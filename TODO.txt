@@ -22,7 +22,7 @@ done (current work)  - PDE/StatPDE
 	
   - pdeinterface.h
 	-- (done) Starke Formulierung -> Strong[Cell|Face|Boundary]Equation und Strong[Cell|Face|Boundary]Equation_U.
-	 (Wir benoetigen hier auch in den FaceDataContainern auch einen Zugriff auf die FEValues der Nachbarzelle.
+	-- (done) (Wir benoetigen hier auch in den FaceDataContainern auch einen Zugriff auf die FEValues der Nachbarzelle.
 	  Fuer den hp-Fall ist das schon implementiert, kann man dann so auch fuer die Normalen FaceDataContainer 
 	  implementieren.)
 	  Weitere Frage hier: um a(u_h, PI_h z_h) zu berechnen: Sei u_h Q1-Funktion, dann ist PI_h z_h Q2 Funktion. Wollen wir 
@@ -31,12 +31,11 @@ done (current work)  - PDE/StatPDE
   - (done) facedatacontainer.h
 	-- s.o. dem 'normalen' FaceDataContainer ermoeglichen, auf Nachbarelemente zuzugreifen (wegen Kantenspruengen.)
   - optproblem.h/PDEProblemContainer.h
-	-- AddDualFunctional. Irgendwie muss das Zielfunktional bestimmt werden.
-	Winni haette gerne eine Auswahl aus den Aux_Funktionalen, Identifikation ueber Namen?. Alternativ: Die Funktion setzt dann ein bool und schiebt das uebergebene Funktional an aux_funktional weiter.
+	-- (done) AddDualFunctional. Irgendwie muss das Zielfunktional bestimmt werden.
+	Winni haette gerne eine Auswahl aus den Aux_Funktionalen, daher: Identifikation ueber Namen.
   - integrator.h
 	-- Routine zum auswerten der Fehlerindikatoren.
-  - Ungeklaert ist noch, wie genau die higher order FE, DoFHandler etc. gehandelt werden.(Abgeleitete Klassen der DoFHandler, oder eigenstaendige Klasse, die dem DoFhandler lediglich uebergeben wird?)
-	
+  - Ungeklaert ist noch, wie genau die higher order FE, DoFHandler etc. gehandelt werden.(Abgeleitete Klassen der DoFHandler, oder eigenstaendige Klasse, die dem DoFhandler lediglich uebergeben wird?)	
 	
 - Interpretation der primalen Zeitschrittverfahren als Galerkin-Verfahren.
 	-- Klasse schreiben (short-statevector o.ae.), die im instationaeren Fall dem
@@ -58,6 +57,11 @@ davon state und tangent bzw. dual und dual hessian ~ww
   --Vector-Values Finite-Elements                                                                                  
                 (Upgrade for multimesh_celldatacontainer needed)        
 
+- Umbenennung optproblem.h in optproblemcontainer.h? Waere konsistent mit pde
+  problemcontainer
+
+- Anstatt die types wie state, adjoint etc. ueber strings und dann if,else abzufragen, wie waere es stattdessen mit enums? Diese kann man dann auch ueber switch abfragen. Nachteil waere, dass man nicht mehr Teile untersuchen kann (wie es mit find("sth") bei einem String moeglich ist.)
+
 - Loesen des Opt-Control Probleme ueber die KKT-Bedingungen 
   (im stationaeren, benötigt Matrizen für die gemischten Ableitungen, wollen wir dazu neue 
   Terme haben, oder wollen wir alle linearen Teile über Matrizen bauen?)
@@ -71,7 +75,6 @@ davon state und tangent bzw. dual und dual hessian ~ww
 	
 - Flag, um exception im Newton zu ignorieren.
 - ForceComputationFlag fuer ControlNewton, reicht das weiter an den StateNewton.
-- 
 
 - Make some automated memchecks, e.g., valgrind --tool=memcheck --leak-check=full --error-exitcode=1 [Programmname] 
   will return 0 if no errors but a nonzero exitcode if there are some errors...
