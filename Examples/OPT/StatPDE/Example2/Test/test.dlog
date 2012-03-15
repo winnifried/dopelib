@@ -1,0 +1,27 @@
+
+	**************************************************
+	*        Starting Reduced Newton Algorithm       *
+	*   Solving : OptProblem	*
+	*  CDoFs : 	3
+	*  SDoFs : 	2178
+	**************************************************
+
+LOG: Allowing IterationCounter `OptNewton_OptProblem' for filenames!
+	CostFunctional: 0.5272
+		 Newton step: 0	 Residual (abs.): 0.5122
+		 Newton step: 0	 Residual (rel.): 1.0000e+00
+	
+	CostFunctional: 6.9019e-06
+		 Newton step: 1	 Residual (rel.):   3.6206e-03	 LinearIters [2]	 LineSearch {0} 
+	CostFunctional: 4.3401e-09
+		 Newton step: 2	 Residual (rel.):   1.4710e-05	 LinearIters [2]	 LineSearch {0} 
+	CostFunctional: 4.2260e-09
+		 Newton step: 3	 Residual (rel.): < 1.0000e-09	 LinearIters [3]	 LineSearch {0} 
+	CostFunctional: 4.2260e-09
+
+	**************************************************
+	*        Stopping Reduced Newton Algorithm       *
+	*             after      3  Iterations           *
+	*             with rel. Residual < 1.0000e-09          *
+	**************************************************
+

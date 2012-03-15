@@ -1,0 +1,31 @@
+
+	**************************************************
+	*        Starting Solution using SNOPT           *
+	*   Solving : OptProblem	*
+	*  CDoFs : 	1089
+	*  SDoFs : 	4225
+	*  Constraints : 	2178
+	**************************************************
+
+LOG: Allowing IterationCounter `Opt_Snopt_OptProblem' for filenames!
+	CostFunctional: 605.7
+	************************************************
+	*               Calling SNOPT                  *
+	*  output will be written to logfile only!     *
+	************************************************
+	
+	
+	
+	************************************************
+	*               SNOPT Finished                 *
+	*          with Exit Code:   1 (success)       *
+	************************************************
+	
+	CostFunctional: 447.9
+
+	**************************************************
+	*        Stopping Solution Using SNOPT           *
+	*             Relative reduction in cost functional: -2.9970e-01          *
+	*             Final value: 4.4785033e+02                                     *
+	**************************************************
+

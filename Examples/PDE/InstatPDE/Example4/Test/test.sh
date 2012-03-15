@@ -7,12 +7,12 @@ fi
 
 if [ $1 == "Test" ]
 then
-    if [ -f test.log ]
+    if [ -f test.dlog ]
     then
 	echo "Running Program ../../../../../bin/DOpE-PDE-InstatPDE-Example4-1d-1d test.prm"
 	(../../../../../bin/DOpE-PDE-InstatPDE-Example4-1d-1d test.prm 2>&1) > /dev/null
 	echo "Comparing Results:"
-	(diff dope.log test.log 2>&1) > /dev/null
+	(diff dope.log test.dlog 2>&1) > /dev/null
 	if [ $? -eq 0 ]
 	then
 	    echo "No differences found."
@@ -20,11 +20,11 @@ then
 	    exit 0
 	else
 	    echo "There where discrepancies in the Output."
-	    diff dope.log test.log
+	    diff dope.log test.dlog
 	    exit 1
 	fi
     else
-	echo "No File test.log found for comparisson. Run '"$0" Store' to create one."
+	echo "No File test.dlog found for comparisson. Run '"$0" Store' to create one."
 	exit 1
     fi
 else
@@ -33,7 +33,7 @@ else
 	echo "Running Program ../../../../../bin/DOpE-PDE-InstatPDE-Example4-1d-1d test.prm"
 	(../../../../../bin/DOpE-PDE-InstatPDE-Example4-1d-1d test.prm 2>&1) > /dev/null
 	echo "Run completed. Cleaning up ..."
-	mv dope.log test.log	
+	mv dope.log test.dlog	
 	exit 0;
     else
 	echo "Unknown Option: "$1

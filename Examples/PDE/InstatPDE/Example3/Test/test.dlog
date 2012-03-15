@@ -1,0 +1,60 @@
+
+	**************************************************
+	*             Starting Forward Solver            *
+	*   Solving : InstatOptProblemContainer	*
+	*  CDoFs : 	1089
+	*  SDoFs : 	Number of Timepoints: 21
+		Total   DoFs: 22869
+		Minimal DoFs: 1089
+		Maximal DoFs: 1089
+	**************************************************
+
+	Computing State Solution:
+LOG: Allowing IterationCounter `Time' for filenames!
+	Writing [./Mesh0/State_InstatOptProblemContainer.00000.vtk]
+			 Timestep: 1 (0 -> 0.05) using shifted Crank-Nicolson
+	Writing [./Mesh0/State_InstatOptProblemContainer.00001.vtk]
+			 Timestep: 2 (0.05 -> 0.1) using shifted Crank-Nicolson
+	Writing [./Mesh0/State_InstatOptProblemContainer.00002.vtk]
+			 Timestep: 3 (0.1 -> 0.15) using shifted Crank-Nicolson
+	Writing [./Mesh0/State_InstatOptProblemContainer.00003.vtk]
+			 Timestep: 4 (0.15 -> 0.2) using shifted Crank-Nicolson
+	Writing [./Mesh0/State_InstatOptProblemContainer.00004.vtk]
+			 Timestep: 5 (0.2 -> 0.25) using shifted Crank-Nicolson
+	Writing [./Mesh0/State_InstatOptProblemContainer.00005.vtk]
+			 Timestep: 6 (0.25 -> 0.3) using shifted Crank-Nicolson
+	Writing [./Mesh0/State_InstatOptProblemContainer.00006.vtk]
+			 Timestep: 7 (0.3 -> 0.35) using shifted Crank-Nicolson
+	Writing [./Mesh0/State_InstatOptProblemContainer.00007.vtk]
+			 Timestep: 8 (0.35 -> 0.4) using shifted Crank-Nicolson
+	Writing [./Mesh0/State_InstatOptProblemContainer.00008.vtk]
+			 Timestep: 9 (0.4 -> 0.45) using shifted Crank-Nicolson
+	Writing [./Mesh0/State_InstatOptProblemContainer.00009.vtk]
+			 Timestep: 10 (0.45 -> 0.5) using shifted Crank-Nicolson
+	Writing [./Mesh0/State_InstatOptProblemContainer.00010.vtk]
+			 Timestep: 11 (0.5 -> 0.55) using shifted Crank-Nicolson
+	Writing [./Mesh0/State_InstatOptProblemContainer.00011.vtk]
+			 Timestep: 12 (0.55 -> 0.6) using shifted Crank-Nicolson
+	Writing [./Mesh0/State_InstatOptProblemContainer.00012.vtk]
+			 Timestep: 13 (0.6 -> 0.65) using shifted Crank-Nicolson
+	Writing [./Mesh0/State_InstatOptProblemContainer.00013.vtk]
+			 Timestep: 14 (0.65 -> 0.7) using shifted Crank-Nicolson
+	Writing [./Mesh0/State_InstatOptProblemContainer.00014.vtk]
+			 Timestep: 15 (0.7 -> 0.75) using shifted Crank-Nicolson
+	Writing [./Mesh0/State_InstatOptProblemContainer.00015.vtk]
+			 Timestep: 16 (0.75 -> 0.8) using shifted Crank-Nicolson
+	Writing [./Mesh0/State_InstatOptProblemContainer.00016.vtk]
+			 Timestep: 17 (0.8 -> 0.85) using shifted Crank-Nicolson
+	Writing [./Mesh0/State_InstatOptProblemContainer.00017.vtk]
+			 Timestep: 18 (0.85 -> 0.9) using shifted Crank-Nicolson
+	Writing [./Mesh0/State_InstatOptProblemContainer.00018.vtk]
+			 Timestep: 19 (0.9 -> 0.95) using shifted Crank-Nicolson
+	Writing [./Mesh0/State_InstatOptProblemContainer.00019.vtk]
+			 Timestep: 20 (0.95 -> 1) using shifted Crank-Nicolson
+	Writing [./Mesh0/State_InstatOptProblemContainer.00020.vtk]
+		Space-Time Pointevaluation: 2.24846
+	CostFunctional: 0
+	Computing Functionals:
+	Space-Time Pointevaluation: 2.24846
+	 u * u = 320199
+	

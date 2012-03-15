@@ -1,0 +1,122 @@
+LOG: Allowing IterationCounter `p_iter' for filenames!
+
+	**************************************************
+	*        Starting Solution using SNOPT           *
+	*   Solving : OptProblem	*
+	*  CDoFs : 	128
+	*  SDoFs : 	1122
+	*  Constraints : 	257
+	**************************************************
+
+LOG: Allowing IterationCounter `Opt_Snopt_OptProblem' for filenames!
+	CostFunctional: 4.2
+	************************************************
+	*               Calling SNOPT                  *
+	*  output will not be written to logfile!      *
+	************************************************
+	
+	
+	
+	************************************************
+	*               SNOPT Finished                 *
+	*          with Exit Code:   1 (success)       *
+	************************************************
+	
+	CostFunctional: 2.3
+
+	**************************************************
+	*        Stopping Solution Using SNOPT           *
+	*             Relative reduction in cost functional:  -5.93e-01          *
+	*             Final value: 2.3040997e+00                                     *
+	**************************************************
+
+
+	**************************************************
+	*        Starting Solution using SNOPT           *
+	*   Solving : OptProblem	*
+	*  CDoFs : 	128
+	*  SDoFs : 	1122
+	*  Constraints : 	257
+	**************************************************
+
+	CostFunctional: 10
+	************************************************
+	*               Calling SNOPT                  *
+	*  output will not be written to logfile!      *
+	************************************************
+	
+	
+	
+	************************************************
+	*               SNOPT Finished                 *
+	*          with Exit Code:   1 (success)       *
+	************************************************
+	
+	CostFunctional: 3.4
+
+	**************************************************
+	*        Stopping Solution Using SNOPT           *
+	*             Relative reduction in cost functional:  -9.89e-01          *
+	*             Final value: 3.3764537e+00                                     *
+	**************************************************
+
+
+	**************************************************
+	*        Starting Solution using SNOPT           *
+	*   Solving : OptProblem	*
+	*  CDoFs : 	512
+	*  SDoFs : 	4290
+	*  Constraints : 	1025
+	**************************************************
+
+	CostFunctional: 3.4
+	************************************************
+	*               Calling SNOPT                  *
+	*  output will not be written to logfile!      *
+	************************************************
+	
+	
+	
+	************************************************
+	*               SNOPT Finished                 *
+	*          with Exit Code:   1 (success)       *
+	************************************************
+	
+	CostFunctional: 2.3
+
+	**************************************************
+	*        Stopping Solution Using SNOPT           *
+	*             Relative reduction in cost functional:  -3.75e-01          *
+	*             Final value: 2.3104065e+00                                     *
+	**************************************************
+
+
+	**************************************************
+	*        Starting Solution using SNOPT           *
+	*   Solving : OptProblem	*
+	*  CDoFs : 	512
+	*  SDoFs : 	4290
+	*  Constraints : 	1025
+	**************************************************
+
+	CostFunctional: 9.3
+	************************************************
+	*               Calling SNOPT                  *
+	*  output will not be written to logfile!      *
+	************************************************
+	
+	
+	
+	************************************************
+	*               SNOPT Finished                 *
+	*          with Exit Code:   1 (success)       *
+	************************************************
+	
+	CostFunctional: 3.2
+
+	**************************************************
+	*        Stopping Solution Using SNOPT           *
+	*             Relative reduction in cost functional:  -9.66e-01          *
+	*             Final value: 3.2367937e+00                                     *
+	**************************************************
+

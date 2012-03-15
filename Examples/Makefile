@@ -13,7 +13,7 @@ help:
 	@echo "=    all       :  Make all examples (in optimized mode)                   ="
 	@echo "=    clean     :  Cleaning up all examples                                ="
 	@echo "=    tests     :  Run all test param data.                                ="
-	@echo "=    cat       :  Run clean, run all, run test (combine these commands)   ="	
+	@echo "=    cat       :  Run clean, run all, run tests (combine these commands)  ="	
 	@echo "=    pdf-doc   :  Create documentation in pdf file format via latexmk     ="
 	@echo "=    doc       :  Create documentation in pdf file format via latexmk     ="
 	@echo "=    distclean :  Cleaning up, including documentation                    ="

@@ -1,0 +1,113 @@
+
+	**************************************************************
+	*        Starting Reduced Trustregion_Newton Algorithm       *
+	*   Solving : OptProblem			*
+	*  CDoFs : 	1089
+	*  SDoFs : 	4225
+	**************************************************
+
+LOG: Allowing IterationCounter `OptNewton_OptProblem' for filenames!
+	CostFunctional: 6.1e+02
+		 Newton step: 0	 Residual (abs.): 0.71
+		 Newton step: 0	 Residual (rel.): 1.00e+00
+	
+		 TR-Newton step: 1	delta: 1.00e+00->1.00e+01  accepting step!	 Residual: 7.05e-01	 LinearIters [2]
+	CostFunctional: 6.06e+02
+		 TR-Newton step: 2	delta: 1.00e+01->1.00e+02  accepting step!	 Residual: 7.05e-01	 LinearIters [2]
+	CostFunctional: 6.05e+02
+		 TR-Newton step: 3	delta: 1.00e+02->1.00e+03  accepting step!	 Residual: 7.00e-01	 LinearIters [2]
+	CostFunctional: 6.03e+02
+		 TR-Newton step: 4	delta: 1.00e+03->1.00e+04  accepting step!	 Residual: 6.57e-01	 LinearIters [2]
+	CostFunctional: 5.82e+02
+		 TR-Newton step: 5	delta: 1.00e+04->2.00e+04  accepting step!	 Residual: 2.17e-01	 LinearIters [2]
+	CostFunctional: 4.46e+02
+		 TR-Newton step: 6	delta: 2.00e+04->4.00e+04  accepting step!	 Residual: 1.26e-03	 LinearIters [2]
+	CostFunctional: 4.29e+02
+		 TR-Newton step: 7	delta: 4.00e+04->8.00e+04  accepting step!	 Residual: 1.29e-05	 LinearIters [2]
+	CostFunctional: 4.29e+02
+		 TR-Newton step: 8	delta: 8.00e+04->1.00e+05  accepting step!	 Residual: 1.21e-08	 LinearIters [4]
+	CostFunctional: 4.29e+02
+	CostFunctional: 4.29e+02
+
+	**************************************************
+	*        Stopping Reduced Trustregion_Newton Algorithm       *
+	*             after      8  Iterations           *
+	*             with rel. Residual    1.72e-08          *
+	*             with Cost  4.2940e+02          *
+	*             n_good: 8 n_bad: 0          *
+	**************************************************
+
+
+	**************************************************
+	*        Starting Reduced Newton Algorithm       *
+	*   Solving : OptProblem	*
+	*  CDoFs : 	1089
+	*  SDoFs : 	4225
+	**************************************************
+
+	CostFunctional: 6.1e+02
+		 Newton step: 0	 Residual (abs.): 0.71
+		 Newton step: 0	 Residual (rel.): 1.00e+00
+	
+	CostFunctional: 4.29e+02
+		 Newton step: 1	 Residual (rel.):   9.00e-08	 LinearIters [2]	 LineSearch {0} 
+	CostFunctional: 4.29e+02
+
+	**************************************************
+	*        Stopping Reduced Newton Algorithm       *
+	*             after      1  Iterations           *
+	*             with rel. Residual    9.00e-08          *
+	**************************************************
+
+
+	**************************************************************
+	*        Starting Reduced Trustregion_Newton Algorithm       *
+	*   Solving : OptProblem			*
+	*  CDoFs : 	4225
+	*  SDoFs : 	16641
+	**************************************************
+
+	CostFunctional: 4.3e+02
+		 Newton step: 0	 Residual (abs.): 0.00072
+		 Newton step: 0	 Residual (rel.): 1.00e+00
+	
+		 TR-Newton step: 1	delta: 1.00e+00->1.00e+01  accepting step!	 Residual: 7.11e-04	 LinearIters [2]
+	CostFunctional: 4.29e+02
+		 TR-Newton step: 2	delta: 1.00e+01->7.87e+01  accepting step!	 Residual: 6.21e-04	 LinearIters [2]
+	CostFunctional: 4.29e+02
+		 TR-Newton step: 3	delta: 7.87e+01->1.57e+02  accepting step!	 Residual: 1.01e-06	 LinearIters [2]
+	CostFunctional: 4.29e+02
+		 TR-Newton step: 4	delta: 1.57e+02->3.15e+02  accepting step!	 Residual: 1.01e-11	 LinearIters [2]
+	CostFunctional: 4.29e+02
+	CostFunctional: 4.29e+02
+
+	**************************************************
+	*        Stopping Reduced Trustregion_Newton Algorithm       *
+	*             after      4  Iterations           *
+	*             with rel. Residual    1.41e-08          *
+	*             with Cost  4.2940e+02          *
+	*             n_good: 4 n_bad: 0          *
+	**************************************************
+
+
+	**************************************************
+	*        Starting Reduced Newton Algorithm       *
+	*   Solving : OptProblem	*
+	*  CDoFs : 	4225
+	*  SDoFs : 	16641
+	**************************************************
+
+	CostFunctional: 6.1e+02
+		 Newton step: 0	 Residual (abs.): 0.71
+		 Newton step: 0	 Residual (rel.): 1.00e+00
+	
+	CostFunctional: 4.29e+02
+		 Newton step: 1	 Residual (rel.):   5.67e-09	 LinearIters [2]	 LineSearch {0} 
+	CostFunctional: 4.29e+02
+
+	**************************************************
+	*        Stopping Reduced Newton Algorithm       *
+	*             after      1  Iterations           *
+	*             with rel. Residual    5.67e-09          *
+	**************************************************
+

@@ -1,0 +1,180 @@
+
+	**************************************************
+	*             Starting Forward Solver            *
+	*   Solving : InstatOptProblemContainer	*
+	*  CDoFs : 	288
+	*  SDoFs : 	Number of Timepoints: 26
+		Total   DoFs: 130832
+		Minimal DoFs: 5032
+		Maximal DoFs: 5032
+	**************************************************
+
+	Computing State Solution:
+LOG: Allowing IterationCounter `Time' for filenames!
+		Pressure_difference: 0
+		Deflection_X: 0
+		Deflection_Y: 0
+		Drag: 0
+		Lift: 0
+			 Timestep: 1 (0 -> 1) using backward Euler
+		Pressure_difference: 330.14
+		Deflection_X: 1.04018e-05
+		Deflection_Y: -6.76113e-05
+		Drag: 10.3555
+		Lift: 0.0660784
+			 Timestep: 2 (1 -> 2) using backward Euler
+		Pressure_difference: 421.301
+		Deflection_X: 2.36563e-05
+		Deflection_Y: 7.91289e-05
+		Drag: 18.4691
+		Lift: 0.375138
+			 Timestep: 3 (2 -> 3) using backward Euler
+		Pressure_difference: 154.439
+		Deflection_X: 2.61718e-05
+		Deflection_Y: 0.000385481
+		Drag: 14.5389
+		Lift: 0.567492
+			 Timestep: 4 (3 -> 4) using backward Euler
+		Pressure_difference: 150.888
+		Deflection_X: 2.40373e-05
+		Deflection_Y: 0.000633421
+		Drag: 14.2472
+		Lift: 0.667244
+			 Timestep: 5 (4 -> 5) using backward Euler
+		Pressure_difference: 149.518
+		Deflection_X: 2.317e-05
+		Deflection_Y: 0.000775095
+		Drag: 14.1573
+		Lift: 0.71875
+			 Timestep: 6 (5 -> 6) using backward Euler
+		Pressure_difference: 148.991
+		Deflection_X: 2.2825e-05
+		Deflection_Y: 0.000841028
+		Drag: 14.1289
+		Lift: 0.744617
+			 Timestep: 7 (6 -> 7) using backward Euler
+		Pressure_difference: 148.801
+		Deflection_X: 2.26958e-05
+		Deflection_Y: 0.000868305
+		Drag: 14.1201
+		Lift: 0.75713
+			 Timestep: 8 (7 -> 8) using backward Euler
+		Pressure_difference: 148.746
+		Deflection_X: 2.26474e-05
+		Deflection_Y: 0.000879279
+		Drag: 14.1174
+		Lift: 0.763
+			 Timestep: 9 (8 -> 9) using backward Euler
+		Pressure_difference: 148.741
+		Deflection_X: 2.26275e-05
+		Deflection_Y: 0.00088397
+		Drag: 14.1166
+		Lift: 0.765731
+			 Timestep: 10 (9 -> 10) using backward Euler
+		Pressure_difference: 148.753
+		Deflection_X: 2.26181e-05
+		Deflection_Y: 0.000886186
+		Drag: 14.1163
+		Lift: 0.76702
+			 Timestep: 11 (10 -> 11) using backward Euler
+		Pressure_difference: 148.767
+		Deflection_X: 2.2613e-05
+		Deflection_Y: 0.000887311
+		Drag: 14.1162
+		Lift: 0.767642
+			 Timestep: 12 (11 -> 12) using backward Euler
+		Pressure_difference: 148.778
+		Deflection_X: 2.26102e-05
+		Deflection_Y: 0.000887896
+		Drag: 14.1162
+		Lift: 0.767949
+			 Timestep: 13 (12 -> 13) using backward Euler
+		Pressure_difference: 148.787
+		Deflection_X: 2.26087e-05
+		Deflection_Y: 0.000888199
+		Drag: 14.1161
+		Lift: 0.768103
+			 Timestep: 14 (13 -> 14) using backward Euler
+		Pressure_difference: 148.792
+		Deflection_X: 2.26078e-05
+		Deflection_Y: 0.000888354
+		Drag: 14.1161
+		Lift: 0.768181
+			 Timestep: 15 (14 -> 15) using backward Euler
+		Pressure_difference: 148.795
+		Deflection_X: 2.26073e-05
+		Deflection_Y: 0.000888434
+		Drag: 14.1161
+		Lift: 0.76822
+			 Timestep: 16 (15 -> 16) using backward Euler
+		Pressure_difference: 148.797
+		Deflection_X: 2.26071e-05
+		Deflection_Y: 0.000888474
+		Drag: 14.1161
+		Lift: 0.76824
+			 Timestep: 17 (16 -> 17) using backward Euler
+		Pressure_difference: 148.798
+		Deflection_X: 2.26069e-05
+		Deflection_Y: 0.000888495
+		Drag: 14.1161
+		Lift: 0.76825
+			 Timestep: 18 (17 -> 18) using backward Euler
+		Pressure_difference: 148.799
+		Deflection_X: 2.26069e-05
+		Deflection_Y: 0.000888505
+		Drag: 14.1161
+		Lift: 0.768255
+			 Timestep: 19 (18 -> 19) using backward Euler
+		Pressure_difference: 148.799
+		Deflection_X: 2.26068e-05
+		Deflection_Y: 0.000888511
+		Drag: 14.1161
+		Lift: 0.768258
+			 Timestep: 20 (19 -> 20) using backward Euler
+		Pressure_difference: 148.799
+		Deflection_X: 2.26068e-05
+		Deflection_Y: 0.000888514
+		Drag: 14.1161
+		Lift: 0.768259
+			 Timestep: 21 (20 -> 21) using backward Euler
+		Pressure_difference: 148.799
+		Deflection_X: 2.26068e-05
+		Deflection_Y: 0.000888516
+		Drag: 14.1161
+		Lift: 0.76826
+			 Timestep: 22 (21 -> 22) using backward Euler
+		Pressure_difference: 148.799
+		Deflection_X: 2.26068e-05
+		Deflection_Y: 0.000888516
+		Drag: 14.1161
+		Lift: 0.76826
+			 Timestep: 23 (22 -> 23) using backward Euler
+		Pressure_difference: 148.799
+		Deflection_X: 2.26068e-05
+		Deflection_Y: 0.000888517
+		Drag: 14.1161
+		Lift: 0.76826
+			 Timestep: 24 (23 -> 24) using backward Euler
+		Pressure_difference: 148.799
+		Deflection_X: 2.26068e-05
+		Deflection_Y: 0.000888517
+		Drag: 14.1161
+		Lift: 0.768261
+			 Timestep: 25 (24 -> 25) using backward Euler
+		Pressure_difference: 148.799
+		Deflection_X: 2.26068e-05
+		Deflection_Y: 0.000888517
+		Drag: 14.1161
+		Lift: 0.768261
+	CostFunctional: 0
+	Computing Functionals:
+	Pressure_difference too large. Writing to file instead: 
+	Writing [./Mesh0/Pressure_difference_InstatOptProblemContainer.00025.gpl]
+	Deflection_X too large. Writing to file instead: 
+	Writing [./Mesh0/Deflection_X_InstatOptProblemContainer.00025.gpl]
+	Deflection_Y too large. Writing to file instead: 
+	Writing [./Mesh0/Deflection_Y_InstatOptProblemContainer.00025.gpl]
+	Drag too large. Writing to file instead: 
+	Writing [./Mesh0/Drag_InstatOptProblemContainer.00025.gpl]
+	Lift too large. Writing to file instead: 
+	Writing [./Mesh0/Lift_InstatOptProblemContainer.00025.gpl]

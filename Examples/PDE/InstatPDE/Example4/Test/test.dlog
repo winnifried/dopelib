@@ -1,0 +1,1387 @@
+
+	**************************************************
+	*             Starting Forward Solver            *
+	*   Solving : InstatOptProblemContainer	*
+	*  CDoFs : 	17
+	*  SDoFs : 	Number of Timepoints: 51
+		Total   DoFs: 867
+		Minimal DoFs: 17
+		Maximal DoFs: 17
+	**************************************************
+
+	Computing State Solution:
+LOG: Allowing IterationCounter `Time' for filenames!
+			 Timestep: 1 (0 -> 0.02) using forward Euler
+			 Newton step: 0	 Residual (abs.):   2.0000e+00
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 2 (0.02 -> 0.04) using forward Euler
+			 Newton step: 0	 Residual (abs.):   4.2977e+01
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 3 (0.04 -> 0.06) using forward Euler
+			 Newton step: 0	 Residual (abs.):   1.7995e+03
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 4 (0.06 -> 0.08) using forward Euler
+			 Newton step: 0	 Residual (abs.):   8.7130e+04
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 5 (0.08 -> 0.1) using forward Euler
+			 Newton step: 0	 Residual (abs.):   4.5068e+06
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 6 (0.1 -> 0.12) using forward Euler
+			 Newton step: 0	 Residual (abs.):   2.4172e+08
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 7 (0.12 -> 0.14) using forward Euler
+			 Newton step: 0	 Residual (abs.):   1.3262e+10
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 8 (0.14 -> 0.16) using forward Euler
+			 Newton step: 0	 Residual (abs.):   7.3902e+11
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 9 (0.16 -> 0.18) using forward Euler
+			 Newton step: 0	 Residual (abs.):   4.1643e+13
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 10 (0.18 -> 0.2) using forward Euler
+			 Newton step: 0	 Residual (abs.):   2.3664e+15
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 11 (0.2 -> 0.22) using forward Euler
+			 Newton step: 0	 Residual (abs.):   1.3534e+17
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 12 (0.22 -> 0.24) using forward Euler
+			 Newton step: 0	 Residual (abs.):   7.7804e+18
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 13 (0.24 -> 0.26) using forward Euler
+			 Newton step: 0	 Residual (abs.):   4.4909e+20
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 14 (0.26 -> 0.28) using forward Euler
+			 Newton step: 0	 Residual (abs.):   2.6006e+22
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 15 (0.28 -> 0.3) using forward Euler
+			 Newton step: 0	 Residual (abs.):   1.5099e+24
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 16 (0.3 -> 0.32) using forward Euler
+			 Newton step: 0	 Residual (abs.):   8.7854e+25
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 17 (0.32 -> 0.34) using forward Euler
+			 Newton step: 0	 Residual (abs.):   5.1205e+27
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 18 (0.34 -> 0.36) using forward Euler
+			 Newton step: 0	 Residual (abs.):   2.9885e+29
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 19 (0.36 -> 0.38) using forward Euler
+			 Newton step: 0	 Residual (abs.):   1.7462e+31
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 20 (0.38 -> 0.4) using forward Euler
+			 Newton step: 0	 Residual (abs.):   1.0212e+33
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 21 (0.4 -> 0.42) using forward Euler
+			 Newton step: 0	 Residual (abs.):   5.9768e+34
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 22 (0.42 -> 0.44) using forward Euler
+			 Newton step: 0	 Residual (abs.):   3.5000e+36
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 23 (0.44 -> 0.46) using forward Euler
+			 Newton step: 0	 Residual (abs.):   2.0506e+38
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 24 (0.46 -> 0.48) using forward Euler
+			 Newton step: 0	 Residual (abs.):   1.2019e+40
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 25 (0.48 -> 0.5) using forward Euler
+			 Newton step: 0	 Residual (abs.):   7.0462e+41
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+		Space-Time Pointevaluation: -6.52128e+41
+			 Timestep: 26 (0.5 -> 0.52) using forward Euler
+			 Newton step: 0	 Residual (abs.):   4.1321e+43
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 27 (0.52 -> 0.54) using forward Euler
+			 Newton step: 0	 Residual (abs.):   2.4237e+45
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 28 (0.54 -> 0.56) using forward Euler
+			 Newton step: 0	 Residual (abs.):   1.4218e+47
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 29 (0.56 -> 0.58) using forward Euler
+			 Newton step: 0	 Residual (abs.):   8.3421e+48
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 30 (0.58 -> 0.6) using forward Euler
+			 Newton step: 0	 Residual (abs.):   4.8949e+50
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 31 (0.6 -> 0.62) using forward Euler
+			 Newton step: 0	 Residual (abs.):   2.8725e+52
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 32 (0.62 -> 0.64) using forward Euler
+			 Newton step: 0	 Residual (abs.):   1.6858e+54
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 33 (0.64 -> 0.66) using forward Euler
+			 Newton step: 0	 Residual (abs.):   9.8936e+55
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 34 (0.66 -> 0.68) using forward Euler
+			 Newton step: 0	 Residual (abs.):   5.8068e+57
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 35 (0.68 -> 0.7) using forward Euler
+			 Newton step: 0	 Residual (abs.):   3.4082e+59
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 36 (0.7 -> 0.72) using forward Euler
+			 Newton step: 0	 Residual (abs.):   2.0005e+61
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 37 (0.72 -> 0.74) using forward Euler
+			 Newton step: 0	 Residual (abs.):   1.1742e+63
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 38 (0.74 -> 0.76) using forward Euler
+			 Newton step: 0	 Residual (abs.):   6.8926e+64
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 39 (0.76 -> 0.78) using forward Euler
+			 Newton step: 0	 Residual (abs.):   4.0459e+66
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 40 (0.78 -> 0.8) using forward Euler
+			 Newton step: 0	 Residual (abs.):   2.3749e+68
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 41 (0.8 -> 0.82) using forward Euler
+			 Newton step: 0	 Residual (abs.):   1.3941e+70
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 42 (0.82 -> 0.84) using forward Euler
+			 Newton step: 0	 Residual (abs.):   8.1834e+71
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 43 (0.84 -> 0.86) using forward Euler
+			 Newton step: 0	 Residual (abs.):   4.8037e+73
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 44 (0.86 -> 0.88) using forward Euler
+			 Newton step: 0	 Residual (abs.):   2.8199e+75
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 45 (0.88 -> 0.9) using forward Euler
+			 Newton step: 0	 Residual (abs.):   1.6553e+77
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 46 (0.9 -> 0.92) using forward Euler
+			 Newton step: 0	 Residual (abs.):   9.7169e+78
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 47 (0.92 -> 0.94) using forward Euler
+			 Newton step: 0	 Residual (abs.):   5.7040e+80
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 48 (0.94 -> 0.96) using forward Euler
+			 Newton step: 0	 Residual (abs.):   3.3484e+82
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 49 (0.96 -> 0.98) using forward Euler
+			 Newton step: 0	 Residual (abs.):   1.9656e+84
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 50 (0.98 -> 1) using forward Euler
+			 Newton step: 0	 Residual (abs.):   1.1538e+86
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+	CostFunctional: 0
+	Computing Functionals:
+	Space-Time Pointevaluation: -6.52128e+41
+
+	**************************************************
+	*             Starting Forward Solver            *
+	*   Solving : InstatOptProblemContainer	*
+	*  CDoFs : 	17
+	*  SDoFs : 	Number of Timepoints: 51
+		Total   DoFs: 867
+		Minimal DoFs: 17
+		Maximal DoFs: 17
+	**************************************************
+
+	Computing State Solution:
+			 Timestep: 1 (0 -> 0.02) using backward Euler
+			 Newton step: 0	 Residual (abs.):   2.0000e+00
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 2 (0.02 -> 0.04) using backward Euler
+			 Newton step: 0	 Residual (abs.):   3.8512e-01
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 3 (0.04 -> 0.06) using backward Euler
+			 Newton step: 0	 Residual (abs.):   2.1424e-01
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 4 (0.06 -> 0.08) using backward Euler
+			 Newton step: 0	 Residual (abs.):   1.5759e-01
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 5 (0.08 -> 0.1) using backward Euler
+			 Newton step: 0	 Residual (abs.):   1.2543e-01
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 6 (0.1 -> 0.12) using backward Euler
+			 Newton step: 0	 Residual (abs.):   1.0271e-01
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 7 (0.12 -> 0.14) using backward Euler
+			 Newton step: 0	 Residual (abs.):   8.5047e-02
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 8 (0.14 -> 0.16) using backward Euler
+			 Newton step: 0	 Residual (abs.):   7.0752e-02
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 9 (0.16 -> 0.18) using backward Euler
+			 Newton step: 0	 Residual (abs.):   5.8974e-02
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 10 (0.18 -> 0.2) using backward Euler
+			 Newton step: 0	 Residual (abs.):   4.9196e-02
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 11 (0.2 -> 0.22) using backward Euler
+			 Newton step: 0	 Residual (abs.):   4.1054e-02
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 12 (0.22 -> 0.24) using backward Euler
+			 Newton step: 0	 Residual (abs.):   3.4264e-02
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 13 (0.24 -> 0.26) using backward Euler
+			 Newton step: 0	 Residual (abs.):   2.8599e-02
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 14 (0.26 -> 0.28) using backward Euler
+			 Newton step: 0	 Residual (abs.):   2.3872e-02
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 15 (0.28 -> 0.3) using backward Euler
+			 Newton step: 0	 Residual (abs.):   1.9926e-02
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 16 (0.3 -> 0.32) using backward Euler
+			 Newton step: 0	 Residual (abs.):   1.6632e-02
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 17 (0.32 -> 0.34) using backward Euler
+			 Newton step: 0	 Residual (abs.):   1.3883e-02
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 18 (0.34 -> 0.36) using backward Euler
+			 Newton step: 0	 Residual (abs.):   1.1588e-02
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 19 (0.36 -> 0.38) using backward Euler
+			 Newton step: 0	 Residual (abs.):   9.6725e-03
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 20 (0.38 -> 0.4) using backward Euler
+			 Newton step: 0	 Residual (abs.):   8.0737e-03
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 21 (0.4 -> 0.42) using backward Euler
+			 Newton step: 0	 Residual (abs.):   6.7392e-03
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 22 (0.42 -> 0.44) using backward Euler
+			 Newton step: 0	 Residual (abs.):   5.6252e-03
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 23 (0.44 -> 0.46) using backward Euler
+			 Newton step: 0	 Residual (abs.):   4.6954e-03
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 24 (0.46 -> 0.48) using backward Euler
+			 Newton step: 0	 Residual (abs.):   3.9193e-03
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 25 (0.48 -> 0.5) using backward Euler
+			 Newton step: 0	 Residual (abs.):   3.2715e-03
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+		Space-Time Pointevaluation: 0.0044411
+			 Timestep: 26 (0.5 -> 0.52) using backward Euler
+			 Newton step: 0	 Residual (abs.):   2.7307e-03
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 27 (0.52 -> 0.54) using backward Euler
+			 Newton step: 0	 Residual (abs.):   2.2793e-03
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 28 (0.54 -> 0.56) using backward Euler
+			 Newton step: 0	 Residual (abs.):   1.9026e-03
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 29 (0.56 -> 0.58) using backward Euler
+			 Newton step: 0	 Residual (abs.):   1.5881e-03
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 30 (0.58 -> 0.6) using backward Euler
+			 Newton step: 0	 Residual (abs.):   1.3256e-03
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 31 (0.6 -> 0.62) using backward Euler
+			 Newton step: 0	 Residual (abs.):   1.1065e-03
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 32 (0.62 -> 0.64) using backward Euler
+			 Newton step: 0	 Residual (abs.):   9.2358e-04
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 33 (0.64 -> 0.66) using backward Euler
+			 Newton step: 0	 Residual (abs.):   7.7092e-04
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 34 (0.66 -> 0.68) using backward Euler
+			 Newton step: 0	 Residual (abs.):   6.4349e-04
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 35 (0.68 -> 0.7) using backward Euler
+			 Newton step: 0	 Residual (abs.):   5.3712e-04
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 36 (0.7 -> 0.72) using backward Euler
+			 Newton step: 0	 Residual (abs.):   4.4834e-04
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 37 (0.72 -> 0.74) using backward Euler
+			 Newton step: 0	 Residual (abs.):   3.7423e-04
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 38 (0.74 -> 0.76) using backward Euler
+			 Newton step: 0	 Residual (abs.):   3.1237e-04
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 39 (0.76 -> 0.78) using backward Euler
+			 Newton step: 0	 Residual (abs.):   2.6074e-04
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 40 (0.78 -> 0.8) using backward Euler
+			 Newton step: 0	 Residual (abs.):   2.1764e-04
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 41 (0.8 -> 0.82) using backward Euler
+			 Newton step: 0	 Residual (abs.):   1.8167e-04
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 42 (0.82 -> 0.84) using backward Euler
+			 Newton step: 0	 Residual (abs.):   1.5164e-04
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 43 (0.84 -> 0.86) using backward Euler
+			 Newton step: 0	 Residual (abs.):   1.2657e-04
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 44 (0.86 -> 0.88) using backward Euler
+			 Newton step: 0	 Residual (abs.):   1.0565e-04
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 45 (0.88 -> 0.9) using backward Euler
+			 Newton step: 0	 Residual (abs.):   8.8188e-05
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 46 (0.9 -> 0.92) using backward Euler
+			 Newton step: 0	 Residual (abs.):   7.3611e-05
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 47 (0.92 -> 0.94) using backward Euler
+			 Newton step: 0	 Residual (abs.):   6.1443e-05
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 48 (0.94 -> 0.96) using backward Euler
+			 Newton step: 0	 Residual (abs.):   5.1287e-05
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 49 (0.96 -> 0.98) using backward Euler
+			 Newton step: 0	 Residual (abs.):   4.2810e-05
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 50 (0.98 -> 1) using backward Euler
+			 Newton step: 0	 Residual (abs.):   3.5733e-05
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+	CostFunctional: 0
+	Computing Functionals:
+	Space-Time Pointevaluation: 0.0044411
+
+	**************************************************
+	*             Starting Forward Solver            *
+	*   Solving : InstatOptProblemContainer	*
+	*  CDoFs : 	17
+	*  SDoFs : 	Number of Timepoints: 51
+		Total   DoFs: 867
+		Minimal DoFs: 17
+		Maximal DoFs: 17
+	**************************************************
+
+	Computing State Solution:
+			 Timestep: 1 (0 -> 0.02) using Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   2.0000e+00
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 2 (0.02 -> 0.04) using Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   9.6285e-01
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 3 (0.04 -> 0.06) using Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   1.1374e+00
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 4 (0.06 -> 0.08) using Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   6.8247e-01
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 5 (0.08 -> 0.1) using Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   8.2125e-01
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 6 (0.1 -> 0.12) using Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   5.2736e-01
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 7 (0.12 -> 0.14) using Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   6.2365e-01
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 8 (0.14 -> 0.16) using Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   4.2512e-01
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 9 (0.16 -> 0.18) using Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   4.8694e-01
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 10 (0.18 -> 0.2) using Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   3.4980e-01
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 11 (0.2 -> 0.22) using Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   3.8733e-01
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 12 (0.22 -> 0.24) using Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   2.9111e-01
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 13 (0.24 -> 0.26) using Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   3.1240e-01
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 14 (0.26 -> 0.28) using Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   2.4397e-01
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 15 (0.28 -> 0.3) using Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   2.5474e-01
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 16 (0.3 -> 0.32) using Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   2.0542e-01
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 17 (0.32 -> 0.34) using Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   2.0956e-01
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 18 (0.34 -> 0.36) using Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   1.7354e-01
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 19 (0.36 -> 0.38) using Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   1.7366e-01
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 20 (0.38 -> 0.4) using Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   1.4698e-01
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 21 (0.4 -> 0.42) using Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   1.4478e-01
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 22 (0.42 -> 0.44) using Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   1.2475e-01
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 23 (0.44 -> 0.46) using Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   1.2132e-01
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 24 (0.46 -> 0.48) using Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   1.0606e-01
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 25 (0.48 -> 0.5) using Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   1.0210e-01
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+		Space-Time Pointevaluation: 0.00126746
+			 Timestep: 26 (0.5 -> 0.52) using Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   9.0307e-02
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 27 (0.52 -> 0.54) using Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   8.6231e-02
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 28 (0.54 -> 0.56) using Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   7.7004e-02
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 29 (0.56 -> 0.58) using Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   7.3059e-02
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 30 (0.58 -> 0.6) using Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   6.5744e-02
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 31 (0.6 -> 0.62) using Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   6.2064e-02
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 32 (0.62 -> 0.64) using Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   5.6197e-02
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 33 (0.64 -> 0.66) using Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   5.2846e-02
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 34 (0.66 -> 0.68) using Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   4.8090e-02
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 35 (0.68 -> 0.7) using Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   4.5086e-02
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 36 (0.7 -> 0.72) using Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   4.1195e-02
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 37 (0.72 -> 0.74) using Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   3.8534e-02
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 38 (0.74 -> 0.76) using Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   3.5324e-02
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 39 (0.76 -> 0.78) using Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   3.2984e-02
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 40 (0.78 -> 0.8) using Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   3.0317e-02
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 41 (0.8 -> 0.82) using Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   2.8272e-02
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 42 (0.82 -> 0.84) using Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   2.6042e-02
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 43 (0.84 -> 0.86) using Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   2.4263e-02
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 44 (0.86 -> 0.88) using Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   2.2389e-02
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 45 (0.88 -> 0.9) using Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   2.0845e-02
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 46 (0.9 -> 0.92) using Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   1.9262e-02
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 47 (0.92 -> 0.94) using Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   1.7925e-02
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 48 (0.94 -> 0.96) using Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   1.6584e-02
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 49 (0.96 -> 0.98) using Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   1.5429e-02
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 50 (0.98 -> 1) using Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   1.4289e-02
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+	CostFunctional: 0
+	Computing Functionals:
+	Space-Time Pointevaluation: 0.00126746
+
+	**************************************************
+	*             Starting Forward Solver            *
+	*   Solving : InstatOptProblemContainer	*
+	*  CDoFs : 	17
+	*  SDoFs : 	Number of Timepoints: 51
+		Total   DoFs: 867
+		Minimal DoFs: 17
+		Maximal DoFs: 17
+	**************************************************
+
+	Computing State Solution:
+			 Timestep: 1 (0 -> 0.02) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   2.0000e+00
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 2 (0.02 -> 0.04) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   8.6506e-01
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 3 (0.04 -> 0.06) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   9.9220e-01
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 4 (0.06 -> 0.08) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   5.0478e-01
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 5 (0.08 -> 0.1) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   6.2572e-01
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 6 (0.1 -> 0.12) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   3.5616e-01
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 7 (0.12 -> 0.14) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   4.1384e-01
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 8 (0.14 -> 0.16) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   2.5336e-01
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 9 (0.16 -> 0.18) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   2.8020e-01
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 10 (0.18 -> 0.2) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   1.7986e-01
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 11 (0.2 -> 0.22) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   1.9244e-01
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 12 (0.22 -> 0.24) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   1.2779e-01
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 13 (0.24 -> 0.26) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   1.3348e-01
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 14 (0.26 -> 0.28) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   9.0955e-02
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 15 (0.28 -> 0.3) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   9.3284e-02
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 16 (0.3 -> 0.32) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   6.4872e-02
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 17 (0.32 -> 0.34) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   6.5578e-02
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 18 (0.34 -> 0.36) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   4.6369e-02
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 19 (0.36 -> 0.38) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   4.6327e-02
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 20 (0.38 -> 0.4) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   3.3214e-02
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 21 (0.4 -> 0.42) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   3.2862e-02
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 22 (0.42 -> 0.44) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   2.3840e-02
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 23 (0.44 -> 0.46) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   2.3394e-02
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 24 (0.46 -> 0.48) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   1.7146e-02
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 25 (0.48 -> 0.5) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   1.6706e-02
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+		Space-Time Pointevaluation: 0.00267814
+			 Timestep: 26 (0.5 -> 0.52) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   1.2355e-02
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 27 (0.52 -> 0.54) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   1.1964e-02
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 28 (0.54 -> 0.56) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   8.9184e-03
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 29 (0.56 -> 0.58) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   8.5895e-03
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 30 (0.58 -> 0.6) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   6.4488e-03
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 31 (0.6 -> 0.62) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   6.1810e-03
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 32 (0.62 -> 0.64) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   4.6706e-03
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 33 (0.64 -> 0.66) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   4.4572e-03
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 34 (0.66 -> 0.68) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   3.3878e-03
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 35 (0.68 -> 0.7) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   3.2203e-03
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 36 (0.7 -> 0.72) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   2.4608e-03
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 37 (0.72 -> 0.74) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   2.3308e-03
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 38 (0.74 -> 0.76) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   1.7899e-03
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 39 (0.76 -> 0.78) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   1.6898e-03
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 40 (0.78 -> 0.8) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   1.3036e-03
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 41 (0.8 -> 0.82) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   1.2270e-03
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 42 (0.82 -> 0.84) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   9.5053e-04
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 43 (0.84 -> 0.86) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   8.9215e-04
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 44 (0.86 -> 0.88) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   6.9387e-04
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 45 (0.88 -> 0.9) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   6.4955e-04
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 46 (0.9 -> 0.92) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   5.0705e-04
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 47 (0.92 -> 0.94) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   4.7351e-04
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 48 (0.94 -> 0.96) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   3.7090e-04
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 49 (0.96 -> 0.98) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   3.4558e-04
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 50 (0.98 -> 1) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   2.7156e-04
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+	CostFunctional: 0
+	Computing Functionals:
+	Space-Time Pointevaluation: 0.00267814
+
+	**************************************************
+	*             Starting Forward Solver            *
+	*   Solving : InstatOptProblemContainer	*
+	*  CDoFs : 	17
+	*  SDoFs : 	Number of Timepoints: 51
+		Total   DoFs: 867
+		Minimal DoFs: 17
+		Maximal DoFs: 17
+	**************************************************
+
+	Computing State Solution:
+			 Timestep: 1 (0 -> 0.02) using Fractional-Step-Theta
+			 Newton step: 0	 Residual (abs.):   2.0000e+00
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 0	 Residual (abs.):   6.9743e-01
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 0	 Residual (abs.):   7.9904e-01
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 2 (0.02 -> 0.04) using Fractional-Step-Theta
+			 Newton step: 0	 Residual (abs.):   4.2141e-01
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 0	 Residual (abs.):   3.4002e-01
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 0	 Residual (abs.):   2.9790e-01
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 3 (0.04 -> 0.06) using Fractional-Step-Theta
+			 Newton step: 0	 Residual (abs.):   2.4650e-01
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 0	 Residual (abs.):   1.9089e-01
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 0	 Residual (abs.):   1.9142e-01
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 4 (0.06 -> 0.08) using Fractional-Step-Theta
+			 Newton step: 0	 Residual (abs.):   1.5634e-01
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 0	 Residual (abs.):   1.4303e-01
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 0	 Residual (abs.):   1.3063e-01
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 5 (0.08 -> 0.1) using Fractional-Step-Theta
+			 Newton step: 0	 Residual (abs.):   1.2100e-01
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 0	 Residual (abs.):   1.0860e-01
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 0	 Residual (abs.):   1.0325e-01
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 6 (0.1 -> 0.12) using Fractional-Step-Theta
+			 Newton step: 0	 Residual (abs.):   9.3480e-02
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 0	 Residual (abs.):   8.9064e-02
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 0	 Residual (abs.):   8.0686e-02
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 7 (0.12 -> 0.14) using Fractional-Step-Theta
+			 Newton step: 0	 Residual (abs.):   7.7068e-02
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 0	 Residual (abs.):   7.1391e-02
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 0	 Residual (abs.):   6.6768e-02
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 8 (0.14 -> 0.16) using Fractional-Step-Theta
+			 Newton step: 0	 Residual (abs.):   6.2150e-02
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 0	 Residual (abs.):   5.9139e-02
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 0	 Residual (abs.):   5.4080e-02
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 9 (0.16 -> 0.18) using Fractional-Step-Theta
+			 Newton step: 0	 Residual (abs.):   5.1355e-02
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 0	 Residual (abs.):   4.8306e-02
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 0	 Residual (abs.):   4.4604e-02
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 10 (0.18 -> 0.2) using Fractional-Step-Theta
+			 Newton step: 0	 Residual (abs.):   4.1992e-02
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 0	 Residual (abs.):   3.9697e-02
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 0	 Residual (abs.):   3.6501e-02
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 11 (0.2 -> 0.22) using Fractional-Step-Theta
+			 Newton step: 0	 Residual (abs.):   3.4493e-02
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 0	 Residual (abs.):   3.2536e-02
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 0	 Residual (abs.):   2.9972e-02
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 12 (0.22 -> 0.24) using Fractional-Step-Theta
+			 Newton step: 0	 Residual (abs.):   2.8277e-02
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 0	 Residual (abs.):   2.6698e-02
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 0	 Residual (abs.):   2.4574e-02
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 13 (0.24 -> 0.26) using Fractional-Step-Theta
+			 Newton step: 0	 Residual (abs.):   2.3201e-02
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 0	 Residual (abs.):   2.1896e-02
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 0	 Residual (abs.):   2.0162e-02
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 14 (0.26 -> 0.28) using Fractional-Step-Theta
+			 Newton step: 0	 Residual (abs.):   1.9029e-02
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 0	 Residual (abs.):   1.7962e-02
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 0	 Residual (abs.):   1.6537e-02
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 15 (0.28 -> 0.3) using Fractional-Step-Theta
+			 Newton step: 0	 Residual (abs.):   1.5610e-02
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 0	 Residual (abs.):   1.4734e-02
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 0	 Residual (abs.):   1.3565e-02
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 16 (0.3 -> 0.32) using Fractional-Step-Theta
+			 Newton step: 0	 Residual (abs.):   1.2804e-02
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 0	 Residual (abs.):   1.2086e-02
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 0	 Residual (abs.):   1.1127e-02
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 17 (0.32 -> 0.34) using Fractional-Step-Theta
+			 Newton step: 0	 Residual (abs.):   1.0503e-02
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 0	 Residual (abs.):   9.9137e-03
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 0	 Residual (abs.):   9.1273e-03
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 18 (0.34 -> 0.36) using Fractional-Step-Theta
+			 Newton step: 0	 Residual (abs.):   8.6153e-03
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 0	 Residual (abs.):   8.1320e-03
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 0	 Residual (abs.):   7.4869e-03
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 19 (0.36 -> 0.38) using Fractional-Step-Theta
+			 Newton step: 0	 Residual (abs.):   7.0669e-03
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 0	 Residual (abs.):   6.6705e-03
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 0	 Residual (abs.):   6.1413e-03
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 20 (0.38 -> 0.4) using Fractional-Step-Theta
+			 Newton step: 0	 Residual (abs.):   5.7968e-03
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 0	 Residual (abs.):   5.4717e-03
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 0	 Residual (abs.):   5.0376e-03
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 21 (0.4 -> 0.42) using Fractional-Step-Theta
+			 Newton step: 0	 Residual (abs.):   4.7550e-03
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 0	 Residual (abs.):   4.4883e-03
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 0	 Residual (abs.):   4.1322e-03
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 22 (0.42 -> 0.44) using Fractional-Step-Theta
+			 Newton step: 0	 Residual (abs.):   3.9004e-03
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 0	 Residual (abs.):   3.6816e-03
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 0	 Residual (abs.):   3.3896e-03
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 23 (0.44 -> 0.46) using Fractional-Step-Theta
+			 Newton step: 0	 Residual (abs.):   3.1994e-03
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 0	 Residual (abs.):   3.0200e-03
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 0	 Residual (abs.):   2.7804e-03
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 24 (0.46 -> 0.48) using Fractional-Step-Theta
+			 Newton step: 0	 Residual (abs.):   2.6244e-03
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 0	 Residual (abs.):   2.4772e-03
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 0	 Residual (abs.):   2.2807e-03
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 25 (0.48 -> 0.5) using Fractional-Step-Theta
+			 Newton step: 0	 Residual (abs.):   2.1528e-03
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 0	 Residual (abs.):   2.0320e-03
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 0	 Residual (abs.):   1.8708e-03
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+		Space-Time Pointevaluation: 0.00287191
+			 Timestep: 26 (0.5 -> 0.52) using Fractional-Step-Theta
+			 Newton step: 0	 Residual (abs.):   1.7659e-03
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 0	 Residual (abs.):   1.6668e-03
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 0	 Residual (abs.):   1.5346e-03
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 27 (0.52 -> 0.54) using Fractional-Step-Theta
+			 Newton step: 0	 Residual (abs.):   1.4485e-03
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 0	 Residual (abs.):   1.3672e-03
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 0	 Residual (abs.):   1.2588e-03
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 28 (0.54 -> 0.56) using Fractional-Step-Theta
+			 Newton step: 0	 Residual (abs.):   1.1882e-03
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 0	 Residual (abs.):   1.1215e-03
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 0	 Residual (abs.):   1.0325e-03
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 29 (0.56 -> 0.58) using Fractional-Step-Theta
+			 Newton step: 0	 Residual (abs.):   9.7462e-04
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 0	 Residual (abs.):   9.1995e-04
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 0	 Residual (abs.):   8.4697e-04
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 30 (0.58 -> 0.6) using Fractional-Step-Theta
+			 Newton step: 0	 Residual (abs.):   7.9946e-04
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 0	 Residual (abs.):   7.5461e-04
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 0	 Residual (abs.):   6.9475e-04
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 31 (0.6 -> 0.62) using Fractional-Step-Theta
+			 Newton step: 0	 Residual (abs.):   6.5578e-04
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 0	 Residual (abs.):   6.1899e-04
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 0	 Residual (abs.):   5.6989e-04
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 32 (0.62 -> 0.64) using Fractional-Step-Theta
+			 Newton step: 0	 Residual (abs.):   5.3792e-04
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 0	 Residual (abs.):   5.0775e-04
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 0	 Residual (abs.):   4.6747e-04
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 33 (0.64 -> 0.66) using Fractional-Step-Theta
+			 Newton step: 0	 Residual (abs.):   4.4124e-04
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 0	 Residual (abs.):   4.1649e-04
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 0	 Residual (abs.):   3.8345e-04
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 34 (0.66 -> 0.68) using Fractional-Step-Theta
+			 Newton step: 0	 Residual (abs.):   3.6194e-04
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 0	 Residual (abs.):   3.4164e-04
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 0	 Residual (abs.):   3.1454e-04
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 35 (0.68 -> 0.7) using Fractional-Step-Theta
+			 Newton step: 0	 Residual (abs.):   2.9689e-04
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 0	 Residual (abs.):   2.8024e-04
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 0	 Residual (abs.):   2.5801e-04
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 36 (0.7 -> 0.72) using Fractional-Step-Theta
+			 Newton step: 0	 Residual (abs.):   2.4353e-04
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 0	 Residual (abs.):   2.2987e-04
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 0	 Residual (abs.):   2.1164e-04
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 37 (0.72 -> 0.74) using Fractional-Step-Theta
+			 Newton step: 0	 Residual (abs.):   1.9977e-04
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 0	 Residual (abs.):   1.8856e-04
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 0	 Residual (abs.):   1.7360e-04
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 38 (0.74 -> 0.76) using Fractional-Step-Theta
+			 Newton step: 0	 Residual (abs.):   1.6386e-04
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 0	 Residual (abs.):   1.5467e-04
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 0	 Residual (abs.):   1.4240e-04
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 39 (0.76 -> 0.78) using Fractional-Step-Theta
+			 Newton step: 0	 Residual (abs.):   1.3441e-04
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 0	 Residual (abs.):   1.2687e-04
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 0	 Residual (abs.):   1.1681e-04
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 40 (0.78 -> 0.8) using Fractional-Step-Theta
+			 Newton step: 0	 Residual (abs.):   1.1026e-04
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 0	 Residual (abs.):   1.0407e-04
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 0	 Residual (abs.):   9.5815e-05
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 41 (0.8 -> 0.82) using Fractional-Step-Theta
+			 Newton step: 0	 Residual (abs.):   9.0441e-05
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 0	 Residual (abs.):   8.5367e-05
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 0	 Residual (abs.):   7.8595e-05
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 42 (0.82 -> 0.84) using Fractional-Step-Theta
+			 Newton step: 0	 Residual (abs.):   7.4186e-05
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 0	 Residual (abs.):   7.0025e-05
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 0	 Residual (abs.):   6.4470e-05
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 43 (0.84 -> 0.86) using Fractional-Step-Theta
+			 Newton step: 0	 Residual (abs.):   6.0853e-05
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 0	 Residual (abs.):   5.7440e-05
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 0	 Residual (abs.):   5.2883e-05
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 44 (0.86 -> 0.88) using Fractional-Step-Theta
+			 Newton step: 0	 Residual (abs.):   4.9917e-05
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 0	 Residual (abs.):   4.7116e-05
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 0	 Residual (abs.):   4.3379e-05
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 45 (0.88 -> 0.9) using Fractional-Step-Theta
+			 Newton step: 0	 Residual (abs.):   4.0945e-05
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 0	 Residual (abs.):   3.8649e-05
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 0	 Residual (abs.):   3.5583e-05
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 46 (0.9 -> 0.92) using Fractional-Step-Theta
+			 Newton step: 0	 Residual (abs.):   3.3587e-05
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 0	 Residual (abs.):   3.1703e-05
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 0	 Residual (abs.):   2.9188e-05
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 47 (0.92 -> 0.94) using Fractional-Step-Theta
+			 Newton step: 0	 Residual (abs.):   2.7550e-05
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 0	 Residual (abs.):   2.6005e-05
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 0	 Residual (abs.):   2.3942e-05
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 48 (0.94 -> 0.96) using Fractional-Step-Theta
+			 Newton step: 0	 Residual (abs.):   2.2599e-05
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 0	 Residual (abs.):   2.1331e-05
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 0	 Residual (abs.):   1.9639e-05
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 49 (0.96 -> 0.98) using Fractional-Step-Theta
+			 Newton step: 0	 Residual (abs.):   1.8537e-05
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 0	 Residual (abs.):   1.7497e-05
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 0	 Residual (abs.):   1.6109e-05
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Timestep: 50 (0.98 -> 1) using Fractional-Step-Theta
+			 Newton step: 0	 Residual (abs.):   1.5206e-05
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 0	 Residual (abs.):   1.4353e-05
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 0	 Residual (abs.):   1.3214e-05
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+	CostFunctional: 0
+	Computing Functionals:
+	Space-Time Pointevaluation: 0.00287191
+	Forward euler: u * u = 9.1374e+172
+	Backward euler: u * u = 3.04092
+	CN: u * u = 2.71523
+	ShiftedCN: u * u = 2.72653
+	FractionalStepTheta: u * u = 2.72052
+	
