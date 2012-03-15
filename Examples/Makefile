@@ -23,7 +23,7 @@ help:
 $(DIRECTORIES):
 	cd $@; $(MAKE) -s $(MAKECMDGOALS)
 
-all clean:	$(DIRECTORIES)
+all clean veryclean:	$(DIRECTORIES)
 
 tests:  
 	./testall.sh
@@ -35,7 +35,7 @@ pdf-doc doc:
 	latexmk -pdf description.tex
 distclean:
 	rm -rf *~ 
-	$(MAKE) clean 
+	$(MAKE) veryclean 
 	rm description.aux description.aux.bak description.log description.pdf description.toc
 
 warncheck:

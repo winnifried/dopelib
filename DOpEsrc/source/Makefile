@@ -152,7 +152,7 @@ clean:
 	rm -f $(OBJDIR)*.o $(OBJDIR)*.go
 
 veryclean: clean
-	rm -f *.a *.inp *.gpl *.eps *.gnuplot
+	rm -f *.a *.inp *.gpl *.eps *.gnuplot Makefile.depend
 	rm ../lib/?d/?d/*.a
 
 INCLUDE += -I../include -I../templates -I../wrapper -I../basic -I../problemdata -I../interfaces -I../reducedproblems -I../container

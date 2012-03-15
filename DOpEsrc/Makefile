@@ -35,8 +35,7 @@ clean:
 
 distclean:
 	rm -rf *~ TAGS 
-	cd source ; $(MAKE) clean
-	rm lib/?d/?d/*.a
+	cd source ; $(MAKE) veryclean
 	cd ../doxygen ; $(MAKE) clean
 	cd ../Examples ; $(MAKE) distclean
 
