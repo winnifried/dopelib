@@ -1,0 +1,117 @@
+TODO DOpE
+=========
+
+done (current work)  - PDE/StatPDE		
+		-- Kommentare zu Beispielen sollten beinhalten:
+		--- Was wird geloest?
+  		--- Welche Features werden hier (erstmalig) benutzt? Diese sollten
+  		ueber \index indiziert werden.
+	
+- Fehlerschaetzer 
+  (zumindest fuer stationaere Probleme)
+  Aenderungen:
+  - stat[reduced|pde]problem.h
+	-- Neuer Problemtyp 'dual_for_estimate' in the various stat[pde|reduced]problems. 
+	   ALTERNATIVE: Eigenes Problem?
+	-- Loeser fuer das duale Problem? Welchen da nehmen?
+	-- Membervariable _u_dual ? So kommen wir nicht mit _z ins Gehege.
+	-- ComputeDualForErrorEstimation() als private Memberfunction
+	-- ComputeErrorIndicators()
+	-- DWRDataContainer hinzufuegen (soll higher order elements und dofhandler etc. verwalten)?
+	-- Welchen Nonlinearsolver benutzen? Einen eigenen hinzufuegen?
+	
+  - pdeinterface.h
+	-- (done) Starke Formulierung -> Strong[Cell|Face|Boundary]Equation und Strong[Cell|Face|Boundary]Equation_U.
+	 (Wir benoetigen hier auch in den FaceDataContainern auch einen Zugriff auf die FEValues der Nachbarzelle.
+	  Fuer den hp-Fall ist das schon implementiert, kann man dann so auch fuer die Normalen FaceDataContainer 
+	  implementieren.)
+	  Weitere Frage hier: um a(u_h, PI_h z_h) zu berechnen: Sei u_h Q1-Funktion, dann ist PI_h z_h Q2 Funktion. Wollen wir 
+	  dafuer 2 CellDataContainer, die z.B. an StrongCellEquation gehen, oder erweitern wir den Vorhandenen? Ich waere dafuer, den
+	  vorhandenen zu erweitern, wie wir das bisher immer gemacht haben (z.B. mit multimesh).
+  - (done) facedatacontainer.h
+	-- s.o. dem 'normalen' FaceDataContainer ermoeglichen, auf Nachbarelemente zuzugreifen (wegen Kantenspruengen.)
+  - optproblem.h/PDEProblemContainer.h
+	-- AddDualFunctional. Irgendwie muss das Zielfunktional bestimmt werden.
+	Winni haette gerne eine Auswahl aus den Aux_Funktionalen, Identifikation ueber Namen?. Alternativ: Die Funktion setzt dann ein bool und schiebt das uebergebene Funktional an aux_funktional weiter.
+  - integrator.h
+	-- Routine zum auswerten der Fehlerindikatoren.
+  - Ungeklaert ist noch, wie genau die higher order FE, DoFHandler etc. gehandelt werden.(Abgeleitete Klassen der DoFHandler, oder eigenstaendige Klasse, die dem DoFhandler lediglich uebergeben wird?)
+	
+	
+- Interpretation der primalen Zeitschrittverfahren als Galerkin-Verfahren.
+	-- Klasse schreiben (short-statevector o.ae.), die im instationaeren Fall dem
+	Newtonsolver lediglich die fuer das aktuelle Zeitintervall noetigen Freiheitsgrade
+	uebergibt. Friend oder abgeleitet vom Statevector, im Konstruktor aktuelles Zeitintervall plus STH, generiert dann Liste von Zeitpunkten, auf denen er arbeitet.~tw
+	-- Zeitintegrator ~cg
+
+-Dirichletdaten ueber Constraintmatrix lokal.
+
+- Erzeugen von Subproblemen fuer Primales, Duales, ... Problem, anstatt alles im Optproblem zu unterscheiden
+optproblem, davon abgeleitet forwardproblem und backwardproblem (mit Matrix),
+davon state und tangent bzw. dual und dual hessian ~ww
+  
+- Trennung der Ortsdiskretisierung (verschieden Feine Gitter) 
+  --Integrals on faces/boundaries                                                                                  
+                (Upgrades for integrator_multimesh and multimesh_facedatacontainer needed)                           
+  --Support for nonstationary problems                                                                             
+                (Upgrades for integrator_multimesh needed)                                                           
+  --Vector-Values Finite-Elements                                                                                  
+                (Upgrade for multimesh_celldatacontainer needed)        
+
+- Loesen des Opt-Control Probleme ueber die KKT-Bedingungen 
+  (im stationaeren, benötigt Matrizen für die gemischten Ableitungen, wollen wir dazu neue 
+  Terme haben, oder wollen wir alle linearen Teile über Matrizen bauen?)
+  -- Newtonsolver zu aendern (ueberpruefen, ob kostenfunktional kleiner wird)
+  -- BlockMatrix fuer das KKT-System. -> Eigenen Integrator schreiben.
+
+- Standardinterface fuer Postprozesse? 
+	-- Basisklasse fuer Postprozesse
+	-- Liste von Postprozessbasisklassen in Reduced Problem.
+	-- Aufruf von ausserhalb: do postprocess!!!11! 
+	
+- Flag, um exception im Newton zu ignorieren.
+- ForceComputationFlag fuer ControlNewton, reicht das weiter an den StateNewton.
+- 
+
+- Make some automated memchecks, e.g., valgrind --tool=memcheck --leak-check=full --error-exitcode=1 [Programmname] 
+  will return 0 if no errors but a nonzero exitcode if there are some errors...
+
+Spaeter ;):
+=============================
+- hp Beispiel in PDE/StatPDE/Example1 ~cg
+- Entferne vor jedem neuen Durchlauf von test.sh die Datei dope.log aus dem Testverzeichnis.
+- Verschiedene Kontrolltypen im Instationaeren, insbesondere Kontrolle in den AWen
+-  Rueckgabeklasse fuer Newton. 
+- Adjungierte Zeitschrittverfahren 
+  (Dann geht endlich auch Opt-Control im Instationaeren)
+- Moeglichkeit, andere Namen fuer die Komponenten zu vergeben? 
+- Doku in latex zu OPT und Instat
+- OPTProblem umbennen
+- Container Dinge in Container Verzeichnis
+- Interface Dinge in Interface Verzeichnis
+- Beispiele in debug-mode compilieren (zum Testen, aber nicht
+  in debug-mode=on einchecken!!!) und Warnungen
+  entfernen
+- Beispiele (OPT) weiter dokumentieren ~tw 
+
+- Webseite: 
+  -- Logo -> tw
+  -- Namen der Personen, Name des Projekts: DOpE-*
+  -- Beschreibung
+  -- domain, 
+  -- manual als *.pdf um die Interessierten richtig heiss zu machen
+  
+- SVN in Heidelberg ~tw
+- Bugzilla -> cg
+- changelog
+
+
+Future
+======
+
+	    
+
+
+
+
+

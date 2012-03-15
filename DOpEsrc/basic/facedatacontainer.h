@@ -1,0 +1,1741 @@
+/*
+ * facedatacontainer.h
+ *
+ *  Created on: May 23, 2011
+ *      Author: cgoll
+ */
+
+#ifndef FACEDATACONTAINER_H_
+#define FACEDATACONTAINER_H_
+
+#include "spacetimehandler.h"
+#include "statespacetimehandler.h"
+#include "fevalues_wrapper.h"
+#include "dopeexception.h"
+
+#include <dofs/dof_handler.h>
+#include <hp/dof_handler.h>
+
+using namespace dealii;
+
+namespace DOpE
+{
+  /**
+   * Dummy Template Class, acts as kind of interface. Through template specialization, we
+   * distinguish between the 'classic' and the 'hp' case.
+   *
+   */
+
+  template<typename DOFHANDLER, typename VECTOR, int dim>
+    class FaceDataContainer
+    {
+      public:
+        FaceDataContainer()
+        {
+          throw(DOpEException(
+              "Dummy class, this constructor should never get called.",
+              "CellDataContainer<dealii::DoFHandler<dim> , VECTOR, dim>::CellDataContainer"));
+        }
+        ;
+    };
+
+  /**
+   * This two classes hold all the information we need in the integrator to
+   * integrate something over a face of a cell (could be a functional, a PDE, etc.).
+   * Of particular importance: This class holds the FaceFEValues objects.
+   *
+   * @template VECTOR     Type of the vector we use in our computations (i.e. Vector<double> or BlockVector<double>)
+   * @template dim        1+ the dimension of the integral we are actually interested in.
+   */
+
+  template<typename VECTOR, int dim>
+    class FaceDataContainer<dealii::DoFHandler<dim>, VECTOR, dim>
+    {
+
+      public:
+        /**
+         * Constructor. Initializes the FaceFEValues objects.
+         *
+         * @template SPARSITYPATTERN      The corresponding Sparsitypattern to the class-template VECTOR.
+         * @template dopedim              The dimension of the control variable.
+         * @template dealdim              The dimension of the state variable.
+         *
+         * @param quad                    Reference to the quadrature-rule which we use at the moment.
+         * @param update_flags            The update flags we need to initialize the FEValues obejcts
+         * @param sth                     A reference to the SpaceTimeHandler in use.
+         * @param cell                    A vector of cell iterators through which we gain most of the needed information (like
+         *                                material_ids, n_dfos, etc.)
+         * @param param_values            A std::map containing parameter data (e.g. non space dependent data). If the control
+         *                                is done by parameters, it is contained in this map at the position "control".
+         * @param domain_values           A std::map containing domain data (e.g. nodal vectors for FE-Functions). If the control
+         *                                is distributed, it is contained in this map at the position "control". The state may always
+         *                                be found in this map at the position "state"
+         * @param need_neighbour          Describes, whether we need all the GetNbr (= Get Neighbor) functions.
+         *
+         */
+        template<typename FE, typename SPARSITYPATTERN, int dopedim,
+            int dealdim>
+          FaceDataContainer(
+              const Quadrature<dim - 1>& quad,
+              UpdateFlags update_flags,
+              SpaceTimeHandler<FE, dealii::DoFHandler<dim>, SPARSITYPATTERN,
+                  VECTOR, dopedim, dealdim>& sth,
+              const std::vector<typename DOpEWrapper::DoFHandler<dim,
+                  dealii::DoFHandler<dim> >::active_cell_iterator>& cell,
+              const std::map<std::string, const Vector<double>*> &param_values,
+              const std::map<std::string, const VECTOR*> &domain_values,
+              bool need_neighbour) :
+                _param_values(param_values),
+                _domain_values(domain_values),
+                _cell(cell),
+                _state_fe_values(*(sth.GetFESystem("state")), quad,
+                    update_flags),
+                _control_fe_values(*(sth.GetFESystem("control")), quad,
+                    update_flags),
+                _need_neighbour(need_neighbour)
+          {
+            _state_index = sth.GetStateIndex();
+            if (_state_index == 1)
+              _control_index = 0;
+            else
+              _control_index = 1;
+            _n_q_points_per_cell = quad.size();
+            _n_dofs_per_cell = cell[0]->get_fe().dofs_per_cell;
+
+            if (need_neighbour)//so we need FEFAcevalues for the neighbour too.
+              {
+                _nbr_state_fe_values = new DOpEWrapper::FEFaceValues<dim>(
+                    *(sth.GetFESystem("state")), quad, update_flags);
+                _nbr_control_fe_values = new DOpEWrapper::FEFaceValues<dim>(
+                    *(sth.GetFESystem("control")), quad, update_flags);
+              }
+            else
+              {
+                _nbr_state_fe_values = NULL;
+                _nbr_control_fe_values = NULL;
+              }
+            _state_fe_subface_values = NULL;
+            _control_fe_subface_values = NULL;
+          }
+        /**
+         * Constructor. Initializes the FaceFEValues objects. For PDE only
+         *
+         * @template SPARSITYPATTERN      The corresponding Sparsitypattern to the class-template VECTOR.
+         *
+         * @param quad                    Reference to the quadrature-rule which we use at the moment.
+         * @param update_flags            The update flags we need to initialize the FEValues obejcts
+         * @param sth                     A reference to the SpaceTimeHandler in use.
+         * @param cell                    A vector of cell iterators through which we gain most of the needed information (like
+         *                                material_ids, n_dfos, etc.)
+         * @param param_values            A std::map containing parameter data (e.g. non space dependent data). If the control
+         *                                is done by parameters, it is contained in this map at the position "control".
+         * @param domain_values           A std::map containing domain data (e.g. nodal vectors for FE-Functions). If the control
+         *                                is distributed, it is contained in this map at the position "control". The state may always
+         *                                be found in this map at the position "state"
+         *
+         */
+        template<typename FE, typename SPARSITYPATTERN>
+          FaceDataContainer(
+              const Quadrature<dim - 1>& quad,
+              UpdateFlags update_flags,
+              StateSpaceTimeHandler<FE, dealii::DoFHandler<dim>,
+                  SPARSITYPATTERN, VECTOR, dim>& sth,
+              const std::vector<typename DOpEWrapper::DoFHandler<dim,
+                  dealii::DoFHandler<dim> >::active_cell_iterator>& cell,
+              const std::map<std::string, const Vector<double>*> &param_values,
+              const std::map<std::string, const VECTOR*> &domain_values, bool need_neighbour) :
+                _param_values(param_values),
+                _domain_values(domain_values),
+                _cell(cell),
+                _state_fe_values(*(sth.GetFESystem("state")), quad,
+                    update_flags),
+                _control_fe_values(*(sth.GetFESystem("state")), quad,
+                    update_flags),
+                _need_neighbour(need_neighbour)
+          {
+            _state_index = sth.GetStateIndex();
+            _control_index = cell.size();
+            _n_q_points_per_cell = quad.size();
+            _n_dofs_per_cell = cell[0]->get_fe().dofs_per_cell;
+
+            if (need_neighbour)//so we need FEFAcevalues for the neighbour too.
+              {
+                _nbr_state_fe_values = new DOpEWrapper::FEFaceValues<dim>(
+                    *(sth.GetFESystem("state")), quad, update_flags);
+                _nbr_control_fe_values = new DOpEWrapper::FEFaceValues<dim>(
+                    *(sth.GetFESystem("state")), quad, update_flags);
+              }
+            else
+              {
+                _nbr_state_fe_values = NULL;
+                _nbr_control_fe_values = NULL;
+              }
+            _state_fe_subface_values = NULL;
+            _control_fe_subface_values = NULL;
+          }
+        ~FaceDataContainer()
+        {
+          if(_nbr_state_fe_values != NULL)
+            {
+              delete _nbr_state_fe_values;
+            }
+          if(_nbr_control_fe_values != NULL)
+            {
+              delete _nbr_control_fe_values;
+            }
+        }
+        /*********************************************/
+        /*
+         * This function reinits the FEValues on the actual face. Should
+         * be called prior to any of the get-functions.
+         *
+         * @param face_no     The 'local number' (i.e. from the perspective of the actual cell) of the
+         *                    actual face.
+         */
+        inline void
+        ReInit(unsigned int face_no);
+
+        /*********************************************/
+        /*
+         * This function reinits the FEFaceValues on the neighbor_cell.
+         * Should be called prior to any of the get nbr_functions,
+         * assumes that ReInit is called prior to this function.
+         */
+        inline void
+        ReInitNbr();
+
+        /*********************************************/
+        /**
+         * Get functions to extract data. They all assume that ReInit
+         * is executed before calling them.
+         */
+        inline unsigned int
+        GetNDoFsPerCell() const;
+        inline unsigned int
+        GetNbrNDoFsPerCell() const;
+        inline unsigned int
+        GetNQPoints() const;
+        inline unsigned int
+        GetNbrNQPoints() const;
+        inline unsigned int
+        GetMaterialId() const;
+        inline unsigned int
+        GetNbrMaterialId() const;
+        inline unsigned int
+        GetNbrMaterialId(unsigned int face) const;
+        inline bool
+        GetIsAtBoundary() const;
+        inline double
+        GetCellDiameter() const;
+        inline unsigned int
+        GetBoundaryIndicator() const;
+        inline const DOpEWrapper::FEFaceValues<dim>&
+        GetFEFaceValuesState() const;
+        inline const DOpEWrapper::FEFaceValues<dim>&
+        GetFEFaceValuesControl() const;
+
+        inline const DOpEWrapper::FEFaceValues<dim>&
+        GetNbrFEFaceValuesState() const;
+        inline const DOpEWrapper::FEFaceValues<dim>&
+        GetNbrFEFaceValuesControl() const;
+
+        /**********************************************/
+        /*
+         * Looks up the given name in _parameter_data and returns the corresponding value
+         * through 'value'.
+         */
+        void
+        GetParamValues(std::string name, Vector<double>& value) const;
+
+        /*********************************************/
+        /**
+         * Functions to extract values and gradients out of the FEFaceValues
+         */
+
+        /*
+         * Writes the values of the state variable at the quadrature points into values.
+         */
+        inline void
+        GetFaceValuesState(std::string name, std::vector<double>& values) const;
+        /*********************************************/
+        /*
+         * Same as above for the Vector valued case.
+         */
+        inline void
+        GetFaceValuesState(std::string name, std::vector<Vector<double> >& values) const;
+
+        /*********************************************/
+        /*
+         * Writes the values of the control variable at the quadrature points into values
+         */
+        inline void
+        GetFaceValuesControl(std::string name, std::vector<double>& values) const;
+        /*********************************************/
+        /*
+         * Same as above for the Vector valued case.
+         */
+        inline void
+        GetFaceValuesControl(std::string name, std::vector<Vector<double> >& values) const;
+        /*********************************************/
+        /*
+         * Writes the values of the state gradient at the quadrature points into values.
+         */
+
+        template<int targetdim>
+          inline void
+              GetFaceGradsState(std::string name,
+                  std::vector<Tensor<1, targetdim> >& values) const;
+
+        /*********************************************/
+        /*
+         * Same as above for the Vector valued case.
+         */
+        template<int targetdim>
+          inline void
+          GetFaceGradsState(std::string name,
+              std::vector<std::vector<Tensor<1, targetdim> > >& values) const;
+
+        /*********************************************/
+        /*
+         * Writes the values of the control gradient at the quadrature points into values.
+         */
+        template<int targetdim>
+          inline void
+          GetFaceGradsControl(std::string name,
+              std::vector<Tensor<1, targetdim> >& values) const;
+
+        /*********************************************/
+        /*
+         * Same as above for the Vector valued case.
+         */
+          template<int targetdim>
+          inline void
+          GetFaceGradsControl(std::string name,
+              std::vector<std::vector<Tensor<1, targetdim> > >& values) const;
+          /*********************************************/
+          /**
+           * Functions to extract values and gradients out of the FEFaceValues
+           * for the Nbr.
+           */
+
+          /*
+           * Writes the values of the state variable at the quadrature points into values.
+           */
+          inline void
+          GetNbrFaceValuesState(std::string name, std::vector<double>& values) const;
+          /*********************************************/
+          /*
+           * Same as above for the Vector valued case.
+           */
+          inline void
+          GetNbrFaceValuesState(std::string name, std::vector<Vector<double> >& values) const;
+
+          /*********************************************/
+
+          /*
+           * Writes the values of the control variable at the quadrature points into values
+           */
+          inline void
+          GetNbrFaceValuesControl(std::string name, std::vector<double>& values) const;
+          /*********************************************/
+
+          /*
+           * Same as above for the Vector valued case.
+           */
+          inline void
+          GetNbrFaceValuesControl(std::string name,
+              std::vector<Vector<double> >& values) const;
+          /*********************************************/
+
+          /*
+           * Writes the values of the state gradient at the quadrature points into values.
+           */
+
+          template<int targetdim>
+          inline void
+          GetNbrFaceGradsState(std::string name,
+              std::vector<Tensor<1, targetdim> >& values) const;
+
+          /*********************************************/
+
+          /*
+           * Same as avoe for the Vector valued case.
+           */
+          template<int targetdim>
+          inline void
+          GetNbrFaceGradsState(std::string name,
+              std::vector<std::vector<Tensor<1, targetdim> > >& values) const;
+
+          /*********************************************/
+
+          /*
+           * Writes the values of the control gradient at the quadrature points into values.
+           */
+
+          template<int targetdim>
+          inline void
+          GetNbrFaceGradsControl(std::string name,
+              std::vector<Tensor<1, targetdim> >& values) const;
+
+          /*********************************************/
+          /*
+           * Same as above for the Vector valued case.
+           */
+          template<int targetdim>
+          inline void
+          GetNbrFaceGradsControl(std::string name,
+              std::vector<std::vector<Tensor<1, targetdim> > >& values) const;
+
+
+      private:
+        /*
+         * Helper Functions
+         */
+        unsigned int
+        GetStateIndex() const;
+        unsigned int
+        GetControlIndex() const;
+        /***********************************************************/
+        /**
+         * Helper Function. Vector valued case.
+         */
+        inline void
+        GetValues(const dealii::FEFaceValuesBase<dim>& fe_values, std::string name,
+            std::vector<double>& values) const;
+        /***********************************************************/
+        /**
+         * Helper Function. Vector valued case.
+         */
+        inline void
+        GetValues(const dealii::FEFaceValuesBase<dim>& fe_values, std::string name,
+            std::vector<Vector<double> >& values) const;
+        /***********************************************************/
+        /**
+         * Helper Function.
+         */
+        template<int targetdim>
+          inline void
+          GetGrads(const dealii::FEFaceValuesBase<dim>& fe_values,
+              std::string name, std::vector<Tensor<1, targetdim> >& values) const;
+        /***********************************************************/
+        /**
+         * Helper Function. Vector valued case.
+         */
+        template<int targetdim>
+          inline void
+          GetGrads(const dealii::FEFaceValuesBase<dim>& fe_values,
+              std::string name, std::vector<std::vector<Tensor<1, targetdim> > >& values) const;
+        /***********************************************************/
+        inline const std::map<std::string, const VECTOR*> &
+        GetDomainValues() const
+        {
+          return _domain_values;
+        }
+        /***********************************************************/
+        //"global" member data, part of every instantiation
+        const std::map<std::string, const Vector<double>*> &_param_values;
+        const std::map<std::string, const VECTOR*> &_domain_values;
+        unsigned int _state_index;
+        unsigned int _control_index;
+
+        const std::vector<typename DOpEWrapper::DoFHandler<dim, dealii::DoFHandler<
+            dim> >::active_cell_iterator> & _cell;
+        DOpEWrapper::FEFaceValues<dim> _state_fe_values;
+        DOpEWrapper::FEFaceValues<dim> _control_fe_values;
+
+        DOpEWrapper::FEFaceValues<dim>* _nbr_state_fe_values;
+        DOpEWrapper::FEFaceValues<dim>* _nbr_control_fe_values;
+
+        DOpEWrapper::FESubfaceValues<dim>* _state_fe_subface_values;
+        DOpEWrapper::FESubfaceValues<dim>* _control_fe_subface_values;
+
+        unsigned int _n_q_points_per_cell;
+        unsigned int _n_dofs_per_cell;
+
+        unsigned int _face;
+        bool _need_neighbour;
+    };
+
+  template<typename VECTOR, int dim>
+    class FaceDataContainer<dealii::hp::DoFHandler<dim>, VECTOR, dim>
+    {
+
+      public:
+        /**
+         * Constructor. Initializes the hp::FaceFEValues objects.
+         *
+         * @template SPARSITYPATTERN      The corresponding Sparsitypattern to the class-template VECTOR.
+         * @template dopedim              The dimension of the control variable.
+         * @template dealdim              The dimension of the state variable.
+         *
+         * @param quad                    Reference to the quadrature-rule which we use at the moment.
+         * @param update_flags            The update flags we need to initialize the FEValues obejcts
+         * @param sth                     A reference to the SpaceTimeHandler in use.
+         * @param cell                    A vector of cell iterators through which we gain most of the needed information (like
+         *                                material_ids, n_dfos, etc.)
+         * @param param_values            A std::map containing parameter data (e.g. non space dependent data). If the control
+         *                                is done by parameters, it is contained in this map at the position "control".
+         * @param domain_values           A std::map containing domain data (e.g. nodal vectors for FE-Functions). If the control
+         *                                is distributed, it is contained in this map at the position "control". The state may always
+         *                                be found in this map at the position "state"
+         * @param need_neighbour         Describes, whether we need all the GetNbr (= Get Neighbor) functions.
+         *
+         */
+        template<typename FE, typename SPARSITYPATTERN, int dopedim,
+            int dealdim>
+          FaceDataContainer<dealii::hp::DoFHandler<dim>, VECTOR, dim> (
+              const hp::QCollection<dim - 1>& q_collection,
+              UpdateFlags update_flags,
+              SpaceTimeHandler<FE, dealii::hp::DoFHandler<dim>,
+                  SPARSITYPATTERN, VECTOR, dopedim, dealdim>& sth,
+              const std::vector<typename DOpEWrapper::DoFHandler<dim,
+                  dealii::hp::DoFHandler<dim> >::active_cell_iterator>& cell,
+              const std::map<std::string, const Vector<double>*> &param_values,
+              const std::map<std::string, const VECTOR*> &domain_values,
+              bool need_neighbour) :
+                _param_values(param_values),
+                _domain_values(domain_values),
+                _cell(cell),
+                _state_hp_fe_values(*(sth.GetFESystem("state")), q_collection,
+                    update_flags),
+                _control_hp_fe_values(*(sth.GetFESystem("control")),
+                    q_collection, update_flags), _q_collection(q_collection)
+          {
+            _state_index = sth.GetStateIndex();
+            if (_state_index == 1)
+              _control_index = 0;
+            else
+              _control_index = 1;
+
+            if (need_neighbour)//so we need FEFAcevalues for the neighbour too.
+              {
+                _nbr_state_hp_fe_values = new DOpEWrapper::HpFEFaceValues<dim>(
+                    *(sth.GetFESystem("state")), q_collection, update_flags);
+                _nbr_control_hp_fe_values = new DOpEWrapper::HpFEFaceValues<dim>(
+                    *(sth.GetFESystem("control")), q_collection, update_flags);
+              }
+            else
+              {
+                _nbr_state_hp_fe_values = NULL;
+                _nbr_control_hp_fe_values = NULL;
+              }
+            _state_hp_fe_subface_values = NULL;
+            _control_hp_fe_subface_values = NULL;
+          }
+
+        /**
+         * Constructor. Initializes the hp::FaceFEValues objects.
+         *
+         * @template SPARSITYPATTERN      The corresponding Sparsitypattern to the class-template VECTOR.
+         * @template dopedim              The dimension of the control variable.
+         * @template dealdim              The dimension of the state variable.
+         *
+         * @param quad                    Reference to the quadrature-rule which we use at the moment.
+         * @param update_flags            The update flags we need to initialize the FEValues obejcts
+         * @param sth                     A reference to the StateSpaceTimeHandler in use.
+         * @param cell                    A vector of cell iterators through which we gain most of the needed information (like
+         *                                material_ids, n_dfos, etc.)
+         * @param param_values            A std::map containing parameter data (e.g. non space dependent data). If the control
+         *                                is done by parameters, it is contained in this map at the position "control".
+         * @param domain_values           A std::map containing domain data (e.g. nodal vectors for FE-Functions). If the control
+         *                                is distributed, it is contained in this map at the position "control". The state may always
+         *                                be found in this map at the position "state"
+         * @param need_neighbour         Describes, whether we need all the GetNbr (= Get Neighbor) functions.
+         *
+         */
+        template<typename FE, typename SPARSITYPATTERN, int dealdim>
+          FaceDataContainer<dealii::hp::DoFHandler<dim>, VECTOR, dim> (
+              const hp::QCollection<dim - 1>& q_collection,
+              UpdateFlags update_flags,
+              StateSpaceTimeHandler<FE, dealii::hp::DoFHandler<dim>,
+                  SPARSITYPATTERN, VECTOR, dealdim>& sth,
+              const std::vector<typename DOpEWrapper::DoFHandler<dim,
+                  dealii::hp::DoFHandler<dim> >::active_cell_iterator>& cell,
+              const std::map<std::string, const Vector<double>*> &param_values,
+              const std::map<std::string, const VECTOR*> &domain_values,
+              bool need_neighbour) :
+                _param_values(param_values),
+                _domain_values(domain_values),
+                _cell(cell),
+                _state_hp_fe_values(*(sth.GetFESystem("state")), q_collection,
+                    update_flags),
+                _control_hp_fe_values(*(sth.GetFESystem("state")),
+                    q_collection, update_flags), _q_collection(q_collection),
+                _need_neighbour(need_neighbour)
+          {
+            _state_index = sth.GetStateIndex();
+            if (_state_index == 1)
+              _control_index = 0;
+            else
+              _control_index = 1;
+
+            if (need_neighbour)
+              {
+                _nbr_state_hp_fe_values = new DOpEWrapper::HpFEFaceValues<dim>(
+                    *(sth.GetFESystem("state")), q_collection, update_flags);
+                _nbr_control_hp_fe_values = new DOpEWrapper::HpFEFaceValues<dim>(
+                    *(sth.GetFESystem("state")), q_collection, update_flags);
+              }
+            else
+              {
+                _nbr_state_hp_fe_values = NULL;
+                _nbr_control_hp_fe_values = NULL;
+              }
+            _state_hp_fe_subface_values = NULL;
+            _control_hp_fe_subface_values = NULL;
+          }
+
+        ~FaceDataContainer<dealii::hp::DoFHandler<dim>, VECTOR, dim> ()
+        {
+          if(_nbr_state_hp_fe_values != NULL)
+            {
+              delete _nbr_state_hp_fe_values;
+            }
+          if(_nbr_control_hp_fe_values != NULL)
+            {
+              delete _nbr_control_hp_fe_values;
+            }
+        }
+
+        /*****************************************************************/
+        /*
+         * This function reinits the hp::FEFaceValues on the actual cell.
+         * Should be called prior to any of the get functions.
+         */
+        inline void
+        ReInit(unsigned int face_no);
+        /*********************************************/
+        /*
+         * This function reinits the hp::FEFaceValues on the neighbor_cell.
+         * Should be called prior to any of the get nbr_functions,
+         * assumes that ReInit is called prior to this function.
+         */
+        inline void
+        ReInitNbr();
+        /*********************************************/
+        /**
+         * Get functions to extract data. They all assume that ReInit
+         * is executed before calling them.
+         */
+        inline unsigned int
+        GetNDoFsPerCell() const;
+
+        inline unsigned int
+        GetNbrNDoFsPerCell() const;
+        inline unsigned int
+        GetNQPoints() const;
+        inline unsigned int
+        GetNbrNQPoints() const;
+        inline unsigned int
+        GetMaterialId() const;
+        inline unsigned int
+        GetNbrMaterialId() const;
+        inline unsigned int
+        GetNbrMaterialId(unsigned int face) const;
+        inline bool
+        GetIsAtBoundary() const;
+        inline unsigned int
+        GetBoundaryIndicator() const;
+        inline double
+        GetCellDiameter() const;
+        inline const DOpEWrapper::FEFaceValues<dim>&
+        GetFEFaceValuesState() const;
+        inline const DOpEWrapper::FEFaceValues<dim>&
+        GetFEFaceValuesControl() const;
+
+        inline const DOpEWrapper::FEFaceValues<dim>&
+        GetNbrFEFaceValuesState() const;
+        inline const DOpEWrapper::FEFaceValues<dim>&
+        GetNbrFEFaceValuesControl() const;
+
+        inline void
+        GetParamValues(std::string name, Vector<double>& value) const;
+
+        /*********************************************/
+        /**
+         * Functions to extract values and gradients out of the FEFaceValues.
+         */
+
+        /*
+         * Writes the values of the state variable at the quadrature points into values.
+         */
+        inline void
+        GetFaceValuesState(std::string name, std::vector<double>& values) const;
+        /*********************************************/
+        /*
+         * Same as above for the Vector valued case.
+         */
+        inline void
+        GetFaceValuesState(std::string name, std::vector<Vector<double> >& values) const;
+
+        /*********************************************/
+
+        /*
+         * Writes the values of the control variable at the quadrature points into values
+         */
+        inline void
+        GetFaceValuesControl(std::string name, std::vector<double>& values) const;
+        /*********************************************/
+
+        /*
+         * Same as above for the Vector valued case.
+         */
+        inline void
+        GetFaceValuesControl(std::string name, std::vector<Vector<double> >& values) const;
+        /*********************************************/
+
+        /*
+         * Writes the values of the state gradient at the quadrature points into values.
+         */
+
+        template<int targetdim>
+          inline void
+              GetFaceGradsState(std::string name,
+                  std::vector<Tensor<1, targetdim> >& values) const;
+
+        /*********************************************/
+
+        /*
+         * Same as avoe for the Vector valued case.
+         */
+        template<int targetdim>
+          inline void
+          GetFaceGradsState(std::string name,
+              std::vector<std::vector<Tensor<1, targetdim> > >& values) const;
+
+        /*********************************************/
+
+        /*
+         * Writes the values of the control gradient at the quadrature points into values.
+         */
+
+        template<int targetdim>
+          inline void
+          GetFaceGradsControl(std::string name,
+              std::vector<Tensor<1, targetdim> >& values) const;
+
+        /*********************************************/
+        /*
+         * Same as above for the Vector valued case.
+         */
+        template<int targetdim>
+          inline void
+          GetFaceGradsControl(std::string name,
+              std::vector<std::vector<Tensor<1, targetdim> > >& values) const;
+
+        /*********************************************/
+        /*********************************************/
+        /**
+         * Functions to extract values and gradients out of the FEFaceValues
+         * for the Nbr.
+         */
+
+        /*
+         * Writes the values of the state variable at the quadrature points into values.
+         */
+        inline void
+        GetNbrFaceValuesState(std::string name, std::vector<double>& values) const;
+        /*********************************************/
+        /*
+         * Same as above for the Vector valued case.
+         */
+        inline void
+            GetNbrFaceValuesState(std::string name, std::vector<Vector<double> >& values) const;
+
+        /*********************************************/
+
+        /*
+         * Writes the values of the control variable at the quadrature points into values
+         */
+        inline void
+        GetNbrFaceValuesControl(std::string name, std::vector<double>& values) const;
+        /*********************************************/
+
+        /*
+         * Same as above for the Vector valued case.
+         */
+        inline void
+            GetNbrFaceValuesControl(std::string name,
+                std::vector<Vector<double> >& values) const;
+        /*********************************************/
+
+        /*
+         * Writes the values of the state gradient at the quadrature points into values.
+         */
+
+        template<int targetdim>
+          inline void
+          GetNbrFaceGradsState(std::string name,
+              std::vector<Tensor<1, targetdim> >& values) const;
+
+        /*********************************************/
+
+        /*
+         * Same as avoe for the Vector valued case.
+         */
+        template<int targetdim>
+          inline void
+          GetNbrFaceGradsState(std::string name,
+              std::vector<std::vector<Tensor<1, targetdim> > >& values) const;
+
+        /*********************************************/
+
+        /*
+         * Writes the values of the control gradient at the quadrature points into values.
+         */
+
+        template<int targetdim>
+          inline void
+          GetNbrFaceGradsControl(std::string name,
+              std::vector<Tensor<1, targetdim> >& values) const;
+
+        /*********************************************/
+        /*
+         * Same as above for the Vector valued case.
+         */
+        template<int targetdim>
+          inline void
+          GetNbrFaceGradsControl(std::string name,
+              std::vector<std::vector<Tensor<1, targetdim> > >& values) const;
+
+      private:
+        inline unsigned int
+        GetStateIndex() const;
+        inline unsigned int
+        GetControlIndex() const;
+        inline const std::map<std::string, const VECTOR*> &
+        GetDomainValues() const;
+        /***********************************************************/
+        /**
+         * Helper Function.
+         * Hier koennte man ueber ein Template nachdenken.
+         */
+        inline void
+        GetValues(const dealii::FEFaceValuesBase<dim>& fe_values, std::string name,
+            std::vector<double>& values) const;
+        /***********************************************************/
+        /**
+         * Helper Function. Vector valued case.
+         */
+        inline void
+        GetValues(const dealii::FEFaceValuesBase<dim>& fe_values, std::string name,
+            std::vector<Vector<double> >& values) const;
+
+        /***********************************************************/
+        /**
+         * Helper Function.
+         */
+        template<int targetdim>
+          inline void
+          GetGrads(const dealii::FEFaceValuesBase<dim>& fe_values,
+              std::string name, std::vector<Tensor<1, targetdim> >& values) const;
+        /***********************************************************/
+        /**
+         * Helper Function. Vector valued case.
+         */
+        template<int targetdim>
+          inline void
+          GetGrads(const dealii::FEFaceValuesBase<dim>& fe_values,
+              std::string name, std::vector<std::vector<Tensor<1, targetdim> > >& values) const;
+
+        /***********************************************************/
+        //"global" member data, part of every instantiation
+        const std::map<std::string, const Vector<double>*> &_param_values;
+        const std::map<std::string, const VECTOR*> &_domain_values;
+        unsigned int _state_index;
+        unsigned int _control_index;
+        const std::vector<typename DOpEWrapper::DoFHandler<dim,
+            dealii::hp::DoFHandler<dim> >::active_cell_iterator>& _cell;
+        DOpEWrapper::HpFEFaceValues<dim> _state_hp_fe_values;
+        DOpEWrapper::HpFEFaceValues<dim> _control_hp_fe_values;
+
+        DOpEWrapper::HpFEFaceValues<dim>* _nbr_state_hp_fe_values;
+        DOpEWrapper::HpFEFaceValues<dim>* _nbr_control_hp_fe_values;
+
+        DOpEWrapper::HpFESubfaceValues<dim>* _state_hp_fe_subface_values;
+        DOpEWrapper::HpFESubfaceValues<dim>* _control_hp_fe_subface_values;
+
+
+
+        const hp::QCollection<dim - 1>& _q_collection;
+        unsigned int _face;
+
+        bool _need_neighbour;
+    };
+
+  /***********************************************************************/
+  /************************IMPLEMENTATION*for*DoFHandler*********************************/
+  /***********************************************************************/
+
+  template<typename VECTOR, int dim>
+    void
+    FaceDataContainer<dealii::DoFHandler<dim>, VECTOR, dim>::ReInit(
+        unsigned int face_no)
+    {
+      _face = face_no;
+      _state_fe_values.reinit(_cell[this->GetStateIndex()], face_no);
+      //Make sure that the Control must be initialized.
+      if (this->GetControlIndex() < _cell.size())
+        _control_fe_values.reinit(_cell[this->GetControlIndex()], face_no);
+    }
+    /***********************************************************************/
+
+    template<typename VECTOR, int dim>
+    void
+    FaceDataContainer<dealii::DoFHandler<dim>, VECTOR, dim>::ReInitNbr()
+    {
+      assert(_need_neighbour);
+      if (_cell[0]->neighbor_index(_face) != -1)
+        {
+          _nbr_state_fe_values->reinit(
+              _cell[this->GetStateIndex()]->neighbor(_face),
+              _cell[this->GetStateIndex()]->neighbor_of_neighbor(_face));
+          //Make sure that the Control must be initialized.
+          if (this->GetControlIndex() < _cell.size())
+            _nbr_control_fe_values->reinit(
+                _cell[this->GetControlIndex()]->neighbor(_face),
+                _cell[this->GetControlIndex()]->neighbor_of_neighbor(_face));
+        }
+      else
+        throw DOpEException("There is no neighbor with number" + _face,
+            "FaceDataContainer::GetNbrNDoFsPerCell");
+    }
+  /***********************************************************************/
+  template<typename VECTOR, int dim>
+    unsigned int
+    FaceDataContainer<dealii::DoFHandler<dim>, VECTOR, dim>::GetNDoFsPerCell() const
+    {
+      return _n_dofs_per_cell;
+    }
+
+  /***********************************************************************/
+
+  template<typename VECTOR, int dim>
+    unsigned int
+    FaceDataContainer<dealii::DoFHandler<dim>, VECTOR, dim>::GetNbrNDoFsPerCell() const
+    {
+      return _n_dofs_per_cell;
+    }
+
+  /**********************************************/
+  template<typename VECTOR, int dim>
+    unsigned int
+    FaceDataContainer<dealii::DoFHandler<dim>, VECTOR, dim>::GetNQPoints() const
+    {
+      return _n_q_points_per_cell;
+    }
+
+    /**********************************************/
+    template<typename VECTOR, int dim>
+    unsigned int
+    FaceDataContainer<dealii::DoFHandler<dim>, VECTOR, dim>::GetNbrNQPoints() const
+    {
+      return _n_q_points_per_cell;
+    }
+
+  /**********************************************/
+  template<typename VECTOR, int dim>
+    unsigned int
+    FaceDataContainer<dealii::DoFHandler<dim>, VECTOR, dim>::GetMaterialId() const
+    {
+      return _cell[0]->material_id();
+    }
+
+  /**********************************************/
+  template<typename VECTOR, int dim>
+    unsigned int
+    FaceDataContainer<dealii::DoFHandler<dim>, VECTOR, dim>::GetNbrMaterialId() const
+    {
+      return this->GetNbrMaterialId(_face);
+    }
+
+  template<typename VECTOR, int dim>
+    unsigned int
+    FaceDataContainer<dealii::DoFHandler<dim>, VECTOR, dim>::GetNbrMaterialId(
+        unsigned int face) const
+    {
+      if (_cell[0]->neighbor_index(face) != -1)
+        return _cell[0]->neighbor(face)->material_id();
+      else
+        throw DOpEException("There is no neighbor with number " + face,
+            "FaceDataContainer::GetNbrMaterialId");
+    }
+
+  /**********************************************/
+  template<typename VECTOR, int dim>
+    bool
+    FaceDataContainer<dealii::DoFHandler<dim>, VECTOR, dim>::GetIsAtBoundary() const
+    {
+      return _cell[0]->face(_face)->at_boundary();
+    }
+
+  /**********************************************/
+  template<typename VECTOR, int dim>
+    double
+    FaceDataContainer<dealii::DoFHandler<dim>, VECTOR, dim>::GetCellDiameter() const
+    {
+      return _cell[0]->face(_face)->diameter();
+    }
+
+  /**********************************************/
+
+  template<typename VECTOR, int dim>
+    unsigned int
+    FaceDataContainer<dealii::DoFHandler<dim>, VECTOR, dim>::
+    GetBoundaryIndicator() const
+    {
+      return _cell[0]->face(_face)->boundary_indicator();
+    }
+
+    /**********************************************/
+    template<typename VECTOR, int dim>
+    const DOpEWrapper::FEFaceValues<dim>&
+    FaceDataContainer<dealii::DoFHandler<dim>, VECTOR, dim>::
+    GetFEFaceValuesState() const
+    {
+      return _state_fe_values;
+    }
+
+    /**********************************************/
+    template<typename VECTOR, int dim>
+    const DOpEWrapper::FEFaceValues<dim>&
+    FaceDataContainer<dealii::DoFHandler<dim>, VECTOR, dim>::
+    GetFEFaceValuesControl() const
+    {
+      return _control_fe_values;
+    }
+    /**********************************************/
+    template<typename VECTOR, int dim>
+    const DOpEWrapper::FEFaceValues<dim>&
+    FaceDataContainer<dealii::DoFHandler<dim>, VECTOR, dim>::
+    GetNbrFEFaceValuesState() const
+    {
+      return *_nbr_state_fe_values;
+    }
+
+    /**********************************************/
+    template<typename VECTOR, int dim>
+    const DOpEWrapper::FEFaceValues<dim>&
+    FaceDataContainer<dealii::DoFHandler<dim>, VECTOR, dim>::
+    GetNbrFEFaceValuesControl() const
+    {
+      return *_nbr_control_fe_values;
+    }
+
+  /**********************************************/
+
+  template<typename VECTOR, int dim>
+    void
+    FaceDataContainer<dealii::DoFHandler<dim>, VECTOR, dim>::GetParamValues(
+        std::string name, Vector<double>& value) const
+    {
+      typename std::map<std::string, const Vector<double>*>::const_iterator it =
+          _param_values.find(name);
+      if (it == _param_values.end())
+        {
+          throw DOpEException("Did not find " + name,
+              "FaceDataContainer::GetParamValues");
+        }
+      value = *(it->second);
+    }
+
+  /*********************************************/
+  template<typename VECTOR, int dim>
+    void
+    FaceDataContainer<dealii::DoFHandler<dim>, VECTOR, dim>::GetFaceValuesState(
+        std::string name, std::vector<double>& values) const
+    {
+      this->GetValues(this->GetFEFaceValuesState(), name, values);
+    }
+  /*********************************************/
+  template<typename VECTOR, int dim>
+    void
+    FaceDataContainer<dealii::DoFHandler<dim>, VECTOR, dim>::GetFaceValuesState(
+        std::string name, std::vector<Vector<double> >& values) const
+    {
+      this->GetValues(this->GetFEFaceValuesState(), name, values);
+
+    }
+
+  /*********************************************/
+  template<typename VECTOR, int dim>
+    void
+    FaceDataContainer<dealii::DoFHandler<dim>, VECTOR, dim>::GetFaceValuesControl(
+        std::string name, std::vector<double>& values) const
+    {
+      this->GetValues(this->GetFEFaceValuesControl(), name, values);
+    }
+
+  /*********************************************/
+  template<typename VECTOR, int dim>
+    void
+    FaceDataContainer<dealii::DoFHandler<dim>, VECTOR, dim>::GetFaceValuesControl(
+        std::string name, std::vector<Vector<double> >& values) const
+    {
+      this->GetValues(this->GetFEFaceValuesControl(), name, values);
+    }
+
+  /*********************************************/
+  template<typename VECTOR, int dim>
+    template<int targetdim>
+      void
+      FaceDataContainer<dealii::DoFHandler<dim>, VECTOR, dim>::GetFaceGradsState(
+          std::string name, std::vector<Tensor<1, targetdim> >& values) const
+      {
+        this->GetGrads<targetdim> (this->GetFEFaceValuesState(), name, values);
+      }
+
+  /*********************************************/
+  template<typename VECTOR, int dim>
+    template<int targetdim>
+      void
+      FaceDataContainer<dealii::DoFHandler<dim>, VECTOR, dim>::GetFaceGradsState(
+          std::string name, std::vector<std::vector<Tensor<1, targetdim> > >& values) const
+      {
+        this->GetGrads<targetdim> (this->GetFEFaceValuesState(), name, values);
+      }
+
+  /***********************************************************************/
+
+  template<typename VECTOR, int dim>
+    template<int targetdim>
+      void
+      FaceDataContainer<dealii::DoFHandler<dim>, VECTOR, dim>::GetFaceGradsControl(
+          std::string name, std::vector<Tensor<1, targetdim> >& values) const
+      {
+        this->GetGrads<targetdim> (this->GetFEFaceValuesControl(), name, values);
+      }
+  /***********************************************************************/
+
+  template<typename VECTOR, int dim>
+    template<int targetdim>
+      void
+      FaceDataContainer<dealii::DoFHandler<dim>, VECTOR, dim>::GetFaceGradsControl(
+          std::string name, std::vector<std::vector<Tensor<1, targetdim> > >& values) const
+      {
+        this->GetGrads<targetdim> (this->GetFEFaceValuesControl(), name, values);
+      }
+
+      /*********************************************/
+      template<typename VECTOR, int dim>
+        void
+        FaceDataContainer<dealii::DoFHandler<dim>, VECTOR, dim>::
+        GetNbrFaceValuesState(
+            std::string name, std::vector<double>& values) const
+        {
+          this->GetValues(this->GetNbrFEFaceValuesState(), name, values);
+        }
+      /*********************************************/
+      template<typename VECTOR, int dim>
+        void
+        FaceDataContainer<dealii::DoFHandler<dim>, VECTOR, dim>::
+        GetNbrFaceValuesState(
+            std::string name, std::vector<Vector<double> >& values) const
+        {
+          this->GetValues(this->GetNbrFEFaceValuesState(), name, values);
+
+        }
+
+      /*********************************************/
+      template<typename VECTOR, int dim>
+        void
+        FaceDataContainer<dealii::DoFHandler<dim>, VECTOR, dim>::
+        GetNbrFaceValuesControl(
+            std::string name, std::vector<double>& values) const
+        {
+          this->GetValues(this->GetNbrFEFaceValuesControl(), name, values);
+        }
+
+      /*********************************************/
+      template<typename VECTOR, int dim>
+        void
+        FaceDataContainer<dealii::DoFHandler<dim>, VECTOR, dim>::
+        GetNbrFaceValuesControl(
+            std::string name, std::vector<Vector<double> >& values) const
+        {
+          this->GetValues(this->GetNbrFEFaceValuesControl(), name, values);
+        }
+
+      /*********************************************/
+      template<typename VECTOR, int dim>
+        template<int targetdim>
+          void
+          FaceDataContainer<dealii::DoFHandler<dim>, VECTOR, dim>::
+          GetNbrFaceGradsState(
+              std::string name, std::vector<Tensor<1, targetdim> >& values) const
+          {
+            this->GetGrads<targetdim> (this->GetNbrFEFaceValuesState(), name, values);
+          }
+
+      /*********************************************/
+      template<typename VECTOR, int dim>
+        template<int targetdim>
+          void
+          FaceDataContainer<dealii::DoFHandler<dim>, VECTOR, dim>::
+          GetNbrFaceGradsState(
+              std::string name, std::vector<std::vector<Tensor<1, targetdim> > >& values) const
+          {
+            this->GetGrads<targetdim> (this->GetNbrFEFaceValuesState(), name, values);
+          }
+
+      /***********************************************************************/
+
+      template<typename VECTOR, int dim>
+        template<int targetdim>
+          void
+          FaceDataContainer<dealii::DoFHandler<dim>, VECTOR, dim>::
+          GetNbrFaceGradsControl(
+              std::string name, std::vector<Tensor<1, targetdim> >& values) const
+          {
+            this->GetGrads<targetdim> (this->GetNbrFEFaceValuesControl(), name, values);
+          }
+      /***********************************************************************/
+
+      template<typename VECTOR, int dim>
+        template<int targetdim>
+          void
+          FaceDataContainer<dealii::DoFHandler<dim>, VECTOR, dim>::
+          GetNbrFaceGradsControl(
+              std::string name, std::vector<std::vector<Tensor<1, targetdim> > >& values) const
+          {
+            this->GetGrads<targetdim> (this->GetNbrFEFaceValuesControl(), name, values);
+          }
+
+  /***********************************************************************/
+
+  template<typename VECTOR, int dim>
+    unsigned int
+    FaceDataContainer<dealii::DoFHandler<dim>, VECTOR, dim>::GetStateIndex() const
+    {
+      return _state_index;
+    }
+
+  /***********************************************************************/
+
+  template<typename VECTOR, int dim>
+    unsigned int
+    FaceDataContainer<dealii::DoFHandler<dim>, VECTOR, dim>::GetControlIndex() const
+    {
+      return _control_index;
+    }
+
+  /***********************************************************************/
+  template<typename VECTOR, int dim>
+    void
+    FaceDataContainer<dealii::DoFHandler<dim>, VECTOR, dim>::GetValues(
+        const dealii::FEFaceValuesBase<dim>& fe_values, std::string name,
+        std::vector<double>& values) const
+    {
+      typename std::map<std::string, const VECTOR*>::const_iterator it =
+          this->GetDomainValues().find(name);
+      if (it == this->GetDomainValues().end())
+        {
+          throw DOpEException("Did not find " + name,
+              "FaceDataContainer::GetValues");
+        }
+      fe_values.get_function_values(*(it->second), values);
+    }
+
+  /***********************************************************************/
+  template<typename VECTOR, int dim>
+    void
+    FaceDataContainer<dealii::DoFHandler<dim>, VECTOR, dim>::GetValues(
+        const dealii::FEFaceValuesBase<dim>& fe_values, std::string name,
+        std::vector<Vector<double> >& values) const
+    {
+      typename std::map<std::string, const VECTOR*>::const_iterator it =
+          this->GetDomainValues().find(name);
+      if (it == this->GetDomainValues().end())
+        {
+          throw DOpEException("Did not find " + name,
+              "FaceDataContainer::GetValues");
+        }
+      fe_values.get_function_values(*(it->second), values);
+    }
+
+  /***********************************************************************/
+
+  template<typename VECTOR, int dim>
+    template<int targetdim>
+      void
+      FaceDataContainer<dealii::DoFHandler<dim>, VECTOR, dim>::GetGrads(
+          const dealii::FEFaceValuesBase<dim>& fe_values, std::string name,
+          std::vector<Tensor<1, targetdim> >& values) const
+      {
+        typename std::map<std::string, const VECTOR*>::const_iterator it =
+            this->GetDomainValues().find(name);
+        if (it == this->GetDomainValues().end())
+          {
+            throw DOpEException("Did not find " + name,
+                "FaceDataContainerBase::GetGrads");
+          }
+        fe_values.get_function_gradients(*(it->second), values);
+      }
+
+  /***********************************************************************/
+
+  template<typename VECTOR, int dim>
+    template<int targetdim>
+      void
+      FaceDataContainer<dealii::DoFHandler<dim>, VECTOR, dim>::GetGrads(
+          const dealii::FEFaceValuesBase<dim>& fe_values, std::string name,
+          std::vector<std::vector<Tensor<1, targetdim> > >& values) const
+      {
+        typename std::map<std::string, const VECTOR*>::const_iterator it =
+            this->GetDomainValues().find(name);
+        if (it == this->GetDomainValues().end())
+          {
+            throw DOpEException("Did not find " + name,
+                "FaceDataContainerBase::GetGrads");
+          }
+        fe_values.get_function_gradients(*(it->second), values);
+      }
+
+  /***********************************************************************/
+  /************************END*OF*IMPLEMENTATION**************************/
+  /***********************************************************************/
+  /***********************************************************************/
+  /*****************IMPLEMENTATION for hp::DoFHandler*********************/
+  /***********************************************************************/
+
+  template<typename VECTOR, int dim>
+    void
+    FaceDataContainer<dealii::hp::DoFHandler<dim>, VECTOR, dim>::ReInit(
+        unsigned int face_no)
+    {
+      _face = face_no;
+      _state_hp_fe_values.reinit(_cell[this->GetStateIndex()], face_no);
+      //Make sure that the Control must be initialized.
+      if (this->GetControlIndex() < _cell.size())
+        _control_hp_fe_values.reinit(_cell[this->GetControlIndex()], face_no);
+
+    }
+
+  /***********************************************************************/
+
+  template<typename VECTOR, int dim>
+    void
+    FaceDataContainer<dealii::hp::DoFHandler<dim>, VECTOR, dim>::ReInitNbr()
+    {
+      assert(_need_neighbour);
+      if (_cell[0]->neighbor_index(_face) != -1)
+        {
+          _nbr_state_hp_fe_values->reinit(
+              _cell[this->GetStateIndex()]->neighbor(_face),
+              _cell[this->GetStateIndex()]->neighbor_of_neighbor(_face));
+          //Make sure that the Control must be initialized.
+          if (this->GetControlIndex() < _cell.size())
+            _nbr_control_hp_fe_values->reinit(
+                _cell[this->GetControlIndex()]->neighbor(_face),
+                _cell[this->GetControlIndex()]->neighbor_of_neighbor(_face));
+        }
+      else
+        throw DOpEException("There is no neighbor with number" + _face,
+            "HpFaceDataContainer::GetNbrNDoFsPerCell");
+
+    }
+
+  /*********************************************/
+
+  template<typename VECTOR, int dim>
+    unsigned int
+    FaceDataContainer<dealii::hp::DoFHandler<dim>, VECTOR, dim>::GetNDoFsPerCell() const
+    {
+      return _cell[0]->get_fe().dofs_per_cell;
+    }
+
+  /*********************************************/
+
+  template<typename VECTOR, int dim>
+    unsigned int
+    FaceDataContainer<dealii::hp::DoFHandler<dim>, VECTOR, dim>::GetNbrNDoFsPerCell() const
+    {
+      if (_cell[0]->neighbor_index(_face) != -1)
+        return _cell[0]->neighbor(_face)->get_fe().dofs_per_cell;
+      else
+        throw DOpEException("There is no neighbor with number" + _face,
+            "HpFaceDataContainer::GetNbrNDoFsPerCell");
+    }
+  /*********************************************/
+  template<typename VECTOR, int dim>
+    unsigned int
+    FaceDataContainer<dealii::hp::DoFHandler<dim>, VECTOR, dim>::GetNQPoints() const
+    {
+      return _q_collection[_cell[0]->active_fe_index()].size();
+    }
+
+  /*********************************************/
+  template<typename VECTOR, int dim>
+    unsigned int
+    FaceDataContainer<dealii::hp::DoFHandler<dim>, VECTOR, dim>::GetNbrNQPoints() const
+    {
+      if (_cell[0]->neighbor_index(_face) != -1)
+        return _q_collection[_cell[0]->neighbor(_face)->active_fe_index()].size();
+      else
+        throw DOpEException("There is no neighbor with number" + _face,
+            "HpFaceDataContainer::GetNbrNQPoints");
+    }
+  /*********************************************/
+
+  template<typename VECTOR, int dim>
+    unsigned int
+    FaceDataContainer<dealii::hp::DoFHandler<dim>, VECTOR, dim>::GetMaterialId() const
+    {
+      return _cell[0]->material_id();
+    }
+  /*********************************************/
+  template<typename VECTOR, int dim>
+    unsigned int
+    FaceDataContainer<dealii::hp::DoFHandler<dim>, VECTOR, dim>::GetNbrMaterialId() const
+    {
+      return this->GetNbrMaterialId(_face);
+    }
+
+  /*********************************************/
+
+  template<typename VECTOR, int dim>
+    unsigned int
+    FaceDataContainer<dealii::hp::DoFHandler<dim>, VECTOR, dim>::GetNbrMaterialId(
+        unsigned int face) const
+    {
+      if (_cell[0]->neighbor_index(face) != -1)
+        return _cell[0]->neighbor(face)->material_id();
+      else
+        throw DOpEException("There is no neighbor with number" + face,
+            "HpFaceDataContainer::GetNbrMaterialId");
+    }
+
+  /*********************************************/
+
+  template<typename VECTOR, int dim>
+    double
+    FaceDataContainer<dealii::hp::DoFHandler<dim>, VECTOR, dim>::GetCellDiameter() const
+    {
+      return _cell[0]->face(_face)->diameter();
+    }
+
+  /**********************************************/
+
+  template<typename VECTOR, int dim>
+    bool
+    FaceDataContainer<dealii::hp::DoFHandler<dim>, VECTOR, dim>::GetIsAtBoundary() const
+    {
+      return _cell[0]->face(_face)->at_boundary();
+    }
+
+  /**********************************************/
+  template<typename VECTOR, int dim>
+    unsigned int
+    FaceDataContainer<dealii::hp::DoFHandler<dim>, VECTOR, dim>::GetBoundaryIndicator() const
+    {
+      return _cell[0]->face(_face)->boundary_indicator();
+    }
+
+  /**********************************************/
+
+  template<typename VECTOR, int dim>
+    void
+    FaceDataContainer<dealii::hp::DoFHandler<dim>, VECTOR, dim>::GetParamValues(
+        std::string name, Vector<double>& value) const
+    {
+      typename std::map<std::string, const Vector<double>*>::const_iterator it =
+          _param_values.find(name);
+      if (it == _param_values.end())
+        {
+          throw DOpEException("Did not find " + name,
+              "FaceDataContainer::GetParamValues");
+        }
+      value = *(it->second);
+    }
+  /*********************************************/
+  template<typename VECTOR, int dim>
+    const DOpEWrapper::FEFaceValues<dim>&
+    FaceDataContainer<dealii::hp::DoFHandler<dim>, VECTOR, dim>::GetFEFaceValuesState() const
+    {
+      return static_cast<const DOpEWrapper::FEFaceValues<dim>&> (_state_hp_fe_values.get_present_fe_values());
+    }
+  /*********************************************/
+  template<typename VECTOR, int dim>
+    const DOpEWrapper::FEFaceValues<dim>&
+    FaceDataContainer<dealii::hp::DoFHandler<dim>, VECTOR, dim>::GetFEFaceValuesControl() const
+    {
+      return static_cast<const DOpEWrapper::FEFaceValues<dim>&> (_control_hp_fe_values.get_present_fe_values());
+    }
+  /*********************************************/
+  template<typename VECTOR, int dim>
+    const DOpEWrapper::FEFaceValues<dim>&
+    FaceDataContainer<dealii::hp::DoFHandler<dim>, VECTOR, dim>::GetNbrFEFaceValuesState() const
+    {
+      return static_cast<const DOpEWrapper::FEFaceValues<dim>&> (_nbr_state_hp_fe_values->get_present_fe_values());
+    }
+  /*********************************************/
+  template<typename VECTOR, int dim>
+    const DOpEWrapper::FEFaceValues<dim>&
+    FaceDataContainer<dealii::hp::DoFHandler<dim>, VECTOR, dim>::GetNbrFEFaceValuesControl() const
+    {
+      return static_cast<const DOpEWrapper::FEFaceValues<dim>&> (_nbr_control_hp_fe_values->get_present_fe_values());
+    }
+  /*********************************************/
+
+  template<typename VECTOR, int dim>
+    void
+    FaceDataContainer<dealii::hp::DoFHandler<dim>, VECTOR, dim>::GetFaceValuesState(
+        std::string name, std::vector<double>& values) const
+    {
+      this->GetValues(this->GetFEFaceValuesState(), name, values);
+    }
+  /*********************************************/
+
+  template<typename VECTOR, int dim>
+    void
+    FaceDataContainer<dealii::hp::DoFHandler<dim>, VECTOR, dim>::GetFaceValuesState(
+        std::string name, std::vector<Vector<double> >& values) const
+    {
+      this->GetValues(this->GetFEFaceValuesState(), name, values);
+
+    }
+
+  /*********************************************/
+
+  template<typename VECTOR, int dim>
+    void
+    FaceDataContainer<dealii::hp::DoFHandler<dim>, VECTOR, dim>::GetFaceValuesControl(
+        std::string name, std::vector<double>& values) const
+    {
+      this->GetValues(this->GetFEFaceValuesControl(), name, values);
+    }
+  /*********************************************/
+
+  template<typename VECTOR, int dim>
+    void
+    FaceDataContainer<dealii::hp::DoFHandler<dim>, VECTOR, dim>::GetFaceValuesControl(
+        std::string name, std::vector<Vector<double> >& values) const
+    {
+      this->GetValues(this->GetFEFaceValuesControl(), name, values);
+    }
+
+  /*********************************************/
+
+  template<typename VECTOR, int dim>
+    template<int targetdim>
+      void
+      FaceDataContainer<dealii::hp::DoFHandler<dim>, VECTOR, dim>::GetFaceGradsState(
+          std::string name, std::vector<Tensor<1, targetdim> >& values) const
+      {
+        this->GetGrads<targetdim> (this->GetFEFaceValuesState(), name, values);
+      }
+
+  /*********************************************/
+
+  template<typename VECTOR, int dim>
+    template<int targetdim>
+      void
+      FaceDataContainer<dealii::hp::DoFHandler<dim>, VECTOR, dim>::GetFaceGradsState(
+          std::string name, std::vector<std::vector<Tensor<1, targetdim> > >& values) const
+      {
+        this->GetGrads<targetdim> (this->GetFEFaceValuesState(), name, values);
+      }
+
+  /*********************************************/
+
+  template<typename VECTOR, int dim>
+    template<int targetdim>
+      void
+      FaceDataContainer<dealii::hp::DoFHandler<dim>, VECTOR, dim>::GetFaceGradsControl(
+          std::string name, std::vector<Tensor<1, targetdim> >& values) const
+      {
+        this->GetGrads<targetdim> (this->GetFEFaceValuesControl(), name, values);
+      }
+
+  /*********************************************/
+
+  template<typename VECTOR, int dim>
+    template<int targetdim>
+      void
+      FaceDataContainer<dealii::hp::DoFHandler<dim>, VECTOR, dim>::GetFaceGradsControl(
+          std::string name, std::vector<std::vector<Tensor<1, targetdim> > >& values) const
+      {
+        this->GetGrads<targetdim> (this->GetFEFaceValuesControl(), name, values);
+      }
+  /*********************************************/
+
+  /*********************************************/
+
+  template<typename VECTOR, int dim>
+    void
+    FaceDataContainer<dealii::hp::DoFHandler<dim>, VECTOR, dim>::GetNbrFaceValuesState(
+        std::string name, std::vector<double>& values) const
+    {
+      this->GetValues(this->GetNbrFEFaceValuesState(), name, values);
+    }
+  /*********************************************/
+
+  template<typename VECTOR, int dim>
+    void
+    FaceDataContainer<dealii::hp::DoFHandler<dim>, VECTOR, dim>::GetNbrFaceValuesState(
+        std::string name, std::vector<Vector<double> >& values) const
+    {
+      this->GetValues(this->GetNbrFEFaceValuesState(), name, values);
+
+    }
+
+  /*********************************************/
+
+  template<typename VECTOR, int dim>
+    void
+    FaceDataContainer<dealii::hp::DoFHandler<dim>, VECTOR, dim>::GetNbrFaceValuesControl(
+        std::string name, std::vector<double>& values) const
+    {
+      this->GetValues(this->GetNbrFEFaceValuesControl(), name, values);
+    }
+  /*********************************************/
+
+  template<typename VECTOR, int dim>
+    void
+    FaceDataContainer<dealii::hp::DoFHandler<dim>, VECTOR, dim>::GetNbrFaceValuesControl(
+        std::string name, std::vector<Vector<double> >& values) const
+    {
+      this->GetValues(this->GetNbrFEFaceValuesControl(), name, values);
+    }
+
+  /*********************************************/
+
+  template<typename VECTOR, int dim>
+    template<int targetdim>
+      void
+      FaceDataContainer<dealii::hp::DoFHandler<dim>, VECTOR, dim>::GetNbrFaceGradsState(
+          std::string name, std::vector<Tensor<1, targetdim> >& values) const
+      {
+        this->GetGrads<targetdim> (this->GetNbrFEFaceValuesState(), name,
+            values);
+      }
+
+  /*********************************************/
+
+  template<typename VECTOR, int dim>
+    template<int targetdim>
+      void
+      FaceDataContainer<dealii::hp::DoFHandler<dim>, VECTOR, dim>::GetNbrFaceGradsState(
+          std::string name, std::vector<std::vector<Tensor<1, targetdim> > >& values) const
+      {
+        this->GetGrads<targetdim> (this->GetNbrFEFaceValuesState(), name,
+            values);
+      }
+
+  /*********************************************/
+
+  template<typename VECTOR, int dim>
+    template<int targetdim>
+      void
+      FaceDataContainer<dealii::hp::DoFHandler<dim>, VECTOR, dim>::GetNbrFaceGradsControl(
+          std::string name, std::vector<Tensor<1, targetdim> >& values) const
+      {
+        this->GetGrads<targetdim> (this->GetNbrFEFaceValuesControl(), name,
+            values);
+      }
+
+  /*********************************************/
+
+  template<typename VECTOR, int dim>
+    template<int targetdim>
+      void
+      FaceDataContainer<dealii::hp::DoFHandler<dim>, VECTOR, dim>::GetNbrFaceGradsControl(
+          std::string name, std::vector<std::vector<Tensor<1, targetdim> > >& values) const
+      {
+        this->GetGrads<targetdim> (this->GetNbrFEFaceValuesControl(), name,
+            values);
+      }
+  /**********************************************/
+  template<typename VECTOR, int dim>
+    unsigned int
+    FaceDataContainer<dealii::hp::DoFHandler<dim>, VECTOR, dim>::GetStateIndex() const
+    {
+      return _state_index;
+    }
+  /*********************************************/
+  template<typename VECTOR, int dim>
+    unsigned int
+    FaceDataContainer<dealii::hp::DoFHandler<dim>, VECTOR, dim>::GetControlIndex() const
+    {
+      return _control_index;
+    }
+  /*********************************************/
+  template<typename VECTOR, int dim>
+    const std::map<std::string, const VECTOR*>&
+    FaceDataContainer<dealii::hp::DoFHandler<dim>, VECTOR, dim>::GetDomainValues() const
+    {
+      return _domain_values;
+    }
+  /*********************************************/
+
+  template<typename VECTOR, int dim>
+    void
+    FaceDataContainer<dealii::hp::DoFHandler<dim>, VECTOR, dim>::GetValues(
+        const dealii::FEFaceValuesBase<dim>& fe_values, std::string name,
+        std::vector<double>& values) const
+    {
+      typename std::map<std::string, const VECTOR*>::const_iterator it =
+          this->GetDomainValues().find(name);
+      if (it == this->GetDomainValues().end())
+        {
+          throw DOpEException("Did not find " + name,
+              "HpFaceDataContainer::GetValues");
+        }
+      fe_values.get_function_values(*(it->second), values);
+    }
+
+  /*********************************************/
+  template<typename VECTOR, int dim>
+    void
+    FaceDataContainer<dealii::hp::DoFHandler<dim>, VECTOR, dim>::GetValues(
+        const dealii::FEFaceValuesBase<dim>& fe_values, std::string name,
+        std::vector<Vector<double> >& values) const
+    {
+      typename std::map<std::string, const VECTOR*>::const_iterator it =
+          this->GetDomainValues().find(name);
+      if (it == this->GetDomainValues().end())
+        {
+          throw DOpEException("Did not find " + name,
+              "HpFaceDataContainer::GetValues");
+        }
+      fe_values.get_function_values(*(it->second), values);
+    }
+  /***********************************************************/
+
+  template<typename VECTOR, int dim>
+    template<int targetdim>
+      void
+      FaceDataContainer<dealii::hp::DoFHandler<dim>, VECTOR, dim>::GetGrads(
+          const dealii::FEFaceValuesBase<dim>& fe_values, std::string name,
+          std::vector<Tensor<1, targetdim> >& values) const
+      {
+        typename std::map<std::string, const VECTOR*>::const_iterator it =
+            this->GetDomainValues().find(name);
+        if (it == this->GetDomainValues().end())
+          {
+            throw DOpEException("Did not find " + name,
+                "HpFaceDataContainerBase::GetGrads");
+          }
+        fe_values.get_function_gradients(*(it->second), values);
+      }
+  /***********************************************************/
+
+  template<typename VECTOR, int dim>
+    template<int targetdim>
+      void
+      FaceDataContainer<dealii::hp::DoFHandler<dim>, VECTOR, dim>::GetGrads(
+          const dealii::FEFaceValuesBase<dim>& fe_values, std::string name,
+          std::vector<std::vector<Tensor<1, targetdim> > >& values) const
+      {
+        typename std::map<std::string, const VECTOR*>::const_iterator it =
+            this->GetDomainValues().find(name);
+        if (it == this->GetDomainValues().end())
+          {
+            throw DOpEException("Did not find " + name,
+                "HpFaceDataContainerBase::GetGrads");
+          }
+        fe_values.get_function_gradients(*(it->second), values);
+      }
+}//end of namespace
+
+#endif /* FACEDATACONTAINER_H_ */

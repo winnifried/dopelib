@@ -1,0 +1,267 @@
+#ifndef _LOCALPDE_
+#define _LOCALPDE_
+
+#include "pdeinterface.h"
+#include "celldatacontainer.h"
+#include "facedatacontainer.h"
+
+using namespace std;
+using namespace dealii;
+using namespace DOpE;
+
+template<typename VECTOR,int dealdim>
+  class LocalPDE : public PDEInterface<CellDataContainer,FaceDataContainer,dealii::DoFHandler<dealdim>, VECTOR,dealdim>
+  {
+  public:
+  LocalPDE() : _state_block_components(2,0)
+      {
+      }
+
+
+    // Domain values for cells
+    void CellEquation (const CellDataContainer<DoFHandler<dealdim>, VECTOR, dealdim>& cdc,
+		       dealii::Vector<double> &local_cell_vector,
+		       double scale, double)
+    {
+      assert(this->_problem_type == "state");
+
+      const DOpEWrapper::FEValues<dealdim> & state_fe_values = cdc.GetFEValuesState();
+      unsigned int n_dofs_per_cell = cdc.GetNDoFsPerCell();
+      unsigned int n_q_points = cdc.GetNQPoints();
+
+      _uvalues.resize(n_q_points,Vector<double>(2));
+      _ugrads.resize(n_q_points,vector<Tensor<1,2> >(2));
+
+      cdc.GetValuesState("last_newton_solution",_uvalues);
+      cdc.GetGradsState("last_newton_solution",_ugrads);
+
+      const FEValuesExtractors::Vector displacements (0);
+
+      const double mu = 80193.800283;
+      const double kappa = 271131.389455;
+      const double lambda = 110743.788889;
+
+      for (unsigned int q_point=0;q_point<n_q_points;q_point++)
+	{
+	  Tensor<2,2> vgrads;
+	  vgrads.clear();
+	  vgrads[0][0] = _ugrads[q_point][0][0];
+	  vgrads[0][1] = _ugrads[q_point][0][1];
+	  vgrads[1][0] = _ugrads[q_point][1][0];
+	  vgrads[1][1] = _ugrads[q_point][1][1];
+
+	  Tensor<2,2> realgrads;
+	  realgrads.clear();
+	  realgrads[0][0] = kappa * vgrads[0][0] + lambda * vgrads[1][1];
+	  realgrads[0][1] = mu * vgrads[0][1] + mu * vgrads[1][0];
+	  realgrads[1][0] = mu * vgrads[0][1] + mu * vgrads[1][0];
+	  realgrads[1][1] = kappa * vgrads[1][1] + lambda * vgrads[0][0];
+
+
+
+	  for (unsigned int i=0;i<n_dofs_per_cell;i++)
+	    {
+
+	      const Tensor<2,2> phi_i_grads_v = state_fe_values[displacements].gradient (i, q_point);
+	      const Tensor<2,2> phi_i_grads_real = 0.5 * phi_i_grads_v + 0.5 * transpose(phi_i_grads_v);
+
+
+
+	      local_cell_vector(i) +=  scale * (scalar_product(realgrads ,phi_i_grads_real))
+		* state_fe_values.JxW(q_point);
+
+	    }
+	}
+
+    }
+
+    void CellMatrix(const CellDataContainer<DoFHandler<dealdim>, VECTOR, dealdim>& cdc,
+		     FullMatrix<double> &local_entry_matrix, double scale, double)
+    {
+      assert(this->_problem_type == "state");
+
+      const DOpEWrapper::FEValues<dealdim> & state_fe_values = cdc.GetFEValuesState();
+      unsigned int n_dofs_per_cell = cdc.GetNDoFsPerCell();
+      unsigned int n_q_points = cdc.GetNQPoints();
+
+      const FEValuesExtractors::Vector displacements (0);
+
+      const double mu = 80193.800283;
+      const double kappa = 271131.389455;
+      const double lambda = 110743.788889;
+
+
+      std::vector<Tensor<2,2> >     phi_grads_v (n_dofs_per_cell);
+      std::vector<Tensor<2,2> >     phi_grads_real (n_dofs_per_cell);
+      std::vector<Tensor<2,2> >     phi_grads_test (n_dofs_per_cell);
+
+      for(unsigned int q_point = 0; q_point < n_q_points; q_point++)
+	{
+	   for(unsigned int k = 0; k < n_dofs_per_cell; k++)
+	     {
+
+	       phi_grads_v[k] = state_fe_values[displacements].gradient (k, q_point);
+	       phi_grads_real[k][0][0] = kappa * phi_grads_v[k][0][0] + lambda * phi_grads_v[k][1][1];
+	       phi_grads_real[k][0][1] = mu * phi_grads_v[k][0][1] + mu * phi_grads_v[k][1][0];
+	       phi_grads_real[k][1][0] = mu * phi_grads_v[k][0][1] + mu * phi_grads_v[k][1][0];
+	       phi_grads_real[k][1][1] = kappa * phi_grads_v[k][1][1] + lambda * phi_grads_v[k][0][0];
+               phi_grads_test[k] = 0.5 * phi_grads_v[k] + 0.5 * transpose(phi_grads_v[k]);
+
+	     }
+
+
+
+	  for(unsigned int i = 0; i < n_dofs_per_cell; i++)
+	    {
+	      for(unsigned int j = 0; j < n_dofs_per_cell; j++)
+		{
+
+
+		  local_entry_matrix(i,j) += scale * (scalar_product(phi_grads_real[j], phi_grads_test[i]))
+
+
+		    * state_fe_values.JxW(q_point);
+		}
+	    }
+	}
+
+    }
+
+    void CellRightHandSide(const CellDataContainer<DoFHandler<dealdim>, VECTOR, dealdim>& /*cdc*/,
+                           dealii::Vector<double> &local_cell_vector __attribute__((unused)),
+                           double scale __attribute__((unused)))
+    {
+    }
+
+    // Values for boundary integrals
+    void BoundaryEquation (const  FaceDataContainer<dealii::DoFHandler<2>, VECTOR, dealdim>& fdc,
+			   dealii::Vector<double> &local_cell_vector,
+			   double scale)
+    {
+
+      assert(this->_problem_type == "state");
+
+      const DOpEWrapper::FEFaceValues<dealdim> & state_fe_face_values = fdc.GetFEFaceValuesState();
+      unsigned int n_dofs_per_cell = fdc.GetNDoFsPerCell();
+      unsigned int n_q_points = fdc.GetNQPoints();
+      unsigned int color = fdc.GetBoundaryIndicator();
+
+      //traction on the upper boundary segment realized as Neumann condition
+      if (color == 3)
+	{
+
+
+	  const FEValuesExtractors::Vector displacements (0);
+
+	      Tensor<1,2> g;
+	      g[0] = 0;
+	      g[1] = 450;
+
+	  for (unsigned int q_point=0;q_point<n_q_points;q_point++)
+	    {
+
+
+	      for (unsigned int i=0;i<n_dofs_per_cell;i++)
+		{
+		  const Tensor<1,2> phi_i_v = state_fe_face_values[displacements].value (i, q_point);
+
+
+
+		  local_cell_vector(i) +=  -scale * g * phi_i_v * state_fe_face_values.JxW(q_point);
+		}
+
+	    }
+	}
+
+    }
+
+    void BoundaryMatrix (const  FaceDataContainer<dealii::DoFHandler<2>, VECTOR, dealdim>& /*fdc*/,
+			 dealii::FullMatrix<double> &/*local_entry_matrix*/)
+    {
+
+      assert(this->_problem_type == "state");
+    }
+
+    void BoundaryRightHandSide (const  FaceDataContainer<dealii::DoFHandler<2>, VECTOR, dealdim>& /*fdc*/,
+				dealii::Vector<double> &/*local_cell_vector*/,
+				double /*scale*/)
+     {
+       	assert(this->_problem_type == "state");
+     }
+
+    UpdateFlags GetUpdateFlags() const
+    {
+	return update_values | update_gradients  | update_quadrature_points;
+    }
+
+    UpdateFlags GetFaceUpdateFlags() const
+    {
+	return update_values | update_gradients  | update_normal_vectors | update_quadrature_points;
+    }
+     unsigned int GetStateNBlocks() const
+    {
+      return 1;
+    }
+
+    std::vector<unsigned int>& GetStateBlockComponent(){ return _state_block_components; }
+    const std::vector<unsigned int>& GetStateBlockComponent() const{ return _state_block_components; }
+
+  protected:
+    inline void GetValues(const DOpEWrapper::FEValues<dealdim>& fe_values,
+			  const map<string, const BlockVector<double>* >& domain_values,string name,
+			  vector<Vector<double> >& values)
+    {
+      typename map<string, const BlockVector<double>* >::const_iterator it = domain_values.find(name);
+      if(it == domain_values.end())
+	{
+	  throw DOpEException("Did not find " + name,"LocalPDE::GetValues");
+	}
+      fe_values.get_function_values(*(it->second),values);
+    }
+
+    inline void GetGrads(const DOpEWrapper::FEValues<dealdim>& fe_values,
+			 const map<string, const BlockVector<double>* >& domain_values,string name,
+			 vector<vector<Tensor<1,dealdim> > >& values)
+    {
+      typename map<string, const BlockVector<double>* >::const_iterator it = domain_values.find(name);
+      if(it == domain_values.end())
+	{
+	  throw DOpEException("Did not find " + name,"LocalPDE::GetGrads");
+	}
+      fe_values.get_function_grads(*(it->second),values);
+    }
+
+
+    inline void GetFaceValues(const DOpEWrapper::FEFaceValues<dealdim>& fe_face_values,
+			      const map<string, const BlockVector<double>* >& domain_values, string name,
+			      vector<Vector<double> >& values)
+    {
+      typename map<string, const BlockVector<double>* >::const_iterator it = domain_values.find(name);
+      if(it == domain_values.end())
+	{
+	  throw DOpEException("Did not find " + name,"LocalPDE::GetValues");
+	}
+      fe_face_values.get_function_values(*(it->second),values);
+    }
+
+    inline void GetFaceGrads(const DOpEWrapper::FEFaceValues<dealdim>& fe_face_values,
+			     const map<string, const BlockVector<double>* >& domain_values, string name,
+			     vector<vector<Tensor<1,dealdim> > >& values)
+    {
+      typename map<string, const BlockVector<double>* >::const_iterator it = domain_values.find(name);
+      if(it == domain_values.end())
+	{
+	  throw DOpEException("Did not find " + name,"LocalPDE::GetGrads");
+	}
+      fe_face_values.get_function_grads(*(it->second),values);
+    }
+
+
+  private:
+    vector<Vector<double> > _uvalues;
+
+    vector<vector<Tensor<1,dealdim> > > _ugrads;
+
+    vector<unsigned int> _state_block_components;
+  };
+#endif

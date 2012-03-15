@@ -1,0 +1,125 @@
+
+# Path to the deal.II toplevel directory:
+D = $(HOME)/deal.II
+
+# This tells `make' where to find the global settings of deal.ii and rules:
+include $D/common/Make.global_options
+
+# First get a list of files belonging to the project. Include files
+# are expected in `include/', while implementation files are expected
+# in `source/'. Object files are placed into `lib/[123]d', using the
+# same base name as the `.cc' file.
+cc-files    = $(shell echo *.cc)
+o-files     = $(cc-files:%.cc=%.$(OBJEXT))
+go-files    = $(cc-files:%.cc=%.g.$(OBJEXT))
+h-files     = $(wildcard *.h)
+
+ifeq ($(DEAL_II_MAJOR),6)
+lib-h-files = $(shell echo $D/base/include/base/*.h \
+		 $D/lac/include/lac/*.h             \
+		 $D/deal.II/include/*/*.h	    \
+	  	 $(DOpE)DOpEsrc/*/*.h)
+libs.g   = $(lib-deal2-$(deal_II_dimension)d.g) \
+	   $(lib-lac.g)                         \
+           $(lib-base.g)			\
+	   $(lib-dope-$(dope_dimension)d-$(deal_II_dimension)d.g)
+libs.o   = $(lib-deal2-$(deal_II_dimension)d.o) \
+	   $(lib-lac.o)                         \
+           $(lib-base.o)			\
+	   $(lib-dope-$(dope_dimension)d-$(deal_II_dimension)d.o)
+else
+lib-h-files = $(shell echo $D/include/deal.II/*/*.h	    \
+	  	 $(DOpE)DOpEsrc/*/*.h)	
+libs.g   = $(lib-deal2.g) \
+	   $(lib-dope-$(dope_dimension)d-$(deal_II_dimension)d.g)
+libs.o   = $(lib-deal2.o) \
+	   $(lib-dope-$(dope_dimension)d-$(deal_II_dimension)d.o)
+endif
+
+lib-dope-$(dope_dimension)d-$(deal_II_dimension)d.g = $(DOpE)DOpEsrc/lib/$(dope_dimension)d/$(deal_II_dimension)d/libdope.g.a
+lib-dope-$(dope_dimension)d-$(deal_II_dimension)d.o = $(DOpE)DOpEsrc/lib/$(dope_dimension)d/$(deal_II_dimension)d/libdope.a
+
+
+# Define a nifty string to indicate in the output of the compile
+# commands whether the program is compiled in multithread mode or not:
+ifneq ($(with-multithreading),no)
+  MT = MT
+else
+  MT = ==
+endif
+
+CXXFLAGS.g += -std=gnu++0x -fvisibility-inlines-hidden
+CXXFLAGS.o += -std=gnu++0x -fvisibility-inlines-hidden
+
+# Now use the information from above to define the set of libraries to
+# link with and the flags to be passed to the compiler:
+ifeq ($(debug-mode),on)
+  libraries = $(go-files) $(libs.g) 
+  flags     = $(CXXFLAGS.g)
+else
+  libraries = $(o-files) $(libs.o)
+  flags     = $(CXXFLAGS.o)
+endif
+
+# Then augment the compiler flags by a specification of the dimension
+# for which the program shall be compiled:
+flags += -Ddeal_II_dimension=$(deal_II_dimension) -Ddope_dimension=$(dope_dimension)
+
+LIBS += -I$(DOpE)/DOpEsrc/include/ -I$(DOpE)/DOpEsrc/templates -I$(DOpE)/DOpEsrc/wrapper -I$(DOpE)/DOpEsrc/basic -I$(DOpE)/DOpEsrc/problemdata -I$(DOpE)/DOpEsrc/interfaces -I$(DOpE)/DOpEsrc/reducedproblems -I$(DOpE)/DOpEsrc/container -I$(DOpE)/DOpEsrc/opt_algorithms
+
+LIBS += $(DOPE_LIBS)
+LDFLAGS += $(DOPE_LDFLAGS)
+flags += $(DOPE_FLAGS)
+
+# The following two rules define how to compile C++ files into object
+# files:
+%.g.$(OBJEXT) :
+	@echo =====waves=======$(dope_dimension)d==$(deal_II_dimension)d====debug=====$(MT)== $(<F)
+	@$(CXX) $(flags) $(LIBS) -c $< -o $@
+%.$(OBJEXT) :
+	@echo =====waves=======$(dope_dimension)d==$(deal_II_dimension)d====optimized=$(MT)== $(<F)
+	@$(CXX) $(flags) $(LIBS) -c $< -o $@
+
+
+# Next define how to link the executable
+$(target)$(EXEEXT) : $(libraries) Makefile
+	@echo =====waves=======$(dope_dimension)d==$(deal_II_dimension)d==============$(MT)== Linking $(@F)
+	@$(CXX) -o $@ $(libraries) $(LIBS) $(LDFLAGS)
+
+
+# Rule how to run the program
+run: $(target)$(EXEEXT)
+	./$(target)$(EXEEXT) $(run-parameters)
+
+all: 
+	$(MAKE)
+
+# Rule how to clean up. This is split into several different rules to
+# allow for parallel execution of commands:
+clean: clean-lib clean-data
+
+veryclean: clean
+	-rm -f *~ */*~ */*/*~ Makefile.dep
+
+clean-lib:
+	-rm -f *.$(OBJEXT) *.g.$(OBJEXT) $(target)$(EXEEXT) TAGS
+
+clean-data:
+	-rm -f $(clean-up-files)
+
+# Again tell `make' which rules are not meant to produce files:
+.PHONY: clean clean-data clean-lib run
+
+
+
+# Finally produce the list of dependencies. Note that this time, the
+# object files end up in directories of their own, so we have to
+# modify the output a bit. The file with the dependencies is put into
+# `lib/'.
+Makefile.dep: $(cc-files) $(h-files) $(lib-h-files) Makefile
+	@echo =====waves=======$(dope_dimension)d==$(deal_II_dimension)d================== Remaking $@
+	@$D/common/scripts/make_dependencies $(INCLUDE) -B. $(cc-files) $(h-files) $(lib-h-files)\
+	 | $(PERL) -p -e 's!^(.*):!$$1:!g;' \
+		> $@
+
+include Makefile.dep

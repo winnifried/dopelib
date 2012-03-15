@@ -1,0 +1,16 @@
+This example solves the distributed minimization problem
+\begin{gather*}
+\min J(q,u) = \frac{1}{2} \|u-u^d\|^2 + \frac{\alpha}{2}\|q\|^2\\
+\text{s.t.} (\nabla u,\nabla \phi) = (f(q),\phi)\;\;\forall\,\phi \in H^1_0(\Omega; \mathbb R^2)
+\end{gather*}
+on the domain $\Omega = [0,1]^2$, and the data is chosen as follows:
+\begin{align*}
+ f(q) &= q_0 \left(\begin{matrix}2\pi^2  \sin( \pi x) \sin(\pi y)\\0 \end{matrix}\right)\\
+      &+ q_1 \left(\begin{matrix}5\pi^2  \sin( \pi x) \sin(2\pi y)\\0 \end{matrix}\right)\\
+      &+ q_2 \left(\begin{matrix}0 \\8\pi^2  \sin(2\pi x) \sin(2\pi y)\end{matrix}\right)\\
+\end{align*}
+with $\alpha = 0$ and $u^d$ such that the solution is given by:
+\begin{gather*}
+ \overline{q} = \bigl(1;0.5;1\bigr)\\
+ \overline{u} = \left(\begin{matrix} \sin( \pi x)( \sin(\pi y)+0.5\sin(2\pi y))\\\sin(2\pi x) \sin(2\pi y) \end{matrix}\right)
+\end{gather*}

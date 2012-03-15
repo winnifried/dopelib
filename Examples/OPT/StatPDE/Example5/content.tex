@@ -1,0 +1,28 @@
+This example solves the distributed minimization problem
+\begin{gather*}
+\min J(q,u) = \frac{1}{2} \|u-u^d\|^2 + \frac{\alpha}{2}\|q\|^2\\
+\text{s.t.} (\nabla u,\nabla \phi) = (q+f,\phi)\;\;\forall\,\phi \in H^1_0(\Omega)
+\end{gather*}
+on the domain $\Omega = [0,1]^2$, and the data is chosen as follows:
+\begin{gather*}
+ f = \left(20\pi^2  \sin(4 \pi x) - \frac{1}{\alpha}  \sin(\pi x)\right) \sin(2 \pi y)\\
+ u^d = \left( 5 \pi^2 \sin(\pi x) + \sin(4 \pi x)\right)  \sin(2\pi y)
+\end{gather*}
+and $\alpha = 10^{-3}$.
+Hence its solution is given by:
+\begin{gather*}
+ \overline{q} = \frac{1}{\alpha} \sin(\pi x) \sin(2 \pi y)\\
+ \overline{u} = \sin(4 \pi x) \sin(2 \pi y)
+\end{gather*}
+
+In addition the following functionals are evaluated:
+\begin{gather*}
+  \text{MidPoint: } u_h(0.5 ; 0.5)\\[2mm]
+  \text{L1-Value: }\int_\Omega |u_h|
+  \text{QError: }\int_\Omega |q_h-\overline{q}|^2
+  \text{UError: }\int_\Omega |u_h-\overline{u}|^2
+\end{gather*}
+
+The important new feature is that we can now use two different meshes for control and state variable.
+This is tested first for globally refined meshes, and then for locally refined meshes with different refinements 
+for the control and state variable.

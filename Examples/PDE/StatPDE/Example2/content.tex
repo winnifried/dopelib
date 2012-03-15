@@ -1,0 +1,97 @@
+\textbf{General problem description}
+
+\vspace{0.2cm}
+
+In this example we consider a simple stationary FSI problem. \index{stationary PDE} \index{stationary PDE!FSI problem} The fluid
+is given as an incompressible Newtonian fluid modelled by the Stokes equation. Here, we use the symmetric stress tensor which has a little consequence when using the do-nothing outflow condition. \index{fluid} \index{fluid!incompressible} \index{fluid!Newtonian}
+The computation domain is $\Omega = [-6,6]\times [0,2]$ and we choose for simplicity $f=0$. 
+
+The fluid reads: \index{fluid!Eulerian framework}
+\begin{Problem}[Variational fluid problem, Eulerian framework]
+ Find $\{v_f,p_f\} \in \{ v_f^D + V\} \times L_f$, such that,
+  \begin{equation*}
+    \begin{aligned} 
+      (\rho_f v\cdot\nabla v_f,\phi^v)_{\Omega_f} +
+      (\sigma_f,\nabla\phi^v)_{\Omega_f} 
+      &= \langle n_f\cdot g_s^\sigma ,\phi^v \rangle_{\Gamma_i}
+      &&\forall \phi^v\in V_f, \\
+      %%%
+      (\operatorname{div}\, v_f,\phi^p)_{\Omega_f} &= 0
+      &&\forall\phi^p\in L_f.
+    \end{aligned}
+  \end{equation*}
+  The Cauchy stress tensor $\sigma_f$ is given by \index{Cauchy stress tensor}
+  \begin{eqnarray}
+    \sigma_f:=-p_f I + \rho_f\nu_f (\nabla v_f+\nabla v_f^T),
+  \end{eqnarray}
+  with the fluid's density $\rho_f$  and the kinematic viscosity
+  $\nu_f$. By $n_f$ we denote the outer normal vector on $\Gamma_i$
+  and by $g^\sigma_f$ is a function which describes forces acting on the interface. These
+  will be specified in the context of fluid-structure interaction
+  models. \index{fluid-structure interaction (FSI)} \index{fluid-structure interaction (FSI)!interface}
+\end{Problem}
+We define:
+\begin{equation*}
+\hat T:=\text{id}+\hat u,\quad
+\hat F:=I+\hat\nabla \hat u,\quad
+\hat J:=\text{det}(I+\hat\nabla \hat u).
+\end{equation*}
+
+
+The structure equations are given by incompressible neo-Hookean material
+\index{structure} \index{structure!incompressible neo-Hookean (INH) material} \index{structure!Lagrangian framework}
+\begin{Problem}[Incompressible neo-Hookean Model (Lagrangian)]
+  \begin{equation*}
+    \begin{aligned}
+      (\hat J_s \hat\sigma_s \hat F_s^{-T},\hat\nabla\hat\phi^v)_{\hat\Omega_s}
+      &= \langle\hat J_s\hat n_s\cdot \hat g_s^\sigma\hat
+      F_s^{-T},\hat\phi^v  \rangle_{\hat\Gamma_i}
+      &&\quad\forall\hat \phi^v\in\hat V_s\\
+      %%%%%%%%%%%%%%%% 
+      (\hat v_s,\hat\phi^u)_{\hat\Omega_s}&=0
+      &&\quad\forall\hat \phi^u\in\hat V_s    ,\\
+      (\text{det}\,\hat F_s-1,\hat\phi^p)_{\hat\Omega_s} &=0
+      &&\quad\forall\hat \phi^p\in\hat L_s,\\
+    \end{aligned}
+  \end{equation*}
+  where $\rho_s$ is the solid's density, $\mu_s$ the Lam\'e
+  coefficient, $\hat n_s$ the outer normal vector at $\hat\Gamma_i$, 
+  $\hat g_s^\sigma$ the force on the interface and with  
+  \[
+  \hat\sigma_s:=-\hat p_sI+\mu_s(\hat F_s\hat F_s^T-I).
+  \]
+\end{Problem}
+
+
+The resulting FSI problem is then given by: \index{fluid-structure interaction (FSI)!ALE model}
+\begin{Problem}[Stationary Fluid-Structure Interaction (ALE)]
+  \begin{equation*}
+    \begin{aligned}
+      (\hat J \rho_f \hat F^{-1}\hat  v\cdot\hat\nabla \hat v,
+      \hat\phi^v)_{\hat\Omega_f}
+      + (\hat J\hat\sigma_f\hat F^{-T},\hat \nabla\hat\phi^v)_{\hat\Omega_f}\\
+      + (\hat J\hat\sigma_s\hat F^{-T},\hat \nabla\hat\phi^v)_{\hat\Omega_s}
+      &= 0&&\forall\hat\phi^v\in \hat V,\\
+      %%%%%%%%%%%% 
+      (\hat v,\hat\phi^u)_{\hat\Omega_s}
+      + (\alpha_u \hat \nabla \hat u,\hat \nabla\hat\phi^u)_{\hat\Omega_f}
+      &=0&&\forall\hat\phi^u\in \hat V,\\
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+      (\widehat{\text{div}}\,(\hat J\hat F^{-1}\hat
+      v_f),\hat\phi^p)_{\hat\Omega_f} 
+      + (\hat J - 1,\hat \phi^p)_{\hat\Omega_s}
+      &=0&&\forall\hat \phi^p\in \hat L,
+    \end{aligned}
+  \end{equation*}  
+\end{Problem}
+
+\vspace{0.2cm}
+
+\textbf{Program description}
+
+\vspace{0.2cm}
+
+There is not much difference to the prior example, so we will keep our remarks rather short. The \textit{functionals.h, localfunctional.h} and \textit{myfunctions.cc} files did not change at all, so we simply refer to the corresponding sections in the last example.\\
+In the \textit{localpde.h} file, all functions of the \texttt{LocalPDE} class have to be adjusted to the current FSI problem. This only makes the equations and matrices a little more complicated, and our solution vector now consists of five components (two velocity components of the fluid, the pressure component, and two additional displacement components for the structure variables). Otherwise, everything is analogous to the former example.\\
+In the \textit{main.cc} we only have to add two components to the \texttt{compmask} vector and prescribe boundary conditions for the structure variables. Apart from that, we define objects for the same classes as before that are even named equally and use the same solvers.\\ 
+Again, the solution is reached within one Newton step, and all we see from the program output is the values of the functionals.

@@ -1,0 +1,18 @@
+a) To compile this library with Apple OSX
+   you need to install a recent g++ (4.4 or newer)
+   using macports.
+
+**************************************************************
+
+b) Finally remove the directory Examples/Test otherwise you
+   can not run 
+      make test
+   in the Example directory since the Apple terminal is not 
+   case sensitive!
+
+**************************************************************
+
+c) If you encounter duplicate symbol errors that don't appear on 
+   LINUX systems check that now template instantiations are in 
+   library header (.h) files. 
+   They must all be in some cc file in the library

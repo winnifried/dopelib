@@ -1,0 +1,54 @@
+Changelog DOpE
+==============
+
+
+15.02.2011: Trennung der Ortsdiskretisierung (verschieden Feine Gitter) ~ww
+
+Programm (1. DOpE Treffen)
+==========================
+
+Wo:         Hamburg
+Wann:       2.1.2012 - 6.1.2012
+Teilnehmer: Christian, Michael, Thomas, Winni
+---------------------------------------------
+
+done	- Umbenennung von statsolver und instatsolver in statreducedproblem und instatreducedproblem. ~ww
+done (Welcher Fehler?) - Statpde/example6, Probleme mit cvs ~ww
+done    - Trennung der Zeitdiskretisierung von Kontrolle und Zustand. 
+done	  -- Schmeisse Zeitdiskretisierung aus controlvector raus.~ww
+done - Aenderung der Genauigkeit der Ausgabe im outputhaendler (sowas wie set.precision). ~tw
+done --set precision ~tw
+done -- Angabe von "epsilon" im Paramfile, Normierung des Residuums im
+        Newtonsolver (inkl. firstres)~tw
+done - integrator und newtonsolver unabh. von PDEPOBLEM (als Funktionstemplate einführen)~ww
+done - reducednewtonalgorithm mit precision anpassen~ww
+done - Example 7 (Laplace-Gleichung), iterative Löser mit precond testen,
+       lokale Gitterverfeinerung in 3D~tw
+done - Verschiebe pdeinterface.h aus include in interfaces ~cg
+done - Instat Beispiele duplizieren, um alle Zeitschrittverfahren zu testen,~cg
+done - Blockvector zu Vector fuer VK -> PDE Beispiel 8 ~tw	
+done - Die vielen Warnungen beim Compilieren reduzieren
+	-- #warnings anschauen, falls berechtigt, nicht mehr ueber compiler, sondern ueber 
+	    //FIXME (fuer bugs etc.) bzw. //TODO ~ww
+	-- unused variable etc. durchschauen.	~ww
+done - 1d Heat equation to test all timestepping schemes ~mg
+  
+done - Vorhandene Beispiele ueberarbeiten (s.o.) ~mg
+done - PDE/StatPDE		
+		-- Kommentare zu Beispielen sollten beinhalten:
+		--- Was wird geloest?
+  		--- Welche Features werden hier (erstmalig) benutzt? Diese sollten
+  		ueber \index indiziert werden.
+  		
+done - 	-- Extra Klasse, die ueber die Zeitintervalle laeuft.(Timeiterator)
+done -  -- Splitten von Zeitintervall und Zeitpunkt. ~cg
+
+done -- - DoFHandler als Template (d.h. hp und normal case mergen) ~cg
+				 -- CellDataContainer und FaceDataContainer anpassen
+					
+					-- Integrator fertig anpassen.
+					-- Zeitschrittverfahren anpassen.
+					-- hp lauffaehig machen.
+					-- Code aufraeumen (auskommentierte Textyeilen)
+					
+done --- IntegratorDataContainer schreiben, Integrator entsprechend anpassen, eventuell auch die DataContianer-Klassen?

@@ -1,0 +1,29 @@
+As the SNOPT-Library is apparently a bit old, here are a few additional hints how to compile
+the Library on modern Linux machines
+------------------------------------------------------------------------------------------
+1.) On Ubuntu create a symlink (as root / or sudo) 
+    ln -s /usr/bin/make /usr/bin/gmake
+    --May be necessary on other OS as well, so do this if calling make claims you have no 
+        gmake.
+2.) Make shure you have the right 'mex' binary in your path (you need the compiler for  
+    MATLAB not the TeX thing!)
+    it works if (At university of Hamburg, otherwise should be the path to the matlab mex 
+    compiler not some latexdirectory) 
+    which mex 
+    returns 
+    	    /afs/physnet.uni-hamburg.de/software/softsrv/bin/mex
+    as first entry.
+3.) On x86_64 mashines to compile use 
+    export F77=/usr/bin/f95
+    ./configure [options]
+    make FFLAGS="-O -fPIC -fdefault-integer-8" CFLAGS="-O -fPIC" CXXFLAGS="-O -fPIC"
+
+4.) There seems to be some strange conflicts when using the build in f2c of SNOPT with ne w versions 
+    of lapack and blas. It seems to be ok if you use the bundled software coming with deal.ii
+    hence you should configure deal.ii with  
+    ./configure --with-umfpack --with-blas --with-lapack ...
+
+---------------------------------------------------------------------------------------------
+In order to compile with modern compilers (gcc >= 4.) you need to add the following
+header to  cppsrc/snoptProblem.cc:
+       #include <cstdlib>

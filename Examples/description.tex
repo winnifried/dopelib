@@ -1,0 +1,413 @@
+\documentclass[a4paper,cleardoubleempty]{scrreprt}
+\usepackage{amsmath,amssymb}
+\usepackage[pdftex,bookmarks=false,pdfpagelabels=true,plainpages=false]{hyperref}
+\usepackage{booktabs}
+\usepackage{makeidx}
+%\usepackage{sfmath}
+\newtheorem{Problem}{Problem}[section]
+
+\newcommand{\todo}[1]{\textbf{\textsc{\textcolor{black}{TODO: #1}}}}
+
+
+\makeindex
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+\title{DOpE - Deal Optimization Environment}
+\author{
+  Michael Geiger\thanks{University of Heidelberg, 
+    {michael.geiger@iwr.uni-heidelberg.de}}, 
+  Christian Goll\thanks{University of Heidelberg, 
+    {christian.goll@iwr.uni-heidelberg.de}}, 
+  Thomas Wick\thanks{University of Heidelberg, 
+    {thomas.wick@iwr.uni-heidelberg.de}}, 
+  Winnifried Wollner\thanks{University of Hamburg, 
+    {winnifried.wollner@math.uni-hamburg.de}}
+}
+
+
+
+\date{\today}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\maketitle
+\cleardoublepage\pagestyle{headings}
+\tableofcontents
+\cleardoublepage
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{Introduction}
+In this report, we describe the DOpE
+\textit{Deal Optimization Environment} project. 
+Originally, the project was initiated in the year 2009 at the 
+University of Heidelberg (Germany) in the numerical analysis
+group of Rolf Rannacher. 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+The \textit{Deal Optimization Environment} (DOpE) project is mainly 
+based on the
+\textit{deal.II} finite element library which has been developed initially
+by W. Bangerth, R. Hartmann, and G. Kanschat. 
+In addition, some algorithmic aspects to compute optimization problems
+in which the state is given in terms of a partial
+differential equations are similar to algorithms of the
+Gascoigne/RoDoBo 
+project, which was initiated by 
+Roland Becker, Dominik Meidner,  and Boris Vexler. 
+Both projects have also been 
+initiated at the University of Heidelberg. 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+The aim of DOpE is to provide a software toolkit to solve forward PDE
+problems as well as optimal control problems constrained by PDE. The
+solution of a broad variety of PDE is possible in deal.II as well, but
+DOpE concentrates on a unified approach for both linear and nonlinear
+problems by interpreting every PDE problem as nonlinear and applying a
+Newton method to solve it. While deal.II leaves much of the work and many
+decisions to the user, DOpE intends to be user-optimized by delivering
+prefabricated tools which require from the user only adjustments connected
+to his specific problem. The solution of optimal control problems with PDE
+constraints is an innovation in the DOpE framework.
+The focus is on the numerical solution of both stationary and nonstationary
+problems which come from different application fields, like elasticity and
+plasticity, fluid dynamics, and fluid-structure interactions.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+At the present stage, we are able to provide the following features and 
+problems:
+\begin{itemize}
+\item Computation of forward problems in 1d, 2d, and 3d.
+\item Solution of stationary and nonstationary forward problems
+\item Various timestepping schemes (based on finite differences), 
+  such as forward Euler, backward Euler,
+  Crank-Nicolson, shifted Crank-Nicolson, and Fractional-Step-$\Theta$ scheme.
+\item Various finite elements taken from deal.ii.
+\item Computation of stationary optimal control problems.
+\item Solving of standard Laplace equation, Navier-Stokes, and 
+fluid-structure interaction. 
+\end{itemize}
+ 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+In the present manual we give a short introduction to all example programs
+which can be found currently in DOpE. The organization of the examples is
+as follows: we distinguish between the mere solution of a PDE and the
+solution of an optimal control problem, and in each case we differentiate
+further between stationary and nonstationary problems. This leads to the
+following structure (we list problems treated in the examples in
+brackets):
+\begin{itemize}
+\item
+solution of PDE problem
+ \begin{itemize}
+   \item
+     stationary PDE (Laplace equation, Stokes equations, FSI problems,
+elasticity and plasticity problems)
+   \item
+     nonstationary PDE (Navier-Stokes equations, FSI problem, Black-Scholes
+equation)
+ \end{itemize}
+\item
+solution of PDE constrained optimal control problem
+ \begin{itemize}
+   \item
+     stationary constraining PDE
+   \item
+     nonstationary constraining PDE
+ \end{itemize}
+\end{itemize}
+The seventh stationary PDE example \ref{PDE_Stat_Laplace_2D} 
+(solution of the Laplace equation) is
+implemented analogously to the corresponding tutorial step in deal.II. By
+comparing the respective program codes, deal.II users should be able to
+catch the differences between the two software packages.
+In later examples we also provide algorithms for 'goal-oriented' automatic
+mesh adaption and error analysis.
+
+{\bf Comment on deal.II}
+
+The deal.II library is open
+source and can be downloaded from \texttt{http://www.dealii.org/}. On this
+homepage, one also finds lots of further information on deal.II as well as
+an extensive tutorial where many features of deal.II are discussed in a
+well-documented example framework. In order to use DOpE, it is highly
+recommendable to be roughly acquainted with deal.II.
+
+
+
+\cleardoublepage
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{Example Handling, Creating new Examples}
+To implement new examples or to use existing examples 
+from the library for own research, the user 
+can simply copy an existing example. In this 
+new example, own code and changes can be compiled.
+
+Adding a new regression test to the repository 
+needs some concentration of the user. In the 
+following, we explain how to do this and what 
+\textit{must} be taken into account:
+\begin{verbatim}
+cp -r Example1 ExampleNew
+cd ExampleNew
+rm -r CVS
+cd Test
+rm -r CVS
+\end{verbatim}
+It is important to remove the repository information,
+which is stored in the directory CVS.
+
+Then, we have to consider the following step. In order to 
+run the regression tests, we start the executable file
+of the present example. This executable comes from the 
+Makefile. For example in the Makefile of 
+Example \ref{PDE_Stat_Stokes}, 
+\begin{verbatim}
+target   = $(BINDIR)/DOpE-PDE-StatPDE-Example1-$
+           (dope_dimension)d-$(deal_II_dimension)d
+\end{verbatim}
+and concretely:
+\begin{verbatim}
+DOpE-PDE-StatPDE-Example1-2d-2d
+\end{verbatim}
+The aforementioned expression is the name of 
+the executable that is required to run the 
+regression test. Hence, in 
+\begin{verbatim}
+PDE/StatPDE/Example1/Test> emacs test.sh
+\end{verbatim}
+you find two times the line
+\begin{verbatim}
+echo "Running Program 
+     ../../../../../bin/DOpE-PDE-StatPDE-Example1-2d-2d test.prm"
+     (../../../../../bin/DOpE-PDE-StatPDE-Example1-2d-2d test.prm 2>&1) 
+     > /dev/null
+\end{verbatim} 
+It is really important when copying an existing example,
+to change this information. 
+First, we have to change the target in the Makefile
+\begin{verbatim}
+target   = $(BINDIR)/DOpE-PDE-StatPDE-ExampleNew-$
+           (dope_dimension)d-$(deal_II_dimension)d
+\end{verbatim}
+Second, we have to replace 
+Example1 by ExampleNew such that 
+\begin{verbatim}
+echo "Running Program 
+     ../../../../../bin/DOpE-PDE-StatPDE-ExampleNew-2d-2d test.prm"
+     (../../../../../bin/DOpE-PDE-StatPDE-ExampleNew-2d-2d test.prm 2>&1) 
+     > /dev/null
+\end{verbatim} 
+Please, also change the dimension parameters 
+\begin{verbatim}
+-2d-2d
+\end{verbatim} 
+Now, the user is prepared to change any information in the 
+\begin{verbatim}
+main.cc, localpde.h, functionals.h, localfunctional.h, etc
+\end{verbatim} 
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{Examples for PDE Solution}
+\label{PDE}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Stationary PDEs} 
+\label{PDE_Stat}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Stationary Stokes Equations} 
+\label{PDE_Stat_Stokes}
+\input{PDE/StatPDE/Example1/content.tex}
+\clearpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Stationary FSI with INH Material} 
+\label{PDE_Stat_FSI_INH}
+\input{PDE/StatPDE/Example2/content.tex}
+\clearpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Stationary FSI with STVK Material} 
+\label{PDE_Stat_FSI_STVK}
+\input{PDE/StatPDE/Example3/content.tex}
+\clearpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Stationary Elasticity Benchmark} 
+\label{PDE_Stat_Elasticity}
+\input{PDE/StatPDE/Example4/content.tex}
+\clearpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Stationary Plasticity Benchmark} 
+\label{PDE_Stat_Plasticity}
+\input{PDE/StatPDE/Example5/content.tex}
+\clearpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Stationary Stokes Equations with periodic BC} 
+\label{PDE_Stat_Periodic_Stokes}
+\input{PDE/StatPDE/Example6/content.tex}
+\clearpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Laplace Equation in 2D} 
+\label{PDE_Stat_Laplace_2D}
+\input{PDE/StatPDE/Example7/content.tex}
+\clearpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Laplace Equation in 3D}
+\label{PDE_Stat_Laplace_3D}
+\input{PDE/StatPDE/Example8/content.tex}
+\clearpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Nonstationary PDEs}
+\label{PDE_Instat}
+\input{PDE/InstatPDE/content.tex}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Nonstationary Stokes Equations}
+\label{PDE_Instat_Stokes}
+\input{PDE/InstatPDE/Example1/content.tex}
+\clearpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Nonstationary FSI Problem}
+\label{PDE_Instat_FSI}
+\input{PDE/InstatPDE/Example2/content.tex}
+\clearpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Black-Scholes Equation}
+\label{PDE_Instat_Black_Scholes}
+\input{PDE/InstatPDE/Example3/content.tex}
+\clearpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Heat Equation in 1D}
+\label{PDE_Instat_Heat_1D}
+\input{PDE/InstatPDE/Example4/content.tex}
+\clearpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Heat Equation in 2D with nonlinearity}
+\label{PDE_Instat_Heat_2D}
+\input{PDE/InstatPDE/Example5/content.tex}
+\cleardoublepage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{Examples with Optimization}
+\label{OPT}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Subject to a Stationary PDE}
+\label{OPT_Stat}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Distributed control with a linear elliptic PDE}
+\label{OPT_Stat_Distrib_Lin_Ellipt}
+\input{OPT/StatPDE/Example1/content.tex}
+\clearpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Parameter control with a linear elliptic PDE}
+\label{OPT_Stat_Param_Lin_Ellipt}
+\input{OPT/StatPDE/Example2/content.tex}
+\clearpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Parameter control with a nonlinear PDE from fluid dynamcis}
+\label{OPT_Stat_Param_Nonlin_Fluid}
+\input{OPT/StatPDE/Example3/content.tex}
+\clearpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Control in the dirichlet boundary values}
+\label{OPT_Stat_Dirichlet_Boundary}
+\input{OPT/StatPDE/Example4/content.tex}
+\clearpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Distributed Control with Different Meshes for Control and State}
+\label{OPT_Stat_Distributed_MultiMesh}
+\input{OPT/StatPDE/Example5/content.tex}
+\clearpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Compliance Minimization of a variable Thickness MBB-Beam}
+\label{OPT_Stat_MBB-Beam}
+\input{OPT/StatPDE/Example6/content.tex}
+\clearpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Distributed control with a linear elliptic PDE using SNOPT}
+\label{OPT_Stat_Box_controlconstraints_SNOPT}
+\input{OPT/StatPDE/Example7/content.tex}
+\clearpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Topology optimization of an MBB-Beam using SNOPT}
+\label{OPT_Stat_TopOpt_MBB_SNOPT}
+\input{OPT/StatPDE/Example8/content.tex}
+\clearpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Parameter control with a non-linear PDE from FSI dynamics}
+\label{OPT_Stat_Param_Nonlin_FSI}
+%\input{OPT/StatPDE/Example5/content.tex}
+\clearpage
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{Testing examples}
+The DOpE testsuite consists of regression tests. They are run to compare 
+the output to previous outputs. This is useful (necessary) after 
+changing programming code anywhere in the library. If a test
+succeeds, everything is fine in the library. If not, you should not
+check in your code into DOpE. Please make sure what is going wrong and WHY!
+
+Every command is computed via a Makefile. In the basic example 
+directory
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Where can I find the tests}
+In each example directory you find a subdirectory `Test'. Herein, you find 
+the parameter files for meshes (*.inp) and a param file (test.prm).
+Moreover, the executable is denoted by `test.sh'. Please make sure, that 
+the 
+\begin{verbatim}
+set never_write_list
+\end{verbatim}
+contains every possible output
+\begin{verbatim}
+Gradient;Hessian;Tangent;Residual;Update;Control;State
+\end{verbatim}
+That means, no solution files are written to the output.
+Recall, that we are just interested in terminal output that 
+is of course sufficient to verify the things.
+
+Hence, the results directory should be empty
+\begin{verbatim}
+set results_dir   = ./
+\end{verbatim}
+The rest in the param file must be identically the same as 
+in the dope.prm file in the parent directory. 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{How to start testing?}
+You start testing by typing 
+\begin{verbatim}
+> ./test.sh Store
+\end{verbatim}
+in the terminal.
+
+After the run, you have to call 
+\begin{verbatim}
+> ./test.sh Test
+\end{verbatim}
+to compare your stored output. Of course, there should be no differences.
+
+The useful point is now the following. After implemention of 
+new pieces of code in the DOpE library or in the examples, you can
+run 
+\begin{verbatim}
+> ./test.sh Test
+\end{verbatim}
+Hereby, you compare your `new' output with the previous stored output.
+
+Attention: After changes you should NOT run again
+\begin{verbatim}
+> ./test.sh Store
+\end{verbatim}
+In that case, you overwrite your previous output.
+\cleardoublepage
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\addcontentsline{toc}{chapter}{Index}
+\printindex
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{document}

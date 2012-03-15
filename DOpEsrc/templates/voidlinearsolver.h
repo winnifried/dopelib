@@ -1,0 +1,102 @@
+#ifndef _VOID_LINEAR_SOLVER_H_
+#define _VOID_LINEAR_SOLVER_H_
+
+#include <lac/vector.h>
+#include <lac/block_sparsity_pattern.h>
+#include <lac/block_sparse_matrix.h>
+#include <lac/compressed_simple_sparsity_pattern.h>
+#include <lac/solver_cg.h>
+#include <lac/precondition.h>
+#include <lac/full_matrix.h>
+#include <lac/sparse_direct.h>
+
+#include <dofs/dof_tools.h>
+
+#include <numerics/vectors.h>
+
+#include <vector>
+
+namespace DOpE
+{
+
+  template <typename SPARSITYPATTERN, typename MATRIX, typename VECTOR,int dim>
+    class VoidLinearSolver
+  {
+  public:
+    VoidLinearSolver(ParameterReader &param_reader);
+    ~VoidLinearSolver();
+   
+    static void declare_params(ParameterReader &param_reader);
+ 
+    /**
+       This Function should be called once after grid refinement, or changes in boundary values
+       to  recompute sparsity patterns, and constraint matrices.
+     */
+    template<typename PROBLEM>
+      void ReInit(PROBLEM& pde);
+
+    /**
+     *  Copys the Rhs to the Solution Vector, als other params are ignored!
+     * 
+     *
+     * @param rhs                   Right Hand Side of the Equation.
+     * @param solution              The Approximate Solution of the Linear Equation.
+     *                              It is assumed to be zero!
+     * @param force_build_matrix    A boolean value, that indicates whether the Matrix
+     *                              should be build by the linear solver in the first iteration.
+     *				    The default is false, meaning that if we have no idea we don't
+     *				    want to build a matrix.
+     *
+     *
+     */
+    template<typename PROBLEM, typename INTEGRATOR>
+      void Solve(PROBLEM& pde, INTEGRATOR& integr, VECTOR &rhs, VECTOR &solution, bool force_matrix_build=false);
+     
+  protected:
+
+  private:
+  
+  };
+
+/*********************************Implementation************************************************/
+ 
+  template <typename SPARSITYPATTERN, typename MATRIX, typename VECTOR,int dim>
+    void VoidLinearSolver<SPARSITYPATTERN,MATRIX,VECTOR, dim>::declare_params(ParameterReader &param_reader __attribute__((unused))) 
+  {
+  }
+
+  /******************************************************/
+
+  template <typename SPARSITYPATTERN, typename MATRIX, typename VECTOR,int dim>
+    VoidLinearSolver<SPARSITYPATTERN,MATRIX,VECTOR, dim>::VoidLinearSolver(ParameterReader &param_reader __attribute__((unused))) 
+  {
+  }
+
+/******************************************************/
+
+template <typename SPARSITYPATTERN, typename MATRIX, typename VECTOR,int dim>
+ VoidLinearSolver<SPARSITYPATTERN,MATRIX,VECTOR, dim>::~VoidLinearSolver()
+{
+}
+
+/******************************************************/
+
+template <typename SPARSITYPATTERN, typename MATRIX, typename VECTOR,int dim>
+  template<typename PROBLEM>
+  void  VoidLinearSolver<SPARSITYPATTERN,MATRIX,VECTOR, dim>::ReInit(PROBLEM& /*pde*/)
+{
+ 
+}
+
+/******************************************************/
+
+template <typename SPARSITYPATTERN, typename MATRIX, typename VECTOR,int dim>
+  template<typename PROBLEM, typename INTEGRATOR>
+  void VoidLinearSolver<SPARSITYPATTERN,MATRIX,VECTOR, dim>::Solve(PROBLEM& /*pde*/, INTEGRATOR& /*integr*/, VECTOR &rhs, VECTOR &solution, bool force_matrix_build __attribute__((unused)))
+{
+  solution = rhs;
+}
+
+
+}
+#endif

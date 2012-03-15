@@ -1,0 +1,6 @@
+This directory should contain symlinks to some third-party libraries
+in order to allow the paths to be set in the corresponding Examples 
+without dependence on the path given by the users.
+To use thirdparty software please create the following (if required):
+
+snopt  		  as link to your SNOPT7 installation

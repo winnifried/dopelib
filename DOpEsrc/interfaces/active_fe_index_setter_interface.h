@@ -1,0 +1,101 @@
+/*
+ * active_fe_index_interface.h
+ *
+ *  Created on: May 2, 2011
+ *      Author: cgoll
+ */
+
+#ifndef ACTIVE_FE_INDEX_INTERFACE_H_
+#define ACTIVE_FE_INDEX_INTERFACE_H_
+
+#include "dofhandler_wrapper.h"
+
+namespace DOpE
+{
+/**
+ * Implements different methods to set the ActiveFEIndex on the cells in the
+ * case of an hp FEMethod.
+ */
+
+template<int dopedim, int dealdim=dopedim>
+class ActiveFEIndexSetterInterface
+{
+  public:
+    ActiveFEIndexSetterInterface(){};
+
+    /**
+     * Gets an iterator to a cell and sets an active FE index
+     * on this cell for the state variable. This function is
+     * used after the first grid generation.
+     *
+     */
+    virtual void
+    SetActiveFEIndexState(
+        typename dealii::hp::DoFHandler<dealdim>::active_cell_iterator&) const
+    {
+    }
+    ;
+    /**
+     * Just for compatibility issues.
+     */
+    virtual void
+    SetActiveFEIndexState(
+        typename dealii::DoFHandler<dealdim>::active_cell_iterator&) const
+    {
+    }
+    ;
+    /**
+     * Gets an iterator to a cell and sets an active FE index
+     * on this cell for the control variable. This function is
+     * used after the first grid generation.
+     *
+     */
+    virtual void
+    SetActiveFEIndexControl(
+        typename dealii::hp::DoFHandler<dopedim>::active_cell_iterator&) const
+    {
+    }
+    ;
+    /**
+     * Just for compatibility issues.
+     */
+    virtual void
+    SetActiveFEIndexControl(
+        typename dealii::DoFHandler<dopedim>::active_cell_iterator&) const
+    {
+    }
+    ;
+
+
+  protected:
+};
+
+template<int dealdim>
+class ActiveFEIndexSetterInterface<0, dealdim>
+{
+  public:
+    ActiveFEIndexSetterInterface(){};
+    /*
+     * Gets an iterator to a cell and sets an active FE index
+     * on this cell for the state variable. This function is
+     * used after the first grid generation.
+     *
+     */
+    virtual void SetActiveFEIndexState(typename dealii::hp::DoFHandler<dealdim>::active_cell_iterator) const
+    {
+    }
+    ;
+    /**
+      * Just for compatibility issues.
+      */
+    virtual void SetActiveFEIndexState(typename dealii::DoFHandler<dealdim>::active_cell_iterator) const
+    {
+    }
+    ;
+
+  protected:
+};
+
+}//end of namespace
+
+#endif /* ACTIVE_FE_INDEX_INTERFACE_H_ */

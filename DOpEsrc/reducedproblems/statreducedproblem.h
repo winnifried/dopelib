@@ -1,0 +1,1749 @@
+#ifndef _STAT_REDUCED_PROBLEM_H_
+#define _STAT_REDUCED_PROBLEM_H_
+
+#include "reducedprobleminterface.h"
+#include "integrator.h"
+#include "parameterreader.h"
+#include "statevector.h"
+#include "stateproblem.h"
+
+#include <lac/vector.h>
+
+#include <lac/block_sparsity_pattern.h>
+#include <lac/block_sparse_matrix.h>
+
+#include "optproblem.h"
+#include "pdeinterface.h"
+#include "functionalinterface.h"
+#include "dirichletdatainterface.h"
+#include "dopeexception.h"
+#include "newtonsolver.h"
+#include "newtonsolvermixeddims.h"
+#include "cglinearsolver.h"
+#include "gmreslinearsolver.h"
+#include "directlinearsolver.h"
+#include "voidlinearsolver.h"
+#include "constraintinterface.h"
+#include "solutionextractor.h"
+
+#include <base/data_out_base.h>
+#include <numerics/data_out.h>
+#include <numerics/vectors.h>
+#include <numerics/matrices.h>
+#include <base/function.h>
+#include <lac/sparse_matrix.h>
+#include <lac/compressed_simple_sparsity_pattern.h>
+#include <lac/block_sparsity_pattern.h>
+#include <lac/sparse_direct.h>
+
+#include <fstream>
+namespace DOpE
+{
+  /**
+   * Basic class to solve stationary PDE- and optimization problems.
+   *
+   * @tparam <CONTROLNONLINEARSOLVER>    Newton solver for the control variables.
+   * @tparam <NONLINEARSOLVER>           Newton solver for the state variables.
+   * @tparam <CONTROLINTEGRATOR>         An integrator for the control variables,
+   *                                     e.g, Integrator or IntegratorMixedDimensions.
+   * @tparam <INTEGRATOR>                An integrator for the state variables,
+   *                                     e.g, Integrator or IntegratorMixedDimensions.
+   * @tparam <PROBLEM>                   PDE- or optimization problem under consideration.
+   * @tparam <VECTOR>                    Class in which we want to store the spatial vector (i.e. dealii::Vector<double> or dealii::BlockVector<double>)
+   * @tparam <dopedim>                   The dimension for the control variable.
+   * @tparam <dealdim>                   The dimension for the state variable.
+   */
+  template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
+      typename CONTROLINTEGRATOR, typename INTEGRATOR, typename PROBLEM,
+      typename VECTOR, int dopedim, int dealdim>
+    class StatReducedProblem : public ReducedProblemInterface<PROBLEM, VECTOR,
+        dopedim, dealdim>
+    {
+      public:
+        /**
+         * Constructor for the StatReducedProblem.
+         *
+         * @param OP                Problem is given to the stationary solver.
+         * @param state_behavior    Indicates the behavior of the StateVector.
+         * @param param_reader      An object which has run time data.
+         * @param quad_rule					A quadrature-rule, which is given to the integrators.
+         * @param face_quad_rule		A facequadrature-rule, which is given to the integrators.
+         */
+        template<typename INTEGRATORDATACONT>
+          StatReducedProblem(PROBLEM *OP, std::string state_behavior,
+              ParameterReader &param_reader, INTEGRATORDATACONT& idc,
+              int base_priority = 0);
+
+        /**
+         * Constructur for the StatReducedProblem.
+         *
+         * @param OP                Problem is given to the stationary solver.
+         * @param state_behavior    Indicates the behavior of the StateVector.
+         * @param param_reader      An object which has run time data.
+         * @param control_quad_rule				Quadrature-Rule, which is given to the control_integrator.
+         * @param control_face_quad_rule	FaceQuadrature-Rule, which is given to the control_integrator.
+         * @param state_quad_rule					Quadrature-Rule, which is given to the state_integrator.
+         * @param state_face_quad_rule		FaceQuadrature-Rule, which is given to the state_integrator.
+         */
+        template<typename STATEINTEGRATORDATACONT,
+            typename CONTROLINTEGRATORCONT>
+          StatReducedProblem(PROBLEM *OP, std::string state_behavior,
+              ParameterReader &param_reader, CONTROLINTEGRATORCONT& c_idc,
+              STATEINTEGRATORDATACONT & s_idc, int base_priority = 0);
+
+        ~StatReducedProblem();
+
+        /******************************************************/
+
+        /**
+         * Static member function for run time parameters.
+         *
+         * @param param_reader      An object which has run time data.
+         */
+        static void
+        declare_params(ParameterReader &param_reader);
+
+        /******************************************************/
+
+        /**
+         * This function sets state- and dual vectors to their correct sizes.
+         * Further, the flags to build the system matrices are set to true.
+         *
+         */
+        void
+        ReInit();
+
+        /******************************************************/
+
+        /**
+         * Implementation of Virtual Method in Base Class
+         *
+         */
+        bool
+        ComputeReducedConstraints(const ControlVector<VECTOR>& q,
+            ConstraintVector<VECTOR>& g);
+
+        /******************************************************/
+
+        /**
+         * Implementation of Virtual Method in Base Class
+         *
+         */
+        void
+        GetControlBoxConstraints(ControlVector<VECTOR>& lb, ControlVector<
+            VECTOR>& ub);
+
+        /******************************************************/
+
+        /**
+         * Implementation of Virtual Method in Base Class
+         *
+         * @param q            The ControlVector<VECTOR> is given to this function.
+         */
+        void
+        ComputeReducedGradient(const ControlVector<VECTOR>& q, ControlVector<
+            VECTOR>& gradient, ControlVector<VECTOR>& gradient_transposed);
+
+        /******************************************************/
+
+        /**
+         * Returns the functional values to compute.
+         *
+         * @param q            The ControlVector<VECTOR> is given to this function.
+         *
+         * @return             Returns a double values of the computed functional.
+         */
+        double
+        ComputeReducedCostFunctional(const ControlVector<VECTOR>& q);
+
+        /******************************************************/
+
+        /**
+         * This function computes reduced functionals of interest within
+         * a time dependent computation.
+         *
+         * @param q            The ControlVector<VECTOR> is given to this function.
+         */
+        void
+        ComputeReducedFunctionals(const ControlVector<VECTOR>& q);
+
+        /******************************************************/
+
+        /**
+         * Implementation of virtual function of base class.
+         */
+        float
+        ComputeRefinementIndicators(const ControlVector<VECTOR>& q, Vector<
+            float>& ref_ind, DOpEtypes::EE_state ee_state =
+            DOpEtypes::EE_state::mixed,
+            DOpEtypes::WeightComputation weight_comp =
+                DOpEtypes::WeightComputation::higher_order_interpolation);
+
+        /******************************************************/
+
+        /**
+         * Implementation of Virtual Method in Base Class.
+         * We assume that adjoint state z(u(q)) is already computed.
+         *
+         * @param q                             The ControlVector<VECTOR> is given to this function.
+         * @param direction                     Documentation will follow later.
+         * @param hessian_direction             Documentation will follow later.
+         * @paramhessian_direction_transposed   Documentation will follow later.
+         */
+        void
+        ComputeReducedHessianVector(const ControlVector<VECTOR>& q,
+            const ControlVector<VECTOR>& direction,
+            ControlVector<VECTOR>& hessian_direction,
+            ControlVector<VECTOR>& hessian_direction_transposed);
+
+        /******************************************************/
+        /**
+         * Implementation of Virtual Method in Base Class.
+         * We assume that the constraints g have been evaluated at the corresponding
+         * point q. This comutes the reduced gradient of the global constraint num
+         * with respect to the control variable.
+         *
+         * @param num                           Number of the global constraint to which we want to
+         *                                      compute the gradient.
+         * @param q                             The ControlVector<VECTOR> is given to this function.
+         * @param g                             The ConstraintVector<VECTOR> which contains the
+         *                                      value of the constraints at q.
+         * @param gradient                      The vector where the gradient will be stored in.
+         * @param gradient_transposed           The transposed version of the gradient vector.
+         */
+        void
+        ComputeReducedGradientOfGlobalConstraints(unsigned int num,
+            const ControlVector<VECTOR>& q, const ConstraintVector<VECTOR>& g,
+            ControlVector<VECTOR>& gradient,
+            ControlVector<VECTOR>& gradient_transposed);
+
+        /******************************************************/
+
+        /**
+         *  This function calls GetU().PrintInfos(out) function which
+         *  prints information on this vector into the given stream.
+         *
+         *  @param out    The output stream.
+         */
+        void
+        StateSizeInfo(std::stringstream& out)
+        {
+          GetU().PrintInfos(out);
+        }
+
+        /******************************************************/
+
+        /**
+         *  Here, the given BlockVector<double> v is printed to a file of *.vtk or *.gpl format.
+         *  However, in later implementations other file formats will be available.
+         *
+         *  @param v           The BlockVector to write to a file.
+         *  @param name        The names of the variables, e.g., in a fluid problem: v1, v2, p.
+         *  @param outfile     The basic name for the output file to print.
+         *  @param dof_type    Has the DoF type: state or control.
+         *  @param filetype    The filetype. Actually, *.vtk or *.gpl  outputs are possible.
+         */
+        void
+        WriteToFile(const VECTOR &v, std::string name, std::string outfile,
+            std::string dof_type, std::string filetype);
+
+        /******************************************************/
+
+        /**
+         *  Here, the given ControlVector<VECTOR> v is printed to a file of *.vtk or *.gpl format.
+         *  However, in later implementations other file formats will be available.
+         *
+         *  @param v           The ControlVector<VECTOR> to write to a file.
+         *  @param name        The names of the variables, e.g., in a fluid problem: v1, v2, p.
+         *  @param outfile     The basic name for the output file to print.
+         *  @param dof_type    Has the DoF type: state or control.
+         *  @param filetype    The filetype. Actually, *.vtk or *.gpl outputs are possible.
+         */
+        void
+        WriteToFile(const ControlVector<VECTOR> &v, std::string name,
+            std::string outfile, std::string dof_type, std::string filetype);
+
+        /**
+         * Basic function to write a std::vector to a file.
+         *
+         *  @param v           A std::vector to write to a file.
+         *  @param outfile     The basic name for the output file to print.
+         *  Doesn't make sense here so aborts if called!
+         */
+        void
+        WriteToFile(const std::vector<double> &v __attribute__((unused)), std::string outfile __attribute__((unused)))
+        {
+          abort();
+        }
+        const StateVector<VECTOR> &
+        GetU_Const() const
+        {
+          return _u;
+        }
+
+        /******************************************************/
+        bool
+        IsEpsilonFeasible(const ConstraintVector<VECTOR>& g, double p)
+        {
+          return this->GetProblem()->IsEpsilonFeasible(g, p);
+        }
+        double
+        GetMaxViolation(const ConstraintVector<VECTOR>& g)
+        {
+          return this->GetProblem()->MaxViolation(g);
+        }
+
+        void
+        FeasibilityShift(const ControlVector<VECTOR>& g_hat, ControlVector<
+            VECTOR>& g, double lambda)
+        {
+          this->GetProblem()->FeasibilityShift(g_hat, g, lambda);
+        }
+        double
+        Complementarity(const ConstraintVector<VECTOR>& f,
+            const ConstraintVector<VECTOR>& g)
+        {
+          return this->GetProblem()->Complementarity(f, g);
+        }
+
+      protected:
+        /**
+         * This function computes the solution for the state variable.
+         * The nonlinear solver is called, even for
+         * linear problems where the solution is computed within one iteration step.
+         *
+         * @param q            The ControlVector<VECTOR> is given to this function.
+         */
+        void
+        ComputeReducedState(const ControlVector<VECTOR>& q);
+
+        /******************************************************/
+        /**
+         * Implementation of Virtual Method in Base Class
+         *
+         * @param q            The ControlVector<VECTOR> is given to this function.
+         */
+        void
+        ComputeReducedAdjoint(const ControlVector<VECTOR>& q);
+
+        /******************************************************/
+
+        /**
+         * This function computes the solution for the dual variable
+         * for error estimation.
+         * The nonlinear solver is called, even for
+         * linear problems where the solution is computed within one iteration step.
+         *
+         */
+        void
+        ComputeDualForErrorEstimation(const ControlVector<VECTOR>& q);
+
+        const StateVector<VECTOR> &
+        GetU() const
+        {
+          return _u;
+        }
+        StateVector<VECTOR> &
+        GetU()
+        {
+          return _u;
+        }
+        StateVector<VECTOR> &
+        GetZ()
+        {
+          return _z;
+        }
+        StateVector<VECTOR> &
+        GetDU()
+        {
+          return _du;
+        }
+        StateVector<VECTOR> &
+        GetDZ()
+        {
+          return _dz;
+        }
+        /**
+         * Returns the solution of the dual equation for error estimation.
+         */
+        const StateVector<VECTOR> &
+        GetZForEE() const
+        {
+          return _z_for_ee;
+        }
+        StateVector<VECTOR> &
+        GetZForEE()
+        {
+          return _z_for_ee;
+        }
+
+        NONLINEARSOLVER&
+        GetNonlinearSolver(std::string type);
+        CONTROLNONLINEARSOLVER&
+        GetControlNonlinearSolver();
+        INTEGRATOR&
+        GetIntegrator()
+        {
+          return _integrator;
+        }
+        CONTROLINTEGRATOR&
+        GetControlIntegrator()
+        {
+          return _control_integrator;
+        }
+
+      private:
+        StateVector<VECTOR> _u;
+        StateVector<VECTOR> _z;
+        StateVector<VECTOR> _du;
+        StateVector<VECTOR> _dz;
+        StateVector<VECTOR> _z_for_ee;
+
+        INTEGRATOR _integrator;
+        CONTROLINTEGRATOR _control_integrator;
+        NONLINEARSOLVER _nonlinear_state_solver;
+        NONLINEARSOLVER _nonlinear_adjoint_solver;
+        CONTROLNONLINEARSOLVER _nonlinear_gradient_solver;
+
+        bool _build_state_matrix, _build_adjoint_matrix, _build_control_matrix;
+        bool _state_reinit, _adjoint_reinit, _gradient_reinit;
+
+        friend class SolutionExtractor<StatReducedProblem<
+            CONTROLNONLINEARSOLVER, NONLINEARSOLVER, CONTROLINTEGRATOR,
+            INTEGRATOR, PROBLEM, VECTOR, dopedim, dealdim> , VECTOR> ;
+    };
+
+  /*************************************************************************/
+  /*****************************IMPLEMENTATION******************************/
+  /*************************************************************************/
+  using namespace dealii;
+
+  /******************************************************/
+  template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
+      typename CONTROLINTEGRATOR, typename INTEGRATOR, typename PROBLEM,
+      typename VECTOR, int dopedim, int dealdim>
+    void
+    StatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER,
+        CONTROLINTEGRATOR, INTEGRATOR, PROBLEM, VECTOR, dopedim, dealdim>::declare_params(
+        ParameterReader &param_reader)
+    {
+      NONLINEARSOLVER::declare_params(param_reader);
+    }
+  /******************************************************/
+
+  template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
+      typename CONTROLINTEGRATOR, typename INTEGRATOR, typename PROBLEM,
+      typename VECTOR, int dopedim, int dealdim>
+    template<typename INTEGRATORDATACONT>
+      StatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER,
+          CONTROLINTEGRATOR, INTEGRATOR, PROBLEM, VECTOR, dopedim, dealdim>::StatReducedProblem(
+          PROBLEM *OP, std::string state_behavior,
+          ParameterReader &param_reader, INTEGRATORDATACONT& idc,
+          int base_priority) :
+        ReducedProblemInterface<PROBLEM, VECTOR, dopedim, dealdim> (OP,
+            base_priority), _u(OP->GetSpaceTimeHandler(), state_behavior,
+            param_reader), _z(OP->GetSpaceTimeHandler(), state_behavior,
+            param_reader), _du(OP->GetSpaceTimeHandler(), state_behavior,
+            param_reader), _dz(OP->GetSpaceTimeHandler(), state_behavior,
+            param_reader), _z_for_ee(OP->GetSpaceTimeHandler(), state_behavior,
+            param_reader), _integrator(idc), _control_integrator(idc),
+            _nonlinear_state_solver(_integrator, param_reader),
+            _nonlinear_adjoint_solver(_integrator, param_reader),
+            _nonlinear_gradient_solver(_control_integrator, param_reader)
+
+      {
+        //ReducedProblems should be ReInited
+        {
+          _state_reinit = true;
+          _adjoint_reinit = true;
+          _gradient_reinit = true;
+        }
+      }
+
+  /******************************************************/
+
+  template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
+      typename CONTROLINTEGRATOR, typename INTEGRATOR, typename PROBLEM,
+      typename VECTOR, int dopedim, int dealdim>
+    template<typename STATEINTEGRATORDATACONT, typename CONTROLINTEGRATORCONT>
+      StatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER,
+          CONTROLINTEGRATOR, INTEGRATOR, PROBLEM, VECTOR, dopedim, dealdim>::StatReducedProblem(
+          PROBLEM *OP, std::string state_behavior,
+          ParameterReader &param_reader, CONTROLINTEGRATORCONT& c_idc,
+          STATEINTEGRATORDATACONT & s_idc, int base_priority) :
+        ReducedProblemInterface<PROBLEM, VECTOR, dopedim, dealdim> (OP,
+            base_priority), _u(OP->GetSpaceTimeHandler(), state_behavior,
+            param_reader), _z(OP->GetSpaceTimeHandler(), state_behavior,
+            param_reader), _du(OP->GetSpaceTimeHandler(), state_behavior,
+            param_reader), _dz(OP->GetSpaceTimeHandler(), state_behavior,
+            param_reader), _z_for_ee(OP->GetSpaceTimeHandler(), state_behavior,
+            param_reader), _integrator(s_idc), _control_integrator(c_idc),
+            _nonlinear_state_solver(_integrator, param_reader),
+            _nonlinear_adjoint_solver(_integrator, param_reader),
+            _nonlinear_gradient_solver(_control_integrator, param_reader)
+
+      {
+        //ReducedProblems should be ReInited
+        {
+          _state_reinit = true;
+          _adjoint_reinit = true;
+          _gradient_reinit = true;
+        }
+      }
+
+  /******************************************************/
+
+  template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
+      typename CONTROLINTEGRATOR, typename INTEGRATOR, typename PROBLEM,
+      typename VECTOR, int dopedim, int dealdim>
+    StatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER,
+        CONTROLINTEGRATOR, INTEGRATOR, PROBLEM, VECTOR, dopedim, dealdim>::~StatReducedProblem()
+    {
+    }
+
+  /******************************************************/
+
+  template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
+      typename CONTROLINTEGRATOR, typename INTEGRATOR, typename PROBLEM,
+      typename VECTOR, int dopedim, int dealdim>
+    NONLINEARSOLVER&
+    StatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER,
+        CONTROLINTEGRATOR, INTEGRATOR, PROBLEM, VECTOR, dopedim, dealdim>::GetNonlinearSolver(
+        std::string type)
+    {
+      if ((type == "state") || (type == "tangent"))
+      {
+        return _nonlinear_state_solver;
+      }
+      else if ((type == "adjoint") || (type == "adjoint_hessian") || (type
+          == "adjoint_for_ee"))
+      {
+        return _nonlinear_adjoint_solver;
+      }
+      else
+      {
+        throw DOpEException("No Solver for Problem type:`" + type + "' found",
+            "StatReducedProblem::GetNonlinearSolver");
+
+      }
+    }
+  /******************************************************/
+
+  template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
+      typename CONTROLINTEGRATOR, typename INTEGRATOR, typename PROBLEM,
+      typename VECTOR, int dopedim, int dealdim>
+    CONTROLNONLINEARSOLVER&
+    StatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER,
+        CONTROLINTEGRATOR, INTEGRATOR, PROBLEM, VECTOR, dopedim, dealdim>::GetControlNonlinearSolver()
+    {
+      if ((this->GetProblem()->GetType() == "gradient")
+          || (this->GetProblem()->GetType() == "hessian"))
+      {
+        return _nonlinear_gradient_solver;
+      }
+      else
+      {
+        throw DOpEException("No Solver for Problem type:`"
+            + this->GetProblem()->GetType() + "' found",
+            "StatReducedProblem::GetControlNonlinearSolver");
+
+      }
+    }
+  /******************************************************/
+
+  template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
+      typename CONTROLINTEGRATOR, typename INTEGRATOR, typename PROBLEM,
+      typename VECTOR, int dopedim, int dealdim>
+    void
+    StatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER,
+        CONTROLINTEGRATOR, INTEGRATOR, PROBLEM, VECTOR, dopedim, dealdim>::ReInit()
+    {
+      ReducedProblemInterface<PROBLEM, VECTOR, dopedim, dealdim>::ReInit();
+
+      //Some Solvers must be reinited when called
+      // Better have subproblems, so that solver can be reinited here
+      {
+        _state_reinit = true;
+        _adjoint_reinit = true;
+        _gradient_reinit = true;
+      }
+
+      _build_state_matrix = true;
+      _build_adjoint_matrix = true;
+
+      GetU().ReInit();
+      GetZ().ReInit();
+      GetDU().ReInit();
+      GetDZ().ReInit();
+      GetZForEE().ReInit();
+
+      _build_control_matrix = true;
+    }
+
+  /******************************************************/
+
+  template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
+      typename CONTROLINTEGRATOR, typename INTEGRATOR, typename PROBLEM,
+      typename VECTOR, int dopedim, int dealdim>
+    void
+    StatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER,
+        CONTROLINTEGRATOR, INTEGRATOR, PROBLEM, VECTOR, dopedim, dealdim>::ComputeReducedState(
+        const ControlVector<VECTOR>& q)
+    {
+      this->GetOutputHandler()->Write("Computing State Solution:", 4
+          + this->GetBasePriority());
+
+      this->SetProblemType("state");
+      auto& problem = this->GetProblem()->GetStateProblem();
+      if (_state_reinit == true)
+      {
+        GetNonlinearSolver("state").ReInit(problem);
+        _state_reinit = false;
+      }
+
+      this->GetProblem()->AddAuxiliaryToIntegrator(this->GetIntegrator());
+      if (dopedim == dealdim)
+      {
+        this->GetIntegrator().AddDomainData("control", &(q.GetSpacialVector()));
+      }
+      else if (dopedim == 0)
+      {
+        this->GetIntegrator().AddParamData("control",
+            &(q.GetSpacialVectorCopy()));
+      }
+      else
+      {
+        throw DOpEException("dopedim not implemented",
+            "StatReducedProblem::ComputeReducedState");
+      }
+
+      _build_state_matrix = this->GetNonlinearSolver("state").NonlinearSolve(
+          problem, (GetU().GetSpacialVector()), true, _build_state_matrix);
+
+      if (dopedim == dealdim)
+      {
+        this->GetIntegrator().DeleteDomainData("control");
+      }
+      else if (dopedim == 0)
+      {
+        this->GetIntegrator().DeleteParamData("control");
+        q.UnLockCopy();
+      }
+      else
+      {
+        throw DOpEException("dopedim not implemented",
+            "StatReducedProblem::ComputeReducedState");
+      }
+      this->GetProblem()->DeleteAuxiliaryFromIntegrator(this->GetIntegrator());
+
+      this->GetOutputHandler()->Write((GetU().GetSpacialVector()), "State"
+          + this->GetPostIndex(), problem.GetDoFType());
+
+    }
+  /******************************************************/
+
+  template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
+      typename CONTROLINTEGRATOR, typename INTEGRATOR, typename PROBLEM,
+      typename VECTOR, int dopedim, int dealdim>
+    bool
+    StatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER,
+        CONTROLINTEGRATOR, INTEGRATOR, PROBLEM, VECTOR, dopedim, dealdim>::ComputeReducedConstraints(
+        const ControlVector<VECTOR>& q, ConstraintVector<VECTOR>& g)
+    {
+      this->GetOutputHandler()->Write("Evaluating Constraints:", 4
+          + this->GetBasePriority());
+
+      this->SetProblemType("constraints");
+
+      g = 0;
+      //Local constraints
+      //  this->GetProblem()->ComputeLocalConstraints(q.GetSpacialVector(), GetU().GetSpacialVector(),
+      //                                              g.GetSpacialVector("local"));
+      if (dopedim == dealdim)
+      {
+        this->GetControlIntegrator().AddDomainData("control",
+            &(q.GetSpacialVector()));
+      }
+      else if (dopedim == 0)
+      {
+        this->GetControlIntegrator().AddParamData("control",
+            &(q.GetSpacialVectorCopy()));
+      }
+      else
+      {
+        throw DOpEException("dopedim not implemented",
+            "VoidReducedProblem::ComputeReducedConstraints");
+      }
+      this->GetControlIntegrator().ComputeLocalControlConstraints(
+          *(this->GetProblem()), g.GetSpacialVector("local"));
+      if (dopedim == dealdim)
+      {
+        this->GetControlIntegrator().DeleteDomainData("control");
+      }
+      else if (dopedim == 0)
+      {
+        this->GetControlIntegrator().DeleteParamData("control");
+        q.UnLockCopy();
+      }
+      else
+      {
+        throw DOpEException("dopedim not implemented",
+            "VoidReducedProblem::ComputeReducedConstraints");
+      }
+      //Global in Space-Time Constraints
+      dealii::Vector<double>& gc = g.GetGlobalConstraints();
+      //dealii::Vector<double> global_values(gc.size());
+
+      unsigned int nglobal = gc.size();//global_values.size();
+
+      if (nglobal > 0)
+      {
+        this->GetProblem()->AddAuxiliaryToIntegrator(this->GetIntegrator());
+
+        for (unsigned int i = 0; i < nglobal; i++)
+        {
+          //this->SetProblemType("local_global_constraints", i);
+          this->SetProblemType("global_constraints", i);
+          this->GetIntegrator().AddDomainData("state",
+              &(GetU().GetSpacialVector()));
+          if (dopedim == dealdim)
+          {
+            this->GetIntegrator().AddDomainData("control",
+                &(q.GetSpacialVector()));
+          }
+          else if (dopedim == 0)
+          {
+            this->GetIntegrator().AddParamData("control",
+                &(q.GetSpacialVectorCopy()));
+          }
+          else
+          {
+            throw DOpEException("dopedim not implemented",
+                "StatReducedProblem::ComputeReducedConstraints");
+          }
+
+          double ret = 0;
+          bool found = false;
+
+          if (this->GetProblem()->GetConstraintType().find("domain")
+              != std::string::npos)
+          {
+            found = true;
+            ret += this->GetIntegrator().ComputeDomainScalar(
+                *(this->GetProblem()));
+          }
+          if (this->GetProblem()->GetConstraintType().find("point")
+              != std::string::npos)
+          {
+            found = true;
+            ret += this->GetIntegrator().ComputePointScalar(
+                *(this->GetProblem()));
+          }
+          if (this->GetProblem()->GetConstraintType().find("boundary")
+              != std::string::npos)
+          {
+            found = true;
+            ret += this->GetIntegrator().ComputeBoundaryScalar(
+                *(this->GetProblem()));
+          }
+          if (this->GetProblem()->GetConstraintType().find("face")
+              != std::string::npos)
+          {
+            found = true;
+            ret += this->GetIntegrator().ComputeFaceScalar(
+                *(this->GetProblem()));
+          }
+
+          if (!found)
+          {
+            throw DOpEException("Unknown Constraint Type: "
+                + this->GetProblem()->GetConstraintType(),
+                "StatReducedProblem::ComputeReducedConstraints");
+          }
+          //      global_values(i) = ret;
+          gc(i) = ret;
+
+          if (dopedim == dealdim)
+          {
+            this->GetIntegrator().DeleteDomainData("control");
+          }
+          else if (dopedim == 0)
+          {
+            this->GetIntegrator().DeleteParamData("control");
+            q.UnLockCopy();
+          }
+          else
+          {
+            throw DOpEException("dopedim not implemented",
+                "StatReducedProblem::ComputeReducedConstraints");
+          }
+          this->GetIntegrator().DeleteDomainData("state");
+        }
+
+        this->GetProblem()->DeleteAuxiliaryFromIntegrator(this->GetIntegrator());
+        //gc = global_values;
+      }
+
+      //Check that no global in space, local in time constraints are given!
+      if (g.HasType("local_global_control") || g.HasType("local_global_state"))
+      {
+        throw DOpEException(
+            "There are global in space, local in time constraints given. In the stationary case they should be moved to global in space and time!",
+            "StatReducedProblem::ComputeReducedConstraints");
+      }
+
+      //this->GetProblem()->PostProcessConstraints(g, true);
+      this->GetProblem()->PostProcessConstraints(g);
+
+      return this->GetProblem()->IsFeasible(g);
+      return true;
+    }
+
+  /******************************************************/
+
+  template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
+      typename CONTROLINTEGRATOR, typename INTEGRATOR, typename PROBLEM,
+      typename VECTOR, int dopedim, int dealdim>
+    void
+    StatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER,
+        CONTROLINTEGRATOR, INTEGRATOR, PROBLEM, VECTOR, dopedim, dealdim>::GetControlBoxConstraints(
+        ControlVector<VECTOR>& lb, ControlVector<VECTOR>& ub)
+    {
+      this->GetProblem()->GetControlBoxConstraints(lb.GetSpacialVector(),
+          ub.GetSpacialVector());
+    }
+
+  /******************************************************/
+
+  template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
+      typename CONTROLINTEGRATOR, typename INTEGRATOR, typename PROBLEM,
+      typename VECTOR, int dopedim, int dealdim>
+    void
+    StatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER,
+        CONTROLINTEGRATOR, INTEGRATOR, PROBLEM, VECTOR, dopedim, dealdim>::ComputeReducedAdjoint(
+        const ControlVector<VECTOR>& q)
+    {
+      this->GetOutputHandler()->Write("Computing Reduced Adjoint:", 4
+          + this->GetBasePriority());
+
+      this->SetProblemType("adjoint");
+      if (_adjoint_reinit == true)
+      {
+        GetNonlinearSolver("adjoint").ReInit(*(this->GetProblem()));
+        _adjoint_reinit = false;
+      }
+
+      this->GetProblem()->AddAuxiliaryToIntegrator(this->GetIntegrator());
+
+      this->GetIntegrator().AddDomainData("state", &(GetU().GetSpacialVector())); //&(GetU().GetSpacialVector())
+
+      if (dopedim == dealdim)
+      {
+        this->GetIntegrator().AddDomainData("control", &(q.GetSpacialVector()));
+      }
+      else if (dopedim == 0)
+      {
+        this->GetIntegrator().AddParamData("control",
+            &(q.GetSpacialVectorCopy()));
+      }
+      else
+      {
+        throw DOpEException("dopedim not implemented",
+            "StatReducedProblem::ComputeReducedAdjoint");
+      }
+
+      _build_adjoint_matrix
+          = this->GetNonlinearSolver("adjoint").NonlinearSolve(
+              *(this->GetProblem()), (GetZ().GetSpacialVector()), true,
+              _build_adjoint_matrix);
+
+      if (dopedim == dealdim)
+      {
+        this->GetIntegrator().DeleteDomainData("control");
+      }
+      else if (dopedim == 0)
+      {
+        this->GetIntegrator().DeleteParamData("control");
+        q.UnLockCopy();
+      }
+      else
+      {
+        throw DOpEException("dopedim not implemented",
+            "StatReducedProblem::ComputeReducedAdjoint");
+      }
+      this->GetIntegrator().DeleteDomainData("state");
+
+      this->GetProblem()->DeleteAuxiliaryFromIntegrator(this->GetIntegrator());
+
+      this->GetOutputHandler()->Write((GetZ().GetSpacialVector()), "Adjoint"
+          + this->GetPostIndex(), this->GetProblem()->GetDoFType());
+    }
+
+  /******************************************************/
+
+  template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
+      typename CONTROLINTEGRATOR, typename INTEGRATOR, typename PROBLEM,
+      typename VECTOR, int dopedim, int dealdim>
+    void
+    StatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER,
+        CONTROLINTEGRATOR, INTEGRATOR, PROBLEM, VECTOR, dopedim, dealdim>::ComputeDualForErrorEstimation(
+        const ControlVector<VECTOR>& q)
+    {
+      this->GetOutputHandler()->Write("Computing Dual for Error Estimation:", 4
+          + this->GetBasePriority());
+
+      this->SetProblemType("adjoint_for_ee");
+      auto& problem = this->GetProblem()->GetStateProblem();
+      if (_adjoint_reinit == true)
+      {
+        GetNonlinearSolver("adjoint_for_ee").ReInit(problem);
+        _adjoint_reinit = false;
+      }
+
+      this->GetProblem()->AddAuxiliaryToIntegrator(this->GetIntegrator());
+
+      this->GetIntegrator().AddDomainData("state", &(GetU().GetSpacialVector())); //&(GetU().GetSpacialVector())
+
+      if (dopedim == dealdim)
+      {
+        this->GetIntegrator().AddDomainData("control", &(q.GetSpacialVector()));
+      }
+      else if (dopedim == 0)
+      {
+        this->GetIntegrator().AddParamData("control",
+            &(q.GetSpacialVectorCopy()));
+      }
+      else
+      {
+        throw DOpEException("dopedim not implemented",
+            "StatReducedProblem::ComputeReducedAdjoint");
+      }
+
+      _build_adjoint_matrix
+          = this->GetNonlinearSolver("adjoint_for_ee").NonlinearSolve(problem,
+              (GetZForEE().GetSpacialVector()), true, _build_adjoint_matrix);
+
+      if (dopedim == dealdim)
+      {
+        this->GetIntegrator().DeleteDomainData("control");
+      }
+      else if (dopedim == 0)
+      {
+        this->GetIntegrator().DeleteParamData("control");
+        q.UnLockCopy();
+      }
+      else
+      {
+        throw DOpEException("dopedim not implemented",
+            "StatReducedProblem::ComputeReducedAdjoint");
+      }
+
+      this->GetIntegrator().DeleteDomainData("state");
+
+      this->GetProblem()->DeleteAuxiliaryFromIntegrator(this->GetIntegrator());
+
+      this->GetOutputHandler()->Write((GetZForEE().GetSpacialVector()),
+          "Dual for Error Estimation" + this->GetPostIndex(),
+          problem.GetDoFType());
+
+    }
+
+  /******************************************************/
+
+  template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
+      typename CONTROLINTEGRATOR, typename INTEGRATOR, typename PROBLEM,
+      typename VECTOR, int dopedim, int dealdim>
+    void
+    StatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER,
+        CONTROLINTEGRATOR, INTEGRATOR, PROBLEM, VECTOR, dopedim, dealdim>::ComputeReducedGradient(
+        const ControlVector<VECTOR>& q, ControlVector<VECTOR>& gradient,
+        ControlVector<VECTOR>& gradient_transposed)
+    {
+      this->ComputeReducedAdjoint(q);
+
+      this->GetOutputHandler()->Write("Computing Reduced Gradient:", 4
+          + this->GetBasePriority());
+
+      //Preparations for ControlInTheDirichletData
+      VECTOR tmp;
+      if (this->GetProblem()->HasControlInDirichletData())
+      {
+        tmp.reinit(GetU().GetSpacialVector());
+        this->SetProblemType("adjoint");
+        this->GetProblem()->AddAuxiliaryToIntegrator(this->GetIntegrator());
+
+        if (dopedim == dealdim)
+        {
+          this->GetIntegrator().AddDomainData("control",
+              &(q.GetSpacialVector()));
+        }
+        else if (dopedim == 0)
+        {
+          this->GetIntegrator().AddParamData("control",
+              &(q.GetSpacialVectorCopy()));
+        }
+        else
+        {
+          throw DOpEException("dopedim not implemented",
+              "StatReducedProblem::ComputeReducedGradient");
+        }
+
+        this->GetIntegrator().AddDomainData("state",
+            &(GetU().GetSpacialVector()));
+        this->GetIntegrator().AddDomainData("last_newton_solution",
+            &(GetZ().GetSpacialVector()));
+
+        this->GetIntegrator().ComputeNonlinearResidual(*(this->GetProblem()),
+            tmp, false);
+        tmp *= -1.;
+
+        if (dopedim == dealdim)
+        {
+          this->GetIntegrator().DeleteDomainData("control");
+        }
+        else if (dopedim == 0)
+        {
+          this->GetIntegrator().DeleteParamData("control");
+          q.UnLockCopy();
+        }
+        else
+        {
+          throw DOpEException("dopedim not implemented",
+              "StatReducedProblem::ComputeReducedGradient");
+        }
+
+        this->GetIntegrator().DeleteDomainData("state");
+        this->GetIntegrator().DeleteDomainData("last_newton_solution");
+        this->GetProblem()->DeleteAuxiliaryFromIntegrator(this->GetIntegrator());
+      }
+      //Endof Dirichletdata Preparations
+      this->SetProblemType("gradient");
+      if (_gradient_reinit == true)
+      {
+        GetControlNonlinearSolver().ReInit(*(this->GetProblem()));
+        _gradient_reinit = false;
+      }
+
+      this->GetProblem()->AddAuxiliaryToIntegrator(this->GetControlIntegrator());
+
+      if (dopedim == dealdim)
+      {
+        this->GetControlIntegrator().AddDomainData("control",
+            &(q.GetSpacialVector()));
+      }
+      else if (dopedim == 0)
+      {
+        this->GetControlIntegrator().AddParamData("control",
+            &(q.GetSpacialVectorCopy()));
+      }
+      else
+      {
+        throw DOpEException("dopedim not implemented",
+            "StatReducedProblem::ComputeReducedGradient");
+      }
+
+      this->GetControlIntegrator().AddDomainData("state",
+          &(GetU().GetSpacialVector()));
+      this->GetControlIntegrator().AddDomainData("adjoint",
+          &(GetZ().GetSpacialVector()));
+      if (this->GetProblem()->HasControlInDirichletData())
+        this->GetControlIntegrator().AddDomainData("adjoint_residual", &tmp);
+
+      gradient_transposed = 0.;
+      if (dopedim == dealdim)
+      {
+        this->GetControlIntegrator().AddDomainData("last_newton_solution",
+            &(gradient_transposed.GetSpacialVector()));
+        this->GetControlIntegrator().ComputeNonlinearResidual(
+            *(this->GetProblem()), gradient.GetSpacialVector(), true);
+        this->GetControlIntegrator().DeleteDomainData("last_newton_solution");
+      }
+      else if (dopedim == 0)
+      {
+        this->GetControlIntegrator().AddParamData("last_newton_solution",
+            &(gradient_transposed.GetSpacialVectorCopy()));
+        this->GetControlIntegrator().ComputeNonlinearResidual(
+            *(this->GetProblem()), gradient.GetSpacialVector(), true);
+
+        this->GetControlIntegrator().DeleteParamData("last_newton_solution");
+        gradient_transposed.UnLockCopy();
+
+      }
+
+      gradient *= -1.;
+      gradient_transposed = gradient;
+
+      //Compute l^2 representation of the Gradient
+
+      _build_control_matrix = this->GetControlNonlinearSolver().NonlinearSolve(
+          *(this->GetProblem()), gradient_transposed.GetSpacialVector(), true,
+          _build_control_matrix);
+      if (dopedim == dealdim)
+      {
+        this->GetControlIntegrator().DeleteDomainData("control");
+      }
+      else if (dopedim == 0)
+      {
+        this->GetControlIntegrator().DeleteParamData("control");
+        q.UnLockCopy();
+      }
+      else
+      {
+        throw DOpEException("dopedim not implemented",
+            "StatReducedProblem::ComputeReducedGradient");
+      }
+      this->GetControlIntegrator().DeleteDomainData("state");
+      this->GetControlIntegrator().DeleteDomainData("adjoint");
+      if (this->GetProblem()->HasControlInDirichletData())
+        this->GetControlIntegrator().DeleteDomainData("adjoint_residual");
+
+      this->GetProblem()->DeleteAuxiliaryFromIntegrator(
+          this->GetControlIntegrator());
+
+      this->GetOutputHandler()->Write(gradient, "Gradient"
+          + this->GetPostIndex(), this->GetProblem()->GetDoFType());
+      this->GetOutputHandler()->Write(gradient_transposed,
+          "Gradient_Transposed" + this->GetPostIndex(),
+          this->GetProblem()->GetDoFType());
+
+    }
+
+  /******************************************************/
+
+  template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
+      typename CONTROLINTEGRATOR, typename INTEGRATOR, typename PROBLEM,
+      typename VECTOR, int dopedim, int dealdim>
+    double
+    StatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER,
+        CONTROLINTEGRATOR, INTEGRATOR, PROBLEM, VECTOR, dopedim, dealdim>::ComputeReducedCostFunctional(
+        const ControlVector<VECTOR>& q)
+    {
+      this->ComputeReducedState(q);
+
+      double ret = 0;
+      bool found = false;
+
+      this->GetOutputHandler()->Write("Computing Cost Functional:", 4
+          + this->GetBasePriority());
+
+      this->SetProblemType("cost_functional");
+
+      this->GetProblem()->AddAuxiliaryToIntegrator(this->GetIntegrator());
+
+      if (dopedim == dealdim)
+      {
+        this->GetIntegrator().AddDomainData("control", &(q.GetSpacialVector()));
+      }
+      else if (dopedim == 0)
+      {
+        this->GetIntegrator().AddParamData("control",
+            &(q.GetSpacialVectorCopy()));
+      }
+      else
+      {
+        throw DOpEException("dopedim not implemented",
+            "StatReducedProblem::ComputeReducedCostFunctional");
+      }
+      this->GetIntegrator().AddDomainData("state", &(GetU().GetSpacialVector()));
+
+      if (this->GetProblem()->GetFunctionalType().find("domain")
+          != std::string::npos)
+      {
+        found = true;
+        ret += this->GetIntegrator().ComputeDomainScalar(*(this->GetProblem()));
+      }
+      if (this->GetProblem()->GetFunctionalType().find("point")
+          != std::string::npos)
+      {
+        found = true;
+        ret += this->GetIntegrator().ComputePointScalar(*(this->GetProblem()));
+      }
+      if (this->GetProblem()->GetFunctionalType().find("boundary")
+          != std::string::npos)
+      {
+        found = true;
+        ret += this->GetIntegrator().ComputeBoundaryScalar(
+            *(this->GetProblem()));
+      }
+      if (this->GetProblem()->GetFunctionalType().find("face")
+          != std::string::npos)
+      {
+        found = true;
+        ret += this->GetIntegrator().ComputeFaceScalar(*(this->GetProblem()));
+      }
+
+      if (!found)
+      {
+        throw DOpEException("Unknown Functional Type: "
+            + this->GetProblem()->GetFunctionalType(),
+            "StatReducedProblem::ComputeReducedCostFunctional");
+      }
+
+      if (dopedim == dealdim)
+      {
+        this->GetIntegrator().DeleteDomainData("control");
+      }
+      else if (dopedim == 0)
+      {
+        this->GetIntegrator().DeleteParamData("control");
+        q.UnLockCopy();
+      }
+      else
+      {
+        throw DOpEException("dopedim not implemented",
+            "StatReducedProblem::ComputeReducedCostFunctional");
+      }
+      this->GetIntegrator().DeleteDomainData("state");
+      this->GetProblem()->DeleteAuxiliaryFromIntegrator(this->GetIntegrator());
+
+      return ret;
+    }
+
+  /******************************************************/
+
+  template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
+      typename CONTROLINTEGRATOR, typename INTEGRATOR, typename PROBLEM,
+      typename VECTOR, int dopedim, int dealdim>
+    void
+    StatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER,
+        CONTROLINTEGRATOR, INTEGRATOR, PROBLEM, VECTOR, dopedim, dealdim>::ComputeReducedFunctionals(
+        const ControlVector<VECTOR>& q)
+    {
+      this->GetOutputHandler()->Write("Computing Functionals:", 4
+          + this->GetBasePriority());
+
+      this->GetProblem()->AddAuxiliaryToIntegrator(this->GetIntegrator());
+
+      if (dopedim == dealdim)
+      {
+        this->GetIntegrator().AddDomainData("control", &(q.GetSpacialVector()));
+      }
+      else if (dopedim == 0)
+      {
+        this->GetIntegrator().AddParamData("control",
+            &(q.GetSpacialVectorCopy()));
+      }
+      else
+      {
+        throw DOpEException("dopedim not implemented",
+            "StatReducedProblem::ComputeReducedFunctionals");
+      }
+      this->GetIntegrator().AddDomainData("state", &(GetU().GetSpacialVector()));
+
+      for (unsigned int i = 0; i < this->GetProblem()->GetNFunctionals(); i++)
+      {
+        double ret = 0;
+        bool found = false;
+
+        this->SetProblemType("aux_functional", i);
+        if (this->GetProblem()->GetFunctionalType().find("domain")
+            != std::string::npos)
+        {
+          found = true;
+          ret += this->GetIntegrator().ComputeDomainScalar(
+              *(this->GetProblem()));
+        }
+        if (this->GetProblem()->GetFunctionalType().find("point")
+            != std::string::npos)
+        {
+          found = true;
+          ret
+              += this->GetIntegrator().ComputePointScalar(*(this->GetProblem()));
+        }
+        if (this->GetProblem()->GetFunctionalType().find("boundary")
+            != std::string::npos)
+        {
+          found = true;
+          ret += this->GetIntegrator().ComputeBoundaryScalar(
+              *(this->GetProblem()));
+        }
+        if (this->GetProblem()->GetFunctionalType().find("face")
+            != std::string::npos)
+        {
+          found = true;
+          ret += this->GetIntegrator().ComputeFaceScalar(*(this->GetProblem()));
+        }
+
+        if (!found)
+        {
+          throw DOpEException("Unknown Functional Type: "
+              + this->GetProblem()->GetFunctionalType(),
+              "StatReducedProblem::ComputeReducedFunctionals");
+        }
+        std::stringstream out;
+        out << this->GetProblem()->GetFunctionalName() << ": " << ret;
+        this->GetOutputHandler()->Write(out, 2 + this->GetBasePriority());
+      }
+
+      if (dopedim == dealdim)
+      {
+        this->GetIntegrator().DeleteDomainData("control");
+      }
+      else if (dopedim == 0)
+      {
+        this->GetIntegrator().DeleteParamData("control");
+        q.UnLockCopy();
+      }
+      else
+      {
+        throw DOpEException("dopedim not implemented",
+            "StatReducedProblem::ComputeReducedFunctionals");
+      }
+      this->GetIntegrator().DeleteDomainData("state");
+      this->GetProblem()->DeleteAuxiliaryFromIntegrator(this->GetIntegrator());
+
+    }
+
+  /******************************************************/
+
+  template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
+      typename CONTROLINTEGRATOR, typename INTEGRATOR, typename PROBLEM,
+      typename VECTOR, int dopedim, int dealdim>
+    float
+    StatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER,
+        CONTROLINTEGRATOR, INTEGRATOR, PROBLEM, VECTOR, dopedim, dealdim>::ComputeRefinementIndicators(
+        const ControlVector<VECTOR>& q, Vector<float>& /*error_ind*/,
+        DOpEtypes::EE_state /*ee_state*/, DOpEtypes::WeightComputation /*weight_comp*/)
+    {
+      this->ComputeDualForErrorEstimation(q);
+
+      this->GetOutputHandler()->Write("Computing Error Indicators:", 4
+          + this->GetBasePriority());
+
+      this->GetProblem()->AddAuxiliaryToIntegrator(this->GetIntegrator());
+
+      this->GetIntegrator().AddDomainData("state", &(GetU().GetSpacialVector()));
+      this->GetIntegrator().AddDomainData("adjoint_for_ee",
+          &(GetZForEE().GetSpacialVector()));
+
+      if (dopedim == dealdim)
+      {
+        this->GetIntegrator().AddDomainData("control", &(q.GetSpacialVector()));
+      }
+      else if (dopedim == 0)
+      {
+        this->GetIntegrator().AddParamData("control",
+            &(q.GetSpacialVectorCopy()));
+      }
+      else
+      {
+        throw DOpEException("dopedim not implemented",
+            "StatReducedProblem::ComputeRefinementIndicators");
+      }
+
+      float error = 0;
+      this->SetProblemType("functional_for_ee");//TODO Wie genau der Uebertrag hier passieren soll.
+      //    float error = this->GetIntegrator().ComputeRefinementIndicators(*this->GetProblem());
+
+      if (dopedim == dealdim)
+      {
+        this->GetIntegrator().DeleteDomainData("control");
+      }
+      else if (dopedim == 0)
+      {
+        this->GetIntegrator().DeleteParamData("control");
+        q.UnLockCopy();
+      }
+      else
+      {
+        throw DOpEException("dopedim not implemented",
+            "StatReducedProblem::ComputeRefinementIndicators");
+      }
+
+      this->GetIntegrator().DeleteDomainData("state");
+      this->GetIntegrator().DeleteDomainData("adjoint_for_ee");
+      this->GetProblem()->DeleteAuxiliaryFromIntegrator(this->GetIntegrator());
+
+      std::stringstream out;
+      out << "Error in " << this->GetProblem()->GetFunctionalName() << ": "
+          << error;
+      this->GetOutputHandler()->Write(out, 2 + this->GetBasePriority());
+
+      return error;
+    }
+
+  /******************************************************/
+
+  template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
+      typename CONTROLINTEGRATOR, typename INTEGRATOR, typename PROBLEM,
+      typename VECTOR, int dopedim, int dealdim>
+    void
+    StatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER,
+        CONTROLINTEGRATOR, INTEGRATOR, PROBLEM, VECTOR, dopedim, dealdim>::ComputeReducedHessianVector(
+        const ControlVector<VECTOR>& q, const ControlVector<VECTOR>& direction,
+        ControlVector<VECTOR>& hessian_direction,
+        ControlVector<VECTOR>& hessian_direction_transposed)
+    {
+      this->GetOutputHandler()->Write("Computing ReducedHessianVector:", 4
+          + this->GetBasePriority());
+      this->GetOutputHandler()->Write("\tSolving Tangent:", 5
+          + this->GetBasePriority());
+
+      this->SetProblemType("tangent");
+
+      this->GetProblem()->AddAuxiliaryToIntegrator(this->GetIntegrator());
+
+      this->GetIntegrator().AddDomainData("state", &(GetU().GetSpacialVector()));
+      this->GetControlIntegrator().AddDomainData("state",
+          &(GetU().GetSpacialVector()));
+
+      if (dopedim == dealdim)
+      {
+        this->GetIntegrator().AddDomainData("dq",
+            &(direction.GetSpacialVector()));
+        this->GetIntegrator().AddDomainData("control", &(q.GetSpacialVector()));
+      }
+      else if (dopedim == 0)
+      {
+        this->GetIntegrator().AddParamData("dq",
+            &(direction.GetSpacialVectorCopy()));
+        this->GetIntegrator().AddParamData("control",
+            &(q.GetSpacialVectorCopy()));
+      }
+      else
+      {
+        throw DOpEException("dopedim not implemented",
+            "StatReducedProblem::ComputeReducedHessianVector");
+      }
+
+      //tangent Matrix is the same as state matrix
+      _build_state_matrix = this->GetNonlinearSolver("tangent").NonlinearSolve(
+          *(this->GetProblem()), (GetDU().GetSpacialVector()), true,
+          _build_state_matrix);
+
+      this->GetOutputHandler()->Write((GetDU().GetSpacialVector()), "Tangent"
+          + this->GetPostIndex(), this->GetProblem()->GetDoFType());
+
+      this->GetOutputHandler()->Write("\tSolving Adjoint Hessian:", 5
+          + this->GetBasePriority());
+      this->SetProblemType("adjoint_hessian");
+      this->GetIntegrator().AddDomainData("adjoint",
+          &(GetZ().GetSpacialVector()));
+      this->GetIntegrator().AddDomainData("tangent",
+          &(GetDU().GetSpacialVector()));
+      this->GetControlIntegrator().AddDomainData("adjoint",
+          &(GetZ().GetSpacialVector()));
+      this->GetControlIntegrator().AddDomainData("tangent",
+          &(GetDU().GetSpacialVector()));
+
+      //adjoint_hessian Matrix is the same as adjoint matrix
+      _build_adjoint_matrix
+          = this->GetNonlinearSolver("adjoint_hessian").NonlinearSolve(
+              *(this->GetProblem()), (GetDZ().GetSpacialVector()), true,
+              _build_adjoint_matrix);
+
+      this->GetOutputHandler()->Write((GetDZ().GetSpacialVector()), "Hessian"
+          + this->GetPostIndex(), this->GetProblem()->GetDoFType());
+
+      this->GetIntegrator().AddDomainData("adjoint_hessian",
+          &(GetDZ().GetSpacialVector()));
+      this->GetControlIntegrator().AddDomainData("adjoint_hessian",
+          &(GetDZ().GetSpacialVector()));
+
+      this->GetOutputHandler()->Write(
+          "\tComputing Representation of the Hessian:", 5
+              + this->GetBasePriority());
+      //Preparations for Control In The Dirichlet Data
+      VECTOR tmp;
+      VECTOR tmp_second;
+      if (this->GetProblem()->HasControlInDirichletData())
+      {
+        tmp.reinit(GetU().GetSpacialVector());
+        tmp_second.reinit(GetU().GetSpacialVector());
+        this->SetProblemType("adjoint");
+        this->GetIntegrator().AddDomainData("last_newton_solution",
+            &(GetZ().GetSpacialVector()));
+
+        this->GetIntegrator().ComputeNonlinearResidual(*(this->GetProblem()),
+            tmp_second, false);
+        tmp_second *= -1.;
+
+        this->GetIntegrator().DeleteDomainData("last_newton_solution");
+        this->SetProblemType("adjoint_hessian");
+        this->GetIntegrator().AddDomainData("last_newton_solution",
+            &(GetDZ().GetSpacialVector()));
+
+        this->GetIntegrator().ComputeNonlinearResidual(*(this->GetProblem()),
+            tmp, false);
+        tmp *= -1.;
+
+        this->GetIntegrator().DeleteDomainData("last_newton_solution");
+      }
+      //Endof Dirichletdata Preparations
+      this->GetProblem()->DeleteAuxiliaryFromIntegrator(this->GetIntegrator());
+
+      this->SetProblemType("hessian");
+      this->GetProblem()->AddAuxiliaryToIntegrator(this->GetControlIntegrator());
+      if (dopedim == dealdim)
+      {
+        this->GetIntegrator().DeleteDomainData("dq");
+        this->GetIntegrator().DeleteDomainData("control");
+        this->GetControlIntegrator().AddDomainData("dq",
+            &(direction.GetSpacialVector()));
+        this->GetControlIntegrator().AddDomainData("control",
+            &(q.GetSpacialVector()));
+      }
+      else if (dopedim == 0)
+      {
+        this->GetIntegrator().DeleteParamData("dq");
+        this->GetIntegrator().DeleteParamData("control");
+        direction.UnLockCopy();
+        q.UnLockCopy();
+        this->GetControlIntegrator().AddParamData("dq",
+            &(direction.GetSpacialVectorCopy()));
+        this->GetControlIntegrator().AddParamData("control",
+            &(q.GetSpacialVectorCopy()));
+      }
+      else
+      {
+        throw DOpEException("dopedim not implemented",
+            "StatReducedProblem::ComputeReducedHessianVector");
+      }
+      if (this->GetProblem()->HasControlInDirichletData())
+      {
+        this->GetControlIntegrator().AddDomainData("adjoint_residual", &tmp);
+        this->GetControlIntegrator().AddDomainData("hessian_residual",
+            &tmp_second);
+      }
+
+      {
+        hessian_direction_transposed = 0.;
+        if (dopedim == dealdim)
+        {
+          this->GetControlIntegrator().AddDomainData("last_newton_solution",
+              &(hessian_direction_transposed.GetSpacialVector()));
+          this->GetControlIntegrator().ComputeNonlinearResidual(
+              *(this->GetProblem()), hessian_direction.GetSpacialVector(), true);
+          this->GetControlIntegrator().DeleteDomainData("last_newton_solution");
+        }
+        else if (dopedim == 0)
+        {
+          this->GetControlIntegrator().AddParamData("last_newton_solution",
+              &(hessian_direction_transposed.GetSpacialVectorCopy()));
+          this->GetControlIntegrator().ComputeNonlinearResidual(
+              *(this->GetProblem()), hessian_direction.GetSpacialVector(), true);
+          this->GetControlIntegrator().DeleteParamData("last_newton_solution");
+          hessian_direction_transposed.UnLockCopy();
+        }
+        hessian_direction *= -1.;
+        hessian_direction_transposed = hessian_direction;
+        //Compute l^2 representation of the HessianVector
+        //hessian Matrix is the same as control matrix
+        _build_control_matrix
+            = this->GetControlNonlinearSolver().NonlinearSolve(
+                *(this->GetProblem()),
+                hessian_direction_transposed.GetSpacialVector(), true,
+                _build_control_matrix);
+
+        this->GetOutputHandler()->Write(hessian_direction, "HessianDirection"
+            + this->GetPostIndex(), this->GetProblem()->GetDoFType());
+        this->GetOutputHandler()->Write(hessian_direction_transposed,
+            "HessianDirection_Transposed" + this->GetPostIndex(),
+            this->GetProblem()->GetDoFType());
+      }
+
+      if (dopedim == dealdim)
+      {
+        this->GetControlIntegrator().DeleteDomainData("dq");
+        this->GetControlIntegrator().DeleteDomainData("control");
+      }
+      else if (dopedim == 0)
+      {
+        this->GetControlIntegrator().DeleteParamData("dq");
+        this->GetControlIntegrator().DeleteParamData("control");
+        direction.UnLockCopy();
+        q.UnLockCopy();
+      }
+      else
+      {
+        throw DOpEException("dopedim not implemented",
+            "StatReducedProblem::ComputeReducedHessianVector");
+      }
+      this->GetIntegrator().DeleteDomainData("state");
+      this->GetIntegrator().DeleteDomainData("adjoint");
+      this->GetIntegrator().DeleteDomainData("tangent");
+      this->GetIntegrator().DeleteDomainData("adjoint_hessian");
+      this->GetControlIntegrator().DeleteDomainData("state");
+      this->GetControlIntegrator().DeleteDomainData("adjoint");
+      this->GetControlIntegrator().DeleteDomainData("tangent");
+      this->GetControlIntegrator().DeleteDomainData("adjoint_hessian");
+      if (this->GetProblem()->HasControlInDirichletData())
+      {
+        this->GetControlIntegrator().DeleteDomainData("adjoint_residual");
+        this->GetControlIntegrator().DeleteDomainData("hessian_residual");
+      }
+      this->GetProblem()->DeleteAuxiliaryFromIntegrator(
+          this->GetControlIntegrator());
+
+    }
+
+  /******************************************************/
+
+  template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
+      typename CONTROLINTEGRATOR, typename INTEGRATOR, typename PROBLEM,
+      typename VECTOR, int dopedim, int dealdim>
+    void
+    StatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER,
+        CONTROLINTEGRATOR, INTEGRATOR, PROBLEM, VECTOR, dopedim, dealdim>::ComputeReducedGradientOfGlobalConstraints(
+        unsigned int num, const ControlVector<VECTOR>& q,
+        const ConstraintVector<VECTOR>& g, ControlVector<VECTOR>& gradient,
+        ControlVector<VECTOR>& gradient_transposed)
+    {
+      //FIXME: If the global constraints depend on u we need to calculate a corresponding
+      //       dual solution before we can calculate the gradient.
+      std::stringstream out;
+      out << "Computing Reduced Gradient of global constraint " << num << " :";
+      this->GetOutputHandler()->Write(out, 4 + this->GetBasePriority());
+      //Compute derivatives of global constraints
+      this->SetProblemType("global_constraint_gradient", num);
+
+      if (dopedim == dealdim)
+      {
+        this->GetControlIntegrator().AddDomainData("control",
+            &(q.GetSpacialVector()));
+      }
+      else if (dopedim == 0)
+      {
+        this->GetControlIntegrator().AddParamData("control",
+            &(q.GetSpacialVectorCopy()));
+      }
+      else
+      {
+        throw DOpEException("dopedim not implemented",
+            "VoidReducedProblem::ComputeReducedGradient");
+      }
+      this->GetProblem()->AddAuxiliaryToIntegrator(this->GetControlIntegrator());
+      this->GetControlIntegrator().AddDomainData("constraints_local",
+          &g.GetSpacialVector("local"));
+      this->GetControlIntegrator().AddParamData("constraints_global",
+          &g.GetGlobalConstraints());
+
+      //Compute
+      this->GetControlIntegrator().ComputeNonlinearRhs(*(this->GetProblem()),
+          gradient.GetSpacialVector(), true);
+      gradient_transposed = gradient;
+
+      this->GetControlIntegrator().DeleteDomainData("constraints_local");
+      this->GetControlIntegrator().DeleteParamData("constraints_global");
+      this->GetProblem()->DeleteAuxiliaryFromIntegrator(
+          this->GetControlIntegrator());
+      if (dopedim == dealdim)
+      {
+        this->GetControlIntegrator().DeleteDomainData("control");
+      }
+      else if (dopedim == 0)
+      {
+        this->GetControlIntegrator().DeleteParamData("control");
+        q.UnLockCopy();
+      }
+      else
+      {
+        throw DOpEException("dopedim not implemented",
+            "VoidReducedProblem::ComputeReducedGradient");
+      }
+    }
+
+  /******************************************************/
+
+  template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
+      typename CONTROLINTEGRATOR, typename INTEGRATOR, typename PROBLEM,
+      typename VECTOR, int dopedim, int dealdim>
+    void
+    StatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER,
+        CONTROLINTEGRATOR, INTEGRATOR, PROBLEM, VECTOR, dopedim, dealdim>::WriteToFile(
+        const VECTOR &v, std::string name, std::string outfile,
+        std::string dof_type, std::string filetype)
+    {
+      if (dof_type == "state")
+      {
+        auto& data_out = this->GetProblem()->GetSpaceTimeHandler()->GetDataOut();
+        data_out.attach_dof_handler(
+            this->GetProblem()->GetSpaceTimeHandler()->GetStateDoFHandler());
+
+        data_out.add_data_vector(v, name);
+        data_out.build_patches();
+
+        std::ofstream output(outfile.c_str());
+
+        if (filetype == ".vtk")
+        {
+          data_out.write_vtk(output);
+        }
+        else if (filetype == ".gpl")
+        {
+          data_out.write_gnuplot(output);
+        }
+        else
+        {
+          throw DOpEException("Don't know how to write filetype `" + filetype
+              + "'!", "StatReducedProblem::WriteToFile");
+        }
+        data_out.clear();
+      }
+      else if (dof_type == "control")
+      {
+#if dope_dimension >0
+        auto& data_out = this->GetProblem()->GetSpaceTimeHandler()->GetDataOut();
+        data_out.attach_dof_handler (this->GetProblem()->GetSpaceTimeHandler()->GetControlDoFHandler());
+
+        data_out.add_data_vector (v,name);
+        data_out.build_patches ();
+
+        std::ofstream output(outfile.c_str());
+
+        if(filetype == ".vtk")
+        {
+          data_out.write_vtk (output);
+        }
+        else if (filetype == ".gpl")
+        {
+          data_out.write_gnuplot(output);
+        }
+        else
+        {
+          throw DOpEException("Don't know how to write filetype `" + filetype + "'!",
+              "StatReducedProblem::WriteToFile");
+        }
+        data_out.clear();
+#else
+        if (filetype == ".txt")
+        {
+          std::ofstream output(outfile.c_str());
+          Vector<double> off;
+          off = v;
+          for (unsigned int i = 0; i < off.size(); i++)
+          {
+            output << off(i) << std::endl;
+          }
+        }
+        else
+        {
+          throw DOpEException("Don't know how to write filetype `" + filetype
+              + "'!", "StatReducedProblem::WriteToFile");
+        }
+#endif
+      }
+      else
+      {
+        throw DOpEException("No such DoFHandler `" + dof_type + "'!",
+            "StatReducedProblem::WriteToFile");
+      }
+    }
+
+  /******************************************************/
+
+  template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
+      typename CONTROLINTEGRATOR, typename INTEGRATOR, typename PROBLEM,
+      typename VECTOR, int dopedim, int dealdim>
+    void
+    StatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER,
+        CONTROLINTEGRATOR, INTEGRATOR, PROBLEM, VECTOR, dopedim, dealdim>::WriteToFile(
+        const ControlVector<VECTOR> &v, std::string name, std::string outfile,
+        std::string dof_type, std::string filetype)
+    {
+      WriteToFile(v.GetSpacialVector(), name, outfile, dof_type, filetype);
+    }
+
+/******************************************************/
+}
+#endif
