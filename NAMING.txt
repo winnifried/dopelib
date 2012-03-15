@@ -1,16 +1,6 @@
 www.dopelib.de
 
 
-VORSCHLAEGE:
-
-DOpE-alpha	
-
-
--------------------------------------------
--------------------------------------------
-DISKUSSION:
-Vom Bild her wuerde mir ja DOpE.alpha bzw. DOpE_\alpha (also in TeX) besser gefallen, 
-wird aber wohl mit der adresse schwer (: ~cg
 
 
 
