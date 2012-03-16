@@ -1,6 +1,8 @@
 TODO DOpE
 =========
 
+- Manual: Additional Chapter on what this Library does and why it is doing so. ~ww
+
 done (current work)  - PDE/StatPDE		
 		-- Kommentare zu Beispielen sollten beinhalten:
 		--- Was wird geloest?
