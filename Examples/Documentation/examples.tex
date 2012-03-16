@@ -12,12 +12,12 @@ following, we explain how to do this and what
 \begin{verbatim}
 cp -r Example1 ExampleNew
 cd ExampleNew
-rm -r CVS
+rm -rf .svn
 cd Test
-rm -r CVS
+rm -rf .svn
 \end{verbatim}
 It is important to remove the repository information,
-which is stored in the directory CVS.
+which is stored in the directory .svn.
 
 Then, we have to consider the following step. In order to 
 run the regression tests, we start the executable file

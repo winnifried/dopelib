@@ -14,12 +14,15 @@ made by (in alphabetical order)
 \end{itemize}
 
 \section{Software requirements}
+The library DOpE has been tested to work on both Linux and 
+MAC OSX. It requires a recent {\tt g++} (at least 4.4.3) due to 
+some new {\tt C++} features implemented in {\tt C++0x} and {\tt C++11}. 
 
 \subsection{deal.ii}
 This library is based upon {\tt deal.ii} hence in order to run 
 {\tt DOpElib} you need a running copy of {\tt deal.ii}.
 
-The deal.II library is open source and is freely availiable for noncommercial project.
+The deal.II library is open source and is freely available for noncommercial project.
 It can be downloaded from \url{http://www.dealii.org/}. On this
 homepage, one also finds lots of further information on deal.II as well as
 an extensive tutorial where many features of deal.II are discussed in a
@@ -28,10 +31,285 @@ recommendable to be roughly acquainted with deal.II.
 
 \subsection{SNOPT}
 If you would like to use the features offered in our SNOPT wrapper. You will 
-need to obtain a licence for {\tt SNOPT} 
+need to obtain a license for {\tt SNOPT} 
 \url{http://www.sbsi-sol-optimize.com/asp/sol_product_snopt.htm}.
-Unfortuately this is at present not availiable for free, but you should check if 
-there is a department license already availiable.
+Unfortunately this is at present not available for free, but you should 
+check if 
+there is a department license already available.
 
-\section{How this library is struktured}
-\marginpar{TODO!}
+\section{How this library is structured}
+This library is designed to allow easy implementation and numerical solutions 
+of problems involving partial differential equations (PDEs). The easiest case 
+is that of a PDE in weak form to find some $u$
+\[
+a(u)(\phi) = 0 \quad \forall \phi \in V
+\]
+with some appropriate space $V$.
+More complex cases involve optimization problems given in the form (OPT)
+\begin{align*}
+\min\;&J(q,u) \\
+  &\text{s.t.}\; a(q,u) = 0 \quad \forall \phi\\
+  &a \le q \le b\\
+  &g(q,u) \le 0  
+\end{align*}
+where $u$ is a FE-function and $q$ can either be a FE-function or some 
+fixed number of parameters.
+
+\subsection{Problem description}
+In order to allow our algorithms the automatic assembly of all required 
+data we need to have some container which contains the complete problem 
+description in a common data format. For this we have the following 
+classes in {\tt DOpEsrc/container}
+\begin{itemize}
+  \item {\tt pdeproblemcontainer.h} Is used to describe  stationary PDE problems.
+  \item {\tt instatpdeproblemcontainer.h} {\bf TODO is still missing but will be used for nonstationary problems.} This will be implemented once we have nonstationary optimization problems running to avoid error duplication in the coding process.
+  \item {\tt optproblem.h} Is used to describe  OPT problems governed by 
+    stationary PDEs. {\bf TODO should be renamed to optproblemcontainer.h including the class name!}
+  \item {\tt instatoptproblemcontainer.h} Is used to describe  OPT problems governed by nonstationary PDEs. The only difference to the stationary case is that we need to specify a time-stepping method.  
+\end{itemize}
+In order to fill these containers there are two things to be done,
+first we need to actually write some data like $a$, $J$, $\ldots$
+which describe the problem. Then we have to select some numerical 
+algorithm components like finite elements, linear solvers $\ldots$.
+The latter ones should be written such that when exchanging these components
+none of the problem descriptions should require changes. 
+Note that it still may be necessary to write some additional descriptions, 
+e.g., if you solve the PDE with a fix point iteration you don't need derivatives
+but if you want to use Newton's method you then have to provide some.
+
+We will start by discussing the problem description components implemented so far
+
+\subsubsection{Problem specific classes}
+The following classes are used to describe the problem and will usually require 
+some implementation.
+
+\begin{itemize}
+  \item {\tt basic/constraints.h} This is used by the spacetimehandlers to 
+    compute the number of constraints from the control and state vectors. 
+    It must not be reimplemented by the user, but needs to be properly 
+    initialized if OPT is used with box control constraints or $g(q,u) \le 0$.
+  \item {\tt interfaces/functionalinterface.h} This gives an interface 
+    for the functional $J$ and any other functional you may want to evaluate.
+    In general this can be used as a base class to write your own functionals 
+    in examples. We note that we only need to write the integrands on 
+    elements or faces the loop over elements will be taken care of else where.
+  \item {\tt interfaces/constraintinterface.h} This gives an interface for both 
+    the control box constraints as well as the general constraint $g \le 0$. This 
+    needs to be specified if constraints are to be used. If they are not needed 
+    a default class {\tt problemdata/noconstraints.h} can be used. We note that we only 
+    need to write the integrands on 
+    elements or faces the loop over elements will be taken care of else where.
+  \item {\tt interfaces/pdeinterface.h} This defines an interface for the 
+    partial differential equation $a(q,u)(\phi) = 0$. This needs to be written
+    by the user. We note that we only need to write the integrands on 
+    elements or faces the loop over elements will be taken care of else where.
+  \item {\tt interfaces/dirichletdatainterface.h} This gives an interface to the 
+    Dirichlet data for a problem. If the Dirichlet data are simply a function 
+    (and do not depend on the control $q$ one can use the default class
+    {\tt problemdata/simpledirichletdata.h}.
+\end{itemize}
+
+\subsubsection{Numeric components}
+These are the components from which a user needs to select some in order to actually 
+solve the given problem. They will not require any rewriting, but sometimes it is 
+advisable to write other than the default parameter into the param file for the 
+solution.
+
+First we need to select a method how to handle all dofs in space and time.
+\begin{itemize}
+\item {\tt basic/spacetimehandler\underline{ }base.h} This class is used to define 
+  an interface to the dimension independent functionality of all space time dof handlers. 
+\item {\tt basic/statespacetimehandler.h} Another intermediate interface class which adds 
+  the dimension dependent functionality if only the variable $u$ is considered, i.e., a 
+  PDE problem.
+\item {\tt basic/spacetimehandler.h } Same as above but with both $q$ and $u$, i.e., for
+  OPT problems.
+\item {\tt basic/mol\underline{ }statespacetimehandler.h} Implementation of a method of 
+  line space time dof handler for PDE problems. It has only one spatial 
+  dofhandler which is used for all time intervals.
+\item {\tt basic/mol\underline{ }spacetimehandler.h} Same as above for OPT problems.
+  A separate spatial dof handler for each of the variables $q$ and $u$ is maintained 
+  but only one triangulation.
+\item {\tt basic/mol\underline{ }multimesh\underline{ }spacetimehandler.h}
+  Same as above, but now in addition the triangulations for $q$ and $u$ can be refined
+  separately from one common initial coarse triangulation. Note that this will
+  in addition require the use of the multimesh version for integrator and 
+  face- as well as celldatacontainer.
+\end{itemize}
+Note that we use these for stationary problems as well, but then you don't have to specify
+any time information.
+
+Second you will need to specify some container classes to be used to 
+pass data between objects. At present you don't have much choice, but you may wish 
+to reimplement some of these if you need data that is not currently included in 
+the containers.
+\begin{itemize}
+\item {\tt container/celldatacontainer.h} This object is used to pass data 
+  given on the current element (cell) of the mesh to the functions in PDE, functional, 
+  $\ldots$. 
+\item {\tt container/facedatacontainer.h} This object is used to pass data 
+  given on the current face of the mesh to the functions in PDE, functional, 
+  $\ldots$. 
+\item {\tt container/multimesh\underline{ }celldatacontainer.h} This is the same as the 
+  celldatacontainer, but it
+  is capable to handle data defined on an alternative triangulation.
+\item {\tt container/multimesh\underline{ }facedatacontainer.h} This is the same as the
+  facedatacontainer, but it
+  is capable to handle data defined on an alternative triangulation.
+\item {\tt container/integratordatacontainer.h} This contains some data that 
+  should be passed to the integrator like quadrature formulas and the above cell and 
+  face data container.
+\end{itemize}
+
+Third, at least for nonstationary PDEs we need to select a time stepping scheme
+the file names of which are mostly self explanatory:
+\begin{itemize}
+\item {\tt include/forward\underline{ }euler\underline{ }problem.h}
+\item {\tt include/shifted\underline{ }crank\underline{ }nicolson\underline{ }problem.h}
+\item {\tt include/backward\underline{ }euler\underline{ }problem.h}
+\item {\tt include/fractional\underline{ }step\underline{ }theta\underline{ }problem.h} Note that the use of this scheme requires a special Newton solver!
+\item {\tt include/crank\underline{ }nicolson\underline{ }problem.h}
+\end{itemize}
+
+Finally, we need to select a way how to integrate and solve linear and nonlinear equations
+\begin{itemize}
+\item {\tt templates/integrator.h} This class computes integrals over a given 
+  triangulation (including its faces).
+\item {\tt templates/integrator\underline{ }multimesh.h} The same as above but it is 
+  possible that some of the FE functions are defined on an other triangulation 
+  as long as the have a common coarse triangulation.
+\item {\tt templates/integratormixeddims.h} This is used to compute integral which 
+  are given in another (larger) dimension than the current variable. (This is exclusively
+  used if the control variable is given by some parameters. Which means {\tt dopedim == 0}). 
+\item {\tt templates/cglinearsolver.h} This is a wrapper for the cg solver implemented in 
+  {\tt deal.ii}. The solver will build and store the stiffness matrix for the PDE.
+\item {\tt templates/gmreslinearsolver.h} This is a wrapper for the gmres solver 
+  implemented in {\tt deal.ii}. The solver will build and store the stiffness matrix 
+  for the PDE.
+\item {\tt templates/directlinearsolver.h} This is a wrapper for the direct solver 
+  implemented in {\tt deal.ii} using {\tt UMFPACK}. 
+  The solver will build and store the stiffness matrix for the PDE.
+\item {\tt templates/voidlinearsolver.h} This is a wrapper for certain cases when we 
+  know that the matrix to be inverted is the identity. It simply copies the rhs to the
+  lhs. This is only needed for compatibility reasons some other components.
+\item {\tt templates/newtonsolver.h} This solves some nonlinear equation using a 
+  line-search Newton method.
+\item {\tt templates/newtonsolvermixeddims.h} The same but in the case when there is 
+  another variable in a (larger) dimension is involved. See 
+  {\tt integratormixeddims.h}.
+\item {\tt templates/instat\underline{ }step\underline{ }newtonsolver.h} This is a 
+  Newton method as above to invert the next time-step. It differs from the plain vanilla
+  version in that it computes certain data from the previous time step only once 
+  and not in every Newton iteration.
+\item {\tt templates/fractional\underline{ }step\underline{ }theta\underline{ }step\underline{ }newtonsolver.h} This is the Newton solver for the time step in a 
+  fractional-step-theta scheme. It combines the computation of all three sub steps.
+\end{itemize}
+
+\subsection{Reduced problems (Solve the PDE)}
+At times it is nice to remove the PDE constraint. This is handled by so called reduced 
+problems. This means that the reduced problem implicitly solves the PDE whenever required
+and eliminates the variable $u$ from the problem.
+\begin{itemize}
+\item {\tt reducedproblems/statpdeproblem.h} This is used to remove the variable $u$ in 
+  a stationary PDE problem. This means that call the method \\
+  {\tt StatPDEProblem::ComputeReducedFunctionals} will evaluate the functionals 
+  defined in the problem description, i.e., in {\tt PDEProblemContainer}, in the 
+  solution of the given PDE.
+\item {\tt reducedproblems/statreducedproblem.h} This eliminates $u$ from the OPT
+  problem with a stationary PDE.
+\item {\tt reducedproblems/instatreducedproblem.h} The same as above but for a
+  nonstationary PDE. {\bf FIXME there is something wrong in this file see FIXME 
+    comment in the source.}
+\item {\tt reducedproblems/voidreducedproblem.h} A wrapper file that eliminates $u$ 
+  if it is not present anyways. This is used so that we can use the same routines to 
+  solve problems that have no PDE constraint.
+\end{itemize}
+
+\subsection{Optimization algorithms}
+Now, in order to solve optimization algorithms we need to define some algorithms.
+At present we offer a selection of algorithms that solve the reduced optimization 
+problem where the PDE constraint has been eliminated as explained in the previous section
+\begin{itemize}
+\item {\tt opt\underline{ }algorithms/reducedalgorithm.h} An interface for all 
+  optimization problems in the reduced formulation. It offers some test functionality
+  to assert that the derivatives of the problem are computed correctly.
+\item {\tt opt\underline{ }algorithms/reducednewtonalgorithm.h}
+  A line-search Newton algorithm using a cg method to invert the reduced hessian. 
+  Implementation ignores any additional constraints.
+\item {\tt opt\underline{ }algorithms/reducedtrustregionnewton.h}
+  A trust region Newton algorithm using a cg method to invert the reduced hessian.
+  Implementation ignores any additional constraints.
+\item {\tt opt\underline{ }algorithms/reduced\underline{ }snopt\underline{ }algorithm.h}
+  An algorithm to solve reduced optimization problems with additional control constraints.
+  ((reduced) state constraints are not yet implemented.)
+\item {\tt opt\underline{ }algorithms/reducednewtonalgorithmwithinverse.h}
+  Line-search Newton algorithm that assumes there exists a method in the reduced problem
+  that can invert the reduced hessian. (This usually makes sense only if there is no 
+  PDE constraint.)
+\item {\tt opt\underline{ }algorithms/generalized\underline{ }mma\underline{ }algorithm.h}
+  An implementation of the MMA-Algorithm for structural optimization using an augmented
+  Lagrangian formulation for the subproblems. The subproblem is implemented using the 
+  special purpose file
+  {\tt include/augmentedlagrangianproblem.h}.
+\end{itemize} 
+
+\subsection{Other Components}
+Beyond these clearly structured groups before there are some classes remaining that
+do not fit the above but are important for the user to know:
+\begin{itemize}
+\item {\tt include/statevector.h} This stores all dofs in space and time for the state 
+  variable $u$. It is possible to select whether all this should be kept in memory or 
+  or unused parts can be written to the hard disk.
+\item {\tt include/controlvector.h} This stores all dofs in space and time for the 
+  control variable $q$. At present no time dependence is implemented.
+\item {\tt include/constraintvector.h} This stores all dofs in space and time for the 
+  non PDE constraints (and corresponding multipliers). 
+  At present no time dependence is implemented.
+\item {\tt include/parameterreader.h} This file is used to define a parameter reader
+  that is used to read run time parameters from a given file.
+\item {\tt include/dopeexception.h} Defines some Exceptions that are thrown by the program
+  should it encounter any unexpected errors.
+\item {\tt include/dopeexceptionhandler.h} This class is used to write information 
+  contained in the exceptions to the output in a uniform manner.
+\item {\tt include/outputhandler.h} This file defines an outputhandler object which 
+  can be used to decide whether some information should be written to screen or file.
+  In addition it can format output according to some run time parameters given by a 
+  parameter file.
+\end{itemize}
+
+\marginpar{Write the rest! WW}
+\subsection{Internal structures}
+interfaces:
+transposeddirichletdatainterface.h
+reducedprobleminterface.h
+            pdeprobleminterface.h  
+
+problemdata:
+noconstraints.h        stateproblem.h          transposedgradientdirichletdata.h
+primaldirichletdata.h  tangentdirichletdata.h  transposedhessiandirichletdata.h
+simpledirichletdata.h
+\subsection{Wrapper classes}
+
+wrapper:
+dofhandler\underline{ }wrapper.h  finiteelement\underline{ }wrapper.h  preconditioner\underline{ }wrapper.h
+fevalues\underline{ }wrapper.h    function\underline{ }wrapper.h       snopt\underline{ }wrapper.h
+
+{\bf TODO! The following files need some appropriate description here 
+This should be done by someone who knows what they are used for. Pleas move the description to the right place above.}
+\marginpar{TODO}
+
+basic:
+      sth\underline{ }internals.h                     
+      DOpEtypes.h 
+include:   
+solutionextractor.h                 
+constraintsmaker.h            helloworld.h                     sparsitymaker.h                     
+            helper.h                                           timedofhandler.h                    
+              timeiterator.h                        
+
+reducedproblems:
+ forwardtimestepreducedproblem.h
+interfaces:
+active\underline{ }fe\underline{ }index\underline{ }setter\underline{ }interface.h  
+
+
