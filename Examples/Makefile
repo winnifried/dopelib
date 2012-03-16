@@ -37,6 +37,7 @@ distclean:
 	rm -rf *~ 
 	$(MAKE) veryclean 
 	rm description.aux description.aux.bak description.log description.pdf description.toc
+	rm Documentation/*.aux Documentation/*.aux.bak
 
 warncheck:
 	./checkwarn.sh
