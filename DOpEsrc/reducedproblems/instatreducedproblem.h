@@ -552,7 +552,9 @@ void InstatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER, CONTROLINTEGR
     GetNonlinearSolver("state").ReInit(problem);
     _state_reinit = false;
   }
- this->TimeLoop(q);
+  //FIXME This seems to be not ok, we should call the loop with problem! 
+  // If this works then there is something wrong in the structure of the instat problems 
+  this->TimeLoop(q);
 }
 /******************************************************/
 
