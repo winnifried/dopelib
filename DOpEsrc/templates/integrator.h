@@ -18,8 +18,15 @@
 namespace DOpE
 {
   /**
-   * This class is used to integrate the righthand side, matrix and so on
-   * This class assumes that one uses the same triangulation for the control and state variable.
+   * This class is used to integrate the righthand side, matrix and so on.
+   * It assumes that one uses the same triangulation for the control and state variable.
+   *
+   * @template INTEGRATORDATACONT       The type of the integratordatacontainer, which has
+   *                                    manages the basic data for integration (quadrate,
+   *                                    celldatacontainer, facedatacontainer etc.)
+   * @template VECTOR                   Class of the vectors which we use in the integrator.
+   * @template SCALAR                   Type of the scalars we use in the integrator.
+   * @template dim
    */
   template<typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR,
       int dim>
@@ -37,6 +44,9 @@ namespace DOpE
         void
         ReInit();
 
+        /**
+         * Mainly self-explanatory functions.
+         */
         template<typename PROBLEM>
           void
           ComputeNonlinearResidual(PROBLEM& pde, VECTOR &residual,
@@ -116,17 +126,27 @@ namespace DOpE
                       SCALAR>& boundary_values,
                   const std::vector<bool>& comp_mask) const;
 
-        // given a vector of active cell iterators and a facenumber, checks if the face
-        // belongs to an 'interface' (i.e. the adjoining cells have different
-        // material ids)
+        /**
+         * Given a vector of active cell iterators and a facenumber, checks if the face
+         * belongs to an 'interface' (i.e. the adjoining cells have different material ids).
+         *
+         * @template CELLITERATOR   Class of the celliterator.
+         *
+         * @param   cell            The cell in question.
+         * @param   face            Local number of the face for which we ask if it is
+         *                          at the interface.
+         */
         template<typename CELLITERATOR>
-        bool AtInterface(CELLITERATOR& cell, unsigned int face)
-        {
-          if (cell[0]->neighbor_index(face) != -1)
-            if(cell[0]->material_id() != cell[0]->neighbor(face)->material_id())
-              return true;
-          return false;
-        }
+          bool
+          AtInterface(CELLITERATOR& cell, unsigned int face)
+          {
+            if (cell[0]->neighbor_index(face) != -1)
+              if (cell[0]->material_id()
+                  != cell[0]->neighbor(face)->material_id())
+                return true;
+            return false;
+          }
+
         INTEGRATORDATACONT & _idc;
 
         std::map<std::string, const VECTOR*> _domain_data;
@@ -273,64 +293,40 @@ namespace DOpE
               // it has a different material_id than the actual cell
               if(AtInterface(cell, face))
               {
-                //now we distinguish between 3 cases:
+                //There exist now 3 different scenarios, given the actual cell and face:
+                // The neighbour behind this face is [ more | as much | less] refined
+                // than/as the actual cell. We have to distinguish here only between the case 1
+                // and the other two, because these will be distinguished in in the FaceDataContainer.
 
-                //note: neighbours->level is at most the actual level, i.e. they may or may not be refined!
                 if (cell[0]->neighbor(face)->has_children())
                 {
                   //first: neighbour is finer
-                  const unsigned int neighbor2=
-                  cell[0]->neighbor_of_neighbor(face);
 
                   for (unsigned int subface_no=0;
                       subface_no < cell[0]->face(face)->n_children();
                       ++subface_no)
                   {
-                    const auto
-                    neighbor_child
-                    = cell[0]->neighbor_child_on_subface (face, subface_no);
-
-                    Assert (neighbor_child->face(neighbor2) ==
-                        cell[0]->face(face)->child(subface_no),
-                        ExcInternalError());
-                    Assert (neighbor_child->has_children() == false,
-                        ExcInternalError());
-
                     //TODO Now here we have to initialise the subface_values on the
                     // actual cell and then the facevalues of the neighbours
+                    fdc.ReInit(face, subface_no);
+                    fdc.ReInitNbr();
+
                     pde.InterfaceEquation(fdc, local_cell_vector);
 
                   }
-
-                }
-                else if (cell[0]->has_children())
-                {// So this cell is finer than the previous one
-                  Assert(cell[0]->neighbor(face)->level() == cell[0]->level()-1,
-                      ExcInternalError());
-
-                  for (unsigned int subface_no=0;
-                      subface_no < cell[0]->face(face)->n_children();
-                      ++subface_no)
-                  {
-                    //TODO initialise the subface_values ont he neighbor_cell and the
-                    // facevalues on the actual cell
-                    pde.InterfaceEquation(fdc, local_cell_vector);
-                  }
-
                 }
                 else
                 {
-                  //the 'normal' case: both cells are on the same level
+                  // either neighbor is as fine as this cell or
+                  // it is coarser
 
-                  Assert(cell[0]->neighbor(face)->level() == cell[0]->level(),
-                      ExcInternalError());
                   fdc.ReInit(face);
                   fdc.ReInitNbr();
                   pde.InterfaceEquation(fdc, local_cell_vector);
                 }
 
               }//endif atinterface
-            }
+            }//endfor faces
           }//endif need_interfaces
 #endif
           //LocalToGlobal
@@ -466,64 +462,39 @@ namespace DOpE
                 // it has a different material_id than the actual cell
                 if(AtInterface(cell, face))
                 {
-                  //now we distinguish between 3 cases:
+                  //There exist now 3 different scenarios, given the actual cell and face:
+                  // The neighbour behind this face is [ more | as much | less] refined
+                  // than/as the actual cell. We have to distinguish here only between the case 1
+                  // and the other two, because these will be distinguished in in the FaceDataContainer.
 
-                  //note: neighbours->level is at most the actual level, i.e. they may or may not be refined!
                   if (cell[0]->neighbor(face)->has_children())
                   {
                     //first: neighbour is finer
-                    const unsigned int neighbor2=
-                    cell[0]->neighbor_of_neighbor(face);
 
                     for (unsigned int subface_no=0;
                         subface_no < cell[0]->face(face)->n_children();
                         ++subface_no)
                     {
-                      const auto
-                      neighbor_child
-                      = cell[0]->neighbor_child_on_subface (face, subface_no);
-
-                      Assert (neighbor_child->face(neighbor2) ==
-                          cell[0]->face(face)->child(subface_no),
-                          ExcInternalError());
-                      Assert (neighbor_child->has_children() == false,
-                          ExcInternalError());
-
                       //TODO Now here we have to initialise the subface_values on the
                       // actual cell and then the facevalues of the neighbours
+                      fdc.ReInit(face, subface_no);
+                      fdc.ReInitNbr();
+
                       pde.InterfaceEquation(fdc, local_cell_vector);
 
                     }
-
-                  }
-                  else if (cell[0]->has_children())
-                  {// So this cell is finer than the previous one
-                    Assert(cell[0]->neighbor(face)->level() == cell[0]->level()-1,
-                        ExcInternalError());
-
-                    for (unsigned int subface_no=0;
-                        subface_no < cell[0]->face(face)->n_children();
-                        ++subface_no)
-                    {
-                      //TODO initialise the subface_values ont he neighbor_cell and the
-                      // facevalues on the actual cell
-                      pde.InterfaceEquation(fdc, local_cell_vector);
-                    }
-
                   }
                   else
                   {
-                    //the 'normal' case: both cells are on the same level
+                    // either neighbor is as fine as this cell or
+                    // it is coarser
 
-                    Assert(cell[0]->neighbor(face)->level() == cell[0]->level(),
-                        ExcInternalError());
                     fdc.ReInit(face);
                     fdc.ReInitNbr();
                     pde.InterfaceEquation(fdc, local_cell_vector);
                   }
-
                 }//endif atinterface
-              }
+              }//endfor face
             }//endif need_interfaces
 #endif
             //LocalToGlobal
@@ -764,59 +735,54 @@ namespace DOpE
               // it has a different material_id than the actual cell
               if(AtInterface(cell, face))
               {
-                //now we distinguish between 3 cases:
+                //There exist now 3 different scenarios, given the actual cell and face:
+                // The neighbour behind this face is [ more | as much | less] refined
+                // than/as the actual cell. We have to distinguish here only between the case 1
+                // and the other two, because these will be distinguished in in the FaceDataContainer.
 
-                //note: neighbours->level is at most the actual level, i.e. they may or may not be refined!
                 if (cell[0]->neighbor(face)->has_children())
                 {
                   //first: neighbour is finer
-                  const unsigned int neighbor2=
-                  cell[0]->neighbor_of_neighbor(face);
 
                   for (unsigned int subface_no=0;
                       subface_no < cell[0]->face(face)->n_children();
                       ++subface_no)
                   {
-                    const auto
-                    neighbor_child
-                    = cell[0]->neighbor_child_on_subface (face, subface_no);
-
-                    Assert (neighbor_child->face(neighbor2) ==
-                        cell[0]->face(face)->child(subface_no),
-                        ExcInternalError());
-                    Assert (neighbor_child->has_children() == false,
-                        ExcInternalError());
-
                     //TODO Now here we have to initialise the subface_values on the
                     // actual cell and then the facevalues of the neighbours
-                    //matrix
+                    fdc.ReInit(face, subface_no);
+                    fdc.ReInitNbr();
+
+                    //TODO auslagern?
+                    nbr_dofs_per_cell = fdc.GetNbrNDoFsPerCell();
+                    nbr_local_dof_indices.resize(0);
+                    nbr_local_dof_indices.resize(nbr_dofs_per_cell, 0);
+                    dealii::FullMatrix<SCALAR> local_interface_matrix(dofs_per_cell,nbr_dofs_per_cell );
+                    local_interface_matrix = 0;
+
+                    pde.InterfaceMatrix(fdc, local_interface_matrix);
+
+                    cell[0]->get_dof_indices(local_dof_indices);
+                    cell[0]->neighbor(face)->get_dof_indices(nbr_local_dof_indices);
+
+                    for (unsigned int i = 0; i < dofs_per_cell; ++i)
+                    {
+                      for (unsigned int j = 0; j < nbr_dofs_per_cell; ++j)
+                      {
+                        matrix.add(local_dof_indices[i], nbr_local_dof_indices[j],
+                            local_interface_matrix(i, j));
+                      } //endfor j
+                    } //endfor i
 
                   }
-
-                }
-                else if (cell[0]->has_children())
-                {// So this cell is finer than the previous one
-                  Assert(cell[0]->neighbor(face)->level() == cell[0]->level()-1,
-                      ExcInternalError());
-
-                  for (unsigned int subface_no=0;
-                      subface_no < cell[0]->face(face)->n_children();
-                      ++subface_no)
-                  {
-                    //TODO initialise the subface_values ont he neighbor_cell and the
-                    // facevalues on the actual cell
-                    //matrix
-                  }
-
                 }
                 else
                 {
-                  //the 'normal' case: both cells are on the same level
-
-                  Assert(cell[0]->neighbor(face)->level() == cell[0]->level(),
-                      ExcInternalError());
+                  // either neighbor is as fine as this cell or it is coarser
                   fdc.ReInit(face);
                   fdc.ReInitNbr();
+
+                  //TODO auslagern?
                   nbr_dofs_per_cell = fdc.GetNbrNDoFsPerCell();
                   nbr_local_dof_indices.resize(0);
                   nbr_local_dof_indices.resize(nbr_dofs_per_cell, 0);
@@ -837,8 +803,8 @@ namespace DOpE
                     } //endfor j
                   } //endfor i
                 }
-
               }//endif atinterface
+
             }
           }//endif need_interfaces
 #endif
@@ -1346,7 +1312,6 @@ namespace DOpE
             *(static_cast<const DOFHANDLER*> (dof_handler)), color, function,
             boundary_values, comp_mask);
       }
-
 }
 #endif
 
