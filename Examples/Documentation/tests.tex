@@ -1,0 +1,61 @@
+\chapter{Testing examples}\label{chap:test}
+The DOpE testsuite consists of regression tests. They are run to compare 
+the output to previous outputs. This is useful (necessary) after 
+changing programming code anywhere in the library. If a test
+succeeds, everything is fine in the library. If not, you should not
+check in your code into DOpE. Please make sure what is going wrong and WHY!
+
+Every command is computed via a Makefile. In the basic example 
+directory
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Where can I find the tests}
+In each example directory you find a subdirectory `Test'. Herein, you find 
+the parameter files for meshes (*.inp) and a param file (test.prm).
+Moreover, the executable is denoted by `test.sh'. Please make sure, that 
+the 
+\begin{verbatim}
+set never_write_list
+\end{verbatim}
+contains every possible output
+\begin{verbatim}
+Gradient;Hessian;Tangent;Residual;Update;Control;State
+\end{verbatim}
+That means, no solution files are written to the output.
+Recall, that we are just interested in terminal output that 
+is of course sufficient to verify the things.
+
+Hence, the results directory should be empty
+\begin{verbatim}
+set results_dir   = ./
+\end{verbatim}
+The rest in the param file must be identically the same as 
+in the dope.prm file in the parent directory. 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{How to start testing?}
+You start testing by typing 
+\begin{verbatim}
+> ./test.sh Store
+\end{verbatim}
+in the terminal.
+
+After the run, you have to call 
+\begin{verbatim}
+> ./test.sh Test
+\end{verbatim}
+to compare your stored output. Of course, there should be no differences.
+
+The useful point is now the following. After implemention of 
+new pieces of code in the DOpE library or in the examples, you can
+run 
+\begin{verbatim}
+> ./test.sh Test
+\end{verbatim}
+Hereby, you compare your `new' output with the previous stored output.
+
+Attention: After changes you should NOT run again
+\begin{verbatim}
+> ./test.sh Store
+\end{verbatim}
+In that case, you overwrite your previous output.

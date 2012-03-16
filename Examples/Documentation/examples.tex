@@ -1,0 +1,71 @@
+\chapter{Example Handling, Creating new Examples}
+\label{chap:howtoex}
+To implement new examples or to use existing examples 
+from the library for own research, the user 
+can simply copy an existing example. In this 
+new example, own code and changes can be compiled.
+
+Adding a new regression test to the repository 
+needs some concentration of the user. In the 
+following, we explain how to do this and what 
+\textit{must} be taken into account:
+\begin{verbatim}
+cp -r Example1 ExampleNew
+cd ExampleNew
+rm -r CVS
+cd Test
+rm -r CVS
+\end{verbatim}
+It is important to remove the repository information,
+which is stored in the directory CVS.
+
+Then, we have to consider the following step. In order to 
+run the regression tests, we start the executable file
+of the present example. This executable comes from the 
+Makefile. For example in the Makefile of 
+Example \ref{PDE_Stat_Stokes}, 
+\begin{verbatim}
+target   = $(BINDIR)/DOpE-PDE-StatPDE-Example1-$
+           (dope_dimension)d-$(deal_II_dimension)d
+\end{verbatim}
+and concretely:
+\begin{verbatim}
+DOpE-PDE-StatPDE-Example1-2d-2d
+\end{verbatim}
+The aforementioned expression is the name of 
+the executable that is required to run the 
+regression test. Hence, in 
+\begin{verbatim}
+PDE/StatPDE/Example1/Test> emacs test.sh
+\end{verbatim}
+you find two times the line
+\begin{verbatim}
+echo "Running Program 
+     ../../../../../bin/DOpE-PDE-StatPDE-Example1-2d-2d test.prm"
+     (../../../../../bin/DOpE-PDE-StatPDE-Example1-2d-2d test.prm 2>&1) 
+     > /dev/null
+\end{verbatim} 
+It is really important when copying an existing example,
+to change this information. 
+First, we have to change the target in the Makefile
+\begin{verbatim}
+target   = $(BINDIR)/DOpE-PDE-StatPDE-ExampleNew-$
+           (dope_dimension)d-$(deal_II_dimension)d
+\end{verbatim}
+Second, we have to replace 
+Example1 by ExampleNew such that 
+\begin{verbatim}
+echo "Running Program 
+     ../../../../../bin/DOpE-PDE-StatPDE-ExampleNew-2d-2d test.prm"
+     (../../../../../bin/DOpE-PDE-StatPDE-ExampleNew-2d-2d test.prm 2>&1) 
+     > /dev/null
+\end{verbatim} 
+Please, also change the dimension parameters 
+\begin{verbatim}
+-2d-2d
+\end{verbatim} 
+Now, the user is prepared to change any information in the 
+\begin{verbatim}
+main.cc, localpde.h, functionals.h, localfunctional.h, etc
+\end{verbatim} 
+

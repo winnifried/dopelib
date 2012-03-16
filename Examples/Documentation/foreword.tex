@@ -6,18 +6,23 @@ University of Heidelberg (Germany) in the numerical analysis
 group of Rolf Rannacher. 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-The \textit{Deal Optimization Environment} (DOpE) project is mainly 
-based on the
-\textit{deal.II} finite element library which has been developed initially
-by W. Bangerth, R. Hartmann, and G. Kanschat. 
-In addition, some algorithmic aspects to compute optimization problems
-in which the state is given in terms of a partial
-differential equations are similar to algorithms of the
-Gascoigne/RoDoBo 
-project, which was initiated by 
-Roland Becker, Dominik Meidner,  and Boris Vexler. 
-Both projects have also been 
-initiated at the University of Heidelberg. 
+The \textit{Deal Optimization Environment} (DOpE) project is 
+based on the \textit{deal.II} finite element library which has been developed
+ initially by W. Bangerth, R. Hartmann, and G. Kanschat. \marginpar{Citation}
+Its main feature is to give a unified interface to highlevel algorithms such as 
+time stepping methods, nonlinear solvers and optimization routines. 
+We aim that the user should only need to write those parts
+of the code that are problem dependent while all invariant parts of the algorithms
+should be reusable without any need for further coding.
+In particular, the user should be able to switch between various different 
+algorithms without the need to rewrite the problem dependent code, though he or she will
+have to replace the algorithm object with an other one. 
+
+The authors acknwoledge their past experience as well as discussions with 
+the authors of the libraries 
+Gascoigne/RoDoBo project, which was initiated by 
+Roland Becker, Dominik Meidner,  and Boris Vexler. \marginpar{Citation} 
+From which some of the ideas to modularize the algorithms have arisen.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 The aim of DOpE is to provide a software toolkit to solve forward PDE
@@ -35,61 +40,39 @@ problems which come from different application fields, like elasticity and
 plasticity, fluid dynamics, and fluid-structure interactions.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-At the present stage, we are able to provide the following features and 
-problems:
+At the present stage the following features are supported by the library
 \begin{itemize}
-\item Computation of forward problems in 1d, 2d, and 3d.
-\item Solution of stationary and nonstationary forward problems
+\item Solution of stationary and nonstationary PDEs in 1d, 2d, and 3d.
 \item Various timestepping schemes (based on finite differences), 
   such as forward Euler, backward Euler,
   Crank-Nicolson, shifted Crank-Nicolson, and Fractional-Step-$\Theta$ scheme.
-\item Various finite elements taken from deal.ii.
-\item Computation of stationary optimal control problems.
-\item Solving of standard Laplace equation, Navier-Stokes, and 
-fluid-structure interaction. 
+\item All finite elements of from deal.ii including hp-support.
+\item Several examples showing the solution of several PDEs including
+   Poisson, Navier-Stokes, Plasticity and fluid-structure interaction problems. 
+\item Self written linesearch and trustregion newton algorithms for the 
+   solution of optimization problems with PDEs. (cp. Nocedal \& Wright\marginpar{Citation})
+\item Interface to SNOPT for the solution of optimization problems with PDEs and
+  additional other constraints.
+\item Several examples showing how to solve various kinds of optimization problems
+  involving stationary PDE constraints.
+\item Mesh adaptation.
+\item Different spatial triangulations for control and state variables.
 \end{itemize}
  
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-In the present manual we give a short introduction to all example programs
-which can be found currently in DOpE. The organization of the examples is
-as follows: we distinguish between the mere solution of a PDE and the
-solution of an optimal control problem, and in each case we differentiate
-further between stationary and nonstationary problems. This leads to the
-following structure (we list problems treated in the examples in
-brackets):
-\begin{itemize}
-\item
-solution of PDE problem
- \begin{itemize}
-   \item
-     stationary PDE (Laplace equation, Stokes equations, FSI problems,
-elasticity and plasticity problems)
-   \item
-     nonstationary PDE (Navier-Stokes equations, FSI problem, Black-Scholes
-equation)
- \end{itemize}
-\item
-solution of PDE constrained optimal control problem
- \begin{itemize}
-   \item
-     stationary constraining PDE
-   \item
-     nonstationary constraining PDE
- \end{itemize}
-\end{itemize}
-The seventh stationary PDE example \ref{PDE_Stat_Laplace_2D} 
-(solution of the Laplace equation) is
-implemented analogously to the corresponding tutorial step in deal.II. By
-comparing the respective program codes, deal.II users should be able to
-catch the differences between the two software packages.
-In later examples we also provide algorithms for 'goal-oriented' automatic
-mesh adaption and error analysis.
+The rest of this document is structured as follows: We start with an introduction in
+Chapter~\ref{chap:intro} where you will learn what is needed to run {\tt DOpElib}. 
+Further you will learn what problems we can solve and how all the different classes 
+work together for this purpose. This should help you figure out what the different classes
+do if you are in need of writing your own algorithm.
 
-{\bf Comment on deal.II}
+Then assuming that you can work to your satisfaction with the algorithms already implemented
+we will show you how to create your own running example in Chapter~\ref{chap:howtoex}.
+This will be followed by a detailed description of all examples already shipped with 
+the library. You can find the examples for the solution of PDEs in Chaper~\ref{PDE}
+and those for the solution of optimization problems with PDEs in Chapter~\ref{OPT}.
 
-The deal.II library is open
-source and can be downloaded from \texttt{http://www.dealii.org/}. On this
-homepage, one also finds lots of further information on deal.II as well as
-an extensive tutorial where many features of deal.II are discussed in a
-well-documented example framework. In order to use DOpE, it is highly
-recommendable to be roughly acquainted with deal.II.
+These notes conclude with a section that explains how we do automated testing of the 
+implementation in Chapter~\ref{chap:test}. This chapter will be of interest only if you 
+are trying to implement some new features to the library so that you can check that 
+the new code did not break anything.
+
