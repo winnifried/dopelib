@@ -5,7 +5,7 @@
 #include "outputhandler.h"
 #include "controlvector.h"
 #include "constraintvector.h"
-#include "DOpEtypes.h"
+#include "dopetypes.h"
 
 #include <assert.h>
 

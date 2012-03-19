@@ -30,6 +30,10 @@ namespace DOpE
 
   typedef dealii::DoFHandler<1>::active_cell_iterator active_cell_it;
 
+
+  /**
+   * An iterator for the timedofhandler.
+   */
   class TimeIterator
   {
     public:

@@ -33,6 +33,15 @@ namespace DOpE
     };
 
     /**
+     * This enum describes how we compute the adjoint solution
+     * for the error estimation via the DWR-method
+     */
+    enum AdjointComputation
+    {
+      higher_order, normal
+    };
+
+    /**
      * This enum describes how we compute the weights in
      * the DWR-method, see for instance
      *
