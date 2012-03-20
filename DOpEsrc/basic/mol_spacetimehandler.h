@@ -170,7 +170,7 @@ namespace DOpE
 #endif
         SpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR, dopedim,
             dealdim>::SetActiveFEIndicesState(_state_dof_handler);
-        _state_dof_handler.distribute_dofs(*GetFESystem("state"));
+        _state_dof_handler.distribute_dofs(GetFESystem("state"));
         DoFRenumbering::component_wise(
             static_cast<DOFHANDLER&> (_state_dof_handler),
             state_block_component);
@@ -184,7 +184,7 @@ namespace DOpE
             _state_dofs_per_block, state_block_component);
 
         _support_points.clear();
-	
+
 	_constraints.ReInit(_control_dofs_per_block);
         //_constraints.ReInit(_control_dofs_per_block, _state_dofs_per_block);
 
@@ -378,16 +378,16 @@ namespace DOpE
       /**
        * Implementation of virtual function in SpaceTimeHandler
        */
-      const dealii::SmartPointer<const FE>
+      const FE&
       GetFESystem(std::string name) const
       {
         if (name == "state")
           {
-            return _state_fe;
+            return *_state_fe;
           }
         else if (name == "control")
           {
-            return _control_fe;
+            return *_control_fe;
           }
         else
           {

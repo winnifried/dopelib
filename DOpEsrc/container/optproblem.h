@@ -505,7 +505,7 @@ namespace DOpE
 
         /******************************************************/
 
-        const dealii::SmartPointer<const FE>
+        const FE&
         GetFESystem() const;
 
         /******************************************************/
@@ -2241,7 +2241,7 @@ namespace DOpE
       typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
       typename VECTOR, int dopedim, int dealdim, typename FE,
       typename DOFHANDLER>
-    const SmartPointer<const FE>
+    const FE&
     OptProblem<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
         SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DOFHANDLER>::GetFESystem() const
     {

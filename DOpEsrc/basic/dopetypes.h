@@ -32,14 +32,6 @@ namespace DOpE
       primal_only, dual_only, mixed
     };
 
-    /**
-     * This enum describes how we compute the adjoint solution
-     * for the error estimation via the DWR-method
-     */
-    enum AdjointComputation
-    {
-      higher_order, normal
-    };
 
     /**
      * This enum describes how we compute the weights in

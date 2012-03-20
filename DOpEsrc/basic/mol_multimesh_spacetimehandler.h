@@ -20,10 +20,10 @@ namespace DOpE
   /**
    * Implements a Space Time Handler with a Method of Lines discretization.
    * This means there is only one fixed mesh for the spatial domain.
-   * However, this space time handler allows to have different meshes for 
+   * However, this space time handler allows to have different meshes for
    * control and state variable based upon the same coarse triangulation.
    *
-   * Note that this makes sense only if dealdim=dopedim. This is why this 
+   * Note that this makes sense only if dealdim=dopedim. This is why this
    * class has only one dim template argument
    */
   template<typename FE, typename DOFHANDLER, typename SPARSITYPATTERN,
@@ -163,7 +163,7 @@ namespace DOpE
 
         SpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR, dim,
             dim>::SetActiveFEIndicesState(_state_dof_handler);
-        _state_dof_handler.distribute_dofs(*GetFESystem("state"));
+        _state_dof_handler.distribute_dofs(GetFESystem("state"));
         DoFRenumbering::component_wise(
             static_cast<DOFHANDLER&> (_state_dof_handler),
             state_block_component);
@@ -371,16 +371,16 @@ namespace DOpE
       /**
        * Implementation of virtual function in SpaceTimeHandler
        */
-      const dealii::SmartPointer<const FE>
+      const FE&
       GetFESystem(std::string name) const
       {
         if (name == "state")
           {
-            return _state_fe;
+            return *_state_fe;
           }
         else if (name == "control")
           {
-            return _control_fe;
+            return *_control_fe;
           }
         else
           {

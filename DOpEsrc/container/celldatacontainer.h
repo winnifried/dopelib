@@ -96,9 +96,9 @@ namespace DOpE
                 _param_values(param_values),
                 _domain_values(domain_values),
                 _cell(cell),
-                _state_fe_values(*(sth.GetFESystem("state")), quad,
+                _state_fe_values((sth.GetFESystem("state")), quad,
                     update_flags),
-                _control_fe_values(*(sth.GetFESystem("control")), quad,
+                _control_fe_values((sth.GetFESystem("control")), quad,
                     update_flags)
           {
             _state_index = sth.GetStateIndex();
@@ -141,9 +141,9 @@ namespace DOpE
                 _param_values(param_values),
                 _domain_values(domain_values),
                 _cell(cell),
-                _state_fe_values(*(sth.GetFESystem("state")), quad,
+                _state_fe_values((sth.GetFESystem("state")), quad,
                     update_flags),
-                _control_fe_values(*(sth.GetFESystem("state")), quad,
+                _control_fe_values((sth.GetFESystem("state")), quad,
                     update_flags)
           {
             _state_index = sth.GetStateIndex();
@@ -358,9 +358,9 @@ namespace DOpE
                 _param_values(param_values),
                 _domain_values(domain_values),
                 _cell(cell),
-                _state_hp_fe_values(*(sth.GetFESystem("state")), q_collection,
+                _state_hp_fe_values((sth.GetFESystem("state")), q_collection,
                     update_flags),
-                _control_hp_fe_values(*(sth.GetFESystem("control")),
+                _control_hp_fe_values((sth.GetFESystem("control")),
                     q_collection, update_flags), _q_collection(q_collection)
           {
             _state_index = sth.GetStateIndex();
@@ -400,9 +400,9 @@ namespace DOpE
                 _param_values(param_values),
                 _domain_values(domain_values),
                 _cell(cell),
-                _state_hp_fe_values(*(sth.GetFESystem("state")), q_collection,
+                _state_hp_fe_values((sth.GetFESystem("state")), q_collection,
                     update_flags),
-                _control_hp_fe_values(*(sth.GetFESystem("state")),
+                _control_hp_fe_values((sth.GetFESystem("state")),
                     q_collection, update_flags), _q_collection(q_collection)
           {
             _state_index = sth.GetStateIndex();

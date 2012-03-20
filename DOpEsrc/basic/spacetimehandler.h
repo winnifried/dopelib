@@ -351,7 +351,7 @@ namespace DOpE
        * Returns a const Smartpointer to the FESystem indicated by the string 'name', i.e. state oder control.
        */
 
-      virtual const dealii::SmartPointer<const FE>
+      virtual const FE&
       GetFESystem(std::string name) const=0;
 
 

@@ -89,9 +89,9 @@ namespace DOpE
                 _param_values(param_values),
                 _domain_values(domain_values),
                 _cell(cell),
-                _state_fe_values(*(sth.GetFESystem("state")), quad,
+                _state_fe_values((sth.GetFESystem("state")), quad,
                     update_flags),
-                _control_fe_values(*(sth.GetFESystem("control")), quad,
+                _control_fe_values((sth.GetFESystem("control")), quad,
                     update_flags),
                 _need_neighbour(need_neighbour)
           {
@@ -106,13 +106,13 @@ namespace DOpE
             if (need_neighbour)//so we need FEFAcevalues etc. for the neighbour too.
               {
                 _nbr_state_fe_values = new DOpEWrapper::FEFaceValues<dim>(
-                    *(sth.GetFESystem("state")), quad, update_flags);
+                    (sth.GetFESystem("state")), quad, update_flags);
                 _nbr_control_fe_values = new DOpEWrapper::FEFaceValues<dim>(
-                    *(sth.GetFESystem("control")), quad, update_flags);
+                    (sth.GetFESystem("control")), quad, update_flags);
                 _state_fe_subface_values = new DOpEWrapper::FESubfaceValues<dim>(
-                    *(sth.GetFESystem("state")), quad, update_flags);
+                    (sth.GetFESystem("state")), quad, update_flags);
                 _control_fe_subface_values =  new DOpEWrapper::FESubfaceValues<dim>(
-                    *(sth.GetFESystem("control")), quad, update_flags);
+                    (sth.GetFESystem("control")), quad, update_flags);
                 _nbr_state_fe_values_ptr = NULL;
                 _nbr_control_fe_values_ptr = NULL;
               }
@@ -161,9 +161,9 @@ namespace DOpE
                 _param_values(param_values),
                 _domain_values(domain_values),
                 _cell(cell),
-                _state_fe_values(*(sth.GetFESystem("state")), quad,
+                _state_fe_values((sth.GetFESystem("state")), quad,
                     update_flags),
-                _control_fe_values(*(sth.GetFESystem("state")), quad,
+                _control_fe_values((sth.GetFESystem("state")), quad,
                     update_flags),
                 _need_neighbour(need_neighbour)
           {
@@ -175,13 +175,13 @@ namespace DOpE
             if (need_neighbour)//so we need FEFAcevalues for the neighbour too.
               {
                 _nbr_state_fe_values = new DOpEWrapper::FEFaceValues<dim>(
-                    *(sth.GetFESystem("state")), quad, update_flags);
+                    (sth.GetFESystem("state")), quad, update_flags);
                 _nbr_control_fe_values = new DOpEWrapper::FEFaceValues<dim>(
-                    *(sth.GetFESystem("state")), quad, update_flags);
+                    (sth.GetFESystem("state")), quad, update_flags);
                 _state_fe_subface_values = new DOpEWrapper::FESubfaceValues<dim>(
-                    *(sth.GetFESystem("state")), quad, update_flags);
+                    (sth.GetFESystem("state")), quad, update_flags);
                 _control_fe_subface_values =  new DOpEWrapper::FESubfaceValues<dim>(
-                    *(sth.GetFESystem("state")), quad, update_flags);
+                    (sth.GetFESystem("state")), quad, update_flags);
               }
             else
               {
@@ -550,9 +550,9 @@ namespace DOpE
                 _param_values(param_values),
                 _domain_values(domain_values),
                 _cell(cell),
-                _state_hp_fe_values(*(sth.GetFESystem("state")), q_collection,
+                _state_hp_fe_values((sth.GetFESystem("state")), q_collection,
                     update_flags),
-                _control_hp_fe_values(*(sth.GetFESystem("control")),
+                _control_hp_fe_values((sth.GetFESystem("control")),
                     q_collection, update_flags), _q_collection(q_collection)
           {
             _state_index = sth.GetStateIndex();
@@ -564,13 +564,13 @@ namespace DOpE
             if (need_neighbour)//so we need FEFAcevalues for the neighbour too.
               {
                 _nbr_state_hp_fe_values = new DOpEWrapper::HpFEFaceValues<dim>(
-                    *(sth.GetFESystem("state")), q_collection, update_flags);
+                    (sth.GetFESystem("state")), q_collection, update_flags);
                 _nbr_control_hp_fe_values = new DOpEWrapper::HpFEFaceValues<dim>(
-                    *(sth.GetFESystem("control")), q_collection, update_flags);
+                    (sth.GetFESystem("control")), q_collection, update_flags);
                 _state_hp_fe_subface_values = new DOpEWrapper::HpFESubfaceValues<dim>(
-                    *(sth.GetFESystem("state")), q_collection, update_flags);
+                    (sth.GetFESystem("state")), q_collection, update_flags);
                 _control_hp_fe_subface_values = new DOpEWrapper::HpFESubfaceValues<dim>(
-                    *(sth.GetFESystem("control")), q_collection, update_flags);
+                    (sth.GetFESystem("control")), q_collection, update_flags);
 
               }
             else
@@ -619,9 +619,9 @@ namespace DOpE
              const std::map<std::string, const VECTOR*> &domain_values,
              bool need_neighbour) :
            _param_values(param_values), _domain_values(domain_values),
-               _cell(cell), _state_hp_fe_values(*(sth.GetFESystem("state")),
+               _cell(cell), _state_hp_fe_values((sth.GetFESystem("state")),
                    q_collection, update_flags), _control_hp_fe_values(
-                   *(sth.GetFESystem("state")), q_collection, update_flags),
+                   (sth.GetFESystem("state")), q_collection, update_flags),
                _q_collection(q_collection), _need_neighbour(need_neighbour)
          {
            _state_index = sth.GetStateIndex();
@@ -633,14 +633,14 @@ namespace DOpE
            if (need_neighbour)
            {
              _nbr_state_hp_fe_values = new DOpEWrapper::HpFEFaceValues<dim>(
-                 *(sth.GetFESystem("state")), q_collection, update_flags);
+                 (sth.GetFESystem("state")), q_collection, update_flags);
              _nbr_control_hp_fe_values = new DOpEWrapper::HpFEFaceValues<dim>(
-                 *(sth.GetFESystem("state")), q_collection, update_flags);
+                 (sth.GetFESystem("state")), q_collection, update_flags);
              _state_hp_fe_subface_values
-                 = new DOpEWrapper::HpFESubfaceValues<dim>(*(sth.GetFESystem(
+                 = new DOpEWrapper::HpFESubfaceValues<dim>((sth.GetFESystem(
                      "state")), q_collection, update_flags);
              _control_hp_fe_subface_values = new DOpEWrapper::HpFESubfaceValues<
-                 dim>(*(sth.GetFESystem("state")), q_collection, update_flags);
+                 dim>((sth.GetFESystem("state")), q_collection, update_flags);
            }
            else
            {

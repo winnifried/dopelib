@@ -530,7 +530,7 @@ namespace DOpE
         {
           residual = 0.;
           // Begin integration
-          unsigned int dofs_per_cell;// = pde.GetFESystem()->dofs_per_cell;
+          unsigned int dofs_per_cell;// = pde.GetFESystem().dofs_per_cell;
 
           dealii::Vector<SCALAR> local_cell_vector;//(dofs_per_cell);
 

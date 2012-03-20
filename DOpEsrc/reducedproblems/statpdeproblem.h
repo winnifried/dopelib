@@ -65,7 +65,7 @@ namespace DOpE
               ParameterReader &param_reader, INTEGRATORDATACONT& idc,
               int base_priority = 0);
         /**
-         * TODO What ist this for?
+         * TODO What ist this for? I thought in this contexts exists no control?
          */
         template<typename STATEINTEGRATORDATACONT,
             typename CONTROLINTEGRATORCONT>
@@ -386,12 +386,26 @@ namespace DOpE
   template<typename NONLINEARSOLVER, typename INTEGRATOR, typename PROBLEM,
       typename VECTOR, int dealdim>
     void
-    StatPDEProblem<NONLINEARSOLVER, INTEGRATOR, PROBLEM, VECTOR, dealdim>::ComputeDualForErrorEstimation()
+    StatPDEProblem<NONLINEARSOLVER, INTEGRATOR, PROBLEM, VECTOR, dealdim>::ComputeDualForErrorEstimation(
+        /*DOpEtypes::WeightComputation weight_comp*/)
     {
+      DOpEtypes::WeightComputation weight_comp = DOpEtypes::higher_order_interpolation;//kann dann weg, nur zum Test
       this->GetOutputHandler()->Write("Computing Dual for Error Estimation:", 4
           + this->GetBasePriority());
+      if (weight_comp == DOpEtypes::higher_order_interpolation)
+      {
+        this->SetProblemType("adjoint_for_ee");
+      }
+      else if (weight_comp == DOpEtypes::higher_order_computation)
+      {
+        this->SetProblemType("adjoint_for_ee_ho");
+      }
+      else
+      {
+        throw DOpEException("Unknown WeightComputation",
+            "StatPDEProblem::ComputeDualForErrorEstimation");
+      }
 
-      this->SetProblemType("adjoint_for_ee");
       //      auto& problem = this->GetProblem()->GetStateProblem();
       auto& problem = *(this->GetProblem());
       if (_adjoint_reinit == true)
@@ -493,6 +507,7 @@ namespace DOpE
         Vector<float>& /*error_ind*/, DOpEtypes::EE_state ee_state,
         DOpEtypes::WeightComputation weight_comp)
     {
+
       this->ComputeDualForErrorEstimation();
 
       this->GetOutputHandler()->Write("Computing Error Indicators:", 4

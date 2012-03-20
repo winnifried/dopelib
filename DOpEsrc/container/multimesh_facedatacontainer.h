@@ -80,9 +80,9 @@ namespace DOpE
                 _domain_values(domain_values),
                 _cell(cell),
                 _tria_cell(tria_cell),
-                _state_fe_values(*(sth.GetFESystem("state")), quad,
+                _state_fe_values(sth.GetFESystem("state"), quad,
                     update_flags),
-                _control_fe_values(*(sth.GetFESystem("control")), quad,
+                _control_fe_values(sth.GetFESystem("control"), quad,
                     update_flags)
           {
             _state_index = sth.GetStateIndex();
@@ -228,9 +228,9 @@ namespace DOpE
         unsigned int
         GetControlIndex() const;
 	unsigned int
-	  GetCoarseIndex() const { return _coarse_index; } 
+	  GetCoarseIndex() const { return _coarse_index; }
         unsigned int
-	  GetFineIndex() const { return _fine_index; } 
+	  GetFineIndex() const { return _fine_index; }
         /***********************************************************/
         /**
          * Helper Function. Vector valued case.
@@ -296,7 +296,7 @@ namespace DOpE
 
         unsigned int _face;
     };
- 
+
 
   /***********************************************************************/
   /************************IMPLEMENTATION*for*DoFHandler*********************************/
@@ -306,7 +306,7 @@ namespace DOpE
     void
     Multimesh_FaceDataContainer<dealii::DoFHandler<dim>, VECTOR, dim>::ReInit(
       unsigned int coarse_index,
-      unsigned int fine_index, 
+      unsigned int fine_index,
       const FullMatrix<double>& prolongation_matrix,
       unsigned int face_no)
     {
@@ -314,7 +314,7 @@ namespace DOpE
       _coarse_index = coarse_index;
       _fine_index = fine_index;
       assert(this->GetControlIndex() < _cell.size());
-      
+
       if(coarse_index == this->GetStateIndex())
       {
 	_state_prolongation = prolongation_matrix;
@@ -564,9 +564,9 @@ namespace DOpE
       dealii::Vector<double> dof_values(dofs_per_cell);
       dealii::Vector<double> dof_values_transformed(dofs_per_cell);
       cell->get_dof_values (*(it->second), dof_values);
-      //Now compute the real values at the nodal points 
+      //Now compute the real values at the nodal points
       prolongation.vmult(dof_values_transformed,dof_values);
-      
+
       //Copied from deal FEValuesBase<dim,spacedim>::get_function_values
       // see deal.II/source/fe/fe_values.cc
       unsigned int n_quadrature_points = GetNQPoints();
@@ -576,7 +576,7 @@ namespace DOpE
 	const double value = dof_values_transformed(shape_func);
 	if (value == 0.)
 	continue;
-	
+
 	const double *shape_value_ptr = &(fe_values.shape_value(shape_func, 0));
 	for (unsigned int point=0; point<n_quadrature_points; ++point)
 	  values[point] += value * *shape_value_ptr++;
@@ -599,28 +599,28 @@ namespace DOpE
           throw DOpEException("Did not find " + name,
               "Multimesh_FaceDataContainer::GetValues");
         }
-      
+
        unsigned int dofs_per_cell = cell->get_fe().dofs_per_cell;
       //Now we get the values on the real cell
       dealii::Vector<double> dof_values(dofs_per_cell);
       dealii::Vector<double> dof_values_transformed(dofs_per_cell);
       cell->get_dof_values (*(it->second), dof_values);
-      //Now compute the real values at the nodal points 
+      //Now compute the real values at the nodal points
       prolongation.vmult(dof_values_transformed,dof_values);
-      
+
       //Copied from deal FEValuesBase<dim,spacedim>::get_function_values
       // see deal.II/source/fe/fe_values.cc
        const unsigned int n_components = cell->get_fe().n_components();
       unsigned int n_quadrature_points = GetNQPoints();
       for (unsigned i=0;i<values.size();++i)
 	std::fill_n (values[i].begin(), values[i].size(), 0);
-      
+
       for (unsigned int shape_func=0; shape_func<dofs_per_cell; ++shape_func)
       {
 	const double value = dof_values_transformed(shape_func);
 	if (value == 0.)
 	  continue;
-	
+
 	if (cell->get_fe().is_primitive(shape_func))
 	{
 	  const unsigned int comp = cell->get_fe().system_to_component_index(shape_func).first;
@@ -661,19 +661,19 @@ namespace DOpE
 	dealii::Vector<double> dof_values(dofs_per_cell);
 	dealii::Vector<double> dof_values_transformed(dofs_per_cell);
 	cell->get_dof_values (*(it->second), dof_values);
-	//Now compute the real values at the nodal points 
+	//Now compute the real values at the nodal points
 	prolongation.vmult(dof_values_transformed,dof_values);
-      
+
         //Copied from deal FEValuesBase<dim,spacedim>::get_function_gradients
 	unsigned int n_quadrature_points = GetNQPoints();
 	std::fill_n (values.begin(), n_quadrature_points, Tensor<1,targetdim>());
-	
+
 	for (unsigned int shape_func=0; shape_func<dofs_per_cell; ++shape_func)
 	{
 	  const double value = dof_values_transformed(shape_func);
 	  if (value == 0.)
 	    continue;
-	  
+
 	  const Tensor<1,targetdim> *shape_gradient_ptr
 	    = &(fe_values.shape_grad(shape_func,0));
 	  for (unsigned int point=0; point<n_quadrature_points; ++point)
@@ -699,27 +699,27 @@ namespace DOpE
             throw DOpEException("Did not find " + name,
                 "Multimesh_FaceDataContainerBase::GetGrads");
           }
-       
+
 	unsigned int dofs_per_cell = cell->get_fe().dofs_per_cell;
 	//Now we get the values on the real cell
 	dealii::Vector<double> dof_values(dofs_per_cell);
 	dealii::Vector<double> dof_values_transformed(dofs_per_cell);
 	cell->get_dof_values (*(it->second), dof_values);
-	//Now compute the real values at the nodal points 
+	//Now compute the real values at the nodal points
 	prolongation.vmult(dof_values_transformed,dof_values);
-      
+
         //Copied from deal FEValuesBase<dim,spacedim>::get_function_gradients
 	const unsigned int n_components = cell->get_fe().n_components();
 	unsigned int n_quadrature_points = GetNQPoints();
 	for (unsigned i=0;i<values.size();++i)
 	  std::fill_n (values[i].begin(), values[i].size(), Tensor<1,dim>());
-	
+
 	for (unsigned int shape_func=0; shape_func<dofs_per_cell; ++shape_func)
 	{
 	  const double value = dof_values_transformed(shape_func);
 	  if (value == 0.)
 	    continue;
-	  
+
 	  if (cell->get_fe().is_primitive(shape_func))
 	  {
 	    const unsigned int comp = cell->get_fe().system_to_component_index(shape_func).first;
