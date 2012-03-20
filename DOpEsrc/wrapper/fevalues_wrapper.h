@@ -33,11 +33,11 @@ namespace DOpEWrapper
         }
     };
 
-  template<>
-    class FEValues<0>
-    {
-      public:
-    };
+//  template<>
+//    class FEValues<0>
+//    {
+//      public:
+//    };
 
   /*********************************************************/
   template<int dim>
@@ -68,12 +68,12 @@ namespace DOpEWrapper
 
     };
 
-  template<>
-    class FEFaceValues<0>
-    {
-      public:
-
-    };
+//  template<>
+//    class FEFaceValues<0>
+//    {
+//      public:
+//
+//    };
 
   /*********************************************************/
   template<int dim>
@@ -104,12 +104,12 @@ namespace DOpEWrapper
 
     };
 
-  template<>
-    class FESubfaceValues<0>
-    {
-      public:
-
-    };
+//  template<>
+//    class FESubfaceValues<0>
+//    {
+//      public:
+//
+//    };
 
   /*********************************************************/
 
@@ -135,12 +135,12 @@ namespace DOpEWrapper
         }
     };
 
-  template<>
-    //
-    class HpFEValues<0>
-    {
-      public:
-    };
+//  template<>
+//    //
+//    class HpFEValues<0>
+//    {
+//      public:
+//    };
 
   /*********************************************************/
   template<int dim>
@@ -201,12 +201,12 @@ namespace DOpEWrapper
 
     };
 
-  template<>
-    class HpFESubfaceValues<0>
-    {
-      public:
-
-    };
+//  template<>
+//    class HpFESubfaceValues<0>
+//    {
+//      public:
+//
+//    };
 
 }
 
