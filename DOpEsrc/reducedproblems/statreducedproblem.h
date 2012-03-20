@@ -275,11 +275,6 @@ namespace DOpE
         {
           abort();
         }
-        const StateVector<VECTOR> &
-        GetU_Const() const
-        {
-          return _u;
-        }
 
         /******************************************************/
         bool

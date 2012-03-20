@@ -173,11 +173,7 @@ namespace DOpE
         {
           abort();
         }
-        const StateVector<VECTOR> &
-        GetU_Const() const
-        {
-          return _u;
-        }
+	//FIXME: Use SolutionExtractor instead
         const StateVector<VECTOR> &
         GetZforEE_Const() const
         {
