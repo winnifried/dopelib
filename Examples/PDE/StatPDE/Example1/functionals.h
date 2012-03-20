@@ -63,7 +63,7 @@ template<typename VECTOR, int dealdim>
      double BoundaryValue(const  FaceDataContainer<dealii::DoFHandler<2>, VECTOR, dealdim>& fdc)
      {
        unsigned int color = fdc.GetBoundaryIndicator();
-       const DOpEWrapper::FEFaceValues<dealdim> &state_fe_face_values = fdc.GetFEFaceValuesState();
+       const auto& state_fe_face_values = fdc.GetFEFaceValuesState();
          unsigned int n_q_points = fdc.GetNQPoints();
        double flux = 0.0;
        if (color == 1)

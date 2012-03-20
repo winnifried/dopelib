@@ -162,7 +162,7 @@ template<typename VECTOR, int dopedim, int dealdim>
      // compute drag value around cylinder
      double BoundaryValue(const FaceDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& fdc)
      {
-       const DOpEWrapper::FEFaceValues<dealdim> & state_fe_face_values = fdc.GetFEFaceValuesState();
+       const auto & state_fe_face_values = fdc.GetFEFaceValuesState();
        unsigned int n_q_points = fdc.GetNQPoints();
        unsigned int color = fdc.GetBoundaryIndicator();
 
@@ -295,7 +295,7 @@ template<typename VECTOR, int dopedim, int dealdim>
      // compute drag value around cylinder
      double BoundaryValue(const FaceDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& fdc)
      {
-       const DOpEWrapper::FEFaceValues<dealdim> & state_fe_face_values = fdc.GetFEFaceValuesState();
+       const auto & state_fe_face_values = fdc.GetFEFaceValuesState();
        
        unsigned int n_q_points = fdc.GetNQPoints();
        unsigned int color = fdc.GetBoundaryIndicator();
@@ -368,7 +368,7 @@ template<typename VECTOR, int dopedim, int dealdim>
      /*
        // compute drag value at interface
    double FaceValue(const DOpEWrapper::FEFaceValues<dopedim> &control_fe_face_values,
- 		      const DOpEWrapper::FEFaceValues<dealdim> &state_fe_face_values,
+ 		      const auto &state_fe_face_values,
  		      const std::map<std::string, const dealii::Vector<double>* > &param_values,
  		      const std::map<std::string, const VECTOR* > &domain_values,
  		      unsigned int n_q_points,

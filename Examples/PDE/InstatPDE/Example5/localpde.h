@@ -241,57 +241,7 @@ class LocalPDE: public PDEInterface<CellDataContainer,FaceDataContainer,dealii::
 			return _state_block_components;
 		}
 
-	protected:
-		inline void GetValues(const DOpEWrapper::FEValues<dealdim>& fe_values, const map<string,
-		                      const VECTOR*>& domain_values, string name, vector<double> & values)
-		{
-			typename map<string, const VECTOR*>::const_iterator it =
-				domain_values.find(name);
-			if (it == domain_values.end())
-			{
-				throw DOpEException("Did not find " + name, "LocalPDE::GetValues");
-			}
-			fe_values.get_function_values(*(it->second), values);
-		}
 
-		inline void GetGrads(const DOpEWrapper::FEValues<dealdim>& fe_values, const map<string,
-		                     const VECTOR*>& domain_values, string name,
-		                     vector<Tensor<1, dealdim> > & values)
-		{
-			typename map<string, const VECTOR*>::const_iterator it =
-				domain_values.find(name);
-			if (it == domain_values.end())
-			{
-				throw DOpEException("Did not find " + name, "LocalPDE::GetGrads");
-			}
-			fe_values.get_function_grads(*(it->second), values);
-		}
-
-		inline void GetFaceValues(const DOpEWrapper::FEFaceValues<dealdim>& fe_face_values, const map<
-		                          string, const VECTOR*>& domain_values, string name,
-		                          vector<Vector<double> >& values)
-		{
-			typename map<string, const VECTOR*>::const_iterator it =
-				domain_values.find(name);
-			if (it == domain_values.end())
-			{
-				throw DOpEException("Did not find " + name, "LocalPDE::GetValues");
-			}
-			fe_face_values.get_function_values(*(it->second), values);
-		}
-
-		inline void GetFaceGrads(const DOpEWrapper::FEFaceValues<dealdim>& fe_face_values, const map<
-		                         string, const VECTOR*>& domain_values, string name, vector<vector<Tensor<1,
-		                         dealdim> > >& values)
-		{
-			typename map<string, const VECTOR*>::const_iterator it =
-				domain_values.find(name);
-			if (it == domain_values.end())
-			{
-				throw DOpEException("Did not find " + name, "LocalPDE::GetGrads");
-			}
-			fe_face_values.get_function_grads(*(it->second), values);
-		}
 	void SetTime(double t) const
 	{
 		_my_time=t;}

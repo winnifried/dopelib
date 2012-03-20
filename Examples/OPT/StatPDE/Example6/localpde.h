@@ -276,7 +276,7 @@ template<template<typename DOFHANDLER, typename VECTOR, int dealdim> class CDC, 
 			   dealii::Vector<double> &local_cell_vector, 
 			   double scale)
     {
-      const DOpEWrapper::FEFaceValues<dealdim> & state_fe_face_values = fdc.GetFEFaceValuesState();
+      const auto & state_fe_face_values = fdc.GetFEFaceValuesState();
       unsigned int n_dofs_per_cell = fdc.GetNDoFsPerCell();
       unsigned int n_q_points = fdc.GetNQPoints();
       unsigned int color = fdc.GetBoundaryIndicator();

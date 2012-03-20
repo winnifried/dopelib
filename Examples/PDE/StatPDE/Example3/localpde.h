@@ -425,7 +425,7 @@ class LocalPDE: public PDEInterface<CellDataContainer,FaceDataContainer,DOFHANDL
                           double scale)
     {
       assert(this->_problem_type == "state");
-      const DOpEWrapper::FEFaceValues<dealdim> & state_fe_face_values = fdc.GetFEFaceValuesState();
+      const auto & state_fe_face_values = fdc.GetFEFaceValuesState();
       unsigned int n_dofs_per_cell = fdc.GetNDoFsPerCell();
       unsigned int n_q_points = fdc.GetNQPoints();
       unsigned int color = fdc.GetBoundaryIndicator();
@@ -479,7 +479,7 @@ class LocalPDE: public PDEInterface<CellDataContainer,FaceDataContainer,DOFHANDL
                         dealii::FullMatrix<double> &local_entry_matrix)
     {
       assert(this->_problem_type == "state");
-      const DOpEWrapper::FEFaceValues<dealdim> & state_fe_face_values = fdc.GetFEFaceValuesState();
+      const auto & state_fe_face_values = fdc.GetFEFaceValuesState();
       unsigned int n_dofs_per_cell = fdc.GetNDoFsPerCell();
       unsigned int n_q_points = fdc.GetNQPoints();
       unsigned int color = fdc.GetBoundaryIndicator();

@@ -233,7 +233,7 @@ template<typename VECTOR, int dealdim>
     double BoundaryValue(const  FaceDataContainer<dealii::DoFHandler<2>, VECTOR, dealdim>& fdc)
     {
       unsigned int color = fdc.GetBoundaryIndicator();
-      const DOpEWrapper::FEFaceValues<dealdim> &state_fe_face_values = fdc.GetFEFaceValuesState();
+      const auto &state_fe_face_values = fdc.GetFEFaceValuesState();
       unsigned int n_q_points = fdc.GetNQPoints();
 
           double integral = 0;
@@ -269,31 +269,6 @@ template<typename VECTOR, int dealdim>
     string GetName() const
     {
       return "y-displacement-integral_on_upper_boundary";
-    }
-
-  protected:
-    inline void GetFaceValues(const DOpEWrapper::FEFaceValues<dealdim>& fe_face_values,
-			      const map<string, const VECTOR* >& domain_values, string name,
-			      vector<Vector<double> >& values)
-    {
-      typename map<string, const VECTOR* >::const_iterator it = domain_values.find(name);
-      if(it == domain_values.end())
-	{
-	  throw DOpEException("Did not find " + name,"LocalPDE::GetValues");
-	}
-      fe_face_values.get_function_values(*(it->second),values);
-    }
-
-    inline void GetFaceGrads(const DOpEWrapper::FEFaceValues<dealdim>& fe_face_values,
-			     const map<string, const VECTOR* >& domain_values, string name,
-			     vector<vector<Tensor<1,dealdim> > >& values)
-    {
-      typename map<string, const VECTOR* >::const_iterator it = domain_values.find(name);
-      if(it == domain_values.end())
-	{
-	  throw DOpEException("Did not find " + name,"LocalPDE::GetGrads");
-	}
-      fe_face_values.get_function_grads(*(it->second),values);
     }
   };
 

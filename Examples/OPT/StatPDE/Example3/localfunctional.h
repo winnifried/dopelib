@@ -52,7 +52,7 @@ template<typename VECTOR,int dopedim, int dealdim>
   // compute drag value around cylinder
   double BoundaryValue(const FaceDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& fdc)
   {
-    const DOpEWrapper::FEFaceValues<dealdim> & state_fe_face_values = fdc.GetFEFaceValuesState();
+    const auto & state_fe_face_values = fdc.GetFEFaceValuesState();
     unsigned int n_q_points = fdc.GetNQPoints();
     unsigned int color = fdc.GetBoundaryIndicator();
     double functional_value_J = 0;
@@ -143,7 +143,7 @@ template<typename VECTOR,int dopedim, int dealdim>
   void BoundaryValue_U(const FaceDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& fdc,
 		       dealii::Vector<double> &local_cell_vector, double scale)
   {
-    const DOpEWrapper::FEFaceValues<dealdim> & state_fe_face_values = fdc.GetFEFaceValuesState();
+    const auto & state_fe_face_values = fdc.GetFEFaceValuesState();
     unsigned int n_dofs_per_cell = fdc.GetNDoFsPerCell();
     unsigned int n_q_points = fdc.GetNQPoints();
     unsigned int color = fdc.GetBoundaryIndicator();
@@ -186,7 +186,7 @@ template<typename VECTOR,int dopedim, int dealdim>
   void BoundaryValue_Q(const FaceDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& fdc,
 		       dealii::Vector<double> &local_cell_vector, double scale)
  {
-   const DOpEWrapper::FEFaceValues<dealdim> & state_fe_face_values = fdc.GetFEFaceValuesState();
+   const auto & state_fe_face_values = fdc.GetFEFaceValuesState();
    unsigned int n_dofs_per_cell = local_cell_vector.size();
    unsigned int n_q_points = fdc.GetNQPoints();
    unsigned int color = fdc.GetBoundaryIndicator();
@@ -229,7 +229,7 @@ template<typename VECTOR,int dopedim, int dealdim>
 void BoundaryValue_QQ(const FaceDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& fdc,
 		      dealii::Vector<double> &local_cell_vector, double scale)
  {
-   const DOpEWrapper::FEFaceValues<dealdim> & state_fe_face_values = fdc.GetFEFaceValuesState();
+   const auto & state_fe_face_values = fdc.GetFEFaceValuesState();
    unsigned int n_dofs_per_cell = local_cell_vector.size();
    unsigned int n_q_points = fdc.GetNQPoints();
    unsigned int color = fdc.GetBoundaryIndicator();

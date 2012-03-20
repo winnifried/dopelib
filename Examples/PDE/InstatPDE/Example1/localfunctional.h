@@ -89,31 +89,6 @@ template<typename VECTOR, int dopedim, int dealdim>
     }
 
 
-  protected:
-    inline void GetValues(const DOpEWrapper::FEValues<dealdim>& fe_values,  const map<string, const VECTOR* >& domain_values,string name, vector<double>& values)
-    {
-      typename map<string, const VECTOR* >::const_iterator it = domain_values.find(name);
-      if(it == domain_values.end())
-	{
-	  throw DOpEException("Did not find " + name,"LocalPDE::GetValues");
-	}
-      fe_values.get_function_values(*(it->second),values);
-    }
-
-    inline void GetGrads(const DOpEWrapper::FEValues<dealdim>& fe_values,  const map<string, const VECTOR* >& domain_values,string name, vector<Tensor<1,dealdim> >& values)
-    {
-      typename map<string, const VECTOR* >::const_iterator it = domain_values.find(name);
-      if(it == domain_values.end())
-	{
-	  throw DOpEException("Did not find " + name,"LocalPDE::GetGrads");
-	}
-      fe_values.get_function_grads(*(it->second),values);
-    }
-
-
-
-
-
   private:
     vector<double> _qvalues;
     vector<double> _fvalues;

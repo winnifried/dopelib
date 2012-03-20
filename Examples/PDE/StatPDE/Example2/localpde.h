@@ -336,7 +336,7 @@ template<typename VECTOR, int dealdim>
                           double scale)
     {
       assert(this->_problem_type == "state");
-      const DOpEWrapper::FEFaceValues<dealdim> & state_fe_face_values = fdc.GetFEFaceValuesState();
+      const auto & state_fe_face_values = fdc.GetFEFaceValuesState();
       unsigned int n_dofs_per_cell = fdc.GetNDoFsPerCell();
       unsigned int n_q_points = fdc.GetNQPoints();
       unsigned int color = fdc.GetBoundaryIndicator();
@@ -395,7 +395,7 @@ template<typename VECTOR, int dealdim>
                         dealii::FullMatrix<double> &local_entry_matrix)
     {
       assert(this->_problem_type == "state");
-      const DOpEWrapper::FEFaceValues<dealdim> & state_fe_face_values = fdc.GetFEFaceValuesState();
+      const auto & state_fe_face_values = fdc.GetFEFaceValuesState();
       unsigned int n_dofs_per_cell = fdc.GetNDoFsPerCell();
       unsigned int n_q_points = fdc.GetNQPoints();
       unsigned int color = fdc.GetBoundaryIndicator();
@@ -514,55 +514,6 @@ template<typename VECTOR, int dealdim>
 
     std::vector<unsigned int>& GetStateBlockComponent(){ return _state_block_components; }
     const std::vector<unsigned int>& GetStateBlockComponent() const{ return _state_block_components; }
-
-    inline void GetValues(const DOpEWrapper::FEValues<dealdim>& fe_values,
-			  const map<string, const BlockVector<double>* >& domain_values,string name,
-			  vector<Vector<double> >& values)
-    {
-      typename map<string, const BlockVector<double>* >::const_iterator it = domain_values.find(name);
-      if(it == domain_values.end())
-	{
-	  throw DOpEException("Did not find " + name,"LocalPDE::GetValues");
-	}
-      fe_values.get_function_values(*(it->second),values);
-    }
-
-    inline void GetGrads(const DOpEWrapper::FEValues<dealdim>& fe_values,
-			 const map<string, const BlockVector<double>* >& domain_values,string name,
-			 vector<vector<Tensor<1,dealdim> > >& values)
-    {
-      typename map<string, const BlockVector<double>* >::const_iterator it = domain_values.find(name);
-      if(it == domain_values.end())
-	{
-	  throw DOpEException("Did not find " + name,"LocalPDE::GetGrads");
-	}
-      fe_values.get_function_grads(*(it->second),values);
-    }
-
-
-    inline void GetFaceValues(const DOpEWrapper::FEFaceValues<dealdim>& fe_face_values,
-			      const map<string, const BlockVector<double>* >& domain_values, string name,
-			      vector<Vector<double> >& values)
-    {
-      typename map<string, const BlockVector<double>* >::const_iterator it = domain_values.find(name);
-      if(it == domain_values.end())
-	{
-	  throw DOpEException("Did not find " + name,"LocalPDE::GetValues");
-	}
-      fe_face_values.get_function_values(*(it->second),values);
-    }
-
-    inline void GetFaceGrads(const DOpEWrapper::FEFaceValues<dealdim>& fe_face_values,
-			     const map<string, const BlockVector<double>* >& domain_values, string name,
-			     vector<vector<Tensor<1,dealdim> > >& values)
-    {
-      typename map<string, const BlockVector<double>* >::const_iterator it = domain_values.find(name);
-      if(it == domain_values.end())
-	{
-	  throw DOpEException("Did not find " + name,"LocalPDE::GetGrads");
-	}
-      fe_face_values.get_function_grads(*(it->second),values);
-    }
 
 
   private:

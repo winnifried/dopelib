@@ -616,7 +616,7 @@ template<typename VECTOR, int dopedim, int dealdim>
   void BoundaryEquation (const FaceDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& fdc,
 			 dealii::Vector<double> &local_cell_vector, double scale)
   {
-    const DOpEWrapper::FEFaceValues<dealdim> & state_fe_face_values = fdc.GetFEFaceValuesState();
+    const auto & state_fe_face_values = fdc.GetFEFaceValuesState();
     unsigned int n_dofs_per_cell = fdc.GetNDoFsPerCell();
     unsigned int n_q_points = fdc.GetNQPoints();
     unsigned int color = fdc.GetBoundaryIndicator();
@@ -705,7 +705,7 @@ template<typename VECTOR, int dopedim, int dealdim>
   void BoundaryMatrix (const FaceDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& fdc,
 		       dealii::FullMatrix<double> &local_entry_matrix)
   {
-    const DOpEWrapper::FEFaceValues<dealdim> & state_fe_face_values = fdc.GetFEFaceValuesState();
+    const auto & state_fe_face_values = fdc.GetFEFaceValuesState();
     unsigned int n_dofs_per_cell = fdc.GetNDoFsPerCell();
     unsigned int n_q_points = fdc.GetNQPoints();
     unsigned int color = fdc.GetBoundaryIndicator();
@@ -769,7 +769,7 @@ template<typename VECTOR, int dopedim, int dealdim>
 			   dealii::Vector<double> &local_cell_vector,
 			   double scale)
   {
-    const DOpEWrapper::FEFaceValues<dealdim> & state_fe_face_values = fdc.GetFEFaceValuesState();
+    const auto & state_fe_face_values = fdc.GetFEFaceValuesState();
     unsigned int n_q_points = fdc.GetNQPoints();
     unsigned int color = fdc.GetBoundaryIndicator();
 
@@ -815,7 +815,7 @@ template<typename VECTOR, int dopedim, int dealdim>
 			   dealii::Vector<double> &local_cell_vector,
 			   double scale)
  {
-   const DOpEWrapper::FEFaceValues<dealdim> & state_fe_face_values = fdc.GetFEFaceValuesState();
+   const auto & state_fe_face_values = fdc.GetFEFaceValuesState();
    unsigned int n_dofs_per_cell = fdc.GetNDoFsPerCell();
    unsigned int n_q_points = fdc.GetNQPoints();
    unsigned int color = fdc.GetBoundaryIndicator();
@@ -864,7 +864,7 @@ template<typename VECTOR, int dopedim, int dealdim>
 			    dealii::Vector<double> &local_cell_vector,
 			    double scale)
  {
-   const DOpEWrapper::FEFaceValues<dealdim> & state_fe_face_values = fdc.GetFEFaceValuesState();
+   const auto & state_fe_face_values = fdc.GetFEFaceValuesState();
    unsigned int n_q_points = fdc.GetNQPoints();
    unsigned int color = fdc.GetBoundaryIndicator();
 
@@ -910,7 +910,7 @@ template<typename VECTOR, int dopedim, int dealdim>
  void BoundaryEquation_U (const FaceDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& fdc,
 			  dealii::Vector<double> &local_cell_vector, double scale)
  {
-   const DOpEWrapper::FEFaceValues<dealdim> & state_fe_face_values = fdc.GetFEFaceValuesState();
+   const auto & state_fe_face_values = fdc.GetFEFaceValuesState();
    unsigned int n_dofs_per_cell = fdc.GetNDoFsPerCell();
    unsigned int n_q_points = fdc.GetNQPoints();
    unsigned int color = fdc.GetBoundaryIndicator();
@@ -953,7 +953,7 @@ template<typename VECTOR, int dopedim, int dealdim>
 			   dealii::Vector<double> &local_cell_vector,
 			   double scale)
  {
-   const DOpEWrapper::FEFaceValues<dealdim> & state_fe_face_values = fdc.GetFEFaceValuesState();
+   const auto & state_fe_face_values = fdc.GetFEFaceValuesState();
    unsigned int n_dofs_per_cell = fdc.GetNDoFsPerCell();
    unsigned int n_q_points = fdc.GetNQPoints();
    unsigned int color = fdc.GetBoundaryIndicator();
@@ -995,7 +995,7 @@ template<typename VECTOR, int dopedim, int dealdim>
 			    dealii::Vector<double> &local_cell_vector,
 			    double scale)
  {
-   const DOpEWrapper::FEFaceValues<dealdim> & state_fe_face_values = fdc.GetFEFaceValuesState();
+   const auto & state_fe_face_values = fdc.GetFEFaceValuesState();
    unsigned int n_dofs_per_cell = fdc.GetNDoFsPerCell();
    unsigned int n_q_points = fdc.GetNQPoints();
    unsigned int color = fdc.GetBoundaryIndicator();
@@ -1148,41 +1148,6 @@ template<typename VECTOR, int dopedim, int dealdim>
 	  throw DOpEException("Did not find " + name,"LocalPDE::GetGrads");
 	}
       fe_values.get_function_grads(*(it->second),values);
-    }
-
-
-    inline void GetFaceValues(const DOpEWrapper::FEFaceValues<dealdim>& fe_face_values,
-			      const map<string, const BlockVector<double>* >& domain_values, string name,
-			      vector<Vector<double> >& values)
-    {
-      typename map<string, const BlockVector<double>* >::const_iterator it = domain_values.find(name);
-      if(it == domain_values.end())
-	{
-	  throw DOpEException("Did not find " + name,"LocalPDE::GetValues");
-	}
-      fe_face_values.get_function_values(*(it->second),values);
-    }
-
-    inline void GetFaceGrads(const DOpEWrapper::FEFaceValues<dealdim>& fe_face_values,
-			     const map<string, const BlockVector<double>* >& domain_values, string name,
-			     vector<vector<Tensor<1,dealdim> > >& values)
-    {
-      typename map<string, const BlockVector<double>* >::const_iterator it = domain_values.find(name);
-      if(it == domain_values.end())
-	{
-	  throw DOpEException("Did not find " + name,"LocalPDE::GetGrads");
-	}
-      fe_face_values.get_function_grads(*(it->second),values);
-    }
-
-     inline void GetParams(const map<string, const Vector<double>* >& param_values,string name, Vector<double>& values)
-    {
-      typename map<string, const Vector<double>* >::const_iterator it = param_values.find(name);
-      if(it == param_values.end())
-	{
-	  throw DOpEException("Did not find " + name,"LocalPDE::GetValues");
-	}
-      values = *(it->second);
     }
 
   private:
