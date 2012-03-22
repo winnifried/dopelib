@@ -18,7 +18,9 @@ made by %(in alphabetical order)
 
 \section{Software requirements}
 The library DOpE has been tested to work on both Linux and 
-MAC OSX. It requires a recent \texttt{ g++} (at least 4.4.3) due to 
+MAC OSX. See also the \texttt{README.OSX} file 
+
+\texttt{DOpElib} requires a recent \texttt{ g++} (at least 4.4.3) due to 
 some new \texttt{ C++} features implemented in \texttt{ C++0x} and \texttt{ C++11}. 
 
 \subsection{deal.II}
@@ -32,13 +34,59 @@ an extensive tutorial where many features of deal.II are discussed in a
 well-documented example framework. In order to use DOpE, it is highly
 recommendable to be roughly acquainted with deal.II.
 
-\subsection{SNOPT}
+When installing \texttt{deal.II} you should take care to configure 
+it to use UMFPACK, i.e.,\\
+\texttt{./configure --with-umfpack}
+
+\subsection{ThirdPartyLibraries}
+In order for \texttt{DOpE} to be able to auto-detect some of the installed 
+Third Party Libraries you should generate according links in the 
+\texttt{ThirdPartyLibs}. See also \texttt{ThirdPartyLibs/README}.
+
+\subsubsection{SNOPT}
 If you would like to use the features offered in our SNOPT wrapper. You will 
 need to obtain a license for \texttt{ SNOPT} 
 \url{http://www.sbsi-sol-optimize.com/asp/sol_product_snopt.htm}.
 Unfortunately this is at present not available for free, but you should 
 check if 
 there is a department license already available.
+For further information you should consult the file 
+\texttt{ThirdPartyLibs/SNOPT.INSTALLNOTES}. In particular you need to configure 
+\texttt{deal.II} with at least the following options:\\
+\texttt{./configure --with-umfpack --with-blas --with-lapack}
+
+\section{Installation}
+I) Get a copy of \texttt{DOpElib} from the svn repository using\\
+\texttt{svn co --username=[your username] \textbackslash \\ \hspace*{5mm}https://ganymed.iwr.uni-heidelberg.de/svn/dope}\\
+(The backslash in the first line means that the line will be continued as one!)
+Note that you need a valid username and password. If you have none you can contact the 
+maintainer by sending an EMail to \url{dope@ganymed.iwr.uni-heidelberg.de}.\\[3mm]
+%
+II) Install \texttt{deal.II} to your home directory, i.e., it should be located in \\
+\texttt{\textasciitilde/deal.II}. \\[1mm]
+If you would like to have another path you will either have to manually edit the files
+\texttt{DOpEsrc/source/Makefile} and \texttt{Examples/Make.global\underline{ }options} and replace the 
+line \\
+\texttt{D = \$(HOME)/deal.II} with the appropriate path.\\[1mm]
+Configure it properly and make the whole \texttt{deal.II} library.\\[3mm]
+%
+III) If you want to use some of the supported third party libraries install them and follow 
+ the instructions in \texttt{ThirdPartyLibs/README}. There may be further information 
+ in some \texttt{ThirdPartyLibs/*.INSTALLNOTES} that you may want to consider.\\[3mm]
+%
+IV) To build the \texttt{DOpElib} you have to change to the directory 
+\texttt{DOpEsrc} where you can call\\ 
+\texttt{make all}\\
+to build the library. If you want to generate some documentation you may use
+\texttt{make pdf-doc} or \texttt{make html-doc} which will require either 
+latex or doxygen to be installed on your computer.\\[3mm]
+%
+V) To build the Examples change to the \texttt{Examples} directory and \texttt{make all}.
+%
+VI) Finally you may wish to test if everything worked. To do so you can 
+change to the \texttt{Examples} directory and \texttt{make tests} which will give you a 
+list of all the examples and whether they behave as expected by the library, see also 
+Chapter~\ref{chap:test}.
 
 \section{How this library is structured}
 This library is designed to allow easy implementation and numerical solutions 
@@ -236,7 +284,7 @@ some implementation.
 \subsection{Reduced problems (Solve the PDE)}
 At times it is nice to remove the PDE constraint in (OPT). 
 This is handled by so called reduced 
-problems (for algorithmis aspects we refer the reader to 
+problems (for algorithmic aspects we refer the reader to 
 \cite{BeMeVe06}). 
 This means that the reduced problem implicitly solves the PDE whenever required
 and eliminates the variable $u$ from the problem.
@@ -322,11 +370,17 @@ do not fit the above but are important for the user to know.
   parameter file.
 \end{itemize}
 
+\subsection{Data Access}
+\begin{itemize}
+\item \texttt{include/solutionextractor.h} This class is used to gain access to the finite element 
+  solutions stored in the reduced problems.
+\end{itemize}
+
 \subsubsection{Constraints and system matrix}
 \begin{itemize}
 \item \texttt{include/constraintsmaker.h} This class sets the constraints on the DOFs of the state FE solution. In the standard implementation, only the hanging-node-constraints are built, but the user can reimplement this class and then include other constraints as well (for example periodic BC).
 {\bf TODO: to rename the file?? (CG)}
-\item \texttt{include/sparsitymaker.h} This class sets the sparsity pattern for the state FE solution. The standard implementiation is just a wrapper for \texttt{dealii::DoFTools::} \texttt{make\_sparsity\_pattern}, but the user can reimplement this class to allow for more sophisticated sparsity patterns.
+\item \texttt{include/sparsitymaker.h} This class sets the sparsity pattern for the state FE solution. The standard implementation is just a wrapper for \texttt{dealii::DoFTools::} \texttt{make\_sparsity\_pattern}, but the user can reimplement this class to allow for more sophisticated sparsity patterns.
 \end{itemize}
 
 \subsubsection{HP components}
@@ -334,38 +388,82 @@ do not fit the above but are important for the user to know.
 \item \texttt{interfaces/active\underline{ }fe\underline{ }index\underline{ }setter\underline{ }interface.h} In the case of hp finite elements, one has to specify for each cell which finite element to use. This is done via this interface.
 \end{itemize}
 
-\marginpar{Write the rest! WW}
 \subsection{Internal structures}
 {\bf TODO: ab hier habe ich noch nichts gemacht (TW)}
-interfaces:
-transposeddirichletdatainterface.h
-reducedprobleminterface.h
-            pdeprobleminterface.h  
+\subsubsection{Interface Classes}
+\begin{itemize}
+  \item \texttt{interfaces/transposeddirichletdatainterface.h} This provides an interface to 
+    the functionality required by {\em transposed Dirichlet data}. Usually when one applies Dirichlet 
+    data $g$ to a function one has to calculate a continuation $Bg$ which is defined on the whole domain.
+    In optimization problems when the Dirichlet data depends on the control one has to evaluate the 
+    dual operator $B^*$ in order to obtain a representation for the reduced gradient of the objective $J$.
+    This is done using the {\em transposed Dirichlet data}.
+  \item \texttt{interfaces/reducedprobleminterface.h} In order to allow all algorithms to be written independent
+    of the given (OPT) problem 
+    (and not requiring the problem as template argument) there is a common base class which 
+    defines the required interfaces. 
+  \item \texttt{interfaces/pdeprobleminterface.h} The same as above but for (PDE) problems.
+\end{itemize}
 
-problemdata:
-noconstraints.h        stateproblem.h          transposedgradientdirichletdata.h
-primaldirichletdata.h  tangentdirichletdata.h  transposedhessiandirichletdata.h
-simpledirichletdata.h
+\subsubsection{Default Classes}
+\begin{itemize}
+  \item \texttt{problemdata/noconstraints.h} A class that can be used for optimization problems 
+    having only a PDE constraint but no further constraints.
+  \item \texttt{problemdata/simpledirichletdata.h} A class that can be used to implement Dirichlet
+    data that are given as a fixed function (independent of the control).
+  \end{itemize}
+
+\subsubsection{Auto-generated Problem Descriptions}
+\begin{itemize}
+  \item \texttt{problemdata/stateproblem.h} This is the problem description for the (forward/primal) PDE constraint.
+    {\bf Similar descriptors will be build for the other problems (adjoint, tangent, $\ldots$) when time allows.}
+  \item \texttt{problemdata/primaldirichletdata.h} This class contains the Dirichlet data for the 
+    forward/primal PDE.
+  \item \texttt{problemdata/tangentdirichletdata.h} This class contains the Dirichlet data for the tangent PDE, i.e.,
+    the first derivative of the Dirichlet data.
+  \item \texttt{problemdata/transposedgradientdirichletdata.h} This contains the transposed Dirichlet data needed 
+    to calculate the gradient of the reduced objective functional, 
+    for detail see \texttt{interfaces/transposeddirichletdatainterface.h}.
+  \item \texttt{problemdata/transposedhessiandirichletdata.h} This contains the transposed Dirichlet data needed 
+    to calculate the hessian of the reduced objective functional, 
+    for detail see \texttt{interfaces/transposeddirichletdatainterface.h}.
+\end{itemize}
+\subsubsection{Management of Time Dependent Problems}
 \begin{itemize}
 \item \texttt{include/timedofhandler.h} DoFHandler responsible for the management of the timedofs (this is a part of the \texttt{SpaceTimeDoFHandler}-classes). Basically a wrapper for a $1d$ \texttt{deal.II}-DoFHandler.
 \item \texttt{include/timeiterator.h} This class works as an iterator on the \texttt{TimeDoFHandler}.                 
 \end{itemize}
 \subsection{Wrapper classes}
+\begin{itemize}
+  \item \texttt{wrapper/dofhandler\underline{ }wrapper.h} A wrapper class for the \texttt{deal.II} DoFHandlers. This 
+    class is needed to provide support for the \texttt{dim $= 0$} case and to have a uniform interface to 
+    DoFHandler and HPDoFHandler.
+  \item \texttt{wrapper/preconditioner\underline{ }wrapper.h} Contains wrappers for several of the preconditioners
+    in \texttt{deal.II}. This is required since unfortunately the preconditioners in \texttt{deal.II} have different
+    interfaces for their initialization.
+  \item \texttt{wrapper/function\underline{ }wrapper.h} An interface that allows to use functions that depend 
+    not only on space but also on time.
+  \item \texttt{wrapper/snopt\underline{ }wrapper.h} An interface to the SNOPT fortran library. This is an additional
+    wrapper to the one provided by SNOPT to allow automatic construction of the functions required 
+    by SNOPT using our library.
+  \item \texttt{wrapper/finiteelement\underline{ }wrapper.h} {\bf Will be removed soon!}
+  \item \texttt{wrapper/fevalues\underline{ }wrapper.h} {\bf Will be removed soon!}
+\end{itemize}
 
-wrapper:
-dofhandler\underline{ }wrapper.h  finiteelement\underline{ }wrapper.h  preconditioner\underline{ }wrapper.h
-fevalues\underline{ }wrapper.h    function\underline{ }wrapper.h       snopt\underline{ }wrapper.h
+\subsection{Other}
+\begin{itemize}
+  \item \texttt{basic/dopetypes.h} This file contains type definitions used in the library. 
+\end{itemize}
 
 {\bf TODO! The following files need some appropriate description here 
 This should be done by someone who knows what they are used for. Please move the description to the right place above.}
+
 \marginpar{TODO}
 
 basic:
       sth\underline{ }internals.h                     
-      DOpEtypes.h 
+
 include:   
-solutionextractor.h                 
-            helloworld.h                               
             helper.h                                          
 
 reducedproblems:
