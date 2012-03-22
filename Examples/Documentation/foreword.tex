@@ -8,7 +8,7 @@ group of Rolf Rannacher.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 The \textit{Deal Optimization Environment} (DOpE) project is 
 based on the \textit{deal.II} finite element library which has been developed
- initially by W. Bangerth, R. Hartmann, and G. Kanschat. \marginpar{Citation}
+ initially by W. Bangerth, R. Hartmann, and G. Kanschat \cite{deal}.
 Its main feature is to give a unified interface to high level algorithms such as 
 time stepping methods, nonlinear solvers and optimization routines. 
 We aim that the user should only need to write those parts
@@ -21,7 +21,7 @@ have to replace the algorithm object with an other one.
 The authors acknowledge their past experience as well as discussions with 
 the authors of the libraries 
 Gascoigne/RoDoBo project, which was initiated by 
-Roland Becker, Dominik Meidner,  and Boris Vexler. \marginpar{Citation} 
+Roland Becker, Dominik Meidner,  and Boris Vexler \cite{rodobo}. 
 From which some of the ideas to modularize the algorithms have arisen.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -46,11 +46,11 @@ At the present stage the following features are supported by the library
 \item Various time stepping schemes (based on finite differences), 
   such as forward Euler, backward Euler,
   Crank-Nicolson, shifted Crank-Nicolson, and Fractional-Step-$\Theta$ scheme.
-\item All finite elements of from deal.ii including hp-support.
+\item All finite elements of from deal.II including hp-support.
 \item Several examples showing the solution of several PDEs including
    Poisson, Navier-Stokes, Plasticity and fluid-structure interaction problems. 
 \item Self written line search and trust region newton algorithms for the 
-   solution of optimization problems with PDEs. (cf. Nocedal \& Wright\marginpar{Citation})
+   solution of optimization problems with PDEs \cite{NoWr00}
 \item Interface to SNOPT for the solution of optimization problems with PDEs and
   additional other constraints.
 \item Several examples showing how to solve various kinds of optimization problems
