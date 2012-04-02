@@ -9,6 +9,8 @@ TODO DOpE
 
 - Remove unnecessary Template Parameter
   -- integrator.h: dim
+  -- mol_spacetimehandler etc: remove SPARSITYMAKER und CONSTRAINTSMAKER
+- pdeinterface.h - scale_ico auch fuer CellEquation_u etc. implementieren!
 
 - Problem typen ueber enum statt string ?
 
@@ -17,6 +19,7 @@ done (current work)  - PDE/StatPDE
 		--- Was wird geloest?
   		--- Welche Features werden hier (erstmalig) benutzt? Diese sollten
   		ueber \index indiziert werden.
+ 
 	
 - Fehlerschaetzer 
   (zumindest fuer stationaere Probleme)
