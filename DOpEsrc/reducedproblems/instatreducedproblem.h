@@ -278,11 +278,6 @@ class InstatReducedProblem: public ReducedProblemInterface<PROBLEM, VECTOR, dope
       return _dz;
     }
 
-    std::vector<std::vector<double> >& GetFunctionalValues()
-    {
-      return _functional_values;
-    }
-
     bool& GetBuildStateMatrix()
     {
       return _build_state_matrix;
@@ -306,12 +301,11 @@ class InstatReducedProblem: public ReducedProblemInterface<PROBLEM, VECTOR, dope
      * a time dependent computation. For instance, drag- and lift values
      * can be computed, as well as deflections, stresses, etc.
      *
-     * @param f_val        A std::vector of std::vector which has the computed functional values.
      * @param q            The control vector is given to this function.
      * @param step         The actual time step.
      * @param num_steps    The total number of time steps.
      */
-    void ComputeTimeFunctionals(std::vector<std::vector<double> >& f_val, const ControlVector<VECTOR>& q,
+    void ComputeTimeFunctionals( const ControlVector<VECTOR>& q,
                                 unsigned int step, unsigned int num_steps);
     /**
      * This function is running the time dependent problem for the state variable.
@@ -358,8 +352,6 @@ class InstatReducedProblem: public ReducedProblemInterface<PROBLEM, VECTOR, dope
     bool _state_reinit, _adjoint_reinit, _gradient_reinit;
 
     bool _project_initial_data;
-
-    std::vector<std::vector<double> > _functional_values;
 
     friend class SolutionExtractor<InstatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER,
         CONTROLINTEGRATOR, INTEGRATOR, PROBLEM, VECTOR,dopedim, dealdim>,   VECTOR > ;
@@ -534,13 +526,7 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER, typename CON
 void InstatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER, CONTROLINTEGRATOR, INTEGRATOR,
     PROBLEM, VECTOR, dopedim, dealdim>::ComputeReducedState(const ControlVector<VECTOR>& q)
 {
-  {//Initializing Functional Values
-    _functional_values.resize(this->GetProblem()->GetNFunctionals() + 1);
-    for (unsigned int i = 0; i < _functional_values.size(); i++)
-    {
-      _functional_values[i].resize(0);
-    }
-  }
+  this->InitializeFunctionalValues(this->GetProblem()->GetNFunctionals() + 1);
 
   this->GetOutputHandler()->Write("Computing State Solution:", 4 + this->GetBasePriority());
 
@@ -617,9 +603,9 @@ double InstatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER, CONTROLINTE
 {
   this->ComputeReducedState(q);
 
-  if (_functional_values[0].size() != 1)
+  if (this->GetFunctionalValues()[0].size() != 1)
   {
-    if (_functional_values[0].size() == 0)
+    if (this->GetFunctionalValues()[0].size() == 0)
       throw DOpEException(
                           "Apparently the CostFunctional was never evaluated! \n\tCheck if the return value of `NeedTimes' is set correctly.",
                           "InstatReducedProblem::ComputeReducedCostFunctional");
@@ -628,7 +614,7 @@ double InstatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER, CONTROLINTE
                           "The CostFunctional has been evaluated too many times! \n\tCheck if the return value of `NeedTimes' is set correctly.",
                           "InstatReducedProblem::ComputeReducedCostFunctional");
   }
-  return _functional_values[0][0];
+  return this->GetFunctionalValues()[0][0];
 }
 
 /******************************************************/
@@ -648,21 +634,21 @@ void InstatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER, CONTROLINTEGR
     this->SetProblemType("aux_functional", i);
     if (this->GetProblem()->GetFunctionalType().find("timelocal"))
     {
-      if (_functional_values[i + 1].size() == 1)
+      if (this->GetFunctionalValues()[i + 1].size() == 1)
       {
         std::stringstream out;
-        out << this->GetProblem()->GetFunctionalName() << ": " << _functional_values[i + 1][0];
+        out << this->GetProblem()->GetFunctionalName() << ": " << this->GetFunctionalValues()[i + 1][0];
         this->GetOutputHandler()->Write(out, 2 + this->GetBasePriority());
       }
-      else if (_functional_values[i + 1].size() > 1)
+      else if (this->GetFunctionalValues()[i + 1].size() > 1)
       {
-        if (_functional_values[i + 1].size()
+        if (this->GetFunctionalValues()[i + 1].size()
             == this->GetProblem()->GetSpaceTimeHandler()->GetMaxTimePoint() + 1)
         {
           std::stringstream out;
           out << this->GetProblem()->GetFunctionalName() << " too large. Writing to file instead: ";
           this->GetOutputHandler()->Write(out, 2 + this->GetBasePriority());
-          this->GetOutputHandler()->Write(_functional_values[i + 1],
+          this->GetOutputHandler()->Write(this->GetFunctionalValues()[i + 1],
                                           this->GetProblem()->GetFunctionalName()
                                               + this->GetPostIndex(), "time");
         }
@@ -670,8 +656,8 @@ void InstatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER, CONTROLINTEGR
         {
           std::stringstream out;
           out << this->GetProblem()->GetFunctionalName() << ": ";
-          for (unsigned int k = 0; k < _functional_values[i + 1].size(); k++)
-            out << _functional_values[i + 1][k] << " ";
+          for (unsigned int k = 0; k < this->GetFunctionalValues()[i + 1].size(); k++)
+            out << this->GetFunctionalValues()[i + 1][k] << " ";
           this->GetOutputHandler()->Write(out, 2 + this->GetBasePriority());
         }
       }
@@ -684,7 +670,7 @@ void InstatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER, CONTROLINTEGR
     else if (this->GetProblem()->GetFunctionalType().find("timedistributed"))
     {
       std::stringstream out;
-      out << this->GetProblem()->GetFunctionalName() << ": " << _functional_values[i + 1][0];
+      out << this->GetProblem()->GetFunctionalName() << ": " << this->GetFunctionalValues()[i + 1][0];
       this->GetOutputHandler()->Write(out, 2 + this->GetBasePriority());
     }
     else
@@ -716,8 +702,8 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER, typename CON
     typename INTEGRATOR, typename PROBLEM, typename VECTOR, int dopedim,
     int dealdim>
 void InstatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER, CONTROLINTEGRATOR, INTEGRATOR,
-    PROBLEM, VECTOR, dopedim, dealdim>::ComputeTimeFunctionals(std::vector<
-    std::vector<double> >& f_val, const ControlVector<VECTOR>& q, unsigned int step, unsigned int num_steps)
+    PROBLEM, VECTOR, dopedim, dealdim>::ComputeTimeFunctionals( const ControlVector<VECTOR>& q,
+                                                                unsigned int step, unsigned int num_steps)
 {
 
   this->GetProblem()->AddAuxiliaryToIntegrator(this->GetIntegrator());
@@ -771,19 +757,19 @@ void InstatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER, CONTROLINTEGR
       //Wert speichern
       if (this->GetProblem()->GetFunctionalType().find("timelocal"))
       {
-        if (f_val[0].size() != 0)
+        if (this->GetFunctionalValues()[0].size() != 0)
         {
           throw DOpEException("Too many evaluations of CostFunctional: "
               + this->GetProblem()->GetFunctionalType(),
                               "InstatReducedProblem::ComputeTimeFunctionals");
         }
-        f_val[0].push_back(ret);
+        this->GetFunctionalValues()[0].push_back(ret);
       }
       else if (this->GetProblem()->GetFunctionalType().find("timedistributed"))
       {//TODO was passiert hier? Vermutlich sollte hier spaeter Zeitintegration durchgefuehrt werden?
-        if (f_val[0].size() != 1)
+        if (this->GetFunctionalValues()[0].size() != 1)
         {
-          f_val[0].resize(1);
+          this->GetFunctionalValues()[0].resize(1);
         }
         double w = 0.;
         if ((step == 0))
@@ -803,7 +789,7 @@ void InstatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER, CONTROLINTEGR
           w += 0.5 * (this->GetProblem()->GetSpaceTimeHandler()->GetTime(step)
               - this->GetProblem()->GetSpaceTimeHandler()->GetTime(step - 1));
         }
-        f_val[0][0] += w * ret;
+        this->GetFunctionalValues()[0][0] += w * ret;
       }
       else
       {
@@ -853,13 +839,13 @@ void InstatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER, CONTROLINTEGR
           std::stringstream out;
           out << "\t" << this->GetProblem()->GetFunctionalName() << ": " << ret;
           this->GetOutputHandler()->Write(out, 2 + this->GetBasePriority());
-          f_val[i + 1].push_back(ret);
+          this->GetFunctionalValues()[i + 1].push_back(ret);
         }
         else if (this->GetProblem()->GetFunctionalType().find("timedistributed"))
         {
-          if (f_val[i + 1].size() != 1)
+          if (this->GetFunctionalValues()[i + 1].size() != 1)
           {
-            f_val[i + 1].resize(1);
+            this->GetFunctionalValues()[i + 1].resize(1);
           }
           double w = 0.;
           if ((step == 0))
@@ -879,7 +865,7 @@ void InstatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER, CONTROLINTEGR
             w += 0.5 * (this->GetProblem()->GetSpaceTimeHandler()->GetTime(step)
                 - this->GetProblem()->GetSpaceTimeHandler()->GetTime(step - 1));
           }
-          f_val[i + 1][0] += w * ret;
+          this->GetFunctionalValues()[i + 1][0] += w * ret;
         }
         else
         {

@@ -537,6 +537,8 @@ namespace DOpE
             DOFHANDLER, VECTOR, dealdim>* F)
         {
           _aux_functionals.push_back(F);
+          _functional_position[F->GetName()] = _aux_functionals.size()-1;
+          //-1 because we are in the pde case and have therefore no cost functional
         }
 
         /******************************************************/
@@ -693,6 +695,12 @@ namespace DOpE
 
         /******************************************************/
 
+       const std::map<std::string, unsigned int>&
+       GetFunctionalPosition() const
+       {
+         return _functional_position;
+       }
+
       protected:
         PDE*
         GetPDE()
@@ -715,6 +723,8 @@ namespace DOpE
 
         std::vector<FunctionalInterface<CellDataContainer, FaceDataContainer,
             DOFHANDLER, VECTOR, dealdim>*> _aux_functionals;
+        std::map<std::string, unsigned int> _functional_position;
+
         unsigned int _functional_for_ee_num;
         PDE* _pde;
         StateSpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR, dealdim>

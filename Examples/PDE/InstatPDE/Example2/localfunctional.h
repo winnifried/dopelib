@@ -85,26 +85,11 @@ template<typename VECTOR, int dopedim, int dealdim>
     {
       return "domain timedistributed";
     }
-
-    inline void GetValues(const DOpEWrapper::FEValues<dealdim>& fe_values,  const map<string, const VECTOR* >& domain_values,string name, vector<Vector<double> >& values)
+    
+    string GetName() const
     {
-      typename map<string, const VECTOR* >::const_iterator it = domain_values.find(name);
-      if(it == domain_values.end())
-	{
-	  throw DOpEException("Did not find " + name,"LocalPDE::GetValues");
+	  return "dummy functional";
 	}
-      fe_values.get_function_values(*(it->second),values);
-    }
-
-    inline void GetParams(const map<string, const Vector<double>* >& param_values,string name, Vector<double>& values)
-    {
-      typename map<string, const Vector<double>* >::const_iterator it = param_values.find(name);
-      if(it == param_values.end())
-	{
-	  throw DOpEException("Did not find " + name,"LocalPDE::GetValues");
-	}
-      values = *(it->second);
-    }
   private:
     Vector<double> _qvalues;
     vector<Vector<double> > _fvalues;

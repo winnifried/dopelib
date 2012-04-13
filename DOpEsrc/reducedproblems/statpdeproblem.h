@@ -354,6 +354,7 @@ namespace DOpE
     void
     StatPDEProblem<NONLINEARSOLVER, INTEGRATOR, PROBLEM, VECTOR, dealdim>::ComputeReducedState()
     {
+      this->InitializeFunctionalValues(this->GetProblem()->GetNFunctionals());
       this->GetOutputHandler()->Write("Computing State Solution:", 4
           + this->GetBasePriority());
 
@@ -484,6 +485,7 @@ namespace DOpE
               + this->GetProblem()->GetFunctionalType(),
               "StatPDEProblem::ComputeReducedFunctionals");
         }
+        this->GetFunctionalValues()[i].push_back(ret);
         std::stringstream out;
         out << this->GetProblem()->GetFunctionalName() << ": " << ret;
         this->GetOutputHandler()->Write(out, 2 + this->GetBasePriority());

@@ -167,6 +167,11 @@ template<typename VECTOR, int dopedim, int dealdim>
     {
       return "domain";
     }
+    
+        string GetName() const
+    {
+	  return "cost functional";
+	}
 
   private:
     Vector<double> _qvalues;

@@ -100,9 +100,19 @@ namespace DOpE
         }
 
       protected:
+        virtual const std::map<std::string, unsigned int>&
+        GetFunctionalPosition() const
+        {
+          return GetProblem()->GetFunctionalPosition();
+        }
 
         PROBLEM*
         GetProblem()
+        {
+          return _OP;
+        }
+        const PROBLEM*
+        GetProblem() const
         {
           return _OP;
         }

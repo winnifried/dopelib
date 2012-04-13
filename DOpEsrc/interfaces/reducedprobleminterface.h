@@ -120,12 +120,122 @@ namespace DOpE
           assert(_OutputHandler);
           return _OutputHandler;
         }
-      protected:
+        
+         /**
+	  * Grants access to the computed value of the functional named 'name'. This should be used in the stationary case.
+          * 
+          * @return                Value of the functional in question.
+          * @param name            Name of the functional in question.
+	  */
+  double
+      GetFunctionalValue(std::string name) const
+      {
+        typename std::map<std::string, unsigned int>::const_iterator it =
+            GetFunctionalPosition().find(name);
+        if (it == GetFunctionalPosition().end())
+        {
+          throw DOpEException(
+              "Did not find " + name + " in the list of functionals.",
+              "ReducedProblemInterface_Base::GetFunctionalValue");
+        }
+        unsigned int pos = it->second;
 
+        if (GetFunctionalValues()[pos].size() != 1)
+        {
+          if (GetFunctionalValues()[0].size() == 0)
+            throw DOpEException(
+                "Apparently the Functional in question was never evaluated!",
+                "ReducedProblemInterface_Base::GetFunctionalValue");
+          else
+            throw DOpEException(
+                "The Functional has been evaluated too many times! \n\tMaybe you should use GetTimeFunctionalValue.",
+                "ReducedProblemInterface_Base::GetFunctionalValue");
+
+        }
+        else
+        {
+          return GetFunctionalValues()[pos][0];
+        }
+      }
+      /**
+       * Grants access to the computed value of the functional named 'name'. This should be used in the instationary case.
+       * 
+       * @return                Value of the functional in question.
+       * @param name            Name of the functional in question.
+       */
+      const std::vector<double>&
+      GetTimeFunctionalValue(std::string name) const
+      {
+        typename std::map<std::string, unsigned int>::const_iterator it =
+            GetFunctionalPosition().find(name);
+        if (it == GetFunctionalPosition().end())
+        {
+          throw DOpEException(
+              "Did not find " + name + " in the list of functionals.",
+              "ReducedProblemInterface_Base::GetFunctionalValue");
+        }
+        unsigned int pos = it->second;
+
+        if (GetFunctionalValues()[pos].size != 1)
+        {
+          if (GetFunctionalValues()[0].size() == 0)
+            throw DOpEException(
+                "Apparently the Functional in question was never evaluated!",
+                "ReducedProblemInterface_Base::GetTimeFunctionalValue");
+          else
+            throw DOpEException(
+                "The Functional has been evaluated too many times! \n\tMaybe you should use GetTimeFunctionalValue.",
+                "ReducedProblemInterface_Base::GetTimeFunctionalValue");
+        }
+        else
+        {
+          return GetFunctionalValues()[pos];
+        }
+      }
+      protected:
+        /**
+         * Resets the _functional_values to their propber size.
+         * 
+         * @ param N            Number of functionals (aux + cost).
+         */
+        void InitializeFunctionalValues(unsigned int N)
+        {
+          //Initializing Functional Values
+          GetFunctionalValues().resize(N);
+          for (unsigned int i = 0; i < GetFunctionalValues().size(); i++)
+          {
+            GetFunctionalValues()[i].resize(0);
+          }
+        }
+	std::vector<std::vector<double> >& GetFunctionalValues()
+	{
+	  return _functional_values;
+	}
+	
+	const std::vector<std::vector<double> >& GetFunctionalValues() const
+        {
+          return _functional_values;
+        }
+        
+        /**
+         * This has to get implemented in the derived classes
+         * like optproblem, pdeproblemcontainer etc.
+         * It returns a map connecting the names of the
+         * added functionals with their position in
+         * _functional_values. 
+         * If a cost functional is present, its values are always 
+         * stored in _functional_values[0]. Auxiliary functionals are stored in the 
+         * order as they are added.
+         */ 
+	virtual std::map<std::string, unsigned int>& GetFunctionalPosition()
+        {
+                    throw DOpEException("Method not implemented",
+              "ReducedProblemInterface_Base::GetFunctionalPosition");
+        };
       private:
         DOpEExceptionHandler<VECTOR>* _ExceptionHandler;
         DOpEOutputHandler<VECTOR>* _OutputHandler;
-
+        std::vector<std::vector<double> > _functional_values;
     };
 
   /**
@@ -344,15 +454,26 @@ namespace DOpE
         {
           return _OP;
         }
+        
+        const PROBLEM* 
+        GetProblem() const
+        {
+          return _OP;
+        }
+        
+        
       protected:
-
+        virtual const std::map<std::string, unsigned int>& GetFunctionalPosition() const
+        {
+          return GetProblem()->GetFunctionalPosition();
+        }
         std::string
-        GetPostIndex()
+        GetPostIndex() const
         {
           return _post_index;
         }
         int
-        GetBasePriority()
+        GetBasePriority() const
         {
           return _base_priority;
         }

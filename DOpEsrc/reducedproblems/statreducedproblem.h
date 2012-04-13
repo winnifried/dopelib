@@ -585,6 +585,8 @@ namespace DOpE
         CONTROLINTEGRATOR, INTEGRATOR, PROBLEM, VECTOR, dopedim, dealdim>::ComputeReducedState(
         const ControlVector<VECTOR>& q)
     {
+        this->InitializeFunctionalValues(this->GetProblem()->GetNFunctionals() + 1);
+      
       this->GetOutputHandler()->Write("Computing State Solution:", 4
           + this->GetBasePriority());
 
@@ -1190,7 +1192,8 @@ namespace DOpE
       }
       this->GetIntegrator().DeleteDomainData("state");
       this->GetProblem()->DeleteAuxiliaryFromIntegrator(this->GetIntegrator());
-
+      
+      this->GetFunctionalValues()[0].push_back(ret);
       return ret;
     }
 
@@ -1265,6 +1268,7 @@ namespace DOpE
               + this->GetProblem()->GetFunctionalType(),
               "StatReducedProblem::ComputeReducedFunctionals");
         }
+        this->GetFunctionalValues()[i+1].push_back(ret);
         std::stringstream out;
         out << this->GetProblem()->GetFunctionalName() << ": " << ret;
         this->GetOutputHandler()->Write(out, 2 + this->GetBasePriority());

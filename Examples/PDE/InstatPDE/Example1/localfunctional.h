@@ -87,6 +87,11 @@ template<typename VECTOR, int dopedim, int dealdim>
     {
       return "domain time_local";
     }
+    
+        string GetName() const
+    {
+	  return "dummy functional";
+	}
 
 
   private:

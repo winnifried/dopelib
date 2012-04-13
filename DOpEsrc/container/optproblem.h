@@ -508,9 +508,6 @@ namespace DOpE
         const FE&
         GetFESystem() const;
 
-        /******************************************************/
-
-        //			const dealii::SmartPointer<const DOpEWrapper::FECollection<dealdim> > GetFECollection() const;
 
         /******************************************************/
         /**
@@ -612,6 +609,8 @@ namespace DOpE
         AddFunctional(FUNCTIONAL_INTERFACE* F)
         {
           _aux_functionals.push_back(F);
+          _functional_position[F->GetName()] = _aux_functionals.size();
+          //remember! At _functional_values[0] we store always the cost functional!
         }
 
         /******************************************************/
@@ -938,6 +937,11 @@ namespace DOpE
           }
 
         /******************************************************/
+       const std::map<std::string, unsigned int>&
+       GetFunctionalPosition() const
+       {
+         return _functional_position;
+       }
 
       protected:
         PDE*
@@ -999,6 +1003,7 @@ namespace DOpE
         unsigned int _problem_type_num;
         unsigned int _functional_for_ee_num;
         std::vector<FUNCTIONAL_INTERFACE*> _aux_functionals;
+        std::map<std::string, unsigned int> _functional_position;
         FUNCTIONAL* _functional;
         PDE* _pde;
         CONSTRAINTS* _constraints;
@@ -1065,6 +1070,9 @@ namespace DOpE
       _zero_dirichlet_values = new ZeroFunction<dealdim> (
           this->GetPDE()->GetStateNComponents());
       _algo_type = "";
+      _functional_position[_functional->GetName()] = 0;
+      //remember! At _functional_values[0] we store always the cost functional!
+      
     }
 
   /******************************************************/

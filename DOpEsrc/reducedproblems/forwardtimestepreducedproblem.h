@@ -136,7 +136,7 @@ namespace DOpE
           problem.SetTime(
               problem.GetSpaceTimeHandler()->GetTime(0),
               problem.GetSpaceTimeHandler()->GetTimeDoFHandler().first_interval());
-          ComputeTimeFunctionals(this->GetFunctionalValues(), q, 0,
+          ComputeTimeFunctionals(q, 0,
               max_timestep);
           this->SetProblemType("state");
         }
@@ -260,7 +260,7 @@ namespace DOpE
               this->GetOutputHandler()->Write(this->GetU().GetSpacialVector(),
                   "State" + this->GetPostIndex(), problem.GetDoFType());
                 {//Funktional Auswertung in t_n//if abfrage, welcher typ
-                  ComputeTimeFunctionals(this->GetFunctionalValues(), q,
+                  ComputeTimeFunctionals( q,
                       local_to_global[i], max_timestep);
                   this->SetProblemType("state");
                 }

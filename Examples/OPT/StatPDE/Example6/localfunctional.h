@@ -121,6 +121,11 @@ template<template<typename DOFHANDLER, typename VECTOR, int dealdim> class CDC, 
     {
       return "boundary";
     }
+    
+        string GetName() const
+    {
+	  return "cost functional";
+	}
 
   private:
     vector<double> _fvalues;

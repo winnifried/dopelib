@@ -736,15 +736,7 @@ template<typename DATACONTAINER>
     { 
       _OP.CellMatrix(cdc, local_entry_matrix,scale, scale_ico);              
     }
-    /******************************************************/ 
-
-//    /**
-//     * Not implemented so far. Returns just _OP.ComputeFaceFEValues(cell,face). For more information we refer to 
-//     * the file optproblem.h
-//     */
-//    void ComputeFaceFEValues(const std::vector<typename dealii::DoFHandler<dealdim>::active_cell_iterator>& cell,
-//			     const unsigned int face){ _OP.ComputeFaceFEValues(cell,face); }
-//			   
+   
      /******************************************************/ 
 
     /**
@@ -1173,6 +1165,13 @@ template<typename FACEDATACONTAINER>
     void SetFEValuesAreInitialized()
     {
       _OP.SetFEValuesAreInitialized();
+    }
+    
+    /******************************************************/
+    const std::map<std::string, unsigned int>&
+    GetFunctionalPosition() const
+    {
+      return _OP.GetFunctionalPosition();
     }
 
   private:

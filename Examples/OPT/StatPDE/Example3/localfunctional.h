@@ -342,6 +342,11 @@ void Value_QQ(const CellDataContainer<dealii::DoFHandler<dealdim>, VECTOR, deald
      {
        return "boundary";
      }
+     
+         string GetName() const
+    {
+	  return "cost functional";
+	}
 
   private:
     Vector<double> _qvalues;
