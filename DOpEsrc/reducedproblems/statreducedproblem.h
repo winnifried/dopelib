@@ -130,8 +130,8 @@ namespace DOpE
          *
          */
         void
-        GetControlBoxConstraints(ControlVector<VECTOR>& lb, ControlVector<
-            VECTOR>& ub);
+        GetControlBoxConstraints(ControlVector<VECTOR>& lb,
+            ControlVector<VECTOR>& ub);
 
         /******************************************************/
 
@@ -141,8 +141,9 @@ namespace DOpE
          * @param q            The ControlVector<VECTOR> is given to this function.
          */
         void
-        ComputeReducedGradient(const ControlVector<VECTOR>& q, ControlVector<
-            VECTOR>& gradient, ControlVector<VECTOR>& gradient_transposed);
+        ComputeReducedGradient(const ControlVector<VECTOR>& q,
+            ControlVector<VECTOR>& gradient,
+            ControlVector<VECTOR>& gradient_transposed);
 
         /******************************************************/
 
@@ -169,15 +170,16 @@ namespace DOpE
 
         /******************************************************/
 
-        /**
-         * Implementation of virtual function of base class.
-         */
-        float
-        ComputeRefinementIndicators(const ControlVector<VECTOR>& q, Vector<
-            float>& ref_ind, DOpEtypes::EE_state ee_state =
-            DOpEtypes::EE_state::mixed,
-            DOpEtypes::WeightComputation weight_comp =
-                DOpEtypes::WeightComputation::higher_order_interpolation);
+//        /**
+//         * Implementation of virtual function of base class.
+//         */
+//        void
+//        ComputeRefinementIndicators(const ControlVector<VECTOR>& q,
+//            DWRDataContainerBase<VECTOR>& dwrc);
+        template<class DWRC>
+          void
+          ComputeRefinementIndicators(const ControlVector<VECTOR>& q,
+              DWRC& dwrc);
 
         /******************************************************/
 
@@ -271,7 +273,8 @@ namespace DOpE
          *  Doesn't make sense here so aborts if called!
          */
         void
-        WriteToFile(const std::vector<double> &v __attribute__((unused)), std::string outfile __attribute__((unused)))
+        WriteToFile(const std::vector<double> &v __attribute__((unused)),
+            std::string outfile __attribute__((unused)))
         {
           abort();
         }
@@ -289,8 +292,8 @@ namespace DOpE
         }
 
         void
-        FeasibilityShift(const ControlVector<VECTOR>& g_hat, ControlVector<
-            VECTOR>& g, double lambda)
+        FeasibilityShift(const ControlVector<VECTOR>& g_hat,
+            ControlVector<VECTOR>& g, double lambda)
         {
           this->GetProblem()->FeasibilityShift(g_hat, g, lambda);
         }
@@ -403,9 +406,10 @@ namespace DOpE
         bool _build_state_matrix, _build_adjoint_matrix, _build_control_matrix;
         bool _state_reinit, _adjoint_reinit, _gradient_reinit;
 
-        friend class SolutionExtractor<StatReducedProblem<
-            CONTROLNONLINEARSOLVER, NONLINEARSOLVER, CONTROLINTEGRATOR,
-            INTEGRATOR, PROBLEM, VECTOR, dopedim, dealdim> , VECTOR> ;
+        friend class SolutionExtractor<
+            StatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER,
+                CONTROLINTEGRATOR, INTEGRATOR, PROBLEM, VECTOR, dopedim, dealdim>,
+            VECTOR> ;
     };
 
   /*************************************************************************/
@@ -434,17 +438,17 @@ namespace DOpE
           CONTROLINTEGRATOR, INTEGRATOR, PROBLEM, VECTOR, dopedim, dealdim>::StatReducedProblem(
           PROBLEM *OP, std::string state_behavior,
           ParameterReader &param_reader, INTEGRATORDATACONT& idc,
-          int base_priority) :
-        ReducedProblemInterface<PROBLEM, VECTOR, dopedim, dealdim> (OP,
-            base_priority), _u(OP->GetSpaceTimeHandler(), state_behavior,
-            param_reader), _z(OP->GetSpaceTimeHandler(), state_behavior,
-            param_reader), _du(OP->GetSpaceTimeHandler(), state_behavior,
-            param_reader), _dz(OP->GetSpaceTimeHandler(), state_behavior,
-            param_reader), _z_for_ee(OP->GetSpaceTimeHandler(), state_behavior,
-            param_reader), _integrator(idc), _control_integrator(idc),
-            _nonlinear_state_solver(_integrator, param_reader),
-            _nonlinear_adjoint_solver(_integrator, param_reader),
-            _nonlinear_gradient_solver(_control_integrator, param_reader)
+          int base_priority)
+          : ReducedProblemInterface<PROBLEM, VECTOR, dopedim, dealdim>(OP,
+              base_priority), _u(OP->GetSpaceTimeHandler(), state_behavior,
+              param_reader), _z(OP->GetSpaceTimeHandler(), state_behavior,
+              param_reader), _du(OP->GetSpaceTimeHandler(), state_behavior,
+              param_reader), _dz(OP->GetSpaceTimeHandler(), state_behavior,
+              param_reader), _z_for_ee(OP->GetSpaceTimeHandler(),
+              state_behavior, param_reader), _integrator(idc), _control_integrator(
+              idc), _nonlinear_state_solver(_integrator, param_reader), _nonlinear_adjoint_solver(
+              _integrator, param_reader), _nonlinear_gradient_solver(
+              _control_integrator, param_reader)
 
       {
         //ReducedProblems should be ReInited
@@ -465,17 +469,17 @@ namespace DOpE
           CONTROLINTEGRATOR, INTEGRATOR, PROBLEM, VECTOR, dopedim, dealdim>::StatReducedProblem(
           PROBLEM *OP, std::string state_behavior,
           ParameterReader &param_reader, CONTROLINTEGRATORCONT& c_idc,
-          STATEINTEGRATORDATACONT & s_idc, int base_priority) :
-        ReducedProblemInterface<PROBLEM, VECTOR, dopedim, dealdim> (OP,
-            base_priority), _u(OP->GetSpaceTimeHandler(), state_behavior,
-            param_reader), _z(OP->GetSpaceTimeHandler(), state_behavior,
-            param_reader), _du(OP->GetSpaceTimeHandler(), state_behavior,
-            param_reader), _dz(OP->GetSpaceTimeHandler(), state_behavior,
-            param_reader), _z_for_ee(OP->GetSpaceTimeHandler(), state_behavior,
-            param_reader), _integrator(s_idc), _control_integrator(c_idc),
-            _nonlinear_state_solver(_integrator, param_reader),
-            _nonlinear_adjoint_solver(_integrator, param_reader),
-            _nonlinear_gradient_solver(_control_integrator, param_reader)
+          STATEINTEGRATORDATACONT & s_idc, int base_priority)
+          : ReducedProblemInterface<PROBLEM, VECTOR, dopedim, dealdim>(OP,
+              base_priority), _u(OP->GetSpaceTimeHandler(), state_behavior,
+              param_reader), _z(OP->GetSpaceTimeHandler(), state_behavior,
+              param_reader), _du(OP->GetSpaceTimeHandler(), state_behavior,
+              param_reader), _dz(OP->GetSpaceTimeHandler(), state_behavior,
+              param_reader), _z_for_ee(OP->GetSpaceTimeHandler(),
+              state_behavior, param_reader), _integrator(s_idc), _control_integrator(
+              c_idc), _nonlinear_state_solver(_integrator, param_reader), _nonlinear_adjoint_solver(
+              _integrator, param_reader), _nonlinear_gradient_solver(
+              _control_integrator, param_reader)
 
       {
         //ReducedProblems should be ReInited
@@ -510,8 +514,8 @@ namespace DOpE
       {
         return _nonlinear_state_solver;
       }
-      else if ((type == "adjoint") || (type == "adjoint_hessian") || (type
-          == "adjoint_for_ee"))
+      else if ((type == "adjoint") || (type == "adjoint_hessian")
+          || (type == "adjoint_for_ee"))
       {
         return _nonlinear_adjoint_solver;
       }
@@ -538,9 +542,9 @@ namespace DOpE
       }
       else
       {
-        throw DOpEException("No Solver for Problem type:`"
-            + this->GetProblem()->GetType() + "' found",
-            "StatReducedProblem::GetControlNonlinearSolver");
+        throw DOpEException(
+            "No Solver for Problem type:`" + this->GetProblem()->GetType()
+                + "' found", "StatReducedProblem::GetControlNonlinearSolver");
 
       }
     }
@@ -633,8 +637,8 @@ namespace DOpE
       }
       this->GetProblem()->DeleteAuxiliaryFromIntegrator(this->GetIntegrator());
 
-      this->GetOutputHandler()->Write((GetU().GetSpacialVector()), "State"
-          + this->GetPostIndex(), problem.GetDoFType());
+      this->GetOutputHandler()->Write((GetU().GetSpacialVector()),
+          "State" + this->GetPostIndex(), problem.GetDoFType());
 
     }
   /******************************************************/
@@ -647,8 +651,8 @@ namespace DOpE
         CONTROLINTEGRATOR, INTEGRATOR, PROBLEM, VECTOR, dopedim, dealdim>::ComputeReducedConstraints(
         const ControlVector<VECTOR>& q, ConstraintVector<VECTOR>& g)
     {
-      this->GetOutputHandler()->Write("Evaluating Constraints:", 4
-          + this->GetBasePriority());
+      this->GetOutputHandler()->Write("Evaluating Constraints:",
+          4 + this->GetBasePriority());
 
       this->SetProblemType("constraints");
 
@@ -691,7 +695,7 @@ namespace DOpE
       dealii::Vector<double>& gc = g.GetGlobalConstraints();
       //dealii::Vector<double> global_values(gc.size());
 
-      unsigned int nglobal = gc.size();//global_values.size();
+      unsigned int nglobal = gc.size();      //global_values.size();
 
       if (nglobal > 0)
       {
@@ -753,8 +757,9 @@ namespace DOpE
 
           if (!found)
           {
-            throw DOpEException("Unknown Constraint Type: "
-                + this->GetProblem()->GetConstraintType(),
+            throw DOpEException(
+                "Unknown Constraint Type: "
+                    + this->GetProblem()->GetConstraintType(),
                 "StatReducedProblem::ComputeReducedConstraints");
           }
           //      global_values(i) = ret;
@@ -777,7 +782,8 @@ namespace DOpE
           this->GetIntegrator().DeleteDomainData("state");
         }
 
-        this->GetProblem()->DeleteAuxiliaryFromIntegrator(this->GetIntegrator());
+        this->GetProblem()->DeleteAuxiliaryFromIntegrator(
+            this->GetIntegrator());
         //gc = global_values;
       }
 
@@ -820,8 +826,8 @@ namespace DOpE
         CONTROLINTEGRATOR, INTEGRATOR, PROBLEM, VECTOR, dopedim, dealdim>::ComputeReducedAdjoint(
         const ControlVector<VECTOR>& q)
     {
-      this->GetOutputHandler()->Write("Computing Reduced Adjoint:", 4
-          + this->GetBasePriority());
+      this->GetOutputHandler()->Write("Computing Reduced Adjoint:",
+          4 + this->GetBasePriority());
 
       this->SetProblemType("adjoint");
       if (_adjoint_reinit == true)
@@ -832,7 +838,8 @@ namespace DOpE
 
       this->GetProblem()->AddAuxiliaryToIntegrator(this->GetIntegrator());
 
-      this->GetIntegrator().AddDomainData("state", &(GetU().GetSpacialVector())); //&(GetU().GetSpacialVector())
+      this->GetIntegrator().AddDomainData("state",
+          &(GetU().GetSpacialVector())); //&(GetU().GetSpacialVector())
 
       if (dopedim == dealdim)
       {
@@ -849,8 +856,8 @@ namespace DOpE
             "StatReducedProblem::ComputeReducedAdjoint");
       }
 
-      _build_adjoint_matrix
-          = this->GetNonlinearSolver("adjoint").NonlinearSolve(
+      _build_adjoint_matrix =
+          this->GetNonlinearSolver("adjoint").NonlinearSolve(
               *(this->GetProblem()), (GetZ().GetSpacialVector()), true,
               _build_adjoint_matrix);
 
@@ -872,8 +879,8 @@ namespace DOpE
 
       this->GetProblem()->DeleteAuxiliaryFromIntegrator(this->GetIntegrator());
 
-      this->GetOutputHandler()->Write((GetZ().GetSpacialVector()), "Adjoint"
-          + this->GetPostIndex(), this->GetProblem()->GetDoFType());
+      this->GetOutputHandler()->Write((GetZ().GetSpacialVector()),
+          "Adjoint" + this->GetPostIndex(), this->GetProblem()->GetDoFType());
     }
 
   /******************************************************/
@@ -886,8 +893,8 @@ namespace DOpE
         CONTROLINTEGRATOR, INTEGRATOR, PROBLEM, VECTOR, dopedim, dealdim>::ComputeDualForErrorEstimation(
         const ControlVector<VECTOR>& q)
     {
-      this->GetOutputHandler()->Write("Computing Dual for Error Estimation:", 4
-          + this->GetBasePriority());
+      this->GetOutputHandler()->Write("Computing Dual for Error Estimation:",
+          4 + this->GetBasePriority());
 
       this->SetProblemType("adjoint_for_ee");
       auto& problem = this->GetProblem()->GetStateProblem();
@@ -899,7 +906,8 @@ namespace DOpE
 
       this->GetProblem()->AddAuxiliaryToIntegrator(this->GetIntegrator());
 
-      this->GetIntegrator().AddDomainData("state", &(GetU().GetSpacialVector())); //&(GetU().GetSpacialVector())
+      this->GetIntegrator().AddDomainData("state",
+          &(GetU().GetSpacialVector())); //&(GetU().GetSpacialVector())
 
       if (dopedim == dealdim)
       {
@@ -916,8 +924,8 @@ namespace DOpE
             "StatReducedProblem::ComputeReducedAdjoint");
       }
 
-      _build_adjoint_matrix
-          = this->GetNonlinearSolver("adjoint_for_ee").NonlinearSolve(problem,
+      _build_adjoint_matrix =
+          this->GetNonlinearSolver("adjoint_for_ee").NonlinearSolve(problem,
               (GetZForEE().GetSpacialVector()), true, _build_adjoint_matrix);
 
       if (dopedim == dealdim)
@@ -958,8 +966,8 @@ namespace DOpE
     {
       this->ComputeReducedAdjoint(q);
 
-      this->GetOutputHandler()->Write("Computing Reduced Gradient:", 4
-          + this->GetBasePriority());
+      this->GetOutputHandler()->Write("Computing Reduced Gradient:",
+          4 + this->GetBasePriority());
 
       //Preparations for ControlInTheDirichletData
       VECTOR tmp;
@@ -1011,7 +1019,8 @@ namespace DOpE
 
         this->GetIntegrator().DeleteDomainData("state");
         this->GetIntegrator().DeleteDomainData("last_newton_solution");
-        this->GetProblem()->DeleteAuxiliaryFromIntegrator(this->GetIntegrator());
+        this->GetProblem()->DeleteAuxiliaryFromIntegrator(
+            this->GetIntegrator());
       }
       //Endof Dirichletdata Preparations
       this->SetProblemType("gradient");
@@ -1021,7 +1030,8 @@ namespace DOpE
         _gradient_reinit = false;
       }
 
-      this->GetProblem()->AddAuxiliaryToIntegrator(this->GetControlIntegrator());
+      this->GetProblem()->AddAuxiliaryToIntegrator(
+          this->GetControlIntegrator());
 
       if (dopedim == dealdim)
       {
@@ -1097,8 +1107,8 @@ namespace DOpE
       this->GetProblem()->DeleteAuxiliaryFromIntegrator(
           this->GetControlIntegrator());
 
-      this->GetOutputHandler()->Write(gradient, "Gradient"
-          + this->GetPostIndex(), this->GetProblem()->GetDoFType());
+      this->GetOutputHandler()->Write(gradient,
+          "Gradient" + this->GetPostIndex(), this->GetProblem()->GetDoFType());
       this->GetOutputHandler()->Write(gradient_transposed,
           "Gradient_Transposed" + this->GetPostIndex(),
           this->GetProblem()->GetDoFType());
@@ -1120,8 +1130,8 @@ namespace DOpE
       double ret = 0;
       bool found = false;
 
-      this->GetOutputHandler()->Write("Computing Cost Functional:", 4
-          + this->GetBasePriority());
+      this->GetOutputHandler()->Write("Computing Cost Functional:",
+          4 + this->GetBasePriority());
 
       this->SetProblemType("cost_functional");
 
@@ -1141,7 +1151,8 @@ namespace DOpE
         throw DOpEException("dopedim not implemented",
             "StatReducedProblem::ComputeReducedCostFunctional");
       }
-      this->GetIntegrator().AddDomainData("state", &(GetU().GetSpacialVector()));
+      this->GetIntegrator().AddDomainData("state",
+          &(GetU().GetSpacialVector()));
 
       if (this->GetProblem()->GetFunctionalType().find("domain")
           != std::string::npos)
@@ -1171,8 +1182,9 @@ namespace DOpE
 
       if (!found)
       {
-        throw DOpEException("Unknown Functional Type: "
-            + this->GetProblem()->GetFunctionalType(),
+        throw DOpEException(
+            "Unknown Functional Type: "
+                + this->GetProblem()->GetFunctionalType(),
             "StatReducedProblem::ComputeReducedCostFunctional");
       }
 
@@ -1207,8 +1219,8 @@ namespace DOpE
         CONTROLINTEGRATOR, INTEGRATOR, PROBLEM, VECTOR, dopedim, dealdim>::ComputeReducedFunctionals(
         const ControlVector<VECTOR>& q)
     {
-      this->GetOutputHandler()->Write("Computing Functionals:", 4
-          + this->GetBasePriority());
+      this->GetOutputHandler()->Write("Computing Functionals:",
+          4 + this->GetBasePriority());
 
       this->GetProblem()->AddAuxiliaryToIntegrator(this->GetIntegrator());
 
@@ -1226,7 +1238,8 @@ namespace DOpE
         throw DOpEException("dopedim not implemented",
             "StatReducedProblem::ComputeReducedFunctionals");
       }
-      this->GetIntegrator().AddDomainData("state", &(GetU().GetSpacialVector()));
+      this->GetIntegrator().AddDomainData("state",
+          &(GetU().GetSpacialVector()));
 
       for (unsigned int i = 0; i < this->GetProblem()->GetNFunctionals(); i++)
       {
@@ -1245,8 +1258,8 @@ namespace DOpE
             != std::string::npos)
         {
           found = true;
-          ret
-              += this->GetIntegrator().ComputePointScalar(*(this->GetProblem()));
+          ret += this->GetIntegrator().ComputePointScalar(
+              *(this->GetProblem()));
         }
         if (this->GetProblem()->GetFunctionalType().find("boundary")
             != std::string::npos)
@@ -1264,8 +1277,9 @@ namespace DOpE
 
         if (!found)
         {
-          throw DOpEException("Unknown Functional Type: "
-              + this->GetProblem()->GetFunctionalType(),
+          throw DOpEException(
+              "Unknown Functional Type: "
+                  + this->GetProblem()->GetFunctionalType(),
               "StatReducedProblem::ComputeReducedFunctionals");
         }
         this->GetFunctionalValues()[i+1].push_back(ret);
@@ -1298,68 +1312,73 @@ namespace DOpE
   template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
       typename CONTROLINTEGRATOR, typename INTEGRATOR, typename PROBLEM,
       typename VECTOR, int dopedim, int dealdim>
-    float
-    StatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER,
-        CONTROLINTEGRATOR, INTEGRATOR, PROBLEM, VECTOR, dopedim, dealdim>::ComputeRefinementIndicators(
-        const ControlVector<VECTOR>& q, Vector<float>& /*error_ind*/,
-        DOpEtypes::EE_state /*ee_state*/, DOpEtypes::WeightComputation /*weight_comp*/)
-    {
-      this->ComputeDualForErrorEstimation(q);
-
-      this->GetOutputHandler()->Write("Computing Error Indicators:", 4
-          + this->GetBasePriority());
-
-      this->GetProblem()->AddAuxiliaryToIntegrator(this->GetIntegrator());
-
-      this->GetIntegrator().AddDomainData("state", &(GetU().GetSpacialVector()));
-      this->GetIntegrator().AddDomainData("adjoint_for_ee",
-          &(GetZForEE().GetSpacialVector()));
-
-      if (dopedim == dealdim)
+    template<class DWRC>
+      void
+      StatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER,
+          CONTROLINTEGRATOR, INTEGRATOR, PROBLEM, VECTOR, dopedim, dealdim>::ComputeRefinementIndicators(
+          const ControlVector<VECTOR>& q, DWRC& dwrc)
+//    StatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER,
+//        CONTROLINTEGRATOR, INTEGRATOR, PROBLEM, VECTOR, dopedim, dealdim>::ComputeRefinementIndicators(
+//        const ControlVector<VECTOR>& q, DWRDataContainerBase<VECTOR>& dwrc)
       {
-        this->GetIntegrator().AddDomainData("control", &(q.GetSpacialVector()));
-      }
-      else if (dopedim == 0)
-      {
-        this->GetIntegrator().AddParamData("control",
-            &(q.GetSpacialVectorCopy()));
-      }
-      else
-      {
-        throw DOpEException("dopedim not implemented",
-            "StatReducedProblem::ComputeRefinementIndicators");
-      }
+        this->ComputeDualForErrorEstimation(q);
 
-      float error = 0;
-      this->SetProblemType("functional_for_ee");//TODO Wie genau der Uebertrag hier passieren soll.
-      //    float error = this->GetIntegrator().ComputeRefinementIndicators(*this->GetProblem());
+        this->GetOutputHandler()->Write("Computing Error Indicators:",
+            4 + this->GetBasePriority());
 
-      if (dopedim == dealdim)
-      {
-        this->GetIntegrator().DeleteDomainData("control");
+        this->GetProblem()->AddAuxiliaryToIntegrator(this->GetIntegrator());
+
+        this->GetIntegrator().AddDomainData("state",
+            &(GetU().GetSpacialVector()));
+        this->GetIntegrator().AddDomainData("adjoint_for_ee",
+            &(GetZForEE().GetSpacialVector()));
+
+        if (dopedim == dealdim)
+        {
+          this->GetIntegrator().AddDomainData("control",
+              &(q.GetSpacialVector()));
+        }
+        else if (dopedim == 0)
+        {
+          this->GetIntegrator().AddParamData("control",
+              &(q.GetSpacialVectorCopy()));
+        }
+        else
+        {
+          throw DOpEException("dopedim not implemented",
+              "StatReducedProblem::ComputeRefinementIndicators");
+        }
+
+        float error = 0;
+        this->SetProblemType("functional_for_ee"); //TODO Wie genau der Uebertrag hier passieren soll.
+        this->GetIntegrator().ComputeRefinementIndicators(*this->GetProblem(),
+            dwrc);
+
+        if (dopedim == dealdim)
+        {
+          this->GetIntegrator().DeleteDomainData("control");
+        }
+        else if (dopedim == 0)
+        {
+          this->GetIntegrator().DeleteParamData("control");
+          q.UnLockCopy();
+        }
+        else
+        {
+          throw DOpEException("dopedim not implemented",
+              "StatReducedProblem::ComputeRefinementIndicators");
+        }
+
+        this->GetIntegrator().DeleteDomainData("state");
+        this->GetIntegrator().DeleteDomainData("adjoint_for_ee");
+        this->GetProblem()->DeleteAuxiliaryFromIntegrator(
+            this->GetIntegrator());
+
+        std::stringstream out;
+        out << "Error in " << this->GetProblem()->GetFunctionalName() << ": "
+            << error;
+        this->GetOutputHandler()->Write(out, 2 + this->GetBasePriority());
       }
-      else if (dopedim == 0)
-      {
-        this->GetIntegrator().DeleteParamData("control");
-        q.UnLockCopy();
-      }
-      else
-      {
-        throw DOpEException("dopedim not implemented",
-            "StatReducedProblem::ComputeRefinementIndicators");
-      }
-
-      this->GetIntegrator().DeleteDomainData("state");
-      this->GetIntegrator().DeleteDomainData("adjoint_for_ee");
-      this->GetProblem()->DeleteAuxiliaryFromIntegrator(this->GetIntegrator());
-
-      std::stringstream out;
-      out << "Error in " << this->GetProblem()->GetFunctionalName() << ": "
-          << error;
-      this->GetOutputHandler()->Write(out, 2 + this->GetBasePriority());
-
-      return error;
-    }
 
   /******************************************************/
 
@@ -1373,16 +1392,17 @@ namespace DOpE
         ControlVector<VECTOR>& hessian_direction,
         ControlVector<VECTOR>& hessian_direction_transposed)
     {
-      this->GetOutputHandler()->Write("Computing ReducedHessianVector:", 4
-          + this->GetBasePriority());
-      this->GetOutputHandler()->Write("\tSolving Tangent:", 5
-          + this->GetBasePriority());
+      this->GetOutputHandler()->Write("Computing ReducedHessianVector:",
+          4 + this->GetBasePriority());
+      this->GetOutputHandler()->Write("\tSolving Tangent:",
+          5 + this->GetBasePriority());
 
       this->SetProblemType("tangent");
 
       this->GetProblem()->AddAuxiliaryToIntegrator(this->GetIntegrator());
 
-      this->GetIntegrator().AddDomainData("state", &(GetU().GetSpacialVector()));
+      this->GetIntegrator().AddDomainData("state",
+          &(GetU().GetSpacialVector()));
       this->GetControlIntegrator().AddDomainData("state",
           &(GetU().GetSpacialVector()));
 
@@ -1410,11 +1430,11 @@ namespace DOpE
           *(this->GetProblem()), (GetDU().GetSpacialVector()), true,
           _build_state_matrix);
 
-      this->GetOutputHandler()->Write((GetDU().GetSpacialVector()), "Tangent"
-          + this->GetPostIndex(), this->GetProblem()->GetDoFType());
+      this->GetOutputHandler()->Write((GetDU().GetSpacialVector()),
+          "Tangent" + this->GetPostIndex(), this->GetProblem()->GetDoFType());
 
-      this->GetOutputHandler()->Write("\tSolving Adjoint Hessian:", 5
-          + this->GetBasePriority());
+      this->GetOutputHandler()->Write("\tSolving Adjoint Hessian:",
+          5 + this->GetBasePriority());
       this->SetProblemType("adjoint_hessian");
       this->GetIntegrator().AddDomainData("adjoint",
           &(GetZ().GetSpacialVector()));
@@ -1426,13 +1446,13 @@ namespace DOpE
           &(GetDU().GetSpacialVector()));
 
       //adjoint_hessian Matrix is the same as adjoint matrix
-      _build_adjoint_matrix
-          = this->GetNonlinearSolver("adjoint_hessian").NonlinearSolve(
+      _build_adjoint_matrix =
+          this->GetNonlinearSolver("adjoint_hessian").NonlinearSolve(
               *(this->GetProblem()), (GetDZ().GetSpacialVector()), true,
               _build_adjoint_matrix);
 
-      this->GetOutputHandler()->Write((GetDZ().GetSpacialVector()), "Hessian"
-          + this->GetPostIndex(), this->GetProblem()->GetDoFType());
+      this->GetOutputHandler()->Write((GetDZ().GetSpacialVector()),
+          "Hessian" + this->GetPostIndex(), this->GetProblem()->GetDoFType());
 
       this->GetIntegrator().AddDomainData("adjoint_hessian",
           &(GetDZ().GetSpacialVector()));
@@ -1440,8 +1460,8 @@ namespace DOpE
           &(GetDZ().GetSpacialVector()));
 
       this->GetOutputHandler()->Write(
-          "\tComputing Representation of the Hessian:", 5
-              + this->GetBasePriority());
+          "\tComputing Representation of the Hessian:",
+          5 + this->GetBasePriority());
       //Preparations for Control In The Dirichlet Data
       VECTOR tmp;
       VECTOR tmp_second;
@@ -1472,7 +1492,8 @@ namespace DOpE
       this->GetProblem()->DeleteAuxiliaryFromIntegrator(this->GetIntegrator());
 
       this->SetProblemType("hessian");
-      this->GetProblem()->AddAuxiliaryToIntegrator(this->GetControlIntegrator());
+      this->GetProblem()->AddAuxiliaryToIntegrator(
+          this->GetControlIntegrator());
       if (dopedim == dealdim)
       {
         this->GetIntegrator().DeleteDomainData("dq");
@@ -1512,7 +1533,8 @@ namespace DOpE
           this->GetControlIntegrator().AddDomainData("last_newton_solution",
               &(hessian_direction_transposed.GetSpacialVector()));
           this->GetControlIntegrator().ComputeNonlinearResidual(
-              *(this->GetProblem()), hessian_direction.GetSpacialVector(), true);
+              *(this->GetProblem()), hessian_direction.GetSpacialVector(),
+              true);
           this->GetControlIntegrator().DeleteDomainData("last_newton_solution");
         }
         else if (dopedim == 0)
@@ -1520,7 +1542,8 @@ namespace DOpE
           this->GetControlIntegrator().AddParamData("last_newton_solution",
               &(hessian_direction_transposed.GetSpacialVectorCopy()));
           this->GetControlIntegrator().ComputeNonlinearResidual(
-              *(this->GetProblem()), hessian_direction.GetSpacialVector(), true);
+              *(this->GetProblem()), hessian_direction.GetSpacialVector(),
+              true);
           this->GetControlIntegrator().DeleteParamData("last_newton_solution");
           hessian_direction_transposed.UnLockCopy();
         }
@@ -1528,14 +1551,15 @@ namespace DOpE
         hessian_direction_transposed = hessian_direction;
         //Compute l^2 representation of the HessianVector
         //hessian Matrix is the same as control matrix
-        _build_control_matrix
-            = this->GetControlNonlinearSolver().NonlinearSolve(
+        _build_control_matrix =
+            this->GetControlNonlinearSolver().NonlinearSolve(
                 *(this->GetProblem()),
                 hessian_direction_transposed.GetSpacialVector(), true,
                 _build_control_matrix);
 
-        this->GetOutputHandler()->Write(hessian_direction, "HessianDirection"
-            + this->GetPostIndex(), this->GetProblem()->GetDoFType());
+        this->GetOutputHandler()->Write(hessian_direction,
+            "HessianDirection" + this->GetPostIndex(),
+            this->GetProblem()->GetDoFType());
         this->GetOutputHandler()->Write(hessian_direction_transposed,
             "HessianDirection_Transposed" + this->GetPostIndex(),
             this->GetProblem()->GetDoFType());
@@ -1611,7 +1635,8 @@ namespace DOpE
         throw DOpEException("dopedim not implemented",
             "VoidReducedProblem::ComputeReducedGradient");
       }
-      this->GetProblem()->AddAuxiliaryToIntegrator(this->GetControlIntegrator());
+      this->GetProblem()->AddAuxiliaryToIntegrator(
+          this->GetControlIntegrator());
       this->GetControlIntegrator().AddDomainData("constraints_local",
           &g.GetSpacialVector("local"));
       this->GetControlIntegrator().AddParamData("constraints_global",
@@ -1655,7 +1680,8 @@ namespace DOpE
     {
       if (dof_type == "state")
       {
-        auto& data_out = this->GetProblem()->GetSpaceTimeHandler()->GetDataOut();
+        auto& data_out =
+            this->GetProblem()->GetSpaceTimeHandler()->GetDataOut();
         data_out.attach_dof_handler(
             this->GetProblem()->GetSpaceTimeHandler()->GetStateDoFHandler());
 
@@ -1674,8 +1700,9 @@ namespace DOpE
         }
         else
         {
-          throw DOpEException("Don't know how to write filetype `" + filetype
-              + "'!", "StatReducedProblem::WriteToFile");
+          throw DOpEException(
+              "Don't know how to write filetype `" + filetype + "'!",
+              "StatReducedProblem::WriteToFile");
         }
         data_out.clear();
       }
@@ -1717,8 +1744,9 @@ namespace DOpE
         }
         else
         {
-          throw DOpEException("Don't know how to write filetype `" + filetype
-              + "'!", "StatReducedProblem::WriteToFile");
+          throw DOpEException(
+              "Don't know how to write filetype `" + filetype + "'!",
+              "StatReducedProblem::WriteToFile");
         }
 #endif
       }

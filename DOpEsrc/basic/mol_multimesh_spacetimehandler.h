@@ -144,7 +144,7 @@ namespace DOpE
         _control_dof_handler.distribute_dofs(*_control_fe);
         DoFRenumbering::component_wise (static_cast<DOFHANDLER&>(_control_dof_handler),
             control_block_component);
-        if(dim==dim)
+        if(dim==dim)//FIXME ?? Isnt this always true?
           {
             _control_hanging_node_constraints.clear ();
             DoFTools::make_hanging_node_constraints (static_cast<DOFHANDLER&>(_control_dof_handler),

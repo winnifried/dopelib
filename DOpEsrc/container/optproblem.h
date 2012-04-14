@@ -239,9 +239,9 @@ namespace DOpE
          *
          * @param cdc                     A DataContainer holding all the needed information
          *                                of the cell
-         * @param local_cell_vector        This vector contains the locally computed values of the cell equation. For more information
-         *                                 on dealii::Vector, please visit, the deal.ii manual pages.
-         * @param scale                    A scaling factor which is -1 or 1 depending on the subroutine to compute.
+         * @param local_cell_vector       This vector contains the locally computed values of the cell equation. For more information
+         *                                on dealii::Vector, please visit, the deal.ii manual pages.
+         * @param scale                   A scaling factor which is -1 or 1 depending on the subroutine to compute.
          */
         template<typename DATACONTAINER>
           void
@@ -942,6 +942,22 @@ namespace DOpE
        {
          return _functional_position;
        }
+
+        unsigned int
+        GetStateNBlocks()
+        {
+          return this->GetPDE()->GetStateNBlocks();
+        }
+
+        /******************************************************/
+
+        std::vector<unsigned int>&
+        GetStateBlockComponent()
+        {
+          return this->GetPDE()->GetStateBlockComponent();
+        }
+
+        /******************************************************/
 
       protected:
         PDE*

@@ -1,0 +1,125 @@
+
+	**************************************************
+	*             Starting Forward Solve             *
+	*   Solving : PDEProblemContainer	*
+	*   SDoFs   : 	576
+	**************************************************
+
+	Computing State Solution:
+			 Newton step: 0	 Residual (abs.):   1.1759e+00
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+	Writing [./Mesh0/State_PDEProblemContainer.vtk]
+	Computing Functionals:
+	Local Mean value: 0.452914
+	Computing Dual for Error Estimation:
+			 Newton step: 0	 Residual (abs.):   1.2500e-01
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+	Writing [./Mesh0/Adjoint_for_ee_PDEProblemContainer.vtk]
+	Computing Error Indicators:
+	Error estimation in Local Mean value: -0.049087
+
+	Mean value error: -0.0109579  Ieff (eh/e)= 4.47958
+	
+
+
+	**************************************************
+	*             Starting Forward Solve             *
+	*   Solving : PDEProblemContainer	*
+	*   SDoFs   : 	954
+	**************************************************
+
+	Computing State Solution:
+			 Newton step: 0	 Residual (abs.):   1.1759e+00
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+	Writing [./Mesh1/State_PDEProblemContainer.vtk]
+	Computing Functionals:
+	Local Mean value: 0.518852
+	Computing Dual for Error Estimation:
+			 Newton step: 0	 Residual (abs.):   1.2500e-01
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+	Writing [./Mesh1/Adjoint_for_ee_PDEProblemContainer.vtk]
+	Computing Error Indicators:
+	Error estimation in Local Mean value: -0.0534708
+
+	Mean value error: -0.076896  Ieff (eh/e)= 0.695365
+	
+
+
+	**************************************************
+	*             Starting Forward Solve             *
+	*   Solving : PDEProblemContainer	*
+	*   SDoFs   : 	1670
+	**************************************************
+
+	Computing State Solution:
+			 Newton step: 0	 Residual (abs.):   1.1759e+00
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+	Writing [./Mesh2/State_PDEProblemContainer.vtk]
+	Computing Functionals:
+	Local Mean value: 0.458203
+	Computing Dual for Error Estimation:
+			 Newton step: 0	 Residual (abs.):   1.2500e-01
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+	Writing [./Mesh2/Adjoint_for_ee_PDEProblemContainer.vtk]
+	Computing Error Indicators:
+	Error estimation in Local Mean value: -0.0168815
+
+	Mean value error: -0.0162471  Ieff (eh/e)= 1.03904
+	
+
+
+	**************************************************
+	*             Starting Forward Solve             *
+	*   Solving : PDEProblemContainer	*
+	*   SDoFs   : 	3324
+	**************************************************
+
+	Computing State Solution:
+			 Newton step: 0	 Residual (abs.):   1.1759e+00
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+	Writing [./Mesh3/State_PDEProblemContainer.vtk]
+	Computing Functionals:
+	Local Mean value: 0.447505
+	Computing Dual for Error Estimation:
+			 Newton step: 0	 Residual (abs.):   6.2500e-02
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+	Writing [./Mesh3/Adjoint_for_ee_PDEProblemContainer.vtk]
+	Computing Error Indicators:
+	Error estimation in Local Mean value: -0.00655622
+
+	Mean value error: -0.0055492  Ieff (eh/e)= 1.18147
+	
+
+
+	**************************************************
+	*             Starting Forward Solve             *
+	*   Solving : PDEProblemContainer	*
+	*   SDoFs   : 	10062
+	**************************************************
+
+	Computing State Solution:
+			 Newton step: 0	 Residual (abs.):   9.3844e-01
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+	Writing [./Mesh4/State_PDEProblemContainer.vtk]
+	Computing Functionals:
+	Local Mean value: 0.442893
+	Computing Dual for Error Estimation:
+			 Newton step: 0	 Residual (abs.):   6.2500e-02
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+	Writing [./Mesh4/Adjoint_for_ee_PDEProblemContainer.vtk]
+	Computing Error Indicators:
+	Error estimation in Local Mean value: -0.00120538
+
+	Mean value error: -0.000936663  Ieff (eh/e)= 1.28689
+	
+

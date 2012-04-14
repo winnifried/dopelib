@@ -14,6 +14,8 @@
 
 #include "celldatacontainer.h"
 #include "facedatacontainer.h"
+#include "higher_order_dwrc.h"
+#include "dopetypes.h"
 
 namespace DOpE
 {
@@ -22,7 +24,7 @@ namespace DOpE
    * It assumes that one uses the same triangulation for the control and state variable.
    *
    * @template INTEGRATORDATACONT       The type of the integratordatacontainer, which has
-   *                                    manages the basic data for integration (quadrate,
+   *                                    manages the basic data for integration (quadrature,
    *                                    celldatacontainer, facedatacontainer etc.)
    * @template VECTOR                   Class of the vectors which we use in the integrator.
    * @template SCALAR                   Type of the scalars we use in the integrator.
@@ -114,17 +116,22 @@ namespace DOpE
         inline const std::map<std::string, const dealii::Vector<SCALAR>*>&
         GetParamData() const;
 
+        template<typename PROBLEM, class STH, class CDC, class FDC>
+          void
+          ComputeRefinementIndicators(PROBLEM& pde,
+              HigherOrderDWRContainer<STH, INTEGRATORDATACONT, CDC, FDC, VECTOR>& dwrc);
+
         inline INTEGRATORDATACONT&
         GetIntegratorDataContainer() const;
 
       private:
         template<typename DOFHANDLER>
           void
-              InterpolateBoundaryValues(const DOpEWrapper::DoFHandler<dim,
-                  DOFHANDLER>* dof_handler, const unsigned int color,
-                  const dealii::Function<dim>& function, std::map<unsigned int,
-                      SCALAR>& boundary_values,
-                  const std::vector<bool>& comp_mask) const;
+          InterpolateBoundaryValues(
+              const DOpEWrapper::DoFHandler<dim, DOFHANDLER>* dof_handler,
+              const unsigned int color, const dealii::Function<dim>& function,
+              std::map<unsigned int, SCALAR>& boundary_values,
+              const std::vector<bool>& comp_mask) const;
 
         /**
          * Given a vector of active cell iterators and a facenumber, checks if the face
@@ -158,8 +165,8 @@ namespace DOpE
   template<typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR,
       int dim>
     Integrator<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::Integrator(
-        INTEGRATORDATACONT& idc) :
-      _idc(idc)
+        INTEGRATORDATACONT& idc)
+        : _idc(idc)
     {
     }
 
@@ -200,31 +207,30 @@ namespace DOpE
         std::vector<unsigned int> local_dof_indices;
 
         const auto& dof_handler =
-        pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandler();
-        auto
-        cell =
-        pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandlerBeginActive();
+            pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandler();
+        auto cell =
+            pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandlerBeginActive();
         auto endc =
-        pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandlerEnd();
+            pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandlerEnd();
 
         // Generate the data containers.
-        _idc.InitializeCDC(pde.GetUpdateFlags(),
+        GetIntegratorDataContainer().InitializeCDC(pde.GetUpdateFlags(),
             *(pde.GetBaseProblem().GetSpaceTimeHandler()), cell,
             this->GetParamData(), this->GetDomainData());
-        auto& cdc = _idc.GetCellDataContainer();
+        auto& cdc = GetIntegratorDataContainer().GetCellDataContainer();
 
 #if deal_II_dimension == 2 || deal_II_dimension == 3
         bool need_faces = pde.HasFaces();
         bool need_interfaces = pde.HasInterfaces();
         std::vector<unsigned int> boundary_equation_colors = pde.GetBoundaryEquationColors();
         bool need_boundary_integrals = (boundary_equation_colors.size() > 0);
-        _idc.InitializeFDC(pde.GetFaceUpdateFlags(),
+        GetIntegratorDataContainer().InitializeFDC(pde.GetFaceUpdateFlags(),
             *(pde.GetBaseProblem().GetSpaceTimeHandler()),
             cell,
             this->GetParamData(),
             this->GetDomainData(),
             need_interfaces);
-        auto & fdc = _idc.GetFaceDataContainer();
+        auto & fdc = GetIntegratorDataContainer().GetFaceDataContainer();
 
 #endif
 
@@ -325,9 +331,9 @@ namespace DOpE
                   pde.InterfaceEquation(fdc, local_cell_vector);
                 }
 
-              }//endif atinterface
-            }//endfor faces
-          }//endif need_interfaces
+              }                  //endif atinterface
+            }                  //endfor faces
+          }                  //endif need_interfaces
 #endif
           //LocalToGlobal
           cell[0]->get_dof_indices(local_dof_indices);
@@ -368,18 +374,17 @@ namespace DOpE
           std::vector<unsigned int> local_dof_indices;
 
           const auto& dof_handler =
-          pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandler();
-          auto
-          cell =
-          pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandlerBeginActive();
+              pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandler();
+          auto cell =
+              pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandlerBeginActive();
           auto endc =
-          pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandlerEnd();
+              pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandlerEnd();
 
           // Generate the data containers.
-          _idc.InitializeCDC(pde.GetUpdateFlags(),
+          GetIntegratorDataContainer().InitializeCDC(pde.GetUpdateFlags(),
               *(pde.GetBaseProblem().GetSpaceTimeHandler()), cell,
               this->GetParamData(), this->GetDomainData());
-          auto& cdc = _idc.GetCellDataContainer();
+          auto& cdc = GetIntegratorDataContainer().GetCellDataContainer();
           //            CellDataContainer<dealii::DoFHandler<dim>, VECTOR, dim> cdc(
           //                *(this->GetQuadratureFormula()), pde.GetUpdateFlags(),
           //                *(pde.GetBaseProblem().GetSpaceTimeHandler()), cell, this->GetParamData(),
@@ -391,13 +396,13 @@ namespace DOpE
           std::vector<unsigned int> boundary_equation_colors = pde.GetBoundaryEquationColors();
           bool need_boundary_integrals = (boundary_equation_colors.size() > 0);
 
-          _idc.InitializeFDC(pde.GetFaceUpdateFlags(),
+          GetIntegratorDataContainer().InitializeFDC(pde.GetFaceUpdateFlags(),
               *(pde.GetBaseProblem().GetSpaceTimeHandler()),
               cell,
               this->GetParamData(),
               this->GetDomainData(),
               need_interfaces);
-          auto & fdc = _idc.GetFaceDataContainer();
+          auto & fdc = GetIntegratorDataContainer().GetFaceDataContainer();
 #endif
 
           for (; cell[0] != endc[0]; cell[0]++)
@@ -493,9 +498,9 @@ namespace DOpE
                     fdc.ReInitNbr();
                     pde.InterfaceEquation(fdc, local_cell_vector);
                   }
-                }//endif atinterface
-              }//endfor face
-            }//endif need_interfaces
+                }                    //endif atinterface
+              }                    //endfor face
+            }                    //endif need_interfaces
 #endif
             //LocalToGlobal
             cell[0]->get_dof_indices(local_dof_indices);
@@ -530,36 +535,35 @@ namespace DOpE
         {
           residual = 0.;
           // Begin integration
-          unsigned int dofs_per_cell;// = pde.GetFESystem().dofs_per_cell;
+          unsigned int dofs_per_cell;      // = pde.GetFESystem().dofs_per_cell;
 
-          dealii::Vector<SCALAR> local_cell_vector;//(dofs_per_cell);
+          dealii::Vector<SCALAR> local_cell_vector;           //(dofs_per_cell);
 
-          std::vector<unsigned int> local_dof_indices;//(dofs_per_cell);
+          std::vector<unsigned int> local_dof_indices;        //(dofs_per_cell);
 
           const auto& dof_handler =
-          pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandler();
-          auto
-          cell =
-          pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandlerBeginActive();
+              pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandler();
+          auto cell =
+              pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandlerBeginActive();
           auto endc =
-          pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandlerEnd();
+              pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandlerEnd();
 
           // Initialize the data containers.
-          _idc.InitializeCDC(pde.GetUpdateFlags(),
+          GetIntegratorDataContainer().InitializeCDC(pde.GetUpdateFlags(),
               *(pde.GetBaseProblem().GetSpaceTimeHandler()), cell,
               this->GetParamData(), this->GetDomainData());
-          auto& cdc = _idc.GetCellDataContainer();
+          auto& cdc = GetIntegratorDataContainer().GetCellDataContainer();
 #if deal_II_dimension == 2 || deal_II_dimension == 3
           bool need_faces = pde.HasFaces();
           std::vector<unsigned int> boundary_equation_colors = pde.GetBoundaryEquationColors();
           bool need_boundary_integrals = (boundary_equation_colors.size() > 0);
 
-          _idc.InitializeFDC(pde.GetFaceUpdateFlags(),
+          GetIntegratorDataContainer().InitializeFDC(pde.GetFaceUpdateFlags(),
               *(pde.GetBaseProblem().GetSpaceTimeHandler()),
               cell,
               this->GetParamData(),
               this->GetDomainData());
-          auto & fdc = _idc.GetFaceDataContainer();
+          auto & fdc = GetIntegratorDataContainer().GetFaceDataContainer();
 #endif
 
           for (; cell[0] != endc[0]; cell[0]++)
@@ -646,17 +650,16 @@ namespace DOpE
         std::vector<unsigned int> local_dof_indices;
 
         const auto& dof_handler =
-        pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandler();
-        auto
-        cell =
-        pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandlerBeginActive();
+            pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandler();
+        auto cell =
+            pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandlerBeginActive();
         auto endc =
-        pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandlerEnd();
+            pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandlerEnd();
 
-        _idc.InitializeCDC(pde.GetUpdateFlags(),
+        GetIntegratorDataContainer().InitializeCDC(pde.GetUpdateFlags(),
             *(pde.GetBaseProblem().GetSpaceTimeHandler()), cell,
             this->GetParamData(), this->GetDomainData());
-        auto& cdc = _idc.GetCellDataContainer();
+        auto& cdc = GetIntegratorDataContainer().GetCellDataContainer();
 
 #if deal_II_dimension == 2 || deal_II_dimension == 3
         //for the interface-case
@@ -691,8 +694,8 @@ namespace DOpE
           cdc.ReInit();
           dofs_per_cell = cell[0]->get_fe().dofs_per_cell;
 
-          dealii::FullMatrix<SCALAR>
-          local_cell_matrix(dofs_per_cell, dofs_per_cell);
+          dealii::FullMatrix<SCALAR> local_cell_matrix(dofs_per_cell,
+              dofs_per_cell);
           local_cell_matrix = 0;
 
           local_dof_indices.resize(0);
@@ -803,10 +806,10 @@ namespace DOpE
                     } //endfor j
                   } //endfor i
                 }
-              }//endif atinterface
+              } //endif atinterface
 
             }
-          }//endif need_interfaces
+          } //endif need_interfaces
 #endif
 
           //LocalToGlobal
@@ -838,16 +841,15 @@ namespace DOpE
           SCALAR ret = 0.;
 
           const auto& dof_handler =
-          pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandler();
-          auto
-          cell =
-          pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandlerBeginActive();
+              pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandler();
+          auto cell =
+              pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandlerBeginActive();
           auto endc =
-          pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandlerEnd();
-          _idc.InitializeCDC(pde.GetUpdateFlags(),
+              pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandlerEnd();
+          GetIntegratorDataContainer().InitializeCDC(pde.GetUpdateFlags(),
               *(pde.GetBaseProblem().GetSpaceTimeHandler()), cell,
               this->GetParamData(), this->GetDomainData());
-          auto& cdc = _idc.GetCellDataContainer();
+          auto& cdc = GetIntegratorDataContainer().GetCellDataContainer();
 
           bool need_faces = pde.HasFaces();
 
@@ -910,7 +912,7 @@ namespace DOpE
 #else
           PROBLEM& /*pde*/
 #endif
-      )
+          )
       {
         {
           SCALAR ret = 0.;
@@ -921,12 +923,12 @@ namespace DOpE
           auto cell = pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandlerBeginActive();
           auto endc = pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandlerEnd();
 
-          _idc.InitializeFDC(pde.GetFaceUpdateFlags(),
+          GetIntegratorDataContainer().InitializeFDC(pde.GetFaceUpdateFlags(),
               *(pde.GetBaseProblem().GetSpaceTimeHandler()),
               cell,
               this->GetParamData(),
               this->GetDomainData());
-          auto & fdc = _idc.GetFaceDataContainer();
+          auto & fdc = GetIntegratorDataContainer().GetFaceDataContainer();
 
           std::vector<unsigned int> boundary_functional_colors = pde.GetBoundaryFunctionalColors();
           bool need_boundary_integrals = (boundary_functional_colors.size() > 0);
@@ -985,7 +987,7 @@ namespace DOpE
 #else
           PROBLEM& /*pde*/
 #endif
-      )
+          )
       {
 
         {
@@ -997,12 +999,12 @@ namespace DOpE
           auto cell = pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandlerBeginActive();
           auto endc = pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandlerEnd();
 
-          _idc.InitializeFDC(pde.GetFaceUpdateFlags(),
+          GetIntegratorDataContainer().InitializeFDC(pde.GetFaceUpdateFlags(),
               *(pde.GetBaseProblem().GetSpaceTimeHandler()),
               cell,
               this->GetParamData(),
               this->GetDomainData());
-          auto & fdc = _idc.GetFaceDataContainer();
+          auto & fdc = GetIntegratorDataContainer().GetFaceDataContainer();
 
           bool need_faces = pde.HasFaces();
           if(!need_faces)
@@ -1124,7 +1126,8 @@ namespace DOpE
 
           InterpolateBoundaryValues(
               pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandler()[0],
-              color, pde.GetDirichletValues(color, this->GetParamData(),
+              color,
+              pde.GetDirichletValues(color, this->GetParamData(),
                   this->GetDomainData()), boundary_values, comp_mask);
 
           for (typename std::map<unsigned int, SCALAR>::const_iterator p =
@@ -1207,10 +1210,12 @@ namespace DOpE
     {
       if (_domain_data.find(name) != _domain_data.end())
       {
-        throw DOpEException("Adding multiple Data with name " + name
-            + " is prohibited!", "Integrator::AddDomainData");
+        throw DOpEException(
+            "Adding multiple Data with name " + name + " is prohibited!",
+            "Integrator::AddDomainData");
       }
-      _domain_data.insert(std::pair<std::string, const VECTOR*>(name, new_data));
+      _domain_data.insert(
+          std::pair<std::string, const VECTOR*>(name, new_data));
     }
 
   /*******************************************************************************************/
@@ -1225,8 +1230,9 @@ namespace DOpE
           _domain_data.find(name);
       if (it == _domain_data.end())
       {
-        throw DOpEException("Deleting Data " + name
-            + " is impossible! Data not found", "Integrator::DeleteDomainData");
+        throw DOpEException(
+            "Deleting Data " + name + " is impossible! Data not found",
+            "Integrator::DeleteDomainData");
       }
       _domain_data.erase(it);
     }
@@ -1251,11 +1257,13 @@ namespace DOpE
     {
       if (_param_data.find(name) != _param_data.end())
       {
-        throw DOpEException("Adding multiple Data with name " + name
-            + " is prohibited!", "Integrator::AddParamData");
+        throw DOpEException(
+            "Adding multiple Data with name " + name + " is prohibited!",
+            "Integrator::AddParamData");
       }
-      _param_data.insert(std::pair<std::string, const dealii::Vector<SCALAR>*>(
-          name, new_data));
+      _param_data.insert(
+          std::pair<std::string, const dealii::Vector<SCALAR>*>(name,
+              new_data));
     }
 
   /*******************************************************************************************/
@@ -1266,12 +1274,13 @@ namespace DOpE
     Integrator<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::DeleteParamData(
         std::string name)
     {
-      typename std::map<std::string, const dealii::Vector<SCALAR>*>::iterator
-          it = _param_data.find(name);
+      typename std::map<std::string, const dealii::Vector<SCALAR>*>::iterator it =
+          _param_data.find(name);
       if (it == _param_data.end())
       {
-        throw DOpEException("Deleting Data " + name
-            + " is impossible! Data not found", "Integrator::DeleteParamData");
+        throw DOpEException(
+            "Deleting Data " + name + " is impossible! Data not found",
+            "Integrator::DeleteParamData");
       }
       _param_data.erase(it);
     }
@@ -1285,6 +1294,270 @@ namespace DOpE
     {
       return _param_data;
     }
+
+
+  /*******************************************************************************************/
+
+  template<typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR,
+      int dim>
+    template<typename PROBLEM, class STH, class CDC, class FDC>
+      void
+      Integrator<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::ComputeRefinementIndicators(
+          PROBLEM& pde,
+          HigherOrderDWRContainer<STH, INTEGRATORDATACONT, CDC, FDC, VECTOR>& dwrc)
+      {
+        //for primal and dual part of the error
+        std::vector<double> cell_sum(2, 0);
+        cell_sum.resize(2, 0);
+        // Begin integration
+        const auto& dof_handler =
+            pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandler();
+        auto cell =
+            pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandlerBeginActive();
+        auto endc =
+            pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandlerEnd();
+
+        const auto& dof_handler_high = dwrc.GetHigherOrderSTH().GetDoFHandler();
+        auto cell_high = dwrc.GetHigherOrderSTH().GetDoFHandlerBeginActive();
+        auto endc_high = dwrc.GetHigherOrderSTH().GetDoFHandlerEnd();
+
+        // Generate the data containers. Notice that we use the quadrature
+        //formula from the higher order idc!.
+        GetIntegratorDataContainer().InitializeCDC(
+            dwrc.GetHigherOrderIDC().GetQuad(),
+            pde.GetUpdateFlags(),
+            *(pde.GetBaseProblem().GetSpaceTimeHandler()),
+            cell,
+            this->GetParamData(),
+            this->GetDomainData());
+        auto& cdc = GetIntegratorDataContainer().GetCellDataContainer();
+
+        dwrc.GetHigherOrderIDC().InitializeCDC(
+            pde.GetUpdateFlags(),
+            dwrc.GetHigherOrderSTH(),
+            cell_high,
+            this->GetParamData(),
+            dwrc.GetWeightData());
+        auto& cdc_weight = dwrc.GetCellWeight();
+
+#if deal_II_dimension == 2 || deal_II_dimension == 3
+
+        //we want to integrate the face-terms only once
+        typename std::map<typename dealii::Triangulation<dim>::face_iterator,std::vector<double> >
+        face_integrals;
+        //initialize the map
+        auto cell_it = cell[0];
+        std::vector<double> face_init(2,-1e20);
+        for (; cell_it != endc[0]; cell_it++)
+        {
+          for (unsigned int face_no=0;face_no<GeometryInfo<dim>::faces_per_cell; ++face_no)
+          {
+            face_integrals[cell_it->face(face_no)] = face_init;
+          }
+        }
+
+//        bool need_faces = pde.HasFaces();
+//        bool need_interfaces = pde.HasInterfaces();
+//        std::vector<unsigned int> boundary_equation_colors = pde.GetBoundaryEquationColors();
+//        bool need_boundary_integrals = (boundary_equation_colors.size() > 0);
+
+        GetIntegratorDataContainer().InitializeFDC(dwrc.GetHigherOrderIDC().GetFaceQuad(),
+            pde.GetFaceUpdateFlags(),
+            *(pde.GetBaseProblem().GetSpaceTimeHandler()),
+            cell,
+            this->GetParamData(),
+            this->GetDomainData(),
+            true);
+        auto & fdc = GetIntegratorDataContainer().GetFaceDataContainer();
+
+        dwrc.GetHigherOrderIDC().InitializeFDC(pde.GetFaceUpdateFlags(),
+            dwrc.GetHigherOrderSTH(),
+            cell_high,
+            this->GetParamData(),
+            dwrc.GetWeightData(),
+            true);
+        auto& fdc_weight = dwrc.GetFaceWeight();
+
+#endif
+
+        for (unsigned int cell_index = 0; cell[0] != endc[0];
+            cell[0]++, cell_index++)
+        {
+          for (unsigned int dh = 1; dh < dof_handler.size(); dh++)
+          {
+            if (cell[dh] == endc[dh])
+            {
+              throw DOpEException(
+                  "Cellnumbers in DoFHandlers are not matching!",
+                  "Integrator::ComputeRefinementIndicators");
+            }
+          }
+          for (unsigned int dh = 0; dh < dof_handler_high.size(); dh++)
+          {
+            if (cell_high[dh] == endc_high[dh])
+            {
+              throw DOpEException(
+                  "Cellnumbers in DoFHandlers are not matching!",
+                  "Integrator::ComputeRefinementIndicators");
+            }
+          }
+
+          cell_sum.clear();
+          cell_sum.resize(2, 0);
+
+          cdc.ReInit();
+          cdc_weight.ReInit();
+
+          //first the cell-residual
+////
+//          //the second '-1' plays only a role in the stationary case. In the non-stationary
+//          //case, scale_ico is set by the time-stepping-scheme
+          pde.CellErrorContribution(cdc, dwrc, cell_sum, 1., 1.);
+          dwrc.GetPrimalErrorIndicators()[cell_index] = cell_sum[0];
+          dwrc.GetDualErrorIndicators()[cell_index] = cell_sum[1];
+          cell_sum.clear();
+          cell_sum.resize(2, 0);
+          //Now to the face terms. We compute them only once for each face and distribute the
+          //afterwards. We choose always to work from the coarser cell, if both neigbors of the
+          //face are on the same level, we pick the one with the lower index
+#if deal_II_dimension == 2 || deal_II_dimension == 3
+//          if(cell[0]->at_boundary())
+//          {
+//            for (unsigned int face=0; face < dealii::GeometryInfo<dim>::faces_per_cell; ++face)
+//            {
+//              if (cell[0]->face(face)->at_boundary())
+//              {
+//                fdc.ReInit(face);
+//                dwrc.GetFaceWeight().ReInit(face);
+//                pde.BoundaryErrorContribution(fdc, dwrc, cell_sum, 1.);
+//                face_integrals[(cell[0]->face(face)] = cell_sum;
+//                cell_sum.clear();
+//                cell_sum.resize(2,0);
+//              }
+//            }
+//          }
+//          else
+//          {
+          for (unsigned int face=0; face < dealii::GeometryInfo<dim>::faces_per_cell; ++face)
+          {
+            auto face_it = cell[0]->face(face);
+
+
+            //check if the face lies at a boundary
+            if(face_it->at_boundary())
+            {
+              fdc.ReInit(face);
+              dwrc.GetFaceWeight().ReInit(face);
+              pde.BoundaryErrorContribution(fdc, dwrc, cell_sum, 1.);
+
+              Assert (face_integrals.find (cell[0]->face(face)) != face_integrals.end(),
+                  ExcInternalError());
+              Assert (face_integrals[cell[0]->face(face)] == face_init,
+                  ExcInternalError());
+              face_integrals[cell[0]->face(face)] = cell_sum;
+              cell_sum.clear();
+              cell_sum.resize(2,0.);
+            }
+            else
+            {
+              //There exist now 3 different scenarios, given the actual cell and face:
+              // The neighbour behind this face is [ more | as much | less] refined
+              // than/as the actual cell. We have to distinguish here only between the case 1
+              // and the other two, because these will be distinguished in in the FaceDataContainer.
+              if (cell[0]->neighbor(face)->has_children())
+              {
+                //first: neighbour is finer
+                std::vector<double> sum(2,0.);
+                for (unsigned int subface_no=0;
+                    subface_no < cell[0]->face(face)->n_children();
+                    ++subface_no)
+                {
+                  //TODO Now here we have to initialise the subface_values on the
+                  // actual cell and then the facevalues of the neighbours
+                  fdc.ReInit(face, subface_no);
+                  fdc.ReInitNbr();
+                  dwrc.GetFaceWeight().ReInit(face, subface_no);
+
+                  pde.FaceErrorContribution(fdc, dwrc, cell_sum, 1.);
+                  sum[0]= cell_sum[0];
+                  sum[1]= cell_sum[1];
+                  cell_sum.clear();
+                  cell_sum.resize(2,0);
+                  face_integrals[cell[0]->neighbor_child_on_subface(face, subface_no)
+                                 ->face(cell[0]->neighbor_of_neighbor(face))] = cell_sum;
+                  cell_sum.clear();
+                  cell_sum.resize(2,0.);
+                }
+
+
+                Assert (face_integrals.find (cell[0]->face(face)) != face_integrals.end(),
+                    ExcInternalError());
+                Assert (face_integrals[cell[0]->face(face)] == face_init,
+                    ExcInternalError());
+
+                face_integrals[cell[0]->face(face)] = sum;
+
+              }
+              else
+              {
+                // either neighbor is as fine as this cell or
+                // it is coarser
+                Assert(cell[0]->neighbor(face)->level() <= cell[0]->level(),ExcInternalError());
+                //now we work always from the coarser cell. if both cells
+                //are on the same level, we pick the one with the lower index
+                if(cell[0]->level() == cell[0]->neighbor(face)->level()
+                    && cell[0]->index() < cell[0]->neighbor(face)->index())
+                {
+                  fdc.ReInit(face);
+                  fdc.ReInitNbr();
+                  dwrc.GetFaceWeight().ReInit(face);
+
+                  pde.FaceErrorContribution(fdc, dwrc, cell_sum, 1.);
+                  Assert (face_integrals.find (cell[0]->face(face)) != face_integrals.end(),
+                      ExcInternalError());
+                  Assert (face_integrals[cell[0]->face(face)] == face_init,
+                      ExcInternalError());
+
+                  face_integrals[cell[0]->face(face)] = cell_sum;
+                  cell_sum.clear();
+                  cell_sum.resize(2,0);
+                }
+              }
+            }
+          }                  //endfor faces
+//          }//end else
+
+#endif
+          for (unsigned int dh = 1; dh < dof_handler.size(); dh++)
+          {
+            cell[dh]++;
+          }
+          for (unsigned int dh = 0; dh < dof_handler_high.size(); dh++)
+          {
+            cell_high[dh]++;
+          }
+        }                  //endfor cell
+#if deal_II_dimension == 2 || deal_II_dimension == 3
+        //now we have to incorporate the face and boundary_values
+        //into
+        unsigned int present_cell = 0;
+        cell =
+        pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandlerBeginActive();
+        for (;
+            cell !=endc; ++cell[0], ++present_cell)
+        for (unsigned int face_no = 0;
+            face_no < GeometryInfo<dim>::faces_per_cell; ++face_no)
+        {
+          Assert(
+              face_integrals.find(cell[0]->face(face_no)) != face_integrals.end(),
+              ExcInternalError());
+          dwrc.GetPrimalErrorIndicators()[present_cell] -=
+          0.5 * face_integrals[cell[0]->face(face_no)][0];
+          dwrc.GetDualErrorIndicators()[present_cell] -=
+          0.5 * face_integrals[cell[0]->face(face_no)][1];
+        }
+#endif
+      }
 
   /*******************************************************************************************/
 
@@ -1305,11 +1578,11 @@ namespace DOpE
       Integrator<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::InterpolateBoundaryValues(
           const DOpEWrapper::DoFHandler<dim, DOFHANDLER>* dof_handler,
           const unsigned int color, const dealii::Function<dim>& function,
-          std::map<unsigned int, SCALAR>& boundary_values, const std::vector<
-              bool>& comp_mask) const
+          std::map<unsigned int, SCALAR>& boundary_values,
+          const std::vector<bool>& comp_mask) const
       {
         dealii::VectorTools::interpolate_boundary_values(
-            *(static_cast<const DOFHANDLER*> (dof_handler)), color, function,
+            *(static_cast<const DOFHANDLER*>(dof_handler)), color, function,
             boundary_values, comp_mask);
       }
 }

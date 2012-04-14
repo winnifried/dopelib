@@ -6,7 +6,7 @@
 #include "controlvector.h"
 #include "constraintvector.h"
 #include "reducedprobleminterface.h"
-#include "dopetypes.h"
+#include "dwrdatacontainer.h"
 
 #include <assert.h>
 
@@ -37,7 +37,7 @@ namespace DOpE
           _base_priority = base_priority;
           _post_index = "_" + this->GetProblem()->GetName();
         }
-        ~PDEProblemInterface()
+        virtual ~PDEProblemInterface()
         {
         }
 
@@ -65,28 +65,25 @@ namespace DOpE
 
         /******************************************************/
 
-        /**
-         * Basic function to compute the error indicators with
-         * the DWR method and higher order interpolation to gain the weights.
-         * We assume that the state is already computed,
-         * whereas the dual solution will be computed inside this function.
-         *
-         * @param ref_ind           The Vector in which the function writes
-         *                          the error indicators on the different cells.
-         *                          This vector is resized to the number of cells
-         *                          of the actual grid.
-         * @param ee_state          Which terms of the error Identity should get computed
-         *                          (i.e. primal-term, dual-term, both)?
-         * @param weight_comp       How to compute the weights?
-         *
-         * @return                  The error in the previously specified functional.
-         *
-         */
-        virtual float
-        ComputeRefinementIndicators(Vector<float>& ref_ind,
-            DOpEtypes::EE_state ee_state = DOpEtypes::EE_state::mixed,
-            DOpEtypes::WeightComputation weight_comp =
-                DOpEtypes::WeightComputation::higher_order_interpolation) = 0;
+//        /**
+//         * Basic function to compute the error indicators with
+//         * the DWR method and higher order interpolation to gain the weights.
+//         * We assume that the state is already computed,
+//         * whereas the dual solution will be computed inside this function.
+//         *
+//         * @param ref_ind           The Vector in which the function writes
+//         *                          the error indicators on the different cells.
+//         *                          This vector is resized to the number of cells
+//         *                          of the actual grid.
+//         * @param ee_state          Which terms of the error Identity should get computed
+//         *                          (i.e. primal-term, dual-term, both)?
+//         * @param weight_comp       How to compute the weights?
+//         *
+//         * @return                  The error in the previously specified functional.
+//         *
+//         */
+//        virtual void
+//        ComputeRefinementIndicators(DWRDataContainerBase<VECTOR>& dwrc) = 0;
 
         /******************************************************/
         /**
@@ -97,6 +94,14 @@ namespace DOpE
         SetProblemType(std::string type, unsigned int num = 0)
         {
           this->GetProblem()->SetType(type, num);
+        }
+
+        template<class DWRC>
+        void InitializeHigherOrderDWRC(DWRC& dwrc)
+        {
+            dwrc.Initialize(GetProblem()->GetSpaceTimeHandler(),
+                GetProblem()->GetStateNBlocks(),
+                GetProblem()->GetStateBlockComponent());
         }
 
       protected:

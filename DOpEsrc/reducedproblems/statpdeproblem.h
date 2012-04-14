@@ -73,6 +73,7 @@ namespace DOpE
               ParameterReader &param_reader, CONTROLINTEGRATORCONT& c_idc,
               STATEINTEGRATORDATACONT & s_idc, int base_priority = 0);
 
+        virtual
         ~StatPDEProblem();
 
         /******************************************************/
@@ -109,11 +110,11 @@ namespace DOpE
         /**
          * Implementation of virtual function of base class.
          */
-        float
-        ComputeRefinementIndicators(Vector<float>& ref_ind,
-            DOpEtypes::EE_state ee_state = DOpEtypes::EE_state::mixed,
-            DOpEtypes::WeightComputation weight_comp =
-                DOpEtypes::WeightComputation::higher_order_interpolation);
+//        virtual void
+//        ComputeRefinementIndicators(DWRDataContainerBase<VECTOR>& dwrc);
+        template<class DWRC>
+          void
+          ComputeRefinementIndicators(DWRC& dwrc);
 
         /******************************************************/
 
@@ -169,11 +170,12 @@ namespace DOpE
          *  Doesn't make sense here so aborts if called!
          */
         void
-        WriteToFile(const std::vector<double> &v __attribute__((unused)), std::string outfile __attribute__((unused)))
+        WriteToFile(const std::vector<double> &v __attribute__((unused)),
+            std::string outfile __attribute__((unused)))
         {
           abort();
         }
-	//FIXME: Use SolutionExtractor instead
+        //FIXME: Use SolutionExtractor instead
         const StateVector<VECTOR> &
         GetZforEE_Const() const
         {
@@ -200,7 +202,7 @@ namespace DOpE
          *
          */
         void
-        ComputeDualForErrorEstimation();
+        ComputeDualForErrorEstimation(DOpEtypes::WeightComputation);
 
         /******************************************************/
         /**
@@ -251,8 +253,11 @@ namespace DOpE
         bool _state_reinit;
         bool _adjoint_reinit;
 
-        friend class SolutionExtractor<StatPDEProblem<NONLINEARSOLVER,
-            INTEGRATOR, PROBLEM, VECTOR, dealdim> , VECTOR> ;
+        std::map<std::string, double> _functional_values;
+
+        friend class SolutionExtractor<
+            StatPDEProblem<NONLINEARSOLVER, INTEGRATOR, PROBLEM, VECTOR, dealdim>,
+            VECTOR> ;
     };
 
   /*************************************************************************/
@@ -277,13 +282,12 @@ namespace DOpE
       StatPDEProblem<NONLINEARSOLVER, INTEGRATOR, PROBLEM, VECTOR, dealdim>::StatPDEProblem(
           PROBLEM *OP, std::string state_behavior,
           ParameterReader &param_reader, INTEGRATORDATACONT& idc,
-          int base_priority) :
-        PDEProblemInterface<PROBLEM, VECTOR, dealdim> (OP, base_priority), _u(
-            OP->GetSpaceTimeHandler(), state_behavior, param_reader),
-            _z_for_ee(OP->GetSpaceTimeHandler(), state_behavior, param_reader),
-            _integrator(idc),
-            _nonlinear_state_solver(_integrator, param_reader),
-            _nonlinear_adjoint_solver(_integrator, param_reader)
+          int base_priority)
+          : PDEProblemInterface<PROBLEM, VECTOR, dealdim>(OP, base_priority), _u(
+              OP->GetSpaceTimeHandler(), state_behavior, param_reader), _z_for_ee(
+              OP->GetSpaceTimeHandler(), state_behavior, param_reader), _integrator(
+              idc), _nonlinear_state_solver(_integrator, param_reader), _nonlinear_adjoint_solver(
+              _integrator, param_reader)
       {
         //PDEProblems should be ReInited
         {
@@ -331,7 +335,7 @@ namespace DOpE
     void
     StatPDEProblem<NONLINEARSOLVER, INTEGRATOR, PROBLEM, VECTOR, dealdim>::ReInit()
     {
-      PDEProblemInterface<PROBLEM, VECTOR, dealdim>::ReInit();
+      PDEProblemInterface < PROBLEM, VECTOR, dealdim > ::ReInit();
 
       //Some Solvers must be reinited when called
       // Better have subproblems, so that solver can be reinited here
@@ -373,8 +377,8 @@ namespace DOpE
 
       this->GetProblem()->DeleteAuxiliaryFromIntegrator(this->GetIntegrator());
 
-      this->GetOutputHandler()->Write((GetU().GetSpacialVector()), "State"
-          + this->GetPostIndex(), problem.GetDoFType());
+      this->GetOutputHandler()->Write((GetU().GetSpacialVector()),
+          "State" + this->GetPostIndex(), problem.GetDoFType());
 
     }
 
@@ -384,18 +388,13 @@ namespace DOpE
       typename VECTOR, int dealdim>
     void
     StatPDEProblem<NONLINEARSOLVER, INTEGRATOR, PROBLEM, VECTOR, dealdim>::ComputeDualForErrorEstimation(
-        /*DOpEtypes::WeightComputation weight_comp*/)
+        DOpEtypes::WeightComputation weight_comp)
     {
-      DOpEtypes::WeightComputation weight_comp = DOpEtypes::higher_order_interpolation;//kann dann weg, nur zum Test
-      this->GetOutputHandler()->Write("Computing Dual for Error Estimation:", 4
-          + this->GetBasePriority());
+      this->GetOutputHandler()->Write("Computing Dual for Error Estimation:",
+          4 + this->GetBasePriority());
       if (weight_comp == DOpEtypes::higher_order_interpolation)
       {
         this->SetProblemType("adjoint_for_ee");
-      }
-      else if (weight_comp == DOpEtypes::higher_order_computation)
-      {
-        this->SetProblemType("adjoint_for_ee_ho");
       }
       else
       {
@@ -403,7 +402,7 @@ namespace DOpE
             "StatPDEProblem::ComputeDualForErrorEstimation");
       }
 
-      //      auto& problem = this->GetProblem()->GetStateProblem();
+      //      auto& problem = this->GetProblem()->GetStateProblem();//Hier ist adjoint problem einzufuegen
       auto& problem = *(this->GetProblem());
       if (_adjoint_reinit == true)
       {
@@ -413,11 +412,11 @@ namespace DOpE
 
       this->GetProblem()->AddAuxiliaryToIntegrator(this->GetIntegrator());
 
-      this->GetIntegrator().AddDomainData("state", &(GetU().GetSpacialVector())); //&(GetU().GetSpacialVector())
+      this->GetIntegrator().AddDomainData("state",
+          &(GetU().GetSpacialVector()));
 
-
-      _build_adjoint_matrix
-          = this->GetNonlinearSolver("adjoint_for_ee").NonlinearSolve(problem,
+      _build_adjoint_matrix =
+          this->GetNonlinearSolver("adjoint_for_ee").NonlinearSolve(problem,
               (GetZForEE().GetSpacialVector()), true, _build_adjoint_matrix);
 
       this->GetIntegrator().DeleteDomainData("state");
@@ -438,12 +437,13 @@ namespace DOpE
     {
       this->ComputeReducedState();
 
-      this->GetOutputHandler()->Write("Computing Functionals:", 4
-          + this->GetBasePriority());
+      this->GetOutputHandler()->Write("Computing Functionals:",
+          4 + this->GetBasePriority());
 
       this->GetProblem()->AddAuxiliaryToIntegrator(this->GetIntegrator());
 
-      this->GetIntegrator().AddDomainData("state", &(GetU().GetSpacialVector()));
+      this->GetIntegrator().AddDomainData("state",
+          &(GetU().GetSpacialVector()));
 
       for (unsigned int i = 0; i < this->GetProblem()->GetNFunctionals(); i++)
       {
@@ -462,8 +462,8 @@ namespace DOpE
             != std::string::npos)
         {
           found = true;
-          ret
-              += this->GetIntegrator().ComputePointScalar(*(this->GetProblem()));
+          ret += this->GetIntegrator().ComputePointScalar(
+              *(this->GetProblem()));
         }
         if (this->GetProblem()->GetFunctionalType().find("boundary")
             != std::string::npos)
@@ -481,8 +481,9 @@ namespace DOpE
 
         if (!found)
         {
-          throw DOpEException("Unknown Functional Type: "
-              + this->GetProblem()->GetFunctionalType(),
+          throw DOpEException(
+              "Unknown Functional Type: "
+                  + this->GetProblem()->GetFunctionalType(),
               "StatPDEProblem::ComputeReducedFunctionals");
         }
         this->GetFunctionalValues()[i].push_back(ret);
@@ -500,38 +501,62 @@ namespace DOpE
 
   template<typename NONLINEARSOLVER, typename INTEGRATOR, typename PROBLEM,
       typename VECTOR, int dealdim>
-    float
-    StatPDEProblem<NONLINEARSOLVER, INTEGRATOR, PROBLEM, VECTOR, dealdim>::ComputeRefinementIndicators(
-        Vector<float>& /*error_ind*/, DOpEtypes::EE_state ee_state,
-        DOpEtypes::WeightComputation weight_comp)
-    {
+    template<class DWRC>
+      void
+      StatPDEProblem<NONLINEARSOLVER, INTEGRATOR, PROBLEM, VECTOR, dealdim>::ComputeRefinementIndicators(
+          DWRC& dwrc)
+//    StatPDEProblem<NONLINEARSOLVER, INTEGRATOR, PROBLEM, VECTOR, dealdim>::ComputeRefinementIndicators(
+//        DWRDataContainerBase<VECTOR>& dwrc)
+      {
+        //first we reinit the dwrdatacontainer (this
+        //sets the weight-vectors to their correct length)
+        const unsigned int n_cells =
+            this->GetProblem()->GetSpaceTimeHandler()->GetStateDoFHandler().get_tria().n_active_cells();
+        dwrc.ReInit(n_cells);
+        //If we need the dual solution, compute it
+        if (dwrc.NeedDual())
+          this->ComputeDualForErrorEstimation(dwrc.GetWeightComputation());
 
-      this->ComputeDualForErrorEstimation();
+        //some output
+        this->GetOutputHandler()->Write("Computing Error Indicators:",
+            4 + this->GetBasePriority());
 
-      this->GetOutputHandler()->Write("Computing Error Indicators:", 4
-          + this->GetBasePriority());
+        this->GetProblem()->AddAuxiliaryToIntegrator(this->GetIntegrator());
 
-      this->GetProblem()->AddAuxiliaryToIntegrator(this->GetIntegrator());
+        //add the primal and (if needed) dual solution to the integrator
+        this->GetIntegrator().AddDomainData("state",
+            &(GetU().GetSpacialVector()));
+        if (dwrc.NeedDual())
+          this->GetIntegrator().AddDomainData("adjoint_for_ee",
+              &(GetZForEE().GetSpacialVector()));
 
-      this->GetIntegrator().AddDomainData("state", &(GetU().GetSpacialVector()));
-      this->GetIntegrator().AddDomainData("adjoint_for_ee",
-          &(GetZForEE().GetSpacialVector()));
+        this->SetProblemType("error_evaluation");
 
-      float error = 0;
-      this->SetProblemType("functional_for_ee");//TODO Wie genau der Uebertrag hier passieren soll.
-      //    float error = this->GetIntegrator().ComputeRefinementIndicators(*this->GetProblem());
+        //prepare the weights...
+        dwrc.PrepareWeights(GetU(), GetZForEE());
 
-      this->GetIntegrator().DeleteDomainData("state");
-      this->GetIntegrator().DeleteDomainData("adjoint_for_ee");
-      this->GetProblem()->DeleteAuxiliaryFromIntegrator(this->GetIntegrator());
+        //now we finally compute the refinement indicators
+        this->GetIntegrator().ComputeRefinementIndicators(*this->GetProblem(),
+            dwrc);
 
-      std::stringstream out;
-      out << "Error in " << this->GetProblem()->GetFunctionalName() << ": "
-          << error;
-      this->GetOutputHandler()->Write(out, 2 + this->GetBasePriority());
+        // release the lock on the refinement indicators (see dwrcontainer.h)
+        dwrc.ReleaseLock();
 
-      return error;
-    }
+        const float error = dwrc.GetError();
+
+        // clear the data
+        this->GetIntegrator().DeleteDomainData("state");
+        if (dwrc.NeedDual())
+          this->GetIntegrator().DeleteDomainData("adjoint_for_ee");
+        this->GetProblem()->DeleteAuxiliaryFromIntegrator(
+            this->GetIntegrator());
+        dwrc.ClearWeightData();
+
+        std::stringstream out;
+        out << "Error estimation in " << this->GetProblem()->GetFunctionalName() << ": "
+            << error;
+        this->GetOutputHandler()->Write(out, 2 + this->GetBasePriority());
+      }
 
   /******************************************************/
   template<typename NONLINEARSOLVER, typename INTEGRATOR, typename PROBLEM,
@@ -543,7 +568,8 @@ namespace DOpE
     {
       if (dof_type == "state")
       {
-        auto& data_out = this->GetProblem()->GetSpaceTimeHandler()->GetDataOut();
+        auto& data_out =
+            this->GetProblem()->GetSpaceTimeHandler()->GetDataOut();
         data_out.attach_dof_handler(
             this->GetProblem()->GetSpaceTimeHandler()->GetStateDoFHandler());
 
@@ -558,8 +584,9 @@ namespace DOpE
         }
         else
         {
-          throw DOpEException("Don't know how to write filetype `" + filetype
-              + "'!", "StatPDEProblem::WriteToFile");
+          throw DOpEException(
+              "Don't know how to write filetype `" + filetype + "'!",
+              "StatPDEProblem::WriteToFile");
         }
         data_out.clear();
       }
@@ -581,7 +608,5 @@ namespace DOpE
     {
       WriteToFile(v.GetSpacialVector(), name, outfile, dof_type, filetype);
     }
-
-/******************************************************/
 }
 #endif

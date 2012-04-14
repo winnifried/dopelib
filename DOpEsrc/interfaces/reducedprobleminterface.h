@@ -6,6 +6,7 @@
 #include "controlvector.h"
 #include "constraintvector.h"
 #include "dopetypes.h"
+#include "dwrdatacontainer.h"
 
 #include <assert.h>
 
@@ -32,6 +33,12 @@ namespace DOpE
           _ExceptionHandler = NULL;
           _OutputHandler = NULL;
         }
+
+        virtual
+        ~ReducedProblemInterface_Base()
+        {
+        }
+        ;
         /**
          * Basic function to get information of the state size.
          *
@@ -227,12 +234,13 @@ namespace DOpE
          * stored in _functional_values[0]. Auxiliary functionals are stored in the 
          * order as they are added.
          */ 
-	virtual std::map<std::string, unsigned int>& GetFunctionalPosition()
+	virtual const std::map<std::string, unsigned int>& GetFunctionalPosition() const
         {
                     throw DOpEException("Method not implemented",
               "ReducedProblemInterface_Base::GetFunctionalPosition");
         };
-      private:
+       
+  private:
         DOpEExceptionHandler<VECTOR>* _ExceptionHandler;
         DOpEOutputHandler<VECTOR>* _OutputHandler;
         std::vector<std::vector<double> > _functional_values;
@@ -246,8 +254,8 @@ namespace DOpE
     class ReducedProblemInterface : public ReducedProblemInterface_Base<VECTOR>
     {
       public:
-        ReducedProblemInterface(PROBLEM *OP, int base_priority = 0) :
-          ReducedProblemInterface_Base<VECTOR> ()
+        ReducedProblemInterface(PROBLEM *OP, int base_priority = 0)
+            : ReducedProblemInterface_Base<VECTOR>()
         {
           _OP = OP;
           _base_priority = base_priority;
@@ -296,8 +304,8 @@ namespace DOpE
          * @param ub           The ControlVector to store the upper bounds
          */
         virtual void
-        GetControlBoxConstraints(ControlVector<VECTOR>& lb, ControlVector<
-            VECTOR>& ub)= 0;
+        GetControlBoxConstraints(ControlVector<VECTOR>& lb,
+            ControlVector<VECTOR>& ub)= 0;
 
         /******************************************************/
 
@@ -311,8 +319,9 @@ namespace DOpE
          * @param gradient_transposed  The transposed version of the gradient vector.
          */
         virtual void
-        ComputeReducedGradient(const ControlVector<VECTOR>& q, ControlVector<
-            VECTOR>& gradient, ControlVector<VECTOR>& gradient_transposed)=0;
+        ComputeReducedGradient(const ControlVector<VECTOR>& q,
+            ControlVector<VECTOR>& gradient,
+            ControlVector<VECTOR>& gradient_transposed)=0;
 
         /******************************************************/
 
@@ -337,31 +346,28 @@ namespace DOpE
 
         /******************************************************/
 
-        /**
-         * Basic function to compute the error indicators with
-         * the DWR method and higher order interpolation to gain the weights.
-         * We assume that the state is already computed,
-         * whereas the dual solution will be computed inside this function.
-         *
-         * @param q                 The ControlVector is given to this function.
-         * @param ref_ind           The Vector in which the function writes
-         *                          the error indicators on the different cells.
-         *                          This vector is resized to the number of cells
-         *                          of the actual grid.
-         * @param ee_state          Which terms of the error Identity should get computed
-         *                          (i.e. primal-term, dual-term, both)?
-         * @param weight_comp       How to compute the weights?
-         *
-         * @return                  The error in the previously specified functional.
-         *
-         */
-        virtual float
-        ComputeRefinementIndicators(const ControlVector<VECTOR>& q, Vector<
-            float>& ref_ind, DOpEtypes::EE_state ee_state =
-            DOpEtypes::EE_state::mixed,
-            DOpEtypes::WeightComputation weight_comp =
-                DOpEtypes::WeightComputation::higher_order_interpolation) = 0;
-
+//        /**
+//         * Basic function to compute the error indicators with
+//         * the DWR method and higher order interpolation to gain the weights.
+//         * We assume that the state is already computed,
+//         * whereas the dual solution will be computed inside this function.
+//         *
+//         * @param q                 The ControlVector is given to this function.
+//         * @param ref_ind           The Vector in which the function writes
+//         *                          the error indicators on the different cells.
+//         *                          This vector is resized to the number of cells
+//         *                          of the actual grid.
+//         * @param ee_state          Which terms of the error Identity should get computed
+//         *                          (i.e. primal-term, dual-term, both)?
+//         * @param weight_comp       How to compute the weights?
+//         *
+//         * @return                  The error in the previously specified functional.
+//         *
+//         */
+//
+//        virtual void
+//        ComputeRefinementIndicators(const ControlVector<VECTOR>& q,
+//            DWRDataContainerBase<VECTOR>& dwrc) = 0;
         /******************************************************/
 
         /**
@@ -380,7 +386,8 @@ namespace DOpE
             ControlVector<VECTOR>& hessian_direction_transposed)=0;
 
         virtual void
-        ComputeReducedHessianInverseVector(const ControlVector<VECTOR>& q __attribute__((unused)),
+        ComputeReducedHessianInverseVector(
+            const ControlVector<VECTOR>& q __attribute__((unused)),
             const ControlVector<VECTOR>& direction __attribute__((unused)),
             ControlVector<VECTOR>& hessian_direction __attribute__((unused)))
         {
@@ -405,14 +412,17 @@ namespace DOpE
         ComputeReducedGradientOfGlobalConstraints(unsigned int /*num*/,
             const ControlVector<VECTOR>& /*q*/,
             const ConstraintVector<VECTOR>& /*g*/,
-            ControlVector<VECTOR>& /*gradient*/, ControlVector<VECTOR>& /*gradient_transposed*/)
+            ControlVector<VECTOR>& /*gradient*/,
+            ControlVector<VECTOR>& /*gradient_transposed*/)
 
         {
           throw DOpEException("Method not implemented",
               "ReducedProblemInterface::ComputeReducedGradientOfGlobalConstraints");
         }
         virtual bool
-        IsEpsilonFeasible(const ConstraintVector<VECTOR>& g __attribute__((unused)), double p __attribute__((unused)))
+        IsEpsilonFeasible(
+            const ConstraintVector<VECTOR>& g __attribute__((unused)),
+            double p __attribute__((unused)))
         {
           throw DOpEException("Method not implemented",
               "ReducedProblemInterface::IsEpsilonFeasible");
@@ -425,8 +435,8 @@ namespace DOpE
               "ReducedProblemInterface::GetMaxViolation");
         }
         virtual void
-        FeasibilityShift(const ControlVector<VECTOR>& /*g_hat*/, ControlVector<
-            VECTOR>& /*g*/, double /*lambda*/)
+        FeasibilityShift(const ControlVector<VECTOR>& /*g_hat*/,
+            ControlVector<VECTOR>& /*g*/, double /*lambda*/)
         {
           throw DOpEException("Method not implemented",
               "ReducedProblemInterface::FeasibilityShift");

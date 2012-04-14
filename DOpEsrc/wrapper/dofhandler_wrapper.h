@@ -22,20 +22,24 @@ namespace DOpEWrapper
   template<int dim, typename DOFHANDLER = dealii::DoFHandler<dim> >
     class DoFHandler : public DOFHANDLER
     {
-    public:
-      DoFHandler(const dealii::Triangulation<dim, dim> &tria) :
-        DOFHANDLER(tria)
-      {
-      }
+      public:
+        DoFHandler(const dealii::Triangulation<dim, dim> &tria)
+            : DOFHANDLER(tria)
+        {
+        }
 
-    const DOFHANDLER& GetDEALDoFHandler() const { return *this; } 
-    
-      /**
-       * Does the DoFHandler need an IndexSetter, i.e. is this
-       * an hp dofhandler?
-       */
-      static bool
-      NeedIndexSetter();
+        const DOFHANDLER&
+        GetDEALDoFHandler() const
+        {
+          return *this;
+        }
+
+        /**
+         * Does the DoFHandler need an IndexSetter, i.e. is this
+         * an hp dofhandler?
+         */
+        static bool
+        NeedIndexSetter();
 
     };
 
@@ -44,17 +48,21 @@ namespace DOpEWrapper
     class DoFHandler<dim, dealii::DoFHandler<dim> > : public dealii::DoFHandler<
         dim>
     {
-    public:
-      DoFHandler(const dealii::Triangulation<dim, dim> &tria) :
-        dealii::DoFHandler<dim>(tria)
-      {
-      }
-      static bool
-      NeedIndexSetter()
-      {
-        return false;
-      }
-      const dealii::DoFHandler<dim>& GetDEALDoFHandler() const { return *this; } 
+      public:
+        DoFHandler(const dealii::Triangulation<dim, dim> &tria)
+            : dealii::DoFHandler<dim>(tria)
+        {
+        }
+        static bool
+        NeedIndexSetter()
+        {
+          return false;
+        }
+        const dealii::DoFHandler<dim>&
+        GetDEALDoFHandler() const
+        {
+          return *this;
+        }
 
     };
 
@@ -63,17 +71,21 @@ namespace DOpEWrapper
     class DoFHandler<dim, dealii::hp::DoFHandler<dim> > : public dealii::hp::DoFHandler<
         dim>
     {
-    public:
-      DoFHandler(const dealii::Triangulation<dim, dim> &tria) :
-        dealii::hp::DoFHandler<dim>(tria)
-      {
-      }
-      static bool
-      NeedIndexSetter()
-      {
-        return true;
-      }
-      const dealii::hp::DoFHandler<dim>& GetDEALDoFHandler() const { return *this; } 
+      public:
+        DoFHandler(const dealii::Triangulation<dim, dim> &tria)
+            : dealii::hp::DoFHandler<dim>(tria)
+        {
+        }
+        static bool
+        NeedIndexSetter()
+        {
+          return true;
+        }
+        const dealii::hp::DoFHandler<dim>&
+        GetDEALDoFHandler() const
+        {
+          return *this;
+        }
     };
 
   /**
@@ -82,77 +94,77 @@ namespace DOpEWrapper
   template<>
     class DoFHandler<0, dealii::DoFHandler<deal_II_dimension> >
     {
-    private:
-      unsigned int _dofs;
+      private:
+        unsigned int _dofs;
 
-    public:
-      /**
-       * We actually never need the triangulation, this constructur merely exists
-       * to allow for dimension independent programming.
-       */
-      template<int dim>
-        DoFHandler(const dealii::Triangulation<dim, dim> &/*tria*/)
-        {
-        }
-      template<int dim>
+      public:
+        /**
+         * We actually never need the triangulation, this constructur merely exists
+         * to allow for dimension independent programming.
+         */
+        template<int dim>
+          DoFHandler(const dealii::Triangulation<dim, dim> &/*tria*/)
+          {
+          }
+        template<int dim>
+          void
+          distribute_dofs(const DOpEWrapper::FiniteElement<dim> &fe,
+              const unsigned int offset __attribute__((unused)) =0)
+          {
+            _dofs = fe.element_multiplicity(0);
+          }
         void
-        distribute_dofs(const DOpEWrapper::FiniteElement<dim> &fe,
-            const unsigned int offset __attribute__((unused)) =0)
+        clear()
         {
-          _dofs = fe.element_multiplicity(0);
         }
-      void
-      clear()
-      {
-      }
-      unsigned int
-      n_dofs() const
-      {
-        return _dofs;
-      }
-      static bool
-      NeedIndexSetter()
-      {
-        return false;
-      }
+        unsigned int
+        n_dofs() const
+        {
+          return _dofs;
+        }
+        static bool
+        NeedIndexSetter()
+        {
+          return false;
+        }
     };
 
   template<>
     class DoFHandler<0, dealii::hp::DoFHandler<deal_II_dimension> >
     {
-    private:
-      unsigned int _dofs;
+      private:
+        unsigned int _dofs;
 
-    public:
-      /**
-       * We actually never need the triangulation, this constructur merely exists
-       * to allow for dimension independent programming.
-       */
-      template<int dim>
-        DoFHandler(const dealii::Triangulation<dim, dim> &/*tria*/)
-        {
-        }
-      template<int dim>
+      public:
+        /**
+         * We actually never need the triangulation, this constructur merely exists
+         * to allow for dimension independent programming.
+         */
+        template<int dim>
+          DoFHandler(const dealii::Triangulation<dim, dim> &/*tria*/)
+          {
+          }
+        template<int dim>
+          void
+          distribute_dofs(const DOpEWrapper::FECollection<dim> &fe_collection,
+              const unsigned int offset __attribute__((unused)) =0)
+          {
+            _dofs = fe_collection[0].element_multiplicity(0);
+          }
         void
-        distribute_dofs(const DOpEWrapper::FECollection<dim> &fe_collection,
-            const unsigned int offset __attribute__((unused)) =0)
+        clear()
         {
-          _dofs = fe_collection[0].element_multiplicity(0);
         }
-      void
-      clear()
-      {
-      }
-      unsigned int
-      n_dofs() const
-      {
-        return _dofs;
-      }
-      static bool
-      NeedIndexSetter()
-      {
-        return false;
-      }
+        unsigned int
+        n_dofs() const
+        {
+          return _dofs;
+        }
+        static bool
+        NeedIndexSetter()
+        {
+          return false;
+        }
     };
 }
 

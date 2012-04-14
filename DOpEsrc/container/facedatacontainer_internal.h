@@ -58,14 +58,14 @@ namespace DOpE
           }
           ;
 
-          virtual inline const dealii::FEFaceValuesBase<dim>&
+          virtual const dealii::FEFaceValuesBase<dim>&
           GetFEFaceValuesState() const =0;
-          virtual inline const dealii::FEFaceValuesBase<dim>&
+          virtual const dealii::FEFaceValuesBase<dim>&
           GetFEFaceValuesControl() const = 0;
 
-          virtual inline const dealii::FEFaceValuesBase<dim>&
+          virtual const dealii::FEFaceValuesBase<dim>&
           GetNbrFEFaceValuesState() const = 0;
-          virtual inline const dealii::FEFaceValuesBase<dim>&
+          virtual const dealii::FEFaceValuesBase<dim>&
           GetNbrFEFaceValuesControl() const = 0;
 
           /********************************************************************/

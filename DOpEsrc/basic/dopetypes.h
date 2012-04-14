@@ -8,6 +8,8 @@
 #ifndef _DOPETYPES_H_
 #define _DOPETYPES_H_
 
+#include <string>
+
 namespace DOpE
 {
   namespace DOpEtypes
@@ -27,27 +29,40 @@ namespace DOpE
      * mixed          Compute both, scale them by 0.5
      *                 and build the sum.
      */
-    enum EE_state
+    enum EETerms
     {
       primal_only, dual_only, mixed
     };
 
+    std::string
+    GetProblemType(EETerms ee_term);
 
     /**
      * This enum describes how we compute the weights in
      * the DWR-method, see for instance
      *
-     * Bangerth, Rannacher: Adaptive Finite Element Mehtods
+     * Bangerth, Rannacher: Adaptive Finite Element Methods
      * for Differential Equations
      *
      * for the explanation of the different states.
      */
     enum WeightComputation
     {
-      higher_order_interpolation, higher_order_computation
+      higher_order_interpolation, higher_order_computation/*Not implemented!*/
     };
-  }
 
+    std::string
+    GetProblemType(WeightComputation wc_term);
+
+    enum ResidualEvaluation
+    {
+      strong_residual
+    };
+
+    std::string
+    GetProblemType(ResidualEvaluation re_term);
+
+  }
 }
 
 #endif /* DOPETYPES_H_ */

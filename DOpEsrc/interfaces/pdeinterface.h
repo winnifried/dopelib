@@ -35,19 +35,20 @@ namespace DOpE
          * Documentation in optproblem.h.
          */
         virtual void
-            CellEquation(const CDC<DOFHANDLER, VECTOR, dealdim>& cdc,
-                dealii::Vector<double> &/*local_cell_vector*/, double scale,
-                double /*scale_ico*/);
+        CellEquation(const CDC<DOFHANDLER, VECTOR, dealdim>& cdc,
+            dealii::Vector<double> &/*local_cell_vector*/, double scale,
+            double /*scale_ico*/);
 
         /******************************************************/
 
         /**
          * Documentation in optproblem.h.
          */
+
         virtual void
-            StrongCellEquation(const CDC<DOFHANDLER, VECTOR, dealdim>& cdc,
-                dealii::Vector<double> &/*local_cell_vector*/, double scale,
-                double /*scale_ico*/);
+        StrongCellResidual(const CDC<DOFHANDLER, VECTOR, dealdim>& cdc,
+            const CDC<DOFHANDLER, VECTOR, dealdim>& cdc_weight, double&,
+            double scale, double /*scale_ico*/);
 
         /******************************************************/
 
@@ -70,14 +71,15 @@ namespace DOpE
         /******************************************************/
 
         virtual void
-        CellEquation_U(const CDC<DOFHANDLER, VECTOR, dealdim>&, dealii::Vector<
-            double> &/*local_cell_vector*/, double scale);
+        CellEquation_U(const CDC<DOFHANDLER, VECTOR, dealdim>&,
+            dealii::Vector<double> &/*local_cell_vector*/, double scale);
 
         /******************************************************/
 
         virtual void
-        StrongCellEquation_U(const CDC<DOFHANDLER, VECTOR, dealdim>&,
-            dealii::Vector<double> &/*local_cell_vector*/, double scale);
+        StrongCellResidual_U(const CDC<DOFHANDLER, VECTOR, dealdim>&,
+            const CDC<DOFHANDLER, VECTOR, dealdim>& cdc_weight, double&,
+            double scale);
 
         /******************************************************/
 
@@ -94,8 +96,8 @@ namespace DOpE
         /******************************************************/
 
         virtual void
-        CellEquation_Q(const CDC<DOFHANDLER, VECTOR, dealdim>&, dealii::Vector<
-            double> &/*local_cell_vector*/, double /*scale*/);
+        CellEquation_Q(const CDC<DOFHANDLER, VECTOR, dealdim>&,
+            dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/);
 
         /******************************************************/
 
@@ -148,9 +150,9 @@ namespace DOpE
          * Documentation in optproblem.h.
          */
         virtual void
-            CellMatrix(const CDC<DOFHANDLER, VECTOR, dealdim>&,
-                dealii::FullMatrix<double> &/*local_entry_matrix*/,
-                double /*scale*/, double /*scale_ico*/);
+        CellMatrix(const CDC<DOFHANDLER, VECTOR, dealdim>&,
+            dealii::FullMatrix<double> &/*local_entry_matrix*/,
+            double /*scale*/, double /*scale_ico*/);
 
         /******************************************************/
 
@@ -191,33 +193,35 @@ namespace DOpE
 
         /******************************************************/
         // Functions for Face Integrals
-
         /**
          * Documentation in optproblem.h.
          */
         virtual void
-        FaceEquation(const FDC<DOFHANDLER, VECTOR, dealdim>&, dealii::Vector<
-            double> &/*local_cell_vector*/, double /*scale*/);
+        FaceEquation(const FDC<DOFHANDLER, VECTOR, dealdim>&,
+            dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/);
         /******************************************************/
 
         /**
          * Documentation in optproblem.h.
          */
+
         virtual void
-        StrongFaceEquation(const FDC<DOFHANDLER, VECTOR, dealdim>&,
+        StrongFaceResidual(const FDC<DOFHANDLER, VECTOR, dealdim>&,
+            const FDC<DOFHANDLER, VECTOR, dealdim>& fdc_weight, double&,
+            double /*scale*/);
+
+        /******************************************************/
+
+        virtual void
+        FaceEquation_U(const FDC<DOFHANDLER, VECTOR, dealdim>&,
             dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/);
 
         /******************************************************/
 
         virtual void
-        FaceEquation_U(const FDC<DOFHANDLER, VECTOR, dealdim>&, dealii::Vector<
-            double> &/*local_cell_vector*/, double /*scale*/);
-
-        /******************************************************/
-
-        virtual void
-        StrongFaceEquation_U(const FDC<DOFHANDLER, VECTOR, dealdim>&,
-            dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/);
+        StrongFaceResidual_U(const FDC<DOFHANDLER, VECTOR, dealdim>&,
+            const FDC<DOFHANDLER, VECTOR, dealdim>& cdc_weight, double&,
+            double /*scale*/);
 
         /******************************************************/
 
@@ -234,8 +238,8 @@ namespace DOpE
         /******************************************************/
 
         virtual void
-        FaceEquation_Q(const FDC<DOFHANDLER, VECTOR, dealdim>&, dealii::Vector<
-            double> &/*local_cell_vector*/, double /*scale*/);
+        FaceEquation_Q(const FDC<DOFHANDLER, VECTOR, dealdim>&,
+            dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/);
 
         /******************************************************/
 
@@ -285,8 +289,8 @@ namespace DOpE
          * Documentation in optproblem.h.
          */
         virtual void
-        FaceMatrix(const FDC<DOFHANDLER, VECTOR, dealdim>&, dealii::FullMatrix<
-            double> &/*local_entry_matrix*/);
+        FaceMatrix(const FDC<DOFHANDLER, VECTOR, dealdim>&,
+            dealii::FullMatrix<double> &/*local_entry_matrix*/);
 
         /******************************************************/
 
@@ -338,7 +342,6 @@ namespace DOpE
 
         /******************************************************/
         // Functions for Boundary Integrals
-
         /**
          * Documentation in optproblem.h.
          */
@@ -351,9 +354,11 @@ namespace DOpE
         /**
          * Documentation in optproblem.h.
          */
+
         virtual void
-        StrongBoundaryEquation(const FDC<DOFHANDLER, VECTOR, dealdim>&,
-            dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/);
+        StrongBoundaryResidual(const FDC<DOFHANDLER, VECTOR, dealdim>&,
+            const FDC<DOFHANDLER, VECTOR, dealdim>& fdc_weight, double&,
+            double /*scale*/);
 
         /******************************************************/
 
@@ -364,8 +369,9 @@ namespace DOpE
         /******************************************************/
 
         virtual void
-        StrongBoundaryEquation_U(const FDC<DOFHANDLER, VECTOR, dealdim>&,
-            dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/);
+        StrongBoundaryResidual_U(const FDC<DOFHANDLER, VECTOR, dealdim>&,
+            const FDC<DOFHANDLER, VECTOR, dealdim>& fdc_weight, double&,
+            double /*scale*/);
 
         /******************************************************/
 

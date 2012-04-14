@@ -20,6 +20,7 @@
 #include "voidlinearsolver.h"
 #include "constraintinterface.h"
 #include "helper.h"
+#include "dwrdatacontainer.h"
 
 #include <base/data_out_base.h>
 #include <numerics/data_out.h>
@@ -91,7 +92,7 @@ class InstatReducedProblem: public ReducedProblemInterface<PROBLEM, VECTOR, dope
               ParameterReader &param_reader, CONTROLINTEGRATORCONT& c_idc,
               STATEINTEGRATORDATACONT & s_idc, int base_priority = 0);
 
-    ~InstatReducedProblem();
+    virtual ~InstatReducedProblem();
 
     /******************************************************/
 
@@ -191,12 +192,8 @@ class InstatReducedProblem: public ReducedProblemInterface<PROBLEM, VECTOR, dope
      * @return                  The error in the previously specified functional.
      *
      */
-    float
-      ComputeRefinementIndicators(const ControlVector<VECTOR>& /*q*/,
-				  Vector<float>& /*ref_ind*/,
-				  DOpEtypes::EE_state /*ee_state*/ = DOpEtypes::EE_state::mixed,
-				  DOpEtypes::WeightComputation /*weight_comp*/ =
-				  DOpEtypes::WeightComputation::higher_order_interpolation)
+    virtual void
+    ComputeRefinementIndicators(DWRDataContainerBase<VECTOR>&)
     {
       throw DOpEException("ExcNotImplemented",
                           "InstatReducedProblem::ComputeRefinementIndicators");

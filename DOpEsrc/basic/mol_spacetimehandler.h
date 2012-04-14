@@ -185,7 +185,7 @@ namespace DOpE
 
         _support_points.clear();
 
-	_constraints.ReInit(_control_dofs_per_block);
+        _constraints.ReInit(_control_dofs_per_block);
         //_constraints.ReInit(_control_dofs_per_block, _state_dofs_per_block);
 
         //Initialize also the timediscretization.
