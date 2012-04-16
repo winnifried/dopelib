@@ -24,7 +24,7 @@
 namespace DOpE
 {
   /**
-   * This class manages the different kind of cell- and facedatacontainer
+   * This class manages the different kind of cell- and facedatacontainers
    * needed in the integrator.
    */
   template<typename DOFHANDLER, typename QUADRATURE, typename FACEQUADRATURE,

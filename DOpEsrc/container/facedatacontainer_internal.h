@@ -19,7 +19,7 @@ namespace DOpE
   {
     /**
      * This class houses all the functionality which is shared between
-     * the CellDataContainer for normal and hp::DoFHandlers.
+     * the FaceDataContainer for normal and hp::DoFHandlers.
      *
      * @template VECTOR     Type of the vector we use in our computations
      *                      (i.e. Vector<double> or BlockVector<double>)

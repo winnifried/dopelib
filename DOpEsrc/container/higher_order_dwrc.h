@@ -13,12 +13,20 @@
 
 namespace DOpE
 {
+  /**
+   * This class implements the missing pieces of DWRDataContainer for
+   * the case of the DWRMethod with higher order interpolation of the weights
+   * and evaluation of strong cell residuals.
+   */
   template<class STH, class IDC, class CDC, class FDC, typename VECTOR>
     class HigherOrderDWRContainer : public DWRDataContainer<CDC, FDC, VECTOR>
     {
       public:
-        HigherOrderDWRContainer(STH& higher_order_sth, IDC& higher_order_idc,
-            std::string state_behavior, ParameterReader &param_reader,
+        HigherOrderDWRContainer(
+            STH& higher_order_sth,
+            IDC& higher_order_idc,
+            std::string state_behavior,
+            ParameterReader &param_reader,
             DOpEtypes::EETerms ee_terms = DOpEtypes::EETerms::mixed)
             : DWRDataContainer<CDC, FDC, VECTOR>(ee_terms), _sth_higher_order(
                 higher_order_sth), _idc_higher_order(higher_order_idc), _PI_h_u(
@@ -54,6 +62,10 @@ namespace DOpE
             _state_block_component = &state_block_component;
           }
 
+        /**
+         * ReInits the DWRDataContainer, the higher order STH
+         * as well as the weight-vectors.
+         */
         void
         ReInit(unsigned int n_cells);
 
@@ -93,6 +105,12 @@ namespace DOpE
           return *_PI_h_z;
         }
 
+
+        /**
+         * Makes the patchwise higher order interpolant of the
+         * primal soltion u. This is needed as a weight for the
+         * dual residual.
+         */
         void
         PreparePI_h_u(const StateVector<VECTOR>& u)
         {
@@ -112,6 +130,13 @@ namespace DOpE
               GetHigherOrderSTH().GetStateHangingNodeConstraints(), u_high);
           GetPI_h_u().GetSpacialVector().add(-1., u_high);
         }
+
+
+        /**
+         * Makes the patchwise higher order interpolant of the
+         * dual solution z. This is needed as a weight for the
+         * primal residual.
+         */
         void
         PreparePI_h_z(const StateVector<VECTOR>& z)
         {
@@ -133,30 +158,45 @@ namespace DOpE
 
         }
 
-
+        /**
+         * Implementation of virtual method from base class.
+         */
         virtual CDC&
         GetCellWeight() const
         {
           return GetHigherOrderIDC().GetCellDataContainer();
         }
 
-        FDC&
+        /**
+         * Implementation of virtual method from base class.
+         */
+        virtual FDC&
         GetFaceWeight() const
         {
           return GetHigherOrderIDC().GetFaceDataContainer();
         }
 
+        /**
+         * Implementation of virtual method from base class.
+         */
         bool
         NeedDual() const
         {
           return true;
         }
 
+        /**
+         * Implementation of virtual method from base class.
+         */
         virtual DOpEtypes::WeightComputation
         GetWeightComputation() const
         {
           return DOpEtypes::higher_order_interpolation;
         }
+
+        /**
+         * Implementation of virtual method from base class.
+         */
         virtual DOpEtypes::ResidualEvaluation
         GetResidualEvaluation() const
         {

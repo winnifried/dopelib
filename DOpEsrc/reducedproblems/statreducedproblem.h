@@ -334,7 +334,8 @@ namespace DOpE
          *
          */
         void
-        ComputeDualForErrorEstimation(const ControlVector<VECTOR>& q);
+        ComputeDualForErrorEstimation(const ControlVector<VECTOR>& q,
+            DOpEtypes::WeightComputation weight_comp);
 
         const StateVector<VECTOR> &
         GetU() const
@@ -589,10 +590,11 @@ namespace DOpE
         CONTROLINTEGRATOR, INTEGRATOR, PROBLEM, VECTOR, dopedim, dealdim>::ComputeReducedState(
         const ControlVector<VECTOR>& q)
     {
-        this->InitializeFunctionalValues(this->GetProblem()->GetNFunctionals() + 1);
-      
-      this->GetOutputHandler()->Write("Computing State Solution:", 4
-          + this->GetBasePriority());
+      this->InitializeFunctionalValues(
+          this->GetProblem()->GetNFunctionals() + 1);
+
+      this->GetOutputHandler()->Write("Computing State Solution:",
+          4 + this->GetBasePriority());
 
       this->SetProblemType("state");
       auto& problem = this->GetProblem()->GetStateProblem();
@@ -891,13 +893,24 @@ namespace DOpE
     void
     StatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER,
         CONTROLINTEGRATOR, INTEGRATOR, PROBLEM, VECTOR, dopedim, dealdim>::ComputeDualForErrorEstimation(
-        const ControlVector<VECTOR>& q)
+        const ControlVector<VECTOR>& q,
+        DOpEtypes::WeightComputation weight_comp)
     {
       this->GetOutputHandler()->Write("Computing Dual for Error Estimation:",
           4 + this->GetBasePriority());
 
-      this->SetProblemType("adjoint_for_ee");
-      auto& problem = this->GetProblem()->GetStateProblem();
+      if (weight_comp == DOpEtypes::higher_order_interpolation)
+      {
+        this->SetProblemType("adjoint_for_ee");
+      }
+      else
+      {
+        throw DOpEException("Unknown WeightComputation",
+            "StatPDEProblem::ComputeDualForErrorEstimation");
+      }
+
+      //      auto& problem = this->GetProblem()->GetStateProblem();//Hier ist adjoint problem einzufuegen
+      auto& problem = *(this->GetProblem());
       if (_adjoint_reinit == true)
       {
         GetNonlinearSolver("adjoint_for_ee").ReInit(problem);
@@ -948,8 +961,7 @@ namespace DOpE
       this->GetProblem()->DeleteAuxiliaryFromIntegrator(this->GetIntegrator());
 
       this->GetOutputHandler()->Write((GetZForEE().GetSpacialVector()),
-          "Dual for Error Estimation" + this->GetPostIndex(),
-          problem.GetDoFType());
+          "Adjoint_for_ee" + this->GetPostIndex(), problem.GetDoFType());
 
     }
 
@@ -1204,7 +1216,7 @@ namespace DOpE
       }
       this->GetIntegrator().DeleteDomainData("state");
       this->GetProblem()->DeleteAuxiliaryFromIntegrator(this->GetIntegrator());
-      
+
       this->GetFunctionalValues()[0].push_back(ret);
       return ret;
     }
@@ -1282,7 +1294,7 @@ namespace DOpE
                   + this->GetProblem()->GetFunctionalType(),
               "StatReducedProblem::ComputeReducedFunctionals");
         }
-        this->GetFunctionalValues()[i+1].push_back(ret);
+        this->GetFunctionalValues()[i + 1].push_back(ret);
         std::stringstream out;
         out << this->GetProblem()->GetFunctionalName() << ": " << ret;
         this->GetOutputHandler()->Write(out, 2 + this->GetBasePriority());
@@ -1321,17 +1333,27 @@ namespace DOpE
 //        CONTROLINTEGRATOR, INTEGRATOR, PROBLEM, VECTOR, dopedim, dealdim>::ComputeRefinementIndicators(
 //        const ControlVector<VECTOR>& q, DWRDataContainerBase<VECTOR>& dwrc)
       {
-        this->ComputeDualForErrorEstimation(q);
+        //first we reinit the dwrdatacontainer (this
+        //sets the weight-vectors to their correct length)
+        const unsigned int n_cells =
+            this->GetProblem()->GetSpaceTimeHandler()->GetStateDoFHandler().get_tria().n_active_cells();
+        dwrc.ReInit(n_cells);
+
+        //If we need the dual solution, compute it
+        if (dwrc.NeedDual())
+          this->ComputeDualForErrorEstimation(q, dwrc.GetWeightComputation());
 
         this->GetOutputHandler()->Write("Computing Error Indicators:",
             4 + this->GetBasePriority());
 
         this->GetProblem()->AddAuxiliaryToIntegrator(this->GetIntegrator());
 
+        //add the primal and (if needed) dual solution to the integrator
         this->GetIntegrator().AddDomainData("state",
             &(GetU().GetSpacialVector()));
-        this->GetIntegrator().AddDomainData("adjoint_for_ee",
-            &(GetZForEE().GetSpacialVector()));
+        if (dwrc.NeedDual())
+          this->GetIntegrator().AddDomainData("adjoint_for_ee",
+              &(GetZForEE().GetSpacialVector()));
 
         if (dopedim == dealdim)
         {
@@ -1349,11 +1371,20 @@ namespace DOpE
               "StatReducedProblem::ComputeRefinementIndicators");
         }
 
-        float error = 0;
-        this->SetProblemType("functional_for_ee"); //TODO Wie genau der Uebertrag hier passieren soll.
+        this->SetProblemType("error_evaluation");
+
+        //prepare the weights...
+        dwrc.PrepareWeights(GetU(), GetZForEE());
+
+        //now we finally compute the refinement indicators
         this->GetIntegrator().ComputeRefinementIndicators(*this->GetProblem(),
             dwrc);
+        // release the lock on the refinement indicators (see dwrcontainer.h)
+        dwrc.ReleaseLock();
 
+        const float error = dwrc.GetError();
+
+        // clear the data
         if (dopedim == dealdim)
         {
           this->GetIntegrator().DeleteDomainData("control");
@@ -1375,8 +1406,8 @@ namespace DOpE
             this->GetIntegrator());
 
         std::stringstream out;
-        out << "Error in " << this->GetProblem()->GetFunctionalName() << ": "
-            << error;
+        out << "Error estimation in " << this->GetProblem()->GetFunctionalName()
+            << ": " << error;
         this->GetOutputHandler()->Write(out, 2 + this->GetBasePriority());
       }
 

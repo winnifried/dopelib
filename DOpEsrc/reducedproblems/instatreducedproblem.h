@@ -177,23 +177,17 @@ class InstatReducedProblem: public ReducedProblemInterface<PROBLEM, VECTOR, dope
     /******************************************************/
 
     /**
-     * Basic function to compute the error indicators with
-     * the DWR method and higher order interpolation to gain the weights.
-     * We assume that the state is already computed,
-     * whereas the dual solution will be computed inside this function.
+     * Computes the error indicators for the error of a previosly
+     * specified functional. Assumes that the primal state solution
+     * is already computed and the functional is specified (see
+     * problem::SetFunctionalForErrorEstimation).
      *
-     * @param ref_ind           The Vector in which the function writes
-     *                          the error indicators on the different cells.
-     *                          This vector is resized to the number of cells
-     *                          of the actual grid.
-     * @param ee_state          Which terms of the error Identity should get computed
-     *                          (i.e. primal-term, dual-term, both)?
-     *
-     * @return                  The error in the previously specified functional.
-     *
+     * Everything else is determined by the DWRDataContainer
+     * you use (represented by the template parameter DWRC).
      */
-    virtual void
-    ComputeRefinementIndicators(DWRDataContainerBase<VECTOR>&)
+    template<class DWRC>
+    void
+    ComputeRefinementIndicators(DWRC&)
     {
       throw DOpEException("ExcNotImplemented",
                           "InstatReducedProblem::ComputeRefinementIndicators");

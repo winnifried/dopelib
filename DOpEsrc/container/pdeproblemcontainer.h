@@ -138,20 +138,20 @@ namespace DOpE
          * This function returns a functional value on a cell.
          * Different types of functionals
          * have been implemented so far: `cost_functional', `aux_functional'
-         * and 'functional_for_ee.
+         * and 'functional_for_ee'.
          * The first one is needed for optimization problems. The second one
          * can be used for the computation of arbitrary functionals that
          * are defined on cells, e.g., drag and lift computation. Or
          * computations of deflections and deformations. The last
-         * one is needed if one watns to use the goal oriented adaptive
+         * one is needed if one wants to use the goal oriented adaptive
          * grid refinement based on the DWR method.
          *
          *
          * @template DATACONTAINER    Class of the datacontainer, distinguishes
-         *                                between hp- and classical case.
+         *                            between hp- and classical case.
          *
-         * @param fdc                     A DataContainer holding all the needed information
-         *                                of the face.
+         * @param fdc                 A DataContainer holding all the needed information
+         *                            of the face.
          */
         template<typename DATACONTAINER>
           double
@@ -251,18 +251,22 @@ namespace DOpE
 
         /******************************************************/
         /**
-         * Computes contribution
-         * the strong form. This is needed in the evaluation of
-         * the strong residuum in the error estimation routines.
+         * Computes the contribution of the cell to overall error
+         * in a previously specified functional. For example, this
+         * could be a residual with appropriate weights.
          *
-         * @template DATACONTAINER      Class of the datacontainer in use, distinguishes
-         *                              between hp- and classical case.
-         * @template SCALAR             Type of the error estimators (e.g. double or float.)
+         * @template CDC                Class of the celldatacontainer in use,
+         *                              distinguishes between hp- and classical case.
+         * @template FDC                Class of the facedatacontainer in use,
+         *                              distinguishes between hp- and classical case.
          *
          * @param cdc                   A DataContainer holding all the needed information
          *                              for the computation of the residuum on the cell.
-         * @param cdc_weight            A DataContainer holding the the needed information
-         *                              for the computation of the weights on the cell.
+         * @param dwrc                  A DWRDataContainer containing all the information
+         *                              needed to evaluate the error on the cell (form of the residual,
+         *                              the weights, etc.).
+         * @param cell_contrib          Vector in which we write the contribution of the cell to the overall
+         *                              error. 1st component: primal_part, 2nd component: dual_part
          * @param scale                 A scaling factor which is -1 or 1 depending on the subroutine to compute.
          * @param scale_ico             A scaling factor for terms which will be treated fully implicit
          *                              in an instationary equation.
@@ -271,7 +275,8 @@ namespace DOpE
           void
           CellErrorContribution(const CDC& cdc,
               const DWRDataContainer<CDC, FDC, VECTOR>& dwrc,
-              std::vector<double>&, double scale, double /*scale_ico*/);
+              std::vector<double>& cell_contrib, double scale,
+              double /*scale_ico*/);
 
         /******************************************************/
 
@@ -338,7 +343,7 @@ namespace DOpE
          * @param local_entry_matrix    The local matrix is quadratic and has size local DoFs times local DoFs and is
          *                              filled by the locally computed values. For more information of its functionality, please
          *                              search for the keyword `FullMatrix' in the deal.ii manual.
-         * @param scale                A scaling factor which is -1 or 1 depending on the subroutine to compute.
+         * @param scale                 A scaling factor which is -1 or 1 depending on the subroutine to compute.
          * @param scale_ico             A scaling factor for terms which will be treated fully implicit
          *                              in an instationary equation.
          */
@@ -398,16 +403,19 @@ namespace DOpE
         /******************************************************/
 
         /**
-         * Computes the value of face on a cell.
-         * It has the same functionality as StrongCellResidual. We refer to its
-         * documentation.
+         * Computes the contribution of the face to overall error
+         * in a previously specified functional. This is the place
+         * where for instance jump terms come into play.
+         *
+         * It has the same functionality
+         * as CellErrorContribution, so we refer to its documentation.
          *
          */
         template<class CDC, class FDC>
           void
           FaceErrorContribution(const FDC& fdc,
               const DWRDataContainer<CDC, FDC, VECTOR>& dwrc,
-              std::vector<double>&, double scale = 1.);
+              std::vector<double>& error_contrib, double scale = 1.);
 
         /******************************************************/
         /**
@@ -461,9 +469,11 @@ namespace DOpE
         /******************************************************/
 
         /**
-         * Computes the value of the boundary on a cell.
-         * It has the same functionality as CellEquation. We refer to its
-         * documentation.
+         * Computes the contribution of the boundary to overall error
+         * in a previously specified functional.
+         *
+         * It has the same functionality
+         * as CellErrorContribution, so we refer to its documentation.
          *
          */
         template<typename FACEDATACONTAINER>
@@ -479,7 +489,6 @@ namespace DOpE
          * documentation.
          *
          */
-//        template<typename FACEDATACONTAINER>
         template<class CDC, class FDC>
           void
           BoundaryErrorContribution(const FDC& dc,
@@ -487,19 +496,6 @@ namespace DOpE
               std::vector<double>&, double scale = 1.);
 
         /******************************************************/
-
-//        /**
-//         * Computes the value of the strong dual residuum on
-//         * the boundary on a cell. It has the same functionality
-//         * as StrongCellResidual_U. We refer to its documentation.
-//         *
-//         */
-//        template<typename FACEDATACONTAINER>
-//          void
-//          StrongBoundaryResidual_U(const FACEDATACONTAINER& dc,
-//              const FACEDATACONTAINER& dc_weight&, double scale = 1.);
-        /******************************************************/
-
         /**
          * Computes the value of the boundary on a cell.
          * It has the same functionality as CellRhs. We refer to its
@@ -605,13 +601,28 @@ namespace DOpE
 
         /******************************************************/
 
+        /**
+         * Adds a functional which will be evaluated after/during (in
+         * time dependent equations) the computation of the state solution.
+         *
+         * Note that you have to specify a the GetName() method for
+         * your functional, and that you can not add two functionals
+         * with the same name!
+         */
         void
         AddFunctional(
             FunctionalInterface<CellDataContainer, FaceDataContainer,
                 DOFHANDLER, VECTOR, dealdim>* F)
         {
           _aux_functionals.push_back(F);
-          _functional_position[F->GetName()] = _aux_functionals.size()-1;
+          if (_functional_position.find(F->GetName())
+              != _functional_position.end())
+          {
+            throw DOpEException(
+                "You cant add two functionals with the same name.",
+                "PDEProblemContainer::AddFunctional");
+          }
+          _functional_position[F->GetName()] = _aux_functionals.size() - 1;
           //-1 because we are in the pde case and have therefore no cost functional
         }
 
@@ -785,12 +796,18 @@ namespace DOpE
         }
 
         /******************************************************/
-		
-	   const std::map<std::string, unsigned int>&
-       GetFunctionalPosition() const
-       {
-         return _functional_position;
-       }
+
+        /**
+         * FunctionalPosition maps the name of the cost/auxiliary functionals
+         * to their position in ReducedProblemInterface_Base::_functional_values.
+         *
+         * TODO This should not be public!
+         */
+        const std::map<std::string, unsigned int>&
+        GetFunctionalPosition() const
+        {
+          return _functional_position;
+        }
       protected:
         PDE*
         GetPDE()
@@ -1127,7 +1144,6 @@ namespace DOpE
 
   template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
       int dealdim, typename FE, typename DOFHANDLER>
-//    template<typename DATACONTAINER>
     template<class CDC, class FDC>
       void
       PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE,
@@ -2079,7 +2095,7 @@ namespace DOpE
     PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE,
         DOFHANDLER>::GetBoundaryFunctionalColors() const
     {
-      //FIXME cost_functional??
+      //FIXME cost_functional?? This is pdeproblemcontainer, we should not have a cost functional! ~cg
       if (GetType() == "cost_functional" || GetType() == "aux_functional"
           || GetType() == "error_evaluation")
       {
@@ -2120,7 +2136,7 @@ namespace DOpE
         }
         _boundary_functional_colors.push_back(color);
       }
-      { //For the  adjoint they are addeed  to the boundary equation colors
+      { //For the  adjoint they are added  to the boundary equation colors
         unsigned int comp = _adjoint_boundary_equation_colors.size();
         for (unsigned int i = 0; i < _adjoint_boundary_equation_colors.size();
             ++i)

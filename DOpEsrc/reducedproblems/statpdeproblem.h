@@ -108,7 +108,13 @@ namespace DOpE
         /******************************************************/
 
         /**
-         * Implementation of virtual function of base class.
+         * Computes the error indicators for the error of a previosly
+         * specified functional. Assumes that the primal state solution
+         * is already computed and the functional is specified (see
+         * problem::SetFunctionalForErrorEstimation).
+         *
+         * Everything else is determined by the DWRDataContainer
+         * you use (represented by the template parameter DWRC).
          */
 //        virtual void
 //        ComputeRefinementIndicators(DWRDataContainerBase<VECTOR>& dwrc);
@@ -252,8 +258,6 @@ namespace DOpE
         bool _build_adjoint_matrix;
         bool _state_reinit;
         bool _adjoint_reinit;
-
-        std::map<std::string, double> _functional_values;
 
         friend class SolutionExtractor<
             StatPDEProblem<NONLINEARSOLVER, INTEGRATOR, PROBLEM, VECTOR, dealdim>,

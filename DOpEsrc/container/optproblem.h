@@ -74,17 +74,19 @@ namespace DOpE
         }
 
         /******************************************************/
-        StateProblem<OptProblem<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
-            CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE,
-            DOFHANDLER> , PDE, DD, SPARSITYPATTERN, VECTOR, dopedim, dealdim>&
+        StateProblem<
+            OptProblem<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
+                SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DOFHANDLER>, PDE,
+            DD, SPARSITYPATTERN, VECTOR, dopedim, dealdim>&
         GetStateProblem()
         {
           if (_state_problem == NULL)
           {
-            _state_problem = new StateProblem<OptProblem<FUNCTIONAL_INTERFACE,
-                FUNCTIONAL, PDE, DD, CONSTRAINTS, SPARSITYPATTERN, VECTOR,
-                dopedim, dealdim, FE, DOFHANDLER> , PDE, DD, SPARSITYPATTERN,
-                VECTOR, dopedim, dealdim> (*this, *_pde);
+            _state_problem = new StateProblem<
+                OptProblem<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
+                    CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE,
+                    DOFHANDLER>, PDE, DD, SPARSITYPATTERN, VECTOR, dopedim,
+                dealdim>(*this, *_pde);
           }
           return *_state_problem;
         }
@@ -170,9 +172,9 @@ namespace DOpE
          * points.
          */
         double
-        PointFunctional(const std::map<std::string,
-            const dealii::Vector<double>*> &param_values, const std::map<
-            std::string, const VECTOR*> &domain_values);
+        PointFunctional(
+            const std::map<std::string, const dealii::Vector<double>*> &param_values,
+            const std::map<std::string, const VECTOR*> &domain_values);
 
         /******************************************************/
 
@@ -211,14 +213,14 @@ namespace DOpE
         /******************************************************/
 
         double
-        AlgebraicFunctional(const std::map<std::string, const dealii::Vector<
-            double>*> &values,
+        AlgebraicFunctional(
+            const std::map<std::string, const dealii::Vector<double>*> &values,
             const std::map<std::string, const VECTOR*> &block_values);
 
         void
-        AlgebraicResidual(VECTOR& residual, const std::map<std::string,
-            const dealii::Vector<double>*> &values, const std::map<std::string,
-            const VECTOR*> &block_values);
+        AlgebraicResidual(VECTOR& residual,
+            const std::map<std::string, const dealii::Vector<double>*> &values,
+            const std::map<std::string, const VECTOR*> &block_values);
 
         /******************************************************/
 
@@ -271,8 +273,8 @@ namespace DOpE
          */
         template<typename DATACONTAINER>
           void
-          CellTimeEquationExplicit(const DATACONTAINER& dc, dealii::Vector<
-              double> &local_cell_vector, double scale = 1.);
+          CellTimeEquationExplicit(const DATACONTAINER& dc,
+              dealii::Vector<double> &local_cell_vector, double scale = 1.);
 
         /******************************************************/
 
@@ -319,8 +321,8 @@ namespace DOpE
         template<typename DATACONTAINER>
           void
           CellMatrix(const DATACONTAINER& dc,
-              dealii::FullMatrix<double> &local_entry_matrix,
-              double scale = 1., double scale_ico = 1.);
+              dealii::FullMatrix<double> &local_entry_matrix, double scale = 1.,
+              double scale_ico = 1.);
 
         /******************************************************/
 
@@ -353,8 +355,8 @@ namespace DOpE
          */
         template<typename DATACONTAINER>
           void
-          CellTimeMatrixExplicit(const DATACONTAINER& dc, dealii::FullMatrix<
-              double> &local_entry_matrix);
+          CellTimeMatrixExplicit(const DATACONTAINER& dc,
+              dealii::FullMatrix<double> &local_entry_matrix);
 
         /******************************************************/
 
@@ -417,8 +419,8 @@ namespace DOpE
          */
         template<typename FACEDATACONTAINER>
           void
-          InterfaceMatrix(const FACEDATACONTAINER& dc, dealii::FullMatrix<
-              double> &local_entry_matrix);
+          InterfaceMatrix(const FACEDATACONTAINER& dc,
+              dealii::FullMatrix<double> &local_entry_matrix);
 
         /******************************************************/
 
@@ -472,7 +474,6 @@ namespace DOpE
         //      void
         //      ComputeLocalConstraints(const VECTOR& control, const VECTOR& state,
         //          VECTOR& constraints);
-
         //      /******************************************************/
         //
         //      /**
@@ -487,8 +488,8 @@ namespace DOpE
         //              VECTOR& constraints);
         //
         void
-        ComputeLocalControlConstraints(VECTOR& constraints, const std::map<
-            std::string, const dealii::Vector<double>*> &values,
+        ComputeLocalControlConstraints(VECTOR& constraints,
+            const std::map<std::string, const dealii::Vector<double>*> &values,
             const std::map<std::string, const VECTOR*> &block_values);
         /******************************************************/
 
@@ -507,7 +508,6 @@ namespace DOpE
 
         const FE&
         GetFESystem() const;
-
 
         /******************************************************/
         /**
@@ -543,8 +543,8 @@ namespace DOpE
 
         void
         SetControlDirichletBoundaryColors(unsigned int color,
-            const std::vector<bool>& comp_mask, const DOpEWrapper::Function<
-                dealdim>* values);
+            const std::vector<bool>& comp_mask,
+            const DOpEWrapper::Function<dealdim>* values);
 
         /******************************************************/
 
@@ -566,15 +566,15 @@ namespace DOpE
         /******************************************************/
 
         const dealii::Function<dealdim> &
-        GetDirichletValues(unsigned int color, const std::map<std::string,
-            const dealii::Vector<double>*> &param_values, const std::map<
-            std::string, const VECTOR*> &domain_values) const;
+        GetDirichletValues(unsigned int color,
+            const std::map<std::string, const dealii::Vector<double>*> &param_values,
+            const std::map<std::string, const VECTOR*> &domain_values) const;
 
         /******************************************************/
 
         const TransposedDirichletDataInterface<dopedim, dealdim> &
-        GetTransposedDirichletValues(unsigned int color, const std::map<
-            std::string, const dealii::Vector<double>*> &param_values,
+        GetTransposedDirichletValues(unsigned int color,
+            const std::map<std::string, const dealii::Vector<double>*> &param_values,
             const std::map<std::string, const VECTOR*> &domain_values) const;
 
         /******************************************************/
@@ -605,10 +605,26 @@ namespace DOpE
 
         /******************************************************/
 
+        /**
+         * Adds a functional which will be evaluated after/during (in
+         * time dependent equations) the computation of the state solution.
+         *
+         * Note that you have to specify a the GetName() method for
+         * your functional, and that you can not add two functionals
+         * with the same name!
+         */
+
         void
         AddFunctional(FUNCTIONAL_INTERFACE* F)
         {
           _aux_functionals.push_back(F);
+          if (_functional_position.find(F->GetName())
+              != _functional_position.end())
+          {
+            throw DOpEException(
+                "You cant add two functionals with the same name.",
+                "PDEProblemContainer::AddFunctional");
+          }
           _functional_position[F->GetName()] = _aux_functionals.size();
           //remember! At _functional_values[0] we store always the cost functional!
         }
@@ -642,8 +658,9 @@ namespace DOpE
           //we throw an error.
           if (!found)
           {
-            throw DOpEException("Can't find functional " + functional_name
-                + " in _aux_functionals",
+            throw DOpEException(
+                "Can't find functional " + functional_name
+                    + " in _aux_functionals",
                 "Optproblem::SetFunctionalForErrorEstimation");
           }
         }
@@ -757,8 +774,8 @@ namespace DOpE
 
         /******************************************************/
 
-        const SpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR,
-            dopedim, dealdim>*
+        const SpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR, dopedim,
+            dealdim>*
         GetSpaceTimeHandler() const
         {
           return _STH;
@@ -798,8 +815,8 @@ namespace DOpE
           return this->GetConstraints()->MaxViolation(g);
         }
         void
-        FeasibilityShift(const ControlVector<VECTOR>& g_hat, ControlVector<
-            VECTOR>& g, double lambda) const
+        FeasibilityShift(const ControlVector<VECTOR>& g_hat,
+            ControlVector<VECTOR>& g, double lambda) const
         {
           this->GetConstraints()->FeasibilityShift(g_hat, g, lambda);
         }
@@ -848,8 +865,8 @@ namespace DOpE
         const ConstraintVector<VECTOR>*
         GetAuxiliaryConstraint(std::string name)
         {
-          typename std::map<std::string, const ConstraintVector<VECTOR> *>::iterator
-              it = _auxiliary_constraints.find(name);
+          typename std::map<std::string, const ConstraintVector<VECTOR> *>::iterator it =
+              _auxiliary_constraints.find(name);
           if (it == _auxiliary_constraints.end())
           {
             throw DOpEException("Could not find data" + name,
@@ -864,8 +881,8 @@ namespace DOpE
           AddAuxiliaryToIntegrator(INTEGRATOR& integrator)
           {
             {
-              typename std::map<std::string, const ControlVector<VECTOR> *>::iterator
-                  it = _auxiliary_controls.begin();
+              typename std::map<std::string, const ControlVector<VECTOR> *>::iterator it =
+                  _auxiliary_controls.begin();
               for (; it != _auxiliary_controls.end(); it++)
               {
                 if (dopedim == dealdim)
@@ -886,8 +903,8 @@ namespace DOpE
               }
             }
             {
-              typename std::map<std::string, const ConstraintVector<VECTOR> *>::iterator
-                  it = _auxiliary_constraints.begin();
+              typename std::map<std::string, const ConstraintVector<VECTOR> *>::iterator it =
+                  _auxiliary_constraints.begin();
               for (; it != _auxiliary_constraints.end(); it++)
               {
                 integrator.AddDomainData(it->first + "_local",
@@ -905,8 +922,8 @@ namespace DOpE
           DeleteAuxiliaryFromIntegrator(INTEGRATOR& integrator)
           {
             {
-              typename std::map<std::string, const ControlVector<VECTOR> *>::iterator
-                  it = _auxiliary_controls.begin();
+              typename std::map<std::string, const ControlVector<VECTOR> *>::iterator it =
+                  _auxiliary_controls.begin();
               for (; it != _auxiliary_controls.end(); it++)
               {
                 if (dopedim == dealdim)
@@ -926,8 +943,8 @@ namespace DOpE
               }
             }
             {
-              typename std::map<std::string, const ConstraintVector<VECTOR> *>::iterator
-                  it = _auxiliary_constraints.begin();
+              typename std::map<std::string, const ConstraintVector<VECTOR> *>::iterator it =
+                  _auxiliary_constraints.begin();
               for (; it != _auxiliary_constraints.end(); it++)
               {
                 integrator.DeleteDomainData(it->first + "_local");
@@ -937,11 +954,11 @@ namespace DOpE
           }
 
         /******************************************************/
-       const std::map<std::string, unsigned int>&
-       GetFunctionalPosition() const
-       {
-         return _functional_position;
-       }
+        const std::map<std::string, unsigned int>&
+        GetFunctionalPosition() const
+        {
+          return _functional_position;
+        }
 
         unsigned int
         GetStateNBlocks()
@@ -1002,11 +1019,12 @@ namespace DOpE
         GetVector(const std::map<std::string, const Vector<double>*>& values,
             std::string name)
         {
-          typename std::map<std::string, const Vector<double>*>::const_iterator
-              it = values.find(name);
+          typename std::map<std::string, const Vector<double>*>::const_iterator it =
+              values.find(name);
           if (it == values.end())
           {
-            throw DOpEException("Did not find " + name, "OptProblem::GetVector");
+            throw DOpEException("Did not find " + name,
+                "OptProblem::GetVector");
           }
           return it->second;
         }
@@ -1029,20 +1047,16 @@ namespace DOpE
         std::vector<unsigned int> _control_dirichlet_colors;
         std::vector<unsigned int> _control_transposed_dirichlet_colors;
         std::vector<std::vector<bool> > _control_dirichlet_comps;
-        std::vector<const DOpEWrapper::Function<dealdim>*>
-            _control_dirichlet_values;
-        std::vector<TransposedGradientDirichletData<DD, VECTOR, dopedim,
-            dealdim>*> _transposed_control_gradient_dirichlet_values;
+        std::vector<const DOpEWrapper::Function<dealdim>*> _control_dirichlet_values;
         std::vector<
-            TransposedHessianDirichletData<DD, VECTOR, dopedim, dealdim>*>
-            _transposed_control_hessian_dirichlet_values;
+            TransposedGradientDirichletData<DD, VECTOR, dopedim, dealdim>*> _transposed_control_gradient_dirichlet_values;
+        std::vector<
+            TransposedHessianDirichletData<DD, VECTOR, dopedim, dealdim>*> _transposed_control_hessian_dirichlet_values;
 
         std::vector<unsigned int> _dirichlet_colors;
         std::vector<std::vector<bool> > _dirichlet_comps;
-        std::vector<PrimalDirichletData<DD, VECTOR, dopedim, dealdim>*>
-            _primal_dirichlet_values;
-        std::vector<TangentDirichletData<DD, VECTOR, dopedim, dealdim>*>
-            _tangent_dirichlet_values;
+        std::vector<PrimalDirichletData<DD, VECTOR, dopedim, dealdim>*> _primal_dirichlet_values;
+        std::vector<TangentDirichletData<DD, VECTOR, dopedim, dealdim>*> _tangent_dirichlet_values;
         const dealii::Function<dealdim>* _zero_dirichlet_values;
 
         const dealii::Function<dealdim>* _initial_values;
@@ -1054,18 +1068,17 @@ namespace DOpE
         std::vector<unsigned int> _boundary_functional_colors;
 
         std::map<std::string, const ControlVector<VECTOR>*> _auxiliary_controls;
-        std::map<std::string, const ConstraintVector<VECTOR>*>
-            _auxiliary_constraints;
+        std::map<std::string, const ConstraintVector<VECTOR>*> _auxiliary_constraints;
 
-        StateProblem<OptProblem<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
-            CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE,
-            DOFHANDLER> , PDE, DD, SPARSITYPATTERN, VECTOR, dopedim, dealdim>
-            * _state_problem;
+        StateProblem<
+            OptProblem<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
+                SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DOFHANDLER>, PDE,
+            DD, SPARSITYPATTERN, VECTOR, dopedim, dealdim> * _state_problem;
 
-        friend class StateProblem<OptProblem<FUNCTIONAL_INTERFACE, FUNCTIONAL,
-            PDE, DD, CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim,
-            FE, DOFHANDLER> , PDE, DD, SPARSITYPATTERN, VECTOR, dopedim,
-            dealdim> ;
+        friend class StateProblem<
+            OptProblem<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
+                SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DOFHANDLER>, PDE,
+            DD, SPARSITYPATTERN, VECTOR, dopedim, dealdim> ;
     };
   /******************************************************/
 
@@ -1077,18 +1090,18 @@ namespace DOpE
         SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DOFHANDLER>::OptProblem(
         FUNCTIONAL& functional, PDE& pde, CONSTRAINTS& constraints,
         SpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR, dopedim,
-            dealdim>& STH) :
-      _functional(&functional), _pde(&pde), _constraints(&constraints), _STH(
-          &STH), _state_problem(NULL)
+            dealdim>& STH)
+        : _functional(&functional), _pde(&pde), _constraints(&constraints), _STH(
+            &STH), _state_problem(NULL)
     {
       _ExceptionHandler = NULL;
       _OutputHandler = NULL;
-      _zero_dirichlet_values = new ZeroFunction<dealdim> (
+      _zero_dirichlet_values = new ZeroFunction<dealdim>(
           this->GetPDE()->GetStateNComponents());
       _algo_type = "";
       _functional_position[_functional->GetName()] = 0;
       //remember! At _functional_values[0] we store always the cost functional!
-      
+
     }
 
   /******************************************************/
@@ -1105,14 +1118,14 @@ namespace DOpE
         delete _zero_dirichlet_values;
       }
 
-      for (unsigned int i = 0; i
-          < _transposed_control_gradient_dirichlet_values.size(); i++)
+      for (unsigned int i = 0;
+          i < _transposed_control_gradient_dirichlet_values.size(); i++)
       {
         if (_transposed_control_gradient_dirichlet_values[i] != NULL)
           delete _transposed_control_gradient_dirichlet_values[i];
       }
-      for (unsigned int i = 0; i
-          < _transposed_control_hessian_dirichlet_values.size(); i++)
+      for (unsigned int i = 0;
+          i < _transposed_control_hessian_dirichlet_values.size(); i++)
       {
         if (_transposed_control_hessian_dirichlet_values[i] != NULL)
           delete _transposed_control_hessian_dirichlet_values[i];
@@ -1190,7 +1203,8 @@ namespace DOpE
         _problem_type_num = num;
         _problem_type = type;
         this->GetPDE()->SetProblemType(_problem_type);
-        this->GetConstraints()->SetProblemType(_problem_type, _problem_type_num);
+        this->GetConstraints()->SetProblemType(_problem_type,
+            _problem_type_num);
 
 #if dope_dimension > 0
         if(dealdim == dopedim)
@@ -1227,22 +1241,26 @@ namespace DOpE
           {
 
             if (_problem_type == "state" || _problem_type == "adjoint"
-                || _problem_type == "adjoint_for_ee" || _problem_type
-                == "functional_for_ee" || _problem_type == "cost_functional"
-                || _problem_type == "aux_functional" || _problem_type
-                == "tangent" || _problem_type == "adjoint_hessian")
+                || _problem_type == "adjoint_for_ee"
+                || _problem_type == "functional_for_ee"
+                || _problem_type == "cost_functional"
+                || _problem_type == "aux_functional"
+                || _problem_type == "tangent"
+                || _problem_type == "adjoint_hessian")
             {
               GetSpaceTimeHandler()->SetDoFHandlerOrdering(0, 0);
             }
-            else if (_problem_type == "gradient" || _problem_type
-                == "hessian_inverse" || _problem_type == "hessian")
+            else if (_problem_type == "gradient"
+                || _problem_type == "hessian_inverse"
+                || _problem_type == "hessian")
             {
               GetSpaceTimeHandler()->SetDoFHandlerOrdering(0, 0);
             }
             else
             {
-              throw DOpEException("_problem_type : " + _problem_type
-                  + " not implemented!", "OptProblem::SetType");
+              throw DOpEException(
+                  "_problem_type : " + _problem_type + " not implemented!",
+                  "OptProblem::SetType");
             }
           }
         }
@@ -1274,7 +1292,7 @@ namespace DOpE
           return _aux_functionals[_problem_type_num]->Value(cdc);
         }
         else if (GetType() == "functional_for_ee")
-        {//TODO ist das hier korrekt? Sollten wir eigentlich nicht benoetigen.
+        {  //TODO ist das hier korrekt? Sollten wir eigentlich nicht benoetigen.
           return _aux_functionals[_functional_for_ee_num]->Value(cdc);
         }
         else if (GetType().find("constraints") != std::string::npos)
@@ -1323,7 +1341,7 @@ namespace DOpE
             this->GetSpaceTimeHandler()->GetControlDoFHandler(),
             this->GetSpaceTimeHandler()->GetStateDoFHandler(), param_values,
             domain_values);
-      }//endif functional_for_ee
+      } //endif functional_for_ee
       else if (GetType().find("constraints") != std::string::npos)
       {
         return GetConstraints()->PointValue(
@@ -1429,8 +1447,8 @@ namespace DOpE
       else if (GetType() == "aux_functional")
       {
         // state values in quadrature points
-        return _aux_functionals[_problem_type_num]->AlgebraicValue(
-            param_values, domain_values);
+        return _aux_functionals[_problem_type_num]->AlgebraicValue(param_values,
+            domain_values);
       }
       else if (GetType() == "functional_for_ee")
       //TODO ist das hier korrekt? Sollten wir eigentlich nicht benoetigen.
@@ -1499,8 +1517,8 @@ namespace DOpE
     void
     OptProblem<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
         SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DOFHANDLER>::AlgebraicResidual(
-        VECTOR& residual, const std::map<std::string, const dealii::Vector<
-            double>*> &param_values,
+        VECTOR& residual,
+        const std::map<std::string, const dealii::Vector<double>*> &param_values,
         const std::map<std::string, const VECTOR*> &domain_values)
     {
       if (GetType() == "gradient")
@@ -1537,23 +1555,28 @@ namespace DOpE
         }
         else if (GetType() == "adjoint" || GetType() == "adjoint_for_ee")
         {
-          throw DOpEException("Not implemented", "OptProblem::CellTimeEquation");
+          throw DOpEException("Not implemented",
+              "OptProblem::CellTimeEquation");
         }
         else if (GetType() == "adjoint_hessian")
         {
-          throw DOpEException("Not implemented", "OptProblem::CellTimeEquation");
+          throw DOpEException("Not implemented",
+              "OptProblem::CellTimeEquation");
         }
         else if (GetType() == "tangent")
         {
-          throw DOpEException("Not implemented", "OptProblem::CellTimeEquation");
+          throw DOpEException("Not implemented",
+              "OptProblem::CellTimeEquation");
         }
         else if ((GetType() == "gradient") || (GetType() == "hessian"))
         {
-          throw DOpEException("Not implemented", "OptProblem::CellTimeEquation");
+          throw DOpEException("Not implemented",
+              "OptProblem::CellTimeEquation");
         }
         else
         {
-          throw DOpEException("Not implemented", "OptProblem::CellTimeEquation");
+          throw DOpEException("Not implemented",
+              "OptProblem::CellTimeEquation");
         }
       }
 
@@ -1578,23 +1601,28 @@ namespace DOpE
         }
         else if (GetType() == "adjoint" || GetType() == "adjoint_for_ee")
         {
-          throw DOpEException("Not implemented", "OptProblem::CellTimeEquation");
+          throw DOpEException("Not implemented",
+              "OptProblem::CellTimeEquation");
         }
         else if (GetType() == "adjoint_hessian")
         {
-          throw DOpEException("Not implemented", "OptProblem::CellTimeEquation");
+          throw DOpEException("Not implemented",
+              "OptProblem::CellTimeEquation");
         }
         else if (GetType() == "tangent")
         {
-          throw DOpEException("Not implemented", "OptProblem::CellTimeEquation");
+          throw DOpEException("Not implemented",
+              "OptProblem::CellTimeEquation");
         }
         else if ((GetType() == "gradient") || (GetType() == "hessian"))
         {
-          throw DOpEException("Not implemented", "OptProblem::CellTimeEquation");
+          throw DOpEException("Not implemented",
+              "OptProblem::CellTimeEquation");
         }
         else
         {
-          throw DOpEException("Not implemented", "OptProblem::CellTimeEquation");
+          throw DOpEException("Not implemented",
+              "OptProblem::CellTimeEquation");
         }
       }
 
@@ -1982,7 +2010,8 @@ namespace DOpE
         }
         else
         {
-          throw DOpEException("Not implemented", "OptProblem::NewtonCellMatrix");
+          throw DOpEException("Not implemented",
+              "OptProblem::NewtonCellMatrix");
         }
 
       }
@@ -2091,7 +2120,8 @@ namespace DOpE
         }
         else
         {
-          throw DOpEException("Not implemented", "OptProblem::NewtonFaceMatrix");
+          throw DOpEException("Not implemented",
+              "OptProblem::NewtonFaceMatrix");
         }
 
       }
@@ -2211,8 +2241,8 @@ namespace DOpE
     void
     OptProblem<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
         SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DOFHANDLER>::ComputeLocalControlConstraints(
-        VECTOR& constraints, const std::map<std::string, const dealii::Vector<
-            double>*> &/*values*/,
+        VECTOR& constraints,
+        const std::map<std::string, const dealii::Vector<double>*> &/*values*/,
         const std::map<std::string, const VECTOR*> &block_values)
     {
       if (GetType() == "constraints")
@@ -2241,9 +2271,9 @@ namespace DOpE
     OptProblem<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
         SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DOFHANDLER>::GetDoFType() const
     {
-      if (GetType() == "state" || GetType() == "adjoint" || GetType()
-          == "adjoint_for_ee" || GetType() == "tangent" || GetType()
-          == "adjoint_hessian")
+      if (GetType() == "state" || GetType() == "adjoint"
+          || GetType() == "adjoint_for_ee" || GetType() == "tangent"
+          || GetType() == "adjoint_hessian")
       {
         return "state";
       }
@@ -2269,9 +2299,9 @@ namespace DOpE
     OptProblem<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
         SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DOFHANDLER>::GetFESystem() const
     {
-      if ((GetType() == "state") || (GetType() == "adjoint") || GetType()
-          == "adjoint_for_ee" || GetType() == "tangent" || GetType()
-          == "adjoint_hessian")
+      if ((GetType() == "state") || (GetType() == "adjoint")
+          || GetType() == "adjoint_for_ee" || GetType() == "tangent"
+          || GetType() == "adjoint_hessian")
       {
         return this->GetSpaceTimeHandler()->GetFESystem("state");
       }
@@ -2452,11 +2482,11 @@ namespace DOpE
       //      GetSpaceTimeHandler()->SetTimeDoFNumber(time_point);
 
       { //Zeit an Dirichlet Werte uebermitteln
-        for (unsigned int i = 0; i
-            < _transposed_control_gradient_dirichlet_values.size(); i++)
+        for (unsigned int i = 0;
+            i < _transposed_control_gradient_dirichlet_values.size(); i++)
           _transposed_control_gradient_dirichlet_values[i]->SetTime(time);
-        for (unsigned int i = 0; i
-            < _transposed_control_hessian_dirichlet_values.size(); i++)
+        for (unsigned int i = 0;
+            i < _transposed_control_hessian_dirichlet_values.size(); i++)
           _transposed_control_hessian_dirichlet_values[i]->SetTime(time);
         for (unsigned int i = 0; i < _primal_dirichlet_values.size(); i++)
           _primal_dirichlet_values[i]->SetTime(time);
@@ -2473,16 +2503,16 @@ namespace DOpE
       }
       //Update Auxiliary Control and Constraint Vectors
       {
-        typename std::map<std::string, const ControlVector<VECTOR> *>::iterator
-            it = _auxiliary_controls.begin();
+        typename std::map<std::string, const ControlVector<VECTOR> *>::iterator it =
+            _auxiliary_controls.begin();
         for (; it != _auxiliary_controls.end(); it++)
         {
           it->second->SetTime(time, interval);
         }
       }
       {
-        typename std::map<std::string, const ConstraintVector<VECTOR> *>::iterator
-            it = _auxiliary_constraints.begin();
+        typename std::map<std::string, const ConstraintVector<VECTOR> *>::iterator it =
+            _auxiliary_constraints.begin();
         for (; it != _auxiliary_constraints.end(); it++)
         {
           it->second->SetTime(time, interval);
@@ -2502,9 +2532,9 @@ namespace DOpE
         SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DOFHANDLER>::ComputeSparsityPattern(
         SPARSITYPATTERN & sparsity) const
     {
-      if (GetType() == "state" || GetType() == "tangent" || GetType()
-          == "adjoint_for_ee" || GetType() == "adjoint" || GetType()
-          == "adjoint_hessian")
+      if (GetType() == "state" || GetType() == "tangent"
+          || GetType() == "adjoint_for_ee" || GetType() == "adjoint"
+          || GetType() == "adjoint_hessian")
       {
         this->GetSpaceTimeHandler()->ComputeStateSparsityPattern(sparsity);
       }
@@ -2578,11 +2608,12 @@ namespace DOpE
     {
       if (_auxiliary_controls.find(name) != _auxiliary_controls.end())
       {
-        throw DOpEException("Adding multiple Data with name " + name
-            + " is prohibited!", "OptProblem::AddAuxiliaryControl");
+        throw DOpEException(
+            "Adding multiple Data with name " + name + " is prohibited!",
+            "OptProblem::AddAuxiliaryControl");
       }
-      _auxiliary_controls.insert(std::pair<std::string, const ControlVector<
-          VECTOR>*>(name, c));
+      _auxiliary_controls.insert(
+          std::pair<std::string, const ControlVector<VECTOR>*>(name, c));
     }
 
   /******************************************************/
@@ -2598,11 +2629,12 @@ namespace DOpE
     {
       if (_auxiliary_constraints.find(name) != _auxiliary_constraints.end())
       {
-        throw DOpEException("Adding multiple Data with name " + name
-            + " is prohibited!", "OptProblem::AddAuxiliaryConstraint");
+        throw DOpEException(
+            "Adding multiple Data with name " + name + " is prohibited!",
+            "OptProblem::AddAuxiliaryConstraint");
       }
-      _auxiliary_constraints.insert(std::pair<std::string,
-          const ConstraintVector<VECTOR>*>(name, c));
+      _auxiliary_constraints.insert(
+          std::pair<std::string, const ConstraintVector<VECTOR>*>(name, c));
     }
   /******************************************************/
 
@@ -2615,8 +2647,8 @@ namespace DOpE
         SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DOFHANDLER>::GetAuxiliaryControl(
         std::string name) const
     {
-      typename std::map<std::string, const ControlVector<VECTOR> *>::const_iterator
-          it = _auxiliary_controls.find(name);
+      typename std::map<std::string, const ControlVector<VECTOR> *>::const_iterator it =
+          _auxiliary_controls.find(name);
       if (it == _auxiliary_controls.end())
       {
         throw DOpEException("Could not find Data with name " + name,
@@ -2636,12 +2668,12 @@ namespace DOpE
         SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DOFHANDLER>::DeleteAuxiliaryControl(
         std::string name)
     {
-      typename std::map<std::string, const ControlVector<VECTOR> *>::iterator
-          it = _auxiliary_controls.find(name);
+      typename std::map<std::string, const ControlVector<VECTOR> *>::iterator it =
+          _auxiliary_controls.find(name);
       if (it == _auxiliary_controls.end())
       {
-        throw DOpEException("Deleting Data " + name
-            + " is impossible! Data not found",
+        throw DOpEException(
+            "Deleting Data " + name + " is impossible! Data not found",
             "OptProblem::DeleteAuxiliaryControl");
       }
       _auxiliary_controls.erase(it);
@@ -2658,12 +2690,12 @@ namespace DOpE
         SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DOFHANDLER>::DeleteAuxiliaryConstraint(
         std::string name)
     {
-      typename std::map<std::string, const ConstraintVector<VECTOR> *>::iterator
-          it = _auxiliary_constraints.find(name);
+      typename std::map<std::string, const ConstraintVector<VECTOR> *>::iterator it =
+          _auxiliary_constraints.find(name);
       if (it == _auxiliary_constraints.end())
       {
-        throw DOpEException("Deleting Data " + name
-            + " is impossible! Data not found",
+        throw DOpEException(
+            "Deleting Data " + name + " is impossible! Data not found",
             "OptProblem::DeleteAuxiliaryConstraint");
       }
       _auxiliary_constraints.erase(it);
@@ -2732,16 +2764,15 @@ namespace DOpE
       }
       else
       {
-        if ((GetType() == "state") || (GetType() == "tangent") || (GetType()
-            == "gradient"))
+        if ((GetType() == "state") || (GetType() == "tangent")
+            || (GetType() == "gradient"))
         {
           return this->GetPDE()->HasFaces();
         }
         else if ((GetType() == "adjoint") || (GetType() == "adjoint_hessian")
             || (GetType() == "hessian"))
         {
-          return this->GetPDE()->HasFaces()
-              || this->GetFunctional()->HasFaces();
+          return this->GetPDE()->HasFaces() || this->GetFunctional()->HasFaces();
         }
         else if (GetType() == "adjoint_for_ee")
         {
@@ -2862,21 +2893,21 @@ namespace DOpE
       _dirichlet_colors.push_back(color);
       _dirichlet_comps.push_back(comp_mask);
       PrimalDirichletData<DD, VECTOR, dopedim, dealdim>* data =
-          new PrimalDirichletData<DD, VECTOR, dopedim, dealdim> (*values);
+          new PrimalDirichletData<DD, VECTOR, dopedim, dealdim>(*values);
       _primal_dirichlet_values.push_back(data);
       TangentDirichletData<DD, VECTOR, dopedim, dealdim>* tdata =
-          new TangentDirichletData<DD, VECTOR, dopedim, dealdim> (*values);
+          new TangentDirichletData<DD, VECTOR, dopedim, dealdim>(*values);
       _tangent_dirichlet_values.push_back(tdata);
 
       if (values->NeedsControl())
       {
         _control_transposed_dirichlet_colors.push_back(color);
         TransposedGradientDirichletData<DD, VECTOR, dopedim, dealdim> * gdata =
-            new TransposedGradientDirichletData<DD, VECTOR, dopedim, dealdim> (
+            new TransposedGradientDirichletData<DD, VECTOR, dopedim, dealdim>(
                 *values);
         _transposed_control_gradient_dirichlet_values.push_back(gdata);
         TransposedHessianDirichletData<DD, VECTOR, dopedim, dealdim> * hdata =
-            new TransposedHessianDirichletData<DD, VECTOR, dopedim, dealdim> (
+            new TransposedHessianDirichletData<DD, VECTOR, dopedim, dealdim>(
                 *values);
         _transposed_control_hessian_dirichlet_values.push_back(hdata);
       }
@@ -2892,9 +2923,9 @@ namespace DOpE
     OptProblem<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
         SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DOFHANDLER>::GetDirichletColors() const
     {
-      if ((GetType() == "state") || (GetType() == "adjoint") || GetType()
-          == "adjoint_for_ee" || (GetType() == "tangent") || (GetType()
-          == "adjoint_hessian"))
+      if ((GetType() == "state") || (GetType() == "adjoint")
+          || GetType() == "adjoint_for_ee" || (GetType() == "tangent")
+          || (GetType() == "adjoint_hessian"))
       {
         return _dirichlet_colors;
       }
@@ -2941,9 +2972,9 @@ namespace DOpE
         SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DOFHANDLER>::GetDirichletCompMask(
         unsigned int color) const
     {
-      if ((GetType() == "state") || (GetType() == "adjoint") || GetType()
-          == "adjoint_for_ee" || (GetType() == "tangent") || (GetType()
-          == "adjoint_hessian"))
+      if ((GetType() == "state") || (GetType() == "adjoint")
+          || GetType() == "adjoint_for_ee" || (GetType() == "tangent")
+          || (GetType() == "adjoint_hessian"))
       {
         unsigned int comp = _dirichlet_colors.size();
         for (unsigned int i = 0; i < _dirichlet_colors.size(); ++i)
@@ -3033,15 +3064,15 @@ namespace DOpE
     const Function<dealdim>&
     OptProblem<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
         SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DOFHANDLER>::GetDirichletValues(
-        unsigned int color, const std::map<std::string, const dealii::Vector<
-            double>*> &param_values,
+        unsigned int color,
+        const std::map<std::string, const dealii::Vector<double>*> &param_values,
         const std::map<std::string, const VECTOR*> &domain_values) const
     {
 
       unsigned int col = _dirichlet_colors.size();
-      if ((GetType() == "state") || (GetType() == "adjoint") || GetType()
-          == "adjoint_for_ee" || (GetType() == "tangent") || (GetType()
-          == "adjoint_hessian"))
+      if ((GetType() == "state") || (GetType() == "adjoint")
+          || GetType() == "adjoint_for_ee" || (GetType() == "tangent")
+          || (GetType() == "adjoint_hessian"))
       {
         for (unsigned int i = 0; i < _dirichlet_colors.size(); ++i)
         {
@@ -3118,15 +3149,15 @@ namespace DOpE
     const TransposedDirichletDataInterface<dopedim, dealdim>&
     OptProblem<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
         SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DOFHANDLER>::GetTransposedDirichletValues(
-        unsigned int color, const std::map<std::string, const dealii::Vector<
-            double>*> &param_values,
+        unsigned int color,
+        const std::map<std::string, const dealii::Vector<double>*> &param_values,
         const std::map<std::string, const VECTOR*> &domain_values) const
     {
       unsigned int col = _control_transposed_dirichlet_colors.size();
       if (GetType() == "gradient" || (GetType() == "hessian"))
       {
-        for (unsigned int i = 0; i
-            < _control_transposed_dirichlet_colors.size(); ++i)
+        for (unsigned int i = 0;
+            i < _control_transposed_dirichlet_colors.size(); ++i)
         {
           if (_control_transposed_dirichlet_colors[i] == color)
           {
@@ -3151,8 +3182,8 @@ namespace DOpE
 
       if (GetType() == "gradient")
       {
-        _transposed_control_gradient_dirichlet_values[col]->ReInit(
-            param_values, domain_values, color);
+        _transposed_control_gradient_dirichlet_values[col]->ReInit(param_values,
+            domain_values, color);
         return *(_transposed_control_gradient_dirichlet_values[col]);
       }
       else if (GetType() == "hessian")
@@ -3212,7 +3243,8 @@ namespace DOpE
     {
       { //Control Boundary Equation colors are simply inserted
         unsigned int comp = _control_boundary_equation_colors.size();
-        for (unsigned int i = 0; i < _control_boundary_equation_colors.size(); ++i)
+        for (unsigned int i = 0; i < _control_boundary_equation_colors.size();
+            ++i)
         {
           if (_control_boundary_equation_colors[i] == color)
           {
@@ -3244,7 +3276,8 @@ namespace DOpE
     {
       { //State Boundary Equation colors are simply inserted
         unsigned int comp = _state_boundary_equation_colors.size();
-        for (unsigned int i = 0; i < _state_boundary_equation_colors.size(); ++i)
+        for (unsigned int i = 0; i < _state_boundary_equation_colors.size();
+            ++i)
         {
           if (_state_boundary_equation_colors[i] == color)
           {
@@ -3263,7 +3296,8 @@ namespace DOpE
       }
       { //For the  adjoint they are added with the boundary functional colors
         unsigned int comp = _adjoint_boundary_equation_colors.size();
-        for (unsigned int i = 0; i < _adjoint_boundary_equation_colors.size(); ++i)
+        for (unsigned int i = 0; i < _adjoint_boundary_equation_colors.size();
+            ++i)
         {
           if (_adjoint_boundary_equation_colors[i] == color)
           {
@@ -3338,7 +3372,8 @@ namespace DOpE
       }
       { //For the  adjoint they are addeed  to the boundary equation colors
         unsigned int comp = _adjoint_boundary_equation_colors.size();
-        for (unsigned int i = 0; i < _adjoint_boundary_equation_colors.size(); ++i)
+        for (unsigned int i = 0; i < _adjoint_boundary_equation_colors.size();
+            ++i)
         {
           if (_adjoint_boundary_equation_colors[i] == color)
           {
@@ -3395,8 +3430,8 @@ namespace DOpE
         SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DOFHANDLER>::GetNBlocks() const
     {
       if ((GetType() == "state") || (GetType() == "adjoint_for_ee")
-          || (GetType() == "adjoint") || (GetType() == "tangent") || (GetType()
-          == "adjoint_hessian"))
+          || (GetType() == "adjoint") || (GetType() == "tangent")
+          || (GetType() == "adjoint_hessian"))
       {
         return this->GetStateNBlocks();
       }
@@ -3422,9 +3457,9 @@ namespace DOpE
         SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DOFHANDLER>::GetDoFsPerBlock(
         unsigned int b) const
     {
-      if ((GetType() == "state") || (GetType() == "adjoint") || (GetType()
-          == "adjoint_for_ee") || (GetType() == "tangent") || (GetType()
-          == "adjoint_hessian"))
+      if ((GetType() == "state") || (GetType() == "adjoint")
+          || (GetType() == "adjoint_for_ee") || (GetType() == "tangent")
+          || (GetType() == "adjoint_hessian"))
       {
         return GetSpaceTimeHandler()->GetStateDoFsPerBlock(b);
       }
@@ -3449,9 +3484,9 @@ namespace DOpE
     OptProblem<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
         SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DOFHANDLER>::GetDoFsPerBlock() const
     {
-      if ((GetType() == "state") || (GetType() == "adjoint") || (GetType()
-          == "adjoint_for_ee") || (GetType() == "tangent") || (GetType()
-          == "adjoint_hessian"))
+      if ((GetType() == "state") || (GetType() == "adjoint")
+          || (GetType() == "adjoint_for_ee") || (GetType() == "tangent")
+          || (GetType() == "adjoint_hessian"))
       {
         return GetSpaceTimeHandler()->GetStateDoFsPerBlock();
       }
@@ -3476,9 +3511,9 @@ namespace DOpE
     OptProblem<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
         SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DOFHANDLER>::GetHangingNodeConstraints() const
     {
-      if ((GetType() == "state") || (GetType() == "adjoint") || (GetType()
-          == "adjoint_for_ee") || (GetType() == "tangent") || (GetType()
-          == "adjoint_hessian"))
+      if ((GetType() == "state") || (GetType() == "adjoint")
+          || (GetType() == "adjoint_for_ee") || (GetType() == "tangent")
+          || (GetType() == "adjoint_hessian"))
       {
         return GetSpaceTimeHandler()->GetStateHangingNodeConstraints();
       }
@@ -3511,7 +3546,8 @@ namespace DOpE
       else if (GetType() == "functional_for_ee")
         return _aux_functionals[_functional_for_ee_num]->NeedTime();
       else
-        throw DOpEException("Not implemented", "OptProblem::NeedTimeFunctional");
+        throw DOpEException("Not implemented",
+            "OptProblem::NeedTimeFunctional");
     }
 
   /******************************************************/

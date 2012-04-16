@@ -184,13 +184,13 @@ namespace DOpE
 
     /******************************************************/
 
-    /**
-     * Function does not make sense when we do not have a state variable.
-     * Just needed for compatibility issues.
-     */
-    template<class DWRCONTAINER>
-    void
-    ComputeRefinementIndicators(DWRCONTAINER& dwrc);;
+//    /**
+//     * Function does not make sense when we do not have a state variable.
+//     * Just needed for compatibility issues.
+//     */
+//    template<class DWRCONTAINER>
+//    void
+//    ComputeRefinementIndicators(DWRCONTAINER& dwrc);
 
     /******************************************************/
 
@@ -1065,19 +1065,19 @@ void VoidReducedProblem<CONTROLNONLINEARSOLVER, CONTROLINTEGRATOR, PROBLEM, VECT
 }
 /******************************************************/
 
-  template<typename CONTROLNONLINEARSOLVER, typename CONTROLINTEGRATOR,
-      typename PROBLEM, typename VECTOR, int dopedim, int dealdim>
-    template<class DWRCONTAINER>
-      void
-      VoidReducedProblem<CONTROLNONLINEARSOLVER, CONTROLINTEGRATOR, PROBLEM,
-          VECTOR, dopedim, dealdim>::ComputeRefinementIndicators(
-          DWRCONTAINER& dwrc)
-
-      {
-        throw DOpEException(
-            "Function makes no sense in this context because we have no state variable.",
-            "VoidReducedProblem::ComputeRefinementIndicators");
-        return 0;
-      }
+//  template<typename CONTROLNONLINEARSOLVER, typename CONTROLINTEGRATOR,
+//      typename PROBLEM, typename VECTOR, int dopedim, int dealdim>
+//    template<class DWRCONTAINER>
+//      void
+//      VoidReducedProblem<CONTROLNONLINEARSOLVER, CONTROLINTEGRATOR, PROBLEM,
+//          VECTOR, dopedim, dealdim>::ComputeRefinementIndicators(
+//          DWRCONTAINER& dwrc)
+//
+//      {
+//        throw DOpEException(
+//            "Function makes no sense in this context because we have no state variable.",
+//            "VoidReducedProblem::ComputeRefinementIndicators");
+//        return 0;
+//      }
 }
 #endif
