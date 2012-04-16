@@ -14,6 +14,19 @@
 
 namespace DOpE
 {
+
+  /**
+   * This class hosts all the information we need for the
+   * error evaluation (weights, additional needed DoF handler, error indicators.)
+   *
+   * DWRDataContainerBase is a base/interface class. As there are different possibilities
+   * to implement the DWR method, for example the computation of the weights
+   * is outsourced to the derived classes.
+   *
+   * @template VECTOR   Vector type used in the computation used in
+   *                    the computation of the PDE solution.
+   *
+   */
   template<typename VECTOR>
     class DWRDataContainerBase
     {
@@ -31,9 +44,18 @@ namespace DOpE
         }
         ;
 
+        /**
+         * This initializes the vector of the error indicators.
+         */
         virtual void
         ReInit(unsigned int n_cells);
 
+        /**
+         * This function sums up the entries of the vector of the error
+         * indicators.
+         *
+         * @ return
+         */
         double
         GetError() const
         {
@@ -44,6 +66,10 @@ namespace DOpE
           }
           return error;
         }
+
+        /**
+         *
+         */
         const Vector<double>&
         GetErrorIndicators() const
         {
@@ -130,14 +156,14 @@ namespace DOpE
             integrator.ComputeRefinementIndicators(problem, *this);
           }
 
-        std::string
-        GetProblemType() const
-        {
-          std::string ret = DOpEtypes::GetProblemType(GetResidualEvaluation())
-              + DOpEtypes::GetProblemType(GetWeightComputation())
-              + DOpEtypes::GetProblemType(GetEETerms());
-          return ret;
-        }
+//        std::string
+//        GetProblemType() const
+//        {
+//          std::string ret = DOpEtypes::GetProblemType(GetResidualEvaluation())
+//              + DOpEtypes::GetProblemType(GetWeightComputation())
+//              + DOpEtypes::GetProblemType(GetEETerms());
+//          return ret;
+//        }
 
         virtual bool
         NeedDual() const = 0;

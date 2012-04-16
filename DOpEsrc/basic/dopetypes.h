@@ -34,8 +34,8 @@ namespace DOpE
       primal_only, dual_only, mixed
     };
 
-    std::string
-    GetProblemType(EETerms ee_term);
+//    std::string
+//    GetProblemType(EETerms ee_term);
 
     /**
      * This enum describes how we compute the weights in
@@ -51,16 +51,22 @@ namespace DOpE
       higher_order_interpolation, higher_order_computation/*Not implemented!*/
     };
 
-    std::string
-    GetProblemType(WeightComputation wc_term);
+//    std::string
+//    GetProblemType(WeightComputation wc_term);
 
+    /**
+     * This enum describes how we evaluate the residual
+     * in the DWR-method.
+     *
+     * strong_residual    We use the strong form of the residual.
+     */
     enum ResidualEvaluation
     {
       strong_residual
     };
 
-    std::string
-    GetProblemType(ResidualEvaluation re_term);
+//    std::string
+//    GetProblemType(ResidualEvaluation re_term);
 
   }
 }
