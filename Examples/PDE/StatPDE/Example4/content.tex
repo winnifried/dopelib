@@ -1,6 +1,4 @@
-\textbf{General problem description}
-
-\vspace{0.2cm}
+\subsubsection{General problem description}
 
 In this example we consider the following benchmark problem from elasticity theory: \index{stationary PDE} \index{stationary PDE!elasticity equations}
 \begin{equation}
@@ -39,11 +37,7 @@ The goal of our computations is to match the following functional reference valu
 \end{tabular}
 \end{table}
 
-\vspace{0.2cm}
-
-\textbf{Program description}
-
-\vspace{0.2cm}
+\subsubsection{Program description}
 
 From the previous examples we know how to read a grid from an \textit{.inp} file. The grid of our current example comes from the above mentioned benchmark problem. The parameter file (\textit{dope.prm}) contains the same variables as in the first two examples.\\
 Apart from different point values of derivatives of the solution, we want to evaluate an integral over part of the boundary. \index{functional} \index{functional!boundary integral} This is newly implemented in \textit{functionals.h}.\\

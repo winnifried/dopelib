@@ -159,9 +159,9 @@ main(int argc, char **argv)
   std::vector<bool> comp_mask(1);
   comp_mask[0] = true;
 
-  ExactSolution es;
+  ExactSolution ex_sol;
 
-  SimpleDirichletData<VECTOR, 2> DD1(es);
+  SimpleDirichletData<VECTOR, 2> DD1(ex_sol);
   //Set dirichlet boundary values all around
   P.SetDirichletBoundaryColors(0, comp_mask, &DD1);
   P.SetDirichletBoundaryColors(1, comp_mask, &DD1);
@@ -192,9 +192,6 @@ main(int argc, char **argv)
   HO_DWRC dwrc(DOFH_higher_order, idc_high, "fullmem", pr,
       DOpEtypes::primal_only);
   solver.InitializeHigherOrderDWRC(dwrc);
-  ExactSolution ex_sol;
-  Vector<double> solution;
-
   //**************************************************************************************************
 
   for (int i = 0; i < max_iter; i++)
@@ -233,7 +230,6 @@ main(int argc, char **argv)
     if (i != max_iter - 1)
     {
 //      DOFH.RefineSpace("global");
-
       Vector<float> error_ind(dwrc.GetErrorIndicators());
       for (unsigned int i = 0; i < error_ind.size(); i++)
         error_ind[i] = std::fabs(error_ind[i]);

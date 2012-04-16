@@ -1,1 +1,43 @@
-Shows use of DWR Method for stationary laplace.
+\subsubsection{General problem description}
+This example shows the use of the adaptive grid refinement and error estimation by the DWR-method (For a description of the method, see \cite{BR03}.) applied to the laplace equation 
+\begin{align*}
+-\Delta u &= f && \text{ in } \Omega
+\end{align*}
+with the analytical solution
+\begin{align*}
+u = \sin\left(\frac{\pi}{x^2 + y^2}\right),
+\end{align*}
+ the corresponding right hand side $f = -\Delta u$ and appropriate Dirichlet Conditions on $\partial \Omega$, where the domain is given by
+\begin{align*}
+\Omega = [-2,2]^2\setminus \overline{B}_{0.5}(0).
+\end{align*}
+We want to estimate the error in the Functional 
+$$\fullfunction{J}{H^1(\Omega)}{\mathbb{R}}{u}{\frac 1 {\abs{\Gamma}} \int_\Gamma u \,dx}$$
+where
+$\Gamma = \left\{(x,y)\in \mathbb R ^2\,\big | \,x=0,-2<y<0.5 \right \}$.
+
+For this setting, we have the error representation
+\begin{align*}
+J(e)=\sum_{K\in \mathbb T _h} \left\{(R_h, z-\psi_h)_K + (r_h, z-\psi_h)_{\partial_K}\right\}
+\end{align*}
+with the error $e=u-u_h$, the Triangulation $\mathbb T_h$, the dual solution $z$, arbitraty function $\phi_h \in V_h$ (the ansatz space) and the cell and edge residuals $\eval[1]{R_h}_{K} = f+\Delta u_h$ resp. 
+\begin{align*}
+\eval[1]{r_h}_{\Sigma} =
+\begin{cases}
+\frac 12 [\partial_n u_h] ,&\text{if } \Sigma \subset \partial_K \setminus \partial \Omega,\\
+-0,& \text{ if } \Sigma \subset\partial \Omega.
+\end{cases}
+\end{align*}
+\subsubsection{Program description}
+Additionally to all the things one has to do when just solving the equation, we have to include {\verb higher_order_dwrc.h }. In this program, we approximate the so called 'weights' $z-\phi_h$ by a patchwise higher order interpolation of $z_h$ (the computed dual solution). 
+
+The beginning of the program is basically as before, note however that we enforce patch-wise refinement of the grid by giving the flag {\verb Triangulation<2>:: } {\verb MeshSmoothing:: } {\verb patch_level_1 }
+to the triangulation. To be able to solve the adjoint equation for the error estimation, we need to implement {\verb FaceValue_U } in \texttt{functionals.h} as well as {\verb CellEquation_U }, {\verb CellMatrix_T }, {\verb CellEquation_U } and {\verb FaceEquation_U } in {\verb localpde.h }. In the latter, we also have to implement {\verb StrongCellResidual }, {\verb StrongFaceResidual } and {\verb StrongBoundaryResidual }.
+
+
+After everything is set up for the solution of the equation, we have to define some  higher order FiniteElements, some (face)quadrature formulas (and build a \texttt{IntegratorDataContainer} with them.) and a higher order \texttt{SpaceTimeHandler}. We use these to define an object of the  \texttt{HigherOrderDWRC} class. The last step is to initialize the \texttt{HigherOrderDWRC} via \texttt{solver.InitializeHigherOrderDWRC(dwrc)}.
+
+Succeding the solution of the state equation ({\verb solver.ComputeReducedFunctionals() }), we compute the error indicators by calling { \verb solver.ComputeRefinementIndicators(dwrc) }. With these indicators, we are now able to refine our grid adaptively (there are several mesh adaption strategies implemented, like 'optimized', 'fixednumber' or 'fixedfraction').
+
+
+

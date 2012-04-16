@@ -1,6 +1,4 @@
-\textbf{General problem description}
-
-\vspace{0.2cm}
+\subsubsection{General problem description}
 
 Similar to the previous example, we consider the following benchmark problem from plasticity theory:
 \begin{equation}
@@ -27,11 +25,7 @@ The main difference with respect to the elastic case is the projection operator 
 In our computations, we choose $\sigma_0 = \sqrt{\frac{2}{3}}\cdot 450$, and the above parameters $\mu$ and $\kappa$ as $\mu = 80193.800283$ resp. $\kappa = 190937.589172$. The corner points of our computational domain are the same as before, and the boundary conditions are not altered, either.\\
 The goal of our computations is to detect a subdomain in $\Omega$ where plastic behaviour occurs (compare \textit{E. Stein (editor), Error-controlled Adaptive Finite Elements in Solid Mechanics, Wiley (2003), pp. 386 - 389}). This subdomain depends on the righthand side $g$ in equation $(1)$ which we write as $g = \lambda \cdot p$ with $p = 100$ and $\lambda \in [1.5;4.5]$.\\
 
-\vspace{0.2cm}
-
-\textbf{Program description}
-
-\vspace{0.2cm}
+\subsubsection{Program description}
 
 The code of the current example is nearly identical to the code of the previous one. The only difference worth mentioning is the change of the equations which leads to different implementations of the \texttt{CellEquation, CellMatrix} and \texttt{BoundaryEquations} functions in \textit{localpde.h}.\\
 Furthermore, the elasticity equations solved in the last example are linear, whereas the plasticity equations are nonlinear; this difference is evident also from the output (here, we need several Newton steps until convergence).\\

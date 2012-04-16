@@ -1,6 +1,4 @@
-\textbf{General problem description}
-
-\vspace{0.2cm}
+\subsubsection{General problem description}
 
 In this example we consider a simple stationary FSI problem. \index{stationary PDE} \index{stationary PDE!FSI problem} The fluid
 is given as an incompressible Newtonian fluid modelled by the Stokes equation. Here, we use the symmetric stress tensor which has a little consequence when using the do-nothing outflow condition. \index{fluid} \index{fluid!incompressible} \index{fluid!Newtonian}
@@ -85,11 +83,7 @@ The resulting FSI problem is then given by: \index{fluid-structure interaction (
   \end{equation*}  
 \end{Problem}
 
-\vspace{0.2cm}
-
-\textbf{Program description}
-
-\vspace{0.2cm}
+\subsubsection{Program description}
 
 There is not much difference to the prior example, so we will keep our remarks rather short. The \textit{functionals.h, localfunctional.h} and \textit{myfunctions.cc} files did not change at all, so we simply refer to the corresponding sections in the last example.\\
 In the \textit{localpde.h} file, all functions of the \texttt{LocalPDE} class have to be adjusted to the current FSI problem. This only makes the equations and matrices a little more complicated, and our solution vector now consists of five components (two velocity components of the fluid, the pressure component, and two additional displacement components for the structure variables). Otherwise, everything is analogous to the former example.\\

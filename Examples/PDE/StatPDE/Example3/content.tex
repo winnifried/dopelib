@@ -1,6 +1,4 @@
-\textbf{General problem description}
-
-\vspace{0.2cm}
+\subsubsection{General problem description}
 
 This example is an extension the previous one.
 We solve an stationary FSI problem either with 
@@ -46,11 +44,7 @@ numerical FSI benchmark \index{fluid-structure interaction (FSI)} \index{fluid-s
 The code is established by computing the stationary FSI benchmark example FSI 1 with 
 the following values of interest: $x$-displacement, $y$-displacement, drag, and lift.\index{functional} \index{functional!drag} \index{functional!lift} \index{functional!deflection}
 
-\vspace{0.2cm}
-
-\textbf{Program description}
-
-\vspace{0.2cm}
+\subsubsection{Program description}
 
 Compared to the two former examples, there are some differences which we will briefly discuss in the following. First of all, the problem is nonlinear in contrast to the former ones. We work on a different domain (given in the \textit{benchfst0100tw.inp} file), namely a channel with a cylinder put at half height near the inflow boundary; further \textit{.inp} files yield the possibility to vary the domain.\\
 Furthermore, in the \textit{dope.prm} parameter file there are two additional subsections which are added only for the current problem. From the denotation of these subsections one can immediately see where in the code the parameters are used.\\

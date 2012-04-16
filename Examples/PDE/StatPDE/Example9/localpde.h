@@ -137,14 +137,6 @@ template<typename VECTOR, int dealdim>
       }
 
       void
-      FaceEquation(
-          const FaceDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& fdc,
-          dealii::Vector<double> &local_cell_vector, double scale)
-      {
-
-      }
-
-      void
       FaceEquation_U(
           const FaceDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& fdc,
           dealii::Vector<double> &local_cell_vector, double scale)
