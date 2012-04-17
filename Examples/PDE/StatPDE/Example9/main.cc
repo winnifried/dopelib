@@ -235,6 +235,7 @@ main(int argc, char **argv)
         error_ind[i] = std::fabs(error_ind[i]);
       DOFH.RefineSpace("optimized", &error_ind);
 //      DOFH.RefineSpace("fixednumber", &error_ind, 0.4);
+//      DOFH.RefineSpace("fixedfraction", &error_ind, 0.8);
     }
   }
   return 0;

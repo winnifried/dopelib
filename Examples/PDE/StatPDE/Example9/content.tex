@@ -1,5 +1,5 @@
 \subsubsection{General problem description}
-This example shows the use of the adaptive grid refinement and error estimation by the DWR-method (For a description of the method, see \cite{BR03}.) applied to the laplace equation 
+This example shows the use of the adaptive grid refinement and error estimation by the \textit{DWR method} (For a description of the method, see \cite{BR03}.) applied to the laplace equation 
 \begin{align*}
 -\Delta u &= f && \text{ in } \Omega
 \end{align*}
@@ -11,33 +11,103 @@ u = \sin\left(\frac{\pi}{x^2 + y^2}\right),
 \begin{align*}
 \Omega = [-2,2]^2\setminus \overline{B}_{0.5}(0).
 \end{align*}
-We want to estimate the error in the Functional 
+We want to estimate the error in the following functional of interest
 $$\fullfunction{J}{H^1(\Omega)}{\mathbb{R}}{u}{\frac 1 {\abs{\Gamma}} \int_\Gamma u \,dx}$$
 where
 $\Gamma = \left\{(x,y)\in \mathbb R ^2\,\big | \,x=0,-2<y<0.5 \right \}$.
 
 For this setting, we have the error representation
-\begin{align*}
+\begin{align}\label{dwr.error_identity}
 J(e)=\sum_{K\in \mathbb T _h} \left\{(R_h, z-\psi_h)_K + (r_h, z-\psi_h)_{\partial_K}\right\}
-\end{align*}
-with the error $e=u-u_h$, the Triangulation $\mathbb T_h$, the dual solution $z$, arbitraty function $\phi_h \in V_h$ (the ansatz space) and the cell and edge residuals $\eval[1]{R_h}_{K} = f+\Delta u_h$ resp. 
-\begin{align*}
+\end{align}
+with the error $e=u-u_h$, the Triangulation $\mathbb T_h$, the dual solution $z$, arbitraty function $\phi_h \in V_h$ (the ansatz space) and the cell- and edge-residuals: 
+\begin{align}\label{dwr.cell_residual}
+\eval[1]{R_h}_{K} = f+\Delta u_h
+\end{align}
+resp. 
+\begin{align}\label{dwr.edge_residual}
 \eval[1]{r_h}_{\Sigma} =
 \begin{cases}
 \frac 12 [\partial_n u_h] ,&\text{if } \Sigma \subset \partial_K \setminus \partial \Omega,\\
--0,& \text{ if } \Sigma \subset\partial \Omega.
+0,& \text{if } \Sigma \subset\partial \Omega.
 \end{cases}
-\end{align*}
+\end{align}
+
+It holds $J(u) \approx 0.441956231972232$.
 \subsubsection{Program description}
-Additionally to all the things one has to do when just solving the equation, we have to include {\verb higher_order_dwrc.h }. In this program, we approximate the so called 'weights' $z-\phi_h$ by a patchwise higher order interpolation of $z_h$ (the computed dual solution). 
-
-The beginning of the program is basically as before, note however that we enforce patch-wise refinement of the grid by giving the flag {\verb Triangulation<2>:: } {\verb MeshSmoothing:: } {\verb patch_level_1 }
-to the triangulation. To be able to solve the adjoint equation for the error estimation, we need to implement {\verb FaceValue_U } in \texttt{functionals.h} as well as {\verb CellEquation_U }, {\verb CellMatrix_T }, {\verb CellEquation_U } and {\verb FaceEquation_U } in {\verb localpde.h }. In the latter, we also have to implement {\verb StrongCellResidual }, {\verb StrongFaceResidual } and {\verb StrongBoundaryResidual }.
+In this section we want to focus on what you have to do if you want to enhance your existing code to use the \textit{DWR method}.
 
 
-After everything is set up for the solution of the equation, we have to define some  higher order FiniteElements, some (face)quadrature formulas (and build a \texttt{IntegratorDataContainer} with them.) and a higher order \texttt{SpaceTimeHandler}. We use these to define an object of the  \texttt{HigherOrderDWRC} class. The last step is to initialize the \texttt{HigherOrderDWRC} via \texttt{solver.InitializeHigherOrderDWRC(dwrc)}.
+First, additionally to all the things one has to do when just solving the equation, we have to include the file
+\begin{verbatim}
+higher_order_dwrc.h
+\end{verbatim}
 
-Succeding the solution of the state equation ({\verb solver.ComputeReducedFunctionals() }), we compute the error indicators by calling { \verb solver.ComputeRefinementIndicators(dwrc) }. With these indicators, we are now able to refine our grid adaptively (there are several mesh adaption strategies implemented, like 'optimized', 'fixednumber' or 'fixedfraction').
+As we approximate the so called 'weights' $z-\phi_h$ in the error representation by a patchwise higher order interpolation of $z_h$ (the computed dual solution), we have to enforce patch-wise refinement of the grid by giving the flag 
+\begin{verbatim}
+Triangulation<2>::MeshSmoothing::patch_level_1
+\end{verbatim}
+to the triangulation. 
 
+To be able to solve the adjoint equation for the error estimation one needs to implement some methods regarding the equation as well es the functional of interest:
+\begin{itemize}
+\item In {\verb pdeinterface.h }
+\begin{itemize}
+\item {\verb CellEquation_U }: Weak form of the adjoint equation.
+\item {\verb CellMatrix_T }: The FE matrix for the adjoint problem.
+\item {\verb FaceEquation_U }: This one is needed in this case here because we have a functional of interest that lives on faces. 
+\end{itemize}
+\item {\verb functionalinterface.h }
+\begin{itemize}
+\item {\verb FaceValue_U }: This is the right hand side of the adjoint equation.
+\end{itemize}
+\end{itemize}
+During the  evaluation of \eqref{dwr.error_identity}, the following methods are needed
+\begin{itemize}
+\item {\verb StrongCellResidual }: The cell residual, see \eqref{dwr.cell_residual}.
+\item {\verb StrongFaceResidual }: The terms in \eqref{dwr.error_identity} that lies in the interiour (i.e. the jumps).
+\item {\verb StrongBoundaryResidual }:The terms in \eqref{dwr.error_identity} that lies on the boundary (There are none in this case).
+\end{itemize}
 
+After this, we tell the problem which functional we want to use for the error estimation, this is done via
+\begin{verbatim}
+P.SetFunctionalForErrorEstimation(LFF.GetName())
+\end{verbatim}
+where \texttt{P} is of type \texttt{PDEProblemContainer} and \texttt{LFF} is the desired functional of interest. 
 
+The next thing we need is an object of the type
+\begin{verbatim}
+HigherOrderDWRContainer
+\end{verbatim}
+This container takes care of the computation of the weights.
+
+To build this, we need the following:
+\begin{itemize}
+\item {\verb DOFH_higher_order }: With some higher order Finite Elemnts and the already defined triangulation, we build this \texttt{SpaceTimeHandler}. This is needed because  we want to use the patch-wise higher order interpolation of the weights.
+\item {\verb idc_high }: A \texttt{IntegratorDataContainer} in which we put some (face)quadrature formulas for the evaluation of the error Identity.
+\item A string which indicates how we want to store the weight-vectors (here: { \verb "fullmem" }).
+\item \texttt{pr}: The \texttt{ParameterReader} which we have already defined.
+\item A enum of type \texttt{EETerms} that tells the container, which error terms we want to compute (primal error indicators vs. dual error indicators, see \cite{BR03}).  
+\end{itemize}
+The last preparation step is now to initialize the \texttt{DWRDataContainer} with the problem in use:
+\begin{verbatim}
+  solver.InitializeHigherOrderDWRC(dwrc);
+\end{verbatim}
+
+Succeding the solution of the state equation 
+\begin{verbatim}
+solver.ComputeReducedFunctionals(); 
+\end{verbatim}
+we compute the error indicators by calling 
+\begin{verbatim}
+solver.ComputeRefinementIndicators(dwrc);
+\end{verbatim}
+We can now get the error indicators (with signs!) out of \texttt{dwrc} by 
+\begin{verbatim}
+dwrc.GetErrorIndicators();
+\end{verbatim}
+With these indicators, we are now able to refine our grid adaptively (there are several mesh adaption strategies implemented, like 'optimized', 'fixednumber' or 'fixedfraction')
+\begin{verbatim}
+DOFH.RefineSpace("optimized", &error_ind);
+\end{verbatim}
+Note, that one has to take the norm of each entry in the vector of the error indicators before feeding them into the \texttt{RefineSpace} method.
