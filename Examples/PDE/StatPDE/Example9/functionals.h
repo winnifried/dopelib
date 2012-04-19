@@ -65,8 +65,6 @@ template<typename VECTOR, typename FACEDATACONTAINER, int dealdim>
         unsigned int material_id = fdc.GetMaterialId();
         unsigned int material_id_neighbor = fdc.GetNbrMaterialId();
 
-        double mean = 0;
-
         if (material_id == 1)
         {
           if (material_id_neighbor == 2)

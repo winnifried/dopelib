@@ -62,12 +62,9 @@ template<typename VECTOR, int dealdim>
           const CellDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& cdc_w,
           double& sum, double scale, double)
       {
-        unsigned int n_dofs_per_cell = cdc.GetNDoFsPerCell();
         unsigned int n_q_points = cdc.GetNQPoints();
         const DOpEWrapper::FEValues<dealdim> &state_fe_values =
             cdc.GetFEValuesState();
-        const DOpEWrapper::FEValues<dealdim> &state_fe_values_weight =
-            cdc_w.GetFEValuesState();
 
         _fvalues.resize(n_q_points);
 
@@ -109,7 +106,6 @@ template<typename VECTOR, int dealdim>
 
         fdc.GetFaceGradsState("state", _ugrads);
         fdc.GetNbrFaceGradsState("state", _ugrads_nbr);
-        const auto & facefevalues = fdc_w.GetFEFaceValuesState();
         fdc_w.GetFaceValuesState("weight_for_primal_residual", _PI_h_z);
         vector<double> jump(n_q_points);
         for (unsigned int q = 0; q < n_q_points; q++)
@@ -129,8 +125,8 @@ template<typename VECTOR, int dealdim>
 
       void
       StrongBoundaryResidual(
-          const FaceDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& fdc,
-          const FaceDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& fdc_w,
+          const FaceDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& ,
+          const FaceDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& ,
           double& sum, double /*scale*/)
       {
         sum = 0;
@@ -138,16 +134,16 @@ template<typename VECTOR, int dealdim>
 
       void
       FaceEquation_U(
-          const FaceDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& fdc,
-          dealii::Vector<double> &local_cell_vector, double scale)
+          const FaceDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& ,
+          dealii::Vector<double> &, double )
       {
 
       }
 
       void
       FaceMatrix(
-          const FaceDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& fdc,
-          FullMatrix<double> &local_entry_matrix)
+          const FaceDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& ,
+          FullMatrix<double> &)
       {
 
       }

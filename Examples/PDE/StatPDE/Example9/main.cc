@@ -121,6 +121,7 @@ main(int argc, char **argv)
   triangulation.refine_global(1);  //because we need the face located at x==0;
   for (auto it = triangulation.begin_active(); it != triangulation.end(); it++)
     if (it->center()[1] <= 0)
+    {
       if (it->center()[0] < 0)
       {
         it->set_material_id(1);
@@ -129,6 +130,7 @@ main(int argc, char **argv)
       {
         it->set_material_id(2);
       }
+    }
   if (prerefine > 0)
     triangulation.refine_global(prerefine);
   //*************************************************************
@@ -217,7 +219,7 @@ main(int argc, char **argv)
 
       double error = exact_value - solver.GetFunctionalValue(LFF.GetName());
       outp << "Mean value error: " << error << "  Ieff (eh/e)= "
-       << dwrc.GetError() / error<< std::endl;
+          << dwrc.GetError() / error << std::endl;
       out.Write(outp, 1, 1, 1);
     }
     catch (DOpEException &e)
