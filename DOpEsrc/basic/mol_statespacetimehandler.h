@@ -53,7 +53,7 @@ namespace DOpE
           _constraintsmaker = new CONSTRAINTSMAKER;
         }
 
-        ~MethodOfLines_StateSpaceTimeHandler()
+        virtual ~MethodOfLines_StateSpaceTimeHandler()
         {
           _state_dof_handler.clear();
 

@@ -723,7 +723,8 @@ namespace DOpE
         const FDC<DOFHANDLER, VECTOR, dealdim>& /*Fdc_weight*/, double&,
         double scale __attribute__((unused)))
     {
-      throw DOpEException("Not Implemented", "PDEInterface::BoundaryEquation");
+      throw DOpEException("Not Implemented",
+          "PDEInterface::StrongBoundaryResidual");
     }
 
   /********************************************/
@@ -754,7 +755,7 @@ namespace DOpE
         double scale __attribute__((unused)))
     {
       throw DOpEException("Not Implemented",
-          "PDEInterface::BoundaryEquation_U");
+          "PDEInterface::StrongBoundaryResidual_U");
     }
 
   /********************************************/

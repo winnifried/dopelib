@@ -246,7 +246,7 @@ class SpaceTimeHandlerBase
      * Returns the DoFs for the constraint vector at the current time which has
      *  to be set prior to calling this function using SetTime.
      */
-    virtual unsigned int GetConstraintNDoFs(std::string /*name*/) const { abort(); }
+    virtual unsigned int GetConstraintNDoFs(std::string /*name*/) const { abort(); return 0; }
     /**
      * Returns the DoFs per  block for the control vector at the current time which has
      * to be set prior to calling this function using SetTime.

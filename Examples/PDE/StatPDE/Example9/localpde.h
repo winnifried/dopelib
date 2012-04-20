@@ -98,7 +98,6 @@ template<typename VECTOR, int dealdim>
           const FaceDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& fdc_w,
           double& sum, double scale)
       {
-
         unsigned int n_q_points = fdc.GetNQPoints();
         _ugrads.resize(n_q_points, Tensor<1, dealdim>());
         _ugrads_nbr.resize(n_q_points, Tensor<1, dealdim>());

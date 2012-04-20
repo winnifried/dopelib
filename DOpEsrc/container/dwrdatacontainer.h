@@ -281,7 +281,7 @@ namespace DOpE
           }
         }
       protected:
-        //TODO PI_h_u and PI_h_z are probably not the best names. \
+        //TODO PI_h_u and PI_h_z are probably not the best names.
         //Basically, one could replace them with 'primalweight' and 'dualweight',
         //but i found them a little bit misleading. ~cg
         virtual StateVector<VECTOR>&

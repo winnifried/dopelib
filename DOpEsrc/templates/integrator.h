@@ -1382,8 +1382,6 @@ namespace DOpE
             this->GetParamData(),
             dwrc.GetWeightData(),
             true);
-        auto& fdc_weight = dwrc.GetFaceWeight();
-
 #endif
 
         for (unsigned int cell_index = 0; cell[0] != endc[0];
