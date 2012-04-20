@@ -1295,6 +1295,11 @@ namespace DOpE
 	    throw DOpEException(" Faces on multiple meshes not implemented yet!", 
 				"IntegratorMultiMesh::ComputeNonlinearRhs_Recursive");
 	  }
+	  if(need_interfaces )
+	  {
+	    throw DOpEException(" Faces on multiple meshes not implemented yet!", 
+				"IntegratorMultiMesh::ComputeNonlinearRhs_Recursive");
+	  }
 	  unsigned int b_index = fine_index%2; //This takes care that if fine_index ==2 then we select the 
 	                                       //zeros entry in the cell vector
 	  

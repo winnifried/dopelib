@@ -133,6 +133,7 @@ int Reduced_SnoptAlgorithm<PROBLEM, VECTOR, dopedim, dealdim>::Solve(ControlVect
   double cost_start=0.;
   std::stringstream out;
   this->GetOutputHandler()->InitOut(out);
+  global_tol =  std::max(_opt_tol,global_tol);
 
   out << "**************************************************\n";
   out << "*        Starting Solution using SNOPT           *\n";
@@ -264,7 +265,7 @@ int Reduced_SnoptAlgorithm<PROBLEM, VECTOR, dopedim, dealdim>::Solve(ControlVect
  
     RSAProb.setIntParameter( "Derivative option", 1 );
     RSAProb.setRealParameter( "Function precison", _func_prec);
-    RSAProb.setRealParameter( "Major optimality tolerance", _opt_tol);
+    RSAProb.setRealParameter( "Major optimality tolerance", global_tol);
     RSAProb.setRealParameter( "Major feasibility tolerance", _feas_tol);
     RSAProb.setRealParameter( "Minor feasibility tolerance", _feas_tol);
     RSAProb.setIntParameter( "Minor iterations limit", _max_inner_iter);

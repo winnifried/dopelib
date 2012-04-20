@@ -554,6 +554,12 @@ namespace DOpE
               this->GetParamData(), this->GetDomainData());
           auto& cdc = GetIntegratorDataContainer().GetCellDataContainer();
 #if deal_II_dimension == 2 || deal_II_dimension == 3
+	  bool need_interfaces = pde.HasInterfaces();
+	  if(need_interfaces )
+	  {
+	    throw DOpEException(" Faces on multiple meshes not implemented yet!", 
+				"IntegratorMultiMesh::ComputeNonlinearRhs_Recursive");
+	  }
           bool need_faces = pde.HasFaces();
           std::vector<unsigned int> boundary_equation_colors = pde.GetBoundaryEquationColors();
           bool need_boundary_integrals = (boundary_equation_colors.size() > 0);
