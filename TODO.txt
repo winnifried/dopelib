@@ -1,5 +1,10 @@
 TODO DOpE
 =========
+- Update the Apply...BoundaryValues to include other constraints, 
+  like periodicity... (maybe with nonzero jump...). Also check the 
+  condense(u)/distribute(u) stuff again, it should not be in the apply 
+  boundary value stuff...
+
 - FE_Wrapper kann weg -> dealii::FESystem
 - FE_Values ? Kann man dim=0 anlegen? Dann kann der weg (Ja, habs auskommentiert,
   trotzdem laeufen alle Probleme korrekt durch (ausser OPT/7+8))~cg.

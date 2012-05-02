@@ -1175,6 +1175,7 @@ namespace DOpE
             u(p->first) = p->second;
           }
         }
+	pde.GetHangingNodeConstraints().distribute(u);
       }
   /*******************************************************************************************/
 
