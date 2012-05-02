@@ -1,8 +1,5 @@
 TODO DOpE
 =========
-
-- Manual: Additional Chapter on what this Library does and why it is doing so. ~ww
-
 - FE_Wrapper kann weg -> dealii::FESystem
 - FE_Values ? Kann man dim=0 anlegen? Dann kann der weg (Ja, habs auskommentiert,
   trotzdem laeufen alle Probleme korrekt durch (ausser OPT/7+8))~cg.
@@ -118,7 +115,6 @@ Spaeter ;):
   -- domain, 
   -- manual als *.pdf um die Interessierten richtig heiss zu machen
   
-- SVN in Heidelberg ~tw
 - Bugzilla -> cg
 - changelog
 

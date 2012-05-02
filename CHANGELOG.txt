@@ -1,6 +1,10 @@
 Changelog DOpE
 ==============
 
+before 2.5.2012
+-------------------------
+done - SVN in Heidelberg ~tw
+done - Manual: Additional Chapter on what this Library does and why it is doing so. ~ww
 
 15.02.2011: Trennung der Ortsdiskretisierung (verschieden Feine Gitter) ~ww
 
