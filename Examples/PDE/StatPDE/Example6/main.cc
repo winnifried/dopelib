@@ -138,7 +138,7 @@ int main(int argc, char **argv)
 	DOpE::PeriodicityConstraints<2> constraints_mkr;
 	MethodOfLines_StateSpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR, 2> DOFH(triangulation,  state_fe);
 	//Add the periodicity constraints through the following:
-	DOFH.SetConstraintsMaker(constraints_mkr);
+	DOFH.SetUserDefinedDoFConstraints(constraints_mkr);
 	/***********************************/
 
 	OP P(LPDE, DOFH);

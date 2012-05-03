@@ -290,7 +290,7 @@ namespace DOpE
          * ReInit.
          */
         void
-        SetConstraintsMaker(
+        SetUserDefinedDoFConstraints(
             UserDefinedDoFConstraints<DOFHANDLER, dealdim>& user_defined_dof_constr)
         {
           _user_defined_dof_constr = &user_defined_dof_constr;

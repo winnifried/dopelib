@@ -67,156 +67,7 @@ template<typename VECTOR, int dopedim, int dealdim>
        return true;
      }
 
-//
-//     // CellEquation contains all implicit terms,
-//     // e.g. pressure, incompressibility of the fluid,
-//     // where no "theta" time-discretization should be applied
-//     void CellEquationOnlyImplicit (const CellDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& cdc,
-//				   dealii::Vector<double> &local_cell_vector,
-//				   double scale, double scale_ico)
-//    {
-//      assert(this->_problem_type == "state");
-//
-//      const DOpEWrapper::FEValues<dealdim> & state_fe_values = cdc.GetFEValuesState();
-//      unsigned int n_dofs_per_cell = cdc.GetNDoFsPerCell();
-//      unsigned int n_q_points = cdc.GetNQPoints();
-//      unsigned int material_id = cdc.GetMaterialId();
-//      double cell_diameter = cdc.GetCellDiameter();
-//
-//        // old Newton step solution values and gradients
-//      _uvalues.resize(n_q_points,Vector<double>(5));
-//      _ugrads.resize(n_q_points,vector<Tensor<1,2> >(5));
-//
-//      cdc.GetValuesState("last_newton_solution",_uvalues);
-//      cdc.GetGradsState("last_newton_solution",_ugrads);
-//
-//      // last timestep solution values and gradients
-//      _last_timestep_uvalues.resize(n_q_points,Vector<double>(5));
-//      _last_timestep_ugrads.resize(n_q_points,vector<Tensor<1,2> >(5));
-//
-//      cdc.GetValuesState("last_time_solution",_last_timestep_uvalues);
-//      cdc.GetGradsState("last_time_solution",_last_timestep_ugrads);
-//
-//      const FEValuesExtractors::Vector velocities (0);
-//      const FEValuesExtractors::Vector displacements (2);
-//      const FEValuesExtractors::Scalar pressure (4);
-//
-//      const Tensor<2,dealdim> Identity = ALE_Transformations
-//	::get_Identity<dealdim> ();
-//
-//      if (material_id == 0)
-//	{
-//	  for (unsigned int q_point=0;q_point<n_q_points;q_point++)
-//	    {
-//	      // variable for mesh-dependent alpha_u
-//	      distance_to_interface = std::sqrt((state_fe_values.quadrature_point(q_point)(0)-0.6)*
-//						(state_fe_values.quadrature_point(q_point)(0)-0.6)+
-//						(state_fe_values.quadrature_point(q_point)(1)-0.2)*
-//						(state_fe_values.quadrature_point(q_point)(1)-0.2));
-//
-//	      // mesh-dependent alpha_u. Here the variable has name tmp_structure_continuation_E.
-//	      tmp_structure_continuation_E = structure_continuation_E
-//		+ scale_distance_to_interface*std::exp(-scale_d_exp*std::abs(distance_to_interface));
-//
-//	      // for elastic structure continuation with pseudo-STVK
-//	        structure_continuation_mu = tmp_structure_continuation_E/(2.0*(1.0+structure_continuation_nus));
-//
-//		structure_continuation_lambda =  (2 * structure_continuation_nus * structure_continuation_mu)/
-//		     (1.0 - 2 * structure_continuation_nus);
-//
-//	      const Tensor<2,dealdim> pI = ALE_Transformations::get_pI<dealdim> (q_point, _uvalues);
-//	      const Tensor<1,dealdim> v = ALE_Transformations::get_v<dealdim> (q_point, _uvalues);
-//
-//	      const Tensor<2,dealdim> grad_v = ALE_Transformations
-//		::get_grad_v<dealdim> (q_point, _ugrads);
-//
-//	      const Tensor<2,dealdim> grad_v_T = ALE_Transformations
-//		::get_grad_v_T<dealdim> (grad_v);
-//
-//	      const Tensor<2,dealdim> grad_u = ALE_Transformations
-//		::get_grad_u<dealdim> (q_point, _ugrads);
-//
-//	      const Tensor<2,dealdim> F = ALE_Transformations
-//		::get_F<dealdim> (q_point, _ugrads);
-//
-//	      const Tensor<2,dealdim> F_Inverse = ALE_Transformations
-//		::get_F_Inverse<dealdim> (F);
-//
-//	      const Tensor<2,dealdim> F_Inverse_T = ALE_Transformations
-//		::get_F_Inverse_T<dealdim> (F_Inverse);
-//
-//	      const double J = ALE_Transformations
-//		::get_J<dealdim> (F);
-//
-//	      const Tensor<2,dealdim> fluid_pressure = (-pI * J * F_Inverse_T);
-//
-//	      const double incompressiblity_fluid = NSE_in_ALE
-//		::get_Incompressibility_ALE<dealdim> (q_point, _ugrads);
-//
-//
-//	      // pseudo-STVK
-//	      const Tensor<2,dealdim> linear_E = Structure_Terms_in_ALE
-//		::get_linear_E<dealdim> (q_point, _ugrads);
-//	      const double tr_linear_E = Structure_Terms_in_ALE
-//		::get_tr_E<dealdim> (linear_E);
-//
-//	      const Tensor<2,dealdim> sigma_structure_continuation_ALE
-//		= (structure_continuation_lambda *
-//		   tr_linear_E * Identity +
-//		   2 * structure_continuation_mu *
-//		   linear_E);
-//
-//
-//
-//	      for (unsigned int i=0;i<n_dofs_per_cell;i++)
-//		{
-//		  // Fluid
-//		      const Tensor<1,dealdim> phi_i_v = state_fe_values[velocities].value (i, q_point);
-//		      const Tensor<2,dealdim> phi_i_grads_v = state_fe_values[velocities].gradient (i, q_point);
-//
-//		      local_cell_vector(i) +=  scale * (scalar_product(fluid_pressure, phi_i_grads_v)
-//							)
-//			* state_fe_values.JxW(q_point);
-//
-//		      const Tensor<1,dealdim> phi_i_u = state_fe_values[displacements].value (i, q_point);
-//		      const Tensor<2,dealdim> phi_i_grads_u = state_fe_values[displacements].gradient (i, q_point);
-//
-//
-////		      local_cell_vector(i) += scale * (//tmp_structure_continuation_E
-////						       alpha_u
-////						       * cell_diameter * cell_diameter
-////						       * scalar_product(grad_u, phi_i_grads_u)
-////						       ) * state_fe_values.JxW(q_point)
-////						       + scale_ico * () * state_fe_values.JxW(q_point);
-//
-//
-//
-//
-//		      const double phi_i_p = state_fe_values[pressure].value (i, q_point);
-//
-//		      local_cell_vector(i) += scale * (incompressiblity_fluid * phi_i_p) * state_fe_values.JxW(q_point);
-//
-//		}
-//	    }
-//	}
-//      else if (material_id == 1)
-//	{
-//	  for (unsigned int q_point=0;q_point<n_q_points;q_point++)
-//	    {
-//	      for (unsigned int i=0;i<n_dofs_per_cell;i++)
-//		{
-//		  // Structure, STVK, implicit
-//		      const double phi_i_p = state_fe_values[pressure].value (i, q_point);
-//
-//		      local_cell_vector(i) += scale * (_uvalues[q_point](dealdim+dealdim) * phi_i_p) * state_fe_values.JxW(q_point);
-//
-//
-//		}
-//	    }
-//	}
-//    }
-
-     // CellEquationExplicit contains all "normal" terms which
+     // The part of CellEquation scaled by scale contains all "normal" terms which
      // can be treated by full "theta" time-discretization
      void CellEquation(const CellDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& cdc,
 				   dealii::Vector<double> &local_cell_vector,
@@ -265,9 +116,6 @@ template<typename VECTOR, int dopedim, int dealdim>
 
 	      const Tensor<2,dealdim> grad_v_T = ALE_Transformations
 		::get_grad_v_T<dealdim> (grad_v);
-
-//	      const Tensor<1,dealdim> u = ALE_Transformations
-//		::get_u<dealdim> (q_point, _uvalues);
 
 	      const Tensor<2,dealdim> F = ALE_Transformations
 		::get_F<dealdim> (q_point, _ugrads);
@@ -381,15 +229,11 @@ template<typename VECTOR, int dopedim, int dealdim>
                 {
                   // Structure, STVK, explicit
 
-//                  const Tensor<1, dealdim> phi_i_v =
-//                      state_fe_values[velocities].value(i, q_point);
                   const Tensor<2, dealdim> phi_i_grads_v =
                       state_fe_values[velocities].gradient(i, q_point);
 
                   const Tensor<1, dealdim> phi_i_u =
                       state_fe_values[displacements].value(i, q_point);
-//                  const Tensor<2, dealdim> phi_i_grads_u =
-//                      state_fe_values[displacements].gradient(i, q_point);
 
                   const double phi_i_p = state_fe_values[pressure].value(i,
                       q_point);
@@ -407,173 +251,6 @@ template<typename VECTOR, int dopedim, int dealdim>
 	    }
 	}
     }
-
-//     void CellMatrixOnlyImplicit(const CellDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& cdc,
-//				FullMatrix<double> &local_entry_matrix)
-//    {
-//      const DOpEWrapper::FEValues<dealdim> & state_fe_values = cdc.GetFEValuesState();
-//      unsigned int n_dofs_per_cell = cdc.GetNDoFsPerCell();
-//      unsigned int n_q_points = cdc.GetNQPoints();
-//      unsigned int material_id = cdc.GetMaterialId();
-//      double cell_diameter = cdc.GetCellDiameter();
-//
-//       // old Newton step solution values and gradients
-//      _uvalues.resize(n_q_points,Vector<double>(5));
-//      _ugrads.resize(n_q_points,vector<Tensor<1,2> >(5));
-//
-//      cdc.GetValuesState("last_newton_solution",_uvalues);
-//      cdc.GetGradsState("last_newton_solution",_ugrads);
-//
-//      // old timestep solution values and gradients
-//      _last_timestep_uvalues.resize(n_q_points,Vector<double>(5));
-//      _last_timestep_ugrads.resize(n_q_points,vector<Tensor<1,2> >(5));
-//
-//      cdc.GetValuesState("last_time_solution",_last_timestep_uvalues);
-//      cdc.GetGradsState("last_time_solution",_last_timestep_ugrads);
-//
-//      const FEValuesExtractors::Vector velocities (0);
-//      const FEValuesExtractors::Vector displacements (2);
-//      const FEValuesExtractors::Scalar pressure (4);
-//
-//      std::vector<Tensor<1,2> >     phi_v (n_dofs_per_cell);
-//      std::vector<Tensor<2,2> >     phi_grads_v (n_dofs_per_cell);
-//      std::vector<Tensor<1,2> >     phi_u (n_dofs_per_cell);
-//      std::vector<Tensor<2,2> >     phi_grads_u (n_dofs_per_cell);
-//      std::vector<double>           phi_p (n_dofs_per_cell);
-//
-//      const Tensor<2,dealdim> Identity = ALE_Transformations
-//	::get_Identity<dealdim> ();
-//
-//      if (material_id == 0)
-//	{
-//	  for(unsigned int q_point = 0; q_point < n_q_points; q_point++)
-//	    {
-//	      // variable for mesh-dependent alpha_u
-//	      distance_to_interface = std::sqrt((state_fe_values.quadrature_point(q_point)(0)-0.6)*
-//						(state_fe_values.quadrature_point(q_point)(0)-0.6)+
-//						(state_fe_values.quadrature_point(q_point)(1)-0.2)*
-//						(state_fe_values.quadrature_point(q_point)(1)-0.2));
-//
-//	      // mesh-dependent alpha_u. Here the variable has name tmp_structure_continuation_E.
-//	      tmp_structure_continuation_E = structure_continuation_E
-//		+ scale_distance_to_interface*std::exp(-scale_d_exp*std::abs(distance_to_interface));
-//	      // for elastic structure continuation with pseudo-STVK
-//	        structure_continuation_mu = tmp_structure_continuation_E/(2.0*(1.0+structure_continuation_nus));
-//
-//		structure_continuation_lambda =  (2 * structure_continuation_nus * structure_continuation_mu)/
-//		     (1.0 - 2 * structure_continuation_nus);
-//
-//	      for(unsigned int k = 0; k < n_dofs_per_cell; k++)
-//		{
-//		  phi_v[k]       = state_fe_values[velocities].value (k, q_point);
-//		  phi_grads_v[k] = state_fe_values[velocities].gradient (k, q_point);
-//		  phi_p[k]       = state_fe_values[pressure].value (k, q_point);
-//		  phi_u[k]       = state_fe_values[displacements].value (k, q_point);
-//		  phi_grads_u[k] = state_fe_values[displacements].gradient (k, q_point);
-//		}
-//
-//	      const Tensor<2,dealdim> pI = ALE_Transformations::get_pI<dealdim> (q_point, _uvalues);
-//	      const Tensor<1,dealdim> v = ALE_Transformations::get_v<dealdim> (q_point, _uvalues);
-//
-//
-//	      const Tensor<1,dealdim> u = ALE_Transformations::get_u<dealdim> (q_point,_uvalues);
-//
-//	      const Tensor<2,dealdim> grad_v = ALE_Transformations::get_grad_v<dealdim> (q_point, _ugrads);
-//
-//	      const Tensor<2,dealdim> grad_v_T = ALE_Transformations::get_grad_v_T<dealdim> (grad_v);
-//	      const Tensor<2,dealdim> F = ALE_Transformations::get_F<dealdim> (q_point, _ugrads);
-//	      const Tensor<2,dealdim> F_Inverse = ALE_Transformations::get_F_Inverse<dealdim> (F);
-//
-//	      const Tensor<2,dealdim> F_Inverse_T = ALE_Transformations::get_F_Inverse_T<dealdim> (F_Inverse);
-//	      const double J = ALE_Transformations::get_J<dealdim> (F);
-//
-//	      for(unsigned int i = 0; i < n_dofs_per_cell; i++)
-//		{
-//		  const Tensor<2,dealdim> pI_LinP = ALE_Transformations::get_pI_LinP<dealdim> (phi_p[i]);
-//		  const Tensor<2,dealdim> grad_v_LinV = ALE_Transformations::get_grad_v_LinV<dealdim> (phi_grads_v[i]);
-//		  const double J_LinU =  ALE_Transformations::get_J_LinU<dealdim> (q_point, _ugrads, phi_grads_u[i]);
-//
-//		  const double J_Inverse_LinU = ALE_Transformations::get_J_Inverse_LinU<dealdim> (J, J_LinU);
-//		  const Tensor<2,dealdim> J_F_Inverse_T_LinU = ALE_Transformations::get_J_F_Inverse_T_LinU<dealdim> (phi_grads_u[i]);
-//		  const Tensor<2,dealdim> F_Inverse_LinU = ALE_Transformations::get_F_Inverse_LinU (phi_grads_u[i],J,
-//												J_LinU,q_point,_ugrads
-//												);
-//
-//		  const Tensor<2,dealdim>  stress_fluid_ALE_1st_term_LinAll =  NSE_in_ALE
-//		    ::get_stress_fluid_ALE_1st_term_LinAll_short<dealdim> (pI, F_Inverse_T,J_F_Inverse_T_LinU,
-//									   pI_LinP,J);
-//
-//		  const double incompressibility_ALE_LinAll = NSE_in_ALE
-//		    ::get_Incompressibility_ALE_LinAll<dealdim> (phi_grads_v[i],phi_grads_u[i], q_point,
-//							     _ugrads);
-//
-//		  // pseudo-STVK: structure extension (instead of harmonic)
-//		  const Tensor<2,dealdim> linear_E_LinU = 0.5 * (phi_grads_u[i] + transpose(phi_grads_u[i]));
-//		  const Tensor<2,dealdim> sigma_structure_continuation_ALE_LinAll = (structure_continuation_lambda *
-//										 trace(linear_E_LinU) * Identity +
-//										 2 * structure_continuation_mu *
-//										 linear_E_LinU);
-//
-//		  for(unsigned int j=0; j<n_dofs_per_cell; j++)
-//		    {
-//		      // Fluid, implicit
-//		      local_entry_matrix(j,i) += (scalar_product(stress_fluid_ALE_1st_term_LinAll, phi_grads_v[j])
-//						  )
-//			* state_fe_values.JxW(q_point);
-//
-//		      // 1) structure extension with common condition: harmonic
-//		      local_entry_matrix(j,i) += (//tmp_structure_continuation_E
-//		      				   alpha_u
-//		        				  * cell_diameter * cell_diameter
-//		        				  * scalar_product(phi_grads_u[i], phi_grads_u[j]) )
-//		        	* state_fe_values.JxW(q_point);
-//
-//
-//		      // 2) structure extension with Nitsche trick
-//		//local_entry_matrix(j,i) += (tmp_structure_continuation_E
-//		//				  //alpha_u
-//		//				  * scalar_product(phi_grads_u[i], phi_grads_u[j]) )
-//		//	* state_fe_values.JxW(q_point);
-//
-//		       // 3) structure extension with pseudo-STVK
-//	//	      local_entry_matrix(j,i) +=
-//	//		cell_diameter * cell_diameter
-//	//		* scalar_product(sigma_structure_continuation_ALE_LinAll, phi_grads_u[j])
-//	//		* state_fe_values.JxW(q_point);
-//	//
-//
-//
-//		      local_entry_matrix(j,i) += (incompressibility_ALE_LinAll *  phi_p[j])
-//			* state_fe_values.JxW(q_point);
-//
-//
-//		    }
-//		}
-//	    }
-//	}
-//      else if (material_id == 1)
-//	{
-//	  for(unsigned int q_point = 0; q_point < n_q_points; q_point++)
-//	    {
-//	      for(unsigned int k = 0; k < n_dofs_per_cell; k++)
-//		{
-//		  phi_p[k]       = state_fe_values[pressure].value (k, q_point);
-//		}
-//
-//	      for(unsigned int i=0; i<n_dofs_per_cell; i++)
-//		{
-//		  for(unsigned int j=0; j<n_dofs_per_cell; j++)
-//		    {
-//		      // Structure, STVK, implicit
-//		      local_entry_matrix(j,i) += (phi_p[i] * phi_p[j])
-//			* state_fe_values.JxW(q_point);
-//
-//		    }
-//		}
-//	    }
-//	}
-//    }
-
 
     void CellMatrix(const CellDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& cdc,
 		    FullMatrix<double> &local_entry_matrix, double scale, double scale_ico)
@@ -701,9 +378,9 @@ template<typename VECTOR, int dopedim, int dealdim>
                       NSE_in_ALE::get_Incompressibility_ALE_LinAll<dealdim>(
                           phi_grads_v[i], phi_grads_u[i], q_point, _ugrads);
 
-                  // pseudo-STVK: structure extension (instead of harmonic)
-                  const Tensor<2, dealdim> linear_E_LinU = 0.5
-                      * (phi_grads_u[i] + transpose(phi_grads_u[i]));
+//                  // pseudo-STVK: structure extension (instead of harmonic)
+//                  const Tensor<2, dealdim> linear_E_LinU = 0.5
+//                      * (phi_grads_u[i] + transpose(phi_grads_u[i]));
 //                  const Tensor<2, dealdim>
 //                      sigma_structure_continuation_ALE_LinAll =
 //                          (structure_continuation_lambda * trace(linear_E_LinU)
@@ -783,10 +460,10 @@ template<typename VECTOR, int dopedim, int dealdim>
 		  const Tensor<2,dealdim> F_LinU = ALE_Transformations
 		    ::get_F_LinU<dealdim> (phi_grads_u[i]);
 
-		  const Tensor<2,dealdim> F_Inverse_LinU = ALE_Transformations
-		    ::get_F_Inverse_LinU<dealdim> (phi_grads_u[i],
-					       J, J_LinU, q_point,
-					       _ugrads);
+//		  const Tensor<2,dealdim> F_Inverse_LinU = ALE_Transformations
+//		    ::get_F_Inverse_LinU<dealdim> (phi_grads_u[i],
+//					       J, J_LinU, q_point,
+//					       _ugrads);
 
 //		  const Tensor<2,dealdim> F_Inverse_T_LinU = transpose(F_Inverse_LinU);
 //

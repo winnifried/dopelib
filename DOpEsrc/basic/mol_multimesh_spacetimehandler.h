@@ -554,7 +554,7 @@ namespace DOpE
          * ReInit.
          */
         void
-        SetConstraintsMaker(
+        SetUserDefinedDoFConstraints(
             UserDefinedDoFConstraints<DOFHANDLER, dim>& constraints_maker)
         {
           _user_defined_dof_constr = &constraints_maker;

@@ -219,7 +219,6 @@ template<typename VECTOR, int dealdim>
 	      const Tensor<1,2> phi_j_v = state_fe_values[velocities].value (j, q_point);
 	      const Tensor<2,2> phi_j_grads_v = state_fe_values[velocities].gradient (j, q_point);
 	      double phi_j_p = state_fe_values[pressure].value (j, q_point);
-	      const Tensor<1,2> phi_j_u = state_fe_values[displacements].value (j, q_point);
 	      const Tensor<2,2> phi_j_grads_u = state_fe_values[displacements].gradient (j, q_point);
 
 	      // ALE Transformations derivatives

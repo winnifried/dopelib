@@ -17,6 +17,22 @@
 
 namespace DOpE
 {
+  /**
+   * This class is an interface which offers the user the possibility
+   * to define some DoFConstraints for the state and/or control fe function.
+   * To define non-standard constraints, one has to implement these in a
+   * derived class of this one, and give then an instantiation
+   * to the SpaceTimeHandler (via SetUserDefinedDoFConstraints).
+   *
+   * The constraints defined by MakeStateDoFConstrains and MakeControlDoFConstraints
+   * are computed AFTER hanging_node_constraint is called, so if there are two
+   * or more conflicting constraints on a DoF, the constraints coming from
+   * hanging nodes win.
+   *
+   * FIXME: Just homogeneous dof constraints at the moment.
+   * If we change distribution from global to local, this should
+   * get changed.
+   */
   template<typename DOFHANDLER, int dopedim, int dealdim = dopedim>
     class UserDefinedDoFConstraints
     {
@@ -28,13 +44,6 @@ namespace DOpE
         ~UserDefinedDoFConstraints()
         {
         }
-
-        /**
-         * Incorporates user defined dof constraints.
-         * FIXME: Just homogeneous dof constraints at the moment.
-         * If we change distribution from global to local, this should
-         * get changed.
-         */
         virtual void
         MakeStateDoFConstraints(
             const DOpEWrapper::DoFHandler<dealdim, DOFHANDLER> & dof_handler,

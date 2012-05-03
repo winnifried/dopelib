@@ -452,14 +452,12 @@ template <typename PROBLEM, typename VECTOR, int dopedim,int dealdim>
 
     ControlVector<VECTOR> tmp1(q), tmp2(q);
     
-    int where =  -1;
     //Check if p_b is feasible
     double n_b = sqrt(p_b*p_b);
 
     if(n_b <= tr_delta)
     {
       min = p_b;
-      where = 0;
     }
     else
     {
@@ -476,7 +474,6 @@ template <typename PROBLEM, typename VECTOR, int dopedim,int dealdim>
       
       if(n_u <= tr_delta)
       {
-	where  = 1;
 	//solution between  p_u and p_b
 	double a = n_u*n_u;
 	double b = n_b*n_b;
@@ -493,7 +490,6 @@ template <typename PROBLEM, typename VECTOR, int dopedim,int dealdim>
       }
       else
       {
-	where = 2;
 	//solution between  0 und p_u
 	min.equ(1./n_u*tr_delta,p_u);
       }

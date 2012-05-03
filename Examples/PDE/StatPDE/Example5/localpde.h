@@ -133,12 +133,10 @@ template<typename VECTOR,int dealdim>
 
       const double sigma = sqrt(2./3.)* 450.0;
       double norm = 0.;
-      double factor = 0.;
 
       for(unsigned int q_point = 0; q_point < n_q_points; q_point++)
 	{
 	  norm = 0.;
-          factor = 0.;
 
 	  Tensor<2,2> vgrads;
 	  vgrads.clear();
@@ -163,7 +161,6 @@ template<typename VECTOR,int dealdim>
 
           norm = sqrt(deviator[0][0]*deviator[0][0] + deviator[0][1]*deviator[0][1] + deviator[1][0]*deviator[1][0] + deviator[1][1]*deviator[1][1]);
 
-          factor = sigma/norm;
 
 	  for(unsigned int j = 0; j < n_dofs_per_cell; j++)
 	  {

@@ -149,8 +149,6 @@ template<template<typename DOFHANDLER, typename VECTOR, int dealdim> class CDC, 
 	if(_p == 1.)
 	  for(unsigned int i = 0; i < n_dofs_per_cell; i++)
 	  {
-	    const Tensor<2,2> phi_grads = state_fe_values[displacements].gradient(i, q_point);
-	    
 	    local_cell_vector(i) += scale * control_fe_values.shape_value (i, q_point)
 	      * 0.25*scalar_product(u_grad + transpose(u_grad),z_grad + transpose(z_grad))
 	      * control_fe_values.JxW(q_point);
@@ -158,8 +156,6 @@ template<template<typename DOFHANDLER, typename VECTOR, int dealdim> class CDC, 
 	else 
 	  for(unsigned int i = 0; i < n_dofs_per_cell; i++)
 	  {
-	    const Tensor<2,2> phi_grads = state_fe_values[displacements].gradient(i, q_point);
-	    
 	    local_cell_vector(i) += scale  * _p * pow(_qvalues[q_point](0),_p-1.)* control_fe_values.shape_value (i, q_point)
 	      * 0.25*scalar_product(u_grad + transpose(u_grad),z_grad + transpose(z_grad))
 	      * control_fe_values.JxW(q_point);
