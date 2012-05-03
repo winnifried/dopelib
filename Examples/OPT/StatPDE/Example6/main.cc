@@ -134,8 +134,7 @@ int main(int argc, char **argv)
   lcc[0][1]=2; // each two constraints (lower and upper bound)
   Constraints constraints(lcc,1);
 
-  MethodOfLines_SpaceTimeHandler<FE,DOFHANDLER,SPARSITYPATTERN,VECTOR,
-    SparsityMaker<DOFHANDLER,2>, ConstraintsMaker<DOFHANDLER,2>,2,2> DOFH(triangulation, 
+  MethodOfLines_SpaceTimeHandler<FE,DOFHANDLER,SPARSITYPATTERN,VECTOR,2,2> DOFH(triangulation, 
 									  control_fe,
 									  state_fe,
 									  constraints);

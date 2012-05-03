@@ -21,7 +21,7 @@
 #include <string.h>
 #include <iostream>
 #include <cmath>
- 
+
 #include <grid/tria.h>
 #include <dofs/dof_handler.h>
 #include <grid/grid_generator.h>
@@ -49,40 +49,41 @@ using namespace DOpE;
 #define DD DOpE::DirichletDataInterface<VECTOR,2,2>
 #define CONS DOpE::ConstraintInterface<CDC,FDC,DOFHANDLER,VECTOR,2,2>
 
+typedef SpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR, 2, 2> STH;
 
-typedef SpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR, 2,2> STH;
+typedef OptProblem<FUNC, FUNC, PDE, DD, CONS, SPARSITYPATTERN, VECTOR, 2, 2> OP;
 
-typedef OptProblem<FUNC, FUNC, PDE, DD, CONS, SPARSITYPATTERN,VECTOR,2,2> OP;
-
-typedef AugmentedLagrangianProblem<LocalConstraintAccessor,STH,OP, 2, 2,1> ALagOP;
-typedef IntegratorDataContainer<DOFHANDLER, dealii::Quadrature<2>, dealii::Quadrature<1>, VECTOR, 2> IDC;
-typedef Integrator<IDC,VECTOR,double,2> INTEGRATOR;
+typedef AugmentedLagrangianProblem<LocalConstraintAccessor, STH, OP, 2, 2, 1> ALagOP;
+typedef IntegratorDataContainer<DOFHANDLER, dealii::Quadrature<2>,
+    dealii::Quadrature<1>, VECTOR, 2> IDC;
+typedef Integrator<IDC, VECTOR, double, 2> INTEGRATOR;
 
 //Uncomment to use a CG-Method with Identity Preconditioner
 //typedef CGLinearSolverWithMatrix<INTEGRATOR,PreconditionIdentity,OP,BlockSparsityPattern,BlockSparseMatrix<double>,BlockVector<double>,2> LINEARSOLVER;
 //Uncomment to use UMFPACK
-typedef DirectLinearSolverWithMatrix<SPARSITYPATTERN,MATRIX,VECTOR,2> LINEARSOLVER;
+typedef DirectLinearSolverWithMatrix<SPARSITYPATTERN, MATRIX, VECTOR, 2> LINEARSOLVER;
 
-typedef NewtonSolver<INTEGRATOR,LINEARSOLVER,VECTOR,2> NLS;
-typedef StatReducedProblem<NLS,NLS,INTEGRATOR,INTEGRATOR,OP,VECTOR,2,2> SSolver;
-typedef VoidReducedProblem<NLS,INTEGRATOR,ALagOP,VECTOR,2,2> ALagSSolver;
+typedef NewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR, 2> NLS;
+typedef StatReducedProblem<NLS, NLS, INTEGRATOR, INTEGRATOR, OP, VECTOR, 2, 2> SSolver;
+typedef VoidReducedProblem<NLS, INTEGRATOR, ALagOP, VECTOR, 2, 2> ALagSSolver;
 
-typedef Reduced_SnoptAlgorithm<OP,dealii::BlockVector<double>,2,2> MMA;
+typedef Reduced_SnoptAlgorithm<OP, dealii::BlockVector<double>, 2, 2> MMA;
 
-int main(int argc, char **argv)
-{  
+int
+main(int argc, char **argv)
+{
 
   std::string paramfile = "dope.prm";
-    
-  if(argc == 2)
-  {
-    paramfile = argv[1];
-  }
+
+  if (argc == 2)
+    {
+      paramfile = argv[1];
+    }
   else if (argc > 2)
-  {
-    std::cout<<"Usage: "<<argv[0]<< " [ paramfile ] "<<std::endl;
-    return -1;
-  }
+    {
+      std::cout << "Usage: " << argv[0] << " [ paramfile ] " << std::endl;
+      return -1;
+    }
 
   ParameterReader pr;
   SSolver::declare_params(pr);
@@ -91,66 +92,60 @@ int main(int argc, char **argv)
 
   pr.read_parameters(paramfile);
 
-  Triangulation<2>     triangulation;
+  Triangulation<2> triangulation;
   std::vector<unsigned int> rep(2);
-  rep[0]  = 2;
-  rep[1]  = 1;
-  GridGenerator::subdivided_hyper_rectangle (triangulation,rep,Point<2>(0,0),Point<2>(2,1),true);
- 
-  FE  control_fe(FE_DGP<2>(0),1);
-  FE  state_fe(FE_Q<2>(2),2);
-  
+  rep[0] = 2;
+  rep[1] = 1;
+  GridGenerator::subdivided_hyper_rectangle(triangulation, rep, Point<2>(0, 0),
+      Point<2>(2, 1), true);
+
+  FE control_fe(FE_DGP<2>(0), 1);
+  FE state_fe(FE_Q<2>(2), 2);
+
   QGauss<2> quadrature_formula(3);
   QGauss<1> face_quadrature_formula(2);
   IDC idc(quadrature_formula, face_quadrature_formula);
 
-  LocalPDE<CDC,FDC,DOFHANDLER,VECTOR,2,2> LPDE;
-  LocalFunctional<CDC,FDC,DOFHANDLER,VECTOR,2,2> LFunc;
+  LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, 2, 2> LPDE;
+  LocalFunctional<CDC, FDC, DOFHANDLER, VECTOR, 2, 2> LFunc;
 
   //triangulation.refine_global (5);
-  triangulation.refine_global (3);
+  triangulation.refine_global(3);
 
-  {//Set Dirichlet Boundary!
-    for (Triangulation<2>::active_cell_iterator
-	   cell = triangulation.begin_active();
-	 cell != triangulation.end(); ++cell)
-      for (unsigned int f=0; f<GeometryInfo<2>::faces_per_cell; ++f)
-      {
-	if(cell->face(f)->at_boundary())
-	{
-	  if (cell->face(f)->center()[1] == 0)
-	  {
-	    cell->face(f)->set_all_boundary_indicators(5);
-	    if(fabs(cell->face(f)->center()[0]-2.)  < (std::max)(0.25,cell->face(f)->diameter()))
-	    {
-	      cell->face(f)->set_all_boundary_indicators(2);
-	    }
-	  }
-	}
-      }
-  }
+    { //Set Dirichlet Boundary!
+      for (Triangulation<2>::active_cell_iterator cell =
+          triangulation.begin_active(); cell != triangulation.end(); ++cell)
+        for (unsigned int f = 0; f < GeometryInfo<2>::faces_per_cell; ++f)
+          {
+            if (cell->face(f)->at_boundary())
+              {
+                if (cell->face(f)->center()[1] == 0)
+                  {
+                    cell->face(f)->set_all_boundary_indicators(5);
+                    if (fabs(cell->face(f)->center()[0] - 2.)
+                        < (std::max)(0.25, cell->face(f)->diameter()))
+                      {
+                        cell->face(f)->set_all_boundary_indicators(2);
+                      }
+                  }
+              }
+          }
+    }
 
   //Add Constrained description
-  std::vector<std::vector<unsigned int> > lcc(1);//1 Control Block
+  std::vector<std::vector<unsigned int> > lcc(1); //1 Control Block
   lcc[0].resize(2);
-  lcc[0][0]=1; //each component is constrained individualy
-  lcc[0][1]=2; // each two constraints (lower and upper bound)
-  Constraints constraints(lcc,1);
+  lcc[0][0] = 1; //each component is constrained individualy
+  lcc[0][1] = 2; // each two constraints (lower and upper bound)
+  Constraints constraints(lcc, 1);
 
-  MethodOfLines_SpaceTimeHandler<FE,DOFHANDLER,SPARSITYPATTERN,VECTOR,
-    SparsityMaker<DOFHANDLER,2>, ConstraintsMaker<DOFHANDLER,2>,2,2> DOFH(triangulation, 
-									  control_fe,
-									  state_fe,
-									  constraints);
-  
+  MethodOfLines_SpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR, 2, 2> DOFH(
+      triangulation, control_fe, state_fe, constraints);
+
   LocalConstraintAccessor CA;
-  LocalConstraint<CDC,FDC,DOFHANDLER,VECTOR,2,2> LC(CA);
-  
-  OP P(LFunc,
-       LPDE,
-       LC,
-       DOFH);  
+  LocalConstraint<CDC, FDC, DOFHANDLER, VECTOR, 2, 2> LC(CA);
 
+  OP P(LFunc, LPDE, LC, DOFH);
 
   std::vector<bool> comp_mask(2);
   comp_mask[0] = false;
@@ -159,46 +154,48 @@ int main(int argc, char **argv)
   comp_mask_2[0] = true;
   comp_mask_2[1] = false;
   DOpEWrapper::ZeroFunction<2> zf(2);
-  SimpleDirichletData<BlockVector<double>,2,2> DD_1(zf);
-  P.SetDirichletBoundaryColors(2,comp_mask,&DD_1);
-  P.SetDirichletBoundaryColors(0,comp_mask_2,&DD_1);
-  
+  SimpleDirichletData<BlockVector<double>, 2, 2> DD_1(zf);
+  P.SetDirichletBoundaryColors(2, comp_mask, &DD_1);
+  P.SetDirichletBoundaryColors(0, comp_mask_2, &DD_1);
+
   P.SetBoundaryFunctionalColors(3);
   P.SetBoundaryEquationColors(3);
 
-  SSolver solver(&P,"fullmem",pr,idc);
-  
-  MMA Alg(&P,&solver,"fullmem",pr);
-    
+  SSolver solver(&P, "fullmem", pr, idc);
+
+  MMA Alg(&P, &solver, "fullmem", pr);
+
   int niter = 2;
-  
+
   Alg.ReInit();
-  ControlVector<BlockVector<double> > q(&DOFH,"fullmem");
+  ControlVector<BlockVector<double> > q(&DOFH, "fullmem");
   //init q
-  {
-    q=0.4;
-  }
-  for(int i = 0; i < niter; i++)
-  {
-    try
     {
-      Alg.GetOutputHandler()->SetIterationNumber(0,"p_iter");
-      LPDE.SetP(1);
-      Alg.Solve(q);
-      Alg.GetOutputHandler()->SetIterationNumber(1,"p_iter");
-      LPDE.SetP(4);
-      Alg.Solve(q);
+      q = 0.4;
     }
-    catch(DOpEException &e)
+  for (int i = 0; i < niter; i++)
     {
-      std::cout<<"Warning: During execution of `" + e.GetThrowingInstance() + "` the following Problem occurred!"<<std::endl;
-      std::cout<<e.GetErrorMessage()<<std::endl;      
+      try
+        {
+          Alg.GetOutputHandler()->SetIterationNumber(0, "p_iter");
+          LPDE.SetP(1);
+          Alg.Solve(q);
+          Alg.GetOutputHandler()->SetIterationNumber(1, "p_iter");
+          LPDE.SetP(4);
+          Alg.Solve(q);
+        }
+      catch (DOpEException &e)
+        {
+          std::cout
+              << "Warning: During execution of `" + e.GetThrowingInstance()
+                  + "` the following Problem occurred!" << std::endl;
+          std::cout << e.GetErrorMessage() << std::endl;
+        }
+      if (i != niter - 1)
+        {
+          DOFH.RefineSpace("global");
+          Alg.ReInit();
+        }
     }
-    if(i != niter-1)
-    {
-      DOFH.RefineSpace("global");
-      Alg.ReInit();
-    }
-  }
   return 0;
 }

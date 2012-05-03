@@ -4,7 +4,7 @@
 #include "statpdeproblem.h"
 #include "newtonsolver.h"
 #include "directlinearsolver.h"
-#include "constraintsmaker.h"
+#include "userdefineddofconstraints.h"
 #include "sparsitymaker.h"
 #include "integratordatacontainer.h"
 
@@ -59,7 +59,7 @@ typedef DirectLinearSolverWithMatrix<SPARSITYPATTERN, MATRIX, VECTOR, 2> LINEARS
 typedef NewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR, 2> NLS;
 typedef StatPDEProblem<NLS, INTEGRATOR, OP, VECTOR, 2> SSolver;
 typedef MethodOfLines_StateSpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN,
-    VECTOR, SparsityMaker<DOFHANDLER, 2>, ConstraintsMaker<DOFHANDLER, 2>, 2> STH;
+    VECTOR, 2> STH;
 typedef CellDataContainer<DOFHANDLER, VECTOR, 2> CDC;
 typedef FaceDataContainer<DOFHANDLER, VECTOR, 2> FDC;
 typedef HigherOrderDWRContainer<STH, IDC, CDC, FDC, VECTOR> HO_DWRC;

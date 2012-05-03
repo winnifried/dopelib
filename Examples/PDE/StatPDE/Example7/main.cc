@@ -11,7 +11,7 @@
 #include "celldatacontainer.h"
 #include "facedatacontainer.h"
 #include "sparsitymaker.h"
-#include "constraintsmaker.h"
+#include "userdefineddofconstraints.h"
 #include "integratordatacontainer.h"
 
 #include <iostream>
@@ -29,7 +29,6 @@
 #include "localpde.h"
 #include "functionals.h"
 
-
 using namespace std;
 using namespace dealii;
 using namespace DOpE;
@@ -44,19 +43,21 @@ using namespace DOpE;
 //#define SPARSITYPATTERN dealii::SparsityPattern
 //#define VECTOR dealii::Vector<double>
 
-typedef PDEProblemContainer<PDEInterface<CellDataContainer,FaceDataContainer,DOFHANDLER,VECTOR, 2>,DirichletDataInterface<VECTOR,2>,SPARSITYPATTERN, VECTOR,2> OP;
-typedef IntegratorDataContainer<DOFHANDLER, dealii::Quadrature<2>, dealii::Quadrature<1>, VECTOR, 2 > IDC;
+typedef PDEProblemContainer<
+    PDEInterface<CellDataContainer, FaceDataContainer, DOFHANDLER, VECTOR, 2>,
+    DirichletDataInterface<VECTOR, 2>, SPARSITYPATTERN, VECTOR, 2> OP;
+typedef IntegratorDataContainer<DOFHANDLER, dealii::Quadrature<2>,
+    dealii::Quadrature<1>, VECTOR, 2> IDC;
 
-typedef Integrator<IDC,VECTOR,double,2> INTEGRATOR;
+typedef Integrator<IDC, VECTOR, double, 2> INTEGRATOR;
 
-typedef DirectLinearSolverWithMatrix<SPARSITYPATTERN,
-				     MATRIX,
-				     VECTOR,2> LINEARSOLVER;
+typedef DirectLinearSolverWithMatrix<SPARSITYPATTERN, MATRIX, VECTOR, 2> LINEARSOLVER;
 
-typedef NewtonSolver<INTEGRATOR,LINEARSOLVER,VECTOR,2> NLS;
-typedef StatPDEProblem<NLS,INTEGRATOR,OP,VECTOR,2> SSolver;
+typedef NewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR, 2> NLS;
+typedef StatPDEProblem<NLS, INTEGRATOR, OP, VECTOR, 2> SSolver;
 
-int main(int argc, char **argv)
+int
+main(int argc, char **argv)
 {
   /**
    *  Solving the standard Laplace equation
@@ -64,45 +65,44 @@ int main(int argc, char **argv)
 
   string paramfile = "dope.prm";
 
-  if(argc == 2)
-  {
-    paramfile = argv[1];
-  }
+  if (argc == 2)
+    {
+      paramfile = argv[1];
+    }
   else if (argc > 2)
-  {
-    std::cout<<"Usage: "<<argv[0]<< " [ paramfile ] "<<std::endl;
-    return -1;
-  }
+    {
+      std::cout << "Usage: " << argv[0] << " [ paramfile ] " << std::endl;
+      return -1;
+    }
 
   ParameterReader pr;
   SSolver::declare_params(pr);
   DOpEOutputHandler<VECTOR>::declare_params(pr);
   pr.read_parameters(paramfile);
 
-  Triangulation<2>     triangulation;
+  Triangulation<2> triangulation;
 
-  DOpEWrapper::FiniteElement<2>          state_fe(FE_Q<2>(1),2);
-						  
-  QGauss<2>  quadrature_formula(3);
+  DOpEWrapper::FiniteElement<2> state_fe(FE_Q<2>(1), 2);
+
+  QGauss<2> quadrature_formula(3);
   QGauss<1> face_quadrature_formula(3);
   IDC idc(quadrature_formula, face_quadrature_formula);
 
-  LocalPDE<VECTOR,2> LPDE;
+  LocalPDE<VECTOR, 2> LPDE;
 
-  LocalPointFunctionalX<VECTOR,2> LPFX;
+  LocalPointFunctionalX<VECTOR, 2> LPFX;
 
   // Pseudo time
-  std::vector<double> times(1,0.);
-  
+  std::vector<double> times(1, 0.);
+
   // Spatial grid
-  GridGenerator::hyper_cube (triangulation, 0, 1);
-  triangulation.refine_global (3);
+  GridGenerator::hyper_cube(triangulation, 0, 1);
+  triangulation.refine_global(3);
 
-  MethodOfLines_StateSpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR, SparsityMaker<DOFHANDLER, 2>, 
-				 ConstraintsMaker<DOFHANDLER, 2>,2> DOFH(triangulation,state_fe);
+  MethodOfLines_StateSpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR, 2> DOFH(
+      triangulation, state_fe);
 
-  OP P(LPDE,
-       DOFH);
+  OP P(LPDE, DOFH);
 
   P.AddFunctional(&LPFX);
 
@@ -114,38 +114,40 @@ int main(int argc, char **argv)
   DOpEWrapper::ZeroFunction<2> zf(2);
   SimpleDirichletData<VECTOR, 2> DD1(zf);
 
-  P.SetDirichletBoundaryColors(0,comp_mask,&DD1);
+  P.SetDirichletBoundaryColors(0, comp_mask, &DD1);
 
-  SSolver solver(&P,"fullmem",pr,idc);
+  SSolver solver(&P, "fullmem", pr, idc);
   //Only needed for pure PDE Problems
-  DOpEOutputHandler<VECTOR> out(&solver,pr);
+  DOpEOutputHandler<VECTOR> out(&solver, pr);
   DOpEExceptionHandler<VECTOR> ex(&out);
   P.RegisterOutputHandler(&out);
   P.RegisterExceptionHandler(&ex);
   solver.RegisterOutputHandler(&out);
-  solver.RegisterExceptionHandler(&ex); 
+  solver.RegisterExceptionHandler(&ex);
 
   try
-  {
-    solver.ReInit();
-    out.ReInit();
-    stringstream outp;
-    
-    outp << "**************************************************\n";
-    outp << "*             Starting Forward Solve             *\n";
-    outp << "*   Solving : "<<P.GetName()<<"\t*\n";
-    outp << "*   SDoFs   : ";
-    solver.StateSizeInfo(outp);
-    outp << "**************************************************";
-    out.Write(outp,1,1,1);
-    
-    solver.ComputeReducedFunctionals();
-  }
-  catch(DOpEException &e)
-  {
-  	std::cout<<"Warning: During execution of `" + e.GetThrowingInstance() + "` the following Problem occurred!"<<std::endl;
-  	std::cout<<e.GetErrorMessage()<<std::endl;
-  }
+    {
+      solver.ReInit();
+      out.ReInit();
+      stringstream outp;
+
+      outp << "**************************************************\n";
+      outp << "*             Starting Forward Solve             *\n";
+      outp << "*   Solving : " << P.GetName() << "\t*\n";
+      outp << "*   SDoFs   : ";
+      solver.StateSizeInfo(outp);
+      outp << "**************************************************";
+      out.Write(outp, 1, 1, 1);
+
+      solver.ComputeReducedFunctionals();
+    }
+  catch (DOpEException &e)
+    {
+      std::cout
+          << "Warning: During execution of `" + e.GetThrowingInstance()
+              + "` the following Problem occurred!" << std::endl;
+      std::cout << e.GetErrorMessage() << std::endl;
+    }
 
   return 0;
 }

@@ -12,7 +12,7 @@
 #include "simpledirichletdata.h"
 #include "noconstraints.h"
 #include "sparsitymaker.h"
-#include "constraintsmaker.h"
+#include "userdefineddofconstraints.h"
 #include "preconditioner_wrapper.h"
 #include "integratordatacontainer.h"
 
@@ -111,7 +111,7 @@ int main(int argc, char **argv)
   Constraints constraints(lcc,0); //Second entry defines the numer of global constraints, here we have none
   
   MethodOfLines_SpaceTimeHandler<FE,DOFHANDLER,SPARSITYPATTERN,VECTOR,
-    SparsityMaker<DOFHANDLER,2>, ConstraintsMaker<DOFHANDLER,2>,2,2> DOFH(triangulation, 
+    2,2> DOFH(triangulation,
 									  control_fe,
 									  state_fe,
 									  constraints);

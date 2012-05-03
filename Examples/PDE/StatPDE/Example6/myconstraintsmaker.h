@@ -8,21 +8,21 @@
 #ifndef MYCONSTRAINTSMAKER_H_
 #define MYCONSTRAINTSMAKER_H_
 
-#include "constraintsmaker.h"
+#include "userdefineddofconstraints.h"
 
 namespace DOpE
 {
 	template<int dim>
-	class PeriodicityConstraints: public ConstraintsMaker<dealii::DoFHandler<dim>, dim>
+	class PeriodicityConstraints: public UserDefinedDoFConstraints<dealii::DoFHandler<dim>, dim>
 	{
 		public:
 			PeriodicityConstraints()
-					: ConstraintsMaker<dealii::DoFHandler<dim>, dim>()
+					: UserDefinedDoFConstraints<dealii::DoFHandler<dim>, dim>()
 			{
 			}
 			static void declare_params(ParameterReader &param_reader);
 
-			virtual void MakeConstraints(
+			virtual void MakeStateDoFConstraints(
 			    const DOpEWrapper::DoFHandler<dim, dealii::DoFHandler<dim> > & dof_handler,
 			    dealii::ConstraintMatrix& constraint_matrix) const;
 //			virtual void MakeConstraints(
@@ -66,7 +66,7 @@ namespace DOpE
 	 *
 	 */
 	template<int dim>
-	void PeriodicityConstraints<dim>::MakeConstraints(
+	void PeriodicityConstraints<dim>::MakeStateDoFConstraints(
 	    const DOpEWrapper::DoFHandler<dim, dealii::DoFHandler<dim> > & dof_handler,
 	    dealii::ConstraintMatrix& constraint_matrix) const
 	{
@@ -75,10 +75,6 @@ namespace DOpE
 		 * We couple boundary_color 0 with 1 (in x direction) and boundary color 2
 		*with 3(in y direction)
 		*/
-		constraint_matrix.clear();
-		DoFTools::make_hanging_node_constraints(
-		    static_cast<const dealii::DoFHandler<dim>&>(dof_handler),
-		    constraint_matrix);
 		/****************************************************************************/
 		unsigned int n_components = dof_handler.get_fe().n_components();
 		unsigned int n_dofs = dof_handler.n_dofs();
@@ -270,7 +266,6 @@ namespace DOpE
 				                                   corners.at(comp).at(i + 1), 1.0);
 			}
 		}
-		constraint_matrix.close();
 	}
 
 //	template<int dim>

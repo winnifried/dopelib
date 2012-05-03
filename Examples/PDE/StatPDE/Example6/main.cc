@@ -4,7 +4,7 @@
 #include "statpdeproblem.h"
 #include "newtonsolver.h"
 #include "directlinearsolver.h"
-#include "constraintsmaker.h"
+#include "userdefineddofconstraints.h"
 #include "myconstraintsmaker.h"
 #include "sparsitymaker.h"
 #include "integratordatacontainer.h"
@@ -32,9 +32,6 @@
 
 #include "localpde.h"
 #include "functionals.h"
-
-#include "constraintsmaker.h"
-#include "myconstraintsmaker.h"
 
 using namespace std;
 using namespace dealii;
@@ -139,8 +136,7 @@ int main(int argc, char **argv)
 
 	/***********************************/
 	DOpE::PeriodicityConstraints<2> constraints_mkr;
-	MethodOfLines_StateSpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR, SparsityMaker<DOFHANDLER,2>,
-	    ConstraintsMaker<DOFHANDLER,2>, 2> DOFH(triangulation,  state_fe);
+	MethodOfLines_StateSpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR, 2> DOFH(triangulation,  state_fe);
 	//Add the periodicity constraints through the following:
 	DOFH.SetConstraintsMaker(constraints_mkr);
 	/***********************************/

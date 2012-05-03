@@ -24,7 +24,7 @@
 #include "solutionextractor.h"
 #include "sparsitymaker.h"
 #include "integratordatacontainer.h"
-#include "constraintsmaker.h"
+#include "userdefineddofconstraints.h"
 
 #include <iostream>
 #include <fstream>
@@ -169,7 +169,6 @@ main(int argc, char **argv)
 
   triangulation.refine_global(4);
   MethodOfLines_SpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR,
-      SparsityMaker<DOFHANDLER, 1> , ConstraintsMaker<DOFHANDLER, 1> ,
       LOCALDOPEDIM, LOCALDEALDIM> DOFH(triangulation, control_fe, state_fe,
       times);
 

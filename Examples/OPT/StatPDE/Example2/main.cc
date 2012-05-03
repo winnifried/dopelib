@@ -17,7 +17,7 @@
 #include "simpledirichletdata.h"
 #include "noconstraints.h"
 #include "sparsitymaker.h"
-#include "constraintsmaker.h"
+#include "userdefineddofconstraints.h"
 #include "integratordatacontainer.h"
 
 #include <iostream>
@@ -102,7 +102,7 @@ int main(int argc, char **argv)
   std::vector<double> times(1,0.);
   triangulation.refine_global (5);
 
-  MethodOfLines_SpaceTimeHandler<FE, DOFHANDLER, BlockSparsityPattern,VECTOR, SparsityMaker<DOFHANDLER,2>, ConstraintsMaker<DOFHANDLER,2>, 0,2>  DOFH(triangulation,control_fe,state_fe);
+  MethodOfLines_SpaceTimeHandler<FE, DOFHANDLER, BlockSparsityPattern,VECTOR, 0,2>  DOFH(triangulation,control_fe,state_fe);
 
   NoConstraints<CellDataContainer,FaceDataContainer,DOFHANDLER,VECTOR, 0,2> Constraints;
 

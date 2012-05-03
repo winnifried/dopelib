@@ -23,7 +23,7 @@
 #include "noconstraints.h"
 #include "solutionextractor.h"
 #include "sparsitymaker.h"
-#include "constraintsmaker.h"
+#include "userdefineddofconstraints.h"
 #include "instatoptproblemcontainer.h"
 #include "integratordatacontainer.h"
 
@@ -179,7 +179,7 @@ int main(int argc, char **argv)
   dealii::GridGenerator::subdivided_hyper_cube(times, 20);
 
 		triangulation.refine_global(5);
-		MethodOfLines_SpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR, SparsityMaker<DOFHANDLER,2>, ConstraintsMaker<DOFHANDLER,2>,LOCALDOPEDIM, LOCALDEALDIM> DOFH(triangulation, control_fe, state_fe, times);
+		MethodOfLines_SpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR,LOCALDOPEDIM, LOCALDEALDIM> DOFH(triangulation, control_fe, state_fe, times);
 
 	  /***************hp********************/
 //	  MethodOfLines_SpaceTimeHandler<FE, DOFHANDLERSPARSITYPATTERN, VECTOR,LOCALDOPEDIM, LOCALDEALDIM> DOFH(triangulation,control_fe_collection, state_fe_collection,times);
