@@ -18,29 +18,34 @@
 namespace DOpE
 {
   template<typename DOFHANDLER, int dim>
-    class ConstraintsMaker
+    class UserDefinedDoFConstraints
     {
     public:
-      ConstraintsMaker()
+      UserDefinedDoFConstraints()
       {
       }
       virtual
-      ~ConstraintsMaker()
+      ~UserDefinedDoFConstraints()
       {
       }
       virtual void
       MakeConstraints(
           const DOpEWrapper::DoFHandler<dim, DOFHANDLER> & dof_handler,
-          dealii::ConstraintMatrix& hanging_node_constraints) const;
+          dealii::ConstraintMatrix& dof_constraints) const;
+      virtual void
+      MakeHomogeneousConstraints(
+          const DOpEWrapper::DoFHandler<dim, DOFHANDLER> & dof_handler,
+          dealii::ConstraintMatrix& dof_constraints) const;
+
 
     private:
     };
 
   template<typename DOFHANDLER, int dim>
     void
-    ConstraintsMaker<DOFHANDLER, dim>::MakeConstraints(
+    UserDefinedDoFConstraints<DOFHANDLER, dim>::MakeConstraints(
         const DOpEWrapper::DoFHandler<dim, DOFHANDLER> & dof_handler,
-        dealii::ConstraintMatrix& hanging_node_constraints) const
+        dealii::ConstraintMatrix& dof_constraints) const
     {
       hanging_node_constraints.clear();
       DoFTools::make_hanging_node_constraints(
