@@ -1,6 +1,11 @@
 Changelog DOpE
 ==============
 
+2. DOpE Treffen 3.5.2012-5.5.2012:
+==================================
+-- Initial Value Computation now done by DOpE, nolonger the fixed dealii function project.
+	
+
 before 2.5.2012
 -------------------------
 done - SVN in Heidelberg ~tw
