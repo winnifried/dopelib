@@ -5,6 +5,11 @@ if [ $# -ne 1 ]
     exit 1
 fi
 
+if [ -f dope.log ]
+then
+	rm dope.log
+fi
+
 if [ $1 == "Test" ]
 then
     if [ -f test.dlog ]
