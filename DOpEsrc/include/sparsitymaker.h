@@ -14,6 +14,9 @@
 
 namespace DOpE
 {
+  /**
+   * Constructs the sparsitypattern.
+   */
   template<typename DOFHANDLER, int dim>
     class SparsityMaker
     {
@@ -38,6 +41,9 @@ namespace DOpE
           dealii::SparsityPattern & sparsity,
           const dealii::ConstraintMatrix& hanging_node_constraints,
           const std::vector<unsigned int>& blocks) const;
+
+      //TODO: If one wishes to change the sparsity-pattern of the control, one
+      //has to implement this here.
 
     };
 

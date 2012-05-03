@@ -294,7 +294,7 @@ namespace DOpE
 
             for (unsigned int face=0; face < dealii::GeometryInfo<dim>::faces_per_cell; ++face)
             {
-              auto face_it = cell[0]->face(face);
+             // auto face_it = cell[0]->face(face);
               // first, check if we are at an interface, i.e. not the neighbour exists and
               // it has a different material_id than the actual cell
               if(AtInterface(cell, face))
@@ -462,7 +462,7 @@ namespace DOpE
 
               for (unsigned int face=0; face < dealii::GeometryInfo<dim>::faces_per_cell; ++face)
               {
-                auto face_it = cell[0]->face(face);
+                //auto face_it = cell[0]->face(face);
                 // first, check if we are at an interface, i.e. not the neighbour exists and
                 // it has a different material_id than the actual cell
                 if(AtInterface(cell, face))
@@ -739,7 +739,7 @@ namespace DOpE
           {
             for (unsigned int face=0; face < dealii::GeometryInfo<dim>::faces_per_cell; ++face)
             {
-              auto face_it = cell[0]->face(face);
+              //auto face_it = cell[0]->face(face);
               // first, check if we are at an interface, i.e. not the neighbour exists and
               // it has a different material_id than the actual cell
               if(AtInterface(cell, face))
@@ -1122,7 +1122,7 @@ namespace DOpE
         // e.g. sometimes we need zero sometimes we need other values.
 
         //Never Condense Nodes Here ! Or All will fail if the state is not initialized with zero!
-        //pde.GetHangingNodeConstraints().condense(u);
+        //pde.GetDoFConstraints().condense(u);
         std::vector<unsigned int> dirichlet_colors = pde.GetDirichletColors();
         for (unsigned int i = 0; i < dirichlet_colors.size(); i++)
         {
@@ -1156,7 +1156,7 @@ namespace DOpE
         //TODO Apply constraints locally, see, e.g., dealii step-27 ? But howto do this in the newton iter
         // e.g. sometimes we need zero sometimes we need other values.
 
-        pde.GetHangingNodeConstraints().condense(u);
+        pde.GetDoFConstraints().condense(u);
         std::vector<unsigned int> dirichlet_colors = pde.GetDirichletColors();
         for (unsigned int i = 0; i < dirichlet_colors.size(); i++)
         {
@@ -1175,7 +1175,6 @@ namespace DOpE
             u(p->first) = p->second;
           }
         }
-	//pde.GetHangingNodeConstraints().distribute(u);
       }
   /*******************************************************************************************/
 
@@ -1188,8 +1187,8 @@ namespace DOpE
       {
         //TODO Apply constraints locally, see, e.g., dealii step-27 ? But howto do this in the newton iter
         // e.g. sometimes we need zero sometimes we need other values.
-        pde.GetHangingNodeConstraints().condense(rhs);
-        pde.GetHangingNodeConstraints().condense(matrix);
+        pde.GetDoFConstraints().condense(rhs);
+        pde.GetDoFConstraints().condense(matrix);
         std::vector<unsigned int> dirichlet_colors = pde.GetDirichletColors();
         for (unsigned int i = 0; i < dirichlet_colors.size(); i++)
         {

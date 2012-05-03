@@ -204,7 +204,7 @@ namespace DOpE
          * Returns the state HN-Constraints at the current time
          */
         virtual const dealii::ConstraintMatrix &
-        GetStateHangingNodeConstraints() const=0;
+        GetStateDoFConstraints() const=0;
 
         /*******************************************************/
 

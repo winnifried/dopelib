@@ -309,7 +309,7 @@ namespace DOpE
        */
       virtual const dealii::ConstraintMatrix
       &
-      GetControlHangingNodeConstraints() const=0;
+      GetControlDoFConstraints() const=0;
 
       /******************************************************/
 
@@ -318,7 +318,7 @@ namespace DOpE
        */
       virtual const dealii::ConstraintMatrix
       &
-      GetStateHangingNodeConstraints() const=0;
+      GetStateDoFConstraints() const=0;
 
       /*******************************************************/
 

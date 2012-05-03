@@ -753,9 +753,9 @@ namespace DOpE
        * @return Returns a matrix with hanging node constraints.
        */
       const dealii::ConstraintMatrix&
-      GetHangingNodeConstraints() const
+      GetDoFConstraints() const
       {
-        return _OP.GetHangingNodeConstraints();
+        return _OP.GetDoFConstraints();
       }
 
       std::string

@@ -121,13 +121,13 @@ namespace DOpE
               GetSTH().GetStateDoFHandler().GetDEALDoFHandler(),
               u.GetSpacialVector(),
               GetHigherOrderSTH().GetStateDoFHandler().GetDEALDoFHandler(),
-              GetHigherOrderSTH().GetStateHangingNodeConstraints(),
+              GetHigherOrderSTH().GetStateDoFConstraints(),
               GetPI_h_u().GetSpacialVector());
           dealii::FETools::interpolate(
               GetSTH().GetStateDoFHandler().GetDEALDoFHandler(),
               u.GetSpacialVector(),
               GetHigherOrderSTH().GetStateDoFHandler().GetDEALDoFHandler(),
-              GetHigherOrderSTH().GetStateHangingNodeConstraints(), u_high);
+              GetHigherOrderSTH().GetStateDoFConstraints(), u_high);
           GetPI_h_u().GetSpacialVector().add(-1., u_high);
         }
 
@@ -147,13 +147,13 @@ namespace DOpE
               GetSTH().GetStateDoFHandler().GetDEALDoFHandler(),
               z.GetSpacialVector(),
               GetHigherOrderSTH().GetStateDoFHandler().GetDEALDoFHandler(),
-              GetHigherOrderSTH().GetStateHangingNodeConstraints(),
+              GetHigherOrderSTH().GetStateDoFConstraints(),
               GetPI_h_z().GetSpacialVector());
           dealii::FETools::interpolate(
               GetSTH().GetStateDoFHandler().GetDEALDoFHandler(),
               z.GetSpacialVector(),
               GetHigherOrderSTH().GetStateDoFHandler().GetDEALDoFHandler(),
-              GetHigherOrderSTH().GetStateHangingNodeConstraints(), z_high);
+              GetHigherOrderSTH().GetStateDoFConstraints(), z_high);
           GetPI_h_z().GetSpacialVector().add(-1., z_high);
 
         }

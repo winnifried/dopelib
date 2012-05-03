@@ -1041,7 +1041,7 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
       //    {
       dealii::VectorTools::project(
 	this->GetProblem()->GetSpaceTimeHandler()->GetStateDoFHandler(),
-	this->GetProblem()->GetSpaceTimeHandler()->GetStateHangingNodeConstraints(),
+	this->GetProblem()->GetSpaceTimeHandler()->GetStateDoFConstraints(),
 	this->GetIntegrator().GetIntegratorDataContainer().GetQuad(),
 	problem.GetInitialValues(), u_alt);
       //    }

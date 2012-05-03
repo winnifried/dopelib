@@ -701,7 +701,7 @@ namespace DOpE
         /******************************************************/
 
         const dealii::ConstraintMatrix&
-        GetHangingNodeConstraints() const;
+        GetDoFConstraints() const;
 
         /******************************************************/
 
@@ -3509,23 +3509,23 @@ namespace DOpE
       typename DOFHANDLER>
     const dealii::ConstraintMatrix&
     OptProblem<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
-        SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DOFHANDLER>::GetHangingNodeConstraints() const
+        SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DOFHANDLER>::GetDoFConstraints() const
     {
       if ((GetType() == "state") || (GetType() == "adjoint")
           || (GetType() == "adjoint_for_ee") || (GetType() == "tangent")
           || (GetType() == "adjoint_hessian"))
       {
-        return GetSpaceTimeHandler()->GetStateHangingNodeConstraints();
+        return GetSpaceTimeHandler()->GetStateDoFConstraints();
       }
       else if ((GetType() == "gradient") || (GetType() == "hessian")
           || (GetType() == "global_constraint_gradient"))
       {
-        return GetSpaceTimeHandler()->GetControlHangingNodeConstraints();
+        return GetSpaceTimeHandler()->GetControlDoFConstraints();
       }
       else
       {
         throw DOpEException("Unknown Type:" + GetType(),
-            "OptProblem::GetHangingNodeConstraints");
+            "OptProblem::GetDoFConstraints");
       }
     }
 

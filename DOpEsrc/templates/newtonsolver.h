@@ -153,7 +153,7 @@ template <typename INTEGRATOR, typename LINEARSOLVER, typename VECTOR,  int dim>
       {
 	GetIntegrator().ApplyInitialBoundaryValues(pde,solution);
       }
-      pde.GetHangingNodeConstraints().distribute(solution);
+      pde.GetDoFConstraints().distribute(solution);
 
       GetIntegrator().AddDomainData("last_newton_solution",&solution);
     

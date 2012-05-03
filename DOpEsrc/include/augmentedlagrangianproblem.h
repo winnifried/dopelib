@@ -1035,7 +1035,7 @@ template<typename FACEDATACONTAINER>
      *
      * @return Returns a matrix with hanging node constraints.
      */
-    const dealii::ConstraintMatrix& GetHangingNodeConstraints() const{ return _OP.GetHangingNodeConstraints(); }
+    const dealii::ConstraintMatrix& GetDoFConstraints() const{ return _OP.GetDoFConstraints(); }
    
 
     std::string GetType() const{ return _OP.GetType(); }

@@ -126,7 +126,7 @@ template <typename PRECONDITIONER,typename SPARSITYPATTERN, typename MATRIX, typ
   cg.solve (_matrix, solution, rhs,
 	    precondition);
   
-  pde.GetHangingNodeConstraints().distribute(solution);
+  pde.GetDoFConstraints().distribute(solution);
 }
 /******************************************************/
 

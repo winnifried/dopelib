@@ -140,7 +140,7 @@ template <typename SPARSITYPATTERN, typename MATRIX, typename VECTOR,int dim>
   _A_direct->solve(sol);
   solution = sol;
 
-  pde.GetHangingNodeConstraints().distribute(solution);
+  pde.GetDoFConstraints().distribute(solution);
 
 }
 

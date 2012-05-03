@@ -154,7 +154,7 @@ namespace DOpE
       inline const std::vector<unsigned int>&
       GetBoundaryEquationColors() const;
       inline const dealii::ConstraintMatrix&
-      GetHangingNodeConstraints() const;
+      GetDoFConstraints() const;
     const dealii::Function<dealdim>&
     GetInitialValues() const;
       /******************************************************/
@@ -555,9 +555,9 @@ namespace DOpE
   template<typename OPTPROBLEM, typename PDE, typename DD,
       typename SPARSITYPATTERN, typename VECTOR, int dopedim, int dealdim>
     const dealii::ConstraintMatrix&
-    StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dopedim, dealdim>::GetHangingNodeConstraints() const
+    StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dopedim, dealdim>::GetDoFConstraints() const
     {
-      return _opt_problem.GetSpaceTimeHandler()->GetStateHangingNodeConstraints();
+      return _opt_problem.GetSpaceTimeHandler()->GetStateDoFConstraints();
     }
   template<typename OPTPROBLEM, typename PDE, typename DD,
     typename SPARSITYPATTERN, typename VECTOR, int dopedim, int dealdim>  const dealii::Function<dealdim>&

@@ -133,7 +133,7 @@ template <typename PRECONDITIONER,typename SPARSITYPATTERN, typename MATRIX, typ
   gmres.solve (_matrix, solution, rhs,
     precondition);
 
-  pde.GetHangingNodeConstraints().distribute(solution);
+  pde.GetDoFConstraints().distribute(solution);
 }
 
 
