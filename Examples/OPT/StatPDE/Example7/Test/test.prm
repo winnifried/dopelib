@@ -79,7 +79,9 @@ subsection reduced_snoptalgorithm parameters
   set max iterations       = 1000
 
   # Tolerance with respect to the optimality condition.
-  set optimality tol       = 1.e-6
+  set optimality tol       = 1.e-6  
+
+  set capture snopt output = false
 end
 
 

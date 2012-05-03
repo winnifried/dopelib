@@ -11,7 +11,7 @@ LOG: Allowing IterationCounter `Opt_Snopt_OptProblem' for filenames!
 	CostFunctional: 605.7
 	************************************************
 	*               Calling SNOPT                  *
-	*  output will be written to logfile only!     *
+	*  output will not be written to logfile!      *
 	************************************************
 	
 	
