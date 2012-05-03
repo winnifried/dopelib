@@ -1,5 +1,25 @@
 TODO DOpE
 =========
+
+- Webseite: 
+  -- Logo -> tw
+  -- Namen der Developer, Contributer, Name des Projekts: DOpElib
+  -- Beschreibung
+  -- domain
+  -- manual als *.pdf um die Interessierten richtig heiss zu machen
+  -- wie komme ich an DOpE?? Mail an dopelib@...
+  -- Danksagungen RoDoBo, deal.ii
+  -- Publications
+
+- Technical Report (Basierend auf Doku)
+  -- Goal of Software
+  -- Aufbau
+  -- Features!
+  -- Beispiele:
+	FSI instat
+	Compliance minimization
+	DWR NS channel (muss noch gerechnet werden)
+	Beispiel mit verschiedenen BC: Einstroemung, Periodisch, Pressure Driven
 - Update the Apply...BoundaryValues to include other constraints, 
   like periodicity... (maybe with nonzero jump...). Also check the 
   condense(u)/distribute(u) stuff again, it should not be in the apply 
@@ -21,6 +41,8 @@ done (current work)  - PDE/StatPDE
 		--- Was wird geloest?
   		--- Welche Features werden hier (erstmalig) benutzt? Diese sollten
   		ueber \index indiziert werden.
+
+- hp Beispiel in PDE/StatPDE/Example1 ~cg !!!!
  
 	
 - Fehlerschaetzer 
@@ -70,19 +92,10 @@ davon state und tangent bzw. dual und dual hessian ~ww
                 (Upgrades for integrator_multimesh and multimesh_facedatacontainer needed)                           
   --Support for nonstationary problems                                                                             
                 (Upgrades for integrator_multimesh needed)                                                           
-  --Vector-Values Finite-Elements                                                                                  
-                (Upgrade for multimesh_celldatacontainer needed)        
+      
 
 - Umbenennung optproblem.h in optproblemcontainer.h? Waere konsistent mit pde
   problemcontainer
-
-- Anstatt die types wie state, adjoint etc. ueber strings und dann if,else abzufragen, wie waere es stattdessen mit enums? Diese kann man dann auch ueber switch abfragen. Nachteil waere, dass man nicht mehr Teile untersuchen kann (wie es mit find("sth") bei einem String moeglich ist.)
-
-- Loesen des Opt-Control Probleme ueber die KKT-Bedingungen 
-  (im stationaeren, benötigt Matrizen für die gemischten Ableitungen, wollen wir dazu neue 
-  Terme haben, oder wollen wir alle linearen Teile über Matrizen bauen?)
-  -- Newtonsolver zu aendern (ueberpruefen, ob kostenfunktional kleiner wird)
-  -- BlockMatrix fuer das KKT-System. -> Eigenen Integrator schreiben.
 
 - Standardinterface fuer Postprozesse? 
 	-- Basisklasse fuer Postprozesse
@@ -95,41 +108,16 @@ davon state und tangent bzw. dual und dual hessian ~ww
 - Make some automated memchecks, e.g., valgrind --tool=memcheck --leak-check=full --error-exitcode=1 [Programmname] 
   will return 0 if no errors but a nonzero exitcode if there are some errors...
 
-Spaeter ;):
-=============================
-- hp Beispiel in PDE/StatPDE/Example1 ~cg
 - Entferne vor jedem neuen Durchlauf von test.sh die Datei dope.log aus dem Testverzeichnis.
 - Verschiedene Kontrolltypen im Instationaeren, insbesondere Kontrolle in den AWen
 -  Rueckgabeklasse fuer Newton. 
 - Adjungierte Zeitschrittverfahren 
   (Dann geht endlich auch Opt-Control im Instationaeren)
-- Moeglichkeit, andere Namen fuer die Komponenten zu vergeben? 
-- Doku in latex zu OPT und Instat
-- OPTProblem umbennen
-- Container Dinge in Container Verzeichnis
-- Interface Dinge in Interface Verzeichnis
-- Beispiele in debug-mode compilieren (zum Testen, aber nicht
-  in debug-mode=on einchecken!!!) und Warnungen
-  entfernen
-- Beispiele (OPT) weiter dokumentieren ~tw 
-
-- Webseite: 
-  -- Logo -> tw
-  -- Namen der Personen, Name des Projekts: DOpE-*
-  -- Beschreibung
-  -- domain, 
-  -- manual als *.pdf um die Interessierten richtig heiss zu machen
-  
-- Bugzilla -> cg
-- changelog
-
-
-Future
-======
-
-	    
-
-
-
+- Doku in latex zu OPT und Instat 
+-  Loesen des Opt-Control Probleme ueber die KKT-Bedingungen 
+  (im stationaeren, benötigt Matrizen für die gemischten Ableitungen, wollen wir dazu neue 
+  Terme haben, oder wollen wir alle linearen Teile über Matrizen bauen?)
+  -- Newtonsolver zu aendern (ueberpruefen, ob kostenfunktional kleiner wird)
+  -- BlockMatrix fuer das KKT-System. -> Eigenen Integrator schreiben.
 
 

@@ -5,6 +5,7 @@ before 2.5.2012
 -------------------------
 done - SVN in Heidelberg ~tw
 done - Manual: Additional Chapter on what this Library does and why it is doing so. ~ww
+done - Multimesh: Support of vector valued FE. ~ww
 
 15.02.2011: Trennung der Ortsdiskretisierung (verschieden Feine Gitter) ~ww
 
