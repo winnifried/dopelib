@@ -7,7 +7,7 @@
 #include "fractional_step_theta_problem.h"
 #include "functionalinterface.h"
 #include "pdeinterface.h"
-#include "forwardtimestepreducedproblem.h"
+#include "instatreducedproblem.h"
 #include "instat_step_newtonsolver.h"
 #include "fractional_step_theta_step_newtonsolver.h"
 #include "gmreslinearsolver.h"
@@ -79,7 +79,7 @@ typedef DirectLinearSolverWithMatrix<SPARSITYPATTERN,
 
 typedef InstatStepNewtonSolver<INTEGRATOR,LINEARSOLVER,VECTOR,2> NLS;
 typedef ReducedNewtonAlgorithm<OP,VECTOR,2,2> RNA;
-typedef ForwardTimestepReducedProblem<NLS,NLS,INTEGRATOR,INTEGRATOR,OP,VECTOR,2,2> SSolver;
+typedef InstatReducedProblem<NLS,NLS,INTEGRATOR,INTEGRATOR,OP,VECTOR,2,2> SSolver;
 
 
 int main(int argc, char **argv)

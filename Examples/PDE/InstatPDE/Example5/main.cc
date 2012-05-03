@@ -7,7 +7,7 @@
 #include "fractional_step_theta_problem.h"
 #include "functionalinterface.h"
 #include "pdeinterface.h"
-#include "forwardtimestepreducedproblem.h"
+#include "instatreducedproblem.h"
 #include "instat_step_newtonsolver.h"
 #include "fractional_step_theta_step_newtonsolver.h"
 #include "newtonsolvermixeddims.h"
@@ -96,7 +96,7 @@ typedef FractionalStepThetaStepNewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR , L
 
 typedef ReducedNewtonAlgorithm<OP, VECTOR, LOCALDOPEDIM, LOCALDEALDIM> RNA;
 
-typedef ForwardTimestepReducedProblem<NLS, NLS, INTEGRATOR, INTEGRATOR, OP,
+typedef InstatReducedProblem<NLS, NLS, INTEGRATOR, INTEGRATOR, OP,
     VECTOR, LOCALDOPEDIM, LOCALDEALDIM> SSolver;
 
 
