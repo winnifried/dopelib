@@ -11,6 +11,10 @@
 
 	Computing State Solution:
 LOG: Allowing IterationCounter `Time' for filenames!
+	Computing Initial Values:
+			 Newton step: 0	 Residual (abs.):   3.83e-02
+			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 1	 Residual (rel.): < 1.00e-10	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatOptProblemContainer.00000.vtk]
 		Start-Time-Point evaluation: 0
 			 Timestep: 1 (0 -> 0.02) using backward Euler
@@ -18,8 +22,8 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 0	 Residual (rel.):   1.00e+00
 			 Newton step: 1	 Residual (rel.):   8.94e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   1.80e-04	 LineSearch {0} 
-			 Newton step: 3	 Residual (rel.):   4.17e-06	 LineSearch {0} 
-			 Newton step: 4	 Residual (rel.):   9.89e-08	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   4.16e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   9.88e-08	 LineSearch {0} 
 			 Newton step: 5	 Residual (rel.):   2.38e-09	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatOptProblemContainer.00001.vtk]
 			 Timestep: 2 (0.02 -> 0.04) using backward Euler

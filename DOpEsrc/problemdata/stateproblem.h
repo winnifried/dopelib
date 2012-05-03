@@ -34,6 +34,24 @@ namespace DOpE
       }
 
       /******************************************************/
+      /****For the initial values ***************/
+      template<typename DATACONTAINER>
+      void Init_CellEquation(const DATACONTAINER& cdc,
+			     dealii::Vector<double> &local_cell_vector, double scale,
+			     double scale_ico)
+      {
+	_pde.Init_CellEquation(GetInitialValues(), cdc, local_cell_vector, scale, scale_ico);
+      }
+
+      template<typename DATACONTAINER>
+      void Init_CellMatrix(const DATACONTAINER& cdc,
+			   dealii::FullMatrix<double> &local_entry_matrix, double scale,
+			   double scale_ico)
+      {
+	_pde.Init_CellMatrix(cdc, local_entry_matrix, scale, scale_ico);
+      }
+
+      /******************************************************/
       /* Functions as in OptProblem */
       template<typename DATACONTAINER>
         inline void

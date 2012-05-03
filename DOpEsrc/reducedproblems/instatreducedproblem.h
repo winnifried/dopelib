@@ -1033,31 +1033,48 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
     
     //Projection der Anfangsdaten
     this->GetOutputHandler()->SetIterationNumber(0, "Time");
-    if (problem.L2ProjectionInitialDataWithDeal())
     {
-      //TODO Initial values should be included in the newton step and not here!
+      this->GetOutputHandler()->Write("Computing Initial Values:",
+          4 + this->GetBasePriority());
+
+      auto& initial_problem = problem.GetInitialProblem();
+      this->GetProblem()->AddAuxiliaryToIntegrator(this->GetIntegrator());
+      if (dopedim == dealdim)
+      {
+        this->GetIntegrator().AddDomainData("control", &(q.GetSpacialVector()));
+      }
+      else if (dopedim == 0)
+      {
+        this->GetIntegrator().AddParamData("control",
+            &(q.GetSpacialVectorCopy()));
+      }
+      else
+      {
+        throw DOpEException("dopedim not implemented",
+            "InstatReducedProblem::ForwardTimeLoop");
+      }
+      //TODO: Possibly another solver for the initial value than for the pde...
+      _build_state_matrix = this->GetNonlinearSolver("state").NonlinearSolve_Initial(
+          initial_problem, u_alt, true, true);
+      _build_state_matrix = true;
+      if (dopedim == dealdim)
+      {
+        this->GetIntegrator().DeleteDomainData("control");
+      }
+      else if (dopedim == 0)
+      {
+        this->GetIntegrator().DeleteParamData("control");
+        q.UnLockCopy();
+      }
+      else
+      {
+        throw DOpEException("dopedim not implemented",
+            "InstatReducedProblem::ForwardTimeLoop");
+      }
+      this->GetProblem()->DeleteAuxiliaryFromIntegrator(this->GetIntegrator());
       
-      //    if (this->GetProblem()->GetSpaceTimeHandler()->GetDoFHandlerType() == "classic")
-      //    {
-      dealii::VectorTools::project(
-	this->GetProblem()->GetSpaceTimeHandler()->GetStateDoFHandler(),
-	this->GetProblem()->GetSpaceTimeHandler()->GetStateDoFConstraints(),
-	this->GetIntegrator().GetIntegratorDataContainer().GetQuad(),
-	problem.GetInitialValues(), u_alt);
-      //    }
-      //    else
-      //    {
-      //      //TODO: Projection fuer hp!
-      //      dealii::VectorTools::interpolate(
-      //                                       *(static_cast<const dealii::hp::DoFHandler<dealdim>*> (&this->GetProblem()->GetSpaceTimeHandler()->GetStateHpDoFHandler())),
-      //                                       this->GetProblem()->GetInitialValues(), u_alt);
-      //    }
     }
-    else
-    {
-      throw DOpEException("Other Projection not implemented yet!",
-			  "ForwardTimestepReducedProblem::ComputeReducedState");
-    }
+    
     this->GetOutputHandler()->Write(u_alt, "State" + this->GetPostIndex(),
           problem.GetDoFType());
     unsigned int max_timestep =

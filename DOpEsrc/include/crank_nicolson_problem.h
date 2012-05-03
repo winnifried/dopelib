@@ -1,6 +1,8 @@
 #ifndef _CRANKNICOLSONProblem_H_
 #define _CRANKNICOLSONProblem_H_
 
+#include "initialproblem.h" 
+
 namespace DOpE
 {
   /**
@@ -26,9 +28,12 @@ namespace DOpE
       CrankNicolsonProblem(OPTPROBLEM& OP) :
         _OP(OP)
       {
+      	_initial_problem = NULL;
       }
       ~CrankNicolsonProblem ()
       {
+	if(_initial_problem != NULL)
+	  delete _initial_problem;
       }
 
       /******************************************************/
@@ -43,6 +48,20 @@ namespace DOpE
       {
         return "Crank-Nicolson";
       }
+      /******************************************************/
+
+      InitialProblem<CrankNicolsonProblem<OPTPROBLEM, SPARSITYPATTERN, VECTOR, dopedim,
+          dealdim, FE, DOFHANDLER>, VECTOR, dealdim>&
+      GetInitialProblem()
+      {
+	if (_initial_problem == NULL)
+	{
+	  _initial_problem = new InitialProblem<CrankNicolsonProblem<OPTPROBLEM, SPARSITYPATTERN, VECTOR, dopedim,
+          dealdim, FE, DOFHANDLER>, VECTOR, dealdim>(*this);
+	}
+	return *_initial_problem;
+      }
+    
       /******************************************************/
       CrankNicolsonProblem<OPTPROBLEM, SPARSITYPATTERN, VECTOR, dopedim,
           dealdim, FE, DOFHANDLER>&
@@ -131,6 +150,62 @@ namespace DOpE
         {
           return _OP.FaceFunctional(fdc);
         }
+     /******************************************************/
+      /****For the initial values ***************/
+      template<typename DATACONTAINER>
+      void Init_CellEquation(const DATACONTAINER& cdc,
+			     dealii::Vector<double> &local_cell_vector, double scale,
+			     double scale_ico)
+      {
+	_OP.Init_CellEquation(cdc, local_cell_vector, scale, scale_ico);
+      }
+
+      template<typename DATACONTAINER>
+      void Init_CellMatrix(const DATACONTAINER& cdc,
+			   dealii::FullMatrix<double> &local_entry_matrix, double scale,
+			   double scale_ico)
+      {
+	_OP.Init_CellMatrix(cdc, local_entry_matrix, scale, scale_ico);
+      }
+ 
+      template<typename FACEDATACONTAINER>
+      void Init_FaceEquation(const FACEDATACONTAINER& /*fdc*/,
+			     dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
+      {
+      }
+
+      template<typename FACEDATACONTAINER>
+      void Init_InterfaceEquation(const FACEDATACONTAINER& /*fdc*/,
+				  dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
+      {
+      }
+
+      template<typename FACEDATACONTAINER>
+      void Init_BoundaryEquation(const FACEDATACONTAINER& /*fdc*/,
+				 dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
+      {
+      }
+     
+      template<typename FACEDATACONTAINER>
+      void Init_FaceMatrix(const FACEDATACONTAINER& /*fdc*/,
+			   FullMatrix<double> &/*local_entry_matrix*/)
+      {
+      }
+
+      template<typename FACEDATACONTAINER>
+      void Init_InterfaceMatrix(const FACEDATACONTAINER& /*fdc*/,
+				FullMatrix<double> &/*local_entry_matrix*/)
+      {
+      }
+      
+      template<typename FACEDATACONTAINER>
+      void Init_BoundaryMatrix(const FACEDATACONTAINER& /*fdc*/,
+			       FullMatrix<double> &/*local_cell_matrix*/)
+      {
+      }
+
+      /****End the initial values ***************/
+      /******************************************************/
 
       /******************************************************/
 
@@ -871,6 +946,8 @@ namespace DOpE
     private:
       OPTPROBLEM& _OP;
       std::string _part;
+    
+    InitialProblem<CrankNicolsonProblem<OPTPROBLEM, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DOFHANDLER>, VECTOR, dealdim> * _initial_problem;
     };
 }
 

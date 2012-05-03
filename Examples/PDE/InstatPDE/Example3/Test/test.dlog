@@ -11,6 +11,7 @@
 
 	Computing State Solution:
 LOG: Allowing IterationCounter `Time' for filenames!
+	Computing Initial Values:
 	Writing [./Mesh0/State_InstatOptProblemContainer.00000.vtk]
 			 Timestep: 1 (0 -> 0.05) using shifted Crank-Nicolson
 	Writing [./Mesh0/State_InstatOptProblemContainer.00001.vtk]

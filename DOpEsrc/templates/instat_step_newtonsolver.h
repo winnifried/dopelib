@@ -85,6 +85,34 @@ namespace DOpE
     template<typename PROBLEM>
       bool NonlinearSolve(PROBLEM& pde, const VECTOR &last_time_solution, VECTOR &solution, bool apply_boundary_values=true, 
 			bool force_matrix_build=false, int priority = 5, std::string algo_level = "\t\t ");
+    /******************************************************/
+
+    /**
+     * Solves the nonlinear PDE to determine the initial value for the	
+     * PROBLEM, i.e., there is no time dependence in this problem!
+     * using a Newton-Method
+     *
+     * @param solution              A  Vector that will store the solution upon completion
+     *                              It is expected that solution is initially set to the return value
+     *                              of residual in NonlinearLastTimeEvals!
+     * @param apply_boundary_values A boolean that decides whether we apply strong dirichlet boundary values
+     *                              to the Vector solution or not. If true (default) the Values will be applied
+     *                              However if it is set to false, solution will be used unchanged as
+     *                              initial condition. Be aware of the fact that NewtonsMethod can only converge 
+     *                              in this case if the initial Value of `solution` has the correct
+     *                              boundary values.
+     * @param force_build_matrix    A boolean value, that indicates whether the Matrix
+     *                              should be build by the linear solver in the first iteration.
+     *				    The default is false, meaning that if we have no idea we don't
+     *				    want to build a matrix.
+     *
+     * @return a boolean, that indicates whether it should be required to build the matrix next time that
+     *         this method is used, e.g. the value for force_build_matrix of the next call.
+     *
+     */    
+    template<typename PROBLEM>
+      bool NonlinearSolve_Initial(PROBLEM& pde, VECTOR &solution, bool apply_boundary_values=true, 
+			bool force_matrix_build=false, int priority = 5, std::string algo_level = "\t\t ");
 
     /******************************************************/
 
@@ -186,7 +214,131 @@ template <typename INTEGRATOR, typename LINEARSOLVER, typename VECTOR,  int dim>
      GetIntegrator().DeleteDomainData("last_time_solution");
 
    }
+   /*******************************************************************************************/
+
+ template <typename INTEGRATOR, typename LINEARSOLVER, typename VECTOR,  int dim>
+   template<typename PROBLEM>
+   bool InstatStepNewtonSolver<INTEGRATOR,LINEARSOLVER, VECTOR, dim>
+   ::NonlinearSolve_Initial(PROBLEM& pde, VECTOR &solution, bool apply_boundary_values, 
+			    bool force_matrix_build, int priority, std::string algo_level)
+ {
+   bool build_matrix = force_matrix_build;
+   VECTOR residual;
+   VECTOR du;
+   std::stringstream out;
+   pde.GetOutputHandler()->InitOut(out);
    
+   du.reinit(solution);
+   residual.reinit(solution);
+   
+   if(apply_boundary_values)
+   {
+     GetIntegrator().ApplyInitialBoundaryValues(pde,solution);
+   }
+   pde.GetDoFConstraints().distribute(solution);
+   
+   GetIntegrator().AddDomainData("last_newton_solution",&solution);
+   
+   GetIntegrator().ComputeNonlinearResidual(pde,residual);
+   residual *= -1.;
+   
+   pde.GetOutputHandler()->SetIterationNumber(0,"PDENewton");
+   pde.GetOutputHandler()->Write(residual,"Residual"+pde.GetType(),pde.GetDoFType());
+   
+   double res = residual.linfty_norm();
+   double firstres = res;
+   double lastres = res;
+   
+   
+   out<< algo_level << "Newton step: " <<0<<"\t Residual (abs.): "
+      <<pde.GetOutputHandler()->ZeroTolerance(res, 1.0)
+      <<"\n";
+   
+   out<< algo_level << "Newton step: " <<0<<"\t Residual (rel.):   " << std::scientific << firstres/firstres; 
+   
+   
+   pde.GetOutputHandler()->Write(out,priority);
+   
+   int iter=0;
+   while(res > _nonlinear_global_tol && res > firstres * _nonlinear_tol)
+   {
+     iter++;
+     
+     if(iter > _nonlinear_maxiter)
+     {
+       GetIntegrator().DeleteDomainData("last_newton_solution");
+       throw DOpEIterationException("Iteration count exceeded bounds!","InstatStepNewtonSolver::NonlinearSolve_Initial");
+     }
+     
+     pde.GetOutputHandler()->SetIterationNumber(iter,"PDENewton");
+     
+     LINEARSOLVER::Solve(pde,GetIntegrator(),residual,du,build_matrix);
+     build_matrix = false;
+     
+     //Linesearch
+     {
+       solution += du;
+       GetIntegrator().ComputeNonlinearResidual(pde,residual);
+       residual *= -1.;
+       
+       pde.GetOutputHandler()->Write(residual,"Residual"+pde.GetType(),pde.GetDoFType());
+       pde.GetOutputHandler()->Write(du,"Update"+pde.GetType(),pde.GetDoFType());
+       
+       double newres = residual.linfty_norm();
+       int lineiter=0;
+       double rho = _linesearch_rho;
+       double alpha=1;
+       
+       while(newres > res)
+       {
+	 out<< algo_level << "Newton step: " <<iter<<"\t Residual (rel.): "
+	    <<pde.GetOutputHandler()->ZeroTolerance(newres/firstres, 1.0)
+	    << "\t LineSearch {"<<lineiter<<"} ";
+	 
+	 pde.GetOutputHandler()->Write(out,priority+1);
+	 
+	 lineiter++;
+	 if(lineiter > _line_maxiter)
+	 {
+	   GetIntegrator().DeleteDomainData("last_newton_solution");
+	   throw DOpEIterationException("Line-Iteration count exceeded bounds!","InstatStepNewtonSolver::NonlinearSolve_Initial");
+	 }
+	 solution.add(alpha*(rho-1.),du);
+	 alpha*= rho;
+	 
+	 GetIntegrator().ComputeNonlinearResidual(pde,residual);
+	 residual *= -1.;
+	 pde.GetOutputHandler()->Write(residual,"Residual"+pde.GetType(),pde.GetDoFType());
+	 
+	 newres = residual.linfty_norm();	    
+	 
+       }
+       if(res/lastres > _nonlinear_rho)
+       {
+	 build_matrix=true;
+       }
+       lastres=res;
+       res=newres;
+       
+       out << algo_level 
+	   << "Newton step: " 
+	   <<iter
+	   <<"\t Residual (rel.): "
+	   << pde.GetOutputHandler()->ZeroTolerance(res/firstres, 1.0)
+	   << "\t LineSearch {"
+	   <<lineiter
+	   <<"} ";
+       
+	  
+       pde.GetOutputHandler()->Write(out,priority);
+       
+     }//End of Linesearch
+   }
+   GetIntegrator().DeleteDomainData("last_newton_solution");
+   
+   return build_matrix; 
+ }
+  
   /*******************************************************************************************/
  template <typename INTEGRATOR, typename LINEARSOLVER, typename VECTOR,  int dim>
    template<typename PROBLEM>

@@ -1,6 +1,8 @@
 #ifndef _SHIFTEDCRANKNICOLSONProblem_H_
 #define _SHIFTEDCRANKNICOLSONProblem_H_
 
+#include "initialproblem.h" 
+
 namespace DOpE
 {
   /**
@@ -27,9 +29,12 @@ namespace DOpE
       ShiftedCrankNicolsonProblem(OPTPROBLEM& OP) :
         _OP(OP)
       {
+	_initial_problem = NULL;
       }
       ~ShiftedCrankNicolsonProblem()
       {
+	if(_initial_problem != NULL)
+	  delete _initial_problem;
       }
 
       /******************************************************/
@@ -45,6 +50,19 @@ namespace DOpE
         return "shifted Crank-Nicolson";
       }
       /******************************************************/
+
+      InitialProblem<ShiftedCrankNicolsonProblem, VECTOR, dealdim>&
+      GetInitialProblem()
+      {
+	if (_initial_problem == NULL)
+	{
+	  _initial_problem = new InitialProblem<ShiftedCrankNicolsonProblem, VECTOR, dealdim>
+	  (*this);
+	}
+	return *_initial_problem;
+      }
+
+       /******************************************************/
       ShiftedCrankNicolsonProblem&
       GetBaseProblem()
       {
@@ -130,6 +148,62 @@ namespace DOpE
         {
           return _OP.FaceFunctional(fdc);
         }
+     /******************************************************/
+      /****For the initial values ***************/
+      template<typename DATACONTAINER>
+      void Init_CellEquation(const DATACONTAINER& cdc,
+			     dealii::Vector<double> &local_cell_vector, double scale,
+			     double scale_ico)
+      {
+	_OP.Init_CellEquation(cdc, local_cell_vector, scale, scale_ico);
+      }
+
+      template<typename DATACONTAINER>
+      void Init_CellMatrix(const DATACONTAINER& cdc,
+			   dealii::FullMatrix<double> &local_entry_matrix, double scale,
+			   double scale_ico)
+      {
+	_OP.Init_CellMatrix(cdc, local_entry_matrix, scale, scale_ico);
+      }
+ 
+      template<typename FACEDATACONTAINER>
+      void Init_FaceEquation(const FACEDATACONTAINER& /*fdc*/,
+			     dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
+      {
+      }
+
+      template<typename FACEDATACONTAINER>
+      void Init_InterfaceEquation(const FACEDATACONTAINER& /*fdc*/,
+				  dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
+      {
+      }
+
+      template<typename FACEDATACONTAINER>
+      void Init_BoundaryEquation(const FACEDATACONTAINER& /*fdc*/,
+				 dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
+      {
+      }
+     
+      template<typename FACEDATACONTAINER>
+      void Init_FaceMatrix(const FACEDATACONTAINER& /*fdc*/,
+			   FullMatrix<double> &/*local_entry_matrix*/)
+      {
+      }
+
+      template<typename FACEDATACONTAINER>
+      void Init_InterfaceMatrix(const FACEDATACONTAINER& /*fdc*/,
+				FullMatrix<double> &/*local_entry_matrix*/)
+      {
+      }
+      
+      template<typename FACEDATACONTAINER>
+      void Init_BoundaryMatrix(const FACEDATACONTAINER& /*fdc*/,
+			       FullMatrix<double> &/*local_cell_matrix*/)
+      {
+      }
+
+      /****End the initial values ***************/
+      /******************************************************/
 
       /******************************************************/
 
@@ -904,6 +978,7 @@ namespace DOpE
       std::string _part;
 
       double damped_cn_theta;
+    InitialProblem<ShiftedCrankNicolsonProblem, VECTOR, dealdim> * _initial_problem;
     };
 }
 

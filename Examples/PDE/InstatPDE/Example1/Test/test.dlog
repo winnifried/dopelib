@@ -11,6 +11,7 @@
 
 	Computing State Solution:
 LOG: Allowing IterationCounter `Time' for filenames!
+	Computing Initial Values:
 		Pressure_difference: 0
 		Drag: 0
 		Lift: 0
