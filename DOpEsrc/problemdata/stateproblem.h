@@ -51,6 +51,14 @@ namespace DOpE
         _pde.Init_CellRhs(& GetInitialValues(), cdc, local_cell_vector, scale);
       }
 
+      void
+      Init_PointRhs(
+      const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
+      const std::map<std::string, const VECTOR*> &/*domain_values*/,
+      VECTOR& /*rhs_vector*/, double /*scale=1.*/)
+      {
+      }
+
       template<typename DATACONTAINER>
       void Init_CellMatrix(const DATACONTAINER& cdc,
 			   dealii::FullMatrix<double> &local_entry_matrix, double scale,
@@ -81,6 +89,12 @@ namespace DOpE
         inline void
         CellRhs(const DATACONTAINER& dc,
             dealii::Vector<double> &local_cell_vector, double scale = 1.);
+
+        void
+        PointRhs(
+            const std::map<std::string, const dealii::Vector<double>*> &param_values,
+            const std::map<std::string, const VECTOR*> &domain_values,
+            VECTOR& rhs_vector, double scale);
 
       template<typename DATACONTAINER>
         inline void
@@ -151,6 +165,8 @@ namespace DOpE
 
       inline bool
       HasFaces() const;
+      inline bool
+      HasPoints() const;
       inline bool
       HasInterfaces() const;
 
@@ -300,6 +316,19 @@ namespace DOpE
       {
         _pde.CellRightHandSide(cdc, local_cell_vector, scale);
       }
+
+  /******************************************************/
+
+  template<typename OPTPROBLEM, typename PDE, typename DD,
+      typename SPARSITYPATTERN, typename VECTOR, int dopedim, int dealdim>
+    void
+    StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dopedim, dealdim>::PointRhs(
+        const std::map<std::string, const dealii::Vector<double>*> &param_values,
+        const std::map<std::string, const VECTOR*> &domain_values,
+        VECTOR& rhs_vector, double scale)
+    {
+
+    }
 
   /******************************************************/
 
@@ -490,6 +519,17 @@ namespace DOpE
     {
       return _pde.HasFaces();
     }
+
+  /******************************************************/
+
+  template<typename OPTPROBLEM, typename PDE, typename DD,
+      typename SPARSITYPATTERN, typename VECTOR, int dopedim, int dealdim>
+    bool
+    StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dopedim, dealdim>::HasPoints() const
+    {
+      return false;//We have no PointRhs in normal stateproblems at the moment.
+    }
+
 
   /******************************************************/
 

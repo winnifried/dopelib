@@ -186,6 +186,14 @@ namespace DOpE
       {
         _OP.Init_CellMatrix(cdc, local_entry_matrix, scale, scale_ico);
       }
+
+      void
+      Init_PointRhs(
+      const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
+      const std::map<std::string, const VECTOR*> &/*domain_values*/,
+      VECTOR& /*rhs_vector*/, double /*scale=1.*/)
+      {
+      }
  
       template<typename FACEDATACONTAINER>
       void Init_FaceEquation(const FACEDATACONTAINER& /*fdc*/,
@@ -411,6 +419,41 @@ namespace DOpE
             {
               abort();
             }
+        }
+      /******************************************************/
+
+        /**
+         * Computes the value of the right-hand side which requires
+         * pointevaluations.
+         * The function is divided into five parts which  are given
+         * the Newton solver. For detailed discussion, please visit
+         * the documentation of the CellEquation.
+         */
+        void
+        PointRhs(
+            const std::map<std::string, const dealii::Vector<double>*> &param_values,
+            const std::map<std::string, const VECTOR*> &domain_values,
+            VECTOR& rhs_vector, double scale = 1.)
+        {
+          if (_part == "New_for_1st_and_3rd_cycle")
+          {
+
+          }
+          else if (_part == "Old_for_1st_cycle" || _part == "Old_for_3rd_cycle")
+          {
+            _OP.PointRhs(param_values, domain_values, rhs_vector, scale);
+          }
+          else if (_part == "New_for_2nd_cycle")
+          {
+            _OP.PointRhs(param_values, domain_values, rhs_vector, scale);
+          }
+          else if (_part == "Old_for_2nd_cycle")
+          {
+          }
+          else
+          {
+            abort();
+          }
         }
 
       /******************************************************/
@@ -783,6 +826,19 @@ namespace DOpE
       HasFaces() const
       {
         return _OP.HasFaces();
+      }
+
+      /******************************************************/
+      /**
+       * This function determines whether point evaluations are required or not.
+       *
+       * @return Returns whether or not this functional needs evaluations of
+       *         point values.
+       */
+      bool
+      HasPoints() const
+      {
+        return _OP.HasPoints();
       }
       /******************************************************/
       /**

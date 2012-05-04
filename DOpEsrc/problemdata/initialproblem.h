@@ -40,6 +40,12 @@ namespace DOpE
           CellRhs(const DATACONTAINER& dc,
               dealii::Vector<double> &local_cell_vector, double scale = 1.);
 
+        inline void
+        PointRhs(
+            const std::map<std::string, const dealii::Vector<double>*> &param_values,
+            const std::map<std::string, const VECTOR*> &domain_values,
+            VECTOR& rhs_vector, double scale = 1);
+
         template<typename DATACONTAINER>
           inline void
           CellMatrix(const DATACONTAINER& dc,
@@ -97,6 +103,8 @@ namespace DOpE
 
         inline bool
         HasFaces() const;
+        inline bool
+        HasPoints() const;
         inline bool
         HasInterfaces() const;
 
@@ -204,6 +212,17 @@ namespace DOpE
       {
         _pde.Init_CellRhs(cdc, local_cell_vector, scale);
       }
+
+  /******************************************************/
+  template<typename PDE, typename VECTOR, int dim>
+    void
+    InitialProblem<PDE, VECTOR, dim>::PointRhs(
+        const std::map<std::string, const dealii::Vector<double>*> &param_values,
+        const std::map<std::string, const VECTOR*> &domain_values,
+        VECTOR& rhs_vector, double scale)
+    {
+      _pde.Init_PointRhs(param_values, domain_values, rhs_vector, scale);
+    }
 
   /******************************************************/
 
@@ -348,6 +367,15 @@ namespace DOpE
     InitialProblem<PDE, VECTOR, dim>::HasFaces() const
     {
       return _pde.HasFaces();
+    }
+
+  /******************************************************/
+
+  template<typename PDE, typename VECTOR, int dim>
+    bool
+    InitialProblem<PDE, VECTOR, dim>::HasPoints() const
+    {
+      return _pde.HasPoints();
     }
 
   /******************************************************/

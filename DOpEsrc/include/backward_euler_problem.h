@@ -157,7 +157,7 @@ namespace DOpE
 			     dealii::Vector<double> &local_cell_vector, double scale,
 			     double scale_ico)
       {
-	_OP.Init_CellEquation(cdc, local_cell_vector, scale, scale_ico);
+        _OP.Init_CellEquation(cdc, local_cell_vector, scale, scale_ico);
       }
 
       template<typename DATACONTAINER>
@@ -173,7 +173,15 @@ namespace DOpE
 			   dealii::FullMatrix<double> &local_entry_matrix, double scale,
 			   double scale_ico)
       {
-	_OP.Init_CellMatrix(cdc, local_entry_matrix, scale, scale_ico);
+        _OP.Init_CellMatrix(cdc, local_entry_matrix, scale, scale_ico);
+      }
+
+      void
+      Init_PointRhs(
+      const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
+      const std::map<std::string, const VECTOR*> &/*domain_values*/,
+      VECTOR& /*rhs_vector*/, double /*scale=1.*/)
+      {
       }
  
       template<typename FACEDATACONTAINER>
@@ -296,15 +304,8 @@ namespace DOpE
        * computation of the actual parts.
        *
        *
-       * @param param_values             A std::map containing parameter data (e.g. non space dependent data). If the control
-       *                                 is done by parameters, it is contained in this map at the position "control".
-       * @param domain_values            A std::map containing domain data (e.g. nodal vectors for FE-Functions). If the control
-       *                                 is distributed, it is contained in this map at the position "control". The state may always
-       *                                 be found in this map at the position "state"
-       * @param n_dofs_per_cell          Number of degrees of freedom on a cell.
-       * @param n_q_points               Number of quadrature points on a cell.
-       * @param material_id              Material Id of the cell.
-       * @param cell_diameter            Diameter of the cell.
+       * @param cdc                      A DataContainer holding all the needed information
+       *                                 of the cell
        * @param local_cell_vector        This vector contains the locally computed values of the cell equation. For more information
        *                                 on dealii::Vector, please visit, the deal.ii manual pages.
        * @param scale                    A scaling factor which is -1 or 1 depending on the subroutine to compute.
@@ -330,6 +331,46 @@ namespace DOpE
       /******************************************************/
 
       /**
+       * Computes the value of the right-hand side of the problem at hand, if it
+       * contains pointevaluations.
+       * The function is divided into two parts `old' and `new' which  are given
+       * the Newton solver. Then, the computation is done in two steps: first
+       * computation of the old Newton- or time step equation parts. After,
+       * computation of the actual parts.
+       *
+       *
+       * @param param_values             A std::map containing parameter data (e.g. non space dependent data). If the control
+       *                                 is done by parameters, it is contained in this map at the position "control".
+       * @param domain_values            A std::map containing domain data (e.g. nodal vectors for FE-Functions). If the control
+       *                                 is distributed, it is contained in this map at the position "control". The state may always
+       *                                 be found in this map at the position "state"
+
+       * @param local_cell_vector        This vector contains the locally computed values of the cell equation. For more information
+       *                                 on dealii::Vector, please visit, the deal.ii manual pages.
+       * @param scale                    A scaling factor which is -1 or 1 depending on the subroutine to compute.
+       */
+        void
+        PointRhs(
+            const std::map<std::string, const dealii::Vector<double>*> &param_values,
+            const std::map<std::string, const VECTOR*> &domain_values,
+            VECTOR& rhs_vector, double scale = 1.)
+        {
+          if (_part == "New")
+          {
+            _OP.PointRhs(param_values, domain_values, rhs_vector, scale);
+          }
+          else if (_part == "Old")
+          {
+          }
+          else
+          {
+            abort();
+          }
+        }
+
+      /******************************************************/
+
+      /**
        * Computes the value of the cell matrix which is derived
        * by computing the directional derivatives of the residuum equation of the PDE
        * under consideration.
@@ -349,15 +390,8 @@ namespace DOpE
        * derivatives vanish if they are applied to old values which are, of course,
        * already computed and therefore constant.
        *
-       * @param param_values             A std::map containing parameter data (e.g. non space dependent data). If the control
-       *                                 is done by parameters, it is contained in this map at the position "control".
-       * @param domain_values            A std::map containing domain data (e.g. nodal vectors for FE-Functions). If the control
-       *                                 is distributed, it is contained in this map at the position "control". The state may always
-       *                                 be found in this map at the position "state"
-       * @param n_dofs_per_cell          Number of degrees of freedom on a cell.
-       * @param n_q_points               Number of quadrature points on a cell.
-       * @param material_id              Material Id of the cell.
-       * @param cell_diameter            Diameter of the cell.
+       * @param cdc                      A DataContainer holding all the needed information
+       *                                 of the cell
        * @param local_entry_matrix       The local matrix is quadratic and has size local DoFs times local DoFs and is
        *                                 filled by the locally computed values. For more information of its functionality, please
        *                                 search for the keyword `FullMatrix' in the deal.ii manual.
@@ -493,15 +527,8 @@ namespace DOpE
        * stress tensor should be subtracted at the outflow boundary.
        *
        *
-       * @param param_values             A std::map containing parameter data (e.g. non space dependent data). If the control
-       *                                 is done by parameters, it is contained in this map at the position "control".
-       * @param domain_values            A std::map containing domain data (e.g. nodal vectors for FE-Functions). If the control
-       *                                 is distributed, it is contained in this map at the position "control". The state may always
-       *                                 be found in this map at the position "state"
-       * @param n_dofs_per_cell          Number of degrees of freedom on a cell.
-       * @param n_q_points               Number of quadrature points on a cell.
-       * @param material_id              Material Id of the cell.
-       * @param cell_diameter            Diameter of the cell.
+       * @param cdc                      A DataContainer holding all the needed information
+       *                                 of the cell
        * @param local_cell_vector        This vector contains the locally computed values of the cell equation. For more information
        *                                 on dealii::Vector, please visit, the deal.ii manual pages.
        * @param scale                    A scaling factor which is -1 or 1 depending on the subroutine to compute.
@@ -553,15 +580,8 @@ namespace DOpE
        * stress tensor should be subtracted at the outflow boundary.
        *
        *
-       * @param param_values             A std::map containing parameter data (e.g. non space dependent data). If the control
-       *                                 is done by parameters, it is contained in this map at the position "control".
-       * @param domain_values            A std::map containing domain data (e.g. nodal vectors for FE-Functions). If the control
-       *                                 is distributed, it is contained in this map at the position "control". The state may always
-       *                                 be found in this map at the position "state"
-       * @param n_dofs_per_cell          Number of degrees of freedom on a cell.
-       * @param n_q_points               Number of quadrature points on a cell.
-       * @param material_id              Material Id of the cell.
-       * @param cell_diameter            Diameter of the cell.
+       * @param cdc                      A DataContainer holding all the needed information
+       *                                 of the cell
        * @param local_entry_matrix       The local matrix is quadratic and has size local DoFs times local DoFs and is
        *                                 filled by the locally computed values. For more information of its functionality, please
        *                                 search for the keyword `FullMatrix' in the deal.ii manual.
@@ -602,6 +622,16 @@ namespace DOpE
       HasFaces() const
       {
         return _OP.HasFaces();
+      }
+
+      /******************************************************/
+      /**
+       * See optproblem.h.
+       */
+      bool
+      HasPoints() const
+      {
+        return _OP.HasPoints();
       }
 
       /******************************************************/
@@ -688,8 +718,6 @@ namespace DOpE
       const dealii::Function<dealdim>&
       GetDirichletValues(
           unsigned int color,
-          //							const DOpEWrapper::DoFHandler<dopedim> & control_dof_handler,
-          //							const DOpEWrapper::DoFHandler<dealdim> &state_dof_handler,
           const std::map<std::string, const dealii::Vector<double>*> &param_values,
           const std::map<std::string, const VECTOR*> &domain_values) const
       {

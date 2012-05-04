@@ -173,6 +173,14 @@ namespace DOpE
       {
         _OP.Init_CellMatrix(cdc, local_entry_matrix, scale, scale_ico);
       }
+
+      void
+      Init_PointRhs(
+      const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
+      const std::map<std::string, const VECTOR*> &/*domain_values*/,
+      VECTOR& /*rhs_vector*/, double /*scale=1.*/)
+      {
+      }
  
       template<typename FACEDATACONTAINER>
       void Init_FaceEquation(const FACEDATACONTAINER& /*fdc*/,
@@ -317,15 +325,55 @@ namespace DOpE
         {
           if (_part == "New")
             {
-              _OP.CellRhs(dc, local_cell_vector, scale);
+
             }
           else if (_part == "Old")
             {
+              _OP.CellRhs(dc, local_cell_vector, scale);
             }
           else
             {
               abort();
             }
+        }
+
+
+      /**
+       * Computes the value of the right-hand side of the problem at hand, if it
+       * contains pointevaluations.
+       * The function is divided into two parts `old' and `new' which  are given
+       * the Newton solver. Then, the computation is done in two steps: first
+       * computation of the old Newton- or time step equation parts. After,
+       * computation of the actual parts.
+       *
+       *
+       * @param param_values             A std::map containing parameter data (e.g. non space dependent data). If the control
+       *                                 is done by parameters, it is contained in this map at the position "control".
+       * @param domain_values            A std::map containing domain data (e.g. nodal vectors for FE-Functions). If the control
+       *                                 is distributed, it is contained in this map at the position "control". The state may always
+       *                                 be found in this map at the position "state"
+
+       * @param local_cell_vector        This vector contains the locally computed values of the cell equation. For more information
+       *                                 on dealii::Vector, please visit, the deal.ii manual pages.
+         * @param scale                    A scaling factor which is -1 or 1 depending on the subroutine to compute.
+         */
+        void
+        PointRhs(
+            const std::map<std::string, const dealii::Vector<double>*> &param_values,
+            const std::map<std::string, const VECTOR*> &domain_values,
+            VECTOR& rhs_vector, double scale = 1.)
+        {
+          if (_part == "New")
+          {
+          }
+          else if (_part == "Old")
+          {
+            _OP.PointRhs(param_values, domain_values, rhs_vector, scale);
+          }
+          else
+          {
+            abort();
+          }
         }
 
       /******************************************************/
@@ -596,6 +644,19 @@ namespace DOpE
       HasFaces() const
       {
         return _OP.HasFaces();
+      }
+
+      /******************************************************/
+      /**
+       * This function determines whether point evaluations are required or not.
+       *
+       * @return Returns whether or not this functional needs evaluations of
+       *         point values.
+       */
+      bool
+      HasPoints() const
+      {
+        return _OP.HasPoints();
       }
 
       /******************************************************/

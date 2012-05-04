@@ -324,6 +324,25 @@ namespace DOpE
         /******************************************************/
 
         /**
+         * Computes the value of the right-hand side of the problem at hand, if it
+         * contains pointevaluations.
+         *
+         * @param param_values             A std::map containing parameter data (e.g. non space dependent data). If the control
+         *                                 is done by parameters, it is contained in this map at the position "control".
+         * @param domain_values            A std::map containing domain data (e.g. nodal vectors for FE-Functions). If the control
+         *                                 is distributed, it is contained in this map at the position "control". The state may always
+         *                                 be found in this map at the position "state"
+         * @param rhs_vector               This vector contains the complete point-rhs.
+         * @param scale                    A scaling factor which is -1 or 1 depending on the subroutine to compute.
+         */
+          void
+          PointRhs(const std::map<std::string, const dealii::Vector<double>*> &param_values,
+              const std::map<std::string, const VECTOR*> &domain_values,
+              VECTOR& rhs_vector, double scale = 1.);
+
+        /******************************************************/
+
+        /**
          * Computes the value of the cell matrix which is derived
          * by computing the directional derivatives of the residuum equation of the PDE
          * problem under consideration.
@@ -534,6 +553,12 @@ namespace DOpE
          */
         bool
         HasFaces() const;
+        /******************************************************/
+        /**
+         * Do we need the evaluation of PointRhs?
+         */
+        bool
+        HasPoints() const;
 
         /******************************************************/
         /**
@@ -863,8 +888,8 @@ namespace DOpE
       int dealdim, typename FE, typename DOFHANDLER>
     PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE,
         DOFHANDLER>::PDEProblemContainer(PDE& pde,
-        StateSpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR, dealdim>& STH)
-        : _pde(&pde), _STH(&STH), _state_problem(NULL)
+        StateSpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR, dealdim>& STH) :
+        _pde(&pde), _STH(&STH), _state_problem(NULL)
     {
       _ExceptionHandler = NULL;
       _OutputHandler = NULL;
@@ -1157,24 +1182,24 @@ namespace DOpE
         {
           switch (dwrc.GetEETerms())
           {
-            case DOpEtypes::primal_only:
-              GetPDE()->StrongCellResidual(cdc, dwrc.GetCellWeight(), error[0],
-                  scale, scale_ico);
-              break;
-            case DOpEtypes::dual_only:
-              GetPDE()->StrongCellResidual_U(cdc, dwrc.GetCellWeight(),
-                  error[1], scale);
-              break;
-            case DOpEtypes::mixed:
-              GetPDE()->StrongCellResidual(cdc, dwrc.GetCellWeight(), error[0],
-                  scale, scale_ico);
-              GetPDE()->StrongCellResidual_U(cdc, dwrc.GetCellWeight(),
-                  error[1], scale);
-              break;
-            default:
-              throw DOpEException("Not implemented for this EETerm.",
-                  "PDEProblemContainer::CellErrorContribution");
-              break;
+          case DOpEtypes::primal_only:
+            GetPDE()->StrongCellResidual(cdc, dwrc.GetCellWeight(), error[0],
+                scale, scale_ico);
+            break;
+          case DOpEtypes::dual_only:
+            GetPDE()->StrongCellResidual_U(cdc, dwrc.GetCellWeight(), error[1],
+                scale);
+            break;
+          case DOpEtypes::mixed:
+            GetPDE()->StrongCellResidual(cdc, dwrc.GetCellWeight(), error[0],
+                scale, scale_ico);
+            GetPDE()->StrongCellResidual_U(cdc, dwrc.GetCellWeight(), error[1],
+                scale);
+            break;
+          default:
+            throw DOpEException("Not implemented for this EETerm.",
+                "PDEProblemContainer::CellErrorContribution");
+            break;
           }
         }
         else
@@ -1201,24 +1226,24 @@ namespace DOpE
         {
           switch (dwrc.GetEETerms())
           {
-            case DOpEtypes::primal_only:
-              GetPDE()->StrongFaceResidual(fdc, dwrc.GetFaceWeight(), error[0],
-                  scale);
-              break;
-            case DOpEtypes::dual_only:
-              GetPDE()->StrongFaceResidual_U(fdc, dwrc.GetFaceWeight(),
-                  error[1], scale);
-              break;
-            case DOpEtypes::mixed:
-              GetPDE()->StrongFaceResidual(fdc, dwrc.GetFaceWeight(), error[0],
-                  scale);
-              GetPDE()->StrongFaceResidual_U(fdc, dwrc.GetFaceWeight(),
-                  error[1], scale);
-              break;
-            default:
-              throw DOpEException("Not implemented for this EETerm.",
-                  "PDEProblemContainer::CellErrorContribution");
-              break;
+          case DOpEtypes::primal_only:
+            GetPDE()->StrongFaceResidual(fdc, dwrc.GetFaceWeight(), error[0],
+                scale);
+            break;
+          case DOpEtypes::dual_only:
+            GetPDE()->StrongFaceResidual_U(fdc, dwrc.GetFaceWeight(), error[1],
+                scale);
+            break;
+          case DOpEtypes::mixed:
+            GetPDE()->StrongFaceResidual(fdc, dwrc.GetFaceWeight(), error[0],
+                scale);
+            GetPDE()->StrongFaceResidual_U(fdc, dwrc.GetFaceWeight(), error[1],
+                scale);
+            break;
+          default:
+            throw DOpEException("Not implemented for this EETerm.",
+                "PDEProblemContainer::CellErrorContribution");
+            break;
           }
         }
         else
@@ -1421,6 +1446,33 @@ namespace DOpE
               "PDEProblemContainer::CellRhs");
         }
       }
+
+  /******************************************************/
+
+  template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
+      int dealdim, typename FE, typename DOFHANDLER>
+    void
+    PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE,
+        DOFHANDLER>::PointRhs(
+        const std::map<std::string, const dealii::Vector<double>*> &param_values,
+        const std::map<std::string, const VECTOR*> &domain_values,
+        VECTOR& rhs_vector, double scale)
+    {
+      if (GetType() == "adjoint_for_ee")
+      {
+        //values of the derivative of the functional for error estimation
+        _aux_functionals[_functional_for_ee_num]->PointValue_U(
+            this->GetSpaceTimeHandler()->GetStateDoFHandler(),
+            this->GetSpaceTimeHandler()->GetStateDoFHandler(), param_values,
+            domain_values, rhs_vector, scale);
+      }
+      else
+      {
+        throw DOpEException("Not implemented", "OptProblem::CellRhs");
+      }
+    }
+
+
   /******************************************************/
 
   template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
@@ -1840,6 +1892,31 @@ namespace DOpE
               "PDEProblemContainer::HasFaces");
         }
       }
+    }
+
+  /******************************************************/
+
+  template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
+      int dealdim, typename FE, typename DOFHANDLER>
+    bool
+    PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE,
+        DOFHANDLER>::HasPoints() const
+    {
+      if ((GetType() == "state") || GetType() == "aux_functional")
+      {
+        //We dont need PointRhs in these cases
+        return false;
+      }
+      else if (GetType() == "adjoint_for_ee")
+      {
+        return _aux_functionals[_functional_for_ee_num]->HasPoints();
+      }
+      else
+      {
+        throw DOpEException("Unknown Type: '" + GetType() + "'!",
+            "PDEProblemContainer::HasFaces");
+      }
+
     }
 
   /******************************************************/

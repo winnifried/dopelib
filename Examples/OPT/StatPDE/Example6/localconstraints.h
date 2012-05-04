@@ -115,17 +115,11 @@ namespace DOpE
    
    std::string GetType() const 
    { 
-     if(this->GetProblemType() == "global_constraints" && this->GetProblemTypeNum()==0)
        return "domain";
-     else
-       throw DOpEException("Unknown problem_type "+this->GetProblemType(),"LocalConstraints::GetType");
    }
    std::string GetName() const 
    { 
-     if(this->GetProblemType() == "global_constraints" && this->GetProblemTypeNum()==0)
        return "volume_constraint";
-     else
-       throw DOpEException("Unknown problem_type "+this->GetProblemType(),"LocalConstraints::GetName");
    } 
         
    dealii::UpdateFlags GetUpdateFlags() const

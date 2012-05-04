@@ -31,7 +31,7 @@ namespace DOpE
     FunctionalInterface<CDC, FDC, DOFHANDLER, VECTOR, dopedim, dealdim>::Value(
         const CDC<DOFHANDLER, VECTOR, dealdim>&)
     {
-      throw DOpEException("GetType not implemented",
+      throw DOpEException("Not implemented",
           "FunctionalInterface::Value");
     }
 
@@ -45,10 +45,103 @@ namespace DOpE
         const std::map<std::string, const dealii::Vector<double>*> &param_values __attribute__((unused)),
         const std::map<std::string, const VECTOR*> &domain_values __attribute__((unused)))
     {
-      throw DOpEException("GetType not implemented",
+      throw DOpEException("Not implemented",
           "FunctionalInterface::PointValue");
     }
 
+  /********************************************/
+
+  template<template<typename DOFHANDLER, typename VECTOR, int dealdim> class CDC, template<typename DOFHANDLER, typename VECTOR, int dealdim> class FDC, typename DOFHANDLER, typename VECTOR, int dopedim, int dealdim>
+    void
+    FunctionalInterface<CDC, FDC, DOFHANDLER, VECTOR, dopedim, dealdim>::PointValue_U(
+        const DOpEWrapper::DoFHandler<dopedim, DOFHANDLER> & control_dof_handler __attribute__((unused)),
+        const DOpEWrapper::DoFHandler<dealdim, DOFHANDLER> & state_dof_handler __attribute__((unused)),
+        const std::map<std::string, const dealii::Vector<double>*> &param_values __attribute__((unused)),
+        const std::map<std::string, const VECTOR*> &domain_values __attribute__((unused)),
+        VECTOR& /*rhs*/,
+        double /*scale*/)
+    {
+      throw DOpEException("Not implemented",
+          "FunctionalInterface::PointValue_U");
+    }
+
+  /********************************************/
+
+  template<template<typename DOFHANDLER, typename VECTOR, int dealdim> class CDC, template<typename DOFHANDLER, typename VECTOR, int dealdim> class FDC, typename DOFHANDLER, typename VECTOR, int dopedim, int dealdim>
+    void
+    FunctionalInterface<CDC, FDC, DOFHANDLER, VECTOR, dopedim, dealdim>::PointValue_Q(
+        const DOpEWrapper::DoFHandler<dopedim, DOFHANDLER> & control_dof_handler __attribute__((unused)),
+        const DOpEWrapper::DoFHandler<dealdim, DOFHANDLER> & state_dof_handler __attribute__((unused)),
+        const std::map<std::string, const dealii::Vector<double>*> &param_values __attribute__((unused)),
+        const std::map<std::string, const VECTOR*> &domain_values __attribute__((unused)),
+        VECTOR& /*rhs*/,
+        double /*scale*/)
+    {
+      throw DOpEException("Not implemented",
+          "FunctionalInterface::PointValue_Q");
+    }
+
+  /********************************************/
+
+  template<template<typename DOFHANDLER, typename VECTOR, int dealdim> class CDC, template<typename DOFHANDLER, typename VECTOR, int dealdim> class FDC, typename DOFHANDLER, typename VECTOR, int dopedim, int dealdim>
+    void
+    FunctionalInterface<CDC, FDC, DOFHANDLER, VECTOR, dopedim, dealdim>::PointValue_UU(
+        const DOpEWrapper::DoFHandler<dopedim, DOFHANDLER> & control_dof_handler __attribute__((unused)),
+        const DOpEWrapper::DoFHandler<dealdim, DOFHANDLER> & state_dof_handler __attribute__((unused)),
+        const std::map<std::string, const dealii::Vector<double>*> &param_values __attribute__((unused)),
+        const std::map<std::string, const VECTOR*> &domain_values __attribute__((unused)),
+        VECTOR& /*rhs*/,
+        double /*scale*/)
+    {
+      throw DOpEException("Not implemented",
+          "FunctionalInterface::PointValue_UU");
+    }
+
+  /********************************************/
+
+  template<template<typename DOFHANDLER, typename VECTOR, int dealdim> class CDC, template<typename DOFHANDLER, typename VECTOR, int dealdim> class FDC, typename DOFHANDLER, typename VECTOR, int dopedim, int dealdim>
+    void
+    FunctionalInterface<CDC, FDC, DOFHANDLER, VECTOR, dopedim, dealdim>::PointValue_QU(
+        const DOpEWrapper::DoFHandler<dopedim, DOFHANDLER> & control_dof_handler __attribute__((unused)),
+        const DOpEWrapper::DoFHandler<dealdim, DOFHANDLER> & state_dof_handler __attribute__((unused)),
+        const std::map<std::string, const dealii::Vector<double>*> &param_values __attribute__((unused)),
+        const std::map<std::string, const VECTOR*> &domain_values __attribute__((unused)),
+        VECTOR& /*rhs*/,
+        double /*scale*/)
+    {
+      throw DOpEException("Not implemented",
+          "FunctionalInterface::PointValue_QU");
+    }
+  /********************************************/
+
+  template<template<typename DOFHANDLER, typename VECTOR, int dealdim> class CDC, template<typename DOFHANDLER, typename VECTOR, int dealdim> class FDC, typename DOFHANDLER, typename VECTOR, int dopedim, int dealdim>
+    void
+    FunctionalInterface<CDC, FDC, DOFHANDLER, VECTOR, dopedim, dealdim>::PointValue_UQ(
+        const DOpEWrapper::DoFHandler<dopedim, DOFHANDLER> & control_dof_handler __attribute__((unused)),
+        const DOpEWrapper::DoFHandler<dealdim, DOFHANDLER> & state_dof_handler __attribute__((unused)),
+        const std::map<std::string, const dealii::Vector<double>*> &param_values __attribute__((unused)),
+        const std::map<std::string, const VECTOR*> &domain_values __attribute__((unused)),
+        VECTOR& /*rhs*/,
+        double /*scale*/)
+    {
+      throw DOpEException("Not implemented",
+          "FunctionalInterface::PointValue_UQ");
+    }
+  /********************************************/
+
+  template<template<typename DOFHANDLER, typename VECTOR, int dealdim> class CDC, template<typename DOFHANDLER, typename VECTOR, int dealdim> class FDC, typename DOFHANDLER, typename VECTOR, int dopedim, int dealdim>
+    void
+    FunctionalInterface<CDC, FDC, DOFHANDLER, VECTOR, dopedim, dealdim>::PointValue_QQ(
+        const DOpEWrapper::DoFHandler<dopedim, DOFHANDLER> & control_dof_handler __attribute__((unused)),
+        const DOpEWrapper::DoFHandler<dealdim, DOFHANDLER> & state_dof_handler __attribute__((unused)),
+        const std::map<std::string, const dealii::Vector<double>*> &param_values __attribute__((unused)),
+        const std::map<std::string, const VECTOR*> &domain_values __attribute__((unused)),
+        VECTOR& /*rhs*/,
+        double /*scale*/)
+    {
+      throw DOpEException("Not implemented",
+          "FunctionalInterface::PointValue_QQ");
+    }
 
   /********************************************/
 
@@ -58,7 +151,7 @@ namespace DOpE
         const CDC<DOFHANDLER, VECTOR, dealdim>&,
         dealii::Vector<double> &local_cell_vector __attribute__((unused)), double scale __attribute__((unused)))
     {
-      throw DOpEException("GetType not implemented",
+      throw DOpEException("Not implemented",
           "FunctionalInterface::Value_U");
     }
 
@@ -70,7 +163,7 @@ namespace DOpE
         const CDC<DOFHANDLER, VECTOR, dealdim>&,
         dealii::Vector<double> &local_cell_vector __attribute__((unused)), double scale __attribute__((unused)))
     {
-      throw DOpEException("GetType not implemented",
+      throw DOpEException("Not implemented",
           "FunctionalInterface::Value_Q");
     }
 
@@ -82,7 +175,7 @@ namespace DOpE
         const CDC<DOFHANDLER, VECTOR, dealdim>&,
         dealii::Vector<double> &local_cell_vector __attribute__((unused)), double scale __attribute__((unused)))
     {
-      throw DOpEException("GetType not implemented",
+      throw DOpEException("Not implemented",
           "FunctionalInterface::Value_UU");
     }
 
@@ -94,7 +187,7 @@ namespace DOpE
         const CDC<DOFHANDLER, VECTOR, dealdim>&,
         dealii::Vector<double> &local_cell_vector __attribute__((unused)), double scale __attribute__((unused)))
     {
-      throw DOpEException("GetType not implemented",
+      throw DOpEException("Not implemented",
           "FunctionalInterface::Value_QU");
     }
 
@@ -106,7 +199,7 @@ namespace DOpE
         const CDC<DOFHANDLER, VECTOR, dealdim>&,
         dealii::Vector<double> &local_cell_vector __attribute__((unused)), double scale __attribute__((unused)))
     {
-      throw DOpEException("GetType not implemented",
+      throw DOpEException("Not implemented",
           "FunctionalInterface::Value_UQ");
     }
 
@@ -118,7 +211,7 @@ namespace DOpE
         const CDC<DOFHANDLER, VECTOR, dealdim>&,
         dealii::Vector<double> &local_cell_vector __attribute__((unused)), double scale __attribute__((unused)))
     {
-      throw DOpEException("GetType not implemented",
+      throw DOpEException("Not implemented",
           "FunctionalInterface::Value_QQ");
     }
 
@@ -128,7 +221,7 @@ namespace DOpE
     std::string
     FunctionalInterface<CDC, FDC, DOFHANDLER, VECTOR, dopedim, dealdim>::GetType() const
     {
-      throw DOpEException("GetType not implemented",
+      throw DOpEException("Not implemented",
           "FunctionalInterface::GetType");
     }
   /********************************************/
@@ -137,7 +230,7 @@ namespace DOpE
     std::string
     FunctionalInterface<CDC, FDC, DOFHANDLER, VECTOR, dopedim, dealdim>::GetName() const
     {
-      throw DOpEException("GetType not implemented",
+      throw DOpEException("Not implemented",
           "FunctionalInterface::GetName");
     }
 
@@ -335,7 +428,30 @@ namespace DOpE
     bool
     FunctionalInterface<CDC, FDC, DOFHANDLER, VECTOR, dopedim, dealdim>::HasFaces() const
     {
-      return false;
+      bool retrn;
+      //we check if the functional is of type face
+      if (GetType().find("face") != std::string::npos)
+        retrn = true;
+      else
+        retrn = false;
+
+      return retrn;
+    }
+
+  /********************************************/
+
+  template<template<typename DOFHANDLER, typename VECTOR, int dealdim> class CDC, template<typename DOFHANDLER, typename VECTOR, int dealdim> class FDC, typename DOFHANDLER, typename VECTOR, int dopedim, int dealdim>
+    bool
+    FunctionalInterface<CDC, FDC, DOFHANDLER, VECTOR, dopedim, dealdim>::HasPoints() const
+    {
+      bool retrn;
+      //we check if the functional is of type point
+      if (GetType().find("point") != std::string::npos)
+        retrn = true;
+      else
+        retrn = false;
+
+      return retrn;
     }
 
 /********************************************/

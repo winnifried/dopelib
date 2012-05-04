@@ -201,10 +201,10 @@ namespace DOpE
         residual = 0.;
         // Begin integration
         unsigned int dofs_per_cell;
-
         dealii::Vector<SCALAR> local_cell_vector;
-
         std::vector<unsigned int> local_dof_indices;
+
+        const bool need_point_rhs = pde.HasPoints();
 
         const auto& dof_handler =
             pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandler();
@@ -346,6 +346,15 @@ namespace DOpE
           {
             cell[dh]++;
           }
+        }
+
+        //check if we need the evaluation of PointRhs
+        if(need_point_rhs)
+        {
+          VECTOR point_rhs;
+          pde.PointRhs(this->GetParamData(),
+              this->GetDomainData(), point_rhs, -1.);
+          residual+=point_rhs;
         }
 
         if (apply_boundary_values)
@@ -531,113 +540,120 @@ namespace DOpE
       Integrator<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::ComputeNonlinearRhs(
           PROBLEM& pde, VECTOR &residual, bool apply_boundary_values)
       {
+        residual = 0.;
+        // Begin integration
+        unsigned int dofs_per_cell;
+        dealii::Vector<SCALAR> local_cell_vector;
+        std::vector<unsigned int> local_dof_indices;
 
+        const bool need_point_rhs = pde.HasPoints();
+
+        const auto& dof_handler =
+            pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandler();
+        auto cell =
+            pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandlerBeginActive();
+        auto endc =
+            pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandlerEnd();
+
+        // Initialize the data containers.
+        GetIntegratorDataContainer().InitializeCDC(pde.GetUpdateFlags(),
+            *(pde.GetBaseProblem().GetSpaceTimeHandler()), cell,
+            this->GetParamData(), this->GetDomainData());
+        auto& cdc = GetIntegratorDataContainer().GetCellDataContainer();
+#if deal_II_dimension == 2 || deal_II_dimension == 3
+        bool need_interfaces = pde.HasInterfaces();
+        if(need_interfaces )
         {
-          residual = 0.;
-          // Begin integration
-          unsigned int dofs_per_cell;      // = pde.GetFESystem().dofs_per_cell;
+          throw DOpEException(" Faces on multiple meshes not implemented yet!",
+              "IntegratorMultiMesh::ComputeNonlinearRhs_Recursive");
+        }
+        bool need_faces = pde.HasFaces();
+        std::vector<unsigned int> boundary_equation_colors = pde.GetBoundaryEquationColors();
+        bool need_boundary_integrals = (boundary_equation_colors.size() > 0);
 
-          dealii::Vector<SCALAR> local_cell_vector;           //(dofs_per_cell);
-
-          std::vector<unsigned int> local_dof_indices;        //(dofs_per_cell);
-
-          const auto& dof_handler =
-              pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandler();
-          auto cell =
-              pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandlerBeginActive();
-          auto endc =
-              pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandlerEnd();
-
-          // Initialize the data containers.
-          GetIntegratorDataContainer().InitializeCDC(pde.GetUpdateFlags(),
-              *(pde.GetBaseProblem().GetSpaceTimeHandler()), cell,
-              this->GetParamData(), this->GetDomainData());
-          auto& cdc = GetIntegratorDataContainer().GetCellDataContainer();
-#if deal_II_dimension == 2 || deal_II_dimension == 3
-	  bool need_interfaces = pde.HasInterfaces();
-	  if(need_interfaces )
-	  {
-	    throw DOpEException(" Faces on multiple meshes not implemented yet!", 
-				"IntegratorMultiMesh::ComputeNonlinearRhs_Recursive");
-	  }
-          bool need_faces = pde.HasFaces();
-          std::vector<unsigned int> boundary_equation_colors = pde.GetBoundaryEquationColors();
-          bool need_boundary_integrals = (boundary_equation_colors.size() > 0);
-
-          GetIntegratorDataContainer().InitializeFDC(pde.GetFaceUpdateFlags(),
-              *(pde.GetBaseProblem().GetSpaceTimeHandler()),
-              cell,
-              this->GetParamData(),
-              this->GetDomainData());
-          auto & fdc = GetIntegratorDataContainer().GetFaceDataContainer();
+        GetIntegratorDataContainer().InitializeFDC(pde.GetFaceUpdateFlags(),
+            *(pde.GetBaseProblem().GetSpaceTimeHandler()),
+            cell,
+            this->GetParamData(),
+            this->GetDomainData());
+        auto & fdc = GetIntegratorDataContainer().GetFaceDataContainer();
 #endif
 
-          for (; cell[0] != endc[0]; cell[0]++)
+        for (; cell[0] != endc[0]; cell[0]++)
+        {
+          for (unsigned int dh = 1; dh < dof_handler.size(); dh++)
           {
-            for (unsigned int dh = 1; dh < dof_handler.size(); dh++)
+            if (cell[dh] == endc[dh])
             {
-              if (cell[dh] == endc[dh])
-              {
-                throw DOpEException(
-                    "Cellnumbers in DoFHandlers are not matching!",
-                    "Integrator::ComputeNonlinearRhs");
-              }
-            }
-
-            cdc.ReInit();
-            dofs_per_cell = cell[0]->get_fe().dofs_per_cell;
-
-            local_cell_vector.reinit(dofs_per_cell);
-            local_cell_vector = 0;
-
-            local_dof_indices.resize(0);
-            local_dof_indices.resize(dofs_per_cell, 0);
-            pde.CellRhs(cdc, local_cell_vector, 1.);
-
-#if deal_II_dimension == 2 || deal_II_dimension == 3
-            if(need_boundary_integrals)
-            {
-              for (unsigned int face=0; face < dealii::GeometryInfo<dim>::faces_per_cell; ++face)
-              {
-                if (cell[0]->face(face)->at_boundary()
-                    &&
-                    (find(boundary_equation_colors.begin(),boundary_equation_colors.end(),
-                            cell[0]->face(face)->boundary_indicator()) != boundary_equation_colors.end()))
-                {
-                  fdc.ReInit(face);
-                  pde.BoundaryRhs(fdc,local_cell_vector,1.);
-                }
-              }
-            }
-            if(need_faces)
-            {
-              for (unsigned int face=0; face < dealii::GeometryInfo<dim>::faces_per_cell; ++face)
-              {
-                if (cell[0]->neighbor_index(face) != -1)
-                {
-                  fdc.ReInit(face);
-                  pde.FaceRhs(fdc, local_cell_vector);
-                }
-              }
-            }
-#endif
-            //LocalToGlobal
-            cell[0]->get_dof_indices(local_dof_indices);
-            for (unsigned int i = 0; i < dofs_per_cell; ++i)
-            {
-              residual(local_dof_indices[i]) += local_cell_vector(i);
-            }
-
-            for (unsigned int dh = 1; dh < dof_handler.size(); dh++)
-            {
-              cell[dh]++;
+              throw DOpEException(
+                  "Cellnumbers in DoFHandlers are not matching!",
+                  "Integrator::ComputeNonlinearRhs");
             }
           }
 
-          if (apply_boundary_values)
+          cdc.ReInit();
+          dofs_per_cell = cell[0]->get_fe().dofs_per_cell;
+
+          local_cell_vector.reinit(dofs_per_cell);
+          local_cell_vector = 0;
+
+          local_dof_indices.resize(0);
+          local_dof_indices.resize(dofs_per_cell, 0);
+          pde.CellRhs(cdc, local_cell_vector, 1.);
+
+#if deal_II_dimension == 2 || deal_II_dimension == 3
+          if(need_boundary_integrals)
           {
-            ApplyNewtonBoundaryValues(pde, residual);
+            for (unsigned int face=0; face < dealii::GeometryInfo<dim>::faces_per_cell; ++face)
+            {
+              if (cell[0]->face(face)->at_boundary()
+                  &&
+                  (find(boundary_equation_colors.begin(),boundary_equation_colors.end(),
+                          cell[0]->face(face)->boundary_indicator()) != boundary_equation_colors.end()))
+              {
+                fdc.ReInit(face);
+                pde.BoundaryRhs(fdc,local_cell_vector,1.);
+              }
+            }
           }
+          if(need_faces)
+          {
+            for (unsigned int face=0; face < dealii::GeometryInfo<dim>::faces_per_cell; ++face)
+            {
+              if (cell[0]->neighbor_index(face) != -1)
+              {
+                fdc.ReInit(face);
+                pde.FaceRhs(fdc, local_cell_vector);
+              }
+            }
+          }
+#endif
+          //LocalToGlobal
+          cell[0]->get_dof_indices(local_dof_indices);
+          for (unsigned int i = 0; i < dofs_per_cell; ++i)
+          {
+            residual(local_dof_indices[i]) += local_cell_vector(i);
+          }
+
+          for (unsigned int dh = 1; dh < dof_handler.size(); dh++)
+          {
+            cell[dh]++;
+          }
+        }
+
+
+        //check if we need the evaluation of PointRhs
+        if(need_point_rhs)
+        {
+          VECTOR point_rhs;
+          pde.PointRhs(this->GetParamData(),
+              this->GetDomainData(), point_rhs, 1.);
+          residual+=point_rhs;
+        }
+
+        if (apply_boundary_values)
+        {
+          ApplyNewtonBoundaryValues(pde, residual);
         }
       }
 

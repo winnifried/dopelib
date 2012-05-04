@@ -241,7 +241,7 @@ namespace DOpE
          *                                between hp- and classical case.
          *
          * @param cdc                     A DataContainer holding all the needed information
-         *                                of the cell
+         *                                of the cell.
          * @param local_cell_vector       This vector contains the locally computed values of the cell equation. For more information
          *                                on dealii::Vector, please visit, the deal.ii manual pages.
          * @param scale                   A scaling factor which is -1 or 1 depending on the subroutine to compute.
@@ -285,7 +285,7 @@ namespace DOpE
          * @template DATACONTAINER         Class of the datacontainer in use, distinguishes
          *                                 between hp- and classical case.
          *
-         * @param cdc                      A DataContainer holding all the needed information
+         * @param cdc                      A DataContainer holding all the needed information of the cell.
          * @param local_cell_vector        This vector contains the locally computed values of the cell equation. For more information
          *                                 on dealii::Vector, please visit, the deal.ii manual pages.
          * @param scale                    A scaling factor which is -1 or 1 depending on the subroutine to compute.
@@ -294,6 +294,25 @@ namespace DOpE
           void
           CellRhs(const DATACONTAINER& dc,
               dealii::Vector<double> &local_cell_vector, double scale = 1.);
+
+        /******************************************************/
+
+        /**
+         * Computes the value of the right-hand side of the problem at hand, if it
+         * contains pointevaluations.
+         *
+         * @param param_values             A std::map containing parameter data (e.g. non space dependent data). If the control
+         *                                 is done by parameters, it is contained in this map at the position "control".
+         * @param domain_values            A std::map containing domain data (e.g. nodal vectors for FE-Functions). If the control
+         *                                 is distributed, it is contained in this map at the position "control". The state may always
+         *                                 be found in this map at the position "state"
+         * @param rhs_vector               This vector contains the complete point-rhs.
+         * @param scale                    A scaling factor which is -1 or 1 depending on the subroutine to compute.
+         */
+          void
+          PointRhs(const std::map<std::string, const dealii::Vector<double>*> &param_values,
+              const std::map<std::string, const VECTOR*> &domain_values,
+              VECTOR& rhs_vector, double scale = 1.);
 
         /******************************************************/
 
@@ -519,6 +538,16 @@ namespace DOpE
          */
         bool
         HasFaces() const;
+
+        /******************************************************/
+        /**
+         * This function determines whether point evaluations are required or not.
+         *
+         * @return Returns whether or not this functional needs evaluations of
+         *         point values.
+         */
+        bool
+        HasPoints() const;
 
         /******************************************************/
         /**
@@ -1841,30 +1870,10 @@ namespace DOpE
         }
         else if (GetType() == "global_constraint_gradient")
         {
-          //    GetConstraints()->Value_Q(this->GetSpaceTimeHandler()->GetControlFEValues(),
-          //			      this->GetSpaceTimeHandler()->GetStateFEValues(),
-          //			      param_values,
-          //			      domain_values,
-          //			      n_dofs_per_cell,
-          //			      n_q_points,
-          //			      material_id,
-          //			      cell_diameter,
-          //			      local_cell_vector,
-          //			      scale);
           GetConstraints()->Value_Q(cdc, local_cell_vector, scale);
         }
         else if (GetType() == "global_constraint_hessian")
         {
-          //    GetConstraints()->Value_QQ(this->GetSpaceTimeHandler()->GetControlFEValues(),
-          //			       this->GetSpaceTimeHandler()->GetStateFEValues(),
-          //			       param_values,
-          //			       domain_values,
-          //			       n_dofs_per_cell,
-          //			       n_q_points,
-          //			       material_id,
-          //			       cell_diameter,
-          //			       local_cell_vector,
-          //			       scale);
           GetConstraints()->Value_QQ(cdc, local_cell_vector, scale);
         }
         else
@@ -1872,6 +1881,74 @@ namespace DOpE
           throw DOpEException("Not implemented", "OptProblemContainer::CellRhs");
         }
       }
+
+  /******************************************************/
+
+  template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
+      typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+      typename VECTOR, int dopedim, int dealdim, typename FE,
+      typename DOFHANDLER>
+    void
+    OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
+        SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DOFHANDLER>::PointRhs(
+        const std::map<std::string, const dealii::Vector<double>*> &param_values,
+        const std::map<std::string, const VECTOR*> &domain_values,
+        VECTOR& rhs_vector, double scale)
+    {
+      if (GetType() == "adjoint")
+      {
+        // state values in quadrature points
+        GetFunctional()->PointValue_U(
+            this->GetSpaceTimeHandler()->GetControlDoFHandler(),
+            this->GetSpaceTimeHandler()->GetStateDoFHandler(), param_values,
+            domain_values, rhs_vector, scale);
+      }
+      else if (GetType() == "adjoint_for_ee")
+      {
+        //values of the derivative of the functional for error estimation
+        _aux_functionals[_functional_for_ee_num]->PointValue_U(
+            this->GetSpaceTimeHandler()->GetControlDoFHandler(),
+            this->GetSpaceTimeHandler()->GetStateDoFHandler(), param_values,
+            domain_values, rhs_vector, scale);
+      }
+      else if (GetType() == "adjoint_hessian")
+      {
+        // state values in quadrature points
+        GetFunctional()->PointValue_UU(
+            this->GetSpaceTimeHandler()->GetControlDoFHandler(),
+            this->GetSpaceTimeHandler()->GetStateDoFHandler(), param_values,
+            domain_values, rhs_vector, scale);
+        GetFunctional()->PointValue_QU(
+            this->GetSpaceTimeHandler()->GetControlDoFHandler(),
+            this->GetSpaceTimeHandler()->GetStateDoFHandler(), param_values,
+            domain_values, rhs_vector, scale);
+      }
+      else if (GetType() == "gradient")
+      {
+        // state values in quadrature points
+        GetFunctional()->PointValue_Q(
+            this->GetSpaceTimeHandler()->GetControlDoFHandler(),
+            this->GetSpaceTimeHandler()->GetStateDoFHandler(), param_values,
+            domain_values, rhs_vector, scale);
+      }
+      else if (GetType() == "hessian")
+      {
+        // state values in quadrature points
+        GetFunctional()->PointValue_QQ(
+            this->GetSpaceTimeHandler()->GetControlDoFHandler(),
+            this->GetSpaceTimeHandler()->GetStateDoFHandler(), param_values,
+            domain_values, rhs_vector, scale);
+        GetFunctional()->PointValue_UQ(
+            this->GetSpaceTimeHandler()->GetControlDoFHandler(),
+            this->GetSpaceTimeHandler()->GetStateDoFHandler(), param_values,
+            domain_values, rhs_vector, scale);
+      }
+      else
+      {
+        throw DOpEException("Not implemented", "OptProblem::CellRhs");
+      }
+    }
+
   /******************************************************/
 
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
@@ -2824,6 +2901,44 @@ namespace DOpE
         }
       }
     }
+
+  /******************************************************/
+
+  template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
+      typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+      typename VECTOR, int dopedim, int dealdim, typename FE,
+      typename DOFHANDLER>
+    bool
+    OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
+        SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DOFHANDLER>::HasPoints() const
+    {
+      if (GetType().find("constraint") || GetType().find("functional")
+          || GetType().find("aux_functional") || (GetType() == "state")
+          || (GetType() == "tangent"))
+      {
+        // We dont need PointRhs in this cases.
+        return false;
+      }
+      else if ((GetType() == "adjoint") || (GetType() == "adjoint_hessian")
+          || (GetType() == "hessian"))
+      {
+        return this->GetFunctional()->HasPoints();
+      }
+      else if (GetType() == "adjoint_for_ee")
+      {
+        return _aux_functionals[_functional_for_ee_num]->HasPoints();
+      }
+      else if (GetType() == "gradient")
+      {
+        return this->GetFunctional()->HasPoints();
+      }
+      else
+      {
+        throw DOpEException("Unknown Type: '" + GetType() + "'!",
+            "OptProblem::HasPoints");
+      }
+    }
+//    }
 
   /******************************************************/
 

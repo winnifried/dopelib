@@ -726,6 +726,18 @@ template<typename DATACONTAINER>
       }
       //_OP.CellRhs(param_values, domain_values, n_dofs_per_cell, n_q_points, material_id, cell_diameter, local_cell_vector, scale);
     }
+        /******************************************************/
+
+        void
+        PointRhs(
+            const std::map<std::string, const dealii::Vector<double>*> &param_values,
+            const std::map<std::string, const BlockVector<double>*> &domain_values,
+            BlockVector<double>& rhs_vector, double scale = 1.)
+        {
+          throw DOpEException("Not Implemented",
+              "AugmentedLagrangianProblem::PointRhs");
+        }
+
     
     /******************************************************/ 
 
@@ -899,6 +911,7 @@ template<typename FACEDATACONTAINER>
      *         The default value is false.
      */
     bool HasFaces() const{ return _OP.HasFaces(); }
+    bool HasPoints() const { return _OP.HasPoints();};
     bool HasInterfaces() const { return _OP.HasInterfaces(); }
     
     /******************************************************/ 
