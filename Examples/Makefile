@@ -1,4 +1,5 @@
 DIRECTORIES = $(shell echo OPT/StatPDE/Example* \
+				OPT/InstatPDE/Example* \
 				PDE/StatPDE/Example* \
 				PDE/InstatPDE/Example* )
 

@@ -72,23 +72,34 @@ typedef OptProblem<FUNC,FUNC,PDE,DD,CONS,SPARSITYPATTERN, VECTOR, LOCALDOPEDIM,L
 typedef DOpE::StateProblem<OP_BASE,PDE,DD,SPARSITYPATTERN,VECTOR,LOCALDOPEDIM,LOCALDEALDIM> PROB;
 // Typedefs for timestep problem
 
-typedef ForwardEulerProblem<PROB, SPARSITYPATTERN, VECTOR, LOCALDOPEDIM,LOCALDEALDIM> TSP1;
-typedef BackwardEulerProblem<PROB, SPARSITYPATTERN, VECTOR, LOCALDOPEDIM,LOCALDEALDIM> TSP2;
-typedef CrankNicolsonProblem<PROB, SPARSITYPATTERN, VECTOR, LOCALDOPEDIM,LOCALDEALDIM> TSP3;
-typedef ShiftedCrankNicolsonProblem<PROB, SPARSITYPATTERN, VECTOR, LOCALDOPEDIM,LOCALDEALDIM> TSP4;
-typedef FractionalStepThetaProblem<PROB, SPARSITYPATTERN, VECTOR, LOCALDOPEDIM,LOCALDEALDIM> TSP5;
+#define TSP1 ForwardEulerProblem
+#define TSP2 BackwardEulerProblem
+#define TSP3 CrankNicolsonProblem
+#define TSP4 ShiftedCrankNicolsonProblem
+#define TSP5 FractionalStepThetaProblem
 //FIXME: This should be a reasonable dual timestepping scheme
-typedef ForwardEulerProblem<OP_BASE, SPARSITYPATTERN, VECTOR, LOCALDOPEDIM,LOCALDEALDIM> DTSP1;
-typedef BackwardEulerProblem<OP_BASE, SPARSITYPATTERN, VECTOR, LOCALDOPEDIM,LOCALDEALDIM> DTSP2;
-typedef CrankNicolsonProblem<OP_BASE, SPARSITYPATTERN, VECTOR, LOCALDOPEDIM,LOCALDEALDIM> DTSP3;
-typedef ShiftedCrankNicolsonProblem<OP_BASE, SPARSITYPATTERN, VECTOR, LOCALDOPEDIM,LOCALDEALDIM> DTSP4;
-typedef FractionalStepThetaProblem<OP_BASE, SPARSITYPATTERN, VECTOR, LOCALDOPEDIM,LOCALDEALDIM> DTSP5;
+#define DTSP1 ForwardEulerProblem
+#define DTSP2 BackwardEulerProblem
+#define DTSP3 CrankNicolsonProblem
+#define DTSP4 ShiftedCrankNicolsonProblem
+#define DTSP5 FractionalStepThetaProblem
 
 typedef InstatOptProblemContainer<TSP1,DTSP1,FUNC,FUNC,PDE,DD,CONS,SPARSITYPATTERN, VECTOR, LOCALDOPEDIM,LOCALDEALDIM> OP1;
 typedef InstatOptProblemContainer<TSP2,DTSP2,FUNC,FUNC,PDE,DD,CONS,SPARSITYPATTERN, VECTOR, LOCALDOPEDIM,LOCALDEALDIM> OP2;
 typedef InstatOptProblemContainer<TSP3,DTSP3,FUNC,FUNC,PDE,DD,CONS,SPARSITYPATTERN, VECTOR, LOCALDOPEDIM,LOCALDEALDIM> OP3;
 typedef InstatOptProblemContainer<TSP4,DTSP4,FUNC,FUNC,PDE,DD,CONS,SPARSITYPATTERN, VECTOR, LOCALDOPEDIM,LOCALDEALDIM> OP4;
 typedef InstatOptProblemContainer<TSP5,DTSP5,FUNC,FUNC,PDE,DD,CONS,SPARSITYPATTERN, VECTOR, LOCALDOPEDIM,LOCALDEALDIM> OP5;
+
+#undef TSP1  
+#undef TSP2  
+#undef TSP3  
+#undef TSP4  
+#undef TSP5  
+#undef DTSP1 
+#undef DTSP2 
+#undef DTSP3 
+#undef DTSP4 
+#undef DTSP5 
 
 typedef IntegratorDataContainer<DOFHANDLER, dealii::Quadrature<LOCALDEALDIM>, dealii::Quadrature<LOCALDEALDIM-1>, VECTOR, LOCALDEALDIM > IDC;
 
