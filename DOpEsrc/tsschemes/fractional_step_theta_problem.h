@@ -2,6 +2,7 @@
 #define _FRACTIONALSTEPTHETAPROBLEM_H_
 
 #include "initialproblem.h" 
+#include "primal_ts_base.h"
 
 namespace DOpE
 {
@@ -22,7 +23,8 @@ namespace DOpE
   template<typename OPTPROBLEM, typename SPARSITYPATTERN, typename VECTOR,
       int dopedim, int dealdim, typename FE = DOpEWrapper::FiniteElement<
           dealdim>, typename DOFHANDLER = dealii::DoFHandler<dealdim>>
-    class FractionalStepThetaProblem
+    class FractionalStepThetaProblem : public PrimalTSBase<OPTPROBLEM,
+    SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DOFHANDLER>
     {
       public:
         /**
@@ -32,8 +34,9 @@ namespace DOpE
        *
        * @param OP     Problem is given to the time stepping scheme.
        */
-      FractionalStepThetaProblem (OPTPROBLEM& OP) :
-        _OP(OP)
+      FractionalStepThetaProblem (OPTPROBLEM& OP)  :
+        PrimalTSBase<OPTPROBLEM, SPARSITYPATTERN, VECTOR, dopedim, dealdim,
+            FE, DOFHANDLER>(OP)
       {
         _fs_theta = 1.0 - std::sqrt(2.0) / 2.0;
         _fs_theta_prime = 1.0 - 2.0 * _fs_theta;
@@ -85,158 +88,6 @@ namespace DOpE
       /******************************************************/
 
       /**
-       * Sets the step part which should actually computed, e.g.,
-       * previous solution within the NewtonStepSolver or
-       * last time step solutions.
-       * @param s    Name of the step part
-       */
-      void
-      SetStepPart(std::string s)
-      {
-        _part = s;
-      }
-      /******************************************************/
-
-      /**
-       * Sets the actual time.
-       *
-       * @param time      The actual time.
-       * @param interval  The actual interval. Make sure that time
-       *                  lies in interval!
-       */
-
-      void SetTime(double time, const TimeIterator& interval)
-      {
-        _OP.SetTime(time, interval);
-      }
-      /******************************************************/
-
-      /**
-       * Not implemented so far. Returns just _OP.CellFunctional(...). For more information we refer to
-       * the file optproblemcontainer.h
-       */
-      template<typename DATACONTAINER>
-        double
-        CellFunctional(const DATACONTAINER& dc)
-        {
-          return _OP.CellFunctional(dc);
-        }
-
-      /******************************************************/
-
-      /**
-       * Not implemented so far. Returns just _OP.PointFunctional(...). For more information we refer to
-       * the file optproblemcontainer.h
-       */
-      double
-      PointFunctional(
-          const std::map<std::string, const dealii::Vector<double>*> &param_values,
-          const std::map<std::string, const VECTOR*> &domain_values)
-      {
-        return _OP.PointFunctional(param_values, domain_values);
-      }
-
-      /******************************************************/
-
-      /**
-       * Not implemented so far. Returns just _OP.BoundaryFunctional(...). For more information we refer to
-       * the file optproblemcontainer.h
-       */
-      template<typename FACEDATACONTAINER>
-        double
-        BoundaryFunctional(const FACEDATACONTAINER& fdc)
-        {
-          return _OP.BoundaryFunctional(fdc);
-        }
-
-      /******************************************************/
-
-      /**
-       * Not implemented so far. Returns just _OP.FaceFunctional(...). For more information we refer to
-       * the file optproblemcontainer.h
-       */
-      template<typename FACEDATACONTAINER>
-        double
-        FaceFunctional(const FACEDATACONTAINER& fdc)
-        {
-          return _OP.FaceFunctional(fdc);
-        }
-     /******************************************************/
-      /****For the initial values ***************/
-      template<typename DATACONTAINER>
-      void Init_CellEquation(const DATACONTAINER& cdc,
-			     dealii::Vector<double> &local_cell_vector, double scale,
-			     double scale_ico)
-      {
-        _OP.Init_CellEquation(cdc, local_cell_vector, scale, scale_ico);
-      }
-
-      template<typename DATACONTAINER>
-      void
-      Init_CellRhs(const DATACONTAINER& cdc,
-          dealii::Vector<double> &local_cell_vector, double scale)
-      {
-        _OP.Init_CellRhs(cdc, local_cell_vector, scale);
-      }
-
-      template<typename DATACONTAINER>
-      void Init_CellMatrix(const DATACONTAINER& cdc,
-			   dealii::FullMatrix<double> &local_entry_matrix, double scale,
-			   double scale_ico)
-      {
-        _OP.Init_CellMatrix(cdc, local_entry_matrix, scale, scale_ico);
-      }
-
-      void
-      Init_PointRhs(
-      const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
-      const std::map<std::string, const VECTOR*> &/*domain_values*/,
-      VECTOR& /*rhs_vector*/, double /*scale=1.*/)
-      {
-      }
- 
-      template<typename FACEDATACONTAINER>
-      void Init_FaceEquation(const FACEDATACONTAINER& /*fdc*/,
-			     dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
-      {
-      }
-
-      template<typename FACEDATACONTAINER>
-      void Init_InterfaceEquation(const FACEDATACONTAINER& /*fdc*/,
-				  dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
-      {
-      }
-
-      template<typename FACEDATACONTAINER>
-      void Init_BoundaryEquation(const FACEDATACONTAINER& /*fdc*/,
-				 dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
-      {
-      }
-     
-      template<typename FACEDATACONTAINER>
-      void Init_FaceMatrix(const FACEDATACONTAINER& /*fdc*/,
-			   FullMatrix<double> &/*local_entry_matrix*/)
-      {
-      }
-
-      template<typename FACEDATACONTAINER>
-      void Init_InterfaceMatrix(const FACEDATACONTAINER& /*fdc*/,
-				FullMatrix<double> &/*local_entry_matrix*/)
-      {
-      }
-      
-      template<typename FACEDATACONTAINER>
-      void Init_BoundaryMatrix(const FACEDATACONTAINER& /*fdc*/,
-			       FullMatrix<double> &/*local_cell_matrix*/)
-      {
-      }
-
-      /****End the initial values ***************/
-      /******************************************************/
-
-      /******************************************************/
-
-      /**
        * Computes the value of the cell equation which corresponds
        * to the residuum in nonlinear cases. This function
        * itself contains a maximum of four subroutines of cell equations:
@@ -273,94 +124,94 @@ namespace DOpE
         CellEquation(const DATACONTAINER& dc,
             dealii::Vector<double> &local_cell_vector, double scale, double)
         {
-          if (_part == "New_for_1st_and_3rd_cycle")
+          if (this->GetPart() == "New_for_1st_and_3rd_cycle")
             {
               dealii::Vector<double> tmp(local_cell_vector);
 
               tmp = 0.0;
-              _OP.CellEquation(dc, tmp, scale * _fs_alpha, scale);
+              this->GetProblem().CellEquation(dc, tmp, scale * _fs_alpha, scale);
               local_cell_vector += tmp;
 
               tmp = 0.0;
-              _OP.CellTimeEquation(
+              this->GetProblem().CellTimeEquation(
                   dc,
                   tmp,
                   scale / (_fs_theta
-                      * _OP.GetBaseProblem().GetSpaceTimeHandler()->GetStepSize()));
+                      * this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize()));
               local_cell_vector += tmp;
 
-              _OP.CellTimeEquationExplicit(
+              this->GetProblem().CellTimeEquationExplicit(
                   dc,
                   local_cell_vector,
                   scale / (_fs_theta
-                      * _OP.GetBaseProblem().GetSpaceTimeHandler()->GetStepSize()));
+                      * this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize()));
             }
-          else if (_part == "Old_for_1st_cycle")
+          else if (this->GetPart() == "Old_for_1st_cycle")
             {
               dealii::Vector<double> tmp(local_cell_vector);
               tmp = 0.0;
 
               // The explicit parts with old_time_values; e.g. for fluid problems: laplace, convection, etc.
-              _OP.CellEquation(dc, tmp, scale * _fs_beta, 0.);
+              this->GetProblem().CellEquation(dc, tmp, scale * _fs_beta, 0.);
               local_cell_vector += tmp;
 
-              _OP.CellTimeEquation(
+              this->GetProblem().CellTimeEquation(
                   dc,
                   local_cell_vector,
                   (-1) * scale / (_fs_theta
-                      * _OP.GetBaseProblem().GetSpaceTimeHandler()->GetStepSize()));
+                      * this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize()));
             }
-          else if (_part == "Old_for_3rd_cycle")
+          else if (this->GetPart() == "Old_for_3rd_cycle")
             {
               dealii::Vector<double> tmp(local_cell_vector);
               tmp = 0.0;
 
               // The explicit parts with old_time_values; e.g. for fluid problems: laplace, convection, etc.
-              _OP.CellEquation(dc, tmp, scale * _fs_beta, 0.);
+              this->GetProblem().CellEquation(dc, tmp, scale * _fs_beta, 0.);
               local_cell_vector += tmp;
 
-              _OP.CellTimeEquation(
+              this->GetProblem().CellTimeEquation(
                   dc,
                   local_cell_vector,
                   (-1) * scale / (_fs_theta
-                      * _OP.GetBaseProblem().GetSpaceTimeHandler()->GetStepSize()));
+                      * this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize()));
             }
-          else if (_part == "New_for_2nd_cycle")
+          else if (this->GetPart() == "New_for_2nd_cycle")
             {
               dealii::Vector<double> tmp(local_cell_vector);
 
               tmp = 0.0;
-              _OP.CellEquation(dc, tmp, scale * _fs_beta, scale);
+              this->GetProblem().CellEquation(dc, tmp, scale * _fs_beta, scale);
               local_cell_vector += tmp;
 
               tmp = 0.0;
-              _OP.CellTimeEquation(
+              this->GetProblem().CellTimeEquation(
                   dc,
                   tmp,
                   scale / (_fs_theta_prime
-                      * _OP.GetBaseProblem().GetSpaceTimeHandler()->GetStepSize()));
+                      * this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize()));
               local_cell_vector += tmp;
 
-              _OP.CellTimeEquationExplicit(
+              this->GetProblem().CellTimeEquationExplicit(
                   dc,
                   local_cell_vector,
                   scale / (_fs_theta_prime
-                      * _OP.GetBaseProblem().GetSpaceTimeHandler()->GetStepSize()));
+                      * this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize()));
             }
-          else if (_part == "Old_for_2nd_cycle")
+          else if (this->GetPart() == "Old_for_2nd_cycle")
             {
               dealii::Vector<double> tmp(local_cell_vector);
               tmp = 0.0;
 
               // The explicit parts with old_time_values; e.g. for fluid problems: laplace, convection, etc.
-              _OP.CellEquation(dc, tmp, scale * _fs_alpha, 0.);
+              this->GetProblem().CellEquation(dc, tmp, scale * _fs_alpha, 0.);
               local_cell_vector += tmp;
 
-              _OP.CellTimeEquation(
+              this->GetProblem().CellTimeEquation(
                   dc,
                   local_cell_vector,
                   (-1) * scale / (_fs_theta_prime
-                      * _OP.GetBaseProblem().GetSpaceTimeHandler()->GetStepSize()));
+                      * this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize()));
             }
           else
             {
@@ -395,24 +246,24 @@ namespace DOpE
         CellRhs(const DATACONTAINER& dc,
             dealii::Vector<double> &local_cell_vector, double scale = 1.)
         {
-          if (_part == "New_for_1st_and_3rd_cycle")
+          if (this->GetPart() == "New_for_1st_and_3rd_cycle")
             {
 
             }
-          else if (_part == "Old_for_1st_cycle" || _part == "Old_for_3rd_cycle")
+          else if (this->GetPart() == "Old_for_1st_cycle" || this->GetPart() == "Old_for_3rd_cycle")
             {
-              _OP.CellRhs(dc, local_cell_vector, scale);
+              this->GetProblem().CellRhs(dc, local_cell_vector, scale);
             }
           //      else if ()
           //	{
-          //      	_OP.CellRhs(param_values, domain_values, n_dofs_per_cell, n_q_points, material_id, cell_diameter, local_cell_vector,
+          //      	this->GetProblem().CellRhs(param_values, domain_values, n_dofs_per_cell, n_q_points, material_id, cell_diameter, local_cell_vector,
           //      			      scale);
           //	}
-          else if (_part == "New_for_2nd_cycle")
+          else if (this->GetPart() == "New_for_2nd_cycle")
             {
-              _OP.CellRhs(dc, local_cell_vector, scale);
+              this->GetProblem().CellRhs(dc, local_cell_vector, scale);
             }
-          else if (_part == "Old_for_2nd_cycle")
+          else if (this->GetPart() == "Old_for_2nd_cycle")
             {
             }
           else
@@ -435,19 +286,19 @@ namespace DOpE
             const std::map<std::string, const VECTOR*> &domain_values,
             VECTOR& rhs_vector, double scale = 1.)
         {
-          if (_part == "New_for_1st_and_3rd_cycle")
+          if (this->GetPart() == "New_for_1st_and_3rd_cycle")
           {
 
           }
-          else if (_part == "Old_for_1st_cycle" || _part == "Old_for_3rd_cycle")
+          else if (this->GetPart() == "Old_for_1st_cycle" || this->GetPart() == "Old_for_3rd_cycle")
           {
-            _OP.PointRhs(param_values, domain_values, rhs_vector, scale);
+            this->GetProblem().PointRhs(param_values, domain_values, rhs_vector, scale);
           }
-          else if (_part == "New_for_2nd_cycle")
+          else if (this->GetPart() == "New_for_2nd_cycle")
           {
-            _OP.PointRhs(param_values, domain_values, rhs_vector, scale);
+            this->GetProblem().PointRhs(param_values, domain_values, rhs_vector, scale);
           }
-          else if (_part == "Old_for_2nd_cycle")
+          else if (this->GetPart() == "Old_for_2nd_cycle")
           {
           }
           else
@@ -498,51 +349,51 @@ namespace DOpE
         CellMatrix(const DATACONTAINER& dc,
             dealii::FullMatrix<double> &local_entry_matrix)
         {
-          if (_part == "New_for_1st_and_3rd_cycle")
+          if (this->GetPart() == "New_for_1st_and_3rd_cycle")
             {
               dealii::FullMatrix<double> m(local_entry_matrix);
               m = 0.;
-              _OP.CellMatrix(dc, m, _fs_alpha, 1.);
+              this->GetProblem().CellMatrix(dc, m, _fs_alpha, 1.);
               local_entry_matrix.add(1.0, m);
 
 
               m = 0.;
-              _OP.CellTimeMatrix(dc, m);
+              this->GetProblem().CellTimeMatrix(dc, m);
               local_entry_matrix.add(
                   1.0 / (_fs_theta
-                      * _OP.GetBaseProblem().GetSpaceTimeHandler()->GetStepSize()), m);
+                      * this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize()), m);
 
               m = 0.;
-              _OP.CellTimeMatrixExplicit(dc, m);
+              this->GetProblem().CellTimeMatrixExplicit(dc, m);
               local_entry_matrix.add(
                   1.0 / (_fs_theta
-                      * _OP.GetBaseProblem().GetSpaceTimeHandler()->GetStepSize()), m);
+                      * this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize()), m);
             }
-          else if (_part == "New_for_2nd_cycle")
+          else if (this->GetPart() == "New_for_2nd_cycle")
             {
               dealii::FullMatrix<double> m(local_entry_matrix);
               m = 0.;
-              _OP.CellMatrix(dc, local_entry_matrix, _fs_beta, 1.);
+              this->GetProblem().CellMatrix(dc, local_entry_matrix, _fs_beta, 1.);
               local_entry_matrix.add(1.0, m);
 
               m = 0.;
-              _OP.CellTimeMatrix(dc, m);
+              this->GetProblem().CellTimeMatrix(dc, m);
               local_entry_matrix.add(
                   1.0 / (_fs_theta_prime
-                      * _OP.GetBaseProblem().GetSpaceTimeHandler()->GetStepSize()), m);
+                      * this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize()), m);
 
               m = 0.;
-              _OP.CellTimeMatrixExplicit(dc, m);
+              this->GetProblem().CellTimeMatrixExplicit(dc, m);
               local_entry_matrix.add(
                   1.0 / (_fs_theta_prime
-                      * _OP.GetBaseProblem().GetSpaceTimeHandler()->GetStepSize()), m);
+                      * this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize()), m);
             }
         }
 
       /******************************************************/
 
       /**
-       * Not implemented so far. Returns just _OP.FaceEquation(...). For more information we refer to
+       * Not implemented so far. Returns just this->GetProblem().FaceEquation(...). For more information we refer to
        * the file optproblemcontainer.h
        */
       template<typename FACEDATACONTAINER>
@@ -550,24 +401,24 @@ namespace DOpE
         FaceEquation(const FACEDATACONTAINER& fdc,
             dealii::Vector<double> &local_cell_vector, double scale = 1.)
         {
-          if (_part == "New_for_1st_and_3rd_cycle")
+          if (this->GetPart() == "New_for_1st_and_3rd_cycle")
             {
-              _OP.FaceEquation(fdc, local_cell_vector, scale * _fs_alpha);
+              this->GetProblem().FaceEquation(fdc, local_cell_vector, scale * _fs_alpha);
 
             }
-          else if ((_part == "Old_for_1st_cycle") || (_part
+          else if ((this->GetPart() == "Old_for_1st_cycle") || (this->GetPart()
               == "Old_for_3rd_cycle"))
             {
-              _OP.FaceEquation(fdc, local_cell_vector, scale * _fs_beta);
+              this->GetProblem().FaceEquation(fdc, local_cell_vector, scale * _fs_beta);
             }
-          else if (_part == "New_for_2nd_cycle")
+          else if (this->GetPart() == "New_for_2nd_cycle")
             {
-              _OP.FaceEquation(fdc, local_cell_vector,
+              this->GetProblem().FaceEquation(fdc, local_cell_vector,
                   scale * _fs_alpha * _fs_theta / _fs_theta_prime);
             }
-          else if (_part == "Old_for_2nd_cycle")
+          else if (this->GetPart() == "Old_for_2nd_cycle")
             {
-              _OP.FaceEquation(fdc, local_cell_vector, scale * _fs_alpha);
+              this->GetProblem().FaceEquation(fdc, local_cell_vector, scale * _fs_alpha);
             }
           else
             {
@@ -579,7 +430,7 @@ namespace DOpE
       /******************************************************/
 
       /**
-       * Not implemented so far. Returns just _OP.InterfaceEquation(...).
+       * Not implemented so far. Returns just this->GetProblem().InterfaceEquation(...).
        * For more information we refer to the file optproblemcontainer.h
        */
       template<typename FACEDATACONTAINER>
@@ -587,26 +438,26 @@ namespace DOpE
         InterfaceEquation(const FACEDATACONTAINER& fdc,
             dealii::Vector<double> &local_cell_vector, double scale = 1.)
         {
-          if (_part == "New_for_1st_and_3rd_cycle")
+          if (this->GetPart() == "New_for_1st_and_3rd_cycle")
             {
-              _OP.InterfaceEquation(fdc, local_cell_vector,
+              this->GetProblem().InterfaceEquation(fdc, local_cell_vector,
                   scale * _fs_alpha);
 
             }
-          else if ((_part == "Old_for_1st_cycle") || (_part
+          else if ((this->GetPart() == "Old_for_1st_cycle") || (this->GetPart()
               == "Old_for_3rd_cycle"))
             {
-              _OP.InterfaceEquation(fdc, local_cell_vector,
+              this->GetProblem().InterfaceEquation(fdc, local_cell_vector,
                   scale * _fs_beta);
             }
-          else if (_part == "New_for_2nd_cycle")
+          else if (this->GetPart() == "New_for_2nd_cycle")
             {
-              _OP.InterfaceEquation(fdc, local_cell_vector,
+              this->GetProblem().InterfaceEquation(fdc, local_cell_vector,
                   scale * _fs_alpha * _fs_theta / _fs_theta_prime);
             }
-          else if (_part == "Old_for_2nd_cycle")
+          else if (this->GetPart() == "Old_for_2nd_cycle")
             {
-              _OP.InterfaceEquation(fdc, local_cell_vector,
+              this->GetProblem().InterfaceEquation(fdc, local_cell_vector,
                   scale * _fs_alpha);
             }
           else
@@ -619,7 +470,7 @@ namespace DOpE
       /******************************************************/
 
       /**
-       * Not implemented so far. Returns just _OP.FaceRhs(...). For more information we refer to
+       * Not implemented so far. Returns just this->GetProblem().FaceRhs(...). For more information we refer to
        * the file optproblemcontainer.h
        */
       template<typename FACEDATACONTAINER>
@@ -627,13 +478,13 @@ namespace DOpE
         FaceRhs(const FACEDATACONTAINER& fdc,
             dealii::Vector<double> &local_cell_vector, double scale = 1.)
         {
-          _OP.FaceRhs(fdc, local_cell_vector, scale);
+          this->GetProblem().FaceRhs(fdc, local_cell_vector, scale);
         }
 
       /******************************************************/
 
       /**
-       * Not implemented so far. Returns just _OP.FaceMatrix(...). For more information we refer to
+       * Not implemented so far. Returns just this->GetProblem().FaceMatrix(...). For more information we refer to
        * the file optproblemcontainer.h
        */
       template<typename FACEDATACONTAINER>
@@ -641,18 +492,18 @@ namespace DOpE
         FaceMatrix(const FACEDATACONTAINER& fdc,
             dealii::FullMatrix<double> &local_entry_matrix)
         {
-          if (_part == "New_for_1st_and_3rd_cycle")
+          if (this->GetPart() == "New_for_1st_and_3rd_cycle")
             {
               dealii::FullMatrix<double> m(local_entry_matrix);
               m = 0.;
-              _OP.FaceMatrix(fdc, m);
+              this->GetProblem().FaceMatrix(fdc, m);
               local_entry_matrix.add(_fs_alpha, m);
             }
-          else if (_part == "New_for_2nd_cycle")
+          else if (this->GetPart() == "New_for_2nd_cycle")
             {
               dealii::FullMatrix<double> m(local_entry_matrix);
               m = 0.;
-              _OP.FaceMatrix(fdc, m);
+              this->GetProblem().FaceMatrix(fdc, m);
               local_entry_matrix.add(_fs_alpha * _fs_theta / _fs_theta_prime, m);
             }
 
@@ -661,7 +512,7 @@ namespace DOpE
       /******************************************************/
 
       /**
-       * Not implemented so far. Returns just _OP.InterfaceMatrix(...).
+       * Not implemented so far. Returns just this->GetProblem().InterfaceMatrix(...).
        *  For more information we refer to the file optproblemcontainer.h
        */
       template<typename FACEDATACONTAINER>
@@ -669,18 +520,18 @@ namespace DOpE
         InterfaceMatrix(const FACEDATACONTAINER& fdc,
             dealii::FullMatrix<double> &local_entry_matrix)
         {
-          if (_part == "New_for_1st_and_3rd_cycle")
+          if (this->GetPart() == "New_for_1st_and_3rd_cycle")
             {
               dealii::FullMatrix<double> m(local_entry_matrix);
               m = 0.;
-              _OP.InterfaceMatrix(fdc,  m);
+              this->GetProblem().InterfaceMatrix(fdc,  m);
               local_entry_matrix.add(_fs_alpha, m);
             }
-          else if (_part == "New_for_2nd_cycle")
+          else if (this->GetPart() == "New_for_2nd_cycle")
             {
               dealii::FullMatrix<double> m(local_entry_matrix);
               m = 0.;
-              _OP.InterfaceMatrix(fdc,  m);
+              this->GetProblem().InterfaceMatrix(fdc,  m);
               local_entry_matrix.add(_fs_alpha * _fs_theta / _fs_theta_prime, m);
             }
 
@@ -716,22 +567,22 @@ namespace DOpE
         BoundaryEquation(const FACEDATACONTAINER& fdc,
             dealii::Vector<double> &local_cell_vector, double scale = 1.)
         {
-          if (_part == "New_for_1st_and_3rd_cycle")
+          if (this->GetPart() == "New_for_1st_and_3rd_cycle")
             {
-              _OP.BoundaryEquation(fdc, local_cell_vector, scale * _fs_alpha);
+              this->GetProblem().BoundaryEquation(fdc, local_cell_vector, scale * _fs_alpha);
             }
-          else if ((_part == "Old_for_1st_cycle") || (_part
+          else if ((this->GetPart() == "Old_for_1st_cycle") || (this->GetPart()
               == "Old_for_3rd_cycle"))
             {
-              _OP.BoundaryEquation(fdc, local_cell_vector, scale * _fs_beta);
+              this->GetProblem().BoundaryEquation(fdc, local_cell_vector, scale * _fs_beta);
             }
-          else if (_part == "New_for_2nd_cycle")
+          else if (this->GetPart() == "New_for_2nd_cycle")
             {
-              _OP.BoundaryEquation(fdc, local_cell_vector, scale * _fs_beta);
+              this->GetProblem().BoundaryEquation(fdc, local_cell_vector, scale * _fs_beta);
             }
-          else if (_part == "Old_for_2nd_cycle")
+          else if (this->GetPart() == "Old_for_2nd_cycle")
             {
-              _OP.BoundaryEquation(fdc, local_cell_vector, scale * _fs_alpha);
+              this->GetProblem().BoundaryEquation(fdc, local_cell_vector, scale * _fs_alpha);
             }
           else
             {
@@ -743,7 +594,7 @@ namespace DOpE
       /******************************************************/
 
       /**
-       * Not implemented so far. Returns just _OP.FaceMatrix(...). For more information we refer to
+       * Not implemented so far. Returns just this->GetProblem().FaceMatrix(...). For more information we refer to
        * the file optproblemcontainer.h
        */
       template<typename FACEDATACONTAINER>
@@ -751,7 +602,7 @@ namespace DOpE
         BoundaryRhs(const FACEDATACONTAINER& fdc,
             dealii::Vector<double> &local_cell_vector, double scale = 1.)
         {
-          _OP.BoundaryRhs(fdc, local_cell_vector, scale);
+          this->GetProblem().BoundaryRhs(fdc, local_cell_vector, scale);
         }
 
       /******************************************************/
@@ -785,378 +636,22 @@ namespace DOpE
         BoundaryMatrix(const FACEDATACONTAINER& fdc,
             dealii::FullMatrix<double> &local_cell_matrix)
         {
-          if (_part == "New_for_1st_and_3rd_cycle")
+          if (this->GetPart() == "New_for_1st_and_3rd_cycle")
             {
               dealii::FullMatrix<double> m(local_cell_matrix);
               m = 0.;
-              _OP.BoundaryMatrix(fdc, m);
+              this->GetProblem().BoundaryMatrix(fdc, m);
               local_cell_matrix.add(_fs_alpha, m);
             }
-          else if (_part == "New_for_2nd_cycle")
+          else if (this->GetPart() == "New_for_2nd_cycle")
             {
               dealii::FullMatrix<double> m(local_cell_matrix);
               m = 0.;
-              _OP.BoundaryMatrix(fdc, m);
+              this->GetProblem().BoundaryMatrix(fdc, m);
               local_cell_matrix.add(_fs_beta, m);
             }
         }
-
-      /******************************************************/
-
-      /**
-       * A pointer to the whole FESystem
-       *
-       * @return A const pointer to the FESystem()
-       */
-      const dealii::SmartPointer<const DOpEWrapper::FiniteElement<dealdim> >
-      GetFESystem() const
-      {
-        return _OP.GetFESystem();
-      }
-
-      /******************************************************/
-
-      /**
-       * This function determines whether a loop over all faces is required or not.
-       *
-       * @return Returns whether or not this functional has components on faces between elements.
-       *         The default value is false.
-       */
-      bool
-      HasFaces() const
-      {
-        return _OP.HasFaces();
-      }
-
-      /******************************************************/
-      /**
-       * This function determines whether point evaluations are required or not.
-       *
-       * @return Returns whether or not this functional needs evaluations of
-       *         point values.
-       */
-      bool
-      HasPoints() const
-      {
-        return _OP.HasPoints();
-      }
-      /******************************************************/
-      /**
-       * This function determines whether a loop over all faces is required or not.
-       *
-       * @return Returns whether or not this functional has components on faces between elements.
-       *         The default value is false.
-       */
-      bool
-      HasInterfaces() const
-      {
-        return _OP.HasInterfaces();
-      }
-
-      /******************************************************/
-
-      /**
-       * This function returns the update flags for domain values
-       * for the computation of shape values, gradients, etc.
-       * For detailed explication, please visit `Finite element access/FEValues classes' in
-       * the deal.ii manual.
-       *
-       * @return Returns the update flags to use in a computation.
-       */
-      dealii::UpdateFlags
-      GetUpdateFlags() const
-      {
-        return _OP.GetUpdateFlags();
-      }
-
-      /******************************************************/
-
-      /**
-       * This function returns the update flags for face values
-       * for the computation of shape values, gradients, etc.
-       * For detailed explication, please visit
-       * `FEFaceValues< dim, spacedim > Class Template Reference' in
-       * the deal.ii manual.
-       *
-       * @return Returns the update flags for faces to use in a computation.
-       */
-      dealii::UpdateFlags
-      GetFaceUpdateFlags() const
-      {
-        return _OP.GetFaceUpdateFlags();
-      }
-
-      /******************************************************/
-
-      /**
-       * A std::vector of integer values which contains the colors of Dirichlet boundaries.
-       *
-       * @return Returns the Dirichlet Colors.
-       */
-      const std::vector<unsigned int>&
-      GetDirichletColors() const
-      {
-        return _OP.GetDirichletColors();
-      }
-
-      /******************************************************/
-
-      /**
-       * A std::vector of boolean values to decide at which parts of the boundary and solutions variables
-       * Dirichlet values should be applied.
-       *
-       * @return Returns a component mask for each boundary color.
-       */
-      const std::vector<bool>&
-      GetDirichletCompMask(unsigned int color) const
-      {
-        return _OP.GetDirichletCompMask(color);
-      }
-
-      /******************************************************/
-
-      /**
-       * This dealii::Function of dimension `dealdim' knows what Dirichlet values to apply
-       * on each boundary part with color 'color'.
-       *
-       * @return Returns a dealii::Function of Dirichlet values of the boundary part with color 'color'.
-       */
-      const dealii::Function<dealdim>&
-      GetDirichletValues(
-          unsigned int color,
-          //							const DOpEWrapper::DoFHandler<dopedim> & control_dof_handler,
-          //							const DOpEWrapper::DoFHandler<dealdim> &state_dof_handler,
-          const std::map<std::string, const dealii::Vector<double>*> &param_values,
-          const std::map<std::string, const VECTOR*> &domain_values) const
-      {
-        return _OP.GetDirichletValues(color,/*control_dof_handler,state_dof_handler,*/
-        param_values, domain_values);
-      }
-
-      /******************************************************/
-
-      /**
-       * This dealii::Function of dimension `dealdim' applies the initial values to the PDE- or Optimization
-       * problem, respectively.
-       *
-       * @return Returns a dealii::Function of initial values.
-       */
-      const dealii::Function<dealdim>&
-      GetInitialValues() const
-      {
-        return _OP.GetInitialValues();
-      }
-
-      /******************************************************/
-
-      /**
-       * A std::vector of integer values which contains the colors of the boundary equation.
-       *
-       * @return Returns colors for the boundary equation.
-       */
-      const std::vector<unsigned int>&
-      GetBoundaryEquationColors() const
-      {
-        return _OP.GetBoundaryEquationColors();
-      }
-
-      /******************************************************/
-
-      /**
-       * A std::vector of integer values which contains the colors of the boundary functionals.
-       *
-       * @return Returns colors for the boundary functionals.
-       */
-      const std::vector<unsigned int>&
-      GetBoundaryFunctionalColors() const
-      {
-        return _OP.GetBoundaryFunctionalColors();
-      }
-
-      /******************************************************/
-
-      /**
-       * This function returns the number of functionals to be considered in the problem.
-       *
-       * @return Returns the number of functionals.
-       */
-      unsigned int
-      GetNFunctionals() const
-      {
-        return _OP.GetNFunctionals();
-      }
-
-      /******************************************************/
-
-      /**
-       * This function gets the number of blocks considered in the PDE problem.
-       * Example 1: in fluid problems we have to find velocities and pressure
-       * --> number of blocks is 2.
-       * Example 2: in FSI problems we have to find velocities, displacements, and pressure.
-       *  --> number of blocks is 3.
-       *
-       * @return Returns the number of blocks.
-       */
-      unsigned int
-      GetNBlocks() const
-      {
-        return _OP.GetNBlocks();
-      }
-
-      /******************************************************/
-
-      /**
-       * A function which has the number of degrees of freedom for the block `b'.
-       *
-       * @return Returns the number of DoFs for block `b'.
-       */
-      unsigned int
-      GetDoFsPerBlock(unsigned int b) const
-      {
-        return _OP.GetDoFsPerBlock(b);
-      }
-
-      /******************************************************/
-
-      /**
-       * A std::vector which contains the number of degrees of freedom per block.
-       *
-       * @return Returns a vector with DoFs.
-       */
-      const std::vector<unsigned int>&
-      GetDoFsPerBlock() const
-      {
-        return _OP.GetDoFsPerBlock();
-      }
-
-      /******************************************************/
-
-      /**
-       * A dealii function. Please visit: ConstraintMatrix in the deal.ii manual.
-       *
-       * @return Returns a matrix with hanging node constraints.
-       */
-      const dealii::ConstraintMatrix&
-      GetDoFConstraints() const
-      {
-        return _OP.GetDoFConstraints();
-      }
-
-      std::string
-      GetType() const
-      {
-        return _OP.GetType();
-      }
-      std::string
-      GetDoFType() const
-      {
-        return _OP.GetDoFType();
-      }
-
-      /******************************************************/
-
-      /**
-       * This function describes what type of Functional is considered
-       *
-       * @return A string describing the functional, feasible values are "domain", "boundary", "point" or "face"
-       *         if it contains domain, or boundary ... parts all combinations of these keywords are feasible.
-       *         In time dependent problems use "timelocal" to indicate that
-       *         it should only be evaluated at a certain time_point, or "timedistributed" to consider \int_0^T J(t,q(t),u(t))  \dt
-       *         only one of the words "timelocal" and "timedistributed" should be considered if not it will be considered to be
-       *         "timelocal"
-       *
-       */
-      std::string
-      GetFunctionalType() const
-      {
-        return _OP.GetFunctionalType();
-      }
-
-      /******************************************************/
-
-      /**
-       * This function is used to name the Functional, this is helpful to distinguish different Functionals in the output.
-       *
-       * @return A string. This is the name beeing displayed next to the computed values.
-       */
-      std::string
-      GetFunctionalName() const
-      {
-        return _OP.GetFunctionalName();
-      }
-
-      /******************************************************/
-
-      /**
-       * A pointer to the OutputHandler() object.
-       *
-       * @return The OutputHandler() object.
-       */
-      DOpEOutputHandler<VECTOR>*
-      GetOutputHandler()
-      {
-        return _OP.GetOutputHandler();
-      }
-
-      /******************************************************/
-
-      /**
-       * A pointer to the SpaceTimeHandler<dopedim,dealdim>  object.
-       *
-       * @return The SpaceTimeHandler() object.
-       */
-      const SpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR,
-          dopedim, dealdim>*
-      GetSpaceTimeHandler() const
-      {
-        return _OP.GetBaseProblem().GetSpaceTimeHandler();
-      }
-      SpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR, dopedim,
-          dealdim>*
-      GetSpaceTimeHandler()
-      {
-        return _OP.GetBaseProblem().GetSpaceTimeHandler();
-      }
-
-      /******************************************************/
-
-      void
-      ComputeSparsityPattern(SPARSITYPATTERN & sparsity) const
-      {
-        _OP.ComputeSparsityPattern(sparsity);
-      }
-
-      bool
-      L2ProjectionInitialDataWithDeal() const
-      {
-        return true;
-      }
-
-      /******************************************************/
-      /**
-       * Access to the private membervariable _fe_values_needed_to_be_initialized which
-       * points out the necessity to initialize the fevalues. This is needed in the
-       * Solverclass (i.e. statsolver or instatsolver), which holds coordinates the
-       * initialization of the fevalues, which are stored in the SpaceTimeHandler.
-       *
-       */
-      bool
-      GetFEValuesNeededToBeInitialized() const
-      {
-        return _OP.GetFEValuesNeededToBeInitialized();
-      }
-
-      void
-      SetFEValuesAreInitialized()
-      {
-        _OP.SetFEValuesAreInitialized();
-      }
-
-      /******************************************************/
     private:
-      OPTPROBLEM& _OP;
-      std::string _part;
-
       // parameters for FS scheme
       double _fs_theta;
       double _fs_theta_prime;

@@ -22,7 +22,7 @@ SRCDIR = $(DOpE)/source/
 cc-files = $(shell echo *.cc)
 nodim-cc-files = 
 
-h-files = $(wildcard ../include/*.h) $(wildcard ../templates/*.h) $(wildcard ../wrapper/*.h) $(wildcard ../basic/*.h) $(wildcard ../problemdata/*.h) $(wildcard ../interfaces/*.h) $(wildcard ../container/*.h) $(wildcard ../opt_algorithms/*.h)
+h-files = $(wildcard ../include/*.h) $(wildcard ../templates/*.h) $(wildcard ../wrapper/*.h) $(wildcard ../basic/*.h) $(wildcard ../problemdata/*.h) $(wildcard ../interfaces/*.h) $(wildcard ../container/*.h) $(wildcard ../opt_algorithms/*.h) $(wildcard ../tsschemes/*.h)
 
 ############################################################
 # Include general settings for including DEAL libraries
@@ -155,7 +155,7 @@ veryclean: clean
 	rm -f *.a *.inp *.gpl *.eps *.gnuplot Makefile.depend
 	rm ../lib/?d/?d/*.a
 
-INCLUDE += -I../include -I../templates -I../wrapper -I../basic -I../problemdata -I../interfaces -I../reducedproblems -I../container -I../opt_algorithms
+INCLUDE += -I../include -I../templates -I../wrapper -I../basic -I../problemdata -I../interfaces -I../reducedproblems -I../container -I../opt_algorithms -I../tsschemes
 
 all-cc-files = $(shell echo *.cc)
 
