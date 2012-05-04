@@ -6,7 +6,7 @@
 namespace DOpE
 {
   template<template<typename BASE_PROB, typename SPARSITYPATTERN, typename VECTOR,int dopedim, int dealdim, typename FE, typename DOFHANDLER> class PRIMALTSPROBLEM, 
-    template<typename BASE_PROB, typename SPARSITYPATTERN, typename VECTOR,int dopedim, int dealdim, typename FE, typename DOFHANDLER> class  DUALTSPROBLEM, 
+    template<typename BASE_PROB, typename SPARSITYPATTERN, typename VECTOR,int dopedim, int dealdim, typename FE, typename DOFHANDLER> class  ADJOINTTSPROBLEM, 
     typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
     typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
     typename VECTOR, int dopedim, int dealdim,
@@ -19,7 +19,7 @@ namespace DOpE
   InstatOptProblemContainer(FUNCTIONAL& functional,PDE& pde,CONSTRAINTS& constraints,
 			    SpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR, dopedim,dealdim>& STH)
   : OptProblemContainer<FUNCTIONAL_INTERFACE,FUNCTIONAL,PDE,DD,CONSTRAINTS,SPARSITYPATTERN,VECTOR,dopedim,dealdim,FE, DOFHANDLER>(
-    functional,pde,constraints,STH), _ts_state_problem(NULL)
+    functional,pde,constraints,STH), _ts_state_problem(NULL), _ts_adjoint_problem(NULL)
   {
   }
   
@@ -29,6 +29,10 @@ namespace DOpE
     {
       delete _ts_state_problem;
     }
+    if(_ts_adjoint_problem != NULL)
+    {
+      delete _ts_adjoint_problem;
+    }
   }
 
   void ReInit(std::string algo_type)
@@ -37,6 +41,11 @@ namespace DOpE
     {
       delete _ts_state_problem;
       _ts_state_problem = NULL;
+    }
+    if(_ts_adjoint_problem != NULL)
+    {
+      delete _ts_adjoint_problem;
+      _ts_adjoint_problem = NULL;
     }
 
     OptProblemContainer<FUNCTIONAL_INTERFACE,FUNCTIONAL,PDE,DD,CONSTRAINTS,SPARSITYPATTERN,VECTOR,dopedim,dealdim,FE, DOFHANDLER>::ReInit(algo_type);
@@ -63,25 +72,25 @@ namespace DOpE
     return *_ts_state_problem;
   }
   //FIXME: This should use the GetAdjointProblem of OptProblemContainer once availiable simillar for all calls
-  // to DUALTSPROBLEM ...
-  DUALTSPROBLEM<OptProblemContainer<FUNCTIONAL_INTERFACE,FUNCTIONAL,PDE,DD,CONSTRAINTS,SPARSITYPATTERN,VECTOR,dopedim,dealdim,FE, DOFHANDLER>,
+  // to ADJOINTTSPROBLEM ...
+  ADJOINTTSPROBLEM<OptProblemContainer<FUNCTIONAL_INTERFACE,FUNCTIONAL,PDE,DD,CONSTRAINTS,SPARSITYPATTERN,VECTOR,dopedim,dealdim,FE, DOFHANDLER>,
   SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DOFHANDLER>& GetAdjointProblem()
   {
-    if(_ts_dual_problem == NULL)
+    if(_ts_adjoint_problem == NULL)
     {
-      _ts_dual_problem = new DUALTSPROBLEM<OptProblemContainer<FUNCTIONAL_INTERFACE,FUNCTIONAL,PDE,DD,CONSTRAINTS,SPARSITYPATTERN,VECTOR,dopedim,dealdim,FE, DOFHANDLER>,
+      _ts_adjoint_problem = new ADJOINTTSPROBLEM<OptProblemContainer<FUNCTIONAL_INTERFACE,FUNCTIONAL,PDE,DD,CONSTRAINTS,SPARSITYPATTERN,VECTOR,dopedim,dealdim,FE, DOFHANDLER>,
       SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DOFHANDLER>(OptProblemContainer<FUNCTIONAL_INTERFACE,FUNCTIONAL,PDE,DD,CONSTRAINTS,
 								 SPARSITYPATTERN,VECTOR,dopedim,dealdim,FE, DOFHANDLER>::GetBaseProblem());
     }
-    return *_ts_dual_problem;
+    return *_ts_adjoint_problem;
   }
 private:
   PRIMALTSPROBLEM<StateProblem<
       OptProblemContainer<FUNCTIONAL_INTERFACE,FUNCTIONAL,PDE,DD,CONSTRAINTS,SPARSITYPATTERN,VECTOR,dopedim,dealdim,FE, DOFHANDLER>,
       PDE, DD, SPARSITYPATTERN, VECTOR, dopedim, dealdim>,
       SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DOFHANDLER>* _ts_state_problem;
-  DUALTSPROBLEM<OptProblemContainer<FUNCTIONAL_INTERFACE,FUNCTIONAL,PDE,DD,CONSTRAINTS,SPARSITYPATTERN,VECTOR,dopedim,dealdim,FE, DOFHANDLER>,
-      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DOFHANDLER>* _ts_dual_problem;
+  ADJOINTTSPROBLEM<OptProblemContainer<FUNCTIONAL_INTERFACE,FUNCTIONAL,PDE,DD,CONSTRAINTS,SPARSITYPATTERN,VECTOR,dopedim,dealdim,FE, DOFHANDLER>,
+      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DOFHANDLER>* _ts_adjoint_problem;
 };
 }
 #endif

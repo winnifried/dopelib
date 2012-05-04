@@ -324,7 +324,7 @@ namespace DOpE
     void
     StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dopedim, dealdim>::PointRhs(
         const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
-        const std::map<std::string, const VECTOR*> &d/*omain_values*/,
+        const std::map<std::string, const VECTOR*> &/*domain_values*/,
         VECTOR& /*rhs_vector*/, double /*scale*/)
     {
 
