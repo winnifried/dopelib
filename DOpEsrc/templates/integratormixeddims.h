@@ -18,7 +18,7 @@
 
 #include "celldatacontainer.h"
 #include "facedatacontainer.h"
-#include "optproblem.h"
+#include "optproblemcontainer.h"
 
 namespace DOpE
 {

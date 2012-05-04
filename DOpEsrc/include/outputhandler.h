@@ -9,7 +9,7 @@
 #include <sstream>
 #include <lac/vector.h>
 
-#include "optproblem.h"
+#include "optproblemcontainer.h"
 #include "controlvector.h"
 #include "parameterreader.h"
 

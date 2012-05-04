@@ -741,7 +741,7 @@ template<typename DATACONTAINER>
 
     /**
      * Not implemented so far. Returns just _OP.FaceEquation(...). For more information we refer to 
-     * the file optproblem.h
+     * the file optproblemcontainer.h
      */
 template<typename FACEDATACONTAINER>
     void FaceEquation(const FACEDATACONTAINER& fdc,
@@ -755,7 +755,7 @@ template<typename FACEDATACONTAINER>
 
     /**
      * Not implemented so far. Returns just _OP.FaceRhs(...). For more information we refer to 
-     * the file optproblem.h
+     * the file optproblemcontainer.h
      */
 template<typename FACEDATACONTAINER>
     void FaceRhs(const FACEDATACONTAINER& fdc,
@@ -769,7 +769,7 @@ template<typename FACEDATACONTAINER>
 
     /**
      * Not implemented so far. Returns just _OP.FaceMatrix(...). For more information we refer to 
-     * the file optproblem.h
+     * the file optproblemcontainer.h
      */
 template<typename FACEDATACONTAINER>
     void FaceMatrix(const FACEDATACONTAINER& fdc,
@@ -795,7 +795,7 @@ template<typename FACEDATACONTAINER>
 
     /**
      * Not implemented so far. Returns just _OP.FaceMatrix(...). For more information we refer to 
-     * the file optproblem.h
+     * the file optproblemcontainer.h
      */
 template<typename FACEDATACONTAINER>
   void BoundaryRhs(const FACEDATACONTAINER& fdc,

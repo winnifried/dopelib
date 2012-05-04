@@ -1,7 +1,7 @@
 #ifndef _REDUCED_ALGORITHM_H_
 #define _REDUCED_ALGORITHM_H_
 
-#include "optproblem.h"
+#include "optproblemcontainer.h"
 #include "reducedprobleminterface.h"
 #include "dopeexceptionhandler.h"
 #include "outputhandler.h"

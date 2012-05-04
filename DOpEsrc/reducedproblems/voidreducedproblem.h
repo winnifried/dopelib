@@ -12,7 +12,7 @@
 #include <lac/block_sparsity_pattern.h>
 #include <lac/block_sparse_matrix.h>
 
-#include "optproblem.h"
+#include "optproblemcontainer.h"
 #include "pdeinterface.h"
 #include "functionalinterface.h"
 #include "dirichletdatainterface.h"

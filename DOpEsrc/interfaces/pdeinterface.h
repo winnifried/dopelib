@@ -33,7 +33,7 @@ namespace DOpE
         /******************************************************/
 
         /**
-         * Documentation in optproblem.h.
+         * Documentation in optproblemcontainer.h.
          */
         virtual void
         CellEquation(const CDC<DOFHANDLER, VECTOR, dealdim>& cdc,
@@ -43,7 +43,7 @@ namespace DOpE
         /******************************************************/
 
         /**
-         * Documentation in optproblem.h.
+         * Documentation in optproblemcontainer.h.
          */
 
         virtual void
@@ -54,7 +54,7 @@ namespace DOpE
         /******************************************************/
 
         /**
-         * Documentation in optproblem.h.
+         * Documentation in optproblemcontainer.h.
          */
         virtual void
         CellTimeEquation(const CDC<DOFHANDLER, VECTOR, dealdim>&,
@@ -63,7 +63,7 @@ namespace DOpE
         /******************************************************/
 
         /**
-         * Documentation in optproblem.h.
+         * Documentation in optproblemcontainer.h.
          */
         virtual void
         CellTimeEquationExplicit(const CDC<DOFHANDLER, VECTOR, dealdim>&,
@@ -139,7 +139,7 @@ namespace DOpE
         /******************************************************/
 
         /**
-         * Documentation in optproblem.h.
+         * Documentation in optproblemcontainer.h.
          */
         virtual void
         CellRightHandSide(const CDC<DOFHANDLER, VECTOR, dealdim>&,
@@ -148,7 +148,7 @@ namespace DOpE
         /******************************************************/
 
         /**
-         * Documentation in optproblem.h.
+         * Documentation in optproblemcontainer.h.
          */
         virtual void
         CellMatrix(const CDC<DOFHANDLER, VECTOR, dealdim>&,
@@ -158,7 +158,7 @@ namespace DOpE
         /******************************************************/
 
         /**
-         * Documentation in optproblem.h.
+         * Documentation in optproblemcontainer.h.
          */
         virtual void
         CellTimeMatrix(const CDC<DOFHANDLER, VECTOR, dealdim>&,
@@ -167,7 +167,7 @@ namespace DOpE
         /******************************************************/
 
         /**
-         * Documentation in optproblem.h.
+         * Documentation in optproblemcontainer.h.
          */
         virtual void
         CellTimeMatrixExplicit(const CDC<DOFHANDLER, VECTOR, dealdim>&,
@@ -195,7 +195,7 @@ namespace DOpE
         /******************************************************/
         // Functions for Face Integrals
         /**
-         * Documentation in optproblem.h.
+         * Documentation in optproblemcontainer.h.
          */
         virtual void
         FaceEquation(const FDC<DOFHANDLER, VECTOR, dealdim>&,
@@ -203,7 +203,7 @@ namespace DOpE
         /******************************************************/
 
         /**
-         * Documentation in optproblem.h.
+         * Documentation in optproblemcontainer.h.
          */
 
         virtual void
@@ -287,7 +287,7 @@ namespace DOpE
         /******************************************************/
 
         /**
-         * Documentation in optproblem.h.
+         * Documentation in optproblemcontainer.h.
          */
         virtual void
         FaceMatrix(const FDC<DOFHANDLER, VECTOR, dealdim>&,
@@ -325,7 +325,7 @@ namespace DOpE
 
         /******************************************************/
         /**
-         * Documentation in optproblem.h
+         * Documentation in optproblemcontainer.h
          */
 
         virtual void
@@ -334,7 +334,7 @@ namespace DOpE
 
         /******************************************************/
         /**
-         * Documentation in optproblem.h
+         * Documentation in optproblemcontainer.h
          */
 
         virtual void
@@ -344,7 +344,7 @@ namespace DOpE
         /******************************************************/
         // Functions for Boundary Integrals
         /**
-         * Documentation in optproblem.h.
+         * Documentation in optproblemcontainer.h.
          */
         virtual void
         BoundaryEquation(const FDC<DOFHANDLER, VECTOR, dealdim>&,
@@ -353,7 +353,7 @@ namespace DOpE
         /******************************************************/
 
         /**
-         * Documentation in optproblem.h.
+         * Documentation in optproblemcontainer.h.
          */
 
         virtual void
@@ -437,7 +437,7 @@ namespace DOpE
         /******************************************************/
 
         /**
-         * Documentation in optproblem.h.
+         * Documentation in optproblemcontainer.h.
          */
         virtual void
         BoundaryMatrix(const FDC<DOFHANDLER, VECTOR, dealdim>&,

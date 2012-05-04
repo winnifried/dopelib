@@ -102,7 +102,7 @@ namespace DOpE
 
       /**
        * Not implemented so far. Returns just _OP.CellFunctional(...). For more information we refer to
-       * the file optproblem.h
+       * the file optproblemcontainer.h
        */
       template<typename DATACONTAINER>
         double
@@ -115,7 +115,7 @@ namespace DOpE
 
       /**
        * Not implemented so far. Returns just _OP.PointFunctional(...). For more information we refer to
-       * the file optproblem.h
+       * the file optproblemcontainer.h
        */
       double
       PointFunctional(
@@ -129,7 +129,7 @@ namespace DOpE
 
       /**
        * Not implemented so far. Returns just _OP.BoundaryFunctional(...). For more information we refer to
-       * the file optproblem.h
+       * the file optproblemcontainer.h
        */
       template<typename FACEDATACONTAINER>
         double
@@ -142,7 +142,7 @@ namespace DOpE
 
       /**
        * Not implemented so far. Returns just _OP.FaceFunctional(...). For more information we refer to
-       * the file optproblem.h
+       * the file optproblemcontainer.h
        */
       template<typename FACEDATACONTAINER>
         double
@@ -401,7 +401,7 @@ namespace DOpE
 
       /**
        * Not implemented so far. Returns just _OP.FaceEquation(...). For more information we refer to
-       * the file optproblem.h
+       * the file optproblemcontainer.h
        */
       template<typename FACEDATACONTAINER>
         void
@@ -428,7 +428,7 @@ namespace DOpE
 
       /**
        * Not implemented so far. Returns just _OP.FaceEquation(...). For more information we refer to
-       * the file optproblem.h
+       * the file optproblemcontainer.h
        */
       template<typename FACEDATACONTAINER>
         void
@@ -457,7 +457,7 @@ namespace DOpE
 
       /**
        * Not implemented so far. Returns just _OP.FaceRhs(...). For more information we refer to
-       * the file optproblem.h
+       * the file optproblemcontainer.h
        */
       template<typename FACEDATACONTAINER>
         void
@@ -471,7 +471,7 @@ namespace DOpE
 
       /**
        * Not implemented so far. Returns just _OP.FaceMatrix(...). For more information we refer to
-       * the file optproblem.h
+       * the file optproblemcontainer.h
        */
       template<typename FACEDATACONTAINER>
         void
@@ -493,7 +493,7 @@ namespace DOpE
 
       /**
        * Not implemented so far. Returns just _OP.InterfaceMatrix(...).
-       * For more information we refer to the file optproblem.h
+       * For more information we refer to the file optproblemcontainer.h
        */
       template<typename FACEDATACONTAINER>
         void
@@ -561,7 +561,7 @@ namespace DOpE
 
       /**
        * Not implemented so far. Returns just _OP.FaceMatrix(...). For more information we refer to
-       * the file optproblem.h
+       * the file optproblemcontainer.h
        */
       template<typename FACEDATACONTAINER>
         void

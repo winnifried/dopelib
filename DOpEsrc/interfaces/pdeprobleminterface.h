@@ -87,7 +87,7 @@ namespace DOpE
         /******************************************************/
         /**
          * Sets the type of the Problem _OP. This function secures the proper initialization of the
-         * FEValues after the type has changed. See also the documentation of SetType in optproblem.h
+         * FEValues after the type has changed. See also the documentation of SetType in optproblemcontainer.h
          */
         void
         SetProblemType(std::string type, unsigned int num = 0)
