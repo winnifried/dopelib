@@ -73,7 +73,9 @@ typedef OptProblem<FUNC,FUNC,PDE,DD,CONS,SPARSITYPATTERN, VECTOR, LOCALDOPEDIM,L
 
 // Typedefs for timestep problem
 typedef ShiftedCrankNicolsonProblem<PROB, SPARSITYPATTERN, VECTOR, LOCALDOPEDIM, LOCALDEALDIM> TSP;
-typedef InstatOptProblemContainer<TSP,FUNC,FUNC,PDE,DD,CONS,SPARSITYPATTERN, VECTOR, LOCALDOPEDIM,LOCALDEALDIM> OP;
+//FIXME: This should be a reasonable dual timestepping scheme
+typedef ShiftedCrankNicolsonProblem<OP_BASE, SPARSITYPATTERN, VECTOR, LOCALDOPEDIM, LOCALDEALDIM> DTSP;
+typedef InstatOptProblemContainer<TSP,DTSP,FUNC,FUNC,PDE,DD,CONS,SPARSITYPATTERN, VECTOR, LOCALDOPEDIM,LOCALDEALDIM> OP;
 typedef IntegratorDataContainer<DOFHANDLER, dealii::Quadrature<LOCALDEALDIM>, dealii::Quadrature<LOCALDEALDIM-1>, VECTOR, LOCALDEALDIM > IDC;
 
 typedef Integrator<IDC , VECTOR , double, LOCALDEALDIM> INTEGRATOR;

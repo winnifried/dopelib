@@ -580,9 +580,23 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER, typename CON
     int dealdim>
 void InstatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER, CONTROLINTEGRATOR, INTEGRATOR,
     PROBLEM, VECTOR, dopedim, dealdim>::ComputeReducedAdjoint(
-      const ControlVector<VECTOR>& /*q*/)
+      const ControlVector<VECTOR>& q)
 {
-  abort();
+  this->GetOutputHandler()->Write("Computing Adjoint Solution:", 4 + this->GetBasePriority());
+
+  this->SetProblemType("adjoint");
+  auto& problem = this->GetProblem()->GetAdjointProblem();
+  if (_adjoint_reinit == true)
+  {
+    GetNonlinearSolver("adjoint").ReInit(problem);
+    _adjoint_reinit = false;
+  }
+
+  this->GetProblem()->AddAuxiliaryState(&(this->GetU()),"state");
+  this->GetProblem()->AddAuxiliaryControl(&q,"control");
+  this->BackwardTimeLoop(problem,this->GetZ(),"Adjoint");
+  this->GetProblem()->DeleteAuxiliaryControl("control");
+  this->GetProblem()->DeleteAuxiliaryState("state");
 }
 
 /******************************************************/

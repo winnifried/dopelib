@@ -65,7 +65,9 @@ typedef OptProblem<FUNC, FUNC, PDE, DD, CONS, SPARSITYPATTERN, VECTOR,
 
 // Typedefs for timestep problem
 typedef BackwardEulerProblem<PROB, SPARSITYPATTERN, VECTOR, 2, 2> TSP;
-typedef InstatOptProblemContainer<TSP, FUNC, FUNC, PDE, DD, CONS,
+//FIXME: This should be a reasonable dual timestepping scheme
+typedef BackwardEulerProblem<OP_BASE, SPARSITYPATTERN, VECTOR, 2, 2> DTSP;
+typedef InstatOptProblemContainer<TSP, DTSP,FUNC, FUNC, PDE, DD, CONS,
     SPARSITYPATTERN, VECTOR, LOCALDOPEDIM, LOCALDEALDIM> OP;
 typedef IntegratorDataContainer<DOFHANDLER, dealii::Quadrature<LOCALDEALDIM>,
     dealii::Quadrature<LOCALDEALDIM - 1>, VECTOR, LOCALDEALDIM> IDC;

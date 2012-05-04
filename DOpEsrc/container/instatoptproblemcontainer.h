@@ -5,7 +5,7 @@
 
 namespace DOpE
 {
-  template<typename PRIMALTSPROBLEM, typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
+  template<typename PRIMALTSPROBLEM, typename DUALTSPROBLEM, typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
       typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
       typename VECTOR, int dopedim, int dealdim,
       typename FE = DOpEWrapper::FiniteElement<dealdim>,
@@ -54,8 +54,19 @@ namespace DOpE
     }
     return *_ts_state_problem;
   }
+  //FIXME: This should use the GetAdjointProblem of OptProblem once availiable
+  DUALTSPROBLEM& GetAdjointProblem()
+  {
+    if(_ts_dual_problem == NULL)
+    {
+      _ts_dual_problem = new DUALTSPROBLEM(OptProblem<FUNCTIONAL_INTERFACE,FUNCTIONAL,PDE,DD,CONSTRAINTS,
+					      SPARSITYPATTERN,VECTOR,dopedim,dealdim,FE, DOFHANDLER>::GetBaseProblem());
+    }
+    return *_ts_dual_problem;
+  }
 private:
   PRIMALTSPROBLEM* _ts_state_problem;
+  DUALTSPROBLEM* _ts_dual_problem;
 };
 }
 #endif
