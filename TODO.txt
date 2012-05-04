@@ -25,13 +25,14 @@ TODO DOpE
   condense(u)/distribute(u) stuff again, it should not be in the apply 
   boundary value stuff...
 
+- Pointfunctional as Optimization functional.
 - FE_Wrapper kann weg -> dealii::FESystem
 - FE_Values ? Kann man dim=0 anlegen? Dann kann der weg (Ja, habs auskommentiert,
   trotzdem laeufen alle Probleme korrekt durch (ausser OPT/7+8))~cg.
 
 - Remove unnecessary Template Parameter
   -- integrator.h: dim
-  -- mol_spacetimehandler etc: remove SPARSITYMAKER und CONSTRAINTSMAKER
+
 - pdeinterface.h - scale_ico auch fuer CellEquation_u etc. implementieren!
 
 - Problem typen ueber enum statt string ?
@@ -108,7 +109,6 @@ davon state und tangent bzw. dual und dual hessian ~ww
 - Make some automated memchecks, e.g., valgrind --tool=memcheck --leak-check=full --error-exitcode=1 [Programmname] 
   will return 0 if no errors but a nonzero exitcode if there are some errors...
 
-- Entferne vor jedem neuen Durchlauf von test.sh die Datei dope.log aus dem Testverzeichnis.
 - Verschiedene Kontrolltypen im Instationaeren, insbesondere Kontrolle in den AWen
 -  Rueckgabeklasse fuer Newton. 
 - Adjungierte Zeitschrittverfahren 
