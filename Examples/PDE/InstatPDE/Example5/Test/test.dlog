@@ -16,7 +16,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 0	 Residual (rel.):   1.00e+00
 			 Newton step: 1	 Residual (rel.): < 1.00e-10	 LineSearch {0} 
 	Writing [./Mesh0/State_InstatOptProblemContainer.00000.vtk]
-		Start-Time-Point evaluation: 0
+		Start-Time-Point evaluation: 1.00644
 			 Timestep: 1 (0 -> 0.02) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.03e-02
 			 Newton step: 0	 Residual (rel.):   1.00e+00
@@ -469,7 +469,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		End-Time-Point evaluation: 0.999964
 	CostFunctional: 0
 	Computing Functionals:
-	Start-Time-Point evaluation: 0
+	Start-Time-Point evaluation: 1.00644
 	End-Time-Point evaluation: 0.999964
-	Backward euler: u * u = 4528.71
+	Backward euler: u * u = 4593.54
 	

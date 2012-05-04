@@ -1400,8 +1400,8 @@ LOG: Allowing IterationCounter `Time' for filenames!
 	Computing Functionals:
 	Space-Time Pointevaluation: 0.00287191
 	Forward euler: u * u = 9.1374e+172
-	Backward euler: u * u = 3.04092
-	CN: u * u = 2.71523
-	ShiftedCN: u * u = 2.72653
-	FractionalStepTheta: u * u = 2.72052
+	Backward euler: u * u = 4.38467
+	CN: u * u = 4.05898
+	ShiftedCN: u * u = 4.07028
+	FractionalStepTheta: u * u = 4.06427
 	

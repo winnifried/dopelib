@@ -16,6 +16,7 @@
 #include "transposedhessiandirichletdata.h"
 #include "constraintvector.h"
 #include "controlvector.h"
+#include "statevector.h"
 #include "celldatacontainer.h"
 #include "facedatacontainer.h"
 
@@ -842,6 +843,11 @@ namespace DOpE
         /******************************************************/
 
         void
+        AddAuxiliaryState(const StateVector<VECTOR>* c, std::string name);
+
+        /******************************************************/
+
+        void
         AddAuxiliaryConstraint(const ConstraintVector<VECTOR>* c,
             std::string name);
 
@@ -852,8 +858,18 @@ namespace DOpE
 
         /******************************************************/
 
+        const StateVector<VECTOR>*
+        GetAuxiliaryState(std::string name) const;
+
+        /******************************************************/
+
         void
         DeleteAuxiliaryControl(std::string name);
+
+        /******************************************************/
+
+        void
+        DeleteAuxiliaryState(std::string name);
 
         /******************************************************/
 
@@ -902,6 +918,15 @@ namespace DOpE
                 }
               }
             }
+	    {
+              typename std::map<std::string, const StateVector<VECTOR> *>::iterator it =
+                  _auxiliary_state.begin();
+              for (; it != _auxiliary_state.end(); it++)
+              {
+                integrator.AddDomainData(it->first,
+					 &(it->second->GetSpacialVector()));                
+              }
+            }
             {
               typename std::map<std::string, const ConstraintVector<VECTOR> *>::iterator it =
                   _auxiliary_constraints.begin();
@@ -940,6 +965,14 @@ namespace DOpE
                   throw DOpEException("dopedim not implemented",
                       "OptProblem::AddAuxiliaryToIntegrator");
                 }
+              }
+            }
+	    {
+              typename std::map<std::string, const StateVector<VECTOR> *>::iterator it =
+                  _auxiliary_state.begin();
+              for (; it != _auxiliary_state.end(); it++)
+              {
+                integrator.DeleteDomainData(it->first);                
               }
             }
             {
@@ -1068,6 +1101,7 @@ namespace DOpE
         std::vector<unsigned int> _boundary_functional_colors;
 
         std::map<std::string, const ControlVector<VECTOR>*> _auxiliary_controls;
+        std::map<std::string, const StateVector<VECTOR>*> _auxiliary_state;
         std::map<std::string, const ConstraintVector<VECTOR>*> _auxiliary_constraints;
 
         StateProblem<
@@ -2583,20 +2617,6 @@ namespace DOpE
     }
   /******************************************************/
 
-  //FIXME kann das weg?
-  //  template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE, typename DD,
-  //      typename CONSTRAINTS, typename SPARSITYPATTERN, typename VECTOR,
-  //      int dopedim, int dealdim, typename FE, typename DOFHANDLER>
-  //    void
-  //    OptProblem<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS, SPARSITYPATTERN, VECTOR,
-  //        dopedim, dealdim,FE, DOFHANDLER>::PostProcessConstraints(
-  //        ConstraintVector<VECTOR>& g, bool process_global_in_time_constraints) const
-  //    {
-  //      return this->GetConstraints()->PostProcessConstraints(g,
-  //          process_global_in_time_constraints);
-  //    }
-  /******************************************************/
-
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
       typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
       typename VECTOR, int dopedim, int dealdim, typename FE,
@@ -2616,6 +2636,26 @@ namespace DOpE
           std::pair<std::string, const ControlVector<VECTOR>*>(name, c));
     }
 
+   /******************************************************/
+
+  template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
+      typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+      typename VECTOR, int dopedim, int dealdim, typename FE,
+      typename DOFHANDLER>
+    void
+    OptProblem<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
+        SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DOFHANDLER>::AddAuxiliaryState(
+        const StateVector<VECTOR>* c, std::string name)
+    {
+      if (_auxiliary_state.find(name) != _auxiliary_state.end())
+      {
+        throw DOpEException(
+            "Adding multiple Data with name " + name + " is prohibited!",
+            "OptProblem::AddAuxiliaryState");
+      }
+      _auxiliary_state.insert(
+          std::pair<std::string, const StateVector<VECTOR>*>(name, c));
+    }
   /******************************************************/
 
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
@@ -2663,6 +2703,27 @@ namespace DOpE
       typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
       typename VECTOR, int dopedim, int dealdim, typename FE,
       typename DOFHANDLER>
+    const StateVector<VECTOR>*
+    OptProblem<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
+        SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DOFHANDLER>::GetAuxiliaryState(
+        std::string name) const
+    {
+      typename std::map<std::string, const StateVector<VECTOR> *>::const_iterator it =
+          _auxiliary_state.find(name);
+      if (it == _auxiliary_state.end())
+      {
+        throw DOpEException("Could not find Data with name " + name,
+            "OptProblem::GetAuxiliaryState");
+      }
+      return it->second;
+    }
+
+  /******************************************************/
+
+  template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
+      typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+      typename VECTOR, int dopedim, int dealdim, typename FE,
+      typename DOFHANDLER>
     void
     OptProblem<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
         SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DOFHANDLER>::DeleteAuxiliaryControl(
@@ -2677,6 +2738,28 @@ namespace DOpE
             "OptProblem::DeleteAuxiliaryControl");
       }
       _auxiliary_controls.erase(it);
+    }
+
+  /******************************************************/
+
+  template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
+      typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+      typename VECTOR, int dopedim, int dealdim, typename FE,
+      typename DOFHANDLER>
+    void
+    OptProblem<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
+        SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DOFHANDLER>::DeleteAuxiliaryState(
+        std::string name)
+    {
+      typename std::map<std::string, const StateVector<VECTOR> *>::iterator it =
+          _auxiliary_state.find(name);
+      if (it == _auxiliary_state.end())
+      {
+        throw DOpEException(
+            "Deleting Data " + name + " is impossible! Data not found",
+            "OptProblem::DeleteAuxiliaryState");
+      }
+      _auxiliary_state.erase(it);
     }
 
   /******************************************************/

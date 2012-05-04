@@ -292,12 +292,10 @@ class InstatReducedProblem: public ReducedProblemInterface<PROBLEM, VECTOR, dope
      * a time dependent computation. For instance, drag- and lift values
      * can be computed, as well as deflections, stresses, etc.
      *
-     * @param q            The control vector is given to this function.
      * @param step         The actual time step.
      * @param num_steps    The total number of time steps.
      */
-    void ComputeTimeFunctionals( const ControlVector<VECTOR>& q,
-                                unsigned int step, unsigned int num_steps);
+    void ComputeTimeFunctionals(unsigned int step, unsigned int num_steps);
     /**
      * This function is running the time dependent problem for the state variable.
      * There is a loop over all time steps, and in each time step
@@ -330,7 +328,18 @@ class InstatReducedProblem: public ReducedProblemInterface<PROBLEM, VECTOR, dope
      *                     for auxilliary forward pdes, like the tangent one.
      */
     template<typename PDE>
-      void ForwardTimeLoop(PDE& problem, const ControlVector<VECTOR>& q, bool eval_funcs);
+      void ForwardTimeLoop(PDE& problem, StateVector<VECTOR>& sol, std::string outname, bool eval_funcs);
+
+    /******************************************************/
+
+    /**
+     * This function does the loop over time but in direction -t.
+     * 
+     * @param problem      Describes the nonstationary pde to be solved
+     * @param q            The given control vector
+     */
+    template<typename PDE>
+      void BackwardTimeLoop(PDE& problem, StateVector<VECTOR>& sol, std::string outname);
 
   private:
 
@@ -536,7 +545,9 @@ void InstatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER, CONTROLINTEGR
     _state_reinit = false;
   }
 
-  this->ForwardTimeLoop(problem,q,true);
+  this->GetProblem()->AddAuxiliaryControl(&q,"control");
+  this->ForwardTimeLoop(problem,this->GetU(),"State",true);
+  this->GetProblem()->DeleteAuxiliaryControl("control");
 }
 /******************************************************/
 
@@ -698,25 +709,11 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER, typename CON
     typename INTEGRATOR, typename PROBLEM, typename VECTOR, int dopedim,
     int dealdim>
 void InstatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER, CONTROLINTEGRATOR, INTEGRATOR,
-    PROBLEM, VECTOR, dopedim, dealdim>::ComputeTimeFunctionals( const ControlVector<VECTOR>& q,
-                                                                unsigned int step, unsigned int num_steps)
+    PROBLEM, VECTOR, dopedim, dealdim>::ComputeTimeFunctionals(unsigned int step, unsigned int num_steps)
 {
 
   this->GetProblem()->AddAuxiliaryToIntegrator(this->GetIntegrator());
 
-  if (dopedim == dealdim)
-  {
-    this->GetIntegrator().AddDomainData("control", &(q.GetSpacialVector()));
-  }
-  else if (dopedim == 0)
-  {
-    this->GetIntegrator().AddParamData("control", &(q.GetSpacialVectorCopy()));
-  }
-  else
-  {
-    throw DOpEException("dopedim not implemented",
-                        "StatReducedProblem::ComputeReducedCostFunctional");
-  }
   this->GetIntegrator().AddDomainData("state", &(GetU().GetSpacialVector()));
   double ret = 0;
   bool found = false;
@@ -872,20 +869,6 @@ void InstatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER, CONTROLINTEGR
       }
     }
   }
-  if (dopedim == dealdim)
-  {
-    this->GetIntegrator().DeleteDomainData("control");
-  }
-  else if (dopedim == 0)
-  {
-    this->GetIntegrator().DeleteParamData("control");
-    q.UnLockCopy();
-  }
-  else
-  {
-    throw DOpEException("dopedim not implemented",
-                        "StatReducedProblem::ComputeReducedCostFunctional");
-  }
   this->GetIntegrator().DeleteDomainData("state");
   this->GetProblem()->DeleteAuxiliaryFromIntegrator(this->GetIntegrator());
 
@@ -1012,11 +995,26 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
     template<typename PDE>
     void InstatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER,
     CONTROLINTEGRATOR, INTEGRATOR, PROBLEM, VECTOR, dopedim, dealdim>::
-    ForwardTimeLoop(PDE& problem, const ControlVector<VECTOR>& q, bool eval_funcs)
+    ForwardTimeLoop(PDE& problem, StateVector<VECTOR>& sol, std::string outname, bool eval_funcs)
   {
     VECTOR u_alt;
+
+    unsigned int max_timestep =
+      problem.GetSpaceTimeHandler()->GetMaxTimePoint();
+    const std::vector<double> times =
+      problem.GetSpaceTimeHandler()->GetTimes();
+    const unsigned int
+      n_dofs_per_interval =
+              problem.GetSpaceTimeHandler()->GetTimeDoFHandler().GetLocalNbrOfDoFs();
+    std::vector<unsigned int> local_to_global(n_dofs_per_interval);
+    {
+      TimeIterator it =
+	problem.GetSpaceTimeHandler()->GetTimeDoFHandler().first_interval();
+      it.get_time_dof_indices(local_to_global);
+      problem.SetTime(local_to_global[0], it);
+      sol.SetTimeDoFNumber(local_to_global[0], it);
+    }
     //u_alt auf initial_values setzen
-    //FIXME Statevector[0] muss u_alt bekommen!
     {
       //dazu erstmal gesamt-dof berechnen
       const std::vector<unsigned int>& dofs_per_block =
@@ -1039,62 +1037,27 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 
       auto& initial_problem = problem.GetInitialProblem();
       this->GetProblem()->AddAuxiliaryToIntegrator(this->GetIntegrator());
-      if (dopedim == dealdim)
-      {
-        this->GetIntegrator().AddDomainData("control", &(q.GetSpacialVector()));
-      }
-      else if (dopedim == 0)
-      {
-        this->GetIntegrator().AddParamData("control",
-            &(q.GetSpacialVectorCopy()));
-      }
-      else
-      {
-        throw DOpEException("dopedim not implemented",
-            "InstatReducedProblem::ForwardTimeLoop");
-      }
+
       //TODO: Possibly another solver for the initial value than for the pde...
       _build_state_matrix = this->GetNonlinearSolver("state").NonlinearSolve_Initial(
           initial_problem, u_alt, true, true);
       _build_state_matrix = true;
-      if (dopedim == dealdim)
-      {
-        this->GetIntegrator().DeleteDomainData("control");
-      }
-      else if (dopedim == 0)
-      {
-        this->GetIntegrator().DeleteParamData("control");
-        q.UnLockCopy();
-      }
-      else
-      {
-        throw DOpEException("dopedim not implemented",
-            "InstatReducedProblem::ForwardTimeLoop");
-      }
+      
       this->GetProblem()->DeleteAuxiliaryFromIntegrator(this->GetIntegrator());
       
     }
-    
-    this->GetOutputHandler()->Write(u_alt, "State" + this->GetPostIndex(),
+    sol.GetSpacialVector() = u_alt;
+    this->GetOutputHandler()->Write(u_alt, outname + this->GetPostIndex(),
           problem.GetDoFType());
-    unsigned int max_timestep =
-      problem.GetSpaceTimeHandler()->GetMaxTimePoint();
+    
     
     if(eval_funcs)
     {//Funktional Auswertung in t_0
-      problem.SetTime(
-	problem.GetSpaceTimeHandler()->GetTime(0),
-	problem.GetSpaceTimeHandler()->GetTimeDoFHandler().first_interval());
-      ComputeTimeFunctionals(q, 0,
+      ComputeTimeFunctionals(0,
 			     max_timestep);
           this->SetProblemType("state");
     }
-    const std::vector<double> times =
-      problem.GetSpaceTimeHandler()->GetTimes();
-    const unsigned int
-      n_dofs_per_interval =
-              problem.GetSpaceTimeHandler()->GetTimeDoFHandler().GetLocalNbrOfDoFs();
-    std::vector<unsigned int> local_to_global(n_dofs_per_interval);
+    
     
     for (TimeIterator it =
 	   problem.GetSpaceTimeHandler()->GetTimeDoFHandler().first_interval(); it
@@ -1102,6 +1065,7 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
     {
       it.get_time_dof_indices(local_to_global);
       problem.SetTime(local_to_global[0], it);
+      sol.SetTimeDoFNumber(local_to_global[0], it);
       //TODO Eventuell waere ein Test mit nicht-gleichmaessigen Zeitschritten sinnvoll!
       
       //we start here at i=1 because we assume that the most
@@ -1119,101 +1083,162 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 	problem.GetOutputHandler()->Write(out,
 					  4 + this->GetBasePriority());
 	
-	this->GetU().SetTimeDoFNumber(local_to_global[i], it);
-	this->GetU().GetSpacialVector() = 0;
+	sol.SetTimeDoFNumber(local_to_global[i], it);
+	sol.GetSpacialVector() = 0;
 	
 	this->GetProblem()->AddAuxiliaryToIntegrator(
 	  this->GetIntegrator());
 	
-	if (dopedim == dealdim)
-	{
-	  this->GetIntegrator().AddDomainData("control",
-					      &(q.GetSpacialVector()));
-	}
-	else if (dopedim == 0)
-	{
-	  this->GetIntegrator().AddParamData("control",
-					     &(q.GetSpacialVectorCopy()));
-	}
-	else
-	{
-	  throw DOpEException("dopedim not implemented",
-			      "ForwardTimestepReducedProblem::ComputeReducedState");
-	}
-	
 	this->GetNonlinearSolver("state").NonlinearLastTimeEvals(problem,
-								 u_alt, this->GetU().GetSpacialVector());
-	
-	if (dopedim == dealdim)
-	{
-	  this->GetIntegrator().DeleteDomainData("control");
-	}
-	else if (dopedim == 0)
-	{
-	  this->GetIntegrator().DeleteParamData("control");
-	  q.UnLockCopy();
-	}
-	else
-	{
-	  throw DOpEException("dopedim not implemented",
-			      "ForwardTimestepReducedProblem::ComputeReducedState");
-	}
+								 u_alt, sol.GetSpacialVector());
+
 	this->GetProblem()->DeleteAuxiliaryFromIntegrator(
 	  this->GetIntegrator());
 	
-	q.SetTime(time, it);
 	problem.SetTime(time, it);
 	this->GetProblem()->AddAuxiliaryToIntegrator(
 	  this->GetIntegrator());
 	
-	if (dopedim == dealdim)
-	{
-	  this->GetIntegrator().AddDomainData("control",
-					      &(q.GetSpacialVector()));
-	}
-	else if (dopedim == 0)
-	{
-	  this->GetIntegrator().AddParamData("control",
-                      &(q.GetSpacialVectorCopy()));
-	}
-	else
-	{
-	  throw DOpEException("dopedim not implemented",
-			      "ForwardTimestepReducedProblem::ComputeReducedState");
-	}
-	
 	this->GetBuildStateMatrix()
 	  = this->GetNonlinearSolver("state").NonlinearSolve(problem,
-							     u_alt, this->GetU().GetSpacialVector(), true,
+							     u_alt, sol.GetSpacialVector(), true,
 							     this->GetBuildStateMatrix());
-	
-	if (dopedim == dealdim)
-	{
-	  this->GetIntegrator().DeleteDomainData("control");
-	}
-	else if (dopedim == 0)
-	{
-	  this->GetIntegrator().DeleteParamData("control");
-	  q.UnLockCopy();
-	}
-	else
-	{
-	  throw DOpEException("dopedim not implemented",
-			      "ForwardTimestepReducedProblem::ComputeReducedState");
-	}
+
 	this->GetProblem()->DeleteAuxiliaryFromIntegrator(
 	  this->GetIntegrator());
 	
 	//TODO do a transfer to the next grid for changing spatial meshes!
-	u_alt = this->GetU().GetSpacialVector();
-	this->GetOutputHandler()->Write(this->GetU().GetSpacialVector(),
-					"State" + this->GetPostIndex(), problem.GetDoFType());
+	u_alt = sol.GetSpacialVector();
+	this->GetOutputHandler()->Write(sol.GetSpacialVector(),
+					outname + this->GetPostIndex(), problem.GetDoFType());
 	if(eval_funcs)
 	{//Funktional Auswertung in t_n//if abfrage, welcher typ
-	  ComputeTimeFunctionals( q,
-				  local_to_global[i], max_timestep);
+	  ComputeTimeFunctionals(local_to_global[i], max_timestep);
 	  this->SetProblemType("state");
 	}
+      }
+    }
+  }
+
+/******************************************************/
+
+template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
+  typename CONTROLINTEGRATOR, typename INTEGRATOR, typename PROBLEM,
+  typename VECTOR, int dopedim, int dealdim>
+  template<typename PDE>
+  void InstatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER,
+  CONTROLINTEGRATOR, INTEGRATOR, PROBLEM, VECTOR, dopedim, dealdim>::
+  BackwardTimeLoop(PDE& problem, StateVector<VECTOR>& sol, std::string outname)
+  {
+    VECTOR u_alt;
+
+    unsigned int max_timestep =
+      problem.GetSpaceTimeHandler()->GetMaxTimePoint();
+    const std::vector<double> times =
+      problem.GetSpaceTimeHandler()->GetTimes();
+    const unsigned int
+      n_dofs_per_interval =
+              problem.GetSpaceTimeHandler()->GetTimeDoFHandler().GetLocalNbrOfDoFs();
+    std::vector<unsigned int> local_to_global(n_dofs_per_interval);
+    {
+      TimeIterator it =
+	problem.GetSpaceTimeHandler()->GetTimeDoFHandler().last_interval();
+      it.get_time_dof_indices(local_to_global);
+      problem.SetTime(local_to_global[local_to_global.size()-1], it);
+      sol.SetTimeDoFNumber(local_to_global[local_to_global.size()-1], it);
+    }
+    //u_alt auf initial_values setzen
+    {
+      //dazu erstmal gesamt-dof berechnen
+      const std::vector<unsigned int>& dofs_per_block =
+	this->GetProblem()->GetSpaceTimeHandler()->GetStateDoFsPerBlock();
+      unsigned int n_dofs = 0;
+      unsigned int n_blocks = dofs_per_block.size();
+      for (unsigned int i = 0; i < n_blocks; i++)
+      {
+	n_dofs += dofs_per_block[i];
+      }
+      //und dann auf den Helper zuerueckgreifen (wegen Templateisierung)
+      DOpEHelper::ReSizeVector(n_dofs, dofs_per_block, u_alt);
+    }
+    //Projection der Anfangsdaten
+    this->GetOutputHandler()->SetIterationNumber(max_timestep, "Time");
+    {
+      this->GetOutputHandler()->Write("Computing Initial Values:",
+          4 + this->GetBasePriority());
+
+      auto& initial_problem = problem.GetInitialProblem();
+      this->GetProblem()->AddAuxiliaryToIntegrator(this->GetIntegrator());
+
+      //TODO: Possibly another solver for the initial value than for the pde...
+      _build_state_matrix = this->GetNonlinearSolver("adjoint").NonlinearSolve_Initial(
+          initial_problem, u_alt, true, true);
+      _build_state_matrix = true;
+
+      this->GetProblem()->DeleteAuxiliaryFromIntegrator(this->GetIntegrator());
+      
+    }
+    sol.GetSpacialVector() = u_alt;
+    this->GetOutputHandler()->Write(u_alt, outname + this->GetPostIndex(),
+          problem.GetDoFType());
+    
+    //TODO: Maybe we should calculate the local gradient computations here
+    
+    for (TimeIterator it =
+	   problem.GetSpaceTimeHandler()->GetTimeDoFHandler().last_interval(); it
+	   != problem.GetSpaceTimeHandler()->GetTimeDoFHandler().before_first_interval(); --it)
+    {
+      it.get_time_dof_indices(local_to_global);
+      problem.SetTime(local_to_global[local_to_global.size()-1], it);
+      sol.SetTimeDoFNumber(local_to_global[local_to_global.size()-1], it);
+     //TODO Eventuell waere ein Test mit nicht-gleichmaessigen Zeitschritten sinnvoll!
+      
+      //we start here at i= 1 and transform i -> n_dofs_per_interval-1-i because we assume that the most
+      //right DoF in the actual interval is already computed!
+      for (unsigned int i = 1; i < n_dofs_per_interval; i++)
+      {
+	unsigned int j = n_dofs_per_interval-1-i;
+	this->GetOutputHandler()->SetIterationNumber(local_to_global[j],
+						     "Time");
+	double time = times[local_to_global[j]];
+	
+	std::stringstream out;
+	out << "\t\t Timestep: " << local_to_global[j] << " ("
+	    << times[local_to_global[j + 1]] << " -> " << time
+	    << ") using " << problem.GetName();
+	problem.GetOutputHandler()->Write(out,
+					  4 + this->GetBasePriority());
+	
+	sol.SetTimeDoFNumber(local_to_global[j], it);
+	sol.GetSpacialVector() = 0;
+	
+	this->GetProblem()->AddAuxiliaryToIntegrator(
+	  this->GetIntegrator());
+		
+	this->GetNonlinearSolver("adjoint").NonlinearLastTimeEvals(problem,
+								   u_alt, sol.GetSpacialVector());
+	
+	this->GetProblem()->DeleteAuxiliaryFromIntegrator(
+	  this->GetIntegrator());
+
+	problem.SetTime(time, it);
+	this->GetProblem()->AddAuxiliaryToIntegrator(
+	  this->GetIntegrator());
+		
+	this->GetBuildStateMatrix()
+	  = this->GetNonlinearSolver("adjoint").NonlinearSolve(problem,
+							     u_alt, sol.GetSpacialVector(), true,
+							     this->GetBuildStateMatrix());
+	
+	this->GetProblem()->DeleteAuxiliaryFromIntegrator(
+	  this->GetIntegrator());
+	
+	//TODO do a transfer to the next grid for changing spatial meshes!
+	u_alt = sol.GetSpacialVector();
+	this->GetOutputHandler()->Write(sol.GetSpacialVector(),
+					outname + this->GetPostIndex(), problem.GetDoFType());
+
+	//Maybe build local gradient here
       }
     }
   }
