@@ -606,10 +606,14 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER, typename CON
     int dealdim>
 void InstatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER, CONTROLINTEGRATOR, INTEGRATOR,
     PROBLEM, VECTOR, dopedim, dealdim>::ComputeReducedGradient(
-      const ControlVector<VECTOR>& /*q*/,
+      const ControlVector<VECTOR>& q,
       ControlVector<VECTOR>& /*gradient*/,
       ControlVector<VECTOR>& /*gradient_transposed*/)
 {
+  this->ComputeReducedAdjoint(q);
+
+  this->GetOutputHandler()->Write("Computing Reduced Gradient:",
+				  4 + this->GetBasePriority());
   abort();
 }
 

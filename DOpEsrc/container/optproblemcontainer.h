@@ -1037,6 +1037,84 @@ namespace DOpE
         }
 
         /******************************************************/
+      /******************************************************/
+      /****For the initial values ***************/
+      template<typename DATACONTAINER>
+      void Init_CellEquation(const DATACONTAINER& cdc,
+			     dealii::Vector<double> &local_cell_vector, double scale,
+			     double scale_ico)
+      {
+        if (GetType() == "adjoint")
+	{
+	  GetPDE()->Init_CellEquation(cdc, local_cell_vector, scale, scale_ico);
+	}
+	else
+	{
+	  throw DOpEException("Not implemented", "OptProblemContainer::Init_CellEquation");
+	}
+      }
+      
+      template<typename DATACONTAINER>
+      void
+      Init_CellRhs(const DATACONTAINER& cdc,
+		   dealii::Vector<double> &local_cell_vector, double scale)
+      {
+        if (GetType() == "adjoint")
+	{
+	  if(GetFunctional()->NeedTime())
+	  {
+	    if(GetFunctional()->GetType().find("timelocal"))
+	    {
+	      GetFunctional()->Value_U(cdc, local_cell_vector, scale);
+	    }
+	  }
+	}
+	else
+	{
+	  throw DOpEException("Not implemented", "OptProblemContainer::Init_CellRhs");
+	}
+      }
+      
+      void
+      Init_PointRhs(
+	const std::map<std::string, const dealii::Vector<double>*> &param_values,
+	const std::map<std::string, const VECTOR*> &domain_values,
+	VECTOR& rhs_vector, double scale=1.)
+      {
+	if (GetType() == "adjoint")
+	{
+	  if(GetFunctional()->NeedTime())
+	  {
+	    if(GetFunctional()->GetType().find("timelocal"))
+	    {
+	      GetFunctional()->PointValue_U(param_values,domain_values,rhs_vector,scale);
+	    }
+	  }
+	}
+	else
+	{
+	  throw DOpEException("Not implemented", "OptProblemContainer::Init_PointRhs");
+	}
+      }
+      
+      template<typename DATACONTAINER>
+      void Init_CellMatrix(const DATACONTAINER& cdc,
+			   dealii::FullMatrix<double> &local_entry_matrix, double scale,
+			   double scale_ico)
+      {
+        if (GetType() == "adjoint")
+	{
+	  GetPDE()->Init_CellMatrix(cdc, local_entry_matrix, scale, scale_ico);
+	}
+	else
+	{
+	  throw DOpEException("Not implemented", "OptProblemContainer::Init_CellMatrix");
+	}
+      }
+
+      /******************************************************/
+
+
 
       protected:
         PDE*
