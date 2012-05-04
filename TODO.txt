@@ -1,5 +1,8 @@
 TODO DOpE
 =========
+- SetType im Optproblem sollte auch dem Funktional den typ mitteilen.
+
+- Beispiel (Erklaerung), PDEInterface nicht als template geben, sondern die LocalPDE.
 
 - Webseite: 
   -- Logo -> tw
