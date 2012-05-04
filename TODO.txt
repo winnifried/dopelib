@@ -1,5 +1,7 @@
 TODO DOpE
 =========
+- Zeitschrittverfahren nochmals anschauen! Diverse Funktionen sind noch nicht umgestellt (faceequation etc.)
+
 - SetType im Optproblem sollte auch dem Funktional den typ mitteilen.
 
 - Beispiel (Erklaerung), PDEInterface nicht als template geben, sondern die LocalPDE.
