@@ -1,6 +1,6 @@
 #include "reduced_snopt_algorithm.h"
 #include "augmentedlagrangianproblem.h"
-#include "optproblem.h"
+#include "optproblemcontainer.h"
 #include "functionalinterface.h"
 #include "pdeinterface.h"
 #include "statreducedproblem.h" 
@@ -51,7 +51,7 @@ using namespace DOpE;
 
 typedef SpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR, 2, 2> STH;
 
-typedef OptProblem<FUNC, FUNC, PDE, DD, CONS, SPARSITYPATTERN, VECTOR, 2, 2> OP;
+typedef OptProblemContainer<FUNC, FUNC, PDE, DD, CONS, SPARSITYPATTERN, VECTOR, 2, 2> OP;
 
 typedef AugmentedLagrangianProblem<LocalConstraintAccessor, STH, OP, 2, 2, 1> ALagOP;
 typedef IntegratorDataContainer<DOFHANDLER, dealii::Quadrature<2>,

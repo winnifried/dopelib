@@ -1,7 +1,7 @@
 
 #include "reducednewtonalgorithm.h"
 #include "reducedtrustregionnewton.h"
-#include "optproblem.h"
+#include "optproblemcontainer.h"
 #include "functionalinterface.h"
 #include "pdeinterface.h"
 #include "statreducedproblem.h"
@@ -41,7 +41,7 @@ using namespace DOpE;
 #define DOFHANDLER dealii::DoFHandler<2>
 #define FE DOpEWrapper::FiniteElement<2>
 
-typedef OptProblem<FunctionalInterface<CellDataContainer,FaceDataContainer,DOFHANDLER, VECTOR, 2,2>,
+typedef OptProblemContainer<FunctionalInterface<CellDataContainer,FaceDataContainer,DOFHANDLER, VECTOR, 2,2>,
 		   FunctionalInterface<CellDataContainer,FaceDataContainer,DOFHANDLER, VECTOR, 2,2>,
 		   PDEInterface<CellDataContainer,FaceDataContainer,DOFHANDLER, VECTOR,2,2>,
 		   DirichletDataInterface<VECTOR,2,2>,

@@ -1,5 +1,5 @@
 #include "reduced_snopt_algorithm.h"
-#include "optproblem.h"
+#include "optproblemcontainer.h"
 #include "functionalinterface.h"
 #include "pdeinterface.h"
 #include "statreducedproblem.h" 
@@ -48,7 +48,7 @@ using namespace DOpE;
 #define DD DOpE::DirichletDataInterface<VECTOR,2,2>
 #define CONS DOpE::ConstraintInterface<CDC,FDC,DOFHANDLER,VECTOR,2,2>
 
-typedef OptProblem<FUNC, FUNC, PDE, DD, CONS, SPARSITYPATTERN,VECTOR,2,2> OP;
+typedef OptProblemContainer<FUNC, FUNC, PDE, DD, CONS, SPARSITYPATTERN,VECTOR,2,2> OP;
 
 typedef IntegratorDataContainer<DOFHANDLER, dealii::Quadrature<2>, dealii::Quadrature<1>, VECTOR, 2> IDC;
 typedef Integrator<IDC,VECTOR,double,2> INTEGRATOR;
