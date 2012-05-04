@@ -155,7 +155,15 @@ namespace DOpE
 			     dealii::Vector<double> &local_cell_vector, double scale,
 			     double scale_ico)
       {
-	_OP.Init_CellEquation(cdc, local_cell_vector, scale, scale_ico);
+        _OP.Init_CellEquation(cdc, local_cell_vector, scale, scale_ico);
+      }
+
+      template<typename DATACONTAINER>
+      void
+      Init_CellRhs(const DATACONTAINER& cdc,
+          dealii::Vector<double> &local_cell_vector, double scale)
+      {
+        _OP.Init_CellRhs(cdc, local_cell_vector, scale);
       }
 
       template<typename DATACONTAINER>
@@ -163,7 +171,7 @@ namespace DOpE
 			   dealii::FullMatrix<double> &local_entry_matrix, double scale,
 			   double scale_ico)
       {
-	_OP.Init_CellMatrix(cdc, local_entry_matrix, scale, scale_ico);
+        _OP.Init_CellMatrix(cdc, local_entry_matrix, scale, scale_ico);
       }
  
       template<typename FACEDATACONTAINER>

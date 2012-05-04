@@ -39,13 +39,13 @@ namespace DOpE
         _fs_theta_prime = 1.0 - 2.0 * _fs_theta;
         _fs_alpha = (1.0 - 2.0 * _fs_theta) / (1.0 - _fs_theta);
         _fs_beta = 1.0 - _fs_alpha;
-	_initial_problem = NULL;
+        _initial_problem = NULL;
       }
 
       ~FractionalStepThetaProblem ()
       {
-	if(_initial_problem != NULL)
-	  delete _initial_problem;
+        if(_initial_problem != NULL)
+          delete _initial_problem;
       }
 
       /******************************************************/
@@ -63,16 +63,16 @@ namespace DOpE
       /******************************************************/
 
       InitialProblem<FractionalStepThetaProblem<OPTPROBLEM, SPARSITYPATTERN, VECTOR, dopedim,
-          dealdim, FE, DOFHANDLER>, VECTOR, dealdim>&
+      dealdim, FE, DOFHANDLER>, VECTOR, dealdim>&
       GetInitialProblem()
       {
-	if (_initial_problem == NULL)
-	{
-	  _initial_problem = new InitialProblem<FractionalStepThetaProblem<OPTPROBLEM, SPARSITYPATTERN, VECTOR, dopedim,
-          dealdim, FE, DOFHANDLER>, VECTOR, dealdim>
-	  (*this);
-	}
-	return *_initial_problem;
+        if (_initial_problem == NULL)
+        {
+          _initial_problem = new InitialProblem<FractionalStepThetaProblem<OPTPROBLEM, SPARSITYPATTERN, VECTOR, dopedim,
+              dealdim, FE, DOFHANDLER>, VECTOR, dealdim>
+          (*this);
+        }
+        return *_initial_problem;
       }
 
        /******************************************************/
@@ -168,7 +168,15 @@ namespace DOpE
 			     dealii::Vector<double> &local_cell_vector, double scale,
 			     double scale_ico)
       {
-	_OP.Init_CellEquation(cdc, local_cell_vector, scale, scale_ico);
+        _OP.Init_CellEquation(cdc, local_cell_vector, scale, scale_ico);
+      }
+
+      template<typename DATACONTAINER>
+      void
+      Init_CellRhs(const DATACONTAINER& cdc,
+          dealii::Vector<double> &local_cell_vector, double scale)
+      {
+        _OP.Init_CellRhs(cdc, local_cell_vector, scale);
       }
 
       template<typename DATACONTAINER>
@@ -176,7 +184,7 @@ namespace DOpE
 			   dealii::FullMatrix<double> &local_entry_matrix, double scale,
 			   double scale_ico)
       {
-	_OP.Init_CellMatrix(cdc, local_entry_matrix, scale, scale_ico);
+        _OP.Init_CellMatrix(cdc, local_entry_matrix, scale, scale_ico);
       }
  
       template<typename FACEDATACONTAINER>

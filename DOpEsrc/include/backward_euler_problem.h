@@ -161,6 +161,14 @@ namespace DOpE
       }
 
       template<typename DATACONTAINER>
+      void
+      Init_CellRhs(const DATACONTAINER& cdc,
+          dealii::Vector<double> &local_cell_vector, double scale)
+      {
+        _OP.Init_CellRhs(cdc, local_cell_vector, scale);
+      }
+
+      template<typename DATACONTAINER>
       void Init_CellMatrix(const DATACONTAINER& cdc,
 			   dealii::FullMatrix<double> &local_entry_matrix, double scale,
 			   double scale_ico)
