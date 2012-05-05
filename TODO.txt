@@ -11,14 +11,13 @@ TODO DOpE
 - Verschiedene Kontrolltypen im Instationaeren, insbesondere Kontrolle in den AWen
 -- Verschiedene Typen der Kontrolle (undefined, initial, timedistributed, timedistributedtimedependend). Diese gibt man dem Kontrollvektor, der den Typ wiederum an STH lieftert. Dieser speichert ihn und stellt sicher, dass alle Kontrollen den selben Typen haben. ~cg
 
-- Zeitschrittverfahren nochmals anschauen! Diverse Funktionen sind noch nicht umgestellt (faceequation etc.)
-
 - SetType im Optproblem sollte auch dem Funktional den typ mitteilen.
 
 - Beispiel (Erklaerung), PDEInterface nicht als template geben, sondern die LocalPDE.
 
+- Logo -> tw
+
 - Webseite: 
-  -- Logo -> tw
   -- Namen der Developer, Contributer, Name des Projekts: DOpElib
   -- Beschreibung
   -- domain
@@ -26,8 +25,9 @@ TODO DOpE
   -- wie komme ich an DOpE?? Mail an dopelib@...
   -- Danksagungen RoDoBo, deal.ii
   -- Publications
+  -- How to cite...
 
-- Technical Report (Basierend auf Doku)
+- Technical Report (Basierend auf Doku) ~tw
   -- Goal of Software
   -- Aufbau
   -- Features!
@@ -37,28 +37,17 @@ TODO DOpE
 	DWR NS channel (muss noch gerechnet werden)
 	Beispiel mit verschiedenen BC: Einstroemung, Periodisch, Pressure Driven
 
-- Update the Apply...BoundaryValues to include other constraints, 
-  like periodicity... (maybe with nonzero jump...). Also check the 
-  condense(u)/distribute(u) stuff again, it should not be in the apply 
-  boundary value stuff...
-
+- PeriodicDoFConstraintMaker in Lib
 
 - FE_Values ? Kann man dim=0 anlegen? Dann kann der weg (Ja, habs auskommentiert,
-  trotzdem laeufen alle Probleme korrekt durch (ausser OPT/7+8))~cg.
+  trotzdem laeufen alle Probleme korrekt durch (ausser OPT/7+8))~tw
 
 - Remove unnecessary Template Parameter
   -- integrator.h: dim
 
-- pdeinterface.h - scale_ico auch fuer CellEquation_u etc. implementieren!
+- Beispiele besser Kommentieren.
 
-- Problem typen ueber enum statt string (Abgelehnt: Diese Vergleiche werden
-in Zukunft sowieso entfallen)
-
-done (current work)  - PDE/StatPDE		
-		-- Kommentare zu Beispielen sollten beinhalten:
-		--- Was wird geloest?
-  		--- Welche Features werden hier (erstmalig) benutzt? Diese sollten
-  		ueber \index indiziert werden.
+- Prm-File Number-Precision sollte einfluss auf Funktionalausgabe haben, z.B., lift in PDE/InstatPDE[12]
 
 - hp Beispiel in PDE/StatPDE/Example1 ~cg !!!!
 	
@@ -98,7 +87,7 @@ done (current work)  - PDE/StatPDE
 	uebergibt. Friend oder abgeleitet vom Statevector, im Konstruktor aktuelles Zeitintervall plus STH, generiert dann Liste von Zeitpunkten, auf denen er arbeitet.~tw
 	-- Zeitintegrator ~cg
 
--Dirichletdaten ueber Constraintmatrix lokal.
+- (homogene!) Dirichletdaten ueber Constraintmatrix lokal.
 
 - Erzeugen von Subproblemen fuer Primales, Duales, ... Problem, anstatt alles im Optproblem zu unterscheiden
 optproblem, davon abgeleitet forwardproblem und backwardproblem (mit Matrix),
@@ -122,7 +111,6 @@ davon state und tangent bzw. dual und dual hessian ~ww
   will return 0 if no errors but a nonzero exitcode if there are some errors...
 
 -  Rueckgabeklasse fuer Newton. 
-- Doku in latex zu OPT und Instat 
 -  Loesen des Opt-Control Probleme ueber die KKT-Bedingungen 
   (im stationaeren, benötigt Matrizen für die gemischten Ableitungen, wollen wir dazu neue 
   Terme haben, oder wollen wir alle linearen Teile über Matrizen bauen?)

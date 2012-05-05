@@ -3,6 +3,7 @@ Changelog DOpE
 
 2. DOpE Treffen 3.5.2012-5.5.2012:
 ==================================
+- Zeitschrittverfahren nochmals anschauen! Diverse Funktionen sind noch nicht umgestellt (faceequation etc.)
 - Renamed optproblem.h to optproblemcontainer.h (OptProblem to OptProblemContainer)
 - Initial Value Computation now done by DOpE, nolonger the fixed dealii function project.
 - Changed interface for incorporation of user defined dofconstraints: Dope computes always
@@ -11,7 +12,11 @@ Changelog DOpE
 - DOpEWrapper::FiniteElement removed, use dealii::FESystem instead.
 - Removed unnecessary template parameters SPARSITYMAKER and CONSTRAINTSMAKER.
 - Removed common code from the timestepping schemes and moved it into the base classes ts_base and primal_ts_base. Moved the files containing the timestepping classes into the directory tsschemes
-	
+- Update the Apply...BoundaryValues to include other constraints, 
+  like periodicity... (maybe with nonzero jump...). Also check the 
+  condense(u)/distribute(u) stuff again, it should not be in the apply 
+  boundary value stuff...	
+- pdeinterface.h - scale_ico auch fuer CellEquation_u etc. implementieren!
 
 before 2.5.2012
 -------------------------
