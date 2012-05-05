@@ -272,7 +272,7 @@ namespace DOpE
                           cell[0]->face(face)->boundary_indicator()) != boundary_equation_colors.end()))
               {
                 fdc.ReInit(face);
-                pde.BoundaryEquation(fdc,local_cell_vector);
+                pde.BoundaryEquation(fdc,local_cell_vector, 1., 1.);
                 pde.BoundaryRhs(fdc,local_cell_vector,-1.);
               }
             }
@@ -284,7 +284,7 @@ namespace DOpE
               if (cell[0]->neighbor_index(face) != -1)
               {
                 fdc.ReInit(face);
-                pde.FaceEquation(fdc, local_cell_vector);
+                pde.FaceEquation(fdc, local_cell_vector, 1., 1.);
                 pde.FaceRhs(fdc, local_cell_vector,-1.);
               }
             }
@@ -317,7 +317,7 @@ namespace DOpE
                     fdc.ReInit(face, subface_no);
                     fdc.ReInitNbr();
 
-                    pde.InterfaceEquation(fdc, local_cell_vector);
+                    pde.InterfaceEquation(fdc, local_cell_vector, 1., 1.);
 
                   }
                 }
@@ -328,7 +328,7 @@ namespace DOpE
 
                   fdc.ReInit(face);
                   fdc.ReInitNbr();
-                  pde.InterfaceEquation(fdc, local_cell_vector);
+                  pde.InterfaceEquation(fdc, local_cell_vector, 1., 1.);
                 }
 
               }                  //endif atinterface
@@ -450,7 +450,7 @@ namespace DOpE
                             cell[0]->face(face)->boundary_indicator()) != boundary_equation_colors.end()))
                 {
                   fdc.ReInit(face);
-                  pde.BoundaryEquation(fdc,local_cell_vector);
+                  pde.BoundaryEquation(fdc,local_cell_vector, 1., 1.);
                 }
               }
             }
@@ -461,7 +461,7 @@ namespace DOpE
                 if (cell[0]->neighbor_index(face) != -1)
                 {
                   fdc.ReInit(face);
-                  pde.FaceEquation(fdc, local_cell_vector);
+                  pde.FaceEquation(fdc, local_cell_vector, 1., 1.);
                 }
               }
             }
@@ -494,7 +494,7 @@ namespace DOpE
                       fdc.ReInit(face, subface_no);
                       fdc.ReInitNbr();
 
-                      pde.InterfaceEquation(fdc, local_cell_vector);
+                      pde.InterfaceEquation(fdc, local_cell_vector, 1., 1.);
 
                     }
                   }
@@ -505,7 +505,7 @@ namespace DOpE
 
                     fdc.ReInit(face);
                     fdc.ReInitNbr();
-                    pde.InterfaceEquation(fdc, local_cell_vector);
+                    pde.InterfaceEquation(fdc, local_cell_vector, 1., 1.);
                   }
                 }                    //endif atinterface
               }                    //endfor face

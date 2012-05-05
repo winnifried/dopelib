@@ -63,7 +63,7 @@ template<typename VECTOR,int dopedim, int dealdim>
     }
 
     void CellEquation_U(const CellDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& cdc,
-			dealii::Vector<double> &local_cell_vector, double scale)
+			dealii::Vector<double> &local_cell_vector, double scale, double /*scale_ico*/)
     {
       const DOpEWrapper::FEValues<dealdim> & state_fe_values = cdc.GetFEValuesState();
       unsigned int n_dofs_per_cell = cdc.GetNDoFsPerCell();
@@ -89,7 +89,7 @@ template<typename VECTOR,int dopedim, int dealdim>
     }
 
     void CellEquation_UT(const CellDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& cdc,
-			 dealii::Vector<double> &local_cell_vector, double scale)
+			 dealii::Vector<double> &local_cell_vector, double scale, double /*scale_ico*/)
     {
       const DOpEWrapper::FEValues<dealdim> & state_fe_values = cdc.GetFEValuesState();
       unsigned int n_dofs_per_cell = cdc.GetNDoFsPerCell();
@@ -113,7 +113,7 @@ template<typename VECTOR,int dopedim, int dealdim>
     }
 
     void CellEquation_UTT(const CellDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& cdc,
-			  dealii::Vector<double> &local_cell_vector, double scale)
+			  dealii::Vector<double> &local_cell_vector, double scale, double /*scale_ico*/)
     {
       const DOpEWrapper::FEValues<dealdim> & state_fe_values = cdc.GetFEValuesState();
       unsigned int n_dofs_per_cell = cdc.GetNDoFsPerCell();
@@ -137,7 +137,7 @@ template<typename VECTOR,int dopedim, int dealdim>
     }
 
     void CellEquation_Q(const CellDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& cdc,
-			dealii::Vector<double> &local_cell_vector, double scale)
+			dealii::Vector<double> &local_cell_vector, double scale, double /*scale_ico*/)
     {
       const DOpEWrapper::FEValues<dealdim> & state_fe_values = cdc.GetFEValuesState();
       unsigned int n_q_points = cdc.GetNQPoints();
@@ -165,7 +165,7 @@ template<typename VECTOR,int dopedim, int dealdim>
     }
 
     void CellEquation_QT(const CellDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& cdc,
-			 dealii::Vector<double> &local_cell_vector, double scale)
+			 dealii::Vector<double> &local_cell_vector, double scale, double /*scale_ico*/)
     {
       const DOpEWrapper::FEValues<dealdim> & state_fe_values = cdc.GetFEValuesState();
       unsigned int n_dofs_per_cell = cdc.GetNDoFsPerCell();
@@ -198,7 +198,7 @@ template<typename VECTOR,int dopedim, int dealdim>
     }
 
     void CellEquation_QTT(const CellDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& cdc,
-			  dealii::Vector<double> &local_cell_vector, double scale)
+			  dealii::Vector<double> &local_cell_vector, double scale, double /*scale_ico*/)
     {
       const DOpEWrapper::FEValues<dealdim> & state_fe_values = cdc.GetFEValuesState();
       unsigned int n_q_points = cdc.GetNQPoints();
@@ -226,22 +226,22 @@ template<typename VECTOR,int dopedim, int dealdim>
     }
 
     void CellEquation_UU(const CellDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& cdc __attribute__((unused)),
-			 dealii::Vector<double> &local_cell_vector __attribute__((unused)), double scale __attribute__((unused)))
+			 dealii::Vector<double> &local_cell_vector __attribute__((unused)), double scale __attribute__((unused)), double /*scale_ico*/)
     {
       assert(this->_problem_type == "adjoint_hessian");
     }
     void CellEquation_QU(const CellDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& cdc __attribute__((unused)),
-			 dealii::Vector<double> &local_cell_vector __attribute__((unused)), double scale __attribute__((unused)))
+			 dealii::Vector<double> &local_cell_vector __attribute__((unused)), double scale __attribute__((unused)), double /*scale_ico*/)
     {
       assert(this->_problem_type == "adjoint_hessian");
     }
     void CellEquation_UQ(const CellDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& cdc __attribute__((unused)),
-			 dealii::Vector<double> &local_cell_vector __attribute__((unused)), double scale __attribute__((unused)))
+			 dealii::Vector<double> &local_cell_vector __attribute__((unused)), double scale __attribute__((unused)), double /*scale_ico*/)
     {
       assert(this->_problem_type == "hessian");
     }
     void CellEquation_QQ(const CellDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& cdc __attribute__((unused)),
-			 dealii::Vector<double> &local_cell_vector __attribute__((unused)), double scale __attribute__((unused)))
+			 dealii::Vector<double> &local_cell_vector __attribute__((unused)), double scale __attribute__((unused)), double /*scale_ico*/)
     {
       assert(this->_problem_type == "hessian");
     }

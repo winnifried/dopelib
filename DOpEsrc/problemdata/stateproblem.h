@@ -115,12 +115,12 @@ namespace DOpE
       template<typename FACEDATACONTAINER>
         inline void
         FaceEquation(const FACEDATACONTAINER& dc,
-            dealii::Vector<double> &local_cell_vector, double scale = 1.);
+            dealii::Vector<double> &local_cell_vector, double scale = 1., double scale_ico = 1.);
 
       template<typename FACEDATACONTAINER>
         inline void
         InterfaceEquation(const FACEDATACONTAINER& dc,
-            dealii::Vector<double> &local_cell_vector, double scale = 1.);
+            dealii::Vector<double> &local_cell_vector, double scale = 1., double scale_ico = 1.);
 
       template<typename FACEDATACONTAINER>
         inline void
@@ -130,17 +130,17 @@ namespace DOpE
       template<typename FACEDATACONTAINER>
         inline void
         FaceMatrix(const FACEDATACONTAINER& dc,
-            dealii::FullMatrix<double> &local_entry_matrix);
+            dealii::FullMatrix<double> &local_entry_matrix, double scale = 1.,double scale_ico = 1.);
 
       template<typename FACEDATACONTAINER>
         inline void
         InterfaceMatrix(const FACEDATACONTAINER& dc,
-            dealii::FullMatrix<double> &local_entry_matrix);
+            dealii::FullMatrix<double> &local_entry_matrix, double scale = 1.,double scale_ico = 1.);
 
       template<typename FACEDATACONTAINER>
         inline void
         BoundaryEquation(const FACEDATACONTAINER& dc,
-            dealii::Vector<double> &local_cell_vector, double scale = 1.);
+            dealii::Vector<double> &local_cell_vector, double scale = 1., double scale_ico = 1.);
 
       template<typename FACEDATACONTAINER>
         inline void
@@ -150,7 +150,7 @@ namespace DOpE
       template<typename FACEDATACONTAINER>
         inline void
         BoundaryMatrix(const FACEDATACONTAINER& dc,
-            dealii::FullMatrix<double> &local_cell_matrix);
+            dealii::FullMatrix<double> &local_cell_matrix, double scale = 1., double scale_ico = 1.);
 
       inline const dealii::SmartPointer<const dealii::FESystem<dealdim> >
       GetFESystem() const;
@@ -273,9 +273,9 @@ namespace DOpE
       void
       StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dopedim,
           dealdim>::FaceEquation(const FACEDATACONTAINER& fdc,
-          dealii::Vector<double> &local_cell_vector, double scale)
+				 dealii::Vector<double> &local_cell_vector, double scale, double scale_ico)
       {
-        _pde.FaceEquation(fdc, local_cell_vector, scale);
+        _pde.FaceEquation(fdc, local_cell_vector, scale, scale_ico);
       }
 
   /******************************************************/
@@ -286,9 +286,9 @@ namespace DOpE
       void
       StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dopedim,
           dealdim>::InterfaceEquation(const FACEDATACONTAINER& fdc,
-          dealii::Vector<double> &local_cell_vector, double scale)
+          dealii::Vector<double> &local_cell_vector, double scale, double scale_ico)
       {
-        _pde.InterfaceEquation(fdc,  local_cell_vector, scale);
+        _pde.InterfaceEquation(fdc,  local_cell_vector, scale, scale_ico);
       }
   /******************************************************/
 
@@ -298,9 +298,9 @@ namespace DOpE
       void
       StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dopedim,
           dealdim>::BoundaryEquation(const FACEDATACONTAINER& fdc,
-          dealii::Vector<double> &local_cell_vector, double scale)
+          dealii::Vector<double> &local_cell_vector, double scale, double scale_ico)
       {
-        _pde.BoundaryEquation(fdc, local_cell_vector, scale);
+        _pde.BoundaryEquation(fdc, local_cell_vector, scale, scale_ico);
       }
 
   /******************************************************/
@@ -403,9 +403,10 @@ namespace DOpE
       void
       StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dopedim,
           dealdim>::FaceMatrix(const FACEDATACONTAINER& fdc,
-          FullMatrix<double> &local_entry_matrix)
+			       FullMatrix<double> &local_entry_matrix, double scale,
+			       double scale_ico)
       {
-        _pde.FaceMatrix(fdc, local_entry_matrix);
+        _pde.FaceMatrix(fdc, local_entry_matrix, scale, scale_ico);
       }
 
   /******************************************************/
@@ -416,9 +417,10 @@ namespace DOpE
       void
       StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dopedim,
           dealdim>::InterfaceMatrix(const FACEDATACONTAINER& fdc,
-          FullMatrix<double> &local_entry_matrix)
+				    FullMatrix<double> &local_entry_matrix, double scale,
+				    double scale_ico)
       {
-        _pde.InterfaceMatrix(fdc,  local_entry_matrix);
+        _pde.InterfaceMatrix(fdc,  local_entry_matrix, scale, scale_ico);
       }
 
   /******************************************************/
@@ -429,9 +431,10 @@ namespace DOpE
       void
       StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dopedim,
           dealdim>::BoundaryMatrix(const FACEDATACONTAINER& fdc,
-          FullMatrix<double> &local_cell_matrix)
+				   FullMatrix<double> &local_cell_matrix, double scale,
+				   double scale_ico)
       {
-        _pde.BoundaryMatrix(fdc, local_cell_matrix);
+        _pde.BoundaryMatrix(fdc, local_cell_matrix, scale, scale_ico);
       }
 
   /******************************************************/

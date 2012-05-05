@@ -134,7 +134,7 @@ template<typename VECTOR, int dealdim>
     void
     BoundaryEquation(
         const FaceDataContainer<dealii::DoFHandler<2>, VECTOR, dealdim>& fdc,
-        dealii::Vector<double> &local_cell_vector, double scale)
+        dealii::Vector<double> &local_cell_vector, double scale, double /*scale_ico*/)
     {
       const auto & state_fe_face_values =
           fdc.GetFEFaceValuesState();
@@ -181,7 +181,7 @@ template<typename VECTOR, int dealdim>
     void
     BoundaryMatrix(
         const FaceDataContainer<dealii::DoFHandler<2>, VECTOR, dealdim>& fdc,
-        dealii::FullMatrix<double> &local_entry_matrix)
+        dealii::FullMatrix<double> &local_entry_matrix, double /*scale*/, double /*scale_ico*/)
     {
       const auto & state_fe_face_values =
           fdc.GetFEFaceValuesState();

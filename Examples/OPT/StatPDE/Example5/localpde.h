@@ -48,7 +48,7 @@ template<typename VECTOR, int dopedim, int dealdim>
 
     void CellEquation_U(const Multimesh_CellDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& cdc,
 			dealii::Vector<double> &local_cell_vector,
-			double scale)
+			double scale, double /*scale_ico*/)
     {
       const DOpEWrapper::FEValues<dealdim> & state_fe_values = cdc.GetFEValuesState();
       unsigned int n_dofs_per_cell = cdc.GetNDoFsPerCell();
@@ -72,7 +72,7 @@ template<typename VECTOR, int dopedim, int dealdim>
 
     void CellEquation_UT(const Multimesh_CellDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& cdc,
 			 dealii::Vector<double> &local_cell_vector,
-			 double scale)
+			 double scale, double /*scale_ico*/)
     {
       const DOpEWrapper::FEValues<dealdim> & state_fe_values = cdc.GetFEValuesState();
       unsigned int n_dofs_per_cell = cdc.GetNDoFsPerCell();
@@ -95,7 +95,7 @@ template<typename VECTOR, int dopedim, int dealdim>
 
     void CellEquation_UTT(const Multimesh_CellDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& cdc,
 			  dealii::Vector<double> &local_cell_vector,
-			  double scale)
+			  double scale, double /*scale_ico*/)
     {
       const DOpEWrapper::FEValues<dealdim> & state_fe_values = cdc.GetFEValuesState();
       unsigned int n_dofs_per_cell = cdc.GetNDoFsPerCell();
@@ -118,7 +118,7 @@ template<typename VECTOR, int dopedim, int dealdim>
 
     void CellEquation_Q(const Multimesh_CellDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& cdc,
 			dealii::Vector<double> &local_cell_vector,
-			double scale)
+			double scale, double /*scale_ico*/)
     {
       const DOpEWrapper::FEValues<dealdim> & control_fe_values = cdc.GetFEValuesControl();
       unsigned int n_dofs_per_cell = cdc.GetNDoFsPerCell();
@@ -141,7 +141,7 @@ template<typename VECTOR, int dopedim, int dealdim>
 
     void CellEquation_QT(const Multimesh_CellDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& cdc,
 			 dealii::Vector<double> &local_cell_vector,
-			 double scale)
+			 double scale, double /*scale_ico*/)
     {
       const DOpEWrapper::FEValues<dealdim> & state_fe_values = cdc.GetFEValuesState();
       unsigned int n_dofs_per_cell = cdc.GetNDoFsPerCell();
@@ -164,7 +164,7 @@ template<typename VECTOR, int dopedim, int dealdim>
 
     void CellEquation_QTT(const Multimesh_CellDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& cdc,
 			  dealii::Vector<double> &local_cell_vector,
-			  double scale)
+			  double scale, double /*scale_ico*/)
     {
       const DOpEWrapper::FEValues<dealdim> & control_fe_values = cdc.GetFEValuesControl();
       unsigned int n_dofs_per_cell = cdc.GetNDoFsPerCell();
@@ -187,25 +187,25 @@ template<typename VECTOR, int dopedim, int dealdim>
 
     void CellEquation_UU(const Multimesh_CellDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& cdc __attribute__((unused)),
 			 dealii::Vector<double> &local_cell_vector __attribute__((unused)),
-			 double scale __attribute__((unused)))
+			 double scale __attribute__((unused)), double /*scale_ico*/)
     {
       assert(this->_problem_type == "adjoint_hessian");
     }
     void CellEquation_QU(const Multimesh_CellDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& cdc __attribute__((unused)),
 			 dealii::Vector<double> &local_cell_vector __attribute__((unused)),
-			 double scale __attribute__((unused)))
+			 double scale __attribute__((unused)), double /*scale_ico*/)
     {
       assert(this->_problem_type == "adjoint_hessian");
     }
     void CellEquation_UQ(const Multimesh_CellDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& cdc __attribute__((unused)),
 			 dealii::Vector<double> &local_cell_vector __attribute__((unused)),
-			 double scale __attribute__((unused)))
+			 double scale __attribute__((unused)), double /*scale_ico*/)
     {
       assert(this->_problem_type == "hessian");
     }
     void CellEquation_QQ(const Multimesh_CellDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& cdc __attribute__((unused)),
 			 dealii::Vector<double> &local_cell_vector __attribute__((unused)),
-			 double scale __attribute__((unused)))
+			 double scale __attribute__((unused)), double /*scale_ico*/)
     {
       assert(this->_problem_type == "hessian");
     }

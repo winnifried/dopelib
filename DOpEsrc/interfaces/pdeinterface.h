@@ -58,7 +58,7 @@ namespace DOpE
          */
         virtual void
         CellTimeEquation(const CDC<DOFHANDLER, VECTOR, dealdim>&,
-            dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/);
+            dealii::Vector<double> &/*local_cell_vector*/, double scale);
 
         /******************************************************/
 
@@ -67,13 +67,13 @@ namespace DOpE
          */
         virtual void
         CellTimeEquationExplicit(const CDC<DOFHANDLER, VECTOR, dealdim>&,
-            dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/);
+            dealii::Vector<double> &/*local_cell_vector*/, double scale);
 
         /******************************************************/
 
         virtual void
         CellEquation_U(const CDC<DOFHANDLER, VECTOR, dealdim>&,
-            dealii::Vector<double> &/*local_cell_vector*/, double scale);
+            dealii::Vector<double> &/*local_cell_vector*/, double scale, double scale_ico);
 
         /******************************************************/
 
@@ -86,55 +86,55 @@ namespace DOpE
 
         virtual void
         CellEquation_UT(const CDC<DOFHANDLER, VECTOR, dealdim>&,
-            dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/);
+            dealii::Vector<double> &/*local_cell_vector*/, double scale, double scale_ico);
 
         /******************************************************/
 
         virtual void
         CellEquation_UTT(const CDC<DOFHANDLER, VECTOR, dealdim>&,
-            dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/);
+            dealii::Vector<double> &/*local_cell_vector*/, double scale, double scale_ico);
 
         /******************************************************/
 
         virtual void
         CellEquation_Q(const CDC<DOFHANDLER, VECTOR, dealdim>&,
-            dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/);
+            dealii::Vector<double> &/*local_cell_vector*/, double scale, double scale_ico);
 
         /******************************************************/
 
         virtual void
         CellEquation_QT(const CDC<DOFHANDLER, VECTOR, dealdim>&,
-            dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/);
+            dealii::Vector<double> &/*local_cell_vector*/, double scale, double scale_ico);
 
         /******************************************************/
 
         virtual void
         CellEquation_QTT(const CDC<DOFHANDLER, VECTOR, dealdim>&,
-            dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/);
+            dealii::Vector<double> &/*local_cell_vector*/, double scale, double scale_ico);
 
         /******************************************************/
 
         virtual void
         CellEquation_UU(const CDC<DOFHANDLER, VECTOR, dealdim>&,
-            dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/);
+            dealii::Vector<double> &/*local_cell_vector*/, double scale, double scale_ico);
 
         /******************************************************/
 
         virtual void
         CellEquation_QU(const CDC<DOFHANDLER, VECTOR, dealdim>&,
-            dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/);
+            dealii::Vector<double> &/*local_cell_vector*/, double scale, double scale_ico);
 
         /******************************************************/
 
         virtual void
         CellEquation_UQ(const CDC<DOFHANDLER, VECTOR, dealdim>&,
-            dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/);
+            dealii::Vector<double> &/*local_cell_vector*/, double scale, double scale_ico);
 
         /******************************************************/
 
         virtual void
         CellEquation_QQ(const CDC<DOFHANDLER, VECTOR, dealdim>&,
-            dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/);
+            dealii::Vector<double> &/*local_cell_vector*/, double scale, double scale_ico);
 
         /******************************************************/
 
@@ -143,7 +143,7 @@ namespace DOpE
          */
         virtual void
         CellRightHandSide(const CDC<DOFHANDLER, VECTOR, dealdim>&,
-            dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/);
+            dealii::Vector<double> &/*local_cell_vector*/, double scale);
 
         /******************************************************/
 
@@ -183,7 +183,7 @@ namespace DOpE
 
         virtual void
         ControlCellEquation(const CDC<DOFHANDLER, VECTOR, dealdim>&,
-            dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/);
+            dealii::Vector<double> &/*local_cell_vector*/, double scale);
 
         /******************************************************/
 
@@ -199,7 +199,7 @@ namespace DOpE
          */
         virtual void
         FaceEquation(const FDC<DOFHANDLER, VECTOR, dealdim>&,
-            dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/);
+            dealii::Vector<double> &/*local_cell_vector*/, double scale, double scale_ico);
         /******************************************************/
 
         /**
@@ -209,80 +209,80 @@ namespace DOpE
         virtual void
         StrongFaceResidual(const FDC<DOFHANDLER, VECTOR, dealdim>&,
             const FDC<DOFHANDLER, VECTOR, dealdim>& fdc_weight, double&,
-            double /*scale*/);
+            double scale);
 
         /******************************************************/
 
         virtual void
         FaceEquation_U(const FDC<DOFHANDLER, VECTOR, dealdim>&,
-            dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/);
+            dealii::Vector<double> &/*local_cell_vector*/, double scale, double scale_ico);
 
         /******************************************************/
 
         virtual void
         StrongFaceResidual_U(const FDC<DOFHANDLER, VECTOR, dealdim>&,
             const FDC<DOFHANDLER, VECTOR, dealdim>& cdc_weight, double&,
-            double /*scale*/);
+            double scale);
 
         /******************************************************/
 
         virtual void
         FaceEquation_UT(const FDC<DOFHANDLER, VECTOR, dealdim>&,
-            dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/);
+            dealii::Vector<double> &/*local_cell_vector*/, double scale, double scale_ico);
 
         /******************************************************/
 
         virtual void
         FaceEquation_UTT(const FDC<DOFHANDLER, VECTOR, dealdim>&,
-            dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/);
+            dealii::Vector<double> &/*local_cell_vector*/, double scale, double scale_ico);
 
         /******************************************************/
 
         virtual void
         FaceEquation_Q(const FDC<DOFHANDLER, VECTOR, dealdim>&,
-            dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/);
+            dealii::Vector<double> &/*local_cell_vector*/, double scale, double scale_ico);
 
         /******************************************************/
 
         virtual void
         FaceEquation_QT(const FDC<DOFHANDLER, VECTOR, dealdim>&,
-            dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/);
+            dealii::Vector<double> &/*local_cell_vector*/, double scale, double scale_ico);
 
         /******************************************************/
 
         virtual void
         FaceEquation_QTT(const FDC<DOFHANDLER, VECTOR, dealdim>&,
-            dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/);
+            dealii::Vector<double> &/*local_cell_vector*/, double scale, double scale_ico);
 
         /******************************************************/
 
         virtual void
         FaceEquation_UU(const FDC<DOFHANDLER, VECTOR, dealdim>&,
-            dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/);
+            dealii::Vector<double> &/*local_cell_vector*/, double scale, double scale_ico);
 
         /******************************************************/
 
         virtual void
         FaceEquation_QU(const FDC<DOFHANDLER, VECTOR, dealdim>&,
-            dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/);
+            dealii::Vector<double> &/*local_cell_vector*/, double scale, double scale_ico);
 
         /******************************************************/
 
         virtual void
         FaceEquation_UQ(const FDC<DOFHANDLER, VECTOR, dealdim>&,
-            dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/);
+            dealii::Vector<double> &/*local_cell_vector*/, double scale, double scale_ico);
 
         /******************************************************/
 
         virtual void
         FaceEquation_QQ(const FDC<DOFHANDLER, VECTOR, dealdim>&,
-            dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/);
+            dealii::Vector<double> &/*local_cell_vector*/, double scale, double scale_ico);
 
         /******************************************************/
 
         virtual void
         FaceRightHandSide(const FDC<DOFHANDLER, VECTOR, dealdim>&,
-            dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/);
+            dealii::Vector<double> &/*local_cell_vector*/, double scale);
 
         /******************************************************/
 
@@ -291,37 +291,25 @@ namespace DOpE
          */
         virtual void
         FaceMatrix(const FDC<DOFHANDLER, VECTOR, dealdim>&,
-            dealii::FullMatrix<double> &/*local_entry_matrix*/);
+            dealii::FullMatrix<double> &/*local_entry_matrix*/, double scale, double scale_ico);
 
         /******************************************************/
 
         virtual void
         FaceMatrix_T(const FDC<DOFHANDLER, VECTOR, dealdim>&,
-            dealii::FullMatrix<double> &/*local_entry_matrix*/);
-
-        /******************************************************/
-
-        virtual void
-        ControlFaceEquation(const FDC<DOFHANDLER, VECTOR, dealdim>&,
-            dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/);
-
-        /******************************************************/
-
-        virtual void
-        ControlFaceMatrix(const FDC<DOFHANDLER, VECTOR, dealdim>&,
-            dealii::FullMatrix<double> &/*local_entry_matrix*/);
+            dealii::FullMatrix<double> &/*local_entry_matrix*/, double scale, double scale_ico);
 
         /******************************************************/
         //Functions for Interface Integrals
         virtual void
         InterfaceMatrix(const FDC<DOFHANDLER, VECTOR, dealdim>&,
-            dealii::FullMatrix<double> &/*local_entry_matrix*/);
+            dealii::FullMatrix<double> &/*local_entry_matrix*/, double scale, double scale_ico);
 
         /******************************************************/
         //Functions for Interface Integrals
         virtual void
         InterfaceMatrix_T(const FDC<DOFHANDLER, VECTOR, dealdim>&,
-            dealii::FullMatrix<double> &/*local_entry_matrix*/);
+            dealii::FullMatrix<double> &/*local_entry_matrix*/, double scale, double scale_ico);
 
         /******************************************************/
         /**
@@ -330,7 +318,7 @@ namespace DOpE
 
         virtual void
         InterfaceEquation(const FDC<DOFHANDLER, VECTOR, dealdim>&,
-            dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/);
+            dealii::Vector<double> &/*local_cell_vector*/, double scale, double scale_ico);
 
         /******************************************************/
         /**
@@ -339,7 +327,7 @@ namespace DOpE
 
         virtual void
         InterfaceEquation_U(const FDC<DOFHANDLER, VECTOR, dealdim>&,
-            dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/);
+            dealii::Vector<double> &/*local_cell_vector*/, double scale, double scale_ico);
 
         /******************************************************/
         // Functions for Boundary Integrals
@@ -348,7 +336,7 @@ namespace DOpE
          */
         virtual void
         BoundaryEquation(const FDC<DOFHANDLER, VECTOR, dealdim>&,
-            dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/);
+            dealii::Vector<double> &/*local_cell_vector*/, double scale, double scale_ico);
 
         /******************************************************/
 
@@ -359,80 +347,80 @@ namespace DOpE
         virtual void
         StrongBoundaryResidual(const FDC<DOFHANDLER, VECTOR, dealdim>&,
             const FDC<DOFHANDLER, VECTOR, dealdim>& fdc_weight, double&,
-            double /*scale*/);
+            double scale);
 
         /******************************************************/
 
         virtual void
         BoundaryEquation_U(const FDC<DOFHANDLER, VECTOR, dealdim>&,
-            dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/);
+            dealii::Vector<double> &/*local_cell_vector*/, double scale, double scale_ico);
 
         /******************************************************/
 
         virtual void
         StrongBoundaryResidual_U(const FDC<DOFHANDLER, VECTOR, dealdim>&,
             const FDC<DOFHANDLER, VECTOR, dealdim>& fdc_weight, double&,
-            double /*scale*/);
+            double scale);
 
         /******************************************************/
 
         virtual void
         BoundaryEquation_UT(const FDC<DOFHANDLER, VECTOR, dealdim>&,
-            dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/);
+            dealii::Vector<double> &/*local_cell_vector*/, double scale, double scale_ico);
 
         /******************************************************/
 
         virtual void
         BoundaryEquation_UTT(const FDC<DOFHANDLER, VECTOR, dealdim>&,
-            dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/);
+            dealii::Vector<double> &/*local_cell_vector*/, double scale, double scale_ico);
 
         /******************************************************/
 
         virtual void
         BoundaryEquation_Q(const FDC<DOFHANDLER, VECTOR, dealdim>&,
-            dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/);
+            dealii::Vector<double> &/*local_cell_vector*/, double scale, double scale_ico);
 
         /******************************************************/
 
         virtual void
         BoundaryEquation_QT(const FDC<DOFHANDLER, VECTOR, dealdim>&,
-            dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/);
+            dealii::Vector<double> &/*local_cell_vector*/, double scale, double scale_ico);
 
         /******************************************************/
 
         virtual void
         BoundaryEquation_QTT(const FDC<DOFHANDLER, VECTOR, dealdim>&,
-            dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/);
+            dealii::Vector<double> &/*local_cell_vector*/, double scale, double scale_ico);
 
         /******************************************************/
 
         virtual void
         BoundaryEquation_UU(const FDC<DOFHANDLER, VECTOR, dealdim>&,
-            dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/);
+            dealii::Vector<double> &/*local_cell_vector*/, double scale, double scale_ico);
 
         /******************************************************/
 
         virtual void
         BoundaryEquation_QU(const FDC<DOFHANDLER, VECTOR, dealdim>&,
-            dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/);
+            dealii::Vector<double> &/*local_cell_vector*/, double scale, double scale_ico);
 
         /******************************************************/
 
         virtual void
         BoundaryEquation_UQ(const FDC<DOFHANDLER, VECTOR, dealdim>&,
-            dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/);
+            dealii::Vector<double> &/*local_cell_vector*/, double scale, double scale_ico);
 
         /******************************************************/
 
         virtual void
         BoundaryEquation_QQ(const FDC<DOFHANDLER, VECTOR, dealdim>&,
-            dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/);
+            dealii::Vector<double> &/*local_cell_vector*/, double scale, double scale_ico);
 
         /******************************************************/
 
         virtual void
         BoundaryRightHandSide(const FDC<DOFHANDLER, VECTOR, dealdim>&,
-            dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/);
+            dealii::Vector<double> &/*local_cell_vector*/, double scale);
 
         /******************************************************/
 
@@ -441,25 +429,15 @@ namespace DOpE
          */
         virtual void
         BoundaryMatrix(const FDC<DOFHANDLER, VECTOR, dealdim>&,
-            dealii::FullMatrix<double> &/*local_entry_matrix*/);
+            dealii::FullMatrix<double> &/*local_entry_matrix*/, double scale, double scale_ico);
 
         /******************************************************/
 
         virtual void
         BoundaryMatrix_T(const FDC<DOFHANDLER, VECTOR, dealdim>&,
-            dealii::FullMatrix<double> &/*local_entry_matrix*/);
+            dealii::FullMatrix<double> &/*local_entry_matrix*/, double scale, double scale_ico);
 
         /******************************************************/
-
-        virtual void
-        ControlBoundaryEquation(const FDC<DOFHANDLER, VECTOR, dealdim>&,
-            dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/);
-
-        /******************************************************/
-
-        virtual void
-        ControlBoundaryMatrix(const FDC<DOFHANDLER, VECTOR, dealdim>&,
-            dealii::FullMatrix<double> &/*local_entry_matrix*/);
 
         /******************************************************/
       /******************************************************/

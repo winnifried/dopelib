@@ -1170,7 +1170,7 @@ namespace DOpE
 			cell[b_index]->face(face)->boundary_indicator()) != boundary_equation_colors.end()))
 	      {
 		fdc.ReInit(coarse_index,fine_index,prolong_matrix,face);
-		pde.BoundaryEquation(fdc,local_cell_vector);
+		pde.BoundaryEquation(fdc,local_cell_vector, 1., 1.);
 		pde.BoundaryRhs(fdc,local_cell_vector,-1.);
 	      }
 	    }

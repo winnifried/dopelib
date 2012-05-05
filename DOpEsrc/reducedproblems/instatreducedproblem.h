@@ -768,13 +768,12 @@ void InstatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER, CONTROLINTEGR
       //Wert speichern
       if (this->GetProblem()->GetFunctionalType().find("timelocal"))
       {
-        if (this->GetFunctionalValues()[0].size() != 0)
+        if (this->GetFunctionalValues()[0].size() != 1)
         {
-          throw DOpEException("Too many evaluations of CostFunctional: "
-              + this->GetProblem()->GetFunctionalType(),
-                              "InstatReducedProblem::ComputeTimeFunctionals");
+          this->GetFunctionalValues()[0].resize(1);
+	  this->GetFunctionalValues()[0][0] = 0.;
         }
-        this->GetFunctionalValues()[0].push_back(ret);
+	this->GetFunctionalValues()[0][0] += ret;
       }
       else if (this->GetProblem()->GetFunctionalType().find("timedistributed"))
       {//TODO was passiert hier? Vermutlich sollte hier spaeter Zeitintegration durchgefuehrt werden?
@@ -1029,7 +1028,7 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
       TimeIterator it =
 	problem.GetSpaceTimeHandler()->GetTimeDoFHandler().first_interval();
       it.get_time_dof_indices(local_to_global);
-      problem.SetTime(local_to_global[0], it);
+      problem.SetTime(times[local_to_global[0]], it);
       sol.SetTimeDoFNumber(local_to_global[0], it);
     }
     //u_alt auf initial_values setzen
@@ -1082,7 +1081,7 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 	   != problem.GetSpaceTimeHandler()->GetTimeDoFHandler().after_last_interval(); ++it)
     {
       it.get_time_dof_indices(local_to_global);
-      problem.SetTime(local_to_global[0], it);
+      problem.SetTime(times[local_to_global[0]], it);
       sol.SetTimeDoFNumber(local_to_global[0], it);
       //TODO Eventuell waere ein Test mit nicht-gleichmaessigen Zeitschritten sinnvoll!
       
@@ -1162,7 +1161,7 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
       TimeIterator it =
 	problem.GetSpaceTimeHandler()->GetTimeDoFHandler().last_interval();
       it.get_time_dof_indices(local_to_global);
-      problem.SetTime(local_to_global[local_to_global.size()-1], it);
+      problem.SetTime(times[local_to_global[local_to_global.size()-1]], it);
       sol.SetTimeDoFNumber(local_to_global[local_to_global.size()-1], it);
     }
     //u_alt auf initial_values setzen
@@ -1207,7 +1206,7 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 	   != problem.GetSpaceTimeHandler()->GetTimeDoFHandler().before_first_interval(); --it)
     {
       it.get_time_dof_indices(local_to_global);
-      problem.SetTime(local_to_global[local_to_global.size()-1], it);
+      problem.SetTime(times[local_to_global[local_to_global.size()-1]], it);
       sol.SetTimeDoFNumber(local_to_global[local_to_global.size()-1], it);
      //TODO Eventuell waere ein Test mit nicht-gleichmaessigen Zeitschritten sinnvoll!
       

@@ -70,8 +70,8 @@ namespace DOpE
     void
     PDEInterface<CDC, FDC, DOFHANDLER, VECTOR, dopedim, dealdim>::CellTimeEquation(
         const CDC<DOFHANDLER, VECTOR, dealdim>&,
-        dealii::Vector<double> &local_cell_vector __attribute__((unused)),
-        double scale __attribute__((unused)))
+        dealii::Vector<double> &/*local_cell_vector*/ ,
+        double /*scale*/ )
     {
       throw DOpEException("Not Implemented", "PDEInterface::CellTimeEquation");
     }
@@ -99,8 +99,8 @@ namespace DOpE
     void
     PDEInterface<CDC, FDC, DOFHANDLER, VECTOR, dopedim, dealdim>::CellEquation_U(
         const CDC<DOFHANDLER, VECTOR, dealdim>&,
-        dealii::Vector<double> &local_cell_vector __attribute__((unused)),
-        double scale __attribute__((unused)))
+        dealii::Vector<double> &/*local_cell_vector*/ ,
+        double /*scale*/, double /*scale_ico*/ )
     {
       throw DOpEException("Not Implemented", "PDEInterface::CellEquation_U");
     }
@@ -115,7 +115,7 @@ namespace DOpE
     PDEInterface<CDC, FDC, DOFHANDLER, VECTOR, dopedim, dealdim>::StrongCellResidual_U(
         const CDC<DOFHANDLER, VECTOR, dealdim>&,
         const CDC<DOFHANDLER, VECTOR, dealdim>& /*cdc_weight*/, double&,
-        double scale __attribute__((unused)))
+        double /*scale*/ )
     {
       throw DOpEException("Not Implemented",
           "PDEInterface::StrongCellResidual_U");
@@ -130,8 +130,8 @@ namespace DOpE
     void
     PDEInterface<CDC, FDC, DOFHANDLER, VECTOR, dopedim, dealdim>::CellEquation_UT(
         const CDC<DOFHANDLER, VECTOR, dealdim>&,
-        dealii::Vector<double> &local_cell_vector __attribute__((unused)),
-        double scale __attribute__((unused)))
+        dealii::Vector<double> &/*local_cell_vector*/ ,
+         double /*scale*/, double /*scale_ico*/ )
     {
       throw DOpEException("Not Implemented", "PDEInterface::CellEquation_UT");
     }
@@ -145,8 +145,8 @@ namespace DOpE
     void
     PDEInterface<CDC, FDC, DOFHANDLER, VECTOR, dopedim, dealdim>::CellEquation_UTT(
         const CDC<DOFHANDLER, VECTOR, dealdim>&,
-        dealii::Vector<double> &local_cell_vector __attribute__((unused)),
-        double scale __attribute__((unused)))
+        dealii::Vector<double> &/*local_cell_vector*/ ,
+        double /*scale*/, double /*scale_ico*/ )
     {
       throw DOpEException("Not Implemented", "PDEInterface::CellEquation_UTT");
     }
@@ -160,8 +160,8 @@ namespace DOpE
     void
     PDEInterface<CDC, FDC, DOFHANDLER, VECTOR, dopedim, dealdim>::CellEquation_Q(
         const CDC<DOFHANDLER, VECTOR, dealdim>&,
-        dealii::Vector<double> &local_cell_vector __attribute__((unused)),
-        double scale __attribute__((unused)))
+        dealii::Vector<double> &/*local_cell_vector*/ ,
+        double /*scale*/, double /*scale_ico*/ )
     {
       throw DOpEException("Not Implemented", "PDEInterface::CellEquation_Q");
     }
@@ -175,8 +175,8 @@ namespace DOpE
     void
     PDEInterface<CDC, FDC, DOFHANDLER, VECTOR, dopedim, dealdim>::CellEquation_QT(
         const CDC<DOFHANDLER, VECTOR, dealdim>&,
-        dealii::Vector<double> &local_cell_vector __attribute__((unused)),
-        double scale __attribute__((unused)))
+        dealii::Vector<double> &/*local_cell_vector*/ ,
+        double /*scale*/, double /*scale_ico*/ )
     {
       throw DOpEException("Not Implemented", "PDEInterface::CellEquation_QT");
     }
@@ -190,8 +190,8 @@ namespace DOpE
     void
     PDEInterface<CDC, FDC, DOFHANDLER, VECTOR, dopedim, dealdim>::CellEquation_QTT(
         const CDC<DOFHANDLER, VECTOR, dealdim>&,
-        dealii::Vector<double> &local_cell_vector __attribute__((unused)),
-        double scale __attribute__((unused)))
+        dealii::Vector<double> &/*local_cell_vector*/ ,
+        double /*scale*/, double /*scale_ico*/ )
     {
       throw DOpEException("Not Implemented", "PDEInterface::CellEquation_QTT");
     }
@@ -205,8 +205,8 @@ namespace DOpE
     void
     PDEInterface<CDC, FDC, DOFHANDLER, VECTOR, dopedim, dealdim>::CellEquation_UU(
         const CDC<DOFHANDLER, VECTOR, dealdim>&,
-        dealii::Vector<double> &local_cell_vector __attribute__((unused)),
-        double scale __attribute__((unused)))
+        dealii::Vector<double> &/*local_cell_vector*/ ,
+        double /*scale*/, double /*scale_ico*/ )
     {
       throw DOpEException("Not Implemented", "PDEInterface::CellEquation_UU");
     }
@@ -220,8 +220,8 @@ namespace DOpE
     void
     PDEInterface<CDC, FDC, DOFHANDLER, VECTOR, dopedim, dealdim>::CellEquation_QU(
         const CDC<DOFHANDLER, VECTOR, dealdim>&,
-        dealii::Vector<double> &local_cell_vector __attribute__((unused)),
-        double scale __attribute__((unused)))
+        dealii::Vector<double> &/*local_cell_vector*/ ,
+        double /*scale*/, double /*scale_ico*/ )
     {
       throw DOpEException("Not Implemented", "PDEInterface::CellEquation_QU");
     }
@@ -235,8 +235,8 @@ namespace DOpE
     void
     PDEInterface<CDC, FDC, DOFHANDLER, VECTOR, dopedim, dealdim>::CellEquation_UQ(
         const CDC<DOFHANDLER, VECTOR, dealdim>&,
-        dealii::Vector<double> &local_cell_vector __attribute__((unused)),
-        double scale __attribute__((unused)))
+        dealii::Vector<double> &/*local_cell_vector*/ ,
+        double /*scale*/, double /*scale_ico*/ )
     {
       throw DOpEException("Not Implemented", "PDEInterface::CellEquation_UQ");
     }
@@ -250,8 +250,8 @@ namespace DOpE
     void
     PDEInterface<CDC, FDC, DOFHANDLER, VECTOR, dopedim, dealdim>::CellEquation_QQ(
         const CDC<DOFHANDLER, VECTOR, dealdim>&,
-        dealii::Vector<double> &local_cell_vector __attribute__((unused)),
-        double scale __attribute__((unused)))
+        dealii::Vector<double> &/*local_cell_vector*/ ,
+        double /*scale*/, double /*scale_ico*/ )
     {
       throw DOpEException("Not Implemented", "PDEInterface::CellEquation_QQ");
     }
@@ -265,8 +265,8 @@ namespace DOpE
     void
     PDEInterface<CDC, FDC, DOFHANDLER, VECTOR, dopedim, dealdim>::ControlCellEquation(
         const CDC<DOFHANDLER, VECTOR, dealdim>&,
-        dealii::Vector<double> &local_cell_vector __attribute__((unused)),
-        double scale __attribute__((unused)))
+        dealii::Vector<double> &/*local_cell_vector*/ ,
+        double /*scale*/ )
     {
       throw DOpEException("Not Implemented",
           "PDEInterface::ControlCellEquation");
@@ -281,8 +281,8 @@ namespace DOpE
     void
     PDEInterface<CDC, FDC, DOFHANDLER, VECTOR, dopedim, dealdim>::CellRightHandSide(
         const CDC<DOFHANDLER, VECTOR, dealdim>&,
-        dealii::Vector<double> &local_cell_vector __attribute__((unused)),
-        double scale __attribute__((unused)))
+        dealii::Vector<double> &/*local_cell_vector*/ ,
+        double /*scale*/ )
     {
       throw DOpEException("Not Implemented", "PDEInterface::CellRightHandSide");
     }
@@ -296,7 +296,7 @@ namespace DOpE
     void
     PDEInterface<CDC, FDC, DOFHANDLER, VECTOR, dopedim, dealdim>::ControlCellMatrix(
         const CDC<DOFHANDLER, VECTOR, dealdim>&,
-        FullMatrix<double> &local_entry_matrix __attribute__((unused)))
+        FullMatrix<double> &/*local_entry_matrix*/ )
     {
       throw DOpEException("Not Implemented", "PDEInterface::ControlCellMatrix");
     }
@@ -325,7 +325,7 @@ namespace DOpE
     void
     PDEInterface<CDC, FDC, DOFHANDLER, VECTOR, dopedim, dealdim>::CellTimeMatrix(
         const CDC<DOFHANDLER, VECTOR, dealdim>&,
-        FullMatrix<double> &local_entry_matrix __attribute__((unused)))
+        FullMatrix<double> &/*local_entry_matrix*/ )
     {
       throw DOpEException("Not Implemented", "PDEInterface::CellTimeMatrix");
     }
@@ -381,8 +381,8 @@ namespace DOpE
     void
     PDEInterface<CDC, FDC, DOFHANDLER, VECTOR, dopedim, dealdim>::FaceEquation(
         const FDC<DOFHANDLER, VECTOR, dealdim>&,
-        dealii::Vector<double> &local_cell_vector __attribute__((unused)),
-        double scale __attribute__((unused)))
+        dealii::Vector<double> &/*local_cell_vector*/ ,
+        double /*scale*/, double /*scale_ico*/ )
     {
       throw DOpEException("Not Implemented", "PDEInterface::FaceEquation");
     }
@@ -397,7 +397,7 @@ namespace DOpE
     PDEInterface<CDC, FDC, DOFHANDLER, VECTOR, dopedim, dealdim>::StrongFaceResidual(
         const FDC<DOFHANDLER, VECTOR, dealdim>&,
         const FDC<DOFHANDLER, VECTOR, dealdim>& /*fdc_weight*/, double&,
-        double scale __attribute__((unused)))
+        double /*scale*/ )
     {
       throw DOpEException("Not Implemented",
           "PDEInterface::StrongFaceResidual");
@@ -411,8 +411,8 @@ namespace DOpE
     void
     PDEInterface<CDC, FDC, DOFHANDLER, VECTOR, dopedim, dealdim>::FaceEquation_U(
         const FDC<DOFHANDLER, VECTOR, dealdim>&,
-        dealii::Vector<double> &local_cell_vector __attribute__((unused)),
-        double scale __attribute__((unused)))
+        dealii::Vector<double> &/*local_cell_vector*/ ,
+        double /*scale*/, double /*scale_ico*/ )
     {
       throw DOpEException("Not Implemented", "PDEInterface::FaceEquation_U");
     }
@@ -426,7 +426,7 @@ namespace DOpE
     PDEInterface<CDC, FDC, DOFHANDLER, VECTOR, dopedim, dealdim>::StrongFaceResidual_U(
         const FDC<DOFHANDLER, VECTOR, dealdim>&,
         const FDC<DOFHANDLER, VECTOR, dealdim>& /*fdc_weight*/, double&,
-        double scale __attribute__((unused)))
+        double /*scale*/ )
     {
       throw DOpEException("Not Implemented",
           "PDEInterface::StrongFaceResidual_U");
@@ -440,8 +440,8 @@ namespace DOpE
     void
     PDEInterface<CDC, FDC, DOFHANDLER, VECTOR, dopedim, dealdim>::FaceEquation_UT(
         const FDC<DOFHANDLER, VECTOR, dealdim>&,
-        dealii::Vector<double> &local_cell_vector __attribute__((unused)),
-        double scale __attribute__((unused)))
+        dealii::Vector<double> &/*local_cell_vector*/ ,
+        double /*scale*/, double /*scale_ico*/ )
     {
       throw DOpEException("Not Implemented", "PDEInterface::FaceEquation_UT");
     }
@@ -454,8 +454,8 @@ namespace DOpE
     void
     PDEInterface<CDC, FDC, DOFHANDLER, VECTOR, dopedim, dealdim>::FaceEquation_UTT(
         const FDC<DOFHANDLER, VECTOR, dealdim>&,
-        dealii::Vector<double> &local_cell_vector __attribute__((unused)),
-        double scale __attribute__((unused)))
+        dealii::Vector<double> &/*local_cell_vector*/,
+        double /*scale*/, double /*scale_ico*/ )
     {
       throw DOpEException("Not Implemented", "PDEInterface::FaceEquation_UTT");
     }
@@ -468,8 +468,8 @@ namespace DOpE
     void
     PDEInterface<CDC, FDC, DOFHANDLER, VECTOR, dopedim, dealdim>::FaceEquation_Q(
         const FDC<DOFHANDLER, VECTOR, dealdim>&,
-        dealii::Vector<double> &local_cell_vector __attribute__((unused)),
-        double scale __attribute__((unused)))
+        dealii::Vector<double> &/*local_cell_vector*/ ,
+        double /*scale*/, double /*scale_ico*/ )
     {
       throw DOpEException("Not Implemented", "PDEInterface::FaceEquation_Q");
     }
@@ -482,8 +482,8 @@ namespace DOpE
     void
     PDEInterface<CDC, FDC, DOFHANDLER, VECTOR, dopedim, dealdim>::FaceEquation_QT(
         const FDC<DOFHANDLER, VECTOR, dealdim>&,
-        dealii::Vector<double> &local_cell_vector __attribute__((unused)),
-        double scale __attribute__((unused)))
+        dealii::Vector<double> &/*local_cell_vector*/ ,
+        double /*scale*/, double /*scale_ico*/ )
     {
       throw DOpEException("Not Implemented", "PDEInterface::FaceEquation_QT");
     }
@@ -496,8 +496,8 @@ namespace DOpE
     void
     PDEInterface<CDC, FDC, DOFHANDLER, VECTOR, dopedim, dealdim>::FaceEquation_QTT(
         const FDC<DOFHANDLER, VECTOR, dealdim>&,
-        dealii::Vector<double> &local_cell_vector __attribute__((unused)),
-        double scale __attribute__((unused)))
+        dealii::Vector<double> &/*local_cell_vector*/ ,
+        double /*scale*/, double /*scale_ico*/ )
     {
       throw DOpEException("Not Implemented", "PDEInterface::FaceEquation_QTT");
     }
@@ -510,8 +510,8 @@ namespace DOpE
     void
     PDEInterface<CDC, FDC, DOFHANDLER, VECTOR, dopedim, dealdim>::FaceEquation_UU(
         const FDC<DOFHANDLER, VECTOR, dealdim>&,
-        dealii::Vector<double> &local_cell_vector __attribute__((unused)),
-        double scale __attribute__((unused)))
+        dealii::Vector<double> &/*local_cell_vector*/ ,
+        double /*scale*/, double /*scale_ico*/ )
     {
       throw DOpEException("Not Implemented", "PDEInterface::FaceEquation_UU");
     }
@@ -524,8 +524,8 @@ namespace DOpE
     void
     PDEInterface<CDC, FDC, DOFHANDLER, VECTOR, dopedim, dealdim>::FaceEquation_QU(
         const FDC<DOFHANDLER, VECTOR, dealdim>&,
-        dealii::Vector<double> &local_cell_vector __attribute__((unused)),
-        double scale __attribute__((unused)))
+        dealii::Vector<double> &/*local_cell_vector*/ ,
+        double /*scale*/, double /*scale_ico*/ )
     {
       throw DOpEException("Not Implemented", "PDEInterface::FaceEquation_QU");
     }
@@ -538,8 +538,8 @@ namespace DOpE
     void
     PDEInterface<CDC, FDC, DOFHANDLER, VECTOR, dopedim, dealdim>::FaceEquation_UQ(
         const FDC<DOFHANDLER, VECTOR, dealdim>&,
-        dealii::Vector<double> &local_cell_vector __attribute__((unused)),
-        double scale __attribute__((unused)))
+        dealii::Vector<double> &/*local_cell_vector*/ ,
+        double /*scale*/, double /*scale_ico*/ )
     {
       throw DOpEException("Not Implemented", "PDEInterface::FaceEquation_UQ");
     }
@@ -552,8 +552,8 @@ namespace DOpE
     void
     PDEInterface<CDC, FDC, DOFHANDLER, VECTOR, dopedim, dealdim>::FaceEquation_QQ(
         const FDC<DOFHANDLER, VECTOR, dealdim>&,
-        dealii::Vector<double> &local_cell_vector __attribute__((unused)),
-        double scale __attribute__((unused)))
+        dealii::Vector<double> &/*local_cell_vector*/ ,
+        double /*scale*/, double /*scale_ico*/ )
     {
       throw DOpEException("Not Implemented", "PDEInterface::FaceEquation_QQ");
     }
@@ -566,8 +566,8 @@ namespace DOpE
     void
     PDEInterface<CDC, FDC, DOFHANDLER, VECTOR, dopedim, dealdim>::FaceRightHandSide(
         const FDC<DOFHANDLER, VECTOR, dealdim>&,
-        dealii::Vector<double> &local_cell_vector __attribute__((unused)),
-        double scale __attribute__((unused)))
+        dealii::Vector<double> &/*local_cell_vector*/ ,
+        double /*scale*/ )
     {
       throw DOpEException("Not Implemented", "PDEInterface::FaceRightHandSide");
     }
@@ -580,7 +580,7 @@ namespace DOpE
     void
     PDEInterface<CDC, FDC, DOFHANDLER, VECTOR, dopedim, dealdim>::FaceMatrix(
         const FDC<DOFHANDLER, VECTOR, dealdim>&,
-        FullMatrix<double> &local_entry_matrix __attribute__((unused)))
+        FullMatrix<double> &/*local_entry_matrix*/, double /*scale*/, double /*scale_ico*/ )
     {
       throw DOpEException("Not Implemented", "PDEInterface::FaceMatrix");
     }
@@ -593,12 +593,12 @@ namespace DOpE
     void
     PDEInterface<CDC, FDC, DOFHANDLER, VECTOR, dopedim, dealdim>::FaceMatrix_T(
         const FDC<DOFHANDLER, VECTOR, dealdim>& fdc,
-        FullMatrix<double> &local_entry_matrix)
+        FullMatrix<double> &local_entry_matrix, double scale, double scale_ico)
     {
       FullMatrix<double> tmp_mat = local_entry_matrix;
       tmp_mat = 0.;
 
-      FaceMatrix(fdc, tmp_mat);
+      FaceMatrix(fdc, tmp_mat,scale,scale_ico);
       unsigned int n_dofs_per_cell = fdc.GetNDoFsPerCell();
 
       for (unsigned int i = 0; i < n_dofs_per_cell; i++)
@@ -611,34 +611,6 @@ namespace DOpE
     }
 
   /********************************************/
-  template<
-      template<typename DOFHANDLER, typename VECTOR, int dealdim> class CDC,
-      template<typename DOFHANDLER, typename VECTOR, int dealdim> class FDC,
-      typename DOFHANDLER, typename VECTOR, int dopedim, int dealdim>
-    void
-    PDEInterface<CDC, FDC, DOFHANDLER, VECTOR, dopedim, dealdim>::ControlFaceEquation(
-        const FDC<DOFHANDLER, VECTOR, dealdim>&,
-        dealii::Vector<double> &local_cell_vector __attribute__((unused)),
-        double scale __attribute__((unused)))
-    {
-      throw DOpEException("Not Implemented",
-          "PDEInterface::ControlFaceEquation");
-    }
-
-  /********************************************/
-  template<
-      template<typename DOFHANDLER, typename VECTOR, int dealdim> class CDC,
-      template<typename DOFHANDLER, typename VECTOR, int dealdim> class FDC,
-      typename DOFHANDLER, typename VECTOR, int dopedim, int dealdim>
-    void
-    PDEInterface<CDC, FDC, DOFHANDLER, VECTOR, dopedim, dealdim>::ControlFaceMatrix(
-        const FDC<DOFHANDLER, VECTOR, dealdim>&,
-        FullMatrix<double> &local_entry_matrix __attribute__((unused)))
-    {
-      throw DOpEException("Not Implemented", "PDEInterface::ControlFaceMatrix");
-    }
-
-  /********************************************/
 
   template<
       template<typename DOFHANDLER, typename VECTOR, int dealdim> class CDC,
@@ -647,8 +619,8 @@ namespace DOpE
     void
     PDEInterface<CDC, FDC, DOFHANDLER, VECTOR, dopedim, dealdim>::InterfaceEquation(
         const FDC<DOFHANDLER, VECTOR, dealdim>&,
-        dealii::Vector<double> &local_cell_vector __attribute__((unused)),
-        double scale __attribute__((unused)))
+        dealii::Vector<double> &/*local_cell_vector*/ ,
+        double /*scale*/, double /*scale_ico*/ )
     {
       throw DOpEException("Not Implemented", "PDEInterface::InterfaceEquation");
     }
@@ -661,8 +633,8 @@ namespace DOpE
     void
     PDEInterface<CDC, FDC, DOFHANDLER, VECTOR, dopedim, dealdim>::InterfaceEquation_U(
         const FDC<DOFHANDLER, VECTOR, dealdim>&,
-        dealii::Vector<double> &local_cell_vector __attribute__((unused)),
-        double scale __attribute__((unused)))
+        dealii::Vector<double> &/*local_cell_vector*/ ,
+        double /*scale*/, double /*scale_ico*/ )
     {
       throw DOpEException("Not Implemented",
           "PDEInterface::InterfaceEquation_U");
@@ -677,7 +649,7 @@ namespace DOpE
     void
     PDEInterface<CDC, FDC, DOFHANDLER, VECTOR, dopedim, dealdim>::InterfaceMatrix(
         const FDC<DOFHANDLER, VECTOR, dealdim>&,
-        FullMatrix<double> &local_entry_matrix __attribute__((unused)))
+        FullMatrix<double> &/*local_entry_matrix*/ , double /*scale*/, double /*scale_ico*/)
     {
       throw DOpEException("Not Implemented", "PDEInterface::InterfaceMatrix");
     }
@@ -691,7 +663,7 @@ namespace DOpE
     void
     PDEInterface<CDC, FDC, DOFHANDLER, VECTOR, dopedim, dealdim>::InterfaceMatrix_T(
         const FDC<DOFHANDLER, VECTOR, dealdim>&,
-        FullMatrix<double> &local_entry_matrix __attribute__((unused)))
+        FullMatrix<double> &/*local_entry_matrix*/ , double /*scale*/, double /*scale_ico*/)
     {
       throw DOpEException("Not Implemented", "PDEInterface::InterfaceMatrix_T");
     }
@@ -705,8 +677,8 @@ namespace DOpE
     void
     PDEInterface<CDC, FDC, DOFHANDLER, VECTOR, dopedim, dealdim>::BoundaryEquation(
         const FDC<DOFHANDLER, VECTOR, dealdim>&,
-        dealii::Vector<double> &local_cell_vector __attribute__((unused)),
-        double scale __attribute__((unused)))
+        dealii::Vector<double> &/*local_cell_vector*/ ,
+        double /*scale*/, double /*scale_ico*/ )
     {
       throw DOpEException("Not Implemented", "PDEInterface::BoundaryEquation");
     }
@@ -721,7 +693,7 @@ namespace DOpE
     PDEInterface<CDC, FDC, DOFHANDLER, VECTOR, dopedim, dealdim>::StrongBoundaryResidual(
         const FDC<DOFHANDLER, VECTOR, dealdim>&,
         const FDC<DOFHANDLER, VECTOR, dealdim>& /*Fdc_weight*/, double&,
-        double scale __attribute__((unused)))
+        double /*scale*/ )
     {
       throw DOpEException("Not Implemented",
           "PDEInterface::StrongBoundaryResidual");
@@ -736,8 +708,8 @@ namespace DOpE
     void
     PDEInterface<CDC, FDC, DOFHANDLER, VECTOR, dopedim, dealdim>::BoundaryEquation_U(
         const FDC<DOFHANDLER, VECTOR, dealdim>&,
-        dealii::Vector<double> &local_cell_vector __attribute__((unused)),
-        double scale __attribute__((unused)))
+        dealii::Vector<double> &/*local_cell_vector*/ ,
+        double /*scale*/, double /*scale_ico*/ )
     {
       throw DOpEException("Not Implemented",
           "PDEInterface::BoundaryEquation_U");
@@ -752,7 +724,7 @@ namespace DOpE
     PDEInterface<CDC, FDC, DOFHANDLER, VECTOR, dopedim, dealdim>::StrongBoundaryResidual_U(
         const FDC<DOFHANDLER, VECTOR, dealdim>&,
         const FDC<DOFHANDLER, VECTOR, dealdim>& /*fdc_weight*/, double&,
-        double scale __attribute__((unused)))
+        double /*scale*/ )
     {
       throw DOpEException("Not Implemented",
           "PDEInterface::StrongBoundaryResidual_U");
@@ -766,8 +738,8 @@ namespace DOpE
     void
     PDEInterface<CDC, FDC, DOFHANDLER, VECTOR, dopedim, dealdim>::BoundaryEquation_UT(
         const FDC<DOFHANDLER, VECTOR, dealdim>&,
-        dealii::Vector<double> &local_cell_vector __attribute__((unused)),
-        double scale __attribute__((unused)))
+        dealii::Vector<double> &/*local_cell_vector*/ ,
+        double /*scale*/, double /*scale_ico*/ )
     {
       throw DOpEException("Not Implemented",
           "PDEInterface::BoundaryEquation_UT");
@@ -781,8 +753,8 @@ namespace DOpE
     void
     PDEInterface<CDC, FDC, DOFHANDLER, VECTOR, dopedim, dealdim>::BoundaryEquation_UTT(
         const FDC<DOFHANDLER, VECTOR, dealdim>&,
-        dealii::Vector<double> &local_cell_vector __attribute__((unused)),
-        double scale __attribute__((unused)))
+        dealii::Vector<double> &/*local_cell_vector*/ ,
+        double /*scale*/, double /*scale_ico*/ )
     {
       throw DOpEException("Not Implemented",
           "PDEInterface::BoundaryEquation_UTT");
@@ -796,8 +768,8 @@ namespace DOpE
     void
     PDEInterface<CDC, FDC, DOFHANDLER, VECTOR, dopedim, dealdim>::BoundaryEquation_Q(
         const FDC<DOFHANDLER, VECTOR, dealdim>&,
-        dealii::Vector<double> &local_cell_vector __attribute__((unused)),
-        double scale __attribute__((unused)))
+        dealii::Vector<double> &/*local_cell_vector*/ ,
+        double /*scale*/, double /*scale_ico*/ )
     {
       throw DOpEException("Not Implemented",
           "PDEInterface::BoundaryEquation_Q");
@@ -811,8 +783,8 @@ namespace DOpE
     void
     PDEInterface<CDC, FDC, DOFHANDLER, VECTOR, dopedim, dealdim>::BoundaryEquation_QT(
         const FDC<DOFHANDLER, VECTOR, dealdim>&,
-        dealii::Vector<double> &local_cell_vector __attribute__((unused)),
-        double scale __attribute__((unused)))
+        dealii::Vector<double> &/*local_cell_vector*/ ,
+        double /*scale*/, double /*scale_ico*/ )
     {
       throw DOpEException("Not Implemented",
           "PDEInterface::BoundaryEquation_QT");
@@ -826,8 +798,8 @@ namespace DOpE
     void
     PDEInterface<CDC, FDC, DOFHANDLER, VECTOR, dopedim, dealdim>::BoundaryEquation_QTT(
         const FDC<DOFHANDLER, VECTOR, dealdim>&,
-        dealii::Vector<double> &local_cell_vector __attribute__((unused)),
-        double scale __attribute__((unused)))
+        dealii::Vector<double> &/*local_cell_vector*/ ,
+        double /*scale*/, double /*scale_ico*/ )
     {
       throw DOpEException("Not Implemented",
           "PDEInterface::BoundaryEquation_QTT");
@@ -841,8 +813,8 @@ namespace DOpE
     void
     PDEInterface<CDC, FDC, DOFHANDLER, VECTOR, dopedim, dealdim>::BoundaryEquation_UU(
         const FDC<DOFHANDLER, VECTOR, dealdim>&,
-        dealii::Vector<double> &local_cell_vector __attribute__((unused)),
-        double scale __attribute__((unused)))
+        dealii::Vector<double> &/*local_cell_vector*/ ,
+        double /*scale*/, double /*scale_ico*/ )
     {
       throw DOpEException("Not Implemented",
           "PDEInterface::BoundaryEquation_UU");
@@ -856,8 +828,8 @@ namespace DOpE
     void
     PDEInterface<CDC, FDC, DOFHANDLER, VECTOR, dopedim, dealdim>::BoundaryEquation_QU(
         const FDC<DOFHANDLER, VECTOR, dealdim>&,
-        dealii::Vector<double> &local_cell_vector __attribute__((unused)),
-        double scale __attribute__((unused)))
+        dealii::Vector<double> &/*local_cell_vector*/ ,
+        double /*scale*/, double /*scale_ico*/ )
     {
       throw DOpEException("Not Implemented",
           "PDEInterface::BoundaryEquation_QU");
@@ -871,8 +843,8 @@ namespace DOpE
     void
     PDEInterface<CDC, FDC, DOFHANDLER, VECTOR, dopedim, dealdim>::BoundaryEquation_UQ(
         const FDC<DOFHANDLER, VECTOR, dealdim>&,
-        dealii::Vector<double> &local_cell_vector __attribute__((unused)),
-        double scale __attribute__((unused)))
+        dealii::Vector<double> &/*local_cell_vector*/ ,
+        double /*scale*/, double /*scale_ico*/ )
     {
       throw DOpEException("Not Implemented",
           "PDEInterface::BoundaryEquation_UQ");
@@ -886,8 +858,8 @@ namespace DOpE
     void
     PDEInterface<CDC, FDC, DOFHANDLER, VECTOR, dopedim, dealdim>::BoundaryEquation_QQ(
         const FDC<DOFHANDLER, VECTOR, dealdim>&,
-        dealii::Vector<double> &local_cell_vector __attribute__((unused)),
-        double scale __attribute__((unused)))
+        dealii::Vector<double> &/*local_cell_vector*/ ,
+        double /*scale*/, double /*scale_ico*/ )
     {
       throw DOpEException("Not Implemented",
           "PDEInterface::BoundaryEquation_QQ");
@@ -901,8 +873,8 @@ namespace DOpE
     void
     PDEInterface<CDC, FDC, DOFHANDLER, VECTOR, dopedim, dealdim>::BoundaryRightHandSide(
         const FDC<DOFHANDLER, VECTOR, dealdim>&,
-        dealii::Vector<double> &local_cell_vector __attribute__((unused)),
-        double scale __attribute__((unused)))
+        dealii::Vector<double> &/*local_cell_vector*/ ,
+        double /*scale*/ )
     {
       throw DOpEException("Not Implemented",
           "PDEInterface::BoundaryRightHandSide");
@@ -916,7 +888,7 @@ namespace DOpE
     void
     PDEInterface<CDC, FDC, DOFHANDLER, VECTOR, dopedim, dealdim>::BoundaryMatrix(
         const FDC<DOFHANDLER, VECTOR, dealdim>&,
-        FullMatrix<double> &local_entry_matrix __attribute__((unused)))
+        FullMatrix<double> &/*local_entry_matrix*/, double /*scale*/, double /*scale_ico*/)
     {
       throw DOpEException("Not Implemented", "PDEInterface::BoundaryMatrix");
     }
@@ -929,12 +901,12 @@ namespace DOpE
     void
     PDEInterface<CDC, FDC, DOFHANDLER, VECTOR, dopedim, dealdim>::BoundaryMatrix_T(
         const FDC<DOFHANDLER, VECTOR, dealdim>& fdc,
-        FullMatrix<double> &local_entry_matrix)
+        FullMatrix<double> &local_entry_matrix, double scale, double scale_ico)
     {
       FullMatrix<double> tmp_mat = local_entry_matrix;
       tmp_mat = 0.;
 
-      BoundaryMatrix(fdc, tmp_mat);
+      BoundaryMatrix(fdc, tmp_mat,scale, scale_ico);
       unsigned int n_dofs_per_cell = fdc.GetNDoFsPerCell();
 
       for (unsigned int i = 0; i < n_dofs_per_cell; i++)
@@ -945,35 +917,6 @@ namespace DOpE
         }
       }
 
-    }
-
-  /********************************************/
-  template<
-      template<typename DOFHANDLER, typename VECTOR, int dealdim> class CDC,
-      template<typename DOFHANDLER, typename VECTOR, int dealdim> class FDC,
-      typename DOFHANDLER, typename VECTOR, int dopedim, int dealdim>
-    void
-    PDEInterface<CDC, FDC, DOFHANDLER, VECTOR, dopedim, dealdim>::ControlBoundaryEquation(
-        const FDC<DOFHANDLER, VECTOR, dealdim>&,
-        dealii::Vector<double> &local_cell_vector __attribute__((unused)),
-        double scale __attribute__((unused)))
-    {
-      throw DOpEException("Not Implemented",
-          "PDEInterface::ControlBoundaryEquation");
-    }
-
-  /********************************************/
-  template<
-      template<typename DOFHANDLER, typename VECTOR, int dealdim> class CDC,
-      template<typename DOFHANDLER, typename VECTOR, int dealdim> class FDC,
-      typename DOFHANDLER, typename VECTOR, int dopedim, int dealdim>
-    void
-    PDEInterface<CDC, FDC, DOFHANDLER, VECTOR, dopedim, dealdim>::ControlBoundaryMatrix(
-        const FDC<DOFHANDLER, VECTOR, dealdim>&,
-        FullMatrix<double> &local_entry_matrix __attribute__((unused)))
-    {
-      throw DOpEException("Not Implemented",
-          "PDEInterface::ControlBoundaryMatrix");
     }
 
   /********************************************/

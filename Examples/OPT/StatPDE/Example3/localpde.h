@@ -217,7 +217,7 @@ template<typename VECTOR, int dopedim, int dealdim>
 
 
     void CellEquation_U(const CellDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& cdc,
-			dealii::Vector<double> &local_cell_vector, double scale)
+			dealii::Vector<double> &local_cell_vector, double scale, double /*scale_ico*/)
     {
       const DOpEWrapper::FEValues<dealdim> & state_fe_values = cdc.GetFEValuesState();
       unsigned int n_dofs_per_cell = cdc.GetNDoFsPerCell();
@@ -310,7 +310,7 @@ template<typename VECTOR, int dopedim, int dealdim>
     
     
     void CellEquation_UT(const CellDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& cdc,
-			 dealii::Vector<double> &local_cell_vector, double scale)
+			 dealii::Vector<double> &local_cell_vector, double scale, double /*scale_ico*/)
     {
       const DOpEWrapper::FEValues<dealdim> & state_fe_values = cdc.GetFEValuesState();
       unsigned int n_dofs_per_cell = cdc.GetNDoFsPerCell();
@@ -403,7 +403,7 @@ template<typename VECTOR, int dopedim, int dealdim>
 
 
     void CellEquation_UTT(const CellDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& cdc,
-			  dealii::Vector<double> &local_cell_vector, double scale)
+			  dealii::Vector<double> &local_cell_vector, double scale, double /*scale_ico*/)
     {
       const DOpEWrapper::FEValues<dealdim> & state_fe_values = cdc.GetFEValuesState();
       unsigned int n_dofs_per_cell = cdc.GetNDoFsPerCell();
@@ -494,7 +494,7 @@ template<typename VECTOR, int dopedim, int dealdim>
     }
 
     void CellEquation_UU(const CellDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& cdc,
-			 dealii::Vector<double> &local_cell_vector, double scale)
+			 dealii::Vector<double> &local_cell_vector, double scale, double /*scale_ico*/)
     {
       const DOpEWrapper::FEValues<dealdim> & state_fe_values = cdc.GetFEValuesState();
       unsigned int n_dofs_per_cell = cdc.GetNDoFsPerCell();
@@ -568,37 +568,37 @@ template<typename VECTOR, int dopedim, int dealdim>
 
     // Look for BoundaryEquationQ
     void CellEquation_Q(const CellDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& cdc __attribute__((unused)),
-			dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
+			dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/, double /*scale_ico*/)
     {
       assert(this->_problem_type == "gradient");
     }
 
 
     void CellEquation_QT(const CellDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& cdc __attribute__((unused)),
-			 dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
+			 dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/, double /*scale_ico*/)
     {
       assert(this->_problem_type == "tangent");
     }
 
     void CellEquation_QTT(const CellDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& cdc __attribute__((unused)),
-			  dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
+			  dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/, double /*scale_ico*/)
     {
       assert(this->_problem_type == "hessian");
     }
 
 
     void CellEquation_QU(const CellDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& cdc __attribute__((unused)),
-			 dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
+			 dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/, double /*scale_ico*/)
     {
       assert(this->_problem_type == "adjoint_hessian");
     }
     void CellEquation_UQ(const CellDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& cdc __attribute__((unused)),
-			 dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
+			 dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/, double /*scale_ico*/)
     {
       assert(this->_problem_type == "hessian");
     }
     void CellEquation_QQ(const CellDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& cdc __attribute__((unused)),
-			 dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
+			 dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/, double /*scale_ico*/)
     {
       assert(this->_problem_type == "hessian");
     }
@@ -614,7 +614,7 @@ template<typename VECTOR, int dopedim, int dealdim>
 
   // Values for Boundary integrals
   void BoundaryEquation (const FaceDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& fdc,
-			 dealii::Vector<double> &local_cell_vector, double scale)
+			 dealii::Vector<double> &local_cell_vector, double scale, double /*scale_ico*/)
   {
     const auto & state_fe_face_values = fdc.GetFEFaceValuesState();
     unsigned int n_dofs_per_cell = fdc.GetNDoFsPerCell();
@@ -703,7 +703,7 @@ template<typename VECTOR, int dopedim, int dealdim>
 
 
   void BoundaryMatrix (const FaceDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& fdc,
-		       dealii::FullMatrix<double> &local_entry_matrix)
+		       dealii::FullMatrix<double> &local_entry_matrix, double /*scale*/, double /*scale_ico*/)
   {
     const auto & state_fe_face_values = fdc.GetFEFaceValuesState();
     unsigned int n_dofs_per_cell = fdc.GetNDoFsPerCell();
@@ -767,7 +767,7 @@ template<typename VECTOR, int dopedim, int dealdim>
 
   void BoundaryEquation_Q (const FaceDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& fdc,
 			   dealii::Vector<double> &local_cell_vector,
-			   double scale)
+			   double scale, double /*scale_ico*/)
   {
     const auto & state_fe_face_values = fdc.GetFEFaceValuesState();
     unsigned int n_q_points = fdc.GetNQPoints();
@@ -813,7 +813,7 @@ template<typename VECTOR, int dopedim, int dealdim>
 
  void BoundaryEquation_QT (const FaceDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& fdc,
 			   dealii::Vector<double> &local_cell_vector,
-			   double scale)
+			   double scale, double /*scale_ico*/)
  {
    const auto & state_fe_face_values = fdc.GetFEFaceValuesState();
    unsigned int n_dofs_per_cell = fdc.GetNDoFsPerCell();
@@ -862,7 +862,7 @@ template<typename VECTOR, int dopedim, int dealdim>
 
  void BoundaryEquation_QTT (const FaceDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& fdc,
 			    dealii::Vector<double> &local_cell_vector,
-			    double scale)
+			    double scale, double /*scale_ico*/)
  {
    const auto & state_fe_face_values = fdc.GetFEFaceValuesState();
    unsigned int n_q_points = fdc.GetNQPoints();
@@ -908,7 +908,7 @@ template<typename VECTOR, int dopedim, int dealdim>
 
  // do-nothing condition at boundary /Gamma_1
  void BoundaryEquation_U (const FaceDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& fdc,
-			  dealii::Vector<double> &local_cell_vector, double scale)
+			  dealii::Vector<double> &local_cell_vector, double scale, double /*scale_ico*/)
  {
    const auto & state_fe_face_values = fdc.GetFEFaceValuesState();
    unsigned int n_dofs_per_cell = fdc.GetNDoFsPerCell();
@@ -951,7 +951,7 @@ template<typename VECTOR, int dopedim, int dealdim>
 
  void BoundaryEquation_UT (const FaceDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& fdc,
 			   dealii::Vector<double> &local_cell_vector,
-			   double scale)
+			   double scale, double /*scale_ico*/)
  {
    const auto & state_fe_face_values = fdc.GetFEFaceValuesState();
    unsigned int n_dofs_per_cell = fdc.GetNDoFsPerCell();
@@ -993,7 +993,7 @@ template<typename VECTOR, int dopedim, int dealdim>
 
  void BoundaryEquation_UTT (const FaceDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& fdc,
 			    dealii::Vector<double> &local_cell_vector,
-			    double scale)
+			    double scale, double /*scale_ico*/)
  {
    const auto & state_fe_face_values = fdc.GetFEFaceValuesState();
    unsigned int n_dofs_per_cell = fdc.GetNDoFsPerCell();
@@ -1035,25 +1035,25 @@ template<typename VECTOR, int dopedim, int dealdim>
   }
 
  void BoundaryEquation_UU (const FaceDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& fdc __attribute__((unused)),
-			   dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
+			   dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/, double /*scale_ico*/)
  {
    assert(this->_problem_type == "adjoint_hessian");
  }
  
  void BoundaryEquation_QU (const FaceDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& fdc __attribute__((unused)),
-			   dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
+			   dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/, double /*scale_ico*/)
  {
    assert(this->_problem_type == "adjoint_hessian");
  }
  
  void BoundaryEquation_UQ (const FaceDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& fdc __attribute__((unused)),
-			   dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
+			   dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/, double /*scale_ico*/)
  {
    
  }
  
  void BoundaryEquation_QQ (const FaceDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& fdc __attribute__((unused)),
-			   dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
+			   dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/, double /*scale_ico*/)
  {
    
  }
@@ -1126,29 +1126,6 @@ template<typename VECTOR, int dopedim, int dealdim>
 
 
   protected:
-    inline void GetValues(const DOpEWrapper::FEValues<dealdim>& fe_values,
-			  const map<string, const BlockVector<double>* >& domain_values,string name,
-			  vector<Vector<double> >& values)
-    {
-      typename map<string, const BlockVector<double>* >::const_iterator it = domain_values.find(name);
-      if(it == domain_values.end())
-	{
-	  throw DOpEException("Did not find " + name,"LocalPDE::GetValues");
-	}
-      fe_values.get_function_values(*(it->second),values);
-    }
-
-    inline void GetGrads(const DOpEWrapper::FEValues<dealdim>& fe_values,
-			 const map<string, const BlockVector<double>* >& domain_values,string name,
-			 vector<vector<Tensor<1,dealdim> > >& values)
-    {
-      typename map<string, const BlockVector<double>* >::const_iterator it = domain_values.find(name);
-      if(it == domain_values.end())
-	{
-	  throw DOpEException("Did not find " + name,"LocalPDE::GetGrads");
-	}
-      fe_values.get_function_grads(*(it->second),values);
-    }
 
   private:
      Vector<double> _qvalues;

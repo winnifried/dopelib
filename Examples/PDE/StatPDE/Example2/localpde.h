@@ -332,7 +332,7 @@ template<typename VECTOR, int dealdim>
     // Values for Boundary integrals
     void BoundaryEquation (const  FaceDataContainer<dealii::DoFHandler<2>, VECTOR, dealdim>& fdc,
                           dealii::Vector<double> &local_cell_vector,
-                          double scale)
+                          double scale, double /*scale_ico*/)
     {
       assert(this->_problem_type == "state");
       const auto & state_fe_face_values = fdc.GetFEFaceValuesState();
@@ -391,7 +391,7 @@ template<typename VECTOR, int dealdim>
 
 
     void BoundaryMatrix (const  FaceDataContainer<dealii::DoFHandler<2>, VECTOR, dealdim>& fdc,
-                        dealii::FullMatrix<double> &local_entry_matrix)
+                        dealii::FullMatrix<double> &local_entry_matrix, double /*scale*/, double /*scale_ico*/)
     {
       assert(this->_problem_type == "state");
       const auto & state_fe_face_values = fdc.GetFEFaceValuesState();

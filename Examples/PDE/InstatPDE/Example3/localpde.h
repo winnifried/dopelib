@@ -248,7 +248,7 @@ template<typename VECTOR, int dopedim, int dealdim>
     void
     BoundaryEquation(
       const FaceDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& /*fdc*/,
-      dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
+      dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/, double /*scale_ico*/)
     {
 
       assert(this->_problem_type == "state");

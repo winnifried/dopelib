@@ -757,10 +757,10 @@ template<typename DATACONTAINER>
      */
 template<typename FACEDATACONTAINER>
     void FaceEquation(const FACEDATACONTAINER& fdc,
-		      dealii::Vector<double> &local_cell_vector, double scale=1.)
+		      dealii::Vector<double> &local_cell_vector, double scale=1., double scale_ico=1.)
     { 	
       throw DOpEException("Not Implemented","AugmentedLagrangianProblem::FaceEquation");
-      _OP.FaceEquation(fdc, local_cell_vector, scale);
+      _OP.FaceEquation(fdc, local_cell_vector, scale,scale_ico);
     }
 
     /******************************************************/ 
@@ -785,10 +785,11 @@ template<typename FACEDATACONTAINER>
      */
 template<typename FACEDATACONTAINER>
     void FaceMatrix(const FACEDATACONTAINER& fdc,
-		    dealii::FullMatrix<double> &local_entry_matrix)
+		    dealii::FullMatrix<double> &local_entry_matrix, double scale = 1.,
+		    double scale_ico = 1.)
     { 
       throw DOpEException("Not Implemented","AugmentedLagrangianProblem::FaceMatrix");
-      _OP.FaceMatrix(fdc, local_entry_matrix); 
+      _OP.FaceMatrix(fdc, local_entry_matrix,scale, scale_ico); 
 
     }
    
@@ -797,10 +798,10 @@ template<typename FACEDATACONTAINER>
 template<typename FACEDATACONTAINER>
     void BoundaryEquation(const FACEDATACONTAINER& fdc,
 			  dealii::Vector<double> &local_cell_vector, 
-			  double scale=1.)
+			  double scale=1., double scale_ico=1.)
     { 
       throw DOpEException("Not Implemented","AugmentedLagrangianProblem::BoundaryEquation");
-      _OP.BoundaryEquation(fdc,local_cell_vector, scale);
+      _OP.BoundaryEquation(fdc,local_cell_vector, scale,scale_ico);
     }
 
     /******************************************************/ 
@@ -821,24 +822,26 @@ template<typename FACEDATACONTAINER>
 
 template<typename FACEDATACONTAINER>
     void BoundaryMatrix(const FACEDATACONTAINER& fdc,
-			dealii::FullMatrix<double> &local_cell_matrix)
+			dealii::FullMatrix<double> &local_cell_matrix, double scale = 1.,
+		    double scale_ico = 1.)
     { 
-      _OP.BoundaryMatrix(fdc,local_cell_matrix); 
+      _OP.BoundaryMatrix(fdc,local_cell_matrix,scale, scale_ico); 
     }
     /******************************************************/ 
      template<typename FACEDATACONTAINER>
        void  InterfaceEquation(const FACEDATACONTAINER& dc,
-			       dealii::Vector<double> &local_cell_vector, double scale = 1.)
+			       dealii::Vector<double> &local_cell_vector, double scale = 1., double scale_ico=1.)
      {
-       _OP.InterfaceEquation(dc,local_cell_vector,scale);
+       _OP.InterfaceEquation(dc,local_cell_vector,scale,scale_ico);
      }
     /******************************************************/ 
      template<typename FACEDATACONTAINER>
         void
         InterfaceMatrix(const FACEDATACONTAINER& dc,
-            dealii::FullMatrix<double> &local_entry_matrix)
+            dealii::FullMatrix<double> &local_entry_matrix, double scale = 1.,
+		    double scale_ico = 1.)
      {
-       _OP.InterfaceMatrix(dc,local_entry_matrix);
+       _OP.InterfaceMatrix(dc,local_entry_matrix,scale, scale_ico);
      }
 
     /******************************************************/ 
