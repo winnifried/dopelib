@@ -12,7 +12,6 @@
 #include "integratormixeddims.h"
 #include "newtonsolvermixeddims.h"
 #include "parameterreader.h"
-#include "finiteelement_wrapper.h"
 #include "mol_spacetimehandler.h"
 #include "localdirichletdata.h"
 #include "noconstraints.h"
@@ -39,9 +38,9 @@ using namespace std;
 using namespace dealii;
 using namespace DOpE;
 
-#define VECTOR dealii::BlockVector<double>
-#define DOFHANDLER dealii::DoFHandler<2>
-#define FE DOpEWrapper::FiniteElement<2>
+#define VECTOR BlockVector<double>
+#define DOFHANDLER DoFHandler<2>
+#define FE FESystem<2>
 
 typedef OptProblemContainer<FunctionalInterface<CellDataContainer,FaceDataContainer,DOFHANDLER, VECTOR, 0,2>,
 FunctionalInterface<CellDataContainer,FaceDataContainer,DOFHANDLER, VECTOR, 0,2>,
@@ -50,7 +49,7 @@ DirichletDataInterface<VECTOR,0,2>,
 ConstraintInterface<CellDataContainer,FaceDataContainer,DOFHANDLER, VECTOR,0,2>,
 BlockSparsityPattern, VECTOR,0,2> OP;
 
-typedef IntegratorDataContainer<DOFHANDLER, dealii::Quadrature<2>, dealii::Quadrature<1>, VECTOR, 2 > IDC;
+typedef IntegratorDataContainer<DOFHANDLER, Quadrature<2>, Quadrature<1>, VECTOR, 2 > IDC;
 typedef Integrator<IDC,VECTOR,double,2> INTEGRATOR;
 typedef IntegratorMixedDimensions<IDC,VECTOR,double,0,2> INTEGRATORM;
 //Uncomment to use UMFPACK
@@ -89,9 +88,8 @@ int main(int argc, char **argv)
 
   GridGenerator::hyper_rectangle (triangulation, p1,p2,true);
 
-  //DOpEWrapper::FiniteElement<0>          control_fe(5); //5 Parameter
-  DOpEWrapper::FiniteElement<2>          control_fe(FE_Nothing<2>(1),5); //5 Parameter
-  DOpEWrapper::FiniteElement<2>          state_fe(FE_Q<2>(1),2);   //
+  FESystem<2>          control_fe(FE_Nothing<2>(1),5); //5 Parameter
+  FESystem<2>          state_fe(FE_Q<2>(1),2);   //
 
 
   QGauss<2>   quadrature_formula(2);
@@ -128,7 +126,7 @@ int main(int argc, char **argv)
 
 
   int niter = 1;
-  dealii::Vector<double> qinit(5);
+  Vector<double> qinit(5);
   {
     qinit(0) =0.;
     qinit(1) =0.;

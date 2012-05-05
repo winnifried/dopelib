@@ -619,7 +619,7 @@ namespace DOpE
   template<>
     void
     DOpE::MethodOfLines_MultiMesh_SpaceTimeHandler<
-        DOpEWrapper::FiniteElement<deal_II_dimension>,
+    dealii::FESystem<deal_II_dimension>,
         dealii::DoFHandler<deal_II_dimension>, dealii::BlockSparsityPattern,
         dealii::BlockVector<double>, dope_dimension>::ComputeControlSparsityPattern(
         dealii::BlockSparsityPattern & sparsity) const
@@ -649,7 +649,7 @@ namespace DOpE
   template<>
     void
     MethodOfLines_MultiMesh_SpaceTimeHandler<
-        DOpEWrapper::FiniteElement<deal_II_dimension>,
+    dealii::FESystem<deal_II_dimension>,
         dealii::DoFHandler<deal_II_dimension>, dealii::SparsityPattern,
         dealii::Vector<double>, dope_dimension>::ComputeControlSparsityPattern(
         dealii::SparsityPattern & sparsity) const
@@ -670,7 +670,7 @@ namespace DOpE
   template<>
     void
     DOpE::MethodOfLines_MultiMesh_SpaceTimeHandler<
-        DOpEWrapper::FECollection<deal_II_dimension>,
+    dealii::hp::FECollection<deal_II_dimension>,
         dealii::hp::DoFHandler<deal_II_dimension>, dealii::BlockSparsityPattern,
         dealii::BlockVector<double>, dope_dimension>::ComputeControlSparsityPattern(
         dealii::BlockSparsityPattern & sparsity) const
@@ -700,7 +700,7 @@ namespace DOpE
   template<>
     void
     MethodOfLines_MultiMesh_SpaceTimeHandler<
-        DOpEWrapper::FECollection<deal_II_dimension>,
+    dealii::hp::FECollection<deal_II_dimension>,
         dealii::hp::DoFHandler<deal_II_dimension>, dealii::SparsityPattern,
         dealii::Vector<double>, dope_dimension>::ComputeControlSparsityPattern(
         dealii::SparsityPattern & sparsity) const

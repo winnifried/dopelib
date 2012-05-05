@@ -1433,8 +1433,8 @@ namespace DOpE
 //          //the second '-1' plays only a role in the stationary case. In the non-stationary
 //          //case, scale_ico is set by the time-stepping-scheme
           pde.CellErrorContribution(cdc, dwrc, cell_sum, 1., 1.);
-          dwrc.GetPrimalErrorIndicators()[cell_index] = cell_sum[0];
-          dwrc.GetDualErrorIndicators()[cell_index] = cell_sum[1];
+          dwrc.GetPrimalErrorIndicators()(cell_index) = cell_sum[0];
+          dwrc.GetDualErrorIndicators()(cell_index) = cell_sum[1];
           cell_sum.clear();
           cell_sum.resize(2, 0);
           //Now to the face terms. We compute them only once for each face and distribute the
@@ -1571,9 +1571,9 @@ namespace DOpE
           Assert(
               face_integrals.find(cell[0]->face(face_no)) != face_integrals.end(),
               ExcInternalError());
-          dwrc.GetPrimalErrorIndicators()[present_cell] -=
+          dwrc.GetPrimalErrorIndicators()(present_cell) -=
           0.5 * face_integrals[cell[0]->face(face_no)][0];
-          dwrc.GetDualErrorIndicators()[present_cell] -=
+          dwrc.GetDualErrorIndicators()(present_cell) -=
           0.5 * face_integrals[cell[0]->face(face_no)][1];
         }
 #endif

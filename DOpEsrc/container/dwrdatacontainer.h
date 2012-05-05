@@ -95,7 +95,7 @@ namespace DOpE
           double error = 0;
           for (unsigned int i = 0; i < GetErrorIndicators().size(); ++i)
           {
-            error += GetErrorIndicators()[i];
+            error += GetErrorIndicators()(i);
           }
           return error;
         }

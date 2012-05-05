@@ -13,7 +13,7 @@ namespace DOpE
 {
   template<typename OPTPROBLEM, typename SPARSITYPATTERN, typename VECTOR,
       int dopedim, int dealdim,
-      typename FE = DOpEWrapper::FiniteElement<dealdim>,
+      typename FE = dealii::FESystem<dealdim>,
       typename DOFHANDLER = dealii::DoFHandler<dealdim> >
     class PrimalTSBase : public TSBase<OPTPROBLEM, SPARSITYPATTERN, VECTOR,
         dopedim, dealdim, FE, DOFHANDLER>

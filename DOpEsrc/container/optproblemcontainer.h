@@ -6,7 +6,6 @@
 #include "functionalinterface.h"
 #include "dofhandler_wrapper.h"
 #include "fevalues_wrapper.h"
-#include "finiteelement_wrapper.h"
 #include "function_wrapper.h"
 #include "spacetimehandler.h"
 #include "primaldirichletdata.h"
@@ -39,7 +38,7 @@
 #include <string>
 #include <vector>
 
-using namespace dealii;
+
 
 namespace DOpE
 {
@@ -53,7 +52,7 @@ namespace DOpE
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
       typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
       typename VECTOR, int dopedim, int dealdim,
-      typename FE = DOpEWrapper::FiniteElement<dealdim>,
+      typename FE = dealii::FESystem<dealdim>,
       typename DOFHANDLER = dealii::DoFHandler<dealdim> >
     class OptProblemContainer
     {
@@ -268,9 +267,12 @@ namespace DOpE
 
         /**
          * This function has the same functionality as the CellTimeEquation function.
-         * It is only needed for fluid-structure interaction problems and has
-         * special structure. Please talk to Thomas Wick when you would like to
-         * use this function.
+         * It is mainly needed for fluid-structure interaction problems and should
+         * be used when the term of the time derivative contains
+	 * nonlinear terms, i.e. $\partial_t u v + ...$
+	 * in which u and v denote solution variables.
+	 * Secondly, this function should be used when the densities 
+	 * are not constant: $\partial_t \rho v + ...$
          */
         template<typename DATACONTAINER>
           void

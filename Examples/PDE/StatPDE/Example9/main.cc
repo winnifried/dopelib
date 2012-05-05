@@ -39,18 +39,18 @@ using namespace std;
 using namespace dealii;
 using namespace DOpE;
 
-#define VECTOR dealii::Vector<double>
-#define MATRIX dealii::SparseMatrix<double>
-#define SPARSITYPATTERN dealii::SparsityPattern
-#define DOFHANDLER dealii::DoFHandler<2>
-#define FE DOpEWrapper::FiniteElement<2>
+#define VECTOR Vector<double>
+#define MATRIX SparseMatrix<double>
+#define SPARSITYPATTERN SparsityPattern
+#define DOFHANDLER DoFHandler<2>
+#define FE FESystem<2>
 #define FACEDATACONTAINER FaceDataContainer<DOFHANDLER, VECTOR, 2>
 
 typedef PDEProblemContainer<
     PDEInterface<CellDataContainer, FaceDataContainer, DOFHANDLER, VECTOR, 2>,
     DirichletDataInterface<VECTOR, 2>, SPARSITYPATTERN, VECTOR, 2> OP;
-typedef IntegratorDataContainer<DOFHANDLER, dealii::Quadrature<2>,
-    dealii::Quadrature<1>, VECTOR, 2> IDC;
+typedef IntegratorDataContainer<DOFHANDLER, Quadrature<2>,
+    Quadrature<1>, VECTOR, 2> IDC;
 typedef Integrator<IDC, VECTOR, double, 2> INTEGRATOR;
 //********************Linearsolver**********************************
 typedef DirectLinearSolverWithMatrix<SPARSITYPATTERN, MATRIX, VECTOR, 2> LINEARSOLVER;
@@ -115,7 +115,7 @@ main(int argc, char **argv)
   const HyperShellBoundary<2> boundary_description(center);
   Triangulation<2> triangulation(
       Triangulation<2>::MeshSmoothing::patch_level_1);
-  dealii::GridGenerator::hyper_cube_with_cylindrical_hole(triangulation, 0.5,
+  GridGenerator::hyper_cube_with_cylindrical_hole(triangulation, 0.5,
       2., 1, 1);
   triangulation.set_boundary(1, boundary_description);
   triangulation.refine_global(1);  //because we need the face located at x==0;
@@ -137,7 +137,7 @@ main(int argc, char **argv)
 
   //FiniteElemente*************************************************
   pr.SetSubsection("main parameters");
-  DOpEWrapper::FiniteElement<2> state_fe(FE_Q<2>(pr.get_integer("order fe")));
+  FESystem<2> state_fe(FE_Q<2>(pr.get_integer("order fe")),1);
 
   //Quadrature formulas*************************************************
   pr.SetSubsection("main parameters");
@@ -183,8 +183,7 @@ main(int argc, char **argv)
   P.SetFunctionalForErrorEstimation(LFF.GetName());
   //FiniteElemente for DWR*************************************************
   pr.SetSubsection("main parameters");
-  DOpEWrapper::FiniteElement<2> state_fe_high(
-      FE_Q<2>(2 * pr.get_integer("order fe")));
+  FESystem<2> state_fe_high(FE_Q<2>(2 * pr.get_integer("order fe")),1);
   //Quadrature formulas for DWR*************************************************
   pr.SetSubsection("main parameters");
   QGauss<2> quadrature_formula_high(pr.get_integer("quad order") + 1);
@@ -234,7 +233,7 @@ main(int argc, char **argv)
 //      DOFH.RefineSpace("global");
       Vector<float> error_ind(dwrc.GetErrorIndicators());
       for (unsigned int i = 0; i < error_ind.size(); i++)
-        error_ind[i] = std::fabs(error_ind[i]);
+        error_ind(i) = std::fabs(error_ind(i));
       DOFH.RefineSpace("optimized", &error_ind);
 //      DOFH.RefineSpace("fixednumber", &error_ind, 0.4);
 //      DOFH.RefineSpace("fixedfraction", &error_ind, 0.8);

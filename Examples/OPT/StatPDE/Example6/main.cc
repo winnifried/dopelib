@@ -36,15 +36,17 @@ using namespace DOpE;
 
 #define CDC CellDataContainer
 #define FDC FaceDataContainer
-#define VECTOR dealii::BlockVector<double>
-#define SPARSITYPATTERN dealii::BlockSparsityPattern
-#define MATRIX dealii::BlockSparseMatrix<double>
-#define DOFHANDLER dealii::DoFHandler<2>
-#define FE DOpEWrapper::FiniteElement<2>
-#define FUNC DOpE::FunctionalInterface<CDC,FDC,DOFHANDLER,VECTOR,2,2>
-#define PDE DOpE::PDEInterface<CDC,FDC,DOFHANDLER,VECTOR,2,2>
-#define DD DOpE::DirichletDataInterface<VECTOR,2,2>
-#define CONS DOpE::ConstraintInterface<CDC,FDC,DOFHANDLER,VECTOR,2,2>
+
+#define VECTOR BlockVector<double>
+#define SPARSITYPATTERN BlockSparsityPattern
+#define MATRIX BlockSparseMatrix<double>
+#define DOFHANDLER DoFHandler<2>
+#define FE FESystem<2>
+
+#define FUNC FunctionalInterface<CDC,FDC,DOFHANDLER,VECTOR,2,2>
+#define PDE PDEInterface<CDC,FDC,DOFHANDLER,VECTOR,2,2>
+#define DD DirichletDataInterface<VECTOR,2,2>
+#define CONS ConstraintInterface<CDC,FDC,DOFHANDLER,VECTOR,2,2>
 
 
 typedef SpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR, 2,2> STH;
@@ -52,7 +54,7 @@ typedef SpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR, 2,2> STH;
 typedef OptProblemContainer<FUNC, FUNC, PDE, DD, CONS, SPARSITYPATTERN,VECTOR,2,2> OP;
 
 typedef AugmentedLagrangianProblem<LocalConstraintAccessor,STH,OP, 2, 2,1> ALagOP;
-typedef IntegratorDataContainer<DOFHANDLER, dealii::Quadrature<2>, dealii::Quadrature<1>, VECTOR, 2> IDC;
+typedef IntegratorDataContainer<DOFHANDLER, Quadrature<2>, Quadrature<1>, VECTOR, 2> IDC;
 typedef Integrator<IDC,VECTOR,double,2> INTEGRATOR;
 
 //Uncomment to use a CG-Method with Identity Preconditioner
@@ -63,8 +65,8 @@ typedef DirectLinearSolverWithMatrix<SPARSITYPATTERN,MATRIX,VECTOR,2> LINEARSOLV
 typedef NewtonSolver<INTEGRATOR,LINEARSOLVER,VECTOR,2> NLS;
 typedef StatReducedProblem<NLS,NLS,INTEGRATOR,INTEGRATOR,OP,VECTOR,2,2> SSolver;
 typedef VoidReducedProblem<NLS,INTEGRATOR,ALagOP,VECTOR,2,2> ALagSSolver;
-//typedef GeneralizedMMAAlgorithm<LocalConstraintAccessor,IDC,STH,OP,dealii::BlockVector<double>,ALagSSolver,2,2,1> MMA;
-typedef GeneralizedMMAAlgorithm<LocalConstraintAccessor,IDC,STH,OP,dealii::BlockVector<double>,ALagSSolver,2,2,1> MMA;
+//typedef GeneralizedMMAAlgorithm<LocalConstraintAccessor,IDC,STH,OP,BlockVector<double>,ALagSSolver,2,2,1> MMA;
+typedef GeneralizedMMAAlgorithm<LocalConstraintAccessor,IDC,STH,OP,BlockVector<double>,ALagSSolver,2,2,1> MMA;
 
 int main(int argc, char **argv)
 {  

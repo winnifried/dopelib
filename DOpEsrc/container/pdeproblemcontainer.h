@@ -6,7 +6,6 @@
 #include "functionalinterface.h"
 #include "dofhandler_wrapper.h"
 #include "fevalues_wrapper.h"
-#include "finiteelement_wrapper.h"
 #include "function_wrapper.h"
 #include "statespacetimehandler.h"
 #include "primaldirichletdata.h"
@@ -34,7 +33,7 @@
 #include <string>
 #include <vector>
 
-using namespace dealii;
+
 
 namespace DOpE
 {
@@ -46,8 +45,8 @@ namespace DOpE
   /////////////////////////////
 
   template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
-      int dealdim, typename FE = DOpEWrapper::FiniteElement<dealdim>,
-      typename DOFHANDLER = dealii::DoFHandler<dealdim> >
+    int dealdim, typename FE = dealii::FESystem<dealdim>,
+    typename DOFHANDLER = dealii::DoFHandler<dealdim> >
     class PDEProblemContainer
     {
       public:

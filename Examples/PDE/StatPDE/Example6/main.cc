@@ -39,16 +39,16 @@ using namespace DOpE;
 
 
 
-#define VECTOR dealii::Vector<double>
-#define MATRIX dealii::SparseMatrix<double>
-#define SPARSITYPATTERN dealii::SparsityPattern
-#define DOFHANDLER dealii::DoFHandler<2>
-#define FE DOpEWrapper::FiniteElement<2>
+#define VECTOR Vector<double>
+#define MATRIX SparseMatrix<double>
+#define SPARSITYPATTERN SparsityPattern
+#define DOFHANDLER DoFHandler<2>
+#define FE FESystem<2>
 #define FACEDATACONTAINER FaceDataContainer<DOFHANDLER, VECTOR, 2>
 
 typedef PDEProblemContainer<PDEInterface<CellDataContainer,FaceDataContainer,DOFHANDLER, VECTOR, 2> , DirichletDataInterface<VECTOR, 2> ,
 			    SPARSITYPATTERN, VECTOR, 2> OP;
-typedef IntegratorDataContainer<DOFHANDLER, dealii::Quadrature<2>, dealii::Quadrature<1>, VECTOR, 2 > IDC;
+typedef IntegratorDataContainer<DOFHANDLER, Quadrature<2>, Quadrature<1>, VECTOR, 2 > IDC;
 typedef Integrator<IDC, VECTOR, double, 2> INTEGRATOR;
 //********************Linearsolver**********************************
 typedef DirectLinearSolverWithMatrix<SPARSITYPATTERN, MATRIX,
@@ -106,7 +106,7 @@ int main(int argc, char **argv)
 	const Point<2> center(0, 0);
 	const HyperShellBoundary<2> boundary_description(center);
 	Triangulation<2> triangulation;
-	dealii::GridGenerator::hyper_cube_with_cylindrical_hole(triangulation, 0.1,
+	GridGenerator::hyper_cube_with_cylindrical_hole(triangulation, 0.1,
 	                                                        1., 1, 1, true);
 	triangulation.set_boundary(4, boundary_description);
 	if (prerefine > 0)
@@ -115,8 +115,7 @@ int main(int argc, char **argv)
 
 	//FiniteElemente*************************************************
 	pr.SetSubsection("main parameters");
-	DOpEWrapper::FiniteElement < 2
-	    > state_fe(FE_Q<2>(pr.get_integer("order fe")), 2);
+	FESystem < 2 > state_fe(FE_Q<2>(pr.get_integer("order fe")), 2);
 
 	//Quadrature formulas*************************************************
 	pr.SetSubsection("main parameters");

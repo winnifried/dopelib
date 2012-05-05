@@ -14,7 +14,6 @@
 
 #include "integratormixeddims.h"    // for mixed dim opt. control
 #include "newtonsolvermixeddims.h"  // for mixed dim opt. control
-#include "finiteelement_wrapper.h"
 
 #include "parameterreader.h"
 #include "mol_spacetimehandler.h"
@@ -58,9 +57,9 @@ using namespace std;
 using namespace dealii;
 using namespace DOpE;
 
-#define VECTOR dealii::BlockVector<double>
-#define DOFHANDLER dealii::DoFHandler<2>
-#define FE DOpEWrapper::FiniteElement<2>
+#define VECTOR BlockVector<double>
+#define DOFHANDLER DoFHandler<2>
+#define FE FESystem<2>
 
 typedef OptProblemContainer<FunctionalInterface<CellDataContainer,FaceDataContainer,DOFHANDLER, VECTOR,0,2>,
 		   FunctionalInterface<CellDataContainer,FaceDataContainer,DOFHANDLER, VECTOR,0,2>,
@@ -69,7 +68,7 @@ typedef OptProblemContainer<FunctionalInterface<CellDataContainer,FaceDataContai
 		   ConstraintInterface<CellDataContainer,FaceDataContainer,DOFHANDLER, VECTOR,0,2>,
 		   BlockSparsityPattern,VECTOR,0,2> OP;
 
-typedef IntegratorDataContainer<DOFHANDLER, dealii::Quadrature<2>, dealii::Quadrature<1>, VECTOR, 2 > IDC;
+typedef IntegratorDataContainer<DOFHANDLER, Quadrature<2>, Quadrature<1>, VECTOR, 2 > IDC;
 typedef Integrator<IDC,VECTOR,double,2> INTEGRATOR;
 typedef IntegratorMixedDimensions<IDC,VECTOR,double,0,2> INTEGRATORM;
 
@@ -139,16 +138,15 @@ int main(int argc, char **argv)
   static const HyperBallBoundary<2> boundary(p,radius);
   triangulation.set_boundary (80, boundary);
 
-  // DOpEWrapper::FiniteElement<0>          control_fe(2); //2 Parameter
-  DOpEWrapper::FiniteElement<2>          control_fe(FE_Nothing<2>(1),2); //2 Parameter
+  FESystem<2>          control_fe(FE_Nothing<2>(1),2); //2 Parameter
 
   // Implementation for state
   // includes finite element for the displacements, too.
   // That is, because this example is the basis for
   // FSI optimal control and is extended in example 5.
-  DOpEWrapper::FiniteElement<2>      state_fe(FE_Q<2>(2),2,   // velocities
-					      FE_Q<2>(1),1, // pressure with CG(1)
- 					      FE_Q<2>(2),2);  // displacements
+  FESystem<2>      state_fe(FE_Q<2>(2),2,   // velocities
+			    FE_Q<2>(1),1, // pressure with CG(1)
+			    FE_Q<2>(2),2);  // displacements
 
   QGauss<2>   quadrature_formula(3);
   QGauss<1> face_quadrature_formula(3);

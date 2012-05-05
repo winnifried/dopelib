@@ -37,16 +37,16 @@ using namespace std;
 using namespace dealii;
 using namespace DOpE;
 
-#define VECTOR dealii::BlockVector<double>
-#define DOFHANDLER dealii::DoFHandler<2>
-#define FE DOpEWrapper::FiniteElement<2>
+#define VECTOR BlockVector<double>
+#define DOFHANDLER DoFHandler<2>
+#define FE FESystem<2>
 
 typedef PDEProblemContainer<
     PDEInterface<CellDataContainer, FaceDataContainer, DOFHANDLER, VECTOR, 2>,
     DirichletDataInterface<VECTOR, 2>, BlockSparsityPattern, VECTOR, 2> OP;
 
-typedef IntegratorDataContainer<DOFHANDLER, dealii::Quadrature<2>,
-    dealii::Quadrature<1>, VECTOR, 2> IDC;
+typedef IntegratorDataContainer<DOFHANDLER, Quadrature<2>,
+    Quadrature<1>, VECTOR, 2> IDC;
 typedef Integrator<IDC, VECTOR, double, 2> INTEGRATOR;
 
 typedef DirectLinearSolverWithMatrix<BlockSparsityPattern,
@@ -96,7 +96,7 @@ main(int argc, char **argv)
       GridOut grid_out;
       grid_out.write_eps(triangulation, out);
     }
-  DOpEWrapper::FiniteElement<2> state_fe(FE_Q<2>(1), 2); //Q1
+  FESystem<2> state_fe(FE_Q<2>(1), 2); //Q1
 
   QSimpson<2> quadrature_formula;
   QSimpson<1> face_quadrature_formula;

@@ -92,10 +92,10 @@ namespace DOpE
           BoundaryMatrix(const FACEDATACONTAINER& dc,
               dealii::FullMatrix<double> &local_cell_matrix);
 
-        inline const dealii::SmartPointer<const DOpEWrapper::FiniteElement<dim> >
+        inline const dealii::SmartPointer<const dealii::FESystem<dim> >
         GetFESystem() const;
 
-        inline const dealii::SmartPointer<const DOpEWrapper::FECollection<dim> >
+        inline const dealii::SmartPointer<const dealii::hp::FECollection<dim> >
         GetFECollection() const;
 
         inline std::string
@@ -303,7 +303,7 @@ namespace DOpE
   /******************************************************/
 
   template<typename PDE, typename VECTOR, int dim>
-    const SmartPointer<const DOpEWrapper::FiniteElement<dim> >
+    const SmartPointer<const dealii::FESystem<dim> >
     InitialProblem<PDE, VECTOR, dim>::GetFESystem() const
     {
       return _pde.GetFESystem();
@@ -311,7 +311,7 @@ namespace DOpE
 
   /******************************************************/
   template<typename PDE, typename VECTOR, int dim>
-    const SmartPointer<const DOpEWrapper::FECollection<dim> >
+    const SmartPointer<const dealii::hp::FECollection<dim> >
     InitialProblem<PDE, VECTOR, dim>::GetFECollection() const
     {
       return _pde.GetFECollection();

@@ -10,7 +10,7 @@ namespace DOpE
     typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
     typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
     typename VECTOR, int dopedim, int dealdim,
-    typename FE = DOpEWrapper::FiniteElement<dealdim>,
+    typename FE = FESystem<dealdim>,
     typename DOFHANDLER = dealii::DoFHandler<dealdim>>
   class InstatOptProblemContainer : public OptProblemContainer<FUNCTIONAL_INTERFACE,FUNCTIONAL,PDE,DD,CONSTRAINTS,
   SPARSITYPATTERN,VECTOR,dopedim,dealdim,FE, DOFHANDLER>

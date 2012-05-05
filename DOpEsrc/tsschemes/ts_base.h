@@ -15,7 +15,7 @@ namespace DOpE
 
   template<typename OPTPROBLEM, typename SPARSITYPATTERN, typename VECTOR,
       int dopedim, int dealdim,
-      typename FE = DOpEWrapper::FiniteElement<dealdim>,
+      typename FE = dealii::FESystem<dealdim>,
       typename DOFHANDLER = dealii::DoFHandler<dealdim> >
     class TSBase
     {
@@ -120,7 +120,7 @@ namespace DOpE
          *
          * @return A const pointer to the FESystem()
          */
-        const dealii::SmartPointer<const DOpEWrapper::FiniteElement<dealdim> >
+      const dealii::SmartPointer<const dealii::FESystem<dealdim> >
         GetFESystem() const
         {
           return _OP.GetFESystem();

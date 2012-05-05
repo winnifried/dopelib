@@ -57,19 +57,19 @@ using namespace DOpE;
 #define LOCALDEALDIM 1
 
 
-#define VECTOR dealii::BlockVector<double>
-#define SPARSITYPATTERN dealii::BlockSparsityPattern
-#define MATRIX dealii::BlockSparseMatrix<double>
-#define DOFHANDLER dealii::DoFHandler<LOCALDOPEDIM>
-#define FE DOpEWrapper::FiniteElement<LOCALDEALDIM>
-#define FUNC DOpE::FunctionalInterface<CellDataContainer,FaceDataContainer,DOFHANDLER,VECTOR,LOCALDOPEDIM,LOCALDEALDIM>
-#define PDE DOpE::PDEInterface<CellDataContainer,FaceDataContainer,DOFHANDLER,VECTOR,LOCALDOPEDIM,LOCALDEALDIM>
-#define DD DOpE::DirichletDataInterface<VECTOR,LOCALDOPEDIM,LOCALDEALDIM>
-#define CONS DOpE::ConstraintInterface<CellDataContainer,FaceDataContainer,DOFHANDLER,VECTOR,LOCALDOPEDIM,LOCALDEALDIM>
+#define VECTOR BlockVector<double>
+#define SPARSITYPATTERN BlockSparsityPattern
+#define MATRIX BlockSparseMatrix<double>
+#define DOFHANDLER DoFHandler<LOCALDOPEDIM>
+#define FE FESystem<LOCALDEALDIM>
+#define FUNC FunctionalInterface<CellDataContainer,FaceDataContainer,DOFHANDLER,VECTOR,LOCALDOPEDIM,LOCALDEALDIM>
+#define PDE PDEInterface<CellDataContainer,FaceDataContainer,DOFHANDLER,VECTOR,LOCALDOPEDIM,LOCALDEALDIM>
+#define DD DirichletDataInterface<VECTOR,LOCALDOPEDIM,LOCALDEALDIM>
+#define CONS ConstraintInterface<CellDataContainer,FaceDataContainer,DOFHANDLER,VECTOR,LOCALDOPEDIM,LOCALDEALDIM>
 
 typedef OptProblemContainer<FUNC,FUNC,PDE,DD,CONS,SPARSITYPATTERN, VECTOR, LOCALDOPEDIM,LOCALDEALDIM> OP_BASE;
 
-typedef DOpE::StateProblem<OP_BASE,PDE,DD,SPARSITYPATTERN,VECTOR,LOCALDOPEDIM,LOCALDEALDIM> PROB;
+typedef StateProblem<OP_BASE,PDE,DD,SPARSITYPATTERN,VECTOR,LOCALDOPEDIM,LOCALDEALDIM> PROB;
 // Typedefs for timestep problem
 
 #define TSP1 ForwardEulerProblem
@@ -101,7 +101,7 @@ typedef InstatOptProblemContainer<TSP5,DTSP5,FUNC,FUNC,PDE,DD,CONS,SPARSITYPATTE
 #undef DTSP4 
 #undef DTSP5 
 
-typedef IntegratorDataContainer<DOFHANDLER, dealii::Quadrature<LOCALDEALDIM>, dealii::Quadrature<LOCALDEALDIM-1>, VECTOR, LOCALDEALDIM > IDC;
+typedef IntegratorDataContainer<DOFHANDLER, Quadrature<LOCALDEALDIM>, Quadrature<LOCALDEALDIM-1>, VECTOR, LOCALDEALDIM > IDC;
 
 typedef Integrator<IDC , VECTOR , double, LOCALDEALDIM> INTEGRATOR;
 
@@ -164,9 +164,9 @@ main(int argc, char **argv)
 
 
   //Define the Finite Elements and quadrature formulas for control and state.
-  DOpEWrapper::FiniteElement<LOCALDEALDIM>
+  FESystem<LOCALDEALDIM>
       control_fe(FE_Q<LOCALDOPEDIM> (1), 1); //Q1 geht auch P0?
-  DOpEWrapper::FiniteElement<LOCALDEALDIM> state_fe(FE_Q<LOCALDEALDIM> (1), 1);//Q1
+  FESystem<LOCALDEALDIM> state_fe(FE_Q<LOCALDEALDIM> (1), 1);//Q1
 
 
   QGauss<LOCALDEALDIM> quadrature_formula(3);
@@ -181,8 +181,8 @@ main(int argc, char **argv)
   LocalPointFunctional<VECTOR, LOCALDOPEDIM, LOCALDEALDIM> LPF;
 
   //Time grid of [0,1]
-  dealii::Triangulation<1> times;
-  dealii::GridGenerator::subdivided_hyper_cube(times, 50);
+  Triangulation<1> times;
+  GridGenerator::subdivided_hyper_cube(times, 50);
 
   triangulation.refine_global(4);
   MethodOfLines_SpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR,

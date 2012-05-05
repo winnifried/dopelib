@@ -152,12 +152,11 @@ namespace DOpE
         BoundaryMatrix(const FACEDATACONTAINER& dc,
             dealii::FullMatrix<double> &local_cell_matrix);
 
-      inline const dealii::SmartPointer<const DOpEWrapper::FiniteElement<
-          dealdim> >
+      inline const dealii::SmartPointer<const dealii::FESystem<dealdim> >
       GetFESystem() const;
 
       inline const dealii::SmartPointer<
-          const DOpEWrapper::FECollection<dealdim> >
+    const dealii::hp::FECollection<dealdim> >
       GetFECollection() const;
 
       inline std::string
@@ -449,7 +448,7 @@ namespace DOpE
 
   template<typename OPTPROBLEM, typename PDE, typename DD,
       typename SPARSITYPATTERN, typename VECTOR, int dopedim, int dealdim>
-    const SmartPointer<const DOpEWrapper::FiniteElement<dealdim> >
+    const SmartPointer<const dealii::FESystem<dealdim> >
     StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dopedim, dealdim>::GetFESystem() const
     {
       return _opt_problem.GetSpaceTimeHandler()->GetFESystem("state");
@@ -458,7 +457,7 @@ namespace DOpE
   /******************************************************/
   template<typename OPTPROBLEM, typename PDE, typename DD,
       typename SPARSITYPATTERN, typename VECTOR, int dopedim, int dealdim>
-    const SmartPointer<const DOpEWrapper::FECollection<dealdim> >
+    const SmartPointer<const dealii::hp::FECollection<dealdim> >
     StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dopedim, dealdim>::GetFECollection() const
     {
       return _opt_problem.GetSpaceTimeHandler()->GetFECollection("state");

@@ -900,7 +900,7 @@ template<typename FACEDATACONTAINER>
      *
      * @return A const pointer to the FESystem()
      */ 
-    const dealii::SmartPointer<const DOpEWrapper::FiniteElement<dealdim> > GetFESystem() const{ return _OP.GetFESystem(); }
+    const dealii::SmartPointer<const dealii::FESystem<dealdim> > GetFESystem() const{ return _OP.GetFESystem(); }
 
     /******************************************************/ 
 

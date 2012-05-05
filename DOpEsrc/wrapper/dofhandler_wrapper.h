@@ -3,7 +3,7 @@
 
 #include <dofs/dof_handler.h>
 #include <hp/dof_handler.h>
-#include "finiteelement_wrapper.h"
+#include <fe/fe_system.h>
 
 namespace DOpEWrapper
 {
@@ -108,7 +108,7 @@ namespace DOpEWrapper
           }
         template<int dim>
           void
-          distribute_dofs(const DOpEWrapper::FiniteElement<dim> &fe,
+          distribute_dofs(const dealii::FESystem<dim> &fe,
               const unsigned int offset __attribute__((unused)) =0)
           {
             _dofs = fe.element_multiplicity(0);
@@ -146,7 +146,7 @@ namespace DOpEWrapper
           }
         template<int dim>
           void
-          distribute_dofs(const DOpEWrapper::FECollection<dim> &fe_collection,
+          distribute_dofs(const dealii::hp::FECollection<dim> &fe_collection,
               const unsigned int offset __attribute__((unused)) =0)
           {
             _dofs = fe_collection[0].element_multiplicity(0);

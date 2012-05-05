@@ -38,9 +38,9 @@ using namespace std;
 using namespace dealii;
 using namespace DOpE;
 
-#define VECTOR dealii::BlockVector<double>
-#define DOFHANDLER dealii::DoFHandler<2>
-#define FE DOpEWrapper::FiniteElement<2>
+#define VECTOR BlockVector<double>
+#define DOFHANDLER DoFHandler<2>
+#define FE FESystem<2>
 
 typedef OptProblemContainer<FunctionalInterface<Multimesh_CellDataContainer,Multimesh_FaceDataContainer,DOFHANDLER, VECTOR, 2,2>,
 		   FunctionalInterface<Multimesh_CellDataContainer,Multimesh_FaceDataContainer,DOFHANDLER, VECTOR, 2,2>,
@@ -48,7 +48,7 @@ typedef OptProblemContainer<FunctionalInterface<Multimesh_CellDataContainer,Mult
 		   DirichletDataInterface<VECTOR,2,2>,
 		   ConstraintInterface<Multimesh_CellDataContainer,Multimesh_FaceDataContainer,DOFHANDLER, VECTOR, 2,2>,BlockSparsityPattern, VECTOR, 2,2> OP;
 
-typedef IntegratorDataContainer<DOFHANDLER, dealii::Quadrature<2>, dealii::Quadrature<1>, VECTOR, 2 > IDC;
+typedef IntegratorDataContainer<DOFHANDLER, Quadrature<2>, Quadrature<1>, VECTOR, 2 > IDC;
 
 typedef IntegratorMultiMesh<IDC,VECTOR,double,2> INTEGRATOR;
 
@@ -85,9 +85,9 @@ int main(int argc, char **argv)
   Triangulation<2>     triangulation;
   GridGenerator::hyper_cube (triangulation, 0, 1);
 
-  //DOpEWrapper::FiniteElement<2>          control_fe(FE_DGP<2>(0),1);
-  DOpEWrapper::FiniteElement<2>          control_fe(FE_Q<2>(1),1);
-  DOpEWrapper::FiniteElement<2>          state_fe(FE_Q<2>(1),1);
+//FESystem<2>          control_fe(FE_DGP<2>(0),1);
+  FESystem<2>          control_fe(FE_Q<2>(1),1);
+  FESystem<2>          state_fe(FE_Q<2>(1),1);
 
   QGauss<2>   quadrature_formula(2);
   QGauss<1> face_quadrature_formula(2);
@@ -103,8 +103,8 @@ int main(int argc, char **argv)
   UErrorFunctional<VECTOR,2,2> UEF;
 
 //  std::vector<double> times(1,0.);
-  dealii::Triangulation<1> times;
-  dealii::GridGenerator::hyper_cube(times);
+  Triangulation<1> times;
+  GridGenerator::hyper_cube(times);
   triangulation.refine_global (3);
 
   MethodOfLines_MultiMesh_SpaceTimeHandler<FE, DOFHANDLER, BlockSparsityPattern,VECTOR, 2> DOFH(triangulation,control_fe, state_fe);

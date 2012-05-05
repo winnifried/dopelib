@@ -39,17 +39,17 @@ using namespace dealii;
 using namespace DOpE;
 
 // Define block issues
-#define MATRIXBLOCK dealii::BlockSparseMatrix<double>
-#define SPARSITYPATTERNBLOCK dealii::BlockSparsityPattern
-#define VECTORBLOCK dealii::BlockVector<double>
+#define MATRIXBLOCK BlockSparseMatrix<double>
+#define SPARSITYPATTERNBLOCK BlockSparsityPattern
+#define VECTORBLOCK BlockVector<double>
 
 // Define "normal" issues
-#define MATRIX dealii::SparseMatrix<double>
-#define SPARSITYPATTERN dealii::SparsityPattern
-#define VECTOR dealii::Vector<double>
+#define MATRIX SparseMatrix<double>
+#define SPARSITYPATTERN SparsityPattern
+#define VECTOR Vector<double>
 
-#define DOFHANDLER dealii::DoFHandler<3>
-#define FE DOpEWrapper::FiniteElement<3>
+#define DOFHANDLER DoFHandler<3>
+#define FE FESystem<3>
 
 #define PRECONDITIONERIDENTITYBLOCK DOpEWrapper::PreconditionIdentity_Wrapper<MATRIXBLOCK>
 #define PRECONDITIONERIDENTITY DOpEWrapper::PreconditionIdentity_Wrapper<MATRIX>
@@ -68,10 +68,10 @@ typedef PDEProblemContainer<
     PDEInterface<CellDataContainer, FaceDataContainer, DOFHANDLER, VECTOR, 3>,
     DirichletDataInterface<VECTOR, 3>, SPARSITYPATTERN, VECTOR, 3> OP3;
 
-typedef IntegratorDataContainer<DOFHANDLER, dealii::Quadrature<3>,
-    dealii::Quadrature<2>, VECTOR, 3> IDC;
-typedef IntegratorDataContainer<DOFHANDLER, dealii::Quadrature<3>,
-    dealii::Quadrature<2>, VECTORBLOCK, 3> IDCBLOCK;
+typedef IntegratorDataContainer<DOFHANDLER, Quadrature<3>,
+    Quadrature<2>, VECTOR, 3> IDC;
+typedef IntegratorDataContainer<DOFHANDLER, Quadrature<3>,
+    Quadrature<2>, VECTORBLOCK, 3> IDCBLOCK;
 
 typedef Integrator<IDCBLOCK, VECTORBLOCK, double, 3> INTEGRATOR1;
 typedef Integrator<IDC, VECTOR, double, 3> INTEGRATOR2;
@@ -123,7 +123,7 @@ main(int argc, char **argv)
 
   Triangulation<3> triangulation;
 
-  DOpEWrapper::FiniteElement<3> state_fe(FE_Q<3>(1), 3);
+  FESystem<3> state_fe(FE_Q<3>(1), 3);
 
   QGauss<3> quadrature_formula(3);
   QGauss<2> face_quadrature_formula(3);

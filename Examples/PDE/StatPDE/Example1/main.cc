@@ -35,17 +35,17 @@ using namespace std;
 using namespace dealii;
 using namespace DOpE;
 
-#define MATRIX dealii::BlockSparseMatrix<double>
-#define SPARSITYPATTERN dealii::BlockSparsityPattern
-#define VECTOR dealii::BlockVector<double>
-#define DOFHANDLER dealii::DoFHandler<2>
-#define FE DOpEWrapper::FiniteElement<2>
+#define MATRIX BlockSparseMatrix<double>
+#define SPARSITYPATTERN BlockSparsityPattern
+#define VECTOR BlockVector<double>
+#define DOFHANDLER DoFHandler<2>
+#define FE FESystem<2>
 
 //typedef PDEProblemContainer<PDEInterface<DOFHANDLER,VECTOR, 2>,DirichletDataInterface<VECTOR,2>,SPARSITYPATTERN, VECTOR,2> OP;
 typedef PDEProblemContainer<LocalPDE<VECTOR, 2>,
-    DirichletDataInterface<VECTOR, 2>, SPARSITYPATTERN, VECTOR, 2> OP;
-typedef IntegratorDataContainer<DOFHANDLER, dealii::Quadrature<2>,
-    dealii::Quadrature<1>, VECTOR, 2> IDC;
+			    DirichletDataInterface<VECTOR, 2>, SPARSITYPATTERN, VECTOR, 2> OP;
+typedef IntegratorDataContainer<DOFHANDLER, Quadrature<2>,
+   Quadrature<1>, VECTOR, 2> IDC;
 
 typedef Integrator<IDC, VECTOR, double, 2> INTEGRATOR;
 
@@ -89,9 +89,9 @@ main(int argc, char **argv)
   std::ifstream input_file("channel.inp");
   grid_in.read_ucd(input_file);
 
-  DOpEWrapper::FiniteElement<2> state_fe(FE_Q<2>(2), 2, FE_Q<2>(1), 1); //Q1
+  FESystem<2> state_fe(FE_Q<2>(2), 2, FE_Q<2>(1), 1); //Q1
   /******hp******************/
-//  DOpEWrapper::FECollection<2>  state_fe_collection(state_fe);
+//  hp::FECollection<2>  state_fe_collection(state_fe);
   /******hp******************/
 
   QGauss<2> quadrature_formula(3);
@@ -99,8 +99,8 @@ main(int argc, char **argv)
   IDC idc(quadrature_formula, face_quadrature_formula);
 
   /******hp******************/
-//  dealii::hp::QCollection<2> q_coll(quadrature_formula);
-//  dealii::hp::QCollection<1> face_q_coll(face_quadrature_formula);
+//  hp::QCollection<2> q_coll(quadrature_formula);
+//  hp::QCollection<1> face_q_coll(face_quadrature_formula);
   /******hp******************/
 
   LocalPDE<VECTOR, 2> LPDE;
@@ -109,8 +109,8 @@ main(int argc, char **argv)
   LocalBoundaryFluxFunctional<VECTOR, 2> LBFF;
 
 //  //pseudo time
-//  dealii::Triangulation<1> times;
-//  dealii::GridGenerator::hyper_cube(times);
+//  Triangulation<1> times;
+//  GridGenerator::hyper_cube(times);
   triangulation.refine_global(3);
 
   MethodOfLines_StateSpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR, 2> DOFH(
