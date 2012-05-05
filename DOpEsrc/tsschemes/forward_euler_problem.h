@@ -468,7 +468,7 @@ namespace DOpE
       template<typename FACEDATACONTAINER>
         void
         BoundaryMatrix(const FACEDATACONTAINER& fdc,
-		       dealii::FullMatrix<double> &local_cell_matrix)
+		       dealii::FullMatrix<double> &local_entry_matrix)
         {
           assert(this->GetPart() == "New");
           this->GetProblem().BoundaryMatrix(fdc, local_entry_matrix, 0., 1.);
