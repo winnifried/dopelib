@@ -284,12 +284,12 @@ namespace DOpE
         template<typename FACEDATACONTAINER>
           void
           FaceEquation(const FACEDATACONTAINER & fdc,
-              dealii::Vector<double> &local_cell_vector, double scale = 1.)
+              dealii::Vector<double> &local_cell_vector, double scale = 1., double scale_ico = 1.)
           {
             if (this->GetPart() == "New")
             {
               // Hier nicht mit this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize() multiplizieren, da local_cell_matrix schon skaliert ist
-              this->GetProblem().FaceEquation(fdc, local_cell_vector, scale);
+              this->GetProblem().FaceEquation(fdc, local_cell_vector, scale, scale);
             }
             else if (this->GetPart() == "Old")
             {
@@ -309,13 +309,12 @@ namespace DOpE
         template<typename FACEDATACONTAINER>
           void
           InterfaceEquation(const FACEDATACONTAINER& dc,
-              dealii::Vector<double> &local_cell_vector, double scale = 1.)
+              dealii::Vector<double> &local_cell_vector, double scale = 1., double scale_ico = 1.)
           {
             if (this->GetPart() == "New")
             {
               // Hier nicht mit this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize() multiplizieren, da local_cell_matrix schon skaliert ist
-              this->GetProblem().InterfaceEquation(dc, local_cell_vector,
-                  scale);
+              this->GetProblem().InterfaceEquation(dc, local_cell_vector, scale, scale);
             }
             else if (this->GetPart() == "Old")
             {
@@ -353,7 +352,7 @@ namespace DOpE
           {
             assert(this->GetPart() == "New");
             // Hier nicht mit this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize() multiplizieren, da local_cell_matrix schon skaliert ist
-            this->GetProblem().FaceMatrix(fdc, local_entry_matrix);
+            this->GetProblem().FaceMatrix(fdc, local_entry_matrix, 1., 1.);
 
           }
 
@@ -369,7 +368,7 @@ namespace DOpE
           {
             assert(this->GetPart() == "New");
             // Hier nicht mit this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize() multiplizieren, da local_cell_matrix schon skaliert ist
-            this->GetProblem().InterfaceMatrix(fdc, local_entry_matrix);
+            this->GetProblem().InterfaceMatrix(fdc, local_entry_matrix, 1., 1.);
 
           }
 
@@ -394,13 +393,13 @@ namespace DOpE
         template<typename FACEDATACONTAINER>
           void
           BoundaryEquation(const FACEDATACONTAINER & fdc,
-              dealii::Vector<double> &local_cell_vector, double scale = 1.)
+			   dealii::Vector<double> &local_cell_vector, double scale = 1.,double scale_ico = 1.)
           {
             if (this->GetPart() == "New")
             {
               // Hier nicht mit this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize() multiplizieren, da local_cell_matrix schon skaliert ist
               this->GetProblem().BoundaryEquation(fdc, local_cell_vector,
-                  scale);
+						  scale,scale );
             }
             else if (this->GetPart() == "Old")
             {
@@ -452,7 +451,7 @@ namespace DOpE
           {
             assert(this->GetPart() == "New");
             // Hier nicht mit this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize() multiplizieren, da local_cell_matrix schon skaliert ist
-            this->GetProblem().BoundaryMatrix(fdc, local_cell_matrix);
+            this->GetProblem().BoundaryMatrix(fdc, local_cell_matrix,1.,1.);
 
           }
       private:
