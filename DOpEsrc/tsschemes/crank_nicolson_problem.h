@@ -310,16 +310,16 @@ namespace DOpE
       template<typename FACEDATACONTAINER>
         void
         FaceEquation(const FACEDATACONTAINER & fdc,
-            dealii::Vector<double> &local_cell_vector, double scale = 1.)
+            dealii::Vector<double> &local_cell_vector, double scale = 1., double scale_ico = 1.)
         {
           if (this->GetPart() == "New")
             {
               // Hier nicht mit this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize() multiplizieren, da local_cell_matrix schon skaliert ist
-              this->GetProblem().FaceEquation(fdc, local_cell_vector, 0.5 * scale);
+              this->GetProblem().FaceEquation(fdc, local_cell_vector, 0.5 * scale, scale);
             }
           else if (this->GetPart() == "Old")
             {
-              this->GetProblem().FaceEquation(fdc, local_cell_vector, 0.5 * scale);
+              this->GetProblem().FaceEquation(fdc, local_cell_vector, 0.5 * scale,0.);
             }
           else
             {
@@ -337,18 +337,18 @@ namespace DOpE
       template<typename FACEDATACONTAINER>
         void
         InterfaceEquation(const FACEDATACONTAINER & fdc,
-            dealii::Vector<double> &local_cell_vector, double scale = 1.)
+			  dealii::Vector<double> &local_cell_vector, double scale = 1., double scale_ico = 1.)
         {
           if (this->GetPart() == "New")
             {
               // Hier nicht mit this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize() multiplizieren, da local_cell_matrix schon skaliert ist
               this->GetProblem().InterfaceEquation(fdc, local_cell_vector,
-                  0.5 * scale);
+						   0.5 * scale, scale);
             }
           else if (this->GetPart() == "Old")
             {
               this->GetProblem().InterfaceEquation(fdc,  local_cell_vector,
-                  0.5 * scale);
+                  0.5 * scale, 0.);
             }
           else
             {
@@ -388,9 +388,9 @@ namespace DOpE
 
           m = 0.;
           // Multiplication with 1/2 due to CN time discretization
-          this->GetProblem().FaceMatrix(fdc, m);
+          this->GetProblem().FaceMatrix(fdc, m, 0.5, 1.);
 
-          local_entry_matrix.add(0.5, m);
+          local_entry_matrix.add(1., m);
         }
 
       /******************************************************/
@@ -410,9 +410,9 @@ namespace DOpE
 
           m = 0.;
           // Multiplication with 1/2 due to CN time discretization
-          this->GetProblem().InterfaceMatrix(fdc,  m);
+          this->GetProblem().InterfaceMatrix(fdc,  m, 0.5, 1.);
 
-          local_entry_matrix.add(0.5, m);
+          local_entry_matrix.add(1., m);
         }
 
       /******************************************************/
@@ -443,16 +443,16 @@ namespace DOpE
       template<typename FACEDATACONTAINER>
         void
         BoundaryEquation(const FACEDATACONTAINER & fdc,
-            dealii::Vector<double> &local_cell_vector, double scale = 1.)
+            dealii::Vector<double> &local_cell_vector, double scale = 1., double scale_ico = 1.)
         {
           if (this->GetPart() == "New")
             {
               // Hier nicht mit this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize() multiplizieren, da local_cell_matrix schon skaliert ist
-              this->GetProblem().BoundaryEquation(fdc, local_cell_vector, 0.5 * scale);
+              this->GetProblem().BoundaryEquation(fdc, local_cell_vector, 0.5 * scale, scale);
             }
           else if (this->GetPart() == "Old")
             {
-              this->GetProblem().BoundaryEquation(fdc, local_cell_vector, 0.5 * scale);
+              this->GetProblem().BoundaryEquation(fdc, local_cell_vector, 0.5 * scale, 0.);
             }
           else
             {
@@ -512,8 +512,8 @@ namespace DOpE
 
           m = 0.;
           // Multiplication with 1/2 due to CN time discretization
-          this->GetProblem().BoundaryMatrix(fdc, m);
-          local_cell_matrix.add(0.5, m);
+          this->GetProblem().BoundaryMatrix(fdc, m, 0.5, 1.);
+          local_cell_matrix.add(1., m);
 
         }
     private:
