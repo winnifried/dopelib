@@ -322,7 +322,7 @@ namespace DOpE
         {
           if (this->GetPart() == "New")
             {
-	      this->GetProblem().InterfaceEquation(fdc, local_cell_vector, 0., scale);
+	      this->GetProblem().InterfaceEquation(dc, local_cell_vector, 0., scale);
             }
           else if (this->GetPart() == "Old")
             {
@@ -358,8 +358,8 @@ namespace DOpE
        */
       template<typename FACEDATACONTAINER>
         void
-        FaceMatrix(const FACEDATACONTAINER& /*fdc*/,
-		   dealii::FullMatrix<double> &local_entry_matrix __attribute__((unused)))
+        FaceMatrix(const FACEDATACONTAINER& fdc,
+		   dealii::FullMatrix<double> &local_entry_matrix)
         {
           assert(this->GetPart() == "New");
 	  this->GetProblem().FaceMatrix(fdc, local_entry_matrix, 0., 1.);
@@ -370,8 +370,8 @@ namespace DOpE
 
       template<typename FACEDATACONTAINER>
         void
-        InterfaceMatrix(const FACEDATACONTAINER& /*fdc*/,
-            dealii::FullMatrix<double> &local_entry_matrix __attribute__((unused)))
+        InterfaceMatrix(const FACEDATACONTAINER& fdc,
+            dealii::FullMatrix<double> &local_entry_matrix)
         {
           assert(this->GetPart() == "New");
           this->GetProblem().InterfaceMatrix(fdc, local_entry_matrix, 0., 1.);
@@ -467,8 +467,8 @@ namespace DOpE
        */
       template<typename FACEDATACONTAINER>
         void
-        BoundaryMatrix(const FACEDATACONTAINER& /*fdc*/,
-		       dealii::FullMatrix<double> &local_cell_matrix __attribute__((unused)))
+        BoundaryMatrix(const FACEDATACONTAINER& fdc,
+		       dealii::FullMatrix<double> &local_cell_matrix)
         {
           assert(this->GetPart() == "New");
           this->GetProblem().BoundaryMatrix(fdc, local_entry_matrix, 0., 1.);
