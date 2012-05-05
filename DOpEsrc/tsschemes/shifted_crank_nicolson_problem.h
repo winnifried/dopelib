@@ -327,17 +327,19 @@ namespace DOpE
         template<typename FACEDATACONTAINER>
           void
           FaceEquation(const FACEDATACONTAINER& fdc,
-              dealii::Vector<double> &local_cell_vector, double scale = 1.)
+              dealii::Vector<double> &local_cell_vector, double scale = 1., double scale_ico = 1.)
           {
             if (this->GetPart() == "New")
             {
               damped_cn_theta = 0.5
                   + this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize();
-              this->GetProblem().FaceEquation(fdc, local_cell_vector, damped_cn_theta * scale);
+              this->GetProblem().FaceEquation(fdc, local_cell_vector, damped_cn_theta * scale, scale);
             }
             else if (this->GetPart() == "Old")
             {
-              this->GetProblem().FaceEquation(fdc, local_cell_vector, damped_cn_theta * scale);
+	      damped_cn_theta = 0.5
+	              + this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize();
+              this->GetProblem().FaceEquation(fdc, local_cell_vector, (1.0 - damped_cn_theta) * scale, 0.);
             }
             else
             {
@@ -355,19 +357,20 @@ namespace DOpE
         template<typename FACEDATACONTAINER>
           void
           InterfaceEquation(const FACEDATACONTAINER& fdc,
-              dealii::Vector<double> &local_cell_vector, double scale = 1.)
+              dealii::Vector<double> &local_cell_vector, double scale = 1., double scale_ico = 1.)
           {
             if (this->GetPart() == "New")
             {
               damped_cn_theta = 0.5
                   + this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize();
               this->GetProblem().InterfaceEquation(fdc, local_cell_vector,
-                  damped_cn_theta * scale);
+						   damped_cn_theta * scale,scale );
             }
             else if (this->GetPart() == "Old")
             {
-              this->GetProblem().InterfaceEquation(fdc, local_cell_vector,
-                  damped_cn_theta * scale);
+              damped_cn_theta = 0.5
+	              + this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize();
+              this->GetProblem().InterfaceEquation(fdc, local_cell_vector, (1.0 - damped_cn_theta) * scale, 0.);
             }
             else
             {
@@ -410,9 +413,9 @@ namespace DOpE
 
             m = 0.;
             // Multiplication with 1/2 + k due to CN time discretization
-            this->GetProblem().FaceMatrix(fdc, m);
+            this->GetProblem().FaceMatrix(fdc, m, damped_cn_theta, 1.);
 
-            local_entry_matrix.add(damped_cn_theta, m);
+            local_entry_matrix.add(1., m);
 
           }
 
@@ -436,9 +439,9 @@ namespace DOpE
 
             m = 0.;
             // Multiplication with 1/2 + k due to CN time discretization
-            this->GetProblem().InterfaceMatrix(fdc, m);
+            this->GetProblem().InterfaceMatrix(fdc, m, damped_cn_theta, 1.);
 
-            local_entry_matrix.add(damped_cn_theta, m);
+            local_entry_matrix.add(1., m);
 
           }
 
@@ -470,21 +473,21 @@ namespace DOpE
         template<typename FACEDATACONTAINER>
           void
           BoundaryEquation(const FACEDATACONTAINER& fdc,
-              dealii::Vector<double> &local_cell_vector, double scale = 1.)
+              dealii::Vector<double> &local_cell_vector, double scale = 1., double scale_ico = 1.)
           {
             if (this->GetPart() == "New")
             {
               damped_cn_theta = 0.5
                   + this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize();
               this->GetProblem().BoundaryEquation(fdc, local_cell_vector,
-                  damped_cn_theta * scale);
+						  damped_cn_theta * scale,scale);
             }
             else if (this->GetPart() == "Old")
             {
               damped_cn_theta = 0.5
                   + this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize();
               this->GetProblem().BoundaryEquation(fdc, local_cell_vector,
-                  (1.0 - damped_cn_theta) * scale);
+						  (1.0 - damped_cn_theta) * scale, 0.);
             }
             else
             {
@@ -546,8 +549,8 @@ namespace DOpE
 
             m = 0.;
             // Multiplication with 1/2 + k due to CN time discretization
-            this->GetProblem().BoundaryMatrix(fdc, m);
-            local_cell_matrix.add(damped_cn_theta, m);
+            this->GetProblem().BoundaryMatrix(fdc, m, damped_cn_theta, 1.);
+            local_cell_matrix.add(1., m);
 
           }
 
