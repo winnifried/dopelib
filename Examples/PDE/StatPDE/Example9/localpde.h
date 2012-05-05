@@ -134,7 +134,7 @@ template<typename VECTOR, int dealdim>
       void
       FaceEquation_U(
           const FaceDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& ,
-          dealii::Vector<double> &, double )
+          dealii::Vector<double> &, double , double)
       {
 
       }
@@ -142,7 +142,7 @@ template<typename VECTOR, int dealdim>
       void
       FaceMatrix(
           const FaceDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& ,
-          FullMatrix<double> &)
+          FullMatrix<double> &, double, double)
       {
 
       }
@@ -150,7 +150,7 @@ template<typename VECTOR, int dealdim>
       void
       CellEquation_U(
           const CellDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& cdc,
-          dealii::Vector<double> &local_cell_vector, double scale)
+          dealii::Vector<double> &local_cell_vector, double scale, double)
       {
         const DOpEWrapper::FEValues<dealdim> & state_fe_values =
             cdc.GetFEValuesState();
