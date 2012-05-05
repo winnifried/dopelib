@@ -1,5 +1,6 @@
 TODO DOpE
 =========
+- Verschiedene Typen der Kontrolle (undefined, initial, timedistributed, timedistributedtimedependend). Diese gibt man dem Kontrollvektor, der den Typ wiederum an STH lieftert. Dieser speichert ihn und stellt sicher, dass alle Kontrollen den selben Typen haben. ~cg
 
 - Zeitschrittverfahren nochmals anschauen! Diverse Funktionen sind noch nicht umgestellt (faceequation etc.)
 
@@ -31,7 +32,8 @@ TODO DOpE
   condense(u)/distribute(u) stuff again, it should not be in the apply 
   boundary value stuff...
 
-- Pointfunctional as Optimization functional.
+- (done)Pointfunctional as Optimization functional.
+   --Beispiel dazu ~cg
 - FE_Wrapper kann weg -> dealii::FESystem
 - FE_Values ? Kann man dim=0 anlegen? Dann kann der weg (Ja, habs auskommentiert,
   trotzdem laeufen alle Probleme korrekt durch (ausser OPT/7+8))~cg.
