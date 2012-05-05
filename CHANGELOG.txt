@@ -3,10 +3,14 @@ Changelog DOpE
 
 2. DOpE Treffen 3.5.2012-5.5.2012:
 ==================================
--- Initial Value Computation now done by DOpE, nolonger the fixed dealii function project.
--- Changed interface for incorporation of user defined dofconstraints: Dope computes always
+- Renamed optproblem.h to optproblemcontainer.h (OptProblem to OptProblemContainer)
+- Initial Value Computation now done by DOpE, nolonger the fixed dealii function project.
+- Changed interface for incorporation of user defined dofconstraints: Dope computes always
    the hanging node constraints (for state and control), after that, the user specified dofconstraints
    (for state and control!) are added.
+- DOpEWrapper::FiniteElement removed, use dealii::FESystem instead.
+- Removed unnecessary template parameters SPARSITYMAKER and CONSTRAINTSMAKER.
+- Removed common code from the timestepping schemes and moved it into the base classes ts_base and primal_ts_base. Moved the files containing the timestepping classes into the directory tsschemes
 	
 
 before 2.5.2012

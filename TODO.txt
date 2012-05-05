@@ -1,6 +1,15 @@
 TODO DOpE
 =========
-- Verschiedene Typen der Kontrolle (undefined, initial, timedistributed, timedistributedtimedependend). Diese gibt man dem Kontrollvektor, der den Typ wiederum an STH lieftert. Dieser speichert ihn und stellt sicher, dass alle Kontrollen den selben Typen haben. ~cg
+- Adjungierte Zeitschrittverfahren 
+  (Dann geht endlich auch Opt-Control im Instationaeren), sind noch
+  fertigzustellen. ~ww
+
+- (done)Pointfunctional as Optimization functional. Beispiel ist noch zu erstellen!
+ Es wird OPT/StatPDE/Example2 modifiziert.
+   --Beispiel dazu ~cg
+
+- Verschiedene Kontrolltypen im Instationaeren, insbesondere Kontrolle in den AWen
+-- Verschiedene Typen der Kontrolle (undefined, initial, timedistributed, timedistributedtimedependend). Diese gibt man dem Kontrollvektor, der den Typ wiederum an STH lieftert. Dieser speichert ihn und stellt sicher, dass alle Kontrollen den selben Typen haben. ~cg
 
 - Zeitschrittverfahren nochmals anschauen! Diverse Funktionen sind noch nicht umgestellt (faceequation etc.)
 
@@ -27,14 +36,13 @@ TODO DOpE
 	Compliance minimization
 	DWR NS channel (muss noch gerechnet werden)
 	Beispiel mit verschiedenen BC: Einstroemung, Periodisch, Pressure Driven
+
 - Update the Apply...BoundaryValues to include other constraints, 
   like periodicity... (maybe with nonzero jump...). Also check the 
   condense(u)/distribute(u) stuff again, it should not be in the apply 
   boundary value stuff...
 
-- (done)Pointfunctional as Optimization functional.
-   --Beispiel dazu ~cg
-- FE_Wrapper kann weg -> dealii::FESystem
+
 - FE_Values ? Kann man dim=0 anlegen? Dann kann der weg (Ja, habs auskommentiert,
   trotzdem laeufen alle Probleme korrekt durch (ausser OPT/7+8))~cg.
 
@@ -43,7 +51,8 @@ TODO DOpE
 
 - pdeinterface.h - scale_ico auch fuer CellEquation_u etc. implementieren!
 
-- Problem typen ueber enum statt string ?
+- Problem typen ueber enum statt string (Abgelehnt: Diese Vergleiche werden
+in Zukunft sowieso entfallen)
 
 done (current work)  - PDE/StatPDE		
 		-- Kommentare zu Beispielen sollten beinhalten:
@@ -52,7 +61,6 @@ done (current work)  - PDE/StatPDE
   		ueber \index indiziert werden.
 
 - hp Beispiel in PDE/StatPDE/Example1 ~cg !!!!
- 
 	
 - Fehlerschaetzer 
   (zumindest fuer stationaere Probleme)
@@ -101,10 +109,6 @@ davon state und tangent bzw. dual und dual hessian ~ww
                 (Upgrades for integrator_multimesh and multimesh_facedatacontainer needed)                           
   --Support for nonstationary problems                                                                             
                 (Upgrades for integrator_multimesh needed)                                                           
-      
-
-- Umbenennung optproblem.h in optproblemcontainer.h? Waere konsistent mit pde
-  problemcontainer
 
 - Standardinterface fuer Postprozesse? 
 	-- Basisklasse fuer Postprozesse
@@ -117,10 +121,7 @@ davon state und tangent bzw. dual und dual hessian ~ww
 - Make some automated memchecks, e.g., valgrind --tool=memcheck --leak-check=full --error-exitcode=1 [Programmname] 
   will return 0 if no errors but a nonzero exitcode if there are some errors...
 
-- Verschiedene Kontrolltypen im Instationaeren, insbesondere Kontrolle in den AWen
 -  Rueckgabeklasse fuer Newton. 
-- Adjungierte Zeitschrittverfahren 
-  (Dann geht endlich auch Opt-Control im Instationaeren)
 - Doku in latex zu OPT und Instat 
 -  Loesen des Opt-Control Probleme ueber die KKT-Bedingungen 
   (im stationaeren, benötigt Matrizen für die gemischten Ableitungen, wollen wir dazu neue 
