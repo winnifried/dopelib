@@ -52,8 +52,7 @@ namespace DOpE
         template<typename DATACONTAINER>
           void
           Init_CellMatrix(const DATACONTAINER& cdc,
-              dealii::FullMatrix<double> &local_entry_matrix, double scale,
-              double scale_ico)
+              dealii::FullMatrix<double> &local_entry_matrix, double scale, double scale_ico)
           {
             this->GetProblem().Init_CellMatrix(cdc, local_entry_matrix, scale,
                 scale_ico);
@@ -70,42 +69,42 @@ namespace DOpE
         template<typename FACEDATACONTAINER>
           void
           Init_FaceEquation(const FACEDATACONTAINER& /*fdc*/,
-              dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
+              dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/, double /*scale_ico*/)
           {
           }
 
         template<typename FACEDATACONTAINER>
           void
           Init_InterfaceEquation(const FACEDATACONTAINER& /*fdc*/,
-              dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
+              dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/, double /*scale_ico*/)
           {
           }
 
         template<typename FACEDATACONTAINER>
           void
           Init_BoundaryEquation(const FACEDATACONTAINER& /*fdc*/,
-              dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
+              dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/, double /*scale_ico*/)
           {
           }
 
         template<typename FACEDATACONTAINER>
           void
           Init_FaceMatrix(const FACEDATACONTAINER& /*fdc*/,
-              FullMatrix<double> &/*local_entry_matrix*/)
+              FullMatrix<double> &/*local_entry_matrix*/, double /*scale*/, double /*scale_ico*/)
           {
           }
 
         template<typename FACEDATACONTAINER>
           void
           Init_InterfaceMatrix(const FACEDATACONTAINER& /*fdc*/,
-              FullMatrix<double> &/*local_entry_matrix*/)
+              FullMatrix<double> &/*local_entry_matrix*/, double /*scale*/, double /*scale_ico*/)
           {
           }
 
         template<typename FACEDATACONTAINER>
           void
           Init_BoundaryMatrix(const FACEDATACONTAINER& /*fdc*/,
-              FullMatrix<double> &/*local_cell_matrix*/)
+              FullMatrix<double> &/*local_cell_matrix*/, double /*scale*/, double /*scale_ico*/)
           {
           }
 
