@@ -399,26 +399,26 @@ namespace DOpE
       template<typename FACEDATACONTAINER>
         void
         FaceEquation(const FACEDATACONTAINER& fdc,
-            dealii::Vector<double> &local_cell_vector, double scale = 1.)
+		     dealii::Vector<double> &local_cell_vector, double scale, double)
         {
           if (this->GetPart() == "New_for_1st_and_3rd_cycle")
             {
-              this->GetProblem().FaceEquation(fdc, local_cell_vector, scale * _fs_alpha);
+              this->GetProblem().FaceEquation(fdc, local_cell_vector, scale * _fs_alpha, scale);
 
             }
           else if ((this->GetPart() == "Old_for_1st_cycle") || (this->GetPart()
               == "Old_for_3rd_cycle"))
             {
-              this->GetProblem().FaceEquation(fdc, local_cell_vector, scale * _fs_beta);
+              this->GetProblem().FaceEquation(fdc, local_cell_vector, scale * _fs_beta, 0);
             }
           else if (this->GetPart() == "New_for_2nd_cycle")
             {
               this->GetProblem().FaceEquation(fdc, local_cell_vector,
-                  scale * _fs_alpha * _fs_theta / _fs_theta_prime);
+                  scale * _fs_beta, scale);
             }
           else if (this->GetPart() == "Old_for_2nd_cycle")
             {
-              this->GetProblem().FaceEquation(fdc, local_cell_vector, scale * _fs_alpha);
+              this->GetProblem().FaceEquation(fdc, local_cell_vector, scale * _fs_alpha, 0.);
             }
           else
             {
@@ -441,24 +441,24 @@ namespace DOpE
           if (this->GetPart() == "New_for_1st_and_3rd_cycle")
             {
               this->GetProblem().InterfaceEquation(fdc, local_cell_vector,
-                  scale * _fs_alpha);
+						   scale * _fs_alpha, scale);
 
             }
           else if ((this->GetPart() == "Old_for_1st_cycle") || (this->GetPart()
               == "Old_for_3rd_cycle"))
             {
               this->GetProblem().InterfaceEquation(fdc, local_cell_vector,
-                  scale * _fs_beta);
+						   scale * _fs_beta, 0);
             }
           else if (this->GetPart() == "New_for_2nd_cycle")
             {
               this->GetProblem().InterfaceEquation(fdc, local_cell_vector,
-                  scale * _fs_alpha * _fs_theta / _fs_theta_prime);
+                  scale * _fs_beta, scale);
             }
           else if (this->GetPart() == "Old_for_2nd_cycle")
             {
               this->GetProblem().InterfaceEquation(fdc, local_cell_vector,
-                  scale * _fs_alpha);
+						   scale * _fs_alpha, 0.);
             }
           else
             {
@@ -496,15 +496,15 @@ namespace DOpE
             {
               dealii::FullMatrix<double> m(local_entry_matrix);
               m = 0.;
-              this->GetProblem().FaceMatrix(fdc, m);
-              local_entry_matrix.add(_fs_alpha, m);
+              this->GetProblem().FaceMatrix(fdc, m, _fs_alpha, 1.);
+              local_entry_matrix.add(1., m);
             }
           else if (this->GetPart() == "New_for_2nd_cycle")
             {
               dealii::FullMatrix<double> m(local_entry_matrix);
               m = 0.;
-              this->GetProblem().FaceMatrix(fdc, m);
-              local_entry_matrix.add(_fs_alpha * _fs_theta / _fs_theta_prime, m);
+              this->GetProblem().FaceMatrix(fdc, m, _fs_beta, 1.);
+              local_entry_matrix.add(1.0, m);	              
             }
 
         }
@@ -524,15 +524,15 @@ namespace DOpE
             {
               dealii::FullMatrix<double> m(local_entry_matrix);
               m = 0.;
-              this->GetProblem().InterfaceMatrix(fdc,  m);
-              local_entry_matrix.add(_fs_alpha, m);
+              this->GetProblem().InterfaceMatrix(fdc,  m, _fs_alpha, 1.);
+              local_entry_matrix.add(1.0, m);
             }
           else if (this->GetPart() == "New_for_2nd_cycle")
             {
               dealii::FullMatrix<double> m(local_entry_matrix);
               m = 0.;
-              this->GetProblem().InterfaceMatrix(fdc,  m);
-              local_entry_matrix.add(_fs_alpha * _fs_theta / _fs_theta_prime, m);
+              this->GetProblem().InterfaceMatrix(fdc,  m, _fs_beta, 1.);
+              local_entry_matrix.add(1.0, m);
             }
 
         }
@@ -565,7 +565,7 @@ namespace DOpE
       template<typename FACEDATACONTAINER>
         void
         BoundaryEquation(const FACEDATACONTAINER& fdc,
-            dealii::Vector<double> &local_cell_vector, double scale = 1.)
+			 dealii::Vector<double> &local_cell_vector, double scale, double)
         {
           if (this->GetPart() == "New_for_1st_and_3rd_cycle")
             {
