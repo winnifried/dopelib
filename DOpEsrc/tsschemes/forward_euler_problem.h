@@ -268,7 +268,7 @@ namespace DOpE
       template<typename DATACONTAINER>
         void
         CellMatrix(const DATACONTAINER& dc,
-            dealii::FullMatrix<double> &local_entry_matrix)
+		   dealii::FullMatrix<double> &local_entry_matrix)
         {
           assert(this->GetPart() == "New");
           dealii::FullMatrix<double> m(local_entry_matrix);
@@ -296,7 +296,7 @@ namespace DOpE
       template<typename FACEDATACONTAINER>
         void
         FaceEquation(const FACEDATACONTAINER& fdc,
-            dealii::Vector<double> &local_cell_vector, double scale = 1.)
+		     dealii::Vector<double> &local_cell_vector, double scale, double scale_ico)
         {
           if (this->GetPart() == "New")
             {
@@ -317,7 +317,7 @@ namespace DOpE
       template<typename FACEDATACONTAINER>
         void
         InterfaceEquation(const FACEDATACONTAINER& dc,
-            dealii::Vector<double> &local_cell_vector, double scale = 1.)
+			  dealii::Vector<double> &local_cell_vector, double scale, double /*scale_ico*/)
         {
           if (this->GetPart() == "New")
             {
@@ -357,7 +357,7 @@ namespace DOpE
       template<typename FACEDATACONTAINER>
         void
         FaceMatrix(const FACEDATACONTAINER& /*fdc*/,
-            dealii::FullMatrix<double> &local_entry_matrix __attribute__((unused)))
+		   dealii::FullMatrix<double> &local_entry_matrix __attribute__((unused)))
         {
           assert(this->GetPart() == "New");
           // No implementation due to explicit character of the time stepping scheme.
@@ -404,7 +404,7 @@ namespace DOpE
       template<typename FACEDATACONTAINER>
         void
         BoundaryEquation(const FACEDATACONTAINER& fdc,
-            dealii::Vector<double> &local_cell_vector, double scale = 1.)
+			 dealii::Vector<double> &local_cell_vector, double scale, double /*scale_ico*/)
         {
           if (this->GetPart() == "New")
             {
@@ -465,7 +465,8 @@ namespace DOpE
       template<typename FACEDATACONTAINER>
         void
         BoundaryMatrix(const FACEDATACONTAINER& /*fdc*/,
-            dealii::FullMatrix<double> &local_cell_matrix __attribute__((unused)))
+		       dealii::FullMatrix<double> &local_cell_matrix __attribute__((unused)),
+		       double /*scale*/, double /*scale_ico*/)
         {
           assert(this->GetPart() == "New");
           // No implementation due to explicit character of the time stepping scheme.
