@@ -244,6 +244,8 @@ namespace DOpE
          * @param local_cell_vector       This vector contains the locally computed values of the cell equation. For more information
          *                                on dealii::Vector, please visit, the deal.ii manual pages.
          * @param scale                   A scaling factor which is -1 or 1 depending on the subroutine to compute.
+         * @param scale_ico             A scaling factor for terms which will be treated fully implicit
+         *                              in an instationary equation.
          */
         template<typename DATACONTAINER>
           void
@@ -334,8 +336,9 @@ namespace DOpE
          *
          * @param cdc                      A DataContainer holding all the needed information
          *
-
-         * @param cell_diameter            Diameter of the cell.
+         * @param scale                 A scaling factor which is -1 or 1 depending on the subroutine to compute.
+         * @param scale_ico             A scaling factor for terms which will be treated fully implicit
+         *                              in an instationary equation.
          * @param local_entry_matrix       The local matrix is quadratic and has size local DoFs times local DoFs and is
          *                                 filled by the locally computed values. For more information of its functionality, please
          *                                 search for the keyword `FullMatrix' in the deal.ii manual.
@@ -391,7 +394,8 @@ namespace DOpE
         template<typename FACEDATACONTAINER>
           void
           FaceEquation(const FACEDATACONTAINER& dc,
-              dealii::Vector<double> &local_cell_vector, double scale, double scale_ico );
+              dealii::Vector<double> &local_cell_vector, double scale,
+              double scale_ico);
 
         /******************************************************/
         /**
@@ -483,33 +487,7 @@ namespace DOpE
           void
           BoundaryMatrix(const FACEDATACONTAINER& dc,
               dealii::FullMatrix<double> &local_cell_matrix, double scale = 1.,double scale_ico = 1.);
-
         /******************************************************/
-        //
-        //      /**
-        //       * This is to evaluate local constraints on the control and the state variable.
-        //       *
-        //       * @param control         The values of the control variable
-        //       * @param state           The values of the state variable
-        //       * @param constraints     The vector that upon completion should contain the values of the local constraint
-        //       *                        mappings.
-        //       */
-        //      void
-        //      ComputeLocalConstraints(const VECTOR& control, const VECTOR& state,
-        //          VECTOR& constraints);
-        //      /******************************************************/
-        //
-        //      /**
-        //       * This is to evaluate local constraints on the control variable.
-        //       *
-        //       * @param control         The values of the control variable
-        //       * @param constraints     The vector that upon completion should contain the values of the local constraint
-        //       *                        mappings.
-        //       */
-        //      void
-        //          ComputeLocalControlConstraints(const VECTOR& control,
-        //              VECTOR& constraints);
-        //
         void
         ComputeLocalControlConstraints(VECTOR& constraints,
             const std::map<std::string, const dealii::Vector<double>*> &values,

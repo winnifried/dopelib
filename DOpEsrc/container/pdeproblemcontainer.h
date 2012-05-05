@@ -241,6 +241,8 @@ namespace DOpE
          * @param local_cell_vector        This vector contains the locally computed values of the cell equation. For more information
          *                                 on dealii::Vector, please visit, the deal.ii manual pages.
          * @param scale                    A scaling factor which is -1 or 1 depending on the subroutine to compute.
+         * @param scale_ico             A scaling factor for terms which will be treated fully implicit
+         *                              in an instationary equation.
          */
         template<typename DATACONTAINER>
           void
@@ -416,7 +418,8 @@ namespace DOpE
         template<typename FACEDATACONTAINER>
           void
           FaceEquation(const FACEDATACONTAINER& dc,
-              dealii::Vector<double> &local_cell_vector, double scale = 1.);
+              dealii::Vector<double> &local_cell_vector, double scale,
+              double scale_ico);
 
         /******************************************************/
 
@@ -445,7 +448,8 @@ namespace DOpE
         template<typename FACEDATACONTAINER>
           void
           InterfaceEquation(const FACEDATACONTAINER& dc,
-              dealii::Vector<double> &local_cell_vector, double scale = 1.);
+              dealii::Vector<double> &local_cell_vector, double scale,
+              double scale_ico);
 
         /******************************************************/
         /**
@@ -470,7 +474,8 @@ namespace DOpE
         template<typename FACEDATACONTAINER>
           void
           FaceMatrix(const FACEDATACONTAINER& dc,
-              dealii::FullMatrix<double> &local_entry_matrix);
+              dealii::FullMatrix<double> &local_entry_matrix, double scale = 1.,
+              double scale_ico = 1.);
 
         /******************************************************/
         /**
@@ -482,7 +487,9 @@ namespace DOpE
         template<typename FACEDATACONTAINER>
           void
           InterfaceMatrix(const FACEDATACONTAINER& dc,
-              dealii::FullMatrix<double> &local_entry_matrix);
+              dealii::FullMatrix<double> &local_entry_matrix, double scale = 1.,
+              double scale_ico = 1.);
+
 
         /******************************************************/
 
@@ -495,9 +502,9 @@ namespace DOpE
          *
          */
         template<typename FACEDATACONTAINER>
-          void
-          BoundaryEquation(const FACEDATACONTAINER& dc,
-              dealii::Vector<double> &local_cell_vector, double scale = 1.);
+             void
+             BoundaryEquation(const FACEDATACONTAINER& dc,
+                 dealii::Vector<double> &local_cell_vector, double scale,double scale_ico);
 
         /******************************************************/
 
@@ -536,7 +543,8 @@ namespace DOpE
         template<typename FACEDATACONTAINER>
           void
           BoundaryMatrix(const FACEDATACONTAINER& dc,
-              dealii::FullMatrix<double> &local_cell_matrix);
+              dealii::FullMatrix<double> &local_cell_matrix, double scale = 1.,
+              double scale_ico = 1.);
 
         /******************************************************/
 
@@ -1155,7 +1163,7 @@ namespace DOpE
         else if (GetType() == "adjoint_for_ee")
         {
           // state values in quadrature points
-          GetPDE()->CellEquation_U(cdc, local_cell_vector, scale);
+          GetPDE()->CellEquation_U(cdc, local_cell_vector, scale, scale_ico);
         }
         else
         {
@@ -1341,17 +1349,17 @@ namespace DOpE
       void
       PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE,
           DOFHANDLER>::FaceEquation(const FACEDATACONTAINER& fdc,
-          dealii::Vector<double> &local_cell_vector, double scale)
+          dealii::Vector<double> &local_cell_vector, double scale, double scale_ico)
       {
         if (GetType() == "state")
         {
           // state values in quadrature points
-          GetPDE()->FaceEquation(fdc, local_cell_vector, scale);
+          GetPDE()->FaceEquation(fdc, local_cell_vector, scale, scale_ico);
         }
         else if (GetType() == "adjoint_for_ee")
         {
           // state values in quadrature points
-          GetPDE()->FaceEquation_U(fdc, local_cell_vector, scale);
+          GetPDE()->FaceEquation_U(fdc, local_cell_vector, scale, scale_ico);
         }
         else
         {
@@ -1368,17 +1376,17 @@ namespace DOpE
       void
       PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE,
           DOFHANDLER>::InterfaceEquation(const FACEDATACONTAINER& fdc,
-          dealii::Vector<double> &local_cell_vector, double scale)
+          dealii::Vector<double> &local_cell_vector, double scale, double scale_ico)
       {
         if (GetType() == "state")
         {
           // state values in quadrature points
-          GetPDE()->InterfaceEquation(fdc, local_cell_vector, scale);
+          GetPDE()->InterfaceEquation(fdc, local_cell_vector, scale, scale_ico);
         }
         else if (GetType() == "adjoint_for_ee")
         {
           // state values in quadrature points
-          GetPDE()->InterfaceEquation_U(fdc, local_cell_vector, scale);
+          GetPDE()->InterfaceEquation_U(fdc, local_cell_vector, scale, scale_ico);
         }
         else
         {
@@ -1394,17 +1402,17 @@ namespace DOpE
       void
       PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE,
           DOFHANDLER>::BoundaryEquation(const FACEDATACONTAINER& fdc,
-          dealii::Vector<double> &local_cell_vector, double scale)
+          dealii::Vector<double> &local_cell_vector, double scale, double scale_ico)
       {
         if (GetType() == "state")
         {
           // state values in quadrature points
-          GetPDE()->BoundaryEquation(fdc, local_cell_vector, scale);
+          GetPDE()->BoundaryEquation(fdc, local_cell_vector, scale, scale_ico);
         }
         else if (GetType() == "adjoint_for_ee")
         {
           // state values in quadrature points
-          GetPDE()->BoundaryEquation_U(fdc, local_cell_vector, scale);
+          GetPDE()->BoundaryEquation_U(fdc, local_cell_vector, scale, scale_ico);
         }
         else
         {
@@ -1624,16 +1632,16 @@ namespace DOpE
       void
       PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE,
           DOFHANDLER>::FaceMatrix(const FACEDATACONTAINER& fdc,
-          FullMatrix<double> &local_entry_matrix)
+          FullMatrix<double> &local_entry_matrix, double scale, double scale_ico)
       {
         if (GetType() == "state")
         {
           // state values in face quadrature points
-          GetPDE()->FaceMatrix(fdc, local_entry_matrix);
+          GetPDE()->FaceMatrix(fdc, local_entry_matrix, scale, scale_ico);
         }
         else if (GetType() == "adjoint_for_ee")
         {
-          GetPDE()->FaceMatrix_T(fdc, local_entry_matrix);
+          GetPDE()->FaceMatrix_T(fdc, local_entry_matrix,scale, scale_ico);
         }
         else
         {
@@ -1651,16 +1659,16 @@ namespace DOpE
       void
       PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE,
           DOFHANDLER>::InterfaceMatrix(const FACEDATACONTAINER& fdc,
-          FullMatrix<double> &local_entry_matrix)
+          FullMatrix<double> &local_entry_matrix, double scale, double scale_ico)
       {
         if (GetType() == "state")
         {
           // state values in face quadrature points
-          GetPDE()->InterfaceMatrix(fdc, local_entry_matrix);
+          GetPDE()->InterfaceMatrix(fdc, local_entry_matrix, scale, scale_ico);
         }
         else if (GetType() == "adjoint_for_ee")
         {
-          GetPDE()->InterfaceMatrix_T(fdc, local_entry_matrix);
+          GetPDE()->InterfaceMatrix_T(fdc, local_entry_matrix, scale, scale_ico);
         }
         else
         {
@@ -1677,17 +1685,17 @@ namespace DOpE
       void
       PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE,
           DOFHANDLER>::BoundaryMatrix(const FACEDATACONTAINER& fdc,
-          FullMatrix<double> &local_cell_matrix)
+          FullMatrix<double> &local_cell_matrix, double scale, double scale_ico)
       {
         if (GetType() == "state")
         {
           // state values in face quadrature points
-          GetPDE()->BoundaryMatrix(fdc, local_cell_matrix);
+          GetPDE()->BoundaryMatrix(fdc, local_cell_matrix,scale,scale_ico);
         }
         else if (GetType() == "adjoint_for_ee")
         {
           // state values in quadrature points
-          GetPDE()->BoundaryMatrix_T(fdc, local_cell_matrix);
+          GetPDE()->BoundaryMatrix_T(fdc, local_cell_matrix, scale,scale_ico);
         }
         else
         {
