@@ -1,0 +1,25 @@
+\subsubsection{General problem description}
+
+This example is a modified version of \texttt{PDE/InstatPDE/Example5}. 
+Again, we consider the heat equation, this time with an additional nonlinear term
+\begin{equation*}
+\partial_t u(t,x,y) - \Delta u(t,x,y) + u(t,x,y)^2 = f(t,x,y),
+\end{equation*}
+with homogeneous dirichlet-data.
+The computational domain is $\Omega \times I = [0,\pi]^2 \times [0,1]$. From the known solution, we can compute the appropriate data 
+\begin{align*}
+f(t,x,y) &= (3-2t)e^{t-t^2} \sin(x) \sin(y) + e^{(t-t^2)^2} \sin^2(x) \sin^2(y),\\
+u_0(x,y) &= q(x,y).
+\end{align*}
+
+With the cost functional 
+\[
+ \min_{q,u} J(q,u) = \frac{1}{2}\int_{\Omega} (u(1,x,y) - \sin(x) \sin(y))^2\,d(x,y) + \frac{1}{2} \int_{\Omega} (q(x,y) - \sin(x) \sin(y))^2\,d(x,y).
+\]
+It has the optimal solution 
+\begin{align*}
+\overline{u}(t,x,y) &= e^{t-t^2} \sin(x) \sin(y),\\
+\overline{q}(t,x,y) &= \sin(x) \sin(y)
+\end{align*}
+and $J(\overline{q},\overline{u}) = 0$.
+

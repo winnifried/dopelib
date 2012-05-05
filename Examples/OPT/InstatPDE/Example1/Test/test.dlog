@@ -1,0 +1,487 @@
+	Computing State Solution:
+LOG: Allowing IterationCounter `Time' for filenames!
+	Computing Initial Values:
+			 Newton step: 0	 Residual (abs.): < 1.00e-10
+			 Newton step: 0	 Residual (rel.):   -nan
+	Writing [./Mesh0/State_InstatOptProblemContainer.00000.vtk]
+		Start-Time-Point evaluation: 0
+			 Timestep: 1 (0 -> 0.02) using backward Euler
+			 Newton step: 0	 Residual (abs.):   1.55e-01
+			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 1	 Residual (rel.):   3.54e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.20e-03	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   4.11e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   1.41e-06	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   4.83e-08	 LineSearch {0} 
+			 Newton step: 6	 Residual (rel.):   1.66e-09	 LineSearch {0} 
+			 Newton step: 7	 Residual (rel.): < 1.00e-10	 LineSearch {0} 
+	Writing [./Mesh0/State_InstatOptProblemContainer.00001.vtk]
+			 Timestep: 2 (0.02 -> 0.04) using backward Euler
+			 Newton step: 0	 Residual (abs.):   1.50e-01
+			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 1	 Residual (rel.):   3.26e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.03e-03	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   3.24e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   1.03e-06	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   3.30e-08	 LineSearch {0} 
+			 Newton step: 6	 Residual (rel.):   1.06e-09	 LineSearch {0} 
+			 Newton step: 7	 Residual (rel.): < 1.00e-10	 LineSearch {0} 
+	Writing [./Mesh0/State_InstatOptProblemContainer.00002.vtk]
+			 Timestep: 3 (0.04 -> 0.06) using backward Euler
+			 Newton step: 0	 Residual (abs.):   1.44e-01
+			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 1	 Residual (rel.):   3.00e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   8.68e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   2.53e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   7.48e-07	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   2.24e-08	 LineSearch {0} 
+			 Newton step: 6	 Residual (rel.):   6.89e-10	 LineSearch {0} 
+	Writing [./Mesh0/State_InstatOptProblemContainer.00003.vtk]
+			 Timestep: 4 (0.06 -> 0.08) using backward Euler
+			 Newton step: 0	 Residual (abs.):   1.39e-01
+			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 1	 Residual (rel.):   2.74e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   7.28e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.96e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   5.55e-07	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   1.64e-08	 LineSearch {0} 
+			 Newton step: 6	 Residual (rel.):   4.96e-10	 LineSearch {0} 
+	Writing [./Mesh0/State_InstatOptProblemContainer.00004.vtk]
+			 Timestep: 5 (0.08 -> 0.1) using backward Euler
+			 Newton step: 0	 Residual (abs.):   1.33e-01
+			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 1	 Residual (rel.):   2.50e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   6.06e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.57e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   4.42e-07	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   1.29e-08	 LineSearch {0} 
+			 Newton step: 6	 Residual (rel.):   3.82e-10	 LineSearch {0} 
+	Writing [./Mesh0/State_InstatOptProblemContainer.00005.vtk]
+			 Timestep: 6 (0.1 -> 0.12) using backward Euler
+			 Newton step: 0	 Residual (abs.):   1.27e-01
+			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 1	 Residual (rel.):   2.27e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   5.11e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.32e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   3.67e-07	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   1.06e-08	 LineSearch {0} 
+			 Newton step: 6	 Residual (rel.):   3.08e-10	 LineSearch {0} 
+	Writing [./Mesh0/State_InstatOptProblemContainer.00006.vtk]
+			 Timestep: 7 (0.12 -> 0.14) using backward Euler
+			 Newton step: 0	 Residual (abs.):   1.21e-01
+			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 1	 Residual (rel.):   2.04e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   4.45e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.14e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   3.15e-07	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   8.84e-09	 LineSearch {0} 
+			 Newton step: 6	 Residual (rel.):   2.53e-10	 LineSearch {0} 
+	Writing [./Mesh0/State_InstatOptProblemContainer.00007.vtk]
+			 Timestep: 8 (0.14 -> 0.16) using backward Euler
+			 Newton step: 0	 Residual (abs.):   1.16e-01
+			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 1	 Residual (rel.):   1.83e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   3.96e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.01e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   2.74e-07	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   7.62e-09	 LineSearch {0} 
+			 Newton step: 6	 Residual (rel.):   2.14e-10	 LineSearch {0} 
+	Writing [./Mesh0/State_InstatOptProblemContainer.00008.vtk]
+			 Timestep: 9 (0.16 -> 0.18) using backward Euler
+			 Newton step: 0	 Residual (abs.):   1.10e-01
+			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 1	 Residual (rel.):   1.66e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   3.58e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   9.11e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   2.43e-07	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   6.66e-09	 LineSearch {0} 
+			 Newton step: 6	 Residual (rel.):   1.86e-10	 LineSearch {0} 
+	Writing [./Mesh0/State_InstatOptProblemContainer.00009.vtk]
+			 Timestep: 10 (0.18 -> 0.2) using backward Euler
+			 Newton step: 0	 Residual (abs.):   1.04e-01
+			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 1	 Residual (rel.):   1.53e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   3.29e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   8.23e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   2.19e-07	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   5.96e-09	 LineSearch {0} 
+			 Newton step: 6	 Residual (rel.):   1.64e-10	 LineSearch {0} 
+	Writing [./Mesh0/State_InstatOptProblemContainer.00010.vtk]
+			 Timestep: 11 (0.2 -> 0.22) using backward Euler
+			 Newton step: 0	 Residual (abs.):   9.84e-02
+			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 1	 Residual (rel.):   1.42e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   3.05e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   7.59e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   1.99e-07	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   5.40e-09	 LineSearch {0} 
+			 Newton step: 6	 Residual (rel.):   1.45e-10	 LineSearch {0} 
+	Writing [./Mesh0/State_InstatOptProblemContainer.00011.vtk]
+			 Timestep: 12 (0.22 -> 0.24) using backward Euler
+			 Newton step: 0	 Residual (abs.):   9.28e-02
+			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 1	 Residual (rel.):   1.34e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.87e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   7.08e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   1.85e-07	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   4.91e-09	 LineSearch {0} 
+			 Newton step: 6	 Residual (rel.):   1.30e-10	 LineSearch {0} 
+	Writing [./Mesh0/State_InstatOptProblemContainer.00012.vtk]
+			 Timestep: 13 (0.24 -> 0.26) using backward Euler
+			 Newton step: 0	 Residual (abs.):   8.73e-02
+			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 1	 Residual (rel.):   1.27e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.70e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   6.61e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   1.72e-07	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   4.49e-09	 LineSearch {0} 
+			 Newton step: 6	 Residual (rel.):   1.16e-10	 LineSearch {0} 
+	Writing [./Mesh0/State_InstatOptProblemContainer.00013.vtk]
+			 Timestep: 14 (0.26 -> 0.28) using backward Euler
+			 Newton step: 0	 Residual (abs.):   8.18e-02
+			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 1	 Residual (rel.):   1.21e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.55e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   6.23e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   1.61e-07	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   4.12e-09	 LineSearch {0} 
+			 Newton step: 6	 Residual (rel.):   1.05e-10	 LineSearch {0} 
+	Writing [./Mesh0/State_InstatOptProblemContainer.00014.vtk]
+			 Timestep: 15 (0.28 -> 0.3) using backward Euler
+			 Newton step: 0	 Residual (abs.):   7.65e-02
+			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 1	 Residual (rel.):   1.16e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.44e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   5.95e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   1.51e-07	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   3.79e-09	 LineSearch {0} 
+			 Newton step: 6	 Residual (rel.): < 1.00e-10	 LineSearch {0} 
+	Writing [./Mesh0/State_InstatOptProblemContainer.00015.vtk]
+			 Timestep: 16 (0.3 -> 0.32) using backward Euler
+			 Newton step: 0	 Residual (abs.):   7.12e-02
+			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 1	 Residual (rel.):   1.12e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.36e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   5.71e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   1.42e-07	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   3.52e-09	 LineSearch {0} 
+			 Newton step: 6	 Residual (rel.): < 1.00e-10	 LineSearch {0} 
+	Writing [./Mesh0/State_InstatOptProblemContainer.00016.vtk]
+			 Timestep: 17 (0.32 -> 0.34) using backward Euler
+			 Newton step: 0	 Residual (abs.):   6.61e-02
+			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 1	 Residual (rel.):   1.08e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.27e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   5.48e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   1.34e-07	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   3.33e-09	 LineSearch {0} 
+			 Newton step: 6	 Residual (rel.): < 1.00e-10	 LineSearch {0} 
+	Writing [./Mesh0/State_InstatOptProblemContainer.00017.vtk]
+			 Timestep: 18 (0.34 -> 0.36) using backward Euler
+			 Newton step: 0	 Residual (abs.):   6.10e-02
+			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 1	 Residual (rel.):   1.05e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.20e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   5.28e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   1.28e-07	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   3.17e-09	 LineSearch {0} 
+			 Newton step: 6	 Residual (rel.): < 1.00e-10	 LineSearch {0} 
+	Writing [./Mesh0/State_InstatOptProblemContainer.00018.vtk]
+			 Timestep: 19 (0.36 -> 0.38) using backward Euler
+			 Newton step: 0	 Residual (abs.):   5.61e-02
+			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 1	 Residual (rel.):   1.02e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.13e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   5.11e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   1.22e-07	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   3.03e-09	 LineSearch {0} 
+			 Newton step: 6	 Residual (rel.): < 1.00e-10	 LineSearch {0} 
+	Writing [./Mesh0/State_InstatOptProblemContainer.00019.vtk]
+			 Timestep: 20 (0.38 -> 0.4) using backward Euler
+			 Newton step: 0	 Residual (abs.):   5.13e-02
+			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 1	 Residual (rel.):   1.01e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.08e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   4.95e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   1.18e-07	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   2.91e-09	 LineSearch {0} 
+			 Newton step: 6	 Residual (rel.): < 1.00e-10	 LineSearch {0} 
+	Writing [./Mesh0/State_InstatOptProblemContainer.00020.vtk]
+			 Timestep: 21 (0.4 -> 0.42) using backward Euler
+			 Newton step: 0	 Residual (abs.):   4.66e-02
+			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 1	 Residual (rel.):   9.89e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.05e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   4.82e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   1.15e-07	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   2.81e-09	 LineSearch {0} 
+			 Newton step: 6	 Residual (rel.): < 1.00e-10	 LineSearch {0} 
+	Writing [./Mesh0/State_InstatOptProblemContainer.00021.vtk]
+			 Timestep: 22 (0.42 -> 0.44) using backward Euler
+			 Newton step: 0	 Residual (abs.):   4.21e-02
+			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 1	 Residual (rel.):   9.75e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.03e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   4.70e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   1.12e-07	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   2.72e-09	 LineSearch {0} 
+			 Newton step: 6	 Residual (rel.): < 1.00e-10	 LineSearch {0} 
+	Writing [./Mesh0/State_InstatOptProblemContainer.00022.vtk]
+			 Timestep: 23 (0.44 -> 0.46) using backward Euler
+			 Newton step: 0	 Residual (abs.):   3.76e-02
+			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 1	 Residual (rel.):   9.63e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.01e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   4.61e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   1.10e-07	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   2.65e-09	 LineSearch {0} 
+	Writing [./Mesh0/State_InstatOptProblemContainer.00023.vtk]
+			 Timestep: 24 (0.46 -> 0.48) using backward Euler
+			 Newton step: 0	 Residual (abs.):   3.33e-02
+			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 1	 Residual (rel.):   9.54e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.00e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   4.55e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   1.09e-07	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   2.60e-09	 LineSearch {0} 
+	Writing [./Mesh0/State_InstatOptProblemContainer.00024.vtk]
+			 Timestep: 25 (0.48 -> 0.5) using backward Euler
+			 Newton step: 0	 Residual (abs.):   2.91e-02
+			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 1	 Residual (rel.):   9.52e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.00e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   4.50e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   1.08e-07	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   2.56e-09	 LineSearch {0} 
+	Writing [./Mesh0/State_InstatOptProblemContainer.00025.vtk]
+			 Timestep: 26 (0.5 -> 0.52) using backward Euler
+			 Newton step: 0	 Residual (abs.):   2.50e-02
+			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 1	 Residual (rel.):   9.53e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.00e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   4.50e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   1.08e-07	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   2.54e-09	 LineSearch {0} 
+	Writing [./Mesh0/State_InstatOptProblemContainer.00026.vtk]
+			 Timestep: 27 (0.52 -> 0.54) using backward Euler
+			 Newton step: 0	 Residual (abs.):   2.11e-02
+			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 1	 Residual (rel.):   9.60e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.03e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   4.55e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   1.09e-07	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   2.55e-09	 LineSearch {0} 
+	Writing [./Mesh0/State_InstatOptProblemContainer.00027.vtk]
+			 Timestep: 28 (0.54 -> 0.56) using backward Euler
+			 Newton step: 0	 Residual (abs.):   1.72e-02
+			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 1	 Residual (rel.):   9.80e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.07e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   4.65e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   1.10e-07	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   2.60e-09	 LineSearch {0} 
+	Writing [./Mesh0/State_InstatOptProblemContainer.00028.vtk]
+			 Timestep: 29 (0.56 -> 0.58) using backward Euler
+			 Newton step: 0	 Residual (abs.):   1.35e-02
+			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 1	 Residual (rel.):   1.01e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.14e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   4.83e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   1.14e-07	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   2.69e-09	 LineSearch {0} 
+	Writing [./Mesh0/State_InstatOptProblemContainer.00029.vtk]
+			 Timestep: 30 (0.58 -> 0.6) using backward Euler
+			 Newton step: 0	 Residual (abs.):   9.95e-03
+			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 1	 Residual (rel.):   1.08e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.28e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   5.15e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   1.21e-07	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   2.86e-09	 LineSearch {0} 
+	Writing [./Mesh0/State_InstatOptProblemContainer.00030.vtk]
+			 Timestep: 31 (0.6 -> 0.62) using backward Euler
+			 Newton step: 0	 Residual (abs.):   6.49e-03
+			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 1	 Residual (rel.):   1.21e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.57e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   5.84e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   1.37e-07	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   3.24e-09	 LineSearch {0} 
+	Writing [./Mesh0/State_InstatOptProblemContainer.00031.vtk]
+			 Timestep: 32 (0.62 -> 0.64) using backward Euler
+			 Newton step: 0	 Residual (abs.):   3.39e-03
+			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 1	 Residual (rel.):   1.50e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   3.25e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   7.44e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   1.74e-07	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   4.13e-09	 LineSearch {0} 
+	Writing [./Mesh0/State_InstatOptProblemContainer.00032.vtk]
+			 Timestep: 33 (0.64 -> 0.66) using backward Euler
+			 Newton step: 0	 Residual (abs.):   1.32e-03
+			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 1	 Residual (rel.):   1.93e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   4.19e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   9.86e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   2.30e-07	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   5.50e-09	 LineSearch {0} 
+	Writing [./Mesh0/State_InstatOptProblemContainer.00033.vtk]
+			 Timestep: 34 (0.66 -> 0.68) using backward Euler
+			 Newton step: 0	 Residual (abs.):   3.14e-03
+			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 1	 Residual (rel.):   4.67e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   3.09e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   6.19e-07	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   1.26e-08	 LineSearch {0} 
+	Writing [./Mesh0/State_InstatOptProblemContainer.00034.vtk]
+			 Timestep: 35 (0.68 -> 0.7) using backward Euler
+			 Newton step: 0	 Residual (abs.):   6.11e-03
+			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 1	 Residual (rel.):   5.14e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   8.73e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.73e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   3.92e-08	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   9.23e-10	 LineSearch {0} 
+	Writing [./Mesh0/State_InstatOptProblemContainer.00035.vtk]
+			 Timestep: 36 (0.7 -> 0.72) using backward Euler
+			 Newton step: 0	 Residual (abs.):   8.95e-03
+			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 1	 Residual (rel.):   6.02e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.09e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   2.38e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   5.55e-08	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   1.30e-09	 LineSearch {0} 
+	Writing [./Mesh0/State_InstatOptProblemContainer.00036.vtk]
+			 Timestep: 37 (0.72 -> 0.74) using backward Euler
+			 Newton step: 0	 Residual (abs.):   1.17e-02
+			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 1	 Residual (rel.):   6.55e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.23e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   2.72e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   6.40e-08	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   1.50e-09	 LineSearch {0} 
+	Writing [./Mesh0/State_InstatOptProblemContainer.00037.vtk]
+			 Timestep: 38 (0.74 -> 0.76) using backward Euler
+			 Newton step: 0	 Residual (abs.):   1.43e-02
+			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 1	 Residual (rel.):   6.89e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.33e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   2.94e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   6.95e-08	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   1.63e-09	 LineSearch {0} 
+	Writing [./Mesh0/State_InstatOptProblemContainer.00038.vtk]
+			 Timestep: 39 (0.76 -> 0.78) using backward Euler
+			 Newton step: 0	 Residual (abs.):   1.68e-02
+			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 1	 Residual (rel.):   7.16e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.40e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   3.11e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   7.36e-08	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   1.73e-09	 LineSearch {0} 
+	Writing [./Mesh0/State_InstatOptProblemContainer.00039.vtk]
+			 Timestep: 40 (0.78 -> 0.8) using backward Euler
+			 Newton step: 0	 Residual (abs.):   1.91e-02
+			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 1	 Residual (rel.):   7.38e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.46e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   3.24e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   7.69e-08	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   1.81e-09	 LineSearch {0} 
+	Writing [./Mesh0/State_InstatOptProblemContainer.00040.vtk]
+			 Timestep: 41 (0.8 -> 0.82) using backward Euler
+			 Newton step: 0	 Residual (abs.):   2.14e-02
+			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 1	 Residual (rel.):   7.57e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.50e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   3.36e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   7.98e-08	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   1.88e-09	 LineSearch {0} 
+	Writing [./Mesh0/State_InstatOptProblemContainer.00041.vtk]
+			 Timestep: 42 (0.82 -> 0.84) using backward Euler
+			 Newton step: 0	 Residual (abs.):   2.35e-02
+			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 1	 Residual (rel.):   7.75e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.55e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   3.47e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   8.25e-08	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   1.95e-09	 LineSearch {0} 
+	Writing [./Mesh0/State_InstatOptProblemContainer.00042.vtk]
+			 Timestep: 43 (0.84 -> 0.86) using backward Euler
+			 Newton step: 0	 Residual (abs.):   2.55e-02
+			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 1	 Residual (rel.):   7.92e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.58e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   3.58e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   8.51e-08	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   2.02e-09	 LineSearch {0} 
+	Writing [./Mesh0/State_InstatOptProblemContainer.00043.vtk]
+			 Timestep: 44 (0.86 -> 0.88) using backward Euler
+			 Newton step: 0	 Residual (abs.):   2.74e-02
+			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 1	 Residual (rel.):   8.09e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.62e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   3.69e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   8.76e-08	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   2.09e-09	 LineSearch {0} 
+	Writing [./Mesh0/State_InstatOptProblemContainer.00044.vtk]
+			 Timestep: 45 (0.88 -> 0.9) using backward Euler
+			 Newton step: 0	 Residual (abs.):   2.91e-02
+			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 1	 Residual (rel.):   8.26e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.66e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   3.80e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   9.02e-08	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   2.16e-09	 LineSearch {0} 
+	Writing [./Mesh0/State_InstatOptProblemContainer.00045.vtk]
+			 Timestep: 46 (0.9 -> 0.92) using backward Euler
+			 Newton step: 0	 Residual (abs.):   3.08e-02
+			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 1	 Residual (rel.):   8.43e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.69e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   3.91e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   9.28e-08	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   2.24e-09	 LineSearch {0} 
+	Writing [./Mesh0/State_InstatOptProblemContainer.00046.vtk]
+			 Timestep: 47 (0.92 -> 0.94) using backward Euler
+			 Newton step: 0	 Residual (abs.):   3.23e-02
+			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 1	 Residual (rel.):   8.60e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.73e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   4.03e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   9.55e-08	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   2.32e-09	 LineSearch {0} 
+	Writing [./Mesh0/State_InstatOptProblemContainer.00047.vtk]
+			 Timestep: 48 (0.94 -> 0.96) using backward Euler
+			 Newton step: 0	 Residual (abs.):   3.37e-02
+			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 1	 Residual (rel.):   8.77e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.77e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   4.15e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   9.83e-08	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   2.40e-09	 LineSearch {0} 
+	Writing [./Mesh0/State_InstatOptProblemContainer.00048.vtk]
+			 Timestep: 49 (0.96 -> 0.98) using backward Euler
+			 Newton step: 0	 Residual (abs.):   3.51e-02
+			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 1	 Residual (rel.):   8.95e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.82e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   4.27e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   1.01e-07	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   2.49e-09	 LineSearch {0} 
+	Writing [./Mesh0/State_InstatOptProblemContainer.00049.vtk]
+			 Timestep: 50 (0.98 -> 1) using backward Euler
+			 Newton step: 0	 Residual (abs.):   3.63e-02
+			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 1	 Residual (rel.):   9.13e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.87e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   4.40e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   1.04e-07	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   2.58e-09	 LineSearch {0} 
+	Writing [./Mesh0/State_InstatOptProblemContainer.00050.vtk]
+		End-Time-Point evaluation: 0.967666
+	Computing Adjoint Solution:
+	Computing Initial Values:
+			 Newton step: 0	 Residual (abs.):   1.48e-03
+			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 1	 Residual (rel.): < 1.00e-10	 LineSearch {0} 
+			 Timestep: 49 (1 -> 0.98) using backward Euler
