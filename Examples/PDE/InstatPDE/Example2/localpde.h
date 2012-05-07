@@ -61,10 +61,9 @@ template<typename VECTOR, int dopedim, int dealdim>
 
       }
 
-     // necessary to compute face integrals
      bool HasFaces() const
      {
-       return true;
+       return false;
      }
 
      // The part of CellEquation scaled by scale contains all "normal" terms which
@@ -790,155 +789,6 @@ template<typename VECTOR, int dopedim, int dealdim>
 	}
 
     }
-
-
-     void FaceEquation (const FaceDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& fdc,
-			dealii::Vector<double> &local_cell_vector,
-			double scale, double /*scale_ico*/)
-     {
-       assert(this->_problem_type == "state");
-
-       const auto & state_fe_face_values = fdc.GetFEFaceValuesState();
-       unsigned int n_dofs_per_cell = fdc.GetNDoFsPerCell();
-       unsigned int n_q_points = fdc.GetNQPoints();
-       //unsigned int color = fdc.GetBoundaryIndicator();
-       unsigned int material_id = fdc.GetMaterialId();
-       unsigned int material_id_neighbor = fdc.GetNbrMaterialId();
-       //bool at_boundary = fdc.GetIsAtBoundary();
-       double cell_diameter = fdc.GetCellDiameter();
-
-	if (material_id != material_id_neighbor)
-	  {
-	      vector<Vector<double> > _ufacevalues;
-	      vector<vector<Tensor<1,dealdim> > > _ufacegrads;
-
-	      _ufacevalues.resize(n_q_points,Vector<double>(5));
-	      _ufacegrads.resize(n_q_points,vector<Tensor<1,2> >(5));
-
-	      fdc.GetFaceValuesState("last_newton_solution",_ufacevalues);
-	      fdc.GetFaceGradsState("last_newton_solution",_ufacegrads);
-
-	      const FEValuesExtractors::Vector displacements (2);
-
-
-	      for (unsigned int q_point=0;q_point<n_q_points;q_point++)
-		{
-		  // variable for mesh-dependent alpha_u
-		  distance_to_interface = std::sqrt((state_fe_face_values.quadrature_point(q_point)(0)-0.6)*
-						    (state_fe_face_values.quadrature_point(q_point)(0)-0.6)+
-						    (state_fe_face_values.quadrature_point(q_point)(1)-0.2)*
-						    (state_fe_face_values.quadrature_point(q_point)(1)-0.2));
-
-		  // mesh-dependent alpha_u. Here the variable has name tmp_structure_continuation_E.
-		  tmp_structure_continuation_E = structure_continuation_E
-		    + scale_distance_to_interface*std::exp(-scale_d_exp*std::abs(distance_to_interface));
-
-		  const Tensor<2,dealdim> grad_u = ALE_Transformations
-		    ::get_grad_u<dealdim> (q_point, _ufacegrads);
-
-		  const Tensor<1,dealdim> neumann_value
-		    = (grad_u * state_fe_face_values.normal_vector(q_point));
-
-//		  const Tensor<1,dealdim> v = ALE_Transformations
-//		    ::get_v<dealdim> (q_point, _ufacevalues);
-
-		  for (unsigned int i=0;i<n_dofs_per_cell;i++)
-		    {
-		      const Tensor<1,2> phi_i_u = state_fe_face_values[displacements].value (i, q_point);
-
-		      local_cell_vector(i) -= 0.0 * (scale
-						     * tmp_structure_continuation_E
-						     //* alpha_u
-						     // not to add when using Nitsche Trick
-						     * cell_diameter * cell_diameter
-						     * neumann_value * phi_i_u)  * state_fe_face_values.JxW(q_point);
-
-		      // with Nitsche trick
-		//local_cell_vector(i) -= 1.0 * (scale * 1000.0/cell_diameter * v * phi_i_u)
-		//	* state_fe_face_values.JxW(q_point);
-
-		    }
-		}
-	  }
-     }
-
-     void FaceMatrix (const FaceDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& fdc,
-		      dealii::FullMatrix<double> &local_entry_matrix,
-		      double /*scale*/, double /*scale_ico*/)
-     {
-       assert(this->_problem_type == "state");
-
-       const auto & state_fe_face_values = fdc.GetFEFaceValuesState();
-       unsigned int n_dofs_per_cell = fdc.GetNDoFsPerCell();
-       unsigned int n_q_points = fdc.GetNQPoints();
-       //unsigned int color = fdc.GetBoundaryIndicator();
-       unsigned int material_id = fdc.GetMaterialId();
-       unsigned int material_id_neighbor = fdc.GetNbrMaterialId();
-       //bool at_boundary = fdc.GetIsAtBoundary();
-       double cell_diameter = fdc.GetCellDiameter(); 
-
-	if (material_id != material_id_neighbor)
-	  {
-	    std::vector<Tensor<1,dealdim> >     phi_v (n_dofs_per_cell);
-	    std::vector<Tensor<1,dealdim> >     phi_u (n_dofs_per_cell);
-	    std::vector<Tensor<2,dealdim> >     phi_grads_u (n_dofs_per_cell);
-
-	    const FEValuesExtractors::Vector velocities (0);
-	    const FEValuesExtractors::Vector displacements (2);
-
-	    for (unsigned int q_point=0;q_point<n_q_points;q_point++)
-	      {
-		// variable for mesh-dependent alpha_u
-		distance_to_interface = std::sqrt((state_fe_face_values.quadrature_point(q_point)(0)-0.6)*
-						  (state_fe_face_values.quadrature_point(q_point)(0)-0.6)+
-						  (state_fe_face_values.quadrature_point(q_point)(1)-0.2)*
-						  (state_fe_face_values.quadrature_point(q_point)(1)-0.2));
-
-		// mesh-dependent alpha_u. Here the variable has name tmp_structure_continuation_E.
-		tmp_structure_continuation_E = structure_continuation_E
-		  + scale_distance_to_interface*std::exp(-scale_d_exp*std::abs(distance_to_interface));
-
-		for (unsigned int k=0; k<n_dofs_per_cell; ++k)
-		  {
-		    phi_v[k]         = state_fe_face_values[velocities].value (k, q_point);
-		    phi_u[k]         = state_fe_face_values[displacements].value (k, q_point);
-		    phi_grads_u[k]   = state_fe_face_values[displacements].gradient (k, q_point);
-		  }
-		 for(unsigned int i = 0; i < n_dofs_per_cell; i++)
-		   {
-		     const Tensor<1,dealdim> neumann_value
-		       = (phi_grads_u[i] * state_fe_face_values.normal_vector(q_point));
-
-		     for(unsigned int j = 0; j < n_dofs_per_cell; j++)
-		       {
-			 // Fluid
-			 local_entry_matrix(j,i) -=  0.0 * (tmp_structure_continuation_E
-							    //alpha_u
-							    // not to add when using Nitsche Trick
-							    * cell_diameter * cell_diameter
-							    * neumann_value *  phi_u[j])  * state_fe_face_values.JxW(q_point);
-
-			 // with Nitsche trick
-			//local_entry_matrix(j,i) -=  1.0 * (1000.0/cell_diameter
-			//				    * phi_v[i] * phi_u[j])* state_fe_face_values.JxW(q_point);
-
-
-		       }
-		   }
-
-
-		}
-
-	  }
-     }
-
-
-     void FaceRightHandSide (const FaceDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& /*fdc*/,
-			     dealii::Vector<double> &/*local_cell_vector*/,
-			     double /*scale*/)
-     {
-       //assert(this->_problem_type == "state");
-     }
 
 
     // Values for boundary integrals
