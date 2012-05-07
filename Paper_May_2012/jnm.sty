@@ -1,0 +1,524 @@
+%%
+%% This is file `jnm.sty',
+%% which are to be used to prepare the paper in the style of
+%% Journal of Numerical Mathematics
+%%
+%% Use in paper.tex:
+%% \documentclass[twoside,11pt]{article}
+%% \usepackage{jnm}
+%%
+\NeedsTeXFormat{LaTeX2e}
+\PassOptionsToPackage{reqno}{amsmath}
+\PassOptionsToPackage{british}{babel}
+\RequirePackage{amsmath,amssymb,times,mathptmx,theorem,enumerate,fancyheadings,babel,lastpage}
+\ProvidesPackage{jnm}
+\def\qed{\quad\textrm{$\Box$}}
+\def\optionJNM{%
+       \gdef\JNM@jname{J. Numer. Math.}%
+       \let\jqed=\qed %
+       \gdef\ack{\medskip\smallskip\par\noindent{\bf Acknowledgments.}\ }%
+}
+\optionJNM %
+\DeclareOption{jnm}{\optionJNM }
+\ProcessOptions*
+\setlength{\textheight}{200mm}
+\setlength{\textwidth}{128mm}
+\setlength{\headsep}{3mm}
+\setlength{\headheight}{\baselineskip}
+\setlength{\evensidemargin}{0mm}
+\setlength{\oddsidemargin}{0mm}
+\addtolength{\textheight}{-\headheight}
+\addtolength{\textheight}{-\headsep}
+\renewcommand{\baselinestretch}{0.90}
+\tolerance=400
+\hfuzz=0.5pt
+\relpenalty=700
+\binoppenalty=1000
+%
+\typeout{*************************************************}
+\typeout{*** \JNM@jname}
+\typeout{*************************************************}
+\language=0
+\frenchspacing
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% usage: \appendix{A} as a substitute for \section{...}
+\def\appendix#1{\section*{#1}\def\appxid{#1}%
+   \def\theequation{\appxid.\arabic{equation}}%
+   \setcounter{equation}{0}%
+}
+%
+\def\@biblabel#1{#1.}
+%\def\thebibliography#1{\section*{REFERENCES}%
+ \def\thebibliography#1{\section*{References}%
+      \list{\@biblabel{\@arabic\c@enumiv}}%
+           {\settowidth\labelwidth{\@biblabel{#1}}%
+            \leftmargin=7mm
+            \labelsep=2mm
+            \labelwidth=5mm
+            \itemsep=1ex
+            \parskip=\z@
+            \parsep=\z@
+            \usecounter{enumiv}%
+            \let\p@enumiv\@empty
+            \renewcommand\theenumiv{\@arabic\c@enumiv}\footnotesize}%
+%     \if@openbib
+%       \renewcommand\newblock{\par}%
+%     \else
+%       \renewcommand\newblock{\hskip .11em \@plus.33em \@minus.07em}%
+%     \fi
+      \sloppy\clubpenalty4000\widowpenalty4000%
+      \sfcode`\.=\@m}
+\def\thanksmark{%
+     \stepcounter{footnote}%
+     \rlap{$^{\textstyle\thefootnote}$}}%
+\def\thanks#1{\thanksmark
+    \protected@xdef\@thanks{\@thanks
+        \protect\footnotetext[\the\c@footnote]{#1}}%
+}
+\def\@sect#1#2#3#4#5#6[#7]#8{%
+     \ifnum #2>\c@secnumdepth
+       \let\@svsec\@empty\else
+       \refstepcounter{#1}%
+       \protected@edef\@svsec{\@seccntformat{#1}\relax}%
+     \fi
+%    \ifnum #2>1 \let\myuppercase=\relax\else\let\myuppercase=\MakeUppercase\fi
+     \ifnum #2>1 \let\myuppercase=\relax\else\let\myuppercase=\relax\fi
+     \@tempskipa #5\relax
+      \ifdim \@tempskipa>\z@
+        \begingroup #6\relax
+          \@hangfrom{\hskip #3\relax\@svsec}%
+                    {\interlinepenalty \@M \myuppercase{#8}\par}%
+        \endgroup
+       \csname #1mark\endcsname{#7}\addcontentsline
+         {toc}{#1}{\ifnum #2>\c@secnumdepth \else
+                      \protect\numberline{\csname the#1\endcsname}\fi
+                    #7}\else
+        \def\@svsechd{#6\hskip #3\relax  %% \relax added 2 May 90
+                   \@svsec \myuppercase{#8}%
+                   \ifnum #2<\c@secnumdepth\else.\quad\fi\csname #1mark\endcsname
+                      {#7}\addcontentsline
+                           {toc}{#1}{\ifnum #2>\c@secnumdepth \else
+                           \protect\numberline{\csname the#1\endcsname}%
+                                     \fi
+                       #7}}\fi
+     \@xsect{#5}}
+%
+\def\thesection{\arabic{section}}
+\def\thesubsection{\thesection.\arabic{subsection}}
+\def\thesubsubsection{\thesubsection.\arabic{subsubsection}}
+%\def\theparagraph{\thesubsubsection.\arabic{paragraph}}
+%\def\thesubparagraph{\theparagraph.\arabic{subparagraph}}
+%
+\renewcommand{\section}{\def\@afterheading{\global\@nobreaktrue
+      \everypar{\if@nobreak
+                   \global\@nobreakfalse
+                   \clubpenalty \@M
+                   \if@afterindent \else {\setbox\z@\lastbox}\fi
+                 \else \clubpenalty \@clubpenalty
+                    \everypar{}\fi}}
+\makeatletter
+\renewcommand{\@seccntformat}[1]{{\csname the##1\endcsname.% namely this point!
+                                 }\hspace{0.5em}}
+\makeatother
+\@startsection{section}{1}% nest level
+   {\z@}% header indent
+   {-3.5ex}% \@plus -1ex \@minus -.2ex}% vskip before header
+   {2.3ex}% \@plus.2ex}% vskip after header
+%  {\reset@my@counters\normalfont\bfseries}}       % header preamble
+   {\reset@my@counters\normalfont\large\bfseries}} % header preamble
+\def\subsection{\@startsection{subsection}{2}{\z@}%
+                                     {-3.25ex}% \@plus -1ex \@minus -.2ex}%
+                                     {1.5ex}% \@plus .2ex}%
+                                     {\normalfont\bfseries}}
+\def\subsubsection{\@startsection{subsubsection}{3}{\z@}%
+                                     {-3.25ex}% \@plus -1ex \@minus -.2ex}%
+                                     {0pt}% \@plus .2ex}%
+                                     {\normalfont\bfseries}}
+\def\sectionLowerCase#1{\let\oldMakeUppercase=\MakeUppercase%
+                        \let\MakeUppercase=\relax%
+                        \section{#1}%
+                        \let\MakeUppercase=\oldMakeUppercase}
+%
+\def\theequation{\arabic{section}.\arabic{equation}}%
+%
+\def\reset@my@counters{\setcounter{equation}{0}}%
+\def\envit#1#2{\@definecounter{#1}%
+  \expandafter\def\csname the#1\endcsname{\arabic{section}.\arabic{#1}}%
+  \expandafter\def\csname my#1\endcsname{\normalfont\bfseries\csname the#1%
+     \endcsname}
+  \global\expandafter\def\csname #1\endcsname{\refstepcounter{#1}%
+   \@ifnextchar[{\envitP{#2}{\csname my#1\endcsname}}%
+                {\envitV{#2}{\csname my#1\endcsname}}}%
+  \global\expandafter\def\csname end#1\endcsname{\endtrivlist}%
+  \global\expandafter\def\csname #1NN\endcsname{\envitNN{#2}}%
+  \global\expandafter\def\csname end#1NN\endcsname{\endtrivlist}%
+  \edef\reset@my@counters{\reset@my@counters\setcounter{#1}{0}}%
+}
+\def\envrm#1#2{\@definecounter{#1}%
+  \expandafter\def\csname the#1\endcsname{\arabic{section}.\arabic{#1}}%
+  \expandafter\def\csname my#1\endcsname{\normalfont\bfseries\csname the#1%
+     \endcsname}
+  \global\expandafter\def\csname #1\endcsname{\refstepcounter{#1}%
+   \@ifnextchar[{\envrmP{#2}{\csname my#1\endcsname}}%
+                {\envrmV{#2}{\csname my#1\endcsname}}}%
+  \global\expandafter\def\csname end#1\endcsname{\endtrivlist}%
+  \global\expandafter\def\csname #1NN\endcsname{\envrmNN{#2}}%
+  \global\expandafter\def\csname end#1NN\endcsname{\endtrivlist}%
+  \edef\reset@my@counters{\reset@my@counters\setcounter{#1}{0}}%
+}
+\def\envitNN#1{\@ifnextchar[{\envitNNP{#1}}{\envitNNV{#1}}}
+\def\envitNNP#1[#2]{\trivlist\item[\myindent{\bfseries #1\ #2.}]\itshape}
+\def\envitNNV#1{\trivlist\item[\myindent{\bfseries #1.}]\itshape}
+\def\envitP#1#2[#3]{\trivlist\item[\myindent{\bfseries #1\ #2\ #3.}]%
+  \itshape}
+\def\envitV#1#2{\trivlist\item[\myindent{\bfseries #1\ #2.}]\itshape}
+\def\envrmNN#1{\@ifnextchar[{\envrmNNP{#1}}{\envrmNNV{#1}}}
+\def\envrmNNP#1[#2]{\trivlist\item[\myindent{\bfseries #1\ #2.}]\upshape}
+\def\envrmNNV#1{\trivlist\item[\myindent{\bfseries #1.}]\upshape}
+\def\envrmP#1#2[#3]{\trivlist\item[\myindent{\bfseries #1\ #2\ #3.}]%
+  \upshape}
+\def\envrmV#1#2{\trivlist\item[\myindent{\bfseries #1\ #2.}]\upshape}
+%
+\def\mygobble#1{} % removes leftmost token...
+\def\chopleft#1{\edef\rchars{\mygobble#1}} % ...and assigns to \rchars.
+\def\regnt#1{\chopleft{#1}%
+  \edef\dfil##1##2{\def##1####1\rchars{\def##2{####1}}} % to define \fil.
+  \dfil{\fil}{\lchar}\fil #1% this defines \lchar.
+  \edef\ntname{\uppercase{\lchar}\rchars}%
+    \callnt{#1}{\ntname}%
+}%
+%
+\envit{theorem}{Theorem}%\regnt{theorem}
+\envit{lemma}{Lemma}%
+\envit{proposition}{Proposition}%
+\envit{statement}{Statement}%
+\envit{assumption}{Assumption}%
+\envrm{corollary}{Corollary}%
+\envrm{remark}{Remark}%
+\envrm{definition}{Definition}%
+\envrm{problem}{Problem}%
+\envrm{example}{Example}%
+\envrm{property}{Property}%
+\envrm{algorithm}{Algorithm}%
+\global\def\endproof{\hfill\jqed\endtrivlist}
+\global\def\proof{\@ifnextchar[{\proofP}{\proofN}}
+\global\def\myindent{\hskip2em}
+\def\proofP[#1]{\trivlist\item[\myindent{\bfseries Proof #1.}]\upshape}
+\def\proofN{\trivlist\item[\myindent{\bfseries Proof.}]\upshape}
+
+\setlength\arraycolsep{.2em} % width between columns in "array" and especially for "eqnarray"
+%%%\setlength\arrayrulewidth{0.4\p@}
+\def\Hline{\noalign{\ifnum0=`}\fi %
+   \vskip2\p@ \hrule \@height1\p@ \vskip3\p@ \ifnum0=`{\fi}}
+\def\hline{\noalign{\ifnum0=`}\fi %
+   \vskip2.5\p@ \hrule \@height \arrayrulewidth \vskip2.5\p@ %
+   \ifnum0=`{\fi}}
+\intextsep=3mm %\z@ % between text and float, [h]
+\textfloatsep=4mm %\z@ % between text and float, [bt]
+\floatsep=4mm %\z@ % between two floats
+\abovecaptionskip=\z@
+\belowcaptionskip=\z@
+%\global\def\refname{REFERENCES}
+%\global\def\bibname{REFERENCES}
+ \global\def\refname{References}
+ \global\def\bibname{References}
+\def\figurename{Figure}
+\def\tablename{Table}
+%%%%%
+%%\def\caption{\refstepcounter\@captype \@dblarg{\@caption\@captype}}
+%%    \@makecaption{\csname fnum@#1\endcsname}{\ignorespaces #3}\par
+\def\mycapdef{\refstepcounter\@captype}
+\def\mycaptxt{{\footnotesize{\bfseries %
+   \expandafter\csname fnum@\@captype\endcsname.}\hskip.5em}}
+\long\def\@makecaption#1#2{%
+  \vskip\abovecaptionskip
+  {\footnotesize{\bfseries #1.}\hskip.5em #2\par}
+  \vskip\belowcaptionskip}
+%%%%%%%%%%%%%%%%%
+%   \ifnextchar<token1><yes><no> looks for next token.  If this token coincides
+%   with token1, it executes `yes', otherwise `no.'
+\def\ifnextchar#1#2#3{ \let\rech=#1 \def\yeacs{#2} \def\naycs{#3}
+   \futurelet\nch\ifnch}
+\def\ifnch{ \ifx\rech\nch \let\recs=\yeacs \else \let\recs=\naycs \fi \recs}
+%
+\newbox\mybox%
+\newdimen\mydim%
+\def\ctable{\ifnextchar[{\ctable@opt}{\ctable@emp}}
+\def\ctable@opt[#1]#2#3#4#5{\begin{table}[#1]\constpart@ctable{#2}{#3}{#4}{#5}}
+\def\ctable@emp#1#2#3#4{\begin{table}\constpart@ctable{#1}{#2}{#3}{#4}}
+\def\constpart@ctable#1#2#3#4{\mycapdef\relax %
+% *** parameter 1: preliminary commands
+#1\relax\global\setbox\mybox\hbox{%
+  \begin{tabular}{#3}% *** parameter 3: tabular argument
+  #4 % *** parameter 4: tabular body
+  \end{tabular}%
+}%
+\mydim=\wd\mybox
+$$
+\begin{tabular}{#3}
+\noalign{\hbox to \mydim {\vtop{\parindent=0pt\hsize=\mydim
+\baselineskip=1.2em\vskip\abovecaptionskip
+\mycaptxt\newline #2\smallskip\smallskip % *** parameter 2: caption
+}}}
+#4 % *** body
+\end{tabular}$$
+\end{table}
+}%
+
+% Macro from SIAMTEX.STY by E.Zalys & V.Statulevicius
+
+\def\zs#1{{\lower2pt\hbox{$\scriptstyle#1$}}}
+
+%%%%%%%%%%%%%%%%%%%%% FONTS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+\def\JNMtextfont{\textfont\msxfam=\twlmsx\scriptfont\msxfam=\eightmsx\scriptscriptfont\msxfam=\sixmsx\textfont\msyfam=\twlmsy\scriptfont\msyfam=\eightmsy\scriptscriptfont\msyfam=\sixmsy\textfont\euffam=\twleuf\scriptfont\euffam=\eighteuf\scriptscriptfont\euffam=\sixeuf\normalsize}
+\let\JNMtextfont\normalsize
+%
+\def\JNMfootnotefont{\textfont\msxfam=\tenmsx\scriptfont\msxfam=\sevenmsx\scriptscriptfont\msxfam=\fivemsx\textfont\msyfam=\tenmsy\scriptfont\msyfam=\sevenmsy\scriptscriptfont\msyfam=\fivemsy\textfont\euffam=\teneuf\scriptfont\euffam=\seveneuf\scriptscriptfont\euffam=\fiveeuf\footnotesize}
+\let\JNMfootnotefont\footnotesize
+%
+\def\JNMtitlefont{\Large\bf}
+%
+\def\TimesRomanOn{}
+\@ifundefined{TimesRomanOn}
+             {\typeout{Computer Modern Style Option}\font\JNMthmfont=cmcsc10 at10pt}
+             {\typeout{Times Roman Style Option}    \font\JNMthmfont=ptmb8t at10pt}
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\renewcommand{\headrulewidth}{0pt}                                                          %
+\pagestyle{fancyplain}                                                      %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\lhead[\fancyplain{}{{\footnotesize\thepage}}]{\fancyplain{\titlemark}{}}
+\rhead[\fancyplain{\titlemark}{}]{\fancyplain{}{{\footnotesize\thepage}}}
+\chead[\fancyplain{}{\JNMleftmark}]{\fancyplain{}{\JNMrightmark}}           %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\cfoot{}
+%
+\def\@checkw#1#2{\@ifundefined {#1}{#2}{\csname #1\endcsname}}
+\def\@checkwrt#1#2{\@ifundefined {#1}{#2\@warning {#2}}%
+{\csname #1\endcsname}}
+\def\@chsm#1#2#3{\@ifundefined{#1}{\@warning{#3}}{\csname #2\endcsname}}
+%
+\def\JNMleftmark{\JNMfootnotefont\it\@checkwrt{@authorH}{Author is not defined}\JNMtextfont}
+%
+\def\JNMrightmark{\JNMfootnotefont\it\@checkwrt{@stitle}{Title is not defined}\JNMtextfont}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+\def\titlemark{\footnotesize\rmfamily\upshape\mdseries%
+    {\itshape\@checkwrt{JNM@jname}{Unknown journal}}, \ %
+    Vol.~\@checkw{JNM@volume}{0}, \ %
+    No.~\@checkw{JNM@number}{0}, \ %
+    pp.~\@checkw{JNM@pages}{\thepage--\pageref{LastPage}}\ %
+%       (\@checkwrt{JNM@year}{year unknown})\\
+%\copyright\ VSP \@checkwrt{JNM@year}{year unknown}%
+%\@ifundefined {JNM@number}{\hfill {\it Prepared using \textsf{jnm.sty} [Version: 02.02.2002 v1.2]}}{}}
+       (\@checkwrt{JNM@year}{year unknown})\\
+%{\footnotesize DOI 10.1515\hspace{0.3mm}/\hspace{0.9mm}RJNAMM.\@checkwrt{JNM@year}{0000}.\@checkw{JNM@doi}{000}}\\
+{\footnotesize DOI 10.1515\hspace{0.3mm}/\hspace{0.9mm}JNUM.\@checkwrt{JNM@year}{0000}.\@checkw{JNM@doi}{000}}\\
+\copyright\ de Gruyter \@checkwrt{JNM@year}{year unknown}%
+\@ifundefined {JNM@number}{\hfill {\it Prepared using \textsf{jnm.sty} [Version: 20.02.2007 v1.3]}}{}%
+}
+%
+\def\thefootnote{\fnsymbol{footnote}}
+\def\@makefnmark{\hbox to 0pt{$^{\@thefnmark}$\hss}}
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Title information
+%
+\def\title#1{\gdef\@title{#1}\gdef\@stitle{\it #1}}
+\def\stitle#1{\gdef\@stitle{\it #1}}
+%
+\def\sauthor#1{\gdef\@authorH{#1}}
+%
+\def\JNMvolume#1{\gdef\JNM@volume{#1}}
+\def\JNMnumber#1{\gdef\JNM@number{#1}}
+%\def\JNMpages{{\thepage--\pageref{LastPage}}}
+\def\JNMpages#1{\gdef\JNM@pages{#1}}
+\def\JNM@year{\number\year}
+\def\JNMyear#1{\gdef\JNM@year{#1}}
+\def\JNMdoi#1{\gdef\JNM@doi{#1}}
+\let\Jyear=\JNMyear
+\let\Jvolume=\JNMvolume
+\let\Jpages=\JNMpages
+\let\Jnumber=\JNMnumber
+\let\Jdoi=\JNMdoi
+\def\comma{,\hskip.7em}
+\def\commaand{,\hskip.7em and\hskip.5em}
+\def\and{\hskip.5em and\hskip.5em}
+\long\def\abstract#1{\gdef\@abstract{\ignorespaces #1}}
+\long\def\keywords#1{\gdef\@keywords{\ignorespaces #1}}
+\long\def\amsmos#1{\gdef\@amsmos{\ignorespaces #1}}
+\let\subjclass=\amsmos
+\def\JNMskip#1{\hbox{\vrule height #1 width 0pt depth 0pt}}
+%
+\def\maketitle{\par
+  \begingroup
+  \def\thefootnote{\@fnsymbol\c@footnote}%
+  \def\@makefnmark{\rlap{\@textsuperscript{\normalsize\@thefnmark}}}%
+  \long\def\@makefntext##1{\parindent 1em\noindent
+          \hb@xt@1.8em{%
+          \hss\@textsuperscript{\normalsize\@thefnmark}}##1}%
+  \newpage
+  \global\@topnum\z@
+  \@maketitle
+ \thispagestyle{plain}\@thanks
+\endgroup
+\setcounter{footnote}{0}}
+\def\put@abstract{{\bfseries Abstract} --- \@abstract}
+\def\put@keywords{\JNMskip{5mm}{\bfseries Keywords:} \@keywords}
+\def\put@amsmos{\JNMskip{5mm}{\bfseries AMS(MOS) subject classification:} \@amsmos}
+\def\support#1{\protected@xdef\@thanks{\@thanks%
+ \protect\footnotetext[0]{#1}}}
+\def\@maketitle{%
+ \null\vspace*{-4mm}\vspace*{-\headsep}
+ \Large\rmfamily\upshape\bfseries
+ {\par\noindent\raggedright\hyphenpenalty=10000\exhyphenpenalty=10000
+ \JNMskip{27mm}\@checkwrt{@title}{Title unknown}%
+ }
+ \par\noindent\normalsize\rmfamily\upshape\mdseries\JNMskip{8.5mm}%
+ \@checkwrt{@author}{Author unknown}%
+ \par\noindent\footnotesize\rmfamily\itshape\mdseries\vspace*{-1.5mm}%
+ \begin{flushleft}\@date\end{flushleft}%
+ \par\noindent\footnotesize\rmfamily\upshape\mdseries\JNMskip{3.5mm}%
+ \@chsm{@abstract}{put@abstract}{No abstract}
+ \par\noindent\footnotesize\rmfamily\upshape\mdseries%
+ \@chsm{@keywords}{put@keywords}{No keywords}
+ \par\noindent\footnotesize\rmfamily\upshape\mdseries%
+%\@chsm{@amsmos}{put@amsmos}{No AMS(MOS)}
+ \@ifundefined{@amsmos}{}{\csname put@amsmos\endcsname}
+ \setcounter{footnote}{0}
+ \setcounter{equation}{0}
+ \let\maketitle\relax
+ \gdef\@title{}\gdef\@abstract{}\gdef\@keywords{}\gdef\@amsmos{}
+ %\vspace{6mm}
+ %\par\noindent
+ \normalfont
+}
+\def\begintext{\vspace{6mm}\par\noindent\normalfont}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% LISTS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+\def\references{\JNMfootnotefont
+\pagebreak[3]
+\begin{flushleft}
+\par\vspace*{2mm}
+%\bf REFERENCES
+\bf \large References
+\par\vspace*{-2.5mm}
+\end{flushleft}
+\vspace*{1pt}
+\list{\arabic{enumi}{.}}%
+      {\usecounter{enumi} \setlength{\leftmargin}{8mm}
+			  \setlength{\labelsep}{3mm}
+			  \setlength{\labelwidth}{5mm} }
+			  \setlength{\itemsep}{5mm}
+			  \setlength{\parskip}{-4mm}
+}
+\let\endreferences\endlist
+\newcounter{numer}
+\def\enumarabic{
+\list{{\rm(\arabic{numer})}}
+      {\usecounter{numer} \setlength{\leftmargin}{7mm}
+                          \setlength{\labelsep}{2mm}
+                          \setlength{\labelwidth}{5mm}
+                          \setlength{\itemsep}{-1mm} }
+}
+\let\endenumarabic\endlist
+\def\enumalph{
+\list{{\rm(\alph{numer})}}
+      {\usecounter{numer} \setlength{\leftmargin}{7mm}
+                          \setlength{\labelsep}{2mm}
+                          \setlength{\labelwidth}{5mm}
+                          \setlength{\itemsep}{-1mm} }
+}
+\let\endenumalph\endlist
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%   SPECIAL LETTERS
+%\def\HATL#1{#1\kern-3.0pt$\hat{ }$\kern3.0pt}
+%\def\HATIT#1{#1\kern-1.7pt$\hat{ }$\kern1.7pt}
+%
+%\def\FG#1{#1\kern-3.0pt$\grave{ }$\kern3.0pt}
+%\def\FGref#1{#1\kern-2.6pt$\grave{ }$\kern2.6pt}
+%\def\FGIT#1{#1\kern-1.7pt$\grave{ }$\kern1.7pt}
+%
+%\def\F#1{#1\kern-3.0pt$\acute{ }$\kern3.0pt}
+%\def\Fref#1{#1\kern-2.6pt$\acute{ }$\kern2.6pt}
+%\def\FIT#1{#1\kern-1.7pt$\acute{ }$\kern1.7pt}
+%
+%\def\G#1{#1\kern-3.0pt$\ddot{ }$\kern3.0pt}
+%\def\Gref#1{#1\kern-2.6pt$\ddot{ }$\kern2.6pt}
+%\def\GIT#1{#1\kern-2.0pt$\ddot{ }$\kern2.0pt}
+%
+%
+%\def\P{{\sf P}}
+%\def\M{{\sf M}}
+%\def\E{{\sf E}}
+%\def\D{{\sf D}}
+%\def\e{{\rm e}}
+%\def\N{{\bf N}}
+%\def\Z{{\bf Z}}
+%\def\R{{\bf R}}
+%\def\C{{\bf C}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\smallskipamount=1.5pt\relax
+% \def\bbN{\mathbb N}
+% \def\bbR{\mathbb R}
+% \def\bbZ{\mathbb Z}
+  \def\d{\,{\rm d}\/}
+  \let\Ji=\i
+\renewcommand{\i}{\ifmmode{\hskip.1em{\rm i}\hskip.1em}\else{\Ji}\fi}
+  \def\e{{\rm e}}
+%%\def\e{\mathop{\rm e}\nolimits}
+  \let\epsilon=\varepsilon
+  \let\kappa=\varkappa
+  \let\phi=\varphi
+  \let\theta=\vartheta
+  \let\phi=\varphi
+  \let\ldots=\dots
+%
+\let\leq=\leqslant
+\let\geq=\geqslant
+\let\le=\leq
+\let\ge=\geq
+\let\goth=\got
+\let\oldtrivlist=\trivlist
+\let\oldendtrivlist=\endtrivlist
+\def\trivlist{\oldtrivlist
+              \ifdim\lastskip<5mm\removelastskip\vskip5mm\fi}
+\def\endtrivlist{\oldendtrivlist
+                 \ifdim\lastskip<5mm\removelastskip\vskip5mm\fi}
+\def\received#1{\gdef\@date{#1}}
+%
+\newcount\@tempcntc
+\def\@citex[#1]#2{\if@filesw\immediate\write\@auxout{\string\citation{#2}}\fi
+  \@tempcnta\z@\@tempcntb\m@ne\def\@citea{}\@cite{\@for\@citeb:=#2\do
+    {\@ifundefined
+       {b@\@citeb}{\@citeo\@tempcntb\m@ne\@citea\def\@citea{,}{\bfseries
+        ?}\@warning
+       {Citation `\@citeb' on page \thepage \space undefined}}%
+    {\setbox\z@\hbox{\global\@tempcntc0\csname b@\@citeb\endcsname\relax}%
+     \ifnum\@tempcntc=\z@ \@citeo\@tempcntb\m@ne
+       \@citea\def\@citea{,}\hbox{\csname b@\@citeb\endcsname}%
+     \else
+      \advance\@tempcntb\@ne
+      \ifnum\@tempcntb=\@tempcntc
+      \else\advance\@tempcntb\m@ne\@citeo
+      \@tempcnta\@tempcntc\@tempcntb\@tempcntc\fi\fi}}\@citeo}{#1}}
+\def\@citeo{\ifnum\@tempcnta>\@tempcntb\else
+               \@citea\def\@citea{,\,\hskip\z@skip}%
+               \ifnum\@tempcnta=\@tempcntb\the\@tempcnta\else
+               {\advance\@tempcnta\@ne\ifnum\@tempcnta=\@tempcntb \else
+                \def\@citea{--}\fi
+      \advance\@tempcnta\m@ne\the\@tempcnta\@citea\the\@tempcntb}\fi\fi}
+%
+\let\oldref=\ref
+\let\oldcite=\cite
+\def\ref#1{{\upshape \oldref{#1}}}
+\def\cite#1{{\upshape \oldcite{#1}}}
+\def\eqref#1{{\upshape (\ref{#1})}}
+%
+\catcode`@=12
+\JNMtextfont
+\endinput
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% End of file `jnm.sty'.

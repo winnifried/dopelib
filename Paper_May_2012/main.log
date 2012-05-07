@@ -1,0 +1,764 @@
+This is pdfTeX, Version 3.1415926-1.40.11 (TeX Live 2010) (format=pdflatex 2010.9.17)  7 MAY 2012 14:56
+entering extended mode
+ restricted \write18 enabled.
+ %&-line parsing enabled.
+**main.tex
+(./main.tex
+LaTeX2e <2009/09/24>
+Babel <v3.8l> and hyphenation patterns for english, dumylang, nohyphenation, ge
+rman-x-2009-06-19, ngerman-x-2009-06-19, ancientgreek, ibycus, arabic, armenian
+, basque, bulgarian, catalan, pinyin, coptic, croatian, czech, danish, dutch, u
+kenglish, usenglishmax, esperanto, estonian, farsi, finnish, french, galician, 
+german, ngerman, swissgerman, monogreek, greek, hungarian, icelandic, assamese,
+ bengali, gujarati, hindi, kannada, malayalam, marathi, oriya, panjabi, tamil, 
+telugu, indonesian, interlingua, irish, italian, kurmanji, lao, latin, latvian,
+ lithuanian, mongolian, mongolianlmc, bokmal, nynorsk, polish, portuguese, roma
+nian, russian, sanskrit, serbian, slovak, slovenian, spanish, swedish, turkish,
+ turkmen, ukrainian, uppersorbian, welsh, loaded.
+(/nfs/mounts/linux_x86_64/Texlive2010/texmf-dist/tex/latex/base/article.cls
+Document Class: article 2007/10/19 v1.4h Standard LaTeX document class
+(/nfs/mounts/linux_x86_64/Texlive2010/texmf-dist/tex/latex/base/size11.clo
+File: size11.clo 2007/10/19 v1.4h Standard LaTeX file (size option)
+)
+\c@part=\count79
+\c@section=\count80
+\c@subsection=\count81
+\c@subsubsection=\count82
+\c@paragraph=\count83
+\c@subparagraph=\count84
+\c@figure=\count85
+\c@table=\count86
+\abovecaptionskip=\skip41
+\belowcaptionskip=\skip42
+\bibindent=\dimen102
+)
+(./jnm.sty
+(/nfs/mounts/linux_x86_64/Texlive2010/texmf-dist/tex/latex/amsmath/amsmath.sty
+Package: amsmath 2000/07/18 v2.13 AMS math features
+\@mathmargin=\skip43
+
+For additional information on amsmath, use the `?' option.
+(/nfs/mounts/linux_x86_64/Texlive2010/texmf-dist/tex/latex/amsmath/amstext.sty
+Package: amstext 2000/06/29 v2.01
+
+(/nfs/mounts/linux_x86_64/Texlive2010/texmf-dist/tex/latex/amsmath/amsgen.sty
+File: amsgen.sty 1999/11/30 v2.0
+\@emptytoks=\toks14
+\ex@=\dimen103
+)) (/nfs/mounts/linux_x86_64/Texlive2010/texmf-dist/tex/latex/amsmath/amsbsy.st
+y
+Package: amsbsy 1999/11/29 v1.2d
+\pmbraise@=\dimen104
+) (/nfs/mounts/linux_x86_64/Texlive2010/texmf-dist/tex/latex/amsmath/amsopn.sty
+Package: amsopn 1999/12/14 v2.01 operator names
+)
+\inf@bad=\count87
+LaTeX Info: Redefining \frac on input line 211.
+\uproot@=\count88
+\leftroot@=\count89
+LaTeX Info: Redefining \overline on input line 307.
+\classnum@=\count90
+\DOTSCASE@=\count91
+LaTeX Info: Redefining \ldots on input line 379.
+LaTeX Info: Redefining \dots on input line 382.
+LaTeX Info: Redefining \cdots on input line 467.
+\Mathstrutbox@=\box26
+\strutbox@=\box27
+\big@size=\dimen105
+LaTeX Font Info:    Redeclaring font encoding OML on input line 567.
+LaTeX Font Info:    Redeclaring font encoding OMS on input line 568.
+\macc@depth=\count92
+\c@MaxMatrixCols=\count93
+\dotsspace@=\muskip10
+\c@parentequation=\count94
+\dspbrk@lvl=\count95
+\tag@help=\toks15
+\row@=\count96
+\column@=\count97
+\maxfields@=\count98
+\andhelp@=\toks16
+\eqnshift@=\dimen106
+\alignsep@=\dimen107
+\tagshift@=\dimen108
+\tagwidth@=\dimen109
+\totwidth@=\dimen110
+\lineht@=\dimen111
+\@envbody=\toks17
+\multlinegap=\skip44
+\multlinetaggap=\skip45
+\mathdisplay@stack=\toks18
+LaTeX Info: Redefining \[ on input line 2666.
+LaTeX Info: Redefining \] on input line 2667.
+)
+(/nfs/mounts/linux_x86_64/Texlive2010/texmf-dist/tex/latex/amsfonts/amssymb.sty
+Package: amssymb 2009/06/22 v3.00
+
+(/nfs/mounts/linux_x86_64/Texlive2010/texmf-dist/tex/latex/amsfonts/amsfonts.st
+y
+Package: amsfonts 2009/06/22 v3.00 Basic AMSFonts support
+\symAMSa=\mathgroup4
+\symAMSb=\mathgroup5
+LaTeX Font Info:    Overwriting math alphabet `\mathfrak' in version `bold'
+(Font)                  U/euf/m/n --> U/euf/b/n on input line 96.
+)) (/nfs/mounts/linux_x86_64/Texlive2010/texmf-dist/tex/latex/psnfss/times.sty
+Package: times 2005/04/12 PSNFSS-v9.2a (SPQR) 
+)
+(/nfs/mounts/linux_x86_64/Texlive2010/texmf-dist/tex/latex/psnfss/mathptmx.sty
+Package: mathptmx 2005/04/12 PSNFSS-v9.2a Times w/ Math, improved (SPQR, WaS) 
+LaTeX Font Info:    Redeclaring symbol font `operators' on input line 28.
+LaTeX Font Info:    Overwriting symbol font `operators' in version `normal'
+(Font)                  OT1/cmr/m/n --> OT1/ztmcm/m/n on input line 28.
+LaTeX Font Info:    Overwriting symbol font `operators' in version `bold'
+(Font)                  OT1/cmr/bx/n --> OT1/ztmcm/m/n on input line 28.
+LaTeX Font Info:    Redeclaring symbol font `letters' on input line 29.
+LaTeX Font Info:    Overwriting symbol font `letters' in version `normal'
+(Font)                  OML/cmm/m/it --> OML/ztmcm/m/it on input line 29.
+LaTeX Font Info:    Overwriting symbol font `letters' in version `bold'
+(Font)                  OML/cmm/b/it --> OML/ztmcm/m/it on input line 29.
+LaTeX Font Info:    Redeclaring symbol font `symbols' on input line 30.
+LaTeX Font Info:    Overwriting symbol font `symbols' in version `normal'
+(Font)                  OMS/cmsy/m/n --> OMS/ztmcm/m/n on input line 30.
+LaTeX Font Info:    Overwriting symbol font `symbols' in version `bold'
+(Font)                  OMS/cmsy/b/n --> OMS/ztmcm/m/n on input line 30.
+LaTeX Font Info:    Redeclaring symbol font `largesymbols' on input line 31.
+LaTeX Font Info:    Overwriting symbol font `largesymbols' in version `normal'
+(Font)                  OMX/cmex/m/n --> OMX/ztmcm/m/n on input line 31.
+LaTeX Font Info:    Overwriting symbol font `largesymbols' in version `bold'
+(Font)                  OMX/cmex/m/n --> OMX/ztmcm/m/n on input line 31.
+\symbold=\mathgroup6
+\symitalic=\mathgroup7
+LaTeX Font Info:    Redeclaring math alphabet \mathbf on input line 34.
+LaTeX Font Info:    Overwriting math alphabet `\mathbf' in version `normal'
+(Font)                  OT1/cmr/bx/n --> OT1/ptm/bx/n on input line 34.
+LaTeX Font Info:    Overwriting math alphabet `\mathbf' in version `bold'
+(Font)                  OT1/cmr/bx/n --> OT1/ptm/bx/n on input line 34.
+LaTeX Font Info:    Redeclaring math alphabet \mathit on input line 35.
+LaTeX Font Info:    Overwriting math alphabet `\mathit' in version `normal'
+(Font)                  OT1/cmr/m/it --> OT1/ptm/m/it on input line 35.
+LaTeX Font Info:    Overwriting math alphabet `\mathit' in version `bold'
+(Font)                  OT1/cmr/bx/it --> OT1/ptm/m/it on input line 35.
+LaTeX Info: Redefining \hbar on input line 50.
+) (/nfs/mounts/linux_x86_64/Texlive2010/texmf-dist/tex/latex/tools/theorem.sty
+Package: theorem 1995/11/23 v2.2c Theorem extension package (FMi)
+\theorem@style=\toks19
+\theorem@bodyfont=\toks20
+\theorempreskipamount=\skip46
+\theorempostskipamount=\skip47
+
+(/nfs/mounts/linux_x86_64/Texlive2010/texmf-dist/tex/latex/tools/thp.sty
+File: thp.sty 1995/11/23 v2.2c Theorem extension package (FMi)
+))
+(/nfs/mounts/linux_x86_64/Texlive2010/texmf-dist/tex/latex/tools/enumerate.sty
+Package: enumerate 1999/03/05 v3.00 enumerate extensions (DPC)
+\@enLab=\toks21
+)
+(/nfs/mounts/linux_x86_64/Texlive2010/texmf-dist/tex/latex/fancyhdr/fancyheadin
+gs.sty
+Package: fancyheadings 2008/02/04 1.99 Dummy package to call fancyhdr
+
+
+Package fancyheadings Warning: Please stop using fancyheadings!
+(fancyheadings)                Use fancyhdr instead.
+(fancyheadings)                We will call fancyhdr with the very same
+(fancyheadings)                options you passed to fancyheadings.
+(fancyheadings)                
+(fancyheadings)                fancyhdr is 99 percent compatible with
+(fancyheadings)                fancyheadings. The only incompatibility is
+(fancyheadings)                that \headrulewidth and \footrulewidth and
+(fancyheadings)                their \plain... versions are no longer length
+(fancyheadings)                parameters, but normal macros (to be changed
+(fancyheadings)                with \renewcommand rather than \setlength)..
+
+
+(/nfs/mounts/linux_x86_64/Texlive2010/texmf-dist/tex/latex/fancyhdr/fancyhdr.st
+y
+\fancy@headwidth=\skip48
+\f@ncyO@elh=\skip49
+\f@ncyO@erh=\skip50
+\f@ncyO@olh=\skip51
+\f@ncyO@orh=\skip52
+\f@ncyO@elf=\skip53
+\f@ncyO@erf=\skip54
+\f@ncyO@olf=\skip55
+\f@ncyO@orf=\skip56
+))
+(/nfs/mounts/linux_x86_64/Texlive2010/texmf-dist/tex/generic/babel/babel.sty
+Package: babel 2008/07/06 v3.8l The Babel package
+
+(/nfs/mounts/linux_x86_64/Texlive2010/texmf-dist/tex/generic/babel/english.ldf
+Language: english 2005/03/30 v3.3o English support from the babel system
+
+(/nfs/mounts/linux_x86_64/Texlive2010/texmf-dist/tex/generic/babel/babel.def
+File: babel.def 2008/07/06 v3.8l Babel common definitions
+\babel@savecnt=\count99
+\U@D=\dimen112
+)
+\l@canadian = a dialect from \language\l@american 
+\l@australian = a dialect from \language\l@british 
+\l@newzealand = a dialect from \language\l@british 
+))
+(/nfs/mounts/linux_x86_64/Texlive2010/texmf-dist/tex/latex/lastpage/lastpage.st
+y
+Package: lastpage 2011/02/01 v1.2g Refers to last page's name (HMM; JPG)
+)
+Package: jnm 
+
+*************************************************
+*** J. Numer. Math.
+*************************************************
+\c@theorem=\count100
+\c@lemma=\count101
+\c@proposition=\count102
+\c@statement=\count103
+\c@assumption=\count104
+\c@corollary=\count105
+\c@remark=\count106
+\c@definition=\count107
+\c@problem=\count108
+\c@example=\count109
+\c@property=\count110
+\c@algorithm=\count111
+\mybox=\box28
+\mydim=\dimen113
+Times Roman Style Option
+\c@numer=\count112
+\@tempcntc=\count113
+)
+(/nfs/mounts/linux_x86_64/Texlive2010/texmf-dist/tex/latex/booktabs/booktabs.st
+y
+Package: booktabs 2005/04/14 v1.61803 publication quality tables
+\heavyrulewidth=\dimen114
+\lightrulewidth=\dimen115
+\cmidrulewidth=\dimen116
+\belowrulesep=\dimen117
+\belowbottomsep=\dimen118
+\aboverulesep=\dimen119
+\abovetopsep=\dimen120
+\cmidrulesep=\dimen121
+\cmidrulekern=\dimen122
+\defaultaddspace=\dimen123
+\@cmidla=\count114
+\@cmidlb=\count115
+\@aboverulesep=\dimen124
+\@belowrulesep=\dimen125
+\@thisruleclass=\count116
+\@lastruleclass=\count117
+\@thisrulewidth=\dimen126
+) (/nfs/mounts/linux_x86_64/Texlive2010/texmf-dist/tex/latex/tools/dcolumn.sty
+Package: dcolumn 2001/05/28 v1.06 decimal alignment package (DPC)
+(/nfs/mounts/linux_x86_64/Texlive2010/texmf-dist/tex/latex/tools/array.sty
+Package: array 2008/09/09 v2.4c Tabular extension package (FMi)
+\col@sep=\dimen127
+\extrarowheight=\dimen128
+\NC@list=\toks22
+\extratabsurround=\skip57
+\backup@length=\skip58
+))
+(/nfs/mounts/linux_x86_64/Texlive2010/texmf-dist/tex/latex/base/fontenc.sty
+Package: fontenc 2005/09/27 v1.99g Standard LaTeX package
+
+(/nfs/mounts/linux_x86_64/Texlive2010/texmf-dist/tex/latex/base/t1enc.def
+File: t1enc.def 2005/09/27 v1.99g Standard LaTeX file
+LaTeX Font Info:    Redeclaring font encoding T1 on input line 43.
+))
+(/nfs/mounts/linux_x86_64/Texlive2010/texmf-dist/tex/latex/mh/mathtools.sty
+Package: mathtools 2011/02/12 v1.10 mathematical typesetting tools
+
+(/nfs/mounts/linux_x86_64/Texlive2010/texmf-dist/tex/latex/graphics/keyval.sty
+Package: keyval 1999/03/16 v1.13 key=value parser (DPC)
+\KV@toks@=\toks23
+) (/nfs/mounts/linux_x86_64/Texlive2010/texmf-dist/tex/latex/tools/calc.sty
+Package: calc 2007/08/22 v4.3 Infix arithmetic (KKT,FJ)
+\calc@Acount=\count118
+\calc@Bcount=\count119
+\calc@Adimen=\dimen129
+\calc@Bdimen=\dimen130
+\calc@Askip=\skip59
+\calc@Bskip=\skip60
+LaTeX Info: Redefining \setlength on input line 76.
+LaTeX Info: Redefining \addtolength on input line 77.
+\calc@Ccount=\count120
+\calc@Cskip=\skip61
+)
+(/nfs/mounts/linux_x86_64/Texlive2010/texmf-dist/tex/latex/mh/mhsetup.sty
+Package: mhsetup 2010/01/21 v1.2a programming setup (MH)
+)
+\g_MT_multlinerow_int=\count121
+\l_MT_multwidth_dim=\dimen131
+\origjot=\skip62
+\l_MT_shortvdotswithinadjustabove_dim=\dimen132
+\l_MT_shortvdotswithinadjustbelow_dim=\dimen133
+)
+(/nfs/mounts/linux_x86_64/Texlive2010/texmf-dist/tex/latex/graphics/graphicx.st
+y
+Package: graphicx 1999/02/16 v1.0f Enhanced LaTeX Graphics (DPC,SPQR)
+
+(/nfs/mounts/linux_x86_64/Texlive2010/texmf-dist/tex/latex/graphics/graphics.st
+y
+Package: graphics 2009/02/05 v1.0o Standard LaTeX Graphics (DPC,SPQR)
+ (/nfs/mounts/linux_x86_64/Texlive2010/texmf-dist/tex/latex/graphics/trig.sty
+Package: trig 1999/03/16 v1.09 sin cos tan (DPC)
+)
+(/nfs/mounts/linux_x86_64/Texlive2010/texmf-dist/tex/latex/latexconfig/graphics
+.cfg
+File: graphics.cfg 2010/04/23 v1.9 graphics configuration of TeX Live
+)
+Package graphics Info: Driver file: pdftex.def on input line 91.
+
+(/nfs/mounts/linux_x86_64/Texlive2010/texmf-dist/tex/latex/pdftex-def/pdftex.de
+f
+File: pdftex.def 2011/01/28 v0.05d Graphics/color for pdfTeX
+\Gread@gobject=\count122
+))
+\Gin@req@height=\dimen134
+\Gin@req@width=\dimen135
+)
+(/nfs/mounts/linux_x86_64/Texlive2010/texmf-dist/tex/latex/subfig/subfig.sty
+Package: subfig 2005/06/28 ver: 1.3 subfig package
+
+(/nfs/mounts/linux_x86_64/Texlive2010/texmf-dist/tex/latex/caption/caption.sty
+Package: caption 2010/01/09 v3.1m Customizing captions (AR)
+
+(/nfs/mounts/linux_x86_64/Texlive2010/texmf-dist/tex/latex/caption/caption3.sty
+Package: caption3 2010/01/14 v3.1m caption3 kernel (AR)
+\captionmargin=\dimen136
+\captionmargin@=\dimen137
+\captionwidth=\dimen138
+\caption@indent=\dimen139
+\caption@parindent=\dimen140
+\caption@hangindent=\dimen141
+Package caption Info: Unknown document class (or package),
+(caption)             standard defaults will be used on input line 1084.
+)
+
+Package caption Warning: Unsupported document class (or package) detected,
+(caption)                usage of the caption package is not recommended.
+See the caption package documentation for explanation.
+
+Package caption Info: \@makecaption = \long macro:#1#2->\vskip \abovecaptionski
+p {\footnotesize {\bfseries #1.}\hskip .5em #2\par } \vskip \belowcaptionskip .
+
+\c@ContinuedFloat=\count123
+)
+\c@KVtest=\count124
+\sf@farskip=\skip63
+\sf@captopadj=\dimen142
+\sf@capskip=\skip64
+\sf@nearskip=\skip65
+\c@subfigure=\count125
+\c@subfigure@save=\count126
+\c@lofdepth=\count127
+\c@subtable=\count128
+\c@subtable@save=\count129
+\c@lotdepth=\count130
+\sf@top=\skip66
+\sf@bottom=\skip67
+)
+(/nfs/mounts/linux_x86_64/Texlive2010/texmf-dist/tex/latex/multirow/multirow.st
+y
+\bigstrutjot=\dimen143
+)
+(/nfs/mounts/linux_x86_64/Texlive2010/texmf-dist/tex/latex/algorithms/algorithm
+ic.sty
+Package: algorithmic 2009/08/24 v0.1 Document Style `algorithmic'
+
+(/nfs/mounts/linux_x86_64/Texlive2010/texmf-dist/tex/latex/base/ifthen.sty
+Package: ifthen 2001/05/26 v1.1c Standard LaTeX ifthen package (DPC)
+)
+\c@ALC@unique=\count131
+\c@ALC@line=\count132
+\c@ALC@rem=\count133
+\c@ALC@depth=\count134
+\ALC@tlm=\skip68
+\algorithmicindent=\skip69
+)
+(/nfs/mounts/linux_x86_64/Texlive2010/texmf-dist/tex/latex/algorithms/algorithm
+.sty
+Package: algorithm 2009/08/24 v0.1 Document Style `algorithm' - floating enviro
+nment
+ (/nfs/mounts/linux_x86_64/Texlive2010/texmf-dist/tex/latex/float/float.sty
+Package: float 2001/11/08 v1.3d Float enhancements (AL)
+\c@float@type=\count135
+\float@exts=\toks24
+\float@box=\box29
+\@float@everytoks=\toks25
+\@floatcapt=\box30
+)
+\@float@every@algorithm=\toks26
+) (/nfs/mounts/linux_x86_64/Texlive2010/texmf-dist/tex/latex/braket/braket.sty)
+ (/nfs/mounts/linux_x86_64/Texlive2010/texmf-dist/tex/latex/graphics/color.sty
+Package: color 2005/11/14 v1.0j Standard LaTeX Color (DPC)
+
+(/nfs/mounts/linux_x86_64/Texlive2010/texmf-dist/tex/latex/latexconfig/color.cf
+g
+File: color.cfg 2007/01/18 v1.5 color configuration of teTeX/TeXLive
+)
+Package color Info: Driver file: pdftex.def on input line 130.
+)
+(/nfs/mounts/linux_x86_64/Texlive2010/texmf-dist/tex/latex/natbib/natbib.sty
+Package: natbib 2010/09/13 8.31b (PWD, AO)
+\bibhang=\skip70
+\bibsep=\skip71
+LaTeX Info: Redefining \cite on input line 694.
+\c@NAT@ctr=\count136
+)
+(./main.aux)
+\openout1 = `main.aux'.
+
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 61.
+LaTeX Font Info:    ... okay on input line 61.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 61.
+LaTeX Font Info:    ... okay on input line 61.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 61.
+LaTeX Font Info:    ... okay on input line 61.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 61.
+LaTeX Font Info:    ... okay on input line 61.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 61.
+LaTeX Font Info:    ... okay on input line 61.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 61.
+LaTeX Font Info:    ... okay on input line 61.
+LaTeX Font Info:    Try loading font information for T1+ptm on input line 61.
+
+(/nfs/mounts/linux_x86_64/Texlive2010/texmf-dist/tex/latex/psnfss/t1ptm.fd
+File: t1ptm.fd 2001/06/04 font definitions for T1/ptm.
+)
+Package lastpage Info: Please have a look at the pagesLTS package at
+(lastpage)             http://www.ctan.org/tex-archive/ 
+(lastpage)             macros/latex/contrib/pagesLTS/ 
+(lastpage)             or
+(lastpage)             http://www.ctan.org/tex-archive/ 
+(lastpage)             install/macros/latex/contrib/pagesLTS.tds.zip
+(lastpage)             ! on input line 61.
+
+(/nfs/mounts/linux_x86_64/Texlive2010/texmf-dist/tex/context/base/supp-pdf.mkii
+[Loading MPS to PDF converter (version 2006.09.02).]
+\scratchcounter=\count137
+\scratchdimen=\dimen144
+\scratchbox=\box31
+\nofMPsegments=\count138
+\nofMParguments=\count139
+\everyMPshowfont=\toks27
+\MPscratchCnt=\count140
+\MPscratchDim=\dimen145
+\MPnumerator=\count141
+\everyMPtoPDFconversion=\toks28
+)
+(/nfs/mounts/linux_x86_64/Texlive2010/texmf-dist/tex/generic/oberdiek/pdftexcmd
+s.sty
+Package: pdftexcmds 2010/04/01 v0.9 Utility functions of pdfTeX for LuaTeX (HO)
+
+
+(/nfs/mounts/linux_x86_64/Texlive2010/texmf-dist/tex/generic/oberdiek/infwarerr
+.sty
+Package: infwarerr 2010/04/08 v1.3 Providing info/warning/message (HO)
+)
+(/nfs/mounts/linux_x86_64/Texlive2010/texmf-dist/tex/generic/oberdiek/ifluatex.
+sty
+Package: ifluatex 2010/03/01 v1.3 Provides the ifluatex switch (HO)
+Package ifluatex Info: LuaTeX not detected.
+)
+(/nfs/mounts/linux_x86_64/Texlive2010/texmf-dist/tex/generic/oberdiek/ltxcmds.s
+ty
+Package: ltxcmds 2010/04/26 v1.7 LaTeX kernel commands for general use (HO)
+)
+Package pdftexcmds Info: LuaTeX not detected.
+Package pdftexcmds Info: \pdf@primitive is available.
+Package pdftexcmds Info: \pdf@ifprimitive is available.
+)
+(/nfs/mounts/linux_x86_64/Texlive2010/texmf-dist/tex/latex/oberdiek/epstopdf-ba
+se.sty
+Package: epstopdf-base 2010/02/09 v2.5 Base part for package epstopdf
+
+(/nfs/mounts/linux_x86_64/Texlive2010/texmf-dist/tex/latex/oberdiek/grfext.sty
+Package: grfext 2007/09/30 v1.0 Managing graphics extensions (HO)
+)
+(/nfs/mounts/linux_x86_64/Texlive2010/texmf-dist/tex/latex/oberdiek/kvoptions.s
+ty
+Package: kvoptions 2010/02/22 v3.7 Keyval support for LaTeX options (HO)
+
+(/nfs/mounts/linux_x86_64/Texlive2010/texmf-dist/tex/generic/oberdiek/kvsetkeys
+.sty
+Package: kvsetkeys 2010/03/01 v1.9 Key value parser (HO)
+
+(/nfs/mounts/linux_x86_64/Texlive2010/texmf-dist/tex/generic/oberdiek/etexcmds.
+sty
+Package: etexcmds 2010/01/28 v1.3 Prefix for e-TeX command names (HO)
+Package etexcmds Info: Could not find \expanded.
+(etexcmds)             That can mean that you are not using pdfTeX 1.50 or
+(etexcmds)             that some package has redefined \expanded.
+(etexcmds)             In the latter case, load this package earlier.
+)))
+Package grfext Info: Graphics extension search list:
+(grfext)             [.png,.pdf,.jpg,.mps,.jpeg,.jbig2,.jb2,.PNG,.PDF,.JPG,.JPE
+G,.JBIG2,.JB2,.eps]
+(grfext)             \AppendGraphicsExtensions on input line 436.
+
+(/nfs/mounts/linux_x86_64/Texlive2010/texmf-dist/tex/latex/latexconfig/epstopdf
+-sys.cfg
+File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
+e
+))
+Package caption Info: Begin \AtBeginDocument code.
+Package caption3 Info: subfig package 1.2 or 1.3 is loaded.
+LaTeX Info: Redefining \subref on input line 61.
+Package caption Info: float package is loaded.
+Package caption Info: End \AtBeginDocument code.
+LaTeX Font Info:    Font shape `T1/ptm/bx/n' in size <14.4> not available
+(Font)              Font shape `T1/ptm/b/n' tried instead on input line 62.
+LaTeX Font Info:    Font shape `T1/ptm/bx/n' in size <10.95> not available
+(Font)              Font shape `T1/ptm/b/n' tried instead on input line 62.
+LaTeX Font Info:    Try loading font information for OT1+ztmcm on input line 62
+.
+
+(/nfs/mounts/linux_x86_64/Texlive2010/texmf-dist/tex/latex/psnfss/ot1ztmcm.fd
+File: ot1ztmcm.fd 2000/01/03 Fontinst v1.801 font definitions for OT1/ztmcm.
+)
+LaTeX Font Info:    Try loading font information for OML+ztmcm on input line 62
+.
+
+(/nfs/mounts/linux_x86_64/Texlive2010/texmf-dist/tex/latex/psnfss/omlztmcm.fd
+File: omlztmcm.fd 2000/01/03 Fontinst v1.801 font definitions for OML/ztmcm.
+)
+LaTeX Font Info:    Try loading font information for OMS+ztmcm on input line 62
+.
+
+(/nfs/mounts/linux_x86_64/Texlive2010/texmf-dist/tex/latex/psnfss/omsztmcm.fd
+File: omsztmcm.fd 2000/01/03 Fontinst v1.801 font definitions for OMS/ztmcm.
+)
+LaTeX Font Info:    Try loading font information for OMX+ztmcm on input line 62
+.
+
+(/nfs/mounts/linux_x86_64/Texlive2010/texmf-dist/tex/latex/psnfss/omxztmcm.fd
+File: omxztmcm.fd 2000/01/03 Fontinst v1.801 font definitions for OMX/ztmcm.
+)
+LaTeX Font Info:    Try loading font information for OT1+ptm on input line 62.
+
+(/nfs/mounts/linux_x86_64/Texlive2010/texmf-dist/tex/latex/psnfss/ot1ptm.fd
+File: ot1ptm.fd 2001/06/04 font definitions for OT1/ptm.
+)
+LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <10.95> not available
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 62.
+LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <8> not available
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 62.
+LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <6> not available
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 62.
+LaTeX Font Info:    Font shape `T1/ptm/bx/n' in size <9> not available
+(Font)              Font shape `T1/ptm/b/n' tried instead on input line 62.
+LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <9> not available
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 62.
+LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <7> not available
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 62.
+LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <5> not available
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 62.
+LaTeX Font Info:    Font shape `T1/ptm/bx/n' in size <12> not available
+(Font)              Font shape `T1/ptm/b/n' tried instead on input line 68.
+LaTeX Font Info:    Try loading font information for OMS+ptm on input line 102.
+
+
+(/nfs/mounts/linux_x86_64/Texlive2010/texmf-dist/tex/latex/psnfss/omsptm.fd
+File: omsptm.fd 
+)
+LaTeX Font Info:    Font shape `OMS/ptm/m/n' in size <9> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 102.
+LaTeX Font Info:    Try loading font information for T1+phv on input line 102.
+
+(/nfs/mounts/linux_x86_64/Texlive2010/texmf-dist/tex/latex/psnfss/t1phv.fd
+File: t1phv.fd 2001/06/04 scalable font definitions for T1/phv.
+)
+LaTeX Font Info:    Font shape `T1/phv/m/it' in size <9> not available
+(Font)              Font shape `T1/phv/m/sl' tried instead on input line 102.
+
+
+Package Fancyhdr Warning: \headheight is too small (13.6pt): 
+ Make it at least 32.18195pt.
+ We now make it that large for the rest of the document.
+ This may cause the page layout to be inconsistent, however.
+
+[1{/nfs/mounts/linux_x86_64/Texlive2010/texmf-var/fonts/map/pdftex/updmap/pdfte
+x.map}
+
+]
+LaTeX Font Info:    Font shape `OMS/ptm/m/n' in size <10.95> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 105.
+
+
+LaTeX Warning: Reference `chap:intro' on page 2 undefined on input line 123.
+
+LaTeX Font Info:    Try loading font information for T1+pcr on input line 123.
+(/nfs/mounts/linux_x86_64/Texlive2010/texmf-dist/tex/latex/psnfss/t1pcr.fd
+File: t1pcr.fd 2001/06/04 font definitions for T1/pcr.
+)
+
+LaTeX Warning: Reference `chap:howtoex' on page 2 undefined on input line 129.
+
+
+LaTeX Warning: Reference `PDE' on page 2 undefined on input line 131.
+
+
+LaTeX Warning: Reference `OPT' on page 2 undefined on input line 132.
+
+
+LaTeX Warning: Reference `chap:test' on page 2 undefined on input line 135.
+
+[2] [3]
+Overfull \hbox (12.13185pt too wide) in paragraph at lines 201--204
+[]\T1/pcr/m/n/10.95 basic/statespacetimehandler.h \T1/ptm/m/n/10.95 An-other in
+-ter-me-di-ate in-ter-face class
+ []
+
+
+Overfull \hbox (4.48961pt too wide) in paragraph at lines 206--209
+[]\T1/pcr/m/n/10.95 basic/mol$[]$statespacetimehandler.h \T1/ptm/m/n/10.95 Im-p
+le-ment-a-tion of a method
+ []
+
+[4] [5]
+Overfull \hbox (104.59674pt too wide) in paragraph at lines 273--276
+\T1/ptm/m/n/10.95 when there is an-other vari-able in a (lar-ger) di-men-sion i
+s in-volved. See \T1/pcr/m/n/10.95 integratormixeddims.h\T1/ptm/m/n/10.95 . 
+ []
+
+
+Overfull \hbox (8.97934pt too wide) in paragraph at lines 276--280
+[]\T1/pcr/m/n/10.95 templates/instat$[]$step$[]$newtonsolver.h \T1/ptm/m/n/10.9
+5 This is a New-ton method
+ []
+
+
+Overfull \hbox (19.79874pt too wide) in paragraph at lines 280--282
+[]\T1/pcr/m/n/10.95 templates/fractional$[]$step$[]$theta$[]$step$[]$newtonsolv
+er.h \T1/ptm/m/n/10.95 This
+ []
+
+[6]
+Overfull \hbox (5.14687pt too wide) in paragraph at lines 344--349
+\T1/pcr/m/n/10.95 StatPDEProblem::ComputeReducedFunctionals \T1/ptm/m/n/10.95 w
+ill eval-u-ate the
+ []
+
+
+Overfull \hbox (22.7216pt too wide) in paragraph at lines 344--349
+\T1/ptm/m/n/10.95 func-tion-als defined in the prob-lem de-scrip-tion, i.e., in
+ \T1/pcr/m/n/10.95 PDEProblemContainer\T1/ptm/m/n/10.95 ,
+ []
+
+[7]
+Overfull \hbox (7.41264pt too wide) in paragraph at lines 354--357
+[]\T1/pcr/m/n/10.95 reducedproblems/voidreducedproblem.h \T1/ptm/m/n/10.95 A wr
+ap-per file that elim-
+ []
+
+
+Overfull \hbox (5.63907pt too wide) in paragraph at lines 367--370
+[]\T1/pcr/m/n/10.95 opt$[]$algorithms/reducednewtonalgorithm.h \T1/ptm/m/n/10.9
+5 A line-search New-
+ []
+
+
+Overfull \hbox (17.47734pt too wide) in paragraph at lines 376--380
+[]\T1/pcr/m/n/10.95 opt$[]$algorithms/reducednewtonalgorithmwithinverse.h \T1/p
+tm/m/n/10.95 Line-
+ []
+
+
+Overfull \hbox (7.15099pt too wide) in paragraph at lines 380--385
+[]\T1/pcr/m/n/10.95 opt$[]$algorithms/generalized$[]$mma$[]$algorithm.h \T1/ptm
+/m/n/10.95 An im-ple-ment-
+ []
+
+
+Overfull \hbox (29.01746pt too wide) in paragraph at lines 380--385
+\T1/ptm/m/n/10.95 us-ing the spe-cial pur-pose file \T1/pcr/m/n/10.95 include/a
+ugmentedlagrangianproblem.h\T1/ptm/m/n/10.95 . 
+ []
+
+[8]
+Overfull \hbox (4.57457pt too wide) in paragraph at lines 433--434
+\T1/ptm/m/n/10.95 that the hanging-node-constraints come first (in case of con-
+flict-ing con-straints.) 
+ []
+
+
+Overfull \hbox (74.70212pt too wide) in paragraph at lines 434--435
+\T1/ptm/m/n/10.95 state FE solu-tion. The stand-ard im-ple-ment-a-tion is just 
+a wrap-per for \T1/pcr/m/n/10.95 dealii::DoFTools::
+ []
+
+[9]
+Overfull \hbox (6.41756pt too wide) in paragraph at lines 439--440
+[]\T1/pcr/m/n/10.95 interfaces/active$[]$fe$[]$index$[]$setter$[]$interface.h \
+T1/ptm/m/n/10.95 In the case
+ []
+
+
+Overfull \hbox (20.00655pt too wide) in paragraph at lines 446--452
+[]\T1/pcr/m/n/10.95 interfaces/transposeddirichletdatainterface.h \T1/ptm/m/n/1
+0.95 This provides
+ []
+
+[10]
+Overfull \hbox (2.18988pt too wide) in paragraph at lines 476--478
+[]\T1/pcr/m/n/10.95 problemdata/tangentdirichletdata.h \T1/ptm/m/n/10.95 This c
+lass con-tains the Di-
+ []
+
+
+Overfull \hbox (1.9173pt too wide) in paragraph at lines 478--481
+[]\T1/pcr/m/n/10.95 problemdata/transposedgradientdirichletdata.h \T1/ptm/m/n/1
+0.95 This con-
+ []
+
+
+Overfull \hbox (138.12332pt too wide) in paragraph at lines 478--481
+\T1/ptm/m/n/10.95 duced ob-ject-ive func-tional, for de-tail see \T1/pcr/m/n/10
+.95 interfaces/transposeddirichletdatainterface.h\T1/ptm/m/n/10.95 . 
+ []
+
+
+Overfull \hbox (138.12332pt too wide) in paragraph at lines 481--484
+\T1/ptm/m/n/10.95 duced ob-ject-ive func-tional, for de-tail see \T1/pcr/m/n/10
+.95 interfaces/transposeddirichletdatainterface.h\T1/ptm/m/n/10.95 . 
+ []
+
+
+Overfull \hbox (63.98035pt too wide) in paragraph at lines 488--489
+[]\T1/pcr/m/n/10.95 include/timeiterator.h \T1/ptm/m/n/10.95 This class works a
+s an iter-ator on the \T1/pcr/m/n/10.95 TimeDoFHandler\T1/ptm/m/n/10.95 . 
+ []
+
+[11] (./main.bbl [12]) AED: lastpage setting LastPage 
+[13] (./main.aux)
+
+LaTeX Warning: There were undefined references.
+
+ ) 
+Here is how much of TeX's memory you used:
+ 5832 strings out of 493747
+ 82989 string characters out of 3137899
+ 153787 words of memory out of 3000000
+ 8961 multiletter control sequences out of 15000+200000
+ 61543 words of font info for 100 fonts, out of 3000000 for 9000
+ 714 hyphenation exceptions out of 8191
+ 44i,16n,47p,412b,417s stack positions out of 5000i,500n,10000p,200000b,50000s
+{/nfs/mounts/linux_x86_64/Texlive2010/texmf-dist/fonts/enc/dvips/base/8r.enc}
+</nfs/mounts/linux_x86_64/Texlive2010/texmf-dist/fonts/type1/public/amsfonts/cm
+/cmmi10.pfb></nfs/mounts/linux_x86_64/Texlive2010/texmf-dist/fonts/type1/public
+/amsfonts/cm/cmr10.pfb></nfs/mounts/linux_x86_64/Texlive2010/texmf-dist/fonts/t
+ype1/public/amsfonts/cm/cmsy10.pfb></nfs/mounts/linux_x86_64/Texlive2010/texmf-
+dist/fonts/type1/public/amsfonts/cm/cmsy9.pfb></nfs/mounts/linux_x86_64/Texlive
+2010/texmf-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb></nfs/mounts/lin
+ux_x86_64/Texlive2010/texmf-dist/fonts/type1/urw/courier/ucrr8a.pfb></nfs/mount
+s/linux_x86_64/Texlive2010/texmf-dist/fonts/type1/urw/helvetic/uhvro8a.pfb></nf
+s/mounts/linux_x86_64/Texlive2010/texmf-dist/fonts/type1/urw/symbol/usyr.pfb></
+nfs/mounts/linux_x86_64/Texlive2010/texmf-dist/fonts/type1/urw/symbol/usyr.pfb>
+</nfs/mounts/linux_x86_64/Texlive2010/texmf-dist/fonts/type1/urw/times/utmb8a.p
+fb></nfs/mounts/linux_x86_64/Texlive2010/texmf-dist/fonts/type1/urw/times/utmr8
+a.pfb></nfs/mounts/linux_x86_64/Texlive2010/texmf-dist/fonts/type1/urw/times/ut
+mri8a.pfb>
+Output written on main.pdf (13 pages, 135652 bytes).
+PDF statistics:
+ 96 PDF objects out of 1000 (max. 8388607)
+ 68 compressed objects within 1 object stream
+ 0 named destinations out of 1000 (max. 500000)
+ 1 words of extra memory for PDF output out of 10000 (max. 10000000)
+

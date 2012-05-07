@@ -1,0 +1,29 @@
+\begin{thebibliography}{4}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Bangerth et~al.(2010)Bangerth, Hartmann, and Kanschat]{deal}
+Wolfgang Bangerth, Ralf Hartmann, and Guido Kanschat.
+\newblock \emph{Differential Equations Analysis Library}, 2010.
+
+\bibitem[Becker et~al.(2005)Becker, Meidner, and Vexler]{rodobo}
+R.~Becker, D.~Meidner, and B.~Vexler.
+\newblock \emph{RODOBO: A C++ library for optimization with stationary and
+  nonstationary PDEs}, 2005.
+
+\bibitem[Becker et~al.(2007)Becker, Meidner, and Vexler]{BeMeVe06}
+Roland Becker, Dominik Meidner, and Boris Vexler.
+\newblock Efficient numerical solution of parabolic optimization problems by
+  finite element methods.
+\newblock \emph{Optim. Methods Softw.}, 22\penalty0 (5):\penalty0 813--833,
+  2007.
+
+\bibitem[Nocedal and Wright(2000)]{NoWr00}
+J.~Nocedal and S.J. Wright.
+\newblock \emph{Numerical Optimization}.
+\newblock Springer, US, 2nd edition, 2000.
+
+\end{thebibliography}
