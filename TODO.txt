@@ -9,10 +9,6 @@ einheitlich (!) kommentiert.
   (Dann geht endlich auch Opt-Control im Instationaeren), sind noch
   fertigzustellen. ~ww
 
-- (done)Pointfunctional as Optimization functional. Beispiel ist noch zu erstellen!
- Es wird OPT/StatPDE/Example2 modifiziert.
-   --Beispiel dazu ~cg
-
 - Verschiedene Kontrolltypen im Instationaeren, insbesondere Kontrolle in den AWen
 -- Verschiedene Typen der Kontrolle (undefined, initial, timedistributed, timedistributedtimedependend). Diese gibt man dem Kontrollvektor, der den Typ wiederum an STH lieftert. Dieser speichert ihn und stellt sicher, dass alle Kontrollen den selben Typen haben. ~cg
 

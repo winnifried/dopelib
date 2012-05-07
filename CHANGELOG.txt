@@ -17,6 +17,7 @@ Changelog DOpE
   condense(u)/distribute(u) stuff again, it should not be in the apply 
   boundary value stuff...	
 - pdeinterface.h - scale_ico auch fuer CellEquation_u etc. implementieren!
+- It is now possible to use pointfunctionals as cost functionals. OPT/StatPDE/Example2 showes this. 
 
 before 2.5.2012
 -------------------------

@@ -1,17 +1,45 @@
 \subsubsection{General problem description}
-This example solves the distributed minimization problem
-\begin{gather*}
-\min J(q,u) = \frac{1}{2} \|u-u^d\|^2 + \frac{\alpha}{2}\|q\|^2\\
-\text{s.t.} (\nabla u,\nabla \phi) = (f(q),\phi)\;\;\forall\,\phi \in H^1_0(\Omega; \mathbb R^2)
-\end{gather*}
-on the domain $\Omega = [0,1]^2$, and the data is chosen as follows:
+This example solves the following pointwise minimization problem
+\begin{align*}
+\min_{(q,u)\in \mathbb R^3 \times H_0^1(\Omega; \mathbb R^2)} J(q,u) &= \frac{1}{2} \sum_{i=0}^2\abs{(u-\overline u)(x_i)}^2 + \frac{\alpha}{2}\|q\|^2\\
+\text{s.t.} (\nabla u,\nabla \phi) &= (f(q),\phi)\;\;\forall\,\phi \in H^1_0(\Omega; \mathbb R^2)
+\end{align*}
+on the domain $\Omega = [0,1]^2$, with
+\begin{itemize}
+\item the observation points
+\begin{align*}
+x_0 = (0.5, 0.5), \quad x_1 = (0.5, 0.25),\quad x_2 = (0.25, 0.25),
+\end{align*}
+\item the regularization parameter $\alpha = 0$, 
+\item the right hand side
 \begin{align*}
  f(q) &= q_0 \left(\begin{matrix}2\pi^2  \sin( \pi x) \sin(\pi y)\\0 \end{matrix}\right)\\
       &+ q_1 \left(\begin{matrix}5\pi^2  \sin( \pi x) \sin(2\pi y)\\0 \end{matrix}\right)\\
       &+ q_2 \left(\begin{matrix}0 \\8\pi^2  \sin(2\pi x) \sin(2\pi y)\end{matrix}\right)\\
 \end{align*}
-with $\alpha = 0$ and $u^d$ such that the solution is given by:
-\begin{gather*}
- \overline{q} = \bigl(1;0.5;1\bigr)\\
- \overline{u} = \left(\begin{matrix} \sin( \pi x)( \sin(\pi y)+0.5\sin(2\pi y))\\\sin(2\pi x) \sin(2\pi y) \end{matrix}\right)
-\end{gather*}
+\item and the exact solution given by 
+\begin{align*}
+ \overline{q} &= \bigl(1;0.5;1\bigr)\\
+ \overline{u}& = \left(\begin{matrix} \sin( \pi x)( \sin(\pi y)+0.5\sin(2\pi y))\\\sin(2\pi x) \sin(2\pi y) \end{matrix}\right).
+\end{align*}
+\end{itemize}
+\subsubsection{Program description}
+Notice that the cost functional is of mixed type (from our computational point of view), i.e. the first part is a pointfunctional whereas the regularization part requires the evaluation of a domain integral. So our \texttt{LocalFunctional} returns as his type:
+\begin{verbatim}
+      string
+      GetType() const
+      {
+        return "point domain";
+      }
+\end{verbatim}
+This brings along that we have not only to implement 
+\begin{itemize} 
+\item \texttt{Value},
+\item  \texttt{Value\_U},
+\item \texttt{Value\_Q}, 
+\item \texttt{Value\_UU},
+\item \texttt{Value\_UQ},
+\item \texttt{Value\_QU},
+\item \texttt{Value\_QQ}
+\end{itemize}
+ from \texttt{FunctionalInterface}, but also all the aforementioned methods with a preceeding \text{Point} (\texttt{PointValue} etc.).
