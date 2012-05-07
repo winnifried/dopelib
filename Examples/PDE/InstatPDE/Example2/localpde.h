@@ -794,7 +794,7 @@ template<typename VECTOR, int dopedim, int dealdim>
 
      void FaceEquation (const FaceDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& fdc,
 			dealii::Vector<double> &local_cell_vector,
-			double scale)
+			double scale, double /*scale_ico*/)
      {
        assert(this->_problem_type == "state");
 
@@ -863,7 +863,8 @@ template<typename VECTOR, int dopedim, int dealdim>
      }
 
      void FaceMatrix (const FaceDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& fdc,
-		      dealii::FullMatrix<double> &local_entry_matrix)
+		      dealii::FullMatrix<double> &local_entry_matrix,
+		      double /*scale*/, double /*scale_ico*/)
      {
        assert(this->_problem_type == "state");
 
@@ -943,7 +944,7 @@ template<typename VECTOR, int dopedim, int dealdim>
     // Values for boundary integrals
     void BoundaryEquation (const FaceDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& fdc,
 			   dealii::Vector<double> &local_cell_vector,
-			   double scale)
+			   double scale, double /*scale_ico*/)
     {
 
       assert(this->_problem_type == "state");
@@ -1002,7 +1003,8 @@ template<typename VECTOR, int dopedim, int dealdim>
     }
 
     void BoundaryMatrix (const FaceDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& fdc,
-			 dealii::FullMatrix<double> &local_entry_matrix)
+			 dealii::FullMatrix<double> &local_entry_matrix,
+			 double scale, double /*scale_ico*/)
     {
       assert(this->_problem_type == "state");
 

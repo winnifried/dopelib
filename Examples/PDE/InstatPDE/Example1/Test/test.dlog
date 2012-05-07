@@ -226,7 +226,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Timestep: 53 (5.2 -> 5.3) using shifted Crank-Nicolson
 		Pressure_difference: 1.78972
 		Drag: 2.12277
-		Lift: -0.00961635
+		Lift: -0.00961636
 			 Timestep: 54 (5.3 -> 5.4) using shifted Crank-Nicolson
 		Pressure_difference: 1.71182
 		Drag: 2.04042
@@ -270,7 +270,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Timestep: 64 (6.3 -> 6.4) using shifted Crank-Nicolson
 		Pressure_difference: 0.827223
 		Drag: 1.06911
-		Lift: -0.00390331
+		Lift: -0.00390332
 			 Timestep: 65 (6.4 -> 6.5) using shifted Crank-Nicolson
 		Pressure_difference: 0.739508
 		Drag: 0.967178
@@ -282,7 +282,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Timestep: 67 (6.6 -> 6.7) using shifted Crank-Nicolson
 		Pressure_difference: 0.571137
 		Drag: 0.766944
-		Lift: -0.00249203
+		Lift: -0.00249202
 			 Timestep: 68 (6.7 -> 6.8) using shifted Crank-Nicolson
 		Pressure_difference: 0.491421
 		Drag: 0.669623
@@ -302,31 +302,31 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Timestep: 72 (7.1 -> 7.2) using shifted Crank-Nicolson
 		Pressure_difference: 0.212051
 		Drag: 0.309975
-		Lift: -0.000689279
+		Lift: -0.00068928
 			 Timestep: 73 (7.2 -> 7.3) using shifted Crank-Nicolson
 		Pressure_difference: 0.153768
 		Drag: 0.22967
-		Lift: -0.000555955
+		Lift: -0.000555957
 			 Timestep: 74 (7.3 -> 7.4) using shifted Crank-Nicolson
 		Pressure_difference: 0.100589
 		Drag: 0.153991
-		Lift: -0.000479561
+		Lift: -0.000479564
 			 Timestep: 75 (7.4 -> 7.5) using shifted Crank-Nicolson
 		Pressure_difference: 0.0526179
 		Drag: 0.0832504
-		Lift: -0.000459308
+		Lift: -0.00045931
 			 Timestep: 76 (7.5 -> 7.6) using shifted Crank-Nicolson
 		Pressure_difference: 0.00984285
 		Drag: 0.0176844
-		Lift: -0.00050001
+		Lift: -0.000500013
 			 Timestep: 77 (7.6 -> 7.7) using shifted Crank-Nicolson
 		Pressure_difference: -0.0279015
 		Drag: -0.0425799
-		Lift: -0.000609289
+		Lift: -0.000609292
 			 Timestep: 78 (7.7 -> 7.8) using shifted Crank-Nicolson
 		Pressure_difference: -0.0609872
 		Drag: -0.0975782
-		Lift: -0.000795195
+		Lift: -0.000795198
 			 Timestep: 79 (7.8 -> 7.9) using shifted Crank-Nicolson
 		Pressure_difference: -0.0900621
 		Drag: -0.147585
