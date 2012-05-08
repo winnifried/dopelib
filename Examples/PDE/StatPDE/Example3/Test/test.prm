@@ -57,7 +57,7 @@ subsection output parameters
   # output
   set printlevel        = 6
 
-  # Set the precision of the output
+  # Set the precision of the newton output
   set number_precision	 = 1
 
   # Set manually the machine tolarance for the output

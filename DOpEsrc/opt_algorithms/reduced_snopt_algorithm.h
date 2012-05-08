@@ -132,7 +132,7 @@ int Reduced_SnoptAlgorithm<PROBLEM, VECTOR, dopedim, dealdim>::Solve(ControlVect
   double cost=0.;
   double cost_start=0.;
   std::stringstream out;
-  this->GetOutputHandler()->InitOut(out);
+  this->GetOutputHandler()->InitNewtonOut(out);
   global_tol =  std::max(_opt_tol,global_tol);
 
   out << "**************************************************\n";
@@ -160,8 +160,10 @@ int Reduced_SnoptAlgorithm<PROBLEM, VECTOR, dopedim, dealdim>::Solve(ControlVect
     this->GetExceptionHandler()->HandleCriticalException(e,"Reduced_SnoptAlgorithm::Solve");
   }
 
+  this->GetOutputHandler()->InitOut(out);
   out<< "CostFunctional: " << cost;
   this->GetOutputHandler()->Write(out,2+this->GetBasePriority());
+  this->GetOutputHandler()->InitNewtonOut(out);
 
   /////////////////////////////////DO SOMETHING to Solve.../////////////////////////
   out<<"************************************************\n";
@@ -322,8 +324,10 @@ int Reduced_SnoptAlgorithm<PROBLEM, VECTOR, dopedim, dealdim>::Solve(ControlVect
     this->GetExceptionHandler()->HandleCriticalException(e,"Reduced_SnoptAlgorithm::Solve");
   }
   //We are done write total evaluation
+  this->GetOutputHandler()->InitOut(out);
   out<< "CostFunctional: " << cost;
   this->GetOutputHandler()->Write(out,2+this->GetBasePriority());
+  this->GetOutputHandler()->InitNewtonOut(out);
   try
     {
       this->GetReducedProblem()->ComputeReducedFunctionals(q);

@@ -23,7 +23,8 @@ namespace DOpE
     param_reader.declare_entry("file_format",".vtk",Patterns::Selection(".vtk|.gpl"),"File format for the output of solution variables");
     param_reader.declare_entry("control_file_format",".vtk",Patterns::Selection(".vtk|.txt"),"File format for the output of control variables");
     param_reader.declare_entry("debug","false",Patterns::Bool(),"Log Debug Information");
-    param_reader.declare_entry("number_precision","5",Patterns::Integer(1),"Sets the precision of the output numbers");
+    param_reader.declare_entry("number_precision","5",Patterns::Integer(1),"Sets the precision of the output numbers in the newton schemes.");
+    param_reader.declare_entry("functional_number_precision","6",Patterns::Integer(1),"Sets the precision of the output numbers for functionals.");
     param_reader.declare_entry("eps_machine_set_by_user","0.0",Patterns::Double(),"Correlation of the output and machine precision");
 
   }
@@ -56,6 +57,7 @@ namespace DOpE
     _control_ending    = param_reader.get_string("control_file_format");
     _debug             = param_reader.get_bool("debug");
     _number_precision  = param_reader.get_integer("number_precision");
+    _functional_number_precision = param_reader.get_integer("functional_number_precision");
     _user_eps_machine  = param_reader.get_double("eps_machine_set_by_user");
 
     std::string tmp  = param_reader.get_string("never_write_list");
@@ -429,11 +431,18 @@ namespace DOpE
   }
 
 
-/*******************************************************/
+  /*******************************************************/
+  template <typename VECTOR>
+  void DOpEOutputHandler<VECTOR>::InitNewtonOut(std::stringstream &msg)
+  {
+    msg.precision(_number_precision);
+  }
+
+  /*******************************************************/
   template <typename VECTOR>
   void DOpEOutputHandler<VECTOR>::InitOut(std::stringstream &msg)
   {
-    msg.precision(_number_precision);
+    msg.precision(_functional_number_precision);
   }
 
 

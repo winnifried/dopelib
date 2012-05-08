@@ -151,7 +151,11 @@ class DOpEOutputHandler
      */
     std::string ZeroTolerance(double value, double reference_value);
     /**
-     * This function sets the precision of the output values.
+     * This function sets the precision of the newton output values.
+     */
+    void InitNewtonOut(std::stringstream& msg);
+    /**
+     * This function sets the precision of the functional output values.
      */
     void InitOut(std::stringstream& msg);
 
@@ -225,6 +229,7 @@ class DOpEOutputHandler
     unsigned int _n_reinits;
     bool _debug;
     unsigned int _number_precision;
+    unsigned int _functional_number_precision;
     double _user_eps_machine;
     bool _disallow_all;
 

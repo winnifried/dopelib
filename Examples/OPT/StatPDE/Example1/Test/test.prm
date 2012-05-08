@@ -51,8 +51,11 @@ subsection output parameters
   set printlevel        = 4
   #set printlevel        = 20
   
-  # Set the precision of the output
+  # Set the precision of the newton output
   set number_precision	 = 2
+
+  # Set the precision of the functional output
+  set functional_number_precision = 3
 
   # Set manually the machine tolarance for the output
   set eps_machine_set_by_user	 = 5.0e-9

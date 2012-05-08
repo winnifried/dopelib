@@ -744,6 +744,7 @@ void VoidReducedProblem<CONTROLNONLINEARSOLVER, CONTROLINTEGRATOR, PROBLEM, VECT
       throw DOpEException("Unknown Functional Type: " + this->GetProblem()->GetFunctionalType(),"VoidReducedProblem::ComputeReducedFunctionals");
     }
     std::stringstream out;
+    this->GetOutputHandler()->InitOut(out);
     out<<this->GetName()<<"->"<< this->GetProblem()->GetFunctionalName() <<": "<< ret;
     this->GetOutputHandler()->Write(out,2+this->GetBasePriority());
   }

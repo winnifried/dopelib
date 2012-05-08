@@ -41,8 +41,11 @@ subsection output parameters
   # Correlation of the output and machine precision
   set eps_machine_set_by_user = 1.0e-8
 
-  # Sets the precision of the output numbers
+  # Sets the precision of the newton output
   set number_precision        = 3
+  
+  # Sets the precision of the functional output
+  set functional_number_precision = 5
   
   # File format for the output of solution variables
   set file_format         = .vtk

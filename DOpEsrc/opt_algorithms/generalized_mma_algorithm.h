@@ -239,7 +239,7 @@ template <typename CONSTRAINTACCESSOR,typename INTEGRATORDATACONT, typename STH,
   double cost_alt=0.;
   double cost_start=0.;
   std::stringstream out;
-  this->GetOutputHandler()->InitOut(out);
+  this->GetOutputHandler()->InitNewtonOut(out);
 
   bool feasible = true;
   double rho;
@@ -266,8 +266,10 @@ template <typename CONSTRAINTACCESSOR,typename INTEGRATORDATACONT, typename STH,
   {
     this->GetExceptionHandler()->HandleCriticalException(e,"GeneralizedMMAAlgorithm::Solve");
   }
+  this->GetOutputHandler()->InitOut(out);
   out<< "CostFunctional: " << cost;
   this->GetOutputHandler()->Write(out,2);
+  this->GetOutputHandler()->InitNewtonOut(out);
 
   try
   {
@@ -335,12 +337,14 @@ template <typename CONSTRAINTACCESSOR,typename INTEGRATORDATACONT, typename STH,
     complementarity_error *= 1./_ndofs;
     double stationarity_error = AugmentedLagrangianResidual(q,gradient,lb,ub,q_min,q_max,_mma_multiplier,q,cost);
     double feasibility_error = this->GetReducedProblem()->GetMaxViolation(_mma_constraints);
+
+    this->GetOutputHandler()->InitOut(out);
     out << "MMA-Outer (0) - [NA/NA/NA] - CE: "<<complementarity_error<< "\tSE: ";
     out<< stationarity_error<<"\t FE: " << feasibility_error<<"\t CostFunctional: "<<cost;
     out<<"\t Step: NA      ";
     out<<"\t p: "<<_p<<"\t acc: NA      "<<"\t rho: "<<rho;
     this->GetOutputHandler()->Write(out,2);
-    
+    this->GetOutputHandler()->InitNewtonOut(out);
     //and error to check for the convergence of the asymptotes is missing!
     //FIXME: Check convergence of Asymptotes?
 
@@ -547,11 +551,14 @@ template <typename CONSTRAINTACCESSOR,typename INTEGRATORDATACONT, typename STH,
 	complementarity_error *= 1./_ndofs;
 	double stationarity_error = AugmentedLagrangianResidual(q,gradient,lb,ub,q_min,q_max,_mma_multiplier,q,cost);
 	double feasibility_error = this->GetReducedProblem()->GetMaxViolation(_mma_constraints);
+
+  this->GetOutputHandler()->InitOut(out);
 	out << "MMA-Outer ("<<iter<<") - ["<<inner_iters<<"/"<<n_inner_loops<<"/"<<n_rho_updates<<"] - CE: "<<this->GetOutputHandler()->ZeroTolerance(complementarity_error,kkt_error_initial)<< "\tSE: ";
 	out<< this->GetOutputHandler()->ZeroTolerance(stationarity_error,kkt_error_initial)<<"\t FE: " << this->GetOutputHandler()->ZeroTolerance(feasibility_error,kkt_error_initial)<<"\t CostFunctional: "<<cost;
 	out<<"\t Step: "<<this->GetOutputHandler()->ZeroTolerance(length,1.);
         out<<"\t p: "<<this->GetOutputHandler()->ZeroTolerance(_p,1.)<<"\t acc: "<<this->GetOutputHandler()->ZeroTolerance(accuracy,1.)<<"\t rho: "<<rho;
 	this->GetOutputHandler()->Write(out,2);
+  this->GetOutputHandler()->InitNewtonOut(out);
 	
 	//and error to check for the convergence of the asymptotes is missing!
 	//FIXME Check convergence of Asymptotes?
@@ -589,8 +596,10 @@ template <typename CONSTRAINTACCESSOR,typename INTEGRATORDATACONT, typename STH,
   {
     this->GetExceptionHandler()->HandleCriticalException(e,"GeneralizedMMAAlgorithm::Solve");
   }
+  this->GetOutputHandler()->InitOut(out);
   out<< "CostFunctional: " << cost;
   this->GetOutputHandler()->Write(out,2);
+  this->GetOutputHandler()->InitNewtonOut(out);
 
   out << "**************************************************\n";
   out << "*        Stopping MMA Algorithm       *\n";
@@ -636,7 +645,7 @@ template <typename CONSTRAINTACCESSOR,typename INTEGRATORDATACONT, typename STH,
   //double mult_scale = 1.;
   bool has_last_good=false;
   std::stringstream out;
-  this->GetOutputHandler()->InitOut(out);
+  this->GetOutputHandler()->InitNewtonOut(out);
 
   out << "\t**************************************************\n";
   out << "\t*        Starting AugLag Algorithm       *\n";
@@ -696,11 +705,13 @@ template <typename CONSTRAINTACCESSOR,typename INTEGRATORDATACONT, typename STH,
     double feasibility_error = this->GetReducedProblem()->GetMaxViolation(real_constraints);
     prediction = cost - mult*constraints;
 
+    this->GetOutputHandler()->InitOut(out);
     out << "\tAugLag-Outer (0) - CE: "<<complementarity_error<< "\tSE: ";
     out<< stationarity_error<<"\t FE: " << feasibility_error<<"\t CostFunctional: "<<cost<<"\t Prediction: "<<prediction<<"\t Multiplier: "<<mult.Norm("infty");
     this->GetOutputHandler()->Write(out,4);
     out<<"\tInitialize Alpha: "<<alpha;
     this->GetOutputHandler()->Write(out,5);
+    this->GetOutputHandler()->InitNewtonOut(out);
 
     double kkt_error = std::max(std::max(complementarity_error,stationarity_error),feasibility_error);
     double kkt_error_last = 0.;
@@ -850,10 +861,12 @@ template <typename CONSTRAINTACCESSOR,typename INTEGRATORDATACONT, typename STH,
 	  complementarity_error *= 1./_ndofs;
 	  stationarity_error = AugmentedLagrangianResidual(q,gradient,lb,ub,q_min,q_max,mult,dq,J);
 	  feasibility_error = this->GetReducedProblem()->GetMaxViolation(real_constraints);
+	  this->GetOutputHandler()->InitOut(out);
 	  //out << "\tAugLag-Outer ("<<iter<<") - ls["<<nl_iter<<"/"<<lineiter<<"/"<<m_lineiter<<"] a="<<alpha<<" p="<<p<<" - Complementarity Error: "<<complementarity_error<< "\tStationarity Violation: ";
 	  out << "\tAugLag-Outer ("<<iter<<") - ls["<<nl_iter<<"/"<<lineiter<<"/"<<m_lineiter<<"] a="<<alpha<<" p="<<_p<<" - CE: "<<complementarity_error<< "\tSE: ";
 	  out<< stationarity_error <<"\t FE: " << feasibility_error<<"\t CostFunctional: "<<cost<<"\t Prediction: "<<prediction<<"\t Multiplier: "<<mult.Norm("infty");
 	  this->GetOutputHandler()->Write(out,4);
+	  this->GetOutputHandler()->InitNewtonOut(out);
 	  
 	  if(feasibility_error <= 0.)
 	  {

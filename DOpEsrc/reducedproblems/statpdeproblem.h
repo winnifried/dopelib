@@ -492,6 +492,7 @@ namespace DOpE
         }
         this->GetFunctionalValues()[i].push_back(ret);
         std::stringstream out;
+        this->GetOutputHandler()->InitOut(out);
         out << this->GetProblem()->GetFunctionalName() << ": " << ret;
         this->GetOutputHandler()->Write(out, 2 + this->GetBasePriority());
       }
@@ -557,6 +558,7 @@ namespace DOpE
         dwrc.ClearWeightData();
 
         std::stringstream out;
+        this->GetOutputHandler()->InitOut(out);
         out << "Error estimation in " << this->GetProblem()->GetFunctionalName() << ": "
             << error;
         this->GetOutputHandler()->Write(out, 2 + this->GetBasePriority());

@@ -226,7 +226,7 @@ template <typename INTEGRATOR, typename LINEARSOLVER, typename VECTOR,  int dim>
    VECTOR residual;
    VECTOR du;
    std::stringstream out;
-   pde.GetOutputHandler()->InitOut(out);
+   pde.GetOutputHandler()->InitNewtonOut(out);
    
    du.reinit(solution);
    residual.reinit(solution);
@@ -356,7 +356,7 @@ template <typename INTEGRATOR, typename LINEARSOLVER, typename VECTOR,  int dim>
       VECTOR residual, time_residual, tmp_residual;
       VECTOR du;
       std::stringstream out;
-      pde.GetOutputHandler()->InitOut(out);
+      pde.GetOutputHandler()->InitNewtonOut(out);
 
       double res = 0.0;
       double firstres = 0.0;

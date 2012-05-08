@@ -158,7 +158,7 @@ int ReducedNewtonAlgorithm<PROBLEM, VECTOR, dopedim, dealdim>::Solve(ControlVect
   unsigned int iter=0;
   double cost=0.;
   std::stringstream out;
-  this->GetOutputHandler()->InitOut(out);
+  this->GetOutputHandler()->InitNewtonOut(out);
 
   out << "**************************************************\n";
   out << "*        Starting Reduced Newton Algorithm       *\n";

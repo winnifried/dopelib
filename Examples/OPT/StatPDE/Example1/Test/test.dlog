@@ -7,7 +7,7 @@
 	**************************************************
 
 LOG: Allowing IterationCounter `OptNewton_OptProblem' for filenames!
-	CostFunctional: 6.1e+02
+	CostFunctional: 606
 		 Newton step: 0	 Residual (abs.): 0.71
 		 Newton step: 0	 Residual (rel.): 1.00e+00
 	
@@ -67,7 +67,7 @@ LOG: Allowing IterationCounter `OptNewton_OptProblem' for filenames!
 	*  SDoFs : 	16641
 	**************************************************
 
-	CostFunctional: 4.3e+02
+	CostFunctional: 429
 		 Newton step: 0	 Residual (abs.): 0.00072
 		 Newton step: 0	 Residual (rel.): 1.00e+00
 	

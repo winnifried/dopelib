@@ -179,7 +179,7 @@ int ReducedTrustregion_NewtonAlgorithm<PROBLEM,VECTOR,dopedim, dealdim>::Solve(C
 
   unsigned int n_good  =0;
   unsigned int n_bad  =0;
-  this->GetOutputHandler()->InitOut(out);
+  this->GetOutputHandler()->InitNewtonOut(out);
 
   out << "**************************************************************\n";
   out << "*        Starting Reduced Trustregion_Newton Algorithm       *\n";
@@ -204,8 +204,10 @@ int ReducedTrustregion_NewtonAlgorithm<PROBLEM,VECTOR,dopedim, dealdim>::Solve(C
     this->GetExceptionHandler()->HandleCriticalException(e);
   }
   
+  this->GetOutputHandler()->InitOut(out);
   out<< "CostFunctional: " << cost;
   this->GetOutputHandler()->Write(out,2+this->GetBasePriority());
+  this->GetOutputHandler()->InitNewtonOut(out);
 
  //try
  //{

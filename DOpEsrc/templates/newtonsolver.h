@@ -144,7 +144,7 @@ template <typename INTEGRATOR, typename LINEARSOLVER, typename VECTOR,  int dim>
       VECTOR residual;
       VECTOR du;
       std::stringstream out;
-      pde.GetOutputHandler()->InitOut(out);
+      pde.GetOutputHandler()->InitNewtonOut(out);
 
       du.reinit(solution);
       residual.reinit(solution);

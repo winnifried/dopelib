@@ -662,6 +662,7 @@ void InstatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER, CONTROLINTEGR
       if (this->GetFunctionalValues()[i + 1].size() == 1)
       {
         std::stringstream out;
+        this->GetOutputHandler()->InitOut(out);
         out << this->GetProblem()->GetFunctionalName() << ": " << this->GetFunctionalValues()[i + 1][0];
         this->GetOutputHandler()->Write(out, 2 + this->GetBasePriority());
       }
@@ -671,6 +672,7 @@ void InstatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER, CONTROLINTEGR
             == this->GetProblem()->GetSpaceTimeHandler()->GetMaxTimePoint() + 1)
         {
           std::stringstream out;
+          this->GetOutputHandler()->InitOut(out);
           out << this->GetProblem()->GetFunctionalName() << " too large. Writing to file instead: ";
           this->GetOutputHandler()->Write(out, 2 + this->GetBasePriority());
           this->GetOutputHandler()->Write(this->GetFunctionalValues()[i + 1],
@@ -680,6 +682,7 @@ void InstatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER, CONTROLINTEGR
         else
         {
           std::stringstream out;
+          this->GetOutputHandler()->InitOut(out);
           out << this->GetProblem()->GetFunctionalName() << ": ";
           for (unsigned int k = 0; k < this->GetFunctionalValues()[i + 1].size(); k++)
             out << this->GetFunctionalValues()[i + 1][k] << " ";
@@ -695,6 +698,7 @@ void InstatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER, CONTROLINTEGR
     else if (this->GetProblem()->GetFunctionalType().find("timedistributed"))
     {
       std::stringstream out;
+      this->GetOutputHandler()->InitOut(out);
       out << this->GetProblem()->GetFunctionalName() << ": " << this->GetFunctionalValues()[i + 1][0];
       this->GetOutputHandler()->Write(out, 2 + this->GetBasePriority());
     }
@@ -847,6 +851,7 @@ void InstatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER, CONTROLINTEGR
         if (this->GetProblem()->GetFunctionalType().find("timelocal"))
         {
           std::stringstream out;
+          this->GetOutputHandler()->InitOut(out);
           out << "\t" << this->GetProblem()->GetFunctionalName() << ": " << ret;
           this->GetOutputHandler()->Write(out, 2 + this->GetBasePriority());
           this->GetFunctionalValues()[i + 1].push_back(ret);
@@ -1094,6 +1099,7 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 	double time = times[local_to_global[i]];
 	
 	std::stringstream out;
+  this->GetOutputHandler()->InitOut(out);
 	out << "\t\t Timestep: " << local_to_global[i] << " ("
 	    << times[local_to_global[i - 1]] << " -> " << time
 	    << ") using " << problem.GetName();
@@ -1220,6 +1226,7 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 	double time = times[local_to_global[j]];
 	
 	std::stringstream out;
+  this->GetOutputHandler()->InitOut(out);
 	out << "\t\t Timestep: " << local_to_global[j] << " ("
 	    << times[local_to_global[j + 1]] << " -> " << time
 	    << ") using " << problem.GetName();
