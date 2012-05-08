@@ -12,6 +12,9 @@
 
 namespace DOpE
 {
+  /**
+   * This class contains the methods which all time stepping schemes share.
+   */
 
   template<typename OPTPROBLEM, typename SPARSITYPATTERN, typename VECTOR,
       int dopedim, int dealdim,

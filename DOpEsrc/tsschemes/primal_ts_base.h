@@ -11,6 +11,10 @@
 #include "ts_base.h"
 namespace DOpE
 {
+
+  /**
+   * This class contains the methods which all primal time stepping schemes share.
+   */
   template<typename OPTPROBLEM, typename SPARSITYPATTERN, typename VECTOR,
       int dopedim, int dealdim,
       typename FE = dealii::FESystem<dealdim>,
