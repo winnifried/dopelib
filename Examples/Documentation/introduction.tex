@@ -116,8 +116,8 @@ classes in \texttt{DOpEsrc/container}
 \begin{itemize}
   \item \texttt{pdeproblemcontainer.h} Is used to describe  stationary PDE problems.
   \item \texttt{instatpdeproblemcontainer.h} {\bf TODO is still missing but will be used for nonstationary problems.} This will be implemented once we have nonstationary optimization problems running to avoid error duplication in the coding process.
-  \item \texttt{optproblem.h} Is used to describe  OPT problems governed by 
-    stationary PDEs. {\bf TODO should be renamed to optproblemcontainer.h including the class name!}
+  \item \texttt{optproblemcontainer.h} Is used to describe  OPT problems governed by 
+    stationary PDEs. 
   \item \texttt{instatoptproblemcontainer.h} Is used to describe  OPT problems governed by nonstationary PDEs. The only difference to the stationary case is that we need to specify a time-stepping method.  
 \end{itemize}
 In order to fill these containers there are two things to be done,
@@ -193,12 +193,12 @@ the containers.
 Third, at least for nonstationary PDEs we need to select a time stepping scheme
 the file names of which are mostly self explanatory:
 \begin{itemize}
-\item \texttt{include/forward\underline{ }euler\underline{ }problem.h}
-\item \texttt{include/shifted\underline{ }crank\underline{ }nicolson\underline{ }problem.h}
-\item \texttt{include/backward\underline{ }euler\underline{ }problem.h}
-\item \texttt{include/fractional\underline{ }step\underline{ }theta\underline{ }problem.h} Note that the use of this scheme requires a special Newton solver, which is, however, already
+\item \texttt{tsschemes/forward\underline{ }euler\underline{ }problem.h}
+\item \texttt{tsschemes/shifted\underline{ }crank\underline{ }nicolson\underline{ }problem.h}
+\item \texttt{tsschemes/backward\underline{ }euler\underline{ }problem.h}
+\item \texttt{tsschemes/fractional\underline{ }step\underline{ }theta\underline{ }problem.h} Note that the use of this scheme requires a special Newton solver, which is, however, already
 implemented for the convenience of the user!
-\item \texttt{include/crank\underline{ }nicolson\underline{ }problem.h}
+\item \texttt{tsschemes/crank\underline{ }nicolson\underline{ }problem.h}
 \end{itemize}
 
 \subsubsection{Integrator routines}
@@ -454,20 +454,13 @@ do not fit the above but are important for the user to know.
 \subsection{Other}
 \begin{itemize}
   \item \texttt{basic/dopetypes.h} This file contains type definitions used in the library. 
+\item \item \texttt{basic/sth\underline{ }internals.h} Wrapper for the \texttt{MapDoFsToSupportPoints} function. The implementation of this changes with the \texttt{deal.II} version in use.
+\item \texttt{include/helper.h} Collection of various small helper functions.
+\item \texttt{tsschemes/primal\_ts\_base.h}  This class contains the methods which all primal time stepping schemes share.
+\item \texttt{tsschemes/ts\_base.h}  This class contains the methods which all time stepping schemes share.
 \end{itemize}
 
 {\bf TODO! The following files need some appropriate description here 
-This should be done by someone who knows what they are used for. Please move the description to the right place above.} tsschemes.
+This should be done by someone who knows what they are used for. Please move the description to the right place above.}.
 
 \marginpar{TODO}
-
-basic:
-      sth\underline{ }internals.h                     
-
-include:   
-            helper.h                                          
-
-
-  
-
-
