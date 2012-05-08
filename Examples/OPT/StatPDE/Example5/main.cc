@@ -107,7 +107,7 @@ int main(int argc, char **argv)
   GridGenerator::hyper_cube(times);
   triangulation.refine_global (3);
 
-  MethodOfLines_MultiMesh_SpaceTimeHandler<FE, DOFHANDLER, BlockSparsityPattern,VECTOR, 2> DOFH(triangulation,control_fe, state_fe);
+  MethodOfLines_MultiMesh_SpaceTimeHandler<FE, DOFHANDLER, BlockSparsityPattern,VECTOR, 2> DOFH(triangulation,control_fe, state_fe, DOpEtypes::stationary);
 
   NoConstraints<Multimesh_CellDataContainer,Multimesh_FaceDataContainer,DOFHANDLER,VECTOR, 2,2> Constraints;
 

@@ -109,7 +109,7 @@ int main(int argc, char **argv)
   GridGenerator::hyper_cube(times);
   triangulation.refine_global (5);
 
-  MethodOfLines_SpaceTimeHandler<FE, DOFHANDLER, BlockSparsityPattern,VECTOR, 2,2> DOFH(triangulation,control_fe, state_fe);
+  MethodOfLines_SpaceTimeHandler<FE, DOFHANDLER, BlockSparsityPattern,VECTOR, 2,2> DOFH(triangulation,control_fe, state_fe, DOpEtypes::stationary);
 
   NoConstraints<CellDataContainer,FaceDataContainer,DOFHANDLER,VECTOR, 2,2> Constraints;
 

@@ -187,7 +187,7 @@ int main(int argc, char **argv)
   GridGenerator::subdivided_hyper_cube(times, 20);
 
 		triangulation.refine_global(5);
-		MethodOfLines_SpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR,LOCALDOPEDIM, LOCALDEALDIM> DOFH(triangulation, control_fe, state_fe, times);
+		MethodOfLines_SpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR,LOCALDOPEDIM, LOCALDEALDIM> DOFH(triangulation, control_fe, state_fe, times, DOpEtypes::undefined);
 
 	  /***************hp********************/
 //	  MethodOfLines_SpaceTimeHandler<FE, DOFHANDLERSPARSITYPATTERN, VECTOR,LOCALDOPEDIM, LOCALDEALDIM> DOFH(triangulation,control_fe_collection, state_fe_collection,times);

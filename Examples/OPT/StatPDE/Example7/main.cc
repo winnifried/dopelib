@@ -114,7 +114,7 @@ int main(int argc, char **argv)
     2,2> DOFH(triangulation,
 									  control_fe,
 									  state_fe,
-									  constraints);
+									  constraints, DOpEtypes::stationary);
   LocalConstraintAccessor CA;
   LocalConstraint<CDC,FDC,DOFHANDLER,VECTOR,2,2> LC(CA);
 

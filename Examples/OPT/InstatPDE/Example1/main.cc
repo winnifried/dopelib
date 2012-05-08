@@ -159,7 +159,7 @@ main(int argc, char **argv)
   triangulation.refine_global(4);
   MethodOfLines_SpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR,
       LOCALDOPEDIM, LOCALDEALDIM> DOFH(triangulation, control_fe, state_fe,
-      times);
+      times, DOpEtypes::initial);
 
 
   NoConstraints<CellDataContainer,FaceDataContainer,DOFHANDLER,VECTOR, LOCALDOPEDIM, LOCALDEALDIM> Constraints;

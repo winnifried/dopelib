@@ -12,6 +12,7 @@
 
 #include "timedofhandler.h"
 #include "timeiterator.h"
+#include "dopetypes.h"
 
 namespace DOpE
 {
@@ -24,25 +25,28 @@ class SpaceTimeHandlerBase
 {
   public:
 
-    SpaceTimeHandlerBase()
+    SpaceTimeHandlerBase(DOpEtypes::ControlType control_type = DOpEtypes::undefined) : _control_type(control_type)
     {
       _state_ticket = 1;
       _control_ticket = 1;
     }
 
-    SpaceTimeHandlerBase(const dealii::Triangulation<1> & times) :
-      _tdfh(times), _interval(_tdfh.first_interval())
+    SpaceTimeHandlerBase(const dealii::Triangulation<1> & times, DOpEtypes::ControlType type = DOpEtypes::undefined) :
+      _tdfh(times), _interval(_tdfh.first_interval()), _control_type(type)
     {
       _state_ticket = 1;
       _control_ticket = 1;
+      _control_type = DOpEtypes::undefined;
     }
 
     SpaceTimeHandlerBase(const dealii::Triangulation<1> & times,
-        const dealii::FiniteElement<1>& fe) :
-          _tdfh(times, fe), _interval(_tdfh.first_interval())
+        const dealii::FiniteElement<1>& fe,
+        DOpEtypes::ControlType type = DOpEtypes::undefined) :
+          _tdfh(times, fe), _interval(_tdfh.first_interval()), _control_type(type)
     {
       _state_ticket = 1;
       _control_ticket = 1;
+      _control_type = DOpEtypes::undefined;
     }
 
 
@@ -185,6 +189,16 @@ class SpaceTimeHandlerBase
       bool ret = (ticket == _control_ticket);
       ticket = _control_ticket;
       return ret;
+    }
+
+
+    /**
+     * Returns the ControlType.
+     */
+
+    DOpEtypes::ControlType GetControlType() const
+    {
+      return _control_type;
     }
 
 
@@ -354,6 +368,7 @@ class SpaceTimeHandlerBase
 
     unsigned int _control_ticket;
     unsigned int _state_ticket;
+    mutable DOpEtypes::ControlType _control_type;
 };
 
 }

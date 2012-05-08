@@ -27,27 +27,43 @@ namespace DOpE
         DOFHANDLER, SPARSITYPATTERN, VECTOR, dopedim, dealdim>
     {
       public:
+      /**
+       * Constructors.
+       *
+       * @param triangulation     The triangulation in use.
+       * @param control_fe        The finite elements used for the discretization of the control variable.
+       * @param state_fe          The finite elements used for the discretization of the state variable.
+       * @param type              The type of the control, see dopetypes.h for more information.
+       * @param times             The timegrid for instationary problems.
+       * @param constraints       ?
+       * @param index_setter      The index setter object (only needed in case of hp elements).
+       */
         MethodOfLines_SpaceTimeHandler(
-            dealii::Triangulation<dealdim>& triangulation, const FE& control_fe,
+            dealii::Triangulation<dealdim>& triangulation,
+            const FE& control_fe,
             const FE& state_fe,
+            DOpEtypes::ControlType type,
             const ActiveFEIndexSetterInterface<dopedim, dealdim>& index_setter =
                 ActiveFEIndexSetterInterface<dopedim, dealdim>()) :
             SpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR, dopedim,
-                dealdim>(index_setter), _triangulation(triangulation), _control_dof_handler(
+                dealdim>( type, index_setter), _triangulation(triangulation), _control_dof_handler(
                 _triangulation), _state_dof_handler(_triangulation), _control_fe(
                 &control_fe), _state_fe(&state_fe), _constraints(), _control_mesh_transfer(
                 NULL), _sparse_mkr_dynamic(true)
         {
           _sparsitymaker = new SparsityMaker<DOFHANDLER, dealdim>;
-          _user_defined_dof_constr =NULL;
+          _user_defined_dof_constr = NULL;
         }
         MethodOfLines_SpaceTimeHandler(
-            dealii::Triangulation<dealdim>& triangulation, const FE& control_fe,
-            const FE& state_fe, const dealii::Triangulation<1> & times,
+            dealii::Triangulation<dealdim>& triangulation,
+            const FE& control_fe,
+            const FE& state_fe,
+            const dealii::Triangulation<1> & times,
+            DOpEtypes::ControlType type,
             const ActiveFEIndexSetterInterface<dopedim, dealdim>& index_setter =
                 ActiveFEIndexSetterInterface<dopedim, dealdim>()) :
             SpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR, dopedim,
-                dealdim>(times, index_setter), _triangulation(triangulation), _control_dof_handler(
+                dealdim>(times,type, index_setter), _triangulation(triangulation), _control_dof_handler(
                 _triangulation), _state_dof_handler(_triangulation), _control_fe(
                 &control_fe), _state_fe(&state_fe), _constraints(), _control_mesh_transfer(
                 NULL), _sparse_mkr_dynamic(true)
@@ -57,12 +73,15 @@ namespace DOpE
         }
 
         MethodOfLines_SpaceTimeHandler(
-            dealii::Triangulation<dealdim>& triangulation, const FE& control_fe,
-            const FE& state_fe, const Constraints& c,
+            dealii::Triangulation<dealdim>& triangulation,
+            const FE& control_fe,
+            const FE& state_fe,
+            const Constraints& c,
+            DOpEtypes::ControlType type,
             const ActiveFEIndexSetterInterface<dopedim, dealdim>& index_setter =
                 ActiveFEIndexSetterInterface<dopedim, dealdim>()) :
             SpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR, dopedim,
-                dealdim>(index_setter), _triangulation(triangulation), _control_dof_handler(
+                dealdim>(type, index_setter), _triangulation(triangulation), _control_dof_handler(
                 _triangulation), _state_dof_handler(_triangulation), _control_fe(
                 &control_fe), _state_fe(&state_fe), _constraints(c), _control_mesh_transfer(
                 NULL), _sparse_mkr_dynamic(true)
@@ -72,13 +91,16 @@ namespace DOpE
         }
 
         MethodOfLines_SpaceTimeHandler(
-            dealii::Triangulation<dealdim>& triangulation, const FE& control_fe,
-            const FE& state_fe, const dealii::Triangulation<1> & times,
+            dealii::Triangulation<dealdim>& triangulation,
+            const FE& control_fe,
+            const FE& state_fe,
+            const dealii::Triangulation<1> & times,
             const Constraints& c,
+            DOpEtypes::ControlType type,
             const ActiveFEIndexSetterInterface<dopedim, dealdim>& index_setter =
                 ActiveFEIndexSetterInterface<dopedim, dealdim>()) :
             SpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR, dopedim,
-                dealdim>(times, index_setter), _triangulation(triangulation), _control_dof_handler(
+                dealdim>(times, type, index_setter), _triangulation(triangulation), _control_dof_handler(
                 _triangulation), _state_dof_handler(_triangulation), _control_fe(
                 &control_fe), _state_fe(&state_fe), _constraints(c), _control_mesh_transfer(
                 NULL), _sparse_mkr_dynamic(true)
@@ -94,13 +116,13 @@ namespace DOpE
           _state_dof_handler.clear();
 
           if (_control_mesh_transfer != NULL)
-            {
-              delete _control_mesh_transfer;
-            }
+          {
+            delete _control_mesh_transfer;
+          }
           if (_sparsitymaker != NULL && _sparse_mkr_dynamic == true)
-            {
-              delete _sparsitymaker;
-            }
+          {
+            delete _sparsitymaker;
+          }
         }
 
         /**
@@ -121,37 +143,37 @@ namespace DOpE
           DoFRenumbering::component_wise (static_cast<DOFHANDLER&>(_control_dof_handler),
               control_block_component);
           if(dopedim==dealdim)
-            {
-              _control_dof_constraints.clear ();
-              DoFTools::make_hanging_node_constraints (static_cast<DOFHANDLER&>(_control_dof_handler),
-                  _control_dof_constraints);
-              if (GetUserDefinedDoFConstraints() != NULL)
-              GetUserDefinedDoFConstraints()->MakeControlDoFConstraints(_control_dof_handler,
-                  _control_dof_constraints);
-              _control_dof_constraints.close ();
-            }
+          {
+            _control_dof_constraints.clear ();
+            DoFTools::make_hanging_node_constraints (static_cast<DOFHANDLER&>(_control_dof_handler),
+                _control_dof_constraints);
+            if (GetUserDefinedDoFConstraints() != NULL)
+            GetUserDefinedDoFConstraints()->MakeControlDoFConstraints(_control_dof_handler,
+                _control_dof_constraints);
+            _control_dof_constraints.close ();
+          }
           else
-            {
-              throw DOpEException("Not implemented for dopedim != dealdim","MethodOfLines_SpaceTimeHandler::ReInit");
-            }
+          {
+            throw DOpEException("Not implemented for dopedim != dealdim","MethodOfLines_SpaceTimeHandler::ReInit");
+          }
 #endif
           _control_dofs_per_block.resize(control_n_blocks);
 #if dope_dimension > 0
-            {
-              DoFTools::count_dofs_per_block (static_cast<DOFHANDLER&>(_control_dof_handler),
-                  _control_dofs_per_block,control_block_component);
-            }
+          {
+            DoFTools::count_dofs_per_block (static_cast<DOFHANDLER&>(_control_dof_handler),
+                _control_dofs_per_block,control_block_component);
+          }
 #else
+          {
+            for (unsigned int i = 0; i < _control_dofs_per_block.size(); i++)
             {
-              for (unsigned int i = 0; i < _control_dofs_per_block.size(); i++)
-                {
-                  _control_dofs_per_block[i] = 0;
-                }
-              for (unsigned int i = 0; i < control_block_component.size(); i++)
-                {
-                  _control_dofs_per_block[control_block_component[i]]++;
-                }
+              _control_dofs_per_block[i] = 0;
             }
+            for (unsigned int i = 0; i < control_block_component.size(); i++)
+            {
+              _control_dofs_per_block[control_block_component[i]]++;
+            }
+          }
 #endif
           SpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR, dopedim,
               dealdim>::SetActiveFEIndicesState(_state_dof_handler);
@@ -374,18 +396,18 @@ namespace DOpE
         GetFESystem(std::string name) const
         {
           if (name == "state")
-            {
-              return *_state_fe;
-            }
+          {
+            return *_state_fe;
+          }
           else if (name == "control")
-            {
-              return *_control_fe;
-            }
+          {
+            return *_control_fe;
+          }
           else
-            {
-              throw DOpEException("Not implemented for name =" + name,
-                  "MethodOfLines_SpaceTimeHandler::GetFESystem");
-            }
+          {
+            throw DOpEException("Not implemented for name =" + name,
+                "MethodOfLines_SpaceTimeHandler::GetFESystem");
+          }
 
         }
 
@@ -407,43 +429,43 @@ namespace DOpE
           assert(bottomfraction == 0.0);
 
           if (_control_mesh_transfer != NULL)
-            {
-              delete _control_mesh_transfer;
-              _control_mesh_transfer = NULL;
-            }
+          {
+            delete _control_mesh_transfer;
+            _control_mesh_transfer = NULL;
+          }
 #if dope_dimension == deal_II_dimension
           _control_mesh_transfer =
               new dealii::SolutionTransfer<dopedim, VECTOR>(
                   _control_dof_handler);
 #endif
           if ("global" == ref_type)
-            {
-              _triangulation.set_all_refine_flags();
-            }
+          {
+            _triangulation.set_all_refine_flags();
+          }
           else if ("fixednumber" == ref_type)
-            {
-              assert(indicators != NULL);
-              GridRefinement::refine_and_coarsen_fixed_number(_triangulation,
-                  *indicators, topfraction, bottomfraction);
-            }
+          {
+            assert(indicators != NULL);
+            GridRefinement::refine_and_coarsen_fixed_number(_triangulation,
+                *indicators, topfraction, bottomfraction);
+          }
           else if ("fixedfraction" == ref_type)
-            {
-              assert(indicators != NULL);
-              GridRefinement::refine_and_coarsen_fixed_fraction(_triangulation,
-                  *indicators, topfraction, bottomfraction);
-            }
+          {
+            assert(indicators != NULL);
+            GridRefinement::refine_and_coarsen_fixed_fraction(_triangulation,
+                *indicators, topfraction, bottomfraction);
+          }
           else if ("optimized" == ref_type)
-            {
-              assert(indicators != NULL);
-              GridRefinement::refine_and_coarsen_optimize(_triangulation,
-                  *indicators);
-              //TODO: how can we prevent coarsening here ?
-            }
+          {
+            assert(indicators != NULL);
+            GridRefinement::refine_and_coarsen_optimize(_triangulation,
+                *indicators);
+            //TODO: how can we prevent coarsening here ?
+          }
           else
-            {
-              throw DOpEException("Not implemented for name =" + ref_type,
-                  "MethodOfLines_SpaceTimeHandler::RefineSpace");
-            }
+          {
+            throw DOpEException("Not implemented for name =" + ref_type,
+                "MethodOfLines_SpaceTimeHandler::RefineSpace");
+          }
           _triangulation.prepare_coarsening_and_refinement();
 
           //FIXME: works only if no coarsening happens, because we do not have the vectors to be interpolated availiable...
@@ -550,8 +572,7 @@ namespace DOpE
    */
   template<>
     void
-    DOpE::MethodOfLines_SpaceTimeHandler<
-        dealii::FESystem<deal_II_dimension>,
+    DOpE::MethodOfLines_SpaceTimeHandler<dealii::FESystem<deal_II_dimension>,
         dealii::DoFHandler<deal_II_dimension>, dealii::BlockSparsityPattern,
         dealii::BlockVector<double>, dope_dimension, deal_II_dimension>::ComputeControlSparsityPattern(
         dealii::BlockSparsityPattern & sparsity) const
@@ -560,13 +581,13 @@ namespace DOpE
       dealii::BlockCompressedSimpleSparsityPattern csp(blocks.size(),
           blocks.size());
       for (unsigned int i = 0; i < blocks.size(); i++)
+      {
+        for (unsigned int j = 0; j < blocks.size(); j++)
         {
-          for (unsigned int j = 0; j < blocks.size(); j++)
-            {
-              csp.block(i, j).reinit(this->GetControlDoFsPerBlock(i),
-                  this->GetControlDoFsPerBlock(j));
-            }
+          csp.block(i, j).reinit(this->GetControlDoFsPerBlock(i),
+              this->GetControlDoFsPerBlock(j));
         }
+      }
       csp.collect_sizes();
 #if dope_dimension > 0
       //We use here dealii::DoFHandler<dealdim>, because if dope_dim >0 then dopedim = dealdim.
@@ -582,8 +603,7 @@ namespace DOpE
 
   template<>
     void
-    MethodOfLines_SpaceTimeHandler<
-        dealii::FESystem<deal_II_dimension>,
+    MethodOfLines_SpaceTimeHandler<dealii::FESystem<deal_II_dimension>,
         dealii::DoFHandler<deal_II_dimension>, dealii::SparsityPattern,
         dealii::Vector<double>, dope_dimension, deal_II_dimension>::ComputeControlSparsityPattern(
         dealii::SparsityPattern & sparsity) const
@@ -615,13 +635,13 @@ namespace DOpE
       dealii::BlockCompressedSimpleSparsityPattern csp(blocks.size(),
           blocks.size());
       for (unsigned int i = 0; i < blocks.size(); i++)
+      {
+        for (unsigned int j = 0; j < blocks.size(); j++)
         {
-          for (unsigned int j = 0; j < blocks.size(); j++)
-            {
-              csp.block(i, j).reinit(this->GetControlDoFsPerBlock(i),
-                  this->GetControlDoFsPerBlock(j));
-            }
+          csp.block(i, j).reinit(this->GetControlDoFsPerBlock(i),
+              this->GetControlDoFsPerBlock(j));
         }
+      }
       csp.collect_sizes();
 #if dope_dimension > 0
       //We use here dealii::DoFHandler<dealdim>, because if dope_dim >0 then dopedim = dealdim.

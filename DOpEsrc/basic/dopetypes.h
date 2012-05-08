@@ -17,9 +17,6 @@ namespace DOpE
     //TODO typedef for dealii-boundary-type
     // (see changes after version 7.1 in deal.ii).
 
-    //TODO define an enum for ProblemTypes => use switch instead
-    // of the awful if then else things.
-
     /**
      * This enum describes which terms of the error identity
      * should get computed:
@@ -34,8 +31,6 @@ namespace DOpE
       primal_only, dual_only, mixed
     };
 
-//    std::string
-//    GetProblemType(EETerms ee_term);
 
     /**
      * This enum describes how we compute the weights in
@@ -51,8 +46,6 @@ namespace DOpE
       higher_order_interpolation, higher_order_computation/*Not implemented!*/
     };
 
-//    std::string
-//    GetProblemType(WeightComputation wc_term);
 
     /**
      * This enum describes how we evaluate the residual
@@ -65,8 +58,13 @@ namespace DOpE
       strong_residual
     };
 
-//    std::string
-//    GetProblemType(ResidualEvaluation re_term);
+    /**
+     * An enum describing the type of the control.
+     */
+    enum ControlType
+    {
+      undefined, stationary, initial, timedistributed_constant, timdistributed_timedependend
+    };
 
   }
 }

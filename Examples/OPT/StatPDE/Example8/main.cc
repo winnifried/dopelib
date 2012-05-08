@@ -140,7 +140,7 @@ main(int argc, char **argv)
   Constraints constraints(lcc, 1);
 
   MethodOfLines_SpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR, 2, 2> DOFH(
-      triangulation, control_fe, state_fe, constraints);
+      triangulation, control_fe, state_fe, constraints, DOpEtypes::stationary);
 
   LocalConstraintAccessor CA;
   LocalConstraint<CDC, FDC, DOFHANDLER, VECTOR, 2, 2> LC(CA);

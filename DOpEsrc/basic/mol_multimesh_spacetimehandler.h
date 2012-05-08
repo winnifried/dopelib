@@ -32,12 +32,26 @@ namespace DOpE
         DOFHANDLER, SPARSITYPATTERN, VECTOR, dim, dim>
     {
       public:
+      /**
+       * Constructors.
+       *
+       * @param triangulation     The triangulation in use.
+       * @param control_fe        The finite elements used for the discretization of the control variable.
+       * @param state_fe          The finite elements used for the discretization of the state variable.
+       * @param type              The type of the control, see dopetypes.h for more information.
+       * @param times             The timegrid for instationary problems.
+       * @param constraints       ?
+       * @param index_setter      The index setter object (only needed in case of hp elements).
+       */
+
+
         MethodOfLines_MultiMesh_SpaceTimeHandler(
             dealii::Triangulation<dim>& triangulation, const FE& control_fe,
             const FE& state_fe,
+            DOpEtypes::ControlType type,
             const ActiveFEIndexSetterInterface<dim, dim>& index_setter =
                 ActiveFEIndexSetterInterface<dim, dim>()) :
-            SpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR, dim, dim>(
+            SpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR, dim, dim>(type,
                 index_setter), _state_triangulation(triangulation), _control_dof_handler(
                 _control_triangulation), _state_dof_handler(
                 _state_triangulation), _control_fe(&control_fe), _state_fe(
@@ -51,10 +65,11 @@ namespace DOpE
         MethodOfLines_MultiMesh_SpaceTimeHandler(
             dealii::Triangulation<dim>& triangulation, const FE& control_fe,
             const FE& state_fe, const dealii::Triangulation<1> & times,
+            DOpEtypes::ControlType type,
             const ActiveFEIndexSetterInterface<dim, dim>& index_setter =
                 ActiveFEIndexSetterInterface<dim, dim>()) :
             SpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR, dim, dim>(
-                times, index_setter), _state_triangulation(triangulation), _control_dof_handler(
+                times, type, index_setter), _state_triangulation(triangulation), _control_dof_handler(
                 _control_triangulation), _state_dof_handler(
                 _state_triangulation), _control_fe(&control_fe), _state_fe(
                 &state_fe), _constraints(), _control_mesh_transfer(NULL), _sparse_mkr_dynamic(
@@ -68,10 +83,11 @@ namespace DOpE
         MethodOfLines_MultiMesh_SpaceTimeHandler(
             dealii::Triangulation<dim>& triangulation, const FE& control_fe,
             const FE& state_fe, const Constraints& c,
+            DOpEtypes::ControlType type,
             const ActiveFEIndexSetterInterface<dim, dim>& index_setter =
                 ActiveFEIndexSetterInterface<dim, dim>()) :
             SpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR, dim, dim>(
-                index_setter), _state_triangulation(triangulation), _control_dof_handler(
+               type, index_setter), _state_triangulation(triangulation), _control_dof_handler(
                 _control_triangulation), _state_dof_handler(
                 _state_triangulation), _control_fe(&control_fe), _state_fe(
                 &state_fe), _constraints(c), _control_mesh_transfer(NULL), _sparse_mkr_dynamic(
@@ -86,10 +102,11 @@ namespace DOpE
             dealii::Triangulation<dim>& triangulation, const FE& control_fe,
             const FE& state_fe, const dealii::Triangulation<1> & times,
             const Constraints& c,
+            DOpEtypes::ControlType type,
             const ActiveFEIndexSetterInterface<dim, dim>& index_setter =
                 ActiveFEIndexSetterInterface<dim, dim>()) :
             SpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR, dim, dim>(
-                times, index_setter), _state_triangulation(triangulation), _control_dof_handler(
+                times, type, index_setter), _state_triangulation(triangulation), _control_dof_handler(
                 _control_triangulation), _state_dof_handler(
                 _state_triangulation), _control_fe(&control_fe), _state_fe(
                 &state_fe), _constraints(c), _control_mesh_transfer(NULL), _sparse_mkr_dynamic(
