@@ -8,7 +8,7 @@
 	**************************************************
 
 LOG: Allowing IterationCounter `Opt_Snopt_OptProblem' for filenames!
-	CostFunctional: 605.7
+	CostFunctional: 605.732
 	************************************************
 	*               Calling SNOPT                  *
 	*  output will not be written to logfile!      *
@@ -21,7 +21,7 @@ LOG: Allowing IterationCounter `Opt_Snopt_OptProblem' for filenames!
 	*          with Exit Code:   1 (success)       *
 	************************************************
 	
-	CostFunctional: 447.9
+	CostFunctional: 447.85
 
 	**************************************************
 	*        Stopping Solution Using SNOPT           *
