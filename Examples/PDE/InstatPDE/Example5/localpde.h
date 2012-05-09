@@ -58,7 +58,7 @@ class LocalPDE: public PDEInterface<CellDataContainer,FaceDataContainer,dealii::
 	const DOpEWrapper::FEValues<dealdim> & state_fe_values = cdc.GetFEValuesState();
         unsigned int n_dofs_per_cell = cdc.GetNDoFsPerCell();
 	unsigned int n_q_points = cdc.GetNQPoints();
-
+	cdc.GetValuesState("last_newton_solution", _uvalues); 
 
 	std::vector<double> phi_values(n_dofs_per_cell);	  
 	std::vector<Tensor<1, dealdim> > phi_grads(n_dofs_per_cell);
@@ -75,7 +75,7 @@ class LocalPDE: public PDEInterface<CellDataContainer,FaceDataContainer,dealii::
 		  {
 		    for (unsigned int j = 0; j < n_dofs_per_cell; j++)
 			{
-			  local_entry_matrix(i, j) += scale * ((phi_grads[j] * phi_grads[i]) + 2*phi_values[j]*phi_values[i]) * state_fe_values.JxW(q_point);
+			  local_entry_matrix(i, j) += scale * ((phi_grads[j] * phi_grads[i]) + 2*_uvalues[q_point]*phi_values[j]*phi_values[i]) * state_fe_values.JxW(q_point);
 			}
 		    }
 		}
