@@ -56,18 +56,54 @@ namespace DOpE
         /**
          * Documentation in optproblemcontainer.h.
          */
-        virtual void
-        CellTimeEquation(const CDC<DOFHANDLER, VECTOR, dealdim>&,
-            dealii::Vector<double> &/*local_cell_vector*/, double scale);
+      //Note that the _UU term is not needed, since we assume that CellTimeEquation is linear!
+      virtual void
+      CellTimeEquation(const CDC<DOFHANDLER, VECTOR, dealdim>&,
+		       dealii::Vector<double> &/*local_cell_vector*/, double scale);
+      
+      /******************************************************/
+      virtual void
+      CellTimeEquation_U(const CDC<DOFHANDLER, VECTOR, dealdim>&,
+			 dealii::Vector<double> &/*local_cell_vector*/, double scale);
+      
+      /******************************************************/
+      virtual void
+      CellTimeEquation_UT(const CDC<DOFHANDLER, VECTOR, dealdim>&,
+			  dealii::Vector<double> &/*local_cell_vector*/, double scale);
+      
+      /******************************************************/
+      virtual void
+      CellTimeEquation_UTT(const CDC<DOFHANDLER, VECTOR, dealdim>&,
+			   dealii::Vector<double> &/*local_cell_vector*/, double scale);
 
         /******************************************************/
 
         /**
          * Documentation in optproblemcontainer.h.
          */
-        virtual void
-        CellTimeEquationExplicit(const CDC<DOFHANDLER, VECTOR, dealdim>&,
-            dealii::Vector<double> &/*local_cell_vector*/, double scale);
+      
+      virtual void
+      CellTimeEquationExplicit(const CDC<DOFHANDLER, VECTOR, dealdim>&,
+			       dealii::Vector<double> &/*local_cell_vector*/, double scale);
+      /******************************************************/
+      virtual void
+      CellTimeEquationExplicit_U(const CDC<DOFHANDLER, VECTOR, dealdim>&,
+			 dealii::Vector<double> &/*local_cell_vector*/, double scale);
+      
+      /******************************************************/
+      virtual void
+      CellTimeEquationExplicit_UT(const CDC<DOFHANDLER, VECTOR, dealdim>&,
+			  dealii::Vector<double> &/*local_cell_vector*/, double scale);
+      
+      /******************************************************/
+      virtual void
+      CellTimeEquationExplicit_UTT(const CDC<DOFHANDLER, VECTOR, dealdim>&,
+			   dealii::Vector<double> &/*local_cell_vector*/, double scale);
+      
+      /******************************************************/
+      virtual void
+      CellTimeEquationExplicit_UU(const CDC<DOFHANDLER, VECTOR, dealdim>&,
+			  dealii::Vector<double> &/*local_cell_vector*/, double scale);
 
         /******************************************************/
 
@@ -165,13 +201,23 @@ namespace DOpE
             dealii::FullMatrix<double> &/*local_entry_matrix*/);
 
         /******************************************************/
+        virtual void
+        CellTimeMatrix_T(const CDC<DOFHANDLER, VECTOR, dealdim>&,
+			 dealii::FullMatrix<double> &/*local_entry_matrix*/);
+
+        /******************************************************/
 
         /**
          * Documentation in optproblemcontainer.h.
          */
         virtual void
         CellTimeMatrixExplicit(const CDC<DOFHANDLER, VECTOR, dealdim>&,
-            dealii::FullMatrix<double> &/*local_entry_matrix*/);
+			       dealii::FullMatrix<double> &/*local_entry_matrix*/);
+
+        /******************************************************/
+      virtual void
+        CellTimeMatrixExplicit_T(const CDC<DOFHANDLER, VECTOR, dealdim>&,
+				 dealii::FullMatrix<double> &/*local_entry_matrix*/);
 
         /******************************************************/
 

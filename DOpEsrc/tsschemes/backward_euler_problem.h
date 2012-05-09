@@ -309,7 +309,7 @@ namespace DOpE
         template<typename FACEDATACONTAINER>
           void
           InterfaceEquation(const FACEDATACONTAINER& dc,
-              dealii::Vector<double> &local_cell_vector, double scale = 1., double scale_ico = 1.)
+			    dealii::Vector<double> &local_cell_vector, double scale = 1., double /*scale_ico*/ = 1.)
           {
             if (this->GetPart() == "New")
             {

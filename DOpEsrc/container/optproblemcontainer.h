@@ -1679,23 +1679,19 @@ namespace DOpE
 
         if (GetType() == "state")
         {
-          // state values in quadrature points
           GetPDE()->CellTimeEquation(cdc, local_cell_vector, scale);
         }
         else if (GetType() == "adjoint" || GetType() == "adjoint_for_ee")
         {
-          throw DOpEException("Not implemented",
-              "OptProblemContainer::CellTimeEquation");
-        }
+          GetPDE()->CellTimeEquation_U(cdc, local_cell_vector, scale);
+	}
         else if (GetType() == "adjoint_hessian")
         {
-          throw DOpEException("Not implemented",
-              "OptProblemContainer::CellTimeEquation");
+          GetPDE()->CellTimeEquation_UTT(cdc, local_cell_vector, scale);
         }
         else if (GetType() == "tangent")
         {
-          throw DOpEException("Not implemented",
-              "OptProblemContainer::CellTimeEquation");
+          GetPDE()->CellTimeEquation_UT(cdc, local_cell_vector, scale);
         }
         else if ((GetType() == "gradient") || (GetType() == "hessian"))
         {
@@ -1725,33 +1721,29 @@ namespace DOpE
 
         if (GetType() == "state")
         {
-          // state values in quadrature points
           GetPDE()->CellTimeEquationExplicit(cdc, local_cell_vector, scale);
         }
         else if (GetType() == "adjoint" || GetType() == "adjoint_for_ee")
         {
-          throw DOpEException("Not implemented",
-              "OptProblemContainer::CellTimeEquation");
+          GetPDE()->CellTimeEquationExplicit_U(cdc, local_cell_vector, scale);
         }
         else if (GetType() == "adjoint_hessian")
         {
-          throw DOpEException("Not implemented",
-              "OptProblemContainer::CellTimeEquation");
+          GetPDE()->CellTimeEquationExplicit_UTT(cdc, local_cell_vector, scale);
         }
         else if (GetType() == "tangent")
         {
-          throw DOpEException("Not implemented",
-              "OptProblemContainer::CellTimeEquation");
+	  GetPDE()->CellTimeEquationExplicit_UT(cdc, local_cell_vector, scale);
         }
         else if ((GetType() == "gradient") || (GetType() == "hessian"))
         {
           throw DOpEException("Not implemented",
-              "OptProblemContainer::CellTimeEquation");
+              "OptProblemContainer::CellTimeEquationExplicit");
         }
         else
         {
           throw DOpEException("Not implemented",
-              "OptProblemContainer::CellTimeEquation");
+              "OptProblemContainer::CellTimeEquationExplicit");
         }
       }
 
@@ -1916,7 +1908,9 @@ namespace DOpE
           scale *= -1;
           GetPDE()->CellEquation_UU(cdc, local_cell_vector, scale,scale);
           GetPDE()->CellEquation_QU(cdc, local_cell_vector, scale,scale);
-        }
+	  //TODO: make some example where this realy matters to check if this is right
+	  GetPDE()->CellTimeEquationExplicit_UU(cdc, local_cell_vector, scale);
+	}
         else if (GetType() == "gradient")
         {
           // state values in quadrature points
@@ -2214,8 +2208,7 @@ namespace DOpE
         else if (GetType() == "adjoint" || GetType() == "adjoint_for_ee"
             || GetType() == "adjoint_hessian")
         {
-          throw DOpEException("Not implemented",
-              "OptProblemContainer::NewtonCellTimeMatrix");
+          GetPDE()->CellTimeMatrix_T(cdc, local_entry_matrix);
         }
         else if ((GetType() == "gradient") || (GetType() == "hessian"))
         {
@@ -2246,23 +2239,21 @@ namespace DOpE
 
         if (GetType() == "state" || GetType() == "tangent")
         {
-          // state values in quadrature points
           GetPDE()->CellTimeMatrixExplicit(cdc, local_entry_matrix);
         }
         else if (GetType() == "adjoint" || GetType() == "adjoint_hessian")
         {
-          throw DOpEException("Not implemented",
-              "OptProblemContainer::NewtonCellTimeMatrix");
+          GetPDE()->CellTimeMatrixExplicit_T(cdc, local_entry_matrix);
         }
         else if ((GetType() == "gradient") || (GetType() == "hessian"))
         {
           throw DOpEException("Not implemented",
-              "OptProblemContainer::NewtonCellTimeMatrix");
+              "OptProblemContainer::NewtonCellTimeMatrixExplicit");
         }
         else
         {
           throw DOpEException("Not implemented",
-              "OptProblemContainer::NewtonCellTimeMatrix");
+              "OptProblemContainer::NewtonCellTimeMatrixExplicit");
         }
 
       }
@@ -2319,7 +2310,7 @@ namespace DOpE
         {
           GetPDE()->InterfaceMatrix(fdc, local_entry_matrix,scale,scale_ico);
         }
-        else if (GetType() == "adjoint_for_ee")
+        else if (GetType() == "adjoint" || GetType() == "adjoint_for_ee"|| GetType() == "adjoint_hessian")
         {
           GetPDE()->InterfaceMatrix_T(fdc, local_entry_matrix,scale,scale_ico);
         }

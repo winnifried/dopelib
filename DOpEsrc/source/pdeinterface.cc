@@ -83,11 +83,109 @@ namespace DOpE
       template<typename DOFHANDLER, typename VECTOR, int dealdim> class FDC,
       typename DOFHANDLER, typename VECTOR, int dopedim, int dealdim>
     void
+    PDEInterface<CDC, FDC, DOFHANDLER, VECTOR, dopedim, dealdim>::CellTimeEquation_U(
+        const CDC<DOFHANDLER, VECTOR, dealdim>&,
+        dealii::Vector<double> &/*local_cell_vector*/ ,
+        double /*scale*/ )
+    {
+      throw DOpEException("Not Implemented", "PDEInterface::CellTimeEquation_U");
+    }
+  /********************************************/
+
+  template<
+      template<typename DOFHANDLER, typename VECTOR, int dealdim> class CDC,
+      template<typename DOFHANDLER, typename VECTOR, int dealdim> class FDC,
+      typename DOFHANDLER, typename VECTOR, int dopedim, int dealdim>
+    void
+    PDEInterface<CDC, FDC, DOFHANDLER, VECTOR, dopedim, dealdim>::CellTimeEquation_UT(
+        const CDC<DOFHANDLER, VECTOR, dealdim>&,
+        dealii::Vector<double> &/*local_cell_vector*/ ,
+        double /*scale*/ )
+    {
+      throw DOpEException("Not Implemented", "PDEInterface::CellTimeEquation_UT");
+    }
+  /********************************************/
+
+  template<
+      template<typename DOFHANDLER, typename VECTOR, int dealdim> class CDC,
+      template<typename DOFHANDLER, typename VECTOR, int dealdim> class FDC,
+      typename DOFHANDLER, typename VECTOR, int dopedim, int dealdim>
+    void
+    PDEInterface<CDC, FDC, DOFHANDLER, VECTOR, dopedim, dealdim>::CellTimeEquation_UTT(
+        const CDC<DOFHANDLER, VECTOR, dealdim>&,
+        dealii::Vector<double> &/*local_cell_vector*/ ,
+        double /*scale*/ )
+    {
+      throw DOpEException("Not Implemented", "PDEInterface::CellTimeEquation_UTT");
+    }
+
+  /********************************************/
+
+  template<
+      template<typename DOFHANDLER, typename VECTOR, int dealdim> class CDC,
+      template<typename DOFHANDLER, typename VECTOR, int dealdim> class FDC,
+      typename DOFHANDLER, typename VECTOR, int dopedim, int dealdim>
+    void
     PDEInterface<CDC, FDC, DOFHANDLER, VECTOR, dopedim, dealdim>::CellTimeEquationExplicit(
         const CDC<DOFHANDLER, VECTOR, dealdim>& cdc,
         dealii::Vector<double> &local_cell_vector, double scale)
     {
       this->CellTimeEquation(cdc, local_cell_vector, scale);
+    }
+
+  /********************************************/
+
+  template<
+      template<typename DOFHANDLER, typename VECTOR, int dealdim> class CDC,
+      template<typename DOFHANDLER, typename VECTOR, int dealdim> class FDC,
+      typename DOFHANDLER, typename VECTOR, int dopedim, int dealdim>
+    void
+    PDEInterface<CDC, FDC, DOFHANDLER, VECTOR, dopedim, dealdim>::CellTimeEquationExplicit_U(
+        const CDC<DOFHANDLER, VECTOR, dealdim>& cdc,
+        dealii::Vector<double> &local_cell_vector, double scale)
+    {
+      this->CellTimeEquation_U(cdc, local_cell_vector, scale);
+    }
+
+  /********************************************/
+
+  template<
+      template<typename DOFHANDLER, typename VECTOR, int dealdim> class CDC,
+      template<typename DOFHANDLER, typename VECTOR, int dealdim> class FDC,
+      typename DOFHANDLER, typename VECTOR, int dopedim, int dealdim>
+    void
+    PDEInterface<CDC, FDC, DOFHANDLER, VECTOR, dopedim, dealdim>::CellTimeEquationExplicit_UT(
+        const CDC<DOFHANDLER, VECTOR, dealdim>& cdc,
+        dealii::Vector<double> &local_cell_vector, double scale)
+    {
+      this->CellTimeEquation_UT(cdc, local_cell_vector, scale);
+    }
+
+  /********************************************/
+
+  template<
+      template<typename DOFHANDLER, typename VECTOR, int dealdim> class CDC,
+      template<typename DOFHANDLER, typename VECTOR, int dealdim> class FDC,
+      typename DOFHANDLER, typename VECTOR, int dopedim, int dealdim>
+    void
+    PDEInterface<CDC, FDC, DOFHANDLER, VECTOR, dopedim, dealdim>::CellTimeEquationExplicit_UTT(
+        const CDC<DOFHANDLER, VECTOR, dealdim>& cdc,
+        dealii::Vector<double> &local_cell_vector, double scale)
+    {
+      this->CellTimeEquation_UTT(cdc, local_cell_vector, scale);
+    }
+
+  /********************************************/
+
+  template<
+      template<typename DOFHANDLER, typename VECTOR, int dealdim> class CDC,
+      template<typename DOFHANDLER, typename VECTOR, int dealdim> class FDC,
+      typename DOFHANDLER, typename VECTOR, int dopedim, int dealdim>
+    void
+    PDEInterface<CDC, FDC, DOFHANDLER, VECTOR, dopedim, dealdim>::CellTimeEquationExplicit_UU(
+      const CDC<DOFHANDLER, VECTOR, dealdim>& /*cdc*/,
+      dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
+    {
     }
 
   /********************************************/
@@ -329,6 +427,33 @@ namespace DOpE
     {
       throw DOpEException("Not Implemented", "PDEInterface::CellTimeMatrix");
     }
+  /********************************************/
+
+  template<
+      template<typename DOFHANDLER, typename VECTOR, int dealdim> class CDC,
+      template<typename DOFHANDLER, typename VECTOR, int dealdim> class FDC,
+      typename DOFHANDLER, typename VECTOR, int dopedim, int dealdim>
+    void
+    PDEInterface<CDC, FDC, DOFHANDLER, VECTOR, dopedim, dealdim>::CellTimeMatrix_T(
+        const CDC<DOFHANDLER, VECTOR, dealdim>& cdc,
+        FullMatrix<double> &local_entry_matrix )
+    {
+      FullMatrix<double> tmp_mat = local_entry_matrix;
+      tmp_mat = 0.;
+
+      //FIXME is this the right behaviour in the instationary case? or what
+      //are the correct values for scale and scale_ico?
+      CellTimeMatrix(cdc, tmp_mat);
+      unsigned int n_dofs_per_cell = cdc.GetNDoFsPerCell();
+
+      for (unsigned int i = 0; i < n_dofs_per_cell; i++)
+      {
+        for (unsigned int j = 0; j < n_dofs_per_cell; j++)
+        {
+          local_entry_matrix(j, i) += tmp_mat(i, j);
+        }
+      }
+    }
 
   /********************************************/
 
@@ -342,6 +467,34 @@ namespace DOpE
         FullMatrix<double> &local_entry_matrix)
     {
       this->CellTimeMatrix(cdc, local_entry_matrix);
+    }
+
+  /********************************************/
+
+  template<
+      template<typename DOFHANDLER, typename VECTOR, int dealdim> class CDC,
+      template<typename DOFHANDLER, typename VECTOR, int dealdim> class FDC,
+      typename DOFHANDLER, typename VECTOR, int dopedim, int dealdim>
+    void
+    PDEInterface<CDC, FDC, DOFHANDLER, VECTOR, dopedim, dealdim>::CellTimeMatrixExplicit_T(
+        const CDC<DOFHANDLER, VECTOR, dealdim>& cdc,
+        FullMatrix<double> &local_entry_matrix)
+    {
+      FullMatrix<double> tmp_mat = local_entry_matrix;
+      tmp_mat = 0.;
+
+      //FIXME is this the right behaviour in the instationary case? or what
+      //are the correct values for scale and scale_ico?
+      CellTimeMatrixExplicit(cdc, tmp_mat);
+      unsigned int n_dofs_per_cell = cdc.GetNDoFsPerCell();
+
+      for (unsigned int i = 0; i < n_dofs_per_cell; i++)
+      {
+        for (unsigned int j = 0; j < n_dofs_per_cell; j++)
+        {
+          local_entry_matrix(j, i) += tmp_mat(i, j);
+        }
+      }
     }
 
   /********************************************/
