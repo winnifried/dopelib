@@ -1,6 +1,9 @@
 Changelog DOpE
 ==============
 
+
+09.05.2012: Backward-Time Loop is running
+
 2. DOpE Treffen 3.5.2012-5.5.2012:
 ==================================
 - Zeitschrittverfahren nochmals anschauen! Diverse Funktionen sind noch nicht umgestellt (faceequation etc.)

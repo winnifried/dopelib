@@ -730,9 +730,9 @@ template<typename DATACONTAINER>
 
         void
         PointRhs(
-            const std::map<std::string, const dealii::Vector<double>*> &param_values,
-            const std::map<std::string, const BlockVector<double>*> &domain_values,
-            BlockVector<double>& rhs_vector, double scale = 1.)
+            const std::map<std::string, const dealii::Vector<double>*> &,
+            const std::map<std::string, const BlockVector<double>*> &,
+            BlockVector<double>&, double)
         {
           throw DOpEException("Not Implemented",
               "AugmentedLagrangianProblem::PointRhs");

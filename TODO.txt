@@ -7,7 +7,7 @@ einheitlich (!) kommentiert.
 
 - Adjungierte Zeitschrittverfahren 
   (Dann geht endlich auch Opt-Control im Instationaeren), sind noch
-  fertigzustellen. ~ww
+  fertigzustellen.
 
 - Verschiedene Kontrolltypen im Instationaeren, insbesondere Kontrolle in den AWen
 -- Verschiedene Typen der Kontrolle (undefined, initial, timedistributed, timedistributedtimedependend). Diese gibt man dem Kontrollvektor, der den Typ wiederum an STH lieftert. Dieser speichert ihn und stellt sicher, dass alle Kontrollen den selben Typen haben. ~cg

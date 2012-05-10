@@ -93,8 +93,8 @@ template<typename VECTOR, int dopedim, int dealdim>
 
       void
       Value_U(
-          const CellDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& cdc,
-          dealii::Vector<double> &local_cell_vector, double scale)
+	const CellDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& /*cdc*/,
+	dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
       {
       }
 
@@ -147,10 +147,10 @@ template<typename VECTOR, int dopedim, int dealdim>
       virtual void
       PointValue_Q(
           const DOpEWrapper::DoFHandler<dopedim, dealii::DoFHandler<dealdim>> &/*control_dof_handler*/,
-          const DOpEWrapper::DoFHandler<dealdim, dealii::DoFHandler<dealdim>> &state_dof_handler,
-          const std::map<std::string, const dealii::Vector<double>*> &param_values,
-          const std::map<std::string, const VECTOR*> &domain_values,
-          VECTOR& rhs, double scale)
+          const DOpEWrapper::DoFHandler<dealdim, dealii::DoFHandler<dealdim>> &,
+          const std::map<std::string, const dealii::Vector<double>*> &,
+          const std::map<std::string, const VECTOR*> &,
+          VECTOR&, double)
       {
       }
 
@@ -180,8 +180,8 @@ template<typename VECTOR, int dopedim, int dealdim>
 
       void
       Value_UU(
-          const CellDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& cdc,
-          dealii::Vector<double> &local_cell_vector, double scale)
+          const CellDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>&,
+          dealii::Vector<double> &, double )
       {
       }
 
@@ -189,7 +189,7 @@ template<typename VECTOR, int dopedim, int dealdim>
       PointValue_UU(
           const DOpEWrapper::DoFHandler<dopedim, dealii::DoFHandler<dealdim> > &/*control_dof_handler*/,
           const DOpEWrapper::DoFHandler<dealdim, dealii::DoFHandler<dealdim> > &state_dof_handler,
-          const std::map<std::string, const dealii::Vector<double>*> &param_values,
+          const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
           const std::map<std::string, const VECTOR*> &domain_values,
           VECTOR& rhs, double scale)
       {
