@@ -21,5 +21,20 @@ It has the optimal solution
 \overline{u}(t,x,y) &= e^{t-t^2} \sin(x) \sin(y),\\
 \overline{q}(t,x,y) &= \sin(x) \sin(y)
 \end{align*}
-and $J(\overline{q},\overline{u}) = 0$.
+and $J(\overline{q},\overline{u}) = 0$.\\[4mm]
 
+The following new things differ from the PDE-Eamples and the optimization examples with stationary 
+PDEs:\\[2mm]
+In the file \texttt{main.cc} the SpaceTimeHandler now gets an additional argument.
+In this case \texttt{DOpEtypes::initial} which specifies that the control is entering in the 
+initial value.\\[2mm]
+In the file \texttt{localpde.h} we now have to specify the Methods \texttt{Init\underline{ }CellRhs}
+and \texttt{Init\underline{ }CellRhs\underline{ }Q}. They need to be adapted, since usualy the InitialValue for the 
+PDE is auto generated from a deal.ii function in the ProblemContainer. This Value is set in the 
+\texttt{Init\underline{ }CellRhs} hence we need to change this function to use the control instead. 
+Correspondingly we need to implement the first derivative of this with respect to the control. 
+--We don't need the second derivative since it is zero anyways.--\\[2mm]
+
+{\bf Note:} In contrast to the ,,normal'' Cell-terms in the PDE we assume in the program 
+that the \texttt{Init\underline{ }CellEquation} is linear in the state and no other solution variables are present.
+Thus no derivatives of the \texttt{Init\underline{ }CellEquation} need to be implemented.

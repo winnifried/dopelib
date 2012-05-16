@@ -190,7 +190,7 @@ void ReducedAlgorithm<PROBLEM, VECTOR, dopedim, dealdim>::SolveForward(ControlVe
     double  cost_diff = gradient*dq;
     out<<"Checking Gradients...."<<std::endl;
     out<<" Epsilon \t Exact \t Diff.Quot. \t Rel. Error ";
-    this->GetOutputHandler()->Write(out,4+this->GetBasePriority());
+    this->GetOutputHandler()->Write(out,3+this->GetBasePriority());
 
     for(unsigned int i = 0; i < niter; i++)
     {
@@ -222,7 +222,7 @@ void ReducedAlgorithm<PROBLEM, VECTOR, dopedim, dealdim>::SolveForward(ControlVe
 
     double diffquot = (cost_right - cost_left)/(2.*eps);
     out<<eps<<"\t"<<exact<<"\t"<<diffquot<<"\t"<<(exact-diffquot)/exact<<std::endl;
-    this->GetOutputHandler()->Write(out,4+this->GetBasePriority());
+    this->GetOutputHandler()->Write(out,3+this->GetBasePriority());
   }
 
 /******************************************************/
@@ -249,7 +249,7 @@ void ReducedAlgorithm<PROBLEM, VECTOR, dopedim, dealdim>::SolveForward(ControlVe
     double  cost_diff = hessian*dq;
     out<<"Checking Hessian...."<<std::endl;
     out<<" Epsilon \t Exact \t Diff.Quot. \t Rel. Error ";
-    this->GetOutputHandler()->Write(out,4+this->GetBasePriority());
+    this->GetOutputHandler()->Write(out,3+this->GetBasePriority());
 
     for(unsigned int i = 0; i < niter; i++)
     {
@@ -285,7 +285,7 @@ void ReducedAlgorithm<PROBLEM, VECTOR, dopedim, dealdim>::SolveForward(ControlVe
     double diffquot = (cost_left - 2.*cost_mid + cost_right)/(eps*eps);
 
     out<<eps<<"\t"<<exact<<"\t"<<diffquot<<"\t"<<(exact-diffquot)/exact<<std::endl;
-    this->GetOutputHandler()->Write(out,4+this->GetBasePriority());
+    this->GetOutputHandler()->Write(out,3+this->GetBasePriority());
   }
 
 /******************************************************/

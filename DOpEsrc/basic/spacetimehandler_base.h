@@ -36,7 +36,6 @@ class SpaceTimeHandlerBase
     {
       _state_ticket = 1;
       _control_ticket = 1;
-      _control_type = DOpEtypes::undefined;
     }
 
     SpaceTimeHandlerBase(const dealii::Triangulation<1> & times,
@@ -46,7 +45,6 @@ class SpaceTimeHandlerBase
     {
       _state_ticket = 1;
       _control_ticket = 1;
-      _control_type = DOpEtypes::undefined;
     }
 
 

@@ -15,7 +15,6 @@ template<typename VECTOR, int dopedim, int dealdim>
   public:
   LocalFunctional()
       {
-	_alpha = 1.e-3;
       }
 
   // include NeedTime
@@ -37,11 +36,12 @@ template<typename VECTOR, int dopedim, int dealdim>
 
     double Value(const CellDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& cdc)
     {
-      const DOpEWrapper::FEValues<dealdim> & state_fe_values = cdc.GetFEValuesState();
+      
       unsigned int n_q_points = cdc.GetNQPoints();
       double ret = 0.;
       if(fabs(_time-1.0)< 1.e-13)
       {
+	const DOpEWrapper::FEValues<dealdim> & state_fe_values = cdc.GetFEValuesState();
 	//endtimevalue
 	_fvalues.resize(n_q_points);
 	_uvalues.resize(n_q_points);
@@ -60,6 +60,7 @@ template<typename VECTOR, int dopedim, int dealdim>
       }
       if(fabs(_time)< 1.e-13)
       {
+	const DOpEWrapper::FEValues<dealdim> & state_fe_values = cdc.GetFEValuesControl();
 	//initialvalue
 	_fvalues.resize(n_q_points);
 	_qvalues.resize(n_q_points);
@@ -115,7 +116,7 @@ template<typename VECTOR, int dopedim, int dealdim>
       unsigned int n_dofs_per_cell = cdc.GetNDoFsPerCell();
       unsigned int n_q_points = cdc.GetNQPoints();
       
-      if(fabs(_time-1.0)< 1.e-13)
+      if(fabs(_time)< 1.e-13)
       {
 	//endtimevalue
 	_fvalues.resize(n_q_points);
@@ -182,7 +183,7 @@ template<typename VECTOR, int dopedim, int dealdim>
       unsigned int n_dofs_per_cell = cdc.GetNDoFsPerCell();
       unsigned int n_q_points = cdc.GetNQPoints();
       
-      if(fabs(_time-1.0)< 1.e-13)
+      if(fabs(_time)< 1.e-13)
       {
 	//endtimevalue
 	_fvalues.resize(n_q_points);
@@ -227,7 +228,6 @@ template<typename VECTOR, int dopedim, int dealdim>
     vector<double> _uvalues;
     vector<double> _duvalues;
     vector<double> _dqvalues;
-    double _alpha;
 
     mutable double _time;
 

@@ -10,7 +10,7 @@
 #include "instatreducedproblem.h"
 #include "instat_step_newtonsolver.h"
 #include "fractional_step_theta_step_newtonsolver.h"
-#include "newtonsolvermixeddims.h"
+#include "newtonsolver.h"
 #include "gmreslinearsolver.h"
 #include "cglinearsolver.h"
 #include "directlinearsolver.h"
@@ -108,6 +108,8 @@ typedef Integrator<IDC , VECTOR , double, LOCALDEALDIM> INTEGRATOR;
 typedef DirectLinearSolverWithMatrix<SPARSITYPATTERN, MATRIX , VECTOR,
     LOCALDEALDIM> LINEARSOLVER;
 
+typedef NewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR , LOCALDEALDIM>
+    CNLS;
 typedef InstatStepNewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR , LOCALDEALDIM>
     NLS;
 
@@ -120,11 +122,11 @@ typedef ReducedNewtonAlgorithm<OP3, VECTOR, LOCALDOPEDIM, LOCALDEALDIM> RNA3;
 typedef ReducedNewtonAlgorithm<OP4, VECTOR, LOCALDOPEDIM, LOCALDEALDIM> RNA4;
 typedef ReducedNewtonAlgorithm<OP5, VECTOR, LOCALDOPEDIM, LOCALDEALDIM> RNA5;
 
-typedef InstatReducedProblem<NLS, NLS, INTEGRATOR, INTEGRATOR, OP1,VECTOR, LOCALDOPEDIM, LOCALDEALDIM> SSolver1;
-typedef InstatReducedProblem<NLS, NLS, INTEGRATOR, INTEGRATOR, OP2,VECTOR, LOCALDOPEDIM, LOCALDEALDIM> SSolver2;
-typedef InstatReducedProblem<NLS, NLS, INTEGRATOR, INTEGRATOR, OP3,VECTOR, LOCALDOPEDIM, LOCALDEALDIM> SSolver3;
-typedef InstatReducedProblem<NLS, NLS, INTEGRATOR, INTEGRATOR, OP4,VECTOR, LOCALDOPEDIM, LOCALDEALDIM> SSolver4;
-typedef InstatReducedProblem<NLS, NLS2, INTEGRATOR, INTEGRATOR, OP5,VECTOR, LOCALDOPEDIM, LOCALDEALDIM> SSolver5;
+typedef InstatReducedProblem<CNLS, NLS, INTEGRATOR, INTEGRATOR, OP1,VECTOR, LOCALDOPEDIM, LOCALDEALDIM> SSolver1;
+typedef InstatReducedProblem<CNLS, NLS, INTEGRATOR, INTEGRATOR, OP2,VECTOR, LOCALDOPEDIM, LOCALDEALDIM> SSolver2;
+typedef InstatReducedProblem<CNLS, NLS, INTEGRATOR, INTEGRATOR, OP3,VECTOR, LOCALDOPEDIM, LOCALDEALDIM> SSolver3;
+typedef InstatReducedProblem<CNLS, NLS, INTEGRATOR, INTEGRATOR, OP4,VECTOR, LOCALDOPEDIM, LOCALDEALDIM> SSolver4;
+typedef InstatReducedProblem<CNLS, NLS2, INTEGRATOR, INTEGRATOR, OP5,VECTOR, LOCALDOPEDIM, LOCALDEALDIM> SSolver5;
 
 
 int

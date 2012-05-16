@@ -2,8 +2,16 @@ TODO DOpE
 =========
 - Common Codeschnipsel in den STH in eigener Klasse zusammenfuehren.
 
+- Alle Functional Calls in opt-problem-container sollten vor dem 
+  Aufruf prüfen ob die ,,Zeit (time)'' auch benötigt wird (NeedTime)
+
+- Need to differentiate in functional between terms that are integrals in time 
+  and those that are not! Needed for derivatives only.
+
 - Beim naechsten Treffen: Am ersten Tag wird der Code von vorne bis hinten
 einheitlich (!) kommentiert.
+
+- Einheitliche Handhabung ob etwas pointer oder Reference wird...
 
 - Adjungierte Zeitschrittverfahren 
   (Dann geht endlich auch Opt-Control im Instationaeren), sind noch

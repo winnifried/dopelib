@@ -30,7 +30,7 @@ subsection reducednewtonalgorithm parameters
   set linear_tol           = 1.e-10
   set linesearch_c         = 0.1
   set linesearch_rho       = 0.9
-  set nonlinear_global_tol = 1.e-11
+  set nonlinear_global_tol = 1.e-6
   set nonlinear_maxiter    = 10
   set nonlinear_tol        = 1.e-7
 end
@@ -48,18 +48,19 @@ subsection output parameters
 
   # Do not write files whose name contains a substring given here by a list of
   # `;` separated words
-  set never_write_list  = Gradient;Residual;Hessian;Tangent;Update
+  set never_write_list  = Gradient;Residual;Update;State;Adjoint;Control
   #set never_write_list  = Gradient;Hessian;Tangent;Adjoint
       
   # Defines what strings should be printed, the higher the number the more
   # output
-  set printlevel        = 10
-
+  set printlevel        = 4
+  #set printlevel        = 10
+    
   # Set the precision of the newton output
   set number_precision	 = 2
 
   # Set manually the machine tolarance for the output
-  set eps_machine_set_by_user	 = 1.0e-11
+  set eps_machine_set_by_user	 = 1.0e-8
 
 
   # Directory where the output goes to

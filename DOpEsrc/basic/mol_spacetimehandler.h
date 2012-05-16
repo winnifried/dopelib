@@ -305,11 +305,12 @@ namespace DOpE
           assert(it.get_left()<=t);
           assert(it.get_right()>=t);
           if (local_vectors.size() != 2)
+	  {
             throw DOpEException(
                 "This function is currently not implemented for anything other than"
                     " linear interpolation of 2 DoFs.",
                 "MethodOfLine_SpaceTimeHandler::InterpolateState");
-
+	  }
           double lambda_l = (it.get_right() - t) / it.get_k();
           double lambda_r = (t - it.get_left()) / it.get_k();
 

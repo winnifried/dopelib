@@ -1,20 +1,5 @@
 # Listing of Parameters for PDE Instat Example 1 (Fluid problem)
 # --------------------------------------------------------------
-subsection Local PDE parameters
-       set interest rate	   	= 0.05
-       set volatility_1		   	= 0.3
-       set volatility_2			= 0.5
-       set rho				= 0
-       set strike price			= 25
-       set expiration date		= 1.0
-end
-
-
-subsection Discretization parameters
-            set upper bound			= 100
-end
-
-
 subsection newtonsolver parameters
   # maximal number of linesearch steps
   set line_maxiter         = 10
@@ -43,9 +28,9 @@ subsection reducednewtonalgorithm parameters
   set linear_tol           = 1.e-10
   set linesearch_c         = 0.1
   set linesearch_rho       = 0.9
-  set nonlinear_global_tol = 1.e-11
+  set nonlinear_global_tol = 1.e-7
   set nonlinear_maxiter    = 10
-  set nonlinear_tol        = 1.e-7
+  set nonlinear_tol        = 1.e-3
 end
 
 subsection output parameters
@@ -61,12 +46,12 @@ subsection output parameters
 
   # Do not write files whose name contains a substring given here by a list of
   # `;` separated words
-  set never_write_list  = Gradient;Residual;Hessian;Tangent;Adjoint;Update
+  set never_write_list  = Gradient;Residual;Hessian;Tangent;Adjoint;Update;State;Control
   #set never_write_list  = Gradient;Hessian;Tangent;Adjoint
       
   # Defines what strings should be printed, the higher the number the more
   # output
-  set printlevel        = 6
+  set printlevel        = 4
 
   # Set the precision of the newton output
   set number_precision	 = 2

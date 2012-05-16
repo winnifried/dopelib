@@ -10,7 +10,7 @@
 #include "instatreducedproblem.h"
 #include "instat_step_newtonsolver.h"
 #include "fractional_step_theta_step_newtonsolver.h"
-#include "newtonsolvermixeddims.h"
+#include "newtonsolver.h"
 #include "gmreslinearsolver.h"
 #include "cglinearsolver.h"
 #include "directlinearsolver.h"
@@ -87,11 +87,14 @@ typedef Integrator<IDC, VECTOR, double, LOCALDEALDIM> INTEGRATOR;
 typedef DirectLinearSolverWithMatrix<BlockSparsityPattern,
     BlockSparseMatrix<double>, BlockVector<double>, LOCALDEALDIM> LINEARSOLVER;
 
+typedef NewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR , LOCALDEALDIM>
+    CNLS;
+
 typedef InstatStepNewtonSolver<INTEGRATOR, LINEARSOLVER, BlockVector<double>,
     LOCALDEALDIM> NLS;
 
 typedef ReducedNewtonAlgorithm<OP, VECTOR, LOCALDOPEDIM, LOCALDEALDIM> RNA;
-typedef InstatReducedProblem<NLS, NLS, INTEGRATOR, INTEGRATOR, OP,
+typedef InstatReducedProblem<CNLS, NLS, INTEGRATOR, INTEGRATOR, OP,
     VECTOR, LOCALDOPEDIM, LOCALDEALDIM> SSolver;
 
 int

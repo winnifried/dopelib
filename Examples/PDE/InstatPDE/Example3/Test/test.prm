@@ -66,13 +66,13 @@ subsection output parameters
       
   # Defines what strings should be printed, the higher the number the more
   # output
-  set printlevel        = 5
+  set printlevel        = 6
 
   # Set the precision of the newton output
-  set number_precision	 = 4
+  set number_precision	 = 2
 
   # Set manually the machine tolarance for the output
-  set eps_machine_set_by_user	 = 1.0e-11
+  set eps_machine_set_by_user	 = 1.0e-7
 
 
   # Directory where the output goes to

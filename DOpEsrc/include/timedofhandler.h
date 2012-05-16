@@ -181,7 +181,7 @@ namespace DOpE
       before_first_interval() const
       {
         assert(_initialized);
-        return _first_interval;
+        return _before_first_interval;
       }
 
       /**

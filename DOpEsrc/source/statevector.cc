@@ -457,7 +457,7 @@ namespace DOpE
       //            }
       //          else
       //            {
-      if (interval.GetIndex() != _accessor_index)
+      if (interval.GetIndex() != _accessor_index || _local_vectors.size()==0 )
         {
           _accessor_index = interval.GetIndex();
           ComputeLocalVectors(interval);

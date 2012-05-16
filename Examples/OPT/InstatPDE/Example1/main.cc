@@ -2,13 +2,11 @@
 #include "instatoptproblemcontainer.h"
 #include "forward_euler_problem.h"
 #include "backward_euler_problem.h"
-#include "crank_nicolson_problem.h"
-#include "shifted_crank_nicolson_problem.h"
 #include "functionalinterface.h"
 #include "pdeinterface.h"
 #include "instatreducedproblem.h"
 #include "instat_step_newtonsolver.h"
-#include "newtonsolvermixeddims.h"
+#include "newtonsolver.h"
 #include "gmreslinearsolver.h"
 #include "cglinearsolver.h"
 #include "directlinearsolver.h"
@@ -78,6 +76,7 @@ typedef OptProblemContainer<FUNC,FUNC,PDE,DD,CONS,SPARSITYPATTERN, VECTOR, LOCAL
 //FIXME: This should be a reasonable dual timestepping scheme
 #define DTSP BackwardEulerProblem
 
+
 typedef InstatOptProblemContainer<TSP,DTSP,FUNC,FUNC,PDE,DD,CONS,SPARSITYPATTERN, VECTOR, LOCALDOPEDIM,LOCALDEALDIM> OP;
 
 #undef TSP
@@ -90,15 +89,14 @@ typedef Integrator<IDC , VECTOR , double, LOCALDEALDIM> INTEGRATOR;
 typedef DirectLinearSolverWithMatrix<SPARSITYPATTERN, MATRIX , VECTOR,
     LOCALDEALDIM> LINEARSOLVER;
 
+typedef NewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR , LOCALDEALDIM>
+    CNLS;
 typedef InstatStepNewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR , LOCALDEALDIM>
     NLS;
 
-typedef FractionalStepThetaStepNewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR , LOCALDEALDIM>
-    NLS2;
-
 typedef ReducedNewtonAlgorithm<OP, VECTOR, LOCALDOPEDIM, LOCALDEALDIM> RNA;
 
-typedef InstatReducedProblem<NLS, NLS, INTEGRATOR, INTEGRATOR, OP,
+typedef InstatReducedProblem<CNLS, NLS, INTEGRATOR, INTEGRATOR, OP,
     VECTOR, LOCALDOPEDIM, LOCALDEALDIM> SSolver;
 
 
@@ -186,33 +184,21 @@ main(int argc, char **argv)
 
   RNA Alg(&P, &solver, pr);
 
-  try
+  //try
     {
 
       Alg.ReInit();
 
       Vector<double> solution;
       ControlVector<VECTOR> q(&DOFH, "fullmem");
-      ControlVector<VECTOR> dq(&DOFH, "fullmem");
-      dq = 1.;
-      Alg.CheckGrads(1.,q,dq,2);
-
-      SolutionExtractor<SSolver, VECTOR> a(solver);
-      const StateVector<VECTOR> &statevec = a.GetU();
-
-      stringstream out;
-      double product = statevec * statevec;
-      out << "Backward euler: u * u = " << product << std::endl;
-      
-      P.GetOutputHandler()->Write(out, 0);
-
+      Alg.Solve(q);
     }
-  catch (DOpEException &e)
-    {
-      std::cout << "Warning: During execution of `" + e.GetThrowingInstance()
-          + "` the following Problem occurred!" << std::endl;
-      std::cout << e.GetErrorMessage() << std::endl;
-    }
+  //catch (DOpEException &e)
+  //  {
+  //    std::cout << "Warning: During execution of `" + e.GetThrowingInstance()
+  //        + "` the following Problem occurred!" << std::endl;
+  //    std::cout << e.GetErrorMessage() << std::endl;
+  //  }
 
   return 0;
 }

@@ -22,7 +22,7 @@ class LocalPDE: public PDEInterface<CellDataContainer,FaceDataContainer,dealii::
     }
 
   //Initial Values from Control
-  void Init_CellRhs(const dealii::Function<dealdim>* init_values,
+  void Init_CellRhs(const dealii::Function<dealdim>* /*init_values*/,
 		    const CellDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& cdc,
 		    dealii::Vector<double> &local_cell_vector, double scale)
   {
@@ -43,6 +43,69 @@ class LocalPDE: public PDEInterface<CellDataContainer,FaceDataContainer,dealii::
       }
     }
   }
+  //Initial Values from Control
+  void Init_CellRhs_Q(const CellDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& cdc,
+		      dealii::Vector<double> &local_cell_vector, double scale)
+  {
+    const DOpEWrapper::FEValues<dealdim> & control_fe_values =
+      cdc.GetFEValuesControl();
+    unsigned int n_dofs_per_cell = cdc.GetNDoFsPerCell();
+    unsigned int n_q_points = cdc.GetNQPoints();
+    _zvalues.resize(n_q_points);
+    cdc.GetValuesState("adjoint",_zvalues);
+    
+    for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
+    {
+      for (unsigned int i = 0; i < n_dofs_per_cell; i++)
+      {
+	local_cell_vector(i) += scale
+	  * control_fe_values.shape_value(i,q_point)* _zvalues[q_point] 
+	  * control_fe_values.JxW(q_point);
+      }
+    }
+  }    
+  //Initial Values from Control
+  void Init_CellRhs_QT(const CellDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& cdc,
+		       dealii::Vector<double> &local_cell_vector, double scale)
+  {
+    const DOpEWrapper::FEValues<dealdim> & state_fe_values =
+      cdc.GetFEValuesState();
+    unsigned int n_dofs_per_cell = cdc.GetNDoFsPerCell();
+    unsigned int n_q_points = cdc.GetNQPoints();
+    _dqvalues.resize(n_q_points);
+    cdc.GetValuesControl("dq",_dqvalues);
+    
+    for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
+    {
+      for (unsigned int i = 0; i < n_dofs_per_cell; i++)
+      {
+	local_cell_vector(i) += scale
+	  * _dqvalues[q_point] * state_fe_values.shape_value(i,q_point)
+	  * state_fe_values.JxW(q_point);
+      }
+    }
+  }    
+ //Initial Values from Control
+  void Init_CellRhs_QTT(const CellDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& cdc,
+		       dealii::Vector<double> &local_cell_vector, double scale)
+  {
+    const DOpEWrapper::FEValues<dealdim> & control_fe_values =
+      cdc.GetFEValuesControl();
+    unsigned int n_dofs_per_cell = cdc.GetNDoFsPerCell();
+    unsigned int n_q_points = cdc.GetNQPoints();
+    _dzvalues.resize(n_q_points);
+    cdc.GetValuesState("adjoint_hessian",_dzvalues);
+    
+    for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
+    {
+      for (unsigned int i = 0; i < n_dofs_per_cell; i++)
+      {
+	local_cell_vector(i) += scale
+	  * control_fe_values.shape_value(i,q_point)* _dzvalues[q_point] 
+	  * control_fe_values.JxW(q_point);
+      }
+    }
+  }  
 
   // Domain values for cells
   void CellEquation(const CellDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& cdc, dealii::Vector<double> &local_cell_vector,double scale, double /*scale_ico*/)
@@ -150,7 +213,7 @@ class LocalPDE: public PDEInterface<CellDataContainer,FaceDataContainer,dealii::
 	const double phi_i = state_fe_values.shape_value(i, q_point);
 	const Tensor<1, dealdim> phi_i_grads = state_fe_values.shape_grad(i, q_point);
 	
-	local_cell_vector(i) += scale * ((_dzgrads[q_point]*phi_i_grads) + _uvalues[q_point]*_dzvalues[q_point]*phi_i) * state_fe_values.JxW(q_point);
+	local_cell_vector(i) += scale * ((_dzgrads[q_point]*phi_i_grads) + 2.*_uvalues[q_point]*_dzvalues[q_point]*phi_i) * state_fe_values.JxW(q_point);
       }
     }
   }
@@ -406,11 +469,57 @@ class LocalPDE: public PDEInterface<CellDataContainer,FaceDataContainer,dealii::
 			      FullMatrix<double> &/*local_entry_matrix*/)  {}
   
 
+  void ControlCellEquation(const CellDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& cdc,
+			   dealii::Vector<double> &local_cell_vector,
+			   double scale)
+  {
+    const DOpEWrapper::FEValues<dealdim> & control_fe_values = cdc.GetFEValuesControl();
+    unsigned int n_dofs_per_cell = cdc.GetNDoFsPerCell();
+    unsigned int n_q_points = cdc.GetNQPoints();
+    {
+      assert((this->_problem_type == "gradient")||(this->_problem_type == "hessian"));
+      _funcgradvalues.resize(n_q_points);
+      cdc.GetValuesControl("last_newton_solution",_funcgradvalues);
+    }
+    
+    for(unsigned int q_point = 0; q_point < n_q_points; q_point++)
+    {
+      for(unsigned int i = 0; i < n_dofs_per_cell; i++)
+      {
+	local_cell_vector(i) += scale *(_funcgradvalues[q_point] * control_fe_values.shape_value (i, q_point))
+	  * control_fe_values.JxW(q_point);
+      }
+    }
+  }
+
+  void ControlCellMatrix(const CellDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& cdc,
+			 FullMatrix<double> &local_entry_matrix)
+  {
+    const DOpEWrapper::FEValues<dealdim> & control_fe_values = cdc.GetFEValuesControl();
+    unsigned int n_dofs_per_cell = cdc.GetNDoFsPerCell();
+    unsigned int n_q_points = cdc.GetNQPoints();
+    
+    for(unsigned int q_point = 0; q_point < n_q_points; q_point++)
+    {
+      for(unsigned int i = 0; i < n_dofs_per_cell; i++)
+      {
+	for(unsigned int j = 0; j < n_dofs_per_cell; j++)
+	  {
+	    local_entry_matrix(i,j) += control_fe_values.shape_value (i, q_point)*control_fe_values.shape_value (j, q_point)
+	      * control_fe_values.JxW(q_point);
+	  }
+      }
+    }
+  }
+
+
   UpdateFlags GetUpdateFlags() const
   {
     if (this->_problem_type == "state"|| this->_problem_type == "adjoint"|| this->_problem_type == "adjoint_hessian"
 	|| this->_problem_type == "tangent")
       				return update_values | update_gradients | update_quadrature_points;
+    else if (this->_problem_type == "gradient" || this->_problem_type == "hessian")
+      				return update_values | update_quadrature_points;
     else
       throw DOpEException("Unknown Problem Type " + this->_problem_type,
 			  "LocalPDE::GetUpdateFlags");
@@ -419,11 +528,11 @@ class LocalPDE: public PDEInterface<CellDataContainer,FaceDataContainer,dealii::
   UpdateFlags GetFaceUpdateFlags() const
   {
     if (this->_problem_type == "state"|| this->_problem_type == "adjoint"|| this->_problem_type == "adjoint_hessian"
-	|| this->_problem_type == "tangent")
+	|| this->_problem_type == "tangent" || this->_problem_type == "gradient" || this->_problem_type == "hessian")
       return update_default;
     else
       throw DOpEException("Unknown Problem Type " + this->_problem_type,
-			  "LocalPDE::GetUpdateFlags");
+			  "LocalPDE::GetFaceUpdateFlags");
   }
   
   unsigned int GetControlNBlocks() const
@@ -462,9 +571,11 @@ private:
   vector<double> _fvalues;
   vector<double> _uvalues;
   vector<double> _qvalues;
+  vector<double> _dqvalues;
   vector<double> _zvalues;
   vector<double> _dzvalues;
   vector<double> _duvalues;
+  vector<double> _funcgradvalues;
   mutable double _my_time;
 
   vector<Tensor<1, dealdim> > _ugrads;

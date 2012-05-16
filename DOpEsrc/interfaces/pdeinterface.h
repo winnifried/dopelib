@@ -490,38 +490,63 @@ namespace DOpE
       /****For the initial values ***************/
       /* Default is componentwise L2 projection */ 
       virtual void
-        Init_CellEquation(const CDC<DOFHANDLER, VECTOR, dealdim>& cdc,
-            dealii::Vector<double> &local_cell_vector, double scale,
-            double /*scale_ico*/)
-        {
-          const DOpEWrapper::FEValues<dealdim> & state_fe_values =
-              cdc.GetFEValuesState();
-          unsigned int n_dofs_per_cell = cdc.GetNDoFsPerCell();
-          unsigned int n_q_points = cdc.GetNQPoints();
-          std::vector<dealii::Vector<double> > uvalues;
-          uvalues.resize(n_q_points,
-              dealii::Vector<double>(this->GetStateNComponents()));
-          cdc.GetValuesState("last_newton_solution", uvalues);
-
-          dealii::Vector<double> f_values(
-              dealii::Vector<double>(this->GetStateNComponents()));
-
-          for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
-            {
-              for (unsigned int i = 0; i < n_dofs_per_cell; i++)
+      Init_CellEquation(const CDC<DOFHANDLER, VECTOR, dealdim>& cdc,
+			dealii::Vector<double> &local_cell_vector, double scale,
+			double /*scale_ico*/)
+      {
+	const DOpEWrapper::FEValues<dealdim> & state_fe_values =
+	  cdc.GetFEValuesState();
+	unsigned int n_dofs_per_cell = cdc.GetNDoFsPerCell();
+	unsigned int n_q_points = cdc.GetNQPoints();
+	std::vector<dealii::Vector<double> > uvalues;
+	uvalues.resize(n_q_points,
+		       dealii::Vector<double>(this->GetStateNComponents()));
+	cdc.GetValuesState("last_newton_solution", uvalues);
+	
+	dealii::Vector<double> f_values(
+	  dealii::Vector<double>(this->GetStateNComponents()));
+	
+	for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
+	{
+	  for (unsigned int i = 0; i < n_dofs_per_cell; i++)
                 {
                   for (unsigned int comp = 0;
-                      comp < this->GetStateNComponents(); comp++)
-                    {
-                      local_cell_vector(i) += scale
-                          * (state_fe_values.shape_value_component(i, q_point,
-                              comp) * uvalues[q_point](comp))
-                          * state_fe_values.JxW(q_point);
-                    }
+		       comp < this->GetStateNComponents(); comp++)
+		  {
+		    local_cell_vector(i) += scale
+		      * (state_fe_values.shape_value_component(i, q_point,
+							       comp) * uvalues[q_point](comp))
+		      * state_fe_values.JxW(q_point);
+		  }
                 }
-            } //endfor q_point
-        }
-
+	} //endfor q_point
+      }
+      
+      virtual void
+      Init_CellRhs_Q(const CDC<DOFHANDLER, VECTOR, dealdim>& /*cdc*/,
+		     dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
+      {
+	
+      }
+      virtual void
+      Init_CellRhs_QT(const CDC<DOFHANDLER, VECTOR, dealdim>& /*cdc*/,
+		     dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
+      {
+	
+      }
+      virtual void
+      Init_CellRhs_QTT(const CDC<DOFHANDLER, VECTOR, dealdim>& /*cdc*/,
+		       dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
+      {
+	
+      }
+      virtual void
+      Init_CellRhs_QQ(const CDC<DOFHANDLER, VECTOR, dealdim>& /*cdc*/,
+		      dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
+      {
+	
+      }
+      
         virtual void
         Init_CellRhs(const dealii::Function<dealdim>* init_values,
             const CDC<DOFHANDLER, VECTOR, dealdim>& cdc,

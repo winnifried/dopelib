@@ -1025,7 +1025,7 @@ namespace DOpE
 			     dealii::Vector<double> &local_cell_vector, double scale,
 			     double scale_ico)
       {
-        if (GetType() == "adjoint")
+        if (GetType() == "adjoint" || GetType() == "tangent" ||GetType() == "adjoint_hessian")
 	{
 	  GetPDE()->Init_CellEquation(cdc, local_cell_vector, scale, scale_ico);
 	}
@@ -1050,6 +1050,26 @@ namespace DOpE
 	      if(GetFunctional()->GetType().find("domain")!= std::string::npos)
 	      {
 		GetFunctional()->Value_U(cdc, local_cell_vector, scale);
+	      }
+	    }
+	  }
+	}
+	else if (GetType() == "tangent")
+	{
+	  if(GetSpaceTimeHandler()->GetControlType() == DOpEtypes::ControlType::initial)
+	  {
+	    GetPDE()->Init_CellRhs_QT(cdc, local_cell_vector, scale);
+	  }
+	}
+	else if (GetType() == "adjoint_hessian")
+	{
+	  if(GetFunctional()->NeedTime())
+	  {
+	    if(GetFunctional()->GetType().find("timelocal")!= std::string::npos)
+	    {
+	      if(GetFunctional()->GetType().find("domain")!= std::string::npos)
+	      {
+		GetFunctional()->Value_UU(cdc, local_cell_vector, scale);
 	      }
 	    }
 	  }
@@ -1079,6 +1099,23 @@ namespace DOpE
 	    }
 	  }
 	}
+	else if (GetType() == "tangent")
+	{
+	  //Nothing to do for tangent, since no point sources are allowed in the initial condition.
+	}
+	else if (GetType() == "adjoint_hessian")
+	{
+	  if(GetFunctional()->NeedTime())
+	  {
+	    if(GetFunctional()->GetType().find("timelocal")!= std::string::npos)
+	    {
+	      if(GetFunctional()->GetType().find("point")!= std::string::npos)
+	      {
+		GetFunctional()->PointValue_UU(param_values,domain_values,rhs_vector,scale);
+	      }
+	    }
+	  }
+	}
 	else
 	{
 	  throw DOpEException("Not implemented", "OptProblemContainer::Init_PointRhs");
@@ -1090,7 +1127,7 @@ namespace DOpE
 			   dealii::FullMatrix<double> &local_entry_matrix, double scale,
 			   double scale_ico)
       {
-        if (GetType() == "adjoint")
+        if (GetType() == "adjoint"|| GetType() == "tangent" || GetType() == "adjoint_hessian")
 	{
 	  GetPDE()->Init_CellMatrix(cdc, local_entry_matrix, scale, scale_ico);
 	}
@@ -1913,20 +1950,29 @@ namespace DOpE
 	}
         else if (GetType() == "gradient")
         {
+	  if(GetSpaceTimeHandler()->GetControlType() == DOpEtypes::ControlType::initial)
+	  {
+	    GetPDE()->Init_CellRhs_Q(cdc, local_cell_vector, scale);
+	  }
           // state values in quadrature points
           GetFunctional()->Value_Q(cdc, local_cell_vector, scale);
           scale *= -1;
-          GetPDE()->CellEquation_Q(cdc, local_cell_vector, scale,scale);
+          GetPDE()->CellEquation_Q(cdc, local_cell_vector, scale, scale);
         }
         else if (GetType() == "hessian")
         {
-          // state values in quadrature points
+          if(GetSpaceTimeHandler()->GetControlType() == DOpEtypes::ControlType::initial)
+	  {
+	    GetPDE()->Init_CellRhs_QTT(cdc, local_cell_vector, scale);
+	    GetPDE()->Init_CellRhs_QQ(cdc, local_cell_vector, scale);
+	  }
+
           GetFunctional()->Value_QQ(cdc, local_cell_vector, scale);
           GetFunctional()->Value_UQ(cdc, local_cell_vector, scale);
           scale *= -1;
           GetPDE()->CellEquation_QTT(cdc, local_cell_vector, scale,scale);
           GetPDE()->CellEquation_UQ(cdc, local_cell_vector, scale,scale);
-          GetPDE()->CellEquation_QQ(cdc, local_cell_vector, scale,scale);
+          GetPDE()->CellEquation_QQ(cdc, local_cell_vector, scale,scale);	  
         }
         else if (GetType() == "global_constraint_gradient")
         {
@@ -2624,11 +2670,19 @@ namespace DOpE
         //PDE
         GetPDE()->SetTime(time);
       }
-      //Update Auxiliary Control and Constraint Vectors
+      //Update Auxiliary Control, State and Constraint Vectors
       {
         typename std::map<std::string, const ControlVector<VECTOR> *>::iterator it =
             _auxiliary_controls.begin();
         for (; it != _auxiliary_controls.end(); it++)
+        {
+          it->second->SetTime(time, interval);
+        }
+      } 
+      {
+        typename std::map<std::string, const StateVector<VECTOR> *>::iterator it =
+            _auxiliary_state.begin();
+        for (; it != _auxiliary_state.end(); it++)
         {
           it->second->SetTime(time, interval);
         }
