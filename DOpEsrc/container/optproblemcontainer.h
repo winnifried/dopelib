@@ -1056,10 +1056,7 @@ namespace DOpE
 	}
 	else if (GetType() == "tangent")
 	{
-	  if(GetSpaceTimeHandler()->GetControlType() == DOpEtypes::ControlType::initial)
-	  {
-	    GetPDE()->Init_CellRhs_QT(cdc, local_cell_vector, scale);
-	  }
+	  GetPDE()->Init_CellRhs_QT(cdc, local_cell_vector, scale);
 	}
 	else if (GetType() == "adjoint_hessian")
 	{
@@ -1914,7 +1911,11 @@ namespace DOpE
           const DATACONTAINER& cdc, dealii::Vector<double> &local_cell_vector,
           double scale)
       {
-
+	//FIXME: In timedependent Problems one should evaluate the 
+	// Functional terms here only if they are time distributed,
+	//otherwise the scaling should be different (e.g. +-1 for local in time
+	//Functionals)
+	//The same applies to all ...Rhs functions, except init_...
         if (GetType() == "state")
         {
           // state values in quadrature points
@@ -1940,7 +1941,7 @@ namespace DOpE
         else if (GetType() == "adjoint_hessian")
         {
           // state values in quadrature points
-          GetFunctional()->Value_UU(cdc, local_cell_vector, scale);
+	  GetFunctional()->Value_UU(cdc, local_cell_vector, scale);
           GetFunctional()->Value_QU(cdc, local_cell_vector, scale);
           scale *= -1;
           GetPDE()->CellEquation_UU(cdc, local_cell_vector, scale,scale);

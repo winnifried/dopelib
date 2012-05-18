@@ -28,9 +28,9 @@ subsection reducednewtonalgorithm parameters
   set linear_tol           = 1.e-10
   set linesearch_c         = 0.1
   set linesearch_rho       = 0.9
-  set nonlinear_global_tol = 1.e-7
+  set nonlinear_global_tol = 1.e-11
   set nonlinear_maxiter    = 10
-  set nonlinear_tol        = 1.e-3
+  set nonlinear_tol        = 5.e-7
 end
 
 subsection output parameters

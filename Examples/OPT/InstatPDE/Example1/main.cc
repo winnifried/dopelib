@@ -2,6 +2,7 @@
 #include "instatoptproblemcontainer.h"
 #include "forward_euler_problem.h"
 #include "backward_euler_problem.h"
+#include "crank_nicolson_problem.h"
 #include "functionalinterface.h"
 #include "pdeinterface.h"
 #include "instatreducedproblem.h"
@@ -73,8 +74,10 @@ typedef OptProblemContainer<FUNC,FUNC,PDE,DD,CONS,SPARSITYPATTERN, VECTOR, LOCAL
 
 
 #define TSP BackwardEulerProblem
+//#define TSP CrankNicolsonProblem
 //FIXME: This should be a reasonable dual timestepping scheme
 #define DTSP BackwardEulerProblem
+//#define DTSP CrankNicolsonProblem
 
 
 typedef InstatOptProblemContainer<TSP,DTSP,FUNC,FUNC,PDE,DD,CONS,SPARSITYPATTERN, VECTOR, LOCALDOPEDIM,LOCALDEALDIM> OP;
@@ -184,21 +187,22 @@ main(int argc, char **argv)
 
   RNA Alg(&P, &solver, pr);
 
-  //try
+  try
     {
 
       Alg.ReInit();
 
       Vector<double> solution;
       ControlVector<VECTOR> q(&DOFH, "fullmem");
+
       Alg.Solve(q);
     }
-  //catch (DOpEException &e)
-  //  {
-  //    std::cout << "Warning: During execution of `" + e.GetThrowingInstance()
-  //        + "` the following Problem occurred!" << std::endl;
-  //    std::cout << e.GetErrorMessage() << std::endl;
-  //  }
+  catch (DOpEException &e)
+    {
+      std::cout << "Warning: During execution of `" + e.GetThrowingInstance()
+          + "` the following Problem occurred!" << std::endl;
+      std::cout << e.GetErrorMessage() << std::endl;
+    }
 
   return 0;
 }

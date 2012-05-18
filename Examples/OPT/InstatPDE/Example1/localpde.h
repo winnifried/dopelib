@@ -129,7 +129,8 @@ class LocalPDE: public PDEInterface<CellDataContainer,FaceDataContainer,dealii::
 	const double phi_i = state_fe_values.shape_value(i, q_point);
 	const Tensor<1, dealdim> phi_i_grads = state_fe_values.shape_grad(i, q_point);
 	
-	local_cell_vector(i) += scale * ((_ugrads[q_point]*phi_i_grads) + _uvalues[q_point]*_uvalues[q_point]*phi_i) * state_fe_values.JxW(q_point);
+	local_cell_vector(i) += scale * ((_ugrads[q_point]*phi_i_grads) + _uvalues[q_point]*_uvalues[q_point]*phi_i
+	  ) * state_fe_values.JxW(q_point);
       }
     }
   }
@@ -157,7 +158,8 @@ class LocalPDE: public PDEInterface<CellDataContainer,FaceDataContainer,dealii::
 	const double phi_i = state_fe_values.shape_value(i, q_point);
 	const Tensor<1, dealdim> phi_i_grads = state_fe_values.shape_grad(i, q_point);
 	
-	local_cell_vector(i) += scale * ((_zgrads[q_point]*phi_i_grads) + 2.*_uvalues[q_point]*_zvalues[q_point]*phi_i) * state_fe_values.JxW(q_point);
+	local_cell_vector(i) += scale * ((_zgrads[q_point]*phi_i_grads) + 2.*_uvalues[q_point]*_zvalues[q_point]*phi_i
+	  ) * state_fe_values.JxW(q_point);
       }
     }
   }
@@ -185,7 +187,8 @@ class LocalPDE: public PDEInterface<CellDataContainer,FaceDataContainer,dealii::
 	const double phi_i = state_fe_values.shape_value(i, q_point);
 	const Tensor<1, dealdim> phi_i_grads = state_fe_values.shape_grad(i, q_point);
 	
-	local_cell_vector(i) += scale * ((_dugrads[q_point]*phi_i_grads) + 2.*_duvalues[q_point]*_uvalues[q_point]*phi_i) * state_fe_values.JxW(q_point);
+	local_cell_vector(i) += scale * ((_dugrads[q_point]*phi_i_grads) + 2.*_duvalues[q_point]*_uvalues[q_point]*phi_i
+	  ) * state_fe_values.JxW(q_point);
       }
     }
   }
@@ -213,7 +216,8 @@ class LocalPDE: public PDEInterface<CellDataContainer,FaceDataContainer,dealii::
 	const double phi_i = state_fe_values.shape_value(i, q_point);
 	const Tensor<1, dealdim> phi_i_grads = state_fe_values.shape_grad(i, q_point);
 	
-	local_cell_vector(i) += scale * ((_dzgrads[q_point]*phi_i_grads) + 2.*_uvalues[q_point]*_dzvalues[q_point]*phi_i) * state_fe_values.JxW(q_point);
+	local_cell_vector(i) += scale * ((_dzgrads[q_point]*phi_i_grads) + 2.*_uvalues[q_point]*_dzvalues[q_point]*phi_i
+	  ) * state_fe_values.JxW(q_point);
       }
     }
   }
@@ -227,13 +231,11 @@ class LocalPDE: public PDEInterface<CellDataContainer,FaceDataContainer,dealii::
     unsigned int n_q_points = cdc.GetNQPoints();
     
     _uvalues.resize(n_q_points);
-    _ugrads.resize(n_q_points);
+    _zvalues.resize(n_q_points);
     
     cdc.GetValuesState("tangent", _duvalues);
     cdc.GetValuesState("adjoint", _zvalues);
-    cdc.GetGradsState("adjoint", _zgrads);
-    
-        
+       
     for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
     {
       for (unsigned int i = 0; i < n_dofs_per_cell; i++)
@@ -241,7 +243,7 @@ class LocalPDE: public PDEInterface<CellDataContainer,FaceDataContainer,dealii::
 	const double phi_i = state_fe_values.shape_value(i, q_point);
 	const Tensor<1, dealdim> phi_i_grads = state_fe_values.shape_grad(i, q_point);
 	
-	local_cell_vector(i) += scale * ((_zgrads[q_point]*phi_i_grads) + 2.*_zvalues[q_point]*_duvalues[q_point]*phi_i) * state_fe_values.JxW(q_point);
+	local_cell_vector(i) += scale * ( 2.*_zvalues[q_point]*_duvalues[q_point]*phi_i) * state_fe_values.JxW(q_point);
       }
     }
   }
@@ -292,7 +294,8 @@ class LocalPDE: public PDEInterface<CellDataContainer,FaceDataContainer,dealii::
       {
 	for (unsigned int j = 0; j < n_dofs_per_cell; j++)
 	{
-	  local_entry_matrix(i, j) += scale * ((phi_grads[j] * phi_grads[i]) + 2*_uvalues[q_point]*phi_values[j]*phi_values[i]) * state_fe_values.JxW(q_point);
+	  local_entry_matrix(i, j) += scale * ((phi_grads[j] * phi_grads[i]) //+ 2.*_uvalues[q_point]*phi_values[j]*phi_values[i]
+	    ) * state_fe_values.JxW(q_point);
 	}
       }
     }

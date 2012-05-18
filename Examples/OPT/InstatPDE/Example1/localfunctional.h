@@ -186,15 +186,12 @@ template<typename VECTOR, int dopedim, int dealdim>
       if(fabs(_time)< 1.e-13)
       {
 	//endtimevalue
-	_fvalues.resize(n_q_points);
 	_dqvalues.resize(n_q_points);
 
 	cdc.GetValuesControl("dq",_dqvalues);
 
 	for(unsigned int q_point = 0; q_point< n_q_points; q_point++)
 	{
-	  _fvalues[q_point] =  sin(state_fe_values.quadrature_point(q_point)(0)) *
-	    sin( state_fe_values.quadrature_point(q_point)(1));
 	  for(unsigned int i=0; i < n_dofs_per_cell; i++)
 	  {
 	    local_cell_vector(i)  += scale*_dqvalues[q_point]*state_fe_values.shape_value (i, q_point)
