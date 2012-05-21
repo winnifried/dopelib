@@ -14,6 +14,7 @@
 
 #include "dofhandler_wrapper.h"
 #include "parameterreader.h"
+#include "dopeexception.h"
 
 namespace DOpE
 {
