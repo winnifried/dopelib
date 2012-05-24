@@ -20,7 +20,7 @@
 			<ul>
 			    <li><a class="active" href="index.html">Home<span><em></em></span></a></li>
 			    <li><a href="authors.html">Authors<span><em></em></span></a></li>
-			    <li><a href="description.html">Description<span><em></em></span></a></li>
+			    <li><a href="documentation.html">Documentation<span><em></em></span></a></li>
 			    <li><a href="publications.html">Publications<span><em></em></span></a></li>
 			    <li><a href="download.html">Download<span><em></em></span></a></li>
 			    <li><a href="thanks.html">Thanks<span><em></em></span></a></li>
@@ -57,20 +57,6 @@
 </div>
 <!-- End Slider -->
 
-<!-- Slider Nav -->
-<!--
-<div id="slider-navigation">
-	<div class="shell">
-		<ul>
-		    <li><a href="#" class="active">STEP 1<strong>ENTERPRISE</strong><em class="ico1"></em></a></li>
-		    <li><a href="#">STEP 2<strong>INNOVATION</strong><em class="ico2"></em></a></li>
-		    <li class="last"><a href="#">STEP 3<strong>VISION</strong><em class="ico3"></em></a></li>
-		</ul>
-	</div>
-</div>
--->
-<!-- End Slider Nav -->
-
 <!-- Main -->
 <div id="main">
 	<div class="shell">
@@ -83,19 +69,15 @@
 			<div class="col">
 				<h3>Aims</h3>
 				  <ul>
-				    <li>Software toolkit to solve forward PDE
-				      problems as well as optimal control problems constrained by PDE. 
-				    <li> DOpE concentrates on a unified approach for both linear and nonlinear
-				      problems by interpreting every PDE problem as nonlinear and applying a
-				      Newton method to solve it. 
-				    <li>DOpE intends to be user-optimized by delivering
-				      prefabricated tools which require from the user only adjustments connected
-				      to his specific problem. 
-				    <li>The solution of optimal control problems with PDE
-				      constraints is an innovation in the DOpE framework.
-				    <li>The focus is on the numerical solution of both stationary and nonstationary
-				      problems which come from different application fields, like elasticity and
-				      plasticity, fluid dynamics, and fluid-structure interactions.
+				    <li> DOpElib is a toolbox providing modularized highlevel algorithms
+				      based on the <a href="www.dealii.org">deal.II</a> Finite Element Library.
+				     <li> This enables researcher to implement only those moduls  
+				      that are specific to their problem while being able to reuse other 
+				      modules without further work. 
+				    <li> The modularized access to the algorithms allows to switch between 
+				      different algorithms for the same problem with litte efford. 
+				    <li> Software toolkit to solve -- stationary and non stationary -- PDE
+				      problems as well as optimal control problems constrained by PDEs. 
 				    </ul>
 			</div>
 			<!-- End Col -->
@@ -104,30 +86,33 @@
 			<div class="col">
 				<h3>Features</h3>
 				<ul>
-<li> Solution of stationary and nonstationary PDEs in 1d, 2d, and 3d.
-<li> Various time stepping schemes (based on finite differences), 
-  such as forward Euler, backward Euler,
-  Crank-Nicolson, shifted Crank-Nicolson, and Fractional-Step-$\Theta$ scheme.
-<li> All finite elements of from deal.II including hp-support.
-<li> Self written line search and trust region newton algorithms for the 
-   solution of optimization problems with PDEs \cite{NoWr00}
-<li> Interface to SNOPT for the solution of optimization problems with PDEs and
-  additional other constraints.
-<li> Mesh adaptation.
-<li> Different spatial triangulations for control and state variables.
-</ul>
+				  <li> User needs to provide only the problem specific data, like element integrals
+				    and can use predefined modules for the solution
+				    of stationary and nonstationary PDEs in 1d, 2d, and 3d using
+				    a line-search Newton algorithm.
+				  <li> Various time stepping schemes (based on finite differences), 
+				    such as forward Euler, backward Euler,
+				    Crank-Nicolson, shifted Crank-Nicolson, and Fractional-Step-$\Theta$ scheme.
+				  <li> Solution of optimization problems with PDE constraints with
+				    built in line search and trust region newton algorithms.
+				    In addition an interface to SNOPT is provided.
+				  <li> Different spatial triangulations for control and state variables.
+				  </ul>
 			</div>
 			<!-- End Col -->
 			
 			<!-- Col -->
 			<div class="col col-last">
-				<h3>Applications</h3>
+				<h3>Features</h3>
 				<ul>
-<li> Several examples showing the solution of several PDEs including
-   Poisson, Navier-Stokes, Plasticity and fluid-structure interaction problems. 
-<li> Several examples showing how to solve various kinds of optimization problems
-  involving stationary PDE constraints.
-</ul>			
+				  <li> All finite elements of from deal.II including hp-support.
+				  <li> Mesh adaptation.
+				  <li> Goal-orientent error estimation.
+				  <li> Several examples showing the solution of several PDEs including
+				    Poisson, Navier-Stokes, Plasticity and fluid-structure interaction problems. 
+				  <li> Several examples showing how to solve various kinds of optimization problems
+				    involving stationary and nonstationary PDE constraints.
+				 </ul>			
 
 			</div>
 			<!-- End Col -->
@@ -155,7 +140,7 @@
 				<span>|</span>
 				<a href="authors.html">Authors</a>
 				<span>|</span>
-				<a href="description.html">Description</a>
+				<a href="documentation.html">Documentation</a>
 				<span>|</span>
 				<a href="publications.html">Publications</a>
 				<span>|</span>
