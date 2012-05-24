@@ -1,17 +1,22 @@
-\documentclass[twoside, 11pt]{article}
-\usepackage{jnm}
+\documentclass[prodmode,acmtoms]{acmsmall}
 %  
-\author{Christian\,Goll\footnotemark[1]\comma Thomas\,Wick\footnotemark[1] 
-\comma Winnifried\,Wollner\footnotemark[1]\thanks{%
-Institut f\"ur Angewandte Mathematik, Universit\"at Heidelberg, Im Neuenheimer Feld 293/294,
-			D-69120 Heidelberg, Germany.}
-}
 
-\sauthor{C. Goll, T. Wick and  W. Wollner}
+% Package to generate and customize Algorithm as per ACM style
+\usepackage[ruled]{algorithm2e}
+\renewcommand{\algorithmcfname}{ALGORITHM}
+\SetAlFnt{\small}
+\SetAlCapFnt{\small}
+\SetAlCapNameFnt{\small}
+\SetAlCapHSkip{0pt}
+\IncMargin{-\parindent}
 
-\title{DOpE: A Goal Oriented Software Library for Computing PDEs and Optimization Problems}
-\stitle{DOpE: A Goal Oriented Software Library}
-\received{Received \hfill}
+% Metadata Information
+\acmVolume{0}
+\acmNumber{0}
+\acmArticle{00}
+\acmYear{0000}
+\acmMonth{0}
+
 %
 %%% User-requested packages placed after this line %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \usepackage{amsfonts,amssymb,amsmath}
@@ -23,11 +28,7 @@ Institut f\"ur Angewandte Mathematik, Universit\"at Heidelberg, Im Neuenheimer F
 \usepackage{multirow}
 % \usepackage[center]{subfigure}
 \numberwithin{equation}{section}
-\usepackage[noend]{algorithmic}                        %Algorithm typesetting environment
-\usepackage[ruled]{algorithm}
 \usepackage{braket}                             %Provides \Set for typing sets
-\usepackage{color}
-\usepackage[square,sort&compress,numbers]{natbib}
 \usepackage{float}
 \usepackage{subfig}
 
@@ -39,36 +40,62 @@ Institut f\"ur Angewandte Mathematik, Universit\"at Heidelberg, Im Neuenheimer F
 \renewcommand{\phi}{\varphi}
 \renewcommand{\epsilon}{\varepsilon}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\abstract{%
-In this article, we describe the software library 
-package \textit{Deal Optimization Environment} (DOpE).
-Its main feature is to give a unified interface to high level algorithms such as 
-time stepping methods, nonlinear solvers and optimization routines. The performance and features 
-of the software package are demonstrated by computing 
-four numerical tests. 
-
-
-
-}
-
-\keywords{%
-
-}
 
 %
 \begin{document}
-\maketitle
+\markboth{C. Goll, T. Wick, and W. Wollner}{DOpElib: A Goal Oriented Software Library}
+
+\title{DOpElib: A Goal Oriented Software Library for Computing PDEs and Optimization Problems}
+
+\author{CHRISTIAN GOLL
+\affil{University of Heidelberg}
+THOMAS WICK
+\affil{University of Heidelberg}
+WINNIFRIED WOLLNER
+\affil{University of Hamburg}}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+\begin{abstract}
+In this article, we describe the software library 
+\textit{Deal.II Optimization Environment} (DOpElib).
+The main feature of DOpElib is that it provides a unified interface to high level algorithms 
+such as time stepping methods, nonlinear solvers and optimization routines. This structure ensures 
+that first of all the user is required to write those sections of code that are specific to 
+the considered problem. Second, the exchange of parts of the used routines is possible 
+with the need for just a few lines of code to change.
+The article illustrates performance and features 
+of the software package by four numerical tests. 
+\end{abstract}
+
+%\category{C.2.2}{Computer-Communication Networks}{Network Protocols}
+
+%\terms{Design, Algorithms, Performance}
+
+%\keywords{Wireless sensor networks, media access control,
+%multi-channel, radio interference, time synchronization}
+
+%\acmformat{Zhou, G., Wu, Y., Yan, T., He, T., Huang, C., Stankovic,
+%J. A., and Abdelzaher, T. F.  2010. A multifrequency MAC specially
+%designed for  wireless sensor network applications.}
+
+\begin{bottomstuff}
+Author's adresses: C. Goll {and} T. Wick, Institut f\"ur Angewandte Mathematik, Universit\"at Heidelberg;
+W. Wollner, Fachbereich Mathematik, Universit\"at Hamburg.
+\end{bottomstuff}
+                      
+
+\maketitle
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Introduction}
 \label{introduction}
-The \textit{Deal Optimization Environment} (DOpE) project is 
-based on the \textit{deal.II} \citep{deal} finite element library which has been developed
+
+
+The \textit{Deal Optimization Environment} (DOpElib) project is 
+based on the \textit{deal.II} \cite{deal} finite element library which has been developed
  initially by W. Bangerth, R. Hartmann, and G. Kanschat \cite{deal}.
 Its main feature is to give a unified interface to high level algorithms such as 
 time stepping methods, nonlinear solvers and optimization routines. 
@@ -548,7 +575,7 @@ I do not know.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %\bibliographystyle{abbrvnat}
-\bibliographystyle{plainnat}
+\bibliographystyle{acmsmall}
 \bibliography{lit}
 %
 

@@ -1,29 +1,27 @@
-\begin{thebibliography}{4}
-\providecommand{\natexlab}[1]{#1}
-\providecommand{\url}[1]{\texttt{#1}}
-\expandafter\ifx\csname urlstyle\endcsname\relax
-  \providecommand{\doi}[1]{doi: #1}\else
-  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+\begin{thebibliography}{}
 
-\bibitem[Bangerth et~al.(2010)Bangerth, Hartmann, and Kanschat]{deal}
-Wolfgang Bangerth, Ralf Hartmann, and Guido Kanschat.
-\newblock \emph{Differential Equations Analysis Library}, 2010.
+\bibitem[\protect\citeauthoryear{Bangerth, Hartmann, and Kanschat}{Bangerth
+  et~al\mbox{.}}{2010}]{deal}
+{\sc Bangerth, W.}, {\sc Hartmann, R.}, {\sc and} {\sc Kanschat, G.} 2010.
+\newblock {\em Differential Equations Analysis Library}.
 
-\bibitem[Becker et~al.(2005)Becker, Meidner, and Vexler]{rodobo}
-R.~Becker, D.~Meidner, and B.~Vexler.
-\newblock \emph{RODOBO: A C++ library for optimization with stationary and
-  nonstationary PDEs}, 2005.
+\bibitem[\protect\citeauthoryear{Becker, Meidner, and Vexler}{Becker
+  et~al\mbox{.}}{2005}]{rodobo}
+{\sc Becker, R.}, {\sc Meidner, D.}, {\sc and} {\sc Vexler, B.} 2005.
+\newblock {\em RODOBO: A C++ library for optimization with stationary and
+  nonstationary PDEs}.
 
-\bibitem[Becker et~al.(2007)Becker, Meidner, and Vexler]{BeMeVe06}
-Roland Becker, Dominik Meidner, and Boris Vexler.
+\bibitem[\protect\citeauthoryear{Becker, Meidner, and Vexler}{Becker
+  et~al\mbox{.}}{2007}]{BeMeVe06}
+{\sc Becker, R.}, {\sc Meidner, D.}, {\sc and} {\sc Vexler, B.} 2007.
 \newblock Efficient numerical solution of parabolic optimization problems by
   finite element methods.
-\newblock \emph{Optim. Methods Softw.}, 22\penalty0 (5):\penalty0 813--833,
-  2007.
+\newblock {\em Optim. Methods Softw.\/}~{\em 22,\/}~5, 813--833.
 
-\bibitem[Nocedal and Wright(2000)]{NoWr00}
-J.~Nocedal and S.J. Wright.
-\newblock \emph{Numerical Optimization}.
-\newblock Springer, US, 2nd edition, 2000.
+\bibitem[\protect\citeauthoryear{Nocedal and Wright}{Nocedal and
+  Wright}{2000}]{NoWr00}
+{\sc Nocedal, J.} {\sc and} {\sc Wright, S.} 2000.
+\newblock {\em Numerical Optimization\/} 2nd Ed.
+\newblock Springer, US.
 
 \end{thebibliography}
