@@ -69,6 +69,7 @@ h1#logo a{ display:block; height:90px; text-indent: -4000px; background:url(imag
 
 .cols {}
 .col { float:left; width:250px; margin-right:115px;}
+.col-long { float:left; width:500px; margin-right:115px;}
 .col-last { margin-right:0;}
 
 
