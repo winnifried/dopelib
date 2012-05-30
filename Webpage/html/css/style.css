@@ -33,8 +33,8 @@ h2, h3,
 #slider-navigation,
 #footer { font-family: "Trebuchet MS", Arial, sans-serif;}
 
-h1#logo { font-size:0; line-height:0; width:216px; height:90px; float:left; }
-h1#logo a{ display:block; height:90px; text-indent: -4000px; background:url(images/logo.gif); }
+h1#logo { padding:15px; font-size:0; line-height:0; width:150px; height:50px; float:left; }
+h1#logo a{ display:block; height:50px; text-indent: -4000px; background:url(images/logo-small.gif); }
 
 .shell { width:980px; margin:0 auto; }
 
@@ -75,10 +75,10 @@ h1#logo a{ display:block; height:90px; text-indent: -4000px; background:url(imag
 
 
 #footer { height:92px; background:url(images/footer.gif); color:#6d6d6d; }
-#footer .shell{ padding-top:28px;}
+#footer .shell{ padding-top:28px; }
 #footer .right { white-space:nowrap; font-size:14px; text-align: right;}
 #footer .right span{ padding:0 1px;}
 #footer .right a{ text-decoration: none; color:#939393;}
 #footer .right a:hover{ color:#f6cb44;}
-.footer-logo { float:left; width:169px; height:34px; background:url(images/footer-logo.gif); }
+.footer-logo {float:left; width:150px; height:50px; background:url(images/logo-small.gif); }
 
