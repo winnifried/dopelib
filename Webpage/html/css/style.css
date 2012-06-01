@@ -61,7 +61,12 @@ h1#logo a{ display:block; height:70px; text-indent: -4000px; background:url(imag
 .slide-info h2{ padding-bottom:20px;}
 .slide-info p{ padding-bottom:15px;}
 .slide-image { float:right; width:219px; height:240px; }
-.image-dope1 { float:right; width:512px; height:180px; background:url(images/dope-animated-large.gif); }
+.image-dope1 { float:left; width:600px; height:240px; background:url(images/dope-animated-large.gif); }
+.image-dope2 { float:left; width:658px; height:216px; background:url(images/dope-1.gif); }
+.image-dope3 { float:left; width:658px; height:216px; background:url(images/dope-2.gif); }
+.image-dope4 { float:left; width:657px; height:229px; background:url(images/dope-3.gif); }
+.image-dope5 { float:left; width:682px; height:172px; background:url(images/dope-4.gif); }
+
 .image1 { background:url(images/slide-image.png); }
 
 #main { width:100%; background:#d3d4ce; padding:50px 0;}
