@@ -32,6 +32,7 @@
 \usepackage{float}
 \usepackage{subfig}
 
+
 %%% User's macros placed after this line %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %\IfFileExists{dsfont.sty}%
 %\usepackage{dsfont}
@@ -40,6 +41,7 @@
 \renewcommand{\phi}{\varphi}
 \renewcommand{\epsilon}{\varepsilon}
 
+\newcommand{\todo}[1]{\textbf{\textsc{\textcolor{black}{TODO: #1}}}}
 
 %
 \begin{document}
@@ -93,8 +95,27 @@ W. Wollner, Fachbereich Mathematik, Universit\"at Hamburg.
 \section{Introduction}
 \label{introduction}
 
+\todo{Wie sehr wollen wir deal.II im ersten Satz hervorheben?}
+\todo{Vorschlag von TW: 
+The aim of the \textit{Deal Optimization Environment} (DOpElib) 
+is to provide a software toolkit to solve forward PDE
+problems as well as optimal control problems constrained by PDE. The
+solution of a broad variety of PDE is possible in other software
+libraries (like in deal.II, dune, or commercial solvers Ansys) 
+as well, but
+DOpE concentrates on a unified approach for both linear and nonlinear
+problems by interpreting every PDE problem as nonlinear and applying a
+Newton method to solve it. While deal.II leaves much of the work and many
+decisions to the user, DOpE intends to be user-optimized by delivering
+prefabricated tools which require from the user only adjustments connected
+to his specific problem. The solution of optimal control problems with PDE
+constraints is an innovation in the DOpE framework.
+The focus is on the numerical solution of both stationary and nonstationary
+problems which come from different application fields, like elasticity and
+plasticity, fluid dynamics, and fluid-structure interactions.
+}
 
-The \textit{Deal Optimization Environment} (DOpElib) project is 
+The DOpElib project is 
 based on the \textit{deal.II} \cite{deal} finite element library which has been developed
  initially by W. Bangerth, R. Hartmann, and G. Kanschat \cite{deal}.
 Its main feature is to give a unified interface to high level algorithms such as 
@@ -112,22 +133,23 @@ Gascoigne/RoDoBo project, which was initiated by
 Roland Becker, Dominik Meidner,  and Boris Vexler \cite{rodobo}. 
 From which some of the ideas to modularize the algorithms have arisen.
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-The aim of DOpE is to provide a software toolkit to solve forward PDE
-problems as well as optimal control problems constrained by PDE. The
-solution of a broad variety of PDE is possible in deal.II as well, but
-DOpE concentrates on a unified approach for both linear and nonlinear
-problems by interpreting every PDE problem as nonlinear and applying a
-Newton method to solve it. While deal.II leaves much of the work and many
-decisions to the user, DOpE intends to be user-optimized by delivering
-prefabricated tools which require from the user only adjustments connected
-to his specific problem. The solution of optimal control problems with PDE
-constraints is an innovation in the DOpE framework.
-The focus is on the numerical solution of both stationary and nonstationary
-problems which come from different application fields, like elasticity and
-plasticity, fluid dynamics, and fluid-structure interactions.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%The aim of DOpE is to provide a software toolkit to solve forward PDE
+%problems as well as optimal control problems constrained by PDE. The
+%solution of a broad variety of PDE is possible in deal.II as well, but
+%DOpE concentrates on a unified approach for both linear and nonlinear
+%problems by interpreting every PDE problem as nonlinear and applying a
+%Newton method to solve it. While deal.II leaves much of the work and many
+%decisions to the user, DOpE intends to be user-optimized by delivering
+%prefabricated tools which require from the user only adjustments connected
+%to his specific problem. The solution of optimal control problems with PDE
+%constraints is an innovation in the DOpE framework.
+%The focus is on the numerical solution of both stationary and nonstationary
+%problems which come from different application fields, like elasticity and
+%plasticity, fluid dynamics, and fluid-structure interactions.
+%
 
-At the present stage the following features are supported by the library
+At the present stage the following key features are supported by the library
 \begin{itemize}
 \item Solution of stationary and nonstationary PDEs in 1d, 2d, and 3d.
 \item Various time stepping schemes (based on finite differences), 
@@ -145,29 +167,33 @@ At the present stage the following features are supported by the library
 \item Mesh adaptation.
 \item Different spatial triangulations for control and state variables.
 \end{itemize}
+
+The article is organized as follows. In Section
+\ref{detailed_description} 
  
-The rest of this document is structured as follows: We start with an introduction in
-Chapter~\ref{chap:intro} where you will learn what is needed to run {\tt DOpElib}. 
-Further you will learn what problems we can solve and how all the different classes 
-work together for this purpose. This should help you figure out what the different classes
-do if you are in need of writing your own algorithm.
-
-Then assuming that you can work to your satisfaction with the algorithms already implemented
-we will show you how to create your own running example in Chapter~\ref{chap:howtoex}.
-This will be followed by a detailed description of all examples already shipped with 
-the library. You can find the examples for the solution of PDEs in Chapter~\ref{PDE}
-and those for the solution of optimization problems with PDEs in Chapter~\ref{OPT}.
-
-These notes conclude with a section that explains how we do automated testing of the 
-implementation in Chapter~\ref{chap:test}. This chapter will be of interest only if you 
-are trying to implement some new features to the library so that you can check that 
-the new code did not break anything.
-
+%The rest of this document is structured as follows: We start with an introduction in
+%Chapter~\ref{chap:intro} where you will learn what is needed to run {\tt DOpElib}. 
+%Further you will learn what problems we can solve and how all the different classes 
+%work together for this purpose. This should help you figure out what the different classes
+%do if you are in need of writing your own algorithm.
+%
+%Then assuming that you can work to your satisfaction with the algorithms already implemented
+%we will show you how to create your own running example in Chapter~\ref{chap:howtoex}.
+%This will be followed by a detailed description of all examples already shipped with 
+%the library. You can find the examples for the solution of PDEs in Chapter~\ref{PDE}
+%and those for the solution of optimization problems with PDEs in Chapter~\ref{OPT}.
+%
+%These notes conclude with a section that explains how we do automated testing of the 
+%implementation in Chapter~\ref{chap:test}. This chapter will be of interest only if you 
+%are trying to implement some new features to the library so that you can check that 
+%the new code did not break anything.
+%
 
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Detailed Description of the Features}
+\label{detailed_description}
 This library is designed to allow easy implementation and numerical solutions 
 of problems involving partial differential equations (PDEs). The easiest case 
 is that of a PDE in weak form to find some $u$
@@ -545,12 +571,98 @@ This should be done by someone who knows what they are used for. Please move the
 \subsection{Interfaces to other software packages}
 deal.II and SNOPT
 
+\section{Documentation, Code Development, Webpage}
+\label{documentation}
+At the present step, the DOpElib project comes with 
+an detailed documentation of all features and examples 
+in pdf format and an detailed programming code 
+documentation. 
+
+\todo{License? How to access to DOpE?}
+\todo{Name of the website}
+
+In addition, the DOpElib test suite provides some regression tests. 
+They are run to compare 
+the output to previous outputs. This is useful (necessary) after 
+changing programming code anywhere in the library. If a test
+succeeds, everything is fine in the library. If not, you should not
+check in your code into DOpE. Please make sure what is going wrong and WHY!
+Every command is computed via a Makefile. 
+
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Numerical Examples}
+\section{Applications}
+\label{applications}
+We present some numerical tests that have been already computed 
+with DOpElib. These tests demonstrate the performance 
+of DOpElib by covering different computational aspects. 
+\begin{itemize}
+\item In detail, the first numerical test, validates various time-stepping schemes
+and the numerical solution of nonlinear coupled partial differential
+equations, formulated in a monolithic solution algorithm. 
+Specifically, the equations are solved by the Rothe method, i.e,
+first temporal discretization and then spatial discretization 
+with a Galerkin finite element scheme. The nonlinaer problem
+is solved by Newton's method. The Jacobian is derived 
+by analytical expressions of the derivatives. 
+In DOpElib this example is implemented in 
+\texttt{Example/PDE/InstatPDE/Example2}
+\item The second example presents an
+optimization problem and its numerical solution.
+\item In the third example, we consider the numerical
+solution of fluid flows governed by the Navier-Stokes
+equations. In contrast to the previous tests, we 
+use finite elements on locally adapted meshes 
+with goal-oriented mesh refinement with the help
+of the dual-weighted residual method. Using 
+this method of local mesh refinement, the error estimator
+is derived with respect to some goal functional and 
+provides optimal meshes to the accurate measurement 
+of the considered functional value. Consequently,
+this is an effiecient method to reduce the computational 
+cost. Most other 
+software libraries does not provide goal-oriented 
+mesh refinement.  
+\item In the last numerical test, we consider 
+different types of boundary conditions to drive
+our problems. 
+\end{itemize}
+
 
 \subsection{Nonstationary Fluid-Structure Interaction}
-The results are already obtained
+In this example, the three proposed mesh motion models are applied 
+to an unsteady fluid-structure interaction problem. We consider 
+the numerical benchmark test FSI 2, which was proposed in \cite{HrTu06b}. 
+The configuration is 
+sketched in Figure \ref{configuration_csm_and_fsi_2D}.
+New results can be found in \cite{BuSc06, TuHrMaRaWoAc10, DeHaeAnnBrVie10}. 
+The Fractional-Step-$\theta$ scheme was used for time discretization with
+different time step sizes $k$. 
+
+% Bilder von FSI 2 
+\begin{figure}[h]
+\centering
+{\includegraphics[width=6cm]{Pictures/visit_fsi_2_CNn_t_2e-2_global_3_biharmonic_mesh8070_scale.png}}
+{\includegraphics[width=6cm]{Pictures/visit_fsi_2_CNn_t_2e-2_global_3_biharmonic_x_velo8070_scale.png}}
+\caption{FSI 2 test case: mesh (left) and velocity profile in vertical 
+direction (right) at time $t=16.14s$.}
+\label{res:fsi_2_mesh_and_x_velo}
+\end{figure}
+
+\begin{figure}
+\centering
+{\includegraphics[width=5.8cm]{Pictures/ux_FSI_2_FS_t_3e-2_t_15e-3_global_2_Hron_grid.pdf}}
+{\includegraphics[width=5.8cm]{Pictures/uy_FSI_2_FS_t_3e-2_t_15e-3_global_2_Hron_grid.pdf}}
+{\includegraphics[width=5.8cm]{Pictures/Drag_fluid_FSI_2_FS_t_3e-2_t_15e-3_global_2_Hron_grid.pdf}}
+{\includegraphics[width=5.8cm]{Pictures/Lift_fluid_FSI_2_FS_t_3e-2_t_15e-3_global_2_Hron_grid.pdf}}
+\caption{FSI 2: the deflections of the beam, $u_x(A)$ and $u_y(A)$ (in $cm$), and 
+the drag and the lift evaluation (in $kg/m\,s^2$) are displayed versus
+time (in $s$).
+} 
+\label{res:results_ux_and_uy_fsi_2}
+\end{figure}
+
 
 \subsection{Compliance minimization}
 Results already obtained.
@@ -562,13 +674,27 @@ Has to be computed.
 Periodic Boundary Conditions}
 I do not know.
 
-
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Conclusions and Outlook}
+\label{conclusions}
+In this article, we described the features 
+and applications of the DOpElib project, which 
+was initiated at the Heidelberg University in 2010.
+Specifically, the applications cover a broad 
+spectrum of numerical exmamples motivated 
+by different disciplines. 
+Currently, we are developing concepts for the efficient 
+numerical solution of time-dependent optimization
+problems governed by PDEs. 
+\todo{Was wollen wir noch in den nächsten 1-2 Jahren erreichen?}
 
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section*{Acknowledgment}
+The second author thanks Rolf Rannacher from
+the Institute for Applied mathematics at the 
+Heidelberg University for financial suppport. 
 
 
 
