@@ -94,14 +94,22 @@ W. Wollner, Fachbereich Mathematik, Universit\"at Hamburg.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Introduction}
 \label{introduction}
+The \textit{Deal Optimization Environment} (DOpElib) 
+provides a software toolkit to solve forward PDE
+problems as well as optimal control problems constrained by a PDE. 
+Its main feature is to give a unified interface to high level algorithms such as 
+time stepping methods, nonlinear solvers and optimization routines. 
+We aim that the user should only need to write those parts
+of the code that are problem dependent while all invariant parts of the algorithms
+should be reusable without any need for further coding.
+In particular, the user should be able to switch between various different 
+algorithms without the need to rewrite the problem dependent code, though he or she will
+have to replace the algorithm object with an other one. 
 
-\todo{Wie sehr wollen wir deal.II im ersten Satz hervorheben?}
-\todo{Vorschlag von TW: 
-The aim of the \textit{Deal Optimization Environment} (DOpElib) 
-is to provide a software toolkit to solve forward PDE
-problems as well as optimal control problems constrained by PDE. The
+The
 solution of a broad variety of PDE is possible in other software
-libraries (like in deal.II, dune, or commercial solvers Ansys) 
+libraries (like in deal.II \cite{deal}, dune \cite{dune} , 
+or commercial solvers like Ansys \cite{ansys}) 
 as well, but
 DOpE concentrates on a unified approach for both linear and nonlinear
 problems by interpreting every PDE problem as nonlinear and applying a
@@ -113,20 +121,10 @@ constraints is an innovation in the DOpE framework.
 The focus is on the numerical solution of both stationary and nonstationary
 problems which come from different application fields, like elasticity and
 plasticity, fluid dynamics, and fluid-structure interactions.
-}
 
 The DOpElib project is 
 based on the \textit{deal.II} \cite{deal} finite element library which has been developed
  initially by W. Bangerth, R. Hartmann, and G. Kanschat \cite{deal}.
-Its main feature is to give a unified interface to high level algorithms such as 
-time stepping methods, nonlinear solvers and optimization routines. 
-We aim that the user should only need to write those parts
-of the code that are problem dependent while all invariant parts of the algorithms
-should be reusable without any need for further coding.
-In particular, the user should be able to switch between various different 
-algorithms without the need to rewrite the problem dependent code, though he or she will
-have to replace the algorithm object with an other one. 
-
 The authors acknowledge their past experience as well as discussions with 
 the authors of the libraries 
 Gascoigne/RoDoBo project, which was initiated by 
@@ -164,7 +162,7 @@ At the present stage the following key features are supported by the library
   additional other constraints.
 \item Several examples showing how to solve various kinds of optimization problems
   involving stationary PDE constraints.
-\item Mesh adaptation.
+\item Goal-oriented mesh adaptation with the dual-weighted residual method.
 \item Different spatial triangulations for control and state variables.
 \end{itemize}
 
@@ -194,6 +192,11 @@ The article is organized as follows. In Section
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Detailed Description of the Features}
 \label{detailed_description}
+\todo{Aus der Sicht des Users anhand eines konkreten Beispiels beschreiben}
+\todo{Einfaches Beispiel nehmen}
+\todo{erwaehnen, dass wir alles immer nicht-linear betrachten}
+\todo{Aussehen eines typischen PDE und Opt loop und deren Gemeinsamkeiten
+erklaeren. Vielleicht mir Pseudocode}
 This library is designed to allow easy implementation and numerical solutions 
 of problems involving partial differential equations (PDEs). The easiest case 
 is that of a PDE in weak form to find some $u$
@@ -222,8 +225,16 @@ classes in \texttt{DOpEsrc/container}
   \item \texttt{pdeproblemcontainer.h} Is used to describe  stationary PDE problems.
   \item \texttt{instatpdeproblemcontainer.h} {\bf TODO is still missing but will be used for nonstationary problems.} This will be implemented once we have nonstationary optimization problems running to avoid error duplication in the coding process.
   \item \texttt{optproblem.h} Is used to describe  OPT problems governed by 
-    stationary PDEs. {\bf TODO should be renamed to optproblemcontainer.h including the class name!}
-  \item \texttt{instatoptproblemcontainer.h} Is used to describe  OPT problems governed by nonstationary PDEs. The only difference to the stationary case is that we need to specify a time-stepping method.  
+    stationary PDEs. 
+  \item \texttt{instatoptproblemcontainer.h} Is used to describe  OPT problems
+    governed by nonstationary PDEs. The only difference to the stationary case
+    is that we need to specify a time-stepping method.  
+  \item \texttt{interfaces/functionalinterface.h} This gives an interface 
+    for the functional $J(\cdot)$ and any other functional you may want to evaluate.
+    In general this can be used as a base class to write your own functionals 
+    in examples. We note that we only need to write the integrands on 
+    elements or faces the loop over elements will be taken care of in the integrator.
+    Specifically, derivatives are written therein, too.
 \end{itemize}
 In order to fill these containers there are two things to be done,
 first we need to actually write some data, for instance,
@@ -294,7 +305,9 @@ the containers.
   face data container.
 \end{itemize}
 
+
 \subsubsection{Time stepping schemes}
+\todo{Kurz halten}
 Third, at least for nonstationary PDEs we need to select a time stepping scheme
 the file names of which are mostly self explanatory:
 \begin{itemize}
@@ -335,54 +348,61 @@ Finally, we need to select a way how to integrate and solve linear and nonlinear
 \end{itemize}
 
 \subsubsection{Linear solvers}
-\begin{itemize}
-\item \texttt{templates/cglinearsolver.h} This is a wrapper for the cg solver implemented in 
-  \texttt{deal.II}. The solver will build and store the stiffness matrix for the PDE.
-\item \texttt{templates/gmreslinearsolver.h} This is a wrapper for the gmres solver 
-  implemented in \texttt{deal.II}. The solver will build and store the stiffness matrix 
-  for the PDE.
-\item \texttt{templates/directlinearsolver.h} This is a wrapper for the direct solver 
-  implemented in \texttt{deal.II} using \texttt{UMFPACK}. 
-  The solver will build and store the stiffness matrix for the PDE.
-\item \texttt{templates/voidlinearsolver.h} This is a wrapper for certain cases when we 
+To solve the linear equations within Newton's method, we use 
+standard solvers from iterative type 
+such as the method of the conjugate gradients (CG method), 
+GMRES, or direct solvers such as \texttt{UMFPACK}.
+In addition, we DOpE provides  a wrapper class 
+\texttt{templates/voidlinearsolver.h} for certain cases when we 
   know that the matrix to be inverted is the identity. It simply copies the rhs to the
   lhs. This is only needed for compatibility reasons some other components.
-\end{itemize}
 
 
 
-\subsection{Problem specific classes}
-The following classes are used to describe the problem and will usually require 
-some implementation.
 
-\begin{itemize}
-  \item \texttt{basic/constraints.h} This is used by the spacetimehandlers to 
-    compute the number of constraints from the control and state vectors. 
-    It must not be reimplemented by the user, but needs to be properly 
-    initialized if OPT is used with box control constraints or $g(q,u) \le 0$.
-  \item \texttt{interfaces/functionalinterface.h} This gives an interface 
-    for the functional $J(\cdot)$ and any other functional you may want to evaluate.
-    In general this can be used as a base class to write your own functionals 
-    in examples. We note that we only need to write the integrands on 
-    elements or faces the loop over elements will be taken care of in the integrator.
-    Specifically, derivatives are written therein, too.
-  \item \texttt{interfaces/constraintinterface.h} This gives an interface for both 
-    the control box constraints as well as the general constraint $g \le 0$. This 
-    needs to be specified if constraints are to be used. If they are not needed 
-    a default class \texttt{problemdata/noconstraints.h} can be used. We note that we only 
-    need to write the integrands on 
-    elements or faces the loop over elements will be taken care of in the integrator.
-  \item \texttt{interfaces/pdeinterface.h} This defines an interface for the 
-    partial differential equation $a(q,u)(\phi) = 0$. This needs to be written
-    by the user. We note that we only need to write the integrands on 
-    elements or faces the loop over elements will be taken care of in the integrator.
-    Specifically, derivatives are written therein, too.
-  \item \texttt{interfaces/dirichletdatainterface.h} This gives an interface to the 
-    Dirichlet data for a problem. If the Dirichlet data are simply a function 
-    (and do not depend on the control $q$) one can use the default class\\
-    \texttt{problemdata/simpledirichletdata.h}.
-\end{itemize}
+%\begin{itemize}
+%\item \texttt{templates/cglinearsolver.h} This is a wrapper for the cg solver implemented in 
+%  \texttt{deal.II}. The solver will build and store the stiffness matrix for the PDE.
+%\item \texttt{templates/gmreslinearsolver.h} This is a wrapper for the gmres solver 
+%  implemented in \texttt{deal.II}. The solver will build and store the stiffness matrix 
+%  for the PDE.
+%\item \texttt{templates/directlinearsolver.h} This is a wrapper for the direct solver 
+%  implemented in \texttt{deal.II} using \texttt{UMFPACK}. 
+%  The solver will build and store the stiffness matrix for the PDE.
+%\item \texttt{templates/voidlinearsolver.h} This is a wrapper for certain cases when we 
+%  know that the matrix to be inverted is the identity. It simply copies the rhs to the
+%  lhs. This is only needed for compatibility reasons some other components.
+%\end{itemize}
+%
 
+
+%\subsection{Problem specific classes}
+%The following classes are used to describe the problem and will usually require 
+%some implementation.
+%
+%\begin{itemize}
+%  \item \texttt{basic/constraints.h} This is used by the spacetimehandlers to 
+%    compute the number of constraints from the control and state vectors. 
+%    It must not be reimplemented by the user, but needs to be properly 
+%    initialized if OPT is used with box control constraints or $g(q,u) \le 0$.
+%
+%  \item \texttt{interfaces/constraintinterface.h} This gives an interface for both 
+%    the control box constraints as well as the general constraint $g \le 0$. This 
+%    needs to be specified if constraints are to be used. If they are not needed 
+%    a default class \texttt{problemdata/noconstraints.h} can be used. We note that we only 
+%    need to write the integrands on 
+%    elements or faces the loop over elements will be taken care of in the integrator.
+%  \item \texttt{interfaces/pdeinterface.h} This defines an interface for the 
+%    partial differential equation $a(q,u)(\phi) = 0$. This needs to be written
+%    by the user. We note that we only need to write the integrands on 
+%    elements or faces the loop over elements will be taken care of in the integrator.
+%    Specifically, derivatives are written therein, too.
+%  \item \texttt{interfaces/dirichletdatainterface.h} This gives an interface to the 
+%    Dirichlet data for a problem. If the Dirichlet data are simply a function 
+%    (and do not depend on the control $q$) one can use the default class\\
+%    \texttt{problemdata/simpledirichletdata.h}.
+%\end{itemize}
+%
 
 
 
@@ -437,139 +457,16 @@ problem where the PDE constraint has been eliminated as explained in the previou
   \texttt{include/augmentedlagrangianproblem.h}.
 \end{itemize} 
 
-\subsection{Other Components}
-Beyond these clearly structured groups before there are some classes remaining that
-do not fit the above but are important for the user to know.
 
-\subsubsection{Vectors}
-\begin{itemize}
-\item \texttt{include/statevector.h} This stores all dofs in space and time for the state 
-  variable $u$. It is possible to select whether all this should be kept in memory or 
-  or unused parts can be written to the hard disk.
-\item \texttt{include/controlvector.h} This stores all dofs in space and time for the 
-  control variable $q$. At present no time dependence is implemented.
-\item \texttt{include/constraintvector.h} This stores all dofs in space and time for the 
-  non PDE constraints (and corresponding multipliers). 
-  At present no time dependence is implemented.
-\end{itemize}
-
-\subsubsection{Parameter handling}
-\begin{itemize}
-\item \texttt{include/parameterreader.h} This file is used to define a parameter reader
-  that is used to read run time parameters from a given file.
-\end{itemize}
-
-\subsubsection{Exception handling}
-\begin{itemize}
-\item \texttt{include/dopeexception.h} Defines some Exceptions that are thrown by the program
-  should it encounter any unexpected errors.
-\item \texttt{include/dopeexceptionhandler.h} This class is used to write information 
-  contained in the exceptions to the output in a uniform manner.
-\end{itemize}
-
-\subsubsection{Output handling}
-\begin{itemize}
-\item \texttt{include/outputhandler.h} This file defines an outputhandler object which 
-  can be used to decide whether some information should be written to screen or file.
-  In addition it can format output according to some run time parameters given by a 
-  parameter file.
-\end{itemize}
-
-\subsection{Data Access}
-\begin{itemize}
-\item \texttt{include/solutionextractor.h} This class is used to gain access to the finite element 
-  solutions stored in the reduced problems.
-\end{itemize}
-
-\subsubsection{Constraints and system matrix}
-\begin{itemize}
-\item \texttt{include/userdefineddofconstraints.h} This class sets the constraints on the DOFs of the state and/or control FE solution. DOpE itself builds the hanging-node-constraints, but the user can reimplement this class and thus include other constraints as well (for example periodic BC). Note, that the hanging-node-constraints come first (in case of conflicting constraints.)
-\item \texttt{include/sparsitymaker.h} This class sets the sparsity pattern for the state FE solution. The standard implementation is just a wrapper for \texttt{dealii::DoFTools::} \texttt{make\_sparsity\_pattern}, but the user can reimplement this class to allow for more sophisticated sparsity patterns.
-\end{itemize}
-
-\subsubsection{HP components}
-\begin{itemize}
-\item \texttt{interfaces/active\underline{ }fe\underline{ }index\underline{ }setter\underline{ }interface.h} In the case of hp finite elements, one has to specify for each cell which finite element to use. This is done via this interface.
-\end{itemize}
-
-\subsection{Internal structures}
-{\bf TODO: ab hier habe ich noch nichts gemacht (TW)}
-\subsubsection{Interface Classes}
-\begin{itemize}
-  \item \texttt{interfaces/transposeddirichletdatainterface.h} This provides an interface to 
-    the functionality required by {\em transposed Dirichlet data}. Usually when one applies Dirichlet 
-    data $g$ to a function one has to calculate a continuation $Bg$ which is defined on the whole domain.
-    In optimization problems when the Dirichlet data depends on the control one has to evaluate the 
-    dual operator $B^*$ in order to obtain a representation for the reduced gradient of the objective $J$.
-    This is done using the {\em transposed Dirichlet data}.
-  \item \texttt{interfaces/reducedprobleminterface.h} In order to allow all algorithms to be written independent
-    of the given (OPT) problem 
-    (and not requiring the problem as template argument) there is a common base class which 
-    defines the required interfaces. 
-  \item \texttt{interfaces/pdeprobleminterface.h} The same as above but for (PDE) problems.
-\end{itemize}
-
-\subsubsection{Default Classes}
-\begin{itemize}
-  \item \texttt{problemdata/noconstraints.h} A class that can be used for optimization problems 
-    having only a PDE constraint but no further constraints.
-  \item \texttt{problemdata/simpledirichletdata.h} A class that can be used to implement Dirichlet
-    data that are given as a fixed function (independent of the control).
-  \end{itemize}
-
-\subsubsection{Auto-generated Problem Descriptions}
-\begin{itemize}
-  \item \texttt{problemdata/stateproblem.h} This is the problem description for the (forward/primal) PDE constraint.
-    {\bf Similar descriptors will be build for the other problems (adjoint, tangent, $\ldots$) when time allows.}
-  \item \texttt{problemdata/initialproblem.h} This is the problem descriptor to compute the finite element representation
-    of the initial values. This is generated by the different time-stepping schemes based upon the defined 
-    representation by the pde, which is set to the component wise $L^2$ projection by default.
-  \item \texttt{problemdata/primaldirichletdata.h} This class contains the Dirichlet data for the 
-    forward/primal PDE.
-  \item \texttt{problemdata/tangentdirichletdata.h} This class contains the Dirichlet data for the tangent PDE, i.e.,
-    the first derivative of the Dirichlet data.
-  \item \texttt{problemdata/transposedgradientdirichletdata.h} This contains the transposed Dirichlet data needed 
-    to calculate the gradient of the reduced objective functional, 
-    for detail see \texttt{interfaces/transposeddirichletdatainterface.h}.
-  \item \texttt{problemdata/transposedhessiandirichletdata.h} This contains the transposed Dirichlet data needed 
-    to calculate the hessian of the reduced objective functional, 
-    for detail see \texttt{interfaces/transposeddirichletdatainterface.h}.
-\end{itemize}
-\subsubsection{Management of Time Dependent Problems}
-\begin{itemize}
-\item \texttt{include/timedofhandler.h} DoFHandler responsible for the management of the timedofs (this is a part of the \texttt{SpaceTimeDoFHandler}-classes). Basically a wrapper for a $1d$ \texttt{deal.II}-DoFHandler.
-\item \texttt{include/timeiterator.h} This class works as an iterator on the \texttt{TimeDoFHandler}.                 
-\end{itemize}
-\subsection{Wrapper classes}
-\begin{itemize}
-  \item \texttt{wrapper/dofhandler\underline{ }wrapper.h} A wrapper class for the \texttt{deal.II} DoFHandlers. This 
-    class is needed to provide support for the \texttt{dim $= 0$} case and to have a uniform interface to 
-    DoFHandler and HPDoFHandler.
-  \item \texttt{wrapper/preconditioner\underline{ }wrapper.h} Contains wrappers for several of the preconditioners
-    in \texttt{deal.II}. This is required since unfortunately the preconditioners in \texttt{deal.II} have different
-    interfaces for their initialization.
-  \item \texttt{wrapper/function\underline{ }wrapper.h} An interface that allows to use functions that depend 
-    not only on space but also on time.
-  \item \texttt{wrapper/snopt\underline{ }wrapper.h} An interface to the SNOPT fortran library. This is an additional
-    wrapper to the one provided by SNOPT to allow automatic construction of the functions required 
-    by SNOPT using our library.
-  \item \texttt{wrapper/fevalues\underline{ }wrapper.h} {\bf Will be removed soon!}
-\end{itemize}
-
-\subsection{Other}
-\begin{itemize}
-  \item \texttt{basic/dopetypes.h} This file contains type definitions used in the library. 
-\end{itemize}
-
-{\bf TODO! The following files need some appropriate description here 
-This should be done by someone who knows what they are used for. Please move the description to the right place above.} tsschemes.
-
-
-
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \subsection{Interfaces to other software packages}
-deal.II and SNOPT
+Since DOpE uses as basis the software library deal.II, all its interfaces
+to other packages can be accessed to. For instance, such libararies 
+are trilinos for with an algebraic multigrid method, MPI for a parallel
+solution of the problem.
+
+In addition DOpE itself has an interface to SNOPT.
 
 \section{Documentation, Code Development, Webpage}
 \label{documentation}
@@ -598,11 +495,11 @@ We present some numerical tests that have been already computed
 with DOpElib. These tests demonstrate the performance 
 of DOpElib by covering different computational aspects. 
 \begin{itemize}
-\item In detail, the first numerical test, validates various time-stepping schemes
+\item The first numerical test shows various time-stepping schemes
 and the numerical solution of nonlinear coupled partial differential
 equations, formulated in a monolithic solution algorithm. 
-Specifically, the equations are solved by the Rothe method, i.e,
-first temporal discretization and then spatial discretization 
+Specifically, the equations are solved by the method of lines, i.e,
+first spatial discretization and then temporal  discretization 
 with a Galerkin finite element scheme. The nonlinaer problem
 is solved by Newton's method. The Jacobian is derived 
 by analytical expressions of the derivatives. 
@@ -610,7 +507,9 @@ In DOpElib this example is implemented in
 \texttt{Example/PDE/InstatPDE/Example2}
 \item The second example presents an
 optimization problem and its numerical solution.
-\item In the third example, we consider the numerical
+\item The main purpose of the third example is the application 
+of refinement techniques for local mesh refinement for 
+two and three dimensional problems. We consider the numerical
 solution of fluid flows governed by the Navier-Stokes
 equations. In contrast to the previous tests, we 
 use finite elements on locally adapted meshes 
@@ -624,9 +523,8 @@ this is an effiecient method to reduce the computational
 cost. Most other 
 software libraries does not provide goal-oriented 
 mesh refinement.  
-\item In the last numerical test, we consider 
-different types of boundary conditions to drive
-our problems. 
+\item Here, we show a time-dependent optimization problem or 
+FSI optimization. 
 \end{itemize}
 
 
@@ -668,11 +566,11 @@ time (in $s$).
 Results already obtained.
 
 \subsection{Goal-oriented mesh refinement for Navier-Stokes}
-Has to be computed.
+Has to be computed in two and three dimensions.
 
-\subsection{Dirichlet Velocity, Neumann Pressure, and
-Periodic Boundary Conditions}
-I do not know.
+\subsection{Time-dependent Opimization or FSI optimization}
+
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Conclusions and Outlook}
