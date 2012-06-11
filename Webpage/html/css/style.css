@@ -67,6 +67,7 @@ h1#logo a{ display:block; height:70px; text-indent: -4000px; background:url(imag
 .image-dope4 { float:left; width:657px; height:229px; background:url(images/dope-3.gif); }
 .image-dope5 { float:left; width:682px; height:172px; background:url(images/dope-4.gif); }
 .image-dope6 { float:left; width:720px; height:240px; background:url(images/dope-5.gif); }
+.image-dope-auth { float:left; width:600px; height:229px; background:url(images/dope-auth.jpg); }
 .image-info  { float:bottom; }
 
 .image1 { background:url(images/slide-image.png); }
