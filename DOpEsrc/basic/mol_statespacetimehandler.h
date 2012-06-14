@@ -33,7 +33,7 @@ namespace DOpE
             StateSpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR,
                 dealdim>(index_setter), _sparse_mkr_dynamic(true), _triangulation(
                 triangulation), _state_dof_handler(_triangulation), _state_fe(
-                &state_fe)
+                &state_fe), _state_mesh_transfer(NULL)
         {
           _sparsitymaker = new SparsityMaker<DOFHANDLER, dealdim>;
           _user_defined_dof_constr = NULL;
@@ -46,7 +46,7 @@ namespace DOpE
             StateSpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR,
                 dealdim>(times, index_setter), _sparse_mkr_dynamic(true), _triangulation(
                 triangulation), _state_dof_handler(_triangulation), _state_fe(
-                &state_fe)
+                &state_fe), _state_mesh_transfer(NULL)
         {
           _sparsitymaker = new SparsityMaker<DOFHANDLER, dealdim>;
           _user_defined_dof_constr = NULL;
@@ -57,7 +57,11 @@ namespace DOpE
         {
           _state_dof_handler.clear();
 
-          if (_sparsitymaker != NULL && _sparse_mkr_dynamic == true)
+          if (_state_mesh_transfer != NULL)
+          {
+            delete _state_mesh_transfer;
+          }
+	  if (_sparsitymaker != NULL && _sparse_mkr_dynamic == true)
             {
               delete _sparsitymaker;
             }
@@ -235,6 +239,14 @@ namespace DOpE
             double bottomfraction = 0.0)
         {
           assert(bottomfraction == 0.0);
+	  if (_state_mesh_transfer != NULL)
+          {
+            delete _state_mesh_transfer;
+            _state_mesh_transfer = NULL;
+          }
+	  _state_mesh_transfer =
+              new dealii::SolutionTransfer<dealdim, VECTOR>(
+		_state_dof_handler);
 
           if ("global" == ref_type)
             {
@@ -264,7 +276,8 @@ namespace DOpE
                   "MethodOfLines_StateSpaceTimeHandler::RefineStateSpace");
             }
           _triangulation.prepare_coarsening_and_refinement();
-
+	  if (_state_mesh_transfer != NULL)
+            _state_mesh_transfer->prepare_for_pure_refinement();
           _triangulation.execute_coarsening_and_refinement();
         }
         /******************************************************/
@@ -278,6 +291,19 @@ namespace DOpE
           //TODO this has to be implemented when temporal refinement is possible!
           //At present the temporal grid can't be refined
           return t;
+        }
+
+        /******************************************************/
+
+        /**
+         * Implementation of virtual function in SpaceTimeHandlerBase
+         */
+	void
+        SpatialMeshTransferState(const VECTOR& old_values,
+				 VECTOR& new_values) const
+        {
+          if (_state_mesh_transfer != NULL)
+            _state_mesh_transfer->refine_interpolate(old_values, new_values);
         }
 
         /******************************************************/
@@ -337,7 +363,8 @@ namespace DOpE
         const dealii::SmartPointer<const FE> _state_fe; //TODO is there a reason that this is not a reference?
 
         std::vector<Point<dealdim> > _support_points;
-
+	dealii::SolutionTransfer<dealdim, VECTOR>* _state_mesh_transfer;
+        
     };
 
 }

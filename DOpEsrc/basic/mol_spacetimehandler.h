@@ -49,6 +49,7 @@ namespace DOpE
                 dealdim>( type, index_setter), _triangulation(triangulation), _control_dof_handler(
                 _triangulation), _state_dof_handler(_triangulation), _control_fe(
                 &control_fe), _state_fe(&state_fe), _constraints(), _control_mesh_transfer(
+                NULL), _state_mesh_transfer(
                 NULL), _sparse_mkr_dynamic(true)
         {
           _sparsitymaker = new SparsityMaker<DOFHANDLER, dealdim>;
@@ -66,6 +67,7 @@ namespace DOpE
                 dealdim>(times,type, index_setter), _triangulation(triangulation), _control_dof_handler(
                 _triangulation), _state_dof_handler(_triangulation), _control_fe(
                 &control_fe), _state_fe(&state_fe), _constraints(), _control_mesh_transfer(
+                NULL), _state_mesh_transfer(
                 NULL), _sparse_mkr_dynamic(true)
         {
           _sparsitymaker = new SparsityMaker<DOFHANDLER, dealdim>;
@@ -84,6 +86,7 @@ namespace DOpE
                 dealdim>(type, index_setter), _triangulation(triangulation), _control_dof_handler(
                 _triangulation), _state_dof_handler(_triangulation), _control_fe(
                 &control_fe), _state_fe(&state_fe), _constraints(c), _control_mesh_transfer(
+                NULL), _state_mesh_transfer(
                 NULL), _sparse_mkr_dynamic(true)
         {
           _sparsitymaker = new SparsityMaker<DOFHANDLER, dealdim>;
@@ -103,6 +106,7 @@ namespace DOpE
                 dealdim>(times, type, index_setter), _triangulation(triangulation), _control_dof_handler(
                 _triangulation), _state_dof_handler(_triangulation), _control_fe(
                 &control_fe), _state_fe(&state_fe), _constraints(c), _control_mesh_transfer(
+                NULL), _state_mesh_transfer(
                 NULL), _sparse_mkr_dynamic(true)
         {
           _sparsitymaker = new SparsityMaker<DOFHANDLER, dealdim>;
@@ -118,6 +122,10 @@ namespace DOpE
           if (_control_mesh_transfer != NULL)
           {
             delete _control_mesh_transfer;
+          }
+	  if (_state_mesh_transfer != NULL)
+          {
+            delete _state_mesh_transfer;
           }
           if (_sparsitymaker != NULL && _sparse_mkr_dynamic == true)
           {
@@ -434,11 +442,19 @@ namespace DOpE
             delete _control_mesh_transfer;
             _control_mesh_transfer = NULL;
           }
+	  if (_state_mesh_transfer != NULL)
+          {
+            delete _state_mesh_transfer;
+            _state_mesh_transfer = NULL;
+          }
 #if dope_dimension == deal_II_dimension
           _control_mesh_transfer =
               new dealii::SolutionTransfer<dopedim, VECTOR>(
                   _control_dof_handler);
 #endif
+	  _state_mesh_transfer =
+              new dealii::SolutionTransfer<dealdim, VECTOR>(
+                  _state_dof_handler);
           if ("global" == ref_type)
           {
             _triangulation.set_all_refine_flags();
@@ -472,6 +488,8 @@ namespace DOpE
           //FIXME: works only if no coarsening happens, because we do not have the vectors to be interpolated availiable...
           if (_control_mesh_transfer != NULL)
             _control_mesh_transfer->prepare_for_pure_refinement();
+	  if (_state_mesh_transfer != NULL)
+            _state_mesh_transfer->prepare_for_pure_refinement();
 
           _triangulation.execute_coarsening_and_refinement();
         }
@@ -499,6 +517,13 @@ namespace DOpE
         {
           if (_control_mesh_transfer != NULL)
             _control_mesh_transfer->refine_interpolate(old_values, new_values);
+        }
+	void
+        SpatialMeshTransferState(const VECTOR& old_values,
+				 VECTOR& new_values) const
+        {
+          if (_state_mesh_transfer != NULL)
+            _state_mesh_transfer->refine_interpolate(old_values, new_values);
         }
         /******************************************************/
         /**
@@ -563,6 +588,7 @@ namespace DOpE
 
         Constraints _constraints;
         dealii::SolutionTransfer<dealdim, VECTOR>* _control_mesh_transfer;
+        dealii::SolutionTransfer<dealdim, VECTOR>* _state_mesh_transfer;
         bool _sparse_mkr_dynamic;
     };
 

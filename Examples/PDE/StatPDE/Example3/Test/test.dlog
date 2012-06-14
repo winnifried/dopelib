@@ -30,16 +30,12 @@
 	**************************************************
 
 	Computing State Solution:
-			 Newton step: 0	 Residual (abs.):   1.3e+00
+			 Newton step: 0	 Residual (abs.):   6.3e-02
 			 Newton step: 0	 Residual (rel.):   1.0e+00
-			 Newton step: 1	 Residual (rel.):   6.3e-01	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   5.5e-01	 LineSearch {1} 
-			 Newton step: 3	 Residual (rel.):   4.8e-01	 LineSearch {0} 
-			 Newton step: 4	 Residual (rel.):   1.6e-02	 LineSearch {0} 
-			 Newton step: 5	 Residual (rel.):   9.7e-06	 LineSearch {0} 
-			 Newton step: 6	 Residual (rel.):   1.1e-07	 LineSearch {0} 
-			 Newton step: 7	 Residual (rel.): < 1.0e-08	 LineSearch {0} 
-			 Newton step: 8	 Residual (rel.): < 1.0e-08	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   8.2e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.5e-03	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   3.6e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 1.0e-08	 LineSearch {0} 
 	Computing Functionals:
 	Pressure difference: 119.658
 	Deflection_X: 2.23585e-05
@@ -54,16 +50,13 @@
 	**************************************************
 
 	Computing State Solution:
-			 Newton step: 0	 Residual (abs.):   1.3e+00
+			 Newton step: 0	 Residual (abs.):   3.6e-02
 			 Newton step: 0	 Residual (rel.):   1.0e+00
-			 Newton step: 1	 Residual (rel.):   4.6e-01	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   3.1e-01	 LineSearch {1} 
-			 Newton step: 3	 Residual (rel.):   2.8e-01	 LineSearch {0} 
-			 Newton step: 4	 Residual (rel.):   1.2e-02	 LineSearch {0} 
-			 Newton step: 5	 Residual (rel.):   6.9e-06	 LineSearch {0} 
-			 Newton step: 6	 Residual (rel.):   8.5e-08	 LineSearch {0} 
-			 Newton step: 7	 Residual (rel.): < 1.0e-08	 LineSearch {0} 
-			 Newton step: 8	 Residual (rel.): < 1.0e-08	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   8.0e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   6.4e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   5.1e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   4.4e-07	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.): < 1.0e-08	 LineSearch {0} 
 	Computing Functionals:
 	Pressure difference: 119.318
 	Deflection_X: 2.24526e-05

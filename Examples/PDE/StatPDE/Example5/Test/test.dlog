@@ -35,21 +35,15 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 	**************************************************
 
 	Computing State Solution:
-			 Newton step: 0	 Residual (abs.):   6.2500e+02
+			 Newton step: 0	 Residual (abs.):   3.7983e+01
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
-			 Newton step: 1	 Residual (rel.):   7.5760e-02	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   5.6827e-02	 LineSearch {2} 
-			 Newton step: 3	 Residual (rel.):   4.9725e-02	 LineSearch {3} 
-			 Newton step: 4	 Residual (rel.):   4.7337e-02	 LineSearch {2} 
-			 Newton step: 5	 Residual (rel.):   3.5177e-02	 LineSearch {0} 
-			 Newton step: 6	 Residual (rel.):   7.4778e-03	 LineSearch {0} 
-			 Newton step: 7	 Residual (rel.):   2.0990e-03	 LineSearch {0} 
-			 Newton step: 8	 Residual (rel.):   1.7561e-04	 LineSearch {0} 
-			 Newton step: 9	 Residual (rel.):   1.4796e-05	 LineSearch {0} 
-			 Newton step: 10	 Residual (rel.):   5.6059e-06	 LineSearch {0} 
-			 Newton step: 11	 Residual (rel.):   2.1495e-06	 LineSearch {0} 
-			 Newton step: 12	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
-	Writing [./Mesh1/State_PDEProblemContainer.00012.vtk]
+			 Newton step: 1	 Residual (rel.):   5.9598e-01	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   5.5042e-02	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   8.8460e-03	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   2.8668e-03	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   3.7834e-05	 LineSearch {0} 
+			 Newton step: 6	 Residual (rel.):   2.0091e-11	 LineSearch {0} 
+	Writing [./Mesh1/State_PDEProblemContainer.00006.vtk]
 	Computing Functionals:
 	x-displacement_in_(90,0): 0.00900925
 	y-displacement_in_(100,100): 0.190493

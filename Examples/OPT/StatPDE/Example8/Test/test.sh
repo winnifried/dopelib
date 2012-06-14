@@ -23,11 +23,13 @@ then
 	    echo "No differences found."
 	    rm dope.log
 	    rm -r Mesh0/
+	    rm -r Mesh1/
 	    exit 0
 	else
 	    echo "There where discrepancies in the Output."
 	    diff dope.log test.dlog
 	    rm -r Mesh0/
+	    rm -r Mesh1/
 	    exit 1
 	fi
     else
@@ -42,6 +44,7 @@ else
 	echo "Run completed. Cleaning up ..."
 	mv dope.log test.dlog
 	rm -r Mesh0/
+	rm -r Mesh1/
 	exit 0;
     else
 	echo "Unknown Option: "$1

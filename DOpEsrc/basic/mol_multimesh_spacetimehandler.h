@@ -55,8 +55,8 @@ namespace DOpE
                 index_setter), _state_triangulation(triangulation), _control_dof_handler(
                 _control_triangulation), _state_dof_handler(
                 _state_triangulation), _control_fe(&control_fe), _state_fe(
-                &state_fe), _constraints(), _control_mesh_transfer(NULL), _sparse_mkr_dynamic(
-                true)
+                &state_fe), _constraints(), _control_mesh_transfer(NULL), 
+	      _state_mesh_transfer(NULL), _sparse_mkr_dynamic(true)
         {
           _control_triangulation.copy_triangulation(_state_triangulation);
           _sparsitymaker = new SparsityMaker<DOFHANDLER, dim>;
@@ -72,8 +72,8 @@ namespace DOpE
                 times, type, index_setter), _state_triangulation(triangulation), _control_dof_handler(
                 _control_triangulation), _state_dof_handler(
                 _state_triangulation), _control_fe(&control_fe), _state_fe(
-                &state_fe), _constraints(), _control_mesh_transfer(NULL), _sparse_mkr_dynamic(
-                true)
+                &state_fe), _constraints(), _control_mesh_transfer(NULL), 
+	        _state_mesh_transfer(NULL), _sparse_mkr_dynamic(true)
         {
           _control_triangulation.copy_triangulation(_state_triangulation);
           _sparsitymaker = new SparsityMaker<DOFHANDLER, dim>;
@@ -90,8 +90,8 @@ namespace DOpE
                type, index_setter), _state_triangulation(triangulation), _control_dof_handler(
                 _control_triangulation), _state_dof_handler(
                 _state_triangulation), _control_fe(&control_fe), _state_fe(
-                &state_fe), _constraints(c), _control_mesh_transfer(NULL), _sparse_mkr_dynamic(
-                true)
+                &state_fe), _constraints(c), _control_mesh_transfer(NULL),  
+	        _state_mesh_transfer(NULL), _sparse_mkr_dynamic(true)
         {
           _control_triangulation.copy_triangulation(_state_triangulation);
           _sparsitymaker = new SparsityMaker<DOFHANDLER, dim>;
@@ -109,8 +109,8 @@ namespace DOpE
                 times, type, index_setter), _state_triangulation(triangulation), _control_dof_handler(
                 _control_triangulation), _state_dof_handler(
                 _state_triangulation), _control_fe(&control_fe), _state_fe(
-                &state_fe), _constraints(c), _control_mesh_transfer(NULL), _sparse_mkr_dynamic(
-                true)
+                &state_fe), _constraints(c), _control_mesh_transfer(NULL),   
+	        _state_mesh_transfer(NULL), _sparse_mkr_dynamic(true)
         {
           _control_triangulation.copy_triangulation(_state_triangulation);
           _sparsitymaker = new SparsityMaker<DOFHANDLER, dim>;
@@ -127,7 +127,11 @@ namespace DOpE
             {
               delete _control_mesh_transfer;
             }
-          if (_sparsitymaker != NULL && _sparse_mkr_dynamic == true)
+          if (_state_mesh_transfer != NULL)
+            {
+              delete _state_mesh_transfer;
+            }
+	  if (_sparsitymaker != NULL && _sparse_mkr_dynamic == true)
             {
               delete _sparsitymaker;
             }
@@ -437,6 +441,14 @@ namespace DOpE
         {
           assert(bottomfraction == 0.0);
 
+	  if (_state_mesh_transfer != NULL)
+            {
+              delete _state_mesh_transfer;
+              _state_mesh_transfer = NULL;
+            }
+          _state_mesh_transfer = new dealii::SolutionTransfer<dim, VECTOR>(
+              _state_dof_handler);
+
           if ("global" == ref_type)
             {
               _state_triangulation.set_all_refine_flags();
@@ -462,12 +474,18 @@ namespace DOpE
                   *indicators);
               //TODO: how can we prevent coarsening here ?
             }
-          else
+          else if("finest-of-both")
+	  {
+	    this->FlagIfLeftIsNotFinest(_state_triangulation,_control_triangulation);
+	  }
+	  else
             {
               throw DOpEException("Not implemented for name =" + ref_type,
                   "MethodOfLines_MultiMesh_SpaceTimeHandler::RefineSpace");
             }
           _state_triangulation.prepare_coarsening_and_refinement();
+	  if (_state_mesh_transfer != NULL)
+            _state_mesh_transfer->prepare_for_pure_refinement();
 
           _state_triangulation.execute_coarsening_and_refinement();
         }
@@ -523,6 +541,10 @@ namespace DOpE
                   _control_triangulation, *indicators);
               //TODO: how can we prevent coarsening here ?
             }
+	  else if("finest-of-both")
+	  {
+	    this->FlagIfLeftIsNotFinest(_control_triangulation,_state_triangulation);
+	  }
           else
             {
               throw DOpEException("Not implemented for name =" + ref_type,
@@ -560,6 +582,18 @@ namespace DOpE
         {
           if (_control_mesh_transfer != NULL)
             _control_mesh_transfer->refine_interpolate(old_values, new_values);
+        }
+        /******************************************************/
+
+        /**
+         * Transfer of the State Vectors
+         */
+        void
+        SpatialMeshTransferState(const VECTOR& old_values,
+            VECTOR& new_values) const
+        {
+          if (_state_mesh_transfer != NULL)
+            _state_mesh_transfer->refine_interpolate(old_values, new_values);
         }
         /******************************************************/
         /**
@@ -604,6 +638,9 @@ namespace DOpE
         {
           return _user_defined_dof_constr;
         }
+
+	void FlagIfLeftIsNotFinest(dealii::Triangulation<dim>& left, const dealii::Triangulation<dim>& right);
+
         SparsityMaker<DOFHANDLER, dim>* _sparsitymaker;
         UserDefinedDoFConstraints<DOFHANDLER, dim>* _user_defined_dof_constr;
 
@@ -625,6 +662,7 @@ namespace DOpE
 
         Constraints _constraints;
         dealii::SolutionTransfer<dim, VECTOR>* _control_mesh_transfer;
+        dealii::SolutionTransfer<dim, VECTOR>* _state_mesh_transfer;
         bool _sparse_mkr_dynamic;
     };
 
@@ -732,6 +770,24 @@ namespace DOpE
       sparsity.copy_from(csp);
     }
 #endif //Endof explicit instanciation
+
+  /*******************************************************/
+  template<typename FE, typename DOFHANDLER, typename SPARSITYPATTERN, typename VECTOR, int dim>
+    void MethodOfLines_MultiMesh_SpaceTimeHandler<FE,DOFHANDLER, SPARSITYPATTERN, VECTOR, dim>
+    ::FlagIfLeftIsNotFinest(dealii::Triangulation<dim>& left, 
+			    const dealii::Triangulation<dim>& right)
+  {
+    auto cell_list = GridTools::get_finest_common_cells (left,right);
+    auto cell_iter = cell_list.begin();
+    for(; cell_iter != cell_list.end(); cell_iter++)
+    {
+      if(cell_iter->second->has_children())
+      {
+	//left is not finest, so we should flag the left cell to be refined
+	cell_iter->first->set_refine_flag();
+      }
+    }
+  }
 }
 
 #endif

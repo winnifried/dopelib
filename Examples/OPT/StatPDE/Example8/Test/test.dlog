@@ -99,7 +99,7 @@ LOG: Allowing IterationCounter `Opt_Snopt_OptProblem' for filenames!
 	*  Constraints : 	1025
 	**************************************************
 
-	CostFunctional: 9.27946
+	CostFunctional: 9.27911
 	************************************************
 	*               Calling SNOPT                  *
 	*  output will not be written to logfile!      *

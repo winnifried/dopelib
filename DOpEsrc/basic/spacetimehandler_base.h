@@ -340,6 +340,8 @@ class SpaceTimeHandlerBase
      *
      */
     virtual void SpatialMeshTransferControl(const VECTOR& /*old_values*/, VECTOR& /*new_values*/) const { abort(); }
+    
+    virtual void SpatialMeshTransferState(const VECTOR& /*old_values*/, VECTOR& /*new_values*/) const { abort(); }
 
   protected:
     /**
