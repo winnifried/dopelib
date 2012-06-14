@@ -626,6 +626,22 @@ namespace DOpE
           _sparsitymaker = &sparsity_maker;
           _sparse_mkr_dynamic = false;
         }
+	 /******************************************************/
+        /**
+         * Through this function one can reinitialize the 
+	 * triangulation for the state variable to be a copy of the
+	 * given argument.
+         */
+
+	void ResetStateTriangulation(const dealii::Triangulation<dim>& tria)
+	{
+	  _state_dof_handler.clear();
+	  _state_triangulation.clear();
+	  _state_triangulation.copy_triangulation(tria);
+	  _state_dof_handler.initialize(_state_triangulation,*_state_fe);
+	  this->IncrementStateTicket();
+	}
+	  
 
       private:
         const SparsityMaker<DOFHANDLER, dim>*

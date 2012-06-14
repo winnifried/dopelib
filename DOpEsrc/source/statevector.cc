@@ -714,10 +714,7 @@ namespace DOpE
                         }
                     }
                   if (reinit)
-                    {
-		      //For Meshtransfer
-		      _local_state = *(_state[_accessor]);
-                      
+                    {                     
 		      _local_vectors[_global_to_local[_accessor]]->reinit(
                           nblocks);
                       for (unsigned int i = 0; i < nblocks; i++)
@@ -726,9 +723,6 @@ namespace DOpE
                               dofs_per_block[i]);
                         }
                       _local_vectors[_global_to_local[_accessor]]->collect_sizes();
-
-		      //For Meshtransfer
-		      GetSpaceTimeHandler()->SpatialMeshTransferState(_local_state,*(_state[_accessor]));
                     }
                 }
               else
@@ -762,10 +756,12 @@ namespace DOpE
         {
           if (_accessor >= 0)
             {
-              if (_state[_accessor] == NULL)
+              bool existed = true;
+	      if (_state[_accessor] == NULL)
                 {
                   _state[_accessor] = new dealii::Vector<double>;
-                }
+		  existed = false; 
+		}
 
               bool reinit = false;
               if (_state[_accessor]->size() != ndofs)
@@ -774,7 +770,17 @@ namespace DOpE
                 }
               if (reinit)
                 {
-                  _state[_accessor]->reinit(ndofs);
+                  if(existed)
+		  {
+		    _local_state = *(_state[_accessor]);
+		  }
+		  
+		  _state[_accessor]->reinit(ndofs);
+
+		  if(existed)
+		  {
+		    GetSpaceTimeHandler()->SpatialMeshTransferState(_local_state,*(_state[_accessor]));
+		  }
                 }
             }
           else
