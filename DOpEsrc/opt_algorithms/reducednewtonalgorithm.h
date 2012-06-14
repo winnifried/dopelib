@@ -52,6 +52,7 @@ namespace DOpE
   private:
     unsigned int _nonlinear_maxiter, _linear_maxiter, _line_maxiter;
     double       _nonlinear_tol, _nonlinear_global_tol, _linear_tol, _linear_global_tol, _linesearch_rho, _linesearch_c;
+    bool         _compute_functionals_in_every_step;
     std::string _postindex;
   };
 
@@ -77,6 +78,8 @@ void ReducedNewtonAlgorithm<PROBLEM, VECTOR, dopedim, dealdim>::declare_params(P
     param_reader.declare_entry("line_maxiter", "4",Patterns::Integer(0));
     param_reader.declare_entry("linesearch_rho", "0.9",Patterns::Double(0));
     param_reader.declare_entry("linesearch_c", "0.1",Patterns::Double(0));
+
+    param_reader.declare_entry("compute_functionals_in_every_step", "false",Patterns::Bool());
 
     ReducedAlgorithm<PROBLEM, VECTOR, dopedim,dealdim>::declare_params(param_reader);
   }
@@ -104,6 +107,8 @@ ReducedNewtonAlgorithm<PROBLEM, VECTOR, dopedim, dealdim>::ReducedNewtonAlgorith
     _line_maxiter         = param_reader.get_integer ("line_maxiter");
     _linesearch_rho       = param_reader.get_double ("linesearch_rho");
     _linesearch_c         = param_reader.get_double ("linesearch_c");
+
+    _compute_functionals_in_every_step  = param_reader.get_bool ("compute_functionals_in_every_step");
 
     _postindex = "_"+this->GetProblem()->GetName();
   }
@@ -186,14 +191,17 @@ int ReducedNewtonAlgorithm<PROBLEM, VECTOR, dopedim, dealdim>::Solve(ControlVect
   out<< "CostFunctional: " << cost;
   this->GetOutputHandler()->Write(out,2+this->GetBasePriority());
 
-  //try
-  //{
-  //  this->GetReducedProblem()->ComputeReducedFunctionals(q);
-  //}
-  //catch(DOpEException& e)
-  //{
-  //  this->GetExceptionHandler()->HandleCriticalException(e);
-  //}
+  if (_compute_functionals_in_every_step == true)
+    {
+      try
+	{
+	  this->GetReducedProblem()->ComputeReducedFunctionals(q);
+	}
+      catch(DOpEException& e)
+	{
+	  this->GetExceptionHandler()->HandleCriticalException(e);
+	}
+    }
 
   try
   {
@@ -271,15 +279,17 @@ int ReducedNewtonAlgorithm<PROBLEM, VECTOR, dopedim, dealdim>::Solve(ControlVect
     out<< "CostFunctional: " << cost;
     this->GetOutputHandler()->Write(out,3+this->GetBasePriority());
 
-    //try
-    //  {
-    //	this->GetReducedProblem()->ComputeReducedFunctionals(q);
-    //  }
-    //catch(DOpEException& e)
-    //  {
-    //	this->GetExceptionHandler()->HandleCriticalException(e);
-    //  }
-
+    if (_compute_functionals_in_every_step == true)
+      {
+	try
+	  {
+	    this->GetReducedProblem()->ComputeReducedFunctionals(q);
+	  }
+	catch(DOpEException& e)
+	  {
+	    this->GetExceptionHandler()->HandleCriticalException(e);
+	  }
+      }
 
 
     //Prepare the next Iteration
