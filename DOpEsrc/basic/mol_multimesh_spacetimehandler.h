@@ -640,6 +640,9 @@ namespace DOpE
 	  _state_triangulation.copy_triangulation(tria);
 	  _state_dof_handler.initialize(_state_triangulation,*_state_fe);
 	  this->IncrementStateTicket();
+	  if(_state_mesh_transfer != NULL)
+	    delete _state_mesh_transfer;
+	  _state_mesh_transfer = NULL;
 	}
 	  
 
