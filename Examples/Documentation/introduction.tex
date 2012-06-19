@@ -20,8 +20,27 @@ made by %(in alphabetical order)
 The library DOpE has been tested to work on both Linux and 
 MAC OSX. See also the \texttt{README.OSX} file 
 
+\subsection{g++}
 \texttt{DOpElib} requires a recent \texttt{g++} (at least 4.4.3) due to 
 some new \texttt{C++} features implemented in \texttt{C++0x} and \texttt{C++11}. 
+You can check the version number using the command-line argument \texttt{g++ -v}.
+
+Under Linux-systems this typically means that you have to do nothing if you have a recent 
+version number. Otherwise you can either install the required version of g++ using the 
+appropriate software installation tool, or you can build the required version from 
+source \texttt{gcc.gnu.org}.
+
+Under MAC OSX, you need to install the \texttt{XCode} tools delivered with the operating system 
+or availiable for free \texttt{developer.apple.com/xcode}. Unfortunately, the delivered 
+version of \texttt{g++} is too old, so you need to install the real thing. To do so, 
+download \texttt{MacPorts} from \texttt{macports.org}. Once you have installed MacPorts 
+you can use it to install aditional linux software. 
+First, update the MacPorts installation \texttt{sudo port selfupdate}
+after that you can install a new version of \texttt{g++} using forinstance 
+\texttt{sudo port install gcc45} to install version $4.5$ of the compiler.
+Afterwards, you need to set the search path appropriate to find the macports version
+of \texttt{g++}, to check if this has been done use \texttt{g++ -v}.
+
 
 \subsection{deal.II}
 This library is based upon \texttt{deal.II} hence in order to run 
