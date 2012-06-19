@@ -49,8 +49,13 @@ namespace DOpE
         virtual
         ~HigherOrderDWRContainer()
         {
+	  if(_PI_h_z != NULL)
+	    delete _PI_h_z;
+	  if(_PI_h_u != NULL)
+	    delete _PI_h_u;
         }
-        ;
+
+	std::string GetName() const { return "DWR-Estimator"; }
 
         template<class STH2>
           void
@@ -202,6 +207,15 @@ namespace DOpE
         {
           return DOpEtypes::strong_residual;
         }
+        
+        /**
+	 * This should be applied to the residual in the integration 
+	 * To assert that the squared norm is calculated
+	 */
+	inline double ResidualModifier(double res)
+	{
+	  return res;
+	}
       protected:
         STH&
         GetSTH()

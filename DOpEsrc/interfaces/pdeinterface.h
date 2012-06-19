@@ -647,6 +647,14 @@ namespace DOpE
         GetStateNComponents() const;
 
         /******************************************************/
+      /**
+       * This function is set by the error estimators in order 
+       * to allow the calculation of squared norms of the residual
+       * as needed for Residual Error estimators as well as 
+       * the residual itself as needed by the DWR estimators.
+       */
+      boost::function1<double,double> ResidualModifier;
+
       protected:
         std::string _problem_type;
 

@@ -69,6 +69,14 @@ During the  evaluation of \eqref{dwr.error_identity}, the following methods are 
 \item {\verb StrongBoundaryResidual }:The terms in \eqref{dwr.error_identity} that lies on the boundary (There are none in this case).
 \end{itemize}
 
+Note that in the above three functions we always apply the method \texttt{ResidualModifier} both to the 
+residual as well as to the jumps on the faces. This is done to assert that we can apply both a 
+DWR-error estimator where the residual should be multiplied with the computed weights (then this function 
+does not do anything) as well as Residual Type error estimator for the $L^2$ or $H^1$ norm where we need to calculate element wise norms of the residual and the jumps. Then this function calculates the appropriate 
+local terms, e.g., the square of the residual scaled with appropriate powers of the local mesh size.
+
+
+
 After this, we tell the problem which functional we want to use for the error estimation, this is done via
 \begin{verbatim}
 P.SetFunctionalForErrorEstimation(LFF.GetName())

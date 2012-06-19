@@ -43,7 +43,7 @@ namespace DOpE
      */
     enum WeightComputation
     {
-      higher_order_interpolation, higher_order_computation/*Not implemented!*/
+      cell_diameter, higher_order_interpolation, higher_order_computation/*Not implemented!*/
     };
 
 

@@ -176,10 +176,10 @@ namespace DOpE
 //        void
 //        ComputeRefinementIndicators(const ControlVector<VECTOR>& q,
 //            DWRDataContainerBase<VECTOR>& dwrc);
-        template<class DWRC>
+        template<class DWRC,class PDE>
           void
           ComputeRefinementIndicators(const ControlVector<VECTOR>& q,
-              DWRC& dwrc);
+              DWRC& dwrc, PDE& pde);
 
         /******************************************************/
 
@@ -1325,15 +1325,18 @@ namespace DOpE
   template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
       typename CONTROLINTEGRATOR, typename INTEGRATOR, typename PROBLEM,
       typename VECTOR, int dopedim, int dealdim>
-    template<class DWRC>
+    template<class DWRC,class PDE>
       void
       StatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER,
           CONTROLINTEGRATOR, INTEGRATOR, PROBLEM, VECTOR, dopedim, dealdim>::ComputeRefinementIndicators(
-          const ControlVector<VECTOR>& q, DWRC& dwrc)
+          const ControlVector<VECTOR>& q, DWRC& dwrc, PDE& pde)
 //    StatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER,
 //        CONTROLINTEGRATOR, INTEGRATOR, PROBLEM, VECTOR, dopedim, dealdim>::ComputeRefinementIndicators(
 //        const ControlVector<VECTOR>& q, DWRDataContainerBase<VECTOR>& dwrc)
       {
+	//Attach the ResidualModifier to the PDE.
+	pde.ResidualModifier = boost::bind<double>(boost::mem_fn(&DWRC::ResidualModifier),boost::ref(dwrc),_1);
+	
         //first we reinit the dwrdatacontainer (this
         //sets the weight-vectors to their correct length)
         const unsigned int n_cells =
@@ -1345,7 +1348,7 @@ namespace DOpE
           this->ComputeDualForErrorEstimation(q, dwrc.GetWeightComputation());
 
         this->GetOutputHandler()->Write("Computing Error Indicators:",
-            4 + this->GetBasePriority());
+					4 + this->GetBasePriority());
 
         this->GetProblem()->AddAuxiliaryToIntegrator(this->GetIntegrator());
 
@@ -1408,9 +1411,11 @@ namespace DOpE
 
         std::stringstream out;
         this->GetOutputHandler()->InitOut(out);
-        out << "Error estimation in " << this->GetProblem()->GetFunctionalName()
-            << ": " << error;
-        this->GetOutputHandler()->Write(out, 2 + this->GetBasePriority());
+        out << "Error estimate using "<<dwrc.GetName();
+	if(dwrc.NeedDual())
+	  out<<" For the computation of "<<this->GetProblem()->GetFunctionalName();
+	out<< ": "<< error;
+	this->GetOutputHandler()->Write(out, 2 + this->GetBasePriority());
       }
 
   /******************************************************/

@@ -42,7 +42,8 @@ namespace DOpE
         ~DWRDataContainerBase()
         {
         }
-        ;
+
+	virtual std::string GetName() const = 0;
 
         /**
          * This initializes the vector of the error indicators and locks them.

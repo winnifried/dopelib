@@ -75,6 +75,8 @@ template<typename VECTOR, int dealdim>
 
         const FEValuesExtractors::Scalar velocities(0);
 
+        //make shure the binding of the function has worked
+	assert(this->ResidualModifier);
         for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
         {
 //          const double x = state_fe_values.quadrature_point(q_point)(0);
@@ -86,8 +88,8 @@ template<typename VECTOR, int dealdim>
 //          _fvalues[q_point][1] = cos(exp(10 * y)) * x * x * y + sin(x);
           double res;
           res = _fvalues[q_point] + _lap_u[q_point];
-
-          sum += scale * (res * _PI_h_z[q_point])
+	  
+          sum += scale * (this->ResidualModifier(res) * _PI_h_z[q_point])
               * state_fe_values.JxW(q_point);
         }
       }
@@ -114,10 +116,12 @@ template<typename VECTOR, int dealdim>
               + (_ugrads[q][1] - _ugrads_nbr[q][1])
                   * fdc.GetFEFaceValuesState().normal_vector(q)[1];
         }
+        //make shure the binding of the function has worked
+	assert(this->ResidualModifier);
 
         for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
         {
-          sum += scale * (jump[q_point] * _PI_h_z[q_point])
+          sum += scale * (this->ResidualModifier(jump[q_point]) * _PI_h_z[q_point])
               * fdc.GetFEFaceValuesState().JxW(q_point);
         }
       }

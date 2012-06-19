@@ -1187,27 +1187,59 @@ namespace DOpE
 
         if (dwrc.GetResidualEvaluation() == DOpEtypes::strong_residual)
         {
-          switch (dwrc.GetEETerms())
-          {
-          case DOpEtypes::primal_only:
-            GetPDE()->StrongCellResidual(cdc, dwrc.GetCellWeight(), error[0],
-                scale, scale_ico);
-            break;
-          case DOpEtypes::dual_only:
-            GetPDE()->StrongCellResidual_U(cdc, dwrc.GetCellWeight(), error[1],
-                scale);
-            break;
-          case DOpEtypes::mixed:
-            GetPDE()->StrongCellResidual(cdc, dwrc.GetCellWeight(), error[0],
-                scale, scale_ico);
-            GetPDE()->StrongCellResidual_U(cdc, dwrc.GetCellWeight(), error[1],
-                scale);
-            break;
-          default:
-            throw DOpEException("Not implemented for this EETerm.",
-                "PDEProblemContainer::CellErrorContribution");
-            break;
+	  if(dwrc.GetWeightComputation() == DOpEtypes::higher_order_interpolation)
+	  {
+	    switch (dwrc.GetEETerms())
+	    {
+	    case DOpEtypes::primal_only:
+	      GetPDE()->StrongCellResidual(cdc, dwrc.GetCellWeight(), error[0],
+					   scale, scale_ico);
+	      break;
+	    case DOpEtypes::dual_only:
+	      GetPDE()->StrongCellResidual_U(cdc, dwrc.GetCellWeight(), error[1],
+					     scale);
+	      break;
+	    case DOpEtypes::mixed:
+	      GetPDE()->StrongCellResidual(cdc, dwrc.GetCellWeight(), error[0],
+					   scale, scale_ico);
+	      GetPDE()->StrongCellResidual_U(cdc, dwrc.GetCellWeight(), error[1],
+					     scale);
+	      break;
+	    default:
+	      throw DOpEException("Not implemented for this EETerm.",
+				  "PDEProblemContainer::CellErrorContribution");
+	      break;
+	    }
           }
+	  else  if(dwrc.GetWeightComputation() == DOpEtypes::cell_diameter)
+	  {
+	    switch (dwrc.GetEETerms())
+	    {
+	    case DOpEtypes::primal_only:
+	      GetPDE()->StrongCellResidual(cdc, cdc, error[0],
+					   scale, scale_ico);
+	      break;
+	    case DOpEtypes::dual_only:
+	      GetPDE()->StrongCellResidual_U(cdc, cdc, error[1],
+					     scale);
+	      break;
+	    case DOpEtypes::mixed:
+	      GetPDE()->StrongCellResidual(cdc, cdc, error[0],
+					   scale, scale_ico);
+	      GetPDE()->StrongCellResidual_U(cdc, cdc, error[1],
+					     scale);
+	      break;
+	    default:
+	      throw DOpEException("Not implemented for this EETerm.",
+				  "PDEProblemContainer::CellErrorContribution");
+	      break;
+	    }
+          }
+	  else 
+	  {
+	      throw DOpEException("Not implemented for this WeightComputation.",
+				  "PDEProblemContainer::CellErrorContribution");
+	  }
         }
         else
         {
@@ -1231,32 +1263,64 @@ namespace DOpE
 
         if (dwrc.GetResidualEvaluation() == DOpEtypes::strong_residual)
         {
-          switch (dwrc.GetEETerms())
-          {
-          case DOpEtypes::primal_only:
-            GetPDE()->StrongFaceResidual(fdc, dwrc.GetFaceWeight(), error[0],
+	  if(dwrc.GetWeightComputation() == DOpEtypes::higher_order_interpolation)
+	  {
+	    switch (dwrc.GetEETerms())
+	    {
+	    case DOpEtypes::primal_only:
+	      GetPDE()->StrongFaceResidual(fdc, dwrc.GetFaceWeight(), error[0],
+					   scale);
+	      break;
+	    case DOpEtypes::dual_only:
+	      GetPDE()->StrongFaceResidual_U(fdc, dwrc.GetFaceWeight(), error[1],
+					     scale);
+	      break;
+	    case DOpEtypes::mixed:
+	      GetPDE()->StrongFaceResidual(fdc, dwrc.GetFaceWeight(), error[0],
+					   scale);
+	      GetPDE()->StrongFaceResidual_U(fdc, dwrc.GetFaceWeight(), error[1],
                 scale);
-            break;
-          case DOpEtypes::dual_only:
-            GetPDE()->StrongFaceResidual_U(fdc, dwrc.GetFaceWeight(), error[1],
+	      break;
+	    default:
+	      throw DOpEException("Not implemented for this EETerm.",
+				  "PDEProblemContainer::FaceErrorContribution");
+	      break;
+	    }
+	  }
+	  else  if(dwrc.GetWeightComputation() == DOpEtypes::cell_diameter)
+	  {
+	    switch (dwrc.GetEETerms())
+	    {
+	    case DOpEtypes::primal_only:
+	      GetPDE()->StrongFaceResidual(fdc, fdc, error[0],
+					   scale);
+	      break;
+	    case DOpEtypes::dual_only:
+	      GetPDE()->StrongFaceResidual_U(fdc,fdc, error[1],
+					     scale);
+	      break;
+	    case DOpEtypes::mixed:
+	      GetPDE()->StrongFaceResidual(fdc, fdc, error[0],
+					   scale);
+	      GetPDE()->StrongFaceResidual_U(fdc, fdc, error[1],
                 scale);
-            break;
-          case DOpEtypes::mixed:
-            GetPDE()->StrongFaceResidual(fdc, dwrc.GetFaceWeight(), error[0],
-                scale);
-            GetPDE()->StrongFaceResidual_U(fdc, dwrc.GetFaceWeight(), error[1],
-                scale);
-            break;
-          default:
-            throw DOpEException("Not implemented for this EETerm.",
-                "PDEProblemContainer::CellErrorContribution");
-            break;
+	      break;
+	    default:
+	      throw DOpEException("Not implemented for this EETerm.",
+				  "PDEProblemContainer::FaceErrorContribution");
+	      break;
+	    }
           }
+	  else 
+	  {
+	      throw DOpEException("Not implemented for this WeightComputation.",
+				  "PDEProblemContainer::FaceErrorContribution");
+	  }
         }
         else
         {
           throw DOpEException("Not implemented for this ResidualEvaluation.",
-              "PDEProblemContainer::CellErrorContribution");
+              "PDEProblemContainer::FaceErrorContribution");
         }
       }
 
@@ -1274,14 +1338,27 @@ namespace DOpE
         Assert(GetType() == "error_evaluation", ExcInternalError());
         if (dwrc.GetResidualEvaluation() == DOpEtypes::strong_residual)
         {
-          // state values in quadrature points
-          GetPDE()->StrongBoundaryResidual(fdc, dwrc.GetFaceWeight(), error[0],
-              scale);
+          if(dwrc.GetWeightComputation() == DOpEtypes::higher_order_interpolation)
+	  {
+            // state values in quadrature points
+	    GetPDE()->StrongBoundaryResidual(fdc, dwrc.GetFaceWeight(), error[0],
+					     scale);
+	  }
+	  else  if(dwrc.GetWeightComputation() == DOpEtypes::cell_diameter)
+	  {
+	    GetPDE()->StrongBoundaryResidual(fdc, fdc, error[0],
+					     scale);
+	  }
+	  else 
+	  {
+	      throw DOpEException("Not implemented for this WeightComputation.",
+				  "PDEProblemContainer::BoundaryErrorContribution");
+	  }
         }
         else
         {
           throw DOpEException("Not implemented for this ResidualEvaluation.",
-              "PDEProblemContainer::CellErrorContribution");
+              "PDEProblemContainer::BoundaryErrorContribution");
         }
       }
 

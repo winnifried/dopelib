@@ -15,6 +15,7 @@
 #include "celldatacontainer.h"
 #include "facedatacontainer.h"
 #include "higher_order_dwrc.h"
+#include "residualestimator.h"
 #include "dopetypes.h"
 
 namespace DOpE
@@ -120,6 +121,10 @@ namespace DOpE
           void
           ComputeRefinementIndicators(PROBLEM& pde,
               HigherOrderDWRContainer<STH, INTEGRATORDATACONT, CDC, FDC, VECTOR>& dwrc);
+	template<typename PROBLEM, class STH, class CDC, class FDC>
+          void
+          ComputeRefinementIndicators(PROBLEM& pde,
+				      ResidualErrorContainer<STH, CDC, FDC, VECTOR>& dwrc);
 
         inline INTEGRATORDATACONT&
         GetIntegratorDataContainer() const;
@@ -1577,6 +1582,234 @@ namespace DOpE
           0.5 * face_integrals[cell[0]->face(face_no)][1];
         }
 #endif
+      }
+  /*******************************************************************************************/
+
+  template<typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR,
+      int dim>
+    template<typename PROBLEM, class STH, class CDC, class FDC>
+      void
+      Integrator<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::ComputeRefinementIndicators(
+          PROBLEM& pde,
+          ResidualErrorContainer<STH, CDC, FDC, VECTOR>& dwrc)
+      {
+        //for primal and dual part of the error
+        std::vector<double> cell_sum(2, 0);
+        cell_sum.resize(2, 0);
+        // Begin integration
+        const auto& dof_handler =
+            pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandler();
+        auto cell =
+            pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandlerBeginActive();
+        auto endc =
+            pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandlerEnd();
+
+	{
+	  //Add Weights
+	  auto wd = dwrc.GetWeightData().begin(); 
+	  auto wend = dwrc.GetWeightData().end();
+	  for( ; wd != wend; wd++)
+	  {
+	    AddDomainData(wd->first,wd->second);
+	  }
+	}
+
+        // Generate the data containers. Notice that we use the quadrature
+        //formula from the higher order idc!.
+        GetIntegratorDataContainer().InitializeCDC(
+	  pde.GetUpdateFlags(),
+	  *(pde.GetBaseProblem().GetSpaceTimeHandler()),
+	  cell,
+	  this->GetParamData(),
+	  this->GetDomainData());
+        auto& cdc = GetIntegratorDataContainer().GetCellDataContainer();
+
+#if deal_II_dimension == 2 || deal_II_dimension == 3
+
+        //we want to integrate the face-terms only once
+        typename std::map<typename dealii::Triangulation<dim>::face_iterator,std::vector<double> >
+        face_integrals;
+        //initialize the map
+        auto cell_it = cell[0];
+        std::vector<double> face_init(2,-1e20);
+        for (; cell_it != endc[0]; cell_it++)
+        {
+          for (unsigned int face_no=0;face_no<GeometryInfo<dim>::faces_per_cell; ++face_no)
+          {
+            face_integrals[cell_it->face(face_no)] = face_init;
+          }
+        }
+
+//        bool need_faces = pde.HasFaces();
+//        bool need_interfaces = pde.HasInterfaces();
+//        std::vector<unsigned int> boundary_equation_colors = pde.GetBoundaryEquationColors();
+//        bool need_boundary_integrals = (boundary_equation_colors.size() > 0);
+
+        GetIntegratorDataContainer().InitializeFDC(
+	  pde.GetFaceUpdateFlags(),
+	  *(pde.GetBaseProblem().GetSpaceTimeHandler()),
+	  cell,
+	  this->GetParamData(),
+	  this->GetDomainData(),
+	  true);
+        auto & fdc = GetIntegratorDataContainer().GetFaceDataContainer();
+
+#endif
+
+        for (unsigned int cell_index = 0; cell[0] != endc[0];
+            cell[0]++, cell_index++)
+        {
+          for (unsigned int dh = 1; dh < dof_handler.size(); dh++)
+          {
+            if (cell[dh] == endc[dh])
+            {
+              throw DOpEException(
+                  "Cellnumbers in DoFHandlers are not matching!",
+                  "Integrator::ComputeRefinementIndicators");
+            }
+          }
+
+          cell_sum.clear();
+          cell_sum.resize(2, 0);
+
+          cdc.ReInit();
+	  dwrc.InitCell(cell[0]->diameter());
+          //first the cell-residual
+          pde.CellErrorContribution(cdc, dwrc, cell_sum, 1., 1.);
+          dwrc.GetPrimalErrorIndicators()(cell_index) = cell_sum[0];
+          dwrc.GetDualErrorIndicators()(cell_index) = cell_sum[1];
+          cell_sum.clear();
+          cell_sum.resize(2, 0);
+          //Now to the face terms. We compute them only once for each face and distribute the
+          //afterwards. We choose always to work from the coarser cell, if both neigbors of the
+          //face are on the same level, we pick the one with the lower index
+#if deal_II_dimension == 2 || deal_II_dimension == 3
+
+          for (unsigned int face=0; face < dealii::GeometryInfo<dim>::faces_per_cell; ++face)
+          {
+            auto face_it = cell[0]->face(face);
+
+
+            //check if the face lies at a boundary
+            if(face_it->at_boundary())
+            {
+              fdc.ReInit(face);
+	      dwrc.InitFace(cell[0]->face(face)->diameter());
+
+              pde.BoundaryErrorContribution(fdc, dwrc, cell_sum, 1.);
+
+              Assert (face_integrals.find (cell[0]->face(face)) != face_integrals.end(),
+                  ExcInternalError());
+              Assert (face_integrals[cell[0]->face(face)] == face_init,
+                  ExcInternalError());
+              face_integrals[cell[0]->face(face)] = cell_sum;
+              cell_sum.clear();
+              cell_sum.resize(2,0.);
+            }
+            else
+            {
+              //There exist now 3 different scenarios, given the actual cell and face:
+              // The neighbour behind this face is [ more | as much | less] refined
+              // than/as the actual cell. We have to distinguish here only between the case 1
+              // and the other two, because these will be distinguished in in the FaceDataContainer.
+              if (cell[0]->neighbor(face)->has_children())
+              {
+                //first: neighbour is finer
+                std::vector<double> sum(2,0.);
+                for (unsigned int subface_no=0;
+                    subface_no < cell[0]->face(face)->n_children();
+                    ++subface_no)
+                {
+                  //TODO Now here we have to initialise the subface_values on the
+                  // actual cell and then the facevalues of the neighbours
+                  fdc.ReInit(face, subface_no);
+                  fdc.ReInitNbr();
+                  dwrc.InitFace(cell[0]->face(face)->diameter());
+
+                  pde.FaceErrorContribution(fdc, dwrc, cell_sum, 1.);
+                  sum[0]= cell_sum[0];
+                  sum[1]= cell_sum[1];
+                  cell_sum.clear();
+                  cell_sum.resize(2,0);
+                  face_integrals[cell[0]->neighbor_child_on_subface(face, subface_no)
+                                 ->face(cell[0]->neighbor_of_neighbor(face))] = cell_sum;
+                  cell_sum.clear();
+                  cell_sum.resize(2,0.);
+                }
+
+
+                Assert (face_integrals.find (cell[0]->face(face)) != face_integrals.end(),
+                    ExcInternalError());
+                Assert (face_integrals[cell[0]->face(face)] == face_init,
+                    ExcInternalError());
+
+                face_integrals[cell[0]->face(face)] = sum;
+
+              }
+              else
+              {
+                // either neighbor is as fine as this cell or
+                // it is coarser
+                Assert(cell[0]->neighbor(face)->level() <= cell[0]->level(),ExcInternalError());
+                //now we work always from the coarser cell. if both cells
+                //are on the same level, we pick the one with the lower index
+                if(cell[0]->level() == cell[0]->neighbor(face)->level()
+                    && cell[0]->index() < cell[0]->neighbor(face)->index())
+                {
+                  fdc.ReInit(face);
+                  fdc.ReInitNbr();
+                  dwrc.InitFace(cell[0]->face(face)->diameter());
+
+                  pde.FaceErrorContribution(fdc, dwrc, cell_sum, 1.);
+                  Assert (face_integrals.find (cell[0]->face(face)) != face_integrals.end(),
+                      ExcInternalError());
+                  Assert (face_integrals[cell[0]->face(face)] == face_init,
+                      ExcInternalError());
+
+                  face_integrals[cell[0]->face(face)] = cell_sum;
+                  cell_sum.clear();
+                  cell_sum.resize(2,0);
+                }
+              }
+            }
+          }                  //endfor faces
+//          }//end else
+
+#endif
+          for (unsigned int dh = 1; dh < dof_handler.size(); dh++)
+          {
+            cell[dh]++;
+          }
+	}                  //endfor cell
+#if deal_II_dimension == 2 || deal_II_dimension == 3
+        //now we have to incorporate the face and boundary_values
+        //into
+        unsigned int present_cell = 0;
+        cell =
+        pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandlerBeginActive();
+        for (;
+            cell !=endc; ++cell[0], ++present_cell)
+        for (unsigned int face_no = 0;
+            face_no < GeometryInfo<dim>::faces_per_cell; ++face_no)
+        {
+          Assert(
+              face_integrals.find(cell[0]->face(face_no)) != face_integrals.end(),
+              ExcInternalError());
+          dwrc.GetPrimalErrorIndicators()(present_cell) -=
+          0.5 * face_integrals[cell[0]->face(face_no)][0];
+          dwrc.GetDualErrorIndicators()(present_cell) -=
+          0.5 * face_integrals[cell[0]->face(face_no)][1];
+        }
+#endif
+	{
+	  //Remove Weights
+	  auto wd = dwrc.GetWeightData().begin(); 
+	  auto wend = dwrc.GetWeightData().end();
+	  for( ; wd != wend; wd++)
+	  {
+	    DeleteDomainData(wd->first);
+	  }
+	}
       }
 
   /*******************************************************************************************/

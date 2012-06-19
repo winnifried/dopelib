@@ -33,6 +33,7 @@
 #include "localpde.h"
 #include "functionals.h"
 #include "higher_order_dwrc.h"
+#include "residualestimator.h"
 #include "myfunctions.h"
 
 using namespace std;
@@ -63,6 +64,8 @@ typedef MethodOfLines_StateSpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN,
 typedef CellDataContainer<DOFHANDLER, VECTOR, 2> CDC;
 typedef FaceDataContainer<DOFHANDLER, VECTOR, 2> FDC;
 typedef HigherOrderDWRContainer<STH, IDC, CDC, FDC, VECTOR> HO_DWRC;
+typedef L2ResidualErrorContainer<STH, CDC, FDC, VECTOR,2> L2_RESC;
+typedef H1ResidualErrorContainer<STH, CDC, FDC, VECTOR,2> H1_RESC;
 
 void
 declare_params(ParameterReader &param_reader)
@@ -192,6 +195,10 @@ main(int argc, char **argv)
   STH DOFH_higher_order(triangulation, state_fe_high);
   HO_DWRC dwrc(DOFH_higher_order, idc_high, "fullmem", pr,
       DOpEtypes::primal_only);
+  L2_RESC l2resc(DOFH,"fullmem",pr,DOpEtypes::primal_only);
+  H1_RESC h1resc(DOFH,"fullmem",pr,DOpEtypes::primal_only);
+
+
   solver.InitializeHigherOrderDWRC(dwrc);
   //**************************************************************************************************
 
@@ -212,13 +219,17 @@ main(int argc, char **argv)
       out.Write(outp, 1, 1, 1);
 
       solver.ComputeReducedFunctionals();
-      solver.ComputeRefinementIndicators(dwrc);
+      solver.ComputeRefinementIndicators(dwrc,LPDE);
+      solver.ComputeRefinementIndicators(l2resc,LPDE);
+      solver.ComputeRefinementIndicators(h1resc,LPDE);
 
       double exact_value = 0.441956231972232;
 
       double error = exact_value - solver.GetFunctionalValue(LFF.GetName());
       outp << "Mean value error: " << error << "  Ieff (eh/e)= "
           << dwrc.GetError() / error << std::endl;
+      outp << "L2-Error estimator: "<<sqrt(l2resc.GetError())<<std::endl;
+      outp << "H1-Error estimator: "<<sqrt(h1resc.GetError())<<std::endl;
       out.Write(outp, 1, 1, 1);
     }
     catch (DOpEException &e)

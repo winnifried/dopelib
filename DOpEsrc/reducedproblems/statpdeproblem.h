@@ -118,9 +118,9 @@ namespace DOpE
          */
 //        virtual void
 //        ComputeRefinementIndicators(DWRDataContainerBase<VECTOR>& dwrc);
-        template<class DWRC>
+        template<class DWRC,class PDE>
           void
-          ComputeRefinementIndicators(DWRC& dwrc);
+          ComputeRefinementIndicators(DWRC& dwrc,PDE& pde);
 
         /******************************************************/
 
@@ -506,13 +506,16 @@ namespace DOpE
 
   template<typename NONLINEARSOLVER, typename INTEGRATOR, typename PROBLEM,
       typename VECTOR, int dealdim>
-    template<class DWRC>
+    template<class DWRC,class PDE>
       void
       StatPDEProblem<NONLINEARSOLVER, INTEGRATOR, PROBLEM, VECTOR, dealdim>::ComputeRefinementIndicators(
-          DWRC& dwrc)
+          DWRC& dwrc, PDE& pde)
 //    StatPDEProblem<NONLINEARSOLVER, INTEGRATOR, PROBLEM, VECTOR, dealdim>::ComputeRefinementIndicators(
 //        DWRDataContainerBase<VECTOR>& dwrc)
       {
+        //Attach the ResidualModifier to the PDE.
+	pde.ResidualModifier = boost::bind<double>(boost::mem_fn(&DWRC::ResidualModifier),boost::ref(dwrc),_1);
+	
         //first we reinit the dwrdatacontainer (this
         //sets the weight-vectors to their correct length)
         const unsigned int n_cells =
@@ -559,8 +562,10 @@ namespace DOpE
 
         std::stringstream out;
         this->GetOutputHandler()->InitOut(out);
-        out << "Error estimation in " << this->GetProblem()->GetFunctionalName() << ": "
-            << error;
+        out << "Error estimate using "<<dwrc.GetName();
+	if(dwrc.NeedDual())
+	  out<<" for the "<<this->GetProblem()->GetFunctionalName();
+	out<< ": "<< error;
         this->GetOutputHandler()->Write(out, 2 + this->GetBasePriority());
       }
 
