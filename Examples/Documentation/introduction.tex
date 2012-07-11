@@ -41,7 +41,6 @@ after that you can install a new version of \texttt{g++} using forinstance
 Afterwards, you need to set the search path appropriate to find the macports version
 of \texttt{g++}, to check if this has been done use \texttt{g++ -v}.
 
-
 \subsection{deal.II}
 This library is based upon \texttt{deal.II} hence in order to run 
 \texttt{DOpElib} you need a running copy of \texttt{deal.II}.
@@ -106,6 +105,34 @@ VI) Finally you may wish to test if everything worked. To do so you can
 change to the \texttt{Examples} directory and \texttt{make tests} which will give you a 
 list of all the examples and whether they behave as expected by the library, see also 
 Chapter~\ref{chap:test}.
+
+\section{FAQs}
+\paragraph{1.) When building the library I get an error message:}
+\begin{itemize}
+\item {\bf unrecognized command line option "-std=gnu++0x"}\\
+  This means that your compiler is too old. You can check the 
+  version of your compiler using \texttt{g++ -v}. If the version is lower than
+  \texttt{4.5} you need to get a newer compiler version.
+\end{itemize}
+
+\paragraph{2.) I have installed a new g++ compiler but g++ -v still finds the old one :}
+\ \\
+  This means that your computer does not find the new compiler. Try
+  \texttt{which g++} to see whether it appears in the list of availiable 
+  compilers (but is maybe too far in the back of the list.) Then you should 
+  modify your \texttt{\$PATH} environment variable so that the new g++ compiler
+  appears.
+
+  If \texttt{which g++} only returns one g++ compiler, then probably you need to
+  set an appropriate symlink.
+  
+  For example on Mac OSX you will find only one g++ compiler \texttt{/usr/bin/g++}
+  which is in fact a symlink to \texttt{/usr/bin/g++-4.2}. Thus to change, the 
+  desired behavior you should add a new link named \texttt{g++} in a directory 
+  in front of \texttt{/usr/bin} or replace the symlink in \texttt{/usr/bin}
+  with a link to the newer compiler which may be for instance located (macports 
+  g++ 4.5 on OSX Lion) in \texttt{/opt/local/bin/g++-mp-4.5}. Make shure that 
+  you add additional appropriate links to \texttt{gcc, cc, }and \texttt{c++}.
 
 \section{How this library is structured}
 This library is designed to allow easy implementation and numerical solutions 
