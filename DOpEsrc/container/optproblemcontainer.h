@@ -20,6 +20,8 @@
 #include "facedatacontainer.h"
 
 #include "stateproblem.h"
+#include "dopetypes.h"
+#include "dwrdatacontainer.h"
 
 #include <lac/vector.h>
 #include <lac/full_matrix.h>
@@ -254,6 +256,35 @@ namespace DOpE
               double scale_ico);
 
         /******************************************************/
+        /**
+         * Computes the contribution of the cell to overall error
+         * in a previously specified functional. For example, this
+         * could be a residual with appropriate weights.
+         *
+         * @template CDC                Class of the celldatacontainer in use,
+         *                              distinguishes between hp- and classical case.
+         * @template FDC                Class of the facedatacontainer in use,
+         *                              distinguishes between hp- and classical case.
+         *
+         * @param cdc                   A DataContainer holding all the needed information
+         *                              for the computation of the residuum on the cell.
+         * @param dwrc                  A DWRDataContainer containing all the information
+         *                              needed to evaluate the error on the cell (form of the residual,
+         *                              the weights, etc.).
+         * @param cell_contrib          Vector in which we write the contribution of the cell to the overall
+         *                              error. 1st component: primal_part, 2nd component: dual_part
+         * @param scale                 A scaling factor which is -1 or 1 depending on the subroutine to compute.
+         * @param scale_ico             A scaling factor for terms which will be treated fully implicit
+         *                              in an instationary equation.
+         */
+        template<class CDC, class FDC>
+          void
+          CellErrorContribution(const CDC& cdc,
+              const DWRDataContainer<CDC, FDC, VECTOR>& dwrc,
+              std::vector<double>& cell_contrib, double scale,
+              double /*scale_ico*/);
+
+        /******************************************************/
 
         /**
          * This function has the same functionality as the CellEquation function.
@@ -396,6 +427,23 @@ namespace DOpE
           FaceEquation(const FACEDATACONTAINER& dc,
               dealii::Vector<double> &local_cell_vector, double scale,
               double scale_ico);
+ 
+       /******************************************************/
+
+        /**
+         * Computes the contribution of the face to overall error
+         * in a previously specified functional. This is the place
+         * where for instance jump terms come into play.
+         *
+         * It has the same functionality
+         * as FaceErrorContribution, so we refer to its documentation.
+         *
+         */
+        template<class CDC, class FDC>
+          void
+          FaceErrorContribution(const FDC& fdc,
+              const DWRDataContainer<CDC, FDC, VECTOR>& dwrc,
+              std::vector<double>& error_contrib, double scale = 1.);
 
         /******************************************************/
         /**
@@ -461,6 +509,20 @@ namespace DOpE
           void
           BoundaryEquation(const FACEDATACONTAINER& dc,
               dealii::Vector<double> &local_cell_vector, double scale,double scale_ico);
+
+        /******************************************************/
+
+        /**
+         * Computes the value of the strong residuum ont the boundary on a cell.
+         * It has the same functionality as StrongCellResidual. We refer to its
+         * documentation.
+         *
+         */
+        template<class CDC, class FDC>
+          void
+          BoundaryErrorContribution(const FDC& dc,
+              const DWRDataContainer<CDC, FDC, VECTOR>& dwrc,
+              std::vector<double>&, double scale = 1.);
 
         /******************************************************/
 
@@ -1379,6 +1441,7 @@ namespace DOpE
                 || _problem_type == "adjoint_for_ee" || _problem_type == "cost_functional"
                 || _problem_type == "aux_functional" || _problem_type == "functional_for_ee"
                 || _problem_type == "tangent" || _problem_type == "adjoint_hessian"
+	        || _problem_type == "error_evaluation"
                 || _problem_type.find("constraints") != std::string::npos)
             {
               GetSpaceTimeHandler()->SetDoFHandlerOrdering(1,0);
@@ -1409,6 +1472,7 @@ namespace DOpE
                 || _problem_type == "cost_functional"
                 || _problem_type == "aux_functional"
                 || _problem_type == "tangent"
+                || _problem_type == "error_evaluation"
                 || _problem_type == "adjoint_hessian")
             {
               GetSpaceTimeHandler()->SetDoFHandlerOrdering(0, 0);
@@ -1668,6 +1732,205 @@ namespace DOpE
         else
         {
           throw DOpEException("Not implemented", "OptProblemContainer::CellEquation");
+        }
+      }
+
+  /******************************************************/
+  
+    template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
+    typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+    typename VECTOR, int dopedim, int dealdim, typename FE,
+    typename DOFHANDLER>
+    template<class CDC, class FDC>
+    void
+      OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
+                          SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DOFHANDLER>::
+          CellErrorContribution(const CDC& cdc,
+				       const DWRDataContainer<CDC, FDC, VECTOR>& dwrc,
+				       std::vector<double>& error, double scale, double scale_ico)
+      {
+	//Tyoe Error evaluation is for PDE-Error only. No Optimization is taken care of.
+        Assert(GetType() == "error_evaluation", ExcInternalError());
+
+        if (dwrc.GetResidualEvaluation() == DOpEtypes::strong_residual)
+        {
+	  if(dwrc.GetWeightComputation() == DOpEtypes::higher_order_interpolation)
+	  {
+	    switch (dwrc.GetEETerms())
+	    {
+	    case DOpEtypes::primal_only:
+	      GetPDE()->StrongCellResidual(cdc, dwrc.GetCellWeight(), error[0],
+					   scale, scale_ico);
+	      break;
+	    case DOpEtypes::dual_only:
+	      GetPDE()->StrongCellResidual_U(cdc, dwrc.GetCellWeight(), error[1],
+					     scale);
+	      break;
+	    case DOpEtypes::mixed:
+	      GetPDE()->StrongCellResidual(cdc, dwrc.GetCellWeight(), error[0],
+					   scale, scale_ico);
+	      GetPDE()->StrongCellResidual_U(cdc, dwrc.GetCellWeight(), error[1],
+					     scale);
+	      break;
+	    default:
+	      throw DOpEException("Not implemented for this EETerm.",
+				  "PDEProblemContainer::CellErrorContribution");
+	      break;
+	    }
+          }
+	  else  if(dwrc.GetWeightComputation() == DOpEtypes::cell_diameter)
+	  {
+	    switch (dwrc.GetEETerms())
+	    {
+	    case DOpEtypes::primal_only:
+	      GetPDE()->StrongCellResidual(cdc, cdc, error[0],
+					   scale, scale_ico);
+	      break;
+	    case DOpEtypes::dual_only:
+	      GetPDE()->StrongCellResidual_U(cdc, cdc, error[1],
+					     scale);
+	      break;
+	    case DOpEtypes::mixed:
+	      GetPDE()->StrongCellResidual(cdc, cdc, error[0],
+					   scale, scale_ico);
+	      GetPDE()->StrongCellResidual_U(cdc, cdc, error[1],
+					     scale);
+	      break;
+	    default:
+	      throw DOpEException("Not implemented for this EETerm.",
+				  "PDEProblemContainer::CellErrorContribution");
+	      break;
+	    }
+          }
+	  else 
+	  {
+	      throw DOpEException("Not implemented for this WeightComputation.",
+				  "PDEProblemContainer::CellErrorContribution");
+	  }
+        }
+        else
+        {
+          throw DOpEException("Not implemented for this ResidualEvaluation.",
+              "PDEProblemContainer::CellErrorContribution");
+        }
+      }
+  /******************************************************/
+
+    template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
+    typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+    typename VECTOR, int dopedim, int dealdim, typename FE,
+    typename DOFHANDLER>
+    template<class CDC, class FDC>
+    void
+      OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
+                          SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DOFHANDLER>::
+          FaceErrorContribution(const FDC& fdc,
+          const DWRDataContainer<CDC, FDC, VECTOR>& dwrc,
+          std::vector<double>& error, double scale)
+      {
+        Assert(GetType() == "error_evaluation", ExcInternalError());
+
+        if (dwrc.GetResidualEvaluation() == DOpEtypes::strong_residual)
+        {
+	  if(dwrc.GetWeightComputation() == DOpEtypes::higher_order_interpolation)
+	  {
+	    switch (dwrc.GetEETerms())
+	    {
+	    case DOpEtypes::primal_only:
+	      GetPDE()->StrongFaceResidual(fdc, dwrc.GetFaceWeight(), error[0],
+					   scale);
+	      break;
+	    case DOpEtypes::dual_only:
+	      GetPDE()->StrongFaceResidual_U(fdc, dwrc.GetFaceWeight(), error[1],
+					     scale);
+	      break;
+	    case DOpEtypes::mixed:
+	      GetPDE()->StrongFaceResidual(fdc, dwrc.GetFaceWeight(), error[0],
+					   scale);
+	      GetPDE()->StrongFaceResidual_U(fdc, dwrc.GetFaceWeight(), error[1],
+                scale);
+	      break;
+	    default:
+	      throw DOpEException("Not implemented for this EETerm.",
+				  "PDEProblemContainer::FaceErrorContribution");
+	      break;
+	    }
+	  }
+	  else  if(dwrc.GetWeightComputation() == DOpEtypes::cell_diameter)
+	  {
+	    switch (dwrc.GetEETerms())
+	    {
+	    case DOpEtypes::primal_only:
+	      GetPDE()->StrongFaceResidual(fdc, fdc, error[0],
+					   scale);
+	      break;
+	    case DOpEtypes::dual_only:
+	      GetPDE()->StrongFaceResidual_U(fdc,fdc, error[1],
+					     scale);
+	      break;
+	    case DOpEtypes::mixed:
+	      GetPDE()->StrongFaceResidual(fdc, fdc, error[0],
+					   scale);
+	      GetPDE()->StrongFaceResidual_U(fdc, fdc, error[1],
+                scale);
+	      break;
+	    default:
+	      throw DOpEException("Not implemented for this EETerm.",
+				  "PDEProblemContainer::FaceErrorContribution");
+	      break;
+	    }
+          }
+	  else 
+	  {
+	      throw DOpEException("Not implemented for this WeightComputation.",
+				  "PDEProblemContainer::FaceErrorContribution");
+	  }
+        }
+        else
+        {
+          throw DOpEException("Not implemented for this ResidualEvaluation.",
+              "PDEProblemContainer::FaceErrorContribution");
+        }
+      }
+
+  /******************************************************/
+
+  template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
+    typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+    typename VECTOR, int dopedim, int dealdim, typename FE,
+    typename DOFHANDLER>
+    template<class CDC, class FDC>
+    void
+      OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
+                          SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DOFHANDLER>::
+          BoundaryErrorContribution(const FDC& fdc,
+          const DWRDataContainer<CDC, FDC, VECTOR>& dwrc,
+          std::vector<double>& error, double scale)
+      {
+        Assert(GetType() == "error_evaluation", ExcInternalError());
+        if (dwrc.GetResidualEvaluation() == DOpEtypes::strong_residual)
+        {
+          if(dwrc.GetWeightComputation() == DOpEtypes::higher_order_interpolation)
+	  {
+            // state values in quadrature points
+	    GetPDE()->StrongBoundaryResidual(fdc, dwrc.GetFaceWeight(), error[0],
+					     scale);
+	  }
+	  else  if(dwrc.GetWeightComputation() == DOpEtypes::cell_diameter)
+	  {
+	    GetPDE()->StrongBoundaryResidual(fdc, fdc, error[0],
+					     scale);
+	  }
+	  else 
+	  {
+	      throw DOpEException("Not implemented for this WeightComputation.",
+				  "PDEProblemContainer::BoundaryErrorContribution");
+	  }
+        }
+        else
+        {
+          throw DOpEException("Not implemented for this ResidualEvaluation.",
+              "PDEProblemContainer::BoundaryErrorContribution");
         }
       }
 

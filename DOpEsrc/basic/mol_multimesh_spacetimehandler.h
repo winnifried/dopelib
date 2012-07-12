@@ -645,6 +645,25 @@ namespace DOpE
 	  _state_mesh_transfer = NULL;
 	}
 	  
+	 /******************************************************/
+        /**
+         * Through this function one can reinitialize the 
+	 * triangulation for the state variable to be a copy of the
+	 * given argument.
+         */
+
+	void ResetControlTriangulation(const dealii::Triangulation<dim>& tria)
+	{
+	  _control_dof_handler.clear();
+	  _control_triangulation.clear();
+	  _control_triangulation.copy_triangulation(tria);
+	  _control_dof_handler.initialize(_control_triangulation,*_control_fe);
+	  this->IncrementControlTicket();
+	  if(_control_mesh_transfer != NULL)
+	    delete _control_mesh_transfer;
+	  _control_mesh_transfer = NULL;
+	}
+	  
 
       private:
         const SparsityMaker<DOFHANDLER, dim>*

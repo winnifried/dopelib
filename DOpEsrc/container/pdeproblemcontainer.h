@@ -429,7 +429,7 @@ namespace DOpE
          * where for instance jump terms come into play.
          *
          * It has the same functionality
-         * as CellErrorContribution, so we refer to its documentation.
+         * as FaceErrorContribution, so we refer to its documentation.
          *
          */
         template<class CDC, class FDC>

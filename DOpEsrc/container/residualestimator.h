@@ -52,6 +52,7 @@ namespace DOpE
             _PI_h_u = new StateVector<VECTOR>(&GetSTH(),
                 state_behavior, param_reader);
           }
+	  _weight = 0.;
         }
 
         virtual
@@ -100,7 +101,7 @@ namespace DOpE
          * dual residual.
          */
         void
-        PreparePI_h_u(const StateVector<VECTOR>& u)
+	  PreparePI_h_u(const StateVector<VECTOR>& /*u*/)
         {
 	  BuildConstantWeight(&(GetSTH().GetStateDoFHandler()),GetPI_h_u().GetSpacialVector());
         }
@@ -112,7 +113,7 @@ namespace DOpE
          * primal residual.
          */
         void
-        PreparePI_h_z(const StateVector<VECTOR>& z)
+	  PreparePI_h_z(const StateVector<VECTOR>& /*z*/)
         {
 	  BuildConstantWeight(&(GetSTH().GetStateDoFHandler()),GetPI_h_z().GetSpacialVector());
         }

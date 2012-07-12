@@ -1385,6 +1385,7 @@ namespace DOpE
             dwrc);
         // release the lock on the refinement indicators (see dwrcontainer.h)
         dwrc.ReleaseLock();
+	dwrc.ClearWeightData();
 
         const float error = dwrc.GetError();
 
@@ -1405,7 +1406,8 @@ namespace DOpE
         }
 
         this->GetIntegrator().DeleteDomainData("state");
-        this->GetIntegrator().DeleteDomainData("adjoint_for_ee");
+         if (dwrc.NeedDual())
+	   this->GetIntegrator().DeleteDomainData("adjoint_for_ee");
         this->GetProblem()->DeleteAuxiliaryFromIntegrator(
             this->GetIntegrator());
 

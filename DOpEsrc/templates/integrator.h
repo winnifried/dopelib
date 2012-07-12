@@ -1569,7 +1569,7 @@ namespace DOpE
         cell =
         pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandlerBeginActive();
         for (;
-            cell !=endc; ++cell[0], ++present_cell)
+            cell[0] !=endc[0]; cell[0]++, ++present_cell)
         for (unsigned int face_no = 0;
             face_no < GeometryInfo<dim>::faces_per_cell; ++face_no)
         {
@@ -1788,16 +1788,16 @@ namespace DOpE
         cell =
         pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandlerBeginActive();
         for (;
-            cell !=endc; ++cell[0], ++present_cell)
+            cell[0] !=endc[0]; cell[0]++, ++present_cell)
         for (unsigned int face_no = 0;
             face_no < GeometryInfo<dim>::faces_per_cell; ++face_no)
         {
           Assert(
               face_integrals.find(cell[0]->face(face_no)) != face_integrals.end(),
               ExcInternalError());
-          dwrc.GetPrimalErrorIndicators()(present_cell) -=
+          dwrc.GetPrimalErrorIndicators()(present_cell) +=
           0.5 * face_integrals[cell[0]->face(face_no)][0];
-          dwrc.GetDualErrorIndicators()(present_cell) -=
+          dwrc.GetDualErrorIndicators()(present_cell) +=
           0.5 * face_integrals[cell[0]->face(face_no)][1];
         }
 #endif
