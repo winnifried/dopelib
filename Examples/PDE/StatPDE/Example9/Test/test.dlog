@@ -20,13 +20,13 @@
 	Computing Error Indicators:
 	Error estimate using DWR-Estimator for the Local Mean value: -0.049087
 	Computing Error Indicators:
-	Error estimate using L2-Residual-Estimator: 1605.77
+	Error estimate using L2-Residual-Estimator: 1607.75
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator: 26287.8
+	Error estimate using H1-Residual-Estimator: 26417.8
 
 	Mean value error: -0.0109579  Ieff (eh/e)= 4.47958
-	L2-Error estimator: 40.0721
-	H1-Error estimator: 162.135
+	L2-Error estimator: 40.0968
+	H1-Error estimator: 162.536
 	
 
 
@@ -51,13 +51,13 @@
 	Computing Error Indicators:
 	Error estimate using DWR-Estimator for the Local Mean value: -0.0534708
 	Computing Error Indicators:
-	Error estimate using L2-Residual-Estimator: 810.3
+	Error estimate using L2-Residual-Estimator: 811.71
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator: 15753.2
+	Error estimate using H1-Residual-Estimator: 15918.1
 
 	Mean value error: -0.076896  Ieff (eh/e)= 0.695365
-	L2-Error estimator: 28.4658
-	H1-Error estimator: 125.512
+	L2-Error estimator: 28.4905
+	H1-Error estimator: 126.167
 	
 
 
@@ -82,13 +82,13 @@
 	Computing Error Indicators:
 	Error estimate using DWR-Estimator for the Local Mean value: -0.0168815
 	Computing Error Indicators:
-	Error estimate using L2-Residual-Estimator: 586.268
+	Error estimate using L2-Residual-Estimator: 587.739
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator: 10806.4
+	Error estimate using H1-Residual-Estimator: 11046.7
 
 	Mean value error: -0.0162471  Ieff (eh/e)= 1.03904
-	L2-Error estimator: 24.213
-	H1-Error estimator: 103.954
+	L2-Error estimator: 24.2433
+	H1-Error estimator: 105.103
 	
 
 
@@ -113,13 +113,13 @@
 	Computing Error Indicators:
 	Error estimate using DWR-Estimator for the Local Mean value: -0.00655622
 	Computing Error Indicators:
-	Error estimate using L2-Residual-Estimator: 171.309
+	Error estimate using L2-Residual-Estimator: 172.502
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator: 5474.58
+	Error estimate using H1-Residual-Estimator: 5755.83
 
 	Mean value error: -0.0055492  Ieff (eh/e)= 1.18147
-	L2-Error estimator: 13.0885
-	H1-Error estimator: 73.9904
+	L2-Error estimator: 13.134
+	H1-Error estimator: 75.8672
 	
 
 
@@ -144,12 +144,12 @@
 	Computing Error Indicators:
 	Error estimate using DWR-Estimator for the Local Mean value: -0.00120538
 	Computing Error Indicators:
-	Error estimate using L2-Residual-Estimator: 11.3352
+	Error estimate using L2-Residual-Estimator: 11.6135
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator: 1353.37
+	Error estimate using H1-Residual-Estimator: 1525.95
 
 	Mean value error: -0.000936663  Ieff (eh/e)= 1.28689
-	L2-Error estimator: 3.36677
-	H1-Error estimator: 36.7881
+	L2-Error estimator: 3.40786
+	H1-Error estimator: 39.0633
 	
 
