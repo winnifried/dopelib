@@ -1,5 +1,8 @@
 TODO DOpE
 =========
+- Recheck args in TS-Schemes, i.e., not always are scale and scale ico used 
+  consistenly in Equation, BoundaryEquation ...
+
 - Common Codeschnipsel in den STH in eigener Klasse zusammenfuehren.
 
 - Alle Functional Calls in opt-problem-container sollten vor dem 
