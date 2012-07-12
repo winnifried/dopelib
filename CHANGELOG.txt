@@ -1,7 +1,13 @@
 Changelog DOpE
 ==============
 
-
+12.07.2012: -Time stepping schemes rescaled. They now correspond to the scaling one 
+	    	  would get using Galerkin-Methods in time.
+	    -Removed Default setting in *Time*Explicit methods of the PDEINTERFACE.
+	     Now, if not desired they do nothing (and neednot be implemented).
+	     In any other case user needs to write *Time*Explicit and write *Time* to 
+	     do nothing.
+Jun 2012  : Logo and Website have been created
 09.05.2012: Backward-Time Loop is running
 
 2. DOpE Treffen 3.5.2012-5.5.2012:

@@ -127,10 +127,11 @@ namespace DOpE
       typename DOFHANDLER, typename VECTOR, int dopedim, int dealdim>
     void
     PDEInterface<CDC, FDC, DOFHANDLER, VECTOR, dopedim, dealdim>::CellTimeEquationExplicit(
-        const CDC<DOFHANDLER, VECTOR, dealdim>& cdc,
-        dealii::Vector<double> &local_cell_vector, double scale)
+      const CDC<DOFHANDLER, VECTOR, dealdim>& /*cdc*/,
+      dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
     {
-      this->CellTimeEquation(cdc, local_cell_vector, scale);
+      //This should be left empty, then one can use the default case *Time* without the 
+      //need to implement CellTimeEquationExplicit
     }
 
   /********************************************/
@@ -141,10 +142,11 @@ namespace DOpE
       typename DOFHANDLER, typename VECTOR, int dopedim, int dealdim>
     void
     PDEInterface<CDC, FDC, DOFHANDLER, VECTOR, dopedim, dealdim>::CellTimeEquationExplicit_U(
-        const CDC<DOFHANDLER, VECTOR, dealdim>& cdc,
-        dealii::Vector<double> &local_cell_vector, double scale)
+      const CDC<DOFHANDLER, VECTOR, dealdim>& /*cdc*/,
+      dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
     {
-      this->CellTimeEquation_U(cdc, local_cell_vector, scale);
+      //This should be left empty, then one can use the default case *Time* without the 
+      //need to implement CellTimeEquationExplicit
     }
 
   /********************************************/
@@ -155,10 +157,11 @@ namespace DOpE
       typename DOFHANDLER, typename VECTOR, int dopedim, int dealdim>
     void
     PDEInterface<CDC, FDC, DOFHANDLER, VECTOR, dopedim, dealdim>::CellTimeEquationExplicit_UT(
-        const CDC<DOFHANDLER, VECTOR, dealdim>& cdc,
-        dealii::Vector<double> &local_cell_vector, double scale)
+      const CDC<DOFHANDLER, VECTOR, dealdim>& /*cdc*/,
+      dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
     {
-      this->CellTimeEquation_UT(cdc, local_cell_vector, scale);
+      //This should be left empty, then one can use the default case *Time* without the 
+      //need to implement CellTimeEquationExplicit
     }
 
   /********************************************/
@@ -169,10 +172,11 @@ namespace DOpE
       typename DOFHANDLER, typename VECTOR, int dopedim, int dealdim>
     void
     PDEInterface<CDC, FDC, DOFHANDLER, VECTOR, dopedim, dealdim>::CellTimeEquationExplicit_UTT(
-        const CDC<DOFHANDLER, VECTOR, dealdim>& cdc,
-        dealii::Vector<double> &local_cell_vector, double scale)
+      const CDC<DOFHANDLER, VECTOR, dealdim>& /*cdc*/,
+      dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
     {
-      this->CellTimeEquation_UTT(cdc, local_cell_vector, scale);
+      //This should be left empty, then one can use the default case *Time* without the 
+      //need to implement CellTimeEquationExplicit
     }
 
   /********************************************/
@@ -186,6 +190,8 @@ namespace DOpE
       const CDC<DOFHANDLER, VECTOR, dealdim>& /*cdc*/,
       dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
     {
+      //This should be left empty, then one can use the default case *Time* without the 
+      //need to implement CellTimeEquationExplicit
     }
 
   /********************************************/
@@ -463,10 +469,11 @@ namespace DOpE
       typename DOFHANDLER, typename VECTOR, int dopedim, int dealdim>
     void
     PDEInterface<CDC, FDC, DOFHANDLER, VECTOR, dopedim, dealdim>::CellTimeMatrixExplicit(
-        const CDC<DOFHANDLER, VECTOR, dealdim>& cdc,
-        FullMatrix<double> &local_entry_matrix)
+      const CDC<DOFHANDLER, VECTOR, dealdim>& /*cdc*/,
+      FullMatrix<double> &/*local_entry_matrix*/)
     {
-      this->CellTimeMatrix(cdc, local_entry_matrix);
+      //This should be left empty, then one can use the default case *Time* without the 
+      //need to implement CellTimeEquationExplicit
     }
 
   /********************************************/

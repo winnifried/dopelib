@@ -125,18 +125,16 @@ namespace DOpE
               // The remaining parts; e.g. for fluid problems: laplace, convection, etc.:
               // Multiplication by 1/2 + k due to CN discretization
 
-              this->GetProblem().CellEquation(dc, tmp, damped_cn_theta * scale, scale);
+              this->GetProblem().CellEquation(dc, tmp, damped_cn_theta * scale* this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize(), scale* this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize());
               local_cell_vector += tmp;
 
               tmp = 0.0;
               this->GetProblem().CellTimeEquation(dc, tmp,
-                  scale
-                      / this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize());
+                  scale);
               local_cell_vector += tmp;
 
               this->GetProblem().CellTimeEquationExplicit(dc, local_cell_vector,
-                  scale
-                      / this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize());
+                  scale);
             }
             else if (this->GetPart() == "Old")
             {
@@ -148,12 +146,11 @@ namespace DOpE
 
               // The explicit parts with old_time_values; e.g. for fluid problems: laplace, convection, etc.
               // Multiplication by 1/2 + k due to CN discretization
-              this->GetProblem().CellEquation(dc, tmp, (1.0 - damped_cn_theta) * scale, 0.);
+              this->GetProblem().CellEquation(dc, tmp, (1.0 - damped_cn_theta) * scale* this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize(), 0.);
               local_cell_vector += tmp;
 
               this->GetProblem().CellTimeEquation(dc, local_cell_vector,
-                  (-1) * scale
-                      / this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize());
+                  (-1) * scale);
             }
             else
             {
@@ -193,14 +190,14 @@ namespace DOpE
             {
               damped_cn_theta = 0.5
                   + this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize();
-              this->GetProblem().CellRhs(fdc, local_cell_vector, damped_cn_theta * scale);
+              this->GetProblem().CellRhs(fdc, local_cell_vector, damped_cn_theta * scale* this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize());
             }
             else if (this->GetPart() == "Old")
             {
               damped_cn_theta = 0.5
                   + this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize();
               this->GetProblem().CellRhs(fdc, local_cell_vector,
-                  (1 - damped_cn_theta) * scale);
+                  (1 - damped_cn_theta) * scale* this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize());
             }
             else
             {
@@ -240,14 +237,14 @@ namespace DOpE
             damped_cn_theta = 0.5
                 + this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize();
             this->GetProblem().PointRhs(param_values, domain_values, rhs_vector,
-                damped_cn_theta * scale);
+                damped_cn_theta * scale* this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize());
           }
           else if (this->GetPart() == "Old")
           {
             damped_cn_theta = 0.5
                 + this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize();
             this->GetProblem().PointRhs(param_values, domain_values, rhs_vector,
-                (1 - damped_cn_theta) * scale);
+                (1 - damped_cn_theta) * scale* this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize());
           }
           else
           {
@@ -303,18 +300,18 @@ namespace DOpE
             // multiplication with 1/2 + k due to CN discretization for the 'normal' parts
             // no multiplication with 1/2 + k for the implicit parts
             //due to implicit treatment of pressure, etc. (in the case of fluid problems)
-            this->GetProblem().CellMatrix(fdc, local_entry_matrix, damped_cn_theta, 1.);
+            this->GetProblem().CellMatrix(fdc, local_entry_matrix, damped_cn_theta* this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize(), 1.* this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize());
 
             m = 0.;
             this->GetProblem().CellTimeMatrix(fdc, m);
             local_entry_matrix.add(
-                1.0 / this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize(),
+                1.0,
                 m);
 
             m = 0.;
             this->GetProblem().CellTimeMatrixExplicit(fdc, m);
             local_entry_matrix.add(
-                1.0 / this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize(),
+                1.0,
                 m);
           }
 
@@ -333,13 +330,13 @@ namespace DOpE
             {
               damped_cn_theta = 0.5
                   + this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize();
-              this->GetProblem().FaceEquation(fdc, local_cell_vector, damped_cn_theta * scale, scale);
+              this->GetProblem().FaceEquation(fdc, local_cell_vector, damped_cn_theta * scale* this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize(), scale* this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize());
             }
             else if (this->GetPart() == "Old")
             {
 	      damped_cn_theta = 0.5
 	              + this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize();
-              this->GetProblem().FaceEquation(fdc, local_cell_vector, (1.0 - damped_cn_theta) * scale, 0.);
+              this->GetProblem().FaceEquation(fdc, local_cell_vector, (1.0 - damped_cn_theta) * scale* this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize(), 0.);
             }
             else
             {
@@ -364,13 +361,13 @@ namespace DOpE
               damped_cn_theta = 0.5
                   + this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize();
               this->GetProblem().InterfaceEquation(fdc, local_cell_vector,
-						   damped_cn_theta * scale,scale );
+						   damped_cn_theta * scale* this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize(),scale* this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize() );
             }
             else if (this->GetPart() == "Old")
             {
               damped_cn_theta = 0.5
 	              + this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize();
-              this->GetProblem().InterfaceEquation(fdc, local_cell_vector, (1.0 - damped_cn_theta) * scale, 0.);
+              this->GetProblem().InterfaceEquation(fdc, local_cell_vector, (1.0 - damped_cn_theta) * scale* this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize(), 0.);
             }
             else
             {
@@ -390,7 +387,7 @@ namespace DOpE
           FaceRhs(const FACEDATACONTAINER& fdc,
               dealii::Vector<double> &local_cell_vector, double scale = 1.)
           {
-            this->GetProblem().FaceRhs(fdc, local_cell_vector, scale);
+            this->GetProblem().FaceRhs(fdc, local_cell_vector, scale* this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize());
           }
 
         /******************************************************/
@@ -407,15 +404,14 @@ namespace DOpE
             assert(this->GetPart() == "New");
             damped_cn_theta = 0.5
                 + this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize();
-            // Hier nicht mit this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize() multiplizieren,
-            // da local_cell_matrix schon skaliert ist
+           
             dealii::FullMatrix<double> m(local_entry_matrix);
 
             m = 0.;
             // Multiplication with 1/2 + k due to CN time discretization
             this->GetProblem().FaceMatrix(fdc, m, damped_cn_theta, 1.);
 
-            local_entry_matrix.add(1., m);
+            local_entry_matrix.add(1.* this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize(), m);
 
           }
 
@@ -433,15 +429,14 @@ namespace DOpE
             assert(this->GetPart() == "New");
             damped_cn_theta = 0.5
                 + this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize();
-            // Hier nicht mit this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize() multiplizieren,
-            // da local_cell_matrix schon skaliert ist
-            dealii::FullMatrix<double> m(local_entry_matrix);
+            
+	    dealii::FullMatrix<double> m(local_entry_matrix);
 
             m = 0.;
             // Multiplication with 1/2 + k due to CN time discretization
             this->GetProblem().InterfaceMatrix(fdc, m, damped_cn_theta, 1.);
 
-            local_entry_matrix.add(1., m);
+            local_entry_matrix.add(1.* this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize(), m);
 
           }
 
@@ -480,14 +475,14 @@ namespace DOpE
               damped_cn_theta = 0.5
                   + this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize();
               this->GetProblem().BoundaryEquation(fdc, local_cell_vector,
-						  damped_cn_theta * scale,scale);
+						  damped_cn_theta * scale* this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize(),scale* this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize());
             }
             else if (this->GetPart() == "Old")
             {
               damped_cn_theta = 0.5
                   + this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize();
               this->GetProblem().BoundaryEquation(fdc, local_cell_vector,
-						  (1.0 - damped_cn_theta) * scale, 0.);
+						  (1.0 - damped_cn_theta) * scale* this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize(), 0.);
             }
             else
             {
@@ -507,7 +502,7 @@ namespace DOpE
           BoundaryRhs(const FACEDATACONTAINER& fdc,
               dealii::Vector<double> &local_cell_vector, double scale = 1.)
           {
-            this->GetProblem().BoundaryRhs(fdc, local_cell_vector, scale);
+            this->GetProblem().BoundaryRhs(fdc, local_cell_vector, scale* this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize());
           }
 
         /******************************************************/
@@ -544,13 +539,12 @@ namespace DOpE
             assert(this->GetPart() == "New");
             damped_cn_theta = 0.5
                 + this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize();
-            // Hier nicht mit this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize() multiplizieren, da local_cell_matrix schon skaliert ist
             dealii::FullMatrix<double> m(local_cell_matrix);
 
             m = 0.;
             // Multiplication with 1/2 + k due to CN time discretization
             this->GetProblem().BoundaryMatrix(fdc, m, damped_cn_theta, 1.);
-            local_cell_matrix.add(1., m);
+            local_cell_matrix.add(1.* this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize(), m);
 
           }
 

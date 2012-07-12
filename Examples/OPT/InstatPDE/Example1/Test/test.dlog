@@ -18,7 +18,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 	CostFunctional: 6.92e-05
 		 Newton step: 1	 Residual (rel.):   1.05e-03	 LinearIters [2]	 LineSearch {0} 
 	CostFunctional: 6.78e-05
-		 Newton step: 2	 Residual (rel.):   1.06e-07	 LinearIters [2]	 LineSearch {0} 
+		 Newton step: 2	 Residual (rel.): < 5.00e-07	 LinearIters [2]	 LineSearch {0} 
 	CostFunctional: 6.78e-05
 	Start-Time-Point evaluation: 1.00663
 	End-Time-Point evaluation: 0.99997
@@ -26,6 +26,6 @@ LOG: Allowing IterationCounter `Time' for filenames!
 	**************************************************
 	*        Stopping Reduced Newton Algorithm       *
 	*             after      2  Iterations           *
-	*             with rel. Residual    1.06e-07          *
+	*             with rel. Residual  < 5.00e-07          *
 	**************************************************
 

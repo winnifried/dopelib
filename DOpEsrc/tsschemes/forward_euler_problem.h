@@ -118,30 +118,29 @@ namespace DOpE
             {
               dealii::Vector<double> tmp(local_cell_vector);
               tmp = 0.0;
-              this->GetProblem().CellEquation(dc, tmp, 0., scale);
+              this->GetProblem().CellEquation(dc, tmp, 0., scale * this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize());
               local_cell_vector += tmp;
 
               tmp = 0.0;
               this->GetProblem().CellTimeEquation(dc, tmp,
-                  scale / this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize());
+                  scale );
               local_cell_vector += tmp;
 
               this->GetProblem().CellTimeEquationExplicit(dc, local_cell_vector,
-                  scale / this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize());
+                  scale );
 
             }
           else if (this->GetPart() == "Old")
             {
               dealii::Vector<double> tmp(local_cell_vector);
               tmp = 0.0;
-              this->GetProblem().CellEquation(dc, tmp, scale, 0.);
+              this->GetProblem().CellEquation(dc, tmp, scale * this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize(), 0.);
               local_cell_vector += tmp;
 
               this->GetProblem().CellTimeEquation(
                   dc,
                   local_cell_vector,
-                  (-1) * scale
-                      / this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize());
+                  (-1) * scale);
             }
           else
             {
@@ -183,7 +182,7 @@ namespace DOpE
             }
           else if (this->GetPart() == "Old")
             {
-              this->GetProblem().CellRhs(dc, local_cell_vector, scale);
+              this->GetProblem().CellRhs(dc, local_cell_vector, scale* this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize());
             }
           else
             {
@@ -222,7 +221,7 @@ namespace DOpE
           }
           else if (this->GetPart() == "Old")
           {
-            this->GetProblem().PointRhs(param_values, domain_values, rhs_vector, scale);
+            this->GetProblem().PointRhs(param_values, domain_values, rhs_vector, scale* this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize());
           }
           else
           {
@@ -273,17 +272,17 @@ namespace DOpE
           assert(this->GetPart() == "New");
           dealii::FullMatrix<double> m(local_entry_matrix);
 
-          this->GetProblem().CellMatrix(dc, local_entry_matrix, 0., 1.);
+          this->GetProblem().CellMatrix(dc, local_entry_matrix, 0., 1.* this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize());
 
           m = 0.;
           this->GetProblem().CellTimeMatrix(dc, m);
           local_entry_matrix.add(
-              1.0 / this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize(), m);
+              1.0, m);
 
           m = 0.;
           this->GetProblem().CellTimeMatrixExplicit(dc, m);
           local_entry_matrix.add(
-              1.0 / this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize(), m);
+              1.0 , m);
 
         }
 
@@ -300,12 +299,11 @@ namespace DOpE
         {
           if (this->GetPart() == "New")
             {
-	      this->GetProblem().FaceEquation(fdc, local_cell_vector, 0., scale);
+	      this->GetProblem().FaceEquation(fdc, local_cell_vector, 0., scale* this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize());
             }
           else if (this->GetPart() == "Old")
             {
-              // Hier nicht mit this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize() multiplizieren, da local_cell_matrix schon skaliert ist
-              this->GetProblem().FaceEquation(fdc, local_cell_vector, scale,0.);
+              this->GetProblem().FaceEquation(fdc, local_cell_vector, scale* this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize(),0.);
             }
           else
             {
@@ -322,12 +320,11 @@ namespace DOpE
         {
           if (this->GetPart() == "New")
             {
-	      this->GetProblem().InterfaceEquation(dc, local_cell_vector, 0., scale);
+	      this->GetProblem().InterfaceEquation(dc, local_cell_vector, 0., scale* this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize());
             }
           else if (this->GetPart() == "Old")
             {
-              // Hier nicht mit this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize() multiplizieren, da local_cell_matrix schon skaliert ist
-              this->GetProblem().InterfaceEquation(dc, local_cell_vector, scale,0.);
+              this->GetProblem().InterfaceEquation(dc, local_cell_vector, scale* this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize(),0.);
             }
           else
             {
@@ -347,7 +344,7 @@ namespace DOpE
         FaceRhs(const FACEDATACONTAINER& fdc,
             dealii::Vector<double> &local_cell_vector, double scale = 1.)
         {
-          this->GetProblem().FaceRhs(fdc, local_cell_vector, scale);
+          this->GetProblem().FaceRhs(fdc, local_cell_vector, scale* this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize());
         }
 
       /******************************************************/
@@ -362,7 +359,7 @@ namespace DOpE
 		   dealii::FullMatrix<double> &local_entry_matrix)
         {
           assert(this->GetPart() == "New");
-	  this->GetProblem().FaceMatrix(fdc, local_entry_matrix, 0., 1.);
+	  this->GetProblem().FaceMatrix(fdc, local_entry_matrix, 0., 1.* this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize());
           
         }
 
@@ -374,7 +371,7 @@ namespace DOpE
             dealii::FullMatrix<double> &local_entry_matrix)
         {
           assert(this->GetPart() == "New");
-          this->GetProblem().InterfaceMatrix(fdc, local_entry_matrix, 0., 1.);
+          this->GetProblem().InterfaceMatrix(fdc, local_entry_matrix, 0., 1.* this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize());
           
         }
 
@@ -410,12 +407,11 @@ namespace DOpE
         {
           if (this->GetPart() == "New")
             {
-	      this->GetProblem().BoundaryEquation(fdc, local_cell_vector, 0., scale);
+	      this->GetProblem().BoundaryEquation(fdc, local_cell_vector, 0., scale* this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize());
             }
           else if (this->GetPart() == "Old")
             {
-              // Hier nicht mit this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize() multiplizieren, da local_cell_matrix schon skaliert ist
-              this->GetProblem().BoundaryEquation(fdc, local_cell_vector, scale,0.);
+              this->GetProblem().BoundaryEquation(fdc, local_cell_vector, scale* this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize(),0.);
             }
           else
             {
@@ -435,7 +431,7 @@ namespace DOpE
         BoundaryRhs(const FACEDATACONTAINER& fdc,
             dealii::Vector<double> &local_cell_vector, double scale = 1.)
         {
-          this->GetProblem().BoundaryRhs(fdc, local_cell_vector, scale);
+          this->GetProblem().BoundaryRhs(fdc, local_cell_vector, scale* this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize());
         }
 
       /******************************************************/
@@ -471,7 +467,7 @@ namespace DOpE
 		       dealii::FullMatrix<double> &local_entry_matrix)
         {
           assert(this->GetPart() == "New");
-          this->GetProblem().BoundaryMatrix(fdc, local_entry_matrix, 0., 1.);
+          this->GetProblem().BoundaryMatrix(fdc, local_entry_matrix, 0., 1.* this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize());
         }
     private:
       InitialProblem<ForwardEulerProblem<OPTPROBLEM, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DOFHANDLER>, VECTOR, dealdim> * _initial_problem;

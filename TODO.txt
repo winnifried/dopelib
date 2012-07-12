@@ -24,16 +24,9 @@ einheitlich (!) kommentiert.
 
 - Beispiel (Erklaerung), PDEInterface nicht als template geben, sondern die LocalPDE.
 
-- Logo -> tw
-
 - Webseite: 
-  -- Namen der Developer, Contributer, Name des Projekts: DOpElib
-  -- Beschreibung
   -- domain
-  -- manual als *.pdf um die Interessierten richtig heiss zu machen
   -- wie komme ich an DOpE?? Mail an dopelib@...
-  -- Danksagungen RoDoBo, deal.ii
-  -- Publications
   -- How to cite...
 
 - Technical Report (Basierend auf Doku) ~tw
