@@ -50,12 +50,10 @@ namespace DOpE
             const DOpEWrapper::DoFHandler<dealdim, DOFHANDLER> & dof_handler,
             dealii::ConstraintMatrix& dof_constraints) const;
 
-#if dope_dimension > 0
         virtual void
         MakeControlDoFConstraints(
             const DOpEWrapper::DoFHandler<dopedim, DOFHANDLER> & dof_handler,
             dealii::ConstraintMatrix& dof_constraints) const;
-#endif
 
       private:
     };
@@ -70,7 +68,6 @@ namespace DOpE
           "UserDefinedDoFConstraints::MakeStateDoFConstraints");
     }
 
-#if dope_dimension > 0
 template<typename DOFHANDLER, int dopedim, int dealdim>
 void
 UserDefinedDoFConstraints<DOFHANDLER, dopedim, dealdim>::MakeControlDoFConstraints(
@@ -81,6 +78,5 @@ UserDefinedDoFConstraints<DOFHANDLER, dopedim, dealdim>::MakeControlDoFConstrain
         "UserDefinedDoFConstraints::MakeControlDoFConstraints");
   }
 
-#endif
 } //end of namespace
 #endif /* CONSTRAINTMAKER_H_ */

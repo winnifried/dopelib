@@ -16,6 +16,7 @@
 #include "localconstraints.h"
 #include "localconstraintaccessor.h"
 #include "integratordatacontainer.h"
+#include "pointconstraintsmaker.h"
 
 #include <stdio.h>
 #include <string.h>
@@ -112,26 +113,6 @@ main(int argc, char **argv)
   //triangulation.refine_global (5);
   triangulation.refine_global(3);
 
-    { //Set Dirichlet Boundary!
-      for (Triangulation<2>::active_cell_iterator cell =
-          triangulation.begin_active(); cell != triangulation.end(); ++cell)
-        for (unsigned int f = 0; f < GeometryInfo<2>::faces_per_cell; ++f)
-          {
-            if (cell->face(f)->at_boundary())
-              {
-                if (cell->face(f)->center()[1] == 0)
-                  {
-                    cell->face(f)->set_all_boundary_indicators(5);
-                    if (fabs(cell->face(f)->center()[0] - 2.)
-                        < (std::max)(0.25, cell->face(f)->diameter()))
-                      {
-                        cell->face(f)->set_all_boundary_indicators(2);
-                      }
-                  }
-              }
-          }
-    }
-
   //Add Constrained description
   std::vector<std::vector<unsigned int> > lcc(1); //1 Control Block
   lcc[0].resize(2);
@@ -139,8 +120,19 @@ main(int argc, char **argv)
   lcc[0][1] = 2; // each two constraints (lower and upper bound)
   Constraints constraints(lcc, 1);
 
+
+  std::vector<Point<2> > c_points(1);
+  std::vector<std::vector<bool> > c_comps(1,std::vector<bool>(2));
+  c_points[0][0] = 2.0;    //We want to constrain the displacement at the vertex (2.0, 0.0)
+  c_points[0][1] = 0.0;
+  c_comps[0][0] = false;   //But we allow displacements in x-dir (comp = 0) to be free
+  c_comps[0][1] = true;    //Only the y-displacement is fixed.
+  DOpE::PointConstraints<DOFHANDLER,2,2> constraints_mkr(c_points,c_comps);
+
   MethodOfLines_SpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR, 2, 2> DOFH(
       triangulation, control_fe, state_fe, constraints, DOpEtypes::stationary);
+  
+  DOFH.SetUserDefinedDoFConstraints(constraints_mkr);
 
   LocalConstraintAccessor CA;
   LocalConstraint<CDC, FDC, DOFHANDLER, VECTOR, 2, 2> LC(CA);
@@ -148,15 +140,11 @@ main(int argc, char **argv)
   OP P(LFunc, LPDE, LC, DOFH);
 
   std::vector<bool> comp_mask(2);
-  comp_mask[0] = false;
-  comp_mask[1] = true;
-  std::vector<bool> comp_mask_2(2);
-  comp_mask_2[0] = true;
-  comp_mask_2[1] = false;
+  comp_mask[0] = true;
+  comp_mask[1] = false;
   DOpEWrapper::ZeroFunction<2> zf(2);
   SimpleDirichletData<BlockVector<double>, 2, 2> DD_1(zf);
-  P.SetDirichletBoundaryColors(2, comp_mask, &DD_1);
-  P.SetDirichletBoundaryColors(0, comp_mask_2, &DD_1);
+  P.SetDirichletBoundaryColors(0, comp_mask, &DD_1);
 
   P.SetBoundaryFunctionalColors(3);
   P.SetBoundaryEquationColors(3);

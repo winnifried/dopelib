@@ -147,11 +147,12 @@ namespace DOpE
           VECTOR, dopedim, dealdim>::SetActiveFEIndicesControl(_control_dof_handler);
 #endif
           _control_dof_handler.distribute_dofs(*_control_fe);
+
 #if dope_dimension > 0
           DoFRenumbering::component_wise (static_cast<DOFHANDLER&>(_control_dof_handler),
               control_block_component);
           if(dopedim==dealdim)
-          {
+         {
             _control_dof_constraints.clear ();
             DoFTools::make_hanging_node_constraints (static_cast<DOFHANDLER&>(_control_dof_handler),
                 _control_dof_constraints);

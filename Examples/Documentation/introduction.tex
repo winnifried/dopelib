@@ -425,6 +425,8 @@ do not fit the above but are important for the user to know.
 \begin{itemize}
 \item \texttt{include/userdefineddofconstraints.h} This class sets the constraints on the DOFs of the state and/or control FE solution. DOpE itself builds the hanging-node-constraints, but the user can reimplement this class and thus include other constraints as well (for example periodic BC). Note, that the hanging-node-constraints come first (in case of conflicting constraints.)
 \item \texttt{include/sparsitymaker.h} This class sets the sparsity pattern for the state FE solution. The standard implementation is just a wrapper for \texttt{dealii::DoFTools::} \texttt{make\_sparsity\_pattern}, but the user can reimplement this class to allow for more sophisticated sparsity patterns.
+\item \texttt{include/pointconstraintsmaker.h} This class is derived from \texttt{include/userdefineddofconstraints.h}
+  and allows to set homogeneous dirichlet values at given points/components.
 \end{itemize}
 
 \subsubsection{HP components}
