@@ -43,7 +43,8 @@ namespace DOpE
         {
         }
 
-	virtual std::string GetName() const = 0;
+        virtual std::string
+        GetName() const = 0;
 
         /**
          * This initializes the vector of the error indicators and locks them.
@@ -63,6 +64,7 @@ namespace DOpE
         ReleaseLock()
         {
           _lock = false;
+
           switch (this->GetEETerms())
           {
             case DOpEtypes::primal_only:
@@ -102,6 +104,44 @@ namespace DOpE
         }
 
         /**
+         * This function sums up the entries of the vector of the error
+         * indicators. So make sure this vector is correctly filled (reminder:
+         * after computing the error indicators, make sure that you call
+         * ReleaseLock()1)
+         *
+         * @ return   Error in the previously specified functional.
+         */
+        double
+        GetPrimalError() const
+        {
+          double error = 0;
+          for (unsigned int i = 0; i < GetAllErrorIndicators()[1]->size(); ++i)
+          {
+            error += GetAllErrorIndicators()[1]->operator()(i);
+          }
+          return error;
+        }
+
+        /**
+         * This function sums up the entries of the vector of the error
+         * indicators. So make sure this vector is correctly filled (reminder:
+         * after computing the error indicators, make sure that you call
+         * ReleaseLock()1)
+         *
+         * @ return   Error in the previously specified functional.
+         */
+        double
+        GetDualError() const
+        {
+          double error = 0;
+          for (unsigned int i = 0; i < GetAllErrorIndicators()[2]->size(); ++i)
+          {
+            error += GetAllErrorIndicators()[2]->operator()(i);
+          }
+          return error;
+        }
+
+        /**
          * Returns the vector of the error indicators. You have to
          * call ReleaseLock() prior to this function.
          *
@@ -133,6 +173,12 @@ namespace DOpE
           return _error_ind_primal;
         }
 
+        const Vector<double>&
+        GetPrimalErrorIndicators() const
+        {
+          return _error_ind_primal;
+        }
+
         /**
          * Returns the vector of the dual error indicators. You dont have
          * to call ReleaseLock() prior to this function.
@@ -141,6 +187,12 @@ namespace DOpE
          */
         Vector<double>&
         GetDualErrorIndicators()
+        {
+          return _error_ind_dual;
+        }
+
+        const Vector<double>&
+        GetDualErrorIndicators() const
         {
           return _error_ind_dual;
         }
@@ -155,7 +207,7 @@ namespace DOpE
         std::vector<const Vector<double>*>
         GetAllErrorIndicators() const
         {
-          std::vector<Vector<double>*> res;
+          std::vector<const Vector<double>*> res;
           if (_lock)
           {
             throw DOpEException("Error indicators are still locked.",
@@ -203,15 +255,6 @@ namespace DOpE
             integrator.ComputeRefinementIndicators(problem, *this);
           }
 
-//        std::string
-//        GetProblemType() const
-//        {
-//          std::string ret = DOpEtypes::GetProblemType(GetResidualEvaluation())
-//              + DOpEtypes::GetProblemType(GetWeightComputation())
-//              + DOpEtypes::GetProblemType(GetEETerms());
-//          return ret;
-//        }
-
         /**
          * Specifies, if we need the solution of the adjoint equation.
          * Pure virtual.
@@ -233,7 +276,6 @@ namespace DOpE
           return _weight_data;
         }
 
-
         /**
          * Deletes the weights.
          */
@@ -242,7 +284,6 @@ namespace DOpE
         {
           _weight_data.clear();
         }
-
 
         /**
          * Computes the functions that compute the weights and puts them
@@ -277,10 +318,11 @@ namespace DOpE
               break;
             default:
               throw DOpEException("Unknown DOpEtypes::EETerms!",
-                  "StatPDEProblem::PrepareWeights");
+                  "DWRDataContainerBase::PrepareWeights");
               break;
           }
         }
+
       protected:
         //TODO PI_h_u and PI_h_z are probably not the best names.
         //Basically, one could replace them with 'primalweight' and 'dualweight',
@@ -315,7 +357,8 @@ namespace DOpE
         bool _lock;
         std::map<std::string, const VECTOR*> _weight_data;
         Vector<double> _error_ind, _error_ind_primal, _error_ind_dual;
-    };
+    }
+    ;
 
   template<typename VECTOR>
     void
@@ -332,7 +375,7 @@ namespace DOpE
    * They have to get implemented in derived classes. These two methods are
    * excluded from DWRDataContainerBase() to save two template parameters.
    */
-  template<class CDC, class FDC, typename VECTOR>
+  template<class STH, class IDC, class CDC, class FDC, typename VECTOR>
     class DWRDataContainer : public DWRDataContainerBase<VECTOR>
     {
       public:
@@ -361,7 +404,35 @@ namespace DOpE
          */
         virtual FDC&
         GetFaceWeight() const = 0;
+
+        virtual STH&
+        GetWeightSTH() = 0;
+        virtual const STH&
+        GetWeightSTH() const = 0;
+
+        virtual IDC&
+        GetWeightIDC() = 0;
+        virtual const IDC&
+        GetWeightIDC() const = 0;
     };
+
+    /**
+     * We need this overloaded function to have the same
+     * interface for dwrdatacontainer and residualestimators,
+     * see there for further information.
+     */
+  template<class CDC, class STH, class IDC, class FDC, typename VECTOR>
+    CDC*
+    ExtractCDC(const DWRDataContainer<STH, IDC, CDC, FDC, VECTOR>& dwrc)
+    {
+      return &dwrc.GetCellWeight();
+    }
+  template<class FDC, class STH, class IDC, class CDC, typename VECTOR>
+    FDC*
+    ExtractFDC(const DWRDataContainer<STH, IDC, CDC, FDC, VECTOR>& dwrc)
+    {
+      return &dwrc.GetFaceWeight();
+    }
 
 } //end of namespace
 #endif /* DWRDATACONTAINER_H_ */

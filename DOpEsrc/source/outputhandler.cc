@@ -446,6 +446,66 @@ namespace DOpE
   }
 
 
+  /*******************************************************/
+
+   template<typename VECTOR>
+     void
+     DOpEOutputHandler<VECTOR>::WriteCellwise(const Vector<double>&q,
+         std::string name, std::string dof_type)
+     {
+       if (AllowWrite(name))
+       {
+         //Construct Name
+         std::stringstream outfile;
+         outfile << _results_basedir;
+         outfile << _results_outdir;
+         outfile << name;
+         outfile << GetPostIndex();
+         if (dof_type == "control")
+           outfile << _control_ending;
+         else if (dof_type == "state")
+           outfile << _ending;
+         else
+           abort();
+
+         Write("Writing [" + outfile.str() + "]", 4);
+
+         if (dof_type == "control")
+           GetReducedProblem()->WriteToFileCellwise(q, name, outfile.str(),
+               dof_type, _control_ending);
+         else if (dof_type == "state")
+           GetReducedProblem()->WriteToFileCellwise(q, name, outfile.str(),
+               dof_type, _ending);
+       }
+     }
+
+   /*******************************************************/
+
+   template<typename VECTOR>
+     std::string
+     DOpEOutputHandler<VECTOR>::ConstructOutputName(std::string name,
+         std::string dof_type)
+    {
+      std::string outfile;
+      if (AllowWrite(name))
+      {
+        //Construct Name
+        outfile += _results_basedir;
+        outfile += _results_outdir;
+        outfile += name;
+        outfile += GetPostIndex();
+        if (dof_type == "control")
+          outfile += _control_ending;
+        else if (dof_type == "state")
+          outfile += _ending;
+        else
+          abort();
+
+        Write("Writing [" + outfile + "]", 4);
+      }
+      return outfile;
+    }
+
 
 /*******************************************************/
   template <typename VECTOR>

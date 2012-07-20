@@ -12,6 +12,7 @@
 #include "celldatacontainer.h"
 #include "facedatacontainer.h"
 #include "stateproblem.h"
+#include "problemcontainer_internal.h"
 
 #include "dopetypes.h"
 #include "dwrdatacontainer.h"
@@ -33,8 +34,6 @@
 #include <string>
 #include <vector>
 
-
-
 namespace DOpE
 {
   //Predeclaration necessary
@@ -45,9 +44,9 @@ namespace DOpE
   /////////////////////////////
 
   template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
-    int dealdim, typename FE = dealii::FESystem<dealdim>,
-    typename DOFHANDLER = dealii::DoFHandler<dealdim> >
-    class PDEProblemContainer
+      int dealdim, typename FE = dealii::FESystem<dealdim>,
+      typename DOFHANDLER = dealii::DoFHandler<dealdim> >
+    class PDEProblemContainer : public ProblemContainerInternal<PDE>
     {
       public:
         PDEProblemContainer(PDE& pde,
@@ -78,7 +77,7 @@ namespace DOpE
             _state_problem = new StateProblem<
                 PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim,
                     FE, DOFHANDLER>, PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>(
-                *this, *_pde);
+                *this, this->GetPDE());
           }
           return *_state_problem;
         }
@@ -251,33 +250,7 @@ namespace DOpE
               double scale_ico);
 
         /******************************************************/
-        /**
-         * Computes the contribution of the cell to overall error
-         * in a previously specified functional. For example, this
-         * could be a residual with appropriate weights.
-         *
-         * @template CDC                Class of the celldatacontainer in use,
-         *                              distinguishes between hp- and classical case.
-         * @template FDC                Class of the facedatacontainer in use,
-         *                              distinguishes between hp- and classical case.
-         *
-         * @param cdc                   A DataContainer holding all the needed information
-         *                              for the computation of the residuum on the cell.
-         * @param dwrc                  A DWRDataContainer containing all the information
-         *                              needed to evaluate the error on the cell (form of the residual,
-         *                              the weights, etc.).
-         * @param cell_contrib          Vector in which we write the contribution of the cell to the overall
-         *                              error. 1st component: primal_part, 2nd component: dual_part
-         * @param scale                 A scaling factor which is -1 or 1 depending on the subroutine to compute.
-         * @param scale_ico             A scaling factor for terms which will be treated fully implicit
-         *                              in an instationary equation.
-         */
-        template<class CDC, class FDC>
-          void
-          CellErrorContribution(const CDC& cdc,
-              const DWRDataContainer<CDC, FDC, VECTOR>& dwrc,
-              std::vector<double>& cell_contrib, double scale,
-              double /*scale_ico*/);
+
 
         /******************************************************/
 
@@ -336,10 +309,11 @@ namespace DOpE
          * @param rhs_vector               This vector contains the complete point-rhs.
          * @param scale                    A scaling factor which is -1 or 1 depending on the subroutine to compute.
          */
-          void
-          PointRhs(const std::map<std::string, const dealii::Vector<double>*> &param_values,
-              const std::map<std::string, const VECTOR*> &domain_values,
-              VECTOR& rhs_vector, double scale = 1.);
+        void
+        PointRhs(
+            const std::map<std::string, const dealii::Vector<double>*> &param_values,
+            const std::map<std::string, const VECTOR*> &domain_values,
+            VECTOR& rhs_vector, double scale = 1.);
 
         /******************************************************/
 
@@ -421,22 +395,6 @@ namespace DOpE
               dealii::Vector<double> &local_cell_vector, double scale,
               double scale_ico);
 
-        /******************************************************/
-
-        /**
-         * Computes the contribution of the face to overall error
-         * in a previously specified functional. This is the place
-         * where for instance jump terms come into play.
-         *
-         * It has the same functionality
-         * as FaceErrorContribution, so we refer to its documentation.
-         *
-         */
-        template<class CDC, class FDC>
-          void
-          FaceErrorContribution(const FDC& fdc,
-              const DWRDataContainer<CDC, FDC, VECTOR>& dwrc,
-              std::vector<double>& error_contrib, double scale = 1.);
 
         /******************************************************/
         /**
@@ -490,35 +448,19 @@ namespace DOpE
               dealii::FullMatrix<double> &local_entry_matrix, double scale = 1.,
               double scale_ico = 1.);
 
-
         /******************************************************/
 
         /**
-         * Computes the contribution of the boundary to overall error
-         * in a previously specified functional.
-         *
-         * It has the same functionality
-         * as CellErrorContribution, so we refer to its documentation.
-         *
+         * Computes the value of face on a boundary.
+         * It has the same functionality as CellEquation. We refer to its
+         * documentation.
          */
         template<typename FACEDATACONTAINER>
-             void
-             BoundaryEquation(const FACEDATACONTAINER& dc,
-                 dealii::Vector<double> &local_cell_vector, double scale,double scale_ico);
-
-        /******************************************************/
-
-        /**
-         * Computes the value of the strong residuum ont the boundary on a cell.
-         * It has the same functionality as StrongCellResidual. We refer to its
-         * documentation.
-         *
-         */
-        template<class CDC, class FDC>
           void
-          BoundaryErrorContribution(const FDC& dc,
-              const DWRDataContainer<CDC, FDC, VECTOR>& dwrc,
-              std::vector<double>&, double scale = 1.);
+          BoundaryEquation(const FACEDATACONTAINER& dc,
+              dealii::Vector<double> &local_cell_vector, double scale,
+              double scale_ico);
+
 
         /******************************************************/
         /**
@@ -731,11 +673,7 @@ namespace DOpE
 
         /******************************************************/
 
-        std::string
-        GetType() const
-        {
-          return _problem_type;
-        }
+
         std::string
         GetDoFType() const;
         std::string
@@ -816,7 +754,7 @@ namespace DOpE
         unsigned int
         GetStateNBlocks()
         {
-          return this->GetPDE()->GetStateNBlocks();
+          return this->GetPDE().GetStateNBlocks();
         }
 
         /******************************************************/
@@ -824,7 +762,7 @@ namespace DOpE
         std::vector<unsigned int>&
         GetStateBlockComponent()
         {
-          return this->GetPDE()->GetStateBlockComponent();
+          return this->GetPDE().GetStateBlockComponent();
         }
 
         /******************************************************/
@@ -840,25 +778,14 @@ namespace DOpE
         {
           return _functional_position;
         }
-      protected:
-        PDE*
-        GetPDE()
-        {
-          return _pde;
-        }
-        const PDE*
-        GetPDE() const
-        {
-          return _pde;
-        }
+
 
         /******************************************************/
       private:
         DOpEExceptionHandler<VECTOR>* _ExceptionHandler;
         DOpEOutputHandler<VECTOR>* _OutputHandler;
-        std::string _problem_type, _algo_type;
 
-        unsigned int _problem_type_num;
+        std::string  _algo_type;
 
         std::vector<
             FunctionalInterface<CellDataContainer, FaceDataContainer,
@@ -866,7 +793,6 @@ namespace DOpE
         std::map<std::string, unsigned int> _functional_position;
 
         unsigned int _functional_for_ee_num;
-        PDE* _pde;
         StateSpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR, dealdim> * _STH;
 
         std::vector<unsigned int> _dirichlet_colors;
@@ -895,13 +821,13 @@ namespace DOpE
       int dealdim, typename FE, typename DOFHANDLER>
     PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE,
         DOFHANDLER>::PDEProblemContainer(PDE& pde,
-        StateSpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR, dealdim>& STH) :
-        _pde(&pde), _STH(&STH), _state_problem(NULL)
+        StateSpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR, dealdim>& STH)
+        : ProblemContainerInternal<PDE>(pde), _STH(&STH), _state_problem(NULL)
     {
       _ExceptionHandler = NULL;
       _OutputHandler = NULL;
       _zero_dirichlet_values = new ZeroFunction<dealdim>(
-          this->GetPDE()->GetStateNComponents());
+          this->GetPDE().GetStateNComponents());
       _algo_type = "";
       _functional_for_ee_num = dealii::numbers::invalid_unsigned_int;
     }
@@ -950,12 +876,12 @@ namespace DOpE
       else
       {
         _algo_type = algo_type;
-        _problem_type = "";
+        this->SetTypeInternal("");
 
         if (_algo_type == "reduced")
         {
-          GetSpaceTimeHandler()->ReInit(this->GetPDE()->GetStateNBlocks(),
-              this->GetPDE()->GetStateBlockComponent());
+          GetSpaceTimeHandler()->ReInit(this->GetPDE().GetStateNBlocks(),
+              this->GetPDE().GetStateBlockComponent());
         }
         else
         {
@@ -973,11 +899,11 @@ namespace DOpE
     PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE,
         DOFHANDLER>::SetType(std::string type, unsigned int num)
     {
-      if (_problem_type != type || _problem_type_num != num)
+      if (this->GetType() != type || this->GetTypeNum() != num)
       {
-        _problem_type_num = num;
-        _problem_type = type;
-        this->GetPDE()->SetProblemType(_problem_type);
+        this->SetTypeInternal(type);
+        this->SetTypeNumInternal( num);
+        this->GetPDE().SetProblemType(type);
       }
       //Nothing to do.
     }
@@ -992,16 +918,16 @@ namespace DOpE
           DOFHANDLER>::CellFunctional(const DATACONTAINER& cdc)
       {
 
-        if (GetType() == "cost_functional")
+        if (this->GetType() == "cost_functional")
         {
           return 0;
         }
-        else if (GetType() == "aux_functional")
+        else if (this->GetType() == "aux_functional")
         {
           // state values in quadrature points
-          return _aux_functionals[_problem_type_num]->Value(cdc);
+          return _aux_functionals[this->GetTypeNum()]->Value(cdc);
         }
-        else if (GetType() == "error_evaluation")
+        else if (this->GetType() == "error_evaluation")
         {
           return _aux_functionals[_functional_for_ee_num]->Value(cdc);
         }
@@ -1021,20 +947,20 @@ namespace DOpE
         const std::map<std::string, const dealii::Vector<double>*> &param_values,
         const std::map<std::string, const VECTOR*> &domain_values)
     {
-      if (GetType() == "cost_functional")
+      if (this->GetType() == "cost_functional")
       {
         return 0.;
       } //endif cost_functional
-      else if (GetType() == "aux_functional")
+      else if (this->GetType() == "aux_functional")
       {
         // state values in quadrature points
-        return _aux_functionals[_problem_type_num]->PointValue(
+        return _aux_functionals[this->GetTypeNum()]->PointValue(
             this->GetSpaceTimeHandler()->GetStateDoFHandler(),
             this->GetSpaceTimeHandler()->GetStateDoFHandler(), param_values,
             domain_values);
 
       } //endif aux_functional
-      else if (GetType() == "error_evaluation")
+      else if (this->GetType() == "error_evaluation")
       {
         return _aux_functionals[_functional_for_ee_num]->PointValue(
             this->GetSpaceTimeHandler()->GetStateDoFHandler(),
@@ -1057,17 +983,17 @@ namespace DOpE
       PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE,
           DOFHANDLER>::BoundaryFunctional(const FACEDATACONTAINER& fdc)
       {
-        if (GetType() == "cost_functional")
+        if (this->GetType() == "cost_functional")
         {
           // state values in quadrature points
           return 0.;
         }
-        else if (GetType() == "aux_functional")
+        else if (this->GetType() == "aux_functional")
         {
           // state values in quadrature points
-          return _aux_functionals[_problem_type_num]->BoundaryValue(fdc);
+          return _aux_functionals[this->GetTypeNum()]->BoundaryValue(fdc);
         }
-        else if (GetType() == "error_evaluation")
+        else if (this->GetType() == "error_evaluation")
         //TODO ist das hier korrekt? Sollten wir eigentlich nicht benoetigen.
         {
           return _aux_functionals[_functional_for_ee_num]->BoundaryValue(fdc);
@@ -1088,17 +1014,17 @@ namespace DOpE
       PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE,
           DOFHANDLER>::FaceFunctional(const FACEDATACONTAINER& fdc)
       {
-        if (GetType() == "cost_functional")
+        if (this->GetType() == "cost_functional")
         {
           // state values in quadrature points
           return 0.;
         }
-        else if (GetType() == "aux_functional")
+        else if (this->GetType() == "aux_functional")
         {
           // state values in quadrature points
-          return _aux_functionals[_problem_type_num]->FaceValue(fdc);
+          return _aux_functionals[this->GetTypeNum()]->FaceValue(fdc);
         }
-        else if (GetType() == "error_evaluation")
+        else if (this->GetType() == "error_evaluation")
         //TODO ist das hier korrekt? Sollten wir eigentlich nicht benoetigen.
         {
           return _aux_functionals[_functional_for_ee_num]->FaceValue(fdc);
@@ -1120,18 +1046,18 @@ namespace DOpE
         const std::map<std::string, const dealii::Vector<double>*> &param_values,
         const std::map<std::string, const VECTOR*> &domain_values)
     {
-      if (GetType() == "cost_functional")
+      if (this->GetType() == "cost_functional")
       {
         // state values in quadrature points
         return 0.;
       }
-      else if (GetType() == "aux_functional")
+      else if (this->GetType() == "aux_functional")
       {
         // state values in quadrature points
-        return _aux_functionals[_problem_type_num]->AlgebraicValue(param_values,
+        return _aux_functionals[this->GetTypeNum()]->AlgebraicValue(param_values,
             domain_values);
       }
-      else if (GetType() == "error_evaluation")
+      else if (this->GetType() == "error_evaluation")
       //TODO ist das hier korrekt? Sollten wir eigentlich nicht benoetigen.
       {
         return _aux_functionals[_functional_for_ee_num]->AlgebraicValue(
@@ -1155,15 +1081,15 @@ namespace DOpE
           dealii::Vector<double> &local_cell_vector, double scale,
           double scale_ico)
       {
-        if (GetType() == "state")
+        if (this->GetType() == "state")
         {
           // state values in quadrature points
-          GetPDE()->CellEquation(cdc, local_cell_vector, scale, scale_ico);
+         this->GetPDE().CellEquation(cdc, local_cell_vector, scale, scale_ico);
         }
-        else if (GetType() == "adjoint_for_ee")
+        else if (this->GetType() == "adjoint_for_ee")
         {
           // state values in quadrature points
-          GetPDE()->CellEquation_U(cdc, local_cell_vector, scale, scale_ico);
+         this->GetPDE().CellEquation_U(cdc, local_cell_vector, scale, scale_ico);
         }
         else
         {
@@ -1172,195 +1098,7 @@ namespace DOpE
         }
       }
 
-  /******************************************************/
 
-  template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
-      int dealdim, typename FE, typename DOFHANDLER>
-    template<class CDC, class FDC>
-      void
-      PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE,
-          DOFHANDLER>::CellErrorContribution(const CDC& cdc,
-          const DWRDataContainer<CDC, FDC, VECTOR>& dwrc,
-          std::vector<double>& error, double scale, double scale_ico)
-      {
-        Assert(GetType() == "error_evaluation", ExcInternalError());
-
-        if (dwrc.GetResidualEvaluation() == DOpEtypes::strong_residual)
-        {
-	  if(dwrc.GetWeightComputation() == DOpEtypes::higher_order_interpolation)
-	  {
-	    switch (dwrc.GetEETerms())
-	    {
-	    case DOpEtypes::primal_only:
-	      GetPDE()->StrongCellResidual(cdc, dwrc.GetCellWeight(), error[0],
-					   scale, scale_ico);
-	      break;
-	    case DOpEtypes::dual_only:
-	      GetPDE()->StrongCellResidual_U(cdc, dwrc.GetCellWeight(), error[1],
-					     scale);
-	      break;
-	    case DOpEtypes::mixed:
-	      GetPDE()->StrongCellResidual(cdc, dwrc.GetCellWeight(), error[0],
-					   scale, scale_ico);
-	      GetPDE()->StrongCellResidual_U(cdc, dwrc.GetCellWeight(), error[1],
-					     scale);
-	      break;
-	    default:
-	      throw DOpEException("Not implemented for this EETerm.",
-				  "PDEProblemContainer::CellErrorContribution");
-	      break;
-	    }
-          }
-	  else  if(dwrc.GetWeightComputation() == DOpEtypes::cell_diameter)
-	  {
-	    switch (dwrc.GetEETerms())
-	    {
-	    case DOpEtypes::primal_only:
-	      GetPDE()->StrongCellResidual(cdc, cdc, error[0],
-					   scale, scale_ico);
-	      break;
-	    case DOpEtypes::dual_only:
-	      GetPDE()->StrongCellResidual_U(cdc, cdc, error[1],
-					     scale);
-	      break;
-	    case DOpEtypes::mixed:
-	      GetPDE()->StrongCellResidual(cdc, cdc, error[0],
-					   scale, scale_ico);
-	      GetPDE()->StrongCellResidual_U(cdc, cdc, error[1],
-					     scale);
-	      break;
-	    default:
-	      throw DOpEException("Not implemented for this EETerm.",
-				  "PDEProblemContainer::CellErrorContribution");
-	      break;
-	    }
-          }
-	  else 
-	  {
-	      throw DOpEException("Not implemented for this WeightComputation.",
-				  "PDEProblemContainer::CellErrorContribution");
-	  }
-        }
-        else
-        {
-          throw DOpEException("Not implemented for this ResidualEvaluation.",
-              "PDEProblemContainer::CellErrorContribution");
-        }
-      }
-
-  /******************************************************/
-
-  template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
-      int dealdim, typename FE, typename DOFHANDLER>
-    template<class CDC, class FDC>
-      void
-      PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE,
-          DOFHANDLER>::FaceErrorContribution(const FDC& fdc,
-          const DWRDataContainer<CDC, FDC, VECTOR>& dwrc,
-          std::vector<double>& error, double scale)
-      {
-        Assert(GetType() == "error_evaluation", ExcInternalError());
-
-        if (dwrc.GetResidualEvaluation() == DOpEtypes::strong_residual)
-        {
-	  if(dwrc.GetWeightComputation() == DOpEtypes::higher_order_interpolation)
-	  {
-	    switch (dwrc.GetEETerms())
-	    {
-	    case DOpEtypes::primal_only:
-	      GetPDE()->StrongFaceResidual(fdc, dwrc.GetFaceWeight(), error[0],
-					   scale);
-	      break;
-	    case DOpEtypes::dual_only:
-	      GetPDE()->StrongFaceResidual_U(fdc, dwrc.GetFaceWeight(), error[1],
-					     scale);
-	      break;
-	    case DOpEtypes::mixed:
-	      GetPDE()->StrongFaceResidual(fdc, dwrc.GetFaceWeight(), error[0],
-					   scale);
-	      GetPDE()->StrongFaceResidual_U(fdc, dwrc.GetFaceWeight(), error[1],
-                scale);
-	      break;
-	    default:
-	      throw DOpEException("Not implemented for this EETerm.",
-				  "PDEProblemContainer::FaceErrorContribution");
-	      break;
-	    }
-	  }
-	  else  if(dwrc.GetWeightComputation() == DOpEtypes::cell_diameter)
-	  {
-	    switch (dwrc.GetEETerms())
-	    {
-	    case DOpEtypes::primal_only:
-	      GetPDE()->StrongFaceResidual(fdc, fdc, error[0],
-					   scale);
-	      break;
-	    case DOpEtypes::dual_only:
-	      GetPDE()->StrongFaceResidual_U(fdc,fdc, error[1],
-					     scale);
-	      break;
-	    case DOpEtypes::mixed:
-	      GetPDE()->StrongFaceResidual(fdc, fdc, error[0],
-					   scale);
-	      GetPDE()->StrongFaceResidual_U(fdc, fdc, error[1],
-                scale);
-	      break;
-	    default:
-	      throw DOpEException("Not implemented for this EETerm.",
-				  "PDEProblemContainer::FaceErrorContribution");
-	      break;
-	    }
-          }
-	  else 
-	  {
-	      throw DOpEException("Not implemented for this WeightComputation.",
-				  "PDEProblemContainer::FaceErrorContribution");
-	  }
-        }
-        else
-        {
-          throw DOpEException("Not implemented for this ResidualEvaluation.",
-              "PDEProblemContainer::FaceErrorContribution");
-        }
-      }
-
-  /******************************************************/
-
-  template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
-      int dealdim, typename FE, typename DOFHANDLER>
-    template<class CDC, class FDC>
-      void
-      PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE,
-          DOFHANDLER>::BoundaryErrorContribution(const FDC& fdc,
-          const DWRDataContainer<CDC, FDC, VECTOR>& dwrc,
-          std::vector<double>& error, double scale)
-      {
-        Assert(GetType() == "error_evaluation", ExcInternalError());
-        if (dwrc.GetResidualEvaluation() == DOpEtypes::strong_residual)
-        {
-          if(dwrc.GetWeightComputation() == DOpEtypes::higher_order_interpolation)
-	  {
-            // state values in quadrature points
-	    GetPDE()->StrongBoundaryResidual(fdc, dwrc.GetFaceWeight(), error[0],
-					     scale);
-	  }
-	  else  if(dwrc.GetWeightComputation() == DOpEtypes::cell_diameter)
-	  {
-	    GetPDE()->StrongBoundaryResidual(fdc, fdc, error[0],
-					     scale);
-	  }
-	  else 
-	  {
-	      throw DOpEException("Not implemented for this WeightComputation.",
-				  "PDEProblemContainer::BoundaryErrorContribution");
-	  }
-        }
-        else
-        {
-          throw DOpEException("Not implemented for this ResidualEvaluation.",
-              "PDEProblemContainer::BoundaryErrorContribution");
-        }
-      }
 
   /******************************************************/
 
@@ -1373,12 +1111,12 @@ namespace DOpE
           dealii::Vector<double> &local_cell_vector, double scale)
       {
 
-        if (GetType() == "state")
+        if (this->GetType() == "state")
         {
           // state values in quadrature points
-          GetPDE()->CellTimeEquation(cdc, local_cell_vector, scale);
+         this->GetPDE().CellTimeEquation(cdc, local_cell_vector, scale);
         }
-        else if (GetType() == "adjoint_for_ee")
+        else if (this->GetType() == "adjoint_for_ee")
         {
           throw DOpEException("Not implemented",
               "OptProblem::CellTimeEquation");
@@ -1401,12 +1139,12 @@ namespace DOpE
           dealii::Vector<double> &local_cell_vector, double scale)
       {
 
-        if (GetType() == "state")
+        if (this->GetType() == "state")
         {
           // state values in quadrature points
-          GetPDE()->CellTimeEquationExplicit(cdc, local_cell_vector, scale);
+         this->GetPDE().CellTimeEquationExplicit(cdc, local_cell_vector, scale);
         }
-        else if (GetType() == "adjoint_for_ee")
+        else if (this->GetType() == "adjoint_for_ee")
         {
           throw DOpEException("Not implemented",
               "OptProblem::CellTimeEquation");
@@ -1426,17 +1164,18 @@ namespace DOpE
       void
       PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE,
           DOFHANDLER>::FaceEquation(const FACEDATACONTAINER& fdc,
-          dealii::Vector<double> &local_cell_vector, double scale, double scale_ico)
+          dealii::Vector<double> &local_cell_vector, double scale,
+          double scale_ico)
       {
-        if (GetType() == "state")
+        if (this->GetType() == "state")
         {
           // state values in quadrature points
-          GetPDE()->FaceEquation(fdc, local_cell_vector, scale, scale_ico);
+         this->GetPDE().FaceEquation(fdc, local_cell_vector, scale, scale_ico);
         }
-        else if (GetType() == "adjoint_for_ee")
+        else if (this->GetType() == "adjoint_for_ee")
         {
           // state values in quadrature points
-          GetPDE()->FaceEquation_U(fdc, local_cell_vector, scale, scale_ico);
+         this->GetPDE().FaceEquation_U(fdc, local_cell_vector, scale, scale_ico);
         }
         else
         {
@@ -1453,17 +1192,19 @@ namespace DOpE
       void
       PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE,
           DOFHANDLER>::InterfaceEquation(const FACEDATACONTAINER& fdc,
-          dealii::Vector<double> &local_cell_vector, double scale, double scale_ico)
+          dealii::Vector<double> &local_cell_vector, double scale,
+          double scale_ico)
       {
-        if (GetType() == "state")
+        if (this->GetType() == "state")
         {
           // state values in quadrature points
-          GetPDE()->InterfaceEquation(fdc, local_cell_vector, scale, scale_ico);
+         this->GetPDE().InterfaceEquation(fdc, local_cell_vector, scale, scale_ico);
         }
-        else if (GetType() == "adjoint_for_ee")
+        else if (this->GetType() == "adjoint_for_ee")
         {
           // state values in quadrature points
-          GetPDE()->InterfaceEquation_U(fdc, local_cell_vector, scale, scale_ico);
+         this->GetPDE().InterfaceEquation_U(fdc, local_cell_vector, scale,
+              scale_ico);
         }
         else
         {
@@ -1479,17 +1220,19 @@ namespace DOpE
       void
       PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE,
           DOFHANDLER>::BoundaryEquation(const FACEDATACONTAINER& fdc,
-          dealii::Vector<double> &local_cell_vector, double scale, double scale_ico)
+          dealii::Vector<double> &local_cell_vector, double scale,
+          double scale_ico)
       {
-        if (GetType() == "state")
+        if (this->GetType() == "state")
         {
           // state values in quadrature points
-          GetPDE()->BoundaryEquation(fdc, local_cell_vector, scale, scale_ico);
+         this->GetPDE().BoundaryEquation(fdc, local_cell_vector, scale, scale_ico);
         }
-        else if (GetType() == "adjoint_for_ee")
+        else if (this->GetType() == "adjoint_for_ee")
         {
           // state values in quadrature points
-          GetPDE()->BoundaryEquation_U(fdc, local_cell_vector, scale, scale_ico);
+         this->GetPDE().BoundaryEquation_U(fdc, local_cell_vector, scale,
+              scale_ico);
         }
         else
         {
@@ -1509,12 +1252,12 @@ namespace DOpE
           dealii::Vector<double> &local_cell_vector, double scale)
       {
 
-        if (GetType() == "state")
+        if (this->GetType() == "state")
         {
           // state values in quadrature points
-          GetPDE()->CellRightHandSide(cdc, local_cell_vector, scale);
+         this->GetPDE().CellRightHandSide(cdc, local_cell_vector, scale);
         }
-        else if (GetType() == "adjoint_for_ee")
+        else if (this->GetType() == "adjoint_for_ee")
         {
           //TODO currently, pointvalue is not working for dual error estimation!
           //values of the derivative of the functional for error estimation.
@@ -1542,7 +1285,7 @@ namespace DOpE
         const std::map<std::string, const VECTOR*> &domain_values,
         VECTOR& rhs_vector, double scale)
     {
-      if (GetType() == "adjoint_for_ee")
+      if (this->GetType() == "adjoint_for_ee")
       {
         //values of the derivative of the functional for error estimation
         _aux_functionals[_functional_for_ee_num]->PointValue_U(
@@ -1556,7 +1299,6 @@ namespace DOpE
       }
     }
 
-
   /******************************************************/
 
   template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
@@ -1567,12 +1309,12 @@ namespace DOpE
           DOFHANDLER>::FaceRhs(const FACEDATACONTAINER& fdc,
           dealii::Vector<double> &local_cell_vector, double scale)
       {
-        if (GetType() == "state")
+        if (this->GetType() == "state")
         {
           // state values in face quadrature points
-          GetPDE()->FaceRightHandSide(fdc, local_cell_vector, scale);
+         this->GetPDE().FaceRightHandSide(fdc, local_cell_vector, scale);
         }
-        else if (GetType() == "adjoint_for_ee")
+        else if (this->GetType() == "adjoint_for_ee")
         {
           //values of the derivative of the functional for error estimation
           _aux_functionals[_functional_for_ee_num]->FaceValue_U(fdc,
@@ -1595,12 +1337,12 @@ namespace DOpE
           DOFHANDLER>::BoundaryRhs(const FACEDATACONTAINER& fdc,
           dealii::Vector<double> &local_cell_vector, double scale)
       {
-        if (GetType() == "state")
+        if (this->GetType() == "state")
         {
           // state values in face quadrature points
-          GetPDE()->BoundaryRightHandSide(fdc, local_cell_vector, scale);
+         this->GetPDE().BoundaryRightHandSide(fdc, local_cell_vector, scale);
         }
-        else if (GetType() == "adjoint_for_ee")
+        else if (this->GetType() == "adjoint_for_ee")
         {
           //values of the derivative of the functional for error estimation
           _aux_functionals[_functional_for_ee_num]->BoundaryValue_U(fdc,
@@ -1625,15 +1367,15 @@ namespace DOpE
           double scale_ico)
       {
 
-        if (GetType() == "state")
+        if (this->GetType() == "state")
         {
           // state values in quadrature points
-          GetPDE()->CellMatrix(cdc, local_entry_matrix, scale, scale_ico);
+         this->GetPDE().CellMatrix(cdc, local_entry_matrix, scale, scale_ico);
         }
-        else if (GetType() == "adjoint_for_ee")
+        else if (this->GetType() == "adjoint_for_ee")
         {
           // state values in quadrature points
-          GetPDE()->CellMatrix_T(cdc, local_entry_matrix, scale, scale_ico);
+         this->GetPDE().CellMatrix_T(cdc, local_entry_matrix, scale, scale_ico);
         }
         else
         {
@@ -1654,12 +1396,12 @@ namespace DOpE
           FullMatrix<double> &local_entry_matrix)
       {
 
-        if (GetType() == "state")
+        if (this->GetType() == "state")
         {
           // state values in quadrature points
-          GetPDE()->CellTimeMatrix(cdc, local_entry_matrix);
+         this->GetPDE().CellTimeMatrix(cdc, local_entry_matrix);
         }
-        else if (GetType() == "dual_for_ee")
+        else if (this->GetType() == "dual_for_ee")
         {
           throw DOpEException("Not implemented",
               "PDEProblemContainer::NewtonCellTimeMatrix");
@@ -1683,12 +1425,12 @@ namespace DOpE
           dealii::FullMatrix<double> &local_entry_matrix)
       {
 
-        if (GetType() == "state")
+        if (this->GetType() == "state")
         {
           // state values in quadrature points
-          GetPDE()->CellTimeMatrixExplicit(cdc, local_entry_matrix);
+         this->GetPDE().CellTimeMatrixExplicit(cdc, local_entry_matrix);
         }
-        else if (GetType() == "dual_for_ee")
+        else if (this->GetType() == "dual_for_ee")
         {
           throw DOpEException("Not implemented",
               "PDEProblemContainer::NewtonCellTimeMatrix");
@@ -1709,16 +1451,17 @@ namespace DOpE
       void
       PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE,
           DOFHANDLER>::FaceMatrix(const FACEDATACONTAINER& fdc,
-          FullMatrix<double> &local_entry_matrix, double scale, double scale_ico)
+          FullMatrix<double> &local_entry_matrix, double scale,
+          double scale_ico)
       {
-        if (GetType() == "state")
+        if (this->GetType() == "state")
         {
           // state values in face quadrature points
-          GetPDE()->FaceMatrix(fdc, local_entry_matrix, scale, scale_ico);
+         this->GetPDE().FaceMatrix(fdc, local_entry_matrix, scale, scale_ico);
         }
-        else if (GetType() == "adjoint_for_ee")
+        else if (this->GetType() == "adjoint_for_ee")
         {
-          GetPDE()->FaceMatrix_T(fdc, local_entry_matrix,scale, scale_ico);
+         this->GetPDE().FaceMatrix_T(fdc, local_entry_matrix, scale, scale_ico);
         }
         else
         {
@@ -1736,16 +1479,18 @@ namespace DOpE
       void
       PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE,
           DOFHANDLER>::InterfaceMatrix(const FACEDATACONTAINER& fdc,
-          FullMatrix<double> &local_entry_matrix, double scale, double scale_ico)
+          FullMatrix<double> &local_entry_matrix, double scale,
+          double scale_ico)
       {
-        if (GetType() == "state")
+        if (this->GetType() == "state")
         {
           // state values in face quadrature points
-          GetPDE()->InterfaceMatrix(fdc, local_entry_matrix, scale, scale_ico);
+         this->GetPDE().InterfaceMatrix(fdc, local_entry_matrix, scale, scale_ico);
         }
-        else if (GetType() == "adjoint_for_ee")
+        else if (this->GetType() == "adjoint_for_ee")
         {
-          GetPDE()->InterfaceMatrix_T(fdc, local_entry_matrix, scale, scale_ico);
+         this->GetPDE().InterfaceMatrix_T(fdc, local_entry_matrix, scale,
+              scale_ico);
         }
         else
         {
@@ -1764,15 +1509,15 @@ namespace DOpE
           DOFHANDLER>::BoundaryMatrix(const FACEDATACONTAINER& fdc,
           FullMatrix<double> &local_cell_matrix, double scale, double scale_ico)
       {
-        if (GetType() == "state")
+        if (this->GetType() == "state")
         {
           // state values in face quadrature points
-          GetPDE()->BoundaryMatrix(fdc, local_cell_matrix,scale,scale_ico);
+         this->GetPDE().BoundaryMatrix(fdc, local_cell_matrix, scale, scale_ico);
         }
-        else if (GetType() == "adjoint_for_ee")
+        else if (this->GetType() == "adjoint_for_ee")
         {
           // state values in quadrature points
-          GetPDE()->BoundaryMatrix_T(fdc, local_cell_matrix, scale,scale_ico);
+         this->GetPDE().BoundaryMatrix_T(fdc, local_cell_matrix, scale, scale_ico);
         }
         else
         {
@@ -1790,13 +1535,14 @@ namespace DOpE
     PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE,
         DOFHANDLER>::GetDoFType() const
     {
-      if (GetType() == "state" || GetType() == "adjoint_for_ee")
+      if (this->GetType() == "state" || this->GetType() == "adjoint_for_ee"
+          || this->GetType() == "error_evaluation")
       {
         return "state";
       }
       else
       {
-        throw DOpEException("Unknown Type:" + GetType(),
+        throw DOpEException("Unknown Type:" + this->GetType(),
             "PDEProblemContainer::GetDoFType");
       }
     }
@@ -1809,13 +1555,13 @@ namespace DOpE
     PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE,
         DOFHANDLER>::GetFESystem() const
     {
-      if ((GetType() == "state") || GetType() == "adjoint_for_ee")
+      if ((this->GetType() == "state") || this->GetType() == "adjoint_for_ee")
       {
         return this->GetSpaceTimeHandler()->GetFESystem("state");
       }
       else
       {
-        throw DOpEException("Unknown Type:" + GetType(),
+        throw DOpEException("Unknown Type:" + this->GetType(),
             "PDEProblemContainer::GetFESystem");
       }
     }
@@ -1830,14 +1576,14 @@ namespace DOpE
     {
 
       UpdateFlags r;
-      if (GetType().find("aux_functional") != std::string::npos)
+      if (this->GetType().find("aux_functional") != std::string::npos)
       {
-        r = _aux_functionals[_problem_type_num]->GetUpdateFlags();
+        r = _aux_functionals[this->GetTypeNum()]->GetUpdateFlags();
       }
       else
       {
-        r = this->GetPDE()->GetUpdateFlags();
-        if (GetType() == "adjoint_for_ee" || GetType() == "error_evaluation")
+        r = this->GetPDE().GetUpdateFlags();
+        if (this->GetType() == "adjoint_for_ee" || this->GetType() == "error_evaluation")
         {
           r = r | _aux_functionals[_functional_for_ee_num]->GetUpdateFlags();
         }
@@ -1854,14 +1600,14 @@ namespace DOpE
         DOFHANDLER>::GetFaceUpdateFlags() const
     {
       UpdateFlags r;
-      if (GetType().find("aux_functional") != std::string::npos)
+      if (this->GetType().find("aux_functional") != std::string::npos)
       {
-        r = _aux_functionals[_problem_type_num]->GetFaceUpdateFlags();
+        r = _aux_functionals[this->GetTypeNum()]->GetFaceUpdateFlags();
       }
       else
       {
-        r = this->GetPDE()->GetFaceUpdateFlags();
-        if (GetType() == "adjoint_for_ee" || GetType() == "error_evaluation")
+        r = this->GetPDE().GetFaceUpdateFlags();
+        if (this->GetType() == "adjoint_for_ee" || this->GetType() == "error_evaluation")
         {
           r = r
               | _aux_functionals[_functional_for_ee_num]->GetFaceUpdateFlags();
@@ -1878,11 +1624,11 @@ namespace DOpE
     PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE,
         DOFHANDLER>::GetFunctionalType() const
     {
-      if (GetType() == "aux_functional")
+      if (this->GetType() == "aux_functional")
       {
-        return _aux_functionals[_problem_type_num]->GetType();
+        return _aux_functionals[this->GetTypeNum()]->GetType();
       }
-      else if (GetType() == "error_evaluation")
+      else if (this->GetType() == "error_evaluation")
       {
         return _aux_functionals[_functional_for_ee_num]->GetType();
       }
@@ -1897,11 +1643,11 @@ namespace DOpE
     PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE,
         DOFHANDLER>::GetFunctionalName() const
     {
-      if (GetType() == "aux_functional")
+      if (this->GetType() == "aux_functional")
       {
-        return _aux_functionals[_problem_type_num]->GetName();
+        return _aux_functionals[this->GetTypeNum()]->GetName();
       }
-      else if (GetType() == "error_evaluation")
+      else if (this->GetType() == "error_evaluation")
       {
         return _aux_functionals[_functional_for_ee_num]->GetName();
       }
@@ -1924,7 +1670,7 @@ namespace DOpE
         for (unsigned int i = 0; i < _aux_functionals.size(); i++)
           _aux_functionals[i]->SetTime(time);
         //PDE
-        GetPDE()->SetTime(time);
+       this->GetPDE().SetTime(time);
       }
     }
 
@@ -1936,13 +1682,13 @@ namespace DOpE
     PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE,
         DOFHANDLER>::ComputeSparsityPattern(SPARSITYPATTERN & sparsity) const
     {
-      if (GetType() == "state" || GetType() == "adjoint_for_ee")
+      if (this->GetType() == "state" || this->GetType() == "adjoint_for_ee")
       {
         this->GetSpaceTimeHandler()->ComputeStateSparsityPattern(sparsity);
       }
       else
       {
-        throw DOpEException("Unknown type " + GetType(),
+        throw DOpEException("Unknown type " + this->GetType(),
             "PDEProblemContainer::ComputeSparsityPattern");
       }
     }
@@ -1955,24 +1701,24 @@ namespace DOpE
     PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE,
         DOFHANDLER>::HasFaces() const
     {
-      if (GetType().find("aux_functional") != std::string::npos)
+      if (this->GetType().find("aux_functional") != std::string::npos)
       {
-        return _aux_functionals[_problem_type_num]->HasFaces();
+        return _aux_functionals[this->GetTypeNum()]->HasFaces();
       }
       else
       {
-        if ((GetType() == "state"))
+        if ((this->GetType() == "state"))
         {
-          return this->GetPDE()->HasFaces();
+          return this->GetPDE().HasFaces();
         }
-        else if (GetType() == "adjoint_for_ee")
+        else if (this->GetType() == "adjoint_for_ee")
         {
-          return this->GetPDE()->HasFaces()
+          return this->GetPDE().HasFaces()
               || _aux_functionals[_functional_for_ee_num]->HasFaces();
         }
         else
         {
-          throw DOpEException("Unknown Type: '" + GetType() + "'!",
+          throw DOpEException("Unknown Type: '" + this->GetType() + "'!",
               "PDEProblemContainer::HasFaces");
         }
       }
@@ -1986,18 +1732,18 @@ namespace DOpE
     PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE,
         DOFHANDLER>::HasPoints() const
     {
-      if ((GetType() == "state") || GetType() == "aux_functional")
+      if ((this->GetType() == "state") || this->GetType() == "aux_functional")
       {
         //We dont need PointRhs in these cases
         return false;
       }
-      else if (GetType() == "adjoint_for_ee")
+      else if (this->GetType() == "adjoint_for_ee")
       {
         return _aux_functionals[_functional_for_ee_num]->HasPoints();
       }
       else
       {
-        throw DOpEException("Unknown Type: '" + GetType() + "'!",
+        throw DOpEException("Unknown Type: '" + this->GetType() + "'!",
             "PDEProblemContainer::HasFaces");
       }
 
@@ -2011,19 +1757,19 @@ namespace DOpE
     PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE,
         DOFHANDLER>::HasInterfaces() const
     {
-      if (GetType().find("aux_functional") != std::string::npos)
+      if (this->GetType().find("aux_functional") != std::string::npos)
       {
         return false;
       }
       else
       {
-        if ((GetType() == "state") || GetType() == "adjoint_for_ee")
+        if ((this->GetType() == "state") || this->GetType() == "adjoint_for_ee")
         {
-          return this->GetPDE()->HasInterfaces();
+          return this->GetPDE().HasInterfaces();
         }
         else
         {
-          throw DOpEException("Unknown Type: '" + GetType() + "'!",
+          throw DOpEException("Unknown Type: '" + this->GetType() + "'!",
               "PDEProblemContainer::HasFaces");
         }
       }
@@ -2059,7 +1805,7 @@ namespace DOpE
       }
       _dirichlet_colors.push_back(color);
       _dirichlet_comps.push_back(comp_mask);
-      PrimalDirichletData<DD, VECTOR, dealdim>* data = new PrimalDirichletData<
+      PrimalDirichletData<DD, VECTOR, dealdim> *data = new PrimalDirichletData<
           DD, VECTOR, dealdim>(*values);
       _primal_dirichlet_values.push_back(data);
     }
@@ -2072,13 +1818,13 @@ namespace DOpE
     PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE,
         DOFHANDLER>::GetDirichletColors() const
     {
-      if ((GetType() == "state") || GetType() == "adjoint_for_ee")
+      if ((this->GetType() == "state") || this->GetType() == "adjoint_for_ee")
       {
         return _dirichlet_colors;
       }
       else
       {
-        throw DOpEException("Unknown Type:" + GetType(),
+        throw DOpEException("Unknown Type:" + this->GetType(),
             "PDEProblemContainer::GetDirichletColors");
       }
     }
@@ -2091,7 +1837,7 @@ namespace DOpE
     PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE,
         DOFHANDLER>::GetDirichletCompMask(unsigned int color) const
     {
-      if ((GetType() == "state" || GetType() == "adjoint_for_ee"))
+      if ((this->GetType() == "state" || this->GetType() == "adjoint_for_ee"))
       {
         unsigned int comp = _dirichlet_colors.size();
         for (unsigned int i = 0; i < _dirichlet_colors.size(); ++i)
@@ -2113,7 +1859,7 @@ namespace DOpE
       }
       else
       {
-        throw DOpEException("Unknown Type:" + GetType(),
+        throw DOpEException("Unknown Type:" + this->GetType(),
             "PDEProblemContainer::GetDirichletCompMask");
       }
     }
@@ -2130,7 +1876,7 @@ namespace DOpE
     {
 
       unsigned int col = _dirichlet_colors.size();
-      if ((GetType() == "state") || GetType() == "adjoint_for_ee")
+      if ((this->GetType() == "state") || this->GetType() == "adjoint_for_ee")
       {
         for (unsigned int i = 0; i < _dirichlet_colors.size(); ++i)
         {
@@ -2150,24 +1896,24 @@ namespace DOpE
       }
       else
       {
-        throw DOpEException("Unknown Type:" + GetType(),
+        throw DOpEException("Unknown Type:" + this->GetType(),
             "PDEProblemContainer::GetDirichletValues");
       }
 
-      if (GetType() == "state")
+      if (this->GetType() == "state")
       {
         _primal_dirichlet_values[col]->ReInit(param_values, domain_values,
             color);
         return *(_primal_dirichlet_values[col]);
       }
-      else if (GetType() == "adjoint_for_ee"
-          || (GetType() == "adjoint_hessian"))
+      else if (this->GetType() == "adjoint_for_ee"
+          || (this->GetType() == "adjoint_hessian"))
       {
         return *(_zero_dirichlet_values);
       }
       else
       {
-        throw DOpEException("Unknown Type:" + GetType(),
+        throw DOpEException("Unknown Type:" + this->GetType(),
             "PDEProblemContainer::GetDirichletValues");
       }
     }
@@ -2180,17 +1926,17 @@ namespace DOpE
     PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE,
         DOFHANDLER>::GetBoundaryEquationColors() const
     {
-      if (GetType() == "state")
+      if (this->GetType() == "state")
       {
         return _state_boundary_equation_colors;
       }
-      else if (GetType() == "adjoint_for_ee")
+      else if (this->GetType() == "adjoint_for_ee")
       {
         return _adjoint_boundary_equation_colors;
       }
       else
       {
-        throw DOpEException("Unknown Type:" + GetType(),
+        throw DOpEException("Unknown Type:" + this->GetType(),
             "PDEProblemContainer::GetBoundaryEquationColors");
       }
     }
@@ -2257,14 +2003,14 @@ namespace DOpE
         DOFHANDLER>::GetBoundaryFunctionalColors() const
     {
       //FIXME cost_functional?? This is pdeproblemcontainer, we should not have a cost functional! ~cg
-      if (GetType() == "cost_functional" || GetType() == "aux_functional"
-          || GetType() == "error_evaluation")
+      if (this->GetType() == "cost_functional" || this->GetType() == "aux_functional"
+          || this->GetType() == "error_evaluation")
       {
         return _boundary_functional_colors;
       }
       else
       {
-        throw DOpEException("Unknown Type:" + GetType(),
+        throw DOpEException("Unknown Type:" + this->GetType(),
             "PDEProblemContainer::GetBoundaryFunctionalColors");
       }
     }
@@ -2328,7 +2074,7 @@ namespace DOpE
     PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE,
         DOFHANDLER>::GetStateNBlocks() const
     {
-      return this->GetPDE()->GetStateNBlocks();
+      return this->GetPDE().GetStateNBlocks();
     }
 
   /******************************************************/
@@ -2339,13 +2085,13 @@ namespace DOpE
     PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE,
         DOFHANDLER>::GetNBlocks() const
     {
-      if ((GetType() == "state") || (GetType() == "adjoint_for_ee"))
+      if ((this->GetType() == "state") || (this->GetType() == "adjoint_for_ee"))
       {
         return this->GetStateNBlocks();
       }
       else
       {
-        throw DOpEException("Unknown Type:" + GetType(),
+        throw DOpEException("Unknown Type:" + this->GetType(),
             "PDEProblemContainer::GetNBlocks");
       }
     }
@@ -2358,13 +2104,13 @@ namespace DOpE
     PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE,
         DOFHANDLER>::GetDoFsPerBlock(unsigned int b) const
     {
-      if ((GetType() == "state") || (GetType() == "adjoint_for_ee"))
+      if ((this->GetType() == "state") || (this->GetType() == "adjoint_for_ee"))
       {
         return GetSpaceTimeHandler()->GetStateDoFsPerBlock(b);
       }
       else
       {
-        throw DOpEException("Unknown Type:" + GetType(),
+        throw DOpEException("Unknown Type:" + this->GetType(),
             "PDEProblemContainer::GetDoFsPerBlock");
       }
     }
@@ -2377,13 +2123,13 @@ namespace DOpE
     PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE,
         DOFHANDLER>::GetDoFsPerBlock() const
     {
-      if ((GetType() == "state") || (GetType() == "adjoint_for_ee"))
+      if ((this->GetType() == "state") || (this->GetType() == "adjoint_for_ee"))
       {
         return GetSpaceTimeHandler()->GetStateDoFsPerBlock();
       }
       else
       {
-        throw DOpEException("Unknown Type:" + GetType(),
+        throw DOpEException("Unknown Type:" + this->GetType(),
             "PDEProblemContainer::GetDoFsPerBlock");
       }
     }
@@ -2396,13 +2142,13 @@ namespace DOpE
     PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE,
         DOFHANDLER>::GetDoFConstraints() const
     {
-      if ((GetType() == "state") || (GetType() == "adjoint_for_ee"))
+      if ((this->GetType() == "state") || (this->GetType() == "adjoint_for_ee"))
       {
         return GetSpaceTimeHandler()->GetStateDoFConstraints();
       }
       else
       {
-        throw DOpEException("Unknown Type:" + GetType(),
+        throw DOpEException("Unknown Type:" + this->GetType(),
             "PDEProblemContainer::GetDoFConstraints");
       }
     }
@@ -2415,11 +2161,11 @@ namespace DOpE
     PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE,
         DOFHANDLER>::NeedTimeFunctional() const
     {
-      if (GetType() == "cost_functional")
+      if (this->GetType() == "cost_functional")
         return false;
-      else if (GetType() == "aux_functional")
-        return _aux_functionals[_problem_type_num]->NeedTime();
-      else if (GetType() == "error_evaluation")
+      else if (this->GetType() == "aux_functional")
+        return _aux_functionals[this->GetTypeNum()]->NeedTime();
+      else if (this->GetType() == "error_evaluation")
         return _aux_functionals[_functional_for_ee_num]->NeedTime();
       else
         throw DOpEException("Not implemented",

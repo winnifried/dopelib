@@ -78,6 +78,7 @@ namespace DOpE
           StateSpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR, dealdim>::SetActiveFEIndicesState(
               _state_dof_handler);
           _state_dof_handler.distribute_dofs(GetFESystem("state"));
+          DoFRenumbering::Cuthill_McKee(static_cast<DOFHANDLER&>(_state_dof_handler));
           DoFRenumbering::component_wise(
               static_cast<DOFHANDLER&>(_state_dof_handler),
               state_block_component);

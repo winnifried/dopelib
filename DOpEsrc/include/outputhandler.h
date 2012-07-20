@@ -96,6 +96,22 @@ class DOpEOutputHandler
      *                   Valid options are 'control' and 'state'
      */
     void Write(const VECTOR&q, std::string name, std::string dof_type);
+
+    /**
+     * Call this Function to write a Vector containing cell-related data into a file.
+     * The method AllowWrite is called to check if
+     * this actually happens. If successfull the filename of the output file will be written with priority 3.
+     *
+     * @param q          A Reference to the Vector to be written.
+     * @param name       The Name of the output file (this is what is checked by AllowWrite).
+     *                   The directory, iteration counters and ending are added automatically.
+     * @param dof_type   A string indicating which dof_handler is associated to the BlockVector.
+     *                   Valid options are 'control' and 'state'.
+     */
+    void
+    WriteCellwise(const Vector<double>&q, std::string name,
+        std::string dof_type);
+
     /**
      * Call this Function to write a ControlVector into a file. The method AllowWrite is called to check if
      * this actually happens. If successfull the filename of the output file will be written with priority 3.
@@ -169,8 +185,15 @@ class DOpEOutputHandler
      */
     void ResumeOutput() { _disallow_all = false; }
 
+    /**
+     * This function constructs the correct output name given by name and dof_type.
+     */
+    std::string
+    ConstructOutputName(std::string name, std::string dof_type);
+
     void StartSaveCTypeOutputToLog();
     void StopSaveCTypeOutputToLog();
+
 
   protected:
     /**

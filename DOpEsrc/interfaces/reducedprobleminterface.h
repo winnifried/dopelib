@@ -9,6 +9,7 @@
 #include "dwrdatacontainer.h"
 
 #include <assert.h>
+#include <numerics/data_out.h>
 
 #include <lac/vector.h>
 
@@ -61,6 +62,24 @@ namespace DOpE
         virtual void
         WriteToFile(const VECTOR &v, std::string name, std::string outfile,
             std::string dof_type, std::string filetype)=0;
+
+        /******************************************************/
+
+        /**
+         * Basic function to write vectors containing cell-related data in files.
+         *
+         *  @param v           The BlockVector to write to a file.
+         *  @param name        The names of the variables, e.g., in a fluid problem: v1, v2, p.
+         *  @param outfile     The basic name for the output file to print.
+         *  @param dof_type    Has the DoF type: state or control.
+         *  @param filetype    The filetype. Actually, *.vtk outputs are possible.
+         */
+        virtual void
+        WriteToFileCellwise(const Vector<double> &/*v*/, std::string /*name*/,
+            std::string /*outfile*/, std::string /*dof_type*/, std::string /*filetype*/)
+        {
+          throw DOpEException("NotImplemented", "WriteToFileCellwise");
+        }
 
         /******************************************************/
 

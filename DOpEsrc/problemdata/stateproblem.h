@@ -57,8 +57,8 @@ namespace DOpE
       const std::map<std::string, const VECTOR*> &/*domain_values*/,
       VECTOR& /*rhs_vector*/, double /*scale=1.*/)
       {
-	//Note if this is implemented one needs to update Init_PointRhs in the 
-	// OptProblem container in the tangent case.
+        //Note if this is implemented one needs to update Init_PointRhs in the
+        // OptProblem container in the tangent case.
       }
 
       template<typename DATACONTAINER>

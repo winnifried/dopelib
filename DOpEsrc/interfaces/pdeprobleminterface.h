@@ -101,7 +101,7 @@ namespace DOpE
          */
         template<class DWRC>
           void
-          InitializeHigherOrderDWRC(DWRC& dwrc)
+          InitializeDWRC(DWRC& dwrc)
           {
             dwrc.Initialize(GetProblem()->GetSpaceTimeHandler(),
                 GetProblem()->GetStateNBlocks(),

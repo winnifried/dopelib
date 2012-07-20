@@ -66,8 +66,7 @@ namespace DOpE
         }
       csp.collect_sizes();
       dealii::DoFTools::make_sparsity_pattern(
-          static_cast<const DOFHANDLER&> (dof_handler), csp);
-      hanging_node_constraints.condense(csp);
+          dof_handler.GetDEALDoFHandler(), csp, hanging_node_constraints);
       sparsity.copy_from(csp);
     }
 
@@ -88,8 +87,7 @@ namespace DOpE
 
       dealii::CompressedSimpleSparsityPattern csp(total_dofs, total_dofs);
       dealii::DoFTools::make_sparsity_pattern(
-          static_cast<const DOFHANDLER&> (dof_handler), csp);
-      hanging_node_constraints.condense(csp);
+          dof_handler.GetDEALDoFHandler(), csp, hanging_node_constraints);
       sparsity.copy_from(csp);
     }
 

@@ -31,7 +31,6 @@ namespace DOpE
       primal_only, dual_only, mixed
     };
 
-
     /**
      * This enum describes how we compute the weights in
      * the DWR-method, see for instance
@@ -43,9 +42,8 @@ namespace DOpE
      */
     enum WeightComputation
     {
-      cell_diameter, higher_order_interpolation, higher_order_computation/*Not implemented!*/
+      cell_diameter, higher_order_interpolation, higher_order_computation, constant/*Not implemented!*/
     };
-
 
     /**
      * This enum describes how we evaluate the residual
@@ -55,7 +53,7 @@ namespace DOpE
      */
     enum ResidualEvaluation
     {
-      strong_residual
+      strong_residual, smoothness_and_influence_factors
     };
 
     /**
@@ -63,7 +61,11 @@ namespace DOpE
      */
     enum ControlType
     {
-      undefined, stationary, initial, timedistributed_constant, timdistributed_timedependend
+      undefined,
+      stationary,
+      initial,
+      timedistributed_constant,
+      timdistributed_timedependend
     };
 
   }
