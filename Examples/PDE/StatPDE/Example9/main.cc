@@ -64,8 +64,8 @@ typedef MethodOfLines_StateSpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN,
 typedef CellDataContainer<DOFHANDLER, VECTOR, 2> CDC;
 typedef FaceDataContainer<DOFHANDLER, VECTOR, 2> FDC;
 typedef HigherOrderDWRContainer<STH, IDC, CDC, FDC, VECTOR> HO_DWRC;
-typedef L2ResidualErrorContainer<STH, CDC, FDC, VECTOR,2> L2_RESC;
-typedef H1ResidualErrorContainer<STH, CDC, FDC, VECTOR,2> H1_RESC;
+typedef L2ResidualErrorContainer<STH, VECTOR,2> L2_RESC;
+typedef H1ResidualErrorContainer<STH, VECTOR,2> H1_RESC;
 
 void
 declare_params(ParameterReader &param_reader)
@@ -186,7 +186,7 @@ main(int argc, char **argv)
   P.SetFunctionalForErrorEstimation(LFF.GetName());
   //FiniteElemente for DWR*************************************************
   pr.SetSubsection("main parameters");
-  FESystem<2> state_fe_high(FE_Q<2>(2 * pr.get_integer("order fe")),1);
+  FESystem<2> state_fe_high(FE_Q<2>(2* pr.get_integer("order fe")),1);
   //Quadrature formulas for DWR*************************************************
   pr.SetSubsection("main parameters");
   QGauss<2> quadrature_formula_high(pr.get_integer("quad order") + 1);
@@ -199,7 +199,7 @@ main(int argc, char **argv)
   H1_RESC h1resc(DOFH,"fullmem",pr,DOpEtypes::primal_only);
 
 
-  solver.InitializeHigherOrderDWRC(dwrc);
+  solver.InitializeDWRC(dwrc);
   //**************************************************************************************************
 
   for (int i = 0; i < max_iter; i++)
@@ -242,10 +242,12 @@ main(int argc, char **argv)
     if (i != max_iter - 1)
     {
 //      DOFH.RefineSpace("global");
+
       Vector<float> error_ind(dwrc.GetErrorIndicators());
       for (unsigned int i = 0; i < error_ind.size(); i++)
         error_ind(i) = std::fabs(error_ind(i));
       DOFH.RefineSpace("optimized", &error_ind);
+
 //      DOFH.RefineSpace("fixednumber", &error_ind, 0.4);
 //      DOFH.RefineSpace("fixedfraction", &error_ind, 0.8);
     }
