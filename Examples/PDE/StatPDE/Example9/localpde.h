@@ -114,7 +114,7 @@ template<typename VECTOR, int dealdim>
           double res;
           res = _lap_u[q_point];
 
-          sum += scale * (res * _PI_h_z[q_point])
+          sum += scale * (this->ResidualModifier(res) * _PI_h_z[q_point])
               * state_fe_values.JxW(q_point);
         }
       }
@@ -188,7 +188,7 @@ template<typename VECTOR, int dealdim>
 
         for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
         {
-          sum += scale * ((f + jump[q_point]) * _PI_h_z[q_point])
+          sum += scale * (this->ResidualModifier(f + jump[q_point]) * _PI_h_z[q_point])
               * fdc.GetFEFaceValuesState().JxW(q_point);
         }
       }
