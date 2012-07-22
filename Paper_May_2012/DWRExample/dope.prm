@@ -10,7 +10,7 @@ end
 
 subsection Local PDE parameters
  # Reynolds is: 2D-1: 20; 2D-2 and 2D-3: 100
-           set viscosity	   = 1.e-3
+       set viscosity	   = 1.e-3
 
 	   # 2D-1: 500; 2D-2 and 2D-3: 20
 	   set drag_lift_constant  = 500  

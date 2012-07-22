@@ -131,7 +131,7 @@ template<typename VECTOR, int dealdim>
             vgrads[1][1] = _ufacegrads[q_point][1][1];
 
             drag_lift_value -= (fluid_pressure
-                + _density_fluid * _viscosity * (vgrads + transpose(vgrads)))
+                + _density_fluid * _viscosity * (vgrads))
                 * state_fe_face_values.normal_vector(q_point)
                 * state_fe_face_values.JxW(q_point);
           }
@@ -141,6 +141,61 @@ template<typename VECTOR, int dealdim>
           return drag_lift_value[0];
         }
         return 0.;
+      }
+
+      virtual void
+      FaceValue_U(
+          const FaceDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& fdc,
+          dealii::Vector<double> &local_cell_vector, double scale)
+      {
+
+      }
+
+      virtual void
+      BoundaryValue_U(
+          const FaceDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& fdc,
+          dealii::Vector<double> &local_cell_vector, double scale)
+      {
+        unsigned int color = fdc.GetBoundaryIndicator();
+        const auto &state_fe_values = fdc.GetFEFaceValuesState();
+        unsigned int n_q_points = fdc.GetNQPoints();
+
+        unsigned int n_dofs_per_cell = fdc.GetNDoFsPerCell();
+
+        if (color == 80)
+        {
+          const FEValuesExtractors::Vector velocities(0);
+          const FEValuesExtractors::Scalar pressure(2);
+
+          for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
+          {
+            for (unsigned int k = 0; k < n_dofs_per_cell; k++)
+            {
+              Tensor < 2, 2 > fluid_pressure;
+              fluid_pressure.clear();
+              fluid_pressure[0][0] = -state_fe_values[pressure].value(k,
+                  q_point);
+              fluid_pressure[1][1] = -state_fe_values[pressure].value(k,
+                  q_point);
+
+              Tensor < 2, 2 > vgrads;
+              vgrads.clear();
+              vgrads[0][0] =
+                  state_fe_values[velocities].gradient(k, q_point)[0][0];
+              vgrads[0][1] =
+                  state_fe_values[velocities].gradient(k, q_point)[0][1];
+              vgrads[1][0] =
+                  state_fe_values[velocities].gradient(k, q_point)[1][0];
+              vgrads[1][1] =
+                  state_fe_values[velocities].gradient(k, q_point)[1][1];
+
+              local_cell_vector[k] = (-1. * _drag_lift_constant * scale
+                  * (fluid_pressure + _density_fluid * _viscosity * (vgrads))
+                  * state_fe_values.normal_vector(q_point)
+                  * state_fe_values.JxW(q_point))[0];
+            }
+          }
+        }
       }
 
       UpdateFlags
@@ -241,7 +296,7 @@ template<typename VECTOR, int dealdim>
             vgrads[1][1] = _ufacegrads[q_point][1][1];
 
             drag_lift_value -= (fluid_pressure
-                + _density_fluid * _viscosity * (vgrads + transpose(vgrads)))
+                + _density_fluid * _viscosity * (vgrads))
                 * state_fe_face_values.normal_vector(q_point)
                 * state_fe_face_values.JxW(q_point);
           }

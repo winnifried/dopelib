@@ -203,7 +203,7 @@ template<typename VECTOR, int dealdim>
               dealii::Vector<double> &local_cell_vector __attribute__((unused)),
               double scale __attribute__((unused)))
           {
-            assert(this->_problem_type == "state");
+
           }
           void BoundaryMatrix (const FaceDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& fdc,
                 dealii::FullMatrix<double> &local_entry_matrix, double /*scale_ico*/, double /*scale_ico*/)

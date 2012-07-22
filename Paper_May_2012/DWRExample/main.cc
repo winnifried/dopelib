@@ -65,8 +65,8 @@ typedef MethodOfLines_StateSpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN,
 typedef CellDataContainer<DOFHANDLER, VECTOR, DIM> CDC;
 typedef FaceDataContainer<DOFHANDLER, VECTOR, DIM> FDC;
 typedef HigherOrderDWRContainer<STH, IDC, CDC, FDC, VECTOR> HO_DWRC;
-typedef L2ResidualErrorContainer<STH, CDC, FDC, VECTOR, DIM> L2_RESC;
-typedef H1ResidualErrorContainer<STH, CDC, FDC, VECTOR, DIM> H1_RESC;
+typedef L2ResidualErrorContainer<STH,  VECTOR, DIM> L2_RESC;
+typedef H1ResidualErrorContainer<STH,  VECTOR, DIM> H1_RESC;
 
 void
 declare_params(ParameterReader &param_reader)
@@ -168,7 +168,10 @@ main(int argc, char **argv)
 
 
   std::vector<bool> comp_mask(DIM+1,true);
-  comp_mask[DIM+1] = false;
+  comp_mask[0] = true;
+  comp_mask[1] = true;
+  comp_mask[2] = false;
+
 
 
   DOpEWrapper::ZeroFunction<DIM> zf(3);
@@ -180,10 +183,7 @@ main(int argc, char **argv)
   P.SetDirichletBoundaryColors(2, comp_mask, &DD1);
   P.SetDirichletBoundaryColors(80, comp_mask, &DD1);
 
-  P.SetBoundaryEquationColors(1);
-
-  BoundaryParabelExact boundary_parabel_ex;
-  P.SetInitialValues(&zf);
+  P.SetBoundaryEquationColors(80);
 
   /************************************************/
   SSolver solver(&P, "fullmem", pr, idc);
@@ -213,7 +213,7 @@ main(int argc, char **argv)
  // L2_RESC l2resc(DOFH, "fullmem", pr, DOpEtypes::primal_only);
  // H1_RESC h1resc(DOFH, "fullmem", pr, DOpEtypes::primal_only);
 
-  solver.InitializeHigherOrderDWRC(dwrc);
+  solver.InitializeDWRC(dwrc);
   //**************************************************************************************************
 
   for (int i = 0; i < max_iter; i++)
@@ -233,7 +233,7 @@ main(int argc, char **argv)
       out.Write(outp, 1, 1, 1);
 
       solver.ComputeReducedFunctionals();
-//      solver.ComputeRefinementIndicators(dwrc, LPDE);
+      solver.ComputeRefinementIndicators(dwrc, LPDE);
 
      // solver.ComputeRefinementIndicators(l2resc, LPDE);
     //  solver.ComputeRefinementIndicators(h1resc, LPDE);
