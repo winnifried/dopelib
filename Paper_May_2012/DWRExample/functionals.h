@@ -189,7 +189,7 @@ template<typename VECTOR, int dealdim>
               vgrads[1][1] =
                   state_fe_values[velocities].gradient(k, q_point)[1][1];
 
-              local_cell_vector[k] = (-1. * _drag_lift_constant * scale
+              local_cell_vector[k] += (-1. * _drag_lift_constant * scale
                   * (fluid_pressure + _density_fluid * _viscosity * (vgrads))
                   * state_fe_values.normal_vector(q_point)
                   * state_fe_values.JxW(q_point))[0];
