@@ -19,16 +19,22 @@ template<typename VECTOR, int dealdim>
       declare_params(ParameterReader &param_reader)
       {
         param_reader.SetSubsection("Local PDE parameters");
+        param_reader.declare_entry("density_fluid", "1.0", Patterns::Double(0));
         param_reader.declare_entry("viscosity", "1.0", Patterns::Double(0));
+        param_reader.declare_entry("drag_lift_constant", "1.0",
+            Patterns::Double(0));
+
       }
 
-      LocalPDEStokes(ParameterReader &param_reader) :
-          _state_block_components(3, 0)
+      LocalPDEStokes(ParameterReader &param_reader)
+          : _state_block_components(3, 0)
       {
         _state_block_components[2] = 1;
 
         param_reader.SetSubsection("Local PDE parameters");
+        _density_fluid = param_reader.get_double("density_fluid");
         _viscosity = param_reader.get_double("viscosity");
+        _drag_lift_constant = param_reader.get_double("drag_lift_constant");
       }
 
       // Domain values for cells
@@ -184,32 +190,41 @@ template<typename VECTOR, int dealdim>
       }
 
       // Values for boundary integrals
-        void BoundaryEquation (const FaceDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& fdc,
-             dealii::Vector<double> &local_cell_vector,
-             double scale, double /*scale_ico*/)
-        {
+      void
+      BoundaryEquation(
+          const FaceDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& fdc,
+          dealii::Vector<double> &local_cell_vector, double scale,
+          double /*scale_ico*/)
+      {
 
-        }
+      }
 
-        // Values for boundary integrals
-          void BoundaryEquation_U (const FaceDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& fdc,
-               dealii::Vector<double> &local_cell_vector,
-               double scale, double /*scale_ico*/)
-          {
+      // Values for boundary integrals
+      void
+      BoundaryEquation_U(
+          const FaceDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& fdc,
+          dealii::Vector<double> &local_cell_vector, double scale,
+          double /*scale_ico*/)
+      {
 
-          }
+      }
 
-          void BoundaryRightHandSide (const FaceDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>&,
-              dealii::Vector<double> &local_cell_vector __attribute__((unused)),
-              double scale __attribute__((unused)))
-          {
+      void
+      BoundaryRightHandSide(
+          const FaceDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>&,
+          dealii::Vector<double> &local_cell_vector __attribute__((unused)),
+          double scale __attribute__((unused)))
+      {
 
-          }
-          void BoundaryMatrix (const FaceDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& fdc,
-                dealii::FullMatrix<double> &local_entry_matrix, double /*scale_ico*/, double /*scale_ico*/)
-             {
+      }
+      void
+      BoundaryMatrix(
+          const FaceDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& fdc,
+          dealii::FullMatrix<double> &local_entry_matrix, double /*scale_ico*/,
+          double /*scale_ico*/)
+      {
 
-             }
+      }
 
       void
       FaceRightHandSide(
@@ -327,6 +342,135 @@ template<typename VECTOR, int dealdim>
 
       }
 
+      void
+      StrongBoundaryResidual_U(
+          const FaceDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& fdc,
+          const FaceDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& fdc_w,
+          double& sum, double scale)
+      {
+        const unsigned int n_q_points = fdc.GetNQPoints();
+        const unsigned int color = fdc.GetBoundaryIndicator();
+
+        _zgrads.resize(n_q_points, vector<Tensor<1, dealdim> >(3));
+        _PI_h_u_grads.resize(n_q_points, vector<Tensor<1, dealdim> >(3));
+
+        fdc.GetFaceGradsState("adjoint_for_ee", _zgrads);
+
+        fdc_w.GetFaceGradsState("weight_for_dual_residual", _PI_h_u_grads);
+
+        if (color == 1)
+          for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
+          {
+            //da - \partial_normal = -1 * -\partial_2 = \partial_2
+            sum += scale * _viscosity * _zgrads[q_point][0][1]
+                * _PI_h_u[q_point][0] * fdc.GetFEFaceValuesState().JxW(q_point);
+          }
+        else if (color == 80)
+          for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
+          {
+            Tensor<2, 2> fluid_pressure;
+            fluid_pressure.clear();
+            fluid_pressure[0][0] = -_PI_h_u[q_point](2);
+            fluid_pressure[1][1] = -_PI_h_u[q_point](2);
+
+            Tensor<2, 2> vgrads;
+            vgrads.clear();
+            vgrads[0][0] = _PI_h_u_grads[q_point][0][0];
+            vgrads[0][1] = _PI_h_u_grads[q_point][0][1];
+            vgrads[1][0] = _PI_h_u_grads[q_point][1][0];
+            vgrads[1][1] = _PI_h_u_grads[q_point][1][1];
+
+            sum -= _drag_lift_constant
+                * ((fluid_pressure + _density_fluid * _viscosity * (vgrads))
+                * fdc.GetFEFaceValuesState().normal_vector(q_point)
+                * fdc.GetFEFaceValuesState().JxW(q_point))[0];
+
+          }
+
+      }
+
+      void
+      StrongCellResidual_U(
+          const CellDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& cdc,
+          const CellDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& cdc_w,
+          double& sum, double scale)
+      {
+
+        unsigned int n_dofs_per_cell = cdc.GetNDoFsPerCell();
+        unsigned int n_q_points = cdc.GetNQPoints();
+        const DOpEWrapper::FEValues<dealdim> &state_fe_values =
+            cdc.GetFEValuesState();
+        const DOpEWrapper::FEValues<dealdim> &state_fe_values_weight =
+            cdc_w.GetFEValuesState();
+
+        _fvalues.resize(n_q_points, Vector<double>(3));
+
+        _PI_h_u.resize(n_q_points, Vector<double>(3));
+        _lap_z.resize(n_q_points, Vector<double>(3));
+        _zgrads.resize(n_q_points, vector<Tensor<1, dealdim> >(3));
+
+        cdc.GetLaplaciansState("adjoint_for_ee", _lap_z);
+        cdc.GetGradsState("adjoint_for_ee", _zgrads);
+
+        cdc_w.GetValuesState("weight_for_dual_residual", _PI_h_u);
+
+        for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
+        {
+          const double divu = _zgrads[q_point][0][0] + _zgrads[q_point][1][1];
+          double res_0 = _viscosity * _lap_z[q_point][0]
+              - _zgrads[q_point][2][0];
+          double res_1 = _viscosity * _lap_z[q_point][1]
+              - _zgrads[q_point][2][1];
+
+          sum += scale
+              * (res_0 * _PI_h_u[q_point][0] + res_1 * _PI_h_u[q_point][1]
+                  + divu * _PI_h_u[q_point][2]) * state_fe_values.JxW(q_point);
+        }
+      }
+
+      void
+      StrongFaceResidual_U(
+          const FaceDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& fdc,
+          const FaceDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& fdc_w,
+          double& sum, double scale)
+      {
+        const unsigned int n_q_points = fdc.GetNQPoints();
+        const unsigned int material_id = fdc.GetMaterialId();
+        const unsigned int material_id_nbr = fdc.GetNbrMaterialId();
+
+        _zgrads.resize(n_q_points, vector<Tensor<1, dealdim> >(3));
+        _zgrads_nbr.resize(n_q_points, vector<Tensor<1, dealdim> >(3));
+        _PI_h_u.resize(n_q_points);
+
+        fdc.GetFaceGradsState("adjoint_for_ee", _zgrads);
+        fdc.GetNbrFaceGradsState("adjoint_for_ee", _zgrads_nbr);
+
+        fdc_w.GetFaceValuesState("weight_for_dual_residual", _PI_h_u);
+        vector<Vector<double> > jump(n_q_points, Vector<double>(2));
+
+        for (unsigned int q = 0; q < n_q_points; q++)
+        {
+          jump[q][0] = _viscosity * (_zgrads_nbr[q][0][0] - _zgrads[q][0][0])
+              * fdc.GetFEFaceValuesState().normal_vector(q)[0]
+              + _viscosity * (_zgrads_nbr[q][0][1] - _zgrads[q][0][1])
+                  * fdc.GetFEFaceValuesState().normal_vector(q)[1];
+
+          jump[q][1] = _viscosity * (_zgrads_nbr[q][1][0] - _zgrads[q][1][0])
+              * fdc.GetFEFaceValuesState().normal_vector(q)[0]
+              + _viscosity * (_zgrads_nbr[q][1][1] - _zgrads[q][1][1])
+                  * fdc.GetFEFaceValuesState().normal_vector(q)[1];
+        }
+
+        for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
+        {
+          sum += scale
+              * (jump[q_point][0] * _PI_h_u[q_point][0]
+                  + jump[q_point][1] * _PI_h_u[q_point][1])
+              * fdc.GetFEFaceValuesState().JxW(q_point);
+        }
+
+      }
+
       UpdateFlags
       GetUpdateFlags() const
       {
@@ -371,16 +515,20 @@ template<typename VECTOR, int dealdim>
       vector<vector<Tensor<1, dealdim> > > _ugrads_nbr;
       vector<Vector<double> > _lap_u;
 
+      vector<Vector<double> > _zvalues;
       vector<vector<Tensor<1, dealdim> > > _zgrads;
-      vector<vector<Tensor<1, dealdim> > > _PI_h_zgrads;
-      vector<Vector<double> > _PI_h_z;
+      vector<vector<Tensor<1, dealdim> > > _zgrads_nbr;
+      vector<Vector<double> > _lap_z;
+      vector<vector<Tensor<1, dealdim> > > _PI_h_zgrads, _PI_h_u_grads;
+      vector<Vector<double> > _PI_h_z, _PI_h_u;
 
       // face values
       vector<vector<Tensor<1, dealdim> > > _ufacegrads;
 
       vector<unsigned int> _state_block_components;
 
-      double _viscosity;
+      double _density_fluid, _viscosity;
+      double _drag_lift_constant;
   }
   ;
 #endif

@@ -209,7 +209,7 @@ main(int argc, char **argv)
   IDC idc_high(quadrature_formula, face_quadrature_formula);
   STH DOFH_higher_order(triangulation, state_fe_high);
   HO_DWRC dwrc(DOFH_higher_order, idc_high, "fullmem", pr,
-      DOpEtypes::primal_only);
+      DOpEtypes::mixed);
  // L2_RESC l2resc(DOFH, "fullmem", pr, DOpEtypes::primal_only);
  // H1_RESC h1resc(DOFH, "fullmem", pr, DOpEtypes::primal_only);
 
