@@ -1,0 +1,27 @@
+developers  
+==========
+cgoll: Christian Goll (CG)
+
+twick: Thomas Wick (TW)
+
+wollner: Winnifried Wollner (WW)
+
+
+
+users      
+===== 
+
+belaia: Mariia Belaia; Master Studentin bei WW, nur fuer 2012. 
+
+ebnahai: Ebna Hai; Master Student bei WW, nur fuer 2012!   
+
+maier: Matthias Maier; Doktorand an Uni Heidelberg, Mentor TW 
+
+rund: Armin Rund; Postdoc an TU Graz (bei Kunisch)
+
+ludovici: Francesco Ludovici; Master Student, ab Okt 2012 Dokorand bei WW
+
+konstantin: Konstantin Pieper; Doktorand TU Muenchen (bei Boris Vexler)
+
+matthiask: Matthias Klinger; Doktorand an Uni Heidelberg, Mentor WW
+
