@@ -169,7 +169,7 @@ template<typename VECTOR, int dopedim, int dealdim>
                           grad_u, phi_i_grads_u))
                       * state_fe_values.JxW(q_point);
 
-                  local_cell_vector(i) += scale_ico * (scalar_product(
+                  local_cell_vector(i) += scale * (scalar_product(
                       fluid_pressure, phi_i_grads_v)) * state_fe_values.JxW(
                       q_point);
 
@@ -402,7 +402,7 @@ template<typename VECTOR, int dopedim, int dealdim>
                               * scalar_product(phi_grads_u[i], phi_grads_u[j]))
                           * state_fe_values.JxW(q_point);
 
-                      local_entry_matrix(j, i) += scale_ico * scalar_product(
+                      local_entry_matrix(j, i) += scale * scalar_product(
                           stress_fluid_ALE_1st_term_LinAll, phi_grads_v[j])
                           * state_fe_values.JxW(q_point);
 
@@ -521,8 +521,8 @@ template<typename VECTOR, int dopedim, int dealdim>
     }
 
   void CellTimeEquationExplicit (const CellDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& cdc,
-                           dealii::Vector<double> &local_cell_vector __attribute__((unused)),
-				   double scale __attribute__((unused)))
+                           dealii::Vector<double> &local_cell_vector,
+				   double scale)
     {
       assert(this->_problem_type == "state");
 
@@ -942,7 +942,7 @@ template<typename VECTOR, int dopedim, int dealdim>
 		  for(unsigned int j = 0; j < n_dofs_per_cell; j++)
 		    {
 		      // Fluid
-		      local_entry_matrix(j,i) -=  neumann_value *  phi_v[j]  * state_fe_face_values.JxW(q_point);
+		      local_entry_matrix(j,i) -=  scale*neumann_value *  phi_v[j]  * state_fe_face_values.JxW(q_point);
 		    }
 		}
 	    }
