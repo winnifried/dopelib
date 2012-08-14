@@ -440,7 +440,7 @@ namespace DOpE
       template<typename FACEDATACONTAINER>
         void
         InterfaceEquation(const FACEDATACONTAINER& fdc,
-            dealii::Vector<double> &local_cell_vector, double scale = 1.)
+            dealii::Vector<double> &local_cell_vector, double scale = 1., double /*scale_ico*/ = 1.)
         {
           if (this->GetPart() == "New_for_1st_and_3rd_cycle")
             {
@@ -577,20 +577,20 @@ namespace DOpE
         {
           if (this->GetPart() == "New_for_1st_and_3rd_cycle")
             {
-              this->GetProblem().BoundaryEquation(fdc, local_cell_vector, scale * _fs_alpha* this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize());
+              this->GetProblem().BoundaryEquation(fdc, local_cell_vector, scale * _fs_alpha* this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize(), scale* this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize());
             }
           else if ((this->GetPart() == "Old_for_1st_cycle") || (this->GetPart()
               == "Old_for_3rd_cycle"))
             {
-              this->GetProblem().BoundaryEquation(fdc, local_cell_vector, scale * _fs_beta* this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize());
+              this->GetProblem().BoundaryEquation(fdc, local_cell_vector, scale * _fs_beta* this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize(), 0.);
             }
           else if (this->GetPart() == "New_for_2nd_cycle")
             {
-              this->GetProblem().BoundaryEquation(fdc, local_cell_vector, scale * _fs_beta* this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize());
+              this->GetProblem().BoundaryEquation(fdc, local_cell_vector, scale * _fs_beta* this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize(), scale* this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize());
             }
           else if (this->GetPart() == "Old_for_2nd_cycle")
             {
-              this->GetProblem().BoundaryEquation(fdc, local_cell_vector, scale * _fs_alpha* this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize());
+              this->GetProblem().BoundaryEquation(fdc, local_cell_vector, scale * _fs_alpha* this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize(),0);
             }
           else
             {
