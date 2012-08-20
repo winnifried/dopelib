@@ -124,15 +124,15 @@ Chapter~\ref{chap:test}.
   appears.
 
   If \texttt{which g++} only returns one g++ compiler, then probably you need to
-  set an appropriate symlink.
+  set an appropriate symlink. Or more robust, you can configure \texttt{dealii}
+  to use the compiler you intend by configuring deal with the right compiler. To
+  do so adjust  the \texttt{CC} and \texttt{CXX} environment variable appropriately
+  before configuring \texttt{dealii}
   
   For example on Mac OSX you will find only one g++ compiler \texttt{/usr/bin/g++}
-  which is in fact a symlink to \texttt{/usr/bin/g++-4.2}. Thus to change, the 
-  desired behavior you should add a new link named \texttt{g++} in a directory 
-  in front of \texttt{/usr/bin} or replace the symlink in \texttt{/usr/bin}
-  with a link to the newer compiler which may be for instance located (macports 
-  g++ 4.5 on OSX Lion) in \texttt{/opt/local/bin/g++-mp-4.5}. Make shure that 
-  you add additional appropriate links to \texttt{gcc, cc, }and \texttt{c++}.
+  which is in fact a symlink to \texttt{/usr/bin/g++-4.2}. 
+  So that you need to insall a newer compiler this may then be found ,e.g., using macports 
+  g++ 4.5 on OSX Lion, in \texttt{/opt/local/bin/g++-mp-4.5}. 
 
 \section{How this library is structured}
 This library is designed to allow easy implementation and numerical solutions 
