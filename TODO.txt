@@ -1,5 +1,11 @@
 TODO DOpE
 =========
+- Funktionalauswertung in Opt-Problemen abhängig vom Typ machen: zur 
+  Zeit werden die Ableitungen der Funktionale (sobald diese 
+  in localfunctional.cc implementiert sind) IMMER ausgewertet.
+
+- Newtonlöser: last_newton_solution (in Matrix?!) ändern. 
+
 - Recheck args in TS-Schemes, i.e., not always are scale and scale ico used 
   consistenly in Equation, BoundaryEquation ...
 
