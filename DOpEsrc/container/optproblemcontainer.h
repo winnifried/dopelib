@@ -2123,8 +2123,9 @@ namespace DOpE
 	    else if (this->GetType() == "adjoint_for_ee")
 	      {
 		//values of the derivative of the functional for error estimation
-		_aux_functionals[_functional_for_ee_num]->FaceValue_U(fdc,
-								      local_cell_vector, scale);
+		if (_aux_functionals[_functional_for_ee_num]->GetType().find("face") != std::string::npos)
+		  _aux_functionals[_functional_for_ee_num]->FaceValue_U(fdc,
+									local_cell_vector, scale);
 	      }
 	    else if (this->GetType() == "tangent")
 	      {
@@ -2209,8 +2210,9 @@ namespace DOpE
 	    else if (this->GetType() == "adjoint_for_ee")
 	      {
 		//values of the derivative of the functional for error estimation
-		_aux_functionals[_functional_for_ee_num]->BoundaryValue_U(fdc,
-									  local_cell_vector, scale);
+		if( _aux_functionals[_functional_for_ee_num]->GetType().find("boundary") != std::string::npos)
+		  _aux_functionals[_functional_for_ee_num]->BoundaryValue_U(fdc,
+									    local_cell_vector, scale);
 	      }
 	    else if (this->GetType() == "tangent")
 	      {
