@@ -1925,8 +1925,7 @@ namespace DOpE
         //otherwise the scaling should be different (e.g. +-1 for local in time
         //Functionals)
         //The same applies to all ...Rhs functions, except init_...
-	if (GetFunctional()->GetType().find("domain") != std::string::npos)
-	  {
+
 	    if (this->GetType() == "state")
 	      {
 		// state values in quadrature points
@@ -1935,7 +1934,8 @@ namespace DOpE
 	    else if (this->GetType() == "adjoint")
 	      {
 		// state values in quadrature points
-		GetFunctional()->Value_U(cdc, local_cell_vector, scale);
+		if (GetFunctional()->GetType().find("domain") != std::string::npos)
+		  GetFunctional()->Value_U(cdc, local_cell_vector, scale);
 	      }
 	    else if (this->GetType() == "adjoint_for_ee")
 	      {
@@ -1952,8 +1952,11 @@ namespace DOpE
 	    else if (this->GetType() == "adjoint_hessian")
 	      {
 		// state values in quadrature points
-		GetFunctional()->Value_UU(cdc, local_cell_vector, scale);
-		GetFunctional()->Value_QU(cdc, local_cell_vector, scale);
+		if (GetFunctional()->GetType().find("domain") != std::string::npos)
+		  {
+		    GetFunctional()->Value_UU(cdc, local_cell_vector, scale);
+		    GetFunctional()->Value_QU(cdc, local_cell_vector, scale);
+		  }
 		scale *= -1;
 		this->GetPDE().CellEquation_UU(cdc, local_cell_vector, scale, scale);
 		this->GetPDE().CellEquation_QU(cdc, local_cell_vector, scale, scale);
@@ -1968,7 +1971,9 @@ namespace DOpE
 		    this->GetPDE().Init_CellRhs_Q(cdc, local_cell_vector, scale);
 		  }
 		// state values in quadrature points
-		GetFunctional()->Value_Q(cdc, local_cell_vector, scale);
+		if (GetFunctional()->GetType().find("domain") != std::string::npos)
+		  GetFunctional()->Value_Q(cdc, local_cell_vector, scale);
+
 		scale *= -1;
 		this->GetPDE().CellEquation_Q(cdc, local_cell_vector, scale, scale);
 	      }
@@ -1981,8 +1986,12 @@ namespace DOpE
 		    this->GetPDE().Init_CellRhs_QQ(cdc, local_cell_vector, scale);
 		  }
 		
-		GetFunctional()->Value_QQ(cdc, local_cell_vector, scale);
-		GetFunctional()->Value_UQ(cdc, local_cell_vector, scale);
+		if (GetFunctional()->GetType().find("domain") != std::string::npos)
+		  {
+		    GetFunctional()->Value_QQ(cdc, local_cell_vector, scale);
+		    GetFunctional()->Value_UQ(cdc, local_cell_vector, scale);
+		  }
+
 		scale *= -1;
 		this->GetPDE().CellEquation_QTT(cdc, local_cell_vector, scale, scale);
 		this->GetPDE().CellEquation_UQ(cdc, local_cell_vector, scale, scale);
@@ -2002,7 +2011,7 @@ namespace DOpE
 				    "OptProblemContainer::CellRhs");
 	      }
 
-	  }
+	  
       }
 	
 	/******************************************************/
@@ -2018,15 +2027,17 @@ namespace DOpE
         const std::map<std::string, const VECTOR*> &domain_values,
         VECTOR& rhs_vector, double scale)
     {
-      if (GetFunctional()->GetType().find("point") != std::string::npos)
-	{ 
+     
 	  if (this->GetType() == "adjoint")
 	    {
 	      // state values in quadrature points
-	      GetFunctional()->PointValue_U(
+	      if (GetFunctional()->GetType().find("point") != std::string::npos)
+		{ 
+		  GetFunctional()->PointValue_U(
 					    this->GetSpaceTimeHandler()->GetControlDoFHandler(),
 					    this->GetSpaceTimeHandler()->GetStateDoFHandler(), param_values,
 					    domain_values, rhs_vector, scale);
+		}
 	    }
 	  else if (this->GetType() == "adjoint_for_ee")
 	    {
@@ -2039,40 +2050,49 @@ namespace DOpE
 	  else if (this->GetType() == "adjoint_hessian")
 	    {
 	      // state values in quadrature points
-	      GetFunctional()->PointValue_UU(
-					     this->GetSpaceTimeHandler()->GetControlDoFHandler(),
-					     this->GetSpaceTimeHandler()->GetStateDoFHandler(), param_values,
-					     domain_values, rhs_vector, scale);
-	      GetFunctional()->PointValue_QU(
-					     this->GetSpaceTimeHandler()->GetControlDoFHandler(),
-					     this->GetSpaceTimeHandler()->GetStateDoFHandler(), param_values,
-					     domain_values, rhs_vector, scale);
+	      if (GetFunctional()->GetType().find("point") != std::string::npos)
+		{
+		  GetFunctional()->PointValue_UU(
+						 this->GetSpaceTimeHandler()->GetControlDoFHandler(),
+						 this->GetSpaceTimeHandler()->GetStateDoFHandler(), param_values,
+						 domain_values, rhs_vector, scale);
+		  GetFunctional()->PointValue_QU(
+						 this->GetSpaceTimeHandler()->GetControlDoFHandler(),
+						 this->GetSpaceTimeHandler()->GetStateDoFHandler(), param_values,
+						 domain_values, rhs_vector, scale);
+		}
 	    }
 	  else if (this->GetType() == "gradient")
 	    {
 	      // state values in quadrature points
-	      GetFunctional()->PointValue_Q(
-					    this->GetSpaceTimeHandler()->GetControlDoFHandler(),
-					    this->GetSpaceTimeHandler()->GetStateDoFHandler(), param_values,
-					    domain_values, rhs_vector, scale);
+	      if (GetFunctional()->GetType().find("point") != std::string::npos)
+		{
+		  GetFunctional()->PointValue_Q(
+						this->GetSpaceTimeHandler()->GetControlDoFHandler(),
+						this->GetSpaceTimeHandler()->GetStateDoFHandler(), param_values,
+						domain_values, rhs_vector, scale);
+		}
 	    }
 	  else if (this->GetType() == "hessian")
 	    {
 	      // state values in quadrature points
-	      GetFunctional()->PointValue_QQ(
-					     this->GetSpaceTimeHandler()->GetControlDoFHandler(),
-					     this->GetSpaceTimeHandler()->GetStateDoFHandler(), param_values,
-					     domain_values, rhs_vector, scale);
-	      GetFunctional()->PointValue_UQ(
-					     this->GetSpaceTimeHandler()->GetControlDoFHandler(),
-					     this->GetSpaceTimeHandler()->GetStateDoFHandler(), param_values,
-					     domain_values, rhs_vector, scale);
+	      if (GetFunctional()->GetType().find("point") != std::string::npos)
+		{
+		  GetFunctional()->PointValue_QQ(
+						 this->GetSpaceTimeHandler()->GetControlDoFHandler(),
+						 this->GetSpaceTimeHandler()->GetStateDoFHandler(), param_values,
+						 domain_values, rhs_vector, scale);
+		  GetFunctional()->PointValue_UQ(
+						 this->GetSpaceTimeHandler()->GetControlDoFHandler(),
+						 this->GetSpaceTimeHandler()->GetStateDoFHandler(), param_values,
+						 domain_values, rhs_vector, scale);
+		}
 	    }
 	  else
 	    {
 	      throw DOpEException("Not implemented", "OptProblem::CellRhs");
 	    }
-	}
+	
     }
 	
 	/******************************************************/
@@ -2088,8 +2108,7 @@ namespace DOpE
           const FACEDATACONTAINER& fdc,
           dealii::Vector<double> &local_cell_vector, double scale)
       {
-	if (GetFunctional()->GetType().find("face") != std::string::npos)
-	  {	
+	
 	    if (this->GetType() == "state")
 	      {
 		// state values in face quadrature points
@@ -2098,7 +2117,8 @@ namespace DOpE
 	    else if (this->GetType() == "adjoint")
 	      {
 		// state values in quadrature points
-		GetFunctional()->FaceValue_U(fdc, local_cell_vector, scale);
+		if (GetFunctional()->GetType().find("face") != std::string::npos)
+		  GetFunctional()->FaceValue_U(fdc, local_cell_vector, scale);
 	      }
 	    else if (this->GetType() == "adjoint_for_ee")
 	      {
@@ -2115,9 +2135,12 @@ namespace DOpE
 	    else if (this->GetType() == "adjoint_hessian")
 	      {
 		// state values in quadrature points
-		GetFunctional()->FaceValue_UU(fdc, local_cell_vector, scale);
-		
-		GetFunctional()->FaceValue_QU(fdc, local_cell_vector, scale);
+		if (GetFunctional()->GetType().find("face") != std::string::npos)
+		  {
+		    GetFunctional()->FaceValue_UU(fdc, local_cell_vector, scale);
+		    GetFunctional()->FaceValue_QU(fdc, local_cell_vector, scale);
+		  }
+
 		scale *= -1;
 		this->GetPDE().FaceEquation_UU(fdc, local_cell_vector, scale, scale);
 		
@@ -2126,16 +2149,23 @@ namespace DOpE
 	    else if (this->GetType() == "gradient")
 	      {
 		// state values in quadrature points
-		GetFunctional()->FaceValue_Q(fdc, local_cell_vector, scale);
+		if (GetFunctional()->GetType().find("face") != std::string::npos)
+		  {
+		    GetFunctional()->FaceValue_Q(fdc, local_cell_vector, scale);
+		  }
+
 		scale *= -1;
 		this->GetPDE().FaceEquation_Q(fdc, local_cell_vector, scale, scale);
 	      }
 	    else if (this->GetType() == "hessian")
 	      {
 		// state values in quadrature points
-		GetFunctional()->FaceValue_QQ(fdc, local_cell_vector, scale);
-		
-		GetFunctional()->FaceValue_UQ(fdc, local_cell_vector, scale);
+		if (GetFunctional()->GetType().find("face") != std::string::npos)
+		  {
+		    GetFunctional()->FaceValue_QQ(fdc, local_cell_vector, scale);
+		    GetFunctional()->FaceValue_UQ(fdc, local_cell_vector, scale);
+		  }
+
 		scale *= -1;
 		this->GetPDE().FaceEquation_QTT(fdc, local_cell_vector, scale, scale);
 		
@@ -2148,7 +2178,7 @@ namespace DOpE
 		throw DOpEException("Not implemented",
 				    "OptProblemContainer::CellFaceRhs");
 	      }
-	  }
+	  
       }
   
   /******************************************************/
@@ -2164,8 +2194,7 @@ namespace DOpE
           const FACEDATACONTAINER& fdc,
           dealii::Vector<double> &local_cell_vector, double scale)
       {
-	if (GetFunctional()->GetType().find("boundary") != std::string::npos)
-	  {
+
 	    if (this->GetType() == "state")
 	      {
 		// state values in face quadrature points
@@ -2174,7 +2203,8 @@ namespace DOpE
 	    else if (this->GetType() == "adjoint")
 	      {
 		// state values in quadrature points
-		GetFunctional()->BoundaryValue_U(fdc, local_cell_vector, scale);
+		if (GetFunctional()->GetType().find("boundary") != std::string::npos)
+		  GetFunctional()->BoundaryValue_U(fdc, local_cell_vector, scale);
 	      }
 	    else if (this->GetType() == "adjoint_for_ee")
 	      {
@@ -2191,8 +2221,12 @@ namespace DOpE
 	    else if (this->GetType() == "adjoint_hessian")
 	      {
 		// state values in quadrature points
-		GetFunctional()->BoundaryValue_UU(fdc, local_cell_vector, scale);
-		GetFunctional()->BoundaryValue_QU(fdc, local_cell_vector, scale);
+		if (GetFunctional()->GetType().find("boundary") != std::string::npos)
+		  {
+		    GetFunctional()->BoundaryValue_UU(fdc, local_cell_vector, scale);
+		    GetFunctional()->BoundaryValue_QU(fdc, local_cell_vector, scale);
+		  }
+
 		scale *= -1;
 		this->GetPDE().BoundaryEquation_UU(fdc, local_cell_vector, scale, scale);
 		this->GetPDE().BoundaryEquation_QU(fdc, local_cell_vector, scale, scale);
@@ -2200,15 +2234,21 @@ namespace DOpE
 	    else if (this->GetType() == "gradient")
 	      {
 		// state values in quadrature points
-		GetFunctional()->BoundaryValue_Q(fdc, local_cell_vector, scale);
+		if (GetFunctional()->GetType().find("boundary") != std::string::npos)
+		  GetFunctional()->BoundaryValue_Q(fdc, local_cell_vector, scale);
+
 		scale *= -1;
 		this->GetPDE().BoundaryEquation_Q(fdc, local_cell_vector, scale, scale);
 	      }
 	    else if (this->GetType() == "hessian")
 	      {
 		// state values in quadrature points
-		GetFunctional()->BoundaryValue_QQ(fdc, local_cell_vector, scale);
-		GetFunctional()->BoundaryValue_UQ(fdc, local_cell_vector, scale);
+		if (GetFunctional()->GetType().find("boundary") != std::string::npos)
+		  {
+		    GetFunctional()->BoundaryValue_QQ(fdc, local_cell_vector, scale);
+		    GetFunctional()->BoundaryValue_UQ(fdc, local_cell_vector, scale);
+		  }
+
 		scale *= -1;
 		this->GetPDE().BoundaryEquation_QTT(fdc, local_cell_vector, scale, scale);
 		this->GetPDE().BoundaryEquation_UQ(fdc, local_cell_vector, scale, scale);
@@ -2219,7 +2259,7 @@ namespace DOpE
 		throw DOpEException("Not implemented",
 				    "OptProblemContainer::CellBoundaryRhs");
 	      }
-	  }
+	  
       }
   
   /******************************************************/
