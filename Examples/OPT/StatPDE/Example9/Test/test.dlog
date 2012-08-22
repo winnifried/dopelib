@@ -39,7 +39,7 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 0	 Residual (rel.):   1.000e+00
 			 Newton step: 1	 Residual (rel.): < 1.000e-09	 LineSearch {0} 
 	Computing Reduced Gradient:
-			  Newton step: 0	 Residual (abs.):  -nan
+			  Newton step: 0	 Residual (abs.):  nan
 			  Newton step: 0	 Residual (rel.): < 1.000e-09
 		 Newton step: 0	 Residual (abs.): 2.95
 		 Newton step: 0	 Residual (rel.): 1.000e+00
@@ -56,7 +56,7 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 0	 Residual (rel.):   1.000e+00
 			 Newton step: 1	 Residual (rel.): < 1.000e-09	 LineSearch {0} 
 		Computing Representation of the Hessian:
-			  Newton step: 0	 Residual (abs.):  -nan
+			  Newton step: 0	 Residual (abs.):  nan
 			  Newton step: 0	 Residual (rel.): < 1.000e-09
 		 Cg step: 1	 Residual: 5.89431
 	Computing ReducedHessianVector:
@@ -69,7 +69,7 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 0	 Residual (rel.):   1.000e+00
 			 Newton step: 1	 Residual (rel.): < 1.000e-09	 LineSearch {0} 
 		Computing Representation of the Hessian:
-			  Newton step: 0	 Residual (abs.):  -nan
+			  Newton step: 0	 Residual (abs.):  nan
 			  Newton step: 0	 Residual (rel.): < 1.000e-09
 		 Cg step: 2	 Residual: 0.13925
 	Computing State Solution:
@@ -93,7 +93,7 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 0	 Residual (rel.):   1.000e+00
 			 Newton step: 1	 Residual (rel.): < 1.000e-09	 LineSearch {0} 
 	Computing Reduced Gradient:
-			  Newton step: 0	 Residual (abs.):  -nan
+			  Newton step: 0	 Residual (abs.):  nan
 			  Newton step: 0	 Residual (rel.): < 1.000e-09
 	Writing [./Mesh0/Control_OptProblem.00001.00000.txt]
 		 Newton step: 1	 Residual (rel.):   1.068e-01	 LinearIters [2]	 LineSearch {0} 
@@ -108,7 +108,7 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 0	 Residual (rel.):   1.000e+00
 			 Newton step: 1	 Residual (rel.): < 1.000e-09	 LineSearch {0} 
 		Computing Representation of the Hessian:
-			  Newton step: 0	 Residual (abs.):  -nan
+			  Newton step: 0	 Residual (abs.):  nan
 			  Newton step: 0	 Residual (rel.): < 1.000e-09
 		 Cg step: 1	 Residual: 0.630196
 	Computing ReducedHessianVector:
@@ -121,7 +121,7 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 0	 Residual (rel.):   1.000e+00
 			 Newton step: 1	 Residual (rel.): < 1.000e-09	 LineSearch {0} 
 		Computing Representation of the Hessian:
-			  Newton step: 0	 Residual (abs.):  -nan
+			  Newton step: 0	 Residual (abs.):  nan
 			  Newton step: 0	 Residual (rel.): < 1.000e-09
 		 Cg step: 2	 Residual: 0.0456961
 	Computing State Solution:
@@ -144,7 +144,7 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 0	 Residual (rel.):   1.000e+00
 			 Newton step: 1	 Residual (rel.): < 1.000e-09	 LineSearch {0} 
 	Computing Reduced Gradient:
-			  Newton step: 0	 Residual (abs.):  -nan
+			  Newton step: 0	 Residual (abs.):  nan
 			  Newton step: 0	 Residual (rel.): < 1.000e-09
 	Writing [./Mesh0/Control_OptProblem.00002.00000.txt]
 		 Newton step: 2	 Residual (rel.):   1.813e-02	 LinearIters [2]	 LineSearch {0} 
@@ -160,7 +160,7 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 0	 Residual (rel.):   1.000e+00
 			 Newton step: 1	 Residual (rel.): < 1.000e-09	 LineSearch {0} 
 		Computing Representation of the Hessian:
-			  Newton step: 0	 Residual (abs.):  -nan
+			  Newton step: 0	 Residual (abs.):  nan
 			  Newton step: 0	 Residual (rel.): < 1.000e-09
 		 Cg step: 1	 Residual: 0.107552
 	Computing ReducedHessianVector:
@@ -173,7 +173,7 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 0	 Residual (rel.):   1.000e+00
 			 Newton step: 1	 Residual (rel.): < 1.000e-09	 LineSearch {0} 
 		Computing Representation of the Hessian:
-			  Newton step: 0	 Residual (abs.):  -nan
+			  Newton step: 0	 Residual (abs.):  nan
 			  Newton step: 0	 Residual (rel.): < 1.000e-09
 		 Cg step: 2	 Residual: 0.0243502
 	Computing ReducedHessianVector:
@@ -186,7 +186,7 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 0	 Residual (rel.):   1.000e+00
 			 Newton step: 1	 Residual (rel.): < 1.000e-09	 LineSearch {0} 
 		Computing Representation of the Hessian:
-			  Newton step: 0	 Residual (abs.):  -nan
+			  Newton step: 0	 Residual (abs.):  nan
 			  Newton step: 0	 Residual (rel.): < 1.000e-09
 		 Cg step: 3	 Residual: 0.0052543
 	Computing State Solution:
@@ -254,7 +254,7 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 0	 Residual (rel.):   1.000e+00
 			 Newton step: 1	 Residual (rel.): < 1.000e-09	 LineSearch {0} 
 	Computing Reduced Gradient:
-			  Newton step: 0	 Residual (abs.):  -nan
+			  Newton step: 0	 Residual (abs.):  nan
 			  Newton step: 0	 Residual (rel.): < 1.000e-09
 	Writing [./Mesh0/Control_OptProblem.00003.00000.txt]
 		 Newton step: 3	 Residual (rel.):   8.256e-03	 LinearIters [3]	 LineSearch {-1} 
@@ -269,7 +269,7 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 0	 Residual (rel.):   1.000e+00
 			 Newton step: 1	 Residual (rel.): < 1.000e-09	 LineSearch {0} 
 		Computing Representation of the Hessian:
-			  Newton step: 0	 Residual (abs.):  -nan
+			  Newton step: 0	 Residual (abs.):  nan
 			  Newton step: 0	 Residual (rel.): < 1.000e-09
 		 Cg step: 1	 Residual: 0.0489677
 	Computing ReducedHessianVector:
@@ -282,7 +282,7 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 0	 Residual (rel.):   1.000e+00
 			 Newton step: 1	 Residual (rel.): < 1.000e-09	 LineSearch {0} 
 		Computing Representation of the Hessian:
-			  Newton step: 0	 Residual (abs.):  -nan
+			  Newton step: 0	 Residual (abs.):  nan
 			  Newton step: 0	 Residual (rel.): < 1.000e-09
 		 Cg step: 2	 Residual: 0.0110989
 	Computing ReducedHessianVector:
@@ -295,7 +295,7 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 0	 Residual (rel.):   1.000e+00
 			 Newton step: 1	 Residual (rel.): < 1.000e-09	 LineSearch {0} 
 		Computing Representation of the Hessian:
-			  Newton step: 0	 Residual (abs.):  -nan
+			  Newton step: 0	 Residual (abs.):  nan
 			  Newton step: 0	 Residual (rel.): < 1.000e-09
 		 Cg step: 3	 Residual: 0.00238581
 	Computing State Solution:
@@ -362,7 +362,7 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 0	 Residual (rel.):   1.000e+00
 			 Newton step: 1	 Residual (rel.): < 1.000e-09	 LineSearch {0} 
 	Computing Reduced Gradient:
-			  Newton step: 0	 Residual (abs.):  -nan
+			  Newton step: 0	 Residual (abs.):  nan
 			  Newton step: 0	 Residual (rel.): < 1.000e-09
 	Writing [./Mesh0/Control_OptProblem.00004.00000.txt]
 		 Newton step: 4	 Residual (rel.):   3.812e-03	 LinearIters [3]	 LineSearch {-1} 
@@ -377,7 +377,7 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 0	 Residual (rel.):   1.000e+00
 			 Newton step: 1	 Residual (rel.): < 1.000e-09	 LineSearch {0} 
 		Computing Representation of the Hessian:
-			  Newton step: 0	 Residual (abs.):  -nan
+			  Newton step: 0	 Residual (abs.):  nan
 			  Newton step: 0	 Residual (rel.): < 1.000e-09
 		 Cg step: 1	 Residual: 0.0226079
 	Computing ReducedHessianVector:
@@ -390,7 +390,7 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 0	 Residual (rel.):   1.000e+00
 			 Newton step: 1	 Residual (rel.): < 1.000e-09	 LineSearch {0} 
 		Computing Representation of the Hessian:
-			  Newton step: 0	 Residual (abs.):  -nan
+			  Newton step: 0	 Residual (abs.):  nan
 			  Newton step: 0	 Residual (rel.): < 1.000e-09
 		 Cg step: 2	 Residual: 0.00514709
 	Computing ReducedHessianVector:
@@ -403,7 +403,7 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 0	 Residual (rel.):   1.000e+00
 			 Newton step: 1	 Residual (rel.): < 1.000e-09	 LineSearch {0} 
 		Computing Representation of the Hessian:
-			  Newton step: 0	 Residual (abs.):  -nan
+			  Newton step: 0	 Residual (abs.):  nan
 			  Newton step: 0	 Residual (rel.): < 1.000e-09
 		 Cg step: 3	 Residual: 0.00109545
 	Computing State Solution:
@@ -466,7 +466,7 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 0	 Residual (rel.):   1.000e+00
 			 Newton step: 1	 Residual (rel.): < 1.000e-09	 LineSearch {0} 
 	Computing Reduced Gradient:
-			  Newton step: 0	 Residual (abs.):  -nan
+			  Newton step: 0	 Residual (abs.):  nan
 			  Newton step: 0	 Residual (rel.): < 1.000e-09
 	Writing [./Mesh0/Control_OptProblem.00005.00000.txt]
 		 Newton step: 5	 Residual (rel.):   1.772e-03	 LinearIters [3]	 LineSearch {-1} 
@@ -481,7 +481,7 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 0	 Residual (rel.):   1.000e+00
 			 Newton step: 1	 Residual (rel.): < 1.000e-09	 LineSearch {0} 
 		Computing Representation of the Hessian:
-			  Newton step: 0	 Residual (abs.):  -nan
+			  Newton step: 0	 Residual (abs.):  nan
 			  Newton step: 0	 Residual (rel.): < 1.000e-09
 		 Cg step: 1	 Residual: 0.0105101
 	Computing ReducedHessianVector:
@@ -494,7 +494,7 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 0	 Residual (rel.):   1.000e+00
 			 Newton step: 1	 Residual (rel.): < 1.000e-09	 LineSearch {0} 
 		Computing Representation of the Hessian:
-			  Newton step: 0	 Residual (abs.):  -nan
+			  Newton step: 0	 Residual (abs.):  nan
 			  Newton step: 0	 Residual (rel.): < 1.000e-09
 		 Cg step: 2	 Residual: 0.00240055
 	Computing ReducedHessianVector:
@@ -507,7 +507,7 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 0	 Residual (rel.):   1.000e+00
 			 Newton step: 1	 Residual (rel.): < 1.000e-09	 LineSearch {0} 
 		Computing Representation of the Hessian:
-			  Newton step: 0	 Residual (abs.):  -nan
+			  Newton step: 0	 Residual (abs.):  nan
 			  Newton step: 0	 Residual (rel.): < 1.000e-09
 		 Cg step: 3	 Residual: 0.000503826
 	Computing ReducedHessianVector:
@@ -520,7 +520,7 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 0	 Residual (rel.):   1.000e+00
 			 Newton step: 1	 Residual (rel.): < 1.000e-09	 LineSearch {0} 
 		Computing Representation of the Hessian:
-			  Newton step: 0	 Residual (abs.):  -nan
+			  Newton step: 0	 Residual (abs.):  nan
 			  Newton step: 0	 Residual (rel.): < 1.000e-09
 		 Cg step: 4	 Residual: 0.000115075
 	Computing State Solution:
@@ -582,7 +582,7 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 0	 Residual (rel.):   1.000e+00
 			 Newton step: 1	 Residual (rel.): < 1.000e-09	 LineSearch {0} 
 	Computing Reduced Gradient:
-			  Newton step: 0	 Residual (abs.):  -nan
+			  Newton step: 0	 Residual (abs.):  nan
 			  Newton step: 0	 Residual (rel.): < 1.000e-09
 	Writing [./Mesh0/Control_OptProblem.00006.00000.txt]
 		 Newton step: 6	 Residual (rel.):   7.291e-04	 LinearIters [4]	 LineSearch {-1} 
@@ -597,7 +597,7 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 0	 Residual (rel.):   1.000e+00
 			 Newton step: 1	 Residual (rel.): < 1.000e-09	 LineSearch {0} 
 		Computing Representation of the Hessian:
-			  Newton step: 0	 Residual (abs.):  -nan
+			  Newton step: 0	 Residual (abs.):  nan
 			  Newton step: 0	 Residual (rel.): < 1.000e-09
 		 Cg step: 1	 Residual: 0.00432166
 	Computing ReducedHessianVector:
@@ -610,7 +610,7 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 0	 Residual (rel.):   1.000e+00
 			 Newton step: 1	 Residual (rel.): < 1.000e-09	 LineSearch {0} 
 		Computing Representation of the Hessian:
-			  Newton step: 0	 Residual (abs.):  -nan
+			  Newton step: 0	 Residual (abs.):  nan
 			  Newton step: 0	 Residual (rel.): < 1.000e-09
 		 Cg step: 2	 Residual: 0.000978803
 	Computing ReducedHessianVector:
@@ -623,7 +623,7 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 0	 Residual (rel.):   1.000e+00
 			 Newton step: 1	 Residual (rel.): < 1.000e-09	 LineSearch {0} 
 		Computing Representation of the Hessian:
-			  Newton step: 0	 Residual (abs.):  -nan
+			  Newton step: 0	 Residual (abs.):  nan
 			  Newton step: 0	 Residual (rel.): < 1.000e-09
 		 Cg step: 3	 Residual: 0.000189562
 	Computing ReducedHessianVector:
@@ -636,7 +636,7 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 0	 Residual (rel.):   1.000e+00
 			 Newton step: 1	 Residual (rel.): < 1.000e-09	 LineSearch {0} 
 		Computing Representation of the Hessian:
-			  Newton step: 0	 Residual (abs.):  -nan
+			  Newton step: 0	 Residual (abs.):  nan
 			  Newton step: 0	 Residual (rel.): < 1.000e-09
 		 Cg step: 4	 Residual: 4.29334e-05
 	Computing State Solution:
@@ -698,7 +698,7 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 0	 Residual (rel.):   1.000e+00
 			 Newton step: 1	 Residual (rel.): < 1.000e-09	 LineSearch {0} 
 	Computing Reduced Gradient:
-			  Newton step: 0	 Residual (abs.):  -nan
+			  Newton step: 0	 Residual (abs.):  nan
 			  Newton step: 0	 Residual (rel.): < 1.000e-09
 	Writing [./Mesh0/Control_OptProblem.00007.00000.txt]
 		 Newton step: 7	 Residual (rel.):   3.025e-04	 LinearIters [4]	 LineSearch {-1} 
@@ -713,7 +713,7 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 0	 Residual (rel.):   1.000e+00
 			 Newton step: 1	 Residual (rel.): < 1.000e-09	 LineSearch {0} 
 		Computing Representation of the Hessian:
-			  Newton step: 0	 Residual (abs.):  -nan
+			  Newton step: 0	 Residual (abs.):  nan
 			  Newton step: 0	 Residual (rel.): < 1.000e-09
 		 Cg step: 1	 Residual: 0.00179165
 	Computing ReducedHessianVector:
@@ -726,7 +726,7 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 0	 Residual (rel.):   1.000e+00
 			 Newton step: 1	 Residual (rel.): < 1.000e-09	 LineSearch {0} 
 		Computing Representation of the Hessian:
-			  Newton step: 0	 Residual (abs.):  -nan
+			  Newton step: 0	 Residual (abs.):  nan
 			  Newton step: 0	 Residual (rel.): < 1.000e-09
 		 Cg step: 2	 Residual: 0.000393331
 	Computing ReducedHessianVector:
@@ -739,7 +739,7 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 0	 Residual (rel.):   1.000e+00
 			 Newton step: 1	 Residual (rel.): < 1.000e-09	 LineSearch {0} 
 		Computing Representation of the Hessian:
-			  Newton step: 0	 Residual (abs.):  -nan
+			  Newton step: 0	 Residual (abs.):  nan
 			  Newton step: 0	 Residual (rel.): < 1.000e-09
 		 Cg step: 3	 Residual: 6.98306e-05
 	Computing ReducedHessianVector:
@@ -752,7 +752,7 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 0	 Residual (rel.):   1.000e+00
 			 Newton step: 1	 Residual (rel.): < 1.000e-09	 LineSearch {0} 
 		Computing Representation of the Hessian:
-			  Newton step: 0	 Residual (abs.):  -nan
+			  Newton step: 0	 Residual (abs.):  nan
 			  Newton step: 0	 Residual (rel.): < 1.000e-09
 		 Cg step: 4	 Residual: 1.53303e-05
 	Computing State Solution:
@@ -813,7 +813,7 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 0	 Residual (rel.):   1.000e+00
 			 Newton step: 1	 Residual (rel.): < 1.000e-09	 LineSearch {0} 
 	Computing Reduced Gradient:
-			  Newton step: 0	 Residual (abs.):  -nan
+			  Newton step: 0	 Residual (abs.):  nan
 			  Newton step: 0	 Residual (rel.): < 1.000e-09
 	Writing [./Mesh0/Control_OptProblem.00008.00000.txt]
 		 Newton step: 8	 Residual (rel.):   1.260e-04	 LinearIters [4]	 LineSearch {-1} 
@@ -828,7 +828,7 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 0	 Residual (rel.):   1.000e+00
 			 Newton step: 1	 Residual (rel.): < 1.000e-09	 LineSearch {0} 
 		Computing Representation of the Hessian:
-			  Newton step: 0	 Residual (abs.):  -nan
+			  Newton step: 0	 Residual (abs.):  nan
 			  Newton step: 0	 Residual (rel.): < 1.000e-09
 		 Cg step: 1	 Residual: 0.000745815
 	Computing ReducedHessianVector:
@@ -841,7 +841,7 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 0	 Residual (rel.):   1.000e+00
 			 Newton step: 1	 Residual (rel.): < 1.000e-09	 LineSearch {0} 
 		Computing Representation of the Hessian:
-			  Newton step: 0	 Residual (abs.):  -nan
+			  Newton step: 0	 Residual (abs.):  nan
 			  Newton step: 0	 Residual (rel.): < 1.000e-09
 		 Cg step: 2	 Residual: 0.000157227
 	Computing ReducedHessianVector:
@@ -854,7 +854,7 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 0	 Residual (rel.):   1.000e+00
 			 Newton step: 1	 Residual (rel.): < 1.000e-09	 LineSearch {0} 
 		Computing Representation of the Hessian:
-			  Newton step: 0	 Residual (abs.):  -nan
+			  Newton step: 0	 Residual (abs.):  nan
 			  Newton step: 0	 Residual (rel.): < 1.000e-09
 		 Cg step: 3	 Residual: 2.57524e-05
 	Computing ReducedHessianVector:
@@ -867,7 +867,7 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 0	 Residual (rel.):   1.000e+00
 			 Newton step: 1	 Residual (rel.): < 1.000e-09	 LineSearch {0} 
 		Computing Representation of the Hessian:
-			  Newton step: 0	 Residual (abs.):  -nan
+			  Newton step: 0	 Residual (abs.):  nan
 			  Newton step: 0	 Residual (rel.): < 1.000e-09
 		 Cg step: 4	 Residual: 5.42894e-06
 	Computing State Solution:
@@ -921,9 +921,9 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 	Computing Reduced Adjoint:
 			 Newton step: 0	 Residual (abs.):   5.991e-01
 			 Newton step: 0	 Residual (rel.):   1.000e+00
-			 Newton step: 1	 Residual (rel.):   2.126e-09	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   2.190e-09	 LineSearch {0} 
 	Computing Reduced Gradient:
-			  Newton step: 0	 Residual (abs.):  -nan
+			  Newton step: 0	 Residual (abs.):  nan
 			  Newton step: 0	 Residual (rel.): < 1.000e-09
 	Writing [./Mesh0/Control_OptProblem.00009.00000.txt]
 		 Newton step: 9	 Residual (rel.):   5.257e-05	 LinearIters [4]	 LineSearch {-1} 
@@ -938,7 +938,7 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 0	 Residual (rel.):   1.000e+00
 			 Newton step: 1	 Residual (rel.): < 1.000e-09	 LineSearch {0} 
 		Computing Representation of the Hessian:
-			  Newton step: 0	 Residual (abs.):  -nan
+			  Newton step: 0	 Residual (abs.):  nan
 			  Newton step: 0	 Residual (rel.): < 1.000e-09
 		 Cg step: 1	 Residual: 0.000311025
 	Computing ReducedHessianVector:
@@ -951,7 +951,7 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 0	 Residual (rel.):   1.000e+00
 			 Newton step: 1	 Residual (rel.): < 1.000e-09	 LineSearch {0} 
 		Computing Representation of the Hessian:
-			  Newton step: 0	 Residual (abs.):  -nan
+			  Newton step: 0	 Residual (abs.):  nan
 			  Newton step: 0	 Residual (rel.): < 1.000e-09
 		 Cg step: 2	 Residual: 6.29969e-05
 	Computing ReducedHessianVector:
@@ -964,7 +964,7 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 0	 Residual (rel.):   1.000e+00
 			 Newton step: 1	 Residual (rel.): < 1.000e-09	 LineSearch {0} 
 		Computing Representation of the Hessian:
-			  Newton step: 0	 Residual (abs.):  -nan
+			  Newton step: 0	 Residual (abs.):  nan
 			  Newton step: 0	 Residual (rel.): < 1.000e-09
 		 Cg step: 3	 Residual: 9.64411e-06
 	Computing ReducedHessianVector:
@@ -977,7 +977,7 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 0	 Residual (rel.):   1.000e+00
 			 Newton step: 1	 Residual (rel.): < 1.000e-09	 LineSearch {0} 
 		Computing Representation of the Hessian:
-			  Newton step: 0	 Residual (abs.):  -nan
+			  Newton step: 0	 Residual (abs.):  nan
 			  Newton step: 0	 Residual (rel.): < 1.000e-09
 		 Cg step: 4	 Residual: 1.95337e-06
 	Computing ReducedHessianVector:
@@ -988,7 +988,7 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 0	 Residual (abs.): < 1.000e-09
 			 Newton step: 0	 Residual (rel.):   1.000e+00
 		Computing Representation of the Hessian:
-			  Newton step: 0	 Residual (abs.):  -nan
+			  Newton step: 0	 Residual (abs.):  nan
 			  Newton step: 0	 Residual (rel.): < 1.000e-09
  ERROR: The following `DOpENegativeCurvatureException` reports!
  ERROR: Warning: During execution of `ReducedNewtonAlgorithm::SolveReducedLinearSystem` the following Problem occurred!
@@ -1045,9 +1045,9 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 	Computing Reduced Adjoint:
 			 Newton step: 0	 Residual (abs.):   2.545e-01
 			 Newton step: 0	 Residual (rel.):   1.000e+00
-			 Newton step: 1	 Residual (rel.):   5.625e-09	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   5.391e-09	 LineSearch {0} 
 	Computing Reduced Gradient:
-			  Newton step: 0	 Residual (abs.):  -nan
+			  Newton step: 0	 Residual (abs.):  nan
 			  Newton step: 0	 Residual (rel.): < 1.000e-09
 	Writing [./Mesh0/Control_OptProblem.00010.00000.txt]
 		 Newton step: 10	 Residual (rel.):   2.196e-05	 LinearIters [4]	 LineSearch {-1} 
@@ -1062,7 +1062,7 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 0	 Residual (rel.):   1.000e+00
 			 Newton step: 1	 Residual (rel.): < 1.000e-09	 LineSearch {0} 
 		Computing Representation of the Hessian:
-			  Newton step: 0	 Residual (abs.):  -nan
+			  Newton step: 0	 Residual (abs.):  nan
 			  Newton step: 0	 Residual (rel.): < 1.000e-09
 		 Cg step: 1	 Residual: 0.000129867
 	Computing ReducedHessianVector:
@@ -1075,7 +1075,7 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 0	 Residual (rel.):   1.000e+00
 			 Newton step: 1	 Residual (rel.): < 1.000e-09	 LineSearch {0} 
 		Computing Representation of the Hessian:
-			  Newton step: 0	 Residual (abs.):  -nan
+			  Newton step: 0	 Residual (abs.):  nan
 			  Newton step: 0	 Residual (rel.): < 1.000e-09
 		 Cg step: 2	 Residual: 2.54108e-05
 	Computing ReducedHessianVector:
@@ -1088,7 +1088,7 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 0	 Residual (rel.):   1.000e+00
 			 Newton step: 1	 Residual (rel.): < 1.000e-09	 LineSearch {0} 
 		Computing Representation of the Hessian:
-			  Newton step: 0	 Residual (abs.):  -nan
+			  Newton step: 0	 Residual (abs.):  nan
 			  Newton step: 0	 Residual (rel.): < 1.000e-09
 		 Cg step: 3	 Residual: 3.68831e-06
 	Computing ReducedHessianVector:
@@ -1099,7 +1099,7 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 0	 Residual (abs.): < 1.000e-09
 			 Newton step: 0	 Residual (rel.):   1.000e+00
 		Computing Representation of the Hessian:
-			  Newton step: 0	 Residual (abs.):  -nan
+			  Newton step: 0	 Residual (abs.):  nan
 			  Newton step: 0	 Residual (rel.): < 1.000e-09
  ERROR: The following `DOpENegativeCurvatureException` reports!
  ERROR: Warning: During execution of `ReducedNewtonAlgorithm::SolveReducedLinearSystem` the following Problem occurred!
@@ -1156,9 +1156,9 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 	Computing Reduced Adjoint:
 			 Newton step: 0	 Residual (abs.):   1.010e-01
 			 Newton step: 0	 Residual (rel.):   1.000e+00
-			 Newton step: 1	 Residual (rel.):   8.739e-09	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   1.597e-08	 LineSearch {0} 
 	Computing Reduced Gradient:
-			  Newton step: 0	 Residual (abs.):  -nan
+			  Newton step: 0	 Residual (abs.):  nan
 			  Newton step: 0	 Residual (rel.): < 1.000e-09
 	Writing [./Mesh0/Control_OptProblem.00011.00000.txt]
 		 Newton step: 11	 Residual (rel.):   9.891e-06	 LinearIters [4]	 LineSearch {-1} 
