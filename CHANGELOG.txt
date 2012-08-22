@@ -1,6 +1,7 @@
 Changelog DOpE
 ==============
-
+22.08.2012: OptProblemContainer and PDEProblemContainer now only evaluate Functionals
+	    appearing in *Rhs if the type is required by the functional
 12.07.2012: -Time stepping schemes rescaled. They now correspond to the scaling one 
 	    	  would get using Galerkin-Methods in time.
 	    -Removed Default setting in *Time*Explicit methods of the PDEINTERFACE.
