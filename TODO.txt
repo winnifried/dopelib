@@ -1,5 +1,9 @@
 TODO DOpE
 =========
+- Mailingliste: wir haben nun einige neue Mitglieder: wer soll E-Mails
+  bekommen und wer nicht.
+- Es gibt immer noch Diskrepanzen bei einigen Tests, da -nan und nan nicht
+  unterschiedlich betrachtet werden.
 - Funktionalauswertung in Opt-Problemen abhängig vom Typ machen: zur 
   Zeit werden die Ableitungen der Funktionale (sobald diese 
   in localfunctional.cc implementiert sind) IMMER ausgewertet.
