@@ -1,6 +1,11 @@
 TODO DOpE
 =========
-- Mailingliste: wir haben nun einige neue Mitglieder: wer soll E-Mails
+- Wie aktualisiere ich die Homepage? ./copywebsite.sh funktioniert nicht
+  so richtig (keine Verbindung nach Hamburg)
+- Usertreffen am 20.,21. Sep 2012 in HD??
+- Mailingliste: 
+  Vorschlag TW: dope@ganymed... und dope-dev@ganymed
+  wir haben nun einige neue Mitglieder: wer soll E-Mails
   bekommen und wer nicht.
 - Es gibt immer noch Diskrepanzen bei einigen Tests, da -nan und nan nicht
   unterschiedlich betrachtet werden.
