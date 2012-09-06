@@ -1,5 +1,6 @@
 TODO DOpE
 =========
+- Rewrite documentation of PDE/InstatPDE/Example1. The equation is navier stokes, not stokes.
 - Wie aktualisiere ich die Homepage? ./copywebsite.sh funktioniert nicht
   so richtig (keine Verbindung nach Hamburg)
 - Usertreffen am 20.,21. Sep 2012 in HD??
