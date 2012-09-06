@@ -1,6 +1,9 @@
 \subsubsection{General problem description}
-In this example we consider the nonstationary incompressible Stokes equation. As in the stationary PDE Example 3 \ref{PDE_Stat_FSI_STVK},
+In this example we consider the nonstationary incompressible Navier-Stokes equation. As in the stationary PDE Example 3 \ref{PDE_Stat_FSI_STVK},
 we use the symmetric fluid stress tensor.  
+
+\textbf{The rest of this parte is written for Stokes instead of Navier-Stokes. Needs to be adjusted.}
+
 In strong formulation we deal with 
 \begin{align*}
 \partial_t v -\nabla\cdot (\nabla v + \nabla v^{T}) + \nabla p &= f \\
@@ -70,7 +73,7 @@ For standard equations (such as the heat
 equation and the wave equation), there is 
 no special treatment required needed. 
 
-However, solving the Navier-Stokes equations are 
+However, solving the Navier-Stokes equations or 
 multi-physics problems (like fluid-structure
 interaction), parts of the equations are treated
 with a fully implicit time-stepping scheme.
