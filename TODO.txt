@@ -1,5 +1,10 @@
 TODO DOpE
 =========
+- The residual-based error estimators (i.e. H1 and L2) do not work with vector-valued solutions. 
+  First lines one should look at is (revision 208):      DOpEsrc/container/residualestimator.h:397 and 207
+              VectorTools::interpolate(*(static_cast<const DOFHANDLER*>(dofh)),
+                ConstantFunction<dim>(1.), vals);
+  
 - Rewrite documentation of PDE/InstatPDE/Example1. The equation is navier stokes, not stokes.
 - Wie aktualisiere ich die Homepage? ./copywebsite.sh funktioniert nicht
   so richtig (keine Verbindung nach Hamburg)

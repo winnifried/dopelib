@@ -204,6 +204,7 @@ namespace DOpE
               const DOpEWrapper::DoFHandler<dim, DOFHANDLER>* dofh,
               VECTOR& vals)
           {
+          //FIXME: Does not work with vector valued functions
             VectorTools::interpolate(*(static_cast<const DOFHANDLER*>(dofh)),
                 ConstantFunction<dim>(1.), vals);
           }
@@ -239,8 +240,8 @@ namespace DOpE
   /**************************************************************************/
   /**
    * This class implements the missing pieces of DWRDataContainer for
-   * the case of the computation of a standard Energynorm-residual error estimator.
-   * Although, technicaly this is not dual weighted!
+   * the case of the computation of a standard energynorm-residual error estimator.
+   * Although, technically this is not dual weighted!
    */
   template<class STH, typename VECTOR, int dim>
     class H1ResidualErrorContainer : public ResidualErrorContainer<VECTOR>
@@ -394,6 +395,7 @@ namespace DOpE
               const DOpEWrapper::DoFHandler<dim, DOFHANDLER>* dofh,
               VECTOR& vals)
           {
+          //FIXME: Does not work with vector valued functions
             VectorTools::interpolate(*(static_cast<const DOFHANDLER*>(dofh)),
                 ConstantFunction<dim>(1.), vals);
           }
