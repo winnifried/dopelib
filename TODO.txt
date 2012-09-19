@@ -1,5 +1,20 @@
 TODO DOpE
 =========
+- Paper
+  x Aufbau
+	I. Introduction --> 1st draft von Winni 
+	II. Aufbau der Bib (Anhand einfacher Beispiele, was muesste User tun?)
+	  II.1. PDE
+		II.1.a. stationaer
+		II.1.b. instationaer --> 1st draft Thomas
+	  II.2. OPT
+	  II.3. Misc (DWR (Christian), Residualestimator, Multimesh, ...)
+	III. Beispiele (kurz, nicht quantitativ, eher schoene Bilder, )
+	  III.1. NS mit DWR (Drag, Lift, Punktauswertung?) --> cgoll 
+	  III.2. FSI --> Thomas
+	  III.3. Comp. - Minimization --> Winni
+ 
+	  
 - The residual-based error estimators (i.e. H1 and L2) do not work with vector-valued solutions. 
   First lines one should look at is (revision 208):      DOpEsrc/container/residualestimator.h:397 and 207
               VectorTools::interpolate(*(static_cast<const DOFHANDLER*>(dofh)),
