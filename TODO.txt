@@ -1,5 +1,26 @@
 TODO DOpE
 =========
+
+Treffen (Sep 19, 2012)
+- FoD
+  Zukunft (evtl. Oeffnung zu DUNE)
+  Entwicklertreffen (Anfang 2013: Ort?? Potschka)
+  svn mirror vor Dez 2013 (Bauarbeiten URZ)
+  Oeffentlicher Download (erstmal Doku und funktionstuechtige Software)
+  DOpE Einfuehrung (wir sind alle dafuer, Winni faengt an)
+  Mailingliste (dopedev@ganymed ... )
+  Hosting (DOpElib domain kaufen!)
+  Maintainer (in Jahreszahlen -> macht Winni)
+  License 
+  svn general (erstmal Heidelberg lassen, wenn Winni Dauerstelle, dann umziehen)
+	
+- Paper
+
+
+
+
+
+
 - Paper
   x Aufbau
 	I. Introduction --> 1st draft von Winni 
@@ -15,12 +36,14 @@ TODO DOpE
 	  III.3. Comp. - Minimization --> Winni
  
 	  
+
 - The residual-based error estimators (i.e. H1 and L2) do not work with vector-valued solutions. 
   First lines one should look at is (revision 208):      DOpEsrc/container/residualestimator.h:397 and 207
               VectorTools::interpolate(*(static_cast<const DOFHANDLER*>(dofh)),
                 ConstantFunction<dim>(1.), vals);
   
 - Rewrite documentation of PDE/InstatPDE/Example1. The equation is navier stokes, not stokes.
+
 - Wie aktualisiere ich die Homepage? ./copywebsite.sh funktioniert nicht
   so richtig (keine Verbindung nach Hamburg)
 - Usertreffen am 20.,21. Sep 2012 in HD??
