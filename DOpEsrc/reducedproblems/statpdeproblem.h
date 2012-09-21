@@ -569,9 +569,10 @@ namespace DOpE
           DWRC& dwrc, PDE& pde)
       {
         //Attach the ResidualModifier to the PDE.
-        pde.ResidualModifier = boost::bind<double>(
+        pde.ResidualModifier = boost::bind<void>(
             boost::mem_fn(&DWRC::ResidualModifier), boost::ref(dwrc), _1);
-
+	pde.VectorResidualModifier = boost::bind<void>(
+	  boost::mem_fn(&DWRC::VectorResidualModifier),boost::ref(dwrc),_1);
         //first we reinit the dwrdatacontainer (this
         //sets the weight-vectors to their correct length)
         const unsigned int n_cells =

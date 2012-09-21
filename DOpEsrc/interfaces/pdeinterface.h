@@ -694,7 +694,8 @@ namespace DOpE
        * as needed for Residual Error estimators as well as 
        * the residual itself as needed by the DWR estimators.
        */
-      boost::function1<double,double> ResidualModifier;
+      boost::function1<void,double&> ResidualModifier;
+      boost::function1<void,dealii::Vector<double>&> VectorResidualModifier;
 
       protected:
         std::string _problem_type;

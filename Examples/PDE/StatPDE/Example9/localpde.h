@@ -77,14 +77,17 @@ template<typename VECTOR, int dealdim>
 
         //make sure the binding of the function has worked
 	assert(this->ResidualModifier);
-        for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
+	for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
         {
           _fvalues[q_point] = -_ex_sol.laplacian(
               state_fe_values.quadrature_point(q_point));
           double res;
           res = _fvalues[q_point] + _lap_u[q_point];
 	  
-          sum += scale * (this->ResidualModifier(res) * _PI_h_z[q_point])
+          //Modify the residual as required by the error estimator
+	  this->ResidualModifier(res);
+        
+          sum += scale * (res * _PI_h_z[q_point])
               * state_fe_values.JxW(q_point);
         }
       }
@@ -113,8 +116,10 @@ template<typename VECTOR, int dealdim>
 
           double res;
           res = _lap_u[q_point];
+          //Modify the residual as required by the error estimator
+	  this->ResidualModifier(res);
 
-          sum += scale * (this->ResidualModifier(res) * _PI_h_z[q_point])
+          sum += scale * (res * _PI_h_z[q_point])
               * state_fe_values.JxW(q_point);
         }
       }
@@ -146,7 +151,12 @@ template<typename VECTOR, int dealdim>
 
         for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
         {
-          sum += scale * (this->ResidualModifier(jump[q_point]) * _PI_h_z[q_point])
+          //Modify the residual as required by the error estimator
+	  double res;
+          res = jump[q_point];
+	  this->ResidualModifier(res);
+        
+          sum += scale * (res * _PI_h_z[q_point])
               * fdc.GetFEFaceValuesState().JxW(q_point);
         }
       }
@@ -188,7 +198,12 @@ template<typename VECTOR, int dealdim>
 
         for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
         {
-          sum += scale * (this->ResidualModifier(f + jump[q_point]) * _PI_h_z[q_point])
+          double res;
+          res = f + jump[q_point];
+          //Modify the residual as required by the error estimator
+	  this->ResidualModifier(res);
+        
+          sum += scale * (res * _PI_h_z[q_point])
               * fdc.GetFEFaceValuesState().JxW(q_point);
         }
       }

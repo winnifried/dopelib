@@ -174,10 +174,17 @@ namespace DOpE
          * This should be applied to the residual in the integration
          * To assert that the squared norm is calculated
          */
-        inline double
-        ResidualModifier(double res)
+        inline void
+        ResidualModifier(double& res)
         {
-          return res * res * _weight;
+          res = res * res * _weight;
+        }
+
+	inline void
+	  VectorResidualModifier(dealii::Vector<double>& res)
+        {
+          for(unsigned int i = 0; i < res.size(); i++)
+	    res(i) = res(i) * res(i) * _weight;
         }
 
         void
@@ -204,9 +211,8 @@ namespace DOpE
               const DOpEWrapper::DoFHandler<dim, DOFHANDLER>* dofh,
               VECTOR& vals)
           {
-          //FIXME: Does not work with vector valued functions
             VectorTools::interpolate(*(static_cast<const DOFHANDLER*>(dofh)),
-                ConstantFunction<dim>(1.), vals);
+				     ConstantFunction<dim>(1.,dofh->get_fe().n_components()), vals);
           }
 
       private:
@@ -365,10 +371,16 @@ namespace DOpE
          * This should be applied to the residual in the integration
          * To assert that the squared norm is calculated
          */
-        inline double
-        ResidualModifier(double res)
+        inline void
+        ResidualModifier(double& res)
         {
-          return res * res * _weight;
+          res = res * res * _weight;
+        }
+	inline void
+	  VectorResidualModifier(dealii::Vector<double>& res)
+        {
+          for(unsigned int i = 0; i < res.size(); i++)
+	    res(i) = res(i) * res(i) * _weight;
         }
 
         void
@@ -395,9 +407,8 @@ namespace DOpE
               const DOpEWrapper::DoFHandler<dim, DOFHANDLER>* dofh,
               VECTOR& vals)
           {
-          //FIXME: Does not work with vector valued functions
-            VectorTools::interpolate(*(static_cast<const DOFHANDLER*>(dofh)),
-                ConstantFunction<dim>(1.), vals);
+	    VectorTools::interpolate(*(static_cast<const DOFHANDLER*>(dofh)),
+				     ConstantFunction<dim>(1.,dofh->get_fe().n_components()), vals);
           }
 
       private:

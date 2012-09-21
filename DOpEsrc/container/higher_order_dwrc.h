@@ -243,12 +243,17 @@ namespace DOpE
 
         /**
          * This should be applied to the residual in the integration
-         * To assert that the squared norm is calculated
+         * Here we don't do anything because it should be the identity for DWR
          */
-        inline double
-        ResidualModifier(double res)
+        inline void
+        ResidualModifier(double& res)
         {
-          return res;
+          
+        }
+	inline void
+	  VectorResidualModifier(dealii::Vector<double>& res)
+        {
+      
         }
 
       protected:
