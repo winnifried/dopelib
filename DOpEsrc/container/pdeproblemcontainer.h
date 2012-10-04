@@ -251,7 +251,6 @@ namespace DOpE
 
         /******************************************************/
 
-
         /******************************************************/
 
         /**
@@ -395,7 +394,6 @@ namespace DOpE
               dealii::Vector<double> &local_cell_vector, double scale,
               double scale_ico);
 
-
         /******************************************************/
         /**
          * Computes the product of two different finite elements
@@ -460,7 +458,6 @@ namespace DOpE
           BoundaryEquation(const FACEDATACONTAINER& dc,
               dealii::Vector<double> &local_cell_vector, double scale,
               double scale_ico);
-
 
         /******************************************************/
         /**
@@ -673,7 +670,6 @@ namespace DOpE
 
         /******************************************************/
 
-
         std::string
         GetDoFType() const;
         std::string
@@ -779,13 +775,12 @@ namespace DOpE
           return _functional_position;
         }
 
-
         /******************************************************/
       private:
         DOpEExceptionHandler<VECTOR>* _ExceptionHandler;
         DOpEOutputHandler<VECTOR>* _OutputHandler;
 
-        std::string  _algo_type;
+        std::string _algo_type;
 
         std::vector<
             FunctionalInterface<CellDataContainer, FaceDataContainer,
@@ -902,7 +897,7 @@ namespace DOpE
       if (this->GetType() != type || this->GetTypeNum() != num)
       {
         this->SetTypeInternal(type);
-        this->SetTypeNumInternal( num);
+        this->SetTypeNumInternal(num);
         this->GetPDE().SetProblemType(type);
       }
       //Nothing to do.
@@ -1054,8 +1049,8 @@ namespace DOpE
       else if (this->GetType() == "aux_functional")
       {
         // state values in quadrature points
-        return _aux_functionals[this->GetTypeNum()]->AlgebraicValue(param_values,
-            domain_values);
+        return _aux_functionals[this->GetTypeNum()]->AlgebraicValue(
+            param_values, domain_values);
       }
       else if (this->GetType() == "error_evaluation")
       //TODO ist das hier korrekt? Sollten wir eigentlich nicht benoetigen.
@@ -1084,12 +1079,13 @@ namespace DOpE
         if (this->GetType() == "state")
         {
           // state values in quadrature points
-         this->GetPDE().CellEquation(cdc, local_cell_vector, scale, scale_ico);
+          this->GetPDE().CellEquation(cdc, local_cell_vector, scale, scale_ico);
         }
         else if (this->GetType() == "adjoint_for_ee")
         {
           // state values in quadrature points
-         this->GetPDE().CellEquation_U(cdc, local_cell_vector, scale, scale_ico);
+          this->GetPDE().CellEquation_U(cdc, local_cell_vector, scale,
+              scale_ico);
         }
         else
         {
@@ -1097,8 +1093,6 @@ namespace DOpE
               "PDEProblemContainer::CellEquation");
         }
       }
-
-
 
   /******************************************************/
 
@@ -1114,7 +1108,7 @@ namespace DOpE
         if (this->GetType() == "state")
         {
           // state values in quadrature points
-         this->GetPDE().CellTimeEquation(cdc, local_cell_vector, scale);
+          this->GetPDE().CellTimeEquation(cdc, local_cell_vector, scale);
         }
         else if (this->GetType() == "adjoint_for_ee")
         {
@@ -1142,7 +1136,8 @@ namespace DOpE
         if (this->GetType() == "state")
         {
           // state values in quadrature points
-         this->GetPDE().CellTimeEquationExplicit(cdc, local_cell_vector, scale);
+          this->GetPDE().CellTimeEquationExplicit(cdc, local_cell_vector,
+              scale);
         }
         else if (this->GetType() == "adjoint_for_ee")
         {
@@ -1170,12 +1165,13 @@ namespace DOpE
         if (this->GetType() == "state")
         {
           // state values in quadrature points
-         this->GetPDE().FaceEquation(fdc, local_cell_vector, scale, scale_ico);
+          this->GetPDE().FaceEquation(fdc, local_cell_vector, scale, scale_ico);
         }
         else if (this->GetType() == "adjoint_for_ee")
         {
           // state values in quadrature points
-         this->GetPDE().FaceEquation_U(fdc, local_cell_vector, scale, scale_ico);
+          this->GetPDE().FaceEquation_U(fdc, local_cell_vector, scale,
+              scale_ico);
         }
         else
         {
@@ -1198,12 +1194,13 @@ namespace DOpE
         if (this->GetType() == "state")
         {
           // state values in quadrature points
-         this->GetPDE().InterfaceEquation(fdc, local_cell_vector, scale, scale_ico);
+          this->GetPDE().InterfaceEquation(fdc, local_cell_vector, scale,
+              scale_ico);
         }
         else if (this->GetType() == "adjoint_for_ee")
         {
           // state values in quadrature points
-         this->GetPDE().InterfaceEquation_U(fdc, local_cell_vector, scale,
+          this->GetPDE().InterfaceEquation_U(fdc, local_cell_vector, scale,
               scale_ico);
         }
         else
@@ -1226,12 +1223,13 @@ namespace DOpE
         if (this->GetType() == "state")
         {
           // state values in quadrature points
-         this->GetPDE().BoundaryEquation(fdc, local_cell_vector, scale, scale_ico);
+          this->GetPDE().BoundaryEquation(fdc, local_cell_vector, scale,
+              scale_ico);
         }
         else if (this->GetType() == "adjoint_for_ee")
         {
           // state values in quadrature points
-         this->GetPDE().BoundaryEquation_U(fdc, local_cell_vector, scale,
+          this->GetPDE().BoundaryEquation_U(fdc, local_cell_vector, scale,
               scale_ico);
         }
         else
@@ -1255,7 +1253,7 @@ namespace DOpE
         if (this->GetType() == "state")
         {
           // state values in quadrature points
-         this->GetPDE().CellRightHandSide(cdc, local_cell_vector, scale);
+          this->GetPDE().CellRightHandSide(cdc, local_cell_vector, scale);
         }
         else if (this->GetType() == "adjoint_for_ee")
         {
@@ -1314,7 +1312,7 @@ namespace DOpE
         if (this->GetType() == "state")
         {
           // state values in face quadrature points
-         this->GetPDE().FaceRightHandSide(fdc, local_cell_vector, scale);
+          this->GetPDE().FaceRightHandSide(fdc, local_cell_vector, scale);
         }
         else if (this->GetType() == "adjoint_for_ee")
         {
@@ -1344,7 +1342,7 @@ namespace DOpE
         if (this->GetType() == "state")
         {
           // state values in face quadrature points
-         this->GetPDE().BoundaryRightHandSide(fdc, local_cell_vector, scale);
+          this->GetPDE().BoundaryRightHandSide(fdc, local_cell_vector, scale);
         }
         else if (this->GetType() == "adjoint_for_ee")
         {
@@ -1376,12 +1374,13 @@ namespace DOpE
         if (this->GetType() == "state")
         {
           // state values in quadrature points
-         this->GetPDE().CellMatrix(cdc, local_entry_matrix, scale, scale_ico);
+          this->GetPDE().CellMatrix(cdc, local_entry_matrix, scale, scale_ico);
         }
         else if (this->GetType() == "adjoint_for_ee")
         {
           // state values in quadrature points
-         this->GetPDE().CellMatrix_T(cdc, local_entry_matrix, scale, scale_ico);
+          this->GetPDE().CellMatrix_T(cdc, local_entry_matrix, scale,
+              scale_ico);
         }
         else
         {
@@ -1405,7 +1404,7 @@ namespace DOpE
         if (this->GetType() == "state")
         {
           // state values in quadrature points
-         this->GetPDE().CellTimeMatrix(cdc, local_entry_matrix);
+          this->GetPDE().CellTimeMatrix(cdc, local_entry_matrix);
         }
         else if (this->GetType() == "dual_for_ee")
         {
@@ -1434,7 +1433,7 @@ namespace DOpE
         if (this->GetType() == "state")
         {
           // state values in quadrature points
-         this->GetPDE().CellTimeMatrixExplicit(cdc, local_entry_matrix);
+          this->GetPDE().CellTimeMatrixExplicit(cdc, local_entry_matrix);
         }
         else if (this->GetType() == "dual_for_ee")
         {
@@ -1463,11 +1462,12 @@ namespace DOpE
         if (this->GetType() == "state")
         {
           // state values in face quadrature points
-         this->GetPDE().FaceMatrix(fdc, local_entry_matrix, scale, scale_ico);
+          this->GetPDE().FaceMatrix(fdc, local_entry_matrix, scale, scale_ico);
         }
         else if (this->GetType() == "adjoint_for_ee")
         {
-         this->GetPDE().FaceMatrix_T(fdc, local_entry_matrix, scale, scale_ico);
+          this->GetPDE().FaceMatrix_T(fdc, local_entry_matrix, scale,
+              scale_ico);
         }
         else
         {
@@ -1491,11 +1491,12 @@ namespace DOpE
         if (this->GetType() == "state")
         {
           // state values in face quadrature points
-         this->GetPDE().InterfaceMatrix(fdc, local_entry_matrix, scale, scale_ico);
+          this->GetPDE().InterfaceMatrix(fdc, local_entry_matrix, scale,
+              scale_ico);
         }
         else if (this->GetType() == "adjoint_for_ee")
         {
-         this->GetPDE().InterfaceMatrix_T(fdc, local_entry_matrix, scale,
+          this->GetPDE().InterfaceMatrix_T(fdc, local_entry_matrix, scale,
               scale_ico);
         }
         else
@@ -1518,12 +1519,14 @@ namespace DOpE
         if (this->GetType() == "state")
         {
           // state values in face quadrature points
-         this->GetPDE().BoundaryMatrix(fdc, local_cell_matrix, scale, scale_ico);
+          this->GetPDE().BoundaryMatrix(fdc, local_cell_matrix, scale,
+              scale_ico);
         }
         else if (this->GetType() == "adjoint_for_ee")
         {
           // state values in quadrature points
-         this->GetPDE().BoundaryMatrix_T(fdc, local_cell_matrix, scale, scale_ico);
+          this->GetPDE().BoundaryMatrix_T(fdc, local_cell_matrix, scale,
+              scale_ico);
         }
         else
         {
@@ -1589,7 +1592,8 @@ namespace DOpE
       else
       {
         r = this->GetPDE().GetUpdateFlags();
-        if (this->GetType() == "adjoint_for_ee" || this->GetType() == "error_evaluation")
+        if (this->GetType() == "adjoint_for_ee"
+            || this->GetType() == "error_evaluation")
         {
           r = r | _aux_functionals[_functional_for_ee_num]->GetUpdateFlags();
         }
@@ -1613,7 +1617,8 @@ namespace DOpE
       else
       {
         r = this->GetPDE().GetFaceUpdateFlags();
-        if (this->GetType() == "adjoint_for_ee" || this->GetType() == "error_evaluation")
+        if (this->GetType() == "adjoint_for_ee"
+            || this->GetType() == "error_evaluation")
         {
           r = r
               | _aux_functionals[_functional_for_ee_num]->GetFaceUpdateFlags();
@@ -1676,7 +1681,7 @@ namespace DOpE
         for (unsigned int i = 0; i < _aux_functionals.size(); i++)
           _aux_functionals[i]->SetTime(time);
         //PDE
-       this->GetPDE().SetTime(time);
+        this->GetPDE().SetTime(time);
       }
     }
 
@@ -2009,7 +2014,8 @@ namespace DOpE
         DOFHANDLER>::GetBoundaryFunctionalColors() const
     {
       //FIXME cost_functional?? This is pdeproblemcontainer, we should not have a cost functional! ~cg
-      if (this->GetType() == "cost_functional" || this->GetType() == "aux_functional"
+      if (this->GetType() == "cost_functional"
+          || this->GetType() == "aux_functional"
           || this->GetType() == "error_evaluation")
       {
         return _boundary_functional_colors;

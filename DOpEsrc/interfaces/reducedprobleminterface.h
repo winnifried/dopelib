@@ -76,7 +76,8 @@ namespace DOpE
          */
         virtual void
         WriteToFileCellwise(const Vector<double> &/*v*/, std::string /*name*/,
-            std::string /*outfile*/, std::string /*dof_type*/, std::string /*filetype*/)
+            std::string /*outfile*/, std::string /*dof_type*/,
+            std::string /*filetype*/)
         {
           throw DOpEException("NotImplemented", "WriteToFileCellwise");
         }
@@ -222,6 +223,47 @@ namespace DOpE
             return GetFunctionalValues()[pos];
           }
         }
+
+
+        /**
+         * The user can add his own Domain Data (for example the coefficient
+         * vector of a finite element function). The user has to make sure
+         * that the vector new_data has the appropriate length. This data
+         * is the accessible in the integrator routines.
+         *
+         * @param name      The unique identifier for the data-vector.
+         * @param new_data  The vector one wishes to add.
+         */
+        void AddUserDomainData(std::string name,const VECTOR* new_data)
+        {
+          if (_user_domain_data.find(name) != _user_domain_data.end())
+          {
+            throw DOpEException(
+                "Adding multiple Data with name " + name + " is prohibited!",
+                "ReducedProblemInterface::AddUserDomainData");
+          }
+          _user_domain_data.insert(
+              std::pair<std::string, const VECTOR*>(name, new_data));
+        }
+
+
+        /**
+         * This function allows to delete user-given domain data vectors,
+         * see AddUserDomainData.
+         */
+        void DeleteUserDomainData(
+            std::string name)
+        {
+          typename std::map<std::string, const VECTOR *>::iterator it =
+              _user_domain_data.find(name);
+          if (it == _user_domain_data.end())
+          {
+            throw DOpEException(
+                "Deleting Data " + name + " is impossible! Data not found",
+                "Integrator::DeleteDomainData");
+          }
+          _user_domain_data.erase(it);
+        }
       protected:
         /**
          * Resets the _functional_values to their proper size.
@@ -250,6 +292,12 @@ namespace DOpE
           return _functional_values;
         }
 
+        const std::map<std::string, const VECTOR*>&
+        GetUserDomainData() const
+        {
+          return _user_domain_data;
+        }
+
         /**
          * This has to get implemented in the derived classes
          * like optproblem, pdeproblemcontainer etc.
@@ -272,6 +320,7 @@ namespace DOpE
         DOpEExceptionHandler<VECTOR>* _ExceptionHandler;
         DOpEOutputHandler<VECTOR>* _OutputHandler;
         std::vector<std::vector<double> > _functional_values;
+        std::map<std::string, const VECTOR*> _user_domain_data;
     };
 
   /**
@@ -498,7 +547,6 @@ namespace DOpE
         {
           return _OP;
         }
-
       protected:
         virtual const std::map<std::string, unsigned int>&
         GetFunctionalPosition() const

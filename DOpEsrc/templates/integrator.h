@@ -1382,10 +1382,14 @@ namespace DOpE
 
 #if deal_II_dimension == 2 || deal_II_dimension == 3
 
-        //we want to integrate the face-terms only once
+        // we want to integrate the face-terms only once, so
+        // we store the values on each face in this map
+        // and distribute it at the end to the adjacent cells.
         typename std::map<typename dealii::Triangulation<dim>::face_iterator,std::vector<double> >
         face_integrals;
-        //initialize the map
+        // initialize the map with a big value to make sure
+        // that we take notice if we forget to add a face
+        // during the error estimation process
         auto cell_it = cell[0];
         std::vector<double> face_init(2,-1e20);
         for (; cell_it != endc[0]; cell_it++)

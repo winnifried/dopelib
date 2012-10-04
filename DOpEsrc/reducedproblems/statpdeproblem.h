@@ -66,7 +66,6 @@ namespace DOpE
               ParameterReader &param_reader, INTEGRATORDATACONT& idc,
               int base_priority = 0);
 
-
         /**
          * Constructor for the StatPDEProblem.
          *
@@ -284,6 +283,34 @@ namespace DOpE
         }
 
       private:
+        /**
+         * Helper function to prevent code duplicity. Adds the user defined
+         * user Data to the Integrator.
+         */
+        void
+        AddUDD()
+        {
+          for (auto it = this->GetUserDomainData().begin();
+              it != this->GetUserDomainData().end(); it++)
+          {
+            this->GetIntegrator().AddDomainData(it->first, it->second);
+          }
+        }
+
+        /**
+         * Helper function to prevent code duplicity. Deletes the user defined
+         * user Data from the Integrator.
+         */
+        void
+        DeleteUDD()
+        {
+          for (auto it = this->GetUserDomainData().begin();
+              it != this->GetUserDomainData().end(); it++)
+          {
+            this->GetIntegrator().DeleteDomainData(it->first);
+          }
+        }
+
         StateVector<VECTOR> _u;
         StateVector<VECTOR> _z_for_ee;
 
@@ -475,12 +502,14 @@ namespace DOpE
 
       this->GetIntegrator().AddDomainData("state",
           &(GetU().GetSpacialVector()));
+      AddUDD();
 
       _build_adjoint_matrix =
           this->GetNonlinearSolver("adjoint_for_ee").NonlinearSolve(problem,
               (GetZForEE().GetSpacialVector()), true, _build_adjoint_matrix);
 
       this->GetIntegrator().DeleteDomainData("state");
+      DeleteUDD();
 
       this->GetProblem()->DeleteAuxiliaryFromIntegrator(this->GetIntegrator());
 
@@ -505,6 +534,7 @@ namespace DOpE
 
       this->GetIntegrator().AddDomainData("state",
           &(GetU().GetSpacialVector()));
+      AddUDD();
 
       for (unsigned int i = 0; i < this->GetProblem()->GetNFunctionals(); i++)
       {
@@ -555,6 +585,8 @@ namespace DOpE
       }
 
       this->GetIntegrator().DeleteDomainData("state");
+      DeleteUDD();
+
       this->GetProblem()->DeleteAuxiliaryFromIntegrator(this->GetIntegrator());
 
     }
@@ -594,6 +626,7 @@ namespace DOpE
         if (dwrc.NeedDual())
           this->GetIntegrator().AddDomainData("adjoint_for_ee",
               &(GetZForEE().GetSpacialVector()));
+        AddUDD();
 
         this->SetProblemType("error_evaluation");
 
@@ -647,6 +680,7 @@ namespace DOpE
         this->GetIntegrator().DeleteDomainData("state");
         if (dwrc.NeedDual())
           this->GetIntegrator().DeleteDomainData("adjoint_for_ee");
+        DeleteUDD();
         this->GetProblem()->DeleteAuxiliaryFromIntegrator(
             this->GetIntegrator());
 

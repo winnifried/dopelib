@@ -3675,7 +3675,7 @@ namespace DOpE
         SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DOFHANDLER>::GetBoundaryFunctionalColors() const
     {
       if (this->GetType() == "cost_functional" || this->GetType() == "aux_functional"
-          || this->GetType() == "functional_for_ee")
+          || this->GetType() == "functional_for_ee")//fixme: what about error_evaluation?
       {
         return _boundary_functional_colors;
       }
