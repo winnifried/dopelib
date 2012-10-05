@@ -170,11 +170,11 @@ template <typename INTEGRATOR, typename LINEARSOLVER, typename VECTOR,  int diml
       double firstres = res;
       double lastres = res;
       
-      out<<algo_level + " Newton step: " <<0<<"\t Residual (abs.):  "<< firstres/firstres 
+      out<<algo_level + " Newton step: " <<0<<"\t Residual (abs.):  " <<pde.GetOutputHandler()->ZeroTolerance(res, 1.0)
 	 <<"\n";
 
       out<<algo_level + " Newton step: " <<0<<"\t Residual (rel.): "
-	 <<pde.GetOutputHandler()->ZeroTolerance(res, 1.0);
+	 <<pde.GetOutputHandler()->ZeroTolerance(res/firstres, 1.0);
 
       pde.GetOutputHandler()->Write(out,priority);
       

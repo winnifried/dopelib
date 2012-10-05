@@ -421,8 +421,20 @@ namespace DOpE
   {
     std::stringstream ret;
     ret.precision(_number_precision);
- 
-    if (std::abs(value) <= std::abs(reference_value) * _user_eps_machine)
+    if(std::isnan(std::abs(value)))
+    {
+      std::string pre;
+      pre.resize(_number_precision+5,' ');
+      ret << pre << "NAN";
+    }
+    else if(std::isinf(std::abs(value)))
+    {
+      std::string pre;
+      pre.resize(_number_precision+5,' ');
+      ret << pre << "INF";
+    }   
+    else
+      if (std::abs(value) <= std::abs(reference_value) * _user_eps_machine)
       ret << "< " << std::setfill(' ') << std::setw(_number_precision+6) <<  std::scientific << _user_eps_machine;
     else 
       ret << " " << std::setfill(' ') << std::setw(_number_precision+7) << std::scientific << value; 
