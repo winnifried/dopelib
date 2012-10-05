@@ -226,13 +226,11 @@ the deal.II software:
   #include "pdeproblemcontainer.h" etc. ...
 \end{lstlisting}
 In the \texttt{main} function, the following steps need to be done. First, 
-the parameter reader for runtime parameters is initialized:
-\begin{lstlisting}
-  ParameterReader pr;
-  SSolver::declare_params(pr);
-  DOpEOutputHandler<VECTOR>::declare_params(pr);
-  pr.read_parameters(paramfile);
-\end{lstlisting}
+the parameter reader for runtime parameters might be initialized. In a parameter
+file the user might specifiy material paramters for the concrete PDE, but also
+general parameters for nonlinear and linear solvers, and output-related 
+aspects.
+
 A linear finite element in two dimensions and two components is 
 initialized:
 \begin{lstlisting}
@@ -264,8 +262,7 @@ Then, the spatial mesh (here the unit square) is created and three-times globall
 A major component which organizes the whole solution process (independent from 
 the problem!) is the 
 \begin{lstlisting}
-  MethodOfLines_StateSpaceTimeHandler<FE, DOFHANDLER, 
-    SPARSITYPATTERN, VECTOR, 2> DOFH(triangulation, state_fe);
+  MethodOfLines_StateSpaceTimeHandler<...> DOFH (...);
 \end{lstlisting}
 This method handles all dofs in space and time and different versions exist
 for forward as well as optimization problems.
@@ -303,9 +300,11 @@ Finally, the programm is started with:
   out.Write(outp, 1, 1, 1);
   solver.ComputeReducedFunctionals();
 \end{lstlisting}
-After explaining the basic compononents that are necessary for all  
-(linear and stationary) partial differential equations, we shall give 
+After explaining the basic compononents that are necessary (and always the same in DOpElib) 
+for all  (linear and stationary) partial differential equations, we shall give 
 an overview to the implementation of the specific form of the PDE. 
+Beside specification of boundary conditions, the form of the local PDE depends 
+on the concrete problem under consideration. 
 This step is done in the \texttt{localpde.h} file. As already explained,
 each PDE is treatet in a nonlinear manner such that for solving 
 the Laplace problem the following nonlinear step is necessary to recapitulate:
@@ -357,7 +356,20 @@ Specifically,
 \end{lstlisting}
 The integration of the equation for each DoF and each quadrature point on each
 cell is then done 
-in the \texttt{templates/integrator.h} function. 
+in the \texttt{templates/integrator.h} function. Finally, as usually in 
+finite element computations, this leads to a discrete system. Since
+we treat each problem with a Newton method, within each Newton step, the 
+following linear system must be solved:
+\[
+A\delta u = b
+\]
+in which $A$ is specified by \texttt{CellMatrix(...)} and 
+$b$ by \texttt{CellEquation(...)}. The vector $\delta u$ denotes the solution to the 
+present Newton step:
+\[
+u^n = u^{n-1} + \omega \delta u
+\]
+with a line search parameter $\omega\in (0,1]$.
 
 
 The target functional 
@@ -472,7 +484,8 @@ fixed number of parameters, $a$ and $b$ are constraint bounds for the control $q
 and $g(\cdot)$ is some state constraint.
 As before, the main part is done in the \texttt{main} function there is no
 great difference to the previous explications. However, 
-since we utilize gradient-based optimization routines \cite{...},
+since we utilize gradient-based optimization routines in the philosophy of
+\cite{Troe99,HiKu01},
 all derivatives must be implemented. All this information
 must given to the \texttt{localpde.h} file. Herein, one has to 
 implement the adjoint, tangent and adjoint Hession equations. 
@@ -507,9 +520,8 @@ x_0 = (0.5, 0.5), \quad x_1 = (0.5, 0.25),\quad x_2 = (0.25, 0.25),
 \end{itemize}
 \begin{defi}[Constrained optimization]
 \label{problem_constraint_optimization}
-Minimize the cost functional $J(q,U)$ subject to the state equation
-$A(q,U)(\Phi) = 0$ (as defined
-in~\eqref{state_form} and~\eqref{opt_state_equation}) for $(q,U) \in 
+Minimize the cost functional $J(q,u)$ subject to the state equation
+$a(q,u)(\phi) = 0$ for $(q,u) \in 
 Q\times  \{v_D+{\cal X}\}$. 
 \end{defi}
 %
@@ -525,6 +537,14 @@ $j:Q_d\rightarrow \mathbb{R}$ by
   j(q) := J(q,S(q)) .
 \end{equation}
 %
+Thus, the constrained optimization problem can be formulated by means
+of  
+%
+\begin{defi}[Unconstrained optimization]
+  \label{opt_reduced_problem}
+  Minimize $j(q)$ for $q\in Q_d$.
+\end{defi}
+%
 Newton's method to solve Problem~\ref{opt_reduced_problem} reads:
 For $l=0,1,\ldots,$ solve
 \begin{equation}
@@ -536,25 +556,25 @@ q^{l+1} &= q^l + \omega\delta q,
 \end{aligned} 
 \end{equation}
 with a line search parameter $\omega\in (0,1]$ which 
-will be specified in Algorithm \ref{algo_opt}.
+will are implemented in \texttt{reducednewtonalgorithm.h}.
 Specifically, the residual and the Hessian of Newton's method 
 \eqref{opt_newton_method}
 can be computed with the help of the following two results:
 \begin{proposition}[Residual of Newton's method]
 \label{prop_newton_residual}
-Let $q\in Q_d, U=S(q)\in {\cal X}$
-and $Z\in {\cal X}$ the dual solution be obtained after solving 
+Let $q\in Q_d, u=S(q)\in {\cal X}$
+and $z\in {\cal X}$ the dual solution be obtained after solving 
 the first and second equation of the KKT system 
 \eqref{opt_KKT_system}. 
 Then the residual of Newton's method \eqref{opt_newton_method} 
 is defined as
 \begin{equation*}
-j'(q)(\delta q) := {\cal L}'_{q}(q,U,Z)(\delta q),
+j'(q)(\delta q) := {\cal L}'_{q}(q,u,z)(\delta q),
 \end{equation*}
 i.e., in explicit representation
 \begin{equation*}
 j'(q)(\delta q) := \alpha_T (q , \tau q)_Q - 
-A_{q}'(q,U)(\tau q , Z).
+A_{q}'(q,u)(\tau q , z).
 \end{equation*}
 \end{proposition}
 \begin{proof}
@@ -563,31 +583,31 @@ The proof uses standard techniques. Details can be found in
 \end{proof}
 \begin{proposition}[Hessian of Newton's method]
   \label{prop_newton_hessian}
-  Let $q\in Q_d, U=S(q)\in {\cal X}$ and $Z\in {\cal X}$ and  $\delta
-  q\in Q_d$ be given. Further, let $\delta U\in {\cal X}$ be the
+  Let $q\in Q_d, u=S(q)\in {\cal X}$ and $z\in {\cal X}$ and  $\delta
+  q\in Q_d$ be given. Further, let $\delta u\in {\cal X}$ be the
   solution of the tangent problem 
   \[
-  \delta U\in{\cal X},\quad 
-  A_{U}'(q,U)(\delta U , \Phi) 
-  = -A_{q}'(q,U)(\delta q , \Phi)  \quad\forall \Phi\in {\cal
+  \delta u\in{\cal X},\quad 
+  a_{u}'(q,u)(\delta u , \phi) 
+  = -a_{q}'(q,u)(\delta q , \phi)  \quad\forall \phi\in {\cal
     X},
   \]
-  and $\delta Z\in {\cal X}$ the solution of the adjoint Hessian 
+  and $\delta z\in {\cal X}$ the solution of the adjoint Hessian 
   problem  
   \[
-  A_{U}'(q,U)(\Phi, \delta Z)
-  = J''_{UU}(q,U)(\delta U, \Phi)
-  - A_{UU}''(q,U)(\delta U, \Phi, Z)
-  - A_{qU}''(q,U)(\delta q , \Phi, Z)  \quad\forall \Phi\in
+  a_{u}'(q,u)(\phi, \delta z)
+  = J''_{uu}(q,u)(\delta u, \phi)
+  - a_{uu}''(q,u)(\delta u, \phi, z)
+  - a_{qu}''(q,u)(\delta q , \phi, z)  \quad\forall \phi\in
   {\cal X}. 
   \]
  Then it holds  for all $\tau q\in Q_d$:
   \[
   j''(q)(\delta q, \tau q):= 
   \alpha_T (\delta q , \tau q)_Q -
-  A_{qq}''(q, U)(\delta q, \tau q , Z) -
-  A_{Uq}''(q,U)(\delta U, \tau q , Z) -
-  A_{q}'(q,U)(\tau q , \delta Z).
+  a_{qq}''(q, u)(\delta q, \tau q , z) -
+  a_{uq}''(q,u)(\delta u, \tau q , z) -
+  a_{q}'(q,u)(\tau q , \delta z).
   \]
 \end{proposition}
 \begin{proof}
@@ -602,7 +622,7 @@ As an example, we examine the adjoint
 \begin{equation}
   \label{opt_KKT_system}
   \begin{aligned}
-    A_{U}'(q,U)(\Phi , Z) &= J'_{U}(q,U)(\Phi) & \forall \Phi&\in {\cal X},
+    a_{u}'(q,u)(\phi , z) &= J'_{u}(q,u)(\phi) & \forall \phi&\in {\cal X},
   \end{aligned}
 \end{equation}
 
@@ -872,9 +892,27 @@ are satisfied in each time step. This is achieved with the help of
 a monolithic coupling scheme (strong coupling).
 
 The configuration is 
-sketched in Figure \ref{configuration_csm_and_fsi_2D}. Details 
+sketched in Figure \ref{configuration_csm_and_fsi_2D}. 
+The computational domain has length $L=2.5m$ and height $H=0.41m$. The circle center
+is positioned at $C=(0.2m,0.2m)$ with radius $r=0.05m$. The elastic beam has length
+$l=0.35m$ and height $h=0.02m$. The right lower end is positioned at 
+$(0.6m,0.19m)$, and
+the left end is attached to the circle. 
+
+\begin{figure}[h]
+\centering
+\input{Pictures/pic_12}
+\caption{Flow around cylinder with elastic beam with 
+circle-center $C=(0.2,0.2)$ and radius $r=0.05$.}
+\label{configuration_csm_and_fsi_2D}
+\end{figure}
+
+Control points $A(t)$ (with $A(0) = (0.6,0.2)$) are fixed at the 
+trailing edge of the structure, measuring $x$- and $y$-deflections of the beam.
+
+Details 
 on parameters and evaluation functionals and other results 
-can be found in \cite{HrTu06b, BuSc06, TuHrMaRaWoAc10, DeHaeAnnBrVie10, Wi11}. 
+can be found in \cite{HrTu06b,BuSc06,DeHaeAnnBrVie10,Wi11}. 
 The Fractional-Step-$\theta$ scheme is used for time discretization with
 different time step sizes $k$. However, the time stepping scheme can be 
 very easily chosen in the \texttt{main.cc} function by declaring
