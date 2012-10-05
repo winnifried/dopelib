@@ -223,7 +223,7 @@ Each of those routines are written in the \texttt{main.cc} file.
 We start by including necessary files both the DOpElib library and
 the deal.II software:
 \begin{lstlisting}
-#include "pdeproblemcontainer.h" etc. ...
+  #include "pdeproblemcontainer.h" etc. ...
 \end{lstlisting}
 In the \texttt{main} function, the following steps need to be done. First, 
 the parameter reader for runtime parameters is initialized:
@@ -264,8 +264,8 @@ Then, the spatial mesh (here the unit square) is created and three-times globall
 A major component which organizes the whole solution process (independent from 
 the problem!) is the 
 \begin{lstlisting}
-MethodOfLines_StateSpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR, 2> DOFH(
-      triangulation, state_fe);
+  MethodOfLines_StateSpaceTimeHandler<FE, DOFHANDLER, 
+    SPARSITYPATTERN, VECTOR, 2> DOFH(triangulation, state_fe);
 \end{lstlisting}
 This method handles all dofs in space and time and different versions exist
 for forward as well as optimization problems.
@@ -298,11 +298,10 @@ Finally, the ouput handler is initialized via
 \end{lstlisting}
 Finally, the programm is started with:
 \begin{lstlisting}
-      solver.ReInit();
-      out.ReInit();
-      out.Write(outp, 1, 1, 1);
-
-      solver.ComputeReducedFunctionals();
+  solver.ReInit();
+  out.ReInit();
+  out.Write(outp, 1, 1, 1);
+  solver.ComputeReducedFunctionals();
 \end{lstlisting}
 After explaining the basic compononents that are necessary for all  
 (linear and stationary) partial differential equations, we shall give 
@@ -317,67 +316,65 @@ Find $\delta u\in V$:
 and $u^{n+1} = u^n + \delta u$ for $n=1,2,3,ldots$.
 Therefore, the implementation reads for the right hand side:
 \begin{lstlisting}
-    void CellEquation(const CellDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& cdc,
-                      dealii::Vector<double> &local_cell_vector,
-                      double scale, double)
+   void CellEquation(...)
     {
       // implement (\nabla u, \nabla \phi) 
     }
 \end{lstlisting}
-Specifically,
+Specifically, the inner loops reads
 \begin{lstlisting}
-      for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
+   for (all quadrature points per cell q)
       {
-        Tensor<2, 2> ugrads;
-        ugrads.clear();
-        ugrads[0][0] = _ugrads[q_point][0][0];
-        ugrads[0][1] = _ugrads[q_point][0][1];
-        ugrads[1][0] = _ugrads[q_point][1][0];
-        ugrads[1][1] = _ugrads[q_point][1][1];
-
-	for (unsigned int i = 0; i < n_dofs_per_cell; i++)
+        Tensor<2, 2> ugrads; // solution vector
+ 
+	for (all dofs per cell i)
         {
-	  const Tensor<2, 2> phi_i_grads_u = state_fe_values[displacements].gradient(i, q_point);
+	  const Tensor<2, 2> phi_i_grads_u; // test function
 
-          local_cell_vector(i) += scale * scalar_product(ugrads, phi_i_grads_u) 
-	    * state_fe_values.JxW(q_point);
+          local_cell_vector(i) += scale * 
+            scalar_product(ugrads, phi_i_grads_u) *
+	    state_fe_values.JxW(q_point);
         }
       }
 \end{lstlisting}
 For the left hand side, we need to implement the Jacobian matrix:
 \begin{lstlisting}
-    void CellMatrix(const CellDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& cdc, FullMatrix<double> &local_entry_matrix, double, double)
+   void CellMatrix(...)
     {
-// implement  (\nabla \delta u, \nabla \phi)
-}
+      // implement  (\nabla \delta u, \nabla \phi)
+    }
 \end{lstlisting}
 Specifically,
 \begin{lstlisting}
-      for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
-      {
-        for (unsigned int k = 0; k < n_dofs_per_cell; k++)
-        {
-          phi_grads_u[k] = state_fe_values[displacements].gradient(k, q_point);
-        }
-
-        for (unsigned int i = 0; i < n_dofs_per_cell; i++)
-        {
-          for (unsigned int j = 0; j < n_dofs_per_cell; j++)
+      for (all quadrature points per cell q)      
+        for (all dofs per cell i)    
+          for (all dofs per cell j)
           {
-            local_entry_matrix(i, j) += scalar_product(phi_grads_u[j], phi_grads_u[i]) 
-                * state_fe_values.JxW(q_point);
+            local_entry_matrix(i, j) += 
+              scalar_product(phi_grads_u[j], phi_grads_u[i]) * 
+              state_fe_values.JxW(q_point);
           }
-        }
-      }
 \end{lstlisting}
 The integration of the equation for each DoF and each quadrature point on each
 cell is then done 
 in the \texttt{templates/integrator.h} function. 
 
 
-The cost functional is now implemented in \todo{hier morgen weiter machen}
+The target functional 
+is now implemented in \texttt{functional.h} and 
+treats a point evaluation:
+\begin{lstlisting}
+  double PointValue(...)
+   {
+    Point<2> p1(0.5, 0.5);
+    Vector<double> tmp_vector(2);
+    // more stuff is necessary here
+    VectorTools::point_value (...);
+    double x = tmp_vector(0);
 
-
+    return x;
+   }
+\end{lstlisting}
 
 
 
@@ -422,44 +419,40 @@ the diffusion is implemented as before. The only thing we add
 is the time-depdendent part $\partial_t u$:
 
 \begin{lstlisting}
- void CellTimeEquation(const CellDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& cdc,
-                           dealii::Vector<double> &local_cell_vector __attribute__((unused)),
-		       double scale __attribute__((unused)))
-    {
-// implement (u^{n+1},\phi) 
-}
+  void CellTimeEquation(...)
+   {
+     // implement (u^{n+1},\phi) 
+   }
 \end{lstlisting}
 and it is done in a straight-forward way:
 \begin{lstlisting}
- for (unsigned int q_point=0;q_point<n_q_points;q_point++)
-	{
-	  Tensor<1,2> v;
-	  u[0] = _uvalues[q_point](0);
-	  u[1] = _uvalues[q_point](1);
+  for (all quadrature points per cell q)
+   {
+     Tensor<1,2> u = ...;
 
-	  for (unsigned int i=0;i<n_dofs_per_cell;i++)
-	    {
-	      const Tensor<1,2> phi_i_u = state_fe_values.value (i, q_point);
+     for (all dofs per cell i)
+      {
+        const Tensor<1,2> phi_i_u = ...;
 
-	      local_cell_vector(i) +=  scale * (u * phi_i_u) * state_fe_values.JxW(q_point);
-	    }
-	}
+        local_cell_vector(i) +=  
+          scale * (u * phi_i_u) * 
+          state_fe_values.JxW(q_point);
+      }
+   }
 \end{lstlisting}
 Here, the advantage is that DOpElib orders the terms in the timestepping
 problems
 such that only $(u^{n+1},\phi)$ must be implemented. However, if someone 
 needs explicit input of the old timestep term, then he can use 
 \begin{lstlisting}
- void CellTimeEquationExplicit (const CellDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& cdc,
-                           dealii::Vector<double> &local_cell_vector,
-				   double scale)
-    {
-      // implement (u^{n+1},\phi) and (u^n,\phi)  
-    }
-    \end{lstlisting}
-    For instance, this explicit term is used for fluid-structure interaction in
-    which
-    the old timestep term needs explicit modification.   
+  void CellTimeEquationExplicit (...)
+   {
+     // implement (u^{n+1},\phi) and (u^n,\phi)  
+   }
+\end{lstlisting}
+For instance, this explicit term is used for fluid-structure interaction in
+which
+the old timestep term needs explicit modification.   
 
 
 
@@ -485,14 +478,179 @@ must given to the \texttt{localpde.h} file. Herein, one has to
 implement the adjoint, tangent and adjoint Hession equations. 
 The algorithmic parts are described in the literature \cite{BeMeVe06}.
 
-Concretely, let us focus on the Laplace equation and ...
+Concretely, let us focus on the Laplace equation and 
+the following optimization problem (taken from 
+Example 2) in \texttt{Examples/OPT/StatPDE}:
+\begin{align*}
+\min_{(q,u)\in \mathbb R^3 \times H_0^1(\Omega; \mathbb R^2)} J(q,u) &=
+\frac{1}{2} \sum_{i=0}^2 |(u-\overline u)(x_i)|^2 + \frac{\alpha}{2}\|q\|^2\\
+\text{s.t.} (\nabla u,\nabla \phi) &= (f(q),\phi)\;\;\forall\,\phi \in H^1_0(\Omega; \mathbb R^2)
+\end{align*}
+on the domain $\Omega = [0,1]^2$, with
+\begin{itemize}
+\item the observation points
+\begin{align*}
+x_0 = (0.5, 0.5), \quad x_1 = (0.5, 0.25),\quad x_2 = (0.25, 0.25),
+\end{align*}
+\item the regularization parameter $\alpha = 0$, 
+\item the right hand side
+\begin{align*}
+ f(q) &= q_0 \left(\begin{matrix}2\pi^2  \sin( \pi x) \sin(\pi y)\\0 \end{matrix}\right)\\
+      &+ q_1 \left(\begin{matrix}5\pi^2  \sin( \pi x) \sin(2\pi y)\\0 \end{matrix}\right)\\
+      &+ q_2 \left(\begin{matrix}0 \\8\pi^2  \sin(2\pi x) \sin(2\pi y)\end{matrix}\right)\\
+\end{align*}
+\item and the exact solution given by 
+\begin{align*}
+ \overline{q} &= \bigl(1;0.5;1\bigr)\\
+ \overline{u}& = \left(\begin{matrix} \sin( \pi x)( \sin(\pi y)+0.5\sin(2\pi y))\\\sin(2\pi x) \sin(2\pi y) \end{matrix}\right).
+\end{align*}
+\end{itemize}
+\begin{defi}[Constrained optimization]
+\label{problem_constraint_optimization}
+Minimize the cost functional $J(q,U)$ subject to the state equation
+$A(q,U)(\Phi) = 0$ (as defined
+in~\eqref{state_form} and~\eqref{opt_state_equation}) for $(q,U) \in 
+Q\times  \{v_D+{\cal X}\}$. 
+\end{defi}
+%
+The constrained optimization problem  on the space $Q_d\times {\cal X}$ 
+is reformulated into an unconstrained optimization problem on the
+space $Q_d$. Therefore, we assume the existence of the solution operator  
+$S:Q_d\rightarrow {v_D+{\cal X}}$ with a unique solution
+$U=S(q)$. Herewith, we define the reduced cost functional
+$j:Q_d\rightarrow \mathbb{R}$ by 
+%
+\begin{equation}
+  \label{opt_reduced_functional}
+  j(q) := J(q,S(q)) .
+\end{equation}
+%
+Newton's method to solve Problem~\ref{opt_reduced_problem} reads:
+For $l=0,1,\ldots,$ solve
+\begin{equation}
+\label{opt_newton_method}
+\begin{aligned}
+j''(q^l)(\delta q , \tau q) &= -j'(q^l)(\delta q) 
+\quad\forall\tau q\in Q_d, \\
+q^{l+1} &= q^l + \omega\delta q,
+\end{aligned} 
+\end{equation}
+with a line search parameter $\omega\in (0,1]$ which 
+will be specified in Algorithm \ref{algo_opt}.
+Specifically, the residual and the Hessian of Newton's method 
+\eqref{opt_newton_method}
+can be computed with the help of the following two results:
+\begin{proposition}[Residual of Newton's method]
+\label{prop_newton_residual}
+Let $q\in Q_d, U=S(q)\in {\cal X}$
+and $Z\in {\cal X}$ the dual solution be obtained after solving 
+the first and second equation of the KKT system 
+\eqref{opt_KKT_system}. 
+Then the residual of Newton's method \eqref{opt_newton_method} 
+is defined as
+\begin{equation*}
+j'(q)(\delta q) := {\cal L}'_{q}(q,U,Z)(\delta q),
+\end{equation*}
+i.e., in explicit representation
+\begin{equation*}
+j'(q)(\delta q) := \alpha_T (q , \tau q)_Q - 
+A_{q}'(q,U)(\tau q , Z).
+\end{equation*}
+\end{proposition}
+\begin{proof}
+The proof uses standard techniques. Details can be found in  
+\cite{BeMeVe06}.
+\end{proof}
+\begin{proposition}[Hessian of Newton's method]
+  \label{prop_newton_hessian}
+  Let $q\in Q_d, U=S(q)\in {\cal X}$ and $Z\in {\cal X}$ and  $\delta
+  q\in Q_d$ be given. Further, let $\delta U\in {\cal X}$ be the
+  solution of the tangent problem 
+  \[
+  \delta U\in{\cal X},\quad 
+  A_{U}'(q,U)(\delta U , \Phi) 
+  = -A_{q}'(q,U)(\delta q , \Phi)  \quad\forall \Phi\in {\cal
+    X},
+  \]
+  and $\delta Z\in {\cal X}$ the solution of the adjoint Hessian 
+  problem  
+  \[
+  A_{U}'(q,U)(\Phi, \delta Z)
+  = J''_{UU}(q,U)(\delta U, \Phi)
+  - A_{UU}''(q,U)(\delta U, \Phi, Z)
+  - A_{qU}''(q,U)(\delta q , \Phi, Z)  \quad\forall \Phi\in
+  {\cal X}. 
+  \]
+ Then it holds  for all $\tau q\in Q_d$:
+  \[
+  j''(q)(\delta q, \tau q):= 
+  \alpha_T (\delta q , \tau q)_Q -
+  A_{qq}''(q, U)(\delta q, \tau q , Z) -
+  A_{Uq}''(q,U)(\delta U, \tau q , Z) -
+  A_{q}'(q,U)(\tau q , \delta Z).
+  \]
+\end{proposition}
+\begin{proof}
+  For the proof this statement (including its time-dependent version), we refer to 
+  Becker et al. \cite{BeMeVe06}.
+  The stationary version of this proposition is easily derived by neglecting 
+  all time derivatives, which concludes the assertion. 
+\end{proof}
+The implementation of all previous terms 
+is realized in the \texttt{localpde.h} file.
+As an example, we examine the adjoint 
+\begin{equation}
+  \label{opt_KKT_system}
+  \begin{aligned}
+    A_{U}'(q,U)(\Phi , Z) &= J'_{U}(q,U)(\Phi) & \forall \Phi&\in {\cal X},
+  \end{aligned}
+\end{equation}
 
-this is taken from step-2 in the Opt examples.
+The implementation it split into equation terms, i.e., 
+\begin{lstlisting} 
+  void CellEquation_U(...)
+   {
+     // implement (\nabla \phi, \nabla z)
+   }
+\end{lstlisting}
+and functional terms, i.e.,     
+\begin{lstlisting} 
+  virtual void PointValue_U(...)
+      {
+        // implement here the derivative of 
+        // the point cost functional
+      }
+\end{lstlisting}
+All remaining terms of the previous two propositions 
+are implemented in the same manner.
 
-\todo{Optimality system}
-
-\todo{Two problems in which we identify the different terms and implementation 
-of these terms in DOpE}
+Afterwards, it remains to use an appropriate 
+optimization algorithm in order to solve the 
+problem. At present we offer a selection of algorithms that solve the reduced optimization 
+problem where the PDE constraint has been eliminated as explained previously.
+\begin{itemize}
+\item \texttt{opt\underline{ }algorithms/reducedalgorithm.h} An interface for all 
+  optimization problems in the reduced formulation. It offers some test functionality
+  to assert that the derivatives of the problem are computed correctly.
+\item \texttt{opt\underline{ }algorithms/reducednewtonalgorithm.h}
+  A line-search Newton algorithm using a cg method to invert the reduced hessian. 
+  Implementation ignores any additional constraints.
+\item \texttt{opt\underline{ }algorithms/reducedtrustregionnewton.h}
+  A trust region Newton algorithm using a cg method to invert the reduced hessian.
+  Implementation ignores any additional constraints.
+\item \texttt{opt\underline{ }algorithms/reduced\underline{ }snopt\underline{ }algorithm.h}
+  An algorithm to solve reduced optimization problems with additional control constraints.
+  ((reduced) state constraints are not yet implemented.)
+\item \texttt{opt\underline{ }algorithms/reducednewtonalgorithmwithinverse.h}
+  Line-search Newton algorithm that assumes there exists a method in the reduced problem
+  that can invert the reduced hessian. (This usually makes sense only if there is no 
+  PDE constraint.)
+\item \texttt{opt\underline{ }algorithms/generalized\underline{ }mma\underline{ }algorithm.h}
+  An implementation of the MMA-Algorithm for structural optimization using an augmented
+  Lagrangian formulation for the subproblems. The subproblem is implemented using the 
+  special purpose file
+  \texttt{include/augmentedlagrangianproblem.h}.
+\end{itemize} 
 
 
 
@@ -643,33 +801,10 @@ and the Fractional-Step-$\Theta$ scheme, are implemented.
 %  solve problems that have no PDE constraint.
 %\end{itemize}
 %
-%\subsection{Optimization algorithms}
-%Now, in order to solve optimization algorithms we need to define some algorithms.
-%At present we offer a selection of algorithms that solve the reduced optimization 
-%problem where the PDE constraint has been eliminated as explained in the previous section.
-%\begin{itemize}
-%\item \texttt{opt\underline{ }algorithms/reducedalgorithm.h} An interface for all 
-%  optimization problems in the reduced formulation. It offers some test functionality
-%  to assert that the derivatives of the problem are computed correctly.
-%\item \texttt{opt\underline{ }algorithms/reducednewtonalgorithm.h}
-%  A line-search Newton algorithm using a cg method to invert the reduced hessian. 
-%  Implementation ignores any additional constraints.
-%\item \texttt{opt\underline{ }algorithms/reducedtrustregionnewton.h}
-%  A trust region Newton algorithm using a cg method to invert the reduced hessian.
-%  Implementation ignores any additional constraints.
-%\item \texttt{opt\underline{ }algorithms/reduced\underline{ }snopt\underline{ }algorithm.h}
-%  An algorithm to solve reduced optimization problems with additional control constraints.
-%  ((reduced) state constraints are not yet implemented.)
-%\item \texttt{opt\underline{ }algorithms/reducednewtonalgorithmwithinverse.h}
-%  Line-search Newton algorithm that assumes there exists a method in the reduced problem
-%  that can invert the reduced hessian. (This usually makes sense only if there is no 
-%  PDE constraint.)
-%\item \texttt{opt\underline{ }algorithms/generalized\underline{ }mma\underline{ }algorithm.h}
-%  An implementation of the MMA-Algorithm for structural optimization using an augmented
-%  Lagrangian formulation for the subproblems. The subproblem is implemented using the 
-%  special purpose file
-%  \texttt{include/augmentedlagrangianproblem.h}.
-%\end{itemize} 
+
+
+
+
 %
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -750,7 +885,9 @@ very easily chosen in the \texttt{main.cc} function by declaring
 #define TSP4 ShiftedCrankNicolsonProblem
 #define TSP5 FractionalStepThetaProblem
 \end{lstlisting}
-and then using the designated scheme.
+and then using in the code the designated scheme, 
+for example here the Fractional-Step-$\theta$ scheme
+\texttt{TSP5}.
 
 
 
