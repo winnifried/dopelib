@@ -51,8 +51,6 @@ Treffen (Sep 19, 2012)
   Vorschlag TW: dope@ganymed... und dope-dev@ganymed
   wir haben nun einige neue Mitglieder: wer soll E-Mails
   bekommen und wer nicht.
-- Es gibt immer noch Diskrepanzen bei einigen Tests, da -nan und nan nicht
-  unterschiedlich betrachtet werden.
 - Funktionalauswertung in Opt-Problemen abhängig vom Typ machen: zur 
   Zeit werden die Ableitungen der Funktionale (sobald diese 
   in localfunctional.cc implementiert sind) IMMER ausgewertet.
@@ -90,16 +88,6 @@ einheitlich (!) kommentiert.
   -- domain
   -- wie komme ich an DOpE?? Mail an dopelib@...
   -- How to cite...
-
-- Technical Report (Basierend auf Doku) ~tw
-  -- Goal of Software
-  -- Aufbau
-  -- Features!
-  -- Beispiele:
-	FSI instat
-	Compliance minimization
-	DWR NS channel (muss noch gerechnet werden)
-	Beispiel mit verschiedenen BC: Einstroemung, Periodisch, Pressure Driven
 
 - PeriodicDoFConstraintMaker in Lib
 

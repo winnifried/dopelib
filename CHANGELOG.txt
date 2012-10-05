@@ -1,5 +1,6 @@
 Changelog DOpE
 ==============
+05.10.2012: Output handler now checks for nan and -nan values to assert that only nan is written in any case.
 22.08.2012: OptProblemContainer and PDEProblemContainer now only evaluate Functionals
 	    appearing in *Rhs if the type is required by the functional
 12.07.2012: -Time stepping schemes rescaled. They now correspond to the scaling one 
