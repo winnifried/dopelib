@@ -705,8 +705,6 @@ and the Fractional-Step-$\Theta$ scheme, are implemented.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Applications}
 \label{applications}
-\todo{In den Beispielen in Pseudo code evtl. zeigen, was der 
-Nutzer aendern kann.}
 We present three numerical tests which demonstrate different
 features of DOpElib:
 \begin{itemize}
@@ -743,7 +741,22 @@ sketched in Figure \ref{configuration_csm_and_fsi_2D}. Details
 on parameters and evaluation functionals and other results 
 can be found in \cite{HrTu06b, BuSc06, TuHrMaRaWoAc10, DeHaeAnnBrVie10, Wi11}. 
 The Fractional-Step-$\theta$ scheme is used for time discretization with
-different time step sizes $k$. Since the problem is fully nonstationary, the 
+different time step sizes $k$. However, the time stepping scheme can be 
+very easily chosen in the \texttt{main.cc} function by declaring
+\begin{lstlisting}
+#define TSP1 ForwardEulerProblem
+#define TSP2 BackwardEulerProblem
+#define TSP3 CrankNicolsonProblem
+#define TSP4 ShiftedCrankNicolsonProblem
+#define TSP5 FractionalStepThetaProblem
+\end{lstlisting}
+and then using the designated scheme.
+
+
+
+
+
+Since the problem is fully nonstationary, the 
 dynamics are presents in Figure \ref{res:fsi_2_mesh_and_x_velo}. 
 By comparison of our findings in Figure \ref{res:results_ux_and_uy_fsi_2}
 with the literature, it can be identified that 
