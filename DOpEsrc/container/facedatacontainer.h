@@ -88,7 +88,8 @@ namespace DOpE
               bool need_neighbour)
               : fdcinternal::FaceDataContainerInternal<VECTOR, dim>(
                   param_values, domain_values, need_neighbour), _cell(cell), _state_fe_values(
-                  (sth.GetFESystem("state")), quad, update_flags), _control_fe_values(
+                  sth.GetMapping(), (sth.GetFESystem("state")), quad,
+                  update_flags), _control_fe_values(sth.GetMapping(),
                   (sth.GetFESystem("control")), quad, update_flags)
           {
             _state_index = sth.GetStateIndex();
@@ -100,9 +101,10 @@ namespace DOpE
             if (need_neighbour) //so we need FEFAcevalues etc. for the neighbour too.
             {
               _nbr_control_fe_values = new DOpEWrapper::FEFaceValues<dim>(
-                  (sth.GetFESystem("control")), quad, update_flags);
+                  sth.GetMapping(), (sth.GetFESystem("control")), quad,
+                  update_flags);
               _control_fe_subface_values =
-                  new DOpEWrapper::FESubfaceValues<dim>(
+                  new DOpEWrapper::FESubfaceValues<dim>(sth.GetMapping(),
                       (sth.GetFESystem("control")), quad, update_flags);
             }
             this->PrivateConstructor(quad, update_flags, sth, need_neighbour);
@@ -137,7 +139,8 @@ namespace DOpE
               bool need_neighbour)
               : fdcinternal::FaceDataContainerInternal<VECTOR, dim>(
                   param_values, domain_values, need_neighbour), _cell(cell), _state_fe_values(
-                  (sth.GetFESystem("state")), quad, update_flags), _control_fe_values(
+                  sth.GetMapping(), (sth.GetFESystem("state")), quad,
+                  update_flags), _control_fe_values(sth.GetMapping(),
                   (sth.GetFESystem("state")), quad, update_flags)
           {
             _state_index = sth.GetStateIndex();
@@ -148,9 +151,10 @@ namespace DOpE
             if (need_neighbour) //so we need FEFAcevalues for the neighbour too.
             {
               _nbr_control_fe_values = new DOpEWrapper::FEFaceValues<dim>(
-                  (sth.GetFESystem("state")), quad, update_flags);
+                  sth.GetMapping(), (sth.GetFESystem("state")), quad,
+                  update_flags);
               _control_fe_subface_values =
-                  new DOpEWrapper::FESubfaceValues<dim>(
+                  new DOpEWrapper::FESubfaceValues<dim>(sth.GetMapping(),
                       (sth.GetFESystem("state")), quad, update_flags);
             }
             this->PrivateConstructor(quad, update_flags, sth, need_neighbour);
@@ -362,9 +366,10 @@ namespace DOpE
             if (need_neighbour) //so we need FEFAcevalues for the neighbour too.
             {
               _nbr_control_hp_fe_values = new DOpEWrapper::HpFEFaceValues<dim>(
-                  (sth.GetFESystem("control")), q_collection, update_flags);
+                  sth.GetMapping(), (sth.GetFESystem("control")), q_collection,
+                  update_flags);
               _control_hp_fe_subface_values =
-                  new DOpEWrapper::HpFESubfaceValues<dim>(
+                  new DOpEWrapper::HpFESubfaceValues<dim>(sth.GetMapping(),
                       (sth.GetFESystem("control")), q_collection, update_flags);
 
             }
@@ -417,9 +422,10 @@ namespace DOpE
             if (need_neighbour)
             {
               _nbr_control_hp_fe_values = new DOpEWrapper::HpFEFaceValues<dim>(
-                  (sth.GetFESystem("state")), q_collection, update_flags);
+                  sth.GetMapping(), (sth.GetFESystem("state")), q_collection,
+                  update_flags);
               _control_hp_fe_subface_values =
-                  new DOpEWrapper::HpFESubfaceValues<dim>(
+                  new DOpEWrapper::HpFESubfaceValues<dim>(sth.GetMapping(),
                       (sth.GetFESystem("state")), q_collection, update_flags);
             }
 
@@ -537,9 +543,11 @@ namespace DOpE
             if (need_neighbour) //so we need FEFAcevalues for the neighbour too.
             {
               _nbr_state_hp_fe_values = new DOpEWrapper::HpFEFaceValues<dim>(
-                  (sth.GetFESystem("state")), q_collection, update_flags);
+                  sth.GetMapping(), (sth.GetFESystem("state")), q_collection,
+                  update_flags);
               _state_hp_fe_subface_values = new DOpEWrapper::HpFESubfaceValues<
-                  dim>((sth.GetFESystem("state")), q_collection, update_flags);
+                  dim>(sth.GetMapping(), (sth.GetFESystem("state")),
+                  q_collection, update_flags);
 
             }
             else

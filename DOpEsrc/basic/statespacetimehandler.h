@@ -84,6 +84,14 @@ namespace DOpE
         /******************************************************/
 
         /**
+         * Returns a reference to the Mapping in use.
+         */
+        virtual const DOpEWrapper::Mapping<dealdim, DOFHANDLER>&
+        GetMapping() const = 0;
+
+        /******************************************************/
+
+        /**
          * Returns a reference to a vector of DoFHandlers, the order of the DoFHandlers must
          * be set prior by SetDoFHandlerOrdering
          */

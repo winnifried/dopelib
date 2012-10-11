@@ -6,6 +6,7 @@
 #include "sparsitymaker.h"
 #include "userdefineddofconstraints.h"
 #include "sth_internals.h"
+#include "mapping_wrapper.h"
 
 #include <dofs/dof_handler.h>
 #include <dofs/dof_renumbering.h>
@@ -27,87 +28,80 @@ namespace DOpE
         DOFHANDLER, SPARSITYPATTERN, VECTOR, dopedim, dealdim>
     {
       public:
-      /**
-       * Constructors.
-       *
-       * @param triangulation     The triangulation in use.
-       * @param control_fe        The finite elements used for the discretization of the control variable.
-       * @param state_fe          The finite elements used for the discretization of the state variable.
-       * @param type              The type of the control, see dopetypes.h for more information.
-       * @param times             The timegrid for instationary problems.
-       * @param constraints       ?
-       * @param index_setter      The index setter object (only needed in case of hp elements).
-       */
+        /**
+         * Constructors.
+         *
+         * @param triangulation     The triangulation in use.
+         * @param control_fe        The finite elements used for the discretization of the control variable.
+         * @param state_fe          The finite elements used for the discretization of the state variable.
+         * @param type              The type of the control, see dopetypes.h for more information.
+         * @param times             The timegrid for instationary problems.
+         * @param constraints       ?
+         * @param index_setter      The index setter object (only needed in case of hp elements).
+         */
         MethodOfLines_SpaceTimeHandler(
-            dealii::Triangulation<dealdim>& triangulation,
-            const FE& control_fe,
-            const FE& state_fe,
-            DOpEtypes::ControlType type,
+            dealii::Triangulation<dealdim>& triangulation, const FE& control_fe,
+            const FE& state_fe, DOpEtypes::ControlType type,
             const ActiveFEIndexSetterInterface<dopedim, dealdim>& index_setter =
-                ActiveFEIndexSetterInterface<dopedim, dealdim>()) :
-            SpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR, dopedim,
-                dealdim>( type, index_setter), _triangulation(triangulation), _control_dof_handler(
-                _triangulation), _state_dof_handler(_triangulation), _control_fe(
-                &control_fe), _state_fe(&state_fe), _constraints(), _control_mesh_transfer(
-                NULL), _state_mesh_transfer(
-                NULL), _sparse_mkr_dynamic(true)
-        {
-          _sparsitymaker = new SparsityMaker<DOFHANDLER, dealdim>;
-          _user_defined_dof_constr = NULL;
-        }
-        MethodOfLines_SpaceTimeHandler(
-            dealii::Triangulation<dealdim>& triangulation,
-            const FE& control_fe,
-            const FE& state_fe,
-            const dealii::Triangulation<1> & times,
-            DOpEtypes::ControlType type,
-            const ActiveFEIndexSetterInterface<dopedim, dealdim>& index_setter =
-                ActiveFEIndexSetterInterface<dopedim, dealdim>()) :
-            SpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR, dopedim,
-                dealdim>(times,type, index_setter), _triangulation(triangulation), _control_dof_handler(
-                _triangulation), _state_dof_handler(_triangulation), _control_fe(
-                &control_fe), _state_fe(&state_fe), _constraints(), _control_mesh_transfer(
-                NULL), _state_mesh_transfer(
-                NULL), _sparse_mkr_dynamic(true)
-        {
-          _sparsitymaker = new SparsityMaker<DOFHANDLER, dealdim>;
-          _user_defined_dof_constr = NULL;
-        }
-
-        MethodOfLines_SpaceTimeHandler(
-            dealii::Triangulation<dealdim>& triangulation,
-            const FE& control_fe,
-            const FE& state_fe,
-            const Constraints& c,
-            DOpEtypes::ControlType type,
-            const ActiveFEIndexSetterInterface<dopedim, dealdim>& index_setter =
-                ActiveFEIndexSetterInterface<dopedim, dealdim>()) :
-            SpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR, dopedim,
+                ActiveFEIndexSetterInterface<dopedim, dealdim>())
+            : SpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR, dopedim,
                 dealdim>(type, index_setter), _triangulation(triangulation), _control_dof_handler(
                 _triangulation), _state_dof_handler(_triangulation), _control_fe(
-                &control_fe), _state_fe(&state_fe), _constraints(c), _control_mesh_transfer(
-                NULL), _state_mesh_transfer(
-                NULL), _sparse_mkr_dynamic(true)
+                &control_fe), _state_fe(&state_fe), _mapping(
+                DOpEWrapper::StaticMappingQ1<dealdim, DOFHANDLER>::mapping_q1), _constraints(), _control_mesh_transfer(
+                NULL), _state_mesh_transfer(NULL), _sparse_mkr_dynamic(true)
+        {
+          _sparsitymaker = new SparsityMaker<DOFHANDLER, dealdim>;
+          _user_defined_dof_constr = NULL;
+        }
+        MethodOfLines_SpaceTimeHandler(
+            dealii::Triangulation<dealdim>& triangulation, const FE& control_fe,
+            const FE& state_fe, const dealii::Triangulation<1> & times,
+            DOpEtypes::ControlType type,
+            const ActiveFEIndexSetterInterface<dopedim, dealdim>& index_setter =
+                ActiveFEIndexSetterInterface<dopedim, dealdim>())
+            : SpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR, dopedim,
+                dealdim>(times, type, index_setter), _triangulation(
+                triangulation), _control_dof_handler(_triangulation), _state_dof_handler(
+                _triangulation), _control_fe(&control_fe), _state_fe(&state_fe), _mapping(
+                DOpEWrapper::StaticMappingQ1<dealdim, DOFHANDLER>::mapping_q1), _constraints(), _control_mesh_transfer(
+                NULL), _state_mesh_transfer(NULL), _sparse_mkr_dynamic(true)
         {
           _sparsitymaker = new SparsityMaker<DOFHANDLER, dealdim>;
           _user_defined_dof_constr = NULL;
         }
 
         MethodOfLines_SpaceTimeHandler(
-            dealii::Triangulation<dealdim>& triangulation,
-            const FE& control_fe,
-            const FE& state_fe,
-            const dealii::Triangulation<1> & times,
-            const Constraints& c,
+            dealii::Triangulation<dealdim>& triangulation, const FE& control_fe,
+            const FE& state_fe, const Constraints& c,
             DOpEtypes::ControlType type,
             const ActiveFEIndexSetterInterface<dopedim, dealdim>& index_setter =
-                ActiveFEIndexSetterInterface<dopedim, dealdim>()) :
-            SpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR, dopedim,
-                dealdim>(times, type, index_setter), _triangulation(triangulation), _control_dof_handler(
+                ActiveFEIndexSetterInterface<dopedim, dealdim>())
+            : SpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR, dopedim,
+                dealdim>(type, index_setter), _triangulation(triangulation), _control_dof_handler(
                 _triangulation), _state_dof_handler(_triangulation), _control_fe(
-                &control_fe), _state_fe(&state_fe), _constraints(c), _control_mesh_transfer(
-                NULL), _state_mesh_transfer(
-                NULL), _sparse_mkr_dynamic(true)
+                &control_fe), _state_fe(&state_fe), _mapping(
+                DOpEWrapper::StaticMappingQ1<dealdim, DOFHANDLER>::mapping_q1), _constraints(
+                c), _control_mesh_transfer(NULL), _state_mesh_transfer(NULL), _sparse_mkr_dynamic(
+                true)
+        {
+          _sparsitymaker = new SparsityMaker<DOFHANDLER, dealdim>;
+          _user_defined_dof_constr = NULL;
+        }
+
+        MethodOfLines_SpaceTimeHandler(
+            dealii::Triangulation<dealdim>& triangulation, const FE& control_fe,
+            const FE& state_fe, const dealii::Triangulation<1> & times,
+            const Constraints& c, DOpEtypes::ControlType type,
+            const ActiveFEIndexSetterInterface<dopedim, dealdim>& index_setter =
+                ActiveFEIndexSetterInterface<dopedim, dealdim>())
+            : SpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR, dopedim,
+                dealdim>(times, type, index_setter), _triangulation(
+                triangulation), _control_dof_handler(_triangulation), _state_dof_handler(
+                _triangulation), _control_fe(&control_fe), _state_fe(&state_fe), _mapping(
+                DOpEWrapper::StaticMappingQ1<dealdim, DOFHANDLER>::mapping_q1), _constraints(
+                c), _control_mesh_transfer(NULL), _state_mesh_transfer(NULL), _sparse_mkr_dynamic(
+                true)
         {
           _sparsitymaker = new SparsityMaker<DOFHANDLER, dealdim>;
           _user_defined_dof_constr = NULL;
@@ -123,7 +117,7 @@ namespace DOpE
           {
             delete _control_mesh_transfer;
           }
-	  if (_state_mesh_transfer != NULL)
+          if (_state_mesh_transfer != NULL)
           {
             delete _state_mesh_transfer;
           }
@@ -152,7 +146,7 @@ namespace DOpE
           DoFRenumbering::component_wise (static_cast<DOFHANDLER&>(_control_dof_handler),
               control_block_component);
           if(dopedim==dealdim)
-         {
+          {
             _control_dof_constraints.clear ();
             DoFTools::make_hanging_node_constraints (static_cast<DOFHANDLER&>(_control_dof_handler),
                 _control_dof_constraints);
@@ -237,6 +231,14 @@ namespace DOpE
           //There is only one mesh, hence always return this
           return _state_dof_handler;
         }
+        /**
+         * Implementation of virtual function in SpaceTimeHandler
+         */
+        const DOpEWrapper::Mapping<dealdim, DOFHANDLER>&
+        GetMapping() const
+        {
+          return _mapping;
+        }
 
         /**
          * Implementation of virtual function in SpaceTimeHandler
@@ -311,15 +313,15 @@ namespace DOpE
             const std::vector<VECTOR*> & local_vectors, double t,
             const TimeIterator& it) const
         {
-          assert(it.get_left()<=t);
-          assert(it.get_right()>=t);
+          assert(it.get_left() <= t);
+          assert(it.get_right() >= t);
           if (local_vectors.size() != 2)
-	  {
+          {
             throw DOpEException(
                 "This function is currently not implemented for anything other than"
                     " linear interpolation of 2 DoFs.",
                 "MethodOfLine_SpaceTimeHandler::InterpolateState");
-	  }
+          }
           double lambda_l = (it.get_right() - t) / it.get_k();
           double lambda_r = (t - it.get_left()) / it.get_k();
 
@@ -379,7 +381,7 @@ namespace DOpE
         GetMapDoFToSupportPoints()
         {
           _support_points.resize(GetStateNDoFs());
-          DOpE::STHInternals::MapDoFsToSupportPoints(GetStateDoFHandler(),
+          DOpE::STHInternals::MapDoFsToSupportPoints(this->GetMapping(), GetStateDoFHandler(),
               _support_points);
           return _support_points;
         }
@@ -443,7 +445,7 @@ namespace DOpE
             delete _control_mesh_transfer;
             _control_mesh_transfer = NULL;
           }
-	  if (_state_mesh_transfer != NULL)
+          if (_state_mesh_transfer != NULL)
           {
             delete _state_mesh_transfer;
             _state_mesh_transfer = NULL;
@@ -453,9 +455,8 @@ namespace DOpE
               new dealii::SolutionTransfer<dopedim, VECTOR>(
                   _control_dof_handler);
 #endif
-	  _state_mesh_transfer =
-              new dealii::SolutionTransfer<dealdim, VECTOR>(
-                  _state_dof_handler);
+          _state_mesh_transfer = new dealii::SolutionTransfer<dealdim, VECTOR>(
+              _state_dof_handler);
           if ("global" == ref_type)
           {
             _triangulation.set_all_refine_flags();
@@ -489,7 +490,7 @@ namespace DOpE
           //FIXME: works only if no coarsening happens, because we do not have the vectors to be interpolated availiable...
           if (_control_mesh_transfer != NULL)
             _control_mesh_transfer->prepare_for_pure_refinement();
-	  if (_state_mesh_transfer != NULL)
+          if (_state_mesh_transfer != NULL)
             _state_mesh_transfer->prepare_for_pure_refinement();
 
           _triangulation.execute_coarsening_and_refinement();
@@ -519,9 +520,9 @@ namespace DOpE
           if (_control_mesh_transfer != NULL)
             _control_mesh_transfer->refine_interpolate(old_values, new_values);
         }
-	void
+        void
         SpatialMeshTransferState(const VECTOR& old_values,
-				 VECTOR& new_values) const
+            VECTOR& new_values) const
         {
           if (_state_mesh_transfer != NULL)
             _state_mesh_transfer->refine_interpolate(old_values, new_values);
@@ -540,6 +541,7 @@ namespace DOpE
             UserDefinedDoFConstraints<DOFHANDLER, dopedim, dealdim>& constraints_maker)
         {
           _user_defined_dof_constr = &constraints_maker;
+          _user_defined_dof_constr.RegisterMapping(this->GetMapping());
         }
         /******************************************************/
         /**
@@ -557,30 +559,31 @@ namespace DOpE
           _sparsitymaker = &sparsity_maker;
           _sparse_mkr_dynamic = false;
         }
-	
+
         /******************************************************/
         /**
          * Through this function one can reinitialize the 
-	 * triangulation for the state variable to be a copy of the
-	 * given argument.
+         * triangulation for the state variable to be a copy of the
+         * given argument.
          */
 
-	void ResetTriangulation(const dealii::Triangulation<dealdim>& tria)
-	{
-	  _state_dof_handler.clear();
-	  _triangulation.clear();
-	  _triangulation.copy_triangulation(tria);
-	  _state_dof_handler.initialize(_triangulation,*_state_fe);
-	  this->IncrementControlTicket();
-	  this->IncrementStateTicket();
-	  if(_control_mesh_transfer != NULL)
-	    delete _control_mesh_transfer;
-	  _control_mesh_transfer = NULL;
-	  if(_state_mesh_transfer != NULL)
-	    delete _state_mesh_transfer;
-	  _state_mesh_transfer = NULL;
-	      
-	}
+        void
+        ResetTriangulation(const dealii::Triangulation<dealdim>& tria)
+        {
+          _state_dof_handler.clear();
+          _triangulation.clear();
+          _triangulation.copy_triangulation(tria);
+          _state_dof_handler.initialize(_triangulation, *_state_fe);
+          this->IncrementControlTicket();
+          this->IncrementStateTicket();
+          if (_control_mesh_transfer != NULL)
+            delete _control_mesh_transfer;
+          _control_mesh_transfer = NULL;
+          if (_state_mesh_transfer != NULL)
+            delete _state_mesh_transfer;
+          _state_mesh_transfer = NULL;
+
+        }
 
       private:
         const SparsityMaker<DOFHANDLER, dealdim>*
@@ -608,6 +611,8 @@ namespace DOpE
 
         const dealii::SmartPointer<const FE> _control_fe;
         const dealii::SmartPointer<const FE> _state_fe;
+
+        DOpEWrapper::Mapping<dealdim, DOFHANDLER> _mapping;
 
         std::vector<Point<dealdim> > _support_points;
 

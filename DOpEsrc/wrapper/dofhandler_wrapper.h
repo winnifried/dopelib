@@ -15,9 +15,9 @@ namespace DOpEWrapper
    * @template DOFHANDLER       With this template argument we distinguish
    *                            between the 'normal' as well as the hp case.
    *                            The class DOFHANDLER is for dim>0 the base class
-   *                            odf DoFHandler.Feasible at the moment are
+   *                            of DoFHandler. Feasible at the moment are
    *                            dealii::DoFHandler<dim> and dealii::hp::DoFHandler.
-   *                            It has the default vale dealii::DoFHandler<dim>
+   *                            It has the default value dealii::DoFHandler<dim>
    */
   template<int dim, typename DOFHANDLER = dealii::DoFHandler<dim> >
     class DoFHandler : public DOFHANDLER

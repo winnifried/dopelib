@@ -13,6 +13,7 @@
 #include <lac/constraint_matrix.h>
 
 #include "dofhandler_wrapper.h"
+#include "mapping_wrapper.h"
 #include "parameterreader.h"
 #include "dopeexception.h"
 
@@ -55,7 +56,19 @@ namespace DOpE
             const DOpEWrapper::DoFHandler<dopedim, DOFHANDLER> & dof_handler,
             dealii::ConstraintMatrix& dof_constraints) const;
 
+        void
+        RegisterMapping(const typename DOpEWrapper::Mapping<dealdim, DOFHANDLER>& mapping)
+        {
+          _mapping = &mapping;
+        }
+
       private:
+        const DOpEWrapper::Mapping<dealdim, DOFHANDLER> &
+        GetMapping() const
+        {
+          return *_mapping;
+        }
+        const DOpEWrapper::Mapping<dealdim, DOFHANDLER> * _mapping;
     };
 
   template<typename DOFHANDLER, int dopedim, int dealdim>
@@ -68,15 +81,15 @@ namespace DOpE
           "UserDefinedDoFConstraints::MakeStateDoFConstraints");
     }
 
-template<typename DOFHANDLER, int dopedim, int dealdim>
-void
-UserDefinedDoFConstraints<DOFHANDLER, dopedim, dealdim>::MakeControlDoFConstraints(
-    const DOpEWrapper::DoFHandler<dopedim, DOFHANDLER> & /*dof_handler*/,
-    dealii::ConstraintMatrix& /*dof_constraints*/) const
-  {
-    throw DOpEException("Not Implemented.",
-        "UserDefinedDoFConstraints::MakeControlDoFConstraints");
-  }
+  template<typename DOFHANDLER, int dopedim, int dealdim>
+    void
+    UserDefinedDoFConstraints<DOFHANDLER, dopedim, dealdim>::MakeControlDoFConstraints(
+        const DOpEWrapper::DoFHandler<dopedim, DOFHANDLER> & /*dof_handler*/,
+        dealii::ConstraintMatrix& /*dof_constraints*/) const
+    {
+      throw DOpEException("Not Implemented.",
+          "UserDefinedDoFConstraints::MakeControlDoFConstraints");
+    }
 
 } //end of namespace
 #endif /* CONSTRAINTMAKER_H_ */

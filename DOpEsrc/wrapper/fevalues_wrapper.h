@@ -4,6 +4,8 @@
 #include <fe/fe_values.h>
 #include <hp/fe_values.h>
 
+#include "mapping_wrapper.h"
+
 namespace DOpEWrapper
 {
 
@@ -11,7 +13,8 @@ namespace DOpEWrapper
     class FEValues : public dealii::FEValues<dim>
     {
       public:
-        FEValues(const dealii::Mapping<dim, dim> & mapping,
+        FEValues(
+            const DOpEWrapper::Mapping<dim, dealii::DoFHandler<dim> > & mapping,
             const dealii::FiniteElement<dim, dim> & fe,
             const dealii::Quadrature<dim> & quadrature,
             const dealii::UpdateFlags update_flags)
@@ -38,7 +41,8 @@ namespace DOpEWrapper
     class FEFaceValues : public dealii::FEFaceValues<dim>
     {
       public:
-        FEFaceValues(const dealii::Mapping<dim, dim> &mapping,
+        FEFaceValues(
+            const DOpEWrapper::Mapping<dim, dealii::DoFHandler<dim> > & mapping,
             const dealii::FiniteElement<dim, dim> &fe,
             const dealii::Quadrature<dim - 1> &quadrature,
             const dealii::UpdateFlags update_flags)
@@ -67,7 +71,8 @@ namespace DOpEWrapper
     class FESubfaceValues : public dealii::FESubfaceValues<dim>
     {
       public:
-        FESubfaceValues(const dealii::Mapping<dim, dim> &mapping,
+        FESubfaceValues(
+            const DOpEWrapper::Mapping<dim, dealii::DoFHandler<dim> > & mapping,
             const dealii::FiniteElement<dim, dim> &fe,
             const dealii::Quadrature<dim - 1> &quadrature,
             const dealii::UpdateFlags update_flags)
@@ -99,7 +104,7 @@ namespace DOpEWrapper
     {
       public:
         HpFEValues(
-            const dealii::hp::MappingCollection<dim, dim> & mapping_collection,
+            const DOpEWrapper::Mapping<dim, dealii::hp::DoFHandler<dim> > & mapping_collection,
             const dealii::hp::FECollection<dim, dim> & fe_collection,
             const dealii::hp::QCollection<dim> & q_collection,
             const dealii::UpdateFlags update_flags)
@@ -123,7 +128,7 @@ namespace DOpEWrapper
     {
       public:
         HpFEFaceValues(
-            const dealii::hp::MappingCollection<dim, dim> & mapping_collection,
+            const DOpEWrapper::Mapping<dim, dealii::hp::DoFHandler<dim> > & mapping_collection,
             const dealii::hp::FECollection<dim, dim> & fe_collection,
             const dealii::hp::QCollection<dim - 1> & q_collection,
             const dealii::UpdateFlags update_flags)
@@ -156,7 +161,7 @@ namespace DOpEWrapper
       public:
 
         HpFESubfaceValues(
-            const dealii::hp::MappingCollection<dim, dim> & mapping_collection,
+            const DOpEWrapper::Mapping<dim, dealii::hp::DoFHandler<dim> > & mapping_collection,
             const dealii::hp::FECollection<dim, dim> & fe_collection,
             const dealii::hp::QCollection<dim - 1> & q_collection,
             const dealii::UpdateFlags update_flags)

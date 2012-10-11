@@ -32,31 +32,30 @@ namespace DOpE
         DOFHANDLER, SPARSITYPATTERN, VECTOR, dim, dim>
     {
       public:
-      /**
-       * Constructors.
-       *
-       * @param triangulation     The triangulation in use.
-       * @param control_fe        The finite elements used for the discretization of the control variable.
-       * @param state_fe          The finite elements used for the discretization of the state variable.
-       * @param type              The type of the control, see dopetypes.h for more information.
-       * @param times             The timegrid for instationary problems.
-       * @param constraints       ?
-       * @param index_setter      The index setter object (only needed in case of hp elements).
-       */
-
+        /**
+         * Constructors.
+         *
+         * @param triangulation     The triangulation in use.
+         * @param control_fe        The finite elements used for the discretization of the control variable.
+         * @param state_fe          The finite elements used for the discretization of the state variable.
+         * @param type              The type of the control, see dopetypes.h for more information.
+         * @param times             The timegrid for instationary problems.
+         * @param constraints       ?
+         * @param index_setter      The index setter object (only needed in case of hp elements).
+         */
 
         MethodOfLines_MultiMesh_SpaceTimeHandler(
             dealii::Triangulation<dim>& triangulation, const FE& control_fe,
-            const FE& state_fe,
-            DOpEtypes::ControlType type,
+            const FE& state_fe, DOpEtypes::ControlType type,
             const ActiveFEIndexSetterInterface<dim, dim>& index_setter =
-                ActiveFEIndexSetterInterface<dim, dim>()) :
-            SpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR, dim, dim>(type,
-                index_setter), _state_triangulation(triangulation), _control_dof_handler(
+                ActiveFEIndexSetterInterface<dim, dim>())
+            : SpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR, dim, dim>(
+                type, index_setter), _state_triangulation(triangulation), _control_dof_handler(
                 _control_triangulation), _state_dof_handler(
                 _state_triangulation), _control_fe(&control_fe), _state_fe(
-                &state_fe), _constraints(), _control_mesh_transfer(NULL), 
-	      _state_mesh_transfer(NULL), _sparse_mkr_dynamic(true)
+                &state_fe), _mapping(
+                DOpEWrapper::StaticMappingQ1<dim, DOFHANDLER>::mapping_q1), _constraints(), _control_mesh_transfer(
+                NULL), _state_mesh_transfer(NULL), _sparse_mkr_dynamic(true)
         {
           _control_triangulation.copy_triangulation(_state_triangulation);
           _sparsitymaker = new SparsityMaker<DOFHANDLER, dim>;
@@ -67,13 +66,14 @@ namespace DOpE
             const FE& state_fe, const dealii::Triangulation<1> & times,
             DOpEtypes::ControlType type,
             const ActiveFEIndexSetterInterface<dim, dim>& index_setter =
-                ActiveFEIndexSetterInterface<dim, dim>()) :
-            SpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR, dim, dim>(
+                ActiveFEIndexSetterInterface<dim, dim>())
+            : SpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR, dim, dim>(
                 times, type, index_setter), _state_triangulation(triangulation), _control_dof_handler(
                 _control_triangulation), _state_dof_handler(
                 _state_triangulation), _control_fe(&control_fe), _state_fe(
-                &state_fe), _constraints(), _control_mesh_transfer(NULL), 
-	        _state_mesh_transfer(NULL), _sparse_mkr_dynamic(true)
+                &state_fe), _mapping(
+                DOpEWrapper::StaticMappingQ1<dim, DOFHANDLER>::mapping_q1), _constraints(), _control_mesh_transfer(
+                NULL), _state_mesh_transfer(NULL), _sparse_mkr_dynamic(true)
         {
           _control_triangulation.copy_triangulation(_state_triangulation);
           _sparsitymaker = new SparsityMaker<DOFHANDLER, dim>;
@@ -85,13 +85,15 @@ namespace DOpE
             const FE& state_fe, const Constraints& c,
             DOpEtypes::ControlType type,
             const ActiveFEIndexSetterInterface<dim, dim>& index_setter =
-                ActiveFEIndexSetterInterface<dim, dim>()) :
-            SpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR, dim, dim>(
-               type, index_setter), _state_triangulation(triangulation), _control_dof_handler(
+                ActiveFEIndexSetterInterface<dim, dim>())
+            : SpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR, dim, dim>(
+                type, index_setter), _state_triangulation(triangulation), _control_dof_handler(
                 _control_triangulation), _state_dof_handler(
                 _state_triangulation), _control_fe(&control_fe), _state_fe(
-                &state_fe), _constraints(c), _control_mesh_transfer(NULL),  
-	        _state_mesh_transfer(NULL), _sparse_mkr_dynamic(true)
+                &state_fe), _mapping(
+                DOpEWrapper::StaticMappingQ1<dim, DOFHANDLER>::mapping_q1), _constraints(
+                c), _control_mesh_transfer(NULL), _state_mesh_transfer(NULL), _sparse_mkr_dynamic(
+                true)
         {
           _control_triangulation.copy_triangulation(_state_triangulation);
           _sparsitymaker = new SparsityMaker<DOFHANDLER, dim>;
@@ -101,16 +103,17 @@ namespace DOpE
         MethodOfLines_MultiMesh_SpaceTimeHandler(
             dealii::Triangulation<dim>& triangulation, const FE& control_fe,
             const FE& state_fe, const dealii::Triangulation<1> & times,
-            const Constraints& c,
-            DOpEtypes::ControlType type,
+            const Constraints& c, DOpEtypes::ControlType type,
             const ActiveFEIndexSetterInterface<dim, dim>& index_setter =
-                ActiveFEIndexSetterInterface<dim, dim>()) :
-            SpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR, dim, dim>(
+                ActiveFEIndexSetterInterface<dim, dim>())
+            : SpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR, dim, dim>(
                 times, type, index_setter), _state_triangulation(triangulation), _control_dof_handler(
                 _control_triangulation), _state_dof_handler(
                 _state_triangulation), _control_fe(&control_fe), _state_fe(
-                &state_fe), _constraints(c), _control_mesh_transfer(NULL),   
-	        _state_mesh_transfer(NULL), _sparse_mkr_dynamic(true)
+                &state_fe), _mapping(
+                DOpEWrapper::StaticMappingQ1<dim, DOFHANDLER>::mapping_q1), _constraints(
+                c), _control_mesh_transfer(NULL), _state_mesh_transfer(NULL), _sparse_mkr_dynamic(
+                true)
         {
           _control_triangulation.copy_triangulation(_state_triangulation);
           _sparsitymaker = new SparsityMaker<DOFHANDLER, dim>;
@@ -124,17 +127,17 @@ namespace DOpE
           _state_dof_handler.clear();
 
           if (_control_mesh_transfer != NULL)
-            {
-              delete _control_mesh_transfer;
-            }
+          {
+            delete _control_mesh_transfer;
+          }
           if (_state_mesh_transfer != NULL)
-            {
-              delete _state_mesh_transfer;
-            }
-	  if (_sparsitymaker != NULL && _sparse_mkr_dynamic == true)
-            {
-              delete _sparsitymaker;
-            }
+          {
+            delete _state_mesh_transfer;
+          }
+          if (_sparsitymaker != NULL && _sparse_mkr_dynamic == true)
+          {
+            delete _sparsitymaker;
+          }
         }
 
         /**
@@ -163,11 +166,11 @@ namespace DOpE
           _control_dof_constraints.close();
 
           _control_dofs_per_block.resize(control_n_blocks);
-            {
-              DoFTools::count_dofs_per_block(
-                  static_cast<DOFHANDLER&>(_control_dof_handler),
-                  _control_dofs_per_block, control_block_component);
-            }
+          {
+            DoFTools::count_dofs_per_block(
+                static_cast<DOFHANDLER&>(_control_dof_handler),
+                _control_dofs_per_block, control_block_component);
+          }
 
           SpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR, dim, dim>::SetActiveFEIndicesState(
               _state_dof_handler);
@@ -221,6 +224,15 @@ namespace DOpE
         {
           //There is only one mesh, hence always return this
           return _state_dof_handler;
+        }
+
+        /**
+         * Implementation of virtual function in SpaceTimeHandler
+         */
+        const DOpEWrapper::Mapping<dim, DOFHANDLER>&
+        GetMapping() const
+        {
+          return _mapping;
         }
 
         /**
@@ -297,8 +309,8 @@ namespace DOpE
             const std::vector<VECTOR*> & local_vectors, double t,
             const TimeIterator& it) const
         {
-          assert(it.get_left()<=t);
-          assert(it.get_right()>=t);
+          assert(it.get_left() <= t);
+          assert(it.get_right() >= t);
           if (local_vectors.size() != 2)
             throw DOpEException(
                 "This function is currently not implemented for anything other than"
@@ -364,8 +376,8 @@ namespace DOpE
         GetMapDoFToSupportPoints()
         {
           _support_points.resize(GetStateNDoFs());
-          DOpE::STHInternals::MapDoFsToSupportPoints(GetStateDoFHandler(),
-              _support_points);
+          DOpE::STHInternals::MapDoFsToSupportPoints(this->GetMapping(),
+              GetStateDoFHandler(), _support_points);
           return _support_points;
         }
 
@@ -391,18 +403,18 @@ namespace DOpE
         GetFESystem(std::string name) const
         {
           if (name == "state")
-            {
-              return *_state_fe;
-            }
+          {
+            return *_state_fe;
+          }
           else if (name == "control")
-            {
-              return *_control_fe;
-            }
+          {
+            return *_control_fe;
+          }
           else
-            {
-              throw DOpEException("Not implemented for name =" + name,
-                  "MethodOfLines_MultiMesh_SpaceTimeHandler::GetFESystem");
-            }
+          {
+            throw DOpEException("Not implemented for name =" + name,
+                "MethodOfLines_MultiMesh_SpaceTimeHandler::GetFESystem");
+          }
 
         }
 
@@ -441,50 +453,49 @@ namespace DOpE
         {
           assert(bottomfraction == 0.0);
 
-	  if (_state_mesh_transfer != NULL)
-            {
-              delete _state_mesh_transfer;
-              _state_mesh_transfer = NULL;
-            }
+          if (_state_mesh_transfer != NULL)
+          {
+            delete _state_mesh_transfer;
+            _state_mesh_transfer = NULL;
+          }
           _state_mesh_transfer = new dealii::SolutionTransfer<dim, VECTOR>(
               _state_dof_handler);
 
           if ("global" == ref_type)
-            {
-              _state_triangulation.set_all_refine_flags();
-            }
+          {
+            _state_triangulation.set_all_refine_flags();
+          }
           else if ("fixednumber" == ref_type)
-            {
-              assert(indicators != NULL);
-              GridRefinement::refine_and_coarsen_fixed_number(
-                  _state_triangulation, *indicators, topfraction,
-                  bottomfraction);
-            }
+          {
+            assert(indicators != NULL);
+            GridRefinement::refine_and_coarsen_fixed_number(
+                _state_triangulation, *indicators, topfraction, bottomfraction);
+          }
           else if ("fixedfraction" == ref_type)
-            {
-              assert(indicators != NULL);
-              GridRefinement::refine_and_coarsen_fixed_fraction(
-                  _state_triangulation, *indicators, topfraction,
-                  bottomfraction);
-            }
+          {
+            assert(indicators != NULL);
+            GridRefinement::refine_and_coarsen_fixed_fraction(
+                _state_triangulation, *indicators, topfraction, bottomfraction);
+          }
           else if ("optimized" == ref_type)
-            {
-              assert(indicators != NULL);
-              GridRefinement::refine_and_coarsen_optimize(_state_triangulation,
-                  *indicators);
-              //TODO: how can we prevent coarsening here ?
-            }
-          else if("finest-of-both")
-	  {
-	    this->FlagIfLeftIsNotFinest(_state_triangulation,_control_triangulation);
-	  }
-	  else
-            {
-              throw DOpEException("Not implemented for name =" + ref_type,
-                  "MethodOfLines_MultiMesh_SpaceTimeHandler::RefineSpace");
-            }
+          {
+            assert(indicators != NULL);
+            GridRefinement::refine_and_coarsen_optimize(_state_triangulation,
+                *indicators);
+            //TODO: how can we prevent coarsening here ?
+          }
+          else if ("finest-of-both")
+          {
+            this->FlagIfLeftIsNotFinest(_state_triangulation,
+                _control_triangulation);
+          }
+          else
+          {
+            throw DOpEException("Not implemented for name =" + ref_type,
+                "MethodOfLines_MultiMesh_SpaceTimeHandler::RefineSpace");
+          }
           _state_triangulation.prepare_coarsening_and_refinement();
-	  if (_state_mesh_transfer != NULL)
+          if (_state_mesh_transfer != NULL)
             _state_mesh_transfer->prepare_for_pure_refinement();
 
           _state_triangulation.execute_coarsening_and_refinement();
@@ -508,48 +519,49 @@ namespace DOpE
           assert(bottomfraction == 0.0);
 
           if (_control_mesh_transfer != NULL)
-            {
-              delete _control_mesh_transfer;
-              _control_mesh_transfer = NULL;
-            }
+          {
+            delete _control_mesh_transfer;
+            _control_mesh_transfer = NULL;
+          }
 #if dope_dimension == deal_II_dimension
           _control_mesh_transfer = new dealii::SolutionTransfer<dim, VECTOR>(
               _control_dof_handler);
 #endif
           if ("global" == ref_type)
-            {
-              _control_triangulation.set_all_refine_flags();
-            }
+          {
+            _control_triangulation.set_all_refine_flags();
+          }
           else if ("fixednumber" == ref_type)
-            {
-              assert(indicators != NULL);
-              GridRefinement::refine_and_coarsen_fixed_number(
-                  _control_triangulation, *indicators, topfraction,
-                  bottomfraction);
-            }
+          {
+            assert(indicators != NULL);
+            GridRefinement::refine_and_coarsen_fixed_number(
+                _control_triangulation, *indicators, topfraction,
+                bottomfraction);
+          }
           else if ("fixedfraction" == ref_type)
-            {
-              assert(indicators != NULL);
-              GridRefinement::refine_and_coarsen_fixed_fraction(
-                  _control_triangulation, *indicators, topfraction,
-                  bottomfraction);
-            }
+          {
+            assert(indicators != NULL);
+            GridRefinement::refine_and_coarsen_fixed_fraction(
+                _control_triangulation, *indicators, topfraction,
+                bottomfraction);
+          }
           else if ("optimized" == ref_type)
-            {
-              assert(indicators != NULL);
-              GridRefinement::refine_and_coarsen_optimize(
-                  _control_triangulation, *indicators);
-              //TODO: how can we prevent coarsening here ?
-            }
-	  else if("finest-of-both")
-	  {
-	    this->FlagIfLeftIsNotFinest(_control_triangulation,_state_triangulation);
-	  }
+          {
+            assert(indicators != NULL);
+            GridRefinement::refine_and_coarsen_optimize(_control_triangulation,
+                *indicators);
+            //TODO: how can we prevent coarsening here ?
+          }
+          else if ("finest-of-both")
+          {
+            this->FlagIfLeftIsNotFinest(_control_triangulation,
+                _state_triangulation);
+          }
           else
-            {
-              throw DOpEException("Not implemented for name =" + ref_type,
-                  "MethodOfLines_MultiMesh_SpaceTimeHandler::RefineSpace");
-            }
+          {
+            throw DOpEException("Not implemented for name =" + ref_type,
+                "MethodOfLines_MultiMesh_SpaceTimeHandler::RefineSpace");
+          }
           _control_triangulation.prepare_coarsening_and_refinement();
 
           //FIXME: works only if no coarsening happens, because we do not have the vectors to be interpolated availiable...
@@ -609,6 +621,7 @@ namespace DOpE
             UserDefinedDoFConstraints<DOFHANDLER, dim>& constraints_maker)
         {
           _user_defined_dof_constr = &constraints_maker;
+          _user_defined_dof_constr->RegisterMapping(this->GetMapping());
         }
         /******************************************************/
         /**
@@ -626,44 +639,45 @@ namespace DOpE
           _sparsitymaker = &sparsity_maker;
           _sparse_mkr_dynamic = false;
         }
-	 /******************************************************/
+        /******************************************************/
         /**
          * Through this function one can reinitialize the 
-	 * triangulation for the state variable to be a copy of the
-	 * given argument.
+         * triangulation for the state variable to be a copy of the
+         * given argument.
          */
 
-	void ResetStateTriangulation(const dealii::Triangulation<dim>& tria)
-	{
-	  _state_dof_handler.clear();
-	  _state_triangulation.clear();
-	  _state_triangulation.copy_triangulation(tria);
-	  _state_dof_handler.initialize(_state_triangulation,*_state_fe);
-	  this->IncrementStateTicket();
-	  if(_state_mesh_transfer != NULL)
-	    delete _state_mesh_transfer;
-	  _state_mesh_transfer = NULL;
-	}
-	  
-	 /******************************************************/
+        void
+        ResetStateTriangulation(const dealii::Triangulation<dim>& tria)
+        {
+          _state_dof_handler.clear();
+          _state_triangulation.clear();
+          _state_triangulation.copy_triangulation(tria);
+          _state_dof_handler.initialize(_state_triangulation, *_state_fe);
+          this->IncrementStateTicket();
+          if (_state_mesh_transfer != NULL)
+            delete _state_mesh_transfer;
+          _state_mesh_transfer = NULL;
+        }
+
+        /******************************************************/
         /**
          * Through this function one can reinitialize the 
-	 * triangulation for the state variable to be a copy of the
-	 * given argument.
+         * triangulation for the state variable to be a copy of the
+         * given argument.
          */
 
-	void ResetControlTriangulation(const dealii::Triangulation<dim>& tria)
-	{
-	  _control_dof_handler.clear();
-	  _control_triangulation.clear();
-	  _control_triangulation.copy_triangulation(tria);
-	  _control_dof_handler.initialize(_control_triangulation,*_control_fe);
-	  this->IncrementControlTicket();
-	  if(_control_mesh_transfer != NULL)
-	    delete _control_mesh_transfer;
-	  _control_mesh_transfer = NULL;
-	}
-	  
+        void
+        ResetControlTriangulation(const dealii::Triangulation<dim>& tria)
+        {
+          _control_dof_handler.clear();
+          _control_triangulation.clear();
+          _control_triangulation.copy_triangulation(tria);
+          _control_dof_handler.initialize(_control_triangulation, *_control_fe);
+          this->IncrementControlTicket();
+          if (_control_mesh_transfer != NULL)
+            delete _control_mesh_transfer;
+          _control_mesh_transfer = NULL;
+        }
 
       private:
         const SparsityMaker<DOFHANDLER, dim>*
@@ -677,7 +691,9 @@ namespace DOpE
           return _user_defined_dof_constr;
         }
 
-	void FlagIfLeftIsNotFinest(dealii::Triangulation<dim>& left, const dealii::Triangulation<dim>& right);
+        void
+        FlagIfLeftIsNotFinest(dealii::Triangulation<dim>& left,
+            const dealii::Triangulation<dim>& right);
 
         SparsityMaker<DOFHANDLER, dim>* _sparsitymaker;
         UserDefinedDoFConstraints<DOFHANDLER, dim>* _user_defined_dof_constr;
@@ -696,6 +712,8 @@ namespace DOpE
         const dealii::SmartPointer<const FE> _control_fe;
         const dealii::SmartPointer<const FE> _state_fe;
 
+        DOpEWrapper::Mapping<dim, DOFHANDLER> _mapping;
+
         std::vector<Point<dim> > _support_points;
 
         Constraints _constraints;
@@ -712,7 +730,7 @@ namespace DOpE
   template<>
     void
     DOpE::MethodOfLines_MultiMesh_SpaceTimeHandler<
-    dealii::FESystem<deal_II_dimension>,
+        dealii::FESystem<deal_II_dimension>,
         dealii::DoFHandler<deal_II_dimension>, dealii::BlockSparsityPattern,
         dealii::BlockVector<double>, dope_dimension>::ComputeControlSparsityPattern(
         dealii::BlockSparsityPattern & sparsity) const
@@ -721,13 +739,13 @@ namespace DOpE
       dealii::BlockCompressedSimpleSparsityPattern csp(blocks.size(),
           blocks.size());
       for (unsigned int i = 0; i < blocks.size(); i++)
+      {
+        for (unsigned int j = 0; j < blocks.size(); j++)
         {
-          for (unsigned int j = 0; j < blocks.size(); j++)
-            {
-              csp.block(i, j).reinit(this->GetControlDoFsPerBlock(i),
-                  this->GetControlDoFsPerBlock(j));
-            }
+          csp.block(i, j).reinit(this->GetControlDoFsPerBlock(i),
+              this->GetControlDoFsPerBlock(j));
         }
+      }
       csp.collect_sizes();
 
       dealii::DoFTools::make_sparsity_pattern(
@@ -742,7 +760,7 @@ namespace DOpE
   template<>
     void
     MethodOfLines_MultiMesh_SpaceTimeHandler<
-    dealii::FESystem<deal_II_dimension>,
+        dealii::FESystem<deal_II_dimension>,
         dealii::DoFHandler<deal_II_dimension>, dealii::SparsityPattern,
         dealii::Vector<double>, dope_dimension>::ComputeControlSparsityPattern(
         dealii::SparsityPattern & sparsity) const
@@ -763,7 +781,7 @@ namespace DOpE
   template<>
     void
     DOpE::MethodOfLines_MultiMesh_SpaceTimeHandler<
-    dealii::hp::FECollection<deal_II_dimension>,
+        dealii::hp::FECollection<deal_II_dimension>,
         dealii::hp::DoFHandler<deal_II_dimension>, dealii::BlockSparsityPattern,
         dealii::BlockVector<double>, dope_dimension>::ComputeControlSparsityPattern(
         dealii::BlockSparsityPattern & sparsity) const
@@ -772,13 +790,13 @@ namespace DOpE
       dealii::BlockCompressedSimpleSparsityPattern csp(blocks.size(),
           blocks.size());
       for (unsigned int i = 0; i < blocks.size(); i++)
+      {
+        for (unsigned int j = 0; j < blocks.size(); j++)
         {
-          for (unsigned int j = 0; j < blocks.size(); j++)
-            {
-              csp.block(i, j).reinit(this->GetControlDoFsPerBlock(i),
-                  this->GetControlDoFsPerBlock(j));
-            }
+          csp.block(i, j).reinit(this->GetControlDoFsPerBlock(i),
+              this->GetControlDoFsPerBlock(j));
         }
+      }
       csp.collect_sizes();
 
       dealii::DoFTools::make_sparsity_pattern(
@@ -793,7 +811,7 @@ namespace DOpE
   template<>
     void
     MethodOfLines_MultiMesh_SpaceTimeHandler<
-    dealii::hp::FECollection<deal_II_dimension>,
+        dealii::hp::FECollection<deal_II_dimension>,
         dealii::hp::DoFHandler<deal_II_dimension>, dealii::SparsityPattern,
         dealii::Vector<double>, dope_dimension>::ComputeControlSparsityPattern(
         dealii::SparsityPattern & sparsity) const
@@ -808,24 +826,25 @@ namespace DOpE
       sparsity.copy_from(csp);
     }
 #endif //Endof explicit instanciation
-
   /*******************************************************/
-  template<typename FE, typename DOFHANDLER, typename SPARSITYPATTERN, typename VECTOR, int dim>
-    void MethodOfLines_MultiMesh_SpaceTimeHandler<FE,DOFHANDLER, SPARSITYPATTERN, VECTOR, dim>
-    ::FlagIfLeftIsNotFinest(dealii::Triangulation<dim>& left, 
-			    const dealii::Triangulation<dim>& right)
-  {
-    auto cell_list = GridTools::get_finest_common_cells (left,right);
-    auto cell_iter = cell_list.begin();
-    for(; cell_iter != cell_list.end(); cell_iter++)
+  template<typename FE, typename DOFHANDLER, typename SPARSITYPATTERN,
+      typename VECTOR, int dim>
+    void
+    MethodOfLines_MultiMesh_SpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN,
+        VECTOR, dim>::FlagIfLeftIsNotFinest(dealii::Triangulation<dim>& left,
+        const dealii::Triangulation<dim>& right)
     {
-      if(cell_iter->second->has_children())
+      auto cell_list = GridTools::get_finest_common_cells(left, right);
+      auto cell_iter = cell_list.begin();
+      for (; cell_iter != cell_list.end(); cell_iter++)
       {
-	//left is not finest, so we should flag the left cell to be refined
-	cell_iter->first->set_refine_flag();
+        if (cell_iter->second->has_children())
+        {
+          //left is not finest, so we should flag the left cell to be refined
+          cell_iter->first->set_refine_flag();
+        }
       }
     }
-  }
 }
 
 #endif

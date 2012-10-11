@@ -211,7 +211,7 @@ namespace DOpE
               const DOpEWrapper::DoFHandler<dim, DOFHANDLER>* dofh,
               VECTOR& vals)
           {
-            VectorTools::interpolate(*(static_cast<const DOFHANDLER*>(dofh)),
+            VectorTools::interpolate(_sth.GetMapping(), *(static_cast<const DOFHANDLER*>(dofh)),
 				     ConstantFunction<dim>(1.,dofh->get_fe().n_components()), vals);
           }
 
@@ -407,8 +407,8 @@ namespace DOpE
               const DOpEWrapper::DoFHandler<dim, DOFHANDLER>* dofh,
               VECTOR& vals)
           {
-	    VectorTools::interpolate(*(static_cast<const DOFHANDLER*>(dofh)),
-				     ConstantFunction<dim>(1.,dofh->get_fe().n_components()), vals);
+            VectorTools::interpolate(_sth.GetMapping(), dofh->GetDEALDoFHandler(),
+				    ConstantFunction<dim>(1.,dofh->get_fe().n_components()), vals);
           }
 
       private:

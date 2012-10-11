@@ -50,7 +50,7 @@ namespace DOpE
 	{
 	  MappingQ1<dealdim> mapping;
 	  std::vector<Point<dealdim> > support_points(dof_handler.n_dofs());
-	  DoFTools::map_dofs_to_support_points(mapping,dof_handler, support_points);
+	  STHInternals::MapDoFsToSupportPoints(this->GetMapping(),dof_handler, support_points);
 	  for(unsigned int i = 0; i < _c_points.size(); i++)
 	  {	  
 	    std::vector<bool> selected_dofs(dof_handler.n_dofs());

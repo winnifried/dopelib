@@ -620,8 +620,7 @@ template<typename PROBLEM>
         {
           current_comp[j] = true;
           //Hole eine Liste der DoFs auf dem Rand und die zugehoerigen Knoten
-          DoFTools::extract_boundary_dofs(
-                                          *static_cast<const dealii::DoFHandler<dimhigh>*> ((pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandler()[0])),
+          DoFTools::extract_boundary_dofs(*static_cast<const dealii::DoFHandler<dimhigh>*> ((pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandler()[0])),
                                           current_comp, selected_components, boundary_indicators);
         }
         const TransposedDirichletDataInterface<dimlow, dimhigh> & DD =

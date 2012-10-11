@@ -3,6 +3,7 @@
 
 #include "spacetimehandler_base.h"
 #include "active_fe_index_setter_interface.h"
+#include "mapping_wrapper.h"
 
 #include <numerics/data_out.h>
 #include <lac/vector.h>
@@ -35,24 +36,25 @@ namespace DOpE
     class SpaceTimeHandler : public SpaceTimeHandlerBase<VECTOR>
     {
       public:
-        SpaceTimeHandler(DOpEtypes::ControlType type) :
-            SpaceTimeHandlerBase<VECTOR>(type)
+        SpaceTimeHandler(DOpEtypes::ControlType type)
+            : SpaceTimeHandlerBase<VECTOR>(type)
         {
         }
         SpaceTimeHandler(const dealii::Triangulation<1> & times,
-            DOpEtypes::ControlType type) :
-            SpaceTimeHandlerBase<VECTOR>(times, type)
+            DOpEtypes::ControlType type)
+            : SpaceTimeHandlerBase<VECTOR>(times, type)
         {
         }
         SpaceTimeHandler(DOpEtypes::ControlType type,
-            const ActiveFEIndexSetterInterface<dopedim, dealdim>& index_setter) :
-            SpaceTimeHandlerBase<VECTOR>(type), _fe_index_setter(&index_setter)
+            const ActiveFEIndexSetterInterface<dopedim, dealdim>& index_setter)
+            : SpaceTimeHandlerBase<VECTOR>(type), _fe_index_setter(
+                &index_setter)
         {
         }
         SpaceTimeHandler(const dealii::Triangulation<1> & times,
             DOpEtypes::ControlType type,
-            const ActiveFEIndexSetterInterface<dopedim, dealdim>& index_setter) :
-            SpaceTimeHandlerBase<VECTOR>(times, type), _fe_index_setter(
+            const ActiveFEIndexSetterInterface<dopedim, dealdim>& index_setter)
+            : SpaceTimeHandlerBase<VECTOR>(times, type), _fe_index_setter(
                 &index_setter)
         {
         }
@@ -90,7 +92,15 @@ namespace DOpE
          * Returns a reference to the DoF Handler for the State at the current time point.
          */
         virtual const DOpEWrapper::DoFHandler<dealdim, DOFHANDLER>&
-        GetStateDoFHandler() const =0;
+        GetStateDoFHandler() const = 0;
+
+        /******************************************************/
+
+        /**
+         * Returns a reference to the Mapping in use.
+         */
+        virtual const DOpEWrapper::Mapping<dealdim, DOFHANDLER>&
+        GetMapping() const = 0;
 
         /******************************************************/
 
@@ -178,7 +188,7 @@ namespace DOpE
           }
 #else
           {
-            assert(_state_index==0);
+            assert(_state_index == 0);
             _domain_dofhandler_vector.clear();
             if (_domain_dofhandler_vector.size() != 1)
             {

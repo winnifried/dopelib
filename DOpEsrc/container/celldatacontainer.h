@@ -93,9 +93,10 @@ namespace DOpE
                   typename dealii::DoFHandler<dim>::active_cell_iterator>& cell,
               const std::map<std::string, const Vector<double>*> &param_values,
               const std::map<std::string, const VECTOR*> &domain_values)
-              : cdcinternal::CellDataContainerInternal<VECTOR, dim>(param_values,
-                  domain_values), _cell(cell), _state_fe_values(
-                  (sth.GetFESystem("state")), quad, update_flags), _control_fe_values(
+              : cdcinternal::CellDataContainerInternal<VECTOR, dim>(
+                  param_values, domain_values), _cell(cell), _state_fe_values(
+                  sth.GetMapping(), (sth.GetFESystem("state")), quad,
+                  update_flags), _control_fe_values(sth.GetMapping(),
                   (sth.GetFESystem("control")), quad, update_flags)
           {
             _state_index = sth.GetStateIndex();
@@ -134,9 +135,10 @@ namespace DOpE
                   typename dealii::DoFHandler<dim>::active_cell_iterator>& cell,
               const std::map<std::string, const Vector<double>*> &param_values,
               const std::map<std::string, const VECTOR*> &domain_values)
-              : cdcinternal::CellDataContainerInternal<VECTOR, dim>(param_values,
-                  domain_values), _cell(cell), _state_fe_values(
-                  (sth.GetFESystem("state")), quad, update_flags), _control_fe_values(
+              : cdcinternal::CellDataContainerInternal<VECTOR, dim>(
+                  param_values, domain_values), _cell(cell), _state_fe_values(
+                  sth.GetMapping(), (sth.GetFESystem("state")), quad,
+                  update_flags), _control_fe_values(sth.GetMapping(),
                   (sth.GetFESystem("state")), quad, update_flags)
           {
             _state_index = sth.GetStateIndex();
@@ -234,9 +236,10 @@ namespace DOpE
                       dealii::hp::DoFHandler<dim> >::active_cell_iterator>& cell,
               const std::map<std::string, const Vector<double>*> &param_values,
               const std::map<std::string, const VECTOR*> &domain_values)
-              : cdcinternal::CellDataContainerInternal<VECTOR, dim>(param_values,
-                  domain_values), _cell(cell), _state_hp_fe_values(
-                  (sth.GetFESystem("state")), q_collection, update_flags), _control_hp_fe_values(
+              : cdcinternal::CellDataContainerInternal<VECTOR, dim>(
+                  param_values, domain_values), _cell(cell), _state_hp_fe_values(
+                  sth.GetMapping(), (sth.GetFESystem("state")), q_collection,
+                  update_flags), _control_hp_fe_values(sth.GetMapping(),
                   (sth.GetFESystem("control")), q_collection, update_flags), _q_collection(
                   q_collection)
           {
@@ -274,9 +277,10 @@ namespace DOpE
                       dealii::hp::DoFHandler<dim> >::active_cell_iterator>& cell,
               const std::map<std::string, const Vector<double>*> &param_values,
               const std::map<std::string, const VECTOR*> &domain_values)
-              : cdcinternal::CellDataContainerInternal<VECTOR, dim>(param_values,
-                  domain_values), _cell(cell), _state_hp_fe_values(
-                  (sth.GetFESystem("state")), q_collection, update_flags), _control_hp_fe_values(
+              : cdcinternal::CellDataContainerInternal<VECTOR, dim>(
+                  param_values, domain_values), _cell(cell), _state_hp_fe_values(
+                  sth.GetMapping(), (sth.GetFESystem("state")), q_collection,
+                  update_flags), _control_hp_fe_values(sth.GetMapping(),
                   (sth.GetFESystem("state")), q_collection, update_flags), _q_collection(
                   q_collection)
           {

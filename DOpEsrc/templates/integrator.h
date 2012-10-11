@@ -142,6 +142,7 @@ namespace DOpE
         template<typename DOFHANDLER>
           void
           InterpolateBoundaryValues(
+              const DOpEWrapper::Mapping<dim, DOFHANDLER>& mapping,
               const DOpEWrapper::DoFHandler<dim, DOFHANDLER>* dof_handler,
               const unsigned int color, const dealii::Function<dim>& function,
               std::map<unsigned int, SCALAR>& boundary_values,
@@ -417,10 +418,6 @@ namespace DOpE
               *(pde.GetBaseProblem().GetSpaceTimeHandler()), cell,
               this->GetParamData(), this->GetDomainData());
           auto& cdc = GetIntegratorDataContainer().GetCellDataContainer();
-          //            CellDataContainer<dealii::DoFHandler<dim>, VECTOR, dim> cdc(
-          //                *(this->GetQuadratureFormula()), pde.GetUpdateFlags(),
-          //                *(pde.GetBaseProblem().GetSpaceTimeHandler()), cell, this->GetParamData(),
-          //                this->GetDomainData());
 
 #if deal_II_dimension == 2 || deal_II_dimension == 3
           bool need_faces = pde.HasFaces();
@@ -1168,7 +1165,7 @@ namespace DOpE
           std::vector<bool> comp_mask = pde.GetDirichletCompMask(color);
           std::map<unsigned int, SCALAR> boundary_values;
 
-          InterpolateBoundaryValues(
+          InterpolateBoundaryValues( pde.GetBaseProblem().GetSpaceTimeHandler()->GetMapping(),
               pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandler()[0],
               color,
               pde.GetDirichletValues(color, this->GetParamData(),
@@ -1202,7 +1199,7 @@ namespace DOpE
           std::vector<bool> comp_mask = pde.GetDirichletCompMask(color);
           std::map<unsigned int, SCALAR> boundary_values;
 
-          InterpolateBoundaryValues(
+          InterpolateBoundaryValues( pde.GetBaseProblem().GetSpaceTimeHandler()->GetMapping(),
               pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandler()[0],
               color, dealii::ZeroFunction<dim>(comp_mask.size()),
               boundary_values, comp_mask);
@@ -1234,7 +1231,7 @@ namespace DOpE
           std::vector<bool> comp_mask = pde.GetDirichletCompMask(color);
           std::map<unsigned int, SCALAR> boundary_values;
 
-          InterpolateBoundaryValues(
+          InterpolateBoundaryValues( pde.GetBaseProblem().GetSpaceTimeHandler()->GetMapping(),
               pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandler()[0],
               color, dealii::ZeroFunction<dim>(comp_mask.size()),
               boundary_values, comp_mask);
@@ -1840,13 +1837,14 @@ namespace DOpE
     template<typename DOFHANDLER>
       void
       Integrator<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::InterpolateBoundaryValues(
+          const DOpEWrapper::Mapping<dim, DOFHANDLER>& mapping,
           const DOpEWrapper::DoFHandler<dim, DOFHANDLER>* dof_handler,
           const unsigned int color, const dealii::Function<dim>& function,
           std::map<unsigned int, SCALAR>& boundary_values,
           const std::vector<bool>& comp_mask) const
       {
-        dealii::VectorTools::interpolate_boundary_values(
-            *(static_cast<const DOFHANDLER*>(dof_handler)), color, function,
+        dealii::VectorTools::interpolate_boundary_values(mapping,
+            dof_handler->GetDEALDoFHandler(), color, function,
             boundary_values, comp_mask);
       }
 }

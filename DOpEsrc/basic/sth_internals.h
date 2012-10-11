@@ -8,6 +8,8 @@
 #ifndef _STH_INTERNALS_H_
 #define _STH_INTERNALS_H_
 
+#include "mapping_wrapper.h"
+
 #include <dofs/dof_tools.h>
 #include <fe/mapping_q1.h>
 #include <hp/mapping_collection.h>
@@ -23,11 +25,12 @@ namespace DOpE
     template<typename VECTOR, int dealdim>
       void
       MapDoFsToSupportPoints(
+          DOpEWrapper::Mapping<dealdim, dealii::DoFHandler<dealdim> > mapping,
           const DOpEWrapper::DoFHandler<dealdim, dealii::DoFHandler<dealdim> >& dh,
           VECTOR& support_points)
       {
 
-        MappingQ1<dealdim> mapping;
+//        MappingQ1 < dealdim > mapping;
 
         DoFTools::map_dofs_to_support_points(mapping, dh, support_points);
       }
@@ -35,27 +38,28 @@ namespace DOpE
     template<typename VECTOR, int dealdim>
       void
       MapDoFsToSupportPoints(
-          const DOpEWrapper::DoFHandler<deal_II_dimension,
-              dealii::hp::DoFHandler<deal_II_dimension> >& dh,
+          DOpEWrapper::Mapping<dealdim, dealii::hp::DoFHandler<dealdim> > mapping,
+          const DOpEWrapper::DoFHandler<dealdim, dealii::hp::DoFHandler<dealdim> >& dh,
           VECTOR& support_points)
       {
 
 #if DEAL_II_MAJOR_VERSION >= 7
 #if DEAL_II_MINOR_VERSION >= 2
-        MappingQ1<dealdim> mapping;
-        hp::MappingCollection<dealdim> map_col(mapping);
+//        MappingQ1<dealdim> mapping;
+//        hp::MappingCollection<dealdim> map_col(mapping);
 
-        DoFTools::map_dofs_to_support_points(map_col, dh, support_points);
+        DoFTools::map_dofs_to_support_points(mapping, dh, support_points);
+//        DoFTools::map_dofs_to_support_points(map_col, dh, support_points);
 #else
         throw DOpEException(
             "Your deal.ii version is too old. We need DoFTools::map_dofs_to_support_points for hp::DoFhandler"
-              " (Implemented since 7.2, revision 24975)!",
+            " (Implemented since 7.2, revision 24975)!",
             "MapDoFsToSupportPoints");
 #endif
 #else
         throw DOpEException(
             "Your deal.ii version is too old. We need DoFTools::map_dofs_to_support_points for hp::DoFhandler"
-              " (Implemented since 7.2, revision 24975)!",
+                " (Implemented since 7.2, revision 24975)!",
             "MapDoFsToSupportPoints");
 #endif
       }
