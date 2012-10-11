@@ -254,7 +254,7 @@ template <typename INTEGRATOR, typename LINEARSOLVER, typename VECTOR,  int dim>
       <<pde.GetOutputHandler()->ZeroTolerance(res, 1.0)
       <<"\n";
    
-   out<< algo_level << "Newton step: " <<0<<"\t Residual (rel.):   " << std::scientific << firstres/firstres; 
+   out<< algo_level << "Newton step: " <<0<<"\t Residual (rel.):   " << std::scientific << pde.GetOutputHandler()->ZeroTolerance(firstres/firstres,1.0);
    
    
    pde.GetOutputHandler()->Write(out,priority);
@@ -407,7 +407,7 @@ template <typename INTEGRATOR, typename LINEARSOLVER, typename VECTOR,  int dim>
 	 <<pde.GetOutputHandler()->ZeroTolerance(res, 1.0)
 	 <<"\n";
 
-      out<<"\t\t Newton step: " <<0<<"\t Residual (rel.):   "<< std::scientific << firstres/firstres; 
+      out<<"\t\t Newton step: " <<0<<"\t Residual (rel.):   "<< std::scientific << pde.GetOutputHandler()->ZeroTolerance(firstres/firstres,1.0);
 
 
           

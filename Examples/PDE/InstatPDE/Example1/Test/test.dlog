@@ -13,13 +13,13 @@
 LOG: Allowing IterationCounter `Time' for filenames!
 	Computing Initial Values:
 			 Newton step: 0	 Residual (abs.): < 1.00e-07
-			 Newton step: 0	 Residual (rel.):   -nan
+			 Newton step: 0	 Residual (rel.):          NAN
 		Pressure_difference: 0
 		Drag: 0
 		Lift: 0
 			 Timestep: 1 (0 -> 0.1) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   1.22e-04
-			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   1.11e-02	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   1.32e-04	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   7.77e-06	 LineSearch {0} 
@@ -29,7 +29,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		Lift: -0.000255424
 			 Timestep: 2 (0.1 -> 0.2) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   1.22e-04
-			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   8.43e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   1.41e-04	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   8.74e-06	 LineSearch {0} 
@@ -39,7 +39,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		Lift: -0.000214161
 			 Timestep: 3 (0.2 -> 0.3) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   1.21e-04
-			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   7.38e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   1.28e-04	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   7.73e-06	 LineSearch {0} 
@@ -49,7 +49,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		Lift: -0.000165433
 			 Timestep: 4 (0.3 -> 0.4) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   1.21e-04
-			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   6.80e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   1.17e-04	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   6.78e-06	 LineSearch {0} 
@@ -59,7 +59,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		Lift: -7.2709e-05
 			 Timestep: 5 (0.4 -> 0.5) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   1.20e-04
-			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   6.31e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   1.06e-04	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   5.91e-06	 LineSearch {0} 
@@ -69,7 +69,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		Lift: 7.39521e-05
 			 Timestep: 6 (0.5 -> 0.6) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   1.19e-04
-			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   5.94e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   9.62e-05	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   5.19e-06	 LineSearch {0} 
@@ -79,7 +79,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		Lift: 0.000279807
 			 Timestep: 7 (0.6 -> 0.7) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   1.18e-04
-			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   5.62e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   8.78e-05	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   4.59e-06	 LineSearch {0} 
@@ -89,7 +89,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		Lift: 0.000528735
 			 Timestep: 8 (0.7 -> 0.8) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   1.16e-04
-			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   5.35e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   8.04e-05	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   4.09e-06	 LineSearch {0} 
@@ -99,7 +99,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		Lift: 0.000786615
 			 Timestep: 9 (0.8 -> 0.9) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   1.15e-04
-			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   5.23e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   7.58e-05	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   3.67e-06	 LineSearch {0} 
@@ -109,7 +109,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		Lift: 0.000975832
 			 Timestep: 10 (0.9 -> 1) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   1.13e-04
-			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   5.13e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   7.20e-05	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   3.31e-06	 LineSearch {0} 
@@ -119,7 +119,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		Lift: 0.000927148
 			 Timestep: 11 (1 -> 1.1) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   1.12e-04
-			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   5.32e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   6.86e-05	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   3.01e-06	 LineSearch {0} 
@@ -129,7 +129,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		Lift: 0.000400323
 			 Timestep: 12 (1.1 -> 1.2) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   1.10e-04
-			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   5.52e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   6.55e-05	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   2.75e-06	 LineSearch {0} 
@@ -139,7 +139,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		Lift: -0.000748057
 			 Timestep: 13 (1.2 -> 1.3) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   1.07e-04
-			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   5.56e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   6.25e-05	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   2.52e-06	 LineSearch {0} 
@@ -149,7 +149,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		Lift: -0.00236672
 			 Timestep: 14 (1.3 -> 1.4) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   1.05e-04
-			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   5.56e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   5.98e-05	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   2.32e-06	 LineSearch {0} 
@@ -159,7 +159,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		Lift: -0.00399014
 			 Timestep: 15 (1.4 -> 1.5) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   1.03e-04
-			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   5.24e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   5.73e-05	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   2.14e-06	 LineSearch {0} 
@@ -169,7 +169,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		Lift: -0.00507265
 			 Timestep: 16 (1.5 -> 1.6) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   9.99e-05
-			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   5.60e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   5.49e-05	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   1.97e-06	 LineSearch {0} 
@@ -179,7 +179,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		Lift: -0.0053513
 			 Timestep: 17 (1.6 -> 1.7) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   9.71e-05
-			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   5.35e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   5.26e-05	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   1.82e-06	 LineSearch {0} 
@@ -189,7 +189,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		Lift: -0.00508416
 			 Timestep: 18 (1.7 -> 1.8) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   9.41e-05
-			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   4.85e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   5.04e-05	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   1.70e-06	 LineSearch {0} 
@@ -199,7 +199,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		Lift: -0.00492508
 			 Timestep: 19 (1.8 -> 1.9) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   9.10e-05
-			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   5.17e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   4.82e-05	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   1.60e-06	 LineSearch {0} 
@@ -209,7 +209,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		Lift: -0.0054308
 			 Timestep: 20 (1.9 -> 2) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   8.77e-05
-			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   4.84e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   4.61e-05	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   1.50e-06	 LineSearch {0} 
@@ -219,7 +219,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		Lift: -0.00656738
 			 Timestep: 21 (2 -> 2.1) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   8.44e-05
-			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   4.80e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   4.40e-05	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   1.41e-06	 LineSearch {0} 
@@ -229,7 +229,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		Lift: -0.00771793
 			 Timestep: 22 (2.1 -> 2.2) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   8.09e-05
-			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   5.05e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   4.19e-05	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   1.33e-06	 LineSearch {0} 
@@ -239,7 +239,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		Lift: -0.00828456
 			 Timestep: 23 (2.2 -> 2.3) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   7.72e-05
-			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   5.34e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   3.98e-05	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   1.25e-06	 LineSearch {0} 
@@ -248,7 +248,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		Lift: -0.00831244
 			 Timestep: 24 (2.3 -> 2.4) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   7.35e-05
-			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   4.91e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   3.76e-05	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   1.17e-06	 LineSearch {0} 
@@ -257,7 +257,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		Lift: -0.00841989
 			 Timestep: 25 (2.4 -> 2.5) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   6.96e-05
-			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   4.85e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   3.53e-05	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   1.10e-06	 LineSearch {0} 
@@ -266,7 +266,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		Lift: -0.00905499
 			 Timestep: 26 (2.5 -> 2.6) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   6.56e-05
-			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   4.68e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   3.29e-05	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   1.02e-06	 LineSearch {0} 
@@ -275,7 +275,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		Lift: -0.00995881
 			 Timestep: 27 (2.6 -> 2.7) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   6.16e-05
-			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   4.66e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   3.02e-05	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   9.46e-07	 LineSearch {0} 
@@ -284,7 +284,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		Lift: -0.0105339
 			 Timestep: 28 (2.7 -> 2.8) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   5.74e-05
-			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   4.89e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   2.73e-05	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   8.67e-07	 LineSearch {0} 
@@ -293,7 +293,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		Lift: -0.0106471
 			 Timestep: 29 (2.8 -> 2.9) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   5.31e-05
-			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   5.15e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   2.41e-05	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   7.85e-07	 LineSearch {0} 
@@ -302,7 +302,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		Lift: -0.0107708
 			 Timestep: 30 (2.9 -> 3) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   4.88e-05
-			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   5.15e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   2.10e-05	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   7.08e-07	 LineSearch {0} 
@@ -311,7 +311,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		Lift: -0.0112718
 			 Timestep: 31 (3 -> 3.1) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   4.44e-05
-			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   5.73e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   1.85e-05	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   6.59e-07	 LineSearch {0} 
@@ -320,7 +320,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		Lift: -0.0118933
 			 Timestep: 32 (3.1 -> 3.2) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   3.99e-05
-			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   6.07e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   1.96e-05	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   6.57e-07	 LineSearch {0} 
@@ -329,7 +329,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		Lift: -0.0121857
 			 Timestep: 33 (3.2 -> 3.3) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   3.55e-05
-			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   6.27e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   2.38e-05	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   7.53e-07	 LineSearch {0} 
@@ -338,7 +338,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		Lift: -0.0121949
 			 Timestep: 34 (3.3 -> 3.4) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   3.32e-05
-			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   6.40e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   2.66e-05	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   9.99e-07	 LineSearch {0} 
@@ -347,7 +347,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		Lift: -0.0123418
 			 Timestep: 35 (3.4 -> 3.5) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   3.12e-05
-			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   6.27e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   2.86e-05	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   1.28e-06	 LineSearch {0} 
@@ -356,7 +356,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		Lift: -0.0127298
 			 Timestep: 36 (3.5 -> 3.6) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   2.85e-05
-			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   6.17e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   3.07e-05	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   1.65e-06	 LineSearch {0} 
@@ -365,7 +365,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		Lift: -0.0130117
 			 Timestep: 37 (3.6 -> 3.7) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   2.51e-05
-			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   6.29e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   3.84e-05	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   2.20e-06	 LineSearch {0} 
@@ -374,7 +374,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		Lift: -0.0129871
 			 Timestep: 38 (3.7 -> 3.8) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   2.19e-05
-			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   6.62e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   5.44e-05	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   2.94e-06	 LineSearch {0} 
@@ -383,7 +383,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		Lift: -0.0129089
 			 Timestep: 39 (3.8 -> 3.9) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   1.93e-05
-			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   7.14e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   7.50e-05	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   3.86e-06	 LineSearch {0} 
@@ -392,7 +392,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		Lift: -0.0130258
 			 Timestep: 40 (3.9 -> 4) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   1.65e-05
-			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   1.00e-02	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   1.04e-04	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   5.22e-06	 LineSearch {0} 
@@ -401,7 +401,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		Lift: -0.0131751
 			 Timestep: 41 (4 -> 4.1) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   1.39e-05
-			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   1.39e-02	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   1.43e-04	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   7.07e-06	 LineSearch {0} 
@@ -410,7 +410,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		Lift: -0.0130907
 			 Timestep: 42 (4.1 -> 4.2) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   1.48e-05
-			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   1.51e-02	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   1.51e-04	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   7.60e-06	 LineSearch {0} 
@@ -420,7 +420,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		Lift: -0.0128526
 			 Timestep: 43 (4.2 -> 4.3) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   1.57e-05
-			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   1.61e-02	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   1.57e-04	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   7.98e-06	 LineSearch {0} 
@@ -430,7 +430,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		Lift: -0.0127212
 			 Timestep: 44 (4.3 -> 4.4) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   1.67e-05
-			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   1.66e-02	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   1.62e-04	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   8.17e-06	 LineSearch {0} 
@@ -440,7 +440,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		Lift: -0.0126906
 			 Timestep: 45 (4.4 -> 4.5) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   2.14e-05
-			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   1.40e-02	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   1.37e-04	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   6.83e-06	 LineSearch {0} 
@@ -450,7 +450,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		Lift: -0.0125243
 			 Timestep: 46 (4.5 -> 4.6) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   2.61e-05
-			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   1.22e-02	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   1.21e-04	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   5.94e-06	 LineSearch {0} 
@@ -460,7 +460,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		Lift: -0.0121664
 			 Timestep: 47 (4.6 -> 4.7) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   3.07e-05
-			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   1.09e-02	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   1.10e-04	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   5.29e-06	 LineSearch {0} 
@@ -470,7 +470,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		Lift: -0.0118177
 			 Timestep: 48 (4.7 -> 4.8) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   3.53e-05
-			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   9.96e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   1.01e-04	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   4.81e-06	 LineSearch {0} 
@@ -480,7 +480,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		Lift: -0.0115902
 			 Timestep: 49 (4.8 -> 4.9) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   3.99e-05
-			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   9.20e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   9.41e-05	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   4.43e-06	 LineSearch {0} 
@@ -490,7 +490,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		Lift: -0.0113382
 			 Timestep: 50 (4.9 -> 5) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   4.44e-05
-			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   8.58e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   8.87e-05	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   4.13e-06	 LineSearch {0} 
@@ -500,7 +500,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		Lift: -0.0109141
 			 Timestep: 51 (5 -> 5.1) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   4.88e-05
-			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   8.07e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   8.42e-05	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   3.88e-06	 LineSearch {0} 
@@ -510,7 +510,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		Lift: -0.0104007
 			 Timestep: 52 (5.1 -> 5.2) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   5.31e-05
-			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   7.64e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   8.06e-05	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   3.68e-06	 LineSearch {0} 
@@ -520,7 +520,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		Lift: -0.00996851
 			 Timestep: 53 (5.2 -> 5.3) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   5.74e-05
-			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   7.27e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   7.75e-05	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   3.52e-06	 LineSearch {0} 
@@ -530,7 +530,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		Lift: -0.00961636
 			 Timestep: 54 (5.3 -> 5.4) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   6.16e-05
-			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   6.95e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   7.50e-05	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   3.38e-06	 LineSearch {0} 
@@ -540,7 +540,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		Lift: -0.00919239
 			 Timestep: 55 (5.4 -> 5.5) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   6.56e-05
-			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   6.67e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   7.29e-05	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   3.26e-06	 LineSearch {0} 
@@ -550,7 +550,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		Lift: -0.00862686
 			 Timestep: 56 (5.5 -> 5.6) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   6.96e-05
-			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   6.43e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   7.12e-05	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   3.17e-06	 LineSearch {0} 
@@ -560,7 +560,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		Lift: -0.00802423
 			 Timestep: 57 (5.6 -> 5.7) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   7.35e-05
-			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   6.21e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   6.99e-05	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   3.10e-06	 LineSearch {0} 
@@ -570,7 +570,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		Lift: -0.00751153
 			 Timestep: 58 (5.7 -> 5.8) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   7.72e-05
-			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   6.02e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   6.89e-05	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   3.04e-06	 LineSearch {0} 
@@ -580,7 +580,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		Lift: -0.00707793
 			 Timestep: 59 (5.8 -> 5.9) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   8.09e-05
-			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   5.85e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   6.81e-05	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   3.00e-06	 LineSearch {0} 
@@ -590,7 +590,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		Lift: -0.00660685
 			 Timestep: 60 (5.9 -> 6) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   8.44e-05
-			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   5.70e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   6.77e-05	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   3.02e-06	 LineSearch {0} 
@@ -600,7 +600,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		Lift: -0.00602761
 			 Timestep: 61 (6 -> 6.1) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   8.77e-05
-			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   5.56e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   6.75e-05	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   3.12e-06	 LineSearch {0} 
@@ -610,7 +610,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		Lift: -0.00539099
 			 Timestep: 62 (6.1 -> 6.2) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   9.10e-05
-			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   5.43e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   6.77e-05	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   3.23e-06	 LineSearch {0} 
@@ -620,7 +620,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		Lift: -0.00480345
 			 Timestep: 63 (6.2 -> 6.3) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   9.41e-05
-			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   5.32e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   6.81e-05	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   3.37e-06	 LineSearch {0} 
@@ -630,7 +630,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		Lift: -0.00431908
 			 Timestep: 64 (6.3 -> 6.4) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   9.71e-05
-			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   5.21e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   6.88e-05	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   3.54e-06	 LineSearch {0} 
@@ -640,7 +640,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		Lift: -0.00390332
 			 Timestep: 65 (6.4 -> 6.5) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   9.99e-05
-			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   5.12e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   6.99e-05	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   3.73e-06	 LineSearch {0} 
@@ -650,7 +650,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		Lift: -0.00348163
 			 Timestep: 66 (6.5 -> 6.6) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   1.03e-04
-			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   5.03e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   7.13e-05	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   3.96e-06	 LineSearch {0} 
@@ -660,7 +660,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		Lift: -0.00300776
 			 Timestep: 67 (6.6 -> 6.7) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   1.05e-04
-			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   4.95e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   7.31e-05	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   4.23e-06	 LineSearch {0} 
@@ -670,7 +670,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		Lift: -0.00249202
 			 Timestep: 68 (6.7 -> 6.8) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   1.07e-04
-			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   4.87e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   7.53e-05	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   4.54e-06	 LineSearch {0} 
@@ -680,7 +680,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		Lift: -0.00198281
 			 Timestep: 69 (6.8 -> 6.9) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   1.10e-04
-			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   4.90e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   7.80e-05	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   4.92e-06	 LineSearch {0} 
@@ -690,7 +690,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		Lift: -0.00153069
 			 Timestep: 70 (6.9 -> 7) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   1.12e-04
-			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   4.98e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   8.12e-05	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   5.35e-06	 LineSearch {0} 
@@ -700,7 +700,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		Lift: -0.0011644
 			 Timestep: 71 (7 -> 7.1) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   1.13e-04
-			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   5.06e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   8.49e-05	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   5.85e-06	 LineSearch {0} 
@@ -710,7 +710,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		Lift: -0.000887617
 			 Timestep: 72 (7.1 -> 7.2) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   1.15e-04
-			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   5.12e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   8.92e-05	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   6.44e-06	 LineSearch {0} 
@@ -720,7 +720,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		Lift: -0.00068928
 			 Timestep: 73 (7.2 -> 7.3) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   1.16e-04
-			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   5.18e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   9.41e-05	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   7.13e-06	 LineSearch {0} 
@@ -730,7 +730,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		Lift: -0.000555957
 			 Timestep: 74 (7.3 -> 7.4) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   1.18e-04
-			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   5.22e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   9.97e-05	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   7.92e-06	 LineSearch {0} 
@@ -740,7 +740,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		Lift: -0.000479564
 			 Timestep: 75 (7.4 -> 7.5) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   1.19e-04
-			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   5.25e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   1.06e-04	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   8.83e-06	 LineSearch {0} 
@@ -750,7 +750,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		Lift: -0.00045931
 			 Timestep: 76 (7.5 -> 7.6) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   1.20e-04
-			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   5.25e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   1.13e-04	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   9.88e-06	 LineSearch {0} 
@@ -761,7 +761,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		Lift: -0.000500013
 			 Timestep: 77 (7.6 -> 7.7) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   1.21e-04
-			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   5.22e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   1.21e-04	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   1.11e-05	 LineSearch {0} 
@@ -772,7 +772,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		Lift: -0.000609292
 			 Timestep: 78 (7.7 -> 7.8) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   1.21e-04
-			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   5.15e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   1.30e-04	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   1.24e-05	 LineSearch {0} 
@@ -783,7 +783,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		Lift: -0.000795198
 			 Timestep: 79 (7.8 -> 7.9) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   1.22e-04
-			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   5.01e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   1.39e-04	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   1.40e-05	 LineSearch {0} 
@@ -794,7 +794,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		Lift: -0.00106467
 			 Timestep: 80 (7.9 -> 8) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   1.22e-04
-			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   4.92e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   1.40e-04	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   1.48e-05	 LineSearch {0} 
