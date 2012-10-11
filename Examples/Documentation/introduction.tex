@@ -486,15 +486,16 @@ do not fit the above but are important for the user to know.
   \item \texttt{wrapper/dofhandler\underline{ }wrapper.h} A wrapper class for the \texttt{deal.II} DoFHandlers. This 
     class is needed to provide support for the \texttt{dim $= 0$} case and to have a uniform interface to 
     DoFHandler and HPDoFHandler.
+  \item \texttt{wrapper/fevalues\underline{ }wrapper.h} {\bf Will be removed soon!}
+  \item \texttt{wrapper/function\underline{ }wrapper.h} An interface that allows to use functions that depend 
+    not only on space but also on time.
+  \item \texttt{wrapper/mapping\underline{ }wrapper.h} An interface that allows to use \texttt{deal.II}-mappings as well as  \texttt{deal.II}-mapping collections depending of the DoFHandler in use. To this end, the class has a template parameter \texttt{DOFHANDLER}.
   \item \texttt{wrapper/preconditioner\underline{ }wrapper.h} Contains wrappers for several of the preconditioners
     in \texttt{deal.II}. This is required since unfortunately the preconditioners in \texttt{deal.II} have different
     interfaces for their initialization.
-  \item \texttt{wrapper/function\underline{ }wrapper.h} An interface that allows to use functions that depend 
-    not only on space but also on time.
   \item \texttt{wrapper/snopt\underline{ }wrapper.h} An interface to the SNOPT fortran library. This is an additional
     wrapper to the one provided by SNOPT to allow automatic construction of the functions required 
     by SNOPT using our library.
-  \item \texttt{wrapper/fevalues\underline{ }wrapper.h} {\bf Will be removed soon!}
 \end{itemize}
 
 \subsection{Other}
