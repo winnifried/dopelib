@@ -1,0 +1,109 @@
+
+	L2-error: 0.228672
+	Computing solution and functionals with 1st order mapping:
+
+	Computing State Solution:
+			 Newton step: 0	 Residual (abs.):   3.56e+00
+			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 1	 Residual (rel.): < 1.00e-11	 LineSearch {0} 
+	Computing Functionals:
+	BoundaryPI: 2.828427
+
+	
+
+
+	L2-error: 0.0604777
+	Computing solution and functionals with 1st order mapping:
+
+	Computing State Solution:
+			 Newton step: 0	 Residual (abs.):   8.38e-01
+			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 1	 Residual (rel.): < 1.00e-11	 LineSearch {0} 
+	Computing Functionals:
+	BoundaryPI: 3.061467
+
+	
+
+
+	L2-error: 0.0120606
+	Computing solution and functionals with 1st order mapping:
+
+	Computing State Solution:
+			 Newton step: 0	 Residual (abs.):   2.87e-01
+			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 1	 Residual (rel.): < 1.00e-11	 LineSearch {0} 
+	Computing Functionals:
+	BoundaryPI: 3.121445
+
+	
+
+
+	L2-error: 0.00222494
+	Computing solution and functionals with 1st order mapping:
+
+	Computing State Solution:
+			 Newton step: 0	 Residual (abs.):   8.11e-02
+			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 1	 Residual (rel.): < 1.00e-11	 LineSearch {0} 
+	Computing Functionals:
+	BoundaryPI: 3.136548
+
+	
+
+
+	L2-error: 0.000400169
+	Computing solution and functionals with 1st order mapping:
+
+	Computing State Solution:
+			 Newton step: 0	 Residual (abs.):   2.18e-02
+			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 1	 Residual (rel.): < 1.00e-11	 LineSearch {0} 
+	Computing Functionals:
+	BoundaryPI: 3.140331
+
+	
+
+	**************************************************
+	*             Starting Forward Solve             *
+	*   Solving : PDEProblemContainer	*
+	*   SDoFs   : 	1313
+	**************************************************
+	Computing solution and functionals with higher order mapping:
+
+	Computing State Solution:
+			 Newton step: 0	 Residual (abs.):   1.33e-02
+			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 1	 Residual (rel.): < 1.00e-11	 LineSearch {0} 
+	Computing Functionals:
+	BoundaryPI: 3.141591
+
+	L2-error: 0.01154
+	
+
+
+	**************************************************
+	*             Starting Forward Solve             *
+	*   Solving : PDEProblemContainer	*
+	*   SDoFs   : 	5185
+	**************************************************
+	Computing solution and functionals with higher order mapping:
+
+	Computing State Solution:
+			 Newton step: 0	 Residual (abs.):   4.06e-03
+			 Newton step: 0	 Residual (rel.):   1.00e+00
+			 Newton step: 1	 Residual (rel.): < 1.00e-11	 LineSearch {0} 
+	Computing Functionals:
+	BoundaryPI: 3.141593
+
+	L2-error: 0.00289896
+	
+
+
+	n-dofs || L2-error || L2-error Q1 || Error PI by boundary Q1 || Error PI by boundary || 
+	       25    2.29e-01              -                     0.4807                       - -3.13e-01    - -6.29e-03    - 
+	       89    6.05e-02           2.09                     0.1674                    1.66 -8.01e-02 2.15 -4.09e-04 4.30 
+	      337    1.21e-02           2.42                     0.0453                    1.96 -2.01e-02 2.07 -2.59e-05 4.15 
+	     1313    2.22e-03           2.49                     0.0115                    2.01 -5.04e-03 2.04 -1.62e-06 4.07 
+	     5185    4.00e-04           2.50                     0.0029                    2.01 -1.26e-03 2.02 -1.01e-07 4.04 
+	
+
