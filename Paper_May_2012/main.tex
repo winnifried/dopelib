@@ -42,6 +42,8 @@
 \newcommand{\N}{\mathbb{N}}
 \renewcommand{\phi}{\varphi}
 \renewcommand{\epsilon}{\varepsilon}
+\newcommand{\deal}{\texttt{deal.II}}
+\newcommand{\dope}{\texttt{DOpElib}}
 
 \newcommand{\todo}[1]{\textbf{\textsc{\textcolor{black}{TODO: #1}}}}
 
@@ -62,8 +64,8 @@ WINNIFRIED WOLLNER
 
 \begin{abstract}
 In this article, we describe the software library 
-\textit{Deal.II Optimization Environment} (DOpElib).
-The main feature of DOpElib is that it provides a unified interface to high level algorithms 
+\textit{Deal.II Optimization Environment} (\dope).
+The main feature of \dope is that it provides a unified interface to high level algorithms 
 such as time stepping methods, nonlinear solvers and optimization routines. This structure ensures 
 that first of all the user is required to write those sections of code that are specific to 
 the considered problem. Second, the exchange of parts of the used routines is possible 
@@ -98,7 +100,7 @@ W. Wollner, Fachbereich Mathematik, Universit\"at Hamburg.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Introduction}
 \label{introduction}
-The \textit{Deal Optimization Environment} (DOpElib) 
+The \textit{Deal Optimization Environment} (\dope) 
 provides a software toolkit to solve forward PDE
 problems as well as optimal control problems constrained by a PDE. 
 Its main feature is to give a unified interface to high level algorithms such as 
@@ -112,22 +114,22 @@ have to replace the algorithm object with an other one.
 
 The
 solution of a broad variety of PDE is possible in other software
-libraries (like in deal.II \cite{deal}, dune \cite{dune} , 
+libraries (like in \deal \cite{deal}, dune \cite{dune} , 
 or commercial solvers like Ansys \cite{ansys}) 
 as well, but
-DOpE concentrates on a unified approach for both linear and nonlinear
+\dope concentrates on a unified approach for both linear and nonlinear
 problems by interpreting every PDE problem as nonlinear and applying a
-Newton method to solve it. While deal.II leaves much of the work and many
-decisions to the user, DOpE intends to be user-optimized by delivering
+Newton method to solve it. While \deal leaves much of the work and many
+decisions to the user, \dope intends to be user-optimized by delivering
 prefabricated tools which require from the user only adjustments connected
 to his specific problem. The solution of optimal control problems with PDE
-constraints is an innovation in the DOpE framework.
+constraints is an innovation in the \dope framework.
 The focus is on the numerical solution of both stationary and nonstationary
 problems which come from different application fields, like elasticity and
 plasticity, fluid dynamics, and fluid-structure interactions.
 
-The DOpElib project is 
-based on the \textit{deal.II} \cite{deal} finite element library which has been developed
+The \dope project is 
+based on the \deal \cite{deal} finite element library which has been developed
  initially by W. Bangerth, R. Hartmann, and G. Kanschat \cite{deal}.
 The authors acknowledge their past experience as well as discussions with 
 the authors of the libraries 
@@ -136,16 +138,16 @@ Roland Becker, Dominik Meidner,  and Boris Vexler \cite{rodobo}.
 From which some of the ideas to modularize the algorithms have arisen.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%The aim of DOpE is to provide a software toolkit to solve forward PDE
+%The aim of \dope is to provide a software toolkit to solve forward PDE
 %problems as well as optimal control problems constrained by PDE. The
-%solution of a broad variety of PDE is possible in deal.II as well, but
-%DOpE concentrates on a unified approach for both linear and nonlinear
+%solution of a broad variety of PDE is possible in \deal as well, but
+%\dope concentrates on a unified approach for both linear and nonlinear
 %problems by interpreting every PDE problem as nonlinear and applying a
-%Newton method to solve it. While deal.II leaves much of the work and many
-%decisions to the user, DOpE intends to be user-optimized by delivering
+%Newton method to solve it. While \deal leaves much of the work and many
+%decisions to the user, \dope intends to be user-optimized by delivering
 %prefabricated tools which require from the user only adjustments connected
 %to his specific problem. The solution of optimal control problems with PDE
-%constraints is an innovation in the DOpE framework.
+%constraints is an innovation in the \dope framework.
 %The focus is on the numerical solution of both stationary and nonstationary
 %problems which come from different application fields, like elasticity and
 %plasticity, fluid dynamics, and fluid-structure interactions.
@@ -157,7 +159,7 @@ At the present stage the following key features are supported by the library
 \item Various time stepping schemes (based on finite differences), 
   such as forward Euler, backward Euler,
   Crank-Nicolson, shifted Crank-Nicolson, and Fractional-Step-$\Theta$ scheme.
-\item All finite elements of from deal.II including hp-support.
+\item All finite elements of from \deal including hp-support.
 \item Several examples showing the solution of several PDEs including
    Poisson, Navier-Stokes, Plasticity and fluid-structure interaction problems. 
 \item Self written line search and trust region newton algorithms for the 
@@ -174,7 +176,7 @@ The article is organized as follows. In Section
 \ref{detailed_description} 
  
 %The rest of this document is structured as follows: We start with an introduction in
-%Chapter~\ref{chap:intro} where you will learn what is needed to run {\tt DOpElib}. 
+%Chapter~\ref{chap:intro} where you will learn what is needed to run {\tt \dope}. 
 %Further you will learn what problems we can solve and how all the different classes 
 %work together for this purpose. This should help you figure out what the different classes
 %do if you are in need of writing your own algorithm.
@@ -203,31 +205,148 @@ The article is organized as follows. In Section
 %erklaeren. Vielleicht mir Pseudocode}
 This library is designed to allow easy implementation and numerical solutions 
 of problems involving partial differential equations (PDEs). 
+In particular, we remove all tedious routine implementation needed in 
+\deal by introducing appropriate classes that take care of all the 
+problem independent implementation while leaving only the problem specific 
+part to the user. To show how this is designed we will, in the sequel, 
+describe the reasoning first for a simple stationary PDE and then show
+how this idea extends to non stationary problems as well as to optimization
+problems with PDE constraints. 
+
 \subsection{Solving of PDEs}
 \subsubsection{Stationary problems}
-The easiest case 
-is that of a PDE in weak form to find some $u$
+For the start we consider a prototypical problem given by the solution of 
+a stationary PDE, which we assume to be given in weak form.
+In abstract notation it reads; find some $u$ in an appropriate set 
+such that
 \[
-a(u)(\phi) = 0 \quad \forall \phi \in V,
+a(u)(\phi) = f(\phi) \quad \forall \phi \in V,
 \]
-with some appropriate space $V$. As example, we take 
-the Laplace problem in weak form:
+with some appropriate space $V$ for the test functions and a 
+right hand side $f$.
+To illustrate this further, we take the stationary 
+incompressible Navier-Stokes equations in a domain $\Omega \subset \R^d$, 
+i.e., $u = (v,p)$ and $\phi = (\phi_u,\phi_p)$ then
 \[
-a(u)(\phi) = (\nabla u, \nabla \phi) \quad \forall \phi \in V.
+a(u)(\phi) = (\nabla v, \nabla\phi_u) + (v \nabla v,\phi_u) + (p, \nabla \cdot \phi_u) + (\nabla \cdot v ,\phi_p)
+\quad \forall \phi \in V = H^1_0(\Omega;\R^d) \times L^2_0(\Omega)
 \]
+Then the solution will be searched for in $V + (u_d,0)$ where $u_d$ is some 
+continuation of the given Dirichlet boundary data.
+Then typically we do not only want to calculate $u$ but more likely we are 
+interested in one (or several) numbers $J(u)$. 
+
+In order to solve this problem, i.e., calculate $J(u)$, we need to discretize 
+the equation, here using finite elements. This means we need to pick a 
+subdivision $\mathcal T_h$, for instance into quadrilaterals,
+of the domain $\Omega$ and a finite element, in the concrete case we could, 
+for instance, take the $\mathcal Q_2/\mathcal Q_1$ Taylor-Hood element.
+As it is clear, that the initialization of the unknowns, the local shape 
+functions, removal of hanging node constraints, etc. always follows the 
+same procedure, we define an object which takes the finite element (FE)
+and the triangulation and takes care of all other things related with 
+handling the finite element space $V_h$. We will refer, to 
+this as the \texttt{SpaceTimeHandler}. It is then clear, that the simplest 
+form of the constructor should have the following interface:
+\begin{lstlisting}
+  template<typename Triangulation, typename FE>
+      void SpaceTimeHandler(Triangulation &, FE);
+\end{lstlisting}
+Next, one needs to solve the discrete equation
+\[
+a(u_h)(\phi_h) = f(\phi_h) \quad \forall \phi \in V_h.
+\]
+To this end one can employ a newton type method with some globalization 
+like line-search. To do so, one needs to calculate the residual of the 
+equation, as well as solving linearized equations for the calculation of 
+the newton method and then employing some kind of globalization strategy.
+This again will usually require the evaluation of the residual.
+
+To evaluate the residual will require the calculation of the integrals 
+involved in the weak formulation of the problem. For example 
+the $i$-th component of the residual, with respect to the given FE-basis 
+$\phi_i$, will read as follows
+\[
+ a(u_h)(\phi_i) - f(\phi_i) = \sum_{K\in \mathcal T_h} \int_K \nabla u, \nabla \phi_i\,dx + \ldots
+\]
+Again, we see that, except for the local element integrals, all 
+calculations are independent from the concrete form of the PDE. 
+Hence we define an object \texttt{Integrator}
+that offers a method to calculate the residual given a user-defined 
+object \texttt{PDE} that implements the local element integrals, i.e.,
+\begin{lstlisting}
+  template<typename PDE,typename VECTOR>
+      void Integrator
+             ::ComputeNonlinearResidual(PROBLEM& pde, 
+                                        VECTOR & residual);
+\end{lstlisting}
+where \texttt{VECTOR} is one of the possible vector types given by \deal.
+It is clear that we need to ensure that the integrator object has access
+to the information stored in the \texttt{SpaceTimeHandler}
+to correctly loop over all elements.
+To solve the linearized systems, again, all that is left is the calculation
+of the matrix corresponding to the linearized equation. To calculate this,
+again we can define a method in the integrator that does exactly this provided
+we have a user defined object \texttt{PDE} that can evaluate the local 
+integrals needed for assembling the matrix, i.e.,
+\begin{lstlisting}
+  template<typename PDE,typename MATRIX>
+      void Integrator
+             ::ComputeMatrix(PROBLEM& pde, 
+                             MATRIX & system_matrix);
+\end{lstlisting}
+where now \texttt{MATRIX} is one of the matrix types supported by \deal.
+With this we can now define a nonlinear solver \texttt{NewtonSolver} 
+for the solution of the discrete problem requiring the existence of the 
+following function
+\begin{lstlisting}
+  template<typename PDE, typename VECTOR>
+      void NewtonSolver
+             ::NonlinearSolve(PROBLEM& pde, 
+                              VECTOR & solution);
+\end{lstlisting}
+
+Finally, we note that to compute the requested functional value 
+all that is left is to evaluate the functional in the computed solution 
+which can be done again using an appropriate integrator method.
+Since the sequence of events sketched above is again independent of the 
+exact problem we introduce another container around it which we call 
+\texttt{StatPDEProblem} that then simply provides the user with the 
+method
+\begin{lstlisting}
+      void StatPDEProblem::ComputeReducedFunctionals();
+\end{lstlisting}
+That combines all the necessary steps to calculate $J(u_h)$. 
+
+\begin{remark}
+In fact, the above constructors are not exactly what is implemented in \dope.
+This is due to the fact, that for instance 
+there are several different sparsity patterns available in 
+\deal which the user should be able chose. Thus it needs to be 
+given to the \texttt{SpaceTimeHandler}. However, to keep the 
+presentation clear we refrained from including these details above and in
+what follows.
+\end{remark}
+
+In the next section we will now sketch the way a user needs to implement the
+user-dependent data as the local cell integrals and the initialization of the
+objects described above.
+\subsubsection{Problem dependent implementation of stationary PDE problems}
+
+ 
 To solve the problem, we need a configuration (a mesh), eventually 
 a diffusion parameter, a finite element, a quadrature rule,
 a linear solver (here the CG solver), and some output such as
 a graphical solution and eventually some measurement functional.
 Each of those routines are written in the \texttt{main.cc} file. 
-We start by including necessary files both the DOpElib library and
-the deal.II software:
+We start by including necessary files both the \dope library and
+the \deal software:
 \begin{lstlisting}
   #include "pdeproblemcontainer.h" etc. ...
 \end{lstlisting}
 In the \texttt{main} function, the following steps need to be done. First, 
 the parameter reader for runtime parameters might be initialized. In a parameter
-file the user might specifiy material paramters for the concrete PDE, but also
+file the user might specify material parameters for the concrete PDE, but also
 general parameters for nonlinear and linear solvers, and output-related 
 aspects.
 
@@ -242,13 +361,13 @@ integrals:
   QGauss<2> quadrature_formula(3);
 \end{lstlisting}
 Then, the \texttt{LocalPDE} object comes into play. This is an quite 
-important feature of DOpElib because it allows for easy implementation 
+important feature of \dope because it allows for easy implementation 
 of the variational formulation. Specific explication is given below because
-the implementation is seperated in \texttt{localpde.h}.
+the implementation is separated in \texttt{localpde.h}.
 Afterwards, a \texttt{LocalPointFunctional} is declared. As for the PDE, the 
 implementation is done in another file, namely \texttt{localfunctional.h}.
 
-Generically, each problem in DOpElib is considered to be time-dependent and nonlinear because
+Generically, each problem in \dope is considered to be time-dependent and nonlinear because
 these are the 'real' world problems. Therefore, (even for the linear and stationary Laplace equation),
 we have to declare a (pseudo) time:
 \begin{lstlisting}
@@ -288,7 +407,7 @@ Next, the solver for the linear equations needs to be specified:
 \begin{lstlisting}
   SSolver solver(&P, "fullmem", pr, idc);
 \end{lstlisting}
-Finally, the ouput handler is initialized via
+Finally, the output handler is initialized via
 \begin{lstlisting}
   P.RegisterOutputHandler(&out);
   solver.RegisterOutputHandler(&out);
@@ -300,7 +419,7 @@ Finally, the programm is started with:
   out.Write(outp, 1, 1, 1);
   solver.ComputeReducedFunctionals();
 \end{lstlisting}
-After explaining the basic compononents that are necessary (and always the same in DOpElib) 
+After explaining the basic compononents that are necessary (and always the same in \dope) 
 for all  (linear and stationary) partial differential equations, we shall give 
 an overview to the implementation of the specific form of the PDE. 
 Beside specification of boundary conditions, the form of the local PDE depends 
@@ -419,7 +538,7 @@ Reordering in new and old terms and multiplication by the time step size $k$:
 (u^{n+1},\phi) + k \theta (\nabla u^{n+1}, \nabla \phi)
 = (u^n, \phi) - (1 - \theta) (\nabla u^{n}, \nabla \phi).
 \]
-In DOpElib, different time stepping schemes can be found 
+In \dope, different time stepping schemes can be found 
 in the folder \texttt{DOpEsrc/tsschemes}.
 
 Because the \texttt{main} file 
@@ -452,7 +571,7 @@ and it is done in a straight-forward way:
       }
    }
 \end{lstlisting}
-Here, the advantage is that DOpElib orders the terms in the timestepping
+Here, the advantage is that \dope orders the terms in the timestepping
 problems
 such that only $(u^{n+1},\phi)$ must be implemented. However, if someone 
 needs explicit input of the old timestep term, then he can use 
@@ -678,18 +797,18 @@ problem where the PDE constraint has been eliminated as explained previously.
 \subsection{Independent features}
 In this final section, we shall give a brief summary of features 
 that are applicable (in general) to all types of problems. Specifically,
-DOpElib provides goal-oriented mesh refinement with the help of the 
+\dope provides goal-oriented mesh refinement with the help of the 
 Dual-Weighted-Residual (DWR) method \cite{BeRa96}. Here, a certain 
 cost functional such as a point evaluation, line intergration or domain
 integration is considered. Determining the lowest error between the 
 (unknown) exact solution and its numerical approximation for lowest computational
 cost is the main goal of the DWR method.
 
-Moreover, DOpElib provides standard error estimators based on residual evaluation and 
+Moreover, \dope provides standard error estimators based on residual evaluation and 
 a ZZ error estimator, i.e., measureing the smoothness of the discrete first derivatives.
-The latter one is accessed via deal.II. 
+The latter one is accessed via \deal. 
 
-In addition, DOpElib provides multi-mesh procedures 
+In addition, \dope provides multi-mesh procedures 
 \todo{kann Winni hier etwas schreiben?}
 
 Concerning temporal integration schemes, the library comes 
@@ -830,7 +949,7 @@ and the Fractional-Step-$\Theta$ scheme, are implemented.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
 %\subsection{Interfaces to other software packages}
-%Since DOpE uses as basis the software library deal.II, all its interfaces
+%Since DOpE uses as basis the software library \deal, all its interfaces
 %to other packages can be accessed to. For instance, such libararies 
 %are trilinos for with an algebraic multigrid method, MPI for a parallel
 %solution of the problem.
@@ -839,7 +958,7 @@ and the Fractional-Step-$\Theta$ scheme, are implemented.
 %
 %%\section{Documentation, Code Development, Webpage}
 %%\label{documentation}
-%%At the present step, the DOpElib project comes with 
+%%At the present step, the \dope project comes with 
 %%an detailed documentation of all features and examples 
 %%in pdf format and an detailed programming code 
 %%documentation. 
@@ -847,7 +966,7 @@ and the Fractional-Step-$\Theta$ scheme, are implemented.
 %%\todo{License? How to access to DOpE?}
 %%\todo{Name of the website}
 %%
-%%In addition, the DOpElib test suite provides some regression tests. 
+%%In addition, the \dope test suite provides some regression tests. 
 %%They are run to compare 
 %%the output to previous outputs. This is useful (necessary) after 
 %%changing programming code anywhere in the library. If a test
@@ -861,7 +980,7 @@ and the Fractional-Step-$\Theta$ scheme, are implemented.
 \section{Applications}
 \label{applications}
 We present three numerical tests which demonstrate different
-features of DOpElib:
+features of \dope:
 \begin{itemize}
 \item In the first numerical example, we consider 
 goal-oriented mesh refinement with the help of the 
@@ -935,7 +1054,7 @@ Since the problem is fully nonstationary, the
 dynamics are presents in Figure \ref{res:fsi_2_mesh_and_x_velo}. 
 By comparison of our findings in Figure \ref{res:results_ux_and_uy_fsi_2}
 with the literature, it can be identified that 
-the implementation in DOpElib is correct.
+the implementation in \dope is correct.
 
 
 
@@ -976,7 +1095,7 @@ Results already obtained.
 \section{Conclusions}
 \label{conclusions}
 In this article, we described the features 
-and applications of the DOpElib project, which 
+and applications of the \dope project, which 
 was initiated at the Heidelberg University in 2010.
 Specifically, the applications cover a broad 
 spectrum of numerical exmamples motivated 
