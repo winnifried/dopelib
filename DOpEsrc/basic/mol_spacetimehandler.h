@@ -541,7 +541,7 @@ namespace DOpE
             UserDefinedDoFConstraints<DOFHANDLER, dopedim, dealdim>& constraints_maker)
         {
           _user_defined_dof_constr = &constraints_maker;
-          _user_defined_dof_constr.RegisterMapping(this->GetMapping());
+          _user_defined_dof_constr->RegisterMapping(this->GetMapping());
         }
         /******************************************************/
         /**

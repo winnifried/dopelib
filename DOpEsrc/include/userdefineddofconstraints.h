@@ -62,13 +62,14 @@ namespace DOpE
           _mapping = &mapping;
         }
 
-      private:
-        const DOpEWrapper::Mapping<dealdim, DOFHANDLER> &
+    protected:
+      const DOpEWrapper::Mapping<dealdim, DOFHANDLER> &
         GetMapping() const
         {
           return *_mapping;
         }
-        const DOpEWrapper::Mapping<dealdim, DOFHANDLER> * _mapping;
+    private:
+      const DOpEWrapper::Mapping<dealdim, DOFHANDLER> * _mapping;
     };
 
   template<typename DOFHANDLER, int dopedim, int dealdim>

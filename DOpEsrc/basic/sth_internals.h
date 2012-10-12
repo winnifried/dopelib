@@ -25,7 +25,7 @@ namespace DOpE
     template<typename VECTOR, int dealdim>
       void
       MapDoFsToSupportPoints(
-          DOpEWrapper::Mapping<dealdim, dealii::DoFHandler<dealdim> > mapping,
+          const DOpEWrapper::Mapping<dealdim, dealii::DoFHandler<dealdim> >& mapping,
           const DOpEWrapper::DoFHandler<dealdim, dealii::DoFHandler<dealdim> >& dh,
           VECTOR& support_points)
       {
@@ -38,7 +38,7 @@ namespace DOpE
     template<typename VECTOR, int dealdim>
       void
       MapDoFsToSupportPoints(
-          DOpEWrapper::Mapping<dealdim, dealii::hp::DoFHandler<dealdim> > mapping,
+          const DOpEWrapper::Mapping<dealdim, dealii::hp::DoFHandler<dealdim> >& mapping,
           const DOpEWrapper::DoFHandler<dealdim, dealii::hp::DoFHandler<dealdim> >& dh,
           VECTOR& support_points)
       {
