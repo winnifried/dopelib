@@ -212,7 +212,7 @@ main(int argc, char **argv)
       solution = gu.GetSpacialVector();
 
       Vector<float> difference_per_cell(triangulation.n_active_cells());
-      VectorTools::integrate_difference(dof_handler, solution,
+      VectorTools::integrate_difference(mapping,dof_handler, solution,
           ExactSolution(order_fe), difference_per_cell, QGauss<2>(4),
           VectorTools::L2_norm);
       outp << "L2-error: " << difference_per_cell.l2_norm() << "\n";
