@@ -34,7 +34,7 @@ namespace DOpE
                 dealdim>(index_setter), _sparse_mkr_dynamic(true), _triangulation(
                 triangulation), _state_dof_handler(_triangulation), _state_fe(
                 &state_fe), _mapping(
-                DOpEWrapper::StaticMappingQ1<dealdim, DOFHANDLER>::mapping_q1), _state_mesh_transfer(
+                &DOpEWrapper::StaticMappingQ1<dealdim, DOFHANDLER>::mapping_q1), _state_mesh_transfer(
                 NULL)
         {
           _sparsitymaker = new SparsityMaker<DOFHANDLER, dealdim>;
@@ -49,7 +49,7 @@ namespace DOpE
                 dealdim>(times, index_setter), _sparse_mkr_dynamic(true), _triangulation(
                 triangulation), _state_dof_handler(_triangulation), _state_fe(
                 &state_fe), _mapping(
-                DOpEWrapper::StaticMappingQ1<dealdim, DOFHANDLER>::mapping_q1), _state_mesh_transfer(
+                &DOpEWrapper::StaticMappingQ1<dealdim, DOFHANDLER>::mapping_q1), _state_mesh_transfer(
                 NULL)
         {
           _sparsitymaker = new SparsityMaker<DOFHANDLER, dealdim>;
@@ -65,7 +65,7 @@ namespace DOpE
             : StateSpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR,
                 dealdim>(index_setter), _sparse_mkr_dynamic(true), _triangulation(
                 triangulation), _state_dof_handler(_triangulation), _state_fe(
-                &state_fe), _mapping(mapping), _state_mesh_transfer(NULL)
+                &state_fe), _mapping(&mapping), _state_mesh_transfer(NULL)
         {
           _sparsitymaker = new SparsityMaker<DOFHANDLER, dealdim>;
           _user_defined_dof_constr = NULL;
@@ -79,7 +79,7 @@ namespace DOpE
             : StateSpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR,
                 dealdim>(times, index_setter), _sparse_mkr_dynamic(true), _triangulation(
                 triangulation), _state_dof_handler(_triangulation), _state_fe(
-                &state_fe), _mapping(mapping), _state_mesh_transfer(NULL)
+                &state_fe), _mapping(&mapping), _state_mesh_transfer(NULL)
         {
           _sparsitymaker = new SparsityMaker<DOFHANDLER, dealdim>;
           _user_defined_dof_constr = NULL;
@@ -157,7 +157,7 @@ namespace DOpE
         const DOpEWrapper::Mapping<dealdim, DOFHANDLER>&
         GetMapping() const
         {
-          return _mapping;
+          return *_mapping;
         }
 
         /**
@@ -404,7 +404,7 @@ namespace DOpE
         dealii::ConstraintMatrix _state_dof_constraints;
 
         const dealii::SmartPointer<const FE> _state_fe; //TODO is there a reason that this is not a reference?
-        DOpEWrapper::Mapping<dealdim, DOFHANDLER> _mapping;
+        const dealii::SmartPointer<const DOpEWrapper::Mapping<dealdim, DOFHANDLER> > _mapping;
 
         std::vector<Point<dealdim> > _support_points;
         dealii::SolutionTransfer<dealdim, VECTOR>* _state_mesh_transfer;

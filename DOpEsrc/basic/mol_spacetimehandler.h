@@ -48,7 +48,7 @@ namespace DOpE
                 dealdim>(type, index_setter), _triangulation(triangulation), _control_dof_handler(
                 _triangulation), _state_dof_handler(_triangulation), _control_fe(
                 &control_fe), _state_fe(&state_fe), _mapping(
-                DOpEWrapper::StaticMappingQ1<dealdim, DOFHANDLER>::mapping_q1), _constraints(), _control_mesh_transfer(
+                &DOpEWrapper::StaticMappingQ1<dealdim, DOFHANDLER>::mapping_q1), _constraints(), _control_mesh_transfer(
                 NULL), _state_mesh_transfer(NULL), _sparse_mkr_dynamic(true)
         {
           _sparsitymaker = new SparsityMaker<DOFHANDLER, dealdim>;
@@ -64,7 +64,7 @@ namespace DOpE
                 dealdim>(times, type, index_setter), _triangulation(
                 triangulation), _control_dof_handler(_triangulation), _state_dof_handler(
                 _triangulation), _control_fe(&control_fe), _state_fe(&state_fe), _mapping(
-                DOpEWrapper::StaticMappingQ1<dealdim, DOFHANDLER>::mapping_q1), _constraints(), _control_mesh_transfer(
+                &DOpEWrapper::StaticMappingQ1<dealdim, DOFHANDLER>::mapping_q1), _constraints(), _control_mesh_transfer(
                 NULL), _state_mesh_transfer(NULL), _sparse_mkr_dynamic(true)
         {
           _sparsitymaker = new SparsityMaker<DOFHANDLER, dealdim>;
@@ -81,7 +81,7 @@ namespace DOpE
                 dealdim>(type, index_setter), _triangulation(triangulation), _control_dof_handler(
                 _triangulation), _state_dof_handler(_triangulation), _control_fe(
                 &control_fe), _state_fe(&state_fe), _mapping(
-                DOpEWrapper::StaticMappingQ1<dealdim, DOFHANDLER>::mapping_q1), _constraints(
+                &DOpEWrapper::StaticMappingQ1<dealdim, DOFHANDLER>::mapping_q1), _constraints(
                 c), _control_mesh_transfer(NULL), _state_mesh_transfer(NULL), _sparse_mkr_dynamic(
                 true)
         {
@@ -99,7 +99,7 @@ namespace DOpE
                 dealdim>(times, type, index_setter), _triangulation(
                 triangulation), _control_dof_handler(_triangulation), _state_dof_handler(
                 _triangulation), _control_fe(&control_fe), _state_fe(&state_fe), _mapping(
-                DOpEWrapper::StaticMappingQ1<dealdim, DOFHANDLER>::mapping_q1), _constraints(
+                &DOpEWrapper::StaticMappingQ1<dealdim, DOFHANDLER>::mapping_q1), _constraints(
                 c), _control_mesh_transfer(NULL), _state_mesh_transfer(NULL), _sparse_mkr_dynamic(
                 true)
         {
@@ -237,7 +237,7 @@ namespace DOpE
         const DOpEWrapper::Mapping<dealdim, DOFHANDLER>&
         GetMapping() const
         {
-          return _mapping;
+          return *_mapping;
         }
 
         /**
@@ -612,7 +612,7 @@ namespace DOpE
         const dealii::SmartPointer<const FE> _control_fe;
         const dealii::SmartPointer<const FE> _state_fe;
 
-        DOpEWrapper::Mapping<dealdim, DOFHANDLER> _mapping;
+        const dealii::SmartPointer<const DOpEWrapper::Mapping<dealdim, DOFHANDLER> > _mapping;
 
         std::vector<Point<dealdim> > _support_points;
 
