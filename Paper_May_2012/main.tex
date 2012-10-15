@@ -511,15 +511,20 @@ treats a point evaluation:
 
 
 \subsubsection{Nonstationary problems}
-In this section, we focus on the extension to 
-the numerical solution of nonstationary processes. 
-As example, we consider the heat equation:
-Find $u$:
+In this section, the 
+numerical solution of nonstationary processes
+is considered. We focus on details which are 
+beyond stationary examples as discussed in the 
+previous sections. Before, we introduce 
+the steps of implementation in DOpElib, we 
+derive the basic theoretical concepts.
+As an example, we consider the heat equation:
+Find $u\in V$:
 \[
 \partial_t u - \Delta u = 0
 \]
 and in weak formulation:
-Find $u$:
+Find $u\in V$:
 \[
 a(u)(\phi) = 0 \quad \forall \phi \in V,
 \]
@@ -538,17 +543,21 @@ Reordering in new and old terms and multiplication by the time step size $k$:
 (u^{n+1},\phi) + k \theta (\nabla u^{n+1}, \nabla \phi)
 = (u^n, \phi) - (1 - \theta) (\nabla u^{n}, \nabla \phi).
 \]
-In \dope, different time stepping schemes can be found 
-in the folder \texttt{DOpEsrc/tsschemes}.
-
-Because the \texttt{main} file 
-is basically the same as for stationary problems
-which is one major goal of the software library,
-we only focus on the implementation of the PDE in the 
-\texttt{localpde.h} file. Here, the stationary part, i.e.,
-the diffusion is implemented as before. The only thing we add 
-is the time-depdendent part $\partial_t u$:
-
+The concrete choice of $\theta$ leads to a
+specific time stepping scheme. For instance,
+$\theta = 0.5$ gives the Crank-Nicolson scheme,
+\begin{lstlisting}
+   CrankNicolsonProblem<...>
+\end{lstlisting}
+The main work is treated as for stationary problems
+within 
+\begin{lstlisting}
+   MethodOfLines_SpaceTimeHandler<...>
+\end{lstlisting}
+Again, the key issue is that this procedure is totally independent 
+of the specific form of the PDE. The user-related work 
+remains to provide the time derivative $\partial_t u$ in
+the implementation:
 \begin{lstlisting}
   void CellTimeEquation(...)
    {
@@ -581,9 +590,6 @@ needs explicit input of the old timestep term, then he can use
      // implement (u^{n+1},\phi) and (u^n,\phi)  
    }
 \end{lstlisting}
-For instance, this explicit term is used for fluid-structure interaction in
-which
-the old timestep term needs explicit modification.   
 
 
 
@@ -1046,9 +1052,18 @@ and then using in the code the designated scheme,
 for example here the Fractional-Step-$\theta$ scheme
 \texttt{TSP5}.
 
-
-
-
+The quantities of interest are evaluations of 
+$x$- and $y$ displacement at the point $A(0) = (0.6,0.2)$
+and the drag and lift forces acting on the cylinder and the elastic beam:
+\begin{align}
+\label{drag_lift_forces}
+(F_D , F_L) 
+= {\int_{S_f} \sigma_f \cdot n_f \, ds + 
+\int_{\Gamma_i} \sigma_s \cdot n_s \, ds},
+\end{align}
+where $S_{f}$ denotes the path over the cylinder in the fluid part and
+$\Gamma_i$ the interface between the elastic beam and the 
+fluid.
 
 Since the problem is fully nonstationary, the 
 dynamics are presents in Figure \ref{res:fsi_2_mesh_and_x_velo}. 
@@ -1075,7 +1090,7 @@ direction (right) at time $t=16.14s$.}
 {\includegraphics[width=5.8cm]{Pictures/Drag_fluid_FSI_2_FS_t_3e-2_t_15e-3_global_2_Hron_grid.pdf}}
 {\includegraphics[width=5.8cm]{Pictures/Lift_fluid_FSI_2_FS_t_3e-2_t_15e-3_global_2_Hron_grid.pdf}}
 \caption{FSI 2: the deflections of the beam, $u_x(A)$ and $u_y(A)$ (in $cm$), and 
-the drag and the lift evaluation (in $kg/m\,s^2$) are displayed versus
+the drag $F_D$ and the lift $F_L$ evaluation (in $kg/m\,s^2$) are displayed versus
 time (in $s$).
 } 
 \label{res:results_ux_and_uy_fsi_2}
