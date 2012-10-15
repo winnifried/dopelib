@@ -262,8 +262,8 @@ main(int argc, char **argv)
   convergence_table.evaluate_convergence_rates("L2-error ||", "n-dofs ||",
       ConvergenceTable::reduction_rate_log2);
 
-  convergence_table.set_scientific("L2-error Q1", true);
-  convergence_table.set_precision("L2-error Q1", 2);
+  convergence_table.set_scientific("L2-error Q1 ||", true);
+  convergence_table.set_precision("L2-error Q1 ||", 2);
   convergence_table.evaluate_convergence_rates("L2-error Q1 ||", "n-dofs ||",
       ConvergenceTable::reduction_rate_log2);
 
