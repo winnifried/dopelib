@@ -14,30 +14,28 @@ if [ $1 == "Test" ]
 then
     if [ -f test.dlog ]
     then
-	echo "Running Program ../../../../../bin/DOpE-PDE-StatPDE-Example10-2d-2d test.prm"
-	(../../../../../bin/DOpE-PDE-StatPDE-Example10-2d-2d test.prm 2>&1) > /dev/null
+	echo "Running Program ../../../../../bin/DOpE-PDE-StatPDE-Example9-2d-2d test.prm"
+	(../../../../../bin/DOpE-PDE-StatPDE-Example9-2d-2d test.prm 2>&1) > /dev/null
 	echo "Comparing Results:"
 	(diff dope.log test.dlog 2>&1) > /dev/null
 	if [ $? -eq 0 ]
 	then
 	    echo "No differences found."
 	    rm dope.log
-	    rm *.gpl
 	    rm -r Mesh0/
 	    rm -r Mesh1/
 	    rm -r Mesh2/
 	    rm -r Mesh3/
-	    rm -r Mesh4/    
+            rm -r Mesh4/
 	    exit 0
 	else
 	    echo "There where discrepancies in the Output."
 	    diff dope.log test.dlog
-	    rm *.gpl
 	    rm -r Mesh0/
 	    rm -r Mesh1/
 	    rm -r Mesh2/
 	    rm -r Mesh3/
-	    rm -r Mesh4/ 
+	    rm -r Mesh4/
 	    exit 1
 	fi
     else
@@ -47,16 +45,15 @@ then
 else
     if [ $1 == "Store" ]
     then
-	echo "Running Program ../../../../../bin/DOpE-PDE-StatPDE-Example10-2d-2d test.prm"
-	(../../../../../bin/DOpE-PDE-StatPDE-Example10-2d-2d test.prm 2>&1) > /dev/null
+	echo "Running Program ../../../../../bin/DOpE-PDE-StatPDE-Example9-2d-2d test.prm"
+	(../../../../../bin/DOpE-PDE-StatPDE-Example9-2d-2d test.prm 2>&1) > /dev/null
 	echo "Run completed. Cleaning up ..."
 	mv dope.log test.dlog
-	rm *.gpl
 	rm -r Mesh0/
 	rm -r Mesh1/
 	rm -r Mesh2/
 	rm -r Mesh3/
-	rm -r Mesh4/ 
+	rm -r Mesh4/
 	exit 0;
     else
 	echo "Unknown Option: "$1
