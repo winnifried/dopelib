@@ -4,6 +4,10 @@
 
 USER=fmsi004
 
+read -s -p "Password for user: "${USER}": "  UPWD
+
+echo ""
+
 echo "Updating repository"
 cd ..
 svn up
@@ -21,8 +25,8 @@ else
 	echo "Repository is broken: No html directory"
 	exit 1
 fi
-echo "Copying Website with user "${USER}
-scp *.html description_full.pdf ${USER}@webapp6.rrz.uni-hamburg.de:/srv/www/htdocs/dopelib/
+echo "Copying Website with password user "${USER}
+sshpass -p ${UPWD} scp *.html description_full.pdf ${USER}@webapp6.rrz.uni-hamburg.de:/srv/www/htdocs/dopelib/
 
 if [ -d css ]
 then
@@ -31,7 +35,7 @@ else
 	echo "Repository is broken: No css directory"
 	exit 1
 fi
-scp *.css ${USER}@webapp6.rrz.uni-hamburg.de:/srv/www/htdocs/dopelib/css/
+sshpass -p ${UPWD} scp *.css ${USER}@webapp6.rrz.uni-hamburg.de:/srv/www/htdocs/dopelib/css/
 if [ -d images ]
 then
     cd images
@@ -39,5 +43,5 @@ else
 	echo "Repository is broken: No images directory"
 	exit 1
 fi
-scp *.png *.jpg *.gif  ${USER}@webapp6.rrz.uni-hamburg.de:/srv/www/htdocs/dopelib/css/images
+sshpass -p ${UPWD} scp *.png *.jpg *.gif  ${USER}@webapp6.rrz.uni-hamburg.de:/srv/www/htdocs/dopelib/css/images
 
