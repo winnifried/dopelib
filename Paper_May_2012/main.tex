@@ -305,11 +305,14 @@ With this we can now define a nonlinear solver \texttt{NewtonSolver}
 for the solution of the discrete problem requiring the existence of the 
 following function
 \begin{lstlisting}
+ template<typename LINSOLVE>
   template<typename PROBLEM, typename VECTOR>
-      void NewtonSolver
+      void NewtonSolver<LINSOLVE>
              ::NonlinearSolve(PROBLEM& pde, 
                               VECTOR & solution);
 \end{lstlisting}
+Where \texttt{LINSOLVE} denotes the solver that should be used to solve the 
+linearized equations during the newton iteration.
 
 Finally, we note that to compute the requested functional value 
 all that is left is to evaluate the functional in the computed solution 
@@ -322,6 +325,17 @@ method
       void StatPDEProblem::ComputeReducedFunctionals();
 \end{lstlisting}
 That combines all the necessary steps to calculate $J(u_h)$. 
+
+Finally, we will need to have an object that is capable of providing all 
+the necessary functionality required from the template argument 
+\texttt{PROBLEM} in all of the above. We provide a wrapper named
+\texttt{PDEProblemContainer} collecting all the problem specific information 
+like the description of the PDE and the functional, the boundary values, etc. 
+Although, having such an object instead of directly giving these informations
+to the \texttt{StatPDEProblem} seems like a nuicance at the moment, we will 
+see that it is of greater interest for time-dependent problems or 
+optimization problems in what follows in Section~\ref{sec:timedep} and
+Section~\ref{sec:opt} respectively. 
 
 \begin{remark}
 In fact, the above constructors are not exactly what is implemented in \dope{}.
@@ -791,7 +805,7 @@ Notice that we get here the values of the computed solution by giving the string
 
 
 
-\subsubsection{Nonstationary problems}
+\subsubsection{Nonstationary problems}\label{sec:timedep}
 In this section, the 
 numerical solution of nonstationary processes
 is considered. We focus on details which are 
@@ -876,7 +890,7 @@ needs explicit input of the old timestep term, then he can use
 
 
 
-\subsection{Solving of optimization problems}
+\subsection{Solving of optimization problems}\label{sec:opt}
 Upgrading the framework for solving optimization problems
 is described in this section. A prototypical problem reads:
 \begin{align*}
