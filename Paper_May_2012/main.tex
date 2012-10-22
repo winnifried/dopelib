@@ -242,7 +242,7 @@ interested in one (or several) functionals depending on the solution, i.e., some
 %\end{align*}
 
 In order to solve this problem, i.e., calculate $J(u)$, we need to discretize 
-the equation, in \dope, we are\marginpar{here using?} using finite elements to this end. This means we need to pick a 
+the equation. In \dope, we are using finite elements to do this. This means we need to pick a 
 subdivision $\mathcal T_h$, for instance into quadrilaterals,
 of the domain $\Omega$ and a finite element. In the concrete case we could, 
 for instance, take the $\mathcal Q_2/\mathcal Q_1$ Taylor-Hood element.
@@ -271,9 +271,9 @@ The evaluation of the residual will require the calculation of the integrals
 involved in the weak formulation of the problem. For example 
 the $i$-th component of the residual, with respect to the given FE-basis 
 $\phi_{h,i}$, will read as follows
-\[
+\begin{align}\label{eq:residual_vector}
  a(u_h)(\phi_{h,i}) - f(\phi_{h,i}) = \sum_{K\in \mathcal T_h} \nu\int_K \nabla u, \nabla \phi_i\,dx + \ldots
-\]
+ \end{align}
 Again, we see that, except for the local element integrals, all 
 calculations are independent from the concrete form of the PDE. 
 Hence we define an object \texttt{Integrator}
@@ -346,10 +346,9 @@ To solve a stationary PDE problem, the user has to provide some code which can r
 \end{description} 
 [Hier eventuell auf Unterschied zw. blosser Objekterstellung und dem tatsaechlichen 'Programmieren' fuer localpde etc. eingehen.]
 
-We describe now a program designed to compute a value $J(u)$, where $u=(v,p)$ is the solution of the Navier-Stokes equations \eqref{eq:ns} on the domain $\Omega$ as seen in figure~\ref{fig:example_ns} with  $f=0$, and the functional $J$ is defined as [TODO: Definition von J. Nutze Benchmark case oder lenkt das zu sehr ab?]. Additionally, for given inflow $v_{\operatorname{in}}$ we set  boundary conditions $
-v = v_{\operatorname{in}} \text{ on } \Gamma_{in}\text{ and }v = 0  \text{ on } \Gamma_{wall}$.
-\marginpar{Das Beispiel hier besser nochmal zusammen schreiben?}
-  
+We describe now a program designed to compute a value $J(u)$, where $u=(v,p)$ is the solution of the Navier-Stokes equations \eqref{eq:ns} on the domain $\Omega$ as seen in figure~\ref{fig:example_ns} with  $f=0$, and $J$ is the drag-force of the enclosed circle. We assume given Dirichlet data for the velocity $v$ on the boundary $\Gamma_{D}=\Gamma_{in}\cup\Gamma_{wall}\cup\Gamma_{circ}$. This is the Benchmark-Case 2D-1 from \cite{TuSchae96}, see there for further details.
+%Additionally, for given inflow $v_{\operatorname{in}}$ we set  boundary conditions 
+%v = v_{\operatorname{in}} \text{ on } \Gamma_{in}\text{ and }v = 0  \text{ on } \Gamma_{wall}.
 \begin{figure}[h]
 \centering
 \resizebox{0.5\textwidth}{!}{\input{Pictures/example_ns}}
@@ -358,8 +357,7 @@ circle-center $C=(0.2,0.2)$ and radius $r=0.05$.}
 \label{fig:example_ns}
 \end{figure}
 
-
-We split our program into the files \texttt{main.cc}, \texttt{functionals.h} and \texttt{localpde.h}. The \texttt{main.cc}-file is responsible for the declaration of various objects which have mostly to do with the \textit{discretization}, the \textit{solvers} and the general \textit{program sequence}, whereas the other two contain most of the problem-data -- especially the cell-wise contributions of the weak form, the right hand side and the functional. We give a brief explanation on every file in the following.
+We split the program into the parts \texttt{main.cc}, \texttt{functionals.h} and \texttt{localpde.h}. The \texttt{main.cc}-file is responsible for the declaration of various objects which have mostly to do with the \textit{discretization}, the \textit{solvers} and the general \textit{program sequence}, whereas the other two contain most of the problem-data -- especially the cell-wise contributions of the weak form, the right hand side and the functional. We give a brief explanation on every file in the following.
 
 \paragraph{\texttt{main.cc}}
 In this file we gather the basic components that are necessary for the solution process of a (stationary) partial differential equation. The structure of the program is basically the same for every equation under consideration, what changes is typically just the \textit{kind} of  finite element or the linear solver.\marginpar{Bin mit diesen Saetzen nicht so ganz zufrieden, mir faellt aber gerade nichts besseres ein. Mir geht es hier darum, dass ich nicht wirklich was programmieren, sondern eher etwas auswaehle, wohingegen in den anderen files tatsaechlich was zu tun ist.}  
@@ -370,11 +368,10 @@ After the usual preamble, in which we include the necessary header-files from \d
    ParameterReader pr;
 \end{lstlisting}
 In a text-file we might specify some problem-related parameters (for instance the viscosity $\nu$), but also general parameters for (non)-linear solvers and the output of computed data. 
-After that, we create a triangulation named \texttt{triangulation}. This is done exactly as in \deal{}, so we can choose between several possibilities: We could explicitly create a grid by providing a list of vertices and cells, read in a triangulation via \texttt{dealii::GridIn}-class or use the \texttt{dealii::GridGenerator}, which offers common domains like hypercubes or hyper-balls.
+After that, we create a triangulation of the domain $\Omega$ named \texttt{triangulation}.
+%This is done exactly as in \deal{}, so we can choose between several possibilities: We could explicitly create a grid by providing a list of vertices and cells, read in a triangulation via \texttt{dealii::GridIn}-class or use the \texttt{dealii::GridGenerator}, which offers common domains like hypercubes or hyper-balls.
 
-[code, Grid einlesen im Benchmark-Fall, ansonsten GridGenerator something. Hier auch auf Randfarben kurz eingehen.]
-
-Next, we create  quadrature rules (for the evaluation of integrals over cells and faces) and a finite element appropriate for the PDE at hand. We choose a gaussian quadrature of order three and the previosly mentioned Tayler-Hood element. \marginpar{Wie klar machen, dass vieles von deal.II uebernommen und nicht selbst geschrieben?}
+Next, we create some quadrature rules (for the evaluation of integrals over cells and faces) and a finite element appropriate for the PDE at hand. We choose a gaussian quadrature of order three and the previosly mentioned Tayler-Hood element. \marginpar{Wie klar machen, dass vieles von deal.II uebernommen und nicht selbst geschrieben?}
 \begin{lstlisting}
   QGauss<2> quad_formula(3);
   QGauss<1> face_quad_formula(3);
@@ -394,38 +391,25 @@ the definition of this classes is done spererately in \texttt{localpde.h} resp. 
 
 In the next step, we define an object of type \texttt{SpaceTimeHandler}, which handles all the things connected with the triangulation as well as the finite element space. This class is also capable of organizing degrees of freedom in time-dependent problems, hence the name. 
 \begin{lstlisting}
-  SpaceTimeHandler<FE> dof_handler(triangulation, finite_element);
+  SpaceTimeHandler<TRIANGULATION, FE> dof_handler(triangulation,
+                                                  finite_element);
 \end{lstlisting}
 There exist different versions of this class for forward as well as optimization problems. 
 
 Now we have everything at hand to create an instantiation of type \texttt{PDEProblemContainer}. This basically represents the disrectized problem, and bundles things like boundary conditions, the PDE, the functional and the discretization. First, we give the constructor the \texttt{local\_pde} and the \texttt{dof\_handler}.
 \begin{lstlisting}
   PDEProblemContainer<LocalPDE> prob_container(local_pde,
-                                                  dof_handler);
+                                               dof_handler);
 \end{lstlisting}
 After that, we add the functional under consideration and, because it is a boundaryfunctional, we specify the part of the boundary on which the functional operates (this is done via a 'boundarycolor').
 \begin{lstlisting}
   prob_container.AddFunctional(&local_functional);
   prob_container.SetBoundaryFunctionalColors(1);
 \end{lstlisting}
-Next, we incorporate the dirichlet data. First, we define two functions representing the dirichlet boundary conditions. These are given to an interface\marginpar{SimpleDirichletData weglassen?} class \texttt{SimpleDirichletData}. 
+Next, we incorporate the dirichlet data, which is given by the class \texttt{DirichleData}. Then we have to tell the \texttt{prob\_container} for which components and boundaries we prescribe the dirichlet conditions. This is done via a boundary-color (0 stands for $\Gamma_D$) and a \texttt{std::vector<bool> comp\_mask = (true, true, false)}.
 \begin{lstlisting}
-  ZeroFunction<2> zf;
-  InflowFunction<2> if;
-  SimpleDirichletData<VECTOR, 2> dd_zf(zf);
-  SimpleDirichletData<VECTOR, 2> dd_if(if);
-\end{lstlisting}
-Then we have to tell the \texttt{prob\_container} for which components and boundaries we prescribe the dirichlet conditions.
-\begin{lstlisting}
-  std::vector<bool> comp_mask(3);
-
-  comp_mask[0] = true;
-  comp_mask[1] = true;
-  comp_mask[2] = false;
-
-  prob_container.SetDirichletBoundaryColors(0, comp_mask, &dd_if);
-  prob_container.SetDirichletBoundaryColors(2, comp_mask, &dd_zf);
-  prob_container.SetDirichletBoundaryColors(3, comp_mask, &dd_zf);
+  DirichletData dd;
+  prob_container.SetDirichletBoundaryColors(0, comp_mask, dd);
 \end{lstlisting}
 Now we create the object which steers the whole solution process, the previosly mentioned \texttt{StatPDEProblem}. It takes care of solving the discretized equation and evaluating the given functionals. The class depends actually on some template-parameters, so for the sake of abbreviation, we defined a typedef at the beginning of the \texttt{main.cc}-file.
 \begin{lstlisting}
@@ -441,18 +425,16 @@ The first template parameter of \texttt{NewtonSolver} describes which linear sol
 typedef DirectLinearSolverWithMatrix<MATRIX,
             VECTOR, 2> LINEARSOLVER;
 \end{lstlisting}
-\marginpar{Kein IDC, dafuer quadformeln eingefuegt.}
 With the type settled, we create the object \texttt{solver}, which needs the discretization (represented here by the \texttt{prob\_container}), the parameter reader as well as the quadrature rules.
 \begin{lstlisting}
-  SSOLVER solver(&prob_container, pr, quad_formula, face_quad_formula);
+  SSOLVER solver(prob_container, pr, quad_formula, face_quad_formula);
 \end{lstlisting}
-\marginpar{outputhandler erlaeutern?}
 %Finally, the output handler is initialized via
 %\begin{lstlisting}
 %  P.RegisterOutputHandler(&out);
 %  solver.RegisterOutputHandler(&out);
 %\end{lstlisting}
-Finally, the programm is started with:
+Finally, the programm is started by
 \begin{lstlisting}
   solver.ReInit();
   solver.ComputeReducedFunctionals();
@@ -461,8 +443,7 @@ Finally, the programm is started with:
 \paragraph{\texttt{localpde.h}}
 We shall now give an overview to the implementation of the specific form of the PDE. 
 
-\marginpar{Rekapitulierung des Newton-Verfahrens?}
-
+%\marginpar{Rekapitulierung des Newton-Verfahrens?}
 Let $N$ be the number of degrees of freedom of our discretization and $\Set{\phi_{h,i}|1\leq i \leq N}$ be a given FE-Basis. As stated in [sectionref], to solve the discrete equation \eqref{eq:discrete_equation} we need the residual, i.e. the vector
 \begin{align}\label{eq:discrete_residual}
 \left(a(u_h)(\phi_{h,i})-(f,\phi_{h,i})\right)_{i=1}^N,
@@ -478,7 +459,7 @@ To this end, we define a class \texttt{LocalPDE} which provides the three method
 
 \begin{lstlisting}
   void CellEquation(const CellDataContainer<2>& cdc,
-                    dealii::Vector<double> &local_cell_vector)
+                    VECTOR &local_cell_vector)
     {
       const auto& fe_values = cdc.GetFEValuesState();
       unsigned int n_dofs_per_cell = cdc.GetNDoFsPerCell();
@@ -492,29 +473,30 @@ To this end, we define a class \texttt{LocalPDE} which provides the three method
 %      cdc.GetGradsState("last_newton_solution", _ugrads);
 %  \end{lstlisting}
   \begin{lstlisting}
-     cdc.GetValuesState("last_newton_solution", _uvalues);
-     cdc.GetGradsState("last_newton_solution", _ugrads);
+     cdc.GetValuesState("last_newton_solution", uvalues);
+     cdc.GetGradsState("last_newton_solution", ugrads);
  \end{lstlisting}
-\texttt{\_uvalues} and \texttt{\_ugrads} are of type \texttt{std::vector<...>}, with $\ldots$ symbolizing the appropriate data type. In these two lines, we load the (gradient of the) solution of the last newton iteration in all the quadrature points on the cell into the two \texttt{std::vector} objects.
+ In these two lines, we load the (gradient of the) solution of the last newton iteration in all the quadrature points on the cell into the two vectors \texttt{uvalues} and \texttt{ugrads}.
 
-In the next linex, we loop over the quadrature points and the number of dofs of the cell. In the innermost loop, we evaluate the weak form tested with $\phi_{i,h}$ on the cell with the help of the previosly selected quadrature formula. 
+In the next lines, we loop over the quadrature points and the number of DoFs of the cell. In the innermost loop, we evaluate the weak form tested with $\phi_{i,h}$ (represented by \texttt{phi\_i\_grads\_v}) on the cell with the help of the previosly selected quadrature formula. 
 %     const FEValuesExtractors::Vector velocities(0);
 %     const FEValuesExtractors::Scalar pressure(2); 
  \begin{lstlisting}
     for(unsigned int q_point = 0; q_point < n_q_points; q_point++)
     {
+      //initialize phi_i_grads_v etc.
       Tensor<2,2> vgrads;
-      vgrads[0][0] = _ugrads[q_point][0][0]; 
-      //etc.
-      const Tensor<2,2> phi_i_grads_v = 
-          state_fe_values[velocities].gradient (i, q_point);
+      vgrads[0]= ugrads[q_point][0]; 
+      vgrads[1]= ugrads[q_point][1];
       for (unsigned int i=0;i<n_dofs_per_cell;i++)
         local_cell_vector(i) += ( _nu 
-                                *_vgrads[q_point] * phi_i_grads_v 
+                                * vgrads * phi_i_grads_v 
                                 + //all the other terms)
                                 * state_fe_values.JxW(q_point);
+    }
 \end{lstlisting}
- 
+\dope{} takes now care of the distribution of the local cell contributions into  the vector of the residual \eqref{eq:residual_vector}. The methods \texttt{CellRightHandSide} and \texttt{CellMatrix} follow the same structure as 
+\texttt{CellEquation}, so we do not go into the details here.
 % [CellEquation]
 % 
 % \begin{lstlisting}
@@ -593,7 +575,25 @@ In the next linex, we loop over the quadrature points and the number of dofs of 
 % with a line search parameter $\omega\in (0,1]$.
 
 \paragraph{\texttt{localfunctional.h}}
-[TODO Christian]
+The implementation of the boundary-functional $J$ follows the outline of the computation of the cell-residual in \texttt{localpde.h}. However, there are two main differences. First, we do not have to specify the method \texttt{CellEquation}, but \texttt{BoundaryValue} instead. This is due to the fact that we consider a boundary-functional in this example, and so we have to specify the value of the functional not cell-wise but face wise (for the faces that lie on $\Gamma_{circ}$). The second difference is that as we only want to evaluate a functional and not a residual-vector, we just loop over the quadrature points and not over the degrees of freedom on the face.
+\begin{lstlisting}
+ double
+ BoundaryValue(const FaceDataContainer<2>& fdc)
+  {
+    //same as before, get n_q_points etc.
+    fdc.GetFaceValuesState("state", ufacevalues);
+    fdc.GetFaceGradsState("state", ufacegrads);
+\end{lstlisting}
+Notice that we get here the values of the computed solution by giving the string "state".
+\begin{lstlisting}
+    for(unsigned int q_point = 0; q_point < n_q_points; q_point++)
+      erg += -1. * ( _nu * ufacegrads[q_point][0]
+                * state_fe_face_values.normal_vector(q_point)
+                + //other terms)        
+                * state_fe_face_values.JxW(q_point);
+    return erg;
+  }
+\end{lstlisting}
 
 % The target functional 
 % is now implemented in \texttt{functional.h} and 
