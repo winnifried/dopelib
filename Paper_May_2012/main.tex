@@ -1283,7 +1283,17 @@ is discussed.
 
 \subsection{Goal-oriented mesh refinement for Navier-Stokes}
 Christian.
+In this example we consider a laminar flow around a cylinder in 2d. To be more precise, we are computing the benchmark 2D-1 from \cite{TuSchae96}. The computational domain is as depicted in figure~\ref{fig:example_ns}. We want to compute the drag force on the enclosed cylinder
+\begin{equation}
+c_D = \frac 1 {20} \int_{\Gamma_{circ}} \nu\partial_nu _1 - pn,
+\end{equation}
+with the normal $n$ and $\nu = 0.001$. To achieve an efficient computation of the quantity $c_D$, we employ goal-oriented mesh refinement with the help of the DWR-method, see \cite{BeRa96}.
 
+\begin{itemize}
+\item Bild Freiheitsgrade vs Fehler, global und 
+\item Bild adaptive mesh, bild der Loesung (?)
+\item eventuell kurz auf duale gleichung eingehen.
+\end{itemize}
 
 \subsection{Nonstationary Fluid-Structure Interaction}
 In this example, the challenging benchmark FSI 2
