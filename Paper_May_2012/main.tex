@@ -47,7 +47,8 @@
 \newcommand{\re}{\operatorname{Re}}
 
 \newcommand{\todo}[1]{\textbf{\textsc{\textcolor{black}{TODO: #1}}}}
-
+%\newcommand{\mymarginpar}[1]{\marginpar{\textcolor{red}{\scriptsize{#1}}}}
+\newcommand{\mymarginpar}[1]{\marginpar{\textcolor{red}{\normalsize{#1}}}}
 %
 \begin{document}
 \markboth{C. Goll, T. Wick, and W. Wollner}{DOpElib: A Goal Oriented Software Library}
@@ -355,7 +356,8 @@ To solve a stationary PDE problem, the user has to provide some code which can r
 \begin{description}
 \item[Discretization] Specify what kind of triangulation, finite element, quadrature rule, etc. we want to use.
 \item[Problem-data] Define the weak form, the corresponding matrices, the functionals as well as the boundary conditions. With exception of the boundary conditions, we have to specify all this only cell-wise, \dope{} handles the rest for us.
-\item[Solvers] Which (non-)linear solver should we use? \marginpar{besser algorithmen?}
+\item[Solvers] Which (non-)linear solver should we use? 
+\mymarginpar{besser algorithmen?}
 \item[Miscellaneous] ParameterReader? Outputhandler etc.
 \end{description} 
 [Hier eventuell auf Unterschied zw. blosser Objekterstellung und dem tatsaechlichen 'Programmieren' fuer localpde etc. eingehen.]
@@ -806,37 +808,79 @@ Notice that we get here the values of the computed solution by giving the string
 
 
 \subsubsection{Nonstationary problems}\label{sec:timedep}
-In this section, the 
-numerical solution of nonstationary processes
-is considered. We focus on details which are 
-beyond stationary examples as discussed in the 
-previous sections. Before, we introduce 
-the steps of implementation in DOpElib, we 
-derive the basic theoretical concepts.
-As an example, we consider the heat equation:
-Find $u\in V$:
+To describe the solution of nonstationary 
+PDEs, we consider a time-dependent semi-linear form
+Let $I:=[0,T]$ be a time interval with end time point value $T$.
+To find some $u$ in a weak form, we define
 \[
-\partial_t u - \Delta u = 0
+\int_I a(u)(\phi) = \int_I f(phi) \quad \forall\phi\in X,
 \]
-and in weak formulation:
-Find $u\in V$:
+with some suitable Bochner space $X$.  As model problem,
+we consider the nonstationary Navier-Stokes equations
+in a domain $\Omega\in\mathbb{R}^d$. Find: 
+$(v,p)\in X$ with
 \[
-a(u)(\phi) = 0 \quad \forall \phi \in V,
+\int_I \bigl[ (\partial_t v, \phi)
++ \nu (\nabla v, \nabla \phi) + (v\cdot\nabla v, \phi)
+- (p,\nabla\cdot \phi)
++ (\nabla\cdot v, \chi)\bigr] \, dt
++ (v(0) - v^0, \phi(0))
+= \int_I (f,\phi) \, dt 
 \]
-with some appropriate space $V$ and 
+for all $\phi:= (\phi, \chi) \in X$ with
 \[
-a(u)(\phi) = (\partial_t u, \phi) + (\nabla u, \nabla \phi) \quad \forall \phi \in V.
+X:= \bigl\{ 
+(v,p) | v\in L^2(I,H_0^1(\Omega)^d , 
+\partial_t v\in L^2(I, L^2(\Omega)^d), 
+p\in L^2(I,L^2(\Omega)\setminus\mathbb{R} \bigr\}.
 \]
+As for stationary problems, the goal is to compute
+some target functional $J(\cdot)$ which is now possibly 
+time-dependent. To organize the discretization 
+process, we need to perform spatial and temporal 
+discretization. This is again done via
+a global object that treats the routines
+in DOpElib:
+\begin{lstlisting}
+  template<typename Triangulation, typename FE, typename times>
+      void MethodOfLines_SpaceTimeHandler(Triangulation &, FE, times);
+\end{lstlisting}
+Spatial discretization is the same
+as discussed previously, and thus, we briefly demonstrate
+routines to perform temporal integration in the following. 
+
+\subsubsection{Problem-dependent 
+implementation of nonstationary problems}
+\label{sec:timedep:implementation}
+We explain in more detail the temporal discretization
+and specific issues of its implementation. 
+To keep the presentation easy, we abuse notation 
+by neglecting
+all material coefficients
+and give formal-related idea based on the weak 
+form of the Navier-Stokes equations:
+Find $(v,p)$ such that
+\begin{align*}
+(\partial_t v,\phi) 
++ (\nabla v, \nabla \phi)
++ (v\cdot\nabla v,\phi)
+-(p,\nabla\cdot \phi)
++(\nabla\cdot v, \chi)
+=(f,\phi).
+\end{align*}
 Temporal discretization using the One-step-$\theta$ scheme reads:
-Given the old timestep solution $u^n$, find $u^{n+1}$:
+Given the old timestep solution $(v^n,p^n)$, 
+find $(v^{n+1}, p^{n+1})$ (and multiplication 
+through by the timestep $k$):
 \[
-\frac{(u^{n+1} - u^{n}, \phi)}{k} + \theta (\nabla u^{n+1}, \nabla \phi)
-+ (1 - \theta) (\nabla u^{n}, \nabla \phi) = 0,
-\]
-Reordering in new and old terms and multiplication by the time step size $k$:
-\[
-(u^{n+1},\phi) + k \theta (\nabla u^{n+1}, \nabla \phi)
-= (u^n, \phi) - (1 - \theta) (\nabla u^{n}, \nabla \phi).
+(v^{n+1} - v^{n}, \phi)
++ k\theta (\nabla v^{n+1}, \nabla \phi)
++ k\theta (v^{n+1}\cdot\nabla v^n + 
+  v^{n}\cdot\nabla v^{n+1},\phi)
+- k (p^{n+1},\nabla\cdot \phi)
++ (\nabla\cdot v^{n+1}, \chi)
+= k\theta (f^{n+1},\phi) + k(1-\theta) (f^{n},\phi)
+- k(1-\theta) (\nabla v^{n}, \nabla \phi) 
 \]
 The concrete choice of $\theta$ leads to a
 specific time stepping scheme. For instance,
@@ -844,15 +888,31 @@ $\theta = 0.5$ gives the Crank-Nicolson scheme,
 \begin{lstlisting}
    CrankNicolsonProblem<...>
 \end{lstlisting}
-The main work is treated as for stationary problems
-within 
+
+
+The pressure and incompressibily terms should be 
+treated fully implicitly when time-discretizing 
+the Navier-Stokes equations.
+For this reason, the implementation is split up
+into several items to account for fully implicit 
+terms and remaining terms for which we need 
+old timestep and present timestep values. 
+Hence, in the local cell equation, a paramter
+is used to distigugish these terms:
 \begin{lstlisting}
-   MethodOfLines_SpaceTimeHandler<...>
+  void CellEquation(...)
+   {
+      local_cell_vector(i) +=  scale * (\nabla v^{n+1}, \nabla \phi) + etc.
+
+      local_cell_vector(i) +=  scale_ico * (-p^{n+1},\nabla\cdot v)
+   }
 \end{lstlisting}
-Again, the key issue is that this procedure is totally independent 
-of the specific form of the PDE. The user-related work 
-remains to provide the time derivative $\partial_t u$ in
-the implementation:
+Analogoues procedure is performed in the local 
+cell matrix.
+
+In addition to stationary problems, the implementation
+of the time-derivative must be considered which is done
+in 
 \begin{lstlisting}
   void CellTimeEquation(...)
    {
@@ -877,7 +937,12 @@ and it is done in a straight-forward way:
 \end{lstlisting}
 Here, the advantage is that \dope{} orders the terms in the timestepping
 problems
-such that only $(u^{n+1},\phi)$ must be implemented. However, if someone 
+such that only $(u^{n+1},\phi)$ must be implemented. 
+
+
+
+\begin{remark}[Nonlinear terms in the time derivative]
+However, if someone 
 needs explicit input of the old timestep term, then he can use 
 \begin{lstlisting}
   void CellTimeEquationExplicit (...)
@@ -885,6 +950,17 @@ needs explicit input of the old timestep term, then he can use
      // implement (u^{n+1},\phi) and (u^n,\phi)  
    }
 \end{lstlisting}
+\end{remark}
+
+\begin{remark}[Fractional-Step-$\theta$-scheme]
+The temporal discretization in this section 
+is based on the One-Step-$\theta$-schemes. The library
+offers in addition an implementation 
+of the second-order and strongly $A$-stable 
+Fractional-Step-$\theta$-scheme in which 
+each time step is subdivided into three 
+sub-timeintervals. 
+\end{remark}
 
 
 
@@ -1296,7 +1372,6 @@ is discussed.
 \end{itemize}
 
 \subsection{Goal-oriented mesh refinement for Navier-Stokes}
-Christian.
 In this example we consider a laminar flow around a cylinder in 2d. To be more precise, we are computing the benchmark 2D-1 from \cite{TuSchae96}. The computational domain is as depicted in figure~\ref{fig:example_ns}. We want to compute the drag force on the enclosed cylinder
 \begin{equation}
 c_D = \frac 1 {20} \int_{\Gamma_{circ}} \nu\partial_nu _1 - pn,
@@ -1321,21 +1396,22 @@ namely, the continuity of velocities and continuity of normal stresses
 are satisfied in each time step. This is achieved with the help of 
 a monolithic coupling scheme (strong coupling).
 
-The configuration is 
-sketched in Figure \ref{configuration_csm_and_fsi_2D}. 
+The basic configuration is 
+sketched in Figure \ref{fig:example_ns} at which an elastic beam is attached 
+behind the rigid cylinder. 
 The computational domain has length $L=2.5m$ and height $H=0.41m$. The circle center
 is positioned at $C=(0.2m,0.2m)$ with radius $r=0.05m$. The elastic beam has length
 $l=0.35m$ and height $h=0.02m$. The right lower end is positioned at 
 $(0.6m,0.19m)$, and
 the left end is attached to the circle. 
 
-\begin{figure}[h]
-\centering
-\input{Pictures/pic_12}
-\caption{Flow around cylinder with elastic beam with 
-circle-center $C=(0.2,0.2)$ and radius $r=0.05$.}
-\label{configuration_csm_and_fsi_2D}
-\end{figure}
+%\begin{figure}[h]
+%\centering
+%\input{Pictures/pic_12}
+%\caption{Flow around cylinder with elastic beam with 
+%circle-center $C=(0.2,0.2)$ and radius $r=0.05$.}
+%\label{configuration_csm_and_fsi_2D}
+%\end{figure}
 
 Control points $A(t)$ (with $A(0) = (0.6,0.2)$) are fixed at the 
 trailing edge of the structure, measuring $x$- and $y$-deflections of the beam.
