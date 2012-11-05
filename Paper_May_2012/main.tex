@@ -371,13 +371,14 @@ objects described above.
 \subsubsection{Problem dependent implementation of stationary PDE problems}
 To solve a stationary PDE problem, the user has to provide some code which can roughly be divided into the following main sections:
 \begin{description}
-\item[Discretization] Specify what kind of triangulation, finite element, quadrature rule, etc. we want to use.
+\item[Discretization] Specify what kind of triangulation, time stepping
+  scheme, finite element, quadrature rules, etc. we want to use.
 \item[Problem-data] Define the weak form, the corresponding matrices, the functionals as well as the boundary conditions. With exception of the boundary conditions, we have to specify all this only cell-wise, \dope{} handles the rest for us.
 \item[Solvers] Which (non-)linear solver should we use? 
-\mymarginpar{besser algorithmen?}
-\item[Miscellaneous] ParameterReader? Outputhandler etc.
+\item[Additional features] ParameterReader to read in the run-time parameters
+  such as material coefficients or adjustments for the solvers like tolerance
+  for Newton's method. Second, definition of Outputhandler etc.
 \end{description} 
-[Hier eventuell auf Unterschied zw. blosser Objekterstellung und dem tatsaechlichen 'Programmieren' fuer localpde etc. eingehen.]
 
 We describe now a program designed to compute a value $J(u)$, where $u=(v,p)$ is the solution of the Navier-Stokes equations \eqref{eq:ns} on the domain $\Omega$ as seen in figure~\ref{fig:example_ns} with  $f=0$, and $J$ is the drag-force of the enclosed circle. We assume given Dirichlet data for the velocity $v$ on the boundary $\Gamma_{D}=\Gamma_{in}\cup\Gamma_{wall}\cup\Gamma_{circ}$. This is the Benchmark-Case 2D-1 from \cite{TuSchae96}, see there for further details.
 %Additionally, for given inflow $v_{\operatorname{in}}$ we set  boundary conditions 
@@ -393,8 +394,14 @@ circle-center $C=(0.2,0.2)$ and radius $r=0.05$.}
 We split the program into the parts \texttt{main.cc}, \texttt{functionals.h} and \texttt{localpde.h}. The \texttt{main.cc}-file is responsible for the declaration of various objects which have mostly to do with the \textit{discretization}, the \textit{solvers} and the general \textit{program sequence}, whereas the other two contain most of the problem-data -- especially the cell-wise contributions of the weak form, the right hand side and the functional. We give a brief explanation on every file in the following.
 
 \paragraph{\texttt{main.cc}}
-In this file we gather the basic components that are necessary for the solution process of a (stationary) partial differential equation. The structure of the program is basically the same for every equation under consideration, what changes is typically just the \textit{kind} of  finite element or the linear solver.\marginpar{Bin mit diesen Saetzen nicht so ganz zufrieden, mir faellt aber gerade nichts besseres ein. Mir geht es hier darum, dass ich nicht wirklich was programmieren, sondern eher etwas auswaehle, wohingegen in den anderen files tatsaechlich was zu tun ist.}  
-%The implementation of problem related data happens somwhere else, here we basically just pick together things like th
+In this file we gather the basic components that are necessary for the
+solution process of a (stationary) partial differential equation. The
+structure of the program is basically the same for every equation under
+consideration, what changes is typically just the \textit{kind} of  finite
+element or the linear solver. Here, a key issue is that we only need to pick 
+some pre-implemented routines from the \dope{} library rather than 
+implementing new features.
+
 
 After the usual preamble, in which we include the necessary header-files from \deal{}, \dope{} and our own problem (i.e. \texttt{localfunctional.h} and \texttt{localpde.h}), we start by defining an instance of a \texttt{ParameterReader}-object, which handles run-time parameter.
 \begin{lstlisting}
@@ -404,22 +411,22 @@ In a text-file we might specify some problem-related parameters (for instance th
 After that, we create a triangulation of the domain $\Omega$ named \texttt{triangulation}.
 %This is done exactly as in \deal{}, so we can choose between several possibilities: We could explicitly create a grid by providing a list of vertices and cells, read in a triangulation via \texttt{dealii::GridIn}-class or use the \texttt{dealii::GridGenerator}, which offers common domains like hypercubes or hyper-balls.
 
-Next, we create some quadrature rules (for the evaluation of integrals over cells and faces) and a finite element appropriate for the PDE at hand. We choose a gaussian quadrature of order three and the previosly mentioned Tayler-Hood element. \marginpar{Wie klar machen, dass vieles von deal.II uebernommen und nicht selbst geschrieben?}
-\begin{lstlisting}
-  QGauss<2> quad_formula(3);
-  QGauss<1> face_quad_formula(3);
-  FESystem<2> finite_element(dealii::FE_Q<2>(2), 2,
-                             dealii::FE_Q(1), 1);
-\end{lstlisting}
+Next, we create some quadrature rules (for the evaluation of integrals over
+cells and faces) and a finite element appropriate for the PDE at hand. We
+choose a Gaussian quadrature of a certain degree and the previosly mentioned
+Tayler-Hood element. These routines are quite standard in each finite element
+software and we take advantage to take them from \deal{}.
+
+
 %IntegratorDataContainer<VECTOR, 2> idc(quad_formula,
 %                                         face_quad_formula);
 %The \texttt{IntegratorDataContainer} class just makes the constructor interface of 
-Then, the \texttt{LocalPDE} and \texttt{LocalFunctional} objects come into play.
+Then, the two characteristic features \texttt{LocalPDE} and \texttt{LocalFunctional} objects come into play.
 \begin{lstlisting}
 LocalPDE<VECTOR> local_pde;
 LocalFunctional<VECTOR> local_functional;
 \end{lstlisting}
-These hold the information of the PDE and functional under consideration. Further explication is given below because
+These hold the information of the PDE and the functional under consideration. Further explication is given below because
 the definition of this classes is done spererately in \texttt{localpde.h} resp.   \texttt{localfunctional.h}.
 
 In the next step, we define an object of type \texttt{SpaceTimeHandler}, which handles all the things connected with the triangulation as well as the finite element space. This class is also capable of organizing degrees of freedom in time-dependent problems, hence the name. 
@@ -511,7 +518,10 @@ To this end, we define a class \texttt{LocalPDE} which provides the three method
  \end{lstlisting}
  In these two lines, we load the (gradient of the) solution of the last newton iteration in all the quadrature points on the cell into the two vectors \texttt{uvalues} and \texttt{ugrads}.
 
-In the next lines, we loop over the quadrature points and the number of DoFs of the cell. In the innermost loop, we evaluate the weak form tested with $\phi_{i,h}$ (represented by \texttt{phi\_i\_grads\_v}) on the cell with the help of the previosly selected quadrature formula. 
+In the next lines, we finally implement our concrete PDE. Here, aim to provide 
+an interface which is closely related to the weak formulation which 
+has to be derived by the user. Thus,
+we loop over the quadrature points and the number of DoFs of the cell. In the innermost loop, we evaluate the weak form tested with $\phi_{i,h}$ (represented by \texttt{phi\_i\_grads\_v}) on the cell with the help of the previosly selected quadrature formula. 
 %     const FEValuesExtractors::Vector velocities(0);
 %     const FEValuesExtractors::Scalar pressure(2); 
  \begin{lstlisting}
