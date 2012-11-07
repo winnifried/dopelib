@@ -12,11 +12,11 @@
 
 % Metadata Information
 \acmVolume{0}
-\acmNumber{0}
+\acmNumber{0} 
 \acmArticle{00}
 \acmYear{0000}
 \acmMonth{0}
-
+ 
 %
 %%% User-requested packages placed after this line %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \usepackage{amsfonts,amssymb,amsmath}
@@ -31,7 +31,7 @@
 % \usepackage[center]{subfigure}
 \numberwithin{equation}{section}
 \usepackage{braket}                             %Provides \Set for typing sets
-\usepackage{float}
+\usepackage{float} 
 \usepackage{subfig}
 
 
@@ -176,7 +176,7 @@ at the present stage the following key features are supported by the library
   additional other constraints.
 \item Several examples showing how to solve various kinds of optimization problems
   involving stationary PDE constraints.
-\item Goal-oriented mesh adaptation with the dual-weighted residual method.
+\item Goal-oriented mesh adaptation with the Dual Weighted Residual method, see \cite{BR03}.
 \item Different spatial triangulations for control and state variables.
 \end{itemize}
 
@@ -233,7 +233,7 @@ how this idea extends to non stationary problems as well as to optimization
 problems with PDE constraints. 
 
 \subsection{Solving of PDEs}
-\subsubsection{Stationary problems}
+\subsubsection{Stationary problems}\label{subsubsec:stationary problems}
 For the start we consider a prototypical problem given by the solution of 
 a stationary PDE, which we assume to be given in weak form.
 In abstract notation it reads; find some $u$ in an appropriate set
@@ -290,7 +290,7 @@ involved in the weak formulation of the problem. For example
 the $i$-th component of the residual, with respect to the given FE-basis 
 $\phi_{h,i}$, will read as follows
 \begin{align}\label{eq:residual_vector}
- a(u_h)(\phi_{h,i}) - f(\phi_{h,i}) = \sum_{K\in \mathcal T_h} \nu\int_K \nabla u, \nabla \phi_i\,dx + \ldots
+ a(u_h)(\phi_{h,i}) - f(\phi_{h,i}) = \sum_{K\in \mathcal T_h} \nu\int_K \nabla u_h, \nabla \phi_{h,i}\,dx + \ldots
  \end{align}
 Again, we see that, except for the local element integrals, all 
 calculations are independent from the concrete form of the PDE. 
@@ -309,7 +309,7 @@ to the information stored in the \texttt{SpaceTimeHandler}
 to correctly loop over all elements.
 To solve the linearized systems, again, all that is left is the calculation
 of the matrix corresponding to the linearized equation. To calculate this,
-again we can define a method in the integrator that does exactly this provided
+ we can define a method in the integrator that does exactly this provided
 we have a user defined object \texttt{pde} that can evaluate the local 
 integrals needed for assembling the matrix, i.e.,
 \begin{lstlisting}
@@ -371,8 +371,9 @@ objects described above.
 \subsubsection{Problem dependent implementation of stationary PDE problems}
 To solve a stationary PDE problem, the user has to provide some code which can roughly be divided into the following main sections:
 \begin{description}
-\item[Discretization] Specify what kind of triangulation, time stepping
-  scheme, finite element, quadrature rules, etc. we want to use.
+\item[Discretization] Specify what kind of triangulation,
+% time steppingscheme,
+finite element, quadrature rules, etc. we want to use.
 \item[Problem-data] Define the weak form, the corresponding matrices, the functionals as well as the boundary conditions. With exception of the boundary conditions, we have to specify all this only cell-wise, \dope{} handles the rest for us.
 \item[Solvers] Which (non-)linear solver should we use? 
 \item[Additional features] ParameterReader to read in the run-time parameters
@@ -441,7 +442,7 @@ Now we have everything at hand to create an instantiation of type \texttt{PDEPro
   PDEProblemContainer<LocalPDE> prob_container(local_pde,
                                                dof_handler);
 \end{lstlisting}
-After that, we add the functional under consideration and, because it is a boundaryfunctional, we specify the part of the boundary on which the functional operates (this is done via a 'boundarycolor').
+After that, we add the functional under consideration and, because it is a boundaryfunctional, we specify the part of the boundary on which the functional operates (this is done via a 'boundarycolor', $1$ represents $\Gamma_{circ}$).
 \begin{lstlisting}
   prob_container.AddFunctional(&local_functional);
   prob_container.SetBoundaryFunctionalColors(1);
@@ -467,7 +468,8 @@ typedef DirectLinearSolverWithMatrix<MATRIX,
 \end{lstlisting}
 With the type settled, we create the object \texttt{solver}, which needs the discretization (represented here by the \texttt{prob\_container}), the parameter reader as well as the quadrature rules.
 \begin{lstlisting}
-  SSOLVER solver(prob_container, pr, quad_formula, face_quad_formula);
+  SSOLVER solver(prob_container, pr,
+                    quad_formula, face_quad_formula);
 \end{lstlisting}
 %Finally, the output handler is initialized via
 %\begin{lstlisting}
@@ -484,7 +486,7 @@ Finally, the programm is started by
 We shall now give an overview to the implementation of the specific form of the PDE. 
 
 %\marginpar{Rekapitulierung des Newton-Verfahrens?}
-Let $N$ be the number of degrees of freedom of our discretization and $\Set{\phi_{h,i}|1\leq i \leq N}$ be a given FE-Basis. As stated in [sectionref], to solve the discrete equation \eqref{eq:discrete_equation} we need the residual, i.e. the vector
+Let $N$ be the number of degrees of freedom of our discretization and $\Set{\phi_{h,i}|1\leq i \leq N}$ be a given FE-Basis. As stated in subsection~\ref{subsubsec:stationary problems}, to solve the discrete equation \eqref{eq:discrete_equation} we need the residual, i.e. the vector
 \begin{align}\label{eq:discrete_residual}
 \left(a(u_h)(\phi_{h,i})-(f,\phi_{h,i})\right)_{i=1}^N,
 \end{align}
@@ -836,9 +838,9 @@ Notice that we get here the values of the computed solution by giving the string
 
 \subsubsection{Nonstationary problems}\label{sec:timedep}
 To describe the solution of nonstationary 
-PDEs, we consider a time-dependent semi-linear form
+PDEs, we consider a time-dependent semi-linear form {\color{red} Hier fehlt etwas? Vermutlich a? ~cg}
 Let $I:=[0,T]$ be a time interval with end time point value $T$.
-To find some $u$ in a weak form, we define
+To find some $u$ in a weak form, we define\marginpar{Inkonsistenz: $f(\phi)$ vs. $(f,\phi)$ etwas weiter unten. Ebenso Integrale mal mit $dt$, mal ohne. Waere dafuer, $dt$ wegzulassen.}
 \[
 \int_I a(u)(\phi) = \int_I f(\phi) \quad \forall\phi\in X,
 \]
@@ -1105,7 +1107,7 @@ optimization algorithms to minimization problems governed by the PDE.
 In this final section, we shall give a brief summary of features 
 that are applicable (in general) to all types of problems. Specifically,
 \dope{} provides goal-oriented mesh refinement with the help of the 
-Dual-Weighted-Residual (DWR) method \cite{BeRa96}. Here, a certain 
+Dual Weighted Residual (DWR) method \cite{BeRa96}. Here, a certain 
 cost functional such as a point evaluation, line intergration or domain
 integration is considered. Determining the lowest error between the 
 (unknown) exact solution and its numerical approximation for lowest computational
@@ -1127,7 +1129,7 @@ features of \dope{}:
 \begin{itemize}
 \item In the first numerical example, we consider 
 goal-oriented mesh refinement with the help of the 
-Dual-Weighted-Residual (DWR) method for the stationary Navier-Stokes equations.
+Dual Weighted Residual (DWR) method for the stationary Navier-Stokes equations.
 \item The second example presents nonstationary fluid-structure 
 interaction. The challenges for those kind of problems are the multi-domain
 character of the coupled problem and the treatment of the coupling conditions.
