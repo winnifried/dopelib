@@ -107,25 +107,26 @@ Today, there exist a broad variety of software libraries
 that provide numerical tools for solving partial differential
 equations (PDEs). Prominent examples are 
 \deal{} \cite{dealnew}, dune \cite{dune} , 
-or commercial solvers like Ansys \cite{ansys}). 
+or commercial solvers like ANSYS \cite{ansys} or COMSOL \cite{comsol}. 
 In fact, these libraries provide very useful tools 
 for a huge variety of applications. 
 
 However, often, the user is confronted with 
-certain bottlenecks. Either, standard high-level routines 
+certain bottlenecks. Either in open-source projects for academic research, 
+standard high-level routines 
 which are necessary to solve even simplest PDEs,
 such as linear and nonlinear solvers or timestepping schemes must be implemented 
 by the user himself. However, such routines are problem-independent 
 and could be provided as standard tools. In fact, in many 
 numerical studies, the main task is to compute a  
 target functional which represents a certain error norm,
-point value, etc.
-Second, there is a ever increasing interest in computing 
+point value or traction, for example.
+Second, there is nowadays an increasing interest in computing 
 optimization problems in which the state equation is governed 
 by a PDE. Such optimization problems comprise optimal control,
 parameter estimation, inverse problems or optimal experimental design. 
 So far, there exist a very limited number of open source packages
-which provides such routines for scientific studies.
+which provides standard routines that serve as basis for scientific studies.
 
 On the other hand, 
 commercial toolkits provide these previously mentioned routines but limits user-interaction
@@ -149,8 +150,8 @@ algorithms without the need to rewrite the problem dependent code, though he or 
 have to replace the algorithm object with an other one. 
 
 
-While \deal{} (which might presently seen as the basis because 
-it provides various finite elements for discretization) 
+While \deal{} (which might presently seen as the basis of DOpE  
+various finite elements are taken for the discretization) 
 leaves much of the work and many
 decisions to the user, \dope{} intends to be user-optimized by delivering
 prefabricated tools which require from the user only adjustments connected
@@ -160,7 +161,7 @@ The focus is on the numerical solution of both stationary and nonstationary
 problems which come from different application fields, like elasticity and
 plasticity, fluid dynamics, and fluid-structure interactions.
 
-Summarizing, 
+The project was initially initiated at the University of Heidelberg in 2010 and  
 at the present stage the following key features are supported by the library
 \begin{itemize}
 \item Solution of stationary and nonstationary PDEs in 1d, 2d, and 3d.
