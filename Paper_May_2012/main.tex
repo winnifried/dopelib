@@ -106,7 +106,7 @@ W. Wollner, Fachbereich Mathematik, Universit\"at Hamburg.
 Today, there exist a broad variety of software libraries
 that provide numerical tools for solving partial differential
 equations (PDEs). Prominent examples are 
-\deal{} \cite{deal}, dune \cite{dune} , 
+\deal{} \cite{dealnew}, dune \cite{dune} , 
 or commercial solvers like Ansys \cite{ansys}). 
 In fact, these libraries provide very useful tools 
 for a huge variety of applications. 
@@ -1110,7 +1110,7 @@ optimization algorithms to minimization problems governed by the PDE.
 In this final section, we shall give a brief summary of features 
 that are applicable (in general) to all types of problems. Specifically,
 \dope{} provides goal-oriented mesh refinement with the help of the 
-Dual Weighted Residual (DWR) method \cite{BeRa96}. Here, a certain 
+Dual Weighted Residual (DWR) method, see \cite{BeRa96} or \cite{BR03}. Here, a certain 
 cost functional such as a point evaluation, line intergration or domain
 integration is considered. Determining the lowest error between the 
 (unknown) exact solution and its numerical approximation for lowest computational
@@ -1264,8 +1264,8 @@ A typical thickness distribution is shown in Figure~\ref{res:mbb}.
 
 \section*{Thanks}
 The \dope{} project makes use of various finite elements taken from  
-the \deal{} \cite{deal} finite element library which has been developed
- initially by W. Bangerth, R. Hartmann, and G. Kanschat \cite{deal}.
+the \deal{} \cite{dealnew} finite element library which has been developed
+ initially by W. Bangerth, R. Hartmann, and G. Kanschat \cite{dealold}.
 The authors acknowledge their past experience as well as discussions 
 on modularization of algorithms
 with 
