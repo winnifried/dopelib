@@ -423,54 +423,71 @@ software and we take advantage to take them from \deal{}.
 %IntegratorDataContainer<VECTOR, 2> idc(quad_formula,
 %                                         face_quad_formula);
 %The \texttt{IntegratorDataContainer} class just makes the constructor interface of 
-Then, the two characteristic features \texttt{LocalPDE} and \texttt{LocalFunctional} objects come into play.
+Then, the two characteristic features \texttt{LocalPDE} and \texttt{LocalFunctional} objects come into play:
 \begin{lstlisting}
-LocalPDE<VECTOR> local_pde;
-LocalFunctional<VECTOR> local_functional;
+  
+  LocalPDE<VECTOR> local_pde;
+  LocalFunctional<VECTOR> local_functional;
+
 \end{lstlisting}
 These hold the information of the PDE and the functional under consideration. Further explication is given below because
 the definition of this classes is done spererately in \texttt{localpde.h} resp.   \texttt{localfunctional.h}.
 
 In the next step, we define an object of type \texttt{SpaceTimeHandler}, which handles all the things connected with the triangulation as well as the finite element space. This class is also capable of organizing degrees of freedom in time-dependent problems, hence the name. 
 \begin{lstlisting}
+
   SpaceTimeHandler<TRIANGULATION, FE> dof_handler(triangulation,
                                                   finite_element);
+
 \end{lstlisting}
 There exist different versions of this class for forward as well as optimization problems. 
 
 Now we have everything at hand to create an instantiation of type \texttt{PDEProblemContainer}. This basically represents the disrectized problem, and bundles things like boundary conditions, the PDE, the functional and the discretization. First, we give the constructor the \texttt{local\_pde} and the \texttt{dof\_handler}.
 \begin{lstlisting}
+
   PDEProblemContainer<LocalPDE> prob_container(local_pde,
                                                dof_handler);
 \end{lstlisting}
 After that, we add the functional under consideration and, because it is a boundaryfunctional, we specify the part of the boundary on which the functional operates (this is done via a 'boundarycolor', $1$ represents $\Gamma_{circ}$).
 \begin{lstlisting}
+
   prob_container.AddFunctional(&local_functional);
   prob_container.SetBoundaryFunctionalColors(1);
+
 \end{lstlisting}
 Next, we incorporate the dirichlet data, which is given by the class \texttt{DirichleData}. Then we have to tell the \texttt{prob\_container} for which components and boundaries we prescribe the dirichlet conditions. This is done via a boundary-color (0 stands for $\Gamma_D$) and a \texttt{std::vector<bool> comp\_mask = (true, true, false)}.
 \begin{lstlisting}
+
   DirichletData dd;
   prob_container.SetDirichletBoundaryColors(0, comp_mask, dd);
+
 \end{lstlisting}
 Now we create the object which steers the whole solution process, the previosly mentioned \texttt{StatPDEProblem}. It takes care of solving the discretized equation and evaluating the given functionals. The class depends actually on some template-parameters, so for the sake of abbreviation, we defined a typedef at the beginning of the \texttt{main.cc}-file.
 \begin{lstlisting}
-typedef StatPDEProblem<NEWTONSOLVER,
+
+  typedef StatPDEProblem<NEWTONSOLVER,
            PDEProblemContainer<LocalPDE>, VECTOR, 2> SSOLVER;
+
 \end{lstlisting}
 Here, \texttt{NEWTONSOLVER} itself is an abbreviation of
 \begin{lstlisting}
-typedef NewtonSolver<LINEARSOLVER, VECTOR, 2> NEWTONSOLVER;
+  
+  typedef NewtonSolver<LINEARSOLVER, VECTOR, 2> NEWTONSOLVER;
+
 \end{lstlisting}
 The first template parameter of \texttt{NewtonSolver} describes which linear solver we use in this example. We opted for a direct solver, so: 
 \begin{lstlisting}
-typedef DirectLinearSolverWithMatrix<MATRIX,
+  
+  typedef DirectLinearSolverWithMatrix<MATRIX,
             VECTOR, 2> LINEARSOLVER;
+
 \end{lstlisting}
 With the type settled, we create the object \texttt{solver}, which needs the discretization (represented here by the \texttt{prob\_container}), the parameter reader as well as the quadrature rules.
 \begin{lstlisting}
+
   SSOLVER solver(prob_container, pr,
                     quad_formula, face_quad_formula);
+
 \end{lstlisting}
 %Finally, the output handler is initialized via
 %\begin{lstlisting}
@@ -479,8 +496,10 @@ With the type settled, we create the object \texttt{solver}, which needs the dis
 %\end{lstlisting}
 Finally, the programm is started by
 \begin{lstlisting}
+
   solver.ReInit();
   solver.ComputeReducedFunctionals();
+
 \end{lstlisting}
 
 \paragraph{\texttt{localpde.h}}
@@ -963,9 +982,11 @@ are used to distigugish these terms:
 \begin{lstlisting}
   void CellEquation(...)
    {
-      local_cell_vector(i) +=  scale * (\nabla v^{n+1}, \nabla \phi) + etc.
+      local_cell_vector(i) +=  
+          scale * (\nabla v^{n+1}, \nabla \phi) + etc.
 
-      local_cell_vector(i) +=  scale_ico * (-p^{n+1},\nabla\cdot v)
+      local_cell_vector(i) +=  
+          scale_ico * (-p^{n+1},\nabla\cdot v)
    }
 \end{lstlisting}
 Analogoues procedure is performed in the local 
@@ -977,7 +998,8 @@ in
 \begin{lstlisting}
   void CellTimeEquation(...)
    {
-     // implement (u^{n+1},\phi) 
+     local_cell_vector(i) += 
+         scale * (u^{n+1},\phi) + etc. 
    }
 \end{lstlisting}
 and it is done in a straight-forward way:
@@ -1250,6 +1272,7 @@ time (in $s$).
 \end{figure}
 
 
+\newpage
 \subsection{Compliance minimization}
 In this example, we consider the compliance minimization of a standard MBB-Beam. 
 The thickness variable is allowed to take intermediate value apart from $0$ and $1$,
