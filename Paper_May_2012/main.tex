@@ -839,11 +839,12 @@ Notice that we get here the values of the computed solution by giving the string
 
 \subsubsection{Nonstationary problems}\label{sec:timedep}
 To describe the solution of nonstationary 
-PDEs, we consider a time-dependent semi-linear form {\color{red} Hier fehlt etwas? Vermutlich a? ~cg}
+PDEs, we consider a time-dependent semi-linear form $a(u)(\phi)$ and some
+right hand side functional $l(\phi)$.
 Let $I:=[0,T]$ be a time interval with end time point value $T$.
-To find some $u$ in a weak form, we define\marginpar{Inkonsistenz: $f(\phi)$ vs. $(f,\phi)$ etwas weiter unten. Ebenso Integrale mal mit $dt$, mal ohne. Waere dafuer, $dt$ wegzulassen.}
+To find some $u$ in a weak form, we define
 \[
-\int_I a(u)(\phi) = \int_I f(\phi) \quad \forall\phi\in X,
+\int_I a(u)(\phi)\, dt = \int_I l(\phi)\, dt \quad \forall\Phi\in X,
 \]
 with some suitable Bochner space $X$.  As model problem,
 we consider the nonstationary Navier-Stokes equations
@@ -855,9 +856,9 @@ $(v,p)\in X$ with
 - (p,\nabla\cdot \phi)
 + (\nabla\cdot v, \chi)\bigr] \, dt
 + (v(0) - v^0, \phi(0))
-= \int_I (f,\phi) \, dt 
+= \int_I l(\phi) \, dt 
 \]
-for all $\phi:= (\phi, \chi) \in X$ with
+for all $\Phi:= (\phi, \chi) \in X$ with
 \[
 X:= \bigl\{ 
 (v,p) | v\in L^2(I,H_0^1(\Omega)^d) , 
@@ -924,8 +925,9 @@ Find $(v,p)$ such that
 + (v\cdot\nabla v,\phi)
 -(p,\nabla\cdot \phi)
 +(\nabla\cdot v, \chi)
-=(f,\phi).
+=(f,\phi),
 \end{align*}
+where $f$ describes some volume forces.
 Temporal discretization using the One-step-$\theta$ scheme reads:
 Given the old timestep solution $(v^n,p^n)$, 
 find $(v^{n+1}, p^{n+1})$ (and multiplication 
@@ -955,8 +957,9 @@ For this reason, the implementation is split up
 into several items to account for fully implicit 
 terms and remaining terms for which we need 
 old timestep and present timestep values. 
-Hence, in the local cell equation, a paramter
-is used to distigugish these terms:
+Hence, in the local cell equation, the parameters
+\texttt{scale} and \texttt{$scale_ico$}
+are used to distigugish these terms:
 \begin{lstlisting}
   void CellEquation(...)
    {
@@ -1108,7 +1111,7 @@ optimization algorithms to minimization problems governed by the PDE.
 
 
 \subsection{Additional features}
-In this final section, we shall give a brief summary of features 
+Finally, we shall give a brief summary of features 
 that are applicable (in general) to all types of problems. Specifically,
 \dope{} provides goal-oriented mesh refinement with the help of the 
 Dual Weighted Residual (DWR) method, see \cite{BeRa96} or \cite{BR03}. Here, a certain 
@@ -1128,12 +1131,13 @@ variables without the need to change the user-given implementation of the PDE an
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Applications}
 \label{applications}
-We present three numerical tests which demonstrate different
+In this final section, 
+we present three numerical tests which demonstrate different
 features of \dope{}:
 \begin{itemize}
 \item In the first numerical example, we consider 
 goal-oriented mesh refinement with the help of the 
-Dual Weighted Residual (DWR) method for the stationary Navier-Stokes equations.
+DWR method for the stationary Navier-Stokes equations.
 \item The second example presents nonstationary fluid-structure 
 interaction. The challenges for those kind of problems are the multi-domain
 character of the coupled problem and the treatment of the coupling conditions.
@@ -1157,7 +1161,7 @@ with the normal $n$ and $\nu = 0.001$. To achieve an efficient computation of th
 \end{itemize}
 
 \subsection{Nonstationary Fluid-Structure Interaction}
-In this example, the challenging benchmark FSI 2
+In this example, a challenging benchmark FSI 2
 proposed by Hron and Turek \cite{HrTu06b} is considered.
 To solve this problem accurately, it is very important that 
 the coupling conditions
@@ -1176,7 +1180,6 @@ is positioned at $C=(0.2m,0.2m)$ with radius $r=0.05m$. The elastic beam has len
 $l=0.35m$ and height $h=0.02m$. The right lower end is positioned at 
 $(0.6m,0.19m)$, and
 the left end is attached to the circle. 
-
 %\begin{figure}[h]
 %\centering
 %\input{Pictures/pic_12}
@@ -1184,7 +1187,6 @@ the left end is attached to the circle.
 %circle-center $C=(0.2,0.2)$ and radius $r=0.05$.}
 %\label{configuration_csm_and_fsi_2D}
 %\end{figure}
-
 Control points $A(t)$ (with $A(0) = (0.6,0.2)$) are fixed at the 
 trailing edge of the structure, measuring $x$- and $y$-deflections of the beam.
 
