@@ -1039,10 +1039,13 @@ To keep the presentation brief we will neglect the additional bounds
 \[
 a \le q \le b,\qquad g(q,u) \le 0
 \]
-although they can be treated by \dope as well.
+although they can be treated by \dope{} as well.
 Then, in order to minimize the functional $J$ one may apply the, so-called, 
 reduced approach, in which we eliminate the dependent variable $u$ by the solution 
-operator $S$ of the PDE, i.e., $a(q,S(q))(\phi) = 0 \quad \forall \phi\in V$. 
+operator $S$ of the PDE, i.e., 
+\begin{align*}
+a(q,S(q))(\phi) = 0 \quad \forall \phi\in V. 
+\end{align*}
 This leads to the problem
 \begin{align*}
 \min\;&j(q) = J(q,S(q)). 
