@@ -221,8 +221,8 @@ how this idea extends to non stationary problems in
 Section~\ref{sec:timedep} as well as to optimization
 problems with PDE constraints in Section~\ref{sec:opt}. 
 
-\subsection{Solving of PDEs}
-\subsubsection{Stationary problems}\label{subsubsec:stationary problems}
+\subsection{Solving of Stationary PDEs}
+\label{subsubsec:stationary problems}
 For the start we consider a prototypical problem given by the solution of 
 a stationary PDE, which we assume to be given in weak form.
 In abstract notation it reads; find some $u$ in an appropriate set
@@ -377,7 +377,7 @@ circle-center $C=(0.2,0.2)$ and radius $r=0.05$.}
 
 We split the program into the parts \texttt{main.cc}, \texttt{functionals.h} and \texttt{localpde.h}. The \texttt{main.cc}-file is responsible for the declaration of various objects which have mostly to do with the \textit{discretization}, the \textit{solvers} and the general \textit{program sequence}, whereas the other two contain most of the problem-data -- especially the cell-wise contributions of the weak form, the right hand side and the functional. We give a brief explanation on every file in the following.
 
-\paragraph{\texttt{main.cc}}
+\subsubsection{\texttt{main.cc}}
 In this file we gather the basic components that are necessary for the
 solution process of a (stationary) partial differential equation. The
 structure of the program is basically the same for every equation under
@@ -474,7 +474,7 @@ Finally, the program is started by
 
 \end{lstlisting}
 
-\paragraph{\texttt{localpde.h}}
+\subsubsection{\texttt{localpde.h}}
 We shall now give an overview to the implementation of the specific form of the PDE. 
 
 Let $N$ be the number of degrees of freedom of our discretization and $\Set{\phi_{h}^{i}|1\leq i \leq N}$ be a given FE-Basis. As stated in subsection~\ref{subsubsec:stationary problems}, to solve the discrete equation \eqref{eq:discrete_equation} we need the residual, i.e. the vector
@@ -526,7 +526,7 @@ we loop over the quadrature points and the number of DoFs of the cell. In the in
 \dope{} takes now care of the distribution of the local cell contributions into  the vector of the residual \eqref{eq:residual_vector}. The methods \texttt{CellRightHandSide} and \texttt{CellMatrix} follow the same structure as 
 \texttt{CellEquation}, so we do not go into the details here.
 
-\paragraph{\texttt{localfunctional.h}}
+\subsubsection{\texttt{localfunctional.h}}
 The implementation of the boundary-functional $J$ follows the outline of the computation of the cell-residual in \texttt{localpde.h}. However, there are two main differences. First, we do not have to specify the method \texttt{CellEquation}, but \texttt{BoundaryValue} instead. This is due to the fact that we consider a boundary-functional in this example, and so we have to specify the value of the functional not cell-wise but face wise (for the faces that lie on $\Gamma_{circ}$). The second difference is that as we only want to evaluate a functional and not a residual-vector, we just loop over the quadrature points and not over the degrees of freedom on the face.
 \begin{lstlisting}
  double
@@ -547,7 +547,7 @@ Notice that we get here the values of the computed solution by giving the string
   }
 \end{lstlisting}
 
-\subsubsection{Nonstationary problems}\label{sec:timedep}
+\subsection{Solving Nonstationary PDEs}\label{sec:timedep}
 To describe the solution of nonstationary 
 PDEs, we consider a time-dependent semi-linear form $a(u)(\phi)$ and some
 right hand side functional $l(\phi)$.
