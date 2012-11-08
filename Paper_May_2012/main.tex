@@ -96,9 +96,10 @@ Today, there exist a broad variety of software libraries
 that provide numerical tools for solving partial differential
 equations (PDEs). Prominent examples are 
 \deal{} \cite{dealnew}, dune \cite{dune}, 
-\marginpar{fenics ...} 
-or commercial solvers like ANSYS \cite{ansys} or COMSOL \cite{comsol}. 
-\marginpar{fluent ...} 
+FEniCS \cite{fenics}
+or commercial solvers like ANSYS (with its Fluent package) \cite{ansys},
+COMSOL \cite{comsol} or simufact forming \cite{simufact}.
+Finally, often, a lot of work is (still) done in Matlab \cite{matlab}.
 In fact, these libraries provide very useful tools 
 for a huge variety of applications. 
 
@@ -127,7 +128,11 @@ asserts due to the required interface, that the code written for the PDE
 is then reusable for the application of state-of-the-art optimization 
 routines.
 So far, there exist a very limited number of open source packages
-which fulfill the requirements listed above. \marginpar{cite Gascoigne /RoDoBo?}
+which fulfill the requirements listed above; 
+sucessful in-house code examples are Gascoigne \cite{gascoigne}
+and RoDoBo \cite{rodobo}. 
+Both have been initiated as well in 
+the Numerical Analysis Group in Heidelberg.
 
 On the other hand, commercial finite element toolkits provide these 
 previously mentioned routines but limits user-interaction
