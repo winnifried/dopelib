@@ -250,7 +250,7 @@ main(int argc, char **argv)
   QGauss<DIM> quadrature_formula_high(pr.get_integer("quad order") + 2);
   QGauss<1> face_quadrature_formula_high(pr.get_integer("facequad order") + 2);
   IDC idc_high(quadrature_formula, face_quadrature_formula);
-  STH DOFH_higher_order(triangulation, state_fe_high);
+  STH DOFH_higher_order(triangulation, mapping, state_fe_high);
 
 //  HO_DWRC dwrc(DOFH_higher_order, idc_high, "fullmem", pr, DOpEtypes::mixed);
   HO_DWRC dwrc(DOFH_higher_order, idc_high, "fullmem", pr, DOpEtypes::mixed);
@@ -302,6 +302,8 @@ main(int argc, char **argv)
           - solver.GetFunctionalValue(LBFL.GetName());
       const double error_delta_p = exact_delta_p
           - solver.GetFunctionalValue(LPFP.GetName());
+      const double error_cd_domain = exact_cd
+          - solver.GetFunctionalValue(LCFD.GetName());
 
       double est_error = 0;
       if (compute_error)
@@ -314,8 +316,9 @@ main(int argc, char **argv)
           est_error = sqrt(h1resc.GetError());
       }
 
-      outp << "Error Drag: " << error_cd << "  Est.Error Drag: " << est_error
-          << "  Ieff: " << est_error / error_cd << "  Error Lift: " << error_cl
+      outp << "Error Drag Domain: " << error_cd_domain << " Error Drag: "
+          << error_cd << "  Est.Error Drag: " << est_error << "  Ieff: "
+          << est_error / error_cd << "  Error Lift: " << error_cl
           << "  Error Delta p: " << error_delta_p << std::endl;
 
 //      outp << "Mean value error: " << error << "  Ieff (eh/e)= "
@@ -334,6 +337,11 @@ main(int argc, char **argv)
       convergence_table.add_value("Drag",
           solver.GetFunctionalValue(LBFD.GetName()));
       convergence_table.add_value("Drag-error", std::fabs(error_cd));
+
+      convergence_table.add_value("DragD",
+          solver.GetFunctionalValue(LCFD.GetName()));
+      convergence_table.add_value("DragD-error", std::fabs(error_cd_domain));
+
       convergence_table.add_value("Lift",
           solver.GetFunctionalValue(LBFL.GetName()));
       convergence_table.add_value("Lift-error", std::fabs(error_cl));
@@ -402,11 +410,14 @@ main(int argc, char **argv)
   }
   convergence_table.set_scientific("Lift-error", true);
   convergence_table.set_scientific("Drag-error", true);
+  convergence_table.set_scientific("DragD-error", true);
   convergence_table.set_scientific("Delta p-error", true);
 
   convergence_table.evaluate_convergence_rates("Lift-error", "n-dofs",
       ConvergenceTable::reduction_rate_log2);
   convergence_table.evaluate_convergence_rates("Drag-error", "n-dofs",
+      ConvergenceTable::reduction_rate_log2);
+  convergence_table.evaluate_convergence_rates("DragD-error", "n-dofs",
       ConvergenceTable::reduction_rate_log2);
   convergence_table.evaluate_convergence_rates("Delta p-error", "n-dofs",
       ConvergenceTable::reduction_rate_log2);

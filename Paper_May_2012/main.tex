@@ -15,7 +15,7 @@
 \acmNumber{0} 
 \acmArticle{00}
 \acmYear{0000}
-\acmMonth{0}
+\acmMonth{0} 
  
 %
 %%% User-requested packages placed after this line %%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -326,8 +326,10 @@ exact problem we introduce another container around it which we call
 \texttt{StatPDEProblem} that then simply provides the user with the 
 method
 \begin{lstlisting}
-      void StatPDEProblem::ComputeReducedFunctionals();
+  template<class NEWTON>
+      void StatPDEProblem<NEWTON>::ComputeReducedFunctionals();
 \end{lstlisting}
+The template argument \texttt{NEWTON} represents the choosen solver of the nonlinear problems.
 That combines all the necessary steps to calculate $J(u_h)$. 
 
 Finally, we will need to have an object that is capable of providing all 
@@ -402,9 +404,9 @@ software and we take advantage to take them from \deal{}.
 
 Then, the two characteristic features \texttt{LocalPDE} and \texttt{LocalFunctional} objects come into play:
 \begin{lstlisting}
-  
-  LocalPDE<VECTOR> local_pde;
-  LocalFunctional<VECTOR> local_functional;
+
+  LocalPDE local_pde;
+  LocalFunctional local_functional;
 
 \end{lstlisting}
 These hold the information of the PDE and the functional under consideration. Further explication is given below because
@@ -413,9 +415,8 @@ the definition of this classes is done separately in \texttt{localpde.h} resp.  
 In the next step, we define an object of type \texttt{SpaceTimeHandler}, which handles all the things connected with the triangulation as well as the finite element space. This class is also capable of organizing degrees of freedom in time-dependent problems, hence the name. 
 \begin{lstlisting}
 
-  SpaceTimeHandler<TRIANGULATION, FE> dof_handler(triangulation,
-                                                  finite_element);
-
+  SpaceTimeHandler dof_handler(triangulation, finite_element);
+  
 \end{lstlisting}
 There exist different versions of this class for forward as well as optimization problems. 
 
@@ -424,6 +425,7 @@ Now we have everything at hand to create an instantiation of type \texttt{PDEPro
 
   PDEProblemContainer<LocalPDE> prob_container(local_pde,
                                                dof_handler);
+                                               
 \end{lstlisting}
 After that, we add the functional under consideration and, because it is a boundary functional, we specify the part of the boundary on which the functional operates (this is done via a 'boundary color', $1$ represents $\Gamma_{circ}$).
 \begin{lstlisting}
@@ -442,21 +444,19 @@ Next, we incorporate the Dirichlet data, which is given by the class \texttt{Dir
 Now we create the object which steers the whole solution process, the previously mentioned \texttt{StatPDEProblem}. It takes care of solving the discretized equation and evaluating the given functionals. The class depends actually on some template-parameters, so for the sake of abbreviation, we defined a typedef at the beginning of the \texttt{main.cc}-file.
 \begin{lstlisting}
 
-  typedef StatPDEProblem<NEWTONSOLVER,
-           PDEProblemContainer<LocalPDE>, VECTOR, 2> SSOLVER;
+  typedef StatPDEProblem<NEWTONSOLVER> SSOLVER;
 
 \end{lstlisting}
 Here, \texttt{NEWTONSOLVER} itself is an abbreviation of
 \begin{lstlisting}
   
-  typedef NewtonSolver<LINEARSOLVER, VECTOR, 2> NEWTONSOLVER;
+  typedef NewtonSolver<LINEARSOLVER> NEWTONSOLVER;
 
 \end{lstlisting}
-The first template parameter of \texttt{NewtonSolver} describes which linear solver we use in this example. We opted for a direct solver, so: 
+The  template parameter \texttt{LINEARSOLVER} describes which linear solver we use in this example. We opted for a direct solver, so: 
 \begin{lstlisting}
   
-  typedef DirectLinearSolverWithMatrix<MATRIX,
-            VECTOR, 2> LINEARSOLVER;
+  typedef DirectLinearSolver<MATRIX, VECTOR> LINEARSOLVER;
 
 \end{lstlisting}
 With the type settled, we create the object \texttt{solver}, which needs the discretization (represented here by the \texttt{prob\_container}), the parameter reader as well as the quadrature rules.
@@ -668,16 +668,17 @@ into several items to account for fully implicit
 terms and remaining terms for which we need 
 old time-step and present time-step values. 
 Hence, in the local cell equation, the parameters
-\texttt{scale} and \texttt{$scale_ico$}
+\texttt{scale} and \texttt{scale\_ico}
 are used to distinguish these terms:
 \begin{lstlisting}
   void CellEquation(...)
    {
+   // Usual loops over DoFs and quadrature points
+     {
       local_cell_vector(i) +=  
-          scale * (\nabla v^{n+1}, \nabla \phi) + etc.
-
-      local_cell_vector(i) +=  
-          scale_ico * (-p^{n+1},\nabla\cdot v)
+          scale *// terms like (\nabla v^{n+1}, \nabla \phi) etc.
+          + scale_ico *// terms like (-p^{n+1},\nabla\cdot \phi)
+     }
    }
 \end{lstlisting}
 Analogous procedure is performed in the local 
@@ -689,23 +690,27 @@ in
 \begin{lstlisting}
   void CellTimeEquation(...)
    {
-     local_cell_vector(i) += 
-         scale * (u^{n+1},\phi) + etc. 
+      //implement (u^{n+1},\phi)
    }
 \end{lstlisting}
-and it is done in a straight-forward way:
+% \begin{lstlisting}
+%   void CellTimeEquation(...)
+%    {
+%      local_cell_vector(i) += 
+%          scale * (u^{n+1},\phi) + etc. 
+%    }
+% \end{lstlisting}
+and it is done in a straight-forward way:\marginpar{Mir gefaellt dieses Auseinanderziehen nicht so wirklich...ist dieser zweite Abschnitt heir notwendig?}
 \begin{lstlisting}
-  for (all quadrature points per cell q)
+  for (/*all quadrature points per cell q*/)
    {
      Tensor<1,2> u = ...;
 
-     for (all dofs per cell i)
+     for (/*all dofs per cell i*/)
       {
-        const Tensor<1,2> phi_i_u = ...;
-
-        local_cell_vector(i) +=  
-          scale * (u * phi_i_u) * 
-          state_fe_values.JxW(q_point);
+        Tensor<1,2> phi_i_u = ...;
+        local_cell_vector(i) +=  scale * (u * phi_i_u) * 
+                                  state_fe_values.JxW(q_point);    
       }
    }
 \end{lstlisting}
