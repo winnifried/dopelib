@@ -97,9 +97,9 @@ that provide numerical tools for solving partial differential
 equations (PDEs). Prominent examples are 
 \deal{} \cite{dealnew}, dune \cite{dune}, 
 FEniCS \cite{fenics}
-or commercial solvers like ANSYS (with its Fluent package) \cite{ansys},
-COMSOL \cite{comsol} or simufact forming \cite{simufact}.
-Finally, often, a lot of work is (still) done in Matlab \cite{matlab}.
+or commercial solvers as for instance ANSYS (with its Fluent package),
+COMSOL, or simufact forming.
+Finally, often, a lot of work is (still) done in Matlab.
 In fact, these libraries provide very useful tools 
 for a huge variety of applications. 
 
@@ -144,7 +144,7 @@ algorithms should enable the researcher
 to change certain parameters or pieces of source code. 
 
 The presented toolkit \dope{}: 
-\textit{Differential Equations and Optimization Environment}
+\textit{Differential Equations and Optimization Environment} \cite{dope}
 fills this gap. We present a software
 to solve both PDE problems as well as optimization problems 
 constrained by a PDE. 
@@ -181,14 +181,13 @@ at the present stage the following key features are supported by the library
    Poisson, Navier-Stokes, Plasticity and fluid-structure interaction problems. 
 \item Line search and trust region newton algorithms for the 
    solution of optimization problems with PDEs by elimination of 
-   the state variable. \cite{NoWr00} 
-   \marginpar{spaeter zitieren}
+   the state variable.
 \item Interface to SNOPT for the solution of optimization problems with PDEs and
   additional other control and state constraints.
 \item Several examples showing how to solve various kinds of optimization 
   problems involving PDE constraints.
-\item Goal-oriented mesh adaptation with the Dual Weighted Residual method, 
-  following \cite{BR03}.
+\item Goal-oriented mesh adaptation with the Dual Weighted Residual method and
+  standard residual based error estimators.
 \item Different spatial triangulations for control and state variables without
   the need to reimplement the user dependent code when switching from one common 
   triangulation to different ones.
@@ -769,7 +768,8 @@ can be computed via the adjoint PDE
     a_{u}'(q,u)(\phi , z) &= J'_{u}(q,u)(\phi) & \forall \phi&\in {\cal X}.
   \end{aligned}
 \end{equation}
-Similarly formulas for the second derivatives can be obtained.
+Similarly formulas for the second derivatives can be obtained, see, e.g., 
+\cite{BeMeVe06}.
 
 To do so, we define an object 
 \begin{lstlisting} 
@@ -795,6 +795,16 @@ and functional terms, i.e.,
         // the boundary cost functional
       }
 \end{lstlisting}
+
+Based on this classes we can now solve the optimization problem, for instance using 
+a Newton type method for the reduced problem, see, e.g., \cite{NoWr00}. This yields 
+an object \texttt{ReducedNewtonAlgorithm} which needs to be initialized 
+with the \texttt{OptProblemContainer} and then provides 
+the following method to be called by the user
+\begin{lstlisting}
+  ReducedNewtonAlgorithm::Solve(ControlVector<VECTOR>& )
+\end{lstlisting}
+where the argument provides an initial guess for the optimal control.
 
 Due to the design of the classes it is easily possible to extend any given 
 and running code for a PDE both to the nonstationary counterpart, if the PDE is 
