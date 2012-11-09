@@ -683,40 +683,20 @@ are used to distinguish these terms:
 \end{lstlisting}
 Analogous procedure is performed in the local 
 cell matrix.
+\begin{remark}
+Note that in the stationary case \dope{} automatically sets $ \texttt{scale\_ico} = \texttt{scale}$, so that in fact the user has to implement the \texttt{CellEquation} only once and can henceforth reuse it in all his stationary an instationary problems. This transfers of course also to other methods like \texttt{CellMatrix}.
+\end{remark}
 
 In addition to stationary problems, the implementation
-of the time-derivative must be considered which is done
-in 
+of the time-derivative, i.e. the term $ (v^{n+1},\phi)$, must be considered which is done
+in the method \texttt{CellTimeEquation} in a straight-forward way. After the initialization of $v$ and the shape function $\phi_i$ and the usual loops over the quadrature points and  degrees of freedom of the cell we fill the local cell vector by
 \begin{lstlisting}
-  void CellTimeEquation(...)
-   {
-      //implement (u^{n+1},\phi)
-   }
-\end{lstlisting}
-% \begin{lstlisting}
-%   void CellTimeEquation(...)
-%    {
-%      local_cell_vector(i) += 
-%          scale * (u^{n+1},\phi) + etc. 
-%    }
-% \end{lstlisting}
-and it is done in a straight-forward way:\marginpar{Mir gefaellt dieses Auseinanderziehen nicht so wirklich...ist dieser zweite Abschnitt heir notwendig?}
-\begin{lstlisting}
-  for (/*all quadrature points per cell q*/)
-   {
-     Tensor<1,2> u = ...;
-
-     for (/*all dofs per cell i*/)
-      {
-        Tensor<1,2> phi_i_u = ...;
-        local_cell_vector(i) +=  scale * (u * phi_i_u) * 
+        local_cell_vector(i) +=  scale * (v * phi_i) * 
                                   state_fe_values.JxW(q_point);    
-      }
-   }
 \end{lstlisting}
 Here, the advantage is that \dope{} orders the terms in the time-stepping
 problems
-such that only $(u^{n+1},\phi)$ must be implemented. 
+such that only $(v^{n+1},\phi)$ must be implemented. 
 
 
 
@@ -726,7 +706,7 @@ needs explicit input of the old time-step term, then he can use
 \begin{lstlisting}
   void CellTimeEquationExplicit (...)
    {
-     // implement (u^{n+1},\phi) and (u^n,\phi)  
+     // implement (v^{n+1},\phi) and (v^n,\phi)  
    }
 \end{lstlisting}
 \end{remark}
