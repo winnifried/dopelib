@@ -80,7 +80,12 @@ namespace DOpE
     std::string logfilename = _results_basedir+_logfile;
     _log.open(logfilename.c_str(), std::ios::out);
     _disallow_all = false;
-    _stdout_backup = 0;
+    _stdout_backup = 0;    
+
+    //FIXME
+    //Once agreed upon uncomment the following line to display the copyright notice 
+    //when initializing the output object.
+    //PrintCopyrightNotice();
   }
 
 /*******************************************************/
@@ -566,6 +571,22 @@ namespace DOpE
     std::string logfilename = _results_basedir+_logfile;
     _log.open(logfilename.c_str(), std::ios::app|std::ios::out);
   }
+
+/*******************************************************/
+  template <typename VECTOR>
+  void DOpEOutputHandler<VECTOR>::PrintCopyrightNotice()
+  {
+    std::stringstream out;
+    
+    out<<"DOpElib Copyright (C) 2012  DOpElib authors"<<std::endl;
+    out<<"This program comes with ABSOLUTELY NO WARRANTY."<<std::endl;
+    out<<"For License details read LICENSE.TXT distributed with this software!"<<std::endl;
+    std::cout<<out.str();
+    std::cout.flush();
+    _log<<out.str();
+    _log.flush();
+  }
+
 
 }//Endof namespace
 /******************************************************/

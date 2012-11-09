@@ -262,7 +262,13 @@ class DOpEOutputHandler
     std::ofstream _log;
 
     fpos_t _std_out_pos;
-    int    _stdout_backup;
+    int    _stdout_backup; 
+
+   /**
+     * Prints Copyright information
+     */
+    void PrintCopyrightNotice();
+
 };
 
 }
