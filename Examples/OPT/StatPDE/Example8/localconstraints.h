@@ -21,7 +21,7 @@
 *
 **/
 
-
+#ifndef _LOCAL_CONSTRAINT_H_
 #define _LOCAL_CONSTRAINT_H_
 
 #include "constraintinterface.h"

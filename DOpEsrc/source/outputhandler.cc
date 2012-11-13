@@ -106,10 +106,7 @@ namespace DOpE
     _disallow_all = false;
     _stdout_backup = 0;    
 
-    //FIXME
-    //Once agreed upon uncomment the following line to display the copyright notice 
-    //when initializing the output object.
-    //PrintCopyrightNotice();
+    PrintCopyrightNotice();
   }
 
 /*******************************************************/
