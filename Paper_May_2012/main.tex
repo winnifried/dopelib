@@ -852,17 +852,31 @@ is discussed.
 \end{itemize}
 
 \subsection{Goal-oriented mesh refinement for Navier-Stokes}
-In this example we consider a laminar flow around a cylinder in 2d. To be more precise, we are computing the benchmark 2D-1 from \cite{TuSchae96}. The computational domain is as depicted in figure~\ref{fig:example_ns}. We want to compute the drag force on the enclosed cylinder
+In this example we consider a laminar flow around a cylinder in 2d. To be more precise, we are computing the benchmark 2D-1 from \cite{TuSchae96}. The computational domain is as depicted in figure~\ref{fig:example_ns} and the equation is discretized with the Taylor-Hood  element. We want to compute the drag force on the enclosed cylinder
 \begin{equation}
-c_D = \frac 1 {20} \int_{\Gamma_{circ}} \nu\partial_nu _1 - pn,
+\mathcal {J}( u) = \frac 1 {20} \int_{\Gamma_{circ}} \nu\partial_nv _1 - pn,
 \end{equation}
-with the normal $n$ and $\nu = 0.001$. To achieve an efficient computation of the quantity $c_D$, we employ goal-oriented mesh refinement with the help of the DWR-method, see \cite{BeRa96}.
+with the solution $u = (v,p)$, the normal $n$ and the viscosity $\nu = 0.001$.
+\begin{figure}[hbt]
+\centering
+{\includegraphics[width=0.8\textwidth]{Pictures/local_grid_NS.png}}
+\caption{Caption.}
+\label{fig:NS_local_grid}
+\end{figure}
+To achieve an efficient computation of the quantity $\mathcal J$, we employ goal-oriented mesh refinement with the help of the DWR-method, see \cite{BeRa96}. The method delivers error indicators and by this way computational grids tailored to minimize the error in the previously given functional $\mathcal J$. The price we have to pay ist the additional computation of a (linear) dual problem, which is implemented as described in section~\ref{sec:opt}. In figure~\ref{fig:NS_local_grid} we see a resulting triangulation after eight refinement steps with roughly $320\,000$ degrees of freedom.
 
-\begin{itemize}
-\item Bild Freiheitsgrade vs Fehler, global und 
-\item Bild adaptive mesh, bild der Loesung (?)
-\item eventuell kurz auf duale gleichung eingehen.
-\end{itemize}
+In figure~\ref{fig:NS_comparison} we compare the errors in the functional obtained by using global and local mesh refinement. We see clearly that the local mesh refinement allows for substantial savings with respect to degrees of freedom.
+
+\ref{fig:NS_local_grid}
+\begin{figure}[hbt]
+\centering
+\resizebox{0.5\textwidth}{!}{\input{Pictures/ConvergenceNS}}
+\caption{Comparison of global and local mesh refinement with respect to the error in the drag-functional $\mathcal J$.}
+\label{fig:NS_comparison}
+\end{figure}
+
+
+
 
 \subsection{Nonstationary Fluid-Structure Interaction}
 In this example, a challenging benchmark FSI 2
