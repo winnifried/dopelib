@@ -5,6 +5,7 @@
 #include "helper.h"
 #include <dofs/dof_tools.h>
 #include <base/types.h>
+#include <deal.II/numerics/vector_tools.h>
 //#include "functionalinterface.h"
 
 using namespace std;
@@ -26,9 +27,12 @@ template<typename VECTOR, int dealdim>
 
       double
       PointValue(
-          const DOpEWrapper::DoFHandler<dealdim, dealii::DoFHandler<dealdim> > & /*control_dof_handler*/,
-          const DOpEWrapper::DoFHandler<dealdim, dealii::DoFHandler<dealdim> > & state_dof_handler,
-          const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
+          const DOpEWrapper::DoFHandler<dealdim, dealii::DoFHandler<dealdim> > &
+          /*control_dof_handler*/,
+          const DOpEWrapper::DoFHandler<dealdim, dealii::DoFHandler<dealdim> > & state_dof_handler
+          ,
+          const std::map<std::string, const dealii::Vector<double>*> &
+          /*param_values*/,
           const std::map<std::string, const VECTOR*> &domain_values)
       {
 
@@ -157,7 +161,8 @@ template<typename VECTOR, int dealdim>
 
       virtual void
       FaceValue_U(
-          const FaceDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& fdc,
+          const FaceDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& fdc
+          ,
           dealii::Vector<double> &local_cell_vector, double scale)
       {
 
@@ -165,7 +170,8 @@ template<typename VECTOR, int dealdim>
 
       virtual void
       BoundaryValue_U(
-          const FaceDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& fdc,
+          const FaceDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& fdc
+          ,
           dealii::Vector<double> &local_cell_vector, double scale)
       {
         unsigned int color = fdc.GetBoundaryIndicator();
@@ -266,7 +272,8 @@ template<typename VECTOR, int dealdim>
       template<class DH>
         void
         PreparePhiD(DH& dope_dh,
-            const std::vector<unsigned int>& dofs_per_block)
+            const std::vector<unsigned int>& dofs_per_block,
+            DOpEWrapper::Mapping<2> mapping)
         {
 
           auto& dof_handler = dope_dh.GetStateDoFHandler().GetDEALDoFHandler();
@@ -284,6 +291,11 @@ template<typename VECTOR, int dealdim>
           for (unsigned int i = 0; i < dof_handler.n_dofs(); ++i)
             if (boundary_dofs[i] == true)
               _phi_d(i) = 1;
+          dope_dh.GetStateDoFConstraints().distribute(_phi_d);
+
+//          VectorTools::project(mapping, dof_handler,
+//              dope_dh.GetStateDoFConstraints(), QGauss<2>(4), OneExtension(),
+//              _phi_d, false, QGauss<1>(4), true);
         }
 
       double
@@ -310,10 +322,10 @@ template<typename VECTOR, int dealdim>
         cdc.GetValuesState("phid", _phidvalues);
         cdc.GetGradsState("phid", _phidgrads);
 
-        const double max_v = GetMaxU(_uvalues);
+        /*  const double max_v = GetMaxU(_uvalues);
 
-        const double delta = _alpha
-            / (_viscosity * pow(h, -2.) + _beta * max_v * 1. / h);
+         const double delta = _alpha
+         / (_viscosity * pow(h, -2.) + _beta * max_v * 1. / h);*/
 
         for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
         {
@@ -338,10 +350,10 @@ template<typename VECTOR, int dealdim>
           double press = _uvalues[q_point](2);
           double incompressibility = vgrads[0][0] + vgrads[1][1];
 
-          double res_0 = -_viscosity * _lap_u[q_point][0] + v * vgrads[0]
-              + pgrad[0];
-          double res_1 = -_viscosity * _lap_u[q_point][1] + v * vgrads[1]
-              + pgrad[1];
+//          double res_0 = -_viscosity * _lap_u[q_point][0] /*+ v * vgrads[0]*/
+//              + pgrad[0];
+//          double res_1 = -_viscosity * _lap_u[q_point][1] /*+ v * vgrads[1]*/
+//              + pgrad[1];
 
           Tensor<2, 2> phid_grads_v;
           phid_grads_v[0][0] = _phidgrads[q_point][0][0];
@@ -359,15 +371,15 @@ template<typename VECTOR, int dealdim>
 
           const double div_phid_v = phid_grads_v[0][0] + phid_grads_v[1][1];
 
-          Tensor<1, 2> Su = v * phid_grads_v + phid_grads_p;
+//          Tensor<1, 2> Su = v * phid_grads_v + phid_grads_p;
 
           erg += (_viscosity * scalar_product(vgrads, phid_grads_v)
               + convection_fluid * phid_v - press * div_phid_v
               + incompressibility * phid_p) * state_fe_values.JxW(q_point);
 
-          erg += delta
-              * (res_0 * Su[0] + res_1 * Su[1] + incompressibility * div_phid_v) //unklar, ob hier '-'
-              * state_fe_values.JxW(q_point);
+          /*erg += delta
+           * (res_0 * Su[0] + res_1 * Su[1] + incompressibility * div_phid_v) //unklar, ob hier '-'
+           * state_fe_values.JxW(q_point);*/
 
         }
         erg *= -1. * _drag_lift_constant;
@@ -376,7 +388,8 @@ template<typename VECTOR, int dealdim>
 
       void
       Value_U(
-          const CellDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& cdc,
+          const CellDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& cdc
+          ,
           dealii::Vector<double> &local_cell_vector, double scale)
       {
         const DOpEWrapper::FEValues<dealdim> & state_fe_values =
@@ -472,29 +485,29 @@ template<typename VECTOR, int dealdim>
                 state_fe_values[velocities].hessian(i, q_point)[1][0][0]
                     + state_fe_values[velocities].hessian(i, q_point)[1][1][1];
 
-            double res_0 = -_viscosity * _lap_u[q_point][0] + v * vgrads[0]/*hier ok, da beides Tensor<1,dim>*/
-            + pgrad[0];
-            double res_1 = -_viscosity * _lap_u[q_point][1] + v * vgrads[1]
-                + pgrad[1];
+//            double res_0 = -_viscosity * _lap_u[q_point][0] + v * vgrads[0]/*hier ok, da beides Tensor<1,dim>*/
+//            + pgrad[0];
+//            double res_1 = -_viscosity * _lap_u[q_point][1] + v * vgrads[1]
+//                + pgrad[1];
 
-            double Dres_0 = -_viscosity * phi_i_lap_v[0] + phi_i_v * vgrads[0]
-                + v * phi_i_grads_v[0] + phi_i_grad_p[0];
-            double Dres_1 = -_viscosity * phi_i_lap_v[1] + phi_i_v * vgrads[1]
-                + v * phi_i_grads_v[1] + phi_i_grad_p[1];
+//            double Dres_0 = -_viscosity * phi_i_lap_v[0] + phi_i_v * vgrads[0]
+//                + v * phi_i_grads_v[0] + phi_i_grad_p[0];
+//            double Dres_1 = -_viscosity * phi_i_lap_v[1] + phi_i_v * vgrads[1]
+//                + v * phi_i_grads_v[1] + phi_i_grad_p[1];
 
-            Tensor<1, 2> Su = v * phid_grads_v + phid_grads_p;
-            Tensor<1, 2> DSu = phi_i_v * phid_grads_v;
+//            Tensor<1, 2> Su = v * phid_grads_v + phid_grads_p;
+//            Tensor<1, 2> DSu = phi_i_v * phid_grads_v;
 
             local_cell_vector(i) -= scale * _drag_lift_constant
                 * (_viscosity * scalar_product(phi_i_grads_v, phid_grads_v)
                     + (vgrads * phi_i_v + phi_i_grads_v * v) * phid_v
-                    - phi_i_p * div_phid_v + div_phi_i_v * phid_p)
+                    - phi_i_p * div_phid_v /*+ div_phi_i_v * phid_p*/)
                 * state_fe_values.JxW(q_point);
-
-            local_cell_vector(i) += scale * delta
-                * (res_0 * DSu[0] + Dres_0 * Su[0] + Dres_1 * Su[1]
-                    + res_1 * DSu[1] + div_phi_i_v * div_phid_v) //unklar, ob hier '-'
-                * state_fe_values.JxW(q_point);
+//
+//            local_cell_vector(i) += scale * delta
+//                * (res_0 * DSu[0] + Dres_0 * Su[0] + Dres_1 * Su[1]
+//                    + res_1 * DSu[1] + div_phi_i_v * div_phid_v) //unklar, ob hier '-'
+//                * state_fe_values.JxW(q_point);
           }
         }
       }

@@ -47,16 +47,17 @@ using namespace DOpE;
 
 //some defines and typedefs for cleaner code
 #define DIM 2
-#define VECTOR Vector<double>
-#define MATRIX SparseMatrix<double>
-#define SPARSITYPATTERN SparsityPattern
+#define VECTOR BlockVector<double>
+#define MATRIX BlockSparseMatrix<double>
+#define SPARSITYPATTERN BlockSparsityPattern
 #define DOFHANDLER DoFHandler<DIM>
 #define FE FESystem<DIM>
 #define FACEDATACONTAINER FaceDataContainer<DOFHANDLER, VECTOR, DIM>
 
 typedef PDEProblemContainer<
-    PDEInterface<CellDataContainer, FaceDataContainer, DOFHANDLER, VECTOR, DIM>,
-    DirichletDataInterface<VECTOR, DIM>, SPARSITYPATTERN, VECTOR, DIM> OP;
+    PDEInterface<CellDataContainer, FaceDataContainer, DOFHANDLER, VECTOR, DIM>
+    ,
+    DirichletDataInterface<VECTOR, DIM> ,SPARSITYPATTERN,VECTOR, DIM> OP;
 typedef IntegratorDataContainer<DOFHANDLER, Quadrature<DIM>,
     Quadrature<DIM - 1>, VECTOR, DIM> IDC;
 typedef Integrator<IDC, VECTOR, double, DIM> INTEGRATOR;
@@ -64,6 +65,7 @@ typedef Integrator<IDC, VECTOR, double, DIM> INTEGRATOR;
 typedef DirectLinearSolverWithMatrix<SPARSITYPATTERN, MATRIX, VECTOR, DIM> LINEARSOLVER;
 //********************Linearsolver**********************************
 typedef NewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR, DIM> NLS;
+//typedef MyStatPDEProblem<NLS, INTEGRATOR, OP, 2> SSolver;
 typedef StatPDEProblem<NLS, INTEGRATOR, OP, VECTOR, DIM> SSolver;
 typedef MethodOfLines_StateSpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN,
     VECTOR, DIM> STH;
@@ -118,8 +120,8 @@ main(int argc, char **argv)
   ConvergenceTable convergence_table;
 
   SSolver::declare_params(pr);
-  LocalPDEStokes<VECTOR, DIM>::declare_params(pr);
-//  LocalPDENStokes<VECTOR, DIM>::declare_params(pr);
+//  LocalPDEStokes<VECTOR, DIM>::declare_params(pr);
+  LocalPDENStokes<VECTOR, DIM>::declare_params(pr);
 //  LocalPDENStokesStab<VECTOR, DIM>::declare_params(pr);
 
   BoundaryParabel::declare_params(pr);
@@ -144,14 +146,14 @@ main(int argc, char **argv)
 //Werte von Nabh G., On higher order methods for the stationary incompressible Navier-Stokes equations. PhD thesis, Heidelberg, 1998
 
   //ns
-//  const double exact_delta_p = 0.11752016697;
-//  const double exact_cd = 5.57953523384;
-//  const double exact_cl = 0.010618948146;
+  const double exact_delta_p = 0.11752016697;
+  const double exact_cd = 5.57953523384;
+  const double exact_cl = 0.010618948146;
 
   //stokes
-  const double exact_delta_p = 0.04557938237;
-  const double exact_cd = 3.142425296;
-  const double exact_cl = 0.03019601524;
+//  const double exact_delta_p = 0.04557938237;
+//  const double exact_cd = 3.142426688/*3.142425296*/;
+//  const double exact_cl = 0.03019601524;
 
   const bool compute_error = pr.get_bool("compute error");
 
@@ -172,6 +174,20 @@ main(int argc, char **argv)
 
   if (prerefine > 0)
     triangulation.refine_global(prerefine);
+//  for (unsigned int i = 1; i < 1; i++)
+//  {
+//    for (auto it = triangulation.begin_active(); it != triangulation.end();
+//        it++)
+//        {
+//      if (it->at_boundary())
+//      {
+//        for (unsigned int j = 0; j < 4; j++)
+//          if (it->face(j)->boundary_indicator() == 80)
+//            it->set_refine_flag();
+//      }
+//    }
+//    triangulation.execute_coarsening_and_refinement();
+//  }
   //*************************************************************
 
   //FiniteElemente*************************************************
@@ -191,8 +207,8 @@ main(int argc, char **argv)
   LocalBoundaryFunctionalLift<VECTOR, DIM> LBFL(pr);
   LocalCellFunctionalDrag<VECTOR, DIM> LCFD(pr);
 
-  LocalPDEStokes<VECTOR, DIM> LPDE(pr);
-//  LocalPDENStokes<VECTOR, DIM> LPDE(pr);
+//  LocalPDEStokes<VECTOR, DIM> LPDE(pr, false);
+  LocalPDENStokes<VECTOR, DIM> LPDE(pr);
 //  LocalPDENStokesStab<VECTOR, DIM> LPDE(pr);
   //*************************************************
 
@@ -220,11 +236,13 @@ main(int argc, char **argv)
 
   BoundaryParabel boundary_parabel(pr);
   SimpleDirichletData<VECTOR, DIM> DD2(boundary_parabel);
+
   P.SetDirichletBoundaryColors(0, comp_mask, &DD2);
+//  P.SetDirichletBoundaryColors(0, comp_mask, &DD1);
   P.SetDirichletBoundaryColors(2, comp_mask, &DD1);
   P.SetDirichletBoundaryColors(80, comp_mask, &DD1);
 
-  P.SetBoundaryEquationColors(80);
+//  P.SetBoundaryEquationColors(80);
 
   /************************************************/
   SSolver solver(&P, "fullmem", pr, idc);
@@ -279,7 +297,7 @@ main(int argc, char **argv)
       out.Write(outp, 1, 1, 1);
 
       std::vector<unsigned int> dofs_per_block = DOFH.GetStateDoFsPerBlock();
-      LCFD.PreparePhiD(DOFH, dofs_per_block);
+      LCFD.PreparePhiD(DOFH, dofs_per_block, mapping);
       solver.AddUserDomainData("phid", LCFD.GetPhiD());
       solver.ComputeReducedFunctionals();
 
@@ -316,7 +334,7 @@ main(int argc, char **argv)
           est_error = sqrt(h1resc.GetError());
       }
 
-      outp << "Error Drag Domain: " << error_cd_domain << " Error Drag: "
+      outp << "Error Drag Domain: " << error_cd_domain <<" Error Drag: "
           << error_cd << "  Est.Error Drag: " << est_error << "  Ieff: "
           << est_error / error_cd << "  Error Lift: " << error_cl
           << "  Error Delta p: " << error_delta_p << std::endl;

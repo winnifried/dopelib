@@ -1,10 +1,10 @@
 # Listing of Parameters
 # ---------------------
 subsection main parameters
-  set max_iter = 6
-  set prerefine = 3
-  set quad order = 4
-  set facequad order = 3
+  set max_iter = 9
+  set prerefine = 1
+  set quad order = 5
+  set facequad order = 5
   set refinement = adaptive
   set estimator = DWR
   set order fe v = 2
@@ -30,7 +30,8 @@ end
 
 subsection output parameters
 # Directory where the output goes to
-  set results_dir       = TestLocalStokesDual/
+  #set results_dir       = TestLocalStokesDual/
+  set results_dir       = NSLocal/
   # File format for the output of solution variables
   set file_format       = .vtk
 
