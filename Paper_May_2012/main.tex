@@ -388,7 +388,7 @@ some pre-implemented routines from the \dope{} library rather than
 implementing new features.
 
 
-After the usual preamble, in which we include the necessary header-files from \deal{}, \dope{} and our own problem (i.e. \texttt{localfunctional.h} and \texttt{localpde.h}), we start by defining an instance of a \texttt{ParameterReader}-object, which handles run-time parameter.
+After the usual preamble, in which we include the necessary header-files from \deal{}, \dope{} and our own problem (i.e. \texttt{localfunctional.h} and \texttt{localpde.h}), we start by defining an instance of a \texttt{ParameterReader}-object, which handles run-time parameters.
 \begin{lstlisting}
    ParameterReader pr;
 \end{lstlisting}
@@ -789,11 +789,11 @@ needs to be provided in addition to the
 \end{lstlisting}
 and functional terms, i.e.,     
 \begin{lstlisting} 
-  virtual void BoundaryValue_U(...)
-      {
-        // implement here the derivative of 
-        // the boundary cost functional
-      }
+  void BoundaryValue_U(...)
+   {
+     // implement here the derivative of 
+     // the boundary cost functional
+   }
 \end{lstlisting}
 
 Based on this classes we can now solve the optimization problem, for instance using 
