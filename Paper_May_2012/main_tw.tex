@@ -66,6 +66,7 @@ WINNIFRIED WOLLNER
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{abstract}
+\todo{Computing. Anschrift tw}
 \todo{Welches Journal: Computing oder ATS?}
 In this article, we describe the software library 
 \textit{Differential Equations and Optimization Environment} (\dope{}).
@@ -75,7 +76,7 @@ that first of all the user is required to write only those sections of code that
 the considered problem. Second, the exchange of parts of the used routines is possible 
 with only a few lines of code to change instead of large reimplementations.
 The article illustrates the design principles and various features
-of the \dope{} \todocg{Wir sollten uns einigen ob the DOpElib oder nur DOpElib} and provides some 
+of the \dope{} \todocg{DOpElib} and provides some 
 numerical results as demonstration for the versatility of the software.
 \end{abstract}
 
@@ -101,11 +102,11 @@ equations (PDEs). Prominent examples are
 FEniCS \cite{fenics}
 or commercial solvers as for instance ANSYS (with its Fluent package),
 COMSOL, or simufact forming.
-Finally, often\todocg{wdh, s.u.: not seldom}, a lot of work is (still) done in Matlab.
+\todo{Finally}, a lot of work is (still) done in Matlab.
 In fact, these libraries provide very useful tools 
 for a huge variety of applications. 
 
-However, often\todocg{wdh, siehe oben}, the user is confronted with 
+\todo{In many cases}, the user is confronted with 
 certain bottlenecks. On the one hand, 
 in open-source projects for academic research, 
 standard high-level routines 
@@ -137,6 +138,7 @@ So far, there exist a very limited number of open source packages
 which fulfill the requirements listed above; 
 sucessful in-house code examples are Gascoigne \cite{gascoigne}
 and RoDoBo \cite{rodobo}. 
+\todo{Alles ok auf Seite 2}
 Both have been initiated as well in 
 the Numerical Analysis Group in Heidelberg.\todocg{Wird hier klar, dass die Arbeiten an DOpE in Hd begonnen haben? Falls nein: Like DOpElib, both have been initiated in the Numerical Analysis Group in Heidelberg.}
 
@@ -214,12 +216,12 @@ examples which illustrate the versatile features of \dope{}.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Detailed Description of the Main Features}
 \label{detailed_description}
-This library is designed to allow easy implementation and numerical solutions \todocg{numerical solutions? strange} 
+This library is designed to allow easy implementation \todo{for the} numerical solutions \todocg{numerical solutions? strange} 
 of problems involving partial differential equations (PDEs). 
 In particular, we remove all tedious routine implementation needed in 
 \deal{} by introducing appropriate classes that take care of all the 
 problem independent implementation while leaving only the problem specific 
-part \todocg{parts} to the user. To show how this is designed we will, in the sequel, 
+part \todocg{Ja. parts} to the user. To show how this is designed we will, in the sequel, 
 describe the reasoning first for a simple stationary PDE in 
 Section~\ref{subsubsec:stationary problems} and then show
 how this idea extends to non stationary problems in 
@@ -250,7 +252,7 @@ continuation of the given Dirichlet boundary data.
 Then typically we do not only want to calculate $u$ but more likely we are 
 interested in one (or several) functionals depending on the solution, i.e., some numbers $J(u)$.
 
-In order to solve this problem, i.e., calculate $J(u)$,\todocg{i.e. calculate a series of values $J(u_h)$ approximating $J(u)$,} we need to discretize 
+In order to solve this problem, i.e., calculate $J(u)$,\todocg{i.e. calculate a sequence of values $J(u_h)$ approximating $J(u)$,} we need to discretize 
 the equation. In \dope, we are using finite elements to do this. This means we need to pick a 
 subdivision $\mathcal T_h$, for instance into quadrilaterals,
 of the domain $\Omega$ and a finite element. In the concrete case, we could, 
@@ -262,8 +264,8 @@ and the triangulation and takes care of all other things related to
 handling the finite element space $V_h$. We will refer, to 
 this as the \texttt{SpaceTimeHandler}. Then, it is clear that the simplest 
 form of the constructor should have the following interface:
-\todocg{(Triangulation\& triag, FE\& fe)}
-\todocg{TRIANGULATION. all other templates are in uppercase.}
+\todocg{CG: (Triangulation\& triag, FE\& fe)}
+\todocg{CG: TRIANGULATION. all other templates are in uppercase.}
 \begin{lstlisting}
   template<typename Triangulation, typename FE>
       void SpaceTimeHandler(Triangulation &, FE);
@@ -369,19 +371,23 @@ To solve a stationary PDE problem, the user has to provide some code which can r
 \begin{description}
 \item[Discretization] Specify what kind of triangulation,
 finite element, quadrature rules, 
-\todo{etc. strange to me} etc. we want to use.
+\todo{etc. strange to me: in most cases this is the 
+... and other things maybe adjusted as well} etc. we want to use.
 \item[Problem-data] 
 Define the weak form, 
 the corresponding matrices, 
-the functionals \todo{$J(u)$} as well as the boundary conditions. With exception of the boundary conditions, we have to specify all this only cell-wise, \dope{} handles the rest for us.
-\item[Solvers] \todo{Choice of a (non-)linear solver.}
+the functionals \todo{Ok: $J$} as well as the boundary conditions. With exception of the boundary conditions, we have to specify all this only cell-wise, \dope{} handles the rest for us.
+\item[Solvers] \todo{Ok: Choice of a (non-)linear solver.}
 \item[Additional features] ParameterReader to read in the run-time parameters
   such as material coefficients or adjustments for the solvers like tolerance
   for Newton's method. 
-\todo{Sentence strang to me} Second, definition of Outputhandler etc.
+\todo{Satz weg: Sentence strang to me} Second, definition of Outputhandler etc.
 \end{description} 
 
-We describe now a program designed to compute a value $J(u)$, where $u=(v,p)$ is the solution of the Navier-Stokes equations \eqref{eq:ns} on the domain $\Omega$ as seen in Figure~\ref{fig:example_ns} with  $f=0$, and $J$ is the drag-force of the enclosed circle\todocg{Eigentlich berechnen wir nicht $J(u)$ sondern approximationen davon, siehe auch weiter oben.}. We assume given Dirichlet data for the velocity $v$ on the boundary $\Gamma_{D}=\Gamma_{in}\cup\Gamma_{wall}\cup\Gamma_{circ}$. This is the Benchmark-Case 2D-1 from \cite{TuSchae96}, see there for further details.
+We describe now a program designed to compute a value $J(u)$, where $u=(v,p)$
+is the solution of the Navier-Stokes equations \eqref{eq:ns} on the domain
+$\Omega$ as seen in Figure~\ref{fig:example_ns} with  $f=0$, and $J$ is the
+drag-force of the enclosed circle\todocg{OK: Ueberall $J$ anstatt $J(u)$ Eigentlich berechnen wir nicht $J(u_h)$ sondern approximationen davon, siehe auch weiter oben.}. We assume given Dirichlet data for the velocity $v$ on the boundary $\Gamma_{D}=\Gamma_{in}\cup\Gamma_{wall}\cup\Gamma_{circ}$. This is the Benchmark-Case 2D-1 from \cite{TuSchae96}, see there for further details.
 \begin{figure}[h]
 \centering
 \resizebox{0.5\textwidth}{!}{\input{Pictures/example_ns}}
@@ -389,7 +395,10 @@ We describe now a program designed to compute a value $J(u)$, where $u=(v,p)$ is
 circle-center $C=(0.2,0.2)$ and radius $r=0.05$.}
 \label{fig:example_ns}
 \end{figure}
-We split the program into the parts \texttt{main.cc}, \texttt{functionals.h} and \texttt{localpde.h}. The \texttt{main.cc}-file is responsible for the declaration of various objects which have mostly to do with the \todocg{textbf finde ich besser als textit, haengt aber vom stylefile ab.}\textit{discretization}, the \textit{solvers} and the general \textit{program sequence}, whereas the other two contain most of the problem-data -- especially the cell-wise contributions of the weak form, the right hand side and the functional. We give a brief explanation on every file in the following.
+We split the program into the parts \texttt{main.cc}, \texttt{functionals.h}
+and \texttt{localpde.h}. The \texttt{main.cc}-file is responsible for the
+declaration of various objects which have mostly to do with the \todocg{Haengt
+  von style-file ab: textbf finde ich besser als textit, haengt aber vom stylefile ab.}\textit{discretization}, the \textit{solvers} and the general \textit{program sequence}, whereas the other two contain most of the problem-data -- especially the cell-wise contributions of the weak form, the right hand side and the functional. We give a brief explanation on every file in the following.
 
 \subsubsection{\texttt{main.cc}}
 In this file we gather the basic components that are necessary for the
@@ -446,7 +455,11 @@ After that, we add the functional under consideration and, because it is a bound
   prob_container.SetBoundaryFunctionalColors(1);
 
 \end{lstlisting}
-Next, we incorporate the Dirichlet data, which is given by the class \texttt{DirichleData}. Then we have to tell the \texttt{prob\_container} for which components and boundaries we prescribe the Dirichlet conditions. This is done via a boundary-color (0 stands for $\Gamma_D$) and a \todocg{comp mask representing the velocity components.} \texttt{std::vector<bool> comp\_mask = (true, true, false)}.
+Next, we incorporate the Dirichlet data, which is given by the class
+\texttt{DirichleData}. Then we have to tell the \texttt{prob\_container} for
+which components and boundaries we prescribe the Dirichlet conditions. This is
+done via a boundary-color (0 stands for $\Gamma_D$) and a 
+\todocg{Aendern in Satz: component mask representing the velocity components.} \texttt{std::vector<bool> comp\_mask = (true, true, false)}.
 \begin{lstlisting}
 
   DirichletData dd;
@@ -454,7 +467,7 @@ Next, we incorporate the Dirichlet data, which is given by the class \texttt{Dir
 
 \end{lstlisting}
 Now we create the object which steers the whole solution process, the previously mentioned \texttt{StatPDEProblem}. It takes care of solving the discretized equation and evaluating the given functionals. The class depends actually on some template-parameters, so for the sake of abbreviation, we defined a typedef at the beginning of the \texttt{main.cc}-file.
-\todocg{NEWTON statt NEWTONSOLVER}
+\todocg{Alle Anerdungen accept auf Seite 7: NEWTON statt NEWTONSOLVER}
 \begin{lstlisting}
 
   typedef StatPDEProblem<NEWTONSOLVER> SSOLVER;
@@ -473,14 +486,18 @@ The  template parameter \texttt{LINEARSOLVER}\todocg{LINSOLVE statt LINEARSOLVER
   typedef DirectLinearSolver<MATRIX, VECTOR> LINEARSOLVER;
 
 \end{lstlisting}
-With the type settled, we create the object \texttt{solver}, which needs the discretization (represented here by the \texttt{prob\_container}), the parameter reader as well as the quadrature rules.
+With the type settled, we create the object \texttt{solver}, which needs the
+discretization (represented here by the \texttt{prob\_container}), the
+parameter reader as well as the quadrature rules.
+\todo{SSolver zu PDE}
 \begin{lstlisting}
 
   SSOLVER solver(prob_container, pr,
                     quad_formula, face_quad_formula);
 
 \end{lstlisting}
-\todo{Finde diesen Schlusssatz komisch}
+\todo{Finde diesen Schlusssatz komisch: Finally we compute 
+the functional $J$ und Reinit weg. We can calculate. solver zu pde}
 Finally, the program is started by
 \begin{lstlisting}
 
@@ -496,7 +513,7 @@ Let $N$ be the number of degrees of freedom of our discretization and $\Set{\phi
 \begin{align}\label{eq:discrete_residual}
 \left(a(u_h)(\phi_{h}^{i})-(f,\phi_{h}^{i})\right)_{i=1}^N,
 \end{align}
-\todo{Hier klarer machen warum wir Jacobi brauchen!}
+\todo{Jacobi explicit weg und Satz weg: Hier klarer machen warum wir Jacobi brauchen!}
 and the Jacobi-matrix of the weak form, i.e.
 \todo{Notation: $\phi_{h,j},\phi_{h}^{i}$}
 \begin{align}\label{eq:discrete_matrix}
@@ -506,7 +523,8 @@ Now all we have to supply here are the cell-wise contributions to these terms, t
 
 To this end, we define a class \texttt{LocalPDE} which provides the three methods
 \texttt{CellEquation}, \texttt{CellRightHandSide} and \texttt{CellMatrix}. 
-\todo{Wirklich??? Mich erinnert die Art der Implementierung eher an Gascoigne!!!}
+\todo{Wirklich??? Mich erinnert die Art der Implementierung eher an
+  Gascoigne!!! Splitting is similar to Gascoigne. Todos von CG ok auf dieser Seite}
 The implementation of the terms works by and large as in \deal{}. We show the basic structure of these methods using the example of \texttt{CellEquation}.
 \todocg{Remove template <2>}
 \begin{lstlisting}
@@ -550,9 +568,9 @@ The implementation of the boundary-functional $J$ follows the outline of the
 computation of the cell-residual in \texttt{localpde.h}. 
 \todo{Fuer mich hoert sich dieser Satz so an, als ob es IMMER two main
   differences gibt. Aber das ist ja nur in diesem speziellen Beispiel der Fall}
-  \todocg{The main difference is that as we only want to evaluate a functional and not a residual-vector, we just loop over the quadrature points and not over the degrees of freedom on the face. Another deviation, special to the case at hand, is that we do not have to specify the method \texttt{CellEquation}, but \texttt{BoundaryValue} instead. This is due to the fact that we consider a boundary-functional in this example, and so we have to specify the value of the functional not cell-wise but face wise (for the faces that lie on $\Gamma_{circ}$). }
+  \todocg{Satz von CG ist fast OK. Equation gegen Value tauschen. Todo belassen: The main difference is that as we only want to evaluate a functional and not a residual-vector, we just loop over the quadrature points and not over the degrees of freedom on the face. Another deviation, special to the case at hand, is that we do not have to specify the method \texttt{CellEquation}, but \texttt{BoundaryValue} instead. This is due to the fact that we consider a boundary-functional in this example, and so we have to specify the value of the functional not cell-wise but face wise (for the faces that lie on $\Gamma_{circ}$). }
 However, there are two main differences. First, we do not have to specify the method \texttt{CellEquation}, but \texttt{BoundaryValue} instead. This is due to the fact that we consider a boundary-functional in this example, and so we have to specify the value of the functional not cell-wise but face wise (for the faces that lie on $\Gamma_{circ}$). The second difference is that as we only want to evaluate a functional and not a residual-vector, we just loop over the quadrature points and not over the degrees of freedom on the face.
-\todocg{Remove template <2>}
+\todocg{OK: Remove template <2>}
 \begin{lstlisting}
  double
  BoundaryValue(const FaceDataContainer<2>& fdc)
@@ -602,7 +620,7 @@ X:= \bigl\{
 p\in L^2(I,L^2(\Omega)\setminus\mathbb{R} \bigr\}.
 \]
 As for stationary problems, the goal is to compute
-some target functional \todo{$J(u)$} which is now possibly 
+some target functional \todo{alle Ssahcen auf Seite 10 uebernehmen $J$} which is now possibly 
 time-dependent. To organize the discretization 
 process, we need to perform spatial and temporal 
 discretization. This is again done via
@@ -631,13 +649,13 @@ Thus a generic problem may look as follows:
 \end{lstlisting}
 At present we have prepared the following time-stepping schemes in \dope:
 \begin{itemize}
-\item Forward-(Explicit)-Euler \todocg{Ist das nicht doppelt gemoppelt?}
+\item Forward-(Explicit)-Euler \todocg{Doppelt belassen in klammern explicit Ist das nicht doppelt gemoppelt?}
 \item Backward-(Implicit)-Euler
 \item Crank-Nicolson scheme
 \item shifted Crank-Nicolson scheme (to deal with singular initial data)
 \item fractional-step-$\theta$ scheme
 \end{itemize}
-\todo{Strange sentence} With this we can now run a loop over all time-steps, where in each of the 
+\todo{Strange sentence: Alles etwas ausfuhrlicher} With this we can now run a loop over all time-steps, where in each of the 
 time-steps we can reuse the functionality to solve stationary PDEs 
 applied to the time-step problem. 
 
@@ -684,12 +702,12 @@ The concrete choice of $\theta$ leads to a
 specific time-stepping scheme. For instance,
 $\theta = 0.5$ gives the Crank-Nicolson scheme,
 
-\todo{Remove the following}
+\todo{Ok: Remove the following}
 \begin{lstlisting}
    CrankNicolsonProblem<...>
 \end{lstlisting}
 
-\todo{It is well-known in fluid mechanics that}
+\todo{Ok: It is well-known in fluid mechanics that}
 The pressure and incompressibility terms should be 
 treated fully implicitly when time-discretizing 
 the Navier-Stokes equations.
@@ -719,7 +737,9 @@ Note that in the stationary case \dope{} automatically sets $ \texttt{scale\_ico
 
 In addition to stationary problems, the implementation
 of the time-derivative, i.e. the term $ (v^{n+1},\phi)$, must be considered which is done
-in the method \texttt{CellTimeEquation} in a straight-forward way. After the initialization of $v$ and the shape function $\phi_i$ \todocg{ich wuerde fuer v und phi hier die texttt function nutzen.} and the usual loops over the quadrature points and  degrees of freedom of the cell we fill the local cell vector by
+in the method \texttt{CellTimeEquation} in a straight-forward way. After the
+initialization of $v$ and the shape function $\phi_i$ \todocg{ok: in ttt
+  aendern: ich wuerde fuer v und phi hier die texttt function nutzen.} and the usual loops over the quadrature points and  degrees of freedom of the cell we fill the local cell vector by
 \begin{lstlisting}
         local_cell_vector(i) +=  scale * (v * phi_i) * 
                                   state_fe_values.JxW(q_point);    
@@ -791,7 +811,7 @@ j'(q)(\delta q) = J'_q(q,S(q))(\delta q) + (S^* J_u'(q,S(q)),\delta q)
 \]
 where the index $q$ or $u$ denote directional derivatives for the 
 respective argument. To calculate action of the adjoint operator $S^*$ 
-we note that $z =  S^* J_u'(q,S(q))$ \todocg{action of the ....?}
+we note that $z =  S^* J_u'(q,S(q))$ \todocg{andern: the action of the ....?}
 can be computed via the adjoint PDE
 \begin{equation}
   \label{opt_KKT_system}
@@ -802,7 +822,7 @@ can be computed via the adjoint PDE
 Similarly formulas for the second derivatives can be obtained, see, e.g., 
 \cite{BeMeVe06}.
 
-To do so, we define an object \todocg{Argumente?}
+To do so, we define an object \todocg{weg: Argumente?}
 \begin{lstlisting} 
   template<typename PDE, typename COSTFUNCTIONAL>
     class OPTProblemContainer;
@@ -837,7 +857,10 @@ the following method to be called by the user
 \end{lstlisting}
 where the argument provides an initial guess for the optimal control.
 
-\todo{Aussage des Satzes ist mir nicht klar! Warum PDEs hier?}
+\todo{WW: Remark ob zeitabh oder nicht. 1-2 saetze. 
+check internet webseite}
+
+\todo{Summarzing, we have learned: Aussage des Satzes ist mir nicht klar! Warum PDEs hier?}
 Due to the design of the classes it is easily possible to extend any given 
 and running code for a PDE both to the nonstationary counterpart, if the PDE is 
 stationary, as well as to an optimization problem where the constraint is 
@@ -893,7 +916,7 @@ c_D = \frac 1 {20} \int_{\Gamma_{circ}} \nu\partial_nu _1 - pn,
 with the normal $n$ and $\nu = 0.001$. To achieve an efficient computation of the quantity $c_D$, we employ goal-oriented mesh refinement with the help of the DWR-method, see \cite{BeRa96}.
 
 \todo{Christians Bilder}
-\todo{Bildunterschrift CG und noch etwas anderes}
+\todo{Bildunterschrift CG und noch etwas anderes und die 2}
 \begin{itemize}
 \item Bild Freiheitsgrade vs Fehler, global und 
 \item Bild adaptive mesh, bild der Loesung (?)
@@ -915,7 +938,7 @@ a monolithic coupling scheme (strong coupling).
 The basic configuration is 
 sketched in Figure \ref{fig:example_ns} at which an elastic beam is attached 
 behind the rigid cylinder. 
-\todocg{Die Masse, die aus dem Bild klarwerden, wuerde ich hier weglassen.}
+\todocg{Die Masse und langen und Einheiten, die aus dem Bild klarwerden, wuerde ich hier weglassen.}
 The computational domain has length $L=2.5m$ and height $H=0.41m$. The circle center
 is positioned at $C=(0.2m,0.2m)$ with radius $r=0.05m$. The elastic beam has length
 $l=0.35m$ and height $h=0.02m$. The right lower end is positioned at 
@@ -931,7 +954,7 @@ The Fractional-Step-$\theta$ scheme is used for time discretization with
 different time step sizes $k$. However, the time-stepping scheme can be 
 very easily chosen in the \texttt{main.cc} function by choosing an appropriate 
 time-stepping scheme
-\todo{. Remove the following
+\todo{OK: . Remove the following
 , at present the following are available.}
 \begin{lstlisting}
 ForwardEulerProblem
@@ -989,7 +1012,8 @@ time (in $s$).
 
 \newpage
 \subsection{Compliance minimization}
-\todo{Was ist MBB? Konnest Du vielleicht auch eine Referenz zur Konfiguration angeben?}\todocg{Wir sollten uns auf eine gemeinsame Darstellung der Bilder einigen (z.B. Achsenbeschriftung ja/nein).}
+\todo{Achsenbeschriftung Winni}
+\todo{Macht Winni: Was ist MBB? Konnest Du vielleicht auch eine Referenz zur Konfiguration angeben?}\todocg{Wir sollten uns auf eine gemeinsame Darstellung der Bilder einigen (z.B. Achsenbeschriftung ja/nein).}
 In this example, we consider the compliance minimization of a standard MBB-Beam. 
 The thickness variable is allowed to take intermediate value apart from $0$ and $1$,
 i.e., we consider a variable thickness sheet. The discretization is done 
@@ -1003,19 +1027,8 @@ thickness.
 \end{figure}
 A typical thickness distribution is shown in Figure~\ref{res:mbb}.
 
-\todo{\section{Outlook}}
-\todo{Ich finde nach wir vor, dass wir kurz skizzieren sollten, was wir als
-  naechstes vor haben}
-\todo{In this work, we introduced
-the software DOpElib to solve PDEs
-and Optimization problems. In the future,
-we plan to implement efficient routines 
-for nonstationary optimization and different 
-types of control and state constraints. 
-Moreover, we plan to link to other 
-software packages, specifically, in order 
-to use parallel computing routines.  
-}
+\todo{Conclusions}
+
 
 \section*{Thanks}
 The \dope{} project makes use of various finite elements taken from  
