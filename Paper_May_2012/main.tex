@@ -1,23 +1,25 @@
-\documentclass[prodmode,acmtoms]{acmsmall}
-%  
-
-% Package to generate and customize Algorithm as per ACM style
-\usepackage[ruled]{algorithm2e}
-\renewcommand{\algorithmcfname}{ALGORITHM}
-\SetAlFnt{\small}
-\SetAlCapFnt{\small}
-\SetAlCapNameFnt{\small}
-\SetAlCapHSkip{0pt}
-\IncMargin{-\parindent}
-
-% Metadata Information
-\acmVolume{0}
-\acmNumber{0} 
-\acmArticle{00}
-\acmYear{0000}
-\acmMonth{0} 
- 
+%\documentclass{svjour3}                     % onecolumn (standard format)
+%\documentclass[smallcondensed]{svjour3}     % onecolumn (ditto)
+\documentclass[smallextended]{svjour3}       % onecolumn (second format)
+%\documentclass[twocolumn]{svjour3}          % twocolumn
 %
+\smartqed  % flush right qed marks, e.g. at end of proof
+%
+\usepackage{graphicx}
+%
+% \usepackage{mathptmx}      % use Times fonts if available on your TeX system
+%
+% insert here the call for the packages your document requires
+%\usepackage{latexsym}
+% etc.
+%
+% please place your own definitions here and don't use \def but
+% \newcommand{}{}
+%
+% Insert the name of "your journal" with
+ \journalname{Computing}
+%
+
 %%% User-requested packages placed after this line %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \usepackage{amsfonts,amssymb,amsmath}
 \usepackage{booktabs,dcolumn}
@@ -27,13 +29,14 @@
 \usepackage{subfig}
 \usepackage{multirow}
 \usepackage{listings}
+\usepackage{xcolor}
+\usepackage[numbers,sort&compress]{natbib} 
 
 % \usepackage[center]{subfigure}
 \numberwithin{equation}{section}
 \usepackage{braket}                             %Provides \Set for typing sets
 \usepackage{float} 
 \usepackage{subfig}
-
 
 %%% User's macros placed after this line %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %\IfFileExists{dsfont.sty}%
@@ -46,28 +49,56 @@
 \newcommand{\dope}{\texttt{DOpElib}}
 \newcommand{\re}{\operatorname{Re}}
 
+
+
 %\newcommand{\todo}[1]{\textbf{\textsc{\textcolor{black}{TODO: #1}}}}
 \newcommand{\todo}[1]{\textbf{\textsc{\textcolor{blue}{TODO: #1}}}}
 \newcommand{\todocg}[1]{\textbf{\textsc{\textcolor{red}{TODO: #1\textasciitilde cg}}}}
 %\newcommand{\mymarginpar}[1]{\marginpar{\textcolor{red}{\scriptsize{#1}}}}
 \newcommand{\mymarginpar}[1]{\marginpar{\textcolor{red}{\normalsize{#1}}}}
 %
+
 \begin{document}
-\markboth{C. Goll, T. Wick, and W. Wollner}{DOpElib:  A Goal Oriented Software Library}
+
 
 \title{DOpElib: Differential Equations and Optimization Environment; A Goal Oriented Software Library for Solving PDEs and Optimization Problems}
 
-\author{CHRISTIAN GOLL
-\affil{University of Heidelberg}
-THOMAS WICK
-\affil{The University of Texas at Austin}
-WINNIFRIED WOLLNER
-\affil{University of Hamburg}}
+
+\titlerunning{DOpElib}        % if too long for running head
+
+\author{C. Goll \and T. Wick \and W. Wollner}
+
+%\authorrunning{Short form of author list} % if too long for running head
+
+\institute{F. Author \at
+              first address \\
+              Tel.: +123-45-678910\\
+              Fax: +123-45-678910\\
+              \email{fauthor@example.com}           %  \\
+           \and
+Thomas Wick \at
+              The Institute for Computational Engineering and Sciences,\\
+The University of Texas at Austin,\\
+Austin, Texas 78712, USA \\
+              Tel.: +1 512-672-7763\\
+              \email{twick@ices.utexas.edu}   
+ \and
+F. Author \at
+              first address \\
+              Tel.: +123-45-678910\\
+              Fax: +123-45-678910\\
+              \email{fauthor@example.com}   
+}
+
+\date{Received: date / Accepted: date}
+% The correct dates will be entered by the editor
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+\maketitle
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{abstract}
-\todo{Computing}
 In this article, we describe the software library 
 \textit{Differential Equations and Optimization Environment} (\dope{}).
 The main feature of \dope{} is that it provides a unified interface to high level algorithms 
@@ -79,28 +110,14 @@ The article illustrates the design principles and various features
 of \dope{} and provides some 
 numerical results as demonstration for the versatility of the software.
 \end{abstract}
-
-\begin{bottomstuff}
-Author's adresses: C. Goll, Institut f\"ur Angewandte Mathematik,
-Universit\"at Heidelberg;
-T. Wick, The Institute for Computational Engineering and Sciences, The
-University of Texas at Austin;
-W. Wollner, Fachbereich Mathematik, Universit\"at Hamburg.
-\end{bottomstuff}
-                      
-
-\maketitle
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Introduction}
 \label{introduction}
 Today, there exist a broad variety of software libraries
 that provide numerical tools for solving partial differential
 equations (PDEs). Prominent examples are 
-\deal{} \cite{dealnew}, dune \cite{dune}, 
-FEniCS \cite{fenics}
+\deal{} \citep{dealnew}, dune \citep{dune}, 
+FEniCS \citep{fenics}
 or commercial solvers as for instance ANSYS (with its Fluent package),
 COMSOL, or simufact forming.
 Finally, a lot of work is (still) done in Matlab.
@@ -262,7 +279,8 @@ handling the finite element space $V_h$. We will refer, to
 this as the \texttt{SpaceTimeHandler}. Then, it is clear that the simplest 
 form of the constructor should have the following interface:
 \begin{lstlisting}
-  template<typename TRIANGULATION & triag, typename FE & fe>
+  template<typename TRIANGULATION & triag, 
+           typename FE & fe>
       void SpaceTimeHandler(Triangulation &, FE);
 \end{lstlisting}
 Next, one needs to solve the discrete equation
@@ -290,8 +308,8 @@ object \texttt{pde} that implements the local element integrals, i.e.,
 \begin{lstlisting}
   template<typename PROBLEM,typename VECTOR>
       void Integrator
-             ::ComputeNonlinearResidual(PROBLEM& pde, 
-                                        VECTOR & residual);
+           ::ComputeNonlinearResidual(PROBLEM& pde, 
+                                      VECTOR & residual);
 \end{lstlisting}
 where \texttt{VECTOR} is one of the possible vector types given by \deal{}.
 It is clear that we need to ensure that the integrator object has access
@@ -331,7 +349,8 @@ exact problem we introduce another container around it which we call
 method
 \begin{lstlisting}
   template<class NEWTON>
-      void StatPDEProblem<NEWTON>::ComputeReducedFunctionals();
+      void StatPDEProblem<NEWTON>
+             ::ComputeReducedFunctionals();
 \end{lstlisting}
 The template argument \texttt{NEWTON} represents the choosen solver of the nonlinear problems.
 That combines all the necessary steps to calculate $J(u_h)$. 
@@ -384,8 +403,6 @@ circle-center $C=(0.2,0.2)$ and radius $r=0.05$.}
 \label{fig:example_ns}
 \end{figure}
 
-\todocg{Haengt
-  von style-file ab: textbf finde ich besser als textit, haengt aber vom stylefile ab.}
 We split the program into the parts \texttt{main.cc}, \texttt{functionals.h} and \texttt{localpde.h}. The \texttt{main.cc}-file is responsible for the declaration of various objects which have mostly to do with the \textit{discretization}, the \textit{solvers} and the general \textit{program sequence}, whereas the other two contain most of the problem-data -- especially the cell-wise contributions of the weak form, the right hand side and the functional. We give a brief explanation on every file in the following.
 
 \subsubsection{\texttt{main.cc}}
@@ -526,17 +543,19 @@ an interface which is closely related to the weak formulation which
 has to be derived by the user. Thus,
 we loop over the quadrature points and the number of DoFs of the cell. In the innermost loop, we evaluate the weak form tested with $\phi_{h}^i$ (represented by \texttt{phi\_i\_grads\_v}) on the cell with the help of the previously selected quadrature formula. 
  \begin{lstlisting}
-    for(unsigned int q_point = 0; q_point < n_q_points; q_point++)
+    for(unsigned int q_point = 0; 
+        q_point < n_q_points; 
+        q_point++)
     {
       //initialize phi_i_grads_v etc.
       Tensor<2,2> vgrads;
       vgrads[0]= ugrads[q_point][0]; 
       vgrads[1]= ugrads[q_point][1];
       for (unsigned int i=0;i<n_dofs_per_cell;i++)
-        local_cell_vector(i) += ( _nu 
-                                * vgrads * phi_i_grads_v 
-                                + //all the other terms)
-                                * state_fe_values.JxW(q_point);
+        local_cell_vector(i) += 
+           ( _nu * vgrads * phi_i_grads_v 
+             + //all the other terms)
+             * state_fe_values.JxW(q_point);
     }
 \end{lstlisting}
 \dope{} takes now care of the distribution of the local cell contributions into  the vector of the residual \eqref{eq:residual_vector}. The methods \texttt{CellRightHandSide} and \texttt{CellMatrix} follow the same structure as 
@@ -565,7 +584,9 @@ hand, is that we do not have to specify the method \texttt{CellEquation}, but
 \end{lstlisting}
 Notice that we get here the values of the computed solution by giving the string "state".
 \begin{lstlisting}
-    for(unsigned int q_point = 0; q_point < n_q_points; q_point++)
+    for(unsigned int q_point = 0; 
+        q_point < n_q_points; 
+        q_point++)
       erg += -1. * ( _nu * ufacegrads[q_point][0]
                 * state_fe_face_values.normal_vector(q_point)
                 + //other terms)        
@@ -587,14 +608,14 @@ with some suitable Bochner space $X$.  As model problem,
 we extend the previous example and consider the nonstationary Navier-Stokes equations
 in a domain $\Omega\in\mathbb{R}^d$. Find: 
 $(v,p)\in X$ with
-\[
-\int_I \bigl[ (\partial_t v, \phi)
+\begin{align*}
+&\int_I \bigl[ (\partial_t v, \phi)
 + \nu (\nabla v, \nabla \phi) + (v\cdot\nabla v, \phi)
 - (p,\nabla\cdot \phi)
-+ (\nabla\cdot v, \chi)\bigr] \, dt
-+ (v(0) - v^0, \phi(0))
++ (\nabla\cdot v, \chi)\bigr] \, dt\\
+&\quad + (v(0) - v^0, \phi(0))
 = \int_I l(\phi) \, dt 
-\]
+\end{align*}
 for all $\Phi:= (\phi, \chi) \in X$ with
 \[
 X:= \bigl\{ 
@@ -617,7 +638,7 @@ at all times, the constructor could look as follows:
   template<typename TIMES & times, 
            typename TRIANGULATION & triag, 
            typename FE & fe>
-      void SpaceTimeHandler(Times &, Triangulation &, FE &);
+   void SpaceTimeHandler(Times &, Triangulation &, FE &);
 \end{lstlisting}
 
 Now we may discretize the problem with some time-stepping scheme, which will 
@@ -703,9 +724,11 @@ are used to distinguish these terms:
    {
    // Usual loops over DoFs and quadrature points
      {
-      local_cell_vector(i) +=  
-          scale *// terms like (\nabla v^{n+1}, \nabla \phi) etc.
-          + scale_ico *// terms like (-p^{n+1},\nabla\cdot \phi)
+      local_cell_vector(i) += 
+          scale * 
+          // terms like (\nabla v^{n+1}, \nabla \phi) etc.
+        + scale_ico *
+          // terms like (-p^{n+1},\nabla\cdot \phi)
      }
    }
 \end{lstlisting}
@@ -720,7 +743,7 @@ of the time-derivative, i.e. the term $ (v^{n+1},\phi)$, must be considered whic
 in the method \texttt{CellTimeEquation} in a straight-forward way. After the initialization of $\texttt{v}$ and the shape function $\texttt{phi\_i}$ and the usual loops over the quadrature points and  degrees of freedom of the cell we fill the local cell vector by
 \begin{lstlisting}
         local_cell_vector(i) +=  scale * (v * phi_i) * 
-                                  state_fe_values.JxW(q_point);    
+                    state_fe_values.JxW(q_point);    
 \end{lstlisting}
 Here, the advantage is that \dope{} orders the terms in the time-stepping
 problems
@@ -814,7 +837,8 @@ needs to be provided in addition to the
 \begin{lstlisting} 
   void CellEquation_U(...)
    {
-     // implement directional derivative of the CellEquation
+     // implement directional derivative 
+     // of the CellEquation
    }
 \end{lstlisting}
 and functional terms, i.e.,     
@@ -966,8 +990,8 @@ the implementation in \dope{} is correct.
 % Bilder von FSI 2 
 \begin{figure}[h]
 \centering
-{\includegraphics[width=6cm]{Pictures/visit_fsi_2_CNn_t_2e-2_global_3_biharmonic_mesh8070_scale.png}}
-{\includegraphics[width=6cm]{Pictures/visit_fsi_2_CNn_t_2e-2_global_3_biharmonic_x_velo8070_scale.png}}
+{\includegraphics[width=5cm]{Pictures/visit_fsi_2_CNn_t_2e-2_global_3_biharmonic_mesh8070_scale.png}}
+{\includegraphics[width=5cm]{Pictures/visit_fsi_2_CNn_t_2e-2_global_3_biharmonic_x_velo8070_scale.png}}
 \caption{FSI 2 test case: mesh (left) and velocity profile in vertical 
 direction (right) at time $t=16.14s$.}
 \label{res:fsi_2_mesh_and_x_velo}
@@ -1037,6 +1061,9 @@ possibility to finish this work.
 %
 
 
+
 \end{document}
+% end of file template.tex
+
 
 
