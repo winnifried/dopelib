@@ -920,15 +920,8 @@ is discussed.
 \subsection{Goal-oriented mesh refinement for Navier-Stokes}
 In this example we consider a laminar flow around a cylinder in 2d. To be more precise, we are computing the benchmark 2D-1 from \cite{TuSchae96}. The computational domain is as depicted in Fig.~\ref{fig:example_ns} and the equation is discretized with the Taylor-Hood  element. We want to compute the drag force on the enclosed cylinder
 \begin{equation}
-J(u) = \frac 1 {20} \int_{\Gamma_{circ}} \nu\partial_nv _1 - pn,
+J(u) = \frac 1 {20} \int_{\Gamma_{circ}} \nu\partial_nv _1 - pn_1,
 \end{equation}
-\todo{
-\begin{equation}
-J(u) = \frac 1 {20} \int_{\Gamma_{circ}} (\nu\partial_nv _1 - pn)e_1,
-\end{equation}
-where $e_1$ denotes the unit vector in $x$-direction. Habil 
-Roland Becker S. 60 im pdf.
-}
 with the solution $u = (v,p)$, the normal $n$ and the viscosity $\nu = 0.001$.
 \begin{figure}[hbt]
 \centering
