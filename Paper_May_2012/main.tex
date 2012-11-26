@@ -552,10 +552,10 @@ we loop over the quadrature points and the number of DoFs of the cell. In the in
 \subsubsection{\texttt{localfunc.h}}
 The implementation of the boundary-functional $J$ follows the outline of the
 computation of the cell-residual in \texttt{localpde.h}. 
-\todo{Habe ich mal umgeschrieben, bitte nochmal ansehen~WW.}
 The main difference, and common to all functionals is that we only want to
 \todocg{ evaluate a functional, i.e., <-wuerde ich streichen} calculate a single number, and not a
-residual-vector\todocg{, i.e., calculate the elements of a vector Diesen Teil wuerde ich streichen.}. Thus, we 
+whole 
+residual-vector. Thus, we 
 just loop over the quadrature points and not over the degrees of freedom 
 on the face. In the present situation, we want to evaluate a functional 
 that consists of a boundary integral. Thus we need to evaluate 
@@ -651,7 +651,6 @@ At present we have prepared the following time-stepping schemes in \dope:
 \item shifted Crank-Nicolson scheme (to deal with singular initial data)
 \item fractional-step-$\theta$ scheme
 \end{itemize}
-\todo{bitte gegenlesen}
 After choosing the time-stepping scheme, the SpaceTimeHandler  
 loops over all time-steps, where in each of the 
 time-steps we can reuse the functionality we have provided to solve 
@@ -660,7 +659,7 @@ This means for instance, if we have implemented the
 cell-integrals in the weak formulation for the stationary case, 
 then we can use the exact same 
 implementation again for the solution of the nonstationary version of 
-the equation. However, we will possibly need to provide an additional 
+the equation. However, we need to provide an additional 
 term to cope with the integral for the time derivative.
 
 Now it is apparent, why we introduced the \texttt{StatPDEProblem}, because
@@ -925,6 +924,13 @@ In this example we consider a laminar flow around a cylinder in 2d. To be more p
 \begin{equation}
 J(u) = \frac 1 {20} \int_{\Gamma_{circ}} \nu\partial_nv _1 - pn,
 \end{equation}
+\todo{
+\begin{equation}
+J(u) = \frac 1 {20} \int_{\Gamma_{circ}} (\nu\partial_nv _1 - pn)e_1,
+\end{equation}
+where $e_1$ denotes the unit vector in $x$-direction. Habil 
+Roland Becker S. 60 im pdf.
+}
 with the solution $u = (v,p)$, the normal $n$ and the viscosity $\nu = 0.001$.
 \begin{figure}[hbt]
 \centering
@@ -1037,12 +1043,13 @@ thickness.
 A typical thickness distribution is shown in Fig.~\ref{res:mbb}.
 
 \section{Conclusions}
-\todo{Frage an CG und Winni: Guter Abschluss?}
 In this article, we described the architecture 
 of the novel software library DOpElib for solving 
-PDEs and optimization problems.  The key idea behind 
-the algorithms is the computation of some target 
-functional \todocg{Ich wuerde eventuell die userfreundlichkeit mehr in den Fokus ruecken? The key idea of the software is to supply a toolkit which allows for fast implementation of the problems at hand, but at the same time gives the user full flexibility to change or alter the used algorithms}\todo{Bin daf\"ur~WW}. This is achieved by a unified interface 
+PDEs and optimization problems.  The key idea of the software is to supply a
+toolkit which allows for fast implementation of the problems at hand, but at
+the same time gives the user full flexibility to change or alter the used
+algorithms. 
+This is achieved by a unified interface 
 to state of the art time-stepping methods, nonlinear solvers and optimization
 routines. The capabilities of DOpElib are demonstrated with the help of three examples.
 
