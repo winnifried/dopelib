@@ -70,11 +70,11 @@
 
 %\authorrunning{Short form of author list} % if too long for running head
 
-\institute{F. Author \at
-              first address \\
-              Tel.: +123-45-678910\\
-              Fax: +123-45-678910\\
-              \email{fauthor@example.com}           %  \\
+\institute{Christian Goll \at
+              Institute of Applied Mathematics, University of Heidelberg
+              \\Im Neuenheimer Feld 293/294, 69120 Heidelberg, Germany\\
+              Tel.: +49 622-154-6154\\
+              \email{cgoll@iwr.uni-heidelberg.de}           %  \\
            \and
 Thomas Wick \at
               The Institute for Computational Engineering and Sciences,\\
@@ -279,9 +279,8 @@ handling the finite element space $V_h$. We will refer, to
 this as the \texttt{SpaceTimeHandler}. Then, it is clear that the simplest 
 form of the constructor should have the following interface:
 \begin{lstlisting}
-  template<typename TRIANGULATION & triag, 
-           typename FE & fe>
-      void SpaceTimeHandler(Triangulation &, FE);
+  template<typename TRIANGULATION, typename FE>
+     void SpaceTimeHandler(TRIANGULATION& triag, FE& fe);
 \end{lstlisting}
 Next, one needs to solve the discrete equation
 \begin{align}\label{eq:discrete_equation}
@@ -307,9 +306,9 @@ that offers a method to calculate the residual given a user-defined
 object \texttt{pde} that implements the local element integrals, i.e.,
 \begin{lstlisting}
   template<typename PROBLEM,typename VECTOR>
-      void Integrator
-           ::ComputeNonlinearResidual(PROBLEM& pde, 
-                                      VECTOR & residual);
+     void Integrator
+          ::ComputeNonlinearResidual(PROBLEM& pde, 
+                                     VECTOR & residual);
 \end{lstlisting}
 where \texttt{VECTOR} is one of the possible vector types given by \deal{}.
 It is clear that we need to ensure that the integrator object has access
@@ -322,9 +321,9 @@ we have a user defined object \texttt{pde} that can evaluate the local
 integrals needed for assembling the matrix, i.e.,
 \begin{lstlisting}
   template<typename PROBLEM,typename MATRIX>
-      void Integrator
-             ::ComputeMatrix(PROBLEM& pde, 
-                             MATRIX & system_matrix);
+     void Integrator
+            ::ComputeMatrix(PROBLEM& pde, 
+                            MATRIX & system_matrix);
 \end{lstlisting}
 where now \texttt{MATRIX} is one of the matrix types supported by \deal{}.
 With this we can now define a nonlinear solver \texttt{NewtonSolver} 
@@ -333,9 +332,9 @@ following function
 \begin{lstlisting}
  template<typename LINSOLVE>
   template<typename PROBLEM, typename VECTOR>
-      void NewtonSolver<LINSOLVE>
-             ::NonlinearSolve(PROBLEM& pde, 
-                              VECTOR & solution);
+     void NewtonSolver<LINSOLVE>
+            ::NonlinearSolve(PROBLEM& pde, 
+                             VECTOR & solution);
 \end{lstlisting}
 Where \texttt{LINSOLVE} denotes the solver that should be used to solve the 
 linearized equations during the newton iteration.
@@ -349,8 +348,8 @@ exact problem we introduce another container around it which we call
 method
 \begin{lstlisting}
   template<class NEWTON>
-      void StatPDEProblem<NEWTON>
-             ::ComputeReducedFunctionals();
+     void StatPDEProblem<NEWTON>
+            ::ComputeReducedFunctionals();
 \end{lstlisting}
 The template argument \texttt{NEWTON} represents the choosen solver of the nonlinear problems.
 That combines all the necessary steps to calculate $J(u_h)$. 
@@ -430,35 +429,29 @@ software and we take advantage to take them from \deal{}.
 
 Then, the two characteristic features \texttt{LocalPDE} and \texttt{LocalFunctional} objects come into play:
 \begin{lstlisting}
-
   LocalPDE local_pde;
   LocalFunctional local_functional;
-
 \end{lstlisting}
 These hold the information of the PDE and the functional under consideration. Further explication is given below because
 the definition of this classes is done separately in \texttt{localpde.h} resp.   \texttt{localfunctional.h}.
 
 In the next step, we define an object of type \texttt{SpaceTimeHandler}, which handles all the things connected with the triangulation as well as the finite element space. This class is also capable of organizing degrees of freedom in time-dependent problems, hence the name. 
 \begin{lstlisting}
-
-  SpaceTimeHandler dof_handler(triangulation, finite_element);
-  
+  SpaceTimeHandler dof_handler(triangulation,
+                               finite_element);
 \end{lstlisting}
 There exist different versions of this class for forward as well as optimization problems. 
 
 Now we have everything at hand to create an instantiation of type \texttt{PDEProblemContainer}. This basically represents the discretized problem, and bundles things like boundary conditions, the PDE, the functional and the discretization. First, we give the constructor the \texttt{local\_pde} and the \texttt{dof\_handler}.
 \begin{lstlisting}
-
-  PDEProblemContainer<LocalPDE> prob_container(local_pde,
-                                               dof_handler);
-                                               
+  PDEProblemContainer<LocalPDE> 
+                      prob_container(local_pde,
+                                     dof_handler);                                            
 \end{lstlisting}
 After that, we add the functional under consideration and, because it is a boundary functional, we specify the part of the boundary on which the functional operates (this is done via a 'boundary color', $1$ represents $\Gamma_{circ}$).
 \begin{lstlisting}
-
   prob_container.AddFunctional(&local_functional);
   prob_container.SetBoundaryFunctionalColors(1);
-
 \end{lstlisting}
 Next, we incorporate the Dirichlet data, which is given by the class
 \texttt{DirichleData}. Then we have to tell the \texttt{prob\_container} for
@@ -466,10 +459,10 @@ which components and boundaries we prescribe the Dirichlet conditions. This is
 done via a boundary-color in a so-called component mask 
 (here, $0$ denotes $\Gamma_D$).
 \begin{lstlisting}
-
   DirichletData dd;
-  prob_container.SetDirichletBoundaryColors(0, comp_mask, dd);
-
+  prob_container.SetDirichletBoundaryColors(0,
+                                            comp_mask,
+                                            dd);
 \end{lstlisting}
 Now we create the object which steers the whole solution process, the previously mentioned \texttt{StatPDEProblem}. It takes care of solving the discretized equation and evaluating the given functionals. The class depends actually on some template-parameters, so for the sake of abbreviation, we defined a typedef at the beginning of the \texttt{main.cc}-file.
 \begin{lstlisting}
@@ -479,28 +472,20 @@ Now we create the object which steers the whole solution process, the previously
 \end{lstlisting}
 Here, \texttt{NEWTON} itself is an abbreviation of
 \begin{lstlisting}
-  
   typedef NewtonSolver<LINSOLVE> NEWTON;
-
 \end{lstlisting}
 The  template parameter \texttt{LINSOLVE} describes which linear solver we use in this example. We opted for a direct solver, so: 
 \begin{lstlisting}
-  
   typedef DirectLinearSolver<MATRIX, VECTOR> LINSOLVE;
-
 \end{lstlisting}
 With the type settled, we create the object \texttt{solver}, which needs the discretization (represented here by the \texttt{prob\_container}), the parameter reader as well as the quadrature rules.
 \begin{lstlisting}
-
   PDE pde(prob_container, pr,
                     quad_formula, face_quad_formula);
-
 \end{lstlisting}
 Finally, we compute the functional $J$ by calling:
 \begin{lstlisting}
-
   pde.ComputeReducedFunctionals();
-
 \end{lstlisting}
 
 \subsubsection{\texttt{localpde.h}}
@@ -526,15 +511,15 @@ We show the basic structure of these methods using the example of \texttt{CellEq
 \begin{lstlisting}
   void CellEquation(const CellDataContainer &cdc,
                     VECTOR &local_cell_vector)
-    {
-      const auto& fe_values = cdc.GetFEValuesState();
-      unsigned int n_dofs_per_cell = cdc.GetNDoFsPerCell();
-      unsigned int n_q_points = cdc.GetNQPoints();
+  {
+    const auto& fe_values = cdc.GetFEValuesState();
+    unsigned int dofs_per_cell = cdc.GetNDoFsPerCell();
+    unsigned int n_q_points = cdc.GetNQPoints();
 \end{lstlisting}
  The \texttt{CellDataContainer} contains all the information we need to compute the cell-contributions (things like number of quadrature points, number of degrees of freedom on the cell, the \texttt{dealii::FEValues}-objects, etc.).
   \begin{lstlisting}
-     cdc.GetValuesState("last_newton_solution", uvalues);
-     cdc.GetGradsState("last_newton_solution", ugrads);
+    cdc.GetValuesState("last_newton_solution", uvalues);
+    cdc.GetGradsState("last_newton_solution", ugrads);
  \end{lstlisting}
  In these two lines, we load the (gradient of the) solution of the last newton iteration in all the quadrature points on the cell into the two vectors \texttt{uvalues} and \texttt{ugrads}.
 
@@ -551,7 +536,7 @@ we loop over the quadrature points and the number of DoFs of the cell. In the in
       Tensor<2,2> vgrads;
       vgrads[0]= ugrads[q_point][0]; 
       vgrads[1]= ugrads[q_point][1];
-      for (unsigned int i=0;i<n_dofs_per_cell;i++)
+      for (unsigned int i=0;i<dofs_per_cell;i++)
         local_cell_vector(i) += 
            ( _nu * vgrads * phi_i_grads_v 
              + //all the other terms)
@@ -569,7 +554,7 @@ The main difference is that as we only want to evaluate a functional and not a
 residual-vector, we just loop over the quadrature points and not over the
 degrees of freedom on the face. Another deviation, special to the case at
 hand, is that we do not have to specify the method \texttt{CellEquation}, but
-\texttt{BoundaryValue} instead because $J$ is just number to be computed. This is due to the fact that we consider a boundary-functional in this example, and so we have to specify the value of the functional not cell-wise but face wise (for the faces that lie on $\Gamma_{circ}$). 
+\texttt{BoundaryValue} instead because $J$ is just a number to be computed. This is due to the fact that we consider a boundary-functional in this example, and so we have to specify the value of the functional not cell-wise but face-wise (for the faces that lie on $\Gamma_{circ}$). 
 
 
 
@@ -635,10 +620,11 @@ add the temporal subdivision \texttt{times}. In the simplest
 case, when we have the same spatial triangulation 
 at all times, the constructor could look as follows:
 \begin{lstlisting}
-  template<typename TIMES & times, 
-           typename TRIANGULATION & triag, 
-           typename FE & fe>
-   void SpaceTimeHandler(Times &, Triangulation &, FE &);
+  template<typename TIMES, typename TRIANGULATION, 
+           typename FE>
+   void SpaceTimeHandler(TIMES& times,
+                         TRIANGULATION& triag,
+                         FE& fe);
 \end{lstlisting}
 
 Now we may discretize the problem with some time-stepping scheme, which will 
@@ -662,7 +648,7 @@ At present we have prepared the following time-stepping schemes in \dope:
 \todo{CG and WW: bitte pruefen}
 After choosing the time-stepping scheme, the SpaceTimeHandler  
 loops over all time-steps, where in each of the 
-time-steps we can reuse the functionality to solve stationary PDEs. 
+time-steps we can reuse the functionality \todocg{we employed} to solve stationary PDEs.\todocg{Hier Beispiele, was genau wir wiederverwenden? Oder auf den naechsten Abschnitt verweisen?} 
 Now it is apparent, why we introduced the \texttt{StatPDEProblem}, because
 we define the \texttt{InstatPDEProblem} to contain the necessary 
 loop over all time points. Consequently, the implementation 
@@ -725,10 +711,10 @@ are used to distinguish these terms:
    // Usual loops over DoFs and quadrature points
      {
       local_cell_vector(i) += 
-          scale * 
-          // terms like (\nabla v^{n+1}, \nabla \phi) etc.
+         scale * 
+         // terms like (\nabla v^{n+1}, \nabla\phi) etc.
         + scale_ico *
-          // terms like (-p^{n+1},\nabla\cdot \phi)
+         // terms like (-p^{n+1},\nabla\cdot\phi)
      }
    }
 \end{lstlisting}
@@ -910,26 +896,23 @@ is discussed.
 \subsection{Goal-oriented mesh refinement for Navier-Stokes}
 In this example we consider a laminar flow around a cylinder in 2d. To be more precise, we are computing the benchmark 2D-1 from \cite{TuSchae96}. The computational domain is as depicted in figure~\ref{fig:example_ns} and the equation is discretized with the Taylor-Hood  element. We want to compute the drag force on the enclosed cylinder
 \begin{equation}
-\mathcal {J}( u) = \frac 1 {20} \int_{\Gamma_{circ}} \nu\partial_nv _1 - pn,
+J(u) = \frac 1 {20} \int_{\Gamma_{circ}} \nu\partial_nv _1 - pn,
 \end{equation}
 with the solution $u = (v,p)$, the normal $n$ and the viscosity $\nu = 0.001$.
-\todo{For CG: Bildunterschrift und die $2$ am Ende und 
-das cal J}
 \begin{figure}[hbt]
 \centering
-{\includegraphics[width=0.8\textwidth]{Pictures/local_grid_NS.png}}
-\caption{Caption.}
+{\includegraphics[width=0.9\textwidth]{Pictures/local_grid_NS.png}}
+\caption{Locally adapted grid after eight refinement steps.}
 \label{fig:NS_local_grid}
 \end{figure}
-To achieve an efficient computation of the quantity $\mathcal J$, we employ goal-oriented mesh refinement with the help of the DWR-method, see \cite{BeRa96}. The method delivers error indicators and by this way computational grids tailored to minimize the error in the previously given functional $\mathcal J$. The price we have to pay ist the additional computation of a (linear) dual problem, which is implemented as described in section~\ref{sec:opt}. In figure~\ref{fig:NS_local_grid} we see a resulting triangulation after eight refinement steps with roughly $320\,000$ degrees of freedom.
+To achieve an efficient computation of the quantity $J$, we employ goal-oriented mesh refinement with the help of the DWR-method, see \cite{BeRa96}. The method delivers error indicators and by this way computational grids tailored to minimize the error in the previously given functional $J$. The price we have to pay ist the additional computation of a (linear) dual problem, which is implemented as described in section~\ref{sec:opt}. In figure~\ref{fig:NS_local_grid} we see a resulting triangulation after eight refinement steps with roughly $320\,000$ degrees of freedom.
 
 In figure~\ref{fig:NS_comparison} we compare the errors in the functional obtained by using global and local mesh refinement. We see clearly that the local mesh refinement allows for substantial savings with respect to degrees of freedom.
 
-\ref{fig:NS_local_grid}
 \begin{figure}[hbt]
 \centering
 \resizebox{0.5\textwidth}{!}{\input{Pictures/ConvergenceNS}}
-\caption{Comparison of global and local mesh refinement with respect to the error in the drag-functional $\mathcal J$.}
+\caption{Comparison of global and local mesh refinement with respect to the error in the drag-functional $J$.}
 \label{fig:NS_comparison}
 \end{figure}
 
@@ -1029,16 +1012,14 @@ thickness.
 A typical thickness distribution is shown in Figure~\ref{res:mbb}.
 
 \section{Conclusions}
-\todo{Frage an CG und Winni: Guter Abschluss?}
+\todo{Frage an CG und Winni: Guter Abschluss?}\todocg
 In this article, we described the architecture 
 of the novel software library DOpElib for solving 
-PDEs and optimization problems. The key idea behind 
+PDEs and optimization problems.  The key idea behind 
 the algorithms is the computation of some target 
-functional. This is achieved by unified interface 
-to state-of the art time-stepping methods, nonlinear solvers and optimization
-routines. The 
-capabilites of DOpElib are demonstrated
-wit the help of three examples.
+functional \todocg{Ich wuerde eventuell die userfreundlichkeit mehr in den Fokus ruecken? The key idea of the software is to supply a toolkit which allows for fast implementation of the problems at hand, but at the same time gives the user full flexibility to change or alter the used algorithms}. This is achieved by a unified interface 
+to state of the art time-stepping methods, nonlinear solvers and optimization
+routines. The capabilites of DOpElib are demonstrated with the help of three examples.
 
 
 \section*{Thanks}
