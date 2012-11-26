@@ -83,11 +83,10 @@ Austin, Texas 78712, USA \\
               Tel.: +1 512-672-7763\\
               \email{twick@ices.utexas.edu}   
  \and
-F. Author \at
-              first address \\
-              Tel.: +123-45-678910\\
-              Fax: +123-45-678910\\
-              \email{fauthor@example.com}   
+W. Wollner \at
+              Universit\"at Hamburg\\
+              Department of Mathematics\\
+              \email{winnifried.wollner@math.uni-hamburg.de}   
 }
 
 \date{Received: date / Accepted: date}
@@ -150,7 +149,7 @@ is then reusable for the application of state-of-the-art optimization
 routines.
 So far, there exist a very limited number of open source packages
 which fulfill the requirements listed above; 
-sucessful in-house code examples are Gascoigne \cite{gascoigne}
+successful in-house code examples are Gascoigne \cite{gascoigne}
 and RoDoBo \cite{rodobo}. 
 Like DOpElib, both have been initiated as well in 
 the Numerical Analysis Group in Heidelberg.
@@ -351,7 +350,7 @@ method
      void StatPDEProblem<NEWTON>
             ::ComputeReducedFunctionals();
 \end{lstlisting}
-The template argument \texttt{NEWTON} represents the choosen solver of the nonlinear problems.
+The template argument \texttt{NEWTON} represents the chosen solver of the nonlinear problems.
 That combines all the necessary steps to calculate $J(u_h)$. 
 
 Finally, we will need to have an object that is capable of providing all 
@@ -402,7 +401,8 @@ circle-center $C=(0.2,0.2)$ and radius $r=0.05$.}
 \label{fig:example_ns}
 \end{figure}
 
-We split the program into the parts \texttt{main.cc}, \texttt{functionals.h} and \texttt{localpde.h}. The \texttt{main.cc}-file is responsible for the declaration of various objects which have mostly to do with the \textit{discretization}, the \textit{solvers} and the general \textit{program sequence}, whereas the other two contain most of the problem-data -- especially the cell-wise contributions of the weak form, the right hand side and the functional. We give a brief explanation on every file in the following.
+We split the program into the parts \texttt{main.cc}, \texttt{func.h} and \texttt{pde.h}. The \texttt{main.cc}-file is responsible for the declaration of various objects which have mostly to do with the \textit{discretization}, the \textit{solvers} and the general \textit{program sequence}, whereas the other two contain most of the problem-data -- especially the cell-wise contributions of the weak form in \texttt{pdh.h} and the functional in \texttt{func.h}. 
+We give a brief explanation on every file in the following.
 
 \subsubsection{\texttt{main.cc}}
 In this file we gather the basic components that are necessary for the
@@ -442,7 +442,7 @@ In the next step, we define an object of type \texttt{SpaceTimeHandler}, which h
 \end{lstlisting}
 There exist different versions of this class for forward as well as optimization problems. 
 
-Now we have everything at hand to create an instantiation of type \texttt{PDEProblemContainer}. This basically represents the discretized problem, and bundles things like boundary conditions, the PDE, the functional and the discretization. First, we give the constructor the \texttt{local\_pde} and the \texttt{dof\_handler}.
+Now we have everything at hand to create an instantiation of the container for the problem data \texttt{PDEProblemContainer}. This basically represents the discretized problem, and bundles things like boundary conditions, the PDE, the functional and the discretization. First, we give the constructor the \texttt{local\_pde} and the \texttt{dof\_handler}.
 \begin{lstlisting}
   PDEProblemContainer<LocalPDE> 
                       prob_container(local_pde,
@@ -453,8 +453,9 @@ After that, we add the functional under consideration and, because it is a bound
   prob_container.AddFunctional(&local_functional);
   prob_container.SetBoundaryFunctionalColors(1);
 \end{lstlisting}
-Next, we incorporate the Dirichlet data, which is given by the class
-\texttt{DirichleData}. Then we have to tell the \texttt{prob\_container} for
+Next, we incorporate the Dirichlet data. To this end, we instantiate a 
+class \texttt{DirichletData} containing the required description of the 
+boundary values. Then we have to tell the \texttt{prob\_container} for
 which components and boundaries we prescribe the Dirichlet conditions. This is
 done via a boundary-color in a so-called component mask 
 (here, $0$ denotes $\Gamma_D$).
@@ -488,7 +489,7 @@ Finally, we compute the functional $J$ by calling:
   pde.ComputeReducedFunctionals();
 \end{lstlisting}
 
-\subsubsection{\texttt{localpde.h}}
+\subsubsection{\texttt{pde.h}}
 We shall now give an overview to the implementation of the specific form of the PDE. 
 
 Let $N$ be the number of degrees of freedom of our discretization and $\Set{\phi_{h}^{i}|1\leq i \leq N}$ be a given FE-Basis. As stated in subsection~\ref{subsubsec:stationary problems}, to solve the discrete equation \eqref{eq:discrete_equation} we need the residual, i.e. the vector
@@ -496,7 +497,8 @@ Let $N$ be the number of degrees of freedom of our discretization and $\Set{\phi
 \left(a(u_h)(\phi_{h}^{i})-(f,\phi_{h}^{i})\right)_{i=1}^N.
 \end{align}
 The corresponding Jacobian can be defined analogously.
-Now all we have to supply here are the cell-wise contributions to these terms, the \texttt{Integrator} takes care of assembling \eqref{eq:discrete_residual} and \eqref{eq:discrete_matrix}.
+Now all we have to supply here are the cell-wise contributions to these terms, the \texttt{Integrator} takes care of assembling \eqref{eq:discrete_residual}
+and similarly of the matrix for the linearized equation to be solved.
 
 To this end, we define a class \texttt{LocalPDE} which provides the three methods
 \texttt{CellEquation}, \texttt{CellRightHandSide} and \texttt{CellMatrix}. 
@@ -506,7 +508,8 @@ implementation itself) of these
 terms works by and large as in \deal{}. 
 
 
-We show the basic structure of these methods using the example of \texttt{CellEquation}.
+We show the basic structure of these methods using the \texttt{CellEquation} 
+method for the implementation of the element-wise integrals.
 
 \begin{lstlisting}
   void CellEquation(const CellDataContainer &cdc,
@@ -539,31 +542,34 @@ we loop over the quadrature points and the number of DoFs of the cell. In the in
       for (unsigned int i=0;i<dofs_per_cell;i++)
         local_cell_vector(i) += 
            ( _nu * vgrads * phi_i_grads_v 
-             + //all the other terms)
-             * state_fe_values.JxW(q_point);
+             + //all the other terms
+           ) * fe_values.JxW(q_point);
     }
 \end{lstlisting}
 \dope{} takes now care of the distribution of the local cell contributions into  the vector of the residual \eqref{eq:residual_vector}. The methods \texttt{CellRightHandSide} and \texttt{CellMatrix} follow the same structure as 
 \texttt{CellEquation}, so we do not go into the details here.
 
-\subsubsection{\texttt{localfunctional.h}}
+\subsubsection{\texttt{localfunc.h}}
 The implementation of the boundary-functional $J$ follows the outline of the
 computation of the cell-residual in \texttt{localpde.h}. 
-\todo{CG and WW: Pruefen, ob der folgende Absatz nun gut ist:}
-The main difference is that as we only want to evaluate a functional and not a
-residual-vector, we just loop over the quadrature points and not over the
-degrees of freedom on the face. Another deviation, special to the case at
-hand, is that we do not have to specify the method \texttt{CellEquation}, but
-\texttt{BoundaryValue} instead because $J$ is just a number to be computed. This is due to the fact that we consider a boundary-functional in this example, and so we have to specify the value of the functional not cell-wise but face-wise (for the faces that lie on $\Gamma_{circ}$). 
+\todo{Habe ich mal umgeschrieben, bitte nochmal ansehen~WW.}
+The main difference, and common to all functionals is that as we only 
+want to evaluate a functional, i.e., calculate a single number, and not a
+residual-vector, i.e., calculate the elements of a vector. Thus, we 
+just loop over the quadrature points and not over the degrees of freedom 
+on the face. In the present situation, we want to evaluate a functional 
+that consists of a boundary integral. Thus we need to evaluate 
+integrals on faces, that lie on $\Gamma_{circ}$, instead of integrals over
+elements. 
+This face contributions are calculated in \texttt{BoundaryValue} and added to 
+sum up to the value of $J$. 
 
-
-
-%However, there are two main differences. First, we do not have to specify the method \texttt{CellEquation}, but \texttt{BoundaryValue} instead. This is due to the fact that we consider a boundary-functional in this example, and so we have to specify the value of the functional not cell-wise but face wise (for the faces that lie on $\Gamma_{circ}$). The second difference is that as we only want to evaluate a functional and not a residual-vector, we just loop over the quadrature points and not over the degrees of freedom on the face.
 \begin{lstlisting}
  double
  BoundaryValue(const FaceDataContainer& fdc)
   {
     //same as before, get n_q_points etc.
+    const auto& face_values = cdc.GetFEFaceValuesState();
     fdc.GetFaceValuesState("state", ufacevalues);
     fdc.GetFaceGradsState("state", ufacegrads);
 \end{lstlisting}
@@ -572,10 +578,10 @@ Notice that we get here the values of the computed solution by giving the string
     for(unsigned int q_point = 0; 
         q_point < n_q_points; 
         q_point++)
-      erg += -1. * ( _nu * ufacegrads[q_point][0]
-                * state_fe_face_values.normal_vector(q_point)
-                + //other terms)        
-                * state_fe_face_values.JxW(q_point);
+      erg -= ( _nu * ufacegrads[q_point][0]
+               * face_values.normal_vector(q_point)
+               + //other terms        
+             ) * face_values.JxW(q_point);
     return erg;
   }
 \end{lstlisting}
@@ -721,15 +727,17 @@ are used to distinguish these terms:
 Analogous procedure is performed in the local 
 cell matrix.
 \begin{remark}
-Note that in the stationary case \dope{} automatically sets $ \texttt{scale\_ico} = \texttt{scale}$, so that in fact the user has to implement the \texttt{CellEquation} only once and can henceforth reuse it in all his stationary an instationary problems. This transfers of course also to other methods like \texttt{CellMatrix}.
+Note that in the stationary case there is no such difference and accordingly 
+\dope{} automatically sets $ \texttt{scale\_ico} = \texttt{scale}$, so that in fact the user has to implement the \texttt{CellEquation} only once and can henceforth reuse it in all his stationary and nonstationary problems. This transfers of course also to other methods like \texttt{CellMatrix}.
 \end{remark}
 
-In addition to stationary problems, the implementation
-of the time-derivative, i.e. the term $ (v^{n+1},\phi)$, must be considered which is done
+In comparison to stationary problems, we need to consider, in addition, 
+the implementation
+of the time-derivative, i.e., the term $ (v^{n+1},\phi)$. This is done
 in the method \texttt{CellTimeEquation} in a straight-forward way. After the initialization of $\texttt{v}$ and the shape function $\texttt{phi\_i}$ and the usual loops over the quadrature points and  degrees of freedom of the cell we fill the local cell vector by
 \begin{lstlisting}
-        local_cell_vector(i) +=  scale * (v * phi_i) * 
-                    state_fe_values.JxW(q_point);    
+    local_cell_vector(i) +=  scale * (v * phi_i)  
+                             * fe_values.JxW(q_point);    
 \end{lstlisting}
 Here, the advantage is that \dope{} orders the terms in the time-stepping
 problems
@@ -759,18 +767,20 @@ sub-steps.
 \end{remark}
 
 \subsection{Solving of optimization problems}\label{sec:opt}
-\todo{For WW: etwas klarer machen, dass wir instationare Optimierung koennen}
-Upgrading the framework for solving optimization problems
-is described in this section. A prototypical problem reads:
+Once we are able to solve stationary and nonstationary PDEs
+we can consider optimization problems constrained by these PDEs.
+How this is done will be described in this section. 
+
+A prototypical PDE constrained optimization problem reads:
 \begin{align*}
 \min\;&J(q,u) \\
   &\text{s.t.}\; a(q,u)(\phi) = 0 \quad \forall \phi\in V,\\
-  &a \le q \le b,\\
+  &q_- \le q \le q_+,\\
   &g(q,u) \le 0,  
 \end{align*}
-where $u$ is a FE-function and $q$ can either be a FE-function or some 
-fixed number of parameters, $a$ and $b$ are constraint bounds for the control $q$,
-and $g(\cdot)$ is some state constraint.
+where $u$ is a function and $q$ can either be a function or some 
+fixed number of parameters. the numbers $q_-$ and $q_+$ are bounds for 
+the control $q$, and $g(\cdot)$ is some state constraint.
 To keep the presentation brief we will neglect the additional bounds
 \[
 a \le q \le b,\qquad g(q,u) \le 0
@@ -778,7 +788,7 @@ a \le q \le b,\qquad g(q,u) \le 0
 although they can be treated by \dope{} as well.
 Then, in order to minimize the functional $J$ one may apply the, so-called, 
 reduced approach, in which we eliminate the dependent variable $u$ by the solution 
-operator $S$ of the PDE, i.e., 
+operator $S$ of the (stationary or nonstationary) PDE, i.e., 
 \begin{align*}
 a(q,S(q))(\phi) = 0 \quad \forall \phi\in V. 
 \end{align*}
@@ -786,20 +796,29 @@ This leads to the problem
 \begin{align*}
 \min\;&j(q) = J(q,S(q)). 
 \end{align*}
-Then, one can apply any algorithm to solve the, unconstraint, minimization 
-problem. This, will in any case require the evaluation of $j(q)$ which 
+This can be discretized using the finite element approximation $S_h$ of $S$ 
+and yields the problem 
+\begin{align*}
+\min\;&j_h(q) = J(q,S_h(q)). 
+\end{align*}
+After possibly discretizing the control $q$ as well using finite elements, 
+one can apply any algorithm to solve the, unconstraint, minimization 
+problem. This, will in any case require the evaluation of $j_h(q)$ which 
 we can do, e.g., using \texttt{StatPDEProblem::ComputeReducedFunctional} for 
-a stationary PDE. If one would like to use derivative based methods, one 
-needs in addition derivatives of $j$ and thus of $J$ as well as of $S$. 
+a stationary PDE or using \texttt{InstatPDEProblem::ComputeReducedFunctional} 
+for nonstationary PDEs. 
+
+If one would like to use derivative based methods, one 
+needs in addition derivatives of $j_h$ and thus of $J$ as well as of $S_h$. 
 To do so, we remark, that one can calculate the derivative of 
 $j$ using the adjoint calculus. Then the directional derivative 
 of $j$ in direction $\delta q$ is given by
 \[
-j'(q)(\delta q) = J'_q(q,S(q))(\delta q) + (S^* J_u'(q,S(q)),\delta q)
+j'_h(q)(\delta q) = J'_q(q,S_h(q))(\delta q) + (S_h^* J_u'(q,S_h(q)),\delta q)
 \]
 where the index $q$ or $u$ denote directional derivatives for the 
-respective argument. To calculate the action of the adjoint operator $S^*$ 
-we note that $z =  S^* J_u'(q,S(q))$
+respective argument. To calculate the action of the adjoint operator $S_h^*$ 
+we note that $z =  S_h^* J_u'(q,S_h(q))$
 can be computed via the adjoint PDE
 \begin{equation}
   \label{opt_KKT_system}
@@ -894,7 +913,7 @@ is discussed.
 \end{itemize}
 
 \subsection{Goal-oriented mesh refinement for Navier-Stokes}
-In this example we consider a laminar flow around a cylinder in 2d. To be more precise, we are computing the benchmark 2D-1 from \cite{TuSchae96}. The computational domain is as depicted in figure~\ref{fig:example_ns} and the equation is discretized with the Taylor-Hood  element. We want to compute the drag force on the enclosed cylinder
+In this example we consider a laminar flow around a cylinder in 2d. To be more precise, we are computing the benchmark 2D-1 from \cite{TuSchae96}. The computational domain is as depicted in Fig.~\ref{fig:example_ns} and the equation is discretized with the Taylor-Hood  element. We want to compute the drag force on the enclosed cylinder
 \begin{equation}
 J(u) = \frac 1 {20} \int_{\Gamma_{circ}} \nu\partial_nv _1 - pn,
 \end{equation}
@@ -905,9 +924,9 @@ with the solution $u = (v,p)$, the normal $n$ and the viscosity $\nu = 0.001$.
 \caption{Locally adapted grid after eight refinement steps.}
 \label{fig:NS_local_grid}
 \end{figure}
-To achieve an efficient computation of the quantity $J$, we employ goal-oriented mesh refinement with the help of the DWR-method, see \cite{BeRa96}. The method delivers error indicators and by this way computational grids tailored to minimize the error in the previously given functional $J$. The price we have to pay ist the additional computation of a (linear) dual problem, which is implemented as described in section~\ref{sec:opt}. In figure~\ref{fig:NS_local_grid} we see a resulting triangulation after eight refinement steps with roughly $320\,000$ degrees of freedom.
+To achieve an efficient computation of the quantity $J$, we employ goal-oriented mesh refinement with the help of the DWR-method, see \cite{BeRa96}. The method delivers error indicators and by this way computational grids tailored to minimize the error in the previously given functional $J$. The price we have to pay is the additional computation of a (linear) dual problem, which is implemented as described in section~\ref{sec:opt}. In Fig.~\ref{fig:NS_local_grid} we see a resulting triangulation after eight refinement steps with roughly $320\,000$ degrees of freedom.
 
-In figure~\ref{fig:NS_comparison} we compare the errors in the functional obtained by using global and local mesh refinement. We see clearly that the local mesh refinement allows for substantial savings with respect to degrees of freedom.
+In Fig.~\ref{fig:NS_comparison} we compare the errors in the functional obtained by using global and local mesh refinement. We see clearly that the local mesh refinement allows for substantial savings with respect to degrees of freedom.
 
 \begin{figure}[hbt]
 \centering
@@ -932,7 +951,7 @@ are satisfied in each time-step. This is achieved with the help of
 a monolithic coupling scheme (strong coupling).
 
 The basic configuration is 
-sketched in Figure \ref{fig:example_ns} at which an elastic beam is attached 
+sketched in Fig.~\ref{fig:example_ns} at which an elastic beam is attached 
 behind the rigid cylinder. 
 The elastic beam has length
 $l=0.35m$ and height $h=0.02m$. The right lower end is positioned at 
@@ -963,8 +982,8 @@ $\Gamma_i$ the interface between the elastic beam and the
 fluid.
 
 Since the problem is fully nonstationary, the 
-dynamics are presents in Figure \ref{res:fsi_2_mesh_and_x_velo}. 
-By comparison of our findings in Figure \ref{res:results_ux_and_uy_fsi_2}
+dynamics are presents in Fig.~\ref{res:fsi_2_mesh_and_x_velo}. 
+By comparison of our findings in Fig.~\ref{res:results_ux_and_uy_fsi_2}
 with the literature, it can be identified that 
 the implementation in \dope{} is correct.
 
@@ -996,30 +1015,28 @@ time (in $s$).
 
 \newpage
 \subsection{Compliance minimization}
-\todo{For Winni: Achsenbeschriftung, MBB ausschreiben, 
-Konfiguration citieren}
-In this example, we consider the compliance minimization of a standard MBB-Beam. 
+In this example, we consider the compliance minimization of a standard MBB-Beam (Messerschmidt-B\"olkow-Blohm-Beam), see, e.g.,~\cite{BendsoeSigmund:2003}.
 The thickness variable is allowed to take intermediate value apart from $0$ and $1$,
 i.e., we consider a variable thickness sheet. The discretization is done 
 using $Q_2$ elements for the displacement and discontinuous $P_0$ elements for the 
 thickness.
 \begin{figure}
 \centering
-\includegraphics[width=1.\textwidth, viewport=150 0 1024 500, clip]{Pictures/MBB.png}
+\includegraphics[width=1.\textwidth, viewport=205 88 975 500, clip]{Pictures/MBB.png}
 \caption{Thickness distribution for the MBB-beam minimum compliance problem.} 
 \label{res:mbb}
 \end{figure}
-A typical thickness distribution is shown in Figure~\ref{res:mbb}.
+A typical thickness distribution is shown in Fig.~\ref{res:mbb}.
 
 \section{Conclusions}
-\todo{Frage an CG und Winni: Guter Abschluss?}\todocg
+\todo{Frage an CG und Winni: Guter Abschluss?}
 In this article, we described the architecture 
 of the novel software library DOpElib for solving 
 PDEs and optimization problems.  The key idea behind 
 the algorithms is the computation of some target 
-functional \todocg{Ich wuerde eventuell die userfreundlichkeit mehr in den Fokus ruecken? The key idea of the software is to supply a toolkit which allows for fast implementation of the problems at hand, but at the same time gives the user full flexibility to change or alter the used algorithms}. This is achieved by a unified interface 
+functional \todocg{Ich wuerde eventuell die userfreundlichkeit mehr in den Fokus ruecken? The key idea of the software is to supply a toolkit which allows for fast implementation of the problems at hand, but at the same time gives the user full flexibility to change or alter the used algorithms}\todo{Bin daf\"ur~WW}. This is achieved by a unified interface 
 to state of the art time-stepping methods, nonlinear solvers and optimization
-routines. The capabilites of DOpElib are demonstrated with the help of three examples.
+routines. The capabilities of DOpElib are demonstrated with the help of three examples.
 
 
 \section*{Thanks}
