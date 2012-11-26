@@ -553,8 +553,8 @@ we loop over the quadrature points and the number of DoFs of the cell. In the in
 The implementation of the boundary-functional $J$ follows the outline of the
 computation of the cell-residual in \texttt{localpde.h}. 
 \todo{Habe ich mal umgeschrieben, bitte nochmal ansehen~WW.}
-The main difference, and common to all functionals is that we only 
-want to evaluate a functional, i.e., calculate a single number, and not a
+The main difference, and common to all functionals is that we only want to
+\todocg{ evaluate a functional, i.e., <-wuerde ich streichen} calculate a single number, and not a
 residual-vector\todocg{, i.e., calculate the elements of a vector Diesen Teil wuerde ich streichen.}. Thus, we 
 just loop over the quadrature points and not over the degrees of freedom 
 on the face. In the present situation, we want to evaluate a functional 
