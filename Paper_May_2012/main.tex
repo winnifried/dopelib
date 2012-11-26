@@ -651,10 +651,18 @@ At present we have prepared the following time-stepping schemes in \dope:
 \item shifted Crank-Nicolson scheme (to deal with singular initial data)
 \item fractional-step-$\theta$ scheme
 \end{itemize}
-\todo{CG and WW: bitte pruefen}
+\todo{bitte gegenlesen}
 After choosing the time-stepping scheme, the SpaceTimeHandler  
 loops over all time-steps, where in each of the 
-time-steps we can reuse the functionality \todocg{we employed} to solve stationary PDEs.\todocg{Hier Beispiele, was genau wir wiederverwenden? Oder auf den naechsten Abschnitt verweisen?} 
+time-steps we can reuse the functionality we have provided to solve 
+stationary PDEs. 
+This means for instance, if we have implemented the 
+cell-integrals in the weak formulation for the stationary case, 
+then we can use the exact same 
+implementation again for the solution of the nonstationary version of 
+the equation. However, we will possibly need to provide an additional 
+term to cope with the integral for the time derivative.
+
 Now it is apparent, why we introduced the \texttt{StatPDEProblem}, because
 we define the \texttt{InstatPDEProblem} to contain the necessary 
 loop over all time points. Consequently, the implementation 
