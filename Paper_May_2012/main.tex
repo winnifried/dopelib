@@ -583,7 +583,7 @@ Notice that we get here the values of the computed solution by giving the string
 \subsection{Solving Nonstationary PDEs}\label{sec:timedep}
 To describe the solution of nonstationary 
 PDEs, we consider a time-dependent semi-linear form $a(u)(\phi)$ and some
-right hand side functional $l(\phi)$.
+right hand side functional $l$.\todocg{Warum hier l und nicht f?}
 Let $I:=[0,T]$ be a time interval with end time point value $T$.
 To find some $u$ in a weak form, we define
 \[
@@ -603,10 +603,10 @@ $(v,p)\in X$ with
 \end{align*}
 for all $\Phi:= (\phi, \chi) \in X$ with
 \[
-X:= \bigl\{ 
+X:= \set{ 
 (v,p) | v\in L^2(I,H_0^1(\Omega)^d) , 
 \partial_t v\in L^2(I, L^2(\Omega)^d), 
-p\in L^2(I,L^2(\Omega)\setminus\mathbb{R} \bigr\}.
+p\in L^2(I,L^2(\Omega)\setminus\mathbb{R}}.
 \]
 As for stationary problems, the goal is to compute
 some target functional $J$ which is now possibly 
@@ -642,10 +642,10 @@ At present we have prepared the following time-stepping schemes in \dope:
 \item Forward-(or Explicit)-Euler
 \item Backward-(or Implicit)-Euler
 \item Crank-Nicolson scheme
-\item shifted Crank-Nicolson scheme (to deal with singular initial data)
-\item fractional-step-$\theta$ scheme
+\item Shifted Crank-Nicolson scheme (to deal with singular initial data)
+\item Fractional-Step-$\theta$ scheme
 \end{itemize}
-After choosing the time-stepping scheme, the SpaceTimeHandler  
+After choosing the time-stepping scheme, the \texttt{SpaceTimeHandler}  
 loops over all time-steps, where in each of the 
 time-steps we can reuse the functionality we have provided to solve 
 stationary PDEs. 
