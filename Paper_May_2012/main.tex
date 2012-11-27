@@ -112,7 +112,7 @@ numerical results as demonstration for the versatility of the software.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Introduction}
 \label{introduction}
-Today, there exist a broad variety of software libraries
+Today, there exists a broad variety of software libraries
 that provide numerical tools for solving partial differential
 equations (PDEs). Prominent examples are 
 \deal{} \citep{dealnew}, dune \citep{dune}, 
@@ -134,7 +134,7 @@ problem-independent and could be provided as standard tools.
 As our guiding design principle, we note that in many 
 numerical studies, the main task is the computation of some  
 target functional, e.g., error norms,
-point values, or certain mean-values as drag or lift coefficients.
+point values, or certain mean-values such as drag or lift coefficients.
 As a second motivating principle, 
 there is nowadays an increasing interest in computing 
 optimization problems in which the state equation is governed 
@@ -151,7 +151,7 @@ So far, there exist a very limited number of open source packages
 which fulfill the requirements listed above; 
 successful in-house code examples are Gascoigne \cite{gascoigne}
 and RoDoBo \cite{rodobo}. 
-Like DOpElib, both have been initiated as well in 
+Like \dope{}, both have been initiated as well in 
 the Numerical Analysis Group in Heidelberg.
 
 On the other hand, commercial finite element toolkits provide these 
@@ -170,7 +170,7 @@ to solve both pure PDE problems as well as optimization problems
 constrained by a PDE. 
 Its main feature is to give a unified interface to high level algorithms such as 
 time-stepping methods, nonlinear solvers and optimization routines. 
-\dope{} is designed such a way that the user only needs to write those parts
+\dope{} is designed in such a way that the user only needs to write those parts
 of the code that are problem dependent while all invariant 
 parts of the algorithms
 are reusable without any need for further coding.
@@ -188,7 +188,7 @@ prefabricated tools which require from the user only adjustments connected
 to his specific problem. The solution of optimization problems with PDE
 constraints is an innovative feature in \dope{}.
 
-The project was initially initiated at the University of Heidelberg in 2010 and  
+The project was initially initiated \todocg{initially initiated - doppelt gemoppelt?} at the University of Heidelberg in 2010 and  
 at the present stage the following key features are supported by the library
 \begin{itemize}
 \item Solving of nonlinear stationary and nonstationary PDEs in 1d, 2d, and 3d.
@@ -229,7 +229,7 @@ examples which illustrate the versatile features of \dope{}.
 \section{Detailed Description of the Main Features}
 \label{detailed_description}
 This library is designed to allow easy implementation for the numerical solution 
-of problems involving partial differential equations (PDEs). 
+of problems involving partial differential equations (PDEs)\todocg{Die Abkuerzung PDE wird auf Seite 1 schon erlaeuternt}. 
 In particular, we remove all tedious routine implementation needed in 
 \deal{} by introducing appropriate classes that take care of all the 
 problem independent implementation while leaving only the problem specific 
@@ -262,7 +262,7 @@ Here $(\cdot,\cdot)$ denotes the $L^2$-inner-product.
 The solution will be searched for in $V + (u_d,0)$ where $u_d$ is some 
 continuation of the given Dirichlet boundary data.
 Then typically we do not only want to calculate $u$ but more likely we are 
-interested in one (or several) functionals depending on the solution, i.e., some numbers $J$.
+interested in one (or several) functionals depending on the solution, i.e., some numbers $J(u)$.
 
 In order to solve this problem, i.e., calculate a sequence of values $J(u_h)$ approximating $J(u)$,
 we need to discretize 
@@ -380,19 +380,19 @@ objects described above.
 \subsubsection{Problem dependent implementation of stationary PDE problems}
 To solve a stationary PDE problem, the user has to provide some code which can roughly be divided into the following main sections:
 \begin{description}
-\item[Discretization] Specify what kind of triangulation:
+\item[\textit{Discretization}]\todocg{Hier scheint etwas verlorengegangen zu sein, der Satz macht so keinen Sinn:} Specify what kind of triangulation:
 in most cases this is the
 finite element and quadrature rules. Furthermore, other
 things might be adjusted as well.
-\item[Problem-data] Define the weak form, the corresponding matrices, the
+\item[\textit{Problem-data}] Define the weak form, the corresponding matrices, the
   functionals $J$ as well as the boundary conditions. With exception of the boundary conditions, we have to specify all this only cell-wise, \dope{} handles the rest for us.
-\item[Solvers] Choice of a (non-)linear solver. 
-\item[Additional features] ParameterReader to read in the run-time parameters
+\item[\textit{Solvers}] Choice of a (non-)linear solver. 
+\item[\textit{Additional features}] ParameterReader to read in the run-time parameters
   such as material coefficients or adjustments for the solvers like tolerance
   for Newton's method. 
 \end{description} 
 
-We describe now a program designed to compute a value $J$, where $u=(v,p)$ is the solution of the Navier-Stokes equations \eqref{eq:ns} on the domain $\Omega$ as seen in figure~\ref{fig:example_ns} with  $f=0$, and $J$ is the drag-force of the enclosed circle. We assume given Dirichlet data for the velocity $v$ on the boundary $\Gamma_{D}=\Gamma_{in}\cup\Gamma_{wall}\cup\Gamma_{circ}$. This is the Benchmark-Case 2D-1 from \cite{TuSchae96}, see there for further details.
+We describe now a program designed to compute a value $J(u)$, where $u=(v,p)$ is the solution of the Navier-Stokes equations \eqref{eq:ns} on the domain $\Omega$ as seen in figure~\ref{fig:example_ns} with  $f=0$, and $J$ is the drag-force of the enclosed circle. We assume given Dirichlet data for the velocity $v$ on the boundary $\Gamma_{D}=\Gamma_{in}\cup\Gamma_{wall}\cup\Gamma_{circ}$. This is the Benchmark-Case 2D-1 from \cite{TuSchae96}, see there for further details.
 \begin{figure}[h]
 \centering
 \resizebox{0.5\textwidth}{!}{\input{Pictures/example_ns}}
@@ -405,11 +405,11 @@ We split the program into the parts \texttt{main.cc}, \texttt{func.h} and \textt
 We give a brief explanation on every file in the following.
 
 \subsubsection{\texttt{main.cc}}
-In this file we gather the basic components that are necessary for the
+In this file we gather all the basic components that are necessary for the
 solution process of a (stationary) partial differential equation. The
 structure of the program is basically the same for every equation under
 consideration, what changes is typically just the \textit{kind} of  finite
-element or the linear solver. Here, a key issue is that we only need to pick 
+element or linear solver we want to use. Here, a key issue is that we only need to pick 
 some pre-implemented routines from the \dope{} library rather than 
 implementing new features.
 
@@ -445,8 +445,7 @@ There exist different versions of this class for forward as well as optimization
 Now we have everything at hand to create an instantiation of the container for the problem data \texttt{PDEProblemContainer}. This basically represents the discretized problem, and bundles things like boundary conditions, the PDE, the functional and the discretization. First, we give the constructor the \texttt{local\_pde} and the \texttt{dof\_handler}.
 \begin{lstlisting}
   PDEProblemContainer<LocalPDE> 
-                      prob_container(local_pde,
-                                     dof_handler);                                            
+             prob_container(local_pde, dof_handler);                                            
 \end{lstlisting}
 After that, we add the functional under consideration and, because it is a boundary functional, we specify the part of the boundary on which the functional operates (this is done via a 'boundary color', $1$ represents $\Gamma_{circ}$).
 \begin{lstlisting}
@@ -457,7 +456,7 @@ Next, we incorporate the Dirichlet data. To this end, we instantiate a
 class \texttt{DirichletData} containing the required description of the 
 boundary values. Then we have to tell the \texttt{prob\_container} for
 which components and boundaries we prescribe the Dirichlet conditions. This is
-done via a boundary-color in a so-called component mask 
+done via a boundary-color and a so-called component mask 
 (here, $0$ denotes $\Gamma_D$).
 \begin{lstlisting}
   DirichletData dd;
@@ -467,9 +466,7 @@ done via a boundary-color in a so-called component mask
 \end{lstlisting}
 Now we create the object which steers the whole solution process, the previously mentioned \texttt{StatPDEProblem}. It takes care of solving the discretized equation and evaluating the given functionals. The class depends actually on some template-parameters, so for the sake of abbreviation, we defined a typedef at the beginning of the \texttt{main.cc}-file.
 \begin{lstlisting}
-
   typedef StatPDEProblem<NEWTON> PDE;
-
 \end{lstlisting}
 Here, \texttt{NEWTON} itself is an abbreviation of
 \begin{lstlisting}
@@ -484,7 +481,7 @@ With the type settled, we create the object \texttt{solver}, which needs the dis
   PDE pde(prob_container, pr,
                     quad_formula, face_quad_formula);
 \end{lstlisting}
-Finally, we compute the value $J(u)$ by calling:
+Finally, we compute the value $J(u_h)$ by calling:
 \begin{lstlisting}
   pde.ComputeReducedFunctionals();
 \end{lstlisting}
@@ -526,7 +523,7 @@ method for the implementation of the element-wise integrals.
  \end{lstlisting}
  In these two lines, we load the (gradient of the) solution of the last newton iteration in all the quadrature points on the cell into the two vectors \texttt{uvalues} and \texttt{ugrads}.
 
-In the next lines, we finally implement our concrete PDE. Here, aim to provide 
+In the next lines, we finally implement our concrete PDE. Here, we aim to provide 
 an interface which is closely related to the weak formulation which 
 has to be derived by the user. Thus,
 we loop over the quadrature points and the number of DoFs of the cell. In the innermost loop, we evaluate the weak form tested with $\phi_{h}^i$ (represented by \texttt{phi\_i\_grads\_v}) on the cell with the help of the previously selected quadrature formula. 
@@ -553,15 +550,14 @@ we loop over the quadrature points and the number of DoFs of the cell. In the in
 The implementation of the boundary-functional $J$ follows the outline of the
 computation of the cell-residual in \texttt{localpde.h}. 
 The main difference, and common to all functionals is that we only want to
-evaluate a functional. Thus, we 
+evaluate a functional \todocg{Ist hier was verrutscht? der Satz passt im Moment nicht so wirklich, der Teil mit dem Vektor ist irgendwie verlorengegangen?}. Thus, we 
 just loop over the quadrature points and not over the degrees of freedom 
 on the face. In the present situation, we want to evaluate a functional 
 that consists of a boundary integral. Thus we need to evaluate 
-integrals on faces, that lie on $\Gamma_{circ}$, instead of integrals over
+integrals on faces, those who lie on $\Gamma_{circ}$, instead of integrals over
 elements. 
 This face contributions are calculated in \texttt{BoundaryValue} and added to 
 sum up to the value of $J$. 
-
 \begin{lstlisting}
  double
  BoundaryValue(const FaceDataContainer& fdc)
@@ -1035,14 +1031,14 @@ A typical thickness distribution is shown in Fig.~\ref{res:mbb}.
 
 \section{Conclusions}
 In this article, we described the architecture 
-of the novel software library DOpElib for solving 
+of the novel software library \dope{} for solving 
 PDEs and optimization problems.  The key idea of the software is to supply a
 toolkit which allows for fast implementation of the problems at hand, but at
 the same time gives the user full flexibility to change or alter the used
 algorithms. 
 This is achieved by a unified interface 
 to state of the art time-stepping methods, nonlinear solvers and optimization
-routines. The capabilities of DOpElib are demonstrated with the help of three examples.
+routines. The capabilities of \dope{} are demonstrated with the help of three examples.
 
 
 \section*{Thanks}
