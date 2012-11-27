@@ -98,6 +98,7 @@ W. Wollner \at
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{abstract}
+\todo{Wird die Webseite genannt? ist das sinnvoll dies zu tun?}
 In this article, we describe the software library 
 \textit{Differential Equations and Optimization Environment} (\dope{}).
 The main feature of \dope{} is that it provides a unified interface to high level algorithms 
@@ -188,6 +189,8 @@ prefabricated tools which require from the user only adjustments connected
 to his specific problem. The solution of optimization problems with PDE
 constraints is an innovative feature in \dope{}.
 
+\todo{Das wir in Heidelberg angefangen haben wird schon vorher erwaehnt!
+  Wuerde den Satz einfach streichen}
 The project was initially initiated \todocg{initially initiated - doppelt gemoppelt?} at the University of Heidelberg in 2010 and  
 at the present stage the following key features are supported by the library
 \begin{itemize}
@@ -199,7 +202,7 @@ at the present stage the following key features are supported by the library
 \item Use of all finite elements of from \deal{} including hp-support.
 \item Some examples showing the solution of several PDEs including
    Poisson, Navier-Stokes, Plasticity and fluid-structure interaction problems. 
-\item Line search and trust region newton algorithms for the 
+\item Line search and trust region Newton algorithms for the 
    solution of optimization problems with PDE constraints by elimination of 
    the state variable.
 \item Interface to SNOPT for the solution of optimization problems with PDEs and
@@ -229,7 +232,7 @@ examples which illustrate the versatile features of \dope{}.
 \section{Detailed Description of the Main Features}
 \label{detailed_description}
 This library is designed to allow easy implementation for the numerical solution 
-of problems involving partial differential equations (PDEs)\todocg{Die Abkuerzung PDE wird auf Seite 1 schon erlaeuternt}. 
+of problems involving PDEs.
 In particular, we remove all tedious routine implementation needed in 
 \deal{} by introducing appropriate classes that take care of all the 
 problem independent implementation while leaving only the problem specific 
@@ -269,6 +272,7 @@ we need to discretize
 the equation. In \dope, we are using finite elements to do this. This means we need to pick a 
 subdivision $\mathcal T_h$, for instance into quadrilaterals,
 of the domain $\Omega$ and a finite element. In the concrete case, we could, 
+\todo{Warum Tylor-Hood? Ist inf-sup stabil wuerde ich erwaehnen}
 for instance, take the $\mathcal Q_2/\mathcal Q_1$ Taylor-Hood element.
 As it is clear, that the initialization of the unknowns, the local shape 
 functions, removal of hanging node constraints, etc. always follows the 
@@ -285,6 +289,7 @@ Next, one needs to solve the discrete equation
 \begin{align}\label{eq:discrete_equation}
 a(u_h)(\phi_h) = (f,\phi_h) \quad \forall \phi \in V_h.
 \end{align}
+\todo{wir schreiben newton immer klein. eigentlich ist das ein Eigenname: Newton}
 To this end, one can employ a newton type method with some globalization 
 like line-search. To do so, one needs to calculate the residual of the 
 equation, as well as to solve linearized equations for the calculation of 
@@ -380,11 +385,15 @@ objects described above.
 \subsubsection{Problem dependent implementation of stationary PDE problems}
 To solve a stationary PDE problem, the user has to provide some code which can roughly be divided into the following main sections:
 \begin{description}
-\item[\textit{Discretization}]\todocg{Hier scheint etwas verlorengegangen zu sein, der Satz macht so keinen Sinn:} Specify what kind of triangulation:
+\item[\textit{Discretization}]\todocg{Hier scheint etwas verlorengegangen zu
+    sein, der Satz macht so keinen Sinn:} 
+\todo{Vorschlag: Specification of triangulation issues such as finite elements
+  and quadrature rules}  
+Specify what kind of triangulation:
 in most cases this is the
 finite element and quadrature rules. Furthermore, other
 things might be adjusted as well.
-\item[\textit{Problem-data}] Define the weak form, the corresponding matrices, the
+\item[\textit{Problem-data}] \todo{Definition of } Define the weak form, the corresponding matrices, the
   functionals $J$ as well as the boundary conditions. With exception of the boundary conditions, we have to specify all this only cell-wise, \dope{} handles the rest for us.
 \item[\textit{Solvers}] Choice of a (non-)linear solver. 
 \item[\textit{Additional features}] ParameterReader to read in the run-time parameters
@@ -546,11 +555,18 @@ we loop over the quadrature points and the number of DoFs of the cell. In the in
 \dope{} takes now care of the distribution of the local cell contributions into  the vector of the residual \eqref{eq:residual_vector}. The methods \texttt{CellRightHandSide} and \texttt{CellMatrix} follow the same structure as 
 \texttt{CellEquation}, so we do not go into the details here.
 
+\todo{Ich wuerde localfunctional als volles Wort schreiben}
 \subsubsection{\texttt{localfunc.h}}
 The implementation of the boundary-functional $J$ follows the outline of the
 computation of the cell-residual in \texttt{localpde.h}. 
 The main difference, and common to all functionals is that we only want to
-evaluate a functional \todocg{Ist hier was verrutscht? der Satz passt im Moment nicht so wirklich, der Teil mit dem Vektor ist irgendwie verlorengegangen?}. Thus, we 
+evaluate a functional \todocg{Ist hier was verrutscht? der Satz passt im
+  Moment nicht so wirklich, der Teil mit dem Vektor ist irgendwie
+  verlorengegangen?}. 
+\todo{Ich hatte Deine Anmerkung so verstanden, als ob Du alles nach dem i.e.,
+  geloescht 
+haben wolltest. Im main TW steht noch das Original}
+Thus, we 
 just loop over the quadrature points and not over the degrees of freedom 
 on the face. In the present situation, we want to evaluate a functional 
 that consists of a boundary integral. Thus we need to evaluate 
@@ -584,6 +600,9 @@ Notice that we get here the values of the computed solution by giving the string
 To describe the solution of nonstationary 
 PDEs, we consider a time-dependent semi-linear form $a(u)(\phi)$ and some
 right hand side functional $l$.\todocg{Warum hier l und nicht f?}
+\todo{Antwort: Weil $f$ die volumen kraft ist. Wir wollten 
+doch Funktional und Kraftvektor unterscheiden. Daher hier $l$. Es gilt :
+$l(\phi) = (f,\phi)$.}
 Let $I:=[0,T]$ be a time interval with end time point value $T$.
 To find some $u$ in a weak form, we define
 \[
@@ -1051,7 +1070,7 @@ with
 the authors of the libraries 
 Gascoigne/RoDoBo project, which was initiated by 
 Roland Becker, Dominik Meidner, and Boris Vexler \cite{rodobo}. 
-The second author thanks Mary F. Wheeler (ICES, Austin) for the 
+Finally, the second author thanks Mary F. Wheeler (ICES, Austin) for the 
 possibility to finish this work.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
