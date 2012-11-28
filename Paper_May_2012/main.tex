@@ -80,7 +80,7 @@ Thomas Wick \at
               The Institute for Computational Engineering and Sciences,\\
 The University of Texas at Austin,\\
 Austin, Texas 78712, USA \\
-              Tel.: +1 512-672-7763\\
+              %Tel.: +1 512-672-7763\\
               \email{twick@ices.utexas.edu}   
  \and
 W. Wollner \at
@@ -98,7 +98,10 @@ W. Wollner \at
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{abstract}
-\todo{Wird die Webseite genannt? ist das sinnvoll dies zu tun?}\todocg{Seite 2, vorletzter Absatz. Da wird DOpElib referenziert, und da steht dann auch die Webseite.}
+\todo{Ich finde die Adressen uneinheitlich. CG und ich koennten die
+  Telefonnummern wegstreichen, um uns an Winni anzupassen. Und Winni
+keonnte Hausnummer oder Postleitzahl hinzufuegen. Immerhin ist 
+das Standart in (fast) allen Journals}
 In this article, we describe the software library 
 \textit{Differential Equations and Optimization Environment} (\dope{}).
 The main feature of \dope{} is that it provides a unified interface to high level algorithms 
@@ -113,6 +116,10 @@ numerical results as demonstration for the versatility of the software.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Introduction}
 \label{introduction}
+\todo{Reihenfolge bei der Erwaehnung von Dopelib mit vollem Namen und 
+des Anfangs in 2010 passt nicht ueberein. 2010 wird am Ende erwahent und der
+volle Name von Dope wird erst genannt nachdem wir bereits die Abkuerzung
+benutzt haben. Das geht so nicht!}
 Today, there exists a broad variety of software libraries
 that provide numerical tools for solving partial differential
 equations (PDEs). Prominent examples are 
@@ -390,6 +397,7 @@ To solve a stationary PDE problem, the user has to provide some code which can r
 \todo{Vorschlag: Specification of triangulation issues such as finite elements
   and quadrature rules}  
   \todocg{Gegenvorschlag: Specification of discretization issues...}
+\todo{Finde ich gut: Koennen wir machen}
 Specify what kind of triangulation:
 in most cases this is the
 finite element and quadrature rules. Furthermore, other
@@ -566,7 +574,11 @@ computation of the cell-residual in \texttt{localpde.h}.
 \todo{Ich hatte Deine Anmerkung so verstanden, als ob Du alles nach dem i.e.,
   geloescht 
 haben wolltest. Im main TW steht noch das Original}
-\todocg{Ich habe den Rest auskommentiert. Mein Vorschlag waere: The main difference is that as we only want to evaluate a functional, i.e. a number, and not a residual-vector, we just loop over the quadrature points and not over the degrees of freedom on the face. }
+\todocg{Ich habe den Rest auskommentiert. Mein Vorschlag waere: The main
+  difference is that as we only want to evaluate a functional, i.e. a number,
+  and not a residual-vector, we just loop over the quadrature points and not
+  over the degrees of freedom on the face. }
+\todo{Finde ich gut. Kannst Du so machen!}
 %Thus, we just loop over the quadrature points and not over the degrees of freedom on the face.
 In the present situation, we want to evaluate a functional 
 that consists of a boundary integral. Thus we need to evaluate 
