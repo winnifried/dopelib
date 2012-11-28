@@ -98,7 +98,7 @@ W. Wollner \at
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{abstract}
-\todo{Wird die Webseite genannt? ist das sinnvoll dies zu tun?}
+\todo{Wird die Webseite genannt? ist das sinnvoll dies zu tun?}\todocg{Seite 2, vorletzter Absatz. Da wird DOpElib referenziert, und da steht dann auch die Webseite.}
 In this article, we describe the software library 
 \textit{Differential Equations and Optimization Environment} (\dope{}).
 The main feature of \dope{} is that it provides a unified interface to high level algorithms 
@@ -389,6 +389,7 @@ To solve a stationary PDE problem, the user has to provide some code which can r
     sein, der Satz macht so keinen Sinn:} 
 \todo{Vorschlag: Specification of triangulation issues such as finite elements
   and quadrature rules}  
+  \todocg{Gegenvorschlag: Specification of discretization issues...}
 Specify what kind of triangulation:
 in most cases this is the
 finite element and quadrature rules. Furthermore, other
@@ -410,7 +411,7 @@ circle-center $C=(0.2,0.2)$ and radius $r=0.05$.}
 \label{fig:example_ns}
 \end{figure}
 
-We split the program into the parts \texttt{main.cc}, \texttt{func.h} and \texttt{pde.h}. The \texttt{main.cc}-file is responsible for the declaration of various objects which have mostly to do with the \textit{discretization}, the \textit{solvers} and the general \textit{program sequence}, whereas the other two contain most of the problem-data -- especially the cell-wise contributions of the weak form in \texttt{pdh.h} and the functional in \texttt{func.h}. 
+We split the program into the parts \texttt{main.cc}, \texttt{localfunctional.h} and \texttt{localpde.h}. The \texttt{main.cc}-file is responsible for the declaration of various objects which have mostly to do with the \textit{discretization}, the \textit{solvers} and the general \textit{program sequence}, whereas the other two contain most of the problem-data -- especially the cell-wise contributions of the weak form in \texttt{localpde.h} and the functional in \texttt{localfunctional.h}. 
 We give a brief explanation on every file in the following.
 
 \subsubsection{\texttt{main.cc}}
@@ -495,7 +496,7 @@ Finally, we compute the value $J(u_h)$ by calling:
   pde.ComputeReducedFunctionals();
 \end{lstlisting}
 
-\subsubsection{\texttt{pde.h}}
+\subsubsection{\texttt{localpde.h}}
 We shall now give an overview to the implementation of the specific form of the PDE. 
 
 Let $N$ be the number of degrees of freedom of our discretization and $\Set{\phi_{h}^{i}|1\leq i \leq N}$ be a given FE-Basis. As stated in subsection~\ref{subsubsec:stationary problems}, to solve the discrete equation \eqref{eq:discrete_equation} we need the residual, i.e. the vector
@@ -555,20 +556,19 @@ we loop over the quadrature points and the number of DoFs of the cell. In the in
 \dope{} takes now care of the distribution of the local cell contributions into  the vector of the residual \eqref{eq:residual_vector}. The methods \texttt{CellRightHandSide} and \texttt{CellMatrix} follow the same structure as 
 \texttt{CellEquation}, so we do not go into the details here.
 
-\todo{Ich wuerde localfunctional als volles Wort schreiben}
-\subsubsection{\texttt{localfunc.h}}
+\subsubsection{\texttt{localfunctional.h}}
 The implementation of the boundary-functional $J$ follows the outline of the
 computation of the cell-residual in \texttt{localpde.h}. 
-The main difference, and common to all functionals is that we only want to
-evaluate a functional \todocg{Ist hier was verrutscht? der Satz passt im
+%The main difference, and common to all functionals is that we only want to evaluate a functional 
+\todocg{Ist hier was verrutscht? der Satz passt im
   Moment nicht so wirklich, der Teil mit dem Vektor ist irgendwie
   verlorengegangen?}. 
 \todo{Ich hatte Deine Anmerkung so verstanden, als ob Du alles nach dem i.e.,
   geloescht 
 haben wolltest. Im main TW steht noch das Original}
-Thus, we 
-just loop over the quadrature points and not over the degrees of freedom 
-on the face. In the present situation, we want to evaluate a functional 
+\todocg{Ich habe den Rest auskommentiert. Mein Vorschlag waere: The main difference is that as we only want to evaluate a functional, i.e. a number, and not a residual-vector, we just loop over the quadrature points and not over the degrees of freedom on the face. }
+%Thus, we just loop over the quadrature points and not over the degrees of freedom on the face.
+In the present situation, we want to evaluate a functional 
 that consists of a boundary integral. Thus we need to evaluate 
 integrals on faces, those who lie on $\Gamma_{circ}$, instead of integrals over
 elements. 
@@ -599,11 +599,7 @@ Notice that we get here the values of the computed solution by giving the string
 \subsection{Solving Nonstationary PDEs}\label{sec:timedep}
 To describe the solution of nonstationary 
 PDEs, we consider a time-dependent semi-linear form $a(u)(\phi)$ and some
-right hand side functional $l$.\todocg{Warum hier l und nicht f?}
-\todo{Antwort: Weil $f$ die volumen kraft ist. Wir wollten 
-doch Funktional und Kraftvektor unterscheiden. Daher hier $l$. Es gilt :
-$l(\phi) = (f,\phi)$.}
-Let $I:=[0,T]$ be a time interval with end time point value $T$.
+right hand side functional $l$. Let $I:=[0,T]$ be a time interval with end time point value $T$.
 To find some $u$ in a weak form, we define
 \[
 \int_I a(u)(\phi)\, dt = \int_I l(\phi)\, dt \quad \forall\Phi\in X,
