@@ -54,6 +54,7 @@
 %\newcommand{\todo}[1]{\textbf{\textsc{\textcolor{black}{TODO: #1}}}}
 \newcommand{\todo}[1]{\textbf{\textsc{\textcolor{blue}{TODO: #1}}}}
 \newcommand{\todocg}[1]{\textbf{\textsc{\textcolor{red}{TODO: #1\textasciitilde cg}}}}
+\newcommand{\todoww}[1]{\textbf{\textsc{\textcolor{green}{TODO: #1\textasciitilde ww}}}}
 %\newcommand{\mymarginpar}[1]{\marginpar{\textcolor{red}{\scriptsize{#1}}}}
 \newcommand{\mymarginpar}[1]{\marginpar{\textcolor{red}{\normalsize{#1}}}}
 %
@@ -61,7 +62,7 @@
 \begin{document}
 
 
-\title{DOpElib: Differential Equations and Optimization Environment; A Goal Oriented Software Library for Solving PDEs and Optimization Problems}
+\title{DOpElib: Differential Equations and Optimization Environment; A Goal Oriented Software Library for Solving PDEs and Optimization Problems with PDEs}
 
 
 \titlerunning{DOpElib}        % if too long for running head
@@ -73,7 +74,7 @@
 \institute{Christian Goll \at
               Institute of Applied Mathematics, University of Heidelberg
               \\Im Neuenheimer Feld 293/294, 69120 Heidelberg, Germany\\
-              Tel.: +49 622-154-6154\\
+              %Tel.: +49 622-154-6154\\
               \email{cgoll@iwr.uni-heidelberg.de}           %  \\
            \and
 Thomas Wick \at
@@ -83,9 +84,10 @@ Austin, Texas 78712, USA \\
               %Tel.: +1 512-672-7763\\
               \email{twick@ices.utexas.edu}   
  \and
-W. Wollner \at
+Winnifried Wollner \at
               Universit\"at Hamburg\\
               Department of Mathematics\\
+              Bundesstr. 55, 20146 Hamburg, Germany\\
               \email{winnifried.wollner@math.uni-hamburg.de}   
 }
 
@@ -98,15 +100,13 @@ W. Wollner \at
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{abstract}
-\todo{Ich finde die Adressen uneinheitlich. CG und ich koennten die
-  Telefonnummern wegstreichen, um uns an Winni anzupassen. Und Winni
-keonnte Hausnummer oder Postleitzahl hinzufuegen. Immerhin ist 
-das Standart in (fast) allen Journals}
-In this article, we describe the software library 
+In this article, we describe the  
 \textit{Differential Equations and Optimization Environment} (\dope{}).
-The main feature of \dope{} is that it provides a unified interface to high level algorithms 
-such as time-stepping methods, nonlinear solvers and optimization routines. This structure ensures 
-that first of all the user is required to write only those sections of code that are specific to 
+\dope{} is a software library that provides a unified interface 
+to high level algorithms such as time-stepping methods, nonlinear solvers and 
+optimization routines. This structure ensures 
+that, first of all, the user is only required to write those sections of code 
+that are specific to 
 the considered problem. Second, the exchange of parts of the used routines is possible 
 with only a few lines of code to change instead of large reimplementations.
 The article illustrates the design principles and various features
@@ -116,10 +116,6 @@ numerical results as demonstration for the versatility of the software.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Introduction}
 \label{introduction}
-\todo{Reihenfolge bei der Erwaehnung von Dopelib mit vollem Namen und 
-des Anfangs in 2010 passt nicht ueberein. 2010 wird am Ende erwahent und der
-volle Name von Dope wird erst genannt nachdem wir bereits die Abkuerzung
-benutzt haben. Das geht so nicht!}
 Today, there exists a broad variety of software libraries
 that provide numerical tools for solving partial differential
 equations (PDEs). Prominent examples are 
@@ -132,51 +128,57 @@ In fact, these libraries provide very useful tools
 for a huge variety of applications. 
 
 In many cases, the user is confronted with 
-certain bottlenecks. On the one hand, 
-in open-source projects for academic research, 
+certain bottlenecks when using such software. 
+On the one hand, in open-source projects for academic research, 
 standard high-level routines 
 which are necessary to solve even simplest PDEs,
-such as linear and nonlinear solvers or time-stepping schemes must be implemented 
-by the users themselves. However, such routines are, at large,
+such as linear and nonlinear solvers or time-stepping schemes must 
+be implemented by the users themselves. However, such routines are, at large,
 problem-independent and could be provided as standard tools. 
 As our guiding design principle, we note that in many 
 numerical studies, the main task is the computation of some  
 target functional, e.g., error norms,
 point values, or certain mean-values such as drag or lift coefficients.
 As a second motivating principle, 
-there is nowadays an increasing interest in computing 
+there is nowadays an increasing interest in solving
 optimization problems in which the state equation is governed 
 by a PDE. Such optimization problems comprise optimal control,
 parameter estimation, inverse problems or optimal experimental design. 
-To do this in complex applications usually requires tremendous work already
+To do this in complex applications requires tremendous work already
 on the PDE itself before considering optimization of the processes modeled 
 by the PDE. Thus it is advantageous to have an environment that allows to 
 focus on the development of an appropriate code for the PDE at first but 
 asserts due to the required interface, that the code written for the PDE
 is then reusable for the application of state-of-the-art optimization 
 routines.
-So far, there exist a very limited number of open source packages
-which fulfill the requirements listed above; 
+
+On the other hand, commercial finite element (FE) toolkits provide these 
+previously mentioned routines but limits user-interaction
+with the source code to an extend that typically conflicts
+with the consideration of problems deviating from the intended 
+user-base for the commercial product. 
+This is quite unsatisfactory because in the development of 
+novel numerical algorithms  or in the solution of more complex 
+applications the researcher needs to be enabled 
+to change certain parameters or pieces of source code. 
+
+This article will provide information on who the {\em Differential 
+Equations and Optimization Environment} \dope{}  \cite{dope} 
+solves these problems by providing a well structured interface for high-level 
+routines integrated
+with tools to solve PDEs. At the present stage we provide an interface to 
+the finite element library \deal{} and a collection of algorithms to solve
+both pure PDE problems as well as optimization problems 
+constrained by a PDE. 
+This provides an extension to the 
+very few tools available doing so; 
 successful in-house code examples are Gascoigne \cite{gascoigne}
 and RoDoBo \cite{rodobo}. 
 Like \dope{}, both have been initiated as well in 
 the Numerical Analysis Group in Heidelberg.
 
-On the other hand, commercial finite element toolkits provide these 
-previously mentioned routines but limits user-interaction
-with the source code to an extend that typically conflicts
-with the consideration of problems deviating from the intended 
-user-base for the commercial product. 
-This is quite unsatisfactory because development of novel numerical 
-algorithms should enable the researcher
-to change certain parameters or pieces of source code. 
-
-The presented toolkit \dope{}: 
-\textit{Differential Equations and Optimization Environment} \cite{dope}
-fills this gap. We present a software
-to solve both pure PDE problems as well as optimization problems 
-constrained by a PDE. 
-Its main feature is to give a unified interface to high level algorithms such as 
+The main feature of \dope is to give a unified interface to high level 
+algorithms such as 
 time-stepping methods, nonlinear solvers and optimization routines. 
 \dope{} is designed in such a way that the user only needs to write those parts
 of the code that are problem dependent while all invariant 
@@ -189,25 +191,23 @@ have to replace the algorithm object with an other one.
 This replacement can be done by replacing the appropriate object at only
 one point in the code.
 
-While \deal{} --which at present is the only toolkit to which we provide an 
+While \deal{} --which at present is the only FE-toolkit to which we provide an 
 interface-- leaves the implementation of all high-level algorithms to the user, 
 \dope{} is user-focused by delivering
-prefabricated tools which require from the user only adjustments connected
-to his specific problem. The solution of optimization problems with PDE
-constraints is an innovative feature in \dope{}.
+prefabricated tools which requires adjustments by the user only for parts
+connected to his specific problem. The possible solution of 
+optimization problems with PDE constraints is an innovative feature in \dope{}.
 
-\todo{Das wir in Heidelberg angefangen haben wird schon vorher erwaehnt!
-  Wuerde den Satz einfach streichen}
-The project was initially initiated \todocg{initially initiated - doppelt gemoppelt?} at the University of Heidelberg in 2010 and  
-at the present stage the following key features are supported by the library
+To give a brief overview, at the present stage of the development 
+the following key features are supported by the library
 \begin{itemize}
-\item Solving of nonlinear stationary and nonstationary PDEs in 1d, 2d, and 3d.
+\item Solvers for nonlinear stationary and nonstationary PDEs in 1d, 2d, and 3d.
 \item Various, easily exchangeable, 
   time-stepping schemes (based on finite differences), 
   such as forward Euler, backward Euler,
   Crank-Nicolson, shifted Crank-Nicolson, and Fractional-Step-$\Theta$ scheme.
 \item Use of all finite elements of from \deal{} including hp-support.
-\item Some examples showing the solution of several PDEs including
+\item Several examples showing the solution of PDEs including
    Poisson, Navier-Stokes, Plasticity and fluid-structure interaction problems. 
 \item Line search and trust region Newton algorithms for the 
    solution of optimization problems with PDE constraints by elimination of 
@@ -215,7 +215,7 @@ at the present stage the following key features are supported by the library
 \item Interface to SNOPT for the solution of optimization problems with PDEs and
   additional other control and state constraints.
 \item Several examples showing how to solve various kinds of optimization 
-  problems involving PDE constraints.
+  problems involving stationary and nonstationary PDE constraints.
 \item Goal-oriented mesh adaptation with the Dual Weighted Residual method and
   standard residual based error estimators.
 \item Different spatial triangulations for control and state variables without
@@ -225,12 +225,15 @@ at the present stage the following key features are supported by the library
 
 The article is organized as follows. In the main Section
 \ref{detailed_description}, a detailed description of 
-the main features is given. In fact, we first explain the solution 
-of stationary PDEs, nonstationary PDEs, and optimization problems. 
-Additional comments are given concerning the required implementation 
-provided by the user.
-Finally, additional features are discussed. In the final Section
-\ref{applications}, we discuss three different numerical 
+the main features is given. First, we first explain the solution 
+of stationary PDEs, in Section~\ref{subsubsec:stationary problems}, nonstationary PDEs, in Section~\ref{sec:timedep}, and optimization problems, in 
+Section~\ref{sec:opt}. 
+In all three cases we first described how the interface is designed, and why 
+it is designed as such. Then the implementation required by the user is 
+demonstrated at an example.
+Finally, additional features are discussed in Section~\ref{sec:additional}. 
+In the final Section
+\ref{applications}, we give three different numerical 
 examples which illustrate the versatile features of \dope{}. 
 
 
@@ -240,19 +243,20 @@ examples which illustrate the versatile features of \dope{}.
 \label{detailed_description}
 This library is designed to allow easy implementation for the numerical solution 
 of problems involving PDEs.
-In particular, we remove all tedious routine implementation needed in 
+By providing interfaces to existing FE-toolkits, at present \deal{}, 
+we remove all tedious routine implementation needed in 
 \deal{} by introducing appropriate classes that take care of all the 
 problem independent implementation while leaving only the problem specific 
-parts to the user. To show how this is designed we will, in the sequel, 
-describe the reasoning first for a simple stationary PDE in 
-Section~\ref{subsubsec:stationary problems} and then show
-how this idea extends to non stationary problems in 
-Section~\ref{sec:timedep} as well as to optimization
-problems with PDE constraints in Section~\ref{sec:opt}. 
+parts to the user. To show how this is designed, we will, in the sequel, 
+describe the reasoning, first, for a simple stationary PDE, in 
+Section~\ref{subsubsec:stationary problems}, and then show
+how this idea extends to non stationary problems, in 
+Section~\ref{sec:timedep}, as well as to optimization
+problems with PDE constraints in, Section~\ref{sec:opt}. 
 
-\subsection{Solving of Stationary PDEs}
+\subsection{Solving Stationary PDEs}
 \label{subsubsec:stationary problems}
-For the start we consider a prototypical problem given by the solution of 
+For the start, we consider a prototypical problem given by the solution of 
 a stationary PDE, which we assume to be given in weak form.
 In abstract notation it reads; find some $u$ in an appropriate set
 such that
@@ -271,22 +275,25 @@ for all $\phi \in V = H^1_0(\Omega;\R^d) \times L^2_0(\Omega)$.
 Here $(\cdot,\cdot)$ denotes the $L^2$-inner-product.
 The solution will be searched for in $V + (u_d,0)$ where $u_d$ is some 
 continuation of the given Dirichlet boundary data.
-Then typically we do not only want to calculate $u$ but more likely we are 
+In a typical calculation, we do not only want to calculate $u$ but more likely we are 
 interested in one (or several) functionals depending on the solution, i.e., some numbers $J(u)$.
 
 In order to solve this problem, i.e., calculate a sequence of values $J(u_h)$ approximating $J(u)$,
 we need to discretize 
-the equation. In \dope, we are using finite elements to do this. This means we need to pick a 
+the equation. In \dope, we are using finite elements, as they are 
+provided by \deal{}, to do this. This means we need to pick a 
 subdivision $\mathcal T_h$, for instance into quadrilaterals,
 of the domain $\Omega$ and a finite element. In the concrete case, we could, 
-\todo{Warum Tylor-Hood? Ist inf-sup stabil wuerde ich erwaehnen}
-for instance, take the $\mathcal Q_2/\mathcal Q_1$ Taylor-Hood element.
+for instance, take the inf-sup stable  $\mathcal Q_2/\mathcal Q_1$ 
+Taylor-Hood element.
 As it is clear, that the initialization of the unknowns, the local shape 
 functions, removal of hanging node constraints, etc. always follows the 
 same procedure, we define an object which takes the finite element (FE)
 and the triangulation and takes care of all other things related to
 handling the finite element space $V_h$. We will refer, to 
-this as the \texttt{SpaceTimeHandler}. Then, it is clear that the simplest 
+this object as the \texttt{SpaceTimeHandler} since it is also 
+capable of coping with unknowns for time dependent problems. Then, it is 
+clear that the simplest 
 form of the constructor should have the following interface:
 \begin{lstlisting}
   template<typename TRIANGULATION, typename FE>
@@ -296,35 +303,36 @@ Next, one needs to solve the discrete equation
 \begin{align}\label{eq:discrete_equation}
 a(u_h)(\phi_h) = (f,\phi_h) \quad \forall \phi \in V_h.
 \end{align}
-\todo{wir schreiben newton immer klein. eigentlich ist das ein Eigenname: Newton}
-To this end, one can employ a newton type method with some globalization 
-like line-search. To do so, one needs to calculate the residual of the 
-equation, as well as to solve linearized equations for the calculation of 
-the newton method and then employing some kind of globalization strategy.
-This again will usually require the evaluation of the residual.
+To this end, one can employ a Newton type method with some globalization 
+like line-search, see, e.g.,~\cite{NoWr00}. 
+To apply the Newton method, one needs to calculate the residual of the 
+equation, solve linearized equations for the calculation of 
+the update, and then employ some kind of globalization strategy.
+Again, this will usually require the evaluation of the residual.
 
 The evaluation of the residual will require the calculation of the integrals 
 involved in the weak formulation of the problem. For example 
 the $i$-th component of the residual, with respect to the given FE-basis 
 $\phi_{h}^{i}$, will read as follows
 \begin{align}\label{eq:residual_vector}
- a(u_h)(\phi_{h}^{i}) - (f,\phi_{h}^{i}) = \sum_{K\in \mathcal T_h} \nu\int_K \nabla u_h\cdot \nabla \phi_{h}^{i}\,dx + \ldots
+ a(u_h)(\phi_{h}^{i}) - (f,\phi_{h}^{i}) = \sum_{K\in \mathcal T_h} \int_K \nu\nabla u_h\cdot \nabla \phi_{h}^{i}\,dx + \ldots
  \end{align}
-Again, we see that, except for the local element integrals, all 
+Again, we see that, except for the local cell (element) integrals, all 
 calculations are independent from the concrete form of the PDE. 
 Hence we define an object \texttt{Integrator}
 that offers a method to calculate the residual given a user-defined 
-object \texttt{pde} that implements the local element integrals, i.e.,
+object \texttt{pde} that implements the local cell integrals, i.e.,
 \begin{lstlisting}
   template<typename PROBLEM,typename VECTOR>
      void Integrator
           ::ComputeNonlinearResidual(PROBLEM& pde, 
                                      VECTOR & residual);
 \end{lstlisting}
-where \texttt{VECTOR} is one of the possible vector types given by \deal{}.
+where \texttt{VECTOR} is some vector type in which the residual 
+should be stored.
 It is clear that we need to ensure that the integrator object has access
 to the information stored in the \texttt{SpaceTimeHandler}
-to correctly loop over all elements.
+to correctly loop over all cells.
 To solve the linearized systems, again, all that is left is the calculation
 of the matrix corresponding to the linearized equation. To calculate this,
  we can define a method in the integrator that does exactly this provided
@@ -336,7 +344,8 @@ integrals needed for assembling the matrix, i.e.,
             ::ComputeMatrix(PROBLEM& pde, 
                             MATRIX & system_matrix);
 \end{lstlisting}
-where now \texttt{MATRIX} is one of the matrix types supported by \deal{}.
+where now \texttt{MATRIX} is an appropriate matrix type needed by the 
+linear solver.
 With this we can now define a nonlinear solver \texttt{NewtonSolver} 
 for the solution of the discrete problem requiring the existence of the 
 following function
@@ -348,13 +357,13 @@ following function
                              VECTOR & solution);
 \end{lstlisting}
 Where \texttt{LINSOLVE} denotes the solver that should be used to solve the 
-linearized equations during the newton iteration.
+linearized equations during the Newton iteration.
 
 Finally, we note that to compute the requested functional value 
 all that is left is to evaluate the functional in the computed solution 
 which can be done again using an appropriate integrator method.
 Since the sequence of events sketched above is again independent of the 
-exact problem we introduce another container around it which we call 
+exact problem we introduce another container which we call 
 \texttt{StatPDEProblem} that then simply provides the user with the 
 method
 \begin{lstlisting}
@@ -362,6 +371,8 @@ method
      void StatPDEProblem<NEWTON>
             ::ComputeReducedFunctionals();
 \end{lstlisting}
+that takes care of calling all other methods needed for the calculation of 
+$J(u_h)$.
 The template argument \texttt{NEWTON} represents the chosen solver of the nonlinear problems.
 That combines all the necessary steps to calculate $J(u_h)$. 
 
@@ -382,35 +393,51 @@ This is due to the fact, that for instance
 there are several different sparsity patterns available in 
 \deal{} which the user should be able to choose. Thus it needs to be 
 given to the \texttt{SpaceTimeHandler}. However, to keep the 
-presentation clear we refrained from including these details above and in
+presentation clear, and since default values are available for these arguments, 
+we refrained from including these details above and in
 what follows.
 \end{remark} 
+
+\begin{remark}
+The reason to include the nonlinear solver as a template argument in 
+\texttt{StatPDEProblem} is that if a given problem can not be solved with 
+this algorithm, e.g., it has no derivatives, then the user should be able 
+to exchange only the nonlinear solver. Further, this makes it possible to
+compare different algorithms available for the solution of the PDE without 
+the need to recode other parts of the problem, thereby helping in doing fair 
+comparisons.
+\end{remark}
 
 In the next section we will now sketch the way a user needs to implement the
 user-dependent data as the local cell integrals and the initialization of the
 objects described above.
-\subsubsection{Problem dependent implementation of stationary PDE problems}
+\subsubsection{Problem Dependent Implementation of Stationary PDE Problems}
 To solve a stationary PDE problem, the user has to provide some code which can roughly be divided into the following main sections:
 \begin{description}
-\item[\textit{Discretization}]\todocg{Hier scheint etwas verlorengegangen zu
-    sein, der Satz macht so keinen Sinn:} 
-\todo{Vorschlag: Specification of triangulation issues such as finite elements
-  and quadrature rules}  
-  \todocg{Gegenvorschlag: Specification of discretization issues...}
-\todo{Finde ich gut: Koennen wir machen}
-Specify what kind of triangulation:
-in most cases this is the
-finite element and quadrature rules. Furthermore, other
-things might be adjusted as well.
-\item[\textit{Problem-data}] \todo{Definition of } Define the weak form, the corresponding matrices, the
-  functionals $J$ as well as the boundary conditions. With exception of the boundary conditions, we have to specify all this only cell-wise, \dope{} handles the rest for us.
+\item[\textit{Discretization}] 
+Specification of discretization issues such as finite elements, 
+quadrature rules, and triangulation.
 \item[\textit{Solvers}] Choice of a (non-)linear solver. 
-\item[\textit{Additional features}] ParameterReader to read in the run-time parameters
+\item[\textit{Problem-data}] Definition of the weak form, 
+the corresponding matrices, the functionals $J$, as well as the boundary 
+conditions. 
+\item[\textit{Additional features}] ParameterReader to read in the 
+  run-time parameters
   such as material coefficients or adjustments for the solvers like tolerance
   for Newton's method. 
 \end{description} 
+The first two points will be done below in the discussion of the file 
+\texttt{main.cc}. The third point is done separately in the file \texttt{pde.h}
+and \texttt{func.h} for convenience. The specification of additional 
+features is skipped, since it consist of reading in a text-file only. 
 
-We describe now a program designed to compute a value $J(u)$, where $u=(v,p)$ is the solution of the Navier-Stokes equations \eqref{eq:ns} on the domain $\Omega$ as seen in figure~\ref{fig:example_ns} with  $f=0$, and $J$ is the drag-force of the enclosed circle. We assume given Dirichlet data for the velocity $v$ on the boundary $\Gamma_{D}=\Gamma_{in}\cup\Gamma_{wall}\cup\Gamma_{circ}$. This is the Benchmark-Case 2D-1 from \cite{TuSchae96}, see there for further details.
+Now, we describe a program designed to compute a value 
+$J(u)$, where $u=(v,p)$ is the solution of the Navier-Stokes 
+equations \eqref{eq:ns} on the domain $\Omega$ as seen in 
+Fig.~\ref{fig:example_ns} with  $f=0$, and $J$ is the drag-force 
+of the enclosed circle. We assume given Dirichlet data for the velocity 
+$v$ on the boundary $\Gamma_{D}=\Gamma_{in}\cup\Gamma_{wall}\cup\Gamma_{circ}$. 
+This is the Benchmark-Case 2D-1 described in \cite{TuSchae96}.
 \begin{figure}[h]
 \centering
 \resizebox{0.5\textwidth}{!}{\input{Pictures/example_ns}}
@@ -419,55 +446,71 @@ circle-center $C=(0.2,0.2)$ and radius $r=0.05$.}
 \label{fig:example_ns}
 \end{figure}
 
-We split the program into the parts \texttt{main.cc}, \texttt{localfunctional.h} and \texttt{localpde.h}. The \texttt{main.cc}-file is responsible for the declaration of various objects which have mostly to do with the \textit{discretization}, the \textit{solvers} and the general \textit{program sequence}, whereas the other two contain most of the problem-data -- especially the cell-wise contributions of the weak form in \texttt{localpde.h} and the functional in \texttt{localfunctional.h}. 
+We split the program into the parts \texttt{main.cc}, \texttt{func.h} and 
+\texttt{pde.h}. The \texttt{main.cc}-file is responsible for the declaration 
+of various objects which have mostly to do with the \textit{discretization}, 
+the \textit{solvers} and the general \textit{program sequence}, whereas the 
+other two contain most of the problem-data -- especially the cell-wise 
+contributions of the weak form in \texttt{pde.h} and the functional in 
+\texttt{func.h}. 
 We give a brief explanation on every file in the following.
 
 \subsubsection{\texttt{main.cc}}
-In this file we gather all the basic components that are necessary for the
+In this file, we gather all the basic components that are necessary for the
 solution process of a (stationary) partial differential equation. The
 structure of the program is basically the same for every equation under
 consideration, what changes is typically just the \textit{kind} of  finite
 element or linear solver we want to use. Here, a key issue is that we only need to pick 
 some pre-implemented routines from the \dope{} library rather than 
-implementing new features.
+implementing these ourselves.
 
 
-After the usual preamble, in which we include the necessary header-files from \deal{}, \dope{} and our own problem (i.e. \texttt{localfunctional.h} and \texttt{localpde.h}), we start by defining an instance of a \texttt{ParameterReader}-object, which handles run-time parameters.
+After the usual preamble, in which we include the necessary header-files 
+from \deal{}, \dope{} and our own problem-data (i.e. \texttt{func.h} 
+and \texttt{pde.h}), we start by defining an instance of a 
+\texttt{ParameterReader}-object, which handles reading of run-time parameters.
 \begin{lstlisting}
    ParameterReader pr;
 \end{lstlisting}
-In a text-file we might specify some problem-related parameters (for instance the viscosity $\nu$), but also general parameters for (non)-linear solvers and the output of computed data. 
-After that, we create a triangulation of the domain $\Omega$ named \texttt{triangulation}.
+The object \texttt{pr} then reads a text-file in which we might specify some 
+problem-related parameters (for instance the viscosity $\nu$), but also general
+ parameters for (non)-linear solvers and the output-format of computed data. 
+After that, we create a triangulation of the domain $\Omega$ named 
+\texttt{triangulation} using the tools provided by the \deal{} FE-library.
 
 Next, we create some quadrature rules (for the evaluation of integrals over
-cells and faces) and a finite element appropriate for the PDE at hand. We
+cells \texttt{quad} and faces \texttt{face\_quad}) and a finite element \text{fe}
+appropriate for the PDE at hand. We
 choose a Gaussian quadrature of a certain degree and the previously mentioned
 Taylor-Hood element. These routines are quite standard in each finite element
-software and we take advantage to take them from \deal{}.
+software and thus we can use those provided by the FE-library \deal{}.
 
 Then, the two characteristic features \texttt{LocalPDE} and \texttt{LocalFunctional} objects come into play:
 \begin{lstlisting}
-  LocalPDE local_pde;
-  LocalFunctional local_functional;
+  LocalPDE pde;
+  LocalFunctional functional;
 \end{lstlisting}
 These hold the information of the PDE and the functional under consideration. Further explication is given below because
-the definition of this classes is done separately in \texttt{localpde.h} resp.   \texttt{localfunctional.h}.
+the definition of this classes is done separately in \texttt{pde.h} 
+and \texttt{func.h} respectively.
 
-In the next step, we define an object of type \texttt{SpaceTimeHandler}, which handles all the things connected with the triangulation as well as the finite element space. This class is also capable of organizing degrees of freedom in time-dependent problems, hence the name. 
+In the next step, we define an object of type \texttt{SpaceTimeHandler}, which handles all the things connected with the triangulation as well as the finite element space. 
 \begin{lstlisting}
   SpaceTimeHandler dof_handler(triangulation,
-                               finite_element);
+                               fe);
 \end{lstlisting}
-There exist different versions of this class for forward as well as optimization problems. 
 
-Now we have everything at hand to create an instantiation of the container for the problem data \texttt{PDEProblemContainer}. This basically represents the discretized problem, and bundles things like boundary conditions, the PDE, the functional and the discretization. First, we give the constructor the \texttt{local\_pde} and the \texttt{dof\_handler}.
+Now we have everything at hand to create an instantiation of the container for the problem data \texttt{PDEProblemContainer}. This basically represents the discretized problem, and bundles things like boundary conditions, the PDE, the functional and the discretization. First, we give the constructor the \texttt{pde} and the \texttt{dof\_handler}.
 \begin{lstlisting}
   PDEProblemContainer<LocalPDE> 
-             prob_container(local_pde, dof_handler);                                            
+             prob_container(pde, dof_handler);                                            
 \end{lstlisting}
-After that, we add the functional under consideration and, because it is a boundary functional, we specify the part of the boundary on which the functional operates (this is done via a 'boundary color', $1$ represents $\Gamma_{circ}$).
+After that, we add the functional under consideration and, because it is a 
+functional acting on the boundary, specify the part of the boundary on which 
+the functional operates (this is done via a 'boundary color', where $1$ 
+represents $\Gamma_{circ}$).
 \begin{lstlisting}
-  prob_container.AddFunctional(&local_functional);
+  prob_container.AddFunctional(&functional);
   prob_container.SetBoundaryFunctionalColors(1);
 \end{lstlisting}
 Next, we incorporate the Dirichlet data. To this end, we instantiate a 
@@ -482,7 +525,7 @@ done via a boundary-color and a so-called component mask
                                             comp_mask,
                                             dd);
 \end{lstlisting}
-Now we create the object which steers the whole solution process, the previously mentioned \texttt{StatPDEProblem}. It takes care of solving the discretized equation and evaluating the given functionals. The class depends actually on some template-parameters, so for the sake of abbreviation, we defined a typedef at the beginning of the \texttt{main.cc}-file.
+Now, we create the object which steers the whole solution process, the previously mentioned \texttt{StatPDEProblem}. It takes care of solving the discretized equation and evaluating the given functionals. The class depends actually on some template-parameters, so for the sake of abbreviation, we defined a typedef at the beginning of the \texttt{main.cc}-file.
 \begin{lstlisting}
   typedef StatPDEProblem<NEWTON> PDE;
 \end{lstlisting}
@@ -494,17 +537,17 @@ The  template parameter \texttt{LINSOLVE} describes which linear solver we use i
 \begin{lstlisting}
   typedef DirectLinearSolver<MATRIX, VECTOR> LINSOLVE;
 \end{lstlisting}
-With the type settled, we create the object \texttt{solver}, which needs the discretization (represented here by the \texttt{prob\_container}), the parameter reader as well as the quadrature rules.
+With the types settled, we create the object \texttt{solver}, which needs the discretization (represented here by the \texttt{prob\_container}), the parameter reader as well as the quadrature rules.
 \begin{lstlisting}
   PDE pde(prob_container, pr,
-                    quad_formula, face_quad_formula);
+                    quad, face_quad);
 \end{lstlisting}
 Finally, we compute the value $J(u_h)$ by calling:
 \begin{lstlisting}
   pde.ComputeReducedFunctionals();
 \end{lstlisting}
-
-\subsubsection{\texttt{localpde.h}}
+\todoww{Should we add a complete listing?}
+\subsubsection{\texttt{pde.h}}
 We shall now give an overview to the implementation of the specific form of the PDE. 
 
 Let $N$ be the number of degrees of freedom of our discretization and $\Set{\phi_{h}^{i}|1\leq i \leq N}$ be a given FE-Basis. As stated in subsection~\ref{subsubsec:stationary problems}, to solve the discrete equation \eqref{eq:discrete_equation} we need the residual, i.e. the vector
@@ -512,7 +555,9 @@ Let $N$ be the number of degrees of freedom of our discretization and $\Set{\phi
 \left(a(u_h)(\phi_{h}^{i})-(f,\phi_{h}^{i})\right)_{i=1}^N.
 \end{align}
 The corresponding Jacobian can be defined analogously.
-Now all we have to supply here are the cell-wise contributions to these terms, the \texttt{Integrator} takes care of assembling \eqref{eq:discrete_residual}
+Now, all we have to supply here are the cell-wise contributions to these terms,
+then the \texttt{Integrator} object 
+takes care of assembling \eqref{eq:discrete_residual}
 and similarly of the matrix for the linearized equation to be solved.
 
 To this end, we define a class \texttt{LocalPDE} which provides the three methods
@@ -520,31 +565,37 @@ To this end, we define a class \texttt{LocalPDE} which provides the three method
 The splitting of these terms is similar to Gascoigne
 \cite{gascoigne} whereas the content (i.e., the 
 implementation itself) of these
-terms works by and large as in \deal{}. 
+terms works as it is required by the FE-library for which the integration is done, here this is \deal{}.
 
 
 We show the basic structure of these methods using the \texttt{CellEquation} 
-method for the implementation of the element-wise integrals.
+method for the implementation of the cell-wise integrals.
 
 \begin{lstlisting}
   void CellEquation(const CellDataContainer &cdc,
-                    VECTOR &local_cell_vector)
+                    VECTOR &local_vector)
   {
     const auto& fe_values = cdc.GetFEValuesState();
     unsigned int dofs_per_cell = cdc.GetNDoFsPerCell();
     unsigned int n_q_points = cdc.GetNQPoints();
 \end{lstlisting}
  The \texttt{CellDataContainer} contains all the information we need to compute the cell-contributions (things like number of quadrature points, number of degrees of freedom on the cell, the \texttt{dealii::FEValues}-objects, etc.).
+To get access to the values and the gradient of the solution in the quadrature 
+points we need to extract them from the \texttt{CellDataContainer}:
+\todoww{Ich habe jetzt das Arg. in state ge\"andert, das wollten wir sowieso in 
+\dope{} umsetzen und ist dann nicht so umst\"andlich}
   \begin{lstlisting}
-    cdc.GetValuesState("last_newton_solution", uvalues);
-    cdc.GetGradsState("last_newton_solution", ugrads);
+    cdc.GetValuesState("state", uvalues);
+    cdc.GetGradsState("state", ugrads);
  \end{lstlisting}
- In these two lines, we load the (gradient of the) solution of the last newton iteration in all the quadrature points on the cell into the two vectors \texttt{uvalues} and \texttt{ugrads}.
+ In these two lines, we load the values and the gradient of the solution 
+during the last Newton iteration in all the quadrature points on the cell 
+into the two variables \texttt{uvalues} and \texttt{ugrads}.
 
-In the next lines, we finally implement our concrete PDE. Here, we aim to provide 
-an interface which is closely related to the weak formulation which 
-has to be derived by the user. Thus,
-we loop over the quadrature points and the number of DoFs of the cell. In the innermost loop, we evaluate the weak form tested with $\phi_{h}^i$ (represented by \texttt{phi\_i\_grads\_v}) on the cell with the help of the previously selected quadrature formula. 
+In the next lines, we finally implement our concrete 
+cell contribution of the PDE. Thus,
+we loop over the quadrature points and the number of DoFs of the cell. In the innermost loop, we evaluate the weak form tested with $\phi_{h}^i$ (here \texttt{phi\_i\_grads\_v} denotes the matrix $\nabla \phi_h^i$) 
+on the cell with the help of the previously selected quadrature formula. 
  \begin{lstlisting}
     for(unsigned int q_point = 0; 
         q_point < n_q_points; 
@@ -555,35 +606,27 @@ we loop over the quadrature points and the number of DoFs of the cell. In the in
       vgrads[0]= ugrads[q_point][0]; 
       vgrads[1]= ugrads[q_point][1];
       for (unsigned int i=0;i<dofs_per_cell;i++)
-        local_cell_vector(i) += 
+        local_vector(i) += 
            ( _nu * vgrads * phi_i_grads_v 
              + //all the other terms
            ) * fe_values.JxW(q_point);
     }
 \end{lstlisting}
-\dope{} takes now care of the distribution of the local cell contributions into  the vector of the residual \eqref{eq:residual_vector}. The methods \texttt{CellRightHandSide} and \texttt{CellMatrix} follow the same structure as 
+\dope{} takes care of the distribution of the local cell contributions into  the vector of the residual \eqref{eq:residual_vector}. The methods \texttt{CellRightHandSide} and \texttt{CellMatrix} follow the same structure as 
 \texttt{CellEquation}, so we do not go into the details here.
 
-\subsubsection{\texttt{localfunctional.h}}
+\subsubsection{\texttt{func.h}}
 The implementation of the boundary-functional $J$ follows the outline of the
-computation of the cell-residual in \texttt{localpde.h}. 
-%The main difference, and common to all functionals is that we only want to evaluate a functional 
-\todocg{Ist hier was verrutscht? der Satz passt im
-  Moment nicht so wirklich, der Teil mit dem Vektor ist irgendwie
-  verlorengegangen?}. 
-\todo{Ich hatte Deine Anmerkung so verstanden, als ob Du alles nach dem i.e.,
-  geloescht 
-haben wolltest. Im main TW steht noch das Original}
-\todocg{Ich habe den Rest auskommentiert. Mein Vorschlag waere: The main
-  difference is that as we only want to evaluate a functional, i.e. a number,
-  and not a residual-vector, we just loop over the quadrature points and not
-  over the degrees of freedom on the face. }
-\todo{Finde ich gut. Kannst Du so machen!}
-%Thus, we just loop over the quadrature points and not over the degrees of freedom on the face.
+computation of the cell-residual in \texttt{pde.h}. 
+The main difference, and common to all functionals, is that as we only want 
+to evaluate a functional, i.e. a number, and not a residual-vector. 
+Hence, we loop over the quadrature points and not over the local 
+degrees of freedom. 
+
 In the present situation, we want to evaluate a functional 
 that consists of a boundary integral. Thus we need to evaluate 
 integrals on faces, those who lie on $\Gamma_{circ}$, instead of integrals over
-elements. 
+cells. 
 This face contributions are calculated in \texttt{BoundaryValue} and added to 
 sum up to the value of $J$. 
 \begin{lstlisting}
@@ -591,12 +634,11 @@ sum up to the value of $J$.
  BoundaryValue(const FaceDataContainer& fdc)
   {
     //same as before, get n_q_points etc.
-    const auto& face_values = cdc.GetFEFaceValuesState();
+    const auto& face_values = fdc.GetFEFaceValuesState();
     fdc.GetFaceValuesState("state", ufacevalues);
     fdc.GetFaceGradsState("state", ufacegrads);
-\end{lstlisting}
-Notice that we get here the values of the computed solution by giving the string "state".
-\begin{lstlisting}
+    
+    double erg = 0.;
     for(unsigned int q_point = 0; 
         q_point < n_q_points; 
         q_point++)
@@ -612,29 +654,37 @@ Notice that we get here the values of the computed solution by giving the string
 To describe the solution of nonstationary 
 PDEs, we consider a time-dependent semi-linear form $a(u)(\phi)$ and some
 right hand side functional $l$. Let $I:=[0,T]$ be a time interval with end time point value $T$.
-To find some $u$ in a weak form, we define
+The weak for of such a problem then consists of finding some $u$ such that
 \[
-\int_I a(u)(\phi)\, dt = \int_I l(\phi)\, dt \quad \forall\Phi\in X,
+\int_I \overline{a}(u)(\phi)\, dt = \int_I l(\phi)\, dt \quad \forall\Phi\in X,
 \]
 with some suitable Bochner space $X$.  As model problem,
 we extend the previous example and consider the nonstationary Navier-Stokes equations
-in a domain $\Omega\in\mathbb{R}^d$. Find: 
-$(v,p)\in X$ with
+in a spatial domain $\Omega\in\mathbb{R}^d$. The weak for is then to find 
+$u = (v,p)\in X$ with
 \begin{align*}
 &\int_I \bigl[ (\partial_t v, \phi)
 + \nu (\nabla v, \nabla \phi) + (v\cdot\nabla v, \phi)
 - (p,\nabla\cdot \phi)
 + (\nabla\cdot v, \chi)\bigr] \, dt\\
 &\quad + (v(0) - v^0, \phi(0))
-= \int_I l(\phi) \, dt 
+= \int_I (f,\phi) \, dt 
 \end{align*}
 for all $\Phi:= (\phi, \chi) \in X$ with
 \[
 X:= \set{ 
 (v,p) | v\in L^2(I,H_0^1(\Omega)^d) , 
 \partial_t v\in L^2(I, L^2(\Omega)^d), 
-p\in L^2(I,L^2(\Omega)\setminus\mathbb{R}}.
+p\in L^2(I,L^2(\Omega)\setminus\mathbb{R})}.
 \]
+We note that the only difference is the appearance of an additional
+time integration, the initial-value, and the term 
+\[
+\int_I (\partial_t v, \phi)\,dt
+\]
+so that we can reuse our stationary implementation for all the other 
+terms if we rescale them appropriately in the time integration.
+
 As for stationary problems, the goal is to compute
 some target functional $J$ which is now possibly 
 time-dependent. To organize the discretization 
@@ -687,21 +737,22 @@ Now it is apparent, why we introduced the \texttt{StatPDEProblem}, because
 we define the \texttt{InstatPDEProblem} to contain the necessary 
 loop over all time points. Consequently, the implementation 
 of nonstationary problems is quite similar to stationary problems,
+at least from the user implementation point of view,
 which was one major goal we claimed at the beginning.
-Next, we will describe the methods (i.e., changes) the user needs to 
+Next, we will describe the methods the user needs to 
 provide in addition to the stationary case.
 
-\subsubsection{Problem-dependent 
-implementation of nonstationary problems}
+\subsubsection{Problem-Dependent 
+Implementation of Nonstationary Problems}
 \label{sec:timedep:implementation}
 We explain in more detail the temporal discretization
 and specific issues of its implementation. 
-To keep the presentation easy, we abuse notation 
-by neglecting
+To keep the presentation easy, we neglect
 all material coefficients
-and give formal-related idea based on the weak 
+to give the idea based on the weak 
 form of the Navier-Stokes equations:
-Find $(v,p)$ such that
+Find $(v,p)$ such that for all $(\phi,\chi)$ 
+and all $t \in I$
 \begin{align*}
 (\partial_t v,\phi) 
 + (\nabla v, \nabla \phi)
@@ -721,7 +772,7 @@ by the inverse of the time-step $k$):
 + k\theta (v^{n+1}\cdot\nabla v^n + 
   v^{n}\cdot\nabla v^{n+1},\phi)\\
 &- k (p^{n+1},\nabla\cdot \phi)
-+ (\nabla\cdot v^{n+1}, \chi)\\
++ k(\nabla\cdot v^{n+1}, \chi)\\
 =&\; k\theta (f^{n+1},\phi) + k(1-\theta) (f^{n},\phi)
 - k(1-\theta) (\nabla v^{n}, \nabla \phi) 
 \end{align*}
@@ -738,7 +789,14 @@ terms and remaining terms for which we need
 old time-step and present time-step values. 
 Hence, in the local cell equation, the parameters
 \texttt{scale} and \texttt{scale\_ico}
-are used to distinguish these terms:
+are used to distinguish these terms.
+I the present context this means that 
+\texttt{scale} $= \pm k\theta$ or \texttt{scale} $= \pm k(1-\theta)$ and
+\texttt{scale\_ico}~$= \pm k$.
+
+With this the \texttt{CellEquation} needs to contain the terms weighted
+with the appropriate scaling as it is indicated below but is otherwise the 
+same as it is in the stationary case. 
 \begin{lstlisting}
   void CellEquation(...)
    {
@@ -756,7 +814,9 @@ Analogous procedure is performed in the local
 cell matrix.
 \begin{remark}
 Note that in the stationary case there is no such difference and accordingly 
-\dope{} automatically sets $ \texttt{scale\_ico} = \texttt{scale}$, so that in fact the user has to implement the \texttt{CellEquation} only once and can henceforth reuse it in all his stationary and nonstationary problems. This transfers of course also to other methods like \texttt{CellMatrix}.
+\dope{} automatically sets $ \texttt{scale\_ico} = \texttt{scale}$, so that in fact the user has to implement the \texttt{CellEquation} only once and can henceforth reuse it in all his stationary and nonstationary problems if 
+\texttt{scale} and \texttt{scale\_ico} are properly used. 
+This transfers of course also to other methods like \texttt{CellMatrix}.
 \end{remark}
 
 In comparison to stationary problems, we need to consider, in addition, 
@@ -775,13 +835,17 @@ such that only $(v^{n+1},\phi)$ must be implemented.
 
 \begin{remark}[Nonlinear terms in the time derivative]
 However, if someone 
-needs explicit input of the old time-step term, then he can use 
+needs to give an explicit formula for the difference quotient
+this can be written using the methods
 \begin{lstlisting}
   void CellTimeEquationExplicit (...)
    {
      // implement (v^{n+1},\phi) and (v^n,\phi)  
    }
 \end{lstlisting}
+Such explicit statements may be useful for nonlinear terms to which time 
+derivatives are applied as it appears for instance in fluid-structure 
+interaction problems.
 \end{remark}
 
 \begin{remark}[Fractional-Step-$\theta$-scheme]
@@ -791,10 +855,11 @@ offers in addition an implementation
 of the second-order and strongly $A$-stable 
 Fractional-Step-$\theta$-scheme in which 
 each time-step is subdivided into three 
-sub-steps. 
+sub-steps. However, no additional implementation is needed by the user 
+for the application of the Fractional-Step-$\theta$-scheme.
 \end{remark}
 
-\subsection{Solving of optimization problems}\label{sec:opt}
+\subsection{Solving Optimization Problems}\label{sec:opt}
 Once we are able to solve stationary and nonstationary PDEs
 we can consider optimization problems constrained by these PDEs.
 How this is done will be described in this section. 
@@ -820,7 +885,7 @@ operator $S$ of the (stationary or nonstationary) PDE, i.e.,
 \begin{align*}
 a(q,S(q))(\phi) = 0 \quad \forall \phi\in V. 
 \end{align*}
-This leads to the problem
+Thus replacing $u$ by $S(q)$ one is left with the problem
 \begin{align*}
 \min\;&j(q) = J(q,S(q)). 
 \end{align*}
@@ -837,9 +902,9 @@ a stationary PDE or using \texttt{InstatPDEProblem::ComputeReducedFunctional}
 for nonstationary PDEs. 
 
 If one would like to use derivative based methods, one 
-needs in addition derivatives of $j_h$ and thus of $J$ as well as of $S_h$. 
-To do so, we remark, that one can calculate the derivative of 
-$j$ using the adjoint calculus. Then the directional derivative 
+needs, in addition, derivatives of $j_h$ and thus of $J$ as well as of $S_h$. 
+We remark, that one can calculate the derivative of 
+$j$ using adjoint calculus. Then the directional derivative 
 of $j$ in direction $\delta q$ is given by
 \[
 j'_h(q)(\delta q) = J'_q(q,S_h(q))(\delta q) + (S_h^* J_u'(q,S_h(q)),\delta q)
@@ -857,7 +922,7 @@ can be computed via the adjoint PDE
 Similarly formulas for the second derivatives can be obtained, see, e.g., 
 \cite{BeMeVe06}.
 
-To do so, we define an object 
+We define an object 
 \begin{lstlisting} 
   template<typename PDE, typename COSTFUNCTIONAL>
     class OPTProblemContainer;
@@ -865,13 +930,15 @@ To do so, we define an object
 that collects the user given PDE and functional descriptions and constructs the 
 required PDE and right hand side information needed for the calculations.
 
-This means for the user only the derivatives of the functional and the PDE 
-needs to be provided in addition to the  \todocg{Verstehe diesen Satz nicht. Das sind doch die Ableitungen des Funktionals und der PDE, warum addition?}
+This means, for solving optimization problems with PDEs, the user needs to
+provide the derivatives of the functional and the PDE 
+in addition to the already defined functions \texttt{CellEquation}, 
+\texttt{BoundaryValue}. For the above adjoint equation these are 
 \begin{lstlisting} 
   void CellEquation_U(...)
    {
      // implement directional derivative 
-     // of the CellEquation
+     // of the CellEquation w.r.t. u
    }
 \end{lstlisting}
 and functional terms, i.e.,     
@@ -879,7 +946,7 @@ and functional terms, i.e.,
   void BoundaryValue_U(...)
    {
      // implement here the derivative of 
-     // the boundary cost functional
+     // the boundary cost functional w.r.t. u
    }
 \end{lstlisting}
 
@@ -903,16 +970,16 @@ PDEs will, due to the enforced interface, enable easy application of state-of-th
 optimization algorithms to minimization problems governed by the PDE.
 
 
-\subsection{Additional features}
+\subsection{Additional Features}\label{sec:additional}
 Finally, we shall give a brief summary of features 
 that are applicable (in general) to all types of problems. Specifically,
 \dope{} provides goal-oriented mesh refinement with the help of the 
-Dual Weighted Residual (DWR) method, see \cite{BeRa96} or \cite{BR03}. Here, a certain 
-cost functional such as a point evaluation, line integration or domain
-integration is considered. Determining the lowest error between the 
-(unknown) exact solution and its numerical approximation for lowest computational
-cost is the main goal of the DWR method. The same routines 
-can also be used, without any modification, to use standard residual error estimators by exchanging the 
+Dual Weighted Residual (DWR) method, see \cite{BeRa96} or \cite{BR03}. Here, a 
+given cost functional such as a point evaluation, line integration or domain
+integration is considered as target quantity. 
+The same routines 
+can also be used, without any modification by the user, to use standard 
+residual error estimators by exchanging the 
 error estimator class.
 
 Since in many applications it is desirable to use different discretizations
@@ -940,8 +1007,8 @@ allows to consider goal-oriented mesh refinement and gradient-based optimization
 is discussed.
 \end{itemize}
 
-\subsection{Goal-oriented mesh refinement for Navier-Stokes}
-In this example we consider a laminar flow around a cylinder in 2d. To be more precise, we are computing the benchmark 2D-1 from \cite{TuSchae96}. The computational domain is as depicted in Fig.~\ref{fig:example_ns} and the equation is discretized with the Taylor-Hood  element. We want to compute the drag force on the enclosed cylinder
+\subsection{Goal-Oriented Mesh Refinement for Navier-Stokes}
+In this example, we consider a laminar flow around a cylinder in 2d. To be more precise, we are computing the benchmark 2D-1 from \cite{TuSchae96}. The computational domain is as depicted in Fig.~\ref{fig:example_ns} and the equation is discretized with the Taylor-Hood  element. We want to compute the drag force on the enclosed cylinder
 \begin{equation}
 J(u) = \frac 1 {20} \int_{\Gamma_{circ}} \nu\partial_nv _1 - pn_1,
 \end{equation}
@@ -952,7 +1019,7 @@ with the solution $u = (v,p)$, the normal $n$ and the viscosity $\nu = 0.001$.
 \caption{Locally adapted grid after eight refinement steps.}
 \label{fig:NS_local_grid}
 \end{figure}
-To achieve an efficient computation of the quantity $J$, we employ goal-oriented mesh refinement with the help of the DWR-method, see \cite{BeRa96}. The method delivers error indicators and by this way computational grids tailored to minimize the error in the previously given functional $J$. The price we have to pay is the additional computation of a (linear) dual problem, which is implemented as described in section~\ref{sec:opt}. In Fig.~\ref{fig:NS_local_grid} we see a resulting triangulation after eight refinement steps with roughly $320\,000$ degrees of freedom.
+To achieve an efficient computation of the quantity $J$, we employ goal-oriented mesh refinement with the help of the DWR-method, see \cite{BeRa96}. The method delivers error indicators and by this way computational grids tailored to minimize the error in the previously given functional $J$. The price we have to pay is the additional computation of a (linear) dual problem, which is implemented as described in Section~\ref{sec:opt}. In Fig.~\ref{fig:NS_local_grid} we see a resulting triangulation after eight refinement steps with roughly $320\,000$ degrees of freedom.
 
 In Fig.~\ref{fig:NS_comparison} we compare the errors in the functional obtained by using global and local mesh refinement. We see clearly that the local mesh refinement allows for substantial savings with respect to degrees of freedom.
 
@@ -1042,7 +1109,7 @@ time (in $s$).
 
 
 \newpage
-\subsection{Compliance minimization}
+\subsection{Compliance Minimization}
 In this example, we consider the compliance minimization of a standard MBB-Beam (Messerschmidt-B\"olkow-Blohm-Beam), see, e.g.,~\cite{BendsoeSigmund:2003}.
 The thickness variable is allowed to take intermediate value apart from $0$ and $1$,
 i.e., we consider a variable thickness sheet. The discretization is done 
