@@ -72,10 +72,10 @@
 %\authorrunning{Short form of author list} % if too long for running head
 
 \institute{Christian Goll \at
-              Institute of Applied Mathematics, University of Heidelberg
+              University of Heidelberg, Institute of Applied Mathematics, 
               \\Im Neuenheimer Feld 293/294, 69120 Heidelberg, Germany\\
               %Tel.: +49 622-154-6154\\
-              \email{cgoll@iwr.uni-heidelberg.de}           %  \\
+              \email{christian.goll@iwr.uni-heidelberg.de}           %  \\
            \and
 Thomas Wick \at
               The Institute for Computational Engineering and Sciences,\\
@@ -162,7 +162,7 @@ novel numerical algorithms  or in the solution of more complex
 applications the researcher needs to be enabled 
 to change certain parameters or pieces of source code. 
 
-This article will provide information on who the {\em Differential 
+This article will provide information on how the {\em Differential 
 Equations and Optimization Environment} \dope{}  \cite{dope} 
 solves these problems by providing a well structured interface for high-level 
 routines integrated
@@ -177,7 +177,7 @@ and RoDoBo \cite{rodobo}.
 Like \dope{}, both have been initiated as well in 
 the Numerical Analysis Group in Heidelberg.
 
-The main feature of \dope is to give a unified interface to high level 
+The main feature of \dope{} is to give a unified interface to high level 
 algorithms such as 
 time-stepping methods, nonlinear solvers and optimization routines. 
 \dope{} is designed in such a way that the user only needs to write those parts
@@ -194,7 +194,7 @@ one point in the code.
 While \deal{} --which at present is the only FE-toolkit to which we provide an 
 interface-- leaves the implementation of all high-level algorithms to the user, 
 \dope{} is user-focused by delivering
-prefabricated tools which requires adjustments by the user only for parts
+prefabricated tools which requires\todocg{require? Ist plural} adjustments by the user only for parts
 connected to his specific problem. The possible solution of 
 optimization problems with PDE constraints is an innovative feature in \dope{}.
 
@@ -225,7 +225,7 @@ the following key features are supported by the library
 
 The article is organized as follows. In the main Section
 \ref{detailed_description}, a detailed description of 
-the main features is given. First, we first explain the solution 
+the main features is given. First, we explain the solution 
 of stationary PDEs, in Section~\ref{subsubsec:stationary problems}, nonstationary PDEs, in Section~\ref{sec:timedep}, and optimization problems, in 
 Section~\ref{sec:opt}. 
 In all three cases we first described how the interface is designed, and why 
@@ -479,7 +479,7 @@ After that, we create a triangulation of the domain $\Omega$ named
 \texttt{triangulation} using the tools provided by the \deal{} FE-library.
 
 Next, we create some quadrature rules (for the evaluation of integrals over
-cells \texttt{quad} and faces \texttt{face\_quad}) and a finite element \text{fe}
+cells \texttt{quad} and faces \texttt{face\_quad}) and a finite element \texttt{fe}
 appropriate for the PDE at hand. We
 choose a Gaussian quadrature of a certain degree and the previously mentioned
 Taylor-Hood element. These routines are quite standard in each finite element
@@ -619,8 +619,7 @@ on the cell with the help of the previously selected quadrature formula.
 The implementation of the boundary-functional $J$ follows the outline of the
 computation of the cell-residual in \texttt{pde.h}. 
 The main difference, and common to all functionals, is that as we only want 
-to evaluate a functional, i.e. a number, and not a residual-vector. 
-Hence, we loop over the quadrature points and not over the local 
+to evaluate a functional, i.e. a number, and not a residual-vector, we loop over the quadrature points and not over the local 
 degrees of freedom. 
 
 In the present situation, we want to evaluate a functional 
@@ -653,14 +652,14 @@ sum up to the value of $J$.
 \subsection{Solving Nonstationary PDEs}\label{sec:timedep}
 To describe the solution of nonstationary 
 PDEs, we consider a time-dependent semi-linear form $a(u)(\phi)$ and some
-right hand side functional $l$. Let $I:=[0,T]$ be a time interval with end time point value $T$.
-The weak for of such a problem then consists of finding some $u$ such that
+right hand side functional $l$\todocg{Nochmal: Warum wird $l$ eingefuehrt, wenn unten doch wieder die l2-represenation $f$ verwandt wird?}. Let $I:=[0,T]$ be a time interval with end time point value $T$.
+The weak \todocg{formulation?} of such a problem then consists of finding some $u$ such that
 \[
 \int_I \overline{a}(u)(\phi)\, dt = \int_I l(\phi)\, dt \quad \forall\Phi\in X,
 \]
 with some suitable Bochner space $X$.  As model problem,
 we extend the previous example and consider the nonstationary Navier-Stokes equations
-in a spatial domain $\Omega\in\mathbb{R}^d$. The weak for is then to find 
+in a spatial domain $\Omega\in\mathbb{R}^d$. The weak \todocg{formulation?} is then to find 
 $u = (v,p)\in X$ with
 \begin{align*}
 &\int_I \bigl[ (\partial_t v, \phi)
