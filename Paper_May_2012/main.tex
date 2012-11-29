@@ -194,7 +194,7 @@ one point in the code.
 While \deal{} --which at present is the only FE-toolkit to which we provide an 
 interface-- leaves the implementation of all high-level algorithms to the user, 
 \dope{} is user-focused by delivering
-prefabricated tools which requires\todocg{require? Ist plural} adjustments by the user only for parts
+prefabricated tools which require adjustments by the user only for parts
 connected to his specific problem. The possible solution of 
 optimization problems with PDE constraints is an innovative feature in \dope{}.
 
@@ -546,11 +546,11 @@ Finally, we compute the value $J(u_h)$ by calling:
 \begin{lstlisting}
   pde.ComputeReducedFunctionals();
 \end{lstlisting}
-\todoww{Should we add a complete listing?}
+
 \subsubsection{\texttt{pde.h}}
 We shall now give an overview to the implementation of the specific form of the PDE. 
 
-Let $N$ be the number of degrees of freedom of our discretization and $\Set{\phi_{h}^{i}|1\leq i \leq N}$ be a given FE-Basis. As stated in subsection~\ref{subsubsec:stationary problems}, to solve the discrete equation \eqref{eq:discrete_equation} we need the residual, i.e. the vector
+Let $N$ be the number of degrees of freedom (DoFs) of our discretization and $\Set{\phi_{h}^{i}|1\leq i \leq N}$ be a given FE-Basis. As stated in subsection~\ref{subsubsec:stationary problems}, to solve the discrete equation \eqref{eq:discrete_equation} we need the residual, i.e., the vector
 \begin{align}\label{eq:discrete_residual}
 \left(a(u_h)(\phi_{h}^{i})-(f,\phi_{h}^{i})\right)_{i=1}^N.
 \end{align}
@@ -582,8 +582,6 @@ method for the implementation of the cell-wise integrals.
  The \texttt{CellDataContainer} contains all the information we need to compute the cell-contributions (things like number of quadrature points, number of degrees of freedom on the cell, the \texttt{dealii::FEValues}-objects, etc.).
 To get access to the values and the gradient of the solution in the quadrature 
 points we need to extract them from the \texttt{CellDataContainer}:
-\todoww{Ich habe jetzt das Arg. in state ge\"andert, das wollten wir sowieso in 
-\dope{} umsetzen und ist dann nicht so umst\"andlich}
   \begin{lstlisting}
     cdc.GetValuesState("state", uvalues);
     cdc.GetGradsState("state", ugrads);
@@ -652,14 +650,16 @@ sum up to the value of $J$.
 \subsection{Solving Nonstationary PDEs}\label{sec:timedep}
 To describe the solution of nonstationary 
 PDEs, we consider a time-dependent semi-linear form $a(u)(\phi)$ and some
-right hand side functional $l$\todocg{Nochmal: Warum wird $l$ eingefuehrt, wenn unten doch wieder die l2-represenation $f$ verwandt wird?}. Let $I:=[0,T]$ be a time interval with end time point value $T$.
-The weak \todocg{formulation?} of such a problem then consists of finding some $u$ such that
+right hand side $f$. Let $I:=[0,T]$ be a time interval with end time point value $T$.
+The weak formulation of such a problem then consists of finding some $u$ such
+ that
 \[
-\int_I \overline{a}(u)(\phi)\, dt = \int_I l(\phi)\, dt \quad \forall\Phi\in X,
+\int_I \overline{a}(u)(\phi)\, dt = \int_I (f,\phi)\, dt \quad \forall\Phi\in X,
 \]
-with some suitable Bochner space $X$.  As model problem,
+with some suitable Bochner space $X$.  
+As model problem,
 we extend the previous example and consider the nonstationary Navier-Stokes equations
-in a spatial domain $\Omega\in\mathbb{R}^d$. The weak \todocg{formulation?} is then to find 
+in a spatial domain $\Omega\in\mathbb{R}^d$. The weak formulation is then to find 
 $u = (v,p)\in X$ with
 \begin{align*}
 &\int_I \bigl[ (\partial_t v, \phi)
@@ -1014,7 +1014,7 @@ J(u) = \frac 1 {20} \int_{\Gamma_{circ}} \nu\partial_nv _1 - pn_1,
 with the solution $u = (v,p)$, the normal $n$ and the viscosity $\nu = 0.001$.
 \begin{figure}[hbt]
 \centering
-{\includegraphics[width=0.9\textwidth]{Pictures/local_grid_NS.png}}
+{\includegraphics[width=0.85\textwidth]{Pictures/local_grid_NS.png}}
 \caption{Locally adapted grid after eight refinement steps.}
 \label{fig:NS_local_grid}
 \end{figure}
@@ -1024,7 +1024,7 @@ In Fig.~\ref{fig:NS_comparison} we compare the errors in the functional obtained
 
 \begin{figure}[hbt]
 \centering
-\resizebox{0.5\textwidth}{!}{\input{Pictures/ConvergenceNS}}
+\resizebox{0.45\textwidth}{!}{\input{Pictures/ConvergenceNS}}
 \caption{Comparison of global and local mesh refinement with respect to the error in the drag-functional $J$.}
 \label{fig:NS_comparison}
 \end{figure}
@@ -1074,32 +1074,29 @@ and the drag and lift forces acting on the cylinder and the elastic beam:
 where $S_{f}$ denotes the path over the cylinder in the fluid part and
 $\Gamma_i$ the interface between the elastic beam and the 
 fluid.
-
-Since the problem is fully nonstationary, the 
-dynamics are presents in Fig.~\ref{res:fsi_2_mesh_and_x_velo}. 
-By comparison of our findings in Fig.~\ref{res:results_ux_and_uy_fsi_2}
-with the literature, it can be identified that 
-the implementation in \dope{} is correct.
-
-
-
 % Bilder von FSI 2 
 \begin{figure}[h]
 \centering
-{\includegraphics[width=5cm]{Pictures/visit_fsi_2_CNn_t_2e-2_global_3_biharmonic_mesh8070_scale.png}}
-{\includegraphics[width=5cm]{Pictures/visit_fsi_2_CNn_t_2e-2_global_3_biharmonic_x_velo8070_scale.png}}
+{\includegraphics[width=4.5cm]{Pictures/visit_fsi_2_CNn_t_2e-2_global_3_biharmonic_mesh8070_scale.png}}
+{\includegraphics[width=4.5cm]{Pictures/visit_fsi_2_CNn_t_2e-2_global_3_biharmonic_x_velo8070_scale.png}}
 \caption{FSI 2 test case: mesh (left) and velocity profile in vertical 
 direction (right) at time $t=16.14s$.}
 \label{res:fsi_2_mesh_and_x_velo}
 \end{figure}
 
-\begin{figure}
+Since the problem is fully nonstationary, only a snapshot of the solution
+and the mesh are presented in Fig.~\ref{res:fsi_2_mesh_and_x_velo}. 
+By comparison of our findings in Fig.~\ref{res:results_ux_and_uy_fsi_2}
+with the literature, it can be identified that 
+the implementation in \dope{} is correct.
+
+\begin{figure}[H]
 \centering
-{\includegraphics[width=5.8cm]{Pictures/ux_FSI_2_FS_t_3e-2_t_15e-3_global_2_Hron_grid.pdf}}
-{\includegraphics[width=5.8cm]{Pictures/uy_FSI_2_FS_t_3e-2_t_15e-3_global_2_Hron_grid.pdf}}
-{\includegraphics[width=5.8cm]{Pictures/Drag_fluid_FSI_2_FS_t_3e-2_t_15e-3_global_2_Hron_grid.pdf}}
-{\includegraphics[width=5.8cm]{Pictures/Lift_fluid_FSI_2_FS_t_3e-2_t_15e-3_global_2_Hron_grid.pdf}}
-\caption{FSI 2: the deflections of the beam, $u_x(A)$ and $u_y(A)$ (in $cm$), and 
+{\includegraphics[width=4.5cm]{Pictures/ux_FSI_2_FS_t_3e-2_t_15e-3_global_2_Hron_grid.pdf}}
+{\includegraphics[width=4.5cm]{Pictures/uy_FSI_2_FS_t_3e-2_t_15e-3_global_2_Hron_grid.pdf}}
+{\includegraphics[width=4.5cm]{Pictures/Drag_fluid_FSI_2_FS_t_3e-2_t_15e-3_global_2_Hron_grid.pdf}}
+{\includegraphics[width=4.5cm]{Pictures/Lift_fluid_FSI_2_FS_t_3e-2_t_15e-3_global_2_Hron_grid.pdf}}
+\caption{FSI 2: The deflections of the beam, $u_x(A)$ and $u_y(A)$ (in $cm$), and 
 the drag $F_D$ and the lift $F_L$ evaluation (in $kg/m\,s^2$) are displayed versus
 time (in $s$).
 } 
@@ -1116,7 +1113,7 @@ using $Q_2$ elements for the displacement and discontinuous $P_0$ elements for t
 thickness.
 \begin{figure}
 \centering
-\includegraphics[width=1.\textwidth, viewport=205 88 975 500, clip]{Pictures/MBB.png}
+\includegraphics[width=0.75\textwidth, viewport=205 88 975 500, clip]{Pictures/MBB.png}
 \caption{Thickness distribution for the MBB-beam minimum compliance problem.} 
 \label{res:mbb}
 \end{figure}
@@ -1142,7 +1139,8 @@ The authors acknowledge their past experience as well as discussions
 on modularization of algorithms
 with 
 the authors of the libraries 
-Gascoigne/RoDoBo project, which was initiated by 
+Gascoigne, initiated by Malte Braack and  Roland Becker \cite{gascoigne}
+and RoDoBo, which where initiated by 
 Roland Becker, Dominik Meidner, and Boris Vexler \cite{rodobo}. 
 Finally, the second author thanks Mary F. Wheeler (ICES, Austin) for the 
 possibility to finish this work.
