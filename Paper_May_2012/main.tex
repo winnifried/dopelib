@@ -1119,6 +1119,19 @@ thickness.
 \end{figure}
 A typical thickness distribution is shown in Fig.~\ref{res:mbb}.
 
+To obtain thickness values that are either $1$ or $0$, so that we can
+interpreter the results in terms of material or no material, we apply the 
+so called SIMP-model (Solid Isotropic Material with Penalization) 
+with parameter $p = 4$ 
+to obtain the distribution given in Fig.~\ref{res:mbb-top}.
+
+\begin{figure}
+\centering
+\includegraphics[width=0.75\textwidth, viewport=205 88 975 500, clip]{Pictures/MBB-top.png}
+\caption{Thickness distribution for the MBB-beam minimum compliance topology optimization problem.} 
+\label{res:mbb-top}
+\end{figure}
+
 \section{Conclusions}
 In this article, we described the architecture 
 of the novel software library \dope{} for solving 
