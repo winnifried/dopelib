@@ -1093,7 +1093,7 @@ By comparison of our findings in Fig.~\ref{res:results_ux_and_uy_fsi_2}
 with the literature, it can be identified that 
 the implementation in \dope{} is correct.
 
-\begin{figure}[H]
+\begin{figure}[hbt]
 \centering
 {\includegraphics[width=4.5cm]{Pictures/ux_FSI_2_FS_t_3e-2_t_15e-3_global_2_Hron_grid.pdf}}
 {\includegraphics[width=4.5cm]{Pictures/uy_FSI_2_FS_t_3e-2_t_15e-3_global_2_Hron_grid.pdf}}
@@ -1106,8 +1106,6 @@ time (in $s$).
 \label{res:results_ux_and_uy_fsi_2}
 \end{figure}
 
-
-\newpage
 \subsection{Compliance Minimization}
 In this example, we consider the compliance minimization of a standard MBB-Beam 
 (Messerschmidt-B\"olkow-Blohm-Beam), see, e.g.,~\cite{BendsoeSigmund:2003}. 
@@ -1120,7 +1118,7 @@ the thickness variable is allowed to take intermediate value apart from $0$ and 
 i.e., we consider a variable thickness sheet. The discretization is done 
 using $Q_2$ elements for the displacement and discontinuous $P_0$ elements for the 
 thickness.
-\begin{figure}
+\begin{figure}[b]
 \centering
 \hspace*{\fill}
 \includegraphics[width=0.44\textwidth, viewport=205 88 975 500, clip]{Pictures/MBB.png}
