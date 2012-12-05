@@ -112,6 +112,9 @@ with only a few lines of code to change instead of large reimplementations.
 The article illustrates the design principles and various features
 of \dope{} and provides some 
 numerical results as demonstration for the versatility of the software.
+
+\keywords{software environment \and goal oriented interface design \and numerical solution of optimization problems and partial differential equations}
+\subclass{49-04 \and  35-04}
 \end{abstract}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Introduction}
@@ -1106,31 +1109,33 @@ time (in $s$).
 
 \newpage
 \subsection{Compliance Minimization}
-In this example, we consider the compliance minimization of a standard MBB-Beam (Messerschmidt-B\"olkow-Blohm-Beam), see, e.g.,~\cite{BendsoeSigmund:2003}.
-The thickness variable is allowed to take intermediate value apart from $0$ and $1$,
+In this example, we consider the compliance minimization of a standard MBB-Beam 
+(Messerschmidt-B\"olkow-Blohm-Beam), see, e.g.,~\cite{BendsoeSigmund:2003}. 
+In order to enforce thickness values to be either $1$ or $0$ we employ 
+the, so called, SIMP-model (Solid Isotropic Material with Penalization), 
+see as well,~\cite{BendsoeSigmund:2003}. 
+
+If we pick the SIMP paramter $p=1$ 
+the thickness variable is allowed to take intermediate value apart from $0$ and $1$,
 i.e., we consider a variable thickness sheet. The discretization is done 
 using $Q_2$ elements for the displacement and discontinuous $P_0$ elements for the 
 thickness.
 \begin{figure}
 \centering
-\includegraphics[width=0.75\textwidth, viewport=205 88 975 500, clip]{Pictures/MBB.png}
-\caption{Thickness distribution for the MBB-beam minimum compliance problem.} 
+\hspace*{\fill}
+\includegraphics[width=0.44\textwidth, viewport=205 88 975 500, clip]{Pictures/MBB.png}
+\hspace{\fill}
+\includegraphics[width=0.44\textwidth, viewport=205 88 975 500, clip]{Pictures/MBB-top.png}
+\hspace{\fill}
+\caption{Thickness distribution for the MBB-beam minimum compliance problem using SIMP parameter $p=1$ (left) and $p=4$ right.} 
 \label{res:mbb}
 \end{figure}
-A typical thickness distribution is shown in Fig.~\ref{res:mbb}.
+A typical thickness distribution is shown in the left image in Fig.~\ref{res:mbb}.
+To obtain thickness values that are, mostly, either $1$ or $0$ we need 
+to pick a larger value for $p$. The distribution given in the right image in Fig.~\ref{res:mbb}
+has been obtained using $p=4$.
 
-To obtain thickness values that are either $1$ or $0$, so that we can
-interpreter the results in terms of material or no material, we apply the 
-so called SIMP-model (Solid Isotropic Material with Penalization) 
-with parameter $p = 4$ 
-to obtain the distribution given in Fig.~\ref{res:mbb-top}.
 
-\begin{figure}
-\centering
-\includegraphics[width=0.75\textwidth, viewport=205 88 975 500, clip]{Pictures/MBB-top.png}
-\caption{Thickness distribution for the MBB-beam minimum compliance topology optimization problem.} 
-\label{res:mbb-top}
-\end{figure}
 
 \section{Conclusions}
 In this article, we described the architecture 
