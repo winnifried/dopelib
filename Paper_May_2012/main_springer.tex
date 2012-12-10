@@ -1,20 +1,24 @@
-\documentclass[prodmode,acmtecs]{acmsmall}
-
-% Package to generate and customize Algorithm as per ACM style
-\usepackage[ruled]{algorithm2e}
-\renewcommand{\algorithmcfname}{ALGORITHM}
-\SetAlFnt{\small}
-\SetAlCapFnt{\small}
-\SetAlCapNameFnt{\small}
-\SetAlCapHSkip{0pt}
-\IncMargin{-\parindent}
-
-% Metadata Information
-\acmVolume{?}
-\acmNumber{?}
-\acmArticle{??}
-\acmYear{???}
-\acmMonth{3}
+%\documentclass{svjour3}                     % onecolumn (standard format)
+%\documentclass[smallcondensed]{svjour3}     % onecolumn (ditto)
+\documentclass[smallextended]{svjour3}       % onecolumn (second format)
+%\documentclass[twocolumn]{svjour3}          % twocolumn
+%
+\smartqed  % flush right qed marks, e.g. at end of proof
+%
+\usepackage{graphicx}
+%
+% \usepackage{mathptmx}      % use Times fonts if available on your TeX system
+%
+% insert here the call for the packages your document requires
+%\usepackage{latexsym}
+% etc.
+%
+% please place your own definitions here and don't use \def but
+% \newcommand{}{}
+%
+% Insert the name of "your journal" with
+ \journalname{Computing}
+%
 
 %%% User-requested packages placed after this line %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \usepackage{amsfonts,amssymb,amsmath}
@@ -57,20 +61,44 @@
 
 \begin{document}
 
-\markboth{C. Goll et al.}{DOpElib: Differential Equations and Optimization Environment}
 
 \title{DOpElib: Differential Equations and Optimization Environment; A Goal Oriented Software Library for Solving PDEs and Optimization Problems with PDEs}
 
 
-%\titlerunning{DOpElib}        % if too long for running head
+\titlerunning{DOpElib}        % if too long for running head
 
-\author{CHRISTIAN GOLL
-\affil{University of Heidelberg}
-THOMAS WICK
-\affil{The University of Texas at Austin}
-WINNIFRIED WOLLNER
-\affil{University of Hamburg}}
- 
+\author{C. Goll \and T. Wick \and W. Wollner}
+
+%\authorrunning{Short form of author list} % if too long for running head
+
+\institute{Christian Goll \at
+              University of Heidelberg,\\ Institute of Applied Mathematics, 
+              \\Im Neuenheimer Feld 293/294, 69120 Heidelberg, Germany\\
+              %Tel.: +49 622-154-6154\\
+              \email{christian.goll@iwr.uni-heidelberg.de}           %  \\
+           \and
+Thomas Wick \at
+              The Institute for Computational Engineering and Sciences,\\
+The University of Texas at Austin,\\
+Austin, Texas 78712, USA \\
+              %Tel.: +1 512-672-7763\\
+              \email{twick@ices.utexas.edu}   
+ \and
+Winnifried Wollner \at
+              Universit\"at Hamburg\\
+              Department of Mathematics\\
+              Bundesstr. 55, 20146 Hamburg, Germany\\
+              \email{winnifried.wollner@math.uni-hamburg.de}   
+}
+
+\date{Received: date / Accepted: date}
+% The correct dates will be entered by the editor
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\maketitle
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{abstract}
 In this article, we describe the  
 \textit{Differential Equations and Optimization Environment} (\dope{}).
@@ -84,36 +112,10 @@ with only a few lines of code to change instead of large reimplementations.
 The article illustrates the design principles and various features
 of \dope{} and provides some 
 numerical results as demonstration for the versatility of the software.
+
+\keywords{software environment \and goal oriented interface design \and numerical solution of optimization problems and partial differential equations}
+\subclass{49-04 \and  35-04}
 \end{abstract}
-
-\category{}{}{\todocg{ Siehe http://www.acm.org/about/class/1998/, ich komme damit aber nicht zurecht.}}
-
-\terms{Algorithms, Design, Documentation}
-
-\keywords{goal oriented interface design, numerical solution of optimization problems and partial differential equations}
-
-\acmformat{\todocg{??}}
-
-
-\begin{bottomstuff}
-Author's addresses: C. Goll, Institute of Applied Mathematics, 
-              University of Heidelberg,
-              Im Neuenheimer Feld 293/294, 69120 Heidelberg, Germany,  christian.goll@iwr.uni-heidelberg.de;   
-T. Wick, The Institute for Computational Engineering and Sciences,
-The University of Texas at Austin,
-Austin, Texas 78712, USA, 
-              twick@ices.utexas.edu;   
-Winnifried Wollner,  
-              Universit\"at Hamburg,
-              Department of Mathematics,
-              Bundesstr. 55, 20146 Hamburg, Germany,winnifried.wollner@math.uni-hamburg.de;   
-\end{bottomstuff}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\maketitle
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Introduction}
 \label{introduction}
@@ -439,7 +441,7 @@ Fig.~\ref{fig:example_ns} with  $f=0$, and $J$ is the drag-force
 of the enclosed circle. We assume given Dirichlet data for the velocity 
 $v$ on the boundary $\Gamma_{D}=\Gamma_{in}\cup\Gamma_{wall}\cup\Gamma_{circ}$. 
 This is the Benchmark-Case 2D-1 described in \cite{TuSchae96}.
-\begin{figure}[hb]
+\begin{figure}[h]
 \centering
 \resizebox{0.5\textwidth}{!}{\input{Pictures/example_ns}}
 \caption{Flow around a cylinder with 
@@ -1014,9 +1016,9 @@ J(u) = \frac 1 {20} \int_{\Gamma_{circ}} \nu\partial_nv _1 - pn_1,
 \end{equation}
 with the solution $u = (v,p)$, the normal $n$ and the viscosity $\nu = 0.001$.
 
-\begin{figure}[h]
+\begin{figure}[hbt]
 \centering
-{\includegraphics[trim = 50mm 50mm 50mm 50mm, clip, width=0.95\textwidth]{Pictures/local_grid_NSv2.png}}
+{\includegraphics[trim = 50mm 50mm 50mm 50mm, clip, width=\textwidth]{Pictures/local_grid_NSv2.png}}
 \caption{Locally adapted grid after eight refinement steps.}
 \label{fig:NS_local_grid}
 \end{figure}
@@ -1027,7 +1029,7 @@ In Fig.~\ref{fig:NS_comparison} we compare the errors in the functional obtained
 
 \begin{figure}[hbt]
 \centering
-\resizebox{0.5\textwidth}{!}{\input{Pictures/ConvergenceNS}}
+\resizebox{0.73\textwidth}{!}{\input{Pictures/ConvergenceNS}}
 \caption{Comparison of global and local mesh refinement with respect to the error in the drag-functional $J$.}
 \label{fig:NS_comparison}
 \end{figure}
@@ -1076,10 +1078,10 @@ where $S_{f}$ denotes the path over the cylinder in the fluid part and
 $\Gamma_i$ the interface between the elastic beam and the 
 fluid.
 % Bilder von FSI 2 
-\begin{figure}[hbt]
+\begin{figure}[h]
 \centering
-{\includegraphics[width=5.5cm]{Pictures/visit_fsi_2_CNn_t_2e-2_global_3_biharmonic_mesh8070_scale.png}}
-{\includegraphics[width=5.5cm]{Pictures/visit_fsi_2_CNn_t_2e-2_global_3_biharmonic_x_velo8070_scale.png}}
+{\includegraphics[width=4.5cm]{Pictures/visit_fsi_2_CNn_t_2e-2_global_3_biharmonic_mesh8070_scale.png}}
+{\includegraphics[width=4.5cm]{Pictures/visit_fsi_2_CNn_t_2e-2_global_3_biharmonic_x_velo8070_scale.png}}
 \caption{FSI 2 test case: mesh (left) and velocity profile in vertical 
 direction (right) at time $t=16.14s$.}
 \label{res:fsi_2_mesh_and_x_velo}
@@ -1093,10 +1095,10 @@ the implementation in \dope{} is correct.
 
 \begin{figure}[hbt]
 \centering
-{\includegraphics[width=0.42\textwidth]{Pictures/ux_FSI_2_FS_t_3e-2_t_15e-3_global_2_Hron_grid.pdf}}
-{\includegraphics[width=0.42\textwidth]{Pictures/uy_FSI_2_FS_t_3e-2_t_15e-3_global_2_Hron_grid.pdf}}
-{\includegraphics[width=0.42\textwidth]{Pictures/Drag_fluid_FSI_2_FS_t_3e-2_t_15e-3_global_2_Hron_grid.pdf}}
-{\includegraphics[width=0.42\textwidth]{Pictures/Lift_fluid_FSI_2_FS_t_3e-2_t_15e-3_global_2_Hron_grid.pdf}}
+{\includegraphics[width=4.5cm]{Pictures/ux_FSI_2_FS_t_3e-2_t_15e-3_global_2_Hron_grid.pdf}}
+{\includegraphics[width=4.5cm]{Pictures/uy_FSI_2_FS_t_3e-2_t_15e-3_global_2_Hron_grid.pdf}}
+{\includegraphics[width=4.5cm]{Pictures/Drag_fluid_FSI_2_FS_t_3e-2_t_15e-3_global_2_Hron_grid.pdf}}
+{\includegraphics[width=4.5cm]{Pictures/Lift_fluid_FSI_2_FS_t_3e-2_t_15e-3_global_2_Hron_grid.pdf}}
 \caption{FSI 2: The deflections of the beam, $u_x(A)$ and $u_y(A)$ (in $cm$), and 
 the drag $F_D$ and the lift $F_L$ evaluation (in $kg/m\,s^2$) are displayed versus
 time (in $s$).
@@ -1116,7 +1118,7 @@ the thickness variable is allowed to take intermediate value apart from $0$ and 
 i.e., we consider a variable thickness sheet. The discretization is done 
 using $Q_2$ elements for the displacement and discontinuous $P_0$ elements for the 
 thickness.
-\begin{figure}[hbt]
+\begin{figure}[b]
 \centering
 \hspace*{\fill}
 \includegraphics[width=0.44\textwidth, viewport=205 88 975 500, clip]{Pictures/MBB.png}
@@ -1145,8 +1147,7 @@ to state of the art time-stepping methods, nonlinear solvers and optimization
 routines. The capabilities of \dope{} are demonstrated with the help of three examples.
 
 
-%\section*{Thanks}
-\begin{acks}
+\section*{Thanks}
 The \dope{} project makes use of various finite elements taken from  
 the \deal{} \cite{dealnew} finite element library which has been developed
  initially by W. Bangerth, R. Hartmann, and G. Kanschat \cite{dealold}.
@@ -1159,14 +1160,12 @@ and RoDoBo, which where initiated by
 Roland Becker, Dominik Meidner, and Boris Vexler \cite{rodobo}. 
 Finally, the second author thanks Mary F. Wheeler (ICES, Austin) for the 
 possibility to finish this work.
-\end{acks}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %\bibliographystyle{abbrvnat}
 \bibliographystyle{acmsmall}
 \bibliography{lit}
-% History dates
-\received{??}{??}{??}
+%
 
 
 
