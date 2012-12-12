@@ -5,10 +5,17 @@ from the library for own research, the user
 can simply copy an existing example. In this 
 new example, own code and changes can be compiled.
 
-Adding a new regression test to the repository 
-needs some concentration of the user. In the 
-following, we explain how to do this and what 
-\textit{must} be taken into account:
+Before being able to change and compile the new code, the user must 
+follow some easy steps in order to modify the information related to the old code. In 
+this section we explain how to modify such information using as model 
+\texttt{PDE/StatPDE/Example1}.
+
+\begin{enumerate}
+ \item In a first step, we copy \texttt{Example1} and renamed it, e.g., 
+\texttt{ExampleNew}. At the same time it is important to remove the repository 
+information that it is stored in the directory \texttt{.svn.}. \\
+After having reached the folder of the example in question in the terminal, 
+\texttt{PDE/StatPDE} in our case, we perform these operation writing the following:
 \begin{verbatim}
 cp -r Example1 ExampleNew
 cd ExampleNew
@@ -16,56 +23,84 @@ rm -rf .svn
 cd Test
 rm -rf .svn
 \end{verbatim}
-It is important to remove the repository information,
-which is stored in the directory .svn.
+Please note that removing the \texttt{.svn} sub-directories is important,
+as otherwise your files may be replaced or changed during your next
+update. Also, if you can submit information to the subversion repository 
+you might accidentally overwrite the original example, here \texttt{Example1}.
 
-Then, we have to consider the following step. In order to 
-run the regression tests, we start the executable file
-of the present example. This executable comes from the 
-Makefile. For example in the Makefile of 
-Example \ref{PDE_Stat_Stokes}, 
+\item We now have to change the target in the \texttt{Makefile}, 
+  otherwise our new example will refer to the executable of the old one.
+  
+  Thus we open the \texttt{Makefile} in the directory \texttt{ExampleNew}
+  to change the name of the executable. In our example you will find a line
 \begin{verbatim}
 target   = $(BINDIR)/DOpE-PDE-StatPDE-Example1-$
            (dope_dimension)d-$(deal_II_dimension)d
 \end{verbatim}
-and concretely:
+Here we need to replace the target to a new name to avoid any 
+possible complication. Thus for example we change the line to 
 \begin{verbatim}
-DOpE-PDE-StatPDE-Example1-2d-2d
+target   = $(BINDIR)/MyExampleNew
 \end{verbatim}
-The aforementioned expression is the name of 
-the executable that is required to run the 
-regression test. Hence, in 
+This will build the executable file in the standard binary directory 
+of \texttt{DOpElib}, i.e., \texttt{\$(DOpE)/bin}, under the name 
+\texttt{MyExampleNew}.
+
+\textit{Note that you should use a different name for all your 
+examples as otherwise you may experience a lot of strange behavior, as
+the executable will be overwritten by all your examples!}
+
+\item If you want to run automated tests on you program so that you can 
+  verify whether your code is running as expected after updating the 
+  library you may want to update the sub-directory \texttt{Test} 
+  as well, see also Chapter~\ref{chap:test}. Otherwise you may skip this 
+  step.
+
+  Change to the \texttt{Test} sub-directory. And then modify the
+  test-script to contain the new name of the executable.
+  Assuming you want to use Emacs, open the file \texttt{test.sh}
 \begin{verbatim}
 PDE/StatPDE/Example1/Test> emacs test.sh
 \end{verbatim}
-you find two times the line
+where, in our example you find two times the lines
 \begin{verbatim}
-echo "Running Program 
-     ../../../../../bin/DOpE-PDE-StatPDE-Example1-2d-2d test.prm"
-     (../../../../../bin/DOpE-PDE-StatPDE-Example1-2d-2d test.prm 2>&1) 
-     > /dev/null
+echo "Running Program ../../../../../bin/DOpE-PDE-StatPDE-Example1-2d-2d test.prm"
+(../../../../../bin/DOpE-PDE-StatPDE-Example1-2d-2d test.prm 2>&1) > /dev/null
 \end{verbatim} 
-It is really important when copying an existing example,
-to change this information. 
-First, we have to change the target in the Makefile
+if you made a copy of an other example the part \texttt{DOpE-PDE-StatPDE-Example1-2d-2d}
+may differ. These lines need to be replaced with the new name of the 
+executable, i.e., for our given example
 \begin{verbatim}
-target   = $(BINDIR)/DOpE-PDE-StatPDE-ExampleNew-$
-           (dope_dimension)d-$(deal_II_dimension)d
-\end{verbatim}
-Second, we have to replace 
-Example1 by ExampleNew such that 
-\begin{verbatim}
-echo "Running Program 
-     ../../../../../bin/DOpE-PDE-StatPDE-ExampleNew-2d-2d test.prm"
-     (../../../../../bin/DOpE-PDE-StatPDE-ExampleNew-2d-2d test.prm 2>&1) 
-     > /dev/null
+echo "Running Program ../../../../../bin/MyExampleNew test.prm"
+(../../../../../bin/MyExampleNew test.prm 2>&1) > /dev/null
 \end{verbatim} 
-Please, also change the dimension parameters 
-\begin{verbatim}
--2d-2d
-\end{verbatim} 
-Now, the user is prepared to change any information in the 
+
+\item  Now, you are prepared to change any of the problem
+  dependent data in information in the files 
 \begin{verbatim}
 main.cc, localpde.h, functionals.h, localfunctional.h, etc
 \end{verbatim} 
+
+\item Once you have finished and are sure that your example is running correctly
+  and you want to use the automated test scripts --see 3) above-- You need 
+  to store new test information to account for your changes. 
+  
+  To do so, change to the \texttt{Test} sub-directory and run the test:
+\begin{verbatim}
+./test Test
+\end{verbatim}
+  Note that this should fail, otherwise you have not changed anything in the program, 
+  or forgot part 3) of this description.
+  
+  If it failed have a look into the file \texttt{dope.log} and see whether you like the 
+  output. If you do not like it you may wish to update the file \texttt{test.prm} that 
+  takes care of the parameters for the test run.
+  
+  Once your satisfied with what you see in the log-file \texttt{dope.log} you need to store 
+  that information using
+\begin{verbatim}
+./test Store
+\end{verbatim}
+\end{enumerate}
+
 
