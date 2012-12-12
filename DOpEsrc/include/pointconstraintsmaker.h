@@ -56,8 +56,8 @@ namespace DOpE
 	
 	  virtual void
 	    MakeControlDoFConstraints(
-	      const DOpEWrapper::DoFHandler<dopedim, DOFHANDLER> & dof_handler,
-	      dealii::ConstraintMatrix& dof_constraints) const {}
+	      const DOpEWrapper::DoFHandler<dopedim, DOFHANDLER> & /*dof_handler*/,
+	      dealii::ConstraintMatrix& /*dof_constraints*/) const {}
 
 	private:
 	  
