@@ -266,7 +266,6 @@ namespace DOpE
             this->GetParamData(), this->GetDomainData());
         auto& cdc = GetIntegratorDataContainer().GetCellDataContainer();
 
-#if deal_II_dimension == 2 || deal_II_dimension == 3
         bool need_faces = pde.HasFaces();
         bool need_interfaces = pde.HasInterfaces();
         std::vector<unsigned int> boundary_equation_colors = pde.GetBoundaryEquationColors();
@@ -278,8 +277,6 @@ namespace DOpE
             this->GetDomainData(),
             need_interfaces);
         auto & fdc = GetIntegratorDataContainer().GetFaceDataContainer();
-
-#endif
 
         for (; cell[0] != endc[0]; cell[0]++)
         {
@@ -308,7 +305,6 @@ namespace DOpE
           pde.CellEquation(cdc, local_cell_vector, 1., 1.);
           pde.CellRhs(cdc, local_cell_vector, -1.);
 
-#if deal_II_dimension == 2 || deal_II_dimension == 3
           if(need_boundary_integrals && cell[0]->at_boundary())
           {
             for (unsigned int face=0; face < dealii::GeometryInfo<dim>::faces_per_cell; ++face)
@@ -381,7 +377,6 @@ namespace DOpE
               }                  //endif atinterface
             }                  //endfor faces
           }                  //endif need_interfaces
-#endif
           //LocalToGlobal
           cell[0]->get_dof_indices(local_dof_indices);
           for (unsigned int i = 0; i < dofs_per_cell; ++i)
@@ -442,7 +437,6 @@ namespace DOpE
               this->GetParamData(), this->GetDomainData());
           auto& cdc = GetIntegratorDataContainer().GetCellDataContainer();
 
-#if deal_II_dimension == 2 || deal_II_dimension == 3
           bool need_faces = pde.HasFaces();
           bool need_interfaces = pde.HasInterfaces();
           std::vector<unsigned int> boundary_equation_colors = pde.GetBoundaryEquationColors();
@@ -455,7 +449,6 @@ namespace DOpE
               this->GetDomainData(),
               need_interfaces);
           auto & fdc = GetIntegratorDataContainer().GetFaceDataContainer();
-#endif
 
           for (; cell[0] != endc[0]; cell[0]++)
           {
@@ -482,7 +475,6 @@ namespace DOpE
             //case, scale_ico is set by the time-stepping-scheme
             pde.CellEquation(cdc, local_cell_vector, 1., 1.);
 
-#if deal_II_dimension == 2 || deal_II_dimension == 3
             if(need_boundary_integrals)
             {
               for (unsigned int face=0; face < dealii::GeometryInfo<dim>::faces_per_cell; ++face)
@@ -553,7 +545,6 @@ namespace DOpE
                 }                    //endif atinterface
               }                    //endfor face
             }                    //endif need_interfaces
-#endif
             //LocalToGlobal
             cell[0]->get_dof_indices(local_dof_indices);
             for (unsigned int i = 0; i < dofs_per_cell; ++i)
@@ -603,7 +594,7 @@ namespace DOpE
             *(pde.GetBaseProblem().GetSpaceTimeHandler()), cell,
             this->GetParamData(), this->GetDomainData());
         auto& cdc = GetIntegratorDataContainer().GetCellDataContainer();
-#if deal_II_dimension == 2 || deal_II_dimension == 3
+
         bool need_interfaces = pde.HasInterfaces();
         if(need_interfaces )
         {
@@ -620,7 +611,6 @@ namespace DOpE
             this->GetParamData(),
             this->GetDomainData());
         auto & fdc = GetIntegratorDataContainer().GetFaceDataContainer();
-#endif
 
         for (; cell[0] != endc[0]; cell[0]++)
         {
@@ -644,7 +634,6 @@ namespace DOpE
           local_dof_indices.resize(dofs_per_cell, 0);
           pde.CellRhs(cdc, local_cell_vector, 1.);
 
-#if deal_II_dimension == 2 || deal_II_dimension == 3
           if(need_boundary_integrals)
           {
             for (unsigned int face=0; face < dealii::GeometryInfo<dim>::faces_per_cell; ++face)
@@ -670,7 +659,6 @@ namespace DOpE
               }
             }
           }
-#endif
           //LocalToGlobal
           cell[0]->get_dof_indices(local_dof_indices);
           for (unsigned int i = 0; i < dofs_per_cell; ++i)
@@ -725,7 +713,6 @@ namespace DOpE
             this->GetParamData(), this->GetDomainData());
         auto& cdc = GetIntegratorDataContainer().GetCellDataContainer();
 
-#if deal_II_dimension == 2 || deal_II_dimension == 3
         //for the interface-case
         unsigned int nbr_dofs_per_cell;
         std::vector<unsigned int> nbr_local_dof_indices;
@@ -742,7 +729,6 @@ namespace DOpE
             this->GetDomainData(),
             need_interfaces);
         auto & fdc = GetIntegratorDataContainer().GetFaceDataContainer();
-#endif
 
         for (; cell[0] != endc[0]; cell[0]++)
         {
@@ -766,7 +752,6 @@ namespace DOpE
           local_dof_indices.resize(dofs_per_cell, 0);
           pde.CellMatrix(cdc, local_cell_matrix);
 
-#if deal_II_dimension == 2 || deal_II_dimension == 3
           if(need_boundary_integrals)
           {
             for (unsigned int face=0; face < dealii::GeometryInfo<dim>::faces_per_cell; ++face)
@@ -874,7 +859,6 @@ namespace DOpE
 
             }
           } //endif need_interfaces
-#endif
 
           //LocalToGlobal
           cell[0]->get_dof_indices(local_dof_indices);
@@ -971,16 +955,11 @@ namespace DOpE
     template<typename PROBLEM>
       SCALAR
       Integrator<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::ComputeBoundaryScalar(
-#if deal_II_dimension == 2 || deal_II_dimension == 3
           PROBLEM& pde
-#else
-          PROBLEM& /*pde*/
-#endif
           )
       {
         {
           SCALAR ret = 0.;
-#if deal_II_dimension == 2 || deal_II_dimension == 3
           // Begin integration
           const auto& dof_handler =
           pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandler();
@@ -1030,10 +1009,6 @@ namespace DOpE
               cell[dh]++;
             }
           }
-#else
-          throw DOpEException("Not implemented in this dimension!",
-              "Integrator::ComputeBoundaryScalar");
-#endif
 
           return ret;
 
@@ -1046,17 +1021,12 @@ namespace DOpE
     template<typename PROBLEM>
       SCALAR
       Integrator<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::ComputeFaceScalar(
-#if deal_II_dimension == 2 || deal_II_dimension == 3
           PROBLEM& pde
-#else
-          PROBLEM& /*pde*/
-#endif
           )
       {
 
         {
           SCALAR ret = 0.;
-#if deal_II_dimension == 2 || deal_II_dimension == 3
           // Begin integration
           const auto& dof_handler =
           pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandler();
@@ -1102,10 +1072,6 @@ namespace DOpE
               cell[dh]++;
             }
           }
-#else
-          throw DOpEException("Not implemented in this dimension!",
-              "Integrator::ComputeFaceScalar");
-#endif
           return ret;
         }
       }
@@ -1400,8 +1366,6 @@ namespace DOpE
             dwrc.GetWeightData());
         auto& cdc_weight = dwrc.GetCellWeight();
 
-#if deal_II_dimension == 2 || deal_II_dimension == 3
-
         // we want to integrate the face-terms only once, so
         // we store the values on each face in this map
         // and distribute it at the end to the adjacent cells.
@@ -1440,7 +1404,6 @@ namespace DOpE
             this->GetParamData(),
             dwrc.GetWeightData(),
             true);
-#endif
 
         for (unsigned int cell_index = 0; cell[0] != endc[0];
             cell[0]++, cell_index++)
@@ -1479,7 +1442,6 @@ namespace DOpE
           //Now to the face terms. We compute them only once for each face and distribute the
           //afterwards. We choose always to work from the coarser cell, if both neigbors of the
           //face are on the same level, we pick the one with the lower index
-#if deal_II_dimension == 2 || deal_II_dimension == 3
           for (unsigned int face=0; face < dealii::GeometryInfo<dim>::faces_per_cell; ++face)
           {
             auto face_it = cell[0]->face(face);
@@ -1565,7 +1527,6 @@ namespace DOpE
               }
             }
           }                  //endfor faces
-#endif
           for (unsigned int dh = 1; dh < dof_handler.size(); dh++)
           {
             cell[dh]++;
@@ -1575,7 +1536,6 @@ namespace DOpE
             cell_weight[dh]++;
           }
         }                  //endfor cell
-#if deal_II_dimension == 2 || deal_II_dimension == 3
         //now we have to incorporate the face and boundary_values
         //into
         unsigned int present_cell = 0;
@@ -1607,7 +1567,6 @@ namespace DOpE
 
           }
         }
-#endif
       }
   /*******************************************************************************************/
 
@@ -1647,8 +1606,6 @@ namespace DOpE
             this->GetParamData(), this->GetDomainData());
         auto& cdc = GetIntegratorDataContainer().GetCellDataContainer();
 
-#if deal_II_dimension == 2 || deal_II_dimension == 3
-
         //we want to integrate the face-terms only once
         typename std::map<typename dealii::Triangulation<dim>::face_iterator,std::vector<double> >
         face_integrals;
@@ -1677,8 +1634,6 @@ namespace DOpE
             true);
         auto & fdc = GetIntegratorDataContainer().GetFaceDataContainer();
 
-#endif
-
         for (unsigned int cell_index = 0; cell[0] != endc[0];
             cell[0]++, cell_index++)
         {
@@ -1706,7 +1661,6 @@ namespace DOpE
           //Now to the face terms. We compute them only once for each face and distribute the
           //afterwards. We choose always to work from the coarser cell, if both neigbors of the
           //face are on the same level, we pick the one with the lower index
-#if deal_II_dimension == 2 || deal_II_dimension == 3
 
           for (unsigned int face=0; face < dealii::GeometryInfo<dim>::faces_per_cell; ++face)
           {
@@ -1796,13 +1750,11 @@ namespace DOpE
           }                  //endfor faces
 //          }//end else
 
-#endif
           for (unsigned int dh = 1; dh < dof_handler.size(); dh++)
           {
             cell[dh]++;
           }
         }                  //endfor cell
-#if deal_II_dimension == 2 || deal_II_dimension == 3
         //now we have to incorporate the face and boundary_values
         //into
         unsigned int present_cell = 0;
@@ -1821,7 +1773,6 @@ namespace DOpE
           dwrc.GetDualErrorIndicators()(present_cell) +=
           0.5 * face_integrals[cell[0]->face(face_no)][1];
         }
-#endif
         {
           //Remove Weights
           auto wd = dwrc.GetWeightData().begin();

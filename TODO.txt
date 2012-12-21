@@ -14,39 +14,13 @@ Treffen (Sep 19, 2012)
   License 
   svn general (erstmal Heidelberg lassen, wenn Winni Dauerstelle, dann umziehen)
 	
-- Paper
-
-
-
-
-
-
-- Paper
-  x Aufbau
-	I. Introduction --> 1st draft von Winni 
-	II. Aufbau der Bib (Anhand einfacher Beispiele, was muesste User tun?)
-	  II.1. PDE
-		II.1.a. stationaer
-		II.1.b. instationaer --> 1st draft Thomas
-	  II.2. OPT
-	  II.3. Misc (DWR (Christian), Residualestimator, Multimesh, ...)
-	III. Beispiele (kurz, nicht quantitativ, eher schoene Bilder, )
-	  III.1. NS mit DWR (Drag, Lift, Punktauswertung?) --> cgoll 
-	  III.2. FSI --> Thomas
-	  III.3. Comp. - Minimization --> Winni
- 
-	  
-
 - The residual-based error estimators (i.e. H1 and L2) do not work with vector-valued solutions. 
   First lines one should look at is (revision 208):      DOpEsrc/container/residualestimator.h:397 and 207
               VectorTools::interpolate(*(static_cast<const DOFHANDLER*>(dofh)),
                 ConstantFunction<dim>(1.), vals);
-  
+	(Should be solved by now but not yet confirmed!)	  
 - Rewrite documentation of PDE/InstatPDE/Example1. The equation is navier stokes, not stokes.
 
-- Wie aktualisiere ich die Homepage? ./copywebsite.sh funktioniert nicht
-  so richtig (keine Verbindung nach Hamburg)
-- Usertreffen am 20.,21. Sep 2012 in HD??
 - Mailingliste: 
   Vorschlag TW: dope@ganymed... und dope-dev@ganymed
   wir haben nun einige neue Mitglieder: wer soll E-Mails
@@ -56,9 +30,6 @@ Treffen (Sep 19, 2012)
   in localfunctional.cc implementiert sind) IMMER ausgewertet.
 
 - Newtonlöser: last_newton_solution (in Matrix?!) ändern. 
-
-- Recheck args in TS-Schemes, i.e., not always are scale and scale ico used 
-  consistenly in Equation, BoundaryEquation ...
 
 - Common Codeschnipsel in den STH in eigener Klasse zusammenfuehren. Das gleiche fuer die problemcontainer.
 
@@ -83,11 +54,6 @@ einheitlich (!) kommentiert.
 - SetType im Optproblem sollte auch dem Funktional den typ mitteilen.
 
 - Beispiel (Erklaerung), PDEInterface nicht als template geben, sondern die LocalPDE.
-
-- Webseite: 
-  -- domain
-  -- wie komme ich an DOpE?? Mail an dopelib@...
-  -- How to cite...
 
 - PeriodicDoFConstraintMaker in Lib
 

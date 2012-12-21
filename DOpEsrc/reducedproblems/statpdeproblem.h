@@ -749,14 +749,14 @@ namespace DOpE
         {
           throw DOpEException(
               "Don't know how to write filetype `" + filetype + "'!",
-              "StatPDEProblem::WriteToFile");
+              "StatPDEProblem::WriteToFileCellwise");
         }
         data_out.clear();
       }
       else
       {
         throw DOpEException("No such DoFHandler `" + dof_type + "'!",
-            "StatPDEProblem::WriteToFile");
+            "StatPDEProblem::WriteToFileCellwise");
       }
     }
 
@@ -784,6 +784,10 @@ namespace DOpE
         if (filetype == ".vtk")
         {
           data_out.write_vtk(output);
+        }
+         else if (filetype == ".gpl")
+        {
+          data_out.write_gnuplot(output);
         }
         else
         {

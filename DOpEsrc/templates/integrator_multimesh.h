@@ -256,9 +256,6 @@ namespace DOpE
 				 this->GetParamData(), this->GetDomainData());
             auto& cdc = _idc.GetMultimeshCellDataContainer();
 
-
-#if deal_II_dimension == 2 || deal_II_dimension == 3
-            
             bool need_interfaces = pde.HasInterfaces();
             _idc.InitializeMMFDC(pde.GetFaceUpdateFlags(),
 				 *(pde.GetBaseProblem().GetSpaceTimeHandler()),
@@ -268,7 +265,6 @@ namespace DOpE
 				 this->GetDomainData(),
 				 need_interfaces);
             auto& fdc = _idc.GetMultimeshFaceDataContainer();
-#endif
 
 	    for(; cell_iter != cell_list.end(); cell_iter++)
 	    {
@@ -486,8 +482,6 @@ namespace DOpE
 			     this->GetParamData(), this->GetDomainData());
 	auto& cdc = _idc.GetMultimeshCellDataContainer();
 	
-#if deal_II_dimension == 2 || deal_II_dimension == 3
-           
             _idc.InitializeMMFDC(pde.GetFaceUpdateFlags(),
 				 *(pde.GetBaseProblem().GetSpaceTimeHandler()),
 				 cell,
@@ -495,7 +489,6 @@ namespace DOpE
 				 this->GetParamData(),
 				 this->GetDomainData());
             auto& fdc = _idc.GetMultimeshFaceDataContainer();
-#endif
 
 	    for(; cell_iter != cell_list.end(); cell_iter++)
 	    {
@@ -575,7 +568,6 @@ namespace DOpE
 			     this->GetParamData(), this->GetDomainData());
         auto& cdc = _idc.GetMultimeshCellDataContainer();
 
-#if deal_II_dimension == 2 || deal_II_dimension == 3
         bool need_interfaces = pde.HasInterfaces();
         _idc.InitializeMMFDC(pde.GetFaceUpdateFlags(),
 			     *(pde.GetBaseProblem().GetSpaceTimeHandler()),
@@ -585,7 +577,6 @@ namespace DOpE
 			     this->GetDomainData(),
 			     need_interfaces);
         auto & fdc = _idc.GetMultimeshFaceDataContainer();
-#endif
 
 	for(; cell_iter != cell_list.end(); cell_iter++)
 	{
@@ -724,15 +715,10 @@ namespace DOpE
     template<typename PROBLEM>
       SCALAR
       IntegratorMultiMesh<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::ComputeBoundaryScalar(
-#if deal_II_dimension == 2 || deal_II_dimension == 3
 	PROBLEM& pde
-#else
-          PROBLEM& /*pde*/
-#endif	
       )
       {
 	SCALAR ret = 0.;
-#if deal_II_dimension == 2 || deal_II_dimension == 3
 	// Begin integration
 	const auto& dof_handler =
 	  pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandler();
@@ -801,10 +787,6 @@ namespace DOpE
 	  ret += ComputeBoundaryScalar_Recursive(pde,cell,tria_cell,prolong_matrix,coarse_index,fine_index,fdc);
 	  tria_cell_iter++;
 	}
-#else
-            throw DOpEException("Not implemented in this dimension!",
-                "IntegratorMultiMesh::ComputeBoundaryScalar");
-#endif
 
             return ret;
       }
@@ -815,11 +797,7 @@ namespace DOpE
     template<typename PROBLEM>
       SCALAR
       IntegratorMultiMesh<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::ComputeFaceScalar(
-#if deal_II_dimension == 2 || deal_II_dimension == 3
 	PROBLEM& /*pde*/
-#else
-          PROBLEM& /*pde*/
-#endif
       )
       {
 	throw DOpEException("This function needs to be implemented!", "IntegratorMultiMesh::ComputeFaceScalar");
@@ -1152,12 +1130,11 @@ namespace DOpE
 	  dealii::Vector<SCALAR> local_cell_vector;
 	  std::vector<unsigned int> local_dof_indices;
 
-#if deal_II_dimension == 2 || deal_II_dimension == 3
 	  bool need_faces = pde.HasFaces();
 	  std::vector<unsigned int> boundary_equation_colors = pde.GetBoundaryEquationColors();
 	  bool need_boundary_integrals = (boundary_equation_colors.size() > 0);
 	  bool need_interfaces = pde.HasInterfaces();  
-#endif
+
 	  cdc.ReInit(coarse_index,fine_index,prolong_matrix);
 	  
 	  dofs_per_cell = cell[0]->get_fe().dofs_per_cell;
@@ -1173,7 +1150,6 @@ namespace DOpE
 	  pde.CellEquation(cdc, local_cell_vector, 1., 1.);
 	  pde.CellRhs(cdc, local_cell_vector, -1.);
 	  
-#if deal_II_dimension == 2 || deal_II_dimension == 3
 	  //FIXME Integrate on Faces of Cell[0] that contain a fine-cell face.
 	  if(need_faces || need_interfaces)
 	  {
@@ -1224,7 +1200,6 @@ namespace DOpE
           //               }
           //           }
           //       }
-#endif
 	  if(coarse_index == 0) //Need to transfer the computed residual to the one on the coarse cell
 	  {
 	    dealii::Vector<SCALAR> tmp(dofs_per_cell);
@@ -1291,12 +1266,11 @@ namespace DOpE
 	  dealii::Vector<SCALAR> local_cell_vector;
 	  std::vector<unsigned int> local_dof_indices;
 
-#if deal_II_dimension == 2 || deal_II_dimension == 3
 	  bool need_faces = pde.HasFaces();
 	  std::vector<unsigned int> boundary_equation_colors = pde.GetBoundaryEquationColors();
 	  bool need_boundary_integrals = (boundary_equation_colors.size() > 0);
 	  bool need_interfaces = pde.HasInterfaces();  
-#endif
+
 	  cdc.ReInit(coarse_index,fine_index,prolong_matrix);
 	  
 	  dofs_per_cell = cell[0]->get_fe().dofs_per_cell;
@@ -1311,7 +1285,6 @@ namespace DOpE
 	  //case, scale_ico is set by the time-stepping-scheme
 	  pde.CellRhs(cdc, local_cell_vector, 1.);
 	  
-#if deal_II_dimension == 2 || deal_II_dimension == 3
 	  //FIXME Integrate on Faces of Cell[0] that contain a fine-cell face.
 	  if(need_faces )
 	  {
@@ -1351,7 +1324,6 @@ namespace DOpE
           //               }
           //           }
           //       }
-#endif
 	  if(coarse_index == 0) //Need to transfer the computed residual to the one on the coarse cell
 	  {
 	    dealii::Vector<SCALAR> tmp(dofs_per_cell);
@@ -1420,12 +1392,10 @@ namespace DOpE
 	  unsigned int dofs_per_cell;
 	  std::vector<unsigned int> local_dof_indices;
 
-#if deal_II_dimension == 2 || deal_II_dimension == 3
 	  bool need_faces = pde.HasFaces();
 	  bool need_interfaces = pde.HasInterfaces();
 	  std::vector<unsigned int> boundary_equation_colors = pde.GetBoundaryEquationColors();
 	  bool need_boundary_integrals = (boundary_equation_colors.size() > 0);
-#endif
 
 	  cdc.ReInit(coarse_index,fine_index,prolong_matrix);
 	  dofs_per_cell = cell[0]->get_fe().dofs_per_cell;
@@ -1438,7 +1408,6 @@ namespace DOpE
 	  local_dof_indices.resize(dofs_per_cell, 0);
 	  pde.CellMatrix(cdc, local_cell_matrix);
 
-#if deal_II_dimension == 2 || deal_II_dimension == 3
 	  //FIXME Integrate on Faces of Cell[0] that contain a fine-cell face.
 	  if(need_faces || need_interfaces)
 	  {
@@ -1506,7 +1475,6 @@ namespace DOpE
          //            }
          //        }
          //    }
-#endif
 	  if(coarse_index == 0) //Need to transfer the computed residual to the one on the coarse cell
 	  {
 	    dealii::FullMatrix<SCALAR> tmp(dofs_per_cell);

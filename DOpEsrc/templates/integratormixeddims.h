@@ -161,7 +161,7 @@ template<typename PROBLEM>
                 *(pde.GetBaseProblem().GetSpaceTimeHandler()), cell,
                 this->GetParamData(), this->GetDomainData());
       auto& cdc = _idc.GetCellDataContainer();
-#if deal_II_dimension == 2 || deal_II_dimension == 3
+
       bool need_faces = pde.HasFaces();
       std::vector<unsigned int> boundary_equation_colors = pde.GetBoundaryEquationColors();
       bool need_boundary_integrals = (boundary_equation_colors.size() > 0);
@@ -171,7 +171,6 @@ template<typename PROBLEM>
                 this->GetParamData(),
                 this->GetDomainData());
       auto & fdc = _idc.GetFaceDataContainer();
-#endif
 
       for (; cell[0] != endc[0]; cell[0]++)
       {
@@ -189,7 +188,6 @@ template<typename PROBLEM>
 
         pde.CellRhs(cdc,local_cell_vector, -1.);
 
-#if deal_II_dimension == 2 || deal_II_dimension == 3
         if(need_boundary_integrals)
         {
           for (unsigned int face=0; face < dealii::GeometryInfo<dimhigh>::faces_per_cell; ++face)
@@ -214,7 +212,6 @@ template<typename PROBLEM>
             }
           }
         }
-#endif
         //LocalToGlobal
         for (unsigned int i = 0; i < dofs; ++i)
         {
@@ -272,7 +269,7 @@ template<typename PROBLEM>
                 *(pde.GetBaseProblem().GetSpaceTimeHandler()), cell,
                 this->GetParamData(), this->GetDomainData());
       auto& cdc = _idc.GetCellDataContainer();
-#if deal_II_dimension == 2 || deal_II_dimension == 3
+
       bool need_faces = pde.HasFaces();
       std::vector<unsigned int> boundary_equation_colors = pde.GetBoundaryEquationColors();
       bool need_boundary_integrals = (boundary_equation_colors.size() > 0);
@@ -282,7 +279,6 @@ template<typename PROBLEM>
                 this->GetParamData(),
                 this->GetDomainData());
       auto & fdc = _idc.GetFaceDataContainer();
-#endif
 
       for (; cell[0] != endc[0]; cell[0]++)
       {
@@ -300,7 +296,6 @@ template<typename PROBLEM>
 
         pde.CellRhs(cdc,local_cell_vector, 1.);
 
-#if deal_II_dimension == 2 || deal_II_dimension == 3
         if(need_boundary_integrals)
         {
           for (unsigned int face=0; face < dealii::GeometryInfo<dimhigh>::faces_per_cell; ++face)
@@ -325,7 +320,6 @@ template<typename PROBLEM>
             }
           }
         }
-#endif
         //LocalToGlobal
         for (unsigned int i = 0; i < dofs; ++i)
         {
@@ -495,7 +489,6 @@ template<typename PROBLEM>
           }
         }
 
-#if deal_II_dimension == 2 || deal_II_dimension == 3
         if(need_boundary_integrals)
         {
           for (unsigned int face=0; face < dealii::GeometryInfo<dimhigh>::faces_per_cell; ++face)
@@ -511,7 +504,6 @@ template<typename PROBLEM>
             }
           }
         }
-#endif
         for (unsigned int dh = 1; dh < dof_handler.size(); dh++)
         {
           cell[dh]++;
@@ -566,7 +558,6 @@ template<typename PROBLEM>
           }
         }
 
-#if deal_II_dimension == 2 || deal_II_dimension == 3
         if(need_faces)
         {
           for (unsigned int face=0; face < dealii::GeometryInfo<dimhigh>::faces_per_cell; ++face)
@@ -575,7 +566,6 @@ template<typename PROBLEM>
             ret +=pde.FaceFunctional(fdc);
           }
         }
-#endif
         for (unsigned int dh = 1; dh < dof_handler.size(); dh++)
         {
           cell[dh]++;

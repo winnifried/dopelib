@@ -1,5 +1,8 @@
 Changelog DOpE
 ==============
+21.12.2012: Removed the now unnecessary deal_II_dim > 1 checks for boundary and face integrals.
+	    Now also in 1d we can use boundary equation ...
+10.12.2012: Paper on DOpElib structure submitted to ACM TOMS
 05.10.2012: Output handler now checks for nan and -nan values to assert that only nan is written in any case.
 22.08.2012: OptProblemContainer and PDEProblemContainer now only evaluate Functionals
 	    appearing in *Rhs if the type is required by the functional
