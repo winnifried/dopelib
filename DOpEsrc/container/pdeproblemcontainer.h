@@ -1618,7 +1618,8 @@ namespace DOpE
         if (this->GetType() == "adjoint_for_ee"
             || this->GetType() == "error_evaluation")
         {
-          r = r | _aux_functionals[_functional_for_ee_num]->GetUpdateFlags();
+	  if(_functional_for_ee_num != dealii::numbers::invalid_unsigned_int)
+	    r = r | _aux_functionals[_functional_for_ee_num]->GetUpdateFlags();
         }
       }
       return r | update_JxW_values;
@@ -1643,7 +1644,8 @@ namespace DOpE
         if (this->GetType() == "adjoint_for_ee"
             || this->GetType() == "error_evaluation")
         {
-          r = r
+ 	  if(_functional_for_ee_num != dealii::numbers::invalid_unsigned_int)
+	    r = r
               | _aux_functionals[_functional_for_ee_num]->GetFaceUpdateFlags();
         }
       }

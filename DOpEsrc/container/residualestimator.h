@@ -59,13 +59,13 @@ namespace DOpE
      */
   template<class CDC, typename VECTOR>
     CDC*
-    ExtractCDC(const ResidualErrorContainer<VECTOR>& dwrc)
+    ExtractCDC(const ResidualErrorContainer<VECTOR>& /*dwrc*/)
     {
       return NULL;
     }
   template<class FDC, typename VECTOR>
     FDC*
-    ExtractFDC(const ResidualErrorContainer<VECTOR>& dwrc)
+    ExtractFDC(const ResidualErrorContainer<VECTOR>& /*dwrc*/)
     {
       return NULL;
     }
@@ -345,7 +345,7 @@ namespace DOpE
          * dual residual.
          */
         void
-        PreparePI_h_u(const StateVector<VECTOR>& u)
+	  PreparePI_h_u(const StateVector<VECTOR>& /*u*/)
         {
           BuildConstantWeight(&(GetSTH().GetStateDoFHandler()),
               GetPI_h_u().GetSpacialVector());
@@ -357,7 +357,7 @@ namespace DOpE
          * primal residual.
          */
         void
-        PreparePI_h_z(const StateVector<VECTOR>& z)
+	  PreparePI_h_z(const StateVector<VECTOR>& /*z*/)
         {
           BuildConstantWeight(&(GetSTH().GetStateDoFHandler()),
               GetPI_h_z().GetSpacialVector());
