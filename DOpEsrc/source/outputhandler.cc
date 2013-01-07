@@ -244,7 +244,24 @@ namespace DOpE
       _log <<" ERROR: "<<msg<<std::endl;
     }
   }
-
+/*******************************************************/
+  template <typename VECTOR>
+  void  DOpEOutputHandler<VECTOR>::WriteAux(std::string msg, std::string file, bool append)
+  {
+    std::stringstream ofile;
+    ofile <<  _results_basedir << _results_outdir << file;
+    std::ofstream outfile;
+    if(append)
+    {
+      outfile.open(ofile.str().c_str(), std::ios::app|std::ios::out);
+    }
+    else
+    {
+      outfile.open(ofile.str().c_str(), std::ios::out);
+    }
+    outfile<<msg;
+    outfile.close();
+  }
 /*******************************************************/
   template <typename VECTOR>
   void DOpEOutputHandler<VECTOR>::Write(std::string msg,

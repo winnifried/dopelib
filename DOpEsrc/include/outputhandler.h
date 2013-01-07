@@ -65,6 +65,15 @@ class DOpEOutputHandler
     static void declare_params(ParameterReader &param_reader);
 
     /**
+     * Call this function to write a string to an auxilliary file
+     *
+     * @param msg        The message that should be printed.
+     * @param file       Filename 
+     * @param append     String appendend to file ?
+     */
+    void WriteAux(std::string msg, std::string file, bool append=true);
+
+       /**
      * Call this function to write a string both to std::out and into the logfile.
      * If the debug mode is activated via the paramfile, the message is always printed into the log.
      *
