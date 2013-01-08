@@ -1,0 +1,17 @@
+\subsubsection{General problem description}
+\index{stationary PDE}
+In this example we consider the same setting as in subsection~\ref{PDE_Stat_Stokes}, the only
+difference is that we want to employ the hp-Finite-Elements. So the equation we solve is still 
+the stationary incompressible Stokes equation \index{stationary PDE!Stokes equation}. Here,
+we use the symmetric stress tensor which has a little consequence when using 
+the do-nothing outflow condition. In strong formulation we have
+\begin{align} \label{eq:strong}
+-\frac{1}{2}\nabla\cdot (\nabla v + \nabla v^{T}) + \nabla p &= f \\ 
+\nabla \cdot v &= 0 \notag
+\end{align} 
+on the domain $\Omega = [-6,6]\times [0,2]$. We choose for simplicity $f=0$.\\
+
+\subsubsection{Adding hp-Elements}
+One sees by comparing  the \texttt{main.cc}-file of this problem with the one of subsection~\ref{PDE_Stat_Stokes} that the change to hp-Elements is really easy. TODO: continue, erklaere insbesondere indexsetter.
+
+
