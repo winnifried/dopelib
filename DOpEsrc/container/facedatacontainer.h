@@ -396,6 +396,7 @@ namespace DOpE
                       (sth.GetFESystem("control")), q_collection, update_flags);
 
             }
+            this->PrivateConstructor(q_collection, update_flags, sth, need_neighbour);
           }
 
         /**
@@ -451,7 +452,7 @@ namespace DOpE
                   new DOpEWrapper::HpFESubfaceValues<dim>(sth.GetMapping(),
                       (sth.GetFESystem("state")), q_collection, update_flags);
             }
-
+            this->PrivateConstructor(q_collection, update_flags, sth, need_neighbour);
           }
 
         /**
@@ -459,22 +460,14 @@ namespace DOpE
          */
         ~FaceDataContainer<dealii::hp::DoFHandler<dim>, VECTOR, dim>()
         {
-          if (_nbr_state_hp_fe_values != NULL)
-          {
             delete _nbr_state_hp_fe_values;
-          }
-          if (_nbr_control_hp_fe_values != NULL)
-          {
+            _nbr_state_hp_fe_values = NULL;
             delete _nbr_control_hp_fe_values;
-          }
-          if (_state_hp_fe_subface_values != NULL)
-          {
+            _nbr_control_hp_fe_values = NULL;
             delete _state_hp_fe_subface_values;
-          }
-          if (_control_hp_fe_subface_values != NULL)
-          {
+            _state_hp_fe_subface_values = NULL;
             delete _control_hp_fe_subface_values;
-          }
+            _control_hp_fe_subface_values = NULL;
         }
 
         /*********************************************/

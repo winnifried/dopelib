@@ -1817,10 +1817,14 @@ namespace DOpE
           std::map<unsigned int, SCALAR>& boundary_values,
           const std::vector<bool>& comp_mask) const
       {
-        dealii::VectorTools::interpolate_boundary_values(mapping,
+    //TODO: mapping[0] is a workaround, as deal does not support interpolate
+    // boundary_values with a mapping collection at this point.
+        dealii::VectorTools::interpolate_boundary_values(mapping[0],
             dof_handler->GetDEALDoFHandler(), color, function,
             boundary_values, comp_mask);
       }
+
+
 }
 #endif
 

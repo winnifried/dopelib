@@ -1,25 +1,25 @@
 /**
-*
-* Copyright (C) 2012 by the DOpElib authors
-*
-* This file is part of DOpElib
-*
-* DOpElib is free software: you can redistribute it
-* and/or modify it under the terms of the GNU General Public
-* License as published by the Free Software Foundation, either
-* version 3 of the License, or (at your option) any later
-* version.
-*
-* DOpElib is distributed in the hope that it will be
-* useful, but WITHOUT ANY WARRANTY; without even the implied
-* warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-* PURPOSE.  See the GNU General Public License for more
-* details.
-*
-* Please refer to the file LICENSE.TXT included in this distribution
-* for further information on this license.
-*
-**/
+ *
+ * Copyright (C) 2012 by the DOpElib authors
+ *
+ * This file is part of DOpElib
+ *
+ * DOpElib is free software: you can redistribute it
+ * and/or modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation, either
+ * version 3 of the License, or (at your option) any later
+ * version.
+ *
+ * DOpElib is distributed in the hope that it will be
+ * useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+ * PURPOSE.  See the GNU General Public License for more
+ * details.
+ *
+ * Please refer to the file LICENSE.TXT included in this distribution
+ * for further information on this license.
+ *
+ **/
 
 /*
  * mapping_wrapper.h
@@ -65,10 +65,28 @@ namespace DOpEWrapper
         {
         }
 
+        /**
+         * This function is needed for a workaround
+         * linked to the hp-version (i.e. deal.ii is not
+         * consistent at the current stage using Mappings
+         * or MappingCollections in the hp-framework).
+         */
+        const typename dealii::MappingQ<dim> &
+        operator[](const unsigned int index) const
+        {
+          assert(index == 0);
+          return *this;
+        }
+
     };
 
   /************************************************************************************/
 
+  /**
+   * WARNING: At the current stage, it is note recommended to use MappingCollections
+   * with more than one mapping, as deal.ii is not consinstent in using
+   * Collections!
+   */
   template<int dim>
     class Mapping<dim, dealii::hp::DoFHandler<dim> > : public dealii::hp::MappingCollection<
         dim>

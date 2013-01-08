@@ -1,25 +1,25 @@
 /**
-*
-* Copyright (C) 2012 by the DOpElib authors
-*
-* This file is part of DOpElib
-*
-* DOpElib is free software: you can redistribute it
-* and/or modify it under the terms of the GNU General Public
-* License as published by the Free Software Foundation, either
-* version 3 of the License, or (at your option) any later
-* version.
-*
-* DOpElib is distributed in the hope that it will be
-* useful, but WITHOUT ANY WARRANTY; without even the implied
-* warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-* PURPOSE.  See the GNU General Public License for more
-* details.
-*
-* Please refer to the file LICENSE.TXT included in this distribution
-* for further information on this license.
-*
-**/
+ *
+ * Copyright (C) 2012 by the DOpElib authors
+ *
+ * This file is part of DOpElib
+ *
+ * DOpElib is free software: you can redistribute it
+ * and/or modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation, either
+ * version 3 of the License, or (at your option) any later
+ * version.
+ *
+ * DOpElib is distributed in the hope that it will be
+ * useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+ * PURPOSE.  See the GNU General Public License for more
+ * details.
+ *
+ * Please refer to the file LICENSE.TXT included in this distribution
+ * for further information on this license.
+ *
+ **/
 
 #ifndef _STAT_PDE_PROBLEM_H_
 #define _STAT_PDE_PROBLEM_H_
@@ -144,6 +144,16 @@ namespace DOpE
          */
         void
         ComputeReducedFunctionals();
+
+        /******************************************************/
+
+        /**
+         * This function evaluates reduced functionals of interest
+         * for the given statevector st_u.
+         *
+         */
+        void
+        ComputeReducedFunctionals(const StateVector<VECTOR>& st_u);
 
         /******************************************************/
 
@@ -305,6 +315,56 @@ namespace DOpE
           return _integrator;
         }
 
+        const bool&
+        GetBuildStateMatrix() const
+        {
+          return _build_state_matrix;
+        }
+
+        const bool&
+        GetBuildAdjointMatrix() const
+        {
+          return _build_adjoint_matrix;
+        }
+
+        const bool&
+        GetStateReinit() const
+        {
+          return _state_reinit;
+        }
+
+        const bool&
+        GetAdjointReinit() const
+        {
+          return _adjoint_reinit;
+        }
+
+
+        bool&
+        GetBuildStateMatrix()
+        {
+          return _build_state_matrix;
+        }
+
+        bool&
+        GetBuildAdjointMatrix()
+        {
+          return _build_adjoint_matrix;
+        }
+
+        bool&
+        GetStateReinit()
+        {
+          return _state_reinit;
+        }
+
+        bool&
+        GetAdjointReinit()
+        {
+          return _adjoint_reinit;
+        }
+
+
       private:
         /**
          * Helper function to prevent code duplicity. Adds the user defined
@@ -315,7 +375,7 @@ namespace DOpE
         {
           for (auto it = this->GetUserDomainData().begin();
               it != this->GetUserDomainData().end(); it++)
-          {
+              {
             this->GetIntegrator().AddDomainData(it->first, it->second);
           }
         }
@@ -329,7 +389,7 @@ namespace DOpE
         {
           for (auto it = this->GetUserDomainData().begin();
               it != this->GetUserDomainData().end(); it++)
-          {
+              {
             this->GetIntegrator().DeleteDomainData(it->first);
           }
         }
@@ -345,6 +405,8 @@ namespace DOpE
         bool _build_adjoint_matrix;
         bool _state_reinit;
         bool _adjoint_reinit;
+
+        int _n_patches;
 
         friend class SolutionExtractor<
             StatPDEProblem<NONLINEARSOLVER, INTEGRATOR, PROBLEM, VECTOR, dealdim>,
@@ -364,6 +426,10 @@ namespace DOpE
         ParameterReader &param_reader)
     {
       NONLINEARSOLVER::declare_params(param_reader);
+      param_reader.SetSubsection("output parameters");
+      param_reader.declare_entry("number of patches", "0",
+          Patterns::Integer(0));
+
     }
   /******************************************************/
 
@@ -380,6 +446,8 @@ namespace DOpE
               idc), _nonlinear_state_solver(_integrator, param_reader), _nonlinear_adjoint_solver(
               _integrator, param_reader)
       {
+        param_reader.SetSubsection("output parameters");
+        _n_patches = param_reader.get_integer("number of patches");
         //PDEProblems should be ReInited
         {
           _state_reinit = true;
@@ -446,7 +514,7 @@ namespace DOpE
     void
     StatPDEProblem<NONLINEARSOLVER, INTEGRATOR, PROBLEM, VECTOR, dealdim>::ReInit()
     {
-      PDEProblemInterface<PROBLEM, VECTOR, dealdim>::ReInit();
+      PDEProblemInterface < PROBLEM, VECTOR, dealdim > ::ReInit();
 
       //Some Solvers must be reinited when called
       // Better have subproblems, so that solver can be reinited here
@@ -489,11 +557,11 @@ namespace DOpE
       this->GetProblem()->DeleteAuxiliaryFromIntegrator(this->GetIntegrator());
 
       this->GetOutputHandler()->Write((GetU().GetSpacialVector()),
-          "State" + this->GetPostIndex(), problem.GetDoFType());
+      "State" + this->GetPostIndex(), problem.GetDoFType());
 
     }
 
-  /******************************************************/
+      /******************************************************/
 
   template<typename NONLINEARSOLVER, typename INTEGRATOR, typename PROBLEM,
       typename VECTOR, int dealdim>
@@ -537,11 +605,11 @@ namespace DOpE
       this->GetProblem()->DeleteAuxiliaryFromIntegrator(this->GetIntegrator());
 
       this->GetOutputHandler()->Write((GetZForEE().GetSpacialVector()),
-          "Adjoint_for_ee" + this->GetPostIndex(), problem.GetDoFType());
+      "Adjoint_for_ee" + this->GetPostIndex(), problem.GetDoFType());
 
     }
 
-  /******************************************************/
+      /******************************************************/
 
   template<typename NONLINEARSOLVER, typename INTEGRATOR, typename PROBLEM,
       typename VECTOR, int dealdim>
@@ -611,7 +679,80 @@ namespace DOpE
       DeleteUDD();
 
       this->GetProblem()->DeleteAuxiliaryFromIntegrator(this->GetIntegrator());
+    }
 
+  /******************************************************/
+
+  template<typename NONLINEARSOLVER, typename INTEGRATOR, typename PROBLEM,
+      typename VECTOR, int dealdim>
+    void
+    StatPDEProblem<NONLINEARSOLVER, INTEGRATOR, PROBLEM, VECTOR, dealdim>::ComputeReducedFunctionals(
+        const StateVector<VECTOR>& st_u)
+    {
+      this->InitializeFunctionalValues(this->GetProblem()->GetNFunctionals());
+      GetU() = st_u;
+
+      this->GetOutputHandler()->Write("Computing Functionals:",
+          4 + this->GetBasePriority());
+
+      this->GetProblem()->AddAuxiliaryToIntegrator(this->GetIntegrator());
+
+      this->GetIntegrator().AddDomainData("state",
+          &(GetU().GetSpacialVector()));
+      AddUDD();
+
+      for (unsigned int i = 0; i < this->GetProblem()->GetNFunctionals(); i++)
+      {
+        double ret = 0;
+        bool found = false;
+
+        this->SetProblemType("aux_functional", i);
+        if (this->GetProblem()->GetFunctionalType().find("domain")
+            != std::string::npos)
+        {
+          found = true;
+          ret += this->GetIntegrator().ComputeDomainScalar(
+              *(this->GetProblem()));
+        }
+        if (this->GetProblem()->GetFunctionalType().find("point")
+            != std::string::npos)
+        {
+          found = true;
+          ret += this->GetIntegrator().ComputePointScalar(
+              *(this->GetProblem()));
+        }
+        if (this->GetProblem()->GetFunctionalType().find("boundary")
+            != std::string::npos)
+        {
+          found = true;
+          ret += this->GetIntegrator().ComputeBoundaryScalar(
+              *(this->GetProblem()));
+        }
+        if (this->GetProblem()->GetFunctionalType().find("face")
+            != std::string::npos)
+        {
+          found = true;
+          ret += this->GetIntegrator().ComputeFaceScalar(*(this->GetProblem()));
+        }
+
+        if (!found)
+        {
+          throw DOpEException(
+              "Unknown Functional Type: "
+                  + this->GetProblem()->GetFunctionalType(),
+              "StatPDEProblem::ComputeReducedFunctionals");
+        }
+        this->GetFunctionalValues()[i].push_back(ret);
+        std::stringstream out;
+        this->GetOutputHandler()->InitOut(out);
+        out << this->GetProblem()->GetFunctionalName() << ": " << ret;
+        this->GetOutputHandler()->Write(out, 2 + this->GetBasePriority());
+      }
+
+      this->GetIntegrator().DeleteDomainData("state");
+      DeleteUDD();
+
+      this->GetProblem()->DeleteAuxiliaryFromIntegrator(this->GetIntegrator());
     }
 
   /******************************************************/
@@ -626,8 +767,8 @@ namespace DOpE
         //Attach the ResidualModifier to the PDE.
         pde.ResidualModifier = boost::bind<void>(
             boost::mem_fn(&DWRC::ResidualModifier), boost::ref(dwrc), _1);
-	pde.VectorResidualModifier = boost::bind<void>(
-	  boost::mem_fn(&DWRC::VectorResidualModifier),boost::ref(dwrc),_1);
+        pde.VectorResidualModifier = boost::bind<void>(
+            boost::mem_fn(&DWRC::VectorResidualModifier), boost::ref(dwrc), _1);
         //first we reinit the dwrdatacontainer (this
         //sets the weight-vectors to their correct length)
         const unsigned int n_cells =
@@ -737,7 +878,7 @@ namespace DOpE
             this->GetProblem()->GetSpaceTimeHandler()->GetStateDoFHandler());
 
         data_out.add_data_vector(v, name);
-        data_out.build_patches();
+        data_out.build_patches(_n_patches);
 
         std::ofstream output(outfile.c_str());
 
@@ -777,7 +918,10 @@ namespace DOpE
             this->GetProblem()->GetSpaceTimeHandler()->GetStateDoFHandler());
 
         data_out.add_data_vector(v, name);
-        data_out.build_patches();
+        //TODO: mapping[0] is a workaround, as deal does not support interpolate
+        // boundary_values with a mapping collection at this point.
+        data_out.build_patches(
+            this->GetProblem()->GetSpaceTimeHandler()->GetMapping()[0]);
 
         std::ofstream output(outfile.c_str());
 
@@ -785,7 +929,7 @@ namespace DOpE
         {
           data_out.write_vtk(output);
         }
-         else if (filetype == ".gpl")
+        else if (filetype == ".gpl")
         {
           data_out.write_gnuplot(output);
         }

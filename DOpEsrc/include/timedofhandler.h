@@ -253,7 +253,7 @@ namespace DOpE
         _first_interval.Initialize(cell, 0);
         _before_first_interval.Initialize(cell, -2);
 
-        cell = this->last_active();
+        cell = this->begin_active();
         while (cell->face(1)->boundary_indicator() != 1)
           {
             cell = cell->neighbor(1);

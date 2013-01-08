@@ -1,25 +1,25 @@
 /**
-*
-* Copyright (C) 2012 by the DOpElib authors
-*
-* This file is part of DOpElib
-*
-* DOpElib is free software: you can redistribute it
-* and/or modify it under the terms of the GNU General Public
-* License as published by the Free Software Foundation, either
-* version 3 of the License, or (at your option) any later
-* version.
-*
-* DOpElib is distributed in the hope that it will be
-* useful, but WITHOUT ANY WARRANTY; without even the implied
-* warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-* PURPOSE.  See the GNU General Public License for more
-* details.
-*
-* Please refer to the file LICENSE.TXT included in this distribution
-* for further information on this license.
-*
-**/
+ *
+ * Copyright (C) 2012 by the DOpElib authors
+ *
+ * This file is part of DOpElib
+ *
+ * DOpElib is free software: you can redistribute it
+ * and/or modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation, either
+ * version 3 of the License, or (at your option) any later
+ * version.
+ *
+ * DOpElib is distributed in the hope that it will be
+ * useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+ * PURPOSE.  See the GNU General Public License for more
+ * details.
+ *
+ * Please refer to the file LICENSE.TXT included in this distribution
+ * for further information on this license.
+ *
+ **/
 
 #ifndef _PDEProblemContainer_H_
 #define _PDEProblemContainer_H_
@@ -72,7 +72,8 @@ namespace DOpE
     class PDEProblemContainer : public ProblemContainerInternal<PDE>
     {
       public:
-        PDEProblemContainer(PDE& pde,
+        PDEProblemContainer(
+            PDE& pde,
             StateSpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR,
                 dealdim>& STH);
 
@@ -92,15 +93,16 @@ namespace DOpE
         /******************************************************/
         StateProblem<
             PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE,
-                DOFHANDLER>, PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>&
+                DOFHANDLER> , PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>&
         GetStateProblem()
         {
           if (_state_problem == NULL)
           {
-            _state_problem = new StateProblem<
-                PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim,
-                    FE, DOFHANDLER>, PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>(
-                *this, this->GetPDE());
+            _state_problem =
+                new StateProblem<
+                    PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR,
+                        dealdim, FE, DOFHANDLER> , PDE, DD, SPARSITYPATTERN
+                    , VECTOR, dealdim>(*this, this->GetPDE());
           }
           return *_state_problem;
         }
@@ -194,7 +196,8 @@ namespace DOpE
          */
         double
         PointFunctional(
-            const std::map<std::string, const dealii::Vector<double>*> &param_values,
+            const std::map<std::string, const dealii::Vector<double>*> &param_values
+            ,
             const std::map<std::string, const VECTOR*> &domain_values);
 
         /******************************************************/
@@ -333,7 +336,8 @@ namespace DOpE
          */
         void
         PointRhs(
-            const std::map<std::string, const dealii::Vector<double>*> &param_values,
+            const std::map<std::string, const dealii::Vector<double>*> &param_values
+            ,
             const std::map<std::string, const VECTOR*> &domain_values,
             VECTOR& rhs_vector, double scale = 1.);
 
@@ -565,8 +569,10 @@ namespace DOpE
         /******************************************************/
 
         const dealii::Function<dealdim> &
-        GetDirichletValues(unsigned int color,
-            const std::map<std::string, const dealii::Vector<double>*> &param_values,
+        GetDirichletValues(
+            unsigned int color,
+            const std::map<std::string, const dealii::Vector<double>*> &param_values
+            ,
             const std::map<std::string, const VECTOR*> &domain_values) const;
 
         /******************************************************/
@@ -827,18 +833,19 @@ namespace DOpE
 
         StateProblem<
             PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE,
-                DOFHANDLER>, PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>* _state_problem;
+                DOFHANDLER> , PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>* _state_problem;
 
         friend class StateProblem<
             PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE,
-                DOFHANDLER>, PDE, DD, SPARSITYPATTERN, VECTOR, dealdim> ;
+                DOFHANDLER> , PDE, DD, SPARSITYPATTERN, VECTOR, dealdim> ;
     };
   /******************************************************/
 
   template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
       int dealdim, typename FE, typename DOFHANDLER>
     PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE,
-        DOFHANDLER>::PDEProblemContainer(PDE& pde,
+        DOFHANDLER>::PDEProblemContainer(
+        PDE& pde,
         StateSpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR, dealdim>& STH)
         : ProblemContainerInternal<PDE>(pde), _STH(&STH), _state_problem(NULL)
     {
@@ -863,7 +870,8 @@ namespace DOpE
       }
       for (unsigned int i = 0; i < _primal_dirichlet_values.size(); i++)
       {
-        if (_primal_dirichlet_values[i] != NULL)
+        if (_primal_dirichlet_values[i] != NULL
+        )
           delete _primal_dirichlet_values[i];
       }
       if (_state_problem != NULL)
@@ -962,7 +970,8 @@ namespace DOpE
     double
     PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE,
         DOFHANDLER>::PointFunctional(
-        const std::map<std::string, const dealii::Vector<double>*> &param_values,
+        const std::map<std::string, const dealii::Vector<double>*> &param_values
+        ,
         const std::map<std::string, const VECTOR*> &domain_values)
     {
       if (this->GetType() == "cost_functional")
@@ -1061,7 +1070,8 @@ namespace DOpE
     double
     PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE,
         DOFHANDLER>::AlgebraicFunctional(
-        const std::map<std::string, const dealii::Vector<double>*> &param_values,
+        const std::map<std::string, const dealii::Vector<double>*> &param_values
+        ,
         const std::map<std::string, const VECTOR*> &domain_values)
     {
       if (this->GetType() == "cost_functional")
@@ -1302,19 +1312,20 @@ namespace DOpE
     void
     PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE,
         DOFHANDLER>::PointRhs(
-        const std::map<std::string, const dealii::Vector<double>*> &param_values,
+        const std::map<std::string, const dealii::Vector<double>*> &param_values
+        ,
         const std::map<std::string, const VECTOR*> &domain_values,
         VECTOR& rhs_vector, double scale)
     {
       if (this->GetType() == "adjoint_for_ee")
       {
         //values of the derivative of the functional for error estimation
-	if (_aux_functionals[_functional_for_ee_num]->GetType().find("point")
-	    != std::string::npos)
-        _aux_functionals[_functional_for_ee_num]->PointValue_U(
-            this->GetSpaceTimeHandler()->GetStateDoFHandler(),
-            this->GetSpaceTimeHandler()->GetStateDoFHandler(), param_values,
-            domain_values, rhs_vector, scale);
+        if (_aux_functionals[_functional_for_ee_num]->GetType().find("point")
+            != std::string::npos)
+          _aux_functionals[_functional_for_ee_num]->PointValue_U(
+              this->GetSpaceTimeHandler()->GetStateDoFHandler(),
+              this->GetSpaceTimeHandler()->GetStateDoFHandler(), param_values,
+              domain_values, rhs_vector, scale);
       }
       else
       {
@@ -1340,10 +1351,10 @@ namespace DOpE
         else if (this->GetType() == "adjoint_for_ee")
         {
           //values of the derivative of the functional for error estimation
-	  if (_aux_functionals[_functional_for_ee_num]->GetType().find("face")
-	      != std::string::npos)
-          _aux_functionals[_functional_for_ee_num]->FaceValue_U(fdc,
-              local_cell_vector, scale);
+          if (_aux_functionals[_functional_for_ee_num]->GetType().find("face")
+              != std::string::npos)
+            _aux_functionals[_functional_for_ee_num]->FaceValue_U(fdc,
+                local_cell_vector, scale);
         }
         else
         {
@@ -1370,10 +1381,10 @@ namespace DOpE
         else if (this->GetType() == "adjoint_for_ee")
         {
           //values of the derivative of the functional for error estimation
-	  if (_aux_functionals[_functional_for_ee_num]->GetType().find("boundary")
-	      != std::string::npos)
-          _aux_functionals[_functional_for_ee_num]->BoundaryValue_U(fdc,
-              local_cell_vector, scale);
+          if (_aux_functionals[_functional_for_ee_num]->GetType().find(
+              "boundary") != std::string::npos)
+            _aux_functionals[_functional_for_ee_num]->BoundaryValue_U(fdc,
+                local_cell_vector, scale);
         }
         else
         {
@@ -1907,7 +1918,8 @@ namespace DOpE
     const Function<dealdim>&
     PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE,
         DOFHANDLER>::GetDirichletValues(unsigned int color,
-        const std::map<std::string, const dealii::Vector<double>*> &param_values,
+        const std::map<std::string, const dealii::Vector<double>*> &param_values
+        ,
         const std::map<std::string, const VECTOR*> &domain_values) const
     {
 
@@ -1989,7 +2001,7 @@ namespace DOpE
         unsigned int comp = _state_boundary_equation_colors.size();
         for (unsigned int i = 0; i < _state_boundary_equation_colors.size();
             ++i)
-        {
+            {
           if (_state_boundary_equation_colors[i] == color)
           {
             comp = i;
@@ -2010,7 +2022,7 @@ namespace DOpE
         unsigned int comp = _adjoint_boundary_equation_colors.size();
         for (unsigned int i = 0; i < _adjoint_boundary_equation_colors.size();
             ++i)
-        {
+            {
           if (_adjoint_boundary_equation_colors[i] == color)
           {
             comp = i;
@@ -2084,7 +2096,7 @@ namespace DOpE
         unsigned int comp = _adjoint_boundary_equation_colors.size();
         for (unsigned int i = 0; i < _adjoint_boundary_equation_colors.size();
             ++i)
-        {
+            {
           if (_adjoint_boundary_equation_colors[i] == color)
           {
             comp = i;
@@ -2179,6 +2191,9 @@ namespace DOpE
     PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE,
         DOFHANDLER>::GetDoFConstraints() const
     {
+//      std::cout << "Constraints:"
+//          << GetSpaceTimeHandler()->GetStateDoFConstraints().n_constraints()
+//          << " and type is " << this->GetType() << std::endl;
       if ((this->GetType() == "state") || (this->GetType() == "adjoint_for_ee"))
       {
         return GetSpaceTimeHandler()->GetStateDoFConstraints();
