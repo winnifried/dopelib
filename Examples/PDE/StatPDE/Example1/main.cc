@@ -51,7 +51,6 @@
 
 #include "localpde.h"
 #include "functionals.h"
-#include "indexsetter.h"
 #include "my_functions.h"
 
 using namespace std;
@@ -66,12 +65,6 @@ using namespace DOpE;
 #define FE FESystem<2, 2>
 #define QUADRATURE Quadrature<2>
 #define FACEQUADRATURE Quadrature<1>
-//**********hp*************************
-//#define DOFHANDLER hp::DoFHandler<2>
-//#define FE hp::FECollection<2, 2>
-//#define QUADRATURE hp::QCollection<2>
-//#define FACEQUADRATURE hp::QCollection<1>
-//**********hp*************************
 
 typedef PDEProblemContainer<LocalPDE<DOFHANDLER, VECTOR, 2> ,
 DirichletDataInterface<VECTOR, 2> ,SPARSITYPATTERN,VECTOR, 2,FE,DOFHANDLER> OP;
@@ -93,8 +86,6 @@ main(int argc, char **argv)
    *  with symmetric stress tensor and do-nothing condition on
    *  the outflow boundary. In this case we employ an additional
    *  term on the outflow boundary due the symmetry of the stress tensor.
-   *
-   *  To make this run with hp, just replace the indicated parts.
    */
   string paramfile = "dope.prm";
 
@@ -123,25 +114,10 @@ main(int argc, char **argv)
 
   FESystem<2> state_fe(FE_Q<2>(2), 2, FE_Q<2>(1), 1); //Q2Q1
 
-  /******hp******************/
-//  FESystem<2> state_fe_2(FE_Q<2>(3), 2, FE_Q<2>(2), 1); //Q3Q2
-//  hp::FECollection < 2 > state_fe_collection(state_fe);
-//  state_fe_collection.push_back(state_fe_2);
-  /******hp******************/
-
   QGauss<2> quadrature_formula(3);
   QGauss<1> face_quadrature_formula(3);
 
   IDC idc(quadrature_formula, face_quadrature_formula);
-  /******hp******************/
-//  QGauss<2> quadrature_formula_2(4);
-//  QGauss<1> face_quadrature_formula_2(4);
-//  hp::QCollection<2> q_coll(quadrature_formula);
-//  q_coll.push_back(quadrature_formula_2);
-//  hp::QCollection<1> face_q_coll(face_quadrature_formula);
-//  face_q_coll.push_back(face_quadrature_formula_2);
-//  IDC idc(q_coll, face_q_coll);
-  /******hp******************/
 
   LocalPDE<DOFHANDLER, VECTOR, 2> LPDE;
 
@@ -151,11 +127,6 @@ main(int argc, char **argv)
   triangulation.refine_global(3);
 
   MethodOfLines_StateSpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR, 2> DOFH(triangulation,state_fe);
-  /***************hp********************/
-//  ActiveFEIndexSetter<2> indexsetter(pr);
-//  MethodOfLines_StateSpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR, 2> DOFH(
-//      triangulation, state_fe_collection, indexsetter);
-  /***************hp********************/
 
   OP P(LPDE, DOFH);
 
