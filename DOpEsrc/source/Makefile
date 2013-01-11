@@ -67,45 +67,45 @@ lib33d-deb : $(DOpE)/lib/3d/3d/libdope.g.a
 
 $(OBJDIR)%.0d.1d.g.o : %.cc $(h-files)
 	@echo =====debug========== $@
-	@$(CXX) $(CXXFLAGS.g) $(FLAGS) -I../.. -Ddeal_II_dimension=1 -DREAL=double -Ddope_dimension=0 -c $< -o $@
+	@$(CXX) $(CXXFLAGS.g) $(FLAGS) -I../.. -Ddeal_II_dimension=1 -DREAL=double -Ddope_dimension=0 -DDEAL_II_MAJOR_VERSION=$(DEAL_II_MAJOR_VERSION) -DDEAL_II_MINOR_VERSION=$(DEAL_II_MINOR_VERSION) -c $< -o $@
 $(OBJDIR)%.0d.1d.o : %.cc $(h-files)
 	@echo =====optimized====== $@
-	@$(CXX) $(CXXFLAGS.o) $(FLAGS) -I../.. -Ddeal_II_dimension=1 -DREAL=double -Ddope_dimension=0 -c $< -o $@
+	@$(CXX) $(CXXFLAGS.o) $(FLAGS) -I../.. -Ddeal_II_dimension=1 -DREAL=double -Ddope_dimension=0 -DDEAL_II_MAJOR_VERSION=$(DEAL_II_MAJOR_VERSION) -DDEAL_II_MINOR_VERSION=$(DEAL_II_MINOR_VERSION) -c $< -o $@
 
 $(OBJDIR)%.1d.1d.g.o : %.cc $(h-files)
 	@echo =====debug========== $@
-	@$(CXX) $(CXXFLAGS.g) $(FLAGS) -I../.. -Ddeal_II_dimension=1 -DREAL=double -Ddope_dimension=1 -c $< -o $@
+	@$(CXX) $(CXXFLAGS.g) $(FLAGS) -I../.. -Ddeal_II_dimension=1 -DREAL=double -Ddope_dimension=1 -DDEAL_II_MAJOR_VERSION=$(DEAL_II_MAJOR_VERSION) -DDEAL_II_MINOR_VERSION=$(DEAL_II_MINOR_VERSION) -c $< -o $@
 $(OBJDIR)%.1d.1d.o : %.cc $(h-files)
 	@echo =====optimized====== $@
-	@$(CXX) $(CXXFLAGS.o) $(FLAGS) -I../.. -Ddeal_II_dimension=1 -DREAL=double -Ddope_dimension=1 -c $< -o $@
+	@$(CXX) $(CXXFLAGS.o) $(FLAGS) -I../.. -Ddeal_II_dimension=1 -DREAL=double -Ddope_dimension=1 -DDEAL_II_MAJOR_VERSION=$(DEAL_II_MAJOR_VERSION) -DDEAL_II_MINOR_VERSION=$(DEAL_II_MINOR_VERSION) -c $< -o $@
 
 $(OBJDIR)%.0d.2d.g.o : %.cc $(h-files)
 	@echo =====debug========== $@
-	@$(CXX) $(CXXFLAGS.g) $(FLAGS) -I../.. -Ddeal_II_dimension=2 -DREAL=double -Ddope_dimension=0 -c $< -o $@
+	@$(CXX) $(CXXFLAGS.g) $(FLAGS) -I../.. -Ddeal_II_dimension=2 -DREAL=double -Ddope_dimension=0 -DDEAL_II_MAJOR_VERSION=$(DEAL_II_MAJOR_VERSION) -DDEAL_II_MINOR_VERSION=$(DEAL_II_MINOR_VERSION) -c $< -o $@
 $(OBJDIR)%.0d.2d.o : %.cc $(h-files)
 	@echo =====optimized====== $@
-	@$(CXX) $(CXXFLAGS.o) $(FLAGS) -I../.. -Ddeal_II_dimension=2 -DREAL=double -Ddope_dimension=0 -c $< -o $@
+	@$(CXX) $(CXXFLAGS.o) $(FLAGS) -I../.. -Ddeal_II_dimension=2 -DREAL=double -Ddope_dimension=0 -DDEAL_II_MAJOR_VERSION=$(DEAL_II_MAJOR_VERSION) -DDEAL_II_MINOR_VERSION=$(DEAL_II_MINOR_VERSION) -c $< -o $@
 
 $(OBJDIR)%.2d.2d.g.o : %.cc $(h-files)
 	@echo =====debug========== $@
-	@$(CXX) $(CXXFLAGS.g) $(FLAGS) -I../.. -Ddeal_II_dimension=2 -DREAL=double -Ddope_dimension=2 -c $< -o $@
+	@$(CXX) $(CXXFLAGS.g) $(FLAGS) -I../.. -Ddeal_II_dimension=2 -DREAL=double -Ddope_dimension=2 -DDEAL_II_MAJOR_VERSION=$(DEAL_II_MAJOR_VERSION) -DDEAL_II_MINOR_VERSION=$(DEAL_II_MINOR_VERSION) -c $< -o $@
 $(OBJDIR)%.2d.2d.o : %.cc $(h-files)
 	@echo =====optimized====== $@
-	@$(CXX) $(CXXFLAGS.o) $(FLAGS) -I../.. -Ddeal_II_dimension=2 -DREAL=double -Ddope_dimension=2 -c $< -o $@
+	@$(CXX) $(CXXFLAGS.o) $(FLAGS) -I../.. -Ddeal_II_dimension=2 -DREAL=double -Ddope_dimension=2 -DDEAL_II_MAJOR_VERSION=$(DEAL_II_MAJOR_VERSION) -DDEAL_II_MINOR_VERSION=$(DEAL_II_MINOR_VERSION) -c $< -o $@
 
 $(OBJDIR)%.0d.3d.g.o : %.cc $(h-files)
 	@echo =====debug========== $@
-	@$(CXX) $(CXXFLAGS.g) $(FLAGS) -I../.. -Ddeal_II_dimension=3 -DREAL=double -Ddope_dimension=0 -c $< -o $@
+	@$(CXX) $(CXXFLAGS.g) $(FLAGS) -I../.. -Ddeal_II_dimension=3 -DREAL=double -Ddope_dimension=0 -DDEAL_II_MAJOR_VERSION=$(DEAL_II_MAJOR_VERSION) -DDEAL_II_MINOR_VERSION=$(DEAL_II_MINOR_VERSION) -c $< -o $@
 $(OBJDIR)%.0d.3d.o : %.cc $(h-files)
 	@echo =====optimized====== $@
-	@$(CXX) $(CXXFLAGS.o) $(FLAGS) -I../.. -Ddeal_II_dimension=3 -DREAL=double -Ddope_dimension=0 -c $< -o $@
+	@$(CXX) $(CXXFLAGS.o) $(FLAGS) -I../.. -Ddeal_II_dimension=3 -DREAL=double -Ddope_dimension=0 -DDEAL_II_MAJOR_VERSION=$(DEAL_II_MAJOR_VERSION) -DDEAL_II_MINOR_VERSION=$(DEAL_II_MINOR_VERSION) -c $< -o $@
 
 $(OBJDIR)%.3d.3d.g.o : %.cc $(h-files)
 	@echo =====debug========== $@
-	@$(CXX) $(CXXFLAGS.g) $(FLAGS) -I../.. -Ddeal_II_dimension=3 -DREAL=double -Ddope_dimension=3 -c $< -o $@
+	@$(CXX) $(CXXFLAGS.g) $(FLAGS) -I../.. -Ddeal_II_dimension=3 -DREAL=double -Ddope_dimension=3 -DDEAL_II_MAJOR_VERSION=$(DEAL_II_MAJOR_VERSION) -DDEAL_II_MINOR_VERSION=$(DEAL_II_MINOR_VERSION) -c $< -o $@
 $(OBJDIR)%.3d.3d.o : %.cc $(h-files)
 	@echo =====optimized====== $@
-	@$(CXX) $(CXXFLAGS.o) $(FLAGS) -I../.. -Ddeal_II_dimension=3 -DREAL=double -Ddope_dimension=3 -c $< -o $@
+	@$(CXX) $(CXXFLAGS.o) $(FLAGS) -I../.. -Ddeal_II_dimension=3 -DREAL=double -Ddope_dimension=3 -DDEAL_II_MAJOR_VERSION=$(DEAL_II_MAJOR_VERSION) -DDEAL_II_MINOR_VERSION=$(DEAL_II_MINOR_VERSION) -c $< -o $@
 
 o0-1-files = $(nodim-cc-files:.cc=.o) $(cc-files:%.cc=$(OBJDIR)%.0d.1d.o)
 o1-1-files = $(nodim-cc-files:.cc=.o) $(cc-files:%.cc=$(OBJDIR)%.1d.1d.o)

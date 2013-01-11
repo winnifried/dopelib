@@ -63,7 +63,6 @@ namespace DOpE
 	  
 	  const std::vector<Point<dealdim> > & _c_points;
 	  const std::vector<std::vector<bool> > & _c_comps;
-
 	};
 
 	template<typename DOFHANDLER, int dopedim, int dealdim>
@@ -77,7 +76,18 @@ namespace DOpE
 	  for(unsigned int i = 0; i < _c_points.size(); i++)
 	  {	  
 	    std::vector<bool> selected_dofs(dof_handler.n_dofs());
+#if DEAL_II_MAJOR_VERSION >= 7
+#if DEAL_II_MINOR_VERSION >= 3
+	    //Newer dealii Versions have changed the interface
+	    dealii::ComponentMask components(_c_comps[i]);
+	    DoFTools::extract_dofs(dof_handler,components,selected_dofs);
+#else
 	    DoFTools::extract_dofs(dof_handler,_c_comps[i],selected_dofs);
+#endif
+#else
+	    DoFTools::extract_dofs(dof_handler,_c_comps[i],selected_dofs);
+#endif
+
 	    bool found = false;
 	    for(unsigned int p = 0; p < support_points.size(); p++)
 	    {

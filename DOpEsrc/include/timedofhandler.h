@@ -26,6 +26,7 @@
 
 //DOpE
 #include <timeiterator.h>
+#include <dopeexception.h>
 
 //deal.ii
 #include <deal.II/fe/fe_q.h>
@@ -115,8 +116,20 @@ namespace DOpE
           {
             dealii::DoFHandler<1>::distribute_dofs(*_fe);
             //make sure that the dofs are numbered 'downstream' (referring to the time variable!)
+#if DEAL_II_MAJOR_VERSION >= 7
+#if DEAL_II_MINOR_VERSION >= 3
+	    //Newer dealii Versions have changed the interface
+	    dealii::DoFRenumbering::downstream<dealii::DoFHandler<1> >(*this,
+								       dealii::Point<1>(1.), true);
+#else 
             dealii::DoFRenumbering::downstream<dealii::DoFHandler<1>, 1>(*this,
-                dealii::Point<1>(1.), true);
+									 dealii::Point<1>(1.), true);
+#endif
+#else
+	    dealii::DoFRenumbering::downstream<dealii::DoFHandler<1>, 1>(*this,
+									 dealii::Point<1>(1.), true);
+#endif
+
             find_ends();
             compute_times();
             _initialized = true;
