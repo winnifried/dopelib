@@ -1670,8 +1670,11 @@ namespace DOpE
             if(face_it->at_boundary())
             {
               fdc.ReInit(face);
+#if deal_II_dimension > 1
               dwrc.InitFace(cell[0]->face(face)->diameter());
-
+#else 
+	      dwrc.InitFace(cell[0]->diameter());
+#endif   
               pde.BoundaryErrorContribution(fdc, dwrc, cell_sum, 1.);
 
               Assert (face_integrals.find (cell[0]->face(face)) != face_integrals.end(),
@@ -1700,7 +1703,11 @@ namespace DOpE
                   // actual cell and then the facevalues of the neighbours
                   fdc.ReInit(face, subface_no);
                   fdc.ReInitNbr();
-                  dwrc.InitFace(cell[0]->face(face)->diameter());
+#if deal_II_dimension > 1
+		  dwrc.InitFace(cell[0]->face(face)->diameter());
+#else 
+		  dwrc.InitFace(cell[0]->diameter());
+#endif   
 
                   pde.FaceErrorContribution(fdc, dwrc, cell_sum, 1.);
                   sum[0]= cell_sum[0];
@@ -1733,8 +1740,12 @@ namespace DOpE
                 {
                   fdc.ReInit(face);
                   fdc.ReInitNbr();
-                  dwrc.InitFace(cell[0]->face(face)->diameter());
-
+#if deal_II_dimension > 1
+		  dwrc.InitFace(cell[0]->face(face)->diameter());
+#else 
+		  dwrc.InitFace(cell[0]->diameter());
+#endif   
+         
                   pde.FaceErrorContribution(fdc, dwrc, cell_sum, 1.);
                   Assert (face_integrals.find (cell[0]->face(face)) != face_integrals.end(),
                       ExcInternalError());
