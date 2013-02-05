@@ -330,7 +330,7 @@ template<typename VECTOR,int dopedim, int dealdim>
 	 { 
 	   for (unsigned int j=0;j<n_dofs_per_cell;j++)
 	     {
-	       local_cell_vector(j) += scale * 0.5 * _mu_regularization * 
+	       local_cell_vector(j) += scale *  _mu_regularization * 
 		 (_qvalues(j) - _control_constant)
 		 * state_fe_face_values.JxW(q_point);		
 	     }
@@ -346,7 +346,7 @@ template<typename VECTOR,int dopedim, int dealdim>
 	 { 
 	   for (unsigned int j=0;j<n_dofs_per_cell;j++)
 	     {
-	       local_cell_vector(j) += scale * 0.5 * _mu_regularization * 
+	       local_cell_vector(j) += scale *  _mu_regularization * 
 		 (_qvalues(j)- _control_constant)
 		 * state_fe_face_values.JxW(q_point);		
 	     }
@@ -377,7 +377,7 @@ void BoundaryValue_QQ(const FaceDataContainer<dealii::DoFHandler<dealdim>, VECTO
 	 { 
 	   for (unsigned int j=0;j<n_dofs_per_cell;j++)
 	     {
-	       local_cell_vector(j) += scale * 0.5 * _mu_regularization * 
+	       local_cell_vector(j) += scale * _mu_regularization * 
 		 (_dqvalues(j))
 		 * state_fe_face_values.JxW(q_point);		
 	     }
@@ -396,7 +396,7 @@ void BoundaryValue_QQ(const FaceDataContainer<dealii::DoFHandler<dealdim>, VECTO
 	 { 
 	   for (unsigned int j=0;j<n_dofs_per_cell;j++)
 	     {
-	       local_cell_vector(j) += scale * 0.5 * _mu_regularization * 
+	       local_cell_vector(j) += scale * _mu_regularization * 
 		 (_dqvalues(j))
 		 * state_fe_face_values.JxW(q_point);		
 	     }
@@ -624,7 +624,7 @@ void FaceValue_U(const FaceDataContainer<dealii::DoFHandler<dealdim>, VECTOR, de
 void FaceValue_UU(const FaceDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& fdc,
 		      dealii::Vector<double> &local_cell_vector, double scale)
 {
-
+#warning derivative missing
 }
 
 
