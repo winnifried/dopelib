@@ -226,12 +226,12 @@ namespace DOpE
      {
        for(unsigned int i = 0; i < g.GetSpacialVector("local").block(block).size(); i++)
        {
-	 ret = max(ret, g.GetSpacialVector("local").block(block)(i));
+	 ret = std::max(ret, g.GetSpacialVector("local").block(block)(i));
        }
      }
      for(unsigned int i = 0; i < g.GetGlobalConstraints().size(); i++)
      {
-       ret = max(ret,g.GetGlobalConstraints()(i));
+       ret = std::max(ret,g.GetGlobalConstraints()(i));
      }
      return ret;
    }
