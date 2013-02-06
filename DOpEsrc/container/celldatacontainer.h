@@ -1,25 +1,25 @@
 /**
-*
-* Copyright (C) 2012 by the DOpElib authors
-*
-* This file is part of DOpElib
-*
-* DOpElib is free software: you can redistribute it
-* and/or modify it under the terms of the GNU General Public
-* License as published by the Free Software Foundation, either
-* version 3 of the License, or (at your option) any later
-* version.
-*
-* DOpElib is distributed in the hope that it will be
-* useful, but WITHOUT ANY WARRANTY; without even the implied
-* warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-* PURPOSE.  See the GNU General Public License for more
-* details.
-*
-* Please refer to the file LICENSE.TXT included in this distribution
-* for further information on this license.
-*
-**/
+ *
+ * Copyright (C) 2012 by the DOpElib authors
+ *
+ * This file is part of DOpElib
+ *
+ * DOpElib is free software: you can redistribute it
+ * and/or modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation, either
+ * version 3 of the License, or (at your option) any later
+ * version.
+ *
+ * DOpElib is distributed in the hope that it will be
+ * useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+ * PURPOSE.  See the GNU General Public License for more
+ * details.
+ *
+ * Please refer to the file LICENSE.TXT included in this distribution
+ * for further information on this license.
+ *
+ **/
 
 /*
  * celldatacontainer.h
@@ -108,10 +108,12 @@ namespace DOpE
          *
          */
         template<typename FE, typename SPARSITYPATTERN, int dopedim, int dealdim>
-          CellDataContainer(const Quadrature<dim>& quad,
+          CellDataContainer(
+              const Quadrature<dim>& quad,
               UpdateFlags update_flags,
               SpaceTimeHandler<FE, dealii::DoFHandler<dim>, SPARSITYPATTERN,
-                  VECTOR, dopedim, dealdim>& sth,
+                  VECTOR, dopedim, dealdim>& sth
+              ,
               const std::vector<
                   typename dealii::DoFHandler<dim>::active_cell_iterator>& cell,
               const std::map<std::string, const Vector<double>*> &param_values,
@@ -121,42 +123,43 @@ namespace DOpE
                   sth.GetMapping(), (sth.GetFESystem("state")), quad,
                   update_flags), _control_fe_values(sth.GetMapping(),
                   (sth.GetFESystem("control")), quad, update_flags)
-          {
-            _state_index = sth.GetStateIndex();
-            if (_state_index == 1)
-              _control_index = 0;
-            else
-              _control_index = 1;
-            _n_q_points_per_cell = quad.size();
-            _n_dofs_per_cell = cell[0]->get_fe().dofs_per_cell;
-          }
+                  {
+                    _state_index = sth.GetStateIndex();
+                    if (_state_index == 1)
+                    _control_index = 0;
+                    else
+                    _control_index = 1;
+                    _n_q_points_per_cell = quad.size();
+                    _n_dofs_per_cell = cell[0]->get_fe().dofs_per_cell;
+                  }
 
-        /**
-         * Constructor. Initializes the FEValues objects. When only a PDE is used.
-         *
-         * @template FE                   Type of the finite element in use.
-         * @template SPARSITYPATTERN      The corresponding Sparsitypattern to the class-template VECTOR.
-         *
-         * @param quad                    Reference to the quadrature-rule which we use at the moment.
-         * @param update_flags            The update flags we need to initialize the FEValues obejcts
-         * @param sth                     A reference to the SpaceTimeHandler in use.
-         * @param cell                    A vector of cell iterators through which we gain most of the needed information (like
-         *                                material_ids, n_dfos, etc.)
-         * @param param_values            A std::map containing parameter data (e.g. non space dependent data). If the control
-         *                                is done by parameters, it is contained in this map at the position "control".
-         * @param domain_values           A std::map containing domain data (e.g. nodal vectors for FE-Functions). If the control
-         *                                is distributed, it is contained in this map at the position "control". The state may always
-         *                                be found in this map at the position "state"
-         *
-         */
-        template<typename FE, typename SPARSITYPATTERN>
-          CellDataContainer(const Quadrature<dim>& quad,
-              UpdateFlags update_flags,
-              StateSpaceTimeHandler<FE, dealii::DoFHandler<dim>,
-                  SPARSITYPATTERN, VECTOR, dim>& sth,
-              const std::vector<
-                  typename dealii::DoFHandler<dim>::active_cell_iterator>& cell,
-              const std::map<std::string, const Vector<double>*> &param_values,
+                  /**
+                   * Constructor. Initializes the FEValues objects. When only a PDE is used.
+                   *
+                   * @template FE                   Type of the finite element in use.
+                   * @template SPARSITYPATTERN      The corresponding Sparsitypattern to the class-template VECTOR.
+                   *
+                   * @param quad                    Reference to the quadrature-rule which we use at the moment.
+                   * @param update_flags            The update flags we need to initialize the FEValues obejcts
+                   * @param sth                     A reference to the SpaceTimeHandler in use.
+                   * @param cell                    A vector of cell iterators through which we gain most of the needed information (like
+                   *                                material_ids, n_dfos, etc.)
+                   * @param param_values            A std::map containing parameter data (e.g. non space dependent data). If the control
+                   *                                is done by parameters, it is contained in this map at the position "control".
+                   * @param domain_values           A std::map containing domain data (e.g. nodal vectors for FE-Functions). If the control
+                   *                                is distributed, it is contained in this map at the position "control". The state may always
+                   *                                be found in this map at the position "state"
+                   *
+                   */
+                  template<typename FE,
+typename            SPARSITYPATTERN>
+            CellDataContainer(const Quadrature<dim>& quad,
+                UpdateFlags update_flags,
+                StateSpaceTimeHandler<FE, dealii::DoFHandler<dim>,
+                SPARSITYPATTERN, VECTOR, dim>& sth,
+                const std::vector<
+                typename dealii::DoFHandler<dim>::active_cell_iterator>& cell,
+                const std::map<std::string, const Vector<double>*> &param_values,
               const std::map<std::string, const VECTOR*> &domain_values)
               : cdcinternal::CellDataContainerInternal<VECTOR, dim>(
                   param_values, domain_values), _cell(cell), _state_fe_values(
@@ -193,6 +196,8 @@ namespace DOpE
         GetMaterialId() const;
         inline unsigned int
         GetNbrMaterialId(unsigned int face) const;
+        inline unsigned int
+        GetFaceBoundaryIndicator(unsigned int face) const;
         inline bool
         GetIsAtBoundary() const;
         inline double
@@ -250,13 +255,16 @@ namespace DOpE
          *
          */
         template<typename FE, typename SPARSITYPATTERN, int dopedim, int dealdim>
-          CellDataContainer(const hp::QCollection<dim>& q_collection,
+          CellDataContainer(
+              const hp::QCollection<dim>& q_collection,
               UpdateFlags update_flags,
               SpaceTimeHandler<FE, dealii::hp::DoFHandler<dim>, SPARSITYPATTERN,
-                  VECTOR, dopedim, dealdim>& sth,
+                  VECTOR, dopedim, dealdim>& sth
+              ,
               const std::vector<
                   typename DOpEWrapper::DoFHandler<dim,
-                      dealii::hp::DoFHandler<dim> >::active_cell_iterator>& cell,
+                      dealii::hp::DoFHandler<dim> >::active_cell_iterator>& cell
+              ,
               const std::map<std::string, const Vector<double>*> &param_values,
               const std::map<std::string, const VECTOR*> &domain_values)
               : cdcinternal::CellDataContainerInternal<VECTOR, dim>(
@@ -291,13 +299,16 @@ namespace DOpE
          *
          */
         template<typename FE, typename SPARSITYPATTERN>
-          CellDataContainer(const hp::QCollection<dim>& q_collection,
+          CellDataContainer(
+              const hp::QCollection<dim>& q_collection,
               UpdateFlags update_flags,
               StateSpaceTimeHandler<FE, dealii::hp::DoFHandler<dim>,
-                  SPARSITYPATTERN, VECTOR, dim>& sth,
+                  SPARSITYPATTERN, VECTOR, dim>& sth
+              ,
               const std::vector<
                   typename DOpEWrapper::DoFHandler<dim,
-                      dealii::hp::DoFHandler<dim> >::active_cell_iterator>& cell,
+                      dealii::hp::DoFHandler<dim> >::active_cell_iterator>& cell
+              ,
               const std::map<std::string, const Vector<double>*> &param_values,
               const std::map<std::string, const VECTOR*> &domain_values)
               : cdcinternal::CellDataContainerInternal<VECTOR, dim>(
@@ -335,6 +346,8 @@ namespace DOpE
         GetMaterialId() const;
         inline unsigned int
         GetNbrMaterialId(unsigned int face) const;
+        inline unsigned int
+        GetFaceBoundaryIndicator(unsigned int face) const;
         inline bool
         GetIsAtBoundary() const;
         inline double
@@ -453,6 +466,15 @@ namespace DOpE
 
   /**********************************************/
   template<typename VECTOR, int dim>
+    unsigned int
+    CellDataContainer<dealii::DoFHandler<dim>, VECTOR, dim>::GetFaceBoundaryIndicator(
+        unsigned int face) const
+    {
+        return _cell[0]->face(face)->boundary_indicator();
+    }
+
+  /**********************************************/
+  template<typename VECTOR, int dim>
     bool
     CellDataContainer<dealii::DoFHandler<dim>, VECTOR, dim>::GetIsAtBoundary() const
     {
@@ -552,6 +574,16 @@ namespace DOpE
         throw DOpEException("There is no neighbor with number" + face,
             "HpCellDataContainer::GetNbrMaterialId");
     }
+
+  /**********************************************/
+  template<typename VECTOR, int dim>
+    unsigned int
+    CellDataContainer<dealii::hp::DoFHandler<dim>, VECTOR, dim>::GetFaceBoundaryIndicator(
+        unsigned int face) const
+    {
+        return _cell[0]->face(face)->boundary_indicator();
+    }
+
   /*********************************************/
 
   template<typename VECTOR, int dim>
