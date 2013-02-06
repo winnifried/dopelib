@@ -151,8 +151,7 @@ namespace DOpE
                    *                                be found in this map at the position "state"
                    *
                    */
-                  template<typename FE,
-typename            SPARSITYPATTERN>
+                  template<typename FE, typename SPARSITYPATTERN>
             CellDataContainer(const Quadrature<dim>& quad,
                 UpdateFlags update_flags,
                 StateSpaceTimeHandler<FE, dealii::DoFHandler<dim>,
@@ -202,6 +201,7 @@ typename            SPARSITYPATTERN>
         GetIsAtBoundary() const;
         inline double
         GetCellDiameter() const;
+        inline Point<dim> GetCenter() const;
         inline const DOpEWrapper::FEValues<dim>&
         GetFEValuesState() const;
         inline const DOpEWrapper::FEValues<dim>&
@@ -352,6 +352,7 @@ typename            SPARSITYPATTERN>
         GetIsAtBoundary() const;
         inline double
         GetCellDiameter() const;
+        inline Point<dim> GetCenter() const;
 
         inline const DOpEWrapper::FEValues<dim>&
         GetFEValuesState() const;
@@ -470,7 +471,7 @@ typename            SPARSITYPATTERN>
     CellDataContainer<dealii::DoFHandler<dim>, VECTOR, dim>::GetFaceBoundaryIndicator(
         unsigned int face) const
     {
-        return _cell[0]->face(face)->boundary_indicator();
+      return _cell[0]->face(face)->boundary_indicator();
     }
 
   /**********************************************/
@@ -480,12 +481,19 @@ typename            SPARSITYPATTERN>
     {
       return _cell[0]->at_boundary();
     }
-
+  /**********************************************/
   template<typename VECTOR, int dim>
     double
     CellDataContainer<dealii::DoFHandler<dim>, VECTOR, dim>::GetCellDiameter() const
     {
       return _cell[0]->diameter();
+    }
+  /**********************************************/
+  template<typename VECTOR, int dim>
+    Point<dim>
+    CellDataContainer<dealii::DoFHandler<dim>, VECTOR, dim>::GetCenter() const
+    {
+      return _cell[0]->center();
     }
 
   /**********************************************/
@@ -581,7 +589,7 @@ typename            SPARSITYPATTERN>
     CellDataContainer<dealii::hp::DoFHandler<dim>, VECTOR, dim>::GetFaceBoundaryIndicator(
         unsigned int face) const
     {
-        return _cell[0]->face(face)->boundary_indicator();
+      return _cell[0]->face(face)->boundary_indicator();
     }
 
   /*********************************************/
@@ -600,6 +608,14 @@ typename            SPARSITYPATTERN>
     CellDataContainer<dealii::hp::DoFHandler<dim>, VECTOR, dim>::GetCellDiameter() const
     {
       return _cell[0]->diameter();
+    }
+
+  /**********************************************/
+  template<typename VECTOR, int dim>
+    Point<dim>
+    CellDataContainer<dealii::hp::DoFHandler<dim>, VECTOR, dim>::GetCenter() const
+    {
+      return _cell[0]->center();
     }
 
   /*********************************************/
