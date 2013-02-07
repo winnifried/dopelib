@@ -36,10 +36,14 @@ namespace DOpE
 
   /***Implementation of RefinementContainer*******************/
 
-  RefinementContainer::RefinementContainer()
-      : _dummy(0)
+  RefinementContainer::RefinementContainer(DOpEtypes::RefinementType ref_type)
+      : _dummy(0), _ref_type(ref_type)
   {
-    _coarsening = false;
+    if (ref_type == DOpEtypes::RefinementType::global
+        || ref_type == DOpEtypes::RefinementType::finest_of_both)
+      _coarsening = false; //we know that in these cases no coarsening is performed
+    else
+      _coarsening = true; // we do not know, coarsening might be a part of the strategy
   }
 
   /***********************************************************/
@@ -96,7 +100,7 @@ namespace DOpE
   DOpEtypes::RefinementType
   RefinementContainer::GetRefType() const
   {
-    return DOpEtypes::RefinementType::global;
+    return _ref_type;
   }
 
   /***********************************************************/
@@ -111,8 +115,9 @@ namespace DOpE
   /****Implementation of LocalRefinement**********************/
   /***********************************************************/
 
-  LocalRefinement::LocalRefinement(const dealii::Vector<float>& indicators)
-      : _indicators(indicators)
+  LocalRefinement::LocalRefinement(const dealii::Vector<float>& indicators,
+      DOpEtypes::RefinementType ref_type)
+      : RefinementContainer(ref_type), _indicators(indicators)
   {
   }
 
@@ -123,14 +128,15 @@ namespace DOpE
   }
 
   /***********************************************************/
-  /****Implementation of RefineFixedFraction*******************/
+  /****Implementation of RefineFixedFraction******************/
   /***********************************************************/
 
   RefineFixedFraction::RefineFixedFraction(
       const dealii::Vector<float>& indicators, double top_fraction,
       double bottom_fraction, const unsigned int max_n_cells)
-      : LocalRefinement(indicators), _top_fraction(top_fraction), _bottom_fraction(
-          bottom_fraction), _max_n_cells(max_n_cells)
+      : LocalRefinement(indicators, DOpEtypes::RefinementType::fixed_fraction), _top_fraction(
+          top_fraction), _bottom_fraction(bottom_fraction), _max_n_cells(
+          max_n_cells)
   {
     assert(_top_fraction<=1. && _top_fraction>=0.);
     assert(_bottom_fraction<=1. && _bottom_fraction>=0.);
@@ -156,22 +162,15 @@ namespace DOpE
   }
 
   /***********************************************************/
-
-  DOpEtypes::RefinementType
-  RefineFixedFraction::GetRefType() const
-  {
-    return DOpEtypes::RefinementType::fixed_fraction;
-  }
-
-  /***********************************************************/
   /****Implementation of RefineFixedNumber********************/
   /***********************************************************/
 
   RefineFixedNumber::RefineFixedNumber(const dealii::Vector<float>& indicators,
       double top_fraction, double bottom_fraction,
       const unsigned int max_n_cells)
-      : LocalRefinement(indicators), _top_fraction(top_fraction), _bottom_fraction(
-          bottom_fraction), _max_n_cells(max_n_cells)
+      : LocalRefinement(indicators, DOpEtypes::RefinementType::fixed_number), _top_fraction(
+          top_fraction), _bottom_fraction(bottom_fraction), _max_n_cells(
+          max_n_cells)
   {
     assert(_top_fraction<=1. && _top_fraction>=0.);
     assert(_bottom_fraction<=1. && _bottom_fraction>=0.);
@@ -197,20 +196,13 @@ namespace DOpE
   }
 
   /***********************************************************/
-
-  DOpEtypes::RefinementType
-  RefineFixedNumber::GetRefType() const
-  {
-    return DOpEtypes::RefinementType::fixed_number;
-  }
-
-  /***********************************************************/
   /****Implementation of RefineOptimized**********************/
   /***********************************************************/
 
   RefineOptimized::RefineOptimized(const dealii::Vector<float>& indicators,
       double convergence_order)
-      : LocalRefinement(indicators), _convergence_order(convergence_order)
+      : LocalRefinement(indicators, DOpEtypes::RefinementType::optimized), _convergence_order(
+          convergence_order)
   {
     _coarsening = false; //the method uses no coarsening.
   }
@@ -221,14 +213,6 @@ namespace DOpE
   RefineOptimized::GetConvergenceOrder() const
   {
     return _convergence_order;
-  }
-
-  /***********************************************************/
-
-  DOpEtypes::RefinementType
-  RefineOptimized::GetRefType() const
-  {
-    return DOpEtypes::RefinementType::optimized;
   }
 
 }

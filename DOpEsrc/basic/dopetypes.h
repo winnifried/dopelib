@@ -48,10 +48,11 @@ namespace DOpE
      * fixed_fraction   Local refinement using fixed fraction strategy
      * fixed_number     Local refinement using fixed number of cells strategy
      * optimized        Local refinement using optimized strategy
+     * finest_of_both   In the case that one has two grids.
      */
     enum RefinementType
     {
-      global, fixed_fraction, fixed_number, optimized
+      global, fixed_fraction, fixed_number, optimized, finest_of_both
     };
 
 

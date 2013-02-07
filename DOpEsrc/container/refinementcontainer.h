@@ -50,10 +50,13 @@ namespace DOpE
   {
     public:
       /**
-       * Constructor if one wants to use global refinement (i.e. use an the
-       * constructor)
+       * Constructor if one wants to use a refinement which does
+       * not need any special data apart from the given DOpEtypes::RefinementType
+       * (like global refinement). If no DOpEtypes::RefinementType is given, global
+       * mesh refinement is assumed.
        * */
-      RefinementContainer();
+      RefinementContainer(DOpEtypes::RefinementType ref_type =
+          DOpEtypes::RefinementType::global);
       virtual
       ~RefinementContainer()
       {
@@ -79,18 +82,19 @@ namespace DOpE
        * the RefinementContainer object is constructed,
        * see dopetypes.h
        */
-      virtual DOpEtypes::RefinementType
+      DOpEtypes::RefinementType
       GetRefType() const;
 
       /**
        * Specifies if the mesh refinement uses coarsening.
        */
-      virtual bool
+      bool
       UsesCoarsening() const;
     protected:
       bool _coarsening;
     private:
       const dealii::Vector<float> _dummy;
+      const DOpEtypes::RefinementType _ref_type;
 
   };
 
@@ -112,7 +116,11 @@ namespace DOpE
       GetLocalErrorIndicators() const;
 
     protected:
-      LocalRefinement(const dealii::Vector<float>&);
+      /**
+       * Protected constructor for use in the derived classes
+       */
+      LocalRefinement(const dealii::Vector<float>&,
+          DOpEtypes::RefinementType ref_type);
     private:
       /**
        * Constructor made private. Should not get used!
@@ -153,8 +161,6 @@ namespace DOpE
       GetTopFraction() const;
       virtual double
       GetBottomFraction() const;
-      virtual DOpEtypes::RefinementType
-      GetRefType() const;
     private:
       const double _top_fraction, _bottom_fraction;
       const unsigned int _max_n_cells;
@@ -195,8 +201,6 @@ namespace DOpE
       GetTopFraction() const;
       virtual double
       GetBottomFraction() const;
-      virtual DOpEtypes::RefinementType
-      GetRefType() const;
 
     private:
       const double _top_fraction, _bottom_fraction;
@@ -229,8 +233,6 @@ namespace DOpE
 
       virtual double
       GetConvergenceOrder() const;
-      virtual DOpEtypes::RefinementType
-      GetRefType() const;
 
     private:
       const double _convergence_order;

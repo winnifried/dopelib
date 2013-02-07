@@ -571,7 +571,7 @@ namespace DOpE
                 ref_container.GetLocalErrorIndicators(),
                 ref_container.GetConvergenceOrder());
           }
-          else if ("finest-of-both")
+          else if (DOpEtypes::RefinementType::finest_of_both == ref_type)
           {
             this->FlagIfLeftIsNotFinest(_state_triangulation,
                 _control_triangulation);
