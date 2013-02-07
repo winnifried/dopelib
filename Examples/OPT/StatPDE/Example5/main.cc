@@ -159,7 +159,7 @@ int main(int argc, char **argv)
   int niter = 3;
   Alg.ReInit();
   ControlVector<VECTOR > q(&DOFH,"fullmem");
-  DOFH.RefineStateSpace("global");
+  DOFH.RefineStateSpace();
   Alg.ReInit();
 
   for(int i = 0; i < niter; i++)
@@ -176,12 +176,12 @@ int main(int argc, char **argv)
     }
     if(i != niter-1)
     {
-      //DOFH.RefineSpace("global");
-      DOFH.RefineControlSpace("global");
+      //DOFH.RefineSpace();
+      DOFH.RefineControlSpace();
       Alg.ReInit();
     }
   }
-  DOFH.RefineStateSpace("global");
+  DOFH.RefineStateSpace();
   Alg.ReInit();
  
   for(int i = 0; i < niter; i++)
@@ -215,7 +215,7 @@ int main(int argc, char **argv)
 					  solution,
 					  estimated_error_per_cell,
 					  component_mask);
-	DOFH.RefineStateSpace("fixednumber",&estimated_error_per_cell,0.1,0.0);
+	DOFH.RefineStateSpace(RefineFixedNumber(estimated_error_per_cell,0.1,0.0));
 	Alg.ReInit();
       }
       if( i%2 == 1)
@@ -233,7 +233,7 @@ int main(int argc, char **argv)
 					  solution,
 					  estimated_error_per_cell,
 					  component_mask);
-	DOFH.RefineControlSpace("fixednumber",&estimated_error_per_cell,0.1,0.0);
+	DOFH.RefineControlSpace(RefineFixedNumber(estimated_error_per_cell,0.1,0.0));
 	Alg.ReInit();
       }
     }

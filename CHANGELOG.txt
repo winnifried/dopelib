@@ -1,5 +1,6 @@
 Changelog DOpE
 ==============
+07.02.2013: Changed Interface of RefineSpace of the MOL-SpaceTimeHandlers
 21.12.2012: Removed the now unnecessary deal_II_dim > 1 checks for boundary and face integrals.
 	    Now also in 1d we can use boundary equation ...
 10.12.2012: Paper on DOpElib structure submitted to ACM TOMS

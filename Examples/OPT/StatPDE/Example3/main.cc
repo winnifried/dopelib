@@ -294,14 +294,8 @@ int main(int argc, char **argv)
  					      estimated_error_per_cell,
  					      component_mask
  					      );
-//	  GridRefinement::refine_and_coarsen_fixed_number (triangulation,
-//							   estimated_error_per_cell,
-//							   0.5, 0.0);
-//	  triangulation.prepare_coarsening_and_refinement();
-//	  triangulation.execute_coarsening_and_refinement ();
 
-	  //triangulation.refine_global (1);
-	  DOFH.RefineSpace("fixednumber",&estimated_error_per_cell,0.5,0.0);
+	  DOFH.RefineSpace(RefineFixedNumber(estimated_error_per_cell,0.5,0.0));
 	  Alg.ReInit();
 	}
 

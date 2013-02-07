@@ -218,7 +218,7 @@ int main(int argc, char **argv)
     }
     if(i != niter-1)
     {
-      DOFH.RefineSpace("global");
+      DOFH.RefineSpace();
       {//Set Dirichlet Boundary!
 	for (Triangulation<2>::active_cell_iterator
 	       cell = triangulation.begin_active();

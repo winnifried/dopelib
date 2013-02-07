@@ -205,7 +205,7 @@ main(int argc, char **argv)
         }
       if (iter != niter - 1)
         {
-          DOFH.RefineSpace("global");
+          DOFH.RefineSpace();
           solver.ReInit();
           out.ReInit();
         }

@@ -41,6 +41,21 @@ namespace DOpE
     // (see changes after version 7.1 in deal.ii).
 
     /**
+     * This enum describes the different mesh refinement types, see
+     * dealii::GridRefinement for more detailded explanation.
+     *
+     * global           Global refinement
+     * fixed_fraction   Local refinement using fixed fraction strategy
+     * fixed_number     Local refinement using fixed number of cells strategy
+     * optimized        Local refinement using optimized strategy
+     */
+    enum RefinementType
+    {
+      global, fixed_fraction, fixed_number, optimized
+    };
+
+
+    /**
      * This enum describes which terms of the error identity
      * should get computed:
      *

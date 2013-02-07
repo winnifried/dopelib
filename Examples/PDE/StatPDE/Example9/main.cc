@@ -264,15 +264,15 @@ main(int argc, char **argv)
     }
     if (i != max_iter - 1)
     {
-//      DOFH.RefineSpace("global");
+//      DOFH.RefineSpace(DOpEtypes::RefinementType::global); //or just DOFH.RefineSpace()
 
       Vector<float> error_ind(dwrc.GetErrorIndicators());
       for (unsigned int i = 0; i < error_ind.size(); i++)
         error_ind(i) = std::fabs(error_ind(i));
-      DOFH.RefineSpace("optimized", &error_ind);
+      DOFH.RefineSpace(RefineOptimized(error_ind));
 
-//      DOFH.RefineSpace("fixednumber", &error_ind, 0.4);
-//      DOFH.RefineSpace("fixedfraction", &error_ind, 0.8);
+//      DOFH.RefineSpace(RefineFixedNumber(error_ind, 0.4));
+//      DOFH.RefineSpace(RefineFixedFraction(error_ind, 0.8));
     }
   }
   return 0;

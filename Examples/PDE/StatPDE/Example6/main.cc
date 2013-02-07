@@ -213,7 +213,7 @@ int main(int argc, char **argv)
 		}
 		if (i != max_iter - 1)
 		{
-		  DOFH.RefineSpace("global");
+		  DOFH.RefineSpace();
 		}
 	}
 	return 0;

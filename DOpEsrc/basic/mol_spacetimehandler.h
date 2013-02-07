@@ -30,6 +30,7 @@
 #include "userdefineddofconstraints.h"
 #include "sth_internals.h"
 #include "mapping_wrapper.h"
+#include "refinementcontainer.h"
 
 #include <dofs/dof_handler.h>
 #include <dofs/dof_renumbering.h>
@@ -446,22 +447,43 @@ namespace DOpE
 
         }
 
+        /******************************************************/
+        /**
+         * This Function is used to refine the spatial mesh globally.
+         * After calling a refinement function a reinitialization is required!
+         *
+         * @param ref_type       A DOpEtypes::RefinementType telling how to refine the
+         *                       spatial mesh. Only DOpEtypes::RefinementType::global
+         *                       is allowed in this method, else one has to specify
+         *                       additionally a RefinementContainer, see the alternative
+         *                       RefineSpace method.
+         */
+        void
+        RefineSpace(DOpEtypes::RefinementType ref_type =
+            DOpEtypes::RefinementType::global)
+        {
+          assert(ref_type == DOpEtypes::RefinementType::global);
+          RefinementContainer ref_con_dummy;
+          RefineSpace(ref_con_dummy);
+        }
+
+        /******************************************************/
         /**
          * This Function is used to refine the spatial mesh.
          * After calling a refinement function a reinitialization is required!
          *
-         * @param ref_type          A string telling how to refine, feasible values are at present
-         *                          'global', 'fixedfraction', 'fixednumber', 'optimized'
-         * @param indicators        A set of positive values, used to guide refinement.
-         * @param topfraction       In a fixed fraction strategy, wich part should be refined
-         * @param bottomfraction    In a fixed fraction strategy, wich part should be coarsened
+         * @param ref_container   Steers the local mesh refinement. Currently availabe are
+         *                        RefinementContainer (for global refinement), RefineFixedFraction,
+         *                        RefineFixedNumber and RefineOptimized.
          */
+
         void
-        RefineSpace(std::string ref_type,
-            const Vector<float>* indicators = NULL, double topfraction = 0.1,
-            double bottomfraction = 0.0)
+        RefineSpace(const RefinementContainer& ref_container)
         {
-          assert(bottomfraction == 0.0);
+          DOpEtypes::RefinementType ref_type = ref_container.GetRefType();
+
+          //make sure that we do not use any coarsening
+          assert(!ref_container.UsesCoarsening());
 
           if (_control_mesh_transfer != NULL)
           {
@@ -480,28 +502,29 @@ namespace DOpE
 #endif
           _state_mesh_transfer = new dealii::SolutionTransfer<dealdim, VECTOR>(
               _state_dof_handler);
-          if ("global" == ref_type)
+          if (DOpEtypes::RefinementType::global == ref_type)
           {
             _triangulation.set_all_refine_flags();
           }
-          else if ("fixednumber" == ref_type)
+          else if (DOpEtypes::RefinementType::fixed_number == ref_type)
           {
-            assert(indicators != NULL);
             GridRefinement::refine_and_coarsen_fixed_number(_triangulation,
-                *indicators, topfraction, bottomfraction);
+                ref_container.GetLocalErrorIndicators(),
+                ref_container.GetTopFraction(),
+                ref_container.GetBottomFraction());
           }
-          else if ("fixedfraction" == ref_type)
+          else if (DOpEtypes::RefinementType::fixed_fraction == ref_type)
           {
-            assert(indicators != NULL);
             GridRefinement::refine_and_coarsen_fixed_fraction(_triangulation,
-                *indicators, topfraction, bottomfraction);
+                ref_container.GetLocalErrorIndicators(),
+                ref_container.GetTopFraction(),
+                ref_container.GetBottomFraction());
           }
-          else if ("optimized" == ref_type)
+          else if (DOpEtypes::RefinementType::optimized == ref_type)
           {
-            assert(indicators != NULL);
             GridRefinement::refine_and_coarsen_optimize(_triangulation,
-                *indicators);
-            //TODO: how can we prevent coarsening here ?
+                ref_container.GetLocalErrorIndicators(),
+                ref_container.GetConvergenceOrder());
           }
           else
           {
@@ -511,9 +534,11 @@ namespace DOpE
           _triangulation.prepare_coarsening_and_refinement();
 
           //FIXME: works only if no coarsening happens, because we do not have the vectors to be interpolated availiable...
-          if (_control_mesh_transfer != NULL)
+          if (_control_mesh_transfer != NULL
+            )
             _control_mesh_transfer->prepare_for_pure_refinement();
-          if (_state_mesh_transfer != NULL)
+          if (_state_mesh_transfer != NULL
+            )
             _state_mesh_transfer->prepare_for_pure_refinement();
 
           _triangulation.execute_coarsening_and_refinement();

@@ -623,7 +623,7 @@ template<typename PROBLEM>
       unsigned int color = dirichlet_colors[i];
       std::vector<bool> comp_mask = pde.GetTransposedDirichletCompMask(color);
       std::vector<bool> current_comp(comp_mask.size(), false);
-      std::set<unsigned char> boundary_indicators;
+      std::set<unsigned int> boundary_indicators;
       boundary_indicators.insert(color);
       for (unsigned int j = 0; j < comp_mask.size(); j++)
       {

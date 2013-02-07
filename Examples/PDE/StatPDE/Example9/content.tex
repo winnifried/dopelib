@@ -114,8 +114,8 @@ We can now get the error indicators (with signs!) out of \texttt{dwrc} by
 \begin{verbatim}
 dwrc.GetErrorIndicators();
 \end{verbatim}
-With these indicators, we are now able to refine our grid adaptively (there are several mesh adaption strategies implemented, like 'optimized', 'fixednumber' or 'fixedfraction')
+With these indicators, we are now able to refine our grid adaptively (there are several mesh adaption strategies implemented, like 'RefineOptimized', 'RefineFixedNumber' or 'RefineFixedFraction')
 \begin{verbatim}
-DOFH.RefineSpace("optimized", &error_ind);
+DOFH.RefineSpace(RefineOptimized(optimized, error_ind));
 \end{verbatim}
 Note, that one has to take the norm of each entry in the vector of the error indicators before feeding them into the \texttt{RefineSpace} method.

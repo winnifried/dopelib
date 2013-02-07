@@ -250,8 +250,8 @@ main(int argc, char **argv)
                   QGauss<2>(3), FunctionMap<3>::type(), solution,
                   estimated_error_per_cell, component_mask);
 
-              DOFH1.RefineSpace("fixednumber", &estimated_error_per_cell, 0.2,
-                  0.0);
+              DOFH1.RefineSpace(RefineFixedNumber(estimated_error_per_cell, 0.2,
+                  0.0));
             }
         }
     }
@@ -324,8 +324,8 @@ main(int argc, char **argv)
                   static_cast<const DoFHandler<3>&>(DOFH2.GetStateDoFHandler()),
                   QGauss<2>(3), FunctionMap<3>::type(), solution,
                   estimated_error_per_cell, component_mask);
-              DOFH2.RefineSpace("fixednumber", &estimated_error_per_cell, 0.2,
-                  0.0);
+              DOFH2.RefineSpace(RefineFixedNumber(estimated_error_per_cell, 0.2,
+                  0.0));
             }
         }
 

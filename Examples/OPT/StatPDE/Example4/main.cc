@@ -180,7 +180,7 @@ int main(int argc, char **argv)
     if(i != niter-1)
     {
       //triangulation.refine_global (1);
-      DOFH.RefineSpace("global");
+      DOFH.RefineSpace();
       Alg.ReInit();
     }
   }

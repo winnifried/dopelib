@@ -276,8 +276,8 @@ main(int argc, char **argv)
     }
     if (i != max_iter - 1)
     {
-      DOFH.RefineSpace("global");
-      DOFH_q1.RefineSpace("global");
+      DOFH.RefineSpace();
+      DOFH_q1.RefineSpace();
     }
   }
   convergence_table.set_scientific("L2-error ||", true);

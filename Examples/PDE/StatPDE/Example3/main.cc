@@ -244,7 +244,7 @@ main(int argc, char **argv)
               static_cast<const DoFHandler<2>&>(DOFH.GetStateDoFHandler()),
               QGauss<1>(2), FunctionMap<2>::type(), solution,
               estimated_error_per_cell, component_mask);
-          DOFH.RefineSpace("fixednumber", &estimated_error_per_cell, 0.3, 0.0);
+          DOFH.RefineSpace(RefineFixedNumber(estimated_error_per_cell, 0.3, 0.0));
           solver.ReInit();
           out.ReInit();
         }
