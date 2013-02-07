@@ -33,6 +33,7 @@
 
 #include <deal.II/lac/vector.h>
 #include "dopetypes.h"
+#include <limits>
 
 namespace DOpE
 {
