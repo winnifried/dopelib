@@ -28,7 +28,7 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 4	 Residual (rel.):   2.21e-01	 LineSearch {0} 
 			 Newton step: 5	 Residual (rel.):   4.51e-03	 LineSearch {0} 
 			 Newton step: 6	 Residual (rel.):   2.04e-05	 LineSearch {0} 
-			 Newton step: 7	 Residual (rel.):   6.41e-07	 LineSearch {0} 
+			 Newton step: 7	 Residual (rel.): < 2.00e-06	 LineSearch {0} 
 	Writing [./Mesh0/State_OptProblem.00000.00007.vtk]
 	Computing Cost Functional:
 	CostFunctional: 4.7e+02
@@ -40,9 +40,9 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 	Computing Reduced Adjoint:
 			 Newton step: 0	 Residual (abs.):   6.93e+03
 			 Newton step: 0	 Residual (rel.):   1.00e+00
-			 Newton step: 1	 Residual (rel.): < 2.00e-08	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 2.00e-06	 LineSearch {0} 
 	Computing Reduced Gradient:
-			  Newton step: 0	 Residual (abs.):  < 2.00e-08
+			  Newton step: 0	 Residual (abs.):  < 2.00e-06
 			  Newton step: 0	 Residual (rel.):        NAN
 		 Newton step: 0	 Residual (abs.): 3.1
 		 Newton step: 0	 Residual (rel.): 1.00e+00
@@ -53,26 +53,26 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 0	 Residual (abs.):   7.48e-02
 			 Newton step: 0	 Residual (rel.):   1.00e+00
 			 Newton step: 1	 Residual (rel.):   2.62e-04	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.): < 2.00e-08	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.): < 2.00e-06	 LineSearch {0} 
 		Solving Adjoint Hessian:
 			 Newton step: 0	 Residual (abs.):   5.08e+00
 			 Newton step: 0	 Residual (rel.):   1.00e+00
-			 Newton step: 1	 Residual (rel.): < 2.00e-08	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 2.00e-06	 LineSearch {0} 
 		Computing Representation of the Hessian:
-			  Newton step: 0	 Residual (abs.):  < 2.00e-08
+			  Newton step: 0	 Residual (abs.):  < 2.00e-06
 			  Newton step: 0	 Residual (rel.):        NAN
 		 Cg step: 1	 Residual: 6.26186
 	Computing ReducedHessianVector:
 		Solving Tangent:
 			 Newton step: 0	 Residual (abs.):   2.23e-01
 			 Newton step: 0	 Residual (rel.):   1.00e+00
-			 Newton step: 1	 Residual (rel.): < 2.00e-08	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 2.00e-06	 LineSearch {0} 
 		Solving Adjoint Hessian:
 			 Newton step: 0	 Residual (abs.):   1.51e+01
 			 Newton step: 0	 Residual (rel.):   1.00e+00
-			 Newton step: 1	 Residual (rel.): < 2.00e-08	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 2.00e-06	 LineSearch {0} 
 		Computing Representation of the Hessian:
-			  Newton step: 0	 Residual (abs.):  < 2.00e-08
+			  Newton step: 0	 Residual (abs.):  < 2.00e-06
 			  Newton step: 0	 Residual (rel.):        NAN
 		 Cg step: 2	 Residual: 0.116813
 	Computing State Solution:
@@ -81,8 +81,8 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 1	 Residual (rel.):   2.03e-01	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   1.33e-02	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   1.33e-04	 LineSearch {0} 
-			 Newton step: 4	 Residual (rel.):   1.89e-06	 LineSearch {0} 
-			 Newton step: 5	 Residual (rel.):   1.01e-07	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 2.00e-06	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.): < 2.00e-06	 LineSearch {0} 
 	Writing [./Mesh0/State_OptProblem.00001.00005.vtk]
 	Computing Cost Functional:
 	CostFunctional: 3.66e+02
@@ -94,9 +94,9 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 	Computing Reduced Adjoint:
 			 Newton step: 0	 Residual (abs.):   2.18e+03
 			 Newton step: 0	 Residual (rel.):   1.00e+00
-			 Newton step: 1	 Residual (rel.): < 2.00e-08	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 2.00e-06	 LineSearch {0} 
 	Computing Reduced Gradient:
-			  Newton step: 0	 Residual (abs.):  < 2.00e-08
+			  Newton step: 0	 Residual (abs.):  < 2.00e-06
 			  Newton step: 0	 Residual (rel.):        NAN
 	Writing [./Mesh0/Control_OptProblem.00001.00000.txt]
 		 Newton step: 1	 Residual (rel.):   4.39e-02	 LinearIters [2]	 LineSearch {0} 
@@ -105,26 +105,26 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 		Solving Tangent:
 			 Newton step: 0	 Residual (abs.):   1.87e-01
 			 Newton step: 0	 Residual (rel.):   1.00e+00
-			 Newton step: 1	 Residual (rel.): < 2.00e-08	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 2.00e-06	 LineSearch {0} 
 		Solving Adjoint Hessian:
 			 Newton step: 0	 Residual (abs.):   1.51e+02
 			 Newton step: 0	 Residual (rel.):   1.00e+00
-			 Newton step: 1	 Residual (rel.): < 2.00e-08	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 2.00e-06	 LineSearch {0} 
 		Computing Representation of the Hessian:
-			  Newton step: 0	 Residual (abs.):  < 2.00e-08
+			  Newton step: 0	 Residual (abs.):  < 2.00e-06
 			  Newton step: 0	 Residual (rel.):        NAN
 		 Cg step: 1	 Residual: 0.275408
 	Computing ReducedHessianVector:
 		Solving Tangent:
 			 Newton step: 0	 Residual (abs.):   1.32e-02
 			 Newton step: 0	 Residual (rel.):   1.00e+00
-			 Newton step: 1	 Residual (rel.): < 2.00e-08	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 2.00e-06	 LineSearch {0} 
 		Solving Adjoint Hessian:
 			 Newton step: 0	 Residual (abs.):   3.51e-01
 			 Newton step: 0	 Residual (rel.):   1.00e+00
-			 Newton step: 1	 Residual (rel.): < 2.00e-08	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 2.00e-06	 LineSearch {0} 
 		Computing Representation of the Hessian:
-			  Newton step: 0	 Residual (abs.):  < 2.00e-08
+			  Newton step: 0	 Residual (abs.):  < 2.00e-06
 			  Newton step: 0	 Residual (rel.):        NAN
 		 Cg step: 2	 Residual: 0.025276
 	Computing State Solution:
@@ -133,7 +133,7 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 1	 Residual (rel.):   3.23e-01	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   4.86e-03	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   1.58e-05	 LineSearch {0} 
-			 Newton step: 4	 Residual (rel.):   6.51e-07	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 2.00e-06	 LineSearch {0} 
 	Writing [./Mesh0/State_OptProblem.00002.00004.vtk]
 	Computing Cost Functional:
 	CostFunctional: 3.65e+02
@@ -145,9 +145,9 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 	Computing Reduced Adjoint:
 			 Newton step: 0	 Residual (abs.):   2.35e+02
 			 Newton step: 0	 Residual (rel.):   1.00e+00
-			 Newton step: 1	 Residual (rel.): < 2.00e-08	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 2.00e-06	 LineSearch {0} 
 	Computing Reduced Gradient:
-			  Newton step: 0	 Residual (abs.):  < 2.00e-08
+			  Newton step: 0	 Residual (abs.):  < 2.00e-06
 			  Newton step: 0	 Residual (rel.):        NAN
 	Writing [./Mesh0/Control_OptProblem.00002.00000.txt]
 		 Newton step: 2	 Residual (rel.):   1.08e-02	 LinearIters [2]	 LineSearch {0} 
@@ -157,39 +157,39 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 0	 Residual (abs.):   8.86e-03
 			 Newton step: 0	 Residual (rel.):   1.00e+00
 			 Newton step: 1	 Residual (rel.):   1.64e-04	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.): < 2.00e-08	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.): < 2.00e-06	 LineSearch {0} 
 		Solving Adjoint Hessian:
 			 Newton step: 0	 Residual (abs.):   6.78e-01
 			 Newton step: 0	 Residual (rel.):   1.00e+00
-			 Newton step: 1	 Residual (rel.): < 2.00e-08	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 2.00e-06	 LineSearch {0} 
 		Computing Representation of the Hessian:
-			  Newton step: 0	 Residual (abs.):  < 2.00e-08
+			  Newton step: 0	 Residual (abs.):  < 2.00e-06
 			  Newton step: 0	 Residual (rel.):        NAN
 		 Cg step: 1	 Residual: 0.0679437
 	Computing ReducedHessianVector:
 		Solving Tangent:
 			 Newton step: 0	 Residual (abs.):   3.39e-03
 			 Newton step: 0	 Residual (rel.):   1.00e+00
-			 Newton step: 1	 Residual (rel.): < 2.00e-08	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 2.00e-06	 LineSearch {0} 
 		Solving Adjoint Hessian:
 			 Newton step: 0	 Residual (abs.):   7.73e-02
 			 Newton step: 0	 Residual (rel.):   1.00e+00
-			 Newton step: 1	 Residual (rel.): < 2.00e-08	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 2.00e-06	 LineSearch {0} 
 		Computing Representation of the Hessian:
-			  Newton step: 0	 Residual (abs.):  < 2.00e-08
+			  Newton step: 0	 Residual (abs.):  < 2.00e-06
 			  Newton step: 0	 Residual (rel.):        NAN
 		 Cg step: 2	 Residual: 0.00701463
 	Computing ReducedHessianVector:
 		Solving Tangent:
 			 Newton step: 0	 Residual (abs.):   2.24e-03
 			 Newton step: 0	 Residual (rel.):   1.00e+00
-			 Newton step: 1	 Residual (rel.): < 2.00e-08	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 2.00e-06	 LineSearch {0} 
 		Solving Adjoint Hessian:
 			 Newton step: 0	 Residual (abs.):   5.45e-02
 			 Newton step: 0	 Residual (rel.):   1.00e+00
-			 Newton step: 1	 Residual (rel.): < 2.00e-08	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 2.00e-06	 LineSearch {0} 
 		Computing Representation of the Hessian:
-			  Newton step: 0	 Residual (abs.):  < 2.00e-08
+			  Newton step: 0	 Residual (abs.):  < 2.00e-06
 			  Newton step: 0	 Residual (rel.):        NAN
 		 Cg step: 3	 Residual: 0.000789013
 	Computing State Solution:
@@ -198,7 +198,7 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 1	 Residual (rel.):   2.50e-01	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   1.47e-04	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   5.41e-06	 LineSearch {0} 
-			 Newton step: 4	 Residual (rel.):   2.20e-07	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 2.00e-06	 LineSearch {0} 
 	Writing [./Mesh0/State_OptProblem.00003.00004.vtk]
 	Computing Cost Functional:
 		 linesearch 
@@ -208,7 +208,7 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 1	 Residual (rel.):   2.67e-02	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   2.33e-04	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   9.47e-06	 LineSearch {0} 
-			 Newton step: 4	 Residual (rel.):   3.85e-07	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 2.00e-06	 LineSearch {0} 
 	Writing [./Mesh0/State_OptProblem.00003.00004.vtk]
 	Computing Cost Functional:
 	Computing State Solution:
@@ -217,7 +217,7 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 1	 Residual (rel.):   2.38e-02	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   2.31e-04	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   9.42e-06	 LineSearch {0} 
-			 Newton step: 4	 Residual (rel.):   3.84e-07	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 2.00e-06	 LineSearch {0} 
 	Writing [./Mesh0/State_OptProblem.00003.00004.vtk]
 	Computing Cost Functional:
 	Computing State Solution:
@@ -226,7 +226,7 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 1	 Residual (rel.):   2.13e-02	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   2.30e-04	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   9.38e-06	 LineSearch {0} 
-			 Newton step: 4	 Residual (rel.):   3.83e-07	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 2.00e-06	 LineSearch {0} 
 	Writing [./Mesh0/State_OptProblem.00003.00004.vtk]
 	Computing Cost Functional:
 	Computing State Solution:
@@ -235,7 +235,7 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 1	 Residual (rel.):   1.91e-02	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   2.29e-04	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   9.34e-06	 LineSearch {0} 
-			 Newton step: 4	 Residual (rel.):   3.82e-07	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 2.00e-06	 LineSearch {0} 
 	Writing [./Mesh0/State_OptProblem.00003.00004.vtk]
 	Computing Cost Functional:
 	Computing State Solution:
@@ -244,7 +244,7 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 1	 Residual (rel.):   1.71e-02	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   2.28e-04	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   9.31e-06	 LineSearch {0} 
-			 Newton step: 4	 Residual (rel.):   3.81e-07	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 2.00e-06	 LineSearch {0} 
 	Writing [./Mesh0/State_OptProblem.00003.00004.vtk]
 	Computing Cost Functional:
  ERROR: The following `DOpEIterationException` reports!
@@ -260,9 +260,9 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 	Computing Reduced Adjoint:
 			 Newton step: 0	 Residual (abs.):   4.98e+01
 			 Newton step: 0	 Residual (rel.):   1.00e+00
-			 Newton step: 1	 Residual (rel.): < 2.00e-08	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 2.00e-06	 LineSearch {0} 
 	Computing Reduced Gradient:
-			  Newton step: 0	 Residual (abs.):  < 2.00e-08
+			  Newton step: 0	 Residual (abs.):  < 2.00e-06
 			  Newton step: 0	 Residual (rel.):        NAN
 	Writing [./Mesh0/Control_OptProblem.00003.00000.txt]
 		 Newton step: 3	 Residual (rel.):   4.32e-03	 LinearIters [3]	 LineSearch {-1} 
@@ -271,39 +271,39 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 		Solving Tangent:
 			 Newton step: 0	 Residual (abs.):   4.68e-04
 			 Newton step: 0	 Residual (rel.):   1.00e+00
-			 Newton step: 1	 Residual (rel.): < 2.00e-08	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 2.00e-06	 LineSearch {0} 
 		Solving Adjoint Hessian:
 			 Newton step: 0	 Residual (abs.):   1.40e-02
 			 Newton step: 0	 Residual (rel.):   1.00e+00
-			 Newton step: 1	 Residual (rel.): < 2.00e-08	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 2.00e-06	 LineSearch {0} 
 		Computing Representation of the Hessian:
-			  Newton step: 0	 Residual (abs.):  < 2.00e-08
+			  Newton step: 0	 Residual (abs.):  < 2.00e-06
 			  Newton step: 0	 Residual (rel.):        NAN
 		 Cg step: 1	 Residual: 0.0270873
 	Computing ReducedHessianVector:
 		Solving Tangent:
 			 Newton step: 0	 Residual (abs.):   1.35e-03
 			 Newton step: 0	 Residual (rel.):   1.00e+00
-			 Newton step: 1	 Residual (rel.): < 2.00e-08	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 2.00e-06	 LineSearch {0} 
 		Solving Adjoint Hessian:
 			 Newton step: 0	 Residual (abs.):   3.16e-02
 			 Newton step: 0	 Residual (rel.):   1.00e+00
-			 Newton step: 1	 Residual (rel.): < 2.00e-08	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 2.00e-06	 LineSearch {0} 
 		Computing Representation of the Hessian:
-			  Newton step: 0	 Residual (abs.):  < 2.00e-08
+			  Newton step: 0	 Residual (abs.):  < 2.00e-06
 			  Newton step: 0	 Residual (rel.):        NAN
 		 Cg step: 2	 Residual: 0.00295788
 	Computing ReducedHessianVector:
 		Solving Tangent:
 			 Newton step: 0	 Residual (abs.):   9.03e-04
 			 Newton step: 0	 Residual (rel.):   1.00e+00
-			 Newton step: 1	 Residual (rel.): < 2.00e-08	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 2.00e-06	 LineSearch {0} 
 		Solving Adjoint Hessian:
 			 Newton step: 0	 Residual (abs.):   2.09e-02
 			 Newton step: 0	 Residual (rel.):   1.00e+00
-			 Newton step: 1	 Residual (rel.): < 2.00e-08	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 2.00e-06	 LineSearch {0} 
 		Computing Representation of the Hessian:
-			  Newton step: 0	 Residual (abs.):  < 2.00e-08
+			  Newton step: 0	 Residual (abs.):  < 2.00e-06
 			  Newton step: 0	 Residual (rel.):        NAN
 		 Cg step: 3	 Residual: 0.000342327
 	Computing State Solution:
@@ -312,7 +312,7 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 1	 Residual (rel.):   1.18e-01	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   2.04e-04	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   8.29e-06	 LineSearch {0} 
-			 Newton step: 4	 Residual (rel.):   3.37e-07	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 2.00e-06	 LineSearch {0} 
 	Writing [./Mesh0/State_OptProblem.00004.00004.vtk]
 	Computing Cost Functional:
 		 linesearch 
@@ -322,7 +322,7 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 1	 Residual (rel.):   1.21e-02	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   2.44e-04	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   9.91e-06	 LineSearch {0} 
-			 Newton step: 4	 Residual (rel.):   4.03e-07	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 2.00e-06	 LineSearch {0} 
 	Writing [./Mesh0/State_OptProblem.00004.00004.vtk]
 	Computing Cost Functional:
 	Computing State Solution:
@@ -331,7 +331,7 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 1	 Residual (rel.):   1.09e-02	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   2.43e-04	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   9.89e-06	 LineSearch {0} 
-			 Newton step: 4	 Residual (rel.):   4.02e-07	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 2.00e-06	 LineSearch {0} 
 	Writing [./Mesh0/State_OptProblem.00004.00004.vtk]
 	Computing Cost Functional:
 	Computing State Solution:
@@ -340,7 +340,7 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 1	 Residual (rel.):   9.80e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   2.42e-04	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   9.87e-06	 LineSearch {0} 
-			 Newton step: 4	 Residual (rel.):   4.02e-07	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 2.00e-06	 LineSearch {0} 
 	Writing [./Mesh0/State_OptProblem.00004.00004.vtk]
 	Computing Cost Functional:
 	Computing State Solution:
@@ -349,7 +349,7 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 1	 Residual (rel.):   8.81e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   2.42e-04	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   9.85e-06	 LineSearch {0} 
-			 Newton step: 4	 Residual (rel.):   4.02e-07	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 2.00e-06	 LineSearch {0} 
 	Writing [./Mesh0/State_OptProblem.00004.00004.vtk]
 	Computing Cost Functional:
 	Computing State Solution:
@@ -358,7 +358,7 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 1	 Residual (rel.):   7.91e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   2.42e-04	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   9.84e-06	 LineSearch {0} 
-			 Newton step: 4	 Residual (rel.):   4.01e-07	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 2.00e-06	 LineSearch {0} 
 	Writing [./Mesh0/State_OptProblem.00004.00004.vtk]
 	Computing Cost Functional:
  ERROR: The following `DOpEIterationException` reports!
@@ -374,9 +374,9 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 	Computing Reduced Adjoint:
 			 Newton step: 0	 Residual (abs.):   1.89e+01
 			 Newton step: 0	 Residual (rel.):   1.00e+00
-			 Newton step: 1	 Residual (rel.): < 2.00e-08	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 2.00e-06	 LineSearch {0} 
 	Computing Reduced Gradient:
-			  Newton step: 0	 Residual (abs.):  < 2.00e-08
+			  Newton step: 0	 Residual (abs.):  < 2.00e-06
 			  Newton step: 0	 Residual (rel.):        NAN
 	Writing [./Mesh0/Control_OptProblem.00004.00000.txt]
 		 Newton step: 4	 Residual (rel.):   1.76e-03	 LinearIters [3]	 LineSearch {-1} 
@@ -385,39 +385,39 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 		Solving Tangent:
 			 Newton step: 0	 Residual (abs.):   1.81e-04
 			 Newton step: 0	 Residual (rel.):   1.00e+00
-			 Newton step: 1	 Residual (rel.): < 2.00e-08	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 2.00e-06	 LineSearch {0} 
 		Solving Adjoint Hessian:
 			 Newton step: 0	 Residual (abs.):   5.71e-03
 			 Newton step: 0	 Residual (rel.):   1.00e+00
-			 Newton step: 1	 Residual (rel.): < 2.00e-08	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 2.00e-06	 LineSearch {0} 
 		Computing Representation of the Hessian:
-			  Newton step: 0	 Residual (abs.):  < 2.00e-08
+			  Newton step: 0	 Residual (abs.):  < 2.00e-06
 			  Newton step: 0	 Residual (rel.):        NAN
 		 Cg step: 1	 Residual: 0.0110163
 	Computing ReducedHessianVector:
 		Solving Tangent:
 			 Newton step: 0	 Residual (abs.):   5.48e-04
 			 Newton step: 0	 Residual (rel.):   1.00e+00
-			 Newton step: 1	 Residual (rel.): < 2.00e-08	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 2.00e-06	 LineSearch {0} 
 		Solving Adjoint Hessian:
 			 Newton step: 0	 Residual (abs.):   1.32e-02
 			 Newton step: 0	 Residual (rel.):   1.00e+00
-			 Newton step: 1	 Residual (rel.): < 2.00e-08	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 2.00e-06	 LineSearch {0} 
 		Computing Representation of the Hessian:
-			  Newton step: 0	 Residual (abs.):  < 2.00e-08
+			  Newton step: 0	 Residual (abs.):  < 2.00e-06
 			  Newton step: 0	 Residual (rel.):        NAN
 		 Cg step: 2	 Residual: 0.0012549
 	Computing ReducedHessianVector:
 		Solving Tangent:
 			 Newton step: 0	 Residual (abs.):   3.69e-04
 			 Newton step: 0	 Residual (rel.):   1.00e+00
-			 Newton step: 1	 Residual (rel.): < 2.00e-08	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 2.00e-06	 LineSearch {0} 
 		Solving Adjoint Hessian:
 			 Newton step: 0	 Residual (abs.):   8.65e-03
 			 Newton step: 0	 Residual (rel.):   1.00e+00
-			 Newton step: 1	 Residual (rel.): < 2.00e-08	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 2.00e-06	 LineSearch {0} 
 		Computing Representation of the Hessian:
-			  Newton step: 0	 Residual (abs.):  < 2.00e-08
+			  Newton step: 0	 Residual (abs.):  < 2.00e-06
 			  Newton step: 0	 Residual (rel.):        NAN
 		 Cg step: 3	 Residual: 0.000146833
 	Computing State Solution:
@@ -426,7 +426,7 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 1	 Residual (rel.):   5.49e-02	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   2.41e-04	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   9.79e-06	 LineSearch {0} 
-			 Newton step: 4	 Residual (rel.):   3.98e-07	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 2.00e-06	 LineSearch {0} 
 	Writing [./Mesh0/State_OptProblem.00005.00004.vtk]
 	Computing Cost Functional:
 		 linesearch 
@@ -436,7 +436,7 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 1	 Residual (rel.):   6.26e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   2.57e-04	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   1.04e-05	 LineSearch {0} 
-			 Newton step: 4	 Residual (rel.):   4.24e-07	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 2.00e-06	 LineSearch {0} 
 	Writing [./Mesh0/State_OptProblem.00005.00004.vtk]
 	Computing Cost Functional:
 	Computing State Solution:
@@ -445,7 +445,7 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 1	 Residual (rel.):   6.26e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   2.56e-04	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   1.04e-05	 LineSearch {0} 
-			 Newton step: 4	 Residual (rel.):   4.24e-07	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 2.00e-06	 LineSearch {0} 
 	Writing [./Mesh0/State_OptProblem.00005.00004.vtk]
 	Computing Cost Functional:
 	Computing State Solution:
@@ -454,7 +454,7 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 1	 Residual (rel.):   6.26e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   2.56e-04	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   1.04e-05	 LineSearch {0} 
-			 Newton step: 4	 Residual (rel.):   4.24e-07	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 2.00e-06	 LineSearch {0} 
 	Writing [./Mesh0/State_OptProblem.00005.00004.vtk]
 	Computing Cost Functional:
 	Computing State Solution:
@@ -463,7 +463,7 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 1	 Residual (rel.):   6.25e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   2.56e-04	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   1.04e-05	 LineSearch {0} 
-			 Newton step: 4	 Residual (rel.):   4.24e-07	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 2.00e-06	 LineSearch {0} 
 	Writing [./Mesh0/State_OptProblem.00005.00004.vtk]
 	Computing Cost Functional:
 	Computing State Solution:
@@ -472,7 +472,7 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 1	 Residual (rel.):   6.25e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   2.56e-04	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   1.04e-05	 LineSearch {0} 
-			 Newton step: 4	 Residual (rel.):   4.24e-07	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 2.00e-06	 LineSearch {0} 
 	Writing [./Mesh0/State_OptProblem.00005.00004.vtk]
 	Computing Cost Functional:
  ERROR: The following `DOpEIterationException` reports!
@@ -488,9 +488,9 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 	Computing Reduced Adjoint:
 			 Newton step: 0	 Residual (abs.):   7.70e+00
 			 Newton step: 0	 Residual (rel.):   1.00e+00
-			 Newton step: 1	 Residual (rel.): < 2.00e-08	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 2.00e-06	 LineSearch {0} 
 	Computing Reduced Gradient:
-			  Newton step: 0	 Residual (abs.):  < 2.00e-08
+			  Newton step: 0	 Residual (abs.):  < 2.00e-06
 			  Newton step: 0	 Residual (rel.):        NAN
 	Writing [./Mesh0/Control_OptProblem.00005.00000.txt]
 		 Newton step: 5	 Residual (rel.):   7.25e-04	 LinearIters [3]	 LineSearch {-1} 
@@ -499,39 +499,39 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 		Solving Tangent:
 			 Newton step: 0	 Residual (abs.):   7.07e-05
 			 Newton step: 0	 Residual (rel.):   1.00e+00
-			 Newton step: 1	 Residual (rel.): < 2.00e-08	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 2.00e-06	 LineSearch {0} 
 		Solving Adjoint Hessian:
 			 Newton step: 0	 Residual (abs.):   2.34e-03
 			 Newton step: 0	 Residual (rel.):   1.00e+00
-			 Newton step: 1	 Residual (rel.): < 2.00e-08	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 2.00e-06	 LineSearch {0} 
 		Computing Representation of the Hessian:
-			  Newton step: 0	 Residual (abs.):  < 2.00e-08
+			  Newton step: 0	 Residual (abs.):  < 2.00e-06
 			  Newton step: 0	 Residual (rel.):        NAN
 		 Cg step: 1	 Residual: 0.00454934
 	Computing ReducedHessianVector:
 		Solving Tangent:
 			 Newton step: 0	 Residual (abs.):   2.24e-04
 			 Newton step: 0	 Residual (rel.):   1.00e+00
-			 Newton step: 1	 Residual (rel.): < 2.00e-08	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 2.00e-06	 LineSearch {0} 
 		Solving Adjoint Hessian:
 			 Newton step: 0	 Residual (abs.):   5.61e-03
 			 Newton step: 0	 Residual (rel.):   1.00e+00
-			 Newton step: 1	 Residual (rel.): < 2.00e-08	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 2.00e-06	 LineSearch {0} 
 		Computing Representation of the Hessian:
-			  Newton step: 0	 Residual (abs.):  < 2.00e-08
+			  Newton step: 0	 Residual (abs.):  < 2.00e-06
 			  Newton step: 0	 Residual (rel.):        NAN
 		 Cg step: 2	 Residual: 0.000530186
 	Computing ReducedHessianVector:
 		Solving Tangent:
 			 Newton step: 0	 Residual (abs.):   1.53e-04
 			 Newton step: 0	 Residual (rel.):   1.00e+00
-			 Newton step: 1	 Residual (rel.): < 2.00e-08	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 2.00e-06	 LineSearch {0} 
 		Solving Adjoint Hessian:
 			 Newton step: 0	 Residual (abs.):   3.61e-03
 			 Newton step: 0	 Residual (rel.):   1.00e+00
-			 Newton step: 1	 Residual (rel.): < 2.00e-08	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 2.00e-06	 LineSearch {0} 
 		Computing Representation of the Hessian:
-			  Newton step: 0	 Residual (abs.):  < 2.00e-08
+			  Newton step: 0	 Residual (abs.):  < 2.00e-06
 			  Newton step: 0	 Residual (rel.):        NAN
 		 Cg step: 3	 Residual: 6.15051e-05
 	Computing State Solution:
@@ -540,7 +540,7 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 1	 Residual (rel.):   2.52e-02	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   2.63e-04	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   1.07e-05	 LineSearch {0} 
-			 Newton step: 4	 Residual (rel.):   4.35e-07	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 2.00e-06	 LineSearch {0} 
 	Writing [./Mesh0/State_OptProblem.00006.00004.vtk]
 	Computing Cost Functional:
 		 linesearch 
@@ -550,7 +550,7 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 1	 Residual (rel.):   6.60e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   2.70e-04	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   1.10e-05	 LineSearch {0} 
-			 Newton step: 4	 Residual (rel.):   4.46e-07	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 2.00e-06	 LineSearch {0} 
 	Writing [./Mesh0/State_OptProblem.00006.00004.vtk]
 	Computing Cost Functional:
 	Computing State Solution:
@@ -559,7 +559,7 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 1	 Residual (rel.):   6.60e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   2.70e-04	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   1.10e-05	 LineSearch {0} 
-			 Newton step: 4	 Residual (rel.):   4.46e-07	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 2.00e-06	 LineSearch {0} 
 	Writing [./Mesh0/State_OptProblem.00006.00004.vtk]
 	Computing Cost Functional:
 	Computing State Solution:
@@ -568,7 +568,7 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 1	 Residual (rel.):   6.60e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   2.69e-04	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   1.10e-05	 LineSearch {0} 
-			 Newton step: 4	 Residual (rel.):   4.46e-07	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 2.00e-06	 LineSearch {0} 
 	Writing [./Mesh0/State_OptProblem.00006.00004.vtk]
 	Computing Cost Functional:
 	Computing State Solution:
@@ -577,7 +577,7 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 1	 Residual (rel.):   6.60e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   2.69e-04	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   1.10e-05	 LineSearch {0} 
-			 Newton step: 4	 Residual (rel.):   4.46e-07	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 2.00e-06	 LineSearch {0} 
 	Writing [./Mesh0/State_OptProblem.00006.00004.vtk]
 	Computing Cost Functional:
 	Computing State Solution:
@@ -586,7 +586,7 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 1	 Residual (rel.):   6.60e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   2.69e-04	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   1.10e-05	 LineSearch {0} 
-			 Newton step: 4	 Residual (rel.):   4.46e-07	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 2.00e-06	 LineSearch {0} 
 	Writing [./Mesh0/State_OptProblem.00006.00004.vtk]
 	Computing Cost Functional:
  ERROR: The following `DOpEIterationException` reports!
@@ -602,9 +602,9 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 	Computing Reduced Adjoint:
 			 Newton step: 0	 Residual (abs.):   3.25e+00
 			 Newton step: 0	 Residual (rel.):   1.00e+00
-			 Newton step: 1	 Residual (rel.): < 2.00e-08	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 2.00e-06	 LineSearch {0} 
 	Computing Reduced Gradient:
-			  Newton step: 0	 Residual (abs.):  < 2.00e-08
+			  Newton step: 0	 Residual (abs.):  < 2.00e-06
 			  Newton step: 0	 Residual (rel.):        NAN
 	Writing [./Mesh0/Control_OptProblem.00006.00000.txt]
 		 Newton step: 6	 Residual (rel.):   3.03e-04	 LinearIters [3]	 LineSearch {-1} 
@@ -613,39 +613,39 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 		Solving Tangent:
 			 Newton step: 0	 Residual (abs.):   2.78e-05
 			 Newton step: 0	 Residual (rel.):   1.00e+00
-			 Newton step: 1	 Residual (rel.): < 2.00e-08	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 2.00e-06	 LineSearch {0} 
 		Solving Adjoint Hessian:
 			 Newton step: 0	 Residual (abs.):   9.63e-04
 			 Newton step: 0	 Residual (rel.):   1.00e+00
-			 Newton step: 1	 Residual (rel.): < 2.00e-08	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 2.00e-06	 LineSearch {0} 
 		Computing Representation of the Hessian:
-			  Newton step: 0	 Residual (abs.):  < 2.00e-08
+			  Newton step: 0	 Residual (abs.):  < 2.00e-06
 			  Newton step: 0	 Residual (rel.):        NAN
 		 Cg step: 1	 Residual: 0.00189968
 	Computing ReducedHessianVector:
 		Solving Tangent:
 			 Newton step: 0	 Residual (abs.):   9.23e-05
 			 Newton step: 0	 Residual (rel.):   1.00e+00
-			 Newton step: 1	 Residual (rel.): < 2.00e-08	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 2.00e-06	 LineSearch {0} 
 		Solving Adjoint Hessian:
 			 Newton step: 0	 Residual (abs.):   2.39e-03
 			 Newton step: 0	 Residual (rel.):   1.00e+00
-			 Newton step: 1	 Residual (rel.): < 2.00e-08	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 2.00e-06	 LineSearch {0} 
 		Computing Representation of the Hessian:
-			  Newton step: 0	 Residual (abs.):  < 2.00e-08
+			  Newton step: 0	 Residual (abs.):  < 2.00e-06
 			  Newton step: 0	 Residual (rel.):        NAN
 		 Cg step: 2	 Residual: 0.000222408
 	Computing ReducedHessianVector:
 		Solving Tangent:
 			 Newton step: 0	 Residual (abs.):   6.34e-05
 			 Newton step: 0	 Residual (rel.):   1.00e+00
-			 Newton step: 1	 Residual (rel.): < 2.00e-08	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 2.00e-06	 LineSearch {0} 
 		Solving Adjoint Hessian:
 			 Newton step: 0	 Residual (abs.):   1.53e-03
 			 Newton step: 0	 Residual (rel.):   1.00e+00
-			 Newton step: 1	 Residual (rel.): < 2.00e-08	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 2.00e-06	 LineSearch {0} 
 		Computing Representation of the Hessian:
-			  Newton step: 0	 Residual (abs.):  < 2.00e-08
+			  Newton step: 0	 Residual (abs.):  < 2.00e-06
 			  Newton step: 0	 Residual (rel.):        NAN
 		 Cg step: 3	 Residual: 2.51672e-05
 	Computing State Solution:
@@ -654,7 +654,7 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 1	 Residual (rel.):   1.15e-02	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   2.79e-04	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   1.14e-05	 LineSearch {0} 
-			 Newton step: 4	 Residual (rel.):   4.62e-07	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 2.00e-06	 LineSearch {0} 
 	Writing [./Mesh0/State_OptProblem.00007.00004.vtk]
 	Computing Cost Functional:
 		 linesearch 
@@ -664,7 +664,7 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 1	 Residual (rel.):   6.91e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   2.82e-04	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   1.15e-05	 LineSearch {0} 
-			 Newton step: 4	 Residual (rel.):   4.66e-07	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 2.00e-06	 LineSearch {0} 
 	Writing [./Mesh0/State_OptProblem.00007.00004.vtk]
 	Computing Cost Functional:
 	Computing State Solution:
@@ -673,7 +673,7 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 1	 Residual (rel.):   6.91e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   2.82e-04	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   1.15e-05	 LineSearch {0} 
-			 Newton step: 4	 Residual (rel.):   4.66e-07	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 2.00e-06	 LineSearch {0} 
 	Writing [./Mesh0/State_OptProblem.00007.00004.vtk]
 	Computing Cost Functional:
 	Computing State Solution:
@@ -682,7 +682,7 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 1	 Residual (rel.):   6.91e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   2.82e-04	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   1.15e-05	 LineSearch {0} 
-			 Newton step: 4	 Residual (rel.):   4.66e-07	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 2.00e-06	 LineSearch {0} 
 	Writing [./Mesh0/State_OptProblem.00007.00004.vtk]
 	Computing Cost Functional:
 	Computing State Solution:
@@ -691,7 +691,7 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 1	 Residual (rel.):   6.91e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   2.82e-04	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   1.15e-05	 LineSearch {0} 
-			 Newton step: 4	 Residual (rel.):   4.66e-07	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 2.00e-06	 LineSearch {0} 
 	Writing [./Mesh0/State_OptProblem.00007.00004.vtk]
 	Computing Cost Functional:
 	Computing State Solution:
@@ -700,7 +700,7 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 1	 Residual (rel.):   6.91e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   2.82e-04	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   1.15e-05	 LineSearch {0} 
-			 Newton step: 4	 Residual (rel.):   4.66e-07	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 2.00e-06	 LineSearch {0} 
 	Writing [./Mesh0/State_OptProblem.00007.00004.vtk]
 	Computing Cost Functional:
  ERROR: The following `DOpEIterationException` reports!
@@ -716,9 +716,9 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 	Computing Reduced Adjoint:
 			 Newton step: 0	 Residual (abs.):   1.39e+00
 			 Newton step: 0	 Residual (rel.):   1.00e+00
-			 Newton step: 1	 Residual (rel.): < 2.00e-08	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 2.00e-06	 LineSearch {0} 
 	Computing Reduced Gradient:
-			  Newton step: 0	 Residual (abs.):  < 2.00e-08
+			  Newton step: 0	 Residual (abs.):  < 2.00e-06
 			  Newton step: 0	 Residual (rel.):        NAN
 	Writing [./Mesh0/Control_OptProblem.00007.00000.txt]
 		 Newton step: 7	 Residual (rel.):   1.27e-04	 LinearIters [3]	 LineSearch {-1} 
@@ -727,52 +727,52 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 		Solving Tangent:
 			 Newton step: 0	 Residual (abs.):   1.16e-05
 			 Newton step: 0	 Residual (rel.):   1.00e+00
-			 Newton step: 1	 Residual (rel.): < 2.00e-08	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 2.00e-06	 LineSearch {0} 
 		Solving Adjoint Hessian:
 			 Newton step: 0	 Residual (abs.):   3.97e-04
 			 Newton step: 0	 Residual (rel.):   1.00e+00
-			 Newton step: 1	 Residual (rel.): < 2.00e-08	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 2.00e-06	 LineSearch {0} 
 		Computing Representation of the Hessian:
-			  Newton step: 0	 Residual (abs.):  < 2.00e-08
+			  Newton step: 0	 Residual (abs.):  < 2.00e-06
 			  Newton step: 0	 Residual (rel.):        NAN
 		 Cg step: 1	 Residual: 0.000799285
 	Computing ReducedHessianVector:
 		Solving Tangent:
 			 Newton step: 0	 Residual (abs.):   3.82e-05
 			 Newton step: 0	 Residual (rel.):   1.00e+00
-			 Newton step: 1	 Residual (rel.): < 2.00e-08	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 2.00e-06	 LineSearch {0} 
 		Solving Adjoint Hessian:
 			 Newton step: 0	 Residual (abs.):   1.02e-03
 			 Newton step: 0	 Residual (rel.):   1.00e+00
-			 Newton step: 1	 Residual (rel.): < 2.00e-08	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 2.00e-06	 LineSearch {0} 
 		Computing Representation of the Hessian:
-			  Newton step: 0	 Residual (abs.):  < 2.00e-08
+			  Newton step: 0	 Residual (abs.):  < 2.00e-06
 			  Newton step: 0	 Residual (rel.):        NAN
 		 Cg step: 2	 Residual: 9.26057e-05
 	Computing ReducedHessianVector:
 		Solving Tangent:
 			 Newton step: 0	 Residual (abs.):   2.65e-05
 			 Newton step: 0	 Residual (rel.):   1.00e+00
-			 Newton step: 1	 Residual (rel.): < 2.00e-08	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 2.00e-06	 LineSearch {0} 
 		Solving Adjoint Hessian:
 			 Newton step: 0	 Residual (abs.):   6.60e-04
 			 Newton step: 0	 Residual (rel.):   1.00e+00
-			 Newton step: 1	 Residual (rel.): < 2.00e-08	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 2.00e-06	 LineSearch {0} 
 		Computing Representation of the Hessian:
-			  Newton step: 0	 Residual (abs.):  < 2.00e-08
+			  Newton step: 0	 Residual (abs.):  < 2.00e-06
 			  Newton step: 0	 Residual (rel.):        NAN
 		 Cg step: 3	 Residual: 1.00996e-05
 	Computing ReducedHessianVector:
 		Solving Tangent:
 			 Newton step: 0	 Residual (abs.):   2.88e-06
 			 Newton step: 0	 Residual (rel.):   1.00e+00
-			 Newton step: 1	 Residual (rel.): < 2.00e-08	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 2.00e-06	 LineSearch {0} 
 		Solving Adjoint Hessian:
 			 Newton step: 0	 Residual (abs.):   8.02e-05
 			 Newton step: 0	 Residual (rel.):   1.00e+00
-			 Newton step: 1	 Residual (rel.): < 2.00e-08	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 2.00e-06	 LineSearch {0} 
 		Computing Representation of the Hessian:
-			  Newton step: 0	 Residual (abs.):  < 2.00e-08
+			  Newton step: 0	 Residual (abs.):  < 2.00e-06
 			  Newton step: 0	 Residual (rel.):        NAN
 		 Cg step: 4	 Residual: 1.17015e-06
 	Computing State Solution:
@@ -781,7 +781,7 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 1	 Residual (rel.):   7.16e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   2.91e-04	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   1.18e-05	 LineSearch {0} 
-			 Newton step: 4	 Residual (rel.):   4.82e-07	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 2.00e-06	 LineSearch {0} 
 	Writing [./Mesh0/State_OptProblem.00008.00004.vtk]
 	Computing Cost Functional:
 		 linesearch 
@@ -791,7 +791,7 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 1	 Residual (rel.):   7.16e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   2.92e-04	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   1.19e-05	 LineSearch {0} 
-			 Newton step: 4	 Residual (rel.):   4.83e-07	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 2.00e-06	 LineSearch {0} 
 	Writing [./Mesh0/State_OptProblem.00008.00004.vtk]
 	Computing Cost Functional:
 	Computing State Solution:
@@ -800,7 +800,7 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 1	 Residual (rel.):   7.16e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   2.92e-04	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   1.19e-05	 LineSearch {0} 
-			 Newton step: 4	 Residual (rel.):   4.83e-07	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 2.00e-06	 LineSearch {0} 
 	Writing [./Mesh0/State_OptProblem.00008.00004.vtk]
 	Computing Cost Functional:
 	Computing State Solution:
@@ -809,7 +809,7 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 1	 Residual (rel.):   7.16e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   2.92e-04	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   1.19e-05	 LineSearch {0} 
-			 Newton step: 4	 Residual (rel.):   4.83e-07	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 2.00e-06	 LineSearch {0} 
 	Writing [./Mesh0/State_OptProblem.00008.00004.vtk]
 	Computing Cost Functional:
 	Computing State Solution:
@@ -818,7 +818,7 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 1	 Residual (rel.):   7.16e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   2.92e-04	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   1.19e-05	 LineSearch {0} 
-			 Newton step: 4	 Residual (rel.):   5.83e-07	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 2.00e-06	 LineSearch {0} 
 	Writing [./Mesh0/State_OptProblem.00008.00004.vtk]
 	Computing Cost Functional:
 	Computing State Solution:
@@ -827,7 +827,7 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 1	 Residual (rel.):   7.16e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   2.92e-04	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   1.19e-05	 LineSearch {0} 
-			 Newton step: 4	 Residual (rel.):   5.42e-07	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 2.00e-06	 LineSearch {0} 
 	Writing [./Mesh0/State_OptProblem.00008.00004.vtk]
 	Computing Cost Functional:
  ERROR: The following `DOpEIterationException` reports!
@@ -843,9 +843,9 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 	Computing Reduced Adjoint:
 			 Newton step: 0	 Residual (abs.):   6.16e-01
 			 Newton step: 0	 Residual (rel.):   1.00e+00
-			 Newton step: 1	 Residual (rel.): < 2.00e-08	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 2.00e-06	 LineSearch {0} 
 	Computing Reduced Gradient:
-			  Newton step: 0	 Residual (abs.):  < 2.00e-08
+			  Newton step: 0	 Residual (abs.):  < 2.00e-06
 			  Newton step: 0	 Residual (rel.):        NAN
 	Writing [./Mesh0/Control_OptProblem.00008.00000.txt]
 		 Newton step: 8	 Residual (rel.):   5.20e-05	 LinearIters [4]	 LineSearch {-1} 
@@ -854,52 +854,52 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 		Solving Tangent:
 			 Newton step: 0	 Residual (abs.):   5.34e-06
 			 Newton step: 0	 Residual (rel.):   1.00e+00
-			 Newton step: 1	 Residual (rel.): < 2.00e-08	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 2.00e-06	 LineSearch {0} 
 		Solving Adjoint Hessian:
 			 Newton step: 0	 Residual (abs.):   1.49e-04
 			 Newton step: 0	 Residual (rel.):   1.00e+00
-			 Newton step: 1	 Residual (rel.): < 2.00e-08	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 2.00e-06	 LineSearch {0} 
 		Computing Representation of the Hessian:
-			  Newton step: 0	 Residual (abs.):  < 2.00e-08
+			  Newton step: 0	 Residual (abs.):  < 2.00e-06
 			  Newton step: 0	 Residual (rel.):        NAN
 		 Cg step: 1	 Residual: 0.000326098
 	Computing ReducedHessianVector:
 		Solving Tangent:
 			 Newton step: 0	 Residual (abs.):   1.53e-05
 			 Newton step: 0	 Residual (rel.):   1.00e+00
-			 Newton step: 1	 Residual (rel.): < 2.00e-08	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 2.00e-06	 LineSearch {0} 
 		Solving Adjoint Hessian:
 			 Newton step: 0	 Residual (abs.):   4.21e-04
 			 Newton step: 0	 Residual (rel.):   1.00e+00
-			 Newton step: 1	 Residual (rel.): < 2.00e-08	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 2.00e-06	 LineSearch {0} 
 		Computing Representation of the Hessian:
-			  Newton step: 0	 Residual (abs.):  < 2.00e-08
+			  Newton step: 0	 Residual (abs.):  < 2.00e-06
 			  Newton step: 0	 Residual (rel.):        NAN
 		 Cg step: 2	 Residual: 3.67413e-05
 	Computing ReducedHessianVector:
 		Solving Tangent:
 			 Newton step: 0	 Residual (abs.):   1.07e-05
 			 Newton step: 0	 Residual (rel.):   1.00e+00
-			 Newton step: 1	 Residual (rel.): < 2.00e-08	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 2.00e-06	 LineSearch {0} 
 		Solving Adjoint Hessian:
 			 Newton step: 0	 Residual (abs.):   2.75e-04
 			 Newton step: 0	 Residual (rel.):   1.00e+00
-			 Newton step: 1	 Residual (rel.): < 2.00e-08	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 2.00e-06	 LineSearch {0} 
 		Computing Representation of the Hessian:
-			  Newton step: 0	 Residual (abs.):  < 2.00e-08
+			  Newton step: 0	 Residual (abs.):  < 2.00e-06
 			  Newton step: 0	 Residual (rel.):        NAN
 		 Cg step: 3	 Residual: 3.79039e-06
 	Computing ReducedHessianVector:
 		Solving Tangent:
-			 Newton step: 0	 Residual (abs.):   1.11e-06
+			 Newton step: 0	 Residual (abs.): < 2.00e-06
 			 Newton step: 0	 Residual (rel.):   1.00e+00
-			 Newton step: 1	 Residual (rel.): < 2.00e-08	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 2.00e-06	 LineSearch {0} 
 		Solving Adjoint Hessian:
 			 Newton step: 0	 Residual (abs.):   3.26e-05
 			 Newton step: 0	 Residual (rel.):   1.00e+00
-			 Newton step: 1	 Residual (rel.): < 2.00e-08	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 2.00e-06	 LineSearch {0} 
 		Computing Representation of the Hessian:
-			  Newton step: 0	 Residual (abs.):  < 2.00e-08
+			  Newton step: 0	 Residual (abs.):  < 2.00e-06
 			  Newton step: 0	 Residual (rel.):        NAN
 		 Cg step: 4	 Residual: 4.27061e-07
 	Computing State Solution:
@@ -908,7 +908,7 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 1	 Residual (rel.):   7.47e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   3.04e-04	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   1.24e-05	 LineSearch {0} 
-			 Newton step: 4	 Residual (rel.):   5.03e-07	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 2.00e-06	 LineSearch {0} 
 	Writing [./Mesh0/State_OptProblem.00009.00004.vtk]
 	Computing Cost Functional:
 		 linesearch 
@@ -918,7 +918,7 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 1	 Residual (rel.):   7.47e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   3.05e-04	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   1.24e-05	 LineSearch {0} 
-			 Newton step: 4	 Residual (rel.):   9.21e-07	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 2.00e-06	 LineSearch {0} 
 	Writing [./Mesh0/State_OptProblem.00009.00004.vtk]
 	Computing Cost Functional:
 	Computing State Solution:
@@ -927,7 +927,7 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 1	 Residual (rel.):   7.47e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   3.05e-04	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   1.24e-05	 LineSearch {0} 
-			 Newton step: 4	 Residual (rel.):   8.83e-07	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 2.00e-06	 LineSearch {0} 
 	Writing [./Mesh0/State_OptProblem.00009.00004.vtk]
 	Computing Cost Functional:
 	Computing State Solution:
@@ -936,7 +936,7 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 1	 Residual (rel.):   7.47e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   3.05e-04	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   1.24e-05	 LineSearch {0} 
-			 Newton step: 4	 Residual (rel.):   1.13e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 2.00e-06	 LineSearch {0} 
 	Writing [./Mesh0/State_OptProblem.00009.00004.vtk]
 	Computing Cost Functional:
 	Computing State Solution:
@@ -945,7 +945,7 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 1	 Residual (rel.):   7.47e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   3.05e-04	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   1.24e-05	 LineSearch {0} 
-			 Newton step: 4	 Residual (rel.):   1.18e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 2.00e-06	 LineSearch {0} 
 	Writing [./Mesh0/State_OptProblem.00009.00004.vtk]
 	Computing Cost Functional:
 	Computing State Solution:
@@ -954,7 +954,7 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 1	 Residual (rel.):   7.47e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   3.05e-04	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   1.24e-05	 LineSearch {0} 
-			 Newton step: 4	 Residual (rel.):   1.47e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 2.00e-06	 LineSearch {0} 
 	Writing [./Mesh0/State_OptProblem.00009.00004.vtk]
 	Computing Cost Functional:
  ERROR: The following `DOpEIterationException` reports!
@@ -970,9 +970,9 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 	Computing Reduced Adjoint:
 			 Newton step: 0	 Residual (abs.):   2.58e-01
 			 Newton step: 0	 Residual (rel.):   1.00e+00
-			 Newton step: 1	 Residual (rel.): < 2.00e-08	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 2.00e-06	 LineSearch {0} 
 	Computing Reduced Gradient:
-			  Newton step: 0	 Residual (abs.):  < 2.00e-08
+			  Newton step: 0	 Residual (abs.):  < 2.00e-06
 			  Newton step: 0	 Residual (rel.):        NAN
 	Writing [./Mesh0/Control_OptProblem.00009.00000.txt]
 		 Newton step: 9	 Residual (rel.):   2.14e-05	 LinearIters [4]	 LineSearch {-1} 
@@ -981,52 +981,52 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 		Solving Tangent:
 			 Newton step: 0	 Residual (abs.):   2.13e-06
 			 Newton step: 0	 Residual (rel.):   1.00e+00
-			 Newton step: 1	 Residual (rel.): < 2.00e-08	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 2.00e-06	 LineSearch {0} 
 		Solving Adjoint Hessian:
 			 Newton step: 0	 Residual (abs.):   6.14e-05
 			 Newton step: 0	 Residual (rel.):   1.00e+00
-			 Newton step: 1	 Residual (rel.): < 2.00e-08	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 2.00e-06	 LineSearch {0} 
 		Computing Representation of the Hessian:
-			  Newton step: 0	 Residual (abs.):  < 2.00e-08
+			  Newton step: 0	 Residual (abs.):  < 2.00e-06
 			  Newton step: 0	 Residual (rel.):        NAN
 		 Cg step: 1	 Residual: 0.000133881
 	Computing ReducedHessianVector:
 		Solving Tangent:
 			 Newton step: 0	 Residual (abs.):   6.14e-06
 			 Newton step: 0	 Residual (rel.):   1.00e+00
-			 Newton step: 1	 Residual (rel.): < 2.00e-08	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 2.00e-06	 LineSearch {0} 
 		Solving Adjoint Hessian:
 			 Newton step: 0	 Residual (abs.):   1.74e-04
 			 Newton step: 0	 Residual (rel.):   1.00e+00
-			 Newton step: 1	 Residual (rel.): < 2.00e-08	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 2.00e-06	 LineSearch {0} 
 		Computing Representation of the Hessian:
-			  Newton step: 0	 Residual (abs.):  < 2.00e-08
+			  Newton step: 0	 Residual (abs.):  < 2.00e-06
 			  Newton step: 0	 Residual (rel.):        NAN
 		 Cg step: 2	 Residual: 1.45058e-05
 	Computing ReducedHessianVector:
 		Solving Tangent:
 			 Newton step: 0	 Residual (abs.):   4.31e-06
 			 Newton step: 0	 Residual (rel.):   1.00e+00
-			 Newton step: 1	 Residual (rel.): < 2.00e-08	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 2.00e-06	 LineSearch {0} 
 		Solving Adjoint Hessian:
 			 Newton step: 0	 Residual (abs.):   1.14e-04
 			 Newton step: 0	 Residual (rel.):   1.00e+00
-			 Newton step: 1	 Residual (rel.): < 2.00e-08	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 2.00e-06	 LineSearch {0} 
 		Computing Representation of the Hessian:
-			  Newton step: 0	 Residual (abs.):  < 2.00e-08
+			  Newton step: 0	 Residual (abs.):  < 2.00e-06
 			  Newton step: 0	 Residual (rel.):        NAN
 		 Cg step: 3	 Residual: 1.40676e-06
 	Computing ReducedHessianVector:
 		Solving Tangent:
-			 Newton step: 0	 Residual (abs.):   4.29e-07
+			 Newton step: 0	 Residual (abs.): < 2.00e-06
 			 Newton step: 0	 Residual (rel.):   1.00e+00
-			 Newton step: 1	 Residual (rel.): < 2.00e-08	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 2.00e-06	 LineSearch {0} 
 		Solving Adjoint Hessian:
 			 Newton step: 0	 Residual (abs.):   1.31e-05
 			 Newton step: 0	 Residual (rel.):   1.00e+00
-			 Newton step: 1	 Residual (rel.): < 2.00e-08	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 2.00e-06	 LineSearch {0} 
 		Computing Representation of the Hessian:
-			  Newton step: 0	 Residual (abs.):  < 2.00e-08
+			  Newton step: 0	 Residual (abs.):  < 2.00e-06
 			  Newton step: 0	 Residual (rel.):        NAN
 		 Cg step: 4	 Residual: 1.5242e-07
 	Computing State Solution:
@@ -1035,7 +1035,7 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 1	 Residual (rel.):   7.73e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   3.15e-04	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   1.28e-05	 LineSearch {0} 
-			 Newton step: 4	 Residual (rel.):   5.22e-07	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 2.00e-06	 LineSearch {0} 
 	Writing [./Mesh0/State_OptProblem.00010.00004.vtk]
 	Computing Cost Functional:
 		 linesearch 
@@ -1092,9 +1092,9 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 	Computing Reduced Adjoint:
 			 Newton step: 0	 Residual (abs.):   1.08e-01
 			 Newton step: 0	 Residual (rel.):   1.00e+00
-			 Newton step: 1	 Residual (rel.): < 2.00e-08	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 2.00e-06	 LineSearch {0} 
 	Computing Reduced Gradient:
-			  Newton step: 0	 Residual (abs.):  < 2.00e-08
+			  Newton step: 0	 Residual (abs.):  < 2.00e-06
 			  Newton step: 0	 Residual (rel.):        NAN
 	Writing [./Mesh0/Control_OptProblem.00010.00000.txt]
 		 Newton step: 10	 Residual (rel.):   8.81e-06	 LinearIters [4]	 LineSearch {-1} 
