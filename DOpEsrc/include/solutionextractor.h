@@ -27,9 +27,10 @@
 #include "statevector.h"
 
 /**
- * This class is used to extract the computed solution u out of the template Parameter SOLVERCLASS,
- *  which should have a memberfunction GetU() with the return type StateVector.
- *   This class is necessary due to some issues  connected with the resolution of overloaded functions.
+ * This class is used to extract the computed solution u out of the template
+ * Parameter SOLVERCLASS, which should have a memberfunction GetU() as well as
+ * GetZforEE() with the return type StateVector. This class is necessary due
+ * to some issues  connected with the resolution of overloaded functions.
  */
 
 
@@ -45,6 +46,10 @@ class SolutionExtractor
 		{
 			return _solverpointer->GetU();
 		}
+    const StateVector<VECTOR> & GetZforEE() const
+    {
+      return _solverpointer->GetZforEE();
+    }
 	private:
 		const SOLVERCLASS* _solverpointer;
 };

@@ -250,12 +250,12 @@ namespace DOpE
         {
           abort();
         }
-        //FIXME: Use SolutionExtractor instead
-        const StateVector<VECTOR> &
-        GetZforEE_Const() const
-        {
-          return _z_for_ee;
-        }
+//        //FIXME: Use SolutionExtractor instead
+//        const StateVector<VECTOR> &
+//        GetZforEE_Const() const
+//        {
+//          return _z_for_ee;
+//        }
 
       protected:
         /**
