@@ -1,0 +1,9 @@
+*.dep
+*~
+.project
+.cproject
+Makefile.depend
+*.o
+*dope.log
+bin/
+DOpEsrc/lib
