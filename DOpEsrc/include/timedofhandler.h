@@ -119,7 +119,8 @@ namespace DOpE
 #if DEAL_II_MAJOR_VERSION >= 7
 #if DEAL_II_MINOR_VERSION >= 3
 	    //Newer dealii Versions have changed the interface
-	    dealii::DoFRenumbering::downstream<dealii::DoFHandler<1> >(*this,
+		dealii::DoFHandler<1>* helppointer = this;
+	    dealii::DoFRenumbering::downstream<dealii::DoFHandler<1> >(*helppointer,
 								       dealii::Point<1>(1.), true);
 #else 
             dealii::DoFRenumbering::downstream<dealii::DoFHandler<1>, 1>(*this,
