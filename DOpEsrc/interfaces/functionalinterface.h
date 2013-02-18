@@ -569,8 +569,13 @@ namespace DOpE
          */
         virtual bool
         HasPoints() const;
+
+        void
+        SetProblemType(std::string type);
       protected:
+        std::string GetProblemType() const;
       private:
+        std::string _problem_type;
 
     };
 }

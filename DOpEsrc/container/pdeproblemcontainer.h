@@ -930,6 +930,8 @@ namespace DOpE
         this->SetTypeInternal(type);
         this->SetTypeNumInternal(num);
         this->GetPDE().SetProblemType(type);
+        if (_functional_for_ee_num != dealii::numbers::invalid_unsigned_int)
+          _aux_functionals[_functional_for_ee_num]->SetProblemType(type);
       }
       //Nothing to do.
     }
@@ -1629,8 +1631,8 @@ namespace DOpE
         if (this->GetType() == "adjoint_for_ee"
             || this->GetType() == "error_evaluation")
         {
-	  if(_functional_for_ee_num != dealii::numbers::invalid_unsigned_int)
-	    r = r | _aux_functionals[_functional_for_ee_num]->GetUpdateFlags();
+          if (_functional_for_ee_num != dealii::numbers::invalid_unsigned_int)
+            r = r | _aux_functionals[_functional_for_ee_num]->GetUpdateFlags();
         }
       }
       return r | update_JxW_values;
@@ -1655,9 +1657,10 @@ namespace DOpE
         if (this->GetType() == "adjoint_for_ee"
             || this->GetType() == "error_evaluation")
         {
- 	  if(_functional_for_ee_num != dealii::numbers::invalid_unsigned_int)
-	    r = r
-              | _aux_functionals[_functional_for_ee_num]->GetFaceUpdateFlags();
+          if (_functional_for_ee_num != dealii::numbers::invalid_unsigned_int)
+            r =
+                r
+                    | _aux_functionals[_functional_for_ee_num]->GetFaceUpdateFlags();
         }
       }
       return r | update_JxW_values;

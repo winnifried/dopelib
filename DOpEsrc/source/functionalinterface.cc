@@ -477,8 +477,26 @@ namespace DOpE
 
       return retrn;
     }
+  /********************************************/
+  template<template<typename DOFHANDLER, typename VECTOR, int dealdim> class CDC
+      , template<typename DOFHANDLER, typename VECTOR, int dealdim> class FDC
+      , typename DOFHANDLER, typename VECTOR, int dopedim, int dealdim>
+    void
+    FunctionalInterface<CDC, FDC, DOFHANDLER, VECTOR, dopedim, dealdim>::SetProblemType(
+        std::string p_type)
+    {
+      _problem_type = p_type;
+    }
 
-/********************************************/
+  /********************************************/
+  template<template<typename DOFHANDLER, typename VECTOR, int dealdim> class CDC
+      , template<typename DOFHANDLER, typename VECTOR, int dealdim> class FDC
+      , typename DOFHANDLER, typename VECTOR, int dopedim, int dealdim>
+    std::string
+    FunctionalInterface<CDC, FDC, DOFHANDLER, VECTOR, dopedim, dealdim>::GetProblemType() const
+    {
+      return _problem_type;
+    }
 
 }//Endof namespace
 /********************************************/
