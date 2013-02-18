@@ -46,9 +46,9 @@ class SolutionExtractor
 		{
 			return _solverpointer->GetU();
 		}
-    const StateVector<VECTOR> & GetZforEE() const
+    const StateVector<VECTOR> & GetZForEE() const
     {
-      return _solverpointer->GetZforEE();
+      return _solverpointer->GetZForEE();
     }
 	private:
 		const SOLVERCLASS* _solverpointer;
