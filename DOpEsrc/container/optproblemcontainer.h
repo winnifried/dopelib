@@ -1281,7 +1281,7 @@ namespace DOpE
       _algo_type = "";
       _functional_position[_functional->GetName()] = 0;
       //remember! At _functional_values[0] we store always the cost functional!
-
+      _functional_for_ee_num = dealii::numbers::invalid_unsigned_int;
     }
 
   /******************************************************/
