@@ -550,10 +550,11 @@ namespace DOpE
       }
 
       this->GetProblem()->AddAuxiliaryToIntegrator(this->GetIntegrator());
-
+      AddUDD();
       _build_state_matrix = this->GetNonlinearSolver("state").NonlinearSolve(
           problem, (GetU().GetSpacialVector()), true, _build_state_matrix);
-
+      DeleteUDD();
+      
       this->GetProblem()->DeleteAuxiliaryFromIntegrator(this->GetIntegrator());
 
       this->GetOutputHandler()->Write((GetU().GetSpacialVector()),
