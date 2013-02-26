@@ -1,5 +1,7 @@
 TODO DOpE
 =========
+- Interface zu IPOPT als Optimierungslöser (Open Source)
+- Nutzung von MUMPS als Direkter Löser.
 
 Treffen (Sep 19, 2012)
 - FoD
