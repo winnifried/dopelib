@@ -497,10 +497,10 @@ namespace DOpE
           }
 #if dope_dimension == deal_II_dimension
           _control_mesh_transfer =
-              new dealii::SolutionTransfer<dopedim, VECTOR>(
+	    new dealii::SolutionTransfer<dopedim, VECTOR, DOFHANDLER>(
                   _control_dof_handler);
 #endif
-          _state_mesh_transfer = new dealii::SolutionTransfer<dealdim, VECTOR>(
+          _state_mesh_transfer = new dealii::SolutionTransfer<dealdim, VECTOR, DOFHANDLER>(
               _state_dof_handler);
           if (DOpEtypes::RefinementType::global == ref_type)
           {
@@ -665,8 +665,8 @@ namespace DOpE
         std::vector<Point<dealdim> > _support_points;
 
         Constraints _constraints;
-        dealii::SolutionTransfer<dealdim, VECTOR>* _control_mesh_transfer;
-        dealii::SolutionTransfer<dealdim, VECTOR>* _state_mesh_transfer;
+        dealii::SolutionTransfer<dealdim, VECTOR, DOFHANDLER>* _control_mesh_transfer;
+        dealii::SolutionTransfer<dealdim, VECTOR, DOFHANDLER>* _state_mesh_transfer;
         bool _sparse_mkr_dynamic;
     };
 

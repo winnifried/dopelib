@@ -332,7 +332,7 @@ namespace DOpE
             delete _state_mesh_transfer;
             _state_mesh_transfer = NULL;
           }
-          _state_mesh_transfer = new dealii::SolutionTransfer<dealdim, VECTOR>(
+          _state_mesh_transfer = new dealii::SolutionTransfer<dealdim, VECTOR, DOFHANDLER>(
               _state_dof_handler);
 
           if (DOpEtypes::RefinementType::global == ref_type)
@@ -459,7 +459,7 @@ namespace DOpE
             const DOpEWrapper::Mapping<dealdim, DOFHANDLER> > _mapping;
 
         std::vector<Point<dealdim> > _support_points;
-        dealii::SolutionTransfer<dealdim, VECTOR>* _state_mesh_transfer;
+        dealii::SolutionTransfer<dealdim, VECTOR, DOFHANDLER>* _state_mesh_transfer;
 
     };
 
