@@ -1,5 +1,8 @@
 TODO DOpE
 =========
+- Fit fuer deal.ii 8.0 machen (deprecated header)
+- Moeglichkeit schaffen, relaxationsparameter etc. an lineare Loeser zu uebergeben.
+- Moeglichkeit schaffen, Informationen der linearen Loeser ausgeben (z.B. Anzahl cg-Schritte)
 - Interface zu IPOPT als Optimierungslöser (Open Source)
 - Nutzung von MUMPS als Direkter Löser.
 
