@@ -1,25 +1,25 @@
 /**
-*
-* Copyright (C) 2012 by the DOpElib authors
-*
-* This file is part of DOpElib
-*
-* DOpElib is free software: you can redistribute it
-* and/or modify it under the terms of the GNU General Public
-* License as published by the Free Software Foundation, either
-* version 3 of the License, or (at your option) any later
-* version.
-*
-* DOpElib is distributed in the hope that it will be
-* useful, but WITHOUT ANY WARRANTY; without even the implied
-* warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-* PURPOSE.  See the GNU General Public License for more
-* details.
-*
-* Please refer to the file LICENSE.TXT included in this distribution
-* for further information on this license.
-*
-**/
+ *
+ * Copyright (C) 2012 by the DOpElib authors
+ *
+ * This file is part of DOpElib
+ *
+ * DOpElib is free software: you can redistribute it
+ * and/or modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation, either
+ * version 3 of the License, or (at your option) any later
+ * version.
+ *
+ * DOpElib is distributed in the hope that it will be
+ * useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+ * PURPOSE.  See the GNU General Public License for more
+ * details.
+ *
+ * Please refer to the file LICENSE.TXT included in this distribution
+ * for further information on this license.
+ *
+ **/
 
 #ifndef _TIMEDOFHANDLER_H_
 #define _TIMEDOFHANDLER_H_
@@ -27,6 +27,7 @@
 //DOpE
 #include <timeiterator.h>
 #include <dopeexception.h>
+#include <versionscheck.h>
 
 //deal.ii
 #include <deal.II/fe/fe_q.h>
@@ -40,6 +41,7 @@
 
 //c++
 #include <vector>
+
 
 using namespace dealii;
 
@@ -77,16 +79,16 @@ namespace DOpE
        * On top of that, we should get the fe from the timestepping problem.
        */
       TimeDoFHandler(const Triangulation<1> & tria,
-          const dealii::FiniteElement<1>& fe) :
-        dealii::DoFHandler<1>(tria)
+          const dealii::FiniteElement<1>& fe)
+          : dealii::DoFHandler<1>(tria)
       {
         _fe = &fe;
         this->distribute_dofs();
         _need_delete = false;
       }
 
-      TimeDoFHandler(const Triangulation<1>& tria) :
-        dealii::DoFHandler<1>(tria)
+      TimeDoFHandler(const Triangulation<1>& tria)
+          : dealii::DoFHandler<1>(tria)
       {
         _fe = new dealii::FE_Q<1>(1);
         this->distribute_dofs();
@@ -99,9 +101,9 @@ namespace DOpE
         this->clear();
 
         if (_need_delete)
-          {
-            delete _fe;
-          }
+        {
+          delete _fe;
+        }
         _fe = NULL;
       }
 
@@ -113,29 +115,22 @@ namespace DOpE
       distribute_dofs()
       {
         if (_fe != NULL)
-          {
-            dealii::DoFHandler<1>::distribute_dofs(*_fe);
-            //make sure that the dofs are numbered 'downstream' (referring to the time variable!)
-#if DEAL_II_MAJOR_VERSION >= 7
-#if DEAL_II_MINOR_VERSION >= 3
-	    //Newer dealii Versions have changed the interface
-		dealii::DoFHandler<1>* helppointer = this;
-	    dealii::DoFRenumbering::downstream<dealii::DoFHandler<1> >(*helppointer,
-								       dealii::Point<1>(1.), true);
-#else 
-            dealii::DoFRenumbering::downstream<dealii::DoFHandler<1>, 1>(*this,
-									 dealii::Point<1>(1.), true);
-#endif
-#else
-	    dealii::DoFRenumbering::downstream<dealii::DoFHandler<1>, 1>(*this,
-									 dealii::Point<1>(1.), true);
-#endif
+        {
+          dealii::DoFHandler<1>::distribute_dofs(*_fe);
+          //make sure that the dofs are numbered 'downstream' (referring to the time variable!)
 
-            find_ends();
-            compute_times();
-            _initialized = true;
-            _dofs_per_cell = this->get_fe().dofs_per_cell;
-          }
+  #if DEAL_II_VERSION_GTE(7,3)
+           dealii::DoFRenumbering::downstream<dealii::DoFHandler<1> >(*this,
+               dealii::Point<1>(1.), true);
+  #else
+           dealii::DoFRenumbering::downstream<dealii::DoFHandler<1>, 1>(*this,
+               dealii::Point<1>(1.), true);
+  #endif
+          find_ends();
+          compute_times();
+          _initialized = true;
+          _dofs_per_cell = this->get_fe().dofs_per_cell;
+        }
       }
 
       /**
@@ -178,16 +173,17 @@ namespace DOpE
        *  the right length beforehand!
        */
       void
-      GetTimes(const TimeIterator & interval, std::vector<double>& local_times) const
+      GetTimes(const TimeIterator & interval,
+          std::vector<double>& local_times) const
       {
-        assert(local_times.size()==GetLocalNbrOfDoFs());
+        assert(local_times.size() == GetLocalNbrOfDoFs());
 
         std::vector<unsigned int> global_dof_indices(GetLocalNbrOfDoFs());
         interval.get_time_dof_indices(global_dof_indices);
         for (unsigned int i = 0; i < GetLocalNbrOfDoFs(); ++i)
-          {
-            local_times[i] = _times[global_dof_indices[i]];
-          }
+        {
+          local_times[i] = _times[global_dof_indices[i]];
+        }
       }
 
       /**
@@ -196,7 +192,7 @@ namespace DOpE
       double
       GetTime(unsigned int timestep)
       {
-        assert(timestep<_times.size());
+        assert(timestep < _times.size());
         return _times[timestep];
       }
 
@@ -261,21 +257,21 @@ namespace DOpE
       {
         DoFHandler<1>::active_cell_iterator cell = this->begin_active();
         while (cell->face(0)->boundary_indicator() != 0)
-          {
-            cell = cell->neighbor(0);
-          }
+        {
+          cell = cell->neighbor(0);
+        }
         _first_interval.Initialize(cell, 0);
         _before_first_interval.Initialize(cell, -2);
 
         cell = this->begin_active();
         while (cell->face(1)->boundary_indicator() != 1)
-          {
-            cell = cell->neighbor(1);
-          }
-        assert(static_cast<int> (this->get_tria().n_active_cells() - 1)>=0);
+        {
+          cell = cell->neighbor(1);
+        }
+        assert(static_cast<int>(this->get_tria().n_active_cells() - 1) >= 0);
         _last_interval.Initialize(cell,
-            static_cast<int> (this->get_tria().n_active_cells() - 1));
-        _after_last_interval.Initialize(cell, -1);
+            static_cast<int>(this->get_tria().n_active_cells() - 1));_after_last_interval
+        .Initialize(cell, -1);
       }
 
       /**
@@ -308,15 +304,15 @@ namespace DOpE
         DoFHandler<1>::active_cell_iterator cell = this->begin_active(), endc =
             this->end();
         for (; cell != endc; ++cell)
+        {
+          fe_values.reinit(cell);
+          cell->get_dof_indices(global_dof_indices);
+          for (unsigned int i = 0; i < n_q_points; ++i)
           {
-            fe_values.reinit(cell);
-            cell->get_dof_indices(global_dof_indices);
-            for (unsigned int i = 0; i < n_q_points; ++i)
-              {
-                _times[global_dof_indices[i]]
-                    = fe_values.get_quadrature_points()[i](0);
-              }
+            _times[global_dof_indices[i]] =
+                fe_values.get_quadrature_points()[i](0);
           }
+        }
       }
       //member variables
 
@@ -337,6 +333,6 @@ namespace DOpE
       bool _need_delete, _initialized;
   };
 
-}//end of namespace
+}      //end of namespace
 
 #endif /* TIMEDOFHANDLER_H_ */
