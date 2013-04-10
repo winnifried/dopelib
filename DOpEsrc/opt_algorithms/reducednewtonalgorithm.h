@@ -423,7 +423,24 @@ int ReducedNewtonAlgorithm<PROBLEM, VECTOR, dopedim, dealdim>::SolveReducedLinea
 
     oldres = res;
     res = Residual(r,r_transposed);//r*r_transposed;
-
+    if(res < 0.)
+    {
+      //something is broken, maybe don't use update formula and 
+      //calculate res from scratch. 
+      try
+      {
+	this->GetReducedProblem()->ComputeReducedHessianVector(q,dq,Hd,Hd_transposed);
+      }
+      catch(DOpEException& e)
+      {
+	this->GetExceptionHandler()->HandleCriticalException(e);
+      }
+      r = gradient;			      
+      r_transposed = gradient_transposed;
+      r.add(1.,Hd);
+      r_transposed.add(1.,Hd_transposed);
+      res = Residual(r,r_transposed);
+    }
     assert(res >= 0.);
     out<<"\t Cg step: " <<iter<<"\t Residual: "<<sqrt(res);
     this->GetOutputHandler()->Write(out,4+this->GetBasePriority());
