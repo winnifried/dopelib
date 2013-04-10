@@ -83,7 +83,7 @@ template<typename VECTOR, int dealdim>
       StrongCellResidual(
           const CellDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& cdc,
           const CellDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& cdc_w,
-          double& sum, double scale, double)
+          double& sum, double scale)
       {
         unsigned int n_q_points = cdc.GetNQPoints();
         const DOpEWrapper::FEValues<dealdim> &state_fe_values =

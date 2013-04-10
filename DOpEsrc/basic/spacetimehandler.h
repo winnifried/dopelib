@@ -60,25 +60,33 @@ namespace DOpE
     {
       public:
         SpaceTimeHandler(DOpEtypes::ControlType type)
-            : SpaceTimeHandlerBase<VECTOR>(type)
+	  : SpaceTimeHandlerBase<VECTOR>(type), 
+	_control_index(dealii::numbers::invalid_unsigned_int),
+	_state_index(dealii::numbers::invalid_unsigned_int)
         {
         }
         SpaceTimeHandler(const dealii::Triangulation<1> & times,
             DOpEtypes::ControlType type)
-            : SpaceTimeHandlerBase<VECTOR>(times, type)
+            : SpaceTimeHandlerBase<VECTOR>(times, type), 
+	_control_index(dealii::numbers::invalid_unsigned_int),
+	_state_index(dealii::numbers::invalid_unsigned_int)
         {
         }
         SpaceTimeHandler(DOpEtypes::ControlType type,
             const ActiveFEIndexSetterInterface<dopedim, dealdim>& index_setter)
-            : SpaceTimeHandlerBase<VECTOR>(type), _fe_index_setter(
-                &index_setter)
+            : SpaceTimeHandlerBase<VECTOR>(type),  
+	_control_index(dealii::numbers::invalid_unsigned_int),
+	_state_index(dealii::numbers::invalid_unsigned_int),
+	_fe_index_setter(&index_setter)
         {
         }
         SpaceTimeHandler(const dealii::Triangulation<1> & times,
             DOpEtypes::ControlType type,
             const ActiveFEIndexSetterInterface<dopedim, dealdim>& index_setter)
-            : SpaceTimeHandlerBase<VECTOR>(times, type), _fe_index_setter(
-                &index_setter)
+            : SpaceTimeHandlerBase<VECTOR>(times, type),  
+	_control_index(dealii::numbers::invalid_unsigned_int),
+	_state_index(dealii::numbers::invalid_unsigned_int), 
+	_fe_index_setter(&index_setter)
         {
         }
         virtual
@@ -134,7 +142,9 @@ namespace DOpE
         const std::vector<const DOpEWrapper::DoFHandler<dealdim, DOFHANDLER>*>&
         GetDoFHandler() const
         {
+	  assert(_state_index != dealii::numbers::invalid_unsigned_int);
 #if dope_dimension > 0
+	  assert(_control_index != dealii::numbers::invalid_unsigned_int);
           _domain_dofhandler_vector[_control_index] = &GetControlDoFHandler();
           _domain_dofhandler_vector[_state_index] = &GetStateDoFHandler();
 #else

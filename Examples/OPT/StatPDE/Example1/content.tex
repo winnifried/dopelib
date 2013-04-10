@@ -13,7 +13,11 @@ and $\alpha = 10^{-3}$.
 Hence its solution is given by:
 \begin{gather*}
  \overline{q} = \frac{1}{\alpha} \sin(\pi x) \sin(2 \pi y)\\
- \overline{u} = \sin(4 \pi x) \sin(2 \pi y)
+ \overline{u} = \sin(4 \pi x) \sin(2 \pi y).
+\end{gather*}
+Thus the exact optimal value of the cost functional can be calculated as 
+\begin{gather*}
+ J^* = J(\overline{q},\overline{u}) = \frac{1}{8}\Bigl(25\pi^4 + \frac{1}{\alpha}\Bigr).
 \end{gather*}
 
 In addition the following functionals are evaluated:
@@ -21,3 +25,6 @@ In addition the following functionals are evaluated:
   \text{MidPoint: } u(0.5 ; 0.5)\\[2mm]
   \text{MeanValue: }\int_\Omega u
 \end{gather*}
+
+The example shows how to estimate the error in the cost functional for stationary optimization
+problems.

@@ -1336,10 +1336,10 @@ namespace DOpE
           DWRDataContainer<STH, INTEGRATORDATACONT, CDC, FDC, VECTOR>& dwrc)
       {
         unsigned int dofs_per_cell;
-
+	unsigned int n_error_comps = dwrc.GetNErrorComps();
         //for primal and dual part of the error
-        std::vector<double> cell_sum(2, 0);
-        cell_sum.resize(2, 0);
+        std::vector<double> cell_sum(n_error_comps, 0);
+        cell_sum.resize(n_error_comps, 0);
 
         // Begin integration
         const auto& dof_handler =
@@ -1375,7 +1375,7 @@ namespace DOpE
         // that we take notice if we forget to add a face
         // during the error estimation process
         auto cell_it = cell[0];
-        std::vector<double> face_init(2,-1e20);
+        std::vector<double> face_init(n_error_comps,-1e20);
         for (; cell_it != endc[0]; cell_it++)
         {
           for (unsigned int face_no=0;face_no<GeometryInfo<dim>::faces_per_cell; ++face_no)
@@ -1427,17 +1427,22 @@ namespace DOpE
             }
           }
           cell_sum.clear();
-          cell_sum.resize(2, 0);
+          cell_sum.resize(n_error_comps, 0);
 
           cdc.ReInit();
           cdc_weight.ReInit();
 
           //first the cell-residual
-          pde.CellErrorContribution(cdc, dwrc, cell_sum, 1., 1.);
-          dwrc.GetPrimalErrorIndicators()(cell_index) = cell_sum[0];
-          dwrc.GetDualErrorIndicators()(cell_index) = cell_sum[1];
-          cell_sum.clear();
-          cell_sum.resize(2, 0);
+          pde.CellErrorContribution(cdc, dwrc, cell_sum, 1.);
+	  for(unsigned int l =0; l < n_error_comps; l ++)
+	  {
+	    dwrc.GetErrorIndicators(l)(cell_index) = cell_sum[l];
+	  }
+          //dwrc.GetPrimalErrorIndicators()(cell_index) = cell_sum[0];
+          //dwrc.GetDualErrorIndicators()(cell_index) = cell_sum[1];
+	  cell_sum.clear();
+          cell_sum.resize(n_error_comps, 0);
+
 
           //Now to the face terms. We compute them only once for each face and distribute the
           //afterwards. We choose always to work from the coarser cell, if both neigbors of the
@@ -1460,7 +1465,7 @@ namespace DOpE
 
               face_integrals[cell[0]->face(face)] = cell_sum;
               cell_sum.clear();
-              cell_sum.resize(2,0.);
+              cell_sum.resize(n_error_comps,0.);
             }
             else
             {
@@ -1471,7 +1476,7 @@ namespace DOpE
               if (cell[0]->neighbor(face)->has_children())
               {
                 //first: neighbour is finer
-                std::vector<double> sum(2,0.);
+                std::vector<double> sum(n_error_comps,0.);
                 for (unsigned int subface_no=0;
                     subface_no < cell[0]->face(face)->n_children();
                     ++subface_no)
@@ -1483,12 +1488,14 @@ namespace DOpE
                   dwrc.GetFaceWeight().ReInit(face, subface_no);
 
                   pde.FaceErrorContribution(fdc, dwrc, cell_sum, 1.);
-                  sum[0] += cell_sum[0];
-                  sum[1] += cell_sum[1];
-                  face_integrals[cell[0]->neighbor_child_on_subface(face, subface_no)
+                  for(unsigned int l =0; l < n_error_comps; l ++)
+		  {
+		    sum[l] += cell_sum[l];
+		  }
+		  face_integrals[cell[0]->neighbor_child_on_subface(face, subface_no)
                   ->face(cell[0]->neighbor_of_neighbor(face))] = cell_sum;
                   cell_sum.clear();
-                  cell_sum.resize(2,0);
+                  cell_sum.resize(n_error_comps,0);
                 }
 
                 Assert (face_integrals.find (cell[0]->face(face)) != face_integrals.end(),
@@ -1498,7 +1505,7 @@ namespace DOpE
 
                 face_integrals[cell[0]->face(face)] = sum;
                 cell_sum.clear();
-                cell_sum.resize(2,0);
+                cell_sum.resize(n_error_comps,0);
               }
               else
               {
@@ -1522,7 +1529,7 @@ namespace DOpE
 
                   face_integrals[cell[0]->face(face)] = cell_sum;
                   cell_sum.clear();
-                  cell_sum.resize(2,0);
+                  cell_sum.resize(n_error_comps,0);
                 }
               }
             }
@@ -1552,17 +1559,27 @@ namespace DOpE
                 ExcInternalError());
             if(cell[0]->face(face_no)->at_boundary())
             {
-              dwrc.GetPrimalErrorIndicators()(present_cell) +=
-              face_integrals[cell[0]->face(face_no)][0];
-              dwrc.GetDualErrorIndicators()(present_cell) +=
-              face_integrals[cell[0]->face(face_no)][1];
+	      for(unsigned int l =0; l < n_error_comps; l ++)
+	      {
+		dwrc.GetErrorIndicators(l)(present_cell) +=
+		  face_integrals[cell[0]->face(face_no)][l];
+	      }
+//              dwrc.GetPrimalErrorIndicators()(present_cell) +=
+//              face_integrals[cell[0]->face(face_no)][0];
+//              dwrc.GetDualErrorIndicators()(present_cell) +=
+//              face_integrals[cell[0]->face(face_no)][1];
             }
             else
             {
-              dwrc.GetPrimalErrorIndicators()(present_cell) +=
-              0.5 * face_integrals[cell[0]->face(face_no)][0];
-              dwrc.GetDualErrorIndicators()(present_cell) +=
-              0.5 * face_integrals[cell[0]->face(face_no)][1];
+	      for(unsigned int l =0; l < n_error_comps; l ++)
+	      {
+		dwrc.GetErrorIndicators(l)(present_cell) +=
+		  0.5*face_integrals[cell[0]->face(face_no)][l];
+	      }
+//              dwrc.GetPrimalErrorIndicators()(present_cell) +=
+//              0.5 * face_integrals[cell[0]->face(face_no)][0];
+//              dwrc.GetDualErrorIndicators()(present_cell) +=
+//              0.5 * face_integrals[cell[0]->face(face_no)][1];
             }
 
           }
@@ -1653,7 +1670,7 @@ namespace DOpE
           cdc.ReInit();
           dwrc.InitCell(cell[0]->diameter());
           //first the cell-residual
-          pde.CellErrorContribution(cdc, dwrc, cell_sum, 1., 1.);
+          pde.CellErrorContribution(cdc, dwrc, cell_sum, 1.);
           dwrc.GetPrimalErrorIndicators()(cell_index) = cell_sum[0];
           dwrc.GetDualErrorIndicators()(cell_index) = cell_sum[1];
           cell_sum.clear();

@@ -1,5 +1,7 @@
 Changelog DOpE
 ==============
+10.02.2013: Added support to estimate the error in the CostFunctional for 
+	    Optimization problems added. See OPT/StatPDE/Example1
 07.02.2013: Changed Interface of RefineSpace of the MOL-SpaceTimeHandlers
 21.12.2012: Removed the now unnecessary deal_II_dim > 1 checks for boundary and face integrals.
 	    Now also in 1d we can use boundary equation ...

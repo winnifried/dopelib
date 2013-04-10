@@ -141,6 +141,12 @@ namespace DOpE
         {
           return *_PI_h_z;
         }
+        ControlVector<VECTOR>&
+        GetPI_h_q()
+        {
+	  throw DOpEException("There is no Control in PDE Problems!",
+            "L2ResidualErrorContainer::PreparePI_h_q");
+        }
 
         /**
          * Makes the patchwise higher order interpolant of the
@@ -164,6 +170,18 @@ namespace DOpE
         {
           BuildConstantWeight(&(GetSTH().GetStateDoFHandler()),
               GetPI_h_z().GetSpacialVector());
+        }
+        /**
+         * Makes the patchwise higher order interpolant of the
+         * control q. This is needed as a weight for the
+         * control residual.
+         */
+        void
+	  PreparePI_h_q(const ControlVector<VECTOR>& q)
+        {
+	  throw DOpEException("There is no Control in PDE Problems!",
+            "HigherOrderDWRContainer::PreparePI_h_q");
+
         }
 
         /**
@@ -338,6 +356,12 @@ namespace DOpE
         {
           return *_PI_h_z;
         }
+        ControlVector<VECTOR>&
+        GetPI_h_q()
+        {
+	  throw DOpEException("There is no Control in PDE Problems!",
+            "H1ResidualErrorContainer::PreparePI_h_q");
+        }
 
         /**
          * Makes the patchwise higher order interpolant of the
@@ -361,6 +385,18 @@ namespace DOpE
         {
           BuildConstantWeight(&(GetSTH().GetStateDoFHandler()),
               GetPI_h_z().GetSpacialVector());
+        }
+        /**
+         * Makes the patchwise higher order interpolant of the
+         * control q. This is needed as a weight for the
+         * control residual.
+         */
+        void
+	  PreparePI_h_q(const ControlVector<VECTOR>& q)
+        {
+	  throw DOpEException("There is no Control in PDE Problems!",
+            "HigherOrderDWRContainer::PreparePI_h_q");
+
         }
 
         /**

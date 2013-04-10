@@ -72,7 +72,7 @@ namespace DOpE
         virtual void
         StrongCellResidual(const CDC<DOFHANDLER, VECTOR, dealdim>& cdc,
             const CDC<DOFHANDLER, VECTOR, dealdim>& cdc_weight, double&,
-            double scale, double /*scale_ico*/);
+            double scale);
 
         /******************************************************/
 
@@ -270,6 +270,23 @@ namespace DOpE
         ControlCellMatrix(const CDC<DOFHANDLER, VECTOR, dealdim>&,
             dealii::FullMatrix<double> &/*local_entry_matrix*/);
         /******************************************************/
+
+        virtual void
+        StrongCellResidual_Control(const CDC<DOFHANDLER, VECTOR, dealdim>&,
+				   const CDC<DOFHANDLER, VECTOR, dealdim>& cdc_weight, double&,
+				   double scale);
+        /******************************************************/
+
+        virtual void
+        StrongFaceResidual_Control(const FDC<DOFHANDLER, VECTOR, dealdim>&,
+				   const FDC<DOFHANDLER, VECTOR, dealdim>& fdc_weight, double&,
+				   double scale);
+        /******************************************************/
+
+        virtual void
+        StrongBoundaryResidual_Control(const FDC<DOFHANDLER, VECTOR, dealdim>&,
+				       const FDC<DOFHANDLER, VECTOR, dealdim>& fdc_weight, double&,
+				       double scale);
 
         /******************************************************/
         // Functions for Face Integrals

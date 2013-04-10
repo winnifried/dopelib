@@ -25,7 +25,7 @@
  * dwrdatacontainer.h
  *
  *  Created on: Mar 22, 2012
- *      Author: cgoll
+ *      Author: cgoll,wwollner
  */
 #ifndef _DWRDATACONTAINER_H_
 #define _DWRDATACONTAINER_H_
@@ -59,6 +59,25 @@ namespace DOpE
             : _ee_terms(ee_terms)
         {
           _lock = true;
+	  switch (this->GetEETerms())
+          {
+	  case DOpEtypes::primal_only:
+	    _n_error_comps = 2;
+	    break;
+	  case DOpEtypes::dual_only:
+	    _n_error_comps = 2;
+	    break;
+	  case DOpEtypes::mixed:
+	    _n_error_comps = 2;
+	    break;
+	  case DOpEtypes::mixed_control:
+	    _n_error_comps = 3;
+	    break;
+	  default:
+	    throw DOpEException("Unknown DOpEtypes::EEterms.",
+				"DWRDataContainer::ReleaseLock");
+	    break;
+          }
         }
 
         virtual
@@ -99,6 +118,11 @@ namespace DOpE
             case DOpEtypes::mixed:
               _error_ind.equ(0.5, GetPrimalErrorIndicators(), 0.5,
                   GetDualErrorIndicators());
+              break;
+             case DOpEtypes::mixed_control:
+              _error_ind.equ(0.5, GetPrimalErrorIndicators(), 0.5,
+			     GetDualErrorIndicators(), 0.5, 
+		             GetControlErrorIndicators());
               break;
             default:
               throw DOpEException("Unknown DOpEtypes::EEterms.",
@@ -165,6 +189,25 @@ namespace DOpE
         }
 
         /**
+         * This function sums up the entries of the vector of the error
+         * indicators. So make sure this vector is correctly filled (reminder:
+         * after computing the error indicators, make sure that you call
+         * ReleaseLock()1)
+         *
+         * @ return   Error in the previously specified functional.
+         */
+        double
+        GetControlError() const
+        {
+          double error = 0;
+          for (unsigned int i = 0; i < GetAllErrorIndicators()[3]->size(); ++i)
+          {
+            error += GetAllErrorIndicators()[3]->operator()(i);
+          }
+          return error;
+        }
+
+        /**
          * Returns the vector of the error indicators. You have to
          * call ReleaseLock() prior to this function.
          *
@@ -221,6 +264,67 @@ namespace DOpE
         }
 
         /**
+         * Returns the vector of the error indicators. You have to
+         * call ReleaseLock() prior to this function.
+         *
+         * @return  Vector of raw control error indicators (i.e. with sign)
+         */
+	Vector<double>&
+        GetControlErrorIndicators()
+        {
+          return _error_ind_control;
+        }
+
+	const Vector<double>&
+        GetControlErrorIndicators() const
+        {
+          return _error_ind_control;
+        }
+
+        /**
+         * Returns the vector of the error indicators. You have to
+         * call ReleaseLock() prior to this function.
+         *
+         * @return  Vector of raw error indicators given by the index
+	 *           0 = primal, 1 = dual, 2 = control 
+         */
+	Vector<double>&
+        GetErrorIndicators(unsigned int i)
+        {
+	  if( i == 0)
+	    return _error_ind_primal;
+	  else
+	    if (i == 1) 
+	      return _error_ind_dual;
+	    else
+	      if (i == 2)
+		return _error_ind_control;
+	      else
+		throw DOpEException("Unknown Indicator","DWRDataContainer::GetErrorIndicators");
+        }
+
+	const Vector<double>&
+        GetErrorIndicators(unsigned int i) const
+        {
+	  if( i == 0)
+	    return _error_ind_primal;
+	  else
+	    if (i == 1) 
+	      return _error_ind_dual;
+	    else
+	      if (i == 2)
+		return _error_ind_control;
+	      else
+		throw DOpEException("Unknown Indicator","DWRDataContainer::GetErrorIndicators");
+        }
+	
+	unsigned int GetNErrorComps() const
+	{
+	  //number of error components...
+	  return _n_error_comps;
+	}
+
+        /**
          * Returns the a vector of pointers to the primal, dual and 'summed up'
          * (according to the enum EEterms) error indicators.
          *
@@ -241,6 +345,7 @@ namespace DOpE
             res.push_back(&_error_ind);
             res.push_back(&this->GetPrimalErrorIndicators());
             res.push_back(&this->GetDualErrorIndicators());
+            res.push_back(&this->GetControlErrorIndicators());
           }
           return res;
         }
@@ -316,7 +421,7 @@ namespace DOpE
          * @param z   The FE-vector of the dual solution.
          */
         void
-        PrepareWeights(StateVector<VECTOR>& u, StateVector<VECTOR>& z)
+        PrepareWeights(const StateVector<VECTOR>& u, const StateVector<VECTOR>& z)
         {
           //Dependend on the GetEETerms we let the dwrc compute the primal and/or dual weights
           switch (GetEETerms())
@@ -339,6 +444,37 @@ namespace DOpE
               AddWeightData("weight_for_primal_residual",
                   &(GetPI_h_z().GetSpacialVector()));
               break;
+           case DOpEtypes::mixed_control:
+              PreparePI_h_u(u);
+              AddWeightData("weight_for_dual_residual",
+                  &(GetPI_h_u().GetSpacialVector()));
+              PreparePI_h_z(z);
+              AddWeightData("weight_for_primal_residual",
+                  &(GetPI_h_z().GetSpacialVector()));
+              break;
+            default:
+              throw DOpEException("Unknown DOpEtypes::EETerms!",
+                  "DWRDataContainerBase::PrepareWeights");
+              break;
+          }
+        }
+        /**
+         * Computes the functions that compute the weights and puts them
+         * into _weight_data.
+         *
+         * @param q   The FE-vector of the control.
+         */
+        void
+        PrepareWeights(const ControlVector<VECTOR>& q)
+        {
+          //Dependend on the GetEETerms we let the dwrc compute the primal and/or dual weights
+          switch (GetEETerms())
+          {
+           case DOpEtypes::mixed_control:
+              PreparePI_h_q(q);
+              AddWeightData("weight_for_control_residual",
+                  &(GetPI_h_q().GetSpacialVector()));
+              break;
             default:
               throw DOpEException("Unknown DOpEtypes::EETerms!",
                   "DWRDataContainerBase::PrepareWeights");
@@ -356,11 +492,17 @@ namespace DOpE
         virtual StateVector<VECTOR>&
         GetPI_h_z() = 0;
 
+        virtual ControlVector<VECTOR>&
+        GetPI_h_q() = 0;
+
         virtual void
         PreparePI_h_u(const StateVector<VECTOR>& u) = 0;
 
         virtual void
         PreparePI_h_z(const StateVector<VECTOR>& z) = 0;
+        
+	virtual void
+	PreparePI_h_q(const ControlVector<VECTOR>& q) = 0;
 
         void
         AddWeightData(std::string name, const VECTOR* new_data)
@@ -378,8 +520,9 @@ namespace DOpE
       private:
         DOpEtypes::EETerms _ee_terms;
         bool _lock;
+	unsigned int _n_error_comps;
         std::map<std::string, const VECTOR*> _weight_data;
-        Vector<double> _error_ind, _error_ind_primal, _error_ind_dual;
+        Vector<double> _error_ind, _error_ind_primal, _error_ind_dual, _error_ind_control;
     }
     ;
 
@@ -390,6 +533,7 @@ namespace DOpE
       _error_ind.reinit(n_cells);
       GetPrimalErrorIndicators().reinit(n_cells);
       GetDualErrorIndicators().reinit(n_cells);
+      GetControlErrorIndicators().reinit(n_cells);
       _lock = true;
     }
 

@@ -25,11 +25,11 @@
  * higher_order_dwrc.h
  *
  *  Created on: Mar 23, 2012
- *      Author: cgoll
+ *      Author: cgoll, wwollner
  */
 
-#ifndef _HIGHER_ORDER_DWRC_H_
-#define _HIGHER_ORDER_DWRC_H_
+#ifndef _HIGHER_ORDER_DWRC_CONTROL_H_
+#define _HIGHER_ORDER_DWRC_CONTROL_H_
 
 #include "dwrdatacontainer.h"
 #include <deal.II/fe/fe_tools.h>
@@ -39,31 +39,33 @@ namespace DOpE
   /**
    * This class implements the missing pieces of DWRDataContainer for
    * the case of the DWRMethod with higher order interpolation of the weights
-   * and evaluation of strong cell residuals.
+   * and evaluation of strong cell residuals. 
+   * This version also includes weights for the control
    */
   template<class STH, class IDC, class CDC, class FDC, typename VECTOR>
-    class HigherOrderDWRContainer : public DWRDataContainer<STH, IDC, CDC, FDC,
+    class HigherOrderDWRContainerControl : public DWRDataContainer<STH, IDC, CDC, FDC,
         VECTOR>
     {
       public:
-        /**
+      /**
          * Constructor.
          *
          * @param higher_order_sth      The STH we use for the higher order interpolation.
          * @param higher_order_idc      The IDC we use for the higher order interpolation.
          *                              Contains also the quadrature rules
+         * @param control_behavior      Behaviour of the ControlVectors.
          * @param state_behavior        Behaviour of the StateVectors.
          * @param param_reader          The parameter reader we use here.
          * @param ee_terms              Which part of the error estimators do we want
          *                              to compute? (primal, dual, both).
          */
-        HigherOrderDWRContainer(STH& higher_order_sth, IDC& higher_order_idc,
-            std::string state_behavior, ParameterReader &param_reader,
+        HigherOrderDWRContainerControl(STH& higher_order_sth, IDC& higher_order_idc,
+            std::string control_behavior, std::string state_behavior, ParameterReader &param_reader,
             DOpEtypes::EETerms ee_terms = DOpEtypes::EETerms::mixed,
             DOpEtypes::ResidualEvaluation res_eval = DOpEtypes::strong_residual)
             : DWRDataContainer<STH, IDC, CDC, FDC, VECTOR>(ee_terms), _sth_higher_order(
                 higher_order_sth), _idc_higher_order(higher_order_idc), _PI_h_u(
-                NULL), _PI_h_z(NULL), _res_eval(res_eval)
+                NULL), _PI_h_z(NULL), _PI_h_q(NULL), _res_eval(res_eval)
         {
           if (this->GetEETerms() == DOpEtypes::primal_only
               || this->GetEETerms() == DOpEtypes::mixed
@@ -81,19 +83,21 @@ namespace DOpE
           }
 	  if (this->GetEETerms() == DOpEtypes::mixed_control)
 	  {
-	    throw DOpEException("Wrong Constructor for type 'mixed_control'",
-                  "HigherOrderDWRContainer::HigherOrderDWRContainer");
+	    _PI_h_q = new ControlVector<VECTOR>(&GetHigherOrderSTH(),
+						control_behavior);
 	  }
         }
 
         virtual
-        ~HigherOrderDWRContainer()
+        ~HigherOrderDWRContainerControl()
         {
           if (_PI_h_z != NULL)
             delete _PI_h_z;
           if (_PI_h_u != NULL)
             delete _PI_h_u;
-	}
+          if (_PI_h_q != NULL)
+            delete _PI_h_q;
+        }
 
         std::string
         GetName() const
@@ -103,11 +107,15 @@ namespace DOpE
 
         template<class STH2>
           void
-          Initialize(STH2* sth, unsigned int state_n_blocks,
-              std::vector<unsigned int>& state_block_component)
+          Initialize(STH2* sth, unsigned int control_n_blocks,
+		     std::vector<unsigned int>& control_block_component, 
+		     unsigned int state_n_blocks,
+		     std::vector<unsigned int>& state_block_component)
           {
             _sth = dynamic_cast<STH*>(sth);
-            _state_n_blocks = state_n_blocks;
+	    _control_n_blocks        =  control_n_blocks;
+            _control_block_component = &control_block_component;
+            _state_n_blocks        =  state_n_blocks;
             _state_block_component = &state_block_component;
           }
 
@@ -156,8 +164,7 @@ namespace DOpE
         ControlVector<VECTOR>&
         GetPI_h_q()
         {
-	  throw DOpEException("There is no Control in PDE Problems!",
-            "HigherOrderDWRContainer::GetPI_h_q");
+          return *_PI_h_q;
         }
 
         /**
@@ -238,9 +245,25 @@ namespace DOpE
         void
 	  PreparePI_h_q(const ControlVector<VECTOR>& q)
         {
-	  throw DOpEException("There is no Control in PDE Problems!",
-            "HigherOrderDWRContainer::PreparePI_h_q");
+          VECTOR q_high;
+          q_high.reinit(GetPI_h_q().GetSpacialVector());
 
+          dealii::FETools::extrapolate(
+              GetSTH().GetControlDoFHandler().GetDEALDoFHandler(),
+              q.GetSpacialVector(),
+              GetHigherOrderSTH().GetControlDoFHandler().GetDEALDoFHandler(),
+              GetHigherOrderSTH().GetControlDoFConstraints(),
+              GetPI_h_q().GetSpacialVector());
+
+          dealii::FETools::interpolate(
+              GetSTH().GetControlDoFHandler().GetDEALDoFHandler(),
+              q.GetSpacialVector(),
+              GetHigherOrderSTH().GetControlDoFHandler().GetDEALDoFHandler(),
+              GetHigherOrderSTH().GetControlDoFConstraints(), q_high);
+
+          GetPI_h_q().GetSpacialVector().add(-1., q_high);
+	  //FIXME With this construction we can not deal with control contraints,
+	  //There, the real weight needs to be build on the elements...
         }
 
         /**
@@ -269,7 +292,7 @@ namespace DOpE
         {
           return true;
         }
-
+	
         /**
          * Implementation of virtual method from base class.
          */
@@ -336,7 +359,8 @@ namespace DOpE
         }
 
       private:
-        unsigned int _state_n_blocks;
+        unsigned int _control_n_blocks, _state_n_blocks;
+        std::vector<unsigned int>* _control_block_component;
 	std::vector<unsigned int>* _state_block_component;
 
         STH& _sth_higher_order;
@@ -346,25 +370,32 @@ namespace DOpE
         const DOpEtypes::ResidualEvaluation _res_eval;
 
         StateVector<VECTOR> * _PI_h_u, *_PI_h_z;
+	ControlVector<VECTOR> * _PI_h_q;
     };
 
   template<class STH, class IDC, class CDC, class FDC, typename VECTOR>
     void
-    HigherOrderDWRContainer<STH, IDC, CDC, FDC, VECTOR>::ReInit(
+    HigherOrderDWRContainerControl<STH, IDC, CDC, FDC, VECTOR>::ReInit(
         unsigned int n_cells)
     {
       DWRDataContainer<STH, IDC, CDC, FDC, VECTOR>::ReInit(n_cells);
 
-      GetHigherOrderSTH().ReInit(_state_n_blocks, *_state_block_component);
+      GetHigherOrderSTH().ReInit(_control_n_blocks, *_control_block_component, _state_n_blocks, *_state_block_component);
       if (this->GetEETerms() == DOpEtypes::primal_only
-          || this->GetEETerms() == DOpEtypes::mixed)
+          || this->GetEETerms() == DOpEtypes::mixed
+	  || this->GetEETerms() == DOpEtypes::mixed_control)
       {
         GetPI_h_z().ReInit();
       }
       if (this->GetEETerms() == DOpEtypes::dual_only
-          || this->GetEETerms() == DOpEtypes::mixed)
+          || this->GetEETerms() == DOpEtypes::mixed
+	  || this->GetEETerms() == DOpEtypes::mixed_control)
       {
         GetPI_h_u().ReInit();
+      }
+      if( this->GetEETerms() == DOpEtypes::mixed_control)
+      {
+	GetPI_h_q().ReInit();
       }
     }
 }

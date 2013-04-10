@@ -2,13 +2,13 @@
 # ---------------------
 subsection cglinearsolver_withmatrix parameters
   # global tolerance for the cg iteration
-  set linear_global_tol = 1.e-16
+  set linear_global_tol = 5.e-13
 
   # maximal number of cg steps
   set linear_maxiter    = 1000
 
   # relative tolerance for the cg iteration
-  set linear_tol        = 1.e-12
+  set linear_tol        = 1.e-10
 end
 
 

@@ -68,14 +68,11 @@ namespace DOpE
          * @param cell_contrib          Vector in which we write the contribution of the cell to the overall
          *                              error. 1st component: primal_part, 2nd component: dual_part
          * @param scale                 A scaling factor which is -1 or 1 depending on the subroutine to compute.
-         * @param scale_ico             A scaling factor for terms which will be treated fully implicit
-         *                              in an instationary equation.
          */
         template<class CDC, class DWRC>
           void
           CellErrorContribution(const CDC& cdc, const DWRC& dwrc,
-              std::vector<double>& cell_contrib, double scale,
-              double /*scale_ico*/);
+              std::vector<double>& cell_contrib, double scale);
 
         /******************************************************/
 
@@ -159,8 +156,7 @@ namespace DOpE
     template<class CDC, class DWRC>
       void
       ProblemContainerInternal<PDE>::CellErrorContribution(const CDC& cdc,
-          const DWRC& dwrc, std::vector<double>& error, double scale,
-          double scale_ico)
+          const DWRC& dwrc, std::vector<double>& error, double scale)
       {
         Assert(GetType() == "error_evaluation", ExcInternalError());
 
@@ -174,20 +170,23 @@ namespace DOpE
             switch (dwrc.GetEETerms())
             {
               case DOpEtypes::primal_only:
-                GetPDE().StrongCellResidual(cdc, *cdc_w, error[0], scale,
-                    scale_ico);
+                GetPDE().StrongCellResidual(cdc, *cdc_w, error[0], scale);
                 break;
               case DOpEtypes::dual_only:
                 GetPDE().StrongCellResidual_U(cdc, *cdc_w, error[1], scale);
                 break;
               case DOpEtypes::mixed:
-                GetPDE().StrongCellResidual(cdc, *cdc_w, error[0], scale,
-                    scale_ico);
+                GetPDE().StrongCellResidual(cdc, *cdc_w, error[0], scale);
                 GetPDE().StrongCellResidual_U(cdc, *cdc_w, error[1], scale);
+                break;
+              case DOpEtypes::mixed_control:
+                GetPDE().StrongCellResidual(cdc, *cdc_w, error[0], scale);
+                GetPDE().StrongCellResidual_U(cdc, *cdc_w, error[1], scale);
+                GetPDE().StrongCellResidual_Control(cdc, *cdc_w, error[2], scale);
                 break;
               default:
                 throw DOpEException("Not implemented for this EETerm.",
-                    "PDEProblemContainer::CellErrorContribution");
+                    "ProblemContainerInternal::CellErrorContribution");
                 break;
             }
 
@@ -197,33 +196,36 @@ namespace DOpE
             switch (dwrc.GetEETerms())
             {
               case DOpEtypes::primal_only:
-                GetPDE().StrongCellResidual(cdc, cdc, error[0], scale,
-                    scale_ico);
+                GetPDE().StrongCellResidual(cdc, cdc, error[0], scale);
                 break;
               case DOpEtypes::dual_only:
                 GetPDE().StrongCellResidual_U(cdc, cdc, error[1], scale);
                 break;
               case DOpEtypes::mixed:
-                GetPDE().StrongCellResidual(cdc, cdc, error[0], scale,
-                    scale_ico);
+                GetPDE().StrongCellResidual(cdc, cdc, error[0], scale);
                 GetPDE().StrongCellResidual_U(cdc, cdc, error[1], scale);
+                break;
+              case DOpEtypes::mixed_control:
+                GetPDE().StrongCellResidual        (cdc, cdc, error[0], scale);
+                GetPDE().StrongCellResidual_U      (cdc, cdc, error[1], scale);
+                GetPDE().StrongCellResidual_Control(cdc, cdc, error[2], scale);
                 break;
               default:
                 throw DOpEException("Not implemented for this EETerm.",
-                    "PDEProblemContainer::CellErrorContribution");
+                    "ProblemContainerInternal::CellErrorContribution");
                 break;
             }
           }
           else
           {
             throw DOpEException("Not implemented for this WeightComputation.",
-                "PDEProblemContainer::CellErrorContribution");
+                "ProblemContainerInternal::CellErrorContribution");
           }
         }
         else
         {
           throw DOpEException("Not implemented for this ResidualEvaluation.",
-              "PDEProblemContainer::CellErrorContribution");
+              "ProblemContainerInternal::CellErrorContribution");
         }
       }
 
@@ -256,9 +258,14 @@ namespace DOpE
                 GetPDE().StrongFaceResidual(fdc, *fdc_w, error[0], scale);
                 GetPDE().StrongFaceResidual_U(fdc, *fdc_w, error[1], scale);
                 break;
+              case DOpEtypes::mixed_control:
+                GetPDE().StrongFaceResidual        (fdc, *fdc_w, error[0], scale);
+                GetPDE().StrongFaceResidual_U      (fdc, *fdc_w, error[1], scale);
+                GetPDE().StrongFaceResidual_Control(fdc, *fdc_w, error[2], scale);
+                break;
               default:
                 throw DOpEException("Not implemented for this EETerm.",
-                    "PDEProblemContainer::FaceErrorContribution");
+                    "ProblemContainerInternal::FaceErrorContribution");
                 break;
             }
           }
@@ -276,9 +283,14 @@ namespace DOpE
                 GetPDE().StrongFaceResidual(fdc, fdc, error[0], scale);
                 GetPDE().StrongFaceResidual_U(fdc, fdc, error[1], scale);
                 break;
+              case DOpEtypes::mixed_control:
+                GetPDE().StrongFaceResidual        (fdc, fdc, error[0], scale);
+                GetPDE().StrongFaceResidual_U      (fdc, fdc, error[1], scale);
+                GetPDE().StrongFaceResidual_Control(fdc, fdc, error[2], scale);
+                break;
               default:
                 throw DOpEException("Not implemented for this EETerm.",
-                    "PDEProblemContainer::FaceErrorContribution");
+                    "ProblemContainerInternal::FaceErrorContribution");
                 break;
             }
 
@@ -286,13 +298,13 @@ namespace DOpE
           else
           {
             throw DOpEException("Not implemented for this WeightComputation.",
-                "PDEProblemContainer::FaceErrorContribution");
+                "ProblemContainerInternal::FaceErrorContribution");
           }
         }
         else
         {
           throw DOpEException("Not implemented for this ResidualEvaluation.",
-              "PDEProblemContainer::FaceErrorContribution");
+              "ProblemContainerInternal::FaceErrorContribution");
         }
       }
 
@@ -324,27 +336,53 @@ namespace DOpE
                 GetPDE().StrongBoundaryResidual(fdc, *fdc_w, error[0], scale);
                 GetPDE().StrongBoundaryResidual_U(fdc, *fdc_w, error[1], scale);
                 break;
+              case DOpEtypes::mixed_control:
+                GetPDE().StrongBoundaryResidual        (fdc, *fdc_w, error[0], scale);
+                GetPDE().StrongBoundaryResidual_U      (fdc, *fdc_w, error[1], scale);
+                GetPDE().StrongBoundaryResidual_Control(fdc, *fdc_w, error[2], scale);
+                break;
               default:
                 throw DOpEException("Not implemented for this EETerm.",
-                    "PDEProblemContainer::BoundaryErrorContribution");
+                    "ProblemContainerInternal::BoundaryErrorContribution");
                 break;
             }
           }
           else if (dwrc.GetWeightComputation() == DOpEtypes::cell_diameter)
           {
-            GetPDE().StrongBoundaryResidual(fdc, fdc, error[0], scale);
+            switch (dwrc.GetEETerms())
+            {
+              case DOpEtypes::primal_only:
+                GetPDE().StrongBoundaryResidual(fdc, fdc, error[0], scale);
+                break;
+              case DOpEtypes::dual_only:
+                GetPDE().StrongBoundaryResidual_U(fdc, fdc, error[1], scale);
+                break;
+              case DOpEtypes::mixed:
+                GetPDE().StrongBoundaryResidual(fdc, fdc, error[0], scale);
+                GetPDE().StrongBoundaryResidual_U(fdc, fdc, error[1], scale);
+                break;
+              case DOpEtypes::mixed_control:
+                GetPDE().StrongBoundaryResidual        (fdc, fdc, error[0], scale);
+                GetPDE().StrongBoundaryResidual_U      (fdc, fdc, error[1], scale);
+                GetPDE().StrongBoundaryResidual_Control(fdc, fdc, error[2], scale);
+                break;
+              default:
+                throw DOpEException("Not implemented for this EETerm.",
+                    "ProblemContainerInternal::BoundaryErrorContribution");
+                break;
+            }
           }
           else
           {
             throw DOpEException("Not implemented for this WeightComputation.",
-                "PDEProblemContainer::BoundaryErrorContribution");
+                "ProblemContainerInternal::BoundaryErrorContribution");
 
           }
         }
         else
         {
           throw DOpEException("Not implemented for this ResidualEvaluation.",
-              "PDEProblemContainer::BoundaryErrorContribution");
+              "ProblemContainerInternal::BoundaryErrorContribution");
         }
       }
 }

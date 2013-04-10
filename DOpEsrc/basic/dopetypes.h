@@ -64,10 +64,11 @@ namespace DOpE
      * dual_only      Only the dual-residual-term.
      * mixed          Compute both, scale them by 0.5
      *                 and build the sum.
+     * mixed_control  As with mixed but includes control errors
      */
     enum EETerms
     {
-      primal_only, dual_only, mixed
+      primal_only, dual_only, mixed, mixed_control
     };
 
     /**

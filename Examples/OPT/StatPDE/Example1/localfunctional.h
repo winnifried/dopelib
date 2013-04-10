@@ -34,9 +34,9 @@ template<typename VECTOR, int dopedim, int dealdim>
   class LocalFunctional : public FunctionalInterface<CellDataContainer,FaceDataContainer,dealii::DoFHandler<dealdim>, VECTOR, dopedim,dealdim>
   {
   public:
-    LocalFunctional()
+    LocalFunctional(double alpha)
     {
-      _alpha = 1.e-3;
+      _alpha = alpha;
     }
 
     double Value(const CellDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& cdc)

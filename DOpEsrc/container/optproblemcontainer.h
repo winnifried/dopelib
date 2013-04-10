@@ -663,7 +663,7 @@ namespace DOpE
           {
             throw DOpEException(
                 "You cant add two functionals with the same name.",
-                "PDEProblemContainer::AddFunctional");
+                "OPTProblemContainer::AddFunctional");
           }
           _functional_position[F->GetName()] = _aux_functionals.size();
           //remember! At _functional_values[0] we store always the cost functional!
@@ -683,26 +683,35 @@ namespace DOpE
         void
         SetFunctionalForErrorEstimation(std::string functional_name)
         {
-          bool found = false;
-          //we go through all aux functionals.
-          for (unsigned int i = 0; i < this->GetNFunctionals(); i++)
-          {
-            if (_aux_functionals[i]->GetName() == functional_name)
-            {
-              //if the names match, we have found our functional.
-              found = true;
-              _functional_for_ee_num = i;
-            }
-          }
-          //If we have not found a functional with the given name,
-          //we throw an error.
-          if (!found)
-          {
-            throw DOpEException(
+	  if(GetFunctional()->GetName() == functional_name)
+	  {
+	    _functional_for_ee_is_cost = true;
+	    _functional_for_ee_num = dealii::numbers::invalid_unsigned_int;
+	  }
+	  else
+	  {
+	    _functional_for_ee_is_cost = false;
+	    bool found = false;
+	    //we go through all aux functionals.
+	    for (unsigned int i = 0; i < this->GetNFunctionals(); i++)
+	    {
+	      if (_aux_functionals[i]->GetName() == functional_name)
+	      {
+		//if the names match, we have found our functional.
+		found = true;
+		_functional_for_ee_num = i;
+	      }
+	    }
+	    //If we have not found a functional with the given name,
+	    //we throw an error.
+	    if (!found)
+	    {
+	      throw DOpEException(
                 "Can't find functional " + functional_name
-                    + " in _aux_functionals",
+		+ " in _aux_functionals",
                 "Optproblem::SetFunctionalForErrorEstimation");
-          }
+	    }
+	  }
         }
 
         /******************************************************/
@@ -1023,6 +1032,13 @@ namespace DOpE
         /******************************************************/
 
         std::vector<unsigned int>&
+        GetControlBlockComponent()
+        {
+          return this->GetPDE().GetControlBlockComponent();
+        }
+        /******************************************************/
+
+        std::vector<unsigned int>&
         GetStateBlockComponent()
         {
           return this->GetPDE().GetStateBlockComponent();
@@ -1165,10 +1181,19 @@ namespace DOpE
             }
           }
 
-        /******************************************************/
+      /******************************************************/
 
-      protected:
-        FUNCTIONAL*
+      /** 
+       * Returns whether the functional for error estimation 
+       * is the costfunctional
+       */
+      bool EEFunctionalIsCost() const
+      {
+	return  _functional_for_ee_is_cost;
+      }
+      
+    protected:
+      FUNCTIONAL*
         GetFunctional();
         const FUNCTIONAL*
         GetFunctional() const;
@@ -1215,6 +1240,7 @@ namespace DOpE
         DOpEOutputHandler<VECTOR>* _OutputHandler;
         std::string  _algo_type;
 
+        bool _functional_for_ee_is_cost;
         unsigned int _functional_for_ee_num;
         std::vector<FUNCTIONAL_INTERFACE*> _aux_functionals;
         std::map<std::string, unsigned int> _functional_position;

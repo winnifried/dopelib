@@ -1367,80 +1367,81 @@ namespace DOpE
             this->GetProblem()->GetSpaceTimeHandler()->GetStateDoFHandler().get_tria().n_active_cells();
         dwrc.ReInit(n_cells);
 
-        //If we need the dual solution, compute it
-        if (dwrc.NeedDual())
-          this->ComputeDualForErrorEstimation(q, dwrc.GetWeightComputation());
-
-        this->GetOutputHandler()->Write("Computing Error Indicators:",
+	//Estimation for Costfunctional
+	if(this->GetProblem()->EEFunctionalIsCost())
+	{
+	  this->GetOutputHandler()->Write("Computing Error Indicators:",
 					4 + this->GetBasePriority());
+	  this->GetProblem()->AddAuxiliaryToIntegrator(this->GetIntegrator());
+          
+          //add the primal and dual solution to the integrator
+	  this->GetIntegrator().AddDomainData("state",
+					      &(GetU().GetSpacialVector()));
+	  this->GetIntegrator().AddDomainData("adjoint_for_ee",
+					      &(GetZ().GetSpacialVector()));
 
-        this->GetProblem()->AddAuxiliaryToIntegrator(this->GetIntegrator());
-
-        //add the primal and (if needed) dual solution to the integrator
-        this->GetIntegrator().AddDomainData("state",
-            &(GetU().GetSpacialVector()));
-        if (dwrc.NeedDual())
-          this->GetIntegrator().AddDomainData("adjoint_for_ee",
-              &(GetZForEE().GetSpacialVector()));
-
-        if (dopedim == dealdim)
-        {
-          this->GetIntegrator().AddDomainData("control",
-              &(q.GetSpacialVector()));
-        }
-        else if (dopedim == 0)
-        {
-          this->GetIntegrator().AddParamData("control",
-              &(q.GetSpacialVectorCopy()));
-        }
-        else
-        {
-          throw DOpEException("dopedim not implemented",
+	  if (dopedim == dealdim)
+	  {
+	    this->GetIntegrator().AddDomainData("control",
+						&(q.GetSpacialVector()));
+	  }
+	  else if (dopedim == 0)
+	  {
+	    this->GetIntegrator().AddParamData("control",
+					       &(q.GetSpacialVectorCopy()));
+	  }
+	  else
+	  {
+	    throw DOpEException("dopedim not implemented",
               "StatReducedProblem::ComputeRefinementIndicators");
-        }
+	  }
 
-        this->SetProblemType("error_evaluation");
+	  this->SetProblemType("error_evaluation");
 
-        //prepare the weights...
-        dwrc.PrepareWeights(GetU(), GetZForEE());
+	  //prepare the weights...
+	  dwrc.PrepareWeights(GetU(), GetZ());
+	  dwrc.PrepareWeights(q);
 
-        //now we finally compute the refinement indicators
-        this->GetIntegrator().ComputeRefinementIndicators(*this->GetProblem(),
-            dwrc);
-        // release the lock on the refinement indicators (see dwrcontainer.h)
-        dwrc.ReleaseLock();
-	dwrc.ClearWeightData();
+	  //now we finally compute the refinement indicators
+	  this->GetIntegrator().ComputeRefinementIndicators(*this->GetProblem(),
+							    dwrc);
+	  // release the lock on the refinement indicators (see dwrcontainer.h)
+	  dwrc.ReleaseLock();
+	  dwrc.ClearWeightData();
 
-        const float error = dwrc.GetError();
-
-        // clear the data
-        if (dopedim == dealdim)
-        {
-          this->GetIntegrator().DeleteDomainData("control");
-        }
-        else if (dopedim == 0)
-        {
-          this->GetIntegrator().DeleteParamData("control");
-          q.UnLockCopy();
-        }
-        else
-        {
-          throw DOpEException("dopedim not implemented",
-              "StatReducedProblem::ComputeRefinementIndicators");
-        }
-
-        this->GetIntegrator().DeleteDomainData("state");
-         if (dwrc.NeedDual())
-	   this->GetIntegrator().DeleteDomainData("adjoint_for_ee");
-        this->GetProblem()->DeleteAuxiliaryFromIntegrator(
+	  // clear the data
+	  if (dopedim == dealdim)
+	  {
+	    this->GetIntegrator().DeleteDomainData("control");
+	  }
+	  else if (dopedim == 0)
+	  {
+	    this->GetIntegrator().DeleteParamData("control");
+	    q.UnLockCopy();
+	  }
+	  else
+	  {
+	    throw DOpEException("dopedim not implemented",
+				"StatReducedProblem::ComputeRefinementIndicators");
+	  }
+	  this->GetIntegrator().DeleteDomainData("state");
+	  this->GetIntegrator().DeleteDomainData("adjoint_for_ee");
+	  this->GetProblem()->DeleteAuxiliaryFromIntegrator(
             this->GetIntegrator());
+	}
+	else //Estimation for other (not the cost) functional
+	{
+	  throw DOpEException("Estimating the error in other functionals than cost is not implemented",
+                  "StatReducedProblem::ComputeRefinementIndicators"); 
+	    
+	}
 
         std::stringstream out;
         this->GetOutputHandler()->InitOut(out);
         out << "Error estimate using "<<dwrc.GetName();
 	if(dwrc.NeedDual())
 	  out<<" For the computation of "<<this->GetProblem()->GetFunctionalName();
-	out<< ": "<< error;
+	out<< ": "<< dwrc.GetError();
 	this->GetOutputHandler()->Write(out, 2 + this->GetBasePriority());
       }
 

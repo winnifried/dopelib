@@ -79,7 +79,7 @@ namespace DOpE
     PDEInterface<CDC, FDC, DOFHANDLER, VECTOR, dopedim, dealdim>::StrongCellResidual(
         const CDC<DOFHANDLER, VECTOR, dealdim>& /*cdc*/,
         const CDC<DOFHANDLER, VECTOR, dealdim>& /*cdc_weight*/, double&,
-        double /*scale*/, double /*scale_ico*/)
+        double /*scale*/)
     {
       throw DOpEException("Not Implemented",
           "PDEInterface::StrongCellResidual");
@@ -427,6 +427,54 @@ namespace DOpE
         FullMatrix<double> &/*local_entry_matrix*/ )
     {
       throw DOpEException("Not Implemented", "PDEInterface::ControlCellMatrix");
+    }
+
+  /********************************************/
+
+  template<
+      template<typename DOFHANDLER, typename VECTOR, int dealdim> class CDC,
+      template<typename DOFHANDLER, typename VECTOR, int dealdim> class FDC,
+      typename DOFHANDLER, typename VECTOR, int dopedim, int dealdim>
+    void
+    PDEInterface<CDC, FDC, DOFHANDLER, VECTOR, dopedim, dealdim>::StrongCellResidual_Control(
+      const CDC<DOFHANDLER, VECTOR, dealdim>&,
+      const CDC<DOFHANDLER, VECTOR, dealdim>& , 
+      double&,
+      double)
+    {
+      throw DOpEException("Not Implemented", "PDEInterface::StrongCellResidual_Control");
+    }
+
+  /********************************************/
+
+  template<
+      template<typename DOFHANDLER, typename VECTOR, int dealdim> class CDC,
+      template<typename DOFHANDLER, typename VECTOR, int dealdim> class FDC,
+      typename DOFHANDLER, typename VECTOR, int dopedim, int dealdim>
+    void
+    PDEInterface<CDC, FDC, DOFHANDLER, VECTOR, dopedim, dealdim>::StrongFaceResidual_Control(
+      const FDC<DOFHANDLER, VECTOR, dealdim>&,
+      const FDC<DOFHANDLER, VECTOR, dealdim>&, 
+      double&,
+      double)
+    {
+      throw DOpEException("Not Implemented", "PDEInterface::StrongFaceResidual_Control");
+    }
+
+  /********************************************/
+
+  template<
+      template<typename DOFHANDLER, typename VECTOR, int dealdim> class CDC,
+      template<typename DOFHANDLER, typename VECTOR, int dealdim> class FDC,
+      typename DOFHANDLER, typename VECTOR, int dopedim, int dealdim>
+    void
+    PDEInterface<CDC, FDC, DOFHANDLER, VECTOR, dopedim, dealdim>::StrongBoundaryResidual_Control(
+      const FDC<DOFHANDLER, VECTOR, dealdim>&,
+      const FDC<DOFHANDLER, VECTOR, dealdim>&, 
+      double&,
+      double)
+    {
+      throw DOpEException("Not Implemented", "PDEInterface::StrongBoundaryResidual_Control");
     }
 
   /********************************************/

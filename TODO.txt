@@ -1,5 +1,7 @@
 TODO DOpE
 =========
+- Fehlerschätzer mit Strong*Residual berücksichtigt nicht automatisch 
+  das gewählte funktional.
 - Fit fuer deal.ii 8.0 machen (deprecated header)
 - Moeglichkeit schaffen, relaxationsparameter etc. an lineare Loeser zu uebergeben.
 - Moeglichkeit schaffen, Informationen der linearen Loeser ausgeben (z.B. Anzahl cg-Schritte)

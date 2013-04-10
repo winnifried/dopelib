@@ -40,6 +40,7 @@
 #include "userdefineddofconstraints.h"
 #include "preconditioner_wrapper.h"
 #include "integratordatacontainer.h"
+#include "higher_order_dwrc_control.h"
 
 #include <iostream>
 
@@ -78,12 +79,17 @@ typedef Integrator<IDC,VECTOR,double,2> INTEGRATOR;
 //Uncomment to use a CG-Method with Identity Preconditioner
 typedef CGLinearSolverWithMatrix<DOpEWrapper::PreconditionIdentity_Wrapper<BlockSparseMatrix<double> >,BlockSparsityPattern,BlockSparseMatrix<double>,VECTOR,2> LINEARSOLVER;
 //Uncomment to use UMFPACK
-//typedef DirectLinearSolverWithMatrix<OP,BlockSparsityPattern,BlockSparseMatrix<double>,VECTOR,2> LINEARSOLVER;
+//typedef DirectLinearSolverWithMatrix<BlockSparsityPattern,BlockSparseMatrix<double>,VECTOR,2> LINEARSOLVER;
 
 typedef NewtonSolver<INTEGRATOR,LINEARSOLVER,VECTOR,2> NLS;
 typedef ReducedNewtonAlgorithm<OP,VECTOR,2,2> RNA;
 typedef ReducedTrustregion_NewtonAlgorithm<OP,VECTOR,2,2> RNA2;
 typedef StatReducedProblem<NLS,NLS,INTEGRATOR,INTEGRATOR,OP,VECTOR,2,2> SSolver;
+
+typedef MethodOfLines_SpaceTimeHandler<FE, DOFHANDLER, BlockSparsityPattern,VECTOR, 2,2> STH;
+typedef CellDataContainer<DOFHANDLER, VECTOR, 2> CDC;
+typedef FaceDataContainer<DOFHANDLER, VECTOR, 2> FDC;
+typedef HigherOrderDWRContainerControl<STH, IDC, CDC, FDC, VECTOR> HO_DWRC;
 
 int main(int argc, char **argv)
 {
@@ -99,6 +105,10 @@ int main(int argc, char **argv)
     std::cout<<"Usage: "<<argv[0]<< " [ paramfile ] "<<std::endl;
     return -1;
   }
+  unsigned int c_fe_order = 1;
+  unsigned int s_fe_order = 2;
+  unsigned int q_order = std::max(c_fe_order,s_fe_order)+1;
+  
 
   ParameterReader pr;
   SSolver::declare_params(pr);
@@ -110,18 +120,19 @@ int main(int argc, char **argv)
 
   std::string cases = "solve";
 
-  Triangulation<2>     triangulation;
+  Triangulation<2>     triangulation(Triangulation<2>::MeshSmoothing::patch_level_1);
   GridGenerator::hyper_cube (triangulation, 0, 1);
 
-  FESystem<2>          control_fe(FE_Q<2>(1),1);
-  FESystem<2>          state_fe(FE_Q<2>(2),1);
+  FESystem<2>          control_fe(FE_Q<2>(c_fe_order),1);
+  FESystem<2>          state_fe(FE_Q<2>(s_fe_order),1);
 
-  QGauss<2>   quadrature_formula(2);
-  QGauss<1> face_quadrature_formula(2);
+  QGauss<2>   quadrature_formula(q_order);
+  QGauss<1> face_quadrature_formula(q_order);
   IDC idc(quadrature_formula, face_quadrature_formula);
+  double alpha = 1.e-3;
 
-  LocalPDE<VECTOR, 2,2> LPDE;
-  LocalFunctional<VECTOR, 2,2> LFunc;
+  LocalPDE<VECTOR, 2,2> LPDE(alpha);
+  LocalFunctional<VECTOR, 2,2> LFunc(alpha);
 
   //AuxFunctionals
   LocalPointFunctional<VECTOR,2,2> LPF;
@@ -132,7 +143,7 @@ int main(int argc, char **argv)
   GridGenerator::hyper_cube(times);
   triangulation.refine_global (5);
 
-  MethodOfLines_SpaceTimeHandler<FE, DOFHANDLER, BlockSparsityPattern,VECTOR, 2,2> DOFH(triangulation,control_fe, state_fe, DOpEtypes::stationary);
+  STH DOFH(triangulation,control_fe, state_fe, DOpEtypes::stationary);
 
   NoConstraints<CellDataContainer,FaceDataContainer,DOFHANDLER,VECTOR, 2,2> Constraints;
 
@@ -158,11 +169,26 @@ int main(int argc, char **argv)
   RNA Alg(&P,&solver, pr,&ex,&out);
   RNA2 Alg2(&P,&solver, pr,&ex,&out);
 
+  /**********************For DWR***************************************/
+  P.SetFunctionalForErrorEstimation(LFunc.GetName());
+  FESystem<2> control_fe_high(FE_Q<2>(2* c_fe_order),1);
+  FESystem<2> state_fe_high(FE_Q<2>(2* s_fe_order),1);
+  QGauss<2>   quadrature_formula_high(2*q_order);
+  QGauss<1> face_quadrature_formula_high(2*q_order);
+  IDC idc_high(quadrature_formula_high, face_quadrature_formula_high);
+  STH DOFH_higher_order(triangulation,control_fe_high, state_fe_high, DOpEtypes::stationary);	  
+  DOFH_higher_order.SetDoFHandlerOrdering(1,0);
+  HO_DWRC dwrc(DOFH_higher_order, idc_high, "fullmem","fullmem", pr,
+	       DOpEtypes::mixed_control);
+  solver.InitializeDWRC(dwrc);
+  /********************************************************************/
   int niter = 2;
   Alg.ReInit();
   out.ReInit();
   ControlVector<VECTOR > q(&DOFH,"fullmem");
  
+  double ex_value = 1./8.*(25*M_PI*M_PI*M_PI*M_PI + 1./alpha);
+
   for(int i = 0; i < niter; i++)
   {
     try
@@ -179,6 +205,18 @@ int main(int argc, char **argv)
 	Alg2.Solve(q);
 	q = 0.;
 	Alg.Solve(q);
+	
+	solver.ComputeRefinementIndicators(q,dwrc,LPDE);
+	double value = solver.GetFunctionalValue(LFunc.GetName());
+	double est_error = dwrc.GetError();
+	double error = ex_value-value;
+	stringstream outp; 
+	outp << "Exact Value: "<<ex_value<<"\t Computed: "<<value<<std::endl;
+	outp << "Primal Err: "<<dwrc.GetPrimalError()<<"\t Dual Err: "<<dwrc.GetDualError();
+	outp << "\t Control Err: "<<dwrc.GetControlError()<<std::endl;
+	outp << "Est Total Error: "<<est_error<<" \tError: "<<error;
+	outp << "  Ieff (eh/e)= " << est_error/ error <<std::endl;
+	out.Write(outp, 1, 1, 1);
       }
     }
     catch(DOpEException &e)

@@ -570,6 +570,20 @@ namespace DOpE
         {
           return _OP;
         }
+        /**
+         * Initializes the HigherOrderDWRDataContainer
+         */
+        template<class DWRC>
+          void
+          InitializeDWRC(DWRC& dwrc)
+          {
+            dwrc.Initialize(GetProblem()->GetSpaceTimeHandler(),
+                GetProblem()->GetControlNBlocks(),
+                GetProblem()->GetControlBlockComponent(),
+                GetProblem()->GetStateNBlocks(),
+                GetProblem()->GetStateBlockComponent());
+          }
+
       protected:
         virtual const std::map<std::string, unsigned int>&
         GetFunctionalPosition() const
