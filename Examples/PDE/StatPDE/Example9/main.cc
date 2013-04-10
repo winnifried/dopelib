@@ -214,8 +214,8 @@ main(int argc, char **argv)
   pr.SetSubsection("main parameters");
   QGauss<2> quadrature_formula_high(pr.get_integer("quad order") + 1);
   QGauss<1> face_quadrature_formula_high(pr.get_integer("facequad order") + 1);
-  IDC idc_high(quadrature_formula, face_quadrature_formula);
-  STH DOFH_higher_order(triangulation, state_fe_high);
+  IDC idc_high(quadrature_formula_high, face_quadrature_formula_high);
+  STH DOFH_higher_order(triangulation,  state_fe_high);
   HO_DWRC dwrc(DOFH_higher_order, idc_high, "fullmem", pr,
       DOpEtypes::primal_only);
   L2_RESC l2resc(DOFH,"fullmem",pr,DOpEtypes::primal_only);
