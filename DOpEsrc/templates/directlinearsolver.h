@@ -35,7 +35,7 @@
 
 #include <dofs/dof_tools.h>
 
-#include <numerics/vectors.h>
+#include <numerics/vector_tools.h>
 
 #include <vector>
 

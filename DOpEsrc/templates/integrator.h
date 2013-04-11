@@ -28,8 +28,8 @@
 #include <lac/block_sparsity_pattern.h>
 #include <lac/block_sparse_matrix.h>
 
-#include <numerics/vectors.h>
-#include <numerics/matrices.h>
+#include <numerics/matrix_tools.h>
+#include <numerics/vector_tools.h>
 
 #include <base/function.h>
 
@@ -1335,7 +1335,6 @@ namespace DOpE
           PROBLEM& pde,
           DWRDataContainer<STH, INTEGRATORDATACONT, CDC, FDC, VECTOR>& dwrc)
       {
-        unsigned int dofs_per_cell;
 	unsigned int n_error_comps = dwrc.GetNErrorComps();
         //for primal and dual part of the error
         std::vector<double> cell_sum(n_error_comps, 0);

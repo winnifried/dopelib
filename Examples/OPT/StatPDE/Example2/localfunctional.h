@@ -24,7 +24,7 @@
 #ifndef _LOCALFunctional_
 #define _LOCALFunctional_
 
-#include <numerics/vectors.h>
+#include <numerics/vector_tools.h>
 #include <base/quadrature.h>
 #include <fe/fe_values.h>
 #include <grid/grid_tools.h>

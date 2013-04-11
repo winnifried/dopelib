@@ -318,7 +318,7 @@ namespace DOpE
       template<typename FACEDATACONTAINER>
         void
         FaceEquation(const FACEDATACONTAINER& fdc,
-		     dealii::Vector<double> &local_cell_vector, double scale, double scale_ico)
+		     dealii::Vector<double> &local_cell_vector, double scale, double /*scale_ico*/)
         {
           if (this->GetPart() == "New")
             {

@@ -31,7 +31,7 @@
 #include <lac/vector.h>
 #include <lac/block_vector_base.h>
 #include <lac/block_vector.h>
-#include <dofs/dof_constraints.h>
+#include <lac/constraint_matrix.h>
 #include <dofs/dof_handler.h>
 
 #include <vector>

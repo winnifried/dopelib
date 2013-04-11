@@ -47,8 +47,8 @@
 
 #include <base/data_out_base.h>
 #include <numerics/data_out.h>
-#include <numerics/vectors.h>
-#include <numerics/matrices.h>
+#include <numerics/matrix_tools.h>
+#include <numerics/vector_tools.h>
 #include <base/function.h>
 #include <lac/sparse_matrix.h>
 #include <lac/compressed_simple_sparsity_pattern.h>

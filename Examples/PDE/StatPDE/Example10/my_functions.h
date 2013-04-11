@@ -50,8 +50,8 @@ class ExactSolution : public DOpEWrapper::Function<2>
     }
 
     double
-    laplacian(const dealii::Point<2> & p,
-        const unsigned int component = 0) const
+      laplacian(const dealii::Point<2> & /*p*/,
+		const unsigned int /*component*/ = 0) const
     {
       return 4.;
     }

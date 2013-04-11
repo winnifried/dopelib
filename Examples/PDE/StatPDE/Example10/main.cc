@@ -51,7 +51,7 @@
 #include <dofs/dof_tools.h>
 #include <base/quadrature_lib.h>
 #include <base/function.h>
-#include <numerics/vectors.h>
+#include <numerics/vector_tools.h>
 #include <deal.II/base/convergence_table.h>
 
 #include "localpde.h"

@@ -332,7 +332,7 @@ namespace DOpE
       template<typename FACEDATACONTAINER>
         void
         FaceEquation(const FACEDATACONTAINER & fdc,
-            dealii::Vector<double> &local_cell_vector, double scale = 1., double scale_ico = 1.)
+		     dealii::Vector<double> &local_cell_vector, double scale = 1., double /*scale_ico*/ = 1.)
         {
           if (this->GetPart() == "New")
             {
@@ -358,7 +358,7 @@ namespace DOpE
       template<typename FACEDATACONTAINER>
         void
         InterfaceEquation(const FACEDATACONTAINER & fdc,
-			  dealii::Vector<double> &local_cell_vector, double scale = 1., double scale_ico = 1.)
+			  dealii::Vector<double> &local_cell_vector, double scale = 1., double /*scale_ico*/ = 1.)
         {
           if (this->GetPart() == "New")
             {
@@ -462,7 +462,7 @@ namespace DOpE
       template<typename FACEDATACONTAINER>
         void
         BoundaryEquation(const FACEDATACONTAINER & fdc,
-            dealii::Vector<double> &local_cell_vector, double scale = 1., double scale_ico = 1.)
+			 dealii::Vector<double> &local_cell_vector, double scale = 1., double /*scale_ico*/ = 1.)
         {
           if (this->GetPart() == "New")
             {

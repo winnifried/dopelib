@@ -252,7 +252,7 @@ template<typename VECTOR, int dopedim, int dealdim>
     
     
     void CellMatrix (const CellDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& cdc,
-		     dealii::FullMatrix<double> &local_entry_matrix, double scale, double /*scale_ico*/)
+		     dealii::FullMatrix<double> &local_entry_matrix, double /*scale*/, double /*scale_ico*/)
     { 
       const DOpEWrapper::FEValues<dealdim> & state_fe_values = cdc.GetFEValuesState();
       unsigned int n_dofs_per_cell = cdc.GetNDoFsPerCell();
@@ -333,7 +333,7 @@ template<typename VECTOR, int dopedim, int dealdim>
 		  const Tensor<2,dealdim> grad_v_LinV = ALE_Transformations::get_grad_v_LinV<dealdim> (phi_grads_v[j]);
 		  const double J_LinU =  ALE_Transformations::get_J_LinU<dealdim> (q_point, _ugrads, phi_grads_u[j]);
 		  
-		  const double J_Inverse_LinU = ALE_Transformations::get_J_Inverse_LinU<dealdim> (J, J_LinU);
+//		  const double J_Inverse_LinU = ALE_Transformations::get_J_Inverse_LinU<dealdim> (J, J_LinU);
 		  const Tensor<2,dealdim> J_F_Inverse_T_LinU = ALE_Transformations::get_J_F_Inverse_T_LinU<dealdim> (phi_grads_u[j]);
 		  const Tensor<2,dealdim> F_Inverse_LinU = ALE_Transformations::get_F_Inverse_LinU (phi_grads_u[j],J,
 												J_LinU,q_point,_ugrads
@@ -452,7 +452,7 @@ template<typename VECTOR, int dopedim, int dealdim>
 		  
 		  for(unsigned int i = 0; i < n_dofs_per_cell; i++)
 		    {	      
-		      local_entry_matrix(i,j) += 
+		      local_entry_matrix(i,j) +=
 			(scalar_product(piola_kirchhoff_stress_structure_STVK_LinALL,phi_grads_v[i])
 			 - _density_structure * phi_v[j] * phi_u[i]
 			 + phi_p[j] * phi_p[i]
@@ -596,9 +596,9 @@ template<typename VECTOR, int dopedim, int dealdim>
 		    const double J_LinU =  ALE_Transformations
 		      ::get_J_LinU<dealdim> (q_point, _z_state_grads, phi_grads_u[j]);
 		  
-		    const double J_Inverse_LinU = ALE_Transformations
-		      ::get_J_Inverse_LinU<dealdim> (J, J_LinU);
-
+//		    const double J_Inverse_LinU = ALE_Transformations
+//		      ::get_J_Inverse_LinU<dealdim> (J, J_LinU);
+//
 		    const Tensor<2,dealdim> J_F_Inverse_T_LinU = ALE_Transformations
 		      ::get_J_F_Inverse_T_LinU<dealdim> (phi_grads_u[j]);
 		  
@@ -801,8 +801,8 @@ template<typename VECTOR, int dopedim, int dealdim>
 	      duv[0] = _duvalues[q_point](0);
 	      duv[1] = _duvalues[q_point](1);
 	      
-	      double dup = _duvalues[q_point](4);
-	      double duv_incompressibility = duv_grads[0][0] +  duv_grads[1][1];
+	      //double dup = _duvalues[q_point](4);
+	      //double duv_incompressibility = duv_grads[0][0] +  duv_grads[1][1];
 
 	      Tensor<2,2> dupI;
 	      dupI.clear();
@@ -861,8 +861,8 @@ template<typename VECTOR, int dopedim, int dealdim>
 	      const Tensor<2,dealdim> E = Structure_Terms_in_ALE 
 		::get_E<dealdim> (F_T, F, Identity);
 	      
-	      const double tr_E = Structure_Terms_in_ALE
-		::get_tr_E<dealdim> (E);
+	      //const double tr_E = Structure_Terms_in_ALE
+	      //	::get_tr_E<dealdim> (E);
 
 	      // sigma in ALE for fluid
 	      const Tensor<2,dealdim> sigma_ALE = NSE_in_ALE
@@ -1168,8 +1168,8 @@ template<typename VECTOR, int dopedim, int dealdim>
 		    const double J_LinU =  ALE_Transformations
 		      ::get_J_LinU<dealdim> (q_point, _dz_state_grads, phi_grads_u[j]);
 		  
-		    const double J_Inverse_LinU = ALE_Transformations
-		      ::get_J_Inverse_LinU<dealdim> (J, J_LinU);
+		    //const double J_Inverse_LinU = ALE_Transformations
+		    //  ::get_J_Inverse_LinU<dealdim> (J, J_LinU);
 
 		    const Tensor<2,dealdim> J_F_Inverse_T_LinU = ALE_Transformations
 		      ::get_J_F_Inverse_T_LinU<dealdim> (phi_grads_u[j]);
@@ -1324,7 +1324,6 @@ template<typename VECTOR, int dopedim, int dealdim>
       unsigned int n_dofs_per_cell = cdc.GetNDoFsPerCell();
       unsigned int n_q_points = cdc.GetNQPoints();
       unsigned int material_id = cdc.GetMaterialId(); 
-      double cell_diameter = cdc.GetCellDiameter();
 
       assert(this->_problem_type == "adjoint_hessian");
           
@@ -2039,53 +2038,53 @@ void BoundaryEquation_QQ (const FaceDataContainer<dealii::DoFHandler<dealdim>, V
 
 ///// Hier FaceEquation einfuegen
 
-  void FaceEquation (const FaceDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& fdc,
-			 dealii::Vector<double> &local_cell_vector, double scale, double /*scale_ico*/)
+  void FaceEquation (const FaceDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& ,
+			 dealii::Vector<double> &, double, double)
   {
 
   }
-  void FaceMatrix (const FaceDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& fdc,
-		       dealii::FullMatrix<double> &local_entry_matrix, double /*scale*/, double /*scale_ico*/)
+  void FaceMatrix (const FaceDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& ,
+		       dealii::FullMatrix<double> &, double, double )
   {
   }
-  void FaceRightHandSide (const FaceDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& fdc __attribute__((unused)),
-			      dealii::Vector<double> &local_cell_vector __attribute__((unused)), double scale __attribute__((unused)))
+  void FaceRightHandSide (const FaceDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>&,
+			      dealii::Vector<double> &, double)
   {
     assert(this->_problem_type == "state");
   }
  
-  void FaceEquation_Q (const FaceDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& fdc,
-			   dealii::Vector<double> &local_cell_vector,
-			   double scale, double /*scale_ico*/)
+  void FaceEquation_Q (const FaceDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& ,
+			   dealii::Vector<double> &,
+			   double, double)
   {
   }
 
- void FaceEquation_QT (const FaceDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& fdc,
-			   dealii::Vector<double> &local_cell_vector,
-			   double scale, double /*scale_ico*/)
+ void FaceEquation_QT (const FaceDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>&,
+			   dealii::Vector<double> &,
+			   double, double)
  {
 }
 
- void FaceEquation_QTT (const FaceDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& fdc,
-			    dealii::Vector<double> &local_cell_vector,
-			    double scale, double /*scale_ico*/)
+ void FaceEquation_QTT (const FaceDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>&,
+			    dealii::Vector<double> &,
+			    double, double)
  { 
  }
 
- void FaceEquation_U (const FaceDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& fdc,
-			  dealii::Vector<double> &local_cell_vector, double scale, double /*scale_ico*/)
+ void FaceEquation_U (const FaceDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>&,
+			  dealii::Vector<double> &, double, double)
  {
  }
 
-  void FaceEquation_UT (const FaceDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& fdc,
-			   dealii::Vector<double> &local_cell_vector,
-			   double scale, double /*scale_ico*/)
+  void FaceEquation_UT (const FaceDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>&,
+			   dealii::Vector<double> &,
+			   double, double)
   {
   }
 
- void FaceEquation_UTT (const FaceDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& fdc,
-			    dealii::Vector<double> &local_cell_vector,
-			    double scale, double /*scale_ico*/)
+ void FaceEquation_UTT (const FaceDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>&,
+			    dealii::Vector<double> &,
+			    double, double)
   {
   }
 
@@ -2224,8 +2223,8 @@ void FaceEquation_QQ (const FaceDataContainer<dealii::DoFHandler<dealdim>, VECTO
      vector<vector<Tensor<1,dealdim> > > _duboundarygrads;
      
      
-     vector<unsigned int> _state_block_components;
      vector<unsigned int> _control_block_components;
+     vector<unsigned int> _state_block_components;
      
      double _cell_diameter;
      

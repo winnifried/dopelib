@@ -139,7 +139,6 @@ template<template<typename DOFHANDLER, typename VECTOR, int dealdim> class CDC, 
 			double scale __attribute__((unused)), double /*scale_ico*/)
     { 
       const DOpEWrapper::FEValues<dealdim> & control_fe_values = cdc.GetFEValuesControl();
-      const DOpEWrapper::FEValues<dealdim> & state_fe_values = cdc.GetFEValuesState();
       unsigned int n_dofs_per_cell = cdc.GetNDoFsPerCell();
       unsigned int n_q_points = cdc.GetNQPoints();
       {

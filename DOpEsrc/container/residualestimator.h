@@ -177,7 +177,7 @@ namespace DOpE
          * control residual.
          */
         void
-	  PreparePI_h_q(const ControlVector<VECTOR>& q)
+	  PreparePI_h_q(const ControlVector<VECTOR>& /*q*/)
         {
 	  throw DOpEException("There is no Control in PDE Problems!",
             "HigherOrderDWRContainer::PreparePI_h_q");
@@ -392,7 +392,7 @@ namespace DOpE
          * control residual.
          */
         void
-	  PreparePI_h_q(const ControlVector<VECTOR>& q)
+	  PreparePI_h_q(const ControlVector<VECTOR>& /*q*/)
         {
 	  throw DOpEException("There is no Control in PDE Problems!",
             "HigherOrderDWRContainer::PreparePI_h_q");

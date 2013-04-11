@@ -263,13 +263,9 @@ template<typename VECTOR, int dopedim, int dealdim>
      double FaceValue(const FaceDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& fdc)  
      {
         const auto & state_fe_face_values = fdc.GetFEFaceValuesState();
-      unsigned int n_dofs_per_cell = fdc.GetNDoFsPerCell();
       unsigned int n_q_points = fdc.GetNQPoints();
-      unsigned int color = fdc.GetBoundaryIndicator();
       unsigned int material_id = fdc.GetMaterialId();
-      unsigned int material_id_neighbor = fdc.GetNbrMaterialId();
-      bool at_boundary = fdc.GetIsAtBoundary();
-      
+      unsigned int material_id_neighbor = fdc.GetNbrMaterialId();     
 
     
        Tensor<1,2> drag_lift_value;
@@ -514,12 +510,9 @@ template<typename VECTOR, int dopedim, int dealdim>
      double FaceValue(const FaceDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& fdc)
     {
       const auto & state_fe_face_values = fdc.GetFEFaceValuesState();
-      unsigned int n_dofs_per_cell = fdc.GetNDoFsPerCell();
       unsigned int n_q_points = fdc.GetNQPoints();
-      unsigned int color = fdc.GetBoundaryIndicator();
       unsigned int material_id = fdc.GetMaterialId();
       unsigned int material_id_neighbor = fdc.GetNbrMaterialId();
-      bool at_boundary = fdc.GetIsAtBoundary();
     
 
    Tensor<1,2> drag_lift_value;

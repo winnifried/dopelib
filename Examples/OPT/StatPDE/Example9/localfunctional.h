@@ -435,7 +435,6 @@ void BoundaryValue_UQ(const FaceDataContainer<dealii::DoFHandler<dealdim>, VECTO
  {
      const auto & state_fe_face_values = fdc.GetFEFaceValuesState();
     unsigned int n_q_points = fdc.GetNQPoints();
-    unsigned int color = fdc.GetBoundaryIndicator();
     unsigned int material_id = fdc.GetMaterialId();
     unsigned int material_id_neighbor = fdc.GetNbrMaterialId();
     bool at_boundary = fdc.GetIsAtBoundary();
@@ -515,7 +514,6 @@ void FaceValue_U(const FaceDataContainer<dealii::DoFHandler<dealdim>, VECTOR, de
   const auto & state_fe_face_values = fdc.GetFEFaceValuesState();
   unsigned int n_dofs_per_cell = fdc.GetNDoFsPerCell();
   unsigned int n_q_points = fdc.GetNQPoints();
-  unsigned int color = fdc.GetBoundaryIndicator();
   unsigned int material_id = fdc.GetMaterialId();
   unsigned int material_id_neighbor = fdc.GetNbrMaterialId();
   bool at_boundary = fdc.GetIsAtBoundary();
@@ -621,35 +619,35 @@ void FaceValue_U(const FaceDataContainer<dealii::DoFHandler<dealdim>, VECTOR, de
   
 }
 
-void FaceValue_UU(const FaceDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& fdc,
-		      dealii::Vector<double> &local_cell_vector, double scale)
+void FaceValue_UU(const FaceDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& /*fdc*/,
+		  dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
 {
 #warning derivative missing
 }
 
 
-void FaceValue_Q(const FaceDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& fdc,
-		      dealii::Vector<double> &local_cell_vector, double scale)
+void FaceValue_Q(const FaceDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>&,
+		      dealii::Vector<double> &, double )
 {
 
 }
  
 
-void FaceValue_QU(const FaceDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& fdc,
-		      dealii::Vector<double> &local_cell_vector, double scale)
+void FaceValue_QU(const FaceDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>&,
+		      dealii::Vector<double> &, double)
 {
 
 }
 
-void FaceValue_UQ(const FaceDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& fdc,
-		      dealii::Vector<double> &local_cell_vector, double scale)
+void FaceValue_UQ(const FaceDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>&,
+		      dealii::Vector<double> &, double)
 {
 
 }
 
 
-void FaceValue_QQ(const FaceDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& fdc,
-		      dealii::Vector<double> &local_cell_vector, double scale)
+void FaceValue_QQ(const FaceDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>&,
+		      dealii::Vector<double> &, double)
 {
 
 }

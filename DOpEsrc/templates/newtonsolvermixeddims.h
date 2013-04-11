@@ -27,8 +27,8 @@
 #include <lac/vector.h>
 #include <lac/block_sparsity_pattern.h>
 #include <lac/block_sparse_matrix.h>
+#include <numerics/vector_tools.h>
 
-#include <numerics/vectors.h>
 #include <vector>
 #include <iostream>
 #include <iomanip>

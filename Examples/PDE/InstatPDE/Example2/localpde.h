@@ -463,8 +463,8 @@ template<typename VECTOR, int dopedim, int dealdim>
 	      const Tensor<2,dealdim> F_T = ALE_Transformations
 		::get_F_T<dealdim> (F);
 
-	      const double J = ALE_Transformations
-		::get_J<dealdim> (F);
+//	      const double J = ALE_Transformations
+//		::get_J<dealdim> (F);
 
 	      const Tensor<2,dealdim> E = Structure_Terms_in_ALE
 		::get_E<dealdim> (F_T, F, Identity);
@@ -475,9 +475,9 @@ template<typename VECTOR, int dopedim, int dealdim>
 	      for(unsigned int i=0; i<n_dofs_per_cell; i++)
 		{
 
-		  const double J_LinU = ALE_Transformations
-		    ::get_J_LinU<dealdim> (q_point, _ugrads,
-				       phi_grads_u[i]);
+//		  const double J_LinU = ALE_Transformations
+//		    ::get_J_LinU<dealdim> (q_point, _ugrads,
+//				       phi_grads_u[i]);
 
 		  const Tensor<2,dealdim> F_LinU = ALE_Transformations
 		    ::get_F_LinU<dealdim> (phi_grads_u[i]);

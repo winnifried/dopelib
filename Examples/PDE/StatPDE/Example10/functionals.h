@@ -45,7 +45,6 @@ template<typename VECTOR, typename FACEDATACONTAINER, int dealdim>
       BoundaryValue(const FACEDATACONTAINER& fdc)
       {
         unsigned int n_q_points = fdc.GetNQPoints();
-        unsigned int boundary_ind = fdc.GetBoundaryIndicator();
 
         double cw = 0;
 
@@ -55,8 +54,6 @@ template<typename VECTOR, typename FACEDATACONTAINER, int dealdim>
 
         for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
         {
-          double p = _ufacevalues[q_point];
-
           cw += 1. * fdc.GetFEFaceValuesState().JxW(q_point);
         }
 

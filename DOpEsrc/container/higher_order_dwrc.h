@@ -62,8 +62,8 @@ namespace DOpE
             DOpEtypes::EETerms ee_terms = DOpEtypes::EETerms::mixed,
             DOpEtypes::ResidualEvaluation res_eval = DOpEtypes::strong_residual)
             : DWRDataContainer<STH, IDC, CDC, FDC, VECTOR>(ee_terms), _sth_higher_order(
-                higher_order_sth), _idc_higher_order(higher_order_idc), _PI_h_u(
-                NULL), _PI_h_z(NULL), _res_eval(res_eval)
+	      higher_order_sth), _idc_higher_order(higher_order_idc), _res_eval(res_eval),
+	      _PI_h_u(NULL), _PI_h_z(NULL)
         {
           if (this->GetEETerms() == DOpEtypes::primal_only
               || this->GetEETerms() == DOpEtypes::mixed
@@ -236,7 +236,7 @@ namespace DOpE
          * control residual.
          */
         void
-	  PreparePI_h_q(const ControlVector<VECTOR>& q)
+	  PreparePI_h_q(const ControlVector<VECTOR>& /*q*/)
         {
 	  throw DOpEException("There is no Control in PDE Problems!",
             "HigherOrderDWRContainer::PreparePI_h_q");
@@ -294,12 +294,12 @@ namespace DOpE
          * Here we don't do anything because it should be the identity for DWR
          */
         inline void
-        ResidualModifier(double& res)
+	  ResidualModifier(double& /*res*/)
         {
           
         }
 	inline void
-	  VectorResidualModifier(dealii::Vector<double>& res)
+	  VectorResidualModifier(dealii::Vector<double>& /*res*/)
         {
       
         }

@@ -141,8 +141,8 @@ template<typename VECTOR, int dealdim>
 
       void
       BoundaryEquation(
-          const FaceDataContainer<dealii::DoFHandler<2>, VECTOR, dealdim>& fdc,
-          dealii::Vector<double> &local_cell_vector, double scale,
+          const FaceDataContainer<dealii::DoFHandler<2>, VECTOR, dealdim>&,
+          dealii::Vector<double> &, double,
           double /*scale_ico*/)
       {
 
@@ -150,8 +150,8 @@ template<typename VECTOR, int dealdim>
 
       void
       BoundaryMatrix(
-          const FaceDataContainer<dealii::DoFHandler<2>, VECTOR, dealdim>& fdc,
-          dealii::FullMatrix<double> &local_entry_matrix, double /*scale*/,
+          const FaceDataContainer<dealii::DoFHandler<2>, VECTOR, dealdim>&,
+          dealii::FullMatrix<double> &, double /*scale*/,
           double /*scale_ico*/)
       {
       }
