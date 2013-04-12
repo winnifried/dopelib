@@ -41,12 +41,8 @@ DOPE_LIBS += -I$(SNOPT)/cppsrc -I$(SNOPT_F2CINC)
 
 #additional linker information
 DOPE_LDFLAGS += -L$(SNOPT_LIBDIR) $(SNOPT_AR_LIBS) $(SNOPT_F2CLIB)/libf2c.a
-
-UNAME := $(shell uname -s)
-ifeq (Darwin,$(UNAME))
- #needed on OSX to link with snopt                                              
-  DOPE_LDFLAGS += -lgfortranbegin -lgfortran
-endif
+#use fortran libs
+DOPE_LDFLAGS += -lgfortranbegin -lgfortran
 
 #endof With SNOPT
 endif
