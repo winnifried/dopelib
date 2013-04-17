@@ -1,5 +1,6 @@
 TODO DOpE
 =========
+- Funktional Point umbenennen, da Name irrefuehrend?
 - Beispiele Code Prüfen (fehlende verwendung von scale, TeX-Problembeschreibungen)
 - Einheitliche handhabung mit nicht genutzen Parametern 
   (Auskommentieren/Entfernen/atribute_unused)
