@@ -79,7 +79,7 @@ namespace DOpE
           {
             return _domain_values;
           }
-          ;
+
 
           virtual const dealii::FEFaceValuesBase<dim>&
           GetFEFaceValuesState() const =0;
@@ -90,6 +90,13 @@ namespace DOpE
           GetNbrFEFaceValuesState() const = 0;
           virtual const dealii::FEFaceValuesBase<dim>&
           GetNbrFEFaceValuesControl() const = 0;
+
+          /*********************************************************************/
+          /**
+           * Return a triangulation iterator to the current cell for the state.
+           */
+          const typename Triangulation<dim>::cell_iterator
+          GetCellState() const;
 
           /********************************************************************/
           /**
@@ -328,6 +335,14 @@ namespace DOpE
               "FaceDataContainerInternal::GetParamValues");
         }
         value = *(it->second);
+      }
+
+    /*********************************************/
+    template<typename VECTOR, int dim>
+    const typename Triangulation<dim>::cell_iterator
+      FaceDataContainerInternal<VECTOR, dim>::GetCellState() const
+      {
+         return this->GetFEFaceValuesState().get_cell();
       }
 
     /*********************************************/

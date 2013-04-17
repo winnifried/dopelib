@@ -87,6 +87,14 @@ namespace DOpE
           virtual const DOpEWrapper::FEValues<dim>&
           GetFEValuesControl() const = 0;
 
+          /*********************************************************************/
+          /**
+           * Return a triangulation iterator to the current cell for the state.
+           */
+          const typename  Triangulation<dim>::cell_iterator
+          GetCellState() const;
+
+
           /********************************************************************/
           /**
            * Functions to extract values and gradients out of the FEValues
@@ -314,8 +322,7 @@ namespace DOpE
     /**********************************************************************/
     template<typename VECTOR, int dim>
       CellDataContainerInternal<VECTOR, dim>::CellDataContainerInternal(
-          const std::map<std::string, const dealii::Vector<double>*> &param_values
-          ,
+          const std::map<std::string, const dealii::Vector<double>*> &param_values,
           const std::map<std::string, const VECTOR*> &domain_values)
           : _param_values(param_values), _domain_values(domain_values)
       {
@@ -352,6 +359,15 @@ namespace DOpE
       {
         this->GetValues(this->GetFEValuesState(), name, values);
 
+      }
+
+
+    /*********************************************/
+    template<typename VECTOR, int dim>
+    const typename Triangulation<dim>::cell_iterator
+      CellDataContainerInternal<VECTOR, dim>::GetCellState() const
+      {
+      return this->GetFEValuesState().get_cell();
       }
 
     /*********************************************/
