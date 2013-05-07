@@ -1,5 +1,10 @@
 TODO DOpE
 =========
+
+Treffen (May 07, 2013)
+
+
+
 - Funktional Point umbenennen, da Name irrefuehrend?
 - Beispiele Code Prüfen (fehlende verwendung von scale, TeX-Problembeschreibungen)
 - Einheitliche handhabung mit nicht genutzen Parametern 
