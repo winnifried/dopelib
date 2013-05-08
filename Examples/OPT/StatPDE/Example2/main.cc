@@ -60,15 +60,15 @@ using namespace dealii;
 using namespace DOpE;
 
 #define VECTOR BlockVector<double>
-#define DOFHANDLER DoFHandler<2>
-#define FE FESystem<2>
+#define DOFHANDLER DoFHandler
+#define FE FESystem
 
 typedef OptProblemContainer<
     FunctionalInterface<CellDataContainer, FaceDataContainer, DOFHANDLER,
         VECTOR, 0, 2>,
     FunctionalInterface<CellDataContainer, FaceDataContainer, DOFHANDLER,
         VECTOR, 0, 2>,
-    PDEInterface<CellDataContainer, FaceDataContainer, DOFHANDLER, VECTOR, 0, 2>,
+    PDEInterface<CellDataContainer, FaceDataContainer, DOFHANDLER, VECTOR,  2>,
     DirichletDataInterface<VECTOR, 0, 2>,
     ConstraintInterface<CellDataContainer, FaceDataContainer, DOFHANDLER,
         VECTOR, 0, 2>, BlockSparsityPattern, VECTOR, 0, 2> OP;
@@ -86,7 +86,7 @@ typedef VoidLinearSolver<BlockSparsityPattern, BlockSparseMatrix<double>,
 
 typedef NewtonSolverMixedDimensions<INTEGRATORM, VOIDLS, VECTOR, 0, 2> NLSM;
 typedef NewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR, 2> NLS;
-typedef ReducedNewtonAlgorithm<OP, VECTOR, 0, 2> RNA;
+typedef ReducedNewtonAlgorithm<OP, VECTOR> RNA;
 typedef StatReducedProblem<NLSM, NLS, INTEGRATORM, INTEGRATOR, OP, VECTOR, 0, 2> SSolver;
 
 int
@@ -120,8 +120,8 @@ main(int argc, char **argv)
 
   IDC idc(quadrature_formula, face_quadrature_formula);
 
-  LocalPDE<VECTOR, 0, 2> LPDE;
-  LocalFunctional<VECTOR, 0, 2> LFunc;
+  LocalPDE<DOFHANDLER, VECTOR, 0, 2> LPDE;
+  LocalFunctional<DOFHANDLER, VECTOR, 0, 2> LFunc;
 
   std::vector<double> times(1, 0.);
   triangulation.refine_global(5);

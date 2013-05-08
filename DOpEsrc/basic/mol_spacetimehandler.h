@@ -64,7 +64,7 @@ namespace DOpE
          * @param index_setter      The index setter object (only needed in case of hp elements).
          */
         MethodOfLines_SpaceTimeHandler(
-            dealii::Triangulation<dealdim>& triangulation, const FE<dopedim, dopedim>& control_fe,
+            dealii::Triangulation<dealdim>& triangulation, const FE<dealdim, dealdim>& control_fe,
             const FE<dealdim, dealdim>& state_fe, DOpEtypes::ControlType type,
             const ActiveFEIndexSetterInterface<dopedim, dealdim>& index_setter =
                 ActiveFEIndexSetterInterface<dopedim, dealdim>()) :
@@ -79,7 +79,7 @@ namespace DOpE
           _user_defined_dof_constr = NULL;
         }
         MethodOfLines_SpaceTimeHandler(
-            dealii::Triangulation<dealdim>& triangulation, const FE<dopedim, dopedim>& control_fe,
+            dealii::Triangulation<dealdim>& triangulation, const FE<dealdim, dealdim>& control_fe,
             const FE<dealdim, dealdim>& state_fe, const dealii::Triangulation<1> & times,
             DOpEtypes::ControlType type,
             const ActiveFEIndexSetterInterface<dopedim, dealdim>& index_setter =
@@ -96,7 +96,7 @@ namespace DOpE
         }
 
         MethodOfLines_SpaceTimeHandler(
-            dealii::Triangulation<dealdim>& triangulation, const FE<dopedim, dopedim>& control_fe,
+            dealii::Triangulation<dealdim>& triangulation, const FE<dealdim, dealdim>& control_fe,
             const FE<dealdim, dealdim>& state_fe, const Constraints& c,
             DOpEtypes::ControlType type,
             const ActiveFEIndexSetterInterface<dopedim, dealdim>& index_setter =
@@ -114,7 +114,7 @@ namespace DOpE
         }
 
         MethodOfLines_SpaceTimeHandler(
-            dealii::Triangulation<dealdim>& triangulation, const FE<dopedim, dopedim>& control_fe,
+            dealii::Triangulation<dealdim>& triangulation, const FE<dealdim, dealdim>& control_fe,
             const FE<dealdim, dealdim>& state_fe, const dealii::Triangulation<1> & times,
             const Constraints& c, DOpEtypes::ControlType type,
             const ActiveFEIndexSetterInterface<dopedim, dealdim>& index_setter =
@@ -654,7 +654,7 @@ namespace DOpE
         dealii::ConstraintMatrix _control_dof_constraints;
         dealii::ConstraintMatrix _state_dof_constraints;
 
-        const dealii::SmartPointer<const FE<dopedim, dopedim> > _control_fe;
+        const dealii::SmartPointer<const FE<dealdim, dealdim> > _control_fe;
         const dealii::SmartPointer<const FE<dealdim, dealdim> > _state_fe;
 
         const dealii::SmartPointer<const DOpEWrapper::Mapping<dealdim, DH> > _mapping;
