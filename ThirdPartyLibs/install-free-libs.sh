@@ -146,6 +146,39 @@ fi
 #back to the ${INST_DIR}
 cd ../..
 #done ASL installation
+#Metis
+cd ThirdParty/Metis
+if [[ -d metis-4.0 ]]
+then
+    echo "The Metis library appears to be available already."
+    echo "reuse existing code? [y/n]"
+    read line
+    if [[ $line != "y" ]]
+    then
+	echo "Ipopt needs additional solvers:"
+	echo "Download the Metis library [y/n]?"
+	read line
+	if [[ $line != "y" ]]
+	then
+	    echo "Stopping script!"
+	    exit 1
+	fi
+	./get.Metis
+    fi
+else
+    echo "Ipopt needs additional solvers:"
+    echo "Download the Metis library [y/n]?"
+    read line
+    if [[ $line != "y" ]]
+    then
+	echo "Stopping script!"
+	exit 1
+    fi
+    ./get.Metis
+fi
+#back to the ${INST_DIR}
+cd ../..
+#done Metis installation
 #Mumps
 cd ThirdParty/Mumps
 if [[ -d MUMPS ]]
@@ -187,6 +220,7 @@ echo "See the file "${INST_DIR}"/ThirdParty/HSL/INSTALL.HSL"
 echo "on how to obtain the required sources. "
 echo "Copy the required files to "${INST_DIR}"/ThirdParty/HSL/INSTALL.HSL:"
 echo "For MA27 copy the file ma27d.f to ma27ad.f"
+echo "For MA77 see the INSTALL.HSL file"
 echo ""
 echo "This has been done? [y/n]"
 read line
@@ -195,28 +229,14 @@ then
     #only if all is fine we continue
     echo "Stopping script!"
     exit 1
-else
-    #check if the files exist!
-    if [[ -f ma27ad.f ]]
-    then
-	echo "found MA27"
-    else
-	echo "MA27 will not be available"
-    fi
 fi
-echo "Continue? [y/n]"
-read line
-if [[ $line != "y" ]]
-then
-    #only if all is fine we continue
-    echo "Stopping script!"
-    exit 1
-else
 #Done with HSL
 
 #done with solvers
-echo "\nStarting the configuration!\n"
-./configure -enable-static -with-asl -with-mumps -with-hsl
+echo ""
+echo "Starting the configuration!"
+echo ""
+./configure -enable-static -with-asl -with-mumps -with-hsl 
 
 read -t 1 -n 10000 discard #remove unwanted input
 echo "Configuration complete:"

@@ -96,6 +96,9 @@ subsection reduced_ipoptalgorithm parameters
   set capture ipopt output = false
   
   #Values: ma27;ma57;ma77;ma86;pardiso;wsmp;mumps
+  #With the install script only mumps is provided
+  #for ma* additional sources need to be obtained.
+  #see the install script.
   set ipopt linsolve	   = ma27
 end
 

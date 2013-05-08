@@ -59,7 +59,7 @@ IPOPT_LIB = $(IPOPT)/lib64/
 DOPE_LIBS += -I$(IPOPT_INC)  
 
 #additional linker information
-DOPE_LDFLAGS += -L$(IPOPT_LIB) -lipopt -lcoinhsl -lcoinmumps
+DOPE_LDFLAGS += -L$(IPOPT_LIB) -lipopt -lcoinhsl -lcoinmumps -lcoinmetis
 
 #endof With IPOPT	
 endif
