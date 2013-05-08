@@ -19,11 +19,19 @@ In addition the following functionals are evaluated:
 \end{gather*}
 
 The Problem is similar to that of {\tt OPT/StatPDE/Example1} except for the box control constraints.
-Another new feature is the use of the commercial optimization library SNOPT. 
+The problem is solved using the optimization library IPOPT that you can obtain for free. To use it 
+a correct link to the ipopt library needs to be created in  {\tt DOpE/ThirdPartyLibs} by the name 
+{\tt ipopt}, i.e., you should have the file
+{\tt DOpE/ThirdPartyLibs/ipopt} pointing to the ipopt directory. If you have not done this you can compile the
+example but when running the example you will only get an error message like\\
+{\tt Warning: During execution of `Reduced\underline{ }IpoptAlgorithm::Solve`\\ the following Problem occurred!\\
+To use this algorithm you need to have IPOPT installed! \\To use this set the WITH\underline{ }IPOPT CompilerFlag.}
+
+Alternatively the commercial optimization library SNOPT can be used in this example.
 In order to use this library you need to install SNOPT on your computer and then generate a symlink to 
 the snopt directory (where you have the libs and the header files) 
 in the {\tt DOpE/ThirdPartyLibs} directory named {\tt snopt}, i.e., you should have the file
 {\tt DOpE/ThirdPartyLibs/snopt} pointing to the snopt directory. If you have not done this you can compile the
 example but when running the example you will only get an error message like\\
 {\tt Warning: During execution of `Reduced\underline{ }SnoptAlgorithm::Solve`\\ the following Problem occurred!\\
-To use this algorithm you need to have SNOPT installed! \\To use this set the WITH\underline{ }SNOP CompilerFlag.} 
+To use this algorithm you need to have SNOPT installed! \\To use this set the WITH\underline{ }SNOPT CompilerFlag.} 

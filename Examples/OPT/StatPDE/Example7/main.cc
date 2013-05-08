@@ -21,6 +21,7 @@
 *
 **/
 
+#include "reduced_ipopt_algorithm.h"
 #include "reduced_snopt_algorithm.h"
 #include "optproblemcontainer.h"
 #include "functionalinterface.h"
@@ -84,7 +85,8 @@ typedef CGLinearSolverWithMatrix<DOpEWrapper::PreconditionIdentity_Wrapper<Block
 typedef NewtonSolver<INTEGRATOR,LINEARSOLVER,VECTOR,2> NLS;
 typedef StatReducedProblem<NLS,NLS,INTEGRATOR,INTEGRATOR,OP,VECTOR,2,2> SSolver;
 
-typedef Reduced_SnoptAlgorithm<OP,BlockVector<double>,2,2> MMA;
+typedef Reduced_SnoptAlgorithm<OP,VECTOR,2,2> SNOPT_Alg;
+typedef Reduced_IpoptAlgorithm<OP,VECTOR,2,2> IPOPT_Alg;
 
 int main(int argc, char **argv)
 {  
@@ -102,7 +104,8 @@ int main(int argc, char **argv)
 
   ParameterReader pr;
   SSolver::declare_params(pr);
-  MMA::declare_params(pr);
+  SNOPT_Alg::declare_params(pr);
+  IPOPT_Alg::declare_params(pr);
   NLS::declare_params(pr);
 
   pr.read_parameters(paramfile);
@@ -157,7 +160,8 @@ int main(int argc, char **argv)
 
   SSolver solver(&P,"fullmem",pr,idc,2);
   
-  MMA Alg(&P,&solver,"fullmem",pr);
+  //SNOPT_Alg Alg(&P,&solver,"fullmem",pr);
+  IPOPT_Alg Alg(&P,&solver,"fullmem",pr);
     
   int niter = 1;
   

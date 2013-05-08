@@ -609,7 +609,14 @@ namespace DOpE
     std::string logfilename = _results_basedir+_logfile;
     _log.open(logfilename.c_str(), std::ios::app|std::ios::out);
   }
+/*******************************************************/
 
+  template <typename VECTOR>
+    std::string DOpEOutputHandler<VECTOR>::GetResultsDir() const
+  {
+    return _results_basedir+_results_outdir;
+  }
+  
 /*******************************************************/
   template <typename VECTOR>
   void DOpEOutputHandler<VECTOR>::PrintCopyrightNotice()

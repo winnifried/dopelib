@@ -1,5 +1,6 @@
 Changelog DOpE
 ==============
+08.05.2013: Added interface to IPOPT. 
 11.04.2013: DOpElib is running with deal.II 8.0pre, updated
 	    deprecated headers
 10.04.2013: Added support to estimate the error in the CostFunctional for 

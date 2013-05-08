@@ -92,6 +92,18 @@ For further information you should consult the file
 \texttt{deal.II} with at least the following options:\\
 \texttt{./configure --with-umfpack --with-blas --with-lapack}
 
+\subsubsection{IPOPT}
+If you would like to use the optimization routines offered by IPOPT
+\url{https://projects.coin-or.org/Ipopt} you can  
+install this yourself and add a symlink as described in \texttt{ThirdPartyLibs/README}.
+Alternatively, you can use installation script
+\texttt{ThirdPartyLibs/install-free-libs.sh}. Note that to use all 
+available linear solvers you may have to obtain a corresponding license 
+manually. This is true in particular for the HSL solvers MA27, $\ldots$.
+For information on these see the information provided by the installation
+script.
+
+
 \section{Installation}
 I) Get a copy of \texttt{DOpElib} from the svn repository using\\
 \texttt{svn co --username=[your username] \textbackslash \\ \hspace*{5mm}https://ganymed.iwr.uni-heidelberg.de/svn/dope}\\

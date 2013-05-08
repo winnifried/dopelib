@@ -226,6 +226,10 @@ class DOpEOutputHandler
     void StartSaveCTypeOutputToLog();
     void StopSaveCTypeOutputToLog();
 
+    /**
+     * This function gives the current output directory
+     */
+    std::string GetResultsDir() const;
 
   protected:
     /**
@@ -275,6 +279,7 @@ class DOpEOutputHandler
      *                are beeing stored as a separate string in this list.
      */
     void ParseString(const std::string tmp, std::vector<std::string>& list);
+
   private:
     std::map<std::string, unsigned int> _iteration_type_pos;
     std::vector<unsigned int> _iteration_number;

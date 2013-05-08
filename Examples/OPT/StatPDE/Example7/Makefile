@@ -47,6 +47,23 @@ DOPE_LDFLAGS += -lgfortranbegin -lgfortran
 #endof With SNOPT	
 endif
 
+ifneq (,$(findstring ipopt, $(_LOCAL_thirdpartylibs)))
+DOPE_FLAGS += -DWITH_IPOPT 
+IPOPT = $(DOpE)/ThirdPartyLibs/ipopt/
+
+IPOPT_INC = $(IPOPT)/include/coin/
+IPOPT_LIB = $(IPOPT)/lib64/
+
+
+#Additional library header files 
+DOPE_LIBS += -I$(IPOPT_INC)  
+
+#additional linker information
+DOPE_LDFLAGS += -L$(IPOPT_LIB) -lipopt -lcoinhsl -lcoinmumps
+
+#endof With IPOPT	
+endif
+
 #Read the default values for all examples
 include $(DOpE)/Examples/Make.global_options
 

@@ -141,7 +141,7 @@ template <typename PROBLEM, typename VECTOR, int dopedim,int dealdim>
 int Reduced_SnoptAlgorithm<PROBLEM, VECTOR, dopedim, dealdim>::Solve(ControlVector<VECTOR>& q,double global_tol)
 {
 #ifndef WITH_SNOPT
-  throw DOpEException("To use this algorithm you need to have SNOPT installed! To use this set the WITH_SNOP CompilerFlag.","Reduced_SnoptAlgorithm::Solve");
+  throw DOpEException("To use this algorithm you need to have SNOPT installed! To use this set the WITH_SNOPT CompilerFlag.","Reduced_SnoptAlgorithm::Solve");
 #else 
   q.ReInit();
   

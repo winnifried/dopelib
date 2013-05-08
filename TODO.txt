@@ -12,7 +12,6 @@ Treffen (May 07, 2013)
   das gewählte funktional.
 - Moeglichkeit schaffen, relaxationsparameter etc. an lineare Loeser zu uebergeben.
 - Moeglichkeit schaffen, Informationen der linearen Loeser ausgeben (z.B. Anzahl cg-Schritte)
-- Interface zu IPOPT als Optimierungslöser (Open Source)
 - Nutzung von MUMPS als Direkter Löser.
 
 - Oeffentlicher Download (erstmal Doku und funktionstuechtige Software)

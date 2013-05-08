@@ -84,4 +84,12 @@ subsection reduced_snoptalgorithm parameters
   set capture snopt output = false
 end
 
+subsection reduced_ipoptalgorithm parameters
+  # Tolerance 
+  set tol		   = 1.e-6
 
+  set capture ipopt output = false
+  
+  #Values: ma27;ma57;ma77;ma86;pardiso;wsmp;mumps
+  set ipopt linsolve	   = mumps
+end
