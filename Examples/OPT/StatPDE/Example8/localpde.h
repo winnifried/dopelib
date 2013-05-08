@@ -30,8 +30,8 @@
 using namespace dealii;
 using namespace DOpE;
 
-template<template<typename DOFHANDLER, typename VECTOR, int dealdim> class CDC, template<typename DOFHANDLER, typename VECTOR, int dealdim> class FDC, typename DOFHANDLER, typename VECTOR,int dopedim, int dealdim>
-  class LocalPDE : public PDEInterface<CDC,FDC,DOFHANDLER,VECTOR,dopedim,dealdim>
+template<template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC, template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC, template<int, int> class DH, typename VECTOR,int dealdim>
+  class LocalPDE : public PDEInterface<CDC,FDC,DH,VECTOR,dealdim>
   {
   public:
   LocalPDE() : _control_block_components(1,0), _state_block_components(2,0)
@@ -41,7 +41,7 @@ template<template<typename DOFHANDLER, typename VECTOR, int dealdim> class CDC, 
     
     void SetP(double p) { _p = p; }
     
-    void CellEquation(const CDC<DOFHANDLER,VECTOR,dealdim>& cdc,
+    void CellEquation(const CDC<DH,VECTOR,dealdim>& cdc,
 		      dealii::Vector<double> &local_cell_vector, 
 		      double scale, double /*scale_ico*/)
     { 
@@ -81,7 +81,7 @@ template<template<typename DOFHANDLER, typename VECTOR, int dealdim> class CDC, 
       }
     }
 
-    void CellEquation_U(const CDC<DOFHANDLER,VECTOR,dealdim>& cdc,
+    void CellEquation_U(const CDC<DH,VECTOR,dealdim>& cdc,
 			dealii::Vector<double> &local_cell_vector, 
 			double scale, double /*scale_ico*/)
     {
@@ -120,21 +120,21 @@ template<template<typename DOFHANDLER, typename VECTOR, int dealdim> class CDC, 
       }
     }
 
-    void CellEquation_UT(const CDC<DOFHANDLER,VECTOR,dealdim>& cdc __attribute__((unused)),
+    void CellEquation_UT(const CDC<DH,VECTOR,dealdim>& cdc __attribute__((unused)),
 			 dealii::Vector<double> &local_cell_vector __attribute__((unused)), 
 			 double scale __attribute__((unused)), double /*scale_ico*/)
     {
       assert(this->_problem_type == "tangent");
     }
 
-    void CellEquation_UTT(const CDC<DOFHANDLER,VECTOR,dealdim>& cdc __attribute__((unused)),
+    void CellEquation_UTT(const CDC<DH,VECTOR,dealdim>& cdc __attribute__((unused)),
 			  dealii::Vector<double> &local_cell_vector __attribute__((unused)), 
 			  double scale __attribute__((unused)), double /*scale_ico*/)
     {
       assert(this->_problem_type == "adjoint_hessian");
     }
 
-    void CellEquation_Q(const CDC<DOFHANDLER,VECTOR,dealdim>& cdc,
+    void CellEquation_Q(const CDC<DH,VECTOR,dealdim>& cdc,
 			dealii::Vector<double> &local_cell_vector, 
 			double scale __attribute__((unused)), double /*scale_ico*/)
     { 
@@ -185,45 +185,45 @@ template<template<typename DOFHANDLER, typename VECTOR, int dealdim> class CDC, 
       }
     }
 
-    void CellEquation_QT(const CDC<DOFHANDLER,VECTOR,dealdim>& cdc __attribute__((unused)),
+    void CellEquation_QT(const CDC<DH,VECTOR,dealdim>& cdc __attribute__((unused)),
 			 dealii::Vector<double> &local_cell_vector __attribute__((unused)), 
 			 double scale __attribute__((unused)), double /*scale_ico*/)
     {
         assert(this->_problem_type == "tangent");
     }
 
-    void CellEquation_QTT(const CDC<DOFHANDLER,VECTOR,dealdim>& cdc __attribute__((unused)),
+    void CellEquation_QTT(const CDC<DH,VECTOR,dealdim>& cdc __attribute__((unused)),
 			  dealii::Vector<double> &local_cell_vector __attribute__((unused)), 
 			  double scale __attribute__((unused)), double /*scale_ico*/)
     {
         assert(this->_problem_type == "hessian");
     }
 
-    void CellEquation_UU(const CDC<DOFHANDLER,VECTOR,dealdim>& cdc __attribute__((unused)),
+    void CellEquation_UU(const CDC<DH,VECTOR,dealdim>& cdc __attribute__((unused)),
 			 dealii::Vector<double> &local_cell_vector __attribute__((unused)), 
 			 double scale __attribute__((unused)))
     {
       assert(this->_problem_type == "adjoint_hessian");
     }
-    void CellEquation_QU(const CDC<DOFHANDLER,VECTOR,dealdim>& cdc __attribute__((unused)),
+    void CellEquation_QU(const CDC<DH,VECTOR,dealdim>& cdc __attribute__((unused)),
 			 dealii::Vector<double> &local_cell_vector __attribute__((unused)), 
 			 double scale __attribute__((unused)), double /*scale_ico*/)
     {
       assert(this->_problem_type == "adjoint_hessian");
     }
-    void CellEquation_UQ(const CDC<DOFHANDLER,VECTOR,dealdim>& cdc __attribute__((unused)),
+    void CellEquation_UQ(const CDC<DH,VECTOR,dealdim>& cdc __attribute__((unused)),
 			 dealii::Vector<double> &local_cell_vector __attribute__((unused)), 
 			 double scale __attribute__((unused)), double /*scale_ico*/)
     {
       assert(this->_problem_type == "hessian");
     }
-    void CellEquation_QQ(const CDC<DOFHANDLER,VECTOR,dealdim>& cdc __attribute__((unused)),
+    void CellEquation_QQ(const CDC<DH,VECTOR,dealdim>& cdc __attribute__((unused)),
 			 dealii::Vector<double> &local_cell_vector __attribute__((unused)), 
 			 double scale __attribute__((unused)), double /*scale_ico*/)
     { 
       assert(this->_problem_type == "hessian");
     }
-    void CellRightHandSide(const CDC<DOFHANDLER,VECTOR,dealdim>& cdc __attribute__((unused)),
+    void CellRightHandSide(const CDC<DH,VECTOR,dealdim>& cdc __attribute__((unused)),
 			   dealii::Vector<double> &local_cell_vector __attribute__((unused)), 
 			   double scale __attribute__((unused)))
     {
@@ -232,7 +232,7 @@ template<template<typename DOFHANDLER, typename VECTOR, int dealdim> class CDC, 
       }
     }
 
-    void CellMatrix(const CDC<DOFHANDLER,VECTOR,dealdim>& cdc,
+    void CellMatrix(const CDC<DH,VECTOR,dealdim>& cdc,
 		    FullMatrix<double> &local_entry_matrix, double /*scale*/, double /*scale_ico*/)
     {  
       const DOpEWrapper::FEValues<dealdim> & state_fe_values = cdc.GetFEValuesState();
@@ -260,7 +260,7 @@ template<template<typename DOFHANDLER, typename VECTOR, int dealdim> class CDC, 
       }
     }
     
-    void ControlCellEquation(const CDC<DOFHANDLER,VECTOR,dealdim>& cdc,
+    void ControlCellEquation(const CDC<DH,VECTOR,dealdim>& cdc,
 			     dealii::Vector<double> &local_cell_vector, 
 			     double scale)
     { 
@@ -283,7 +283,7 @@ template<template<typename DOFHANDLER, typename VECTOR, int dealdim> class CDC, 
       }
     }
 
-    void ControlCellMatrix(const CDC<DOFHANDLER,VECTOR,dealdim>& cdc,
+    void ControlCellMatrix(const CDC<DH,VECTOR,dealdim>& cdc,
 			   FullMatrix<double> &local_entry_matrix) 
     {
       const DOpEWrapper::FEValues<dealdim> & control_fe_values = cdc.GetFEValuesControl();
@@ -302,7 +302,7 @@ template<template<typename DOFHANDLER, typename VECTOR, int dealdim> class CDC, 
       }
     }
     
-    void BoundaryEquation (const FDC<DOFHANDLER, VECTOR, dealdim>& fdc,
+    void BoundaryEquation (const FDC<DH, VECTOR, dealdim>& fdc,
 			   dealii::Vector<double> &local_cell_vector, 
 			   double scale, double /*scale_ico*/)
     {
@@ -331,73 +331,73 @@ template<template<typename DOFHANDLER, typename VECTOR, int dealdim> class CDC, 
       }
     }
 
-    void BoundaryEquation_U (const FDC<DOFHANDLER, VECTOR, dealdim>& fdc __attribute__((unused)),
+    void BoundaryEquation_U (const FDC<DH, VECTOR, dealdim>& fdc __attribute__((unused)),
     			     dealii::Vector<double> &local_cell_vector __attribute__((unused)), 
 			     double scale __attribute__((unused)), double /*scale_ico*/)
     {
     }
 
-    void BoundaryEquation_UT (const FDC<DOFHANDLER, VECTOR, dealdim>& fdc __attribute__((unused)),
+    void BoundaryEquation_UT (const FDC<DH, VECTOR, dealdim>& fdc __attribute__((unused)),
     			      dealii::Vector<double> &local_cell_vector __attribute__((unused)),
     			      double scale __attribute__((unused)), double /*scale_ico*/)
     {
     }
 
-    void BoundaryEquation_UTT (const FDC<DOFHANDLER, VECTOR, dealdim>& fdc __attribute__((unused)),
+    void BoundaryEquation_UTT (const FDC<DH, VECTOR, dealdim>& fdc __attribute__((unused)),
     			       dealii::Vector<double> &local_cell_vector __attribute__((unused)), 
 			       double scale __attribute__((unused)), double /*scale_ico*/)
     {
     }
 
-    void BoundaryEquation_Q (const FDC<DOFHANDLER, VECTOR, dealdim>& fdc __attribute__((unused)),
+    void BoundaryEquation_Q (const FDC<DH, VECTOR, dealdim>& fdc __attribute__((unused)),
     			     dealii::Vector<double> &local_cell_vector __attribute__((unused)),
     			     double scale __attribute__((unused)), double /*scale_ico*/)
     {
     }
 
-    void BoundaryEquation_QT (const FDC<DOFHANDLER, VECTOR, dealdim>& fdc __attribute__((unused)),
+    void BoundaryEquation_QT (const FDC<DH, VECTOR, dealdim>& fdc __attribute__((unused)),
     			      dealii::Vector<double> &local_cell_vector __attribute__((unused)), 
 			      double scale __attribute__((unused)), double /*scale_ico*/)
     {
     }
 
-    void BoundaryEquation_QTT (const FDC<DOFHANDLER, VECTOR, dealdim>& fdc __attribute__((unused)),
+    void BoundaryEquation_QTT (const FDC<DH, VECTOR, dealdim>& fdc __attribute__((unused)),
 			       dealii::Vector<double> &local_cell_vector __attribute__((unused)),
 			       double scale __attribute__((unused)), double /*scale_ico*/)
     {
     }
 
-    void BoundaryEquation_UU (const FDC<DOFHANDLER, VECTOR, dealdim>& fdc __attribute__((unused)),
+    void BoundaryEquation_UU (const FDC<DH, VECTOR, dealdim>& fdc __attribute__((unused)),
     			      dealii::Vector<double> &local_cell_vector __attribute__((unused)), 
 			      double scale __attribute__((unused)), double /*scale_ico*/)
     {
     }
 
-    void BoundaryEquation_QU (const FDC<DOFHANDLER, VECTOR, dealdim>& fdc __attribute__((unused)),
+    void BoundaryEquation_QU (const FDC<DH, VECTOR, dealdim>& fdc __attribute__((unused)),
     			      dealii::Vector<double> &local_cell_vector __attribute__((unused)),
     			      double scale __attribute__((unused)), double /*scale_ico*/)
     {
     }
 
-    void BoundaryEquation_UQ (const FDC<DOFHANDLER, VECTOR, dealdim>& fdc __attribute__((unused)),
+    void BoundaryEquation_UQ (const FDC<DH, VECTOR, dealdim>& fdc __attribute__((unused)),
     			      dealii::Vector<double> &local_cell_vector __attribute__((unused)), 
 			      double scale __attribute__((unused)), double /*scale_ico*/)
     {
     }
 
-    void BoundaryEquation_QQ (const FDC<DOFHANDLER, VECTOR, dealdim>& fdc __attribute__((unused)),
+    void BoundaryEquation_QQ (const FDC<DH, VECTOR, dealdim>& fdc __attribute__((unused)),
 			      dealii::Vector<double> &local_cell_vector __attribute__((unused)),
 			      double scale __attribute__((unused)), double /*scale_ico*/)
     {
     }
     
-    void BoundaryRightHandSide (const FDC<DOFHANDLER, VECTOR, dealdim>& fdc __attribute__((unused)),
+    void BoundaryRightHandSide (const FDC<DH, VECTOR, dealdim>& fdc __attribute__((unused)),
 				dealii::Vector<double> &local_cell_vector __attribute__((unused)), 
 				double scale __attribute__((unused)))
     {
     }
     
-    void BoundaryMatrix (const FDC<DOFHANDLER, VECTOR, dealdim>& fdc __attribute__((unused)),
+    void BoundaryMatrix (const FDC<DH, VECTOR, dealdim>& fdc __attribute__((unused)),
 			 dealii::FullMatrix<double> &local_entry_matrix __attribute__((unused)), double /*scale*/, double /*scale_ico*/)
     {
     }

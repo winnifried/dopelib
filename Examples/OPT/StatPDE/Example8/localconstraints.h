@@ -33,8 +33,8 @@ namespace DOpE
    * A template for an arbitrary Constraints.
    * GlobalConstraints are dealt with as a Functional, hence all functions from Functionals are inherited.
    */
-  template<template<typename DOFHANDLER, typename VECTOR, int dealdim> class CDC, template<typename DOFHANDLER, typename VECTOR, int dealdim> class FDC, typename DOFHANDLER, typename VECTOR,int dopedim,int dealdim>
-    class LocalConstraint : public ConstraintInterface<CDC,FDC,DOFHANDLER,VECTOR,dopedim,dealdim>
+  template<template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC, template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC, template<int, int> class DH, typename VECTOR,int dopedim,int dealdim>
+    class LocalConstraint : public ConstraintInterface<CDC,FDC,DH,VECTOR,dopedim,dealdim>
   {
   public:
     LocalConstraint(LocalConstraintAccessor& CA) : LCA(CA) 
@@ -61,7 +61,7 @@ namespace DOpE
       LCA.GetControlBoxConstraints(lb,ub);
     }
 
-    double Value(const CDC<DOFHANDLER,VECTOR,dealdim>& cdc)
+    double Value(const CDC<DH,VECTOR,dealdim>& cdc)
     {
       if(this->GetProblemType() == "global_constraints" && this->GetProblemTypeNum()==0)
       {
@@ -85,13 +85,13 @@ namespace DOpE
       }
     }
 
-    void Value_U(const CDC<DOFHANDLER,VECTOR,dealdim>& cdc __attribute__((unused)),
+    void Value_U(const CDC<DH,VECTOR,dealdim>& cdc __attribute__((unused)),
 		 dealii::Vector<double> &local_cell_vector __attribute__((unused)), 
 		 double scale __attribute__((unused)))
     {
     }
 
-    void Value_Q(const CDC<DOFHANDLER,VECTOR,dealdim>& cdc,
+    void Value_Q(const CDC<DH,VECTOR,dealdim>& cdc,
 		dealii::Vector<double> &local_cell_vector, 
 		double scale)
    {
@@ -115,22 +115,22 @@ namespace DOpE
      }
    } 
  
-   void Value_UU(const CDC<DOFHANDLER,VECTOR,dealdim>& cdc __attribute__((unused)),
+   void Value_UU(const CDC<DH,VECTOR,dealdim>& cdc __attribute__((unused)),
 		 dealii::Vector<double> &local_cell_vector __attribute__((unused)), 
 		 double scale __attribute__((unused)))
    {
    }
-   void Value_QU(const CDC<DOFHANDLER,VECTOR,dealdim>& cdc __attribute__((unused)),
+   void Value_QU(const CDC<DH,VECTOR,dealdim>& cdc __attribute__((unused)),
 		 dealii::Vector<double> &local_cell_vector __attribute__((unused)), 
 		 double scale __attribute__((unused)))
    {
    }
-   void Value_UQ(const CDC<DOFHANDLER,VECTOR,dealdim>& cdc __attribute__((unused)),
+   void Value_UQ(const CDC<DH,VECTOR,dealdim>& cdc __attribute__((unused)),
 		 dealii::Vector<double> &local_cell_vector __attribute__((unused)), 
 		 double scale __attribute__((unused)))
    {
    }
-   void Value_QQ(const CDC<DOFHANDLER,VECTOR,dealdim>& cdc __attribute__((unused)),
+   void Value_QQ(const CDC<DH,VECTOR,dealdim>& cdc __attribute__((unused)),
 		 dealii::Vector<double> &local_cell_vector __attribute__((unused)), 
 		 double scale __attribute__((unused)))
    {

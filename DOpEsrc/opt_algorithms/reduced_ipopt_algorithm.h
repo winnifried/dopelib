@@ -38,12 +38,12 @@
 
 namespace DOpE
 {
-  template <typename PROBLEM, typename VECTOR, int dopedim,  int dealdim>
-    class Reduced_IpoptAlgorithm : public ReducedAlgorithm<PROBLEM, VECTOR, dopedim,dealdim>
+  template <typename PROBLEM, typename VECTOR>
+    class Reduced_IpoptAlgorithm : public ReducedAlgorithm<PROBLEM, VECTOR>
   {
   public:
     Reduced_IpoptAlgorithm(PROBLEM* OP,
-			   ReducedProblemInterface<PROBLEM, VECTOR,dopedim,dealdim>* S,
+			   ReducedProblemInterface<PROBLEM, VECTOR>* S,
 			   std::string vector_behavior,
 			   ParameterReader &param_reader,
 			   DOpEExceptionHandler<VECTOR>* Except=NULL,
@@ -85,27 +85,27 @@ namespace DOpE
 
   /******************************************************/
 
-template <typename PROBLEM, typename VECTOR, int dopedim,int dealdim>
-void Reduced_IpoptAlgorithm<PROBLEM, VECTOR, dopedim, dealdim>::declare_params(ParameterReader &param_reader)
+template <typename PROBLEM, typename VECTOR>
+void Reduced_IpoptAlgorithm<PROBLEM, VECTOR>::declare_params(ParameterReader &param_reader)
   {
     param_reader.SetSubsection("reduced_ipoptalgorithm parameters");
     param_reader.declare_entry("tol","1.e-5",Patterns::Double(0,1),"Tolerance");
     param_reader.declare_entry("capture ipopt output","true",Patterns::Bool(),"Select if the ipopt output should be stored in log file");
     param_reader.declare_entry("ipopt linsolve","ma27",Patterns::Selection("ma27|ma57|ma77|ma86|pardiso|wsmp|mumps"),"Linear Solver to be used in ipopt.");
-    ReducedAlgorithm<PROBLEM, VECTOR, dopedim,dealdim>::declare_params(param_reader);
+    ReducedAlgorithm<PROBLEM, VECTOR>::declare_params(param_reader);
   }
 
 /******************************************************/
 
-template <typename PROBLEM, typename VECTOR, int dopedim,int dealdim>
-Reduced_IpoptAlgorithm<PROBLEM, VECTOR, dopedim, dealdim>::Reduced_IpoptAlgorithm(PROBLEM* OP,
-										  ReducedProblemInterface<PROBLEM, VECTOR,dopedim, dealdim>* S,
+template <typename PROBLEM, typename VECTOR>
+Reduced_IpoptAlgorithm<PROBLEM, VECTOR>::Reduced_IpoptAlgorithm(PROBLEM* OP,
+										  ReducedProblemInterface<PROBLEM, VECTOR>* S,
 										  std::string vector_behavior,
 										  ParameterReader &param_reader,
 										  DOpEExceptionHandler<VECTOR>* Except,
 										  DOpEOutputHandler<VECTOR>* Output,
 										  int base_priority)
-  : ReducedAlgorithm<PROBLEM, VECTOR,dopedim, dealdim>(OP,S,param_reader,Except,Output,base_priority)
+  : ReducedAlgorithm<PROBLEM, VECTOR>(OP,S,param_reader,Except,Output,base_priority)
   {
 
     param_reader.SetSubsection("reduced_ipoptalgorithm parameters");
@@ -121,8 +121,8 @@ Reduced_IpoptAlgorithm<PROBLEM, VECTOR, dopedim, dealdim>::Reduced_IpoptAlgorith
 
 /******************************************************/
 
-template <typename PROBLEM, typename VECTOR, int dopedim,int dealdim>
-Reduced_IpoptAlgorithm<PROBLEM, VECTOR, dopedim, dealdim>::~Reduced_IpoptAlgorithm()
+template <typename PROBLEM, typename VECTOR>
+Reduced_IpoptAlgorithm<PROBLEM, VECTOR>::~Reduced_IpoptAlgorithm()
   {
 
   }
@@ -130,8 +130,8 @@ Reduced_IpoptAlgorithm<PROBLEM, VECTOR, dopedim, dealdim>::~Reduced_IpoptAlgorit
 
 /******************************************************/
 
-template <typename PROBLEM, typename VECTOR, int dopedim,int dealdim>
-int Reduced_IpoptAlgorithm<PROBLEM, VECTOR, dopedim, dealdim>::Solve(ControlVector<VECTOR>& q,double global_tol)
+template <typename PROBLEM, typename VECTOR>
+int Reduced_IpoptAlgorithm<PROBLEM, VECTOR>::Solve(ControlVector<VECTOR>& q,double global_tol)
 {
 #ifndef WITH_IPOPT
   throw DOpEException("To use this algorithm you need to have IPOPT installed! To use this set the WITH_IPOPT CompilerFlag.","Reduced_IpoptAlgorithm::Solve");
@@ -202,7 +202,7 @@ int Reduced_IpoptAlgorithm<PROBLEM, VECTOR, dopedim, dealdim>::Solve(ControlVect
     //Ipopt_Problem<ReducedProblemInterface<PROBLEM,VECTOR, dopedim,dealdim>,VECTOR> 
     //  ip_prob((this->GetReducedProblem()),q,&q_min,&q_max,constraints);
     Ipopt::SmartPtr<Ipopt::TNLP> mynlp = new 
-      Ipopt_Problem<ReducedProblemInterface<PROBLEM,VECTOR, dopedim,dealdim>,VECTOR>(
+      Ipopt_Problem<ReducedProblemInterface<PROBLEM,VECTOR>,VECTOR>(
 	ret_val, this->GetReducedProblem(),q,&q_min,&q_max,constraints);
 
     //Ipopt::IpoptApplication app;

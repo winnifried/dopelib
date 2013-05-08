@@ -38,25 +38,25 @@ namespace DOpE
    *                     indicate which components should be constraint at the point.
    *                     Both vetors are assumed to be in identical order!
    */
-	template<typename DOFHANDLER, int dopedim, int dealdim = dopedim>
-	class PointConstraints : public UserDefinedDoFConstraints<DOFHANDLER,dopedim,dealdim>
+	template<template<int, int> class DH, int dopedim, int dealdim = dopedim>
+	class PointConstraints : public UserDefinedDoFConstraints<DH,dopedim,dealdim>
 	{
 	public:
-	  PointConstraints(const std::vector<Point<dealdim> > &c_points, 
+	  PointConstraints(const std::vector<dealii::Point<dealdim> > &c_points,
 			   const std::vector<std::vector<bool> > &c_comps)
-	: UserDefinedDoFConstraints<DOFHANDLER,dopedim,dealdim>(), _c_points(c_points), _c_comps(c_comps)
+	: UserDefinedDoFConstraints<DH,dopedim,dealdim>(), _c_points(c_points), _c_comps(c_comps)
 	{
 	  if(_c_points.size() != _c_comps.size())
 	    throw DOpEException("Number of Entries not matching!","PointConstraints::PointConstraints");
 	}
 	  
 	  virtual void MakeStateDoFConstraints(
-	    const DOpEWrapper::DoFHandler<dealdim, DOFHANDLER> & dof_handler,
+	    const DOpEWrapper::DoFHandler<dealdim, DH> & dof_handler,
 	    dealii::ConstraintMatrix& constraint_matrix) const;
 	
 	  virtual void
 	    MakeControlDoFConstraints(
-	      const DOpEWrapper::DoFHandler<dopedim, DOFHANDLER> & /*dof_handler*/,
+	      const DOpEWrapper::DoFHandler<dopedim, DH> & /*dof_handler*/,
 	      dealii::ConstraintMatrix& /*dof_constraints*/) const {}
 
 	private:
@@ -65,13 +65,12 @@ namespace DOpE
 	  const std::vector<std::vector<bool> > & _c_comps;
 	};
 
-	template<typename DOFHANDLER, int dopedim, int dealdim>
-	  void PointConstraints<DOFHANDLER, dopedim, dealdim>::MakeStateDoFConstraints(
-	    const DOpEWrapper::DoFHandler<dealdim, DOFHANDLER > & dof_handler,
+	template<template<int, int> class DH, int dopedim, int dealdim>
+	  void PointConstraints<DH, dopedim, dealdim>::MakeStateDoFConstraints(
+	    const DOpEWrapper::DoFHandler<dealdim, DH > & dof_handler,
 	    dealii::ConstraintMatrix& constraint_matrix) const
 	{
-	  MappingQ1<dealdim> mapping;
-	  std::vector<Point<dealdim> > support_points(dof_handler.n_dofs());
+	  std::vector<dealii::Point<dealdim> > support_points(dof_handler.n_dofs());
 	  STHInternals::MapDoFsToSupportPoints(this->GetMapping(),dof_handler, support_points);
 	  for(unsigned int i = 0; i < _c_points.size(); i++)
 	  {	  

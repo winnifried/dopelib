@@ -65,10 +65,10 @@ using namespace DOpE;
 #define VECTOR BlockVector<double>
 #define SPARSITYPATTERN BlockSparsityPattern
 #define MATRIX BlockSparseMatrix<double>
-#define DOFHANDLER DoFHandler<2>
-#define FE FESystem<2>
+#define DOFHANDLER DoFHandler
+#define FE FESystem
 #define FUNC FunctionalInterface<CDC,FDC,DOFHANDLER,VECTOR,2,2>
-#define PDE PDEInterface<CDC,FDC,DOFHANDLER,VECTOR,2,2>
+#define PDE PDEInterface<CDC,FDC,DOFHANDLER,VECTOR,2>
 #define DD DirichletDataInterface<VECTOR,2,2>
 #define CONS ConstraintInterface<CDC,FDC,DOFHANDLER,VECTOR,2,2>
 
@@ -85,8 +85,8 @@ typedef CGLinearSolverWithMatrix<DOpEWrapper::PreconditionIdentity_Wrapper<Block
 typedef NewtonSolver<INTEGRATOR,LINEARSOLVER,VECTOR,2> NLS;
 typedef StatReducedProblem<NLS,NLS,INTEGRATOR,INTEGRATOR,OP,VECTOR,2,2> SSolver;
 
-typedef Reduced_SnoptAlgorithm<OP,VECTOR,2,2> SNOPT_Alg;
-typedef Reduced_IpoptAlgorithm<OP,VECTOR,2,2> IPOPT_Alg;
+typedef Reduced_SnoptAlgorithm<OP,VECTOR> SNOPT_Alg;
+typedef Reduced_IpoptAlgorithm<OP,VECTOR> IPOPT_Alg;
 
 int main(int argc, char **argv)
 {  
@@ -113,19 +113,19 @@ int main(int argc, char **argv)
   Triangulation<2>     triangulation;
   GridGenerator::hyper_cube (triangulation, 0, 1);
  
-  FE  control_fe(FE_Q<2>(1),1);
-  FE  state_fe(FE_Q<2>(2),1);
+  FE<2>  control_fe(FE_Q<2>(1),1);
+  FE<2>  state_fe(FE_Q<2>(2),1);
   
   QGauss<2> quadrature_formula(2);
   QGauss<1> face_quadrature_formula(2);
   IDC idc(quadrature_formula, face_quadrature_formula);
 
-  LocalPDE<VECTOR, 2,2> LPDE;
-  LocalFunctional<VECTOR, 2,2> LFunc;
+  LocalPDE<DOFHANDLER, VECTOR,2> LPDE;
+  LocalFunctional<DOFHANDLER, VECTOR, 2,2> LFunc;
  
   //AuxFunctionals
-  LocalPointFunctional<VECTOR,2,2> LPF;
-  LocalMeanValueFunctional<VECTOR,2,2> LMF;
+  LocalPointFunctional<DOFHANDLER, VECTOR,2,2> LPF;
+  LocalMeanValueFunctional<DOFHANDLER, VECTOR,2,2> LMF;
 
   triangulation.refine_global (5);
 

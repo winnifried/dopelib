@@ -30,15 +30,15 @@ using namespace std;
 using namespace dealii;
 using namespace DOpE;
 
-template<typename VECTOR, int dopedim, int dealdim>
-  class LocalMeanValueFunctional : public FunctionalInterface<CellDataContainer,FaceDataContainer,dealii::DoFHandler, VECTOR,dopedim,dealdim>
+template<template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
+  class LocalMeanValueFunctional : public FunctionalInterface<CellDataContainer,FaceDataContainer,DH, VECTOR,dopedim,dealdim>
   {
   public:
     LocalMeanValueFunctional()
     {
     }
 
-    double Value(const CellDataContainer<dealii::DoFHandler, VECTOR, dealdim>& cdc)
+    double Value(const CellDataContainer<DH, VECTOR, dealdim>& cdc)
     {
       const DOpEWrapper::FEValues<dealdim> & state_fe_values = cdc.GetFEValuesState();
       unsigned int n_q_points = cdc.GetNQPoints();
@@ -75,13 +75,13 @@ template<typename VECTOR, int dopedim, int dealdim>
 
 /****************************************************************************************/
 
-template<typename VECTOR, int dopedim, int dealdim>
-  class LocalPointFunctional : public FunctionalInterface<CellDataContainer,FaceDataContainer,dealii::DoFHandler, VECTOR, dopedim,dealdim>
+template<template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
+  class LocalPointFunctional : public FunctionalInterface<CellDataContainer,FaceDataContainer,DH, VECTOR, dopedim,dealdim>
   {
   public:
 
-  double PointValue(const DOpEWrapper::DoFHandler<dopedim, dealii::DoFHandler > & control_dof_handler __attribute__((unused)),
-		    const DOpEWrapper::DoFHandler<dealdim, dealii::DoFHandler > &state_dof_handler,
+  double PointValue(const DOpEWrapper::DoFHandler<dopedim, DH > & control_dof_handler __attribute__((unused)),
+		    const DOpEWrapper::DoFHandler<dealdim, DH > &state_dof_handler,
 		    const std::map<std::string, const dealii::Vector<double>* > &param_values __attribute__((unused)),
 		    const std::map<std::string, const VECTOR* > &domain_values)
   {

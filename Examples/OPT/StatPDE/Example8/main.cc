@@ -66,10 +66,10 @@ using namespace DOpE;
 #define VECTOR BlockVector<double>
 #define SPARSITYPATTERN BlockSparsityPattern
 #define MATRIX BlockSparseMatrix<double>
-#define DOFHANDLER DoFHandler<2>
-#define FE FESystem<2>
+#define DOFHANDLER DoFHandler
+#define FE FESystem
 #define FUNC FunctionalInterface<CDC,FDC,DOFHANDLER,VECTOR,2,2>
-#define PDE PDEInterface<CDC,FDC,DOFHANDLER,VECTOR,2,2>
+#define PDE PDEInterface<CDC,FDC,DOFHANDLER,VECTOR,2>
 #define DD DirichletDataInterface<VECTOR,2,2>
 #define CONS ConstraintInterface<CDC,FDC,DOFHANDLER,VECTOR,2,2>
 
@@ -91,7 +91,7 @@ typedef NewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR, 2> NLS;
 typedef StatReducedProblem<NLS, NLS, INTEGRATOR, INTEGRATOR, OP, VECTOR, 2, 2> SSolver;
 typedef VoidReducedProblem<NLS, INTEGRATOR, ALagOP, VECTOR, 2, 2> ALagSSolver;
 
-typedef Reduced_SnoptAlgorithm<OP, BlockVector<double>, 2, 2> MMA;
+typedef Reduced_SnoptAlgorithm<OP, BlockVector<double>> MMA;
 
 int
 main(int argc, char **argv)
@@ -123,14 +123,14 @@ main(int argc, char **argv)
   GridGenerator::subdivided_hyper_rectangle(triangulation, rep, Point<2>(0, 0),
       Point<2>(2, 1), true);
 
-  FE control_fe(FE_DGP<2>(0), 1);
-  FE state_fe(FE_Q<2>(2), 2);
+  FE<2> control_fe(FE_DGP<2>(0), 1);
+  FE<2> state_fe(FE_Q<2>(2), 2);
 
   QGauss<2> quadrature_formula(3);
   QGauss<1> face_quadrature_formula(2);
   IDC idc(quadrature_formula, face_quadrature_formula);
 
-  LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, 2, 2> LPDE;
+  LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, 2> LPDE;
   LocalFunctional<CDC, FDC, DOFHANDLER, VECTOR, 2, 2> LFunc;
 
   //triangulation.refine_global (5);

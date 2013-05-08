@@ -33,8 +33,8 @@ namespace DOpE
    * A template for an arbitrary Constraints.
    * GlobalConstraints are dealt with as a Functional, hence all functions from Functionals are inherited.
    */
-  template<template<typename DOFHANDLER, typename VECTOR, int dealdim> class CDC, template<typename DOFHANDLER, typename VECTOR, int dealdim> class FDC, typename DOFHANDLER, typename VECTOR,int dopedim,int dealdim>
-    class LocalConstraint : public ConstraintInterface<CDC,FDC,DOFHANDLER,VECTOR,dopedim,dealdim>
+  template<template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC, template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC, template<int, int> class DH, typename VECTOR,int dopedim,int dealdim>
+    class LocalConstraint : public ConstraintInterface<CDC,FDC,DH,VECTOR,dopedim,dealdim>
   {
   public:
     LocalConstraint(LocalConstraintAccessor& CA) : LCA(CA) 

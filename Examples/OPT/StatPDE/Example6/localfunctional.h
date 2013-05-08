@@ -31,15 +31,15 @@ using namespace std;
 using namespace dealii;
 using namespace DOpE;
 
-template<template<typename DOFHANDLER, typename VECTOR, int dealdim> class CDC, template<typename DOFHANDLER, typename VECTOR, int dealdim> class FDC, typename DOFHANDLER, typename VECTOR,int dopedim, int dealdim>
-  class LocalFunctional : public FunctionalInterface<CDC,FDC,DOFHANDLER,VECTOR,dopedim,dealdim>
+template<template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC, template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC, template<int, int> class DH, typename VECTOR,int dopedim, int dealdim>
+  class LocalFunctional : public FunctionalInterface<CDC,FDC,DH,VECTOR,dopedim,dealdim>
   {
   public:
     LocalFunctional() 
     {
     }
     
-    double BoundaryValue(const FDC<DOFHANDLER, VECTOR, dealdim>& fdc)
+    double BoundaryValue(const FDC<DH, VECTOR, dealdim>& fdc)
     {
       const auto & state_fe_face_values = fdc.GetFEFaceValuesState();
       unsigned int n_q_points = fdc.GetNQPoints();
@@ -64,7 +64,7 @@ template<template<typename DOFHANDLER, typename VECTOR, int dealdim> class CDC, 
       return ret;
     }
     
-    void BoundaryValue_U(const FDC<DOFHANDLER, VECTOR, dealdim>& fdc,
+    void BoundaryValue_U(const FDC<DH, VECTOR, dealdim>& fdc,
 			 dealii::Vector<double> &local_cell_vector, 
 			 double scale)
     {
@@ -94,42 +94,42 @@ template<template<typename DOFHANDLER, typename VECTOR, int dealdim> class CDC, 
       
     }
 
-     void BoundaryValue_Q(const FDC<DOFHANDLER, VECTOR, dealdim>& fdc __attribute__((unused)),
+     void BoundaryValue_Q(const FDC<DH, VECTOR, dealdim>& fdc __attribute__((unused)),
 			  dealii::Vector<double> &local_cell_vector __attribute__((unused)), 
 			  double scale __attribute__((unused)))
      {
      }
      
-    void BoundaryValue_UU(const FDC<DOFHANDLER, VECTOR, dealdim>& fdc __attribute__((unused)),
+    void BoundaryValue_UU(const FDC<DH, VECTOR, dealdim>& fdc __attribute__((unused)),
 			  dealii::Vector<double> &local_cell_vector __attribute__((unused)), 
 			  double scale __attribute__((unused)))
     {
     }
      
-    void BoundaryValue_QU(const FDC<DOFHANDLER, VECTOR, dealdim>& fdc __attribute__((unused)),
+    void BoundaryValue_QU(const FDC<DH, VECTOR, dealdim>& fdc __attribute__((unused)),
 			  dealii::Vector<double> &local_cell_vector __attribute__((unused)), 
 			  double scale __attribute__((unused)))
     {
     }
     
-    void BoundaryValue_UQ(const FDC<DOFHANDLER, VECTOR, dealdim>& fdc __attribute__((unused)),
+    void BoundaryValue_UQ(const FDC<DH, VECTOR, dealdim>& fdc __attribute__((unused)),
 			  dealii::Vector<double> &local_cell_vector __attribute__((unused)), 
 			  double scale __attribute__((unused)))
     {
     }
      
-    void BoundaryValue_QQ(const FDC<DOFHANDLER, VECTOR, dealdim>& fdc __attribute__((unused)),
+    void BoundaryValue_QQ(const FDC<DH, VECTOR, dealdim>& fdc __attribute__((unused)),
 			  dealii::Vector<double> &local_cell_vector __attribute__((unused)), 
 			  double scale __attribute__((unused)))
     {
     }
 
-    void Value_U(const CDC<DOFHANDLER, VECTOR, dealdim>& cdc __attribute__((unused)),
+    void Value_U(const CDC<DH, VECTOR, dealdim>& cdc __attribute__((unused)),
 		 dealii::Vector<double> &local_cell_vector __attribute__((unused)), 
 		 double scale __attribute__((unused)))
     {
     }
-    void Value_Q(const CDC<DOFHANDLER, VECTOR, dealdim>& cdc __attribute__((unused)),
+    void Value_Q(const CDC<DH, VECTOR, dealdim>& cdc __attribute__((unused)),
 		 dealii::Vector<double> &local_cell_vector __attribute__((unused)), 
 		 double scale __attribute__((unused)))
     {

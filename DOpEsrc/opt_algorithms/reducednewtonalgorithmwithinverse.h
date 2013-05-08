@@ -45,11 +45,11 @@ namespace DOpE
    *
    */
   template <typename PROBLEM, typename VECTOR,int dopedim,  int dealdim>
-    class ReducedNewtonAlgorithmWithInverse : public ReducedNewtonAlgorithm<PROBLEM, VECTOR,dopedim,dealdim>
+    class ReducedNewtonAlgorithmWithInverse : public ReducedNewtonAlgorithm<PROBLEM, VECTOR>
   {
   public:
     ReducedNewtonAlgorithmWithInverse(PROBLEM* OP, 
-				      ReducedProblemInterface<PROBLEM, VECTOR,dopedim,dealdim>* S,
+				      ReducedProblemInterface<PROBLEM, VECTOR>* S,
 				      ParameterReader &param_reader,
 				      DOpEExceptionHandler<VECTOR>* Except=NULL,
 				      DOpEOutputHandler<VECTOR>* Output=NULL,
@@ -95,18 +95,18 @@ namespace DOpE
 template <typename PROBLEM, typename VECTOR,int dopedim,int dealdim>
 void ReducedNewtonAlgorithmWithInverse<PROBLEM, VECTOR,dopedim, dealdim>::declare_params(ParameterReader &param_reader)
   {
-    ReducedNewtonAlgorithm<PROBLEM, VECTOR,dopedim,dealdim>::declare_params(param_reader);
+    ReducedNewtonAlgorithm<PROBLEM, VECTOR>::declare_params(param_reader);
   }
 /******************************************************/
 
 template <typename PROBLEM, typename VECTOR,int dopedim,int dealdim>
 ReducedNewtonAlgorithmWithInverse<PROBLEM, VECTOR,dopedim, dealdim>::ReducedNewtonAlgorithmWithInverse(PROBLEM* OP, 
-											       ReducedProblemInterface<PROBLEM, VECTOR,dopedim, dealdim>* S,
+											       ReducedProblemInterface<PROBLEM, VECTOR>* S,
 											       ParameterReader &param_reader,
 											       DOpEExceptionHandler<VECTOR>* Except,
 											       DOpEOutputHandler<VECTOR>* Output,
 											       int base_priority) 
-  : ReducedNewtonAlgorithm<PROBLEM, VECTOR,dopedim, dealdim>(OP,S,param_reader,Except,Output,base_priority)
+  : ReducedNewtonAlgorithm<PROBLEM, VECTOR>(OP,S,param_reader,Except,Output,base_priority)
   {
     param_reader.SetSubsection("reducednewtonalgorithm parameters");
     _line_maxiter         = param_reader.get_integer ("line_maxiter");
@@ -126,7 +126,7 @@ ReducedNewtonAlgorithmWithInverse<PROBLEM, VECTOR,dopedim, dealdim>::~ReducedNew
 template <typename PROBLEM, typename VECTOR,int dopedim,int dealdim>
 int ReducedNewtonAlgorithmWithInverse<PROBLEM, VECTOR,dopedim, dealdim>::Solve(ControlVector<VECTOR>& q,double global_tol)
 {
-  return ReducedNewtonAlgorithm<PROBLEM, VECTOR,dopedim, dealdim>::Solve(q,global_tol);
+  return ReducedNewtonAlgorithm<PROBLEM, VECTOR>::Solve(q,global_tol);
 }
 
 /******************************************************/

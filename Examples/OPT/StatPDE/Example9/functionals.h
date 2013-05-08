@@ -34,13 +34,13 @@ using namespace DOpE;
 
 /****************************************************************************************/
 
-template<typename VECTOR, int dopedim, int dealdim>
-  class LocalPointFunctionalPressure : public FunctionalInterface<CellDataContainer,FaceDataContainer,dealii::DoFHandler, VECTOR, dopedim,dealdim>
+template<template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
+  class LocalPointFunctionalPressure : public FunctionalInterface<CellDataContainer,FaceDataContainer,DH, VECTOR, dopedim,dealdim>
   {
   public:
     
-  double PointValue(const DOpEWrapper::DoFHandler<dopedim, dealii::DoFHandler > & /*control_dof_handler*/,
-		    const DOpEWrapper::DoFHandler<dealdim, dealii::DoFHandler > & state_dof_handler,
+  double PointValue(const DOpEWrapper::DoFHandler<dopedim, DH > & /*control_dof_handler*/,
+		    const DOpEWrapper::DoFHandler<dealdim, DH > & state_dof_handler,
 		      const std::map<std::string, const dealii::Vector<double>* > &/*param_values*/,
 		    const std::map<std::string, const VECTOR* > &domain_values)
   {
@@ -74,13 +74,13 @@ template<typename VECTOR, int dopedim, int dealdim>
   };
 
 /****************************************************************************************/
-template<typename VECTOR, int dopedim, int dealdim>
-  class LocalPointFunctionalDeflectionX : public FunctionalInterface<CellDataContainer,FaceDataContainer,dealii::DoFHandler, VECTOR, dopedim,dealdim>
+template<template<int, int> class DH,typename VECTOR, int dopedim, int dealdim>
+  class LocalPointFunctionalDeflectionX : public FunctionalInterface<CellDataContainer,FaceDataContainer,DH, VECTOR, dopedim,dealdim>
   {
   public:
     
-    double PointValue(const DOpEWrapper::DoFHandler<dopedim, dealii::DoFHandler > & /*control_dof_handler*/,
-			      const DOpEWrapper::DoFHandler<dealdim, dealii::DoFHandler > &state_dof_handler,
+    double PointValue(const DOpEWrapper::DoFHandler<dopedim, DH > & /*control_dof_handler*/,
+			      const DOpEWrapper::DoFHandler<dealdim, DH > &state_dof_handler,
 		      const std::map<std::string, const dealii::Vector<double>* > &/*param_values*/,
 			      const std::map<std::string, const VECTOR* > &domain_values)		
   {
@@ -110,13 +110,13 @@ template<typename VECTOR, int dopedim, int dealdim>
   };
 
 /****************************************************************************************/
-template<typename VECTOR, int dopedim, int dealdim>
-  class LocalPointFunctionalDeflectionY : public FunctionalInterface<CellDataContainer,FaceDataContainer,dealii::DoFHandler, VECTOR, dopedim,dealdim>
+template<template<int, int> class DH,typename VECTOR, int dopedim, int dealdim>
+  class LocalPointFunctionalDeflectionY : public FunctionalInterface<CellDataContainer,FaceDataContainer,DH, VECTOR, dopedim,dealdim>
   {
   public:
     
-   double PointValue(const DOpEWrapper::DoFHandler<dopedim, dealii::DoFHandler > & /*control_dof_handler*/,
-		    const DOpEWrapper::DoFHandler<dealdim, dealii::DoFHandler > &state_dof_handler,
+   double PointValue(const DOpEWrapper::DoFHandler<dopedim, DH > & /*control_dof_handler*/,
+		    const DOpEWrapper::DoFHandler<dealdim, DH > &state_dof_handler,
 		      const std::map<std::string, const dealii::Vector<double>* > &/*param_values*/,
 		    const std::map<std::string, const VECTOR* > &domain_values)      		
   {
@@ -146,8 +146,8 @@ template<typename VECTOR, int dopedim, int dealdim>
 
 // drag 
 /****************************************************************************************/
-template<typename VECTOR, int dopedim, int dealdim>
-  class LocalBoundaryFaceFunctionalDrag : public FunctionalInterface<CellDataContainer,FaceDataContainer,dealii::DoFHandler, VECTOR, dopedim,dealdim>
+template<template<int, int> class DH,typename VECTOR, int dopedim, int dealdim>
+  class LocalBoundaryFaceFunctionalDrag : public FunctionalInterface<CellDataContainer,FaceDataContainer,DH, VECTOR, dopedim,dealdim>
   {
   public:    
      static void declare_params(ParameterReader &param_reader)
@@ -188,7 +188,7 @@ template<typename VECTOR, int dopedim, int dealdim>
      }
 
      // compute drag value around cylinder
-    double BoundaryValue(const FaceDataContainer<dealii::DoFHandler, VECTOR, dealdim>& fdc) 
+    double BoundaryValue(const FaceDataContainer<DH, VECTOR, dealdim>& fdc) 
      {
        unsigned int color = fdc.GetBoundaryIndicator();
       const auto &state_fe_face_values = fdc.GetFEFaceValuesState();
@@ -260,7 +260,7 @@ template<typename VECTOR, int dopedim, int dealdim>
      }
 
      
-     double FaceValue(const FaceDataContainer<dealii::DoFHandler, VECTOR, dealdim>& fdc)  
+     double FaceValue(const FaceDataContainer<DH, VECTOR, dealdim>& fdc)  
      {
         const auto & state_fe_face_values = fdc.GetFEFaceValuesState();
       unsigned int n_q_points = fdc.GetNQPoints();
@@ -390,8 +390,8 @@ template<typename VECTOR, int dopedim, int dealdim>
 
  // lift 
 /****************************************************************************************/
-template<typename VECTOR, int dopedim, int dealdim>
-  class LocalBoundaryFaceFunctionalLift : public FunctionalInterface<CellDataContainer,FaceDataContainer,dealii::DoFHandler, VECTOR, dopedim,dealdim>
+template<template<int, int> class DH,typename VECTOR, int dopedim, int dealdim>
+  class LocalBoundaryFaceFunctionalLift : public FunctionalInterface<CellDataContainer,FaceDataContainer,DH, VECTOR, dopedim,dealdim>
   {
   public:    
      static void declare_params(ParameterReader &param_reader)
@@ -433,7 +433,7 @@ template<typename VECTOR, int dopedim, int dealdim>
 
 
      // compute drag value around cylinder
-     double BoundaryValue(const FaceDataContainer<dealii::DoFHandler, VECTOR, dealdim>& fdc) 
+     double BoundaryValue(const FaceDataContainer<DH, VECTOR, dealdim>& fdc) 
      {
        unsigned int color = fdc.GetBoundaryIndicator();
       const auto &state_fe_face_values = fdc.GetFEFaceValuesState();
@@ -507,7 +507,7 @@ template<typename VECTOR, int dopedim, int dealdim>
 
       
      // compute drag value at interface
-     double FaceValue(const FaceDataContainer<dealii::DoFHandler, VECTOR, dealdim>& fdc)
+     double FaceValue(const FaceDataContainer<DH, VECTOR, dealdim>& fdc)
     {
       const auto & state_fe_face_values = fdc.GetFEFaceValuesState();
       unsigned int n_q_points = fdc.GetNQPoints();

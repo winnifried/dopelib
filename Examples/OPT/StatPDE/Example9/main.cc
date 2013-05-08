@@ -83,12 +83,12 @@ using namespace dealii;
 using namespace DOpE;
 
 #define VECTOR BlockVector<double>
-#define DOFHANDLER DoFHandler<2>
-#define FE FESystem<2>
+#define DOFHANDLER DoFHandler
+#define FE FESystem
 
 typedef OptProblemContainer<FunctionalInterface<CellDataContainer,FaceDataContainer,DOFHANDLER, VECTOR,0,2>,
 		   FunctionalInterface<CellDataContainer,FaceDataContainer,DOFHANDLER, VECTOR,0,2>,
-		   PDEInterface<CellDataContainer,FaceDataContainer,DOFHANDLER, VECTOR,0,2>,
+		   PDEInterface<CellDataContainer,FaceDataContainer,DOFHANDLER, VECTOR,2>,
 		   DirichletDataInterface<VECTOR,0,2>,
 		   ConstraintInterface<CellDataContainer,FaceDataContainer,DOFHANDLER, VECTOR,0,2>,
 		   BlockSparsityPattern,VECTOR,0,2> OP;
@@ -152,11 +152,11 @@ int main(int argc, char **argv)
   ParameterReader pr;
   SSolver::declare_params(pr);
   RNA::declare_params(pr);
-  LocalPDE<VECTOR,0,2>::declare_params(pr);
-  LocalFunctional<VECTOR,0,2>::declare_params(pr);
+  LocalPDE<DOFHANDLER, VECTOR,2>::declare_params(pr);
+  LocalFunctional<DOFHANDLER, VECTOR,0,2>::declare_params(pr);
   BoundaryParabel::declare_params(pr);
-  LocalBoundaryFaceFunctionalDrag<VECTOR,0,2>::declare_params(pr);
-  LocalBoundaryFaceFunctionalLift<VECTOR,0,2>::declare_params(pr);
+  LocalBoundaryFaceFunctionalDrag<DOFHANDLER,VECTOR,0,2>::declare_params(pr);
+  LocalBoundaryFaceFunctionalLift<DOFHANDLER,VECTOR,0,2>::declare_params(pr);
 
   // Declare parameter for this section
   declare_params(pr);
@@ -195,14 +195,14 @@ int main(int argc, char **argv)
   QGauss<1> face_quadrature_formula(3);
   IDC idc(quadrature_formula, face_quadrature_formula);
 
-  LocalPDE<VECTOR,0,2> LPDE(pr);
-  LocalFunctional<VECTOR,0,2> LFunc(pr);
+  LocalPDE<DOFHANDLER, VECTOR,2> LPDE(pr);
+  LocalFunctional<DOFHANDLER, VECTOR,0,2> LFunc(pr);
 
-  LocalPointFunctionalPressure<VECTOR,0,2> LPFP;
-  LocalPointFunctionalDeflectionX<VECTOR,0,2> LPFDX;
-  LocalPointFunctionalDeflectionY<VECTOR,0,2> LPFDY;
-  LocalBoundaryFaceFunctionalDrag<VECTOR,0,2>  LBFD(pr);
-  LocalBoundaryFaceFunctionalLift<VECTOR,0,2>  LBFL(pr);
+  LocalPointFunctionalPressure<DOFHANDLER, VECTOR,0,2> LPFP;
+  LocalPointFunctionalDeflectionX<DOFHANDLER, VECTOR,0,2> LPFDX;
+  LocalPointFunctionalDeflectionY<DOFHANDLER, VECTOR,0,2> LPFDY;
+  LocalBoundaryFaceFunctionalDrag<DOFHANDLER, VECTOR,0,2>  LBFD(pr);
+  LocalBoundaryFaceFunctionalLift<DOFHANDLER, VECTOR,0,2>  LBFL(pr);
 
   
   //pseudo time
