@@ -34,7 +34,7 @@ using namespace DOpE;
 /****************************************************************************************/
 
 template<typename VECTOR, int dopedim, int dealdim>
-  class LocalPointFunctionalPressure : public FunctionalInterface<CellDataContainer,FaceDataContainer,dealii::DoFHandler<dealdim>, VECTOR,dopedim,dealdim>
+  class LocalPointFunctionalPressure : public FunctionalInterface<CellDataContainer,FaceDataContainer,dealii::DoFHandler, VECTOR,dopedim,dealdim>
   {
   private:
     mutable double time;
@@ -51,8 +51,8 @@ template<typename VECTOR, int dopedim, int dealdim>
       return true;
     }
 
-    double PointValue(const DOpEWrapper::DoFHandler<dopedim, dealii::DoFHandler<dealdim> > & /*control_dof_handler*/,
-		    const DOpEWrapper::DoFHandler<dealdim, dealii::DoFHandler<dealdim> > & state_dof_handler,
+    double PointValue(const DOpEWrapper::DoFHandler<dopedim, dealii::DoFHandler > & /*control_dof_handler*/,
+		    const DOpEWrapper::DoFHandler<dealdim, dealii::DoFHandler > & state_dof_handler,
 		      const std::map<std::string, const dealii::Vector<double>* > &/*param_values*/,
 		    const std::map<std::string, const VECTOR* > &domain_values)
   {
@@ -93,7 +93,7 @@ template<typename VECTOR, int dopedim, int dealdim>
 /****************************************************************************************/
 
 template<typename VECTOR, int dopedim, int dealdim>
-  class LocalBoundaryFunctionalDrag : public FunctionalInterface<CellDataContainer,FaceDataContainer,dealii::DoFHandler<dealdim>, VECTOR,dopedim,dealdim>
+  class LocalBoundaryFunctionalDrag : public FunctionalInterface<CellDataContainer,FaceDataContainer,dealii::DoFHandler, VECTOR,dopedim,dealdim>
   {
   private:
     mutable double time;
@@ -132,7 +132,7 @@ template<typename VECTOR, int dopedim, int dealdim>
       return true;
     }
 
-    double BoundaryValue(const FaceDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& fdc)
+    double BoundaryValue(const FaceDataContainer<dealii::DoFHandler, VECTOR, dealdim>& fdc)
     {
       unsigned int color = fdc.GetBoundaryIndicator();
       const auto &state_fe_face_values = fdc.GetFEFaceValuesState();
@@ -205,7 +205,7 @@ template<typename VECTOR, int dopedim, int dealdim>
 /****************************************************************************************/
 
 template<typename VECTOR, int dopedim, int dealdim>
-  class LocalBoundaryFunctionalLift : public FunctionalInterface<CellDataContainer,FaceDataContainer,dealii::DoFHandler<dealdim>, VECTOR,dopedim,dealdim>
+  class LocalBoundaryFunctionalLift : public FunctionalInterface<CellDataContainer,FaceDataContainer,dealii::DoFHandler, VECTOR,dopedim,dealdim>
   {
   private:
     mutable double time;
@@ -243,7 +243,7 @@ template<typename VECTOR, int dopedim, int dealdim>
       return true;
     }
 
-    double BoundaryValue(const FaceDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& fdc)
+    double BoundaryValue(const FaceDataContainer<dealii::DoFHandler, VECTOR, dealdim>& fdc)
     {
       unsigned int color = fdc.GetBoundaryIndicator();
       const auto &state_fe_face_values = fdc.GetFEFaceValuesState();

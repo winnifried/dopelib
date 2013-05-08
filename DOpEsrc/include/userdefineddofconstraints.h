@@ -58,7 +58,7 @@ namespace DOpE
    * If we change distribution from global to local, this should
    * get changed.
    */
-  template<typename DOFHANDLER, int dopedim, int dealdim = dopedim>
+  template<template<int, int> class DH, int dopedim, int dealdim = dopedim>
     class UserDefinedDoFConstraints
     {
       public:
@@ -71,44 +71,44 @@ namespace DOpE
         }
         virtual void
         MakeStateDoFConstraints(
-            const DOpEWrapper::DoFHandler<dealdim, DOFHANDLER> & dof_handler,
+            const DOpEWrapper::DoFHandler<dealdim, DH> & dof_handler,
             dealii::ConstraintMatrix& dof_constraints) const;
 
         virtual void
         MakeControlDoFConstraints(
-            const DOpEWrapper::DoFHandler<dopedim, DOFHANDLER> & dof_handler,
+            const DOpEWrapper::DoFHandler<dopedim, DH> & dof_handler,
             dealii::ConstraintMatrix& dof_constraints) const;
 
         void
-        RegisterMapping(const typename DOpEWrapper::Mapping<dealdim, DOFHANDLER>& mapping)
+        RegisterMapping(const typename DOpEWrapper::Mapping<dealdim, DH>& mapping)
         {
           _mapping = &mapping;
         }
 
     protected:
-      const DOpEWrapper::Mapping<dealdim, DOFHANDLER> &
+      const DOpEWrapper::Mapping<dealdim, DH> &
         GetMapping() const
         {
           return *_mapping;
         }
     private:
-      const DOpEWrapper::Mapping<dealdim, DOFHANDLER> * _mapping;
+      const DOpEWrapper::Mapping<dealdim, DH> * _mapping;
     };
 
-  template<typename DOFHANDLER, int dopedim, int dealdim>
+  template<template<int, int> class DH, int dopedim, int dealdim>
     void
-    UserDefinedDoFConstraints<DOFHANDLER, dopedim, dealdim>::MakeStateDoFConstraints(
-        const DOpEWrapper::DoFHandler<dealdim, DOFHANDLER> & /*dof_handler*/,
+    UserDefinedDoFConstraints<DH, dopedim, dealdim>::MakeStateDoFConstraints(
+        const DOpEWrapper::DoFHandler<dealdim, DH> & /*dof_handler*/,
         dealii::ConstraintMatrix& /*dof_constraints*/) const
     {
       throw DOpEException("Not Implemented.",
           "UserDefinedDoFConstraints::MakeStateDoFConstraints");
     }
 
-  template<typename DOFHANDLER, int dopedim, int dealdim>
+  template<template<int, int> class DH, int dopedim, int dealdim>
     void
-    UserDefinedDoFConstraints<DOFHANDLER, dopedim, dealdim>::MakeControlDoFConstraints(
-        const DOpEWrapper::DoFHandler<dopedim, DOFHANDLER> & /*dof_handler*/,
+    UserDefinedDoFConstraints<DH, dopedim, dealdim>::MakeControlDoFConstraints(
+        const DOpEWrapper::DoFHandler<dopedim, DH> & /*dof_handler*/,
         dealii::ConstraintMatrix& /*dof_constraints*/) const
     {
       throw DOpEException("Not Implemented.",

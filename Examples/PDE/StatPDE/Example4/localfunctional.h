@@ -32,7 +32,7 @@ using namespace dealii;
 using namespace DOpE;
 
 template<typename VECTOR, int dopedim, int dealdim>
-  class LocalFunctional : public FunctionalInterface<DoFHandler<dealdim>, VECTOR,dopedim,dealdim>
+  class LocalFunctional : public FunctionalInterface<DoFHandler, VECTOR,dopedim,dealdim>
   {
   public:
   LocalFunctional()
@@ -40,45 +40,45 @@ template<typename VECTOR, int dopedim, int dealdim>
 	_alpha = 1.e-3;
       }
 
-    double Value(const CellDataContainer<DoFHandler<dealdim>, VECTOR, dealdim>&)
+    double Value(const CellDataContainer<DoFHandler, VECTOR, dealdim>&)
     {
       return 0.;
     }
 
-    void Value_U(const CellDataContainer<DoFHandler<dealdim>, VECTOR, dealdim>&,
+    void Value_U(const CellDataContainer<DoFHandler, VECTOR, dealdim>&,
                  dealii::Vector<double> &local_cell_vector __attribute__((unused)),
                  double scale __attribute__((unused)))
     {
 
     }
 
-    void Value_Q(const CellDataContainer<DoFHandler<dealdim>, VECTOR, dealdim>&,
+    void Value_Q(const CellDataContainer<DoFHandler, VECTOR, dealdim>&,
                  dealii::Vector<double> &local_cell_vector __attribute__((unused)),
                  double scale __attribute__((unused)))
     {
 
     }
 
-    void Value_UU(const CellDataContainer<DoFHandler<dealdim>, VECTOR, dealdim>&,
+    void Value_UU(const CellDataContainer<DoFHandler, VECTOR, dealdim>&,
                   dealii::Vector<double> &local_cell_vector __attribute__((unused)),
                   double scale __attribute__((unused)))
     {
 
     }
 
-    void Value_QU(const CellDataContainer<DoFHandler<dealdim>, VECTOR, dealdim>&,
+    void Value_QU(const CellDataContainer<DoFHandler, VECTOR, dealdim>&,
                   dealii::Vector<double> &local_cell_vector __attribute__((unused)),
                   double scale __attribute__((unused)))
     {
     }
 
-    void Value_UQ(const CellDataContainer<DoFHandler<dealdim>, VECTOR, dealdim>&,
+    void Value_UQ(const CellDataContainer<DoFHandler, VECTOR, dealdim>&,
                   dealii::Vector<double> &local_cell_vector __attribute__((unused)),
                   double scale __attribute__((unused)))
     {
     }
 
-    void Value_QQ(const CellDataContainer<DoFHandler<dealdim>, VECTOR, dealdim>&,
+    void Value_QQ(const CellDataContainer<DoFHandler, VECTOR, dealdim>&,
                   dealii::Vector<double> &local_cell_vector __attribute__((unused)),
                   double scale __attribute__((unused)))
     {

@@ -61,8 +61,8 @@ using namespace DOpE;
 #define SPARSITYPATTERN BlockSparsityPattern
 #define VECTOR BlockVector<double>
 
-#define DOFHANDLER DoFHandler<2>
-#define FE FESystem<2, 2>
+#define DOFHANDLER DoFHandler
+#define FE FESystem
 #define QUADRATURE Quadrature<2>
 #define FACEQUADRATURE Quadrature<1>
 

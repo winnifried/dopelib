@@ -83,7 +83,7 @@ using namespace DOpE;
 #define VECTOR BlockVector<double>
 #define SPARSITYPATTERN BlockSparsityPattern
 #define MATRIX BlockSparseMatrix<double>
-#define DOFHANDLER DoFHandler<LOCALDOPEDIM>
+#define DOFHANDLER DoFHandler
 #define FE FESystem<LOCALDEALDIM>
 #define FUNC FunctionalInterface<CellDataContainer,FaceDataContainer,DOFHANDLER,VECTOR,LOCALDOPEDIM,LOCALDEALDIM>
 #define PDE PDEInterface<CellDataContainer,FaceDataContainer,DOFHANDLER,VECTOR,LOCALDOPEDIM,LOCALDEALDIM>

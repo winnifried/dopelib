@@ -33,12 +33,12 @@
 namespace DOpE
 {
 
-  template <typename PROBLEM, typename VECTOR, int dopedim,  int dealdim>
-    class ReducedTrustregion_NewtonAlgorithm : public ReducedAlgorithm<PROBLEM,VECTOR,dopedim,dealdim>
+  template <typename PROBLEM, typename VECTOR>
+    class ReducedTrustregion_NewtonAlgorithm : public ReducedAlgorithm<PROBLEM,VECTOR>
   {
   public:
     ReducedTrustregion_NewtonAlgorithm(PROBLEM* OP, 
-				       ReducedProblemInterface<PROBLEM,VECTOR,dopedim,dealdim>* S,
+				       ReducedProblemInterface<PROBLEM,VECTOR>* S,
 				       ParameterReader &param_reader,
 				       DOpEExceptionHandler<VECTOR>* Except=NULL,
 				       DOpEOutputHandler<VECTOR>* Output=NULL,
@@ -98,8 +98,8 @@ namespace DOpE
 
   /******************************************************/
 
-template <typename PROBLEM, typename VECTOR, int dopedim,int dealdim>
-void ReducedTrustregion_NewtonAlgorithm<PROBLEM,VECTOR,dopedim, dealdim>::declare_params(ParameterReader &param_reader)
+template <typename PROBLEM, typename VECTOR>
+void ReducedTrustregion_NewtonAlgorithm<PROBLEM,VECTOR>::declare_params(ParameterReader &param_reader)
   {
     param_reader.SetSubsection("reducedtrustregionnewtonalgorithm parameters");
     param_reader.declare_entry("nonlinear_maxiter", "10",Patterns::Integer(0));
@@ -115,19 +115,19 @@ void ReducedTrustregion_NewtonAlgorithm<PROBLEM,VECTOR,dopedim, dealdim>::declar
     
     param_reader.declare_entry("tr_method", "dogleg",Patterns::Selection("dogleg|exact|steinhaug"));
     
-    ReducedAlgorithm<PROBLEM,VECTOR,dopedim,dealdim>::declare_params(param_reader);
+    ReducedAlgorithm<PROBLEM,VECTOR>::declare_params(param_reader);
   }
 /******************************************************/
 
-template <typename PROBLEM, typename VECTOR, int dopedim,int dealdim>
-  ReducedTrustregion_NewtonAlgorithm<PROBLEM,VECTOR,dopedim, dealdim>
+template <typename PROBLEM, typename VECTOR>
+  ReducedTrustregion_NewtonAlgorithm<PROBLEM,VECTOR>
   ::ReducedTrustregion_NewtonAlgorithm(PROBLEM* OP, 
-				       ReducedProblemInterface<PROBLEM,VECTOR,dopedim, dealdim>* S,
+				       ReducedProblemInterface<PROBLEM,VECTOR>* S,
 				       ParameterReader &param_reader,
 				       DOpEExceptionHandler<VECTOR>* Except,
 				       DOpEOutputHandler<VECTOR>* Output,
 				       int base_priority) 
-  : ReducedAlgorithm<PROBLEM,VECTOR,dopedim, dealdim>(OP,S,param_reader,Except,Output,base_priority)
+  : ReducedAlgorithm<PROBLEM,VECTOR>(OP,S,param_reader,Except,Output,base_priority)
   {
     param_reader.SetSubsection("reducedtrustregionnewtonalgorithm parameters");
     _nonlinear_maxiter    = param_reader.get_integer ("nonlinear_maxiter");
@@ -151,15 +151,15 @@ template <typename PROBLEM, typename VECTOR, int dopedim,int dealdim>
 
 /******************************************************/
 
-template <typename PROBLEM, typename VECTOR, int dopedim,int dealdim>
-ReducedTrustregion_NewtonAlgorithm<PROBLEM,VECTOR,dopedim, dealdim>::~ReducedTrustregion_NewtonAlgorithm()
+template <typename PROBLEM, typename VECTOR>
+ReducedTrustregion_NewtonAlgorithm<PROBLEM,VECTOR>::~ReducedTrustregion_NewtonAlgorithm()
   {
     
   }
 /******************************************************/
 
-template <typename PROBLEM, typename VECTOR, int dopedim,int dealdim>
-double ReducedTrustregion_NewtonAlgorithm<PROBLEM,VECTOR,dopedim, dealdim>::NewtonResidual(const ControlVector<VECTOR>& q) 
+template <typename PROBLEM, typename VECTOR>
+double ReducedTrustregion_NewtonAlgorithm<PROBLEM,VECTOR>::NewtonResidual(const ControlVector<VECTOR>& q)
 {
   //Solve j'(q) = 0
   ControlVector<VECTOR> gradient(q), gradient_transposed(q);
@@ -188,8 +188,8 @@ double ReducedTrustregion_NewtonAlgorithm<PROBLEM,VECTOR,dopedim, dealdim>::Newt
 /**
  * Implements the Trust Region Algorithm from Nocedal-Wright Alg 4.1
  */
-template <typename PROBLEM, typename VECTOR, int dopedim,int dealdim>
-int ReducedTrustregion_NewtonAlgorithm<PROBLEM,VECTOR,dopedim, dealdim>::Solve(ControlVector<VECTOR>& q,double global_tol)
+template <typename PROBLEM, typename VECTOR>
+int ReducedTrustregion_NewtonAlgorithm<PROBLEM,VECTOR>::Solve(ControlVector<VECTOR>& q,double global_tol)
 {
  
   q.ReInit();
@@ -426,8 +426,8 @@ int ReducedTrustregion_NewtonAlgorithm<PROBLEM,VECTOR,dopedim, dealdim>::Solve(C
 }
 /******************************************************/
 
-template <typename PROBLEM, typename VECTOR, int dopedim,int dealdim>
-  bool ReducedTrustregion_NewtonAlgorithm<PROBLEM,VECTOR,dopedim, dealdim>::
+template <typename PROBLEM, typename VECTOR>
+  bool ReducedTrustregion_NewtonAlgorithm<PROBLEM,VECTOR>::
   ComputeTRModelMinimizer(const ControlVector<VECTOR>&  q,  
 			  const ControlVector<VECTOR>& gradient,
 			  const ControlVector<VECTOR>& gradient_transposed,
@@ -570,8 +570,8 @@ template <typename PROBLEM, typename VECTOR, int dopedim,int dealdim>
 
 /******************************************************/
 
-template <typename PROBLEM, typename VECTOR, int dopedim,int dealdim>
-  int ReducedTrustregion_NewtonAlgorithm<PROBLEM, VECTOR, dopedim, dealdim>
+template <typename PROBLEM, typename VECTOR>
+  int ReducedTrustregion_NewtonAlgorithm<PROBLEM, VECTOR>
   ::SolveReducedLinearSystem(const ControlVector<VECTOR>& q,
 			     const ControlVector<VECTOR>& gradient,
 			     const ControlVector<VECTOR>& gradient_transposed,

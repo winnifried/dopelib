@@ -40,7 +40,7 @@ using namespace DOpE;
 // massflux
 /****************************************************************************************/
 template<typename VECTOR, typename FACEDATACONTAINER, int dealdim>
-class LocalBoundaryFunctionalMassFlux: public FunctionalInterface<CellDataContainer,FaceDataContainer,dealii::DoFHandler<dealdim>, VECTOR,
+class LocalBoundaryFunctionalMassFlux: public FunctionalInterface<CellDataContainer,FaceDataContainer,dealii::DoFHandler, VECTOR,
     dealdim>
 {
 	public:

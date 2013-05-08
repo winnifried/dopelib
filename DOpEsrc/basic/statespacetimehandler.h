@@ -1,25 +1,25 @@
 /**
-*
-* Copyright (C) 2012 by the DOpElib authors
-*
-* This file is part of DOpElib
-*
-* DOpElib is free software: you can redistribute it
-* and/or modify it under the terms of the GNU General Public
-* License as published by the Free Software Foundation, either
-* version 3 of the License, or (at your option) any later
-* version.
-*
-* DOpElib is distributed in the hope that it will be
-* useful, but WITHOUT ANY WARRANTY; without even the implied
-* warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-* PURPOSE.  See the GNU General Public License for more
-* details.
-*
-* Please refer to the file LICENSE.TXT included in this distribution
-* for further information on this license.
-*
-**/
+ *
+ * Copyright (C) 2012 by the DOpElib authors
+ *
+ * This file is part of DOpElib
+ *
+ * DOpElib is free software: you can redistribute it
+ * and/or modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation, either
+ * version 3 of the License, or (at your option) any later
+ * version.
+ *
+ * DOpElib is distributed in the hope that it will be
+ * useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+ * PURPOSE.  See the GNU General Public License for more
+ * details.
+ *
+ * Please refer to the file LICENSE.TXT included in this distribution
+ * for further information on this license.
+ *
+ **/
 
 #ifndef _STATE_SPACE_TIME_HANDLER_H_
 #define _STATE_SPACE_TIME_HANDLER_H_
@@ -45,37 +45,37 @@ namespace DOpE
    * StateSpaceTimeDoFHandler.
    *
    * @tparam <FE>               The finite element type we use (i.e. 'normal' finite elements vs. hp::FECollections)
-   * @tparam <DOFHANDLER>       The dofhandler type we use (i.e. 'normal' dofhandler vs. hp::dofhandler)
+   * @tparam <DH>       The dofhandler type we use (i.e. 'normal' dofhandler vs. hp::dofhandler)
    * @tparam <SPARSITYPATTERN>  The sparsity pattern for control & state. This is needed as a class template, because
    *                            member function templates are not allowed for virtual member functions.
    * @tparam <VECTOR>           The vector type for control & state (i.e. dealii::Vector<double> or dealii::BlockVector<double>)
    * @tparam<dealdim>           The dimension for the state variable. This is the dimension the
    *                            mesh is in.
    */
-  template<typename FE, typename DOFHANDLER, typename SPARSITYPATTERN,
+  template<template<int, int> class FE, template<int, int> class DH, typename SPARSITYPATTERN,
       typename VECTOR, int dealdim>
     class StateSpaceTimeHandler : public SpaceTimeHandlerBase<VECTOR>
     {
       public:
         StateSpaceTimeHandler() :
-          SpaceTimeHandlerBase<VECTOR> ()
+            SpaceTimeHandlerBase<VECTOR>()
         {
           _domain_dofhandler_vector.resize(1);
         }
         StateSpaceTimeHandler(const dealii::Triangulation<1> & times) :
-          SpaceTimeHandlerBase<VECTOR> (times)
+            SpaceTimeHandlerBase<VECTOR>(times)
         {
           _domain_dofhandler_vector.resize(1);
         }
         StateSpaceTimeHandler(
             const ActiveFEIndexSetterInterface<dealdim>& index_setter) :
-          SpaceTimeHandlerBase<VECTOR> (), _fe_index_setter(&index_setter)
+            SpaceTimeHandlerBase<VECTOR>(), _fe_index_setter(&index_setter)
         {
           _domain_dofhandler_vector.resize(1);
         }
         StateSpaceTimeHandler(const dealii::Triangulation<1> & times,
             const ActiveFEIndexSetterInterface<dealdim>& index_setter) :
-          SpaceTimeHandlerBase<VECTOR> (times), _fe_index_setter(&index_setter)
+            SpaceTimeHandlerBase<VECTOR>(times), _fe_index_setter(&index_setter)
         {
           _domain_dofhandler_vector.resize(1);
         }
@@ -101,7 +101,7 @@ namespace DOpE
         /**
          * Returns a reference to the DoF Handler for the State at the current time point.
          */
-        virtual const DOpEWrapper::DoFHandler<dealdim, DOFHANDLER>&
+        virtual const DOpEWrapper::DoFHandler<dealdim, DH>&
         GetStateDoFHandler() const =0;
 
         /******************************************************/
@@ -109,7 +109,7 @@ namespace DOpE
         /**
          * Returns a reference to the Mapping in use.
          */
-        virtual const DOpEWrapper::Mapping<dealdim, DOFHANDLER>&
+        virtual const DOpEWrapper::Mapping<dealdim, DH>&
         GetMapping() const = 0;
 
         /******************************************************/
@@ -118,7 +118,7 @@ namespace DOpE
          * Returns a reference to a vector of DoFHandlers, the order of the DoFHandlers must
          * be set prior by SetDoFHandlerOrdering
          */
-        const std::vector<const DOpEWrapper::DoFHandler<dealdim, DOFHANDLER>*>&
+        const std::vector<const DOpEWrapper::DoFHandler<dealdim, DH>*>&
         GetDoFHandler() const
         {
           _domain_dofhandler_vector[0] = &GetStateDoFHandler();
@@ -132,12 +132,12 @@ namespace DOpE
          * DoFHandlers in use.
          */
         std::vector<
-            typename DOpEWrapper::DoFHandler<dealdim, DOFHANDLER>::active_cell_iterator>
+            typename DOpEWrapper::DoFHandler<dealdim, DH>::active_cell_iterator>
         GetDoFHandlerBeginActive() const
         {
           std::vector<
-              typename DOpEWrapper::DoFHandler<dealdim, DOFHANDLER>::active_cell_iterator>
-              ret(this->GetDoFHandler().size());
+              typename DOpEWrapper::DoFHandler<dealdim, DH>::active_cell_iterator> ret(
+              this->GetDoFHandler().size());
           for (unsigned int dh = 0; dh < this->GetDoFHandler().size(); dh++)
           {
             ret[dh] = this->GetDoFHandler()[dh]->begin_active();
@@ -153,12 +153,12 @@ namespace DOpE
          */
 
         std::vector<
-            typename DOpEWrapper::DoFHandler<dealdim, DOFHANDLER>::active_cell_iterator>
+            typename DOpEWrapper::DoFHandler<dealdim, DH>::active_cell_iterator>
         GetDoFHandlerEnd() const
         {
           std::vector<
-              typename DOpEWrapper::DoFHandler<dealdim, DOFHANDLER>::active_cell_iterator>
-              ret(this->GetDoFHandler().size());
+              typename DOpEWrapper::DoFHandler<dealdim, DH>::active_cell_iterator> ret(
+              this->GetDoFHandler().size());
           for (unsigned int dh = 0; dh < this->GetDoFHandler().size(); dh++)
           {
             ret[dh] = this->GetDoFHandler()[dh]->end();
@@ -199,11 +199,11 @@ namespace DOpE
          */
         void
         SetActiveFEIndicesState(
-            DOpEWrapper::DoFHandler<dealdim, DOFHANDLER>& dof_handler)
+            DOpEWrapper::DoFHandler<dealdim, DH>& dof_handler)
         {
           if (dof_handler.NeedIndexSetter())
           {
-            for (typename DOFHANDLER::active_cell_iterator cell =
+            for (typename DH<dealdim, dealdim>::active_cell_iterator cell =
                 dof_handler.begin_active(); cell != dof_handler.end(); ++cell)
             {
               this->GetFEIndexSetter().SetActiveFEIndexState(cell);
@@ -259,12 +259,12 @@ namespace DOpE
          * Returns a const Reference to the FESystem indicated by the string 'name', i.e. state oder control.
          */
 
-        virtual const FE&
+        virtual const FE<dealdim, dealdim>&
         GetFESystem(std::string name) const=0;
 
         /******************************************************/
 
-        dealii::DataOut<dealdim, DOFHANDLER>&
+        dealii::DataOut<dealdim, DH<dealdim, dealdim> >&
         GetDataOut()
         {
           _data_out.clear();
@@ -274,10 +274,9 @@ namespace DOpE
       protected:
         //we need this here, because we know the type of the DoFHandler in use.
         //This saves us a template argument for statpdeproblem etc.
-        dealii::DataOut<dealdim, DOFHANDLER> _data_out;
+        dealii::DataOut<dealdim, DH<dealdim, dealdim> > _data_out;
         const ActiveFEIndexSetterInterface<dealdim>* _fe_index_setter;
-        mutable std::vector<const DOpEWrapper::DoFHandler<dealdim, DOFHANDLER>*>
-            _domain_dofhandler_vector;
+        mutable std::vector<const DOpEWrapper::DoFHandler<dealdim, DH>*> _domain_dofhandler_vector;
 
     };
 }

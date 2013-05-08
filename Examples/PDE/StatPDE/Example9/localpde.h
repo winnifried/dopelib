@@ -35,7 +35,7 @@ using namespace DOpE;
 /***********************************************************************************************/
 template<typename VECTOR, int dealdim>
   class LocalPDELaplace : public PDEInterface<CellDataContainer,
-      FaceDataContainer, dealii::DoFHandler<dealdim>, VECTOR, dealdim>
+      FaceDataContainer, dealii::DoFHandler, VECTOR, dealdim>
   {
     public:
       LocalPDELaplace()
@@ -46,7 +46,7 @@ template<typename VECTOR, int dealdim>
       // Domain values for cells
       void
       CellEquation(
-          const CellDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& cdc,
+          const CellDataContainer<dealii::DoFHandler, VECTOR, dealdim>& cdc,
           dealii::Vector<double> &local_cell_vector, double scale, double)
       {
         unsigned int n_dofs_per_cell = cdc.GetNDoFsPerCell();
@@ -81,8 +81,8 @@ template<typename VECTOR, int dealdim>
 
       void
       StrongCellResidual(
-          const CellDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& cdc,
-          const CellDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& cdc_w,
+          const CellDataContainer<dealii::DoFHandler, VECTOR, dealdim>& cdc,
+          const CellDataContainer<dealii::DoFHandler, VECTOR, dealdim>& cdc_w,
           double& sum, double scale)
       {
         unsigned int n_q_points = cdc.GetNQPoints();
@@ -117,8 +117,8 @@ template<typename VECTOR, int dealdim>
 
       void
       StrongCellResidual_U(
-          const CellDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& cdc,
-          const CellDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& cdc_w,
+          const CellDataContainer<dealii::DoFHandler, VECTOR, dealdim>& cdc,
+          const CellDataContainer<dealii::DoFHandler, VECTOR, dealdim>& cdc_w,
           double& sum, double scale)
       {
         unsigned int n_q_points = cdc.GetNQPoints();
@@ -149,8 +149,8 @@ template<typename VECTOR, int dealdim>
 
       void
       StrongFaceResidual(
-          const FaceDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& fdc,
-          const FaceDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& fdc_w,
+          const FaceDataContainer<dealii::DoFHandler, VECTOR, dealdim>& fdc,
+          const FaceDataContainer<dealii::DoFHandler, VECTOR, dealdim>& fdc_w,
           double& sum, double scale)
       {
         unsigned int n_q_points = fdc.GetNQPoints();
@@ -186,8 +186,8 @@ template<typename VECTOR, int dealdim>
 
       void
       StrongFaceResidual_U(
-          const FaceDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& fdc,
-          const FaceDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& fdc_w,
+          const FaceDataContainer<dealii::DoFHandler, VECTOR, dealdim>& fdc,
+          const FaceDataContainer<dealii::DoFHandler, VECTOR, dealdim>& fdc_w,
           double& sum, double scale)
       {
         unsigned int n_q_points = fdc.GetNQPoints();
@@ -233,8 +233,8 @@ template<typename VECTOR, int dealdim>
 
       void
       StrongBoundaryResidual(
-          const FaceDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>&,
-          const FaceDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>&,
+          const FaceDataContainer<dealii::DoFHandler, VECTOR, dealdim>&,
+          const FaceDataContainer<dealii::DoFHandler, VECTOR, dealdim>&,
           double& sum, double /*scale*/)
       {
         sum = 0;
@@ -242,8 +242,8 @@ template<typename VECTOR, int dealdim>
 
       void
       StrongBoundaryResidual_U(
-          const FaceDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>&,
-          const FaceDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>&,
+          const FaceDataContainer<dealii::DoFHandler, VECTOR, dealdim>&,
+          const FaceDataContainer<dealii::DoFHandler, VECTOR, dealdim>&,
           double& sum, double /*scale*/)
       {
         sum = 0;
@@ -251,7 +251,7 @@ template<typename VECTOR, int dealdim>
 
       void
       FaceEquation_U(
-          const FaceDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>&,
+          const FaceDataContainer<dealii::DoFHandler, VECTOR, dealdim>&,
           dealii::Vector<double> &, double, double)
       {
 
@@ -259,7 +259,7 @@ template<typename VECTOR, int dealdim>
 
       void
       FaceMatrix(
-          const FaceDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>&,
+          const FaceDataContainer<dealii::DoFHandler, VECTOR, dealdim>&,
           FullMatrix<double> &, double, double)
       {
 
@@ -267,7 +267,7 @@ template<typename VECTOR, int dealdim>
 
       void
       CellEquation_U(
-          const CellDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& cdc,
+          const CellDataContainer<dealii::DoFHandler, VECTOR, dealdim>& cdc,
           dealii::Vector<double> &local_cell_vector, double scale, double)
       {
         const DOpEWrapper::FEValues<dealdim> & state_fe_values =
@@ -299,7 +299,7 @@ template<typename VECTOR, int dealdim>
 
       void
       CellMatrix(
-          const CellDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& cdc,
+          const CellDataContainer<dealii::DoFHandler, VECTOR, dealdim>& cdc,
           FullMatrix<double> &local_entry_matrix, double scale, double)
       {
         unsigned int n_dofs_per_cell = cdc.GetNDoFsPerCell();
@@ -333,7 +333,7 @@ template<typename VECTOR, int dealdim>
 
       void
       CellMatrix_T(
-          const CellDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& cdc,
+          const CellDataContainer<dealii::DoFHandler, VECTOR, dealdim>& cdc,
           FullMatrix<double> &local_entry_matrix, double scale, double)
       {
         unsigned int n_dofs_per_cell = cdc.GetNDoFsPerCell();
@@ -367,7 +367,7 @@ template<typename VECTOR, int dealdim>
 
       void
       CellRightHandSide(
-          const CellDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& cdc,
+          const CellDataContainer<dealii::DoFHandler, VECTOR, dealdim>& cdc,
           dealii::Vector<double> &local_cell_vector, double scale)
       {
         assert(this->_problem_type == "state");

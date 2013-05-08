@@ -33,7 +33,7 @@ using namespace dealii;
 using namespace DOpE;
 
 /****************************************************************************************/
-template<typename DOFHANDLER, typename VECTOR, int dealdim>
+template<template<int, int> class DOFHANDLER, typename VECTOR, int dealdim>
   class LocalPointFunctionalX : public FunctionalInterface<CellDataContainer,
       FaceDataContainer, DOFHANDLER, VECTOR, dealdim>
   {
@@ -79,7 +79,7 @@ template<typename DOFHANDLER, typename VECTOR, int dealdim>
 
 // drag
 /****************************************************************************************/
-template<typename DOFHANDLER, typename VECTOR, int dealdim>
+template<template<int, int> class DOFHANDLER, typename VECTOR, int dealdim>
   class LocalBoundaryFluxFunctional : public FunctionalInterface<
       CellDataContainer, FaceDataContainer, DOFHANDLER, VECTOR,
       dealdim>

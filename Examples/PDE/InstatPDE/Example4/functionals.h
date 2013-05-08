@@ -35,7 +35,7 @@ using namespace DOpE;
 /****************************************************************************************/
 
 template<typename VECTOR, int dopedim, int dealdim>
-  class LocalPointFunctional : public FunctionalInterface<CellDataContainer,FaceDataContainer,dealii::DoFHandler<dealdim>, VECTOR, dopedim,dealdim>
+  class LocalPointFunctional : public FunctionalInterface<CellDataContainer,FaceDataContainer,dealii::DoFHandler, VECTOR, dopedim,dealdim>
   {
   private:
     mutable double time;
@@ -55,8 +55,8 @@ template<typename VECTOR, int dopedim, int dealdim>
     		return false;
     }
 
-  double PointValue(const DOpEWrapper::DoFHandler<dopedim, dealii::DoFHandler<dealdim> > &/* control_dof_handler*/,
-		    const DOpEWrapper::DoFHandler<dealdim, dealii::DoFHandler<dealdim> > & state_dof_handler,
+  double PointValue(const DOpEWrapper::DoFHandler<dopedim, dealii::DoFHandler > &/* control_dof_handler*/,
+		    const DOpEWrapper::DoFHandler<dealdim, dealii::DoFHandler > & state_dof_handler,
 		    const std::map<std::string, const dealii::Vector<double>* > &/*param_values*/,
 		    const std::map<std::string, const VECTOR* > &domain_values)
   {

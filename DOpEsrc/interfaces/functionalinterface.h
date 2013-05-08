@@ -1,25 +1,25 @@
 /**
-*
-* Copyright (C) 2012 by the DOpElib authors
-*
-* This file is part of DOpElib
-*
-* DOpElib is free software: you can redistribute it
-* and/or modify it under the terms of the GNU General Public
-* License as published by the Free Software Foundation, either
-* version 3 of the License, or (at your option) any later
-* version.
-*
-* DOpElib is distributed in the hope that it will be
-* useful, but WITHOUT ANY WARRANTY; without even the implied
-* warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-* PURPOSE.  See the GNU General Public License for more
-* details.
-*
-* Please refer to the file LICENSE.TXT included in this distribution
-* for further information on this license.
-*
-**/
+ *
+ * Copyright (C) 2012 by the DOpElib authors
+ *
+ * This file is part of DOpElib
+ *
+ * DOpElib is free software: you can redistribute it
+ * and/or modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation, either
+ * version 3 of the License, or (at your option) any later
+ * version.
+ *
+ * DOpElib is distributed in the hope that it will be
+ * useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+ * PURPOSE.  See the GNU General Public License for more
+ * details.
+ *
+ * Please refer to the file LICENSE.TXT included in this distribution
+ * for further information on this license.
+ *
+ **/
 
 #ifndef _FUNCTIONAL_INTERFACE_H_
 #define _FUNCTIONAL_INTERFACE_H_
@@ -46,9 +46,10 @@ namespace DOpE
    * the derivatives thereof.
    */
   template<
-      template<typename DOFHANDLER, typename VECTOR, int dealdim> class CDC,
-      template<typename DOFHANDLER, typename VECTOR, int dealdim> class FDC,
-      typename DOFHANDLER, typename VECTOR, int dopedim, int dealdim = dopedim>
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
+      template<int, int> class DH, typename VECTOR, int dopedim, int dealdim =
+          dopedim>
     class FunctionalInterface
     {
       public:
@@ -63,7 +64,7 @@ namespace DOpE
          *                a cell.
          */
         virtual double
-        Value(const CDC<DOFHANDLER, VECTOR, dealdim>& cdc);
+        Value(const CDC<DH, VECTOR, dealdim>& cdc);
 
         /**
          * This evaluates the Cost Functional J_u'(q,u)(.) = \int_\Omega j_u'(q(x),u(x))(.) \dx on a given element T.
@@ -76,7 +77,7 @@ namespace DOpE
          * @param scale                    A factor by which the result is scaled.
          */
         virtual void
-        Value_U(const CDC<DOFHANDLER, VECTOR, dealdim>& cdc,
+        Value_U(const CDC<DH, VECTOR, dealdim>& cdc,
             dealii::Vector<double> &local_cell_vector, double scale);
 
         /**
@@ -90,7 +91,7 @@ namespace DOpE
          * @param scale                    A factor by which the result is scaled.
          */
         virtual void
-        Value_Q(const CDC<DOFHANDLER, VECTOR, dealdim>& cdc,
+        Value_Q(const CDC<DH, VECTOR, dealdim>& cdc,
             dealii::Vector<double> &local_cell_vector, double scale);
 
         /**
@@ -104,7 +105,7 @@ namespace DOpE
          * @param scale                    A factor by which the result is scaled.
          */
         virtual void
-        Value_UU(const CDC<DOFHANDLER, VECTOR, dealdim>& cdc,
+        Value_UU(const CDC<DH, VECTOR, dealdim>& cdc,
             dealii::Vector<double> &local_cell_vector, double scale);
 
         /**
@@ -118,7 +119,7 @@ namespace DOpE
          * @param scale                    A factor by which the result is scaled.
          */
         virtual void
-        Value_QU(const CDC<DOFHANDLER, VECTOR, dealdim>& cdc,
+        Value_QU(const CDC<DH, VECTOR, dealdim>& cdc,
             dealii::Vector<double> &local_cell_vector, double scale);
 
         /**
@@ -132,7 +133,7 @@ namespace DOpE
          * @param scale                    A factor by which the result is scaled.
          */
         virtual void
-        Value_UQ(const CDC<DOFHANDLER, VECTOR, dealdim>& cdc,
+        Value_UQ(const CDC<DH, VECTOR, dealdim>& cdc,
             dealii::Vector<double> &local_cell_vector, double scale);
 
         /**
@@ -146,7 +147,7 @@ namespace DOpE
          * @param scale                    A factor by which the result is scaled.
          */
         virtual void
-        Value_QQ(const CDC<DOFHANDLER, VECTOR, dealdim>& cdc,
+        Value_QQ(const CDC<DH, VECTOR, dealdim>& cdc,
             dealii::Vector<double> &local_cell_vector, double scale);
 
         /**
@@ -163,8 +164,8 @@ namespace DOpE
          */
         virtual double
         PointValue(
-            const DOpEWrapper::DoFHandler<dopedim, DOFHANDLER> &control_dof_handler,
-            const DOpEWrapper::DoFHandler<dealdim, DOFHANDLER> &state_dof_handler,
+            const DOpEWrapper::DoFHandler<dopedim, DH> &control_dof_handler,
+            const DOpEWrapper::DoFHandler<dealdim, DH> &state_dof_handler,
             const std::map<std::string, const dealii::Vector<double>*> &param_values,
             const std::map<std::string, const VECTOR*> &domain_values);
 
@@ -183,12 +184,11 @@ namespace DOpE
          */
         virtual void
         PointValue_U(
-            const DOpEWrapper::DoFHandler<dopedim, DOFHANDLER> &control_dof_handler,
-            const DOpEWrapper::DoFHandler<dealdim, DOFHANDLER> &state_dof_handler,
+            const DOpEWrapper::DoFHandler<dopedim, DH> &control_dof_handler,
+            const DOpEWrapper::DoFHandler<dealdim, DH> &state_dof_handler,
             const std::map<std::string, const dealii::Vector<double>*> &param_values,
             const std::map<std::string, const VECTOR*> &domain_values,
-            VECTOR& rhs,
-            double scale);
+            VECTOR& rhs, double scale);
 
         /**
          * This evaluates the Cost Functional J_q'(q,u)(.) = \sum_i j_q'(q(x_i),u(x_i))(.). For given points x_i.
@@ -205,12 +205,11 @@ namespace DOpE
          */
         virtual void
         PointValue_Q(
-            const DOpEWrapper::DoFHandler<dopedim, DOFHANDLER> &control_dof_handler,
-            const DOpEWrapper::DoFHandler<dealdim, DOFHANDLER> &state_dof_handler,
+            const DOpEWrapper::DoFHandler<dopedim, DH> &control_dof_handler,
+            const DOpEWrapper::DoFHandler<dealdim, DH> &state_dof_handler,
             const std::map<std::string, const dealii::Vector<double>*> &param_values,
             const std::map<std::string, const VECTOR*> &domain_values,
-            VECTOR& rhs,
-            double scale);
+            VECTOR& rhs, double scale);
 
         /**
          * This evaluates the Cost Functional J_uu''(q,u)(.,Du) = \sum_i j_uu''(q(x_i),u(x_i))(., Du). For given points x_i.
@@ -227,12 +226,11 @@ namespace DOpE
          */
         virtual void
         PointValue_UU(
-            const DOpEWrapper::DoFHandler<dopedim, DOFHANDLER> &control_dof_handler,
-            const DOpEWrapper::DoFHandler<dealdim, DOFHANDLER> &state_dof_handler,
+            const DOpEWrapper::DoFHandler<dopedim, DH> &control_dof_handler,
+            const DOpEWrapper::DoFHandler<dealdim, DH> &state_dof_handler,
             const std::map<std::string, const dealii::Vector<double>*> &param_values,
             const std::map<std::string, const VECTOR*> &domain_values,
-            VECTOR& rhs,
-            double scale);
+            VECTOR& rhs, double scale);
 
         /**
          * This evaluates the Cost Functional J_qu''(q,u)(.,Dq) = \sum_i j_qu''(q(x_i),u(x_i))(., Dq). For given points x_i.
@@ -250,12 +248,11 @@ namespace DOpE
          */
         virtual void
         PointValue_QU(
-            const DOpEWrapper::DoFHandler<dopedim, DOFHANDLER> &control_dof_handler,
-            const DOpEWrapper::DoFHandler<dealdim, DOFHANDLER> &state_dof_handler,
+            const DOpEWrapper::DoFHandler<dopedim, DH> &control_dof_handler,
+            const DOpEWrapper::DoFHandler<dealdim, DH> &state_dof_handler,
             const std::map<std::string, const dealii::Vector<double>*> &param_values,
             const std::map<std::string, const VECTOR*> &domain_values,
-            VECTOR& rhs,
-            double scale);
+            VECTOR& rhs, double scale);
 
         /**
          * This evaluates the Cost Functional J_uq''(q,u)(.,Du) = \sum_i j_uq''(q(x_i),u(x_i))(., Du). For given points x_i.
@@ -273,12 +270,11 @@ namespace DOpE
          */
         virtual void
         PointValue_UQ(
-            const DOpEWrapper::DoFHandler<dopedim, DOFHANDLER> &control_dof_handler,
-            const DOpEWrapper::DoFHandler<dealdim, DOFHANDLER> &state_dof_handler,
+            const DOpEWrapper::DoFHandler<dopedim, DH> &control_dof_handler,
+            const DOpEWrapper::DoFHandler<dealdim, DH> &state_dof_handler,
             const std::map<std::string, const dealii::Vector<double>*> &param_values,
             const std::map<std::string, const VECTOR*> &domain_values,
-            VECTOR& rhs,
-            double scale);
+            VECTOR& rhs, double scale);
 
         /**
          * This evaluates the Cost Functional J_qq''(q,u)(.,Dq) = \sum_i j_qq''(q(x_i),u(x_i))(., Dq). For given points x_i.
@@ -296,14 +292,11 @@ namespace DOpE
          */
         virtual void
         PointValue_QQ(
-            const DOpEWrapper::DoFHandler<dopedim, DOFHANDLER> &control_dof_handler,
-            const DOpEWrapper::DoFHandler<dealdim, DOFHANDLER> &state_dof_handler,
+            const DOpEWrapper::DoFHandler<dopedim, DH> &control_dof_handler,
+            const DOpEWrapper::DoFHandler<dealdim, DH> &state_dof_handler,
             const std::map<std::string, const dealii::Vector<double>*> &param_values,
             const std::map<std::string, const VECTOR*> &domain_values,
-            VECTOR& rhs,
-            double scale);
-
-
+            VECTOR& rhs, double scale);
 
         /**
          * The same as FunctionalInterface::Value only on boundaries.
@@ -314,7 +307,7 @@ namespace DOpE
          * @param scale                    A factor by which the result is scaled.
          */
         virtual double
-        BoundaryValue(const FDC<DOFHANDLER, VECTOR, dealdim>& fdc);
+        BoundaryValue(const FDC<DH, VECTOR, dealdim>& fdc);
 
         /**
          * The same as FunctionalInterface::Value_U only on boundaries.
@@ -325,7 +318,7 @@ namespace DOpE
          * @param scale                    A factor by which the result is scaled.
          */
         virtual void
-        BoundaryValue_U(const FDC<DOFHANDLER, VECTOR, dealdim>& fdc,
+        BoundaryValue_U(const FDC<DH, VECTOR, dealdim>& fdc,
             dealii::Vector<double> &local_cell_vector, double scale);
 
         /**
@@ -337,7 +330,7 @@ namespace DOpE
          * @param scale                    A factor by which the result is scaled.
          */
         virtual void
-        BoundaryValue_Q(const FDC<DOFHANDLER, VECTOR, dealdim>& fdc,
+        BoundaryValue_Q(const FDC<DH, VECTOR, dealdim>& fdc,
             dealii::Vector<double> &local_cell_vector, double scale);
 
         /**
@@ -349,7 +342,7 @@ namespace DOpE
          * @param scale                    A factor by which the result is scaled.
          */
         virtual void
-        BoundaryValue_UU(const FDC<DOFHANDLER, VECTOR, dealdim>& fdc,
+        BoundaryValue_UU(const FDC<DH, VECTOR, dealdim>& fdc,
             dealii::Vector<double> &local_cell_vector, double scale);
 
         /**
@@ -361,7 +354,7 @@ namespace DOpE
          * @param scale                    A factor by which the result is scaled.
          */
         virtual void
-        BoundaryValue_QU(const FDC<DOFHANDLER, VECTOR, dealdim>& fdc,
+        BoundaryValue_QU(const FDC<DH, VECTOR, dealdim>& fdc,
             dealii::Vector<double> &local_cell_vector, double scale);
 
         /**
@@ -373,7 +366,7 @@ namespace DOpE
          * @param scale                    A factor by which the result is scaled.
          */
         virtual void
-        BoundaryValue_UQ(const FDC<DOFHANDLER, VECTOR, dealdim>& fdc,
+        BoundaryValue_UQ(const FDC<DH, VECTOR, dealdim>& fdc,
             dealii::Vector<double> &local_cell_vector, double scale);
 
         /**
@@ -385,7 +378,7 @@ namespace DOpE
          * @param scale                    A factor by which the result is scaled.
          */
         virtual void
-        BoundaryValue_QQ(const FDC<DOFHANDLER, VECTOR, dealdim>& fdc,
+        BoundaryValue_QQ(const FDC<DH, VECTOR, dealdim>& fdc,
             dealii::Vector<double> &local_cell_vector, double scale);
 
         /**
@@ -396,7 +389,7 @@ namespace DOpE
          *                                 the functional on a face.
          */
         virtual double
-        FaceValue(const FDC<DOFHANDLER, VECTOR, dealdim>& fdc);
+        FaceValue(const FDC<DH, VECTOR, dealdim>& fdc);
 
         /**
          * The same as FunctionalInterface::Value_U only on a faces between elements.
@@ -408,7 +401,7 @@ namespace DOpE
          * @param scale                    A factor by which the result is scaled.
          */
         virtual void
-        FaceValue_U(const FDC<DOFHANDLER, VECTOR, dealdim>& fdc,
+        FaceValue_U(const FDC<DH, VECTOR, dealdim>& fdc,
             dealii::Vector<double> &local_cell_vector, double scale);
 
         /**
@@ -421,7 +414,7 @@ namespace DOpE
          * @param scale                    A factor by which the result is scaled.
          */
         virtual void
-        FaceValue_Q(const FDC<DOFHANDLER, VECTOR, dealdim>& fdc,
+        FaceValue_Q(const FDC<DH, VECTOR, dealdim>& fdc,
             dealii::Vector<double> &local_cell_vector, double scale);
 
         /**
@@ -434,7 +427,7 @@ namespace DOpE
          * @param scale                    A factor by which the result is scaled.
          */
         virtual void
-        FaceValue_UU(const FDC<DOFHANDLER, VECTOR, dealdim>& fdc,
+        FaceValue_UU(const FDC<DH, VECTOR, dealdim>& fdc,
             dealii::Vector<double> &local_cell_vector, double scale);
 
         /**
@@ -447,7 +440,7 @@ namespace DOpE
          * @param scale                    A factor by which the result is scaled.
          */
         virtual void
-        FaceValue_QU(const FDC<DOFHANDLER, VECTOR, dealdim>& fdc,
+        FaceValue_QU(const FDC<DH, VECTOR, dealdim>& fdc,
             dealii::Vector<double> &local_cell_vector, double scale);
 
         /**
@@ -460,7 +453,7 @@ namespace DOpE
          * @param scale                    A factor by which the result is scaled.
          */
         virtual void
-        FaceValue_UQ(const FDC<DOFHANDLER, VECTOR, dealdim>& fdc,
+        FaceValue_UQ(const FDC<DH, VECTOR, dealdim>& fdc,
             dealii::Vector<double> &local_cell_vector, double scale);
 
         /**
@@ -473,7 +466,7 @@ namespace DOpE
          * @param scale                    A factor by which the result is scaled.
          */
         virtual void
-        FaceValue_QQ(const FDC<DOFHANDLER, VECTOR, dealdim>& fdc,
+        FaceValue_QQ(const FDC<DH, VECTOR, dealdim>& fdc,
             dealii::Vector<double> &local_cell_vector, double scale);
 
         /**
@@ -573,7 +566,8 @@ namespace DOpE
         void
         SetProblemType(std::string type);
       protected:
-        std::string GetProblemType() const;
+        std::string
+        GetProblemType() const;
       private:
         std::string _problem_type;
 

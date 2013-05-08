@@ -34,7 +34,7 @@ using namespace dealii;
 using namespace DOpE;
 
 template<typename VECTOR, int dopedim, int dealdim>
-class LocalPDE: public PDEInterface<CellDataContainer,FaceDataContainer,dealii::DoFHandler<dealdim>, VECTOR,dopedim, dealdim>
+class LocalPDE: public PDEInterface<CellDataContainer,FaceDataContainer,dealii::DoFHandler, VECTOR,dopedim, dealdim>
 {
 	public:
 
@@ -44,7 +44,7 @@ class LocalPDE: public PDEInterface<CellDataContainer,FaceDataContainer,dealii::
     }
 
 		// Domain values for cells
-  void CellEquation(const CellDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& cdc, dealii::Vector<double> &local_cell_vector,double scale, double /*scale_ico*/)
+  void CellEquation(const CellDataContainer<dealii::DoFHandler, VECTOR, dealdim>& cdc, dealii::Vector<double> &local_cell_vector,double scale, double /*scale_ico*/)
       {
 	 assert(this->_problem_type == "state");
 			
@@ -73,7 +73,7 @@ class LocalPDE: public PDEInterface<CellDataContainer,FaceDataContainer,dealii::
 	}
 
 
-  void CellMatrix(const CellDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& cdc, FullMatrix<double> &local_entry_matrix, double scale, double)
+  void CellMatrix(const CellDataContainer<dealii::DoFHandler, VECTOR, dealdim>& cdc, FullMatrix<double> &local_entry_matrix, double scale, double)
       {
 	const DOpEWrapper::FEValues<dealdim> & state_fe_values = cdc.GetFEValuesState();
         unsigned int n_dofs_per_cell = cdc.GetNDoFsPerCell();
@@ -101,7 +101,7 @@ class LocalPDE: public PDEInterface<CellDataContainer,FaceDataContainer,dealii::
 	   }
 
 
-  void CellRightHandSide(const CellDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& /*cdc*/,
+  void CellRightHandSide(const CellDataContainer<dealii::DoFHandler, VECTOR, dealdim>& /*cdc*/,
 			 dealii::Vector<double> &local_cell_vector __attribute__((unused)),
 			 double scale __attribute__((unused)))
   {
@@ -109,14 +109,14 @@ class LocalPDE: public PDEInterface<CellDataContainer,FaceDataContainer,dealii::
     
   }
 
-  void CellTimeEquationExplicit(const CellDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& /*cdc*/,
+  void CellTimeEquationExplicit(const CellDataContainer<dealii::DoFHandler, VECTOR, dealdim>& /*cdc*/,
 				dealii::Vector<double> &local_cell_vector __attribute__((unused)),
 				double scale __attribute__((unused)))
   {
     assert(this->_problem_type == "state");
   }
 
-		void CellTimeEquation(const CellDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& cdc,
+		void CellTimeEquation(const CellDataContainer<dealii::DoFHandler, VECTOR, dealdim>& cdc,
                            dealii::Vector<double> &local_cell_vector __attribute__((unused)),
 		       double scale __attribute__((unused)))
 		{
@@ -142,13 +142,13 @@ class LocalPDE: public PDEInterface<CellDataContainer,FaceDataContainer,dealii::
 			}
 		}
 
-		void CellTimeMatrixExplicit(const CellDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& /*cdc*/,
+		void CellTimeMatrixExplicit(const CellDataContainer<dealii::DoFHandler, VECTOR, dealdim>& /*cdc*/,
 					    FullMatrix<double> &/*local_entry_matrix*/)
 		{
 			assert(this->_problem_type == "state");
 		}
 
-		void CellTimeMatrix(const CellDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& cdc,
+		void CellTimeMatrix(const CellDataContainer<dealii::DoFHandler, VECTOR, dealdim>& cdc,
 			      FullMatrix<double> &local_entry_matrix)
 		{
 			assert(this->_problem_type == "state");

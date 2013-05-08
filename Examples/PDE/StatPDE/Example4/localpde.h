@@ -33,7 +33,7 @@ using namespace dealii;
 using namespace DOpE;
 
 template<typename VECTOR,int dealdim>
-  class LocalPDE : public PDEInterface<CellDataContainer,FaceDataContainer,dealii::DoFHandler<dealdim>, VECTOR,dealdim>
+  class LocalPDE : public PDEInterface<CellDataContainer,FaceDataContainer,dealii::DoFHandler, VECTOR,dealdim>
   {
   public:
   LocalPDE() : _state_block_components(2,0)
@@ -42,7 +42,7 @@ template<typename VECTOR,int dealdim>
 
 
     // Domain values for cells
-    void CellEquation (const CellDataContainer<DoFHandler<dealdim>, VECTOR, dealdim>& cdc,
+    void CellEquation (const CellDataContainer<DoFHandler, VECTOR, dealdim>& cdc,
 		       dealii::Vector<double> &local_cell_vector,
 		       double scale, double)
     {
@@ -98,7 +98,7 @@ template<typename VECTOR,int dealdim>
 
     }
 
-    void CellMatrix(const CellDataContainer<DoFHandler<dealdim>, VECTOR, dealdim>& cdc,
+    void CellMatrix(const CellDataContainer<DoFHandler, VECTOR, dealdim>& cdc,
 		     FullMatrix<double> &local_entry_matrix, double scale, double)
     {
       assert(this->_problem_type == "state");
@@ -150,7 +150,7 @@ template<typename VECTOR,int dealdim>
 
     }
 
-    void CellRightHandSide(const CellDataContainer<DoFHandler<dealdim>, VECTOR, dealdim>& /*cdc*/,
+    void CellRightHandSide(const CellDataContainer<DoFHandler, VECTOR, dealdim>& /*cdc*/,
                            dealii::Vector<double> &local_cell_vector __attribute__((unused)),
                            double scale __attribute__((unused)))
     {

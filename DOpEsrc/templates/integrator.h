@@ -162,11 +162,11 @@ namespace DOpE
         GetIntegratorDataContainerFunc() const;
 
       private:
-        template<typename DOFHANDLER>
+        template<template<int, int> class DH>
           void
           InterpolateBoundaryValues(
-              const DOpEWrapper::Mapping<dim, DOFHANDLER>& mapping,
-              const DOpEWrapper::DoFHandler<dim, DOFHANDLER>* dof_handler,
+              const DOpEWrapper::Mapping<dim, DH>& mapping,
+              const DOpEWrapper::DoFHandler<dim, DH>* dof_handler,
               const unsigned int color, const dealii::Function<dim>& function,
               std::map<unsigned int, SCALAR>& boundary_values,
               const std::vector<bool>& comp_mask) const;
@@ -1835,11 +1835,11 @@ namespace DOpE
 
   template<typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR,
       int dim>
-    template<typename DOFHANDLER>
+    template<template<int, int> class DH>
       void
       Integrator<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::InterpolateBoundaryValues(
-          const DOpEWrapper::Mapping<dim, DOFHANDLER>& mapping,
-          const DOpEWrapper::DoFHandler<dim, DOFHANDLER>* dof_handler,
+          const DOpEWrapper::Mapping<dim, DH>& mapping,
+          const DOpEWrapper::DoFHandler<dim, DH>* dof_handler,
           const unsigned int color, const dealii::Function<dim>& function,
           std::map<unsigned int, SCALAR>& boundary_values,
           const std::vector<bool>& comp_mask) const

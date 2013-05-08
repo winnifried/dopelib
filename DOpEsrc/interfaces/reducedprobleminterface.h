@@ -350,7 +350,7 @@ namespace DOpE
    * A template for different solver types to be used for solving
    * PDE- as well as optimization problems.
    */
-  template<typename PROBLEM, typename VECTOR, int dopedim, int dealdim>
+  template<typename PROBLEM, typename VECTOR>
     class ReducedProblemInterface : public ReducedProblemInterface_Base<VECTOR>
     {
       public:

@@ -31,7 +31,7 @@ using namespace dealii;
 using namespace DOpE;
 
 template<typename VECTOR,int dopedim, int dealdim>
-  class LocalFunctional : public FunctionalInterface<CellDataContainer,FaceDataContainer,dealii::DoFHandler<dealdim>, VECTOR,dopedim,dealdim>
+  class LocalFunctional : public FunctionalInterface<CellDataContainer,FaceDataContainer,dealii::DoFHandler, VECTOR,dopedim,dealdim>
   {
   public:
 
@@ -73,7 +73,7 @@ template<typename VECTOR,int dopedim, int dealdim>
 
 
   // compute drag value around cylinder
-  double BoundaryValue(const FaceDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& fdc)
+  double BoundaryValue(const FaceDataContainer<dealii::DoFHandler, VECTOR, dealdim>& fdc)
   {
     const auto & state_fe_face_values = fdc.GetFEFaceValuesState();
     unsigned int n_q_points = fdc.GetNQPoints();
@@ -163,7 +163,7 @@ template<typename VECTOR,int dopedim, int dealdim>
      }
 
 
-  void BoundaryValue_U(const FaceDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& fdc,
+  void BoundaryValue_U(const FaceDataContainer<dealii::DoFHandler, VECTOR, dealdim>& fdc,
 		       dealii::Vector<double> &local_cell_vector, double scale)
   {
     const auto & state_fe_face_values = fdc.GetFEFaceValuesState();
@@ -206,7 +206,7 @@ template<typename VECTOR,int dopedim, int dealdim>
   }
 
 
-  void BoundaryValue_Q(const FaceDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& fdc,
+  void BoundaryValue_Q(const FaceDataContainer<dealii::DoFHandler, VECTOR, dealdim>& fdc,
 		       dealii::Vector<double> &local_cell_vector, double scale)
  {
    const auto & state_fe_face_values = fdc.GetFEFaceValuesState();
@@ -249,7 +249,7 @@ template<typename VECTOR,int dopedim, int dealdim>
  }
 
 
-void BoundaryValue_QQ(const FaceDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& fdc,
+void BoundaryValue_QQ(const FaceDataContainer<dealii::DoFHandler, VECTOR, dealdim>& fdc,
 		      dealii::Vector<double> &local_cell_vector, double scale)
  {
    const auto & state_fe_face_values = fdc.GetFEFaceValuesState();
@@ -297,58 +297,58 @@ void BoundaryValue_QQ(const FaceDataContainer<dealii::DoFHandler<dealdim>, VECTO
      }
  }
 
-void BoundaryValue_UU(const FaceDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& fdc __attribute__((unused)),
+void BoundaryValue_UU(const FaceDataContainer<dealii::DoFHandler, VECTOR, dealdim>& fdc __attribute__((unused)),
 		      dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
 {
   
 }
 
-void BoundaryValue_QU(const FaceDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& fdc __attribute__((unused)),
+void BoundaryValue_QU(const FaceDataContainer<dealii::DoFHandler, VECTOR, dealdim>& fdc __attribute__((unused)),
 		      dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
 {
   
 }
 
-void BoundaryValue_UQ(const FaceDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& fdc __attribute__((unused)),
+void BoundaryValue_UQ(const FaceDataContainer<dealii::DoFHandler, VECTOR, dealdim>& fdc __attribute__((unused)),
 		      dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
 {
   
 }
 
-double Value(const CellDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& cdc __attribute__((unused)))
+double Value(const CellDataContainer<dealii::DoFHandler, VECTOR, dealdim>& cdc __attribute__((unused)))
 {
   return 0.;
 }
 
-void Value_U(const CellDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& cdc __attribute__((unused)),
+void Value_U(const CellDataContainer<dealii::DoFHandler, VECTOR, dealdim>& cdc __attribute__((unused)),
 	     dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
 {
   
 }
 
-void Value_Q(const CellDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& cdc __attribute__((unused)),
+void Value_Q(const CellDataContainer<dealii::DoFHandler, VECTOR, dealdim>& cdc __attribute__((unused)),
 	     dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
 {
   
 }
 
-void Value_UU(const CellDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& cdc __attribute__((unused)),
+void Value_UU(const CellDataContainer<dealii::DoFHandler, VECTOR, dealdim>& cdc __attribute__((unused)),
 	      dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
 {
   
 }
 
-void Value_QU(const CellDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& cdc __attribute__((unused)),
+void Value_QU(const CellDataContainer<dealii::DoFHandler, VECTOR, dealdim>& cdc __attribute__((unused)),
 	      dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
 {
 }
 
-void Value_UQ(const CellDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& cdc __attribute__((unused)),
+void Value_UQ(const CellDataContainer<dealii::DoFHandler, VECTOR, dealdim>& cdc __attribute__((unused)),
 	      dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
 {
 }
 
-void Value_QQ(const CellDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& cdc __attribute__((unused)),
+void Value_QQ(const CellDataContainer<dealii::DoFHandler, VECTOR, dealdim>& cdc __attribute__((unused)),
 	      dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
 {
   

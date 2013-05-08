@@ -32,7 +32,7 @@ using namespace std;
 using namespace dealii;
 using namespace DOpE;
 
-template<typename DOFHANDLER, typename VECTOR, int dealdim>
+template<template<int, int> class DOFHANDLER, typename VECTOR, int dealdim>
   class LocalPDE : public PDEInterface<CellDataContainer, FaceDataContainer,
       DOFHANDLER, VECTOR, dealdim>
   {

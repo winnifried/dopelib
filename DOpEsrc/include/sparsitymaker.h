@@ -40,7 +40,7 @@ namespace DOpE
   /**
    * Constructs the sparsitypattern.
    */
-  template<typename DOFHANDLER, int dim>
+  template<template<int, int> class DH, int dim>
     class SparsityMaker
     {
     public:
@@ -53,14 +53,14 @@ namespace DOpE
       }
       virtual void
       ComputeSparsityPattern(
-          const DOpEWrapper::DoFHandler<dim, DOFHANDLER>& dof_handler,
+          const DOpEWrapper::DoFHandler<dim, DH>& dof_handler,
           dealii::BlockSparsityPattern & sparsity,
           const dealii::ConstraintMatrix& hanging_node_constraints,
           const std::vector<unsigned int>& blocks) const;
 
       virtual void
       ComputeSparsityPattern(
-          const DOpEWrapper::DoFHandler<dim, DOFHANDLER>& dof_handler,
+          const DOpEWrapper::DoFHandler<dim, DH>& dof_handler,
           dealii::SparsityPattern & sparsity,
           const dealii::ConstraintMatrix& hanging_node_constraints,
           const std::vector<unsigned int>& blocks) const;
@@ -70,10 +70,10 @@ namespace DOpE
 
     };
 
-  template<typename DOFHANDLER, int dim>
+  template<template<int, int> class DH, int dim>
     void
-    SparsityMaker<DOFHANDLER, dim>::ComputeSparsityPattern(
-        const DOpEWrapper::DoFHandler<dim, DOFHANDLER>& dof_handler,
+    SparsityMaker<DH, dim>::ComputeSparsityPattern(
+        const DOpEWrapper::DoFHandler<dim, DH>& dof_handler,
         dealii::BlockSparsityPattern & sparsity,
         const dealii::ConstraintMatrix& hanging_node_constraints,
         const std::vector<unsigned int>& blocks) const
@@ -94,10 +94,10 @@ namespace DOpE
     }
 
 
-  template<typename DOFHANDLER, int dim>
+  template<template<int, int> class DH, int dim>
     void
-    SparsityMaker<DOFHANDLER, dim>::ComputeSparsityPattern(
-        const DOpEWrapper::DoFHandler<dim, DOFHANDLER>& dof_handler,
+    SparsityMaker<DH, dim>::ComputeSparsityPattern(
+        const DOpEWrapper::DoFHandler<dim, DH>& dof_handler,
         dealii::SparsityPattern & sparsity,
         const dealii::ConstraintMatrix& hanging_node_constraints,
         const std::vector<unsigned int>& blocks) const

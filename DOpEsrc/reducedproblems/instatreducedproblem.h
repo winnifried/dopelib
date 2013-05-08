@@ -77,7 +77,7 @@ namespace DOpE
  */
 template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER, typename CONTROLINTEGRATOR,
     typename INTEGRATOR, typename PROBLEM, typename VECTOR, int dopedim, int dealdim>
-class InstatReducedProblem: public ReducedProblemInterface<PROBLEM, VECTOR, dopedim, dealdim>
+class InstatReducedProblem: public ReducedProblemInterface<PROBLEM, VECTOR>
 {
   public:
     /**
@@ -409,7 +409,7 @@ void InstatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER, CONTROLINTEGR
           ParameterReader &param_reader,
           INTEGRATORDATACONT& idc,
           int base_priority) :
-            ReducedProblemInterface<PROBLEM, VECTOR, dopedim, dealdim> (OP,
+           ReducedProblemInterface<PROBLEM, VECTOR> (OP,
                 base_priority),
             _u(OP->GetSpaceTimeHandler(), state_behavior, param_reader),
             _z(OP->GetSpaceTimeHandler(), state_behavior, param_reader),
@@ -445,7 +445,7 @@ void InstatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER, CONTROLINTEGR
           CONTROLINTEGRATORCONT& c_idc,
           STATEINTEGRATORDATACONT & s_idc,
           int base_priority) :
-            ReducedProblemInterface<PROBLEM, VECTOR, dopedim, dealdim> (OP,
+           ReducedProblemInterface<PROBLEM, VECTOR> (OP,
                 base_priority),
             _u(OP->GetSpaceTimeHandler(), state_behavior, param_reader),
             _z(OP->GetSpaceTimeHandler(), state_behavior, param_reader),
@@ -529,7 +529,7 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER, typename CON
 void InstatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER, CONTROLINTEGRATOR, INTEGRATOR,
     PROBLEM, VECTOR, dopedim, dealdim>::ReInit()
 {
-  ReducedProblemInterface<PROBLEM, VECTOR, dopedim, dealdim>::ReInit();
+ ReducedProblemInterface<PROBLEM, VECTOR>::ReInit();
 
   //Some Solvers must be reinited when called
   // Better have subproblems, so that solver can be reinited here

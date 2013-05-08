@@ -76,7 +76,7 @@ namespace DOpE
    */
   template <typename CONTROLNONLINEARSOLVER, typename CONTROLINTEGRATOR, typename PROBLEM,
     typename VECTOR, int dopedim, int dealdim>
-    class VoidReducedProblem : public ReducedProblemInterface<PROBLEM,VECTOR,dopedim,dealdim>
+    class VoidReducedProblem : public ReducedProblemInterface<PROBLEM,VECTOR,dealdim>
   {
   public:
     /**
@@ -323,7 +323,7 @@ template <typename CONTROLNONLINEARSOLVER, typename CONTROLINTEGRATOR, typename 
 			 ParameterReader &param_reader,
 			 INTEGRATORDATACONT& idc,
 			 int base_priority)
-  : ReducedProblemInterface<PROBLEM, VECTOR, dopedim, dealdim>(OP,base_priority),
+  : ReducedProblemInterface<PROBLEM, VECTOR,  dealdim>(OP,base_priority),
   _control_integrator(idc),
   _nonlinear_gradient_solver(_control_integrator, param_reader),
   _constraints(OP->GetSpaceTimeHandler(),vector_behavior)
@@ -369,7 +369,7 @@ template <typename CONTROLNONLINEARSOLVER, typename CONTROLINTEGRATOR, typename 
   template <typename CONTROLNONLINEARSOLVER, typename CONTROLINTEGRATOR, typename PROBLEM, typename VECTOR,int dopedim,int dealdim>
   void VoidReducedProblem<CONTROLNONLINEARSOLVER, CONTROLINTEGRATOR, PROBLEM, VECTOR, dopedim, dealdim>::ReInit()
 {
-  ReducedProblemInterface<PROBLEM, VECTOR, dopedim,dealdim>::ReInit();
+  ReducedProblemInterface<PROBLEM, VECTOR, dealdim>::ReInit();
 
   //Some Solvers must be reinited when called
   // Better have subproblems, so that solver can be reinited here

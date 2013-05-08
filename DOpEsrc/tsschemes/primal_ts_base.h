@@ -40,15 +40,15 @@ namespace DOpE
    */
   template<typename OPTPROBLEM, typename SPARSITYPATTERN, typename VECTOR,
       int dopedim, int dealdim,
-      typename FE = dealii::FESystem<dealdim>,
-      typename DOFHANDLER = dealii::DoFHandler<dealdim> >
+      template <int, int> class FE = dealii::FESystem,
+      template <int, int> class DH = dealii::DoFHandler>
     class PrimalTSBase : public TSBase<OPTPROBLEM, SPARSITYPATTERN, VECTOR,
-        dopedim, dealdim, FE, DOFHANDLER>
+        dopedim, dealdim, FE, DH>
     {
       public:
         PrimalTSBase(OPTPROBLEM& OP) :
             TSBase<OPTPROBLEM, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE,
-                DOFHANDLER>(OP)
+                DH>(OP)
         {
         }
 

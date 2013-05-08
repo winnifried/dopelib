@@ -32,7 +32,7 @@ using namespace DOpE;
 
 /***********************************************************************************************/
 template<typename VECTOR, int dealdim>
-  class LocalPDELaplace : public PDEInterface<CellDataContainer,FaceDataContainer,dealii::DoFHandler<dealdim>,
+  class LocalPDELaplace : public PDEInterface<CellDataContainer,FaceDataContainer,dealii::DoFHandler,
       VECTOR, dealdim>
   {
   public:
@@ -44,7 +44,7 @@ template<typename VECTOR, int dealdim>
     // Domain values for cells
     void
     CellEquation(
-        const CellDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& cdc,
+        const CellDataContainer<dealii::DoFHandler, VECTOR, dealdim>& cdc,
         dealii::Vector<double> &local_cell_vector, double scale, double)
     {
       unsigned int n_dofs_per_cell = cdc.GetNDoFsPerCell();
@@ -87,7 +87,7 @@ template<typename VECTOR, int dealdim>
 
     void
     CellMatrix(
-        const CellDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& cdc,
+        const CellDataContainer<dealii::DoFHandler, VECTOR, dealdim>& cdc,
         FullMatrix<double> &local_entry_matrix, double scale, double)
     {
       unsigned int n_dofs_per_cell = cdc.GetNDoFsPerCell();
@@ -123,7 +123,7 @@ template<typename VECTOR, int dealdim>
 
     void
     CellRightHandSide(
-        const CellDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& cdc,
+        const CellDataContainer<dealii::DoFHandler, VECTOR, dealdim>& cdc,
         dealii::Vector<double> &local_cell_vector, double scale)
     {
       assert(this->_problem_type == "state");

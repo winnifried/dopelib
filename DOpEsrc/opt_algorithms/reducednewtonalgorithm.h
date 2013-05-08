@@ -33,12 +33,12 @@
 namespace DOpE
 {
 
-  template <typename PROBLEM, typename VECTOR, int dopedim,  int dealdim>
-    class ReducedNewtonAlgorithm : public ReducedAlgorithm<PROBLEM, VECTOR, dopedim,dealdim>
+  template <typename PROBLEM, typename VECTOR>
+    class ReducedNewtonAlgorithm : public ReducedAlgorithm<PROBLEM, VECTOR>
   {
   public:
     ReducedNewtonAlgorithm(PROBLEM* OP,
-			   ReducedProblemInterface<PROBLEM, VECTOR,dopedim,dealdim>* S,
+			   ReducedProblemInterface<PROBLEM, VECTOR>* S,
 			   ParameterReader &param_reader,
 			   DOpEExceptionHandler<VECTOR>* Except=NULL,
 			   DOpEOutputHandler<VECTOR>* Output=NULL,
@@ -86,8 +86,8 @@ namespace DOpE
   
   /******************************************************/
 
-template <typename PROBLEM, typename VECTOR, int dopedim,int dealdim>
-void ReducedNewtonAlgorithm<PROBLEM, VECTOR, dopedim, dealdim>::declare_params(ParameterReader &param_reader)
+template <typename PROBLEM, typename VECTOR>
+void ReducedNewtonAlgorithm<PROBLEM, VECTOR>::declare_params(ParameterReader &param_reader)
   {
     param_reader.SetSubsection("reducednewtonalgorithm parameters");
     param_reader.declare_entry("nonlinear_maxiter", "10",Patterns::Integer(0));
@@ -104,18 +104,18 @@ void ReducedNewtonAlgorithm<PROBLEM, VECTOR, dopedim, dealdim>::declare_params(P
 
     param_reader.declare_entry("compute_functionals_in_every_step", "false",Patterns::Bool());
 
-    ReducedAlgorithm<PROBLEM, VECTOR, dopedim,dealdim>::declare_params(param_reader);
+    ReducedAlgorithm<PROBLEM, VECTOR>::declare_params(param_reader);
   }
 /******************************************************/
 
-template <typename PROBLEM, typename VECTOR, int dopedim,int dealdim>
-ReducedNewtonAlgorithm<PROBLEM, VECTOR, dopedim, dealdim>::ReducedNewtonAlgorithm(PROBLEM* OP,
-									 ReducedProblemInterface<PROBLEM, VECTOR,dopedim, dealdim>* S,
+template <typename PROBLEM, typename VECTOR>
+ReducedNewtonAlgorithm<PROBLEM, VECTOR>::ReducedNewtonAlgorithm(PROBLEM* OP,
+									 ReducedProblemInterface<PROBLEM, VECTOR>* S,
 									 ParameterReader &param_reader,
 									 DOpEExceptionHandler<VECTOR>* Except,
 									 DOpEOutputHandler<VECTOR>* Output,
 									 int base_priority)
-  : ReducedAlgorithm<PROBLEM, VECTOR,dopedim, dealdim>(OP,S,param_reader,Except,Output,base_priority)
+  : ReducedAlgorithm<PROBLEM, VECTOR>(OP,S,param_reader,Except,Output,base_priority)
   {
 
     param_reader.SetSubsection("reducednewtonalgorithm parameters");
@@ -138,16 +138,16 @@ ReducedNewtonAlgorithm<PROBLEM, VECTOR, dopedim, dealdim>::ReducedNewtonAlgorith
 
 /******************************************************/
 
-template <typename PROBLEM, typename VECTOR, int dopedim,int dealdim>
-ReducedNewtonAlgorithm<PROBLEM, VECTOR, dopedim, dealdim>::~ReducedNewtonAlgorithm()
+template <typename PROBLEM, typename VECTOR>
+ReducedNewtonAlgorithm<PROBLEM, VECTOR>::~ReducedNewtonAlgorithm()
   {
 
   }
 
 /******************************************************/
 
-template <typename PROBLEM, typename VECTOR,int dopedim,int dealdim>
-  double ReducedNewtonAlgorithm<PROBLEM, VECTOR, dopedim, dealdim>::NewtonResidual(const ControlVector<VECTOR>& q) 
+template <typename PROBLEM, typename VECTOR>
+  double ReducedNewtonAlgorithm<PROBLEM, VECTOR>::NewtonResidual(const ControlVector<VECTOR>& q)
 {
   //Solve j'(q) = 0
   ControlVector<VECTOR> gradient(q), gradient_transposed(q);
@@ -175,8 +175,8 @@ template <typename PROBLEM, typename VECTOR,int dopedim,int dealdim>
 
 /******************************************************/
 
-template <typename PROBLEM, typename VECTOR, int dopedim,int dealdim>
-int ReducedNewtonAlgorithm<PROBLEM, VECTOR, dopedim, dealdim>::Solve(ControlVector<VECTOR>& q,double global_tol)
+template <typename PROBLEM, typename VECTOR>
+int ReducedNewtonAlgorithm<PROBLEM, VECTOR>::Solve(ControlVector<VECTOR>& q,double global_tol)
 {
 
   q.ReInit();
@@ -359,8 +359,8 @@ int ReducedNewtonAlgorithm<PROBLEM, VECTOR, dopedim, dealdim>::Solve(ControlVect
 
 /******************************************************/
 
-template <typename PROBLEM, typename VECTOR, int dopedim,int dealdim>
-int ReducedNewtonAlgorithm<PROBLEM, VECTOR, dopedim, dealdim>::SolveReducedLinearSystem(const ControlVector<VECTOR>& q,
+template <typename PROBLEM, typename VECTOR>
+int ReducedNewtonAlgorithm<PROBLEM, VECTOR>::SolveReducedLinearSystem(const ControlVector<VECTOR>& q,
 									       const ControlVector<VECTOR>& gradient,
 									       const ControlVector<VECTOR>& gradient_transposed,
 									       ControlVector<VECTOR>& dq)
@@ -455,8 +455,8 @@ int ReducedNewtonAlgorithm<PROBLEM, VECTOR, dopedim, dealdim>::SolveReducedLinea
 
 /******************************************************/
 
-template <typename PROBLEM, typename VECTOR, int dopedim,int dealdim>
-int ReducedNewtonAlgorithm<PROBLEM, VECTOR, dopedim, dealdim>::ReducedNewtonLineSearch(const ControlVector<VECTOR>& dq,
+template <typename PROBLEM, typename VECTOR>
+int ReducedNewtonAlgorithm<PROBLEM, VECTOR>::ReducedNewtonLineSearch(const ControlVector<VECTOR>& dq,
 							     const ControlVector<VECTOR>&  gradient,
 							     double& cost,
 							     ControlVector<VECTOR>& q)

@@ -39,7 +39,7 @@ using namespace DOpE;
 
 template<typename VECTOR, int dopedim, int dealdim>
   class LocalFunctional : public FunctionalInterface<CellDataContainer,
-      FaceDataContainer, dealii::DoFHandler<dealdim>, VECTOR, dopedim, dealdim>
+      FaceDataContainer, dealii::DoFHandler, VECTOR, dopedim, dealdim>
   {
     public:
       LocalFunctional()
@@ -59,7 +59,7 @@ template<typename VECTOR, int dopedim, int dealdim>
 
       double
       Value(
-          const CellDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& cdc)
+          const CellDataContainer<dealii::DoFHandler, VECTOR, dealdim>& cdc)
       {
         const DOpEWrapper::FEValues<dealdim> & state_fe_values =
             cdc.GetFEValuesState();
@@ -82,8 +82,8 @@ template<typename VECTOR, int dopedim, int dealdim>
 
       double
       PointValue(
-          const DOpEWrapper::DoFHandler<dopedim, dealii::DoFHandler<dealdim> > &/*control_dof_handler*/,
-          const DOpEWrapper::DoFHandler<dealdim, dealii::DoFHandler<dealdim> > &state_dof_handler,
+          const DOpEWrapper::DoFHandler<dopedim, dealii::DoFHandler > &/*control_dof_handler*/,
+          const DOpEWrapper::DoFHandler<dealdim, dealii::DoFHandler > &state_dof_handler,
           const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
           const std::map<std::string, const VECTOR*> &domain_values)
       {
@@ -116,15 +116,15 @@ template<typename VECTOR, int dopedim, int dealdim>
 
       void
       Value_U(
-	const CellDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& /*cdc*/,
+	const CellDataContainer<dealii::DoFHandler, VECTOR, dealdim>& /*cdc*/,
 	dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
       {
       }
 
       virtual void
       PointValue_U(
-          const DOpEWrapper::DoFHandler<dopedim, dealii::DoFHandler<dealdim> > &/*control_dof_handler*/,
-          const DOpEWrapper::DoFHandler<dealdim, dealii::DoFHandler<dealdim> > &state_dof_handler,
+          const DOpEWrapper::DoFHandler<dopedim, dealii::DoFHandler > &/*control_dof_handler*/,
+          const DOpEWrapper::DoFHandler<dealdim, dealii::DoFHandler > &state_dof_handler,
           const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
           const std::map<std::string, const VECTOR*> &domain_values,
           VECTOR& rhs, double scale)
@@ -169,8 +169,8 @@ template<typename VECTOR, int dopedim, int dealdim>
 
       virtual void
       PointValue_Q(
-          const DOpEWrapper::DoFHandler<dopedim, dealii::DoFHandler<dealdim>> &/*control_dof_handler*/,
-          const DOpEWrapper::DoFHandler<dealdim, dealii::DoFHandler<dealdim>> &,
+          const DOpEWrapper::DoFHandler<dopedim, dealii::DoFHandler> &/*control_dof_handler*/,
+          const DOpEWrapper::DoFHandler<dealdim, dealii::DoFHandler> &,
           const std::map<std::string, const dealii::Vector<double>*> &,
           const std::map<std::string, const VECTOR*> &,
           VECTOR&, double)
@@ -179,7 +179,7 @@ template<typename VECTOR, int dopedim, int dealdim>
 
       void
       Value_Q(
-          const CellDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& cdc,
+          const CellDataContainer<dealii::DoFHandler, VECTOR, dealdim>& cdc,
           dealii::Vector<double> &local_cell_vector, double scale)
       {
         const DOpEWrapper::FEValues<dealdim> & state_fe_values =
@@ -203,15 +203,15 @@ template<typename VECTOR, int dopedim, int dealdim>
 
       void
       Value_UU(
-          const CellDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>&,
+          const CellDataContainer<dealii::DoFHandler, VECTOR, dealdim>&,
           dealii::Vector<double> &, double )
       {
       }
 
       virtual void
       PointValue_UU(
-          const DOpEWrapper::DoFHandler<dopedim, dealii::DoFHandler<dealdim> > &/*control_dof_handler*/,
-          const DOpEWrapper::DoFHandler<dealdim, dealii::DoFHandler<dealdim> > &state_dof_handler,
+          const DOpEWrapper::DoFHandler<dopedim, dealii::DoFHandler > &/*control_dof_handler*/,
+          const DOpEWrapper::DoFHandler<dealdim, dealii::DoFHandler > &state_dof_handler,
           const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
           const std::map<std::string, const VECTOR*> &domain_values,
           VECTOR& rhs, double scale)
@@ -251,8 +251,8 @@ template<typename VECTOR, int dopedim, int dealdim>
 
       virtual void
       PointValue_QU(
-          const DOpEWrapper::DoFHandler<dopedim, dealii::DoFHandler<dealdim> > &/*control_dof_handler*/,
-          const DOpEWrapper::DoFHandler<dealdim, dealii::DoFHandler<dealdim> > &/*state_dof_handler*/,
+          const DOpEWrapper::DoFHandler<dopedim, dealii::DoFHandler > &/*control_dof_handler*/,
+          const DOpEWrapper::DoFHandler<dealdim, dealii::DoFHandler > &/*state_dof_handler*/,
           const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
           const std::map<std::string, const VECTOR*> &/*domain_values*/,
           VECTOR& /*rhs*/, double /*scale*/)
@@ -262,8 +262,8 @@ template<typename VECTOR, int dopedim, int dealdim>
 
       virtual void
       PointValue_UQ(
-          const DOpEWrapper::DoFHandler<dopedim, dealii::DoFHandler<dealdim> > &/*control_dof_handler*/,
-          const DOpEWrapper::DoFHandler<dealdim, dealii::DoFHandler<dealdim> > &/*state_dof_handler*/,
+          const DOpEWrapper::DoFHandler<dopedim, dealii::DoFHandler > &/*control_dof_handler*/,
+          const DOpEWrapper::DoFHandler<dealdim, dealii::DoFHandler > &/*state_dof_handler*/,
           const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
           const std::map<std::string, const VECTOR*> &/*domain_values*/,
           VECTOR& /*rhs*/, double /*scale*/)
@@ -273,8 +273,8 @@ template<typename VECTOR, int dopedim, int dealdim>
 
       virtual void
       PointValue_QQ(
-          const DOpEWrapper::DoFHandler<dopedim, dealii::DoFHandler<dealdim> > &/*control_dof_handler*/,
-          const DOpEWrapper::DoFHandler<dealdim, dealii::DoFHandler<dealdim> > &/*state_dof_handler*/,
+          const DOpEWrapper::DoFHandler<dopedim, dealii::DoFHandler > &/*control_dof_handler*/,
+          const DOpEWrapper::DoFHandler<dealdim, dealii::DoFHandler > &/*state_dof_handler*/,
           const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
           const std::map<std::string, const VECTOR*> &/*domain_values*/,
           VECTOR& /*rhs*/, double /*scale*/)
@@ -284,7 +284,7 @@ template<typename VECTOR, int dopedim, int dealdim>
 
       void
       Value_QU(
-          const CellDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& cdc __attribute__((unused)),
+          const CellDataContainer<dealii::DoFHandler, VECTOR, dealdim>& cdc __attribute__((unused)),
           dealii::Vector<double> &local_cell_vector __attribute__((unused)),
           double scale __attribute__((unused)))
       {
@@ -292,7 +292,7 @@ template<typename VECTOR, int dopedim, int dealdim>
 
       void
       Value_UQ(
-          const CellDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& cdc __attribute__((unused)),
+          const CellDataContainer<dealii::DoFHandler, VECTOR, dealdim>& cdc __attribute__((unused)),
           dealii::Vector<double> &local_cell_vector __attribute__((unused)),
           double scale __attribute__((unused)))
       {
@@ -300,7 +300,7 @@ template<typename VECTOR, int dopedim, int dealdim>
 
       void
       Value_QQ(
-          const CellDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& cdc,
+          const CellDataContainer<dealii::DoFHandler, VECTOR, dealdim>& cdc,
           dealii::Vector<double> &local_cell_vector, double scale)
       {
         const DOpEWrapper::FEValues<dealdim> & state_fe_values =
@@ -341,7 +341,7 @@ template<typename VECTOR, int dopedim, int dealdim>
 
     private:
       void
-      create_point_source(const dealii::DoFHandler<dealdim>& dof_handler,
+      create_point_source(const dealii::DoFHandler& dof_handler,
           const Point<dealdim> point, const unsigned int component,
           VECTOR& rhs_vector)
       {
@@ -350,7 +350,7 @@ template<typename VECTOR, int dopedim, int dealdim>
 
         rhs_vector = 0;
 
-        std::pair<typename DoFHandler<dealdim>::active_cell_iterator,
+        std::pair<typename DoFHandler::active_cell_iterator,
             Point<dealdim> > cell_point =
             GridTools::find_active_cell_around_point(
                 StaticMappingQ1<dealdim>::mapping, dof_handler, point);

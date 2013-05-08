@@ -38,7 +38,7 @@
 
 namespace DOpEWrapper
 {
-  template<int dim, typename DOFHANDLER = dealii::DoFHandler<dim> >
+  template<int dim, template<int, int> class DH = dealii::DoFHandler>
     class Mapping
     {
       private:
@@ -51,17 +51,17 @@ namespace DOpEWrapper
   /************************************************************************************/
 
   template<int dim>
-    class Mapping<dim, dealii::DoFHandler<dim> > : public dealii::MappingQ<dim>
+    class Mapping<dim, dealii::DoFHandler > : public dealii::MappingQ<dim>
     {
       public:
         Mapping(const unsigned int p, const bool use_mapping_q_on_all_cells =
-            false)
-            : dealii::MappingQ<dim>(p, use_mapping_q_on_all_cells)
+            false) :
+            dealii::MappingQ<dim>(p, use_mapping_q_on_all_cells)
         {
         }
 
-        Mapping(const dealii::MappingQ<dim> &mapping)
-            : dealii::MappingQ<dim>(mapping)
+        Mapping(const dealii::MappingQ<dim> &mapping) :
+            dealii::MappingQ<dim>(mapping)
         {
         }
 
@@ -88,44 +88,44 @@ namespace DOpEWrapper
    * Collections!
    */
   template<int dim>
-    class Mapping<dim, dealii::hp::DoFHandler<dim> > : public dealii::hp::MappingCollection<
+    class Mapping<dim, dealii::hp::DoFHandler> : public dealii::hp::MappingCollection<
         dim>
     {
       public:
-        Mapping()
-            : dealii::hp::MappingCollection<dim>()
+        Mapping() :
+            dealii::hp::MappingCollection<dim>()
         {
         }
 
-        Mapping(const dealii::Mapping<dim>& mapping)
-            : dealii::hp::MappingCollection<dim>(mapping)
+        Mapping(const dealii::Mapping<dim>& mapping) :
+            dealii::hp::MappingCollection<dim>(mapping)
         {
         }
-        Mapping(const dealii::hp::MappingCollection<dim> & mapping_collection)
-            : dealii::hp::MappingCollection<dim>(mapping_collection)
+        Mapping(const dealii::hp::MappingCollection<dim> & mapping_collection) :
+            dealii::hp::MappingCollection<dim>(mapping_collection)
         {
         }
     };
 
   /************************************************************************************/
 
-  template<int dim, typename DOFHANDLER>
+  template<int dim, template<int, int> class DH>
     struct StaticMappingQ1
     {
     };
 
   template<int dim>
-    struct StaticMappingQ1<dim, dealii::DoFHandler<dim> >
+    struct StaticMappingQ1<dim, dealii::DoFHandler>
     {
       public:
-        static Mapping<dim, dealii::DoFHandler<dim> > mapping_q1;
+        static Mapping<dim, dealii::DoFHandler> mapping_q1;
     };
 
   template<int dim>
-    struct StaticMappingQ1<dim, dealii::hp::DoFHandler<dim> >
+    struct StaticMappingQ1<dim, dealii::hp::DoFHandler>
     {
       public:
-        static Mapping<dim, dealii::hp::DoFHandler<dim> > mapping_q1;
+        static Mapping<dim, dealii::hp::DoFHandler> mapping_q1;
     };
 }
 

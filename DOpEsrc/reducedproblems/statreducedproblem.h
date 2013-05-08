@@ -79,8 +79,7 @@ namespace DOpE
   template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
       typename CONTROLINTEGRATOR, typename INTEGRATOR, typename PROBLEM,
       typename VECTOR, int dopedim, int dealdim>
-    class StatReducedProblem : public ReducedProblemInterface<PROBLEM, VECTOR,
-        dopedim, dealdim>
+    class StatReducedProblem : public ReducedProblemInterface<PROBLEM, VECTOR>
     {
       public:
         /**
@@ -463,7 +462,7 @@ namespace DOpE
           PROBLEM *OP, std::string state_behavior,
           ParameterReader &param_reader, INTEGRATORDATACONT& idc,
           int base_priority)
-          : ReducedProblemInterface<PROBLEM, VECTOR, dopedim, dealdim>(OP,
+          : ReducedProblemInterface<PROBLEM, VECTOR>(OP,
               base_priority), _u(OP->GetSpaceTimeHandler(), state_behavior,
               param_reader), _z(OP->GetSpaceTimeHandler(), state_behavior,
               param_reader), _du(OP->GetSpaceTimeHandler(), state_behavior,
@@ -494,7 +493,7 @@ namespace DOpE
           PROBLEM *OP, std::string state_behavior,
           ParameterReader &param_reader, CONTROLINTEGRATORCONT& c_idc,
           STATEINTEGRATORDATACONT & s_idc, int base_priority)
-          : ReducedProblemInterface<PROBLEM, VECTOR, dopedim, dealdim>(OP,
+          : ReducedProblemInterface<PROBLEM, VECTOR>(OP,
               base_priority), _u(OP->GetSpaceTimeHandler(), state_behavior,
               param_reader), _z(OP->GetSpaceTimeHandler(), state_behavior,
               param_reader), _du(OP->GetSpaceTimeHandler(), state_behavior,
@@ -581,7 +580,7 @@ namespace DOpE
     StatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER,
         CONTROLINTEGRATOR, INTEGRATOR, PROBLEM, VECTOR, dopedim, dealdim>::ReInit()
     {
-      ReducedProblemInterface<PROBLEM, VECTOR, dopedim, dealdim>::ReInit();
+      ReducedProblemInterface<PROBLEM, VECTOR>::ReInit();
 
       //Some Solvers must be reinited when called
       // Better have subproblems, so that solver can be reinited here

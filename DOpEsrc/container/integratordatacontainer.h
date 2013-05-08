@@ -50,7 +50,7 @@ namespace DOpE
    * This class manages the different kind of cell- and facedatacontainers
    * needed in the integrator.
    */
-  template<typename DOFHANDLER, typename QUADRATURE, typename FACEQUADRATURE,
+  template<template<int, int> class DH, typename QUADRATURE, typename FACEQUADRATURE,
       typename VECTOR, int dim>
     class IntegratorDataContainer
     {
@@ -94,13 +94,13 @@ namespace DOpE
           InitializeFDC(const FACEQUADRATURE& fquad, UpdateFlags update_flags,
               STH& sth,
               const std::vector<
-                  typename DOpEWrapper::DoFHandler<dim, DOFHANDLER>::active_cell_iterator>& cell,
+                  typename DOpEWrapper::DoFHandler<dim, DH>::active_cell_iterator>& cell,
               const std::map<std::string, const Vector<double>*> &param_values,
               const std::map<std::string, const VECTOR*> &domain_values,
               bool need_interfaces = false)
           {
               delete _fdc;
-            _fdc = new FaceDataContainer<DOFHANDLER, VECTOR, dim>(fquad,
+            _fdc = new FaceDataContainer<DH, VECTOR, dim>(fquad,
                 update_flags, sth, cell, param_values, domain_values,
                 need_interfaces);
           }
@@ -113,7 +113,7 @@ namespace DOpE
           void
           InitializeFDC(UpdateFlags update_flags, STH& sth,
               const std::vector<
-                  typename DOpEWrapper::DoFHandler<dim, DOFHANDLER>::active_cell_iterator>& cell,
+                  typename DOpEWrapper::DoFHandler<dim, DH>::active_cell_iterator>& cell,
               const std::map<std::string, const Vector<double>*> &param_values,
               const std::map<std::string, const VECTOR*> &domain_values,
               bool need_interfaces = false)
@@ -130,13 +130,13 @@ namespace DOpE
           InitializeCDC(const QUADRATURE& quad, UpdateFlags update_flags,
               STH& sth,
               const std::vector<
-                  typename DOpEWrapper::DoFHandler<dim, DOFHANDLER>::active_cell_iterator>& cell,
+                  typename DOpEWrapper::DoFHandler<dim, DH>::active_cell_iterator>& cell,
               const std::map<std::string, const Vector<double>*> &param_values,
               const std::map<std::string, const VECTOR*> &domain_values)
           {
             if (_cdc != NULL)
               delete _cdc;
-            _cdc = new CellDataContainer<DOFHANDLER, VECTOR, dim>(quad,
+            _cdc = new CellDataContainer<DH, VECTOR, dim>(quad,
                 update_flags, sth, cell, param_values, domain_values);
           }
 
@@ -148,7 +148,7 @@ namespace DOpE
           void
           InitializeCDC(UpdateFlags update_flags, STH& sth,
               const std::vector<
-                  typename DOpEWrapper::DoFHandler<dim, DOFHANDLER>::active_cell_iterator>& cell,
+                  typename DOpEWrapper::DoFHandler<dim, DH>::active_cell_iterator>& cell,
               const std::map<std::string, const Vector<double>*> &param_values,
               const std::map<std::string, const VECTOR*> &domain_values)
           {
@@ -162,7 +162,7 @@ namespace DOpE
         template<typename STH>
           void
           InitializeMMFDC(UpdateFlags update_flags, STH& sth,
-              const typename std::vector<typename DOFHANDLER::cell_iterator>& cell,
+              const typename std::vector<typename DH<dim, dim>::cell_iterator>& cell,
               const typename std::vector<
                   typename dealii::Triangulation<dim>::cell_iterator>& tria_cell,
               const std::map<std::string, const Vector<double>*> &param_values,
@@ -171,7 +171,7 @@ namespace DOpE
           {
             if (_mm_fdc != NULL)
               delete _mm_fdc;
-            _mm_fdc = new Multimesh_FaceDataContainer<DOFHANDLER, VECTOR, dim>(
+            _mm_fdc = new Multimesh_FaceDataContainer<DH, VECTOR, dim>(
                 GetFaceQuad(), update_flags, sth, cell, tria_cell, param_values,
                 domain_values, need_interfaces);
           }
@@ -182,7 +182,7 @@ namespace DOpE
         template<typename STH>
           void
           InitializeMMCDC(UpdateFlags update_flags, STH& sth,
-              const typename std::vector<typename DOFHANDLER::cell_iterator>& cell,
+              const typename std::vector<typename DH<dim, dim>::cell_iterator>& cell,
               const typename std::vector<
                   typename dealii::Triangulation<dim>::cell_iterator>& tria_cell,
               const std::map<std::string, const Vector<double>*> &param_values,
@@ -190,7 +190,7 @@ namespace DOpE
           {
             if (_mm_cdc != NULL)
               delete _mm_cdc;
-            _mm_cdc = new Multimesh_CellDataContainer<DOFHANDLER, VECTOR, dim>(
+            _mm_cdc = new Multimesh_CellDataContainer<DH, VECTOR, dim>(
                 GetQuad(), update_flags, sth, cell, tria_cell, param_values,
                 domain_values);
           }
@@ -207,7 +207,7 @@ namespace DOpE
           return *_face_quad;
         }
 
-        FaceDataContainer<DOFHANDLER, VECTOR, dim>&
+        FaceDataContainer<DH, VECTOR, dim>&
         GetFaceDataContainer() const
         {
           if (_fdc != NULL)
@@ -217,7 +217,7 @@ namespace DOpE
                 "IntegratorDataContainer::GetFaceDataContainer");
         }
 
-        CellDataContainer<DOFHANDLER, VECTOR, dim>&
+        CellDataContainer<DH, VECTOR, dim>&
         GetCellDataContainer() const
         {
           if (_cdc != NULL)
@@ -227,7 +227,7 @@ namespace DOpE
                 "IntegratorDataContainer::GetCellDataContainer");
         }
 
-        Multimesh_FaceDataContainer<DOFHANDLER, VECTOR, dim>&
+        Multimesh_FaceDataContainer<DH, VECTOR, dim>&
         GetMultimeshFaceDataContainer() const
         {
           if (_mm_fdc != NULL)
@@ -237,7 +237,7 @@ namespace DOpE
                 "IntegratorDataContainer::GetMultimeshFaceDataContainer");
         }
 
-        Multimesh_CellDataContainer<DOFHANDLER, VECTOR, dim>&
+        Multimesh_CellDataContainer<DH, VECTOR, dim>&
         GetMultimeshCellDataContainer() const
         {
           if (_mm_cdc != NULL)
@@ -249,10 +249,10 @@ namespace DOpE
       private:
         QUADRATURE const* _quad;
         FACEQUADRATURE const* _face_quad;
-        FaceDataContainer<DOFHANDLER, VECTOR, dim>* _fdc;
-        CellDataContainer<DOFHANDLER, VECTOR, dim>* _cdc;
-        Multimesh_FaceDataContainer<DOFHANDLER, VECTOR, dim>* _mm_fdc;
-        Multimesh_CellDataContainer<DOFHANDLER, VECTOR, dim>* _mm_cdc;
+        FaceDataContainer<DH, VECTOR, dim>* _fdc;
+        CellDataContainer<DH, VECTOR, dim>* _cdc;
+        Multimesh_FaceDataContainer<DH, VECTOR, dim>* _mm_fdc;
+        Multimesh_CellDataContainer<DH, VECTOR, dim>* _mm_cdc;
     };
 
 } //end of namespace

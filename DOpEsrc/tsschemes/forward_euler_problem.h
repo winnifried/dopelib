@@ -36,8 +36,8 @@ namespace DOpE
    * @tparam <OPTPROBLEM>       The problem to deal with.
    * @tparam <SPARSITYPATTERN>  The sparsity pattern for control & state.
    * @tparam <VECTOR>           The vector type for control & state (i.e. dealii::Vector<double> or dealii::BlockVector<double>)
-   * @tparam <FE>               The type of finite elements in use, must be compatible with the DOFHANDLER.
-   * @tparam <DOFHANDLER>       The type of the DoFHandler in use (to be more precise: The type of the dealii-DoFhandler which forms
+   * @tparam <FE>               The type of finite elements in use, must be compatible with the DH.
+   * @tparam <DH>               The type of the DoFHandler in use (to be more precise: The type of the dealii-DoFhandler which forms
    *                            the base class of the DOpEWrapper::DoFHandler in use.)
    * @tparam <dopedim>          The dimension for the control variable.
    * @tparam <dealdim>          The dimension of the state variable.
@@ -45,15 +45,15 @@ namespace DOpE
    */
   template<typename OPTPROBLEM, typename SPARSITYPATTERN, typename VECTOR,
       int dopedim, int dealdim,
-      typename FE = dealii::FESystem<dealdim>,
-      typename DOFHANDLER = dealii::DoFHandler<dealdim>>
+      template <int, int> class FE = dealii::FESystem,
+      template <int, int> class DH = dealii::DoFHandler>
     class ForwardEulerProblem : public PrimalTSBase<OPTPROBLEM,
-    SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DOFHANDLER>
+    SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>
     {
       public:
         ForwardEulerProblem(OPTPROBLEM& OP) :
             PrimalTSBase<OPTPROBLEM, SPARSITYPATTERN, VECTOR, dopedim, dealdim,
-                FE, DOFHANDLER>(OP)
+                FE, DH>(OP)
         {
           _initial_problem = NULL;
         }
@@ -78,12 +78,12 @@ namespace DOpE
       
       /******************************************************/
 
-      InitialProblem<ForwardEulerProblem<OPTPROBLEM, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DOFHANDLER>, VECTOR, dealdim>&
+      InitialProblem<ForwardEulerProblem<OPTPROBLEM, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>, VECTOR, dealdim>&
       GetInitialProblem()
       {
 	if (_initial_problem == NULL)
 	{
-	  _initial_problem = new InitialProblem<ForwardEulerProblem<OPTPROBLEM, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DOFHANDLER>, VECTOR, dealdim>
+	  _initial_problem = new InitialProblem<ForwardEulerProblem<OPTPROBLEM, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>, VECTOR, dealdim>
 	  (*this);
 	}
 	return *_initial_problem;
@@ -91,7 +91,7 @@ namespace DOpE
 
       /******************************************************/
       ForwardEulerProblem<OPTPROBLEM, SPARSITYPATTERN, VECTOR, dopedim,
-          dealdim, FE, DOFHANDLER>&
+          dealdim, FE, DH>&
       GetBaseProblem()
       {
         return *this;
@@ -493,7 +493,7 @@ namespace DOpE
           this->GetProblem().BoundaryMatrix(fdc, local_entry_matrix, 0., 1.* this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize());
         }
     private:
-      InitialProblem<ForwardEulerProblem<OPTPROBLEM, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DOFHANDLER>, VECTOR, dealdim> * _initial_problem;
+      InitialProblem<ForwardEulerProblem<OPTPROBLEM, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>, VECTOR, dealdim> * _initial_problem;
     };
 }
 

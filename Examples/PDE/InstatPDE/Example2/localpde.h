@@ -35,7 +35,7 @@ using namespace dealii;
 using namespace DOpE;
 
 template<typename VECTOR, int dopedim, int dealdim>
-  class LocalPDE : public PDEInterface<CellDataContainer,FaceDataContainer,dealii::DoFHandler<dealdim>, VECTOR,dopedim,dealdim>
+  class LocalPDE : public PDEInterface<CellDataContainer,FaceDataContainer,dealii::DoFHandler, VECTOR,dopedim,dealdim>
   {
   public:
 
@@ -91,7 +91,7 @@ template<typename VECTOR, int dopedim, int dealdim>
 
      // The part of CellEquation scaled by scale contains all "normal" terms which
      // can be treated by full "theta" time-discretization
-     void CellEquation(const CellDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& cdc,
+     void CellEquation(const CellDataContainer<dealii::DoFHandler, VECTOR, dealdim>& cdc,
 				   dealii::Vector<double> &local_cell_vector,
 				   double scale, double scale_ico)
     {
@@ -274,7 +274,7 @@ template<typename VECTOR, int dopedim, int dealdim>
 	}
     }
 
-    void CellMatrix(const CellDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& cdc,
+    void CellMatrix(const CellDataContainer<dealii::DoFHandler, VECTOR, dealdim>& cdc,
 		    FullMatrix<double> &local_entry_matrix, double scale, double scale_ico)
     {
       const DOpEWrapper::FEValues<dealdim> & state_fe_values = cdc.GetFEValuesState();
@@ -528,7 +528,7 @@ template<typename VECTOR, int dopedim, int dealdim>
     }
 
 
-    void CellRightHandSide(const CellDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& /*cdc*/,
+    void CellRightHandSide(const CellDataContainer<dealii::DoFHandler, VECTOR, dealdim>& /*cdc*/,
                            dealii::Vector<double> &local_cell_vector __attribute__((unused)),
                            double scale __attribute__((unused)))
     {
@@ -536,14 +536,14 @@ template<typename VECTOR, int dopedim, int dealdim>
     }
 
 
-    void CellTimeEquation (const CellDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& /*cdc*/,
+    void CellTimeEquation (const CellDataContainer<dealii::DoFHandler, VECTOR, dealdim>& /*cdc*/,
                            dealii::Vector<double> &local_cell_vector __attribute__((unused)),
 				   double scale __attribute__((unused)))
     {
       assert(this->_problem_type == "state");
     }
 
-  void CellTimeEquationExplicit (const CellDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& cdc,
+  void CellTimeEquationExplicit (const CellDataContainer<dealii::DoFHandler, VECTOR, dealdim>& cdc,
                            dealii::Vector<double> &local_cell_vector,
 				   double scale)
     {
@@ -662,13 +662,13 @@ template<typename VECTOR, int dopedim, int dealdim>
     }
 
 
-  void CellTimeMatrix(const CellDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& /*cdc*/,
+  void CellTimeMatrix(const CellDataContainer<dealii::DoFHandler, VECTOR, dealdim>& /*cdc*/,
 			FullMatrix<double> &/*local_entry_matrix*/)
     {
       assert(this->_problem_type == "state");
     }
 
-    void CellTimeMatrixExplicit(const CellDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& cdc,
+    void CellTimeMatrixExplicit(const CellDataContainer<dealii::DoFHandler, VECTOR, dealdim>& cdc,
 				FullMatrix<double> &local_entry_matrix)
     {
       assert(this->_problem_type == "state");
@@ -815,7 +815,7 @@ template<typename VECTOR, int dopedim, int dealdim>
 
 
     // Values for boundary integrals
-    void BoundaryEquation (const FaceDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& fdc,
+    void BoundaryEquation (const FaceDataContainer<dealii::DoFHandler, VECTOR, dealdim>& fdc,
 			   dealii::Vector<double> &local_cell_vector,
 			   double scale, double /*scale_ico*/)
     {
@@ -875,7 +875,7 @@ template<typename VECTOR, int dopedim, int dealdim>
 
     }
 
-    void BoundaryMatrix (const FaceDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& fdc,
+    void BoundaryMatrix (const FaceDataContainer<dealii::DoFHandler, VECTOR, dealdim>& fdc,
 			 dealii::FullMatrix<double> &local_entry_matrix,
 			 double scale, double /*scale_ico*/)
     {
@@ -972,7 +972,7 @@ template<typename VECTOR, int dopedim, int dealdim>
 	}
     }
 
-    void BoundaryRightHandSide (const FaceDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& /*fdc*/,
+    void BoundaryRightHandSide (const FaceDataContainer<dealii::DoFHandler, VECTOR, dealdim>& /*fdc*/,
 				dealii::Vector<double> &/*local_cell_vector*/,
 				double /*scale*/)
      {

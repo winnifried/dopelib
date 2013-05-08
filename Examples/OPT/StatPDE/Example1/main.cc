@@ -62,12 +62,12 @@ using namespace dealii;
 using namespace DOpE;
 
 #define VECTOR BlockVector<double>
-#define DOFHANDLER DoFHandler<2>
-#define FE FESystem<2>
+#define DOFHANDLER DoFHandler
+#define FE FESystem
 
 typedef OptProblemContainer<FunctionalInterface<CellDataContainer,FaceDataContainer,DOFHANDLER, VECTOR, 2,2>,
 		   FunctionalInterface<CellDataContainer,FaceDataContainer,DOFHANDLER, VECTOR, 2,2>,
-		   PDEInterface<CellDataContainer,FaceDataContainer,DOFHANDLER, VECTOR,2,2>,
+		   PDEInterface<CellDataContainer,FaceDataContainer,DOFHANDLER, VECTOR,2>,
 		   DirichletDataInterface<VECTOR,2,2>,
 		   ConstraintInterface<CellDataContainer,FaceDataContainer,DOFHANDLER, VECTOR, 2,2>,
 		   BlockSparsityPattern, VECTOR, 2,2> OP;
@@ -82,8 +82,8 @@ typedef CGLinearSolverWithMatrix<DOpEWrapper::PreconditionIdentity_Wrapper<Block
 //typedef DirectLinearSolverWithMatrix<BlockSparsityPattern,BlockSparseMatrix<double>,VECTOR,2> LINEARSOLVER;
 
 typedef NewtonSolver<INTEGRATOR,LINEARSOLVER,VECTOR,2> NLS;
-typedef ReducedNewtonAlgorithm<OP,VECTOR,2,2> RNA;
-typedef ReducedTrustregion_NewtonAlgorithm<OP,VECTOR,2,2> RNA2;
+typedef ReducedNewtonAlgorithm<OP,VECTOR> RNA;
+typedef ReducedTrustregion_NewtonAlgorithm<OP,VECTOR> RNA2;
 typedef StatReducedProblem<NLS,NLS,INTEGRATOR,INTEGRATOR,OP,VECTOR,2,2> SSolver;
 
 typedef MethodOfLines_SpaceTimeHandler<FE, DOFHANDLER, BlockSparsityPattern,VECTOR, 2,2> STH;

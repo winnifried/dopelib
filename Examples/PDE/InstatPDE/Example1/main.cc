@@ -79,10 +79,10 @@ using namespace DOpE;
 #define LOCALDEALDIM 2
 #define VECTOR BlockVector<double>
 #define SPARSITYPATTERN BlockSparsityPattern
-#define DOFHANDLER DoFHandler<LOCALDEALDIM>
-#define FE FESystem<2>
+#define DOFHANDLER DoFHandler
+#define FE FESystem
 #define FUNC FunctionalInterface<CellDataContainer,FaceDataContainer,DOFHANDLER,VECTOR,LOCALDOPEDIM,LOCALDEALDIM>
-#define PDE PDEInterface<CellDataContainer,FaceDataContainer,DOFHANDLER,VECTOR,LOCALDOPEDIM,LOCALDEALDIM>
+#define PDE PDEInterface<CellDataContainer,FaceDataContainer,DOFHANDLER,VECTOR,LOCALDEALDIM>
 #define DD DirichletDataInterface<VECTOR,LOCALDOPEDIM,LOCALDEALDIM>
 #define CONS ConstraintInterface<CellDataContainer,FaceDataContainer,DOFHANDLER,VECTOR,LOCALDOPEDIM,LOCALDEALDIM>
 
@@ -116,7 +116,7 @@ typedef NewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR , LOCALDEALDIM>
 typedef InstatStepNewtonSolver<INTEGRATOR, LINEARSOLVER, BlockVector<double>,
     LOCALDEALDIM> NLS;
 
-typedef ReducedNewtonAlgorithm<OP, VECTOR, LOCALDOPEDIM, LOCALDEALDIM> RNA;
+typedef ReducedNewtonAlgorithm<OP, VECTOR> RNA;
 typedef InstatReducedProblem<CNLS, NLS, INTEGRATOR, INTEGRATOR, OP,
     VECTOR, LOCALDOPEDIM, LOCALDEALDIM> SSolver;
 

@@ -1,25 +1,25 @@
 /**
-*
-* Copyright (C) 2012 by the DOpElib authors
-*
-* This file is part of DOpElib
-*
-* DOpElib is free software: you can redistribute it
-* and/or modify it under the terms of the GNU General Public
-* License as published by the Free Software Foundation, either
-* version 3 of the License, or (at your option) any later
-* version.
-*
-* DOpElib is distributed in the hope that it will be
-* useful, but WITHOUT ANY WARRANTY; without even the implied
-* warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-* PURPOSE.  See the GNU General Public License for more
-* details.
-*
-* Please refer to the file LICENSE.TXT included in this distribution
-* for further information on this license.
-*
-**/
+ *
+ * Copyright (C) 2012 by the DOpElib authors
+ *
+ * This file is part of DOpElib
+ *
+ * DOpElib is free software: you can redistribute it
+ * and/or modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation, either
+ * version 3 of the License, or (at your option) any later
+ * version.
+ *
+ * DOpElib is distributed in the hope that it will be
+ * useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+ * PURPOSE.  See the GNU General Public License for more
+ * details.
+ *
+ * Please refer to the file LICENSE.TXT included in this distribution
+ * for further information on this license.
+ *
+ **/
 
 #ifndef _DOPE_DOFHANDLER_H_
 #define _DOPE_DOFHANDLER_H_
@@ -42,16 +42,17 @@ namespace DOpEWrapper
    *                            dealii::DoFHandler<dim> and dealii::hp::DoFHandler.
    *                            It has the default value dealii::DoFHandler<dim>
    */
-  template<int dim, typename DOFHANDLER = dealii::DoFHandler<dim> >
-    class DoFHandler : public DOFHANDLER
+  template<int dim,
+      template<int dim, int spacedim> class DOFHANDLER = dealii::DoFHandler>
+    class DoFHandler : public DOFHANDLER<dim, dim>
     {
       public:
-        DoFHandler(const dealii::Triangulation<dim, dim> &tria)
-            : DOFHANDLER(tria)
+        DoFHandler(const dealii::Triangulation<dim, dim> &tria) :
+            DOFHANDLER<dim, dim>(tria)
         {
         }
 
-        const DOFHANDLER&
+        const DOFHANDLER<dim, dim>&
         GetDEALDoFHandler() const
         {
           return *this;
@@ -68,12 +69,11 @@ namespace DOpEWrapper
 
   //Template specialization DOFHANDLER = dealii::DoFHandler<dim>
   template<int dim>
-    class DoFHandler<dim, dealii::DoFHandler<dim> > : public dealii::DoFHandler<
-        dim>
+    class DoFHandler<dim, dealii::DoFHandler> : public dealii::DoFHandler<dim>
     {
       public:
-        DoFHandler(const dealii::Triangulation<dim, dim> &tria)
-            : dealii::DoFHandler<dim>(tria)
+        DoFHandler(const dealii::Triangulation<dim, dim> &tria) :
+            dealii::DoFHandler<dim>(tria)
         {
         }
         static bool
@@ -91,12 +91,12 @@ namespace DOpEWrapper
 
   //Template specialization DOFHANDLER = dealii::hp::DoFHandler<dim>
   template<int dim>
-    class DoFHandler<dim, dealii::hp::DoFHandler<dim> > : public dealii::hp::DoFHandler<
+    class DoFHandler<dim, dealii::hp::DoFHandler> : public dealii::hp::DoFHandler<
         dim>
     {
       public:
-        DoFHandler(const dealii::Triangulation<dim, dim> &tria)
-            : dealii::hp::DoFHandler<dim>(tria)
+        DoFHandler(const dealii::Triangulation<dim, dim> &tria) :
+            dealii::hp::DoFHandler<dim>(tria)
         {
         }
         static bool
@@ -115,7 +115,7 @@ namespace DOpEWrapper
    * Template specializations for dim=0.
    */
   template<>
-    class DoFHandler<0, dealii::DoFHandler<deal_II_dimension> >
+    class DoFHandler<0, dealii::DoFHandler>
     {
       private:
         unsigned int _dofs;
@@ -153,7 +153,7 @@ namespace DOpEWrapper
     };
 
   template<>
-    class DoFHandler<0, dealii::hp::DoFHandler<deal_II_dimension> >
+    class DoFHandler<0, dealii::hp::DoFHandler>
     {
       private:
         unsigned int _dofs;

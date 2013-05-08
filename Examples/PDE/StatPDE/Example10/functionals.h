@@ -34,7 +34,7 @@ using namespace DOpE;
 
 template<typename VECTOR, typename FACEDATACONTAINER, int dealdim>
   class BoundaryFunctional : public FunctionalInterface<CellDataContainer,
-      FaceDataContainer, dealii::DoFHandler<dealdim>, VECTOR, dealdim>
+      FaceDataContainer, dealii::DoFHandler, VECTOR, dealdim>
   {
     public:
       BoundaryFunctional()

@@ -81,7 +81,7 @@ typedef CGLinearSolverWithMatrix<DOpEWrapper::PreconditionIdentity_Wrapper<Block
 //typedef DirectLinearSolverWithMatrix<BlockSparsityPattern,BlockSparseMatrix<double>,VECTOR,2> LINEARSOLVER;
 
 typedef NewtonSolver<INTEGRATOR,LINEARSOLVER,VECTOR,2> NLS;
-typedef ReducedNewtonAlgorithm<OP,VECTOR,2,2> RNA;
+typedef ReducedNewtonAlgorithm<OP,VECTOR> RNA;
 typedef StatReducedProblem<NLS,NLS,INTEGRATOR,INTEGRATOR,OP,VECTOR,2,2> SSolver;
 
 int main(int argc, char **argv)

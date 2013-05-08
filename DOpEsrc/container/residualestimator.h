@@ -1,25 +1,25 @@
 /**
-*
-* Copyright (C) 2012 by the DOpElib authors
-*
-* This file is part of DOpElib
-*
-* DOpElib is free software: you can redistribute it
-* and/or modify it under the terms of the GNU General Public
-* License as published by the Free Software Foundation, either
-* version 3 of the License, or (at your option) any later
-* version.
-*
-* DOpElib is distributed in the hope that it will be
-* useful, but WITHOUT ANY WARRANTY; without even the implied
-* warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-* PURPOSE.  See the GNU General Public License for more
-* details.
-*
-* Please refer to the file LICENSE.TXT included in this distribution
-* for further information on this license.
-*
-**/
+ *
+ * Copyright (C) 2012 by the DOpElib authors
+ *
+ * This file is part of DOpElib
+ *
+ * DOpElib is free software: you can redistribute it
+ * and/or modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation, either
+ * version 3 of the License, or (at your option) any later
+ * version.
+ *
+ * DOpElib is distributed in the hope that it will be
+ * useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+ * PURPOSE.  See the GNU General Public License for more
+ * details.
+ *
+ * Please refer to the file LICENSE.TXT included in this distribution
+ * for further information on this license.
+ *
+ **/
 
 #ifndef _RESIDUAL_ERROR_H_
 #define _RESIDUAL_ERROR_H_
@@ -39,8 +39,8 @@ namespace DOpE
     {
       public:
         ResidualErrorContainer(DOpEtypes::EETerms ee_terms =
-            DOpEtypes::EETerms::mixed)
-            : DWRDataContainerBase<VECTOR>(ee_terms)
+            DOpEtypes::EETerms::mixed) :
+            DWRDataContainerBase<VECTOR>(ee_terms)
         {
         }
         virtual void
@@ -50,13 +50,13 @@ namespace DOpE
 
     };
 
-    /**
-     * We need this overloaded function to have the same
-     * interface for dwrdatacontainer and residualestimators.
-     *
-     * The function should actually never get called, but with this
-     * construction, we save 4 unnecessary template parameters!
-     */
+  /**
+   * We need this overloaded function to have the same
+   * interface for dwrdatacontainer and residualestimators.
+   *
+   * The function should actually never get called, but with this
+   * construction, we save 4 unnecessary template parameters!
+   */
   template<class CDC, typename VECTOR>
     CDC*
     ExtractCDC(const ResidualErrorContainer<VECTOR>& /*dwrc*/)
@@ -80,9 +80,9 @@ namespace DOpE
       public:
         L2ResidualErrorContainer(STH& sth, std::string state_behavior,
             ParameterReader &param_reader, DOpEtypes::EETerms ee_terms =
-                DOpEtypes::EETerms::mixed)
-            : ResidualErrorContainer<VECTOR>(ee_terms), _sth(sth), _PI_h_u(
-                NULL), _PI_h_z(NULL)
+                DOpEtypes::EETerms::mixed) :
+            ResidualErrorContainer<VECTOR>(ee_terms), _sth(sth), _PI_h_u(NULL), _PI_h_z(
+                NULL)
         {
           if (this->GetEETerms() == DOpEtypes::primal_only
               || this->GetEETerms() == DOpEtypes::mixed)
@@ -144,8 +144,8 @@ namespace DOpE
         ControlVector<VECTOR>&
         GetPI_h_q()
         {
-	  throw DOpEException("There is no Control in PDE Problems!",
-            "L2ResidualErrorContainer::PreparePI_h_q");
+          throw DOpEException("There is no Control in PDE Problems!",
+              "L2ResidualErrorContainer::PreparePI_h_q");
         }
 
         /**
@@ -177,10 +177,10 @@ namespace DOpE
          * control residual.
          */
         void
-	  PreparePI_h_q(const ControlVector<VECTOR>& /*q*/)
+        PreparePI_h_q(const ControlVector<VECTOR>& /*q*/)
         {
-	  throw DOpEException("There is no Control in PDE Problems!",
-            "HigherOrderDWRContainer::PreparePI_h_q");
+          throw DOpEException("There is no Control in PDE Problems!",
+              "HigherOrderDWRContainer::PreparePI_h_q");
 
         }
 
@@ -221,11 +221,11 @@ namespace DOpE
           res = res * res * _weight;
         }
 
-	inline void
-	  VectorResidualModifier(dealii::Vector<double>& res)
+        inline void
+        VectorResidualModifier(dealii::Vector<double>& res)
         {
-          for(unsigned int i = 0; i < res.size(); i++)
-	    res(i) = res(i) * res(i) * _weight;
+          for (unsigned int i = 0; i < res.size(); i++)
+            res(i) = res(i) * res(i) * _weight;
         }
 
         void
@@ -246,14 +246,14 @@ namespace DOpE
           return _sth;
         }
 
-        template<typename DOFHANDLER>
+        template<template<int, int> class DH>
           void
-          BuildConstantWeight(
-              const DOpEWrapper::DoFHandler<dim, DOFHANDLER>* dofh,
+          BuildConstantWeight(const DOpEWrapper::DoFHandler<dim, DH>* dofh,
               VECTOR& vals)
           {
-            VectorTools::interpolate(_sth.GetMapping(), *(static_cast<const DOFHANDLER*>(dofh)),
-				     ConstantFunction<dim>(1.,dofh->get_fe().n_components()), vals);
+            VectorTools::interpolate(_sth.GetMapping(),
+                *(static_cast<const DH<dim, dim>*>(dofh)),
+                ConstantFunction<dim>(1., dofh->get_fe().n_components()), vals);
           }
 
       private:
@@ -296,9 +296,9 @@ namespace DOpE
       public:
         H1ResidualErrorContainer(STH& sth, std::string state_behavior,
             ParameterReader &param_reader, DOpEtypes::EETerms ee_terms =
-                DOpEtypes::EETerms::mixed)
-            : ResidualErrorContainer<VECTOR>(ee_terms), _sth(sth), _PI_h_u(
-                NULL), _PI_h_z(NULL)
+                DOpEtypes::EETerms::mixed) :
+            ResidualErrorContainer<VECTOR>(ee_terms), _sth(sth), _PI_h_u(NULL), _PI_h_z(
+                NULL)
         {
           if (this->GetEETerms() == DOpEtypes::primal_only
               || this->GetEETerms() == DOpEtypes::mixed)
@@ -359,8 +359,8 @@ namespace DOpE
         ControlVector<VECTOR>&
         GetPI_h_q()
         {
-	  throw DOpEException("There is no Control in PDE Problems!",
-            "H1ResidualErrorContainer::PreparePI_h_q");
+          throw DOpEException("There is no Control in PDE Problems!",
+              "H1ResidualErrorContainer::PreparePI_h_q");
         }
 
         /**
@@ -369,7 +369,7 @@ namespace DOpE
          * dual residual.
          */
         void
-	  PreparePI_h_u(const StateVector<VECTOR>& /*u*/)
+        PreparePI_h_u(const StateVector<VECTOR>& /*u*/)
         {
           BuildConstantWeight(&(GetSTH().GetStateDoFHandler()),
               GetPI_h_u().GetSpacialVector());
@@ -381,7 +381,7 @@ namespace DOpE
          * primal residual.
          */
         void
-	  PreparePI_h_z(const StateVector<VECTOR>& /*z*/)
+        PreparePI_h_z(const StateVector<VECTOR>& /*z*/)
         {
           BuildConstantWeight(&(GetSTH().GetStateDoFHandler()),
               GetPI_h_z().GetSpacialVector());
@@ -392,10 +392,10 @@ namespace DOpE
          * control residual.
          */
         void
-	  PreparePI_h_q(const ControlVector<VECTOR>& /*q*/)
+        PreparePI_h_q(const ControlVector<VECTOR>& /*q*/)
         {
-	  throw DOpEException("There is no Control in PDE Problems!",
-            "HigherOrderDWRContainer::PreparePI_h_q");
+          throw DOpEException("There is no Control in PDE Problems!",
+              "HigherOrderDWRContainer::PreparePI_h_q");
 
         }
 
@@ -435,11 +435,11 @@ namespace DOpE
         {
           res = res * res * _weight;
         }
-	inline void
-	  VectorResidualModifier(dealii::Vector<double>& res)
+        inline void
+        VectorResidualModifier(dealii::Vector<double>& res)
         {
-          for(unsigned int i = 0; i < res.size(); i++)
-	    res(i) = res(i) * res(i) * _weight;
+          for (unsigned int i = 0; i < res.size(); i++)
+            res(i) = res(i) * res(i) * _weight;
         }
 
         void
@@ -460,14 +460,14 @@ namespace DOpE
           return _sth;
         }
 
-        template<typename DOFHANDLER>
+        template<template<int, int> class DH>
           void
-          BuildConstantWeight(
-              const DOpEWrapper::DoFHandler<dim, DOFHANDLER>* dofh,
+          BuildConstantWeight(const DOpEWrapper::DoFHandler<dim, DH>* dofh,
               VECTOR& vals)
           {
-            VectorTools::interpolate(_sth.GetMapping(), dofh->GetDEALDoFHandler(),
-				    ConstantFunction<dim>(1.,dofh->get_fe().n_components()), vals);
+            VectorTools::interpolate(_sth.GetMapping(),
+                dofh->GetDEALDoFHandler(),
+                ConstantFunction<dim>(1., dofh->get_fe().n_components()), vals);
           }
 
       private:

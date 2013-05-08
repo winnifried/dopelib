@@ -35,12 +35,12 @@ using namespace DOpE;
 
 /****************************************************************************************/
 template<typename VECTOR, int dealdim>
-  class LocalPointFunctionalX : public FunctionalInterface<CellDataContainer,FaceDataContainer,dealii::DoFHandler<dealdim>, VECTOR, dealdim>
+  class LocalPointFunctionalX : public FunctionalInterface<CellDataContainer,FaceDataContainer,dealii::DoFHandler, VECTOR, dealdim>
   {
   public:
 
-    double PointValue(const DOpEWrapper::DoFHandler<dealdim, dealii::DoFHandler<dealdim> > & /*control_dof_handler*/,
-			      const DOpEWrapper::DoFHandler<dealdim, dealii::DoFHandler<dealdim> > &state_dof_handler,
+    double PointValue(const DOpEWrapper::DoFHandler<dealdim, dealii::DoFHandler > & /*control_dof_handler*/,
+			      const DOpEWrapper::DoFHandler<dealdim, dealii::DoFHandler > &state_dof_handler,
 		      const std::map<std::string, const dealii::Vector<double>* > &/*param_values*/,
 			      const std::map<std::string, const VECTOR* > &domain_values)
   {
@@ -73,7 +73,7 @@ template<typename VECTOR, int dealdim>
 // drag
 /****************************************************************************************/
 template<typename VECTOR, int dealdim>
-  class LocalBoundaryFluxFunctional : public FunctionalInterface<CellDataContainer,FaceDataContainer,dealii::DoFHandler<dealdim>,VECTOR,dealdim>
+  class LocalBoundaryFluxFunctional : public FunctionalInterface<CellDataContainer,FaceDataContainer,dealii::DoFHandler,VECTOR,dealdim>
   {
   public:
     bool HasFaces() const
@@ -83,7 +83,7 @@ template<typename VECTOR, int dealdim>
 
 
      // compute drag value around cylinder
-     double BoundaryValue(const FaceDataContainer<dealii::DoFHandler<dealdim>,VECTOR, dealdim>& fdc)
+     double BoundaryValue(const FaceDataContainer<dealii::DoFHandler,VECTOR, dealdim>& fdc)
      {
        unsigned int color = fdc.GetBoundaryIndicator();
        const auto &state_fe_face_values = fdc.GetFEFaceValuesState();

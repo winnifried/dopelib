@@ -31,7 +31,7 @@ using namespace dealii;
 using namespace DOpE;
 
 template<typename VECTOR, int dopedim, int dealdim>
-  class LocalPDE : public PDEInterface<CellDataContainer,FaceDataContainer,dealii::DoFHandler<dealdim>, VECTOR, dopedim,dealdim>
+  class LocalPDE : public PDEInterface<CellDataContainer,FaceDataContainer,dealii::DoFHandler, VECTOR, dopedim,dealdim>
   {
   public:
   LocalPDE() : _block_components(1,0)
@@ -39,7 +39,7 @@ template<typename VECTOR, int dopedim, int dealdim>
 	_alpha = 1.e-3;
       }
 
-    void CellEquation(const CellDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& cdc,
+    void CellEquation(const CellDataContainer<dealii::DoFHandler, VECTOR, dealdim>& cdc,
 		      dealii::Vector<double> &local_cell_vector,
 		      double scale, double /*scale_ico*/)
     {
@@ -69,7 +69,7 @@ template<typename VECTOR, int dopedim, int dealdim>
       }
     }
 
-    void CellEquation_U(const CellDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& cdc,
+    void CellEquation_U(const CellDataContainer<dealii::DoFHandler, VECTOR, dealdim>& cdc,
 			dealii::Vector<double> &local_cell_vector,
 			double scale, double /*scale_ico*/)
     {
@@ -93,7 +93,7 @@ template<typename VECTOR, int dopedim, int dealdim>
       }
     }
 
-    void CellEquation_UT(const CellDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& cdc,
+    void CellEquation_UT(const CellDataContainer<dealii::DoFHandler, VECTOR, dealdim>& cdc,
 			 dealii::Vector<double> &local_cell_vector,
 			 double scale, double /*scale_ico*/)
     {
@@ -116,7 +116,7 @@ template<typename VECTOR, int dopedim, int dealdim>
       }
     }
 
-    void CellEquation_UTT(const CellDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& cdc,
+    void CellEquation_UTT(const CellDataContainer<dealii::DoFHandler, VECTOR, dealdim>& cdc,
 			  dealii::Vector<double> &local_cell_vector,
 			  double scale, double /*scale_ico*/)
     {
@@ -139,7 +139,7 @@ template<typename VECTOR, int dopedim, int dealdim>
       }
     }
 
-    void CellEquation_Q(const CellDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& cdc,
+    void CellEquation_Q(const CellDataContainer<dealii::DoFHandler, VECTOR, dealdim>& cdc,
 			dealii::Vector<double> &local_cell_vector,
 			double scale, double /*scale_ico*/)
     {
@@ -162,7 +162,7 @@ template<typename VECTOR, int dopedim, int dealdim>
       }
     }
 
-    void CellEquation_QT(const CellDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& cdc,
+    void CellEquation_QT(const CellDataContainer<dealii::DoFHandler, VECTOR, dealdim>& cdc,
 			 dealii::Vector<double> &local_cell_vector,
 			 double scale, double /*scale_ico*/)
     {
@@ -185,7 +185,7 @@ template<typename VECTOR, int dopedim, int dealdim>
       }
     }
 
-    void CellEquation_QTT(const CellDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& cdc,
+    void CellEquation_QTT(const CellDataContainer<dealii::DoFHandler, VECTOR, dealdim>& cdc,
 			  dealii::Vector<double> &local_cell_vector,
 			  double scale, double /*scale_ico*/)
     {
@@ -208,32 +208,32 @@ template<typename VECTOR, int dopedim, int dealdim>
       }
     }
 
-    void CellEquation_UU(const CellDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& cdc __attribute__((unused)),
+    void CellEquation_UU(const CellDataContainer<dealii::DoFHandler, VECTOR, dealdim>& cdc __attribute__((unused)),
 			 dealii::Vector<double> &local_cell_vector __attribute__((unused)),
 			 double scale __attribute__((unused)), double /*scale_ico*/)
     {
       assert(this->_problem_type == "adjoint_hessian");
     }
-    void CellEquation_QU(const CellDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& cdc __attribute__((unused)),
+    void CellEquation_QU(const CellDataContainer<dealii::DoFHandler, VECTOR, dealdim>& cdc __attribute__((unused)),
 			 dealii::Vector<double> &local_cell_vector __attribute__((unused)),
 			 double scale __attribute__((unused)), double /*scale_ico*/)
     {
       assert(this->_problem_type == "adjoint_hessian");
     }
-    void CellEquation_UQ(const CellDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& cdc __attribute__((unused)),
+    void CellEquation_UQ(const CellDataContainer<dealii::DoFHandler, VECTOR, dealdim>& cdc __attribute__((unused)),
 			 dealii::Vector<double> &local_cell_vector __attribute__((unused)),
 			 double scale __attribute__((unused)), double /*scale_ico*/)
     {
       assert(this->_problem_type == "hessian");
     }
-    void CellEquation_QQ(const CellDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& cdc __attribute__((unused)),
+    void CellEquation_QQ(const CellDataContainer<dealii::DoFHandler, VECTOR, dealdim>& cdc __attribute__((unused)),
 			 dealii::Vector<double> &local_cell_vector __attribute__((unused)),
 			 double scale __attribute__((unused)), double /*scale_ico*/)
     {
       assert(this->_problem_type == "hessian");
     }
 
-    void CellRightHandSide(const CellDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& cdc,
+    void CellRightHandSide(const CellDataContainer<dealii::DoFHandler, VECTOR, dealdim>& cdc,
 			   dealii::Vector<double> &local_cell_vector,
 			   double scale)
     {
@@ -258,7 +258,7 @@ template<typename VECTOR, int dopedim, int dealdim>
       }
     }
 
-    void CellMatrix(const CellDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& cdc,
+    void CellMatrix(const CellDataContainer<dealii::DoFHandler, VECTOR, dealdim>& cdc,
 		    FullMatrix<double> &local_entry_matrix, double scale, double /*scale_ico*/)
     {
       const DOpEWrapper::FEValues<dealdim> & state_fe_values = cdc.GetFEValuesState();
@@ -279,7 +279,7 @@ template<typename VECTOR, int dopedim, int dealdim>
       }
     }
 
-    void ControlCellEquation(const CellDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& cdc,
+    void ControlCellEquation(const CellDataContainer<dealii::DoFHandler, VECTOR, dealdim>& cdc,
 			     dealii::Vector<double> &local_cell_vector,
 			     double scale)
     {
@@ -302,7 +302,7 @@ template<typename VECTOR, int dopedim, int dealdim>
       }
     }
 
-    void ControlCellMatrix(const CellDataContainer<dealii::DoFHandler<dealdim>, VECTOR, dealdim>& cdc,
+    void ControlCellMatrix(const CellDataContainer<dealii::DoFHandler, VECTOR, dealdim>& cdc,
 			   FullMatrix<double> &local_entry_matrix)
     {
       const DOpEWrapper::FEValues<dealdim> & control_fe_values = cdc.GetFEValuesControl();

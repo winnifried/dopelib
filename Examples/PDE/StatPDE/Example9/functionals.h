@@ -41,7 +41,7 @@ using namespace DOpE;
 /****************************************************************************************/
 template<typename VECTOR, typename FACEDATACONTAINER, int dealdim>
   class LocalFaceFunctional : public FunctionalInterface<CellDataContainer,
-      FaceDataContainer, dealii::DoFHandler<dealdim>, VECTOR, dealdim>
+      FaceDataContainer, dealii::DoFHandler, VECTOR, dealdim>
   {
     public:
       LocalFaceFunctional()

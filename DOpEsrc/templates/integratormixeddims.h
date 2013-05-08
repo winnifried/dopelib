@@ -450,11 +450,11 @@ template<typename PROBLEM>
       SCALAR ret = 0.;
       // Begin integration
 
-      const std::vector<const DOpEWrapper::DoFHandler<dimhigh, dealii::DoFHandler<dimhigh> >*>& dof_handler =
+      const std::vector<const DOpEWrapper::DoFHandler<dimhigh, dealii::DoFHandler >*>& dof_handler =
           pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandler();
-      std::vector<typename DOpEWrapper::DoFHandler<dimhigh, dealii::DoFHandler<dimhigh> >::active_cell_iterator>
+      std::vector<typename DOpEWrapper::DoFHandler<dimhigh, dealii::DoFHandler >::active_cell_iterator>
           cell(dof_handler.size());
-      std::vector<typename DOpEWrapper::DoFHandler<dimhigh, dealii::DoFHandler<dimhigh> >::active_cell_iterator>
+      std::vector<typename DOpEWrapper::DoFHandler<dimhigh, dealii::DoFHandler>::active_cell_iterator>
           endc(dof_handler.size());
 
       for (unsigned int dh = 0; dh < dof_handler.size(); dh++)
@@ -464,7 +464,7 @@ template<typename PROBLEM>
       }
 
       // Generate the data containers.
-      FaceDataContainer<dealii::DoFHandler<dimhigh>, VECTOR, dimhigh> fdc(*(this->GetFaceQuadratureFormula()),
+      FaceDataContainer<dealii::DoFHandler, VECTOR, dimhigh> fdc(*(this->GetFaceQuadratureFormula()),
 					     pde.GetFaceUpdateFlags(),
 					     *(pde.GetBaseProblem().GetSpaceTimeHandler()), cell,
 					     this->GetParamData(), this->GetDomainData());
@@ -523,11 +523,11 @@ template<typename PROBLEM>
       SCALAR ret = 0.;
 
       // Begin integration
-      const std::vector<const DOpEWrapper::DoFHandler<dimhigh, dealii::DoFHandler<dimhigh> >*>& dof_handler =
+      const std::vector<const DOpEWrapper::DoFHandler<dimhigh, dealii::DoFHandler >*>& dof_handler =
           pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandler();
-      std::vector<typename DOpEWrapper::DoFHandler<dimhigh, dealii::DoFHandler<dimhigh> >::active_cell_iterator>
+      std::vector<typename DOpEWrapper::DoFHandler<dimhigh, dealii::DoFHandler>::active_cell_iterator>
           cell(dof_handler.size());
-      std::vector<typename DOpEWrapper::DoFHandler<dimhigh, dealii::DoFHandler<dimhigh> >::active_cell_iterator>
+      std::vector<typename DOpEWrapper::DoFHandler<dimhigh, dealii::DoFHandler>::active_cell_iterator>
           endc(dof_handler.size());
 
       for (unsigned int dh = 0; dh < dof_handler.size(); dh++)
@@ -536,7 +536,7 @@ template<typename PROBLEM>
         endc[dh] = dof_handler[dh]->end();
       }
       // Generate the data containers.
-      FaceDataContainer<dealii::DoFHandler<dimhigh>, VECTOR, dimhigh> fdc(*(this->GetFaceQuadratureFormula()),
+      FaceDataContainer<dealii::DoFHandler, VECTOR, dimhigh> fdc(*(this->GetFaceQuadratureFormula()),
 					     pde.GetFaceUpdateFlags(),
 					     *(pde.GetBaseProblem().GetSpaceTimeHandler()), cell,
 					     this->GetParamData(), this->GetDomainData());
@@ -633,7 +633,7 @@ template<typename PROBLEM>
         {
           current_comp[j] = true;
           //Hole eine Liste der DoFs auf dem Rand und die zugehoerigen Knoten
-          DoFTools::extract_boundary_dofs(*static_cast<const dealii::DoFHandler<dimhigh>*> ((pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandler()[0])),
+          DoFTools::extract_boundary_dofs(*((pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandler()[0]->GetDEALDoFHandler)),
                                           current_comp, selected_components, boundary_indicators);
         }
         const TransposedDirichletDataInterface<dimlow, dimhigh> & DD =

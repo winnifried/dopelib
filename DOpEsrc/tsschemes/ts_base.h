@@ -41,8 +41,8 @@ namespace DOpE
 
   template<typename OPTPROBLEM, typename SPARSITYPATTERN, typename VECTOR,
       int dopedim, int dealdim,
-      typename FE = dealii::FESystem<dealdim>,
-      typename DOFHANDLER = dealii::DoFHandler<dealdim> >
+      template <int, int> class FE = dealii::FESystem,
+      template <int, int> class DH = dealii::DoFHandler>
     class TSBase
     {
       public:
@@ -438,13 +438,13 @@ namespace DOpE
          *
          * @return The SpaceTimeHandler() object.
          */
-        const SpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR, dopedim,
+        const SpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dopedim,
             dealdim>*
         GetSpaceTimeHandler() const
         {
           return _OP.GetBaseProblem().GetSpaceTimeHandler();
         }
-        SpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR, dopedim,
+        SpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dopedim,
             dealdim>*
         GetSpaceTimeHandler()
         {

@@ -51,12 +51,12 @@ namespace DOpE
    * The update for the asymptotes follows See K. Svanberg, MMA and GCMMA, 2007
    */
   template <typename CONSTRAINTACCESSOR,typename INTEGRATORDATACONT, typename STH, typename PROBLEM,typename VECTOR, typename SOLVER, int dopedim,  int dealdim, int localdim>
-    class GeneralizedMMAAlgorithm : public ReducedAlgorithm<PROBLEM,VECTOR,dopedim,dealdim>
+    class GeneralizedMMAAlgorithm : public ReducedAlgorithm<PROBLEM,VECTOR>
   {
   public:
     GeneralizedMMAAlgorithm(PROBLEM* OP,
 			     CONSTRAINTACCESSOR* CA, 
-			     ReducedProblemInterface<PROBLEM,VECTOR,dopedim,dealdim>* S,
+			     ReducedProblemInterface<PROBLEM,VECTOR>* S,
 			     std::string vector_behavior, 
 			     ParameterReader &param_reader,
 			     INTEGRATORDATACONT& idc,
@@ -68,7 +68,7 @@ namespace DOpE
 
     void ReInit() 
     {  
-      ReducedAlgorithm<PROBLEM,VECTOR,dopedim,dealdim>::ReInit();
+      ReducedAlgorithm<PROBLEM,VECTOR>::ReInit();
       _sub_problem_opt_alg.ReInit();
     }
 
@@ -194,7 +194,7 @@ void GeneralizedMMAAlgorithm<CONSTRAINTACCESSOR, INTEGRATORDATACONT, STH, PROBLE
   param_reader.declare_entry("mma_inner_maxiter", "20", Patterns::Integer(0)); 
   param_reader.declare_entry("mma_global_tol", "1.e-8", Patterns::Double(0)); 
 
-  ReducedAlgorithm<PROBLEM,VECTOR,dopedim,dealdim>::declare_params(param_reader);
+  ReducedAlgorithm<PROBLEM,VECTOR>::declare_params(param_reader);
   ReducedNewtonAlgorithmWithInverse<AugmentedLagrangianProblem<CONSTRAINTACCESSOR,STH, PROBLEM,dopedim,dealdim,localdim>,VECTOR,dopedim,dealdim>::declare_params(param_reader);
 }
 
@@ -204,13 +204,13 @@ template <typename CONSTRAINTACCESSOR,typename INTEGRATORDATACONT, typename STH,
 GeneralizedMMAAlgorithm<CONSTRAINTACCESSOR, INTEGRATORDATACONT, STH, PROBLEM,VECTOR, SOLVER,dopedim, dealdim, localdim>
   ::GeneralizedMMAAlgorithm(PROBLEM* OP, 
 			    CONSTRAINTACCESSOR* CA, 
-			    ReducedProblemInterface<PROBLEM,VECTOR,dopedim,dealdim>* S,
+			    ReducedProblemInterface<PROBLEM,VECTOR>* S,
 			    std::string vector_behavior,
 			    ParameterReader &param_reader,
 			    INTEGRATORDATACONT& idc,
 			     DOpEExceptionHandler<VECTOR>* Except,
 			    DOpEOutputHandler<VECTOR>* Output)
-  : ReducedAlgorithm<PROBLEM,VECTOR,dopedim,dealdim>(OP,S,param_reader,Except,Output),
+  : ReducedAlgorithm<PROBLEM,VECTOR>(OP,S,param_reader,Except,Output),
   _mma_constraints(OP->GetSpaceTimeHandler(),vector_behavior),
   _mma_multiplier(OP->GetSpaceTimeHandler(),vector_behavior),
   _CA(*CA),
