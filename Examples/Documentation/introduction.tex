@@ -379,6 +379,9 @@ and eliminates the variable $u$ from the problem.
 \item \texttt{reducedproblems/voidreducedproblem.h} A wrapper file that eliminates $u$ 
   if it is not present anyways. This is used so that we can use the same routines to 
   solve problems that have no PDE constraint.
+\item \texttt{reducedproblems/ipopt\underline{ }problem.h} A wrapper file that is used by the 
+  reduced\underline{ }ipopt\underline{ }algorithm when solving optimization problems. This file
+  hides the interface to IPOPT.
 \end{itemize}
 
 \subsection{Optimization algorithms}
@@ -396,7 +399,12 @@ problem where the PDE constraint has been eliminated as explained in the previou
   A trust region Newton algorithm using a cg method to invert the reduced hessian.
   Implementation ignores any additional constraints.
 \item \texttt{opt\underline{ }algorithms/reduced\underline{ }snopt\underline{ }algorithm.h}
+  An algorithm to solve reduced optimization problems with additional control constraints
+  using the third-party library SNOPT.
+  ((reduced) state constraints are not yet implemented.)
+\item \texttt{opt\underline{ }algorithms/reduced\underline{ }ipopt\underline{ }algorithm.h}
   An algorithm to solve reduced optimization problems with additional control constraints.
+  using the third-party library IPOPT.
   ((reduced) state constraints are not yet implemented.)
 \item \texttt{opt\underline{ }algorithms/reducednewtonalgorithmwithinverse.h}
   Line-search Newton algorithm that assumes there exists a method in the reduced problem
