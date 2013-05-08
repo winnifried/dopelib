@@ -30,7 +30,7 @@ using namespace std;
 using namespace dealii;
 using namespace DOpE;
 
-template<template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
+template<template<int, int> class DH, typename VECTOR, int dealdim>
   class LocalPDE : public PDEInterface<CellDataContainer,FaceDataContainer,DH, VECTOR, dealdim>
   {
   public:

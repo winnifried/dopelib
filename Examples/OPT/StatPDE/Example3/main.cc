@@ -138,7 +138,7 @@ int main(int argc, char **argv)
   ParameterReader pr;
   SSolver::declare_params(pr);
   RNA::declare_params(pr);
-  LocalPDE<DOFHANDLER, VECTOR,0,2>::declare_params(pr);
+  LocalPDE<DOFHANDLER, VECTOR,2>::declare_params(pr);
   LocalFunctional<DOFHANDLER, VECTOR,0,2>::declare_params(pr);
   BoundaryParabel::declare_params(pr);
   LocalBoundaryFaceFunctionalDrag<VECTOR,0,2>::declare_params(pr);
@@ -175,7 +175,7 @@ int main(int argc, char **argv)
   QGauss<1> face_quadrature_formula(3);
   IDC idc(quadrature_formula, face_quadrature_formula);
 
-  LocalPDE<DOFHANDLER, VECTOR,0,2> LPDE(pr);
+  LocalPDE<DOFHANDLER, VECTOR,2> LPDE(pr);
   LocalFunctional<DOFHANDLER, VECTOR,0,2> LFunc(pr);
 
   LocalPointFunctionalPressure<VECTOR,0,2> LPFP;
