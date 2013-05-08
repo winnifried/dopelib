@@ -30,8 +30,8 @@ using namespace std;
 using namespace dealii;
 using namespace DOpE;
 
-template<typename VECTOR, int dopedim, int dealdim>
-  class LocalFunctional : public FunctionalInterface<CellDataContainer,FaceDataContainer,dealii::DoFHandler, VECTOR, dopedim,dealdim>
+template<template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
+  class LocalFunctional : public FunctionalInterface<CellDataContainer,FaceDataContainer,DH, VECTOR, dopedim,dealdim>
   {
   public:
   LocalFunctional()
@@ -39,7 +39,7 @@ template<typename VECTOR, int dopedim, int dealdim>
 	_alpha = 10.;
       }
 
-      double Value(const CellDataContainer<dealii::DoFHandler, VECTOR, dealdim>& cdc)
+      double Value(const CellDataContainer<DH, VECTOR, dealdim>& cdc)
       {
 	const DOpEWrapper::FEValues<dealdim> & state_fe_values = cdc.GetFEValuesState();
 	unsigned int n_q_points = cdc.GetNQPoints();
@@ -71,7 +71,7 @@ template<typename VECTOR, int dopedim, int dealdim>
       return r;
     }
 
-    void Value_U(const CellDataContainer<dealii::DoFHandler, VECTOR, dealdim>& cdc,
+    void Value_U(const CellDataContainer<DH, VECTOR, dealdim>& cdc,
 		 dealii::Vector<double> &local_cell_vector, double scale)
     {
       const DOpEWrapper::FEValues<dealdim> & state_fe_values = cdc.GetFEValuesState();
@@ -105,7 +105,7 @@ template<typename VECTOR, int dopedim, int dealdim>
       }
     }
 
-    void Value_Q(const CellDataContainer<dealii::DoFHandler, VECTOR, dealdim>& cdc,
+    void Value_Q(const CellDataContainer<DH, VECTOR, dealdim>& cdc,
 		 dealii::Vector<double> &local_cell_vector, double scale)
     {
       const DOpEWrapper::FEValues<dealdim> & state_fe_values = cdc.GetFEValuesState();
@@ -125,7 +125,7 @@ template<typename VECTOR, int dopedim, int dealdim>
       }
     }
 
-    void Value_UU(const CellDataContainer<dealii::DoFHandler, VECTOR, dealdim>& cdc,
+    void Value_UU(const CellDataContainer<DH, VECTOR, dealdim>& cdc,
 		  dealii::Vector<double> &local_cell_vector, double scale)
     {
       const DOpEWrapper::FEValues<dealdim> & state_fe_values = cdc.GetFEValuesState();
@@ -151,17 +151,17 @@ template<typename VECTOR, int dopedim, int dealdim>
       }
     }
 
-    void Value_QU(const CellDataContainer<dealii::DoFHandler, VECTOR, dealdim>& cdc __attribute__((unused)),
+    void Value_QU(const CellDataContainer<DH, VECTOR, dealdim>& cdc __attribute__((unused)),
 		  dealii::Vector<double> &local_cell_vector __attribute__((unused)), double scale __attribute__((unused)))
     {
     }
 
-    void Value_UQ(const CellDataContainer<dealii::DoFHandler, VECTOR, dealdim>& cdc __attribute__((unused)),
+    void Value_UQ(const CellDataContainer<DH, VECTOR, dealdim>& cdc __attribute__((unused)),
 		  dealii::Vector<double> &local_cell_vector __attribute__((unused)), double scale __attribute__((unused)))
     {
     }
 
-    void Value_QQ(const CellDataContainer<dealii::DoFHandler, VECTOR, dealdim>& cdc,
+    void Value_QQ(const CellDataContainer<DH, VECTOR, dealdim>& cdc,
 		  dealii::Vector<double> &local_cell_vector, double scale)
     {
       const DOpEWrapper::FEValues<dealdim> & state_fe_values = cdc.GetFEValuesState();

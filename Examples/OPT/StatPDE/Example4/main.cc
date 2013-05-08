@@ -62,12 +62,12 @@ using namespace dealii;
 using namespace DOpE;
 
 #define VECTOR BlockVector<double>
-#define DOFHANDLER DoFHandler<2>
-#define FE FESystem<2>
+#define DOFHANDLER DoFHandler
+#define FE FESystem
 
 typedef OptProblemContainer<FunctionalInterface<CellDataContainer,FaceDataContainer,DOFHANDLER, VECTOR, 0,2>,
 FunctionalInterface<CellDataContainer,FaceDataContainer,DOFHANDLER, VECTOR, 0,2>,
-PDEInterface<CellDataContainer,FaceDataContainer,DOFHANDLER, VECTOR,0,2>,
+PDEInterface<CellDataContainer,FaceDataContainer,DOFHANDLER, VECTOR,2>,
 DirichletDataInterface<VECTOR,0,2>,
 ConstraintInterface<CellDataContainer,FaceDataContainer,DOFHANDLER, VECTOR,0,2>,
 BlockSparsityPattern, VECTOR,0,2> OP;
@@ -119,8 +119,8 @@ int main(int argc, char **argv)
   QGauss<1> face_quadrature_formula(2);
   IDC idc(quadrature_formula, face_quadrature_formula);
 
-  LocalPDE<VECTOR,0,2> LPDE;
-  LocalFunctional<VECTOR,0,2> LFunc;
+  LocalPDE<DOFHANDLER, VECTOR,2> LPDE;
+  LocalFunctional<DOFHANDLER, VECTOR,0,2> LFunc;
 
   std::vector<double> times(1,0.);
   triangulation.refine_global (5);
