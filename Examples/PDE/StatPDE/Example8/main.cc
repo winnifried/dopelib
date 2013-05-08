@@ -71,25 +71,27 @@ using namespace DOpE;
 #define SPARSITYPATTERN SparsityPattern
 #define VECTOR Vector<double>
 
-#define DOFHANDLER DoFHandler<3>
-#define FE FESystem<3>
+#define DOFHANDLER DoFHandler
+#define FE FESystem
+#define CDC CellDataContainer
+#define FDC FaceDataContainer
 
 #define PRECONDITIONERIDENTITYBLOCK DOpEWrapper::PreconditionIdentity_Wrapper<MATRIXBLOCK>
 #define PRECONDITIONERIDENTITY DOpEWrapper::PreconditionIdentity_Wrapper<MATRIX>
 #define PRECONDITIONERSSOR DOpEWrapper::PreconditionSSOR_Wrapper<MATRIX>
 
 typedef PDEProblemContainer<
-    PDEInterface<CellDataContainer, FaceDataContainer, DOFHANDLER, VECTORBLOCK,
-        3>, DirichletDataInterface<VECTORBLOCK, 3>, SPARSITYPATTERNBLOCK,
-    VECTORBLOCK, 3> OP1;
+  LocalPDE<CDC,FDC, DOFHANDLER, VECTORBLOCK,
+	   3>, DirichletDataInterface<VECTORBLOCK, 3>, SPARSITYPATTERNBLOCK,
+  VECTORBLOCK, 3> OP1;
 
 typedef PDEProblemContainer<
-    PDEInterface<CellDataContainer, FaceDataContainer, DOFHANDLER, VECTOR, 3>,
+  LocalPDE<CDC,FDC, DOFHANDLER, VECTOR, 3>,
     DirichletDataInterface<VECTOR, 3>, SPARSITYPATTERN, VECTOR, 3> OP2;
 
 typedef PDEProblemContainer<
-    PDEInterface<CellDataContainer, FaceDataContainer, DOFHANDLER, VECTOR, 3>,
-    DirichletDataInterface<VECTOR, 3>, SPARSITYPATTERN, VECTOR, 3> OP3;
+  LocalPDE<CDC,FDC, DOFHANDLER, VECTOR, 3>,
+  DirichletDataInterface<VECTOR, 3>, SPARSITYPATTERN, VECTOR, 3> OP3;
 
 typedef IntegratorDataContainer<DOFHANDLER, Quadrature<3>,
     Quadrature<2>, VECTOR, 3> IDC;
@@ -146,17 +148,17 @@ main(int argc, char **argv)
 
   Triangulation<3> triangulation;
 
-  FESystem<3> state_fe(FE_Q<3>(1), 3);
+  FE<3> state_fe(FE_Q<3>(1), 3);
 
   QGauss<3> quadrature_formula(3);
   QGauss<2> face_quadrature_formula(3);
   IDC idc(quadrature_formula, face_quadrature_formula);
   IDCBLOCK idcblock(quadrature_formula, face_quadrature_formula);
-  LocalPDE<VECTORBLOCK, 3> LPDE1;
-  LocalPointFunctionalX<VECTORBLOCK, 3> LPFX1;
+  LocalPDE<CDC,FDC,DOFHANDLER,VECTORBLOCK, 3> LPDE1;
+  LocalPointFunctionalX<CDC,FDC,DOFHANDLER,VECTORBLOCK, 3> LPFX1;
 
-  LocalPDE<VECTOR, 3> LPDE2;
-  LocalPointFunctionalX<VECTOR, 3> LPFX2;
+  LocalPDE<CDC,FDC,DOFHANDLER,VECTOR, 3> LPDE2;
+  LocalPointFunctionalX<CDC,FDC,DOFHANDLER,VECTOR, 3> LPFX2;
 
   // Pseudo time
   std::vector<double> times(1, 0.);

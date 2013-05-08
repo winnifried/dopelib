@@ -32,9 +32,11 @@ using namespace std;
 using namespace dealii;
 using namespace DOpE;
 
-template<typename VECTOR, typename FACEDATACONTAINER, int dealdim>
-  class BoundaryFunctional : public FunctionalInterface<CellDataContainer,
-      FaceDataContainer, dealii::DoFHandler, VECTOR, dealdim>
+template<
+template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+  template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
+  template<int, int> class DH, typename VECTOR, int dealdim>
+  class BoundaryFunctional : public FunctionalInterface<CDC, FDC, DH, VECTOR, dealdim>
   {
     public:
       BoundaryFunctional()
@@ -42,7 +44,7 @@ template<typename VECTOR, typename FACEDATACONTAINER, int dealdim>
       }
 
       double
-      BoundaryValue(const FACEDATACONTAINER& fdc)
+      BoundaryValue(const FDC<DH,VECTOR,dealdim>& fdc)
       {
         unsigned int n_q_points = fdc.GetNQPoints();
 

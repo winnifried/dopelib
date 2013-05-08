@@ -33,15 +33,18 @@ using namespace DOpE;
 
 /****************************************************************************************/
 
-template<typename DOFHANDLER, typename VECTOR, int dealdim>
-class LocalPointFunctionalPressure: public FunctionalInterface<CellDataContainer,FaceDataContainer,DOFHANDLER, VECTOR, dealdim>
+template<
+template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+  template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
+  template<int, int> class DH, typename VECTOR, int dealdim>
+  class LocalPointFunctionalPressure: public FunctionalInterface<CDC, FDC, DH, VECTOR, dealdim>
 {
   public:
 
-  double PointValue(const DOpEWrapper::DoFHandler<dealdim, DOFHANDLER> & /*control_dof_handler*/,
-                      const DOpEWrapper::DoFHandler<dealdim, DOFHANDLER> & state_dof_handler,
+  double PointValue(const DOpEWrapper::DoFHandler<dealdim, DH> & /*control_dof_handler*/,
+		    const DOpEWrapper::DoFHandler<dealdim, DH> & state_dof_handler,
 		    const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
-                      const std::map<std::string, const VECTOR*> &domain_values)
+		    const std::map<std::string, const VECTOR*> &domain_values)
     {
       Point<2> p1(0.15, 0.2);
       Point<2> p2(0.25, 0.2);
@@ -72,15 +75,18 @@ class LocalPointFunctionalPressure: public FunctionalInterface<CellDataContainer
 };
 
 /****************************************************************************************/
-template<typename DOFHANDLER, typename VECTOR, int dealdim>
-class LocalPointFunctionalDeflectionX: public FunctionalInterface<CellDataContainer,FaceDataContainer,DOFHANDLER, VECTOR, dealdim>
+template<
+template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+  template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
+  template<int, int> class DH, typename VECTOR, int dealdim>
+  class LocalPointFunctionalDeflectionX: public FunctionalInterface<CDC, FDC, DH, VECTOR, dealdim>
 {
   public:
 
-  double PointValue(const DOpEWrapper::DoFHandler<dealdim, DOFHANDLER> & /*control_dof_handler*/,
-                      const DOpEWrapper::DoFHandler<dealdim, DOFHANDLER> &state_dof_handler,
+  double PointValue(const DOpEWrapper::DoFHandler<dealdim, DH> & /*control_dof_handler*/,
+		    const DOpEWrapper::DoFHandler<dealdim, DH> &state_dof_handler,
 		    const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
-                      const std::map<std::string, const VECTOR*> &domain_values)
+		    const std::map<std::string, const VECTOR*> &domain_values)
     {
       Point<2> p1(0.6, 0.2);
 
@@ -107,15 +113,18 @@ class LocalPointFunctionalDeflectionX: public FunctionalInterface<CellDataContai
 };
 
 /****************************************************************************************/
-template<typename DOFHANDLER, typename VECTOR, int dealdim>
-class LocalPointFunctionalDeflectionY: public FunctionalInterface<CellDataContainer,FaceDataContainer,DOFHANDLER, VECTOR, dealdim>
+template<
+template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+  template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
+  template<int, int> class DH, typename VECTOR, int dealdim>
+  class LocalPointFunctionalDeflectionY: public FunctionalInterface<CDC, FDC, DH, VECTOR, dealdim>
 {
   public:
 
-  double PointValue(const DOpEWrapper::DoFHandler<dealdim, DOFHANDLER> & /*control_dof_handler*/,
-                      const DOpEWrapper::DoFHandler<dealdim, DOFHANDLER> &state_dof_handler,
+  double PointValue(const DOpEWrapper::DoFHandler<dealdim, DH> & /*control_dof_handler*/,
+		    const DOpEWrapper::DoFHandler<dealdim, DH> &state_dof_handler,
 		    const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
-                      const std::map<std::string, const VECTOR*> &domain_values)
+		    const std::map<std::string, const VECTOR*> &domain_values)
     {
       Point<2> p1(0.6, 0.2);
 
@@ -143,8 +152,11 @@ class LocalPointFunctionalDeflectionY: public FunctionalInterface<CellDataContai
 
 // drag
 /****************************************************************************************/
-template<typename DOFHANDLER, typename VECTOR, int dealdim>
-class LocalBoundaryFaceFunctionalDrag: public FunctionalInterface<CellDataContainer,FaceDataContainer,DOFHANDLER, VECTOR, dealdim>
+template<
+template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+  template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
+  template<int, int> class DH, typename VECTOR, int dealdim>
+  class LocalBoundaryFaceFunctionalDrag: public FunctionalInterface<CDC, FDC, DH, VECTOR, dealdim>
 {
   public:
     static void declare_params(ParameterReader &param_reader)
@@ -175,7 +187,7 @@ class LocalBoundaryFaceFunctionalDrag: public FunctionalInterface<CellDataContai
     }
 
     // compute drag value around cylinder
-    double BoundaryValue(const FaceDataContainer<DOFHANDLER,VECTOR,2>& fdc)
+    double BoundaryValue(const FDC<DH,VECTOR,2>& fdc)
     {
       unsigned int color = fdc.GetBoundaryIndicator();
       unsigned int n_q_points = fdc.GetNQPoints();
@@ -243,7 +255,7 @@ class LocalBoundaryFaceFunctionalDrag: public FunctionalInterface<CellDataContai
 
     }
 
-    double FaceValue(const FaceDataContainer<DOFHANDLER,VECTOR,2>& fdc)
+    double FaceValue(const FDC<DH,VECTOR,2>& fdc)
     {
 
       unsigned int material_id = fdc.GetMaterialId();
@@ -339,8 +351,11 @@ class LocalBoundaryFaceFunctionalDrag: public FunctionalInterface<CellDataContai
 
 // lift
 /****************************************************************************************/
-template<typename DOFHANDLER, typename VECTOR, int dealdim>
-class LocalBoundaryFaceFunctionalLift: public FunctionalInterface<CellDataContainer,FaceDataContainer,DOFHANDLER, VECTOR, dealdim>
+template<
+template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+  template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
+  template<int, int> class DH, typename VECTOR, int dealdim>
+  class LocalBoundaryFaceFunctionalLift: public FunctionalInterface<CDC, FDC, DH, VECTOR, dealdim>
 {
   public:
     static void declare_params(ParameterReader &param_reader)
@@ -371,7 +386,7 @@ class LocalBoundaryFaceFunctionalLift: public FunctionalInterface<CellDataContai
     }
 
     // compute drag value around cylinder
-    double BoundaryValue(const FaceDataContainer<DOFHANDLER,VECTOR,2>& fdc)
+    double BoundaryValue(const FDC<DH,VECTOR,2>& fdc)
     {
       unsigned int n_q_points = fdc.GetNQPoints();
       unsigned int color = fdc.GetBoundaryIndicator();
@@ -441,7 +456,7 @@ class LocalBoundaryFaceFunctionalLift: public FunctionalInterface<CellDataContai
     }
 
     // compute drag value at interface
-    double FaceValue(const FaceDataContainer<DOFHANDLER,VECTOR,2>& fdc)
+    double FaceValue(const FDC<DH,VECTOR,2>& fdc)
     {
 
       unsigned int n_q_points = fdc.GetNQPoints();

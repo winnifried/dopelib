@@ -39,9 +39,12 @@ using namespace DOpE;
 
 // massflux
 /****************************************************************************************/
-template<typename VECTOR, typename FACEDATACONTAINER, int dealdim>
-  class LocalFaceFunctional : public FunctionalInterface<CellDataContainer,
-      FaceDataContainer, dealii::DoFHandler, VECTOR, dealdim>
+
+template<
+template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+  template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
+  template<int, int> class DH, typename VECTOR, int dealdim>
+  class LocalFaceFunctional : public FunctionalInterface<CDC, FDC, DH, VECTOR, dealdim>
   {
     public:
       LocalFaceFunctional()
@@ -49,7 +52,7 @@ template<typename VECTOR, typename FACEDATACONTAINER, int dealdim>
       }
 
       double
-      FaceValue(const FACEDATACONTAINER& fdc)
+	FaceValue(const FDC<DH,VECTOR,dealdim>& fdc)
       {
         unsigned int n_q_points = fdc.GetNQPoints();
         unsigned int material_id = fdc.GetMaterialId();
@@ -81,7 +84,7 @@ template<typename VECTOR, typename FACEDATACONTAINER, int dealdim>
       }
 
       void
-      FaceValue_U(const FACEDATACONTAINER& fdc,
+      FaceValue_U(const FDC<DH,VECTOR,dealdim>& fdc,
           dealii::Vector<double> &local_cell_vector, double scale)
       {
         unsigned int n_q_points = fdc.GetNQPoints();

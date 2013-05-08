@@ -65,11 +65,12 @@ using namespace DOpE;
 #define VECTOR Vector<double>
 #define MATRIX SparseMatrix<double>
 #define SPARSITYPATTERN SparsityPattern
-#define DOFHANDLER DoFHandler<2>
-#define FE FESystem<2>
-#define FACEDATACONTAINER FaceDataContainer<DOFHANDLER, VECTOR, 2>
+#define DOFHANDLER DoFHandler
+#define FE FESystem
+#define CDC CellDataContainer
+#define FDC FaceDataContainer
 
-typedef PDEProblemContainer<PDEInterface<CellDataContainer,FaceDataContainer,DOFHANDLER, VECTOR, 2> , DirichletDataInterface<VECTOR, 2> ,
+typedef PDEProblemContainer<LocalPDELaplace<CDC,FDC,DOFHANDLER, VECTOR, 2> , DirichletDataInterface<VECTOR, 2> ,
 			    SPARSITYPATTERN, VECTOR, 2> OP;
 typedef IntegratorDataContainer<DOFHANDLER, Quadrature<2>, Quadrature<1>, VECTOR, 2 > IDC;
 typedef Integrator<IDC, VECTOR, double, 2> INTEGRATOR;
@@ -138,7 +139,7 @@ int main(int argc, char **argv)
 
 	//FiniteElemente*************************************************
 	pr.SetSubsection("main parameters");
-	FESystem < 2 > state_fe(FE_Q<2>(pr.get_integer("order fe")), 2);
+	FE<2> state_fe(FE_Q<2>(pr.get_integer("order fe")), 2);
 
 	//Quadrature formulas*************************************************
 	pr.SetSubsection("main parameters");
@@ -148,8 +149,8 @@ int main(int argc, char **argv)
 	//**************************************************************************************************
 
 	//Functionals*************************************************
-	LocalBoundaryFunctionalMassFlux<VECTOR, FACEDATACONTAINER, 2> LBFMF;
-	LocalPDELaplace<VECTOR,  2> LPDE;
+	LocalBoundaryFunctionalMassFlux<CDC,FDC,DOFHANDLER,VECTOR, 2> LBFMF;
+	LocalPDELaplace<CDC,FDC,DOFHANDLER,VECTOR, 2> LPDE;
 	//*************************************************
 
 	//pseudo time*************************************************
@@ -157,7 +158,7 @@ int main(int argc, char **argv)
 	//*************************************************
 
 	/***********************************/
-	DOpE::PeriodicityConstraints<2> constraints_mkr;
+	DOpE::PeriodicityConstraints<DOFHANDLER,2> constraints_mkr;
 	MethodOfLines_StateSpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR, 2> DOFH(triangulation,  state_fe);
 	//Add the periodicity constraints through the following:
 	DOFH.SetUserDefinedDoFConstraints(constraints_mkr);

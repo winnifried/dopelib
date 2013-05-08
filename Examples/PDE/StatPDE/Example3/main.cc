@@ -66,19 +66,23 @@ using namespace std;
 using namespace dealii;
 using namespace DOpE;
 
+#define MATRIX BlockSparseMatrix<double>
+#define SPARSITYPATTERN BlockSparsityPattern
 #define VECTOR BlockVector<double>
-#define DOFHANDLER DoFHandler<2>
-#define FE FESystem<2>
+#define DOFHANDLER DoFHandler
+#define FE FESystem
+#define CDC CellDataContainer
+#define FDC FaceDataContainer
 
-typedef PDEProblemContainer<LocalPDE<DOFHANDLER, VECTOR, 2>,
-    DirichletDataInterface<VECTOR, 2>, BlockSparsityPattern, VECTOR, 2> OP;
+typedef PDEProblemContainer<LocalPDE<CDC,FDC,DOFHANDLER, VECTOR, 2>,
+    DirichletDataInterface<VECTOR, 2>, SPARSITYPATTERN, VECTOR, 2> OP;
 
 typedef IntegratorDataContainer<DOFHANDLER, Quadrature<2>,
-    Quadrature<1>, VECTOR, 2> IDC;
+				Quadrature<1>, VECTOR, 2> IDC;
 typedef Integrator<IDC, VECTOR, double, 2> INTEGRATOR;
 
-typedef DirectLinearSolverWithMatrix<BlockSparsityPattern,
-    BlockSparseMatrix<double>, VECTOR, 2> LINEARSOLVER;
+typedef DirectLinearSolverWithMatrix<SPARSITYPATTERN,
+				     MATRIX, VECTOR, 2> LINEARSOLVER;
 
 typedef NewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR, 2> NLS;
 typedef StatPDEProblem<NLS, INTEGRATOR, OP, VECTOR, 2> SSolver;
@@ -109,10 +113,10 @@ main(int argc, char **argv)
   ParameterReader pr;
   SSolver::declare_params(pr);
   DOpEOutputHandler<VECTOR>::declare_params(pr);
-  LocalPDE<DOFHANDLER, VECTOR, 2>::declare_params(pr);
+  LocalPDE<CDC,FDC,DOFHANDLER, VECTOR, 2>::declare_params(pr);
   BoundaryParabel::declare_params(pr);
-  LocalBoundaryFaceFunctionalDrag<DOFHANDLER, VECTOR, 2>::declare_params(pr);
-  LocalBoundaryFaceFunctionalLift<DOFHANDLER, VECTOR, 2>::declare_params(pr);
+  LocalBoundaryFaceFunctionalDrag<CDC,FDC,DOFHANDLER, VECTOR, 2>::declare_params(pr);
+  LocalBoundaryFaceFunctionalLift<CDC,FDC,DOFHANDLER, VECTOR, 2>::declare_params(pr);
   pr.read_parameters(paramfile);
 
   Triangulation<2> triangulation;
@@ -141,13 +145,13 @@ main(int argc, char **argv)
   QGauss<1> face_quadrature_formula(3);
   IDC idc(quadrature_formula, face_quadrature_formula);
 
-  LocalPDE<DOFHANDLER, VECTOR, 2> LPDE(pr);
+  LocalPDE<CDC,FDC,DOFHANDLER, VECTOR, 2> LPDE(pr);
 
-  LocalPointFunctionalPressure<DOFHANDLER, VECTOR, 2> LPFP;
-  LocalPointFunctionalDeflectionX<DOFHANDLER, VECTOR, 2> LPFDX;
-  LocalPointFunctionalDeflectionY<DOFHANDLER, VECTOR, 2> LPFDY;
-  LocalBoundaryFaceFunctionalDrag<DOFHANDLER, VECTOR, 2> LBFD(pr);
-  LocalBoundaryFaceFunctionalLift<DOFHANDLER, VECTOR, 2> LBFL(pr);
+  LocalPointFunctionalPressure   <CDC,FDC,DOFHANDLER, VECTOR, 2> LPFP;
+  LocalPointFunctionalDeflectionX<CDC,FDC,DOFHANDLER, VECTOR, 2> LPFDX;
+  LocalPointFunctionalDeflectionY<CDC,FDC,DOFHANDLER, VECTOR, 2> LPFDY;
+  LocalBoundaryFaceFunctionalDrag<CDC,FDC,DOFHANDLER, VECTOR, 2> LBFD(pr);
+  LocalBoundaryFaceFunctionalLift<CDC,FDC,DOFHANDLER, VECTOR, 2> LBFL(pr);
 
   //pseudo time
   std::vector<double> times(1, 0.);

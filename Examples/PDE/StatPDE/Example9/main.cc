@@ -66,15 +66,16 @@ using namespace DOpE;
 #define VECTOR Vector<double>
 #define MATRIX SparseMatrix<double>
 #define SPARSITYPATTERN SparsityPattern
-#define DOFHANDLER DoFHandler<2>
-#define FE FESystem<2>
-#define FACEDATACONTAINER FaceDataContainer<DOFHANDLER, VECTOR, 2>
+#define DOFHANDLER DoFHandler
+#define FE FESystem
+#define CDC CellDataContainer
+#define FDC FaceDataContainer
 
 typedef PDEProblemContainer<
-    PDEInterface<CellDataContainer, FaceDataContainer, DOFHANDLER, VECTOR, 2>,
-    DirichletDataInterface<VECTOR, 2>, SPARSITYPATTERN, VECTOR, 2> OP;
+  LocalPDELaplace<CDC,FDC, DOFHANDLER, VECTOR, 2>,
+  DirichletDataInterface<VECTOR, 2>, SPARSITYPATTERN, VECTOR, 2> OP;
 typedef IntegratorDataContainer<DOFHANDLER, Quadrature<2>,
-    Quadrature<1>, VECTOR, 2> IDC;
+				Quadrature<1>, VECTOR, 2> IDC;
 typedef Integrator<IDC, VECTOR, double, 2> INTEGRATOR;
 //********************Linearsolver**********************************
 typedef DirectLinearSolverWithMatrix<SPARSITYPATTERN, MATRIX, VECTOR, 2> LINEARSOLVER;
@@ -83,10 +84,8 @@ typedef DirectLinearSolverWithMatrix<SPARSITYPATTERN, MATRIX, VECTOR, 2> LINEARS
 typedef NewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR, 2> NLS;
 typedef StatPDEProblem<NLS, INTEGRATOR, OP, VECTOR, 2> SSolver;
 typedef MethodOfLines_StateSpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN,
-    VECTOR, 2> STH;
-typedef CellDataContainer<DOFHANDLER, VECTOR, 2> CDC;
-typedef FaceDataContainer<DOFHANDLER, VECTOR, 2> FDC;
-typedef HigherOrderDWRContainer<STH, IDC, CDC, FDC, VECTOR> HO_DWRC;
+					    VECTOR, 2> STH;
+typedef HigherOrderDWRContainer<STH, IDC, CDC<DOFHANDLER,VECTOR,2>,FDC<DOFHANDLER,VECTOR,2>, VECTOR> HO_DWRC;
 typedef L2ResidualErrorContainer<STH, VECTOR,2> L2_RESC;
 typedef H1ResidualErrorContainer<STH, VECTOR,2> H1_RESC;
 
@@ -163,7 +162,7 @@ main(int argc, char **argv)
 
   //FiniteElemente*************************************************
   pr.SetSubsection("main parameters");
-  FESystem<2> state_fe(FE_Q<2>(pr.get_integer("order fe")),1);
+  FE<2> state_fe(FE_Q<2>(pr.get_integer("order fe")),1);
 
   //Quadrature formulas*************************************************
   pr.SetSubsection("main parameters");
@@ -173,8 +172,8 @@ main(int argc, char **argv)
   //**************************************************************************
 
   //Functionals*************************************************
-  LocalFaceFunctional<VECTOR, FACEDATACONTAINER, 2> LFF;
-  LocalPDELaplace<VECTOR, 2> LPDE;
+  LocalFaceFunctional<CDC,FDC,DOFHANDLER,VECTOR, 2> LFF;
+  LocalPDELaplace<CDC,FDC,DOFHANDLER,VECTOR, 2> LPDE;
   //*************************************************
 
   //space time handler***********************************/
@@ -209,7 +208,7 @@ main(int argc, char **argv)
   P.SetFunctionalForErrorEstimation(LFF.GetName());
   //FiniteElemente for DWR*************************************************
   pr.SetSubsection("main parameters");
-  FESystem<2> state_fe_high(FE_Q<2>(2* pr.get_integer("order fe")),1);
+  FE<2> state_fe_high(FE_Q<2>(2* pr.get_integer("order fe")),1);
   //Quadrature formulas for DWR*************************************************
   pr.SetSubsection("main parameters");
   QGauss<2> quadrature_formula_high(pr.get_integer("quad order") + 1);

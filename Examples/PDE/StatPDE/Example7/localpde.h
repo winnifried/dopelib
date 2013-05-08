@@ -32,8 +32,10 @@ using namespace std;
 using namespace dealii;
 using namespace DOpE;
 
-template<typename VECTOR, int dealdim>
-class LocalPDE: public PDEInterface<CellDataContainer,FaceDataContainer,dealii::DoFHandler, VECTOR, dealdim>
+template<template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+  template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
+  template<int, int> class DH, typename VECTOR, int dealdim>
+  class LocalPDE: public PDEInterface<CDC,FDC,DH, VECTOR, dealdim>
 {
   public:
     LocalPDE() :
@@ -43,7 +45,7 @@ class LocalPDE: public PDEInterface<CellDataContainer,FaceDataContainer,dealii::
     }
 
     // Domain values for cells
-    void CellEquation(const CellDataContainer<dealii::DoFHandler, VECTOR, dealdim>& cdc,
+    void CellEquation(const CDC<DH, VECTOR, dealdim>& cdc,
                       dealii::Vector<double> &local_cell_vector,
                       double scale, double)
     {
@@ -79,7 +81,7 @@ class LocalPDE: public PDEInterface<CellDataContainer,FaceDataContainer,dealii::
 
     }
 
-    void CellMatrix(const CellDataContainer<dealii::DoFHandler, VECTOR, dealdim>& cdc, FullMatrix<double> &local_entry_matrix, double, double)
+    void CellMatrix(const CDC<DH, VECTOR, dealdim>& cdc, FullMatrix<double> &local_entry_matrix, double, double)
     {
 
       const DOpEWrapper::FEValues<dealdim> & state_fe_values = cdc.GetFEValuesState();
@@ -109,7 +111,7 @@ class LocalPDE: public PDEInterface<CellDataContainer,FaceDataContainer,dealii::
 
     }
 
-    void CellRightHandSide(const CellDataContainer<dealii::DoFHandler, VECTOR, dealdim>& cdc,
+    void CellRightHandSide(const CDC<DH, VECTOR, dealdim>& cdc,
                            dealii::Vector<double> &local_cell_vector __attribute__((unused)),
                            double scale __attribute__((unused)))
     {

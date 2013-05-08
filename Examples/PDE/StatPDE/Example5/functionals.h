@@ -34,16 +34,19 @@ using namespace DOpE;
 // x-displacement in (90,0)
 /****************************************************************************************/
 
-template<typename VECTOR, int dealdim>
-  class LocalPointFunctionalDisp_1 : public FunctionalInterface<CellDataContainer,FaceDataContainer,dealii::DoFHandler, VECTOR,dealdim>
+template<
+template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+  template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
+  template<int, int> class DH, typename VECTOR, int dealdim>
+  class LocalPointFunctionalDisp_1 : public FunctionalInterface<CDC, FDC, DH, VECTOR, dealdim>
   {
 
   public:
 
-    double PointValue(const DOpEWrapper::DoFHandler<dealdim, dealii::DoFHandler > & control_dof_handler __attribute__((unused)),
-		    const DOpEWrapper::DoFHandler<dealdim, dealii::DoFHandler > &state_dof_handler,
-		    const std::map<std::string, const dealii::Vector<double>* > &param_values __attribute__((unused)),
-		    const std::map<std::string, const VECTOR* > &domain_values)
+    double PointValue(const DOpEWrapper::DoFHandler<dealdim, DH > & control_dof_handler __attribute__((unused)),
+		      const DOpEWrapper::DoFHandler<dealdim, DH > &state_dof_handler,
+		      const std::map<std::string, const dealii::Vector<double>* > &param_values __attribute__((unused)),
+		      const std::map<std::string, const VECTOR* > &domain_values)
   {
     Point<2> p1(90,0);
 
@@ -69,16 +72,20 @@ template<typename VECTOR, int dealdim>
 
 // y-displacement in (100,100)
 /****************************************************************************************/
-template<typename VECTOR, int dealdim>
-  class LocalPointFunctionalDisp_2 : public FunctionalInterface<CellDataContainer,FaceDataContainer,dealii::DoFHandler,VECTOR,dealdim>
+
+template<
+template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+  template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
+  template<int, int> class DH, typename VECTOR, int dealdim>
+  class LocalPointFunctionalDisp_2 : public FunctionalInterface<CDC, FDC, DH, VECTOR, dealdim>
   {
 
   public:
 
-  double PointValue(const DOpEWrapper::DoFHandler<dealdim, dealii::DoFHandler > & control_dof_handler __attribute__((unused)),
-			      const DOpEWrapper::DoFHandler<dealdim, dealii::DoFHandler > &state_dof_handler,
-			      const std::map<std::string, const dealii::Vector<double>* > &param_values __attribute__((unused)),
-			      const std::map<std::string, const VECTOR* > &domain_values)
+  double PointValue(const DOpEWrapper::DoFHandler<dealdim, DH > & control_dof_handler __attribute__((unused)),
+		    const DOpEWrapper::DoFHandler<dealdim, DH > &state_dof_handler,
+		    const std::map<std::string, const dealii::Vector<double>* > &param_values __attribute__((unused)),
+		    const std::map<std::string, const VECTOR* > &domain_values)
   {
     Point<dealdim> p1(100,100);
 
@@ -106,14 +113,18 @@ template<typename VECTOR, int dealdim>
 
 // x-displacement in (0,100)
 /****************************************************************************************/
-template<typename VECTOR, int dealdim>
-  class LocalPointFunctionalDisp_3 : public FunctionalInterface<CellDataContainer,FaceDataContainer,dealii::DoFHandler,VECTOR,dealdim>
+
+template<
+template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+  template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
+  template<int, int> class DH, typename VECTOR, int dealdim>
+  class LocalPointFunctionalDisp_3 : public FunctionalInterface<CDC, FDC, DH, VECTOR, dealdim>
   {
 
   public:
 
-  double PointValue(const DOpEWrapper::DoFHandler<dealdim, dealii::DoFHandler > & control_dof_handler __attribute__((unused)),
-		    const DOpEWrapper::DoFHandler<dealdim, dealii::DoFHandler > &state_dof_handler,
+  double PointValue(const DOpEWrapper::DoFHandler<dealdim, DH > & control_dof_handler __attribute__((unused)),
+		    const DOpEWrapper::DoFHandler<dealdim, DH > &state_dof_handler,
 		    const std::map<std::string, const dealii::Vector<double>* > &param_values __attribute__((unused)),
 		    const std::map<std::string, const VECTOR* > &domain_values)
   {
@@ -143,14 +154,17 @@ template<typename VECTOR, int dealdim>
 //yy-stress in (90,0)
 /****************************************************************************************/
 
-template<typename VECTOR, int dealdim>
-  class LocalDomainFunctionalStress : public FunctionalInterface<CellDataContainer,FaceDataContainer,dealii::DoFHandler, VECTOR,dealdim>
+template<
+template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+  template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
+  template<int, int> class DH, typename VECTOR, int dealdim>
+  class LocalDomainFunctionalStress : public FunctionalInterface<CDC, FDC, DH, VECTOR, dealdim>
   {
   private:
 
   public:
 
-      double Value(const CellDataContainer<dealii::DoFHandler, VECTOR, dealdim>& cdc)
+      double Value(const CDC<DH, VECTOR, dealdim>& cdc)
       {
 	const DOpEWrapper::FEValues<dealdim> &state_fe_values = cdc.GetFEValuesState();
 	unsigned int n_q_points = cdc.GetNQPoints();
@@ -206,38 +220,16 @@ template<typename VECTOR, int dealdim>
       {
 	return "yy-stress_in_(90,0)";
       }
-
-  protected:
-      inline void GetValues(const DOpEWrapper::FEValues<dealdim>& fe_values,
-			    const map<string, const VECTOR* >& domain_values, string name,
-			    vector<Vector<double> >& values)
-      {
-	typename map<string, const VECTOR* >::const_iterator it = domain_values.find(name);
-	if(it == domain_values.end())
-	{
-	  throw DOpEException("Did not find " + name,"LocalPDE::GetValues");
-	}
-	fe_values.get_function_values(*(it->second),values);
-      }
-
-      inline void GetGrads(const DOpEWrapper::FEValues<dealdim>& fe_values,
-			   const map<string, const VECTOR* >& domain_values, string name,
-			   vector<vector<Tensor<1,dealdim> > >& values)
-      {
-	typename map<string, const VECTOR* >::const_iterator it = domain_values.find(name);
-	if(it == domain_values.end())
-	{
-	  throw DOpEException("Did not find " + name,"LocalPDE::GetGrads");
-	}
-	fe_values.get_function_grads(*(it->second),values);
-      }
   };
 
 // y-displacement-integral on upper boundary
 /****************************************************************************************/
 
-template<typename VECTOR, int dealdim>
-  class LocalBoundaryFaceFunctionalUpBd : public FunctionalInterface<CellDataContainer,FaceDataContainer,dealii::DoFHandler, VECTOR,dealdim>
+template<
+template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+  template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
+  template<int, int> class DH, typename VECTOR, int dealdim>
+  class LocalBoundaryFaceFunctionalUpBd : public FunctionalInterface<CDC, FDC, DH, VECTOR, dealdim>
   {
   private:
 
@@ -251,7 +243,7 @@ template<typename VECTOR, int dealdim>
     }
 
     // compute y-displacement-integral
-    double BoundaryValue(const FaceDataContainer<dealii::DoFHandler, VECTOR, dealdim>& fdc)
+    double BoundaryValue(const FDC<DH, VECTOR, dealdim>& fdc)
     {
       unsigned int color = fdc.GetBoundaryIndicator();
       const auto &state_fe_face_values = fdc.GetFEFaceValuesState();

@@ -39,9 +39,12 @@ using namespace DOpE;
 
 // massflux
 /****************************************************************************************/
-template<typename VECTOR, typename FACEDATACONTAINER, int dealdim>
-class LocalBoundaryFunctionalMassFlux: public FunctionalInterface<CellDataContainer,FaceDataContainer,dealii::DoFHandler, VECTOR,
-    dealdim>
+
+template<
+template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+  template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
+  template<int, int> class DH, typename VECTOR, int dealdim>
+class LocalBoundaryFunctionalMassFlux: public FunctionalInterface<CDC, FDC, DH, VECTOR, dealdim>
 {
 	public:
 		LocalBoundaryFunctionalMassFlux()
@@ -49,7 +52,7 @@ class LocalBoundaryFunctionalMassFlux: public FunctionalInterface<CellDataContai
 		}
 
 		// compute drag value around cylinder
-		double BoundaryValue(const FACEDATACONTAINER& fdc)
+		double BoundaryValue(const FDC<DH,VECTOR,2>& fdc)
 		{
 			unsigned int n_q_points = fdc.GetNQPoints();
 			unsigned int color = fdc.GetBoundaryIndicator();

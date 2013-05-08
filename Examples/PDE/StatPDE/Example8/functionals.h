@@ -34,15 +34,18 @@ using namespace DOpE;
 
 
 /****************************************************************************************/
-template<typename VECTOR, int dealdim>
-  class LocalPointFunctionalX : public FunctionalInterface<CellDataContainer,FaceDataContainer,dealii::DoFHandler, VECTOR,dealdim>
+template<
+template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+  template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
+  template<int, int> class DH, typename VECTOR, int dealdim>
+  class LocalPointFunctionalX : public FunctionalInterface<CDC, FDC, DH, VECTOR, dealdim>
   {
   public:
 
-    double PointValue(const DOpEWrapper::DoFHandler<dealdim, dealii::DoFHandler > & /*control_dof_handler*/,
-			      const DOpEWrapper::DoFHandler<dealdim, dealii::DoFHandler > &state_dof_handler,
+    double PointValue(const DOpEWrapper::DoFHandler<dealdim, DH > & /*control_dof_handler*/,
+		      const DOpEWrapper::DoFHandler<dealdim, DH > &state_dof_handler,
 		      const std::map<std::string, const dealii::Vector<double>* > &/*param_values*/,
-			      const std::map<std::string, const VECTOR* > &domain_values)
+		      const std::map<std::string, const VECTOR* > &domain_values)
   {
     Point<3> p1(0.5, 0.5, 0.5);
 

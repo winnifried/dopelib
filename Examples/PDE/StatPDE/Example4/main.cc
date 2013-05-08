@@ -60,20 +60,24 @@ using namespace std;
 using namespace dealii;
 using namespace DOpE;
 
+#define MATRIX BlockSparseMatrix<double>
+#define SPARSITYPATTERN BlockSparsityPattern
 #define VECTOR BlockVector<double>
-#define DOFHANDLER DoFHandler<2>
-#define FE FESystem<2>
+#define DOFHANDLER DoFHandler
+#define FE FESystem
+#define CDC CellDataContainer
+#define FDC FaceDataContainer
 
 typedef PDEProblemContainer<
-    PDEInterface<CellDataContainer, FaceDataContainer, DOFHANDLER, VECTOR, 2>,
-    DirichletDataInterface<VECTOR, 2>, BlockSparsityPattern, VECTOR, 2> OP;
+  PDEInterface<CDC, FDC, DOFHANDLER, VECTOR, 2>,
+  DirichletDataInterface<VECTOR, 2>, SPARSITYPATTERN, VECTOR, 2> OP;
 
 typedef IntegratorDataContainer<DOFHANDLER, Quadrature<2>,
-    Quadrature<1>, VECTOR, 2> IDC;
+				Quadrature<1>, VECTOR, 2> IDC;
 typedef Integrator<IDC, VECTOR, double, 2> INTEGRATOR;
 
-typedef DirectLinearSolverWithMatrix<BlockSparsityPattern,
-    BlockSparseMatrix<double>, VECTOR, 2> LINEARSOLVER;
+typedef DirectLinearSolverWithMatrix<SPARSITYPATTERN,
+				     MATRIX, VECTOR, 2> LINEARSOLVER;
 typedef NewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR, 2> NLS;
 
 typedef StatPDEProblem<NLS, INTEGRATOR, OP, VECTOR, 2> SSolver;
@@ -119,20 +123,20 @@ main(int argc, char **argv)
       GridOut grid_out;
       grid_out.write_eps(triangulation, out);
     }
-  FESystem<2> state_fe(FE_Q<2>(1), 2); //Q1
+  FE<2> state_fe(FE_Q<2>(1), 2); //Q1
 
   QSimpson<2> quadrature_formula;
   QSimpson<1> face_quadrature_formula;
   IDC idc(quadrature_formula, face_quadrature_formula);
 
-  LocalPDE<VECTOR, 2> LPDE;
+  LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, 2> LPDE;
 
-  LocalPointFunctionalDisp_1<VECTOR, 2> LPFD_1;
-  LocalPointFunctionalDisp_2<VECTOR, 2> LPFD_2;
-  LocalPointFunctionalDisp_3<VECTOR, 2> LPFD_3;
-  LocalDomainFunctionalStress<VECTOR, 2> LDFS;
+  LocalPointFunctionalDisp_1<CDC, FDC, DOFHANDLER, VECTOR, 2> LPFD_1;
+  LocalPointFunctionalDisp_2<CDC, FDC, DOFHANDLER, VECTOR, 2> LPFD_2;
+  LocalPointFunctionalDisp_3<CDC, FDC, DOFHANDLER, VECTOR, 2> LPFD_3;
+  LocalDomainFunctionalStress<CDC, FDC, DOFHANDLER, VECTOR, 2> LDFS;
 
-  LocalBoundaryFaceFunctionalUpBd<VECTOR, 2> LBFUB;
+  LocalBoundaryFaceFunctionalUpBd<CDC, FDC, DOFHANDLER, VECTOR, 2> LBFUB;
 
   MethodOfLines_StateSpaceTimeHandler<FE, DOFHANDLER, BlockSparsityPattern,
       VECTOR, 2> DOFH(triangulation, state_fe);

@@ -59,18 +59,15 @@ using namespace DOpE;
 #define MATRIX BlockSparseMatrix<double>
 #define SPARSITYPATTERN BlockSparsityPattern
 #define VECTOR BlockVector<double>
-#define DOFHANDLER DoFHandler<2>
-#define FE FESystem<2>
+#define DOFHANDLER DoFHandler
+#define FE FESystem
+#define CDC CellDataContainer
+#define FDC FaceDataContainer
 
-//#define MATRIX SparseMatrix<double>
-//#define SPARSITYPATTERN SparsityPattern
-//#define VECTOR Vector<double>
-
-typedef PDEProblemContainer<
-    PDEInterface<CellDataContainer, FaceDataContainer, DOFHANDLER, VECTOR, 2>,
-    DirichletDataInterface<VECTOR, 2>, SPARSITYPATTERN, VECTOR, 2> OP;
+typedef PDEProblemContainer<LocalPDE<CDC,FDC, DOFHANDLER, VECTOR, 2>,
+			    DirichletDataInterface<VECTOR, 2>, SPARSITYPATTERN, VECTOR, 2> OP;
 typedef IntegratorDataContainer<DOFHANDLER, Quadrature<2>,
-    Quadrature<1>, VECTOR, 2> IDC;
+				Quadrature<1>, VECTOR, 2> IDC;
 
 typedef Integrator<IDC, VECTOR, double, 2> INTEGRATOR;
 
@@ -105,15 +102,15 @@ main(int argc, char **argv)
 
   Triangulation<2> triangulation;
 
-  FESystem<2> state_fe(FE_Q<2>(1), 2);
+  FE<2> state_fe(FE_Q<2>(1), 2);
 
   QGauss<2> quadrature_formula(3);
   QGauss<1> face_quadrature_formula(3);
   IDC idc(quadrature_formula, face_quadrature_formula);
 
-  LocalPDE<VECTOR, 2> LPDE;
+  LocalPDE<CDC,FDC,DOFHANDLER,VECTOR, 2> LPDE;
 
-  LocalPointFunctionalX<VECTOR, 2> LPFX;
+  LocalPointFunctionalX<CDC,FDC,DOFHANDLER,VECTOR, 2> LPFX;
 
   // Pseudo time
   std::vector<double> times(1, 0.);
@@ -123,7 +120,7 @@ main(int argc, char **argv)
   triangulation.refine_global(3);
 
   MethodOfLines_StateSpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR, 2> DOFH(
-      triangulation, state_fe);
+    triangulation, state_fe);
 
   OP P(LPDE, DOFH);
 

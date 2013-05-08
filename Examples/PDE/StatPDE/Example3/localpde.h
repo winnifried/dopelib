@@ -30,8 +30,10 @@ using namespace std;
 using namespace dealii;
 using namespace DOpE;
 
-template<typename DOFHANDLER, typename VECTOR, int dealdim>
-class LocalPDE: public PDEInterface<CellDataContainer,FaceDataContainer,DOFHANDLER,VECTOR, dealdim>
+template<template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+  template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
+  template<int, int> class DH, typename VECTOR, int dealdim>
+  class LocalPDE : public PDEInterface<CDC,FDC,DH, VECTOR, dealdim>
 {
   public:
 
@@ -63,7 +65,7 @@ class LocalPDE: public PDEInterface<CellDataContainer,FaceDataContainer,DOFHANDL
     }
 
     // Domain values for cells
-    void CellEquation(const CellDataContainer<DOFHANDLER,VECTOR,2>& cdc,
+    void CellEquation(const CDC<DH,VECTOR,2>& cdc,
                       dealii::Vector<double> &local_cell_vector,
                       double scale, double)
     {
@@ -215,7 +217,7 @@ class LocalPDE: public PDEInterface<CellDataContainer,FaceDataContainer,DOFHANDL
       }
     }
 
-    void CellMatrix(const CellDataContainer<DOFHANDLER,VECTOR,2>& cdc, dealii::FullMatrix<double> &local_entry_matrix, double, double)
+    void CellMatrix(const CDC<DH,VECTOR,2>& cdc, dealii::FullMatrix<double> &local_entry_matrix, double, double)
     {
       assert(this->_problem_type == "state");
 
@@ -435,7 +437,7 @@ class LocalPDE: public PDEInterface<CellDataContainer,FaceDataContainer,DOFHANDL
       }
     }
 
-    void CellRightHandSide(const CellDataContainer<DOFHANDLER,VECTOR,2>&,
+    void CellRightHandSide(const CDC<DH,VECTOR,2>&,
                            dealii::Vector<double> &/*local_cell_vector*/,
                            double /*scale*/)
     {
@@ -443,7 +445,7 @@ class LocalPDE: public PDEInterface<CellDataContainer,FaceDataContainer,DOFHANDL
 
 
     // Values for Boundary integrals
-    void BoundaryEquation(const FaceDataContainer<DOFHANDLER,VECTOR,2>& fdc,
+    void BoundaryEquation(const FDC<DH,VECTOR,2>& fdc,
                           dealii::Vector<double> &local_cell_vector,
                           double scale, double /*scale_ico*/)
     {
@@ -498,7 +500,7 @@ class LocalPDE: public PDEInterface<CellDataContainer,FaceDataContainer,DOFHANDL
       }
     }
 
-    void BoundaryMatrix(const FaceDataContainer<DOFHANDLER,VECTOR,2>& fdc,
+    void BoundaryMatrix(const FDC<DH,VECTOR,2>& fdc,
                         dealii::FullMatrix<double> &local_entry_matrix, double /*scale*/, double /*scale_ico*/)
     {
       assert(this->_problem_type == "state");
@@ -595,7 +597,7 @@ class LocalPDE: public PDEInterface<CellDataContainer,FaceDataContainer,DOFHANDL
       }
     }
 
-    void BoundaryRightHandSide(const FaceDataContainer<DOFHANDLER,VECTOR,2>&,
+    void BoundaryRightHandSide(const FDC<DH,VECTOR,2>&,
                                dealii::Vector<double> &/*local_cell_vector*/,
                                double /*scale*/)
     {

@@ -65,11 +65,12 @@ using namespace DOpE;
 #define MATRIX SparseMatrix<double>
 #define SPARSITYPATTERN SparsityPattern
 #define VECTOR Vector<double>
-#define DOFHANDLER DoFHandler<2>
-#define FE FESystem<2>
-#define FACEDATACONTAINER FaceDataContainer<DOFHANDLER, VECTOR, 2>
+#define DOFHANDLER DoFHandler
+#define FE FESystem
+#define CDC CellDataContainer
+#define FDC FaceDataContainer
 
-typedef PDEProblemContainer<LocalPDE<VECTOR, 2>,
+typedef PDEProblemContainer<LocalPDE<CDC,FDC,DOFHANDLER,VECTOR, 2>,
     DirichletDataInterface<VECTOR, 2>, SPARSITYPATTERN, VECTOR, 2> OP;
 typedef IntegratorDataContainer<DOFHANDLER, Quadrature<2>, Quadrature<1>,
     VECTOR, 2> IDC;
@@ -135,16 +136,16 @@ main(int argc, char **argv)
   GridGenerator::hyper_ball(triangulation_q1);
   triangulation_q1.set_boundary(0, boundary);
 
-  FESystem<2> state_fe(FE_Q<2>(order_fe), 1);
+  FE<2> state_fe(FE_Q<2>(order_fe), 1);
 
   QGauss<2> quadrature_formula(2);
   QGauss<1> face_quadrature_formula(2);
   IDC idc(quadrature_formula, face_quadrature_formula);
 
-  LocalPDE<VECTOR, 2> LPDE(order_fe);
-  BoundaryFunctional<VECTOR, FACEDATACONTAINER, 2> BF;
+  LocalPDE<CDC,FDC,DOFHANDLER,VECTOR, 2> LPDE(order_fe);
+  BoundaryFunctional<CDC,FDC,DOFHANDLER,VECTOR, 2> BF;
 
-  DOpEWrapper::Mapping<2, dealii::DoFHandler<2> > mapping(order_mapping);
+  DOpEWrapper::Mapping<2, DOFHANDLER > mapping(order_mapping);
   MethodOfLines_StateSpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR, 2> DOFH(
       triangulation, mapping, state_fe);
   MethodOfLines_StateSpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR, 2> DOFH_q1(
