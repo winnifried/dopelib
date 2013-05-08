@@ -62,12 +62,12 @@ using namespace dealii;
 using namespace DOpE;
 
 #define VECTOR BlockVector<double>
-#define DOFHANDLER DoFHandler<2>
-#define FE FESystem<2>
+#define DOFHANDLER DoFHandler
+#define FE FESystem
 
 typedef OptProblemContainer<FunctionalInterface<Multimesh_CellDataContainer,Multimesh_FaceDataContainer,DOFHANDLER, VECTOR, 2,2>,
 		   FunctionalInterface<Multimesh_CellDataContainer,Multimesh_FaceDataContainer,DOFHANDLER, VECTOR, 2,2>,
-		   PDEInterface<Multimesh_CellDataContainer,Multimesh_FaceDataContainer,DOFHANDLER, VECTOR,2,2>,
+		   PDEInterface<Multimesh_CellDataContainer,Multimesh_FaceDataContainer,DOFHANDLER, VECTOR,2>,
 		   DirichletDataInterface<VECTOR,2,2>,
 		   ConstraintInterface<Multimesh_CellDataContainer,Multimesh_FaceDataContainer,DOFHANDLER, VECTOR, 2,2>,BlockSparsityPattern, VECTOR, 2,2> OP;
 
@@ -116,14 +116,14 @@ int main(int argc, char **argv)
   QGauss<1> face_quadrature_formula(2);
   IDC idc(quadrature_formula, face_quadrature_formula);
 
-  LocalPDE<VECTOR, 2,2> LPDE;
-  LocalFunctional<VECTOR, 2,2> LFunc;
+  LocalPDE<DOFHANDLER, VECTOR, 2> LPDE;
+  LocalFunctional<DOFHANDLER, VECTOR, 2,2> LFunc;
 
   //AuxFunctionals
-  LocalPointFunctional<VECTOR,2,2> LPF;
-  LocalMeanValueFunctional<VECTOR,2,2> LMF;
-  QErrorFunctional<VECTOR,2,2> QEF;
-  UErrorFunctional<VECTOR,2,2> UEF;
+  LocalPointFunctional<DOFHANDLER, VECTOR,2,2> LPF;
+  LocalMeanValueFunctional<DOFHANDLER,VECTOR,2,2> LMF;
+  QErrorFunctional<DOFHANDLER,VECTOR,2,2> QEF;
+  UErrorFunctional<DOFHANDLER,VECTOR,2,2> UEF;
 
 //  std::vector<double> times(1,0.);
   Triangulation<1> times;

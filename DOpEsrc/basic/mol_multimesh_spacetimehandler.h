@@ -179,12 +179,12 @@ namespace DOpE
           SpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dim, dim>::SetActiveFEIndicesControl(
               _control_dof_handler);
           _control_dof_handler.distribute_dofs(*_control_fe);
-          DoFRenumbering::component_wise(static_cast<DH&>(_control_dof_handler),
+          DoFRenumbering::component_wise(static_cast<DH<dim, dim>&>(_control_dof_handler),
               control_block_component);
 
           _control_dof_constraints.clear();
           DoFTools::make_hanging_node_constraints(
-              static_cast<DH&>(_control_dof_handler), _control_dof_constraints);
+              static_cast<DH<dim, dim>&>(_control_dof_handler), _control_dof_constraints);
           if (GetUserDefinedDoFConstraints() != NULL)
             GetUserDefinedDoFConstraints()->MakeControlDoFConstraints(
                 _control_dof_handler, _control_dof_constraints);
@@ -193,19 +193,19 @@ namespace DOpE
           _control_dofs_per_block.resize(control_n_blocks);
           {
             DoFTools::count_dofs_per_block(
-                static_cast<DH&>(_control_dof_handler), _control_dofs_per_block,
+                static_cast<DH<dim, dim>&>(_control_dof_handler), _control_dofs_per_block,
                 control_block_component);
           }
 
           SpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dim, dim>::SetActiveFEIndicesState(
               _state_dof_handler);
           _state_dof_handler.distribute_dofs(GetFESystem("state"));
-          DoFRenumbering::component_wise(static_cast<DH&>(_state_dof_handler),
+          DoFRenumbering::component_wise(static_cast<DH<dim, dim>&>(_state_dof_handler),
               state_block_component);
 
           _state_dof_constraints.clear();
           DoFTools::make_hanging_node_constraints(
-              static_cast<DH&>(_state_dof_handler), _state_dof_constraints);
+              static_cast<DH<dim, dim>&>(_state_dof_handler), _state_dof_constraints);
           //TODO Dirichlet Daten hierueber.
           if (GetUserDefinedDoFConstraints() != NULL)
             GetUserDefinedDoFConstraints()->MakeStateDoFConstraints(
@@ -213,7 +213,7 @@ namespace DOpE
           _state_dof_constraints.close();
 
           _state_dofs_per_block.resize(state_n_blocks);
-          DoFTools::count_dofs_per_block(static_cast<DH&>(_state_dof_handler),
+          DoFTools::count_dofs_per_block(static_cast<DH<dim, dim>&>(_state_dof_handler),
               _state_dofs_per_block, state_block_component);
 
           _support_points.clear();
@@ -536,7 +536,7 @@ namespace DOpE
             delete _state_mesh_transfer;
             _state_mesh_transfer = NULL;
           }
-          _state_mesh_transfer = new dealii::SolutionTransfer<dim, VECTOR, DH>(
+          _state_mesh_transfer = new dealii::SolutionTransfer<dim, VECTOR, DH<dim, dim>>(
               _state_dof_handler);
 
           if (DOpEtypes::RefinementType::global == ref_type)
@@ -606,7 +606,7 @@ namespace DOpE
           }
 #if dope_dimension == deal_II_dimension
           _control_mesh_transfer =
-              new dealii::SolutionTransfer<dim, VECTOR, DH>(
+              new dealii::SolutionTransfer<dim, VECTOR, DH<dim, dim>>(
                   _control_dof_handler);
 #endif
           if (DOpEtypes::RefinementType::global == ref_type)
@@ -802,8 +802,8 @@ namespace DOpE
         std::vector<Point<dim> > _support_points;
 
         Constraints _constraints;
-        dealii::SolutionTransfer<dim, VECTOR, DH>* _control_mesh_transfer;
-        dealii::SolutionTransfer<dim, VECTOR, DH>* _state_mesh_transfer;
+        dealii::SolutionTransfer<dim, VECTOR, DH<dim, dim> >* _control_mesh_transfer;
+        dealii::SolutionTransfer<dim, VECTOR, DH<dim, dim> >* _state_mesh_transfer;
         bool _sparse_mkr_dynamic;
     };
 

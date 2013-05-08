@@ -127,59 +127,59 @@ namespace DOpE
         GetIntegratorDataContainer() const;
 
       private:
-        template<typename DOFHANDLER>
+        template<template<int, int> class DH>
           void
           InterpolateBoundaryValues(
-              const DOpEWrapper::DoFHandler<dim, DOFHANDLER>*  dof_handler,
+              const DOpEWrapper::DoFHandler<dim, DH>*  dof_handler,
               const unsigned int color, const dealii::Function<dim>& function,
               std::map<unsigned int, SCALAR>& boundary_values,
               const std::vector<bool>& comp_mask) const;
 
-	template<typename PROBLEM, typename DOFHANDLER>
+	template<typename PROBLEM, template<int, int> class DH>
 	  inline void ComputeNonlinearResidual_Recursive(
 	    PROBLEM& pde, 
 	    VECTOR& residual, 
-	    typename std::vector<typename DOFHANDLER::cell_iterator>& cell_iter,
+	    typename std::vector<typename DH<dim, dim>::cell_iterator>& cell_iter,
 	    typename std::vector<typename dealii::Triangulation<dim>::cell_iterator>& tria_cell_iter,
 	    const FullMatrix<SCALAR>& prolong_matrix,unsigned int coarse_index,unsigned int fine_index,
-	    Multimesh_CellDataContainer<DOFHANDLER, VECTOR, dim>& cdc,
-	    Multimesh_FaceDataContainer<DOFHANDLER, VECTOR, dim>& fdc);
+	    Multimesh_CellDataContainer<DH, VECTOR, dim>& cdc,
+	    Multimesh_FaceDataContainer<DH, VECTOR, dim>& fdc);
 	
-	template<typename PROBLEM, typename DOFHANDLER>
+	template<typename PROBLEM, template<int, int> class DH>
 	  inline void ComputeNonlinearRhs_Recursive(
 	    PROBLEM& pde, 
 	    VECTOR& residual, 
-	    typename std::vector<typename DOFHANDLER::cell_iterator>& cell_iter,
+	    typename std::vector<typename DH<dim, dim>::cell_iterator>& cell_iter,
 	    typename std::vector<typename dealii::Triangulation<dim>::cell_iterator>& tria_cell_iter,
 	    const FullMatrix<SCALAR>& prolong_matrix,unsigned int coarse_index,unsigned int fine_index,
-	    Multimesh_CellDataContainer<DOFHANDLER, VECTOR, dim>& cdc,
-	    Multimesh_FaceDataContainer<DOFHANDLER, VECTOR, dim>& fdc);
+	    Multimesh_CellDataContainer<DH, VECTOR, dim>& cdc,
+	    Multimesh_FaceDataContainer<DH, VECTOR, dim>& fdc);
 	
-	template<typename PROBLEM, typename MATRIX, typename DOFHANDLER>
+	template<typename PROBLEM, typename MATRIX, template<int, int> class DH>
 	  inline void ComputeMatrix_Recursive(
 	    PROBLEM& pde, 
 	    MATRIX& matrix, 
-	    typename std::vector<typename DOFHANDLER::cell_iterator>& cell_iter,
+	    typename std::vector<typename DH<dim, dim>::cell_iterator>& cell_iter,
 	    typename std::vector<typename dealii::Triangulation<dim>::cell_iterator>& tria_cell_iter,
 	    const FullMatrix<SCALAR>& prolong_matrix,unsigned int coarse_index,unsigned int fine_index,
-	    Multimesh_CellDataContainer<DOFHANDLER, VECTOR, dim>& cdc,
-	    Multimesh_FaceDataContainer<DOFHANDLER, VECTOR, dim>& fdc);
+	    Multimesh_CellDataContainer<DH, VECTOR, dim>& cdc,
+	    Multimesh_FaceDataContainer<DH, VECTOR, dim>& fdc);
 
-	template<typename PROBLEM, typename DOFHANDLER>
+	template<typename PROBLEM, template<int, int> class DH>
 	  inline SCALAR ComputeDomainScalar_Recursive(
 	    PROBLEM& pde, 
-	    typename std::vector<typename DOFHANDLER::cell_iterator>& cell_iter,
+	    typename std::vector<typename DH<dim, dim>::cell_iterator>& cell_iter,
 	    typename std::vector<typename dealii::Triangulation<dim>::cell_iterator>& tria_cell_iter,
 	    const FullMatrix<SCALAR>& prolong_matrix,unsigned int coarse_index,unsigned int fine_index,
-	    Multimesh_CellDataContainer<DOFHANDLER, VECTOR, dim>& cdc);
+	    Multimesh_CellDataContainer<DH, VECTOR, dim>& cdc);
 
-	template<typename PROBLEM, typename DOFHANDLER>
+	template<typename PROBLEM, template<int, int> class DH>
 	  inline SCALAR ComputeBoundaryScalar_Recursive(
 	    PROBLEM& pde, 
-	    typename std::vector<typename DOFHANDLER::cell_iterator>& cell_iter,
+	    typename std::vector<typename DH<dim, dim>::cell_iterator>& cell_iter,
 	    typename std::vector<typename dealii::Triangulation<dim>::cell_iterator>& tria_cell_iter,
 	    const FullMatrix<SCALAR>& prolong_matrix,unsigned int coarse_index,unsigned int fine_index,
-	    Multimesh_FaceDataContainer<DOFHANDLER, VECTOR, dim>& cdc);
+	    Multimesh_FaceDataContainer<DH, VECTOR, dim>& cdc);
 
         INTEGRATORDATACONT & _idc;
 
@@ -1099,30 +1099,30 @@ namespace DOpE
 
   template<typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR,
       int dim>
-    template<typename DOFHANDLER>
+    template<template<int, int> class DH>
       void
       IntegratorMultiMesh<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::InterpolateBoundaryValues(
-          const DOpEWrapper::DoFHandler<dim, DOFHANDLER>* dof_handler,
+          const DOpEWrapper::DoFHandler<dim, DH>* dof_handler,
           const unsigned int color, const dealii::Function<dim>& function,
           std::map<unsigned int, SCALAR>& boundary_values,
           const std::vector<bool>& comp_mask) const
       {
         dealii::VectorTools::interpolate_boundary_values(
-            *(static_cast<const DOFHANDLER*> (dof_handler)), color, function,
+            dof_handler->GetDEALDoFHandler(), color, function,
             boundary_values, comp_mask);
       }
 
   /*******************************************************************************************/
 
   template<typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR,int dim>
-    template<typename PROBLEM, typename DOFHANDLER>
+    template<typename PROBLEM, template<int, int> class DH>
     void IntegratorMultiMesh<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::ComputeNonlinearResidual_Recursive(
       PROBLEM& pde, 
       VECTOR& residual, 
-      typename std::vector<typename DOFHANDLER::cell_iterator> &cell,
+      typename std::vector<typename DH<dim, dim>::cell_iterator> &cell,
       typename std::vector<typename dealii::Triangulation<dim>::cell_iterator> &tria_cell,
       const FullMatrix<SCALAR>& prolong_matrix,unsigned int coarse_index,unsigned int fine_index,
-      Multimesh_CellDataContainer<DOFHANDLER, VECTOR, dim>& cdc,Multimesh_FaceDataContainer<DOFHANDLER, VECTOR, dim>& fdc)
+      Multimesh_CellDataContainer<DH, VECTOR, dim>& cdc,Multimesh_FaceDataContainer<DH, VECTOR, dim>& fdc)
   {
     if(!cell[0]->has_children() && ! cell[1]->has_children())
     {
@@ -1233,7 +1233,7 @@ namespace DOpE
       
       unsigned int local_n_dofs = cell[coarse_index]->get_fe().dofs_per_cell;
       
-      typename DOFHANDLER::cell_iterator dofh_fine = cell[fine_index];
+      typename DH<dim, dim>::cell_iterator dofh_fine = cell[fine_index];
       typename dealii::Triangulation<dim>::cell_iterator tria_fine = tria_cell[fine_index];
       
       for (unsigned int child=0; child<GeometryInfo<dim>::max_children_per_cell;++child)
@@ -1251,14 +1251,14 @@ namespace DOpE
   /*******************************************************************************************/
 
   template<typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR,int dim>
-    template<typename PROBLEM, typename DOFHANDLER>
+    template<typename PROBLEM, template<int, int> class DH>
     void IntegratorMultiMesh<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::ComputeNonlinearRhs_Recursive(
       PROBLEM& pde, 
       VECTOR& residual, 
-      typename std::vector<typename DOFHANDLER::cell_iterator> &cell,
+      typename std::vector<typename DH<dim, dim>::cell_iterator> &cell,
       typename std::vector<typename dealii::Triangulation<dim>::cell_iterator> &tria_cell,
       const FullMatrix<SCALAR>& prolong_matrix,unsigned int coarse_index,unsigned int fine_index,
-      Multimesh_CellDataContainer<DOFHANDLER, VECTOR, dim>& cdc,Multimesh_FaceDataContainer<DOFHANDLER, VECTOR, dim>& fdc)
+      Multimesh_CellDataContainer<DH, VECTOR, dim>& cdc,Multimesh_FaceDataContainer<DH, VECTOR, dim>& fdc)
   {
     if(!cell[0]->has_children() && ! cell[1]->has_children())
     {
@@ -1357,7 +1357,7 @@ namespace DOpE
       
       unsigned int local_n_dofs = cell[coarse_index]->get_fe().dofs_per_cell;
       
-      typename DOFHANDLER::cell_iterator dofh_fine = cell[fine_index];
+      typename DH<dim, dim>::cell_iterator dofh_fine = cell[fine_index];
       typename dealii::Triangulation<dim>::cell_iterator tria_fine = tria_cell[fine_index];
       
       for (unsigned int child=0; child<GeometryInfo<dim>::max_children_per_cell;++child)
@@ -1377,14 +1377,14 @@ namespace DOpE
 
   template<typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR,
       int dim>
-    template<typename PROBLEM, typename MATRIX, typename DOFHANDLER>
+    template<typename PROBLEM, typename MATRIX, template<int, int> class DH>
       void
       IntegratorMultiMesh<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::ComputeMatrix_Recursive(
-	PROBLEM& pde, MATRIX &matrix, typename std::vector<typename DOFHANDLER::cell_iterator>& cell,
+	PROBLEM& pde, MATRIX &matrix, typename std::vector<typename DH<dim, dim>::cell_iterator>& cell,
 	typename std::vector<typename dealii::Triangulation<dim>::cell_iterator>& tria_cell,
 	const FullMatrix<SCALAR>& prolong_matrix,unsigned int coarse_index,unsigned int fine_index,
-	Multimesh_CellDataContainer<DOFHANDLER, VECTOR, dim>& cdc,
-	Multimesh_FaceDataContainer<DOFHANDLER, VECTOR, dim>& fdc)
+	Multimesh_CellDataContainer<DH, VECTOR, dim>& cdc,
+	Multimesh_FaceDataContainer<DH, VECTOR, dim>& fdc)
       {
 
 	if(!cell[0]->has_children() && ! cell[1]->has_children())
@@ -1519,7 +1519,7 @@ namespace DOpE
 	  
 	  unsigned int local_n_dofs = cell[coarse_index]->get_fe().dofs_per_cell;
 	  
-	  typename DOFHANDLER::cell_iterator dofh_fine = cell[fine_index];
+	  typename DH<dim, dim>::cell_iterator dofh_fine = cell[fine_index];
 	  typename dealii::Triangulation<dim>::cell_iterator tria_fine = tria_cell[fine_index];
 	  
 	  for (unsigned int child=0; child<GeometryInfo<dim>::max_children_per_cell;++child)
@@ -1538,13 +1538,13 @@ namespace DOpE
   /*******************************************************************************************/
   
   template<typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR,int dim>
-    template<typename PROBLEM, typename DOFHANDLER>
+    template<typename PROBLEM, template<int, int> class DH>
     SCALAR IntegratorMultiMesh<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::ComputeDomainScalar_Recursive(
       PROBLEM& pde, 
-      typename std::vector<typename DOFHANDLER::cell_iterator> &cell,
+      typename std::vector<typename DH<dim, dim>::cell_iterator> &cell,
       typename std::vector<typename dealii::Triangulation<dim>::cell_iterator> &tria_cell,
       const FullMatrix<SCALAR>& prolong_matrix,unsigned int coarse_index,unsigned int fine_index,
-      Multimesh_CellDataContainer<DOFHANDLER, VECTOR, dim>& cdc)
+      Multimesh_CellDataContainer<DH, VECTOR, dim>& cdc)
   {
     if(!cell[0]->has_children() && ! cell[1]->has_children())
     {
@@ -1563,7 +1563,7 @@ namespace DOpE
       
       unsigned int local_n_dofs = cell[coarse_index]->get_fe().dofs_per_cell;
       
-      typename DOFHANDLER::cell_iterator dofh_fine = cell[fine_index];
+      typename DH<dim, dim>::cell_iterator dofh_fine = cell[fine_index];
       typename dealii::Triangulation<dim>::cell_iterator tria_fine = tria_cell[fine_index];
       SCALAR ret = 0.;
       for (unsigned int child=0; child<GeometryInfo<dim>::max_children_per_cell;++child)
@@ -1582,13 +1582,13 @@ namespace DOpE
   /*******************************************************************************************/
   
   template<typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR,int dim>
-    template<typename PROBLEM, typename DOFHANDLER>
+    template<typename PROBLEM, template<int, int> class DH>
     SCALAR IntegratorMultiMesh<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::ComputeBoundaryScalar_Recursive(
       PROBLEM& pde, 
-      typename std::vector<typename DOFHANDLER::cell_iterator> &cell,
+      typename std::vector<typename DH<dim, dim>::cell_iterator> &cell,
       typename std::vector<typename dealii::Triangulation<dim>::cell_iterator> &tria_cell,
       const FullMatrix<SCALAR>& prolong_matrix,unsigned int coarse_index,unsigned int fine_index,
-      Multimesh_FaceDataContainer<DOFHANDLER, VECTOR, dim>& fdc)
+      Multimesh_FaceDataContainer<DH, VECTOR, dim>& fdc)
   {
     if(!cell[0]->has_children() && ! cell[1]->has_children())
     {
@@ -1619,7 +1619,7 @@ namespace DOpE
       
       unsigned int local_n_dofs = cell[coarse_index]->get_fe().dofs_per_cell;
       
-      typename DOFHANDLER::cell_iterator dofh_fine = cell[fine_index];
+      typename DH<dim, dim>::cell_iterator dofh_fine = cell[fine_index];
       typename dealii::Triangulation<dim>::cell_iterator tria_fine = tria_cell[fine_index];
       SCALAR ret = 0.;
       for (unsigned int child=0; child<GeometryInfo<dim>::max_children_per_cell;++child)

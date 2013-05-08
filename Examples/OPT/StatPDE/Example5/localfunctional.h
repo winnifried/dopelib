@@ -30,8 +30,8 @@ using namespace std;
 using namespace dealii;
 using namespace DOpE;
 
-template<typename VECTOR, int dopedim, int dealdim>
-  class LocalFunctional : public FunctionalInterface<Multimesh_CellDataContainer,Multimesh_FaceDataContainer,dealii::DoFHandler, VECTOR, dopedim,dealdim>
+template<template<int, int> class DH,typename VECTOR, int dopedim, int dealdim>
+  class LocalFunctional : public FunctionalInterface<Multimesh_CellDataContainer,Multimesh_FaceDataContainer,DH, VECTOR, dopedim,dealdim>
   {
   public:
     LocalFunctional()
@@ -39,7 +39,7 @@ template<typename VECTOR, int dopedim, int dealdim>
       _alpha = 1.e-3;
     }
 
-    double Value(const Multimesh_CellDataContainer<dealii::DoFHandler, VECTOR, dealdim>& cdc)
+    double Value(const Multimesh_CellDataContainer<DH, VECTOR, dealdim>& cdc)
     {
       const DOpEWrapper::FEValues<dealdim> & state_fe_values = cdc.GetFEValuesState();
       unsigned int n_q_points = cdc.GetNQPoints();
@@ -69,7 +69,7 @@ template<typename VECTOR, int dopedim, int dealdim>
       return r;
     }
 
-    void Value_U(const Multimesh_CellDataContainer<dealii::DoFHandler, VECTOR, dealdim>& cdc,
+    void Value_U(const Multimesh_CellDataContainer<DH, VECTOR, dealdim>& cdc,
 		 dealii::Vector<double> &local_cell_vector,
 		 double scale)
     {
@@ -96,7 +96,7 @@ template<typename VECTOR, int dopedim, int dealdim>
       }
     }
 
-    void Value_Q(const Multimesh_CellDataContainer<dealii::DoFHandler, VECTOR, dealdim>& cdc,
+    void Value_Q(const Multimesh_CellDataContainer<DH, VECTOR, dealdim>& cdc,
 		 dealii::Vector<double> &local_cell_vector,
 		 double scale)
     {
@@ -119,7 +119,7 @@ template<typename VECTOR, int dopedim, int dealdim>
       }
     }
 
-    void Value_UU(const Multimesh_CellDataContainer<dealii::DoFHandler, VECTOR, dealdim>& cdc,
+    void Value_UU(const Multimesh_CellDataContainer<DH, VECTOR, dealdim>& cdc,
 		  dealii::Vector<double> &local_cell_vector,
 		  double scale)
     {
@@ -141,19 +141,19 @@ template<typename VECTOR, int dopedim, int dealdim>
       }
     }
 
-    void Value_QU(const Multimesh_CellDataContainer<dealii::DoFHandler, VECTOR, dealdim>& cdc __attribute__((unused)),
+    void Value_QU(const Multimesh_CellDataContainer<DH, VECTOR, dealdim>& cdc __attribute__((unused)),
 		  dealii::Vector<double> &local_cell_vector __attribute__((unused)),
 		  double scale __attribute__((unused)))
     {
     }
 
-    void Value_UQ(const Multimesh_CellDataContainer<dealii::DoFHandler, VECTOR, dealdim>& cdc __attribute__((unused)),
+    void Value_UQ(const Multimesh_CellDataContainer<DH, VECTOR, dealdim>& cdc __attribute__((unused)),
 		  dealii::Vector<double> &local_cell_vector __attribute__((unused)),
 		  double scale __attribute__((unused)))
     {
     }
 
-    void Value_QQ(const Multimesh_CellDataContainer<dealii::DoFHandler, VECTOR, dealdim>& cdc,
+    void Value_QQ(const Multimesh_CellDataContainer<DH, VECTOR, dealdim>& cdc,
 		  dealii::Vector<double> &local_cell_vector,
 		  double scale)
     {

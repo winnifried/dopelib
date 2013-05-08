@@ -30,15 +30,15 @@ using namespace std;
 using namespace dealii;
 using namespace DOpE;
 
-template<typename VECTOR, int dopedim, int dealdim>
-  class QErrorFunctional : public FunctionalInterface<Multimesh_CellDataContainer,Multimesh_FaceDataContainer,dealii::DoFHandler, VECTOR,dopedim,dealdim>
+template<template<int, int> class DH,typename VECTOR, int dopedim, int dealdim>
+  class QErrorFunctional : public FunctionalInterface<Multimesh_CellDataContainer,Multimesh_FaceDataContainer,DH, VECTOR,dopedim,dealdim>
   {
   public:
     QErrorFunctional()
     {
     }
 
-    double Value(const Multimesh_CellDataContainer<dealii::DoFHandler, VECTOR, dealdim>& cdc)
+    double Value(const Multimesh_CellDataContainer<DH, VECTOR, dealdim>& cdc)
     {
       const DOpEWrapper::FEValues<dealdim> & fe_values = cdc.GetFEValuesControl();
       unsigned int n_q_points = cdc.GetNQPoints();
@@ -80,15 +80,15 @@ template<typename VECTOR, int dopedim, int dealdim>
 
 /****************************************************************************************/
 
-template<typename VECTOR, int dopedim, int dealdim>
-  class UErrorFunctional : public FunctionalInterface<Multimesh_CellDataContainer,Multimesh_FaceDataContainer,dealii::DoFHandler, VECTOR,dopedim,dealdim>
+template<template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
+  class UErrorFunctional : public FunctionalInterface<Multimesh_CellDataContainer,Multimesh_FaceDataContainer,DH, VECTOR,dopedim,dealdim>
   {
   public:
     UErrorFunctional()
     {
     }
 
-    double Value(const Multimesh_CellDataContainer<dealii::DoFHandler, VECTOR, dealdim>& cdc)
+    double Value(const Multimesh_CellDataContainer<DH, VECTOR, dealdim>& cdc)
     {
       const DOpEWrapper::FEValues<dealdim> & fe_values = cdc.GetFEValuesState();
       unsigned int n_q_points = cdc.GetNQPoints();
@@ -127,15 +127,15 @@ template<typename VECTOR, int dopedim, int dealdim>
     vector<double> _fvalues;
   };
 
-/****************************************************************************************/template<typename VECTOR, int dopedim, int dealdim>
-  class LocalMeanValueFunctional : public FunctionalInterface<Multimesh_CellDataContainer,Multimesh_FaceDataContainer,dealii::DoFHandler, VECTOR,dopedim,dealdim>
+/****************************************************************************************/template<template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
+  class LocalMeanValueFunctional : public FunctionalInterface<Multimesh_CellDataContainer,Multimesh_FaceDataContainer,DH, VECTOR,dopedim,dealdim>
   {
   public:
     LocalMeanValueFunctional()
     {
     }
 
-    double Value(const Multimesh_CellDataContainer<dealii::DoFHandler, VECTOR, dealdim>& cdc)
+    double Value(const Multimesh_CellDataContainer<DH, VECTOR, dealdim>& cdc)
     {
       const DOpEWrapper::FEValues<dealdim> & state_fe_values = cdc.GetFEValuesState();
       unsigned int n_q_points = cdc.GetNQPoints();
@@ -172,13 +172,13 @@ template<typename VECTOR, int dopedim, int dealdim>
 
 /****************************************************************************************/
 
-template<typename VECTOR, int dopedim, int dealdim>
-  class LocalPointFunctional : public FunctionalInterface<Multimesh_CellDataContainer,Multimesh_FaceDataContainer,dealii::DoFHandler, VECTOR, dopedim,dealdim>
+template<template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
+  class LocalPointFunctional : public FunctionalInterface<Multimesh_CellDataContainer,Multimesh_FaceDataContainer,DH, VECTOR, dopedim,dealdim>
   {
   public:
 
-  double PointValue(const DOpEWrapper::DoFHandler<dopedim, dealii::DoFHandler > & control_dof_handler __attribute__((unused)),
-		    const DOpEWrapper::DoFHandler<dealdim, dealii::DoFHandler > &state_dof_handler,
+  double PointValue(const DOpEWrapper::DoFHandler<dopedim, DH > & control_dof_handler __attribute__((unused)),
+		    const DOpEWrapper::DoFHandler<dealdim, DH > &state_dof_handler,
 		    const std::map<std::string, const dealii::Vector<double>* > &param_values __attribute__((unused)),
 		    const std::map<std::string, const VECTOR* > &domain_values)
   {
