@@ -105,8 +105,7 @@ main(int argc, char **argv)
   DOpEOutputHandler<VECTOR>::declare_params(pr);
   LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>::declare_params(pr);
   BoundaryParabel::declare_params(pr);
-  LocalBoundaryFaceFunctionalDrag<CDC, FDC, DOFHANDLER, //#include <dofs/dof_handler.h>
-  //#include <grid/grid_generator.h>VECTOR, DIM>::declare_params(
+  LocalBoundaryFaceFunctionalDrag<CDC, FDC, DOFHANDLER, VECTOR, DIM>::declare_params(
       pr);
   LocalBoundaryFaceFunctionalLift<CDC, FDC, DOFHANDLER, VECTOR, DIM>::declare_params(
       pr);

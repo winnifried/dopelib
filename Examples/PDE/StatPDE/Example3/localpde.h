@@ -235,7 +235,7 @@ template<
 
       void
       CellMatrix(const CDC<DH, VECTOR, 2>& cdc,
-          dealii::FullMatrix<double> &local_entry_matrix, double /*scale*/,
+          dealii::FullMatrix<double> &local_entry_matrix, double scale,
           double /*scale_ico*/)
       {
         assert(this->_problem_type == "state");
