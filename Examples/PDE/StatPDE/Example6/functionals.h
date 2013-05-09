@@ -91,7 +91,7 @@ template<
       UpdateFlags
       GetFaceUpdateFlags() const
       {
-        return  update_quadrature_points | update_normal_vectors;
+        return update_values | update_quadrature_points | update_normal_vectors;
       }
 
       string
