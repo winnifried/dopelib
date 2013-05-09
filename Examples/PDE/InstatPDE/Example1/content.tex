@@ -1,35 +1,33 @@
 \subsubsection{General problem description}
 In this example we consider the nonstationary incompressible Navier-Stokes equation. As in the stationary PDE Example 3 \ref{PDE_Stat_FSI_STVK},
-we use the symmetric fluid stress tensor.  
-
-\textbf{The rest of this parte is written for Stokes instead of Navier-Stokes. Needs to be adjusted.}
-
-In strong formulation we deal with 
+we use the symmetric fluid stress tensor, i.e. 
+in strong formulation we deal with 
 \begin{align*}
-\partial_t v -\nabla\cdot (\nabla v + \nabla v^{T}) + \nabla p &= f \\
-div\, v &= 0 
+\partial_t v -\nabla\cdot (\nabla v + \nabla v^{T}) + (v\cdot\nabla)v  +\nabla p &= f \\
+\nabla\cdot v &= 0 
 \end{align*}
 on time interval $I=[0,T]$ and the domain 
 $\Omega = [-6,6]\times [0,2]$. For simplicity,  we set $f=0$.
 
-As introduced earlier, 
-we formulate the time stepping scheme as \textit{One-step-$\theta$ scheme},
-which are based on finite difference schemes. 
+
+As introduced earlier, we formulate the time stepping scheme as \textit{One-step-$\theta$ scheme},
+which are based on finite difference schemes. In order to keep the presentation simple, we describe the scheme using the stokes equation and thus neglecting the nonlinearity. Note that in the program we use the full Navier-Stokes operator.
+
 The time interval is given by $I=[0,T]$. Let $v^n,p^n$ and the time
-step $k=t^{n+1}-t^n$ be given. Find $v=v^{n+1}, p^{n+1}$ such that:
+step $k=t^{n+1}-t^n$ be given. Find $v^{n+1}, p^{n+1}$ such that:
 
 \begin{align*}
-v - k\theta (\nabla\cdot (\nabla v + \nabla v^{T}) + \nabla p) &=
-k\theta f^{n+1} + k(1-\theta)f^{n+1}\\
-&+  v^n + k(1-\theta) (\nabla\cdot (\nabla v^n + \nabla (v^n)^{T}) 
-+ \nabla p^n) \\
-div \,v &= 0 
+v^{n+1} - k\theta \left(\nabla\cdot (\nabla v^{n+1} + \nabla {v^{n+1}}^T) + \nabla p^{n+1}\right) &=
+k\theta f^{n+1} + k(1-\theta)f^{n}\\
+&+  v^n + k(1-\theta) \left(\nabla\cdot (\nabla v^n + \nabla (v^n)^{T}) 
++ \nabla p^n\right) \\
+\nabla \cdot v^{n+1} &= 0 
 \end{align*}
 In the case of the BE-scheme, $\theta = 1$, and the equation is reduced to
 \begin{align*}
-v - k\theta (\nabla\cdot (\nabla v + \nabla v^{T}) + \nabla p) &=
+v^{n+1} - k (\nabla\cdot (\nabla v^{n+1} + \nabla {v^{n+1}}^{T}) + \nabla p^n) &=
 k\theta f^{n+1} +  v^n  \\
-div \,v &= 0
+\nabla \cdot v^{n+1} &= 0
 \end{align*}
 Note, that one should prefer a complete implicit treatment of the
 pressure $p$. Instead of using $\theta p^{n+1} + (1-\theta)p^n$, the pressure
@@ -42,22 +40,25 @@ $Q_2^c / Q_1^c$.
 The variational formulation reads:
 
 \begin{Problem}[Backward Euler (BE) timestepping problem]
-Find $v:= v^{n+1}\in V$ and $p:= p^{n+1}\in L$:
-\begin{align*}
+Let $\theta =1$.Find $v:= v^{n+1}\in V$ and $p:= p^{n+1}\in L$:
+\begin{align}
 (v,\phi^v) + k\theta (\nabla v + \nabla v^{T}, \nabla\phi^v) 
 - k  (p, \nabla\cdot\phi^v) &=
 k\theta (f^{n+1},\phi^v) +  (v^n,\phi^v)\\
-(div \,v,\phi^p) = 0  
-\end{align*}
+(\nabla \cdot v,\phi^p) = 0  \label{eq.divfreiheit}
+\end{align}
 \end{Problem}
 for all suitable test functions ${\phi^v , \phi^p} \in V\times L$. 
-The parameter $\theta$ is chosen as $\theta =1$.
+
 
 Derivation of the other timestepping problems is analogous.
+\begin{remark}
+Note that because of the zero right hand side we are allowed to multiply \eqref{eq.divfreiheit} by $k\theta$. So that we solve $$k\theta(\nabla \cdot v,\phi^p) = 0$$ instead of $(\nabla \cdot v,\phi^p) = 0$. 
+\end{remark}
 
 
-\textbf{Specific features for 
-solving nonstationary problems}\\
+\subsubsection{Specific features for 
+solving nonstationary problems}
 
 In the following, we explain in more detail the 
 different member functions that are required to
