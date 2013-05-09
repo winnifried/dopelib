@@ -101,7 +101,7 @@ typedef IntegratorDataContainer<DOFHANDLER, QUADRATURE, FACEQUADRATURE, VECTOR,
 typedef Integrator<IDC, VECTOR, double, DIM> INTEGRATOR;
 
 //The linear solver we want to use.
-typedef DirectLinearSolverWithMatrix<SPARSITYPATTERN, MATRIX, VECTOR, DIM> LINEARSOLVER;
+typedef DirectLinearSolverWithMatrix<SPARSITYPATTERN, MATRIX, VECTOR> LINEARSOLVER;
 
 //The newtonsolver we want to use.
 typedef NewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR, DIM> NLS;

@@ -97,7 +97,7 @@ typedef IntegratorMixedDimensions<IDC,VECTOR,double,0,2> INTEGRATORM;
 
 typedef DirectLinearSolverWithMatrix<BlockSparsityPattern,
 				     BlockSparseMatrix<double>,
-				     VECTOR,2> LINEARSOLVER;
+				     VECTOR> LINEARSOLVER;
 
 typedef VoidLinearSolver<BlockSparsityPattern,BlockSparseMatrix<double>,VECTOR,2> VOIDLS;  // mixed dim optimal control
 

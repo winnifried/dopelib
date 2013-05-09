@@ -104,7 +104,7 @@ typedef IntegratorDataContainer<DOFHANDLER, Quadrature<LOCALDEALDIM>,
 
 typedef Integrator<IDC, VECTOR, double, 2> INTEGRATOR;
 
-typedef DirectLinearSolverWithMatrix<SPARSITYPATTERN, MATRIX, VECTOR, 2> LINEARSOLVER;
+typedef DirectLinearSolverWithMatrix<SPARSITYPATTERN, MATRIX, VECTOR> LINEARSOLVER;
 
 typedef NewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR , LOCALDEALDIM>
     CNLS;

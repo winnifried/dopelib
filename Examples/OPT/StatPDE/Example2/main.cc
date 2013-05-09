@@ -79,7 +79,7 @@ typedef Integrator<IDC, VECTOR, double, 2> INTEGRATOR;
 typedef IntegratorMixedDimensions<IDC, VECTOR, double, 0, 2> INTEGRATORM;
 
 typedef DirectLinearSolverWithMatrix<BlockSparsityPattern,
-    BlockSparseMatrix<double>, VECTOR, 2> LINEARSOLVER;
+    BlockSparseMatrix<double>, VECTOR> LINEARSOLVER;
 
 typedef VoidLinearSolver<BlockSparsityPattern, BlockSparseMatrix<double>,
     VECTOR, 2> VOIDLS;

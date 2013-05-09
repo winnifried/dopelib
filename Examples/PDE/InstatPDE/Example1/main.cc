@@ -78,6 +78,7 @@ using namespace DOpE;
 #define LOCALDOPEDIM 2
 #define LOCALDEALDIM 2
 #define VECTOR BlockVector<double>
+#define MATRIX BlockSparseMatrix<double>
 #define SPARSITYPATTERN BlockSparsityPattern
 #define DOFHANDLER DoFHandler
 #define FE FESystem
@@ -107,8 +108,7 @@ typedef IntegratorDataContainer<DOFHANDLER, Quadrature<LOCALDEALDIM>,
 
 typedef Integrator<IDC, VECTOR, double, LOCALDEALDIM> INTEGRATOR;
 
-typedef DirectLinearSolverWithMatrix<BlockSparsityPattern,
-    BlockSparseMatrix<double>, BlockVector<double>, LOCALDEALDIM> LINEARSOLVER;
+typedef DirectLinearSolverWithMatrix<SPARSITYPATTERN,MATRIX,VECTOR> LINEARSOLVER;
 
 typedef NewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR , LOCALDEALDIM>
     CNLS;

@@ -76,7 +76,7 @@ typedef IntegratorDataContainer<DOFHANDLER, Quadrature<2>, Quadrature<1>, VECTOR
 typedef Integrator<IDC,VECTOR,double,2> INTEGRATOR;
 typedef IntegratorMixedDimensions<IDC,VECTOR,double,0,2> INTEGRATORM;
 //Uncomment to use UMFPACK
-typedef DirectLinearSolverWithMatrix<BlockSparsityPattern,BlockSparseMatrix<double>,VECTOR,2> LINEARSOLVER;
+typedef DirectLinearSolverWithMatrix<BlockSparsityPattern,BlockSparseMatrix<double>,VECTOR> LINEARSOLVER;
 
 typedef VoidLinearSolver<BlockSparsityPattern,BlockSparseMatrix<double>,VECTOR,2> VOIDLS;
 

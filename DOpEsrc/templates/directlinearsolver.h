@@ -41,8 +41,20 @@
 
 namespace DOpE
 {
+  /**
+   * @class DirectLinearSolverWithMatrix
+   *
+   * This class provides a linear solve for the nonlinear solvers of DOpE.
+   * Here we interface to the UMFPACK-Solver provided via dealii
+   * The use of this function requires that dealii is compiled with UMFPACK
+   *
+   * @tparam <SPARSITYPATTERN>    The sparsity pattern for the matrix
+   * @tparam <MATRIX>             The matrix type that is used for the storage of the system_matrix
+   * @tparam <VECTOR>             The vector type for the solution and righthandside data,
+   *
+   */
 
-  template <typename SPARSITYPATTERN, typename MATRIX, typename VECTOR,int dim>
+  template <typename SPARSITYPATTERN, typename MATRIX, typename VECTOR>
     class DirectLinearSolverWithMatrix
   {
   public:
@@ -59,17 +71,21 @@ namespace DOpE
       void ReInit(PROBLEM& pde);
 
     /**
-     * Solves the nonlinear PDE described by the PDEPROBLEM given initialy to the constructor 
-     * using UMFPACK
+     * Solves the linear PDE in the form Ax = b using dealii::SparseDirectUMFPACK
      *
-     * @param rhs                   Right Hand Side of the Equation.
+     *
+     * @tparam <PROBLEM>            The problem that we want to solve, this is passed on to the INTEGRATOR
+     *                              to calculate the matrix.
+     * @tparam <INTEGRATOR>         The integrator used to calculate the matrix A.
+     * @param rhs                   Right Hand Side of the Equation, i.e., the VECTOR b.
+     *                              Note that rhs is not const, this is because we need to apply 
+     *                              the boundary values to this vector!
      * @param solution              The Approximate Solution of the Linear Equation.
-     *                              It is assumed to be zero!
+     *                              It is assumed to be zero! Upon completion this VECTOR stores x
      * @param force_build_matrix    A boolean value, that indicates whether the Matrix
      *                              should be build by the linear solver in the first iteration.
      *				    The default is false, meaning that if we have no idea we don't
      *				    want to build a matrix.
-     *
      *
      */
     template<typename PROBLEM, typename INTEGRATOR>
@@ -89,24 +105,24 @@ namespace DOpE
 
 /*********************************Implementation************************************************/
  
-  template <typename SPARSITYPATTERN, typename MATRIX, typename VECTOR,int dim>
- void DirectLinearSolverWithMatrix<SPARSITYPATTERN,MATRIX,VECTOR, dim>::declare_params(ParameterReader &param_reader __attribute__((unused))) 
+  template <typename SPARSITYPATTERN, typename MATRIX, typename VECTOR>
+    void DirectLinearSolverWithMatrix<SPARSITYPATTERN,MATRIX,VECTOR>::declare_params(ParameterReader &/*param_reader*/) 
   {
   }
 
   /******************************************************/
 
-  template <typename SPARSITYPATTERN, typename MATRIX, typename VECTOR,int dim>
-    DirectLinearSolverWithMatrix<SPARSITYPATTERN,MATRIX,VECTOR, dim>::DirectLinearSolverWithMatrix(
-      ParameterReader &param_reader __attribute__((unused))) 
+  template <typename SPARSITYPATTERN, typename MATRIX, typename VECTOR>
+    DirectLinearSolverWithMatrix<SPARSITYPATTERN,MATRIX,VECTOR>::DirectLinearSolverWithMatrix(
+      ParameterReader &/*param_reader*/) 
   {
     _A_direct = NULL;
   }
 
 /******************************************************/
 
-template <typename SPARSITYPATTERN, typename MATRIX, typename VECTOR,int dim>
- DirectLinearSolverWithMatrix<SPARSITYPATTERN,MATRIX,VECTOR, dim>::~DirectLinearSolverWithMatrix()
+template <typename SPARSITYPATTERN, typename MATRIX, typename VECTOR>
+ DirectLinearSolverWithMatrix<SPARSITYPATTERN,MATRIX,VECTOR>::~DirectLinearSolverWithMatrix()
 {
   if(_A_direct != NULL)
   {
@@ -116,9 +132,9 @@ template <typename SPARSITYPATTERN, typename MATRIX, typename VECTOR,int dim>
 
 /******************************************************/
 
-template <typename SPARSITYPATTERN, typename MATRIX, typename VECTOR,int dim>
+template <typename SPARSITYPATTERN, typename MATRIX, typename VECTOR>
   template<typename PROBLEM>
-  void  DirectLinearSolverWithMatrix<SPARSITYPATTERN,MATRIX,VECTOR, dim>::ReInit(PROBLEM& pde)
+  void  DirectLinearSolverWithMatrix<SPARSITYPATTERN,MATRIX,VECTOR>::ReInit(PROBLEM& pde)
 {
   _matrix.clear();
   pde.ComputeSparsityPattern(_sparsity_pattern);
@@ -133,13 +149,13 @@ template <typename SPARSITYPATTERN, typename MATRIX, typename VECTOR,int dim>
 
 /******************************************************/
 
-template <typename SPARSITYPATTERN, typename MATRIX, typename VECTOR,int dim>
+template <typename SPARSITYPATTERN, typename MATRIX, typename VECTOR>
   template<typename PROBLEM, typename INTEGRATOR>
-  void DirectLinearSolverWithMatrix<SPARSITYPATTERN,MATRIX,VECTOR, dim>::Solve(PROBLEM& pde,
-									       INTEGRATOR& integr,
-									       VECTOR &rhs, 
-									       VECTOR &solution, 
-									       bool force_matrix_build)
+  void DirectLinearSolverWithMatrix<SPARSITYPATTERN,MATRIX,VECTOR>::Solve(PROBLEM& pde,
+									  INTEGRATOR& integr,
+									  VECTOR &rhs, 
+									  VECTOR &solution, 
+									  bool force_matrix_build)
 {
   if(force_matrix_build)
   { 

@@ -40,8 +40,20 @@
 
 namespace DOpE
 {
+  /**
+   * @class CGLinearSolverWithMatrix
+   *
+   * This class provides a linear solve for the nonlinear solvers of DOpE.
+   * Here we interface to the CG-Solver of dealii
+   *
+   * @tparam <PRECONDITIONER>     The preconditioner class to be used with the solver
+   * @tparam <SPARSITYPATTERN>    The sparsity pattern for the matrix
+   * @tparam <MATRIX>             The matrix type that is used for the storage of the system_matrix
+   * @tparam <VECTOR>             The vector type for the solution and righthandside data,
+   *
+   */
 
-  template <typename PRECONDITIONER, typename SPARSITYPATTERN, typename MATRIX, typename VECTOR,int dim>
+  template <typename PRECONDITIONER, typename SPARSITYPATTERN, typename MATRIX, typename VECTOR>
     class CGLinearSolverWithMatrix
   {
   public:
@@ -58,17 +70,21 @@ namespace DOpE
       void ReInit(PROBLEM& pde);
 
     /**
-     * Solves the nonlinear PDE described by the PROBLEM given initialy to the constructor 
-     * using a CG-Method
+     * Solves the linear PDE in the form Ax = b using dealii::SolverCG
      *
-     * @param rhs                   Right Hand Side of the Equation.
+     *
+     * @tparam <PROBLEM>            The problem that we want to solve, this is passed on to the INTEGRATOR
+     *                              to calculate the matrix.
+     * @tparam <INTEGRATOR>         The integrator used to calculate the matrix A.
+     * @param rhs                   Right Hand Side of the Equation, i.e., the VECTOR b.
+     *                              Note that rhs is not const, this is because we need to apply 
+     *                              the boundary values to this vector!
      * @param solution              The Approximate Solution of the Linear Equation.
-     *                              It is assumed to be zero!
+     *                              It is assumed to be zero! Upon completion this VECTOR stores x
      * @param force_build_matrix    A boolean value, that indicates whether the Matrix
      *                              should be build by the linear solver in the first iteration.
      *				    The default is false, meaning that if we have no idea we don't
      *				    want to build a matrix.
-     *
      *
      */
     template<typename PROBLEM, typename INTEGRATOR>
@@ -86,8 +102,8 @@ namespace DOpE
 
 /*********************************Implementation************************************************/
 
-template <typename PRECONDITIONER,typename SPARSITYPATTERN, typename MATRIX, typename VECTOR,int dim>
- void CGLinearSolverWithMatrix<PRECONDITIONER,SPARSITYPATTERN,MATRIX,VECTOR, dim>::declare_params(ParameterReader &param_reader)
+template <typename PRECONDITIONER,typename SPARSITYPATTERN, typename MATRIX, typename VECTOR>
+ void CGLinearSolverWithMatrix<PRECONDITIONER,SPARSITYPATTERN,MATRIX,VECTOR>::declare_params(ParameterReader &param_reader)
   {
     param_reader.SetSubsection("cglinearsolver_withmatrix parameters");
     param_reader.declare_entry("linear_global_tol", "1.e-16",Patterns::Double(0),"global tolerance for the cg iteration");
@@ -96,8 +112,8 @@ template <typename PRECONDITIONER,typename SPARSITYPATTERN, typename MATRIX, typ
   }
 /******************************************************/
 
-  template <typename PRECONDITIONER,typename SPARSITYPATTERN, typename MATRIX, typename VECTOR,int dim>
-    CGLinearSolverWithMatrix<PRECONDITIONER,SPARSITYPATTERN,MATRIX,VECTOR, dim>
+  template <typename PRECONDITIONER,typename SPARSITYPATTERN, typename MATRIX, typename VECTOR>
+    CGLinearSolverWithMatrix<PRECONDITIONER,SPARSITYPATTERN,MATRIX,VECTOR>
     ::CGLinearSolverWithMatrix(ParameterReader &param_reader) 
 {
   param_reader.SetSubsection("cglinearsolver_withmatrix parameters");
@@ -109,16 +125,16 @@ template <typename PRECONDITIONER,typename SPARSITYPATTERN, typename MATRIX, typ
 
 /******************************************************/
 
-template <typename PRECONDITIONER,typename SPARSITYPATTERN, typename MATRIX, typename VECTOR,int dim>
-  CGLinearSolverWithMatrix<PRECONDITIONER,SPARSITYPATTERN,MATRIX,VECTOR, dim>::~CGLinearSolverWithMatrix()
+template <typename PRECONDITIONER,typename SPARSITYPATTERN, typename MATRIX, typename VECTOR>
+  CGLinearSolverWithMatrix<PRECONDITIONER,SPARSITYPATTERN,MATRIX,VECTOR>::~CGLinearSolverWithMatrix()
 {
 }
 
 /******************************************************/
 
-template <typename PRECONDITIONER,typename SPARSITYPATTERN, typename MATRIX, typename VECTOR,int dim>
+template <typename PRECONDITIONER,typename SPARSITYPATTERN, typename MATRIX, typename VECTOR>
   template<typename PROBLEM>
-  void  CGLinearSolverWithMatrix<PRECONDITIONER,SPARSITYPATTERN,MATRIX,VECTOR, dim>::ReInit(PROBLEM& pde)
+  void  CGLinearSolverWithMatrix<PRECONDITIONER,SPARSITYPATTERN,MATRIX,VECTOR>::ReInit(PROBLEM& pde)
 {
   _matrix.clear();
   pde.ComputeSparsityPattern(_sparsity_pattern);
@@ -126,14 +142,13 @@ template <typename PRECONDITIONER,typename SPARSITYPATTERN, typename MATRIX, typ
 }
 
 /******************************************************/
-
-template <typename PRECONDITIONER,typename SPARSITYPATTERN, typename MATRIX, typename VECTOR,int dim>
+template <typename PRECONDITIONER,typename SPARSITYPATTERN, typename MATRIX, typename VECTOR>
   template<typename PROBLEM, typename INTEGRATOR>
-  void CGLinearSolverWithMatrix<PRECONDITIONER,SPARSITYPATTERN,MATRIX,VECTOR, dim>::Solve(PROBLEM& pde, 
-											  INTEGRATOR& integr,
-											  VECTOR &rhs, 
-											  VECTOR &solution, 
-											  bool force_matrix_build)
+  void CGLinearSolverWithMatrix<PRECONDITIONER,SPARSITYPATTERN,MATRIX,VECTOR>::Solve(PROBLEM& pde, 
+										     INTEGRATOR& integr,
+										     VECTOR &rhs, 
+										     VECTOR &solution, 
+										     bool force_matrix_build)
 {
   if(force_matrix_build)
   { 

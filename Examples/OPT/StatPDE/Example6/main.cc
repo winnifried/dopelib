@@ -81,9 +81,9 @@ typedef IntegratorDataContainer<DOFHANDLER, Quadrature<2>, Quadrature<1>, VECTOR
 typedef Integrator<IDC,VECTOR,double,2> INTEGRATOR;
 
 //Uncomment to use a CG-Method with Identity Preconditioner
-//typedef CGLinearSolverWithMatrix<INTEGRATOR,PreconditionIdentity,OP,BlockSparsityPattern,BlockSparseMatrix<double>,BlockVector<double>,2> LINEARSOLVER;
+//typedef CGLinearSolverWithMatrix<INTEGRATOR,PreconditionIdentity,OP,SPARSITYPATTERN,MATRIX,VECTOR> LINEARSOLVER;
 //Uncomment to use UMFPACK
-typedef DirectLinearSolverWithMatrix<SPARSITYPATTERN,MATRIX,VECTOR,2> LINEARSOLVER;
+typedef DirectLinearSolverWithMatrix<SPARSITYPATTERN,MATRIX,VECTOR> LINEARSOLVER;
 
 typedef NewtonSolver<INTEGRATOR,LINEARSOLVER,VECTOR,2> NLS;
 typedef StatReducedProblem<NLS,NLS,INTEGRATOR,INTEGRATOR,OP,VECTOR,2,2> SSolver;
