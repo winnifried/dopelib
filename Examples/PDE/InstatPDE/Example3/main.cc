@@ -84,9 +84,9 @@ using namespace DOpE;
 #define SPARSITYPATTERN BlockSparsityPattern
 #define MATRIX BlockSparseMatrix<double>
 #define DOFHANDLER DoFHandler
-#define FE FESystem<LOCALDEALDIM>
+#define FE FESystem
 #define FUNC FunctionalInterface<CellDataContainer,FaceDataContainer,DOFHANDLER,VECTOR,LOCALDOPEDIM,LOCALDEALDIM>
-#define PDE PDEInterface<CellDataContainer,FaceDataContainer,DOFHANDLER,VECTOR,LOCALDOPEDIM,LOCALDEALDIM>
+#define PDE PDEInterface<CellDataContainer,FaceDataContainer,DOFHANDLER,VECTOR,LOCALDEALDIM>
 #define DD DirichletDataInterface<VECTOR,LOCALDOPEDIM,LOCALDEALDIM>
 #define CONS ConstraintInterface<CellDataContainer,FaceDataContainer,DOFHANDLER,VECTOR,LOCALDOPEDIM,LOCALDEALDIM>
 
@@ -116,7 +116,7 @@ typedef NewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR , LOCALDEALDIM>
 typedef InstatStepNewtonSolver<INTEGRATOR, LINEARSOLVER,VECTOR , LOCALDEALDIM>
 NLS;
 
-typedef ReducedNewtonAlgorithm<OP, VECTOR, LOCALDOPEDIM, LOCALDEALDIM> RNA;
+typedef ReducedNewtonAlgorithm<OP, VECTOR> RNA;
 typedef InstatReducedProblem<CNLS, NLS, INTEGRATOR, INTEGRATOR, OP, VECTOR, LOCALDOPEDIM, LOCALDEALDIM>
 SSolver;
 
@@ -168,7 +168,7 @@ int main(int argc, char **argv)
 	ParameterReader pr;
 	SSolver::declare_params(pr);
 	RNA::declare_params(pr);
-	LocalPDE<VECTOR,LOCALDOPEDIM, LOCALDEALDIM>::declare_params(pr);
+	LocalPDE<DOFHANDLER, VECTOR, LOCALDEALDIM>::declare_params(pr);
 	InitialData::declare_params(pr);
 	pr.SetSubsection("Discretization parameters");
 	pr.declare_entry("upper bound", "0.0", Patterns::Double(0));
@@ -203,9 +203,9 @@ int main(int argc, char **argv)
 
 	//Define the localPDE and the functionals we are interested in. Here, LFunc is a dummy necessary for the control,
 	//LPF is a SpaceTimePointevaluation
-	LocalPDE<VECTOR, LOCALDOPEDIM, LOCALDEALDIM> LPDE(pr);
-	LocalFunctional<VECTOR, LOCALDOPEDIM, LOCALDEALDIM> LFunc;
-	LocalPointFunctional<VECTOR, LOCALDOPEDIM, LOCALDEALDIM> LPF;
+	LocalPDE<DOFHANDLER, VECTOR, LOCALDEALDIM> LPDE(pr);
+	LocalFunctional<DOFHANDLER, VECTOR, LOCALDOPEDIM, LOCALDEALDIM> LFunc;
+	LocalPointFunctional<DOFHANDLER, VECTOR, LOCALDOPEDIM, LOCALDEALDIM> LPF;
 
 	//Time grid of [0,1]
   Triangulation<1> times;

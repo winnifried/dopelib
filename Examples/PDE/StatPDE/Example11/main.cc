@@ -61,8 +61,8 @@ using namespace DOpE;
 #define MATRIX BlockSparseMatrix<double>
 #define SPARSITYPATTERN BlockSparsityPattern
 #define VECTOR BlockVector<double>
-#define DOFHANDLER hp::DoFHandler<2>
-#define FE hp::FECollection<2, 2>
+#define DOFHANDLER hp::DoFHandler
+#define FE hp::FECollection
 #define QUADRATURE hp::QCollection<2>
 #define FACEQUADRATURE hp::QCollection<1>
 

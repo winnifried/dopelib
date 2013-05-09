@@ -76,10 +76,10 @@ using namespace DOpE;
 #define VECTOR BlockVector<double>
 #define SPARSITYPATTERN BlockSparsityPattern
 #define MATRIX BlockSparseMatrix<double>
-#define DOFHANDLER DoFHandler<2>
-#define FE FESystem<2>
+#define DOFHANDLER DoFHandler
+#define FE FESystem
 #define FUNC FunctionalInterface<CellDataContainer,FaceDataContainer,DOFHANDLER,VECTOR,LOCALDOPEDIM,LOCALDEALDIM>
-#define PDE PDEInterface<CellDataContainer,FaceDataContainer,DOFHANDLER,VECTOR,LOCALDOPEDIM,LOCALDEALDIM>
+#define PDE PDEInterface<CellDataContainer,FaceDataContainer,DOFHANDLER,VECTOR,LOCALDEALDIM>
 #define DD DirichletDataInterface<VECTOR,LOCALDOPEDIM,LOCALDEALDIM>
 #define CONS ConstraintInterface<CellDataContainer,FaceDataContainer,DOFHANDLER,VECTOR,LOCALDOPEDIM,LOCALDEALDIM>
 
@@ -109,7 +109,7 @@ typedef DirectLinearSolverWithMatrix<SPARSITYPATTERN, MATRIX, VECTOR, 2> LINEARS
 typedef NewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR , LOCALDEALDIM>
     CNLS;
 typedef InstatStepNewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR, 2> NLS;
-typedef ReducedNewtonAlgorithm<OP, VECTOR, 2, 2> RNA;
+typedef ReducedNewtonAlgorithm<OP, VECTOR> RNA;
 typedef InstatReducedProblem<CNLS, NLS, INTEGRATOR, INTEGRATOR, OP,
     VECTOR, 2, 2> SSolver;
 
@@ -137,11 +137,11 @@ main(int argc, char **argv)
   ParameterReader pr;
   SSolver::declare_params(pr);
   RNA::declare_params(pr);
-  LocalPDE<VECTOR, 2, 2>::declare_params(pr);
+  LocalPDE<DOFHANDLER, VECTOR,  2>::declare_params(pr);
   BoundaryParabel::declare_params(pr);
-  LocalBoundaryFaceFunctionalDrag<VECTOR, LOCALDOPEDIM, LOCALDEALDIM>::declare_params(
+  LocalBoundaryFaceFunctionalDrag<DOFHANDLER,VECTOR, LOCALDOPEDIM, LOCALDEALDIM>::declare_params(
       pr);
-  LocalBoundaryFaceFunctionalLift<VECTOR, LOCALDOPEDIM, LOCALDEALDIM>::declare_params(
+  LocalBoundaryFaceFunctionalLift<DOFHANDLER,VECTOR, LOCALDOPEDIM, LOCALDEALDIM>::declare_params(
       pr);
   pr.read_parameters(paramfile);
 
@@ -177,15 +177,15 @@ main(int argc, char **argv)
   QGauss<1> face_quadrature_formula(3);
   IDC idc(quadrature_formula, face_quadrature_formula);
 
-  LocalPDE<VECTOR, 2, 2> LPDE(pr);
-  LocalFunctional<VECTOR, 2, 2> LFunc;
+  LocalPDE<DOFHANDLER,VECTOR,  2> LPDE(pr);
+  LocalFunctional<DOFHANDLER,VECTOR, 2, 2> LFunc;
 
-  LocalPointFunctionalPressure<VECTOR, 2, 2> LPFP;
-  LocalPointFunctionalDeflectionX<VECTOR, 2, 2> LPFDX;
-  LocalPointFunctionalDeflectionY<VECTOR, 2, 2> LPFDY;
+  LocalPointFunctionalPressure<DOFHANDLER,VECTOR, 2, 2> LPFP;
+  LocalPointFunctionalDeflectionX<DOFHANDLER,VECTOR, 2, 2> LPFDX;
+  LocalPointFunctionalDeflectionY<DOFHANDLER,VECTOR, 2, 2> LPFDY;
 
-  LocalBoundaryFaceFunctionalDrag<VECTOR, LOCALDOPEDIM, LOCALDEALDIM> LBFD(pr);
-  LocalBoundaryFaceFunctionalLift<VECTOR, LOCALDOPEDIM, LOCALDEALDIM> LBFL(pr);
+  LocalBoundaryFaceFunctionalDrag<DOFHANDLER,VECTOR, LOCALDOPEDIM, LOCALDEALDIM> LBFD(pr);
+  LocalBoundaryFaceFunctionalLift<DOFHANDLER,VECTOR, LOCALDOPEDIM, LOCALDEALDIM> LBFL(pr);
 
   //Time grid of [0,25]
   Triangulation<1> times;

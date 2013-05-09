@@ -33,17 +33,17 @@ using namespace dealii;
 using namespace DOpE;
 
 /****************************************************************************************/
-template<typename DOFHANDLER, typename VECTOR, int dealdim>
+template<template<int, int> class DH, typename VECTOR, int dealdim>
   class LocalPointFunctionalX : public FunctionalInterface<CellDataContainer,
-      FaceDataContainer, DOFHANDLER, VECTOR, dealdim>
+      FaceDataContainer, DH, VECTOR, dealdim>
   {
     public:
 
       double
       PointValue(
-          const DOpEWrapper::DoFHandler<dealdim, DOFHANDLER > &
+          const DOpEWrapper::DoFHandler<dealdim, DH > &
           /*control_dof_handler*/,
-          const DOpEWrapper::DoFHandler<dealdim, DOFHANDLER > &state_dof_handler
+          const DOpEWrapper::DoFHandler<dealdim, DH > &state_dof_handler
           ,
           const std::map<std::string, const dealii::Vector<double>*> &
           /*param_values*/,
@@ -79,9 +79,9 @@ template<typename DOFHANDLER, typename VECTOR, int dealdim>
 
 // drag
 /****************************************************************************************/
-template<typename DOFHANDLER, typename VECTOR, int dealdim>
+template<template<int, int> class DH, typename VECTOR, int dealdim>
   class LocalBoundaryFluxFunctional : public FunctionalInterface<
-      CellDataContainer, FaceDataContainer, DOFHANDLER, VECTOR,
+      CellDataContainer, FaceDataContainer, DH, VECTOR,
       dealdim>
   {
     public:
@@ -93,7 +93,7 @@ template<typename DOFHANDLER, typename VECTOR, int dealdim>
 
       // compute drag value around cylinder
       double
-      BoundaryValue(const FaceDataContainer<DOFHANDLER, VECTOR, dealdim>& fdc)
+      BoundaryValue(const FaceDataContainer<DH, VECTOR, dealdim>& fdc)
       {
         unsigned int color = fdc.GetBoundaryIndicator();
         const auto& state_fe_face_values = fdc.GetFEFaceValuesState();

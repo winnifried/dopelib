@@ -32,9 +32,9 @@ using namespace std;
 using namespace dealii;
 using namespace DOpE;
 
-template<typename DOFHANDLER, typename VECTOR, int dealdim>
+template<template<int, int> class DH, typename VECTOR, int dealdim>
   class LocalPDE : public PDEInterface<CellDataContainer, FaceDataContainer,
-      DOFHANDLER, VECTOR, dealdim>
+      DH, VECTOR, dealdim>
   {
     public:
       LocalPDE()
@@ -45,7 +45,7 @@ template<typename DOFHANDLER, typename VECTOR, int dealdim>
 
       // Domain values for cells
       void
-      CellEquation(const CellDataContainer<DOFHANDLER, VECTOR, dealdim>& cdc,
+      CellEquation(const CellDataContainer<DH, VECTOR, dealdim>& cdc,
       dealii::Vector<double> &local_cell_vector, double scale
           , double /*scale_ico*/)
       {
@@ -98,7 +98,7 @@ template<typename DOFHANDLER, typename VECTOR, int dealdim>
       }
 
       void
-      CellMatrix(const CellDataContainer<DOFHANDLER, VECTOR, dealdim>& cdc,
+      CellMatrix(const CellDataContainer<DH, VECTOR, dealdim>& cdc,
       FullMatrix<double> &local_entry_matrix,
       double scale, double /*scale_ico*/)
       {
@@ -148,7 +148,7 @@ template<typename DOFHANDLER, typename VECTOR, int dealdim>
       }
 
       void
-      CellRightHandSide(const CellDataContainer<DOFHANDLER, VECTOR, dealdim>&
+      CellRightHandSide(const CellDataContainer<DH, VECTOR, dealdim>&
           /*cdc*/,
           dealii::Vector<double> &local_cell_vector
           __attribute__((unused)), double scale __attribute__((unused)))
@@ -159,7 +159,7 @@ template<typename DOFHANDLER, typename VECTOR, int dealdim>
       // Values for boundary integrals
       void
       BoundaryEquation(
-          const FaceDataContainer<DOFHANDLER, VECTOR, dealdim>& fdc,
+          const FaceDataContainer<DH, VECTOR, dealdim>& fdc,
           dealii::Vector<double> &local_cell_vector, double scale
           , double /*scale_ico*/)
       {
@@ -206,7 +206,7 @@ template<typename DOFHANDLER, typename VECTOR, int dealdim>
 
       void
       BoundaryMatrix(
-          const FaceDataContainer<DOFHANDLER, VECTOR, dealdim>& fdc,
+          const FaceDataContainer<DH, VECTOR, dealdim>& fdc,
           dealii::FullMatrix<double> &local_entry_matrix, double
           /*scale*/, double /*scale_ico*/)
       {
@@ -247,7 +247,7 @@ template<typename DOFHANDLER, typename VECTOR, int dealdim>
 
       void
       BoundaryRightHandSide(
-          const FaceDataContainer<DOFHANDLER, VECTOR, dealdim>&,
+          const FaceDataContainer<DH, VECTOR, dealdim>&,
           dealii::Vector<double> &local_cell_vector
           __attribute__((unused)), double scale __attribute__((unused)))
       {

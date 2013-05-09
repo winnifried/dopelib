@@ -81,10 +81,10 @@ using namespace DOpE;
 #define VECTOR dealii::BlockVector<double>
 #define SPARSITYPATTERN dealii::BlockSparsityPattern
 #define MATRIX dealii::BlockSparseMatrix<double>
-#define DOFHANDLER dealii::DoFHandler<LOCALDOPEDIM>
-#define FE FESystem<LOCALDOPEDIM>
+#define DOFHANDLER dealii::DoFHandler
+#define FE FESystem
 #define FUNC DOpE::FunctionalInterface<CellDataContainer,FaceDataContainer,DOFHANDLER,VECTOR,LOCALDOPEDIM,LOCALDEALDIM>
-#define PDE DOpE::PDEInterface<CellDataContainer,FaceDataContainer,DOFHANDLER,VECTOR,LOCALDOPEDIM,LOCALDEALDIM>
+#define PDE DOpE::PDEInterface<CellDataContainer,FaceDataContainer,DOFHANDLER,VECTOR,LOCALDEALDIM>
 #define DD DOpE::DirichletDataInterface<VECTOR,LOCALDOPEDIM,LOCALDEALDIM>
 #define CONS DOpE::ConstraintInterface<CellDataContainer,FaceDataContainer,DOFHANDLER,VECTOR,LOCALDOPEDIM,LOCALDEALDIM>
 
@@ -120,7 +120,7 @@ typedef NewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR , LOCALDEALDIM>
 typedef InstatStepNewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR , LOCALDEALDIM>
     NLS;
 
-typedef ReducedNewtonAlgorithm<OP, VECTOR, LOCALDOPEDIM, LOCALDEALDIM> RNA;
+typedef ReducedNewtonAlgorithm<OP, VECTOR> RNA;
 
 typedef InstatReducedProblem<CNLS, NLS, INTEGRATOR, INTEGRATOR, OP,
     VECTOR, LOCALDOPEDIM, LOCALDEALDIM> SSolver;
@@ -171,10 +171,10 @@ main(int argc, char **argv)
 
   //Define the localPDE and the functionals we are interested in. Here, LFunc is a dummy necessary for the control,
   //LPF is a SpaceTimePointevaluation
-  LocalPDE<VECTOR, LOCALDOPEDIM, LOCALDEALDIM> LPDE;
-  LocalFunctional<VECTOR, LOCALDOPEDIM, LOCALDEALDIM> LFunc;
-  LocalPointFunctional<VECTOR, LOCALDOPEDIM, LOCALDEALDIM> LPF;
-  LocalPointFunctional2<VECTOR, LOCALDOPEDIM, LOCALDEALDIM> LPF2;
+  LocalPDE<DOFHANDLER, VECTOR,  LOCALDEALDIM> LPDE;
+  LocalFunctional<DOFHANDLER, VECTOR, LOCALDOPEDIM, LOCALDEALDIM> LFunc;
+  LocalPointFunctional<DOFHANDLER, VECTOR, LOCALDOPEDIM, LOCALDEALDIM> LPF;
+  LocalPointFunctional2<DOFHANDLER, VECTOR, LOCALDOPEDIM, LOCALDEALDIM> LPF2;
 
   //Time grid of [0,1]
   dealii::Triangulation<1> times;

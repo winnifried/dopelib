@@ -35,8 +35,8 @@ using namespace DOpE;
 
 /****************************************************************************************/
 
-template<typename VECTOR, int dopedim, int dealdim>
-  class LocalPointFunctional : public FunctionalInterface<CellDataContainer,FaceDataContainer,dealii::DoFHandler, VECTOR, dopedim,dealdim>
+template<template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
+  class LocalPointFunctional : public FunctionalInterface<CellDataContainer,FaceDataContainer,DH, VECTOR, dopedim,dealdim>
   {
   private:
     mutable double time;
@@ -56,8 +56,8 @@ template<typename VECTOR, int dopedim, int dealdim>
     		return false;
     }
 
-  double PointValue(const DOpEWrapper::DoFHandler<dopedim, dealii::DoFHandler > &/* control_dof_handler*/,
-		    const DOpEWrapper::DoFHandler<dealdim, dealii::DoFHandler > & state_dof_handler,
+  double PointValue(const DOpEWrapper::DoFHandler<dopedim, DH > &/* control_dof_handler*/,
+		    const DOpEWrapper::DoFHandler<dealdim, DH > & state_dof_handler,
 		    const std::map<std::string, const dealii::Vector<double>* > &/*param_values*/,
 		    const std::map<std::string, const VECTOR* > &domain_values)
   {
@@ -87,8 +87,8 @@ template<typename VECTOR, int dopedim, int dealdim>
 
 /************************************************************************************************************************************************/
 
-template<typename VECTOR, int dopedim, int dealdim>
-  class LocalPointFunctional2 : public FunctionalInterface<CellDataContainer,FaceDataContainer,dealii::DoFHandler, VECTOR, dopedim,dealdim>
+template<template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
+  class LocalPointFunctional2 : public FunctionalInterface<CellDataContainer,FaceDataContainer,DH, VECTOR, dopedim,dealdim>
   {
   private:
     mutable double time;
@@ -108,8 +108,8 @@ template<typename VECTOR, int dopedim, int dealdim>
     		return false;
     }
 
-  double PointValue(const DOpEWrapper::DoFHandler<dopedim, dealii::DoFHandler > &/* control_dof_handler*/,
-		    const DOpEWrapper::DoFHandler<dealdim, dealii::DoFHandler > & state_dof_handler,
+  double PointValue(const DOpEWrapper::DoFHandler<dopedim, DH > &/* control_dof_handler*/,
+		    const DOpEWrapper::DoFHandler<dealdim, DH > & state_dof_handler,
 		    const std::map<std::string, const dealii::Vector<double>* > &/*param_values*/,
 		    const std::map<std::string, const VECTOR* > &domain_values)
   {

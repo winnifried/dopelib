@@ -84,9 +84,9 @@ using namespace DOpE;
 #define SPARSITYPATTERN BlockSparsityPattern
 #define MATRIX BlockSparseMatrix<double>
 #define DOFHANDLER DoFHandler
-#define FE FESystem<LOCALDEALDIM>
+#define FE FESystem
 #define FUNC FunctionalInterface<CellDataContainer,FaceDataContainer,DOFHANDLER,VECTOR,LOCALDOPEDIM,LOCALDEALDIM>
-#define PDE PDEInterface<CellDataContainer,FaceDataContainer,DOFHANDLER,VECTOR,LOCALDOPEDIM,LOCALDEALDIM>
+#define PDE PDEInterface<CellDataContainer,FaceDataContainer,DOFHANDLER,VECTOR,LOCALDEALDIM>
 #define DD DirichletDataInterface<VECTOR,LOCALDOPEDIM,LOCALDEALDIM>
 #define CONS ConstraintInterface<CellDataContainer,FaceDataContainer,DOFHANDLER,VECTOR,LOCALDOPEDIM,LOCALDEALDIM>
 
@@ -136,14 +136,14 @@ typedef NewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR , LOCALDEALDIM>
 typedef InstatStepNewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR , LOCALDEALDIM>
     NLS;
 
-typedef FractionalStepThetaStepNewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR , LOCALDEALDIM>
+typedef FractionalStepThetaStepNewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR, LOCALDEALDIM>
     NLS2;
 
-typedef ReducedNewtonAlgorithm<OP1, VECTOR, LOCALDOPEDIM, LOCALDEALDIM> RNA1;
-typedef ReducedNewtonAlgorithm<OP2, VECTOR, LOCALDOPEDIM, LOCALDEALDIM> RNA2;
-typedef ReducedNewtonAlgorithm<OP3, VECTOR, LOCALDOPEDIM, LOCALDEALDIM> RNA3;
-typedef ReducedNewtonAlgorithm<OP4, VECTOR, LOCALDOPEDIM, LOCALDEALDIM> RNA4;
-typedef ReducedNewtonAlgorithm<OP5, VECTOR, LOCALDOPEDIM, LOCALDEALDIM> RNA5;
+typedef ReducedNewtonAlgorithm<OP1, VECTOR> RNA1;
+typedef ReducedNewtonAlgorithm<OP2, VECTOR> RNA2;
+typedef ReducedNewtonAlgorithm<OP3, VECTOR> RNA3;
+typedef ReducedNewtonAlgorithm<OP4, VECTOR> RNA4;
+typedef ReducedNewtonAlgorithm<OP5, VECTOR> RNA5;
 
 typedef InstatReducedProblem<CNLS, NLS, INTEGRATOR, INTEGRATOR, OP1,VECTOR, LOCALDOPEDIM, LOCALDEALDIM> SSolver1;
 typedef InstatReducedProblem<CNLS, NLS, INTEGRATOR, INTEGRATOR, OP2,VECTOR, LOCALDOPEDIM, LOCALDEALDIM> SSolver2;
@@ -201,9 +201,9 @@ main(int argc, char **argv)
 
   //Define the localPDE and the functionals we are interested in. Here, LFunc is a dummy necessary for the control,
   //LPF is a SpaceTimePointevaluation
-  LocalPDE<VECTOR, LOCALDOPEDIM, LOCALDEALDIM> LPDE;
-  LocalFunctional<VECTOR, LOCALDOPEDIM, LOCALDEALDIM> LFunc;
-  LocalPointFunctional<VECTOR, LOCALDOPEDIM, LOCALDEALDIM> LPF;
+  LocalPDE<DOFHANDLER, VECTOR,  LOCALDEALDIM> LPDE;
+  LocalFunctional<DOFHANDLER, VECTOR, LOCALDOPEDIM, LOCALDEALDIM> LFunc;
+  LocalPointFunctional<DOFHANDLER, VECTOR, LOCALDOPEDIM, LOCALDEALDIM> LPF;
 
   //Time grid of [0,1]
   Triangulation<1> times;
