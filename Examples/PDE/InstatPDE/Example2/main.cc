@@ -106,9 +106,9 @@ typedef Integrator<IDC, VECTOR, double, 2> INTEGRATOR;
 
 typedef DirectLinearSolverWithMatrix<SPARSITYPATTERN, MATRIX, VECTOR> LINEARSOLVER;
 
-typedef NewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR , LOCALDEALDIM>
+typedef NewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR>
     CNLS;
-typedef InstatStepNewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR, 2> NLS;
+typedef InstatStepNewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR> NLS;
 typedef ReducedNewtonAlgorithm<OP, VECTOR> RNA;
 typedef InstatReducedProblem<CNLS, NLS, INTEGRATOR, INTEGRATOR, OP,
     VECTOR, 2, 2> SSolver;

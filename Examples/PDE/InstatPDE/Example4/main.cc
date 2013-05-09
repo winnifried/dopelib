@@ -130,12 +130,10 @@ typedef Integrator<IDC , VECTOR , double, LOCALDEALDIM> INTEGRATOR;
 
 typedef DirectLinearSolverWithMatrix<SPARSITYPATTERN, MATRIX , VECTOR> LINEARSOLVER;
 
-typedef NewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR , LOCALDEALDIM>
-    CNLS;
-typedef InstatStepNewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR , LOCALDEALDIM>
-    NLS;
+typedef NewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR> CNLS;
+typedef InstatStepNewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR>  NLS;
 
-typedef FractionalStepThetaStepNewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR, LOCALDEALDIM>
+typedef FractionalStepThetaStepNewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR>
     NLS2;
 
 typedef ReducedNewtonAlgorithm<OP1, VECTOR> RNA1;

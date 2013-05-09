@@ -41,8 +41,17 @@
 
 namespace DOpE
 {
-
-  template <typename SPARSITYPATTERN, typename MATRIX, typename VECTOR,int dim>
+  /**
+   * @class VoidLinearSolver
+   *
+   * This class provides a linear solve for the nonlinear solvers of DOpE.
+   * This one is a dummy implementation for certain cases where we know that
+   * we invert an identity matrix!
+   *
+   * @tparam <VECTOR>             The vector type for the solution and righthandside data,
+   *
+   */
+  template <typename VECTOR>
     class VoidLinearSolver
   {
   public:
@@ -83,39 +92,39 @@ namespace DOpE
 
 /*********************************Implementation************************************************/
  
-  template <typename SPARSITYPATTERN, typename MATRIX, typename VECTOR,int dim>
-    void VoidLinearSolver<SPARSITYPATTERN,MATRIX,VECTOR, dim>::declare_params(ParameterReader &param_reader __attribute__((unused))) 
+  template <typename VECTOR>
+    void VoidLinearSolver<VECTOR>::declare_params(ParameterReader &/*param_reader*/) 
   {
   }
 
   /******************************************************/
 
-  template <typename SPARSITYPATTERN, typename MATRIX, typename VECTOR,int dim>
-    VoidLinearSolver<SPARSITYPATTERN,MATRIX,VECTOR, dim>::VoidLinearSolver(ParameterReader &param_reader __attribute__((unused))) 
+  template <typename VECTOR>
+    VoidLinearSolver<VECTOR>::VoidLinearSolver(ParameterReader &/*param_reader*/) 
   {
   }
 
 /******************************************************/
 
-template <typename SPARSITYPATTERN, typename MATRIX, typename VECTOR,int dim>
- VoidLinearSolver<SPARSITYPATTERN,MATRIX,VECTOR, dim>::~VoidLinearSolver()
+template <typename VECTOR>
+ VoidLinearSolver<VECTOR>::~VoidLinearSolver()
 {
 }
 
 /******************************************************/
 
-template <typename SPARSITYPATTERN, typename MATRIX, typename VECTOR,int dim>
+template <typename VECTOR>
   template<typename PROBLEM>
-  void  VoidLinearSolver<SPARSITYPATTERN,MATRIX,VECTOR, dim>::ReInit(PROBLEM& /*pde*/)
+  void  VoidLinearSolver<VECTOR>::ReInit(PROBLEM& /*pde*/)
 {
  
 }
 
 /******************************************************/
 
-template <typename SPARSITYPATTERN, typename MATRIX, typename VECTOR,int dim>
+template <typename VECTOR>
   template<typename PROBLEM, typename INTEGRATOR>
-  void VoidLinearSolver<SPARSITYPATTERN,MATRIX,VECTOR, dim>::Solve(PROBLEM& /*pde*/, INTEGRATOR& /*integr*/, VECTOR &rhs, VECTOR &solution, bool force_matrix_build __attribute__((unused)))
+  void VoidLinearSolver<VECTOR>::Solve(PROBLEM& /*pde*/, INTEGRATOR& /*integr*/, VECTOR &rhs, VECTOR &solution, bool /*force_matrix_build*/)
 {
   solution = rhs;
 }

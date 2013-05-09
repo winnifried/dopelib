@@ -40,8 +40,19 @@
 
 namespace DOpE
 {
+  /**
+   * A nonlinear solver class to compute solutions to nonlinear (stationary) problems
+   * Where the nonlinear variable is in a lower dimensional (0-dim) depending on 
+   * quanties given in a higherdimensional space in which we can integrate using
+   * the INTEGRATOR.
+   *
+   * @tparam <INTEGRATOR>          Integration routines to compute domain-, face-, and right-hand side values.
+   * @tparam <LINEARSOLVER>        A linear solver to solve the linear subproblems.
+   * @tparam <VECTOR>              A template class for arbitrary vectors which are given to the 
+                                   FS scheme and where the solution is stored in.
+   */
 
-  template <typename INTEGRATOR, typename LINEARSOLVER, typename VECTOR,int dimlow, int dimhigh>
+  template <typename INTEGRATOR, typename LINEARSOLVER, typename VECTOR>
     class NewtonSolverMixedDimensions : public LINEARSOLVER
   {
   public:
@@ -61,6 +72,9 @@ namespace DOpE
      * Solves the nonlinear PDE described by the PDEPROBLEM given initialy to the constructor 
      * using a Newton-Method
      *
+     * @tparam <PROBLEM>            The description of the problem we want to solve.
+     *
+     * @param pde                   The problem
      * @param solution              A  Vector that will store the solution upon completion
      *                              Note that an initial guess for the solution may be stored 
      *                              in this vector as this Vector is used as starting value for the 
@@ -75,13 +89,16 @@ namespace DOpE
      *                              should be build by the linear solver in the first iteration.
      *				    The default is false, meaning that if we have no idea we don't
      *				    want to build a matrix.
+     * @param priority              A number that defines the offset for the priority of the output
+     * @param algo_level            A prefix string to adjust indentation of the output.
      *
      * @return a boolean, that indicates whether it should be required to build the matrix next time that
      *         this method is used, e.g. the value for force_build_matrix of the next call.
      *
      */
     template<typename PROBLEM>
-      bool NonlinearSolve(PROBLEM& pde, VECTOR &solution, bool apply_boundary_values=true, bool force_matrix_build=false,
+      bool NonlinearSolve(PROBLEM& pde, VECTOR &solution, bool apply_boundary_values=true, 
+			  bool force_matrix_build=false,
 			  int priority = 5, std::string algo_level = "\t\t ");
     
   protected:
@@ -100,8 +117,8 @@ namespace DOpE
 
   /**********************************Implementation*******************************************/
 
-template <typename INTEGRATOR, typename LINEARSOLVER, typename VECTOR,  int dimlow, int dimhigh>
- void NewtonSolverMixedDimensions<INTEGRATOR,LINEARSOLVER, VECTOR, dimlow, dimhigh>
+template <typename INTEGRATOR, typename LINEARSOLVER, typename VECTOR>
+ void NewtonSolverMixedDimensions<INTEGRATOR,LINEARSOLVER, VECTOR>
     ::declare_params(ParameterReader &param_reader)
   {
       param_reader.SetSubsection("newtonsolver parameters");
@@ -118,13 +135,11 @@ template <typename INTEGRATOR, typename LINEARSOLVER, typename VECTOR,  int diml
 
   /*******************************************************************************************/
 
-  template <typename INTEGRATOR, typename LINEARSOLVER, typename VECTOR,  int dimlow, int dimhigh>
-    NewtonSolverMixedDimensions<INTEGRATOR,LINEARSOLVER, VECTOR, dimlow, dimhigh>
+  template <typename INTEGRATOR, typename LINEARSOLVER, typename VECTOR>
+    NewtonSolverMixedDimensions<INTEGRATOR,LINEARSOLVER, VECTOR>
     ::NewtonSolverMixedDimensions(INTEGRATOR &integrator, ParameterReader &param_reader)
     : LINEARSOLVER(param_reader), _integrator(integrator)
     {
-      assert(dimlow < dimhigh);
-
        param_reader.SetSubsection("newtonsolver parameters");
        _nonlinear_global_tol = param_reader.get_double ("nonlinear_global_tol");
        _nonlinear_tol        = param_reader.get_double ("nonlinear_tol"); 
@@ -138,25 +153,25 @@ template <typename INTEGRATOR, typename LINEARSOLVER, typename VECTOR,  int diml
 
   /*******************************************************************************************/
 
-    template <typename INTEGRATOR, typename LINEARSOLVER, typename VECTOR,  int dimlow, int dimhigh>
-    NewtonSolverMixedDimensions<INTEGRATOR,LINEARSOLVER, VECTOR, dimlow, dimhigh>
+    template <typename INTEGRATOR, typename LINEARSOLVER, typename VECTOR>
+    NewtonSolverMixedDimensions<INTEGRATOR,LINEARSOLVER, VECTOR>
                    ::~NewtonSolverMixedDimensions()
     {
     }
 
   /*******************************************************************************************/
- template <typename INTEGRATOR, typename LINEARSOLVER, typename VECTOR,  int dimlow, int dimhigh>
+ template <typename INTEGRATOR, typename LINEARSOLVER, typename VECTOR>
    template<typename PROBLEM>
-   void NewtonSolverMixedDimensions<INTEGRATOR,LINEARSOLVER, VECTOR, dimlow, dimhigh>
+   void NewtonSolverMixedDimensions<INTEGRATOR,LINEARSOLVER, VECTOR>
                  ::ReInit(PROBLEM& pde)
     {
       LINEARSOLVER::ReInit(pde);
     }
 
   /*******************************************************************************************/
- template <typename INTEGRATOR, typename LINEARSOLVER, typename VECTOR,  int dimlow, int dimhigh>
+ template <typename INTEGRATOR, typename LINEARSOLVER, typename VECTOR>
    template<typename PROBLEM>
-   bool NewtonSolverMixedDimensions<INTEGRATOR,LINEARSOLVER, VECTOR, dimlow, dimhigh>
+   bool NewtonSolverMixedDimensions<INTEGRATOR,LINEARSOLVER, VECTOR>
    ::NonlinearSolve(PROBLEM& pde,
 		    VECTOR &solution, 
 		    bool apply_boundary_values, 
@@ -273,8 +288,8 @@ template <typename INTEGRATOR, typename LINEARSOLVER, typename VECTOR,  int diml
 
 
 /*******************************************************************************************/
-    template <typename INTEGRATOR, typename LINEARSOLVER, typename VECTOR,  int dimlow, int dimhigh>
-    INTEGRATOR& NewtonSolverMixedDimensions<INTEGRATOR,LINEARSOLVER,VECTOR, dimlow, dimhigh>
+    template <typename INTEGRATOR, typename LINEARSOLVER, typename VECTOR>
+    INTEGRATOR& NewtonSolverMixedDimensions<INTEGRATOR,LINEARSOLVER,VECTOR>
                                ::GetIntegrator()
     {
       return _integrator;

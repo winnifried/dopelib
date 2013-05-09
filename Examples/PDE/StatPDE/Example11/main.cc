@@ -76,7 +76,7 @@ typedef Integrator<IDC, VECTOR, double, 2> INTEGRATOR;
 
 typedef DirectLinearSolverWithMatrix<SPARSITYPATTERN, MATRIX, VECTOR> LINEARSOLVER;
 
-typedef NewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR, 2> NLS;
+typedef NewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR> NLS;
 typedef StatPDEProblem<NLS, INTEGRATOR, OP, VECTOR, 2> SSolver;
 
 int

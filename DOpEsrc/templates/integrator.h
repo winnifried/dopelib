@@ -52,7 +52,7 @@ namespace DOpE
    *                                    celldatacontainer, facedatacontainer etc.)
    * @template VECTOR                   Class of the vectors which we use in the integrator.
    * @template SCALAR                   Type of the scalars we use in the integrator.
-   * @template dim
+   * @template dim                      dimesion of the domain
    */
   template<typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR,
       int dim>

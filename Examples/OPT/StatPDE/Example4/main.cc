@@ -78,10 +78,10 @@ typedef IntegratorMixedDimensions<IDC,VECTOR,double,0,2> INTEGRATORM;
 //Uncomment to use UMFPACK
 typedef DirectLinearSolverWithMatrix<BlockSparsityPattern,BlockSparseMatrix<double>,VECTOR> LINEARSOLVER;
 
-typedef VoidLinearSolver<BlockSparsityPattern,BlockSparseMatrix<double>,VECTOR,2> VOIDLS;
+typedef VoidLinearSolver<VECTOR> VOIDLS;
 
-typedef NewtonSolverMixedDimensions<INTEGRATORM,VOIDLS,VECTOR,0,2> NLSM;
-typedef NewtonSolver<INTEGRATOR,LINEARSOLVER,VECTOR,2> NLS;
+typedef NewtonSolverMixedDimensions<INTEGRATORM,VOIDLS,VECTOR> NLSM;
+typedef NewtonSolver<INTEGRATOR,LINEARSOLVER,VECTOR> NLS;
 typedef ReducedNewtonAlgorithm<OP,VECTOR> RNA;
 typedef StatReducedProblem<NLSM,NLS,INTEGRATORM,INTEGRATOR,OP,VECTOR,0,2> SSolver;
 

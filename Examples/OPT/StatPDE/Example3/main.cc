@@ -99,10 +99,10 @@ typedef DirectLinearSolverWithMatrix<BlockSparsityPattern,
 				     BlockSparseMatrix<double>,
 				     VECTOR> LINEARSOLVER;
 
-typedef VoidLinearSolver<BlockSparsityPattern,BlockSparseMatrix<double>,VECTOR,2> VOIDLS;  // mixed dim optimal control
+typedef VoidLinearSolver<VECTOR> VOIDLS;  // mixed dim optimal control
 
-typedef NewtonSolverMixedDimensions<INTEGRATORM,VOIDLS,VECTOR,0,2> NLSM;    // mixed dim optimal control
-typedef NewtonSolver<INTEGRATOR,LINEARSOLVER,VECTOR,2> NLS;
+typedef NewtonSolverMixedDimensions<INTEGRATORM,VOIDLS,VECTOR> NLSM;    // mixed dim optimal control
+typedef NewtonSolver<INTEGRATOR,LINEARSOLVER,VECTOR> NLS;
 typedef ReducedNewtonAlgorithm<OP,VECTOR> RNA;
 typedef StatReducedProblem<NLSM,NLS,INTEGRATORM,INTEGRATOR,OP,VECTOR,0,2> SSolver;
 

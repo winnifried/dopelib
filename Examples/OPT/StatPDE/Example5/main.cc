@@ -80,7 +80,7 @@ typedef CGLinearSolverWithMatrix<DOpEWrapper::PreconditionIdentity_Wrapper<Block
 //Uncomment to use UMFPACK
 //typedef DirectLinearSolverWithMatrix<BlockSparsityPattern,BlockSparseMatrix<double>,VECTOR> LINEARSOLVER;
 
-typedef NewtonSolver<INTEGRATOR,LINEARSOLVER,VECTOR,2> NLS;
+typedef NewtonSolver<INTEGRATOR,LINEARSOLVER,VECTOR> NLS;
 typedef ReducedNewtonAlgorithm<OP,VECTOR> RNA;
 typedef StatReducedProblem<NLS,NLS,INTEGRATOR,INTEGRATOR,OP,VECTOR,2,2> SSolver;
 

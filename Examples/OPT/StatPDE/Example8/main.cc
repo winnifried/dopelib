@@ -87,7 +87,7 @@ typedef Integrator<IDC, VECTOR, double, 2> INTEGRATOR;
 //Uncomment to use UMFPACK
 typedef DirectLinearSolverWithMatrix<SPARSITYPATTERN, MATRIX, VECTOR> LINEARSOLVER;
 
-typedef NewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR, 2> NLS;
+typedef NewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR> NLS;
 typedef StatReducedProblem<NLS, NLS, INTEGRATOR, INTEGRATOR, OP, VECTOR, 2, 2> SSolver;
 typedef VoidReducedProblem<NLS, INTEGRATOR, ALagOP, VECTOR, 2, 2> ALagSSolver;
 

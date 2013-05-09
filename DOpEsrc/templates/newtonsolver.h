@@ -41,8 +41,16 @@
 
 namespace DOpE
 {
+  /**
+   * A nonlinear solver class to compute solutions to nonlinear (stationary) problems
+   *
+   * @tparam <INTEGRATOR>          Integration routines to compute domain-, face-, and right-hand side values.
+   * @tparam <LINEARSOLVER>        A linear solver to solve the linear subproblems.
+   * @tparam <VECTOR>              A template class for arbitrary vectors which are given to the 
+                                   FS scheme and where the solution is stored in.
+   */
 
-  template <typename INTEGRATOR, typename LINEARSOLVER, typename VECTOR,int dim>
+  template <typename INTEGRATOR, typename LINEARSOLVER, typename VECTOR>
     class NewtonSolver : public LINEARSOLVER
   {
   public:
@@ -59,9 +67,11 @@ namespace DOpE
       void ReInit(PROBLEM& pde);
 
     /**
-     * Solves the nonlinear PDE described by the PROBLEM given initialy to the constructor 
-     * using a Newton-Method
+     * Solves the nonlinear PDE described by the PROBLEM using a Newton-Method
      *
+     * @tparam <PROBLEM>            The description of the problem we want to solve.
+     *
+     * @param pde                   The problem
      * @param solution              A  Vector that will store the solution upon completion
      *                              Note that an initial guess for the solution may be stored 
      *                              in this vector as this Vector is used as starting value for the 
@@ -76,14 +86,17 @@ namespace DOpE
      *                              should be build by the linear solver in the first iteration.
      *				    The default is false, meaning that if we have no idea we don't
      *				    want to build a matrix.
+     * @param priority              A number that defines the offset for the priority of the output
+     * @param algo_level            A prefix string to adjust indentation of the output.
      *
      * @return a boolean, that indicates whether it should be required to build the matrix next time that
      *         this method is used, e.g. the value for force_build_matrix of the next call.
      *
      */
     template<typename PROBLEM>
-      bool NonlinearSolve(PROBLEM& pde, VECTOR &solution, bool apply_boundary_values=true, bool force_matrix_build=false,
-			int priority = 5, std::string algo_level = "\t\t ");
+      bool NonlinearSolve(PROBLEM& pde, VECTOR &solution, bool apply_boundary_values=true, 
+			  bool force_matrix_build=false,
+			  int priority = 5, std::string algo_level = "\t\t ");
     
   protected:
     
@@ -101,8 +114,8 @@ namespace DOpE
 
   /**********************************Implementation*******************************************/
 
-template <typename INTEGRATOR, typename LINEARSOLVER, typename VECTOR,  int dim>
- void NewtonSolver<INTEGRATOR,LINEARSOLVER, VECTOR,  dim>
+template <typename INTEGRATOR, typename LINEARSOLVER, typename VECTOR>
+ void NewtonSolver<INTEGRATOR,LINEARSOLVER, VECTOR>
     ::declare_params(ParameterReader &param_reader)
   {
       param_reader.SetSubsection("newtonsolver parameters");
@@ -119,8 +132,8 @@ template <typename INTEGRATOR, typename LINEARSOLVER, typename VECTOR,  int dim>
 
   /*******************************************************************************************/
 
-  template <typename INTEGRATOR, typename LINEARSOLVER, typename VECTOR,  int dim>
-    NewtonSolver<INTEGRATOR,LINEARSOLVER, VECTOR,  dim>
+  template <typename INTEGRATOR, typename LINEARSOLVER, typename VECTOR>
+    NewtonSolver<INTEGRATOR,LINEARSOLVER, VECTOR>
     ::NewtonSolver(INTEGRATOR &integrator, ParameterReader &param_reader)
     : LINEARSOLVER(param_reader), _integrator(integrator)
     {
@@ -137,25 +150,25 @@ template <typename INTEGRATOR, typename LINEARSOLVER, typename VECTOR,  int dim>
 
   /*******************************************************************************************/
 
-    template <typename INTEGRATOR, typename LINEARSOLVER, typename VECTOR,  int dim>
-    NewtonSolver<INTEGRATOR,LINEARSOLVER, VECTOR, dim>
+    template <typename INTEGRATOR, typename LINEARSOLVER, typename VECTOR>
+    NewtonSolver<INTEGRATOR,LINEARSOLVER, VECTOR>
                    ::~NewtonSolver()
     {
     }
 
   /*******************************************************************************************/
- template <typename INTEGRATOR, typename LINEARSOLVER, typename VECTOR,  int dim>
+ template <typename INTEGRATOR, typename LINEARSOLVER, typename VECTOR>
     template<typename PROBLEM>
-   void NewtonSolver<INTEGRATOR,LINEARSOLVER, VECTOR,  dim>
+   void NewtonSolver<INTEGRATOR,LINEARSOLVER, VECTOR>
                         ::ReInit(PROBLEM& pde)
     {
       LINEARSOLVER::ReInit(pde);
     }
 
   /*******************************************************************************************/
- template <typename INTEGRATOR, typename LINEARSOLVER, typename VECTOR,  int dim>
+ template <typename INTEGRATOR, typename LINEARSOLVER, typename VECTOR>
    template<typename PROBLEM>
-   bool NewtonSolver<INTEGRATOR,LINEARSOLVER, VECTOR, dim>
+   bool NewtonSolver<INTEGRATOR,LINEARSOLVER, VECTOR>
    ::NonlinearSolve(PROBLEM& pde,
 		    VECTOR &solution, 
 		    bool apply_boundary_values, 
@@ -281,8 +294,8 @@ template <typename INTEGRATOR, typename LINEARSOLVER, typename VECTOR,  int dim>
     }
 
   /*******************************************************************************************/
-    template <typename INTEGRATOR, typename LINEARSOLVER, typename VECTOR,  int dim>
-    INTEGRATOR& NewtonSolver<INTEGRATOR,LINEARSOLVER, VECTOR,  dim>
+    template <typename INTEGRATOR, typename LINEARSOLVER, typename VECTOR>
+    INTEGRATOR& NewtonSolver<INTEGRATOR,LINEARSOLVER, VECTOR>
                                ::GetIntegrator()
     {
       return _integrator;

@@ -104,7 +104,7 @@ typedef Integrator<IDC, VECTOR, double, DIM> INTEGRATOR;
 typedef DirectLinearSolverWithMatrix<SPARSITYPATTERN, MATRIX, VECTOR> LINEARSOLVER;
 
 //The newtonsolver we want to use.
-typedef NewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR, DIM> NLS;
+typedef NewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR> NLS;
 
 //This class represents the PDEProblem and steers the solution process.
 typedef StatPDEProblem<NLS, INTEGRATOR, OP, VECTOR, DIM> SSolver;

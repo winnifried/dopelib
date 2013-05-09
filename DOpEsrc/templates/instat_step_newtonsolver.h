@@ -43,17 +43,15 @@ namespace DOpE
 {
   /**
    * A nonlinear solver class to compute solutions to time dependent PDE- and optimization problems with
-   * One-Step theta schemes. This class differ from the fractional_step_theta_step_newtonsolver.h
+   * One-Step theta schemes. This class differ from the FractionalStepThetaStepNewtonSolver
    * since the time interval is not split up.
    *
    * @tparam <INTEGRATOR>          Integration routines to compute domain-, face-, and right-hand side values.
    * @tparam <LINEARSOLVER>        A linear solver to solve the linear subproblems.
-   * @tparam <PDEPROBLEM>          The PDE problem to solve.
    * @tparam <VECTOR>              A template class for arbitrary vectors which are given to the 
                                    FS scheme and where the solution is stored in.
-   * @tparam <dim>                 The dimension of the problem: 1, 2, or 3.				  
    */
-  template <typename INTEGRATOR, typename LINEARSOLVER, typename VECTOR,int dim>
+  template <typename INTEGRATOR, typename LINEARSOLVER, typename VECTOR>
     class InstatStepNewtonSolver : public LINEARSOLVER
   {
   public:
@@ -81,10 +79,12 @@ namespace DOpE
     /******************************************************/
 
     /**
-     * Solves the nonlinear PDE coming from the backward euler time-discretization 
-     * described by the PROBLEM given initialy to the constructor 
-     * using a Newton-Method
+     * Solves the nonlinear PDE coming from a One-Step theta time-discretization 
+     * described by the PROBLEM using a Newton-Method
      *
+     * @tparam <PROBLEM>            The description of the problem we want to solve.
+     *
+     * @param pde                   The problem
      * @param last_time_solution    A  Vector stores the solution from the previous timestep
      *                              It is also the starting value of this iteration
      * @param solution              A  Vector that will store the solution upon completion
@@ -100,14 +100,17 @@ namespace DOpE
      *                              should be build by the linear solver in the first iteration.
      *				    The default is false, meaning that if we have no idea we don't
      *				    want to build a matrix.
+     * @param priority              A number that defines the offset for the priority of the output
+     * @param algo_level            A prefix string to adjust indentation of the output.
      *
      * @return a boolean, that indicates whether it should be required to build the matrix next time that
      *         this method is used, e.g. the value for force_build_matrix of the next call.
      *
      */    
     template<typename PROBLEM>
-      bool NonlinearSolve(PROBLEM& pde, const VECTOR &last_time_solution, VECTOR &solution, bool apply_boundary_values=true, 
-			bool force_matrix_build=false, int priority = 5, std::string algo_level = "\t\t ");
+      bool NonlinearSolve(PROBLEM& pde, const VECTOR &last_time_solution, VECTOR &solution, 
+			  bool apply_boundary_values=true, 
+			  bool force_matrix_build=false, int priority = 5, std::string algo_level = "\t\t ");
     /******************************************************/
 
     /**
@@ -115,6 +118,9 @@ namespace DOpE
      * PROBLEM, i.e., there is no time dependence in this problem!
      * using a Newton-Method
      *
+     * @tparam <PROBLEM>            The description of the problem we want to solve.
+     *
+     * @param pde                   The problem
      * @param solution              A  Vector that will store the solution upon completion
      *                              It is expected that solution is initially set to the return value
      *                              of residual in NonlinearLastTimeEvals!
@@ -128,6 +134,9 @@ namespace DOpE
      *                              should be build by the linear solver in the first iteration.
      *				    The default is false, meaning that if we have no idea we don't
      *				    want to build a matrix.
+     * @param priority              A number that defines the offset for the priority of the output
+     * @param algo_level            A prefix string to adjust indentation of the output.
+     *
      *
      * @return a boolean, that indicates whether it should be required to build the matrix next time that
      *         this method is used, e.g. the value for force_build_matrix of the next call.
@@ -142,6 +151,9 @@ namespace DOpE
     /**
      * Evaluates the timestep Problem at the previous time-point, this is part of the rhs for the Solution
      *
+     * @tparam <PROBLEM>            The description of the problem we want to solve.
+     *
+     * @param pde                   The problem
      * @param last_time_solution          A  Vector stores the solution from the previous timestep
      * @param residual              A  Vector that will store the results upon completion
      *
@@ -165,8 +177,8 @@ namespace DOpE
 
   /**********************************Implementation*******************************************/
 
-template <typename INTEGRATOR, typename LINEARSOLVER, typename VECTOR,  int dim>
- void InstatStepNewtonSolver<INTEGRATOR,LINEARSOLVER, VECTOR,  dim>
+template <typename INTEGRATOR, typename LINEARSOLVER, typename VECTOR>
+ void InstatStepNewtonSolver<INTEGRATOR,LINEARSOLVER, VECTOR>
     ::declare_params(ParameterReader &param_reader)
   {
       param_reader.SetSubsection("newtonsolver parameters");
@@ -183,8 +195,8 @@ template <typename INTEGRATOR, typename LINEARSOLVER, typename VECTOR,  int dim>
 
   /*******************************************************************************************/
 
-  template <typename INTEGRATOR, typename LINEARSOLVER, typename VECTOR,  int dim>
-    InstatStepNewtonSolver<INTEGRATOR,LINEARSOLVER, VECTOR,  dim>
+  template <typename INTEGRATOR, typename LINEARSOLVER, typename VECTOR>
+    InstatStepNewtonSolver<INTEGRATOR,LINEARSOLVER, VECTOR>
     ::InstatStepNewtonSolver(INTEGRATOR &integrator, ParameterReader &param_reader)
     : LINEARSOLVER(param_reader), _integrator(integrator)
     {
@@ -201,25 +213,25 @@ template <typename INTEGRATOR, typename LINEARSOLVER, typename VECTOR,  int dim>
 
   /*******************************************************************************************/
 
-    template <typename INTEGRATOR, typename LINEARSOLVER, typename VECTOR,  int dim>
-    InstatStepNewtonSolver<INTEGRATOR,LINEARSOLVER, VECTOR,  dim>
+    template <typename INTEGRATOR, typename LINEARSOLVER, typename VECTOR>
+    InstatStepNewtonSolver<INTEGRATOR,LINEARSOLVER, VECTOR>
                    ::~InstatStepNewtonSolver()
     {
     }
 
   /*******************************************************************************************/
- template <typename INTEGRATOR, typename LINEARSOLVER, typename VECTOR,  int dim>
+ template <typename INTEGRATOR, typename LINEARSOLVER, typename VECTOR>
    template<typename PROBLEM>
-   void InstatStepNewtonSolver<INTEGRATOR,LINEARSOLVER, VECTOR,  dim>
+   void InstatStepNewtonSolver<INTEGRATOR,LINEARSOLVER, VECTOR>
                         ::ReInit(PROBLEM& pde)
     {
       LINEARSOLVER::ReInit(pde);
     }
 
  /*******************************************************************************************/
- template <typename INTEGRATOR, typename LINEARSOLVER, typename VECTOR,  int dim>
+ template <typename INTEGRATOR, typename LINEARSOLVER, typename VECTOR>
    template<typename PROBLEM>
-   void InstatStepNewtonSolver<INTEGRATOR,LINEARSOLVER, VECTOR, dim>
+   void InstatStepNewtonSolver<INTEGRATOR,LINEARSOLVER, VECTOR>
    ::NonlinearLastTimeEvals(PROBLEM& pde, const VECTOR &last_time_solution, VECTOR &residual)
    { 
      VECTOR tmp_residual;
@@ -239,9 +251,9 @@ template <typename INTEGRATOR, typename LINEARSOLVER, typename VECTOR,  int dim>
    }
    /*******************************************************************************************/
 
- template <typename INTEGRATOR, typename LINEARSOLVER, typename VECTOR,  int dim>
+ template <typename INTEGRATOR, typename LINEARSOLVER, typename VECTOR>
    template<typename PROBLEM>
-   bool InstatStepNewtonSolver<INTEGRATOR,LINEARSOLVER, VECTOR, dim>
+   bool InstatStepNewtonSolver<INTEGRATOR,LINEARSOLVER, VECTOR>
    ::NonlinearSolve_Initial(PROBLEM& pde, VECTOR &solution, bool apply_boundary_values, 
 			    bool force_matrix_build, int priority, std::string algo_level)
  {
@@ -363,9 +375,9 @@ template <typename INTEGRATOR, typename LINEARSOLVER, typename VECTOR,  int dim>
  }
   
   /*******************************************************************************************/
- template <typename INTEGRATOR, typename LINEARSOLVER, typename VECTOR,  int dim>
+ template <typename INTEGRATOR, typename LINEARSOLVER, typename VECTOR>
    template<typename PROBLEM>
-    bool InstatStepNewtonSolver<INTEGRATOR,LINEARSOLVER, VECTOR, dim>
+    bool InstatStepNewtonSolver<INTEGRATOR,LINEARSOLVER, VECTOR>
                         ::NonlinearSolve(PROBLEM& pde,
 					 const VECTOR &last_time_solution, 
 					 VECTOR &solution, 
@@ -400,7 +412,7 @@ template <typename INTEGRATOR, typename LINEARSOLVER, typename VECTOR,  int dim>
 	GetIntegrator().ApplyInitialBoundaryValues(pde,solution);
       }
       
-      // echte rechte Seite zum aktuellen Zeitschritt f^{n+1}
+      // Righthandside for the current timestep f^{n+1}
       GetIntegrator().AddDomainData("last_time_solution",&last_time_solution);
       GetIntegrator().AddDomainData("last_newton_solution",&solution);
       pde.SetStepPart("New");
@@ -408,15 +420,15 @@ template <typename INTEGRATOR, typename LINEARSOLVER, typename VECTOR,  int dim>
       tmp_residual *= -1;
       residual += tmp_residual;
 
-      // Speichern des nicht von u^{n+1} abh. Anteils
+      // Save the part of the residual which is independent of  u^{n+1}
       time_residual = residual;
       time_residual *=-1;
 
-      // Berechne zum "echte" Residuumsgleichung zum aktuellen Zeitschritt
+      // Calculate the "real" residual in the current timestep
       GetIntegrator().ComputeNonlinearLhs(pde,tmp_residual); // modi, new
       residual += tmp_residual;
                
-      residual *=-1.; // wg. A(U)(\psi) = - A(U)(du,\psi)
+      residual *=-1.; // due to A(U)(\psi) = - A(U)(du,\psi)
      
       pde.GetOutputHandler()->SetIterationNumber(0,"PDENewton");
       pde.GetOutputHandler()->Write(residual,"Residual"+pde.GetType(),pde.GetDoFType());
@@ -450,7 +462,6 @@ template <typename INTEGRATOR, typename LINEARSOLVER, typename VECTOR,  int dim>
 	{
 	  solution += du;	 
 	  GetIntegrator().ComputeNonlinearLhs(pde,residual);	
-	  //GetIntegrator().ComputeNonlinearRhs(residual); // später vielleicht, falls f^{n+1} linearisiert wird (wie bei FSI)	  
 	  residual -= time_residual; 
 	  residual *= -1.;
 	  pde.GetOutputHandler()->Write(residual,"Residual"+pde.GetType(),pde.GetDoFType());
@@ -503,8 +514,8 @@ template <typename INTEGRATOR, typename LINEARSOLVER, typename VECTOR,  int dim>
     }
 
 /*******************************************************************************************/
-    template <typename INTEGRATOR, typename LINEARSOLVER, typename VECTOR,  int dim>
-    INTEGRATOR& InstatStepNewtonSolver<INTEGRATOR,LINEARSOLVER, VECTOR,  dim>
+    template <typename INTEGRATOR, typename LINEARSOLVER, typename VECTOR>
+    INTEGRATOR& InstatStepNewtonSolver<INTEGRATOR,LINEARSOLVER, VECTOR>
                                ::GetIntegrator()
     {
       return _integrator;
