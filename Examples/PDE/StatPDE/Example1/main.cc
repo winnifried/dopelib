@@ -28,7 +28,6 @@
 //deal.ii includes
 #include <grid/tria.h>
 #include <grid/grid_in.h>
-#include <dofs/dof_handler.h>
 #include <fe/fe_q.h>
 #include <base/quadrature_lib.h>
 

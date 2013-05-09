@@ -26,13 +26,9 @@
 
 #include <grid/tria.h>
 #include <grid/grid_in.h>
-#include <dofs/dof_handler.h>
-#include <grid/grid_generator.h>
 #include <fe/fe_q.h>
 #include <fe/fe_dgp.h>
-#include <dofs/dof_tools.h>
 #include <base/quadrature_lib.h>
-#include <base/function.h>
 
 #include "pdeproblemcontainer.h"
 #include "functionalinterface.h"
@@ -44,8 +40,6 @@
 #include "parameterreader.h"
 #include "mol_statespacetimehandler.h"
 #include "simpledirichletdata.h"
-#include "sparsitymaker.h"
-#include "userdefineddofconstraints.h"
 #include "integratordatacontainer.h"
 
 #include "localpde.h"
@@ -88,7 +82,7 @@ main(int argc, char **argv)
    * Stationary FSI problem in an ALE framework
    * Fluid: Stokes equ.
    * Structure: Incompressible neo hookean (INH) model
-   * We use the Q2^c-P1^dc element for discretization.
+   * We use the Q2^c-P1^dc element for discretization of Stokes.
    */
 
   string paramfile = "dope.prm";

@@ -25,8 +25,6 @@
 #define _LOCALPDE_
 
 #include "pdeinterface.h"
-#include "celldatacontainer.h"
-#include "facedatacontainer.h"
 
 using namespace std;
 using namespace dealii;

@@ -45,6 +45,10 @@ template<
       dealdim>
   {
     public:
+      LocalPointFunctionalX()
+      {
+        assert(dealdim==2);
+      }
 
       double
       PointValue(const DOpEWrapper::DoFHandler<dealdim, DH> &
@@ -98,6 +102,11 @@ template<
       VECTOR, dealdim>
   {
     public:
+      LocalBoundaryFluxFunctional()
+      {
+        assert(dealdim==2);
+      }
+
       double
       BoundaryValue(const FaceDataContainer<DH, VECTOR, dealdim>& fdc)
       {

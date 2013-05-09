@@ -20,14 +20,6 @@
 * for further information on this license.
 *
 **/
-
-/*
- * myconstraintsmaker.h
- *
- *  Created on: Aug 10, 2011
- *      Author: cgoll
- */
-
 #ifndef MYCONSTRAINTSMAKER_H_
 #define MYCONSTRAINTSMAKER_H_
 

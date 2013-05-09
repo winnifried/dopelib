@@ -66,10 +66,4 @@ subsection output parameters
   set results_dir       = Results/
 end
 
-#subsection gmres_withmatrix parameters
-	#   set linear_global_tol = 1.0e-16
-	#   set linear_maxiter    = 6000
-	#   set no_tmp_vectors    = 500
-#end
-
 

@@ -45,6 +45,10 @@ template<
       dealdim>
   {
     public:
+      LocalPointFunctionalX()
+      {
+        assert(dealdim==2);
+      }
 
       double
       PointValue(const DOpEWrapper::DoFHandler<dealdim, DH> &
