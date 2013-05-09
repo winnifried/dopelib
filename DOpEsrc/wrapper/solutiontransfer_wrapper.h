@@ -31,6 +31,22 @@
 
 namespace DOpEWrapper
 {
+/**
+ * @class SolutionTransfer
+ * 
+ * This class provides a wrapper for the dealii::SolutionTransfer 
+ * objects. It is used to cope with the non existing instantiation
+ * of the dealii::SolutionTransfer<dim,VECTOR,MGDoFHandler> object. 
+ * 
+ * For all values of DH it simply is the corresponding dealii::SolutionTransfer
+ * object, except for the MGDoFHandler, when instead the DoFHandler
+ * is used.
+ * 
+ * @tparam <dim>              The dimension in which the problem is posed.
+ * @tparma <VECTOR>           The vector type used to store the unknowns.
+ * @tparam <DH>               The dealii DofHandler type used.
+ */
+
   template <int dim, typename VECTOR, template<int, int> class DH = dealii::DoFHandler>
     class SolutionTransfer : public dealii::SolutionTransfer<dim,VECTOR, DH<dim,dim> >
     {

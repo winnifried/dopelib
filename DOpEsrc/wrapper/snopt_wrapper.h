@@ -55,6 +55,18 @@
 
 namespace DOpEWrapper
 {
+  /**
+   * @struct SNOPT_FUNC_DATA
+   *
+   * A struct defined to contain all the data needed by the
+   * SNOPT interface. 
+   *
+   * Since the number of arguments required by the SNOPT userinterface
+   * is larger than usually initialized number N of arguments
+   * accepted by boost::functionN we use this struct to allow use
+   * of the SNOPT interface with any boost functionality as it
+   * uses only one argument now.
+   */
   struct SNOPT_FUNC_DATA{
     integer    *Status; integer *n;    doublereal* x;
     integer    *needF;  integer *neF;  doublereal* F;
@@ -64,6 +76,15 @@ namespace DOpEWrapper
     doublereal *ru;     integer *lenru;
   };
       
+  /**
+   * @fn SNOPT_A_userfunc_
+   *
+   * This function is required by the SNOPT userinterface.
+   * here it bundles the arguments into the struct SNOPT_FUNC_DATA
+   * which is then passed to the function 
+   * SNOPT_A_userfunc_interface
+   * which we will load at runtime using boost with the user defined data.
+   */
   boost::function1<int, SNOPT_FUNC_DATA&> SNOPT_A_userfunc_interface;
   int SNOPT_A_userfunc_(integer    *Status, integer *n,    doublereal x[],
 			   integer    *needF,  integer *neF,  doublereal F[],
@@ -94,7 +115,12 @@ namespace DOpEWrapper
     else
       throw DOpE::DOpEException("The boost::function SNOPT_userfunc_interface has not been declared","DOpEWrapper::SNOPT::dope_snopt_userfunc_");
   }
-
+  
+  /**
+   * @class SNOPT_Problem
+   *
+   * A class that wrapps the snoptProblem interface for us.
+   */
   class SNOPT_Problem : public snoptProblem
   {
   public:

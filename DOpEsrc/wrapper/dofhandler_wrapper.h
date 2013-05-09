@@ -32,7 +32,11 @@ namespace DOpEWrapper
 {
 
   /**
-   * Wrapper for the DoFHandler.
+   * @class DoFHandler
+   *
+   * Wrapper for the DoFHandler. This Wrapper is required to allow instantiations
+   * of DoFHandlers in dimension 0 as well as between ``normal'' and ``hp'' 
+   * DoFHandlers.
    *
    * @template dim              Dimension of the dofhandler.
    * @template DOFHANDLER       With this template argument we distinguish
@@ -52,6 +56,15 @@ namespace DOpEWrapper
         {
         }
 
+      /**
+       * This function is needed to get access to the base class, i.e.,
+       * the dealii DoFHandler which is wrapped. 
+       * 
+       * This is needed to avoid casts in the program when 
+       * some functions need a dealii DoFHandler but have the 
+       * DoFHandler as a template which is deduced by the 
+       * arguments passed to the function
+       */
         const DOFHANDLER<dim, dim>&
         GetDEALDoFHandler() const
         {
@@ -132,7 +145,7 @@ namespace DOpEWrapper
         template<int dim>
           void
           distribute_dofs(const dealii::FESystem<dim> &fe,
-              const unsigned int offset __attribute__((unused)) =0)
+			  const unsigned int /*offset*/=0)
           {
             _dofs = fe.element_multiplicity(0);
           }
@@ -170,7 +183,7 @@ namespace DOpEWrapper
         template<int dim>
           void
           distribute_dofs(const dealii::hp::FECollection<dim> &fe_collection,
-              const unsigned int offset __attribute__((unused)) =0)
+			  const unsigned int /*offset*/ = 0)
           {
             _dofs = fe_collection[0].element_multiplicity(0);
           }

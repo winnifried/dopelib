@@ -31,7 +31,14 @@
 
 namespace DOpEWrapper
 {
-
+  /**
+   * @class FEValues
+   *
+   * This class is a wrapper for the FEValues 
+   * Objects in dealii to allow instatiations with dim = 0
+   *
+   * @tparam <dim>     The dimension in which the FEValues object lives
+   */
   template<int dim>
     class FEValues : public dealii::FEValues<dim>
     {
@@ -59,6 +66,15 @@ namespace DOpEWrapper
     };
 
   /*********************************************************/
+  /**
+   * @class FEFaceValues
+   *
+   * This class is a wrapper for the FEFaceValues 
+   * Objects in dealii to allow instatiations with dim = 0
+   *
+   * @tparam <dim>     The dimension in which the FEFaceValues object is posed
+   *     
+   */
   template<int dim>
     class FEFaceValues : public dealii::FEFaceValues<dim>
     {
@@ -89,6 +105,15 @@ namespace DOpEWrapper
     };
 
   /*********************************************************/
+  /**
+   * @class FESubfaceValues
+   *
+   * This class is a wrapper for the FESubfaceValues and HPSubfaceValues 
+   * Objects in dealii to allow instatiations with dim = 0
+   *
+   * @tparam <dim>     The dimension in which the FESubfaceValues object is posed
+   *     
+   */
   template<int dim>
     class FESubfaceValues : public dealii::FESubfaceValues<dim>
     {
@@ -119,6 +144,14 @@ namespace DOpEWrapper
     };
 
   /*********************************************************/
+  /**
+   * @class HpFEValues
+   *
+   * This class is a wrapper for the FEValues and HpFEValues 
+   * Objects in dealii to allow instatiations with dim = 0
+   *
+   * @tparam <dim>     The dimension in which the HpFEValues object lives
+   */
 
   template<int dim>
     class HpFEValues : public dealii::hp::FEValues<dim>
@@ -143,6 +176,15 @@ namespace DOpEWrapper
     };
 
   /*********************************************************/
+  /**
+   * @class HpFEFaceValues
+   *
+   * This class is a wrapper for the HPFaceFEValues 
+   * Objects in dealii to allow instatiations with dim = 0
+   *
+   * @tparam <dim>     The dimension in which the HpFEFaceValues object is posed
+   *     
+   */
   template<int dim>
     class HpFEFaceValues : public dealii::hp::FEFaceValues<dim>
     {
@@ -175,7 +217,16 @@ namespace DOpEWrapper
     };
 
   /*********************************************************/
-  template<int dim>
+ /**
+   * @class HpFESubfaceValues
+   *
+   * This class is a wrapper for the HpFESubfaceValues 
+   * Objects in dealii to allow instatiations with dim = 0
+   *
+   * @tparam <dim>     The dimension in which the HpFESubfaceValues object is posed
+   *     
+   */
+    template<int dim>
     class HpFESubfaceValues : public dealii::hp::FESubfaceValues<dim>
     {
       public:

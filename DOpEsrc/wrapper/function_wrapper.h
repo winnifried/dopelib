@@ -31,7 +31,12 @@
 namespace DOpEWrapper
 {
   /**
+   * @class Function
+   *
    * A dope function which is derived from the dealii function interface.
+   * This wrapper is needed to assert that the class have a 
+   * method SetTime so that we have a unified way to comunicate 
+   * the time in nonstationary problems.
    *
    * @tparam<dim>    The considered function has dimension `dim'
    */
@@ -66,7 +71,7 @@ namespace DOpEWrapper
          * @param Gives actual time to the function.
          */
         virtual void
-        SetTime(double time __attribute__((unused))) const
+	  SetTime(double /*time*/) const
         {
         }
         ;
@@ -88,6 +93,8 @@ namespace DOpEWrapper
   /******************************************************/
 
   /**
+   * @class ZeroFunctions
+   *
    * A dope zero function which is derived from the dealii zero function interface.
    */
   template<int dim>
@@ -106,15 +113,15 @@ namespace DOpEWrapper
         }
 
         virtual double
-        value(const dealii::Point<dim> &p __attribute__((unused)),
-            const unsigned int component __attribute__((unused))) const
+	  value(const dealii::Point<dim> &/*p*/,
+		const unsigned int /*component*/) const
         {
           return 0.0;
         }
 
         virtual void
-        vector_value(const dealii::Point<dim> &p __attribute__((unused)),
-            dealii::Vector<double> &return_value) const
+	  vector_value(const dealii::Point<dim> &/*p*/,
+		       dealii::Vector<double> &return_value) const
         {
           Assert(return_value.size() == this->n_components,
               ExcDimensionMismatch (return_value.size(), this->n_components));
@@ -124,147 +131,148 @@ namespace DOpEWrapper
 
         virtual void
         value_list(const std::vector<dealii::Point<dim> > &points,
-            std::vector<double> &values,
-            const unsigned int component __attribute__((unused)) = 0) const
+		   std::vector<double> &values,
+		   const unsigned int /*component*/ = 0) const
         {
           Assert(values.size() == points.size(),
-              ExcDimensionMismatch(values.size(), points.size()));
-
+		 ExcDimensionMismatch(values.size(), points.size()));
+	  
           std::fill(values.begin(), values.end(), 0.);
         }
 
         virtual void
-        vector_value_list(const std::vector<dealii::Point<dim> > &points,
-            std::vector<dealii::Vector<double> > &values) const
+	  vector_value_list(const std::vector<dealii::Point<dim> > &points,
+			    std::vector<dealii::Vector<double> > &values) const
         {
           Assert(values.size() == points.size(),
-              ExcDimensionMismatch(values.size(), points.size()));
-
+		 ExcDimensionMismatch(values.size(), points.size()));
+	  
           for (unsigned int i = 0; i < points.size(); ++i)
           {
             Assert(values[i].size() == this->n_components,
-                ExcDimensionMismatch(values[i].size(), this->n_components));
+		   ExcDimensionMismatch(values[i].size(), this->n_components));
             std::fill(values[i].begin(), values[i].end(), 0.);
           };
         }
 
         virtual dealii::Tensor<1, dim>
-        gradient(const dealii::Point<dim> &p __attribute__((unused)),
-            const unsigned int component __attribute__((unused)) =
-            0) const
+	  gradient(const dealii::Point<dim> &/*p*/,
+		   const unsigned int /*component*/ = 0) const
         {
           return dealii::Tensor<1, dim>();
         }
-
+	
         virtual void
-        vector_gradient(const dealii::Point<dim> &p __attribute__((unused)),
-            std::vector<dealii::Tensor<1, dim> > &gradients) const
+	  vector_gradient(const dealii::Point<dim> &/*p*/,
+			  std::vector<dealii::Tensor<1, dim> > &gradients) const
         {
           Assert(gradients.size() == this->n_components,
-              ExcDimensionMismatch(gradients.size(), this->n_components));
-
+		 ExcDimensionMismatch(gradients.size(), this->n_components));
+	  
           for (unsigned int c = 0; c < this->n_components; ++c)
             gradients[c].clear();
         }
 
         virtual void
-        gradient_list(const std::vector<dealii::Point<dim> > &points,
-            std::vector<dealii::Tensor<1, dim> > &gradients,
-            const unsigned int component __attribute__((unused)) =
-            0) const
+	  gradient_list(const std::vector<dealii::Point<dim> > &points,
+			std::vector<dealii::Tensor<1, dim> > &gradients,
+			const unsigned int /*component*/ = 0) const
         {
           Assert(gradients.size() == points.size(),
-              ExcDimensionMismatch(gradients.size(), points.size()));
-
+		 ExcDimensionMismatch(gradients.size(), points.size()));
+	  
           for (unsigned int i = 0; i < points.size(); ++i)
             gradients[i].clear();
         }
-
+	
         virtual void
-        vector_gradient_list(const std::vector<dealii::Point<dim> > &points,
-            std::vector<std::vector<dealii::Tensor<1, dim> > > &gradients) const
+	  vector_gradient_list(const std::vector<dealii::Point<dim> > &points,
+			       std::vector<std::vector<dealii::Tensor<1, dim> > > &gradients) const
         {
           Assert(gradients.size() == points.size(),
-              ExcDimensionMismatch(gradients.size(), points.size()));
+		 ExcDimensionMismatch(gradients.size(), points.size()));
           for (unsigned int i = 0; i < points.size(); ++i)
           {
             Assert(gradients[i].size() == this->n_components,
-                ExcDimensionMismatch(gradients[i].size(), this->n_components));
+		   ExcDimensionMismatch(gradients[i].size(), this->n_components));
             for (unsigned int c = 0; c < this->n_components; ++c)
               gradients[i][c].clear();
           };
         }
     };
-
+  
   /******************************************************/
 
   /**
+   * @class ZeroFunctions
+   *
    * A dope constant function which is derived from the dealii constant function interface.
+   * 
    */
   template<int dim>
     class ConstantFunction : public ZeroFunction<dim>
+  {
+    public:
+  ConstantFunction(const double value,
+		   const unsigned int n_components = 1)
+    : ZeroFunction<dim>(n_components), _function_value(value)
     {
-      public:
-        ConstantFunction(const double value,
-            const unsigned int n_components = 1)
-            : ZeroFunction<dim>(n_components), _function_value(value)
-        {
-        }
-        ;
+    }
+    ;
 
-        virtual
-        ~ConstantFunction()
-        {
-        }
-        ;
+    virtual
+      ~ConstantFunction()
+    {
+    }
+    ;
 
-        virtual double
-        value(const dealii::Point<dim> &p __attribute__((unused)),
-            const unsigned int component __attribute__((unused))) const
-        {
-          return _function_value;
-        }
+    virtual double
+      value(const dealii::Point<dim> &/*p*/,
+            const unsigned int /*component*/) const
+    {
+      return _function_value;
+    }
 
-        virtual void
-        vector_value(const dealii::Point<dim> &p __attribute__((unused)),
-            dealii::Vector<double> &return_value) const
-        {
-          Assert(return_value.size() == this->n_components,
-              ExcDimensionMismatch (return_value.size(), this->n_components));
+    virtual void
+      vector_value(const dealii::Point<dim> &/*p*/,
+		   dealii::Vector<double> &return_value) const
+    {
+      Assert(return_value.size() == this->n_components,
+	     ExcDimensionMismatch (return_value.size(), this->n_components));
+      
+      std::fill(return_value.begin(), return_value.end(), _function_value);
+    }
 
-          std::fill(return_value.begin(), return_value.end(), _function_value);
-        }
-
-        virtual void
-        value_list(const std::vector<dealii::Point<dim> > &points,
-            std::vector<double> &values,
-            const unsigned int component __attribute__((unused)) = 0) const
-        {
-          Assert(values.size() == points.size(),
-              ExcDimensionMismatch(values.size(), points.size()));
-
-          std::fill(values.begin(), values.end(), _function_value);
-        }
-
-        virtual void
-        vector_value_list(const std::vector<dealii::Point<dim> > &points,
-            std::vector<dealii::Vector<double> > &values) const
-        {
-          Assert(values.size() == points.size(),
-              ExcDimensionMismatch(values.size(), points.size()));
-
-          for (unsigned int i = 0; i < points.size(); ++i)
-          {
-            Assert(values[i].size() == this->n_components,
-                ExcDimensionMismatch(values[i].size(), this->n_components));
-            std::fill(values[i].begin(), values[i].end(), _function_value);
-          };
-        }
-
-      private:
-        const double _function_value;
-    };
-
+    virtual void
+      value_list(const std::vector<dealii::Point<dim> > &points,
+		 std::vector<double> &values,
+		 const unsigned int /*component*/ = 0) const
+    {
+      Assert(values.size() == points.size(),
+	     ExcDimensionMismatch(values.size(), points.size()));
+      
+      std::fill(values.begin(), values.end(), _function_value);
+    }
+    
+    virtual void
+      vector_value_list(const std::vector<dealii::Point<dim> > &points,
+			std::vector<dealii::Vector<double> > &values) const
+    {
+      Assert(values.size() == points.size(),
+	     ExcDimensionMismatch(values.size(), points.size()));
+      
+      for (unsigned int i = 0; i < points.size(); ++i)
+      {
+	Assert(values[i].size() == this->n_components,
+	       ExcDimensionMismatch(values[i].size(), this->n_components));
+	std::fill(values[i].begin(), values[i].end(), _function_value);
+      };
+    }
+    
+  private:
+    const double _function_value;
+  };
+  
 } //end of namespace
 
 #endif

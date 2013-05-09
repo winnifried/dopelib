@@ -31,6 +31,21 @@
 
 namespace DOpEWrapper
 {
+/**
+ * @class DataOut
+ * 
+ * This class provides a wrapper for the dealii::DataOut 
+ * objects. It is used to cope with the non existing instantiation
+ * of the dealii::DataOut<dim,MGDoFHandler> object. 
+ * 
+ * For all values of DH it simply is the corresponding dealii::DataOut
+ * object, except for the MGDoFHandler, when instead the DoFHandler
+ * is used.
+ * 
+ * @tparam <dim>              The dimension in which the problem is posed.
+ * @tparam <DH>               The dealii DofHandler type used.
+ */
+
   template <int dim, template<int, int> class DH = dealii::DoFHandler>
     class DataOut : public dealii::DataOut<dim, DH<dim,dim> >
     {

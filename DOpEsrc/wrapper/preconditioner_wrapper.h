@@ -26,9 +26,31 @@
 
 #include <lac/precondition.h>
 #include <lac/sparse_ilu.h>
-
+  
+  /**
+   * @file preconditioner_wrapper.h
+   *
+   * This file contains a collection of Wrappers to the
+   * different preconditioners provided by dealii so
+   * that they all have the same interface allowing 
+   * their use as template arguments in our linear solvers.
+   *
+   * Note that they all can be used in the linear solvers by dealii
+   * but they do not have the same initialization methods!
+   */
 namespace DOpEWrapper
 {
+ /**
+   * @class PreconditionSSOR_Wrapper
+   *
+   * Wrapper for the dealii::PreconditionSSOR preconditioner.
+   * 
+   * This is provided to provide a unified initialization interface 
+   * to the preconditioners making them useable as template arguments 
+   * in our linear solvers.
+   *
+   * @tparam <MATRIX>   The used matrix type
+   */
   template <typename MATRIX>
     class PreconditionSSOR_Wrapper : public dealii::PreconditionSSOR<MATRIX>
   {
@@ -39,7 +61,18 @@ namespace DOpEWrapper
     }
   };
 
-  template <typename MATRIX>
+ /**
+   * @class PreconditionIdentity_Wrapper
+   *
+   * Wrapper for the dealii::PreconditionIdentity preconditioner.
+   * 
+   * This is provided to provide a unified initialization interface 
+   * to the preconditioners making them useable as template arguments 
+   * in our linear solvers.
+   *
+   * @tparam <MATRIX>   The used matrix type
+   */
+   template <typename MATRIX>
     class PreconditionIdentity_Wrapper : public dealii::PreconditionIdentity
   {
   public:
@@ -48,7 +81,18 @@ namespace DOpEWrapper
     }
   };
 
-  template <typename number>
+ /**
+   * @class PreconditionSparseILU_Wrapper
+   *
+   * Wrapper for the dealii::PreconditionSparseILU preconditioner.
+   * 
+   * This is provided to provide a unified initialization interface 
+   * to the preconditioners making them useable as template arguments 
+   * in our linear solvers.
+   *
+   * @tparam <MATRIX>   The used matrix type
+   */
+   template <typename number>
     class PreconditionSparseILU_Wrapper : public dealii::SparseILU<number>
   {
   public:

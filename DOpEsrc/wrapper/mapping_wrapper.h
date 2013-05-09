@@ -21,13 +21,6 @@
  *
  **/
 
-/*
- * mapping_wrapper.h
- *
- *  Created on: Oct 4, 2012
- *      Author: cgoll
- */
-
 #ifndef MAPPING_WRAPPER_H_
 #define MAPPING_WRAPPER_H_
 
@@ -37,7 +30,19 @@
 #include <fe/mapping_q.h>
 
 namespace DOpEWrapper
-{
+{ 
+  /**
+   * @class Mapping
+   *
+   * A Wrapper that is used to automatically use the
+   * dealii::MappingCollection for hp::DoFHandlers and
+   * dealii::Mapping for all other DoFHandler objects
+   * and simultaneously beeing of the same type to
+   * allow us the use of DoFHandler as a template.
+   *
+   * @template dim              Dimension of the dofhandler.
+   * @template DOFHANDLER       The dealii DoFHandler Object
+   */
   template<int dim, template<int, int> class DH = dealii::DoFHandler>
     class Mapping
     {
