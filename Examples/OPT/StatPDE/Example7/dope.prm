@@ -99,7 +99,7 @@ subsection reduced_ipoptalgorithm parameters
   #With the install script only mumps is provided
   #for ma* additional sources need to be obtained.
   #see the install script.
-  set ipopt linsolve	   = ma27
+  set ipopt linsolve	   = mumps
 end
 
 

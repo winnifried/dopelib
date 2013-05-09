@@ -212,6 +212,39 @@ fi
 #back to the ${INST_DIR}
 cd ../..
 #done Mumps installation
+#Lapack
+cd ThirdParty/Lapack
+if [[ -d LAPACK ]]
+then
+    echo "The Lapack library appears to be available already."
+    echo "reuse existing code? [y/n]"
+    read line
+    if [[ $line != "y" ]]
+    then
+	echo "Ipopt needs additional solvers:"
+	echo "Download the Lapack library [y/n]?"
+	read line
+	if [[ $line != "y" ]]
+	then
+	    echo "Stopping script!"
+	    exit 1
+	fi
+	./get.Lapack
+    fi
+else
+    echo "Ipopt needs additional solvers:"
+    echo "Download the Lapack library [y/n]?"
+    read line
+    if [[ $line != "y" ]]
+    then
+	echo "Stopping script!"
+	exit 1
+    fi
+    ./get.Lapack
+fi
+#back to the ${INST_DIR}
+cd ../..
+#done Lapack installation
 
 #HSL
 echo "Please install/or download appropriate linear solvers"
@@ -260,8 +293,9 @@ if [[ $line != "y" ]]
 then
     #only if all is fine we continue
     echo "No Checks are done!"
+else
+    make test
 fi
-make test
 
 read -t 1 -n 10000 discard #remove unwanted 
 echo "proceede with installation [y/n]"

@@ -58,8 +58,25 @@ IPOPT_LIB = $(IPOPT)/lib64/
 #Additional library header files 
 DOPE_LIBS += -I$(IPOPT_INC)  
 
+IPOPT_LDFLAGS = -lipopt
+
+#Check additionally installed libs
+_LOCAL_ipopt_add_libs = $(shell echo $(IPOPT_LIB)/*)
+ifneq (,$(findstring coinhsl, $(_LOCAL_ipopt_add_libs)))
+IPOPT_LDFLAGS += -lcoinhsl		
+endif
+ifneq (,$(findstring coinmetis, $(_LOCAL_ipopt_add_libs)))
+IPOPT_LDFLAGS += -lcoinmetis		
+endif
+ifneq (,$(findstring coinmumps, $(_LOCAL_ipopt_add_libs)))
+IPOPT_LDFLAGS += -lcoinmumps		
+endif
+ifneq (,$(findstring coinlapack, $(_LOCAL_ipopt_add_libs)))
+IPOPT_LDFLAGS += -lcoinlapack		
+endif
+
 #additional linker information
-DOPE_LDFLAGS += -L$(IPOPT_LIB) -lipopt -lcoinhsl -lcoinmumps -lcoinmetis
+DOPE_LDFLAGS += -L$(IPOPT_LIB) $(IPOPT_LDFLAGS)
 
 #endof With IPOPT	
 endif
