@@ -1,5 +1,11 @@
 Changelog DOpE
 ==============
+09.05.2013: DESCRIPTION: Template - parameters reworked:
+	    Changes to the user interface:
+	    1) template<typename [FE|DOFHANDLER]> is now template<template<int,int> class [FE|DOFHANDLER]. So instead of, f.i., dealii::DoFHandler<2> you have to specify dealii::DoFHandler as a template parameter.
+	    2) ReducedProblemInterface has lost both dim-template-parameters, and derived classes are adapted.
+	    3) Most opt-algorithms have lost one or two dim-template-parameters
+	    4) PDEInterface has lost dopedim as templateparameter.
 08.05.2013: Added interface to IPOPT. 
 11.04.2013: DOpElib is running with deal.II 8.0pre, updated
 	    deprecated headers
