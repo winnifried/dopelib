@@ -26,17 +26,12 @@
 
 #include <grid/tria.h>
 #include <grid/tria_boundary_lib.h>
-//#include <dofs/dof_handler.h>
 #include <grid/grid_generator.h>
 #include <fe/fe_q.h>
-//#include <fe/fe_nothing.h>
-//#include <dofs/dof_tools.h>
 #include <base/quadrature_lib.h>
 #include <base/function.h>
 
 #include "pdeproblemcontainer.h"
-//#include "functionalinterface.h"
-//#include "pdeinterface.h"
 #include "statpdeproblem.h"
 #include "newtonsolver.h"
 #include "directlinearsolver.h"
@@ -48,7 +43,6 @@
 #include "parameterreader.h"
 #include "mol_statespacetimehandler.h"
 #include "simpledirichletdata.h"
-//#include "active_fe_index_setter_interface.h"
 
 #include "localpde.h"
 #include "functionals.h"
