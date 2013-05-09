@@ -30,13 +30,13 @@
 #include "userdefineddofconstraints.h"
 #include "sth_internals.h"
 #include "refinementcontainer.h"
+#include "solutiontransfer_wrapper.h"
 
 #include <dofs/dof_handler.h>
 #include <dofs/dof_renumbering.h>
 #include <dofs/dof_tools.h>
 #include <hp/mapping_collection.h>
 #include <lac/constraint_matrix.h>
-#include <deal.II/numerics/solution_transfer.h>
 #include <deal.II/grid/grid_refinement.h>
 
 namespace DOpE
@@ -536,8 +536,8 @@ namespace DOpE
             delete _state_mesh_transfer;
             _state_mesh_transfer = NULL;
           }
-          _state_mesh_transfer = new dealii::SolutionTransfer<dim, VECTOR, DH<dim, dim>>(
-              _state_dof_handler);
+          _state_mesh_transfer = new DOpEWrapper::SolutionTransfer<dim, VECTOR,
+	    DH>(_state_dof_handler);
 
           if (DOpEtypes::RefinementType::global == ref_type)
           {
@@ -605,9 +605,8 @@ namespace DOpE
             _control_mesh_transfer = NULL;
           }
 #if dope_dimension == deal_II_dimension
-          _control_mesh_transfer =
-              new dealii::SolutionTransfer<dim, VECTOR, DH<dim, dim>>(
-                  _control_dof_handler);
+          _control_mesh_transfer = new DOpEWrapper::SolutionTransfer<dim, VECTOR,
+	    DH>(_control_dof_handler);
 #endif
           if (DOpEtypes::RefinementType::global == ref_type)
           {
@@ -802,9 +801,9 @@ namespace DOpE
         std::vector<Point<dim> > _support_points;
 
         Constraints _constraints;
-        dealii::SolutionTransfer<dim, VECTOR, DH<dim, dim> >* _control_mesh_transfer;
-        dealii::SolutionTransfer<dim, VECTOR, DH<dim, dim> >* _state_mesh_transfer;
-        bool _sparse_mkr_dynamic;
+	DOpEWrapper::SolutionTransfer<dim, VECTOR,DH>* _control_mesh_transfer;
+        DOpEWrapper::SolutionTransfer<dim, VECTOR,DH>* _state_mesh_transfer;
+	bool _sparse_mkr_dynamic;
     };
 
   /**************************explicit instantiation*************/

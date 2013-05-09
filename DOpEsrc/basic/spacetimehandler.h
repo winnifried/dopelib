@@ -27,8 +27,8 @@
 #include "spacetimehandler_base.h"
 #include "active_fe_index_setter_interface.h"
 #include "mapping_wrapper.h"
+#include "dataout_wrapper.h"
 
-#include <numerics/data_out.h>
 #include <lac/vector.h>
 #include <lac/block_vector_base.h>
 #include <lac/block_vector.h>
@@ -400,7 +400,7 @@ namespace DOpE
 
         /******************************************************/
 
-        dealii::DataOut<dealdim, DH<dealdim, dealdim> >&
+        DOpEWrapper::DataOut<dealdim, DH>&
         GetDataOut()
         {
           _data_out.clear();
@@ -412,7 +412,7 @@ namespace DOpE
       protected:
         //we need this here, because we know the type of the DoFHandler in use.
         //This saves us a template argument for statpdeproblem etc.
-        dealii::DataOut<dealdim, DH<dealdim, dealdim> > _data_out;
+        DOpEWrapper::DataOut<dealdim, DH> _data_out;
         unsigned int _control_index, _state_index;
         const ActiveFEIndexSetterInterface<dopedim, dealdim>* _fe_index_setter;
         mutable std::vector<const DOpEWrapper::DoFHandler<dealdim, DH>*> _domain_dofhandler_vector;
