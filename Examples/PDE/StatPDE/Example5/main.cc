@@ -76,6 +76,7 @@ typedef StatPDEProblem<NLS, INTEGRATOR, OP, VECTOR, DIM> SSolver;
 typedef MethodOfLines_StateSpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN,
     VECTOR, DIM> STH;
 
+
 int
 main(int argc, char **argv)
 {
