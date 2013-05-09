@@ -37,6 +37,17 @@ namespace DOpE
 {
   /**
    * This class contains the methods which all time stepping schemes share.
+   *
+   * @tparam <OPTPROBLEM>       The problem to deal with.
+   * @tparam <SPARSITYPATTERN>  The sparsity pattern for control & state.
+   * @tparam <VECTOR>           The vector type for control & state 
+   *                            (i.e. dealii::Vector<double> or dealii::BlockVector<double>)
+   * @tparam <dopedim>          The dimension for the control variable.
+   * @tparam <dealdim>          The dimension of the state variable.
+   * @tparam <FE>               The type of finite elements in use, must be compatible with the DH.
+   * @tparam <DH>               The type of the DoFHandler in use 
+   *                            (to be more precise: The type of the dealii-DoFhandler which forms
+   *                            the base class of the DOpEWrapper::DoFHandler in use.)
    */
 
   template<typename OPTPROBLEM, typename SPARSITYPATTERN, typename VECTOR,
@@ -262,8 +273,7 @@ namespace DOpE
             const std::map<std::string, const dealii::Vector<double>*> &param_values,
             const std::map<std::string, const VECTOR*> &domain_values) const
         {
-          return _OP.GetDirichletValues(color,/*control_dof_handler,state_dof_handler,*/
-          param_values, domain_values);
+          return _OP.GetDirichletValues(color, param_values, domain_values);
         }
 
         /******************************************************/
@@ -323,10 +333,6 @@ namespace DOpE
 
         /**
          * This function gets the number of blocks considered in the PDE problem.
-         * Example 1: in fluid problems we have to find velocities and pressure
-         * --> number of blocks is 2.
-         * Example 2: in FSI problems we have to find velocities, displacements, and pressure.
-         *  --> number of blocks is 3.
          *
          * @return Returns the number of blocks.
          */

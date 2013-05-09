@@ -37,6 +37,17 @@ namespace DOpE
 
   /**
    * This class contains the methods which all primal time stepping schemes share.
+   *
+   * @tparam <OPTPROBLEM>       The problem to deal with.
+   * @tparam <SPARSITYPATTERN>  The sparsity pattern for control & state.
+   * @tparam <VECTOR>           The vector type for control & state 
+   *                            (i.e. dealii::Vector<double> or dealii::BlockVector<double>)
+   * @tparam <dopedim>          The dimension for the control variable.
+   * @tparam <dealdim>          The dimension of the state variable.
+   * @tparam <FE>               The type of finite elements in use, must be compatible with the DH.
+   * @tparam <DH>               The type of the DoFHandler in use 
+   *                            (to be more precise: The type of the dealii-DoFhandler which forms
+   *                            the base class of the DOpEWrapper::DoFHandler in use.)
    */
   template<typename OPTPROBLEM, typename SPARSITYPATTERN, typename VECTOR,
       int dopedim, int dealdim,
@@ -58,9 +69,26 @@ namespace DOpE
 
         /******************************************************/
         /****For the initial values ***************/
-        template<typename DATACONTAINER>
+        /**
+         * Computes the value of the cell contributions to the 
+	 * equation for the calculation of the initial values
+         *
+	 * @tparam <CDC>                   A container that contains all relevant data
+	 *                                 needed on the element, e.g., element size, finite element values;
+	 *                                 see, e.g., CellDataContainer
+         *
+	 * @param cdc                      The CDC object.
+         * @param local_cell_vector        This vector contains the locally computed values 
+         *                                 of the cell equation. For more information
+         *                                 on dealii::Vector, please visit, the deal.ii manual pages.
+         * @param scale                    A scaling factor which is -1 or 1 depending on the subroutine 
+	 *                                 to compute.
+	 * @param scale_ico                Given for compatibility reasons with the CellEquation 
+	 *                                 in PDEInterface. Should not be used here!
+         */
+        template<typename CDC>
           void
-          Init_CellEquation(const DATACONTAINER& cdc,
+          Init_CellEquation(const CDC& cdc,
               dealii::Vector<double> &local_cell_vector, double scale,
               double scale_ico)
           {
@@ -68,69 +96,197 @@ namespace DOpE
                 scale_ico);
           }
 
-        template<typename DATACONTAINER>
+        /**
+         * Computes the value of the cell contributions to the 
+	 * RHS for the calculation of the initial values
+         *
+	 * @tparam <CDC>                   A container that contains all relevant data
+	 *                                 needed on the element, e.g., element size, finite element values;
+	 *                                 see, e.g., CellDataContainer
+         *
+	 * @param cdc                      The CDC object.
+         * @param local_cell_vector        This vector contains the locally computed values 
+         *                                 of the cellrhs.
+         * @param scale                    A scaling factor which is -1 or 1 depending on the subroutine 
+	 *                                 to compute.
+	 */
+        template<typename CDC>
           void
-          Init_CellRhs(const DATACONTAINER& cdc,
+          Init_CellRhs(const CDC& cdc,
               dealii::Vector<double> &local_cell_vector, double scale)
           {
             this->GetProblem().Init_CellRhs(cdc, local_cell_vector, scale);
           }
 
-        template<typename DATACONTAINER>
+        /** 
+         * Computes the value of the cell contributions to the 
+	 * Matrix for the calculation of the initial values
+         *
+	 * @tparam <CDC>                   A container that contains all relevant data
+	 *                                 needed on the element, e.g., element size, finite element values;
+	 *                                 see, e.g., CellDataContainer
+         *
+	 * @param cdc                      The CDC object.
+         * @param local_entry_matrix       This vector contains the locally computed values 
+         *                                 of the cellmatrix.
+         * @param scale                    A scaling factor which is -1 or 1 depending on the subroutine 
+	 *                                 to compute.
+	 * @param scale_ico                Given for compatibility reasons with the CellEquation 
+	 *                                 in PDEInterface. Should not be used here!
+	 */
+        template<typename CDC>
           void
-          Init_CellMatrix(const DATACONTAINER& cdc,
+          Init_CellMatrix(const CDC& cdc,
               dealii::FullMatrix<double> &local_entry_matrix, double scale, double scale_ico)
           {
             this->GetProblem().Init_CellMatrix(cdc, local_entry_matrix, scale,
                 scale_ico);
           }
 
+        /**
+	 * Computes the value of the point contributions to the 
+	 * Rhs for the calculation of the initial values
+	 *
+         * @param param_values             A std::map containing parameter data 
+	 *                                 (e.g. non space dependent data). If the control
+         *                                 is done by parameters, it is contained in this map 
+	 *                                 at the position "control".
+         * @param domain_values            A std::map containing domain data 
+	 *                                 (i.e., nodal vectors for FE-Functions). If the control
+         *                                 is distributed, it is contained in this map at the
+	 *                                 position "control". The state may always
+         *                                 be found in this map at the position "state"
+         * @param local_cell_vector        This vector contains the locally computed values 
+	 *                                 of the PointRhs. For more information
+         *                                 on dealii::Vector, please visit, the deal.ii manual pages.
+         * @param scale                    A scaling factor which is -1 or 1 depending on the subroutine 
+	 *                                 to compute.
+         */
         void
         Init_PointRhs(
             const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
             const std::map<std::string, const VECTOR*> &/*domain_values*/,
-            VECTOR& /*rhs_vector*/, double /*scale=1.*/)
+            VECTOR& /*rhs_vector*/, double /*scale*/)
         {
         }
 
-        template<typename FACEDATACONTAINER>
+      /**
+         * Same functionality as for the Init_CellEquation, but on Faces.
+	 * Note that no time derivatives may occure on faces of the domain at present!
+	 * @tparam <FDC>                   A container that contains all relevant data
+	 *                                 needed on the element, e.g., element size, finite element values;
+	 *                                 see, e.g., FaceDataContainer
+         *
+	 * @param fdc                      The FDC object.
+         * @param local_cell_vector        This vector contains the locally computed values 
+         *                                 of the Facequation. 
+         * @param scale                    A scaling factor which is -1 or 1 depending on the subroutine 
+	 *                                 to compute.
+	 * @param scale_ico                Given for compatibility reasons with the CellEquation 
+	 *                                 in PDEInterface. Should not be used here!
+          */
+       template<typename FDC>
           void
-          Init_FaceEquation(const FACEDATACONTAINER& /*fdc*/,
+          Init_FaceEquation(const FDC& /*fdc*/,
               dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/, double /*scale_ico*/)
           {
           }
 
-        template<typename FACEDATACONTAINER>
+       /**
+         * Same functionality as for the Init_CellEquation, but on Interfaces, i.e. the same as 
+	 * FaceEquation but with access to the FEValues on both sides.
+	 * Note that no time derivatives may occure on faces of the domain at present!
+	 * @tparam <FDC>                   A container that contains all relevant data
+	 *                                 needed on the element, e.g., element size, finite element values;
+	 *                                 see, e.g., FaceDataContainer
+         *
+	 * @param fdc                      The FDC object.
+         * @param local_cell_vector        This vector contains the locally computed values 
+         *                                 of the InterfaceEquation. 
+         * @param scale                    A scaling factor which is -1 or 1 depending on the subroutine 
+	 *                                 to compute.
+	 * @param scale_ico                Given for compatibility reasons with the CellEquation 
+	 *                                 in PDEInterface. Should not be used here!
+	 */
+         template<typename FDC>
           void
-          Init_InterfaceEquation(const FACEDATACONTAINER& /*fdc*/,
+          Init_InterfaceEquation(const FDC& /*fdc*/,
               dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/, double /*scale_ico*/)
           {
           }
 
-        template<typename FACEDATACONTAINER>
+        /**
+         * Same functionality as for the CellEquation, but on Boundaries.
+	 * Note that no time derivatives may occure on faces of the domain at present!
+	 * @tparam <FDC>                   A container that contains all relevant data
+	 *                                 needed on the element, e.g., element size, finite element values;
+	 *                                 see, e.g., FaceDataContainer
+         *
+	 * @param fdc                      The FDC object.
+         * @param local_cell_vector        This vector contains the locally computed values 
+         *                                 of the Facequation. 
+         * @param scale                    A scaling factor which is -1 or 1 depending on the subroutine 
+	 *                                 to compute.
+	 * @param scale_ico                Given for compatibility reasons with the CellEquation 
+	 *                                 in PDEInterface. Should not be used here!
+          */
+        template<typename FDC>
           void
-          Init_BoundaryEquation(const FACEDATACONTAINER& /*fdc*/,
+          Init_BoundaryEquation(const FDC& /*fdc*/,
               dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/, double /*scale_ico*/)
           {
           }
 
-        template<typename FACEDATACONTAINER>
+         /**
+         * Same functionality as for the CellMatrix, but on Faces.
+	 * Note that no time derivatives may occure on faces of the domain at present!
+	 * @tparam <FDC>                   A container that contains all relevant data
+	 *                                 needed on the element, e.g., element size, finite element values;
+	 *                                 see, e.g., FaceDataContainer
+         *
+	 * @param fdc                      The FDC object.
+         * @param local_entry_matrix       This matrix contains the locally computed values 
+         *                                 of the FaceMatrix. 
+ 	 */
+        template<typename FDC>
           void
-          Init_FaceMatrix(const FACEDATACONTAINER& /*fdc*/,
+          Init_FaceMatrix(const FDC& /*fdc*/,
               FullMatrix<double> &/*local_entry_matrix*/, double /*scale*/, double /*scale_ico*/)
           {
           }
 
-        template<typename FACEDATACONTAINER>
+      /**
+         * Same functionality as for the CellMatrix, but on Interfaces.
+	 * Note that no time derivatives may occure on faces of the domain at present!
+	 * @tparam <FDC>                   A container that contains all relevant data
+	 *                                 needed on the element, e.g., element size, finite element values;
+	 *                                 see, e.g., FaceDataContainer
+         *
+	 * @param fdc                      The FDC object.
+         * @param local_entry_matrix       This matrix contains the locally computed values 
+         *                                 of the InterfaceMatrix. 
+ 	 */
+        template<typename FDC>
           void
-          Init_InterfaceMatrix(const FACEDATACONTAINER& /*fdc*/,
+          Init_InterfaceMatrix(const FDC& /*fdc*/,
               FullMatrix<double> &/*local_entry_matrix*/, double /*scale*/, double /*scale_ico*/)
           {
           }
 
-        template<typename FACEDATACONTAINER>
+        /**
+         * Same functionality as for the CellMatrix, but on Boundaries.
+	 * Note that no time derivatives may occure on faces of the domain at present!
+	 * @tparam <FDC>                   A container that contains all relevant data
+	 *                                 needed on the element, e.g., element size, finite element values;
+	 *                                 see, e.g., FaceDataContainer
+         *
+	 * @param fdc                      The FDC object.
+         * @param local_entry_matrix       This matrix contains the locally computed values 
+         *                                 of the FaceMatrix. 
+ 	 */
+        template<typename FDC>
           void
-          Init_BoundaryMatrix(const FACEDATACONTAINER& /*fdc*/,
+          Init_BoundaryMatrix(const FDC& /*fdc*/,
               FullMatrix<double> &/*local_cell_matrix*/, double /*scale*/, double /*scale_ico*/)
           {
           }

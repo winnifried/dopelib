@@ -96,6 +96,7 @@ For further information you should consult the file
 If you would like to use the optimization routines offered by IPOPT
 \url{https://projects.coin-or.org/Ipopt} you can  
 install this yourself and add a symlink as described in \texttt{ThirdPartyLibs/README}.
+
 Alternatively, you can use installation script
 \texttt{ThirdPartyLibs/install-free-libs.sh}. Note that to use all 
 available linear solvers you may have to obtain a corresponding license 
@@ -379,8 +380,9 @@ and eliminates the variable $u$ from the problem.
 \item \texttt{reducedproblems/voidreducedproblem.h} A wrapper file that eliminates $u$ 
   if it is not present anyways. This is used so that we can use the same routines to 
   solve problems that have no PDE constraint.
-\item \texttt{reducedproblems/ipopt\underline{ }problem.h} A wrapper file that is used by the 
-  reduced\underline{ }ipopt\underline{ }algorithm when solving optimization problems. This file
+\item \texttt{reducedproblems/ipopt\underline{ }problem.h} A wrapper file 
+ required when solving optimization problems using the 
+  reduced\underline{ }ipopt\underline{ }algorithm. This file
   hides the interface to IPOPT.
 \end{itemize}
 
@@ -465,8 +467,8 @@ do not fit the above but are important for the user to know.
 \begin{itemize}
 \item \texttt{include/userdefineddofconstraints.h} This class sets the constraints on the DOFs of the state and/or control FE solution. DOpE itself builds the hanging-node-constraints, but the user can reimplement this class and thus include other constraints as well (for example periodic BC). Note, that the hanging-node-constraints come first (in case of conflicting constraints.)
 \item \texttt{include/sparsitymaker.h} This class sets the sparsity pattern for the state FE solution. The standard implementation is just a wrapper for \texttt{dealii::DoFTools::} \texttt{make\_sparsity\_pattern}, but the user can reimplement this class to allow for more sophisticated sparsity patterns.
-\item \texttt{include/pointconstraintsmaker.h} This class is derived from \texttt{include/userdefineddofconstraints.h}
-  and allows to set homogeneous dirichlet values at given points/components.
+\item \texttt{include/pointconstraintsmaker.h} This class allows to set 
+  homogeneous dirichlet values at given points/components.
 \end{itemize}
 
 \subsubsection{HP components}
@@ -536,7 +538,7 @@ do not fit the above but are important for the user to know.
   \item \texttt{wrapper/snopt\underline{ }wrapper.h} An interface to the SNOPT fortran library. This is an additional
     wrapper to the one provided by SNOPT to allow automatic construction of the functions required 
     by SNOPT using our library.
-  \item \texttt{wrapper/solutiontransfer\underliner{ }wrapper.h} A wrapper for the SolutionTransfer class
+  \item \texttt{wrapper/solutiontransfer\underline{ }wrapper.h} A wrapper for the SolutionTransfer class
     from \texttt{deal.II}. 
   \item \texttt{wrapper/dataout\underline{ }wrapper.h} A wrapper for the DataOut class from \texttt{deal.II}.
 \end{itemize}

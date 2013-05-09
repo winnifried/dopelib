@@ -30,17 +30,21 @@
 namespace DOpE
 {
   /**
+   * @class BackwardEulerProblem 
+   *
    * Class to compute time dependent problems with the backward Euler
    * time stepping scheme.
    *
    * @tparam <OPTPROBLEM>       The problem to deal with.
    * @tparam <SPARSITYPATTERN>  The sparsity pattern for control & state.
-   * @tparam <VECTOR>           The vector type for control & state (i.e. dealii::Vector<double> or dealii::BlockVector<double>)
-   * @tparam <FE>               The type of finite elements in use, must be compatible with the DH.
-   * @tparam <DH>       The type of the DoFHandler in use (to be more precise: The type of the dealii-DoFhandler which forms
-   *                            the base class of the DOpEWrapper::DoFHandler in use.)
+   * @tparam <VECTOR>           The vector type for control & state 
+   *                            (i.e. dealii::Vector<double> or dealii::BlockVector<double>)
    * @tparam <dopedim>          The dimension for the control variable.
    * @tparam <dealdim>          The dimension of the state variable.
+   * @tparam <FE>               The type of finite elements in use, must be compatible with the DH.
+   * @tparam <DH>               The type of the DoFHandler in use 
+   *                            (to be more precise: The type of the dealii-DoFhandler which forms
+   *                            the base class of the DOpEWrapper::DoFHandler in use.)
    *
    */
   template<typename OPTPROBLEM, typename SPARSITYPATTERN, typename VECTOR,
@@ -75,7 +79,11 @@ namespace DOpE
           return "backward Euler";
         }
         /******************************************************/
-
+      
+        /**
+	 * Returns a pointer to the problem used to calculate
+	 * the initial values used for this scheme.
+	 */
         InitialProblem<
             BackwardEulerProblem<OPTPROBLEM, SPARSITYPATTERN, VECTOR, dopedim,
                 dealdim, FE, DH>, VECTOR, dealdim>&
@@ -91,6 +99,13 @@ namespace DOpE
         }
 
         /******************************************************/
+        
+        /**
+         * Returns a pointer to the base problem, here `this'.
+	 * This behavior is temporary to allow use of the BackwardEulerProblem
+	 * until all subproblems (i.e., Primal, Dual, Tangent,...)
+	 * have their own description.
+	 */
         BackwardEulerProblem<OPTPROBLEM, SPARSITYPATTERN, VECTOR, dopedim,
             dealdim, FE, DH> &
         GetBaseProblem()
@@ -101,49 +116,46 @@ namespace DOpE
         /******************************************************/
 
         /**
-         * Computes the value of the cell equation which corresponds
-         * to the residuum in nonlinear cases. This function
-         * itself contains a maximum of four subroutines of cell equations:
-         * CellEquation, CellEquationExplicit, TimeEquation, TimeEquationExplicit.
-         * So far, three types are needed for fluid-structure interaction problems:
-         * CellEquation: implicit terms, like pressure.
-         * CellEquationExplicit: stress tensors, fluid convection, etc.
-         * TimeEquationExplicit: time derivatives of certain variables which are
-         *                       combined with transformations, etc.
-         *
-         * In fluid problems, the CellEquations terms coincide. However the
-         * TimeEquations terms differ:
-         * CellTimeEquation: time derivatives, e.g., dt v
+         * Computes the value of the cell equation for the time-step problem.
+         * This is build from the three functions 
+	 * CellEquation, CellTimeEquation, CellTimeEquationExplicit
+	 * provided by the PDE:
+	 * CellEquation: The spatial integrals
+         * CellTimeEquation: The time derivative part in the equation
+	 *                   if \partial_t can be approximated with 
+	 *                   difference quotient between t_n and t_{n+1}.
+	 * TimeEquationExplicit: Explicit calculation of the time derivative if
+	 *                       a simple difference quotient is not sufficient
+	 *                       as it may happen for timederivatives of nonlinear terms.
          *
          * The function is divided into two parts `old' and `new' which  are given
          * to the Newton solver. Then, the computation is done in two steps: first
          * computation of the old Newton- or time step equation parts. After,
          * computation of the actual parts.
          *
+	 * @tparam <CDC>                   A container that contains all relevant data
+	 *                                 needed on the element, e.g., element size, finite element values;
+	 *                                 see, e.g., CellDataContainer
          *
-         * @param param_values             A std::map containing parameter data (e.g. non space dependent data). If the control
-         *                                 is done by parameters, it is contained in this map at the position "control".
-         * @param domain_values            A std::map containing domain data (e.g. nodal vectors for FE-Functions). If the control
-         *                                 is distributed, it is contained in this map at the position "control". The state may always
-         *                                 be found in this map at the position "state"
-         * @param n_dofs_per_cell          Number of degrees of freedom on a cell.
-         * @param n_q_points               Number of quadrature points on a cell.
-         * @param material_id              Material Id of the cell.
-         * @param cell_diameter            Diameter of the cell.
-         * @param local_cell_vector        This vector contains the locally computed values of the cell equation. For more information
+	 * @param cdc                      The CDC object.
+         * @param local_cell_vector        This vector contains the locally computed values 
+         *                                 of the cell equation. For more information
          *                                 on dealii::Vector, please visit, the deal.ii manual pages.
-         * @param scale                    A scaling factor which is -1 or 1 depending on the subroutine to compute.
+         * @param scale                    A scaling factor which is -1 or 1 depending on the subroutine 
+	 *                                 to compute.
+	 * @param scale_ico                Given for compatibility reasons with the CellEquation 
+	 *                                 in PDEInterface. Should not be used here!
          */
-        template<typename DATACONTAINER>
+        template<typename CDC>
           void
-          CellEquation(const DATACONTAINER & dc,
-              dealii::Vector<double> &local_cell_vector, double scale, double)
+          CellEquation(const CDC & cdc,
+		       dealii::Vector<double> &local_cell_vector, double scale, double /*scale_ico*/)
           {
             if (this->GetPart() == "New")
             {
               dealii::Vector<double> tmp(local_cell_vector);
               tmp = 0.0;
-              this->GetProblem().CellEquation(dc, tmp,
+              this->GetProblem().CellEquation(cdc, tmp,
                   scale
                       * this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize(),
                   scale
@@ -151,15 +163,15 @@ namespace DOpE
               local_cell_vector += tmp;
 
               tmp = 0.0;
-              this->GetProblem().CellTimeEquation(dc, tmp, scale);
+              this->GetProblem().CellTimeEquation(cdc, tmp, scale);
               local_cell_vector += tmp;
 
-              this->GetProblem().CellTimeEquationExplicit(dc, local_cell_vector,
+              this->GetProblem().CellTimeEquationExplicit(cdc, local_cell_vector,
                   scale);
             }
             else if (this->GetPart() == "Old")
             {
-              this->GetProblem().CellTimeEquation(dc, local_cell_vector,
+              this->GetProblem().CellTimeEquation(cdc, local_cell_vector,
                   (-1) * scale);
             }
             else
@@ -177,21 +189,26 @@ namespace DOpE
          * computation of the old Newton- or time step equation parts. After,
          * computation of the actual parts.
          *
+	 * @tparam <CDC>                   A container that contains all relevant data
+	 *                                 needed on the element, e.g., element size, finite element values;
+	 *                                 see, e.g., CellDataContainer
          *
          * @param cdc                      A DataContainer holding all the needed information
          *                                 of the cell
-         * @param local_cell_vector        This vector contains the locally computed values of the cell equation. For more information
+         * @param local_cell_vector        This vector contains the locally computed values of 
+	 *                                 the CellRhs. For more information
          *                                 on dealii::Vector, please visit, the deal.ii manual pages.
-         * @param scale                    A scaling factor which is -1 or 1 depending on the subroutine to compute.
+         * @param scale                    A scaling factor which is -1 or 1 depending on the subroutine 
+	 *                                 to compute.
          */
-        template<typename DATACONTAINER>
+        template<typename CDC>
           void
-          CellRhs(const DATACONTAINER & dc,
-              dealii::Vector<double> &local_cell_vector, double scale = 1.)
+          CellRhs(const CDC & cdc,
+              dealii::Vector<double> &local_cell_vector, double scale)
           {
             if (this->GetPart() == "New")
             {
-              this->GetProblem().CellRhs(dc, local_cell_vector,
+              this->GetProblem().CellRhs(cdc, local_cell_vector,
                   scale
                       * this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize());
             }
@@ -215,21 +232,26 @@ namespace DOpE
          * computation of the actual parts.
          *
          *
-         * @param param_values             A std::map containing parameter data (e.g. non space dependent data). If the control
-         *                                 is done by parameters, it is contained in this map at the position "control".
-         * @param domain_values            A std::map containing domain data (e.g. nodal vectors for FE-Functions). If the control
-         *                                 is distributed, it is contained in this map at the position "control". The state may always
+         * @param param_values             A std::map containing parameter data 
+	 *                                 (e.g. non space dependent data). If the control
+         *                                 is done by parameters, it is contained in this map 
+	 *                                 at the position "control".
+         * @param domain_values            A std::map containing domain data 
+	 *                                 (i.e., nodal vectors for FE-Functions). If the control
+         *                                 is distributed, it is contained in this map at the
+	 *                                 position "control". The state may always
          *                                 be found in this map at the position "state"
-
-         * @param local_cell_vector        This vector contains the locally computed values of the cell equation. For more information
+         * @param local_cell_vector        This vector contains the locally computed values 
+	 *                                 of the PointRhs. For more information
          *                                 on dealii::Vector, please visit, the deal.ii manual pages.
-         * @param scale                    A scaling factor which is -1 or 1 depending on the subroutine to compute.
+         * @param scale                    A scaling factor which is -1 or 1 depending on the subroutine 
+	 *                                 to compute.
          */
         void
         PointRhs(
             const std::map<std::string, const dealii::Vector<double>*> &param_values,
             const std::map<std::string, const VECTOR*> &domain_values,
-            VECTOR& rhs_vector, double scale = 1.)
+            VECTOR& rhs_vector, double scale)
         {
           if (this->GetPart() == "New")
           {
@@ -268,32 +290,37 @@ namespace DOpE
          * derivatives vanish if they are applied to old values which are, of course,
          * already computed and therefore constant.
          *
+	 * @tparam <CDC>                   A container that contains all relevant data
+	 *                                 needed on the element, e.g., element size, finite element values;
+	 *                                 see, e.g., CellDataContainer
          * @param cdc                      A DataContainer holding all the needed information
          *                                 of the cell
-         * @param local_entry_matrix       The local matrix is quadratic and has size local DoFs times local DoFs and is
-         *                                 filled by the locally computed values. For more information of its functionality, please
+         * @param local_entry_matrix       The local matrix is quadratic and has size local DoFs 
+ 	 *                                 times local DoFs and is
+         *                                 filled by the locally computed values. For more information 
+	 *                                 of its functionality, please
          *                                 search for the keyword `FullMatrix' in the deal.ii manual.
          */
-        template<typename DATACONTAINER>
+        template<typename CDC>
           void
-          CellMatrix(const DATACONTAINER & dc,
+          CellMatrix(const CDC & cdc,
               dealii::FullMatrix<double> &local_entry_matrix)
           {
             assert(this->GetPart() == "New");
             dealii::FullMatrix<double> m(local_entry_matrix);
 
-            this->GetProblem().CellMatrix(dc, local_entry_matrix,
+            this->GetProblem().CellMatrix(cdc, local_entry_matrix,
                 1.
                     * this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize(),
                 1.
                     * this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize());
 
             m = 0.;
-            this->GetProblem().CellTimeMatrix(dc, m);
+            this->GetProblem().CellTimeMatrix(cdc, m);
             local_entry_matrix.add(1.0, m);
 
             m = 0.;
-            this->GetProblem().CellTimeMatrixExplicit(dc, m);
+            this->GetProblem().CellTimeMatrixExplicit(cdc, m);
             local_entry_matrix.add(1.0, m);
 
           }
@@ -301,14 +328,25 @@ namespace DOpE
         /******************************************************/
 
         /**
-         * Not implemented so far. Returns just this->GetProblem().FaceEquation(...). For more information we refer to
-         * the file optproblemcontainer.h
-         */
-        template<typename FACEDATACONTAINER>
+         * Same functionality as for the CellEquation, but on Faces.
+	 * Note that no time derivatives may occure on faces of the domain at present!
+	 * @tparam <FDC>                   A container that contains all relevant data
+	 *                                 needed on the element, e.g., element size, finite element values;
+	 *                                 see, e.g., FaceDataContainer
+         *
+	 * @param fdc                      The FDC object.
+         * @param local_cell_vector        This vector contains the locally computed values 
+         *                                 of the Facequation. 
+         * @param scale                    A scaling factor which is -1 or 1 depending on the subroutine 
+	 *                                 to compute.
+	 * @param scale_ico                Given for compatibility reasons with the CellEquation 
+	 *                                 in PDEInterface. Should not be used here!
+          */
+        template<typename FDC>
           void
-          FaceEquation(const FACEDATACONTAINER & fdc,
-              dealii::Vector<double> &local_cell_vector, double scale = 1.,
-              double /*scale_ico*/= 1.)
+          FaceEquation(const FDC & fdc,
+              dealii::Vector<double> &local_cell_vector, double scale,
+              double /*scale_ico*/)
           {
             if (this->GetPart() == "New")
             {
@@ -329,19 +367,31 @@ namespace DOpE
 
         /******************************************************/
 
-        /**
-         * Not implemented so far. Returns just this->GetProblem().FaceEquation(...). For more information we refer to
-         * the file optproblemcontainer.h
-         */
-        template<typename FACEDATACONTAINER>
+       /**
+         * Same functionality as for the CellEquation, but on Interfaces, i.e. the same as 
+	 * FaceEquation but with access to the FEValues on both sides.
+	 * Note that no time derivatives may occure on faces of the domain at present!
+	 * @tparam <FDC>                   A container that contains all relevant data
+	 *                                 needed on the element, e.g., element size, finite element values;
+	 *                                 see, e.g., FaceDataContainer
+         *
+	 * @param fdc                      The FDC object.
+         * @param local_cell_vector        This vector contains the locally computed values 
+         *                                 of the InterfaceEquation. 
+         * @param scale                    A scaling factor which is -1 or 1 depending on the subroutine 
+	 *                                 to compute.
+	 * @param scale_ico                Given for compatibility reasons with the CellEquation 
+	 *                                 in PDEInterface. Should not be used here!
+	 */
+         template<typename FDC>
           void
-          InterfaceEquation(const FACEDATACONTAINER& dc,
-              dealii::Vector<double> &local_cell_vector, double scale = 1.,
-              double /*scale_ico*/= 1.)
+          InterfaceEquation(const FDC& fdc,
+              dealii::Vector<double> &local_cell_vector, double scale,
+              double /*scale_ico*/)
           {
             if (this->GetPart() == "New")
             {
-              this->GetProblem().InterfaceEquation(dc, local_cell_vector,
+              this->GetProblem().InterfaceEquation(fdc, local_cell_vector,
                   scale
                       * this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize(),
                   scale
@@ -358,13 +408,23 @@ namespace DOpE
 
         /******************************************************/
 
-        /**
-         * Not implemented so far. Returns just this->GetProblem().FaceRhs(...). For more information we refer to
-         * the file optproblemcontainter.h
-         */
-        template<typename FACEDATACONTAINER>
+         /**
+         * Same functionality as for the CellRhs, but on Faces.
+	 * Note that no time derivatives may occure on faces of the domain at present!
+	 * @tparam <FDC>                   A container that contains all relevant data
+	 *                                 needed on the element, e.g., element size, finite element values;
+	 *                                 see, e.g., FaceDataContainer
+         *
+	 * @param fdc                      The FDC object.
+         * @param local_cell_vector        This vector contains the locally computed values 
+         *                                 of the FaceRhs. 
+         * @param scale                    A scaling factor which is -1 or 1 depending on the subroutine 
+	 *                                 to compute.
+	 */
+ 
+        template<typename FDC>
           void
-          FaceRhs(const FACEDATACONTAINER & fdc,
+          FaceRhs(const FDC & fdc,
               dealii::Vector<double> &local_cell_vector, double scale = 1.)
           {
             this->GetProblem().FaceRhs(fdc, local_cell_vector,
@@ -374,13 +434,20 @@ namespace DOpE
 
         /******************************************************/
 
-        /**
-         * Not implemented so far. Returns just this->GetProblem().FaceMatrix(...). For more information we refer to
-         * the file optproblemcontainer.h
-         */
-        template<typename FACEDATACONTAINER>
+         /**
+         * Same functionality as for the CellMatrix, but on Faces.
+	 * Note that no time derivatives may occure on faces of the domain at present!
+	 * @tparam <FDC>                   A container that contains all relevant data
+	 *                                 needed on the element, e.g., element size, finite element values;
+	 *                                 see, e.g., FaceDataContainer
+         *
+	 * @param fdc                      The FDC object.
+         * @param local_entry_matrix       This matrix contains the locally computed values 
+         *                                 of the FaceMatrix. 
+ 	 */
+        template<typename FDC>
           void
-          FaceMatrix(const FACEDATACONTAINER & fdc,
+          FaceMatrix(const FDC & fdc,
               dealii::FullMatrix<double> &local_entry_matrix)
           {
             assert(this->GetPart() == "New");
@@ -393,13 +460,21 @@ namespace DOpE
           }
 
         /******************************************************/
-        /**
-         * Not implemented so far. Returns just this->GetProblem().InterfaceMatrix(...). For more information we refer to
-         * the file optproblemcontainer.h
-         */
-        template<typename FACEDATACONTAINER>
+
+      /**
+         * Same functionality as for the CellMatrix, but on Interfaces.
+	 * Note that no time derivatives may occure on faces of the domain at present!
+	 * @tparam <FDC>                   A container that contains all relevant data
+	 *                                 needed on the element, e.g., element size, finite element values;
+	 *                                 see, e.g., FaceDataContainer
+         *
+	 * @param fdc                      The FDC object.
+         * @param local_entry_matrix       This matrix contains the locally computed values 
+         *                                 of the InterfaceMatrix. 
+ 	 */
+         template<typename FDC>
           void
-          InterfaceMatrix(const FACEDATACONTAINER& fdc,
+          InterfaceMatrix(const FDC& fdc,
               dealii::FullMatrix<double> &local_entry_matrix)
           {
             assert(this->GetPart() == "New");
@@ -414,26 +489,25 @@ namespace DOpE
         /******************************************************/
 
         /**
-         * Computes the value of boundary equations. In the actual
-         * implementation we just consider values for the actual time step.
-         * Therefore, no implementation is necessary of older time steps, etc.
-         * An example of a boundary equations is the `do-nothing' outflow
-         * condition of fluid flows in a channel when using the symmetric stress tensor.
-         * In order to have correct outflow conditions the transposed part of the
-         * stress tensor should be subtracted at the outflow boundary.
+         * Same functionality as for the CellEquation, but on Boundaries.
+	 * Note that no time derivatives may occure on faces of the domain at present!
+	 * @tparam <FDC>                   A container that contains all relevant data
+	 *                                 needed on the element, e.g., element size, finite element values;
+	 *                                 see, e.g., FaceDataContainer
          *
-         *
-         * @param cdc                      A DataContainer holding all the needed information
-         *                                 of the cell
-         * @param local_cell_vector        This vector contains the locally computed values of the cell equation. For more information
-         *                                 on dealii::Vector, please visit, the deal.ii manual pages.
-         * @param scale                    A scaling factor which is -1 or 1 depending on the subroutine to compute.
-         */
-        template<typename FACEDATACONTAINER>
+	 * @param fdc                      The FDC object.
+         * @param local_cell_vector        This vector contains the locally computed values 
+         *                                 of the Facequation. 
+         * @param scale                    A scaling factor which is -1 or 1 depending on the subroutine 
+	 *                                 to compute.
+	 * @param scale_ico                Given for compatibility reasons with the CellEquation 
+	 *                                 in PDEInterface. Should not be used here!
+          */
+        template<typename FDC>
           void
-          BoundaryEquation(const FACEDATACONTAINER & fdc,
-              dealii::Vector<double> &local_cell_vector, double scale = 1.,
-              double /*scale_ico*/= 1.)
+          BoundaryEquation(const FDC & fdc,
+              dealii::Vector<double> &local_cell_vector, double scale,
+              double /*scale_ico*/)
           {
             if (this->GetPart() == "New")
             {
@@ -455,14 +529,23 @@ namespace DOpE
 
         /******************************************************/
 
-        /**
-         * Not implemented so far. Returns just this->GetProblem().FaceMatrix(...). For more information we refer to
-         * the file optproblemcontainer.h
-         */
-        template<typename FACEDATACONTAINER>
+      /**
+       * Same functionality as for the CellRhs, but on Boundaries.
+       * Note that no time derivatives may occure on faces of the domain at present!
+       * @tparam <FDC>                   A container that contains all relevant data
+       *                                 needed on the element, e.g., element size, finite element values;
+       *                                 see, e.g., FaceDataContainer
+       *
+       * @param fdc                      The FDC object.
+       * @param local_cell_vector        This vector contains the locally computed values 
+       *                                 of the FaceRhs. 
+       * @param scale                    A scaling factor which is -1 or 1 depending on the subroutine 
+       *                                 to compute.
+       */
+        template<typename FDC>
           void
-          BoundaryRhs(const FACEDATACONTAINER & fdc,
-              dealii::Vector<double> &local_cell_vector, double scale = 1.)
+          BoundaryRhs(const FDC & fdc,
+              dealii::Vector<double> &local_cell_vector, double scale)
           {
             this->GetProblem().BoundaryRhs(fdc, local_cell_vector,
                 scale
@@ -472,25 +555,20 @@ namespace DOpE
         /******************************************************/
 
         /**
-         * Computes the matrix entries of boundary equations.
-         * This function is just considered in the `new' part. This is due to that directional
-         * derivatives vanish if they are applied to old values which are, of course,
-         * already computed and therefore constant.
-         * An example of a boundary equations is the `do-nothing' outflow
-         * condition of fluid flows in a channel when using the symmetric stress tensor.
-         * In order to have correct outflow conditions the transposed part of the
-         * stress tensor should be subtracted at the outflow boundary.
+         * Same functionality as for the CellMatrix, but on Boundaries.
+	 * Note that no time derivatives may occure on faces of the domain at present!
+	 * @tparam <FDC>                   A container that contains all relevant data
+	 *                                 needed on the element, e.g., element size, finite element values;
+	 *                                 see, e.g., FaceDataContainer
          *
-         *
-         * @param cdc                      A DataContainer holding all the needed information
-         *                                 of the cell
-         * @param local_entry_matrix       The local matrix is quadratic and has size local DoFs times local DoFs and is
-         *                                 filled by the locally computed values. For more information of its functionality, please
-         *                                 search for the keyword `FullMatrix' in the deal.ii manual.
-         */
-        template<typename FACEDATACONTAINER>
+	 * @param fdc                      The FDC object.
+         * @param local_entry_matrix       This matrix contains the locally computed values 
+         *                                 of the FaceMatrix. 
+ 	 */
+ 
+        template<typename FDC>
           void
-          BoundaryMatrix(const FACEDATACONTAINER & fdc,
+          BoundaryMatrix(const FDC & fdc,
               dealii::FullMatrix<double> &local_cell_matrix)
           {
             assert(this->GetPart() == "New");
