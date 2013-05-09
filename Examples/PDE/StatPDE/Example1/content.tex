@@ -7,7 +7,7 @@ the do-nothing outflow condition. In strong formulation we have
 -\frac{1}{2}\nabla\cdot (\nabla v + \nabla v^{T}) + \nabla p &= f \\ 
 \nabla \cdot v &= 0 \notag
 \end{align} 
-on the domain $\Omega = [-6,6]\times [0,2]$. We choose for simplicity $f=0$.\\
+on the domain $\Omega = [-6,6]\times [0,2]$. We split $\partial \Omega = \Gamma_D \cup \Gamma_{out}$. The right hand side of the channel is $\Gamma_{out}$ on which we describe the free outflow condition, on the rest of the boundary we prescribe dirichlet values (An parabolic inflow on the left hand side and zero on the upper and lower channel walls). We choose for simplicity $f=0$.\\
 
 \subsubsection{Program structure}
 
@@ -43,14 +43,20 @@ In the current example we declare functionals for point values of the velocity a
 
 The \textit{LocalPDE} is derived from a \texttt{PDEInterface} class. It comprises several functions which build up the cell and boundary equations, matrices and righthand sides. The weak formulation of problem \eqref{eq:strong} with $f=0$ is
 \begin{equation} \label{eq:weak}
-   \frac{1}{2}(\nabla v, \nabla \varphi) + \frac{1}{2}(\nabla v^{T}, \nabla \varphi) - (p, \nabla \cdot \varphi) + (\nabla \cdot v, \psi) = 0.
+   \frac{1}{2}(\nabla v, \nabla \varphi)_\Omega + \frac{1}{2}(\nabla v^{T}, \nabla \varphi)_\Omega - (p, \nabla \cdot \varphi)_\Omega + (\nabla \cdot v, \psi)_\Omega - (n\cdot \nabla v^T,\phi)_{\Gamma_{out}} = 0.
 \end{equation}
+\begin{remark}
+Note the additional term on $\Gamma_{out}$, which is a consequence of the use of the symmetric stress tensor together with the free outflow condition.
+\end{remark}
 This problem is vector valued, i.e. the velocity variable $v$ has two components and the pressure variable $p$ is a scalar. For the implementation, we use a vector valued solution variable with three components, where the distinction between velocity and pressure is done by use of the deal.II \texttt{FEValuesExtractors} class. \index{vector-valued problem}\\
 Furthermore, in DOpE we always interpret the problems in the context of a Newton method. Usually, a PDE in its weak formulation is given as
 \begin{equation*}
    a(u;\varphi) = f(\varphi).
 \end{equation*}
-The lefthand side is implemented in the \texttt{CellEquation} function, the righthand side is implemented in the \texttt{CellRightHandSide} function (which is unused in this example, because $f=0$).\\
+The lefthand side is implemented in the \texttt{CellEquation} function, the righthand side is implemented in the \texttt{CellRightHandSide} function (which is unused in this example, because $f=0$).
+\begin{remark}
+The weak formulation might contain some terms on faces or (parts of) the boundary. DOpE is able to handle these via \texttt{BoundaryEquation}, \texttt{BoundaryRightHandSide} etc.. To keep things simple, we neglect these terms in this introduction.
+\end{remark}
 To apply Newton's method, this problem is linearized: on the lefthand side, we have the derivative of the (semilinear) form $a(\cdot;\cdot)$ with respect to the solution variable $u$, and the righthand side is the residual of the weak formulation:
 \begin{equation*}
    a_u'(u;u^+,\varphi) = -a(u;\varphi) + f(\varphi).
@@ -84,7 +90,7 @@ Because of the linearity of equation \eqref{eq:weak}, there is almost no differe
 \vspace{0.2cm}
 
 First of all, several header files have to be included that are needed during the solution process. We divide these includes into blocks corresponding to DOpE headers, deal.II headers, C++ headers and header files of the example itself (like the ones mentioned above).\\
-Furthermore, we define names for certain objects via \texttt{typedef} which act as abbreviations in order to keep the code readable. In our case, these are \texttt{OP, INTEGRATOR, LINEARSOLVER, NLS} and \texttt{SSOLVER}.\\
+Furthermore, we define names for certain objects via \texttt{typedef} which act as abbreviations in order to keep the code readable. In our case, these are \texttt{OP, IDC, INTEGRATOR, LINEARSOLVER, NLS, SSOLVER} and \texttt{STH}.\\
 In the \texttt{int main()} function, we first create a possibility to read the parameter values from the \textit{dope.prm} file. Then there are several standard steps for finite element codes like
 \begin{itemize}
 \item
@@ -95,11 +101,11 @@ creation of finite element objects for the state and the control and of quadratu
 and in addition, we 
 \begin{itemize}
 \item
-create objects of the \texttt{LocalPDE} class and of the different functional classes declared in the \textit{functionals.h} file (including an object of the \texttt{LocalFunctional} class, even if we do not regard an optimal control problem here).
+create objects of the \texttt{LocalPDE} class and of the different functional classes declared in the \textit{functionals.h} file.
 \end{itemize}
-\textit{REMARK:}\\
+\begin{remark}
 Up to now  we have to create a pseudo time even for stationary problems. The \\\texttt{MethodOfLines\underline{ }StateSpaceTimeHandler} object (\texttt{DOFH}) which is needed for the initialization of \texttt{OP} requires a vector in which timepoints are specified. However, this is again merely a dummy variable, for we do not actually apply a time stepping method in the stationary case. This will also be removed in future versions of DOpE.\\
-
+\end{remark}
 Before we initialize the \texttt{SSolver} object and actually solve the problem, we have to set the correct boundary conditions. Via the \texttt{compmask} vector, we ensure that the boundary conditions are set only for the velocity components of our solution vector. We set homogeneous Dirichlet values at the upper and lower boundaries of the channel. The inflow is described by a parabolic profile at the left boundary (the corresponding function class is declared in the \textit{myfunctions.cc} file), whereas we do not prescribe anything at the outflow boundary (so-called do-nothing condition).\\
 The output of the program (the two functional values) is rather unspectacular; as the problem is linear, the solution is computed within one Newton step.
 

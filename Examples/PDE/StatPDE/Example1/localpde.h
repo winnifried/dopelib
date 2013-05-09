@@ -25,38 +25,52 @@
 #define _LOCALPDE_
 
 #include "pdeinterface.h"
-#include "celldatacontainer.h"
-#include "facedatacontainer.h"
 
-using namespace std;
-using namespace dealii;
 using namespace DOpE;
 
-template<template<int, int> class DOFHANDLER, typename VECTOR, int dealdim>
-  class LocalPDE : public PDEInterface<CellDataContainer, FaceDataContainer,
-      DOFHANDLER, VECTOR, dealdim>
+/**
+ * This class describes cellwise the weak formulation of the PDE.
+ * See pdeinterface.h for more information.
+ */
+template<
+    template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+    template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
+    template<int, int> class DH, typename VECTOR, int dealdim>
+  class LocalPDE : public PDEInterface<CDC, FDC, DH, VECTOR, dealdim>
   {
     public:
-      LocalPDE()
-          : _state_block_components(3, 0)
+      LocalPDE() :
+          _state_block_components(3, 0)
       {
+        assert(dealdim==2);
+        //The solution has dealdim+1 components, and we
+        //want to group the components 0,..,dealdim into
+        //block zero and the component dealdim+1 into the block 1.
         _state_block_components[2] = 1;
       }
 
-      // Domain values for cells
+      /**
+       * This describes the weak formulation on a cell, i.e. the
+       * weak formulation of the Stokes equation.
+       */
       void
-      CellEquation(const CellDataContainer<DOFHANDLER, VECTOR, dealdim>& cdc,
-      dealii::Vector<double> &local_cell_vector, double scale
-          , double /*scale_ico*/)
+      CellEquation(const CDC<DH, VECTOR, dealdim>& cdc,
+          dealii::Vector<double> &local_cell_vector, double scale,
+          double scale_ico)
       {
+        //Get the number of dofs, the number of quad points as
+        //well as the finite element values on this cell from the cdc.
         const DOpEWrapper::FEValues<dealdim> & state_fe_values =
             cdc.GetFEValuesState();
-        unsigned int n_dofs_per_cell = cdc.GetNDoFsPerCell();
-        unsigned int n_q_points = cdc.GetNQPoints();
+        const unsigned int n_dofs_per_cell = cdc.GetNDoFsPerCell();
+        const unsigned int n_q_points = cdc.GetNQPoints();
+        //This should only get called if the problem type is state.
         assert(this->_problem_type == "state");
 
+        //Resize uvalues and ugrads properly. These will hold the
+        //solution of the last newton iteration.
         _uvalues.resize(n_q_points, Vector<double>(3));
-        _ugrads.resize(n_q_points, vector < Tensor<1, 2> > (3));
+        _ugrads.resize(n_q_points, std::vector<Tensor<1, 2> >(3));
 
         cdc.GetValuesState("last_newton_solution", _uvalues);
         cdc.GetGradsState("last_newton_solution", _ugrads);
@@ -64,9 +78,11 @@ template<template<int, int> class DOFHANDLER, typename VECTOR, int dealdim>
         const FEValuesExtractors::Vector velocities(0);
         const FEValuesExtractors::Scalar pressure(2);
 
+        //Now loop over all the quadpoints
         for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
         {
-          Tensor < 2, 2 > vgrads;
+          //An abbreviations to declatter the weak formulation.
+          Tensor<2, 2> vgrads;
           vgrads.clear();
           vgrads[0][0] = _ugrads[q_point][0][0];
           vgrads[0][1] = _ugrads[q_point][0][1];
@@ -76,43 +92,50 @@ template<template<int, int> class DOFHANDLER, typename VECTOR, int dealdim>
           double press = _uvalues[q_point](2);
           double incompressibility = vgrads[0][0] + vgrads[1][1];
 
+          //loop over all degrees of freedom
           for (unsigned int i = 0; i < n_dofs_per_cell; i++)
           {
-//              const Tensor<1, 2> phi_i_v = state_fe_values[velocities].value(i,
-//                  q_point);
+            //Again abbreviations.
             const Tensor<2, 2> phi_i_grads_v =
                 state_fe_values[velocities].gradient(i, q_point);
             const double phi_i_p = state_fe_values[pressure].value(i, q_point);
             const double div_phi_v = state_fe_values[velocities].divergence(i,
                 q_point);
 
+            //Define the weak formulation. scale_ico makes only
+            //sense in the instationary context. In a stationary
+            //problem it holds scale_ico = scale.
             local_cell_vector(i) += scale
                 * (0.5 * scalar_product(vgrads, phi_i_grads_v)
-                    + 0.5 * scalar_product(transpose(vgrads), phi_i_grads_v)
-                    - press * div_phi_v + incompressibility * phi_i_p)
+                    + 0.5 * scalar_product(transpose(vgrads), phi_i_grads_v))
                 * state_fe_values.JxW(q_point);
 
+            local_cell_vector(i) += scale_ico
+                * (-1. * press * div_phi_v + incompressibility * phi_i_p)
+                * state_fe_values.JxW(q_point);
           }
         }
 
       }
 
+      /**
+       * Assembling of the cellmatrix. See CellEquation for more information.
+       */
       void
-      CellMatrix(const CellDataContainer<DOFHANDLER, VECTOR, dealdim>& cdc,
-      FullMatrix<double> &local_entry_matrix,
-      double scale, double /*scale_ico*/)
+      CellMatrix(const CDC<DH, VECTOR, dealdim>& cdc,
+          FullMatrix<double> &local_entry_matrix, double scale,
+          double scale_ico)
       {
-
         const DOpEWrapper::FEValues<dealdim> & state_fe_values =
             cdc.GetFEValuesState();
-        unsigned int n_dofs_per_cell = cdc.GetNDoFsPerCell();
-        unsigned int n_q_points = cdc.GetNQPoints();
+        const unsigned int n_dofs_per_cell = cdc.GetNDoFsPerCell();
+        const unsigned int n_q_points = cdc.GetNQPoints();
 
         const FEValuesExtractors::Vector velocities(0);
         const FEValuesExtractors::Scalar pressure(2);
 
-        std::vector < Tensor<1, 2> > phi_v(n_dofs_per_cell);
-        std::vector < Tensor<2, 2> > phi_grads_v(n_dofs_per_cell);
+        std::vector<Tensor<1, 2> > phi_v(n_dofs_per_cell);
+        std::vector<Tensor<2, 2> > phi_grads_v(n_dofs_per_cell);
         std::vector<double> phi_p(n_dofs_per_cell);
         std::vector<double> div_phi_v(n_dofs_per_cell);
 
@@ -130,15 +153,14 @@ template<template<int, int> class DOFHANDLER, typename VECTOR, int dealdim>
           {
             for (unsigned int j = 0; j < n_dofs_per_cell; j++)
             {
-              //const Tensor<2,2> phi_j_grads_v = state_fe_values[velocities].gradient (j, q_point);
-              //const double phi_j_p = state_fe_values[pressure].value (j, q_point);
-
+              local_entry_matrix(i, j) += scale
+                  * (0.5 * scalar_product(phi_grads_v[j], phi_grads_v[i])
+                      + 0.5
+                          * scalar_product(transpose(phi_grads_v[j]),
+                              phi_grads_v[i])) * state_fe_values.JxW(q_point);
               local_entry_matrix(i, j) +=
-                  scale
-                      * (0.5 * scalar_product(phi_grads_v[j], phi_grads_v[i])
-                          + 0.5
-                              * scalar_product(transpose(phi_grads_v[j]),
-                                  phi_grads_v[i]) - phi_p[j] * div_phi_v[i]
+                  scale_ico
+                      * (-phi_p[j] * div_phi_v[i]
                           + (phi_grads_v[j][0][0] + phi_grads_v[j][1][1])
                               * phi_p[i]) * state_fe_values.JxW(q_point);
             }
@@ -147,33 +169,40 @@ template<template<int, int> class DOFHANDLER, typename VECTOR, int dealdim>
 
       }
 
+      /**
+       * Describes the value of the rhs on a cell, i.e. the term (f,phi).
+       * As we have f=0 in our example, this method is empty.
+       */
       void
-      CellRightHandSide(const CellDataContainer<DOFHANDLER, VECTOR, dealdim>&
-          /*cdc*/,
-          dealii::Vector<double> &local_cell_vector
-          __attribute__((unused)), double scale __attribute__((unused)))
+      CellRightHandSide(const CDC<DH, VECTOR, dealdim>&
+      /*cdc*/, dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
       {
 
       }
 
-      // Values for boundary integrals
+      /**
+       * This describes the weak formulation on a part of the boundary.
+       * We need to specify this here as we use the symmetrized gradient
+       * for Stokes equation together with a free outflow condition.
+       */
       void
-      BoundaryEquation(
-          const FaceDataContainer<DOFHANDLER, VECTOR, dealdim>& fdc,
-          dealii::Vector<double> &local_cell_vector, double scale
-          , double /*scale_ico*/)
+      BoundaryEquation(const FDC<DH, VECTOR, dealdim>& fdc,
+          dealii::Vector<double> &local_cell_vector, double scale,
+          double /*scale_ico*/)
       {
+        //auto = FEValues
         const auto & state_fe_face_values = fdc.GetFEFaceValuesState();
-        unsigned int n_dofs_per_cell = fdc.GetNDoFsPerCell();
-        unsigned int n_q_points = fdc.GetNQPoints();
-        unsigned int color = fdc.GetBoundaryIndicator();
+        const unsigned int n_dofs_per_cell = fdc.GetNDoFsPerCell();
+        const unsigned int n_q_points = fdc.GetNQPoints();
+        const unsigned int color = fdc.GetBoundaryIndicator();
 
         assert(this->_problem_type == "state");
 
-        // do-nothing applied on outflow boundary
+        //Do-nothing condition applied on the outflow boundary.
+        //The latter has boundary color 1 in this example.
         if (color == 1)
         {
-          _ufacegrads.resize(n_q_points, vector < Tensor<1, 2> > (3));
+          _ufacegrads.resize(n_q_points, std::vector<Tensor<1, 2> >(3));
 
           fdc.GetFaceGradsState("last_newton_solution", _ufacegrads);
 
@@ -181,7 +210,7 @@ template<template<int, int> class DOFHANDLER, typename VECTOR, int dealdim>
 
           for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
           {
-            Tensor < 2, 2 > vgrads;
+            Tensor<2, 2> vgrads;
             vgrads.clear();
             vgrads[0][0] = _ufacegrads[q_point][0][0];
             vgrads[0][1] = _ufacegrads[q_point][0][1];
@@ -204,16 +233,18 @@ template<template<int, int> class DOFHANDLER, typename VECTOR, int dealdim>
 
       }
 
+      /**
+       * The matrix term corresponding to the above defined boundaryequation.
+       */
       void
-      BoundaryMatrix(
-          const FaceDataContainer<DOFHANDLER, VECTOR, dealdim>& fdc,
-          dealii::FullMatrix<double> &local_entry_matrix, double
-          /*scale*/, double /*scale_ico*/)
+      BoundaryMatrix(const FDC<DH, VECTOR, dealdim>& fdc,
+          dealii::FullMatrix<double> &local_entry_matrix, double scale,
+          double /*scale_ico*/)
       {
         const auto & state_fe_face_values = fdc.GetFEFaceValuesState();
-        unsigned int n_dofs_per_cell = fdc.GetNDoFsPerCell();
-        unsigned int n_q_points = fdc.GetNQPoints();
-        unsigned int color = fdc.GetBoundaryIndicator();
+        const unsigned int n_dofs_per_cell = fdc.GetNDoFsPerCell();
+        const unsigned int n_q_points = fdc.GetNQPoints();
+        const unsigned int color = fdc.GetBoundaryIndicator();
         assert(this->_problem_type == "state");
 
         // do-nothing applied on outflow boundary
@@ -236,8 +267,8 @@ template<template<int, int> class DOFHANDLER, typename VECTOR, int dealdim>
                 const Tensor<1, 2> neumann_value = (transpose(phi_j_grads_v)
                     * state_fe_face_values.normal_vector(q_point));
 
-                local_entry_matrix(i, j) += -0.5 * neumann_value * phi_i_v
-                    * state_fe_face_values.JxW(q_point);
+                local_entry_matrix(i, j) += -scale * 0.5 * neumann_value
+                    * phi_i_v * state_fe_face_values.JxW(q_point);
               }
             }
           }
@@ -245,20 +276,28 @@ template<template<int, int> class DOFHANDLER, typename VECTOR, int dealdim>
 
       }
 
+      /**
+       * Describes the value of the rhs on a part of the boundary, i.e. the term
+       * (f,phi)_\partial\Omega. As we have f=0 in our example, this method is empty.
+       */
       void
-      BoundaryRightHandSide(
-          const FaceDataContainer<DOFHANDLER, VECTOR, dealdim>&,
-          dealii::Vector<double> &local_cell_vector
-          __attribute__((unused)), double scale __attribute__((unused)))
+      BoundaryRightHandSide(const FDC<DH, VECTOR, dealdim>& /*fdc*/,
+          dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
       {
       }
 
+      /**
+       * Returns the update flags the FEValues.
+       */
       UpdateFlags
       GetUpdateFlags() const
       {
         return update_values | update_gradients | update_quadrature_points;
       }
 
+      /**
+       * Returns the update flags the FEFaceValues.
+       */
       UpdateFlags
       GetFaceUpdateFlags() const
       {
@@ -266,6 +305,9 @@ template<template<int, int> class DOFHANDLER, typename VECTOR, int dealdim>
             | update_quadrature_points;
       }
 
+      /**
+       * Returns the number of blocks. We have two, namely velocity and pressure.
+       */
       unsigned int
       GetStateNBlocks() const
       {
@@ -283,13 +325,10 @@ template<template<int, int> class DOFHANDLER, typename VECTOR, int dealdim>
       }
 
     private:
-      vector<Vector<double> > _uvalues;
+      std::vector<Vector<double> > _uvalues;
+      std::vector<std::vector<Tensor<1, dealdim> > > _ugrads;
+      std::vector<std::vector<Tensor<1, dealdim> > > _ufacegrads;
 
-      vector<vector<Tensor<1, dealdim> > > _ugrads;
-
-      // face values
-      vector<vector<Tensor<1, dealdim> > > _ufacegrads;
-
-      vector<unsigned int> _state_block_components;
+     std::vector<unsigned int> _state_block_components;
   };
 #endif

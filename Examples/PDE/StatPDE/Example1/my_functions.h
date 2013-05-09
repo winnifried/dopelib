@@ -27,15 +27,26 @@ using namespace dealii;
 
 
 /******************************************************/
+/**
+ * This function defines the inflowcondition.
+ */
 
 class BoundaryParabel : public DOpEWrapper::Function<2> 
 {
 public:
   BoundaryParabel () : DOpEWrapper::Function<2>(3) {}
   
+  /**
+   * Returns the value of the component 'component' of the function
+   * in point 'p'.
+   */
   virtual double value (const Point<2>   &p,
 			const unsigned int  component = 0) const;
   
+  /**
+   * Returns the value  of the function  in point 'p'.
+   */
+
   virtual void vector_value (const Point<2> &p, 
 			     Vector<double>   &value) const;
   
