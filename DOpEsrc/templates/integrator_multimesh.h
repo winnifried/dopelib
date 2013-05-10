@@ -41,10 +41,22 @@
 namespace DOpE
 {
   /**
-   * This class is used to integrate the righthand side, matrix and so on
-   * In contrast to the Integrator this class assumes that we may have 
-   * different meshes for the control and state variable.
+   * This class is used to integrate the righthand side, matrix and so on.
+   * This class is used when the control and the state are given on two different meshes
+   * based upon the same initial mesh. 
+   *
+   * For details on the functions see Integrator.
+   *
+   * Note that integration on faces is not yet supported.
+   *
+   * @template INTEGRATORDATACONT       The type of the integratordatacontainer, which has
+   *                                    manages the basic data for integration (quadrature,
+   *                                    celldatacontainer, facedatacontainer etc.)
+   * @template VECTOR                   Class of the vectors which we use in the integrator.
+   * @template SCALAR                   Type of the scalars we use in the integrator.
+   * @template dim                      The dimension of the domain
    */
+
   template<typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR,
       int dim>
     class IntegratorMultiMesh
@@ -54,10 +66,6 @@ namespace DOpE
 
         ~IntegratorMultiMesh();
 
-        /**
-         This Function should be called once after grid refinement, or changes in boundary values
-         to  recompute sparsity patterns, and constraint matrices.
-         */
         void
         ReInit();
 
@@ -135,6 +143,10 @@ namespace DOpE
               std::map<unsigned int, SCALAR>& boundary_values,
               const std::vector<bool>& comp_mask) const;
 
+	/**
+	 * Used by to ComputeNonlinearResidual to loop until both variables are on 
+	 * the same local element. See also deal.ii step-28
+	 */	 
 	template<typename PROBLEM, template<int, int> class DH>
 	  inline void ComputeNonlinearResidual_Recursive(
 	    PROBLEM& pde, 
@@ -145,6 +157,10 @@ namespace DOpE
 	    Multimesh_CellDataContainer<DH, VECTOR, dim>& cdc,
 	    Multimesh_FaceDataContainer<DH, VECTOR, dim>& fdc);
 	
+	/**
+	 * Used by to ComputeNonlinearRhs to loop until both variables are on 
+	 * the same local element. See also deal.ii step-28
+	 */	 
 	template<typename PROBLEM, template<int, int> class DH>
 	  inline void ComputeNonlinearRhs_Recursive(
 	    PROBLEM& pde, 
@@ -155,6 +171,10 @@ namespace DOpE
 	    Multimesh_CellDataContainer<DH, VECTOR, dim>& cdc,
 	    Multimesh_FaceDataContainer<DH, VECTOR, dim>& fdc);
 	
+	/**
+	 * Used by to ComputeMatrix to loop until both variables are on 
+	 * the same local element. See also deal.ii step-28
+	 */	 
 	template<typename PROBLEM, typename MATRIX, template<int, int> class DH>
 	  inline void ComputeMatrix_Recursive(
 	    PROBLEM& pde, 
@@ -165,6 +185,10 @@ namespace DOpE
 	    Multimesh_CellDataContainer<DH, VECTOR, dim>& cdc,
 	    Multimesh_FaceDataContainer<DH, VECTOR, dim>& fdc);
 
+	/**
+	 * Used by to ComputeDomainScalar to loop until both variables are on 
+	 * the same local element. See also deal.ii step-28
+	 */	 
 	template<typename PROBLEM, template<int, int> class DH>
 	  inline SCALAR ComputeDomainScalar_Recursive(
 	    PROBLEM& pde, 
@@ -173,6 +197,10 @@ namespace DOpE
 	    const FullMatrix<SCALAR>& prolong_matrix,unsigned int coarse_index,unsigned int fine_index,
 	    Multimesh_CellDataContainer<DH, VECTOR, dim>& cdc);
 
+	/**
+	 * Used by to ComputeBoundaryScalar to loop until both variables are on 
+	 * the same local element. See also deal.ii step-28
+	 */	 
 	template<typename PROBLEM, template<int, int> class DH>
 	  inline SCALAR ComputeBoundaryScalar_Recursive(
 	    PROBLEM& pde, 
@@ -315,130 +343,6 @@ namespace DOpE
       {
           {
 	    throw DOpEException("This function needs to be implemented!", "IntegratorMultiMesh::ComputeNonlinearLhs");
-//            residual = 0.;
-//            // Begin integration
-//            unsigned int dofs_per_cell ;
-//
-//            dealii::Vector<SCALAR> local_cell_vector;
-//
-//            std::vector<unsigned int> local_dof_indices;
-//
-//            const auto& dof_handler =
-//                pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandler();
-//            auto
-//                cell =
-//                    pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandlerBeginActive();
-//            auto endc =
-//                pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandlerEnd();
-//
-//            // Generate the data containers.
-//            _idc.InitializeCDC(pde.GetUpdateFlags(),
-//                *(pde.GetBaseProblem().GetSpaceTimeHandler()), cell,
-//                this->GetParamData(), this->GetDomainData());
-//            auto& cdc = _idc.GetCellDataContainer();
-//            //            CellDataContainer<dealii::DoFHandler<dim>, VECTOR, dim> cdc(
-//            //                *(this->GetQuadratureFormula()), pde.GetUpdateFlags(),
-//            //                *(pde.GetBaseProblem().GetSpaceTimeHandler()), cell, this->GetParamData(),
-//            //                this->GetDomainData());
-//
-//#if deal_II_dimension == 2 || deal_II_dimension == 3
-//            bool need_faces = pde.HasFaces();
-//            bool need_interfaces = pde.HasInterfaces();
-//            std::vector<unsigned int> boundary_equation_colors = pde.GetBoundaryEquationColors();
-//            bool need_boundary_integrals = (boundary_equation_colors.size() > 0);
-//
-//            _idc.InitializeFDC(pde.GetFaceUpdateFlags(),
-//                *(pde.GetBaseProblem().GetSpaceTimeHandler()),
-//                cell,
-//                this->GetParamData(),
-//                this->GetDomainData(),
-//                need_interfaces);
-//            auto & fdc = _idc.GetFaceDataContainer();
-//#endif
-//
-//            for (; cell[0] != endc[0]; cell[0]++)
-//              {
-//                for (unsigned int dh = 1; dh < dof_handler.size(); dh++)
-//                  {
-//                    if (cell[dh] == endc[dh])
-//                      {
-//                        throw DOpEException(
-//                            "Cellnumbers in DoFHandlers are not matching!",
-//                            "IntegratorMultiMesh::ComputeNonlinearLhs");
-//                      }
-//                  }
-//
-//                cdc.ReInit();
-//                dofs_per_cell = cell[0]->get_fe().dofs_per_cell;
-//
-//                local_cell_vector.reinit(dofs_per_cell);
-//                local_cell_vector = 0;
-//
-//                local_dof_indices.resize(0);
-//                local_dof_indices.resize(dofs_per_cell, 0);
-//
-//                //the second '1' plays only a role in the stationary case. In the non-stationary
-//                //case, scale_ico is set by the time-stepping-scheme
-//                pde.CellEquation(cdc, local_cell_vector, 1., 1.);
-//
-//#if deal_II_dimension == 2 || deal_II_dimension == 3
-//                if(need_boundary_integrals)
-//                  {
-//                    for (unsigned int face=0; face < dealii::GeometryInfo<dim>::faces_per_cell; ++face)
-//                      {
-//                        if (cell[0]->face(face)->at_boundary()
-//                            &&
-//                            (find(boundary_equation_colors.begin(),boundary_equation_colors.end(),
-//                                    cell[0]->face(face)->boundary_indicator()) != boundary_equation_colors.end()))
-//                          {
-//                            fdc.ReInit(face);
-//                            pde.BoundaryEquation(fdc,local_cell_vector);
-//                          }
-//                      }
-//                  }
-//                if(need_faces)
-//                  {
-//                    for (unsigned int face=0; face < dealii::GeometryInfo<dim>::faces_per_cell; ++face)
-//                      {
-//                        if (cell[0]->neighbor_index(face) != -1)
-//                          {
-//                            fdc.ReInit(face);
-//                            pde.FaceEquation(fdc, local_cell_vector);
-//                          }
-//                      }
-//                  }
-//                if( need_interfaces)
-//                  {
-//                    for (unsigned int face=0; face < dealii::GeometryInfo<dim>::faces_per_cell; ++face)
-//                      {
-//                        fdc.ReInit(face);
-//                        if (cell[0]->neighbor_index(face) != -1
-//                            &&
-//                            fdc.GetMaterialId()!= fdc.GetNbrMaterialId())
-//                          {
-//                            fdc.ReInitNbr();
-//                            pde.InterfaceEquation(fdc, local_cell_vector);
-//                          }
-//                      }
-//                  }
-//#endif
-//                //LocalToGlobal
-//                cell[0]->get_dof_indices(local_dof_indices);
-//                for (unsigned int i = 0; i < dofs_per_cell; ++i)
-//                  {
-//                    residual(local_dof_indices[i]) += local_cell_vector(i);
-//                  }
-//
-//                for (unsigned int dh = 1; dh < dof_handler.size(); dh++)
-//                  {
-//                    cell[dh]++;
-//                  }
-//              }
-//
-//            if (apply_boundary_values)
-//              {
-//                ApplyNewtonBoundaryValues(pde, residual);
-//              }
           }
       }
 

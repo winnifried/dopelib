@@ -77,79 +77,351 @@ namespace DOpE
         ReInit();
 
         /**
-         * Mainly self-explanatory functions.
-         */
+         * This method is used to evaluate the residual of the nonlinear equation.
+	 *
+	 * It assumes that the PROBLEM provides methods named 
+	 * CellEquation, CellRhs, BoundaryEquation, BoundaryRhs, FaceEquation, FaceRhs,
+	 * InterfaceEquation, and PointRhs
+      	 * For the calculation of the respective quantities, see, e.g., OptProblemContainer for 
+	 * details on these methods. 
+	 *
+	 * @tparam <PROBLEM>                The problem description
+	 *
+	 * @param pde                       The object containing the description of the nonlinear pde.
+	 * @param resiual                   A vector which contains the residual after completing the method.
+	 * @param apply_boundary_values     A flag to decide whether or not to set components belonging to
+	 *                                  constrained DoFs to zero (e.g., at Dirichlet boundaries)
+	 */
         template<typename PROBLEM>
           void
           ComputeNonlinearResidual(PROBLEM& pde, VECTOR &residual,
               bool apply_boundary_values = true);
+        /**
+         * This method is used to evaluate the left hand side of the residual of the nonlinear equation
+	 * This are all terms depending on the nonlinear variable. 
+	 * The use of this function can be advantageous to avoid recalculation of terms that do 
+	 * not change with update of the evaluation point.
+	 *
+	 * It assumes that the PROBLEM provides methods named 
+	 * CellEquation,BoundaryEquation, FaceEquation, and InterfaceEquation
+      	 * For the calculation of the respective quantities, see, e.g., OptProblemContainer for 
+	 * details on these methods. 
+	 *
+	 * @tparam <PROBLEM>                The problem description
+	 *
+	 * @param pde                       The object containing the description of the nonlinear pde.
+	 * @param resiual                   A vector which contains the residual after completing the method.
+	 * @param apply_boundary_values     A flag to decide whether or not to set components belonging to
+	 *                                  constrained DoFs to zero (e.g., at Dirichlet boundaries)
+	 */
         template<typename PROBLEM>
           void
           ComputeNonlinearLhs(PROBLEM& pde, VECTOR &residual,
               bool apply_boundary_values = true);
+        /**
+         * This method is used to evaluate the righ hand side of the residual of the nonlinear equation
+	 * This are all terms independent of the nonlinear variable. 
+	 * The use of this function can be advantageous to avoid recalculation of terms that do 
+	 * not change with update of the evaluation point.
+	 *
+	 * It assumes that the PROBLEM provides methods named 
+	 * CellRhs, BoundaryRhs, FaceRhs, and PointRhs
+      	 * For the calculation of the respective quantities, see, e.g., OptProblemContainer for 
+	 * details on these methods. 
+	 *
+	 * @tparam <PROBLEM>                The problem description
+	 *
+	 * @param pde                       The object containing the description of the nonlinear pde.
+	 * @param resiual                   A vector which contains the residual after completing the method.
+	 * @param apply_boundary_values     A flag to decide whether or not to set components belonging to
+	 *                                  constrained DoFs to zero (e.g., at Dirichlet boundaries)
+	 */
         template<typename PROBLEM>
           void
           ComputeNonlinearRhs(PROBLEM& pde, VECTOR &residual,
               bool apply_boundary_values = true);
+       /**
+         * This method is used to calculate the matrix corresponding to the linearized equation.
+	 *
+	 * It assumes that the PROBLEM provides methods named 
+	 * CellMatrix, BoundaryMatrix, FaceMatrix, and InterfaceRhs
+      	 * For the calculation of the respective quantities, see, e.g., OptProblemContainer for 
+	 * details on these methods. 
+	 *
+	 * @tparam <PROBLEM>                The problem description
+	 *
+	 * @param pde                       The object containing the description of the nonlinear pde.
+	 * @param matrix                    A matrix which contains the matrix after completing the method.
+	 */	
         template<typename PROBLEM, typename MATRIX>
           void
           ComputeMatrix(PROBLEM& pde, MATRIX &matrix);
 
-        template<typename PROBLEM>
+        /**
+         * This routine is used as a dummy to allow for the solutions of problems that do not need any
+	 * integration, i.e., that don't involve integration. 
+	 *
+	 * It is assumed that a method AlgebraicResidual in 
+	 * PROBLEM provides a method for the calculation of the residual. 
+	 *
+	 * @tparam <PROBLEM>                The problem description
+	 *
+	 * @param pde                       The object containing the description of the nonlinear pde.
+	 * @param resiual                   A vector which contains the residual after completing the method.
+	 */
+         template<typename PROBLEM>
           void
           ComputeNonlinearAlgebraicResidual(PROBLEM& pde, VECTOR &residual);
+        /**
+         * This method is used to calculate local constraints, i.e., constraints that do not need 
+	 * any integration but can be calculated directly from the values in the unknowns.
+	 * Typical examples are box constraints in Lagrange elements.
+	 * 
+	 *
+	 * It is assumed that a method ComputeLocalControlConstraints in 
+	 * PROBLEM provides a method for the calculation of the residual. 
+	 *
+	 * @tparam <PROBLEM>                The problem description
+	 *
+	 * @param pde                       The object containing the description of the nonlinear pde.
+	 * @param constraints               A vector which contains the constraints.
+	 */
         template<typename PROBLEM>
           void
           ComputeLocalControlConstraints(PROBLEM& pde, VECTOR &constraints);
 
+        /**
+	 * This methods evaluates functionals that are given by an integration over the spatial domain.
+	 * 
+	 * It is assumed that PROBLEM provides a method CellFunctional.
+	 *
+	 * @tparam <PROBLEM>                The problem description
+	 *
+	 * @param pde                       The object containing the description of the functional.
+	 *
+	 * @return                          The value of the functional
+	 */
         template<typename PROBLEM>
           SCALAR
           ComputeDomainScalar(PROBLEM& pde);
+        /**
+	 * This methods evaluates functionals that are given by evaluation in certain 
+	 * fixed points in the domain.
+	 * 
+	 * It is assumed that PROBLEM provides a method PointFunctional.
+	 *
+	 * @tparam <PROBLEM>                The problem description
+	 *
+	 * @param pde                       The object containing the description of the functional.
+	 *
+	 * @return                          The value of the functional
+	 */
         template<typename PROBLEM>
           SCALAR
           ComputePointScalar(PROBLEM& pde);
+        /**
+	 * This methods evaluates functionals that are given by evaluation of integrals 
+	 * over parts of the boundary.
+	 * 
+	 * It is assumed that PROBLEM provides a method BoundaryFunctional.
+	 *
+	 * This routine assumes that a corresponding calculation method is provided by PROBLEM
+	 *
+	 * @tparam <PROBLEM>                The problem description
+	 *
+	 * @param pde                       The object containing the description of the functional.
+	 *
+	 * @return                          The value of the functional
+	 */
         template<typename PROBLEM>
           SCALAR
           ComputeBoundaryScalar(PROBLEM& pde);
+        /**
+	 * This methods evaluates functionals that are given by evaluation of integrals over
+	 * certain faces in the domain.
+	 * 
+	 * It is assumed that PROBLEM provides a method FaceFunctional.
+	 *
+	 * This routine assumes that a corresponding calculation method is provided by PROBLEM
+	 *
+	 * @tparam <PROBLEM>                The problem description
+	 *
+	 * @param pde                       The object containing the description of the functional.
+	 *
+	 * @return                          The value of the functional
+	 */
         template<typename PROBLEM>
           SCALAR
           ComputeFaceScalar(PROBLEM& pde);
-        template<typename PROBLEM>
+        /**
+	 * This methods evaluates functionals that are given algebraic manipulation
+	 * of the unknowns. 
+	 * 
+	 * It is assumed that PROBLEM provides a method ComputeAlgebraicScalar.
+	 *
+	 * This routine assumes that a corresponding calculation method is provided by PROBLEM
+	 *
+	 * @tparam <PROBLEM>                The problem description
+	 *
+	 * @param pde                       The object containing the description of the functional.
+	 *
+	 * @return                          The value of the functional
+	 */
+         template<typename PROBLEM>
           SCALAR
           ComputeAlgebraicScalar(PROBLEM& pde);
 
+	 /**
+	  * This method applies inhomogeneous dirichlet boundary values.
+	  * 
+	  * It is assumed that PROBLEM provides functions GetDirichletCompMask,
+	  * GetDirichletColors, and GetDirichletValues to find the appropriate 
+	  * boundary values.
+	  *
+	  * @tparam <PROBLEM>                The problem description
+	  *
+	  * @param pde                       The object containing the description of the functional.
+	  * @param u                         The vector to which the boundary values are applied.
+	  */
         template<typename PROBLEM>
           void
           ApplyInitialBoundaryValues(PROBLEM& pde, VECTOR &u);
+
+	/**
+	  * This method is used in optimization problems with 
+	  * control in the dirichlet values, it then needs
+	  * to calculate the transposed to the control-to-dirichletvalues
+	  * mapping. Note that this is currently only usable
+	  * of the control is 0-dimensional, i.e., a fixed number of 
+	  * parameters. Thus it is only implemented in 
+	  * IntegratorMixedDimensions and provided here for compatibility reasons 
+	  * only.
+	  *
+	  * @tparam <PROBLEM>                The problem description
+	  *
+	  * @param pde                       The object containing the description of the functional.
+	  * @param u                         The vector to which the boundary values are applied.
+	  */
         template<typename PROBLEM>
           void
           ApplyTransposedInitialBoundaryValues(PROBLEM& pde, VECTOR &u);
+	 /**
+	  * This method applies homogeneous dirichlet boundary values on all
+	  * Dirichlet boundaries
+	  * 
+	  * It is assumed that PROBLEM provides functions GetDirichletCompMask and
+	  * GetDirichletColors to find the appropriate 
+	  * boundary values.
+	  *
+	  * @tparam <PROBLEM>                The problem description
+	  *
+	  * @param pde                       The object containing the description of the functional.
+	  * @param u                         The vector to which the boundary values are applied.
+	  */
         template<typename PROBLEM>
           void
           ApplyNewtonBoundaryValues(PROBLEM& pde, VECTOR &u);
+	 /**
+	  * This method applies homogeneous dirichlet boundary values on all
+	  * Dirichlet boundaries. This method applies the required values
+	  * To allparts of the linear equation Ax=b, i.e., to A, x, and b.
+	  * 
+	  * It is assumed that PROBLEM provides functions GetDirichletCompMask and
+	  * GetDirichletColors to find the appropriate 
+	  * boundary values.
+	  *
+	  * @tparam <PROBLEM>                The problem description
+	  *
+	  * @param pde                       The object containing the description of the functional.
+	  * @param matrix                    The matrix A  
+	  * @param sol                       The vector x
+	  * @param rhs                       The vector b 
+	  */	
         template<typename PROBLEM, typename MATRIX>
           void
           ApplyNewtonBoundaryValues(PROBLEM& pde, MATRIX &matrix, VECTOR &rhs,
               VECTOR &sol);
 
+	/**
+	 * This function can be used to pass domain data, i.e., finite element 
+	 * functions, to the problem. The added data will automatically be 
+	 * initialized on the elements where the integration takes place.
+	 *
+	 * Adding multiple data with the same name is prohibited.
+	 *
+	 * @param name         An identifier by which the PROBLEM in the
+	 *                     corresponding Compute* method can access the data.
+	 * @param new_data     A pointer to the data to be added.
+	 */ 
         inline void
         AddDomainData(std::string name, const VECTOR* new_data);
-        inline void
+	/**
+	 * This function is used to remove previously added domain data from the
+	 * integrator. 
+	 *
+	 * Deleting data that is not present in the integrator will
+	 * cause an exception.
+	 *
+	 * @param name         The identifier for the data to be removed from
+	 *                     the integrator.
+	 */
+	inline void
         DeleteDomainData(std::string name);
-        inline const std::map<std::string, const VECTOR*>&
-        GetDomainData() const;
-
+	/**
+	 * This function can be used to pass parameter data, i.e., data independent
+	 * of the spatial position, to the problem. 
+	 *
+	 * Adding multiple data with the same name is prohibited.
+	 *
+	 * @param name         An identifier by which the PROBLEM in the
+	 *                     corresponding Compute* method can access the data.
+	 * @param new_data     A pointer to the data to be added.
+	 */ 
         inline void
         AddParamData(std::string name, const dealii::Vector<SCALAR>* new_data);
-        inline void
+	/**
+	 * This function is used to remove previously added parameter data from the
+	 * integrator. 
+	 *
+	 * Deleting data that is not present in the integrator will
+	 * cause an exception.
+	 *
+	 * @param name         The identifier for the data to be removed from
+	 *                     the integrator.
+	 */inline void
         DeleteParamData(std::string name);
-        inline const std::map<std::string, const dealii::Vector<SCALAR>*>&
-        GetParamData() const;
-
+ 
+	/**
+	 * This function is used to calculate indicators based
+	 * on DWR-type data containes. This means it is 
+	 * assumed that an additional SpaceTimeHandler is used
+	 * for the calculation of the weights.
+	 * See DWRDataContainter for details.
+	 *
+	 * @tparam <PROBLEM>    The problem description
+	 * @tparam <STH>        An additional SpaceTimeHandler
+	 * @tparam <CDC>        An additional CellDataContainer
+	 * @tparam <FDC>        An additional FaceDataContainer
+	 *
+	 * @param pde           The problem
+	 * @param dwrc          The data container for the error estimation.
+	 *                      This object also stores the refinement indicators.
+	 */
         template<typename PROBLEM, class STH, class CDC, class FDC>
           void
           ComputeRefinementIndicators(PROBLEM& pde,
               DWRDataContainer<STH, INTEGRATORDATACONT, CDC, FDC, VECTOR>& dwrc);
+ 	/**
+	 * This function is used to calculate indicators based
+	 * on Residual-type data containes. See ResidualErrorContainer
+	 * for details.
+	 *
+	 * @tparam <PROBLEM>    The problem description
+	 *
+	 * @param pde           The problem
+	 * @param dwrc          The data container for the error estimation.
+	 *                      This object also stores the refinement indicators.
+	 */
         template<typename PROBLEM>
           void
           ComputeRefinementIndicators(PROBLEM& pde,
@@ -160,6 +432,22 @@ namespace DOpE
 
         inline INTEGRATORDATACONT&
         GetIntegratorDataContainerFunc() const;
+
+      protected: 
+	/**
+	 * This grants access to the domain data stored in the integrator.
+	 * 
+	 * @return The map with the stored data.
+	 */
+        inline const std::map<std::string, const VECTOR*>&
+	  GetDomainData() const;
+	/**
+	 * This grants access to the parameter data stored in the integrator.
+	 * 
+	 * @return The map with the stored data.
+	 */
+	inline const std::map<std::string, const dealii::Vector<SCALAR>*>&
+	  GetParamData() const;
 
       private:
         template<template<int, int> class DH>

@@ -45,7 +45,23 @@
 
 namespace DOpE
 {
-
+  /**
+   * This class is used to integrate the righthand side, matrix and so on.
+   * This class is used when the control is 0 dimensional and the state is 
+   * in dimension 1, 2, or 3. This is then used to ,,integrate'' residuals
+   * for the 0 dim variable that may depend upon integrals over the 
+   * highdimensional domain for the other variable.
+   *
+   * For details on the functions see Integrator.
+   *
+   * @template INTEGRATORDATACONT       The type of the integratordatacontainer, which has
+   *                                    manages the basic data for integration (quadrature,
+   *                                    celldatacontainer, facedatacontainer etc.)
+   * @template VECTOR                   Class of the vectors which we use in the integrator.
+   * @template SCALAR                   Type of the scalars we use in the integrator.
+   * @template dimlow                   The dimension of the lowdimensional object (should be 0!)
+   * @template dimhigh                  The dimension of the highdimensional object (should be 1,2, or 3)
+   */
 template<typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR, int dimlow,
     int dimhigh>
 class IntegratorMixedDimensions 
@@ -55,10 +71,6 @@ class IntegratorMixedDimensions
 
     ~IntegratorMixedDimensions();
 
-    /**
-     This Function should be called once after grid refinement, or changes in boundary values
-     to  recompute sparsity patterns, and constraint matrices.
-     */
     void ReInit();
 
     template<typename PROBLEM>
@@ -93,13 +105,16 @@ class IntegratorMixedDimensions
 
     inline void AddDomainData(std::string name, const VECTOR* new_data);
     inline void DeleteDomainData(std::string name);
-    inline const std::map<std::string, const VECTOR*>& GetDomainData() const;
 
     inline void AddParamData(std::string name, const dealii::Vector<SCALAR>* new_data);
     inline void DeleteParamData(std::string name);
-    inline const std::map<std::string, const dealii::Vector<SCALAR>*>& GetParamData() const;
 
-    inline  const INTEGRATORDATACONT& GetIntegratorDataContainer() const;
+    inline  const INTEGRATORDATACONT& GetIntegratorDataContainer() const;     
+
+  protected: 
+      inline const std::map<std::string, const VECTOR*>& GetDomainData() const;
+      inline const std::map<std::string, const dealii::Vector<SCALAR>*>& GetParamData() const;
+     
   private:
     INTEGRATORDATACONT & _idc;
 
