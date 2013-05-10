@@ -138,7 +138,7 @@ template<
 
       void
       BoundaryEquation(const FDC<DH, VECTOR, dealdim>& fdc,
-          dealii::Vector<double> &, doublescale, double /*scale_ico*/)
+		       dealii::Vector<double> &, double /*scale*/, double /*scale_ico*/)
       {
 
       }
