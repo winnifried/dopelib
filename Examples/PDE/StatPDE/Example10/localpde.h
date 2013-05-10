@@ -1,53 +1,50 @@
 /**
-*
-* Copyright (C) 2012 by the DOpElib authors
-*
-* This file is part of DOpElib
-*
-* DOpElib is free software: you can redistribute it
-* and/or modify it under the terms of the GNU General Public
-* License as published by the Free Software Foundation, either
-* version 3 of the License, or (at your option) any later
-* version.
-*
-* DOpElib is distributed in the hope that it will be
-* useful, but WITHOUT ANY WARRANTY; without even the implied
-* warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-* PURPOSE.  See the GNU General Public License for more
-* details.
-*
-* Please refer to the file LICENSE.TXT included in this distribution
-* for further information on this license.
-*
-**/
+ *
+ * Copyright (C) 2012 by the DOpElib authors
+ *
+ * This file is part of DOpElib
+ *
+ * DOpElib is free software: you can redistribute it
+ * and/or modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation, either
+ * version 3 of the License, or (at your option) any later
+ * version.
+ *
+ * DOpElib is distributed in the hope that it will be
+ * useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+ * PURPOSE.  See the GNU General Public License for more
+ * details.
+ *
+ * Please refer to the file LICENSE.TXT included in this distribution
+ * for further information on this license.
+ *
+ **/
 
 #ifndef _LOCALPDE_
 #define _LOCALPDE_
 
 #include "pdeinterface.h"
-#include "celldatacontainer.h"
-#include "facedatacontainer.h"
 #include "my_functions.h"
 
 using namespace std;
 using namespace dealii;
 using namespace DOpE;
 
-
-template<template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
-  template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
-  template<int, int> class DH, typename VECTOR, int dealdim>
-  class LocalPDE : public PDEInterface<CDC,FDC,DH, VECTOR, dealdim>
+template<
+    template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+    template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
+    template<int, int> class DH, typename VECTOR, int dealdim>
+  class LocalPDE : public PDEInterface<CDC, FDC, DH, VECTOR, dealdim>
   {
     public:
-      LocalPDE(unsigned int order)
-          : _exact_solution(order), _state_block_components(1, 0)
+      LocalPDE(unsigned int order) :
+          _exact_solution(order), _state_block_components(1, 0)
       {
       }
 
       void
-      CellEquation(
-          const CDC<DH, VECTOR, dealdim>& cdc,
+      CellEquation(const CDC<DH, VECTOR, dealdim>& cdc,
           dealii::Vector<double> &local_cell_vector, double scale, double)
       {
         unsigned int n_dofs_per_cell = cdc.GetNDoFsPerCell();
@@ -81,8 +78,7 @@ template<template<template<int, int> class DH, typename VECTOR, int dealdim> cla
       }
 
       void
-      CellMatrix(
-          const CDC<DH, VECTOR, dealdim>& cdc,
+      CellMatrix(const CDC<DH, VECTOR, dealdim>& cdc,
           FullMatrix<double> &local_entry_matrix, double scale, double)
       {
         unsigned int n_dofs_per_cell = cdc.GetNDoFsPerCell();
@@ -115,8 +111,7 @@ template<template<template<int, int> class DH, typename VECTOR, int dealdim> cla
       }
 
       void
-      CellRightHandSide(
-          const CDC<DH, VECTOR, dealdim>& cdc,
+      CellRightHandSide(const CDC<DH, VECTOR, dealdim>& cdc,
           dealii::Vector<double> &local_cell_vector, double scale)
       {
         assert(this->_problem_type == "state");
@@ -142,27 +137,22 @@ template<template<template<int, int> class DH, typename VECTOR, int dealdim> cla
       }
 
       void
-      BoundaryEquation(
-          const FDC<DH, VECTOR, dealdim>&,
-          dealii::Vector<double> &, double,
-          double /*scale_ico*/)
+      BoundaryEquation(const FDC<DH, VECTOR, dealdim>& fdc,
+          dealii::Vector<double> &, doublescale, double /*scale_ico*/)
       {
 
       }
 
       void
-      BoundaryMatrix(
-          const FDC<DH, VECTOR, dealdim>&,
-          dealii::FullMatrix<double> &, double /*scale*/,
+      BoundaryMatrix(const FDC<DH, VECTOR, dealdim>& /*fdc*/,
+          dealii::FullMatrix<double> & /*local_matrix*/, double /*scale*/,
           double /*scale_ico*/)
       {
       }
 
       void
-      BoundaryRightHandSide(
-          const FDC<DH, VECTOR, dealdim>&,
-          dealii::Vector<double> &local_cell_vector __attribute__((unused)),
-          double scale __attribute__((unused)))
+      BoundaryRightHandSide(const FDC<DH, VECTOR, dealdim>& /*fdc*/,
+          dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
       {
       }
 
@@ -202,6 +192,6 @@ template<template<template<int, int> class DH, typename VECTOR, int dealdim> cla
 
       ExactSolution _exact_solution;
 
-       vector<unsigned int> _state_block_components;
+      vector<unsigned int> _state_block_components;
   };
 #endif

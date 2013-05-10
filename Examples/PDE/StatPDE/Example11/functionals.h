@@ -24,36 +24,45 @@
 #ifndef _LOCALFunctionalS_
 #define _LOCALFunctionalS_
 
-#include "pdeinterface.h"
-#include "celldatacontainer.h"
-#include "facedatacontainer.h"
+#include "functionalinterface.h"
 
-using namespace std;
-using namespace dealii;
 using namespace DOpE;
 
+/**
+ * This class describes the functionals we want to evaluate.
+ * See pdeinterface.h for more information.
+ */
 /****************************************************************************************/
-template<template<int, int> class DH, typename VECTOR, int dealdim>
-  class LocalPointFunctionalX : public FunctionalInterface<CellDataContainer,
-      FaceDataContainer, DH, VECTOR, dealdim>
+
+/**
+ * This functional evaluates the first velocity component at (2,1).
+ */
+template<
+    template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+    template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
+    template<int, int> class DH, typename VECTOR, int dealdim>
+  class LocalPointFunctionalX : public FunctionalInterface<CDC, FDC, DH, VECTOR,
+      dealdim>
   {
     public:
+      LocalPointFunctionalX()
+      {
+        assert(dealdim==2);
+      }
 
       double
-      PointValue(
-          const DOpEWrapper::DoFHandler<dealdim, DH > &
-          /*control_dof_handler*/,
-          const DOpEWrapper::DoFHandler<dealdim, DH > &state_dof_handler
-          ,
+      PointValue(const DOpEWrapper::DoFHandler<dealdim, DH> &
+      /*control_dof_handler*/,
+          const DOpEWrapper::DoFHandler<dealdim, DH> &state_dof_handler,
           const std::map<std::string, const dealii::Vector<double>*> &
           /*param_values*/,
           const std::map<std::string, const VECTOR*> &domain_values)
       {
-        Point < 2 > p1(2.0, 1.0);
+        const dealii::Point<2> p1(2.0, 1.0);
 
-        typename map<string, const VECTOR*>::const_iterator it =
+        typename std::map<std::string, const VECTOR*>::const_iterator it =
             domain_values.find("state");
-        Vector<double> tmp_vector(3);
+        dealii::Vector<double> tmp_vector(3);
 
         VectorTools::point_value(state_dof_handler, *(it->second), p1,
             tmp_vector);
@@ -64,12 +73,15 @@ template<template<int, int> class DH, typename VECTOR, int dealdim>
 
       }
 
-      string
+      /**
+       * Describes the type of the functional.
+       */
+      std::string
       GetType() const
       {
         return "point";
       }
-      string
+      std::string
       GetName() const
       {
         return "Velocity in X";
@@ -77,40 +89,36 @@ template<template<int, int> class DH, typename VECTOR, int dealdim>
 
   };
 
-// drag
 /****************************************************************************************/
-template<template<int, int> class DH, typename VECTOR, int dealdim>
-  class LocalBoundaryFluxFunctional : public FunctionalInterface<
-      CellDataContainer, FaceDataContainer, DH, VECTOR,
-      dealdim>
+/**
+ * This functional evaluates the flux over the outflow boundary.
+ */
+
+template<
+    template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+    template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
+    template<int, int> class DH, typename VECTOR, int dealdim>
+  class LocalBoundaryFluxFunctional : public FunctionalInterface<CDC, FDC, DH,
+      VECTOR, dealdim>
   {
     public:
-      bool
-      HasFaces() const
-      {
-        return false;
-      }
-
-      // compute drag value around cylinder
       double
       BoundaryValue(const FaceDataContainer<DH, VECTOR, dealdim>& fdc)
       {
-        unsigned int color = fdc.GetBoundaryIndicator();
+        const unsigned int color = fdc.GetBoundaryIndicator();
+        //auto = FEValues
         const auto& state_fe_face_values = fdc.GetFEFaceValuesState();
-        unsigned int n_q_points = fdc.GetNQPoints();
+        const unsigned int n_q_points = fdc.GetNQPoints();
         double flux = 0.0;
         if (color == 1)
         {
-
-          vector < Vector<double> > _ufacevalues;
-
-          _ufacevalues.resize(n_q_points, Vector<double>(3));
-
+          std::vector<dealii::Vector<double> > _ufacevalues;
+          _ufacevalues.resize(n_q_points, dealii::Vector<double>(3));
           fdc.GetFaceValuesState("state", _ufacevalues);
 
           for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
           {
-            Tensor < 1, 2 > v;
+            dealii::Tensor<1, 2> v;
             v.clear();
             v[0] = _ufacevalues[q_point](0);
             v[1] = _ufacevalues[q_point](1);
@@ -118,10 +126,8 @@ template<template<int, int> class DH, typename VECTOR, int dealdim>
             flux += v * state_fe_face_values.normal_vector(q_point)
                 * state_fe_face_values.JxW(q_point);
           }
-
         }
         return flux;
-
       }
 
       UpdateFlags
@@ -130,19 +136,16 @@ template<template<int, int> class DH, typename VECTOR, int dealdim>
         return update_values | update_quadrature_points | update_normal_vectors;
       }
 
-      string
+      std::string
       GetType() const
       {
         return "boundary";
       }
-      string
+      std::string
       GetName() const
       {
         return "Flux";
       }
-
-    private:
-
   };
 
 #endif

@@ -230,8 +230,8 @@ template<
 
       void
       StrongBoundaryResidual(
-          const FaceDataContainer<dealii::DoFHandler, VECTOR, dealdim>&,
-          const FaceDataContainer<dealii::DoFHandler, VECTOR, dealdim>&,
+          const FaceDataContainer<dealii::DoFHandler, VECTOR, dealdim>&/*fdc*/,
+          const FaceDataContainer<dealii::DoFHandler, VECTOR, dealdim>&/*fdc_w*/,
           double& sum, double /*scale*/)
       {
         sum = 0;
@@ -239,8 +239,8 @@ template<
 
       void
       StrongBoundaryResidual_U(
-          const FaceDataContainer<dealii::DoFHandler, VECTOR, dealdim>&,
-          const FaceDataContainer<dealii::DoFHandler, VECTOR, dealdim>&,
+          const FaceDataContainer<dealii::DoFHandler, VECTOR, dealdim>&/*fdc*/,
+          const FaceDataContainer<dealii::DoFHandler, VECTOR, dealdim>&/*fdc_w*/,
           double& sum, double /*scale*/)
       {
         sum = 0;
@@ -248,17 +248,18 @@ template<
 
       void
       FaceEquation_U(
-          const FaceDataContainer<dealii::DoFHandler, VECTOR, dealdim>&,
-          dealii::Vector<double> &, double /*scale*/, double/*scale_ico*/)
+          const FaceDataContainer<dealii::DoFHandler, VECTOR, dealdim>&/*fdc*/,
+          dealii::Vector<double> &/*local_vector*/, double /*scale*/,
+          double/*scale_ico*/)
       {
-
       }
 
       void
-      FaceMatrix(const FaceDataContainer<dealii::DoFHandler, VECTOR, dealdim>&,
-          FullMatrix<double> &, double /*scale*/, double/*scale_ico*/)
+      FaceMatrix(
+          const FaceDataContainer<dealii::DoFHandler, VECTOR, dealdim>&/*fdc*/,
+          FullMatrix<double> & /*local_matrix*/, double /*scale*/,
+          double/*scale_ico*/)
       {
-
       }
 
       void

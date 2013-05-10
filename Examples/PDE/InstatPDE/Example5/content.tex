@@ -17,4 +17,4 @@ Furthermore, we have to prescribe homogeneous Dirichlet boundary conditions.
 
 \subsubsection{Program description}
 
-The new feature of this example is the nonhomogeneous righthand side. In examples \ref{PDE_Stat_Laplace_2D} and \ref{PDE_Stat_Laplace_3D}, we regarded stationary problems with nonhomogeneous righthand sides, but up to now, we never involved the time variable into the nonhomogeneity. To do this, DOpE yields a \texttt{SetTime()} function which has to be applied in the \textit{localpde.h} file as well as at the place where the \texttt{RightHandSideFunction} class is declared (here the \textit{myfunctions.h} file.
+The new feature of this example is the nonhomogeneous righthand side. In examples \ref{PDE_Stat_Laplace_2D} and \ref{PDE_Stat_Laplace_3D}, we regarded stationary problems with nonhomogeneous righthand sides, but up to now, we never involved the time variable into the nonhomogeneity. To do this, \texttt{DOpElib} yields a \texttt{SetTime()} function which has to be applied in the \textit{localpde.h} file as well as at the place where the \texttt{RightHandSideFunction} class is declared (here the \textit{myfunctions.h} file.

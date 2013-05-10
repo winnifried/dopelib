@@ -32,7 +32,7 @@ The most important part of each example is the \textit{main.cc} file which conta
 \vspace{0.2cm}
 \index{functional evaluation}
 Here, we declare all quantities of interest (functionals), e.g. point values, drag, lift, mean values of certain quantities over a subdomain etc. \\
-Each of these functionals is declared as a class of its own, but in DOpE all classes are derived from a so-called \texttt{FunctionalInterface} class.\\
+Each of these functionals is declared as a class of its own, but in \texttt{DOpElib} all classes are derived from a so-called \texttt{FunctionalInterface} class.\\
 In the current example we declare functionals for point values of the velocity and for the flux at the outflow boundary of the channel.\index{functional!point value} \index{functional!boundary flux}\\
 
 \vspace{0.2cm}
@@ -49,7 +49,7 @@ The \textit{LocalPDE} is derived from a \texttt{PDEInterface} class. It comprise
 Note the additional term on $\Gamma_{out}$, which is a consequence of the use of the symmetric stress tensor together with the free outflow condition.
 \end{remark}
 This problem is vector valued, i.e. the velocity variable $v$ has two components and the pressure variable $p$ is a scalar. For the implementation, we use a vector valued solution variable with three components, where the distinction between velocity and pressure is done by use of the deal.II \texttt{FEValuesExtractors} class. \index{vector-valued problem}\\
-Furthermore, in DOpE we always interpret the problems in the context of a Newton method. Usually, a PDE in its weak formulation is given as
+Furthermore, in \texttt{DOpElib} we always interpret the problems in the context of a Newton method. Usually, a PDE in its weak formulation is given as
 \begin{equation*}
    a(u;\varphi) = f(\varphi).
 \end{equation*}
