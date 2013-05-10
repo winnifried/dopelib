@@ -21,13 +21,6 @@
 *
 **/
 
-/*
- * ts_base_primal.h
- *
- *  Created on: 04.05.2012
- *      Author: cgoll
- */
-
 #ifndef _PRIMAL_TS_BASE_H_
 #define _PRIMAL_TS_BASE_H_
 

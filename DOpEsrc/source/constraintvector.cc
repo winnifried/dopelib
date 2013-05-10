@@ -192,7 +192,7 @@ void ConstraintVector<VECTOR>::ReSizeGlobal(unsigned int ndofs)
 }
 
 /******************************************************/
-namespace DOpE//namespace is needed due to template specialization
+namespace DOpE
 {
 
 template<>

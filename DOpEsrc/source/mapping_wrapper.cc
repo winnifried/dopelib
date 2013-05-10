@@ -22,13 +22,6 @@
 **/
 
 
-/*
- * mapping_wrapper.cc
- *
- *  Created on: Oct 8, 2012
- *      Author: cgoll
- */
-
 #include"mapping_wrapper.h"
 #include <dofs/dof_handler.h>
 #include <hp/dof_handler.h>

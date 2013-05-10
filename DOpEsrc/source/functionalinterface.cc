@@ -61,7 +61,7 @@ namespace DOpE
       template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
     double
     FunctionalInterface<CDC, FDC, DH, VECTOR, dopedim, dealdim>::Value(
-        const CDC<DH, VECTOR, dealdim>&)
+      const CDC<DH, VECTOR, dealdim>& /*cdc*/)
     {
       throw DOpEException("Not implemented", "FunctionalInterface::Value");
     }
@@ -74,10 +74,10 @@ namespace DOpE
       template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
     double
     FunctionalInterface<CDC, FDC, DH, VECTOR, dopedim, dealdim>::PointValue(
-        const DOpEWrapper::DoFHandler<dopedim, DH> & control_dof_handler __attribute__((unused)),
-        const DOpEWrapper::DoFHandler<dealdim, DH> & state_dof_handler __attribute__((unused)),
-        const std::map<std::string, const dealii::Vector<double>*> &param_values __attribute__((unused)),
-        const std::map<std::string, const VECTOR*> &domain_values __attribute__((unused)))
+        const DOpEWrapper::DoFHandler<dopedim, DH> & /*control_dof_handler*/,
+        const DOpEWrapper::DoFHandler<dealdim, DH> & /*state_dof_handler*/,
+        const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
+        const std::map<std::string, const VECTOR*> &/*domain_values*/)
     {
       throw DOpEException("Not implemented", "FunctionalInterface::PointValue");
     }
@@ -90,10 +90,10 @@ namespace DOpE
       template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
     void
     FunctionalInterface<CDC, FDC, DH, VECTOR, dopedim, dealdim>::PointValue_U(
-        const DOpEWrapper::DoFHandler<dopedim, DH> & control_dof_handler __attribute__((unused)),
-        const DOpEWrapper::DoFHandler<dealdim, DH> & state_dof_handler __attribute__((unused)),
-        const std::map<std::string, const dealii::Vector<double>*> &param_values __attribute__((unused)),
-        const std::map<std::string, const VECTOR*> &domain_values __attribute__((unused)),
+        const DOpEWrapper::DoFHandler<dopedim, DH> & /*control_dof_handler*/,
+        const DOpEWrapper::DoFHandler<dealdim, DH> & /*state_dof_handler*/,
+        const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
+        const std::map<std::string, const VECTOR*> &/*domain_values*/,
         VECTOR& /*rhs*/, double /*scale*/)
     {
       throw DOpEException("Not implemented",
@@ -108,10 +108,10 @@ namespace DOpE
       template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
     void
     FunctionalInterface<CDC, FDC, DH, VECTOR, dopedim, dealdim>::PointValue_Q(
-        const DOpEWrapper::DoFHandler<dopedim, DH> & control_dof_handler __attribute__((unused)),
-        const DOpEWrapper::DoFHandler<dealdim, DH> & state_dof_handler __attribute__((unused)),
-        const std::map<std::string, const dealii::Vector<double>*> &param_values __attribute__((unused)),
-        const std::map<std::string, const VECTOR*> &domain_values __attribute__((unused)),
+        const DOpEWrapper::DoFHandler<dopedim, DH> & /*control_dof_handler*/,
+        const DOpEWrapper::DoFHandler<dealdim, DH> & /*state_dof_handler*/,
+        const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
+        const std::map<std::string, const VECTOR*> &/*domain_values*/,
         VECTOR& /*rhs*/, double /*scale*/)
     {
       throw DOpEException("Not implemented",
@@ -126,10 +126,10 @@ namespace DOpE
       template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
     void
     FunctionalInterface<CDC, FDC, DH, VECTOR, dopedim, dealdim>::PointValue_UU(
-        const DOpEWrapper::DoFHandler<dopedim, DH> & control_dof_handler __attribute__((unused)),
-        const DOpEWrapper::DoFHandler<dealdim, DH> & state_dof_handler __attribute__((unused)),
-        const std::map<std::string, const dealii::Vector<double>*> &param_values __attribute__((unused)),
-        const std::map<std::string, const VECTOR*> &domain_values __attribute__((unused)),
+        const DOpEWrapper::DoFHandler<dopedim, DH> & /*control_dof_handler*/,
+        const DOpEWrapper::DoFHandler<dealdim, DH> & /*state_dof_handler*/,
+        const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
+        const std::map<std::string, const VECTOR*> &/*domain_values*/,
         VECTOR& /*rhs*/, double /*scale*/)
     {
       throw DOpEException("Not implemented",
@@ -144,10 +144,10 @@ namespace DOpE
       template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
     void
     FunctionalInterface<CDC, FDC, DH, VECTOR, dopedim, dealdim>::PointValue_QU(
-        const DOpEWrapper::DoFHandler<dopedim, DH> & control_dof_handler __attribute__((unused)),
-        const DOpEWrapper::DoFHandler<dealdim, DH> & state_dof_handler __attribute__((unused)),
-        const std::map<std::string, const dealii::Vector<double>*> &param_values __attribute__((unused)),
-        const std::map<std::string, const VECTOR*> &domain_values __attribute__((unused)),
+        const DOpEWrapper::DoFHandler<dopedim, DH> & /*control_dof_handler*/,
+        const DOpEWrapper::DoFHandler<dealdim, DH> & /*state_dof_handler*/,
+        const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
+        const std::map<std::string, const VECTOR*> &/*domain_values*/,
         VECTOR& /*rhs*/, double /*scale*/)
     {
       throw DOpEException("Not implemented",
@@ -161,10 +161,10 @@ namespace DOpE
       template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
     void
     FunctionalInterface<CDC, FDC, DH, VECTOR, dopedim, dealdim>::PointValue_UQ(
-        const DOpEWrapper::DoFHandler<dopedim, DH> & control_dof_handler __attribute__((unused)),
-        const DOpEWrapper::DoFHandler<dealdim, DH> & state_dof_handler __attribute__((unused)),
-        const std::map<std::string, const dealii::Vector<double>*> &param_values __attribute__((unused)),
-        const std::map<std::string, const VECTOR*> &domain_values __attribute__((unused)),
+        const DOpEWrapper::DoFHandler<dopedim, DH> & /*control_dof_handler*/,
+        const DOpEWrapper::DoFHandler<dealdim, DH> & /*state_dof_handler*/,
+        const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
+        const std::map<std::string, const VECTOR*> &/*domain_values*/,
         VECTOR& /*rhs*/, double /*scale*/)
     {
       throw DOpEException("Not implemented",
@@ -178,10 +178,10 @@ namespace DOpE
       template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
     void
     FunctionalInterface<CDC, FDC, DH, VECTOR, dopedim, dealdim>::PointValue_QQ(
-        const DOpEWrapper::DoFHandler<dopedim, DH> & control_dof_handler __attribute__((unused)),
-        const DOpEWrapper::DoFHandler<dealdim, DH> & state_dof_handler __attribute__((unused)),
-        const std::map<std::string, const dealii::Vector<double>*> &param_values __attribute__((unused)),
-        const std::map<std::string, const VECTOR*> &domain_values __attribute__((unused)),
+        const DOpEWrapper::DoFHandler<dopedim, DH> & /*control_dof_handler*/,
+        const DOpEWrapper::DoFHandler<dealdim, DH> & /*state_dof_handler*/,
+        const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
+        const std::map<std::string, const VECTOR*> &/*domain_values*/,
         VECTOR& /*rhs*/, double /*scale*/)
     {
       throw DOpEException("Not implemented",
@@ -196,9 +196,9 @@ namespace DOpE
       template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
     void
     FunctionalInterface<CDC, FDC, DH, VECTOR, dopedim, dealdim>::Value_U(
-        const CDC<DH, VECTOR, dealdim>&,
-        dealii::Vector<double> &local_cell_vector __attribute__((unused)),
-        double scale __attribute__((unused)))
+      const CDC<DH, VECTOR, dealdim>& /*cdc*/,
+        dealii::Vector<double> &/*local_cell_vector*/,
+        double /*scale*/)
     {
       throw DOpEException("Not implemented", "FunctionalInterface::Value_U");
     }
@@ -211,9 +211,9 @@ namespace DOpE
       template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
     void
     FunctionalInterface<CDC, FDC, DH, VECTOR, dopedim, dealdim>::Value_Q(
-        const CDC<DH, VECTOR, dealdim>&,
-        dealii::Vector<double> &local_cell_vector __attribute__((unused)),
-        double scale __attribute__((unused)))
+        const CDC<DH, VECTOR, dealdim>& /*cdc*/,
+        dealii::Vector<double> &/*local_cell_vector*/,
+        double /*scale*/)
     {
       throw DOpEException("Not implemented", "FunctionalInterface::Value_Q");
     }
@@ -226,9 +226,9 @@ namespace DOpE
       template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
     void
     FunctionalInterface<CDC, FDC, DH, VECTOR, dopedim, dealdim>::Value_UU(
-        const CDC<DH, VECTOR, dealdim>&,
-        dealii::Vector<double> &local_cell_vector __attribute__((unused)),
-        double scale __attribute__((unused)))
+        const CDC<DH, VECTOR, dealdim>& /*cdc*/,
+        dealii::Vector<double> &/*local_cell_vector*/,
+        double /*scale*/)
     {
       throw DOpEException("Not implemented", "FunctionalInterface::Value_UU");
     }
@@ -241,9 +241,9 @@ namespace DOpE
       template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
     void
     FunctionalInterface<CDC, FDC, DH, VECTOR, dopedim, dealdim>::Value_QU(
-        const CDC<DH, VECTOR, dealdim>&,
-        dealii::Vector<double> &local_cell_vector __attribute__((unused)),
-        double scale __attribute__((unused)))
+        const CDC<DH, VECTOR, dealdim>& /*cdc*/,
+        dealii::Vector<double> &/*local_cell_vector*/,
+        double /*scale*/)
     {
       throw DOpEException("Not implemented", "FunctionalInterface::Value_QU");
     }
@@ -256,9 +256,9 @@ namespace DOpE
       template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
     void
     FunctionalInterface<CDC, FDC, DH, VECTOR, dopedim, dealdim>::Value_UQ(
-        const CDC<DH, VECTOR, dealdim>&,
-        dealii::Vector<double> &local_cell_vector __attribute__((unused)),
-        double scale __attribute__((unused)))
+        const CDC<DH, VECTOR, dealdim>& /*cdc*/,
+        dealii::Vector<double> &/*local_cell_vector*/,
+        double /*scale*/)
     {
       throw DOpEException("Not implemented", "FunctionalInterface::Value_UQ");
     }
@@ -271,9 +271,9 @@ namespace DOpE
       template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
     void
     FunctionalInterface<CDC, FDC, DH, VECTOR, dopedim, dealdim>::Value_QQ(
-        const CDC<DH, VECTOR, dealdim>&,
-        dealii::Vector<double> &local_cell_vector __attribute__((unused)),
-        double scale __attribute__((unused)))
+        const CDC<DH, VECTOR, dealdim>& /*cdc*/,
+        dealii::Vector<double> &/*local_cell_vector*/,
+        double /*scale*/)
     {
       throw DOpEException("Not implemented", "FunctionalInterface::Value_QQ");
     }
@@ -308,7 +308,7 @@ namespace DOpE
       template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
     double
     FunctionalInterface<CDC, FDC, DH, VECTOR, dopedim, dealdim>::FaceValue(
-        const FDC<DH, VECTOR, dealdim>&)
+        const FDC<DH, VECTOR, dealdim>& /*fdc*/)
     {
       throw DOpEException("Not Implemented", "FunctionalInterface::FaceValue");
     }
@@ -320,9 +320,9 @@ namespace DOpE
       template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
     void
     FunctionalInterface<CDC, FDC, DH, VECTOR, dopedim, dealdim>::FaceValue_U(
-        const FDC<DH, VECTOR, dealdim>&,
-        dealii::Vector<double> &local_cell_vector __attribute__((unused)),
-        double scale __attribute__((unused)))
+        const FDC<DH, VECTOR, dealdim>& /*fdc*/,
+        dealii::Vector<double> &/*local_cell_vector*/,
+        double /*scale*/)
     {
       throw DOpEException("Not Implemented",
           "FunctionalInterface::FaceValue_U");
@@ -335,9 +335,9 @@ namespace DOpE
       template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
     void
     FunctionalInterface<CDC, FDC, DH, VECTOR, dopedim, dealdim>::FaceValue_Q(
-        const FDC<DH, VECTOR, dealdim>&,
-        dealii::Vector<double> &local_cell_vector __attribute__((unused)),
-        double scale __attribute__((unused)))
+        const FDC<DH, VECTOR, dealdim>& /*fdc*/,
+        dealii::Vector<double> &/*local_cell_vector*/,
+        double /*scale*/)
     {
       throw DOpEException("Not Implemented",
           "FunctionalInterface::FaceValue_Q");
@@ -350,9 +350,9 @@ namespace DOpE
       template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
     void
     FunctionalInterface<CDC, FDC, DH, VECTOR, dopedim, dealdim>::FaceValue_UU(
-        const FDC<DH, VECTOR, dealdim>&,
-        dealii::Vector<double> &local_cell_vector __attribute__((unused)),
-        double scale __attribute__((unused)))
+        const FDC<DH, VECTOR, dealdim>& /*fdc*/,
+        dealii::Vector<double> &/*local_cell_vector*/,
+        double /*scale*/)
     {
       throw DOpEException("Not Implemented",
           "FunctionalInterface::FaceValue_UU");
@@ -365,9 +365,9 @@ namespace DOpE
       template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
     void
     FunctionalInterface<CDC, FDC, DH, VECTOR, dopedim, dealdim>::FaceValue_QU(
-        const FDC<DH, VECTOR, dealdim>&,
-        dealii::Vector<double> &local_cell_vector __attribute__((unused)),
-        double scale __attribute__((unused)))
+        const FDC<DH, VECTOR, dealdim>& /*fdc*/,
+        dealii::Vector<double> &/*local_cell_vector*/,
+        double /*scale*/)
     {
       throw DOpEException("Not Implemented",
           "FunctionalInterface::FaceValue_QU");
@@ -380,9 +380,9 @@ namespace DOpE
       template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
     void
     FunctionalInterface<CDC, FDC, DH, VECTOR, dopedim, dealdim>::FaceValue_UQ(
-        const FDC<DH, VECTOR, dealdim>&,
-        dealii::Vector<double> &local_cell_vector __attribute__((unused)),
-        double scale __attribute__((unused)))
+        const FDC<DH, VECTOR, dealdim>& /*fdc*/,
+        dealii::Vector<double> &/*local_cell_vector*/,
+        double /*scale*/)
     {
       throw DOpEException("Not Implemented",
           "FunctionalInterface::FaceValue_UQ");
@@ -395,9 +395,9 @@ namespace DOpE
       template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
     void
     FunctionalInterface<CDC, FDC, DH, VECTOR, dopedim, dealdim>::FaceValue_QQ(
-        const FDC<DH, VECTOR, dealdim>&,
-        dealii::Vector<double> &local_cell_vector __attribute__((unused)),
-        double scale __attribute__((unused)))
+        const FDC<DH, VECTOR, dealdim>& /*fdc*/,
+        dealii::Vector<double> &/*local_cell_vector*/,
+        double /*scale*/)
     {
       throw DOpEException("Not Implemented",
           "FunctionalInterface::FaceValue_QQ");
@@ -410,7 +410,7 @@ namespace DOpE
       template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
     double
     FunctionalInterface<CDC, FDC, DH, VECTOR, dopedim, dealdim>::BoundaryValue(
-        const FDC<DH, VECTOR, dealdim>&)
+        const FDC<DH, VECTOR, dealdim>& /*fdc*/)
     {
       throw DOpEException("Not Implemented",
           "FunctionalInterface::BoundaryValue");
@@ -423,9 +423,9 @@ namespace DOpE
       template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
     void
     FunctionalInterface<CDC, FDC, DH, VECTOR, dopedim, dealdim>::BoundaryValue_U(
-        const FDC<DH, VECTOR, dealdim>&,
-        dealii::Vector<double> &local_cell_vector __attribute__((unused)),
-        double scale __attribute__((unused)))
+        const FDC<DH, VECTOR, dealdim>& /*fdc*/,
+        dealii::Vector<double> &/*local_cell_vector*/,
+        double /*scale*/)
     {
       throw DOpEException("Not Implemented",
           "FunctionalInterface::BoundaryValue_U");
@@ -438,9 +438,9 @@ namespace DOpE
       template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
     void
     FunctionalInterface<CDC, FDC, DH, VECTOR, dopedim, dealdim>::BoundaryValue_Q(
-        const FDC<DH, VECTOR, dealdim>&,
-        dealii::Vector<double> &local_cell_vector __attribute__((unused)),
-        double scale __attribute__((unused)))
+        const FDC<DH, VECTOR, dealdim>& /*fdc*/,
+        dealii::Vector<double> &/*local_cell_vector*/,
+        double /*scale*/)
     {
       throw DOpEException("Not Implemented",
           "FunctionalInterface::BoundaryValue_Q");
@@ -453,9 +453,9 @@ namespace DOpE
       template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
     void
     FunctionalInterface<CDC, FDC, DH, VECTOR, dopedim, dealdim>::BoundaryValue_UU(
-        const FDC<DH, VECTOR, dealdim>&,
-        dealii::Vector<double> &local_cell_vector __attribute__((unused)),
-        double scale __attribute__((unused)))
+        const FDC<DH, VECTOR, dealdim>& /*fdc*/,
+        dealii::Vector<double> &/*local_cell_vector*/,
+        double /*scale*/)
     {
       throw DOpEException("Not Implemented",
           "FunctionalInterface::BoundaryValue_UU");
@@ -468,9 +468,9 @@ namespace DOpE
       template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
     void
     FunctionalInterface<CDC, FDC, DH, VECTOR, dopedim, dealdim>::BoundaryValue_QU(
-        const FDC<DH, VECTOR, dealdim>&,
-        dealii::Vector<double> &local_cell_vector __attribute__((unused)),
-        double scale __attribute__((unused)))
+        const FDC<DH, VECTOR, dealdim>& /*fdc*/,
+        dealii::Vector<double> &/*local_cell_vector*/,
+        double /*scale*/)
     {
       throw DOpEException("Not Implemented",
           "FunctionalInterface::BoundaryValue_QU");
@@ -483,9 +483,9 @@ namespace DOpE
       template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
     void
     FunctionalInterface<CDC, FDC, DH, VECTOR, dopedim, dealdim>::BoundaryValue_UQ(
-        const FDC<DH, VECTOR, dealdim>&,
-        dealii::Vector<double> &local_cell_vector __attribute__((unused)),
-        double scale __attribute__((unused)))
+        const FDC<DH, VECTOR, dealdim>& /*fdc*/,
+        dealii::Vector<double> &/*local_cell_vector*/,
+        double /*scale*/)
     {
       throw DOpEException("Not Implemented",
           "FunctionalInterface::BoundaryValue_UQ");
@@ -498,9 +498,9 @@ namespace DOpE
       template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
     void
     FunctionalInterface<CDC, FDC, DH, VECTOR, dopedim, dealdim>::BoundaryValue_QQ(
-        const FDC<DH, VECTOR, dealdim>&,
-        dealii::Vector<double> &local_cell_vector __attribute__((unused)),
-        double scale __attribute__((unused)))
+        const FDC<DH, VECTOR, dealdim>& /*fdc*/,
+        dealii::Vector<double> &/*local_cell_vector*/,
+        double /*scale*/)
     {
       throw DOpEException("Not Implemented",
           "FunctionalInterface::BoundaryValue_QQ");
@@ -513,8 +513,8 @@ namespace DOpE
       template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
     double
     FunctionalInterface<CDC, FDC, DH, VECTOR, dopedim, dealdim>::AlgebraicValue(
-        const std::map<std::string, const dealii::Vector<double>*> &param_values __attribute__((unused)),
-        const std::map<std::string, const VECTOR*> &domain_values __attribute__((unused)))
+        const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
+        const std::map<std::string, const VECTOR*> &/*domain_values*/)
     {
       throw DOpEException("Not Implemented",
           "FunctionalInterface::AlgebraicValue");
@@ -552,9 +552,9 @@ namespace DOpE
       template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
     void
     FunctionalInterface<CDC, FDC, DH, VECTOR, dopedim, dealdim>::AlgebraicGradient_Q(
-        VECTOR& gradient __attribute__((unused)),
-        const std::map<std::string, const dealii::Vector<double>*> &param_values __attribute__((unused)),
-        const std::map<std::string, const VECTOR*> &domain_values __attribute__((unused)))
+        VECTOR& gradient,
+        const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
+        const std::map<std::string, const VECTOR*> &/*domain_values*/)
     {
       throw DOpEException("Not Implemented",
           "FunctionalInterface::AlgebraicGradient_Q");

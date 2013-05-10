@@ -21,13 +21,6 @@
 *
 **/
 
-/*
- * TSBase.h
- *
- *  Created on: 04.05.2012
- *      Author: cgoll
- */
-
 #ifndef _TSBase_H_
 #define _TSBase_H_
 

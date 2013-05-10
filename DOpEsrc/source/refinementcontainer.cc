@@ -20,12 +20,6 @@
  * for further information on this license.
  *
  **/
-/*
- * refinementcontainer.cc
- *
- *  Created on: Feb 7, 2013
- *      Author: cgoll
- */
 
 #include "refinementcontainer.h"
 #include "dopeexception.h"

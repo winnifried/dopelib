@@ -21,12 +21,6 @@
 *
 **/
 
-/*
- * helper.cc
- *
- *  Created on: Apr 8, 2011
- *      Author: cgoll
- */
 #include "helper.h"
 namespace DOpEHelper
 {
