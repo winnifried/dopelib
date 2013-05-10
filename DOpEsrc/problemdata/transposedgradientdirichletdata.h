@@ -24,9 +24,6 @@
 #ifndef _TRANSPOSED_GRADIENT_DIRICHLET_DATA_H_
 #define _TRANSPOSED_GRADIENT_DIRICHLET_DATA_H_
 
-#include "function_wrapper.h"
-#include "dofhandler_wrapper.h"
-#include "fevalues_wrapper.h"
 #include "transposeddirichletdatainterface.h"
 
 namespace DOpE
@@ -34,15 +31,18 @@ namespace DOpE
 
   /**
    * This class is used to compute the reduced gradient in the case of dirichlet control
+   *						
+   * @tparam  DD              The Dirichlet Data Object under consideration
+   * @tparam  VECTOR          The Vector type
+   * @tparam  dealdim         The dimension of the domain
+   *
    */
-  template<typename DD, typename VECTOR, int dopedim, int dealdim>
-    class TransposedGradientDirichletData : public TransposedDirichletDataInterface<dopedim,dealdim>
+  template<typename DD, typename VECTOR, int dealdim>
+    class TransposedGradientDirichletData : public TransposedDirichletDataInterface<dealdim>
   {
   public:
-  TransposedGradientDirichletData(const DD& data) : TransposedDirichletDataInterface<dopedim,dealdim>(), _dirichlet_data(data)
+  TransposedGradientDirichletData(const DD& data) : TransposedDirichletDataInterface<dealdim>(), _dirichlet_data(data)
     {
-//      _control_dof_handler = NULL;
-//      _state_dof_handler = NULL;
       _param_values = NULL;
       _domain_values = NULL;
       _color = 0;
@@ -52,14 +52,10 @@ namespace DOpE
      * Initializes the private data, should be called prior to any value call!
      */
     void ReInit(
-//                const DOpEWrapper::DoFHandler<dopedim> & control_dof_handler,
-//		const DOpEWrapper::DoFHandler<dealdim> &state_dof_handler,
 		const std::map<std::string, const dealii::Vector<double>* > &param_values,
 		const std::map<std::string, const VECTOR* > &domain_values,
 		unsigned int color)
     {
-//      _control_dof_handler = &control_dof_handler;
-//      _state_dof_handler = &state_dof_handler;
       _param_values = &param_values;
       _domain_values = &domain_values;
       _color = color;
@@ -67,7 +63,16 @@ namespace DOpE
 
 
     /**
-     * Accesses the values of the dirichlet data
+     * Accesses the values of the transposed of the first derivative of the 
+     * control-to-dirichlet-values map. I.e. if DD'(q): \R^n \rightarrow L^2(\partial\Omega;R^m)
+     * then here we calculate DD'(q)^*: L^2(\partial\Omega;R^m) \rightarrow \R^n
+     *
+     * @param p             The point (on the boundary of the domain) where the Dirichlet
+     *                      values are evaluated
+     * @param component     The component of the Dirichlet data (in \R^m)
+     * @param dof_number    The number of the dof for the domain data in V_h(\Omega;R^m)
+     *                      from which the influence is calculated. 
+     * @param local_vector  The vector for the result in \R^n
      */
     void value (const dealii::Point<dealdim>   &p,
 		const unsigned int  component,
@@ -75,8 +80,6 @@ namespace DOpE
 		dealii::Vector<double>& local_vector) const
     {
       _dirichlet_data.Data_QT(
-//                              _control_dof_handler,
-//			      _state_dof_handler,
 			      _param_values,
 			      _domain_values,
 			      _color,
@@ -97,8 +100,6 @@ namespace DOpE
     }
   private:
     const DD& _dirichlet_data;
-//    const DOpEWrapper::DoFHandler<dopedim>*  _control_dof_handler;
-//    const DOpEWrapper::DoFHandler<dealdim>* _state_dof_handler;
     const std::map<std::string, const dealii::Vector<double>* >* _param_values;
     const std::map<std::string, const VECTOR* >* _domain_values;
     unsigned int _color;

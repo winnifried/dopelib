@@ -29,7 +29,7 @@ namespace DOpE
   /**
    * Interface for DirichletData
    */
-  template<typename VECTOR, int dopedim, int dealdim=dopedim>
+  template<typename VECTOR, int dealdim>
     class DirichletDataInterface
   {
   public:
@@ -49,10 +49,7 @@ namespace DOpE
      *
      * @return                      The dirichletdata for the componten at point.
      */
-     virtual double Data(
-//                         const DOpEWrapper::DoFHandler<dopedim> * control_dof_handler __attribute__((unused)),
-//			 const DOpEWrapper::DoFHandler<dealdim> *state_dof_handler __attribute__((unused)),
-			 const std::map<std::string, const dealii::Vector<double>* > *param_values __attribute__((unused)),
+     virtual double Data(const std::map<std::string, const dealii::Vector<double>* > *param_values __attribute__((unused)),
 			 const std::map<std::string, const VECTOR* > *domain_values __attribute__((unused)),
 			 unsigned int color __attribute__((unused)),
 			 const dealii::Point<dealdim>& point __attribute__((unused)),
@@ -75,10 +72,7 @@ namespace DOpE
      *
      * @return                      The dirichletdata for the componten at point.
      */
-   virtual double Data_Q(
-//                         const DOpEWrapper::DoFHandler<dopedim> * control_dof_handler,
-//			 const DOpEWrapper::DoFHandler<dealdim> *state_dof_handler,
-			 const std::map<std::string, const dealii::Vector<double>* > *param_values,
+   virtual double Data_Q(const std::map<std::string, const dealii::Vector<double>* > *param_values,
 			 const std::map<std::string, const VECTOR* > *domain_values,
 			 unsigned int color,
 			 const dealii::Point<dealdim>& point,
@@ -102,10 +96,7 @@ namespace DOpE
      *
      * @param local_vector          The transposed dirichlet data at the point
      */
-   virtual void Data_QT (
-//                         const DOpEWrapper::DoFHandler<dopedim> * control_dof_handler __attribute__((unused)),
-//			 const DOpEWrapper::DoFHandler<dealdim> *state_dof_handler __attribute__((unused)),
-			 const std::map<std::string, const dealii::Vector<double>* > *param_values __attribute__((unused)),
+   virtual void Data_QT (const std::map<std::string, const dealii::Vector<double>* > *param_values __attribute__((unused)),
 			 const std::map<std::string, const VECTOR* > *domain_values __attribute__((unused)),
 			 unsigned int color __attribute__((unused)),
 			 const dealii::Point<dealdim>& point __attribute__((unused)),
@@ -132,10 +123,7 @@ namespace DOpE
      *
      * @param local_vector          The transposed dirichlet data at the point
      */
-   virtual void Data_QQT (
-//                          const DOpEWrapper::DoFHandler<dopedim> * control_dof_handler __attribute__((unused)),
-//			  const DOpEWrapper::DoFHandler<dealdim> *state_dof_handler __attribute__((unused)),
-			  const std::map<std::string, const dealii::Vector<double>* > *param_values __attribute__((unused)),
+   virtual void Data_QQT (const std::map<std::string, const dealii::Vector<double>* > *param_values __attribute__((unused)),
 			  const std::map<std::string, const VECTOR* > *domain_values __attribute__((unused)),
 			  unsigned int color __attribute__((unused)),
 			  const dealii::Point<dealdim>& point __attribute__((unused)),

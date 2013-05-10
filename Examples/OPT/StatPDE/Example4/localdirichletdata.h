@@ -30,8 +30,8 @@ using namespace std;
 using namespace dealii;
 using namespace DOpE;
 
-template<typename VECTOR, int dopedim, int dealdim>
-  class LocalDirichletData : public DirichletDataInterface<VECTOR,dopedim,dealdim>
+template<typename VECTOR, int dealdim>
+  class LocalDirichletData : public DirichletDataInterface<VECTOR,dealdim>
   {
   public:
 

@@ -31,35 +31,30 @@ namespace DOpE
 {
 
   /**
-   * A Simple Interface Class, that sets DirichletData given by a DOpEWrapper::Function. This means they don't depend on control or state values
+   * A Simple Interface Class, that sets DirichletData given by a DOpEWrapper::Function. 
+   * This means they don't depend on control or state values
    */
-  template<typename VECTOR, int dopedim, int dealdim=dopedim>
-    class SimpleDirichletData : public DirichletDataInterface<VECTOR, dopedim,dealdim>
+  template<typename VECTOR, int dealdim>
+    class SimpleDirichletData : public DirichletDataInterface<VECTOR, dealdim>
   {
   public:
-  SimpleDirichletData(const DOpEWrapper::Function<dealdim>& data) : DirichletDataInterface<VECTOR, dopedim,dealdim>(), _data(data)
+  SimpleDirichletData(const DOpEWrapper::Function<dealdim>& data) : DirichletDataInterface<VECTOR,dealdim>(), _data(data)
     {}
 
-  double Data(
-//              const DOpEWrapper::DoFHandler<dopedim> * control_dof_handler __attribute__((unused)),
-//	      const DOpEWrapper::DoFHandler<dealdim> *state_dof_handler __attribute__((unused)),
-	      const std::map<std::string, const dealii::Vector<double>* > *param_values __attribute__((unused)),
-	      const std::map<std::string, const VECTOR* > *domain_values __attribute__((unused)),
-	      unsigned int color __attribute__((unused)),
+  double Data(const std::map<std::string, const dealii::Vector<double>* > */*param_values*/,
+	      const std::map<std::string, const VECTOR* > */*domain_values*/,
+	      unsigned int /*color*/,
 	      const dealii::Point<dealdim>& point,
 	      const unsigned int component) const
   {
     return _data.value(point,component);
   }
 
-  double Data_Q(
-//                const DOpEWrapper::DoFHandler<dopedim> * control_dof_handler __attribute__((unused)),
-//		const DOpEWrapper::DoFHandler<dealdim> *state_dof_handler __attribute__((unused)),
-		const std::map<std::string, const dealii::Vector<double>* > *param_values __attribute__((unused)),
-		const std::map<std::string, const VECTOR* > *domain_values __attribute__((unused)),
-		unsigned int color __attribute__((unused)),
-		const dealii::Point<dealdim>& point __attribute__((unused)),
-		const unsigned int component __attribute__((unused))) const
+  double Data_Q(const std::map<std::string, const dealii::Vector<double>* > */*param_values*/,
+		const std::map<std::string, const VECTOR* > */*domain_values*/,
+		unsigned int /*color*/,
+		const dealii::Point<dealdim>& /*point*/,
+		const unsigned int /*component*/) const
   {
     return 0.;
   }

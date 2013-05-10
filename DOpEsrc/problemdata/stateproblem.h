@@ -30,8 +30,21 @@ using namespace dealii;
 
 namespace DOpE
 {
+  /**
+   * This is a problem used in the solution of the 
+   * primal pde problem, i.e., the state-equation.
+   * 
+   * @tparam OPTPROBLEM     The container with the OPT-Problem description
+   * @tparam PDE            The container with the PDE-description
+   *                        note the PDE is the one we use for all
+   *                        things related to the PDE. This is so to allow
+   *                        switching between timesteps.
+   * @tparam DD             Dirichlet datan
+   * @tparam VECTOR         The vector class
+   * @tparam dim            The dimension of the domain.
+   */
   template<typename OPTPROBLEM, typename PDE, typename DD,
-      typename SPARSITYPATTERN, typename VECTOR, int dopedim, int dealdim=dopedim>
+      typename SPARSITYPATTERN, typename VECTOR, int dim>
     class StateProblem
     {
     public:
@@ -58,22 +71,34 @@ namespace DOpE
 
       /******************************************************/
       /****For the initial values ***************/
-      template<typename DATACONTAINER>
-      void Init_CellEquation(const DATACONTAINER& cdc,
+        /**
+	 * Functions providing the required information for the integrator.
+	 * see OptProblemContainer for details.
+	 */
+      template<typename CDC>
+      void Init_CellEquation(const CDC& cdc,
 			     dealii::Vector<double> &local_cell_vector, double scale,
 			     double scale_ico)
       {
         _pde.Init_CellEquation(cdc, local_cell_vector, scale, scale_ico);
       }
 
-      template<typename DATACONTAINER>
+        /**
+	 * Functions providing the required information for the integrator.
+	 * see OptProblemContainer for details.
+	 */
+      template<typename CDC>
       void
-      Init_CellRhs(const DATACONTAINER& cdc,
+      Init_CellRhs(const CDC& cdc,
           dealii::Vector<double> &local_cell_vector, double scale)
       {
         _pde.Init_CellRhs(& GetInitialValues(), cdc, local_cell_vector, scale);
       }
 
+        /**
+	 * Functions providing the required information for the integrator.
+	 * see OptProblemContainer for details.
+	 */
       void
       Init_PointRhs(
       const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
@@ -84,8 +109,12 @@ namespace DOpE
         // OptProblem container in the tangent case.
       }
 
-      template<typename DATACONTAINER>
-      void Init_CellMatrix(const DATACONTAINER& cdc,
+        /**
+	 * Functions providing the required information for the integrator.
+	 * see OptProblemContainer for details.
+	 */
+      template<typename CDC>
+      void Init_CellMatrix(const CDC& cdc,
 			   dealii::FullMatrix<double> &local_entry_matrix, double scale,
 			   double scale_ico)
       {
@@ -94,134 +123,258 @@ namespace DOpE
 
       /******************************************************/
       /* Functions as in OptProblem */
-      template<typename DATACONTAINER>
+        /**
+	 * Functions providing the required information for the integrator.
+	 * see OptProblemContainer for details.
+	 */
+      template<typename CDC>
         inline void
-        CellEquation(const DATACONTAINER& cdc,
+        CellEquation(const CDC& cdc,
             dealii::Vector<double> &local_cell_vector, double scale,
             double scale_ico);
 
-      template<typename DATACONTAINER>
+        /**
+	 * Functions providing the required information for the integrator.
+	 * see OptProblemContainer for details.
+	 */
+      template<typename CDC>
         inline void
-        CellTimeEquation(const DATACONTAINER& dc,
+        CellTimeEquation(const CDC& cdc,
             dealii::Vector<double> &local_cell_vector, double scale = 1.);
 
-      template<typename DATACONTAINER>
+        /**
+	 * Functions providing the required information for the integrator.
+	 * see OptProblemContainer for details.
+	 */
+      template<typename CDC>
         inline void
-        CellTimeEquationExplicit(const DATACONTAINER& dc,
+        CellTimeEquationExplicit(const CDC& cdc,
             dealii::Vector<double> &local_cell_vector, double scale = 1.);
 
-      template<typename DATACONTAINER>
+        /**
+	 * Functions providing the required information for the integrator.
+	 * see OptProblemContainer for details.
+	 */
+      template<typename CDC>
         inline void
-        CellRhs(const DATACONTAINER& dc,
+        CellRhs(const CDC& cdc,
             dealii::Vector<double> &local_cell_vector, double scale = 1.);
 
+        /**
+	 * Functions providing the required information for the integrator.
+	 * see OptProblemContainer for details.
+	 */
         void
         PointRhs(
             const std::map<std::string, const dealii::Vector<double>*> &param_values,
             const std::map<std::string, const VECTOR*> &domain_values,
             VECTOR& rhs_vector, double scale);
 
-      template<typename DATACONTAINER>
+        /**
+	 * Functions providing the required information for the integrator.
+	 * see OptProblemContainer for details.
+	 */
+      template<typename CDC>
         inline void
-        CellMatrix(const DATACONTAINER& dc,
+        CellMatrix(const CDC& cdc,
             dealii::FullMatrix<double> &local_entry_matrix, double scale = 1.,
             double scale_ico = 1.);
 
-      template<typename DATACONTAINER>
+        /**
+	 * Functions providing the required information for the integrator.
+	 * see OptProblemContainer for details.
+	 */
+      template<typename CDC>
         inline void
-        CellTimeMatrix(const DATACONTAINER& dc,
+        CellTimeMatrix(const CDC& cdc,
             dealii::FullMatrix<double> &local_entry_matrix);
 
-      template<typename DATACONTAINER>
+        /**
+	 * Functions providing the required information for the integrator.
+	 * see OptProblemContainer for details.
+	 */
+      template<typename CDC>
         inline void
-        CellTimeMatrixExplicit(const DATACONTAINER& dc,
+        CellTimeMatrixExplicit(const CDC& cdc,
             dealii::FullMatrix<double> &local_entry_matrix);
 
-      template<typename FACEDATACONTAINER>
+        /**
+	 * Functions providing the required information for the integrator.
+	 * see OptProblemContainer for details.
+	 */
+      template<typename FDC>
         inline void
-        FaceEquation(const FACEDATACONTAINER& dc,
+        FaceEquation(const FDC& fdc,
             dealii::Vector<double> &local_cell_vector, double scale = 1., double scale_ico = 1.);
 
-      template<typename FACEDATACONTAINER>
+        /**
+	 * Functions providing the required information for the integrator.
+	 * see OptProblemContainer for details.
+	 */
+     template<typename FDC>
         inline void
-        InterfaceEquation(const FACEDATACONTAINER& dc,
+        InterfaceEquation(const FDC& fdc,
             dealii::Vector<double> &local_cell_vector, double scale = 1., double scale_ico = 1.);
 
-      template<typename FACEDATACONTAINER>
+        /**
+	 * Functions providing the required information for the integrator.
+	 * see OptProblemContainer for details.
+	 */
+      template<typename FDC>
         inline void
-        FaceRhs(const FACEDATACONTAINER& dc,
+        FaceRhs(const FDC& fdc,
             dealii::Vector<double> &local_cell_vector, double scale = 1.);
 
-      template<typename FACEDATACONTAINER>
+        /**
+	 * Functions providing the required information for the integrator.
+	 * see OptProblemContainer for details.
+	 */
+      template<typename FDC>
         inline void
-        FaceMatrix(const FACEDATACONTAINER& dc,
+        FaceMatrix(const FDC& fdc,
             dealii::FullMatrix<double> &local_entry_matrix, double scale = 1.,double scale_ico = 1.);
 
-      template<typename FACEDATACONTAINER>
+      template<typename FDC>
         inline void
-        InterfaceMatrix(const FACEDATACONTAINER& dc,
+        InterfaceMatrix(const FDC& fdc,
             dealii::FullMatrix<double> &local_entry_matrix, double scale = 1.,double scale_ico = 1.);
 
-      template<typename FACEDATACONTAINER>
+        /**
+	 * Functions providing the required information for the integrator.
+	 * see OptProblemContainer for details.
+	 */
+      template<typename FDC>
         inline void
-        BoundaryEquation(const FACEDATACONTAINER& dc,
+        BoundaryEquation(const FDC& fdc,
             dealii::Vector<double> &local_cell_vector, double scale = 1., double scale_ico = 1.);
 
-      template<typename FACEDATACONTAINER>
+        /**
+	 * Functions providing the required information for the integrator.
+	 * see OptProblemContainer for details.
+	 */
+      template<typename FDC>
         inline void
-        BoundaryRhs(const FACEDATACONTAINER& dc,
+        BoundaryRhs(const FDC& fdc,
             dealii::Vector<double> &local_cell_vector, double scale = 1.);
 
-      template<typename FACEDATACONTAINER>
+        /**
+	 * Functions providing the required information for the integrator.
+	 * see OptProblemContainer for details.
+	 */
+      template<typename FDC>
         inline void
-        BoundaryMatrix(const FACEDATACONTAINER& dc,
+        BoundaryMatrix(const FDC& fdc,
             dealii::FullMatrix<double> &local_cell_matrix, double scale = 1., double scale_ico = 1.);
 
-      inline const dealii::SmartPointer<const dealii::FESystem<dealdim> >
+        /**
+	 * Functions providing the required information for the integrator.
+	 * see OptProblemContainer for details.
+	 */
+      inline const dealii::SmartPointer<const dealii::FESystem<dim> >
       GetFESystem() const;
 
+        /**
+	 * Functions providing the required information for the integrator.
+	 * see OptProblemContainer for details.
+	 */
       inline const dealii::SmartPointer<
-    const dealii::hp::FECollection<dealdim> >
+    const dealii::hp::FECollection<dim> >
       GetFECollection() const;
 
+        /**
+	 * Functions providing the required information for the integrator.
+	 * see OptProblemContainer for details.
+	 */
       inline std::string
       GetDoFType() const;
 
+        /**
+	 * Functions providing the required information for the integrator.
+	 * see OptProblemContainer for details.
+	 */
       inline bool
       HasFaces() const;
+        /**
+	 * Functions providing the required information for the integrator.
+	 * see OptProblemContainer for details.
+	 */
       inline bool
       HasPoints() const;
+        /**
+	 * Functions providing the required information for the integrator.
+	 * see OptProblemContainer for details.
+	 */
       inline bool
       HasInterfaces() const;
 
+        /**
+	 * Functions providing the required information for the integrator.
+	 * see OptProblemContainer for details.
+	 */
       inline dealii::UpdateFlags
       GetUpdateFlags() const;
 
+        /**
+	 * Functions providing the required information for the integrator.
+	 * see OptProblemContainer for details.
+	 */
       inline dealii::UpdateFlags
       GetFaceUpdateFlags() const;
 
       /******************************************************/
+        /**
+	 * Functions providing the required information for the integrator.
+	 * see OptProblemContainer for details.
+	 */
       inline void
       SetTime(double time, const TimeIterator& interval);
 
+        /**
+	 * Functions providing the required information for the integrator.
+	 * see OptProblemContainer for details.
+	 */
       inline void
       ComputeSparsityPattern(SPARSITYPATTERN & sparsity) const;
 
+        /**
+	 * Functions providing the required information for the integrator.
+	 * see OptProblemContainer for details.
+	 */
       inline const std::vector<unsigned int>&
       GetDirichletColors() const;
+        /**
+	 * Functions providing the required information for the integrator.
+	 * see OptProblemContainer for details.
+	 */
       inline const std::vector<bool>&
       GetDirichletCompMask(unsigned int color) const;
-      inline const Function<dealdim>
+        /**
+	 * Functions providing the required information for the integrator.
+	 * see OptProblemContainer for details.
+	 */
+      inline const Function<dim>
           &
           GetDirichletValues(
               unsigned int color,
               const std::map<std::string, const dealii::Vector<double>*> &param_values,
               const std::map<std::string, const VECTOR*> &domain_values) const;
+        /**
+	 * Functions providing the required information for the integrator.
+	 * see OptProblemContainer for details.
+	 */
       inline const std::vector<unsigned int>&
       GetBoundaryEquationColors() const;
+        /**
+	 * Functions providing the required information for the integrator.
+	 * see OptProblemContainer for details.
+	 */
       inline const dealii::ConstraintMatrix&
       GetDoFConstraints() const;
-    const dealii::Function<dealdim>&
+        /**
+	 * Functions providing the required information for the integrator.
+	 * see OptProblemContainer for details.
+	 */
+    const dealii::Function<dim>&
     GetInitialValues() const;
       /******************************************************/
       DOpEOutputHandler<VECTOR>*
@@ -242,7 +395,7 @@ namespace DOpE
 
       std::vector<unsigned int> _dirichlet_colors;
       std::vector<std::vector<bool> > _dirichlet_comps;
-      std::vector<PrimalDirichletData<DD, VECTOR, dopedim, dealdim>*>
+      std::vector<PrimalDirichletData<DD, VECTOR, dim>*>
           _primal_dirichlet_values;
       std::vector<unsigned int> _state_boundary_equation_colors;
 
@@ -253,11 +406,11 @@ namespace DOpE
   /*****************************************************************************************/
 
   template<typename OPTPROBLEM, typename PDE, typename DD,
-      typename SPARSITYPATTERN, typename VECTOR, int dopedim, int dealdim>
-    template<typename DATACONTAINER>
+      typename SPARSITYPATTERN, typename VECTOR, int dim>
+    template<typename CDC>
       void
-      StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dopedim,
-          dealdim>::CellEquation(const DATACONTAINER& cdc,
+      StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, 
+          dim>::CellEquation(const CDC& cdc,
           dealii::Vector<double> &local_cell_vector, double scale,
           double scale_ico)
       {
@@ -267,11 +420,11 @@ namespace DOpE
   /******************************************************/
 
   template<typename OPTPROBLEM, typename PDE, typename DD,
-      typename SPARSITYPATTERN, typename VECTOR, int dopedim, int dealdim>
-    template<typename DATACONTAINER>
+      typename SPARSITYPATTERN, typename VECTOR, int dim>
+    template<typename CDC>
       void
-      StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dopedim,
-          dealdim>::CellTimeEquation(const DATACONTAINER& cdc,
+      StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR,
+          dim>::CellTimeEquation(const CDC& cdc,
           dealii::Vector<double> &local_cell_vector, double scale)
       {
         _pde.CellTimeEquation(cdc, local_cell_vector, scale);
@@ -280,11 +433,11 @@ namespace DOpE
   /******************************************************/
 
   template<typename OPTPROBLEM, typename PDE, typename DD,
-      typename SPARSITYPATTERN, typename VECTOR, int dopedim, int dealdim>
-    template<typename DATACONTAINER>
+      typename SPARSITYPATTERN, typename VECTOR, int dim>
+    template<typename CDC>
       void
-      StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dopedim,
-          dealdim>::CellTimeEquationExplicit(const DATACONTAINER& cdc,
+      StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR,
+          dim>::CellTimeEquationExplicit(const CDC& cdc,
           dealii::Vector<double> &local_cell_vector, double scale)
       {
         _pde.CellTimeEquationExplicit(cdc, local_cell_vector, scale);
@@ -293,11 +446,11 @@ namespace DOpE
   /******************************************************/
 
   template<typename OPTPROBLEM, typename PDE, typename DD,
-      typename SPARSITYPATTERN, typename VECTOR, int dopedim, int dealdim>
-    template<typename FACEDATACONTAINER>
+      typename SPARSITYPATTERN, typename VECTOR, int dim>
+    template<typename FDC>
       void
-      StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dopedim,
-          dealdim>::FaceEquation(const FACEDATACONTAINER& fdc,
+      StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR,
+          dim>::FaceEquation(const FDC& fdc,
 				 dealii::Vector<double> &local_cell_vector, double scale, double scale_ico)
       {
         _pde.FaceEquation(fdc, local_cell_vector, scale, scale_ico);
@@ -306,11 +459,11 @@ namespace DOpE
   /******************************************************/
 
   template<typename OPTPROBLEM, typename PDE, typename DD,
-      typename SPARSITYPATTERN, typename VECTOR, int dopedim, int dealdim>
-    template<typename FACEDATACONTAINER>
+      typename SPARSITYPATTERN, typename VECTOR, int dim>
+    template<typename FDC>
       void
-      StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dopedim,
-          dealdim>::InterfaceEquation(const FACEDATACONTAINER& fdc,
+      StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR,
+          dim>::InterfaceEquation(const FDC& fdc,
           dealii::Vector<double> &local_cell_vector, double scale, double scale_ico)
       {
         _pde.InterfaceEquation(fdc,  local_cell_vector, scale, scale_ico);
@@ -318,11 +471,11 @@ namespace DOpE
   /******************************************************/
 
   template<typename OPTPROBLEM, typename PDE, typename DD,
-      typename SPARSITYPATTERN, typename VECTOR, int dopedim, int dealdim>
-    template<typename FACEDATACONTAINER>
+      typename SPARSITYPATTERN, typename VECTOR, int dim>
+    template<typename FDC>
       void
-      StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dopedim,
-          dealdim>::BoundaryEquation(const FACEDATACONTAINER& fdc,
+      StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR,
+          dim>::BoundaryEquation(const FDC& fdc,
           dealii::Vector<double> &local_cell_vector, double scale, double scale_ico)
       {
         _pde.BoundaryEquation(fdc, local_cell_vector, scale, scale_ico);
@@ -331,11 +484,11 @@ namespace DOpE
   /******************************************************/
 
   template<typename OPTPROBLEM, typename PDE, typename DD,
-      typename SPARSITYPATTERN, typename VECTOR, int dopedim, int dealdim>
-    template<typename DATACONTAINER>
+      typename SPARSITYPATTERN, typename VECTOR, int dim>
+    template<typename CDC>
       void
-      StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dopedim,
-          dealdim>::CellRhs(const DATACONTAINER& cdc,
+      StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR,
+          dim>::CellRhs(const CDC& cdc,
           dealii::Vector<double> &local_cell_vector, double scale)
       {
         _pde.CellRightHandSide(cdc, local_cell_vector, scale);
@@ -344,9 +497,9 @@ namespace DOpE
   /******************************************************/
 
   template<typename OPTPROBLEM, typename PDE, typename DD,
-      typename SPARSITYPATTERN, typename VECTOR, int dopedim, int dealdim>
+      typename SPARSITYPATTERN, typename VECTOR, int dim>
     void
-    StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dopedim, dealdim>::PointRhs(
+    StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dim>::PointRhs(
         const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
         const std::map<std::string, const VECTOR*> &/*domain_values*/,
         VECTOR& /*rhs_vector*/, double /*scale*/)
@@ -357,11 +510,11 @@ namespace DOpE
   /******************************************************/
 
   template<typename OPTPROBLEM, typename PDE, typename DD,
-      typename SPARSITYPATTERN, typename VECTOR, int dopedim, int dealdim>
-    template<typename FACEDATACONTAINER>
+      typename SPARSITYPATTERN, typename VECTOR, int dim>
+    template<typename FDC>
       void
-      StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dopedim,
-          dealdim>::FaceRhs(const FACEDATACONTAINER& fdc,
+      StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR,
+          dim>::FaceRhs(const FDC& fdc,
           dealii::Vector<double> &local_cell_vector, double scale)
       {
         _pde.FaceRightHandSide(fdc, local_cell_vector, scale);
@@ -370,11 +523,11 @@ namespace DOpE
   /******************************************************/
 
   template<typename OPTPROBLEM, typename PDE, typename DD,
-      typename SPARSITYPATTERN, typename VECTOR, int dopedim, int dealdim>
-    template<typename FACEDATACONTAINER>
+      typename SPARSITYPATTERN, typename VECTOR, int dim>
+    template<typename FDC>
       void
-      StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dopedim,
-          dealdim>::BoundaryRhs(const FACEDATACONTAINER& fdc,
+      StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR,
+          dim>::BoundaryRhs(const FDC& fdc,
           dealii::Vector<double> &local_cell_vector, double scale)
       {
         _pde.BoundaryRightHandSide(fdc, local_cell_vector, scale);
@@ -383,11 +536,11 @@ namespace DOpE
   /******************************************************/
 
   template<typename OPTPROBLEM, typename PDE, typename DD,
-      typename SPARSITYPATTERN, typename VECTOR, int dopedim, int dealdim>
-    template<typename DATACONTAINER>
+      typename SPARSITYPATTERN, typename VECTOR, int dim>
+    template<typename CDC>
       void
-      StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dopedim,
-          dealdim>::CellMatrix(const DATACONTAINER& cdc,
+      StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR,
+          dim>::CellMatrix(const CDC& cdc,
           dealii::FullMatrix<double> &local_entry_matrix, double scale,
           double scale_ico)
       {
@@ -397,11 +550,11 @@ namespace DOpE
   /******************************************************/
 
   template<typename OPTPROBLEM, typename PDE, typename DD,
-      typename SPARSITYPATTERN, typename VECTOR, int dopedim, int dealdim>
-    template<typename DATACONTAINER>
+      typename SPARSITYPATTERN, typename VECTOR, int dim>
+    template<typename CDC>
       void
-      StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dopedim,
-          dealdim>::CellTimeMatrix(const DATACONTAINER& cdc,
+      StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR,
+          dim>::CellTimeMatrix(const CDC& cdc,
           FullMatrix<double> &local_entry_matrix)
       {
         _pde.CellTimeMatrix(cdc, local_entry_matrix);
@@ -410,11 +563,11 @@ namespace DOpE
   /******************************************************/
 
   template<typename OPTPROBLEM, typename PDE, typename DD,
-      typename SPARSITYPATTERN, typename VECTOR, int dopedim, int dealdim>
-    template<typename DATACONTAINER>
+      typename SPARSITYPATTERN, typename VECTOR, int dim>
+    template<typename CDC>
       void
-      StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dopedim,
-          dealdim>::CellTimeMatrixExplicit(const DATACONTAINER& cdc,
+      StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR,
+          dim>::CellTimeMatrixExplicit(const CDC& cdc,
           dealii::FullMatrix<double> &local_entry_matrix)
       {
         _pde.CellTimeMatrixExplicit(cdc, local_entry_matrix);
@@ -423,11 +576,11 @@ namespace DOpE
   /******************************************************/
 
   template<typename OPTPROBLEM, typename PDE, typename DD,
-      typename SPARSITYPATTERN, typename VECTOR, int dopedim, int dealdim>
-    template<typename FACEDATACONTAINER>
+      typename SPARSITYPATTERN, typename VECTOR, int dim>
+    template<typename FDC>
       void
-      StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dopedim,
-          dealdim>::FaceMatrix(const FACEDATACONTAINER& fdc,
+      StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR,
+          dim>::FaceMatrix(const FDC& fdc,
 			       FullMatrix<double> &local_entry_matrix, double scale,
 			       double scale_ico)
       {
@@ -437,11 +590,11 @@ namespace DOpE
   /******************************************************/
 
   template<typename OPTPROBLEM, typename PDE, typename DD,
-      typename SPARSITYPATTERN, typename VECTOR, int dopedim, int dealdim>
-    template<typename FACEDATACONTAINER>
+      typename SPARSITYPATTERN, typename VECTOR, int dim>
+    template<typename FDC>
       void
-      StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dopedim,
-          dealdim>::InterfaceMatrix(const FACEDATACONTAINER& fdc,
+      StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR,
+          dim>::InterfaceMatrix(const FDC& fdc,
 				    FullMatrix<double> &local_entry_matrix, double scale,
 				    double scale_ico)
       {
@@ -451,11 +604,11 @@ namespace DOpE
   /******************************************************/
 
   template<typename OPTPROBLEM, typename PDE, typename DD,
-      typename SPARSITYPATTERN, typename VECTOR, int dopedim, int dealdim>
-    template<typename FACEDATACONTAINER>
+      typename SPARSITYPATTERN, typename VECTOR, int dim>
+    template<typename FDC>
       void
-      StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dopedim,
-          dealdim>::BoundaryMatrix(const FACEDATACONTAINER& fdc,
+      StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR,
+          dim>::BoundaryMatrix(const FDC& fdc,
 				   FullMatrix<double> &local_cell_matrix, double scale,
 				   double scale_ico)
       {
@@ -465,9 +618,9 @@ namespace DOpE
   /******************************************************/
 
   template<typename OPTPROBLEM, typename PDE, typename DD,
-      typename SPARSITYPATTERN, typename VECTOR, int dopedim, int dealdim>
+      typename SPARSITYPATTERN, typename VECTOR, int dim>
     std::string
-    StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dopedim, dealdim>::GetDoFType() const
+    StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dim>::GetDoFType() const
     {
       return "state";
     }
@@ -475,18 +628,18 @@ namespace DOpE
   /******************************************************/
 
   template<typename OPTPROBLEM, typename PDE, typename DD,
-      typename SPARSITYPATTERN, typename VECTOR, int dopedim, int dealdim>
-    const SmartPointer<const dealii::FESystem<dealdim> >
-    StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dopedim, dealdim>::GetFESystem() const
+      typename SPARSITYPATTERN, typename VECTOR, int dim>
+    const SmartPointer<const dealii::FESystem<dim> >
+    StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dim>::GetFESystem() const
     {
       return _opt_problem.GetSpaceTimeHandler()->GetFESystem("state");
     }
 
   /******************************************************/
   template<typename OPTPROBLEM, typename PDE, typename DD,
-      typename SPARSITYPATTERN, typename VECTOR, int dopedim, int dealdim>
-    const SmartPointer<const dealii::hp::FECollection<dealdim> >
-    StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dopedim, dealdim>::GetFECollection() const
+      typename SPARSITYPATTERN, typename VECTOR, int dim>
+    const SmartPointer<const dealii::hp::FECollection<dim> >
+    StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dim>::GetFECollection() const
     {
       return _opt_problem.GetSpaceTimeHandler()->GetFECollection("state");
     }
@@ -494,9 +647,9 @@ namespace DOpE
   /******************************************************/
 
   template<typename OPTPROBLEM, typename PDE, typename DD,
-      typename SPARSITYPATTERN, typename VECTOR, int dopedim, int dealdim>
+      typename SPARSITYPATTERN, typename VECTOR, int dim>
     UpdateFlags
-    StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dopedim, dealdim>::GetUpdateFlags() const
+    StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dim>::GetUpdateFlags() const
     {
       UpdateFlags r;
       r = _pde.GetUpdateFlags();
@@ -506,9 +659,9 @@ namespace DOpE
   /******************************************************/
 
   template<typename OPTPROBLEM, typename PDE, typename DD,
-      typename SPARSITYPATTERN, typename VECTOR, int dopedim, int dealdim>
+      typename SPARSITYPATTERN, typename VECTOR, int dim>
     UpdateFlags
-    StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dopedim, dealdim>::GetFaceUpdateFlags() const
+    StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dim>::GetFaceUpdateFlags() const
     {
       UpdateFlags r;
       r = _pde.GetFaceUpdateFlags();
@@ -518,9 +671,9 @@ namespace DOpE
   /******************************************************/
 
   template<typename OPTPROBLEM, typename PDE, typename DD,
-      typename SPARSITYPATTERN, typename VECTOR, int dopedim, int dealdim>
+      typename SPARSITYPATTERN, typename VECTOR, int dim>
     void
-    StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dopedim, dealdim>::SetTime(
+    StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dim>::SetTime(
         double time, const TimeIterator& interval)
     {
       _opt_problem.SetTime(time, interval);
@@ -529,9 +682,9 @@ namespace DOpE
   /******************************************************/
 
   template<typename OPTPROBLEM, typename PDE, typename DD,
-      typename SPARSITYPATTERN, typename VECTOR, int dopedim, int dealdim>
+      typename SPARSITYPATTERN, typename VECTOR, int dim>
     void
-    StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dopedim, dealdim>::ComputeSparsityPattern(
+    StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dim>::ComputeSparsityPattern(
         SPARSITYPATTERN & sparsity) const
     {
       _opt_problem.GetSpaceTimeHandler()->ComputeStateSparsityPattern(sparsity);
@@ -540,9 +693,9 @@ namespace DOpE
   /******************************************************/
 
   template<typename OPTPROBLEM, typename PDE, typename DD,
-      typename SPARSITYPATTERN, typename VECTOR, int dopedim, int dealdim>
+      typename SPARSITYPATTERN, typename VECTOR, int dim>
     bool
-    StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dopedim, dealdim>::HasFaces() const
+    StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dim>::HasFaces() const
     {
       return _pde.HasFaces();
     }
@@ -550,9 +703,9 @@ namespace DOpE
   /******************************************************/
 
   template<typename OPTPROBLEM, typename PDE, typename DD,
-      typename SPARSITYPATTERN, typename VECTOR, int dopedim, int dealdim>
+      typename SPARSITYPATTERN, typename VECTOR, int dim>
     bool
-    StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dopedim, dealdim>::HasPoints() const
+    StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dim>::HasPoints() const
     {
       return false;//We have no PointRhs in normal stateproblems at the moment.
     }
@@ -561,9 +714,9 @@ namespace DOpE
   /******************************************************/
 
   template<typename OPTPROBLEM, typename PDE, typename DD,
-      typename SPARSITYPATTERN, typename VECTOR, int dopedim, int dealdim>
+      typename SPARSITYPATTERN, typename VECTOR, int dim>
     bool
-    StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dopedim, dealdim>::HasInterfaces() const
+    StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dim>::HasInterfaces() const
     {
       return _pde.HasInterfaces();
     }
@@ -571,9 +724,9 @@ namespace DOpE
   /******************************************************/
 
   template<typename OPTPROBLEM, typename PDE, typename DD,
-      typename SPARSITYPATTERN, typename VECTOR, int dopedim, int dealdim>
+      typename SPARSITYPATTERN, typename VECTOR, int dim>
     const std::vector<unsigned int>&
-    StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dopedim, dealdim>::GetDirichletColors() const
+    StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dim>::GetDirichletColors() const
     {
       return _dirichlet_colors;
     }
@@ -581,9 +734,9 @@ namespace DOpE
   /******************************************************/
 
   template<typename OPTPROBLEM, typename PDE, typename DD,
-      typename SPARSITYPATTERN, typename VECTOR, int dopedim, int dealdim>
+      typename SPARSITYPATTERN, typename VECTOR, int dim>
     const std::vector<bool>&
-    StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dopedim, dealdim>::GetDirichletCompMask(
+    StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dim>::GetDirichletCompMask(
         unsigned int color) const
     {
       unsigned int comp = _dirichlet_colors.size();
@@ -607,9 +760,9 @@ namespace DOpE
   /******************************************************/
 
   template<typename OPTPROBLEM, typename PDE, typename DD,
-      typename SPARSITYPATTERN, typename VECTOR, int dopedim, int dealdim>
-    const Function<dealdim>&
-    StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dopedim, dealdim>::GetDirichletValues(
+      typename SPARSITYPATTERN, typename VECTOR, int dim>
+    const Function<dim>&
+    StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dim>::GetDirichletValues(
         unsigned int color,
         const std::map<std::string, const dealii::Vector<double>*> &param_values,
         const std::map<std::string, const VECTOR*> &domain_values) const
@@ -636,9 +789,9 @@ namespace DOpE
   /******************************************************/
 
   template<typename OPTPROBLEM, typename PDE, typename DD,
-      typename SPARSITYPATTERN, typename VECTOR, int dopedim, int dealdim>
+      typename SPARSITYPATTERN, typename VECTOR, int dim>
     const std::vector<unsigned int>&
-    StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dopedim, dealdim>::GetBoundaryEquationColors() const
+    StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dim>::GetBoundaryEquationColors() const
     {
       return _state_boundary_equation_colors;
     }
@@ -646,15 +799,15 @@ namespace DOpE
   /******************************************************/
 
   template<typename OPTPROBLEM, typename PDE, typename DD,
-      typename SPARSITYPATTERN, typename VECTOR, int dopedim, int dealdim>
+      typename SPARSITYPATTERN, typename VECTOR, int dim>
     const dealii::ConstraintMatrix&
-    StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dopedim, dealdim>::GetDoFConstraints() const
+    StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dim>::GetDoFConstraints() const
     {
       return _opt_problem.GetSpaceTimeHandler()->GetStateDoFConstraints();
     }
   template<typename OPTPROBLEM, typename PDE, typename DD,
-    typename SPARSITYPATTERN, typename VECTOR, int dopedim, int dealdim>  const dealii::Function<dealdim>&
-    StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dopedim, dealdim>::GetInitialValues() const
+    typename SPARSITYPATTERN, typename VECTOR, int dim>  const dealii::Function<dim>&
+    StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dim>::GetInitialValues() const
   {
     return _opt_problem.GetInitialValues();
   }

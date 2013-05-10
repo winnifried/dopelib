@@ -68,7 +68,7 @@ using namespace DOpE;
 typedef OptProblemContainer<FunctionalInterface<CellDataContainer,FaceDataContainer,DOFHANDLER, VECTOR, 0,2>,
 FunctionalInterface<CellDataContainer,FaceDataContainer,DOFHANDLER, VECTOR, 0,2>,
 PDEInterface<CellDataContainer,FaceDataContainer,DOFHANDLER, VECTOR,2>,
-DirichletDataInterface<VECTOR,0,2>,
+DirichletDataInterface<VECTOR,2>,
 ConstraintInterface<CellDataContainer,FaceDataContainer,DOFHANDLER, VECTOR,0,2>,
 BlockSparsityPattern, VECTOR,0,2> OP;
 
@@ -138,7 +138,7 @@ int main(int argc, char **argv)
   comp_mask[0] = true;
   comp_mask[1] = true;
 
-  LocalDirichletData<VECTOR,0,2> DD;
+  LocalDirichletData<VECTOR,2> DD;
   P.SetDirichletBoundaryColors(0,comp_mask,&DD);
   P.SetDirichletBoundaryColors(1,comp_mask,&DD);
   P.SetDirichletBoundaryColors(2,comp_mask,&DD);

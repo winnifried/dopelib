@@ -69,7 +69,7 @@ using namespace DOpE;
 #define FE FESystem
 #define FUNC FunctionalInterface<CDC,FDC,DOFHANDLER,VECTOR,2,2>
 #define PDE PDEInterface<CDC,FDC,DOFHANDLER,VECTOR,2>
-#define DD DirichletDataInterface<VECTOR,2,2>
+#define DD DirichletDataInterface<VECTOR,2>
 #define CONS ConstraintInterface<CDC,FDC,DOFHANDLER,VECTOR,2,2>
 
 typedef OptProblemContainer<FUNC, FUNC, PDE, DD, CONS, SPARSITYPATTERN,VECTOR,2,2> OP;
@@ -155,7 +155,7 @@ int main(int argc, char **argv)
   std::vector<bool> comp_mask(1);
   comp_mask[0] = true;
   DOpEWrapper::ZeroFunction<2> zf(1);
-  SimpleDirichletData<BlockVector<double>,2,2> DD_1(zf);
+  SimpleDirichletData<BlockVector<double>,2> DD_1(zf);
   P.SetDirichletBoundaryColors(0,comp_mask,&DD_1);
 
   SSolver solver(&P,"fullmem",pr,idc,2);

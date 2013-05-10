@@ -651,11 +651,10 @@ template<typename PROBLEM>
           DoFTools::extract_boundary_dofs(pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandler()[0]->GetDEALDoFHandler(),
                                           current_comp, selected_components, boundary_indicators);
         }
-        const TransposedDirichletDataInterface<dimlow, dimhigh> & DD =
-            pde.GetTransposedDirichletValues(
-                                                               color,
-                                                               this->GetParamData(),
-                                                               this->GetDomainData());
+        const TransposedDirichletDataInterface<dimhigh> & DD =
+	  pde.GetTransposedDirichletValues(color,
+					   this->GetParamData(),
+					   this->GetDomainData());
         for (unsigned int k = 0; k < selected_components.size(); k++)
         {
           if (selected_components[k])

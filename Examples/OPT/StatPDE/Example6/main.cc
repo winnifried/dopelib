@@ -68,7 +68,7 @@ using namespace DOpE;
 
 #define FUNC FunctionalInterface<CDC,FDC,DOFHANDLER,VECTOR,2,2>
 #define PDE PDEInterface<CDC,FDC,DOFHANDLER,VECTOR,2>
-#define DD DirichletDataInterface<VECTOR,2,2>
+#define DD DirichletDataInterface<VECTOR,2>
 #define CONS ConstraintInterface<CDC,FDC,DOFHANDLER,VECTOR,2,2>
 
 
@@ -181,7 +181,7 @@ int main(int argc, char **argv)
   comp_mask_2[0] = true;
   comp_mask_2[1] = false;
   DOpEWrapper::ZeroFunction<2> zf(2);
-  SimpleDirichletData<BlockVector<double>,2,2> DD_1(zf);
+  SimpleDirichletData<BlockVector<double>,2> DD_1(zf);
   P.SetDirichletBoundaryColors(2,comp_mask,&DD_1);
   P.SetDirichletBoundaryColors(0,comp_mask_2,&DD_1);
   

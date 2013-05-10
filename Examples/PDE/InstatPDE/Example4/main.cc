@@ -87,12 +87,12 @@ using namespace DOpE;
 #define FE FESystem
 #define FUNC FunctionalInterface<CellDataContainer,FaceDataContainer,DOFHANDLER,VECTOR,LOCALDOPEDIM,LOCALDEALDIM>
 #define PDE PDEInterface<CellDataContainer,FaceDataContainer,DOFHANDLER,VECTOR,LOCALDEALDIM>
-#define DD DirichletDataInterface<VECTOR,LOCALDOPEDIM,LOCALDEALDIM>
+#define DD DirichletDataInterface<VECTOR,LOCALDEALDIM>
 #define CONS ConstraintInterface<CellDataContainer,FaceDataContainer,DOFHANDLER,VECTOR,LOCALDOPEDIM,LOCALDEALDIM>
 
 typedef OptProblemContainer<FUNC,FUNC,PDE,DD,CONS,SPARSITYPATTERN, VECTOR, LOCALDOPEDIM,LOCALDEALDIM> OP_BASE;
 
-typedef StateProblem<OP_BASE,PDE,DD,SPARSITYPATTERN,VECTOR,LOCALDOPEDIM,LOCALDEALDIM> PROB;
+typedef StateProblem<OP_BASE,PDE,DD,SPARSITYPATTERN,VECTOR,LOCALDEALDIM> PROB;
 // Typedefs for timestep problem
 
 #define TSP1 ForwardEulerProblem
@@ -230,7 +230,7 @@ main(int argc, char **argv)
 
   //Here we use zero boundary values
   DOpEWrapper::ZeroFunction<LOCALDEALDIM> zf;
-  SimpleDirichletData<VECTOR, LOCALDOPEDIM, LOCALDEALDIM> DD1(zf);
+  SimpleDirichletData<VECTOR, LOCALDEALDIM> DD1(zf);
 
   P1.SetDirichletBoundaryColors(0, comp_mask, &DD1);
   P1.SetDirichletBoundaryColors(1, comp_mask, &DD1);

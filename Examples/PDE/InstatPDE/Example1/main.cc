@@ -84,7 +84,7 @@ using namespace DOpE;
 #define FE FESystem
 #define FUNC FunctionalInterface<CellDataContainer,FaceDataContainer,DOFHANDLER,VECTOR,LOCALDOPEDIM,LOCALDEALDIM>
 #define PDE PDEInterface<CellDataContainer,FaceDataContainer,DOFHANDLER,VECTOR,LOCALDEALDIM>
-#define DD DirichletDataInterface<VECTOR,LOCALDOPEDIM,LOCALDEALDIM>
+#define DD DirichletDataInterface<VECTOR,LOCALDEALDIM>
 #define CONS ConstraintInterface<CellDataContainer,FaceDataContainer,DOFHANDLER,VECTOR,LOCALDOPEDIM,LOCALDEALDIM>
 
 typedef OptProblemContainer<FUNC, FUNC, PDE, DD, CONS, SPARSITYPATTERN, VECTOR,
@@ -207,10 +207,10 @@ main(int argc, char **argv)
   comp_mask[2] = false;
 
   DOpEWrapper::ZeroFunction<LOCALDEALDIM> zf(3);
-  SimpleDirichletData<VECTOR, LOCALDOPEDIM, LOCALDEALDIM> DD1(zf);
+  SimpleDirichletData<VECTOR, LOCALDEALDIM> DD1(zf);
 
   BoundaryParabel boundary_parabel(pr);
-  SimpleDirichletData<VECTOR, LOCALDOPEDIM, LOCALDEALDIM> DD2(boundary_parabel);
+  SimpleDirichletData<VECTOR, LOCALDEALDIM> DD2(boundary_parabel);
   P.SetDirichletBoundaryColors(0, comp_mask, &DD2);
   P.SetDirichletBoundaryColors(2, comp_mask, &DD1);
   P.SetDirichletBoundaryColors(80, comp_mask, &DD1);

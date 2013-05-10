@@ -33,15 +33,16 @@ namespace DOpE
 
   /**
    * This class is used to extract the Dirichlet Data for the Primal Problem
+   *
+   * @tparam  DD              The Dirichlet Data Object under consideration
+   * @tparam  VECTOR          The Vector type
    */
-  template<typename DD, typename VECTOR, int dopedim, int dealdim=dopedim>
+  template<typename DD, typename VECTOR, int dealdim>
     class PrimalDirichletData : public DOpEWrapper::Function<dealdim>
   {
   public:
   PrimalDirichletData(const DD& data) : DOpEWrapper::Function<dealdim>(data.n_components(), data.InitialTime()), _dirichlet_data(data)
     {
-//      _control_dof_handler = NULL;
-//      _state_dof_handler = NULL;
       _param_values = NULL;
       _domain_values = NULL;
       _color = 0;
@@ -51,14 +52,10 @@ namespace DOpE
      * Initializes the private data, should be called prior to any value call!
      */
     void ReInit(
-//                const DOpEWrapper::DoFHandler<dopedim> & control_dof_handler,
-//		const DOpEWrapper::DoFHandler<dealdim> &state_dof_handler,
 		const std::map<std::string, const dealii::Vector<double>* > &param_values,
 		const std::map<std::string, const VECTOR* > &domain_values,
 		unsigned int color)
     {
-//      _control_dof_handler = &control_dof_handler;
-//      _state_dof_handler = &state_dof_handler;
       _param_values = &param_values;
       _domain_values = &domain_values;
       _color = color;
@@ -66,14 +63,19 @@ namespace DOpE
 
 
     /**
-     * Accesses the values of the dirichlet data
+     * Accesses the values of the dirichlet data for the primal problem.
+     * This is given by the first derivative of the control-to-dirichlet-values
+     *
+     * @param p         The point (on the boundary of the domain) where the Dirichlet
+     *                  values are evaluated
+     * @param component The component of the Dirichlet data
+     *
+     * @return The component of the Dirichlet data at p, i.e., DD(q)(p)_{component} 
      */
     double value (const dealii::Point<dealdim>   &p,
 		  const unsigned int  component) const
     {
       return _dirichlet_data.Data(
-//                                  _control_dof_handler,
-//			     _state_dof_handler,
 			     _param_values,
 			     _domain_values,
 			     _color,
@@ -92,8 +94,6 @@ namespace DOpE
     }
   private:
     const DD& _dirichlet_data;
-//    const DOpEWrapper::DoFHandler<dopedim>*  _control_dof_handler;
-//    const DOpEWrapper::DoFHandler<dealdim>* _state_dof_handler;
     const std::map<std::string, const dealii::Vector<double>* >* _param_values;
     const std::map<std::string, const VECTOR* >* _domain_values;
     unsigned int _color;

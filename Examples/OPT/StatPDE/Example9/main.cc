@@ -89,7 +89,7 @@ using namespace DOpE;
 typedef OptProblemContainer<FunctionalInterface<CellDataContainer,FaceDataContainer,DOFHANDLER, VECTOR,0,2>,
 		   FunctionalInterface<CellDataContainer,FaceDataContainer,DOFHANDLER, VECTOR,0,2>,
 		   PDEInterface<CellDataContainer,FaceDataContainer,DOFHANDLER, VECTOR,2>,
-		   DirichletDataInterface<VECTOR,0,2>,
+		   DirichletDataInterface<VECTOR,2>,
 		   ConstraintInterface<CellDataContainer,FaceDataContainer,DOFHANDLER, VECTOR,0,2>,
 		   BlockSparsityPattern,VECTOR,0,2> OP;
 
@@ -245,11 +245,11 @@ int main(int argc, char **argv)
   comp_mask[4] = false;
 
   DOpEWrapper::ZeroFunction<2> zf(5);
-  SimpleDirichletData<VECTOR,0,2> DD1(zf);
+  SimpleDirichletData<VECTOR,2> DD1(zf);
 
 
   BoundaryParabel boundary_parabel(pr);
-  SimpleDirichletData<VECTOR,0,2> DD2(boundary_parabel);
+  SimpleDirichletData<VECTOR,2> DD2(boundary_parabel);
   P.SetDirichletBoundaryColors(0,comp_mask,&DD2);  // flow by Dirichlet data
   P.SetDirichletBoundaryColors(2,comp_mask,&DD1);
   P.SetDirichletBoundaryColors(80,comp_mask,&DD1);

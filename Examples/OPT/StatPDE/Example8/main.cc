@@ -69,7 +69,7 @@ using namespace DOpE;
 #define FE FESystem
 #define FUNC FunctionalInterface<CDC,FDC,DOFHANDLER,VECTOR,2,2>
 #define PDE PDEInterface<CDC,FDC,DOFHANDLER,VECTOR,2>
-#define DD DirichletDataInterface<VECTOR,2,2>
+#define DD DirichletDataInterface<VECTOR,2>
 #define CONS ConstraintInterface<CDC,FDC,DOFHANDLER,VECTOR,2,2>
 
 typedef SpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR, 2, 2> STH;
@@ -163,7 +163,7 @@ main(int argc, char **argv)
   comp_mask[0] = true;
   comp_mask[1] = false;
   DOpEWrapper::ZeroFunction<2> zf(2);
-  SimpleDirichletData<BlockVector<double>, 2, 2> DD_1(zf);
+  SimpleDirichletData<BlockVector<double>, 2> DD_1(zf);
   P.SetDirichletBoundaryColors(0, comp_mask, &DD_1);
 
   P.SetBoundaryFunctionalColors(3);

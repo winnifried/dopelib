@@ -100,7 +100,7 @@ namespace DOpE
         StateProblem<
             OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
                 CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>,
-            PDE, DD, SPARSITYPATTERN, VECTOR, dopedim, dealdim>&
+            PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>&
         GetStateProblem()
         {
           if (_state_problem == NULL)
@@ -108,7 +108,7 @@ namespace DOpE
             _state_problem = new StateProblem<
                 OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
                     CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE,
-                    DH>, PDE, DD, SPARSITYPATTERN, VECTOR, dopedim, dealdim>(
+                    DH>, PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>(
                 *this, this->GetPDE());
           }
           return *_state_problem;
@@ -611,7 +611,7 @@ namespace DOpE
 
         /******************************************************/
 
-        const TransposedDirichletDataInterface<dopedim, dealdim> &
+        const TransposedDirichletDataInterface<dealdim> &
         GetTransposedDirichletValues(unsigned int color,
             const std::map<std::string, const dealii::Vector<double>*> &param_values,
             const std::map<std::string, const VECTOR*> &domain_values) const;
@@ -1251,14 +1251,14 @@ namespace DOpE
         std::vector<std::vector<bool> > _control_dirichlet_comps;
         std::vector<const DOpEWrapper::Function<dealdim>*> _control_dirichlet_values;
         std::vector<
-            TransposedGradientDirichletData<DD, VECTOR, dopedim, dealdim>*> _transposed_control_gradient_dirichlet_values;
+            TransposedGradientDirichletData<DD, VECTOR, dealdim>*> _transposed_control_gradient_dirichlet_values;
         std::vector<
-            TransposedHessianDirichletData<DD, VECTOR, dopedim, dealdim>*> _transposed_control_hessian_dirichlet_values;
+            TransposedHessianDirichletData<DD, VECTOR, dealdim>*> _transposed_control_hessian_dirichlet_values;
 
         std::vector<unsigned int> _dirichlet_colors;
         std::vector<std::vector<bool> > _dirichlet_comps;
-        std::vector<PrimalDirichletData<DD, VECTOR, dopedim, dealdim>*> _primal_dirichlet_values;
-        std::vector<TangentDirichletData<DD, VECTOR, dopedim, dealdim>*> _tangent_dirichlet_values;
+        std::vector<PrimalDirichletData<DD, VECTOR, dealdim>*> _primal_dirichlet_values;
+        std::vector<TangentDirichletData<DD, VECTOR, dealdim>*> _tangent_dirichlet_values;
         const dealii::Function<dealdim>* _zero_dirichlet_values;
 
         const dealii::Function<dealdim>* _initial_values;
@@ -1276,12 +1276,12 @@ namespace DOpE
         StateProblem<
             OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
                 CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>,
-            PDE, DD, SPARSITYPATTERN, VECTOR, dopedim, dealdim> * _state_problem;
+            PDE, DD, SPARSITYPATTERN, VECTOR, dealdim> * _state_problem;
 
         friend class StateProblem<
             OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
                 CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>,
-            PDE, DD, SPARSITYPATTERN, VECTOR, dopedim, dealdim> ;
+            PDE, DD, SPARSITYPATTERN, VECTOR, dealdim> ;
     };
   /******************************************************/
 
@@ -3331,22 +3331,22 @@ namespace DOpE
       }
       _dirichlet_colors.push_back(color);
       _dirichlet_comps.push_back(comp_mask);
-      PrimalDirichletData<DD, VECTOR, dopedim, dealdim>* data =
-          new PrimalDirichletData<DD, VECTOR, dopedim, dealdim>(*values);
+      PrimalDirichletData<DD, VECTOR, dealdim>* data =
+          new PrimalDirichletData<DD, VECTOR, dealdim>(*values);
       _primal_dirichlet_values.push_back(data);
-      TangentDirichletData<DD, VECTOR, dopedim, dealdim>* tdata =
-          new TangentDirichletData<DD, VECTOR, dopedim, dealdim>(*values);
+      TangentDirichletData<DD, VECTOR, dealdim>* tdata =
+          new TangentDirichletData<DD, VECTOR, dealdim>(*values);
       _tangent_dirichlet_values.push_back(tdata);
 
       if (values->NeedsControl())
       {
         _control_transposed_dirichlet_colors.push_back(color);
-        TransposedGradientDirichletData<DD, VECTOR, dopedim, dealdim> * gdata =
-            new TransposedGradientDirichletData<DD, VECTOR, dopedim, dealdim>(
+        TransposedGradientDirichletData<DD, VECTOR, dealdim> * gdata =
+            new TransposedGradientDirichletData<DD, VECTOR, dealdim>(
                 *values);
         _transposed_control_gradient_dirichlet_values.push_back(gdata);
-        TransposedHessianDirichletData<DD, VECTOR, dopedim, dealdim> * hdata =
-            new TransposedHessianDirichletData<DD, VECTOR, dopedim, dealdim>(
+        TransposedHessianDirichletData<DD, VECTOR, dealdim> * hdata =
+            new TransposedHessianDirichletData<DD, VECTOR, dealdim>(
                 *values);
         _transposed_control_hessian_dirichlet_values.push_back(hdata);
       }
@@ -3595,7 +3595,7 @@ namespace DOpE
       typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
       typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
       template<int, int> class DH>
-    const TransposedDirichletDataInterface<dopedim, dealdim>&
+    const TransposedDirichletDataInterface<dealdim>&
     OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
         SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetTransposedDirichletValues(
         unsigned int color,

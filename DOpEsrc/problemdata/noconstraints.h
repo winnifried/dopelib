@@ -29,8 +29,10 @@
 namespace DOpE
 {
   /**
-   * A template for an arbitrary Constraints.
-   * GlobalConstraints are dealt with as a Functional, hence all functions from Functionals are inherited.
+   * This is a special case of additional (other then the PDE) constraint
+   * when no such constraints are present.
+   *
+   * For details on the methods see ConstraintInterface
    */
   template<
       template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
@@ -50,8 +52,8 @@ namespace DOpE
 
         void
         EvaluateLocalControlConstraints(
-            const VECTOR& control __attribute__((unused)),
-            VECTOR& constraints __attribute__((unused)))
+	  const VECTOR& /*control*/,
+	  VECTOR& /*constraints*/)
         {
           throw DOpEException("This should never be called!",
               "NoConstraints::EvaluateLocalControlConstraints");
@@ -65,13 +67,13 @@ namespace DOpE
         }
         bool
         IsFeasible(
-            const ConstraintVector<VECTOR>& g __attribute__((unused))) const
+	  const ConstraintVector<VECTOR>& /*g*/) const
         {
           return true;
         }
         bool
-        IsLargerThan(const ConstraintVector<VECTOR>& g __attribute__((unused)),
-            double p) const
+	  IsLargerThan(const ConstraintVector<VECTOR>& /*g*/,
+		       double p) const
         {
           if (p < 0)
             return true;
@@ -86,20 +88,20 @@ namespace DOpE
         }
         void
         PostProcessConstraints(
-            ConstraintVector<VECTOR>& g __attribute__((unused))) const
+	  ConstraintVector<VECTOR>& /*g*/) const
         {
         }
         double
         MaxViolation(
-            const ConstraintVector<VECTOR>& g __attribute__((unused))) const
+	  const ConstraintVector<VECTOR>& /*g*/) const
         {
           return 0.;
         }
         void
         FeasibilityShift(
-            const ControlVector<VECTOR>& g_hat __attribute__((unused)),
-            ControlVector<VECTOR>& g __attribute__((unused)),
-            double lambda __attribute__((unused))) const
+	  const ControlVector<VECTOR>& /*g_hat*/,
+	  ControlVector<VECTOR>& /*g*/,
+	  double /*lambda*/) const
         {
         }
         double

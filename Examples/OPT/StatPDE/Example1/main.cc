@@ -68,7 +68,7 @@ using namespace DOpE;
 typedef OptProblemContainer<FunctionalInterface<CellDataContainer,FaceDataContainer,DOFHANDLER, VECTOR, 2,2>,
 		   FunctionalInterface<CellDataContainer,FaceDataContainer,DOFHANDLER, VECTOR, 2,2>,
 		   PDEInterface<CellDataContainer,FaceDataContainer,DOFHANDLER, VECTOR,2>,
-		   DirichletDataInterface<VECTOR,2,2>,
+		   DirichletDataInterface<VECTOR,2>,
 		   ConstraintInterface<CellDataContainer,FaceDataContainer,DOFHANDLER, VECTOR, 2,2>,
 		   BlockSparsityPattern, VECTOR, 2,2> OP;
 
@@ -159,7 +159,7 @@ int main(int argc, char **argv)
   std::vector<bool> comp_mask(1);
   comp_mask[0] = true;
   DOpEWrapper::ZeroFunction<2> zf(1);
-  SimpleDirichletData<VECTOR,2,2> DD(zf);
+  SimpleDirichletData<VECTOR,2> DD(zf);
   P.SetDirichletBoundaryColors(0,comp_mask,&DD);
 
   SSolver solver(&P, "fullmem", pr, idc,2);

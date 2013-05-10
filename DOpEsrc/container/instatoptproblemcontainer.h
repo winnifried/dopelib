@@ -100,14 +100,14 @@ namespace DOpE
 
   PRIMALTSPROBLEM<StateProblem<
   OptProblemContainer<FUNCTIONAL_INTERFACE,FUNCTIONAL,PDE,DD,CONSTRAINTS,SPARSITYPATTERN,VECTOR,dopedim,dealdim,FE, DH>,
-  PDE, DD, SPARSITYPATTERN, VECTOR, dopedim, dealdim>,
+  PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>,
   SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>& GetStateProblem()
   {
     if(_ts_state_problem == NULL)
     {
       _ts_state_problem = new PRIMALTSPROBLEM<StateProblem<
       OptProblemContainer<FUNCTIONAL_INTERFACE,FUNCTIONAL,PDE,DD,CONSTRAINTS,SPARSITYPATTERN,VECTOR,dopedim,dealdim,FE, DH>,
-      PDE, DD, SPARSITYPATTERN, VECTOR, dopedim, dealdim>,
+      PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>,
       SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>(OptProblemContainer<FUNCTIONAL_INTERFACE,FUNCTIONAL,PDE,DD,CONSTRAINTS,
       					      SPARSITYPATTERN,VECTOR,dopedim,dealdim,FE, DH>::GetStateProblem());
     }
@@ -162,7 +162,7 @@ namespace DOpE
 private:
   PRIMALTSPROBLEM<StateProblem<
       OptProblemContainer<FUNCTIONAL_INTERFACE,FUNCTIONAL,PDE,DD,CONSTRAINTS,SPARSITYPATTERN,VECTOR,dopedim,dealdim,FE, DH>,
-      PDE, DD, SPARSITYPATTERN, VECTOR, dopedim, dealdim>,
+      PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>,
       SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>* _ts_state_problem;
   ADJOINTTSPROBLEM<OptProblemContainer<FUNCTIONAL_INTERFACE,FUNCTIONAL,PDE,DD,CONSTRAINTS,SPARSITYPATTERN,VECTOR,dopedim,dealdim,FE, DH>,
       SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>* _ts_adjoint_problem;

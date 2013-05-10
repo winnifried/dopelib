@@ -30,6 +30,14 @@ using namespace dealii;
 
 namespace DOpE
 {
+  /**
+   * This is a problem used in the solution of the 
+   * initial value for nonstationary problems
+   * 
+   * @tparam PDE     The container with the PDE description
+   * @tparam VECTOR  The vector class
+   * @tparam dim     The dimension of the domain.
+   */
   template<typename PDE, typename VECTOR, int dim>
     class InitialProblem
     {
@@ -51,113 +59,224 @@ namespace DOpE
         }
 
         /******************************************************/
-        /* Functions as in OptProblem */
-        template<typename DATACONTAINER>
+        /**
+	 * Functions providing the required information for the integrator.
+	 * see OptProblemContainer for details.
+	 */
+        template<typename CDC>
           inline void
-          CellEquation(const DATACONTAINER& cdc,
+          CellEquation(const CDC& cdc,
               dealii::Vector<double> &local_cell_vector, double scale,
               double scale_ico);
 
-        template<typename DATACONTAINER>
+        /**
+	 * Functions providing the required information for the integrator.
+	 * see OptProblemContainer for details.
+	 */
+        template<typename CDC>
           inline void
-          CellRhs(const DATACONTAINER& dc,
+          CellRhs(const CDC& cdc,
               dealii::Vector<double> &local_cell_vector, double scale = 1.);
 
+        /**
+	 * Functions providing the required information for the integrator.
+	 * see OptProblemContainer for details.
+	 */
         inline void
         PointRhs(
             const std::map<std::string, const dealii::Vector<double>*> &param_values,
             const std::map<std::string, const VECTOR*> &domain_values,
             VECTOR& rhs_vector, double scale = 1);
 
-        template<typename DATACONTAINER>
+        /**
+	 * Functions providing the required information for the integrator.
+	 * see OptProblemContainer for details.
+	 */
+        template<typename CDC>
           inline void
-          CellMatrix(const DATACONTAINER& dc,
+          CellMatrix(const CDC& cdc,
               dealii::FullMatrix<double> &local_entry_matrix, double scale = 1.,
               double scale_ico = 1.);
 
-        template<typename FACEDATACONTAINER>
+        /**
+	 * Functions providing the required information for the integrator.
+	 * see OptProblemContainer for details.
+	 */
+        template<typename FDC>
           inline void
-          FaceEquation(const FACEDATACONTAINER& dc,
+          FaceEquation(const FDC& fdc,
 		       dealii::Vector<double> &local_cell_vector, double scale = 1., double scale_ico = 1.);
 
-        template<typename FACEDATACONTAINER>
+        /**
+	 * Functions providing the required information for the integrator.
+	 * see OptProblemContainer for details.
+	 */
+        template<typename FDC>
           inline void
-          InterfaceEquation(const FACEDATACONTAINER& dc,
+          InterfaceEquation(const FDC& fdc,
               dealii::Vector<double> &local_cell_vector, double scale = 1., double scale_ico = 1.);
 
-        template<typename FACEDATACONTAINER>
+        /**
+	 * Functions providing the required information for the integrator.
+	 * see OptProblemContainer for details.
+	 */
+        template<typename FDC>
           inline void
-          FaceRhs(const FACEDATACONTAINER& dc,
+          FaceRhs(const FDC& fdc,
               dealii::Vector<double> &local_cell_vector, double scale = 1.);
 
-        template<typename FACEDATACONTAINER>
+	/**
+	 * Functions providing the required information for the integrator.
+	 * see OptProblemContainer for details.
+	 */
+       template<typename FDC>
           inline void
-          FaceMatrix(const FACEDATACONTAINER& dc,
+          FaceMatrix(const FDC& fdc,
               dealii::FullMatrix<double> &local_entry_matrix, double scale = 1., double scale_ico = 1.);
 
-        template<typename FACEDATACONTAINER>
+        /**
+	 * Functions providing the required information for the integrator.
+	 * see OptProblemContainer for details.
+	 */
+        template<typename FDC>
           inline void
-          InterfaceMatrix(const FACEDATACONTAINER& dc,
+          InterfaceMatrix(const FDC& fdc,
               dealii::FullMatrix<double> &local_entry_matrix, double scale = 1., double scale_ico = 1.);
 
-        template<typename FACEDATACONTAINER>
+        /**
+	 * Functions providing the required information for the integrator.
+	 * see OptProblemContainer for details.
+	 */
+        template<typename FDC>
           inline void
-          BoundaryEquation(const FACEDATACONTAINER& dc,
+          BoundaryEquation(const FDC& fdc,
               dealii::Vector<double> &local_cell_vector, double scale = 1., double scale_ico = 1.);
 
-        template<typename FACEDATACONTAINER>
+        /**
+	 * Functions providing the required information for the integrator.
+	 * see OptProblemContainer for details.
+	 */
+        template<typename FDC>
           inline void
-          BoundaryRhs(const FACEDATACONTAINER& dc,
+          BoundaryRhs(const FDC& fdc,
               dealii::Vector<double> &local_cell_vector, double scale = 1.);
 
-        template<typename FACEDATACONTAINER>
+        /**
+	 * Functions providing the required information for the integrator.
+	 * see OptProblemContainer for details.
+	 */
+        template<typename FDC>
           inline void
-          BoundaryMatrix(const FACEDATACONTAINER& dc,
+          BoundaryMatrix(const FDC& fdc,
               dealii::FullMatrix<double> &local_cell_matrix, double scale = 1., double scale_ico = 1.);
 
+        /**
+	 * Functions providing the required information for the integrator.
+	 * see OptProblemContainer for details.
+	 */
         inline const dealii::SmartPointer<const dealii::FESystem<dim> >
         GetFESystem() const;
 
+        /**
+	 * Functions providing the required information for the integrator.
+	 * see OptProblemContainer for details.
+	 */
         inline const dealii::SmartPointer<const dealii::hp::FECollection<dim> >
         GetFECollection() const;
 
+        /**
+	 * Functions providing the required information for the integrator.
+	 * see OptProblemContainer for details.
+	 */
         inline std::string
         GetDoFType() const;
 
+        /**
+	 * Functions providing the required information for the integrator.
+	 * see OptProblemContainer for details.
+	 */
         inline bool
         HasFaces() const;
+        /**
+	 * Functions providing the required information for the integrator.
+	 * see OptProblemContainer for details.
+	 */
         inline bool
         HasPoints() const;
+        /**
+	 * Functions providing the required information for the integrator.
+	 * see OptProblemContainer for details.
+	 */
         inline bool
         HasInterfaces() const;
 
+        /**
+	 * Functions providing the required information for the integrator.
+	 * see OptProblemContainer for details.
+	 */
         inline dealii::UpdateFlags
         GetUpdateFlags() const;
 
+        /**
+	 * Functions providing the required information for the integrator.
+	 * see OptProblemContainer for details.
+	 */
         inline dealii::UpdateFlags
         GetFaceUpdateFlags() const;
 
         /******************************************************/
+        /**
+	 * Functions providing the required information for the integrator.
+	 * see OptProblemContainer for details.
+	 */
         inline void
         SetTime(double time, const TimeIterator& interval);
 
+        /**
+	 * Functions providing the required information for the integrator.
+	 * see OptProblemContainer for details.
+	 */
         template<typename SPARSITYPATTERN>
           inline void
           ComputeSparsityPattern(SPARSITYPATTERN & sparsity) const;
 
+        /**
+	 * Functions providing the required information for the integrator.
+	 * see OptProblemContainer for details.
+	 */
         inline const std::vector<unsigned int>&
         GetDirichletColors() const;
+        /**
+	 * Functions providing the required information for the integrator.
+	 * see OptProblemContainer for details.
+	 */
         inline const std::vector<bool>&
         GetDirichletCompMask(unsigned int color) const;
+        /**
+	 * Functions providing the required information for the integrator.
+	 * see OptProblemContainer for details.
+	 */
         inline const Function<dim>&
         GetDirichletValues(unsigned int color,
             const std::map<std::string, const dealii::Vector<double>*> &param_values,
             const std::map<std::string, const VECTOR*> &domain_values) const;
+        /**
+	 * Functions providing the required information for the integrator.
+	 * see OptProblemContainer for details.
+	 */
         inline const std::vector<unsigned int>&
         GetBoundaryEquationColors() const;
+        /**
+	 * Functions providing the required information for the integrator.
+	 * see OptProblemContainer for details.
+	 */
         inline const dealii::ConstraintMatrix&
         GetDoFConstraints() const;
-        const dealii::Function<dim>&
+	/**
+	 * Functions providing the required information for the integrator.
+	 * see OptProblemContainer for details.
+	 */
+       const dealii::Function<dim>&
         GetInitialValues() const;
         /******************************************************/
         DOpEOutputHandler<VECTOR>*
@@ -181,9 +300,9 @@ namespace DOpE
   /*****************************************************************************************/
 
   template<typename PDE, typename VECTOR, int dim>
-    template<typename DATACONTAINER>
+    template<typename CDC>
       void
-      InitialProblem<PDE, VECTOR, dim>::CellEquation(const DATACONTAINER& cdc,
+      InitialProblem<PDE, VECTOR, dim>::CellEquation(const CDC& cdc,
           dealii::Vector<double> &local_cell_vector, double scale,
           double scale_ico)
       {
@@ -193,10 +312,10 @@ namespace DOpE
   /******************************************************/
 
   template<typename PDE, typename VECTOR, int dim>
-    template<typename FACEDATACONTAINER>
+    template<typename FDC>
       void
       InitialProblem<PDE, VECTOR, dim>::FaceEquation(
-          const FACEDATACONTAINER& fdc,
+          const FDC& fdc,
           dealii::Vector<double> &local_cell_vector, double scale, double scale_ico)
       {
         _pde.Init_FaceEquation(fdc, local_cell_vector, scale, scale_ico);
@@ -205,10 +324,10 @@ namespace DOpE
   /******************************************************/
 
   template<typename PDE, typename VECTOR, int dim>
-    template<typename FACEDATACONTAINER>
+    template<typename FDC>
       void
       InitialProblem<PDE, VECTOR, dim>::InterfaceEquation(
-          const FACEDATACONTAINER& fdc,
+          const FDC& fdc,
           dealii::Vector<double> &local_cell_vector, double scale, double scale_ico)
       {
         _pde.Init_InterfaceEquation(fdc, local_cell_vector, scale, scale_ico);
@@ -216,10 +335,10 @@ namespace DOpE
   /******************************************************/
 
   template<typename PDE, typename VECTOR, int dim>
-    template<typename FACEDATACONTAINER>
+    template<typename FDC>
       void
       InitialProblem<PDE, VECTOR, dim>::BoundaryEquation(
-          const FACEDATACONTAINER& fdc,
+          const FDC& fdc,
           dealii::Vector<double> &local_cell_vector, double scale, double scale_ico)
       {
         _pde.Init_BoundaryEquation(fdc, local_cell_vector, scale, scale_ico);
@@ -228,9 +347,9 @@ namespace DOpE
   /******************************************************/
 
   template<typename PDE, typename VECTOR, int dim>
-    template<typename DATACONTAINER>
+    template<typename CDC>
       void
-      InitialProblem<PDE, VECTOR, dim>::CellRhs(const DATACONTAINER& cdc,
+      InitialProblem<PDE, VECTOR, dim>::CellRhs(const CDC& cdc,
           dealii::Vector<double> &local_cell_vector, double scale)
       {
         _pde.Init_CellRhs(cdc, local_cell_vector, scale);
@@ -250,10 +369,10 @@ namespace DOpE
   /******************************************************/
 
   template<typename PDE, typename VECTOR, int dim>
-    template<typename FACEDATACONTAINER>
+    template<typename FDC>
       void
       InitialProblem<PDE, VECTOR, dim>::FaceRhs(
-          const FACEDATACONTAINER& /*fdc*/,
+          const FDC& /*fdc*/,
           dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
       {
       }
@@ -261,10 +380,10 @@ namespace DOpE
   /******************************************************/
 
   template<typename PDE, typename VECTOR, int dim>
-    template<typename FACEDATACONTAINER>
+    template<typename FDC>
       void
       InitialProblem<PDE, VECTOR, dim>::BoundaryRhs(
-          const FACEDATACONTAINER& /*fdc*/,
+          const FDC& /*fdc*/,
           dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
       {
       }
@@ -272,9 +391,9 @@ namespace DOpE
   /******************************************************/
 
   template<typename PDE, typename VECTOR, int dim>
-    template<typename DATACONTAINER>
+    template<typename CDC>
       void
-      InitialProblem<PDE, VECTOR, dim>::CellMatrix(const DATACONTAINER& cdc,
+      InitialProblem<PDE, VECTOR, dim>::CellMatrix(const CDC& cdc,
           dealii::FullMatrix<double> &local_entry_matrix, double scale, double scale_ico)
       {
         _pde.Init_CellMatrix(cdc, local_entry_matrix, scale, scale_ico);
@@ -283,9 +402,9 @@ namespace DOpE
   /******************************************************/
 
   template<typename PDE, typename VECTOR, int dim>
-    template<typename FACEDATACONTAINER>
+    template<typename FDC>
       void
-      InitialProblem<PDE, VECTOR, dim>::FaceMatrix(const FACEDATACONTAINER& fdc,
+      InitialProblem<PDE, VECTOR, dim>::FaceMatrix(const FDC& fdc,
           FullMatrix<double> &local_entry_matrix, double scale, double scale_ico)
       {
         _pde.Init_FaceMatrix(fdc, local_entry_matrix, scale, scale_ico);
@@ -294,10 +413,10 @@ namespace DOpE
   /******************************************************/
 
   template<typename PDE, typename VECTOR, int dim>
-    template<typename FACEDATACONTAINER>
+    template<typename FDC>
       void
       InitialProblem<PDE, VECTOR, dim>::InterfaceMatrix(
-          const FACEDATACONTAINER& fdc, FullMatrix<double> &local_entry_matrix, double scale, double scale_ico)
+          const FDC& fdc, FullMatrix<double> &local_entry_matrix, double scale, double scale_ico)
       {
         _pde.Init_InterfaceMatrix(fdc, local_entry_matrix, scale, scale_ico);
       }
@@ -305,10 +424,10 @@ namespace DOpE
   /******************************************************/
 
   template<typename PDE, typename VECTOR, int dim>
-    template<typename FACEDATACONTAINER>
+    template<typename FDC>
       void
       InitialProblem<PDE, VECTOR, dim>::BoundaryMatrix(
-          const FACEDATACONTAINER& fdc, FullMatrix<double> &local_cell_matrix, double scale, double scale_ico)
+          const FDC& fdc, FullMatrix<double> &local_cell_matrix, double scale, double scale_ico)
       {
         _pde.Init_BoundaryMatrix(fdc, local_cell_matrix, scale, scale_ico);
       }
