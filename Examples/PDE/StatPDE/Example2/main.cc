@@ -31,7 +31,6 @@
 #include <base/quadrature_lib.h>
 
 #include "pdeproblemcontainer.h"
-#include "functionalinterface.h"
 #include "pdeinterface.h"
 #include "statpdeproblem.h"
 #include "newtonsolver.h"

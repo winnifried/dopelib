@@ -1,29 +1,27 @@
 /**
-*
-* Copyright (C) 2012 by the DOpElib authors
-*
-* This file is part of DOpElib
-*
-* DOpElib is free software: you can redistribute it
-* and/or modify it under the terms of the GNU General Public
-* License as published by the Free Software Foundation, either
-* version 3 of the License, or (at your option) any later
-* version.
-*
-* DOpElib is distributed in the hope that it will be
-* useful, but WITHOUT ANY WARRANTY; without even the implied
-* warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-* PURPOSE.  See the GNU General Public License for more
-* details.
-*
-* Please refer to the file LICENSE.TXT included in this distribution
-* for further information on this license.
-*
-**/
+ *
+ * Copyright (C) 2012 by the DOpElib authors
+ *
+ * This file is part of DOpElib
+ *
+ * DOpElib is free software: you can redistribute it
+ * and/or modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation, either
+ * version 3 of the License, or (at your option) any later
+ * version.
+ *
+ * DOpElib is distributed in the hope that it will be
+ * useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+ * PURPOSE.  See the GNU General Public License for more
+ * details.
+ *
+ * Please refer to the file LICENSE.TXT included in this distribution
+ * for further information on this license.
+ *
+ **/
 
 #include "pdeproblemcontainer.h"
-#include "functionalinterface.h"
-#include "pdeinterface.h"
 #include "statpdeproblem.h"
 #include "newtonsolver.h"
 #include "directlinearsolver.h"
@@ -31,8 +29,6 @@
 #include "parameterreader.h"
 #include "mol_statespacetimehandler.h"
 #include "simpledirichletdata.h"
-#include "celldatacontainer.h"
-#include "facedatacontainer.h"
 #include "sparsitymaker.h"
 #include "userdefineddofconstraints.h"
 #include "integratordatacontainer.h"
@@ -62,22 +58,30 @@ using namespace std;
 using namespace dealii;
 using namespace DOpE;
 
-#define MATRIX SparseMatrix<double>
-#define SPARSITYPATTERN SparsityPattern
-#define VECTOR Vector<double>
+const static int DIM = 2;
+
 #define DOFHANDLER DoFHandler
 #define FE FESystem
 #define CDC CellDataContainer
 #define FDC FaceDataContainer
 
-typedef PDEProblemContainer<LocalPDE<CDC,FDC,DOFHANDLER,VECTOR, 2>,
-    DirichletDataInterface<VECTOR, 2>, SPARSITYPATTERN, VECTOR, 2> OP;
-typedef IntegratorDataContainer<DOFHANDLER, Quadrature<2>, Quadrature<1>,
-    VECTOR, 2> IDC;
-typedef Integrator<IDC, VECTOR, double, 2> INTEGRATOR;
+typedef QGauss<DIM> QUADRATURE;
+typedef QGauss<DIM - 1> FACEQUADRATURE;
+typedef SparseMatrix<double> MATRIX;
+typedef SparsityPattern SPARSITYPATTERN;
+typedef Vector<double> VECTOR;
+
+typedef PDEProblemContainer<LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
+    SimpleDirichletData<VECTOR, DIM>, SPARSITYPATTERN, VECTOR, DIM, FE,
+    DOFHANDLER> OP;
+typedef IntegratorDataContainer<DOFHANDLER, QUADRATURE, FACEQUADRATURE, VECTOR,
+    DIM> IDC;
+typedef Integrator<IDC, VECTOR, double, DIM> INTEGRATOR;
 typedef DirectLinearSolverWithMatrix<SPARSITYPATTERN, MATRIX, VECTOR> LINEARSOLVER;
 typedef NewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR> NLS;
-typedef StatPDEProblem<NLS, INTEGRATOR, OP, VECTOR, 2> SSolver;
+typedef StatPDEProblem<NLS, INTEGRATOR, OP, VECTOR, DIM> SSolver;
+typedef MethodOfLines_StateSpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN,
+    VECTOR, DIM> STH;
 
 void
 declare_params(ParameterReader &param_reader)
@@ -98,7 +102,7 @@ main(int argc, char **argv)
    *  In this example we do not really solve
    *  a PDE but test the functionality of the higher order mappings.
    *  To this end we approximate PI by the computation of the
-   *  circumference of a circle. See the deal.II tutorail, step 10.
+   *  circumference of a circle. See the deal.II tutorial step 10.
    */
   string paramfile = "dope.prm";
 
@@ -126,30 +130,28 @@ main(int argc, char **argv)
   const int order_fe = pr.get_integer("order fe");
   const int order_mapping = pr.get_integer("order mapping");
 
-  Triangulation<2> triangulation;
-  Triangulation<2> triangulation_q1;
+  Triangulation<DIM> triangulation;
+  Triangulation<DIM> triangulation_q1;
 
   GridGenerator::hyper_ball(triangulation);
-  static const HyperBallBoundary<2> boundary;
+  static const HyperBallBoundary<DIM> boundary;
   triangulation.set_boundary(0, boundary);
 
   GridGenerator::hyper_ball(triangulation_q1);
   triangulation_q1.set_boundary(0, boundary);
 
-  FE<2> state_fe(FE_Q<2>(order_fe), 1);
+  FE<DIM> state_fe(FE_Q<DIM>(order_fe), 1);
 
-  QGauss<2> quadrature_formula(2);
-  QGauss<1> face_quadrature_formula(2);
+  QUADRATURE quadrature_formula(2);
+  FACEQUADRATURE face_quadrature_formula(2);
   IDC idc(quadrature_formula, face_quadrature_formula);
 
-  LocalPDE<CDC,FDC,DOFHANDLER,VECTOR, 2> LPDE(order_fe);
-  BoundaryFunctional<CDC,FDC,DOFHANDLER,VECTOR, 2> BF;
+  LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM> LPDE(order_fe);
+  BoundaryFunctional<CDC, FDC, DOFHANDLER, VECTOR, DIM> BF;
 
-  DOpEWrapper::Mapping<2, DOFHANDLER > mapping(order_mapping);
-  MethodOfLines_StateSpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR, 2> DOFH(
-      triangulation, mapping, state_fe);
-  MethodOfLines_StateSpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR, 2> DOFH_q1(
-      triangulation_q1, state_fe);
+  DOpEWrapper::Mapping<DIM, DOFHANDLER > mapping(order_mapping);
+  STH DOFH(triangulation, mapping, state_fe);
+  STH DOFH_q1(triangulation_q1, state_fe);
 
   OP P(LPDE, DOFH);
   OP P_q1(LPDE, DOFH_q1);
@@ -165,8 +167,8 @@ main(int argc, char **argv)
   comp_mask[0] = true;
 
   ExactSolution ex_sol(order_fe);
-  DOpEWrapper::ConstantFunction<2> cs(1., 1);
-  SimpleDirichletData<VECTOR, 2> DD1(cs);
+  DOpEWrapper::ConstantFunction<DIM> cs(1., 1);
+  SimpleDirichletData<VECTOR, DIM> DD1(cs);
 
   P.SetDirichletBoundaryColors(0, comp_mask, &DD1);
 
@@ -230,14 +232,14 @@ main(int argc, char **argv)
 
       solver.ComputeReducedFunctionals();
 
-      SolutionExtractor<SSolver, VECTOR > a(solver);
-      const StateVector<VECTOR > &gu = a.GetU();
+      SolutionExtractor<SSolver, VECTOR> a(solver);
+      const StateVector<VECTOR> &gu = a.GetU();
 
       solution = gu.GetSpacialVector();
 
       Vector<float> difference_per_cell(triangulation.n_active_cells());
-      VectorTools::integrate_difference(mapping,dof_handler, solution,
-          ExactSolution(order_fe), difference_per_cell, QGauss<2>(4),
+      VectorTools::integrate_difference(mapping, dof_handler, solution,
+          ExactSolution(order_fe), difference_per_cell, QGauss<DIM>(4),
           VectorTools::L2_norm);
       outp << "L2-error: " << difference_per_cell.l2_norm() << "\n";
       convergence_table.add_value("n-dofs ||", DOFH.GetStateNDoFs());
@@ -249,16 +251,17 @@ main(int argc, char **argv)
 
       solver_q1.ComputeReducedFunctionals();
 
-      SolutionExtractor<SSolver, VECTOR > a_q1(solver_q1);
-      const StateVector<VECTOR > &gu_q1 = a_q1.GetU();
+      SolutionExtractor<SSolver, VECTOR> a_q1(solver_q1);
+      const StateVector<VECTOR> &gu_q1 = a_q1.GetU();
 
       solution = gu_q1.GetSpacialVector();
 
       VectorTools::integrate_difference(dof_handler_q1, solution,
-          ExactSolution(order_fe), difference_per_cell, QGauss<2>(4),
+          ExactSolution(order_fe), difference_per_cell, QGauss<DIM>(4),
           VectorTools::L2_norm);
-      outp << "L2-error: " << difference_per_cell.l2_norm()<< "\n";
-      convergence_table.add_value("L2-error Q1 ||", difference_per_cell.l2_norm());
+      outp << "L2-error: " << difference_per_cell.l2_norm() << "\n";
+      convergence_table.add_value("L2-error Q1 ||",
+          difference_per_cell.l2_norm());
 
       convergence_table.add_value("Error PI by boundary Q1 ||",
           solver_q1.GetFunctionalValue(BF.GetName()) - dealii::numbers::PI);
@@ -293,13 +296,13 @@ main(int argc, char **argv)
 
   convergence_table.set_scientific("Error PI by boundary ||", true);
   convergence_table.set_precision("Error PI by boundary ||", 2);
-  convergence_table.evaluate_convergence_rates("Error PI by boundary ||", "n-dofs ||",
-      ConvergenceTable::reduction_rate_log2);
+  convergence_table.evaluate_convergence_rates("Error PI by boundary ||",
+      "n-dofs ||", ConvergenceTable::reduction_rate_log2);
 
   convergence_table.set_scientific("Error PI by boundary Q1 ||", true);
   convergence_table.set_precision("Error PI by boundary Q1 ||", 2);
-  convergence_table.evaluate_convergence_rates("Error PI by boundary Q1 ||", "n-dofs ||",
-      ConvergenceTable::reduction_rate_log2);
+  convergence_table.evaluate_convergence_rates("Error PI by boundary Q1 ||",
+      "n-dofs ||", ConvergenceTable::reduction_rate_log2);
   stringstream outp;
   convergence_table.write_text(outp);
   out.Write(outp, 1, 1, 1);

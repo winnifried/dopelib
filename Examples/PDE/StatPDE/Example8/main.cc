@@ -1,25 +1,33 @@
 /**
-*
-* Copyright (C) 2012 by the DOpElib authors
-*
-* This file is part of DOpElib
-*
-* DOpElib is free software: you can redistribute it
-* and/or modify it under the terms of the GNU General Public
-* License as published by the Free Software Foundation, either
-* version 3 of the License, or (at your option) any later
-* version.
-*
-* DOpElib is distributed in the hope that it will be
-* useful, but WITHOUT ANY WARRANTY; without even the implied
-* warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-* PURPOSE.  See the GNU General Public License for more
-* details.
-*
-* Please refer to the file LICENSE.TXT included in this distribution
-* for further information on this license.
-*
-**/
+ *
+ * Copyright (C) 2012 by the DOpElib authors
+ *
+ * This file is part of DOpElib
+ *
+ * DOpElib is free software: you can redistribute it
+ * and/or modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation, either
+ * version 3 of the License, or (at your option) any later
+ * version.
+ *
+ * DOpElib is distributed in the hope that it will be
+ * useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+ * PURPOSE.  See the GNU General Public License for more
+ * details.
+ *
+ * Please refer to the file LICENSE.TXT included in this distribution
+ * for further information on this license.
+ *
+ **/
+#include <iostream>
+#include <fstream>
+
+#include <grid/tria.h>
+#include <grid/grid_generator.h>
+#include <fe/fe_q.h>
+#include <base/quadrature_lib.h>
+#include <numerics/error_estimator.h>
 
 #include "pdeproblemcontainer.h"
 #include "functionalinterface.h"
@@ -31,28 +39,8 @@
 #include "parameterreader.h"
 #include "mol_statespacetimehandler.h"
 #include "simpledirichletdata.h"
-#include "celldatacontainer.h"
-#include "facedatacontainer.h"
-#include "sparsitymaker.h"
-#include "userdefineddofconstraints.h"
 #include "preconditioner_wrapper.h"
 #include "integratordatacontainer.h"
-
-#include <iostream>
-#include <fstream>
-
-#include <grid/tria.h>
-#include <grid/grid_in.h>
-#include <dofs/dof_handler.h>
-#include <grid/grid_generator.h>
-#include <fe/fe_q.h>
-#include <dofs/dof_tools.h>
-#include <base/quadrature_lib.h>
-#include <base/function.h>
-
-// for grid local refinement
-#include <numerics/error_estimator.h>
-#include <grid/grid_refinement.h>
 
 #include "localpde.h"
 #include "functionals.h"
@@ -61,277 +49,277 @@ using namespace std;
 using namespace dealii;
 using namespace DOpE;
 
-// Define block issues
-#define MATRIXBLOCK BlockSparseMatrix<double>
-#define SPARSITYPATTERNBLOCK BlockSparsityPattern
-#define VECTORBLOCK BlockVector<double>
-
-// Define "normal" issues
-#define MATRIX SparseMatrix<double>
-#define SPARSITYPATTERN SparsityPattern
-#define VECTOR Vector<double>
+const static int DIM = 3;
 
 #define DOFHANDLER DoFHandler
 #define FE FESystem
 #define CDC CellDataContainer
 #define FDC FaceDataContainer
 
-#define PRECONDITIONERIDENTITYBLOCK DOpEWrapper::PreconditionIdentity_Wrapper<MATRIXBLOCK>
-#define PRECONDITIONERIDENTITY DOpEWrapper::PreconditionIdentity_Wrapper<MATRIX>
-#define PRECONDITIONERSSOR DOpEWrapper::PreconditionSSOR_Wrapper<MATRIX>
+typedef QGauss<DIM> QUADRATURE;
+typedef QGauss<DIM - 1> FACEQUADRATURE;
 
-typedef PDEProblemContainer<
-  LocalPDE<CDC,FDC, DOFHANDLER, VECTORBLOCK,
-	   3>, DirichletDataInterface<VECTORBLOCK, 3>, SPARSITYPATTERNBLOCK,
-  VECTORBLOCK, 3> OP1;
+// Define block issues
+typedef BlockSparseMatrix<double> MATRIXBLOCK;
+typedef BlockSparsityPattern SPARSITYPATTERNBLOCK;
+typedef BlockVector<double> VECTORBLOCK;
 
-typedef PDEProblemContainer<
-  LocalPDE<CDC,FDC, DOFHANDLER, VECTOR, 3>,
-    DirichletDataInterface<VECTOR, 3>, SPARSITYPATTERN, VECTOR, 3> OP2;
+// Define "normal" issues
+typedef SparseMatrix<double> MATRIX;
+typedef SparsityPattern SPARSITYPATTERN;
+typedef Vector<double> VECTOR;
 
-typedef PDEProblemContainer<
-  LocalPDE<CDC,FDC, DOFHANDLER, VECTOR, 3>,
-  DirichletDataInterface<VECTOR, 3>, SPARSITYPATTERN, VECTOR, 3> OP3;
+//Define different preconditioners
+typedef DOpEWrapper::PreconditionIdentity_Wrapper<MATRIXBLOCK> PRECONDITIONERIDENTITYBLOCK;
+typedef DOpEWrapper::PreconditionIdentity_Wrapper<MATRIX> PRECONDITIONERIDENTITY;
+typedef DOpEWrapper::PreconditionSSOR_Wrapper<MATRIX> PRECONDITIONERSSOR;
 
-typedef IntegratorDataContainer<DOFHANDLER, Quadrature<3>,
-    Quadrature<2>, VECTOR, 3> IDC;
-typedef IntegratorDataContainer<DOFHANDLER, Quadrature<3>,
-    Quadrature<2>, VECTORBLOCK, 3> IDCBLOCK;
+//Define problemcontainer for block and non block
+typedef PDEProblemContainer<LocalPDE<CDC, FDC, DOFHANDLER, VECTORBLOCK, DIM>,
+    SimpleDirichletData<VECTORBLOCK, DIM>, SPARSITYPATTERNBLOCK, VECTORBLOCK,
+    DIM> OPBLOCK;
+typedef PDEProblemContainer<LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
+    SimpleDirichletData<VECTOR, DIM>, SPARSITYPATTERN, VECTOR, DIM> OP;
 
-typedef Integrator<IDCBLOCK, VECTORBLOCK, double, 3> INTEGRATOR1;
-typedef Integrator<IDC, VECTOR, double, 3> INTEGRATOR2;
-typedef Integrator<IDC, VECTOR, double, 3> INTEGRATOR3;
+//Define integratordatacontainer for block and non block vectors
+typedef IntegratorDataContainer<DOFHANDLER, QUADRATURE, FACEQUADRATURE, VECTOR,
+    DIM> IDC;
+typedef IntegratorDataContainer<DOFHANDLER, QUADRATURE, FACEQUADRATURE,
+    VECTORBLOCK, DIM> IDCBLOCK;
 
+//Define block and nonblock integrators
+typedef Integrator<IDCBLOCK, VECTORBLOCK, double, DIM> BLOCKINTEGRATOR;
+typedef Integrator<IDC, VECTOR, double, DIM> INTEGRATOR;
+
+//We set up three different linear solvers: Block and nonblock GMRES without
+//a preconditioner and an SSor preconditioned non-block GMRES
 typedef GMRESLinearSolverWithMatrix<PRECONDITIONERIDENTITYBLOCK,
-    SPARSITYPATTERNBLOCK, MATRIXBLOCK, VECTORBLOCK> LINEARSOLVER1;
-
+    SPARSITYPATTERNBLOCK, MATRIXBLOCK, VECTORBLOCK> GMRESIDENTITYBLOCK;
 typedef GMRESLinearSolverWithMatrix<PRECONDITIONERIDENTITY, SPARSITYPATTERN,
-    MATRIX, VECTOR> LINEARSOLVER2;
-
+    MATRIX, VECTOR> GMRESIDENTITY;
 typedef GMRESLinearSolverWithMatrix<PRECONDITIONERSSOR, SPARSITYPATTERN, MATRIX,
-    VECTOR> LINEARSOLVER3;
+    VECTOR> GMRESSSOR;
 
-typedef NewtonSolver<INTEGRATOR1, LINEARSOLVER1, VECTORBLOCK> NLS1;
-typedef NewtonSolver<INTEGRATOR2, LINEARSOLVER2, VECTOR> NLS2;
-typedef NewtonSolver<INTEGRATOR3, LINEARSOLVER3, VECTOR> NLS3;
+//Define three newtonsolver fitting the three linear solvers
+typedef NewtonSolver<BLOCKINTEGRATOR, GMRESIDENTITYBLOCK, VECTORBLOCK> NLS1;
+typedef NewtonSolver<INTEGRATOR, GMRESIDENTITY, VECTOR> NLS2;
+typedef NewtonSolver<INTEGRATOR, GMRESSSOR, VECTOR> NLS3;
 
-typedef StatPDEProblem<NLS1, INTEGRATOR1, OP1, VECTORBLOCK, 3> SSolver1;
-typedef StatPDEProblem<NLS2, INTEGRATOR2, OP2, VECTOR, 3> SSolver2;
-typedef StatPDEProblem<NLS3, INTEGRATOR3, OP3, VECTOR, 3> SSolver3;
+//Define the three ssolver fitting the three linear solvers.
+typedef StatPDEProblem<NLS1, BLOCKINTEGRATOR, OPBLOCK, VECTORBLOCK, DIM> SSolver1;
+typedef StatPDEProblem<NLS2, INTEGRATOR, OP, VECTOR, DIM> SSolver2;
+typedef StatPDEProblem<NLS3, INTEGRATOR, OP, VECTOR, DIM> SSolver3;
+
+//Define the spacetimehandler for block and non block vectors
+typedef MethodOfLines_StateSpaceTimeHandler<FE, DOFHANDLER,
+    SPARSITYPATTERNBLOCK, VECTORBLOCK, DIM> STHBLOCK;
+typedef MethodOfLines_StateSpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN,
+    VECTOR, DIM> STH;
 
 int
 main(int argc, char **argv)
 {
   /**
-   *  Solving the standard Laplace equation
+   *  Solving the standard Laplace equation in 3d with a locally refined grid
+   *  and three different iterative linear solvers.
    */
 
   string paramfile = "dope.prm";
 
   if (argc == 2)
-    {
-      paramfile = argv[1];
-    }
+  {
+    paramfile = argv[1];
+  }
   else if (argc > 2)
-    {
-      std::cout << "Usage: " << argv[0] << " [ paramfile ] " << std::endl;
-      return -1;
-    }
+  {
+    std::cout << "Usage: " << argv[0] << " [ paramfile ] " << std::endl;
+    return -1;
+  }
 
+  //Declare parameters
   ParameterReader pr;
   SSolver1::declare_params(pr);
   SSolver2::declare_params(pr);
   SSolver3::declare_params(pr);
   DOpEOutputHandler<VECTOR>::declare_params(pr);
-
   pr.read_parameters(paramfile);
 
-  Triangulation<3> triangulation;
+  // Mesh-refinement cycles
+  const int niter = 3;
 
-  FE<3> state_fe(FE_Q<3>(1), 3);
-
-  QGauss<3> quadrature_formula(3);
-  QGauss<2> face_quadrature_formula(3);
-  IDC idc(quadrature_formula, face_quadrature_formula);
-  IDCBLOCK idcblock(quadrature_formula, face_quadrature_formula);
-  LocalPDE<CDC,FDC,DOFHANDLER,VECTORBLOCK, 3> LPDE1;
-  LocalPointFunctionalX<CDC,FDC,DOFHANDLER,VECTORBLOCK, 3> LPFX1;
-
-  LocalPDE<CDC,FDC,DOFHANDLER,VECTOR, 3> LPDE2;
-  LocalPointFunctionalX<CDC,FDC,DOFHANDLER,VECTOR, 3> LPFX2;
-
-  // Pseudo time
-  std::vector<double> times(1, 0.);
-
-  // Spatial grid
+  //Create triangulation
+  Triangulation<DIM> triangulation;
   GridGenerator::hyper_cube(triangulation, 0, 1);
   triangulation.refine_global(3);
 
-  MethodOfLines_StateSpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERNBLOCK,
-      VECTORBLOCK, 3> DOFH1(triangulation, state_fe);
+  //Define the finite element as well as the quadrature rules
+  FE<DIM> state_fe(FE_Q<DIM>(1), 3);
+  QUADRATURE quadrature_formula(3);
+  FACEQUADRATURE face_quadrature_formula(3);
+  IDC idc(quadrature_formula, face_quadrature_formula);
+  IDCBLOCK idcblock(quadrature_formula, face_quadrature_formula);
 
-  MethodOfLines_StateSpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR, 3> DOFH2(
-      triangulation, state_fe);
+  //Set up the pde and the pointfunctional for block-vectors and non block vectors
+  LocalPDE<CDC, FDC, DOFHANDLER, VECTORBLOCK, DIM> LPDE1;
+  LocalPointFunctionalX<CDC, FDC, DOFHANDLER, VECTORBLOCK, DIM> LPFX1;
 
-  OP1 P1(LPDE1, DOFH1);
+  LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM> LPDE2;
+  LocalPointFunctionalX<CDC, FDC, DOFHANDLER, VECTOR, DIM> LPFX2;
 
-  OP2 P2(LPDE2, DOFH2);
+  //Define the different STH and OP objects
+  STHBLOCK DOFH1(triangulation, state_fe);
+  STH DOFH2(triangulation, state_fe);
 
-  OP3 P3(LPDE2, DOFH2);
+  OPBLOCK Pblock(LPDE1, DOFH1);
+  OP P(LPDE2, DOFH2);
 
-  P1.AddFunctional(&LPFX1);
-  P2.AddFunctional(&LPFX2);
-  P3.AddFunctional(&LPFX2);
+  //Add the functionals to the problemcontainer
+  Pblock.AddFunctional(&LPFX1);
+  P.AddFunctional(&LPFX2);
 
-  std::vector<bool> comp_mask(3);
+  //Set the dirichlet values
+  DOpEWrapper::ZeroFunction<DIM> zf(3);
+  SimpleDirichletData<VECTORBLOCK, DIM> DD1(zf);
+  SimpleDirichletData<VECTOR, DIM> DD2(zf);
+  std::vector<bool> comp_mask(3, true);
+  Pblock.SetDirichletBoundaryColors(0, comp_mask, &DD1);
+  P.SetDirichletBoundaryColors(0, comp_mask, &DD2);
 
-  comp_mask[0] = true;
-  comp_mask[1] = true;
-  comp_mask[2] = true;
+  //We solve first with the nonpreconditioned GMRES with blockstructure.
+  {
+    SSolver1 solver1(&Pblock, "fullmem", pr, idcblock);
 
-  DOpEWrapper::ZeroFunction<3> zf(3);
-  SimpleDirichletData<VECTORBLOCK, 3> DD1(zf);
-  SimpleDirichletData<VECTOR, 3> DD2(zf);
+    DOpEOutputHandler<VECTORBLOCK> out(&solver1, pr);
+    DOpEExceptionHandler<VECTORBLOCK> ex(&out);
+    Pblock.RegisterOutputHandler(&out);
+    Pblock.RegisterExceptionHandler(&ex);
+    solver1.RegisterOutputHandler(&out);
+    solver1.RegisterExceptionHandler(&ex);
 
-  P1.SetDirichletBoundaryColors(0, comp_mask, &DD1);
-  P2.SetDirichletBoundaryColors(0, comp_mask, &DD2);
-  P3.SetDirichletBoundaryColors(0, comp_mask, &DD2);
 
+    Vector<double> solution;
+
+    for (int i = 0; i < niter; i++)
     {
-      SSolver1 solver1(&P1, "fullmem", pr, idcblock);
+      try
+      {
+        solver1.ReInit();
+        out.ReInit();
+        stringstream outp;
 
-      DOpEOutputHandler<VECTORBLOCK> out(&solver1, pr);
-      DOpEExceptionHandler<VECTORBLOCK> ex(&out);
-      P1.RegisterOutputHandler(&out);
-      P1.RegisterExceptionHandler(&ex);
-      solver1.RegisterOutputHandler(&out);
-      solver1.RegisterExceptionHandler(&ex);
-      // Mesh-refinement cycles
-      int niter = 3;
+        outp << "**************************************************\n";
+        outp << "*             Starting Forward Solve - 1         *\n";
+        outp << "*   Solving : " << Pblock.GetName() << "\t*\n";
+        outp << "*   SDoFs   : ";
+        solver1.StateSizeInfo(outp);
+        outp << "**************************************************";
+        out.Write(outp, 1, 1, 1);
 
-      Vector<double> solution;
+        solver1.ComputeReducedFunctionals();
+      }
+      catch (DOpEException &e)
+      {
+        std::cout
+            << "Warning: During execution of `" + e.GetThrowingInstance()
+                + "` the following Problem occurred!" << std::endl;
+        std::cout << e.GetErrorMessage() << std::endl;
+      }
+      if (i != niter - 1)
+      {
+        //We extract the solution out of the statproblem..
+        SolutionExtractor<SSolver1, VECTORBLOCK> a1(solver1);
+        const StateVector<VECTORBLOCK> &gu1 = a1.GetU();
+        solution = gu1.GetSpacialVector();
+        Vector<float> estimated_error_per_cell(triangulation.n_active_cells());
 
-      for (int i = 0; i < niter; i++)
-        {
-          try
-            {
-              solver1.ReInit();
-              out.ReInit();
-              stringstream outp;
+        std::vector<bool> component_mask(3, true);
 
-              outp << "**************************************************\n";
-              outp << "*             Starting Forward Solve - 1         *\n";
-              outp << "*   Solving : " << P1.GetName() << "\t*\n";
-              outp << "*   SDoFs   : ";
-              solver1.StateSizeInfo(outp);
-              outp << "**************************************************";
-              out.Write(outp, 1, 1, 1);
+        //..and estimate the error with the help of the KellyErrorEstimator
+        KellyErrorEstimator<DIM>::estimate(
+            static_cast<const DoFHandler<DIM>&>(DOFH1.GetStateDoFHandler()),
+            QGauss<2>(3), FunctionMap<DIM>::type(), solution,
+            estimated_error_per_cell, component_mask);
 
-              solver1.ComputeReducedFunctionals();
-            }
-          catch (DOpEException &e)
-            {
-              std::cout
-                  << "Warning: During execution of `" + e.GetThrowingInstance()
-                      + "` the following Problem occurred!" << std::endl;
-              std::cout << e.GetErrorMessage() << std::endl;
-            }
-          if (i != niter - 1)
-            {
-              SolutionExtractor<SSolver1, VECTORBLOCK > a1(solver1);
-              const StateVector<VECTORBLOCK > &gu1 = a1.GetU();
-              solution = 0;
-              solution = gu1.GetSpacialVector();
-              Vector<float> estimated_error_per_cell(
-                  triangulation.n_active_cells());
-
-              std::vector<bool> component_mask(3, true);
-
-              KellyErrorEstimator<3>::estimate(
-                  static_cast<const DoFHandler<3>&>(DOFH1.GetStateDoFHandler()),
-                  QGauss<2>(3), FunctionMap<3>::type(), solution,
-                  estimated_error_per_cell, component_mask);
-
-              DOFH1.RefineSpace(RefineFixedNumber(estimated_error_per_cell, 0.2,
-                  0.0));
-            }
-        }
+        //We choose a refinement strategy (here fixednumber) and
+        //refine the spatial esh accordingly.
+        DOFH1.RefineSpace(
+            RefineFixedNumber(estimated_error_per_cell, 0.2, 0.0));
+      }
     }
+  }
+  //Here we solve with nonpreconditioned GMRES without blockstructure as
+  //well as with the SSOR preconditioned GMRES.
+  {
+    SSolver2 solver2(&P, "fullmem", pr, idc);
+    SSolver3 solver3(&P, "fullmem", pr, idc);
+
+    DOpEOutputHandler<VECTOR> out(&solver2, pr);
+    DOpEExceptionHandler<VECTOR> ex(&out);
+    P.RegisterOutputHandler(&out);
+    P.RegisterExceptionHandler(&ex);
+    solver2.RegisterOutputHandler(&out);
+    solver2.RegisterExceptionHandler(&ex);
+    P.RegisterOutputHandler(&out);
+    P.RegisterExceptionHandler(&ex);
+    solver3.RegisterOutputHandler(&out);
+    solver3.RegisterExceptionHandler(&ex);
+
+    Vector<double> solution;
+
+    for (int i = 0; i < niter; i++)
     {
-      SSolver2 solver2(&P2, "fullmem", pr, idc);
-      SSolver3 solver3(&P3, "fullmem", pr, idc);
+      try
+      {
+        solver2.ReInit();
+        solver3.ReInit();
+        out.ReInit();
+        stringstream outp;
+        outp << "**************************************************\n";
+        outp << "*             Starting Forward Solve - 2         *\n";
+        outp << "*   Solving : " << P.GetName() << "\t*\n";
+        outp << "*   SDoFs   : ";
+        solver2.StateSizeInfo(outp);
+        outp << "**************************************************";
+        out.Write(outp, 1, 1, 1);
 
-      DOpEOutputHandler<VECTOR> out(&solver2, pr);
-      DOpEExceptionHandler<VECTOR> ex(&out);
-      P2.RegisterOutputHandler(&out);
-      P2.RegisterExceptionHandler(&ex);
-      solver2.RegisterOutputHandler(&out);
-      solver2.RegisterExceptionHandler(&ex);
-      P3.RegisterOutputHandler(&out);
-      P3.RegisterExceptionHandler(&ex);
-      solver3.RegisterOutputHandler(&out);
-      solver3.RegisterExceptionHandler(&ex);
-      // Mesh-refinement cycles
-      int niter = 3;
+        solver2.ComputeReducedFunctionals();
 
-      Vector<double> solution;
+        outp << "**************************************************\n";
+        outp << "*             Starting Forward Solve - 3         *\n";
+        outp << "*   Solving : " << P.GetName() << "\t*\n";
+        outp << "*   SDoFs   : ";
+        solver3.StateSizeInfo(outp);
+        outp << "**************************************************";
+        out.Write(outp, 1, 1, 1);
 
-      for (int i = 0; i < niter; i++)
-        {
-          try
-            {
-              solver2.ReInit();
-              solver3.ReInit();
-              out.ReInit();
-              stringstream outp;
-              outp << "**************************************************\n";
-              outp << "*             Starting Forward Solve - 2         *\n";
-              outp << "*   Solving : " << P2.GetName() << "\t*\n";
-              outp << "*   SDoFs   : ";
-              solver2.StateSizeInfo(outp);
-              outp << "**************************************************";
-              out.Write(outp, 1, 1, 1);
+        solver3.ComputeReducedFunctionals();
+      }
+      catch (DOpEException &e)
+      {
+        std::cout
+            << "Warning: During execution of `" + e.GetThrowingInstance()
+                + "` the following Problem occurred!" << std::endl;
+        std::cout << e.GetErrorMessage() << std::endl;
+      }
+      if (i != niter - 1)
+      {
+        SolutionExtractor<SSolver2, VECTOR> a1(solver2);
+        const StateVector<VECTOR> &gu1 = a1.GetU();
+        solution = gu1.GetSpacialVector();
+        Vector<float> estimated_error_per_cell(triangulation.n_active_cells());
 
-              solver2.ComputeReducedFunctionals();
+        std::vector<bool> component_mask(3, true);
 
-              outp << "**************************************************\n";
-              outp << "*             Starting Forward Solve - 3         *\n";
-              outp << "*   Solving : " << P3.GetName() << "\t*\n";
-              outp << "*   SDoFs   : ";
-              solver3.StateSizeInfo(outp);
-              outp << "**************************************************";
-              out.Write(outp, 1, 1, 1);
-
-              solver3.ComputeReducedFunctionals();
-            }
-          catch (DOpEException &e)
-            {
-              std::cout
-                  << "Warning: During execution of `" + e.GetThrowingInstance()
-                      + "` the following Problem occurred!" << std::endl;
-              std::cout << e.GetErrorMessage() << std::endl;
-            }
-          if (i != niter - 1)
-            {
-              SolutionExtractor<SSolver2, VECTOR > a1(solver2);
-              const StateVector<VECTOR > &gu1 = a1.GetU();
-              solution = 0;
-              solution = gu1.GetSpacialVector();
-              Vector<float> estimated_error_per_cell(
-                  triangulation.n_active_cells());
-
-              std::vector<bool> component_mask(3, true);
-
-              KellyErrorEstimator<3>::estimate(
-                  static_cast<const DoFHandler<3>&>(DOFH2.GetStateDoFHandler()),
-                  QGauss<2>(3), FunctionMap<3>::type(), solution,
-                  estimated_error_per_cell, component_mask);
-              DOFH2.RefineSpace(RefineFixedNumber(estimated_error_per_cell, 0.2,
-                  0.0));
-            }
-        }
-
+        KellyErrorEstimator<DIM>::estimate(
+            static_cast<const DoFHandler<DIM>&>(DOFH2.GetStateDoFHandler()),
+            QGauss<2>(3), FunctionMap<DIM>::type(), solution,
+            estimated_error_per_cell, component_mask);
+        DOFH2.RefineSpace(
+            RefineFixedNumber(estimated_error_per_cell, 0.2, 0.0));
+      }
     }
+
+  }
 
   return 0;
 }

@@ -1,28 +1,28 @@
 /**
-*
-* Copyright (C) 2012 by the DOpElib authors
-*
-* This file is part of DOpElib
-*
-* DOpElib is free software: you can redistribute it
-* and/or modify it under the terms of the GNU General Public
-* License as published by the Free Software Foundation, either
-* version 3 of the License, or (at your option) any later
-* version.
-*
-* DOpElib is distributed in the hope that it will be
-* useful, but WITHOUT ANY WARRANTY; without even the implied
-* warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-* PURPOSE.  See the GNU General Public License for more
-* details.
-*
-* Please refer to the file LICENSE.TXT included in this distribution
-* for further information on this license.
-*
-**/
+ *
+ * Copyright (C) 2012 by the DOpElib authors
+ *
+ * This file is part of DOpElib
+ *
+ * DOpElib is free software: you can redistribute it
+ * and/or modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation, either
+ * version 3 of the License, or (at your option) any later
+ * version.
+ *
+ * DOpElib is distributed in the hope that it will be
+ * useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+ * PURPOSE.  See the GNU General Public License for more
+ * details.
+ *
+ * Please refer to the file LICENSE.TXT included in this distribution
+ * for further information on this license.
+ *
+ **/
 
-#ifndef __LOCALPDE
-#define __LOCALPDE
+#ifndef _LOCALPDE_H_
+#define _LOCALPDE_H_
 
 #include "pdeinterface.h"
 #include "myfunctions.h"
@@ -33,22 +33,22 @@ using namespace dealii;
 using namespace DOpE;
 
 /***********************************************************************************************/
-template<template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
-  template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
-  template<int, int> class DH, typename VECTOR, int dealdim>
-  class LocalPDELaplace : public PDEInterface<CDC,FDC,DH, VECTOR, dealdim>
+template<
+    template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+    template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
+    template<int, int> class DH, typename VECTOR, int dealdim>
+  class LocalPDELaplace : public PDEInterface<CDC, FDC, DH, VECTOR, dealdim>
   {
     public:
-      LocalPDELaplace()
-          : _state_block_components(1, 0)
+      LocalPDELaplace() :
+          _state_block_components(1, 0)
       {
       }
 
-      // Domain values for cells
       void
-      CellEquation(
-          const CDC<DH, VECTOR, dealdim>& cdc,
-          dealii::Vector<double> &local_cell_vector, double scale, double)
+      CellEquation(const CDC<DH, VECTOR, dealdim>& cdc,
+          dealii::Vector<double> &local_cell_vector, double scale,
+          double/*scale_ico*/)
       {
         unsigned int n_dofs_per_cell = cdc.GetNDoFsPerCell();
         unsigned int n_q_points = cdc.GetNQPoints();
@@ -81,10 +81,8 @@ template<template<template<int, int> class DH, typename VECTOR, int dealdim> cla
       }
 
       void
-      StrongCellResidual(
-          const CDC<DH, VECTOR, dealdim>& cdc,
-          const CDC<DH, VECTOR, dealdim>& cdc_w,
-          double& sum, double scale)
+      StrongCellResidual(const CDC<DH, VECTOR, dealdim>& cdc,
+          const CDC<DH, VECTOR, dealdim>& cdc_w, double& sum, double scale)
       {
         unsigned int n_q_points = cdc.GetNQPoints();
         const DOpEWrapper::FEValues<dealdim> &state_fe_values =
@@ -100,27 +98,25 @@ template<template<template<int, int> class DH, typename VECTOR, int dealdim> cla
         const FEValuesExtractors::Scalar velocities(0);
 
         //make sure the binding of the function has worked
-	assert(this->ResidualModifier);
-	for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
+        assert(this->ResidualModifier);
+        for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
         {
           _fvalues[q_point] = -_ex_sol.laplacian(
               state_fe_values.quadrature_point(q_point));
           double res;
           res = _fvalues[q_point] + _lap_u[q_point];
-	  
+
           //Modify the residual as required by the error estimator
-	  this->ResidualModifier(res);
-        
+          this->ResidualModifier(res);
+
           sum += scale * (res * _PI_h_z[q_point])
               * state_fe_values.JxW(q_point);
         }
       }
 
       void
-      StrongCellResidual_U(
-          const CDC<DH, VECTOR, dealdim>& cdc,
-          const CDC<DH, VECTOR, dealdim>& cdc_w,
-          double& sum, double scale)
+      StrongCellResidual_U(const CDC<DH, VECTOR, dealdim>& cdc,
+          const CDC<DH, VECTOR, dealdim>& cdc_w, double& sum, double scale)
       {
         unsigned int n_q_points = cdc.GetNQPoints();
         const DOpEWrapper::FEValues<dealdim> &state_fe_values =
@@ -141,7 +137,7 @@ template<template<template<int, int> class DH, typename VECTOR, int dealdim> cla
           double res;
           res = _lap_u[q_point];
           //Modify the residual as required by the error estimator
-	  this->ResidualModifier(res);
+          this->ResidualModifier(res);
 
           sum += scale * (res * _PI_h_z[q_point])
               * state_fe_values.JxW(q_point);
@@ -170,16 +166,16 @@ template<template<template<int, int> class DH, typename VECTOR, int dealdim> cla
               + (_ugrads_nbr[q][1] - _ugrads[q][1])
                   * fdc.GetFEFaceValuesState().normal_vector(q)[1];
         }
-        //make shure the binding of the function has worked
-	assert(this->ResidualModifier);
+        //make sure the binding of the function has worked
+        assert(this->ResidualModifier);
 
         for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
         {
           //Modify the residual as required by the error estimator
-	  double res;
+          double res;
           res = jump[q_point];
-	  this->ResidualModifier(res);
-        
+          this->ResidualModifier(res);
+
           sum += scale * (res * _PI_h_z[q_point])
               * fdc.GetFEFaceValuesState().JxW(q_point);
         }
@@ -225,8 +221,8 @@ template<template<template<int, int> class DH, typename VECTOR, int dealdim> cla
           double res;
           res = f + jump[q_point];
           //Modify the residual as required by the error estimator
-	  this->ResidualModifier(res);
-        
+          this->ResidualModifier(res);
+
           sum += scale * (res * _PI_h_z[q_point])
               * fdc.GetFEFaceValuesState().JxW(q_point);
         }
@@ -253,23 +249,22 @@ template<template<template<int, int> class DH, typename VECTOR, int dealdim> cla
       void
       FaceEquation_U(
           const FaceDataContainer<dealii::DoFHandler, VECTOR, dealdim>&,
-          dealii::Vector<double> &, double, double)
+          dealii::Vector<double> &, double /*scale*/, double/*scale_ico*/)
       {
 
       }
 
       void
-      FaceMatrix(
-          const FaceDataContainer<dealii::DoFHandler, VECTOR, dealdim>&,
-          FullMatrix<double> &, double, double)
+      FaceMatrix(const FaceDataContainer<dealii::DoFHandler, VECTOR, dealdim>&,
+          FullMatrix<double> &, double /*scale*/, double/*scale_ico*/)
       {
 
       }
 
       void
-      CellEquation_U(
-          const CDC<DH, VECTOR, dealdim>& cdc,
-          dealii::Vector<double> &local_cell_vector, double scale, double)
+      CellEquation_U(const CDC<DH, VECTOR, dealdim>& cdc,
+          dealii::Vector<double> &local_cell_vector, double scale,
+          double/*scale_ico*/)
       {
         const DOpEWrapper::FEValues<dealdim> & state_fe_values =
             cdc.GetFEValuesState();
@@ -299,9 +294,9 @@ template<template<template<int, int> class DH, typename VECTOR, int dealdim> cla
       }
 
       void
-      CellMatrix(
-          const CDC<DH, VECTOR, dealdim>& cdc,
-          FullMatrix<double> &local_entry_matrix, double scale, double)
+      CellMatrix(const CDC<DH, VECTOR, dealdim>& cdc,
+          FullMatrix<double> &local_entry_matrix, double scale,
+          double/*scale_ico*/)
       {
         unsigned int n_dofs_per_cell = cdc.GetNDoFsPerCell();
         unsigned int n_q_points = cdc.GetNQPoints();
@@ -333,9 +328,9 @@ template<template<template<int, int> class DH, typename VECTOR, int dealdim> cla
       }
 
       void
-      CellMatrix_T(
-          const CDC<DH, VECTOR, dealdim>& cdc,
-          FullMatrix<double> &local_entry_matrix, double scale, double)
+      CellMatrix_T(const CDC<DH, VECTOR, dealdim>& cdc,
+          FullMatrix<double> &local_entry_matrix, double scale,
+          double /*scale_ico*/)
       {
         unsigned int n_dofs_per_cell = cdc.GetNDoFsPerCell();
         unsigned int n_q_points = cdc.GetNQPoints();
@@ -367,8 +362,7 @@ template<template<template<int, int> class DH, typename VECTOR, int dealdim> cla
       }
 
       void
-      CellRightHandSide(
-          const CDC<DH, VECTOR, dealdim>& cdc,
+      CellRightHandSide(const CDC<DH, VECTOR, dealdim>& cdc,
           dealii::Vector<double> &local_cell_vector, double scale)
       {
         assert(this->_problem_type == "state");

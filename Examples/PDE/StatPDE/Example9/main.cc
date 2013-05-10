@@ -1,25 +1,40 @@
 /**
-*
-* Copyright (C) 2012 by the DOpElib authors
-*
-* This file is part of DOpElib
-*
-* DOpElib is free software: you can redistribute it
-* and/or modify it under the terms of the GNU General Public
-* License as published by the Free Software Foundation, either
-* version 3 of the License, or (at your option) any later
-* version.
-*
-* DOpElib is distributed in the hope that it will be
-* useful, but WITHOUT ANY WARRANTY; without even the implied
-* warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-* PURPOSE.  See the GNU General Public License for more
-* details.
-*
-* Please refer to the file LICENSE.TXT included in this distribution
-* for further information on this license.
-*
-**/
+ *
+ * Copyright (C) 2012 by the DOpElib authors
+ *
+ * This file is part of DOpElib
+ *
+ * DOpElib is free software: you can redistribute it
+ * and/or modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation, either
+ * version 3 of the License, or (at your option) any later
+ * version.
+ *
+ * DOpElib is distributed in the hope that it will be
+ * useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+ * PURPOSE.  See the GNU General Public License for more
+ * details.
+ *
+ * Please refer to the file LICENSE.TXT included in this distribution
+ * for further information on this license.
+ *
+ **/
+
+#include <iostream>
+#include <fstream>
+
+#include <grid/tria.h>
+#include <grid/grid_in.h>
+#include <grid/tria_boundary_lib.h>
+#include <dofs/dof_handler.h>
+#include <grid/grid_generator.h>
+#include <fe/fe_q.h>
+#include <fe/fe_nothing.h>
+#include <dofs/dof_tools.h>
+#include <base/quadrature_lib.h>
+#include <base/function.h>
+#include <numerics/vector_tools.h>
 
 #include "pdeproblemcontainer.h"
 #include "functionalinterface.h"
@@ -38,21 +53,6 @@
 #include "simpledirichletdata.h"
 #include "active_fe_index_setter_interface.h"
 
-#include <iostream>
-#include <fstream>
-
-#include <grid/tria.h>
-#include <grid/grid_in.h>
-#include <grid/tria_boundary_lib.h>
-#include <dofs/dof_handler.h>
-#include <grid/grid_generator.h>
-#include <fe/fe_q.h>
-#include <fe/fe_nothing.h>
-#include <dofs/dof_tools.h>
-#include <base/quadrature_lib.h>
-#include <base/function.h>
-#include <numerics/vector_tools.h>
-
 #include "localpde.h"
 #include "functionals.h"
 #include "higher_order_dwrc.h"
@@ -63,6 +63,19 @@ using namespace std;
 using namespace dealii;
 using namespace DOpE;
 
+const static int DIM = 2;
+
+#define DOFHANDLER DoFHandler
+#define FE FESystem
+#define CDC CellDataContainer
+#define FDC FaceDataContainer
+
+typedef QGauss<DIM> QUADRATURE;
+typedef QGauss<DIM - 1> FACEQUADRATURE;
+typedef SparseMatrix<double> MATRIX;
+typedef SparsityPattern SPARSITYPATTERN;
+typedef Vector<double> VECTOR;
+
 #define VECTOR Vector<double>
 #define MATRIX SparseMatrix<double>
 #define SPARSITYPATTERN SparsityPattern
@@ -71,23 +84,21 @@ using namespace DOpE;
 #define CDC CellDataContainer
 #define FDC FaceDataContainer
 
-typedef PDEProblemContainer<
-  LocalPDELaplace<CDC,FDC, DOFHANDLER, VECTOR, 2>,
-  DirichletDataInterface<VECTOR, 2>, SPARSITYPATTERN, VECTOR, 2> OP;
-typedef IntegratorDataContainer<DOFHANDLER, Quadrature<2>,
-				Quadrature<1>, VECTOR, 2> IDC;
-typedef Integrator<IDC, VECTOR, double, 2> INTEGRATOR;
-//********************Linearsolver**********************************
+typedef PDEProblemContainer<LocalPDELaplace<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
+    SimpleDirichletData<VECTOR, DIM>, SPARSITYPATTERN, VECTOR, DIM> OP;
+typedef IntegratorDataContainer<DOFHANDLER, QUADRATURE, FACEQUADRATURE,
+    VECTOR, DIM> IDC;
+typedef Integrator<IDC, VECTOR, double, DIM> INTEGRATOR;
 typedef DirectLinearSolverWithMatrix<SPARSITYPATTERN, MATRIX, VECTOR> LINEARSOLVER;
-//********************Linearsolver**********************************
 
 typedef NewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR> NLS;
-typedef StatPDEProblem<NLS, INTEGRATOR, OP, VECTOR, 2> SSolver;
+typedef StatPDEProblem<NLS, INTEGRATOR, OP, VECTOR, DIM> SSolver;
 typedef MethodOfLines_StateSpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN,
-					    VECTOR, 2> STH;
-typedef HigherOrderDWRContainer<STH, IDC, CDC<DOFHANDLER,VECTOR,2>,FDC<DOFHANDLER,VECTOR,2>, VECTOR> HO_DWRC;
-typedef L2ResidualErrorContainer<STH, VECTOR,2> L2_RESC;
-typedef H1ResidualErrorContainer<STH, VECTOR,2> H1_RESC;
+    VECTOR, DIM> STH;
+typedef HigherOrderDWRContainer<STH, IDC, CDC<DOFHANDLER, VECTOR, DIM>,
+    FDC<DOFHANDLER, VECTOR, DIM>, VECTOR> HO_DWRC;
+typedef L2ResidualErrorContainer<STH, VECTOR, DIM> L2_RESC;
+typedef H1ResidualErrorContainer<STH, VECTOR, DIM> H1_RESC;
 
 void
 declare_params(ParameterReader &param_reader)
@@ -108,6 +119,11 @@ declare_params(ParameterReader &param_reader)
 int
 main(int argc, char **argv)
 {
+  /**
+   * We solve the standard laplace equation in 2d. The
+   * main feature is the use of the DWR method for error
+   * estimation and grid refinement.
+   */
   string paramfile = "dope.prm";
 
   if (argc == 2)
@@ -136,14 +152,13 @@ main(int argc, char **argv)
   //*************************************************
 
   //Make triangulation *************************************************
-  const Point<2> center(0, 0);
-  const HyperShellBoundary<2> boundary_description(center);
-  Triangulation<2> triangulation(
-      Triangulation<2>::MeshSmoothing::patch_level_1);
-  GridGenerator::hyper_cube_with_cylindrical_hole(triangulation, 0.5,
-      2., 1, 1);
+  const Point<DIM> center(0, 0);
+  const HyperShellBoundary<DIM> boundary_description(center);
+  Triangulation<DIM> triangulation(
+      Triangulation<DIM>::MeshSmoothing::patch_level_1);
+  GridGenerator::hyper_cube_with_cylindrical_hole(triangulation, 0.5, 2., 1, 1);
   triangulation.set_boundary(1, boundary_description);
-  triangulation.refine_global(1);  //because we need the face located at x==0;
+  triangulation.refine_global(1); //because we need the face located at x==0;
   for (auto it = triangulation.begin_active(); it != triangulation.end(); it++)
     if (it->center()[1] <= 0)
     {
@@ -162,18 +177,18 @@ main(int argc, char **argv)
 
   //FiniteElemente*************************************************
   pr.SetSubsection("main parameters");
-  FE<2> state_fe(FE_Q<2>(pr.get_integer("order fe")),1);
+  FE<DIM> state_fe(FE_Q<DIM>(pr.get_integer("order fe")), 1);
 
   //Quadrature formulas*************************************************
   pr.SetSubsection("main parameters");
-  QGauss<2> quadrature_formula(pr.get_integer("quad order"));
+  QGauss<DIM> quadrature_formula(pr.get_integer("quad order"));
   QGauss<1> face_quadrature_formula(pr.get_integer("facequad order"));
   IDC idc(quadrature_formula, face_quadrature_formula);
   //**************************************************************************
 
   //Functionals*************************************************
-  LocalFaceFunctional<CDC,FDC,DOFHANDLER,VECTOR, 2> LFF;
-  LocalPDELaplace<CDC,FDC,DOFHANDLER,VECTOR, 2> LPDE;
+  LocalFaceFunctional<CDC, FDC, DOFHANDLER, VECTOR, DIM> LFF;
+  LocalPDELaplace<CDC, FDC, DOFHANDLER, VECTOR, DIM> LPDE;
   //*************************************************
 
   //space time handler***********************************/
@@ -188,7 +203,7 @@ main(int argc, char **argv)
 
   ExactSolution ex_sol;
 
-  SimpleDirichletData<VECTOR, 2> DD1(ex_sol);
+  SimpleDirichletData<VECTOR, DIM> DD1(ex_sol);
   //Set dirichlet boundary values all around
   P.SetDirichletBoundaryColors(0, comp_mask, &DD1);
   P.SetDirichletBoundaryColors(1, comp_mask, &DD1);
@@ -208,18 +223,19 @@ main(int argc, char **argv)
   P.SetFunctionalForErrorEstimation(LFF.GetName());
   //FiniteElemente for DWR*************************************************
   pr.SetSubsection("main parameters");
-  FE<2> state_fe_high(FE_Q<2>(2* pr.get_integer("order fe")),1);
+  FE<DIM> state_fe_high(FE_Q<DIM>(2 * pr.get_integer("order fe")), 1);
   //Quadrature formulas for DWR*************************************************
   pr.SetSubsection("main parameters");
-  QGauss<2> quadrature_formula_high(pr.get_integer("quad order") + 1);
-  QGauss<1> face_quadrature_formula_high(pr.get_integer("facequad order") + 1);
+  QUADRATURE quadrature_formula_high(pr.get_integer("quad order") + 1);
+  FACEQUADRATURE face_quadrature_formula_high(
+      pr.get_integer("facequad order") + 1);
   IDC idc_high(quadrature_formula_high, face_quadrature_formula_high);
-  STH DOFH_higher_order(triangulation,  state_fe_high);
+  STH DOFH_higher_order(triangulation, state_fe_high);
   HO_DWRC dwrc(DOFH_higher_order, idc_high, "fullmem", pr,
       DOpEtypes::primal_only);
-  L2_RESC l2resc(DOFH,"fullmem",pr,DOpEtypes::primal_only);
-  H1_RESC h1resc(DOFH,"fullmem",pr,DOpEtypes::primal_only);
 
+  L2_RESC l2resc(DOFH, "fullmem", pr, DOpEtypes::primal_only);
+  H1_RESC h1resc(DOFH, "fullmem", pr, DOpEtypes::primal_only);
 
   solver.InitializeDWRC(dwrc);
   //**************************************************************************************************
@@ -241,17 +257,17 @@ main(int argc, char **argv)
       out.Write(outp, 1, 1, 1);
 
       solver.ComputeReducedFunctionals();
-      solver.ComputeRefinementIndicators(dwrc,LPDE);
-      solver.ComputeRefinementIndicators(l2resc,LPDE);
-      solver.ComputeRefinementIndicators(h1resc,LPDE);
+      solver.ComputeRefinementIndicators(dwrc, LPDE);
+      solver.ComputeRefinementIndicators(l2resc, LPDE);
+      solver.ComputeRefinementIndicators(h1resc, LPDE);
 
-      double exact_value = 0.441956231972232;
+      const double exact_value = 0.441956231972232;
 
       double error = exact_value - solver.GetFunctionalValue(LFF.GetName());
       outp << "Mean value error: " << error << "  Ieff (eh/e)= "
           << dwrc.GetError() / error << std::endl;
-      outp << "L2-Error estimator: "<<sqrt(l2resc.GetError())<<std::endl;
-      outp << "H1-Error estimator: "<<sqrt(h1resc.GetError())<<std::endl;
+      outp << "L2-Error estimator: " << sqrt(l2resc.GetError()) << std::endl;
+      outp << "H1-Error estimator: " << sqrt(h1resc.GetError()) << std::endl;
       out.Write(outp, 1, 1, 1);
     }
     catch (DOpEException &e)
@@ -263,15 +279,17 @@ main(int argc, char **argv)
     }
     if (i != max_iter - 1)
     {
-//      DOFH.RefineSpace(DOpEtypes::RefinementType::global); //or just DOFH.RefineSpace()
+      //For global mesh refinement, uncomment the next line
+      // DOFH.RefineSpace(DOpEtypes::RefinementType::global); //or just DOFH.RefineSpace()
 
       Vector<float> error_ind(dwrc.GetErrorIndicators());
       for (unsigned int i = 0; i < error_ind.size(); i++)
         error_ind(i) = std::fabs(error_ind(i));
-      DOFH.RefineSpace(RefineOptimized(error_ind));
 
-//      DOFH.RefineSpace(RefineFixedNumber(error_ind, 0.4));
-//      DOFH.RefineSpace(RefineFixedFraction(error_ind, 0.8));
+      DOFH.RefineSpace(RefineOptimized(error_ind));
+      //There are other mesh refinement strategies implemented, for example
+      //DOFH.RefineSpace(RefineFixedNumber(error_ind, 0.4));
+      //DOFH.RefineSpace(RefineFixedFraction(error_ind, 0.8));
     }
   }
   return 0;

@@ -21,15 +21,9 @@
 *
 **/
 
-/*
- * functionals.h
- *
- *  Created on: Aug 22, 2011
- *      Author: cgoll
- */
 
-#ifndef FUNCTIONALS_H_
-#define FUNCTIONALS_H_
+#ifndef _FUNCTIONALS_H_
+#define _FUNCTIONALS_H_
 
 #include "functionalinterface.h"
 

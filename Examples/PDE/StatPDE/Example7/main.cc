@@ -78,7 +78,8 @@ int
 main(int argc, char **argv)
 {
   /**
-   *  Solving the standard Laplace equation.
+   *  Solving the vector valued Laplace equation in 2d
+   *  with constant rhs (1,1) and zero dirichlet values.
    */
 
   string paramfile = "dope.prm";

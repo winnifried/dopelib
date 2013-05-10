@@ -59,7 +59,7 @@ template<
 
         cdc.GetGradsState("last_newton_solution", _ugrads);
 
-        const FEValuesExtractors::Vector displacements(0);
+        const FEValuesExtractors::Vector extracto(0);
 
         for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
         {
@@ -73,7 +73,7 @@ template<
           for (unsigned int i = 0; i < n_dofs_per_cell; i++)
           {
             const Tensor<2, dealdim> phi_i_grads_u =
-                state_fe_values[displacements].gradient(i, q_point);
+                state_fe_values[extracto].gradient(i, q_point);
 
             local_cell_vector(i) += scale
                 * scalar_product(ugrads, phi_i_grads_u)
@@ -92,7 +92,7 @@ template<
         unsigned int n_dofs_per_cell = cdc.GetNDoFsPerCell();
         unsigned int n_q_points = cdc.GetNQPoints();
 
-        const FEValuesExtractors::Vector displacements(0);
+        const FEValuesExtractors::Vector extracto(0);
 
         std::vector<Tensor<2, dealdim> > phi_grads_u(n_dofs_per_cell);
 
@@ -100,7 +100,7 @@ template<
         {
           for (unsigned int k = 0; k < n_dofs_per_cell; k++)
           {
-            phi_grads_u[k] = state_fe_values[displacements].gradient(k,
+            phi_grads_u[k] = state_fe_values[extracto].gradient(k,
                 q_point);
           }
 
@@ -127,7 +127,7 @@ template<
         unsigned int n_dofs_per_cell = cdc.GetNDoFsPerCell();
         unsigned int n_q_points = cdc.GetNQPoints();
 
-        const FEValuesExtractors::Vector displacements(0);
+        const FEValuesExtractors::Vector extracto(0);
 
         Tensor<1, dealdim> fvalues;
         fvalues.clear();
@@ -138,7 +138,7 @@ template<
         {
           for (unsigned int i = 0; i < n_dofs_per_cell; i++)
           {
-            const Tensor<1, dealdim> phi_i_u = state_fe_values[displacements].value(i,
+            const Tensor<1, dealdim> phi_i_u = state_fe_values[extracto].value(i,
                 q_point);
 
             local_cell_vector(i) += scale * fvalues * phi_i_u
