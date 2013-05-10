@@ -1416,7 +1416,7 @@ namespace DOpE
     template<typename PROBLEM>
       void
       Integrator<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::ApplyTransposedInitialBoundaryValues(
-          PROBLEM& /*pde*/, VECTOR &u __attribute__((unused)))
+	PROBLEM& /*pde*/, VECTOR &/*u*/)
       {
         //Wird  hier nicht gebraucht...
       }

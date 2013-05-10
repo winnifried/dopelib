@@ -606,7 +606,7 @@ template<typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR, int diml
     int dimhigh>
 template<typename PROBLEM>
   void IntegratorMixedDimensions<INTEGRATORDATACONT, VECTOR, SCALAR, dimlow, dimhigh>::ApplyInitialBoundaryValues(PROBLEM& /*pde*/,
-												      VECTOR &u __attribute__((unused)))
+														  VECTOR &/*u*/)
 {
 }
 /*******************************************************************************************/
@@ -680,7 +680,7 @@ template<typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR, int diml
     int dimhigh>
 template<typename PROBLEM>
   void IntegratorMixedDimensions<INTEGRATORDATACONT, VECTOR, SCALAR, dimlow, dimhigh>::ApplyNewtonBoundaryValues(PROBLEM& /*pde*/,
-												     VECTOR &u __attribute__((unused)))
+														 VECTOR &/*u*/)
 {
   //We don't need those in the mixed case...
 }
@@ -690,9 +690,9 @@ template<typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR, int diml
     int dimhigh>
 template<typename PROBLEM, typename MATRIX>
     void IntegratorMixedDimensions<INTEGRATORDATACONT, VECTOR, SCALAR, dimlow, dimhigh>::ApplyNewtonBoundaryValues(PROBLEM& pde,
-												       MATRIX& matrix __attribute__((unused)),
-												       VECTOR &rhs __attribute__((unused)),
-												       VECTOR &sol __attribute__((unused)))
+														   MATRIX &/*matrix*/,
+														   VECTOR &/*rhs*/,
+														   VECTOR &/*sol*/)
 {
   //We don't need those in the mixed case...
 }
