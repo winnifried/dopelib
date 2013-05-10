@@ -22,7 +22,6 @@
 **/
 
 #include "reduced_snopt_algorithm.h"
-#include "augmentedlagrangianproblem.h"
 #include "optproblemcontainer.h"
 #include "functionalinterface.h"
 #include "pdeinterface.h"
@@ -77,7 +76,6 @@ typedef SpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR, 2, 2> STH;
 
 typedef OptProblemContainer<FUNC, FUNC, PDE, DD, CONS, SPARSITYPATTERN, VECTOR, 2, 2> OP;
 
-typedef AugmentedLagrangianProblem<LocalConstraintAccessor, STH, OP, 2, 2, 1> ALagOP;
 typedef IntegratorDataContainer<DOFHANDLER, Quadrature<2>,
     Quadrature<1>, VECTOR, 2> IDC;
 typedef Integrator<IDC, VECTOR, double, 2> INTEGRATOR;
@@ -89,7 +87,6 @@ typedef DirectLinearSolverWithMatrix<SPARSITYPATTERN, MATRIX, VECTOR> LINEARSOLV
 
 typedef NewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR> NLS;
 typedef StatReducedProblem<NLS, NLS, INTEGRATOR, INTEGRATOR, OP, VECTOR, 2, 2> SSolver;
-typedef VoidReducedProblem<NLS, INTEGRATOR, ALagOP, VECTOR, 2, 2> ALagSSolver;
 
 typedef Reduced_SnoptAlgorithm<OP, BlockVector<double>> MMA;
 
