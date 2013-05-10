@@ -82,8 +82,14 @@ namespace DOpE
     /**
      * Constructur for the VoidReducedProblem.
      *
-     * @param OP                Problem is given to the stationary solver.
+     * @tparam <INTEGRATORDATACONT> An IntegratorDataContainer
+     *
+     * @param OP                ProblemContainer.
+     * @param vector_behavior   A string indicating how vectors should be stored 
      * @param param_reader      An object which has run time data.
+     * @param idc               The InegratorDataContainer 
+     * @param base_priority     An offset for the priority of the output written to
+     *                          the OutputHandler
      */
   template<typename INTEGRATORDATACONT>
     VoidReducedProblem(PROBLEM *OP,
@@ -105,19 +111,15 @@ namespace DOpE
     /******************************************************/
 
     /**
-     * This function sets state- and dual vectors to their correct sizes.
-     * Further, the flags to build the system matrices are set to true.
-     *
-     * @param algo_type         A string which indicates the type of the
-     *                          algorithm. Actual, there is one possibility to
-     *                          use the `reduced' algorithm.
+     * Reinitialization after mesh changes to adjust sizes ...
      */
     void ReInit();
 
     /******************************************************/
 
     /**
-     * Implementation of Virtual Method in Base Class
+     * Implementation of Virtual Method in Base Class 
+     * ReducedProblemInterface
      *
      */
     bool ComputeReducedConstraints(const ControlVector<VECTOR>& q, ConstraintVector<VECTOR>& g);
@@ -125,7 +127,8 @@ namespace DOpE
     /******************************************************/
 
     /**
-     * Implementation of Virtual Method in Base Class
+     * Implementation of Virtual Method in Base Class 
+     * ReducedProblemInterface
      *
      */
     void GetControlBoxConstraints(ControlVector<VECTOR>& lb, ControlVector<VECTOR>& ub) ;
@@ -133,9 +136,9 @@ namespace DOpE
     /******************************************************/
 
     /**
-     * Implementation of Virtual Method in Base Class
+     * Implementation of Virtual Method in Base Class 
+     * ReducedProblemInterface
      *
-     * @param q            The ControlVector is given to this function.
      */
     void ComputeReducedGradient(const ControlVector<VECTOR>& q,
 				ControlVector<VECTOR>& gradient,
@@ -145,9 +148,11 @@ namespace DOpE
     /******************************************************/
 
     /**
-     * Implementation of Virtual Method in Base Class
-     *
-     * @param q            The ControlVector is given to this function.
+     * Calculates the derivatives of the constraints at the point
+     * constraints in the given direction (in the constraint space).  
+     * Note that this is only different from the identity if 
+     * the constraints are transformed again, as it happens for instance
+     * with the AugmentedLagrangianProblem.
      */
     void ComputeReducedConstraintGradient(const ConstraintVector<VECTOR>& direction,
 					  const ConstraintVector<VECTOR>& constraints,
@@ -156,34 +161,27 @@ namespace DOpE
     /******************************************************/
 
     /**
-     * Returns the functional values to compute.
+     * Implementation of Virtual Method in Base Class 
+     * ReducedProblemInterface
      *
-     * @param q            The ControlVector is given to this function.
-     *
-     * @return             Returns a double values of the computed functional.
      */
     double ComputeReducedCostFunctional(const ControlVector<VECTOR>& q);
 
     /******************************************************/
 
     /**
-     * This function computes reduced functionals of interest within
-     * a time dependent computation.
+     * Implementation of Virtual Method in Base Class 
+     * ReducedProblemInterface
      *
-     * @param q            The ControlVector is given to this function.
      */
     void ComputeReducedFunctionals(const ControlVector<VECTOR>& q);
 
     /******************************************************/
 
     /**
-     * Implementation of Virtual Method in Base Class.
-     * We assume that adjoint state z(u(q)) is already computed.
+     * Implementation of Virtual Method in Base Class 
+     * ReducedProblemInterface
      *
-     * @param q                             The ControlVector is given to this function.
-     * @param direction                     Documentation will follow later.
-     * @param hessian_direction             Documentation will follow later.
-     * @paramhessian_direction_transposed   Documentation will follow later.
      */
     void ComputeReducedHessianVector(const ControlVector<VECTOR>& q,
 				     const ControlVector<VECTOR>& direction,
@@ -193,13 +191,9 @@ namespace DOpE
     /******************************************************/
 
     /**
-     * Implementation of Virtual Method in Base Class.
-     * We assume that adjoint state z(u(q)) is already computed.
+     * Implementation of Virtual Method in Base Class 
+     * ReducedProblemInterface
      *
-     * @param q                             The ControlVector is given to this function.
-     * @param direction                     Documentation will follow later.
-     * @param hessian_direction             Documentation will follow later.
-     * @paramhessian_direction_transposed   Documentation will follow later.
      */
     void ComputeReducedHessianInverseVector(const ControlVector<VECTOR>& q,
 					    const ControlVector<VECTOR>& direction,
@@ -207,21 +201,10 @@ namespace DOpE
 
     /******************************************************/
 
-//    /**
-//     * Function does not make sense when we do not have a state variable.
-//     * Just needed for compatibility issues.
-//     */
-//    template<class DWRCONTAINER>
-//    void
-//    ComputeRefinementIndicators(DWRCONTAINER& dwrc);
-
-    /******************************************************/
-
     /**
-     *  This function calls GetU().PrintInfos(out) function which
-     *  prints information on this vector into the given stream.
+     * Implementation of Virtual Method in Base Class 
+     * ReducedProblemInterface
      *
-     *  @param out    The output stream.
      */
     void StateSizeInfo(std::stringstream& out) { out<<"Not Present"<<std::endl; }
 
@@ -268,8 +251,8 @@ namespace DOpE
      *  @param outfile     The basic name for the output file to print.
      *  Doesn't make sense here so aborts if called!
      */
-    void WriteToFile(const std::vector<double> &v __attribute__((unused)),
-		     std::string outfile __attribute__((unused)))  { abort(); }
+    void WriteToFile(const std::vector<double> &/*v*/,
+		     std::string /*outfile*/)  { abort(); }
 
     /**
      * Function that returns a name of this class to allow differentiation in the output
@@ -283,7 +266,16 @@ namespace DOpE
     CONTROLNONLINEARSOLVER& GetControlNonlinearSolver();
     CONTROLINTEGRATOR& GetControlIntegrator() { return _control_integrator; }
 
-    //Solves the Equation H(q) sol = rhs
+    /**
+     * Solves the Equation H(q) sol = rhs
+     * Works only if we can reasonably build the inverse of the hessian.
+     * To do so the ProblemContainer needs to provide a problem
+     * type "hessian_inverse"
+     *
+     * @param q      The point at which the hessian is considered
+     * @param rhs    The right hand side
+     * @param sol    The solution of the problem
+     */
     void H_inverse(const ControlVector<VECTOR>& q,
 		   const ControlVector<VECTOR>& rhs,
 		   ControlVector<VECTOR>& sol);

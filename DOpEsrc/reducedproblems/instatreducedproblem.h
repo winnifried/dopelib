@@ -71,7 +71,8 @@ namespace DOpE
  * @tparam <INTEGRATOR>                An integrator for the state variables,
  *                                     e.g, Integrator or IntegratorMixedDimensions..
  * @tparam <PROBLEM>                   PDE- or optimization problem under consideration including ts-scheme.
- * @tparam <VECTOR>                    Class in which we want to store the spatial vector (i.e. dealii::Vector<double> or dealii::BlockVector<double>)
+ * @tparam <VECTOR>                    Class in which we want to store the spatial vector 
+ *                                     (i.e. dealii::Vector<double> or dealii::BlockVector<double>)
  * @tparam <dopedim>                   The dimension for the control variable.
  * @tparam <dealdim>                   The dimension for the state variable.
  */
@@ -80,41 +81,43 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER, typename CON
 class InstatReducedProblem: public ReducedProblemInterface<PROBLEM, VECTOR>
 {
   public:
-    /**
-     * Constructur for the InstatReducedProblem.
-     *
-     * @param OP                Problem is given to the time stepping scheme.
-     * @param state_behavior    Indicates the behavior of the StateVector. Please see, documentation of
-     StateVector in `statevector.h'.
-     * @param param_reader      An object which has run time data.
-     * @param quad_rule					Quadrature-Rule, which is given to the integrators.
-     * @param face_quad_rule		FaceQuadrature-Rule, which is given to the integrators.
-     */
+        /**
+         * Constructor for the InstatPDEProblem.
+         *
+	 * @tparam <INTEGRATORDATACONT> An IntegratorDataContainer
+         *
+         * @param OP                Problem is given to the stationary solver.
+         * @param state_behavior    Indicates the behavior of the StateVector.
+         * @param param_reader      An object which has run time data.
+         * @param idc		    An INTETGRATORDATACONT which has all the data needed by the integrator.
+	 * @param base_priority     An offset for the priority of the output written to
+	 *                          the OutputHandler
+	 */
   template<typename INTEGRATORDATACONT>
-          InstatReducedProblem(PROBLEM *OP, std::string state_behavior,
-              ParameterReader &param_reader,
-              INTEGRATORDATACONT& idc,
-              int base_priority = 0);
+    InstatReducedProblem(PROBLEM *OP, std::string state_behavior,
+			 ParameterReader &param_reader,
+			 INTEGRATORDATACONT& idc,
+			 int base_priority = 0);
+  
 
-
-    /**
-     * Constructor for the InstatReducedProblem.
-     *
-     * @param OP                			Problem is given to the time stepping scheme.
-     * @param state_behavior    			Indicates the behavior of the StateVector. Please see, documentation of
-     StateVector in `statevector.h'.
-     * @param param_reader      			An object which has run time data.
-     * @param control_quad_rule				Quadrature-Rule, which is given to the control_integrator.
-     * @param control_face_quad_rule	FaceQuadrature-Rule, which is given to the control_integrator.
-     * @param state_quad_rule					Quadrature-Rule, which is given to the state_integrator.
-     * @param state_face_quad_rule		FaceQuadrature-Rule, which is given to the state_integrator.
-     */
-
+        /**
+         * Constructor for the StatReducedProblem.
+         *
+	 * @tparam <INTEGRATORDATACONT> An IntegratorDataContainer
+         *
+	 * @param OP                Problem is given to the stationary solver.
+         * @param state_behavior    Indicates the behavior of the StateVector.
+         * @param param_reader      An object which has run time data.
+	 * @param c_idc             The InegratorDataContainer for control integration
+	 * @param s_idc             The InegratorDataContainer for state integration
+	 * @param base_priority     An offset for the priority of the output written to
+	 *                          the OutputHandler
+         */
   template<typename STATEINTEGRATORDATACONT, typename CONTROLINTEGRATORCONT>
-          InstatReducedProblem(PROBLEM *OP, std::string state_behavior,
-              ParameterReader &param_reader, CONTROLINTEGRATORCONT& c_idc,
-              STATEINTEGRATORDATACONT & s_idc, int base_priority = 0);
-
+    InstatReducedProblem(PROBLEM *OP, std::string state_behavior,
+			 ParameterReader &param_reader, CONTROLINTEGRATORCONT& c_idc,
+			 STATEINTEGRATORDATACONT & s_idc, int base_priority = 0);
+  
     virtual ~InstatReducedProblem();
 
     /******************************************************/
@@ -139,24 +142,27 @@ class InstatReducedProblem: public ReducedProblemInterface<PROBLEM, VECTOR>
 
     /**
      * Implementation of Virtual Method in Base Class
-     */
+     * ReducedProblemInterface
+     *
+      */
     bool ComputeReducedConstraints(const ControlVector<VECTOR>& q, ConstraintVector<VECTOR>& g);
 
     /******************************************************/
 
     /**
      * Implementation of Virtual Method in Base Class
-     */
+     * ReducedProblemInterface
+     *
+      */
     void GetControlBoxConstraints(ControlVector<VECTOR>& lb, ControlVector<VECTOR>& ub);
 
 
     /******************************************************/
 
     /**
-     * This function is not implemented so far and aborts computation if
-     * called.
+     * Implementation of Virtual Method in Base Class
+     * ReducedProblemInterface
      *
-     * @param q            The control vector is given to this function.
      */
     void ComputeReducedGradient(const ControlVector<VECTOR>& q, ControlVector<VECTOR>& gradient,
                                 ControlVector<VECTOR>& gradient_transposed);
@@ -164,34 +170,27 @@ class InstatReducedProblem: public ReducedProblemInterface<PROBLEM, VECTOR>
     /******************************************************/
 
     /**
-     * Returns the functional values to compute.
+     * Implementation of Virtual Method in Base Class
+     * ReducedProblemInterface
      *
-     * @param q            The control vector is given to this function.
-     *
-     * @return             Returns a double values of the computed functional.
      */
     double ComputeReducedCostFunctional(const ControlVector<VECTOR>& q);
 
     /******************************************************/
 
     /**
-     * This function computes reduced functionals of interest within
-     * a time dependent computation.
+     * Implementation of Virtual Method in Base Class
+     * ReducedProblemInterface
      *
-     * @param q            The control vector is given to this function.
      */
     void ComputeReducedFunctionals(const ControlVector<VECTOR>& q);
 
     /******************************************************/
 
     /**
-     * This function is not implemented so far and aborts computation if
-     * called. We assume that adjoint state z(u(q)) is already computed.
+     * Implementation of Virtual Method in Base Class
+     * ReducedProblemInterface
      *
-     * @param q                             The control vector is given to this function.
-     * @param direction                     Documentation will follow later.
-     * @param hessian_direction             Documentation will follow later.
-     * @paramhessian_direction_transposed   Documentation will follow later.
      */
     void ComputeReducedHessianVector(const ControlVector<VECTOR>& q, const ControlVector<VECTOR>& direction,
                                      ControlVector<VECTOR>& hessian_direction,
@@ -207,10 +206,20 @@ class InstatReducedProblem: public ReducedProblemInterface<PROBLEM, VECTOR>
      *
      * Everything else is determined by the DWRDataContainer
      * you use (represented by the template parameter DWRC).
+     *
+     * @tparam <DWRC>           A container for the refinement indicators
+     *                          See, e.g., DWRDataContainer
+     * @tparam <PDE>            The problem contrainer
+     *
+     * @param q                 The ControlVector at which the indicators 
+     *                          are to be evaluated. 
+     * @param dwrc              The data container
+     * @param pde               The problem
+     *
      */
     template<class DWRC>
-    void
-    ComputeRefinementIndicators(DWRC&)
+      void
+      ComputeRefinementIndicators(DWRC&)
     {
       throw DOpEException("ExcNotImplemented",
                           "InstatReducedProblem::ComputeRefinementIndicators");
@@ -219,10 +228,9 @@ class InstatReducedProblem: public ReducedProblemInterface<PROBLEM, VECTOR>
     /******************************************************/
 
     /**
-     *  This function calls GetU().PrintInfos(out) function which
-     *  prints information on this vector into the given stream.
+     * Implementation of Virtual Method in Base Class
+     * ReducedProblemInterface
      *
-     *  @param out    The output stream.
      */
     void StateSizeInfo(std::stringstream& out)
     {
@@ -327,8 +335,11 @@ class InstatReducedProblem: public ReducedProblemInterface<PROBLEM, VECTOR>
     /******************************************************/
 
     /**
-     * This function is not implemented so far and aborts computation if
-     * called.
+     * This function computes the adjoint, i.e., the Lagrange 
+     * multiplier to constraint given by the state equation.
+     * It is assumed that the state u(q) corresponding to 
+     * the argument q is already calculated.
+     *
      *
      * @param q            The control vector is given to this function.
      */
@@ -341,6 +352,8 @@ class InstatReducedProblem: public ReducedProblemInterface<PROBLEM, VECTOR>
      * 
      * @param problem      Describes the nonstationary pde to be solved
      * @param q            The given control vector
+     * @param outname      The name prefix given to the solution vectors
+     *                     if they are written to files, e.g., State, Tangent, ...
      * @param eval_funcs   Decide wether to evaluate the functionals or not.
      *                     Should be true for the primal-problem but false
      *                     for auxilliary forward pdes, like the tangent one.
@@ -355,6 +368,8 @@ class InstatReducedProblem: public ReducedProblemInterface<PROBLEM, VECTOR>
      * 
      * @param problem      Describes the nonstationary pde to be solved
      * @param q            The given control vector
+     * @param outname      The name prefix given to the solution vectors
+     *                     if they are written to files, e.g., Adjoint, Hessian, ...
      */
     template<typename PDE>
       void BackwardTimeLoop(PDE& problem, StateVector<VECTOR>& sol, std::string outname);

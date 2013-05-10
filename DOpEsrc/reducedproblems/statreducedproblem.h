@@ -72,7 +72,8 @@ namespace DOpE
    * @tparam <INTEGRATOR>                An integrator for the state variables,
    *                                     e.g, Integrator or IntegratorMixedDimensions.
    * @tparam <PROBLEM>                   PDE- or optimization problem under consideration.
-   * @tparam <VECTOR>                    Class in which we want to store the spatial vector (i.e. dealii::Vector<double> or dealii::BlockVector<double>)
+   * @tparam <VECTOR>                    Class in which we want to store the spatial vector 
+   *                                     (i.e. dealii::Vector<double> or dealii::BlockVector<double>)
    * @tparam <dopedim>                   The dimension for the control variable.
    * @tparam <dealdim>                   The dimension for the state variable.
    */
@@ -85,11 +86,14 @@ namespace DOpE
         /**
          * Constructor for the StatReducedProblem.
          *
-         * @param OP                Problem is given to the stationary solver.
+	 * @tparam <INTEGRATORDATACONT> An IntegratorDataContainer
+         *
+	 * @param OP                Problem is given to the stationary solver.
          * @param state_behavior    Indicates the behavior of the StateVector.
          * @param param_reader      An object which has run time data.
-         * @param quad_rule					A quadrature-rule, which is given to the integrators.
-         * @param face_quad_rule		A facequadrature-rule, which is given to the integrators.
+	 * @param idc               The InegratorDataContainer for state and control integration
+	 * @param base_priority     An offset for the priority of the output written to
+	 *                          the OutputHandler
          */
         template<typename INTEGRATORDATACONT>
           StatReducedProblem(PROBLEM *OP, std::string state_behavior,
@@ -97,15 +101,17 @@ namespace DOpE
               int base_priority = 0);
 
         /**
-         * Constructur for the StatReducedProblem.
+         * Constructor for the StatReducedProblem.
          *
-         * @param OP                Problem is given to the stationary solver.
+	 * @tparam <INTEGRATORDATACONT> An IntegratorDataContainer
+         *
+	 * @param OP                Problem is given to the stationary solver.
          * @param state_behavior    Indicates the behavior of the StateVector.
          * @param param_reader      An object which has run time data.
-         * @param control_quad_rule				Quadrature-Rule, which is given to the control_integrator.
-         * @param control_face_quad_rule	FaceQuadrature-Rule, which is given to the control_integrator.
-         * @param state_quad_rule					Quadrature-Rule, which is given to the state_integrator.
-         * @param state_face_quad_rule		FaceQuadrature-Rule, which is given to the state_integrator.
+	 * @param c_idc             The InegratorDataContainer for control integration
+	 * @param s_idc             The InegratorDataContainer for state integration
+	 * @param base_priority     An offset for the priority of the output written to
+	 *                          the OutputHandler
          */
         template<typename STATEINTEGRATORDATACONT,
             typename CONTROLINTEGRATORCONT>
@@ -139,6 +145,7 @@ namespace DOpE
 
         /**
          * Implementation of Virtual Method in Base Class
+	 * ReducedProblemInterface
          *
          */
         bool
@@ -149,6 +156,7 @@ namespace DOpE
 
         /**
          * Implementation of Virtual Method in Base Class
+	 * ReducedProblemInterface
          *
          */
         void
@@ -159,8 +167,8 @@ namespace DOpE
 
         /**
          * Implementation of Virtual Method in Base Class
+	 * ReducedProblemInterface
          *
-         * @param q            The ControlVector<VECTOR> is given to this function.
          */
         void
         ComputeReducedGradient(const ControlVector<VECTOR>& q,
@@ -170,11 +178,9 @@ namespace DOpE
         /******************************************************/
 
         /**
-         * Returns the functional values to compute.
+         * Implementation of Virtual Method in Base Class
+	 * ReducedProblemInterface
          *
-         * @param q            The ControlVector<VECTOR> is given to this function.
-         *
-         * @return             Returns a double values of the computed functional.
          */
         double
         ComputeReducedCostFunctional(const ControlVector<VECTOR>& q);
@@ -182,23 +188,35 @@ namespace DOpE
         /******************************************************/
 
         /**
-         * This function computes reduced functionals of interest within
-         * a time dependent computation.
+         * Implementation of Virtual Method in Base Class
+	 * ReducedProblemInterface
          *
-         * @param q            The ControlVector<VECTOR> is given to this function.
          */
-        void
+       void
         ComputeReducedFunctionals(const ControlVector<VECTOR>& q);
 
         /******************************************************/
 
-//        /**
-//         * Implementation of virtual function of base class.
-//         */
-//        void
-//        ComputeRefinementIndicators(const ControlVector<VECTOR>& q,
-//            DWRDataContainerBase<VECTOR>& dwrc);
-        template<class DWRC,class PDE>
+        /**
+         * Computes the error indicators for the error of a previosly
+         * specified functional. Assumes that the primal state solution
+         * is already computed and the functional is specified (see
+         * problem::SetFunctionalForErrorEstimation).
+         *
+         * Everything else is determined by the DWRDataContainer
+         * you use (represented by the template parameter DWRC).
+         *
+	 * @tparam <DWRC>           A container for the refinement indicators
+	 *                          See, e.g., DWRDataContainer
+	 * @tparam <PDE>            The problem contrainer
+	 *
+         * @param q                 The ControlVector at which the indicators 
+	 *                          are to be evaluated. 
+	 * @param dwrc              The data container
+	 * @param pde               The problem
+         *
+         */
+       template<class DWRC,class PDE>
           void
           ComputeRefinementIndicators(const ControlVector<VECTOR>& q,
               DWRC& dwrc, PDE& pde);
@@ -206,13 +224,9 @@ namespace DOpE
         /******************************************************/
 
         /**
-         * Implementation of Virtual Method in Base Class.
-         * We assume that adjoint state z(u(q)) is already computed.
+         * Implementation of Virtual Method in Base Class
+	 * ReducedProblemInterface
          *
-         * @param q                             The ControlVector<VECTOR> is given to this function.
-         * @param direction                     Documentation will follow later.
-         * @param hessian_direction             Documentation will follow later.
-         * @paramhessian_direction_transposed   Documentation will follow later.
          */
         void
         ComputeReducedHessianVector(const ControlVector<VECTOR>& q,
@@ -221,21 +235,13 @@ namespace DOpE
             ControlVector<VECTOR>& hessian_direction_transposed);
 
         /******************************************************/
-        /**
-         * Implementation of Virtual Method in Base Class.
-         * We assume that the constraints g have been evaluated at the corresponding
-         * point q. This comutes the reduced gradient of the global constraint num
-         * with respect to the control variable.
+
+       /**
+         * Implementation of Virtual Method in Base Class
+	 * ReducedProblemInterface
          *
-         * @param num                           Number of the global constraint to which we want to
-         *                                      compute the gradient.
-         * @param q                             The ControlVector<VECTOR> is given to this function.
-         * @param g                             The ConstraintVector<VECTOR> which contains the
-         *                                      value of the constraints at q.
-         * @param gradient                      The vector where the gradient will be stored in.
-         * @param gradient_transposed           The transposed version of the gradient vector.
          */
-        void
+       void
         ComputeReducedGradientOfGlobalConstraints(unsigned int num,
             const ControlVector<VECTOR>& q, const ConstraintVector<VECTOR>& g,
             ControlVector<VECTOR>& gradient,
@@ -244,10 +250,9 @@ namespace DOpE
         /******************************************************/
 
         /**
-         *  This function calls GetU().PrintInfos(out) function which
-         *  prints information on this vector into the given stream.
+         * Implementation of Virtual Method in Base Class
+	 * ReducedProblemInterface
          *
-         *  @param out    The output stream.
          */
         void
         StateSizeInfo(std::stringstream& out)
@@ -295,30 +300,49 @@ namespace DOpE
          *  Doesn't make sense here so aborts if called!
          */
         void
-        WriteToFile(const std::vector<double> &v __attribute__((unused)),
-            std::string outfile __attribute__((unused)))
+	  WriteToFile(const std::vector<double> &/*v*/,
+		      std::string /*outfile*/)
         {
           abort();
         }
 
         /******************************************************/
+        /**
+         * Implementation of Virtual Method in Base Class
+	 * ReducedProblemInterface
+         *
+         */
         bool
         IsEpsilonFeasible(const ConstraintVector<VECTOR>& g, double p)
         {
           return this->GetProblem()->IsEpsilonFeasible(g, p);
         }
+        /**
+         * Implementation of Virtual Method in Base Class
+	 * ReducedProblemInterface
+         *
+         */
         double
         GetMaxViolation(const ConstraintVector<VECTOR>& g)
         {
           return this->GetProblem()->MaxViolation(g);
         }
-
+        /**
+         * Implementation of Virtual Method in Base Class
+	 * ReducedProblemInterface
+         *
+         */
         void
         FeasibilityShift(const ControlVector<VECTOR>& g_hat,
             ControlVector<VECTOR>& g, double lambda)
         {
           this->GetProblem()->FeasibilityShift(g_hat, g, lambda);
         }
+        /**
+         * Implementation of Virtual Method in Base Class
+	 * ReducedProblemInterface
+         *
+         */
         double
         Complementarity(const ConstraintVector<VECTOR>& f,
             const ConstraintVector<VECTOR>& g)
@@ -339,7 +363,10 @@ namespace DOpE
 
         /******************************************************/
         /**
-         * Implementation of Virtual Method in Base Class
+         * This function computes the adjoint, i.e., the Lagrange 
+	 * multiplier to constraint given by the state equation.
+	 * It is assumed that the state u(q) corresponding to 
+	 * the argument q is already calculated.
          *
          * @param q            The ControlVector<VECTOR> is given to this function.
          */
@@ -351,9 +378,12 @@ namespace DOpE
         /**
          * This function computes the solution for the dual variable
          * for error estimation.
-         * The nonlinear solver is called, even for
-         * linear problems where the solution is computed within one iteration step.
+	 *
+	 * I is assumed that the state u(q) corresponding to 
+	 * the argument q is already calculated.
          *
+         * @param q            The ControlVector<VECTOR> is given to this function.
+	 * @param weight_comp  A flag deciding how the weights should be calculated
          */
         void
         ComputeDualForErrorEstimation(const ControlVector<VECTOR>& q,

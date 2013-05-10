@@ -61,7 +61,10 @@
 namespace DOpE
 {
   /**
-   // * Basic class to solve stationary PDE- and optimization problems. TODO i thought this is onlyl for PDE Problems
+   // * Basic class to solve stationary PDE-problems. 
+   * In contrast to StatReducedProblem no control variable is present. 
+   * This allows to avoid initialization of the related and objects 
+   * which will not be used.
    *
    * @tparam <NONLINEARSOLVER>           Newton solver for the state variables.
    * @tparam <INTEGRATOR>                An integrator for the state variables,
@@ -79,11 +82,15 @@ namespace DOpE
         /**
          * Constructor for the StatPDEProblem.
          *
+	 * @tparam <INTEGRATORDATACONT> An IntegratorDataContainer
+         *
          * @param OP                Problem is given to the stationary solver.
          * @param state_behavior    Indicates the behavior of the StateVector.
          * @param param_reader      An object which has run time data.
          * @param idc		    An INTETGRATORDATACONT which has all the data needed by the integrator.
-         */
+	 * @param base_priority     An offset for the priority of the output written to
+	 *                          the OutputHandler
+	 */
         template<typename INTEGRATORDATACONT>
           StatPDEProblem(PROBLEM *OP, std::string state_behavior,
               ParameterReader &param_reader, INTEGRATORDATACONT& idc,
@@ -98,20 +105,13 @@ namespace DOpE
          * @param idc               An INTETGRATORDATACONT which has all the data needed by the integrator.
          * @param idc2              An INTETGRATORDATACONT which is used by the integrator to evalueate the
          *                          functionals.
+	 * @param base_priority     An offset for the priority of the output written to
+	 *                          the OutputHandler
          */
         template<typename INTEGRATORDATACONT>
           StatPDEProblem(PROBLEM *OP, std::string state_behavior,
               ParameterReader &param_reader, INTEGRATORDATACONT& idc1,
               INTEGRATORDATACONT& idc2, int base_priority = 0);
-
-        /**
-         * TODO What ist this for? I thought in this contexts exists no control?
-         */
-        template<typename STATEINTEGRATORDATACONT,
-            typename CONTROLINTEGRATORCONT>
-          StatPDEProblem(PROBLEM *OP, std::string state_behavior,
-              ParameterReader &param_reader, CONTROLINTEGRATORCONT& c_idc,
-              STATEINTEGRATORDATACONT & s_idc, int base_priority = 0);
 
         virtual
         ~StatPDEProblem();
@@ -139,7 +139,8 @@ namespace DOpE
         /******************************************************/
 
         /**
-         * This function computes reduced functionals of interest
+         * Implementation of Virtual Method in Base Class
+	 * ReducedProblemInterface
          *
          */
         void
@@ -165,9 +166,15 @@ namespace DOpE
          *
          * Everything else is determined by the DWRDataContainer
          * you use (represented by the template parameter DWRC).
+	 *
+	 * @tparam <DWRC>           A container for the refinement indicators
+	 *                          See, e.g., DWRDataContainer
+	 * @tparam <PDE>            The problem contrainer
+	 *
+	 * @param dwrc              The data container
+	 * @param pde               The problem
+         *
          */
-//        virtual void
-//        ComputeRefinementIndicators(DWRDataContainerBase<VECTOR>& dwrc);
         template<class DWRC, class PDE>
           void
           ComputeRefinementIndicators(DWRC& dwrc, PDE& pde);
@@ -175,10 +182,9 @@ namespace DOpE
         /******************************************************/
 
         /**
-         *  This function calls GetU().PrintInfos(out) function which
-         *  prints information on this vector into the given stream.
+         * Implementation of Virtual Method in Base Class
+	 * ReducedProblemInterface
          *
-         *  @param out    The output stream.
          */
         void
         StateSizeInfo(std::stringstream& out)
@@ -245,24 +251,15 @@ namespace DOpE
          *  Doesn't make sense here so aborts if called!
          */
         void
-        WriteToFile(const std::vector<double> &v __attribute__((unused)),
-            std::string outfile __attribute__((unused)))
+	  WriteToFile(const std::vector<double> &/*v*/,
+            std::string /*outfile*/)
         {
           abort();
         }
-//        //FIXME: Use SolutionExtractor instead
-//        const StateVector<VECTOR> &
-//        GetZforEE_Const() const
-//        {
-//          return _z_for_ee;
-//        }
 
       protected:
         /**
          * This function computes the solution for the state variable.
-         * The nonlinear solver is called, even for
-         * linear problems where the solution is computed within one iteration step.
-         *
          */
         void
         ComputeReducedState();
@@ -272,9 +269,11 @@ namespace DOpE
         /**
          * This function computes the solution for the dual variable
          * for error estimation.
-         * The nonlinear solver is called, even for
-         * linear problems where the solution is computed within one iteration step.
+	 *
+	 * I is assumed that the state u(q) corresponding to 
+	 * the argument q is already calculated.
          *
+         * @param weight_comp  A flag deciding how the weights should be calculated
          */
         void
         ComputeDualForErrorEstimation(DOpEtypes::WeightComputation);
@@ -797,39 +796,6 @@ namespace DOpE
 
         //prepare the weights...
         dwrc.PrepareWeights(GetU(), GetZForEE());
-//////        //******************gdb**************************
-////        //Output der Gewichte
-//
-//        for (unsigned int jj = 0; jj<=2 ; jj++)
-//        {
-//          std::stringstream outfile;
-//          std::string name = "L2_PI_h_z_" + Utilities::int_to_string(jj) + "_comp";
-//          outfile
-//              << this->GetOutputHandler()->ConstructOutputName(name,
-//                  this->GetProblem()->GetDoFType());
-//          auto& data_out = dwrc.GetWeightSTH().GetDataOut();
-//
-//          data_out.attach_dof_handler(
-//              dwrc.GetWeightSTH().GetStateDoFHandler());
-//
-//          ComponentSelectFunction<2> c_s(jj, 1, 3);
-//          Vector<double> outvec(n_cells);
-//          auto vec = dwrc.GetPI_h_z().GetSpacialVector();
-//
-//          VectorTools::integrate_difference(
-//              dwrc.GetWeightSTH().GetStateDoFHandler().GetDEALDoFHandler(),
-//              vec, dealii::ZeroFunction<2>(3), outvec, QGauss<2>(3),
-//              VectorTools::L2_norm, &c_s);
-//
-//          data_out.add_data_vector(outvec, name);
-//          data_out.build_patches();
-//
-//          std::ofstream output(outfile.str());
-//          data_out.write_vtk(output);
-//          data_out.clear();
-//        }
-////
-////        //********************************************
 
         //now we finally compute the refinement indicators
         this->GetIntegrator().ComputeRefinementIndicators(*this->GetProblem(),

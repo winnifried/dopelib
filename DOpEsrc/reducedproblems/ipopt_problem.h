@@ -35,6 +35,17 @@
 namespace DOpE
 {
 #ifdef WITH_IPOPT
+
+  /**
+   * This class is used to transfer the problem given by
+   * the user to the interface required to solve the problem 
+   * using IPOPT.
+   *
+   * @tparam <RPROBLEM>   The reduced problem considered for the solution
+   *                      See ReducedProblemInterface for the required methods.
+   * @tparam <VECTOR>     The vector type under consideration.
+   *
+   */
   template <typename RPROBLEM, typename VECTOR>
     class Ipopt_Problem : public Ipopt::TNLP
   {
