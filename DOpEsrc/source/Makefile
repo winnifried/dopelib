@@ -31,7 +31,8 @@ h-files = $(wildcard ../include/*.h) $(wildcard ../templates/*.h) $(wildcard ../
 
 include $D/common/Make.global_options
 
-CXXFLAGS += -std=gnu++0x -Wall -fvisibility-inlines-hidden
+#in gcc 4.7 and later use -std=c++11
+CXXFLAGS += -std=c++0x -Wall -fvisibility-inlines-hidden
 
 FLAGS = $(CXXFLAGS) -DGLIBCXX_DEBUG
 
