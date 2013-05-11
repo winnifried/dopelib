@@ -33,11 +33,13 @@ namespace DOpE
    * of the reduced cost functional following K. Svanberg.
    *
    * @tparam <CONSTRAINTACCESSOR>  An object that gives information on how to use the constraint vector
-   * @tparam <OPTPROBLEM>  The problem to deal with.
-   * @tparam <dopedim>     The dimension for the control variable.
-   * @tparam <dealdim>     The dimension of the state variable.
-   * @tparam <localdim>    The dimension of  the control-constraint Matrix-Variable  (i.e. the root of the 
-   *                       block size for the block seperable approximation)
+   * @tparam <STH>                 The space time handler.
+   * @tparam <OPTPROBLEM>          The problem to deal with, i.e., an OptProblemContainer.
+   * @tparam <dopedim>             The dimension for the control variable.
+   * @tparam <dealdim>             The dimension of the state variable.
+   * @tparam <localdim>            The dimension of  the control-constraint Matrix-Variable  
+   *                               (i.e. the root of the 
+   *                               block size for the block seperable approximation)
    *
    */
   template<typename CONSTRAINTACCESSOR, typename STH, typename OPTPROBLEM,
@@ -137,16 +139,9 @@ namespace DOpE
           }
         }
 
-        //   /**
-        //    * Computes the FE values on a cell.
-        //    * @param cell      Reference of the actual cell.
-        //    */
-        //   void ComputeCellFEValues(const std::vector<typename dealii::DoFHandler<dealdim>::active_cell_iterator>& cell)
-        //   {
-        //     _OP.ComputeCellFEValues(cell);
-        //   }
-
-        //TODO Pfush
+	/**
+         * Calculates the hessian of the global constraints in the augmented Lagrangian
+	 */
         void
         ComputeReducedGlobalConstraintHessian(
             const ConstraintVector<dealii::BlockVector<double> >& constraints,
@@ -162,7 +157,9 @@ namespace DOpE
           }
         }
 
-        //TODO Pfush
+	/**
+         * Calculates the gradient of the constraints in the augmented Lagrangian
+	 */
         void
         ComputeReducedConstraintGradient(
             const ConstraintVector<dealii::BlockVector<double> >& direction,
@@ -215,7 +212,9 @@ namespace DOpE
           }
         }
         /******************************************************/
-
+	/** 
+	 * Initializes the multiplier used in the augmented Lagrangian
+	 */
         void
         InitMultiplier(ConstraintVector<dealii::BlockVector<double> >& m,
             const ControlVector<dealii::BlockVector<double> >& gradient) const
@@ -254,7 +253,11 @@ namespace DOpE
         }
 
         /******************************************************/
-
+	/**
+	 * Evaluates the augmented Lagrangian. It is an algebraic function
+	 * since we directly operate on the dofs, and the PDE is eliminated by the
+	 * outer MMA-Algorithm
+	 */
         double
         AlgebraicFunctional(
             const std::map<std::string, const dealii::Vector<double>*> &values,
@@ -265,7 +268,7 @@ namespace DOpE
             throw DOpEException("Not implemented for this dopedim ",
                 "AumentedLagrangianProblem::AlgebraicFunctional");
 
-          //Hohle die benoetigten Werte
+          //Get the required values
           const dealii::BlockVector<double>* linearization_point;
           const dealii::BlockVector<double>* functional_gradient;
           const dealii::BlockVector<double>* mma_multiplier;
@@ -315,8 +318,8 @@ namespace DOpE
               //Project to positive and negative part! And compute tau = largest eigenvalue of grad_J
               _CA.ProjectToPositiveAndNegativePart(grad_J, grad_J_plus,
                   grad_J_minus, tau);
-              //anpassen von tau, s.d. -  gradJ + tau Id pos def.
-              tmp = invert(upper_asymptote - lower_asymptote); //Eigentlich upper_bound-lower_bound
+              //adjust tau, such that. -  gradJ + tau Id is pos def.
+              tmp = invert(upper_asymptote - lower_asymptote); 
               p_val = (upper_asymptote - control)
                   * (grad_J_plus + _rho / 2. * tmp)
                   * (upper_asymptote - control);
@@ -355,6 +358,9 @@ namespace DOpE
         }
         /******************************************************/
 
+	/**
+	 * Evaluates the residual of the Algebraic problem
+	 */
         void
         AlgebraicResidual(dealii::BlockVector<double>& residual,
             const std::map<std::string, const dealii::Vector<double>*> &values,
@@ -368,7 +374,7 @@ namespace DOpE
               throw DOpEException("Not implemented for this dopedim ",
                   "AumentedLagrangianProblem::AlgebraicFunctional");
 
-            //Hohle die benoetigten Werte
+            //get the required values
             const dealii::BlockVector<double>* linearization_point;
             const dealii::BlockVector<double>* functional_gradient;
             const dealii::BlockVector<double>* mma_multiplier;
@@ -398,7 +404,7 @@ namespace DOpE
                   "mma_upper_asymptote");
             }
             {
-              //Ableitung der hyperbolischen Approximation an das Cost functional
+              //Derivative of the hyperbolic approximation to the cost functional
               Tensor<2, localdim> grad_J, lower_asymptote, upper_asymptote,
                   control, point, grad_J_plus, grad_J_minus, identity;
               Tensor<2, localdim> p_val, q_val, uf, lf, tmp, result;
@@ -407,10 +413,7 @@ namespace DOpE
                 identity[i][i] = 1.;
               double tau = 0.;
 
-              //assume bounds are constant, but choose outside the feasible region
-              //_CA.FillLowerUpperControlBound(lower_asymptote,upper_asymptote,true);
-
-              for (unsigned int i = 0;
+	      for (unsigned int i = 0;
                   i < _CA.GetNLocalControlDoFs(linearization_point); i++)
               {
                 _CA.CopyLocalControlToTensor(*functional_gradient, grad_J, i);
@@ -424,8 +427,8 @@ namespace DOpE
                 //Project to positive and negative part! And compute tau = largest eigenvalue of grad_J
                 _CA.ProjectToPositiveAndNegativePart(grad_J, grad_J_plus,
                     grad_J_minus, tau);
-                //anpassen von tau, s.d. -  gradJ + tau Id pos def.
-                tmp = invert(upper_asymptote - lower_asymptote); //Eigentlich upper_bound-lower_bound
+                //adjust tau, such that -  gradJ + tau Id  is pos def.
+                tmp = invert(upper_asymptote - lower_asymptote); 
                 p_val = (upper_asymptote - control)
                     * (grad_J_plus + _rho / 2. * tmp)
                     * (upper_asymptote - control);
@@ -438,11 +441,10 @@ namespace DOpE
 
                 result = uf * p_val * uf;
                 result -= lf * q_val * lf;
-                //TODO Check derivative!
                 _CA.CopyTensorToLocalControl(result, residual, i);
-                //Das war J'
+                //Now done with J'
               }
-              //Ableitung von Multiplier times constraints
+              //Derivative of  Multiplier times constraints
               Tensor<2, localdim> local_constraints, local_multiplier,
                   local_constraint_derivative;
 
@@ -494,7 +496,7 @@ namespace DOpE
               throw DOpEException("Not implemented for this dopedim ",
                   "AumentedLagrangianProblem::AlgebraicFunctional");
 
-            //Hohle die benoetigten Werte
+            //Get the required values 
             const dealii::BlockVector<double>* linearization_point;
             const dealii::BlockVector<double>* functional_gradient;
             const dealii::BlockVector<double>* mma_multiplier;
@@ -537,7 +539,8 @@ namespace DOpE
               }
               direction = GetBlockVector(block_values, "dq");
             }
-            //local in time global in space constraint times multiplier derivative (only phi'' \nabla g \nabla g^T)
+            //local in time global in space constraint times multiplier derivative 
+	    //(only phi'' \nabla g \nabla g^T)
             // the other term is computed elsewhere
             {
               unsigned int global_block = mma_multiplier->n_blocks() - 1;
@@ -554,7 +557,7 @@ namespace DOpE
             }
             //local in time and space constraints times multiplier derivative
             {
-              //Erstmal phi'' \nabla g \nabla g^T
+              //Now phi'' \nabla g \nabla g^T
               Tensor<2, localdim> local_constraints, local_multiplier,
                   local_constraint_derivative, identity, tmp;
               identity = 0;
@@ -622,9 +625,6 @@ namespace DOpE
               Tensor<2, localdim> p_val, q_val, uf, lf, tmp, dq, result;
               double tau = 0.;
 
-              //assume bounds are constant, but choose outside the feasible region
-              //_CA.FillLowerUpperControlBound(lower_asymptote,upper_asymptote,true);
-
               for (unsigned int i = 0;
                   i < _CA.GetNLocalControlDoFs(linearization_point); i++)
               {
@@ -641,8 +641,8 @@ namespace DOpE
                 _CA.ProjectToPositiveAndNegativePart(grad_J, grad_J_plus,
                     grad_J_minus, tau);
 
-                //anpassen von tau, s.d. -  gradJ + tau Id pos def.
-                tmp = invert(upper_asymptote - lower_asymptote); //Eigentlich upper_bound-lower_bound
+                //adjust tau, s.t. -  gradJ + tau Id is pos def.
+                tmp = invert(upper_asymptote - lower_asymptote); 
                 p_val = (upper_asymptote - control)
                     * (grad_J_plus + _rho / 2. * tmp)
                     * (upper_asymptote - control);
@@ -662,7 +662,7 @@ namespace DOpE
                   abort();
                 }
                 _CA.AddTensorToLocalControl(result, residual, i);
-                //Das war J''
+                //Done with J''
               }
             }
           }
@@ -671,7 +671,7 @@ namespace DOpE
             //Compute Residual = H^{-1}dq
             //Where H^{-1} is the Hessian of the mma approximation and the block-local constraints
 
-            //Hohle die benoetigten Werte
+            //Get the required values 
             const dealii::BlockVector<double>* linearization_point;
             const dealii::BlockVector<double>* functional_gradient;
             const dealii::BlockVector<double>* mma_multiplier;
@@ -722,8 +722,6 @@ namespace DOpE
             {
               identity[i][i] = _p;
             }
-            //assume bounds are constant, but choose outside the feasible region
-            //_CA.FillLowerUpperControlBound(lower_asymptote,upper_asymptote,true);
 
             //Build  local Blocks of the hessian
             for (unsigned int i = 0;
@@ -744,8 +742,8 @@ namespace DOpE
               //Project to positive and negative part! And compute tau = largest eigenvalue of grad_J
               _CA.ProjectToPositiveAndNegativePart(grad_J, grad_J_plus,
                   grad_J_minus, tau);
-              //anpassen von tau, s.d. -  gradJ + tau Id pos def.
-              tmp = invert(upper_asymptote - lower_asymptote); //Eigentlich upper_bound-lower_bound
+              //adjust tau, such that -  gradJ + tau Id is pos def.
+              tmp = invert(upper_asymptote - lower_asymptote); 
               p_val = (upper_asymptote - control)
                   * (grad_J_plus + _rho / 2. * tmp)
                   * (upper_asymptote - control);
@@ -803,9 +801,6 @@ namespace DOpE
 
         /******************************************************/
 
-        /**
-         * The Augmented Lagrangian Problem is purely algebraic, hence this returns zero
-         */
         double
         PointFunctional(
             const std::map<std::string, const dealii::Vector<double>*> &param_values,
@@ -816,9 +811,6 @@ namespace DOpE
 
         /******************************************************/
 
-        /**
-         * The Augmented Lagrangian Problem is purely algebraic, hence this returns zero
-         */
         template<typename FACEDATACONTAINER>
           double
           BoundaryFunctional(const FACEDATACONTAINER& fdc)
@@ -828,9 +820,6 @@ namespace DOpE
 
         /******************************************************/
 
-        /**
-         * The Augmented Lagrangian Problem is purely algebraic, hence this returns zero
-         */
         template<typename FACEDATACONTAINER>
           double
           FaceFunctional(const FACEDATACONTAINER& fdc)
@@ -916,8 +905,7 @@ namespace DOpE
               throw DOpEException("Not Implemented",
                   "AugmentedLagrangianProblem::CellRhs");
             }
-            //_OP.CellRhs(param_values, domain_values, n_dofs_per_cell, n_q_points, material_id, cell_diameter, local_cell_vector, scale);
-          }
+           }
         /******************************************************/
 
         void
@@ -942,10 +930,6 @@ namespace DOpE
 
         /******************************************************/
 
-        /**
-         * Not implemented so far. Returns just _OP.FaceEquation(...). For more information we refer to
-         * the file optproblemcontainer.h
-         */
         template<typename FACEDATACONTAINER>
           void
           FaceEquation(const FACEDATACONTAINER& fdc,
@@ -954,31 +938,21 @@ namespace DOpE
           {
             throw DOpEException("Not Implemented",
                 "AugmentedLagrangianProblem::FaceEquation");
-            _OP.FaceEquation(fdc, local_cell_vector, scale, scale_ico);
           }
 
         /******************************************************/
 
-        /**
-         * Not implemented so far. Returns just _OP.FaceRhs(...). For more information we refer to
-         * the file optproblemcontainer.h
-         */
-        template<typename FACEDATACONTAINER>
+         template<typename FACEDATACONTAINER>
           void
           FaceRhs(const FACEDATACONTAINER& fdc,
               dealii::Vector<double> &local_cell_vector, double scale = 1.)
           {
             throw DOpEException("Not Implemented",
                 "AugmentedLagrangianProblem::FaceRhs");
-            _OP.FaceRhs(fdc, local_cell_vector, scale);
           }
 
         /******************************************************/
 
-        /**
-         * Not implemented so far. Returns just _OP.FaceMatrix(...). For more information we refer to
-         * the file optproblemcontainer.h
-         */
         template<typename FACEDATACONTAINER>
           void
           FaceMatrix(const FACEDATACONTAINER& fdc,
@@ -987,8 +961,6 @@ namespace DOpE
           {
             throw DOpEException("Not Implemented",
                 "AugmentedLagrangianProblem::FaceMatrix");
-            _OP.FaceMatrix(fdc, local_entry_matrix, scale, scale_ico);
-
           }
 
         /******************************************************/
@@ -1001,15 +973,10 @@ namespace DOpE
           {
             throw DOpEException("Not Implemented",
                 "AugmentedLagrangianProblem::BoundaryEquation");
-            _OP.BoundaryEquation(fdc, local_cell_vector, scale, scale_ico);
           }
 
         /******************************************************/
 
-        /**
-         * Not implemented so far. Returns just _OP.FaceMatrix(...). For more information we refer to
-         * the file optproblemcontainer.h
-         */
         template<typename FACEDATACONTAINER>
           void
           BoundaryRhs(const FACEDATACONTAINER& fdc,
@@ -1017,7 +984,6 @@ namespace DOpE
           {
             throw DOpEException("Not Implemented",
                 "AugmentedLagrangianProblem::BoundaryRhs");
-            _OP.BoundaryRhs(fdc, local_cell_vector, scale);
           }
 
         /******************************************************/
@@ -1028,7 +994,8 @@ namespace DOpE
               dealii::FullMatrix<double> &local_cell_matrix, double scale = 1.,
               double scale_ico = 1.)
           {
-            _OP.BoundaryMatrix(fdc, local_cell_matrix, scale, scale_ico);
+            throw DOpEException("Not Implemented",
+                "AugmentedLagrangianProblem::BoundaryRhs");
           }
         /******************************************************/
         template<typename FACEDATACONTAINER>
@@ -1037,7 +1004,8 @@ namespace DOpE
               dealii::Vector<double> &local_cell_vector, double scale = 1.,
               double scale_ico = 1.)
           {
-            _OP.InterfaceEquation(dc, local_cell_vector, scale, scale_ico);
+            throw DOpEException("Not Implemented",
+                "AugmentedLagrangianProblem::BoundaryRhs");
           }
         /******************************************************/
         template<typename FACEDATACONTAINER>
@@ -1046,7 +1014,8 @@ namespace DOpE
               dealii::FullMatrix<double> &local_entry_matrix, double scale = 1.,
               double scale_ico = 1.)
           {
-            _OP.InterfaceMatrix(dc, local_entry_matrix, scale, scale_ico);
+            throw DOpEException("Not Implemented",
+                "AugmentedLagrangianProblem::BoundaryRhs");
           }
 
         /******************************************************/
@@ -1056,10 +1025,6 @@ namespace DOpE
             const std::map<std::string, const dealii::Vector<double>*> &/*values*/,
             const std::map<std::string, const dealii::BlockVector<double>*> &block_values)
         {
-//      _OP.ComputeLocalConstraints(control,state,constraints);
-//TODO here the order should be consistent with the order in the given constraints...
-//TODO also we should do this for all blocks...
-
           const dealii::BlockVector<double>& lower_bound = *GetBlockVector(
               block_values, "mma_lower_bound");
           const dealii::BlockVector<double>& upper_bound = *GetBlockVector(
@@ -1084,11 +1049,8 @@ namespace DOpE
         GetControlBoxConstraints(dealii::BlockVector<double>& lb,
             dealii::BlockVector<double>& ub) const
         {
-          //abort();
           lb = GetAuxiliaryControl("mma_lower_bound")->GetSpacialVector();
           ub = GetAuxiliaryControl("mma_upper_bound")->GetSpacialVector();
-          //There should be the local constraints...
-          //_OP.GetControlBoxConstraints(lb, ub);
         }
 
         /******************************************************/
@@ -1225,10 +1187,8 @@ namespace DOpE
          */
         const dealii::Function<dealdim>&
         GetDirichletValues(unsigned int color,
-//							const DOpEWrapper::DoFHandler<dopedim> & control_dof_handler,
-//							const DOpEWrapper::DoFHandler<dealdim> &state_dof_handler,
-            const std::map<std::string, const dealii::Vector<double>*> &param_values,
-            const std::map<std::string, const dealii::BlockVector<double>*> &domain_values) const
+			   const std::map<std::string, const dealii::Vector<double>*> &param_values,
+			   const std::map<std::string, const dealii::BlockVector<double>*> &domain_values) const
         {
           return _OP.GetDirichletValues(color, param_values, domain_values);
         }

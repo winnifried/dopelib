@@ -26,7 +26,6 @@
 #include "functionalinterface.h"
 #include "pdeinterface.h"
 #include "statreducedproblem.h" 
-#include "voidreducedproblem.h"
 #include "newtonsolver.h"
 #include "cglinearsolver.h"
 #include "directlinearsolver.h"

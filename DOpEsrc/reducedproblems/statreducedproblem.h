@@ -727,7 +727,7 @@ namespace DOpE
       else
       {
         throw DOpEException("dopedim not implemented",
-            "VoidReducedProblem::ComputeReducedConstraints");
+            "StatReducedProblem::ComputeReducedConstraints");
       }
       this->GetControlIntegrator().ComputeLocalControlConstraints(
           *(this->GetProblem()), g.GetSpacialVector("local"));
@@ -743,7 +743,7 @@ namespace DOpE
       else
       {
         throw DOpEException("dopedim not implemented",
-            "VoidReducedProblem::ComputeReducedConstraints");
+            "StatReducedProblem::ComputeReducedConstraints");
       }
       //Global in Space-Time Constraints
       dealii::Vector<double>& gc = g.GetGlobalConstraints();
@@ -1727,7 +1727,7 @@ namespace DOpE
       else
       {
         throw DOpEException("dopedim not implemented",
-            "VoidReducedProblem::ComputeReducedGradient");
+            "StatReducedProblem::ComputeReducedGradient");
       }
       this->GetProblem()->AddAuxiliaryToIntegrator(
           this->GetControlIntegrator());
@@ -1757,7 +1757,7 @@ namespace DOpE
       else
       {
         throw DOpEException("dopedim not implemented",
-            "VoidReducedProblem::ComputeReducedGradient");
+            "StatReducedProblem::ComputeReducedGradient");
       }
     }
 

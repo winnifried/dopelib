@@ -377,9 +377,6 @@ and eliminates the variable $u$ from the problem.
   problem with a stationary PDE.
 \item \texttt{reducedproblems/instatreducedproblem.h} The same as above but for a
   nonstationary PDE.
-\item \texttt{reducedproblems/voidreducedproblem.h} A wrapper file that eliminates $u$ 
-  if it is not present anyways. This is used so that we can use the same routines to 
-  solve problems that have no PDE constraint.
 \item \texttt{reducedproblems/ipopt\underline{ }problem.h} A wrapper file 
  required when solving optimization problems using the 
   reduced\underline{ }ipopt\underline{ }algorithm. This file
@@ -412,11 +409,6 @@ problem where the PDE constraint has been eliminated as explained in the previou
   Line-search Newton algorithm that assumes there exists a method in the reduced problem
   that can invert the reduced hessian. (This usually makes sense only if there is no 
   PDE constraint.)
-\item \texttt{opt\underline{ }algorithms/generalized\underline{ }mma\underline{ }algorithm.h}
-  An implementation of the MMA-Algorithm for structural optimization using an augmented
-  Lagrangian formulation for the subproblems. The subproblem is implemented using the 
-  special purpose file
-  \texttt{include/augmentedlagrangianproblem.h}.
 \end{itemize} 
 
 \subsection{Other Components}

@@ -35,7 +35,20 @@
 
 namespace DOpE
 {
-
+  /**
+   * @class Reduced_SnoptAlgorithm
+   *
+   * This class provides a solver for constrained optimization 
+   * problems in reduced form, i.e., the dependent variable 
+   * given by an equality constraint is  assumed to be eliminated 
+   * by solving the equation. I.e.,
+   * we solve the problem min j(q) s.t., a \le q \le b, g(q) \le 0
+   *
+   * The solution is done by interfacing to the SNOPT library.
+   *
+   * @tparam <PROBLEM>    The problem container. See, e.g., OptProblemContainer
+   * @tparam <VECTOR>     The vector type of the solution.
+   */
   template<typename PROBLEM, typename VECTOR>
     class Reduced_SnoptAlgorithm : public ReducedAlgorithm<PROBLEM, VECTOR>
     {
@@ -47,6 +60,11 @@ namespace DOpE
             DOpEOutputHandler<VECTOR>* Output = NULL, int base_priority = 0);
         ~Reduced_SnoptAlgorithm();
 
+	/**
+	 * Used to declare run time parameters. This is needed to declare all
+	 * parameters a startup without the need for an object to be already 
+	 * declared.
+	 */
         static void
         declare_params(ParameterReader &param_reader);
 
