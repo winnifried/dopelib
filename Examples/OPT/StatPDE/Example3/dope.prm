@@ -4,10 +4,6 @@
 subsection Local PDE parameters
 	   set density_fluid	= 1.0
 	   set viscosity	= 1.0e-3
-	   set alpha_u		= 1.0	
-	   set alpha_p		= 1.0		   
-	   set mu		= 0.5e+6
-	   set poisson_ratio_nu = 0.4
 end
 
 subsection My functions parameters
@@ -88,10 +84,5 @@ subsection output parameters
   set results_dir       = Results/
 end
 
-#subsection gmres_withmatrix parameters
-	#   set linear_global_tol = 1.0e-16
-	#   set linear_maxiter    = 6000
-	#   set no_tmp_vectors    = 500
-#end
 
 
