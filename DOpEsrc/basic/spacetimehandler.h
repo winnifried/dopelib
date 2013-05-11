@@ -456,21 +456,31 @@ namespace DOpE
 
         /**
 	 * Experimental status: 
-         * Computes the current mg_sparsity pattern for the state variable
+         * Needed for MG prec.
          */
         virtual void
-        ComputeMGStateSparsityPattern(dealii::MGLevelObject<dealii::BlockSparsityPattern> & mg_sparsity_patterns,
-				      unsigned int n_levels) const=0;
+	  ComputeMGStateSparsityPattern(dealii::MGLevelObject<dealii::BlockSparsityPattern> & /*mg_sparsity_patterns*/,
+					unsigned int /*n_levels*/) const
+	{
+	   throw DOpEException(
+                "Not used for normal DofHandler",
+                "StateSpaceTimeHandler.h");
+	}
 
 	/******************************************************/
 
         /**
-	 * Experimental status: 
-         * Computes the current mg sparsity pattern for the state variable
+         * Experimental status: 
+         * Needed for MG prec.
          */
         virtual void
-        ComputeMGStateSparsityPattern(dealii::MGLevelObject<dealii::SparsityPattern> & mg_sparsity_patterns,
-				      unsigned int n_levels) const=0;
+	  ComputeMGStateSparsityPattern(dealii::MGLevelObject<dealii::SparsityPattern> & /*mg_sparsity_patterns*/,
+					unsigned int /*n_levels*/) const
+	{
+	   throw DOpEException(
+                "Not used for normal DofHandler",
+                "StateSpaceTimeHandler.h");
+	}
 
         /******************************************************/
         /**
