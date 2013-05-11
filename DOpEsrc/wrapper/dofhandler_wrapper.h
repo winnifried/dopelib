@@ -124,6 +124,28 @@ namespace DOpEWrapper
         }
     };
 
+ //Template specialization DOFHANDLER = dealii::MGDoFHandler<dim>
+  template<int dim>
+    class DoFHandler<dim, dealii::MGDoFHandler > : public dealii::MGDoFHandler<
+        dim>
+    {
+      public:
+        DoFHandler(const dealii::Triangulation<dim, dim> &tria)
+            : dealii::MGDoFHandler<dim>(tria)
+        {
+        }
+        static bool
+        NeedIndexSetter()
+        {
+          return true;
+        }
+        const dealii::MGDoFHandler<dim>&
+        GetDEALDoFHandler() const
+        {
+          return *this;
+        }
+    };
+
   /**
    * Template specializations for dim=0.
    */

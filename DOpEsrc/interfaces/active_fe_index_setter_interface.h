@@ -68,6 +68,15 @@ class ActiveFEIndexSetterInterface
     }
     ;
     /**
+     * Just for compatibility issues.
+     */
+    virtual void
+    SetActiveFEIndexState(
+        typename dealii::MGDoFHandler<dealdim>::active_cell_iterator&) const
+    {
+    }
+    ;
+    /**
      * Gets an iterator to a cell and sets an active FE index
      * on this cell for the control variable. This function is
      * used after the first grid generation.
@@ -85,6 +94,15 @@ class ActiveFEIndexSetterInterface
     virtual void
     SetActiveFEIndexControl(
         typename dealii::DoFHandler<dopedim>::active_cell_iterator&) const
+    {
+    }
+    ;
+  /**
+   * Just for compatibility issues.
+   */
+    virtual void
+    SetActiveFEIndexControl(
+        typename dealii::MGDoFHandler<dopedim>::active_cell_iterator&) const
     {
     }
     ;
@@ -112,6 +130,13 @@ class ActiveFEIndexSetterInterface<0, dealdim>
       * Just for compatibility issues.
       */
     virtual void SetActiveFEIndexState(typename dealii::DoFHandler<dealdim>::active_cell_iterator) const
+    {
+    }
+    ;
+    /**
+      * Just for compatibility issues.
+      */
+    virtual void SetActiveFEIndexState(typename dealii::MGDoFHandler<dealdim>::active_cell_iterator) const
     {
     }
     ;

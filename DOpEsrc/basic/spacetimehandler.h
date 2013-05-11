@@ -35,6 +35,18 @@
 #include <lac/constraint_matrix.h>
 #include <dofs/dof_handler.h>
 
+
+// Multi-level routines 
+#include <deal.II/multigrid/mg_constrained_dofs.h>
+#include <deal.II/multigrid/multigrid.h>
+#include <deal.II/multigrid/mg_transfer.h>
+#include <deal.II/multigrid/mg_tools.h>
+#include <deal.II/multigrid/mg_coarse.h>
+#include <deal.II/multigrid/mg_smoother.h>
+#include <deal.II/multigrid/mg_matrix.h>
+
+
+
 #include <vector>
 #include <iostream>
 #include <sstream>
@@ -193,6 +205,56 @@ namespace DOpE
           }
           return ret;
         }
+
+
+        /******************************************************/
+
+        /**
+	 * Experimental status:
+         * Returns a vector of the begin_celliterators of the
+         * DoFHandlers in use.
+	 * Iterator for multigrid's matrix assembling running
+	 * over all cells on all levels.
+         */
+        std::vector<
+            typename DOpEWrapper::DoFHandler<dealdim, DH>::cell_iterator>
+        GetDoFHandlerBeginActiveAllLevels() const
+        {
+          std::vector<
+              typename DOpEWrapper::DoFHandler<dealdim, DH>::cell_iterator> ret(
+              this->GetDoFHandler().size());
+          for (unsigned int dh = 0; dh < this->GetDoFHandler().size(); dh++)
+          {
+            ret[dh] = this->GetDoFHandler()[dh]->begin_active();
+          }
+          return ret;
+        }
+
+        /******************************************************/
+
+        /**
+	 * Experimental status:	   
+         * Returns a vector of the end-celliterators of the
+         * DoFHandlers in use.
+	 * Iterator for multigrid's matrix assembling running
+	 * over all cells on all levels.
+         */
+
+        std::vector<
+            typename DOpEWrapper::DoFHandler<dealdim, DH>::cell_iterator>
+        GetDoFHandlerEndAllLevels() const
+        {
+          std::vector<
+              typename DOpEWrapper::DoFHandler<dealdim, DH>::cell_iterator> ret(
+              this->GetDoFHandler().size());
+          for (unsigned int dh = 0; dh < this->GetDoFHandler().size(); dh++)
+          {
+            ret[dh] = this->GetDoFHandler()[dh]->end();
+          }
+          return ret;
+        }
+
+
 
         /******************************************************/
 
@@ -389,6 +451,26 @@ namespace DOpE
          */
         virtual void
         ComputeStateSparsityPattern(SPARSITYPATTERN & sparsity) const=0;
+
+	/******************************************************/
+
+        /**
+	 * Experimental status: 
+         * Computes the current mg_sparsity pattern for the state variable
+         */
+        virtual void
+        ComputeMGStateSparsityPattern(dealii::MGLevelObject<dealii::BlockSparsityPattern> & mg_sparsity_patterns,
+				      unsigned int n_levels) const=0;
+
+	/******************************************************/
+
+        /**
+	 * Experimental status: 
+         * Computes the current mg sparsity pattern for the state variable
+         */
+        virtual void
+        ComputeMGStateSparsityPattern(dealii::MGLevelObject<dealii::SparsityPattern> & mg_sparsity_patterns,
+				      unsigned int n_levels) const=0;
 
         /******************************************************/
         /**

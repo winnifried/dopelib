@@ -51,6 +51,15 @@ namespace DOpEWrapper
         {
         }
 
+    FEValues(
+	     const DOpEWrapper::Mapping<dim, dealii::MGDoFHandler > & mapping,
+	     const dealii::FiniteElement<dim, dim> & fe,
+	     const dealii::Quadrature<dim> & quadrature,
+	     const dealii::UpdateFlags update_flags)
+      : dealii::FEValues<dim>(mapping, fe, quadrature, update_flags)
+        {
+        }
+
         FEValues(const dealii::FiniteElement<dim, dim> & fe,
             const dealii::Quadrature<dim> & quadrature,
             const dealii::UpdateFlags update_flags) :
@@ -88,6 +97,15 @@ namespace DOpEWrapper
         {
         }
 
+    FEFaceValues(
+            const DOpEWrapper::Mapping<dim, dealii::MGDoFHandler > & mapping,
+            const dealii::FiniteElement<dim, dim> &fe,
+            const dealii::Quadrature<dim - 1> &quadrature,
+            const dealii::UpdateFlags update_flags)
+            : dealii::FEFaceValues<dim>(mapping, fe, quadrature, update_flags)
+        {
+        }
+
         FEFaceValues(const dealii::FiniteElement<dim, dim> &fe,
             const dealii::Quadrature<dim - 1> &quadrature,
             const dealii::UpdateFlags update_flags) :
@@ -118,12 +136,23 @@ namespace DOpEWrapper
     class FESubfaceValues : public dealii::FESubfaceValues<dim>
     {
       public:
+      
         FESubfaceValues(
             const DOpEWrapper::Mapping<dim, dealii::DoFHandler> & mapping,
             const dealii::FiniteElement<dim, dim> &fe,
             const dealii::Quadrature<dim - 1> &quadrature,
             const dealii::UpdateFlags update_flags) :
             dealii::FESubfaceValues<dim>(mapping, fe, quadrature, update_flags)
+        {
+        }
+
+        FESubfaceValues(
+            const DOpEWrapper::Mapping<dim, dealii::MGDoFHandler > & mapping,
+            const dealii::FiniteElement<dim, dim> &fe,
+            const dealii::Quadrature<dim - 1> &quadrature,
+            const dealii::UpdateFlags update_flags)
+            : dealii::FESubfaceValues<dim>(mapping, fe, quadrature,
+                update_flags)
         {
         }
 

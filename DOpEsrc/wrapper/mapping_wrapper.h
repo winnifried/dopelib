@@ -25,6 +25,7 @@
 #define MAPPING_WRAPPER_H_
 
 #include <dofs/dof_handler.h>
+#include <multigrid/mg_dof_handler.h>
 #include <hp/dof_handler.h>
 #include <hp/mapping_collection.h>
 #include <fe/mapping_q.h>
@@ -51,6 +52,10 @@ namespace DOpEWrapper
         {
         }
 
+      ~Mapping()
+      {
+      }
+
     };
 
   /************************************************************************************/
@@ -69,6 +74,46 @@ namespace DOpEWrapper
             dealii::MappingQ<dim>(mapping)
         {
         }
+
+      ~Mapping()
+	{
+	}
+
+        /**
+         * This function is needed for a workaround
+         * linked to the hp-version (i.e. deal.ii is not
+         * consistent at the current stage using Mappings
+         * or MappingCollections in the hp-framework).
+         */
+        const typename dealii::MappingQ<dim> &
+        operator[](const unsigned int index) const
+        {
+          assert(index == 0);
+          return *this;
+        }
+
+    };
+
+  /************************************************************************************/
+
+  template<int dim>
+    class Mapping<dim, dealii::MGDoFHandler > : public dealii::MappingQ<dim>
+    {
+      public:
+        Mapping(const unsigned int p, const bool use_mapping_q_on_all_cells =
+            false)
+            : dealii::MappingQ<dim>(p, use_mapping_q_on_all_cells)
+        {
+        }
+
+        Mapping(const dealii::MappingQ<dim> &mapping)
+            : dealii::MappingQ<dim>(mapping)
+        {
+        }
+
+      ~Mapping()
+	{
+	}
 
         /**
          * This function is needed for a workaround
@@ -102,8 +147,12 @@ namespace DOpEWrapper
         {
         }
 
-        Mapping(const dealii::Mapping<dim>& mapping) :
-            dealii::hp::MappingCollection<dim>(mapping)
+      ~Mapping()
+	{
+	}
+
+        Mapping(const dealii::Mapping<dim>& mapping)
+            : dealii::hp::MappingCollection<dim>(mapping)
         {
         }
         Mapping(const dealii::hp::MappingCollection<dim> & mapping_collection) :
@@ -124,6 +173,13 @@ namespace DOpEWrapper
     {
       public:
         static Mapping<dim, dealii::DoFHandler> mapping_q1;
+    };
+
+ template<int dim>
+    struct StaticMappingQ1<dim, dealii::MGDoFHandler >
+    {
+      public:
+        static Mapping<dim, dealii::MGDoFHandler > mapping_q1;
     };
 
   template<int dim>
