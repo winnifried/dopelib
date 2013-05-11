@@ -12,7 +12,6 @@ subsection Local PDE parameters
 	   set density_fluid	 = 1.0e+3
 	   set density_structure = 1.0e+3
 	   set viscosity	 = 1.0e-3
-	   # should be 1.0e-5
 	   set alpha_u		 = 1.0e-3
 	   set alpha_p		 = 1.0	   
 	   set mu		 = 0.5e+6	   

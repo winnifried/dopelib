@@ -97,6 +97,12 @@ typedef Reduced_IpoptAlgorithm<OP, VECTOR> IPOPT_Alg;
 int
 main(int argc, char **argv)
 {
+  /**
+   * Distributed control in the right hand side of
+   *  a linear elliptic PDE  plus some box constraints
+   *  for the control. We use IPOPT/SNOPT for the optimization.
+   *
+   */
   std::string paramfile = "dope.prm";
 
   if (argc == 2)

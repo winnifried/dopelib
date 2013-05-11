@@ -75,32 +75,37 @@ typedef BlockVector<double> VECTOR;
 typedef FunctionalInterface<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> FUNCTIONALINTERFACE;
 typedef LocalFunctional<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> COSTFUNCTIONAL;
 
-typedef DirichletDataInterface<VECTOR, 2> DD;
+typedef SimpleDirichletData<VECTOR, DIM> DD;
+typedef LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM> PDE;
 typedef ConstraintInterface<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> CONS;
 
 typedef SpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR, CDIM, DIM> STH;
 
-typedef OptProblemContainer<FUNCTIONALINTERFACE, COSTFUNCTIONAL,
-    LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
-    SimpleDirichletData<VECTOR, DIM>, CONS, SPARSITYPATTERN, VECTOR, CDIM, DIM> OP;
+typedef OptProblemContainer<FUNCTIONALINTERFACE, COSTFUNCTIONAL, PDE, DD, CONS,
+    SPARSITYPATTERN, VECTOR, CDIM, DIM> OP;
 
 typedef AugmentedLagrangianProblem<LocalConstraintAccessor, STH, OP, CDIM, DIM,
     1> ALagOP;
 typedef IntegratorDataContainer<DOFHANDLER, Quadrature<DIM>, Quadrature<1>,
-    VECTOR, 2> IDC;
-typedef Integrator<IDC, VECTOR, double, 2> INTEGRATOR;
+    VECTOR, DIM> IDC;
+typedef Integrator<IDC, VECTOR, double, DIM> INTEGRATOR;
 typedef DirectLinearSolverWithMatrix<SPARSITYPATTERN, MATRIX, VECTOR> LINEARSOLVER;
 typedef NewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR> NLS;
 typedef StatReducedProblem<NLS, NLS, INTEGRATOR, INTEGRATOR, OP, VECTOR, CDIM,
     DIM> SSolver;
 typedef VoidReducedProblem<NLS, INTEGRATOR, ALagOP, VECTOR, CDIM, DIM> ALagSSolver;
 typedef GeneralizedMMAAlgorithm<LocalConstraintAccessor, IDC, STH, OP, VECTOR,
-    ALagSSolver, 2, 2, 1> MMA;
+    ALagSSolver, CDIM, DIM, 1> MMA;
 
 int
 main(int argc, char **argv)
 {
-
+  /**
+   * 1This example implements the minimum compliance problem for
+   * the thickness optimization of an MBB-Beam. Using the
+   * MMA-Method of K. Svanberg together with an augmented
+   * Lagrangian approach for the subproblems following M. Stingl.
+   */
   string paramfile = "dope.prm";
 
   if (argc == 2)
@@ -138,8 +143,8 @@ main(int argc, char **argv)
   FACEQUADRATURE face_quadrature_formula(2);
   IDC idc(quadrature_formula, face_quadrature_formula);
 
-  LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, 2> LPDE;
-  LocalFunctional<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> LFunc;
+  PDE LPDE;
+  COSTFUNCTIONAL LFunc;
 
   { //Set Dirichlet Boundary!
     for (Triangulation<DIM>::active_cell_iterator cell =
@@ -184,7 +189,7 @@ main(int argc, char **argv)
   comp_mask_2[0] = true;
   comp_mask_2[1] = false;
   DOpEWrapper::ZeroFunction<DIM> zf(2);
-  SimpleDirichletData<VECTOR, DIM> DD_1(zf);
+  DD DD_1(zf);
   P.SetDirichletBoundaryColors(2, comp_mask, &DD_1);
   P.SetDirichletBoundaryColors(0, comp_mask_2, &DD_1);
 
