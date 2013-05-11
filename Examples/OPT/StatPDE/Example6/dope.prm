@@ -82,12 +82,4 @@ subsection reducednewtonalgorithm parameters
   set nonlinear_tol        = 1.e-7
 end
 
-#subsection reducedtrustregionnewtonalgorithm parameters
-#  set nonlinear_global_tol = 1.e-11
-#  set nonlinear_maxiter    = 100
-#  set nonlinear_tol        = 1.e-7
-#  set tr_method		   = dogleg
-##  set tr_method		   = exact
-#end
-
 

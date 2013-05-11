@@ -57,7 +57,7 @@ namespace DOpE
       }
     }
 
-    unsigned int GetNLocalControlBlocks(const dealii::BlockVector<double>* q) const
+    unsigned int GetNLocalControlDoFs(const dealii::BlockVector<double>* q) const
     {
       assert(q->n_blocks() ==1);
       return q->block(0).size();

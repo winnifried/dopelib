@@ -113,19 +113,15 @@ namespace DOpE
       }
     }
 
-    unsigned int GetNLocalControlBlocks(const dealii::BlockVector<double>* q) const
+    unsigned int GetNLocalControlDoFs(const dealii::BlockVector<double>* q) const
     {
       assert(q->n_blocks() ==1);
       return q->block(0).size();
     }
 //Badname, because ret. ndofs
-    unsigned int GetNLocalControlConstraintBlocks(const dealii::BlockVector<double>* q) const
+    unsigned int GetNLocalControlConstraintDoFs(const dealii::BlockVector<double>* q) const
     {
       return q->block(0).size();
-    }
-    unsigned int GetNLocalStateConstraintBlocks(const dealii::BlockVector<double>* /*q*/) const
-    {
-      return 0;
     }
 
     inline void GetControlBoxConstraints(dealii::BlockVector<double>& lb, dealii::BlockVector<double>& ub) const
@@ -134,19 +130,6 @@ namespace DOpE
       ub = _rho_max;
     }
 
-//    inline void FillLowerUpperControlBound(Tensor<2,1>& low, Tensor<2,1>&  up, bool external=false)
-//    {
-//      if(external==false)
-//      {
-//	low[0][0] = _rho_min;
-//	up[0][0] = _rho_max;
-//      }
-//      else
-//      {
-//	low[0][0] = _rho_min-2.e-1;
-//	up[0][0] = _rho_max+2.e-1;
-//      }
-//    }
 
     inline void ProjectToPositiveAndNegativePart(const Tensor<2,1>& A, Tensor<2,1>&  A_plus,Tensor<2,1>&  A_minus, double& max_EV)
     {

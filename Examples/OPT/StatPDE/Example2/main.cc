@@ -56,7 +56,6 @@ using namespace DOpE;
 #define DOFHANDLER DoFHandler
 #define FE FESystem
 
-
 const static int DIM = 2;
 const static int CDIM = 0;
 
