@@ -24,7 +24,7 @@
 #ifndef _LOCALFunctionalS_
 #define _LOCALFunctionalS_
 
-#include "pdeinterface.h"
+#include "functionalinterface.h"
 
 using namespace std;
 using namespace dealii;
