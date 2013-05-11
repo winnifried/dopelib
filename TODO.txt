@@ -1,13 +1,15 @@
 TODO DOpE
 =========
+- Doxygen documentation in (include/basic/container/interfaces)
+- Code cleaning PDE and OPT Instat
+  -- Beispiel (Erklaerung), PDEInterface nicht als template geben, sondern die LocalPDE.
+- content.tex for PDE/Instat OPT/Stat and OPT/Instat
+- Finish MG-Solver (Experimental/Example12)
 - InstatPDEProblem schreiben
 - Multimesh aus IntegratorDataContainer entfernen
 - DirichletDataInterface - GetParam und GetValue auslagern?
-Treffen (May 07, 2013)
-----------------------
-- define DoFHandler aendern in typedef, erst mit spaeterer gcc version moeglich, siehe http://en.cppreference.com/w/cpp/language/type_alias und http://gcc.gnu.org/projects/cxx0x.html
-- Funktional Point umbenennen, da Name irrefuehrend?
-- Beispiele Code Prüfen (fehlende verwendung von scale, TeX-Problembeschreibungen)
+- define DoFHandler aendern in typedef, erst mit spaeterer gcc version moeglich, 
+  siehe http://en.cppreference.com/w/cpp/language/type_alias und http://gcc.gnu.org/projects/cxx0x.html
 - Einheitliche handhabung mit nicht genutzen Parametern 
   (Auskommentieren/Entfernen/atribute_unused)
 - Fehlerschätzer mit Strong*Residual berücksichtigt nicht automatisch 
@@ -23,27 +25,21 @@ Treffen (May 07, 2013)
   in localfunctional.cc implementiert sind) IMMER ausgewertet.
 
 - Matrix: Immer "State"
-- Common Codeschnipsel in den STH in eigener Klasse zusammenfuehren. Das gleiche fuer die problemcontainer.
+- Common Codeschnipsel in eigene Klasse auslagern
 - Alle Functional Calls in opt-problem-container sollten vor dem 
   Aufruf prüfen ob die ,,Zeit (time)'' auch benötigt wird (NeedTime)
 - Need to differentiate in functional between terms that are integrals in time 
   and those that are not! Needed for derivatives only.
-- Beim naechsten Treffen: Am ersten Tag wird der Code von vorne bis hinten
-einheitlich (!) kommentiert.
 - Einheitliche Handhabung ob etwas pointer oder Reference wird und Const correctness
-- Check!: SetType im Optproblem sollte auch dem Funktional den typ mitteilen.
-- Beispiel (Erklaerung), PDEInterface nicht als template geben, sondern die LocalPDE.
-- PeriodicDoFConstraintMaker in Lib
-- Remove unnecessary Template Parameter
-  -- integrator.h: dim
+
+- Check~cg!: SetType im Optproblem sollte auch dem Funktional den typ mitteilen.
+
 - Standardinterface fuer Postprozesse? 
-	-- Basisklasse fuer Postprozesse
-	-- Liste von Postprozessbasisklassen in Reduced Problem.
-	-- Aufruf von ausserhalb: do postprocess!!!11! 
+  -- Basisklasse fuer Postprozesse
+  -- Liste von Postprozessbasisklassen in Reduced Problem.
+  -- Aufruf von ausserhalb: do postprocess!!!11! 
 
 -  Rueckgabeklassen fuer Loeser
--  MG (step-16) 
-
 
 Future:
 -------
@@ -51,7 +47,8 @@ Future:
   (Dann geht endlich auch Opt-Control im Instationaeren), sind noch
   fertigzustellen.
 - Verschiedene Kontrolltypen im Instationaeren, insbesondere Kontrolle in den AWen
--- Verschiedene Typen der Kontrolle (undefined, initial, timedistributed, timedistributedtimedependend). Diese gibt man dem Kontrollvektor, der den Typ wiederum an STH lieftert. Dieser speichert ihn und stellt sicher, dass alle Kontrollen den selben Typen haben. 
+-- Verschiedene Typen der Kontrolle (undefined, initial, timedistributed, timedistributedtimedependend). Diese gibt man dem Kontrollvektor, der den Typ wiederum an STH liefert. 
+   Dieser speichert ihn und stellt sicher, dass alle Kontrollen den selben Typen haben. 
 - DOpE Einfuehrung (wir sind alle dafuer, Winni faengt an)
 - FE_Values ? Kann man dim=0 anlegen? Dann kann der weg (Ja, habs auskommentiert,
   trotzdem laeufen alle Probleme korrekt durch (ausser OPT/7+8))~tw

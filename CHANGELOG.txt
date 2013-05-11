@@ -1,8 +1,14 @@
 Changelog DOpE
 ==============
+11.09.2013: 1) PDE and OPT StatPDE code cleaned
+	    2) Updated doxygen docu
+	    3) Experimental Example to develop use of MG-Solver
+	    4) Documentation in PDE/StatPDE
 09.05.2013: DESCRIPTION: Template - parameters reworked:
 	    Changes to the user interface:
-	    1) template<typename [FE|DOFHANDLER]> is now template<template<int,int> class [FE|DOFHANDLER]. So instead of, f.i., dealii::DoFHandler<2> you have to specify dealii::DoFHandler as a template parameter.
+	    1) template<typename [FE|DOFHANDLER]> is now template<template<int,int> class [FE|DOFHANDLER]. 
+               So instead of, f.i., dealii::DoFHandler<2> you have to specify dealii::DoFHandler as a 
+               template parameter.
 	    2) ReducedProblemInterface has lost both dim-template-parameters, and derived classes are adapted.
 	    3) Most opt-algorithms have lost one or two dim-template-parameters
 	    4) PDEInterface has lost dopedim as templateparameter.
