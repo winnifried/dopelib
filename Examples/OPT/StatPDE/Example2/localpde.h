@@ -1,25 +1,25 @@
 /**
-*
-* Copyright (C) 2012 by the DOpElib authors
-*
-* This file is part of DOpElib
-*
-* DOpElib is free software: you can redistribute it
-* and/or modify it under the terms of the GNU General Public
-* License as published by the Free Software Foundation, either
-* version 3 of the License, or (at your option) any later
-* version.
-*
-* DOpElib is distributed in the hope that it will be
-* useful, but WITHOUT ANY WARRANTY; without even the implied
-* warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-* PURPOSE.  See the GNU General Public License for more
-* details.
-*
-* Please refer to the file LICENSE.TXT included in this distribution
-* for further information on this license.
-*
-**/
+ *
+ * Copyright (C) 2012 by the DOpElib authors
+ *
+ * This file is part of DOpElib
+ *
+ * DOpElib is free software: you can redistribute it
+ * and/or modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation, either
+ * version 3 of the License, or (at your option) any later
+ * version.
+ *
+ * DOpElib is distributed in the hope that it will be
+ * useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+ * PURPOSE.  See the GNU General Public License for more
+ * details.
+ *
+ * Please refer to the file LICENSE.TXT included in this distribution
+ * for further information on this license.
+ *
+ **/
 
 #ifndef _LOCALPDE_
 #define _LOCALPDE_
@@ -30,9 +30,12 @@ using namespace std;
 using namespace dealii;
 using namespace DOpE;
 
-template<template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
-  class LocalPDE : public PDEInterface<CellDataContainer, FaceDataContainer,
-      DH, VECTOR,  dealdim>
+template<
+    template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+    template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
+    template<int, int> class DH, typename VECTOR, int dopedim, int dealdim =
+        dopedim>
+  class LocalPDE : public PDEInterface<CDC, FDC, DH, VECTOR, dealdim>
   {
     public:
       LocalPDE() :
@@ -44,8 +47,7 @@ template<template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
       }
 
       void
-      CellEquation(
-          const CellDataContainer<DH, VECTOR, dealdim>& cdc,
+      CellEquation(const CDC<DH, VECTOR, dealdim>& cdc,
           dealii::Vector<double> &local_cell_vector, double scale,
           double /*scale_ico*/)
       {
@@ -108,8 +110,7 @@ template<template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
       }
 
       void
-      CellEquation_U(
-          const CellDataContainer<DH, VECTOR, dealdim>& cdc,
+      CellEquation_U(const CDC<DH, VECTOR, dealdim>& cdc,
           dealii::Vector<double> &local_cell_vector, double scale,
           double /*scale_ico*/)
       {
@@ -141,8 +142,7 @@ template<template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
       }
 
       void
-      CellEquation_UT(
-          const CellDataContainer<DH, VECTOR, dealdim>& cdc,
+      CellEquation_UT(const CDC<DH, VECTOR, dealdim>& cdc,
           dealii::Vector<double> &local_cell_vector, double scale,
           double /*scale_ico*/)
       {
@@ -172,8 +172,7 @@ template<template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
       }
 
       void
-      CellEquation_UTT(
-          const CellDataContainer<DH, VECTOR, dealdim>& cdc,
+      CellEquation_UTT(const CDC<DH, VECTOR, dealdim>& cdc,
           dealii::Vector<double> &local_cell_vector, double scale,
           double /*scale_ico*/)
       {
@@ -203,8 +202,7 @@ template<template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
       }
 
       void
-      CellEquation_Q(
-          const CellDataContainer<DH, VECTOR, dealdim>& cdc,
+      CellEquation_Q(const CDC<DH, VECTOR, dealdim>& cdc,
           dealii::Vector<double> &local_cell_vector, double scale,
           double /*scale_ico*/)
       {
@@ -251,8 +249,7 @@ template<template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
       }
 
       void
-      CellEquation_QT(
-          const CellDataContainer<DH, VECTOR, dealdim>& cdc,
+      CellEquation_QT(const CDC<DH, VECTOR, dealdim>& cdc,
           dealii::Vector<double> &local_cell_vector, double scale,
           double /*scale_ico*/)
       {
@@ -302,8 +299,7 @@ template<template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
       }
 
       void
-      CellEquation_QTT(
-          const CellDataContainer<DH, VECTOR, dealdim>& cdc,
+      CellEquation_QTT(const CDC<DH, VECTOR, dealdim>& cdc,
           dealii::Vector<double> &local_cell_vector, double scale,
           double /*scale_ico*/)
       {
@@ -350,42 +346,36 @@ template<template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
       }
 
       void
-      CellEquation_UU(
-          const CellDataContainer<DH, VECTOR, dealdim>& cdc ,
-          dealii::Vector<double> &local_cell_vector ,
-          double scale , double /*scale_ico*/)
+      CellEquation_UU(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
+          dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/,
+          double /*scale_ico*/)
       {
         assert(this->_problem_type == "adjoint_hessian");
       }
       void
-      CellEquation_QU(
-          const CellDataContainer<DH, VECTOR, dealdim>& cdc ,
-          dealii::Vector<double> &local_cell_vector ,
-          double scale , double /*scale_ico*/)
+      CellEquation_QU(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
+          dealii::Vector<double> &local_cell_vector, double /*scale*/,
+          double /*scale_ico*/)
       {
         assert(this->_problem_type == "adjoint_hessian");
       }
       void
-      CellEquation_UQ(
-          const CellDataContainer<DH, VECTOR, dealdim>& cdc ,
-          dealii::Vector<double> &local_cell_vector ,
-          double scale , double /*scale_ico*/)
+      CellEquation_UQ(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
+          dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/,
+          double /*scale_ico*/)
       {
         assert(this->_problem_type == "hessian");
       }
       void
-      CellEquation_QQ(
-          const CellDataContainer<DH, VECTOR, dealdim>& cdc ,
-          dealii::Vector<double> &local_cell_vector ,
-          double scale , double /*scale_ico*/)
+      CellEquation_QQ(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
+          dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/,
+          double /*scale_ico*/)
       {
         assert(this->_problem_type == "hessian");
       }
       void
-      CellRightHandSide(
-          const CellDataContainer<DH, VECTOR, dealdim>& cdc ,
-          dealii::Vector<double> &local_cell_vector ,
-          double scale )
+      CellRightHandSide(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
+          dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
       {
         {
           assert(this->_problem_type == "state");
@@ -393,8 +383,7 @@ template<template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
       }
 
       void
-      CellMatrix(
-          const CellDataContainer<DH, VECTOR, dealdim>& cdc,
+      CellMatrix(const CDC<DH, VECTOR, dealdim>& cdc,
           FullMatrix<double> &local_entry_matrix, double scale,
           double /*scale_ico*/)
       {
@@ -427,8 +416,7 @@ template<template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
       }
 
       void
-      ControlCellEquation(
-          const CellDataContainer<DH, VECTOR, dealdim>& cdc,
+      ControlCellEquation(const CDC<DH, VECTOR, dealdim>& cdc,
           dealii::Vector<double> &local_cell_vector, double scale)
       {
         {
@@ -445,9 +433,8 @@ template<template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
       }
 
       void
-      ControlCellMatrix(
-          const CellDataContainer<DH, VECTOR, dealdim>& cdc ,
-          FullMatrix<double> &local_entry_matrix )
+      ControlCellMatrix(const CDC<DH, VECTOR, dealdim>& cdc,
+          FullMatrix<double> &local_entry_matrix)
       {
         assert(local_entry_matrix.m() == local_entry_matrix.n());
         for (unsigned int i = 0; i < local_entry_matrix.m(); i++)

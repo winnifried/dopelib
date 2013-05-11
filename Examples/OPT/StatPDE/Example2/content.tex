@@ -24,7 +24,7 @@ x_0 = (0.5, 0.5), \quad x_1 = (0.5, 0.25),\quad x_2 = (0.25, 0.25),
 \end{align*}
 \end{itemize}
 \subsubsection{Program description}
-Notice that the cost functional is of mixed type (from our computational point of view), i.e. the first part is a pointfunctional whereas the regularization part requires the evaluation of a domain integral. So our \texttt{LocalFunctional} returns as his type:
+Notice that the cost functional is of mixed type (from our computational point of view), i.e. the first part is a pointfunctional whereas the regularization part requires the evaluation of a domain integral. To handle this, we need a special integrator as well as a special newtonsolver. Additionally, our \texttt{LocalFunctional} returns as his type:
 \begin{verbatim}
       string
       GetType() const
@@ -43,3 +43,5 @@ This brings along that we have not only to implement
 \item \texttt{Value\_QQ}
 \end{itemize}
  from \texttt{FunctionalInterface}, but also all the aforementioned methods with a preceeding \text{Point} (\texttt{PointValue} etc.).
+%FE_Nothing, handle of the control erlaeutern.
+

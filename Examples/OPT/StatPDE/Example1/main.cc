@@ -23,19 +23,15 @@
 #include <iostream>
 
 #include <grid/tria.h>
-//#include <dofs/dof_handler.h>
 #include <grid/grid_generator.h>
 #include <fe/fe_q.h>
-//#include <dofs/dof_tools.h>
 #include <base/quadrature_lib.h>
-//#include <base/function.h>
 #include <lac/precondition_block.h>
 
 #include "reducednewtonalgorithm.h"
 #include "reducedtrustregionnewton.h"
 #include "optproblemcontainer.h"
 #include "functionalinterface.h"
-//#include "pdeinterface.h"
 #include "statreducedproblem.h"
 #include "newtonsolver.h"
 #include "cglinearsolver.h"
@@ -45,8 +41,6 @@
 #include "mol_spacetimehandler.h"
 #include "simpledirichletdata.h"
 #include "noconstraints.h"
-//#include "sparsitymaker.h"
-//#include "userdefineddofconstraints.h"
 #include "preconditioner_wrapper.h"
 #include "integratordatacontainer.h"
 #include "higher_order_dwrc_control.h"
@@ -61,7 +55,7 @@ using namespace DOpE;
 
 //Some abbreviations for better readability
 const static int DIM = 2;
-const static int CDIM = 2
+const static int CDIM = 2;
 //stands for the dimension of the controlvariable;
 
 #define DOFHANDLER DoFHandler
@@ -111,7 +105,7 @@ typedef StatReducedProblem<NLS, NLS, INTEGRATOR, INTEGRATOR, OP, VECTOR, CDIM,
     DIM> SSolver;
 
 //The spacetimehandler manages all the things related to the degrees of
-//freedom in space and time (for the optimization as wella s the state variable!)
+//freedom in space and time (for the optimization as well as the state variable!)
 typedef MethodOfLines_SpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR,
     CDIM, DIM> STH;
 
@@ -122,7 +116,12 @@ int
 main(int argc, char **argv)
 {
   /**
+   * This class solves a distributed minimization problem with
+   * the laplacian as PDE constraint and the control on the right
+   * hand side of the PDE. The target functional is
+   * $\frac{1}{2} \|u-u^d\|^2 + \frac{\alpha}{2}\|q\|^2$.
    *
+   * Additionally we estimate the error in the cost functional.
    */
 
   string paramfile = "dope.prm";
@@ -136,9 +135,10 @@ main(int argc, char **argv)
     std::cout << "Usage: " << argv[0] << " [ paramfile ] " << std::endl;
     return -1;
   }
-  unsigned int c_fe_order = 1;
-  unsigned int s_fe_order = 2;
-  unsigned int q_order = std::max(c_fe_order, s_fe_order) + 1;
+  const unsigned int c_fe_order = 1;
+  const unsigned int s_fe_order = 2;
+  const unsigned int q_order = std::max(c_fe_order, s_fe_order) + 1;
+  const int niter = 2;
 
   ParameterReader pr;
   SSolver::declare_params(pr);
@@ -154,24 +154,21 @@ main(int argc, char **argv)
       Triangulation<DIM>::MeshSmoothing::patch_level_1);
   GridGenerator::hyper_cube(triangulation, 0, 1);
 
-  FESystem<CDIM> control_fe(FE_Q<CDIM>(c_fe_order), 1);
-  FESystem<DIM> state_fe(FE_Q<DIM>(s_fe_order), 1);
+  FE<CDIM> control_fe(FE_Q<CDIM>(c_fe_order), 1);
+  FE<DIM> state_fe(FE_Q<DIM>(s_fe_order), 1);
 
   QUADRATURE quadrature_formula(q_order);
   FACEQUADRATURE face_quadrature_formula(q_order);
   IDC idc(quadrature_formula, face_quadrature_formula);
-  double alpha = 1.e-3;
+  const double alpha = 1.e-3;
 
-  LocalPDE<VECTOR, CDIM, DIM> LPDE(alpha);
-  LocalFunctional<VECTOR, CDIM, DIM> LFunc(alpha);
+  LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> LPDE(alpha);
+  COSTFUNCTIONAL LFunc(alpha);
 
   //AuxFunctionals
-  LocalPointFunctional<VECTOR, CDIM, DIM> LPF;
-  LocalMeanValueFunctional<VECTOR, CDIM, DIM> LMF;
+  LocalPointFunctional<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> LPF;
+  LocalMeanValueFunctional<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> LMF;
 
-//  std::vector<double> times(1,0.);
-  Triangulation<1> times;
-  GridGenerator::hyper_cube(times);
   triangulation.refine_global(5);
 
   STH DOFH(triangulation, control_fe, state_fe, DOpEtypes::stationary);
@@ -202,8 +199,8 @@ main(int argc, char **argv)
   P.SetFunctionalForErrorEstimation(LFunc.GetName());
   FESystem<2> control_fe_high(FE_Q<2>(2 * c_fe_order), 1);
   FESystem<2> state_fe_high(FE_Q<2>(2 * s_fe_order), 1);
-  QGauss<2> quadrature_formula_high(2 * q_order);
-  QGauss<1> face_quadrature_formula_high(2 * q_order);
+  QUADRATURE quadrature_formula_high(2 * q_order);
+  FACEQUADRATURE face_quadrature_formula_high(2 * q_order);
   IDC idc_high(quadrature_formula_high, face_quadrature_formula_high);
   STH DOFH_higher_order(triangulation, control_fe_high, state_fe_high,
       DOpEtypes::stationary);
@@ -212,7 +209,7 @@ main(int argc, char **argv)
       DOpEtypes::mixed_control);
   solver.InitializeDWRC(dwrc);
   /********************************************************************/
-  int niter = 2;
+
   Alg.ReInit();
   out.ReInit();
   ControlVector<VECTOR> q(&DOFH, "fullmem");
@@ -231,15 +228,15 @@ main(int argc, char **argv)
       }
       else
       {
-
+        //We test ReducedNewtonAlgorithm as well as ReducedTrustedNewtonAlgorithm
         Alg2.Solve(q);
         q = 0.;
         Alg.Solve(q);
 
         solver.ComputeRefinementIndicators(q, dwrc, LPDE);
-        double value = solver.GetFunctionalValue(LFunc.GetName());
-        double est_error = dwrc.GetError();
-        double error = ex_value - value;
+        const double value = solver.GetFunctionalValue(LFunc.GetName());
+        const double est_error = dwrc.GetError();
+        const double error = ex_value - value;
         stringstream outp;
         outp << "Exact Value: " << ex_value << "\t Computed: " << value
             << std::endl;
@@ -260,7 +257,7 @@ main(int argc, char **argv)
     }
     if (i != niter - 1)
     {
-      //triangulation.refine_global (1);
+      //global mesh refinement
       DOFH.RefineSpace();
       Alg.ReInit();
       out.ReInit();

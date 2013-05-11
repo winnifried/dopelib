@@ -1,25 +1,25 @@
 /**
-*
-* Copyright (C) 2012 by the DOpElib authors
-*
-* This file is part of DOpElib
-*
-* DOpElib is free software: you can redistribute it
-* and/or modify it under the terms of the GNU General Public
-* License as published by the Free Software Foundation, either
-* version 3 of the License, or (at your option) any later
-* version.
-*
-* DOpElib is distributed in the hope that it will be
-* useful, but WITHOUT ANY WARRANTY; without even the implied
-* warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-* PURPOSE.  See the GNU General Public License for more
-* details.
-*
-* Please refer to the file LICENSE.TXT included in this distribution
-* for further information on this license.
-*
-**/
+ *
+ * Copyright (C) 2012 by the DOpElib authors
+ *
+ * This file is part of DOpElib
+ *
+ * DOpElib is free software: you can redistribute it
+ * and/or modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation, either
+ * version 3 of the License, or (at your option) any later
+ * version.
+ *
+ * DOpElib is distributed in the hope that it will be
+ * useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+ * PURPOSE.  See the GNU General Public License for more
+ * details.
+ *
+ * Please refer to the file LICENSE.TXT included in this distribution
+ * for further information on this license.
+ *
+ **/
 
 #ifndef _LOCALFunctional_
 #define _LOCALFunctional_
@@ -37,9 +37,13 @@ using namespace std;
 using namespace dealii;
 using namespace DOpE;
 
-template<template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
-  class LocalFunctional : public FunctionalInterface<CellDataContainer,
-      FaceDataContainer, DH, VECTOR, dopedim, dealdim>
+template<
+    template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+    template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
+    template<int, int> class DH, typename VECTOR, int dopedim, int dealdim =
+        dopedim>
+  class LocalFunctional : public FunctionalInterface<CDC, FDC, DH, VECTOR,
+      dopedim, dealdim>
   {
     public:
       LocalFunctional()
@@ -58,8 +62,7 @@ template<template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
       }
 
       double
-      Value(
-          const CellDataContainer<DH, VECTOR, dealdim>& cdc)
+      Value(const CDC<DH, VECTOR, dealdim>& cdc)
       {
         const DOpEWrapper::FEValues<dealdim> & state_fe_values =
             cdc.GetFEValuesState();
@@ -82,8 +85,8 @@ template<template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
 
       double
       PointValue(
-          const DOpEWrapper::DoFHandler<dopedim, DH > &/*control_dof_handler*/,
-          const DOpEWrapper::DoFHandler<dealdim, DH > &state_dof_handler,
+          const DOpEWrapper::DoFHandler<dopedim, DH> &/*control_dof_handler*/,
+          const DOpEWrapper::DoFHandler<dealdim, DH> &state_dof_handler,
           const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
           const std::map<std::string, const VECTOR*> &domain_values)
       {
@@ -115,16 +118,15 @@ template<template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
       }
 
       void
-      Value_U(
-	const CellDataContainer<DH, VECTOR, dealdim>& /*cdc*/,
-	dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
+      Value_U(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
+          dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
       {
       }
 
       virtual void
       PointValue_U(
-          const DOpEWrapper::DoFHandler<dopedim, DH > &/*control_dof_handler*/,
-          const DOpEWrapper::DoFHandler<dealdim, DH > &state_dof_handler,
+          const DOpEWrapper::DoFHandler<dopedim, DH> &/*control_dof_handler*/,
+          const DOpEWrapper::DoFHandler<dealdim, DH> &state_dof_handler,
           const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
           const std::map<std::string, const VECTOR*> &domain_values,
           VECTOR& rhs, double scale)
@@ -172,14 +174,12 @@ template<template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
           const DOpEWrapper::DoFHandler<dopedim, DH> &/*control_dof_handler*/,
           const DOpEWrapper::DoFHandler<dealdim, DH> &,
           const std::map<std::string, const dealii::Vector<double>*> &,
-          const std::map<std::string, const VECTOR*> &,
-          VECTOR&, double)
+          const std::map<std::string, const VECTOR*> &, VECTOR&, double)
       {
       }
 
       void
-      Value_Q(
-          const CellDataContainer<DH, VECTOR, dealdim>& cdc,
+      Value_Q(const CDC<DH, VECTOR, dealdim>& cdc,
           dealii::Vector<double> &local_cell_vector, double scale)
       {
         const DOpEWrapper::FEValues<dealdim> & state_fe_values =
@@ -202,16 +202,15 @@ template<template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
       }
 
       void
-      Value_UU(
-          const CellDataContainer<DH, VECTOR, dealdim>&,
-          dealii::Vector<double> &, double )
+      Value_UU(const CDC<DH, VECTOR, dealdim>&, dealii::Vector<double> &,
+          double)
       {
       }
 
       virtual void
       PointValue_UU(
-          const DOpEWrapper::DoFHandler<dopedim, DH > &/*control_dof_handler*/,
-          const DOpEWrapper::DoFHandler<dealdim, DH > &state_dof_handler,
+          const DOpEWrapper::DoFHandler<dopedim, DH> &/*control_dof_handler*/,
+          const DOpEWrapper::DoFHandler<dealdim, DH> &state_dof_handler,
           const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
           const std::map<std::string, const VECTOR*> &domain_values,
           VECTOR& rhs, double scale)
@@ -251,8 +250,8 @@ template<template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
 
       virtual void
       PointValue_QU(
-          const DOpEWrapper::DoFHandler<dopedim, DH > &/*control_dof_handler*/,
-          const DOpEWrapper::DoFHandler<dealdim, DH > &/*state_dof_handler*/,
+          const DOpEWrapper::DoFHandler<dopedim, DH> &/*control_dof_handler*/,
+          const DOpEWrapper::DoFHandler<dealdim, DH> &/*state_dof_handler*/,
           const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
           const std::map<std::string, const VECTOR*> &/*domain_values*/,
           VECTOR& /*rhs*/, double /*scale*/)
@@ -262,8 +261,8 @@ template<template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
 
       virtual void
       PointValue_UQ(
-          const DOpEWrapper::DoFHandler<dopedim, DH > &/*control_dof_handler*/,
-          const DOpEWrapper::DoFHandler<dealdim, DH > &/*state_dof_handler*/,
+          const DOpEWrapper::DoFHandler<dopedim, DH> &/*control_dof_handler*/,
+          const DOpEWrapper::DoFHandler<dealdim, DH> &/*state_dof_handler*/,
           const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
           const std::map<std::string, const VECTOR*> &/*domain_values*/,
           VECTOR& /*rhs*/, double /*scale*/)
@@ -273,8 +272,8 @@ template<template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
 
       virtual void
       PointValue_QQ(
-          const DOpEWrapper::DoFHandler<dopedim, DH > &/*control_dof_handler*/,
-          const DOpEWrapper::DoFHandler<dealdim, DH > &/*state_dof_handler*/,
+          const DOpEWrapper::DoFHandler<dopedim, DH> &/*control_dof_handler*/,
+          const DOpEWrapper::DoFHandler<dealdim, DH> &/*state_dof_handler*/,
           const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
           const std::map<std::string, const VECTOR*> &/*domain_values*/,
           VECTOR& /*rhs*/, double /*scale*/)
@@ -283,24 +282,19 @@ template<template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
       }
 
       void
-      Value_QU(
-          const CellDataContainer<DH, VECTOR, dealdim>& cdc ,
-          dealii::Vector<double> &local_cell_vector ,
-          double scale )
+      Value_QU(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
+          dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
       {
       }
 
       void
-      Value_UQ(
-          const CellDataContainer<DH, VECTOR, dealdim>& cdc ,
-          dealii::Vector<double> &local_cell_vector ,
-          double scale )
+      Value_UQ(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
+          dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
       {
       }
 
       void
-      Value_QQ(
-          const CellDataContainer<DH, VECTOR, dealdim>& cdc,
+      Value_QQ(const CDC<DH, VECTOR, dealdim>& cdc,
           dealii::Vector<double> &local_cell_vector, double scale)
       {
         const DOpEWrapper::FEValues<dealdim> & state_fe_values =
