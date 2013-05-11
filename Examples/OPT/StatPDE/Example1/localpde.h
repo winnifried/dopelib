@@ -33,8 +33,7 @@ using namespace DOpE;
 template<
     template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
     template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
-    template<int, int> class DH, typename VECTOR, int dopedim, int dealdim =
-        dopedim>
+    template<int, int> class DH, typename VECTOR, int dealdim>
   class LocalPDE : public PDEInterface<CDC, FDC, DH, VECTOR, dealdim>
   {
     public:

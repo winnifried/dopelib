@@ -64,7 +64,6 @@ using namespace DOpE;
 #define DOFHANDLER DoFHandler
 #define FE FESystem
 
-
 const static int DIM = 2;
 const static int CDIM = 0;
 
@@ -82,7 +81,7 @@ typedef LocalFunctional<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> COSTFUNCTIONAL;
 typedef FunctionalInterface<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> FUNCTIONALINTERFACE;
 
 typedef OptProblemContainer<FUNCTIONALINTERFACE, COSTFUNCTIONAL,
-    LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM>,
+    LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
     SimpleDirichletData<VECTOR, DIM>,
     NoConstraints<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM>, SPARSITYPATTERN,
     VECTOR, CDIM, DIM> OP;
@@ -136,7 +135,7 @@ main(int argc, char **argv)
   ParameterReader pr;
   SSolver::declare_params(pr);
   RNA::declare_params(pr);
-  LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM>::declare_params(pr);
+  LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>::declare_params(pr);
   COSTFUNCTIONAL::declare_params(pr);
   BoundaryParabel::declare_params(pr);
   LocalBoundaryFaceFunctionalDrag<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM>::declare_params(
@@ -145,8 +144,11 @@ main(int argc, char **argv)
       pr);
   pr.read_parameters(paramfile);
 
-  Triangulation<DIM> triangulation;
+  // Mesh-refinement cycles
+  const int niter = 1;
 
+  //create triangulation
+  Triangulation<DIM> triangulation;
   GridIn<DIM> grid_in;
   grid_in.attach_triangulation(triangulation);
   // Grid for "normal" fluid Benchmark
@@ -155,12 +157,13 @@ main(int argc, char **argv)
   grid_in.read_ucd(input_file);
 
   Point<DIM> p(0.2, 0.2);
-  double radius = 0.05;
+  const double radius = 0.05;
   static const HyperBallBoundary<DIM> boundary(p, radius);
   triangulation.set_boundary(80, boundary);
+  triangulation.refine_global(2);
+
 
   FE<DIM> control_fe(FE_Nothing<DIM>(1), 2); //2 Parameter, thus 2 components
-
   FE<DIM> state_fe(FE_Q<DIM>(2), 2, // velocities
       FE_Q<DIM>(1), 1); // pressure with CG(1)
 
@@ -168,7 +171,7 @@ main(int argc, char **argv)
   FACEQUADRATURE face_quadrature_formula(3);
   IDC idc(quadrature_formula, face_quadrature_formula);
 
-  LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> LPDE(pr);
+  LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM> LPDE(pr);
   COSTFUNCTIONAL LFunc(pr);
 
   LocalPointFunctionalPressure<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> LPFP;
@@ -179,8 +182,6 @@ main(int argc, char **argv)
   LocalBoundaryFaceFunctionalLift<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> LBFL(
       pr);
 
-  //pseudo time
-  triangulation.refine_global(2);
 
   STH DOFH(triangulation, control_fe, state_fe, DOpEtypes::stationary);
 
@@ -192,17 +193,14 @@ main(int argc, char **argv)
   P.AddFunctional(&LBFD);
   P.AddFunctional(&LBFL);
 
-  // fuer Drag und Lift Auswertung am Zylinder
+  //Due to drag and lift evaluation at the boundary
   P.SetBoundaryFunctionalColors(80);
 
   // Due to regularization
   P.SetBoundaryFunctionalColors(50);
   P.SetBoundaryFunctionalColors(51);
 
-  std::vector<bool> comp_mask(3);
-
-  comp_mask[0] = true;
-  comp_mask[1] = true;
+  std::vector<bool> comp_mask(3, true);
   comp_mask[2] = false;
 
   DOpEWrapper::ZeroFunction<DIM> zf(3);
@@ -228,8 +226,6 @@ main(int argc, char **argv)
   RNA Alg(&P, &solver, pr);
 
   std::string cases = "solve";
-  // Mesh-refinement cycles
-  int niter = 1;
 
   Vector<double> solution;
   Alg.ReInit();
@@ -245,7 +241,7 @@ main(int argc, char **argv)
         ControlVector<VECTOR> dq(q);
         // eps: step size for difference quotient
         // choose: 1.0, 0.1, 0.01, etc.
-        double eps_diff = 1.0e-2;
+        const double eps_diff = 1.0e-2;
         Alg.CheckGrads(eps_diff, q, dq, 2);
         Alg.CheckHessian(eps_diff, q, dq, 2);
       }

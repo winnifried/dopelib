@@ -50,18 +50,18 @@ template<
 
       LocalFunctional(ParameterReader &param_reader)
       {
-        // Control- and regulraization parameters
+        // Control- and regularization parameters
         mu_regularization = 1.0e+1;
         upper_bound_for_control_sum = 1.0e-2;
 
-        // Fluid- and material parameters
+        // Fluid parameters
         param_reader.SetSubsection("Local PDE parameters");
         _density_fluid = param_reader.get_double("density_fluid");
         _viscosity = param_reader.get_double("viscosity");
       }
 
       double
-      BoundaryValue(const FaceDataContainer<DH, VECTOR, dealdim>& fdc)
+      BoundaryValue(const FDC<DH, VECTOR, dealdim>& fdc)
       {
         const auto & state_fe_face_values = fdc.GetFEFaceValuesState();
         unsigned int n_q_points = fdc.GetNQPoints();
@@ -96,7 +96,6 @@ template<
             grad_v[1][0] = _ufacegrads[q_point][1][0];
             grad_v[1][1] = _ufacegrads[q_point][1][1];
 
-            // constitutive stress tensors for fluid
             Tensor<2, 2> cauchy_stress_fluid;
             cauchy_stress_fluid =
                 500.0
@@ -147,7 +146,7 @@ template<
       }
 
       void
-      BoundaryValue_U(const FaceDataContainer<DH, VECTOR, dealdim>& fdc,
+      BoundaryValue_U(const FDC<DH, VECTOR, dealdim>& fdc,
           dealii::Vector<double> &local_cell_vector, double scale)
       {
         const auto & state_fe_face_values = fdc.GetFEFaceValuesState();
@@ -190,7 +189,7 @@ template<
       }
 
       void
-      BoundaryValue_Q(const FaceDataContainer<DH, VECTOR, dealdim>& fdc,
+      BoundaryValue_Q(const FDC<DH, VECTOR, dealdim>& fdc,
           dealii::Vector<double> &local_cell_vector, double scale)
       {
         const auto & state_fe_face_values = fdc.GetFEFaceValuesState();
@@ -231,7 +230,7 @@ template<
       }
 
       void
-      BoundaryValue_QQ(const FaceDataContainer<DH, VECTOR, dealdim>& fdc,
+      BoundaryValue_QQ(const FDC<DH, VECTOR, dealdim>& fdc,
           dealii::Vector<double> &local_cell_vector, double scale)
       {
         const auto & state_fe_face_values = fdc.GetFEFaceValuesState();
@@ -278,67 +277,67 @@ template<
       }
 
       void
-      BoundaryValue_UU(const FaceDataContainer<DH, VECTOR, dealdim>& /*fdc*/,
+      BoundaryValue_UU(const FDC<DH, VECTOR, dealdim>& /*fdc*/,
           dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
       {
 
       }
 
       void
-      BoundaryValue_QU(const FaceDataContainer<DH, VECTOR, dealdim>& /*fdc*/,
+      BoundaryValue_QU(const FDC<DH, VECTOR, dealdim>& /*fdc*/,
           dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
       {
 
       }
 
       void
-      BoundaryValue_UQ(const FaceDataContainer<DH, VECTOR, dealdim>& /*fdc*/,
+      BoundaryValue_UQ(const FDC<DH, VECTOR, dealdim>& /*fdc*/,
           dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
       {
 
       }
 
       double
-      Value(const CellDataContainer<DH, VECTOR, dealdim>& /*cdc*/)
+      Value(const CDC<DH, VECTOR, dealdim>& /*cdc*/)
       {
         return 0.;
       }
 
       void
-      Value_U(const CellDataContainer<DH, VECTOR, dealdim>& /*cdc*/,
+      Value_U(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
           dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
       {
 
       }
 
       void
-      Value_Q(const CellDataContainer<DH, VECTOR, dealdim>& /*cdc*/,
+      Value_Q(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
           dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
       {
 
       }
 
       void
-      Value_UU(const CellDataContainer<DH, VECTOR, dealdim>& /*cdc*/,
+      Value_UU(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
           dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
       {
 
       }
 
       void
-      Value_QU(const CellDataContainer<DH, VECTOR, dealdim>& /*cdc*/,
+      Value_QU(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
           dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
       {
       }
 
       void
-      Value_UQ(const CellDataContainer<DH, VECTOR, dealdim>& /*cdc*/,
+      Value_UQ(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
           dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
       {
       }
 
       void
-      Value_QQ(const CellDataContainer<DH, VECTOR, dealdim>& /*cdc*/,
+      Value_QQ(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
           dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
       {
 
@@ -373,7 +372,7 @@ template<
       vector<vector<Tensor<1, dealdim> > > _dufacegrads;
 
 
-      // Fluid- and material parameters
+      // Fluid parameters
       double _density_fluid, _viscosity;
 
       // Control- and regularization parameters

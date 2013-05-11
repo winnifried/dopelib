@@ -77,7 +77,7 @@ typedef FunctionalInterface<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> FUNCTIONALI
 //We use an optproblemcontainer instead of a pdeproblemcontainer, as we solve an optimazation
 //problem. The optproblemcontainer holds all the information regarding the opt-problem.
 typedef OptProblemContainer<FUNCTIONALINTERFACE, COSTFUNCTIONAL,
-    LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM>,
+    LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
     SimpleDirichletData<VECTOR, DIM>,
     NoConstraints<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM>, SPARSITYPATTERN,
     VECTOR, CDIM, DIM> OP;
@@ -162,7 +162,7 @@ main(int argc, char **argv)
   IDC idc(quadrature_formula, face_quadrature_formula);
   const double alpha = 1.e-3;
 
-  LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> LPDE(alpha);
+  LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM> LPDE(alpha);
   COSTFUNCTIONAL LFunc(alpha);
 
   //AuxFunctionals
@@ -186,7 +186,6 @@ main(int argc, char **argv)
 
   SimpleDirichletData<VECTOR, DIM> DD(zf);
   P.SetDirichletBoundaryColors(0, comp_mask, &DD);
-
 
   SSolver solver(&P, "fullmem", pr, idc, 2);
   //Make sure we use the same outputhandler

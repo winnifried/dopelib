@@ -174,7 +174,6 @@ template<
 
   };
 
-// drag
 /****************************************************************************************/
 template<
     template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
@@ -262,7 +261,6 @@ template<
             double J;
             J = determinant(F);
 
-            // constitutive stress tensors for fluid
             Tensor<2, 2> cauchy_stress_fluid;
             cauchy_stress_fluid = (-pI
                 + _density_fluid * _viscosity * (grad_v + transpose(grad_v)));
@@ -272,7 +270,7 @@ template<
                 * state_fe_face_values.JxW(q_point);
           }
         }
-        return 500 * drag_lift_value[0]; // for fluid problems
+        return 500 * drag_lift_value[0];
       }
 
       UpdateFlags
@@ -368,7 +366,6 @@ template<
             grad_v[1][0] = _ufacegrads[q_point][1][0];
             grad_v[1][1] = _ufacegrads[q_point][1][1];
 
-            // constitutive stress tensors for fluid
             Tensor<2, 2> cauchy_stress_fluid;
             cauchy_stress_fluid = (-pI
                 + _density_fluid * _viscosity * (grad_v + transpose(grad_v)));
@@ -379,7 +376,7 @@ template<
           }
 
         }
-        return 500 * drag_lift_value[1]; // for fluid problems
+        return 500 * drag_lift_value[1];
       }
 
       UpdateFlags

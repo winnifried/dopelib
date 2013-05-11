@@ -74,7 +74,7 @@ typedef LocalFunctional<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> COSTFUNCTIONAL;
 typedef FunctionalInterface<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> FUNCTIONALINTERFACE;
 
 typedef OptProblemContainer<FUNCTIONALINTERFACE, COSTFUNCTIONAL,
-    LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM>,
+    LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
     SimpleDirichletData<VECTOR,  DIM>,
     NoConstraints<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM>, SPARSITYPATTERN,
     VECTOR, CDIM, DIM> OP;
@@ -140,7 +140,7 @@ main(int argc, char **argv)
   FACEQUADRATURE face_quadrature_formula(2);
   IDC idc(quadrature_formula, face_quadrature_formula);
 
-  LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> LPDE;
+  LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM> LPDE;
   COSTFUNCTIONAL LFunc;
 
   STH DOFH(triangulation, control_fe, state_fe, DOpEtypes::stationary);

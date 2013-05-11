@@ -33,8 +33,7 @@ using namespace DOpE;
 template<
     template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
     template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
-    template<int, int> class DH, typename VECTOR, int dopedim, int dealdim =
-        dopedim>
+    template<int, int> class DH, typename VECTOR, int dealdim>
   class LocalPDE : public PDEInterface<CDC, FDC, DH, VECTOR, dealdim>
   {
     public:
@@ -63,9 +62,8 @@ template<
         _viscosity = param_reader.get_double("viscosity");
       }
 
-      // Domain values for cells
       void
-      CellEquation(const CellDataContainer<DH, VECTOR, dealdim>& cdc,
+      CellEquation(const CDC<DH, VECTOR, dealdim>& cdc,
           dealii::Vector<double> &local_cell_vector, double scale,
           double /*scale_ico*/)
       {
@@ -100,7 +98,6 @@ template<
           v[0] = _uvalues[q_point](0);
           v[1] = _uvalues[q_point](1);
 
-          //double v_press = _uvalues[q_point](2);
           double v_incompressibility = v_grads[0][0] + v_grads[1][1];
 
           Tensor<1, 2> convection_fluid = v_grads * v;
@@ -131,7 +128,7 @@ template<
       }
 
       void
-      CellMatrix(const CellDataContainer<DH, VECTOR, dealdim>& cdc,
+      CellMatrix(const CDC<DH, VECTOR, dealdim>& cdc,
           dealii::FullMatrix<double> &local_entry_matrix, double scale,
           double /*scale_ico*/)
       {
@@ -176,7 +173,6 @@ template<
           v[0] = _uvalues[q_point](0);
           v[1] = _uvalues[q_point](1);
 
-
           for (unsigned int j = 0; j < n_dofs_per_cell; j++)
           {
             const Tensor<1, 2> phi_j_v = state_fe_values[velocities].value(j,
@@ -214,7 +210,7 @@ template<
       }
 
       void
-      CellEquation_U(const CellDataContainer<DH, VECTOR, dealdim>& cdc,
+      CellEquation_U(const CDC<DH, VECTOR, dealdim>& cdc,
           dealii::Vector<double> &local_cell_vector, double scale,
           double /*scale_ico*/)
       {
@@ -271,7 +267,6 @@ template<
 
           double zp = _zvalues[q_point](2);
 
-
           for (unsigned int i = 0; i < n_dofs_per_cell; i++)
           {
             const Tensor<1, 2> phi_i_v = state_fe_values[velocities].value(i,
@@ -291,8 +286,7 @@ template<
                         * scalar_product(
                             phi_i_grads_v + transpose(phi_i_grads_v), zv_grads)
                     + (phi_i_grads_v * zv_state + zv_state_grads * phi_i_v) * zv
-                    + (phi_i_grads_v[0][0] + phi_i_grads_v[1][1]) * zp
-                    )
+                    + (phi_i_grads_v[0][0] + phi_i_grads_v[1][1]) * zp)
                 * state_fe_values.JxW(q_point);
 
           }
@@ -300,7 +294,7 @@ template<
       }
 
       void
-      CellEquation_UT(const CellDataContainer<DH, VECTOR, dealdim>& cdc,
+      CellEquation_UT(const CDC<DH, VECTOR, dealdim>& cdc,
           dealii::Vector<double> &local_cell_vector, double scale,
           double /*scale_ico*/)
       {
@@ -347,7 +341,6 @@ template<
 
           double duv_incompressibility = duv_grads[0][0] + duv_grads[1][1];
 
-
           // state values which contains
           // solution from previous Newton step
           // Necessary for fluid convection term
@@ -371,15 +364,13 @@ template<
                 state_fe_values[velocities].gradient(i, q_point);
             const double phi_i_p = state_fe_values[pressure].value(i, q_point);
 
-
             local_cell_vector(i) += scale
                 * (scalar_product(du_pI, phi_i_grads_v)
                     + _viscosity
                         * scalar_product(duv_grads + transpose(duv_grads),
                             phi_i_grads_v)
                     + (duv_grads * duv_state + duv_state_grads * duv) * phi_i_v
-                    + duv_incompressibility * phi_i_p
-                    )
+                    + duv_incompressibility * phi_i_p)
                 * state_fe_values.JxW(q_point);
           }
         }
@@ -387,7 +378,7 @@ template<
       }
 
       void
-      CellEquation_UTT(const CellDataContainer<DH, VECTOR, dealdim>& cdc,
+      CellEquation_UTT(const CDC<DH, VECTOR, dealdim>& cdc,
           dealii::Vector<double> &local_cell_vector, double scale,
           double /*scale_ico*/)
       {
@@ -444,7 +435,6 @@ template<
 
           double dzp = _dzvalues[q_point](2);
 
-
           for (unsigned int i = 0; i < n_dofs_per_cell; i++)
           {
             const Tensor<1, 2> phi_i_v = state_fe_values[velocities].value(i,
@@ -452,7 +442,6 @@ template<
             const Tensor<2, 2> phi_i_grads_v =
                 state_fe_values[velocities].gradient(i, q_point);
             const double phi_i_p = state_fe_values[pressure].value(i, q_point);
-
 
             Tensor<2, dealdim> fluid_pressure_phi_i;
             fluid_pressure_phi_i.clear();
@@ -466,15 +455,14 @@ template<
                             phi_i_grads_v + transpose(phi_i_grads_v), dzv_grads)
                     + (phi_i_grads_v * dzv_state + dzv_state_grads * phi_i_v)
                         * dzv
-                    + (phi_i_grads_v[0][0] + phi_i_grads_v[1][1]) * dzp
-                    )
+                    + (phi_i_grads_v[0][0] + phi_i_grads_v[1][1]) * dzp)
                 * state_fe_values.JxW(q_point);
           }
         }
       }
 
       void
-      CellEquation_UU(const CellDataContainer<DH, VECTOR, dealdim>& cdc,
+      CellEquation_UU(const CDC<DH, VECTOR, dealdim>& cdc,
           dealii::Vector<double> &local_cell_vector, double scale,
           double /*scale_ico*/)
       {
@@ -546,7 +534,7 @@ template<
 
       // Look for BoundaryEquationQ
       void
-      CellEquation_Q(const CellDataContainer<DH, VECTOR, dealdim>& cdc,
+      CellEquation_Q(const CDC<DH, VECTOR, dealdim>& cdc,
           dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/,
           double /*scale_ico*/)
       {
@@ -554,7 +542,7 @@ template<
       }
 
       void
-      CellEquation_QT(const CellDataContainer<DH, VECTOR, dealdim>& cdc,
+      CellEquation_QT(const CDC<DH, VECTOR, dealdim>& cdc,
           dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/,
           double /*scale_ico*/)
       {
@@ -562,7 +550,7 @@ template<
       }
 
       void
-      CellEquation_QTT(const CellDataContainer<DH, VECTOR, dealdim>& cdc,
+      CellEquation_QTT(const CDC<DH, VECTOR, dealdim>& cdc,
           dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/,
           double /*scale_ico*/)
       {
@@ -570,21 +558,21 @@ template<
       }
 
       void
-      CellEquation_QU(const CellDataContainer<DH, VECTOR, dealdim>& cdc,
+      CellEquation_QU(const CDC<DH, VECTOR, dealdim>& cdc,
           dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/,
           double /*scale_ico*/)
       {
         assert(this->_problem_type == "adjoint_hessian");
       }
       void
-      CellEquation_UQ(const CellDataContainer<DH, VECTOR, dealdim>& cdc,
+      CellEquation_UQ(const CDC<DH, VECTOR, dealdim>& cdc,
           dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/,
           double /*scale_ico*/)
       {
         assert(this->_problem_type == "hessian");
       }
       void
-      CellEquation_QQ(const CellDataContainer<DH, VECTOR, dealdim>& cdc,
+      CellEquation_QQ(const CDC<DH, VECTOR, dealdim>& cdc,
           dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/,
           double /*scale_ico*/)
       {
@@ -592,7 +580,7 @@ template<
       }
 
       void
-      CellRightHandSide(const CellDataContainer<DH, VECTOR, dealdim>& cdc,
+      CellRightHandSide(const CDC<DH, VECTOR, dealdim>& cdc,
           dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
       {
         assert(this->_problem_type == "state");
@@ -600,7 +588,7 @@ template<
 
       // Values for Boundary integrals
       void
-      BoundaryEquation(const FaceDataContainer<DH, VECTOR, dealdim>& fdc,
+      BoundaryEquation(const FDC<DH, VECTOR, dealdim>& fdc,
           dealii::Vector<double> &local_cell_vector, double scale,
           double /*scale_ico*/)
       {
@@ -694,8 +682,8 @@ template<
       }
 
       void
-      BoundaryMatrix(const FaceDataContainer<DH, VECTOR, dealdim>& fdc,
-          dealii::FullMatrix<double> &local_entry_matrix, double /*scale*/,
+      BoundaryMatrix(const FDC<DH, VECTOR, dealdim>& fdc,
+          dealii::FullMatrix<double> &local_entry_matrix, double scale,
           double /*scale_ico*/)
       {
         const auto & state_fe_face_values = fdc.GetFEFaceValuesState();
@@ -741,7 +729,7 @@ template<
                 const Tensor<1, 2> neumann_value = do_nothing_LinAll
                     * state_fe_face_values.normal_vector(q_point);
 
-                local_entry_matrix(i, j) -= neumann_value * phi_i_v
+                local_entry_matrix(i, j) -= scale * neumann_value * phi_i_v
                     * state_fe_face_values.JxW(q_point);
               }
             }
@@ -751,14 +739,14 @@ template<
       }
 
       void
-      BoundaryRightHandSide(const FaceDataContainer<DH, VECTOR, dealdim>& fdc,
-          dealii::Vector<double> &local_cell_vector, double scale)
+      BoundaryRightHandSide(const FDC<DH, VECTOR, dealdim>& /*fdc*/,
+          dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
       {
         assert(this->_problem_type == "state");
       }
 
       void
-      BoundaryEquation_Q(const FaceDataContainer<DH, VECTOR, dealdim>& fdc,
+      BoundaryEquation_Q(const FDC<DH, VECTOR, dealdim>& fdc,
           dealii::Vector<double> &local_cell_vector, double scale,
           double /*scale_ico*/)
       {
@@ -805,7 +793,7 @@ template<
       }
 
       void
-      BoundaryEquation_QT(const FaceDataContainer<DH, VECTOR, dealdim>& fdc,
+      BoundaryEquation_QT(const FDC<DH, VECTOR, dealdim>& fdc,
           dealii::Vector<double> &local_cell_vector, double scale,
           double /*scale_ico*/)
       {
@@ -832,7 +820,6 @@ template<
                   * state_fe_face_values.normal_vector(q_point)
                   * state_fe_face_values.JxW(q_point);
             }
-
           }
         }
 
@@ -856,7 +843,7 @@ template<
       }
 
       void
-      BoundaryEquation_QTT(const FaceDataContainer<DH, VECTOR, dealdim>& fdc,
+      BoundaryEquation_QTT(const FDC<DH, VECTOR, dealdim>& fdc,
           dealii::Vector<double> &local_cell_vector, double scale,
           double /*scale_ico*/)
       {
@@ -904,7 +891,7 @@ template<
 
       // do-nothing condition at boundary /Gamma_1
       void
-      BoundaryEquation_U(const FaceDataContainer<DH, VECTOR, dealdim>& fdc,
+      BoundaryEquation_U(const FDC<DH, VECTOR, dealdim>& fdc,
           dealii::Vector<double> &local_cell_vector, double scale,
           double /*scale_ico*/)
       {
@@ -947,7 +934,7 @@ template<
       }
 
       void
-      BoundaryEquation_UT(const FaceDataContainer<DH, VECTOR, dealdim>& fdc,
+      BoundaryEquation_UT(const FDC<DH, VECTOR, dealdim>& fdc,
           dealii::Vector<double> &local_cell_vector, double scale,
           double /*scale_ico*/)
       {
@@ -990,7 +977,7 @@ template<
       }
 
       void
-      BoundaryEquation_UTT(const FaceDataContainer<DH, VECTOR, dealdim>& fdc,
+      BoundaryEquation_UTT(const FDC<DH, VECTOR, dealdim>& fdc,
           dealii::Vector<double> &local_cell_vector, double scale,
           double /*scale_ico*/)
       {
@@ -1033,7 +1020,7 @@ template<
       }
 
       void
-      BoundaryEquation_UU(const FaceDataContainer<DH, VECTOR, dealdim>& fdc,
+      BoundaryEquation_UU(const FDC<DH, VECTOR, dealdim>& /*fdc*/,
           dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/,
           double /*scale_ico*/)
       {
@@ -1041,7 +1028,7 @@ template<
       }
 
       void
-      BoundaryEquation_QU(const FaceDataContainer<DH, VECTOR, dealdim>& fdc,
+      BoundaryEquation_QU(const FDC<DH, VECTOR, dealdim>& /*fdc*/,
           dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/,
           double /*scale_ico*/)
       {
@@ -1049,7 +1036,7 @@ template<
       }
 
       void
-      BoundaryEquation_UQ(const FaceDataContainer<DH, VECTOR, dealdim>& fdc,
+      BoundaryEquation_UQ(const FDC<DH, VECTOR, dealdim>& /*fdc*/,
           dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/,
           double /*scale_ico*/)
       {
@@ -1057,7 +1044,7 @@ template<
       }
 
       void
-      BoundaryEquation_QQ(const FaceDataContainer<DH, VECTOR, dealdim>& fdc,
+      BoundaryEquation_QQ(const FDC<DH, VECTOR, dealdim>& /*fdc*/,
           dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/,
           double /*scale_ico*/)
       {
@@ -1065,7 +1052,7 @@ template<
       }
 
       void
-      ControlCellEquation(const CellDataContainer<DH, VECTOR, dealdim>& cdc,
+      ControlCellEquation(const CDC<DH, VECTOR, dealdim>& cdc,
           dealii::Vector<double> &local_cell_vector, double scale)
       {
         {
@@ -1082,7 +1069,7 @@ template<
       }
 
       void
-      ControlCellMatrix(const CellDataContainer<DH, VECTOR, dealdim>& cdc,
+      ControlCellMatrix(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
           FullMatrix<double> &local_entry_matrix)
       {
         assert(local_entry_matrix.m() == local_entry_matrix.n());
@@ -1202,10 +1189,7 @@ template<
 
       double _cell_diameter;
 
-      // Fluid- and material variables
-      double _density_fluid, _viscosity, _alpha_u, _lame_coefficient_mu,
-          _poisson_ratio_nu, _lame_coefficient_lambda;
-
+      double _density_fluid, _viscosity;
   };
 #endif
 

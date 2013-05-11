@@ -67,22 +67,6 @@ BoundaryParabel::value (const Point<2>  &p,
   
   if (component == 0)   
     {
-      
-      /*
-      // Channel problem
-      return   ( (p(0) == -6.0) && (p(1) <= 2.0)  ? - _mean_inflow_velocity * 
-       (std::pow(p(1), 2) - 2.0 * std::pow(p(1),1)) : 0 );
-      */
-      
-      /*
-      // Benchmark with flag
-      return ( (p(0) == 0) && (p(1) <= 0.41) ? -1.5 * _mean_inflow_velocity * 
-		     (4.0/0.1681) * 		     		    
-		     (std::pow(p(1), 2) - 0.41 * std::pow(p(1),1)) : 0 );  
-      
-      */
-      
-      // Benchmark
       return ( (p(0) == 0) && (p(1) <= 0.41) ? -_mean_inflow_velocity * 
 	       (4.0/0.1681) * 		     		    
 	       (std::pow(p(1), 2) - 0.41 * std::pow(p(1),1)) : 0 );  
