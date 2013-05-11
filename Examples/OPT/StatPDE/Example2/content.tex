@@ -1,8 +1,8 @@
 \subsubsection{General problem description}
 This example solves the following pointwise minimization problem
 \begin{align*}
-\min_{(q,u)\in \mathbb R^3 \times H_0^1(\Omega; \mathbb R^2)} J(q,u) &= \frac{1}{2} \sum_{i=0}^2\abs{(u-\overline u)(x_i)}^2 + \frac{\alpha}{2}\|q\|^2\\
-\text{s.t. } (\nabla u,\nabla \phi) &= (f(q),\phi)\;\;\forall\,\phi \in H^1_0(\Omega; \mathbb R^2)
+\min_{(q,u)\in \mathbb R^3 \times H_0^1(\Omega; \mathbb R^2)} J(q,u) &= \frac{1}{2} \sum_{i=0}^2\abs{(u-\overline u)(x_i)}^2 + \frac{\alpha}{2}\|q\|^2&&\\
+\text{s.t. } (\nabla u,\nabla \phi) &= (f(q),\phi) \quad\forall\,\phi \in H^1_0(\Omega; \mathbb R^2)
 \end{align*}
 on the domain $\Omega = [0,1]^2$, with zero dirichlet boundary conditions and
 \begin{itemize}
