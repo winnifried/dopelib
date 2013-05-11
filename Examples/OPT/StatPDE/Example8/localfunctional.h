@@ -93,44 +93,44 @@ template<template<template<int, int> class DH, typename VECTOR, int dealdim> cla
       
     }
 
-     void BoundaryValue_Q(const FDC<DH, VECTOR, dealdim>& fdc __attribute__((unused)),
-			  dealii::Vector<double> &local_cell_vector __attribute__((unused)), 
-			  double scale __attribute__((unused)))
+     void BoundaryValue_Q(const FDC<DH, VECTOR, dealdim>& fdc ,
+			  dealii::Vector<double> &local_cell_vector , 
+			  double scale )
      {
      }
      
-    void BoundaryValue_UU(const FDC<DH, VECTOR, dealdim>& fdc __attribute__((unused)),
-			  dealii::Vector<double> &local_cell_vector __attribute__((unused)), 
-			  double scale __attribute__((unused)))
+    void BoundaryValue_UU(const FDC<DH, VECTOR, dealdim>& fdc ,
+			  dealii::Vector<double> &local_cell_vector , 
+			  double scale )
     {
     }
      
-    void BoundaryValue_QU(const FDC<DH, VECTOR, dealdim>& fdc __attribute__((unused)),
-			  dealii::Vector<double> &local_cell_vector __attribute__((unused)), 
-			  double scale __attribute__((unused)))
+    void BoundaryValue_QU(const FDC<DH, VECTOR, dealdim>& fdc ,
+			  dealii::Vector<double> &local_cell_vector , 
+			  double scale )
     {
     }
     
-    void BoundaryValue_UQ(const FDC<DH, VECTOR, dealdim>& fdc __attribute__((unused)),
-			  dealii::Vector<double> &local_cell_vector __attribute__((unused)), 
-			  double scale __attribute__((unused)))
+    void BoundaryValue_UQ(const FDC<DH, VECTOR, dealdim>& fdc ,
+			  dealii::Vector<double> &local_cell_vector , 
+			  double scale )
     {
     }
      
-    void BoundaryValue_QQ(const FDC<DH, VECTOR, dealdim>& fdc __attribute__((unused)),
-			  dealii::Vector<double> &local_cell_vector __attribute__((unused)), 
-			  double scale __attribute__((unused)))
+    void BoundaryValue_QQ(const FDC<DH, VECTOR, dealdim>& fdc ,
+			  dealii::Vector<double> &local_cell_vector , 
+			  double scale )
     {
     }
 
-    void Value_U(const CDC<DH, VECTOR, dealdim>& cdc __attribute__((unused)),
-		 dealii::Vector<double> &local_cell_vector __attribute__((unused)), 
-		 double scale __attribute__((unused)))
+    void Value_U(const CDC<DH, VECTOR, dealdim>& cdc ,
+		 dealii::Vector<double> &local_cell_vector , 
+		 double scale )
     {
     }
-    void Value_Q(const CDC<DH, VECTOR, dealdim>& cdc __attribute__((unused)),
-		 dealii::Vector<double> &local_cell_vector __attribute__((unused)), 
-		 double scale __attribute__((unused)))
+    void Value_Q(const CDC<DH, VECTOR, dealdim>& cdc ,
+		 dealii::Vector<double> &local_cell_vector , 
+		 double scale )
     {
     }
 

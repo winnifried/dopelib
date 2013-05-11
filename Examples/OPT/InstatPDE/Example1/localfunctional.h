@@ -187,14 +187,14 @@ template<template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
     }
 
     void Value_QU(const CellDataContainer<DH, VECTOR, dealdim>&,
-                  dealii::Vector<double> &local_cell_vector __attribute__((unused)),
-                  double scale __attribute__((unused)))
+                  dealii::Vector<double> &local_cell_vector ,
+                  double scale )
     {
     }
 
     void Value_UQ(const CellDataContainer<DH, VECTOR, dealdim>&,
-                  dealii::Vector<double> &local_cell_vector __attribute__((unused)),
-                  double scale __attribute__((unused)))
+                  dealii::Vector<double> &local_cell_vector ,
+                  double scale )
     {
     }
 

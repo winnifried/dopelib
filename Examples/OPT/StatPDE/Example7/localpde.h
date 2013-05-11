@@ -208,27 +208,27 @@ template<template<int, int> class DH,typename VECTOR, int dealdim>
       }
     }
 
-    void CellEquation_UU(const CellDataContainer<DH, VECTOR, dealdim>& cdc __attribute__((unused)),
-			 dealii::Vector<double> &local_cell_vector __attribute__((unused)),
-			 double scale __attribute__((unused)), double /*scale_ico*/)
+    void CellEquation_UU(const CellDataContainer<DH, VECTOR, dealdim>& cdc ,
+			 dealii::Vector<double> &local_cell_vector ,
+			 double scale , double /*scale_ico*/)
     {
       assert(this->_problem_type == "adjoint_hessian");
     }
-    void CellEquation_QU(const CellDataContainer<DH, VECTOR, dealdim>& cdc __attribute__((unused)),
-			 dealii::Vector<double> &local_cell_vector __attribute__((unused)),
-			 double scale __attribute__((unused)), double /*scale_ico*/)
+    void CellEquation_QU(const CellDataContainer<DH, VECTOR, dealdim>& cdc ,
+			 dealii::Vector<double> &local_cell_vector ,
+			 double scale , double /*scale_ico*/)
     {
       assert(this->_problem_type == "adjoint_hessian");
     }
-    void CellEquation_UQ(const CellDataContainer<DH, VECTOR, dealdim>& cdc __attribute__((unused)),
-			 dealii::Vector<double> &local_cell_vector __attribute__((unused)),
-			 double scale __attribute__((unused)), double /*scale_ico*/)
+    void CellEquation_UQ(const CellDataContainer<DH, VECTOR, dealdim>& cdc ,
+			 dealii::Vector<double> &local_cell_vector ,
+			 double scale , double /*scale_ico*/)
     {
       assert(this->_problem_type == "hessian");
     }
-    void CellEquation_QQ(const CellDataContainer<DH, VECTOR, dealdim>& cdc __attribute__((unused)),
-			 dealii::Vector<double> &local_cell_vector __attribute__((unused)),
-			 double scale __attribute__((unused)), double /*scale_ico*/)
+    void CellEquation_QQ(const CellDataContainer<DH, VECTOR, dealdim>& cdc ,
+			 dealii::Vector<double> &local_cell_vector ,
+			 double scale , double /*scale_ico*/)
     {
       assert(this->_problem_type == "hessian");
     }

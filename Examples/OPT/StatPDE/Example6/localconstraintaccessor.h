@@ -186,7 +186,7 @@ namespace DOpE
       }
     }
 
-    inline void GetLocalConstraintSecondDerivative(Tensor<2,1>& derivative, const dealii::BlockVector<double>& /*constraints*/, unsigned int local_block __attribute__((unused)), unsigned int local_index_1, unsigned int local_index_2) const
+    inline void GetLocalConstraintSecondDerivative(Tensor<2,1>& derivative, const dealii::BlockVector<double>& /*constraints*/, unsigned int local_block , unsigned int local_index_1, unsigned int local_index_2) const
     {
       assert(local_index_1 == 0);
       assert(local_index_2 == 0);
@@ -208,7 +208,7 @@ namespace DOpE
       }
     }
 
-    inline void GetLocalConstraintSecondDerivative(Tensor<2,1>& derivative, const dealii::BlockVector<double>& /*constraints*/, unsigned int local_block __attribute__((unused)) ) const
+    inline void GetLocalConstraintSecondDerivative(Tensor<2,1>& derivative, const dealii::BlockVector<double>& /*constraints*/, unsigned int local_block  ) const
     {
       derivative[0][0] = 0.;
     }

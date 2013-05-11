@@ -85,9 +85,9 @@ namespace DOpE
       }
     }
 
-    void Value_U(const CDC<DH,VECTOR,dealdim>& cdc __attribute__((unused)),
-		 dealii::Vector<double> &local_cell_vector __attribute__((unused)), 
-		 double scale __attribute__((unused)))
+    void Value_U(const CDC<DH,VECTOR,dealdim>& cdc ,
+		 dealii::Vector<double> &local_cell_vector , 
+		 double scale )
     {
     }
 
@@ -115,24 +115,24 @@ namespace DOpE
      }
    } 
  
-   void Value_UU(const CDC<DH,VECTOR,dealdim>& cdc __attribute__((unused)),
-		 dealii::Vector<double> &local_cell_vector __attribute__((unused)), 
-		 double scale __attribute__((unused)))
+   void Value_UU(const CDC<DH,VECTOR,dealdim>& cdc ,
+		 dealii::Vector<double> &local_cell_vector , 
+		 double scale )
    {
    }
-   void Value_QU(const CDC<DH,VECTOR,dealdim>& cdc __attribute__((unused)),
-		 dealii::Vector<double> &local_cell_vector __attribute__((unused)), 
-		 double scale __attribute__((unused)))
+   void Value_QU(const CDC<DH,VECTOR,dealdim>& cdc ,
+		 dealii::Vector<double> &local_cell_vector , 
+		 double scale )
    {
    }
-   void Value_UQ(const CDC<DH,VECTOR,dealdim>& cdc __attribute__((unused)),
-		 dealii::Vector<double> &local_cell_vector __attribute__((unused)), 
-		 double scale __attribute__((unused)))
+   void Value_UQ(const CDC<DH,VECTOR,dealdim>& cdc ,
+		 dealii::Vector<double> &local_cell_vector , 
+		 double scale )
    {
    }
-   void Value_QQ(const CDC<DH,VECTOR,dealdim>& cdc __attribute__((unused)),
-		 dealii::Vector<double> &local_cell_vector __attribute__((unused)), 
-		 double scale __attribute__((unused)))
+   void Value_QQ(const CDC<DH,VECTOR,dealdim>& cdc ,
+		 dealii::Vector<double> &local_cell_vector , 
+		 double scale )
    {
    }
    
@@ -236,7 +236,7 @@ namespace DOpE
      return ret;
    }
 
-   void PostProcessConstraints(ConstraintVector<VECTOR>&  g __attribute__((unused))) const {} 
+   void PostProcessConstraints(ConstraintVector<VECTOR>&  g ) const {} 
 
    void FeasibilityShift(const ControlVector<VECTOR>& g_hat,ControlVector<VECTOR>&  g,double lambda) const 
    {

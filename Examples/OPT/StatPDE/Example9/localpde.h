@@ -1539,44 +1539,44 @@ template<template<int, int> class DH,typename VECTOR, int dealdim>
 
 
     // Look for BoundaryEquationQ
-    void CellEquation_Q(const CellDataContainer<DH, VECTOR, dealdim>& cdc __attribute__((unused)),
+    void CellEquation_Q(const CellDataContainer<DH, VECTOR, dealdim>& cdc ,
 			dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/, double /*scale_ico*/)
     { 
       assert(this->_problem_type == "gradient");
     }
 
     
-    void CellEquation_QT(const CellDataContainer<DH, VECTOR, dealdim>& cdc __attribute__((unused)),
+    void CellEquation_QT(const CellDataContainer<DH, VECTOR, dealdim>& cdc ,
 			 dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/, double /*scale_ico*/)
     {      
       assert(this->_problem_type == "tangent");
     }
 
-    void CellEquation_QTT(const CellDataContainer<DH, VECTOR, dealdim>& cdc __attribute__((unused)),
+    void CellEquation_QTT(const CellDataContainer<DH, VECTOR, dealdim>& cdc ,
 			  dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/, double /*scale_ico*/)
     {    
       assert(this->_problem_type == "hessian");
     }
 
   
-    void CellEquation_QU(const CellDataContainer<DH, VECTOR, dealdim>& cdc __attribute__((unused)),
+    void CellEquation_QU(const CellDataContainer<DH, VECTOR, dealdim>& cdc ,
 			 dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/, double /*scale_ico*/)
     {
       assert(this->_problem_type == "adjoint_hessian");
     }
-    void CellEquation_UQ(const CellDataContainer<DH, VECTOR, dealdim>& cdc __attribute__((unused)),
+    void CellEquation_UQ(const CellDataContainer<DH, VECTOR, dealdim>& cdc ,
 			 dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/, double /*scale_ico*/)
     {
       assert(this->_problem_type == "hessian");
     }
-    void CellEquation_QQ(const CellDataContainer<DH, VECTOR, dealdim>& cdc __attribute__((unused)),
+    void CellEquation_QQ(const CellDataContainer<DH, VECTOR, dealdim>& cdc ,
 			 dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/, double /*scale_ico*/)
     { 
       assert(this->_problem_type == "hessian");
     }
     
  
-  void CellRightHandSide(const CellDataContainer<DH, VECTOR, dealdim>& cdc __attribute__((unused)),
+  void CellRightHandSide(const CellDataContainer<DH, VECTOR, dealdim>& cdc ,
 			 dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
   {
       assert(this->_problem_type == "state");    
@@ -1730,8 +1730,8 @@ template<template<int, int> class DH,typename VECTOR, int dealdim>
   }
   
 
-  void BoundaryRightHandSide (const FaceDataContainer<DH, VECTOR, dealdim>& fdc __attribute__((unused)),
-			      dealii::Vector<double> &local_cell_vector __attribute__((unused)), double scale __attribute__((unused)))
+  void BoundaryRightHandSide (const FaceDataContainer<DH, VECTOR, dealdim>& fdc ,
+			      dealii::Vector<double> &local_cell_vector , double scale )
   {
     assert(this->_problem_type == "state");
   }
@@ -2010,25 +2010,25 @@ template<template<int, int> class DH,typename VECTOR, int dealdim>
       }
   }
   
-void BoundaryEquation_UU (const FaceDataContainer<DH, VECTOR, dealdim>& fdc __attribute__((unused)),
+void BoundaryEquation_UU (const FaceDataContainer<DH, VECTOR, dealdim>& fdc ,
 			   dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/, double /*scale_ico*/) 
   {
     assert(this->_problem_type == "adjoint_hessian");	
   }
  
-void BoundaryEquation_QU (const FaceDataContainer<DH, VECTOR, dealdim>& fdc __attribute__((unused)),
+void BoundaryEquation_QU (const FaceDataContainer<DH, VECTOR, dealdim>& fdc ,
 			   dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/, double /*scale_ico*/)
   {
     assert(this->_problem_type == "adjoint_hessian");	
   }
  
-void BoundaryEquation_UQ (const FaceDataContainer<DH, VECTOR, dealdim>& fdc __attribute__((unused)),
+void BoundaryEquation_UQ (const FaceDataContainer<DH, VECTOR, dealdim>& fdc ,
 			   dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/, double /*scale_ico*/)
   {
     
   }
  
-void BoundaryEquation_QQ (const FaceDataContainer<DH, VECTOR, dealdim>& fdc __attribute__((unused)),
+void BoundaryEquation_QQ (const FaceDataContainer<DH, VECTOR, dealdim>& fdc ,
 			   dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/, double /*scale_ico*/)
   {
     
@@ -2088,25 +2088,25 @@ void BoundaryEquation_QQ (const FaceDataContainer<DH, VECTOR, dealdim>& fdc __at
   {
   }
 
-void FaceEquation_UU (const FaceDataContainer<DH, VECTOR, dealdim>& fdc __attribute__((unused)),
+void FaceEquation_UU (const FaceDataContainer<DH, VECTOR, dealdim>& fdc ,
 			   dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/, double /*scale_ico*/) 
   {
     assert(this->_problem_type == "adjoint_hessian");	
   }
  
-void FaceEquation_QU (const FaceDataContainer<DH, VECTOR, dealdim>& fdc __attribute__((unused)),
+void FaceEquation_QU (const FaceDataContainer<DH, VECTOR, dealdim>& fdc ,
 			   dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/, double /*scale_ico*/)
   {
     assert(this->_problem_type == "adjoint_hessian");	
   }
  
-void FaceEquation_UQ (const FaceDataContainer<DH, VECTOR, dealdim>& fdc __attribute__((unused)),
+void FaceEquation_UQ (const FaceDataContainer<DH, VECTOR, dealdim>& fdc ,
 			   dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/, double /*scale_ico*/)
   {
     
   }
  
-void FaceEquation_QQ (const FaceDataContainer<DH, VECTOR, dealdim>& fdc __attribute__((unused)),
+void FaceEquation_QQ (const FaceDataContainer<DH, VECTOR, dealdim>& fdc ,
 			   dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/, double /*scale_ico*/)
   {
     
@@ -2114,7 +2114,7 @@ void FaceEquation_QQ (const FaceDataContainer<DH, VECTOR, dealdim>& fdc __attrib
 
 ///////// Hier Face zuende
 
-   void ControlCellEquation(const CellDataContainer<DH, VECTOR, dealdim>& cdc __attribute__((unused)),
+   void ControlCellEquation(const CellDataContainer<DH, VECTOR, dealdim>& cdc ,
    dealii::Vector<double> &local_cell_vector, double scale)
     { 
       {
@@ -2129,7 +2129,7 @@ void FaceEquation_QQ (const FaceDataContainer<DH, VECTOR, dealdim>& fdc __attrib
       }
     }
 
-    void ControlCellMatrix(const CellDataContainer<DH, VECTOR, dealdim>& cdc __attribute__((unused)),
+    void ControlCellMatrix(const CellDataContainer<DH, VECTOR, dealdim>& cdc ,
    FullMatrix<double> &local_entry_matrix) 
     {
       assert(local_entry_matrix.m() == local_entry_matrix.n());

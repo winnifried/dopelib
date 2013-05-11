@@ -1,25 +1,25 @@
 /**
-*
-* Copyright (C) 2012 by the DOpElib authors
-*
-* This file is part of DOpElib
-*
-* DOpElib is free software: you can redistribute it
-* and/or modify it under the terms of the GNU General Public
-* License as published by the Free Software Foundation, either
-* version 3 of the License, or (at your option) any later
-* version.
-*
-* DOpElib is distributed in the hope that it will be
-* useful, but WITHOUT ANY WARRANTY; without even the implied
-* warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-* PURPOSE.  See the GNU General Public License for more
-* details.
-*
-* Please refer to the file LICENSE.TXT included in this distribution
-* for further information on this license.
-*
-**/
+ *
+ * Copyright (C) 2012 by the DOpElib authors
+ *
+ * This file is part of DOpElib
+ *
+ * DOpElib is free software: you can redistribute it
+ * and/or modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation, either
+ * version 3 of the License, or (at your option) any later
+ * version.
+ *
+ * DOpElib is distributed in the hope that it will be
+ * useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+ * PURPOSE.  See the GNU General Public License for more
+ * details.
+ *
+ * Please refer to the file LICENSE.TXT included in this distribution
+ * for further information on this license.
+ *
+ **/
 
 #ifndef _LOCALFunctionalS_
 #define _LOCALFunctionalS_
@@ -30,79 +30,100 @@ using namespace std;
 using namespace dealii;
 using namespace DOpE;
 
-template<typename VECTOR, int dopedim, int dealdim>
-  class LocalMeanValueFunctional : public FunctionalInterface<CellDataContainer,FaceDataContainer,dealii::DoFHandler, VECTOR,dopedim,dealdim>
+template<
+    template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+    template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
+    template<int, int> class DH, typename VECTOR, int dopedim, int dealdim =
+        dopedim>
+  class LocalMeanValueFunctional : public FunctionalInterface<CDC, FDC, DH,
+      VECTOR, dopedim, dealdim>
   {
-  public:
-    LocalMeanValueFunctional()
-    {
-    }
-
-    double Value(const CellDataContainer<dealii::DoFHandler, VECTOR, dealdim>& cdc)
-    {
-      const DOpEWrapper::FEValues<dealdim> & state_fe_values = cdc.GetFEValuesState();
-      unsigned int n_q_points = cdc.GetNQPoints();
+    public:
+      LocalMeanValueFunctional()
       {
-	_uvalues.resize(n_q_points);
-	cdc.GetValuesState("state",_uvalues);
       }
 
-      double r = 0.;
-      for(unsigned int q_point=0; q_point<n_q_points; q_point++)
+      double
+      Value(const CDC<DH, VECTOR, dealdim>& cdc)
       {
-	r += fabs(_uvalues[q_point]) * state_fe_values.JxW(q_point);
+        const DOpEWrapper::FEValues<dealdim> & state_fe_values =
+            cdc.GetFEValuesState();
+        unsigned int n_q_points = cdc.GetNQPoints();
+        {
+          _uvalues.resize(n_q_points);
+          cdc.GetValuesState("state", _uvalues);
+        }
+
+        double r = 0.;
+        for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
+        {
+          r += fabs(_uvalues[q_point]) * state_fe_values.JxW(q_point);
+        }
+        return r;
       }
-      return r;
-    }
 
-    UpdateFlags GetUpdateFlags() const
-    {
-      return update_values | update_quadrature_points;
-    }
+      UpdateFlags
+      GetUpdateFlags() const
+      {
+        return update_values | update_quadrature_points;
+      }
 
-    string GetType() const
-    {
-      return "domain";
-    }
-    string GetName() const
-    {
-      return "L1-Norm";
-    }
+      string
+      GetType() const
+      {
+        return "domain";
+      }
+      string
+      GetName() const
+      {
+        return "L1-Norm";
+      }
 
-  private:
-    vector<double> _uvalues;
+    private:
+      vector<double> _uvalues;
   };
 
 /****************************************************************************************/
 
-template<typename VECTOR, int dopedim, int dealdim>
-  class LocalPointFunctional : public FunctionalInterface<CellDataContainer,FaceDataContainer,dealii::DoFHandler, VECTOR, dopedim,dealdim>
+template<
+    template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+    template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
+    template<int, int> class DH, typename VECTOR, int dopedim, int dealdim =
+        dopedim>
+  class LocalPointFunctional : public FunctionalInterface<CDC, FDC, DH, VECTOR,
+      dopedim, dealdim>
   {
-  public:
+    public:
 
-  double PointValue(const DOpEWrapper::DoFHandler<dopedim, dealii::DoFHandler > & control_dof_handler __attribute__((unused)),
-		    const DOpEWrapper::DoFHandler<dealdim, dealii::DoFHandler > &state_dof_handler,
-		    const std::map<std::string, const dealii::Vector<double>* > &param_values __attribute__((unused)),
-		    const std::map<std::string, const VECTOR* > &domain_values)
-  {
-    Point<2> p(0.125,0.75);
+      double
+      PointValue(
+          const DOpEWrapper::DoFHandler<dopedim, DH> & /*control_dof_handler*/ ,
+          const DOpEWrapper::DoFHandler<dealdim, DH> & state_dof_handler,
+          const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/ ,
+          const std::map<std::string, const VECTOR*> & domain_values)
+      {
+        Point<2> p(0.125, 0.75);
 
-    typename map<string, const BlockVector<double>* >::const_iterator it = domain_values.find("state");
-    Vector<double> tmp_vector(1);
+        typename map<string, const BlockVector<double>*>::const_iterator it =
+            domain_values.find("state");
+        Vector<double> tmp_vector(1);
 
-    VectorTools::point_value (state_dof_handler, *(it->second), p, tmp_vector);
+        VectorTools::point_value(state_dof_handler, *(it->second), p,
+            tmp_vector);
 
-    return  tmp_vector(0);
-  }
+        return tmp_vector(0);
+      }
 
-  string GetType() const
-  {
-    return "point";
-  }
-  string GetName() const
-  {
-    return "PointValue";
-  }
+      string
+      GetType() const
+      {
+        return "point";
+      }
+      string
+      GetName() const
+      {
+        return "PointValue";
+      }
 
   };
 

@@ -409,7 +409,7 @@ void BoundaryValue_QQ(const FaceDataContainer<DH, VECTOR, dealdim>& fdc,
 
 
 
- void BoundaryValue_UU(const FaceDataContainer<DH, VECTOR, dealdim>& fdc __attribute__((unused)),
+ void BoundaryValue_UU(const FaceDataContainer<DH, VECTOR, dealdim>& fdc ,
 		      dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
  {  
   
@@ -417,13 +417,13 @@ void BoundaryValue_QQ(const FaceDataContainer<DH, VECTOR, dealdim>& fdc,
 
  
  
- void BoundaryValue_QU(const FaceDataContainer<DH, VECTOR, dealdim>& fdc __attribute__((unused)),
+ void BoundaryValue_QU(const FaceDataContainer<DH, VECTOR, dealdim>& fdc ,
 		      dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
  {
    
  }
  
-void BoundaryValue_UQ(const FaceDataContainer<DH, VECTOR, dealdim>& fdc __attribute__((unused)),
+void BoundaryValue_UQ(const FaceDataContainer<DH, VECTOR, dealdim>& fdc ,
 		      dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
  {
    
@@ -653,40 +653,40 @@ void FaceValue_QQ(const FaceDataContainer<DH, VECTOR, dealdim>&,
 }
     
 
-double Value(const CellDataContainer<DH, VECTOR, dealdim>& cdc __attribute__((unused)))
+double Value(const CellDataContainer<DH, VECTOR, dealdim>& cdc )
 {
   return 0.;
 }
 
-void Value_U(const CellDataContainer<DH, VECTOR, dealdim>& cdc __attribute__((unused)),
+void Value_U(const CellDataContainer<DH, VECTOR, dealdim>& cdc ,
 	     dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
 {
   
 }
 
-void Value_Q(const CellDataContainer<DH, VECTOR, dealdim>& cdc __attribute__((unused)),
+void Value_Q(const CellDataContainer<DH, VECTOR, dealdim>& cdc ,
 	     dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
 {
   
 }
 
-void Value_UU(const CellDataContainer<DH, VECTOR, dealdim>& cdc __attribute__((unused)),
+void Value_UU(const CellDataContainer<DH, VECTOR, dealdim>& cdc ,
 	      dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
 {
   
 }
 
-void Value_QU(const CellDataContainer<DH, VECTOR, dealdim>& cdc __attribute__((unused)),
+void Value_QU(const CellDataContainer<DH, VECTOR, dealdim>& cdc ,
 	      dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
 {
 }
 
-void Value_UQ(const CellDataContainer<DH, VECTOR, dealdim>& cdc __attribute__((unused)),
+void Value_UQ(const CellDataContainer<DH, VECTOR, dealdim>& cdc ,
 	      dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
 {
 }
 
-void Value_QQ(const CellDataContainer<DH, VECTOR, dealdim>& cdc __attribute__((unused)),
+void Value_QQ(const CellDataContainer<DH, VECTOR, dealdim>& cdc ,
 	      dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
 {
   

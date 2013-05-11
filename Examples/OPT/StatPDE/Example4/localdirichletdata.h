@@ -36,12 +36,12 @@ template<typename VECTOR, int dealdim>
   public:
 
      double Data(
-//                 const DOpEWrapper::DoFHandler<dopedim> * control_dof_handler __attribute__((unused)),
-//		 const DOpEWrapper::DoFHandler<dealdim> *state_dof_handler __attribute__((unused)),
+//                 const DOpEWrapper::DoFHandler<dopedim> * control_dof_handler ,
+//		 const DOpEWrapper::DoFHandler<dealdim> *state_dof_handler ,
 		 const std::map<std::string, const dealii::Vector<double>* > *param_values,
-		 const std::map<std::string, const VECTOR* > *domain_values __attribute__((unused)),
-		 unsigned int color __attribute__((unused)),
-		 const dealii::Point<dealdim>& point __attribute__((unused)),
+		 const std::map<std::string, const VECTOR* > *domain_values ,
+		 unsigned int color ,
+		 const dealii::Point<dealdim>& point ,
 		 unsigned int component) const
      {
        _qvalues.reinit(5);
@@ -65,12 +65,12 @@ template<typename VECTOR, int dealdim>
      }
 
    double Data_Q(
-//                 const DOpEWrapper::DoFHandler<dopedim> * control_dof_handler __attribute__((unused)),
-//		 const DOpEWrapper::DoFHandler<dealdim> *state_dof_handler __attribute__((unused)),
+//                 const DOpEWrapper::DoFHandler<dopedim> * control_dof_handler ,
+//		 const DOpEWrapper::DoFHandler<dealdim> *state_dof_handler ,
 		 const std::map<std::string, const dealii::Vector<double>* > *param_values,
-		 const std::map<std::string, const VECTOR* > *domain_values __attribute__((unused)),
-		 unsigned int color __attribute__((unused)),
-		 const dealii::Point<dealdim>& point __attribute__((unused)),
+		 const std::map<std::string, const VECTOR* > *domain_values ,
+		 unsigned int color ,
+		 const dealii::Point<dealdim>& point ,
 		 unsigned int component)  const
    {
      _qvalues.reinit(5);
@@ -96,12 +96,12 @@ template<typename VECTOR, int dealdim>
    }
 
    void Data_QT (
-//                 const DOpEWrapper::DoFHandler<dopedim> * control_dof_handler __attribute__((unused)),
-//		 const DOpEWrapper::DoFHandler<dealdim> *state_dof_handler __attribute__((unused)),
+//                 const DOpEWrapper::DoFHandler<dopedim> * control_dof_handler ,
+//		 const DOpEWrapper::DoFHandler<dealdim> *state_dof_handler ,
 		 const std::map<std::string, const dealii::Vector<double>* > *param_values,
 		 const std::map<std::string, const VECTOR* > *domain_values,
-		 unsigned int color __attribute__((unused)),
-		 const dealii::Point<dealdim>& point __attribute__((unused)),
+		 unsigned int color ,
+		 const dealii::Point<dealdim>& point ,
 		 unsigned int component,
 		 unsigned int  dof_number,
 		 dealii::Vector<double>& local_vector) const
@@ -125,12 +125,12 @@ template<typename VECTOR, int dealdim>
    }
 
    void Data_QQT (
-//                  const DOpEWrapper::DoFHandler<dopedim> * control_dof_handler __attribute__((unused)),
-//		  const DOpEWrapper::DoFHandler<dealdim> *state_dof_handler __attribute__((unused)),
+//                  const DOpEWrapper::DoFHandler<dopedim> * control_dof_handler ,
+//		  const DOpEWrapper::DoFHandler<dealdim> *state_dof_handler ,
 		  const std::map<std::string, const dealii::Vector<double>* > *param_values,
 		  const std::map<std::string, const VECTOR* > *domain_values,
-		  unsigned int color __attribute__((unused)),
-		  const dealii::Point<dealdim>& point __attribute__((unused)),
+		  unsigned int color ,
+		  const dealii::Point<dealdim>& point ,
 		  unsigned int component,
 		  unsigned int  dof_number,
 		  dealii::Vector<double>& local_vector) const

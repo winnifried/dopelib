@@ -133,7 +133,7 @@ namespace DOpE
      return ret;
    }
 
-   void PostProcessConstraints(ConstraintVector<VECTOR>&  g __attribute__((unused))) const {} 
+   void PostProcessConstraints(ConstraintVector<VECTOR>&  g ) const {} 
 
    void FeasibilityShift(const ControlVector<VECTOR>& g_hat,ControlVector<VECTOR>&  g,double lambda) const 
    {

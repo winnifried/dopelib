@@ -80,9 +80,9 @@ template<template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
   {
   public:
 
-  double PointValue(const DOpEWrapper::DoFHandler<dopedim, DH > & control_dof_handler __attribute__((unused)),
+  double PointValue(const DOpEWrapper::DoFHandler<dopedim, DH > & control_dof_handler ,
 		    const DOpEWrapper::DoFHandler<dealdim, DH > &state_dof_handler,
-		    const std::map<std::string, const dealii::Vector<double>* > &param_values __attribute__((unused)),
+		    const std::map<std::string, const dealii::Vector<double>* > &param_values ,
 		    const std::map<std::string, const VECTOR* > &domain_values)
   {
     Point<2> p(0.125,0.75);
