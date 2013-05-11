@@ -26,6 +26,7 @@
 
 #include <iostream>
 
+#include "../../Examples/Experimental/Example12/mgcelldatacontainer.h"
 using namespace dealii;
 
 namespace DOpE
@@ -1317,4 +1318,16 @@ template class DOpE::PDEInterface<DOpE::CellDataContainer,
 template class DOpE::PDEInterface<DOpE::CellDataContainer,
     DOpE::FaceDataContainer, dealii::hp::DoFHandler, dealii::Vector<double>,
     deal_II_dimension>;
+template class DOpE::PDEInterface<DOpE::CellDataContainer,
+    DOpE::FaceDataContainer, dealii::MGDoFHandler,
+    dealii::BlockVector<double>, deal_II_dimension>;
+template class DOpE::PDEInterface<DOpE::CellDataContainer,
+    DOpE::FaceDataContainer, dealii::MGDoFHandler,
+    dealii::Vector<double>, deal_II_dimension>;
+template class DOpE::PDEInterface<DOpE::MGCellDataContainer,
+    DOpE::FaceDataContainer, dealii::MGDoFHandler,
+    dealii::BlockVector<double>, deal_II_dimension>;
+template class DOpE::PDEInterface<DOpE::MGCellDataContainer,
+    DOpE::FaceDataContainer, dealii::MGDoFHandler,
+    dealii::Vector<double>, deal_II_dimension>;
 

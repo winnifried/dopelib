@@ -641,3 +641,9 @@ template class DOpE::FunctionalInterface<DOpE::CellDataContainer,
 template class DOpE::FunctionalInterface<DOpE::CellDataContainer,
     DOpE::FaceDataContainer, dealii::hp::DoFHandler,
     dealii::BlockVector<double>, dope_dimension, deal_II_dimension>;
+template class DOpE::FunctionalInterface<DOpE::CellDataContainer,
+    DOpE::FaceDataContainer, dealii::MGDoFHandler, dealii::Vector<double>,
+    dope_dimension, deal_II_dimension>;
+template class DOpE::FunctionalInterface<DOpE::CellDataContainer,
+    DOpE::FaceDataContainer, dealii::MGDoFHandler,
+    dealii::BlockVector<double>, dope_dimension, deal_II_dimension>;
