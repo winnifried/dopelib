@@ -35,11 +35,11 @@
 #include "functionalinterface.h"
 #include "statreducedproblem.h"
 #include "directlinearsolver.h"
-#include "voidlinearsolver.h"
+#include "voidlinearsolver.h" // for mixed dim opt. control
 #include "integrator.h"
 #include "newtonsolver.h"
-#include "integratormixeddims.h"
-#include "newtonsolvermixeddims.h"
+#include "integratormixeddims.h" // for mixed dim opt. control
+#include "newtonsolvermixeddims.h" // for mixed dim opt. control
 #include "parameterreader.h"
 #include "mol_spacetimehandler.h"
 #include "simpledirichletdata.h"
@@ -87,6 +87,7 @@ typedef IntegratorMixedDimensions<IDC, VECTOR, double, CDIM, DIM> INTEGRATORM;
 
 typedef DirectLinearSolverWithMatrix<SPARSITYPATTERN, MATRIX, VECTOR> LINEARSOLVER;
 
+//dummy solver for the 0d control
 typedef VoidLinearSolver<VECTOR> VOIDLS;
 
 //special newtonsolver for the mixed dims
@@ -126,23 +127,21 @@ main(int argc, char **argv)
 
   Triangulation<DIM> triangulation;
   GridGenerator::hyper_cube(triangulation, 0, 1);
+  triangulation.refine_global(5);
 
   //We need no finite element for the control variable, so
   //we take the FE_Nothing element, which has 0 degrees of freedom.
   //The number of components of the finite element has to mathc
   //the number of parameters!
   FE<DIM> control_fe(FE_Nothing<DIM>(1), 3); //3 Parameter
-  FE<DIM> state_fe(FE_Q<DIM>(1), 2); //
+  FE<DIM> state_fe(FE_Q<DIM>(1), 2);
 
   QUADRATURE quadrature_formula(2);
   FACEQUADRATURE face_quadrature_formula(2);
-
   IDC idc(quadrature_formula, face_quadrature_formula);
 
   LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> LPDE;
   COSTFUNCTIONAL LFunc;
-
-  triangulation.refine_global(5);
 
   STH DOFH(triangulation, control_fe, state_fe, DOpEtypes::stationary);
 
@@ -150,12 +149,10 @@ main(int argc, char **argv)
 
   OP P(LFunc, LPDE, Constraints, DOFH);
 
-  std::vector<bool> comp_mask(2); //changed from 1 to 2
-  comp_mask[0] = true;
-  comp_mask[1] = true;
+  DOpEWrapper::ZeroFunction<DIM> zf(2);
+  SimpleDirichletData<VECTOR, DIM> DD(zf);
+  std::vector<bool> comp_mask(2, true);
 
-  DOpEWrapper::ZeroFunction<DIM> zf(2); //changed
-  SimpleDirichletData<VECTOR,  DIM> DD(zf);
   P.SetDirichletBoundaryColors(0, comp_mask, &DD);
 
   SSolver solver(&P, "fullmem", pr, idc);
@@ -166,7 +163,8 @@ main(int argc, char **argv)
     Alg.ReInit();
 
     ControlVector<VECTOR> q(&DOFH, "fullmem");
-    { //PreInitialization of q
+    {
+      //PreInitialization of q
       q = 2.;
     }
 
