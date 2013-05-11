@@ -1,9 +1,10 @@
 TODO DOpE
 =========
-
+- InstatPDEProblem schreiben
+- Multimesh aus IntegratorDataContainer entfernen
+- DirichletDataInterface - GetParam und GetValue auslagern?
 Treffen (May 07, 2013)
 ----------------------
-
 - define DoFHandler aendern in typedef, erst mit spaeterer gcc version moeglich, siehe http://en.cppreference.com/w/cpp/language/type_alias und http://gcc.gnu.org/projects/cxx0x.html
 - Funktional Point umbenennen, da Name irrefuehrend?
 - Beispiele Code Prüfen (fehlende verwendung von scale, TeX-Problembeschreibungen)

@@ -21,6 +21,18 @@
 *
 **/
 
+#include <iostream>
+
+#include <grid/tria.h>
+#include <dofs/dof_handler.h>
+#include <grid/grid_generator.h>
+#include <fe/fe_q.h>
+#include <fe/fe_dgp.h>
+#include <dofs/dof_tools.h>
+#include <base/quadrature_lib.h>
+#include <base/function.h>
+#include <lac/precondition_block.h>
+#include <numerics/error_estimator.h>
 
 #include "reducednewtonalgorithm.h"
 #include "optproblemcontainer.h"
@@ -40,18 +52,7 @@
 #include "preconditioner_wrapper.h"
 #include "integratordatacontainer.h"
 
-#include <iostream>
 
-#include <grid/tria.h>
-#include <dofs/dof_handler.h>
-#include <grid/grid_generator.h>
-#include <fe/fe_q.h>
-#include <fe/fe_dgp.h>
-#include <dofs/dof_tools.h>
-#include <base/quadrature_lib.h>
-#include <base/function.h>
-#include <lac/precondition_block.h>
-#include <numerics/error_estimator.h>
 
 #include "localpde.h"
 #include "localfunctional.h"
@@ -86,7 +87,11 @@ typedef StatReducedProblem<NLS,NLS,INTEGRATOR,INTEGRATOR,OP,VECTOR,2,2> SSolver;
 
 int main(int argc, char **argv)
 {
-
+  /**
+   * We solve a PDE constrained optimization problem with a distributed
+   * control on the right hand side. In this example, we use different
+   * meshes for the control and the state variable.
+   */
   string paramfile = "dope.prm";
 
   if(argc == 2)

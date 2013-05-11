@@ -17,12 +17,12 @@ Hence its solution is given by:
 \end{gather*}
 
 In addition the following functionals are evaluated:
-\begin{gather*}
-  \text{MidPoint: } u_h(0.5 ; 0.5)\\[2mm]
-  \text{L1-Value: }\int_\Omega |u_h|
-  \text{QError: }\int_\Omega |q_h-\overline{q}|^2
-  \text{UError: }\int_\Omega |u_h-\overline{u}|^2
-\end{gather*}
+\begin{align*}
+  &\text{MidPoint: } u_h(0.5 ; 0.5)&&
+  \text{ L1-Value: }\int_\Omega |u_h|\\
+  &\text{QError: }\int_\Omega |q_h-\overline{q}|^2
+  &&\text{  UError: }\int_\Omega |u_h-\overline{u}|^2
+\end{align*}
 
 The important new feature is that we can now use two different meshes for control and state variable.
 This is tested first for globally refined meshes, and then for locally refined meshes with different refinements 

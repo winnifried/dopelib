@@ -96,6 +96,11 @@ typedef MethodOfLines_SpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR,
 int
 main(int argc, char **argv)
 {
+  /**
+   * Solves an optimization problem with an PDE constraint
+   * and control int the dirichlet boundary values of the state.
+   * The state solves the laplacian.
+   */
   string paramfile = "dope.prm";
 
   if (argc == 2)
