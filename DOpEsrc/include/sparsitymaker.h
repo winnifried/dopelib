@@ -84,7 +84,7 @@ namespace DOpE
        */
       virtual void
       ComputeMGSparsityPattern(
-			       const DOpEWrapper::DoFHandler<dim, DH>& dof_handler,
+			       const DOpEWrapper::DoFHandler<dim, dealii::MGDoFHandler>& dof_handler,
 			       dealii::MGLevelObject<dealii::BlockSparsityPattern> & mg_sparsity_pattern, 
 			       const dealii::ConstraintMatrix& hanging_node_constraints,
 			       const std::vector<unsigned int>& blocks,
@@ -96,7 +96,7 @@ namespace DOpE
        */
       virtual void
 	ComputeMGSparsityPattern(
-          const DOpEWrapper::DoFHandler<dim, DH>& dof_handler,
+          const DOpEWrapper::DoFHandler<dim, dealii::MGDoFHandler>& dof_handler,
 	  dealii::MGLevelObject<dealii::SparsityPattern> & mg_sparsity_pattern, 
           const dealii::ConstraintMatrix& hanging_node_constraints,
           const std::vector<unsigned int>& blocks,
@@ -161,7 +161,7 @@ namespace DOpE
     void
     SparsityMaker<DH, dim>
     ::ComputeMGSparsityPattern(
-			       const DOpEWrapper::DoFHandler<dim, DH>& dof_handler,
+			       const DOpEWrapper::DoFHandler<dim, dealii::MGDoFHandler>& dof_handler,
 			       dealii::MGLevelObject<dealii::BlockSparsityPattern> & mg_sparsity_patterns, 
 			       const dealii::ConstraintMatrix& /*hanging_node_constraints*/,
 			       const std::vector<unsigned int>& blocks,
@@ -204,7 +204,7 @@ namespace DOpE
     void
     SparsityMaker<DH, dim>
     ::ComputeMGSparsityPattern(
-			       const DOpEWrapper::DoFHandler<dim, DH>& dof_handler,
+			       const DOpEWrapper::DoFHandler<dim, dealii::MGDoFHandler>& dof_handler,
 			       dealii::MGLevelObject<dealii::SparsityPattern> & mg_sparsity_patterns, 
 			       const dealii::ConstraintMatrix& /*hanging_node_constraints*/,
 			       const std::vector<unsigned int>& /*blocks*/,
