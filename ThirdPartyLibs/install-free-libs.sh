@@ -317,11 +317,23 @@ then
     echo "    to your \$LD_LIBRARY_PATH variable"
     echo "**************************************************************"
 else
-    echo ""
-    echo "**************************************************************"
-    echo "                 Installation failed!"
-    echo "No Library Directory "${INST_DIR}/lib64" detected!"
-    echo "**************************************************************"
+    #try if it is called lib
+    if [[ -d ${INST_DIR}/lib ]]
+    then
+	mv ${INST_DIR}/lib ${INST_DIR}/lib64
+	echo ""
+	echo "**************************************************************"
+	echo "                 Installation complete!"
+	echo "Add "${INST_DIR}/lib64
+	echo "    to your \$LD_LIBRARY_PATH variable"
+	echo "**************************************************************"
+    else
+	echo ""
+	echo "**************************************************************"
+	echo "                 Installation failed!"
+	echo "No Library Directory in "${INST_DIR}/" detected!"
+	echo "**************************************************************"
+    fi
 fi
 
 #endof ipopt installation

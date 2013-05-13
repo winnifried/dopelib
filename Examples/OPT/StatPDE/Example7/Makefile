@@ -23,29 +23,29 @@ clean-up-files = ...
 
 _LOCAL_thirdpartylibs = $(shell echo $(DOpE)/ThirdPartyLibs/*)
 
-ifneq (,$(findstring snopt, $(_LOCAL_thirdpartylibs)))
-DOPE_FLAGS += -DWITH_SNOPT -fPIC
-SNOPT = $(DOpE)/ThirdPartyLibs/snopt
-
-SNOPT_F2CINC = $(SNOPT)/include/
-SNOPT_F2CLIB = $(SNOPT)/lib/
-
-SNOPT_LIBDIR = $(SNOPT)/lib/
-
-SNOPT_LIBS    = -lsnopt_cpp -lsnopt -lsnprint -lblas
-SNOPT_AR      = libsnopt_cpp libsnopt libsnprint libblas
-SNOPT_AR_LIBS = $(SNOPT_AR:%=$(SNOPT_LIBDIR)/%.a)
-
-#Additional library header files 
-DOPE_LIBS += -I$(SNOPT)/cppsrc -I$(SNOPT_F2CINC) 
-
-#additional linker information
-DOPE_LDFLAGS += -L$(SNOPT_LIBDIR) $(SNOPT_AR_LIBS) $(SNOPT_F2CLIB)/libf2c.a 
-#use fortran libs
-DOPE_LDFLAGS += -lgfortranbegin -lgfortran
-
-#endof With SNOPT	
-endif
+#ifneq (,$(findstring snopt, $(_LOCAL_thirdpartylibs)))
+#DOPE_FLAGS += -DWITH_SNOPT -fPIC
+#SNOPT = $(DOpE)/ThirdPartyLibs/snopt
+#
+#SNOPT_F2CINC = $(SNOPT)/include/
+#SNOPT_F2CLIB = $(SNOPT)/lib/
+#
+#SNOPT_LIBDIR = $(SNOPT)/lib/
+#
+#SNOPT_LIBS    = -lsnopt_cpp -lsnopt -lsnprint -lblas
+#SNOPT_AR      = libsnopt_cpp libsnopt libsnprint libblas
+#SNOPT_AR_LIBS = $(SNOPT_AR:%=$(SNOPT_LIBDIR)/%.a)
+#
+##Additional library header files 
+#DOPE_LIBS += -I$(SNOPT)/cppsrc -I$(SNOPT_F2CINC) 
+#
+##additional linker information
+#DOPE_LDFLAGS += -L$(SNOPT_LIBDIR) $(SNOPT_AR_LIBS) $(SNOPT_F2CLIB)/libf2c.a 
+##use fortran libs
+#DOPE_LDFLAGS += -lgfortranbegin -lgfortran
+#
+##endof With SNOPT	
+#endif
 
 ifneq (,$(findstring ipopt, $(_LOCAL_thirdpartylibs)))
 DOPE_FLAGS += -DWITH_IPOPT 
