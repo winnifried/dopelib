@@ -552,7 +552,7 @@ namespace DOpE
       template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
     void
     FunctionalInterface<CDC, FDC, DH, VECTOR, dopedim, dealdim>::AlgebraicGradient_Q(
-        VECTOR& gradient,
+      VECTOR& /*gradient*/,
         const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
         const std::map<std::string, const VECTOR*> &/*domain_values*/)
     {
