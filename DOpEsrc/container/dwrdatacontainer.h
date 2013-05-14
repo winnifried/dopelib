@@ -475,6 +475,9 @@ namespace DOpE
               AddWeightData("weight_for_control_residual",
                   &(GetPI_h_q().GetSpacialVector()));
               break;
+	  case DOpEtypes::primal_only:
+	    //Do nothing to be compatible with residual estimators not using the control!
+	    break;
             default:
               throw DOpEException("Unknown DOpEtypes::EETerms!",
                   "DWRDataContainerBase::PrepareWeights");

@@ -1396,8 +1396,8 @@ namespace DOpE
             this->GetProblem()->GetSpaceTimeHandler()->GetStateDoFHandler().get_tria().n_active_cells();
         dwrc.ReInit(n_cells);
 
-	//Estimation for Costfunctional
-	if(this->GetProblem()->EEFunctionalIsCost())
+	//Estimation for Costfunctional or if no dual is needed
+	if(this->GetProblem()->EEFunctionalIsCost() || !dwrc.NeedDual())
 	{
 	  this->GetOutputHandler()->Write("Computing Error Indicators:",
 					4 + this->GetBasePriority());
