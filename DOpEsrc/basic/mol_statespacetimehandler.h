@@ -138,8 +138,7 @@ namespace DOpE
           DoFRenumbering::Cuthill_McKee(
               static_cast<DH<dealdim, dealdim>&>(_state_dof_handler));
           DoFRenumbering::component_wise(
-              static_cast<DH<dealdim, dealdim>&>(_state_dof_handler),
-              state_block_component);
+              static_cast<DH<dealdim, dealdim>&>(_state_dof_handler));
 
           _state_dof_constraints.clear();
           DoFTools::make_hanging_node_constraints(

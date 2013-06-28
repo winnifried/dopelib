@@ -179,8 +179,7 @@ namespace DOpE
           SpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dim, dim>::SetActiveFEIndicesControl(
               _control_dof_handler);
           _control_dof_handler.distribute_dofs(*_control_fe);
-          DoFRenumbering::component_wise(static_cast<DH<dim, dim>&>(_control_dof_handler),
-              control_block_component);
+          DoFRenumbering::component_wise(static_cast<DH<dim, dim>&>(_control_dof_handler));
 
           _control_dof_constraints.clear();
           DoFTools::make_hanging_node_constraints(
@@ -200,8 +199,7 @@ namespace DOpE
           SpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dim, dim>::SetActiveFEIndicesState(
               _state_dof_handler);
           _state_dof_handler.distribute_dofs(GetFESystem("state"));
-          DoFRenumbering::component_wise(static_cast<DH<dim, dim>&>(_state_dof_handler),
-              state_block_component);
+          DoFRenumbering::component_wise(static_cast<DH<dim, dim>&>(_state_dof_handler));
 
           _state_dof_constraints.clear();
           DoFTools::make_hanging_node_constraints(

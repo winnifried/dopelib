@@ -167,8 +167,7 @@ namespace DOpE
           _control_dof_handler.distribute_dofs(*_control_fe);
 
 #if dope_dimension > 0
-          DoFRenumbering::component_wise (static_cast<DH<dopedim, dopedim>&>(_control_dof_handler),
-              control_block_component);
+          DoFRenumbering::component_wise (static_cast<DH<dopedim, dopedim>&>(_control_dof_handler));
           if(dopedim==dealdim)
           {
             _control_dof_constraints.clear ();
@@ -206,8 +205,7 @@ namespace DOpE
               _state_dof_handler);
           _state_dof_handler.distribute_dofs(GetFESystem("state"));
           DoFRenumbering::component_wise(
-              static_cast<DH<dealdim, dealdim>&>(_state_dof_handler),
-              state_block_component);
+              static_cast<DH<dealdim, dealdim>&>(_state_dof_handler));
 
           _state_dof_constraints.clear();
           DoFTools::make_hanging_node_constraints(
