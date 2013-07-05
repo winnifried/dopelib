@@ -46,6 +46,7 @@
 #include "userdefineddofconstraints.h"
 #include "integratordatacontainer.h"
 
+
 #include <iostream>
 #include <fstream>
 
@@ -63,6 +64,7 @@
 #include "localpde.h"
 #include "localfunctional.h"
 #include "functionals.h"
+#include "indexsetter.h"
 
 using namespace std;
 using namespace dealii;
@@ -74,8 +76,10 @@ using namespace DOpE;
 #define VECTOR BlockVector<double>
 #define SPARSITYPATTERN BlockSparsityPattern
 #define MATRIX BlockSparseMatrix<double>
-#define DOFHANDLER DoFHandler
-#define FE FESystem
+#define DOFHANDLER hp::DoFHandler
+#define FE hp::FECollection
+#define QUADRATURE hp::QCollection
+#define FACEQUADRATURE hp::QCollection
 #define FUNC FunctionalInterface<CellDataContainer,FaceDataContainer,DOFHANDLER,VECTOR,LOCALDOPEDIM,LOCALDEALDIM>
 #define PDE PDEInterface<CellDataContainer,FaceDataContainer,DOFHANDLER,VECTOR,LOCALDEALDIM>
 #define DD DirichletDataInterface<VECTOR,LOCALDEALDIM>
@@ -91,14 +95,15 @@ typedef OptProblemContainer<FUNC, FUNC, PDE, DD, CONS, SPARSITYPATTERN, VECTOR,
 #define DTSP BackwardEulerProblem
 
 typedef InstatOptProblemContainer<TSP, DTSP,FUNC, FUNC, PDE, DD, CONS,
-    SPARSITYPATTERN, VECTOR, LOCALDOPEDIM, LOCALDEALDIM> OP;
+				  SPARSITYPATTERN, VECTOR, LOCALDOPEDIM, 
+				  LOCALDEALDIM, FE, DOFHANDLER> OP;
 
 #undef TSP
 #undef DTSP
 
 
-typedef IntegratorDataContainer<DOFHANDLER, Quadrature<LOCALDEALDIM>,
-    Quadrature<LOCALDEALDIM - 1>, VECTOR, LOCALDEALDIM> IDC;
+typedef IntegratorDataContainer<DOFHANDLER, QUADRATURE<LOCALDEALDIM>,
+    QUADRATURE<LOCALDEALDIM - 1>, VECTOR, LOCALDEALDIM> IDC;
 
 typedef Integrator<IDC, VECTOR, double, 2> INTEGRATOR;
 
@@ -149,14 +154,25 @@ main(int argc, char **argv)
   grid_in.read_ucd(input_file);
 
   FESystem<2> control_fe(FE_Q<2>(1), 1);
+  hp::FECollection < 2 > control_fe_collection(control_fe);
+  control_fe_collection.push_back(control_fe); //Need same number of entries in FECollection as state
 
-  // FE for the state equation: v,u,p
+  // FE for the state equation: u,p
   FESystem<2> state_fe(FE_Q<2>(2), 2, 
 		       FE_Q<2>(1), 1);
+  FESystem<2> state_fe_2(FE_Q<2>(2), 2, 
+			 FE_Nothing<2>(1), 1);
+  hp::FECollection < 2 > state_fe_collection(state_fe);
+  state_fe_collection.push_back(state_fe_2);
 
   QGauss<2> quadrature_formula(3);
   QGauss<1> face_quadrature_formula(3);
-  IDC idc(quadrature_formula, face_quadrature_formula);
+  hp::QCollection<2> q_coll(quadrature_formula);
+  q_coll.push_back(quadrature_formula);
+  hp::QCollection<1> face_q_coll(face_quadrature_formula);
+  face_q_coll.push_back(face_quadrature_formula);
+
+  IDC idc(q_coll,face_q_coll);
 
   LocalPDE<DOFHANDLER,VECTOR,  2> LPDE(pr);
   LocalFunctional<DOFHANDLER,VECTOR, 2, 2> LFunc;
@@ -169,9 +185,13 @@ main(int argc, char **argv)
   GridGenerator::subdivided_hyper_cube(times, 100, 0, 100000);
 
   triangulation.refine_global(3);
+  ActiveFEIndexSetter<2> indexsetter(pr);
   MethodOfLines_SpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR,
-      LOCALDOPEDIM, LOCALDEALDIM> DOFH(triangulation, control_fe, state_fe,
-      times, DOpEtypes::undefined);
+      LOCALDOPEDIM, LOCALDEALDIM> DOFH(triangulation, 
+				       control_fe_collection, 
+				       state_fe_collection,
+				       times, DOpEtypes::undefined,
+				       indexsetter);
 
   NoConstraints<CellDataContainer, FaceDataContainer, DOFHANDLER, VECTOR,
       LOCALDOPEDIM, LOCALDEALDIM> Constraints;
