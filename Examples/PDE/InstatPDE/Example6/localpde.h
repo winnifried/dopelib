@@ -41,8 +41,6 @@ template<template<int, int> class DH,typename VECTOR,  int dealdim>
      static void declare_params(ParameterReader &param_reader)
     {
       param_reader.SetSubsection("Local PDE parameters");
-      param_reader.declare_entry("alpha_u", "1.0",
-				 Patterns::Double(0));
 
       param_reader.declare_entry("m_biot", "1.0",
 				 Patterns::Double(0));
@@ -71,7 +69,6 @@ template<template<int, int> class DH,typename VECTOR,  int dealdim>
 	_state_block_components[2]= 1;
 
 	param_reader.SetSubsection("Local PDE parameters");
-	alpha_u = param_reader.get_double ("alpha_u");
 	M_biot = param_reader.get_double ("m_biot");
 	c_biot = 1.0/M_biot;
 
@@ -240,10 +237,6 @@ template<template<int, int> class DH,typename VECTOR,  int dealdim>
 		    scalar_product(sigma_s,phi_i_grads_u) *
 		    state_fe_values.JxW(q);
 
-		  local_cell_vector(i) += scale_ico * alpha_u * (grad_p * phi_i_grads_p
-				       ) * state_fe_values.JxW(q);
-
-
 		}
 	    }
 	}
@@ -368,10 +361,6 @@ template<template<int, int> class DH,typename VECTOR,  int dealdim>
 		      local_entry_matrix(j, i) += scale_ico
 			* scalar_product(sigma_s,phi_i_grads_u[j])
 			* state_fe_values.JxW(q);
-
-		      local_entry_matrix(j,i) += scale_ico * alpha_u * 
-			(phi_i_grads_p[i] * phi_i_grads_p[j]	
-			 ) * state_fe_values.JxW(q); 
 
 		    }
 		}
@@ -726,7 +715,7 @@ template<template<int, int> class DH,typename VECTOR,  int dealdim>
     double _alpha, _cell_diameter;
 
     // material variables
-    double density_structure, alpha_u,
+    double density_structure, 
       lame_coefficient_mu, poisson_ratio_nu, lame_coefficient_lambda;
 
     double M_biot, c_biot, alpha_biot, viscosity_biot, K_biot, density_biot;
