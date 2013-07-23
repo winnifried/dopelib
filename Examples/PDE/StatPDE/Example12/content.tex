@@ -4,7 +4,7 @@ is taken from \texttt{dealii} step-20 and shows how this step can be implemented
 
 Most things are identical to all the other programs. However there is a subtle difference in 
 \texttt{localpde.h}: Although the element used has 3 components (two for the RT-Element and 1 for the pressure)
-the block_component vector mapping blocks to components has only 2 entries. 1 for each finite element used!
+the block\underline{ }component vector mapping blocks to components has only 2 entries. 1 for each finite element used!
 
 The second difference is that we have to initialize the mapping explicitly. This is due to the fact that the 
 default 
