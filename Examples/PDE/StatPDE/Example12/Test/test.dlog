@@ -1,0 +1,73 @@
+DOpElib Copyright (C) 2012  DOpElib authors
+This program comes with ABSOLUTELY NO WARRANTY.
+For License details read LICENSE.TXT distributed with this software!
+
+	**************************************************
+	*             Starting Forward Solve             *
+	*   Solving : PDEProblemContainer	*
+	*   SDoFs   : 	5
+	**************************************************
+	
+
+	Computing State Solution:
+			 Newton step: 0	 Residual (abs.):   9.5000e-01
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-10	 LineSearch {0} 
+	Computing Functionals:
+	L^2-error: 1.4737
+
+	**************************************************
+	*             Starting Forward Solve             *
+	*   Solving : PDEProblemContainer	*
+	*   SDoFs   : 	16
+	**************************************************
+	
+
+	Computing State Solution:
+			 Newton step: 0	 Residual (abs.):   9.5000e-01
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-10	 LineSearch {0} 
+	Computing Functionals:
+	L^2-error: 0.361093
+
+	**************************************************
+	*             Starting Forward Solve             *
+	*   Solving : PDEProblemContainer	*
+	*   SDoFs   : 	56
+	**************************************************
+	
+
+	Computing State Solution:
+			 Newton step: 0	 Residual (abs.):   4.9375e-01
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-10	 LineSearch {0} 
+	Computing Functionals:
+	L^2-error: 0.0897536
+
+	**************************************************
+	*             Starting Forward Solve             *
+	*   Solving : PDEProblemContainer	*
+	*   SDoFs   : 	208
+	**************************************************
+	
+
+	Computing State Solution:
+			 Newton step: 0	 Residual (abs.):   2.6903e-01
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-10	 LineSearch {0} 
+	Computing Functionals:
+	L^2-error: 0.022395
+
+	**************************************************
+	*             Starting Forward Solve             *
+	*   Solving : PDEProblemContainer	*
+	*   SDoFs   : 	800
+	**************************************************
+	
+
+	Computing State Solution:
+			 Newton step: 0	 Residual (abs.):   1.3912e-01
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-10	 LineSearch {0} 
+	Computing Functionals:
+	L^2-error: 0.00559527
