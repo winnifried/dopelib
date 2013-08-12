@@ -81,7 +81,7 @@ subsection output parameters
   set number_precision	 = 4
 
   # Set manually the machine tolarance for the output
-  set eps_machine_set_by_user	 = 1.0e-11
+  set eps_machine_set_by_user	 = 3.0e-11
 
   
   # Directory where the output goes to
