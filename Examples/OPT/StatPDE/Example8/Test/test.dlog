@@ -42,7 +42,7 @@ LOG: Allowing IterationCounter `Opt_Snopt_OptProblem' for filenames!
 	*  Constraints : 	257
 	**************************************************
 
-	CostFunctional: 21.984
+	CostFunctional: 21.9837
 	************************************************
 	*               Calling SNOPT                  *
 	*  output will not be written to logfile!      *
@@ -60,7 +60,7 @@ LOG: Allowing IterationCounter `Opt_Snopt_OptProblem' for filenames!
 	**************************************************
 	*        Stopping Solution Using SNOPT           *
 	*             Relative reduction in cost functional:  -1.20e+00          *
-	*             Final value: 5.4621760e+00                                     *
+	*             Final value: 5.4621761e+00                                     *
 	**************************************************
 
 
@@ -102,7 +102,7 @@ LOG: Allowing IterationCounter `Opt_Snopt_OptProblem' for filenames!
 	*  Constraints : 	1025
 	**************************************************
 
-	CostFunctional: 19.7802
+	CostFunctional: 19.7825
 	************************************************
 	*               Calling SNOPT                  *
 	*  output will not be written to logfile!      *
@@ -115,11 +115,11 @@ LOG: Allowing IterationCounter `Opt_Snopt_OptProblem' for filenames!
 	*          with Exit Code:   1 (success)       *
 	************************************************
 	
-	CostFunctional: 6.3488
+	CostFunctional: 6.43874
 
 	**************************************************
 	*        Stopping Solution Using SNOPT           *
-	*             Relative reduction in cost functional:  -1.03e+00          *
-	*             Final value: 6.3488012e+00                                     *
+	*             Relative reduction in cost functional:  -1.02e+00          *
+	*             Final value: 6.4387433e+00                                     *
 	**************************************************
 
