@@ -28,6 +28,10 @@ namespace DOpE
 {
   /**
    * Interface for TransposedDirichletData to compute reduced Hessian and Gradient from the Adjoint.
+   *
+   * For details see the description of TransposedGradientDirichletData and
+   * TransposedHessianDirichletData
+   *
    */  
   template<int dealdim>
   class TransposedDirichletDataInterface 

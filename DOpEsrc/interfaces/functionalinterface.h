@@ -524,8 +524,8 @@ namespace DOpE
          *
          * @param t   The time that should be set.
          */
-        virtual void
-        SetTime(double t __attribute__((unused))) const
+      virtual void
+      SetTime(double /*t*/) const
         {
         }
 

@@ -21,13 +21,6 @@
 *
 **/
 
-/*
- * active_fe_index_interface.h
- *
- *  Created on: May 2, 2011
- *      Author: cgoll
- */
-
 #ifndef ACTIVE_FE_INDEX_INTERFACE_H_
 #define ACTIVE_FE_INDEX_INTERFACE_H_
 
@@ -37,7 +30,9 @@ namespace DOpE
 {
 /**
  * Implements different methods to set the ActiveFEIndex on the cells in the
- * case of an hp FEMethod.
+ * case of an hp FEMethod. This class defines the interface needed 
+ * by the HP::DoFHandler. The user needs to reimplement the methods
+ * according to the specific rules used for the element selection.
  */
 
 template<int dopedim, int dealdim=dopedim>

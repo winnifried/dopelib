@@ -264,11 +264,6 @@ namespace DOpE
         }
 
         void
-        PostProcessConstraints(ConstraintVector<VECTOR>& g) const
-        {
-        }
-
-        void
         FeasibilityShift(const ControlVector<VECTOR>& g_hat,
             ControlVector<VECTOR>& g, double lambda) const
         {
