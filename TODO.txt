@@ -1,5 +1,25 @@
 TODO DOpE
 =========
+
+Aufraeumen fuer ersten *.tar.tgz
+-------------------------------
+
+content.tex	Thomas
+code cleaning	Christian
+doxygen		Winni
+
+Speziell:
+- Doxygen documentation in (include/basic/container/interfaces)
+- Code cleaning PDE and OPT Instat
+  -- Beispiel (Erklaerung), PDEInterface nicht als template geben, 
+	sondern die LocalPDE
+
+- content.tex for PDE/Instat OPT/Stat and OPT/Instat
+
+
+Standard TODO fuer naechstes Treffen
+------------------------------------
+
 - Doxygen documentation in (include/basic/container/interfaces)
 - Code cleaning PDE and OPT Instat
   -- Beispiel (Erklaerung), PDEInterface nicht als template geben, sondern die LocalPDE.
