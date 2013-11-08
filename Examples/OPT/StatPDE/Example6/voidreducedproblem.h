@@ -262,6 +262,24 @@ namespace DOpE
     {
       return "VoidReducedProblem";
     }
+
+    /**
+     * Sets the value of the Augmented Lagrangian Value
+     * It is assumed that p is positive.
+     */
+    void SetValue(double p, std::string name)
+    {
+      if ("p" == name)
+      {
+	assert(p > 0.);
+	_p = p;
+      }
+      else
+      {
+	throw DOpEException("Unknown value " + name,
+			    "AumentedLagrangianProblem::SetType");
+      }
+    }
   protected:
     CONTROLNONLINEARSOLVER& GetControlNonlinearSolver();
     CONTROLINTEGRATOR& GetControlIntegrator() { return _control_integrator; }
@@ -290,7 +308,7 @@ namespace DOpE
     std::string _vector_behavior;
 
     ConstraintVector<VECTOR> _constraints;
-
+    double _p;
   };
 
 /*************************************************************************/
@@ -498,7 +516,7 @@ bool VoidReducedProblem<CONTROLNONLINEARSOLVER, CONTROLINTEGRATOR, PROBLEM, VECT
 
   this->GetProblem()->PostProcessConstraints(g);
 
-  return this->GetProblem()->IsFeasible(g);
+  return g.IsFeasible();
 }
 /******************************************************/
 
@@ -627,7 +645,10 @@ double VoidReducedProblem<CONTROLNONLINEARSOLVER, CONTROLINTEGRATOR, PROBLEM, VE
   double ret = 0;
   bool found=false;
   //Functional may depend on constraints
-  if(!ComputeReducedConstraints(q,_constraints))
+  ComputeReducedConstraints(q,_constraints);
+    //Only trouble if too small values! This is
+    //a special adaptation for the Augmented Lagrangian!
+  if(!_constraints.IsLargerThan(-_p))
   {
     //Infeasible q!
     throw DOpEException("Infeasible value!","VoidReducedProblem::ComputeReducedCostFunctional");

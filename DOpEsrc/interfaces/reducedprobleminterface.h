@@ -503,35 +503,6 @@ namespace DOpE
           throw DOpEException("Method not implemented",
               "ReducedProblemInterface::ComputeReducedGradientOfGlobalConstraints");
         }
-        virtual bool
-        IsEpsilonFeasible(
-            const ConstraintVector<VECTOR>& g __attribute__((unused)),
-            double p __attribute__((unused)))
-        {
-          throw DOpEException("Method not implemented",
-              "ReducedProblemInterface::IsEpsilonFeasible");
-        }
-
-        virtual double
-        GetMaxViolation(const ConstraintVector<VECTOR>& /*g*/)
-        {
-          throw DOpEException("Method not implemented",
-              "ReducedProblemInterface::GetMaxViolation");
-        }
-        virtual void
-        FeasibilityShift(const ControlVector<VECTOR>& /*g_hat*/,
-            ControlVector<VECTOR>& /*g*/, double /*lambda*/)
-        {
-          throw DOpEException("Method not implemented",
-              "ReducedProblemInterface::FeasibilityShift");
-        }
-        virtual double
-        Complementarity(const ConstraintVector<VECTOR>& /*f*/,
-            const ConstraintVector<VECTOR>& /*g*/)
-        {
-          throw DOpEException("Method not implemented",
-              "ReducedProblemInterface::Complementarity");
-        }
 
         /*****************************************************/
         /**

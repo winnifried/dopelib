@@ -274,6 +274,7 @@ GeneralizedMMAAlgorithm<CONSTRAINTACCESSOR, INTEGRATORDATACONT, STH, PROBLEM,VEC
   _mma_global_tol = param_reader.get_double  ("mma_global_tol");
 
   _augmented_lagrangian_problem.SetValue(1.e-1,"p");
+  _augmented_lagrangian_solver.SetValue(1.e-1,"p");
 
   _merit_multiplier = 1.;
   _initial_lagrange_mult_scale = 1.;
@@ -291,6 +292,7 @@ template <typename CONSTRAINTACCESSOR,typename INTEGRATORDATACONT, typename STH,
   _p = 0.1;
 
   _augmented_lagrangian_problem.SetValue(_p,"p");
+  _augmented_lagrangian_solver.SetValue(_p,"p");
 
   q.ReInit();
 
@@ -402,10 +404,10 @@ template <typename CONSTRAINTACCESSOR,typename INTEGRATORDATACONT, typename STH,
     _augmented_lagrangian_problem.SetValue(rho,"rho");
   }
   {
-    double complementarity_error = this->GetReducedProblem()->Complementarity(_mma_multiplier,_mma_constraints);
+    double complementarity_error = _mma_multiplier.Complementarity(_mma_constraints);
     complementarity_error *= 1./_ndofs;
     double stationarity_error = AugmentedLagrangianResidual(q,gradient,lb,ub,q_min,q_max,_mma_multiplier,q,cost);
-    double feasibility_error = this->GetReducedProblem()->GetMaxViolation(_mma_constraints);
+    double feasibility_error = _mma_constraints.Norm("infty","positive");
 
     this->GetOutputHandler()->InitOut(out);
     out << "MMA-Outer (0) - [NA/NA/NA] - CE: "<<complementarity_error<< "\tSE: ";
@@ -490,6 +492,7 @@ template <typename CONSTRAINTACCESSOR,typename INTEGRATORDATACONT, typename STH,
       _p = p_init;
       _augmented_lagrangian_problem.SetValue(_p,"p");
       _augmented_lagrangian_problem.SetValue(rho,"rho");
+      _augmented_lagrangian_solver.SetValue(_p,"p");
       
       cost = this->GetReducedProblem()->ComputeReducedCostFunctional(dq);
       this->GetReducedProblem()->ComputeReducedGradient(dq,gradient,gradient_transposed);
@@ -548,6 +551,7 @@ template <typename CONSTRAINTACCESSOR,typename INTEGRATORDATACONT, typename STH,
 	_p = p_init;
 	_augmented_lagrangian_problem.SetValue(_p,"p");
 	_augmented_lagrangian_problem.SetValue(rho,"rho");
+	_augmented_lagrangian_solver.SetValue(_p,"p");
 	
 	cost = this->GetReducedProblem()->ComputeReducedCostFunctional(dq);
 	this->GetReducedProblem()->ComputeReducedGradient(dq,gradient,gradient_transposed);
@@ -616,10 +620,10 @@ template <typename CONSTRAINTACCESSOR,typename INTEGRATORDATACONT, typename STH,
 
       //Update the Error-Measure and accuracy requirements.
       {
-	double complementarity_error = this->GetReducedProblem()->Complementarity(_mma_multiplier,_mma_constraints);
+	double complementarity_error = _mma_multiplier.Complementarity(_mma_constraints);
 	complementarity_error *= 1./_ndofs;
 	double stationarity_error = AugmentedLagrangianResidual(q,gradient,lb,ub,q_min,q_max,_mma_multiplier,q,cost);
-	double feasibility_error = this->GetReducedProblem()->GetMaxViolation(_mma_constraints);
+	double feasibility_error = _mma_constraints.Norm("infty","positive");
 
   this->GetOutputHandler()->InitOut(out);
 	out << "MMA-Outer ("<<iter<<") - ["<<inner_iters<<"/"<<n_inner_loops<<"/"<<n_rho_updates<<"] - CE: "<<this->GetOutputHandler()->ZeroTolerance(complementarity_error,kkt_error_initial)<< "\tSE: ";
@@ -736,6 +740,7 @@ template <typename CONSTRAINTACCESSOR,typename INTEGRATORDATACONT, typename STH,
     bool run=true;
     int piter=0;
     _augmented_lagrangian_problem.SetValue(_p,"p");
+    _augmented_lagrangian_solver.SetValue(_p,"p");
     double alpha = sqrt(gradient*gradient)*0.5;
     
     ConstraintVector<VECTOR> constraints(dm);
@@ -754,6 +759,9 @@ template <typename CONSTRAINTACCESSOR,typename INTEGRATORDATACONT, typename STH,
     _augmented_lagrangian_problem.AddAuxiliaryControl(&q_min,"mma_lower_bound");
     _augmented_lagrangian_problem.AddAuxiliaryControl(&q_max,"mma_upper_bound");
     feasible = _augmented_lagrangian_solver.ComputeReducedConstraints(dq,constraints);
+    //Recompute feasibility, since only feasibility for the augmented Lagrangian is needed.
+    //i.e., we do require that x is choosen in the domain of phi(g), this is equivalent to phi(g(x)) > -p
+    feasible = constraints.IsLargerThan(-_p);
     if(!feasible)
     { 
       _augmented_lagrangian_problem.DeleteAuxiliaryControl("mma_lower_bound");
@@ -768,10 +776,10 @@ template <typename CONSTRAINTACCESSOR,typename INTEGRATORDATACONT, typename STH,
     cost = ComputeModelValue(dq,q,gradient,lb,ub,q_min,q_max,dm,constraints,J);
 
     double complementarity_error = 0.;
-    complementarity_error = this->GetReducedProblem()->Complementarity(mult,real_constraints);
+    complementarity_error = mult.Complementarity(real_constraints);
     complementarity_error *= 1./_ndofs;
     double stationarity_error = AugmentedLagrangianResidual(q,gradient,lb,ub,q_min,q_max,mult,dq,J);
-    double feasibility_error = this->GetReducedProblem()->GetMaxViolation(real_constraints);
+    double feasibility_error = real_constraints.Norm("infty","positive");
     prediction = cost - mult*constraints;
 
     this->GetOutputHandler()->InitOut(out);
@@ -889,6 +897,8 @@ template <typename CONSTRAINTACCESSOR,typename INTEGRATORDATACONT, typename STH,
 	_augmented_lagrangian_problem.AddAuxiliaryControl(&q_min,"mma_lower_bound");
 	_augmented_lagrangian_problem.AddAuxiliaryControl(&q_max,"mma_upper_bound");
 	feasible = _augmented_lagrangian_solver.ComputeReducedConstraints(dq,constraints);
+	//Recompute feasibility, since only feasibility for the augmented Lagrangian is needed.
+	feasible = constraints.IsLargerThan(-_p);
 	this->GetReducedProblem()->ComputeReducedConstraints(dq,real_constraints);
 	if(!feasible)
 	{
@@ -901,7 +911,7 @@ template <typename CONSTRAINTACCESSOR,typename INTEGRATORDATACONT, typename STH,
 	
 	if(!retry)
 	{
-	  complementarity_error = this->GetReducedProblem()->Complementarity(mult,real_constraints);
+	  complementarity_error = mult.Complementarity(real_constraints);
 	  _augmented_lagrangian_solver.ComputeReducedConstraintGradient(mult,constraints,dm);
 	  
 	  //Update Multiplier
@@ -926,10 +936,10 @@ template <typename CONSTRAINTACCESSOR,typename INTEGRATORDATACONT, typename STH,
       {
 	//Check stopping Criterium Step 4 of Alg 9.4.1
 	{
-	  complementarity_error = this->GetReducedProblem()->Complementarity(mult,real_constraints);
+	  complementarity_error = mult.Complementarity(real_constraints);
 	  complementarity_error *= 1./_ndofs;
 	  stationarity_error = AugmentedLagrangianResidual(q,gradient,lb,ub,q_min,q_max,mult,dq,J);
-	  feasibility_error = this->GetReducedProblem()->GetMaxViolation(real_constraints);
+	  feasibility_error = real_constraints.Norm("infty","positive");
 	  this->GetOutputHandler()->InitOut(out);
 	  //out << "\tAugLag-Outer ("<<iter<<") - ls["<<nl_iter<<"/"<<lineiter<<"/"<<m_lineiter<<"] a="<<alpha<<" p="<<p<<" - Complementarity Error: "<<complementarity_error<< "\tStationarity Violation: ";
 	  out << "\tAugLag-Outer ("<<iter<<") - ls["<<nl_iter<<"/"<<lineiter<<"/"<<m_lineiter<<"] a="<<alpha<<" p="<<_p<<" - CE: "<<complementarity_error<< "\tSE: ";
@@ -960,12 +970,12 @@ template <typename CONSTRAINTACCESSOR,typename INTEGRATORDATACONT, typename STH,
 	  {
 	    double gamma = 0.5;
 	    
-	    if(!this->GetReducedProblem()->IsEpsilonFeasible(real_constraints,gamma*_p))
+	    if(! real_constraints.IsEpsilonFeasible(gamma*_p))
 	    {
 	      if(piter < 30)
 	      {
 		piter++;
-		gamma = (this->GetReducedProblem()->GetMaxViolation(real_constraints)+_p)/(2.*_p);
+		gamma = (real_constraints.Norm("infty","positive")+_p)/(2.*_p);
 	      }
 	      else
 	      {
@@ -974,9 +984,17 @@ template <typename CONSTRAINTACCESSOR,typename INTEGRATORDATACONT, typename STH,
 		  bool l_run = true;
 		  while(l_run)
 		  {
-		    this->GetReducedProblem()->FeasibilityShift(last_good_control, dq,gamma*0.5);
+		    //Move the control towards feasibility
+		    {
+		      double lambda = gamma*0.5;
+		      assert( lambda > 0);
+		      assert( lambda < 1);
+		      dq *= 1.-lambda;
+		      dq.add(lambda,last_good_control);
+		    }
+
 		    this->GetReducedProblem()->ComputeReducedConstraints(dq,real_constraints);
-		    l_run = !this->GetReducedProblem()->IsEpsilonFeasible(real_constraints,gamma*_p);
+		    l_run = !real_constraints.IsEpsilonFeasible(gamma*_p);
 		  }
 		}
 		else
@@ -998,17 +1016,20 @@ template <typename CONSTRAINTACCESSOR,typename INTEGRATORDATACONT, typename STH,
 	    out<<_p;
 	    this->GetOutputHandler()->Write(out,5);
 	    _augmented_lagrangian_problem.SetValue(_p,"p");
+	    _augmented_lagrangian_solver.SetValue(_p,"p");
 
 	    cost = ComputeModelValue(dq,q,gradient,lb,ub,q_min,q_max,dm,constraints,J);
 	    
-	    complementarity_error = this->GetReducedProblem()->Complementarity(mult,real_constraints);
+	    complementarity_error = mult.Complementarity(real_constraints);
 	    complementarity_error *= 1./_ndofs;
 	    stationarity_error = AugmentedLagrangianResidual(q,gradient,lb,ub,q_min,q_max,mult,dq,J);
-	    feasibility_error = this->GetReducedProblem()->GetMaxViolation(real_constraints);
+	    feasibility_error = real_constraints.Norm("infty","positive");
 	    
 	    _augmented_lagrangian_problem.AddAuxiliaryControl(&q_min,"mma_lower_bound");
 	    _augmented_lagrangian_problem.AddAuxiliaryControl(&q_max,"mma_upper_bound");
 	    feasible = _augmented_lagrangian_solver.ComputeReducedConstraints(dq,constraints);
+	    //Recompute feasibility, since only feasibility for the augmented Lagrangian is needed.
+	    feasible = constraints.IsLargerThan(-_p);
 	    this->GetReducedProblem()->ComputeReducedConstraints(dq,real_constraints);
 	    if(!feasible)
 	    {
@@ -1075,16 +1096,19 @@ int GeneralizedMMAAlgorithm<CONSTRAINTACCESSOR, INTEGRATORDATACONT, STH, PROBLEM
                          double J)
 {
   bool feasible = true;
+
+
   
   //Solve the unconstraint minimization of the augmented lagrangian
   int ret = FindStationaryPointOfAugmentedLagrangian(q,gradient,lb,ub,q_min,q_max,dm,dq,alpha,J);
-  
   //update multiplier and p, alpha 
   
   _augmented_lagrangian_problem.AddAuxiliaryControl(&q_min,"mma_lower_bound");
   _augmented_lagrangian_problem.AddAuxiliaryControl(&q_max,"mma_upper_bound");
 
   feasible = _augmented_lagrangian_solver.ComputeReducedConstraints(dq,constraints);
+  //Recompute feasibility, since only feasibility for the augmented Lagrangian is needed.
+  feasible = constraints.IsLargerThan(-_p);
   if(!feasible)
   { 
     _augmented_lagrangian_problem.DeleteAuxiliaryControl("mma_lower_bound");
@@ -1217,6 +1241,8 @@ template <typename CONSTRAINTACCESSOR,typename INTEGRATORDATACONT, typename STH,
   _augmented_lagrangian_problem.AddAuxiliaryControl(&q_min,"mma_lower_bound");
   _augmented_lagrangian_problem.AddAuxiliaryControl(&q_max,"mma_upper_bound");
   bool feasible = _augmented_lagrangian_solver.ComputeReducedConstraints(q,constraints);
+  //Recompute feasibility, since only feasibility for the augmented Lagrangian is needed.
+  feasible = constraints.IsLargerThan(-_p);
   _augmented_lagrangian_problem.DeleteAuxiliaryControl("mma_lower_bound");
   _augmented_lagrangian_problem.DeleteAuxiliaryControl("mma_upper_bound");
   if(!feasible)
@@ -1262,6 +1288,8 @@ template <typename CONSTRAINTACCESSOR,typename INTEGRATORDATACONT, typename STH,
 	_augmented_lagrangian_problem.AddAuxiliaryControl(&q_min,"mma_lower_bound");
 	_augmented_lagrangian_problem.AddAuxiliaryControl(&q_max,"mma_upper_bound");
 	feasible = _augmented_lagrangian_solver.ComputeReducedConstraints(q,constraints);
+	//Recompute feasibility, since only feasibility for the augmented Lagrangian is needed.
+	feasible = constraints.IsLargerThan(-_p);
 	_augmented_lagrangian_problem.DeleteAuxiliaryControl("mma_lower_bound");
 	_augmented_lagrangian_problem.DeleteAuxiliaryControl("mma_upper_bound");
 	if(!feasible)

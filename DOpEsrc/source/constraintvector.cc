@@ -570,6 +570,90 @@ double ConstraintVector<VECTOR>::Norm(std::string name,std::string restriction) 
   return ret;
 }
 
+template<typename VECTOR> 
+bool ConstraintVector<VECTOR>::IsFeasible() const
+{
+  for(unsigned int i = 0; i < _local_control_constraint.size(); i++)
+  {
+    const VECTOR& tmp = *(_local_control_constraint[i]);
+    for( unsigned int j = 0; j < tmp.size(); j++)
+    {
+      if(tmp(j) > 0.)
+	return false;
+    }
+  }
+  for(unsigned int i = 0; i< _global_constraint.size(); i++)
+  {
+    if(_global_constraint(i) > 0.)
+      return false;
+  }
+  return true;
+}
+
+template<typename VECTOR> 
+bool ConstraintVector<VECTOR>::IsEpsilonFeasible(double eps) const
+{ 
+  for(unsigned int i = 0; i < _local_control_constraint.size(); i++)
+  {
+    const VECTOR& tmp = *(_local_control_constraint[i]);
+    for( unsigned int j = 0; j < tmp.size(); j++)
+    {
+      if(tmp(j) > eps)
+	return false;
+    }
+  }
+  for(unsigned int i = 0; i< _global_constraint.size(); i++)
+  {
+    if(_global_constraint(i) > eps)
+      return false;
+  }
+  return true;
+}
+
+template<typename VECTOR> 
+bool ConstraintVector<VECTOR>::IsLargerThan(double eps) const
+{ 
+  for(unsigned int i = 0; i < _local_control_constraint.size(); i++)
+  {
+    const VECTOR& tmp = *(_local_control_constraint[i]);
+    for( unsigned int j = 0; j < tmp.size(); j++)
+    {
+      if(tmp(j) <= eps)
+	return false;
+    }
+  }
+  for(unsigned int i = 0; i< _global_constraint.size(); i++)
+  {
+    if(_global_constraint(i) <= eps)
+      return false;
+  }
+  return true;
+}
+        
+template<typename VECTOR> 
+double ConstraintVector<VECTOR>::Complementarity(const ConstraintVector<VECTOR>& g) const
+{
+  double ret =0.;
+  assert(g._local_control_constraint.size() == _local_control_constraint.size());
+
+  for(unsigned int i = 0; i < _local_control_constraint.size(); i++)
+  {
+  
+    const VECTOR& tmp = *(_local_control_constraint[i]);
+    const VECTOR& tmp2 = *(g._local_control_constraint[i]);
+    assert(tmp2.size() == tmp.size());
+    for( unsigned int j = 0; j < tmp.size(); j++)
+    {
+      ret += fabs(tmp2[j]*tmp[j]);
+    }
+  }
+  assert(_global_constraint.size() == g._global_constraint.size()); 
+  for(unsigned int i = 0; i< _global_constraint.size(); i++)
+  {
+    ret += fabs(_global_constraint[i]*g._global_constraint[i]);
+  }
+  return ret;
+}
 
 /******************************************************/
 /******************************************************/

@@ -109,32 +109,6 @@ namespace DOpE
           _problem_type_num = num;
           _problem_type = type;
         }
-	//FIXME: The following functions should be part
-	//of the constraint vector.
-	/**
-	 *  This function is used to check whether the values 
-	 *  stored in the argument g constitutes a constraint vector
-	 *  corresponding to a feasible control.
-	 *
-	 *  @param  g     The ConstraintVector to be checked.
-	 *
-	 *  @return       A boolean beeing true if the constraint is feasible
-	 *                and false otherwise.
-	 */
-        virtual bool
-        IsFeasible(const ConstraintVector<VECTOR>& g) const=0;
-
-        virtual bool
-        IsLargerThan(const ConstraintVector<VECTOR>& g, double p) const=0;
-
-        virtual bool
-        IsEpsilonFeasible(const ConstraintVector<VECTOR>& g, double p) const=0;
-        virtual double
-        MaxViolation(const ConstraintVector<VECTOR>& g) const =0;
-        virtual double
-        Complementarity(const ConstraintVector<VECTOR>& f,
-            const ConstraintVector<VECTOR>& g) const=0;
-	//end FIXME
 
 	/**
 	 * This function is called after the constraints are evaluated.
@@ -150,12 +124,6 @@ namespace DOpE
 	{
 	}
 	
-	//FIXME: This function is not userdependent. It should be 
-	//in the constraintvector!
-        virtual void
-        FeasibilityShift(const ControlVector<VECTOR>& g_hat,
-            ControlVector<VECTOR>& g, double lambda) const=0;
-
       protected:
         std::string
         GetProblemType() const

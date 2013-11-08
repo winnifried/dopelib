@@ -65,50 +65,10 @@ namespace DOpE
           lb = -1.e+20;
           ub = 1.e+20;
         }
-        bool
-        IsFeasible(
-	  const ConstraintVector<VECTOR>& /*g*/) const
-        {
-          return true;
-        }
-        bool
-	  IsLargerThan(const ConstraintVector<VECTOR>& /*g*/,
-		       double p) const
-        {
-          if (p < 0)
-            return true;
-          return false;
-        }
-        bool
-        IsEpsilonFeasible(const ConstraintVector<VECTOR>& /*g*/, double p) const
-        {
-          if (p >= 0)
-            return true;
-          return false;
-        }
-        void
+	void
         PostProcessConstraints(
 	  ConstraintVector<VECTOR>& /*g*/) const
         {
-        }
-        double
-        MaxViolation(
-	  const ConstraintVector<VECTOR>& /*g*/) const
-        {
-          return 0.;
-        }
-        void
-        FeasibilityShift(
-	  const ControlVector<VECTOR>& /*g_hat*/,
-	  ControlVector<VECTOR>& /*g*/,
-	  double /*lambda*/) const
-        {
-        }
-        double
-        Complementarity(const ConstraintVector<VECTOR>& /*f*/,
-            const ConstraintVector<VECTOR>& /*g*/) const
-        {
-          return 0.;
         }
 
       protected:

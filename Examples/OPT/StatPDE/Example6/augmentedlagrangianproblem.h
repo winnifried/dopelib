@@ -1412,16 +1412,6 @@ namespace DOpE
 
         /******************************************************/
 
-        bool
-        IsFeasible(
-            const ConstraintVector<dealii::BlockVector<double> >& g) const
-        {
-          //We do require that x is choosen in the domain of phi(g), this is equivalent to phi(g(x)) > -p
-          return _OP.IsLargerThan(g, -_p);
-        }
-
-        /******************************************************/
-
         void
         PostProcessConstraints(
             ConstraintVector<dealii::BlockVector<double> >& g) const

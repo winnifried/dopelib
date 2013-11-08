@@ -306,50 +306,6 @@ namespace DOpE
           abort();
         }
 
-        /******************************************************/
-        /**
-         * Implementation of Virtual Method in Base Class
-	 * ReducedProblemInterface
-         *
-         */
-        bool
-        IsEpsilonFeasible(const ConstraintVector<VECTOR>& g, double p)
-        {
-          return this->GetProblem()->IsEpsilonFeasible(g, p);
-        }
-        /**
-         * Implementation of Virtual Method in Base Class
-	 * ReducedProblemInterface
-         *
-         */
-        double
-        GetMaxViolation(const ConstraintVector<VECTOR>& g)
-        {
-          return this->GetProblem()->MaxViolation(g);
-        }
-        /**
-         * Implementation of Virtual Method in Base Class
-	 * ReducedProblemInterface
-         *
-         */
-        void
-        FeasibilityShift(const ControlVector<VECTOR>& g_hat,
-            ControlVector<VECTOR>& g, double lambda)
-        {
-          this->GetProblem()->FeasibilityShift(g_hat, g, lambda);
-        }
-        /**
-         * Implementation of Virtual Method in Base Class
-	 * ReducedProblemInterface
-         *
-         */
-        double
-        Complementarity(const ConstraintVector<VECTOR>& f,
-            const ConstraintVector<VECTOR>& g)
-        {
-          return this->GetProblem()->Complementarity(f, g);
-        }
-
       protected:
         /**
          * This function computes the solution for the state variable.
@@ -852,8 +808,8 @@ namespace DOpE
       //this->GetProblem()->PostProcessConstraints(g, true);
       this->GetProblem()->PostProcessConstraints(g);
 
-      return this->GetProblem()->IsFeasible(g);
-      return true;
+      
+      return g.IsFeasible();
     }
 
   /******************************************************/

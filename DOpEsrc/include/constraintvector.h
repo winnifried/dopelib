@@ -192,6 +192,56 @@ namespace DOpE
      */
     double Norm(std::string name,std::string restriction = "all") const;
 
+    /**
+     *  This function is used to check whether the values 
+     *  stored in this vector
+     *  corresponding to a feasible control,
+     *  i.e., if all entries are non positive
+     *
+     *  @return       A boolean beeing true if the constraint is feasible
+     *                and false otherwise.
+     */
+    virtual bool
+      IsFeasible() const;
+    /**
+     *  This function is used to check whether the values 
+     *  stored in this vector
+     *  corresponding to an epsilon  feasible control,
+     *  i.e., if all entries are not larger than the given eps.
+     *
+     *  @param  eps   The value of epsilon.
+     *
+     *  @return       A boolean beeing true if the constraint is eps-feasible
+     *                and false otherwise.
+     */
+    virtual bool
+      IsEpsilonFeasible(double eps) const;
+    
+     /**
+     *  This function is used to check whether the values 
+     *  stored in this vector are larger than the given epsilon.
+     *
+     *  @param  eps   The value of epsilon.
+     *
+     *  @return       A boolean beeing true if the constraint is larger than eps
+     *                and false otherwise.
+     */
+    virtual bool
+      IsLargerThan(double eps) const;
+   
+     
+    /**
+     *  This function calculates the element-wise product of the 
+     *  constraintvector with the given argument. The absolute value
+     *  of these products is then summed.
+     *
+     *  @param g  A given vector to check the complementarity.
+     *
+     *  @return the complementarity product.
+     */
+    virtual double
+      Complementarity(const ConstraintVector<VECTOR>& g) const;
+
   private:
     /**
      * This function resizes the spacial vector at a prior given time point.

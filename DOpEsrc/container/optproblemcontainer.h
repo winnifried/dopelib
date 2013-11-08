@@ -825,40 +825,6 @@ namespace DOpE
 
         /******************************************************/
 
-        bool
-        IsFeasible(const ConstraintVector<VECTOR>& g) const;
-        bool
-        IsLargerThan(const ConstraintVector<VECTOR>& g, double p) const
-        {
-          return this->GetConstraints()->IsLargerThan(g, p);
-        }
-        bool
-        IsEpsilonFeasible(const ConstraintVector<VECTOR>& g, double p) const
-        {
-          return this->GetConstraints()->IsEpsilonFeasible(g, p);
-        }
-        double
-        MaxViolation(const ConstraintVector<VECTOR>& g) const
-        {
-          return this->GetConstraints()->MaxViolation(g);
-        }
-        void
-        FeasibilityShift(const ControlVector<VECTOR>& g_hat,
-            ControlVector<VECTOR>& g, double lambda) const
-        {
-          this->GetConstraints()->FeasibilityShift(g_hat, g, lambda);
-        }
-        double
-        Complementarity(const ConstraintVector<VECTOR>& f,
-            const ConstraintVector<VECTOR>& g) const
-        {
-          return this->GetConstraints()->Complementarity(f, g);
-        }
-        /******************************************************/
-
-        //      void
-        //      PostProcessConstraints(ConstraintVector<VECTOR>& g,
-        //          bool process_global_in_time_constraints) const;
         void
         PostProcessConstraints(ConstraintVector<VECTOR>& g) const;
 
@@ -2896,20 +2862,6 @@ namespace DOpE
         throw DOpEException("Unknown type " + this->GetType(),
             "OptProblemContainer::ComputeSparsityPattern");
       }
-    }
-
-  /******************************************************/
-
-  template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-      typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-      typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-      template<int, int> class DH>
-    bool
-    OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
-        SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::IsFeasible(
-        const ConstraintVector<VECTOR>& g) const
-    {
-      return this->GetConstraints()->IsFeasible(g);
     }
 
   /******************************************************/
