@@ -88,7 +88,8 @@ typedef OptProblemContainer<FUNC, FUNC, PDE, DD, CONS, SPARSITYPATTERN, VECTOR,
 #define PROB StateProblem<OP_BASE,PDE,DD,SPARSITYPATTERN,VECTOR,LOCALDOPEDIM,LOCALDEALDIM>
 
 // Typedefs for timestep problem
-#define TSP BackwardEulerProblem
+//#define TSP BackwardEulerProblem
+#define TSP ShiftedCrankNicolsonProblem
 //FIXME: This should be a reasonable dual timestepping scheme
 #define DTSP BackwardEulerProblem
 
@@ -189,9 +190,9 @@ main(int argc, char **argv)
 
   //Time grid of [0,25]
   Triangulation<1> times;
-  GridGenerator::subdivided_hyper_cube(times, 25, 0, 25);
+  GridGenerator::subdivided_hyper_cube(times, 1500, 0, 15);
 
-  triangulation.refine_global(1);
+  triangulation.refine_global(2);
   MethodOfLines_SpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR,
       LOCALDOPEDIM, LOCALDEALDIM> DOFH(triangulation, control_fe, state_fe,
       times, DOpEtypes::undefined);

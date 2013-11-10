@@ -188,8 +188,8 @@ template<template<int, int> class DH,typename VECTOR,  int dealdim>
                       * state_fe_values.JxW(q_point);
 
                   local_cell_vector(i) += scale_ico * (//tmp_structure_continuation_E
-                      alpha_u * cell_diameter * cell_diameter * scalar_product(
-                          grad_u, phi_i_grads_u))
+                      alpha_u/(std::pow(state_fe_values.JxW(q_point),1.0)) *
+		      scalar_product(grad_u, phi_i_grads_u))
                       * state_fe_values.JxW(q_point);
 
                   local_cell_vector(i) += scale * (scalar_product(
@@ -421,7 +421,7 @@ template<template<int, int> class DH,typename VECTOR,  int dealdim>
                           q_point);
 
                       local_entry_matrix(j, i) += scale_ico * (//tmp_structure_continuation_E
-                          alpha_u * cell_diameter * cell_diameter
+							       alpha_u/(std::pow(state_fe_values.JxW(q_point),1.0)) 
                               * scalar_product(phi_grads_u[i], phi_grads_u[j]))
                           * state_fe_values.JxW(q_point);
 

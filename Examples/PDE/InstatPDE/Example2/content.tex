@@ -1,7 +1,8 @@
 \subsubsection{General problem description}
 
 In the present example, we solve a 
-nonstationary fluid-structure interaction problem. 
+nonstationary fluid-structure interaction problem in 
+arbitrary Lagrangian-Eulerian (ALE) coordinates. 
 The underlying equations are stated in the following:
 \begin{Problem}[Variational fluid-structure interaction framework]
   \label{eq:fsi:ale:harmonic}
@@ -38,17 +39,38 @@ The underlying equations are stated in the following:
       &=0&&\forall\hat\psi^p\in \hat L,
     \end{aligned}
   \end{eqnarray*}  
-  with $\hat\rho_f$, $\hat\rho_s$, $\nu_f$, $\mu_s$, $\lambda_s$, $\hat F$, and $\hat J$. 
-  The stress tensors for the fluid and structure are
-implemented in  
-  $\hat\sigma_f$, $\hat\sigma_s$, and $\hat\sigma_g$ 
+  with the densities $\hat\rho_f$ and $\hat\rho_s$, 
+the viscosity $\nu_f$, the Lam\'e parameters 
+$\mu_s$, $\lambda_s$ and the deformation gradient $\hat F$, and its
+determinant $\hat J$. The stress tensors for the fluid and structure are
+implemented by 
+\[
+\hat\sigma_f = -\hat pI + \hat\rho_f\nu_f (\hat\nabla\hat v \hat F^{-1}
+  + \hat F^{-T} \hat\nabla\hat v^T)
+\], 
+and 
+\[
+\hat\sigma_s = \hat F (\lambda_s \text{tr}\hat E I + 2\mu_s \hat E)
+\]
+with $\hat E = \frac{1}{2}(\hat F^T \hat F - I)$.
+The mesh deformation
+is of harmonic type and given by 
+\[
+\hat\sigma_g = \alpha(x) \hat\nabla\hat u,
+\] 
+with a specific parameter $\alpha(x)$ (motivation by Stein/Tezduyar/Benney 2003).
 \end{Problem}
+The ALE approach belongs to interface-tracking methods in which 
+the mesh is moved such that it fits in all time steps with 
+the FSI-interface. However, this leads to 
+a degeneration of the ALE map. Methods to circument such as 
+degeneration as long as possible are re-meshing techniques or 
+to use a biharmonic mesh motion technique.
 
 
 
 
-
-
+\newpage
 
 {\bf Code validation for fluid problems with ALE}
 
@@ -101,5 +123,20 @@ The results are summarized below:
 \vspace{0.2cm}
 
 \textbf{Program description}
+
+The major difference to the first nonstationary program
+is the introduction of the 
+\begin{verbatim}
+void CellTimeEquationExplicit (...) 
+\end{verbatim}
+to write all time derivative terms explicitely:
+\begin{equation*}
+(v^n - v^{n-1}, \phi)_{\Omega}.
+\end{equation*}
+This behavior is useful since (as shown in the above equations)
+other solutions variables have to be considered
+around $\partial_t v$ such as $J:=J(u)$. 
+The same holds for the corresponding matrix part.
+
 
 \vspace{0.2cm}
