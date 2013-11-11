@@ -42,6 +42,11 @@
 namespace DOpE
 {
 
+  /**
+   * A template providing all evaluations of a PDE that may be used
+   * during the solution of a PDE or an optimization with a PDE constraint.
+   *
+   */
   template<
       template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
@@ -56,98 +61,369 @@ namespace DOpE
         /******************************************************/
 
         /**
-         * Documentation in optproblemcontainer.h.
+         * Assuming that the PDE is given in the form a(u;\phi) = f(\phi),
+	 * this function implements all terms in a(u;\phi) that are
+	 * represented by intergrals over elements T.
+	 * Hence, if a(u;\phi) = \sum_T \int_T a_T(u;\phi) + ...
+	 * then this function needs to implement \int_T a_T(u;\phi)
+	 * a_T may depend upon any spatial derivatives, but not on temporal 
+	 * derivatives.
+	 * 
+	 * @param cdc                The CellDataContainer object which provides 
+	 *                           access to all information on the element, 
+	 *                           e.g., test-functions, mesh size,...
+	 * @param local_cell_vector  The vector containing the integrals
+	 *                           ordered according to the local number 
+	 *                           of the testfunction.
+	 * @param scale              A scaling parameter to be used in all
+	 *                           equations.
+	 * @param scale_ico          A special scaling parameter to be used 
+	 *                           in certain parts of the equation
+	 *                           if they need to be treated differently in 
+	 *                           time-stepping schemes, see the PDF-documentation
+	 *                           for more details.
+	 *                           
          */
         virtual void
-        CellEquation(const CDC<DH, VECTOR, dealdim>& cdc,
-            dealii::Vector<double> &/*local_cell_vector*/, double scale,
-            double /*scale_ico*/);
+	  CellEquation(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
+		       dealii::Vector<double> &/*local_cell_vector*/, 
+		       double /*scale*/,
+		       double /*scale_ico*/);
 
         /******************************************************/
 
         /**
-         * Documentation in optproblemcontainer.h.
+         * This function is used for error estimation and should implement
+	 * the strong form of the residual on an element T.
+	 * 
+	 * @param cdc                The CellDataContainer object which provides 
+	 *                           access to all information on the element, 
+	 *                           e.g., test-functions, mesh size,...
+	 * @param cdc_wight          The CellDataContainer for the weight-function,
+	 *                           e.g., the testfunction by which the
+	 *                           residual needs to be multiplied
+	 * @param ret                The value of the integral on the element 
+	 *                           of residual times testfunction.
+	 * @param scale              A scaling parameter to be used in all
+	 *                           equations.
+	 *                           
          */
-
         virtual void
-        StrongCellResidual(const CDC<DH, VECTOR, dealdim>& cdc,
-            const CDC<DH, VECTOR, dealdim>& cdc_weight, double&, double scale);
+        StrongCellResidual(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
+			   const CDC<DH, VECTOR, dealdim>& /*cdc_weight*/, 
+			   double& /*ret*/, 
+			   double /*scale*/);
 
         /******************************************************/
 
         /**
-         * Documentation in optproblemcontainer.h.
-         */
+         * Assuming that the discretization of temporal derivatives by a backward 
+	 * difference, i.e., \partial_t u(t_i) \approx 1/\delta t ( u(t_i) - u(t_{i-1})
+	 * in several cases the the temporal derivatives of the
+	 * equation give rise to a spacial integral of the form 
+	 *
+	 * \int_Omega T(u(t_i); \phi(t_i)) - \int_Omega T(u(t_{i-1}); \phi(t_{i-1}))
+	 *
+	 * This equation is used to implement the element contribution
+	 * \int_T T(u,\phi)
+	 * 
+	 * @param cdc                The CellDataContainer object which provides 
+	 *                           access to all information on the element, 
+	 *                           e.g., test-functions, mesh size,...
+	 * @param local_cell_vector  The vector containing the integrals
+	 *                           ordered according to the local number 
+	 *                           of the testfunction.
+	 * @param scale              A scaling parameter to be used in all
+	 *                           equations.
+	 */
         //Note that the _UU term is not needed, since we assume that CellTimeEquation is linear!
         virtual void
-        CellTimeEquation(const CDC<DH, VECTOR, dealdim>&,
-            dealii::Vector<double> &/*local_cell_vector*/, double scale);
+	  CellTimeEquation(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
+			   dealii::Vector<double> &/*local_cell_vector*/, 
+			   double /*scale*/);
 
         /******************************************************/
-        virtual void
-        CellTimeEquation_U(const CDC<DH, VECTOR, dealdim>&,
-            dealii::Vector<double> &/*local_cell_vector*/, double scale);
-
-        /******************************************************/
-        virtual void
-        CellTimeEquation_UT(const CDC<DH, VECTOR, dealdim>&,
-            dealii::Vector<double> &/*local_cell_vector*/, double scale);
-
-        /******************************************************/
-        virtual void
-        CellTimeEquation_UTT(const CDC<DH, VECTOR, dealdim>&,
-            dealii::Vector<double> &/*local_cell_vector*/, double scale);
-
-        /******************************************************/
-
         /**
-         * Documentation in optproblemcontainer.h.
-         */
-
-        virtual void
-        CellTimeEquationExplicit(const CDC<DH, VECTOR, dealdim>&,
-            dealii::Vector<double> &/*local_cell_vector*/, double scale);
-        /******************************************************/
-        virtual void
-        CellTimeEquationExplicit_U(const CDC<DH, VECTOR, dealdim>&,
-            dealii::Vector<double> &/*local_cell_vector*/, double scale);
-
-        /******************************************************/
-        virtual void
-        CellTimeEquationExplicit_UT(const CDC<DH, VECTOR, dealdim>&,
-            dealii::Vector<double> &/*local_cell_vector*/, double scale);
-
-        /******************************************************/
-        virtual void
-        CellTimeEquationExplicit_UTT(const CDC<DH, VECTOR, dealdim>&,
-            dealii::Vector<double> &/*local_cell_vector*/, double scale);
-
-        /******************************************************/
-        virtual void
-        CellTimeEquationExplicit_UU(const CDC<DH, VECTOR, dealdim>&,
-            dealii::Vector<double> &/*local_cell_vector*/, double scale);
+         * Same as CellTimeEquation, but here the derivative of T with
+	 * respect to u is considered.
+	 * Here, the derivative of T in u in a direction du 
+	 * for a fixed test function z
+	 * is denoted as T'(u;du,z)
+	 *
+	 * This equation is used to implement the element contribution
+	 * \int_T T'(u;\phi,z)
+	 * 
+	 * @param cdc                The CellDataContainer object which provides 
+	 *                           access to all information on the element, 
+	 *                           e.g., test-functions, mesh size,...
+	 * @param local_cell_vector  The vector containing the integrals
+	 *                           ordered according to the local number 
+	 *                           of the testfunction.
+	 * @param scale              A scaling parameter to be used in all
+	 *                           equations.
+	 */
+	virtual void
+	  CellTimeEquation_U(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
+			     dealii::Vector<double> &/*local_cell_vector*/, 
+			     double /*scale*/);
 
         /******************************************************/
+        /**
+         * Same as CellTimeEquation_U, but we exchange the argument for
+	 * the test function.
+	 *
+	 * This equation is used to implement the element contribution
+	 * \int_T T'(u;du,\phi)
+	 * 
+	 * @param cdc                The CellDataContainer object which provides 
+	 *                           access to all information on the element, 
+	 *                           e.g., test-functions, mesh size,...
+	 * @param local_cell_vector  The vector containing the integrals
+	 *                           ordered according to the local number 
+	 *                           of the testfunction.
+	 * @param scale              A scaling parameter to be used in all
+	 *                           equations.
+	 */  
+	virtual void
+	  CellTimeEquation_UT(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
+			      dealii::Vector<double> &/*local_cell_vector*/,
+			      double /*scale*/);
 
+        /******************************************************/
+        /**
+         * Same as CellTimeEquation_UT, but we exchange the argument for
+	 * the test function.
+	 *
+	 * This equation is used to implement the element contribution
+	 * \int_T T'(u;\phi,dz)
+	 * 
+	 * Note that this is the same function as in CellTimeEquation_U,
+	 * but it is used with an other argument dz instead of z.
+	 * 
+	 * @param cdc                The CellDataContainer object which provides 
+	 *                           access to all information on the element, 
+	 *                           e.g., test-functions, mesh size,...
+	 * @param local_cell_vector  The vector containing the integrals
+	 *                           ordered according to the local number 
+	 *                           of the testfunction.
+	 * @param scale              A scaling parameter to be used in all
+	 *                           equations.
+	 */
         virtual void
-        CellEquation_U(const CDC<DH, VECTOR, dealdim>&,
-            dealii::Vector<double> &/*local_cell_vector*/, double scale,
-            double scale_ico);
+	  CellTimeEquation_UTT(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
+			       dealii::Vector<double> &/*local_cell_vector*/, 
+			       double /*scale*/);
 
         /******************************************************/
 
+	/**
+	 * In certain cases, the assumption of CellTimeEquation 
+	 * are not meet, i.e., we can not use the 
+	 * same operator T at t_i and t_{i-1}. 
+	 * In these cases instead of CellTimeEquation this 
+	 * funtion is used, where the user can implement the
+	 * complete approximation of the temporal derivative.
+	 *
+	 * @param cdc                The CellDataContainer object which provides 
+	 *                           access to all information on the element, 
+	 *                           e.g., test-functions, mesh size,...
+	 * @param local_cell_vector  The vector containing the integrals
+	 *                           ordered according to the local number 
+	 *                           of the testfunction.
+	 * @param scale              A scaling parameter to be used in all
+	 *                           equations.
+	 */
         virtual void
-        StrongCellResidual_U(const CDC<DH, VECTOR, dealdim>&,
-            const CDC<DH, VECTOR, dealdim>& cdc_weight, double&, double scale);
+	  CellTimeEquationExplicit(const CDC<DH, VECTOR, dealdim>& /*cdc**/,
+				   dealii::Vector<double> &/*local_cell_vector*/, 
+				   double /*scale*/);
+        /******************************************************/
+	/**
+	 * Analog to CellTimeEquationExplicit, this function is used 
+	 * to replace CellTimeEquation_U if needed.
+	 *
+	 * @param cdc                The CellDataContainer object which provides 
+	 *                           access to all information on the element, 
+	 *                           e.g., test-functions, mesh size,...
+	 * @param local_cell_vector  The vector containing the integrals
+	 *                           ordered according to the local number 
+	 *                           of the testfunction.
+	 * @param scale              A scaling parameter to be used in all
+	 *                           equations.
+	 */
+	virtual void
+	  CellTimeEquationExplicit_U(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
+				     dealii::Vector<double> &/*local_cell_vector*/, 
+				     double /*scale*/);
 
         /******************************************************/
+	/**
+	 * Analog to CellTimeEquationExplicit, this function is used 
+	 * to replace CellTimeEquation_UT if needed.
+	 *
+	 * @param cdc                The CellDataContainer object which provides 
+	 *                           access to all information on the element, 
+	 *                           e.g., test-functions, mesh size,...
+	 * @param local_cell_vector  The vector containing the integrals
+	 *                           ordered according to the local number 
+	 *                           of the testfunction.
+	 * @param scale              A scaling parameter to be used in all
+	 *                           equations.
+	 */
 
         virtual void
-        CellEquation_UT(const CDC<DH, VECTOR, dealdim>&,
-            dealii::Vector<double> &/*local_cell_vector*/, double scale,
-            double scale_ico);
+	  CellTimeEquationExplicit_UT(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
+				      dealii::Vector<double> &/*local_cell_vector*/, 
+				      double /*scale*/);
 
         /******************************************************/
+	/**
+	 * Analog to CellTimeEquationExplicit, this function is used 
+	 * to replace CellTimeEquation_UTT if needed.
+	 *
+	 * @param cdc                The CellDataContainer object which provides 
+	 *                           access to all information on the element, 
+	 *                           e.g., test-functions, mesh size,...
+	 * @param local_cell_vector  The vector containing the integrals
+	 *                           ordered according to the local number 
+	 *                           of the testfunction.
+	 * @param scale              A scaling parameter to be used in all
+	 *                           equations.
+	 */
+        virtual void
+	  CellTimeEquationExplicit_UTT(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
+				       dealii::Vector<double> &/*local_cell_vector*/, 
+				       double /*scale*/);
+
+        /******************************************************/
+	/**
+	 * For nonlinear terms involved in the temporal derivative 
+	 * the second derivatives with respect to the state of the 
+	 * time derivative are implemented here.
+	 *
+	 * @param cdc                The CellDataContainer object which provides 
+	 *                           access to all information on the element, 
+	 *                           e.g., test-functions, mesh size,...
+	 * @param local_cell_vector  The vector containing the integrals
+	 *                           ordered according to the local number 
+	 *                           of the testfunction.
+	 * @param scale              A scaling parameter to be used in all
+	 *                           equations.
+	 */
+
+        virtual void
+	  CellTimeEquationExplicit_UU(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
+				      dealii::Vector<double> &/*local_cell_vector*/, 
+				      double /*scale*/);
+
+        /******************************************************/
+	/**
+	 * This term implements the derivative of CellEquation 
+	 * with respect to the u argument. I.e., if 
+	 * CellEquation implements the term
+	 * int_T a_T(u;\phi) then this method
+	 * implements \int_T a_T'(u;\phi,z) 
+	 * where \phi denotes the direction to which the derivative 
+	 * is applied
+	 * 
+	 * @param cdc                The CellDataContainer object which provides 
+	 *                           access to all information on the element, 
+	 *                           e.g., test-functions, mesh size,...
+	 * @param local_cell_vector  The vector containing the integrals
+	 *                           ordered according to the local number 
+	 *                           of the testfunction.
+	 * @param scale              A scaling parameter to be used in all
+	 *                           equations.
+	 * @param scale_ico          A special scaling parameter to be used 
+	 *                           in certain parts of the equation
+	 *                           if they need to be treated differently in 
+	 *                           time-stepping schemes, see the PDF-documentation
+	 *                           for more details.
+	 */
+        virtual void
+	  CellEquation_U(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
+			 dealii::Vector<double> &/*local_cell_vector*/, 
+			 double /*scale*/,
+			 double /*scale_ico*/);
+
+        /******************************************************/
+	/**
+	 * Similar to the StongCellResidual, this function implements the
+	 * strong element residual for the adjoint equation.
+	 * 
+	 * @param cdc                The CellDataContainer object which provides 
+	 *                           access to all information on the element, 
+	 *                           e.g., test-functions, mesh size,...
+	 * @param local_cell_vector  The vector containing the integrals
+	 *                           ordered according to the local number 
+	 *                           of the testfunction.
+	 * @param cdc_wight          The CellDataContainer for the weight-function,
+	 *                           e.g., the testfunction by which the
+	 *                           residual needs to be multiplied
+	 * @param scale              A scaling parameter to be used in all
+	 *                           equations.
+	 */
+
+        virtual void
+	  StrongCellResidual_U(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
+			       const CDC<DH, VECTOR, dealdim>& /*cdc_weight*/, 
+			       double& /*ret*/, double /*scale*/);
+
+        /******************************************************/
+	/**
+	 * This term implements the derivative of CellEquation 
+	 * with respect to the u argument. I.e., if 
+	 * CellEquation implements the term
+	 * int_T a_T(u;\phi) then this method
+	 * implements \int_T a_T'(u;du,\phi) .
+	 * In contrast to CellEquation_U the arguments are exchanged.
+	 * 
+	 * @param cdc                The CellDataContainer object which provides 
+	 *                           access to all information on the element, 
+	 *                           e.g., test-functions, mesh size,...
+	 * @param local_cell_vector  The vector containing the integrals
+	 *                           ordered according to the local number 
+	 *                           of the testfunction.
+	 * @param scale              A scaling parameter to be used in all
+	 *                           equations.
+	 * @param scale_ico          A special scaling parameter to be used 
+	 *                           in certain parts of the equation
+	 *                           if they need to be treated differently in 
+	 *                           time-stepping schemes, see the PDF-documentation
+	 *                           for more details.
+	 */
+
+        virtual void
+	  CellEquation_UT(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
+			  dealii::Vector<double> &/*local_cell_vector*/, 
+			  double /*scale*/,
+			  double /*scale_ico*/);
+
+        /******************************************************/
+	/**
+	 * This term implements the derivative of CellEquation 
+	 * with respect to the u argument. I.e., if 
+	 * CellEquation implements the term
+	 * int_T a_T(u;\phi) then this method
+	 * implements \int_T a_T'(u;phi,dz) .
+	 * 
+	 * This implements the same form as CellEquation_U, but
+	 * with exchanged functions, i.e., dz instead of z.
+	 * 
+	 * @param cdc                The CellDataContainer object which provides 
+	 *                           access to all information on the element, 
+	 *                           e.g., test-functions, mesh size,...
+	 * @param local_cell_vector  The vector containing the integrals
+	 *                           ordered according to the local number 
+	 *                           of the testfunction.
+	 * @param scale              A scaling parameter to be used in all
+	 *                           equations.
+	 * @param scale_ico          A special scaling parameter to be used 
+	 *                           in certain parts of the equation
+	 *                           if they need to be treated differently in 
+	 *                           time-stepping schemes, see the PDF-documentation
+	 *                           for more details.
+	 */
 
         virtual void
         CellEquation_UTT(const CDC<DH, VECTOR, dealdim>&,

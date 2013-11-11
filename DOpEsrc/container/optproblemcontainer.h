@@ -173,11 +173,11 @@ namespace DOpE
          * are defined on cells, e.g., drag and lift computation.
          * Or computations of deflections and deformations.
          *
-         * @template FACEDATACONTAINER    Class of the datacontainer, distinguishes
+         * @template DATACONTAINER    Class of the datacontainer, distinguishes
          *                                between hp- and classical case.
          *
-         * @param fdc                     A DataContainer holding all the needed information
-         *                                of the face.
+         * @param cdc                     A DataContainer holding all the needed information
+         *                                of the element.
          */
         template<typename DATACONTAINER>
           double

@@ -24,6 +24,10 @@ Standard TODO fuer naechstes Treffen
 - Code cleaning PDE and OPT Instat
   -- Beispiel (Erklaerung), PDEInterface nicht als template geben, sondern die LocalPDE.
 - content.tex for PDE/Instat OPT/Stat and OPT/Instat
+- CDC and FDC should be local template arguments of the methods in 
+  PDE and Functional.
+- Beeing more clever, it should be possible to remove alle the UTT and QTT terms,
+  they implement the same argument as U and Q, but with different variables.
 - Finish MG-Solver (Experimental/Example12)
 - InstatPDEProblem schreiben
 - Multimesh aus IntegratorDataContainer entfernen

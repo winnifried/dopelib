@@ -45,8 +45,9 @@ namespace DOpE
   /////////////////////////////
 
   /**
-   * A template for different solver types to be used for solving
-   * PDE- as well as optimization problems.
+   * Teis class is the basis for the reduced problems,
+   * i.e., those in which the PDE has been elimiated for
+   * the solution of stationary and nonstationary PDEs.
    */
   template<typename PROBLEM, typename VECTOR, int dealdim>
     class PDEProblemInterface : public ReducedProblemInterface_Base<VECTOR>
@@ -67,8 +68,8 @@ namespace DOpE
         /******************************************************/
 
         /**
-         * Basic function which is given to instatsolver.h and statsolver.h, respectively,
-         * and reinitializes vectors, matrices, etc.
+	 * Reinitialization when needed to adjust vector and matrix 
+	 * sizes. 
          *
          */
         virtual void
@@ -80,34 +81,16 @@ namespace DOpE
         /******************************************************/
 
         /**
-         * Basic function to compute reduced functionals.
-         *
+         * Evaluation of the functionals in the solution of the
+         * PDE. This function needs to be specified separately for
+	 * stationary and non stationary problems since the
+	 * evaluation of the functionals differs.
          */
         virtual void
         ComputeReducedFunctionals()=0;
 
         /******************************************************/
 
-//        /**
-//         * Basic function to compute the error indicators with
-//         * the DWR method and higher order interpolation to gain the weights.
-//         * We assume that the state is already computed,
-//         * whereas the dual solution will be computed inside this function.
-//         *
-//         * @param ref_ind           The Vector in which the function writes
-//         *                          the error indicators on the different cells.
-//         *                          This vector is resized to the number of cells
-//         *                          of the actual grid.
-//         * @param ee_state          Which terms of the error Identity should get computed
-//         *                          (i.e. primal-term, dual-term, both)?
-//         * @param weight_comp       How to compute the weights?
-//         *
-//         * @return                  The error in the previously specified functional.
-//         *
-//         */
-//        virtual void
-//        ComputeRefinementIndicators(DWRDataContainerBase<VECTOR>& dwrc) = 0;
-        /******************************************************/
         /**
          * Sets the type of the Problem _OP. This function secures the proper initialization of the
          * FEValues after the type has changed. See also the documentation of SetType in optproblemcontainer.h

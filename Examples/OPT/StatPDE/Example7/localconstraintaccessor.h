@@ -62,12 +62,6 @@ namespace DOpE
         }
       }
 
-      unsigned int
-      GetNLocalControlDoFs(const dealii::BlockVector<double>* q) const
-      {
-        assert(q->n_blocks() == 1);
-        return q->block(0).size();
-      }
       inline void
       GetControlBoxConstraints(dealii::BlockVector<double>& lb,
           dealii::BlockVector<double>& ub) const
