@@ -190,9 +190,9 @@ main(int argc, char **argv)
 
   //Time grid of [0,25]
   Triangulation<1> times;
-  GridGenerator::subdivided_hyper_cube(times, 1500, 0, 15);
+  GridGenerator::subdivided_hyper_cube(times, 25, 0, 25);
 
-  triangulation.refine_global(2);
+  triangulation.refine_global(1);
   MethodOfLines_SpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR,
       LOCALDOPEDIM, LOCALDEALDIM> DOFH(triangulation, control_fe, state_fe,
       times, DOpEtypes::undefined);

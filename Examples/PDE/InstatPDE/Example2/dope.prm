@@ -3,7 +3,7 @@
 
 subsection Local PDE parameters
 	   set density_fluid	 = 1.0e+3
-           set density_structure = 1.0e+4
+           set density_structure = 1.0e+3
 	   set viscosity	 = 1.0e-3
 	   # normally: 1.0e-4	  
 	   set alpha_u		 = 1.0e-5
@@ -13,7 +13,7 @@ end
 
 subsection My functions parameters
            # FSI 1: 0.2, FSI 2: 1.0, FSI 3: 2.0
-	   set mean_inflow_velocity = 1.0
+	   set mean_inflow_velocity = 0.2
 
 end
 

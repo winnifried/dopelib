@@ -22,301 +22,315 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		Deflection_Y: 0
 		Drag: 0
 		Lift: 0
-			 Timestep: 1 (0 -> 1) using backward Euler
-			 Newton step: 0	 Residual (abs.):   5.4e-01
+			 Timestep: 1 (0 -> 1) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   8.2e-01
 			 Newton step: 0	 Residual (rel.):     1.0e+00
-			 Newton step: 1	 Residual (rel.):   5.1e-01	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   5.2e-02	 LineSearch {0} 
-			 Newton step: 3	 Residual (rel.):   4.3e-03	 LineSearch {0} 
-			 Newton step: 4	 Residual (rel.):   6.4e-04	 LineSearch {0} 
-			 Newton step: 5	 Residual (rel.):   1.4e-04	 LineSearch {0} 
-			 Newton step: 6	 Residual (rel.):   2.8e-05	 LineSearch {0} 
-			 Newton step: 7	 Residual (rel.):   6.0e-06	 LineSearch {0} 
-			 Newton step: 8	 Residual (rel.):   1.3e-06	 LineSearch {0} 
-			 Newton step: 9	 Residual (rel.):   2.6e-07	 LineSearch {0} 
-			 Newton step: 10	 Residual (rel.): < 1.0e-07	 LineSearch {0} 
-			 Newton step: 11	 Residual (rel.): < 1.0e-07	 LineSearch {0} 
-		Pressure_difference: 330.14
-		Deflection_X: 1.04018e-05
-		Deflection_Y: -6.76113e-05
-		Drag: 10.3555
-		Lift: 0.0660784
-			 Timestep: 2 (1 -> 2) using backward Euler
-			 Newton step: 0	 Residual (abs.):   1.4e+00
-			 Newton step: 0	 Residual (rel.):     1.0e+00
-			 Newton step: 1	 Residual (rel.):   2.2e-01	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   3.0e-03	 LineSearch {0} 
-			 Newton step: 3	 Residual (rel.):   4.4e-04	 LineSearch {0} 
-			 Newton step: 4	 Residual (rel.):   9.2e-05	 LineSearch {0} 
-			 Newton step: 5	 Residual (rel.):   1.8e-05	 LineSearch {0} 
-			 Newton step: 6	 Residual (rel.):   3.3e-06	 LineSearch {0} 
-			 Newton step: 7	 Residual (rel.):   6.2e-07	 LineSearch {0} 
-			 Newton step: 8	 Residual (rel.):   1.2e-07	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   5.2e-01	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.1e-01	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   7.1e-03	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   4.9e-04	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   9.0e-05	 LineSearch {0} 
+			 Newton step: 6	 Residual (rel.):   1.6e-05	 LineSearch {0} 
+			 Newton step: 7	 Residual (rel.):   3.0e-06	 LineSearch {0} 
+			 Newton step: 8	 Residual (rel.):   5.5e-07	 LineSearch {0} 
 			 Newton step: 9	 Residual (rel.): < 1.0e-07	 LineSearch {0} 
 			 Newton step: 10	 Residual (rel.): < 1.0e-07	 LineSearch {0} 
-		Pressure_difference: 421.301
-		Deflection_X: 2.36563e-05
-		Deflection_Y: 7.91289e-05
-		Drag: 18.4691
-		Lift: 0.375138
-			 Timestep: 3 (2 -> 3) using backward Euler
-			 Newton step: 0	 Residual (abs.):   1.5e+00
+			 Newton step: 11	 Residual (rel.): < 1.0e-07	 LineSearch {0} 
+		Pressure_difference: 240.735
+		Deflection_X: 1.19174e-05
+		Deflection_Y: -2.02945e-05
+		Drag: 9.02506
+		Lift: 0.110425
+			 Timestep: 2 (1 -> 2) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   1.6e+00
 			 Newton step: 0	 Residual (rel.):     1.0e+00
-			 Newton step: 1	 Residual (rel.):   5.1e-02	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   8.6e-03	 LineSearch {0} 
-			 Newton step: 3	 Residual (rel.):   3.0e-05	 LineSearch {0} 
-			 Newton step: 4	 Residual (rel.):   1.5e-06	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   2.8e-01	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   4.1e-03	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   5.1e-04	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   1.0e-04	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   1.9e-05	 LineSearch {0} 
+			 Newton step: 6	 Residual (rel.):   3.5e-06	 LineSearch {0} 
+			 Newton step: 7	 Residual (rel.):   6.3e-07	 LineSearch {0} 
+			 Newton step: 8	 Residual (rel.):   1.1e-07	 LineSearch {0} 
+			 Newton step: 9	 Residual (rel.): < 1.0e-07	 LineSearch {0} 
+			 Newton step: 10	 Residual (rel.): < 1.0e-07	 LineSearch {0} 
+		Pressure_difference: 390.568
+		Deflection_X: 2.31837e-05
+		Deflection_Y: 0.000188658
+		Drag: 17.938
+		Lift: 0.436111
+			 Timestep: 3 (2 -> 3) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   1.3e+00
+			 Newton step: 0	 Residual (rel.):     1.0e+00
+			 Newton step: 1	 Residual (rel.):   4.4e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   5.1e-03	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.1e-04	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   1.1e-05	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   1.1e-06	 LineSearch {0} 
+			 Newton step: 6	 Residual (rel.):   1.1e-07	 LineSearch {0} 
+			 Newton step: 7	 Residual (rel.): < 1.0e-07	 LineSearch {0} 
+			 Newton step: 8	 Residual (rel.): < 1.0e-07	 LineSearch {0} 
+		Pressure_difference: 231.705
+		Deflection_X: 2.44601e-05
+		Deflection_Y: 0.000398842
+		Drag: 15.5651
+		Lift: 0.564268
+			 Timestep: 4 (3 -> 4) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   5.2e-01
+			 Newton step: 0	 Residual (rel.):     1.0e+00
+			 Newton step: 1	 Residual (rel.):   8.4e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.1e-03	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   4.2e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   2.9e-06	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   1.9e-07	 LineSearch {0} 
+			 Newton step: 6	 Residual (rel.): < 1.0e-07	 LineSearch {0} 
+		Pressure_difference: 177.614
+		Deflection_X: 2.41834e-05
+		Deflection_Y: 0.000554556
+		Drag: 14.6854
+		Lift: 0.642372
+			 Timestep: 5 (4 -> 5) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   2.3e-01
+			 Newton step: 0	 Residual (rel.):     1.0e+00
+			 Newton step: 1	 Residual (rel.):   9.4e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   8.0e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   2.4e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   1.3e-06	 LineSearch {0} 
 			 Newton step: 5	 Residual (rel.): < 1.0e-07	 LineSearch {0} 
 			 Newton step: 6	 Residual (rel.): < 1.0e-07	 LineSearch {0} 
-		Pressure_difference: 154.439
-		Deflection_X: 2.61718e-05
-		Deflection_Y: 0.000385481
-		Drag: 14.5389
-		Lift: 0.567492
-			 Timestep: 4 (3 -> 4) using backward Euler
-			 Newton step: 0	 Residual (abs.):   1.8e-01
+		Pressure_difference: 158.988
+		Deflection_X: 2.3709e-05
+		Deflection_Y: 0.000657333
+		Drag: 14.3483
+		Lift: 0.689194
+			 Timestep: 6 (5 -> 6) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   1.2e-01
 			 Newton step: 0	 Residual (rel.):     1.0e+00
-			 Newton step: 1	 Residual (rel.):   4.9e-01	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   3.0e-03	 LineSearch {0} 
-			 Newton step: 3	 Residual (rel.):   3.8e-05	 LineSearch {0} 
-			 Newton step: 4	 Residual (rel.):   2.2e-06	 LineSearch {0} 
-			 Newton step: 5	 Residual (rel.):   1.2e-07	 LineSearch {0} 
-			 Newton step: 6	 Residual (rel.): < 1.0e-07	 LineSearch {0} 
-		Pressure_difference: 150.888
-		Deflection_X: 2.40373e-05
-		Deflection_Y: 0.000633421
-		Drag: 14.2472
-		Lift: 0.667244
-			 Timestep: 5 (4 -> 5) using backward Euler
-			 Newton step: 0	 Residual (abs.):   1.1e-01
-			 Newton step: 0	 Residual (rel.):     1.0e+00
-			 Newton step: 1	 Residual (rel.):   2.7e-01	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   1.1e-03	 LineSearch {0} 
-			 Newton step: 3	 Residual (rel.):   2.8e-05	 LineSearch {0} 
-			 Newton step: 4	 Residual (rel.):   1.6e-06	 LineSearch {0} 
-			 Newton step: 5	 Residual (rel.): < 1.0e-07	 LineSearch {0} 
-		Pressure_difference: 149.518
-		Deflection_X: 2.317e-05
-		Deflection_Y: 0.000775095
-		Drag: 14.1573
-		Lift: 0.71875
-			 Timestep: 6 (5 -> 6) using backward Euler
-			 Newton step: 0	 Residual (abs.):   7.7e-02
-			 Newton step: 0	 Residual (rel.):     1.0e+00
-			 Newton step: 1	 Residual (rel.):   8.6e-02	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   7.2e-02	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   3.4e-04	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   1.8e-05	 LineSearch {0} 
-			 Newton step: 4	 Residual (rel.):   1.0e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   9.1e-07	 LineSearch {0} 
 			 Newton step: 5	 Residual (rel.): < 1.0e-07	 LineSearch {0} 
-		Pressure_difference: 148.991
-		Deflection_X: 2.2825e-05
-		Deflection_Y: 0.000841028
-		Drag: 14.1289
-		Lift: 0.744617
-			 Timestep: 7 (6 -> 7) using backward Euler
-			 Newton step: 0	 Residual (abs.):   5.2e-02
+		Pressure_difference: 152.472
+		Deflection_X: 2.33477e-05
+		Deflection_Y: 0.000720656
+		Drag: 14.2144
+		Lift: 0.716972
+			 Timestep: 7 (6 -> 7) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   7.2e-02
 			 Newton step: 0	 Residual (rel.):     1.0e+00
-			 Newton step: 1	 Residual (rel.):   2.1e-02	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   4.3e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.9e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.5e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   7.3e-07	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.): < 1.0e-07	 LineSearch {0} 
+		Pressure_difference: 150.143
+		Deflection_X: 2.3121e-05
+		Deflection_Y: 0.000757968
+		Drag: 14.1592
+		Lift: 0.733321
+			 Timestep: 8 (7 -> 8) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   4.7e-02
+			 Newton step: 0	 Residual (rel.):     1.0e+00
+			 Newton step: 1	 Residual (rel.):   2.2e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.4e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.2e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   6.0e-07	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.): < 1.0e-07	 LineSearch {0} 
+		Pressure_difference: 149.291
+		Deflection_X: 2.299e-05
+		Deflection_Y: 0.000779311
+		Drag: 14.1356
+		Lift: 0.742877
+			 Timestep: 9 (8 -> 9) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   3.1e-02
+			 Newton step: 0	 Residual (rel.):     1.0e+00
+			 Newton step: 1	 Residual (rel.):   1.0e-02	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   2.0e-04	 LineSearch {0} 
-			 Newton step: 3	 Residual (rel.):   1.1e-05	 LineSearch {0} 
-			 Newton step: 4	 Residual (rel.):   6.3e-07	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.0e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   4.9e-07	 LineSearch {0} 
 			 Newton step: 5	 Residual (rel.): < 1.0e-07	 LineSearch {0} 
-		Pressure_difference: 148.801
-		Deflection_X: 2.26958e-05
-		Deflection_Y: 0.000868305
-		Drag: 14.1201
-		Lift: 0.75713
-			 Timestep: 8 (7 -> 8) using backward Euler
-			 Newton step: 0	 Residual (abs.):   3.5e-02
+		Pressure_difference: 148.972
+		Deflection_X: 2.29174e-05
+		Deflection_Y: 0.000791287
+		Drag: 14.1252
+		Lift: 0.748432
+			 Timestep: 10 (9 -> 10) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   2.2e-02
 			 Newton step: 0	 Residual (rel.):     1.0e+00
-			 Newton step: 1	 Residual (rel.):   5.1e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   1.3e-04	 LineSearch {0} 
-			 Newton step: 3	 Residual (rel.):   7.1e-06	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   4.5e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.6e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   8.1e-06	 LineSearch {0} 
 			 Newton step: 4	 Residual (rel.):   3.9e-07	 LineSearch {0} 
-			 Newton step: 5	 Residual (rel.): < 1.0e-07	 LineSearch {0} 
-		Pressure_difference: 148.746
-		Deflection_X: 2.26474e-05
-		Deflection_Y: 0.000879279
-		Drag: 14.1174
-		Lift: 0.763
-			 Timestep: 9 (8 -> 9) using backward Euler
-			 Newton step: 0	 Residual (abs.):   2.3e-02
-			 Newton step: 0	 Residual (rel.):     1.0e+00
-			 Newton step: 1	 Residual (rel.):   1.4e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   8.3e-05	 LineSearch {0} 
-			 Newton step: 3	 Residual (rel.):   4.6e-06	 LineSearch {0} 
-			 Newton step: 4	 Residual (rel.):   2.5e-07	 LineSearch {0} 
-		Pressure_difference: 148.741
-		Deflection_X: 2.26275e-05
-		Deflection_Y: 0.00088397
-		Drag: 14.1166
-		Lift: 0.765731
-			 Timestep: 10 (9 -> 10) using backward Euler
+		Pressure_difference: 148.851
+		Deflection_X: 2.2878e-05
+		Deflection_Y: 0.000797936
+		Drag: 14.1204
+		Lift: 0.751648
+			 Timestep: 11 (10 -> 11) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   1.5e-02
 			 Newton step: 0	 Residual (rel.):     1.0e+00
-			 Newton step: 1	 Residual (rel.):   9.2e-04	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   6.0e-05	 LineSearch {0} 
-			 Newton step: 3	 Residual (rel.):   3.4e-06	 LineSearch {0} 
-			 Newton step: 4	 Residual (rel.):   1.8e-07	 LineSearch {0} 
-		Pressure_difference: 148.753
-		Deflection_X: 2.26181e-05
-		Deflection_Y: 0.000886186
-		Drag: 14.1163
-		Lift: 0.76702
-			 Timestep: 11 (10 -> 11) using backward Euler
-			 Newton step: 0	 Residual (abs.):   9.3e-03
+			 Newton step: 1	 Residual (rel.):   2.3e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.3e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   6.5e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   3.2e-07	 LineSearch {0} 
+		Pressure_difference: 148.806
+		Deflection_X: 2.28567e-05
+		Deflection_Y: 0.000801611
+		Drag: 14.1182
+		Lift: 0.753505
+			 Timestep: 12 (11 -> 12) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   1.1e-02
 			 Newton step: 0	 Residual (rel.):     1.0e+00
-			 Newton step: 1	 Residual (rel.):   7.4e-04	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   4.7e-05	 LineSearch {0} 
-			 Newton step: 3	 Residual (rel.):   2.6e-06	 LineSearch {0} 
-			 Newton step: 4	 Residual (rel.):   1.4e-07	 LineSearch {0} 
-		Pressure_difference: 148.767
-		Deflection_X: 2.2613e-05
-		Deflection_Y: 0.000887311
-		Drag: 14.1162
-		Lift: 0.767642
-			 Timestep: 12 (11 -> 12) using backward Euler
-			 Newton step: 0	 Residual (abs.):   5.8e-03
+			 Newton step: 1	 Residual (rel.):   1.8e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.0e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   5.2e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   2.5e-07	 LineSearch {0} 
+		Pressure_difference: 148.79
+		Deflection_X: 2.28452e-05
+		Deflection_Y: 0.000803646
+		Drag: 14.1172
+		Lift: 0.754577
+			 Timestep: 13 (12 -> 13) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   7.3e-03
 			 Newton step: 0	 Residual (rel.):     1.0e+00
-			 Newton step: 1	 Residual (rel.):   6.2e-04	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   3.9e-05	 LineSearch {0} 
-			 Newton step: 3	 Residual (rel.):   2.2e-06	 LineSearch {0} 
-			 Newton step: 4	 Residual (rel.):   1.2e-07	 LineSearch {0} 
-		Pressure_difference: 148.778
-		Deflection_X: 2.26102e-05
-		Deflection_Y: 0.000887896
-		Drag: 14.1162
-		Lift: 0.767949
-			 Timestep: 13 (12 -> 13) using backward Euler
+			 Newton step: 1	 Residual (rel.):   1.4e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   8.4e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   4.2e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   2.1e-07	 LineSearch {0} 
+		Pressure_difference: 148.787
+		Deflection_X: 2.28388e-05
+		Deflection_Y: 0.00080478
+		Drag: 14.1167
+		Lift: 0.755195
+			 Timestep: 14 (13 -> 14) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   5.0e-03
+			 Newton step: 0	 Residual (rel.):     1.0e+00
+			 Newton step: 1	 Residual (rel.):   1.2e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   6.9e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   3.5e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   1.7e-07	 LineSearch {0} 
+		Pressure_difference: 148.788
+		Deflection_X: 2.28353e-05
+		Deflection_Y: 0.000805418
+		Drag: 14.1164
+		Lift: 0.755553
+			 Timestep: 15 (14 -> 15) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   3.5e-03
 			 Newton step: 0	 Residual (rel.):     1.0e+00
-			 Newton step: 1	 Residual (rel.):   5.3e-04	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   3.3e-05	 LineSearch {0} 
-			 Newton step: 3	 Residual (rel.):   1.8e-06	 LineSearch {0} 
-		Pressure_difference: 148.787
-		Deflection_X: 2.26087e-05
-		Deflection_Y: 0.000888199
-		Drag: 14.1161
-		Lift: 0.768103
-			 Timestep: 14 (13 -> 14) using backward Euler
-			 Newton step: 0	 Residual (abs.):   2.1e-03
+			 Newton step: 1	 Residual (rel.):   9.7e-04	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   5.7e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   2.9e-06	 LineSearch {0} 
+		Pressure_difference: 148.79
+		Deflection_X: 2.28333e-05
+		Deflection_Y: 0.00080578
+		Drag: 14.1163
+		Lift: 0.755761
+			 Timestep: 16 (15 -> 16) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   2.4e-03
 			 Newton step: 0	 Residual (rel.):     1.0e+00
-			 Newton step: 1	 Residual (rel.):   4.5e-04	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   2.8e-05	 LineSearch {0} 
-			 Newton step: 3	 Residual (rel.):   1.5e-06	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   8.1e-04	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   4.8e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   2.4e-06	 LineSearch {0} 
 		Pressure_difference: 148.792
-		Deflection_X: 2.26078e-05
-		Deflection_Y: 0.000888354
-		Drag: 14.1161
-		Lift: 0.768181
-			 Timestep: 15 (14 -> 15) using backward Euler
-			 Newton step: 0	 Residual (abs.):   1.3e-03
+		Deflection_X: 2.28322e-05
+		Deflection_Y: 0.000805988
+		Drag: 14.1163
+		Lift: 0.755882
+			 Timestep: 17 (16 -> 17) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   1.6e-03
 			 Newton step: 0	 Residual (rel.):     1.0e+00
-			 Newton step: 1	 Residual (rel.):   3.8e-04	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   2.3e-05	 LineSearch {0} 
-			 Newton step: 3	 Residual (rel.):   1.3e-06	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   6.9e-04	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   4.1e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   2.1e-06	 LineSearch {0} 
+		Pressure_difference: 148.794
+		Deflection_X: 2.28315e-05
+		Deflection_Y: 0.000806109
+		Drag: 14.1162
+		Lift: 0.755952
+			 Timestep: 18 (17 -> 18) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   1.1e-03
+			 Newton step: 0	 Residual (rel.):     1.0e+00
+			 Newton step: 1	 Residual (rel.):   6.0e-04	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   3.5e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.8e-06	 LineSearch {0} 
 		Pressure_difference: 148.795
-		Deflection_X: 2.26073e-05
-		Deflection_Y: 0.000888434
-		Drag: 14.1161
-		Lift: 0.76822
-			 Timestep: 16 (15 -> 16) using backward Euler
-			 Newton step: 0	 Residual (abs.):   7.7e-04
+		Deflection_X: 2.28311e-05
+		Deflection_Y: 0.000806181
+		Drag: 14.1162
+		Lift: 0.755994
+			 Timestep: 19 (18 -> 19) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   7.5e-04
 			 Newton step: 0	 Residual (rel.):     1.0e+00
-			 Newton step: 1	 Residual (rel.):   3.2e-04	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   2.0e-05	 LineSearch {0} 
-			 Newton step: 3	 Residual (rel.):   1.1e-06	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   5.2e-04	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   3.1e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.5e-06	 LineSearch {0} 
 		Pressure_difference: 148.797
-		Deflection_X: 2.26071e-05
-		Deflection_Y: 0.000888474
-		Drag: 14.1161
-		Lift: 0.76824
-			 Timestep: 17 (16 -> 17) using backward Euler
-			 Newton step: 0	 Residual (abs.):   5.0e-04
+		Deflection_X: 2.28308e-05
+		Deflection_Y: 0.000806223
+		Drag: 14.1162
+		Lift: 0.756018
+			 Timestep: 20 (19 -> 20) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   5.1e-04
 			 Newton step: 0	 Residual (rel.):     1.0e+00
-			 Newton step: 1	 Residual (rel.):   2.6e-04	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   1.5e-05	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   4.6e-04	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.7e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.3e-06	 LineSearch {0} 
+		Pressure_difference: 148.797
+		Deflection_X: 2.28307e-05
+		Deflection_Y: 0.000806248
+		Drag: 14.1162
+		Lift: 0.756032
+			 Timestep: 21 (20 -> 21) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   3.4e-04
+			 Newton step: 0	 Residual (rel.):     1.0e+00
+			 Newton step: 1	 Residual (rel.):   4.1e-04	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.4e-05	 LineSearch {0} 
 		Pressure_difference: 148.798
-		Deflection_X: 2.26069e-05
-		Deflection_Y: 0.000888495
-		Drag: 14.1161
-		Lift: 0.76825
-			 Timestep: 18 (17 -> 18) using backward Euler
-			 Newton step: 0	 Residual (abs.):   3.5e-04
+		Deflection_X: 2.28306e-05
+		Deflection_Y: 0.000806263
+		Drag: 14.1162
+		Lift: 0.756041
+			 Timestep: 22 (21 -> 22) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   2.3e-04
 			 Newton step: 0	 Residual (rel.):     1.0e+00
-			 Newton step: 1	 Residual (rel.):   1.9e-04	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   1.2e-05	 LineSearch {0} 
-		Pressure_difference: 148.799
-		Deflection_X: 2.26069e-05
-		Deflection_Y: 0.000888505
-		Drag: 14.1161
-		Lift: 0.768255
-			 Timestep: 19 (18 -> 19) using backward Euler
-			 Newton step: 0	 Residual (abs.):   2.4e-04
-			 Newton step: 0	 Residual (rel.):     1.0e+00
-			 Newton step: 1	 Residual (rel.):   1.5e-04	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   9.0e-06	 LineSearch {0} 
-		Pressure_difference: 148.799
-		Deflection_X: 2.26068e-05
-		Deflection_Y: 0.000888511
-		Drag: 14.1161
-		Lift: 0.768258
-			 Timestep: 20 (19 -> 20) using backward Euler
+			 Newton step: 1	 Residual (rel.):   3.7e-04	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.1e-05	 LineSearch {0} 
+		Pressure_difference: 148.798
+		Deflection_X: 2.28305e-05
+		Deflection_Y: 0.000806272
+		Drag: 14.1162
+		Lift: 0.756046
+			 Timestep: 23 (22 -> 23) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   1.6e-04
 			 Newton step: 0	 Residual (rel.):     1.0e+00
-			 Newton step: 1	 Residual (rel.):   1.2e-04	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   7.1e-06	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   3.3e-04	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.9e-05	 LineSearch {0} 
 		Pressure_difference: 148.799
-		Deflection_X: 2.26068e-05
-		Deflection_Y: 0.000888514
-		Drag: 14.1161
-		Lift: 0.768259
-			 Timestep: 21 (20 -> 21) using backward Euler
+		Deflection_X: 2.28305e-05
+		Deflection_Y: 0.000806277
+		Drag: 14.1162
+		Lift: 0.756049
+			 Timestep: 24 (23 -> 24) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   1.1e-04
 			 Newton step: 0	 Residual (rel.):     1.0e+00
-			 Newton step: 1	 Residual (rel.):   9.1e-05	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   5.5e-06	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   2.8e-04	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.6e-05	 LineSearch {0} 
 		Pressure_difference: 148.799
-		Deflection_X: 2.26068e-05
-		Deflection_Y: 0.000888516
-		Drag: 14.1161
-		Lift: 0.76826
-			 Timestep: 22 (21 -> 22) using backward Euler
-			 Newton step: 0	 Residual (abs.):   7.5e-05
+		Deflection_X: 2.28305e-05
+		Deflection_Y: 0.000806281
+		Drag: 14.1162
+		Lift: 0.756051
+			 Timestep: 25 (24 -> 25) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   7.9e-05
 			 Newton step: 0	 Residual (rel.):     1.0e+00
-			 Newton step: 1	 Residual (rel.):   7.2e-05	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   2.4e-04	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.4e-05	 LineSearch {0} 
 		Pressure_difference: 148.799
-		Deflection_X: 2.26068e-05
-		Deflection_Y: 0.000888516
-		Drag: 14.1161
-		Lift: 0.76826
-			 Timestep: 23 (22 -> 23) using backward Euler
-			 Newton step: 0	 Residual (abs.):   5.1e-05
-			 Newton step: 0	 Residual (rel.):     1.0e+00
-			 Newton step: 1	 Residual (rel.):   6.1e-05	 LineSearch {0} 
-		Pressure_difference: 148.799
-		Deflection_X: 2.26068e-05
-		Deflection_Y: 0.000888517
-		Drag: 14.1161
-		Lift: 0.76826
-			 Timestep: 24 (23 -> 24) using backward Euler
-			 Newton step: 0	 Residual (abs.):   3.3e-05
-			 Newton step: 0	 Residual (rel.):     1.0e+00
-			 Newton step: 1	 Residual (rel.):   5.4e-05	 LineSearch {0} 
-		Pressure_difference: 148.799
-		Deflection_X: 2.26068e-05
-		Deflection_Y: 0.000888517
-		Drag: 14.1161
-		Lift: 0.768261
-			 Timestep: 25 (24 -> 25) using backward Euler
-			 Newton step: 0	 Residual (abs.):   2.2e-05
-			 Newton step: 0	 Residual (rel.):     1.0e+00
-			 Newton step: 1	 Residual (rel.):   4.8e-05	 LineSearch {0} 
-		Pressure_difference: 148.799
-		Deflection_X: 2.26068e-05
-		Deflection_Y: 0.000888517
-		Drag: 14.1161
-		Lift: 0.768261
+		Deflection_X: 2.28305e-05
+		Deflection_Y: 0.000806283
+		Drag: 14.1162
+		Lift: 0.756052
 	CostFunctional: 0
 	Computing Functionals:
 	Pressure_difference too large. Writing to file instead: 
