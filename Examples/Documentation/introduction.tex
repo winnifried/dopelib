@@ -193,7 +193,9 @@ description in a common data format. For this we have the following
 classes in \texttt{DOpEsrc/container}
 \begin{itemize}
   \item \texttt{pdeproblemcontainer.h} Is used to describe  stationary PDE problems.
-  \item \texttt{instatpdeproblemcontainer.h} {\bf TODO is still missing but will be used for nonstationary problems.} This will be implemented once we have nonstationary optimization problems running to avoid error duplication in the coding process.
+  \item \texttt{instatpdeproblemcontainer.h} 
+%{\bf TODO is still missing but will be used for nonstationary problems.} 
+This will be implemented once we have nonstationary optimization problems running to avoid error duplication in the coding process.
   \item \texttt{optproblemcontainer.h} Is used to describe  OPT problems governed by 
     stationary PDEs. 
   \item \texttt{instatoptproblemcontainer.h} Is used to describe  OPT problems governed by nonstationary PDEs. The only difference to the stationary case is that we need to specify a time-stepping method.  
@@ -223,7 +225,7 @@ First we need to select a method how to handle all dofs in space and time.
 \begin{itemize}
 \item \texttt{basic/spacetimehandler\underline{ }base.h} This class is used to define 
   an interface to the dimension independent functionality of all space time dof handlers.
-  {\bf TODO: Beispiele geben}
+  %{\bf TODO: Beispiele geben}
 \item \texttt{basic/statespacetimehandler.h} Another intermediate interface class which adds 
   the dimension dependent functionality if only the variable $u$ is considered, i.e., a 
   PDE problem.
