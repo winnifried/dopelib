@@ -17,6 +17,28 @@ Speziell:
 - content.tex for PDE/Instat OPT/Stat and OPT/Instat
 
 
+Speziell fuer Thomas (Nov 18, 2013)
+-----------------------------------
+In OPT/StatPDE/Example1 sollte z.B. analog zu PDE/StatPDE/Example1
+	einmal das ganze Programm erklärt werden, da es sich ja doch
+	etwas von den PDE Beispielen unterscheidet. Andere Klassen
+	und mehr Implementation in Functional und PDE.
+
+In OPT/StatPDE/Example2 Sollten wir kurz auf die Implementierung
+	von 0-d Kontrollen mit FE-Nothing eingehen.
+FE_Nothing componenten geben die Anzahl der Parameter an.
+
+
+In OPT/StatPDE/Example4 sollte noch etwas Text zur Kontrolle in
+	den Dirichlet-Werten stehen, da die ja nicht (explizit) in der 
+	variationellen Form vorkommen.
+
+In einem der Beispiele Example[678] sollten wir die Constraints
+erklären. Ich glaube es ist am besten wenn wir dazu 7 nehmen und
+dann die Beispiele 6 und 7 vertauschen.
+ex 7) Speziell etwas zu Box-constraints.
+ex 6+8) zusaetzlich mittelwert constraint - functional
+
 Standard TODO fuer naechstes Treffen
 ------------------------------------
 
@@ -64,6 +86,7 @@ Standard TODO fuer naechstes Treffen
   -- Aufruf von ausserhalb: do postprocess!!!11! 
 
 -  Rueckgabeklassen fuer Loeser
+-  Parallelisierung mit Trilinos, mpi und p4est
 
 Future:
 -------

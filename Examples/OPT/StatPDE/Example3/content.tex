@@ -49,6 +49,15 @@ symmetric stress tensor, we need to subtract the nonsymmetric part
 on the outflow boundary, related to the do-nothing condition.
 $\diamond$
 
+The control $q$ enters via the weak formulation. It reads,
+\begin{align*}
+a(q,v,p)(\phi) = (\sigma(v,p), \phi) + (v\cdot \nabla v, \phi) 
++ \langle q, \phi\cdot n \rangle + (\nabla\cdot v, \chi) = 0,
+\end{align*}
+
+
+
+
 The target functional is considered as 
 \[
 k(v,p) = \int_{\Gamma_O} n\cdot \sigma(v,p)\cdot d \, ds,
@@ -58,7 +67,7 @@ direction
 of the mean flow. For theoretical and numerical reasons, this functional 
 needs to be regularized, including the control variable $q$, such that
 \[
-K(v,p,q) = k(v,p) + \frac{\alpha}{2}||q - q_0||,
+K(q,v,p) = k(v,p) + \frac{\alpha}{2}||q - q_0||,
 \] 
 where $\alpha$ is the Tikhonov parameter and $q_0$ some 
 reference control. 
@@ -67,7 +76,7 @@ The rest of the progam is similar to the previous optimization problems where
 we formulate the state equation in a weak form $a(v,p)(\phi)$ such that the 
 final problem reads
 \[
-K(v,p,q) \rightarrow 0 \quad \text{s.t.} \quad a(v,p)(\phi) = 0.
+K(q,v,p) \rightarrow \text{min} \quad \text{s.t.} \quad a(q,v,p)(\phi) = 0.
 \]
 
 %\subsubsection{Program description}
