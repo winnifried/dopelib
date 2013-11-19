@@ -42,6 +42,9 @@
 #include "celldatacontainer.h"
 #include "facedatacontainer.h"
 #include "optproblemcontainer.h"
+#if DEAL_II_VERSION_GTE(7,3)
+	#include <base/types.h>
+ #endif
 
 namespace DOpE
 {
@@ -638,7 +641,11 @@ template<typename PROBLEM>
       unsigned int color = dirichlet_colors[i];
       std::vector<bool> comp_mask = pde.GetTransposedDirichletCompMask(color);
       std::vector<bool> current_comp(comp_mask.size(), false);
-      std::set<unsigned char> boundary_indicators;
+#if DEAL_II_VERSION_GTE(7,3)
+		std::set<types::boundary_id> boundary_indicators;
+#else
+		std::set<unsigned char> boundary_indicators;
+#endif
       boundary_indicators.insert(color);
       for (unsigned int j = 0; j < comp_mask.size(); j++)
       {
