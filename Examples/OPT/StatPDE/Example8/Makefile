@@ -25,7 +25,7 @@ _LOCAL_thirdpartylibs = $(shell echo $(DOpE)/ThirdPartyLibs/*)
 
 ifneq (,$(findstring snopt, $(_LOCAL_thirdpartylibs)))
 DOPE_FLAGS += -DWITH_SNOPT -fPIC
-SNOPT = $(HOME)/src/snopt7
+SNOPT = $(DOpE)/ThirdPartyLibs/snopt
 
 SNOPT_F2CINC = $(SNOPT)/include/
 SNOPT_F2CLIB = $(SNOPT)/lib/
