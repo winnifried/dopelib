@@ -47,7 +47,8 @@ template<
       declare_params(ParameterReader &param_reader)
       {
         param_reader.SetSubsection("Local PDE parameters");
-        param_reader.declare_entry("viscosity", "1.0", Patterns::Double(0));
+	param_reader.declare_entry("density_fluid", "0.0", Patterns::Double(0));
+        param_reader.declare_entry("viscosity", "0.0", Patterns::Double(0));
       }
 
       LocalPDE(ParameterReader &param_reader) :
@@ -56,6 +57,7 @@ template<
         _state_block_components[2] = 1;
 
         param_reader.SetSubsection("Local PDE parameters");
+	_density_fluid = param_reader.get_double("density_fluid");
         _viscosity = param_reader.get_double("viscosity");
       }
 
@@ -113,10 +115,10 @@ template<
             const double phi_i_p = state_fe_values[pressure].value(i, q_point);
 
             local_cell_vector(i) += scale
-                * (convection_fluid * phi_i_v
-                    + _viscosity
-                        * scalar_product(vgrads + transpose(vgrads),
-                            phi_i_grads_v)) * state_fe_values.JxW(q_point);
+                * _density_fluid * (convection_fluid * phi_i_v
+				    + _viscosity
+				    * scalar_product(vgrads + transpose(vgrads),
+						     phi_i_grads_v)) * state_fe_values.JxW(q_point);
 
             local_cell_vector(i) += scale_ico
                 * (scalar_product(fluid_pressure, phi_i_grads_v)
@@ -187,7 +189,7 @@ template<
             for (unsigned int j = 0; j < n_dofs_per_cell; j++)
             {
               local_entry_matrix(j, i) += scale
-                  * (convection_fluid_LinV * phi_v[j]
+                  * _density_fluid * (convection_fluid_LinV * phi_v[j]
                       + _viscosity
                           * scalar_product(
                               phi_grads_v[i] + transpose(phi_grads_v[i]),
@@ -249,7 +251,7 @@ template<
             const Tensor<1, 2> phi_i_v = state_fe_values[velocities].value(i,
                 q_point);
 
-            local_cell_vector(i) += scale * (v * phi_i_v)
+            local_cell_vector(i) += scale * _density_fluid * (v * phi_i_v)
                 * state_fe_values.JxW(q_point);
           }
         }
@@ -289,7 +291,7 @@ template<
           {
             for (unsigned int j = 0; j < n_dofs_per_cell; j++)
             {
-              local_entry_matrix(j, i) += (phi_v[i] * phi_v[j])
+              local_entry_matrix(j, i) += _density_fluid * (phi_v[i] * phi_v[j])
                   * state_fe_values.JxW(q_point);
             }
           }
@@ -333,7 +335,7 @@ template<
               const Tensor<1, 2> phi_i_v =
                   state_fe_face_values[velocities].value(i, q_point);
 
-              const Tensor<1, 2> neumann_value = _viscosity
+              const Tensor<1, 2> neumann_value = _viscosity * _density_fluid 
                   * (transpose(vgrads)
                       * state_fe_face_values.normal_vector(q_point));
 
@@ -368,7 +370,7 @@ template<
             {
               const Tensor<2, 2> phi_j_grads_v =
                   state_fe_face_values[velocities].gradient(i, q_point);
-              const Tensor<1, 2> neumann_value = _viscosity
+              const Tensor<1, 2> neumann_value = _viscosity * _density_fluid 
                   * (transpose(phi_j_grads_v)
                       * state_fe_face_values.normal_vector(q_point));
 
@@ -454,7 +456,7 @@ template<
       vector<unsigned int> _state_block_components;
       vector<unsigned int> _block_components;
 
-      double _viscosity;
+      double _density_fluid, _viscosity;
 
   };
 #endif

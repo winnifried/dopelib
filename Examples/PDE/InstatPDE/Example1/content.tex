@@ -3,11 +3,11 @@ In this example we consider the nonstationary incompressible Navier-Stokes equat
 we use the symmetric fluid stress tensor, i.e. 
 in strong formulation we deal with 
 \begin{align*}
-\partial_t v -\nabla\cdot (\nabla v + \nabla v^{T}) + (v\cdot\nabla)v  +\nabla p &= f \\
+\rho \partial_t v - \rho \nabla\cdot (\nabla v + \nabla v^{T}) + \rho (v\cdot\nabla)v  +\nabla p &= f \\
 \nabla\cdot v &= 0 
 \end{align*}
-on time interval $I=[0,T]$ and the domain 
-$\Omega = [-6,6]\times [0,2]$. For simplicity,  we set $f=0$.
+on time interval $I=[0,T]$ and the fluid benchmark domain (Schaefer/Turek 1996) 
+Here, we set $f=0$ and the flow is driven by a Dirichlet inflow condition.
 
 
 As introduced earlier, we formulate the time stepping scheme as \textit{One-step-$\theta$ scheme},
