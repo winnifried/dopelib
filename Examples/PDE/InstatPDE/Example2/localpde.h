@@ -26,8 +26,6 @@
 
 #include "pdeinterface.h"
 #include "ale_transformations.h"
-#include "celldatacontainer.h"
-#include "facedatacontainer.h"
 
 using namespace std;
 using namespace dealii;

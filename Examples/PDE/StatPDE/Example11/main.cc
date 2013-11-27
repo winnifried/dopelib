@@ -308,3 +308,7 @@ main(int argc, char **argv)
   out.Write(outp, 1, 1, 1);
   return 0;
 }
+#undef FDC
+#undef CDC
+#undef FE
+#undef DOFHANDLER

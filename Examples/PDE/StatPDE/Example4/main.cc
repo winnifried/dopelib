@@ -163,3 +163,7 @@ main(int argc, char **argv)
 
   return 0;
 }
+#undef FDC
+#undef CDC
+#undef FE
+#undef DOFHANDLER
