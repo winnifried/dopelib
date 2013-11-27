@@ -30,6 +30,8 @@
 #ifndef _DWRDATACONTAINER_H_
 #define _DWRDATACONTAINER_H_
 
+#include "constraintvector.h"
+#include "controlvector.h"
 #include "statevector.h"
 #include "dopetypes.h"
 #include "parameterreader.h"

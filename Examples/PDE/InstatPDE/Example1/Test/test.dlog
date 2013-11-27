@@ -5,7 +5,7 @@ For License details read LICENSE.TXT distributed with this software!
 	**************************************************
 	*             Starting Forward Solver            *
 	*   Solving : InstatOptProblemContainer	*
-	*  CDoFs : 	708
+	*  CDoFs : 	0
 	*  SDoFs : 	Number of Timepoints: 81
 		Total   DoFs: 494100
 		Minimal DoFs: 6100

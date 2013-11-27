@@ -1,25 +1,25 @@
 /**
-*
-* Copyright (C) 2012 by the DOpElib authors
-*
-* This file is part of DOpElib
-*
-* DOpElib is free software: you can redistribute it
-* and/or modify it under the terms of the GNU General Public
-* License as published by the Free Software Foundation, either
-* version 3 of the License, or (at your option) any later
-* version.
-*
-* DOpElib is distributed in the hope that it will be
-* useful, but WITHOUT ANY WARRANTY; without even the implied
-* warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-* PURPOSE.  See the GNU General Public License for more
-* details.
-*
-* Please refer to the file LICENSE.TXT included in this distribution
-* for further information on this license.
-*
-**/
+ *
+ * Copyright (C) 2012 by the DOpElib authors
+ *
+ * This file is part of DOpElib
+ *
+ * DOpElib is free software: you can redistribute it
+ * and/or modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation, either
+ * version 3 of the License, or (at your option) any later
+ * version.
+ *
+ * DOpElib is distributed in the hope that it will be
+ * useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+ * PURPOSE.  See the GNU General Public License for more
+ * details.
+ *
+ * Please refer to the file LICENSE.TXT included in this distribution
+ * for further information on this license.
+ *
+ **/
 
 #ifndef _LOCALFunctionalS_
 #define _LOCALFunctionalS_
@@ -30,60 +30,67 @@ using namespace std;
 using namespace dealii;
 using namespace DOpE;
 
-
 /****************************************************************************************/
 
-template<template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
-  class LocalPointFunctional : public FunctionalInterface<CellDataContainer,FaceDataContainer,DH, VECTOR, dopedim,dealdim>
+template<
+    template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+    template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
+    template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
+  class LocalPointFunctional : public FunctionalInterface<CDC, FDC, DH, VECTOR,
+      dopedim, dealdim>
   {
-  private:
-    mutable double time;
+    private:
+      mutable double time;
 
-  public:
+    public:
 
-    void SetTime(double t) const
-    {
-      time = t;
-    }
+      void
+      SetTime(double t) const
+      {
+        time = t;
+      }
 
-    bool NeedTime() const
-    {
-    	if (time==1)
-    		return true;
-    	else
-    		return false;
-    }
+      bool
+      NeedTime() const
+      {
+        if (time == 1)
+          return true;
+        else
+          return false;
+      }
 
-  double PointValue(const DOpEWrapper::DoFHandler<dopedim, DH > &/* control_dof_handler*/,
-		    const DOpEWrapper::DoFHandler<dealdim, DH > & state_dof_handler,
-		    const std::map<std::string, const dealii::Vector<double>* > &/*param_values*/,
-		    const std::map<std::string, const VECTOR* > &domain_values)
-  {
+      double
+      PointValue(
+          const DOpEWrapper::DoFHandler<dopedim, DH> &/* control_dof_handler*/,
+          const DOpEWrapper::DoFHandler<dealdim, DH> & state_dof_handler,
+          const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
+          const std::map<std::string, const VECTOR*> &domain_values)
+      {
 
-    Point<2> evaluation_point(25.,25.);
+        Point<2> evaluation_point(25., 25.);
 
-    typename map<string, const VECTOR* >::const_iterator it = domain_values.find("state");
+        typename map<string, const VECTOR*>::const_iterator it =
+            domain_values.find("state");
 
-    double point_value = VectorTools::point_value(state_dof_handler, *(it->second), evaluation_point);
+        double point_value = VectorTools::point_value(state_dof_handler,
+            *(it->second), evaluation_point);
 
-    // pressure analysis
-    return point_value;
-  }
+        return point_value;
+      }
 
-  string GetType() const
-  {
-    return "point timelocal";
-    // 1) point domain boundary face
-    // 2) timelocal timedistributed
-  }
-  string GetName() const
-  {
-    return "Space-Time Pointevaluation";
-  }
+      string
+      GetType() const
+      {
+        return "point timelocal";
+        // 1) point domain boundary face
+        // 2) timelocal timedistributed
+      }
+      string
+      GetName() const
+      {
+        return "Space-Time Pointevaluation";
+      }
 
   };
-
-
-/****************************************************************************************/
 
 #endif

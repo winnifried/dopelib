@@ -1,134 +1,136 @@
 /**
-*
-* Copyright (C) 2012 by the DOpElib authors
-*
-* This file is part of DOpElib
-*
-* DOpElib is free software: you can redistribute it
-* and/or modify it under the terms of the GNU General Public
-* License as published by the Free Software Foundation, either
-* version 3 of the License, or (at your option) any later
-* version.
-*
-* DOpElib is distributed in the hope that it will be
-* useful, but WITHOUT ANY WARRANTY; without even the implied
-* warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-* PURPOSE.  See the GNU General Public License for more
-* details.
-*
-* Please refer to the file LICENSE.TXT included in this distribution
-* for further information on this license.
-*
-**/
+ *
+ * Copyright (C) 2012 by the DOpElib authors
+ *
+ * This file is part of DOpElib
+ *
+ * DOpElib is free software: you can redistribute it
+ * and/or modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation, either
+ * version 3 of the License, or (at your option) any later
+ * version.
+ *
+ * DOpElib is distributed in the hope that it will be
+ * useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+ * PURPOSE.  See the GNU General Public License for more
+ * details.
+ *
+ * Please refer to the file LICENSE.TXT included in this distribution
+ * for further information on this license.
+ *
+ **/
 
 #ifndef _LOCALFunctional_
 #define _LOCALFunctional_
 
-//#include "pdeinterface.h"
 #include "functionalinterface.h"
-
 
 using namespace std;
 using namespace dealii;
 using namespace DOpE;
 
-template<template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
-  class LocalFunctional : public FunctionalInterface<CellDataContainer,FaceDataContainer,DH, VECTOR, dopedim,dealdim>
+template<
+    template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+    template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
+    template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
+  class LocalFunctional : public FunctionalInterface<CDC, FDC, DH, VECTOR,
+      dopedim, dealdim>
   {
-  public:
-  LocalFunctional()
+    public:
+      LocalFunctional() :
+          _time(0)
       {
-	_alpha = 1.e-3;
       }
 
-  // include NeedTime
-    void SetTime(double t) const
-    {
-      _time = t;
-    }
+      // include NeedTime
+      void
+      SetTime(double t) const
+      {
+        _time = t;
+      }
 
+      bool
+      NeedTime() const
+      {
+        if (fabs(_time - 1.) < 1.e-13)
+          return true;
+        return false;
+      }
 
-    bool NeedTime() const
-    {
-      if(fabs(_time-1.0)< 1.e-13)
-	return true;
-      return false;
-    }
+      double
+      Value(const CDC<DH, VECTOR, dealdim>&)
+      {
+        return 0.0;
+      }
 
+      void
+      Value_U(const CDC<DH, VECTOR, dealdim>&,
+          dealii::Vector<double> &local_cell_vector __attribute__((unused)),
+          double scale __attribute__((unused)))
+      {
 
-    double Value(const CellDataContainer<DH, VECTOR, dealdim>&)
-    {
-      return 0.0;
-    }
+      }
 
+      void
+      Value_Q(const CDC<DH, VECTOR, dealdim>&,
+          dealii::Vector<double> &local_cell_vector __attribute__((unused)),
+          double scale __attribute__((unused)))
+      {
 
-    void Value_U(const CellDataContainer<DH, VECTOR, dealdim>&,
-                 dealii::Vector<double> &local_cell_vector __attribute__((unused)),
-                 double scale __attribute__((unused)))
-    {
+      }
 
-    }
+      void
+      Value_UU(const CDC<DH, VECTOR, dealdim>&,
+          dealii::Vector<double> &local_cell_vector __attribute__((unused)),
+          double scale __attribute__((unused)))
+      {
 
-    void Value_Q(const CellDataContainer<DH, VECTOR, dealdim>&,
-                 dealii::Vector<double> &local_cell_vector __attribute__((unused)),
-                 double scale __attribute__((unused)))
-    {
+      }
 
-    }
+      void
+      Value_QU(const CDC<DH, VECTOR, dealdim>&,
+          dealii::Vector<double> &local_cell_vector __attribute__((unused)),
+          double scale __attribute__((unused)))
+      {
+      }
 
-    void Value_UU(const CellDataContainer<DH, VECTOR, dealdim>&,
-                  dealii::Vector<double> &local_cell_vector __attribute__((unused)),
-                  double scale __attribute__((unused)))
-    {
+      void
+      Value_UQ(const CDC<DH, VECTOR, dealdim>&,
+          dealii::Vector<double> &local_cell_vector __attribute__((unused)),
+          double scale __attribute__((unused)))
+      {
+      }
 
-    }
+      void
+      Value_QQ(const CDC<DH, VECTOR, dealdim>&,
+          dealii::Vector<double> &local_cell_vector __attribute__((unused)),
+          double scale __attribute__((unused)))
+      {
 
-    void Value_QU(const CellDataContainer<DH, VECTOR, dealdim>&,
-                  dealii::Vector<double> &local_cell_vector __attribute__((unused)),
-                  double scale __attribute__((unused)))
-    {
-    }
+      }
 
-    void Value_UQ(const CellDataContainer<DH, VECTOR, dealdim>&,
-                  dealii::Vector<double> &local_cell_vector __attribute__((unused)),
-                  double scale __attribute__((unused)))
-    {
-    }
+      UpdateFlags
+      GetUpdateFlags() const
+      {
+        return update_quadrature_points;
+      }
 
-    void Value_QQ(const CellDataContainer<DH, VECTOR, dealdim>&,
-                  dealii::Vector<double> &local_cell_vector __attribute__((unused)),
-                  double scale __attribute__((unused)))
-    {
+      string
+      GetType() const
+      {
+        return "domain time_local";
+      }
 
-    }
+      string
+      GetName() const
+      {
+        return "dummy functional";
+      }
 
+    private:
 
-
-
-    UpdateFlags GetUpdateFlags() const
-    {
-      return update_values | update_quadrature_points;
-    }
-
-    string GetType() const
-    {
-      return "domain timelocal";
-    }
-    
-    std::string GetName() const
-    {
-	  return "dummy functional";
-	}
-
-  private:
-    vector<double> _qvalues;
-    vector<double> _fvalues;
-    vector<double> _uvalues;
-    vector<double> _duvalues;
-    vector<double> _dqvalues;
-    double _alpha;
-
-    mutable double _time;
+      mutable double _time;
 
   };
 #endif

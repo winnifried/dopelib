@@ -3,7 +3,7 @@
 
 subsection Local PDE parameters
 	   set density_fluid	   = 1.0
-           set viscosity	   = 1.0e-3
+     set viscosity	  		 = 1.0e-3
 
 	   # 2D-1: 500; 2D-2 and 2D-3: 20
 	   set drag_lift_constant  = 20  

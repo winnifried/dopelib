@@ -31,15 +31,6 @@ template<int dealdim>
 class ActiveFEIndexSetter : public ActiveFEIndexSetterInterface<dealdim>
 {
   public:
-  ActiveFEIndexSetter(ParameterReader &/*param_reader*/)
-  {
-  }
-
-  static void
-  declare_params(ParameterReader &/*param_reader*/)
-  {
-  }
-
   /*
    * Gets an iterator to a cell and sets an active FE index
    * on this cell for the state variable. This function is

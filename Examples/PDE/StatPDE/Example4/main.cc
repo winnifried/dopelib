@@ -45,10 +45,6 @@ using namespace std;
 using namespace dealii;
 using namespace DOpE;
 
-using namespace std;
-using namespace dealii;
-using namespace DOpE;
-
 const static int DIM = 2;
 
 #define DOFHANDLER DoFHandler

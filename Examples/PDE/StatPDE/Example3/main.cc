@@ -26,10 +26,10 @@
 #include <fstream>
 
 //deal.ii includes
+#include <base/quadrature_lib.h>
+#include <fe/fe_q.h>
 #include <grid/tria.h>
 #include <grid/grid_in.h>
-#include <fe/fe_q.h>
-#include <base/quadrature_lib.h>
 
 //DOpE includes
 //This steers the whole solution process
