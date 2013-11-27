@@ -43,17 +43,17 @@ template<
       {
         param_reader.SetSubsection("Local PDE parameters");
 
-        param_reader.declare_entry("m_biot", "1.0", Patterns::Double(0));
-        param_reader.declare_entry("alpha_biot", "1.0", Patterns::Double(0));
-        param_reader.declare_entry("viscosity_biot", "1.0",
+        param_reader.declare_entry("m_biot", "0.0", Patterns::Double(0));
+        param_reader.declare_entry("alpha_biot", "0.0", Patterns::Double(0));
+        param_reader.declare_entry("viscosity_biot", "0.0",
             Patterns::Double(0));
-        param_reader.declare_entry("K_biot", "1.0", Patterns::Double(0));
-        param_reader.declare_entry("density_biot", "1.0", Patterns::Double(0));
-        param_reader.declare_entry("volume_source", "1.0", Patterns::Double(0));
+        param_reader.declare_entry("K_biot", "0.0", Patterns::Double(0));
+        param_reader.declare_entry("density_biot", "0.0", Patterns::Double(0));
+        param_reader.declare_entry("volume_source", "0.0", Patterns::Double(0));
 
-        param_reader.declare_entry("density_structure", "1.0",
+        param_reader.declare_entry("density_structure", "0.0",
             Patterns::Double(0));
-        param_reader.declare_entry("mu", "1.0", Patterns::Double(0));
+        param_reader.declare_entry("mu", "0.0", Patterns::Double(0));
         param_reader.declare_entry("poisson_ratio_nu", "0.4",
             Patterns::Double(0));
       }
@@ -183,10 +183,8 @@ template<
 
               local_cell_vector(i) += scale
                   * (1.0 / viscosity_biot * K_biot * grad_p * phi_i_grads_p
-                      - q_biot * phi_i_p
-                  // Right hand side values
-//		     - density_biot * 1.0/viscosity_biot 
-//		     * K_biot * gravity * phi_i_grads_p
+		     // Right hand side 
+		     - q_biot * phi_i_p
                   ) * state_fe_values.JxW(q);
 
             }
