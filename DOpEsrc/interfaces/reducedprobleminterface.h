@@ -430,30 +430,6 @@ namespace DOpE
 
         /******************************************************/
 
-//        /**
-//         * Basic function to compute the error indicators with
-//         * the DWR method and higher order interpolation to gain the weights.
-//         * We assume that the state is already computed,
-//         * whereas the dual solution will be computed inside this function.
-//         *
-//         * @param q                 The ControlVector is given to this function.
-//         * @param ref_ind           The Vector in which the function writes
-//         *                          the error indicators on the different cells.
-//         *                          This vector is resized to the number of cells
-//         *                          of the actual grid.
-//         * @param ee_state          Which terms of the error Identity should get computed
-//         *                          (i.e. primal-term, dual-term, both)?
-//         * @param weight_comp       How to compute the weights?
-//         *
-//         * @return                  The error in the previously specified functional.
-//         *
-//         */
-//
-//        virtual void
-//        ComputeRefinementIndicators(const ControlVector<VECTOR>& q,
-//            DWRDataContainerBase<VECTOR>& dwrc) = 0;
-        /******************************************************/
-
         /**
          * Basic function to compute the reduced gradient solution.
          * We assume that adjoint state z(u(q)) is already computed.
@@ -470,10 +446,9 @@ namespace DOpE
             ControlVector<VECTOR>& hessian_direction_transposed)=0;
 
         virtual void
-        ComputeReducedHessianInverseVector(
-            const ControlVector<VECTOR>& q __attribute__((unused)),
-            const ControlVector<VECTOR>& direction __attribute__((unused)),
-            ControlVector<VECTOR>& hessian_direction __attribute__((unused)))
+        ComputeReducedHessianInverseVector(const ControlVector<VECTOR>& /*q*/,
+					   const ControlVector<VECTOR>& /*direction*/,
+					   ControlVector<VECTOR>&       /*hessian_direction*/)
         {
           throw DOpEException("Method not implemented",
               "ReducedProblemInterface::ComputeReducedHessianInverseVector");
@@ -494,10 +469,10 @@ namespace DOpE
          */
         virtual void
         ComputeReducedGradientOfGlobalConstraints(unsigned int /*num*/,
-            const ControlVector<VECTOR>& /*q*/,
-            const ConstraintVector<VECTOR>& /*g*/,
-            ControlVector<VECTOR>& /*gradient*/,
-            ControlVector<VECTOR>& /*gradient_transposed*/)
+						  const ControlVector<VECTOR>& /*q*/,
+						  const ConstraintVector<VECTOR>& /*g*/,
+						  ControlVector<VECTOR>& /*gradient*/,
+						  ControlVector<VECTOR>& /*gradient_transposed*/)
 
         {
           throw DOpEException("Method not implemented",
