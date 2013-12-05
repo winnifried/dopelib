@@ -21,13 +21,6 @@
 *
 **/
 
-/*
- * higher_order_dwrc.h
- *
- *  Created on: Mar 23, 2012
- *      Author: cgoll, wwollner
- */
-
 #ifndef _HIGHER_ORDER_DWRC_CONTROL_H_
 #define _HIGHER_ORDER_DWRC_CONTROL_H_
 
@@ -102,7 +95,7 @@ namespace DOpE
         std::string
         GetName() const
         {
-          return "DWR-Estimator";
+          return "DWR-Estimator-with-Control";
         }
 
         template<class STH2>

@@ -40,6 +40,13 @@ namespace DOpE
    * Dummy Template Class, acts as kind of interface. Through template specialization, we
    * distinguish between the 'classic' and the 'hp' case.
    *
+   * The Multimesh_CellDataContainers, can deal with different meshes for the control
+   * and state variable as long as both are given as refinements of a common coarse grid
+   * by calculation of the respective values on a common refinement.
+   *
+   * @template DOFHANDLER The type of the dealii-dofhandler we use in our DoPEWrapper::DoFHandler, at the moment DoFHandler and hp::DoFHandler.
+   * @template VECTOR     Type of the vector we use in our computations (i.e. Vector<double> or BlockVector<double>)
+   * @template dim        The dimension of the integral we are actually interested in.
    */
 
   template<template<int, int> class DH, typename VECTOR, int dim>

@@ -21,13 +21,6 @@
  *
  **/
 
-/*
- * functionals.h
- *
- *  Created on: Aug 22, 2011
- *      Author: cgoll
- */
-
 #ifndef FUNCTIONALS_H_
 #define FUNCTIONALS_H_
 

@@ -21,13 +21,6 @@
 *
 **/
 
-/*
- * problemcontainer_internal.h
- *
- *  Created on: Jul 19, 2012
- *      Author: cgoll
- */
-
 #ifndef PROBLEMCONTAINER_INTERNAL_H_
 #define PROBLEMCONTAINER_INTERNAL_H_
 

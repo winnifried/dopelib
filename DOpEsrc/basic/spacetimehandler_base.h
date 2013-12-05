@@ -43,7 +43,7 @@ namespace DOpE
  * Interface to the dimension independent functionality of a
  * SpaceTimeDoFHandler
  */
-template<typename VECTOR>//has to be a class template because you can no have virtual member function templates.
+template<typename VECTOR>//has to be a class template because you can not have virtual member function templates.
 class SpaceTimeHandlerBase
 {
   public:

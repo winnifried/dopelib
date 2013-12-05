@@ -21,12 +21,6 @@
 *
 **/
 
-/*
- * dwrdatacontainer.h
- *
- *  Created on: Mar 22, 2012
- *      Author: cgoll,wwollner
- */
 #ifndef _DWRDATACONTAINER_H_
 #define _DWRDATACONTAINER_H_
 

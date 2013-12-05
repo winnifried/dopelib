@@ -21,13 +21,6 @@
 *
 **/
 
-/*
- * DOpEtypes.h
- *
- *  Created on: Mar 13, 2012
- *      Author: cgoll
- */
-
 #ifndef _DOPETYPES_H_
 #define _DOPETYPES_H_
 
@@ -48,7 +41,9 @@ namespace DOpE
      * fixed_fraction   Local refinement using fixed fraction strategy
      * fixed_number     Local refinement using fixed number of cells strategy
      * optimized        Local refinement using optimized strategy
-     * finest_of_both   In the case that one has two grids.
+     * finest_of_both   In the case that one has two grids, refine such that 
+     *                  elements are refined if, on the other mesh, the element 
+     *                  has been refined. 
      */
     enum RefinementType
     {
@@ -98,14 +93,18 @@ namespace DOpE
 
     /**
      * An enum describing the type of the control.
+     *
+     * undefined      self explanatory
+     * stationary     the control is not time dependent
+     * initial        the control acts in the initial conditions
+     * nonstationary  the control is timedependent
      */
     enum ControlType
     {
       undefined,
       stationary,
       initial,
-      timedistributed_constant,
-      timdistributed_timedependend
+      nonstationary
     };
 
   }

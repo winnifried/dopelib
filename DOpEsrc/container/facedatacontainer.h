@@ -21,13 +21,6 @@
  *
  **/
 
-/*
- * facedatacontainer.h
- *
- *  Created on: May 23, 2011
- *      Author: cgoll
- */
-
 #ifndef FACEDATACONTAINER_H_
 #define FACEDATACONTAINER_H_
 

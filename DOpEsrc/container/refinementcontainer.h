@@ -21,13 +21,6 @@
  *
  **/
 
-/*
- * refinementcontainer.h
- *
- *  Created on: Feb 7, 2013
- *      Author: cgoll
- */
-
 #ifndef _REFINEMENTCONTAINER_H_
 #define _REFINEMENTCONTAINER_H_
 

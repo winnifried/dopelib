@@ -21,13 +21,6 @@
  *
  **/
 
-/*
- * CellDataContainer_internal.h
- *
- *  Created on: Apr 3, 2012
- *      Author: cgoll
- */
-
 #ifndef _CELLDATACONTAINER_INTERNAL_H_
 #define _CELLDATACONTAINER_INTERNAL_H_
 

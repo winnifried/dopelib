@@ -21,13 +21,6 @@
 *
 **/
 
-/*
- * my_functions.h
- *
- *  Created on: Oct 10, 2012
- *      Author: cgoll
- */
-
 #ifndef MY_FUNCTIONS_H_
 #define MY_FUNCTIONS_H_
 

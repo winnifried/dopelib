@@ -21,13 +21,6 @@
 *
 **/
 
-/*
- * higher_order_dwrc.h
- *
- *  Created on: Mar 23, 2012
- *      Author: cgoll
- */
-
 #ifndef _HIGHER_ORDER_DWRC_H_
 #define _HIGHER_ORDER_DWRC_H_
 
@@ -39,7 +32,7 @@ namespace DOpE
   /**
    * This class implements the missing pieces of DWRDataContainer for
    * the case of the DWRMethod with higher order interpolation of the weights
-   * and evaluation of strong cell residuals.
+   * and evaluation of strong cell and jump residuals.
    */
   template<class STH, class IDC, class CDC, class FDC, typename VECTOR>
     class HigherOrderDWRContainer : public DWRDataContainer<STH, IDC, CDC, FDC,

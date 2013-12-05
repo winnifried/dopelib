@@ -21,13 +21,6 @@
 *
 **/
 
-/*
- * facedatacontainer_internal.h
- *
- *  Created on: Apr 4, 2012
- *      Author: cgoll
- */
-
 #ifndef FACEDATACONTAINER_INTERNAL_H_
 #define FACEDATACONTAINER_INTERNAL_H_
 

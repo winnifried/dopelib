@@ -21,13 +21,6 @@
 *
 **/
 
-/*
- * integratordatacontainer.h
- *
- *  Created on: 18.01.2012
- *      Author: cgoll
- */
-
 #ifndef _INTEGRATORDATACONTAINER_H_
 #define _INTEGRATORDATACONTAINER_H_
 

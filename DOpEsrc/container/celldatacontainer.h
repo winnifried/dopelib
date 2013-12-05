@@ -21,13 +21,6 @@
  *
  **/
 
-/*
- * celldatacontainer.h
- *
- *  Created on: May 18, 2011
- *      Author: cgoll
- */
-
 #ifndef CELLDATACONTAINER_H_
 #define CELLDATACONTAINER_H_
 

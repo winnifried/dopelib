@@ -21,13 +21,6 @@
 *
 **/
 
-/*
- * sth_internals.h
- *
- *  Created on: 23.01.2012
- *      Author: cgoll
- */
-
 #ifndef _STH_INTERNALS_H_
 #define _STH_INTERNALS_H_
 
@@ -45,6 +38,10 @@ namespace DOpE
 {
   namespace STHInternals
   {
+    /**
+     * Calls the deal.II map_dofs_to_support_points routine.
+     * For DoFHandler
+     */
     template<typename VECTOR, int dealdim>
       void
       MapDoFsToSupportPoints(
@@ -58,6 +55,10 @@ namespace DOpE
         DoFTools::map_dofs_to_support_points(mapping, dh, support_points);
       }
 
+    /**
+     * Calls the deal.II map_dofs_to_support_points routine.
+     * For MGDoFHandler (Experimental)
+     */
     template<typename VECTOR, int dealdim>
       void
       MapDoFsToSupportPoints(
@@ -71,6 +72,10 @@ namespace DOpE
         DoFTools::map_dofs_to_support_points(mapping, dh, support_points);
       }
 
+    /**
+     * Calls the deal.II map_dofs_to_support_points routine.
+     * For hp::DoFHandler
+     */
     template<typename VECTOR, int dealdim>
       void
       MapDoFsToSupportPoints(
