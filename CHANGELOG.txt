@@ -1,5 +1,9 @@
 Changelog DOpE
 ==============
+
+05.12.2013 Unused parameters should now all be placed in a comment.	
+	   All occurences of the __attribute__((unused)) directive 
+	   have been removed.
 11.09.2013: 1) PDE and OPT StatPDE code cleaned
 	    2) Updated doxygen docu
 	    3) Experimental Example to develop use of MG-Solver

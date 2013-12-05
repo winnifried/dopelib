@@ -356,16 +356,16 @@ template<
 
       void
       CellRightHandSide(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
-          dealii::Vector<double> &local_cell_vector __attribute__((unused)),
-          double scale __attribute__((unused)))
+			dealii::Vector<double> & /*local_cell_vector*/,
+			double /*scale*/)
       {
         assert(this->_problem_type == "state");
       }
 
       void
       CellTimeEquation(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
-          dealii::Vector<double> &local_cell_vector __attribute__((unused)),
-          double scale __attribute__((unused)))
+		       dealii::Vector<double> & /*local_cell_vector*/,
+		       double /*scale*/)
       {
         assert(this->_problem_type == "state");
       }

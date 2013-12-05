@@ -49,11 +49,10 @@ template<
       }
 
       double
-      PointValue(
-          const DOpEWrapper::DoFHandler<dealdim, DH> & control_dof_handler __attribute__((unused)),
-          const DOpEWrapper::DoFHandler<dealdim, DH> &state_dof_handler,
-          const std::map<std::string, const dealii::Vector<double>*> &param_values __attribute__((unused)),
-          const std::map<std::string, const VECTOR*> &domain_values)
+	PointValue(const DOpEWrapper::DoFHandler<dealdim, DH> & /*control_dof_handler*/,
+		   const DOpEWrapper::DoFHandler<dealdim, DH> & state_dof_handler,
+		   const std::map<std::string, const dealii::Vector<double>*> & /*param_values*/,
+		   const std::map<std::string, const VECTOR*> & domain_values)
       {
         Point<2> p1(90, 0);
 
@@ -100,11 +99,10 @@ template<
       }
 
       double
-      PointValue(
-          const DOpEWrapper::DoFHandler<dealdim, DH> & control_dof_handler __attribute__((unused)),
-          const DOpEWrapper::DoFHandler<dealdim, DH> &state_dof_handler,
-          const std::map<std::string, const dealii::Vector<double>*> &param_values __attribute__((unused)),
-          const std::map<std::string, const VECTOR*> &domain_values)
+	PointValue(const DOpEWrapper::DoFHandler<dealdim, DH> & /*control_dof_handler*/,
+		   const DOpEWrapper::DoFHandler<dealdim, DH> & state_dof_handler,
+		   const std::map<std::string, const dealii::Vector<double>*> & /*param_values*/,
+		   const std::map<std::string, const VECTOR*> & domain_values)
       {
         Point<dealdim> p1(100, 100);
 
@@ -150,11 +148,10 @@ template<
       }
 
       double
-      PointValue(
-          const DOpEWrapper::DoFHandler<dealdim, DH> & control_dof_handler __attribute__((unused)),
-          const DOpEWrapper::DoFHandler<dealdim, DH> &state_dof_handler,
-          const std::map<std::string, const dealii::Vector<double>*> &param_values __attribute__((unused)),
-          const std::map<std::string, const VECTOR*> &domain_values)
+	PointValue(const DOpEWrapper::DoFHandler<dealdim, DH> & /*control_dof_handler*/,
+		   const DOpEWrapper::DoFHandler<dealdim, DH> & state_dof_handler,
+		   const std::map<std::string, const dealii::Vector<double>*> & /*param_values*/,
+		   const std::map<std::string, const VECTOR*> & domain_values)
       {
         Point<2> p1(0, 100);
 

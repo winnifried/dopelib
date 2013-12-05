@@ -59,55 +59,9 @@ template<
       }
 
       double
-      Value(const CDC<DH, VECTOR, dealdim>&)
+	Value(const CDC<DH, VECTOR, dealdim>& /*cdc*/)
       {
         return 0.0;
-      }
-
-      void
-      Value_U(const CDC<DH, VECTOR, dealdim>&,
-          dealii::Vector<double> &local_cell_vector __attribute__((unused)),
-          double scale __attribute__((unused)))
-      {
-
-      }
-
-      void
-      Value_Q(const CDC<DH, VECTOR, dealdim>&,
-          dealii::Vector<double> &local_cell_vector __attribute__((unused)),
-          double scale __attribute__((unused)))
-      {
-
-      }
-
-      void
-      Value_UU(const CDC<DH, VECTOR, dealdim>&,
-          dealii::Vector<double> &local_cell_vector __attribute__((unused)),
-          double scale __attribute__((unused)))
-      {
-
-      }
-
-      void
-      Value_QU(const CDC<DH, VECTOR, dealdim>&,
-          dealii::Vector<double> &local_cell_vector __attribute__((unused)),
-          double scale __attribute__((unused)))
-      {
-      }
-
-      void
-      Value_UQ(const CDC<DH, VECTOR, dealdim>&,
-          dealii::Vector<double> &local_cell_vector __attribute__((unused)),
-          double scale __attribute__((unused)))
-      {
-      }
-
-      void
-      Value_QQ(const CDC<DH, VECTOR, dealdim>&,
-          dealii::Vector<double> &local_cell_vector __attribute__((unused)),
-          double scale __attribute__((unused)))
-      {
-
       }
 
       UpdateFlags

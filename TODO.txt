@@ -58,8 +58,6 @@ Standard TODO fuer naechstes Treffen
 - DirichletDataInterface - GetParam und GetValue auslagern?
 - define DoFHandler aendern in typedef, erst mit spaeterer gcc version moeglich, 
   siehe http://en.cppreference.com/w/cpp/language/type_alias und http://gcc.gnu.org/projects/cxx0x.html
-- Einheitliche handhabung mit nicht genutzen Parametern 
-  (Auskommentieren/Entfernen/atribute_unused)
 - Fehlerschätzer mit Strong*Residual berücksichtigt nicht automatisch 
   das gewählte funktional.
 - Moeglichkeit schaffen, relaxationsparameter etc. an lineare Loeser zu uebergeben.

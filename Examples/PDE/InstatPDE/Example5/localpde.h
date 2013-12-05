@@ -119,9 +119,9 @@ template<
       }
 
       void
-      CellRightHandSide(const CDC<DH, VECTOR, dealdim>& cdc,
-          dealii::Vector<double> &local_cell_vector __attribute__((unused)),
-          double scale __attribute__((unused)))
+	CellRightHandSide(const CDC<DH, VECTOR, dealdim>& cdc,
+			  dealii::Vector<double> & local_cell_vector,
+			  double scale)
       {
         assert(this->_problem_type == "state");
 
@@ -148,16 +148,16 @@ template<
 
       void
       CellTimeEquationExplicit(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
-          dealii::Vector<double> &local_cell_vector __attribute__((unused)),
-          double scale __attribute__((unused)))
+			       dealii::Vector<double> & /*local_cell_vector*/,
+			       double /*scale*/)
       {
         assert(this->_problem_type == "state");
       }
 
       void
       CellTimeEquation(const CDC<DH, VECTOR, dealdim>& cdc,
-          dealii::Vector<double> &local_cell_vector __attribute__((unused)),
-          double scale __attribute__((unused)))
+		       dealii::Vector<double> & local_cell_vector,
+		       double scale)
       {
         assert(this->_problem_type == "state");
 
@@ -191,7 +191,7 @@ template<
 
       void
       CellTimeMatrix(const CDC<DH, VECTOR, dealdim>& cdc,
-          FullMatrix<double> &local_entry_matrix)
+		     FullMatrix<double> &local_entry_matrix)
       {
         assert(this->_problem_type == "state");
 
@@ -224,8 +224,9 @@ template<
       // Values for boundary integrals
       void
       BoundaryEquation(const FDC<DH, VECTOR, dealdim>& /*fdc*/,
-          dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/,
-          double /*scale_ico*/)
+		       dealii::Vector<double> &/*local_cell_vector*/, 
+		       double /*scale*/,
+		       double /*scale_ico*/)
       {
 
         assert(this->_problem_type == "state");
@@ -234,7 +235,8 @@ template<
 
       void
       BoundaryRightHandSide(const FDC<DH, VECTOR, dealdim>& /*fdc*/,
-          dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
+			    dealii::Vector<double> &/*local_cell_vector*/, 
+			    double /*scale*/)
       {
         assert(this->_problem_type == "state");
       }
