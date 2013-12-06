@@ -899,8 +899,8 @@ namespace DOpE
                face, subface);
 	  
 	  bool ret = false;
-	  if(neighbor_child->face(_cell->neighbor_of_neighbor(face)) == _cell->face(face)->child(subface));
-		 ret = true;
+	  if(neighbor_child->face(_cell->neighbor_of_neighbor(face)) == _cell->face(face)->child(subface))
+	    ret = true;
 	  return  ret;
 	}
 	
