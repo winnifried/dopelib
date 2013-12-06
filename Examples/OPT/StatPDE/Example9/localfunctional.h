@@ -235,9 +235,6 @@ template<
           std::vector<Tensor<2, 2> > phi_grads_u(n_dofs_per_cell);
           std::vector<double> phi_p(n_dofs_per_cell);
 
-          const Tensor<2, dealdim> Identity = ALE_Transformations::get_Identity<
-              dealdim>();
-
           for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
           {
             for (unsigned int k = 0; k < n_dofs_per_cell; k++)
@@ -406,21 +403,21 @@ template<
       }
 
       void
-      BoundaryValue_UU(const FDC<DH, VECTOR, dealdim>& fdc,
+      BoundaryValue_UU(const FDC<DH, VECTOR, dealdim>& /*fdc*/,
           dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
       {
 
       }
 
       void
-      BoundaryValue_QU(const FDC<DH, VECTOR, dealdim>& fdc,
+      BoundaryValue_QU(const FDC<DH, VECTOR, dealdim>& /*fdc*/,
           dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
       {
 
       }
 
       void
-      BoundaryValue_UQ(const FDC<DH, VECTOR, dealdim>& fdc,
+      BoundaryValue_UQ(const FDC<DH, VECTOR, dealdim>& /*fdc*/,
           dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
       {
 
@@ -534,9 +531,6 @@ template<
             std::vector<Tensor<1, 2> > phi_u(n_dofs_per_cell);
             std::vector<Tensor<2, 2> > phi_grads_u(n_dofs_per_cell);
             std::vector<double> phi_p(n_dofs_per_cell);
-
-            const Tensor<2, dealdim> Identity =
-                ALE_Transformations::get_Identity<dealdim>();
 
             for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
             {

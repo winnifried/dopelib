@@ -183,61 +183,61 @@ template<
       }
 
       void
-      CellEquation_Q(const CDC<DH, VECTOR, dealdim>& cdc,
-          dealii::Vector<double> &local_cell_vector, double scale,
+      CellEquation_Q(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
+          dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/,
           double /*scale_ico*/)
       {
 
       }
 
       void
-      CellEquation_QT(const CDC<DH, VECTOR, dealdim>& cdc,
-          dealii::Vector<double> &local_cell_vector, double scale,
+      CellEquation_QT(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
+          dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/,
           double /*scale_ico*/)
       {
 
       }
 
       void
-      CellEquation_QTT(const CDC<DH, VECTOR, dealdim>& cdc,
-          dealii::Vector<double> &local_cell_vector, double scale,
+      CellEquation_QTT(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
+          dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/,
           double /*scale_ico*/)
       {
 
       }
 
       void
-      CellEquation_UU(const CDC<DH, VECTOR, dealdim>& cdc,
-          dealii::Vector<double> &local_cell_vector, double scale,
-          double /*scale_ico*/)
-      {
-        assert(this->_problem_type == "adjoint_hessian");
-      }
-      void
-      CellEquation_QU(const CDC<DH, VECTOR, dealdim>& cdc,
-          dealii::Vector<double> &local_cell_vector, double scale,
+      CellEquation_UU(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
+          dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/,
           double /*scale_ico*/)
       {
         assert(this->_problem_type == "adjoint_hessian");
       }
       void
-      CellEquation_UQ(const CDC<DH, VECTOR, dealdim>& cdc,
-          dealii::Vector<double> &local_cell_vector, double scale,
+      CellEquation_QU(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
+          dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/,
+          double /*scale_ico*/)
+      {
+        assert(this->_problem_type == "adjoint_hessian");
+      }
+      void
+      CellEquation_UQ(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
+          dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/,
           double /*scale_ico*/)
       {
         assert(this->_problem_type == "hessian");
       }
       void
-      CellEquation_QQ(const CDC<DH, VECTOR, dealdim>& cdc,
-          dealii::Vector<double> &local_cell_vector, double scale,
+      CellEquation_QQ(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
+          dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/,
           double /*scale_ico*/)
       {
         assert(this->_problem_type == "hessian");
       }
 
       void
-      CellRightHandSide(const CDC<DH, VECTOR, dealdim>& cdc,
-          dealii::Vector<double> &local_cell_vector, double scale)
+      CellRightHandSide(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
+			dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
       {
         assert(this->_problem_type == "state");
       }
@@ -296,7 +296,7 @@ template<
       }
 
       void
-      ControlCellMatrix(const CDC<DH, VECTOR, dealdim>& cdc,
+      ControlCellMatrix(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
           FullMatrix<double> &local_entry_matrix)
       {
 //        for(unsigned int q_point = 0; q_point < n_q_points; q_point++)

@@ -312,7 +312,6 @@ template <typename CONSTRAINTACCESSOR,typename INTEGRATORDATACONT, typename STH,
   std::stringstream out;
   this->GetOutputHandler()->InitNewtonOut(out);
 
-  bool feasible = true;
   double rho;
 
   dq = 1.;
@@ -462,7 +461,7 @@ template <typename CONSTRAINTACCESSOR,typename INTEGRATORDATACONT, typename STH,
 
       cost = this->GetReducedProblem()->ComputeReducedCostFunctional(dq);
       this->GetReducedProblem()->ComputeReducedGradient(dq,gradient,gradient_transposed);
-      feasible = this->GetReducedProblem()->ComputeReducedConstraints(dq,_mma_constraints);
+      this->GetReducedProblem()->ComputeReducedConstraints(dq,_mma_constraints);
 
      }
     catch(DOpEException& e)
@@ -496,7 +495,7 @@ template <typename CONSTRAINTACCESSOR,typename INTEGRATORDATACONT, typename STH,
       
       cost = this->GetReducedProblem()->ComputeReducedCostFunctional(dq);
       this->GetReducedProblem()->ComputeReducedGradient(dq,gradient,gradient_transposed);
-      feasible = this->GetReducedProblem()->ComputeReducedConstraints(dq,_mma_constraints);
+      this->GetReducedProblem()->ComputeReducedConstraints(dq,_mma_constraints);
       retry = true;
     }
     else if(cost + 2.*_mma_multiplier.Norm("infty")*_mma_constraints.Norm("l1","positive")< cost_alt)
@@ -518,7 +517,7 @@ template <typename CONSTRAINTACCESSOR,typename INTEGRATORDATACONT, typename STH,
 	//dq = q;
 	cost = this->GetReducedProblem()->ComputeReducedCostFunctional(q);
 	this->GetReducedProblem()->ComputeReducedGradient(q,gradient,gradient_transposed);
-	feasible = this->GetReducedProblem()->ComputeReducedConstraints(q,_mma_constraints);
+	this->GetReducedProblem()->ComputeReducedConstraints(q,_mma_constraints);
 	retry = true;
 	accuracy *= 0.1;
 	{
@@ -555,7 +554,7 @@ template <typename CONSTRAINTACCESSOR,typename INTEGRATORDATACONT, typename STH,
 	
 	cost = this->GetReducedProblem()->ComputeReducedCostFunctional(dq);
 	this->GetReducedProblem()->ComputeReducedGradient(dq,gradient,gradient_transposed);
-	feasible = this->GetReducedProblem()->ComputeReducedConstraints(dq,_mma_constraints);
+	this->GetReducedProblem()->ComputeReducedConstraints(dq,_mma_constraints);
 	retry = true;
       }
       else
@@ -649,7 +648,7 @@ template <typename CONSTRAINTACCESSOR,typename INTEGRATORDATACONT, typename STH,
       _augmented_lagrangian_problem.SetValue(rho,"rho");
       cost = this->GetReducedProblem()->ComputeReducedCostFunctional(q);
       this->GetReducedProblem()->ComputeReducedGradient(q,gradient,gradient_transposed);
-      feasible = this->GetReducedProblem()->ComputeReducedConstraints(q,_mma_constraints);
+      this->GetReducedProblem()->ComputeReducedConstraints(q,_mma_constraints);
       p_init = _p;
       
       n_total_inner_iters += inner_iters;

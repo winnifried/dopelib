@@ -100,8 +100,8 @@ namespace DOpE
         }
 
         void
-        Value_U(const CDC<DH, VECTOR, dealdim>& cdc,
-            dealii::Vector<double> &local_cell_vector, double scale)
+	  Value_U(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
+		  dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
         {
         }
 

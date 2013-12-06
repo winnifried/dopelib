@@ -102,7 +102,6 @@ template<
         unsigned int n_dofs_per_cell = cdc.GetNDoFsPerCell();
         unsigned int n_q_points = cdc.GetNQPoints();
         unsigned int material_id = cdc.GetMaterialId();
-        double cell_diameter = cdc.GetCellDiameter();
 
         // old Newton step solution values and gradients
         _uvalues.resize(n_q_points, Vector<double>(5));
@@ -286,7 +285,6 @@ template<
         unsigned int n_dofs_per_cell = cdc.GetNDoFsPerCell();
         unsigned int n_q_points = cdc.GetNQPoints();
         unsigned int material_id = cdc.GetMaterialId();
-        double cell_diameter = cdc.GetCellDiameter();
 
         // old Newton step solution values and gradients
         _uvalues.resize(n_q_points, Vector<double>(5));
@@ -452,8 +450,8 @@ template<
             const Tensor<2, dealdim> F = ALE_Transformations::get_F<dealdim>(
                 q_point, _ugrads);
 
-            const Tensor<2, dealdim> F_Inverse =
-                ALE_Transformations::get_F_Inverse<dealdim>(F);
+//            const Tensor<2, dealdim> F_Inverse =
+//                ALE_Transformations::get_F_Inverse<dealdim>(F);
 
 //	      const Tensor<2,dealdim> F_Inverse_T = ALE_Transformations
 //		::get_F_Inverse_T<dealdim> (F_Inverse);

@@ -120,7 +120,7 @@ namespace DOpE
 	 * @param g   The vector to be transformed.
 	 */
         virtual void
-        PostProcessConstraints(ConstraintVector<VECTOR>& g) const
+	  PostProcessConstraints(ConstraintVector<VECTOR>& /*g*/) const
 	{
 	}
 	

@@ -379,8 +379,6 @@ namespace DOpE
             const dealii::BlockVector<double>* functional_gradient;
             const dealii::BlockVector<double>* mma_multiplier;
             const dealii::BlockVector<double>* eval_point;
-            const dealii::Vector<double>* mma_multiplier_global;
-            const dealii::Vector<double>* constraint_values_global;
             const dealii::BlockVector<double>* constraint_values;
             const dealii::BlockVector<double>* mma_lower_asymptote;
             const dealii::BlockVector<double>* mma_upper_asymptote;
@@ -392,13 +390,9 @@ namespace DOpE
                   "mma_functional_gradient");
               mma_multiplier = GetBlockVector(block_values,
                   "mma_multiplier_local");
-              mma_multiplier_global = GetVector(values,
-                  "mma_multiplier_global");
               constraint_values = GetBlockVector(block_values,
                   "constraints_local");
-              constraint_values_global = GetVector(values,
-                  "constraints_global");
-              mma_lower_asymptote = GetBlockVector(block_values,
+	      mma_lower_asymptote = GetBlockVector(block_values,
                   "mma_lower_asymptote");
               mma_upper_asymptote = GetBlockVector(block_values,
                   "mma_upper_asymptote");
@@ -677,8 +671,6 @@ namespace DOpE
             const dealii::BlockVector<double>* mma_multiplier;
             const dealii::BlockVector<double>* eval_point;
             const dealii::BlockVector<double>* direction;
-            const dealii::Vector<double>* mma_multiplier_global;
-            const dealii::Vector<double>* constraint_values_global;
             const dealii::BlockVector<double>* constraint_values;
             const dealii::BlockVector<double>* mma_lower_asymptote;
             const dealii::BlockVector<double>* mma_upper_asymptote;
@@ -690,12 +682,8 @@ namespace DOpE
                   "mma_functional_gradient");
               mma_multiplier = GetBlockVector(block_values,
                   "mma_multiplier_local");
-              mma_multiplier_global = GetVector(values,
-                  "mma_multiplier_global");
               constraint_values = GetBlockVector(block_values,
                   "constraints_local");
-              constraint_values_global = GetVector(values,
-                  "constraints_global");
               mma_lower_asymptote = GetBlockVector(block_values,
                   "mma_lower_asymptote");
               mma_upper_asymptote = GetBlockVector(block_values,
@@ -932,9 +920,9 @@ namespace DOpE
 
         template<typename FACEDATACONTAINER>
           void
-          FaceEquation(const FACEDATACONTAINER& fdc,
-              dealii::Vector<double> &local_cell_vector, double scale = 1.,
-              double scale_ico = 1.)
+          FaceEquation(const FACEDATACONTAINER& /*fcd*/,
+              dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/ = 1.,
+              double /*scale_ico*/ = 1.)
           {
             throw DOpEException("Not Implemented",
                 "AugmentedLagrangianProblem::FaceEquation");
@@ -944,8 +932,8 @@ namespace DOpE
 
          template<typename FACEDATACONTAINER>
           void
-          FaceRhs(const FACEDATACONTAINER& fdc,
-              dealii::Vector<double> &local_cell_vector, double scale = 1.)
+          FaceRhs(const FACEDATACONTAINER& /*fcd*/,
+              dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/ = 1.)
           {
             throw DOpEException("Not Implemented",
                 "AugmentedLagrangianProblem::FaceRhs");
@@ -955,9 +943,9 @@ namespace DOpE
 
         template<typename FACEDATACONTAINER>
           void
-          FaceMatrix(const FACEDATACONTAINER& fdc,
-              dealii::FullMatrix<double> &local_entry_matrix, double scale = 1.,
-              double scale_ico = 1.)
+          FaceMatrix(const FACEDATACONTAINER& /*fcd*/,
+		     dealii::FullMatrix<double> &/*local_entry_matrix*/, double /*scale*/ = 1.,
+              double /*scale_ico*/ = 1.)
           {
             throw DOpEException("Not Implemented",
                 "AugmentedLagrangianProblem::FaceMatrix");
@@ -967,9 +955,9 @@ namespace DOpE
 
         template<typename FACEDATACONTAINER>
           void
-          BoundaryEquation(const FACEDATACONTAINER& fdc,
-              dealii::Vector<double> &local_cell_vector, double scale = 1.,
-              double scale_ico = 1.)
+          BoundaryEquation(const FACEDATACONTAINER& /*fcd*/,
+              dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/ = 1.,
+              double /*scale_ico*/ = 1.)
           {
             throw DOpEException("Not Implemented",
                 "AugmentedLagrangianProblem::BoundaryEquation");
@@ -979,8 +967,8 @@ namespace DOpE
 
         template<typename FACEDATACONTAINER>
           void
-          BoundaryRhs(const FACEDATACONTAINER& fdc,
-              dealii::Vector<double> &local_cell_vector, double scale = 1.)
+          BoundaryRhs(const FACEDATACONTAINER& /*fcd*/,
+              dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/ = 1.)
           {
             throw DOpEException("Not Implemented",
                 "AugmentedLagrangianProblem::BoundaryRhs");
@@ -990,9 +978,9 @@ namespace DOpE
 
         template<typename FACEDATACONTAINER>
           void
-          BoundaryMatrix(const FACEDATACONTAINER& fdc,
-              dealii::FullMatrix<double> &local_cell_matrix, double scale = 1.,
-              double scale_ico = 1.)
+          BoundaryMatrix(const FACEDATACONTAINER& /*fcd*/,
+			 dealii::FullMatrix<double> &/*local_cell_matrix*/, double /*scale*/ = 1.,
+			 double /*scale_ico*/ = 1.)
           {
             throw DOpEException("Not Implemented",
                 "AugmentedLagrangianProblem::BoundaryRhs");
@@ -1000,9 +988,9 @@ namespace DOpE
         /******************************************************/
         template<typename FACEDATACONTAINER>
           void
-          InterfaceEquation(const FACEDATACONTAINER& dc,
-              dealii::Vector<double> &local_cell_vector, double scale = 1.,
-              double scale_ico = 1.)
+          InterfaceEquation(const FACEDATACONTAINER& /*dc*/,
+              dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/ = 1.,
+              double /*scale_ico*/ = 1.)
           {
             throw DOpEException("Not Implemented",
                 "AugmentedLagrangianProblem::BoundaryRhs");
@@ -1010,9 +998,9 @@ namespace DOpE
         /******************************************************/
         template<typename FACEDATACONTAINER>
           void
-          InterfaceMatrix(const FACEDATACONTAINER& dc,
-              dealii::FullMatrix<double> &local_entry_matrix, double scale = 1.,
-              double scale_ico = 1.)
+          InterfaceMatrix(const FACEDATACONTAINER& /*dc*/,
+			  dealii::FullMatrix<double> &/*local_entry_matrix*/, double /*scale*/ = 1.,
+              double /*scale_ico*/ = 1.)
           {
             throw DOpEException("Not Implemented",
                 "AugmentedLagrangianProblem::BoundaryRhs");

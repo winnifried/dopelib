@@ -380,84 +380,84 @@ template<
       }
 
       void
-      BoundaryEquation_U(const FDC<DH, VECTOR, dealdim>& fdc,
-          dealii::Vector<double> &local_cell_vector, double scale,
+      BoundaryEquation_U(const FDC<DH, VECTOR, dealdim>& /*fdc*/,
+          dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/,
           double /*scale_ico*/)
       {
       }
 
       void
-      BoundaryEquation_UT(const FDC<DH, VECTOR, dealdim>& fdc,
-          dealii::Vector<double> &local_cell_vector, double scale,
+      BoundaryEquation_UT(const FDC<DH, VECTOR, dealdim>& /*fdc*/,
+          dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/,
           double /*scale_ico*/)
       {
       }
 
       void
-      BoundaryEquation_UTT(const FDC<DH, VECTOR, dealdim>& fdc,
-          dealii::Vector<double> &local_cell_vector, double scale,
+      BoundaryEquation_UTT(const FDC<DH, VECTOR, dealdim>& /*fdc*/,
+          dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/,
           double /*scale_ico*/)
       {
       }
 
       void
-      BoundaryEquation_Q(const FDC<DH, VECTOR, dealdim>& fdc,
-          dealii::Vector<double> &local_cell_vector, double scale,
+      BoundaryEquation_Q(const FDC<DH, VECTOR, dealdim>& /*fdc*/,
+          dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/,
           double /*scale_ico*/)
       {
       }
 
       void
-      BoundaryEquation_QT(const FDC<DH, VECTOR, dealdim>& fdc,
-          dealii::Vector<double> &local_cell_vector, double scale,
+      BoundaryEquation_QT(const FDC<DH, VECTOR, dealdim>& /*fdc*/,
+          dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/,
           double /*scale_ico*/)
       {
       }
 
       void
-      BoundaryEquation_QTT(const FDC<DH, VECTOR, dealdim>& fdc,
-          dealii::Vector<double> &local_cell_vector, double scale,
+      BoundaryEquation_QTT(const FDC<DH, VECTOR, dealdim>& /*fdc*/,
+          dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/,
           double /*scale_ico*/)
       {
       }
 
       void
-      BoundaryEquation_UU(const FDC<DH, VECTOR, dealdim>& fdc,
-          dealii::Vector<double> &local_cell_vector, double scale,
+      BoundaryEquation_UU(const FDC<DH, VECTOR, dealdim>& /*fdc*/,
+          dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/,
           double /*scale_ico*/)
       {
       }
 
       void
-      BoundaryEquation_QU(const FDC<DH, VECTOR, dealdim>& fdc,
-          dealii::Vector<double> &local_cell_vector, double scale,
+      BoundaryEquation_QU(const FDC<DH, VECTOR, dealdim>& /*fdc*/,
+          dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/,
           double /*scale_ico*/)
       {
       }
 
       void
-      BoundaryEquation_UQ(const FDC<DH, VECTOR, dealdim>& fdc,
-          dealii::Vector<double> &local_cell_vector, double scale,
+      BoundaryEquation_UQ(const FDC<DH, VECTOR, dealdim>& /*fdc*/,
+          dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/,
           double /*scale_ico*/)
       {
       }
 
       void
-      BoundaryEquation_QQ(const FDC<DH, VECTOR, dealdim>& fdc,
-          dealii::Vector<double> &local_cell_vector, double scale,
+      BoundaryEquation_QQ(const FDC<DH, VECTOR, dealdim>& /*fdc*/,
+          dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/,
           double /*scale_ico*/)
       {
       }
 
       void
-      BoundaryRightHandSide(const FDC<DH, VECTOR, dealdim>& fdc,
-          dealii::Vector<double> &local_cell_vector, double scale)
+      BoundaryRightHandSide(const FDC<DH, VECTOR, dealdim>& /*fdc*/,
+			    dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
       {
       }
 
       void
-      BoundaryMatrix(const FDC<DH, VECTOR, dealdim>& fdc,
-          dealii::FullMatrix<double> &local_entry_matrix, double /*scale*/,
+      BoundaryMatrix(const FDC<DH, VECTOR, dealdim>& /*fdc*/,
+		     dealii::FullMatrix<double> &/*local_entry_matrix*/, double /*scale*/,
           double /*scale_ico*/)
       {
       }

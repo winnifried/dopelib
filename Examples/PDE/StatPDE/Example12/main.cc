@@ -159,7 +159,7 @@ main(int argc, char **argv)
   solver.RegisterExceptionHandler(&ex);
 
   VECTOR solution;
-  auto& dof_handler = DOFH.GetStateDoFHandler().GetDEALDoFHandler();
+
   for (int i = 0; i < max_iter; i++)
   {
     try

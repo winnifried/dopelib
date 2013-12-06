@@ -21,13 +21,6 @@
 *
 **/
 
-/*
- * sparsitymaker.h
- *
- *  Created on: May 31, 2011
- *      Author: cgoll
- */
-
 #ifndef SPARSITYMAKER_H_
 #define SPARSITYMAKER_H_
 

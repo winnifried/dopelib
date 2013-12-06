@@ -115,7 +115,7 @@ template<typename VECTOR, int dealdim>
       Data_QQT(
           const std::map<std::string, const dealii::Vector<double>*> *param_values,
           const std::map<std::string, const VECTOR*> *domain_values,
-          unsigned int color, const dealii::Point<dealdim>& /*point*/,
+          unsigned int /*color*/, const dealii::Point<dealdim>& /*point*/,
           unsigned int component, unsigned int dof_number,
           dealii::Vector<double>& local_vector) const
       {

@@ -104,7 +104,7 @@ template<
         unsigned int n_dofs_per_cell = cdc.GetNDoFsPerCell();
         unsigned int n_q_points = cdc.GetNQPoints();
         unsigned int material_id = cdc.GetMaterialId();
-        double cell_diameter = cdc.GetCellDiameter();
+//        double cell_diameter = cdc.GetCellDiameter();
 
         // old Newton step solution values and gradients
         _uvalues.resize(n_q_points, Vector<double>(3));
@@ -147,7 +147,7 @@ template<
             u[0] = _uvalues[q](0);
             u[1] = _uvalues[q](1);
 
-            double p = _uvalues[q](2);
+//            double p = _uvalues[q](2);
 
             Tensor<2, dealdim> grad_u;
             grad_u[0][0] = _ugrads[q][0][0];
@@ -155,9 +155,9 @@ template<
             grad_u[1][0] = _ugrads[q][1][0];
             grad_u[1][1] = _ugrads[q][1][1];
 
-            const double divergence_u = _ugrads[q][0][0] + _ugrads[q][1][1];
-            const double old_timestep_divergence_u =
-                _last_timestep_ugrads[q][0][0] + _last_timestep_ugrads[q][1][1];
+//            const double divergence_u = _ugrads[q][0][0] + _ugrads[q][1][1];
+//            const double old_timestep_divergence_u =
+//                _last_timestep_ugrads[q][0][0] + _last_timestep_ugrads[q][1][1];
 
             double q_biot = volume_source;
 
@@ -195,7 +195,7 @@ template<
         {
           for (unsigned int q = 0; q < n_q_points; q++)
           {
-            double p = _uvalues[q](2);
+//            double p = _uvalues[q](2);
 
             Tensor<1, dealdim> grad_p;
             grad_p[0] = _ugrads[q][2][0];
@@ -217,10 +217,10 @@ template<
               const Tensor<2, dealdim> phi_i_grads_u =
                   state_fe_values[displacements].gradient(i, q);
 
-              const Tensor<1, dealdim> phi_i_grads_p =
-                  state_fe_values[pressure].gradient(i, q);
+//              const Tensor<1, dealdim> phi_i_grads_p =
+//                  state_fe_values[pressure].gradient(i, q);
 
-              const double phi_i_p = state_fe_values[pressure].value(i, q);
+//              const double phi_i_p = state_fe_values[pressure].value(i, q);
 
               local_cell_vector(i) += scale_ico
                   * scalar_product(sigma_s, phi_i_grads_u)
@@ -241,7 +241,7 @@ template<
         unsigned int n_dofs_per_cell = cdc.GetNDoFsPerCell();
         unsigned int n_q_points = cdc.GetNQPoints();
         unsigned int material_id = cdc.GetMaterialId();
-        double cell_diameter = cdc.GetCellDiameter();
+//        double cell_diameter = cdc.GetCellDiameter();
 
         // old Newton step solution values and gradients
         _uvalues.resize(n_q_points, Vector<double>(3));
@@ -297,8 +297,8 @@ template<
               pI_LinP[0][0] = phi_i_p[i];
               pI_LinP[1][1] = phi_i_p[i];
 
-              double divergence_u_LinU = phi_i_grads_u[i][0][0]
-                  + phi_i_grads_u[i][1][1];
+//              double divergence_u_LinU = phi_i_grads_u[i][0][0]
+//                  + phi_i_grads_u[i][1][1];
 
               Tensor<2, dealdim> E = 0.5
                   * (phi_i_grads_u[i] + transpose(phi_i_grads_u[i]));
@@ -494,8 +494,8 @@ template<
       // Values for boundary integrals
       void
       BoundaryEquation(const FDC<DH, VECTOR, dealdim>& fdc,
-          dealii::Vector<double> &local_cell_vector, double scale,
-          double scale_ico)
+		       dealii::Vector<double> &local_cell_vector, double /*scale*/,
+		       double scale_ico)
       {
 
         assert(this->_problem_type == "state");
@@ -537,9 +537,9 @@ template<
       }
 
       void
-      BoundaryMatrix(const FDC<DH, VECTOR, dealdim>& fdc,
-          dealii::FullMatrix<double> &local_entry_matrix, double scale,
-          double scale_ico)
+	BoundaryMatrix(const FDC<DH, VECTOR, dealdim>& /*fdc*/,
+		       dealii::FullMatrix<double> & /*local_entry_matrix*/, double /*scale*/,
+		       double /*scale_ico*/)
       {
         assert(this->_problem_type == "state");
 
@@ -555,8 +555,8 @@ template<
       // Values for boundary integrals
       void
       FaceEquation(const FDC<DH, VECTOR, dealdim>& fdc,
-          dealii::Vector<double> &local_cell_vector, double scale,
-          double scale_ico)
+		   dealii::Vector<double> &local_cell_vector, double /*scale*/,
+		   double scale_ico)
       {
 
         assert(this->_problem_type == "state");
@@ -612,9 +612,9 @@ template<
       }
 
       void
-      FaceMatrix(const FDC<DH, VECTOR, dealdim>& fdc,
-          dealii::FullMatrix<double> &local_entry_matrix, double scale,
-          double scale_ico)
+	FaceMatrix(const FDC<DH, VECTOR, dealdim>& /*fdc*/,
+		   dealii::FullMatrix<double> &/*local_entry_matrix*/, double /*scale*/,
+		   double /*scale_ico*/)
       {
         assert(this->_problem_type == "state");
 

@@ -173,9 +173,9 @@ namespace DOpE
     
   template <typename RPROBLEM, typename VECTOR>
     bool Ipopt_Problem<RPROBLEM,VECTOR>::get_starting_point(Ipopt::Index n, bool init_x, Ipopt::Number* x,
-							   bool init_z, Ipopt::Number* z_L, Ipopt::Number* z_U,
-							   Ipopt::Index m, bool init_lambda,
-							   Ipopt::Number* lambda)
+							    bool init_z, Ipopt::Number* /*z_L*/, Ipopt::Number* /*z_U*/,
+							    Ipopt::Index /*m*/, bool init_lambda,
+							    Ipopt::Number* /*lambda*/)
   {
     assert(init_x == true);
     assert(init_z == false);
@@ -190,7 +190,7 @@ namespace DOpE
   }
     
   template <typename RPROBLEM, typename VECTOR>
-    bool Ipopt_Problem<RPROBLEM,VECTOR>::eval_f(Ipopt::Index n, const Ipopt::Number* x, bool new_x, Ipopt::Number& obj_value)
+    bool Ipopt_Problem<RPROBLEM,VECTOR>::eval_f(Ipopt::Index n, const Ipopt::Number* x, bool /*new_x*/, Ipopt::Number& obj_value)
   {   
     VECTOR& qval = _q.GetSpacialVector();
     for(int i = 0; i < n; i++)
@@ -249,7 +249,7 @@ namespace DOpE
   }
     
   template <typename RPROBLEM, typename VECTOR>
-    bool Ipopt_Problem<RPROBLEM,VECTOR>::eval_g(Ipopt::Index n, const Ipopt::Number* x, bool new_x, Ipopt::Index m, Ipopt::Number* g)
+    bool Ipopt_Problem<RPROBLEM,VECTOR>::eval_g(Ipopt::Index n, const Ipopt::Number* x, bool new_x, Ipopt::Index /*m*/, Ipopt::Number* g)
   {
     if( new_x )
     {
@@ -349,10 +349,10 @@ namespace DOpE
   }
 
   template <typename RPROBLEM, typename VECTOR>
-    bool Ipopt_Problem<RPROBLEM,VECTOR>::eval_h(Ipopt::Index n, const Ipopt::Number* x, bool new_x,
-					       Ipopt::Number obj_factor, Ipopt::Index m, const Ipopt::Number* lambda,
-					       bool new_lambda, Ipopt::Index nele_hess, Ipopt::Index* iRow,
-					       Ipopt::Index* jCol, Ipopt::Number* values)
+    bool Ipopt_Problem<RPROBLEM,VECTOR>::eval_h(Ipopt::Index /*n*/, const Ipopt::Number* /*x*/, bool /*new_x*/,
+						Ipopt::Number /*obj_factor*/, Ipopt::Index /*m*/, const Ipopt::Number* /*lambda*/,
+						bool /*new_lambda*/, Ipopt::Index /*nele_hess*/, Ipopt::Index* /*iRow*/,
+						Ipopt::Index* /*jCol*/, Ipopt::Number* /*values*/)
   {
     //Donot calculate the hessian!
     return false;
@@ -361,13 +361,13 @@ namespace DOpE
 
   template <typename RPROBLEM, typename VECTOR>
     void Ipopt_Problem<RPROBLEM,VECTOR>::finalize_solution(Ipopt::SolverReturn status,
-							  Ipopt::Index n, const Ipopt::Number* x, 
-							  const Ipopt::Number* z_L, const Ipopt::Number* z_U,
-							  Ipopt::Index m, const Ipopt::Number* g, 
-							  const Ipopt::Number* lambda,
-							  Ipopt::Number obj_value,
-							  const Ipopt::IpoptData* ip_data,
-							  Ipopt::IpoptCalculatedQuantities* ip_cq)
+							   Ipopt::Index n, const Ipopt::Number* x, 
+							   const Ipopt::Number* /*z_L*/, const Ipopt::Number* /*z_U*/,
+							   Ipopt::Index /*m*/, const Ipopt::Number* /*g*/, 
+							   const Ipopt::Number* /*lambda*/,
+							   Ipopt::Number /*obj_value*/,
+							   const Ipopt::IpoptData* /*ip_data*/,
+							   Ipopt::IpoptCalculatedQuantities* /*ip_cq*/)
   {
     //Check the result, _q should be x and then be copied to _init
     

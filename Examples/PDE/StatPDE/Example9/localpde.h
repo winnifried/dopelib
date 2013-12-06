@@ -375,7 +375,7 @@ template<
 
       void
       CellRightHandSide(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
-          dealii::Vector<double> &local_cell_vector, double scale)
+			dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
       {
         assert(this->_problem_type == "state");
       }

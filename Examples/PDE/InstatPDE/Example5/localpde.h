@@ -304,12 +304,12 @@ template<
     private:
       vector<double> _fvalues;
       vector<double> _uvalues;
-      mutable double _my_time;
 
       vector<Tensor<1, dealdim> > _ugrads;
 
       vector<unsigned int> _state_block_components;
       vector<unsigned int> _block_components;
-
+     
+      mutable double _my_time;
   };
 #endif

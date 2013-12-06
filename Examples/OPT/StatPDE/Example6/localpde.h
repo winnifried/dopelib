@@ -153,8 +153,7 @@ template<
       {
         const DOpEWrapper::FEValues<dealdim> & control_fe_values =
             cdc.GetFEValuesControl();
-        const DOpEWrapper::FEValues<dealdim> & state_fe_values =
-            cdc.GetFEValuesState();
+
         unsigned int n_dofs_per_cell = cdc.GetNDoFsPerCell();
         unsigned int n_q_points = cdc.GetNQPoints();
         {
@@ -185,9 +184,6 @@ template<
 
           for (unsigned int i = 0; i < n_dofs_per_cell; i++)
           {
-            const Tensor<2, 2> phi_grads =
-                state_fe_values[displacements].gradient(i, q_point);
-
             local_cell_vector(i) += scale
                 * control_fe_values.shape_value(i, q_point) * 0.25
                 * scalar_product(u_grad + transpose(u_grad),
@@ -447,8 +443,8 @@ template<
 
       void
       BoundaryMatrix(const FDC<DH, VECTOR, dealdim>& /*fdc*/,
-          dealii::FullMatrix<double> &local_entry_matrix, double /*scale*/,
-          double /*scale_ico*/)
+		     dealii::FullMatrix<double> &/*local_entry_matrix*/, double /*scale*/,
+		     double /*scale_ico*/)
       {
       }
 

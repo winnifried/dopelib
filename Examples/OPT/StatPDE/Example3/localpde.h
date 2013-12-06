@@ -534,7 +534,7 @@ template<
 
       // Look for BoundaryEquationQ
       void
-      CellEquation_Q(const CDC<DH, VECTOR, dealdim>& cdc,
+      CellEquation_Q(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
           dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/,
           double /*scale_ico*/)
       {
@@ -542,7 +542,7 @@ template<
       }
 
       void
-      CellEquation_QT(const CDC<DH, VECTOR, dealdim>& cdc,
+      CellEquation_QT(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
           dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/,
           double /*scale_ico*/)
       {
@@ -550,7 +550,7 @@ template<
       }
 
       void
-      CellEquation_QTT(const CDC<DH, VECTOR, dealdim>& cdc,
+      CellEquation_QTT(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
           dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/,
           double /*scale_ico*/)
       {
@@ -558,21 +558,21 @@ template<
       }
 
       void
-      CellEquation_QU(const CDC<DH, VECTOR, dealdim>& cdc,
+      CellEquation_QU(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
           dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/,
           double /*scale_ico*/)
       {
         assert(this->_problem_type == "adjoint_hessian");
       }
       void
-      CellEquation_UQ(const CDC<DH, VECTOR, dealdim>& cdc,
+      CellEquation_UQ(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
           dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/,
           double /*scale_ico*/)
       {
         assert(this->_problem_type == "hessian");
       }
       void
-      CellEquation_QQ(const CDC<DH, VECTOR, dealdim>& cdc,
+      CellEquation_QQ(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
           dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/,
           double /*scale_ico*/)
       {
@@ -580,7 +580,7 @@ template<
       }
 
       void
-      CellRightHandSide(const CDC<DH, VECTOR, dealdim>& cdc,
+      CellRightHandSide(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
           dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
       {
         assert(this->_problem_type == "state");

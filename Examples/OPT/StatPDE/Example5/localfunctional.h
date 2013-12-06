@@ -164,14 +164,14 @@ template<
       }
 
       void
-      Value_QU(const Multimesh_CellDataContainer<DH, VECTOR, dealdim>& cdc,
-          dealii::Vector<double> &local_cell_vector, double scale)
+    Value_QU(const Multimesh_CellDataContainer<DH, VECTOR, dealdim>& /*cdc*/,
+	     dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
       {
       }
 
       void
-      Value_UQ(const Multimesh_CellDataContainer<DH, VECTOR, dealdim>& cdc,
-          dealii::Vector<double> &local_cell_vector, double scale)
+      Value_UQ(const Multimesh_CellDataContainer<DH, VECTOR, dealdim>& /*cdc*/,
+	       dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
       {
       }
 

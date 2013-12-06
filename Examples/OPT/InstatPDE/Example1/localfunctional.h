@@ -208,13 +208,13 @@ template<
 
       void
       Value_QU(const CDC<DH, VECTOR, dealdim>&,
-          dealii::Vector<double> &local_cell_vector, double scale)
+          dealii::Vector<double> &, double)
       {
       }
 
       void
       Value_UQ(const CDC<DH, VECTOR, dealdim>&,
-          dealii::Vector<double> &local_cell_vector, double scale)
+          dealii::Vector<double> &, double)
       {
       }
 

@@ -302,8 +302,6 @@ template<
           for (unsigned int i = 0; i < n_dofs_per_cell; i++)
           {
             const double phi_i = state_fe_values.shape_value(i, q_point);
-            const Tensor<1, dealdim> phi_i_grads = state_fe_values.shape_grad(i,
-                q_point);
 
             local_cell_vector(i) += scale
                 * (2. * _zvalues[q_point] * _duvalues[q_point] * phi_i)

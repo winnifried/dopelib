@@ -353,8 +353,8 @@ template<
       }
       void
       CellEquation_QU(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
-          dealii::Vector<double> &local_cell_vector, double /*scale*/,
-          double /*scale_ico*/)
+		      dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/,
+		      double /*scale_ico*/)
       {
         assert(this->_problem_type == "adjoint_hessian");
       }
@@ -432,8 +432,8 @@ template<
       }
 
       void
-      ControlCellMatrix(const CDC<DH, VECTOR, dealdim>& cdc,
-          FullMatrix<double> &local_entry_matrix)
+	ControlCellMatrix(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
+			  FullMatrix<double> &local_entry_matrix)
       {
         assert(local_entry_matrix.m() == local_entry_matrix.n());
         for (unsigned int i = 0; i < local_entry_matrix.m(); i++)

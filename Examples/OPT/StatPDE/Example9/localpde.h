@@ -133,9 +133,6 @@ template<
             const Tensor<2, dealdim> grad_v_T =
                 ALE_Transformations::get_grad_v_T<dealdim>(grad_v);
 
-            const Tensor<1, dealdim> u = ALE_Transformations::get_u<dealdim>(
-                q_point, _uvalues);
-
             const Tensor<2, dealdim> grad_u = ALE_Transformations::get_grad_u<
                 dealdim>(q_point, _ugrads);
 
@@ -198,24 +195,18 @@ template<
             const Tensor<1, 2> v = ALE_Transformations::get_v<2>(q_point,
                 _uvalues);
 
-            const Tensor<2, 2> grad_v = ALE_Transformations::get_grad_v<2>(
-                q_point, _ugrads);
-
-            const Tensor<1, 2> u = ALE_Transformations::get_u<2>(q_point,
-                _uvalues);
-
             const Tensor<2, 2> F = ALE_Transformations::get_F<2>(q_point,
                 _ugrads);
 
             const Tensor<2, 2> F_T = ALE_Transformations::get_F_T<2>(F);
 
-            const Tensor<2, 2> F_Inverse =
-                ALE_Transformations::get_F_Inverse<2>(F);
+//            const Tensor<2, 2> F_Inverse =
+//                ALE_Transformations::get_F_Inverse<2>(F);
 
-            const Tensor<2, 2> F_Inverse_T =
-                ALE_Transformations::get_F_Inverse_T<2>(F_Inverse);
+//            const Tensor<2, 2> F_Inverse_T =
+//                ALE_Transformations::get_F_Inverse_T<2>(F_Inverse);
 
-            const double J = ALE_Transformations::get_J<2>(F);
+//            const double J = ALE_Transformations::get_J<2>(F);
 
             const Tensor<2, 2> E = Structure_Terms_in_ALE::get_E<2>(F_T, F,
                 Identity);
@@ -227,21 +218,14 @@ template<
                 * (_lame_coefficient_lambda * tr_E * Identity
                     + 2 * _lame_coefficient_mu * E));
 
-            const Tensor<2, 2> stress_term = (J * sigma_structure_ALE
-                * F_Inverse_T);
-
             for (unsigned int i = 0; i < n_dofs_per_cell; i++)
             {
-              const Tensor<1, 2> phi_i_v = state_fe_values[velocities].value(i,
-                  q_point);
               const Tensor<2, 2> phi_i_grads_v =
                   state_fe_values[velocities].gradient(i, q_point);
               const double phi_i_p = state_fe_values[pressure].value(i,
                   q_point);
               const Tensor<1, 2> phi_i_u = state_fe_values[displacements].value(
                   i, q_point);
-              const Tensor<2, 2> phi_i_grads_u =
-                  state_fe_values[displacements].gradient(i, q_point);
 
               local_cell_vector(i) += scale
                   * (scalar_product(sigma_structure_ALE, phi_i_grads_v)
@@ -318,8 +302,8 @@ template<
             const Tensor<1, dealdim> v = ALE_Transformations::get_v<dealdim>(
                 q_point, _uvalues);
 
-            const Tensor<1, dealdim> u = ALE_Transformations::get_u<dealdim>(
-                q_point, _uvalues);
+//            const Tensor<1, dealdim> u = ALE_Transformations::get_u<dealdim>(
+//                q_point, _uvalues);
 
             const Tensor<2, dealdim> grad_v = ALE_Transformations::get_grad_v<
                 dealdim>(q_point, _ugrads);
@@ -411,16 +395,16 @@ template<
             const Tensor<2, dealdim> F = ALE_Transformations::get_F<dealdim>(
                 q_point, _ugrads);
 
-            const Tensor<2, dealdim> F_Inverse =
-                ALE_Transformations::get_F_Inverse<dealdim>(F);
+//            const Tensor<2, dealdim> F_Inverse =
+//                ALE_Transformations::get_F_Inverse<dealdim>(F);
 
-            const Tensor<2, dealdim> F_Inverse_T =
-                ALE_Transformations::get_F_Inverse_T<dealdim>(F_Inverse);
+//            const Tensor<2, dealdim> F_Inverse_T =
+//                ALE_Transformations::get_F_Inverse_T<dealdim>(F_Inverse);
 
             const Tensor<2, dealdim> F_T =
                 ALE_Transformations::get_F_T<dealdim>(F);
 
-            const double J = ALE_Transformations::get_J<dealdim>(F);
+//            const double J = ALE_Transformations::get_J<dealdim>(F);
 
             const Tensor<2, dealdim> E = Structure_Terms_in_ALE::get_E<dealdim>(
                 F_T, F, Identity);
@@ -430,22 +414,22 @@ template<
             for (unsigned int j = 0; j < n_dofs_per_cell; j++)
             {
 
-              const double J_LinU = ALE_Transformations::get_J_LinU<dealdim>(
-                  q_point, _ugrads, phi_grads_u[j]);
+//              const double J_LinU = ALE_Transformations::get_J_LinU<dealdim>(
+//                  q_point, _ugrads, phi_grads_u[j]);
 
               const Tensor<2, dealdim> F_LinU = ALE_Transformations::get_F_LinU<
                   dealdim>(phi_grads_u[j]);
 
-              const Tensor<2, dealdim> F_Inverse_LinU =
-                  ALE_Transformations::get_F_Inverse_LinU<dealdim>(
-                      phi_grads_u[j], J, J_LinU, q_point, _ugrads);
+//              const Tensor<2, dealdim> F_Inverse_LinU =
+//                  ALE_Transformations::get_F_Inverse_LinU<dealdim>(
+//                      phi_grads_u[j], J, J_LinU, q_point, _ugrads);
 
-              const Tensor<2, dealdim> F_Inverse_T_LinU = transpose(
-                  F_Inverse_LinU);
+//              const Tensor<2, dealdim> F_Inverse_T_LinU = transpose(
+//                  F_Inverse_LinU);
 
-              const Tensor<2, dealdim> J_F_Inverse_T_LinU =
-                  ALE_Transformations::get_J_F_Inverse_T_LinU<dealdim>(
-                      phi_grads_u[j]);
+//              const Tensor<2, dealdim> J_F_Inverse_T_LinU =
+//                  ALE_Transformations::get_J_F_Inverse_T_LinU<dealdim>(
+//                      phi_grads_u[j]);
 
               // STVK: Green_Lagrange strain tensor derivatives
               const Tensor<2, dealdim> E_LinU = 0.5
@@ -585,9 +569,6 @@ template<
             const Tensor<2, dealdim> F_Inverse_T =
                 ALE_Transformations::get_F_Inverse_T<dealdim>(F_Inverse);
 
-            const Tensor<2, dealdim> F_T =
-                ALE_Transformations::get_F_T<dealdim>(F);
-
             const double J = ALE_Transformations::get_J<dealdim>(F);
 
             const Tensor<2, dealdim> sigma_ALE =
@@ -685,16 +666,16 @@ template<
             const Tensor<2, dealdim> F = ALE_Transformations::get_F<dealdim>(
                 q_point, _z_state_grads);
 
-            const Tensor<2, dealdim> F_Inverse =
-                ALE_Transformations::get_F_Inverse<dealdim>(F);
+//            const Tensor<2, dealdim> F_Inverse =
+//                ALE_Transformations::get_F_Inverse<dealdim>(F);
 
-            const Tensor<2, dealdim> F_Inverse_T =
-                ALE_Transformations::get_F_Inverse_T<dealdim>(F_Inverse);
+//            const Tensor<2, dealdim> F_Inverse_T =
+//                ALE_Transformations::get_F_Inverse_T<dealdim>(F_Inverse);
 
             const Tensor<2, dealdim> F_T =
                 ALE_Transformations::get_F_T<dealdim>(F);
 
-            const double J = ALE_Transformations::get_J<dealdim>(F);
+//            const double J = ALE_Transformations::get_J<dealdim>(F);
 
             const Tensor<2, dealdim> E = Structure_Terms_in_ALE::get_E<dealdim>(
                 F_T, F, Identity);
@@ -706,22 +687,22 @@ template<
 
               //_z_state_values
               //_z_state_grads
-              const double J_LinU = ALE_Transformations::get_J_LinU<dealdim>(
-                  q_point, _z_state_grads, phi_grads_u[j]);
+//              const double J_LinU = ALE_Transformations::get_J_LinU<dealdim>(
+//                  q_point, _z_state_grads, phi_grads_u[j]);
 
               const Tensor<2, dealdim> F_LinU = ALE_Transformations::get_F_LinU<
                   dealdim>(phi_grads_u[j]);
 
-              const Tensor<2, dealdim> F_Inverse_LinU =
-                  ALE_Transformations::get_F_Inverse_LinU<dealdim>(
-                      phi_grads_u[j], J, J_LinU, q_point, _z_state_grads);
+//              const Tensor<2, dealdim> F_Inverse_LinU =
+//                  ALE_Transformations::get_F_Inverse_LinU<dealdim>(
+//                      phi_grads_u[j], J, J_LinU, q_point, _z_state_grads);
 
-              const Tensor<2, dealdim> F_Inverse_T_LinU = transpose(
-                  F_Inverse_LinU);
+//              const Tensor<2, dealdim> F_Inverse_T_LinU = transpose(
+//                  F_Inverse_LinU);
 
-              const Tensor<2, dealdim> J_F_Inverse_T_LinU =
-                  ALE_Transformations::get_J_F_Inverse_T_LinU<dealdim>(
-                      phi_grads_u[j]);
+//              const Tensor<2, dealdim> J_F_Inverse_T_LinU =
+//                  ALE_Transformations::get_J_F_Inverse_T_LinU<dealdim>(
+//                     phi_grads_u[j]);
 
               // STVK: Green_Lagrange strain tensor derivatives
               const Tensor<2, dealdim> E_LinU = 0.5
@@ -855,13 +836,13 @@ template<
             const Tensor<2, dealdim> F_Inverse_T =
                 ALE_Transformations::get_F_Inverse_T<dealdim>(F_Inverse);
 
-            const Tensor<2, dealdim> F_T =
-                ALE_Transformations::get_F_T<dealdim>(F);
+//            const Tensor<2, dealdim> F_T =
+//                ALE_Transformations::get_F_T<dealdim>(F);
 
             const double J = ALE_Transformations::get_J<dealdim>(F);
 
-            const Tensor<2, dealdim> E = Structure_Terms_in_ALE::get_E<dealdim>(
-                F_T, F, Identity);
+//            const Tensor<2, dealdim> E = Structure_Terms_in_ALE::get_E<dealdim>(
+//                F_T, F, Identity);
 
             //const double tr_E = Structure_Terms_in_ALE
             //	::get_tr_E<dealdim> (E);
@@ -876,15 +857,15 @@ template<
             const double J_LinU = ALE_Transformations::get_J_LinU<dealdim>(
                 q_point, _du_state_grads, duu_grads);
 
-            const Tensor<2, dealdim> F_LinU = ALE_Transformations::get_F_LinU<
-                dealdim>(duu_grads);
+//            const Tensor<2, dealdim> F_LinU = ALE_Transformations::get_F_LinU<
+//                dealdim>(duu_grads);
 
             const Tensor<2, dealdim> F_Inverse_LinU =
                 ALE_Transformations::get_F_Inverse_LinU<dealdim>(duu_grads, J,
                     J_LinU, q_point, _du_state_grads);
 
-            const Tensor<2, dealdim> F_Inverse_T_LinU = transpose(
-                F_Inverse_LinU);
+//            const Tensor<2, dealdim> F_Inverse_T_LinU = transpose(
+//                F_Inverse_LinU);
 
             const Tensor<2, dealdim> J_F_Inverse_T_LinU =
                 ALE_Transformations::get_J_F_Inverse_T_LinU<dealdim>(duu_grads);
@@ -957,16 +938,16 @@ template<
             const Tensor<2, dealdim> F = ALE_Transformations::get_F<dealdim>(
                 q_point, _du_state_grads);
 
-            const Tensor<2, dealdim> F_Inverse =
-                ALE_Transformations::get_F_Inverse<dealdim>(F);
+//            const Tensor<2, dealdim> F_Inverse =
+//                ALE_Transformations::get_F_Inverse<dealdim>(F);
 
-            const Tensor<2, dealdim> F_Inverse_T =
-                ALE_Transformations::get_F_Inverse_T<dealdim>(F_Inverse);
+//            const Tensor<2, dealdim> F_Inverse_T =
+//                ALE_Transformations::get_F_Inverse_T<dealdim>(F_Inverse);
 
             const Tensor<2, dealdim> F_T =
                 ALE_Transformations::get_F_T<dealdim>(F);
 
-            const double J = ALE_Transformations::get_J<dealdim>(F);
+//            const double J = ALE_Transformations::get_J<dealdim>(F);
 
             const Tensor<2, dealdim> E = Structure_Terms_in_ALE::get_E<dealdim>(
                 F_T, F, Identity);
@@ -974,21 +955,21 @@ template<
             const double tr_E = Structure_Terms_in_ALE::get_tr_E<dealdim>(E);
 
             // linearizations
-            const double J_LinU = ALE_Transformations::get_J_LinU<dealdim>(
-                q_point, _du_state_grads, duu_grads);
+//            const double J_LinU = ALE_Transformations::get_J_LinU<dealdim>(
+//                q_point, _du_state_grads, duu_grads);
 
             const Tensor<2, dealdim> F_LinU = ALE_Transformations::get_F_LinU<
                 dealdim>(duu_grads);
 
-            const Tensor<2, dealdim> F_Inverse_LinU =
-                ALE_Transformations::get_F_Inverse_LinU<dealdim>(duu_grads, J,
-                    J_LinU, q_point, _du_state_grads);
+//            const Tensor<2, dealdim> F_Inverse_LinU =
+//                ALE_Transformations::get_F_Inverse_LinU<dealdim>(duu_grads, J,
+//                    J_LinU, q_point, _du_state_grads);
 
-            const Tensor<2, dealdim> F_Inverse_T_LinU = transpose(
-                F_Inverse_LinU);
+//            const Tensor<2, dealdim> F_Inverse_T_LinU = transpose(
+//                F_Inverse_LinU);
 
-            const Tensor<2, dealdim> J_F_Inverse_T_LinU =
-                ALE_Transformations::get_J_F_Inverse_T_LinU<dealdim>(duu_grads);
+//            const Tensor<2, dealdim> J_F_Inverse_T_LinU =
+//                ALE_Transformations::get_J_F_Inverse_T_LinU<dealdim>(duu_grads);
 
             // STVK: Green_Lagrange strain tensor derivatives
             const Tensor<2, dealdim> E_LinU = 0.5
@@ -1137,8 +1118,8 @@ template<
             const Tensor<2, dealdim> F_Inverse_T =
                 ALE_Transformations::get_F_Inverse_T<dealdim>(F_Inverse);
 
-            const Tensor<2, dealdim> F_T =
-                ALE_Transformations::get_F_T<dealdim>(F);
+//            const Tensor<2, dealdim> F_T =
+//                ALE_Transformations::get_F_T<dealdim>(F);
 
             const double J = ALE_Transformations::get_J<dealdim>(F);
 
@@ -1237,16 +1218,16 @@ template<
             const Tensor<2, dealdim> F = ALE_Transformations::get_F<dealdim>(
                 q_point, _dz_state_grads);
 
-            const Tensor<2, dealdim> F_Inverse =
-                ALE_Transformations::get_F_Inverse<dealdim>(F);
+//            const Tensor<2, dealdim> F_Inverse =
+//                ALE_Transformations::get_F_Inverse<dealdim>(F);
 
-            const Tensor<2, dealdim> F_Inverse_T =
-                ALE_Transformations::get_F_Inverse_T<dealdim>(F_Inverse);
+//            const Tensor<2, dealdim> F_Inverse_T =
+//                ALE_Transformations::get_F_Inverse_T<dealdim>(F_Inverse);
 
             const Tensor<2, dealdim> F_T =
                 ALE_Transformations::get_F_T<dealdim>(F);
 
-            const double J = ALE_Transformations::get_J<dealdim>(F);
+//            const double J = ALE_Transformations::get_J<dealdim>(F);
 
             const Tensor<2, dealdim> E = Structure_Terms_in_ALE::get_E<dealdim>(
                 F_T, F, Identity);
@@ -1258,22 +1239,22 @@ template<
 
               //_z_state_values
               //_z_state_grads
-              const double J_LinU = ALE_Transformations::get_J_LinU<dealdim>(
-                  q_point, _dz_state_grads, phi_grads_u[j]);
+//              const double J_LinU = ALE_Transformations::get_J_LinU<dealdim>(
+//                  q_point, _dz_state_grads, phi_grads_u[j]);
 
               const Tensor<2, dealdim> F_LinU = ALE_Transformations::get_F_LinU<
                   dealdim>(phi_grads_u[j]);
 
-              const Tensor<2, dealdim> F_Inverse_LinU =
-                  ALE_Transformations::get_F_Inverse_LinU<dealdim>(
-                      phi_grads_u[j], J, J_LinU, q_point, _dz_state_grads);
+//              const Tensor<2, dealdim> F_Inverse_LinU =
+//                  ALE_Transformations::get_F_Inverse_LinU<dealdim>(
+//                      phi_grads_u[j], J, J_LinU, q_point, _dz_state_grads);
 
-              const Tensor<2, dealdim> F_Inverse_T_LinU = transpose(
-                  F_Inverse_LinU);
+//              const Tensor<2, dealdim> F_Inverse_T_LinU = transpose(
+//                  F_Inverse_LinU);
 
-              const Tensor<2, dealdim> J_F_Inverse_T_LinU =
-                  ALE_Transformations::get_J_F_Inverse_T_LinU<dealdim>(
-                      phi_grads_u[j]);
+//             const Tensor<2, dealdim> J_F_Inverse_T_LinU =
+//                  ALE_Transformations::get_J_F_Inverse_T_LinU<dealdim>(
+//                      phi_grads_u[j]);
 
               // STVK: Green_Lagrange strain tensor derivatives
               const Tensor<2, dealdim> E_LinU = 0.5
@@ -1420,16 +1401,16 @@ template<
             const Tensor<2, dealdim> F = ALE_Transformations::get_F<dealdim>(
                 q_point, _du_tangent_grads);
 
-            const Tensor<2, dealdim> F_Inverse =
-                ALE_Transformations::get_F_Inverse<dealdim>(F);
+//            const Tensor<2, dealdim> F_Inverse =
+//                ALE_Transformations::get_F_Inverse<dealdim>(F);
 
-            const Tensor<2, dealdim> F_Inverse_T =
-                ALE_Transformations::get_F_Inverse_T<dealdim>(F_Inverse);
+//            const Tensor<2, dealdim> F_Inverse_T =
+//                ALE_Transformations::get_F_Inverse_T<dealdim>(F_Inverse);
 
             const Tensor<2, dealdim> F_T =
                 ALE_Transformations::get_F_T<dealdim>(F);
 
-            const double J = ALE_Transformations::get_J<dealdim>(F);
+//            const double J = ALE_Transformations::get_J<dealdim>(F);
 
             const Tensor<2, dealdim> E = Structure_Terms_in_ALE::get_E<dealdim>(
                 F_T, F, Identity);
@@ -1437,17 +1418,17 @@ template<
             const double tr_E = Structure_Terms_in_ALE::get_tr_E<dealdim>(E);
 
             // state values and grads
-            const Tensor<2, dealdim> F_state = ALE_Transformations::get_F<
-                dealdim>(q_point, _du_state_grads);
+//            const Tensor<2, dealdim> F_state = ALE_Transformations::get_F<
+//                dealdim>(q_point, _du_state_grads);
 
-            const Tensor<2, dealdim> F_Inverse_state =
-                ALE_Transformations::get_F_Inverse<dealdim>(F);
+//            const Tensor<2, dealdim> F_Inverse_state =
+//                ALE_Transformations::get_F_Inverse<dealdim>(F);
 
-            const Tensor<2, dealdim> F_Inverse_T_state =
-                ALE_Transformations::get_F_Inverse_T<dealdim>(F_Inverse);
+//            const Tensor<2, dealdim> F_Inverse_T_state =
+//                ALE_Transformations::get_F_Inverse_T<dealdim>(F_Inverse);
 
-            const Tensor<2, dealdim> F_T_state = ALE_Transformations::get_F_T<
-                dealdim>(F);
+//            const Tensor<2, dealdim> F_T_state = ALE_Transformations::get_F_T<
+//                dealdim>(F);
 
             const Tensor<2, dealdim> F_LinU_state =
                 ALE_Transformations::get_F_LinU_state<dealdim>(q_point,
@@ -1457,22 +1438,22 @@ template<
             {
               //_du_state_values
               //_z_state_grads
-              const double J_LinU = ALE_Transformations::get_J_LinU<dealdim>(
-                  q_point, _du_tangent_grads, phi_grads_u[j]);
+//              const double J_LinU = ALE_Transformations::get_J_LinU<dealdim>(
+//                  q_point, _du_tangent_grads, phi_grads_u[j]);
 
               const Tensor<2, dealdim> F_LinU = ALE_Transformations::get_F_LinU<
                   dealdim>(phi_grads_u[j]);
 
-              const Tensor<2, dealdim> F_Inverse_LinU =
-                  ALE_Transformations::get_F_Inverse_LinU<dealdim>(
-                      phi_grads_u[j], J, J_LinU, q_point, _du_tangent_grads);
+//              const Tensor<2, dealdim> F_Inverse_LinU =
+//                  ALE_Transformations::get_F_Inverse_LinU<dealdim>(
+//                      phi_grads_u[j], J, J_LinU, q_point, _du_tangent_grads);
 
-              const Tensor<2, dealdim> F_Inverse_T_LinU = transpose(
-                  F_Inverse_LinU);
+//              const Tensor<2, dealdim> F_Inverse_T_LinU = transpose(
+//                  F_Inverse_LinU);
 
-              const Tensor<2, dealdim> J_F_Inverse_T_LinU =
-                  ALE_Transformations::get_J_F_Inverse_T_LinU<dealdim>(
-                      phi_grads_u[j]);
+//              const Tensor<2, dealdim> J_F_Inverse_T_LinU =
+//                  ALE_Transformations::get_J_F_Inverse_T_LinU<dealdim>(
+//                      phi_grads_u[j]);
 
               // STVK: Green_Lagrange strain tensor derivatives
               const Tensor<2, dealdim> E_LinU = 0.5
@@ -1525,7 +1506,7 @@ template<
 
       // Look for BoundaryEquationQ
       void
-      CellEquation_Q(const CDC<DH, VECTOR, dealdim>& cdc,
+      CellEquation_Q(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
           dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/,
           double /*scale_ico*/)
       {
@@ -1533,7 +1514,7 @@ template<
       }
 
       void
-      CellEquation_QT(const CDC<DH, VECTOR, dealdim>& cdc,
+      CellEquation_QT(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
           dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/,
           double /*scale_ico*/)
       {
@@ -1541,7 +1522,7 @@ template<
       }
 
       void
-      CellEquation_QTT(const CDC<DH, VECTOR, dealdim>& cdc,
+      CellEquation_QTT(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
           dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/,
           double /*scale_ico*/)
       {
@@ -1549,21 +1530,21 @@ template<
       }
 
       void
-      CellEquation_QU(const CDC<DH, VECTOR, dealdim>& cdc,
+      CellEquation_QU(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
           dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/,
           double /*scale_ico*/)
       {
         assert(this->_problem_type == "adjoint_hessian");
       }
       void
-      CellEquation_UQ(const CDC<DH, VECTOR, dealdim>& cdc,
+      CellEquation_UQ(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
           dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/,
           double /*scale_ico*/)
       {
         assert(this->_problem_type == "hessian");
       }
       void
-      CellEquation_QQ(const CDC<DH, VECTOR, dealdim>& cdc,
+      CellEquation_QQ(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
           dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/,
           double /*scale_ico*/)
       {
@@ -1571,7 +1552,7 @@ template<
       }
 
       void
-      CellRightHandSide(const CDC<DH, VECTOR, dealdim>& cdc,
+      CellRightHandSide(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
           dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
       {
         assert(this->_problem_type == "state");
@@ -1732,8 +1713,8 @@ template<
       }
 
       void
-      BoundaryRightHandSide(const FaceDataContainer<DH, VECTOR, dealdim>& fdc,
-          dealii::Vector<double> &local_cell_vector, double scale)
+	BoundaryRightHandSide(const FaceDataContainer<DH, VECTOR, dealdim>& /*fdc*/,
+			      dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
       {
         assert(this->_problem_type == "state");
       }
@@ -2016,7 +1997,7 @@ template<
       }
 
       void
-      BoundaryEquation_UU(const FaceDataContainer<DH, VECTOR, dealdim>& fdc,
+	BoundaryEquation_UU(const FaceDataContainer<DH, VECTOR, dealdim>& /*fdc*/,
           dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/,
           double /*scale_ico*/)
       {
@@ -2024,7 +2005,7 @@ template<
       }
 
       void
-      BoundaryEquation_QU(const FaceDataContainer<DH, VECTOR, dealdim>& fdc,
+	BoundaryEquation_QU(const FaceDataContainer<DH, VECTOR, dealdim>& /*fdc*/,
           dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/,
           double /*scale_ico*/)
       {
@@ -2032,7 +2013,7 @@ template<
       }
 
       void
-      BoundaryEquation_UQ(const FaceDataContainer<DH, VECTOR, dealdim>& fdc,
+	BoundaryEquation_UQ(const FaceDataContainer<DH, VECTOR, dealdim>& /*fdc*/,
           dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/,
           double /*scale_ico*/)
       {
@@ -2040,7 +2021,7 @@ template<
       }
 
       void
-      BoundaryEquation_QQ(const FaceDataContainer<DH, VECTOR, dealdim>& fdc,
+	BoundaryEquation_QQ(const FaceDataContainer<DH, VECTOR, dealdim>& /*fdc*/,
           dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/,
           double /*scale_ico*/)
       {
@@ -2104,7 +2085,7 @@ template<
       }
 
       void
-      FaceEquation_UU(const FaceDataContainer<DH, VECTOR, dealdim>& fdc,
+      FaceEquation_UU(const FaceDataContainer<DH, VECTOR, dealdim>& /*fdc*/,
           dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/,
           double /*scale_ico*/)
       {
@@ -2112,7 +2093,7 @@ template<
       }
 
       void
-      FaceEquation_QU(const FaceDataContainer<DH, VECTOR, dealdim>& fdc,
+      FaceEquation_QU(const FaceDataContainer<DH, VECTOR, dealdim>& /*fdc*/,
           dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/,
           double /*scale_ico*/)
       {
@@ -2120,7 +2101,7 @@ template<
       }
 
       void
-      FaceEquation_UQ(const FaceDataContainer<DH, VECTOR, dealdim>& fdc,
+      FaceEquation_UQ(const FaceDataContainer<DH, VECTOR, dealdim>& /*fdc*/,
           dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/,
           double /*scale_ico*/)
       {
@@ -2128,7 +2109,7 @@ template<
       }
 
       void
-      FaceEquation_QQ(const FaceDataContainer<DH, VECTOR, dealdim>& fdc,
+      FaceEquation_QQ(const FaceDataContainer<DH, VECTOR, dealdim>& /*fdc*/,
           dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/,
           double /*scale_ico*/)
       {
@@ -2155,7 +2136,7 @@ template<
       }
 
       void
-      ControlCellMatrix(const CDC<DH, VECTOR, dealdim>& cdc,
+	ControlCellMatrix(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
           FullMatrix<double> &local_entry_matrix)
       {
         assert(local_entry_matrix.m() == local_entry_matrix.n());

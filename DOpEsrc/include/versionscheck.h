@@ -1,9 +1,3 @@
-/*
- * versionscheck.h
- *
- *  Created on: Mar 5, 2013
- *      Author: cgoll
- */
 
 #ifndef _VERSIONSCHECK_H_
 #define _VERSIONSCHECK_H_

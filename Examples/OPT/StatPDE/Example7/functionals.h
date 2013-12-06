@@ -97,10 +97,10 @@ template<
 
       double
       PointValue(
-          const DOpEWrapper::DoFHandler<dopedim, DH> & control_dof_handler,
-          const DOpEWrapper::DoFHandler<dealdim, DH> &state_dof_handler,
-          const std::map<std::string, const dealii::Vector<double>*> &param_values,
-          const std::map<std::string, const VECTOR*> &domain_values)
+	const DOpEWrapper::DoFHandler<dopedim, DH> & /*control_dof_handler*/,
+	const DOpEWrapper::DoFHandler<dealdim, DH> &state_dof_handler,
+	const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
+	const std::map<std::string, const VECTOR*> &domain_values)
       {
         Point<2> p(0.125, 0.75);
 

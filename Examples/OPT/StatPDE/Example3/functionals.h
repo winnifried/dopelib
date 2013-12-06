@@ -258,9 +258,6 @@ template<
             Tensor<2, 2> F_Inverse_T;
             F_Inverse_T = transpose(F_Inverse);
 
-            double J;
-            J = determinant(F);
-
             Tensor<2, 2> cauchy_stress_fluid;
             cauchy_stress_fluid = (-pI
                 + _density_fluid * _viscosity * (grad_v + transpose(grad_v)));

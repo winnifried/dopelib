@@ -21,13 +21,6 @@
 *
 **/
 
-/*
- * constraintmaker.h
- *
- *  Created on: May 31, 2011
- *      Author: cgoll
- */
-
 #ifndef _CONSTRAINTMAKER_H_
 #define _CONSTRAINTMAKER_H_
 

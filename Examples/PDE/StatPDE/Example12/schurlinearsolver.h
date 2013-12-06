@@ -144,12 +144,12 @@ namespace DOpE
 
 /*********************************Implementation************************************************/
 
-  void SchurLinearSolverWithMatrix::declare_params(ParameterReader &param_reader)
+  void SchurLinearSolverWithMatrix::declare_params(ParameterReader &/*param_reader*/)
   {
   }
 /******************************************************/
   
-  SchurLinearSolverWithMatrix::SchurLinearSolverWithMatrix(ParameterReader &param_reader) 
+  SchurLinearSolverWithMatrix::SchurLinearSolverWithMatrix(ParameterReader &/*param_reader*/) 
   {
   }
   
