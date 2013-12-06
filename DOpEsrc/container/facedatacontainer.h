@@ -887,6 +887,42 @@ namespace DOpE
   /************************IMPLEMENTATION*for*DoFHandler*********************************/
   /***********************************************************************/
 
+    namespace {
+	template<int dim, template<int, int> class DH>
+	bool sanity_check(const 
+            typename DOpEWrapper::DoFHandler<dim, DH>::active_cell_iterator & _cell,
+			unsigned int face,
+			unsigned int subface)
+	{
+	   const auto neighbor_child =
+            _cell->neighbor_child_on_subface(
+               face, subface);
+	  
+	  bool ret = false;
+	  if(neighbor_child->face(_cell->neighbor_of_neighbor(face)) == _cell->face(face)->child(subface));
+		 ret = true;
+	  return  ret;
+	}
+	
+	template<>
+	bool sanity_check<1,dealii::hp::DoFHandler>(const 
+            typename DOpEWrapper::DoFHandler<1, dealii::hp::DoFHandler>::active_cell_iterator &,
+			unsigned int,
+			unsigned int)
+	{
+	  return  true;
+	}
+	
+	template<>
+		bool sanity_check<1,dealii::DoFHandler>(const 
+            typename DOpEWrapper::DoFHandler<1, dealii::DoFHandler>::active_cell_iterator &,
+			unsigned int,
+			unsigned int)
+	{
+	  return  true;
+	}
+  }
+ 
   template<typename VECTOR, int dim>
     void
     FaceDataContainer<dealii::DoFHandler, VECTOR, dim>::ReInit(
@@ -924,6 +960,7 @@ namespace DOpE
       }
     }
   /***********************************************************************/
+  
 
   template<typename VECTOR, int dim>
     void
@@ -943,9 +980,9 @@ namespace DOpE
 
         // some sanity checks: Check, that the face and subface match and that the neighbour child
         // is not more refined.
-        Assert(
-            neighbor_child->face(_cell[this->GetStateIndex()]->neighbor_of_neighbor(this->GetFace())) == _cell[this->GetStateIndex()]->face(this->GetFace())->child(this->GetSubFace()),
-            ExcInternalError());
+        Assert((sanity_check<dim, dealii::DoFHandler>(_cell[this->GetStateIndex()],
+													 this->GetFace(),
+													 this->GetSubFace()) == true), ExcInternalError());
         Assert(neighbor_child->has_children() == false, ExcInternalError());
 
         _nbr_state_fe_values->reinit(neighbor_child,
@@ -1221,9 +1258,9 @@ namespace DOpE
 
         // some sanity checks: Check, that the face and subface match and that the neighbour child
         // is not more refined.
-        Assert(
-            neighbor_child->face(_cell[this->GetStateIndex()]->neighbor_of_neighbor(this->GetFace())) == _cell[this->GetStateIndex()]->face(this->GetFace())->child(this->GetSubFace()),
-            ExcInternalError());
+        Assert((sanity_check<dim, dealii::hp::DoFHandler>(_cell[this->GetStateIndex()],
+													 this->GetFace(),
+													 this->GetSubFace()) == true), ExcInternalError());
         Assert(neighbor_child->has_children() == false, ExcInternalError());
 
         _nbr_state_fe_values->reinit(neighbor_child,
