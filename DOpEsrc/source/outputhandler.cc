@@ -24,6 +24,7 @@
 
 #include "outputhandler.h"
 #include "reducedprobleminterface.h"
+#include "version.h"
 
 #include <cstdlib>
 #include <assert.h>
@@ -623,9 +624,15 @@ namespace DOpE
   {
     std::stringstream out;
     
-    out<<"DOpElib Copyright (C) 2012  DOpElib authors"<<std::endl;
+    out<<"DOpElib Copyright (C) 2012 - "<<DOpE::VERSION::year<<" DOpElib authors"<<std::endl;
     out<<"This program comes with ABSOLUTELY NO WARRANTY."<<std::endl;
     out<<"For License details read LICENSE.TXT distributed with this software!"<<std::endl;
+    out<<std::endl;
+    out<<"This is DOpElib Version: "<<DOpE::VERSION::major<<"."<<DOpE::VERSION::minor;
+    out<<"."<<DOpE::VERSION::fix<<" "<<DOpE::VERSION::postfix<<std::endl;
+    out<<"\tStatus as of: "<<std::setfill('0')<<std::setw(2)<<DOpE::VERSION::day;
+    out<<"/"<<std::setfill('0')<<std::setw(2)<<DOpE::VERSION::month;
+    out<<"/"<<DOpE::VERSION::year<<std::endl;
     std::cout<<out.str();
     std::cout.flush();
     _log<<out.str();
