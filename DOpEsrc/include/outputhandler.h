@@ -223,7 +223,15 @@ class DOpEOutputHandler
     std::string
     ConstructOutputName(std::string name, std::string dof_type);
 
+    /**
+     * Redirects all output to std::cout to the logfile.
+     * This is usefull if third party software directly prints
+     * output onto the screen.
+     */ 
     void StartSaveCTypeOutputToLog();
+    /**
+     * Disables the redirect of std::cout
+     */ 
     void StopSaveCTypeOutputToLog();
 
     /**

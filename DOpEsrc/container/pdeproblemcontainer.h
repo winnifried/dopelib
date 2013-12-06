@@ -78,6 +78,22 @@ namespace DOpE
     class DOpEExceptionHandler;
   /////////////////////////////
 
+  /**
+   * Container class for all stationary PDE problems.
+   * This class collects all problem depended data needed to 
+   * calculate the solution to the PDE.
+   *
+   * @tparam PDE               The description of the PDE, see PDEInterface for details.
+   * @tparam DD                The description of the Dirichlet data, see 
+   *                           DirichletDataInterface for details.
+   * @tparam SPARSITYPATTERN   The sparsity pattern to be used in the stiffness matrix.
+   * @tparam VECTOR            The vector type in which the coordinate vector of the 
+   *                           solution is to be stored.
+   * @tparam dealdim           The dimension of the domain in which the PDE is considered.
+   * @tparam FE                The finite element under consideration.
+   * @tparam DH                The spatial DoFHandler to be used when evaluating the 
+   *                           weak form.
+   */
   template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
       int dealdim, template<int, int> class FE = dealii::FESystem,
       template<int, int> class DH = dealii::DoFHandler>
@@ -100,7 +116,10 @@ namespace DOpE
           return "PDEProblemContainer";
         }
 
-        /******************************************************/
+      /******************************************************/
+      /**
+       * Returns a description of the PDE
+       */
         StateProblem<
             PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE,
                 DH>, PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>&
@@ -181,7 +200,7 @@ namespace DOpE
          * @template DATACONTAINER    Class of the datacontainer, distinguishes
          *                            between hp- and classical case.
          *
-         * @param fdc                 A DataContainer holding all the needed information
+         * @param cdc                 A DataContainer holding all the needed information
          *                            of the face.
          */
         template<typename DATACONTAINER>
@@ -245,7 +264,12 @@ namespace DOpE
           FaceFunctional(const FACEDATACONTAINER& fdc);
 
         /******************************************************/
-
+        /**
+         * This function returns a functional value that is computed entirely
+	 * out of the knowledge of the coordinate vectors of state and control.
+	 *
+	 * No integration routine is implemented inbetween!
+         */
         double
         AlgebraicFunctional(
             const std::map<std::string, const dealii::Vector<double>*> &values,
@@ -300,9 +324,9 @@ namespace DOpE
 
         /**
          * This function has the same functionality as the CellTimeEquation function.
-         * It is only needed for fluid-structure interaction problems and has
-         * special structure. Please talk to Thomas Wick when you would like to
-         * use this function.
+         * It is needed for problems with nonlinearities in the time derivative, like
+	 * fluid-structure interaction problems and has
+         * special structure.
          */
         template<typename DATACONTAINER>
           void

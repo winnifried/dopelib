@@ -38,6 +38,12 @@
 namespace DOpE
 {
 
+/**
+ * This class represents the controlvector.
+ *
+ * @tparam <VECTOR>     Class in which we want to store the spatial vector
+ *                      (i.e. dealii::Vector<double> or dealii::BlockVector<double>)
+ */
 template<typename VECTOR>
   class ControlVector
   {

@@ -53,79 +53,130 @@ namespace DOpE
     {
       public:
         /**
-         * Constructors.
+	 * Constructor used for stationary PDEs and stationary optimization problems without any
+	 * further constraints beyond the PDE.
          *
-         * @param triangulation     The triangulation in use.
+         * @param triangulation     The coars triangulation to be used.
          * @param control_fe        The finite elements used for the discretization of the control variable.
          * @param state_fe          The finite elements used for the discretization of the state variable.
          * @param type              The type of the control, see dopetypes.h for more information.
-         * @param times             The timegrid for instationary problems.
-         * @param constraints       ?
          * @param index_setter      The index setter object (only needed in case of hp elements).
          */
-        MethodOfLines_SpaceTimeHandler(
-            dealii::Triangulation<dealdim>& triangulation, const FE<dealdim, dealdim>& control_fe,
-            const FE<dealdim, dealdim>& state_fe, DOpEtypes::ControlType type,
-            const ActiveFEIndexSetterInterface<dopedim, dealdim>& index_setter =
-                ActiveFEIndexSetterInterface<dopedim, dealdim>()) :
-            SpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dopedim, dealdim>(
-                type, index_setter), _triangulation(triangulation), _control_dof_handler(
-                _triangulation), _state_dof_handler(_triangulation), _control_fe(
-                &control_fe), _state_fe(&state_fe), _mapping(
-                &DOpEWrapper::StaticMappingQ1<dealdim, DH>::mapping_q1), _constraints(), _control_mesh_transfer(
-                NULL), _state_mesh_transfer(NULL), _sparse_mkr_dynamic(true)
-        {
-          _sparsitymaker = new SparsityMaker<DH, dealdim>;
-          _user_defined_dof_constr = NULL;
-        }
-        MethodOfLines_SpaceTimeHandler(
-            dealii::Triangulation<dealdim>& triangulation, const FE<dealdim, dealdim>& control_fe,
-            const FE<dealdim, dealdim>& state_fe, const dealii::Triangulation<1> & times,
-            DOpEtypes::ControlType type,
-            const ActiveFEIndexSetterInterface<dopedim, dealdim>& index_setter =
-                ActiveFEIndexSetterInterface<dopedim, dealdim>()) :
-            SpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dopedim, dealdim>(
-                times, type, index_setter), _triangulation(triangulation), _control_dof_handler(
-                _triangulation), _state_dof_handler(_triangulation), _control_fe(
-                &control_fe), _state_fe(&state_fe), _mapping(
-                &DOpEWrapper::StaticMappingQ1<dealdim, DH>::mapping_q1), _constraints(), _control_mesh_transfer(
-                NULL), _state_mesh_transfer(NULL), _sparse_mkr_dynamic(true)
+        MethodOfLines_SpaceTimeHandler(dealii::Triangulation<dealdim>& triangulation, 
+				       const FE<dealdim, dealdim>& control_fe,
+				       const FE<dealdim, dealdim>& state_fe, 
+				       DOpEtypes::ControlType type,
+				       const ActiveFEIndexSetterInterface<dopedim, dealdim>& index_setter =
+				       ActiveFEIndexSetterInterface<dopedim, dealdim>()) :
+      SpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dopedim, dealdim>(type, index_setter), 
+	_triangulation(triangulation), 
+	_control_dof_handler(_triangulation), 
+	_state_dof_handler(_triangulation), 
+	_control_fe(&control_fe), 
+	_state_fe(&state_fe), 
+	_mapping(&DOpEWrapper::StaticMappingQ1<dealdim, DH>::mapping_q1), 
+	_constraints(), 
+	_control_mesh_transfer(NULL), 
+	_state_mesh_transfer(NULL), 
+	_sparse_mkr_dynamic(true)
         {
           _sparsitymaker = new SparsityMaker<DH, dealdim>;
           _user_defined_dof_constr = NULL;
         }
 
-        MethodOfLines_SpaceTimeHandler(
-            dealii::Triangulation<dealdim>& triangulation, const FE<dealdim, dealdim>& control_fe,
-            const FE<dealdim, dealdim>& state_fe, const Constraints& c,
-            DOpEtypes::ControlType type,
-            const ActiveFEIndexSetterInterface<dopedim, dealdim>& index_setter =
-                ActiveFEIndexSetterInterface<dopedim, dealdim>()) :
-            SpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dopedim, dealdim>(
-                type, index_setter), _triangulation(triangulation), _control_dof_handler(
-                _triangulation), _state_dof_handler(_triangulation), _control_fe(
-                &control_fe), _state_fe(&state_fe), _mapping(
-                &DOpEWrapper::StaticMappingQ1<dealdim, DH>::mapping_q1), _constraints(
-                c), _control_mesh_transfer(NULL), _state_mesh_transfer(NULL), _sparse_mkr_dynamic(
-                true)
+        /**
+	 * Constructor used for nonstationary PDEs and nonstationary optimization problems without any
+	 * further constraints beyond the PDE.
+         *
+         * @param triangulation     The coars triangulation to be used.
+         * @param control_fe        The finite elements used for the discretization of the control variable.
+         * @param state_fe          The finite elements used for the discretization of the state variable.
+         * @param times             The timegrid for instationary problems.
+         * @param type              The type of the control, see dopetypes.h for more information.
+         * @param index_setter      The index setter object (only needed in case of hp elements).
+         */      
+        MethodOfLines_SpaceTimeHandler(dealii::Triangulation<dealdim>& triangulation, 
+				       const FE<dealdim, dealdim>& control_fe,
+				       const FE<dealdim, dealdim>& state_fe, 
+				       const dealii::Triangulation<1> & times,
+				       DOpEtypes::ControlType type,
+				       const ActiveFEIndexSetterInterface<dopedim, dealdim>& index_setter =
+				       ActiveFEIndexSetterInterface<dopedim, dealdim>()) :
+      SpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dopedim, dealdim>(times, type, index_setter), 
+	_triangulation(triangulation), 
+	_control_dof_handler(_triangulation), 
+	_state_dof_handler(_triangulation), 
+	_control_fe(&control_fe), 
+	_state_fe(&state_fe), 
+	_mapping(&DOpEWrapper::StaticMappingQ1<dealdim, DH>::mapping_q1), 
+	_constraints(), 
+	_control_mesh_transfer(NULL), _state_mesh_transfer(NULL), _sparse_mkr_dynamic(true)
         {
           _sparsitymaker = new SparsityMaker<DH, dealdim>;
           _user_defined_dof_constr = NULL;
         }
 
-        MethodOfLines_SpaceTimeHandler(
-            dealii::Triangulation<dealdim>& triangulation, const FE<dealdim, dealdim>& control_fe,
-            const FE<dealdim, dealdim>& state_fe, const dealii::Triangulation<1> & times,
-            const Constraints& c, DOpEtypes::ControlType type,
-            const ActiveFEIndexSetterInterface<dopedim, dealdim>& index_setter =
-                ActiveFEIndexSetterInterface<dopedim, dealdim>()) :
-            SpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dopedim, dealdim>(
-                times, type, index_setter), _triangulation(triangulation), _control_dof_handler(
-                _triangulation), _state_dof_handler(_triangulation), _control_fe(
-                &control_fe), _state_fe(&state_fe), _mapping(
-                &DOpEWrapper::StaticMappingQ1<dealdim, DH>::mapping_q1), _constraints(
-                c), _control_mesh_transfer(NULL), _state_mesh_transfer(NULL), _sparse_mkr_dynamic(
-                true)
+	/**
+	 * Constructor used for stationary optimization problems with additional constraints.
+         *
+         * @param triangulation     The coars triangulation to be used.
+         * @param control_fe        The finite elements used for the discretization of the control variable.
+         * @param state_fe          The finite elements used for the discretization of the state variable.
+         * @param constraints       An object describing the constraints imposed on an optimization
+	 *                          problem in term of the number of unknowns in the control and state.
+         * @param type              The type of the control, see dopetypes.h for more information.
+         * @param index_setter      The index setter object (only needed in case of hp elements).
+         */
+         MethodOfLines_SpaceTimeHandler(dealii::Triangulation<dealdim>& triangulation, 
+					const FE<dealdim, dealdim>& control_fe,
+					const FE<dealdim, dealdim>& state_fe, 
+					const Constraints& c,
+					DOpEtypes::ControlType type,
+					const ActiveFEIndexSetterInterface<dopedim, dealdim>& index_setter =
+					ActiveFEIndexSetterInterface<dopedim, dealdim>()) :
+      SpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dopedim, dealdim>(type, index_setter), 
+	_triangulation(triangulation), 
+	_control_dof_handler(_triangulation), 
+	_state_dof_handler(_triangulation), 
+	_control_fe(&control_fe), 
+	_state_fe(&state_fe), 
+	_mapping(&DOpEWrapper::StaticMappingQ1<dealdim, DH>::mapping_q1), 
+	_constraints(c), 
+	_control_mesh_transfer(NULL), _state_mesh_transfer(NULL), _sparse_mkr_dynamic(true)
+        {
+          _sparsitymaker = new SparsityMaker<DH, dealdim>;
+          _user_defined_dof_constr = NULL;
+        }
+
+        /**
+	 * Constructor used for nonstationary optimization problems with additional constraints.
+         *
+         * @param triangulation     The coars triangulation to be used.
+         * @param control_fe        The finite elements used for the discretization of the control variable.
+         * @param state_fe          The finite elements used for the discretization of the state variable.
+         * @param times             The timegrid for instationary problems.
+         * @param constraints       An object describing the constraints imposed on an optimization
+	 *                          problem in term of the number of unknowns in the control and state.
+         * @param type              The type of the control, see dopetypes.h for more information.
+         * @param index_setter      The index setter object (only needed in case of hp elements).
+         */
+        MethodOfLines_SpaceTimeHandler(dealii::Triangulation<dealdim>& triangulation, 
+				       const FE<dealdim, dealdim>& control_fe,
+				       const FE<dealdim, dealdim>& state_fe, 
+				       const dealii::Triangulation<1> & times,
+				       const Constraints& c, 
+				       DOpEtypes::ControlType type,
+				       const ActiveFEIndexSetterInterface<dopedim, dealdim>& index_setter =
+				       ActiveFEIndexSetterInterface<dopedim, dealdim>()) :
+      SpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dopedim, dealdim>(times, type, index_setter), 
+	_triangulation(triangulation), 
+	_control_dof_handler(_triangulation), 
+	_state_dof_handler(_triangulation), 
+	_control_fe(&control_fe), 
+	_state_fe(&state_fe), 
+	_mapping(&DOpEWrapper::StaticMappingQ1<dealdim, DH>::mapping_q1), 
+	_constraints(c), 
+	_control_mesh_transfer(NULL), _state_mesh_transfer(NULL), _sparse_mkr_dynamic(true)
         {
           _sparsitymaker = new SparsityMaker<DH, dealdim>;
           _user_defined_dof_constr = NULL;
@@ -409,10 +460,18 @@ namespace DOpE
         }
 
         /******************************************************/
+	/**
+	 * Computes the SparsityPattern for the stiffness matrix
+	 * of the scalar product in the control space. 
+	 */
         void
         ComputeControlSparsityPattern(SPARSITYPATTERN & sparsity) const;
 
         /******************************************************/
+	/**
+	 * Computes the SparsityPattern for the stiffness matrix
+	 * of the PDE. 
+	 */
         void
         ComputeStateSparsityPattern(SPARSITYPATTERN & sparsity) const
         {

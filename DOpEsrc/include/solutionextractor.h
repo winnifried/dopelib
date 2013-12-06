@@ -30,7 +30,7 @@
  * This class is used to extract the computed solution u out of the template
  * Parameter SOLVERCLASS, which should have a memberfunction GetU() as well as
  * GetZforEE() with the return type StateVector. This class is necessary due
- * to some issues  connected with the resolution of overloaded functions.
+ * to some issues  connected with the resolution of overloaded functions with templates.
  */
 
 

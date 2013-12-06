@@ -43,6 +43,10 @@ namespace DOpE
   /**
    * Implements a Space Time Handler with a Method of Lines discretization.
    * This means there is only one fixed mesh for the spatial domain.
+   * This Space Time Handler has knowlege of only one variable, namely the
+   * solution to a PDE.
+   *
+   * For the detailed comments, please see the documentation of MethodOfLines_SpaceTimeHandler
    */
   template<template<int, int> class FE, template<int, int> class DH, typename SPARSITYPATTERN,
       typename VECTOR, int dealdim>

@@ -35,7 +35,7 @@ namespace DOpE
   {
 
     /**
-     *   The four states an iterator can be in: valid, past-the-end and
+     *   The four states an iterator can be in: valid, past-the-end, before-the-beginning and
      *   invalid.
      */
     enum IteratorStates
@@ -55,7 +55,10 @@ namespace DOpE
 
 
   /**
-   * An iterator for the timedofhandler.
+   * An iterator for the timedofhandler that allows us 
+   * to work with the 1d triangulation of the interval 
+   * in the same way that we would do if we just had numbers 
+   * for the endpoints of the intervals.
    */
   class TimeIterator
   {

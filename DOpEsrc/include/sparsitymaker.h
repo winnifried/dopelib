@@ -43,7 +43,8 @@
 namespace DOpE
 {
   /**
-   * Constructs the sparsitypattern.
+   * Standard implementation of the object responsible 
+   * to construct the sparsitypattern.
    */
   template<template<int, int> class DH, int dim>
     class SparsityMaker

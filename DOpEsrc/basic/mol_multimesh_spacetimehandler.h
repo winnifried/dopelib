@@ -49,6 +49,8 @@ namespace DOpE
    *
    * Note that this makes sense only if dealdim=dopedim. This is why this
    * class has only one dim template argument
+   *
+   * For the detailed documentation, see MethodOfLines_SpaceTimeHandler
    */
   template<template<int, int> class FE, template<int, int> class DH,
       typename SPARSITYPATTERN, typename VECTOR, int dim>
@@ -56,18 +58,6 @@ namespace DOpE
         DH, SPARSITYPATTERN, VECTOR, dim, dim>
     {
       public:
-        /**
-         * Constructors.
-         *
-         * @param triangulation     The triangulation in use.
-         * @param control_fe        The finite elements used for the discretization of the control variable.
-         * @param state_fe          The finite elements used for the discretization of the state variable.
-         * @param type              The type of the control, see dopetypes.h for more information.
-         * @param times             The timegrid for instationary problems.
-         * @param constraints       ?
-         * @param index_setter      The index setter object (only needed in case of hp elements).
-         */
-
         MethodOfLines_MultiMesh_SpaceTimeHandler(
             dealii::Triangulation<dim>& triangulation,
             const FE<dim, dim>& control_fe, const FE<dim, dim>& state_fe,

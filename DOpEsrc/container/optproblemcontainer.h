@@ -72,7 +72,28 @@ namespace DOpE
     class DOpEExceptionHandler;
   /////////////////////////////
 
-  template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
+  /**
+   * Container class for all stationary Optimization problems.
+   * This class collects all problem depended data needed to 
+   * calculate the solution to the optimization problem
+   *
+   * @tparam FUNCTIONAL_INTERFACE   A generic interface to arbitrary functionals to be evaluated.
+   * @tparam FUNCTIONAL             The cost functional, see FunctionalInterface for details.
+   * @tparam PDE                    The description of the PDE, see PDEInterface for details.
+   * @tparam DD                     The description of the Dirichlet data, see 
+   *                                DirichletDataInterface for details.
+   * @tparam CONSTRAINTS            The description of, possible, additional constraints for the 
+   *                                optimization problem, see ConstraintInterface for details.
+   * @tparam SPARSITYPATTERN        The sparsity pattern to be used in the stiffness matrix.
+   * @tparam VECTOR                 The vector type in which the coordinate vector of the 
+   *                                solution is to be stored.
+   * @tparam dopedim                The dimension of the domain in which the control is considered.
+   * @tparam dealdim                The dimension of the domain in which the PDE is considered.
+   * @tparam FE                     The finite element under consideration.
+   * @tparam DH                     The spatial DoFHandler to be used when evaluating the 
+   *                                weak form.
+   */
+   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
       typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
       typename VECTOR, int dopedim, int dealdim,
       template<int, int> class FE = dealii::FESystem,
@@ -97,6 +118,9 @@ namespace DOpE
         }
 
         /******************************************************/
+      /**
+       * Returns a description of the PDE
+       */
         StateProblem<
             OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
                 CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>,
@@ -234,13 +258,24 @@ namespace DOpE
           FaceFunctional(const FACEDATACONTAINER& fdc);
 
         /******************************************************/
-
+        /**
+         * This function returns a functional value that is computed entirely
+	 * out of the knowledge of the coordinate vectors of state and control.
+	 *
+	 * No integration routine is implemented inbetween!
+         */
         double
         AlgebraicFunctional(
             const std::map<std::string, const dealii::Vector<double>*> &values,
             const std::map<std::string, const VECTOR*> &block_values);
 
-        void
+        /**
+         * This function returns a residual to an equation that is depending 
+	 * directly on the knowledge of the coordinate vectors of state and control.
+	 *
+	 * No integration routine is implemented inbetween!
+         */
+         void
         AlgebraicResidual(VECTOR& residual,
             const std::map<std::string, const dealii::Vector<double>*> &values,
             const std::map<std::string, const VECTOR*> &block_values);

@@ -1,6 +1,8 @@
 Changelog DOpE
 ==============
-
+06.12.2013 Doxygen documentation finished:
+	   Except for self explanatory functions all other
+	   should have a doxygen comment.
 05.12.2013 Unused parameters should now all be placed in a comment.	
 	   All occurences of the __attribute__((unused)) directive 
 	   have been removed.

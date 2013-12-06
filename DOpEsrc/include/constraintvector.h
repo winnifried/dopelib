@@ -37,6 +37,12 @@
 
 namespace DOpE
 {
+/**
+ * This class represents the constraint vector used for additional constraints beyond the PDE.
+ *
+ * @tparam <VECTOR>     Class in which we want to store the spatial vector
+ *                      (i.e. dealii::Vector<double> or dealii::BlockVector<double>)
+ */
   template<typename VECTOR>
   class ConstraintVector
   {
