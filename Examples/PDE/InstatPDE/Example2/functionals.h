@@ -70,7 +70,7 @@ template<
 
         typename map<string, const VECTOR*>::const_iterator it =
             domain_values.find("state");
-        Vector<double> tmp_vector(5);
+        Vector<double> tmp_vector(7);
 
         VectorTools::point_value(state_dof_handler, *(it->second), p1,
             tmp_vector);
@@ -138,7 +138,7 @@ template<
 
         typename map<string, const VECTOR*>::const_iterator it =
             domain_values.find("state");
-        Vector<double> tmp_vector(5);
+        Vector<double> tmp_vector(7);
 
         VectorTools::point_value(state_dof_handler, *(it->second), p1,
             tmp_vector);
@@ -200,7 +200,7 @@ template<
 
         typename map<string, const VECTOR*>::const_iterator it =
             domain_values.find("state");
-        Vector<double> tmp_vector(5);
+        Vector<double> tmp_vector(7);
 
         VectorTools::point_value(state_dof_handler, *(it->second), p1,
             tmp_vector);
@@ -298,8 +298,8 @@ template<
           vector<Vector<double> > _ufacevalues;
           vector<vector<Tensor<1, dealdim> > > _ufacegrads;
 
-          _ufacevalues.resize(n_q_points, Vector<double>(5));
-          _ufacegrads.resize(n_q_points, vector<Tensor<1, 2> >(5));
+          _ufacevalues.resize(n_q_points, Vector<double>(7));
+          _ufacegrads.resize(n_q_points, vector<Tensor<1, 2> >(7));
 
           fdc.GetFaceValuesState("state", _ufacevalues);
           fdc.GetFaceGradsState("state", _ufacegrads);
@@ -364,8 +364,8 @@ template<
             vector<Vector<double> > _ufacevalues;
             vector<vector<Tensor<1, dealdim> > > _ufacegrads;
 
-            _ufacevalues.resize(n_q_points, Vector<double>(5));
-            _ufacegrads.resize(n_q_points, vector<Tensor<1, 2> >(5));
+            _ufacevalues.resize(n_q_points, Vector<double>(7));
+            _ufacegrads.resize(n_q_points, vector<Tensor<1, 2> >(7));
 
             fdc.GetFaceValuesState("state", _ufacevalues);
             fdc.GetFaceGradsState("state", _ufacegrads);
@@ -514,8 +514,8 @@ template<
           vector<Vector<double> > _ufacevalues;
           vector<vector<Tensor<1, dealdim> > > _ufacegrads;
 
-          _ufacevalues.resize(n_q_points, Vector<double>(5));
-          _ufacegrads.resize(n_q_points, vector<Tensor<1, 2> >(5));
+          _ufacevalues.resize(n_q_points, Vector<double>(7));
+          _ufacegrads.resize(n_q_points, vector<Tensor<1, 2> >(7));
 
           fdc.GetFaceValuesState("state", _ufacevalues);
           fdc.GetFaceGradsState("state", _ufacegrads);
@@ -584,8 +584,8 @@ template<
             vector<Vector<double> > _ufacevalues;
             vector<vector<Tensor<1, dealdim> > > _ufacegrads;
 
-            _ufacevalues.resize(n_q_points, Vector<double>(5));
-            _ufacegrads.resize(n_q_points, vector<Tensor<1, 2> >(5));
+            _ufacevalues.resize(n_q_points, Vector<double>(7));
+            _ufacegrads.resize(n_q_points, vector<Tensor<1, 2> >(7));
 
             fdc.GetFaceValuesState("state", _ufacevalues);
             fdc.GetFaceGradsState("state", _ufacegrads);

@@ -31,7 +31,7 @@ class BoundaryParabel : public DOpEWrapper::Function<2>
 {
   public:
     BoundaryParabel(ParameterReader &param_reader) :
-        DOpEWrapper::Function<2>(5), mytime(0)
+        DOpEWrapper::Function<2>(7), mytime(0)
     {
       param_reader.SetSubsection("My functions parameters");
       _mean_inflow_velocity = param_reader.get_double("mean_inflow_velocity");

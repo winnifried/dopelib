@@ -54,6 +54,7 @@
 #include "instatoptproblemcontainer.h"
 
 #include "shifted_crank_nicolson_problem.h"
+#include "crank_nicolson_problem.h"
 
 //Problem specific includes
 #include "localpde.h"
@@ -92,8 +93,10 @@ typedef StateProblem<OP_BASE, LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
 
 // Typedefs for timestep problem
 #define TSP ShiftedCrankNicolsonProblem
+//#define TSP CrankNicolsonProblem
 //FIXME: This should be a reasonable dual timestepping scheme
 #define DTSP ShiftedCrankNicolsonProblem
+//#define DTSP CrankNicolsonProblem
 typedef InstatOptProblemContainer<TSP, DTSP, FUNC,
     LocalFunctional<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM>,
     LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
@@ -117,7 +120,8 @@ int
 main(int argc, char **argv)
 {
   /**
-   * Instationary FSI problem in an ALE framework
+   * Nonstationary FSI problem in an ALE framework
+   * with biharmonic mesh motion
    * Fluid: NSE
    * Structure: INH or STVK
    */
@@ -170,7 +174,10 @@ main(int argc, char **argv)
   FESystem<DIM> control_fe(FE_Nothing<DIM>(), 1);
 
   // FE for the state equation: v,u,p
-  FESystem<DIM> state_fe(FE_Q<DIM>(2), 2, FE_Q<DIM>(2), 2, FE_DGP<DIM>(1), 1);
+  FESystem<DIM> state_fe(FE_Q<DIM>(2), 2, 
+			 FE_Q<DIM>(2), 2, 
+			 FE_DGP<DIM>(1), 1,
+			 FE_Q<DIM>(2), 2);
 
   QGauss<DIM> quadrature_formula(3);
   QGauss<DIM - 1> face_quadrature_formula(3);
@@ -188,10 +195,21 @@ main(int argc, char **argv)
   LocalBoundaryFaceFunctionalLift<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM> LBFL(
       pr);
 
-  //Time grid of [0,25] with
-  // 25 subintervalls for the timediscretization.
+  // Specification of time step size and time interval 
+  // for different FSI benchmark tests
+
+  // FSI 1: Time grid of [0,25] with
+  // 25 subintervalls for the time discretization.
+  // Below: times, 25, 0, 25 
+
+  // FSI 2: k = 1.0e-2 until T=10
+  // Below: times, 1000, 0, 10
+
+  // FSI 3: k = 1.0e-2 until T=10
+  // Below: times, 10000, 0, 10
   Triangulation<1> times;
   GridGenerator::subdivided_hyper_cube(times, 25, 0, 25);
+
 
   MethodOfLines_SpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR, DIM,
       DIM> DOFH(triangulation, control_fe, state_fe, times,
@@ -214,15 +232,17 @@ main(int argc, char **argv)
   P.SetBoundaryFunctionalColors(80);
   P.SetBoundaryFunctionalColors(81);
 
-  std::vector<bool> comp_mask(5);
+  std::vector<bool> comp_mask(7);
 
   comp_mask[0] = true; // vx
   comp_mask[1] = true; // vy
   comp_mask[2] = true; // ux
   comp_mask[3] = true; // uy
   comp_mask[4] = false; // pressure
+  comp_mask[5] = false; // wx
+  comp_mask[6] = false; // wy
 
-  DOpEWrapper::ZeroFunction<DIM> zf(5);
+  DOpEWrapper::ZeroFunction<DIM> zf(7);
   SimpleDirichletData<VECTOR, DIM> DD1(zf);
 
   BoundaryParabel boundary_parabel(pr);
