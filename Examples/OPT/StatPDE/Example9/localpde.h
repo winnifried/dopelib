@@ -200,20 +200,11 @@ template<
 
             const Tensor<2, 2> F_T = ALE_Transformations::get_F_T<2>(F);
 
-//            const Tensor<2, 2> F_Inverse =
-//                ALE_Transformations::get_F_Inverse<2>(F);
-
-//            const Tensor<2, 2> F_Inverse_T =
-//                ALE_Transformations::get_F_Inverse_T<2>(F_Inverse);
-
-//            const double J = ALE_Transformations::get_J<2>(F);
-
             const Tensor<2, 2> E = Structure_Terms_in_ALE::get_E<2>(F_T, F,
                 Identity);
 
             const double tr_E = Structure_Terms_in_ALE::get_tr_E<2>(E);
 
-            // STVK
             const Tensor<2, 2> sigma_structure_ALE = (F
                 * (_lame_coefficient_lambda * tr_E * Identity
                     + 2 * _lame_coefficient_mu * E));
@@ -302,9 +293,6 @@ template<
             const Tensor<1, dealdim> v = ALE_Transformations::get_v<dealdim>(
                 q_point, _uvalues);
 
-//            const Tensor<1, dealdim> u = ALE_Transformations::get_u<dealdim>(
-//                q_point, _uvalues);
-
             const Tensor<2, dealdim> grad_v = ALE_Transformations::get_grad_v<
                 dealdim>(q_point, _ugrads);
 
@@ -332,7 +320,6 @@ template<
               const double J_LinU = ALE_Transformations::get_J_LinU<dealdim>(
                   q_point, _ugrads, phi_grads_u[j]);
 
-//		  const double J_Inverse_LinU = ALE_Transformations::get_J_Inverse_LinU<dealdim> (J, J_LinU);
               const Tensor<2, dealdim> J_F_Inverse_T_LinU =
                   ALE_Transformations::get_J_F_Inverse_T_LinU<dealdim>(
                       phi_grads_u[j]);
@@ -395,16 +382,8 @@ template<
             const Tensor<2, dealdim> F = ALE_Transformations::get_F<dealdim>(
                 q_point, _ugrads);
 
-//            const Tensor<2, dealdim> F_Inverse =
-//                ALE_Transformations::get_F_Inverse<dealdim>(F);
-
-//            const Tensor<2, dealdim> F_Inverse_T =
-//                ALE_Transformations::get_F_Inverse_T<dealdim>(F_Inverse);
-
             const Tensor<2, dealdim> F_T =
                 ALE_Transformations::get_F_T<dealdim>(F);
-
-//            const double J = ALE_Transformations::get_J<dealdim>(F);
 
             const Tensor<2, dealdim> E = Structure_Terms_in_ALE::get_E<dealdim>(
                 F_T, F, Identity);
@@ -413,34 +392,15 @@ template<
 
             for (unsigned int j = 0; j < n_dofs_per_cell; j++)
             {
-
-//              const double J_LinU = ALE_Transformations::get_J_LinU<dealdim>(
-//                  q_point, _ugrads, phi_grads_u[j]);
-
               const Tensor<2, dealdim> F_LinU = ALE_Transformations::get_F_LinU<
                   dealdim>(phi_grads_u[j]);
 
-//              const Tensor<2, dealdim> F_Inverse_LinU =
-//                  ALE_Transformations::get_F_Inverse_LinU<dealdim>(
-//                      phi_grads_u[j], J, J_LinU, q_point, _ugrads);
-
-//              const Tensor<2, dealdim> F_Inverse_T_LinU = transpose(
-//                  F_Inverse_LinU);
-
-//              const Tensor<2, dealdim> J_F_Inverse_T_LinU =
-//                  ALE_Transformations::get_J_F_Inverse_T_LinU<dealdim>(
-//                      phi_grads_u[j]);
-
-              // STVK: Green_Lagrange strain tensor derivatives
               const Tensor<2, dealdim> E_LinU = 0.5
                   * (transpose(F_LinU) * F + transpose(F) * F_LinU);
 
               const double tr_E_LinU = Structure_Terms_in_ALE::get_tr_E_LinU<
                   dealdim>(q_point, _ugrads, phi_grads_u[j]);
 
-              // STVK
-              // piola-kirchhoff stress structure STVK linearized in all directions
-              // J * (1/J*F*(lambda*tr_E*I + 2*mu*E)*F^T) * F^{-T} --> Linearization
               Tensor<2, dealdim> piola_kirchhoff_stress_structure_STVK_LinALL;
               piola_kirchhoff_stress_structure_STVK_LinALL =
                   _lame_coefficient_lambda
@@ -587,9 +547,7 @@ template<
               const double J_LinU = ALE_Transformations::get_J_LinU<dealdim>(
                   q_point, _z_state_grads, phi_grads_u[j]);
 
-//		    const double J_Inverse_LinU = ALE_Transformations
-//		      ::get_J_Inverse_LinU<dealdim> (J, J_LinU);
-//
+
               const Tensor<2, dealdim> J_F_Inverse_T_LinU =
                   ALE_Transformations::get_J_F_Inverse_T_LinU<dealdim>(
                       phi_grads_u[j]);
@@ -666,16 +624,8 @@ template<
             const Tensor<2, dealdim> F = ALE_Transformations::get_F<dealdim>(
                 q_point, _z_state_grads);
 
-//            const Tensor<2, dealdim> F_Inverse =
-//                ALE_Transformations::get_F_Inverse<dealdim>(F);
-
-//            const Tensor<2, dealdim> F_Inverse_T =
-//                ALE_Transformations::get_F_Inverse_T<dealdim>(F_Inverse);
-
             const Tensor<2, dealdim> F_T =
                 ALE_Transformations::get_F_T<dealdim>(F);
-
-//            const double J = ALE_Transformations::get_J<dealdim>(F);
 
             const Tensor<2, dealdim> E = Structure_Terms_in_ALE::get_E<dealdim>(
                 F_T, F, Identity);
@@ -684,36 +634,15 @@ template<
 
             for (unsigned int j = 0; j < n_dofs_per_cell; j++)
             {
-
-              //_z_state_values
-              //_z_state_grads
-//              const double J_LinU = ALE_Transformations::get_J_LinU<dealdim>(
-//                  q_point, _z_state_grads, phi_grads_u[j]);
-
               const Tensor<2, dealdim> F_LinU = ALE_Transformations::get_F_LinU<
                   dealdim>(phi_grads_u[j]);
 
-//              const Tensor<2, dealdim> F_Inverse_LinU =
-//                  ALE_Transformations::get_F_Inverse_LinU<dealdim>(
-//                      phi_grads_u[j], J, J_LinU, q_point, _z_state_grads);
-
-//              const Tensor<2, dealdim> F_Inverse_T_LinU = transpose(
-//                  F_Inverse_LinU);
-
-//              const Tensor<2, dealdim> J_F_Inverse_T_LinU =
-//                  ALE_Transformations::get_J_F_Inverse_T_LinU<dealdim>(
-//                     phi_grads_u[j]);
-
-              // STVK: Green_Lagrange strain tensor derivatives
               const Tensor<2, dealdim> E_LinU = 0.5
                   * (transpose(F_LinU) * F + transpose(F) * F_LinU);
 
               const double tr_E_LinU = Structure_Terms_in_ALE::get_tr_E_LinU<
                   dealdim>(q_point, _z_state_grads, phi_grads_u[j]);
 
-              // STVK
-              // piola-kirchhoff stress structure STVK linearized in all directions
-              // J * (1/J*F*(lambda*tr_E*I + 2*mu*E)*F^T) * F^{-T} --> Linearization
               Tensor<2, dealdim> piola_kirchhoff_stress_structure_STVK_LinALL;
               piola_kirchhoff_stress_structure_STVK_LinALL =
                   _lame_coefficient_lambda
@@ -787,9 +716,6 @@ template<
             duv[0] = _duvalues[q_point](0);
             duv[1] = _duvalues[q_point](1);
 
-            //double dup = _duvalues[q_point](4);
-            //double duv_incompressibility = duv_grads[0][0] +  duv_grads[1][1];
-
             Tensor<2, 2> dupI;
             dupI.clear();
             dupI[0][0] = _duvalues[q_point](4);
@@ -804,9 +730,6 @@ template<
             duu_grads[1][0] = _dugrads[q_point][3][0];
             duu_grads[1][1] = _dugrads[q_point][3][1];
 
-            // state values which contains
-            // solution from previous Newton step
-            // Necessary for fluid convection term
             Tensor<2, 2> dupI_state;
             dupI_state.clear();
             dupI_state[0][0] = _du_state_values[q_point](4);
@@ -826,7 +749,6 @@ template<
             duv_state[0] = _du_state_values[q_point](0);
             duv_state[1] = _du_state_values[q_point](1);
 
-            // get state values
             const Tensor<2, dealdim> F = ALE_Transformations::get_F<dealdim>(
                 q_point, _du_state_grads);
 
@@ -836,41 +758,23 @@ template<
             const Tensor<2, dealdim> F_Inverse_T =
                 ALE_Transformations::get_F_Inverse_T<dealdim>(F_Inverse);
 
-//            const Tensor<2, dealdim> F_T =
-//                ALE_Transformations::get_F_T<dealdim>(F);
-
             const double J = ALE_Transformations::get_J<dealdim>(F);
 
-//            const Tensor<2, dealdim> E = Structure_Terms_in_ALE::get_E<dealdim>(
-//                F_T, F, Identity);
-
-            //const double tr_E = Structure_Terms_in_ALE
-            //	::get_tr_E<dealdim> (E);
-
-            // sigma in ALE for fluid
             const Tensor<2, dealdim> sigma_ALE =
                 NSE_in_ALE::get_stress_fluid_ALE<dealdim>(_density_fluid,
                     _viscosity, dupI_state, duv_state_grads,
                     transpose(duv_state_grads), F_Inverse, F_Inverse_T);
 
-            // linearizations
             const double J_LinU = ALE_Transformations::get_J_LinU<dealdim>(
                 q_point, _du_state_grads, duu_grads);
-
-//            const Tensor<2, dealdim> F_LinU = ALE_Transformations::get_F_LinU<
-//                dealdim>(duu_grads);
 
             const Tensor<2, dealdim> F_Inverse_LinU =
                 ALE_Transformations::get_F_Inverse_LinU<dealdim>(duu_grads, J,
                     J_LinU, q_point, _du_state_grads);
 
-//            const Tensor<2, dealdim> F_Inverse_T_LinU = transpose(
-//                F_Inverse_LinU);
-
             const Tensor<2, dealdim> J_F_Inverse_T_LinU =
                 ALE_Transformations::get_J_F_Inverse_T_LinU<dealdim>(duu_grads);
 
-            // four main equations
             const Tensor<2, dealdim> stress_fluid_ALE_1st_term_LinAll =
                 NSE_in_ALE::get_stress_fluid_ALE_1st_term_LinAll_short<dealdim>(
                     dupI_state, F_Inverse_T, J_F_Inverse_T_LinU, dupI, J);
@@ -938,49 +842,23 @@ template<
             const Tensor<2, dealdim> F = ALE_Transformations::get_F<dealdim>(
                 q_point, _du_state_grads);
 
-//            const Tensor<2, dealdim> F_Inverse =
-//                ALE_Transformations::get_F_Inverse<dealdim>(F);
-
-//            const Tensor<2, dealdim> F_Inverse_T =
-//                ALE_Transformations::get_F_Inverse_T<dealdim>(F_Inverse);
-
             const Tensor<2, dealdim> F_T =
                 ALE_Transformations::get_F_T<dealdim>(F);
-
-//            const double J = ALE_Transformations::get_J<dealdim>(F);
 
             const Tensor<2, dealdim> E = Structure_Terms_in_ALE::get_E<dealdim>(
                 F_T, F, Identity);
 
             const double tr_E = Structure_Terms_in_ALE::get_tr_E<dealdim>(E);
 
-            // linearizations
-//            const double J_LinU = ALE_Transformations::get_J_LinU<dealdim>(
-//                q_point, _du_state_grads, duu_grads);
-
             const Tensor<2, dealdim> F_LinU = ALE_Transformations::get_F_LinU<
                 dealdim>(duu_grads);
 
-//            const Tensor<2, dealdim> F_Inverse_LinU =
-//                ALE_Transformations::get_F_Inverse_LinU<dealdim>(duu_grads, J,
-//                    J_LinU, q_point, _du_state_grads);
-
-//            const Tensor<2, dealdim> F_Inverse_T_LinU = transpose(
-//                F_Inverse_LinU);
-
-//            const Tensor<2, dealdim> J_F_Inverse_T_LinU =
-//                ALE_Transformations::get_J_F_Inverse_T_LinU<dealdim>(duu_grads);
-
-            // STVK: Green_Lagrange strain tensor derivatives
             const Tensor<2, dealdim> E_LinU = 0.5
                 * (transpose(F_LinU) * F + transpose(F) * F_LinU);
 
             const double tr_E_LinU = Structure_Terms_in_ALE::get_tr_E_LinU<
                 dealdim>(q_point, _du_state_grads, duu_grads);
 
-            // STVK
-            // piola-kirchhoff stress structure STVK linearized in all directions
-            // J * (1/J*F*(lambda*tr_E*I + 2*mu*E)*F^T) * F^{-T} --> Linearization
             Tensor<2, dealdim> piola_kirchhoff_stress_structure_STVK_LinALL;
             piola_kirchhoff_stress_structure_STVK_LinALL =
                 _lame_coefficient_lambda
@@ -1108,7 +986,6 @@ template<
             dzpI_state[1][0] = 0.0;
             dzpI_state[1][1] = _dz_state_values[q_point](4);
 
-            // state values and grads
             const Tensor<2, dealdim> F = ALE_Transformations::get_F<dealdim>(
                 q_point, _dz_state_grads);
 
@@ -1117,9 +994,6 @@ template<
 
             const Tensor<2, dealdim> F_Inverse_T =
                 ALE_Transformations::get_F_Inverse_T<dealdim>(F_Inverse);
-
-//            const Tensor<2, dealdim> F_T =
-//                ALE_Transformations::get_F_T<dealdim>(F);
 
             const double J = ALE_Transformations::get_J<dealdim>(F);
 
@@ -1139,8 +1013,6 @@ template<
               const double J_LinU = ALE_Transformations::get_J_LinU<dealdim>(
                   q_point, _dz_state_grads, phi_grads_u[j]);
 
-              //const double J_Inverse_LinU = ALE_Transformations
-              //  ::get_J_Inverse_LinU<dealdim> (J, J_LinU);
 
               const Tensor<2, dealdim> J_F_Inverse_T_LinU =
                   ALE_Transformations::get_J_F_Inverse_T_LinU<dealdim>(
@@ -1150,7 +1022,6 @@ template<
                   ALE_Transformations::get_F_Inverse_LinU(phi_grads_u[j], J,
                       J_LinU, q_point, _dz_state_grads);
 
-              // four main equations
               const Tensor<2, dealdim> stress_fluid_ALE_1st_term_LinAll =
                   NSE_in_ALE::get_stress_fluid_ALE_1st_term_LinAll_short<dealdim>(
                       dzpI_state, F_Inverse_T, J_F_Inverse_T_LinU, pI_LinP, J);
@@ -1214,20 +1085,11 @@ template<
 
             double dzp = _dzvalues[q_point](4);
 
-            // state values and grads
             const Tensor<2, dealdim> F = ALE_Transformations::get_F<dealdim>(
                 q_point, _dz_state_grads);
 
-//            const Tensor<2, dealdim> F_Inverse =
-//                ALE_Transformations::get_F_Inverse<dealdim>(F);
-
-//            const Tensor<2, dealdim> F_Inverse_T =
-//                ALE_Transformations::get_F_Inverse_T<dealdim>(F_Inverse);
-
             const Tensor<2, dealdim> F_T =
                 ALE_Transformations::get_F_T<dealdim>(F);
-
-//            const double J = ALE_Transformations::get_J<dealdim>(F);
 
             const Tensor<2, dealdim> E = Structure_Terms_in_ALE::get_E<dealdim>(
                 F_T, F, Identity);
@@ -1236,36 +1098,15 @@ template<
 
             for (unsigned int j = 0; j < n_dofs_per_cell; j++)
             {
-
-              //_z_state_values
-              //_z_state_grads
-//              const double J_LinU = ALE_Transformations::get_J_LinU<dealdim>(
-//                  q_point, _dz_state_grads, phi_grads_u[j]);
-
               const Tensor<2, dealdim> F_LinU = ALE_Transformations::get_F_LinU<
                   dealdim>(phi_grads_u[j]);
 
-//              const Tensor<2, dealdim> F_Inverse_LinU =
-//                  ALE_Transformations::get_F_Inverse_LinU<dealdim>(
-//                      phi_grads_u[j], J, J_LinU, q_point, _dz_state_grads);
-
-//              const Tensor<2, dealdim> F_Inverse_T_LinU = transpose(
-//                  F_Inverse_LinU);
-
-//             const Tensor<2, dealdim> J_F_Inverse_T_LinU =
-//                  ALE_Transformations::get_J_F_Inverse_T_LinU<dealdim>(
-//                      phi_grads_u[j]);
-
-              // STVK: Green_Lagrange strain tensor derivatives
               const Tensor<2, dealdim> E_LinU = 0.5
                   * (transpose(F_LinU) * F + transpose(F) * F_LinU);
 
               const double tr_E_LinU = Structure_Terms_in_ALE::get_tr_E_LinU<
                   dealdim>(q_point, _dz_state_grads, phi_grads_u[j]);
 
-              // STVK
-              // piola-kirchhoff stress structure STVK linearized in all directions
-              // J * (1/J*F*(lambda*tr_E*I + 2*mu*E)*F^T) * F^{-T} --> Linearization
               Tensor<2, dealdim> piola_kirchhoff_stress_structure_STVK_LinALL;
               piola_kirchhoff_stress_structure_STVK_LinALL =
                   _lame_coefficient_lambda
@@ -1389,7 +1230,6 @@ template<
                   q_point);
             }
 
-            // adjoint values and grads
             Tensor<2, 2> zv_grads;
             zv_grads.clear();
             zv_grads[0][0] = _zgrads[q_point][0][0];
@@ -1401,34 +1241,13 @@ template<
             const Tensor<2, dealdim> F = ALE_Transformations::get_F<dealdim>(
                 q_point, _du_tangent_grads);
 
-//            const Tensor<2, dealdim> F_Inverse =
-//                ALE_Transformations::get_F_Inverse<dealdim>(F);
-
-//            const Tensor<2, dealdim> F_Inverse_T =
-//                ALE_Transformations::get_F_Inverse_T<dealdim>(F_Inverse);
-
             const Tensor<2, dealdim> F_T =
                 ALE_Transformations::get_F_T<dealdim>(F);
-
-//            const double J = ALE_Transformations::get_J<dealdim>(F);
 
             const Tensor<2, dealdim> E = Structure_Terms_in_ALE::get_E<dealdim>(
                 F_T, F, Identity);
 
             const double tr_E = Structure_Terms_in_ALE::get_tr_E<dealdim>(E);
-
-            // state values and grads
-//            const Tensor<2, dealdim> F_state = ALE_Transformations::get_F<
-//                dealdim>(q_point, _du_state_grads);
-
-//            const Tensor<2, dealdim> F_Inverse_state =
-//                ALE_Transformations::get_F_Inverse<dealdim>(F);
-
-//            const Tensor<2, dealdim> F_Inverse_T_state =
-//                ALE_Transformations::get_F_Inverse_T<dealdim>(F_Inverse);
-
-//            const Tensor<2, dealdim> F_T_state = ALE_Transformations::get_F_T<
-//                dealdim>(F);
 
             const Tensor<2, dealdim> F_LinU_state =
                 ALE_Transformations::get_F_LinU_state<dealdim>(q_point,
@@ -1436,33 +1255,15 @@ template<
 
             for (unsigned int j = 0; j < n_dofs_per_cell; j++)
             {
-              //_du_state_values
-              //_z_state_grads
-//              const double J_LinU = ALE_Transformations::get_J_LinU<dealdim>(
-//                  q_point, _du_tangent_grads, phi_grads_u[j]);
-
               const Tensor<2, dealdim> F_LinU = ALE_Transformations::get_F_LinU<
                   dealdim>(phi_grads_u[j]);
 
-//              const Tensor<2, dealdim> F_Inverse_LinU =
-//                  ALE_Transformations::get_F_Inverse_LinU<dealdim>(
-//                      phi_grads_u[j], J, J_LinU, q_point, _du_tangent_grads);
-
-//              const Tensor<2, dealdim> F_Inverse_T_LinU = transpose(
-//                  F_Inverse_LinU);
-
-//              const Tensor<2, dealdim> J_F_Inverse_T_LinU =
-//                  ALE_Transformations::get_J_F_Inverse_T_LinU<dealdim>(
-//                      phi_grads_u[j]);
-
-              // STVK: Green_Lagrange strain tensor derivatives
               const Tensor<2, dealdim> E_LinU = 0.5
                   * (transpose(F_LinU) * F + transpose(F) * F_LinU);
 
               const Tensor<2, dealdim> E_LinU_state = 0.5
                   * (transpose(F_LinU_state) * F + transpose(F) * F_LinU_state);
 
-              // I'm not so sure!!!!!
               const double tr_E_LinU = Structure_Terms_in_ALE::get_tr_E_LinU<
                   dealdim>(q_point, _du_tangent_grads, phi_grads_u[j]);
 
@@ -1484,19 +1285,12 @@ template<
                           * (F_LinU * E_LinU_state + F_LinU_state * E_LinU
                               + F * E_LinW_LinU);
 
-              // STVK
-              // piola-kirchhoff stress structure STVK linearized in all directions
-              // J * (1/J*F*(lambda*tr_E*I + 2*mu*E)*F^T) * F^{-T} --> Linearization
               Tensor<2, dealdim> piola_kirchhoff_stress_structure_STVK_LinALL;
               piola_kirchhoff_stress_structure_STVK_LinALL =
                   _lame_coefficient_lambda
                       * (F_LinU * tr_E * Identity + F * tr_E_LinU * Identity)
                       + 2 * _lame_coefficient_mu * (F_LinU * E + F * E_LinU);
 
-              // 0.0 ist besser, da Deformationen sehr klein
-              local_cell_vector(j) += 0.0 * scale
-                  * scalar_product(piola_kirchhoff_stress_structure_STVK_LinALL,
-                      zv_grads) * state_fe_values.JxW(q_point);
             }
           }
 
@@ -1695,7 +1489,6 @@ template<
                 const Tensor<2, 2> phi_j_grads_v =
                     state_fe_face_values[velocities].gradient(j, q_point);
 
-                // do-nothing
                 Tensor<2, 2> do_nothing_LinAll;
                 do_nothing_LinAll = _density_fluid * _viscosity
                     * transpose(phi_j_grads_v);

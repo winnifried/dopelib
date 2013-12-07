@@ -617,7 +617,7 @@ template<
       FaceValue_UU(const FDC<DH, VECTOR, dealdim>& /*fdc*/,
           dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
       {
-//This derivative is not zero but it is not needed for newton convergence
+
       }
 
       void
