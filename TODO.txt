@@ -13,9 +13,8 @@ Speziell:
   -- Beispiel (Erklaerung), PDEInterface nicht als template geben, 
 	sondern die LocalPDE
 
-- content.tex for PDE/Instat OPT/Stat and OPT/Instat
-- TW: FSI 2 und FSI 3 ueber parameter file
-  check harmonic extension!
+- TW: content.tex for PDE/Instat OPT/Stat and OPT/Instat
+
 
 
 Speziell fuer Thomas (Nov 18, 2013)
