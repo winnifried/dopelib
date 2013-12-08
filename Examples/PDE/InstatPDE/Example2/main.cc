@@ -54,7 +54,6 @@
 #include "instatoptproblemcontainer.h"
 
 #include "shifted_crank_nicolson_problem.h"
-#include "crank_nicolson_problem.h"
 
 //Problem specific includes
 #include "localpde.h"
@@ -93,10 +92,8 @@ typedef StateProblem<OP_BASE, LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
 
 // Typedefs for timestep problem
 #define TSP ShiftedCrankNicolsonProblem
-//#define TSP CrankNicolsonProblem
 //FIXME: This should be a reasonable dual timestepping scheme
 #define DTSP ShiftedCrankNicolsonProblem
-//#define DTSP CrankNicolsonProblem
 typedef InstatOptProblemContainer<TSP, DTSP, FUNC,
     LocalFunctional<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM>,
     LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
@@ -249,6 +246,9 @@ main(int argc, char **argv)
   SimpleDirichletData<VECTOR, DIM> DD2(boundary_parabel);
   P.SetDirichletBoundaryColors(0, comp_mask, &DD2); // inflow boundary
   P.SetDirichletBoundaryColors(2, comp_mask, &DD1); // rigid walls
+
+  comp_mask[5] = true; // wx
+  comp_mask[6] = true; // wy
   P.SetDirichletBoundaryColors(80, comp_mask, &DD1); // cylinder
   P.SetDirichletBoundaryColors(81, comp_mask, &DD1); // cylinder attached to flag
 

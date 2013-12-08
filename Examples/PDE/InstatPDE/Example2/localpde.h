@@ -273,13 +273,13 @@ template<
                   * scalar_product(stress_term, phi_i_grads_v)
                   * state_fe_values.JxW(q_point);
 
+
+              local_cell_vector(i) += scale * density_structure * (-v * phi_i_u)
+                  * state_fe_values.JxW(q_point);
+
 	      // Physically not necessary but nonetheless here
 	      // since we use a global test function which
 	      // requires appropriate extension
-              local_cell_vector(i) += scale * (-v * phi_i_u)
-                  * state_fe_values.JxW(q_point);
-
-	      // Same reason as in the previous term
               local_cell_vector(i) += scale_ico
                   * (_uvalues[q_point](dealdim + dealdim) * phi_i_p)
                   * state_fe_values.JxW(q_point);
@@ -504,13 +504,14 @@ template<
                         piola_kirchhoff_stress_structure_STVK_LinALL,
                         phi_grads_v[j])) * state_fe_values.JxW(q_point);
 
+
+                local_entry_matrix(j, i) += scale * density_structure * 
+		  (-phi_v[i] * phi_u[j])
+                    * state_fe_values.JxW(q_point);
+
                 // Physically not necessary but nonetheless here
 		// since we use a global test function which
 		// requires appropriate extension
-                local_entry_matrix(j, i) += scale * (-phi_v[i] * phi_u[j])
-                    * state_fe_values.JxW(q_point);
-
-		// Same reason as in the previous term
                 local_entry_matrix(j, i) += scale_ico * (phi_p[i] * phi_p[j])
                     * state_fe_values.JxW(q_point);
 
@@ -662,10 +663,9 @@ template<
               const Tensor<1, 2> phi_i_u = state_fe_values[displacements].value(
                   i, q_point);
               local_cell_vector(i) += scale
-                  * (density_structure * (J + last_timestep_J) / 2.0
-                      * (v - last_timestep_v) * phi_i_v
-                      + (u - last_timestep_u) * phi_i_u)
-                  * state_fe_values.JxW(q_point);
+                  * (density_structure * (v - last_timestep_v) * phi_i_v                   
+		     + density_structure * (u - last_timestep_u) * phi_i_u
+		     ) * state_fe_values.JxW(q_point);
             }
           }
         }
@@ -819,16 +819,13 @@ template<
               const double J_LinU = ALE_Transformations::get_J_LinU<dealdim>(
                   q_point, _ugrads, phi_grads_u[i]);
 
-              const Tensor<1, dealdim> accelaration_term_LinAll =
-                  NSE_in_ALE::get_accelaration_term_LinAll(phi_v[i], v,
-                      last_timestep_v, J_LinU, J, last_timestep_J,
-                      density_structure);
-
               for (unsigned int j = 0; j < n_dofs_per_cell; j++)
               {
                 // Structure, CellTimeMatrix, explicit
-                local_entry_matrix(j, i) += (accelaration_term_LinAll * phi_v[j]
-                    + phi_u[i] * phi_u[j]) * state_fe_values.JxW(q_point);
+                local_entry_matrix(j, i) += 
+		  (density_structure * phi_v[i]* phi_v[j]
+		   + density_structure * phi_u[i] * phi_u[j]
+		   ) * state_fe_values.JxW(q_point);
 
               }
             }
