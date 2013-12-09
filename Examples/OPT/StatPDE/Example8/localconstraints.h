@@ -101,27 +101,27 @@ namespace DOpE
 
         void
         ElementValue_U(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
-            dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
+            dealii::Vector<double> &/*local_vector*/, double /*scale*/)
         {
         }
 
         void
         ElementValue_Q(const CDC<DH, VECTOR, dealdim>& cdc,
-            dealii::Vector<double> &local_cell_vector, double scale)
+            dealii::Vector<double> &local_vector, double scale)
         {
           if (this->GetProblemType() == "global_constraint_gradient"
               && this->GetProblemTypeNum() == 0)
           {
             const DOpEWrapper::FEValues<dealdim> & control_fe_values =
                 cdc.GetFEValuesControl();
-            unsigned int n_dofs_per_cell = cdc.GetNDoFsPerCell();
+            unsigned int n_dofs_per_element = cdc.GetNDoFsPerElement();
             unsigned int n_q_points = cdc.GetNQPoints();
 
             for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
             {
-              for (unsigned int i = 0; i < n_dofs_per_cell; i++)
+              for (unsigned int i = 0; i < n_dofs_per_element; i++)
               {
-                local_cell_vector(i) += scale
+                local_vector(i) += scale
                     * control_fe_values.shape_value(i, q_point)
                     * control_fe_values.JxW(q_point);
               }
@@ -135,22 +135,22 @@ namespace DOpE
 
         void
         ElementValue_UU(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
-            dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
+            dealii::Vector<double> &/*local_vector*/, double /*scale*/)
         {
         }
         void
         ElementValue_QU(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
-            dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
+            dealii::Vector<double> &/*local_vector*/, double /*scale*/)
         {
         }
         void
         ElementValue_UQ(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
-            dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
+            dealii::Vector<double> &/*local_vector*/, double /*scale*/)
         {
         }
         void
         ElementValue_QQ(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
-            dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
+            dealii::Vector<double> &/*local_vector*/, double /*scale*/)
         {
         }
 

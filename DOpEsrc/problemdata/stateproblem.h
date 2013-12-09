@@ -76,11 +76,11 @@ namespace DOpE
 	 * see OptProblemContainer for details.
 	 */
       template<typename CDC>
-      void Init_CellEquation(const CDC& cdc,
-			     dealii::Vector<double> &local_cell_vector, double scale,
+      void Init_ElementEquation(const CDC& cdc,
+			     dealii::Vector<double> &local_vector, double scale,
 			     double scale_ico)
       {
-        _pde.Init_CellEquation(cdc, local_cell_vector, scale, scale_ico);
+        _pde.Init_ElementEquation(cdc, local_vector, scale, scale_ico);
       }
 
         /**
@@ -89,10 +89,10 @@ namespace DOpE
 	 */
       template<typename CDC>
       void
-      Init_CellRhs(const CDC& cdc,
-          dealii::Vector<double> &local_cell_vector, double scale)
+      Init_ElementRhs(const CDC& cdc,
+          dealii::Vector<double> &local_vector, double scale)
       {
-        _pde.Init_CellRhs(& GetInitialValues(), cdc, local_cell_vector, scale);
+        _pde.Init_ElementRhs(& GetInitialValues(), cdc, local_vector, scale);
       }
 
         /**
@@ -114,11 +114,11 @@ namespace DOpE
 	 * see OptProblemContainer for details.
 	 */
       template<typename CDC>
-      void Init_CellMatrix(const CDC& cdc,
+      void Init_ElementMatrix(const CDC& cdc,
 			   dealii::FullMatrix<double> &local_entry_matrix, double scale,
 			   double scale_ico)
       {
-        _pde.Init_CellMatrix(cdc, local_entry_matrix, scale, scale_ico);
+        _pde.Init_ElementMatrix(cdc, local_entry_matrix, scale, scale_ico);
       }
 
       /******************************************************/
@@ -129,8 +129,8 @@ namespace DOpE
 	 */
       template<typename CDC>
         inline void
-        CellEquation(const CDC& cdc,
-            dealii::Vector<double> &local_cell_vector, double scale,
+        ElementEquation(const CDC& cdc,
+            dealii::Vector<double> &local_vector, double scale,
             double scale_ico);
 
         /**
@@ -139,8 +139,8 @@ namespace DOpE
 	 */
       template<typename CDC>
         inline void
-        CellTimeEquation(const CDC& cdc,
-            dealii::Vector<double> &local_cell_vector, double scale = 1.);
+        ElementTimeEquation(const CDC& cdc,
+            dealii::Vector<double> &local_vector, double scale = 1.);
 
         /**
 	 * Functions providing the required information for the integrator.
@@ -148,8 +148,8 @@ namespace DOpE
 	 */
       template<typename CDC>
         inline void
-        CellTimeEquationExplicit(const CDC& cdc,
-            dealii::Vector<double> &local_cell_vector, double scale = 1.);
+        ElementTimeEquationExplicit(const CDC& cdc,
+            dealii::Vector<double> &local_vector, double scale = 1.);
 
         /**
 	 * Functions providing the required information for the integrator.
@@ -157,8 +157,8 @@ namespace DOpE
 	 */
       template<typename CDC>
         inline void
-        CellRhs(const CDC& cdc,
-            dealii::Vector<double> &local_cell_vector, double scale = 1.);
+        ElementRhs(const CDC& cdc,
+            dealii::Vector<double> &local_vector, double scale = 1.);
 
         /**
 	 * Functions providing the required information for the integrator.
@@ -176,7 +176,7 @@ namespace DOpE
 	 */
       template<typename CDC>
         inline void
-        CellMatrix(const CDC& cdc,
+        ElementMatrix(const CDC& cdc,
             dealii::FullMatrix<double> &local_entry_matrix, double scale = 1.,
             double scale_ico = 1.);
 
@@ -186,7 +186,7 @@ namespace DOpE
 	 */
       template<typename CDC>
         inline void
-        CellTimeMatrix(const CDC& cdc,
+        ElementTimeMatrix(const CDC& cdc,
             dealii::FullMatrix<double> &local_entry_matrix);
 
         /**
@@ -195,7 +195,7 @@ namespace DOpE
 	 */
       template<typename CDC>
         inline void
-        CellTimeMatrixExplicit(const CDC& cdc,
+        ElementTimeMatrixExplicit(const CDC& cdc,
             dealii::FullMatrix<double> &local_entry_matrix);
 
         /**
@@ -205,7 +205,7 @@ namespace DOpE
       template<typename FDC>
         inline void
         FaceEquation(const FDC& fdc,
-            dealii::Vector<double> &local_cell_vector, double scale = 1., double scale_ico = 1.);
+            dealii::Vector<double> &local_vector, double scale = 1., double scale_ico = 1.);
 
         /**
 	 * Functions providing the required information for the integrator.
@@ -214,7 +214,7 @@ namespace DOpE
      template<typename FDC>
         inline void
         InterfaceEquation(const FDC& fdc,
-            dealii::Vector<double> &local_cell_vector, double scale = 1., double scale_ico = 1.);
+            dealii::Vector<double> &local_vector, double scale = 1., double scale_ico = 1.);
 
         /**
 	 * Functions providing the required information for the integrator.
@@ -223,7 +223,7 @@ namespace DOpE
       template<typename FDC>
         inline void
         FaceRhs(const FDC& fdc,
-            dealii::Vector<double> &local_cell_vector, double scale = 1.);
+            dealii::Vector<double> &local_vector, double scale = 1.);
 
         /**
 	 * Functions providing the required information for the integrator.
@@ -246,7 +246,7 @@ namespace DOpE
       template<typename FDC>
         inline void
         BoundaryEquation(const FDC& fdc,
-            dealii::Vector<double> &local_cell_vector, double scale = 1., double scale_ico = 1.);
+            dealii::Vector<double> &local_vector, double scale = 1., double scale_ico = 1.);
 
         /**
 	 * Functions providing the required information for the integrator.
@@ -255,7 +255,7 @@ namespace DOpE
       template<typename FDC>
         inline void
         BoundaryRhs(const FDC& fdc,
-            dealii::Vector<double> &local_cell_vector, double scale = 1.);
+            dealii::Vector<double> &local_vector, double scale = 1.);
 
         /**
 	 * Functions providing the required information for the integrator.
@@ -264,7 +264,7 @@ namespace DOpE
       template<typename FDC>
         inline void
         BoundaryMatrix(const FDC& fdc,
-            dealii::FullMatrix<double> &local_cell_matrix, double scale = 1., double scale_ico = 1.);
+            dealii::FullMatrix<double> &local_matrix, double scale = 1., double scale_ico = 1.);
 
         /**
 	 * Functions providing the required information for the integrator.
@@ -420,11 +420,11 @@ namespace DOpE
     template<typename CDC>
       void
       StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, 
-          dim>::CellEquation(const CDC& cdc,
-          dealii::Vector<double> &local_cell_vector, double scale,
+          dim>::ElementEquation(const CDC& cdc,
+          dealii::Vector<double> &local_vector, double scale,
           double scale_ico)
       {
-        _pde.CellEquation(cdc, local_cell_vector, scale, scale_ico);
+        _pde.ElementEquation(cdc, local_vector, scale, scale_ico);
       }
 
   /******************************************************/
@@ -434,10 +434,10 @@ namespace DOpE
     template<typename CDC>
       void
       StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR,
-          dim>::CellTimeEquation(const CDC& cdc,
-          dealii::Vector<double> &local_cell_vector, double scale)
+          dim>::ElementTimeEquation(const CDC& cdc,
+          dealii::Vector<double> &local_vector, double scale)
       {
-        _pde.CellTimeEquation(cdc, local_cell_vector, scale);
+        _pde.ElementTimeEquation(cdc, local_vector, scale);
       }
 
   /******************************************************/
@@ -447,10 +447,10 @@ namespace DOpE
     template<typename CDC>
       void
       StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR,
-          dim>::CellTimeEquationExplicit(const CDC& cdc,
-          dealii::Vector<double> &local_cell_vector, double scale)
+          dim>::ElementTimeEquationExplicit(const CDC& cdc,
+          dealii::Vector<double> &local_vector, double scale)
       {
-        _pde.CellTimeEquationExplicit(cdc, local_cell_vector, scale);
+        _pde.ElementTimeEquationExplicit(cdc, local_vector, scale);
       }
 
   /******************************************************/
@@ -461,9 +461,9 @@ namespace DOpE
       void
       StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR,
           dim>::FaceEquation(const FDC& fdc,
-				 dealii::Vector<double> &local_cell_vector, double scale, double scale_ico)
+				 dealii::Vector<double> &local_vector, double scale, double scale_ico)
       {
-        _pde.FaceEquation(fdc, local_cell_vector, scale, scale_ico);
+        _pde.FaceEquation(fdc, local_vector, scale, scale_ico);
       }
 
   /******************************************************/
@@ -474,9 +474,9 @@ namespace DOpE
       void
       StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR,
           dim>::InterfaceEquation(const FDC& fdc,
-          dealii::Vector<double> &local_cell_vector, double scale, double scale_ico)
+          dealii::Vector<double> &local_vector, double scale, double scale_ico)
       {
-        _pde.InterfaceEquation(fdc,  local_cell_vector, scale, scale_ico);
+        _pde.InterfaceEquation(fdc,  local_vector, scale, scale_ico);
       }
   /******************************************************/
 
@@ -486,9 +486,9 @@ namespace DOpE
       void
       StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR,
           dim>::BoundaryEquation(const FDC& fdc,
-          dealii::Vector<double> &local_cell_vector, double scale, double scale_ico)
+          dealii::Vector<double> &local_vector, double scale, double scale_ico)
       {
-        _pde.BoundaryEquation(fdc, local_cell_vector, scale, scale_ico);
+        _pde.BoundaryEquation(fdc, local_vector, scale, scale_ico);
       }
 
   /******************************************************/
@@ -498,10 +498,10 @@ namespace DOpE
     template<typename CDC>
       void
       StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR,
-          dim>::CellRhs(const CDC& cdc,
-          dealii::Vector<double> &local_cell_vector, double scale)
+          dim>::ElementRhs(const CDC& cdc,
+          dealii::Vector<double> &local_vector, double scale)
       {
-        _pde.CellRightHandSide(cdc, local_cell_vector, scale);
+        _pde.ElementRightHandSide(cdc, local_vector, scale);
       }
 
   /******************************************************/
@@ -525,9 +525,9 @@ namespace DOpE
       void
       StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR,
           dim>::FaceRhs(const FDC& fdc,
-          dealii::Vector<double> &local_cell_vector, double scale)
+          dealii::Vector<double> &local_vector, double scale)
       {
-        _pde.FaceRightHandSide(fdc, local_cell_vector, scale);
+        _pde.FaceRightHandSide(fdc, local_vector, scale);
       }
 
   /******************************************************/
@@ -538,9 +538,9 @@ namespace DOpE
       void
       StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR,
           dim>::BoundaryRhs(const FDC& fdc,
-          dealii::Vector<double> &local_cell_vector, double scale)
+          dealii::Vector<double> &local_vector, double scale)
       {
-        _pde.BoundaryRightHandSide(fdc, local_cell_vector, scale);
+        _pde.BoundaryRightHandSide(fdc, local_vector, scale);
       }
 
   /******************************************************/
@@ -550,11 +550,11 @@ namespace DOpE
     template<typename CDC>
       void
       StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR,
-          dim>::CellMatrix(const CDC& cdc,
+          dim>::ElementMatrix(const CDC& cdc,
           dealii::FullMatrix<double> &local_entry_matrix, double scale,
           double scale_ico)
       {
-        _pde.CellMatrix(cdc, local_entry_matrix, scale, scale_ico);
+        _pde.ElementMatrix(cdc, local_entry_matrix, scale, scale_ico);
       }
 
   /******************************************************/
@@ -564,10 +564,10 @@ namespace DOpE
     template<typename CDC>
       void
       StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR,
-          dim>::CellTimeMatrix(const CDC& cdc,
+          dim>::ElementTimeMatrix(const CDC& cdc,
           FullMatrix<double> &local_entry_matrix)
       {
-        _pde.CellTimeMatrix(cdc, local_entry_matrix);
+        _pde.ElementTimeMatrix(cdc, local_entry_matrix);
       }
 
   /******************************************************/
@@ -577,10 +577,10 @@ namespace DOpE
     template<typename CDC>
       void
       StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR,
-          dim>::CellTimeMatrixExplicit(const CDC& cdc,
+          dim>::ElementTimeMatrixExplicit(const CDC& cdc,
           dealii::FullMatrix<double> &local_entry_matrix)
       {
-        _pde.CellTimeMatrixExplicit(cdc, local_entry_matrix);
+        _pde.ElementTimeMatrixExplicit(cdc, local_entry_matrix);
       }
 
   /******************************************************/
@@ -619,10 +619,10 @@ namespace DOpE
       void
       StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR,
           dim>::BoundaryMatrix(const FDC& fdc,
-				   FullMatrix<double> &local_cell_matrix, double scale,
+				   FullMatrix<double> &local_matrix, double scale,
 				   double scale_ico)
       {
-        _pde.BoundaryMatrix(fdc, local_cell_matrix, scale, scale_ico);
+        _pde.BoundaryMatrix(fdc, local_matrix, scale, scale_ico);
       }
 
   /******************************************************/

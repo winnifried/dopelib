@@ -92,14 +92,14 @@ namespace DOpE
         /******************************************************/
 
         /**
-         * Returns just _OP.CellFunctional(...). For more information we refer to
+         * Returns just _OP.ElementFunctional(...). For more information we refer to
          * the file optproblemcontainer.h
          */
         template<typename DATACONTAINER>
           double
-          CellFunctional(const DATACONTAINER& dc)
+          ElementFunctional(const DATACONTAINER& dc)
           {
-            return _OP.CellFunctional(dc);
+            return _OP.ElementFunctional(dc);
           }
 
         /******************************************************/

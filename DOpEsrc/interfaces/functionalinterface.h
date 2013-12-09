@@ -33,9 +33,9 @@
 
 #include "fevalues_wrapper.h"
 #include "dofhandler_wrapper.h"
-#include "celldatacontainer.h"
+#include "elementdatacontainer.h"
 #include "facedatacontainer.h"
-#include "multimesh_celldatacontainer.h"
+#include "multimesh_elementdatacontainer.h"
 #include "multimesh_facedatacontainer.h"
 
 namespace DOpE
@@ -60,8 +60,8 @@ namespace DOpE
         /**
          * This evaluates the Cost Functional J(q,u) = \int_\Omega j(q(x),u(x)) \dx on a given element T.
          *
-         * @param cdc     The CellDataContainer containing all the data necessary to evaluate the functional on
-         *                a cell.
+         * @param cdc     The ElementDataContainer containing all the data necessary to evaluate the functional on
+         *                a element.
          */
         virtual double
         ElementValue(const CDC<DH, VECTOR, dealdim>& cdc);
@@ -69,86 +69,86 @@ namespace DOpE
         /**
          * This evaluates the Cost Functional J_u'(q,u)(.) = \int_\Omega j_u'(q(x),u(x))(.) \dx on a given element T.
          *
-         * @param cdc                      The CellDataContainer containing all the data necessary to evaluate the functional on
-         *                                 a cell.
-         * @param local_cell_vector        A Vector to contain the result. After completion local_cell_vector fulfills
-         *                                 local_cell_vector(i) += scale * \int_T j_u'(q(x),u(x))(\phi_i) \dx where \phi_i is
+         * @param cdc                      The ElementDataContainer containing all the data necessary to evaluate the functional on
+         *                                 a element.
+         * @param local_vector        A Vector to contain the result. After completion local_vector fulfills
+         *                                 local_vector(i) += scale * \int_T j_u'(q(x),u(x))(\phi_i) \dx where \phi_i is
          *                                 the i-th local basis function of the state space.
          * @param scale                    A factor by which the result is scaled.
          */
         virtual void
         ElementValue_U(const CDC<DH, VECTOR, dealdim>& cdc,
-            dealii::Vector<double> &local_cell_vector, double scale);
+            dealii::Vector<double> &local_vector, double scale);
 
         /**
          * This evaluates the Cost Functional J_q'(q,u)(.) = \int_\Omega j_q'(q(x),u(x))(.) \dx on a given element T.
          *
-         * @param cdc                      The CellDataContainer containing all the data necessary to evaluate the functional on
-         *                                 a cell.
-         * @param local_cell_vector        A Vector to contain the result. After completion local_cell_vector fullfils
-         *                                 local_cell_vector(i) += scale * \int_T j_q'(q(x),u(x))(\phi_i) \dx where \phi_i is
+         * @param cdc                      The ElementDataContainer containing all the data necessary to evaluate the functional on
+         *                                 a element.
+         * @param local_vector        A Vector to contain the result. After completion local_vector fullfils
+         *                                 local_vector(i) += scale * \int_T j_q'(q(x),u(x))(\phi_i) \dx where \phi_i is
          *                                 the i-th local basis function of the control space.
          * @param scale                    A factor by which the result is scaled.
          */
         virtual void
         ElementValue_Q(const CDC<DH, VECTOR, dealdim>& cdc,
-            dealii::Vector<double> &local_cell_vector, double scale);
+            dealii::Vector<double> &local_vector, double scale);
 
         /**
          * This evaluates the Cost Functional J_uu'(q,u)(.,DU) = \int_\Omega j_uu'(q(x),u(x))(.,DU) \dx on a given element T.
          *
-         * @param cdc                      The CellDataContainer containing all the data necessary to evaluate the functional on
-         *                                 a cell.
-         * @param local_cell_vector        A Vector to contain the result. After completion local_cell_vector fullfils
-         *                                 local_cell_vector(i) += scale * \int_T j_uu'(q(x),u(x))(\phi_i,DU) \dx where \phi_i is
+         * @param cdc                      The ElementDataContainer containing all the data necessary to evaluate the functional on
+         *                                 a element.
+         * @param local_vector        A Vector to contain the result. After completion local_vector fullfils
+         *                                 local_vector(i) += scale * \int_T j_uu'(q(x),u(x))(\phi_i,DU) \dx where \phi_i is
          *                                 the i-th local basis function of the state space.
          * @param scale                    A factor by which the result is scaled.
          */
         virtual void
         ElementValue_UU(const CDC<DH, VECTOR, dealdim>& cdc,
-            dealii::Vector<double> &local_cell_vector, double scale);
+            dealii::Vector<double> &local_vector, double scale);
 
         /**
          * This evaluates the Cost Functional J_qu'(q,u)(.,DQ) = \int_\Omega j_qu'(q(x),u(x))(.,DQ) \dx on a given element T.
          *
-         * @param cdc                      The CellDataContainer containing all the data necessary to evaluate the functional on
-         *                                 a cell.
-         * @param local_cell_vector        A Vector to contain the result. After completion local_cell_vector fullfils
-         *                                 local_cell_vector(i) += scale * \int_T j_qu'(q(x),u(x))(\phi_i,DQ) \dx where \phi_i is
+         * @param cdc                      The ElementDataContainer containing all the data necessary to evaluate the functional on
+         *                                 a element.
+         * @param local_vector        A Vector to contain the result. After completion local_vector fullfils
+         *                                 local_vector(i) += scale * \int_T j_qu'(q(x),u(x))(\phi_i,DQ) \dx where \phi_i is
          *                                 the i-th local basis function of the state space.
          * @param scale                    A factor by which the result is scaled.
          */
         virtual void
         ElementValue_QU(const CDC<DH, VECTOR, dealdim>& cdc,
-            dealii::Vector<double> &local_cell_vector, double scale);
+            dealii::Vector<double> &local_vector, double scale);
 
         /**
          * This evaluates the Cost Functional J_uq'(q,u)(.,DU) = \int_\Omega j_uq'(q(x),u(x))(.,DU) \dx on a given element T.
          *
-         * @param cdc                      The CellDataContainer containing all the data necessary to evaluate the functional on
-         *                                 a cell.
-         * @param local_cell_vector        A Vector to contain the result. After completion local_cell_vector fullfils
-         *                                 local_cell_vector(i) += scale * \int_T j_uq'(q(x),u(x))(\phi_i,DU) \dx where \phi_i is
+         * @param cdc                      The ElementDataContainer containing all the data necessary to evaluate the functional on
+         *                                 a element.
+         * @param local_vector        A Vector to contain the result. After completion local_vector fullfils
+         *                                 local_vector(i) += scale * \int_T j_uq'(q(x),u(x))(\phi_i,DU) \dx where \phi_i is
          *                                 the i-th local basis function of the control space.
          * @param scale                    A factor by which the result is scaled.
          */
         virtual void
         ElementValue_UQ(const CDC<DH, VECTOR, dealdim>& cdc,
-            dealii::Vector<double> &local_cell_vector, double scale);
+            dealii::Vector<double> &local_vector, double scale);
 
         /**
          * This evaluates the Cost Functional J_qq'(q,u)(.,DQ) = \int_\Omega j_qq'(q(x),u(x))(.,DQ) \dx on a given element T.
          *
-         * @param cdc                      The CellDataContainer containing all the data necessary to evaluate the functional on
-         *                                 a cell.
-         * @param local_cell_vector        A Vector to contain the result. After completion local_cell_vector fullfils
-         *                                 local_cell_vector(i) += scale * \int_T j_qq'(q(x),u(x))(\phi_i,DQ) \dx where \phi_i is
+         * @param cdc                      The ElementDataContainer containing all the data necessary to evaluate the functional on
+         *                                 a element.
+         * @param local_vector        A Vector to contain the result. After completion local_vector fullfils
+         *                                 local_vector(i) += scale * \int_T j_qq'(q(x),u(x))(\phi_i,DQ) \dx where \phi_i is
          *                                 the i-th local basis function of the control space.
          * @param scale                    A factor by which the result is scaled.
          */
         virtual void
         ElementValue_QQ(const CDC<DH, VECTOR, dealdim>& cdc,
-            dealii::Vector<double> &local_cell_vector, double scale);
+            dealii::Vector<double> &local_vector, double scale);
 
         /**
          * This evaluates the Cost Functional J(q,u) = \sum_i j(q(x_i),u(x_i)). For given points x_i.
@@ -303,7 +303,7 @@ namespace DOpE
          *
          * @param fdc                      A FaceDataContainer containing all the information to evaluate
          *                                 the functional on a face.
-         * @param local_cell_vector        A Vector to contain the result.
+         * @param local_vector        A Vector to contain the result.
          * @param scale                    A factor by which the result is scaled.
          */
         virtual double
@@ -314,72 +314,72 @@ namespace DOpE
          *
          * @param fdc                      A FaceDataContainer containing all the information to evaluate
          *                                 the functional on a face.
-         * @param local_cell_vector        A Vector to contain the result.
+         * @param local_vector        A Vector to contain the result.
          * @param scale                    A factor by which the result is scaled.
          */
         virtual void
         BoundaryValue_U(const FDC<DH, VECTOR, dealdim>& fdc,
-            dealii::Vector<double> &local_cell_vector, double scale);
+            dealii::Vector<double> &local_vector, double scale);
 
         /**
          * The same as FunctionalInterface::ElementValue_Q only on boundaries.
          *
          * @param fdc                      A FaceDataContainer containing all the information to evaluate
          *                                 the functional on a face.
-         * @param local_cell_vector        A Vector to contain the result.
+         * @param local_vector        A Vector to contain the result.
          * @param scale                    A factor by which the result is scaled.
          */
         virtual void
         BoundaryValue_Q(const FDC<DH, VECTOR, dealdim>& fdc,
-            dealii::Vector<double> &local_cell_vector, double scale);
+            dealii::Vector<double> &local_vector, double scale);
 
         /**
          * The same as FunctionalInterface::ElementValue_UU only on boundaries.
          *
          * @param fdc                      A FaceDataContainer containing all the information to evaluate
          *                                 the functional on a face.
-         * @param local_cell_vector        A Vector to contain the result.
+         * @param local_vector        A Vector to contain the result.
          * @param scale                    A factor by which the result is scaled.
          */
         virtual void
         BoundaryValue_UU(const FDC<DH, VECTOR, dealdim>& fdc,
-            dealii::Vector<double> &local_cell_vector, double scale);
+            dealii::Vector<double> &local_vector, double scale);
 
         /**
          * The same as FunctionalInterface::ElementValue_QU only on boundaries.
          *
          * @param fdc                      A FaceDataContainer containing all the information to evaluate
          *                                 the functional on a face.
-         * @param local_cell_vector        A Vector to contain the result.
+         * @param local_vector        A Vector to contain the result.
          * @param scale                    A factor by which the result is scaled.
          */
         virtual void
         BoundaryValue_QU(const FDC<DH, VECTOR, dealdim>& fdc,
-            dealii::Vector<double> &local_cell_vector, double scale);
+            dealii::Vector<double> &local_vector, double scale);
 
         /**
          * The same as FunctionalInterface::ElementValue_UQ only on boundaries.
          *
          * @param fdc                      A FaceDataContainer containing all the information to evaluate
          *                                 the functional on a face.
-         * @param local_cell_vector        A Vector to contain the result.
+         * @param local_vector        A Vector to contain the result.
          * @param scale                    A factor by which the result is scaled.
          */
         virtual void
         BoundaryValue_UQ(const FDC<DH, VECTOR, dealdim>& fdc,
-            dealii::Vector<double> &local_cell_vector, double scale);
+            dealii::Vector<double> &local_vector, double scale);
 
         /**
          * The same as FunctionalInterface::ElementValue_QQ only on boundaries.
          *
          * @param fdc                      A FaceDataContainer containing all the information to evaluate
          *                                 the functional on a face.
-         * @param local_cell_vector        A Vector to contain the result.
+         * @param local_vector        A Vector to contain the result.
          * @param scale                    A factor by which the result is scaled.
          */
         virtual void
         BoundaryValue_QQ(const FDC<DH, VECTOR, dealdim>& fdc,
-            dealii::Vector<double> &local_cell_vector, double scale);
+            dealii::Vector<double> &local_vector, double scale);
 
         /**
          * The same as FunctionalInterface::ElementValue only on a faces between elements.
@@ -397,12 +397,12 @@ namespace DOpE
          *
          * @param fdc                      A FaceDataContainer containing all the information to evaluate
          *                                 the functional on a face.
-         * @param local_cell_vector        A Vector to contain the result.
+         * @param local_vector        A Vector to contain the result.
          * @param scale                    A factor by which the result is scaled.
          */
         virtual void
         FaceValue_U(const FDC<DH, VECTOR, dealdim>& fdc,
-            dealii::Vector<double> &local_cell_vector, double scale);
+            dealii::Vector<double> &local_vector, double scale);
 
         /**
          * The same as FunctionalInterface::ElementValue_Q only on a faces between elements.
@@ -410,12 +410,12 @@ namespace DOpE
          *
          * @param fdc                      A FaceDataContainer containing all the information to evaluate
          *                                 the functional on a face.
-         * @param local_cell_vector        A Vector to contain the result.
+         * @param local_vector        A Vector to contain the result.
          * @param scale                    A factor by which the result is scaled.
          */
         virtual void
         FaceValue_Q(const FDC<DH, VECTOR, dealdim>& fdc,
-            dealii::Vector<double> &local_cell_vector, double scale);
+            dealii::Vector<double> &local_vector, double scale);
 
         /**
          * The same as FunctionalInterface::ElementValue_UU only on a faces between elements.
@@ -423,12 +423,12 @@ namespace DOpE
          *
          * @param fdc                      A FaceDataContainer containing all the information to evaluate
          *                                 the functional on a face.
-         * @param local_cell_vector        A Vector to contain the result.
+         * @param local_vector        A Vector to contain the result.
          * @param scale                    A factor by which the result is scaled.
          */
         virtual void
         FaceValue_UU(const FDC<DH, VECTOR, dealdim>& fdc,
-            dealii::Vector<double> &local_cell_vector, double scale);
+            dealii::Vector<double> &local_vector, double scale);
 
         /**
          * The same as FunctionalInterface::ElementValue_QU only on a faces between elements.
@@ -436,12 +436,12 @@ namespace DOpE
          *
          * @param fdc                      A FaceDataContainer containing all the information to evaluate
          *                                 the functional on a face.
-         * @param local_cell_vector        A Vector to contain the result.
+         * @param local_vector        A Vector to contain the result.
          * @param scale                    A factor by which the result is scaled.
          */
         virtual void
         FaceValue_QU(const FDC<DH, VECTOR, dealdim>& fdc,
-            dealii::Vector<double> &local_cell_vector, double scale);
+            dealii::Vector<double> &local_vector, double scale);
 
         /**
          * The same as FunctionalInterface::ElementValue_UQ only on a faces between elements.
@@ -449,12 +449,12 @@ namespace DOpE
          *
          * @param fdc                      A FaceDataContainer containing all the information to evaluate
          *                                 the functional on a face.
-         * @param local_cell_vector        A Vector to contain the result.
+         * @param local_vector        A Vector to contain the result.
          * @param scale                    A factor by which the result is scaled.
          */
         virtual void
         FaceValue_UQ(const FDC<DH, VECTOR, dealdim>& fdc,
-            dealii::Vector<double> &local_cell_vector, double scale);
+            dealii::Vector<double> &local_vector, double scale);
 
         /**
          * The same as FunctionalInterface::ElementValue_QQ only on a faces between elements.
@@ -462,12 +462,12 @@ namespace DOpE
          *
          * @param fdc                      A FaceDataContainer containing all the information to evaluate
          *                                 the functional on a face.
-         * @param local_cell_vector        A Vector to contain the result.
+         * @param local_vector        A Vector to contain the result.
          * @param scale                    A factor by which the result is scaled.
          */
         virtual void
         FaceValue_QQ(const FDC<DH, VECTOR, dealdim>& fdc,
-            dealii::Vector<double> &local_cell_vector, double scale);
+            dealii::Vector<double> &local_vector, double scale);
 
         /**
          * Implements a functional that can be computed by the values in some given Vectors or BlockVectors

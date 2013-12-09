@@ -69,7 +69,7 @@ namespace DOpE
       {
         _fe = NULL;
         _times.resize(1, 0.);
-        _dofs_per_cell = 1;
+        _dofs_per_element = 1;
         _need_delete = false;
         _initialized = false;
       }
@@ -129,7 +129,7 @@ namespace DOpE
           find_ends();
           compute_times();
           _initialized = true;
-          _dofs_per_cell = this->get_fe().dofs_per_cell;
+          _dofs_per_element = this->get_fe().dofs_per_cell;
         }
       }
 
@@ -244,7 +244,7 @@ namespace DOpE
       unsigned int
       GetLocalNbrOfDoFs() const
       {
-        return _dofs_per_cell;
+        return _dofs_per_element;
       }
 
     private:
@@ -255,23 +255,23 @@ namespace DOpE
       void
       find_ends()
       {
-        DoFHandler<1>::active_cell_iterator cell = this->begin_active();
-        while (cell->face(0)->boundary_indicator() != 0)
+        DoFHandler<1>::active_cell_iterator element = this->begin_active();
+        while (element->face(0)->boundary_indicator() != 0)
         {
-          cell = cell->neighbor(0);
+          element = element->neighbor(0);
         }
-        _first_interval.Initialize(cell, 0);
-        _before_first_interval.Initialize(cell, -2);
+        _first_interval.Initialize(element, 0);
+        _before_first_interval.Initialize(element, -2);
 
-        cell = this->begin_active();
-        while (cell->face(1)->boundary_indicator() != 1)
+        element = this->begin_active();
+        while (element->face(1)->boundary_indicator() != 1)
         {
-          cell = cell->neighbor(1);
+          element = element->neighbor(1);
         }
         assert(static_cast<int>(this->get_tria().n_active_cells() - 1) >= 0);
-        _last_interval.Initialize(cell,
+        _last_interval.Initialize(element,
             static_cast<int>(this->get_tria().n_active_cells() - 1));_after_last_interval
-        .Initialize(cell, -1);
+        .Initialize(element, -1);
       }
 
       /**
@@ -298,15 +298,15 @@ namespace DOpE
         std::vector<unsigned int> global_dof_indices(
             this->get_fe().dofs_per_cell);
 
-        //the usual loops. Go over all cells, in every cell go through the quad
+        //the usual loops. Go over all elements, in every element go through the quad
         //points and store thei position in _times
-        //typename DoFHandler<1>::active_cell_iterator cell =
-        DoFHandler<1>::active_cell_iterator cell = this->begin_active(), endc =
+        //typename DoFHandler<1>::active_cell_iterator element =
+        DoFHandler<1>::active_cell_iterator element = this->begin_active(), endc =
             this->end();
-        for (; cell != endc; ++cell)
+        for (; element != endc; ++element)
         {
-          fe_values.reinit(cell);
-          cell->get_dof_indices(global_dof_indices);
+          fe_values.reinit(element);
+          element->get_dof_indices(global_dof_indices);
           for (unsigned int i = 0; i < n_q_points; ++i)
           {
             _times[global_dof_indices[i]] =
@@ -329,7 +329,7 @@ namespace DOpE
        * A vector containing the place of the time Dofs.
        */
       std::vector<double> _times;
-      unsigned int _dofs_per_cell;
+      unsigned int _dofs_per_element;
       bool _need_delete, _initialized;
   };
 

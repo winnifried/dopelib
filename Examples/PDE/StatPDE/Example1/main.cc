@@ -81,9 +81,9 @@ typedef BlockVector<double> VECTOR;
 //Abbreviations of various DOpE types, see in the respective headers for more
 //information.
 
-//Celldatacontainer and Facedatacontainer handle all the informations we need
-//to integrate or evaluate an FE function on a cell resp. face.
-#define CDC CellDataContainer
+//Elementdatacontainer and Facedatacontainer handle all the informations we need
+//to integrate or evaluate an FE function on a element resp. face.
+#define CDC ElementDataContainer
 #define FDC FaceDataContainer
 
 //The PDEProblemContainer holds all the information regarding the PDE.
@@ -92,7 +92,7 @@ typedef PDEProblemContainer<LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
     DOFHANDLER> OP;
 
 //The IntegratorDataContainer holds quadrature formulas as
-//well as cell- and facedatacontainer.
+//well as element- and facedatacontainer.
 typedef IntegratorDataContainer<DOFHANDLER, QUADRATURE, FACEQUADRATURE, VECTOR,
     DIM> IDC;
 

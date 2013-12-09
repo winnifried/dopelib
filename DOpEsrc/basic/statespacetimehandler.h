@@ -255,10 +255,10 @@ namespace DOpE
         {
           if (dof_handler.NeedIndexSetter())
           {
-            for (typename DH<dealdim, dealdim>::active_cell_iterator cell =
-                dof_handler.begin_active(); cell != dof_handler.end(); ++cell)
+            for (typename DH<dealdim, dealdim>::active_cell_iterator element =
+                dof_handler.begin_active(); element != dof_handler.end(); ++element)
             {
-              this->GetFEIndexSetter().SetActiveFEIndexState(cell);
+              this->GetFEIndexSetter().SetActiveFEIndexState(element);
             }
           }
         }

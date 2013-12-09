@@ -29,7 +29,7 @@
 using namespace DOpE;
 
 /**
- * This class describes cellwise the weak formulation of the PDE.
+ * This class describes elementwise the weak formulation of the PDE.
  * See pdeinterface.h for more information.
  */
 template<
@@ -50,19 +50,19 @@ template<
       }
 
       /**
-       * This describes the weak formulation on a cell, i.e. the
+       * This describes the weak formulation on a element, i.e. the
        * weak formulation of the Stokes equation.
        */
       void
-      CellEquation(const CDC<DH, VECTOR, dealdim>& cdc,
-          dealii::Vector<double> &local_cell_vector, double scale,
+      ElementEquation(const CDC<DH, VECTOR, dealdim>& cdc,
+          dealii::Vector<double> &local_vector, double scale,
           double scale_ico)
       {
         //Get the number of dofs, the number of quad points as
-        //well as the finite element values on this cell from the cdc.
+        //well as the finite element values on this element from the cdc.
         const DOpEWrapper::FEValues<dealdim> & state_fe_values =
             cdc.GetFEValuesState();
-        const unsigned int n_dofs_per_cell = cdc.GetNDoFsPerCell();
+        const unsigned int n_dofs_per_element = cdc.GetNDoFsPerElement();
         const unsigned int n_q_points = cdc.GetNQPoints();
         //This should only get called if the problem type is state.
         assert(this->_problem_type == "state");
@@ -93,7 +93,7 @@ template<
           double incompressibility = vgrads[0][0] + vgrads[1][1];
 
           //loop over all degrees of freedom
-          for (unsigned int i = 0; i < n_dofs_per_cell; i++)
+          for (unsigned int i = 0; i < n_dofs_per_element; i++)
           {
             //Again abbreviations.
             const Tensor<2, 2> phi_i_grads_v =
@@ -105,12 +105,12 @@ template<
             //Define the weak formulation. scale_ico makes only
             //sense in the instationary context. In a stationary
             //problem it holds scale_ico = scale.
-            local_cell_vector(i) += scale
+            local_vector(i) += scale
                 * (0.5 * scalar_product(vgrads, phi_i_grads_v)
                     + 0.5 * scalar_product(transpose(vgrads), phi_i_grads_v))
                 * state_fe_values.JxW(q_point);
 
-            local_cell_vector(i) += scale_ico
+            local_vector(i) += scale_ico
                 * (-1. * press * div_phi_v + incompressibility * phi_i_p)
                 * state_fe_values.JxW(q_point);
           }
@@ -118,30 +118,27 @@ template<
 
       }
 
-      /**
-       * Assembling of the cellmatrix. See CellEquation for more information.
-       */
       void
-      CellMatrix(const CDC<DH, VECTOR, dealdim>& cdc,
-          FullMatrix<double> &local_entry_matrix, double scale,
+      ElementMatrix(const CDC<DH, VECTOR, dealdim>& cdc,
+          FullMatrix<double> &local_matrix, double scale,
           double scale_ico)
       {
         const DOpEWrapper::FEValues<dealdim> & state_fe_values =
             cdc.GetFEValuesState();
-        const unsigned int n_dofs_per_cell = cdc.GetNDoFsPerCell();
+        const unsigned int n_dofs_per_element = cdc.GetNDoFsPerElement();
         const unsigned int n_q_points = cdc.GetNQPoints();
 
         const FEValuesExtractors::Vector velocities(0);
         const FEValuesExtractors::Scalar pressure(2);
 
-        std::vector<Tensor<1, 2> > phi_v(n_dofs_per_cell);
-        std::vector<Tensor<2, 2> > phi_grads_v(n_dofs_per_cell);
-        std::vector<double> phi_p(n_dofs_per_cell);
-        std::vector<double> div_phi_v(n_dofs_per_cell);
+        std::vector<Tensor<1, 2> > phi_v(n_dofs_per_element);
+        std::vector<Tensor<2, 2> > phi_grads_v(n_dofs_per_element);
+        std::vector<double> phi_p(n_dofs_per_element);
+        std::vector<double> div_phi_v(n_dofs_per_element);
 
         for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
         {
-          for (unsigned int k = 0; k < n_dofs_per_cell; k++)
+          for (unsigned int k = 0; k < n_dofs_per_element; k++)
           {
             phi_v[k] = state_fe_values[velocities].value(k, q_point);
             phi_grads_v[k] = state_fe_values[velocities].gradient(k, q_point);
@@ -149,16 +146,16 @@ template<
             div_phi_v[k] = state_fe_values[velocities].divergence(k, q_point);
           }
 
-          for (unsigned int i = 0; i < n_dofs_per_cell; i++)
+          for (unsigned int i = 0; i < n_dofs_per_element; i++)
           {
-            for (unsigned int j = 0; j < n_dofs_per_cell; j++)
+            for (unsigned int j = 0; j < n_dofs_per_element; j++)
             {
-              local_entry_matrix(i, j) += scale
+              local_matrix(i, j) += scale
                   * (0.5 * scalar_product(phi_grads_v[j], phi_grads_v[i])
                       + 0.5
                           * scalar_product(transpose(phi_grads_v[j]),
                               phi_grads_v[i])) * state_fe_values.JxW(q_point);
-              local_entry_matrix(i, j) +=
+              local_matrix(i, j) +=
                   scale_ico
                       * (-phi_p[j] * div_phi_v[i]
                           + (phi_grads_v[j][0][0] + phi_grads_v[j][1][1])
@@ -170,12 +167,12 @@ template<
       }
 
       /**
-       * Describes the value of the rhs on a cell, i.e. the term (f,phi).
+       * Describes the value of the rhs on a element, i.e. the term (f,phi).
        * As we have f=0 in our example, this method is empty.
        */
       void
-      CellRightHandSide(const CDC<DH, VECTOR, dealdim>&
-      /*cdc*/, dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
+      ElementRightHandSide(const CDC<DH, VECTOR, dealdim>&
+      /*cdc*/, dealii::Vector<double> &/*local_vector*/, double /*scale*/)
       {
 
       }
@@ -187,12 +184,12 @@ template<
        */
       void
       BoundaryEquation(const FDC<DH, VECTOR, dealdim>& fdc,
-          dealii::Vector<double> &local_cell_vector, double scale,
+          dealii::Vector<double> &local_vector, double scale,
           double /*scale_ico*/)
       {
         //auto = FEValues
         const auto & state_fe_face_values = fdc.GetFEFaceValuesState();
-        const unsigned int n_dofs_per_cell = fdc.GetNDoFsPerCell();
+        const unsigned int n_dofs_per_element = fdc.GetNDoFsPerElement();
         const unsigned int n_q_points = fdc.GetNQPoints();
         const unsigned int color = fdc.GetBoundaryIndicator();
 
@@ -217,7 +214,7 @@ template<
             vgrads[1][0] = _ufacegrads[q_point][1][0];
             vgrads[1][1] = _ufacegrads[q_point][1][1];
 
-            for (unsigned int i = 0; i < n_dofs_per_cell; i++)
+            for (unsigned int i = 0; i < n_dofs_per_element; i++)
             {
               const Tensor<1, 2> phi_i_v =
                   state_fe_face_values[velocities].value(i, q_point);
@@ -225,7 +222,7 @@ template<
               const Tensor<1, 2> neumann_value = (transpose(vgrads)
                   * state_fe_face_values.normal_vector(q_point));
 
-              local_cell_vector(i) += -scale * 0.5 * neumann_value * phi_i_v
+              local_vector(i) += -scale * 0.5 * neumann_value * phi_i_v
                   * state_fe_face_values.JxW(q_point);
             }
           }
@@ -238,11 +235,11 @@ template<
        */
       void
       BoundaryMatrix(const FDC<DH, VECTOR, dealdim>& fdc,
-          dealii::FullMatrix<double> &local_entry_matrix, double scale,
+          dealii::FullMatrix<double> &local_matrix, double scale,
           double /*scale_ico*/)
       {
         const auto & state_fe_face_values = fdc.GetFEFaceValuesState();
-        const unsigned int n_dofs_per_cell = fdc.GetNDoFsPerCell();
+        const unsigned int n_dofs_per_element = fdc.GetNDoFsPerElement();
         const unsigned int n_q_points = fdc.GetNQPoints();
         const unsigned int color = fdc.GetBoundaryIndicator();
         assert(this->_problem_type == "state");
@@ -254,12 +251,12 @@ template<
 
           for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
           {
-            for (unsigned int i = 0; i < n_dofs_per_cell; i++)
+            for (unsigned int i = 0; i < n_dofs_per_element; i++)
             {
               const Tensor<1, 2> phi_i_v =
                   state_fe_face_values[velocities].value(i, q_point);
 
-              for (unsigned int j = 0; j < n_dofs_per_cell; j++)
+              for (unsigned int j = 0; j < n_dofs_per_element; j++)
               {
                 const Tensor<2, 2> phi_j_grads_v =
                     state_fe_face_values[velocities].gradient(j, q_point);
@@ -267,7 +264,7 @@ template<
                 const Tensor<1, 2> neumann_value = (transpose(phi_j_grads_v)
                     * state_fe_face_values.normal_vector(q_point));
 
-                local_entry_matrix(i, j) += -scale * 0.5 * neumann_value
+                local_matrix(i, j) += -scale * 0.5 * neumann_value
                     * phi_i_v * state_fe_face_values.JxW(q_point);
               }
             }
@@ -282,7 +279,7 @@ template<
        */
       void
       BoundaryRightHandSide(const FDC<DH, VECTOR, dealdim>& /*fdc*/,
-          dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
+          dealii::Vector<double> &/*local_vector*/, double /*scale*/)
       {
       }
 

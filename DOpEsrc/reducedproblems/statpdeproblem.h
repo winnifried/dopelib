@@ -211,7 +211,7 @@ namespace DOpE
         /******************************************************/
 
         /**
-         *  Here, the given Vector v (containing cell-related data) is printed to
+         *  Here, the given Vector v (containing element-related data) is printed to
          *  a file of *.vtk format. However, in later implementations other
          *  file formats will be available.
          *
@@ -221,10 +221,10 @@ namespace DOpE
          *  @param dof_type    Has the DoF type: state or control.
          *  @param filetype    The filetype. Actually, *.vtk outputs are possible.
          *  @param type        How to interprete the given data, i.e. does v contain nodal-related or
-         *                     cell-related data.
+         *                     element-related data.
          */
         void
-        WriteToFileCellwise(const Vector<double> &v, std::string name,
+        WriteToFileElementwise(const Vector<double> &v, std::string name,
             std::string outfile, std::string dof_type, std::string filetype);
 
         /******************************************************/
@@ -771,9 +771,9 @@ namespace DOpE
             boost::mem_fn(&DWRC::VectorResidualModifier), boost::ref(dwrc), _1);
         //first we reinit the dwrdatacontainer (this
         //sets the weight-vectors to their correct length)
-        const unsigned int n_cells =
+        const unsigned int n_elements =
             this->GetProblem()->GetSpaceTimeHandler()->GetStateDoFHandler().get_tria().n_active_cells();
-        dwrc.ReInit(n_cells);
+        dwrc.ReInit(n_elements);
         //If we need the dual solution, compute it
         if (dwrc.NeedDual())
           this->ComputeDualForErrorEstimation(dwrc.GetWeightComputation());
@@ -822,7 +822,7 @@ namespace DOpE
           out << " for the " << this->GetProblem()->GetFunctionalName();
         out << ": " << error;
         this->GetOutputHandler()->Write(out, 2 + this->GetBasePriority());
-        this->GetOutputHandler()->WriteCellwise(dwrc.GetErrorIndicators(),
+        this->GetOutputHandler()->WriteElementwise(dwrc.GetErrorIndicators(),
             "Error_Indicators" + this->GetPostIndex(),
             this->GetProblem()->GetDoFType());
 
@@ -833,7 +833,7 @@ namespace DOpE
   template<typename NONLINEARSOLVER, typename INTEGRATOR, typename PROBLEM,
       typename VECTOR, int dealdim>
     void
-    StatPDEProblem<NONLINEARSOLVER, INTEGRATOR, PROBLEM, VECTOR, dealdim>::WriteToFileCellwise(
+    StatPDEProblem<NONLINEARSOLVER, INTEGRATOR, PROBLEM, VECTOR, dealdim>::WriteToFileElementwise(
         const Vector<double> &v, std::string name, std::string outfile,
         std::string dof_type, std::string filetype)
     {
@@ -857,14 +857,14 @@ namespace DOpE
         {
           throw DOpEException(
               "Don't know how to write filetype `" + filetype + "'!",
-              "StatPDEProblem::WriteToFileCellwise");
+              "StatPDEProblem::WriteToFileElementwise");
         }
         data_out.clear();
       }
       else
       {
         throw DOpEException("No such DoFHandler `" + dof_type + "'!",
-            "StatPDEProblem::WriteToFileCellwise");
+            "StatPDEProblem::WriteToFileElementwise");
       }
     }
 

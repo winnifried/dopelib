@@ -20,8 +20,8 @@ For this setting, we have the error representation
 \begin{align}\label{dwr.error_identity}
 J(e)=\sum_{K\in \mathbb T _h} \left\{(R_h, z-\psi_h)_K + (r_h, z-\psi_h)_{\partial_K}\right\}
 \end{align}
-with the error $e=u-u_h$, the Triangulation $\mathbb T_h$, the dual solution $z$, arbitraty function $\phi_h \in V_h$ (the ansatz space) and the cell- and edge-residuals: 
-\begin{align}\label{dwr.cell_residual}
+with the error $e=u-u_h$, the Triangulation $\mathbb T_h$, the dual solution $z$, arbitraty function $\phi_h \in V_h$ (the ansatz space) and the element- and edge-residuals: 
+\begin{align}\label{dwr.element_residual}
 \eval[1]{R_h}_{K} = f+\Delta u_h
 \end{align}
 resp. 
@@ -53,8 +53,8 @@ To be able to solve the adjoint equation for the error estimation one needs to i
 \begin{itemize}
 \item In {\verb pdeinterface.h }
 \begin{itemize}
-\item {\verb CellEquation_U }: Weak form of the adjoint equation.
-\item {\verb CellMatrix_T }: The FE matrix for the adjoint problem.
+\item {\verb ElementEquation_U }: Weak form of the adjoint equation.
+\item {\verb ElementMatrix_T }: The FE matrix for the adjoint problem.
 \item {\verb FaceEquation_U }: This one is needed in this case here because we have a functional of interest that lives on faces. 
 \end{itemize}
 \item {\verb functionalinterface.h }
@@ -64,7 +64,7 @@ To be able to solve the adjoint equation for the error estimation one needs to i
 \end{itemize}
 During the  evaluation of \eqref{dwr.error_identity}, the following methods are needed
 \begin{itemize}
-\item {\verb StrongCellResidual }: The cell residual, see \eqref{dwr.cell_residual}.
+\item {\verb StrongElementResidual }: The element residual, see \eqref{dwr.element_residual}.
 \item {\verb StrongFaceResidual }: The terms in \eqref{dwr.error_identity} that lies in the interiour (i.e. the jumps).
 \item {\verb StrongBoundaryResidual }:The terms in \eqref{dwr.error_identity} that lies on the boundary (There are none in this case).
 \end{itemize}

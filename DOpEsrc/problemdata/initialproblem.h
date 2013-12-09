@@ -65,8 +65,8 @@ namespace DOpE
 	 */
         template<typename CDC>
           inline void
-          CellEquation(const CDC& cdc,
-              dealii::Vector<double> &local_cell_vector, double scale,
+          ElementEquation(const CDC& cdc,
+              dealii::Vector<double> &local_vector, double scale,
               double scale_ico);
 
         /**
@@ -75,8 +75,8 @@ namespace DOpE
 	 */
         template<typename CDC>
           inline void
-          CellRhs(const CDC& cdc,
-              dealii::Vector<double> &local_cell_vector, double scale = 1.);
+          ElementRhs(const CDC& cdc,
+              dealii::Vector<double> &local_vector, double scale = 1.);
 
         /**
 	 * Functions providing the required information for the integrator.
@@ -94,8 +94,8 @@ namespace DOpE
 	 */
         template<typename CDC>
           inline void
-          CellMatrix(const CDC& cdc,
-              dealii::FullMatrix<double> &local_entry_matrix, double scale = 1.,
+          ElementMatrix(const CDC& cdc,
+              dealii::FullMatrix<double> &local_matrix, double scale = 1.,
               double scale_ico = 1.);
 
         /**
@@ -105,7 +105,7 @@ namespace DOpE
         template<typename FDC>
           inline void
           FaceEquation(const FDC& fdc,
-		       dealii::Vector<double> &local_cell_vector, double scale = 1., double scale_ico = 1.);
+		       dealii::Vector<double> &local_vector, double scale = 1., double scale_ico = 1.);
 
         /**
 	 * Functions providing the required information for the integrator.
@@ -114,7 +114,7 @@ namespace DOpE
         template<typename FDC>
           inline void
           InterfaceEquation(const FDC& fdc,
-              dealii::Vector<double> &local_cell_vector, double scale = 1., double scale_ico = 1.);
+              dealii::Vector<double> &local_vector, double scale = 1., double scale_ico = 1.);
 
         /**
 	 * Functions providing the required information for the integrator.
@@ -123,7 +123,7 @@ namespace DOpE
         template<typename FDC>
           inline void
           FaceRhs(const FDC& fdc,
-              dealii::Vector<double> &local_cell_vector, double scale = 1.);
+              dealii::Vector<double> &local_vector, double scale = 1.);
 
 	/**
 	 * Functions providing the required information for the integrator.
@@ -132,7 +132,7 @@ namespace DOpE
        template<typename FDC>
           inline void
           FaceMatrix(const FDC& fdc,
-              dealii::FullMatrix<double> &local_entry_matrix, double scale = 1., double scale_ico = 1.);
+              dealii::FullMatrix<double> &local_matrix, double scale = 1., double scale_ico = 1.);
 
         /**
 	 * Functions providing the required information for the integrator.
@@ -141,7 +141,7 @@ namespace DOpE
         template<typename FDC>
           inline void
           InterfaceMatrix(const FDC& fdc,
-              dealii::FullMatrix<double> &local_entry_matrix, double scale = 1., double scale_ico = 1.);
+              dealii::FullMatrix<double> &local_matrix, double scale = 1., double scale_ico = 1.);
 
         /**
 	 * Functions providing the required information for the integrator.
@@ -150,7 +150,7 @@ namespace DOpE
         template<typename FDC>
           inline void
           BoundaryEquation(const FDC& fdc,
-              dealii::Vector<double> &local_cell_vector, double scale = 1., double scale_ico = 1.);
+              dealii::Vector<double> &local_vector, double scale = 1., double scale_ico = 1.);
 
         /**
 	 * Functions providing the required information for the integrator.
@@ -159,7 +159,7 @@ namespace DOpE
         template<typename FDC>
           inline void
           BoundaryRhs(const FDC& fdc,
-              dealii::Vector<double> &local_cell_vector, double scale = 1.);
+              dealii::Vector<double> &local_vector, double scale = 1.);
 
         /**
 	 * Functions providing the required information for the integrator.
@@ -168,7 +168,7 @@ namespace DOpE
         template<typename FDC>
           inline void
           BoundaryMatrix(const FDC& fdc,
-              dealii::FullMatrix<double> &local_cell_matrix, double scale = 1., double scale_ico = 1.);
+              dealii::FullMatrix<double> &local_matrix, double scale = 1., double scale_ico = 1.);
 
         /**
 	 * Functions providing the required information for the integrator.
@@ -302,11 +302,11 @@ namespace DOpE
   template<typename PDE, typename VECTOR, int dim>
     template<typename CDC>
       void
-      InitialProblem<PDE, VECTOR, dim>::CellEquation(const CDC& cdc,
-          dealii::Vector<double> &local_cell_vector, double scale,
+      InitialProblem<PDE, VECTOR, dim>::ElementEquation(const CDC& cdc,
+          dealii::Vector<double> &local_vector, double scale,
           double scale_ico)
       {
-        _pde.Init_CellEquation(cdc, local_cell_vector, scale, scale_ico);
+        _pde.Init_ElementEquation(cdc, local_vector, scale, scale_ico);
       }
 
   /******************************************************/
@@ -316,9 +316,9 @@ namespace DOpE
       void
       InitialProblem<PDE, VECTOR, dim>::FaceEquation(
           const FDC& fdc,
-          dealii::Vector<double> &local_cell_vector, double scale, double scale_ico)
+          dealii::Vector<double> &local_vector, double scale, double scale_ico)
       {
-        _pde.Init_FaceEquation(fdc, local_cell_vector, scale, scale_ico);
+        _pde.Init_FaceEquation(fdc, local_vector, scale, scale_ico);
       }
 
   /******************************************************/
@@ -328,9 +328,9 @@ namespace DOpE
       void
       InitialProblem<PDE, VECTOR, dim>::InterfaceEquation(
           const FDC& fdc,
-          dealii::Vector<double> &local_cell_vector, double scale, double scale_ico)
+          dealii::Vector<double> &local_vector, double scale, double scale_ico)
       {
-        _pde.Init_InterfaceEquation(fdc, local_cell_vector, scale, scale_ico);
+        _pde.Init_InterfaceEquation(fdc, local_vector, scale, scale_ico);
       }
   /******************************************************/
 
@@ -339,9 +339,9 @@ namespace DOpE
       void
       InitialProblem<PDE, VECTOR, dim>::BoundaryEquation(
           const FDC& fdc,
-          dealii::Vector<double> &local_cell_vector, double scale, double scale_ico)
+          dealii::Vector<double> &local_vector, double scale, double scale_ico)
       {
-        _pde.Init_BoundaryEquation(fdc, local_cell_vector, scale, scale_ico);
+        _pde.Init_BoundaryEquation(fdc, local_vector, scale, scale_ico);
       }
 
   /******************************************************/
@@ -349,10 +349,10 @@ namespace DOpE
   template<typename PDE, typename VECTOR, int dim>
     template<typename CDC>
       void
-      InitialProblem<PDE, VECTOR, dim>::CellRhs(const CDC& cdc,
-          dealii::Vector<double> &local_cell_vector, double scale)
+      InitialProblem<PDE, VECTOR, dim>::ElementRhs(const CDC& cdc,
+          dealii::Vector<double> &local_vector, double scale)
       {
-        _pde.Init_CellRhs(cdc, local_cell_vector, scale);
+        _pde.Init_ElementRhs(cdc, local_vector, scale);
       }
 
   /******************************************************/
@@ -373,7 +373,7 @@ namespace DOpE
       void
       InitialProblem<PDE, VECTOR, dim>::FaceRhs(
           const FDC& /*fdc*/,
-          dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
+          dealii::Vector<double> &/*local_vector*/, double /*scale*/)
       {
       }
 
@@ -384,7 +384,7 @@ namespace DOpE
       void
       InitialProblem<PDE, VECTOR, dim>::BoundaryRhs(
           const FDC& /*fdc*/,
-          dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
+          dealii::Vector<double> &/*local_vector*/, double /*scale*/)
       {
       }
 
@@ -393,10 +393,10 @@ namespace DOpE
   template<typename PDE, typename VECTOR, int dim>
     template<typename CDC>
       void
-      InitialProblem<PDE, VECTOR, dim>::CellMatrix(const CDC& cdc,
-          dealii::FullMatrix<double> &local_entry_matrix, double scale, double scale_ico)
+      InitialProblem<PDE, VECTOR, dim>::ElementMatrix(const CDC& cdc,
+          dealii::FullMatrix<double> &local_matrix, double scale, double scale_ico)
       {
-        _pde.Init_CellMatrix(cdc, local_entry_matrix, scale, scale_ico);
+        _pde.Init_ElementMatrix(cdc, local_matrix, scale, scale_ico);
       }
 
   /******************************************************/
@@ -405,9 +405,9 @@ namespace DOpE
     template<typename FDC>
       void
       InitialProblem<PDE, VECTOR, dim>::FaceMatrix(const FDC& fdc,
-          FullMatrix<double> &local_entry_matrix, double scale, double scale_ico)
+          FullMatrix<double> &local_matrix, double scale, double scale_ico)
       {
-        _pde.Init_FaceMatrix(fdc, local_entry_matrix, scale, scale_ico);
+        _pde.Init_FaceMatrix(fdc, local_matrix, scale, scale_ico);
       }
 
   /******************************************************/
@@ -416,9 +416,9 @@ namespace DOpE
     template<typename FDC>
       void
       InitialProblem<PDE, VECTOR, dim>::InterfaceMatrix(
-          const FDC& fdc, FullMatrix<double> &local_entry_matrix, double scale, double scale_ico)
+          const FDC& fdc, FullMatrix<double> &local_matrix, double scale, double scale_ico)
       {
-        _pde.Init_InterfaceMatrix(fdc, local_entry_matrix, scale, scale_ico);
+        _pde.Init_InterfaceMatrix(fdc, local_matrix, scale, scale_ico);
       }
 
   /******************************************************/
@@ -427,9 +427,9 @@ namespace DOpE
     template<typename FDC>
       void
       InitialProblem<PDE, VECTOR, dim>::BoundaryMatrix(
-          const FDC& fdc, FullMatrix<double> &local_cell_matrix, double scale, double scale_ico)
+          const FDC& fdc, FullMatrix<double> &local_matrix, double scale, double scale_ico)
       {
-        _pde.Init_BoundaryMatrix(fdc, local_cell_matrix, scale, scale_ico);
+        _pde.Init_BoundaryMatrix(fdc, local_matrix, scale, scale_ico);
       }
 
   /******************************************************/

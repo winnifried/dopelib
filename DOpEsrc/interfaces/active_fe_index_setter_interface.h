@@ -29,7 +29,7 @@
 namespace DOpE
 {
 /**
- * Implements different methods to set the ActiveFEIndex on the cells in the
+ * Implements different methods to set the ActiveFEIndex on the elements in the
  * case of an hp FEMethod. This class defines the interface needed 
  * by the HP::DoFHandler. The user needs to reimplement the methods
  * according to the specific rules used for the element selection.
@@ -42,8 +42,8 @@ class ActiveFEIndexSetterInterface
     ActiveFEIndexSetterInterface(){};
 
     /**
-     * Gets an iterator to a cell and sets an active FE index
-     * on this cell for the state variable. This function is
+     * Gets an iterator to a element and sets an active FE index
+     * on this element for the state variable. This function is
      * used after the first grid generation.
      *
      */
@@ -72,8 +72,8 @@ class ActiveFEIndexSetterInterface
     }
     ;
     /**
-     * Gets an iterator to a cell and sets an active FE index
-     * on this cell for the control variable. This function is
+     * Gets an iterator to a element and sets an active FE index
+     * on this element for the control variable. This function is
      * used after the first grid generation.
      *
      */
@@ -112,8 +112,8 @@ class ActiveFEIndexSetterInterface<0, dealdim>
   public:
     ActiveFEIndexSetterInterface(){};
     /*
-     * Gets an iterator to a cell and sets an active FE index
-     * on this cell for the state variable. This function is
+     * Gets an iterator to a element and sets an active FE index
+     * on this element for the state variable. This function is
      * used after the first grid generation.
      *
      */

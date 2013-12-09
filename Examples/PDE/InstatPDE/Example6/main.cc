@@ -71,7 +71,7 @@ const static int DIM = 2;
 
 #define DOFHANDLER hp::DoFHandler
 #define FE hp::FECollection
-#define CDC CellDataContainer
+#define CDC ElementDataContainer
 #define FDC FaceDataContainer
 
 typedef hp::QCollection<DIM> QUADRATURE;
@@ -187,7 +187,7 @@ main(int argc, char **argv)
       times, DOpEtypes::undefined,
       indexsetter);
 
-  NoConstraints<CellDataContainer, FaceDataContainer, DOFHANDLER, VECTOR,
+  NoConstraints<ElementDataContainer, FaceDataContainer, DOFHANDLER, VECTOR,
   DIM, DIM> Constraints;
 
   OP P(LFunc, LPDE, Constraints, DOFH);

@@ -39,7 +39,7 @@ namespace DOpE
      *
      * global           Global refinement
      * fixed_fraction   Local refinement using fixed fraction strategy
-     * fixed_number     Local refinement using fixed number of cells strategy
+     * fixed_number     Local refinement using fixed number of elements strategy
      * optimized        Local refinement using optimized strategy
      * finest_of_both   In the case that one has two grids, refine such that 
      *                  elements are refined if, on the other mesh, the element 
@@ -77,7 +77,7 @@ namespace DOpE
      */
     enum WeightComputation
     {
-      cell_diameter, higher_order_interpolation, higher_order_computation, constant/*Not implemented!*/
+      element_diameter, higher_order_interpolation, higher_order_computation, constant/*Not implemented!*/
     };
 
     /**

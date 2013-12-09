@@ -86,10 +86,10 @@ namespace DOpE
 
           /*********************************************************************/
           /**
-           * Return a triangulation iterator to the current cell for the state.
+           * Return a triangulation iterator to the current element for the state.
            */
           const typename Triangulation<dim>::cell_iterator
-          GetCellState() const;
+          GetElementState() const;
 
           /********************************************************************/
           /**
@@ -333,9 +333,9 @@ namespace DOpE
     /*********************************************/
     template<typename VECTOR, int dim>
     const typename Triangulation<dim>::cell_iterator
-      FaceDataContainerInternal<VECTOR, dim>::GetCellState() const
+      FaceDataContainerInternal<VECTOR, dim>::GetElementState() const
       {
-         return this->GetFEFaceValuesState().get_cell();
+         return this->GetFEFaceValuesState().get_element();
       }
 
     /*********************************************/
@@ -518,7 +518,7 @@ namespace DOpE
         if (it == this->GetDomainValues().end())
         {
           throw DOpEException("Did not find " + name,
-              "CellDataContainer::GetValues");
+              "ElementDataContainer::GetValues");
         }
         fe_values.get_function_values(*(it->second), values);
       }
@@ -535,7 +535,7 @@ namespace DOpE
         if (it == this->GetDomainValues().end())
         {
           throw DOpEException("Did not find " + name,
-              "CellDataContainer::GetValues");
+              "ElementDataContainer::GetValues");
         }
         fe_values.get_function_values(*(it->second), values);
       }

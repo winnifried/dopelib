@@ -104,41 +104,41 @@ namespace DOpE
 
     template<typename CDC>
         void
-        CellEquation(const CDC & cdc,
-		     dealii::Vector<double> &local_cell_vector, double scale, double /*scale_ico*/)
+        ElementEquation(const CDC & cdc,
+		     dealii::Vector<double> &local_vector, double scale, double /*scale_ico*/)
         {
           if (this->GetPart() == "New")
             {
-              dealii::Vector<double> tmp(local_cell_vector);
+              dealii::Vector<double> tmp(local_vector);
 
               tmp = 0.0;
               // The remaining parts; e.g. for fluid problems: laplace, convection, etc.
               // Multiplication by 1/2 due to CN discretization
-              this->GetProblem().CellEquation(cdc, tmp, 0.5 * scale* this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize(), scale* this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize());
-              local_cell_vector += tmp;
+              this->GetProblem().ElementEquation(cdc, tmp, 0.5 * scale* this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize(), scale* this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize());
+              local_vector += tmp;
 
               tmp = 0.0;
-              this->GetProblem().CellTimeEquation(cdc, tmp,
+              this->GetProblem().ElementTimeEquation(cdc, tmp,
                   scale);
-              local_cell_vector += tmp;
+              local_vector += tmp;
 
-              this->GetProblem().CellTimeEquationExplicit(cdc, local_cell_vector,
+              this->GetProblem().ElementTimeEquationExplicit(cdc, local_vector,
                   scale);
 
             }
           else if (this->GetPart() == "Old")
             {
-              dealii::Vector<double> tmp(local_cell_vector);
+              dealii::Vector<double> tmp(local_vector);
               tmp = 0.0;
 
               // The explicit parts with old_time_values; e.g. for fluid problems: laplace, convection, etc.
               // Multiplication by 1/2 due to CN discretization
-              this->GetProblem().CellEquation(cdc, tmp, 0.5 * scale* this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize(), 0.);
-              local_cell_vector += tmp;
+              this->GetProblem().ElementEquation(cdc, tmp, 0.5 * scale* this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize(), 0.);
+              local_vector += tmp;
 
-              this->GetProblem().CellTimeEquation(
+              this->GetProblem().ElementTimeEquation(
                   cdc,
-                  local_cell_vector,
+                  local_vector,
                   (-1) * scale);
             }
           else
@@ -151,16 +151,16 @@ namespace DOpE
 
       template<typename CDC>
         void
-        CellRhs(const CDC & cdc,
-            dealii::Vector<double> &local_cell_vector, double scale)
+        ElementRhs(const CDC & cdc,
+            dealii::Vector<double> &local_vector, double scale)
         {
           if (this->GetPart() == "New")
             {
-              this->GetProblem().CellRhs(cdc, local_cell_vector, 0.5 * scale* this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize());
+              this->GetProblem().ElementRhs(cdc, local_vector, 0.5 * scale* this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize());
             }
           else if (this->GetPart() == "Old")
             {
-              this->GetProblem().CellRhs(cdc, local_cell_vector, 0.5 * scale* this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize());
+              this->GetProblem().ElementRhs(cdc, local_vector, 0.5 * scale* this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize());
             }
           else
             {
@@ -196,24 +196,24 @@ namespace DOpE
 
       template<typename CDC>
         void
-        CellMatrix(const CDC & cdc,
-            dealii::FullMatrix<double> &local_entry_matrix)
+        ElementMatrix(const CDC & cdc,
+            dealii::FullMatrix<double> &local_matrix)
         {
           assert(this->GetPart() == "New");
-          dealii::FullMatrix<double> m(local_entry_matrix);
+          dealii::FullMatrix<double> m(local_matrix);
 
           // multiplication with 1/2 for scale due to CN discretization,
           //no multiplication with 1/2 for scale_ico due to implicit treatment of pressure, etc. (in the case of fluid problems)
-          this->GetProblem().CellMatrix(cdc, local_entry_matrix, 0.5* this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize(), 1.* this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize());
+          this->GetProblem().ElementMatrix(cdc, local_matrix, 0.5* this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize(), 1.* this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize());
 
           m = 0.;
-          this->GetProblem().CellTimeMatrix(cdc, m);
-          local_entry_matrix.add(
+          this->GetProblem().ElementTimeMatrix(cdc, m);
+          local_matrix.add(
               1.0 , m);
 
           m = 0.;
-          this->GetProblem().CellTimeMatrixExplicit(cdc, m);
-          local_entry_matrix.add(
+          this->GetProblem().ElementTimeMatrixExplicit(cdc, m);
+          local_matrix.add(
               1.0 , m);
         }
 
@@ -222,15 +222,15 @@ namespace DOpE
       template<typename FDC>
         void
         FaceEquation(const FDC & fdc,
-		     dealii::Vector<double> &local_cell_vector, double scale, double /*scale_ico*/)
+		     dealii::Vector<double> &local_vector, double scale, double /*scale_ico*/)
         {
           if (this->GetPart() == "New")
             {
-              this->GetProblem().FaceEquation(fdc, local_cell_vector, 0.5 * scale* this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize(), scale* this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize());
+              this->GetProblem().FaceEquation(fdc, local_vector, 0.5 * scale* this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize(), scale* this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize());
             }
           else if (this->GetPart() == "Old")
             {
-              this->GetProblem().FaceEquation(fdc, local_cell_vector, 0.5 * scale* this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize(),0.);
+              this->GetProblem().FaceEquation(fdc, local_vector, 0.5 * scale* this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize(),0.);
             }
           else
             {
@@ -244,16 +244,16 @@ namespace DOpE
       template<typename FDC>
         void
         InterfaceEquation(const FDC & fdc,
-			  dealii::Vector<double> &local_cell_vector, double scale, double /*scale_ico*/)
+			  dealii::Vector<double> &local_vector, double scale, double /*scale_ico*/)
         {
           if (this->GetPart() == "New")
             {
-              this->GetProblem().InterfaceEquation(fdc, local_cell_vector,
+              this->GetProblem().InterfaceEquation(fdc, local_vector,
 						   0.5 * scale* this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize(), scale* this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize());
             }
           else if (this->GetPart() == "Old")
             {
-              this->GetProblem().InterfaceEquation(fdc,  local_cell_vector,
+              this->GetProblem().InterfaceEquation(fdc,  local_vector,
                   0.5 * scale* this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize(), 0.);
             }
           else
@@ -268,9 +268,9 @@ namespace DOpE
       template<typename FDC>
         void
         FaceRhs(const FDC & fdc,
-            dealii::Vector<double> &local_cell_vector, double scale = 1.)
+            dealii::Vector<double> &local_vector, double scale = 1.)
         {
-          this->GetProblem().FaceRhs(fdc, local_cell_vector, scale* this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize());
+          this->GetProblem().FaceRhs(fdc, local_vector, scale* this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize());
         }
 
       /******************************************************/
@@ -278,17 +278,17 @@ namespace DOpE
       template<typename FDC>
         void
         FaceMatrix(const FDC & fdc,
-            dealii::FullMatrix<double> &local_entry_matrix)
+            dealii::FullMatrix<double> &local_matrix)
         {
           assert(this->GetPart() == "New");
-          // Hier nicht mit this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize() multiplizieren, da local_cell_matrix schon skaliert ist
-          dealii::FullMatrix<double> m(local_entry_matrix);
+          // Hier nicht mit this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize() multiplizieren, da local_matrix schon skaliert ist
+          dealii::FullMatrix<double> m(local_matrix);
 
           m = 0.;
           // Multiplication with 1/2 due to CN time discretization
           this->GetProblem().FaceMatrix(fdc, m, 0.5* this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize(), 1.* this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize());
 
-          local_entry_matrix.add(1., m);
+          local_matrix.add(1., m);
         }
 
       /******************************************************/
@@ -296,16 +296,16 @@ namespace DOpE
      template<typename FDC>
         void
         InterfaceMatrix(const FDC & fdc,
-            dealii::FullMatrix<double> &local_entry_matrix)
+            dealii::FullMatrix<double> &local_matrix)
         {
           assert(this->GetPart() == "New");
-          dealii::FullMatrix<double> m(local_entry_matrix);
+          dealii::FullMatrix<double> m(local_matrix);
 
           m = 0.;
           // Multiplication with 1/2 due to CN time discretization
           this->GetProblem().InterfaceMatrix(fdc,  m, 0.5* this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize(), 1.* this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize());
 
-          local_entry_matrix.add(1., m);
+          local_matrix.add(1., m);
         }
 
       /******************************************************/
@@ -313,15 +313,15 @@ namespace DOpE
      template<typename FDC>
         void
         BoundaryEquation(const FDC & fdc,
-			 dealii::Vector<double> &local_cell_vector, double scale, double /*scale_ico*/)
+			 dealii::Vector<double> &local_vector, double scale, double /*scale_ico*/)
         {
           if (this->GetPart() == "New")
             {
-              this->GetProblem().BoundaryEquation(fdc, local_cell_vector, 0.5 * scale* this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize(), scale* this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize());
+              this->GetProblem().BoundaryEquation(fdc, local_vector, 0.5 * scale* this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize(), scale* this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize());
             }
           else if (this->GetPart() == "Old")
             {
-              this->GetProblem().BoundaryEquation(fdc, local_cell_vector, 0.5 * scale* this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize(), 0.);
+              this->GetProblem().BoundaryEquation(fdc, local_vector, 0.5 * scale* this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize(), 0.);
             }
           else
             {
@@ -335,9 +335,9 @@ namespace DOpE
      template<typename FDC>
         void
         BoundaryRhs(const FDC & fdc,
-            dealii::Vector<double> &local_cell_vector, double scale)
+            dealii::Vector<double> &local_vector, double scale)
         {
-          this->GetProblem().BoundaryRhs(fdc, local_cell_vector, scale* this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize());
+          this->GetProblem().BoundaryRhs(fdc, local_vector, scale* this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize());
         }
 
       /******************************************************/
@@ -345,15 +345,15 @@ namespace DOpE
       template<typename FDC>
         void
         BoundaryMatrix(const FDC & fdc,
-            dealii::FullMatrix<double> &local_cell_matrix)
+            dealii::FullMatrix<double> &local_matrix)
         {
           assert(this->GetPart() == "New");
-          dealii::FullMatrix<double> m(local_cell_matrix);
+          dealii::FullMatrix<double> m(local_matrix);
 
           m = 0.;
           // Multiplication with 1/2 due to CN time discretization
           this->GetProblem().BoundaryMatrix(fdc, m, 0.5* this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize(), 1.* this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize());
-          local_cell_matrix.add(1., m);
+          local_matrix.add(1., m);
 
         }
     private:

@@ -32,7 +32,7 @@ namespace DOpE
   /**
    * This class implements the missing pieces of DWRDataContainer for
    * the case of the DWRMethod with higher order interpolation of the weights
-   * and evaluation of strong cell and jump residuals.
+   * and evaluation of strong element and jump residuals.
    */
   template<class STH, class IDC, class CDC, class FDC, typename VECTOR>
     class HigherOrderDWRContainer : public DWRDataContainer<STH, IDC, CDC, FDC,
@@ -109,7 +109,7 @@ namespace DOpE
          * as well as the weight-vectors.
          */
         void
-        ReInit(unsigned int n_cells);
+        ReInit(unsigned int n_elements);
 
         STH&
         GetWeightSTH()
@@ -240,9 +240,9 @@ namespace DOpE
          * Implementation of virtual method from base class.
          */
         virtual CDC&
-        GetCellWeight() const
+        GetElementWeight() const
         {
-          return GetHigherOrderIDC().GetCellDataContainer();
+          return GetHigherOrderIDC().GetElementDataContainer();
         }
 
         /**
@@ -344,9 +344,9 @@ namespace DOpE
   template<class STH, class IDC, class CDC, class FDC, typename VECTOR>
     void
     HigherOrderDWRContainer<STH, IDC, CDC, FDC, VECTOR>::ReInit(
-        unsigned int n_cells)
+        unsigned int n_elements)
     {
-      DWRDataContainer<STH, IDC, CDC, FDC, VECTOR>::ReInit(n_cells);
+      DWRDataContainer<STH, IDC, CDC, FDC, VECTOR>::ReInit(n_elements);
 
       GetHigherOrderSTH().ReInit(_state_n_blocks, *_state_block_component);
       if (this->GetEETerms() == DOpEtypes::primal_only

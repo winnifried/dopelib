@@ -56,7 +56,7 @@ const static int DIM = 2;
 
 #define DOFHANDLER DoFHandler
 #define FE FESystem
-#define CDC CellDataContainer
+#define CDC ElementDataContainer
 #define FDC FaceDataContainer
 
 typedef QGauss<DIM> QUADRATURE;
@@ -220,7 +220,7 @@ main(int argc, char **argv)
       const StateVector<VECTOR> &gu = a.GetU();
       solution = 0;
       solution = gu.GetSpacialVector();
-      Vector<float> estimated_error_per_cell(triangulation.n_active_cells());
+      Vector<float> estimated_error_per_element(triangulation.n_active_cells());
 
       std::vector<bool> component_mask(5, false);
       component_mask[2] = true;
@@ -228,8 +228,8 @@ main(int argc, char **argv)
       KellyErrorEstimator<DIM>::estimate(
           static_cast<const DoFHandler<DIM>&>(DOFH.GetStateDoFHandler()),
           QGauss<1>(2), FunctionMap<DIM>::type(), solution,
-          estimated_error_per_cell, component_mask);
-      DOFH.RefineSpace(RefineFixedNumber(estimated_error_per_cell, 0.3, 0.0));
+          estimated_error_per_element, component_mask);
+      DOFH.RefineSpace(RefineFixedNumber(estimated_error_per_element, 0.3, 0.0));
       solver.ReInit();
       out.ReInit();
     }

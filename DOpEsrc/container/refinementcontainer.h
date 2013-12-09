@@ -66,7 +66,7 @@ namespace DOpE
       virtual double
       GetBottomFraction() const;
       virtual unsigned int
-      GetMaxNCells() const;
+      GetMaxNElements() const;
       virtual double
       GetConvergenceOrder() const;
 
@@ -138,11 +138,11 @@ namespace DOpE
        * @param indicators        A set of positive values, used to guide refinement.
        * @param topfraction       is the fraction of the total estimate which should be refined.
        * @param bottomfraction    is the fraction of the estimate coarsened.
-       * @param max_n_cells       The maximal number of cells allowed.
+       * @param max_n_elements       The maximal number of elements allowed.
        */
       RefineFixedFraction(const dealii::Vector<float>& indicators,
           double top_fraction = 0.1, double bottom_fraction = 0.0,
-          const unsigned int max_n_cells =
+          const unsigned int max_n_elements =
               std::numeric_limits<unsigned int>::max());
 
       virtual
@@ -156,7 +156,7 @@ namespace DOpE
       GetBottomFraction() const;
     private:
       const double _top_fraction, _bottom_fraction;
-      const unsigned int _max_n_cells;
+      const unsigned int _max_n_elements;
   };
 
   /***************************************************************/
@@ -174,15 +174,15 @@ namespace DOpE
        * with a predictable growth of the mesh.
        *
        * @param indicators        A set of positive values, used to guide refinement.
-       * @param topfraction        is the fraction of cells to be refined.
+       * @param topfraction        is the fraction of elements to be refined.
        *
        * @param bottomfraction    In a fixed fraction/fixed number strategy,
        *                          wich part should be coarsened.
-       * @param max_n_cells       The maximal number of cells allowed.
+       * @param max_n_elements       The maximal number of elements allowed.
        */
       RefineFixedNumber(const dealii::Vector<float>& indicators,
           double top_fraction = 0.1, double bottom_fraction = 0.0,
-          const unsigned int max_n_cells =
+          const unsigned int max_n_elements =
               std::numeric_limits<unsigned int>::max());
 
       virtual
@@ -197,7 +197,7 @@ namespace DOpE
 
     private:
       const double _top_fraction, _bottom_fraction;
-      const unsigned int _max_n_cells;
+      const unsigned int _max_n_elements;
   };
 
   /***************************************************************/

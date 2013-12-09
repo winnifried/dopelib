@@ -902,14 +902,14 @@ namespace DOpE
         dim>::FlagIfLeftIsNotFinest(dealii::Triangulation<dim>& left,
         const dealii::Triangulation<dim>& right)
     {
-      auto cell_list = GridTools::get_finest_common_cells(left, right);
-      auto cell_iter = cell_list.begin();
-      for (; cell_iter != cell_list.end(); cell_iter++)
+      auto element_list = GridTools::get_finest_common_cells(left, right);
+      auto element_iter = element_list.begin();
+      for (; element_iter != element_list.end(); element_iter++)
       {
-        if (cell_iter->second->has_children())
+        if (element_iter->second->has_children())
         {
-          //left is not finest, so we should flag the left cell to be refined
-          cell_iter->first->set_refine_flag();
+          //left is not finest, so we should flag the left element to be refined
+          element_iter->first->set_refine_flag();
         }
       }
     }

@@ -64,9 +64,9 @@ namespace DOpEWrapper
     class Mapping<dim, dealii::DoFHandler > : public dealii::MappingQ<dim>
     {
       public:
-        Mapping(const unsigned int p, const bool use_mapping_q_on_all_cells =
+        Mapping(const unsigned int p, const bool use_mapping_q_on_all_elements =
             false) :
-            dealii::MappingQ<dim>(p, use_mapping_q_on_all_cells)
+            dealii::MappingQ<dim>(p, use_mapping_q_on_all_elements)
         {
         }
 
@@ -100,9 +100,9 @@ namespace DOpEWrapper
     class Mapping<dim, dealii::MGDoFHandler > : public dealii::MappingQ<dim>
     {
       public:
-        Mapping(const unsigned int p, const bool use_mapping_q_on_all_cells =
+        Mapping(const unsigned int p, const bool use_mapping_q_on_all_elements =
             false)
-            : dealii::MappingQ<dim>(p, use_mapping_q_on_all_cells)
+            : dealii::MappingQ<dim>(p, use_mapping_q_on_all_elements)
         {
         }
 

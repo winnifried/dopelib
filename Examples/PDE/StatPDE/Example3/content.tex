@@ -14,7 +14,7 @@ on the domain $\Omega = [-6,6]\times [0,2]$.  We split $\partial \Omega = \Gamma
 \subsubsection{Adding hp-Elements}
 One sees by comparing  the \texttt{main.cc}-file of this problem with the one of subsection~\ref{PDE_Stat_Stokes} that the change to hp-Elements is really easy, so we will keep the description short. In comparison to example \ref{PDE_Stat_Stokes} the \textit{localpde.h} and \textit{functionals.h} have not changed, but we have one additional file, namely \textit{indexsetter.h}, in which the class \texttt{ActiveFEIndexSetter} is defined.
 
-In the hp-framework we have a stack of finite elements (a \texttt{hp::FECollection}) given. We assign each cell of the triangulation an fe-index which determines which finite element we use on this cell. The \texttt{ActiveFEIndexSetter} class manages these indices, see there for more information.
+In the hp-framework we have a stack of finite elements (a \texttt{hp::FECollection}) given. We assign each element of the triangulation an fe-index which determines which finite element we use on this element. The \texttt{ActiveFEIndexSetter} class manages these indices, see there for more information.
 
 The changes in \textit{main.cc} are also minimal and are highlighted in the source code. Obviously, we use \texttt{FECollection} and \texttt{QCollection} as well as a different DoFHandler.
 \begin{verbatim}

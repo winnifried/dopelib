@@ -568,7 +568,7 @@ template<
       FaceValue(const FDC<DH, VECTOR, dealdim>& fdc)
       {
         const auto & state_fe_face_values = fdc.GetFEFaceValuesState();
-        //unsigned int n_dofs_per_cell = fdc.GetNDoFsPerCell();
+        //unsigned int n_dofs_per_element = fdc.GetNDoFsPerElement();
         unsigned int n_q_points = fdc.GetNQPoints();
         //unsigned int color = fdc.GetBoundaryIndicator();
         unsigned int material_id = fdc.GetMaterialId();

@@ -66,8 +66,8 @@ typedef BlockSparseMatrix<double> MATRIX;
 typedef BlockSparsityPattern SPARSITYPATTERN;
 typedef BlockVector<double> VECTOR;
 
-//We use the multimesh variants of Cell- and FaceDataContainer
-#define CDC Multimesh_CellDataContainer
+//We use the multimesh variants of Element- and FaceDataContainer
+#define CDC Multimesh_ElementDataContainer
 #define FDC Multimesh_FaceDataContainer
 
 typedef LocalFunctional<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> COSTFUNCTIONAL;
@@ -148,7 +148,7 @@ main(int argc, char **argv)
 
   STH DOFH(triangulation, control_fe, state_fe, DOpEtypes::stationary);
 
-  NoConstraints<Multimesh_CellDataContainer, Multimesh_FaceDataContainer,
+  NoConstraints<Multimesh_ElementDataContainer, Multimesh_FaceDataContainer,
       DOFHANDLER, VECTOR, CDIM, DIM> Constraints;
 
   OP P(LFunc, LPDE, Constraints, DOFH);
@@ -221,16 +221,16 @@ main(int argc, char **argv)
         Vector<double> solution;
         solution = 0;
         solution = gu.GetSpacialVector();
-        Vector<float> estimated_error_per_cell(triangulation.n_active_cells());
+        Vector<float> estimated_error_per_element(triangulation.n_active_cells());
 
         std::vector<bool> component_mask(1, true);
 
         KellyErrorEstimator<DIM>::estimate(
             static_cast<const DoFHandler<DIM>&>(DOFH.GetStateDoFHandler()),
             QGauss<1>(2), FunctionMap<DIM>::type(), solution,
-            estimated_error_per_cell, component_mask);
+            estimated_error_per_element, component_mask);
         DOFH.RefineStateSpace(
-            RefineFixedNumber(estimated_error_per_cell, 0.1, 0.0));
+            RefineFixedNumber(estimated_error_per_element, 0.1, 0.0));
         Alg.ReInit();
       }
       if (i % 2 == 1)
@@ -238,16 +238,16 @@ main(int argc, char **argv)
         Vector<double> solution;
         solution = 0;
         solution = q.GetSpacialVector();
-        Vector<float> estimated_error_per_cell(triangulation.n_active_cells());
+        Vector<float> estimated_error_per_element(triangulation.n_active_cells());
 
         std::vector<bool> component_mask(1, true);
 
         KellyErrorEstimator<DIM>::estimate(
             static_cast<const DoFHandler<DIM>&>(DOFH.GetControlDoFHandler()),
             QGauss<1>(2), FunctionMap<DIM>::type(), solution,
-            estimated_error_per_cell, component_mask);
+            estimated_error_per_element, component_mask);
         DOFH.RefineControlSpace(
-            RefineFixedNumber(estimated_error_per_cell, 0.1, 0.0));
+            RefineFixedNumber(estimated_error_per_element, 0.1, 0.0));
         Alg.ReInit();
       }
     }

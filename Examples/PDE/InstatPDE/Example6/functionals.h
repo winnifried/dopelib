@@ -37,7 +37,7 @@ template<
     template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
     template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
     template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
-  class LocalPointFunctionalP1 : public FunctionalInterface<CellDataContainer,
+  class LocalPointFunctionalP1 : public FunctionalInterface<ElementDataContainer,
       FaceDataContainer, DH, VECTOR, dopedim, dealdim>
   {
     private:

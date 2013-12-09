@@ -1,5 +1,10 @@
 Changelog DOpE
 ==============
+09.12.2013 Renamed Functions: 
+	   FunctionalInterface::Value*
+		now is FunctionalInterface:ElementValue*/ 
+	   All functions named *cell* are now called 
+	   *element*.
 06.12.2013 Doxygen documentation finished:
 	   Except for self explanatory functions all other
 	   should have a doxygen comment.

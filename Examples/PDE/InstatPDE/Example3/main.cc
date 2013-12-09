@@ -69,7 +69,7 @@ const static int DIM = 2;
 
 #define DOFHANDLER DoFHandler
 #define FE FESystem
-#define CDC CellDataContainer
+#define CDC ElementDataContainer
 #define FDC FaceDataContainer
 
 typedef QGauss<DIM> QUADRATURE;
@@ -119,26 +119,26 @@ typedef InstatReducedProblem<CNLS, NLS, INTEGRATOR, INTEGRATOR, OP, VECTOR, DIM,
 void
 ColorizeTriangulation(Triangulation<2> &coarse_grid, double upper_bound)
 {
-  Triangulation<2>::cell_iterator cell = coarse_grid.begin();
+  Triangulation<2>::cell_iterator element = coarse_grid.begin();
   Triangulation<2>::cell_iterator endc = coarse_grid.end();
-  for (; cell != endc; ++cell)
+  for (; element != endc; ++element)
     for (unsigned int face = 0; face < GeometryInfo<2>::faces_per_cell; ++face)
     {
-      if (std::fabs(cell->face(face)->center()(1) - (0)) < 1e-12)
+      if (std::fabs(element->face(face)->center()(1) - (0)) < 1e-12)
       {
-        cell->face(face)->set_boundary_indicator(1);
+        element->face(face)->set_boundary_indicator(1);
       }
-      else if (std::fabs(cell->face(face)->center()(0) - (upper_bound)) < 1e-12)
+      else if (std::fabs(element->face(face)->center()(0) - (upper_bound)) < 1e-12)
       {
-        cell->face(face)->set_boundary_indicator(0);
+        element->face(face)->set_boundary_indicator(0);
       }
-      else if (std::fabs(cell->face(face)->center()(1) - (upper_bound)) < 1e-12)
+      else if (std::fabs(element->face(face)->center()(1) - (upper_bound)) < 1e-12)
       {
-        cell->face(face)->set_boundary_indicator(0);
+        element->face(face)->set_boundary_indicator(0);
       }
-      else if (std::fabs(cell->face(face)->center()(0) - (0)) < 1e-12)
+      else if (std::fabs(element->face(face)->center()(0) - (0)) < 1e-12)
       {
-        cell->face(face)->set_boundary_indicator(1);
+        element->face(face)->set_boundary_indicator(1);
       }
     }
 }
@@ -202,7 +202,7 @@ main(int argc, char **argv)
       DIM> DOFH(triangulation, control_fe, state_fe, times,
       DOpEtypes::undefined);
 
-  NoConstraints<CellDataContainer, FaceDataContainer, DOFHANDLER, VECTOR, DIM,
+  NoConstraints<ElementDataContainer, FaceDataContainer, DOFHANDLER, VECTOR, DIM,
       DIM> Constraints;
   OP P(LFunc, LPDE, Constraints, DOFH);
 

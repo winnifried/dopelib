@@ -76,8 +76,8 @@ namespace DOpE
       /**
        * Self explanatory.
        */
-      TimeIterator(const active_cell_it& cell, int present_index) :
-        _cell(cell)
+      TimeIterator(const active_cell_it& element, int present_index) :
+        _element(element)
       {
         _present_index = present_index;
       }
@@ -87,7 +87,7 @@ namespace DOpE
        */
       TimeIterator(const TimeIterator& it)
       {
-        _cell = it._cell;
+        _element = it._element;
         _present_index = it._present_index;
       }
 
@@ -98,7 +98,7 @@ namespace DOpE
       GetState() const
       {
         if (_present_index >= 0 && _present_index
-            < static_cast<int>(_cell->get_triangulation().n_active_cells()))
+            < static_cast<int>(_element->get_triangulation().n_active_cells()))
           return IteratorState::valid;
         else
           {
@@ -126,89 +126,89 @@ namespace DOpE
       }
 
       TimeIterator&
-      operator=(const TimeIterator& cell)
+      operator=(const TimeIterator& element)
       {
-        _cell = cell._cell;
-        _present_index = cell._present_index;
+        _element = element._element;
+        _present_index = element._present_index;
         return *this;
       }
 
       void
-      Initialize(const active_cell_it& cell, int present_index)
+      Initialize(const active_cell_it& element, int present_index)
       {
-        _cell = cell;
+        _element = element;
         _present_index = present_index;
       }
 
       bool
-      operator==(const TimeIterator& cell)
+      operator==(const TimeIterator& element)
       {
-        if (GetState() == cell.GetState())
-          return (_cell == cell.get_cell());
+        if (GetState() == element.GetState())
+          return (_element == element.get_element());
         else
           return false;
       }
 
       bool
-      operator!=(const TimeIterator& cell)
+      operator!=(const TimeIterator& element)
       {
-        if (GetState() == cell.GetState())
-          return (_cell != cell.get_cell());
+        if (GetState() == element.GetState())
+          return (_element != element.get_element());
         else
           return true;
       }
 
       /**
-       * Returns the center of the actual cell.
+       * Returns the center of the actual element.
        */
       double
       get_center() const
       {
         assert(GetState()==IteratorState::valid);
-        return _cell->center()(0);
+        return _element->center()(0);
       }
 
       /**
-       * Returns the  location of the left hand side of the actual cell.
+       * Returns the  location of the left hand side of the actual element.
        */
       double
       get_left() const
       {
         assert(GetState()==IteratorState::valid);
-        return _cell->face(0)->center()(0);
+        return _element->face(0)->center()(0);
       }
 
       /**
-       * Returns the location of the right hand side of the actual cell.
+       * Returns the location of the right hand side of the actual element.
        */
       double
       get_right() const
       {
         assert(GetState()==IteratorState::valid);
-        return _cell->face(1)->center()(0);
+        return _element->face(1)->center()(0);
       }
 
       /**
-       * Returns the length of the actual cell.
+       * Returns the length of the actual element.
        */
       double
       get_k() const
       {
         assert(GetState()==IteratorState::valid);
-        return _cell->diameter();
+        return _element->diameter();
       }
 
       const active_cell_it&
-      get_cell() const
+      get_element() const
       {
-        return _cell;
+        return _element;
       }
 
       void
       get_time_dof_indices(std::vector<unsigned int>& local_dof_indices) const
       {
         assert(GetState()==IteratorState::valid);
-        _cell->get_dof_indices(local_dof_indices);
+        _element->get_dof_indices(local_dof_indices);
       }
 
       /**
@@ -219,9 +219,9 @@ namespace DOpE
       {
         assert(GetState()==IteratorState::valid);
         ++_present_index;
-        if (_present_index < static_cast<int>(_cell->get_triangulation().n_active_cells()))
+        if (_present_index < static_cast<int>(_element->get_triangulation().n_active_cells()))
           {
-            _cell = _cell->neighbor(1);
+            _element = _element->neighbor(1);
           }
         else
           {
@@ -238,12 +238,12 @@ namespace DOpE
       operator++(int)
       {
         assert(GetState()==IteratorState::valid);
-        TimeIterator tmp(_cell, _present_index);
+        TimeIterator tmp(_element, _present_index);
 
         ++_present_index;
-        if (_present_index < static_cast<int>(_cell->get_triangulation().n_active_cells()))
+        if (_present_index < static_cast<int>(_element->get_triangulation().n_active_cells()))
           {
-            _cell = _cell->neighbor(1);
+            _element = _element->neighbor(1);
           }
         else
           {
@@ -262,7 +262,7 @@ namespace DOpE
         --_present_index;
         if (_present_index >= 0)
           {
-            _cell = _cell->neighbor(0);
+            _element = _element->neighbor(0);
           }
         else
           {
@@ -279,10 +279,10 @@ namespace DOpE
       operator--(int)
       {
         assert(GetState()==IteratorState::valid);
-        TimeIterator tmp(_cell, _present_index);
+        TimeIterator tmp(_element, _present_index);
         if (_present_index >= 0)
           {
-            _cell = _cell->neighbor(0);
+            _element = _element->neighbor(0);
           }
         else
           {
@@ -291,7 +291,7 @@ namespace DOpE
         return tmp;
       }
     private:
-      active_cell_it _cell;
+      active_cell_it _element;
       int _present_index;
   };
 }

@@ -32,20 +32,20 @@ class ActiveFEIndexSetter : public ActiveFEIndexSetterInterface<dealdim>
 {
   public:
   /*
-   * Gets an iterator to a cell and sets an active FE index
-   * on this cell for the state variable. This function is
+   * Gets an iterator to a element and sets an active FE index
+   * on this element for the state variable. This function is
    * used after the first grid generation.
    *
    */
   virtual void
   SetActiveFEIndexState(
-      typename dealii::hp::DoFHandler<dealdim>::active_cell_iterator&cell) const
+      typename dealii::hp::DoFHandler<dealdim>::active_cell_iterator&element) const
   {
 
-    if (cell->material_id() == 1)
-    cell->set_active_fe_index(0);
+    if (element->material_id() == 1)
+    element->set_active_fe_index(0);
     else
-    cell->set_active_fe_index(1);
+    element->set_active_fe_index(1);
   }
 
 };

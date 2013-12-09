@@ -210,10 +210,10 @@ template<
 
       void
       BoundaryValue_U(const FDC<DH, VECTOR, dealdim>& fdc,
-          dealii::Vector<double> &local_cell_vector, double scale)
+          dealii::Vector<double> &local_vector, double scale)
       {
         const auto & state_fe_face_values = fdc.GetFEFaceValuesState();
-        unsigned int n_dofs_per_cell = fdc.GetNDoFsPerCell();
+        unsigned int n_dofs_per_element = fdc.GetNDoFsPerElement();
         unsigned int n_q_points = fdc.GetNQPoints();
         unsigned int color = fdc.GetBoundaryIndicator();
 
@@ -229,15 +229,15 @@ template<
           const FEValuesExtractors::Vector displacements(2);
           const FEValuesExtractors::Scalar pressure(4);
 
-          std::vector<Tensor<1, 2> > phi_v(n_dofs_per_cell);
-          std::vector<Tensor<2, 2> > phi_grads_v(n_dofs_per_cell);
-          std::vector<Tensor<1, 2> > phi_u(n_dofs_per_cell);
-          std::vector<Tensor<2, 2> > phi_grads_u(n_dofs_per_cell);
-          std::vector<double> phi_p(n_dofs_per_cell);
+          std::vector<Tensor<1, 2> > phi_v(n_dofs_per_element);
+          std::vector<Tensor<2, 2> > phi_grads_v(n_dofs_per_element);
+          std::vector<Tensor<1, 2> > phi_u(n_dofs_per_element);
+          std::vector<Tensor<2, 2> > phi_grads_u(n_dofs_per_element);
+          std::vector<double> phi_p(n_dofs_per_element);
 
           for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
           {
-            for (unsigned int k = 0; k < n_dofs_per_cell; k++)
+            for (unsigned int k = 0; k < n_dofs_per_element; k++)
             {
               phi_p[k] = state_fe_face_values[pressure].value(k, q_point);
               phi_v[k] = state_fe_face_values[velocities].value(k, q_point);
@@ -272,7 +272,7 @@ template<
             stress_normal = sigma_ALE
                 * state_fe_face_values.normal_vector(q_point);
 
-            for (unsigned int j = 0; j < n_dofs_per_cell; j++)
+            for (unsigned int j = 0; j < n_dofs_per_element; j++)
             {
               const Tensor<2, dealdim> pI_LinP =
                   ALE_Transformations::get_pI_LinP<dealdim>(phi_p[j]);
@@ -304,7 +304,7 @@ template<
                   + stress_fluid_ALE_2nd_term_LinAll)
                   * state_fe_face_values.normal_vector(q_point);
 
-              local_cell_vector(j) += scale * neumann_value[0]
+              local_vector(j) += scale * neumann_value[0]
                   * stress_normal[0] * state_fe_face_values.JxW(q_point);
 
             }
@@ -314,10 +314,10 @@ template<
 
       void
       BoundaryValue_Q(const FDC<DH, VECTOR, dealdim>& fdc,
-          dealii::Vector<double> &local_cell_vector, double scale)
+          dealii::Vector<double> &local_vector, double scale)
       {
         const auto & state_fe_face_values = fdc.GetFEFaceValuesState();
-        unsigned int n_dofs_per_cell = local_cell_vector.size();
+        unsigned int n_dofs_per_element = local_vector.size();
         unsigned int n_q_points = fdc.GetNQPoints();
         unsigned int color = fdc.GetBoundaryIndicator();
 
@@ -329,9 +329,9 @@ template<
 
           for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
           {
-            for (unsigned int j = 0; j < n_dofs_per_cell; j++)
+            for (unsigned int j = 0; j < n_dofs_per_element; j++)
             {
-              local_cell_vector(j) += scale * _mu_regularization
+              local_vector(j) += scale * _mu_regularization
                   * (_qvalues(j) - _control_constant)
                   * state_fe_face_values.JxW(q_point);
             }
@@ -345,9 +345,9 @@ template<
 
           for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
           {
-            for (unsigned int j = 0; j < n_dofs_per_cell; j++)
+            for (unsigned int j = 0; j < n_dofs_per_element; j++)
             {
-              local_cell_vector(j) += scale * _mu_regularization
+              local_vector(j) += scale * _mu_regularization
                   * (_qvalues(j) - _control_constant)
                   * state_fe_face_values.JxW(q_point);
             }
@@ -357,10 +357,10 @@ template<
 
       void
       BoundaryValue_QQ(const FDC<DH, VECTOR, dealdim>& fdc,
-          dealii::Vector<double> &local_cell_vector, double scale)
+          dealii::Vector<double> &local_vector, double scale)
       {
         const auto & state_fe_face_values = fdc.GetFEFaceValuesState();
-        unsigned int n_dofs_per_cell = local_cell_vector.size();
+        unsigned int n_dofs_per_element = local_vector.size();
         unsigned int n_q_points = fdc.GetNQPoints();
         unsigned int color = fdc.GetBoundaryIndicator();
 
@@ -375,9 +375,9 @@ template<
 
           for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
           {
-            for (unsigned int j = 0; j < n_dofs_per_cell; j++)
+            for (unsigned int j = 0; j < n_dofs_per_element; j++)
             {
-              local_cell_vector(j) += scale * _mu_regularization
+              local_vector(j) += scale * _mu_regularization
                   * (_dqvalues(j)) * state_fe_face_values.JxW(q_point);
             }
           }
@@ -393,9 +393,9 @@ template<
 
           for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
           {
-            for (unsigned int j = 0; j < n_dofs_per_cell; j++)
+            for (unsigned int j = 0; j < n_dofs_per_element; j++)
             {
-              local_cell_vector(j) += scale * _mu_regularization
+              local_vector(j) += scale * _mu_regularization
                   * (_dqvalues(j)) * state_fe_face_values.JxW(q_point);
             }
           }
@@ -404,21 +404,21 @@ template<
 
       void
       BoundaryValue_UU(const FDC<DH, VECTOR, dealdim>& /*fdc*/,
-          dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
+          dealii::Vector<double> &/*local_vector*/, double /*scale*/)
       {
 
       }
 
       void
       BoundaryValue_QU(const FDC<DH, VECTOR, dealdim>& /*fdc*/,
-          dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
+          dealii::Vector<double> &/*local_vector*/, double /*scale*/)
       {
 
       }
 
       void
       BoundaryValue_UQ(const FDC<DH, VECTOR, dealdim>& /*fdc*/,
-          dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
+          dealii::Vector<double> &/*local_vector*/, double /*scale*/)
       {
 
       }
@@ -503,10 +503,10 @@ template<
 
       void
       FaceValue_U(const FDC<DH, VECTOR, dealdim>& fdc,
-          dealii::Vector<double> &local_cell_vector, double scale)
+          dealii::Vector<double> &local_vector, double scale)
       {
         const auto & state_fe_face_values = fdc.GetFEFaceValuesState();
-        unsigned int n_dofs_per_cell = fdc.GetNDoFsPerCell();
+        unsigned int n_dofs_per_element = fdc.GetNDoFsPerElement();
         unsigned int n_q_points = fdc.GetNQPoints();
         unsigned int material_id = fdc.GetMaterialId();
         unsigned int material_id_neighbor = fdc.GetNbrMaterialId();
@@ -526,15 +526,15 @@ template<
             const FEValuesExtractors::Vector displacements(2);
             const FEValuesExtractors::Scalar pressure(4);
 
-            std::vector<Tensor<1, 2> > phi_v(n_dofs_per_cell);
-            std::vector<Tensor<2, 2> > phi_grads_v(n_dofs_per_cell);
-            std::vector<Tensor<1, 2> > phi_u(n_dofs_per_cell);
-            std::vector<Tensor<2, 2> > phi_grads_u(n_dofs_per_cell);
-            std::vector<double> phi_p(n_dofs_per_cell);
+            std::vector<Tensor<1, 2> > phi_v(n_dofs_per_element);
+            std::vector<Tensor<2, 2> > phi_grads_v(n_dofs_per_element);
+            std::vector<Tensor<1, 2> > phi_u(n_dofs_per_element);
+            std::vector<Tensor<2, 2> > phi_grads_u(n_dofs_per_element);
+            std::vector<double> phi_p(n_dofs_per_element);
 
             for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
             {
-              for (unsigned int k = 0; k < n_dofs_per_cell; k++)
+              for (unsigned int k = 0; k < n_dofs_per_element; k++)
               {
                 phi_p[k] = state_fe_face_values[pressure].value(k, q_point);
                 phi_v[k] = state_fe_face_values[velocities].value(k, q_point);
@@ -570,7 +570,7 @@ template<
               stress_normal = sigma_ALE
                   * state_fe_face_values.normal_vector(q_point);
 
-              for (unsigned int j = 0; j < n_dofs_per_cell; j++)
+              for (unsigned int j = 0; j < n_dofs_per_element; j++)
               {
                 const Tensor<2, dealdim> pI_LinP =
                     ALE_Transformations::get_pI_LinP<dealdim>(phi_p[j]);
@@ -604,7 +604,7 @@ template<
                     + stress_fluid_ALE_2nd_term_LinAll)
                     * state_fe_face_values.normal_vector(q_point);
 
-                local_cell_vector(j) += scale * neumann_value[0]
+                local_vector(j) += scale * neumann_value[0]
                     * stress_normal[0] * state_fe_face_values.JxW(q_point);
 
               }
@@ -615,35 +615,35 @@ template<
 
       void
       FaceValue_UU(const FDC<DH, VECTOR, dealdim>& /*fdc*/,
-          dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
+          dealii::Vector<double> &/*local_vector*/, double /*scale*/)
       {
 
       }
 
       void
       FaceValue_Q(const FDC<DH, VECTOR, dealdim>& /*fdc*/,
-          dealii::Vector<double> & /*local_cell_vector*/, double /*scale*/)
+          dealii::Vector<double> & /*local_vector*/, double /*scale*/)
       {
 
       }
 
       void
       FaceValue_QU(const FDC<DH, VECTOR, dealdim>& /*fdc*/,
-          dealii::Vector<double> & /*local_cell_vector*/, double /*scale*/)
+          dealii::Vector<double> & /*local_vector*/, double /*scale*/)
       {
 
       }
 
       void
       FaceValue_UQ(const FDC<DH, VECTOR, dealdim>& /*fdc*/,
-          dealii::Vector<double> & /*local_cell_vector*/, double /*scale*/)
+          dealii::Vector<double> & /*local_vector*/, double /*scale*/)
       {
 
       }
 
       void
       FaceValue_QQ(const FDC<DH, VECTOR, dealdim>& /*fdc*/,
-          dealii::Vector<double> & /*local_cell_vector*/, double /*scale*/)
+          dealii::Vector<double> & /*local_vector*/, double /*scale*/)
       {
 
       }
@@ -656,40 +656,40 @@ template<
 
       void
       ElementValue_U(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
-          dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
+          dealii::Vector<double> &/*local_vector*/, double /*scale*/)
       {
 
       }
 
       void
       ElementValue_Q(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
-          dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
+          dealii::Vector<double> &/*local_vector*/, double /*scale*/)
       {
 
       }
 
       void
       ElementValue_UU(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
-          dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
+          dealii::Vector<double> &/*local_vector*/, double /*scale*/)
       {
 
       }
 
       void
       ElementValue_QU(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
-          dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
+          dealii::Vector<double> &/*local_vector*/, double /*scale*/)
       {
       }
 
       void
       ElementValue_UQ(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
-          dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
+          dealii::Vector<double> &/*local_vector*/, double /*scale*/)
       {
       }
 
       void
       ElementValue_QQ(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
-          dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
+          dealii::Vector<double> &/*local_vector*/, double /*scale*/)
       {
 
       }

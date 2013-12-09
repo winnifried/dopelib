@@ -214,7 +214,7 @@ namespace DOpE
          * Returns a vector of the begin_celliterators of the
          * DoFHandlers in use.
 	 * Iterator for multigrid's matrix assembling running
-	 * over all cells on all levels.
+	 * over all elements on all levels.
          */
         std::vector<
             typename DOpEWrapper::DoFHandler<dealdim, DH>::cell_iterator>
@@ -237,7 +237,7 @@ namespace DOpE
          * Returns a vector of the end-celliterators of the
          * DoFHandlers in use.
 	 * Iterator for multigrid's matrix assembling running
-	 * over all cells on all levels.
+	 * over all elements on all levels.
          */
 
         std::vector<
@@ -318,7 +318,7 @@ namespace DOpE
 
         /******************************************************/
         /*
-         * This function sets for every cell the right fe index for the state variable.
+         * This function sets for every element the right fe index for the state variable.
          * This is only useful in the hp case!
          *
          * @param dof_handler   The dof_handler for which the fe indices have to be set.
@@ -329,17 +329,17 @@ namespace DOpE
         {
           if (dof_handler.NeedIndexSetter()) //with this we distinguish between hp and classic
           {
-            for (typename DH<dealdim, dealdim>::active_cell_iterator cell =
-                dof_handler.begin_active(); cell != dof_handler.end(); ++cell)
+            for (typename DH<dealdim, dealdim>::active_cell_iterator element =
+                dof_handler.begin_active(); element != dof_handler.end(); ++element)
             {
-              this->GetFEIndexSetter().SetActiveFEIndexState(cell);
+              this->GetFEIndexSetter().SetActiveFEIndexState(element);
             }
           }
         }
 
         /******************************************************/
         /*
-         * This function sets for every cell the right fe index for the state variable.
+         * This function sets for every element the right fe index for the state variable.
          * This is only useful in the hp case!
          *
          * @param dof_handler   The dof_handler for which the fe indices have to be set.
@@ -350,10 +350,10 @@ namespace DOpE
         {
           if (dof_handler.NeedIndexSetter())
           {
-            for (typename DH<dopedim, dopedim>::active_cell_iterator cell =
-                dof_handler.begin_active(); cell != dof_handler.end(); ++cell)
+            for (typename DH<dopedim, dopedim>::active_cell_iterator element =
+                dof_handler.begin_active(); element != dof_handler.end(); ++element)
             {
-              this->GetFEIndexSetter().SetActiveFEIndexState(cell);
+              this->GetFEIndexSetter().SetActiveFEIndexState(element);
             }
           }
         }

@@ -197,7 +197,7 @@ namespace DOpE
     void
     FunctionalInterface<CDC, FDC, DH, VECTOR, dopedim, dealdim>::ElementValue_U(
       const CDC<DH, VECTOR, dealdim>& /*cdc*/,
-        dealii::Vector<double> &/*local_cell_vector*/,
+        dealii::Vector<double> &/*local_vector*/,
         double /*scale*/)
     {
       throw DOpEException("Not implemented", "FunctionalInterface::ElementValue_U");
@@ -212,7 +212,7 @@ namespace DOpE
     void
     FunctionalInterface<CDC, FDC, DH, VECTOR, dopedim, dealdim>::ElementValue_Q(
         const CDC<DH, VECTOR, dealdim>& /*cdc*/,
-        dealii::Vector<double> &/*local_cell_vector*/,
+        dealii::Vector<double> &/*local_vector*/,
         double /*scale*/)
     {
       throw DOpEException("Not implemented", "FunctionalInterface::ElementValue_Q");
@@ -227,7 +227,7 @@ namespace DOpE
     void
     FunctionalInterface<CDC, FDC, DH, VECTOR, dopedim, dealdim>::ElementValue_UU(
         const CDC<DH, VECTOR, dealdim>& /*cdc*/,
-        dealii::Vector<double> &/*local_cell_vector*/,
+        dealii::Vector<double> &/*local_vector*/,
         double /*scale*/)
     {
       throw DOpEException("Not implemented", "FunctionalInterface::ElementValue_UU");
@@ -242,7 +242,7 @@ namespace DOpE
     void
     FunctionalInterface<CDC, FDC, DH, VECTOR, dopedim, dealdim>::ElementValue_QU(
         const CDC<DH, VECTOR, dealdim>& /*cdc*/,
-        dealii::Vector<double> &/*local_cell_vector*/,
+        dealii::Vector<double> &/*local_vector*/,
         double /*scale*/)
     {
       throw DOpEException("Not implemented", "FunctionalInterface::ElementValue_QU");
@@ -257,7 +257,7 @@ namespace DOpE
     void
     FunctionalInterface<CDC, FDC, DH, VECTOR, dopedim, dealdim>::ElementValue_UQ(
         const CDC<DH, VECTOR, dealdim>& /*cdc*/,
-        dealii::Vector<double> &/*local_cell_vector*/,
+        dealii::Vector<double> &/*local_vector*/,
         double /*scale*/)
     {
       throw DOpEException("Not implemented", "FunctionalInterface::ElementValue_UQ");
@@ -272,7 +272,7 @@ namespace DOpE
     void
     FunctionalInterface<CDC, FDC, DH, VECTOR, dopedim, dealdim>::ElementValue_QQ(
         const CDC<DH, VECTOR, dealdim>& /*cdc*/,
-        dealii::Vector<double> &/*local_cell_vector*/,
+        dealii::Vector<double> &/*local_vector*/,
         double /*scale*/)
     {
       throw DOpEException("Not implemented", "FunctionalInterface::ElementValue_QQ");
@@ -321,7 +321,7 @@ namespace DOpE
     void
     FunctionalInterface<CDC, FDC, DH, VECTOR, dopedim, dealdim>::FaceValue_U(
         const FDC<DH, VECTOR, dealdim>& /*fdc*/,
-        dealii::Vector<double> &/*local_cell_vector*/,
+        dealii::Vector<double> &/*local_vector*/,
         double /*scale*/)
     {
       throw DOpEException("Not Implemented",
@@ -336,7 +336,7 @@ namespace DOpE
     void
     FunctionalInterface<CDC, FDC, DH, VECTOR, dopedim, dealdim>::FaceValue_Q(
         const FDC<DH, VECTOR, dealdim>& /*fdc*/,
-        dealii::Vector<double> &/*local_cell_vector*/,
+        dealii::Vector<double> &/*local_vector*/,
         double /*scale*/)
     {
       throw DOpEException("Not Implemented",
@@ -351,7 +351,7 @@ namespace DOpE
     void
     FunctionalInterface<CDC, FDC, DH, VECTOR, dopedim, dealdim>::FaceValue_UU(
         const FDC<DH, VECTOR, dealdim>& /*fdc*/,
-        dealii::Vector<double> &/*local_cell_vector*/,
+        dealii::Vector<double> &/*local_vector*/,
         double /*scale*/)
     {
       throw DOpEException("Not Implemented",
@@ -366,7 +366,7 @@ namespace DOpE
     void
     FunctionalInterface<CDC, FDC, DH, VECTOR, dopedim, dealdim>::FaceValue_QU(
         const FDC<DH, VECTOR, dealdim>& /*fdc*/,
-        dealii::Vector<double> &/*local_cell_vector*/,
+        dealii::Vector<double> &/*local_vector*/,
         double /*scale*/)
     {
       throw DOpEException("Not Implemented",
@@ -381,7 +381,7 @@ namespace DOpE
     void
     FunctionalInterface<CDC, FDC, DH, VECTOR, dopedim, dealdim>::FaceValue_UQ(
         const FDC<DH, VECTOR, dealdim>& /*fdc*/,
-        dealii::Vector<double> &/*local_cell_vector*/,
+        dealii::Vector<double> &/*local_vector*/,
         double /*scale*/)
     {
       throw DOpEException("Not Implemented",
@@ -396,7 +396,7 @@ namespace DOpE
     void
     FunctionalInterface<CDC, FDC, DH, VECTOR, dopedim, dealdim>::FaceValue_QQ(
         const FDC<DH, VECTOR, dealdim>& /*fdc*/,
-        dealii::Vector<double> &/*local_cell_vector*/,
+        dealii::Vector<double> &/*local_vector*/,
         double /*scale*/)
     {
       throw DOpEException("Not Implemented",
@@ -424,7 +424,7 @@ namespace DOpE
     void
     FunctionalInterface<CDC, FDC, DH, VECTOR, dopedim, dealdim>::BoundaryValue_U(
         const FDC<DH, VECTOR, dealdim>& /*fdc*/,
-        dealii::Vector<double> &/*local_cell_vector*/,
+        dealii::Vector<double> &/*local_vector*/,
         double /*scale*/)
     {
       throw DOpEException("Not Implemented",
@@ -439,7 +439,7 @@ namespace DOpE
     void
     FunctionalInterface<CDC, FDC, DH, VECTOR, dopedim, dealdim>::BoundaryValue_Q(
         const FDC<DH, VECTOR, dealdim>& /*fdc*/,
-        dealii::Vector<double> &/*local_cell_vector*/,
+        dealii::Vector<double> &/*local_vector*/,
         double /*scale*/)
     {
       throw DOpEException("Not Implemented",
@@ -454,7 +454,7 @@ namespace DOpE
     void
     FunctionalInterface<CDC, FDC, DH, VECTOR, dopedim, dealdim>::BoundaryValue_UU(
         const FDC<DH, VECTOR, dealdim>& /*fdc*/,
-        dealii::Vector<double> &/*local_cell_vector*/,
+        dealii::Vector<double> &/*local_vector*/,
         double /*scale*/)
     {
       throw DOpEException("Not Implemented",
@@ -469,7 +469,7 @@ namespace DOpE
     void
     FunctionalInterface<CDC, FDC, DH, VECTOR, dopedim, dealdim>::BoundaryValue_QU(
         const FDC<DH, VECTOR, dealdim>& /*fdc*/,
-        dealii::Vector<double> &/*local_cell_vector*/,
+        dealii::Vector<double> &/*local_vector*/,
         double /*scale*/)
     {
       throw DOpEException("Not Implemented",
@@ -484,7 +484,7 @@ namespace DOpE
     void
     FunctionalInterface<CDC, FDC, DH, VECTOR, dopedim, dealdim>::BoundaryValue_UQ(
         const FDC<DH, VECTOR, dealdim>& /*fdc*/,
-        dealii::Vector<double> &/*local_cell_vector*/,
+        dealii::Vector<double> &/*local_vector*/,
         double /*scale*/)
     {
       throw DOpEException("Not Implemented",
@@ -499,7 +499,7 @@ namespace DOpE
     void
     FunctionalInterface<CDC, FDC, DH, VECTOR, dopedim, dealdim>::BoundaryValue_QQ(
         const FDC<DH, VECTOR, dealdim>& /*fdc*/,
-        dealii::Vector<double> &/*local_cell_vector*/,
+        dealii::Vector<double> &/*local_vector*/,
         double /*scale*/)
     {
       throw DOpEException("Not Implemented",
@@ -623,27 +623,27 @@ namespace DOpE
 } //Endof namespace
 /********************************************/
 /********************************************/
-template class DOpE::FunctionalInterface<DOpE::CellDataContainer,
+template class DOpE::FunctionalInterface<DOpE::ElementDataContainer,
     DOpE::FaceDataContainer, dealii::DoFHandler, dealii::Vector<double>,
     dope_dimension, deal_II_dimension>;
-template class DOpE::FunctionalInterface<DOpE::CellDataContainer,
+template class DOpE::FunctionalInterface<DOpE::ElementDataContainer,
     DOpE::FaceDataContainer, dealii::DoFHandler, dealii::BlockVector<double>,
     dope_dimension, deal_II_dimension>;
-template class DOpE::FunctionalInterface<DOpE::Multimesh_CellDataContainer,
+template class DOpE::FunctionalInterface<DOpE::Multimesh_ElementDataContainer,
     DOpE::Multimesh_FaceDataContainer, dealii::DoFHandler,
     dealii::Vector<double>, dope_dimension, deal_II_dimension>;
-template class DOpE::FunctionalInterface<DOpE::Multimesh_CellDataContainer,
+template class DOpE::FunctionalInterface<DOpE::Multimesh_ElementDataContainer,
     DOpE::Multimesh_FaceDataContainer, dealii::DoFHandler,
     dealii::BlockVector<double>, dope_dimension, deal_II_dimension>;
-template class DOpE::FunctionalInterface<DOpE::CellDataContainer,
+template class DOpE::FunctionalInterface<DOpE::ElementDataContainer,
     DOpE::FaceDataContainer, dealii::hp::DoFHandler, dealii::Vector<double>,
     dope_dimension, deal_II_dimension>;
-template class DOpE::FunctionalInterface<DOpE::CellDataContainer,
+template class DOpE::FunctionalInterface<DOpE::ElementDataContainer,
     DOpE::FaceDataContainer, dealii::hp::DoFHandler,
     dealii::BlockVector<double>, dope_dimension, deal_II_dimension>;
-template class DOpE::FunctionalInterface<DOpE::CellDataContainer,
+template class DOpE::FunctionalInterface<DOpE::ElementDataContainer,
     DOpE::FaceDataContainer, dealii::MGDoFHandler, dealii::Vector<double>,
     dope_dimension, deal_II_dimension>;
-template class DOpE::FunctionalInterface<DOpE::CellDataContainer,
+template class DOpE::FunctionalInterface<DOpE::ElementDataContainer,
     DOpE::FaceDataContainer, dealii::MGDoFHandler,
     dealii::BlockVector<double>, dope_dimension, deal_II_dimension>;

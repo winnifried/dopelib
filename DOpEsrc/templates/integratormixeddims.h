@@ -39,7 +39,7 @@
 
 #include <vector>
 
-#include "celldatacontainer.h"
+#include "elementdatacontainer.h"
 #include "facedatacontainer.h"
 #include "optproblemcontainer.h"
 #if DEAL_II_VERSION_GTE(7,3)
@@ -59,7 +59,7 @@ namespace DOpE
    *
    * @template INTEGRATORDATACONT       The type of the integratordatacontainer, which has
    *                                    manages the basic data for integration (quadrature,
-   *                                    celldatacontainer, facedatacontainer etc.)
+   *                                    elementdatacontainer, facedatacontainer etc.)
    * @template VECTOR                   Class of the vectors which we use in the integrator.
    * @template SCALAR                   Type of the scalars we use in the integrator.
    * @template dimlow                   The dimension of the lowdimensional object (should be 0!)
@@ -168,54 +168,54 @@ template<typename PROBLEM>
       const unsigned int dofs =
           pde.GetBaseProblem().GetSpaceTimeHandler()->GetControlNDoFs();
 
-      dealii::Vector<SCALAR> local_cell_vector(dofs);
+      dealii::Vector<SCALAR> local_vector(dofs);
       const auto& dof_handler =
           pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandler();
-      auto cell = pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandlerBeginActive();
+      auto element = pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandlerBeginActive();
       auto endc = pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandlerEnd();
 
      // Initialize the data containers.
       _idc.InitializeCDC(pde.GetUpdateFlags(),
-                *(pde.GetBaseProblem().GetSpaceTimeHandler()), cell,
+                *(pde.GetBaseProblem().GetSpaceTimeHandler()), element,
                 this->GetParamData(), this->GetDomainData());
-      auto& cdc = _idc.GetCellDataContainer();
+      auto& cdc = _idc.GetElementDataContainer();
 
       bool need_faces = pde.HasFaces();
       std::vector<unsigned int> boundary_equation_colors = pde.GetBoundaryEquationColors();
       bool need_boundary_integrals = (boundary_equation_colors.size() > 0);
       _idc.InitializeFDC(pde.GetFaceUpdateFlags(),
                 *(pde.GetBaseProblem().GetSpaceTimeHandler()),
-                cell,
+                element,
                 this->GetParamData(),
                 this->GetDomainData());
       auto & fdc = _idc.GetFaceDataContainer();
 
-      for (; cell[0] != endc[0]; cell[0]++)
+      for (; element[0] != endc[0]; element[0]++)
       {
         for (unsigned int dh = 1; dh < dof_handler.size(); dh++)
         {
-          if (cell[dh] == endc[dh])
+          if (element[dh] == endc[dh])
           {
-            throw DOpEException("Cellnumbers in DoFHandlers are not matching!",
+            throw DOpEException("Elementnumbers in DoFHandlers are not matching!",
                                 "IntegratorMixedDimensions::ComputeNonlinearResidual");
           }
         }
 
-        local_cell_vector = 0;
+        local_vector = 0;
 	cdc.ReInit();
 
-        pde.CellRhs(cdc,local_cell_vector, -1.);
+        pde.ElementRhs(cdc,local_vector, -1.);
 
         if(need_boundary_integrals)
         {
           for (unsigned int face=0; face < dealii::GeometryInfo<dimhigh>::faces_per_cell; ++face)
           {
-            if (cell[0]->face(face)->at_boundary()
+            if (element[0]->face(face)->at_boundary()
                 &&
-                (find(boundary_equation_colors.begin(),boundary_equation_colors.end(),cell[0]->face(face)->boundary_indicator()) != boundary_equation_colors.end()))
+                (find(boundary_equation_colors.begin(),boundary_equation_colors.end(),element[0]->face(face)->boundary_indicator()) != boundary_equation_colors.end()))
             {
 	      fdc.ReInit(face);
-	      pde.BoundaryRhs(fdc,local_cell_vector,-1.);
+	      pde.BoundaryRhs(fdc,local_vector,-1.);
             }
           }
         }
@@ -223,31 +223,31 @@ template<typename PROBLEM>
         {
           for (unsigned int face=0; face < dealii::GeometryInfo<dimhigh>::faces_per_cell; ++face)
           {
-            if (cell[0]->neighbor_index(face) != -1)
+            if (element[0]->neighbor_index(face) != -1)
             {
               fdc.ReInit(face);
-	      pde.FaceRhs(fdc,local_cell_vector,-1.);
+	      pde.FaceRhs(fdc,local_vector,-1.);
             }
           }
         }
         //LocalToGlobal
         for (unsigned int i = 0; i < dofs; ++i)
         {
-          residual(i) += local_cell_vector(i);
+          residual(i) += local_vector(i);
         }
 
         for (unsigned int dh = 1; dh < dof_handler.size(); dh++)
         {
-          cell[dh]++;
+          element[dh]++;
         }
       }
       //The Equation should not be space dependend.
-      local_cell_vector = 0;
-      pde.CellEquation(cdc, local_cell_vector, 1., 1.);
+      local_vector = 0;
+      pde.ElementEquation(cdc, local_vector, 1., 1.);
 
       for (unsigned int i = 0; i < dofs; ++i)
       {
-        residual(i) += local_cell_vector(i);
+        residual(i) += local_vector(i);
       }
 
       if (pde.HasControlInDirichletData())
@@ -276,54 +276,54 @@ template<typename PROBLEM>
       const unsigned int dofs =
           pde.GetBaseProblem().GetSpaceTimeHandler()->GetControlNDoFs();
 
-      dealii::Vector<SCALAR> local_cell_vector(dofs);
+      dealii::Vector<SCALAR> local_vector(dofs);
       const auto& dof_handler =
           pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandler();
-      auto cell = pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandlerBeginActive();
+      auto element = pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandlerBeginActive();
       auto endc = pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandlerEnd();
 
      // Initialize the data containers.
       _idc.InitializeCDC(pde.GetUpdateFlags(),
-                *(pde.GetBaseProblem().GetSpaceTimeHandler()), cell,
+                *(pde.GetBaseProblem().GetSpaceTimeHandler()), element,
                 this->GetParamData(), this->GetDomainData());
-      auto& cdc = _idc.GetCellDataContainer();
+      auto& cdc = _idc.GetElementDataContainer();
 
       bool need_faces = pde.HasFaces();
       std::vector<unsigned int> boundary_equation_colors = pde.GetBoundaryEquationColors();
       bool need_boundary_integrals = (boundary_equation_colors.size() > 0);
       _idc.InitializeFDC(pde.GetFaceUpdateFlags(),
                 *(pde.GetBaseProblem().GetSpaceTimeHandler()),
-                cell,
+                element,
                 this->GetParamData(),
                 this->GetDomainData());
       auto & fdc = _idc.GetFaceDataContainer();
 
-      for (; cell[0] != endc[0]; cell[0]++)
+      for (; element[0] != endc[0]; element[0]++)
       {
         for (unsigned int dh = 1; dh < dof_handler.size(); dh++)
         {
-          if (cell[dh] == endc[dh])
+          if (element[dh] == endc[dh])
           {
-            throw DOpEException("Cellnumbers in DoFHandlers are not matching!",
+            throw DOpEException("Elementnumbers in DoFHandlers are not matching!",
                                 "IntegratorMixedDimensions::ComputeNonlinearResidual");
           }
         }
 
-        local_cell_vector = 0;
+        local_vector = 0;
 	cdc.ReInit();
 
-        pde.CellRhs(cdc,local_cell_vector, 1.);
+        pde.ElementRhs(cdc,local_vector, 1.);
 
         if(need_boundary_integrals)
         {
           for (unsigned int face=0; face < dealii::GeometryInfo<dimhigh>::faces_per_cell; ++face)
           {
-            if (cell[0]->face(face)->at_boundary()
+            if (element[0]->face(face)->at_boundary()
                 &&
-                (find(boundary_equation_colors.begin(),boundary_equation_colors.end(),cell[0]->face(face)->boundary_indicator()) != boundary_equation_colors.end()))
+                (find(boundary_equation_colors.begin(),boundary_equation_colors.end(),element[0]->face(face)->boundary_indicator()) != boundary_equation_colors.end()))
             {
 	      fdc.ReInit(face);
-	      pde.BoundaryRhs(fdc,local_cell_vector,1.);
+	      pde.BoundaryRhs(fdc,local_vector,1.);
             }
           }
         }
@@ -331,22 +331,22 @@ template<typename PROBLEM>
         {
           for (unsigned int face=0; face < dealii::GeometryInfo<dimhigh>::faces_per_cell; ++face)
           {
-            if (cell[0]->neighbor_index(face) != -1)
+            if (element[0]->neighbor_index(face) != -1)
             {
               fdc.ReInit(face);
-	      pde.FaceRhs(fdc,local_cell_vector,1.);
+	      pde.FaceRhs(fdc,local_vector,1.);
             }
           }
         }
         //LocalToGlobal
         for (unsigned int i = 0; i < dofs; ++i)
         {
-          residual(i) += local_cell_vector(i);
+          residual(i) += local_vector(i);
         }
 
         for (unsigned int dh = 1; dh < dof_handler.size(); dh++)
         {
-          cell[dh]++;
+          element[dh]++;
         }
       }
 
@@ -398,29 +398,29 @@ template<typename PROBLEM>
 
       const auto& dof_handler =
           pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandler();
-      auto cell = pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandlerBeginActive();
+      auto element = pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandlerBeginActive();
       auto endc = pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandlerEnd();
 
       _idc.InitializeCDC(pde.GetUpdateFlags(),
-          *(pde.GetBaseProblem().GetSpaceTimeHandler()), cell,
+          *(pde.GetBaseProblem().GetSpaceTimeHandler()), element,
           this->GetParamData(), this->GetDomainData());
-      auto& cdc = _idc.GetCellDataContainer();
+      auto& cdc = _idc.GetElementDataContainer();
 
 
       bool need_faces = pde.HasFaces();
 
-      for (; cell[0] != endc[0]; cell[0]++)
+      for (; element[0] != endc[0]; element[0]++)
       {
         for (unsigned int dh = 1; dh < dof_handler.size(); dh++)
         {
-          if (cell[dh] == endc[dh])
+          if (element[dh] == endc[dh])
           {
-            throw DOpEException("Cellnumbers in DoFHandlers are not matching!",
+            throw DOpEException("Elementnumbers in DoFHandlers are not matching!",
                                 "IntegratorMixedDimensions::ComputeDomainScalar");
           }
         }
 
-        ret += pde.CellFunctional(cdc);
+        ret += pde.ElementFunctional(cdc);
 
         if (need_faces)
         {
@@ -430,7 +430,7 @@ template<typename PROBLEM>
 
         for (unsigned int dh = 1; dh < dof_handler.size(); dh++)
         {
-          cell[dh]++;
+          element[dh]++;
         }
       }
       return ret;
@@ -470,21 +470,21 @@ template<typename PROBLEM>
 
       const std::vector<const DOpEWrapper::DoFHandler<dimhigh, dealii::DoFHandler >*>& dof_handler =
           pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandler();
-      std::vector<typename DOpEWrapper::DoFHandler<dimhigh, dealii::DoFHandler >::active_cell_iterator>
-          cell(dof_handler.size());
-      std::vector<typename DOpEWrapper::DoFHandler<dimhigh, dealii::DoFHandler>::active_cell_iterator>
+      std::vector<typename DOpEWrapper::DoFHandler<dimhigh, dealii::DoFHandler >::active_element_iterator>
+          element(dof_handler.size());
+      std::vector<typename DOpEWrapper::DoFHandler<dimhigh, dealii::DoFHandler>::active_element_iterator>
           endc(dof_handler.size());
 
       for (unsigned int dh = 0; dh < dof_handler.size(); dh++)
       {
-        cell[dh] = dof_handler[dh]->begin_active();
+        element[dh] = dof_handler[dh]->begin_active();
         endc[dh] = dof_handler[dh]->end();
       }
 
       // Generate the data containers.
       FaceDataContainer<dealii::DoFHandler, VECTOR, dimhigh> fdc(*(this->GetFaceQuadratureFormula()),
 					     pde.GetFaceUpdateFlags(),
-					     *(pde.GetBaseProblem().GetSpaceTimeHandler()), cell,
+					     *(pde.GetBaseProblem().GetSpaceTimeHandler()), element,
 					     this->GetParamData(), this->GetDomainData());
 
       std::vector<unsigned int> boundary_functional_colors =
@@ -496,13 +496,13 @@ template<typename PROBLEM>
                             "IntegratorMixedDimensions::ComputeBoundaryScalar");
       }
 
-      for (; cell[0] != endc[0]; cell[0]++)
+      for (; element[0] != endc[0]; element[0]++)
       {
         for (unsigned int dh = 1; dh < dof_handler.size(); dh++)
         {
-          if (cell[dh] == endc[dh])
+          if (element[dh] == endc[dh])
           {
-            throw DOpEException("Cellnumbers in DoFHandlers are not matching!",
+            throw DOpEException("Elementnumbers in DoFHandlers are not matching!",
                                 "IntegratorMixedDimensions::ComputeBoundaryScalar");
           }
         }
@@ -511,12 +511,12 @@ template<typename PROBLEM>
         {
           for (unsigned int face=0; face < dealii::GeometryInfo<dimhigh>::faces_per_cell; ++face)
           {
-            if (cell[0]->face(face)->at_boundary()
+            if (element[0]->face(face)->at_boundary()
                 &&
                 (find(boundary_functional_colors.begin(),boundary_functional_colors.end(),
-                        cell[0]->face(face)->boundary_indicator()) != boundary_functional_colors.end()))
+                        element[0]->face(face)->boundary_indicator()) != boundary_functional_colors.end()))
             {
-//              pde.GetBaseProblem().GetSpaceTimeHandler()->ComputeFaceFEValues(cell, face, pde.GetType());
+//              pde.GetBaseProblem().GetSpaceTimeHandler()->ComputeFaceFEValues(element, face, pde.GetType());
               fdc.ReInit(face);
 	      ret += pde.BoundaryFunctional(fdc);
             }
@@ -524,7 +524,7 @@ template<typename PROBLEM>
         }
         for (unsigned int dh = 1; dh < dof_handler.size(); dh++)
         {
-          cell[dh]++;
+          element[dh]++;
         }
       }
       return ret;
@@ -543,20 +543,20 @@ template<typename PROBLEM>
       // Begin integration
       const std::vector<const DOpEWrapper::DoFHandler<dimhigh, dealii::DoFHandler >*>& dof_handler =
           pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandler();
-      std::vector<typename DOpEWrapper::DoFHandler<dimhigh, dealii::DoFHandler>::active_cell_iterator>
-          cell(dof_handler.size());
-      std::vector<typename DOpEWrapper::DoFHandler<dimhigh, dealii::DoFHandler>::active_cell_iterator>
+      std::vector<typename DOpEWrapper::DoFHandler<dimhigh, dealii::DoFHandler>::active_element_iterator>
+          element(dof_handler.size());
+      std::vector<typename DOpEWrapper::DoFHandler<dimhigh, dealii::DoFHandler>::active_element_iterator>
           endc(dof_handler.size());
 
       for (unsigned int dh = 0; dh < dof_handler.size(); dh++)
       {
-        cell[dh] = dof_handler[dh]->begin_active();
+        element[dh] = dof_handler[dh]->begin_active();
         endc[dh] = dof_handler[dh]->end();
       }
       // Generate the data containers.
       FaceDataContainer<dealii::DoFHandler, VECTOR, dimhigh> fdc(*(this->GetFaceQuadratureFormula()),
 					     pde.GetFaceUpdateFlags(),
-					     *(pde.GetBaseProblem().GetSpaceTimeHandler()), cell,
+					     *(pde.GetBaseProblem().GetSpaceTimeHandler()), element,
 					     this->GetParamData(), this->GetDomainData());
 
       bool need_faces = pde.HasFaces();
@@ -565,13 +565,13 @@ template<typename PROBLEM>
         throw DOpEException("No faces required!", "IntegratorMixedDimensions::ComputeFaceScalar");
       }
 
-      for (; cell[0] != endc[0]; cell[0]++)
+      for (; element[0] != endc[0]; element[0]++)
       {
         for (unsigned int dh = 1; dh < dof_handler.size(); dh++)
         {
-          if (cell[dh] == endc[dh])
+          if (element[dh] == endc[dh])
           {
-            throw DOpEException("Cellnumbers in DoFHandlers are not matching!",
+            throw DOpEException("Elementnumbers in DoFHandlers are not matching!",
                                 "IntegratorMixedDimensions::ComputeFaceScalar");
           }
         }
@@ -586,7 +586,7 @@ template<typename PROBLEM>
         }
         for (unsigned int dh = 1; dh < dof_handler.size(); dh++)
         {
-          cell[dh]++;
+          element[dh]++;
         }
       }
       return ret;

@@ -21,14 +21,14 @@
  *
  **/
 
-#ifndef CELLDATACONTAINER_H_
-#define CELLDATACONTAINER_H_
+#ifndef ELEMENTDATACONTAINER_H_
+#define ELEMENTDATACONTAINER_H_
 
 #include "spacetimehandler.h"
 #include "statespacetimehandler.h"
 #include "fevalues_wrapper.h"
 #include "dopeexception.h"
-#include "celldatacontainer_internal.h"
+#include "elementdatacontainer_internal.h"
 
 #include <dofs/dof_handler.h>
 #include <multigrid/mg_dof_handler.h>
@@ -53,22 +53,22 @@ namespace DOpE
    */
 
   template<template<int, int> class DH, typename VECTOR, int dim>
-    class CellDataContainer : public cdcinternal::CellDataContainerInternal<
+    class ElementDataContainer : public cdcinternal::ElementDataContainerInternal<
         VECTOR, dim>
     {
       public:
-        CellDataContainer()
+        ElementDataContainer()
         {
           throw(DOpE::DOpEException(
               "Dummy class, this constructor should never get called.",
-              "CellDataContainer<dealii::DoFHandler<dim> , VECTOR, dim>::CellDataContainer"));
+              "ElementDataContainer<dealii::DoFHandler<dim> , VECTOR, dim>::ElementDataContainer"));
         }
         ;
     };
 
   /**
    * This two classes hold all the information we need in the integrator to
-   * integrate something over a cell (could be a functional, a PDE, etc.).
+   * integrate something over a element (could be a functional, a PDE, etc.).
    * Of particular importance: This class holds the FEValues objects.
    *
    * @template VECTOR     Type of the vector we use in our computations (i.e. Vector<double> or BlockVector<double>)
@@ -76,7 +76,7 @@ namespace DOpE
    */
 
   template<typename VECTOR, int dim>
-    class CellDataContainer<dealii::DoFHandler, VECTOR, dim> : public cdcinternal::CellDataContainerInternal<
+    class ElementDataContainer<dealii::DoFHandler, VECTOR, dim> : public cdcinternal::ElementDataContainerInternal<
         VECTOR, dim>
     {
 
@@ -92,7 +92,7 @@ namespace DOpE
          * @param quad                    Reference to the quadrature-rule which we use at the moment.
          * @param update_flags            The update flags we need to initialize the FEValues obejcts
          * @param sth                     A reference to the SpaceTimeHandler in use.
-         * @param cell                    A vector of cell iterators through which we gain most of the needed information (like
+         * @param element                    A vector of element iterators through which we gain most of the needed information (like
          *                                material_ids, n_dfos, etc.)
          * @param param_values            A std::map containing parameter data (e.g. non space dependent data). If the control
          *                                is done by parameters, it is contained in this map at the position "control".
@@ -102,16 +102,16 @@ namespace DOpE
          *
          */
         template<template<int, int> class FE, typename SPARSITYPATTERN, int dopedim, int dealdim>
-          CellDataContainer(const Quadrature<dim>& quad,
+          ElementDataContainer(const Quadrature<dim>& quad,
               UpdateFlags update_flags,
               SpaceTimeHandler<FE, dealii::DoFHandler, SPARSITYPATTERN, VECTOR,
                   dopedim, dealdim>& sth,
               const std::vector<
-                  typename dealii::DoFHandler<dim>::active_cell_iterator>& cell,
+                  typename dealii::DoFHandler<dim>::active_cell_iterator>& element,
               const std::map<std::string, const Vector<double>*> &param_values,
               const std::map<std::string, const VECTOR*> &domain_values) :
-              cdcinternal::CellDataContainerInternal<VECTOR, dim>(param_values,
-                  domain_values), _cell(cell), _state_fe_values(
+              cdcinternal::ElementDataContainerInternal<VECTOR, dim>(param_values,
+                  domain_values), _element(element), _state_fe_values(
                   sth.GetMapping(), (sth.GetFESystem("state")), quad,
                   update_flags), _control_fe_values(sth.GetMapping(),
                   (sth.GetFESystem("control")), quad, update_flags)
@@ -121,8 +121,8 @@ namespace DOpE
               _control_index = 0;
             else
               _control_index = 1;
-            _n_q_points_per_cell = quad.size();
-            _n_dofs_per_cell = cell[0]->get_fe().dofs_per_cell;
+            _n_q_points_per_element = quad.size();
+            _n_dofs_per_element = element[0]->get_fe().dofs_per_cell;
           }
 
         /**
@@ -134,7 +134,7 @@ namespace DOpE
          * @param quad                    Reference to the quadrature-rule which we use at the moment.
          * @param update_flags            The update flags we need to initialize the FEValues obejcts
          * @param sth                     A reference to the SpaceTimeHandler in use.
-         * @param cell                    A vector of cell iterators through which we gain most of the needed information (like
+         * @param element                    A vector of element iterators through which we gain most of the needed information (like
          *                                material_ids, n_dfos, etc.)
          * @param param_values            A std::map containing parameter data (e.g. non space dependent data). If the control
          *                                is done by parameters, it is contained in this map at the position "control".
@@ -144,31 +144,31 @@ namespace DOpE
          *
          */
         template<template<int, int> class FE, typename SPARSITYPATTERN>
-          CellDataContainer(const Quadrature<dim>& quad,
+          ElementDataContainer(const Quadrature<dim>& quad,
               UpdateFlags update_flags,
               StateSpaceTimeHandler<FE, dealii::DoFHandler, SPARSITYPATTERN,
                   VECTOR, dim>& sth,
               const std::vector<
-                  typename dealii::DoFHandler<dim>::active_cell_iterator>& cell,
+                  typename dealii::DoFHandler<dim>::active_cell_iterator>& element,
               const std::map<std::string, const Vector<double>*> &param_values,
               const std::map<std::string, const VECTOR*> &domain_values) :
-              cdcinternal::CellDataContainerInternal<VECTOR, dim>(param_values,
-                  domain_values), _cell(cell), _state_fe_values(
+              cdcinternal::ElementDataContainerInternal<VECTOR, dim>(param_values,
+                  domain_values), _element(element), _state_fe_values(
                   sth.GetMapping(), (sth.GetFESystem("state")), quad,
                   update_flags), _control_fe_values(sth.GetMapping(),
                   (sth.GetFESystem("state")), quad, update_flags)
           {
             _state_index = sth.GetStateIndex();
-            _control_index = cell.size(); //Make sure they are never used ...
-            _n_q_points_per_cell = quad.size();
-            _n_dofs_per_cell = cell[0]->get_fe().dofs_per_cell;
+            _control_index = element.size(); //Make sure they are never used ...
+            _n_q_points_per_element = quad.size();
+            _n_dofs_per_element = element[0]->get_fe().dofs_per_cell;
           }
-        ~CellDataContainer()
+        ~ElementDataContainer()
         {
         }
         /*********************************************/
         /*
-         * This function reinits the FEValues on the actual cell. Should
+         * This function reinits the FEValues on the actual element. Should
          * be called prior to any of the get-functions.
          */
         inline void
@@ -180,7 +180,7 @@ namespace DOpE
          * is executed before calling them. Self explanatory.
          */
         inline unsigned int
-        GetNDoFsPerCell() const;
+        GetNDoFsPerElement() const;
         inline unsigned int
         GetNQPoints() const;
         inline unsigned int
@@ -192,7 +192,7 @@ namespace DOpE
         inline bool
         GetIsAtBoundary() const;
         inline double
-        GetCellDiameter() const;
+        GetElementDiameter() const;
         inline Point<dim>
         GetCenter() const;
         inline const DOpEWrapper::FEValues<dim>&
@@ -213,12 +213,12 @@ namespace DOpE
         unsigned int _state_index;
         unsigned int _control_index;
 
-        const std::vector<typename dealii::DoFHandler<dim>::active_cell_iterator> & _cell;
+        const std::vector<typename dealii::DoFHandler<dim>::active_cell_iterator> & _element;
         DOpEWrapper::FEValues<dim> _state_fe_values;
         DOpEWrapper::FEValues<dim> _control_fe_values;
 
-        unsigned int _n_q_points_per_cell;
-        unsigned int _n_dofs_per_cell;
+        unsigned int _n_q_points_per_element;
+        unsigned int _n_dofs_per_element;
     };
 
   /*****************************************************************/
@@ -227,7 +227,7 @@ namespace DOpE
 
   /**
    * This two classes hold all the information we need in the integrator to
-   * integrate something over a cell (could be a functional, a PDE, etc.).
+   * integrate something over a element (could be a functional, a PDE, etc.).
    * Of particular importance: This class holds the FEValues objects.
    *
    * @template VECTOR     Type of the vector we use in our computations (i.e. Vector<double> or BlockVector<double>)
@@ -235,7 +235,7 @@ namespace DOpE
    */
 
   template<typename VECTOR, int dim>
-    class CellDataContainer<dealii::MGDoFHandler, VECTOR, dim> : public cdcinternal::CellDataContainerInternal<
+    class ElementDataContainer<dealii::MGDoFHandler, VECTOR, dim> : public cdcinternal::ElementDataContainerInternal<
         VECTOR, dim>
     {
 
@@ -251,7 +251,7 @@ namespace DOpE
          * @param quad                    Reference to the quadrature-rule which we use at the moment.
          * @param update_flags            The update flags we need to initialize the FEValues obejcts
          * @param sth                     A reference to the SpaceTimeHandler in use.
-         * @param cell                    A vector of cell iterators through which we gain most of the needed information (like
+         * @param element                    A vector of element iterators through which we gain most of the needed information (like
          *                                material_ids, n_dfos, etc.)
          * @param param_values            A std::map containing parameter data (e.g. non space dependent data). If the control
          *                                is done by parameters, it is contained in this map at the position "control".
@@ -261,18 +261,18 @@ namespace DOpE
          *
          */
       template<template<int, int> class FE, typename SPARSITYPATTERN, int dopedim, int dealdim>
-          CellDataContainer(
+          ElementDataContainer(
               const Quadrature<dim>& quad,
               UpdateFlags update_flags,
               SpaceTimeHandler<FE, dealii::MGDoFHandler, SPARSITYPATTERN,
                   VECTOR, dopedim, dealdim>& sth
               ,
               const std::vector<
-                  typename dealii::MGDoFHandler<dim>::active_cell_iterator>& cell,
+                  typename dealii::MGDoFHandler<dim>::active_cell_iterator>& element,
               const std::map<std::string, const Vector<double>*> &param_values,
               const std::map<std::string, const VECTOR*> &domain_values)
-              : cdcinternal::CellDataContainerInternal<VECTOR, dim>(
-                  param_values, domain_values), _cell(cell), _state_fe_values(
+              : cdcinternal::ElementDataContainerInternal<VECTOR, dim>(
+                  param_values, domain_values), _element(element), _state_fe_values(
                   sth.GetMapping(), (sth.GetFESystem("state")), quad,
                   update_flags), _control_fe_values(sth.GetMapping(),
                   (sth.GetFESystem("control")), quad, update_flags)
@@ -282,8 +282,8 @@ namespace DOpE
                     _control_index = 0;
                     else
                     _control_index = 1;
-                    _n_q_points_per_cell = quad.size();
-                    _n_dofs_per_cell = cell[0]->get_fe().dofs_per_cell;
+                    _n_q_points_per_element = quad.size();
+                    _n_dofs_per_element = element[0]->get_fe().dofs_per_cell;
                   }
 
 
@@ -299,7 +299,7 @@ namespace DOpE
                    * @param quad                    Reference to the quadrature-rule which we use at the moment.
                    * @param update_flags            The update flags we need to initialize the FEValues obejcts
                    * @param sth                     A reference to the SpaceTimeHandler in use.
-                   * @param cell                    A vector of cell iterators through which we gain most of the needed information (like
+                   * @param element                    A vector of element iterators through which we gain most of the needed information (like
                    *                                material_ids, n_dfos, etc.)
                    * @param param_values            A std::map containing parameter data (e.g. non space dependent data). If the control
                    *                                is done by parameters, it is contained in this map at the position "control".
@@ -309,33 +309,33 @@ namespace DOpE
                    *
                    */
                   template<template<int, int> class FE, typename SPARSITYPATTERN>
-            CellDataContainer(const Quadrature<dim>& quad,
+            ElementDataContainer(const Quadrature<dim>& quad,
                 UpdateFlags update_flags,
                 StateSpaceTimeHandler<FE, dealii::MGDoFHandler,
                 SPARSITYPATTERN, VECTOR, dim>& sth,
                 const std::vector<
-                typename dealii::MGDoFHandler<dim>::active_cell_iterator>& cell,
+                typename dealii::MGDoFHandler<dim>::active_cell_iterator>& element,
                 const std::map<std::string, const Vector<double>*> &param_values,
               const std::map<std::string, const VECTOR*> &domain_values)
-              : cdcinternal::CellDataContainerInternal<VECTOR, dim>(
-                  param_values, domain_values), _cell(cell), _state_fe_values(
+              : cdcinternal::ElementDataContainerInternal<VECTOR, dim>(
+                  param_values, domain_values), _element(element), _state_fe_values(
                   sth.GetMapping(), (sth.GetFESystem("state")), quad,
                   update_flags), _control_fe_values(sth.GetMapping(),
                   (sth.GetFESystem("state")), quad, update_flags)
           {
             _state_index = sth.GetStateIndex();
-            _control_index = cell.size(); //Make sure they are never used ...
-            _n_q_points_per_cell = quad.size();
-            _n_dofs_per_cell = cell[0]->get_fe().dofs_per_cell;
+            _control_index = element.size(); //Make sure they are never used ...
+            _n_q_points_per_element = quad.size();
+            _n_dofs_per_element = element[0]->get_fe().dofs_per_cell;
           }
 
 
-        ~CellDataContainer()
+        ~ElementDataContainer()
         {
         }
         /*********************************************/
         /*
-         * This function reinits the FEValues on the actual cell. Should
+         * This function reinits the FEValues on the actual element. Should
          * be called prior to any of the get-functions.
          */
         inline void
@@ -347,7 +347,7 @@ namespace DOpE
          * is executed before calling them. Self explanatory.
          */
         inline unsigned int
-        GetNDoFsPerCell() const;
+        GetNDoFsPerElement() const;
         inline unsigned int
         GetNQPoints() const;
         inline unsigned int
@@ -359,7 +359,7 @@ namespace DOpE
         inline bool
         GetIsAtBoundary() const;
         inline double
-        GetCellDiameter() const;
+        GetElementDiameter() const;
         inline Point<dim> GetCenter() const;
         inline const DOpEWrapper::FEValues<dim>&
         GetFEValuesState() const;
@@ -379,12 +379,12 @@ namespace DOpE
         unsigned int _state_index;
         unsigned int _control_index;
 
-        const std::vector<typename dealii::MGDoFHandler<dim>::active_cell_iterator> & _cell;
+        const std::vector<typename dealii::MGDoFHandler<dim>::active_cell_iterator> & _element;
         DOpEWrapper::FEValues<dim> _state_fe_values;
         DOpEWrapper::FEValues<dim> _control_fe_values;
 
-        unsigned int _n_q_points_per_cell;
-        unsigned int _n_dofs_per_cell;
+        unsigned int _n_q_points_per_element;
+        unsigned int _n_dofs_per_element;
     };
 
   /*  end MGDofHandler */
@@ -392,7 +392,7 @@ namespace DOpE
 
 
   template<typename VECTOR, int dim>
-    class CellDataContainer<dealii::hp::DoFHandler, VECTOR, dim> : public cdcinternal::CellDataContainerInternal<
+    class ElementDataContainer<dealii::hp::DoFHandler, VECTOR, dim> : public cdcinternal::ElementDataContainerInternal<
         VECTOR, dim>
     {
 
@@ -408,7 +408,7 @@ namespace DOpE
          * @param quad                    Reference to the qcollection-rule which we use at the moment.
          * @param update_flags            The update flags we need to initialize the FEValues obejcts
          * @param sth                     A reference to the SpaceTimeHandler in use.
-         * @param cell                    A vector of cell iterators through which we gain most of the needed information (like
+         * @param element                    A vector of element iterators through which we gain most of the needed information (like
          *                                material_ids, n_dfos, etc.)
          * @param param_values            A std::map containing parameter data (e.g. non space dependent data). If the control
          *                                is done by parameters, it is contained in this map at the position "control".
@@ -418,16 +418,16 @@ namespace DOpE
          *
          */
         template<template<int, int> class FE, typename SPARSITYPATTERN, int dopedim, int dealdim>
-          CellDataContainer(const hp::QCollection<dim>& q_collection,
+          ElementDataContainer(const hp::QCollection<dim>& q_collection,
               UpdateFlags update_flags,
               SpaceTimeHandler<FE, dealii::hp::DoFHandler, SPARSITYPATTERN,
                   VECTOR, dopedim, dealdim>& sth,
               const std::vector<
-                  typename DOpEWrapper::DoFHandler<dim, dealii::hp::DoFHandler>::active_cell_iterator>& cell,
+                  typename DOpEWrapper::DoFHandler<dim, dealii::hp::DoFHandler>::active_cell_iterator>& element,
               const std::map<std::string, const Vector<double>*> &param_values,
               const std::map<std::string, const VECTOR*> &domain_values) :
-              cdcinternal::CellDataContainerInternal<VECTOR, dim>(param_values,
-                  domain_values), _cell(cell), _state_hp_fe_values(
+              cdcinternal::ElementDataContainerInternal<VECTOR, dim>(param_values,
+                  domain_values), _element(element), _state_hp_fe_values(
                   sth.GetMapping(), (sth.GetFESystem("state")), q_collection,
                   update_flags), _control_hp_fe_values(sth.GetMapping(),
                   (sth.GetFESystem("control")), q_collection, update_flags), _q_collection(
@@ -448,7 +448,7 @@ namespace DOpE
          * @param quad                    Reference to the qcollection-rule which we use at the moment.
          * @param update_flags            The update flags we need to initialize the FEValues obejcts
          * @param sth                     A reference to the SpaceTimeHandler in use.
-         * @param cell                    A vector of cell iterators through which we gain most of the needed information (like
+         * @param element                    A vector of element iterators through which we gain most of the needed information (like
          *                                material_ids, n_dfos, etc.)
          * @param param_values            A std::map containing parameter data (e.g. non space dependent data). If the control
          *                                is done by parameters, it is contained in this map at the position "control".
@@ -458,31 +458,31 @@ namespace DOpE
          *
          */
         template<template<int, int> class FE, typename SPARSITYPATTERN>
-          CellDataContainer(const hp::QCollection<dim>& q_collection,
+          ElementDataContainer(const hp::QCollection<dim>& q_collection,
               UpdateFlags update_flags,
               StateSpaceTimeHandler<FE, dealii::hp::DoFHandler, SPARSITYPATTERN,
                   VECTOR, dim>& sth,
               const std::vector<
-                  typename DOpEWrapper::DoFHandler<dim, dealii::hp::DoFHandler>::active_cell_iterator>& cell,
+                  typename DOpEWrapper::DoFHandler<dim, dealii::hp::DoFHandler>::active_cell_iterator>& element,
               const std::map<std::string, const Vector<double>*> &param_values,
               const std::map<std::string, const VECTOR*> &domain_values) :
-              cdcinternal::CellDataContainerInternal<VECTOR, dim>(param_values,
-                  domain_values), _cell(cell), _state_hp_fe_values(
+              cdcinternal::ElementDataContainerInternal<VECTOR, dim>(param_values,
+                  domain_values), _element(element), _state_hp_fe_values(
                   sth.GetMapping(), (sth.GetFESystem("state")), q_collection,
                   update_flags), _control_hp_fe_values(sth.GetMapping(),
                   (sth.GetFESystem("state")), q_collection, update_flags), _q_collection(
                   q_collection)
           {
             _state_index = sth.GetStateIndex();
-            _control_index = cell.size(); //Make sure they are never used ...
+            _control_index = element.size(); //Make sure they are never used ...
           }
-        ~CellDataContainer()
+        ~ElementDataContainer()
         {
         }
 
         /*****************************************************************/
         /*
-         * This function reinits the hp::FEValues on the actual cell. Should
+         * This function reinits the hp::FEValues on the actual element. Should
          * be called prior to any of the get-functions.
          */
         inline void
@@ -494,7 +494,7 @@ namespace DOpE
          */
 
         inline unsigned int
-        GetNDoFsPerCell() const;
+        GetNDoFsPerElement() const;
         inline unsigned int
         GetNQPoints() const;
         inline unsigned int
@@ -506,7 +506,7 @@ namespace DOpE
         inline bool
         GetIsAtBoundary() const;
         inline double
-        GetCellDiameter() const;
+        GetElementDiameter() const;
         inline Point<dim>
         GetCenter() const;
 
@@ -563,7 +563,7 @@ namespace DOpE
         unsigned int _control_index;
 
         const std::vector<
-            typename dealii::hp::DoFHandler<dim>::active_cell_iterator> & _cell;
+            typename dealii::hp::DoFHandler<dim>::active_cell_iterator> & _element;
         DOpEWrapper::HpFEValues<dim> _state_hp_fe_values;
         DOpEWrapper::HpFEValues<dim> _control_hp_fe_values;
 
@@ -576,86 +576,86 @@ namespace DOpE
 
   template<typename VECTOR, int dim>
     void
-    DOpE::CellDataContainer<dealii::DoFHandler, VECTOR, dim>::ReInit()
+    DOpE::ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::ReInit()
     {
-      _state_fe_values.reinit(_cell[this->GetStateIndex()]);
+      _state_fe_values.reinit(_element[this->GetStateIndex()]);
       //Make sure that the Control must be initialized.
-      if (this->GetControlIndex() < _cell.size())
-        _control_fe_values.reinit(_cell[this->GetControlIndex()]);
+      if (this->GetControlIndex() < _element.size())
+        _control_fe_values.reinit(_element[this->GetControlIndex()]);
     }
 
   /***********************************************************************/
   template<typename VECTOR, int dim>
     unsigned int
-    CellDataContainer<dealii::DoFHandler, VECTOR, dim>::GetNDoFsPerCell() const
+    ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::GetNDoFsPerElement() const
     {
-      return _n_dofs_per_cell;
+      return _n_dofs_per_element;
     }
 
   /**********************************************/
   template<typename VECTOR, int dim>
     unsigned int
-    CellDataContainer<dealii::DoFHandler, VECTOR, dim>::GetNQPoints() const
+    ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::GetNQPoints() const
     {
-      return _n_q_points_per_cell;
+      return _n_q_points_per_element;
     }
 
   /**********************************************/
   template<typename VECTOR, int dim>
     unsigned int
-    CellDataContainer<dealii::DoFHandler, VECTOR, dim>::GetMaterialId() const
+    ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::GetMaterialId() const
     {
-      return _cell[0]->material_id();
+      return _element[0]->material_id();
     }
 
   /**********************************************/
   template<typename VECTOR, int dim>
     unsigned int
-    CellDataContainer<dealii::DoFHandler, VECTOR, dim>::GetNbrMaterialId(
+    ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::GetNbrMaterialId(
         unsigned int face) const
     {
-      if (_cell[0]->neighbor_index(face) != -1)
-        return _cell[0]->neighbor(face)->material_id();
+      if (_element[0]->neighbor_index(face) != -1)
+        return _element[0]->neighbor(face)->material_id();
       else
         throw DOpEException("There is no neighbor with number " + face,
-            "CellDataContainer::GetNbrMaterialId");
+            "ElementDataContainer::GetNbrMaterialId");
     }
 
   /**********************************************/
   template<typename VECTOR, int dim>
     unsigned int
-    CellDataContainer<dealii::DoFHandler, VECTOR, dim>::GetFaceBoundaryIndicator(
+    ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::GetFaceBoundaryIndicator(
         unsigned int face) const
     {
-      return _cell[0]->face(face)->boundary_indicator();
+      return _element[0]->face(face)->boundary_indicator();
     }
 
   /**********************************************/
   template<typename VECTOR, int dim>
     bool
-    CellDataContainer<dealii::DoFHandler, VECTOR, dim>::GetIsAtBoundary() const
+    ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::GetIsAtBoundary() const
     {
-      return _cell[0]->at_boundary();
+      return _element[0]->at_boundary();
     }
   /**********************************************/
   template<typename VECTOR, int dim>
     double
-    CellDataContainer<dealii::DoFHandler, VECTOR, dim>::GetCellDiameter() const
+    ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::GetElementDiameter() const
     {
-      return _cell[0]->diameter();
+      return _element[0]->diameter();
     }
   /**********************************************/
   template<typename VECTOR, int dim>
     Point<dim>
-    CellDataContainer<dealii::DoFHandler, VECTOR, dim>::GetCenter() const
+    ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::GetCenter() const
     {
-      return _cell[0]->center();
+      return _element[0]->center();
     }
 
   /**********************************************/
   template<typename VECTOR, int dim>
     const DOpEWrapper::FEValues<dim>&
-    CellDataContainer<dealii::DoFHandler, VECTOR, dim>::GetFEValuesState() const
+    ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::GetFEValuesState() const
     {
       return _state_fe_values;
     }
@@ -663,7 +663,7 @@ namespace DOpE
   /**********************************************/
   template<typename VECTOR, int dim>
     const DOpEWrapper::FEValues<dim>&
-    CellDataContainer<dealii::DoFHandler, VECTOR, dim>::GetFEValuesControl() const
+    ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::GetFEValuesControl() const
     {
       return _control_fe_values;
     }
@@ -672,7 +672,7 @@ namespace DOpE
 
   template<typename VECTOR, int dim>
     unsigned int
-    CellDataContainer<dealii::DoFHandler, VECTOR, dim>::GetStateIndex() const
+    ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::GetStateIndex() const
     {
       return _state_index;
     }
@@ -681,7 +681,7 @@ namespace DOpE
 
   template<typename VECTOR, int dim>
     unsigned int
-    CellDataContainer<dealii::DoFHandler, VECTOR, dim>::GetControlIndex() const
+    ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::GetControlIndex() const
     {
       return _control_index;
     }
@@ -701,86 +701,86 @@ namespace DOpE
 
   template<typename VECTOR, int dim>
     void
-    DOpE::CellDataContainer<dealii::MGDoFHandler, VECTOR, dim>::ReInit()
+    DOpE::ElementDataContainer<dealii::MGDoFHandler, VECTOR, dim>::ReInit()
     {
-      _state_fe_values.reinit(_cell[this->GetStateIndex()]);
+      _state_fe_values.reinit(_element[this->GetStateIndex()]);
       //Make sure that the Control must be initialized.
-      if (this->GetControlIndex() < _cell.size())
-        _control_fe_values.reinit(_cell[this->GetControlIndex()]);
+      if (this->GetControlIndex() < _element.size())
+        _control_fe_values.reinit(_element[this->GetControlIndex()]);
     }
 
   /***********************************************************************/
   template<typename VECTOR, int dim>
     unsigned int
-    CellDataContainer<dealii::MGDoFHandler, VECTOR, dim>::GetNDoFsPerCell() const
+    ElementDataContainer<dealii::MGDoFHandler, VECTOR, dim>::GetNDoFsPerElement() const
     {
-      return _n_dofs_per_cell;
+      return _n_dofs_per_element;
     }
 
   /**********************************************/
   template<typename VECTOR, int dim>
     unsigned int
-    CellDataContainer<dealii::MGDoFHandler, VECTOR, dim>::GetNQPoints() const
+    ElementDataContainer<dealii::MGDoFHandler, VECTOR, dim>::GetNQPoints() const
     {
-      return _n_q_points_per_cell;
+      return _n_q_points_per_element;
     }
 
   /**********************************************/
   template<typename VECTOR, int dim>
     unsigned int
-    CellDataContainer<dealii::MGDoFHandler, VECTOR, dim>::GetMaterialId() const
+    ElementDataContainer<dealii::MGDoFHandler, VECTOR, dim>::GetMaterialId() const
     {
-      return _cell[0]->material_id();
+      return _element[0]->material_id();
     }
 
   /**********************************************/
   template<typename VECTOR, int dim>
     unsigned int
-    CellDataContainer<dealii::MGDoFHandler, VECTOR, dim>::GetNbrMaterialId(
+    ElementDataContainer<dealii::MGDoFHandler, VECTOR, dim>::GetNbrMaterialId(
         unsigned int face) const
     {
-      if (_cell[0]->neighbor_index(face) != -1)
-        return _cell[0]->neighbor(face)->material_id();
+      if (_element[0]->neighbor_index(face) != -1)
+        return _element[0]->neighbor(face)->material_id();
       else
         throw DOpEException("There is no neighbor with number " + face,
-            "CellDataContainer::GetNbrMaterialId");
+            "ElementDataContainer::GetNbrMaterialId");
     }
 
   /**********************************************/
   template<typename VECTOR, int dim>
     unsigned int
-    CellDataContainer<dealii::MGDoFHandler, VECTOR, dim>::GetFaceBoundaryIndicator(
+    ElementDataContainer<dealii::MGDoFHandler, VECTOR, dim>::GetFaceBoundaryIndicator(
         unsigned int face) const
     {
-      return _cell[0]->face(face)->boundary_indicator();
+      return _element[0]->face(face)->boundary_indicator();
     }
 
   /**********************************************/
   template<typename VECTOR, int dim>
     bool
-    CellDataContainer<dealii::MGDoFHandler, VECTOR, dim>::GetIsAtBoundary() const
+    ElementDataContainer<dealii::MGDoFHandler, VECTOR, dim>::GetIsAtBoundary() const
     {
-      return _cell[0]->at_boundary();
+      return _element[0]->at_boundary();
     }
   /**********************************************/
   template<typename VECTOR, int dim>
     double
-    CellDataContainer<dealii::MGDoFHandler, VECTOR, dim>::GetCellDiameter() const
+    ElementDataContainer<dealii::MGDoFHandler, VECTOR, dim>::GetElementDiameter() const
     {
-      return _cell[0]->diameter();
+      return _element[0]->diameter();
     }
   /**********************************************/
   template<typename VECTOR, int dim>
     Point<dim>
-    CellDataContainer<dealii::MGDoFHandler, VECTOR, dim>::GetCenter() const
+    ElementDataContainer<dealii::MGDoFHandler, VECTOR, dim>::GetCenter() const
     {
-      return _cell[0]->center();
+      return _element[0]->center();
     }
 
   /**********************************************/
   template<typename VECTOR, int dim>
     const DOpEWrapper::FEValues<dim>&
-    CellDataContainer<dealii::MGDoFHandler, VECTOR, dim>::GetFEValuesState() const
+    ElementDataContainer<dealii::MGDoFHandler, VECTOR, dim>::GetFEValuesState() const
     {
       return _state_fe_values;
     }
@@ -788,7 +788,7 @@ namespace DOpE
   /**********************************************/
   template<typename VECTOR, int dim>
     const DOpEWrapper::FEValues<dim>&
-    CellDataContainer<dealii::MGDoFHandler, VECTOR, dim>::GetFEValuesControl() const
+    ElementDataContainer<dealii::MGDoFHandler, VECTOR, dim>::GetFEValuesControl() const
     {
       return _control_fe_values;
     }
@@ -797,7 +797,7 @@ namespace DOpE
 
   template<typename VECTOR, int dim>
     unsigned int
-    CellDataContainer<dealii::MGDoFHandler, VECTOR, dim>::GetStateIndex() const
+    ElementDataContainer<dealii::MGDoFHandler, VECTOR, dim>::GetStateIndex() const
     {
       return _state_index;
     }
@@ -806,7 +806,7 @@ namespace DOpE
 
   template<typename VECTOR, int dim>
     unsigned int
-    CellDataContainer<dealii::MGDoFHandler, VECTOR, dim>::GetControlIndex() const
+    ElementDataContainer<dealii::MGDoFHandler, VECTOR, dim>::GetControlIndex() const
     {
       return _control_index;
     }
@@ -823,96 +823,96 @@ namespace DOpE
 
   template<typename VECTOR, int dim>
     void
-    CellDataContainer<dealii::hp::DoFHandler, VECTOR, dim>::ReInit()
+    ElementDataContainer<dealii::hp::DoFHandler, VECTOR, dim>::ReInit()
     {
-      _state_hp_fe_values.reinit(_cell[this->GetStateIndex()]);
+      _state_hp_fe_values.reinit(_element[this->GetStateIndex()]);
       //Make sure that the Control must be initialized.
-      if (this->GetControlIndex() < _cell.size())
-        _control_hp_fe_values.reinit(_cell[this->GetControlIndex()]);
+      if (this->GetControlIndex() < _element.size())
+        _control_hp_fe_values.reinit(_element[this->GetControlIndex()]);
     }
   /*********************************************/
 
   template<typename VECTOR, int dim>
     unsigned int
-    CellDataContainer<dealii::hp::DoFHandler, VECTOR, dim>::GetNDoFsPerCell() const
+    ElementDataContainer<dealii::hp::DoFHandler, VECTOR, dim>::GetNDoFsPerElement() const
     {
-      return _cell[0]->get_fe().dofs_per_cell;
+      return _element[0]->get_fe().dofs_per_cell;
     }
   /*********************************************/
   template<typename VECTOR, int dim>
     unsigned int
-    CellDataContainer<dealii::hp::DoFHandler, VECTOR, dim>::GetNQPoints() const
+    ElementDataContainer<dealii::hp::DoFHandler, VECTOR, dim>::GetNQPoints() const
     {
-      return (_q_collection[_cell[0]->active_fe_index()]).size();
-    }
-  /*********************************************/
-
-  template<typename VECTOR, int dim>
-    unsigned int
-    CellDataContainer<dealii::hp::DoFHandler, VECTOR, dim>::GetMaterialId() const
-    {
-      return _cell[0]->material_id();
+      return (_q_collection[_element[0]->active_fe_index()]).size();
     }
   /*********************************************/
 
   template<typename VECTOR, int dim>
     unsigned int
-    CellDataContainer<dealii::hp::DoFHandler, VECTOR, dim>::GetNbrMaterialId(
+    ElementDataContainer<dealii::hp::DoFHandler, VECTOR, dim>::GetMaterialId() const
+    {
+      return _element[0]->material_id();
+    }
+  /*********************************************/
+
+  template<typename VECTOR, int dim>
+    unsigned int
+    ElementDataContainer<dealii::hp::DoFHandler, VECTOR, dim>::GetNbrMaterialId(
         unsigned int face) const
     {
-      if (_cell[0]->neighbor_index(face) != -1)
-        return _cell[0]->neighbor(face)->material_id();
+      if (_element[0]->neighbor_index(face) != -1)
+        return _element[0]->neighbor(face)->material_id();
       else
         throw DOpEException("There is no neighbor with number" + face,
-            "HpCellDataContainer::GetNbrMaterialId");
+            "HpElementDataContainer::GetNbrMaterialId");
     }
 
   /**********************************************/
   template<typename VECTOR, int dim>
     unsigned int
-    CellDataContainer<dealii::hp::DoFHandler, VECTOR, dim>::GetFaceBoundaryIndicator(
+    ElementDataContainer<dealii::hp::DoFHandler, VECTOR, dim>::GetFaceBoundaryIndicator(
         unsigned int face) const
     {
-      return _cell[0]->face(face)->boundary_indicator();
+      return _element[0]->face(face)->boundary_indicator();
     }
 
   /*********************************************/
 
   template<typename VECTOR, int dim>
     bool
-    CellDataContainer<dealii::hp::DoFHandler, VECTOR, dim>::GetIsAtBoundary() const
+    ElementDataContainer<dealii::hp::DoFHandler, VECTOR, dim>::GetIsAtBoundary() const
     {
-      return _cell[0]->at_boundary();
+      return _element[0]->at_boundary();
     }
 
   /*********************************************/
 
   template<typename VECTOR, int dim>
     double
-    CellDataContainer<dealii::hp::DoFHandler, VECTOR, dim>::GetCellDiameter() const
+    ElementDataContainer<dealii::hp::DoFHandler, VECTOR, dim>::GetElementDiameter() const
     {
-      return _cell[0]->diameter();
+      return _element[0]->diameter();
     }
 
   /**********************************************/
   template<typename VECTOR, int dim>
     Point<dim>
-    CellDataContainer<dealii::hp::DoFHandler, VECTOR, dim>::GetCenter() const
+    ElementDataContainer<dealii::hp::DoFHandler, VECTOR, dim>::GetCenter() const
     {
-      return _cell[0]->center();
+      return _element[0]->center();
     }
 
   /*********************************************/
   template<typename VECTOR, int dim>
     const DOpEWrapper::FEValues<dim>&
-    CellDataContainer<dealii::hp::DoFHandler, VECTOR, dim>::GetFEValuesState() const
+    ElementDataContainer<dealii::hp::DoFHandler, VECTOR, dim>::GetFEValuesState() const
     {
       return static_cast<const DOpEWrapper::FEValues<dim>&>(_state_hp_fe_values.get_present_fe_values());
     }
   /*********************************************/
   template<typename VECTOR, int dim>
     const DOpEWrapper::FEValues<dim>&
-    CellDataContainer<dealii::hp::DoFHandler, VECTOR, dim>::GetFEValuesControl() const
+    ElementDataContainer<dealii::hp::DoFHandler, VECTOR, dim>::GetFEValuesControl() const
     {
       return static_cast<const DOpEWrapper::FEValues<dim>&>(_control_hp_fe_values.get_present_fe_values());
     }
@@ -920,14 +920,14 @@ namespace DOpE
 
   template<typename VECTOR, int dim>
     unsigned int
-    CellDataContainer<dealii::hp::DoFHandler, VECTOR, dim>::GetStateIndex() const
+    ElementDataContainer<dealii::hp::DoFHandler, VECTOR, dim>::GetStateIndex() const
     {
       return _state_index;
     }
   /*********************************************/
   template<typename VECTOR, int dim>
     unsigned int
-    CellDataContainer<dealii::hp::DoFHandler, VECTOR, dim>::GetControlIndex() const
+    ElementDataContainer<dealii::hp::DoFHandler, VECTOR, dim>::GetControlIndex() const
     {
       return _control_index;
     }

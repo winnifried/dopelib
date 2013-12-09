@@ -30,9 +30,9 @@ After solving the equation, we want to apply local mesh refinement. So first we 
  	const StateVector<VECTORBLOCK> &gu1 = a1.GetU();
  	solution = gu1.GetSpacialVector();
 \end{verbatim}
-With this vector we estiamte the error via \texttt{KellyErrorEstimator} and get a vector holding the estimated error per cell. After choosing a refinement criterion (see \textit{refinementcontainer.h}, we opt here for refining the top 20\% of the cells), we give the SpaceTimeHandler an object of type \texttt{RefinementContainer} which holds all the information needed for the local mesh refinement. This is done via the \texttt{RefineSpace} method.
+With this vector we estiamte the error via \texttt{KellyErrorEstimator} and get a vector holding the estimated error per element. After choosing a refinement criterion (see \textit{refinementcontainer.h}, we opt here for refining the top 20\% of the elements), we give the SpaceTimeHandler an object of type \texttt{RefinementContainer} which holds all the information needed for the local mesh refinement. This is done via the \texttt{RefineSpace} method.
 \begin{verbatim}
         DOFH1.RefineSpace(
-               RefineFixedNumber(estimated_error_per_cell, 0.2, 0.0));
+               RefineFixedNumber(estimated_error_per_element, 0.2, 0.0));
 \end{verbatim}
 This method transfers our solution onto the new mesh. The transferred solution is then taken as the starting guess of the newton method in the next solution cycle. This is especially helpful for nonlinear problems.

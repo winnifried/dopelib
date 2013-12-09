@@ -44,28 +44,28 @@ namespace DOpE
 
         }
         /**
-         * Computes the contribution of the cell to overall error
+         * Computes the contribution of the element to overall error
          * in a previously specified functional. For example, this
          * could be a residual with appropriate weights.
          *
-         * @template CDC                Class of the celldatacontainer in use,
+         * @template CDC                Class of the elementdatacontainer in use,
          *                              distinguishes between hp- and classical case.
          * @template FDC                Class of the facedatacontainer in use,
          *                              distinguishes between hp- and classical case.
          *
          * @param cdc                   A DataContainer holding all the needed information
-         *                              for the computation of the residuum on the cell.
+         *                              for the computation of the residuum on the element.
          * @param dwrc                  A DWRDataContainer containing all the information
-         *                              needed to evaluate the error on the cell (form of the residual,
+         *                              needed to evaluate the error on the element (form of the residual,
          *                              the weights, etc.).
-         * @param cell_contrib          Vector in which we write the contribution of the cell to the overall
+         * @param element_contrib          Vector in which we write the contribution of the element to the overall
          *                              error. 1st component: primal_part, 2nd component: dual_part
          * @param scale                 A scaling factor which is -1 or 1 depending on the subroutine to compute.
          */
         template<class CDC, class DWRC>
           void
-          CellErrorContribution(const CDC& cdc, const DWRC& dwrc,
-              std::vector<double>& cell_contrib, double scale);
+          ElementErrorContribution(const CDC& cdc, const DWRC& dwrc,
+              std::vector<double>& element_contrib, double scale);
 
         /******************************************************/
 
@@ -75,7 +75,7 @@ namespace DOpE
          * where for instance jump terms come into play.
          *
          * It has the same functionality
-         * as CellErrorContribution, so we refer to its documentation.
+         * as ElementErrorContribution, so we refer to its documentation.
          *
          */
         template<class FDC, class DWRC>
@@ -90,7 +90,7 @@ namespace DOpE
          * in a previously specified functional.
          *
          * It has the same functionality
-         * as CellErrorContribution, so we refer to its documentation.
+         * as ElementErrorContribution, so we refer to its documentation.
          *
          */
         template<class FDC, class DWRC>
@@ -148,7 +148,7 @@ namespace DOpE
   template<typename PDE>
     template<class CDC, class DWRC>
       void
-      ProblemContainerInternal<PDE>::CellErrorContribution(const CDC& cdc,
+      ProblemContainerInternal<PDE>::ElementErrorContribution(const CDC& cdc,
           const DWRC& dwrc, std::vector<double>& error, double scale)
       {
         Assert(GetType() == "error_evaluation", ExcInternalError());
@@ -163,62 +163,62 @@ namespace DOpE
             switch (dwrc.GetEETerms())
             {
               case DOpEtypes::primal_only:
-                GetPDE().StrongCellResidual(cdc, *cdc_w, error[0], scale);
+                GetPDE().StrongElementResidual(cdc, *cdc_w, error[0], scale);
                 break;
               case DOpEtypes::dual_only:
-                GetPDE().StrongCellResidual_U(cdc, *cdc_w, error[1], scale);
+                GetPDE().StrongElementResidual_U(cdc, *cdc_w, error[1], scale);
                 break;
               case DOpEtypes::mixed:
-                GetPDE().StrongCellResidual(cdc, *cdc_w, error[0], scale);
-                GetPDE().StrongCellResidual_U(cdc, *cdc_w, error[1], scale);
+                GetPDE().StrongElementResidual(cdc, *cdc_w, error[0], scale);
+                GetPDE().StrongElementResidual_U(cdc, *cdc_w, error[1], scale);
                 break;
               case DOpEtypes::mixed_control:
-                GetPDE().StrongCellResidual(cdc, *cdc_w, error[0], scale);
-                GetPDE().StrongCellResidual_U(cdc, *cdc_w, error[1], scale);
-                GetPDE().StrongCellResidual_Control(cdc, *cdc_w, error[2], scale);
+                GetPDE().StrongElementResidual(cdc, *cdc_w, error[0], scale);
+                GetPDE().StrongElementResidual_U(cdc, *cdc_w, error[1], scale);
+                GetPDE().StrongElementResidual_Control(cdc, *cdc_w, error[2], scale);
                 break;
               default:
                 throw DOpEException("Not implemented for this EETerm.",
-                    "ProblemContainerInternal::CellErrorContribution");
+                    "ProblemContainerInternal::ElementErrorContribution");
                 break;
             }
 
           }
-          else if (dwrc.GetWeightComputation() == DOpEtypes::cell_diameter)
+          else if (dwrc.GetWeightComputation() == DOpEtypes::element_diameter)
           {
             switch (dwrc.GetEETerms())
             {
               case DOpEtypes::primal_only:
-                GetPDE().StrongCellResidual(cdc, cdc, error[0], scale);
+                GetPDE().StrongElementResidual(cdc, cdc, error[0], scale);
                 break;
               case DOpEtypes::dual_only:
-                GetPDE().StrongCellResidual_U(cdc, cdc, error[1], scale);
+                GetPDE().StrongElementResidual_U(cdc, cdc, error[1], scale);
                 break;
               case DOpEtypes::mixed:
-                GetPDE().StrongCellResidual(cdc, cdc, error[0], scale);
-                GetPDE().StrongCellResidual_U(cdc, cdc, error[1], scale);
+                GetPDE().StrongElementResidual(cdc, cdc, error[0], scale);
+                GetPDE().StrongElementResidual_U(cdc, cdc, error[1], scale);
                 break;
               case DOpEtypes::mixed_control:
-                GetPDE().StrongCellResidual        (cdc, cdc, error[0], scale);
-                GetPDE().StrongCellResidual_U      (cdc, cdc, error[1], scale);
-                GetPDE().StrongCellResidual_Control(cdc, cdc, error[2], scale);
+                GetPDE().StrongElementResidual        (cdc, cdc, error[0], scale);
+                GetPDE().StrongElementResidual_U      (cdc, cdc, error[1], scale);
+                GetPDE().StrongElementResidual_Control(cdc, cdc, error[2], scale);
                 break;
               default:
                 throw DOpEException("Not implemented for this EETerm.",
-                    "ProblemContainerInternal::CellErrorContribution");
+                    "ProblemContainerInternal::ElementErrorContribution");
                 break;
             }
           }
           else
           {
             throw DOpEException("Not implemented for this WeightComputation.",
-                "ProblemContainerInternal::CellErrorContribution");
+                "ProblemContainerInternal::ElementErrorContribution");
           }
         }
         else
         {
           throw DOpEException("Not implemented for this ResidualEvaluation.",
-              "ProblemContainerInternal::CellErrorContribution");
+              "ProblemContainerInternal::ElementErrorContribution");
         }
       }
 
@@ -262,7 +262,7 @@ namespace DOpE
                 break;
             }
           }
-          else if (dwrc.GetWeightComputation() == DOpEtypes::cell_diameter)
+          else if (dwrc.GetWeightComputation() == DOpEtypes::element_diameter)
           {
             switch (dwrc.GetEETerms())
             {
@@ -340,7 +340,7 @@ namespace DOpE
                 break;
             }
           }
-          else if (dwrc.GetWeightComputation() == DOpEtypes::cell_diameter)
+          else if (dwrc.GetWeightComputation() == DOpEtypes::element_diameter)
           {
             switch (dwrc.GetEETerms())
             {

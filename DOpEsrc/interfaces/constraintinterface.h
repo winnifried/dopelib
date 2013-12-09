@@ -42,7 +42,7 @@ namespace DOpE
    * GlobalConstraints are dealt with as a Functional, 
    * hence all functions from Functionals are inherited.
    *
-   * @tparam <CDC>             The CellDataContainer object
+   * @tparam <CDC>             The ElementDataContainer object
    *                           needed by the base class.
    * @tparam <FDC>             The FaceDataContainer object
    *                           needed by the base class.

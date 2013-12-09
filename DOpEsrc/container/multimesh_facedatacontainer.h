@@ -40,7 +40,7 @@ namespace DOpE
    * Dummy Template Class, acts as kind of interface. Through template specialization, we
    * distinguish between the 'classic' and the 'hp' case.
    *
-   * The Multimesh_CellDataContainers, can deal with different meshes for the control
+   * The Multimesh_ElementDataContainers, can deal with different meshes for the control
    * and state variable as long as both are given as refinements of a common coarse grid
    * by calculation of the respective values on a common refinement.
    *
@@ -64,7 +64,7 @@ namespace DOpE
 
   /**
    * This two classes hold all the information we need in the integrator to
-   * integrate something over a face of a cell (could be a functional, a PDE, etc.).
+   * integrate something over a face of a element (could be a functional, a PDE, etc.).
    * Of particular importance: This class holds the FaceFEValues objects.
    *
    * @template VECTOR     Type of the vector we use in our computations (i.e. Vector<double> or BlockVector<double>)
@@ -86,7 +86,7 @@ namespace DOpE
          * @param quad                    Reference to the quadrature-rule which we use at the moment.
          * @param update_flags            The update flags we need to initialize the FEValues obejcts
          * @param sth                     A reference to the SpaceTimeHandler in use.
-         * @param cell                    A vector of cell iterators through which we gain most of the needed information (like
+         * @param element                    A vector of element iterators through which we gain most of the needed information (like
          *                                material_ids, n_dfos, etc.)
          * @param param_values            A std::map containing parameter data (e.g. non space dependent data). If the control
          *                                is done by parameters, it is contained in this map at the position "control".
@@ -102,14 +102,14 @@ namespace DOpE
               UpdateFlags update_flags,
               SpaceTimeHandler<FE, dealii::DoFHandler, SPARSITYPATTERN,
                   VECTOR, dopedim, dealdim>& sth,
-              const typename std::vector<typename dealii::DoFHandler<dim>::cell_iterator>& cell,
-              const typename std::vector<typename dealii::Triangulation<dim>::cell_iterator>& tria_cell,
+              const typename std::vector<typename dealii::DoFHandler<dim>::cell_iterator>& element,
+              const typename std::vector<typename dealii::Triangulation<dim>::cell_iterator>& tria_element,
               const std::map<std::string, const Vector<double>*> &param_values,
               const std::map<std::string, const VECTOR*> &domain_values, bool/* just for compatibility*/) :
                 _param_values(param_values),
                 _domain_values(domain_values),
-                _cell(cell),
-                _tria_cell(tria_cell),
+                _element(element),
+                _tria_element(tria_element),
                 _state_fe_values(sth.GetFESystem("state"), quad,
                     update_flags),
                 _control_fe_values(sth.GetFESystem("control"), quad,
@@ -120,10 +120,10 @@ namespace DOpE
               _control_index = 0;
             else
               _control_index = 1;
-            _n_q_points_per_cell = quad.size();
-            _n_dofs_per_cell = cell[0]->get_fe().dofs_per_cell;
-	    _control_prolongation = IdentityMatrix(_cell[this->GetControlIndex()]->get_fe().dofs_per_cell);
-	    _state_prolongation = IdentityMatrix(_cell[this->GetStateIndex()]->get_fe().dofs_per_cell);
+            _n_q_points_per_element = quad.size();
+            _n_dofs_per_element = element[0]->get_fe().dofs_per_cell;
+	    _control_prolongation = IdentityMatrix(_element[this->GetControlIndex()]->get_fe().dofs_per_cell);
+	    _state_prolongation = IdentityMatrix(_element[this->GetStateIndex()]->get_fe().dofs_per_cell);
           }
 
         ~Multimesh_FaceDataContainer()
@@ -134,7 +134,7 @@ namespace DOpE
          * This function reinits the FEValues on the actual face. Should
          * be called prior to any of the get-functions.
          *
-         * @param face_no     The 'local number' (i.e. from the perspective of the actual cell) of the
+         * @param face_no     The 'local number' (i.e. from the perspective of the actual element) of the
          *                    actual face.
          */
         inline void
@@ -153,9 +153,9 @@ namespace DOpE
          * is executed before calling them.
          */
         inline unsigned int
-        GetNDoFsPerCell() const;
+        GetNDoFsPerElement() const;
         inline unsigned int
-        GetNbrNDoFsPerCell() const;
+        GetNbrNDoFsPerElement() const;
         inline unsigned int
         GetNQPoints() const;
         inline unsigned int
@@ -167,7 +167,7 @@ namespace DOpE
         inline bool
         GetIsAtBoundary() const;
         inline double
-        GetCellDiameter() const;
+        GetElementDiameter() const;
         inline unsigned int
         GetBoundaryIndicator() const;
         inline const DOpEWrapper::FEFaceValues<dim>&
@@ -266,7 +266,7 @@ namespace DOpE
          * Helper Function. Vector valued case.
          */
         inline void
-        GetValues(typename dealii::DoFHandler<dim>::cell_iterator cell,
+        GetValues(typename dealii::DoFHandler<dim>::cell_iterator element,
 		  const FullMatrix<double>& prolongation,
 		  const DOpEWrapper::FEFaceValues<dim>& fe_values, std::string name,
 		  std::vector<double>& values) const;
@@ -275,7 +275,7 @@ namespace DOpE
          * Helper Function. Vector valued case.
          */
         inline void
-        GetValues(typename dealii::DoFHandler<dim>::cell_iterator cell,
+        GetValues(typename dealii::DoFHandler<dim>::cell_iterator element,
 		  const FullMatrix<double>& prolongation,
 		  const DOpEWrapper::FEFaceValues<dim>& fe_values, std::string name,
 		  std::vector<Vector<double> >& values) const;
@@ -285,7 +285,7 @@ namespace DOpE
          */
         template<int targetdim>
           inline void
-          GetGrads(typename dealii::DoFHandler<dim>::cell_iterator cell,
+          GetGrads(typename dealii::DoFHandler<dim>::cell_iterator element,
 		   const FullMatrix<double>& prolongation,
 		   const DOpEWrapper::FEFaceValues<dim>& fe_values,
 		   std::string name, std::vector<Tensor<1, targetdim> >& values) const;
@@ -295,7 +295,7 @@ namespace DOpE
          */
         template<int targetdim>
           inline void
-          GetGrads(typename dealii::DoFHandler<dim>::cell_iterator cell,
+          GetGrads(typename dealii::DoFHandler<dim>::cell_iterator element,
 		   const FullMatrix<double>& prolongation,
 		   const DOpEWrapper::FEFaceValues<dim>& fe_values,
 		   std::string name, std::vector<std::vector<Tensor<1, targetdim> > >& values) const;
@@ -312,8 +312,8 @@ namespace DOpE
         unsigned int _state_index;
         unsigned int _control_index;
 
- 	const typename std::vector<typename dealii::DoFHandler<dim>::cell_iterator>& _cell;
-	const typename std::vector<typename dealii::Triangulation<dim>::cell_iterator>& _tria_cell;
+ 	const typename std::vector<typename dealii::DoFHandler<dim>::cell_iterator>& _element;
+	const typename std::vector<typename dealii::Triangulation<dim>::cell_iterator>& _tria_element;
         DOpEWrapper::FEFaceValues<dim> _state_fe_values;
         DOpEWrapper::FEFaceValues<dim> _control_fe_values;
 
@@ -321,8 +321,8 @@ namespace DOpE
 	FullMatrix<double> _state_prolongation;
 	unsigned int _coarse_index, _fine_index;
 
-	unsigned int _n_q_points_per_cell;
-        unsigned int _n_dofs_per_cell;
+	unsigned int _n_q_points_per_element;
+        unsigned int _n_dofs_per_element;
 
         unsigned int _face;
     };
@@ -343,47 +343,47 @@ namespace DOpE
       _face = face_no;
       _coarse_index = coarse_index;
       _fine_index = fine_index;
-      assert(this->GetControlIndex() < _cell.size());
+      assert(this->GetControlIndex() < _element.size());
 
       if(coarse_index == this->GetStateIndex())
       {
 	_state_prolongation = prolongation_matrix;
-	_control_prolongation = IdentityMatrix(_cell[this->GetControlIndex()]->get_fe().dofs_per_cell);
+	_control_prolongation = IdentityMatrix(_element[this->GetControlIndex()]->get_fe().dofs_per_cell);
       }
       else
       {
 	if(coarse_index == this->GetControlIndex())
 	{
 	   _control_prolongation = prolongation_matrix;
-	   _state_prolongation = IdentityMatrix(_cell[this->GetStateIndex()]->get_fe().dofs_per_cell);
+	   _state_prolongation = IdentityMatrix(_element[this->GetStateIndex()]->get_fe().dofs_per_cell);
 	}
 	else
 	{
-	  _control_prolongation = IdentityMatrix(_cell[this->GetControlIndex()]->get_fe().dofs_per_cell);
-	  _state_prolongation = IdentityMatrix(_cell[this->GetStateIndex()]->get_fe().dofs_per_cell);
+	  _control_prolongation = IdentityMatrix(_element[this->GetControlIndex()]->get_fe().dofs_per_cell);
+	  _state_prolongation = IdentityMatrix(_element[this->GetStateIndex()]->get_fe().dofs_per_cell);
 	  _fine_index = 0;
 	}
       }
 
-      _state_fe_values.reinit(_tria_cell[GetFineIndex()], face_no);
-      _control_fe_values.reinit(_tria_cell[GetFineIndex()], face_no);
+      _state_fe_values.reinit(_tria_element[GetFineIndex()], face_no);
+      _control_fe_values.reinit(_tria_element[GetFineIndex()], face_no);
     }
   /***********************************************************************/
   template<typename VECTOR, int dim>
     unsigned int
-    Multimesh_FaceDataContainer<dealii::DoFHandler, VECTOR, dim>::GetNDoFsPerCell() const
+    Multimesh_FaceDataContainer<dealii::DoFHandler, VECTOR, dim>::GetNDoFsPerElement() const
     {
-      return _n_dofs_per_cell;
+      return _n_dofs_per_element;
     }
 
   /***********************************************************************/
 
   template<typename VECTOR, int dim>
     unsigned int
-    Multimesh_FaceDataContainer<dealii::DoFHandler, VECTOR, dim>::GetNbrNDoFsPerCell() const
+    Multimesh_FaceDataContainer<dealii::DoFHandler, VECTOR, dim>::GetNbrNDoFsPerElement() const
     {
       throw DOpEException("This function has not been written since we do not know what the right neigbour is!",
-            "Multimesh_FaceDataContainer::GetNbrNDoFsPerCell");
+            "Multimesh_FaceDataContainer::GetNbrNDoFsPerElement");
     }
 
   /**********************************************/
@@ -391,7 +391,7 @@ namespace DOpE
     unsigned int
     Multimesh_FaceDataContainer<dealii::DoFHandler, VECTOR, dim>::GetNQPoints() const
     {
-      return _n_q_points_per_cell;
+      return _n_q_points_per_element;
     }
 
   /**********************************************/
@@ -399,7 +399,7 @@ namespace DOpE
     unsigned int
     Multimesh_FaceDataContainer<dealii::DoFHandler, VECTOR, dim>::GetMaterialId() const
     {
-      return _tria_cell[GetFineIndex()]->material_id();
+      return _tria_element[GetFineIndex()]->material_id();
     }
 
   /**********************************************/
@@ -424,16 +424,16 @@ namespace DOpE
     bool
     Multimesh_FaceDataContainer<dealii::DoFHandler, VECTOR, dim>::GetIsAtBoundary() const
     {
-      return _tria_cell[GetFineIndex()]->face(_face)->at_boundary();
+      return _tria_element[GetFineIndex()]->face(_face)->at_boundary();
     }
 
   /**********************************************/
   template<typename VECTOR, int dim>
     double
-    Multimesh_FaceDataContainer<dealii::DoFHandler, VECTOR, dim>::GetCellDiameter() const
+    Multimesh_FaceDataContainer<dealii::DoFHandler, VECTOR, dim>::GetElementDiameter() const
     {
       throw DOpEException("This function has not been written since we do not know what the right Diameter!",
-			  "Multimesh_FaceDataContainer::GetCellDiameter");
+			  "Multimesh_FaceDataContainer::GetElementDiameter");
     }
 
   /**********************************************/
@@ -442,7 +442,7 @@ namespace DOpE
     unsigned int
     Multimesh_FaceDataContainer<dealii::DoFHandler, VECTOR, dim>::GetBoundaryIndicator() const
     {
-      return _tria_cell[GetFineIndex()]->face(_face)->boundary_indicator();
+      return _tria_element[GetFineIndex()]->face(_face)->boundary_indicator();
     }
 
   /**********************************************/
@@ -484,7 +484,7 @@ namespace DOpE
     Multimesh_FaceDataContainer<dealii::DoFHandler, VECTOR, dim>::GetFaceValuesState(
         std::string name, std::vector<double>& values) const
     {
-      this->GetValues(_cell[this->GetStateIndex()],_state_prolongation,this->GetFEFaceValuesState(), name, values);
+      this->GetValues(_element[this->GetStateIndex()],_state_prolongation,this->GetFEFaceValuesState(), name, values);
     }
   /*********************************************/
   template<typename VECTOR, int dim>
@@ -492,7 +492,7 @@ namespace DOpE
     Multimesh_FaceDataContainer<dealii::DoFHandler, VECTOR, dim>::GetFaceValuesState(
         std::string name, std::vector<Vector<double> >& values) const
     {
-      this->GetValues(_cell[this->GetStateIndex()],_state_prolongation,this->GetFEFaceValuesState(), name, values);
+      this->GetValues(_element[this->GetStateIndex()],_state_prolongation,this->GetFEFaceValuesState(), name, values);
 
     }
 
@@ -502,7 +502,7 @@ namespace DOpE
     Multimesh_FaceDataContainer<dealii::DoFHandler, VECTOR, dim>::GetFaceValuesControl(
         std::string name, std::vector<double>& values) const
     {
-      this->GetValues(_cell[this->GetControlIndex()],_control_prolongation,this->GetFEFaceValuesControl(), name, values);
+      this->GetValues(_element[this->GetControlIndex()],_control_prolongation,this->GetFEFaceValuesControl(), name, values);
     }
 
   /*********************************************/
@@ -511,7 +511,7 @@ namespace DOpE
     Multimesh_FaceDataContainer<dealii::DoFHandler, VECTOR, dim>::GetFaceValuesControl(
         std::string name, std::vector<Vector<double> >& values) const
     {
-      this->GetValues(_cell[this->GetControlIndex()],_control_prolongation,this->GetFEFaceValuesControl(), name, values);
+      this->GetValues(_element[this->GetControlIndex()],_control_prolongation,this->GetFEFaceValuesControl(), name, values);
     }
 
   /*********************************************/
@@ -521,7 +521,7 @@ namespace DOpE
       Multimesh_FaceDataContainer<dealii::DoFHandler, VECTOR, dim>::GetFaceGradsState(
           std::string name, std::vector<Tensor<1, targetdim> >& values) const
       {
-        this->GetGrads<targetdim> (_cell[this->GetStateIndex()],_state_prolongation,this->GetFEFaceValuesState(), name, values);
+        this->GetGrads<targetdim> (_element[this->GetStateIndex()],_state_prolongation,this->GetFEFaceValuesState(), name, values);
       }
 
   /*********************************************/
@@ -531,7 +531,7 @@ namespace DOpE
       Multimesh_FaceDataContainer<dealii::DoFHandler, VECTOR, dim>::GetFaceGradsState(
           std::string name, std::vector<std::vector<Tensor<1, targetdim> > >& values) const
       {
-        this->GetGrads<targetdim> (_cell[this->GetStateIndex()],_state_prolongation,this->GetFEFaceValuesState(), name, values);
+        this->GetGrads<targetdim> (_element[this->GetStateIndex()],_state_prolongation,this->GetFEFaceValuesState(), name, values);
       }
 
   /***********************************************************************/
@@ -542,7 +542,7 @@ namespace DOpE
       Multimesh_FaceDataContainer<dealii::DoFHandler, VECTOR, dim>::GetFaceGradsControl(
           std::string name, std::vector<Tensor<1, targetdim> >& values) const
       {
-        this->GetGrads<targetdim> (_cell[this->GetControlIndex()],_control_prolongation,this->GetFEFaceValuesControl(), name, values);
+        this->GetGrads<targetdim> (_element[this->GetControlIndex()],_control_prolongation,this->GetFEFaceValuesControl(), name, values);
       }
   /***********************************************************************/
 
@@ -552,7 +552,7 @@ namespace DOpE
       Multimesh_FaceDataContainer<dealii::DoFHandler, VECTOR, dim>::GetFaceGradsControl(
           std::string name, std::vector<std::vector<Tensor<1, targetdim> > >& values) const
       {
-        this->GetGrads<targetdim> (_cell[this->GetControlIndex()],_control_prolongation,this->GetFEFaceValuesControl(), name, values);
+        this->GetGrads<targetdim> (_element[this->GetControlIndex()],_control_prolongation,this->GetFEFaceValuesControl(), name, values);
       }
 
   /***********************************************************************/
@@ -577,7 +577,7 @@ namespace DOpE
   template<typename VECTOR, int dim>
     void
     Multimesh_FaceDataContainer<dealii::DoFHandler, VECTOR, dim>::GetValues(
-        typename dealii::DoFHandler<dim>::cell_iterator cell,
+        typename dealii::DoFHandler<dim>::cell_iterator element,
 	const FullMatrix<double>& prolongation,
 	const DOpEWrapper::FEFaceValues<dim>& fe_values, std::string name,
         std::vector<double>& values) const
@@ -589,11 +589,11 @@ namespace DOpE
           throw DOpEException("Did not find " + name,
               "Multimesh_FaceDataContainer::GetValues");
         }
-      unsigned int dofs_per_cell = cell->get_fe().dofs_per_cell;
-      //Now we get the values on the real cell
-      dealii::Vector<double> dof_values(dofs_per_cell);
-      dealii::Vector<double> dof_values_transformed(dofs_per_cell);
-      cell->get_dof_values (*(it->second), dof_values);
+      unsigned int dofs_per_element = element->get_fe().dofs_per_cell;
+      //Now we get the values on the real element
+      dealii::Vector<double> dof_values(dofs_per_element);
+      dealii::Vector<double> dof_values_transformed(dofs_per_element);
+      element->get_dof_values (*(it->second), dof_values);
       //Now compute the real values at the nodal points
       prolongation.vmult(dof_values_transformed,dof_values);
 
@@ -601,7 +601,7 @@ namespace DOpE
       // see deal.II/source/fe/fe_values.cc
       unsigned int n_quadrature_points = GetNQPoints();
       std::fill_n (values.begin(), n_quadrature_points, 0);
-      for (unsigned int shape_func=0; shape_func<dofs_per_cell; ++shape_func)
+      for (unsigned int shape_func=0; shape_func<dofs_per_element; ++shape_func)
       {
 	const double value = dof_values_transformed(shape_func);
 	if (value == 0.)
@@ -617,7 +617,7 @@ namespace DOpE
   template<typename VECTOR, int dim>
     void
     Multimesh_FaceDataContainer<dealii::DoFHandler, VECTOR, dim>::GetValues(
-      typename dealii::DoFHandler<dim>::cell_iterator cell,
+      typename dealii::DoFHandler<dim>::cell_iterator element,
       const FullMatrix<double>& prolongation,
       const DOpEWrapper::FEFaceValues<dim>& fe_values, std::string name,
       std::vector<Vector<double> >& values) const
@@ -630,37 +630,37 @@ namespace DOpE
               "Multimesh_FaceDataContainer::GetValues");
         }
 
-       unsigned int dofs_per_cell = cell->get_fe().dofs_per_cell;
-      //Now we get the values on the real cell
-      dealii::Vector<double> dof_values(dofs_per_cell);
-      dealii::Vector<double> dof_values_transformed(dofs_per_cell);
-      cell->get_dof_values (*(it->second), dof_values);
+       unsigned int dofs_per_element = element->get_fe().dofs_per_cell;
+      //Now we get the values on the real element
+      dealii::Vector<double> dof_values(dofs_per_element);
+      dealii::Vector<double> dof_values_transformed(dofs_per_element);
+      element->get_dof_values (*(it->second), dof_values);
       //Now compute the real values at the nodal points
       prolongation.vmult(dof_values_transformed,dof_values);
 
       //Copied from deal FEValuesBase<dim,spacedim>::get_function_values
       // see deal.II/source/fe/fe_values.cc
-       const unsigned int n_components = cell->get_fe().n_components();
+       const unsigned int n_components = element->get_fe().n_components();
       unsigned int n_quadrature_points = GetNQPoints();
       for (unsigned i=0;i<values.size();++i)
 	std::fill_n (values[i].begin(), values[i].size(), 0);
 
-      for (unsigned int shape_func=0; shape_func<dofs_per_cell; ++shape_func)
+      for (unsigned int shape_func=0; shape_func<dofs_per_element; ++shape_func)
       {
 	const double value = dof_values_transformed(shape_func);
 	if (value == 0.)
 	  continue;
 
-	if (cell->get_fe().is_primitive(shape_func))
+	if (element->get_fe().is_primitive(shape_func))
 	{
-	  const unsigned int comp = cell->get_fe().system_to_component_index(shape_func).first;
+	  const unsigned int comp = element->get_fe().system_to_component_index(shape_func).first;
 	  for (unsigned int point=0; point<n_quadrature_points; ++point)
 	    values[point](comp) += value * fe_values.shape_value(shape_func,point);
 	}
 	else
 	  for (unsigned int c=0; c<n_components; ++c)
 	  {
-	    if (cell->get_fe().get_nonzero_components(shape_func)[c] == false)
+	    if (element->get_fe().get_nonzero_components(shape_func)[c] == false)
 	      continue;
 	    for (unsigned int point=0; point<n_quadrature_points; ++point)
 	      values[point](c) += value * fe_values.shape_value_component(shape_func,point,c);
@@ -674,7 +674,7 @@ namespace DOpE
     template<int targetdim>
       void
       Multimesh_FaceDataContainer<dealii::DoFHandler, VECTOR, dim>::GetGrads(
-          typename dealii::DoFHandler<dim>::cell_iterator cell,
+          typename dealii::DoFHandler<dim>::cell_iterator element,
 	  const FullMatrix<double>& prolongation,
 	  const DOpEWrapper::FEFaceValues<dim>& fe_values, std::string name,
           std::vector<Tensor<1, targetdim> >& values) const
@@ -686,11 +686,11 @@ namespace DOpE
             throw DOpEException("Did not find " + name,
                 "Multimesh_FaceDataContainerBase::GetGrads");
           }
-        unsigned int dofs_per_cell = cell->get_fe().dofs_per_cell;
-	//Now we get the values on the real cell
-	dealii::Vector<double> dof_values(dofs_per_cell);
-	dealii::Vector<double> dof_values_transformed(dofs_per_cell);
-	cell->get_dof_values (*(it->second), dof_values);
+        unsigned int dofs_per_element = element->get_fe().dofs_per_cell;
+	//Now we get the values on the real element
+	dealii::Vector<double> dof_values(dofs_per_element);
+	dealii::Vector<double> dof_values_transformed(dofs_per_element);
+	element->get_dof_values (*(it->second), dof_values);
 	//Now compute the real values at the nodal points
 	prolongation.vmult(dof_values_transformed,dof_values);
 
@@ -698,7 +698,7 @@ namespace DOpE
 	unsigned int n_quadrature_points = GetNQPoints();
 	std::fill_n (values.begin(), n_quadrature_points, Tensor<1,targetdim>());
 
-	for (unsigned int shape_func=0; shape_func<dofs_per_cell; ++shape_func)
+	for (unsigned int shape_func=0; shape_func<dofs_per_element; ++shape_func)
 	{
 	  const double value = dof_values_transformed(shape_func);
 	  if (value == 0.)
@@ -717,7 +717,7 @@ namespace DOpE
     template<int targetdim>
       void
       Multimesh_FaceDataContainer<dealii::DoFHandler, VECTOR, dim>::GetGrads(
-          typename dealii::DoFHandler<dim>::cell_iterator cell,
+          typename dealii::DoFHandler<dim>::cell_iterator element,
 	  const FullMatrix<double>& prolongation,
 	  const DOpEWrapper::FEFaceValues<dim>& fe_values, std::string name,
           std::vector<std::vector<Tensor<1, targetdim> > >& values) const
@@ -730,36 +730,36 @@ namespace DOpE
                 "Multimesh_FaceDataContainerBase::GetGrads");
           }
 
-	unsigned int dofs_per_cell = cell->get_fe().dofs_per_cell;
-	//Now we get the values on the real cell
-	dealii::Vector<double> dof_values(dofs_per_cell);
-	dealii::Vector<double> dof_values_transformed(dofs_per_cell);
-	cell->get_dof_values (*(it->second), dof_values);
+	unsigned int dofs_per_element = element->get_fe().dofs_per_cell;
+	//Now we get the values on the real element
+	dealii::Vector<double> dof_values(dofs_per_element);
+	dealii::Vector<double> dof_values_transformed(dofs_per_element);
+	element->get_dof_values (*(it->second), dof_values);
 	//Now compute the real values at the nodal points
 	prolongation.vmult(dof_values_transformed,dof_values);
 
         //Copied from deal FEValuesBase<dim,spacedim>::get_function_gradients
-	const unsigned int n_components = cell->get_fe().n_components();
+	const unsigned int n_components = element->get_fe().n_components();
 	unsigned int n_quadrature_points = GetNQPoints();
 	for (unsigned i=0;i<values.size();++i)
 	  std::fill_n (values[i].begin(), values[i].size(), Tensor<1,dim>());
 
-	for (unsigned int shape_func=0; shape_func<dofs_per_cell; ++shape_func)
+	for (unsigned int shape_func=0; shape_func<dofs_per_element; ++shape_func)
 	{
 	  const double value = dof_values_transformed(shape_func);
 	  if (value == 0.)
 	    continue;
 
-	  if (cell->get_fe().is_primitive(shape_func))
+	  if (element->get_fe().is_primitive(shape_func))
 	  {
-	    const unsigned int comp = cell->get_fe().system_to_component_index(shape_func).first;
+	    const unsigned int comp = element->get_fe().system_to_component_index(shape_func).first;
 	    for (unsigned int point=0; point<n_quadrature_points; ++point)
 	      values[point][comp] += value * fe_values.shape_grad(shape_func,point);
 	  }
 	  else
 	    for (unsigned int c=0; c<n_components; ++c)
 	    {
-	      if (cell->get_fe().get_nonzero_components(shape_func)[c] == false)
+	      if (element->get_fe().get_nonzero_components(shape_func)[c] == false)
 		continue;
 	      for (unsigned int point=0; point<n_quadrature_points; ++point)
 		values[point][c] += value * fe_values.shape_grad_component(shape_func,point,c);

@@ -112,91 +112,91 @@ namespace DOpE
 
          template<typename CDC>
           void
-          CellEquation(const CDC& cdc,
-		       dealii::Vector<double> &local_cell_vector, double scale, double /*scale_ico*/)
+          ElementEquation(const CDC& cdc,
+		       dealii::Vector<double> &local_vector, double scale, double /*scale_ico*/)
           {
             if (this->GetPart() == "New_for_1st_and_3rd_cycle")
             {
-              dealii::Vector<double> tmp(local_cell_vector);
+              dealii::Vector<double> tmp(local_vector);
 
               tmp = 0.0;
-              this->GetProblem().CellEquation(cdc, tmp,
+              this->GetProblem().ElementEquation(cdc, tmp,
                   scale * _fs_alpha
                       * this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize(),
                   scale
                       * this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize());
-              local_cell_vector += tmp;
+              local_vector += tmp;
 
               tmp = 0.0;
-              this->GetProblem().CellTimeEquation(cdc, tmp, scale / (_fs_theta));
-              local_cell_vector += tmp;
+              this->GetProblem().ElementTimeEquation(cdc, tmp, scale / (_fs_theta));
+              local_vector += tmp;
 
-              this->GetProblem().CellTimeEquationExplicit(cdc, local_cell_vector,
+              this->GetProblem().ElementTimeEquationExplicit(cdc, local_vector,
                   scale / (_fs_theta));
             }
             else if (this->GetPart() == "Old_for_1st_cycle")
             {
-              dealii::Vector<double> tmp(local_cell_vector);
+              dealii::Vector<double> tmp(local_vector);
               tmp = 0.0;
 
               // The explicit parts with old_time_values; e.g. for fluid problems: laplace, convection, etc.
-              this->GetProblem().CellEquation(cdc, tmp,
+              this->GetProblem().ElementEquation(cdc, tmp,
                   scale * _fs_beta
                       * this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize(),
                   0.);
-              local_cell_vector += tmp;
+              local_vector += tmp;
 
-              this->GetProblem().CellTimeEquation(cdc, local_cell_vector,
+              this->GetProblem().ElementTimeEquation(cdc, local_vector,
                   (-1) * scale / (_fs_theta));
             }
             else if (this->GetPart() == "Old_for_3rd_cycle")
             {
-              dealii::Vector<double> tmp(local_cell_vector);
+              dealii::Vector<double> tmp(local_vector);
               tmp = 0.0;
 
               // The explicit parts with old_time_values; e.g. for fluid problems: laplace, convection, etc.
-              this->GetProblem().CellEquation(cdc, tmp,
+              this->GetProblem().ElementEquation(cdc, tmp,
                   scale * _fs_beta
                       * this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize(),
                   0.);
-              local_cell_vector += tmp;
+              local_vector += tmp;
 
-              this->GetProblem().CellTimeEquation(cdc, local_cell_vector,
+              this->GetProblem().ElementTimeEquation(cdc, local_vector,
                   (-1) * scale / (_fs_theta));
             }
             else if (this->GetPart() == "New_for_2nd_cycle")
             {
-              dealii::Vector<double> tmp(local_cell_vector);
+              dealii::Vector<double> tmp(local_vector);
 
               tmp = 0.0;
-              this->GetProblem().CellEquation(cdc, tmp,
+              this->GetProblem().ElementEquation(cdc, tmp,
                   scale * _fs_beta
                       * this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize(),
                   scale
                       * this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize());
-              local_cell_vector += tmp;
+              local_vector += tmp;
 
               tmp = 0.0;
-              this->GetProblem().CellTimeEquation(cdc, tmp,
+              this->GetProblem().ElementTimeEquation(cdc, tmp,
                   scale / (_fs_theta_prime));
-              local_cell_vector += tmp;
+              local_vector += tmp;
 
-              this->GetProblem().CellTimeEquationExplicit(cdc, local_cell_vector,
+              this->GetProblem().ElementTimeEquationExplicit(cdc, local_vector,
                   scale / (_fs_theta_prime));
             }
             else if (this->GetPart() == "Old_for_2nd_cycle")
             {
-              dealii::Vector<double> tmp(local_cell_vector);
+              dealii::Vector<double> tmp(local_vector);
               tmp = 0.0;
 
               // The explicit parts with old_time_values; e.g. for fluid problems: laplace, convection, etc.
-              this->GetProblem().CellEquation(cdc, tmp,
+              this->GetProblem().ElementEquation(cdc, tmp,
                   scale * _fs_alpha
                       * this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize(),
                   0.);
-              local_cell_vector += tmp;
+              local_vector += tmp;
 
-              this->GetProblem().CellTimeEquation(cdc, local_cell_vector,
+              this->GetProblem().ElementTimeEquation(cdc, local_vector,
                   (-1) * scale / (_fs_theta_prime));
             }
             else
@@ -209,8 +209,8 @@ namespace DOpE
 
         template<typename CDC>
           void
-          CellRhs(const CDC& cdc,
-              dealii::Vector<double> &local_cell_vector, double scale)
+          ElementRhs(const CDC& cdc,
+              dealii::Vector<double> &local_vector, double scale)
           {
             if (this->GetPart() == "New_for_1st_and_3rd_cycle")
             {
@@ -219,13 +219,13 @@ namespace DOpE
             else if (this->GetPart() == "Old_for_1st_cycle"
                 || this->GetPart() == "Old_for_3rd_cycle")
             {
-              this->GetProblem().CellRhs(cdc, local_cell_vector,
+              this->GetProblem().ElementRhs(cdc, local_vector,
                   scale
                       * this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize());
             }
             else if (this->GetPart() == "New_for_2nd_cycle")
             {
-              this->GetProblem().CellRhs(cdc, local_cell_vector,
+              this->GetProblem().ElementRhs(cdc, local_vector,
                   scale
                       * this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize());
             }
@@ -275,46 +275,46 @@ namespace DOpE
 
         template<typename CDC>
           void
-          CellMatrix(const CDC& cdc,
-              dealii::FullMatrix<double> &local_entry_matrix)
+          ElementMatrix(const CDC& cdc,
+              dealii::FullMatrix<double> &local_matrix)
           {
             if (this->GetPart() == "New_for_1st_and_3rd_cycle")
             {
-              dealii::FullMatrix<double> m(local_entry_matrix);
+              dealii::FullMatrix<double> m(local_matrix);
               m = 0.;
-              this->GetProblem().CellMatrix(cdc, m,
+              this->GetProblem().ElementMatrix(cdc, m,
                   _fs_alpha
                       * this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize(),
                   1.
                       * this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize());
-              local_entry_matrix.add(1.0, m);
+              local_matrix.add(1.0, m);
 
               m = 0.;
-              this->GetProblem().CellTimeMatrix(cdc, m);
-              local_entry_matrix.add(1.0 / (_fs_theta), m);
+              this->GetProblem().ElementTimeMatrix(cdc, m);
+              local_matrix.add(1.0 / (_fs_theta), m);
 
               m = 0.;
-              this->GetProblem().CellTimeMatrixExplicit(cdc, m);
-              local_entry_matrix.add(1.0 / (_fs_theta), m);
+              this->GetProblem().ElementTimeMatrixExplicit(cdc, m);
+              local_matrix.add(1.0 / (_fs_theta), m);
             }
             else if (this->GetPart() == "New_for_2nd_cycle")
             {
-              dealii::FullMatrix<double> m(local_entry_matrix);
+              dealii::FullMatrix<double> m(local_matrix);
               m = 0.;
-              this->GetProblem().CellMatrix(cdc, local_entry_matrix,
+              this->GetProblem().ElementMatrix(cdc, local_matrix,
                   _fs_beta
                       * this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize(),
                   1.
                       * this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize());
-              local_entry_matrix.add(1.0, m);
+              local_matrix.add(1.0, m);
 
               m = 0.;
-              this->GetProblem().CellTimeMatrix(cdc, m);
-              local_entry_matrix.add(1.0 / (_fs_theta_prime), m);
+              this->GetProblem().ElementTimeMatrix(cdc, m);
+              local_matrix.add(1.0 / (_fs_theta_prime), m);
 
               m = 0.;
-              this->GetProblem().CellTimeMatrixExplicit(cdc, m);
-              local_entry_matrix.add(1.0 / (_fs_theta_prime), m);
+              this->GetProblem().ElementTimeMatrixExplicit(cdc, m);
+              local_matrix.add(1.0 / (_fs_theta_prime), m);
             }
           }
 
@@ -323,11 +323,11 @@ namespace DOpE
         template<typename FDC>
           void
           FaceEquation(const FDC& fdc,
-              dealii::Vector<double> &local_cell_vector, double scale, double)
+              dealii::Vector<double> &local_vector, double scale, double)
           {
             if (this->GetPart() == "New_for_1st_and_3rd_cycle")
             {
-              this->GetProblem().FaceEquation(fdc, local_cell_vector,
+              this->GetProblem().FaceEquation(fdc, local_vector,
                   scale * _fs_alpha
                       * this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize(),
                   scale
@@ -337,14 +337,14 @@ namespace DOpE
             else if ((this->GetPart() == "Old_for_1st_cycle")
                 || (this->GetPart() == "Old_for_3rd_cycle"))
             {
-              this->GetProblem().FaceEquation(fdc, local_cell_vector,
+              this->GetProblem().FaceEquation(fdc, local_vector,
                   scale * _fs_beta
                       * this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize(),
                   0);
             }
             else if (this->GetPart() == "New_for_2nd_cycle")
             {
-              this->GetProblem().FaceEquation(fdc, local_cell_vector,
+              this->GetProblem().FaceEquation(fdc, local_vector,
                   scale * _fs_beta
                       * this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize(),
                   scale
@@ -352,7 +352,7 @@ namespace DOpE
             }
             else if (this->GetPart() == "Old_for_2nd_cycle")
             {
-              this->GetProblem().FaceEquation(fdc, local_cell_vector,
+              this->GetProblem().FaceEquation(fdc, local_vector,
                   scale * _fs_alpha
                       * this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize(),
                   0.);
@@ -369,12 +369,12 @@ namespace DOpE
         template<typename FDC>
           void
           InterfaceEquation(const FDC& fdc,
-              dealii::Vector<double> &local_cell_vector, double scale,
+              dealii::Vector<double> &local_vector, double scale,
               double /*scale_ico*/)
           {
             if (this->GetPart() == "New_for_1st_and_3rd_cycle")
             {
-              this->GetProblem().InterfaceEquation(fdc, local_cell_vector,
+              this->GetProblem().InterfaceEquation(fdc, local_vector,
                   scale * _fs_alpha
                       * this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize(),
                   scale
@@ -384,14 +384,14 @@ namespace DOpE
             else if ((this->GetPart() == "Old_for_1st_cycle")
                 || (this->GetPart() == "Old_for_3rd_cycle"))
             {
-              this->GetProblem().InterfaceEquation(fdc, local_cell_vector,
+              this->GetProblem().InterfaceEquation(fdc, local_vector,
                   scale * _fs_beta
                       * this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize(),
                   0);
             }
             else if (this->GetPart() == "New_for_2nd_cycle")
             {
-              this->GetProblem().InterfaceEquation(fdc, local_cell_vector,
+              this->GetProblem().InterfaceEquation(fdc, local_vector,
                   scale * _fs_beta
                       * this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize(),
                   scale
@@ -399,7 +399,7 @@ namespace DOpE
             }
             else if (this->GetPart() == "Old_for_2nd_cycle")
             {
-              this->GetProblem().InterfaceEquation(fdc, local_cell_vector,
+              this->GetProblem().InterfaceEquation(fdc, local_vector,
                   scale * _fs_alpha
                       * this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize(),
                   0.);
@@ -416,9 +416,9 @@ namespace DOpE
         template<typename FDC>
           void
           FaceRhs(const FDC& fdc,
-              dealii::Vector<double> &local_cell_vector, double scale = 1.)
+              dealii::Vector<double> &local_vector, double scale = 1.)
           {
-            this->GetProblem().FaceRhs(fdc, local_cell_vector,
+            this->GetProblem().FaceRhs(fdc, local_vector,
                 scale
                     * this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize());
           }
@@ -428,29 +428,29 @@ namespace DOpE
         template<typename FDC>
           void
           FaceMatrix(const FDC& fdc,
-              dealii::FullMatrix<double> &local_entry_matrix)
+              dealii::FullMatrix<double> &local_matrix)
           {
             if (this->GetPart() == "New_for_1st_and_3rd_cycle")
             {
-              dealii::FullMatrix<double> m(local_entry_matrix);
+              dealii::FullMatrix<double> m(local_matrix);
               m = 0.;
               this->GetProblem().FaceMatrix(fdc, m,
                   _fs_alpha
                       * this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize(),
                   1.
                       * this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize());
-              local_entry_matrix.add(1., m);
+              local_matrix.add(1., m);
             }
             else if (this->GetPart() == "New_for_2nd_cycle")
             {
-              dealii::FullMatrix<double> m(local_entry_matrix);
+              dealii::FullMatrix<double> m(local_matrix);
               m = 0.;
               this->GetProblem().FaceMatrix(fdc, m,
                   _fs_beta
                       * this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize(),
                   1.
                       * this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize());
-              local_entry_matrix.add(1.0, m);
+              local_matrix.add(1.0, m);
             }
 
           }
@@ -460,29 +460,29 @@ namespace DOpE
         template<typename FDC>
           void
           InterfaceMatrix(const FDC& fdc,
-              dealii::FullMatrix<double> &local_entry_matrix)
+              dealii::FullMatrix<double> &local_matrix)
           {
             if (this->GetPart() == "New_for_1st_and_3rd_cycle")
             {
-              dealii::FullMatrix<double> m(local_entry_matrix);
+              dealii::FullMatrix<double> m(local_matrix);
               m = 0.;
               this->GetProblem().InterfaceMatrix(fdc, m,
                   _fs_alpha
                       * this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize(),
                   1.
                       * this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize());
-              local_entry_matrix.add(1.0, m);
+              local_matrix.add(1.0, m);
             }
             else if (this->GetPart() == "New_for_2nd_cycle")
             {
-              dealii::FullMatrix<double> m(local_entry_matrix);
+              dealii::FullMatrix<double> m(local_matrix);
               m = 0.;
               this->GetProblem().InterfaceMatrix(fdc, m,
                   _fs_beta
                       * this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize(),
                   1.
                       * this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize());
-              local_entry_matrix.add(1.0, m);
+              local_matrix.add(1.0, m);
             }
 
           }
@@ -492,11 +492,11 @@ namespace DOpE
         template<typename FDC>
           void
           BoundaryEquation(const FDC& fdc,
-              dealii::Vector<double> &local_cell_vector, double scale, double)
+              dealii::Vector<double> &local_vector, double scale, double)
           {
             if (this->GetPart() == "New_for_1st_and_3rd_cycle")
             {
-              this->GetProblem().BoundaryEquation(fdc, local_cell_vector,
+              this->GetProblem().BoundaryEquation(fdc, local_vector,
                   scale * _fs_alpha
                       * this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize(),
                   scale
@@ -505,14 +505,14 @@ namespace DOpE
             else if ((this->GetPart() == "Old_for_1st_cycle")
                 || (this->GetPart() == "Old_for_3rd_cycle"))
             {
-              this->GetProblem().BoundaryEquation(fdc, local_cell_vector,
+              this->GetProblem().BoundaryEquation(fdc, local_vector,
                   scale * _fs_beta
                       * this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize(),
                   0.);
             }
             else if (this->GetPart() == "New_for_2nd_cycle")
             {
-              this->GetProblem().BoundaryEquation(fdc, local_cell_vector,
+              this->GetProblem().BoundaryEquation(fdc, local_vector,
                   scale * _fs_beta
                       * this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize(),
                   scale
@@ -520,7 +520,7 @@ namespace DOpE
             }
             else if (this->GetPart() == "Old_for_2nd_cycle")
             {
-              this->GetProblem().BoundaryEquation(fdc, local_cell_vector,
+              this->GetProblem().BoundaryEquation(fdc, local_vector,
                   scale * _fs_alpha
                       * this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize(),
                   0);
@@ -537,9 +537,9 @@ namespace DOpE
         template<typename FDC>
           void
           BoundaryRhs(const FDC& fdc,
-              dealii::Vector<double> &local_cell_vector, double scale)
+              dealii::Vector<double> &local_vector, double scale)
           {
-            this->GetProblem().BoundaryRhs(fdc, local_cell_vector,
+            this->GetProblem().BoundaryRhs(fdc, local_vector,
                 scale
                     * this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize());
           }
@@ -549,29 +549,29 @@ namespace DOpE
         template<typename FDC>
           void
           BoundaryMatrix(const FDC& fdc,
-              dealii::FullMatrix<double> &local_cell_matrix)
+              dealii::FullMatrix<double> &local_matrix)
           {
             if (this->GetPart() == "New_for_1st_and_3rd_cycle")
             {
-              dealii::FullMatrix<double> m(local_cell_matrix);
+              dealii::FullMatrix<double> m(local_matrix);
               m = 0.;
               this->GetProblem().BoundaryMatrix(fdc, m,
                   _fs_alpha
                       * this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize(),
                   1.
                       * this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize());
-              local_cell_matrix.add(1.0, m);
+              local_matrix.add(1.0, m);
             }
             else if (this->GetPart() == "New_for_2nd_cycle")
             {
-              dealii::FullMatrix<double> m(local_cell_matrix);
+              dealii::FullMatrix<double> m(local_matrix);
               m = 0.;
               this->GetProblem().BoundaryMatrix(fdc, m,
                   _fs_beta
                       * this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize(),
                   1.
                       * this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize());
-              local_cell_matrix.add(1.0, m);
+              local_matrix.add(1.0, m);
             }
           }
       private:

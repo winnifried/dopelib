@@ -89,7 +89,7 @@ namespace DOpE
         /******************************************************/
 
         /**
-         * Basic function to write vectors containing cell-related data in files.
+         * Basic function to write vectors containing element-related data in files.
          *
          *  @param v           The BlockVector to write to a file.
          *  @param name        The names of the variables, e.g., in a fluid problem: v1, v2, p.
@@ -98,11 +98,11 @@ namespace DOpE
          *  @param filetype    The filetype. Actually, *.vtk outputs are possible.
          */
         virtual void
-        WriteToFileCellwise(const Vector<double> &/*v*/, std::string /*name*/,
+        WriteToFileElementwise(const Vector<double> &/*v*/, std::string /*name*/,
             std::string /*outfile*/, std::string /*dof_type*/,
             std::string /*filetype*/)
         {
-          throw DOpEException("NotImplemented", "WriteToFileCellwise");
+          throw DOpEException("NotImplemented", "WriteToFileElementwise");
         }
 
         /******************************************************/

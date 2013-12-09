@@ -526,7 +526,7 @@ template <typename INTEGRATOR, typename LINEARSOLVER, typename VECTOR>
       tmp_last_time_solution = solution;
 
       // needs to be set here, otherwise the 
-      // values in cell equation are not set!
+      // values in element equation are not set!
       GetIntegrator().AddDomainData("last_time_solution",&tmp_last_time_solution);
 
       // Calculate residual parts corresponding to the last time-step
@@ -650,7 +650,7 @@ template <typename INTEGRATOR, typename LINEARSOLVER, typename VECTOR>
       tmp_last_time_solution = solution;
 
       // needs to be set here, otherwise the 
-      // values in cell equation are not set!
+      // values in element equation are not set!
       GetIntegrator().AddDomainData("last_time_solution",&tmp_last_time_solution);
 
       // Calculate residual parts corresponding to the last time-step

@@ -53,7 +53,7 @@ const static int DIM = 2;
 
 #define DOFHANDLER DoFHandler
 #define FE FESystem
-#define CDC CellDataContainer
+#define CDC ElementDataContainer
 #define FDC FaceDataContainer
 
 typedef QGauss<DIM> QUADRATURE;

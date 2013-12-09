@@ -69,7 +69,7 @@ typedef BlockSparseMatrix<double> MATRIX;
 typedef BlockSparsityPattern SPARSITYPATTERN;
 typedef BlockVector<double> VECTOR;
 
-#define CDC CellDataContainer
+#define CDC ElementDataContainer
 #define FDC FaceDataContainer
 
 typedef FunctionalInterface<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> FUNCTIONALINTERFACE;
@@ -147,19 +147,19 @@ main(int argc, char **argv)
   COSTFUNCTIONAL LFunc;
 
   { //Set Dirichlet Boundary!
-    for (Triangulation<DIM>::active_cell_iterator cell =
-        triangulation.begin_active(); cell != triangulation.end(); ++cell)
+    for (Triangulation<DIM>::active_cell_iterator element =
+        triangulation.begin_active(); element != triangulation.end(); ++element)
       for (unsigned int f = 0; f < GeometryInfo<DIM>::faces_per_cell; ++f)
       {
-        if (cell->face(f)->at_boundary())
+        if (element->face(f)->at_boundary())
         {
-          if (cell->face(f)->center()[1] == 0)
+          if (element->face(f)->center()[1] == 0)
           {
-            cell->face(f)->set_all_boundary_indicators(5);
-            if (fabs(cell->face(f)->center()[0] - 2.)
-                < std::max(0.25, cell->face(f)->diameter()))
+            element->face(f)->set_all_boundary_indicators(5);
+            if (fabs(element->face(f)->center()[0] - 2.)
+                < std::max(0.25, element->face(f)->diameter()))
             {
-              cell->face(f)->set_all_boundary_indicators(2);
+              element->face(f)->set_all_boundary_indicators(2);
             }
           }
         }
@@ -223,19 +223,19 @@ main(int argc, char **argv)
     {
       DOFH.RefineSpace();
       { //Set Dirichlet Boundary!
-        for (Triangulation<DIM>::active_cell_iterator cell =
-            triangulation.begin_active(); cell != triangulation.end(); ++cell)
+        for (Triangulation<DIM>::active_cell_iterator element =
+            triangulation.begin_active(); element != triangulation.end(); ++element)
           for (unsigned int f = 0; f < GeometryInfo<DIM>::faces_per_cell; ++f)
           {
-            if (cell->face(f)->at_boundary())
+            if (element->face(f)->at_boundary())
             {
-              if (cell->face(f)->center()[1] == 0)
+              if (element->face(f)->center()[1] == 0)
               {
-                cell->face(f)->set_all_boundary_indicators(5);
-                if ((fabs(cell->face(f)->center()[0] - 2.)
-                    < std::max(0.25, cell->face(f)->diameter())))
+                element->face(f)->set_all_boundary_indicators(5);
+                if ((fabs(element->face(f)->center()[0] - 2.)
+                    < std::max(0.25, element->face(f)->diameter())))
                 {
-                  cell->face(f)->set_all_boundary_indicators(2);
+                  element->face(f)->set_all_boundary_indicators(2);
                 }
               }
             }

@@ -73,9 +73,9 @@ namespace DOpE
   /***********************************************************/
 
   unsigned int
-  RefinementContainer::GetMaxNCells() const
+  RefinementContainer::GetMaxNElements() const
   {
-    throw DOpEException("Not implemented", "RefinementContainer::GetMaxNCells");
+    throw DOpEException("Not implemented", "RefinementContainer::GetMaxNElements");
     return std::numeric_limits<unsigned int>::max();
   }
 
@@ -127,10 +127,10 @@ namespace DOpE
 
   RefineFixedFraction::RefineFixedFraction(
       const dealii::Vector<float>& indicators, double top_fraction,
-      double bottom_fraction, const unsigned int max_n_cells)
+      double bottom_fraction, const unsigned int max_n_elements)
       : LocalRefinement(indicators, DOpEtypes::RefinementType::fixed_fraction), _top_fraction(
-          top_fraction), _bottom_fraction(bottom_fraction), _max_n_cells(
-          max_n_cells)
+          top_fraction), _bottom_fraction(bottom_fraction), _max_n_elements(
+          max_n_elements)
   {
     assert(_top_fraction<=1. && _top_fraction>=0.);
     assert(_bottom_fraction<=1. && _bottom_fraction>=0.);
@@ -161,10 +161,10 @@ namespace DOpE
 
   RefineFixedNumber::RefineFixedNumber(const dealii::Vector<float>& indicators,
       double top_fraction, double bottom_fraction,
-      const unsigned int max_n_cells)
+      const unsigned int max_n_elements)
       : LocalRefinement(indicators, DOpEtypes::RefinementType::fixed_number), _top_fraction(
-          top_fraction), _bottom_fraction(bottom_fraction), _max_n_cells(
-          max_n_cells)
+          top_fraction), _bottom_fraction(bottom_fraction), _max_n_elements(
+          max_n_elements)
   {
     assert(_top_fraction<=1. && _top_fraction>=0.);
     assert(_bottom_fraction<=1. && _bottom_fraction>=0.);

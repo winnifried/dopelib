@@ -782,9 +782,9 @@ namespace DOpE
         /******************************************************/
         template<typename DATACONTAINER>
           double
-          CellFunctional(const DATACONTAINER& cdc)
+          ElementFunctional(const DATACONTAINER& cdc)
           {
-            return _OP.CellFunctional(cdc);
+            return _OP.ElementFunctional(cdc);
           }
 
         /******************************************************/
@@ -819,19 +819,19 @@ namespace DOpE
 
         template<typename DATACONTAINER>
           void
-          CellEquation(const DATACONTAINER& cdc,
-              dealii::Vector<double> &local_cell_vector, double scale = 1.,
+          ElementEquation(const DATACONTAINER& cdc,
+              dealii::Vector<double> &local_vector, double scale = 1.,
               double scale_ico = 1.)
           {
-            _OP.CellEquation(cdc, local_cell_vector, scale, scale_ico);
+            _OP.ElementEquation(cdc, local_vector, scale, scale_ico);
           }
 
         /******************************************************/
 
         template<typename DATACONTAINER>
           void
-          CellRhs(const DATACONTAINER& cdc,
-              dealii::Vector<double> &local_cell_vector, double scale = 1.)
+          ElementRhs(const DATACONTAINER& cdc,
+              dealii::Vector<double> &local_vector, double scale = 1.)
           {
             if (this->GetType() == "gradient")
             {
@@ -855,7 +855,7 @@ namespace DOpE
                 local_scaling *= local_scaling;
                 local_scaling *= mma_multiplier_global(i);
                 local_scaling *= (_p * _p);
-                _OP.CellRhs(cdc, local_cell_vector, scale * local_scaling);
+                _OP.ElementRhs(cdc, local_vector, scale * local_scaling);
               }
               _OP.SetType(tmp, tmp_num);
             }
@@ -880,18 +880,18 @@ namespace DOpE
                 local_scaling *= local_scaling;
                 local_scaling *= mma_multiplier_global(i);
                 local_scaling *= 1. / (_p * _p);
-                _OP.CellRhs(cdc, local_cell_vector, scale * local_scaling);
+                _OP.ElementRhs(cdc, local_vector, scale * local_scaling);
               }
               _OP.SetType(tmp, tmp_num);
             }
             else if (this->GetType() == "global_constraint_gradient")
             {
-              _OP.CellRhs(cdc, local_cell_vector, scale);
+              _OP.ElementRhs(cdc, local_vector, scale);
             }
             else
             {
               throw DOpEException("Not Implemented",
-                  "AugmentedLagrangianProblem::CellRhs");
+                  "AugmentedLagrangianProblem::ElementRhs");
             }
            }
         /******************************************************/
@@ -909,11 +909,11 @@ namespace DOpE
 
         template<typename DATACONTAINER>
           void
-          CellMatrix(const DATACONTAINER& cdc,
-              dealii::FullMatrix<double> &local_entry_matrix, double scale = 1.,
+          ElementMatrix(const DATACONTAINER& cdc,
+              dealii::FullMatrix<double> &local_matrix, double scale = 1.,
               double scale_ico = 1.)
           {
-            _OP.CellMatrix(cdc, local_entry_matrix, scale, scale_ico);
+            _OP.ElementMatrix(cdc, local_matrix, scale, scale_ico);
           }
 
         /******************************************************/
@@ -921,7 +921,7 @@ namespace DOpE
         template<typename FACEDATACONTAINER>
           void
           FaceEquation(const FACEDATACONTAINER& /*fcd*/,
-              dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/ = 1.,
+              dealii::Vector<double> &/*local_vector*/, double /*scale*/ = 1.,
               double /*scale_ico*/ = 1.)
           {
             throw DOpEException("Not Implemented",
@@ -933,7 +933,7 @@ namespace DOpE
          template<typename FACEDATACONTAINER>
           void
           FaceRhs(const FACEDATACONTAINER& /*fcd*/,
-              dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/ = 1.)
+              dealii::Vector<double> &/*local_vector*/, double /*scale*/ = 1.)
           {
             throw DOpEException("Not Implemented",
                 "AugmentedLagrangianProblem::FaceRhs");
@@ -944,7 +944,7 @@ namespace DOpE
         template<typename FACEDATACONTAINER>
           void
           FaceMatrix(const FACEDATACONTAINER& /*fcd*/,
-		     dealii::FullMatrix<double> &/*local_entry_matrix*/, double /*scale*/ = 1.,
+		     dealii::FullMatrix<double> &/*local_matrix*/, double /*scale*/ = 1.,
               double /*scale_ico*/ = 1.)
           {
             throw DOpEException("Not Implemented",
@@ -956,7 +956,7 @@ namespace DOpE
         template<typename FACEDATACONTAINER>
           void
           BoundaryEquation(const FACEDATACONTAINER& /*fcd*/,
-              dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/ = 1.,
+              dealii::Vector<double> &/*local_vector*/, double /*scale*/ = 1.,
               double /*scale_ico*/ = 1.)
           {
             throw DOpEException("Not Implemented",
@@ -968,7 +968,7 @@ namespace DOpE
         template<typename FACEDATACONTAINER>
           void
           BoundaryRhs(const FACEDATACONTAINER& /*fcd*/,
-              dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/ = 1.)
+              dealii::Vector<double> &/*local_vector*/, double /*scale*/ = 1.)
           {
             throw DOpEException("Not Implemented",
                 "AugmentedLagrangianProblem::BoundaryRhs");
@@ -979,7 +979,7 @@ namespace DOpE
         template<typename FACEDATACONTAINER>
           void
           BoundaryMatrix(const FACEDATACONTAINER& /*fcd*/,
-			 dealii::FullMatrix<double> &/*local_cell_matrix*/, double /*scale*/ = 1.,
+			 dealii::FullMatrix<double> &/*local_matrix*/, double /*scale*/ = 1.,
 			 double /*scale_ico*/ = 1.)
           {
             throw DOpEException("Not Implemented",
@@ -989,7 +989,7 @@ namespace DOpE
         template<typename FACEDATACONTAINER>
           void
           InterfaceEquation(const FACEDATACONTAINER& /*dc*/,
-              dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/ = 1.,
+              dealii::Vector<double> &/*local_vector*/, double /*scale*/ = 1.,
               double /*scale_ico*/ = 1.)
           {
             throw DOpEException("Not Implemented",
@@ -999,7 +999,7 @@ namespace DOpE
         template<typename FACEDATACONTAINER>
           void
           InterfaceMatrix(const FACEDATACONTAINER& /*dc*/,
-			  dealii::FullMatrix<double> &/*local_entry_matrix*/, double /*scale*/ = 1.,
+			  dealii::FullMatrix<double> &/*local_matrix*/, double /*scale*/ = 1.,
               double /*scale_ico*/ = 1.)
           {
             throw DOpEException("Not Implemented",

@@ -62,7 +62,7 @@ const static int DIM = 2;
 
 #define DOFHANDLER DoFHandler
 #define FE FESystem
-#define CDC CellDataContainer
+#define CDC ElementDataContainer
 #define FDC FaceDataContainer
 
 typedef QGauss<DIM> QUADRATURE;
@@ -237,13 +237,13 @@ main(int argc, char **argv)
 
       solution = gu.GetSpacialVector();
 
-      Vector<float> difference_per_cell(triangulation.n_active_cells());
+      Vector<float> difference_per_element(triangulation.n_active_cells());
       VectorTools::integrate_difference(mapping, dof_handler, solution,
-          ExactSolution(order_fe), difference_per_cell, QGauss<DIM>(4),
+          ExactSolution(order_fe), difference_per_element, QGauss<DIM>(4),
           VectorTools::L2_norm);
-      outp << "L2-error: " << difference_per_cell.l2_norm() << "\n";
+      outp << "L2-error: " << difference_per_element.l2_norm() << "\n";
       convergence_table.add_value("n-dofs ||", DOFH.GetStateNDoFs());
-      convergence_table.add_value("L2-error ||", difference_per_cell.l2_norm());
+      convergence_table.add_value("L2-error ||", difference_per_element.l2_norm());
 
       /********************/
       outp << "Computing solution and functionals with 1st order mapping:";
@@ -257,11 +257,11 @@ main(int argc, char **argv)
       solution = gu_q1.GetSpacialVector();
 
       VectorTools::integrate_difference(dof_handler_q1, solution,
-          ExactSolution(order_fe), difference_per_cell, QGauss<DIM>(4),
+          ExactSolution(order_fe), difference_per_element, QGauss<DIM>(4),
           VectorTools::L2_norm);
-      outp << "L2-error: " << difference_per_cell.l2_norm() << "\n";
+      outp << "L2-error: " << difference_per_element.l2_norm() << "\n";
       convergence_table.add_value("L2-error Q1 ||",
-          difference_per_cell.l2_norm());
+          difference_per_element.l2_norm());
 
       convergence_table.add_value("Error PI by boundary Q1 ||",
           solver_q1.GetFunctionalValue(BF.GetName()) - dealii::numbers::PI);

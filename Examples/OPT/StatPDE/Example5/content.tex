@@ -27,7 +27,7 @@ In addition the following functionals are evaluated:
 The important new feature is that we can now use two different meshes for control and state variable.
 This is tested first for globally refined meshes, and then for locally refined meshes with different refinements for the control and state variable.
 \subsubsection{Program description}
-In order to use different meshes for control and state we need to use the multimesh variants of \texttt{CellDataContainer}, \texttt{FaceDataContainer} and \texttt{Integrator} and we have to choose a space time handler capable of managing multiple meshes, so we use 
+In order to use different meshes for control and state we need to use the multimesh variants of \texttt{ElementDataContainer}, \texttt{FaceDataContainer} and \texttt{Integrator} and we have to choose a space time handler capable of managing multiple meshes, so we use 
 
 \texttt{MethodOfLines\_MultiMesh\_SpaceTimeHandler}.
 

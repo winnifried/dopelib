@@ -81,18 +81,18 @@ template<
         return false;
       }
 
-      // The part of CellEquation scaled by scale contains all "normal" terms which
+      // The part of ElementEquation scaled by scale contains all "normal" terms which
       // can be treated by full "theta" time-discretization
       void
-      CellEquation(const CellDataContainer<DH, VECTOR, dealdim>& cdc,
-          dealii::Vector<double> &local_cell_vector, double scale,
+      ElementEquation(const ElementDataContainer<DH, VECTOR, dealdim>& cdc,
+          dealii::Vector<double> &local_vector, double scale,
           double scale_ico)
       {
         assert(this->_problem_type == "state");
 
         const DOpEWrapper::FEValues<dealdim> & state_fe_values =
             cdc.GetFEValuesState();
-        unsigned int n_dofs_per_cell = cdc.GetNDoFsPerCell();
+        unsigned int n_dofs_per_element = cdc.GetNDoFsPerElement();
         unsigned int n_q_points = cdc.GetNQPoints();
         unsigned int material_id = cdc.GetMaterialId();
 
@@ -172,7 +172,7 @@ template<
                 NSE_in_ALE::get_Incompressibility_ALE<dealdim>(q_point,
                     _ugrads);
 
-            for (unsigned int i = 0; i < n_dofs_per_cell; i++)
+            for (unsigned int i = 0; i < n_dofs_per_element; i++)
             {
               // Fluid, explicit
               const Tensor<1, dealdim> phi_i_v =
@@ -189,25 +189,25 @@ template<
 		state_fe_values[displacements_w].gradient(i, q_point);
 
 
-              local_cell_vector(i) += scale
+              local_vector(i) += scale
                   * (convection_fluid * phi_i_v
                       + scalar_product(stress_fluid, phi_i_grads_v))
                   * state_fe_values.JxW(q_point);
 
-              local_cell_vector(i) += scale_ico
+              local_vector(i) += scale_ico
 		* ( alpha_u
                       * scalar_product(grad_w, phi_i_grads_u))
                   * state_fe_values.JxW(q_point);
 
-              local_cell_vector(i) += scale
+              local_vector(i) += scale
                   * (scalar_product(fluid_pressure, phi_i_grads_v))
                   * state_fe_values.JxW(q_point);
 
-              local_cell_vector(i) += scale_ico
+              local_vector(i) += scale_ico
                   * (incompressiblity_fluid * phi_i_p)
                   * state_fe_values.JxW(q_point);
 
-	      local_cell_vector(i) += scale_ico * alpha_u
+	      local_vector(i) += scale_ico * alpha_u
 		* (w * phi_i_w - scalar_product(grad_u, phi_i_grads_w))
 		* state_fe_values.JxW(q_point);
 
@@ -254,7 +254,7 @@ template<
             const Tensor<2, dealdim> stress_term = (J * sigma_structure_ALE
                 * F_Inverse_T);
 
-            for (unsigned int i = 0; i < n_dofs_per_cell; i++)
+            for (unsigned int i = 0; i < n_dofs_per_element; i++)
             {
               // Structure, STVK, explicit
               const Tensor<2, dealdim> phi_i_grads_v =
@@ -269,22 +269,22 @@ template<
 	      const Tensor<2, dealdim> phi_i_grads_w =
 		state_fe_values[displacements_w].gradient(i, q_point);
 
-              local_cell_vector(i) += scale
+              local_vector(i) += scale
                   * scalar_product(stress_term, phi_i_grads_v)
                   * state_fe_values.JxW(q_point);
 
 
-              local_cell_vector(i) += scale * density_structure * (-v * phi_i_u)
+              local_vector(i) += scale * density_structure * (-v * phi_i_u)
                   * state_fe_values.JxW(q_point);
 
 	      // Physically not necessary but nonetheless here
 	      // since we use a global test function which
 	      // requires appropriate extension
-              local_cell_vector(i) += scale_ico
+              local_vector(i) += scale_ico
                   * (_uvalues[q_point](dealdim + dealdim) * phi_i_p)
                   * state_fe_values.JxW(q_point);
 
-	      local_cell_vector(i) += scale_ico * alpha_u
+	      local_vector(i) += scale_ico * alpha_u
 		* (scalar_product(grad_w, phi_i_grads_w))
 		* state_fe_values.JxW(q_point);
 
@@ -294,13 +294,13 @@ template<
       }
 
       void
-      CellMatrix(const CellDataContainer<DH, VECTOR, dealdim>& cdc,
-          FullMatrix<double> &local_entry_matrix, double scale,
+      ElementMatrix(const ElementDataContainer<DH, VECTOR, dealdim>& cdc,
+          FullMatrix<double> &local_matrix, double scale,
           double scale_ico)
       {
         const DOpEWrapper::FEValues<dealdim> & state_fe_values =
             cdc.GetFEValuesState();
-        unsigned int n_dofs_per_cell = cdc.GetNDoFsPerCell();
+        unsigned int n_dofs_per_element = cdc.GetNDoFsPerElement();
         unsigned int n_q_points = cdc.GetNQPoints();
         unsigned int material_id = cdc.GetMaterialId();
 
@@ -323,13 +323,13 @@ template<
         const FEValuesExtractors::Scalar pressure(4);
 	const FEValuesExtractors::Vector displacements_w (5); 
 
-        std::vector<Tensor<1, 2> > phi_v(n_dofs_per_cell);
-        std::vector<Tensor<2, 2> > phi_grads_v(n_dofs_per_cell);
-        std::vector<Tensor<1, 2> > phi_u(n_dofs_per_cell);
-        std::vector<Tensor<2, 2> > phi_grads_u(n_dofs_per_cell);
-        std::vector<double> phi_p(n_dofs_per_cell);
-	std::vector<Tensor<1, 2> > phi_w(n_dofs_per_cell);
-        std::vector<Tensor<2, 2> > phi_grads_w(n_dofs_per_cell);
+        std::vector<Tensor<1, 2> > phi_v(n_dofs_per_element);
+        std::vector<Tensor<2, 2> > phi_grads_v(n_dofs_per_element);
+        std::vector<Tensor<1, 2> > phi_u(n_dofs_per_element);
+        std::vector<Tensor<2, 2> > phi_grads_u(n_dofs_per_element);
+        std::vector<double> phi_p(n_dofs_per_element);
+	std::vector<Tensor<1, 2> > phi_w(n_dofs_per_element);
+        std::vector<Tensor<2, 2> > phi_grads_w(n_dofs_per_element);
 
         const Tensor<2, dealdim> Identity = ALE_Transformations::get_Identity<
             dealdim>();
@@ -338,7 +338,7 @@ template<
         {
           for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
           {
-            for (unsigned int k = 0; k < n_dofs_per_cell; k++)
+            for (unsigned int k = 0; k < n_dofs_per_element; k++)
             {
               phi_v[k] = state_fe_values[velocities].value(k, q_point);
               phi_grads_v[k] = state_fe_values[velocities].gradient(k, q_point);
@@ -378,7 +378,7 @@ template<
                 NSE_in_ALE::get_stress_fluid_ALE<dealdim>(density_fluid,
                     viscosity, pI, grad_v, grad_v_T, F_Inverse, F_Inverse_T);
 
-            for (unsigned int i = 0; i < n_dofs_per_cell; i++)
+            for (unsigned int i = 0; i < n_dofs_per_element; i++)
             {
               const Tensor<2, dealdim> pI_LinP =
                   ALE_Transformations::get_pI_LinP<dealdim>(phi_p[i]);
@@ -415,28 +415,28 @@ template<
                   NSE_in_ALE::get_Incompressibility_ALE_LinAll<dealdim>(
                       phi_grads_v[i], phi_grads_u[i], q_point, _ugrads);
 
-              for (unsigned int j = 0; j < n_dofs_per_cell; j++)
+              for (unsigned int j = 0; j < n_dofs_per_element; j++)
               {
                 // Fluid, explicit
-                local_entry_matrix(j, i) += scale
+                local_matrix(j, i) += scale
                     * (convection_fluid_LinAll_short * phi_v[j]
                         + scalar_product(stress_fluid_ALE_2nd_term_LinAll,
                             phi_grads_v[j])) * state_fe_values.JxW(q_point);
 
-                local_entry_matrix(j, i) += scale_ico
+                local_matrix(j, i) += scale_ico
 		  * (alpha_u
                     * scalar_product(phi_grads_w[i], phi_grads_u[j]))
                     * state_fe_values.JxW(q_point);
 
-                local_entry_matrix(j, i) += scale
+                local_matrix(j, i) += scale
                     * scalar_product(stress_fluid_ALE_1st_term_LinAll,
                         phi_grads_v[j]) * state_fe_values.JxW(q_point);
 
-                local_entry_matrix(j, i) += scale_ico
+                local_matrix(j, i) += scale_ico
                     * (incompressibility_ALE_LinAll * phi_p[j])
                     * state_fe_values.JxW(q_point);
 
-		local_entry_matrix(j, i) += scale_ico * alpha_u
+		local_matrix(j, i) += scale_ico * alpha_u
 		  * (phi_w[i] * phi_w[j] - scalar_product(phi_grads_u[i],phi_grads_w[j])
 		     ) * state_fe_values.JxW(q_point);
 
@@ -448,7 +448,7 @@ template<
         {
           for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
           {
-            for (unsigned int k = 0; k < n_dofs_per_cell; k++)
+            for (unsigned int k = 0; k < n_dofs_per_element; k++)
             {
               phi_v[k] = state_fe_values[velocities].value(k, q_point);
               phi_grads_v[k] = state_fe_values[velocities].gradient(k, q_point);
@@ -475,7 +475,7 @@ template<
 
             const double tr_E = Structure_Terms_in_ALE::get_tr_E<dealdim>(E);
 
-            for (unsigned int i = 0; i < n_dofs_per_cell; i++)
+            for (unsigned int i = 0; i < n_dofs_per_element; i++)
             {
               const Tensor<2, dealdim> F_LinU = ALE_Transformations::get_F_LinU<
                   dealdim>(phi_grads_u[i]);
@@ -496,26 +496,26 @@ template<
                       * (F_LinU * tr_E * Identity + F * tr_E_LinU * Identity)
                       + 2 * lame_coefficient_mu * (F_LinU * E + F * E_LinU);
 
-              for (unsigned int j = 0; j < n_dofs_per_cell; j++)
+              for (unsigned int j = 0; j < n_dofs_per_element; j++)
               {
                 // STVK, explicit
-                local_entry_matrix(j, i) += scale
+                local_matrix(j, i) += scale
                     * (scalar_product(
                         piola_kirchhoff_stress_structure_STVK_LinALL,
                         phi_grads_v[j])) * state_fe_values.JxW(q_point);
 
 
-                local_entry_matrix(j, i) += scale * density_structure * 
+                local_matrix(j, i) += scale * density_structure * 
 		  (-phi_v[i] * phi_u[j])
                     * state_fe_values.JxW(q_point);
 
                 // Physically not necessary but nonetheless here
 		// since we use a global test function which
 		// requires appropriate extension
-                local_entry_matrix(j, i) += scale_ico * (phi_p[i] * phi_p[j])
+                local_matrix(j, i) += scale_ico * (phi_p[i] * phi_p[j])
                     * state_fe_values.JxW(q_point);
 
-		local_entry_matrix(j, i) += scale_ico * alpha_u 
+		local_matrix(j, i) += scale_ico * alpha_u 
 		  * scalar_product(phi_grads_w[i],
 				   phi_grads_w[j]) * state_fe_values.JxW(q_point);
               }
@@ -525,31 +525,31 @@ template<
       }
 
       void
-      CellRightHandSide(const CellDataContainer<DH, VECTOR, dealdim>& /*cdc*/,
-			dealii::Vector<double> & /*local_cell_vector*/,
+      ElementRightHandSide(const ElementDataContainer<DH, VECTOR, dealdim>& /*cdc*/,
+			dealii::Vector<double> & /*local_vector*/,
 			double /*scale*/)
       {
         assert(this->_problem_type == "state");
       }
 
       void
-      CellTimeEquation(const CellDataContainer<DH, VECTOR, dealdim>& /*cdc*/,
-			dealii::Vector<double> & /*local_cell_vector*/,
+      ElementTimeEquation(const ElementDataContainer<DH, VECTOR, dealdim>& /*cdc*/,
+			dealii::Vector<double> & /*local_vector*/,
 			double /*scale*/)
       {
         assert(this->_problem_type == "state");
       }
 
       void
-      CellTimeEquationExplicit(
-          const CellDataContainer<DH, VECTOR, dealdim>& cdc,
-          dealii::Vector<double> &local_cell_vector, double scale)
+      ElementTimeEquationExplicit(
+          const ElementDataContainer<DH, VECTOR, dealdim>& cdc,
+          dealii::Vector<double> &local_vector, double scale)
       {
         assert(this->_problem_type == "state");
 
         const DOpEWrapper::FEValues<dealdim> & state_fe_values =
             cdc.GetFEValuesState();
-        unsigned int n_dofs_per_cell = cdc.GetNDoFsPerCell();
+        unsigned int n_dofs_per_element = cdc.GetNDoFsPerElement();
         unsigned int n_q_points = cdc.GetNQPoints();
         unsigned int material_id = cdc.GetMaterialId();
 
@@ -614,12 +614,12 @@ template<
             const Tensor<1, dealdim> convection_fluid_with_last_timestep_u =
                 density_fluid * J * (grad_v * F_Inverse * last_timestep_u);
 
-            for (unsigned int i = 0; i < n_dofs_per_cell; i++)
+            for (unsigned int i = 0; i < n_dofs_per_element; i++)
             {
-              // Fluid, CellTimeEquation, explicit
+              // Fluid, ElementTimeEquation, explicit
               const Tensor<1, 2> phi_i_v = state_fe_values[velocities].value(i,
                   q_point);
-              local_cell_vector(i) += scale
+              local_vector(i) += scale
                   * (density_fluid * (J + last_timestep_J) / 2.0
                       * (v - last_timestep_v) * phi_i_v
                       - convection_fluid_with_u * phi_i_v
@@ -655,14 +655,14 @@ template<
                 ALE_Transformations::get_u<dealdim>(q_point,
                     _last_timestep_uvalues);
 
-            for (unsigned int i = 0; i < n_dofs_per_cell; i++)
+            for (unsigned int i = 0; i < n_dofs_per_element; i++)
             {
-              // Structure, CellTimeEquation, explicit
+              // Structure, ElementTimeEquation, explicit
               const Tensor<1, 2> phi_i_v = state_fe_values[velocities].value(i,
                   q_point);
               const Tensor<1, 2> phi_i_u = state_fe_values[displacements].value(
                   i, q_point);
-              local_cell_vector(i) += scale
+              local_vector(i) += scale
                   * (density_structure * (v - last_timestep_v) * phi_i_v                   
 		     + density_structure * (u - last_timestep_u) * phi_i_u
 		     ) * state_fe_values.JxW(q_point);
@@ -672,21 +672,21 @@ template<
       }
 
       void
-      CellTimeMatrix(const CellDataContainer<DH, VECTOR, dealdim>& /*cdc*/,
-          FullMatrix<double> &/*local_entry_matrix*/)
+      ElementTimeMatrix(const ElementDataContainer<DH, VECTOR, dealdim>& /*cdc*/,
+          FullMatrix<double> &/*local_matrix*/)
       {
         assert(this->_problem_type == "state");
       }
 
       void
-      CellTimeMatrixExplicit(const CellDataContainer<DH, VECTOR, dealdim>& cdc,
-          FullMatrix<double> &local_entry_matrix)
+      ElementTimeMatrixExplicit(const ElementDataContainer<DH, VECTOR, dealdim>& cdc,
+          FullMatrix<double> &local_matrix)
       {
         assert(this->_problem_type == "state");
 
         const DOpEWrapper::FEValues<dealdim> & state_fe_values =
             cdc.GetFEValuesState();
-        unsigned int n_dofs_per_cell = cdc.GetNDoFsPerCell();
+        unsigned int n_dofs_per_element = cdc.GetNDoFsPerElement();
         unsigned int n_q_points = cdc.GetNQPoints();
         unsigned int material_id = cdc.GetMaterialId();
 
@@ -707,16 +707,16 @@ template<
         const FEValuesExtractors::Vector velocities(0);
         const FEValuesExtractors::Vector displacements(2);
 
-        std::vector<Tensor<1, dealdim> > phi_v(n_dofs_per_cell);
-        std::vector<Tensor<2, dealdim> > phi_grads_v(n_dofs_per_cell);
-        std::vector<Tensor<1, dealdim> > phi_u(n_dofs_per_cell);
-        std::vector<Tensor<2, dealdim> > phi_grads_u(n_dofs_per_cell);
+        std::vector<Tensor<1, dealdim> > phi_v(n_dofs_per_element);
+        std::vector<Tensor<2, dealdim> > phi_grads_v(n_dofs_per_element);
+        std::vector<Tensor<1, dealdim> > phi_u(n_dofs_per_element);
+        std::vector<Tensor<2, dealdim> > phi_grads_u(n_dofs_per_element);
 
         if (material_id == 0)
         {
           for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
           {
-            for (unsigned int k = 0; k < n_dofs_per_cell; k++)
+            for (unsigned int k = 0; k < n_dofs_per_element; k++)
             {
               phi_v[k] = state_fe_values[velocities].value(k, q_point);
               phi_grads_v[k] = state_fe_values[velocities].gradient(k, q_point);
@@ -748,7 +748,7 @@ template<
                 ALE_Transformations::get_u<dealdim>(q_point,
                     _last_timestep_uvalues);
 
-            for (unsigned int i = 0; i < n_dofs_per_cell; i++)
+            for (unsigned int i = 0; i < n_dofs_per_element; i++)
             {
               const Tensor<2, dealdim> grad_v = ALE_Transformations::get_grad_v<
                   dealdim>(q_point, _ugrads);
@@ -774,10 +774,10 @@ template<
                       phi_grads_v[i], J, J_LinU, F_Inverse, F_Inverse_LinU,
                       last_timestep_u, grad_v, density_fluid);
 
-              for (unsigned int j = 0; j < n_dofs_per_cell; j++)
+              for (unsigned int j = 0; j < n_dofs_per_element; j++)
               {
-                // Fluid, CellTimeMatrix, explicit
-                local_entry_matrix(j, i) += (accelaration_term_LinAll * phi_v[j]
+                // Fluid, ElementTimeMatrix, explicit
+                local_matrix(j, i) += (accelaration_term_LinAll * phi_v[j]
                     - convection_fluid_u_LinAll_short * phi_v[j]
                     + convection_fluid_u_old_LinAll_short * phi_v[j])
                     * state_fe_values.JxW(q_point);
@@ -790,7 +790,7 @@ template<
         {
           for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
           {
-            for (unsigned int k = 0; k < n_dofs_per_cell; k++)
+            for (unsigned int k = 0; k < n_dofs_per_element; k++)
             {
               phi_v[k] = state_fe_values[velocities].value(k, q_point);
               phi_u[k] = state_fe_values[displacements].value(k, q_point);
@@ -813,16 +813,16 @@ template<
             const double last_timestep_J = ALE_Transformations::get_J<dealdim>(
                 last_timestep_F);
 
-            for (unsigned int i = 0; i < n_dofs_per_cell; i++)
+            for (unsigned int i = 0; i < n_dofs_per_element; i++)
             {
 
               const double J_LinU = ALE_Transformations::get_J_LinU<dealdim>(
                   q_point, _ugrads, phi_grads_u[i]);
 
-              for (unsigned int j = 0; j < n_dofs_per_cell; j++)
+              for (unsigned int j = 0; j < n_dofs_per_element; j++)
               {
-                // Structure, CellTimeMatrix, explicit
-                local_entry_matrix(j, i) += 
+                // Structure, ElementTimeMatrix, explicit
+                local_matrix(j, i) += 
 		  (density_structure * phi_v[i]* phi_v[j]
 		   + density_structure * phi_u[i] * phi_u[j]
 		   ) * state_fe_values.JxW(q_point);
@@ -837,14 +837,14 @@ template<
       // Values for boundary integrals
       void
       BoundaryEquation(const FaceDataContainer<DH, VECTOR, dealdim>& fdc,
-          dealii::Vector<double> &local_cell_vector, double scale,
+          dealii::Vector<double> &local_vector, double scale,
           double /*scale_ico*/)
       {
 
         assert(this->_problem_type == "state");
 
         const auto & state_fe_face_values = fdc.GetFEFaceValuesState();
-        unsigned int n_dofs_per_cell = fdc.GetNDoFsPerCell();
+        unsigned int n_dofs_per_element = fdc.GetNDoFsPerElement();
         unsigned int n_q_points = fdc.GetNQPoints();
         unsigned int color = fdc.GetBoundaryIndicator();
 
@@ -887,12 +887,12 @@ template<
                 (stress_fluid_transposed_part
                     * state_fe_face_values.normal_vector(q_point));
 
-            for (unsigned int i = 0; i < n_dofs_per_cell; i++)
+            for (unsigned int i = 0; i < n_dofs_per_element; i++)
             {
               const Tensor<1, 2> phi_i_v =
                   state_fe_face_values[velocities].value(i, q_point);
 
-              local_cell_vector(i) -= scale * neumann_value * phi_i_v
+              local_vector(i) -= scale * neumann_value * phi_i_v
                   * state_fe_face_values.JxW(q_point);
             }
           }
@@ -902,13 +902,13 @@ template<
 
       void
       BoundaryMatrix(const FaceDataContainer<DH, VECTOR, dealdim>& fdc,
-          dealii::FullMatrix<double> &local_entry_matrix, double scale,
+          dealii::FullMatrix<double> &local_matrix, double scale,
           double /*scale_ico*/)
       {
         assert(this->_problem_type == "state");
 
         const auto & state_fe_face_values = fdc.GetFEFaceValuesState();
-        unsigned int n_dofs_per_cell = fdc.GetNDoFsPerCell();
+        unsigned int n_dofs_per_element = fdc.GetNDoFsPerElement();
         unsigned int n_q_points = fdc.GetNQPoints();
         unsigned int color = fdc.GetBoundaryIndicator();
 
@@ -922,16 +922,16 @@ template<
           fdc.GetFaceValuesState("last_newton_solution", _ufacevalues);
           fdc.GetFaceGradsState("last_newton_solution", _ufacegrads);
 
-          std::vector<Tensor<1, dealdim> > phi_v(n_dofs_per_cell);
-          std::vector<Tensor<2, dealdim> > phi_grads_v(n_dofs_per_cell);
-          std::vector<Tensor<2, dealdim> > phi_grads_u(n_dofs_per_cell);
+          std::vector<Tensor<1, dealdim> > phi_v(n_dofs_per_element);
+          std::vector<Tensor<2, dealdim> > phi_grads_v(n_dofs_per_element);
+          std::vector<Tensor<2, dealdim> > phi_grads_u(n_dofs_per_element);
 
           const FEValuesExtractors::Vector velocities(0);
           const FEValuesExtractors::Vector displacements(2);
 
           for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
           {
-            for (unsigned int k = 0; k < n_dofs_per_cell; ++k)
+            for (unsigned int k = 0; k < n_dofs_per_element; ++k)
             {
               phi_v[k] = state_fe_face_values[velocities].value(k, q_point);
               phi_grads_v[k] = state_fe_face_values[velocities].gradient(k,
@@ -951,7 +951,7 @@ template<
 
             const double J = ALE_Transformations::get_J<dealdim>(F);
 
-            for (unsigned int i = 0; i < n_dofs_per_cell; i++)
+            for (unsigned int i = 0; i < n_dofs_per_element; i++)
             {
               const Tensor<2, dealdim> grad_v_LinV =
                   ALE_Transformations::get_grad_v_LinV<dealdim>(phi_grads_v[i]);
@@ -976,10 +976,10 @@ template<
                   (stress_fluid_ALE_3rd_term_LinAll
                       * state_fe_face_values.normal_vector(q_point));
 
-              for (unsigned int j = 0; j < n_dofs_per_cell; j++)
+              for (unsigned int j = 0; j < n_dofs_per_element; j++)
               {
                 // Fluid
-                local_entry_matrix(j, i) -= scale * neumann_value * phi_v[j]
+                local_matrix(j, i) -= scale * neumann_value * phi_v[j]
                     * state_fe_face_values.JxW(q_point);
               }
             }
@@ -990,7 +990,7 @@ template<
       void
       BoundaryRightHandSide(
           const FaceDataContainer<DH, VECTOR, dealdim>& /*fdc*/,
-          dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
+          dealii::Vector<double> &/*local_vector*/, double /*scale*/)
       {
         assert(this->_problem_type == "state");
       }
@@ -1059,7 +1059,7 @@ template<
 
       vector<unsigned int> _state_block_components;
       vector<unsigned int> _block_components;
-      double _cell_diameter;
+      double _diameter;
 
       // material variables
       double density_fluid, density_structure, viscosity, alpha_u,

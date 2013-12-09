@@ -241,7 +241,7 @@ First we need to select a method how to handle all dofs in space and time.
   Same as above, but now in addition the triangulations for $q$ and $u$ can be refined
   separately from one common initial coarse triangulation. Note that this will
   in addition require the use of the multimesh version for integrator and 
-  face- as well as celldatacontainer.
+  face- as well as elementdatacontainer.
 \end{itemize}
 Note that we use these for stationary problems as well, but then you don't have to specify
 any time information.
@@ -252,20 +252,20 @@ pass data between objects. At present you don't have much choice, but you may wi
 to reimplement some of these if you need data that is not currently included in 
 the containers.
 \begin{itemize}
-\item \texttt{container/celldatacontainer.h} This object is used to pass data 
-  given on the current element (cell) of the mesh to the functions in PDE, functional, 
+\item \texttt{container/elementdatacontainer.h} This object is used to pass data 
+  given on the current element of the mesh to the functions in PDE, functional, 
   $\ldots$. 
 \item \texttt{container/facedatacontainer.h} This object is used to pass data 
   given on the current face of the mesh to the functions in PDE, functional, 
   $\ldots$. 
-\item \texttt{container/multimesh\underline{ }celldatacontainer.h} This is the same as the 
-  celldatacontainer, but it
+\item \texttt{container/multimesh\underline{ }elementdatacontainer.h} This is the same as the 
+  elementdatacontainer, but it
   is capable to handle data defined on an alternative triangulation.
 \item \texttt{container/multimesh\underline{ }facedatacontainer.h} This is the same as the
   facedatacontainer, but it
   is capable to handle data defined on an alternative triangulation.
 \item \texttt{container/integratordatacontainer.h} This contains some data that 
-  should be passed to the integrator like quadrature formulas and the above cell and 
+  should be passed to the integrator like quadrature formulas and the above element and 
   face data container.
 \item \texttt{container/refinementcontainer.h} The classes defined herein are given to the \texttt{RefineSpace} method of the \texttt{SpaceTimeHandler} and determine how we define the spatial mesh (i.e. globally or locally with a fixed fraction, fixed number or shomehow 'optimized' strategy).
 \end{itemize}
@@ -467,7 +467,7 @@ do not fit the above but are important for the user to know.
 
 \subsubsection{HP components}
 \begin{itemize}
-\item \texttt{interfaces/active\underline{ }fe\underline{ }index\underline{ }setter\underline{ }interface.h} In the case of hp finite elements, one has to specify for each cell which finite element to use. This is done via this interface.
+\item \texttt{interfaces/active\underline{ }fe\underline{ }index\underline{ }setter\underline{ }interface.h} In the case of hp finite elements, one has to specify for each element which finite element to use. This is done via this interface.
 \end{itemize}
 
 \subsection{Internal structures}

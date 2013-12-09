@@ -31,16 +31,16 @@
 #include <lac/vector.h>
 
 #include "dofhandler_wrapper.h"
-#include "celldatacontainer.h"
+#include "elementdatacontainer.h"
 #include "facedatacontainer.h"
-#include "multimesh_celldatacontainer.h"
+#include "multimesh_elementdatacontainer.h"
 #include "multimesh_facedatacontainer.h"
 #include "dopeexception.h"
 
 namespace DOpE
 {
   /**
-   * This class manages the different kind of cell- and facedatacontainers
+   * This class manages the different kind of element- and facedatacontainers
    * needed in the integrator.
    */
   template<template<int, int> class DH, typename QUADRATURE, typename FACEQUADRATURE,
@@ -87,14 +87,14 @@ namespace DOpE
           InitializeFDC(const FACEQUADRATURE& fquad, UpdateFlags update_flags,
               STH& sth,
               const std::vector<
-                  typename DOpEWrapper::DoFHandler<dim, DH>::active_cell_iterator>& cell,
+                  typename DOpEWrapper::DoFHandler<dim, DH>::active_cell_iterator>& element,
               const std::map<std::string, const Vector<double>*> &param_values,
               const std::map<std::string, const VECTOR*> &domain_values,
               bool need_interfaces = false)
           {
               delete _fdc;
             _fdc = new FaceDataContainer<DH, VECTOR, dim>(fquad,
-                update_flags, sth, cell, param_values, domain_values,
+                update_flags, sth, element, param_values, domain_values,
                 need_interfaces);
           }
 
@@ -106,46 +106,46 @@ namespace DOpE
           void
           InitializeFDC(UpdateFlags update_flags, STH& sth,
               const std::vector<
-                  typename DOpEWrapper::DoFHandler<dim, DH>::active_cell_iterator>& cell,
+                  typename DOpEWrapper::DoFHandler<dim, DH>::active_cell_iterator>& element,
               const std::map<std::string, const Vector<double>*> &param_values,
               const std::map<std::string, const VECTOR*> &domain_values,
               bool need_interfaces = false)
           {
-            InitializeFDC(GetFaceQuad(), update_flags, sth, cell, param_values,
+            InitializeFDC(GetFaceQuad(), update_flags, sth, element, param_values,
                 domain_values, need_interfaces);
           }
 
         /**
-         * Initializes the CellDataContainer. See the documentation there.
+         * Initializes the ElementDataContainer. See the documentation there.
          */
         template<typename STH>
           void
           InitializeCDC(const QUADRATURE& quad, UpdateFlags update_flags,
               STH& sth,
               const std::vector<
-                  typename DOpEWrapper::DoFHandler<dim, DH>::active_cell_iterator>& cell,
+                  typename DOpEWrapper::DoFHandler<dim, DH>::active_cell_iterator>& element,
               const std::map<std::string, const Vector<double>*> &param_values,
               const std::map<std::string, const VECTOR*> &domain_values)
           {
             if (_cdc != NULL)
               delete _cdc;
-            _cdc = new CellDataContainer<DH, VECTOR, dim>(quad,
-                update_flags, sth, cell, param_values, domain_values);
+            _cdc = new ElementDataContainer<DH, VECTOR, dim>(quad,
+                update_flags, sth, element, param_values, domain_values);
           }
 
         /**
-         * Initializes the CellDataContainer. See the documentation there.
+         * Initializes the ElementDataContainer. See the documentation there.
          * This one uses the previously given quadrature.
          */
         template<typename STH>
           void
           InitializeCDC(UpdateFlags update_flags, STH& sth,
               const std::vector<
-                  typename DOpEWrapper::DoFHandler<dim, DH>::active_cell_iterator>& cell,
+                  typename DOpEWrapper::DoFHandler<dim, DH>::active_cell_iterator>& element,
               const std::map<std::string, const Vector<double>*> &param_values,
               const std::map<std::string, const VECTOR*> &domain_values)
           {
-            InitializeCDC(GetQuad(), update_flags, sth, cell, param_values,
+            InitializeCDC(GetQuad(), update_flags, sth, element, param_values,
                 domain_values);
           }
 
@@ -155,9 +155,9 @@ namespace DOpE
         template<typename STH>
           void
           InitializeMMFDC(UpdateFlags update_flags, STH& sth,
-              const typename std::vector<typename DH<dim, dim>::cell_iterator>& cell,
+              const typename std::vector<typename DH<dim, dim>::cell_iterator>& element,
               const typename std::vector<
-                  typename dealii::Triangulation<dim>::cell_iterator>& tria_cell,
+                  typename dealii::Triangulation<dim>::cell_iterator>& tria_element,
               const std::map<std::string, const Vector<double>*> &param_values,
               const std::map<std::string, const VECTOR*> &domain_values,
               bool need_interfaces = false)
@@ -165,26 +165,26 @@ namespace DOpE
             if (_mm_fdc != NULL)
               delete _mm_fdc;
             _mm_fdc = new Multimesh_FaceDataContainer<DH, VECTOR, dim>(
-                GetFaceQuad(), update_flags, sth, cell, tria_cell, param_values,
+                GetFaceQuad(), update_flags, sth, element, tria_element, param_values,
                 domain_values, need_interfaces);
           }
 
         /**
-         * Initializes the MMCellDataContainer. See the documentation there.
+         * Initializes the MMElementDataContainer. See the documentation there.
          */
         template<typename STH>
           void
           InitializeMMCDC(UpdateFlags update_flags, STH& sth,
-              const typename std::vector<typename DH<dim, dim>::cell_iterator>& cell,
+              const typename std::vector<typename DH<dim, dim>::cell_iterator>& element,
               const typename std::vector<
-                  typename dealii::Triangulation<dim>::cell_iterator>& tria_cell,
+                  typename dealii::Triangulation<dim>::cell_iterator>& tria_element,
               const std::map<std::string, const Vector<double>*> &param_values,
               const std::map<std::string, const VECTOR*> &domain_values)
           {
             if (_mm_cdc != NULL)
               delete _mm_cdc;
-            _mm_cdc = new Multimesh_CellDataContainer<DH, VECTOR, dim>(
-                GetQuad(), update_flags, sth, cell, tria_cell, param_values,
+            _mm_cdc = new Multimesh_ElementDataContainer<DH, VECTOR, dim>(
+                GetQuad(), update_flags, sth, element, tria_element, param_values,
                 domain_values);
           }
 
@@ -210,14 +210,14 @@ namespace DOpE
                 "IntegratorDataContainer::GetFaceDataContainer");
         }
 
-        CellDataContainer<DH, VECTOR, dim>&
-        GetCellDataContainer() const
+        ElementDataContainer<DH, VECTOR, dim>&
+        GetElementDataContainer() const
         {
           if (_cdc != NULL)
             return *_cdc;
           else
             throw DOpEException("Pointer has to be initialized.",
-                "IntegratorDataContainer::GetCellDataContainer");
+                "IntegratorDataContainer::GetElementDataContainer");
         }
 
         Multimesh_FaceDataContainer<DH, VECTOR, dim>&
@@ -230,22 +230,22 @@ namespace DOpE
                 "IntegratorDataContainer::GetMultimeshFaceDataContainer");
         }
 
-        Multimesh_CellDataContainer<DH, VECTOR, dim>&
-        GetMultimeshCellDataContainer() const
+        Multimesh_ElementDataContainer<DH, VECTOR, dim>&
+        GetMultimeshElementDataContainer() const
         {
           if (_mm_cdc != NULL)
             return *_mm_cdc;
           else
             throw DOpEException("Pointer has to be initialized.",
-                "IntegratorDataContainer::GetMultimeshCellDataContainer");
+                "IntegratorDataContainer::GetMultimeshElementDataContainer");
         }
       private:
         QUADRATURE const* _quad;
         FACEQUADRATURE const* _face_quad;
         FaceDataContainer<DH, VECTOR, dim>* _fdc;
-        CellDataContainer<DH, VECTOR, dim>* _cdc;
+        ElementDataContainer<DH, VECTOR, dim>* _cdc;
         Multimesh_FaceDataContainer<DH, VECTOR, dim>* _mm_fdc;
-        Multimesh_CellDataContainer<DH, VECTOR, dim>* _mm_cdc;
+        Multimesh_ElementDataContainer<DH, VECTOR, dim>* _mm_cdc;
     };
 
 } //end of namespace

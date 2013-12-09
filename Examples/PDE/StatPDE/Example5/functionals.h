@@ -79,7 +79,7 @@ template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
 
       void
       FaceValue_U(const FDC<DH,VECTOR,dealdim>& fdc,
-          dealii::Vector<double> &local_cell_vector, double scale)
+          dealii::Vector<double> &local_vector, double scale)
       {
         unsigned int n_q_points = fdc.GetNQPoints();
         unsigned int material_id = fdc.GetMaterialId();
@@ -91,9 +91,9 @@ template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
           {
             for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
             {
-              for (unsigned int i = 0; i < fdc.GetNDoFsPerCell(); ++i)
+              for (unsigned int i = 0; i < fdc.GetNDoFsPerElement(); ++i)
               {
-                local_cell_vector(i) += scale * 1. / (1.5)
+                local_vector(i) += scale * 1. / (1.5)
                     * fdc.GetFEFaceValuesState().shape_value(i, q_point)
                     * fdc.GetFEFaceValuesState().JxW(q_point);
               }

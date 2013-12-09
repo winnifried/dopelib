@@ -37,7 +37,7 @@ template<
     template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
     template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
     template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
-  class LocalPointFunctional : public FunctionalInterface<CellDataContainer,
+  class LocalPointFunctional : public FunctionalInterface<ElementDataContainer,
       FaceDataContainer, dealii::DoFHandler, VECTOR, dopedim, dealdim>
   {
     private:
@@ -100,7 +100,7 @@ template<
     template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
     template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
     template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
-  class LocalPointFunctional2 : public FunctionalInterface<CellDataContainer,
+  class LocalPointFunctional2 : public FunctionalInterface<ElementDataContainer,
       FaceDataContainer, dealii::DoFHandler, VECTOR, dopedim, dealdim>
   {
     private:

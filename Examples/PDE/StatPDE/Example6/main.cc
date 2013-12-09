@@ -53,7 +53,7 @@ const static int DIM = 3;
 
 #define DOFHANDLER DoFHandler
 #define FE FESystem
-#define CDC CellDataContainer
+#define CDC ElementDataContainer
 #define FDC FaceDataContainer
 
 typedef QGauss<DIM> QUADRATURE;
@@ -230,7 +230,7 @@ main(int argc, char **argv)
         SolutionExtractor<SSolver1, VECTORBLOCK> a1(solver1);
         const StateVector<VECTORBLOCK> &gu1 = a1.GetU();
         solution = gu1.GetSpacialVector();
-        Vector<float> estimated_error_per_cell(triangulation.n_active_cells());
+        Vector<float> estimated_error_per_element(triangulation.n_active_cells());
 
         std::vector<bool> component_mask(3, true);
 
@@ -238,12 +238,12 @@ main(int argc, char **argv)
         KellyErrorEstimator<DIM>::estimate(
             static_cast<const DoFHandler<DIM>&>(DOFH1.GetStateDoFHandler()),
             QGauss<2>(3), FunctionMap<DIM>::type(), solution,
-            estimated_error_per_cell, component_mask);
+            estimated_error_per_element, component_mask);
 
         //We choose a refinement strategy (here fixednumber) and
         //refine the spatial esh accordingly.
         DOFH1.RefineSpace(
-            RefineFixedNumber(estimated_error_per_cell, 0.2, 0.0));
+            RefineFixedNumber(estimated_error_per_element, 0.2, 0.0));
       }
     }
   }
@@ -306,16 +306,16 @@ main(int argc, char **argv)
         SolutionExtractor<SSolver2, VECTOR> a1(solver2);
         const StateVector<VECTOR> &gu1 = a1.GetU();
         solution = gu1.GetSpacialVector();
-        Vector<float> estimated_error_per_cell(triangulation.n_active_cells());
+        Vector<float> estimated_error_per_element(triangulation.n_active_cells());
 
         std::vector<bool> component_mask(3, true);
 
         KellyErrorEstimator<DIM>::estimate(
             static_cast<const DoFHandler<DIM>&>(DOFH2.GetStateDoFHandler()),
             QGauss<2>(3), FunctionMap<DIM>::type(), solution,
-            estimated_error_per_cell, component_mask);
+            estimated_error_per_element, component_mask);
         DOFH2.RefineSpace(
-            RefineFixedNumber(estimated_error_per_cell, 0.2, 0.0));
+            RefineFixedNumber(estimated_error_per_element, 0.2, 0.0));
       }
     }
 

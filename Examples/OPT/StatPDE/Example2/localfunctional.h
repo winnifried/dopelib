@@ -119,7 +119,7 @@ template<
 
       void
       ElementValue_U(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
-          dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
+          dealii::Vector<double> &/*local_vector*/, double /*scale*/)
       {
       }
 
@@ -180,7 +180,7 @@ template<
 
       void
       ElementValue_Q(const CDC<DH, VECTOR, dealdim>& cdc,
-          dealii::Vector<double> &local_cell_vector, double scale)
+          dealii::Vector<double> &local_vector, double scale)
       {
         const DOpEWrapper::FEValues<dealdim> & state_fe_values =
             cdc.GetFEValuesState();
@@ -193,9 +193,9 @@ template<
 
         for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
         {
-          for (unsigned int i = 0; i < local_cell_vector.size(); i++)
+          for (unsigned int i = 0; i < local_vector.size(); i++)
           {
-            local_cell_vector(i) += scale * _alpha * (_qvalues(i))
+            local_vector(i) += scale * _alpha * (_qvalues(i))
                 * state_fe_values.JxW(q_point);
           }
         }
@@ -283,19 +283,19 @@ template<
 
       void
       ElementValue_QU(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
-          dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
+          dealii::Vector<double> &/*local_vector*/, double /*scale*/)
       {
       }
 
       void
       ElementValue_UQ(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
-          dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
+          dealii::Vector<double> &/*local_vector*/, double /*scale*/)
       {
       }
 
       void
       ElementValue_QQ(const CDC<DH, VECTOR, dealdim>& cdc,
-          dealii::Vector<double> &local_cell_vector, double scale)
+          dealii::Vector<double> &local_vector, double scale)
       {
         const DOpEWrapper::FEValues<dealdim> & state_fe_values =
             cdc.GetFEValuesState();
@@ -307,9 +307,9 @@ template<
 
         for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
         {
-          for (unsigned int i = 0; i < local_cell_vector.size(); i++)
+          for (unsigned int i = 0; i < local_vector.size(); i++)
           {
-            local_cell_vector(i) += scale * _alpha * _dqvalues(i)
+            local_vector(i) += scale * _alpha * _dqvalues(i)
                 * state_fe_values.JxW(q_point);
           }
         }
@@ -345,23 +345,23 @@ template<
         rhs_vector = 0;
 
         std::pair<typename DH<dealdim, dealdim>::active_cell_iterator,
-            Point<dealdim> > cell_point =
+            Point<dealdim> > element_point =
             GridTools::find_active_cell_around_point(
                 StaticMappingQ1<dealdim>::mapping, dof_handler, point);
 
         Quadrature<dealdim> q(
-            GeometryInfo<dealdim>::project_to_unit_cell(cell_point.second));
+            GeometryInfo<dealdim>::project_to_unit_cell(element_point.second));
 
         FEValues<dealdim> fe_values(dof_handler.get_fe(), q,
             UpdateFlags(update_values));
-        fe_values.reinit(cell_point.first);
+        fe_values.reinit(element_point.first);
 
-        const unsigned int dofs_per_cell = dof_handler.get_fe().dofs_per_cell;
+        const unsigned int dofs_per_element = dof_handler.get_fe().dofs_per_cell;
 
-        std::vector<unsigned int> local_dof_indices(dofs_per_cell);
-        cell_point.first->get_dof_indices(local_dof_indices);
+        std::vector<unsigned int> local_dof_indices(dofs_per_element);
+        element_point.first->get_dof_indices(local_dof_indices);
 
-        for (unsigned int i = 0; i < dofs_per_cell; i++)
+        for (unsigned int i = 0; i < dofs_per_element; i++)
           rhs_vector(local_dof_indices[i]) = fe_values.shape_value_component(i,
               0, component);
       }

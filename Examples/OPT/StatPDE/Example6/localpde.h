@@ -45,13 +45,13 @@ template<
       }
 
       void
-      CellEquation(const CDC<DH, VECTOR, dealdim>& cdc,
-          dealii::Vector<double> &local_cell_vector, double scale,
+      ElementEquation(const CDC<DH, VECTOR, dealdim>& cdc,
+          dealii::Vector<double> &local_vector, double scale,
           double /*scale_ico*/)
       {
         const DOpEWrapper::FEValues<dealdim> & state_fe_values =
             cdc.GetFEValuesState();
-        unsigned int n_dofs_per_cell = cdc.GetNDoFsPerCell();
+        unsigned int n_dofs_per_element = cdc.GetNDoFsPerElement();
         unsigned int n_q_points = cdc.GetNQPoints();
         {
           //Reading data
@@ -75,12 +75,12 @@ template<
           u_grad[1][0] = _ugrads[q_point][1][0];
           u_grad[1][1] = _ugrads[q_point][1][1];
 
-          for (unsigned int i = 0; i < n_dofs_per_cell; i++)
+          for (unsigned int i = 0; i < n_dofs_per_element; i++)
           {
             const Tensor<2, 2> phi_grads =
                 state_fe_values[displacements].gradient(i, q_point);
 
-            local_cell_vector(i) += scale * _qvalues[q_point](0) * 0.25
+            local_vector(i) += scale * _qvalues[q_point](0) * 0.25
                 * scalar_product(u_grad + transpose(u_grad),
                     phi_grads + transpose(phi_grads))
                 * state_fe_values.JxW(q_point);
@@ -89,13 +89,13 @@ template<
       }
 
       void
-      CellEquation_U(const CDC<DH, VECTOR, dealdim>& cdc,
-          dealii::Vector<double> &local_cell_vector, double scale,
+      ElementEquation_U(const CDC<DH, VECTOR, dealdim>& cdc,
+          dealii::Vector<double> &local_vector, double scale,
           double /*scale_ico*/)
       {
         const DOpEWrapper::FEValues<dealdim> & state_fe_values =
             cdc.GetFEValuesState();
-        unsigned int n_dofs_per_cell = cdc.GetNDoFsPerCell();
+        unsigned int n_dofs_per_element = cdc.GetNDoFsPerElement();
         unsigned int n_q_points = cdc.GetNQPoints();
         {
           assert(this->_problem_type == "adjoint");
@@ -118,12 +118,12 @@ template<
           z_grad[1][0] = _zgrads[q_point][1][0];
           z_grad[1][1] = _zgrads[q_point][1][1];
 
-          for (unsigned int i = 0; i < n_dofs_per_cell; i++)
+          for (unsigned int i = 0; i < n_dofs_per_element; i++)
           {
             const Tensor<2, 2> phi_grads =
                 state_fe_values[displacements].gradient(i, q_point);
 
-            local_cell_vector(i) += scale * _qvalues[q_point](0) * 0.25
+            local_vector(i) += scale * _qvalues[q_point](0) * 0.25
                 * scalar_product(phi_grads + transpose(phi_grads),
                     z_grad + transpose(z_grad)) * state_fe_values.JxW(q_point);
           }
@@ -131,30 +131,30 @@ template<
       }
 
       void
-      CellEquation_UT(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
-          dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/,
+      ElementEquation_UT(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
+          dealii::Vector<double> &/*local_vector*/, double /*scale*/,
           double /*scale_ico*/)
       {
         assert(this->_problem_type == "tangent");
       }
 
       void
-      CellEquation_UTT(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
-          dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/,
+      ElementEquation_UTT(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
+          dealii::Vector<double> &/*local_vector*/, double /*scale*/,
           double /*scale_ico*/)
       {
         assert(this->_problem_type == "adjoint_hessian");
       }
 
       void
-      CellEquation_Q(const CDC<DH, VECTOR, dealdim>& cdc,
-          dealii::Vector<double> &local_cell_vector, double scale,
+      ElementEquation_Q(const CDC<DH, VECTOR, dealdim>& cdc,
+          dealii::Vector<double> &local_vector, double scale,
           double /*scale_ico*/)
       {
         const DOpEWrapper::FEValues<dealdim> & control_fe_values =
             cdc.GetFEValuesControl();
 
-        unsigned int n_dofs_per_cell = cdc.GetNDoFsPerCell();
+        unsigned int n_dofs_per_element = cdc.GetNDoFsPerElement();
         unsigned int n_q_points = cdc.GetNQPoints();
         {
           assert(this->_problem_type == "gradient");
@@ -182,9 +182,9 @@ template<
           u_grad[1][0] = _ugrads[q_point][1][0];
           u_grad[1][1] = _ugrads[q_point][1][1];
 
-          for (unsigned int i = 0; i < n_dofs_per_cell; i++)
+          for (unsigned int i = 0; i < n_dofs_per_element; i++)
           {
-            local_cell_vector(i) += scale
+            local_vector(i) += scale
                 * control_fe_values.shape_value(i, q_point) * 0.25
                 * scalar_product(u_grad + transpose(u_grad),
                     z_grad + transpose(z_grad))
@@ -194,52 +194,52 @@ template<
       }
 
       void
-      CellEquation_QT(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
-          dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/,
+      ElementEquation_QT(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
+          dealii::Vector<double> &/*local_vector*/, double /*scale*/,
           double /*scale_ico*/)
       {
         assert(this->_problem_type == "tangent");
       }
 
       void
-      CellEquation_QTT(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
-          dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/,
+      ElementEquation_QTT(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
+          dealii::Vector<double> &/*local_vector*/, double /*scale*/,
           double /*scale_ico*/)
       {
         assert(this->_problem_type == "hessian");
       }
 
       void
-      CellEquation_UU(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
-          dealii::Vector<double> &/*local_cell_vector*/, double/*scale*/,
+      ElementEquation_UU(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
+          dealii::Vector<double> &/*local_vector*/, double/*scale*/,
           double /*scale_ico*/)
       {
         assert(this->_problem_type == "adjoint_hessian");
       }
       void
-      CellEquation_QU(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
-          dealii::Vector<double> &/*local_cell_vector*/, double/*scale*/,
+      ElementEquation_QU(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
+          dealii::Vector<double> &/*local_vector*/, double/*scale*/,
           double /*scale_ico*/)
       {
         assert(this->_problem_type == "adjoint_hessian");
       }
       void
-      CellEquation_UQ(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
-          dealii::Vector<double> &/*local_cell_vector*/, double/*scale*/,
+      ElementEquation_UQ(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
+          dealii::Vector<double> &/*local_vector*/, double/*scale*/,
           double /*scale_ico*/)
       {
         assert(this->_problem_type == "hessian");
       }
       void
-      CellEquation_QQ(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
-          dealii::Vector<double> &/*local_cell_vector*/, double/*scale*/,
+      ElementEquation_QQ(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
+          dealii::Vector<double> &/*local_vector*/, double/*scale*/,
           double /*scale_ico*/)
       {
         assert(this->_problem_type == "hessian");
       }
       void
-      CellRightHandSide(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
-          dealii::Vector<double> &/*local_cell_vector*/, double/*scale*/)
+      ElementRightHandSide(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
+          dealii::Vector<double> &/*local_vector*/, double/*scale*/)
       {
         {
           assert(this->_problem_type == "state");
@@ -247,13 +247,13 @@ template<
       }
 
       void
-      CellMatrix(const CDC<DH, VECTOR, dealdim>& cdc,
-          FullMatrix<double> &local_entry_matrix, double /*scale*/,
+      ElementMatrix(const CDC<DH, VECTOR, dealdim>& cdc,
+          FullMatrix<double> &local_matrix, double /*scale*/,
           double /*scale_ico*/)
       {
         const DOpEWrapper::FEValues<dealdim> & state_fe_values =
             cdc.GetFEValuesState();
-        unsigned int n_dofs_per_cell = cdc.GetNDoFsPerCell();
+        unsigned int n_dofs_per_element = cdc.GetNDoFsPerElement();
         unsigned int n_q_points = cdc.GetNQPoints();
         {
           cdc.GetValuesControl("control", _qvalues);
@@ -262,16 +262,16 @@ template<
 
         for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
         {
-          for (unsigned int i = 0; i < n_dofs_per_cell; i++)
+          for (unsigned int i = 0; i < n_dofs_per_element; i++)
           {
             const Tensor<2, 2> phi_grads =
                 state_fe_values[displacements].gradient(i, q_point);
-            for (unsigned int j = 0; j < n_dofs_per_cell; j++)
+            for (unsigned int j = 0; j < n_dofs_per_element; j++)
             {
               const Tensor<2, 2> psi_grads =
                   state_fe_values[displacements].gradient(j, q_point);
 
-              local_entry_matrix(i, j) += _qvalues[q_point](0) * 0.25
+              local_matrix(i, j) += _qvalues[q_point](0) * 0.25
                   * scalar_product(psi_grads + transpose(psi_grads),
                       phi_grads + transpose(phi_grads))
                   * state_fe_values.JxW(q_point);
@@ -281,12 +281,12 @@ template<
       }
 
       void
-      ControlCellEquation(const CDC<DH, VECTOR, dealdim>& cdc,
-          dealii::Vector<double> &local_cell_vector, double scale)
+      ControlElementEquation(const CDC<DH, VECTOR, dealdim>& cdc,
+          dealii::Vector<double> &local_vector, double scale)
       {
         const DOpEWrapper::FEValues<dealdim> & control_fe_values =
             cdc.GetFEValuesControl();
-        unsigned int n_dofs_per_cell = cdc.GetNDoFsPerCell();
+        unsigned int n_dofs_per_element = cdc.GetNDoFsPerElement();
         unsigned int n_q_points = cdc.GetNQPoints();
         {
           assert(
@@ -297,9 +297,9 @@ template<
 
         for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
         {
-          for (unsigned int i = 0; i < n_dofs_per_cell; i++)
+          for (unsigned int i = 0; i < n_dofs_per_element; i++)
           {
-            local_cell_vector(i) += scale
+            local_vector(i) += scale
                 * (_funcgradvalues[q_point](0)
                     * control_fe_values.shape_value(i, q_point))
                 * control_fe_values.JxW(q_point);
@@ -308,20 +308,20 @@ template<
       }
 
       void
-      ControlCellMatrix(const CDC<DH, VECTOR, dealdim>& cdc,
-          FullMatrix<double> &local_entry_matrix)
+      ControlElementMatrix(const CDC<DH, VECTOR, dealdim>& cdc,
+          FullMatrix<double> &local_matrix)
       {
         const DOpEWrapper::FEValues<dealdim> & control_fe_values =
             cdc.GetFEValuesControl();
-        unsigned int n_dofs_per_cell = cdc.GetNDoFsPerCell();
+        unsigned int n_dofs_per_element = cdc.GetNDoFsPerElement();
         unsigned int n_q_points = cdc.GetNQPoints();
         for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
         {
-          for (unsigned int i = 0; i < n_dofs_per_cell; i++)
+          for (unsigned int i = 0; i < n_dofs_per_element; i++)
           {
-            for (unsigned int j = 0; j < n_dofs_per_cell; j++)
+            for (unsigned int j = 0; j < n_dofs_per_element; j++)
             {
-              local_entry_matrix(i, j) += control_fe_values.shape_value(i,
+              local_matrix(i, j) += control_fe_values.shape_value(i,
                   q_point) * control_fe_values.shape_value(j, q_point)
                   * control_fe_values.JxW(q_point);
             }
@@ -331,11 +331,11 @@ template<
 
       void
       BoundaryEquation(const FDC<DH, VECTOR, dealdim>& fdc,
-          dealii::Vector<double> &local_cell_vector, double scale,
+          dealii::Vector<double> &local_vector, double scale,
           double /*scale_ico*/)
       {
         const auto & state_fe_face_values = fdc.GetFEFaceValuesState();
-        unsigned int n_dofs_per_cell = fdc.GetNDoFsPerCell();
+        unsigned int n_dofs_per_element = fdc.GetNDoFsPerElement();
         unsigned int n_q_points = fdc.GetNQPoints();
         unsigned int color = fdc.GetBoundaryIndicator();
         {
@@ -352,9 +352,9 @@ template<
             MyFunctions::Forces(_fvalues,
                 state_fe_face_values.quadrature_point(q_point)(0),
                 state_fe_face_values.quadrature_point(q_point)(1));
-            for (unsigned int i = 0; i < n_dofs_per_cell; i++)
+            for (unsigned int i = 0; i < n_dofs_per_element; i++)
             {
-              local_cell_vector(i) -= scale
+              local_vector(i) -= scale
                   * (_fvalues[0]
                       * state_fe_face_values[comp_0].value(i, q_point)
                       + _fvalues[1]
@@ -367,83 +367,83 @@ template<
 
       void
       BoundaryEquation_U(const FDC<DH, VECTOR, dealdim>& /*fdc*/,
-          dealii::Vector<double> &/*local_cell_vector*/, double/*scale*/,
+          dealii::Vector<double> &/*local_vector*/, double/*scale*/,
           double /*scale_ico*/)
       {
       }
 
       void
       BoundaryEquation_UT(const FDC<DH, VECTOR, dealdim>& /*fdc*/,
-          dealii::Vector<double> &/*local_cell_vector*/, double/*scale*/,
+          dealii::Vector<double> &/*local_vector*/, double/*scale*/,
           double /*scale_ico*/)
       {
       }
 
       void
       BoundaryEquation_UTT(const FDC<DH, VECTOR, dealdim>& /*fdc*/,
-          dealii::Vector<double> &/*local_cell_vector*/, double/*scale*/,
+          dealii::Vector<double> &/*local_vector*/, double/*scale*/,
           double /*scale_ico*/)
       {
       }
 
       void
       BoundaryEquation_Q(const FDC<DH, VECTOR, dealdim>& /*fdc*/,
-          dealii::Vector<double> &/*local_cell_vector*/, double/*scale*/,
+          dealii::Vector<double> &/*local_vector*/, double/*scale*/,
           double /*scale_ico*/)
       {
       }
 
       void
       BoundaryEquation_QT(const FDC<DH, VECTOR, dealdim>& /*fdc*/,
-          dealii::Vector<double> &/*local_cell_vector*/, double/*scale*/,
+          dealii::Vector<double> &/*local_vector*/, double/*scale*/,
           double /*scale_ico*/)
       {
       }
 
       void
       BoundaryEquation_QTT(const FDC<DH, VECTOR, dealdim>& /*fdc*/,
-          dealii::Vector<double> &/*local_cell_vector*/, double/*scale*/,
+          dealii::Vector<double> &/*local_vector*/, double/*scale*/,
           double /*scale_ico*/)
       {
       }
 
       void
       BoundaryEquation_UU(const FDC<DH, VECTOR, dealdim>& /*fdc*/,
-          dealii::Vector<double> &/*local_cell_vector*/, double/*scale*/,
+          dealii::Vector<double> &/*local_vector*/, double/*scale*/,
           double /*scale_ico*/)
       {
       }
 
       void
       BoundaryEquation_QU(const FDC<DH, VECTOR, dealdim>& /*fdc*/,
-          dealii::Vector<double> &/*local_cell_vector*/, double/*scale*/,
+          dealii::Vector<double> &/*local_vector*/, double/*scale*/,
           double /*scale_ico*/)
       {
       }
 
       void
       BoundaryEquation_UQ(const FDC<DH, VECTOR, dealdim>& /*fdc*/,
-          dealii::Vector<double> &/*local_cell_vector*/, double/*scale*/,
+          dealii::Vector<double> &/*local_vector*/, double/*scale*/,
           double /*scale_ico*/)
       {
       }
 
       void
       BoundaryEquation_QQ(const FDC<DH, VECTOR, dealdim>& /*fdc*/,
-          dealii::Vector<double> &/*local_cell_vector*/, double/*scale*/,
+          dealii::Vector<double> &/*local_vector*/, double/*scale*/,
           double /*scale_ico*/)
       {
       }
 
       void
       BoundaryRightHandSide(const FDC<DH, VECTOR, dealdim>& /*fdc*/,
-          dealii::Vector<double> &/*local_cell_vector*/, double/*scale*/)
+          dealii::Vector<double> &/*local_vector*/, double/*scale*/)
       {
       }
 
       void
       BoundaryMatrix(const FDC<DH, VECTOR, dealdim>& /*fdc*/,
-		     dealii::FullMatrix<double> &/*local_entry_matrix*/, double /*scale*/,
+		     dealii::FullMatrix<double> &/*local_matrix*/, double /*scale*/,
 		     double /*scale_ico*/)
       {
       }

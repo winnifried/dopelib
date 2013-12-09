@@ -39,7 +39,7 @@
 #include "constraintvector.h"
 #include "controlvector.h"
 #include "statevector.h"
-#include "celldatacontainer.h"
+#include "elementdatacontainer.h"
 #include "facedatacontainer.h"
 #include "stateproblem.h"
 #include "dopetypes.h"
@@ -189,12 +189,12 @@ namespace DOpE
         /******************************************************/
 
         /**
-         * This function returns a functional value on a cell.
+         * This function returns a functional value on a element.
          * Different types of functionals
          * have been implemented so far: `cost_functional' and `aux_functional'.
          * The first one is needed for optimization problems. The second one
          * can be used for the computation of arbitrary functionals that
-         * are defined on cells, e.g., drag and lift computation.
+         * are defined on elements, e.g., drag and lift computation.
          * Or computations of deflections and deformations.
          *
          * @template DATACONTAINER    Class of the datacontainer, distinguishes
@@ -205,7 +205,7 @@ namespace DOpE
          */
         template<typename DATACONTAINER>
           double
-          CellFunctional(const DATACONTAINER& cdc);
+          ElementFunctional(const DATACONTAINER& cdc);
 
         /******************************************************/
 
@@ -283,13 +283,13 @@ namespace DOpE
         /******************************************************/
 
         /**
-         * Computes the value of the cell equation which corresponds
+         * Computes the value of the element equation which corresponds
          * to the residuum in nonlinear cases. This function is the basis
          * for all stationary examples and unsteady configurations as well.
          * However, in unsteady computations one has to differentiate
          * between explicit (diffusion, convection) and implicit terms
          * (pressure, incompressibility). For that reason a second
-         * function CellEquationImplicit also exists.
+         * function ElementEquationImplicit also exists.
          *
          * If no differentiation between explicit and implicit terms is needed
          * this function should be used.
@@ -298,8 +298,8 @@ namespace DOpE
          *                                between hp- and classical case.
          *
          * @param cdc                     A DataContainer holding all the needed information
-         *                                of the cell.
-         * @param local_cell_vector       This vector contains the locally computed values of the cell equation. For more information
+         *                                of the element.
+         * @param local_vector       This vector contains the locally computed values of the element equation. For more information
          *                                on dealii::Vector, please visit, the deal.ii manual pages.
          * @param scale                   A scaling factor which is -1 or 1 depending on the subroutine to compute.
          * @param scale_ico             A scaling factor for terms which will be treated fully implicit
@@ -307,26 +307,26 @@ namespace DOpE
          */
         template<typename DATACONTAINER>
           void
-          CellEquation(const DATACONTAINER& cdc,
-              dealii::Vector<double> &local_cell_vector, double scale,
+          ElementEquation(const DATACONTAINER& cdc,
+              dealii::Vector<double> &local_vector, double scale,
               double scale_ico);
 
         /******************************************************/
 
         /**
-         * This function has the same functionality as the CellEquation function.
+         * This function has the same functionality as the ElementEquation function.
          * It is needed for time derivatives when working with
          * time dependent problems.
          */
         template<typename DATACONTAINER>
           void
-          CellTimeEquation(const DATACONTAINER& dc,
-              dealii::Vector<double> &local_cell_vector, double scale = 1.);
+          ElementTimeEquation(const DATACONTAINER& dc,
+              dealii::Vector<double> &local_vector, double scale = 1.);
 
         /******************************************************/
 
         /**
-         * This function has the same functionality as the CellTimeEquation function.
+         * This function has the same functionality as the ElementTimeEquation function.
          * It is mainly needed for fluid-structure interaction problems and should
          * be used when the term of the time derivative contains
          * nonlinear terms, i.e. $\partial_t u v + ...$
@@ -336,8 +336,8 @@ namespace DOpE
          */
         template<typename DATACONTAINER>
           void
-          CellTimeEquationExplicit(const DATACONTAINER& dc,
-              dealii::Vector<double> &local_cell_vector, double scale = 1.);
+          ElementTimeEquationExplicit(const DATACONTAINER& dc,
+              dealii::Vector<double> &local_vector, double scale = 1.);
 
         /******************************************************/
 
@@ -347,15 +347,15 @@ namespace DOpE
          * @template DATACONTAINER         Class of the datacontainer in use, distinguishes
          *                                 between hp- and classical case.
          *
-         * @param cdc                      A DataContainer holding all the needed information of the cell.
-         * @param local_cell_vector        This vector contains the locally computed values of the cell equation. For more information
+         * @param cdc                      A DataContainer holding all the needed information of the element.
+         * @param local_vector        This vector contains the locally computed values of the element equation. For more information
          *                                 on dealii::Vector, please visit, the deal.ii manual pages.
          * @param scale                    A scaling factor which is -1 or 1 depending on the subroutine to compute.
          */
         template<typename DATACONTAINER>
           void
-          CellRhs(const DATACONTAINER& dc,
-              dealii::Vector<double> &local_cell_vector, double scale = 1.);
+          ElementRhs(const DATACONTAINER& dc,
+              dealii::Vector<double> &local_vector, double scale = 1.);
 
         /******************************************************/
 
@@ -380,12 +380,12 @@ namespace DOpE
         /******************************************************/
 
         /**
-         * Computes the value of the cell matrix which is derived
+         * Computes the value of the element matrix which is derived
          * by computing the directional derivatives of the residuum equation of the PDE
          * problem under consideration.
          *
          * The differentiation between explicit and implicit terms is
-         * equivalent to the CellEquation. We refer to its documentation.
+         * equivalent to the ElementEquation. We refer to its documentation.
          *
          * Moreover, you find an extensive explication in the
          * time step algorithms, e.g., backward_euler_problem.h.
@@ -404,32 +404,32 @@ namespace DOpE
          */
         template<typename DATACONTAINER>
           void
-          CellMatrix(const DATACONTAINER& dc,
+          ElementMatrix(const DATACONTAINER& dc,
               dealii::FullMatrix<double> &local_entry_matrix, double scale = 1.,
               double scale_ico = 1.);
 
         /******************************************************/
 
         /**
-         * Computes the value of the cell matrix which is derived
+         * Computes the value of the element matrix which is derived
          * by computing the directional derivatives of the time residuum of the PDE
          * problem under consideration.
          *
          * The differentiation between explicit and implicit terms is
-         * equivalent to the CellTimeEquation. We refer to its documentation.
+         * equivalent to the ElementTimeEquation. We refer to its documentation.
          *
          * Moreover, you find an extensive explication in the
          * time step algorithms, e.g., backward_euler_problem.h.
          */
         template<typename DATACONTAINER>
           void
-          CellTimeMatrix(const DATACONTAINER& dc,
+          ElementTimeMatrix(const DATACONTAINER& dc,
               dealii::FullMatrix<double> &local_entry_matrix);
 
         /******************************************************/
 
         /**
-         * Computes the value of the cell matrix which is derived
+         * Computes the value of the element matrix which is derived
          * by computing the directional derivatives of the time residuum of the PDE
          * problem under consideration.
          *
@@ -439,27 +439,27 @@ namespace DOpE
          */
         template<typename DATACONTAINER>
           void
-          CellTimeMatrixExplicit(const DATACONTAINER& dc,
+          ElementTimeMatrixExplicit(const DATACONTAINER& dc,
               dealii::FullMatrix<double> &local_entry_matrix);
 
         /******************************************************/
 
         /**
-         * Computes the value of face on a cell.
-         * It has the same functionality as CellEquation. We refer to its
+         * Computes the value of face on a element.
+         * It has the same functionality as ElementEquation. We refer to its
          * documentation.
          *
          */
         template<typename FACEDATACONTAINER>
           void
           FaceEquation(const FACEDATACONTAINER& dc,
-              dealii::Vector<double> &local_cell_vector, double scale,
+              dealii::Vector<double> &local_vector, double scale,
               double scale_ico);
 
         /******************************************************/
         /**
          * Computes the product of two different finite elements
-         * on a interior face. It has the same functionality as CellEquation.
+         * on a interior face. It has the same functionality as ElementEquation.
          * We refer to its documentation.
          *
          */
@@ -468,26 +468,26 @@ namespace DOpE
         template<typename FACEDATACONTAINER>
           void
           InterfaceEquation(const FACEDATACONTAINER& dc,
-              dealii::Vector<double> &local_cell_vector, double scale,
+              dealii::Vector<double> &local_vector, double scale,
               double scale_ico);
 
         /******************************************************/
         /**
-         * Computes the value of face on a cell.
-         * It has the same functionality as CellRhs. We refer to its
+         * Computes the value of face on a element.
+         * It has the same functionality as ElementRhs. We refer to its
          * documentation.
          *
          */
         template<typename FACEDATACONTAINER>
           void
           FaceRhs(const FACEDATACONTAINER& dc,
-              dealii::Vector<double> &local_cell_vector, double scale = 1.);
+              dealii::Vector<double> &local_vector, double scale = 1.);
 
         /******************************************************/
 
         /**
-         * Computes the value of face on a cell.
-         * It has the same functionality as CellMatrix. We refer to its
+         * Computes the value of face on a element.
+         * It has the same functionality as ElementMatrix. We refer to its
          * documentation.
          *
          */
@@ -501,7 +501,7 @@ namespace DOpE
         /**
          * Computes the product of two different finite elements
          * on an interior face. It has the same functionality as
-         * CellMatrix. We refer to its documentation.
+         * ElementMatrix. We refer to its documentation.
          *
          */
         template<typename FACEDATACONTAINER>
@@ -513,42 +513,42 @@ namespace DOpE
         /******************************************************/
 
         /**
-         * Computes the value of the boundary on a cell.
-         * It has the same functionality as CellEquation. We refer to its
+         * Computes the value of the boundary on a element.
+         * It has the same functionality as ElementEquation. We refer to its
          * documentation.
          *
          */
         template<typename FACEDATACONTAINER>
           void
           BoundaryEquation(const FACEDATACONTAINER& dc,
-              dealii::Vector<double> &local_cell_vector, double scale,
+              dealii::Vector<double> &local_vector, double scale,
               double scale_ico);
 
         /******************************************************/
 
         /**
-         * Computes the value of the boundary on a cell.
-         * It has the same functionality as CellRhs. We refer to its
+         * Computes the value of the boundary on a element.
+         * It has the same functionality as ElementRhs. We refer to its
          * documentation.
          *
          */
         template<typename FACEDATACONTAINER>
           void
           BoundaryRhs(const FACEDATACONTAINER& dc,
-              dealii::Vector<double> &local_cell_vector, double scale = 1.);
+              dealii::Vector<double> &local_vector, double scale = 1.);
 
         /******************************************************/
 
         /**
-         * Computes the value of the boundary on a cell.
-         * It has the same functionality as CellMatrix. We refer to its
+         * Computes the value of the boundary on a element.
+         * It has the same functionality as ElementMatrix. We refer to its
          * documentation.
          *
          */
         template<typename FACEDATACONTAINER>
           void
           BoundaryMatrix(const FACEDATACONTAINER& dc,
-              dealii::FullMatrix<double> &local_cell_matrix, double scale = 1.,
+              dealii::FullMatrix<double> &local_matrix, double scale = 1.,
               double scale_ico = 1.);
         /******************************************************/
         void
@@ -1047,27 +1047,27 @@ namespace DOpE
         /****For the initial values ***************/
         template<typename DATACONTAINER>
           void
-          Init_CellEquation(const DATACONTAINER& cdc,
-              dealii::Vector<double> &local_cell_vector, double scale,
+          Init_ElementEquation(const DATACONTAINER& cdc,
+              dealii::Vector<double> &local_vector, double scale,
               double scale_ico)
           {
             if (this->GetType() == "adjoint" || this->GetType() == "tangent"
                 || this->GetType() == "adjoint_hessian")
             {
-              this->GetPDE().Init_CellEquation(cdc, local_cell_vector, scale,
+              this->GetPDE().Init_ElementEquation(cdc, local_vector, scale,
                   scale_ico);
             }
             else
             {
               throw DOpEException("Not implemented",
-                  "OptProblemContainer::Init_CellEquation");
+                  "OptProblemContainer::Init_ElementEquation");
             }
           }
 
         template<typename DATACONTAINER>
           void
-          Init_CellRhs(const DATACONTAINER& cdc,
-              dealii::Vector<double> &local_cell_vector, double scale)
+          Init_ElementRhs(const DATACONTAINER& cdc,
+              dealii::Vector<double> &local_vector, double scale)
           {
             //FIXME: We should take care of the cases of boundary and face functionals...
             if (this->GetType() == "adjoint")
@@ -1080,14 +1080,14 @@ namespace DOpE
                   if (GetFunctional()->GetType().find("domain")
                       != std::string::npos)
                   {
-                    GetFunctional()->ElementValue_U(cdc, local_cell_vector, scale);
+                    GetFunctional()->ElementValue_U(cdc, local_vector, scale);
                   }
                 }
               }
             }
             else if (this->GetType() == "tangent")
             {
-              this->GetPDE().Init_CellRhs_QT(cdc, local_cell_vector, scale);
+              this->GetPDE().Init_ElementRhs_QT(cdc, local_vector, scale);
             }
             else if (this->GetType() == "adjoint_hessian")
             {
@@ -1099,7 +1099,7 @@ namespace DOpE
                   if (GetFunctional()->GetType().find("domain")
                       != std::string::npos)
                   {
-                    GetFunctional()->ElementValue_UU(cdc, local_cell_vector, scale);
+                    GetFunctional()->ElementValue_UU(cdc, local_vector, scale);
                   }
                 }
               }
@@ -1107,7 +1107,7 @@ namespace DOpE
             else
             {
               throw DOpEException("Not implemented",
-                  "OptProblemContainer::Init_CellRhs");
+                  "OptProblemContainer::Init_ElementRhs");
             }
           }
 
@@ -1162,20 +1162,20 @@ namespace DOpE
 
         template<typename DATACONTAINER>
           void
-          Init_CellMatrix(const DATACONTAINER& cdc,
+          Init_ElementMatrix(const DATACONTAINER& cdc,
               dealii::FullMatrix<double> &local_entry_matrix, double scale,
               double scale_ico)
           {
             if (this->GetType() == "adjoint" || this->GetType() == "tangent"
                 || this->GetType() == "adjoint_hessian")
             {
-              this->GetPDE().Init_CellMatrix(cdc, local_entry_matrix, scale,
+              this->GetPDE().Init_ElementMatrix(cdc, local_entry_matrix, scale,
                   scale_ico);
             }
             else
             {
               throw DOpEException("Not implemented",
-                  "OptProblemContainer::Init_CellMatrix");
+                  "OptProblemContainer::Init_ElementMatrix");
             }
           }
 
@@ -1484,7 +1484,7 @@ namespace DOpE
     template<typename DATACONTAINER>
       double
       OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
-          CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::CellFunctional(
+          CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::ElementFunctional(
           const DATACONTAINER& cdc)
       {
 
@@ -1509,7 +1509,7 @@ namespace DOpE
         else
         {
           throw DOpEException("Not implemented",
-              "OptProblemContainer::CellFunctional");
+              "OptProblemContainer::ElementFunctional");
         }
       }
 
@@ -1682,45 +1682,45 @@ namespace DOpE
     template<typename DATACONTAINER>
       void
       OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
-          CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::CellEquation(
-          const DATACONTAINER& cdc, dealii::Vector<double> &local_cell_vector,
+          CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::ElementEquation(
+          const DATACONTAINER& cdc, dealii::Vector<double> &local_vector,
           double scale, double scale_ico)
       {
 
         if (this->GetType() == "state")
         {
           // state values in quadrature points
-          this->GetPDE().CellEquation(cdc, local_cell_vector, scale, scale_ico);
+          this->GetPDE().ElementEquation(cdc, local_vector, scale, scale_ico);
         }
         else if ((this->GetType() == "adjoint")
             || (this->GetType() == "adjoint_for_ee"))
         {
           // state values in quadrature points
-          this->GetPDE().CellEquation_U(cdc, local_cell_vector, scale,
+          this->GetPDE().ElementEquation_U(cdc, local_vector, scale,
               scale_ico);
         }
         else if (this->GetType() == "adjoint_hessian")
         {
           // state values in quadrature points
-          this->GetPDE().CellEquation_UTT(cdc, local_cell_vector, scale,
+          this->GetPDE().ElementEquation_UTT(cdc, local_vector, scale,
               scale_ico);
         }
         else if (this->GetType() == "tangent")
         {
           // state values in quadrature points
-          this->GetPDE().CellEquation_UT(cdc, local_cell_vector, scale,
+          this->GetPDE().ElementEquation_UT(cdc, local_vector, scale,
               scale_ico);
         }
         else if ((this->GetType() == "gradient")
             || (this->GetType() == "hessian"))
         {
           // control values in quadrature points
-          this->GetPDE().ControlCellEquation(cdc, local_cell_vector, scale);
+          this->GetPDE().ControlElementEquation(cdc, local_vector, scale);
         }
         else
         {
           throw DOpEException("Not implemented",
-              "OptProblemContainer::CellEquation");
+              "OptProblemContainer::ElementEquation");
         }
       }
 
@@ -1759,38 +1759,38 @@ namespace DOpE
     template<typename DATACONTAINER>
       void
       OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
-          CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::CellTimeEquation(
-          const DATACONTAINER& cdc, dealii::Vector<double> &local_cell_vector,
+          CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::ElementTimeEquation(
+          const DATACONTAINER& cdc, dealii::Vector<double> &local_vector,
           double scale)
       {
 
         if (this->GetType() == "state")
         {
-          this->GetPDE().CellTimeEquation(cdc, local_cell_vector, scale);
+          this->GetPDE().ElementTimeEquation(cdc, local_vector, scale);
         }
         else if (this->GetType() == "adjoint"
             || this->GetType() == "adjoint_for_ee")
         {
-          this->GetPDE().CellTimeEquation_U(cdc, local_cell_vector, scale);
+          this->GetPDE().ElementTimeEquation_U(cdc, local_vector, scale);
         }
         else if (this->GetType() == "adjoint_hessian")
         {
-          this->GetPDE().CellTimeEquation_UTT(cdc, local_cell_vector, scale);
+          this->GetPDE().ElementTimeEquation_UTT(cdc, local_vector, scale);
         }
         else if (this->GetType() == "tangent")
         {
-          this->GetPDE().CellTimeEquation_UT(cdc, local_cell_vector, scale);
+          this->GetPDE().ElementTimeEquation_UT(cdc, local_vector, scale);
         }
         else if ((this->GetType() == "gradient")
             || (this->GetType() == "hessian"))
         {
           throw DOpEException("Not implemented",
-              "OptProblemContainer::CellTimeEquation");
+              "OptProblemContainer::ElementTimeEquation");
         }
         else
         {
           throw DOpEException("Not implemented",
-              "OptProblemContainer::CellTimeEquation");
+              "OptProblemContainer::ElementTimeEquation");
         }
       }
 
@@ -1803,42 +1803,42 @@ namespace DOpE
     template<typename DATACONTAINER>
       void
       OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
-          CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::CellTimeEquationExplicit(
-          const DATACONTAINER& cdc, dealii::Vector<double> &local_cell_vector,
+          CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::ElementTimeEquationExplicit(
+          const DATACONTAINER& cdc, dealii::Vector<double> &local_vector,
           double scale)
       {
 
         if (this->GetType() == "state")
         {
-          this->GetPDE().CellTimeEquationExplicit(cdc, local_cell_vector,
+          this->GetPDE().ElementTimeEquationExplicit(cdc, local_vector,
               scale);
         }
         else if (this->GetType() == "adjoint"
             || this->GetType() == "adjoint_for_ee")
         {
-          this->GetPDE().CellTimeEquationExplicit_U(cdc, local_cell_vector,
+          this->GetPDE().ElementTimeEquationExplicit_U(cdc, local_vector,
               scale);
         }
         else if (this->GetType() == "adjoint_hessian")
         {
-          this->GetPDE().CellTimeEquationExplicit_UTT(cdc, local_cell_vector,
+          this->GetPDE().ElementTimeEquationExplicit_UTT(cdc, local_vector,
               scale);
         }
         else if (this->GetType() == "tangent")
         {
-          this->GetPDE().CellTimeEquationExplicit_UT(cdc, local_cell_vector,
+          this->GetPDE().ElementTimeEquationExplicit_UT(cdc, local_vector,
               scale);
         }
         else if ((this->GetType() == "gradient")
             || (this->GetType() == "hessian"))
         {
           throw DOpEException("Not implemented",
-              "OptProblemContainer::CellTimeEquationExplicit");
+              "OptProblemContainer::ElementTimeEquationExplicit");
         }
         else
         {
           throw DOpEException("Not implemented",
-              "OptProblemContainer::CellTimeEquationExplicit");
+              "OptProblemContainer::ElementTimeEquationExplicit");
         }
       }
 
@@ -1853,37 +1853,37 @@ namespace DOpE
       OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
           CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::FaceEquation(
           const FACEDATACONTAINER& fdc,
-          dealii::Vector<double> &local_cell_vector, double scale,
+          dealii::Vector<double> &local_vector, double scale,
           double scale_ico)
       {
         if (this->GetType() == "state")
         {
           // state values in quadrature points
-          this->GetPDE().FaceEquation(fdc, local_cell_vector, scale, scale_ico);
+          this->GetPDE().FaceEquation(fdc, local_vector, scale, scale_ico);
         }
         else if (this->GetType() == "adjoint"
             || this->GetType() == "adjoint_for_ee")
         {
           // state values in quadrature points
-          this->GetPDE().FaceEquation_U(fdc, local_cell_vector, scale,
+          this->GetPDE().FaceEquation_U(fdc, local_vector, scale,
               scale_ico);
         }
         else if (this->GetType() == "adjoint_hessian")
         {
           // state values in quadrature points
-          this->GetPDE().FaceEquation_UTT(fdc, local_cell_vector, scale,
+          this->GetPDE().FaceEquation_UTT(fdc, local_vector, scale,
               scale_ico);
         }
         else if (this->GetType() == "tangent")
         {
           // state values in quadrature points
-          this->GetPDE().FaceEquation_UT(fdc, local_cell_vector, scale,
+          this->GetPDE().FaceEquation_UT(fdc, local_vector, scale,
               scale_ico);
         }
 //        else if ((this->GetType() == "gradient") || (this->GetType() == "hessian"))
 //        {
 //          // control values in quadrature points
-//          this->GetPDE().ControlFaceEquation(fdc, local_cell_vector, scale);
+//          this->GetPDE().ControlFaceEquation(fdc, local_vector, scale);
 //        }
         else
         {
@@ -1903,19 +1903,19 @@ namespace DOpE
       OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
           CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::InterfaceEquation(
           const FACEDATACONTAINER& fdc,
-          dealii::Vector<double> &local_cell_vector, double scale,
+          dealii::Vector<double> &local_vector, double scale,
           double scale_ico)
       {
         if (this->GetType() == "state")
         {
-          this->GetPDE().InterfaceEquation(fdc, local_cell_vector, scale,
+          this->GetPDE().InterfaceEquation(fdc, local_vector, scale,
               scale_ico);
         }
         else if (this->GetType() == "adjoint"
             || this->GetType() == "adjoint_for_ee")
         {
           // state values in quadrature points
-          this->GetPDE().InterfaceEquation_U(fdc, local_cell_vector, scale,
+          this->GetPDE().InterfaceEquation_U(fdc, local_vector, scale,
               scale_ico);
         }
         else
@@ -1935,43 +1935,43 @@ namespace DOpE
       OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
           CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::BoundaryEquation(
           const FACEDATACONTAINER& fdc,
-          dealii::Vector<double> &local_cell_vector, double scale,
+          dealii::Vector<double> &local_vector, double scale,
           double scale_ico)
       {
         if (this->GetType() == "state")
         {
           // state values in quadrature points
-          this->GetPDE().BoundaryEquation(fdc, local_cell_vector, scale,
+          this->GetPDE().BoundaryEquation(fdc, local_vector, scale,
               scale_ico);
         }
         else if (this->GetType() == "adjoint"
             || this->GetType() == "adjoint_for_ee")
         {
           // state values in quadrature points
-          this->GetPDE().BoundaryEquation_U(fdc, local_cell_vector, scale,
+          this->GetPDE().BoundaryEquation_U(fdc, local_vector, scale,
               scale_ico);
         }
         else if (this->GetType() == "adjoint_hessian")
         {
           // state values in quadrature points
-          this->GetPDE().BoundaryEquation_UTT(fdc, local_cell_vector, scale,
+          this->GetPDE().BoundaryEquation_UTT(fdc, local_vector, scale,
               scale_ico);
         }
         else if (this->GetType() == "tangent")
         {
           // state values in quadrature points
-          this->GetPDE().BoundaryEquation_UT(fdc, local_cell_vector, scale,
+          this->GetPDE().BoundaryEquation_UT(fdc, local_vector, scale,
               scale_ico);
         }
 //        else if ((this->GetType() == "gradient") || (this->GetType() == "hessian"))
 //        {
 //          // control values in quadrature points
-//          this->GetPDE().ControlBoundaryEquation(fdc, local_cell_vector, scale);
+//          this->GetPDE().ControlBoundaryEquation(fdc, local_vector, scale);
 //        }
         else
         {
           throw DOpEException("Not implemented",
-              "OptProblemContainer::CellBoundaryEquation");
+              "OptProblemContainer::ElementBoundaryEquation");
         }
       }
 
@@ -1984,8 +1984,8 @@ namespace DOpE
     template<typename DATACONTAINER>
       void
       OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
-          CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::CellRhs(
-          const DATACONTAINER& cdc, dealii::Vector<double> &local_cell_vector,
+          CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::ElementRhs(
+          const DATACONTAINER& cdc, dealii::Vector<double> &local_vector,
           double scale)
       {
         //FIXME: In timedependent Problems one should evaluate the
@@ -1997,39 +1997,39 @@ namespace DOpE
         if (this->GetType() == "state")
         {
           // state values in quadrature points
-          this->GetPDE().CellRightHandSide(cdc, local_cell_vector, scale);
+          this->GetPDE().ElementRightHandSide(cdc, local_vector, scale);
         }
         else if (this->GetType() == "adjoint")
         {
           // state values in quadrature points
           if (GetFunctional()->GetType().find("domain") != std::string::npos)
-            GetFunctional()->ElementValue_U(cdc, local_cell_vector, scale);
+            GetFunctional()->ElementValue_U(cdc, local_vector, scale);
         }
         else if (this->GetType() == "adjoint_for_ee")
         {
           //values of the derivative of the functional for error estimation
           _aux_functionals[_functional_for_ee_num]->ElementValue_U(cdc,
-              local_cell_vector, scale);
+              local_vector, scale);
         }
         else if (this->GetType() == "tangent")
         {
           // state values in quadrature points
           scale *= -1;
-          this->GetPDE().CellEquation_QT(cdc, local_cell_vector, scale, scale);
+          this->GetPDE().ElementEquation_QT(cdc, local_vector, scale, scale);
         }
         else if (this->GetType() == "adjoint_hessian")
         {
           // state values in quadrature points
           if (GetFunctional()->GetType().find("domain") != std::string::npos)
           {
-            GetFunctional()->ElementValue_UU(cdc, local_cell_vector, scale);
-            GetFunctional()->ElementValue_QU(cdc, local_cell_vector, scale);
+            GetFunctional()->ElementValue_UU(cdc, local_vector, scale);
+            GetFunctional()->ElementValue_QU(cdc, local_vector, scale);
           }
           scale *= -1;
-          this->GetPDE().CellEquation_UU(cdc, local_cell_vector, scale, scale);
-          this->GetPDE().CellEquation_QU(cdc, local_cell_vector, scale, scale);
+          this->GetPDE().ElementEquation_UU(cdc, local_vector, scale, scale);
+          this->GetPDE().ElementEquation_QU(cdc, local_vector, scale, scale);
           //TODO: make some example where this realy matters to check if this is right
-          this->GetPDE().CellTimeEquationExplicit_UU(cdc, local_cell_vector,
+          this->GetPDE().ElementTimeEquationExplicit_UU(cdc, local_vector,
               scale);
         }
         else if (this->GetType() == "gradient")
@@ -2037,47 +2037,47 @@ namespace DOpE
           if (GetSpaceTimeHandler()->GetControlType()
               == DOpEtypes::ControlType::initial)
           {
-            this->GetPDE().Init_CellRhs_Q(cdc, local_cell_vector, scale);
+            this->GetPDE().Init_ElementRhs_Q(cdc, local_vector, scale);
           }
           // state values in quadrature points
           if (GetFunctional()->GetType().find("domain") != std::string::npos)
-            GetFunctional()->ElementValue_Q(cdc, local_cell_vector, scale);
+            GetFunctional()->ElementValue_Q(cdc, local_vector, scale);
 
           scale *= -1;
-          this->GetPDE().CellEquation_Q(cdc, local_cell_vector, scale, scale);
+          this->GetPDE().ElementEquation_Q(cdc, local_vector, scale, scale);
         }
         else if (this->GetType() == "hessian")
         {
           if (GetSpaceTimeHandler()->GetControlType()
               == DOpEtypes::ControlType::initial)
           {
-            this->GetPDE().Init_CellRhs_QTT(cdc, local_cell_vector, scale);
-            this->GetPDE().Init_CellRhs_QQ(cdc, local_cell_vector, scale);
+            this->GetPDE().Init_ElementRhs_QTT(cdc, local_vector, scale);
+            this->GetPDE().Init_ElementRhs_QQ(cdc, local_vector, scale);
           }
 
           if (GetFunctional()->GetType().find("domain") != std::string::npos)
           {
-            GetFunctional()->ElementValue_QQ(cdc, local_cell_vector, scale);
-            GetFunctional()->ElementValue_UQ(cdc, local_cell_vector, scale);
+            GetFunctional()->ElementValue_QQ(cdc, local_vector, scale);
+            GetFunctional()->ElementValue_UQ(cdc, local_vector, scale);
           }
 
           scale *= -1;
-          this->GetPDE().CellEquation_QTT(cdc, local_cell_vector, scale, scale);
-          this->GetPDE().CellEquation_UQ(cdc, local_cell_vector, scale, scale);
-          this->GetPDE().CellEquation_QQ(cdc, local_cell_vector, scale, scale);
+          this->GetPDE().ElementEquation_QTT(cdc, local_vector, scale, scale);
+          this->GetPDE().ElementEquation_UQ(cdc, local_vector, scale, scale);
+          this->GetPDE().ElementEquation_QQ(cdc, local_vector, scale, scale);
         }
         else if (this->GetType() == "global_constraint_gradient")
         {
-          GetConstraints()->ElementValue_Q(cdc, local_cell_vector, scale);
+          GetConstraints()->ElementValue_Q(cdc, local_vector, scale);
         }
         else if (this->GetType() == "global_constraint_hessian")
         {
-          GetConstraints()->ElementValue_QQ(cdc, local_cell_vector, scale);
+          GetConstraints()->ElementValue_QQ(cdc, local_vector, scale);
         }
         else
         {
           throw DOpEException("Not implemented",
-              "OptProblemContainer::CellRhs");
+              "OptProblemContainer::ElementRhs");
         }
 
       }
@@ -2158,7 +2158,7 @@ namespace DOpE
       }
       else
       {
-        throw DOpEException("Not implemented", "OptProblem::CellRhs");
+        throw DOpEException("Not implemented", "OptProblem::PointRhs");
       }
 
     }
@@ -2174,19 +2174,19 @@ namespace DOpE
       OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
           CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::FaceRhs(
           const FACEDATACONTAINER& fdc,
-          dealii::Vector<double> &local_cell_vector, double scale)
+          dealii::Vector<double> &local_vector, double scale)
       {
 
         if (this->GetType() == "state")
         {
           // state values in face quadrature points
-          this->GetPDE().FaceRightHandSide(fdc, local_cell_vector, scale);
+          this->GetPDE().FaceRightHandSide(fdc, local_vector, scale);
         }
         else if (this->GetType() == "adjoint")
         {
           // state values in quadrature points
           if (GetFunctional()->GetType().find("face") != std::string::npos)
-            GetFunctional()->FaceValue_U(fdc, local_cell_vector, scale);
+            GetFunctional()->FaceValue_U(fdc, local_vector, scale);
         }
         else if (this->GetType() == "adjoint_for_ee")
         {
@@ -2194,59 +2194,59 @@ namespace DOpE
           if (_aux_functionals[_functional_for_ee_num]->GetType().find("face")
               != std::string::npos)
             _aux_functionals[_functional_for_ee_num]->FaceValue_U(fdc,
-                local_cell_vector, scale);
+                local_vector, scale);
         }
         else if (this->GetType() == "tangent")
         {
           // state values in quadrature points
           scale *= -1;
-          this->GetPDE().FaceEquation_QT(fdc, local_cell_vector, scale, scale);
+          this->GetPDE().FaceEquation_QT(fdc, local_vector, scale, scale);
         }
         else if (this->GetType() == "adjoint_hessian")
         {
           // state values in quadrature points
           if (GetFunctional()->GetType().find("face") != std::string::npos)
           {
-            GetFunctional()->FaceValue_UU(fdc, local_cell_vector, scale);
-            GetFunctional()->FaceValue_QU(fdc, local_cell_vector, scale);
+            GetFunctional()->FaceValue_UU(fdc, local_vector, scale);
+            GetFunctional()->FaceValue_QU(fdc, local_vector, scale);
           }
 
           scale *= -1;
-          this->GetPDE().FaceEquation_UU(fdc, local_cell_vector, scale, scale);
+          this->GetPDE().FaceEquation_UU(fdc, local_vector, scale, scale);
 
-          this->GetPDE().FaceEquation_QU(fdc, local_cell_vector, scale, scale);
+          this->GetPDE().FaceEquation_QU(fdc, local_vector, scale, scale);
         }
         else if (this->GetType() == "gradient")
         {
           // state values in quadrature points
           if (GetFunctional()->GetType().find("face") != std::string::npos)
           {
-            GetFunctional()->FaceValue_Q(fdc, local_cell_vector, scale);
+            GetFunctional()->FaceValue_Q(fdc, local_vector, scale);
           }
 
           scale *= -1;
-          this->GetPDE().FaceEquation_Q(fdc, local_cell_vector, scale, scale);
+          this->GetPDE().FaceEquation_Q(fdc, local_vector, scale, scale);
         }
         else if (this->GetType() == "hessian")
         {
           // state values in quadrature points
           if (GetFunctional()->GetType().find("face") != std::string::npos)
           {
-            GetFunctional()->FaceValue_QQ(fdc, local_cell_vector, scale);
-            GetFunctional()->FaceValue_UQ(fdc, local_cell_vector, scale);
+            GetFunctional()->FaceValue_QQ(fdc, local_vector, scale);
+            GetFunctional()->FaceValue_UQ(fdc, local_vector, scale);
           }
 
           scale *= -1;
-          this->GetPDE().FaceEquation_QTT(fdc, local_cell_vector, scale, scale);
+          this->GetPDE().FaceEquation_QTT(fdc, local_vector, scale, scale);
 
-          this->GetPDE().FaceEquation_UQ(fdc, local_cell_vector, scale, scale);
+          this->GetPDE().FaceEquation_UQ(fdc, local_vector, scale, scale);
 
-          this->GetPDE().FaceEquation_QQ(fdc, local_cell_vector, scale, scale);
+          this->GetPDE().FaceEquation_QQ(fdc, local_vector, scale, scale);
         }
         else
         {
           throw DOpEException("Not implemented",
-              "OptProblemContainer::CellFaceRhs");
+              "OptProblemContainer::FaceRhs");
         }
 
       }
@@ -2262,19 +2262,19 @@ namespace DOpE
       OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
           CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::BoundaryRhs(
           const FACEDATACONTAINER& fdc,
-          dealii::Vector<double> &local_cell_vector, double scale)
+          dealii::Vector<double> &local_vector, double scale)
       {
 
         if (this->GetType() == "state")
         {
           // state values in face quadrature points
-          this->GetPDE().BoundaryRightHandSide(fdc, local_cell_vector, scale);
+          this->GetPDE().BoundaryRightHandSide(fdc, local_vector, scale);
         }
         else if (this->GetType() == "adjoint")
         {
           // state values in quadrature points
           if (GetFunctional()->GetType().find("boundary") != std::string::npos)
-            GetFunctional()->BoundaryValue_U(fdc, local_cell_vector, scale);
+            GetFunctional()->BoundaryValue_U(fdc, local_vector, scale);
         }
         else if (this->GetType() == "adjoint_for_ee")
         {
@@ -2282,13 +2282,13 @@ namespace DOpE
           if (_aux_functionals[_functional_for_ee_num]->GetType().find(
               "boundary") != std::string::npos)
             _aux_functionals[_functional_for_ee_num]->BoundaryValue_U(fdc,
-                local_cell_vector, scale);
+                local_vector, scale);
         }
         else if (this->GetType() == "tangent")
         {
           // state values in quadrature points
           scale *= -1;
-          this->GetPDE().BoundaryEquation_QT(fdc, local_cell_vector, scale,
+          this->GetPDE().BoundaryEquation_QT(fdc, local_vector, scale,
               scale);
         }
         else if (this->GetType() == "adjoint_hessian")
@@ -2296,24 +2296,24 @@ namespace DOpE
           // state values in quadrature points
           if (GetFunctional()->GetType().find("boundary") != std::string::npos)
           {
-            GetFunctional()->BoundaryValue_UU(fdc, local_cell_vector, scale);
-            GetFunctional()->BoundaryValue_QU(fdc, local_cell_vector, scale);
+            GetFunctional()->BoundaryValue_UU(fdc, local_vector, scale);
+            GetFunctional()->BoundaryValue_QU(fdc, local_vector, scale);
           }
 
           scale *= -1;
-          this->GetPDE().BoundaryEquation_UU(fdc, local_cell_vector, scale,
+          this->GetPDE().BoundaryEquation_UU(fdc, local_vector, scale,
               scale);
-          this->GetPDE().BoundaryEquation_QU(fdc, local_cell_vector, scale,
+          this->GetPDE().BoundaryEquation_QU(fdc, local_vector, scale,
               scale);
         }
         else if (this->GetType() == "gradient")
         {
           // state values in quadrature points
           if (GetFunctional()->GetType().find("boundary") != std::string::npos)
-            GetFunctional()->BoundaryValue_Q(fdc, local_cell_vector, scale);
+            GetFunctional()->BoundaryValue_Q(fdc, local_vector, scale);
 
           scale *= -1;
-          this->GetPDE().BoundaryEquation_Q(fdc, local_cell_vector, scale,
+          this->GetPDE().BoundaryEquation_Q(fdc, local_vector, scale,
               scale);
         }
         else if (this->GetType() == "hessian")
@@ -2321,22 +2321,22 @@ namespace DOpE
           // state values in quadrature points
           if (GetFunctional()->GetType().find("boundary") != std::string::npos)
           {
-            GetFunctional()->BoundaryValue_QQ(fdc, local_cell_vector, scale);
-            GetFunctional()->BoundaryValue_UQ(fdc, local_cell_vector, scale);
+            GetFunctional()->BoundaryValue_QQ(fdc, local_vector, scale);
+            GetFunctional()->BoundaryValue_UQ(fdc, local_vector, scale);
           }
 
           scale *= -1;
-          this->GetPDE().BoundaryEquation_QTT(fdc, local_cell_vector, scale,
+          this->GetPDE().BoundaryEquation_QTT(fdc, local_vector, scale,
               scale);
-          this->GetPDE().BoundaryEquation_UQ(fdc, local_cell_vector, scale,
+          this->GetPDE().BoundaryEquation_UQ(fdc, local_vector, scale,
               scale);
-          this->GetPDE().BoundaryEquation_QQ(fdc, local_cell_vector, scale,
+          this->GetPDE().BoundaryEquation_QQ(fdc, local_vector, scale,
               scale);
         }
         else
         {
           throw DOpEException("Not implemented",
-              "OptProblemContainer::CellBoundaryRhs");
+              "OptProblemContainer::BoundaryRhs");
         }
 
       }
@@ -2350,7 +2350,7 @@ namespace DOpE
     template<typename DATACONTAINER>
       void
       OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
-          CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::CellMatrix(
+          CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::ElementMatrix(
           const DATACONTAINER& cdc,
           dealii::FullMatrix<double> &local_entry_matrix, double scale,
           double scale_ico)
@@ -2359,26 +2359,26 @@ namespace DOpE
         if (this->GetType() == "state" || this->GetType() == "tangent")
         {
           // state values in quadrature points
-          this->GetPDE().CellMatrix(cdc, local_entry_matrix, scale, scale_ico);
+          this->GetPDE().ElementMatrix(cdc, local_entry_matrix, scale, scale_ico);
         }
         else if (this->GetType() == "adjoint"
             || this->GetType() == "adjoint_for_ee"
             || this->GetType() == "adjoint_hessian")
         {
           // state values in quadrature points
-          this->GetPDE().CellMatrix_T(cdc, local_entry_matrix, scale,
+          this->GetPDE().ElementMatrix_T(cdc, local_entry_matrix, scale,
               scale_ico);
         }
         else if ((this->GetType() == "gradient")
             || (this->GetType() == "hessian"))
         {
           // control values in quadrature points
-          this->GetPDE().ControlCellMatrix(cdc, local_entry_matrix);
+          this->GetPDE().ControlElementMatrix(cdc, local_entry_matrix);
         }
         else
         {
           throw DOpEException("Not implemented",
-              "OptProblemContainer::NewtonCellMatrix");
+              "OptProblemContainer::ElementMatrix");
         }
 
       }
@@ -2392,31 +2392,31 @@ namespace DOpE
     template<typename DATACONTAINER>
       void
       OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
-          CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::CellTimeMatrix(
+          CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::ElementTimeMatrix(
           const DATACONTAINER& cdc, FullMatrix<double> &local_entry_matrix)
       {
 
         if (this->GetType() == "state" || this->GetType() == "tangent")
         {
           // state values in quadrature points
-          this->GetPDE().CellTimeMatrix(cdc, local_entry_matrix);
+          this->GetPDE().ElementTimeMatrix(cdc, local_entry_matrix);
         }
         else if (this->GetType() == "adjoint"
             || this->GetType() == "adjoint_for_ee"
             || this->GetType() == "adjoint_hessian")
         {
-          this->GetPDE().CellTimeMatrix_T(cdc, local_entry_matrix);
+          this->GetPDE().ElementTimeMatrix_T(cdc, local_entry_matrix);
         }
         else if ((this->GetType() == "gradient")
             || (this->GetType() == "hessian"))
         {
           throw DOpEException("Not implemented",
-              "OptProblemContainer::NewtonCellTimeMatrix");
+              "OptProblemContainer::ElementTimeMatrix");
         }
         else
         {
           throw DOpEException("Not implemented",
-              "OptProblemContainer::NewtonCellTimeMatrix");
+              "OptProblemContainer::ElementTimeMatrix");
         }
 
       }
@@ -2430,30 +2430,30 @@ namespace DOpE
     template<typename DATACONTAINER>
       void
       OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
-          CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::CellTimeMatrixExplicit(
+          CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::ElementTimeMatrixExplicit(
           const DATACONTAINER& cdc,
           dealii::FullMatrix<double> &local_entry_matrix)
       {
 
         if (this->GetType() == "state" || this->GetType() == "tangent")
         {
-          this->GetPDE().CellTimeMatrixExplicit(cdc, local_entry_matrix);
+          this->GetPDE().ElementTimeMatrixExplicit(cdc, local_entry_matrix);
         }
         else if (this->GetType() == "adjoint"
             || this->GetType() == "adjoint_hessian")
         {
-          this->GetPDE().CellTimeMatrixExplicit_T(cdc, local_entry_matrix);
+          this->GetPDE().ElementTimeMatrixExplicit_T(cdc, local_entry_matrix);
         }
         else if ((this->GetType() == "gradient")
             || (this->GetType() == "hessian"))
         {
           throw DOpEException("Not implemented",
-              "OptProblemContainer::NewtonCellTimeMatrixExplicit");
+              "OptProblemContainer::ElementTimeMatrixExplicit");
         }
         else
         {
           throw DOpEException("Not implemented",
-              "OptProblemContainer::NewtonCellTimeMatrixExplicit");
+              "OptProblemContainer::ElementTimeMatrixExplicit");
         }
 
       }
@@ -2539,13 +2539,13 @@ namespace DOpE
       void
       OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
           CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::BoundaryMatrix(
-          const FACEDATACONTAINER& fdc, FullMatrix<double> &local_cell_matrix,
+          const FACEDATACONTAINER& fdc, FullMatrix<double> &local_matrix,
           double scale, double scale_ico)
       {
         if (this->GetType() == "state" || this->GetType() == "tangent")
         {
           // state values in face quadrature points
-          this->GetPDE().BoundaryMatrix(fdc, local_cell_matrix, scale,
+          this->GetPDE().BoundaryMatrix(fdc, local_matrix, scale,
               scale_ico);
         }
         else if (this->GetType() == "adjoint"
@@ -2553,18 +2553,18 @@ namespace DOpE
             || this->GetType() == "adjoint_hessian")
         {
           // state values in quadrature points
-          this->GetPDE().BoundaryMatrix_T(fdc, local_cell_matrix, scale,
+          this->GetPDE().BoundaryMatrix_T(fdc, local_matrix, scale,
               scale_ico);
         }
 //        else if ((this->GetType() == "gradient") || (this->GetType() == "hessian"))
 //        {
 //          // control values in quadrature points
-//          this->GetPDE().ControlBoundaryMatrix(fdc, local_cell_matrix);
+//          this->GetPDE().ControlBoundaryMatrix(fdc, local_matrix);
 //        }
         else
         {
           throw DOpEException("Not implemented",
-              "OptProblemContainer::NewtonCellBoundaryMatrix");
+              "OptProblemContainer::ElementBoundaryMatrix");
         }
 
       }

@@ -69,7 +69,7 @@ const static int DIM = 2;
 
 #define DOFHANDLER DoFHandler
 #define FE FESystem
-#define CDC CellDataContainer
+#define CDC ElementDataContainer
 #define FDC FaceDataContainer
 
 typedef QGauss<DIM> QUADRATURE;
@@ -212,7 +212,7 @@ main(int argc, char **argv)
       DIM> DOFH(triangulation, control_fe, state_fe, times,
       DOpEtypes::undefined);
 
-  NoConstraints<CellDataContainer, FaceDataContainer, DOFHANDLER, VECTOR, DIM,
+  NoConstraints<ElementDataContainer, FaceDataContainer, DOFHANDLER, VECTOR, DIM,
       DIM> Constraints;
 
   OP P(LFunc, LPDE, Constraints, DOFH);

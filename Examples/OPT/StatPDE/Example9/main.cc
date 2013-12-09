@@ -75,7 +75,7 @@ typedef BlockSparseMatrix<double> MATRIX;
 typedef BlockSparsityPattern SPARSITYPATTERN;
 typedef BlockVector<double> VECTOR;
 
-#define CDC CellDataContainer
+#define CDC ElementDataContainer
 #define FDC FaceDataContainer
 
 typedef LocalFunctional<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> COSTFUNCTIONAL;
@@ -199,7 +199,7 @@ main(int argc, char **argv)
 
   STH DOFH(triangulation, control_fe, state_fe, DOpEtypes::stationary);
 
-  NoConstraints<CellDataContainer, FaceDataContainer, DOFHANDLER, VECTOR, CDIM,
+  NoConstraints<ElementDataContainer, FaceDataContainer, DOFHANDLER, VECTOR, CDIM,
       DIM> Constraints;
 
   OP P(LFunc, LPDE, Constraints, DOFH);
@@ -287,17 +287,17 @@ main(int argc, char **argv)
       const StateVector<VECTOR> &gu = a.GetU();
       solution = 0;
       solution = gu.GetSpacialVector();
-      Vector<float> estimated_error_per_cell(triangulation.n_active_cells());
+      Vector<float> estimated_error_per_element(triangulation.n_active_cells());
 
       std::vector<bool> component_mask(5, true);
 
       KellyErrorEstimator<DIM>::estimate(
           static_cast<const DoFHandler<DIM>&>(DOFH.GetStateDoFHandler()),
           QGauss<1>(2), FunctionMap<DIM>::type(), solution,
-          estimated_error_per_cell, component_mask);
+          estimated_error_per_element, component_mask);
 
       GridRefinement::refine_and_coarsen_fixed_number(triangulation,
-          estimated_error_per_cell, 0.3, 0.0);
+          estimated_error_per_element, 0.3, 0.0);
 
       triangulation.prepare_coarsening_and_refinement();
       triangulation.execute_coarsening_and_refinement();

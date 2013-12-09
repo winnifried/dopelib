@@ -122,22 +122,22 @@ namespace DOpE
       for (int d = 0; d < dim; d++)
         dof_locations[d].resize(n_components);
 
-      //first loop over all cells...
-      for (typename DOpEWrapper::DoFHandler<dim, DH>::active_cell_iterator cell =
-          dof_handler.begin_active(); cell != dof_handler.end(); ++cell)
+      //first loop over all elements...
+      for (typename DOpEWrapper::DoFHandler<dim, DH>::active_cell_iterator element =
+          dof_handler.begin_active(); element != dof_handler.end(); ++element)
       {
         //...then loop over all faces.
         for (unsigned int face = 0;
             face < dealii::GeometryInfo<dim>::faces_per_cell; ++face)
         {
-          int boundary_indicator = cell->face(face)->boundary_indicator();
+          int boundary_indicator = element->face(face)->boundary_indicator();
           // Proceed only if the boundary indicator is lower than 4 and
           //if face is on a boundary and the corresponding boundary indicator is even
-          if (cell->face(face)->at_boundary() && boundary_indicator < 4
+          if (element->face(face)->at_boundary() && boundary_indicator < 4
               && boundary_indicator % 2 == 0)
           {
-            cell->face(face)->get_dof_indices(global_dof_indices);
-            fe_face_values.reinit(cell, face);
+            element->face(face)->get_dof_indices(global_dof_indices);
+            fe_face_values.reinit(element, face);
             //Now loop over all dofs on this face
             for (unsigned int i = 0; i < n_q_points; i++)
             {
@@ -166,19 +166,19 @@ namespace DOpE
         couplings.at(i).resize(n_dofs);
       }
       dealii::Point<dim> actual_dof_location;
-      for (typename DOpEWrapper::DoFHandler<dim, DH>::active_cell_iterator cell =
-          dof_handler.begin_active(); cell != dof_handler.end(); ++cell)
+      for (typename DOpEWrapper::DoFHandler<dim, DH>::active_cell_iterator element =
+          dof_handler.begin_active(); element != dof_handler.end(); ++element)
       {
         for (unsigned int face = 0;
             face < dealii::GeometryInfo<dim>::faces_per_cell; ++face)
         {
-          int boundary_indicator = cell->face(face)->boundary_indicator();
+          int boundary_indicator = element->face(face)->boundary_indicator();
           //Now loop over the remaining dofs, i.e. the ones with an odd boundary_indicator
-          if (cell->face(face)->at_boundary() && boundary_indicator < 4
+          if (element->face(face)->at_boundary() && boundary_indicator < 4
               && boundary_indicator % 2 == 1)
           {
-            cell->face(face)->get_dof_indices(global_dof_indices);
-            fe_face_values.reinit(cell, face);
+            element->face(face)->get_dof_indices(global_dof_indices);
+            fe_face_values.reinit(element, face);
             //loop over all dofs on this face
             for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
             {

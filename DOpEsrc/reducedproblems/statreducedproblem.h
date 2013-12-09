@@ -1348,9 +1348,9 @@ namespace DOpE
 	
         //first we reinit the dwrdatacontainer (this
         //sets the weight-vectors to their correct length)
-        const unsigned int n_cells =
+        const unsigned int n_elements =
             this->GetProblem()->GetSpaceTimeHandler()->GetStateDoFHandler().get_tria().n_active_cells();
-        dwrc.ReInit(n_cells);
+        dwrc.ReInit(n_elements);
 
 	//Estimation for Costfunctional or if no dual is needed
 	if(this->GetProblem()->EEFunctionalIsCost() || !dwrc.NeedDual())

@@ -130,7 +130,7 @@ class DOpEOutputHandler
     void Write(const VECTOR&q, std::string name, std::string dof_type);
 
     /**
-     * Call this Function to write a Vector containing cell-related data into a file.
+     * Call this Function to write a Vector containing element-related data into a file.
      * The method AllowWrite is called to check if
      * this actually happens. If successfull the filename of the output file will be written with priority 3.
      *
@@ -141,7 +141,7 @@ class DOpEOutputHandler
      *                   Valid options are 'control' and 'state'.
      */
     void
-    WriteCellwise(const Vector<double>&q, std::string name,
+    WriteElementwise(const Vector<double>&q, std::string name,
         std::string dof_type);
 
     /**

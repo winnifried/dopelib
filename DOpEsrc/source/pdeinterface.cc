@@ -27,7 +27,7 @@
 #include <iostream>
 
 //FIXME: For developement of MG-support, please uncomment.
-//#include "../../Examples/Experimental/Example12/mgcelldatacontainer.h"
+//#include "../../Examples/Experimental/Example12/mgelementdatacontainer.h"
 
 using namespace dealii;
 
@@ -63,12 +63,12 @@ namespace DOpE
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dealdim>
     void
-    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::CellEquation(
+    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::ElementEquation(
         const CDC<DH, VECTOR, dealdim>& /*cdc*/,
-        dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/,
+        dealii::Vector<double> &/*local_vector*/, double /*scale*/,
         double /*scale_ico*/)
     {
-      throw DOpEException("Not Implemented", "PDEInterface::CellEquation");
+      throw DOpEException("Not Implemented", "PDEInterface::ElementEquation");
     }
 
   /********************************************/
@@ -78,13 +78,13 @@ namespace DOpE
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dealdim>
     void
-    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::StrongCellResidual(
+    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::StrongElementResidual(
         const CDC<DH, VECTOR, dealdim>& /*cdc*/,
         const CDC<DH, VECTOR, dealdim>& /*cdc_weight*/, double&,
         double /*scale*/)
     {
       throw DOpEException("Not Implemented",
-          "PDEInterface::StrongCellResidual");
+          "PDEInterface::StrongElementResidual");
     }
 
   /********************************************/
@@ -94,11 +94,11 @@ namespace DOpE
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dealdim>
     void
-    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::CellTimeEquation(
+    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::ElementTimeEquation(
         const CDC<DH, VECTOR, dealdim>&,
-        dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
+        dealii::Vector<double> &/*local_vector*/, double /*scale*/)
     {
-      throw DOpEException("Not Implemented", "PDEInterface::CellTimeEquation");
+      throw DOpEException("Not Implemented", "PDEInterface::ElementTimeEquation");
     }
 
   /********************************************/
@@ -108,12 +108,12 @@ namespace DOpE
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dealdim>
     void
-    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::CellTimeEquation_U(
+    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::ElementTimeEquation_U(
         const CDC<DH, VECTOR, dealdim>&,
-        dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
+        dealii::Vector<double> &/*local_vector*/, double /*scale*/)
     {
       throw DOpEException("Not Implemented",
-          "PDEInterface::CellTimeEquation_U");
+          "PDEInterface::ElementTimeEquation_U");
     }
   /********************************************/
 
@@ -122,12 +122,12 @@ namespace DOpE
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dealdim>
     void
-    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::CellTimeEquation_UT(
+    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::ElementTimeEquation_UT(
         const CDC<DH, VECTOR, dealdim>&,
-        dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
+        dealii::Vector<double> &/*local_vector*/, double /*scale*/)
     {
       throw DOpEException("Not Implemented",
-          "PDEInterface::CellTimeEquation_UT");
+          "PDEInterface::ElementTimeEquation_UT");
     }
   /********************************************/
 
@@ -136,12 +136,12 @@ namespace DOpE
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dealdim>
     void
-    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::CellTimeEquation_UTT(
+    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::ElementTimeEquation_UTT(
         const CDC<DH, VECTOR, dealdim>&,
-        dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
+        dealii::Vector<double> &/*local_vector*/, double /*scale*/)
     {
       throw DOpEException("Not Implemented",
-          "PDEInterface::CellTimeEquation_UTT");
+          "PDEInterface::ElementTimeEquation_UTT");
     }
 
   /********************************************/
@@ -151,12 +151,12 @@ namespace DOpE
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dealdim>
     void
-    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::CellTimeEquationExplicit(
+    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::ElementTimeEquationExplicit(
         const CDC<DH, VECTOR, dealdim>& /*cdc*/,
-        dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
+        dealii::Vector<double> &/*local_vector*/, double /*scale*/)
     {
       //This should be left empty, then one can use the default case *Time* without the 
-      //need to implement CellTimeEquationExplicit
+      //need to implement ElementTimeEquationExplicit
     }
 
   /********************************************/
@@ -166,12 +166,12 @@ namespace DOpE
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dealdim>
     void
-    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::CellTimeEquationExplicit_U(
+    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::ElementTimeEquationExplicit_U(
         const CDC<DH, VECTOR, dealdim>& /*cdc*/,
-        dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
+        dealii::Vector<double> &/*local_vector*/, double /*scale*/)
     {
       //This should be left empty, then one can use the default case *Time* without the 
-      //need to implement CellTimeEquationExplicit
+      //need to implement ElementTimeEquationExplicit
     }
 
   /********************************************/
@@ -181,12 +181,12 @@ namespace DOpE
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dealdim>
     void
-    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::CellTimeEquationExplicit_UT(
+    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::ElementTimeEquationExplicit_UT(
         const CDC<DH, VECTOR, dealdim>& /*cdc*/,
-        dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
+        dealii::Vector<double> &/*local_vector*/, double /*scale*/)
     {
       //This should be left empty, then one can use the default case *Time* without the 
-      //need to implement CellTimeEquationExplicit
+      //need to implement ElementTimeEquationExplicit
     }
 
   /********************************************/
@@ -196,12 +196,12 @@ namespace DOpE
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dealdim>
     void
-    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::CellTimeEquationExplicit_UTT(
+    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::ElementTimeEquationExplicit_UTT(
         const CDC<DH, VECTOR, dealdim>& /*cdc*/,
-        dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
+        dealii::Vector<double> &/*local_vector*/, double /*scale*/)
     {
       //This should be left empty, then one can use the default case *Time* without the 
-      //need to implement CellTimeEquationExplicit
+      //need to implement ElementTimeEquationExplicit
     }
 
   /********************************************/
@@ -211,12 +211,12 @@ namespace DOpE
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dealdim>
     void
-    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::CellTimeEquationExplicit_UU(
+    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::ElementTimeEquationExplicit_UU(
         const CDC<DH, VECTOR, dealdim>& /*cdc*/,
-        dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
+        dealii::Vector<double> &/*local_vector*/, double /*scale*/)
     {
       //This should be left empty, then one can use the default case *Time* without the 
-      //need to implement CellTimeEquationExplicit
+      //need to implement ElementTimeEquationExplicit
     }
 
   /********************************************/
@@ -226,12 +226,12 @@ namespace DOpE
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dealdim>
     void
-    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::CellEquation_U(
+    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::ElementEquation_U(
         const CDC<DH, VECTOR, dealdim>&,
-        dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/,
+        dealii::Vector<double> &/*local_vector*/, double /*scale*/,
         double /*scale_ico*/)
     {
-      throw DOpEException("Not Implemented", "PDEInterface::CellEquation_U");
+      throw DOpEException("Not Implemented", "PDEInterface::ElementEquation_U");
     }
 
   /********************************************/
@@ -241,13 +241,13 @@ namespace DOpE
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dealdim>
     void
-    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::StrongCellResidual_U(
+    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::StrongElementResidual_U(
         const CDC<DH, VECTOR, dealdim>&,
         const CDC<DH, VECTOR, dealdim>& /*cdc_weight*/, double&,
         double /*scale*/)
     {
       throw DOpEException("Not Implemented",
-          "PDEInterface::StrongCellResidual_U");
+          "PDEInterface::StrongElementResidual_U");
     }
 
   /********************************************/
@@ -257,12 +257,12 @@ namespace DOpE
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dealdim>
     void
-    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::CellEquation_UT(
+    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::ElementEquation_UT(
         const CDC<DH, VECTOR, dealdim>&,
-        dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/,
+        dealii::Vector<double> &/*local_vector*/, double /*scale*/,
         double /*scale_ico*/)
     {
-      throw DOpEException("Not Implemented", "PDEInterface::CellEquation_UT");
+      throw DOpEException("Not Implemented", "PDEInterface::ElementEquation_UT");
     }
 
   /********************************************/
@@ -272,12 +272,12 @@ namespace DOpE
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dealdim>
     void
-    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::CellEquation_UTT(
+    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::ElementEquation_UTT(
         const CDC<DH, VECTOR, dealdim>&,
-        dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/,
+        dealii::Vector<double> &/*local_vector*/, double /*scale*/,
         double /*scale_ico*/)
     {
-      throw DOpEException("Not Implemented", "PDEInterface::CellEquation_UTT");
+      throw DOpEException("Not Implemented", "PDEInterface::ElementEquation_UTT");
     }
 
   /********************************************/
@@ -287,12 +287,12 @@ namespace DOpE
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dealdim>
     void
-    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::CellEquation_Q(
+    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::ElementEquation_Q(
         const CDC<DH, VECTOR, dealdim>&,
-        dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/,
+        dealii::Vector<double> &/*local_vector*/, double /*scale*/,
         double /*scale_ico*/)
     {
-      throw DOpEException("Not Implemented", "PDEInterface::CellEquation_Q");
+      throw DOpEException("Not Implemented", "PDEInterface::ElementEquation_Q");
     }
 
   /********************************************/
@@ -302,12 +302,12 @@ namespace DOpE
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dealdim>
     void
-    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::CellEquation_QT(
+    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::ElementEquation_QT(
         const CDC<DH, VECTOR, dealdim>&,
-        dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/,
+        dealii::Vector<double> &/*local_vector*/, double /*scale*/,
         double /*scale_ico*/)
     {
-      throw DOpEException("Not Implemented", "PDEInterface::CellEquation_QT");
+      throw DOpEException("Not Implemented", "PDEInterface::ElementEquation_QT");
     }
 
   /********************************************/
@@ -317,12 +317,12 @@ namespace DOpE
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dealdim>
     void
-    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::CellEquation_QTT(
+    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::ElementEquation_QTT(
         const CDC<DH, VECTOR, dealdim>&,
-        dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/,
+        dealii::Vector<double> &/*local_vector*/, double /*scale*/,
         double /*scale_ico*/)
     {
-      throw DOpEException("Not Implemented", "PDEInterface::CellEquation_QTT");
+      throw DOpEException("Not Implemented", "PDEInterface::ElementEquation_QTT");
     }
 
   /********************************************/
@@ -332,12 +332,12 @@ namespace DOpE
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dealdim>
     void
-    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::CellEquation_UU(
+    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::ElementEquation_UU(
         const CDC<DH, VECTOR, dealdim>&,
-        dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/,
+        dealii::Vector<double> &/*local_vector*/, double /*scale*/,
         double /*scale_ico*/)
     {
-      throw DOpEException("Not Implemented", "PDEInterface::CellEquation_UU");
+      throw DOpEException("Not Implemented", "PDEInterface::ElementEquation_UU");
     }
 
   /********************************************/
@@ -347,12 +347,12 @@ namespace DOpE
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dealdim>
     void
-    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::CellEquation_QU(
+    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::ElementEquation_QU(
         const CDC<DH, VECTOR, dealdim>&,
-        dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/,
+        dealii::Vector<double> &/*local_vector*/, double /*scale*/,
         double /*scale_ico*/)
     {
-      throw DOpEException("Not Implemented", "PDEInterface::CellEquation_QU");
+      throw DOpEException("Not Implemented", "PDEInterface::ElementEquation_QU");
     }
 
   /********************************************/
@@ -362,12 +362,12 @@ namespace DOpE
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dealdim>
     void
-    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::CellEquation_UQ(
+    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::ElementEquation_UQ(
         const CDC<DH, VECTOR, dealdim>&,
-        dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/,
+        dealii::Vector<double> &/*local_vector*/, double /*scale*/,
         double /*scale_ico*/)
     {
-      throw DOpEException("Not Implemented", "PDEInterface::CellEquation_UQ");
+      throw DOpEException("Not Implemented", "PDEInterface::ElementEquation_UQ");
     }
 
   /********************************************/
@@ -377,12 +377,12 @@ namespace DOpE
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dealdim>
     void
-    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::CellEquation_QQ(
+    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::ElementEquation_QQ(
         const CDC<DH, VECTOR, dealdim>&,
-        dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/,
+        dealii::Vector<double> &/*local_vector*/, double /*scale*/,
         double /*scale_ico*/)
     {
-      throw DOpEException("Not Implemented", "PDEInterface::CellEquation_QQ");
+      throw DOpEException("Not Implemented", "PDEInterface::ElementEquation_QQ");
     }
 
   /********************************************/
@@ -392,12 +392,12 @@ namespace DOpE
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dealdim>
     void
-    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::ControlCellEquation(
+    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::ControlElementEquation(
         const CDC<DH, VECTOR, dealdim>&,
-        dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
+        dealii::Vector<double> &/*local_vector*/, double /*scale*/)
     {
       throw DOpEException("Not Implemented",
-          "PDEInterface::ControlCellEquation");
+          "PDEInterface::ControlElementEquation");
     }
 
   /********************************************/
@@ -407,11 +407,11 @@ namespace DOpE
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dealdim>
     void
-    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::CellRightHandSide(
+    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::ElementRightHandSide(
         const CDC<DH, VECTOR, dealdim>&,
-        dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
+        dealii::Vector<double> &/*local_vector*/, double /*scale*/)
     {
-      throw DOpEException("Not Implemented", "PDEInterface::CellRightHandSide");
+      throw DOpEException("Not Implemented", "PDEInterface::ElementRightHandSide");
     }
 
   /********************************************/
@@ -421,11 +421,11 @@ namespace DOpE
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dealdim>
     void
-    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::ControlCellMatrix(
+    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::ControlElementMatrix(
         const CDC<DH, VECTOR, dealdim>&,
         FullMatrix<double> &/*local_entry_matrix*/)
     {
-      throw DOpEException("Not Implemented", "PDEInterface::ControlCellMatrix");
+      throw DOpEException("Not Implemented", "PDEInterface::ControlElementMatrix");
     }
 
   /********************************************/
@@ -435,12 +435,12 @@ namespace DOpE
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dealdim>
     void
-    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::StrongCellResidual_Control(
+    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::StrongElementResidual_Control(
         const CDC<DH, VECTOR, dealdim>&, const CDC<DH, VECTOR, dealdim>&,
         double&, double)
     {
       throw DOpEException("Not Implemented",
-          "PDEInterface::StrongCellResidual_Control");
+          "PDEInterface::StrongElementResidual_Control");
     }
 
   /********************************************/
@@ -480,12 +480,12 @@ namespace DOpE
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dealdim>
     void
-    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::CellMatrix(
+    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::ElementMatrix(
         const CDC<DH, VECTOR, dealdim>&,
         FullMatrix<double> &/*local_entry_matrix*/, double/*scale*/,
         double /*scale_ico*/)
     {
-      throw DOpEException("Not Implemented", "PDEInterface::CellMatrix");
+      throw DOpEException("Not Implemented", "PDEInterface::ElementMatrix");
     }
 
   /********************************************/
@@ -495,11 +495,11 @@ namespace DOpE
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dealdim>
     void
-    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::CellTimeMatrix(
+    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::ElementTimeMatrix(
         const CDC<DH, VECTOR, dealdim>&,
         FullMatrix<double> &/*local_entry_matrix*/)
     {
-      throw DOpEException("Not Implemented", "PDEInterface::CellTimeMatrix");
+      throw DOpEException("Not Implemented", "PDEInterface::ElementTimeMatrix");
     }
   /********************************************/
 
@@ -508,7 +508,7 @@ namespace DOpE
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dealdim>
     void
-    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::CellTimeMatrix_T(
+    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::ElementTimeMatrix_T(
         const CDC<DH, VECTOR, dealdim>& cdc,
         FullMatrix<double> &local_entry_matrix)
     {
@@ -517,12 +517,12 @@ namespace DOpE
 
       //FIXME is this the right behaviour in the instationary case? or what
       //are the correct values for scale and scale_ico?
-      CellTimeMatrix(cdc, tmp_mat);
-      unsigned int n_dofs_per_cell = cdc.GetNDoFsPerCell();
+      ElementTimeMatrix(cdc, tmp_mat);
+      unsigned int n_dofs_per_element = cdc.GetNDoFsPerElement();
 
-      for (unsigned int i = 0; i < n_dofs_per_cell; i++)
+      for (unsigned int i = 0; i < n_dofs_per_element; i++)
       {
-        for (unsigned int j = 0; j < n_dofs_per_cell; j++)
+        for (unsigned int j = 0; j < n_dofs_per_element; j++)
         {
           local_entry_matrix(j, i) += tmp_mat(i, j);
         }
@@ -536,12 +536,12 @@ namespace DOpE
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dealdim>
     void
-    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::CellTimeMatrixExplicit(
+    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::ElementTimeMatrixExplicit(
         const CDC<DH, VECTOR, dealdim>& /*cdc*/,
         FullMatrix<double> &/*local_entry_matrix*/)
     {
       //This should be left empty, then one can use the default case *Time* without the 
-      //need to implement CellTimeEquationExplicit
+      //need to implement ElementTimeEquationExplicit
     }
 
   /********************************************/
@@ -551,7 +551,7 @@ namespace DOpE
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dealdim>
     void
-    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::CellTimeMatrixExplicit_T(
+    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::ElementTimeMatrixExplicit_T(
         const CDC<DH, VECTOR, dealdim>& cdc,
         FullMatrix<double> &local_entry_matrix)
     {
@@ -560,12 +560,12 @@ namespace DOpE
 
       //FIXME is this the right behaviour in the instationary case? or what
       //are the correct values for scale and scale_ico?
-      CellTimeMatrixExplicit(cdc, tmp_mat);
-      unsigned int n_dofs_per_cell = cdc.GetNDoFsPerCell();
+      ElementTimeMatrixExplicit(cdc, tmp_mat);
+      unsigned int n_dofs_per_element = cdc.GetNDoFsPerElement();
 
-      for (unsigned int i = 0; i < n_dofs_per_cell; i++)
+      for (unsigned int i = 0; i < n_dofs_per_element; i++)
       {
-        for (unsigned int j = 0; j < n_dofs_per_cell; j++)
+        for (unsigned int j = 0; j < n_dofs_per_element; j++)
         {
           local_entry_matrix(j, i) += tmp_mat(i, j);
         }
@@ -579,7 +579,7 @@ namespace DOpE
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dealdim>
     void
-    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::CellMatrix_T(
+    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::ElementMatrix_T(
         const CDC<DH, VECTOR, dealdim>& cdc,
         FullMatrix<double> &local_entry_matrix, double scale, double scale_ico)
     {
@@ -588,12 +588,12 @@ namespace DOpE
 
       //FIXME is this the right behaviour in the instationary case? or what
       //are the correct values for scale and scale_ico?
-      CellMatrix(cdc, tmp_mat, scale, scale_ico);
-      unsigned int n_dofs_per_cell = cdc.GetNDoFsPerCell();
+      ElementMatrix(cdc, tmp_mat, scale, scale_ico);
+      unsigned int n_dofs_per_element = cdc.GetNDoFsPerElement();
 
-      for (unsigned int i = 0; i < n_dofs_per_cell; i++)
+      for (unsigned int i = 0; i < n_dofs_per_element; i++)
       {
-        for (unsigned int j = 0; j < n_dofs_per_cell; j++)
+        for (unsigned int j = 0; j < n_dofs_per_element; j++)
         {
           local_entry_matrix(j, i) += tmp_mat(i, j);
         }
@@ -609,7 +609,7 @@ namespace DOpE
     void
     PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::FaceEquation(
         const FDC<DH, VECTOR, dealdim>&,
-        dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/,
+        dealii::Vector<double> &/*local_vector*/, double /*scale*/,
         double /*scale_ico*/)
     {
       throw DOpEException("Not Implemented", "PDEInterface::FaceEquation");
@@ -639,7 +639,7 @@ namespace DOpE
     void
     PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::FaceEquation_U(
         const FDC<DH, VECTOR, dealdim>&,
-        dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/,
+        dealii::Vector<double> &/*local_vector*/, double /*scale*/,
         double /*scale_ico*/)
     {
       throw DOpEException("Not Implemented", "PDEInterface::FaceEquation_U");
@@ -668,7 +668,7 @@ namespace DOpE
     void
     PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::FaceEquation_UT(
         const FDC<DH, VECTOR, dealdim>&,
-        dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/,
+        dealii::Vector<double> &/*local_vector*/, double /*scale*/,
         double /*scale_ico*/)
     {
       throw DOpEException("Not Implemented", "PDEInterface::FaceEquation_UT");
@@ -682,7 +682,7 @@ namespace DOpE
     void
     PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::FaceEquation_UTT(
         const FDC<DH, VECTOR, dealdim>&,
-        dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/,
+        dealii::Vector<double> &/*local_vector*/, double /*scale*/,
         double /*scale_ico*/)
     {
       throw DOpEException("Not Implemented", "PDEInterface::FaceEquation_UTT");
@@ -696,7 +696,7 @@ namespace DOpE
     void
     PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::FaceEquation_Q(
         const FDC<DH, VECTOR, dealdim>&,
-        dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/,
+        dealii::Vector<double> &/*local_vector*/, double /*scale*/,
         double /*scale_ico*/)
     {
       throw DOpEException("Not Implemented", "PDEInterface::FaceEquation_Q");
@@ -710,7 +710,7 @@ namespace DOpE
     void
     PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::FaceEquation_QT(
         const FDC<DH, VECTOR, dealdim>&,
-        dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/,
+        dealii::Vector<double> &/*local_vector*/, double /*scale*/,
         double /*scale_ico*/)
     {
       throw DOpEException("Not Implemented", "PDEInterface::FaceEquation_QT");
@@ -724,7 +724,7 @@ namespace DOpE
     void
     PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::FaceEquation_QTT(
         const FDC<DH, VECTOR, dealdim>&,
-        dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/,
+        dealii::Vector<double> &/*local_vector*/, double /*scale*/,
         double /*scale_ico*/)
     {
       throw DOpEException("Not Implemented", "PDEInterface::FaceEquation_QTT");
@@ -738,7 +738,7 @@ namespace DOpE
     void
     PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::FaceEquation_UU(
         const FDC<DH, VECTOR, dealdim>&,
-        dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/,
+        dealii::Vector<double> &/*local_vector*/, double /*scale*/,
         double /*scale_ico*/)
     {
       throw DOpEException("Not Implemented", "PDEInterface::FaceEquation_UU");
@@ -752,7 +752,7 @@ namespace DOpE
     void
     PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::FaceEquation_QU(
         const FDC<DH, VECTOR, dealdim>&,
-        dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/,
+        dealii::Vector<double> &/*local_vector*/, double /*scale*/,
         double /*scale_ico*/)
     {
       throw DOpEException("Not Implemented", "PDEInterface::FaceEquation_QU");
@@ -766,7 +766,7 @@ namespace DOpE
     void
     PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::FaceEquation_UQ(
         const FDC<DH, VECTOR, dealdim>&,
-        dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/,
+        dealii::Vector<double> &/*local_vector*/, double /*scale*/,
         double /*scale_ico*/)
     {
       throw DOpEException("Not Implemented", "PDEInterface::FaceEquation_UQ");
@@ -780,7 +780,7 @@ namespace DOpE
     void
     PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::FaceEquation_QQ(
         const FDC<DH, VECTOR, dealdim>&,
-        dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/,
+        dealii::Vector<double> &/*local_vector*/, double /*scale*/,
         double /*scale_ico*/)
     {
       throw DOpEException("Not Implemented", "PDEInterface::FaceEquation_QQ");
@@ -794,7 +794,7 @@ namespace DOpE
     void
     PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::FaceRightHandSide(
         const FDC<DH, VECTOR, dealdim>&,
-        dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
+        dealii::Vector<double> &/*local_vector*/, double /*scale*/)
     {
       throw DOpEException("Not Implemented", "PDEInterface::FaceRightHandSide");
     }
@@ -827,11 +827,11 @@ namespace DOpE
       tmp_mat = 0.;
 
       FaceMatrix(fdc, tmp_mat, scale, scale_ico);
-      unsigned int n_dofs_per_cell = fdc.GetNDoFsPerCell();
+      unsigned int n_dofs_per_element = fdc.GetNDoFsPerElement();
 
-      for (unsigned int i = 0; i < n_dofs_per_cell; i++)
+      for (unsigned int i = 0; i < n_dofs_per_element; i++)
       {
-        for (unsigned int j = 0; j < n_dofs_per_cell; j++)
+        for (unsigned int j = 0; j < n_dofs_per_element; j++)
         {
           local_entry_matrix(j, i) += tmp_mat(i, j);
         }
@@ -847,7 +847,7 @@ namespace DOpE
     void
     PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::InterfaceEquation(
         const FDC<DH, VECTOR, dealdim>&,
-        dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/,
+        dealii::Vector<double> &/*local_vector*/, double /*scale*/,
         double /*scale_ico*/)
     {
       throw DOpEException("Not Implemented", "PDEInterface::InterfaceEquation");
@@ -861,7 +861,7 @@ namespace DOpE
     void
     PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::InterfaceEquation_U(
         const FDC<DH, VECTOR, dealdim>&,
-        dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/,
+        dealii::Vector<double> &/*local_vector*/, double /*scale*/,
         double /*scale_ico*/)
     {
       throw DOpEException("Not Implemented",
@@ -907,7 +907,7 @@ namespace DOpE
     void
     PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::BoundaryEquation(
         const FDC<DH, VECTOR, dealdim>&,
-        dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/,
+        dealii::Vector<double> &/*local_vector*/, double /*scale*/,
         double /*scale_ico*/)
     {
       throw DOpEException("Not Implemented", "PDEInterface::BoundaryEquation");
@@ -938,7 +938,7 @@ namespace DOpE
     void
     PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::BoundaryEquation_U(
         const FDC<DH, VECTOR, dealdim>&,
-        dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/,
+        dealii::Vector<double> &/*local_vector*/, double /*scale*/,
         double /*scale_ico*/)
     {
       throw DOpEException("Not Implemented",
@@ -968,7 +968,7 @@ namespace DOpE
     void
     PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::BoundaryEquation_UT(
         const FDC<DH, VECTOR, dealdim>&,
-        dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/,
+        dealii::Vector<double> &/*local_vector*/, double /*scale*/,
         double /*scale_ico*/)
     {
       throw DOpEException("Not Implemented",
@@ -983,7 +983,7 @@ namespace DOpE
     void
     PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::BoundaryEquation_UTT(
         const FDC<DH, VECTOR, dealdim>&,
-        dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/,
+        dealii::Vector<double> &/*local_vector*/, double /*scale*/,
         double /*scale_ico*/)
     {
       throw DOpEException("Not Implemented",
@@ -998,7 +998,7 @@ namespace DOpE
     void
     PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::BoundaryEquation_Q(
         const FDC<DH, VECTOR, dealdim>&,
-        dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/,
+        dealii::Vector<double> &/*local_vector*/, double /*scale*/,
         double /*scale_ico*/)
     {
       throw DOpEException("Not Implemented",
@@ -1013,7 +1013,7 @@ namespace DOpE
     void
     PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::BoundaryEquation_QT(
         const FDC<DH, VECTOR, dealdim>&,
-        dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/,
+        dealii::Vector<double> &/*local_vector*/, double /*scale*/,
         double /*scale_ico*/)
     {
       throw DOpEException("Not Implemented",
@@ -1028,7 +1028,7 @@ namespace DOpE
     void
     PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::BoundaryEquation_QTT(
         const FDC<DH, VECTOR, dealdim>&,
-        dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/,
+        dealii::Vector<double> &/*local_vector*/, double /*scale*/,
         double /*scale_ico*/)
     {
       throw DOpEException("Not Implemented",
@@ -1043,7 +1043,7 @@ namespace DOpE
     void
     PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::BoundaryEquation_UU(
         const FDC<DH, VECTOR, dealdim>&,
-        dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/,
+        dealii::Vector<double> &/*local_vector*/, double /*scale*/,
         double /*scale_ico*/)
     {
       throw DOpEException("Not Implemented",
@@ -1058,7 +1058,7 @@ namespace DOpE
     void
     PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::BoundaryEquation_QU(
         const FDC<DH, VECTOR, dealdim>&,
-        dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/,
+        dealii::Vector<double> &/*local_vector*/, double /*scale*/,
         double /*scale_ico*/)
     {
       throw DOpEException("Not Implemented",
@@ -1073,7 +1073,7 @@ namespace DOpE
     void
     PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::BoundaryEquation_UQ(
         const FDC<DH, VECTOR, dealdim>&,
-        dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/,
+        dealii::Vector<double> &/*local_vector*/, double /*scale*/,
         double /*scale_ico*/)
     {
       throw DOpEException("Not Implemented",
@@ -1088,7 +1088,7 @@ namespace DOpE
     void
     PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::BoundaryEquation_QQ(
         const FDC<DH, VECTOR, dealdim>&,
-        dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/,
+        dealii::Vector<double> &/*local_vector*/, double /*scale*/,
         double /*scale_ico*/)
     {
       throw DOpEException("Not Implemented",
@@ -1103,7 +1103,7 @@ namespace DOpE
     void
     PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::BoundaryRightHandSide(
         const FDC<DH, VECTOR, dealdim>&,
-        dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
+        dealii::Vector<double> &/*local_vector*/, double /*scale*/)
     {
       throw DOpEException("Not Implemented",
           "PDEInterface::BoundaryRightHandSide");
@@ -1137,11 +1137,11 @@ namespace DOpE
       tmp_mat = 0.;
 
       BoundaryMatrix(fdc, tmp_mat, scale, scale_ico);
-      unsigned int n_dofs_per_cell = fdc.GetNDoFsPerCell();
+      unsigned int n_dofs_per_element = fdc.GetNDoFsPerElement();
 
-      for (unsigned int i = 0; i < n_dofs_per_cell; i++)
+      for (unsigned int i = 0; i < n_dofs_per_element; i++)
       {
-        for (unsigned int j = 0; j < n_dofs_per_cell; j++)
+        for (unsigned int j = 0; j < n_dofs_per_element; j++)
         {
           local_entry_matrix(j, i) += tmp_mat(i, j);
         }
@@ -1302,35 +1302,35 @@ namespace DOpE
 } //Endof namespace
 /********************************************/
 /********************************************/
-template class DOpE::PDEInterface<DOpE::CellDataContainer,
+template class DOpE::PDEInterface<DOpE::ElementDataContainer,
     DOpE::FaceDataContainer, dealii::DoFHandler, dealii::BlockVector<double>,
     deal_II_dimension>;
-template class DOpE::PDEInterface<DOpE::CellDataContainer,
+template class DOpE::PDEInterface<DOpE::ElementDataContainer,
     DOpE::FaceDataContainer, dealii::DoFHandler, dealii::Vector<double>,
     deal_II_dimension>;
-template class DOpE::PDEInterface<DOpE::Multimesh_CellDataContainer,
+template class DOpE::PDEInterface<DOpE::Multimesh_ElementDataContainer,
     DOpE::Multimesh_FaceDataContainer, dealii::DoFHandler,
     dealii::BlockVector<double>, deal_II_dimension>;
-template class DOpE::PDEInterface<DOpE::Multimesh_CellDataContainer,
+template class DOpE::PDEInterface<DOpE::Multimesh_ElementDataContainer,
     DOpE::Multimesh_FaceDataContainer, dealii::DoFHandler,
     dealii::Vector<double>, deal_II_dimension>;
-template class DOpE::PDEInterface<DOpE::CellDataContainer,
+template class DOpE::PDEInterface<DOpE::ElementDataContainer,
     DOpE::FaceDataContainer, dealii::hp::DoFHandler,
     dealii::BlockVector<double>, deal_II_dimension>;
-template class DOpE::PDEInterface<DOpE::CellDataContainer,
+template class DOpE::PDEInterface<DOpE::ElementDataContainer,
     DOpE::FaceDataContainer, dealii::hp::DoFHandler, dealii::Vector<double>,
     deal_II_dimension>;
 //FIXME: For developement of MG-support, please uncomment.
-//template class DOpE::PDEInterface<DOpE::CellDataContainer,
+//template class DOpE::PDEInterface<DOpE::ElementDataContainer,
 //    DOpE::FaceDataContainer, dealii::MGDoFHandler,
 //    dealii::BlockVector<double>, deal_II_dimension>;
-//template class DOpE::PDEInterface<DOpE::CellDataContainer,
+//template class DOpE::PDEInterface<DOpE::ElementDataContainer,
 //    DOpE::FaceDataContainer, dealii::MGDoFHandler,
 //    dealii::Vector<double>, deal_II_dimension>;
-//template class DOpE::PDEInterface<DOpE::MGCellDataContainer,
+//template class DOpE::PDEInterface<DOpE::MGElementDataContainer,
 //    DOpE::FaceDataContainer, dealii::MGDoFHandler,
 //    dealii::BlockVector<double>, deal_II_dimension>;
-//template class DOpE::PDEInterface<DOpE::MGCellDataContainer,
+//template class DOpE::PDEInterface<DOpE::MGElementDataContainer,
 //    DOpE::FaceDataContainer, dealii::MGDoFHandler,
 //    dealii::Vector<double>, deal_II_dimension>;
 

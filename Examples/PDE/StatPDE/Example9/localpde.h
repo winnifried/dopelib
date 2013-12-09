@@ -47,16 +47,16 @@ template<
         _state_block_components[4] = 2;
       }
 
-      // Domain values for cells
+      // Domain values for elements
       void
-      CellEquation(const CDC<DH, VECTOR, dealdim>& cdc,
-          dealii::Vector<double> &local_cell_vector, double scale,
+      ElementEquation(const CDC<DH, VECTOR, dealdim>& cdc,
+          dealii::Vector<double> &local_vector, double scale,
           double /*scale_ico*/)
       {
         assert(this->_problem_type == "state");
         const DOpEWrapper::FEValues<dealdim> & state_fe_values =
             cdc.GetFEValuesState();
-        const unsigned int n_dofs_per_cell = cdc.GetNDoFsPerCell();
+        const unsigned int n_dofs_per_element = cdc.GetNDoFsPerElement();
         const unsigned int n_q_points = cdc.GetNQPoints();
         const unsigned int material_id = cdc.GetMaterialId();
 
@@ -138,7 +138,7 @@ template<
           Tensor<2, 2> cauchy_stress_structure;
           cauchy_stress_structure = -pI + mu * (F * transpose(F) - I);
 
-          for (unsigned int i = 0; i < n_dofs_per_cell; i++)
+          for (unsigned int i = 0; i < n_dofs_per_element; i++)
           {
             const Tensor<2, 2> phi_i_grads_v =
                 state_fe_values[velocities].gradient(i, q_point);
@@ -151,7 +151,7 @@ template<
             // fluid: material_id == 0, structure: material_id == 1
             if (material_id == 0)
             {
-              local_cell_vector(i) += scale
+              local_vector(i) += scale
                   * (scalar_product(J * cauchy_stress_fluid * F_Inverse_T,
                       phi_i_grads_v) + incompressiblity_fluid * phi_i_p
                       + alpha_u * scalar_product(u_grad, phi_i_grads_u))
@@ -159,7 +159,7 @@ template<
             }
             else if (material_id == 1)
             {
-              local_cell_vector(i) += scale
+              local_vector(i) += scale
                   * (scalar_product(J * cauchy_stress_structure * F_Inverse_T,
                       phi_i_grads_v) + (J - 1.0) * phi_i_p + v * phi_i_u)
                   * state_fe_values.JxW(q_point);
@@ -170,14 +170,14 @@ template<
       }
 
       void
-      CellMatrix(const CDC<DH, VECTOR, dealdim>& cdc,
-          FullMatrix<double> &local_entry_matrix, double scale,
+      ElementMatrix(const CDC<DH, VECTOR, dealdim>& cdc,
+          FullMatrix<double> &local_matrix, double scale,
           double /*scale_ico*/)
       {
         assert(this->_problem_type == "state");
         const DOpEWrapper::FEValues<dealdim> & state_fe_values =
             cdc.GetFEValuesState();
-        const unsigned int n_dofs_per_cell = cdc.GetNDoFsPerCell();
+        const unsigned int n_dofs_per_element = cdc.GetNDoFsPerElement();
         const unsigned int n_q_points = cdc.GetNQPoints();
         const unsigned int material_id = cdc.GetMaterialId();
 
@@ -247,7 +247,7 @@ template<
           u_grad[1][0] = _ugrads[q_point][4][0];
           u_grad[1][1] = _ugrads[q_point][4][1];
 
-          for (unsigned int j = 0; j < n_dofs_per_cell; j++)
+          for (unsigned int j = 0; j < n_dofs_per_element; j++)
           {
             const Tensor<1, 2> phi_j_v = state_fe_values[velocities].value(j,
                 q_point);
@@ -329,7 +329,7 @@ template<
                     - phi_j_grads_u[1][0] * _ugrads[q_point][0][1]
                     + phi_j_grads_u[0][0] * _ugrads[q_point][1][1]);
 
-            for (unsigned int i = 0; i < n_dofs_per_cell; i++)
+            for (unsigned int i = 0; i < n_dofs_per_element; i++)
             {
               const Tensor<2, 2> phi_i_grads_v =
                   state_fe_values[velocities].gradient(i, q_point);
@@ -343,7 +343,7 @@ template<
               // fluid: material_id == 0, structure: material_id == 1
               if (material_id == 0)
               {
-                local_entry_matrix(i, j) +=
+                local_matrix(i, j) +=
                     scale
                         * (scalar_product(
                             piola_kirchhoff_stress_1st_term_LinALL,
@@ -359,7 +359,7 @@ template<
               }
               else if (material_id == 1)
               {
-                local_entry_matrix(i, j) += scale
+                local_matrix(i, j) += scale
                     * (scalar_product(piola_kirchhoff_stress_1st_term_LinALL,
                         phi_i_grads_v)
                         + scalar_product(
@@ -374,8 +374,8 @@ template<
       }
 
       void
-      CellRightHandSide(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
-			dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
+      ElementRightHandSide(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
+			dealii::Vector<double> &/*local_vector*/, double /*scale*/)
       {
         assert(this->_problem_type == "state");
       }
@@ -383,12 +383,12 @@ template<
       // Values for Boundary integrals
       void
       BoundaryEquation(const FDC<DH, VECTOR, dealdim>& fdc,
-          dealii::Vector<double> &local_cell_vector, double scale,
+          dealii::Vector<double> &local_vector, double scale,
           double /*scale_ico*/)
       {
         assert(this->_problem_type == "state");
         const auto & state_fe_face_values = fdc.GetFEFaceValuesState();
-        unsigned int n_dofs_per_cell = fdc.GetNDoFsPerCell();
+        unsigned int n_dofs_per_element = fdc.GetNDoFsPerElement();
         unsigned int n_q_points = fdc.GetNQPoints();
         unsigned int color = fdc.GetBoundaryIndicator();
 
@@ -430,12 +430,12 @@ template<
                 * transpose(invert(F))
                 * state_fe_face_values.normal_vector(q_point));
 
-            for (unsigned int i = 0; i < n_dofs_per_cell; i++)
+            for (unsigned int i = 0; i < n_dofs_per_element; i++)
             {
               const Tensor<1, 2> phi_i_v =
                   state_fe_face_values[velocities].value(i, q_point);
 
-              local_cell_vector(i) += -scale * neumann_value * phi_i_v
+              local_vector(i) += -scale * neumann_value * phi_i_v
                   * state_fe_face_values.JxW(q_point);
             }
           }
@@ -444,12 +444,12 @@ template<
 
       void
       BoundaryMatrix(const FDC<DH, VECTOR, dealdim>& fdc,
-          dealii::FullMatrix<double> &local_entry_matrix, double scale,
+          dealii::FullMatrix<double> &local_matrix, double scale,
           double /*scale_ico*/)
       {
         assert(this->_problem_type == "state");
         const auto & state_fe_face_values = fdc.GetFEFaceValuesState();
-        unsigned int n_dofs_per_cell = fdc.GetNDoFsPerCell();
+        unsigned int n_dofs_per_element = fdc.GetNDoFsPerElement();
         unsigned int n_q_points = fdc.GetNQPoints();
         unsigned int color = fdc.GetBoundaryIndicator();
 
@@ -493,12 +493,12 @@ template<
             v_grad[1][0] = _uboundarygrads[q_point][1][0];
             v_grad[1][1] = _uboundarygrads[q_point][1][1];
 
-            for (unsigned int i = 0; i < n_dofs_per_cell; i++)
+            for (unsigned int i = 0; i < n_dofs_per_element; i++)
             {
               const Tensor<1, 2> phi_i_v =
                   state_fe_face_values[velocities].value(i, q_point);
 
-              for (unsigned int j = 0; j < n_dofs_per_cell; j++)
+              for (unsigned int j = 0; j < n_dofs_per_element; j++)
               {
                 const Tensor<2, 2> phi_j_grads_v =
                     state_fe_face_values[velocities].gradient(j, q_point);
@@ -542,7 +542,7 @@ template<
                 const Tensor<1, 2> neumann_value = do_nothing_LinAll
                     * state_fe_face_values.normal_vector(q_point);
 
-                local_entry_matrix(i, j) += -scale * neumann_value * phi_i_v
+                local_matrix(i, j) += -scale * neumann_value * phi_i_v
                     * state_fe_face_values.JxW(q_point);
               }
             }
@@ -552,7 +552,7 @@ template<
 
       void
       BoundaryRightHandSide(const FDC<DH, VECTOR, dealdim>& /*fdc*/,
-          dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
+          dealii::Vector<double> &/*local_vector*/, double /*scale*/)
       {
       }
 

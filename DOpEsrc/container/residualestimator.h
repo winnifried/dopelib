@@ -46,7 +46,7 @@ namespace DOpE
         virtual void
         InitFace(double /*h*/) = 0;
         virtual void
-        InitCell(double /*h*/) = 0;
+        InitElement(double /*h*/) = 0;
 
     };
 
@@ -128,7 +128,7 @@ namespace DOpE
          * as well as the weight-vectors.
          */
         void
-        ReInit(unsigned int n_cells);
+        ReInit(unsigned int n_elements);
 
         StateVector<VECTOR>&
         GetPI_h_u()
@@ -199,7 +199,7 @@ namespace DOpE
         virtual DOpEtypes::WeightComputation
         GetWeightComputation() const
         {
-          return DOpEtypes::cell_diameter;
+          return DOpEtypes::element_diameter;
         }
 
         /**
@@ -234,7 +234,7 @@ namespace DOpE
           _weight = h * h * h;
         }
         void
-        InitCell(double h)
+        InitElement(double h)
         {
           _weight = h * h * h * h;
         }
@@ -268,9 +268,9 @@ namespace DOpE
 
   template<class STH, typename VECTOR, int dim>
     void
-    L2ResidualErrorContainer<STH, VECTOR, dim>::ReInit(unsigned int n_cells)
+    L2ResidualErrorContainer<STH, VECTOR, dim>::ReInit(unsigned int n_elements)
     {
-      DWRDataContainerBase<VECTOR>::ReInit(n_cells);
+      DWRDataContainerBase<VECTOR>::ReInit(n_elements);
 
       if (this->GetEETerms() == DOpEtypes::primal_only
           || this->GetEETerms() == DOpEtypes::mixed)
@@ -343,7 +343,7 @@ namespace DOpE
          * as well as the weight-vectors.
          */
         void
-        ReInit(unsigned int n_cells);
+        ReInit(unsigned int n_elements);
 
         StateVector<VECTOR>&
         GetPI_h_u()
@@ -414,7 +414,7 @@ namespace DOpE
         virtual DOpEtypes::WeightComputation
         GetWeightComputation() const
         {
-          return DOpEtypes::cell_diameter;
+          return DOpEtypes::element_diameter;
         }
 
         /**
@@ -448,7 +448,7 @@ namespace DOpE
           _weight = h;
         }
         void
-        InitCell(double h)
+        InitElement(double h)
         {
           _weight = h * h;
         }
@@ -482,9 +482,9 @@ namespace DOpE
 
   template<class STH, typename VECTOR, int dim>
     void
-    H1ResidualErrorContainer<STH, VECTOR, dim>::ReInit(unsigned int n_cells)
+    H1ResidualErrorContainer<STH, VECTOR, dim>::ReInit(unsigned int n_elements)
     {
-      DWRDataContainerBase<VECTOR>::ReInit(n_cells);
+      DWRDataContainerBase<VECTOR>::ReInit(n_elements);
 
       if (this->GetEETerms() == DOpEtypes::primal_only
           || this->GetEETerms() == DOpEtypes::mixed)

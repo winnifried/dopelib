@@ -44,10 +44,10 @@ template<
       }
 
       void
-      CellEquation(const CDC<DH, VECTOR, dealdim>& cdc,
-          dealii::Vector<double> &local_cell_vector, double scale, double)
+      ElementEquation(const CDC<DH, VECTOR, dealdim>& cdc,
+          dealii::Vector<double> &local_vector, double scale, double)
       {
-        unsigned int n_dofs_per_cell = cdc.GetNDoFsPerCell();
+        unsigned int n_dofs_per_element = cdc.GetNDoFsPerElement();
         unsigned int n_q_points = cdc.GetNQPoints();
         const DOpEWrapper::FEValues<dealdim> &state_fe_values =
 	  cdc.GetFEValuesState();
@@ -76,13 +76,13 @@ template<
 	  K[1][0] = 0.;
 	  K[1][1] = 1.;
 
-          for (unsigned int i = 0; i < n_dofs_per_cell; i++)
+          for (unsigned int i = 0; i < n_dofs_per_element; i++)
           {
               const Tensor<1,dealdim> phi_i_u     = state_fe_values[velocities].value (i, q_point);
               const double            div_phi_i_u = state_fe_values[velocities].divergence (i, q_point);
               const double            phi_i_p     = state_fe_values[pressure].value (i, q_point);
 	      
-	      local_cell_vector(i) += scale * 
+	      local_vector(i) += scale * 
 		( phi_i_u * K * u - div_phi_i_u * p - phi_i_p * div_u)
                 * state_fe_values.JxW(q_point);
           }
@@ -90,10 +90,10 @@ template<
       }
 
       void
-      CellMatrix(const CDC<DH, VECTOR, dealdim>& cdc,
-          FullMatrix<double> &local_entry_matrix, double scale, double)
+      ElementMatrix(const CDC<DH, VECTOR, dealdim>& cdc,
+          FullMatrix<double> &local_matrix, double scale, double)
       {
-        unsigned int n_dofs_per_cell = cdc.GetNDoFsPerCell();
+        unsigned int n_dofs_per_element = cdc.GetNDoFsPerElement();
         unsigned int n_q_points = cdc.GetNQPoints();
         const DOpEWrapper::FEValues<dealdim> &state_fe_values =
 	  cdc.GetFEValuesState();
@@ -109,18 +109,18 @@ template<
 	  K[1][0] = 0.;
 	  K[1][1] = 1.;
 
-          for (unsigned int i = 0; i < n_dofs_per_cell; i++)
+          for (unsigned int i = 0; i < n_dofs_per_element; i++)
           {
 	    const Tensor<1,dealdim> phi_i_u     = state_fe_values[velocities].value (i, q_point);
 	    const double            div_phi_i_u = state_fe_values[velocities].divergence (i, q_point);
 	    const double            phi_i_p     = state_fe_values[pressure].value (i, q_point);
-	    for (unsigned int j = 0; j < n_dofs_per_cell; j++)
+	    for (unsigned int j = 0; j < n_dofs_per_element; j++)
 	    {
 	      const Tensor<1,dealdim> phi_j_u     = state_fe_values[velocities].value (j, q_point);
 	      const double            div_phi_j_u = state_fe_values[velocities].divergence (j, q_point);
 	      const double            phi_j_p     = state_fe_values[pressure].value (j, q_point);
 	      
-	      local_entry_matrix(i,j) += scale * 
+	      local_matrix(i,j) += scale * 
 		( phi_i_u * K * phi_j_u - div_phi_i_u * phi_j_p - phi_i_p * div_phi_j_u)
 		* state_fe_values.JxW(q_point);
 	    }
@@ -129,11 +129,11 @@ template<
       }
 
       void
-      CellRightHandSide(const CDC<DH, VECTOR, dealdim>& cdc,
-          dealii::Vector<double> &local_cell_vector, double scale)
+      ElementRightHandSide(const CDC<DH, VECTOR, dealdim>& cdc,
+          dealii::Vector<double> &local_vector, double scale)
       {
         assert(this->_problem_type == "state");
-        unsigned int n_dofs_per_cell = cdc.GetNDoFsPerCell();
+        unsigned int n_dofs_per_element = cdc.GetNDoFsPerElement();
         unsigned int n_q_points = cdc.GetNQPoints();
         const DOpEWrapper::FEValues<dealdim> &state_fe_values =
             cdc.GetFEValuesState();
@@ -144,9 +144,9 @@ template<
         for (unsigned int q_point = 0; q_point < n_q_points; ++q_point)
         {
           _fvalues[q_point] = 0.;
-          for (unsigned int i = 0; i < n_dofs_per_cell; i++)
+          for (unsigned int i = 0; i < n_dofs_per_element; i++)
           {
-            local_cell_vector(i) += scale * _fvalues[q_point]
+            local_vector(i) += scale * _fvalues[q_point]
                 * state_fe_values[pressure].value(i, q_point)
                 * state_fe_values.JxW(q_point);
           }
@@ -170,10 +170,10 @@ template<
 
       void
       BoundaryRightHandSide(const FDC<DH, VECTOR, dealdim>& fdc,
-          dealii::Vector<double> & local_cell_vector, double scale)
+          dealii::Vector<double> & local_vector, double scale)
       {
 	assert(this->_problem_type == "state");
-        unsigned int n_dofs_per_cell = fdc.GetNDoFsPerCell();
+        unsigned int n_dofs_per_element = fdc.GetNDoFsPerElement();
         unsigned int n_q_points = fdc.GetNQPoints();
         const auto &state_fe_face_values =
             fdc.GetFEFaceValuesState();
@@ -188,9 +188,9 @@ template<
 	  Tensor<1,dealdim> p = state_fe_face_values.quadrature_point(q_point);
 	  _fvalues[q_point] = (alpha*p[0]*p[1]*p[1]/2 + beta*p[0] - alpha*p[0]*p[0]*p[0]/6);
 
-          for (unsigned int i = 0; i < n_dofs_per_cell; i++)
+          for (unsigned int i = 0; i < n_dofs_per_element; i++)
           {
-          local_cell_vector(i) += scale * _fvalues[q_point]
+          local_vector(i) += scale * _fvalues[q_point]
 	    * (state_fe_face_values[velocities].value(i, q_point) 
 	       * state_fe_face_values.normal_vector(q_point))
 	    * state_fe_face_values.JxW(q_point);

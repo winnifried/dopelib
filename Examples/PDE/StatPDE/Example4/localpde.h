@@ -25,7 +25,7 @@
 #define _LOCALPDE_
 
 #include "pdeinterface.h"
-#include "celldatacontainer.h"
+#include "elementdatacontainer.h"
 #include "facedatacontainer.h"
 
 using namespace std;
@@ -45,14 +45,14 @@ template<
       }
 
       void
-      CellEquation(const CDC<DH, VECTOR, dealdim>& cdc,
-          dealii::Vector<double> &local_cell_vector, double scale, double)
+      ElementEquation(const CDC<DH, VECTOR, dealdim>& cdc,
+          dealii::Vector<double> &local_vector, double scale, double)
       {
         assert(this->_problem_type == "state");
 
         const DOpEWrapper::FEValues<dealdim> & state_fe_values =
             cdc.GetFEValuesState();
-        unsigned int n_dofs_per_cell = cdc.GetNDoFsPerCell();
+        unsigned int n_dofs_per_element = cdc.GetNDoFsPerElement();
         unsigned int n_q_points = cdc.GetNQPoints();
 
         _ugrads.resize(n_q_points, vector<Tensor<1, dealdim> >(2));
@@ -70,12 +70,12 @@ template<
           ugrads[1][0] = _ugrads[q_point][1][0];
           ugrads[1][1] = _ugrads[q_point][1][1];
 
-          for (unsigned int i = 0; i < n_dofs_per_cell; i++)
+          for (unsigned int i = 0; i < n_dofs_per_element; i++)
           {
             const Tensor<2, dealdim> phi_i_grads_u =
                 state_fe_values[extracto].gradient(i, q_point);
 
-            local_cell_vector(i) += scale
+            local_vector(i) += scale
                 * scalar_product(ugrads, phi_i_grads_u)
                 * state_fe_values.JxW(q_point);
           }
@@ -84,31 +84,31 @@ template<
       }
 
       void
-      CellMatrix(const CDC<DH, VECTOR, dealdim>& cdc,
-          FullMatrix<double> &local_entry_matrix, double, double)
+      ElementMatrix(const CDC<DH, VECTOR, dealdim>& cdc,
+          FullMatrix<double> &local_matrix, double, double)
       {
         const DOpEWrapper::FEValues<dealdim> & state_fe_values =
             cdc.GetFEValuesState();
-        unsigned int n_dofs_per_cell = cdc.GetNDoFsPerCell();
+        unsigned int n_dofs_per_element = cdc.GetNDoFsPerElement();
         unsigned int n_q_points = cdc.GetNQPoints();
 
         const FEValuesExtractors::Vector extracto(0);
 
-        std::vector<Tensor<2, dealdim> > phi_grads_u(n_dofs_per_cell);
+        std::vector<Tensor<2, dealdim> > phi_grads_u(n_dofs_per_element);
 
         for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
         {
-          for (unsigned int k = 0; k < n_dofs_per_cell; k++)
+          for (unsigned int k = 0; k < n_dofs_per_element; k++)
           {
             phi_grads_u[k] = state_fe_values[extracto].gradient(k,
                 q_point);
           }
 
-          for (unsigned int i = 0; i < n_dofs_per_cell; i++)
+          for (unsigned int i = 0; i < n_dofs_per_element; i++)
           {
-            for (unsigned int j = 0; j < n_dofs_per_cell; j++)
+            for (unsigned int j = 0; j < n_dofs_per_element; j++)
             {
-              local_entry_matrix(i, j) += scalar_product(phi_grads_u[j],
+              local_matrix(i, j) += scalar_product(phi_grads_u[j],
                   phi_grads_u[i]) * state_fe_values.JxW(q_point);
             }
           }
@@ -116,15 +116,15 @@ template<
       }
 
       void
-      CellRightHandSide(const CDC<DH, VECTOR, dealdim>& cdc,
-			dealii::Vector<double> & local_cell_vector,
+      ElementRightHandSide(const CDC<DH, VECTOR, dealdim>& cdc,
+			dealii::Vector<double> & local_vector,
 			double scale)
       {
         assert(this->_problem_type == "state");
 
         const DOpEWrapper::FEValues<dealdim> & state_fe_values =
             cdc.GetFEValuesState();
-        unsigned int n_dofs_per_cell = cdc.GetNDoFsPerCell();
+        unsigned int n_dofs_per_element = cdc.GetNDoFsPerElement();
         unsigned int n_q_points = cdc.GetNQPoints();
 
         const FEValuesExtractors::Vector extracto(0);
@@ -136,12 +136,12 @@ template<
 
         for (unsigned int q_point = 0; q_point < n_q_points; ++q_point)
         {
-          for (unsigned int i = 0; i < n_dofs_per_cell; i++)
+          for (unsigned int i = 0; i < n_dofs_per_element; i++)
           {
             const Tensor<1, dealdim> phi_i_u = state_fe_values[extracto].value(i,
                 q_point);
 
-            local_cell_vector(i) += scale * fvalues * phi_i_u
+            local_vector(i) += scale * fvalues * phi_i_u
                 * state_fe_values.JxW(q_point);
           }
         }

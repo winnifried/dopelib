@@ -506,7 +506,7 @@ namespace DOpE
 
    template<typename VECTOR>
      void
-     DOpEOutputHandler<VECTOR>::WriteCellwise(const Vector<double>&q,
+     DOpEOutputHandler<VECTOR>::WriteElementwise(const Vector<double>&q,
          std::string name, std::string dof_type)
      {
        if (AllowWrite(name))
@@ -527,10 +527,10 @@ namespace DOpE
          Write("Writing [" + outfile.str() + "]", 4);
 
          if (dof_type == "control")
-           GetReducedProblem()->WriteToFileCellwise(q, name, outfile.str(),
+           GetReducedProblem()->WriteToFileElementwise(q, name, outfile.str(),
                dof_type, _control_ending);
          else if (dof_type == "state")
-           GetReducedProblem()->WriteToFileCellwise(q, name, outfile.str(),
+           GetReducedProblem()->WriteToFileElementwise(q, name, outfile.str(),
                dof_type, _ending);
        }
      }

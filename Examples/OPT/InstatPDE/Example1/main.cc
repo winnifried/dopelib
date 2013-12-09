@@ -71,7 +71,7 @@ const static int CDIM = 2;
 
 #define DOFHANDLER DoFHandler
 #define FE FESystem
-#define CDC CellDataContainer
+#define CDC ElementDataContainer
 #define FDC FaceDataContainer
 
 typedef QGauss<DIM> QUADRATURE;
@@ -171,7 +171,7 @@ main(int argc, char **argv)
   MethodOfLines_SpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR, CDIM,
       DIM> DOFH(triangulation, control_fe, state_fe, times, DOpEtypes::initial);
 
-  NoConstraints<CellDataContainer, FaceDataContainer, DOFHANDLER, VECTOR, CDIM,
+  NoConstraints<ElementDataContainer, FaceDataContainer, DOFHANDLER, VECTOR, CDIM,
       DIM> Constraints;
   OP P(LFunc, LPDE, Constraints, DOFH);
 

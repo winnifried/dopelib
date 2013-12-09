@@ -13,7 +13,7 @@ on the domain $\Omega = [-6,6]\times [0,2]$. We split $\partial \Omega = \Gamma_
 
 In all examples, the whole program is split up into several files for the sake of readability. These files are always denoted in the same way, so we only have to explain the general structure in this first example, whereas in the following examples, we will only point out differences to the current one. The content of the single files will be described in more detail below.\\
 
-If we do not use one of the standard grids given in the deal.II library, we can read a grid from an input file. In our example, the domain $\Omega = [-6,6]\times [0,2]$ is given in the \textit{channel.inp} file, where all nodes, cells and boundary lines are listed explicitly and the boundary is divided into disjoint parts by attributing different colors to the boundary lines.\index{grid}\\
+If we do not use one of the standard grids given in the deal.II library, we can read a grid from an input file. In our example, the domain $\Omega = [-6,6]\times [0,2]$ is given in the \textit{channel.inp} file, where all nodes, elements and boundary lines are listed explicitly and the boundary is divided into disjoint parts by attributing different colors to the boundary lines.\index{grid}\\
 
 Certain parameters occurring during the solution process, e.g. error tolerances or the maximum number of iterations in an iterative solution procedure, are fixed in a parameter file called \textit{dope.prm}. This parameter file comprises several subsections corresponding to different solver components.\index{parameters}\\
 
@@ -21,7 +21,7 @@ In the \textit{functionals.h} file we declare classes for different scalar quant
 
 The \textit{localfunctional.h} file is relevant only if we want to solve an optimal control problem. In this case, it contains the cost functional, whereas the file is not needed for the forward solution of PDEs. We will get back to this later in the context of optimal control problems.\index{cost functional}\\
 
-All information about the PDE problem (in the optimal control case about the constraining PDE) is included in the \textit{localpde.h} file. In a class called \texttt{LocalPDE}, we build up the cell equation, the cell matrix and cell righthand side as well as the boundary equation, boundary matrix and boundary righthand side. Later on, the integrator collects this local information and creates the global vectors and matrices.\\
+All information about the PDE problem (in the optimal control case about the constraining PDE) is included in the \textit{localpde.h} file. In a class called \texttt{LocalPDE}, we build up the element equation, the element matrix and element righthand side as well as the boundary equation, boundary matrix and boundary righthand side. Later on, the integrator collects this local information and creates the global vectors and matrices.\\
 
 The most important part of each example is the \textit{main.cc} file which contains the \texttt{int main()} function. Here we create objects of all classes described above and actually solve the respective problem.\\
  
@@ -41,7 +41,7 @@ In the current example we declare functionals for point values of the velocity a
 
 \vspace{0.2cm}
 
-The \textit{LocalPDE} is derived from a \texttt{PDEInterface} class. It comprises several functions which build up the cell and boundary equations, matrices and righthand sides. The weak formulation of problem \eqref{eq:strong} with $f=0$ is
+The \textit{LocalPDE} is derived from a \texttt{PDEInterface} class. It comprises several functions which build up the element and boundary equations, matrices and righthand sides. The weak formulation of problem \eqref{eq:strong} with $f=0$ is
 \begin{equation} \label{eq:weak}
    \frac{1}{2}(\nabla v, \nabla \varphi)_\Omega + \frac{1}{2}(\nabla v^{T}, \nabla \varphi)_\Omega - (p, \nabla \cdot \varphi)_\Omega + (\nabla \cdot v, \psi)_\Omega - (n\cdot \nabla v^T,\phi)_{\Gamma_{out}} = 0.
 \end{equation}
@@ -53,7 +53,7 @@ Furthermore, in \texttt{DOpElib} we always interpret the problems in the context
 \begin{equation*}
    a(u;\varphi) = f(\varphi).
 \end{equation*}
-The lefthand side is implemented in the \texttt{CellEquation} function, the righthand side is implemented in the \texttt{CellRightHandSide} function (which is unused in this example, because $f=0$).
+The lefthand side is implemented in the \texttt{ElementEquation} function, the righthand side is implemented in the \texttt{ElementRightHandSide} function (which is unused in this example, because $f=0$).
 \begin{remark}
 The weak formulation might contain some terms on faces or (parts of) the boundary. DOpE is able to handle these via \texttt{BoundaryEquation}, \texttt{BoundaryRightHandSide} etc.. To keep things simple, we neglect these terms in this introduction.
 \end{remark}
@@ -61,15 +61,15 @@ To apply Newton's method, this problem is linearized: on the lefthand side, we h
 \begin{equation*}
    a_u'(u;u^+,\varphi) = -a(u;\varphi) + f(\varphi).
 \end{equation*}
-In the \texttt{CellMatrix} function, we implement the following matrix $A$ as representation of the derivative on the lefthand side:
+In the \texttt{ElementMatrix} function, we implement the following matrix $A$ as representation of the derivative on the lefthand side:
 \begin{equation*}
   A = (a_u'(u;\varphi_i,\varphi_j))_{j,i=1}^N
 \end{equation*}
-with the number $N$ of the degrees of freedom. Similarly, the \texttt{CellEquation} contains the vector
+with the number $N$ of the degrees of freedom. Similarly, the \texttt{ElementEquation} contains the vector
 \begin{equation*}
   a = a(u;\varphi_i)_{i=1}^{N},
 \end{equation*}
-and the \texttt{CellRightHandSide} in the case $f \neq 0$ would contain a vector
+and the \texttt{ElementRightHandSide} in the case $f \neq 0$ would contain a vector
 \begin{equation*}
   \tilde{f} = (f;\varphi_i)_{i=1}^N.
 \end{equation*}

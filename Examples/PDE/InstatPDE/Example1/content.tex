@@ -65,7 +65,7 @@ different member functions that are required to
 implement nonstationary equations.
 
 \begin{verbatim}
-void CellEquation (..., double scale, double scale_ico)
+void ElementEquation (..., double scale, double scale_ico)
 \end{verbatim}
 The two arguments 
 are used to distigunish between explicit 
@@ -101,7 +101,7 @@ this term in a time discretization in a fully
 implicit manner. 
 
 \begin{verbatim}
-void CellMatrix (..., double scale, double scale_ico)
+void ElementMatrix (..., double scale, double scale_ico)
 \end{verbatim}
 The directional derivatives of the state equation
 are implemented in the present function. As before,
@@ -113,7 +113,7 @@ are used to distigungish between fully implicit
 are other behavior. 
 
 \begin{verbatim}
-void CellTimeEquation (...) 
+void ElementTimeEquation (...) 
 \end{verbatim}
 This function is used to implement the 
 time derivative in weak formulation 
@@ -137,7 +137,7 @@ has the possibility to write all terms of
 $\partial_t v$ explicitly. In this case, we 
 use the 
 \begin{verbatim}
-void CellTimeEquationExplicit (...) 
+void ElementTimeEquationExplicit (...) 
 \end{verbatim}
 and we write 
 \begin{equation*}
@@ -152,10 +152,10 @@ for an illustration
 of this function. 
 
 Consequently, the directional derivatives of the 
-cell terms are implemented in the corresponding
+element terms are implemented in the corresponding
 matrix functions, i.e., 
 \begin{verbatim}
-void CellTimeMatrix (...), void CellTimeMatrixExplicit 
+void ElementTimeMatrix (...), void ElementTimeMatrixExplicit 
 \end{verbatim}
 
 

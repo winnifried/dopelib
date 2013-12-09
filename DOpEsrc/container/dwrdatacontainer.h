@@ -90,7 +90,7 @@ namespace DOpE
          * is released (see ReleaseLock()).
          */
         virtual void
-        ReInit(unsigned int n_cells);
+        ReInit(unsigned int n_elements);
 
         /**
          * Releases the lock and fills the vector of error indicators
@@ -527,17 +527,17 @@ namespace DOpE
 
   template<typename VECTOR>
     void
-    DWRDataContainerBase<VECTOR>::ReInit(unsigned int n_cells)
+    DWRDataContainerBase<VECTOR>::ReInit(unsigned int n_elements)
     {
-      _error_ind.reinit(n_cells);
-      GetPrimalErrorIndicators().reinit(n_cells);
-      GetDualErrorIndicators().reinit(n_cells);
-      GetControlErrorIndicators().reinit(n_cells);
+      _error_ind.reinit(n_elements);
+      GetPrimalErrorIndicators().reinit(n_elements);
+      GetDualErrorIndicators().reinit(n_elements);
+      GetControlErrorIndicators().reinit(n_elements);
       _lock = true;
     }
 
   /**
-   * Adds just the pure virtual functions GetCellWeight() and GetFaceWeight().
+   * Adds just the pure virtual functions GetElementWeight() and GetFaceWeight().
    * They have to get implemented in derived classes. These two methods are
    * excluded from DWRDataContainerBase() to save two template parameters.
    */
@@ -558,11 +558,11 @@ namespace DOpE
         ;
 
         /**
-         * Returns a CellDataContainer for the weights on the
-         * cells. Pure virtual.
+         * Returns a ElementDataContainer for the weights on the
+         * elements. Pure virtual.
          */
         virtual CDC&
-        GetCellWeight() const = 0;
+        GetElementWeight() const = 0;
 
         /**
          * Returns a FaceDataContainer for the weight on the
@@ -591,7 +591,7 @@ namespace DOpE
     CDC*
     ExtractCDC(const DWRDataContainer<STH, IDC, CDC, FDC, VECTOR>& dwrc)
     {
-      return &dwrc.GetCellWeight();
+      return &dwrc.GetElementWeight();
     }
   template<class FDC, class STH, class IDC, class CDC, typename VECTOR>
     FDC*

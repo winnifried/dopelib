@@ -27,6 +27,6 @@ The goal of our computations is to detect a subdomain in $\Omega$ where plastic 
 
 \subsubsection{Program description}
 
-The code of the current example is nearly identical to the code of the previous one. The only difference worth mentioning is the change of the equations which leads to different implementations of the \texttt{CellEquation, CellMatrix} and \texttt{BoundaryEquations} functions in \textit{localpde.h}.\\
+The code of the current example is nearly identical to the code of the previous one. The only difference worth mentioning is the change of the equations which leads to different implementations of the \texttt{ElementEquation, ElementMatrix} and \texttt{BoundaryEquations} functions in \textit{localpde.h}.\\
 Furthermore, the elasticity equations solved in the last example are linear, whereas the plasticity equations are nonlinear; this difference is evident also from the output (here, we need several Newton steps until convergence).\\
 The functionals that appear in the output yield additional information and are not required in the above problem setting. The subdomain with plastic behaviour we want to detect can be visualized from the \textit{.vtk} files written to the \texttt{Results/Mesh} subfolders.

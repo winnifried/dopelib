@@ -81,11 +81,11 @@ template<
 
       void
       ElementValue_U(const CDC<DH, VECTOR, dealdim>& cdc,
-          dealii::Vector<double> &local_cell_vector, double scale)
+          dealii::Vector<double> &local_vector, double scale)
       {
         const DOpEWrapper::FEValues<dealdim> & state_fe_values =
             cdc.GetFEValuesState();
-        unsigned int n_dofs_per_cell = cdc.GetNDoFsPerCell();
+        unsigned int n_dofs_per_element = cdc.GetNDoFsPerElement();
         unsigned int n_q_points = cdc.GetNQPoints();
         {
           _fvalues.resize(n_q_points);
@@ -101,9 +101,9 @@ template<
               + 5. * M_PI * M_PI
                   * sin(M_PI * state_fe_values.quadrature_point(q_point)(0)))
               * sin(2 * M_PI * state_fe_values.quadrature_point(q_point)(1));
-          for (unsigned int i = 0; i < n_dofs_per_cell; i++)
+          for (unsigned int i = 0; i < n_dofs_per_element; i++)
           {
-            local_cell_vector(i) += scale
+            local_vector(i) += scale
                 * (_uvalues[q_point] - _fvalues[q_point])
                 * state_fe_values.shape_value(i, q_point)
                 * state_fe_values.JxW(q_point);
@@ -113,11 +113,11 @@ template<
 
       void
       ElementValue_Q(const CDC<DH, VECTOR, dealdim>& cdc,
-          dealii::Vector<double> &local_cell_vector, double scale)
+          dealii::Vector<double> &local_vector, double scale)
       {
         const DOpEWrapper::FEValues<dealdim> & control_fe_values =
             cdc.GetFEValuesControl();
-        unsigned int n_dofs_per_cell = cdc.GetNDoFsPerCell();
+        unsigned int n_dofs_per_element = cdc.GetNDoFsPerElement();
         unsigned int n_q_points = cdc.GetNQPoints();
         {
           _qvalues.resize(n_q_points);
@@ -127,9 +127,9 @@ template<
 
         for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
         {
-          for (unsigned int i = 0; i < n_dofs_per_cell; i++)
+          for (unsigned int i = 0; i < n_dofs_per_element; i++)
           {
-            local_cell_vector(i) +=
+            local_vector(i) +=
                 scale * _alpha
                     * (_qvalues[q_point]
                         * control_fe_values.shape_value(i, q_point))
@@ -140,11 +140,11 @@ template<
 
       void
       ElementValue_UU(const CDC<DH, VECTOR, dealdim>& cdc,
-          dealii::Vector<double> &local_cell_vector, double scale)
+          dealii::Vector<double> &local_vector, double scale)
       {
         const DOpEWrapper::FEValues<dealdim> & state_fe_values =
             cdc.GetFEValuesState();
-        unsigned int n_dofs_per_cell = cdc.GetNDoFsPerCell();
+        unsigned int n_dofs_per_element = cdc.GetNDoFsPerElement();
         unsigned int n_q_points = cdc.GetNQPoints();
         {
           _duvalues.resize(n_q_points);
@@ -153,9 +153,9 @@ template<
 
         for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
         {
-          for (unsigned int i = 0; i < n_dofs_per_cell; i++)
+          for (unsigned int i = 0; i < n_dofs_per_element; i++)
           {
-            local_cell_vector(i) += scale * _duvalues[q_point]
+            local_vector(i) += scale * _duvalues[q_point]
                 * state_fe_values.shape_value(i, q_point)
                 * state_fe_values.JxW(q_point);
           }
@@ -164,23 +164,23 @@ template<
 
       void
       ElementValue_QU(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
-          dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
+          dealii::Vector<double> &/*local_vector*/, double /*scale*/)
       {
       }
 
       void
       ElementValue_UQ(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
-          dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
+          dealii::Vector<double> &/*local_vector*/, double /*scale*/)
       {
       }
 
       void
       ElementValue_QQ(const CDC<DH, VECTOR, dealdim>& cdc,
-          dealii::Vector<double> &local_cell_vector, double scale)
+          dealii::Vector<double> &local_vector, double scale)
       {
         const DOpEWrapper::FEValues<dealdim> & control_fe_values =
             cdc.GetFEValuesControl();
-        unsigned int n_dofs_per_cell = cdc.GetNDoFsPerCell();
+        unsigned int n_dofs_per_element = cdc.GetNDoFsPerElement();
         unsigned int n_q_points = cdc.GetNQPoints();
         {
           _dqvalues.resize(n_q_points);
@@ -189,9 +189,9 @@ template<
 
         for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
         {
-          for (unsigned int i = 0; i < n_dofs_per_cell; i++)
+          for (unsigned int i = 0; i < n_dofs_per_element; i++)
           {
-            local_cell_vector(i) += scale * _alpha
+            local_vector(i) += scale * _alpha
                 * (_dqvalues[q_point]
                     * control_fe_values.shape_value(i, q_point))
                 * control_fe_values.JxW(q_point);
