@@ -1080,7 +1080,7 @@ namespace DOpE
                   if (GetFunctional()->GetType().find("domain")
                       != std::string::npos)
                   {
-                    GetFunctional()->Value_U(cdc, local_cell_vector, scale);
+                    GetFunctional()->ElementValue_U(cdc, local_cell_vector, scale);
                   }
                 }
               }
@@ -1099,7 +1099,7 @@ namespace DOpE
                   if (GetFunctional()->GetType().find("domain")
                       != std::string::npos)
                   {
-                    GetFunctional()->Value_UU(cdc, local_cell_vector, scale);
+                    GetFunctional()->ElementValue_UU(cdc, local_cell_vector, scale);
                   }
                 }
               }
@@ -1491,20 +1491,20 @@ namespace DOpE
         if (this->GetType() == "cost_functional")
         {
           // state values in quadrature points
-          return GetFunctional()->Value(cdc);
+          return GetFunctional()->ElementValue(cdc);
         }
         else if (this->GetType() == "aux_functional")
         {
           // state values in quadrature points
-          return _aux_functionals[this->GetTypeNum()]->Value(cdc);
+          return _aux_functionals[this->GetTypeNum()]->ElementValue(cdc);
         }
         else if (this->GetType() == "functional_for_ee")
         { //TODO ist das hier korrekt? Sollten wir eigentlich nicht benoetigen.
-          return _aux_functionals[_functional_for_ee_num]->Value(cdc);
+          return _aux_functionals[_functional_for_ee_num]->ElementValue(cdc);
         }
         else if (this->GetType().find("constraints") != std::string::npos)
         {
-          return GetConstraints()->Value(cdc);
+          return GetConstraints()->ElementValue(cdc);
         }
         else
         {
@@ -2003,12 +2003,12 @@ namespace DOpE
         {
           // state values in quadrature points
           if (GetFunctional()->GetType().find("domain") != std::string::npos)
-            GetFunctional()->Value_U(cdc, local_cell_vector, scale);
+            GetFunctional()->ElementValue_U(cdc, local_cell_vector, scale);
         }
         else if (this->GetType() == "adjoint_for_ee")
         {
           //values of the derivative of the functional for error estimation
-          _aux_functionals[_functional_for_ee_num]->Value_U(cdc,
+          _aux_functionals[_functional_for_ee_num]->ElementValue_U(cdc,
               local_cell_vector, scale);
         }
         else if (this->GetType() == "tangent")
@@ -2022,8 +2022,8 @@ namespace DOpE
           // state values in quadrature points
           if (GetFunctional()->GetType().find("domain") != std::string::npos)
           {
-            GetFunctional()->Value_UU(cdc, local_cell_vector, scale);
-            GetFunctional()->Value_QU(cdc, local_cell_vector, scale);
+            GetFunctional()->ElementValue_UU(cdc, local_cell_vector, scale);
+            GetFunctional()->ElementValue_QU(cdc, local_cell_vector, scale);
           }
           scale *= -1;
           this->GetPDE().CellEquation_UU(cdc, local_cell_vector, scale, scale);
@@ -2041,7 +2041,7 @@ namespace DOpE
           }
           // state values in quadrature points
           if (GetFunctional()->GetType().find("domain") != std::string::npos)
-            GetFunctional()->Value_Q(cdc, local_cell_vector, scale);
+            GetFunctional()->ElementValue_Q(cdc, local_cell_vector, scale);
 
           scale *= -1;
           this->GetPDE().CellEquation_Q(cdc, local_cell_vector, scale, scale);
@@ -2057,8 +2057,8 @@ namespace DOpE
 
           if (GetFunctional()->GetType().find("domain") != std::string::npos)
           {
-            GetFunctional()->Value_QQ(cdc, local_cell_vector, scale);
-            GetFunctional()->Value_UQ(cdc, local_cell_vector, scale);
+            GetFunctional()->ElementValue_QQ(cdc, local_cell_vector, scale);
+            GetFunctional()->ElementValue_UQ(cdc, local_cell_vector, scale);
           }
 
           scale *= -1;
@@ -2068,11 +2068,11 @@ namespace DOpE
         }
         else if (this->GetType() == "global_constraint_gradient")
         {
-          GetConstraints()->Value_Q(cdc, local_cell_vector, scale);
+          GetConstraints()->ElementValue_Q(cdc, local_cell_vector, scale);
         }
         else if (this->GetType() == "global_constraint_hessian")
         {
-          GetConstraints()->Value_QQ(cdc, local_cell_vector, scale);
+          GetConstraints()->ElementValue_QQ(cdc, local_cell_vector, scale);
         }
         else
         {

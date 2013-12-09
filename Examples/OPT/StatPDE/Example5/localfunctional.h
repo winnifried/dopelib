@@ -46,7 +46,7 @@ template<
       }
 
       double
-      Value(const Multimesh_CellDataContainer<DH, VECTOR, dealdim>& cdc)
+      ElementValue(const Multimesh_CellDataContainer<DH, VECTOR, dealdim>& cdc)
       {
         const DOpEWrapper::FEValues<dealdim> & state_fe_values =
             cdc.GetFEValuesState();
@@ -81,7 +81,7 @@ template<
       }
 
       void
-      Value_U(const Multimesh_CellDataContainer<DH, VECTOR, dealdim>& cdc,
+      ElementValue_U(const Multimesh_CellDataContainer<DH, VECTOR, dealdim>& cdc,
           dealii::Vector<double> &local_cell_vector, double scale)
       {
         const DOpEWrapper::FEValues<dealdim> & state_fe_values =
@@ -113,7 +113,7 @@ template<
       }
 
       void
-      Value_Q(const Multimesh_CellDataContainer<DH, VECTOR, dealdim>& cdc,
+      ElementValue_Q(const Multimesh_CellDataContainer<DH, VECTOR, dealdim>& cdc,
           dealii::Vector<double> &local_cell_vector, double scale)
       {
         const DOpEWrapper::FEValues<dealdim> & control_fe_values =
@@ -140,7 +140,7 @@ template<
       }
 
       void
-      Value_UU(const Multimesh_CellDataContainer<DH, VECTOR, dealdim>& cdc,
+      ElementValue_UU(const Multimesh_CellDataContainer<DH, VECTOR, dealdim>& cdc,
           dealii::Vector<double> &local_cell_vector, double scale)
       {
         const DOpEWrapper::FEValues<dealdim> & state_fe_values =
@@ -164,19 +164,19 @@ template<
       }
 
       void
-    Value_QU(const Multimesh_CellDataContainer<DH, VECTOR, dealdim>& /*cdc*/,
+    ElementValue_QU(const Multimesh_CellDataContainer<DH, VECTOR, dealdim>& /*cdc*/,
 	     dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
       {
       }
 
       void
-      Value_UQ(const Multimesh_CellDataContainer<DH, VECTOR, dealdim>& /*cdc*/,
+      ElementValue_UQ(const Multimesh_CellDataContainer<DH, VECTOR, dealdim>& /*cdc*/,
 	       dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
       {
       }
 
       void
-      Value_QQ(const Multimesh_CellDataContainer<DH, VECTOR, dealdim>& cdc,
+      ElementValue_QQ(const Multimesh_CellDataContainer<DH, VECTOR, dealdim>& cdc,
           dealii::Vector<double> &local_cell_vector, double scale)
       {
         const DOpEWrapper::FEValues<dealdim> & control_fe_values =

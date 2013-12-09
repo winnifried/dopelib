@@ -64,7 +64,7 @@ namespace DOpE
          *                a cell.
          */
         virtual double
-        Value(const CDC<DH, VECTOR, dealdim>& cdc);
+        ElementValue(const CDC<DH, VECTOR, dealdim>& cdc);
 
         /**
          * This evaluates the Cost Functional J_u'(q,u)(.) = \int_\Omega j_u'(q(x),u(x))(.) \dx on a given element T.
@@ -77,7 +77,7 @@ namespace DOpE
          * @param scale                    A factor by which the result is scaled.
          */
         virtual void
-        Value_U(const CDC<DH, VECTOR, dealdim>& cdc,
+        ElementValue_U(const CDC<DH, VECTOR, dealdim>& cdc,
             dealii::Vector<double> &local_cell_vector, double scale);
 
         /**
@@ -91,7 +91,7 @@ namespace DOpE
          * @param scale                    A factor by which the result is scaled.
          */
         virtual void
-        Value_Q(const CDC<DH, VECTOR, dealdim>& cdc,
+        ElementValue_Q(const CDC<DH, VECTOR, dealdim>& cdc,
             dealii::Vector<double> &local_cell_vector, double scale);
 
         /**
@@ -105,7 +105,7 @@ namespace DOpE
          * @param scale                    A factor by which the result is scaled.
          */
         virtual void
-        Value_UU(const CDC<DH, VECTOR, dealdim>& cdc,
+        ElementValue_UU(const CDC<DH, VECTOR, dealdim>& cdc,
             dealii::Vector<double> &local_cell_vector, double scale);
 
         /**
@@ -119,7 +119,7 @@ namespace DOpE
          * @param scale                    A factor by which the result is scaled.
          */
         virtual void
-        Value_QU(const CDC<DH, VECTOR, dealdim>& cdc,
+        ElementValue_QU(const CDC<DH, VECTOR, dealdim>& cdc,
             dealii::Vector<double> &local_cell_vector, double scale);
 
         /**
@@ -133,7 +133,7 @@ namespace DOpE
          * @param scale                    A factor by which the result is scaled.
          */
         virtual void
-        Value_UQ(const CDC<DH, VECTOR, dealdim>& cdc,
+        ElementValue_UQ(const CDC<DH, VECTOR, dealdim>& cdc,
             dealii::Vector<double> &local_cell_vector, double scale);
 
         /**
@@ -147,7 +147,7 @@ namespace DOpE
          * @param scale                    A factor by which the result is scaled.
          */
         virtual void
-        Value_QQ(const CDC<DH, VECTOR, dealdim>& cdc,
+        ElementValue_QQ(const CDC<DH, VECTOR, dealdim>& cdc,
             dealii::Vector<double> &local_cell_vector, double scale);
 
         /**
@@ -299,7 +299,7 @@ namespace DOpE
             VECTOR& rhs, double scale);
 
         /**
-         * The same as FunctionalInterface::Value only on boundaries.
+         * The same as FunctionalInterface::ElementValue only on boundaries.
          *
          * @param fdc                      A FaceDataContainer containing all the information to evaluate
          *                                 the functional on a face.
@@ -310,7 +310,7 @@ namespace DOpE
         BoundaryValue(const FDC<DH, VECTOR, dealdim>& fdc);
 
         /**
-         * The same as FunctionalInterface::Value_U only on boundaries.
+         * The same as FunctionalInterface::ElementValue_U only on boundaries.
          *
          * @param fdc                      A FaceDataContainer containing all the information to evaluate
          *                                 the functional on a face.
@@ -322,7 +322,7 @@ namespace DOpE
             dealii::Vector<double> &local_cell_vector, double scale);
 
         /**
-         * The same as FunctionalInterface::Value_Q only on boundaries.
+         * The same as FunctionalInterface::ElementValue_Q only on boundaries.
          *
          * @param fdc                      A FaceDataContainer containing all the information to evaluate
          *                                 the functional on a face.
@@ -334,7 +334,7 @@ namespace DOpE
             dealii::Vector<double> &local_cell_vector, double scale);
 
         /**
-         * The same as FunctionalInterface::Value_UU only on boundaries.
+         * The same as FunctionalInterface::ElementValue_UU only on boundaries.
          *
          * @param fdc                      A FaceDataContainer containing all the information to evaluate
          *                                 the functional on a face.
@@ -346,7 +346,7 @@ namespace DOpE
             dealii::Vector<double> &local_cell_vector, double scale);
 
         /**
-         * The same as FunctionalInterface::Value_QU only on boundaries.
+         * The same as FunctionalInterface::ElementValue_QU only on boundaries.
          *
          * @param fdc                      A FaceDataContainer containing all the information to evaluate
          *                                 the functional on a face.
@@ -358,7 +358,7 @@ namespace DOpE
             dealii::Vector<double> &local_cell_vector, double scale);
 
         /**
-         * The same as FunctionalInterface::Value_UQ only on boundaries.
+         * The same as FunctionalInterface::ElementValue_UQ only on boundaries.
          *
          * @param fdc                      A FaceDataContainer containing all the information to evaluate
          *                                 the functional on a face.
@@ -370,7 +370,7 @@ namespace DOpE
             dealii::Vector<double> &local_cell_vector, double scale);
 
         /**
-         * The same as FunctionalInterface::Value_QQ only on boundaries.
+         * The same as FunctionalInterface::ElementValue_QQ only on boundaries.
          *
          * @param fdc                      A FaceDataContainer containing all the information to evaluate
          *                                 the functional on a face.
@@ -382,7 +382,7 @@ namespace DOpE
             dealii::Vector<double> &local_cell_vector, double scale);
 
         /**
-         * The same as FunctionalInterface::Value only on a faces between elements.
+         * The same as FunctionalInterface::ElementValue only on a faces between elements.
          * This function is only used if FunctionalInterface::HasFaces returns true.
          *
          * @param fdc                      A FaceDataContainer containing all the information to evaluate
@@ -392,7 +392,7 @@ namespace DOpE
         FaceValue(const FDC<DH, VECTOR, dealdim>& fdc);
 
         /**
-         * The same as FunctionalInterface::Value_U only on a faces between elements.
+         * The same as FunctionalInterface::ElementValue_U only on a faces between elements.
          * This function is only used if FunctionalInterface::HasFaces returns true.
          *
          * @param fdc                      A FaceDataContainer containing all the information to evaluate
@@ -405,7 +405,7 @@ namespace DOpE
             dealii::Vector<double> &local_cell_vector, double scale);
 
         /**
-         * The same as FunctionalInterface::Value_Q only on a faces between elements.
+         * The same as FunctionalInterface::ElementValue_Q only on a faces between elements.
          * This function is only used if FunctionalInterface::HasFaces returns true.
          *
          * @param fdc                      A FaceDataContainer containing all the information to evaluate
@@ -418,7 +418,7 @@ namespace DOpE
             dealii::Vector<double> &local_cell_vector, double scale);
 
         /**
-         * The same as FunctionalInterface::Value_UU only on a faces between elements.
+         * The same as FunctionalInterface::ElementValue_UU only on a faces between elements.
          * This function is only used if FunctionalInterface::HasFaces returns true.
          *
          * @param fdc                      A FaceDataContainer containing all the information to evaluate
@@ -431,7 +431,7 @@ namespace DOpE
             dealii::Vector<double> &local_cell_vector, double scale);
 
         /**
-         * The same as FunctionalInterface::Value_QU only on a faces between elements.
+         * The same as FunctionalInterface::ElementValue_QU only on a faces between elements.
          * This function is only used if FunctionalInterface::HasFaces returns true.
          *
          * @param fdc                      A FaceDataContainer containing all the information to evaluate
@@ -444,7 +444,7 @@ namespace DOpE
             dealii::Vector<double> &local_cell_vector, double scale);
 
         /**
-         * The same as FunctionalInterface::Value_UQ only on a faces between elements.
+         * The same as FunctionalInterface::ElementValue_UQ only on a faces between elements.
          * This function is only used if FunctionalInterface::HasFaces returns true.
          *
          * @param fdc                      A FaceDataContainer containing all the information to evaluate
@@ -457,7 +457,7 @@ namespace DOpE
             dealii::Vector<double> &local_cell_vector, double scale);
 
         /**
-         * The same as FunctionalInterface::Value_QQ only on a faces between elements.
+         * The same as FunctionalInterface::ElementValue_QQ only on a faces between elements.
          * This function is only used if FunctionalInterface::HasFaces returns true.
          *
          * @param fdc                      A FaceDataContainer containing all the information to evaluate

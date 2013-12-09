@@ -60,10 +60,10 @@ namespace DOpE
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
     double
-    FunctionalInterface<CDC, FDC, DH, VECTOR, dopedim, dealdim>::Value(
+    FunctionalInterface<CDC, FDC, DH, VECTOR, dopedim, dealdim>::ElementValue(
       const CDC<DH, VECTOR, dealdim>& /*cdc*/)
     {
-      throw DOpEException("Not implemented", "FunctionalInterface::Value");
+      throw DOpEException("Not implemented", "FunctionalInterface::ElementValue");
     }
 
   /********************************************/
@@ -195,12 +195,12 @@ namespace DOpE
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
     void
-    FunctionalInterface<CDC, FDC, DH, VECTOR, dopedim, dealdim>::Value_U(
+    FunctionalInterface<CDC, FDC, DH, VECTOR, dopedim, dealdim>::ElementValue_U(
       const CDC<DH, VECTOR, dealdim>& /*cdc*/,
         dealii::Vector<double> &/*local_cell_vector*/,
         double /*scale*/)
     {
-      throw DOpEException("Not implemented", "FunctionalInterface::Value_U");
+      throw DOpEException("Not implemented", "FunctionalInterface::ElementValue_U");
     }
 
   /********************************************/
@@ -210,12 +210,12 @@ namespace DOpE
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
     void
-    FunctionalInterface<CDC, FDC, DH, VECTOR, dopedim, dealdim>::Value_Q(
+    FunctionalInterface<CDC, FDC, DH, VECTOR, dopedim, dealdim>::ElementValue_Q(
         const CDC<DH, VECTOR, dealdim>& /*cdc*/,
         dealii::Vector<double> &/*local_cell_vector*/,
         double /*scale*/)
     {
-      throw DOpEException("Not implemented", "FunctionalInterface::Value_Q");
+      throw DOpEException("Not implemented", "FunctionalInterface::ElementValue_Q");
     }
 
   /********************************************/
@@ -225,12 +225,12 @@ namespace DOpE
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
     void
-    FunctionalInterface<CDC, FDC, DH, VECTOR, dopedim, dealdim>::Value_UU(
+    FunctionalInterface<CDC, FDC, DH, VECTOR, dopedim, dealdim>::ElementValue_UU(
         const CDC<DH, VECTOR, dealdim>& /*cdc*/,
         dealii::Vector<double> &/*local_cell_vector*/,
         double /*scale*/)
     {
-      throw DOpEException("Not implemented", "FunctionalInterface::Value_UU");
+      throw DOpEException("Not implemented", "FunctionalInterface::ElementValue_UU");
     }
 
   /********************************************/
@@ -240,12 +240,12 @@ namespace DOpE
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
     void
-    FunctionalInterface<CDC, FDC, DH, VECTOR, dopedim, dealdim>::Value_QU(
+    FunctionalInterface<CDC, FDC, DH, VECTOR, dopedim, dealdim>::ElementValue_QU(
         const CDC<DH, VECTOR, dealdim>& /*cdc*/,
         dealii::Vector<double> &/*local_cell_vector*/,
         double /*scale*/)
     {
-      throw DOpEException("Not implemented", "FunctionalInterface::Value_QU");
+      throw DOpEException("Not implemented", "FunctionalInterface::ElementValue_QU");
     }
 
   /********************************************/
@@ -255,12 +255,12 @@ namespace DOpE
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
     void
-    FunctionalInterface<CDC, FDC, DH, VECTOR, dopedim, dealdim>::Value_UQ(
+    FunctionalInterface<CDC, FDC, DH, VECTOR, dopedim, dealdim>::ElementValue_UQ(
         const CDC<DH, VECTOR, dealdim>& /*cdc*/,
         dealii::Vector<double> &/*local_cell_vector*/,
         double /*scale*/)
     {
-      throw DOpEException("Not implemented", "FunctionalInterface::Value_UQ");
+      throw DOpEException("Not implemented", "FunctionalInterface::ElementValue_UQ");
     }
 
   /********************************************/
@@ -270,12 +270,12 @@ namespace DOpE
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
     void
-    FunctionalInterface<CDC, FDC, DH, VECTOR, dopedim, dealdim>::Value_QQ(
+    FunctionalInterface<CDC, FDC, DH, VECTOR, dopedim, dealdim>::ElementValue_QQ(
         const CDC<DH, VECTOR, dealdim>& /*cdc*/,
         dealii::Vector<double> &/*local_cell_vector*/,
         double /*scale*/)
     {
-      throw DOpEException("Not implemented", "FunctionalInterface::Value_QQ");
+      throw DOpEException("Not implemented", "FunctionalInterface::ElementValue_QQ");
     }
 
   /********************************************/

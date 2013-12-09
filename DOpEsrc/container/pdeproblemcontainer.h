@@ -995,11 +995,11 @@ namespace DOpE
         else if (this->GetType() == "aux_functional")
         {
           // state values in quadrature points
-          return _aux_functionals[this->GetTypeNum()]->Value(cdc);
+          return _aux_functionals[this->GetTypeNum()]->ElementValue(cdc);
         }
         else if (this->GetType() == "error_evaluation")
         {
-          return _aux_functionals[_functional_for_ee_num]->Value(cdc);
+          return _aux_functionals[_functional_for_ee_num]->ElementValue(cdc);
         }
         else
         {
@@ -1334,7 +1334,7 @@ namespace DOpE
           //Check, if we have to evaluate an integral over a domain.
           if (_aux_functionals[_functional_for_ee_num]->GetType().find("domain")
               != std::string::npos)
-            _aux_functionals[_functional_for_ee_num]->Value_U(cdc,
+            _aux_functionals[_functional_for_ee_num]->ElementValue_U(cdc,
                 local_cell_vector, scale);
         }
         else

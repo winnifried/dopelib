@@ -59,7 +59,7 @@ template<
       }
 
       double
-	Value(const CDC<DH, VECTOR, dealdim>& /*cdc*/)
+	ElementValue(const CDC<DH, VECTOR, dealdim>& /*cdc*/)
       {
         return 0.0;
       }

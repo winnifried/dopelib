@@ -139,12 +139,12 @@ template<
       }
 
       void
-      Value_U(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
+      ElementValue_U(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
           dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
       {
       }
       void
-      Value_Q(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
+      ElementValue_Q(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
           dealii::Vector<double> &/*local_cell_vector*/, double /*scale*/)
       {
       }

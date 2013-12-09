@@ -44,7 +44,7 @@ template<
       }
 
       double
-      Value(const CDC<DH, VECTOR, dealdim>& cdc)
+      ElementValue(const CDC<DH, VECTOR, dealdim>& cdc)
       {
         const DOpEWrapper::FEValues<dealdim> & fe_values =
             cdc.GetFEValuesControl();
@@ -107,7 +107,7 @@ template<
       }
 
       double
-      Value(const CDC<DH, VECTOR, dealdim>& cdc)
+      ElementValue(const CDC<DH, VECTOR, dealdim>& cdc)
       {
         const DOpEWrapper::FEValues<dealdim> & fe_values =
             cdc.GetFEValuesState();
@@ -168,7 +168,7 @@ template<
       }
 
       double
-      Value(const CDC<DH, VECTOR, dealdim>& cdc)
+      ElementValue(const CDC<DH, VECTOR, dealdim>& cdc)
       {
         const DOpEWrapper::FEValues<dealdim> & state_fe_values =
             cdc.GetFEValuesState();
