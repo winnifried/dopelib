@@ -14,14 +14,16 @@
 \newtheorem{remark}[Problem]{Remark}
 
 \newcommand{\todo}[1]{\textbf{\textsc{\textcolor{red}{TODO: #1}}}}
-
+\newcommand{\twick}[1]{\textbf{\textsc{\textcolor{red}{#1}}}}
+\newcommand{\twickremove}[1]{\textbf{\textsc{\textcolor{blue}{#1}}}}
+\newcommand{\dope}{\texttt{DOpElib}}
 
 \makeindex
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{document}
-\title{DOpElib: 
-Differential Equations\\ and Optimization Environment}
+\title{DOpElib:\\ 
+Differential Equations and Optimization Environment}
 \author{
   Christian Goll\thanks{Heidelberg University, 
     {christian.goll@iwr.uni-heidelberg.de}}, 
@@ -33,7 +35,15 @@ Differential Equations\\ and Optimization Environment}
 
 
 
-\date{\today}
+
+\date{\today
+\vspace*{2cm}
+\begin{figure}[h]
+\centering
+{\includegraphics[width=8cm]{Documentation/logo.png}}
+\end{figure}
+}
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \maketitle

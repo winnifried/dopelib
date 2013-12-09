@@ -130,7 +130,7 @@ main(int argc, char **argv)
 
   //We need no finite element for the control variable, so
   //we take the FE_Nothing element, which has 0 degrees of freedom.
-  //The number of components of the finite element has to mathc
+  //The number of components of the finite element has to match
   //the number of parameters!
   FE<DIM> control_fe(FE_Nothing<DIM>(1), 3); //3 Parameter
   FE<DIM> state_fe(FE_Q<DIM>(1), 2);

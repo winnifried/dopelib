@@ -5,3 +5,10 @@ This example implements the topology optimization of an MBB-Beam given in \\
 The solution is computed using the commercial optimization library SNOPT as in 
 {\tt OPT/StatPDE/Example7}. This Example demonstrate how global constraints on
 the control variable can be included into the optimization call.
+
+\subsubsection{Program description}
+\twick{
+The global constraint is inserted in the main file via 
+\texttt{constraints(lcc, 1)} instead of 
+\texttt{constraints(lcc, 0)} what we had in the previous two examples.
+}

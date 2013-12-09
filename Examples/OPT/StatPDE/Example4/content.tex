@@ -16,4 +16,12 @@ The data is chosen as follows:
 \end{align*}
 with $\alpha = 10$.
 \subsubsection{Program description}
-The control in the dirichlet boundary values is incorporated via the class \texttt{LocalDirichletData} which is defined in the file \textit{localdirichletdata.h}. The class is then given to the \texttt{OptProblemContainer} as a template argument. This is all that is needed to use the control in the dirichlet boundary values.
+The control in the dirichlet boundary values is incorporated via the
+class \texttt{LocalDirichletData} which is defined in the
+file \textit{localdirichletdata.h}. The class is then given to
+the \texttt{OptProblemContainer} as a template argument. This is all that is
+needed to use the control in the dirichlet boundary values. 
+\twick{
+In the main file and the localpde program, we work still with the 
+\texttt{FE\underline{}Nothing} element to assign the five controls.
+}

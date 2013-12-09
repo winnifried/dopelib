@@ -18,7 +18,22 @@ In addition the following functionals are evaluated:
   \text{MeanValue: }\int_\Omega u
 \end{gather*}
 
+
+\subsubsection{Program description}
+\twick{
 The Problem is similar to that of {\tt OPT/StatPDE/Example1} except for the box control constraints.
+The implementation of these constraints is taken care of in the main file
+where we add a constrained description \texttt{lcc}.
+}
+
+\twickremove{Winni: in dieser Beischreibung ist 
+\[
+-500 \leq q \leq 500.
+\]
+Allerdings finde ich die '500' nirgendwo in main, localpde, or localfunctional
+file. Wie funktioniert dieses Programm'?}
+
+\subsubsection{External optimization solver}
 The problem is solved using the optimization library IPOPT that you can obtain for free. To use it 
 a correct link to the ipopt library needs to be created in  {\tt DOpE/ThirdPartyLibs} by the name 
 {\tt ipopt}, i.e., you should have the file

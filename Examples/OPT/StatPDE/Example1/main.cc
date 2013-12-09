@@ -74,7 +74,7 @@ typedef BlockVector<double> VECTOR;
 typedef LocalFunctional<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> COSTFUNCTIONAL;
 typedef FunctionalInterface<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> FUNCTIONALINTERFACE;
 
-//We use an optproblemcontainer instead of a pdeproblemcontainer, as we solve an optimazation
+//We use an optproblemcontainer instead of a pdeproblemcontainer, as we solve an optimization
 //problem. The optproblemcontainer holds all the information regarding the opt-problem.
 typedef OptProblemContainer<FUNCTIONALINTERFACE, COSTFUNCTIONAL,
     LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
@@ -96,7 +96,7 @@ typedef CGLinearSolverWithMatrix<
 
 typedef NewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR> NLS;
 
-//For different optimization algorightms
+//For different optimization algorithms
 typedef ReducedNewtonAlgorithm<OP, VECTOR> RNA;
 typedef ReducedTrustregion_NewtonAlgorithm<OP, VECTOR> RNA2;
 
@@ -154,7 +154,10 @@ main(int argc, char **argv)
       Triangulation<DIM>::MeshSmoothing::patch_level_1);
   GridGenerator::hyper_cube(triangulation, 0, 1);
 
+  // New in comparison to pure PDE problems
   FE<CDIM> control_fe(FE_Q<CDIM>(c_fe_order), 1);
+
+  // This is the same as in pure PDE problems
   FE<DIM> state_fe(FE_Q<DIM>(s_fe_order), 1);
 
   QUADRATURE quadrature_formula(q_order);
@@ -163,6 +166,8 @@ main(int argc, char **argv)
   const double alpha = 1.e-3;
 
   LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM> LPDE(alpha);
+
+  // New in comparison to pure PDE problems
   COSTFUNCTIONAL LFunc(alpha);
 
   //AuxFunctionals
