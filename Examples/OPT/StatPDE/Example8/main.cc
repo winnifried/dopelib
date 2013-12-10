@@ -48,7 +48,6 @@
 #include "pointconstraintsmaker.h"
 
 #include "localconstraints.h"
-#include "localconstraintaccessor.h"
 #include "localpde.h"
 #include "localfunctional.h"
 
@@ -155,8 +154,7 @@ main(int argc, char **argv)
 
   DOFH.SetUserDefinedDoFConstraints(constraints_mkr);
 
-  LocalConstraintAccessor CA;
-  LocalConstraint<CDC, FDC, DOFHANDLER, VECTOR, 2, 2> LC(CA);
+  LocalConstraint<CDC, FDC, DOFHANDLER, VECTOR, 2, 2> LC;
 
   OP P(LFunc, LPDE, LC, DOFH);
 

@@ -25,7 +25,6 @@
 #define _LOCAL_CONSTRAINT_H_
 
 #include "constraintinterface.h"
-#include "localconstraintaccessor.h"
 
 namespace DOpE
 {
@@ -41,9 +40,10 @@ namespace DOpE
         dopedim, dealdim>
     {
       public:
-        LocalConstraint(LocalConstraintAccessor& CA) :
-            LCA(CA)
+        LocalConstraint() 
         {
+	  _q_min = -500.;
+	  _q_max = 500.;
         }
         ~LocalConstraint()
         {
@@ -56,18 +56,19 @@ namespace DOpE
         {
           assert(constraints.block(0).size() == 2*control.block(0).size());
 
+            //Add Control Constraints, such that if control is feasible all  entries are not positive!
+            // _q_min <= control <= _q_max
           for (unsigned int i = 0; i < control.block(0).size(); i++)
           {
-            //Add Control Constraints, such that if control is feasible all  entries are not positive!
-            // _rho_min <= control <= _rho_max
-            LCA.ControlToLowerConstraint(control, constraints);
-            LCA.ControlToUpperConstraint(control, constraints);
-          }
+	    constraints.block(0)(i) = _q_min - control.block(0)(i);
+	    constraints.block(0)(control.block(0).size() + i) = control.block(0)(i) - _q_max;
+	  }
         }
         void
         GetControlBoxConstraints(VECTOR& lb, VECTOR& ub) const
         {
-          LCA.GetControlBoxConstraints(lb, ub);
+          lb = _q_min;
+	  ub = _q_max;
         }
 
         std::string
@@ -90,7 +91,7 @@ namespace DOpE
         }
 
       private:
-        LocalConstraintAccessor& LCA;
+	double _q_min, _q_max;
 
     };
 }

@@ -25,7 +25,6 @@
 #define _LOCAL_CONSTRAINT_H_
 
 #include "constraintinterface.h"
-#include "localconstraintaccessor.h"
 
 namespace DOpE
 {
@@ -41,14 +40,22 @@ namespace DOpE
         dopedim, dealdim>
     {
       public:
-        LocalConstraint(LocalConstraintAccessor& CA) :
-            LCA(CA)
+        LocalConstraint() 
         {
           _vol_max = 0.5;
+	  _rho_min = 1.e-4;
+	  _rho_max = 1.;
+
         }
         ~LocalConstraint()
         {
         }
+	
+	void
+	  SetRhoMin(double val)
+	{
+	  _rho_min = val;
+	}
 
         void
         EvaluateLocalControlConstraints(
@@ -57,18 +64,19 @@ namespace DOpE
         {
           assert(constraints.block(0).size() == 2*control.block(0).size());
 
-          for (unsigned int i = 0; i < control.block(0).size(); i++)
-          {
-            //Add Control Constraints, such that if control is feasible all  entries are not positive!
-            // _rho_min <= control <= _rho_max
-            LCA.ControlToLowerConstraint(control, constraints);
-            LCA.ControlToUpperConstraint(control, constraints);
-          }
+	  //Add Control Constraints, such that if control is feasible all  entries are not positive!
+	  // _rho_min <= control <= _rho_max
+	  for (unsigned int i = 0; i < control.block(0).size(); i++)
+	  {
+	    constraints.block(0)(i) = _rho_min - control.block(0)(i);
+	    constraints.block(0)(control.block(0).size() + i) = control.block(0)(i) - _rho_max;
+	  }
         }
         void
         GetControlBoxConstraints(VECTOR& lb, VECTOR& ub) const
         {
-          LCA.GetControlBoxConstraints(lb, ub);
+	  lb = _rho_min;
+	  ub = _rho_max;
         }
 
         double
@@ -186,9 +194,8 @@ namespace DOpE
         }
 	
       private:
-        double _vol_max;
+        double _vol_max, _rho_min, _rho_max;
         std::vector<dealii::Vector<double> > _qvalues;
-        LocalConstraintAccessor& LCA;
 
     };
 }

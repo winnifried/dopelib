@@ -49,7 +49,6 @@
 #include "localfunctional.h"
 #include "functionals.h"
 #include "localconstraints.h"
-#include "localconstraintaccessor.h"
 
 using namespace dealii;
 using namespace DOpE;
@@ -153,8 +152,7 @@ main(int argc, char **argv)
   MethodOfLines_SpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR, CDIM,
       DIM> DOFH(triangulation, control_fe, state_fe, constraints,
       DOpEtypes::stationary);
-  LocalConstraintAccessor CA;
-  LocalConstraint<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> LC(CA);
+  LocalConstraint<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> LC;
 
   OP P(LFunc, LPDE, LC, DOFH);
 
