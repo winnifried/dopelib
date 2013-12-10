@@ -1,7 +1,20 @@
 \chapter{Introduction}\label{chap:intro}
-\section{How to get \dope{}}
-\twick{How do you get dope please here. Specific installation instructions 
-are given in Section \ref{sec_installation}}.
+\section{How to get \dope{}}\label{sec:obtain}
+\added{There are two ways to obtain a copy of \dope{}:\\
+%
+\begin{enumerate}[A)]
+\item You can obtain a copy of \dope{} from the developers svn repository using\\
+\texttt{svn co --username=[your username] \textbackslash \\ 
+\hspace*{5mm}https://ganymed.iwr.uni-heidelberg.de/svn/dope}\\
+(The backslash in the first line means that the line will be continued as one!)
+
+Note that you need a valid username and password. If you have none you can contact the 
+maintainer by sending an EMail to \url{dope@dopelib.net}.
+%
+\item You can download the sources as a tar-ball from the project website\\ 
+\url{http://www.dopelib.net}.
+\end{enumerate}
+}
 
 \section{License information}
 Copyright (C) 2012 by the DOpElib authors\\[2mm]
@@ -23,8 +36,24 @@ details.\\[2mm]
 Please refer to the file LICENSE.TXT included in this distribution
 for further information on this license.
 
+\section{References}
+\added{
+If you like the library and use it for your own projects, please give credits by 
+referencing the project \dope{}~\cite{dope} using the following bibtex entry:
+}
+\begin{lstlisting}
+@MISC{dope,
+  key   = {DOpElib},
+  title = {The {D}ifferential {E}quation and 
+               {O}ptimization {E}nvironment: \textsc{DOpElib}},
+  url   = {http://www.dopelib.net},
+  note  = {\texttt{http://www.dopelib.net}}
+}
+\end{lstlisting}
+
 
 \section{Developers}
+\label{sec:contrib}
 The library is currently maintained by 
 \begin{itemize}
   \item Christian Goll (Heidelberg University)
@@ -54,12 +83,12 @@ appropriate software installation tool, or you can build the required version fr
 source \texttt{gcc.gnu.org}.
 
 Under MAC OSX, you need to install the \texttt{XCode} tools delivered with the operating system 
-or availiable for free \texttt{developer.apple.com/xcode}. Unfortunately, the delivered 
+or available for free \texttt{developer.apple.com/xcode}. Unfortunately, the delivered 
 version of \texttt{g++} is too old, so you need to install the real thing. To do so, 
 download \texttt{MacPorts} from \texttt{macports.org}. Once you have installed MacPorts 
-you can use it to install aditional linux software. 
+you can use it to install additional Linux software. 
 First, update the MacPorts installation \texttt{sudo port selfupdate}
-after that you can install a new version of \texttt{g++} using forinstance 
+after that you can install a new version of \texttt{g++} using for instance 
 \texttt{sudo port install gcc45} to install version $4.5$ of the compiler.
 Afterwards, you need to set the search path appropriate to find the macports version
 of \texttt{g++}, to check if this has been done use \texttt{g++ -v}.
@@ -111,11 +140,7 @@ script.
 
 \section{Installation}
 \label{sec_installation}
-I) Get a copy of \texttt{DOpElib} from the svn repository using\\
-\texttt{svn co --username=[your username] \textbackslash \\ \hspace*{5mm}https://ganymed.iwr.uni-heidelberg.de/svn/dope}\\
-(The backslash in the first line means that the line will be continued as one!)
-Note that you need a valid username and password. If you have none you can contact the 
-maintainer by sending an EMail to \url{dope@ganymed.iwr.uni-heidelberg.de}.\\[3mm]
+I) Get a copy of \texttt{DOpElib}, see Section~\ref{sec:obtain} for details.
 %
 II) Install \texttt{deal.II} to your home directory, i.e., it should be located in \\
 \texttt{\textasciitilde/deal.II}. \\[1mm]
@@ -155,21 +180,22 @@ Chapter~\ref{chap:test}.
 \paragraph{2.) I have installed a new g++ compiler but g++ -v still finds the old one :}
 \ \\
   This means that your computer does not find the new compiler. Try
-  \texttt{which g++} to see whether it appears in the list of availiable 
+  \texttt{which g++} to see whether it appears in the list of available 
   compilers (but is maybe too far in the back of the list.) Then you should 
   modify your \texttt{\$PATH} environment variable so that the new g++ compiler
   appears.
 
   If \texttt{which g++} only returns one g++ compiler, then probably you need to
-  set an appropriate symlink. Or more robust, you can configure \texttt{dealii}
+  set an appropriate symlink. Or more robust, you can configure \texttt{deal.II}
   to use the compiler you intend by configuring deal with the right compiler. To
   do so adjust  the \texttt{CC} and \texttt{CXX} environment variable appropriately
-  before configuring \texttt{dealii}
+  before configuring \texttt{deal.II}
   
   For example on Mac OSX you will find only one g++ compiler \texttt{/usr/bin/g++}
   which is in fact a symlink to \texttt{/usr/bin/g++-4.2}. 
-  So that you need to insall a newer compiler this may then be found ,e.g., using macports 
-  g++ 4.5 on OSX Lion, in \texttt{/opt/local/bin/g++-mp-4.5}. 
+  So that you need to install a newer compiler. You can do so, for instance
+  using macports. Then you can find, e.g., g++ version 4.5 on OSX Lion 
+  in \texttt{/opt/local/bin/g++-mp-4.5}. 
 
 \section{How this library is structured}
 This library is designed to allow easy implementation and numerical solutions 
@@ -272,7 +298,7 @@ the containers.
 \item \texttt{container/integratordatacontainer.h} This contains some data that 
   should be passed to the integrator like quadrature formulas and the above element and 
   face data container.
-\item \texttt{container/refinementcontainer.h} The classes defined herein are given to the \texttt{RefineSpace} method of the \texttt{SpaceTimeHandler} and determine how we define the spatial mesh (i.e. globally or locally with a fixed fraction, fixed number or shomehow 'optimized' strategy).
+\item \texttt{container/refinementcontainer.h} The classes defined herein are given to the \texttt{RefineSpace} method of the \texttt{SpaceTimeHandler} and determine how we define the spatial mesh (i.e. globally or locally with a fixed fraction, fixed number or 'optimized' strategy).
 \end{itemize}
 
 \subsubsection{Time stepping schemes}
@@ -319,15 +345,15 @@ Finally, we need to select a way how to integrate and solve linear and nonlinear
 \begin{itemize}
 \item \texttt{templates/cglinearsolver.h} This is a wrapper for the cg solver implemented in 
   \texttt{deal.II}. The solver will build and store the stiffness matrix for the PDE.
-\item \texttt{templates/gmreslinearsolver.h} This is a wrapper for the gmres solver 
+\item \texttt{templates/gmreslinearsolver.h} This is a wrapper for the GMRES solver 
   implemented in \texttt{deal.II}. The solver will build and store the stiffness matrix 
   for the PDE.
 \item \texttt{templates/directlinearsolver.h} This is a wrapper for the direct solver 
   implemented in \texttt{deal.II} using \texttt{UMFPACK}. 
   The solver will build and store the stiffness matrix for the PDE.
 \item \texttt{templates/voidlinearsolver.h} This is a wrapper for certain cases when we 
-  know that the matrix to be inverted is the identity. It simply copies the rhs to the
-  lhs. This is only needed for compatibility reasons some other components.
+  know that the matrix to be inverted is the identity. It simply copies the right hand side to the
+  left hand side. This is only needed for compatibility reasons some other components.
 \end{itemize}
 
 
@@ -467,7 +493,7 @@ do not fit the above but are important for the user to know.
 \item \texttt{include/userdefineddofconstraints.h} This class sets the constraints on the DOFs of the state and/or control FE solution. DOpE itself builds the hanging-node-constraints, but the user can reimplement this class and thus include other constraints as well (for example periodic BC). Note, that the hanging-node-constraints come first (in case of conflicting constraints.)
 \item \texttt{include/sparsitymaker.h} This class sets the sparsity pattern for the state FE solution. The standard implementation is just a wrapper for \texttt{dealii::DoFTools::} \texttt{make\_sparsity\_pattern}, but the user can reimplement this class to allow for more sophisticated sparsity patterns.
 \item \texttt{include/pointconstraintsmaker.h} This class allows to set 
-  homogeneous dirichlet values at given points/components.
+  homogeneous Dirichlet values at given points/components.
 \end{itemize}
 
 \subsubsection{HP components}
@@ -505,7 +531,7 @@ do not fit the above but are important for the user to know.
     {\bf Similar descriptors will be build for the other problems (adjoint, tangent, $\ldots$) when time allows.}
   \item \texttt{problemdata/initialproblem.h} This is the problem descriptor to compute the finite element representation
     of the initial values. This is generated by the different time-stepping schemes based upon the defined 
-    representation by the pde, which is set to the component wise $L^2$ projection by default.
+    representation by the PDE, which is set to the component wise $L^2$ projection by default.
   \item \texttt{problemdata/primaldirichletdata.h} This class contains the Dirichlet data for the 
     forward/primal PDE.
   \item \texttt{problemdata/tangentdirichletdata.h} This class contains the Dirichlet data for the tangent PDE, i.e.,
@@ -534,7 +560,8 @@ do not fit the above but are important for the user to know.
   \item \texttt{wrapper/preconditioner\underline{ }wrapper.h} Contains wrappers for several of the preconditioners
     in \texttt{deal.II}. This is required since unfortunately the preconditioners in \texttt{deal.II} have different
     interfaces for their initialization.
-  \item \texttt{wrapper/snopt\underline{ }wrapper.h} An interface to the SNOPT fortran library. This is an additional
+  \item \texttt{wrapper/snopt\underline{ }wrapper.h} An interface to the FORTRAN library SNOPT. 
+    This is an additional
     wrapper to the one provided by SNOPT to allow automatic construction of the functions required 
     by SNOPT using our library.
   \item \texttt{wrapper/solutiontransfer\underline{ }wrapper.h} A wrapper for the SolutionTransfer class
@@ -547,7 +574,7 @@ do not fit the above but are important for the user to know.
   \item \texttt{basic/dopetypes.h} This file contains type definitions used in the library. 
 \item \texttt{basic/sth\underline{ }internals.h} Wrapper for the \texttt{MapDoFsToSupportPoints} function. The implementation of this changes with the \texttt{deal.II} version in use.
 \item \texttt{include/helper.h} Collection of various small helper functions.
-\item \texttt{reducedproblems/problemcontainer\underline{ }internal.h} Houses some functions und variables common in the various problemcontainer.
+\item \texttt{reducedproblems/problemcontainer\underline{ }internal.h} Houses some functions and variables common in the various problemcontainer.
 \item \texttt{tsschemes/primal\_ts\_base.h}  This class contains the methods which all primal time stepping schemes share.
 \item \texttt{tsschemes/ts\_base.h}  This class contains the methods which all time stepping schemes share.
 \end{itemize}

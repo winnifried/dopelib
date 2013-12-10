@@ -23,10 +23,10 @@ The main difference with respect to the elastic case is the projection operator 
             \right. 
 \end{equation*}
 In our computations, we choose $\sigma_0 = \sqrt{\frac{2}{3}}\cdot 450$, and the above parameters $\mu$ and $\kappa$ as $\mu = 80193.800283$ resp. $\kappa = 190937.589172$. The corner points of our computational domain are the same as before, and the boundary conditions are not altered, either.\\
-The goal of our computations is to detect a subdomain in $\Omega$ where plastic behaviour occurs (compare \textit{E. Stein (editor), Error-controlled Adaptive Finite Elements in Solid Mechanics, Wiley (2003), pp. 386 - 389}). This subdomain depends on the righthand side $g$ in equation $(1)$ which we write as $g = \lambda \cdot p$ with $p = 100$ and $\lambda \in [1.5;4.5]$.\\
+The goal of our computations is to detect a subdomain in $\Omega$ where plastic behavior occurs (compare \textit{E. Stein (editor), Error-controlled Adaptive Finite Elements in Solid Mechanics, Wiley (2003), pp. 386 - 389}). This subdomain depends on the right hand side $g$ in equation $(1)$ which we write as $g = \lambda \cdot p$ with $p = 100$ and $\lambda \in [1.5;4.5]$.\\
 
 \subsubsection{Program description}
 
 The code of the current example is nearly identical to the code of the previous one. The only difference worth mentioning is the change of the equations which leads to different implementations of the \texttt{ElementEquation, ElementMatrix} and \texttt{BoundaryEquations} functions in \textit{localpde.h}.\\
 Furthermore, the elasticity equations solved in the last example are linear, whereas the plasticity equations are nonlinear; this difference is evident also from the output (here, we need several Newton steps until convergence).\\
-The functionals that appear in the output yield additional information and are not required in the above problem setting. The subdomain with plastic behaviour we want to detect can be visualized from the \textit{.vtk} files written to the \texttt{Results/Mesh} subfolders.
+The functionals that appear in the output yield additional information and are not required in the above problem setting. The subdomain with plastic behavior we want to detect can be visualized from the \textit{.vtk} files written to the \texttt{Results/Mesh} subfolders.

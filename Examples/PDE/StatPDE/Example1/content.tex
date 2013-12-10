@@ -7,7 +7,7 @@ the do-nothing outflow condition. In strong formulation we have
 -\frac{1}{2}\nabla\cdot (\nabla v + \nabla v^{T}) + \nabla p &= f \\ 
 \nabla \cdot v &= 0 \notag
 \end{align} 
-on the domain $\Omega = [-6,6]\times [0,2]$. We split $\partial \Omega = \Gamma_D \cup \Gamma_{out}$. The right hand side of the channel is $\Gamma_{out}$ on which we describe the free outflow condition, on the rest of the boundary we prescribe dirichlet values (An parabolic inflow on the left hand side and zero on the upper and lower channel walls). We choose for simplicity $f=0$.\\
+on the domain $\Omega = [-6,6]\times [0,2]$. We split $\partial \Omega = \Gamma_D \cup \Gamma_{out}$. The right hand side of the channel is $\Gamma_{out}$ on which we describe the free outflow condition, on the rest of the boundary we prescribe Dirichlet values (An parabolic inflow on the left hand side and zero on the upper and lower channel walls). We choose for simplicity $f=0$.\\
 
 \subsubsection{Program structure}
 
@@ -21,7 +21,7 @@ In the \textit{functionals.h} file we declare classes for different scalar quant
 
 The \textit{localfunctional.h} file is relevant only if we want to solve an optimal control problem. In this case, it contains the cost functional, whereas the file is not needed for the forward solution of PDEs. We will get back to this later in the context of optimal control problems.\index{cost functional}\\
 
-All information about the PDE problem (in the optimal control case about the constraining PDE) is included in the \textit{localpde.h} file. In a class called \texttt{LocalPDE}, we build up the element equation, the element matrix and element righthand side as well as the boundary equation, boundary matrix and boundary righthand side. Later on, the integrator collects this local information and creates the global vectors and matrices.\\
+All information about the PDE problem (in the optimal control case about the constraining PDE) is included in the \textit{localpde.h} file. In a class called \texttt{LocalPDE}, we build up the element equation, the element matrix and element right hand side as well as the boundary equation, boundary matrix and boundary right hand side. Later on, the integrator collects this local information and creates the global vectors and matrices.\\
 
 The most important part of each example is the \textit{main.cc} file which contains the \texttt{int main()} function. Here we create objects of all classes described above and actually solve the respective problem.\\
  
@@ -41,7 +41,7 @@ In the current example we declare functionals for point values of the velocity a
 
 \vspace{0.2cm}
 
-The \textit{LocalPDE} is derived from a \texttt{PDEInterface} class. It comprises several functions which build up the element and boundary equations, matrices and righthand sides. The weak formulation of problem \eqref{eq:strong} with $f=0$ is
+The \textit{LocalPDE} is derived from a \texttt{PDEInterface} class. It comprises several functions which build up the element and boundary equations, matrices and right hand sides. The weak formulation of problem \eqref{eq:strong} with $f=0$ is
 \begin{equation} \label{eq:weak}
    \frac{1}{2}(\nabla v, \nabla \varphi)_\Omega + \frac{1}{2}(\nabla v^{T}, \nabla \varphi)_\Omega - (p, \nabla \cdot \varphi)_\Omega + (\nabla \cdot v, \psi)_\Omega - (n\cdot \nabla v^T,\phi)_{\Gamma_{out}} = 0.
 \end{equation}
@@ -53,15 +53,15 @@ Furthermore, in \texttt{DOpElib} we always interpret the problems in the context
 \begin{equation*}
    a(u;\varphi) = f(\varphi).
 \end{equation*}
-The lefthand side is implemented in the \texttt{ElementEquation} function, the righthand side is implemented in the \texttt{ElementRightHandSide} function (which is unused in this example, because $f=0$).
+The left hand side is implemented in the \texttt{ElementEquation} function, the right hand side is implemented in the \texttt{ElementRightHandSide} function (which is unused in this example, because $f=0$).
 \begin{remark}
 The weak formulation might contain some terms on faces or (parts of) the boundary. DOpE is able to handle these via \texttt{BoundaryEquation}, \texttt{BoundaryRightHandSide} etc.. To keep things simple, we neglect these terms in this introduction.
 \end{remark}
-To apply Newton's method, this problem is linearized: on the lefthand side, we have the derivative of the (semilinear) form $a(\cdot;\cdot)$ with respect to the solution variable $u$, and the righthand side is the residual of the weak formulation:
+To apply Newton's method, this problem is linearized: on the left hand side, we have the derivative of the (semilinear) form $a(\cdot;\cdot)$ with respect to the solution variable $u$, and the right hand side is the residual of the weak formulation:
 \begin{equation*}
    a_u'(u;u^+,\varphi) = -a(u;\varphi) + f(\varphi).
 \end{equation*}
-In the \texttt{ElementMatrix} function, we implement the following matrix $A$ as representation of the derivative on the lefthand side:
+In the \texttt{ElementMatrix} function, we implement the following matrix $A$ as representation of the derivative on the left hand side:
 \begin{equation*}
   A = (a_u'(u;\varphi_i,\varphi_j))_{j,i=1}^N
 \end{equation*}

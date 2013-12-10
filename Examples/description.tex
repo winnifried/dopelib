@@ -7,15 +7,19 @@
 %\usepackage{sfmath}
 \usepackage{color}
 \usepackage{graphicx} 
+\usepackage{enumerate}
+\usepackage{listings}
+
 \theoremstyle{plain}
 \newtheorem{Problem}{Problem}[section]
 
 \theoremstyle{remark}
 \newtheorem{remark}[Problem]{Remark}
+\usepackage{changes}
+\usepackage{todonotes}
 
-\newcommand{\todo}[1]{\textbf{\textsc{\textcolor{red}{TODO: #1}}}}
-\newcommand{\twick}[1]{\textbf{\textsc{\textcolor{red}{#1}}}}
-\newcommand{\twickremove}[1]{\textbf{\textsc{\textcolor{blue}{#1}}}}
+\newcommand{\twick}[1]{\added{#1}}
+\newcommand{\twickremove}[1]{\deleted{#1}}
 \newcommand{\dope}{\texttt{DOpElib}}
 
 \makeindex

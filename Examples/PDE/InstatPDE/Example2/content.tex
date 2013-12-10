@@ -64,7 +64,7 @@ with $\hat E = \frac{1}{2}(\hat F^T \hat F - I)$.
 The ALE approach belongs to interface-tracking methods in which 
 the mesh is moved such that it fits in all time steps with 
 the FSI-interface. However, this leads to 
-a degeneration of the ALE map. Methods to circument such as 
+a degeneration of the ALE map. Methods to circumvent such as 
 degeneration as long as possible are re-meshing techniques or 
 to use a biharmonic mesh motion technique.
 
@@ -170,7 +170,7 @@ is the introduction of the
 \begin{verbatim}
 void ElementTimeEquationExplicit (...) 
 \end{verbatim}
-to write all time derivative terms explicitely:
+to write all time derivative terms explicitly:
 \begin{equation*}
 (v^n - v^{n-1}, \phi)_{\Omega}.
 \end{equation*}

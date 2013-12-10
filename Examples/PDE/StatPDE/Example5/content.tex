@@ -1,5 +1,5 @@
 \subsubsection{General problem description}
-This example shows the use of the adaptive grid refinement and error estimation by the \textit{DWR method} (For a description of the method, see \cite{BR03}.) applied to the laplace equation 
+This example shows the use of the adaptive grid refinement and error estimation by the \textit{DWR method} (For a description of the method, see \cite{BR03}.) applied to the Laplace equation 
 \begin{align*}
 -\Delta u &= f && \text{ in } \Omega
 \end{align*}
@@ -20,7 +20,7 @@ For this setting, we have the error representation
 \begin{align}\label{dwr.error_identity}
 J(e)=\sum_{K\in \mathbb T _h} \left\{(R_h, z-\psi_h)_K + (r_h, z-\psi_h)_{\partial_K}\right\}
 \end{align}
-with the error $e=u-u_h$, the Triangulation $\mathbb T_h$, the dual solution $z$, arbitraty function $\phi_h \in V_h$ (the ansatz space) and the element- and edge-residuals: 
+with the error $e=u-u_h$, the Triangulation $\mathbb T_h$, the dual solution $z$, arbitrary function $\phi_h \in V_h$ (the ansatz space) and the element- and edge-residuals: 
 \begin{align}\label{dwr.element_residual}
 \eval[1]{R_h}_{K} = f+\Delta u_h
 \end{align}
@@ -65,7 +65,7 @@ To be able to solve the adjoint equation for the error estimation one needs to i
 During the  evaluation of \eqref{dwr.error_identity}, the following methods are needed
 \begin{itemize}
 \item {\verb StrongElementResidual }: The element residual, see \eqref{dwr.element_residual}.
-\item {\verb StrongFaceResidual }: The terms in \eqref{dwr.error_identity} that lies in the interiour (i.e. the jumps).
+\item {\verb StrongFaceResidual }: The terms in \eqref{dwr.error_identity} that lies in the interior (i.e. the jumps).
 \item {\verb StrongBoundaryResidual }:The terms in \eqref{dwr.error_identity} that lies on the boundary (There are none in this case).
 \end{itemize}
 
@@ -91,7 +91,7 @@ This container takes care of the computation of the weights.
 
 To build this, we need the following:
 \begin{itemize}
-\item {\verb DOFH_higher_order }: With some higher order Finite Elemnts and the already defined triangulation, we build this \texttt{SpaceTimeHandler}. This is needed because  we want to use the patch-wise higher order interpolation of the weights.
+\item {\verb DOFH_higher_order }: With some higher order Finite Elements and the already defined triangulation, we build this \texttt{SpaceTimeHandler}. This is needed because  we want to use the patch-wise higher order interpolation of the weights.
 \item {\verb idc_high }: A \texttt{IntegratorDataContainer} in which we put some (face)quadrature formulas for the evaluation of the error Identity.
 \item A string which indicates how we want to store the weight-vectors (here: { \verb "fullmem" }).
 \item \texttt{pr}: The \texttt{ParameterReader} which we have already defined.
@@ -102,7 +102,7 @@ The last preparation step is now to initialize the \texttt{DWRDataContainer} wit
   solver.InitializeHigherOrderDWRC(dwrc);
 \end{verbatim}
 
-Succeding the solution of the state equation 
+Succeeding the solution of the state equation 
 \begin{verbatim}
 solver.ComputeReducedFunctionals(); 
 \end{verbatim}

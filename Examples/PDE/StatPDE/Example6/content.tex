@@ -1,10 +1,10 @@
 \subsubsection{General problem description}
-In this problem we solve the simple vector valued laplace equation in 3d
+In this problem we solve the simple vector valued Laplace equation in 3d
 on the unit square $\Omega=[0,1]^3$, i.e. in strong formulation we look for $u=(u_1, u_2, u_3)$ s.t.
 \begin{align*}
 -\Delta u =& f &&\text{in }\Omega.
 \end{align*}
-We set zero dirichlet values on $\partial \Gamma$ and choose $f=(1,1,1)$.
+We set zero Dirichlet values on $\partial \Gamma$ and choose $f=(1,1,1)$.
 \subsubsection{Program description}
 The PDE is discretized with Q3-elements on a series of locally refined grids (we use the \texttt{KellyErrorEstimator}). The algebraic equations are solved with  different iterative linear solvers acting on different vector and matrix-structures (i.e. we use \texttt{dealii::BlockVector} and \texttt{dealii::Vector} plus the appropriate matrix classes). 
 
@@ -30,7 +30,7 @@ After solving the equation, we want to apply local mesh refinement. So first we 
  	const StateVector<VECTORBLOCK> &gu1 = a1.GetU();
  	solution = gu1.GetSpacialVector();
 \end{verbatim}
-With this vector we estiamte the error via \texttt{KellyErrorEstimator} and get a vector holding the estimated error per element. After choosing a refinement criterion (see \textit{refinementcontainer.h}, we opt here for refining the top 20\% of the elements), we give the SpaceTimeHandler an object of type \texttt{RefinementContainer} which holds all the information needed for the local mesh refinement. This is done via the \texttt{RefineSpace} method.
+With this vector we estimate the error via \texttt{KellyErrorEstimator} and get a vector holding the estimated error per element. After choosing a refinement criterion (see \textit{refinementcontainer.h}, we opt here for refining the top 20\% of the elements), we give the SpaceTimeHandler an object of type \texttt{RefinementContainer} which holds all the information needed for the local mesh refinement. This is done via the \texttt{RefineSpace} method.
 \begin{verbatim}
         DOFH1.RefineSpace(
                RefineFixedNumber(estimated_error_per_element, 0.2, 0.0));

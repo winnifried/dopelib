@@ -33,7 +33,7 @@ Note, that one should prefer a complete implicit treatment of the
 pressure $p$. Instead of using $\theta p^{n+1} + (1-\theta)p^n$, the pressure
 appears only with $\theta p^{n+1}$.
 
-After discretization in time, the space is treated, as ususally, with 
+After discretization in time, the space is treated, as usually, with 
 a Galerkin finite element scheme, here based on the Taylor-Hood element 
 $Q_2^c / Q_1^c$.
 
@@ -68,7 +68,7 @@ implement nonstationary equations.
 void ElementEquation (..., double scale, double scale_ico)
 \end{verbatim}
 The two arguments 
-are used to distigunish between explicit 
+are used to distinguish between explicit 
 components and fully implicit components. 
 For standard equations (such as the heat 
 equation and the wave equation), there is 
@@ -109,7 +109,7 @@ the last two parameters
 \begin{verbatim}
 double scale, double scale_ico
 \end{verbatim} 
-are used to distigungish between fully implicit 
+are used to distinguish between fully implicit 
 are other behavior. 
 
 \begin{verbatim}
@@ -143,7 +143,7 @@ and we write
 \begin{equation*}
 (v^n - v^{n-1}, \phi)_{\Omega}.
 \end{equation*}
-This behavior is useful for multi-phyics problems
+This behavior is useful for multi-physics problems
 where other solutions variables have to be considered
 around $\partial_t v$. The user should have a look 
 in the second Example 
