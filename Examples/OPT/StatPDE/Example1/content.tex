@@ -1,11 +1,7 @@
 \subsubsection{General problem description}
-\twick{Dieses Beispiel ist nun extremst ausfuehrlich hinsichtlich der
-localpde. Da dies ein Manual ist, wuensche ich mir, dass wir dies (respective
-moeglicher Rechtschreibfehler und typos) auch so belassen. Mir hat das damals 
-bei FSI Opt sehr geholfen.}
 This example solves a distributed minimization problem
-\twick{and shows how to estimate the error in the cost functional for stationary optimization
-problems. The problem reads:}
+and shows how to estimate the error in the cost functional for stationary optimization
+problems. The problem reads:
 \begin{gather*}
 \min J(q,u) = \frac{1}{2} \|u-u^d\|^2 + \frac{\alpha}{2}\|q\|^2\\
 \text{s.t.} (\nabla u,\nabla \phi) = (q+f,\phi)\;\;\forall\,\phi \in H^1_0(\Omega)
@@ -32,7 +28,7 @@ In addition the following functionals are evaluated:
   \text{MeanValue: }\int_\Omega u
 \end{gather*}
 
-\added{
+{
 \subsubsection{Background information and program description}
 In the following, we describe all extensions to the previous problems 
 relevant to solving PDE-based optimization with \dope{}. So far, 
@@ -161,110 +157,9 @@ $H(q) \in mathcal L(Q,Q)$ by defining
  (H(q)\tau q,\delta q)_Q = j''(q)(\tau q,\delta q) \quad \forall\,\delta q,\tau q\in Q.
 \]
 }
-\todo[inline]{Brauchen wir den n\"achsten Block wirklich? Das steht 1 Seite dar\"uber schon, 
-die Notation passt aber nicht immer, z.B. $J''(u)$, fehlende Argumente und Funktionen (z.N. Dual Hessian Equation)
-. 
-Ansonsten müssen wir den Block nochmal durchgehen um die Sachen zu beheben.}
-
-Finally, we recall the representations of the previous work. First, we recall 
-in terms of the Lagrangian:
-
-\textbf{Adjoint:} Find $z\in X$ such that
-\begin{equation*}
-{\cal L}_u' (q,u,z)(\phi) = 0 \quad \forall\phi\in X. 
-\end{equation*}
-\textbf{Tangent (linearized state):} Find $\delta u\in X$ such that
-\begin{equation*}
-{\cal L}_{qz}'' (q,u,z)(\delta q, \phi) +
-{\cal L}_{uz}'' (q,u,z)(\delta u, \phi) = 0 \quad \forall\phi\in X. 
-\end{equation*}
-
-\textbf{Additional adjoint:} Find $\delta z\in X$ such that
-\begin{equation*}
-{\cal L}_{qu}'' (q,u,z)(\delta q, \phi) +
-{\cal L}_{uu}'' (q,u,z)(\delta u, \phi) +
-{\cal L}_{zu}'' (q,u,z)(\delta z, \phi) = 0 \quad \forall\phi\in X. 
-\end{equation*}
-
-Especially, the equations for stationary optimization problems are
-given as follows:
-
-\textbf{Adjoint:} Find $z\in X$ such that
-\begin{equation*}
-a_u'(q,u)(\phi,z) = J'(u)(\phi) \quad \forall\phi\in X. 
-\end{equation*}
-\textbf{Tangent:} Find $\delta u\in X$ such that
-\begin{equation*}
-a_u'(q,u)(\delta u,\phi) = -a_q'(q,u)(\delta q,\phi)  \quad \forall\phi\in X. 
-\end{equation*}
-\textbf{Additional adjoint:} Find $\delta z\in X$ such that
-\begin{equation*}
-a_u'(q,u)(\phi,\delta z) = a_{uu}''(q,u)(\delta u,\phi,z)
--a_{qu}''(q,u)(\delta q,\phi,z) + J''(u)(\delta,\phi) \quad \forall\phi\in X. 
-\end{equation*}
-
-
-Using the Lagrangian, the previous expressions read
-
-
-\textbf{Lagrangian}
-\begin{equation*}
-{\cal L}(q,u,z) =J(q,u) - a(q,u)(z)
-\end{equation*}
-
-\textbf{State Equation}
-\begin{align*}
-a(q,u)(\phi) = 0 
-\end{align*}
-
-
-\textbf{Dual Equation}
-
-\begin{align*}
-{\cal L}_{u}' (q,u,z)(\phi ) &= 0 \\
-\Leftrightarrow a_u' (q,u)(\phi,z) &= J_u' (q,u)(\phi)
-\end{align*}
-
-\textbf{Tangent Equation}
-
-\begin{align*}
-{\cal L}_{qz}'' (q,u,z)(\delta q, \phi) 
-+ {\cal L}_{uz}'' (q,u,z)(\delta u, \phi) &= 0 \\
-\Leftrightarrow a_u' (q,u)(\delta u,\phi) + a_q' (q,u)(\delta q,\phi) &= 0
-\end{align*}
-
-\textbf{Dual Hessian Equation}
-
-\begin{align*}
-{\cal L}_{qu}'' (q,u,z)(\delta q, \phi) 
-&+ {\cal L}_{uu}'' (q,u,z)(\delta u, \phi) \\
-&+ {\cal L}_{zu}'' (q,u,z)(\delta z, \phi) = 0 \\
-\Leftrightarrow a_u' (q,u)(\phi, \delta z) 
-&+ a_{uu}' (q,u)(\delta u,\phi, z) \\
-&+ a_{qu}' (q,u)(\delta q,\phi, z)  = J_{uu}''(q,u)(\cdot ,\cdot )
-\end{align*}
-
-\textbf{Newton left hand side: first derivative}
-
-\begin{align*}
-j'(q)(\delta q) &= {\cal L}_{q}' (q,u,z)(\delta q) \quad\text{(Gradient equation)} \\
-\Leftrightarrow j'(q)(\delta q) &= -a_q' (q,u)(\delta q,z) + J_{q}'(q,u)(\delta q)
-\end{align*}
-
-\textbf{Newton right hand side: second derivative}
-
-\begin{align*}
-j''(q)(\delta q, \delta r) &= {\cal L}_{qq}'' (q,u,z)(\delta q, \delta r) + 
-{\cal L}_{uq}'' (q,u,z)(\delta u, \delta r) \\
-&\quad +  {\cal L}_{zq}'' (q,u,z)(\delta z, \delta r) \\
-\Leftrightarrow  j''(q)(\delta q, \delta r) &= 
-J_{qq}''(q,u)(\delta q, \delta r) -a_{qq}'' (q,u)(\delta q,\delta r, z) \\
-&\quad - a_{uq}'' (q,u)(\delta u,\delta r, z) -a_{q}' (q,u)(\delta r,\delta z)  
-\end{align*}
-\todo[inline]{end of delete comment}
 
 \subsubsection{Implementation in \dope{}}
-\added{
+{
 From the previous details, and the definition of the Lagrangian and its 
 derivatives it is clear, that the user has to provide the respective derivatives. 
 Since the Lagrangian consists of the PDE and the cost functional it 
@@ -336,8 +231,6 @@ corresponding derivatives must be provided as well.
 
 \subsubsection{Back to the specific equations in this example}
 We have
-\todo[inline]{Wollen wir die alle? Die Terme $a'_u$ sind ja alle Gleich bis auf das 
-jeweilige argument...}
 \begin{align*}
 a(q,u)(\phi) &= (\nabla u, \nabla\phi) - (q + f, \phi),\\
 a_u'(q,u)(\phi, z) &= (\nabla\phi, \nabla z),\\
