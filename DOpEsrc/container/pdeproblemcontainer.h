@@ -200,12 +200,12 @@ namespace DOpE
          * @template DATACONTAINER    Class of the datacontainer, distinguishes
          *                            between hp- and classical case.
          *
-         * @param cdc                 A DataContainer holding all the needed information
+         * @param edc                 A DataContainer holding all the needed information
          *                            of the face.
          */
         template<typename DATACONTAINER>
           double
-          ElementFunctional(const DATACONTAINER& cdc);
+          ElementFunctional(const DATACONTAINER& edc);
 
         /******************************************************/
 
@@ -292,7 +292,7 @@ namespace DOpE
          * @template DATACONTAINER        Class of the datacontainer in use, distinguishes
          *                                between hp- and classical case.
          *
-         * @param cdc                     A DataContainer holding all the needed information
+         * @param edc                     A DataContainer holding all the needed information
          *                                of the element
          * @param local_vector        This vector contains the locally computed values of the element equation. For more information
          *                                 on dealii::Vector, please visit, the deal.ii manual pages.
@@ -302,7 +302,7 @@ namespace DOpE
          */
         template<typename DATACONTAINER>
           void
-          ElementEquation(const DATACONTAINER& cdc,
+          ElementEquation(const DATACONTAINER& edc,
               dealii::Vector<double> &local_vector, double scale,
               double scale_ico);
 
@@ -341,7 +341,7 @@ namespace DOpE
          * @template DATACONTAINER         Class of the datacontainer in use, distinguishes
          *                                 between hp- and classical case.
          *
-         * @param cdc                      A DataContainer holding all the needed information
+         * @param edc                      A DataContainer holding all the needed information
          * @param local_vector        This vector contains the locally computed values of the element equation. For more information
          *                                 on dealii::Vector, please visit, the deal.ii manual pages.
          * @param scale                    A scaling factor which is -1 or 1 depending on the subroutine to compute.
@@ -387,7 +387,7 @@ namespace DOpE
          * @template DATACONTAINER      Class of the datacontainer in use, distinguishes
          *                              between hp- and classical case.
          *
-         * @param cdc                   A DataContainer holding all the needed information
+         * @param edc                   A DataContainer holding all the needed information
          *
 
          * @param local_entry_matrix    The local matrix is quadratic and has size local DoFs times local DoFs and is
@@ -985,7 +985,7 @@ namespace DOpE
     template<typename DATACONTAINER>
       double
       PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE, DH>::ElementFunctional(
-          const DATACONTAINER& cdc)
+          const DATACONTAINER& edc)
       {
 
         if (this->GetType() == "cost_functional")
@@ -995,11 +995,11 @@ namespace DOpE
         else if (this->GetType() == "aux_functional")
         {
           // state values in quadrature points
-          return _aux_functionals[this->GetTypeNum()]->ElementValue(cdc);
+          return _aux_functionals[this->GetTypeNum()]->ElementValue(edc);
         }
         else if (this->GetType() == "error_evaluation")
         {
-          return _aux_functionals[_functional_for_ee_num]->ElementValue(cdc);
+          return _aux_functionals[_functional_for_ee_num]->ElementValue(edc);
         }
         else
         {
@@ -1145,18 +1145,18 @@ namespace DOpE
     template<typename DATACONTAINER>
       void
       PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE, DH>::ElementEquation(
-          const DATACONTAINER& cdc, dealii::Vector<double> &local_vector,
+          const DATACONTAINER& edc, dealii::Vector<double> &local_vector,
           double scale, double scale_ico)
       {
         if (this->GetType() == "state")
         {
           // state values in quadrature points
-          this->GetPDE().ElementEquation(cdc, local_vector, scale, scale_ico);
+          this->GetPDE().ElementEquation(edc, local_vector, scale, scale_ico);
         }
         else if (this->GetType() == "adjoint_for_ee")
         {
           // state values in quadrature points
-          this->GetPDE().ElementEquation_U(cdc, local_vector, scale,
+          this->GetPDE().ElementEquation_U(edc, local_vector, scale,
               scale_ico);
         }
         else
@@ -1173,14 +1173,14 @@ namespace DOpE
     template<typename DATACONTAINER>
       void
       PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE, DH>::ElementTimeEquation(
-          const DATACONTAINER& cdc, dealii::Vector<double> &local_vector,
+          const DATACONTAINER& edc, dealii::Vector<double> &local_vector,
           double scale)
       {
 
         if (this->GetType() == "state")
         {
           // state values in quadrature points
-          this->GetPDE().ElementTimeEquation(cdc, local_vector, scale);
+          this->GetPDE().ElementTimeEquation(edc, local_vector, scale);
         }
         else if (this->GetType() == "adjoint_for_ee")
         {
@@ -1201,14 +1201,14 @@ namespace DOpE
     template<typename DATACONTAINER>
       void
       PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE, DH>::ElementTimeEquationExplicit(
-          const DATACONTAINER& cdc, dealii::Vector<double> &local_vector,
+          const DATACONTAINER& edc, dealii::Vector<double> &local_vector,
           double scale)
       {
 
         if (this->GetType() == "state")
         {
           // state values in quadrature points
-          this->GetPDE().ElementTimeEquationExplicit(cdc, local_vector,
+          this->GetPDE().ElementTimeEquationExplicit(edc, local_vector,
               scale);
         }
         else if (this->GetType() == "adjoint_for_ee")
@@ -1318,14 +1318,14 @@ namespace DOpE
     template<typename DATACONTAINER>
       void
       PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE, DH>::ElementRhs(
-          const DATACONTAINER& cdc, dealii::Vector<double> &local_vector,
+          const DATACONTAINER& edc, dealii::Vector<double> &local_vector,
           double scale)
       {
 
         if (this->GetType() == "state")
         {
           // state values in quadrature points
-          this->GetPDE().ElementRightHandSide(cdc, local_vector, scale);
+          this->GetPDE().ElementRightHandSide(edc, local_vector, scale);
         }
         else if (this->GetType() == "adjoint_for_ee")
         {
@@ -1334,7 +1334,7 @@ namespace DOpE
           //Check, if we have to evaluate an integral over a domain.
           if (_aux_functionals[_functional_for_ee_num]->GetType().find("domain")
               != std::string::npos)
-            _aux_functionals[_functional_for_ee_num]->ElementValue_U(cdc,
+            _aux_functionals[_functional_for_ee_num]->ElementValue_U(edc,
                 local_vector, scale);
         }
         else
@@ -1437,7 +1437,7 @@ namespace DOpE
     template<typename DATACONTAINER>
       void
       PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE, DH>::ElementMatrix(
-          const DATACONTAINER& cdc,
+          const DATACONTAINER& edc,
           dealii::FullMatrix<double> &local_entry_matrix, double scale,
           double scale_ico)
       {
@@ -1445,12 +1445,12 @@ namespace DOpE
         if (this->GetType() == "state")
         {
           // state values in quadrature points
-          this->GetPDE().ElementMatrix(cdc, local_entry_matrix, scale, scale_ico);
+          this->GetPDE().ElementMatrix(edc, local_entry_matrix, scale, scale_ico);
         }
         else if (this->GetType() == "adjoint_for_ee")
         {
           // state values in quadrature points
-          this->GetPDE().ElementMatrix_T(cdc, local_entry_matrix, scale,
+          this->GetPDE().ElementMatrix_T(edc, local_entry_matrix, scale,
               scale_ico);
         }
         else
@@ -1468,13 +1468,13 @@ namespace DOpE
     template<typename DATACONTAINER>
       void
       PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE, DH>::ElementTimeMatrix(
-          const DATACONTAINER& cdc, FullMatrix<double> &local_entry_matrix)
+          const DATACONTAINER& edc, FullMatrix<double> &local_entry_matrix)
       {
 
         if (this->GetType() == "state")
         {
           // state values in quadrature points
-          this->GetPDE().ElementTimeMatrix(cdc, local_entry_matrix);
+          this->GetPDE().ElementTimeMatrix(edc, local_entry_matrix);
         }
         else if (this->GetType() == "dual_for_ee")
         {
@@ -1496,14 +1496,14 @@ namespace DOpE
     template<typename DATACONTAINER>
       void
       PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE, DH>::ElementTimeMatrixExplicit(
-          const DATACONTAINER& cdc,
+          const DATACONTAINER& edc,
           dealii::FullMatrix<double> &local_entry_matrix)
       {
 
         if (this->GetType() == "state")
         {
           // state values in quadrature points
-          this->GetPDE().ElementTimeMatrixExplicit(cdc, local_entry_matrix);
+          this->GetPDE().ElementTimeMatrixExplicit(edc, local_entry_matrix);
         }
         else if (this->GetType() == "dual_for_ee")
         {

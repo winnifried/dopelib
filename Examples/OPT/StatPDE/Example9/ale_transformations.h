@@ -21,11 +21,7 @@
 *
 **/
 
-/* Thomas Wick
-   University of Heidelberg
-   Date: Wed, Mar 18, 2009,
-         Fri, Mar 27, 2009
-
+/*
    Contents: 
    1) namespaces: ALE transformations
    2)             Stokes Terms in ALE

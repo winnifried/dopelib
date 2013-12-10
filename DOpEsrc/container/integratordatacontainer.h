@@ -50,8 +50,8 @@ namespace DOpE
       public:
         IntegratorDataContainer(const QUADRATURE& quad,
             const FACEQUADRATURE & face_quad)
-            : _quad(&quad), _face_quad(&face_quad), _fdc(NULL), _cdc(NULL), _mm_fdc(
-                NULL), _mm_cdc(NULL)
+            : _quad(&quad), _face_quad(&face_quad), _fdc(NULL), _edc(NULL), _mm_fdc(
+                NULL), _mm_edc(NULL)
         {
         }
 
@@ -62,20 +62,20 @@ namespace DOpE
             delete _fdc;
             _fdc = NULL;
           }
-          if (_cdc != NULL)
+          if (_edc != NULL)
           {
-            delete _cdc;
-            _cdc = NULL;
+            delete _edc;
+            _edc = NULL;
           }
           if (_mm_fdc != NULL)
           {
             delete _mm_fdc;
             _mm_fdc = NULL;
           }
-          if (_mm_cdc != NULL)
+          if (_mm_edc != NULL)
           {
-            delete _mm_cdc;
-            _mm_cdc = NULL;
+            delete _mm_edc;
+            _mm_edc = NULL;
           }
         }
 
@@ -120,16 +120,16 @@ namespace DOpE
          */
         template<typename STH>
           void
-          InitializeCDC(const QUADRATURE& quad, UpdateFlags update_flags,
+          InitializeEDC(const QUADRATURE& quad, UpdateFlags update_flags,
               STH& sth,
               const std::vector<
                   typename DOpEWrapper::DoFHandler<dim, DH>::active_cell_iterator>& element,
               const std::map<std::string, const Vector<double>*> &param_values,
               const std::map<std::string, const VECTOR*> &domain_values)
           {
-            if (_cdc != NULL)
-              delete _cdc;
-            _cdc = new ElementDataContainer<DH, VECTOR, dim>(quad,
+            if (_edc != NULL)
+              delete _edc;
+            _edc = new ElementDataContainer<DH, VECTOR, dim>(quad,
                 update_flags, sth, element, param_values, domain_values);
           }
 
@@ -139,13 +139,13 @@ namespace DOpE
          */
         template<typename STH>
           void
-          InitializeCDC(UpdateFlags update_flags, STH& sth,
+          InitializeEDC(UpdateFlags update_flags, STH& sth,
               const std::vector<
                   typename DOpEWrapper::DoFHandler<dim, DH>::active_cell_iterator>& element,
               const std::map<std::string, const Vector<double>*> &param_values,
               const std::map<std::string, const VECTOR*> &domain_values)
           {
-            InitializeCDC(GetQuad(), update_flags, sth, element, param_values,
+            InitializeEDC(GetQuad(), update_flags, sth, element, param_values,
                 domain_values);
           }
 
@@ -174,16 +174,16 @@ namespace DOpE
          */
         template<typename STH>
           void
-          InitializeMMCDC(UpdateFlags update_flags, STH& sth,
+          InitializeMMEDC(UpdateFlags update_flags, STH& sth,
               const typename std::vector<typename DH<dim, dim>::cell_iterator>& element,
               const typename std::vector<
                   typename dealii::Triangulation<dim>::cell_iterator>& tria_element,
               const std::map<std::string, const Vector<double>*> &param_values,
               const std::map<std::string, const VECTOR*> &domain_values)
           {
-            if (_mm_cdc != NULL)
-              delete _mm_cdc;
-            _mm_cdc = new Multimesh_ElementDataContainer<DH, VECTOR, dim>(
+            if (_mm_edc != NULL)
+              delete _mm_edc;
+            _mm_edc = new Multimesh_ElementDataContainer<DH, VECTOR, dim>(
                 GetQuad(), update_flags, sth, element, tria_element, param_values,
                 domain_values);
           }
@@ -213,8 +213,8 @@ namespace DOpE
         ElementDataContainer<DH, VECTOR, dim>&
         GetElementDataContainer() const
         {
-          if (_cdc != NULL)
-            return *_cdc;
+          if (_edc != NULL)
+            return *_edc;
           else
             throw DOpEException("Pointer has to be initialized.",
                 "IntegratorDataContainer::GetElementDataContainer");
@@ -233,8 +233,8 @@ namespace DOpE
         Multimesh_ElementDataContainer<DH, VECTOR, dim>&
         GetMultimeshElementDataContainer() const
         {
-          if (_mm_cdc != NULL)
-            return *_mm_cdc;
+          if (_mm_edc != NULL)
+            return *_mm_edc;
           else
             throw DOpEException("Pointer has to be initialized.",
                 "IntegratorDataContainer::GetMultimeshElementDataContainer");
@@ -243,9 +243,9 @@ namespace DOpE
         QUADRATURE const* _quad;
         FACEQUADRATURE const* _face_quad;
         FaceDataContainer<DH, VECTOR, dim>* _fdc;
-        ElementDataContainer<DH, VECTOR, dim>* _cdc;
+        ElementDataContainer<DH, VECTOR, dim>* _edc;
         Multimesh_FaceDataContainer<DH, VECTOR, dim>* _mm_fdc;
-        Multimesh_ElementDataContainer<DH, VECTOR, dim>* _mm_cdc;
+        Multimesh_ElementDataContainer<DH, VECTOR, dim>* _mm_edc;
     };
 
 } //end of namespace

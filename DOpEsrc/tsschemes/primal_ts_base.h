@@ -66,11 +66,11 @@ namespace DOpE
          * Computes the value of the element contributions to the 
 	 * equation for the calculation of the initial values
          *
-	 * @tparam <CDC>                   A container that contains all relevant data
+	 * @tparam <EDC>                   A container that contains all relevant data
 	 *                                 needed on the element, e.g., element size, finite element values;
 	 *                                 see, e.g., ElementDataContainer
          *
-	 * @param cdc                      The CDC object.
+	 * @param edc                      The EDC object.
          * @param local_vector        This vector contains the locally computed values 
          *                                 of the element equation. For more information
          *                                 on dealii::Vector, please visit, the deal.ii manual pages.
@@ -79,13 +79,13 @@ namespace DOpE
 	 * @param scale_ico                Given for compatibility reasons with the ElementEquation 
 	 *                                 in PDEInterface. Should not be used here!
          */
-        template<typename CDC>
+        template<typename EDC>
           void
-          Init_ElementEquation(const CDC& cdc,
+          Init_ElementEquation(const EDC& edc,
               dealii::Vector<double> &local_vector, double scale,
               double scale_ico)
           {
-            this->GetProblem().Init_ElementEquation(cdc, local_vector, scale,
+            this->GetProblem().Init_ElementEquation(edc, local_vector, scale,
                 scale_ico);
           }
 
@@ -93,33 +93,33 @@ namespace DOpE
          * Computes the value of the element contributions to the 
 	 * RHS for the calculation of the initial values
          *
-	 * @tparam <CDC>                   A container that contains all relevant data
+	 * @tparam <EDC>                   A container that contains all relevant data
 	 *                                 needed on the element, e.g., element size, finite element values;
 	 *                                 see, e.g., ElementDataContainer
          *
-	 * @param cdc                      The CDC object.
+	 * @param edc                      The EDC object.
          * @param local_vector        This vector contains the locally computed values 
          *                                 of the elementrhs.
          * @param scale                    A scaling factor which is -1 or 1 depending on the subroutine 
 	 *                                 to compute.
 	 */
-        template<typename CDC>
+        template<typename EDC>
           void
-          Init_ElementRhs(const CDC& cdc,
+          Init_ElementRhs(const EDC& edc,
               dealii::Vector<double> &local_vector, double scale)
           {
-            this->GetProblem().Init_ElementRhs(cdc, local_vector, scale);
+            this->GetProblem().Init_ElementRhs(edc, local_vector, scale);
           }
 
         /** 
          * Computes the value of the element contributions to the 
 	 * Matrix for the calculation of the initial values
          *
-	 * @tparam <CDC>                   A container that contains all relevant data
+	 * @tparam <EDC>                   A container that contains all relevant data
 	 *                                 needed on the element, e.g., element size, finite element values;
 	 *                                 see, e.g., ElementDataContainer
          *
-	 * @param cdc                      The CDC object.
+	 * @param edc                      The EDC object.
          * @param local_matrix       This vector contains the locally computed values 
          *                                 of the elementmatrix.
          * @param scale                    A scaling factor which is -1 or 1 depending on the subroutine 
@@ -127,12 +127,12 @@ namespace DOpE
 	 * @param scale_ico                Given for compatibility reasons with the ElementEquation 
 	 *                                 in PDEInterface. Should not be used here!
 	 */
-        template<typename CDC>
+        template<typename EDC>
           void
-          Init_ElementMatrix(const CDC& cdc,
+          Init_ElementMatrix(const EDC& edc,
               dealii::FullMatrix<double> &local_matrix, double scale, double scale_ico)
           {
-            this->GetProblem().Init_ElementMatrix(cdc, local_matrix, scale,
+            this->GetProblem().Init_ElementMatrix(edc, local_matrix, scale,
                 scale_ico);
           }
 

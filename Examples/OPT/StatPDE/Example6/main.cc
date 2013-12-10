@@ -92,10 +92,10 @@ typedef Integrator<IDC, VECTOR, double, DIM> INTEGRATOR;
 typedef DirectLinearSolverWithMatrix<SPARSITYPATTERN, MATRIX, VECTOR> LINEARSOLVER;
 typedef NewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR> NLS;
 typedef StatReducedProblem<NLS, NLS, INTEGRATOR, INTEGRATOR, OP, VECTOR, CDIM,
-    DIM> SSolver;
-typedef VoidReducedProblem<NLS, INTEGRATOR, ALagOP, VECTOR, CDIM, DIM> ALagSSolver;
+    DIM> RP;
+typedef VoidReducedProblem<NLS, INTEGRATOR, ALagOP, VECTOR, CDIM, DIM> ALagRP;
 typedef GeneralizedMMAAlgorithm<LocalConstraintAccessor, IDC, STH, OP, VECTOR,
-    ALagSSolver, CDIM, DIM, 1> MMA;
+    ALagRP, CDIM, DIM, 1> MMA;
 
 int
 main(int argc, char **argv)
@@ -119,7 +119,7 @@ main(int argc, char **argv)
   }
 
   ParameterReader pr;
-  SSolver::declare_params(pr);
+  RP::declare_params(pr);
   MMA::declare_params(pr);
   NLS::declare_params(pr);
 
@@ -196,7 +196,7 @@ main(int argc, char **argv)
   P.SetBoundaryFunctionalColors(3);
   P.SetBoundaryEquationColors(3);
 
-  SSolver solver(&P, "fullmem", pr, idc);
+  RP solver(&P, "fullmem", pr, idc);
 
   MMA Alg(&P, &CA, &solver, "fullmem", pr, idc);
 

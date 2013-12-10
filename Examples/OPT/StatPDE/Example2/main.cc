@@ -95,7 +95,7 @@ typedef NewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR> NLS;
 typedef ReducedNewtonAlgorithm<OP, VECTOR> RNA;
 
 typedef StatReducedProblem<NLSM, NLS, INTEGRATORM, INTEGRATOR, OP, VECTOR, CDIM,
-    DIM> SSolver;
+    DIM> RP;
 typedef MethodOfLines_SpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR,
     CDIM, DIM> STH;
 
@@ -120,7 +120,7 @@ main(int argc, char **argv)
   }
 
   ParameterReader pr;
-  SSolver::declare_params(pr);
+  RP::declare_params(pr);
   RNA::declare_params(pr);
   pr.read_parameters(paramfile);
 
@@ -154,7 +154,7 @@ main(int argc, char **argv)
 
   P.SetDirichletBoundaryColors(0, comp_mask, &DD);
 
-  SSolver solver(&P, "fullmem", pr, idc);
+  RP solver(&P, "fullmem", pr, idc);
   RNA Alg(&P, &solver, pr);
 
   try

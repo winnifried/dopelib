@@ -106,9 +106,9 @@ typedef NewtonSolver<INTEGRATOR, GMRESIDENTITY, VECTOR> NLS2;
 typedef NewtonSolver<INTEGRATOR, GMRESSSOR, VECTOR> NLS3;
 
 //Define the three ssolver fitting the three linear solvers.
-typedef StatPDEProblem<NLS1, BLOCKINTEGRATOR, OPBLOCK, VECTORBLOCK, DIM> SSolver1;
-typedef StatPDEProblem<NLS2, INTEGRATOR, OP, VECTOR, DIM> SSolver2;
-typedef StatPDEProblem<NLS3, INTEGRATOR, OP, VECTOR, DIM> SSolver3;
+typedef StatPDEProblem<NLS1, BLOCKINTEGRATOR, OPBLOCK, VECTORBLOCK, DIM> RP1;
+typedef StatPDEProblem<NLS2, INTEGRATOR, OP, VECTOR, DIM> RP2;
+typedef StatPDEProblem<NLS3, INTEGRATOR, OP, VECTOR, DIM> RP3;
 
 //Define the spacetimehandler for block and non block vectors
 typedef MethodOfLines_StateSpaceTimeHandler<FE, DOFHANDLER,
@@ -138,9 +138,9 @@ main(int argc, char **argv)
 
   //Declare parameters
   ParameterReader pr;
-  SSolver1::declare_params(pr);
-  SSolver2::declare_params(pr);
-  SSolver3::declare_params(pr);
+  RP1::declare_params(pr);
+  RP2::declare_params(pr);
+  RP3::declare_params(pr);
   DOpEOutputHandler<VECTOR>::declare_params(pr);
   pr.read_parameters(paramfile);
 
@@ -187,7 +187,7 @@ main(int argc, char **argv)
 
   //We solve first with the nonpreconditioned GMRES with blockstructure.
   {
-    SSolver1 solver1(&Pblock, "fullmem", pr, idcblock);
+    RP1 solver1(&Pblock, "fullmem", pr, idcblock);
 
     DOpEOutputHandler<VECTORBLOCK> out(&solver1, pr);
     DOpEExceptionHandler<VECTORBLOCK> ex(&out);
@@ -227,7 +227,7 @@ main(int argc, char **argv)
       if (i != niter - 1)
       {
         //We extract the solution out of the statproblem..
-        SolutionExtractor<SSolver1, VECTORBLOCK> a1(solver1);
+        SolutionExtractor<RP1, VECTORBLOCK> a1(solver1);
         const StateVector<VECTORBLOCK> &gu1 = a1.GetU();
         solution = gu1.GetSpacialVector();
         Vector<float> estimated_error_per_element(triangulation.n_active_cells());
@@ -250,8 +250,8 @@ main(int argc, char **argv)
   //Here we solve with nonpreconditioned GMRES without blockstructure as
   //well as with the SSOR preconditioned GMRES.
   {
-    SSolver2 solver2(&P, "fullmem", pr, idc);
-    SSolver3 solver3(&P, "fullmem", pr, idc);
+    RP2 solver2(&P, "fullmem", pr, idc);
+    RP3 solver3(&P, "fullmem", pr, idc);
 
     DOpEOutputHandler<VECTOR> out(&solver2, pr);
     DOpEExceptionHandler<VECTOR> ex(&out);
@@ -303,7 +303,7 @@ main(int argc, char **argv)
       }
       if (i != niter - 1)
       {
-        SolutionExtractor<SSolver2, VECTOR> a1(solver2);
+        SolutionExtractor<RP2, VECTOR> a1(solver2);
         const StateVector<VECTOR> &gu1 = a1.GetU();
         solution = gu1.GetSpacialVector();
         Vector<float> estimated_error_per_element(triangulation.n_active_cells());

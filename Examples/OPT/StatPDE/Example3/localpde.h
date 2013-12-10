@@ -31,10 +31,10 @@ using namespace dealii;
 using namespace DOpE;
 
 template<
-    template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+    template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
     template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
     template<int, int> class DH, typename VECTOR, int dealdim>
-  class LocalPDE : public PDEInterface<CDC, FDC, DH, VECTOR, dealdim>
+  class LocalPDE : public PDEInterface<EDC, FDC, DH, VECTOR, dealdim>
   {
     public:
 
@@ -63,14 +63,14 @@ template<
       }
 
       void
-      ElementEquation(const CDC<DH, VECTOR, dealdim>& cdc,
+      ElementEquation(const EDC<DH, VECTOR, dealdim>& edc,
           dealii::Vector<double> &local_vector, double scale,
           double /*scale_ico*/)
       {
         const DOpEWrapper::FEValues<dealdim> & state_fe_values =
-            cdc.GetFEValuesState();
-        unsigned int n_dofs_per_element = cdc.GetNDoFsPerElement();
-        unsigned int n_q_points = cdc.GetNQPoints();
+            edc.GetFEValuesState();
+        unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
+        unsigned int n_q_points = edc.GetNQPoints();
 
         assert(this->_problem_type == "state");
 
@@ -78,8 +78,8 @@ template<
         _ugrads.resize(n_q_points, vector<Tensor<1, 2> >(3));
 
         // Getting state values
-        cdc.GetValuesState("last_newton_solution", _uvalues);
-        cdc.GetGradsState("last_newton_solution", _ugrads);
+        edc.GetValuesState("last_newton_solution", _uvalues);
+        edc.GetGradsState("last_newton_solution", _ugrads);
 
         const FEValuesExtractors::Vector velocities(0);
         const FEValuesExtractors::Scalar pressure(2);
@@ -128,14 +128,14 @@ template<
       }
 
       void
-      ElementMatrix(const CDC<DH, VECTOR, dealdim>& cdc,
+      ElementMatrix(const EDC<DH, VECTOR, dealdim>& edc,
           dealii::FullMatrix<double> &local_matrix, double scale,
           double /*scale_ico*/)
       {
         const DOpEWrapper::FEValues<dealdim> & state_fe_values =
-            cdc.GetFEValuesState();
-        unsigned int n_dofs_per_element = cdc.GetNDoFsPerElement();
-        unsigned int n_q_points = cdc.GetNQPoints();
+            edc.GetFEValuesState();
+        unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
+        unsigned int n_q_points = edc.GetNQPoints();
 
         _uvalues.resize(n_q_points, Vector<double>(3));
         _ugrads.resize(n_q_points, vector<Tensor<1, 2> >(3));
@@ -147,13 +147,13 @@ template<
         // for the linearized convection term.
         if (this->_problem_type == "state")
         {
-          cdc.GetValuesState("last_newton_solution", _uvalues);
-          cdc.GetGradsState("last_newton_solution", _ugrads);
+          edc.GetValuesState("last_newton_solution", _uvalues);
+          edc.GetGradsState("last_newton_solution", _ugrads);
         }
         else
         {
-          cdc.GetValuesState("state", _uvalues);
-          cdc.GetGradsState("state", _ugrads);
+          edc.GetValuesState("state", _uvalues);
+          edc.GetGradsState("state", _ugrads);
         }
 
         const FEValuesExtractors::Vector velocities(0);
@@ -210,28 +210,28 @@ template<
       }
 
       void
-      ElementEquation_U(const CDC<DH, VECTOR, dealdim>& cdc,
+      ElementEquation_U(const EDC<DH, VECTOR, dealdim>& edc,
           dealii::Vector<double> &local_vector, double scale,
           double /*scale_ico*/)
       {
         const DOpEWrapper::FEValues<dealdim> & state_fe_values =
-            cdc.GetFEValuesState();
-        unsigned int n_dofs_per_element = cdc.GetNDoFsPerElement();
-        unsigned int n_q_points = cdc.GetNQPoints();
+            edc.GetFEValuesState();
+        unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
+        unsigned int n_q_points = edc.GetNQPoints();
 
         assert(this->_problem_type == "adjoint");
 
         _zvalues.resize(n_q_points, Vector<double>(3));
         _zgrads.resize(n_q_points, vector<Tensor<1, 2> >(3));
 
-        cdc.GetValuesState("last_newton_solution", _zvalues);
-        cdc.GetGradsState("last_newton_solution", _zgrads);
+        edc.GetValuesState("last_newton_solution", _zvalues);
+        edc.GetGradsState("last_newton_solution", _zgrads);
 
         _z_state_values.resize(n_q_points, Vector<double>(3));
         _z_state_grads.resize(n_q_points, vector<Tensor<1, 2> >(3));
 
-        cdc.GetValuesState("state", _z_state_values);
-        cdc.GetGradsState("state", _z_state_grads);
+        edc.GetValuesState("state", _z_state_values);
+        edc.GetGradsState("state", _z_state_grads);
 
         const FEValuesExtractors::Vector velocities(0);
         const FEValuesExtractors::Scalar pressure(2);
@@ -294,28 +294,28 @@ template<
       }
 
       void
-      ElementEquation_UT(const CDC<DH, VECTOR, dealdim>& cdc,
+      ElementEquation_UT(const EDC<DH, VECTOR, dealdim>& edc,
           dealii::Vector<double> &local_vector, double scale,
           double /*scale_ico*/)
       {
         const DOpEWrapper::FEValues<dealdim> & state_fe_values =
-            cdc.GetFEValuesState();
-        unsigned int n_dofs_per_element = cdc.GetNDoFsPerElement();
-        unsigned int n_q_points = cdc.GetNQPoints();
+            edc.GetFEValuesState();
+        unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
+        unsigned int n_q_points = edc.GetNQPoints();
 
         assert(this->_problem_type == "tangent");
 
         _duvalues.resize(n_q_points, Vector<double>(3));
         _dugrads.resize(n_q_points, vector<Tensor<1, 2> >(3));
 
-        cdc.GetValuesState("last_newton_solution", _duvalues);
-        cdc.GetGradsState("last_newton_solution", _dugrads);
+        edc.GetValuesState("last_newton_solution", _duvalues);
+        edc.GetGradsState("last_newton_solution", _dugrads);
 
         _du_state_values.resize(n_q_points, Vector<double>(3));
         _du_state_grads.resize(n_q_points, vector<Tensor<1, 2> >(3));
 
-        cdc.GetValuesState("state", _du_state_values);
-        cdc.GetGradsState("state", _du_state_grads);
+        edc.GetValuesState("state", _du_state_values);
+        edc.GetGradsState("state", _du_state_grads);
 
         const FEValuesExtractors::Vector velocities(0);
         const FEValuesExtractors::Scalar pressure(2);
@@ -378,28 +378,28 @@ template<
       }
 
       void
-      ElementEquation_UTT(const CDC<DH, VECTOR, dealdim>& cdc,
+      ElementEquation_UTT(const EDC<DH, VECTOR, dealdim>& edc,
           dealii::Vector<double> &local_vector, double scale,
           double /*scale_ico*/)
       {
         const DOpEWrapper::FEValues<dealdim> & state_fe_values =
-            cdc.GetFEValuesState();
-        unsigned int n_dofs_per_element = cdc.GetNDoFsPerElement();
-        unsigned int n_q_points = cdc.GetNQPoints();
+            edc.GetFEValuesState();
+        unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
+        unsigned int n_q_points = edc.GetNQPoints();
 
         assert(this->_problem_type == "adjoint_hessian");
 
         _dzvalues.resize(n_q_points, Vector<double>(3));
         _dzgrads.resize(n_q_points, vector<Tensor<1, 2> >(3));
 
-        cdc.GetValuesState("last_newton_solution", _dzvalues);
-        cdc.GetGradsState("last_newton_solution", _dzgrads);
+        edc.GetValuesState("last_newton_solution", _dzvalues);
+        edc.GetGradsState("last_newton_solution", _dzgrads);
 
         _dz_state_values.resize(n_q_points, Vector<double>(3));
         _dz_state_grads.resize(n_q_points, vector<Tensor<1, 2> >(3));
 
-        cdc.GetValuesState("state", _dz_state_values);
-        cdc.GetGradsState("state", _dz_state_grads);
+        edc.GetValuesState("state", _dz_state_values);
+        edc.GetGradsState("state", _dz_state_grads);
 
         const FEValuesExtractors::Vector velocities(0);
         const FEValuesExtractors::Scalar pressure(2);
@@ -462,28 +462,28 @@ template<
       }
 
       void
-      ElementEquation_UU(const CDC<DH, VECTOR, dealdim>& cdc,
+      ElementEquation_UU(const EDC<DH, VECTOR, dealdim>& edc,
           dealii::Vector<double> &local_vector, double scale,
           double /*scale_ico*/)
       {
         const DOpEWrapper::FEValues<dealdim> & state_fe_values =
-            cdc.GetFEValuesState();
-        unsigned int n_dofs_per_element = cdc.GetNDoFsPerElement();
-        unsigned int n_q_points = cdc.GetNQPoints();
+            edc.GetFEValuesState();
+        unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
+        unsigned int n_q_points = edc.GetNQPoints();
 
         assert(this->_problem_type == "adjoint_hessian");
 
         _zvalues.resize(n_q_points, Vector<double>(3));
         _zgrads.resize(n_q_points, vector<Tensor<1, 2> >(3));
 
-        cdc.GetValuesState("adjoint", _zvalues);
-        cdc.GetGradsState("adjoint", _zgrads);
+        edc.GetValuesState("adjoint", _zvalues);
+        edc.GetGradsState("adjoint", _zgrads);
 
         _du_state_values.resize(n_q_points, Vector<double>(3));
         _du_state_grads.resize(n_q_points, vector<Tensor<1, 2> >(3));
 
-        cdc.GetValuesState("tangent", _du_state_values);
-        cdc.GetGradsState("tangent", _du_state_grads);
+        edc.GetValuesState("tangent", _du_state_values);
+        edc.GetGradsState("tangent", _du_state_grads);
 
         const FEValuesExtractors::Vector velocities(0);
         const FEValuesExtractors::Scalar pressure(2);
@@ -534,7 +534,7 @@ template<
 
       // Look for BoundaryEquationQ
       void
-      ElementEquation_Q(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
+      ElementEquation_Q(const EDC<DH, VECTOR, dealdim>& /*edc*/,
           dealii::Vector<double> &/*local_vector*/, double /*scale*/,
           double /*scale_ico*/)
       {
@@ -542,7 +542,7 @@ template<
       }
 
       void
-      ElementEquation_QT(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
+      ElementEquation_QT(const EDC<DH, VECTOR, dealdim>& /*edc*/,
           dealii::Vector<double> &/*local_vector*/, double /*scale*/,
           double /*scale_ico*/)
       {
@@ -550,7 +550,7 @@ template<
       }
 
       void
-      ElementEquation_QTT(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
+      ElementEquation_QTT(const EDC<DH, VECTOR, dealdim>& /*edc*/,
           dealii::Vector<double> &/*local_vector*/, double /*scale*/,
           double /*scale_ico*/)
       {
@@ -558,21 +558,21 @@ template<
       }
 
       void
-      ElementEquation_QU(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
+      ElementEquation_QU(const EDC<DH, VECTOR, dealdim>& /*edc*/,
           dealii::Vector<double> &/*local_vector*/, double /*scale*/,
           double /*scale_ico*/)
       {
         assert(this->_problem_type == "adjoint_hessian");
       }
       void
-      ElementEquation_UQ(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
+      ElementEquation_UQ(const EDC<DH, VECTOR, dealdim>& /*edc*/,
           dealii::Vector<double> &/*local_vector*/, double /*scale*/,
           double /*scale_ico*/)
       {
         assert(this->_problem_type == "hessian");
       }
       void
-      ElementEquation_QQ(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
+      ElementEquation_QQ(const EDC<DH, VECTOR, dealdim>& /*edc*/,
           dealii::Vector<double> &/*local_vector*/, double /*scale*/,
           double /*scale_ico*/)
       {
@@ -580,7 +580,7 @@ template<
       }
 
       void
-      ElementRightHandSide(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
+      ElementRightHandSide(const EDC<DH, VECTOR, dealdim>& /*edc*/,
           dealii::Vector<double> &/*local_vector*/, double /*scale*/)
       {
         assert(this->_problem_type == "state");
@@ -1052,14 +1052,14 @@ template<
       }
 
       void
-      ControlElementEquation(const CDC<DH, VECTOR, dealdim>& cdc,
+      ControlElementEquation(const EDC<DH, VECTOR, dealdim>& edc,
           dealii::Vector<double> &local_vector, double scale)
       {
         {
           assert(
               (this->_problem_type == "gradient")||(this->_problem_type == "hessian"));
           _funcgradvalues.reinit(local_vector.size());
-          cdc.GetParamValues("last_newton_solution", _funcgradvalues);
+          edc.GetParamValues("last_newton_solution", _funcgradvalues);
         }
 
         for (unsigned int i = 0; i < local_vector.size(); i++)
@@ -1069,7 +1069,7 @@ template<
       }
 
       void
-      ControlElementMatrix(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
+      ControlElementMatrix(const EDC<DH, VECTOR, dealdim>& /*edc*/,
           FullMatrix<double> &local_matrix)
       {
         assert(local_matrix.m() == local_matrix.n());

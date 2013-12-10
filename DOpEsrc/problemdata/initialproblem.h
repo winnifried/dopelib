@@ -63,9 +63,9 @@ namespace DOpE
 	 * Functions providing the required information for the integrator.
 	 * see OptProblemContainer for details.
 	 */
-        template<typename CDC>
+        template<typename EDC>
           inline void
-          ElementEquation(const CDC& cdc,
+          ElementEquation(const EDC& edc,
               dealii::Vector<double> &local_vector, double scale,
               double scale_ico);
 
@@ -73,9 +73,9 @@ namespace DOpE
 	 * Functions providing the required information for the integrator.
 	 * see OptProblemContainer for details.
 	 */
-        template<typename CDC>
+        template<typename EDC>
           inline void
-          ElementRhs(const CDC& cdc,
+          ElementRhs(const EDC& edc,
               dealii::Vector<double> &local_vector, double scale = 1.);
 
         /**
@@ -92,9 +92,9 @@ namespace DOpE
 	 * Functions providing the required information for the integrator.
 	 * see OptProblemContainer for details.
 	 */
-        template<typename CDC>
+        template<typename EDC>
           inline void
-          ElementMatrix(const CDC& cdc,
+          ElementMatrix(const EDC& edc,
               dealii::FullMatrix<double> &local_matrix, double scale = 1.,
               double scale_ico = 1.);
 
@@ -300,13 +300,13 @@ namespace DOpE
   /*****************************************************************************************/
 
   template<typename PDE, typename VECTOR, int dim>
-    template<typename CDC>
+    template<typename EDC>
       void
-      InitialProblem<PDE, VECTOR, dim>::ElementEquation(const CDC& cdc,
+      InitialProblem<PDE, VECTOR, dim>::ElementEquation(const EDC& edc,
           dealii::Vector<double> &local_vector, double scale,
           double scale_ico)
       {
-        _pde.Init_ElementEquation(cdc, local_vector, scale, scale_ico);
+        _pde.Init_ElementEquation(edc, local_vector, scale, scale_ico);
       }
 
   /******************************************************/
@@ -347,12 +347,12 @@ namespace DOpE
   /******************************************************/
 
   template<typename PDE, typename VECTOR, int dim>
-    template<typename CDC>
+    template<typename EDC>
       void
-      InitialProblem<PDE, VECTOR, dim>::ElementRhs(const CDC& cdc,
+      InitialProblem<PDE, VECTOR, dim>::ElementRhs(const EDC& edc,
           dealii::Vector<double> &local_vector, double scale)
       {
-        _pde.Init_ElementRhs(cdc, local_vector, scale);
+        _pde.Init_ElementRhs(edc, local_vector, scale);
       }
 
   /******************************************************/
@@ -391,12 +391,12 @@ namespace DOpE
   /******************************************************/
 
   template<typename PDE, typename VECTOR, int dim>
-    template<typename CDC>
+    template<typename EDC>
       void
-      InitialProblem<PDE, VECTOR, dim>::ElementMatrix(const CDC& cdc,
+      InitialProblem<PDE, VECTOR, dim>::ElementMatrix(const EDC& edc,
           dealii::FullMatrix<double> &local_matrix, double scale, double scale_ico)
       {
-        _pde.Init_ElementMatrix(cdc, local_matrix, scale, scale_ico);
+        _pde.Init_ElementMatrix(edc, local_matrix, scale, scale_ico);
       }
 
   /******************************************************/

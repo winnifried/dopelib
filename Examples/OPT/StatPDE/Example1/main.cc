@@ -102,7 +102,7 @@ typedef ReducedTrustregion_NewtonAlgorithm<OP, VECTOR> RNA2;
 
 //This class represents the reduced problem and steers the solution process.
 typedef StatReducedProblem<NLS, NLS, INTEGRATOR, INTEGRATOR, OP, VECTOR, CDIM,
-    DIM> SSolver;
+    DIM> RP;
 
 //The spacetimehandler manages all the things related to the degrees of
 //freedom in space and time (for the optimization as well as the state variable!)
@@ -141,7 +141,7 @@ main(int argc, char **argv)
   const int niter = 2;
 
   ParameterReader pr;
-  SSolver::declare_params(pr);
+  RP::declare_params(pr);
   RNA::declare_params(pr);
   RNA2::declare_params(pr);
   DOpEOutputHandler<VECTOR>::declare_params(pr);
@@ -192,7 +192,7 @@ main(int argc, char **argv)
   SimpleDirichletData<VECTOR, DIM> DD(zf);
   P.SetDirichletBoundaryColors(0, comp_mask, &DD);
 
-  SSolver solver(&P, "fullmem", pr, idc, 2);
+  RP solver(&P, "fullmem", pr, idc, 2);
   //Make sure we use the same outputhandler
   DOpEOutputHandler<VECTOR> out(&solver, pr);
   DOpEExceptionHandler<VECTOR> ex(&out);

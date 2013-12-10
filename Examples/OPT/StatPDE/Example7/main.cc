@@ -88,7 +88,7 @@ typedef CGLinearSolverWithMatrix<
 
 typedef NewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR> NLS;
 typedef StatReducedProblem<NLS, NLS, INTEGRATOR, INTEGRATOR, OP, VECTOR, CDIM,
-    DIM> SSolver;
+    DIM> RP;
 //The two optimization algorightms using SNOPT/IPOPT
 typedef Reduced_SnoptAlgorithm<OP, VECTOR> SNOPT_Alg;
 typedef Reduced_IpoptAlgorithm<OP, VECTOR> IPOPT_Alg;
@@ -115,7 +115,7 @@ main(int argc, char **argv)
   }
 
   ParameterReader pr;
-  SSolver::declare_params(pr);
+  RP::declare_params(pr);
   SNOPT_Alg::declare_params(pr);
   IPOPT_Alg::declare_params(pr);
   NLS::declare_params(pr);
@@ -164,7 +164,7 @@ main(int argc, char **argv)
   DD DD_1(zf);
   P.SetDirichletBoundaryColors(0, comp_mask, &DD_1);
 
-  SSolver solver(&P, "fullmem", pr, idc, 2);
+  RP solver(&P, "fullmem", pr, idc, 2);
 
   //uncomment to use SNOPT if installed
   //SNOPT_Alg Alg(&P,&solver,"fullmem",pr);

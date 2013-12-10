@@ -175,10 +175,10 @@ template<typename PROBLEM>
       auto endc = pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandlerEnd();
 
      // Initialize the data containers.
-      _idc.InitializeCDC(pde.GetUpdateFlags(),
+      _idc.InitializeEDC(pde.GetUpdateFlags(),
                 *(pde.GetBaseProblem().GetSpaceTimeHandler()), element,
                 this->GetParamData(), this->GetDomainData());
-      auto& cdc = _idc.GetElementDataContainer();
+      auto& edc = _idc.GetElementDataContainer();
 
       bool need_faces = pde.HasFaces();
       std::vector<unsigned int> boundary_equation_colors = pde.GetBoundaryEquationColors();
@@ -202,9 +202,9 @@ template<typename PROBLEM>
         }
 
         local_vector = 0;
-	cdc.ReInit();
+	edc.ReInit();
 
-        pde.ElementRhs(cdc,local_vector, -1.);
+        pde.ElementRhs(edc,local_vector, -1.);
 
         if(need_boundary_integrals)
         {
@@ -243,7 +243,7 @@ template<typename PROBLEM>
       }
       //The Equation should not be space dependend.
       local_vector = 0;
-      pde.ElementEquation(cdc, local_vector, 1., 1.);
+      pde.ElementEquation(edc, local_vector, 1., 1.);
 
       for (unsigned int i = 0; i < dofs; ++i)
       {
@@ -283,10 +283,10 @@ template<typename PROBLEM>
       auto endc = pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandlerEnd();
 
      // Initialize the data containers.
-      _idc.InitializeCDC(pde.GetUpdateFlags(),
+      _idc.InitializeEDC(pde.GetUpdateFlags(),
                 *(pde.GetBaseProblem().GetSpaceTimeHandler()), element,
                 this->GetParamData(), this->GetDomainData());
-      auto& cdc = _idc.GetElementDataContainer();
+      auto& edc = _idc.GetElementDataContainer();
 
       bool need_faces = pde.HasFaces();
       std::vector<unsigned int> boundary_equation_colors = pde.GetBoundaryEquationColors();
@@ -310,9 +310,9 @@ template<typename PROBLEM>
         }
 
         local_vector = 0;
-	cdc.ReInit();
+	edc.ReInit();
 
-        pde.ElementRhs(cdc,local_vector, 1.);
+        pde.ElementRhs(edc,local_vector, 1.);
 
         if(need_boundary_integrals)
         {
@@ -401,10 +401,10 @@ template<typename PROBLEM>
       auto element = pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandlerBeginActive();
       auto endc = pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandlerEnd();
 
-      _idc.InitializeCDC(pde.GetUpdateFlags(),
+      _idc.InitializeEDC(pde.GetUpdateFlags(),
           *(pde.GetBaseProblem().GetSpaceTimeHandler()), element,
           this->GetParamData(), this->GetDomainData());
-      auto& cdc = _idc.GetElementDataContainer();
+      auto& edc = _idc.GetElementDataContainer();
 
 
       bool need_faces = pde.HasFaces();
@@ -420,7 +420,7 @@ template<typename PROBLEM>
           }
         }
 
-        ret += pde.ElementFunctional(cdc);
+        ret += pde.ElementFunctional(edc);
 
         if (need_faces)
         {

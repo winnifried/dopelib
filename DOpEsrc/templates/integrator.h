@@ -400,17 +400,17 @@ namespace DOpE
 	 *
 	 * @tparam <PROBLEM>    The problem description
 	 * @tparam <STH>        An additional SpaceTimeHandler
-	 * @tparam <CDC>        An additional ElementDataContainer
+	 * @tparam <EDC>        An additional ElementDataContainer
 	 * @tparam <FDC>        An additional FaceDataContainer
 	 *
 	 * @param pde           The problem
 	 * @param dwrc          The data container for the error estimation.
 	 *                      This object also stores the refinement indicators.
 	 */
-        template<typename PROBLEM, class STH, class CDC, class FDC>
+        template<typename PROBLEM, class STH, class EDC, class FDC>
           void
           ComputeRefinementIndicators(PROBLEM& pde,
-              DWRDataContainer<STH, INTEGRATORDATACONT, CDC, FDC, VECTOR>& dwrc);
+              DWRDataContainer<STH, INTEGRATORDATACONT, EDC, FDC, VECTOR>& dwrc);
  	/**
 	 * This function is used to calculate indicators based
 	 * on Residual-type data containes. See ResidualErrorContainer
@@ -549,10 +549,10 @@ namespace DOpE
             pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandlerEnd();
 
         // Generate the data containers.
-        GetIntegratorDataContainer().InitializeCDC(pde.GetUpdateFlags(),
+        GetIntegratorDataContainer().InitializeEDC(pde.GetUpdateFlags(),
             *(pde.GetBaseProblem().GetSpaceTimeHandler()), element,
             this->GetParamData(), this->GetDomainData());
-        auto& cdc = GetIntegratorDataContainer().GetElementDataContainer();
+        auto& edc = GetIntegratorDataContainer().GetElementDataContainer();
 
         bool need_faces = pde.HasFaces();
         bool need_interfaces = pde.HasInterfaces();
@@ -578,7 +578,7 @@ namespace DOpE
             }
           }
 
-          cdc.ReInit();
+          edc.ReInit();
 
           dofs_per_element = element[0]->get_fe().dofs_per_cell;
 
@@ -590,8 +590,8 @@ namespace DOpE
 
           //the second '1' plays only a role in the stationary case. In the non-stationary
           //case, scale_ico is set by the time-stepping-scheme
-          pde.ElementEquation(cdc, local_vector, 1., 1.);
-          pde.ElementRhs(cdc, local_vector, -1.);
+          pde.ElementEquation(edc, local_vector, 1., 1.);
+          pde.ElementRhs(edc, local_vector, -1.);
 
           if(need_boundary_integrals && element[0]->at_boundary())
           {
@@ -720,10 +720,10 @@ namespace DOpE
               pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandlerEnd();
 
           // Generate the data containers.
-          GetIntegratorDataContainer().InitializeCDC(pde.GetUpdateFlags(),
+          GetIntegratorDataContainer().InitializeEDC(pde.GetUpdateFlags(),
               *(pde.GetBaseProblem().GetSpaceTimeHandler()), element,
               this->GetParamData(), this->GetDomainData());
-          auto& cdc = GetIntegratorDataContainer().GetElementDataContainer();
+          auto& edc = GetIntegratorDataContainer().GetElementDataContainer();
 
           bool need_faces = pde.HasFaces();
           bool need_interfaces = pde.HasInterfaces();
@@ -750,7 +750,7 @@ namespace DOpE
               }
             }
 
-            cdc.ReInit();
+            edc.ReInit();
             dofs_per_element = element[0]->get_fe().dofs_per_cell;
 
             local_vector.reinit(dofs_per_element);
@@ -761,7 +761,7 @@ namespace DOpE
 
             //the second '1' plays only a role in the stationary case. In the non-stationary
             //case, scale_ico is set by the time-stepping-scheme
-            pde.ElementEquation(cdc, local_vector, 1., 1.);
+            pde.ElementEquation(edc, local_vector, 1., 1.);
 
             if(need_boundary_integrals)
             {
@@ -878,10 +878,10 @@ namespace DOpE
             pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandlerEnd();
 
         // Initialize the data containers.
-        GetIntegratorDataContainer().InitializeCDC(pde.GetUpdateFlags(),
+        GetIntegratorDataContainer().InitializeEDC(pde.GetUpdateFlags(),
             *(pde.GetBaseProblem().GetSpaceTimeHandler()), element,
             this->GetParamData(), this->GetDomainData());
-        auto& cdc = GetIntegratorDataContainer().GetElementDataContainer();
+        auto& edc = GetIntegratorDataContainer().GetElementDataContainer();
 
         bool need_interfaces = pde.HasInterfaces();
         if(need_interfaces )
@@ -912,7 +912,7 @@ namespace DOpE
             }
           }
 
-          cdc.ReInit();
+          edc.ReInit();
           dofs_per_element = element[0]->get_fe().dofs_per_cell;
 
           local_vector.reinit(dofs_per_element);
@@ -920,7 +920,7 @@ namespace DOpE
 
           local_dof_indices.resize(0);
           local_dof_indices.resize(dofs_per_element, 0);
-          pde.ElementRhs(cdc, local_vector, 1.);
+          pde.ElementRhs(edc, local_vector, 1.);
 
           if(need_boundary_integrals)
           {
@@ -996,10 +996,10 @@ namespace DOpE
         auto endc =
             pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandlerEnd();
 
-        GetIntegratorDataContainer().InitializeCDC(pde.GetUpdateFlags(),
+        GetIntegratorDataContainer().InitializeEDC(pde.GetUpdateFlags(),
             *(pde.GetBaseProblem().GetSpaceTimeHandler()), element,
             this->GetParamData(), this->GetDomainData());
-        auto& cdc = GetIntegratorDataContainer().GetElementDataContainer();
+        auto& edc = GetIntegratorDataContainer().GetElementDataContainer();
 
         //for the interface-case
         unsigned int nbr_dofs_per_element;
@@ -1029,7 +1029,7 @@ namespace DOpE
                   "Integrator::ComputeMatrix");
             }
           }
-          cdc.ReInit();
+          edc.ReInit();
           dofs_per_element = element[0]->get_fe().dofs_per_cell;
 
           dealii::FullMatrix<SCALAR> local_matrix(dofs_per_element,
@@ -1038,7 +1038,7 @@ namespace DOpE
 
           local_dof_indices.resize(0);
           local_dof_indices.resize(dofs_per_element, 0);
-          pde.ElementMatrix(cdc, local_matrix);
+          pde.ElementMatrix(edc, local_matrix);
 
           if(need_boundary_integrals)
           {
@@ -1182,10 +1182,10 @@ namespace DOpE
               pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandlerBeginActive();
           auto endc =
               pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandlerEnd();
-          GetIntegratorDataContainerFunc().InitializeCDC(pde.GetUpdateFlags(),
+          GetIntegratorDataContainerFunc().InitializeEDC(pde.GetUpdateFlags(),
               *(pde.GetBaseProblem().GetSpaceTimeHandler()), element,
               this->GetParamData(), this->GetDomainData());
-          auto& cdc = GetIntegratorDataContainerFunc().GetElementDataContainer();
+          auto& edc = GetIntegratorDataContainerFunc().GetElementDataContainer();
 
           bool need_faces = pde.HasFaces();
 
@@ -1201,8 +1201,8 @@ namespace DOpE
               }
             }
 
-            cdc.ReInit();
-            ret += pde.ElementFunctional(cdc);
+            edc.ReInit();
+            ret += pde.ElementFunctional(edc);
 
             if (need_faces)
             {
@@ -1617,11 +1617,11 @@ namespace DOpE
 
   template<typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR,
       int dim>
-    template<typename PROBLEM, class STH, class CDC, class FDC>
+    template<typename PROBLEM, class STH, class EDC, class FDC>
       void
       Integrator<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::ComputeRefinementIndicators(
           PROBLEM& pde,
-          DWRDataContainer<STH, INTEGRATORDATACONT, CDC, FDC, VECTOR>& dwrc)
+          DWRDataContainer<STH, INTEGRATORDATACONT, EDC, FDC, VECTOR>& dwrc)
       {
 	unsigned int n_error_comps = dwrc.GetNErrorComps();
         //for primal and dual part of the error
@@ -1642,16 +1642,16 @@ namespace DOpE
 
         // Generate the data containers. Notice that we use the quadrature
         //formula from the higher order idc!.
-        GetIntegratorDataContainer().InitializeCDC(
+        GetIntegratorDataContainer().InitializeEDC(
             dwrc.GetWeightIDC().GetQuad(), pde.GetUpdateFlags(),
             *(pde.GetBaseProblem().GetSpaceTimeHandler()), element,
             this->GetParamData(), this->GetDomainData());
-        auto& cdc = GetIntegratorDataContainer().GetElementDataContainer();
+        auto& edc = GetIntegratorDataContainer().GetElementDataContainer();
 
-        dwrc.GetWeightIDC().InitializeCDC(pde.GetUpdateFlags(),
+        dwrc.GetWeightIDC().InitializeEDC(pde.GetUpdateFlags(),
             dwrc.GetWeightSTH(), element_weight, this->GetParamData(),
             dwrc.GetWeightData());
-        auto& cdc_weight = dwrc.GetElementWeight();
+        auto& edc_weight = dwrc.GetElementWeight();
 
         // we want to integrate the face-terms only once, so
         // we store the values on each face in this map
@@ -1716,11 +1716,11 @@ namespace DOpE
           element_sum.clear();
           element_sum.resize(n_error_comps, 0);
 
-          cdc.ReInit();
-          cdc_weight.ReInit();
+          edc.ReInit();
+          edc_weight.ReInit();
 
           //first the element-residual
-          pde.ElementErrorContribution(cdc, dwrc, element_sum, 1.);
+          pde.ElementErrorContribution(edc, dwrc, element_sum, 1.);
 	  for(unsigned int l =0; l < n_error_comps; l ++)
 	  {
 	    dwrc.GetErrorIndicators(l)(element_index) = element_sum[l];
@@ -1905,10 +1905,10 @@ namespace DOpE
 
         // Generate the data containers. Notice that we use the quadrature
         // formula from the higher order idc!.
-        GetIntegratorDataContainer().InitializeCDC(pde.GetUpdateFlags(),
+        GetIntegratorDataContainer().InitializeEDC(pde.GetUpdateFlags(),
             *(pde.GetBaseProblem().GetSpaceTimeHandler()), element,
             this->GetParamData(), this->GetDomainData());
-        auto& cdc = GetIntegratorDataContainer().GetElementDataContainer();
+        auto& edc = GetIntegratorDataContainer().GetElementDataContainer();
 
         //we want to integrate the face-terms only once
         typename std::map<typename dealii::Triangulation<dim>::face_iterator,std::vector<double> >
@@ -1954,10 +1954,10 @@ namespace DOpE
           element_sum.clear();
           element_sum.resize(2, 0);
 
-          cdc.ReInit();
+          edc.ReInit();
           dwrc.InitElement(element[0]->diameter());
           //first the element-residual
-          pde.ElementErrorContribution(cdc, dwrc, element_sum, 1.);
+          pde.ElementErrorContribution(edc, dwrc, element_sum, 1.);
           dwrc.GetPrimalErrorIndicators()(element_index) = element_sum[0];
           dwrc.GetDualErrorIndicators()(element_index) = element_sum[1];
           element_sum.clear();

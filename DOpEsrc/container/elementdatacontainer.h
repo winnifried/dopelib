@@ -53,7 +53,7 @@ namespace DOpE
    */
 
   template<template<int, int> class DH, typename VECTOR, int dim>
-    class ElementDataContainer : public cdcinternal::ElementDataContainerInternal<
+    class ElementDataContainer : public edcinternal::ElementDataContainerInternal<
         VECTOR, dim>
     {
       public:
@@ -76,7 +76,7 @@ namespace DOpE
    */
 
   template<typename VECTOR, int dim>
-    class ElementDataContainer<dealii::DoFHandler, VECTOR, dim> : public cdcinternal::ElementDataContainerInternal<
+    class ElementDataContainer<dealii::DoFHandler, VECTOR, dim> : public edcinternal::ElementDataContainerInternal<
         VECTOR, dim>
     {
 
@@ -110,7 +110,7 @@ namespace DOpE
                   typename dealii::DoFHandler<dim>::active_cell_iterator>& element,
               const std::map<std::string, const Vector<double>*> &param_values,
               const std::map<std::string, const VECTOR*> &domain_values) :
-              cdcinternal::ElementDataContainerInternal<VECTOR, dim>(param_values,
+              edcinternal::ElementDataContainerInternal<VECTOR, dim>(param_values,
                   domain_values), _element(element), _state_fe_values(
                   sth.GetMapping(), (sth.GetFESystem("state")), quad,
                   update_flags), _control_fe_values(sth.GetMapping(),
@@ -152,7 +152,7 @@ namespace DOpE
                   typename dealii::DoFHandler<dim>::active_cell_iterator>& element,
               const std::map<std::string, const Vector<double>*> &param_values,
               const std::map<std::string, const VECTOR*> &domain_values) :
-              cdcinternal::ElementDataContainerInternal<VECTOR, dim>(param_values,
+              edcinternal::ElementDataContainerInternal<VECTOR, dim>(param_values,
                   domain_values), _element(element), _state_fe_values(
                   sth.GetMapping(), (sth.GetFESystem("state")), quad,
                   update_flags), _control_fe_values(sth.GetMapping(),
@@ -235,7 +235,7 @@ namespace DOpE
    */
 
   template<typename VECTOR, int dim>
-    class ElementDataContainer<dealii::MGDoFHandler, VECTOR, dim> : public cdcinternal::ElementDataContainerInternal<
+    class ElementDataContainer<dealii::MGDoFHandler, VECTOR, dim> : public edcinternal::ElementDataContainerInternal<
         VECTOR, dim>
     {
 
@@ -271,7 +271,7 @@ namespace DOpE
                   typename dealii::MGDoFHandler<dim>::active_cell_iterator>& element,
               const std::map<std::string, const Vector<double>*> &param_values,
               const std::map<std::string, const VECTOR*> &domain_values)
-              : cdcinternal::ElementDataContainerInternal<VECTOR, dim>(
+              : edcinternal::ElementDataContainerInternal<VECTOR, dim>(
                   param_values, domain_values), _element(element), _state_fe_values(
                   sth.GetMapping(), (sth.GetFESystem("state")), quad,
                   update_flags), _control_fe_values(sth.GetMapping(),
@@ -317,7 +317,7 @@ namespace DOpE
                 typename dealii::MGDoFHandler<dim>::active_cell_iterator>& element,
                 const std::map<std::string, const Vector<double>*> &param_values,
               const std::map<std::string, const VECTOR*> &domain_values)
-              : cdcinternal::ElementDataContainerInternal<VECTOR, dim>(
+              : edcinternal::ElementDataContainerInternal<VECTOR, dim>(
                   param_values, domain_values), _element(element), _state_fe_values(
                   sth.GetMapping(), (sth.GetFESystem("state")), quad,
                   update_flags), _control_fe_values(sth.GetMapping(),
@@ -392,7 +392,7 @@ namespace DOpE
 
 
   template<typename VECTOR, int dim>
-    class ElementDataContainer<dealii::hp::DoFHandler, VECTOR, dim> : public cdcinternal::ElementDataContainerInternal<
+    class ElementDataContainer<dealii::hp::DoFHandler, VECTOR, dim> : public edcinternal::ElementDataContainerInternal<
         VECTOR, dim>
     {
 
@@ -426,7 +426,7 @@ namespace DOpE
                   typename DOpEWrapper::DoFHandler<dim, dealii::hp::DoFHandler>::active_cell_iterator>& element,
               const std::map<std::string, const Vector<double>*> &param_values,
               const std::map<std::string, const VECTOR*> &domain_values) :
-              cdcinternal::ElementDataContainerInternal<VECTOR, dim>(param_values,
+              edcinternal::ElementDataContainerInternal<VECTOR, dim>(param_values,
                   domain_values), _element(element), _state_hp_fe_values(
                   sth.GetMapping(), (sth.GetFESystem("state")), q_collection,
                   update_flags), _control_hp_fe_values(sth.GetMapping(),
@@ -466,7 +466,7 @@ namespace DOpE
                   typename DOpEWrapper::DoFHandler<dim, dealii::hp::DoFHandler>::active_cell_iterator>& element,
               const std::map<std::string, const Vector<double>*> &param_values,
               const std::map<std::string, const VECTOR*> &domain_values) :
-              cdcinternal::ElementDataContainerInternal<VECTOR, dim>(param_values,
+              edcinternal::ElementDataContainerInternal<VECTOR, dim>(param_values,
                   domain_values), _element(element), _state_hp_fe_values(
                   sth.GetMapping(), (sth.GetFESystem("state")), q_collection,
                   update_flags), _control_hp_fe_values(sth.GetMapping(),

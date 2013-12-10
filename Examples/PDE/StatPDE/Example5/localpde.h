@@ -34,10 +34,10 @@ using namespace DOpE;
 
 /***********************************************************************************************/
 template<
-    template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+    template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
     template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
     template<int, int> class DH, typename VECTOR, int dealdim>
-  class LocalPDELaplace : public PDEInterface<CDC, FDC, DH, VECTOR, dealdim>
+  class LocalPDELaplace : public PDEInterface<EDC, FDC, DH, VECTOR, dealdim>
   {
     public:
       LocalPDELaplace() :
@@ -46,19 +46,19 @@ template<
       }
 
       void
-      ElementEquation(const CDC<DH, VECTOR, dealdim>& cdc,
+      ElementEquation(const EDC<DH, VECTOR, dealdim>& edc,
           dealii::Vector<double> &local_vector, double scale,
           double/*scale_ico*/)
       {
-        unsigned int n_dofs_per_element = cdc.GetNDoFsPerElement();
-        unsigned int n_q_points = cdc.GetNQPoints();
+        unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
+        unsigned int n_q_points = edc.GetNQPoints();
         const DOpEWrapper::FEValues<dealdim> &state_fe_values =
-            cdc.GetFEValuesState();
+            edc.GetFEValuesState();
 
         assert(this->_problem_type == "state");
 
         _ugrads.resize(n_q_points, Tensor<1, dealdim>());
-        cdc.GetGradsState("last_newton_solution", _ugrads);
+        edc.GetGradsState("last_newton_solution", _ugrads);
 
         const FEValuesExtractors::Scalar velocities(0);
 
@@ -81,19 +81,19 @@ template<
       }
 
       void
-      StrongElementResidual(const CDC<DH, VECTOR, dealdim>& cdc,
-          const CDC<DH, VECTOR, dealdim>& cdc_w, double& sum, double scale)
+      StrongElementResidual(const EDC<DH, VECTOR, dealdim>& edc,
+          const EDC<DH, VECTOR, dealdim>& edc_w, double& sum, double scale)
       {
-        unsigned int n_q_points = cdc.GetNQPoints();
+        unsigned int n_q_points = edc.GetNQPoints();
         const DOpEWrapper::FEValues<dealdim> &state_fe_values =
-            cdc.GetFEValuesState();
+            edc.GetFEValuesState();
 
         _fvalues.resize(n_q_points);
 
         _PI_h_z.resize(n_q_points);
         _lap_u.resize(n_q_points);
-        cdc.GetLaplaciansState("state", _lap_u);
-        cdc_w.GetValuesState("weight_for_primal_residual", _PI_h_z);
+        edc.GetLaplaciansState("state", _lap_u);
+        edc_w.GetValuesState("weight_for_primal_residual", _PI_h_z);
 
         const FEValuesExtractors::Scalar velocities(0);
 
@@ -115,19 +115,19 @@ template<
       }
 
       void
-      StrongElementResidual_U(const CDC<DH, VECTOR, dealdim>& cdc,
-          const CDC<DH, VECTOR, dealdim>& cdc_w, double& sum, double scale)
+      StrongElementResidual_U(const EDC<DH, VECTOR, dealdim>& edc,
+          const EDC<DH, VECTOR, dealdim>& edc_w, double& sum, double scale)
       {
-        unsigned int n_q_points = cdc.GetNQPoints();
+        unsigned int n_q_points = edc.GetNQPoints();
         const DOpEWrapper::FEValues<dealdim> &state_fe_values =
-            cdc.GetFEValuesState();
+            edc.GetFEValuesState();
 
         _fvalues.resize(n_q_points);
 
         _PI_h_z.resize(n_q_points);
         _lap_u.resize(n_q_points);
-        cdc.GetLaplaciansState("adjoint_for_ee", _lap_u);
-        cdc_w.GetValuesState("weight_for_dual_residual", _PI_h_z);
+        edc.GetLaplaciansState("adjoint_for_ee", _lap_u);
+        edc_w.GetValuesState("weight_for_dual_residual", _PI_h_z);
 
         const FEValuesExtractors::Scalar velocities(0);
 
@@ -263,19 +263,19 @@ template<
       }
 
       void
-      ElementEquation_U(const CDC<DH, VECTOR, dealdim>& cdc,
+      ElementEquation_U(const EDC<DH, VECTOR, dealdim>& edc,
           dealii::Vector<double> &local_vector, double scale,
           double/*scale_ico*/)
       {
         const DOpEWrapper::FEValues<dealdim> & state_fe_values =
-            cdc.GetFEValuesState();
-        unsigned int n_dofs_per_element = cdc.GetNDoFsPerElement();
-        unsigned int n_q_points = cdc.GetNQPoints();
+            edc.GetFEValuesState();
+        unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
+        unsigned int n_q_points = edc.GetNQPoints();
 
         assert(this->_problem_type == "adjoint_for_ee");
         _zgrads.resize(n_q_points, Tensor<1, dealdim>());
         //We don't need u so we don't search for state
-        cdc.GetGradsState("last_newton_solution", _zgrads);
+        edc.GetGradsState("last_newton_solution", _zgrads);
 
         const FEValuesExtractors::Scalar velocities(0);
         for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
@@ -295,15 +295,15 @@ template<
       }
 
       void
-      ElementMatrix(const CDC<DH, VECTOR, dealdim>& cdc,
+      ElementMatrix(const EDC<DH, VECTOR, dealdim>& edc,
           FullMatrix<double> &local_matrix, double scale,
           double/*scale_ico*/)
       {
-        unsigned int n_dofs_per_element = cdc.GetNDoFsPerElement();
-        unsigned int n_q_points = cdc.GetNQPoints();
-        //unsigned int material_id = cdc.GetMaterialId();
+        unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
+        unsigned int n_q_points = edc.GetNQPoints();
+        //unsigned int material_id = edc.GetMaterialId();
         const DOpEWrapper::FEValues<dealdim> &state_fe_values =
-            cdc.GetFEValuesState();
+            edc.GetFEValuesState();
 
         const FEValuesExtractors::Scalar velocities(0);
 
@@ -329,15 +329,15 @@ template<
       }
 
       void
-      ElementMatrix_T(const CDC<DH, VECTOR, dealdim>& cdc,
+      ElementMatrix_T(const EDC<DH, VECTOR, dealdim>& edc,
           FullMatrix<double> &local_matrix, double scale,
           double /*scale_ico*/)
       {
-        unsigned int n_dofs_per_element = cdc.GetNDoFsPerElement();
-        unsigned int n_q_points = cdc.GetNQPoints();
-        //unsigned int material_id = cdc.GetMaterialId();
+        unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
+        unsigned int n_q_points = edc.GetNQPoints();
+        //unsigned int material_id = edc.GetMaterialId();
         const DOpEWrapper::FEValues<dealdim> &state_fe_values =
-            cdc.GetFEValuesState();
+            edc.GetFEValuesState();
 
         const FEValuesExtractors::Scalar velocities(0);
 
@@ -363,14 +363,14 @@ template<
       }
 
       void
-      ElementRightHandSide(const CDC<DH, VECTOR, dealdim>& cdc,
+      ElementRightHandSide(const EDC<DH, VECTOR, dealdim>& edc,
           dealii::Vector<double> &local_vector, double scale)
       {
         assert(this->_problem_type == "state");
-        unsigned int n_dofs_per_element = cdc.GetNDoFsPerElement();
-        unsigned int n_q_points = cdc.GetNQPoints();
+        unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
+        unsigned int n_q_points = edc.GetNQPoints();
         const DOpEWrapper::FEValues<dealdim> &state_fe_values =
-            cdc.GetFEValuesState();
+            edc.GetFEValuesState();
 
         _fvalues.resize(n_q_points);
         const FEValuesExtractors::Scalar velocities(0);

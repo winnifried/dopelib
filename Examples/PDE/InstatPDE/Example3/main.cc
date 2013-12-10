@@ -111,7 +111,7 @@ typedef NewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR> CNLS;
 typedef InstatStepNewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR> NLS;
 typedef ReducedNewtonAlgorithm<OP, VECTOR> RNA;
 typedef InstatReducedProblem<CNLS, NLS, INTEGRATOR, INTEGRATOR, OP, VECTOR, DIM,
-    DIM> SSolver;
+    DIM> RP;
 
 /**
  * Colorize the spatial triangulation, i.e. set the correct boundary colors.
@@ -164,7 +164,7 @@ main(int argc, char **argv)
 
   //First, declare the parameters and read them in.
   ParameterReader pr;
-  SSolver::declare_params(pr);
+  RP::declare_params(pr);
   RNA::declare_params(pr);
   LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>::declare_params(pr);
   InitialData::declare_params(pr);
@@ -221,7 +221,7 @@ main(int argc, char **argv)
   InitialData initial_data(pr);
   P.SetInitialValues(&initial_data);
 
-  SSolver solver(&P, "store_on_disc", pr, idc);
+  RP solver(&P, "store_on_disc", pr, idc);
 
   RNA Alg(&P, &solver, pr);
 
@@ -233,7 +233,7 @@ main(int argc, char **argv)
 
     Alg.SolveForward(q);
 
-    SolutionExtractor<SSolver, VECTOR> a(solver);
+    SolutionExtractor<RP, VECTOR> a(solver);
     const StateVector<VECTOR> &statevec = a.GetU();
 
     stringstream out;

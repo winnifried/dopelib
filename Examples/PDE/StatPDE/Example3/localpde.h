@@ -33,10 +33,10 @@ using namespace DOpE;
  * See pdeinterface.h for more information.
  */
 template<
-    template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+    template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
     template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
     template<int, int> class DH, typename VECTOR, int dealdim>
-  class LocalPDE : public PDEInterface<CDC, FDC, DH, VECTOR, dealdim>
+  class LocalPDE : public PDEInterface<EDC, FDC, DH, VECTOR, dealdim>
   {
     public:
       LocalPDE() :
@@ -54,16 +54,16 @@ template<
        * weak formulation of the Stokes equation.
        */
       void
-      ElementEquation(const CDC<DH, VECTOR, dealdim>& cdc,
+      ElementEquation(const EDC<DH, VECTOR, dealdim>& edc,
           dealii::Vector<double> &local_vector, double scale,
           double scale_ico)
       {
         //Get the number of dofs, the number of quad points as
-        //well as the finite element values on this element from the cdc.
+        //well as the finite element values on this element from the edc.
         const DOpEWrapper::FEValues<dealdim> & state_fe_values =
-            cdc.GetFEValuesState();
-        const unsigned int n_dofs_per_element = cdc.GetNDoFsPerElement();
-        const unsigned int n_q_points = cdc.GetNQPoints();
+            edc.GetFEValuesState();
+        const unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
+        const unsigned int n_q_points = edc.GetNQPoints();
         //This should only get called if the problem type is state.
         assert(this->_problem_type == "state");
 
@@ -72,8 +72,8 @@ template<
         _uvalues.resize(n_q_points, Vector<double>(3));
         _ugrads.resize(n_q_points, std::vector<Tensor<1, 2> >(3));
 
-        cdc.GetValuesState("last_newton_solution", _uvalues);
-        cdc.GetGradsState("last_newton_solution", _ugrads);
+        edc.GetValuesState("last_newton_solution", _uvalues);
+        edc.GetGradsState("last_newton_solution", _ugrads);
 
         const FEValuesExtractors::Vector velocities(0);
         const FEValuesExtractors::Scalar pressure(2);
@@ -119,14 +119,14 @@ template<
       }
 
       void
-      ElementMatrix(const CDC<DH, VECTOR, dealdim>& cdc,
+      ElementMatrix(const EDC<DH, VECTOR, dealdim>& edc,
           FullMatrix<double> &local_matrix, double scale,
           double scale_ico)
       {
         const DOpEWrapper::FEValues<dealdim> & state_fe_values =
-            cdc.GetFEValuesState();
-        const unsigned int n_dofs_per_element = cdc.GetNDoFsPerElement();
-        const unsigned int n_q_points = cdc.GetNQPoints();
+            edc.GetFEValuesState();
+        const unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
+        const unsigned int n_q_points = edc.GetNQPoints();
 
         const FEValuesExtractors::Vector velocities(0);
         const FEValuesExtractors::Scalar pressure(2);
@@ -171,8 +171,8 @@ template<
        * As we have f=0 in our example, this method is empty.
        */
       void
-      ElementRightHandSide(const CDC<DH, VECTOR, dealdim>&
-      /*cdc*/, dealii::Vector<double> &/*local_vector*/, double /*scale*/)
+      ElementRightHandSide(const EDC<DH, VECTOR, dealdim>&
+      /*edc*/, dealii::Vector<double> &/*local_vector*/, double /*scale*/)
       {
 
       }

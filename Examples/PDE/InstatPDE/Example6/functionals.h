@@ -34,7 +34,7 @@ using namespace DOpE;
 /****************************************************************************************/
 
 template<
-    template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+    template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
     template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
     template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
   class LocalPointFunctionalP1 : public FunctionalInterface<ElementDataContainer,
@@ -98,10 +98,10 @@ template<
 /****************************************************************************************/
 
 template<
-    template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+    template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
     template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
     template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
-  class LocalPointFunctionalP2 : public FunctionalInterface<CDC, FDC, DH,
+  class LocalPointFunctionalP2 : public FunctionalInterface<EDC, FDC, DH,
       VECTOR, dopedim, dealdim>
   {
     private:

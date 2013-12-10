@@ -111,7 +111,7 @@ typedef NewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR> CNLS;
 typedef InstatStepNewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR> NLS;
 typedef ReducedNewtonAlgorithm<OP, VECTOR> RNA;
 typedef InstatReducedProblem<CNLS, NLS, INTEGRATOR, INTEGRATOR, OP, VECTOR, DIM,
-    DIM> SSolver;
+    DIM> RP;
 
 int
 main(int argc, char **argv)
@@ -136,7 +136,7 @@ main(int argc, char **argv)
   }
 
   ParameterReader pr;
-  SSolver::declare_params(pr);
+  RP::declare_params(pr);
   RNA::declare_params(pr);
   LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, 2>::declare_params(pr);
   BoundaryParabel::declare_params(pr);
@@ -256,7 +256,7 @@ main(int argc, char **argv)
 
   P.SetInitialValues(&zf);
 
-  SSolver solver(&P, "fullmem", pr, idc);
+  RP solver(&P, "fullmem", pr, idc);
   RNA Alg(&P, &solver, pr);
 
   // Mesh-refinement cycles

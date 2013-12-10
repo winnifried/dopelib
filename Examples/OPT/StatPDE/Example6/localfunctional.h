@@ -32,10 +32,10 @@ using namespace dealii;
 using namespace DOpE;
 
 template<
-    template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+    template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
     template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
     template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
-  class LocalFunctional : public FunctionalInterface<CDC, FDC, DH, VECTOR,
+  class LocalFunctional : public FunctionalInterface<EDC, FDC, DH, VECTOR,
       dopedim, dealdim>
   {
     public:
@@ -140,12 +140,12 @@ template<
       }
 
       void
-	ElementValue_U(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
+	ElementValue_U(const EDC<DH, VECTOR, dealdim>& /*edc*/,
 		dealii::Vector<double> &/*local_vector*/, double/*scale*/)
       {
       }
       void
-	ElementValue_Q(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
+	ElementValue_Q(const EDC<DH, VECTOR, dealdim>& /*edc*/,
 		dealii::Vector<double> &/*local_vector*/, double/*scale*/)
       {
       }

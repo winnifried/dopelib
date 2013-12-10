@@ -38,10 +38,10 @@ using namespace DOpE;
  * This functional evaluates the first displacement component at (2,1).
  */
 template<
-    template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+    template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
     template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
     template<int, int> class DH, typename VECTOR, int dealdim>
-  class LocalPointFunctionalX : public FunctionalInterface<CDC, FDC, DH, VECTOR,
+  class LocalPointFunctionalX : public FunctionalInterface<EDC, FDC, DH, VECTOR,
       dealdim>
   {
     public:
@@ -95,10 +95,10 @@ template<
  */
 
 template<
-    template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+    template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
     template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
     template<int, int> class DH, typename VECTOR, int dealdim>
-  class LocalBoundaryFluxFunctional : public FunctionalInterface<CDC, FDC, DH,
+  class LocalBoundaryFluxFunctional : public FunctionalInterface<EDC, FDC, DH,
       VECTOR, dealdim>
   {
     public:

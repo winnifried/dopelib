@@ -101,7 +101,7 @@ typedef NewtonSolverMixedDimensions<INTEGRATORM, VOIDLS, VECTOR> NLSM;
 typedef NewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR> NLS;
 typedef ReducedNewtonAlgorithm<OP, VECTOR> RNA;
 typedef StatReducedProblem<NLSM, NLS, INTEGRATORM, INTEGRATOR, OP, VECTOR, CDIM,
-    DIM> SSolver;
+    DIM> RP;
 typedef MethodOfLines_SpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR,
     CDIM, DIM> STH;
 
@@ -140,7 +140,7 @@ main(int argc, char **argv)
   }
 
   ParameterReader pr;
-  SSolver::declare_params(pr);
+  RP::declare_params(pr);
   RNA::declare_params(pr);
   PDE::declare_params(pr);
   COSTFUNCTIONAL::declare_params(pr);
@@ -240,7 +240,7 @@ main(int argc, char **argv)
   P.SetControlBoundaryEquationColors(50); // upper control bc \Gamma_q1
   P.SetControlBoundaryEquationColors(51); // lower control bc \Gamma_q2
 
-  SSolver solver(&P, "fullmem", pr, idc);
+  RP solver(&P, "fullmem", pr, idc);
   RNA Alg(&P, &solver, pr);
 
   std::string cases = _solve_or_check.c_str();
@@ -283,7 +283,7 @@ main(int argc, char **argv)
     }
     if (i != niter - 1)
     {
-      SolutionExtractor<SSolver, VECTOR> a(solver);
+      SolutionExtractor<RP, VECTOR> a(solver);
       const StateVector<VECTOR> &gu = a.GetU();
       solution = 0;
       solution = gu.GetSpacialVector();

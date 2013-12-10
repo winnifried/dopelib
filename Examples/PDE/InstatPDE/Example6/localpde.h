@@ -31,10 +31,10 @@ using namespace dealii;
 using namespace DOpE;
 
 template<
-    template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+    template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
     template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
     template<int, int> class DH, typename VECTOR, int dealdim>
-  class LocalPDE : public PDEInterface<CDC, FDC, DH, VECTOR, dealdim>
+  class LocalPDE : public PDEInterface<EDC, FDC, DH, VECTOR, dealdim>
   {
     public:
 
@@ -93,32 +93,32 @@ template<
       // The part of ElementEquation scaled by scale contains all "normal" terms which
       // can be treated by full "theta" time-discretization
       void
-      ElementEquation(const CDC<DH, VECTOR, dealdim>& cdc,
+      ElementEquation(const EDC<DH, VECTOR, dealdim>& edc,
           dealii::Vector<double> &local_vector, double scale,
           double scale_ico)
       {
         assert(this->_problem_type == "state");
 
         const DOpEWrapper::FEValues<dealdim> & state_fe_values =
-            cdc.GetFEValuesState();
-        unsigned int n_dofs_per_element = cdc.GetNDoFsPerElement();
-        unsigned int n_q_points = cdc.GetNQPoints();
-        unsigned int material_id = cdc.GetMaterialId();
-//        double element_diameter = cdc.GetElementDiameter();
+            edc.GetFEValuesState();
+        unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
+        unsigned int n_q_points = edc.GetNQPoints();
+        unsigned int material_id = edc.GetMaterialId();
+//        double element_diameter = edc.GetElementDiameter();
 
         // old Newton step solution values and gradients
         _uvalues.resize(n_q_points, Vector<double>(3));
         _ugrads.resize(n_q_points, vector<Tensor<1, 2> >(3));
 
-        cdc.GetValuesState("last_newton_solution", _uvalues);
-        cdc.GetGradsState("last_newton_solution", _ugrads);
+        edc.GetValuesState("last_newton_solution", _uvalues);
+        edc.GetGradsState("last_newton_solution", _ugrads);
 
         // old timestep solution values and gradients
         _last_timestep_uvalues.resize(n_q_points, Vector<double>(3));
         _last_timestep_ugrads.resize(n_q_points, vector<Tensor<1, 2> >(3));
 
-        cdc.GetValuesState("last_time_solution", _last_timestep_uvalues);
-        cdc.GetGradsState("last_time_solution", _last_timestep_ugrads);
+        edc.GetValuesState("last_time_solution", _last_timestep_uvalues);
+        edc.GetGradsState("last_time_solution", _last_timestep_ugrads);
 
         const FEValuesExtractors::Vector displacements(0);
         const FEValuesExtractors::Scalar pressure(2);
@@ -232,30 +232,30 @@ template<
       }
 
       void
-      ElementMatrix(const CDC<DH, VECTOR, dealdim>& cdc,
+      ElementMatrix(const EDC<DH, VECTOR, dealdim>& edc,
           FullMatrix<double> &local_matrix, double scale,
           double scale_ico)
       {
         const DOpEWrapper::FEValues<dealdim> & state_fe_values =
-            cdc.GetFEValuesState();
-        unsigned int n_dofs_per_element = cdc.GetNDoFsPerElement();
-        unsigned int n_q_points = cdc.GetNQPoints();
-        unsigned int material_id = cdc.GetMaterialId();
-//        double element_diameter = cdc.GetElementDiameter();
+            edc.GetFEValuesState();
+        unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
+        unsigned int n_q_points = edc.GetNQPoints();
+        unsigned int material_id = edc.GetMaterialId();
+//        double element_diameter = edc.GetElementDiameter();
 
         // old Newton step solution values and gradients
         _uvalues.resize(n_q_points, Vector<double>(3));
         _ugrads.resize(n_q_points, vector<Tensor<1, 2> >(3));
 
-        cdc.GetValuesState("last_newton_solution", _uvalues);
-        cdc.GetGradsState("last_newton_solution", _ugrads);
+        edc.GetValuesState("last_newton_solution", _uvalues);
+        edc.GetGradsState("last_newton_solution", _ugrads);
 
         // old timestep solution values and gradients
         _last_timestep_uvalues.resize(n_q_points, Vector<double>(3));
         _last_timestep_ugrads.resize(n_q_points, vector<Tensor<1, 2> >(3));
 
-        cdc.GetValuesState("last_time_solution", _last_timestep_uvalues);
-        cdc.GetGradsState("last_time_solution", _last_timestep_ugrads);
+        edc.GetValuesState("last_time_solution", _last_timestep_uvalues);
+        edc.GetGradsState("last_time_solution", _last_timestep_ugrads);
 
         const FEValuesExtractors::Vector displacements(0);
         const FEValuesExtractors::Scalar pressure(2);
@@ -355,7 +355,7 @@ template<
       }
 
       void
-      ElementRightHandSide(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
+      ElementRightHandSide(const EDC<DH, VECTOR, dealdim>& /*edc*/,
 			dealii::Vector<double> & /*local_vector*/,
 			double /*scale*/)
       {
@@ -363,7 +363,7 @@ template<
       }
 
       void
-      ElementTimeEquation(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
+      ElementTimeEquation(const EDC<DH, VECTOR, dealdim>& /*edc*/,
 		       dealii::Vector<double> & /*local_vector*/,
 		       double /*scale*/)
       {
@@ -371,30 +371,30 @@ template<
       }
 
       void
-      ElementTimeEquationExplicit(const CDC<DH, VECTOR, dealdim>& cdc,
+      ElementTimeEquationExplicit(const EDC<DH, VECTOR, dealdim>& edc,
           dealii::Vector<double> &local_vector, double scale)
       {
         assert(this->_problem_type == "state");
 
         const DOpEWrapper::FEValues<dealdim> & state_fe_values =
-            cdc.GetFEValuesState();
-        unsigned int n_dofs_per_element = cdc.GetNDoFsPerElement();
-        unsigned int n_q_points = cdc.GetNQPoints();
-        unsigned int material_id = cdc.GetMaterialId();
+            edc.GetFEValuesState();
+        unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
+        unsigned int n_q_points = edc.GetNQPoints();
+        unsigned int material_id = edc.GetMaterialId();
 
         // old Newton step solution values and gradients
         _uvalues.resize(n_q_points, Vector<double>(3));
         _ugrads.resize(n_q_points, vector<Tensor<1, 2> >(3));
 
-        cdc.GetValuesState("last_newton_solution", _uvalues);
-        cdc.GetGradsState("last_newton_solution", _ugrads);
+        edc.GetValuesState("last_newton_solution", _uvalues);
+        edc.GetGradsState("last_newton_solution", _ugrads);
 
         // old timestep solution values and gradients
         _last_timestep_uvalues.resize(n_q_points, Vector<double>(3));
         _last_timestep_ugrads.resize(n_q_points, vector<Tensor<1, 2> >(3));
 
-        cdc.GetValuesState("last_time_solution", _last_timestep_uvalues);
-        cdc.GetGradsState("last_time_solution", _last_timestep_ugrads);
+        edc.GetValuesState("last_time_solution", _last_timestep_uvalues);
+        edc.GetGradsState("last_time_solution", _last_timestep_ugrads);
 
         const FEValuesExtractors::Vector displacements(0);
         const FEValuesExtractors::Scalar pressure(2);
@@ -425,38 +425,38 @@ template<
       }
 
       void
-      ElementTimeMatrix(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
+      ElementTimeMatrix(const EDC<DH, VECTOR, dealdim>& /*edc*/,
           FullMatrix<double> &/*local_matrix*/)
       {
         assert(this->_problem_type == "state");
       }
 
       void
-      ElementTimeMatrixExplicit(const CDC<DH, VECTOR, dealdim>& cdc,
+      ElementTimeMatrixExplicit(const EDC<DH, VECTOR, dealdim>& edc,
           FullMatrix<double> &local_matrix)
       {
         assert(this->_problem_type == "state");
 
         const DOpEWrapper::FEValues<dealdim> & state_fe_values =
-            cdc.GetFEValuesState();
-        unsigned int n_dofs_per_element = cdc.GetNDoFsPerElement();
-        unsigned int n_q_points = cdc.GetNQPoints();
-        unsigned int material_id = cdc.GetMaterialId();
-        //double element_diameter = cdc.GetElementDiameter();
+            edc.GetFEValuesState();
+        unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
+        unsigned int n_q_points = edc.GetNQPoints();
+        unsigned int material_id = edc.GetMaterialId();
+        //double element_diameter = edc.GetElementDiameter();
 
         // old Newton step solution values and gradients
         _uvalues.resize(n_q_points, Vector<double>(3));
         _ugrads.resize(n_q_points, vector<Tensor<1, 2> >(3));
 
-        cdc.GetValuesState("last_newton_solution", _uvalues);
-        cdc.GetGradsState("last_newton_solution", _ugrads);
+        edc.GetValuesState("last_newton_solution", _uvalues);
+        edc.GetGradsState("last_newton_solution", _ugrads);
 
         // old timestep solution values and gradients
         _last_timestep_uvalues.resize(n_q_points, Vector<double>(3));
         _last_timestep_ugrads.resize(n_q_points, vector<Tensor<1, 2> >(3));
 
-        cdc.GetValuesState("last_time_solution", _last_timestep_uvalues);
-        cdc.GetGradsState("last_time_solution", _last_timestep_ugrads);
+        edc.GetValuesState("last_time_solution", _last_timestep_uvalues);
+        edc.GetGradsState("last_time_solution", _last_timestep_ugrads);
 
         const FEValuesExtractors::Vector displacements(0);
         const FEValuesExtractors::Scalar pressure(2);

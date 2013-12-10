@@ -154,7 +154,7 @@ namespace DOpE
 	    typename std::vector<typename DH<dim, dim>::cell_iterator>& element_iter,
 	    typename std::vector<typename dealii::Triangulation<dim>::cell_iterator>& tria_element_iter,
 	    const FullMatrix<SCALAR>& prolong_matrix,unsigned int coarse_index,unsigned int fine_index,
-	    Multimesh_ElementDataContainer<DH, VECTOR, dim>& cdc,
+	    Multimesh_ElementDataContainer<DH, VECTOR, dim>& edc,
 	    Multimesh_FaceDataContainer<DH, VECTOR, dim>& fdc);
 	
 	/**
@@ -168,7 +168,7 @@ namespace DOpE
 	    typename std::vector<typename DH<dim, dim>::cell_iterator>& element_iter,
 	    typename std::vector<typename dealii::Triangulation<dim>::cell_iterator>& tria_element_iter,
 	    const FullMatrix<SCALAR>& prolong_matrix,unsigned int coarse_index,unsigned int fine_index,
-	    Multimesh_ElementDataContainer<DH, VECTOR, dim>& cdc,
+	    Multimesh_ElementDataContainer<DH, VECTOR, dim>& edc,
 	    Multimesh_FaceDataContainer<DH, VECTOR, dim>& fdc);
 	
 	/**
@@ -182,7 +182,7 @@ namespace DOpE
 	    typename std::vector<typename DH<dim, dim>::cell_iterator>& element_iter,
 	    typename std::vector<typename dealii::Triangulation<dim>::cell_iterator>& tria_element_iter,
 	    const FullMatrix<SCALAR>& prolong_matrix,unsigned int coarse_index,unsigned int fine_index,
-	    Multimesh_ElementDataContainer<DH, VECTOR, dim>& cdc,
+	    Multimesh_ElementDataContainer<DH, VECTOR, dim>& edc,
 	    Multimesh_FaceDataContainer<DH, VECTOR, dim>& fdc);
 
 	/**
@@ -195,7 +195,7 @@ namespace DOpE
 	    typename std::vector<typename DH<dim, dim>::cell_iterator>& element_iter,
 	    typename std::vector<typename dealii::Triangulation<dim>::cell_iterator>& tria_element_iter,
 	    const FullMatrix<SCALAR>& prolong_matrix,unsigned int coarse_index,unsigned int fine_index,
-	    Multimesh_ElementDataContainer<DH, VECTOR, dim>& cdc);
+	    Multimesh_ElementDataContainer<DH, VECTOR, dim>& edc);
 
 	/**
 	 * Used by to ComputeBoundaryScalar to loop until both variables are on 
@@ -207,7 +207,7 @@ namespace DOpE
 	    typename std::vector<typename DH<dim, dim>::cell_iterator>& element_iter,
 	    typename std::vector<typename dealii::Triangulation<dim>::cell_iterator>& tria_element_iter,
 	    const FullMatrix<SCALAR>& prolong_matrix,unsigned int coarse_index,unsigned int fine_index,
-	    Multimesh_FaceDataContainer<DH, VECTOR, dim>& cdc);
+	    Multimesh_FaceDataContainer<DH, VECTOR, dim>& edc);
 
         INTEGRATORDATACONT & _idc;
 
@@ -279,10 +279,10 @@ namespace DOpE
 	    int fine_index = 0; //element[fine_index] is the finer of the two (both indices are 2 = element.size() if they are equally refined.
 
             // Generate the data containers.
-            _idc.InitializeMMCDC(pde.GetUpdateFlags(),
+            _idc.InitializeMMEDC(pde.GetUpdateFlags(),
 				 *(pde.GetBaseProblem().GetSpaceTimeHandler()), element, tria_element,
 				 this->GetParamData(), this->GetDomainData());
-            auto& cdc = _idc.GetMultimeshElementDataContainer();
+            auto& edc = _idc.GetMultimeshElementDataContainer();
 
             bool need_interfaces = pde.HasInterfaces();
             _idc.InitializeMMFDC(pde.GetFaceUpdateFlags(),
@@ -322,7 +322,7 @@ namespace DOpE
 		  coarse_index = fine_index = 2;
 		}
 	      }
-	      ComputeNonlinearResidual_Recursive(pde,residual,element,tria_element,prolong_matrix,coarse_index,fine_index,cdc,fdc);
+	      ComputeNonlinearResidual_Recursive(pde,residual,element,tria_element,prolong_matrix,coarse_index,fine_index,edc,fdc);
 	      tria_element_iter++;
 	    }
 
@@ -381,10 +381,10 @@ namespace DOpE
 	int fine_index = 0; //element[fine_index] is the finer of the two (both indices are 2 = element.size() if they are equally refined.
 	
 	// Generate the data containers.
-	_idc.InitializeMMCDC(pde.GetUpdateFlags(),
+	_idc.InitializeMMEDC(pde.GetUpdateFlags(),
 			     *(pde.GetBaseProblem().GetSpaceTimeHandler()), element, tria_element,
 			     this->GetParamData(), this->GetDomainData());
-	auto& cdc = _idc.GetMultimeshElementDataContainer();
+	auto& edc = _idc.GetMultimeshElementDataContainer();
 	
             _idc.InitializeMMFDC(pde.GetFaceUpdateFlags(),
 				 *(pde.GetBaseProblem().GetSpaceTimeHandler()),
@@ -422,7 +422,7 @@ namespace DOpE
 		  coarse_index = fine_index = 2;
 		}
 	      }
-	      ComputeNonlinearRhs_Recursive(pde,residual,element,tria_element,prolong_matrix,coarse_index,fine_index,cdc,fdc);
+	      ComputeNonlinearRhs_Recursive(pde,residual,element,tria_element,prolong_matrix,coarse_index,fine_index,edc,fdc);
 	      tria_element_iter++;
 	    }
 
@@ -467,10 +467,10 @@ namespace DOpE
 	int fine_index = 0; //element[fine_index] is the finer of the two (both indices are 2 = element.size() if they are equally refined.
 
 	// Generate the data containers.
-        _idc.InitializeMMCDC(pde.GetUpdateFlags(),
+        _idc.InitializeMMEDC(pde.GetUpdateFlags(),
 			     *(pde.GetBaseProblem().GetSpaceTimeHandler()), element, tria_element,
 			     this->GetParamData(), this->GetDomainData());
-        auto& cdc = _idc.GetMultimeshElementDataContainer();
+        auto& edc = _idc.GetMultimeshElementDataContainer();
 
         bool need_interfaces = pde.HasInterfaces();
         _idc.InitializeMMFDC(pde.GetFaceUpdateFlags(),
@@ -510,7 +510,7 @@ namespace DOpE
 	      coarse_index = fine_index = 2;
 	    }
 	  }
-	  ComputeMatrix_Recursive(pde,matrix,element,tria_element,prolong_matrix,coarse_index,fine_index,cdc,fdc);
+	  ComputeMatrix_Recursive(pde,matrix,element,tria_element,prolong_matrix,coarse_index,fine_index,edc,fdc);
 	  tria_element_iter++;
 	}
       }
@@ -554,10 +554,10 @@ namespace DOpE
     }
     
     // Generate the data containers.
-    _idc.InitializeMMCDC(pde.GetUpdateFlags(),
+    _idc.InitializeMMEDC(pde.GetUpdateFlags(),
 			 *(pde.GetBaseProblem().GetSpaceTimeHandler()), element, tria_element,
 			 this->GetParamData(), this->GetDomainData());
-    auto& cdc = _idc.GetMultimeshElementDataContainer();
+    auto& edc = _idc.GetMultimeshElementDataContainer();
     
     for(; element_iter != element_list.end(); element_iter++)
     {
@@ -587,7 +587,7 @@ namespace DOpE
 	  coarse_index = fine_index = 2;
 	}
       }
-      ret += ComputeDomainScalar_Recursive(pde,element,tria_element,prolong_matrix,coarse_index,fine_index,cdc);
+      ret += ComputeDomainScalar_Recursive(pde,element,tria_element,prolong_matrix,coarse_index,fine_index,edc);
       tria_element_iter++;
     }
     return ret; 
@@ -1026,7 +1026,7 @@ namespace DOpE
       typename std::vector<typename DH<dim, dim>::cell_iterator> &element,
       typename std::vector<typename dealii::Triangulation<dim>::cell_iterator> &tria_element,
       const FullMatrix<SCALAR>& prolong_matrix,unsigned int coarse_index,unsigned int fine_index,
-      Multimesh_ElementDataContainer<DH, VECTOR, dim>& cdc,Multimesh_FaceDataContainer<DH, VECTOR, dim>& fdc)
+      Multimesh_ElementDataContainer<DH, VECTOR, dim>& edc,Multimesh_FaceDataContainer<DH, VECTOR, dim>& fdc)
   {
     if(!element[0]->has_children() && ! element[1]->has_children())
     {
@@ -1039,7 +1039,7 @@ namespace DOpE
 	  bool need_boundary_integrals = (boundary_equation_colors.size() > 0);
 	  bool need_interfaces = pde.HasInterfaces();  
 
-	  cdc.ReInit(coarse_index,fine_index,prolong_matrix);
+	  edc.ReInit(coarse_index,fine_index,prolong_matrix);
 	  
 	  dofs_per_element = element[0]->get_fe().dofs_per_cell;
 	  
@@ -1051,8 +1051,8 @@ namespace DOpE
 	  
 	  //the second '1' plays only a role in the stationary case. In the non-stationary
 	  //case, scale_ico is set by the time-stepping-scheme
-	  pde.ElementEquation(cdc, local_vector, 1., 1.);
-	  pde.ElementRhs(cdc, local_vector, -1.);
+	  pde.ElementEquation(edc, local_vector, 1., 1.);
+	  pde.ElementRhs(edc, local_vector, -1.);
 	  
 	  //FIXME Integrate on Faces of Element[0] that contain a fine-element face.
 	  if(need_faces || need_interfaces)
@@ -1148,7 +1148,7 @@ namespace DOpE
 	element[fine_index] = dofh_fine->child(child);
 	tria_element[fine_index] = tria_fine->child(child);
 	
-	ComputeNonlinearResidual_Recursive(pde,residual,element,tria_element,new_matrix, coarse_index, fine_index, cdc, fdc);
+	ComputeNonlinearResidual_Recursive(pde,residual,element,tria_element,new_matrix, coarse_index, fine_index, edc, fdc);
       }
     }
   }
@@ -1162,7 +1162,7 @@ namespace DOpE
       typename std::vector<typename DH<dim, dim>::cell_iterator> &element,
       typename std::vector<typename dealii::Triangulation<dim>::cell_iterator> &tria_element,
       const FullMatrix<SCALAR>& prolong_matrix,unsigned int coarse_index,unsigned int fine_index,
-      Multimesh_ElementDataContainer<DH, VECTOR, dim>& cdc,Multimesh_FaceDataContainer<DH, VECTOR, dim>& fdc)
+      Multimesh_ElementDataContainer<DH, VECTOR, dim>& edc,Multimesh_FaceDataContainer<DH, VECTOR, dim>& fdc)
   {
     if(!element[0]->has_children() && ! element[1]->has_children())
     {
@@ -1175,7 +1175,7 @@ namespace DOpE
 	  bool need_boundary_integrals = (boundary_equation_colors.size() > 0);
 	  bool need_interfaces = pde.HasInterfaces();  
 
-	  cdc.ReInit(coarse_index,fine_index,prolong_matrix);
+	  edc.ReInit(coarse_index,fine_index,prolong_matrix);
 	  
 	  dofs_per_element = element[0]->get_fe().dofs_per_cell;
 	  
@@ -1187,7 +1187,7 @@ namespace DOpE
 	  
 	  //the second '1' plays only a role in the stationary case. In the non-stationary
 	  //case, scale_ico is set by the time-stepping-scheme
-	  pde.ElementRhs(cdc, local_vector, 1.);
+	  pde.ElementRhs(edc, local_vector, 1.);
 	  
 	  //FIXME Integrate on Faces of Element[0] that contain a fine-element face.
 	  if(need_faces )
@@ -1272,7 +1272,7 @@ namespace DOpE
 	element[fine_index] = dofh_fine->child(child);
 	tria_element[fine_index] = tria_fine->child(child);
 	
-	ComputeNonlinearRhs_Recursive(pde,residual,element,tria_element,new_matrix, coarse_index, fine_index, cdc, fdc);
+	ComputeNonlinearRhs_Recursive(pde,residual,element,tria_element,new_matrix, coarse_index, fine_index, edc, fdc);
       }
     }
   }
@@ -1287,7 +1287,7 @@ namespace DOpE
 	PROBLEM& pde, MATRIX &matrix, typename std::vector<typename DH<dim, dim>::cell_iterator>& element,
 	typename std::vector<typename dealii::Triangulation<dim>::cell_iterator>& tria_element,
 	const FullMatrix<SCALAR>& prolong_matrix,unsigned int coarse_index,unsigned int fine_index,
-	Multimesh_ElementDataContainer<DH, VECTOR, dim>& cdc,
+	Multimesh_ElementDataContainer<DH, VECTOR, dim>& edc,
 	Multimesh_FaceDataContainer<DH, VECTOR, dim>& fdc)
       {
 
@@ -1301,7 +1301,7 @@ namespace DOpE
 	  std::vector<unsigned int> boundary_equation_colors = pde.GetBoundaryEquationColors();
 	  bool need_boundary_integrals = (boundary_equation_colors.size() > 0);
 
-	  cdc.ReInit(coarse_index,fine_index,prolong_matrix);
+	  edc.ReInit(coarse_index,fine_index,prolong_matrix);
 	  dofs_per_element = element[0]->get_fe().dofs_per_cell;
 
 	  dealii::FullMatrix<SCALAR> local_matrix(dofs_per_element,
@@ -1310,7 +1310,7 @@ namespace DOpE
 
 	  local_dof_indices.resize(0);
 	  local_dof_indices.resize(dofs_per_element, 0);
-	  pde.ElementMatrix(cdc, local_matrix);
+	  pde.ElementMatrix(edc, local_matrix);
 
 	  //FIXME Integrate on Faces of Element[0] that contain a fine-element face.
 	  if(need_faces || need_interfaces)
@@ -1434,7 +1434,7 @@ namespace DOpE
 	    element[fine_index] = dofh_fine->child(child);
 	    tria_element[fine_index] = tria_fine->child(child);
 	    
-	    ComputeMatrix_Recursive(pde,matrix,element,tria_element,new_matrix, coarse_index, fine_index, cdc, fdc);
+	    ComputeMatrix_Recursive(pde,matrix,element,tria_element,new_matrix, coarse_index, fine_index, edc, fdc);
 	  }
 	}
       } 
@@ -1448,13 +1448,13 @@ namespace DOpE
       typename std::vector<typename DH<dim, dim>::cell_iterator> &element,
       typename std::vector<typename dealii::Triangulation<dim>::cell_iterator> &tria_element,
       const FullMatrix<SCALAR>& prolong_matrix,unsigned int coarse_index,unsigned int fine_index,
-      Multimesh_ElementDataContainer<DH, VECTOR, dim>& cdc)
+      Multimesh_ElementDataContainer<DH, VECTOR, dim>& edc)
   {
     if(!element[0]->has_children() && ! element[1]->has_children())
     {
       SCALAR ret = 0.;
-      cdc.ReInit(coarse_index,fine_index,prolong_matrix);
-      ret += pde.ElementFunctional(cdc);
+      edc.ReInit(coarse_index,fine_index,prolong_matrix);
+      ret += pde.ElementFunctional(edc);
       return ret;
     }    //Endof the case on the finest level
     else
@@ -1478,7 +1478,7 @@ namespace DOpE
 	element[fine_index] = dofh_fine->child(child);
 	tria_element[fine_index] = tria_fine->child(child);
 	
-	ret += ComputeDomainScalar_Recursive(pde,element,tria_element,new_matrix, coarse_index, fine_index, cdc);
+	ret += ComputeDomainScalar_Recursive(pde,element,tria_element,new_matrix, coarse_index, fine_index, edc);
       }
       return ret;
     }

@@ -34,10 +34,10 @@ namespace DOpE
   /********************************************/
 
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
-    FunctionalInterface<CDC, FDC, DH, VECTOR, dopedim, dealdim>::FunctionalInterface()
+    FunctionalInterface<EDC, FDC, DH, VECTOR, dopedim, dealdim>::FunctionalInterface()
     {
 
     }
@@ -45,10 +45,10 @@ namespace DOpE
   /********************************************/
 
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
-    FunctionalInterface<CDC, FDC, DH, VECTOR, dopedim, dealdim>::~FunctionalInterface()
+    FunctionalInterface<EDC, FDC, DH, VECTOR, dopedim, dealdim>::~FunctionalInterface()
     {
 
     }
@@ -56,12 +56,12 @@ namespace DOpE
   /********************************************/
 
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
     double
-    FunctionalInterface<CDC, FDC, DH, VECTOR, dopedim, dealdim>::ElementValue(
-      const CDC<DH, VECTOR, dealdim>& /*cdc*/)
+    FunctionalInterface<EDC, FDC, DH, VECTOR, dopedim, dealdim>::ElementValue(
+      const EDC<DH, VECTOR, dealdim>& /*edc*/)
     {
       throw DOpEException("Not implemented", "FunctionalInterface::ElementValue");
     }
@@ -69,11 +69,11 @@ namespace DOpE
   /********************************************/
 
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
     double
-    FunctionalInterface<CDC, FDC, DH, VECTOR, dopedim, dealdim>::PointValue(
+    FunctionalInterface<EDC, FDC, DH, VECTOR, dopedim, dealdim>::PointValue(
         const DOpEWrapper::DoFHandler<dopedim, DH> & /*control_dof_handler*/,
         const DOpEWrapper::DoFHandler<dealdim, DH> & /*state_dof_handler*/,
         const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
@@ -85,11 +85,11 @@ namespace DOpE
   /********************************************/
 
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
     void
-    FunctionalInterface<CDC, FDC, DH, VECTOR, dopedim, dealdim>::PointValue_U(
+    FunctionalInterface<EDC, FDC, DH, VECTOR, dopedim, dealdim>::PointValue_U(
         const DOpEWrapper::DoFHandler<dopedim, DH> & /*control_dof_handler*/,
         const DOpEWrapper::DoFHandler<dealdim, DH> & /*state_dof_handler*/,
         const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
@@ -103,11 +103,11 @@ namespace DOpE
   /********************************************/
 
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
     void
-    FunctionalInterface<CDC, FDC, DH, VECTOR, dopedim, dealdim>::PointValue_Q(
+    FunctionalInterface<EDC, FDC, DH, VECTOR, dopedim, dealdim>::PointValue_Q(
         const DOpEWrapper::DoFHandler<dopedim, DH> & /*control_dof_handler*/,
         const DOpEWrapper::DoFHandler<dealdim, DH> & /*state_dof_handler*/,
         const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
@@ -121,11 +121,11 @@ namespace DOpE
   /********************************************/
 
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
     void
-    FunctionalInterface<CDC, FDC, DH, VECTOR, dopedim, dealdim>::PointValue_UU(
+    FunctionalInterface<EDC, FDC, DH, VECTOR, dopedim, dealdim>::PointValue_UU(
         const DOpEWrapper::DoFHandler<dopedim, DH> & /*control_dof_handler*/,
         const DOpEWrapper::DoFHandler<dealdim, DH> & /*state_dof_handler*/,
         const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
@@ -139,11 +139,11 @@ namespace DOpE
   /********************************************/
 
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
     void
-    FunctionalInterface<CDC, FDC, DH, VECTOR, dopedim, dealdim>::PointValue_QU(
+    FunctionalInterface<EDC, FDC, DH, VECTOR, dopedim, dealdim>::PointValue_QU(
         const DOpEWrapper::DoFHandler<dopedim, DH> & /*control_dof_handler*/,
         const DOpEWrapper::DoFHandler<dealdim, DH> & /*state_dof_handler*/,
         const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
@@ -156,11 +156,11 @@ namespace DOpE
   /********************************************/
 
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
     void
-    FunctionalInterface<CDC, FDC, DH, VECTOR, dopedim, dealdim>::PointValue_UQ(
+    FunctionalInterface<EDC, FDC, DH, VECTOR, dopedim, dealdim>::PointValue_UQ(
         const DOpEWrapper::DoFHandler<dopedim, DH> & /*control_dof_handler*/,
         const DOpEWrapper::DoFHandler<dealdim, DH> & /*state_dof_handler*/,
         const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
@@ -173,11 +173,11 @@ namespace DOpE
   /********************************************/
 
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
     void
-    FunctionalInterface<CDC, FDC, DH, VECTOR, dopedim, dealdim>::PointValue_QQ(
+    FunctionalInterface<EDC, FDC, DH, VECTOR, dopedim, dealdim>::PointValue_QQ(
         const DOpEWrapper::DoFHandler<dopedim, DH> & /*control_dof_handler*/,
         const DOpEWrapper::DoFHandler<dealdim, DH> & /*state_dof_handler*/,
         const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
@@ -191,12 +191,12 @@ namespace DOpE
   /********************************************/
 
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
     void
-    FunctionalInterface<CDC, FDC, DH, VECTOR, dopedim, dealdim>::ElementValue_U(
-      const CDC<DH, VECTOR, dealdim>& /*cdc*/,
+    FunctionalInterface<EDC, FDC, DH, VECTOR, dopedim, dealdim>::ElementValue_U(
+      const EDC<DH, VECTOR, dealdim>& /*edc*/,
         dealii::Vector<double> &/*local_vector*/,
         double /*scale*/)
     {
@@ -206,12 +206,12 @@ namespace DOpE
   /********************************************/
 
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
     void
-    FunctionalInterface<CDC, FDC, DH, VECTOR, dopedim, dealdim>::ElementValue_Q(
-        const CDC<DH, VECTOR, dealdim>& /*cdc*/,
+    FunctionalInterface<EDC, FDC, DH, VECTOR, dopedim, dealdim>::ElementValue_Q(
+        const EDC<DH, VECTOR, dealdim>& /*edc*/,
         dealii::Vector<double> &/*local_vector*/,
         double /*scale*/)
     {
@@ -221,12 +221,12 @@ namespace DOpE
   /********************************************/
 
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
     void
-    FunctionalInterface<CDC, FDC, DH, VECTOR, dopedim, dealdim>::ElementValue_UU(
-        const CDC<DH, VECTOR, dealdim>& /*cdc*/,
+    FunctionalInterface<EDC, FDC, DH, VECTOR, dopedim, dealdim>::ElementValue_UU(
+        const EDC<DH, VECTOR, dealdim>& /*edc*/,
         dealii::Vector<double> &/*local_vector*/,
         double /*scale*/)
     {
@@ -236,12 +236,12 @@ namespace DOpE
   /********************************************/
 
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
     void
-    FunctionalInterface<CDC, FDC, DH, VECTOR, dopedim, dealdim>::ElementValue_QU(
-        const CDC<DH, VECTOR, dealdim>& /*cdc*/,
+    FunctionalInterface<EDC, FDC, DH, VECTOR, dopedim, dealdim>::ElementValue_QU(
+        const EDC<DH, VECTOR, dealdim>& /*edc*/,
         dealii::Vector<double> &/*local_vector*/,
         double /*scale*/)
     {
@@ -251,12 +251,12 @@ namespace DOpE
   /********************************************/
 
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
     void
-    FunctionalInterface<CDC, FDC, DH, VECTOR, dopedim, dealdim>::ElementValue_UQ(
-        const CDC<DH, VECTOR, dealdim>& /*cdc*/,
+    FunctionalInterface<EDC, FDC, DH, VECTOR, dopedim, dealdim>::ElementValue_UQ(
+        const EDC<DH, VECTOR, dealdim>& /*edc*/,
         dealii::Vector<double> &/*local_vector*/,
         double /*scale*/)
     {
@@ -266,12 +266,12 @@ namespace DOpE
   /********************************************/
 
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
     void
-    FunctionalInterface<CDC, FDC, DH, VECTOR, dopedim, dealdim>::ElementValue_QQ(
-        const CDC<DH, VECTOR, dealdim>& /*cdc*/,
+    FunctionalInterface<EDC, FDC, DH, VECTOR, dopedim, dealdim>::ElementValue_QQ(
+        const EDC<DH, VECTOR, dealdim>& /*edc*/,
         dealii::Vector<double> &/*local_vector*/,
         double /*scale*/)
     {
@@ -281,33 +281,33 @@ namespace DOpE
   /********************************************/
 
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
     std::string
-    FunctionalInterface<CDC, FDC, DH, VECTOR, dopedim, dealdim>::GetType() const
+    FunctionalInterface<EDC, FDC, DH, VECTOR, dopedim, dealdim>::GetType() const
     {
       throw DOpEException("Not implemented", "FunctionalInterface::GetType");
     }
   /********************************************/
 
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
     std::string
-    FunctionalInterface<CDC, FDC, DH, VECTOR, dopedim, dealdim>::GetName() const
+    FunctionalInterface<EDC, FDC, DH, VECTOR, dopedim, dealdim>::GetName() const
     {
       throw DOpEException("Not implemented", "FunctionalInterface::GetName");
     }
 
   /********************************************/
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
     double
-    FunctionalInterface<CDC, FDC, DH, VECTOR, dopedim, dealdim>::FaceValue(
+    FunctionalInterface<EDC, FDC, DH, VECTOR, dopedim, dealdim>::FaceValue(
         const FDC<DH, VECTOR, dealdim>& /*fdc*/)
     {
       throw DOpEException("Not Implemented", "FunctionalInterface::FaceValue");
@@ -315,11 +315,11 @@ namespace DOpE
 
   /********************************************/
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
     void
-    FunctionalInterface<CDC, FDC, DH, VECTOR, dopedim, dealdim>::FaceValue_U(
+    FunctionalInterface<EDC, FDC, DH, VECTOR, dopedim, dealdim>::FaceValue_U(
         const FDC<DH, VECTOR, dealdim>& /*fdc*/,
         dealii::Vector<double> &/*local_vector*/,
         double /*scale*/)
@@ -330,11 +330,11 @@ namespace DOpE
 
   /********************************************/
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
     void
-    FunctionalInterface<CDC, FDC, DH, VECTOR, dopedim, dealdim>::FaceValue_Q(
+    FunctionalInterface<EDC, FDC, DH, VECTOR, dopedim, dealdim>::FaceValue_Q(
         const FDC<DH, VECTOR, dealdim>& /*fdc*/,
         dealii::Vector<double> &/*local_vector*/,
         double /*scale*/)
@@ -345,11 +345,11 @@ namespace DOpE
 
   /********************************************/
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
     void
-    FunctionalInterface<CDC, FDC, DH, VECTOR, dopedim, dealdim>::FaceValue_UU(
+    FunctionalInterface<EDC, FDC, DH, VECTOR, dopedim, dealdim>::FaceValue_UU(
         const FDC<DH, VECTOR, dealdim>& /*fdc*/,
         dealii::Vector<double> &/*local_vector*/,
         double /*scale*/)
@@ -360,11 +360,11 @@ namespace DOpE
 
   /********************************************/
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
     void
-    FunctionalInterface<CDC, FDC, DH, VECTOR, dopedim, dealdim>::FaceValue_QU(
+    FunctionalInterface<EDC, FDC, DH, VECTOR, dopedim, dealdim>::FaceValue_QU(
         const FDC<DH, VECTOR, dealdim>& /*fdc*/,
         dealii::Vector<double> &/*local_vector*/,
         double /*scale*/)
@@ -375,11 +375,11 @@ namespace DOpE
 
   /********************************************/
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
     void
-    FunctionalInterface<CDC, FDC, DH, VECTOR, dopedim, dealdim>::FaceValue_UQ(
+    FunctionalInterface<EDC, FDC, DH, VECTOR, dopedim, dealdim>::FaceValue_UQ(
         const FDC<DH, VECTOR, dealdim>& /*fdc*/,
         dealii::Vector<double> &/*local_vector*/,
         double /*scale*/)
@@ -390,11 +390,11 @@ namespace DOpE
 
   /********************************************/
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
     void
-    FunctionalInterface<CDC, FDC, DH, VECTOR, dopedim, dealdim>::FaceValue_QQ(
+    FunctionalInterface<EDC, FDC, DH, VECTOR, dopedim, dealdim>::FaceValue_QQ(
         const FDC<DH, VECTOR, dealdim>& /*fdc*/,
         dealii::Vector<double> &/*local_vector*/,
         double /*scale*/)
@@ -405,11 +405,11 @@ namespace DOpE
 
   /********************************************/
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
     double
-    FunctionalInterface<CDC, FDC, DH, VECTOR, dopedim, dealdim>::BoundaryValue(
+    FunctionalInterface<EDC, FDC, DH, VECTOR, dopedim, dealdim>::BoundaryValue(
         const FDC<DH, VECTOR, dealdim>& /*fdc*/)
     {
       throw DOpEException("Not Implemented",
@@ -418,11 +418,11 @@ namespace DOpE
 
   /********************************************/
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
     void
-    FunctionalInterface<CDC, FDC, DH, VECTOR, dopedim, dealdim>::BoundaryValue_U(
+    FunctionalInterface<EDC, FDC, DH, VECTOR, dopedim, dealdim>::BoundaryValue_U(
         const FDC<DH, VECTOR, dealdim>& /*fdc*/,
         dealii::Vector<double> &/*local_vector*/,
         double /*scale*/)
@@ -433,11 +433,11 @@ namespace DOpE
 
   /********************************************/
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
     void
-    FunctionalInterface<CDC, FDC, DH, VECTOR, dopedim, dealdim>::BoundaryValue_Q(
+    FunctionalInterface<EDC, FDC, DH, VECTOR, dopedim, dealdim>::BoundaryValue_Q(
         const FDC<DH, VECTOR, dealdim>& /*fdc*/,
         dealii::Vector<double> &/*local_vector*/,
         double /*scale*/)
@@ -448,11 +448,11 @@ namespace DOpE
 
   /********************************************/
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
     void
-    FunctionalInterface<CDC, FDC, DH, VECTOR, dopedim, dealdim>::BoundaryValue_UU(
+    FunctionalInterface<EDC, FDC, DH, VECTOR, dopedim, dealdim>::BoundaryValue_UU(
         const FDC<DH, VECTOR, dealdim>& /*fdc*/,
         dealii::Vector<double> &/*local_vector*/,
         double /*scale*/)
@@ -463,11 +463,11 @@ namespace DOpE
 
   /********************************************/
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
     void
-    FunctionalInterface<CDC, FDC, DH, VECTOR, dopedim, dealdim>::BoundaryValue_QU(
+    FunctionalInterface<EDC, FDC, DH, VECTOR, dopedim, dealdim>::BoundaryValue_QU(
         const FDC<DH, VECTOR, dealdim>& /*fdc*/,
         dealii::Vector<double> &/*local_vector*/,
         double /*scale*/)
@@ -478,11 +478,11 @@ namespace DOpE
 
   /********************************************/
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
     void
-    FunctionalInterface<CDC, FDC, DH, VECTOR, dopedim, dealdim>::BoundaryValue_UQ(
+    FunctionalInterface<EDC, FDC, DH, VECTOR, dopedim, dealdim>::BoundaryValue_UQ(
         const FDC<DH, VECTOR, dealdim>& /*fdc*/,
         dealii::Vector<double> &/*local_vector*/,
         double /*scale*/)
@@ -493,11 +493,11 @@ namespace DOpE
 
   /********************************************/
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
     void
-    FunctionalInterface<CDC, FDC, DH, VECTOR, dopedim, dealdim>::BoundaryValue_QQ(
+    FunctionalInterface<EDC, FDC, DH, VECTOR, dopedim, dealdim>::BoundaryValue_QQ(
         const FDC<DH, VECTOR, dealdim>& /*fdc*/,
         dealii::Vector<double> &/*local_vector*/,
         double /*scale*/)
@@ -508,11 +508,11 @@ namespace DOpE
 
   /********************************************/
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
     double
-    FunctionalInterface<CDC, FDC, DH, VECTOR, dopedim, dealdim>::AlgebraicValue(
+    FunctionalInterface<EDC, FDC, DH, VECTOR, dopedim, dealdim>::AlgebraicValue(
         const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
         const std::map<std::string, const VECTOR*> &/*domain_values*/)
     {
@@ -523,11 +523,11 @@ namespace DOpE
   /********************************************/
 
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
     UpdateFlags
-    FunctionalInterface<CDC, FDC, DH, VECTOR, dopedim, dealdim>::GetUpdateFlags() const
+    FunctionalInterface<EDC, FDC, DH, VECTOR, dopedim, dealdim>::GetUpdateFlags() const
     {
       return update_default; //no update
     }
@@ -535,11 +535,11 @@ namespace DOpE
   /********************************************/
 
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
     UpdateFlags
-    FunctionalInterface<CDC, FDC, DH, VECTOR, dopedim, dealdim>::GetFaceUpdateFlags() const
+    FunctionalInterface<EDC, FDC, DH, VECTOR, dopedim, dealdim>::GetFaceUpdateFlags() const
     {
       return update_default; //no update
     }
@@ -547,11 +547,11 @@ namespace DOpE
   /********************************************/
 
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
     void
-    FunctionalInterface<CDC, FDC, DH, VECTOR, dopedim, dealdim>::AlgebraicGradient_Q(
+    FunctionalInterface<EDC, FDC, DH, VECTOR, dopedim, dealdim>::AlgebraicGradient_Q(
       VECTOR& /*gradient*/,
         const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
         const std::map<std::string, const VECTOR*> &/*domain_values*/)
@@ -563,11 +563,11 @@ namespace DOpE
   /********************************************/
 
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
     bool
-    FunctionalInterface<CDC, FDC, DH, VECTOR, dopedim, dealdim>::HasFaces() const
+    FunctionalInterface<EDC, FDC, DH, VECTOR, dopedim, dealdim>::HasFaces() const
     {
       bool retrn;
       //we check if the functional is of type face
@@ -582,11 +582,11 @@ namespace DOpE
   /********************************************/
 
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
     bool
-    FunctionalInterface<CDC, FDC, DH, VECTOR, dopedim, dealdim>::HasPoints() const
+    FunctionalInterface<EDC, FDC, DH, VECTOR, dopedim, dealdim>::HasPoints() const
     {
       bool retrn;
       //we check if the functional is of type point
@@ -599,11 +599,11 @@ namespace DOpE
     }
   /********************************************/
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
     void
-    FunctionalInterface<CDC, FDC, DH, VECTOR, dopedim, dealdim>::SetProblemType(
+    FunctionalInterface<EDC, FDC, DH, VECTOR, dopedim, dealdim>::SetProblemType(
         std::string p_type)
     {
       _problem_type = p_type;
@@ -611,11 +611,11 @@ namespace DOpE
 
   /********************************************/
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
     std::string
-    FunctionalInterface<CDC, FDC, DH, VECTOR, dopedim, dealdim>::GetProblemType() const
+    FunctionalInterface<EDC, FDC, DH, VECTOR, dopedim, dealdim>::GetProblemType() const
     {
       return _problem_type;
     }

@@ -782,9 +782,9 @@ namespace DOpE
         /******************************************************/
         template<typename DATACONTAINER>
           double
-          ElementFunctional(const DATACONTAINER& cdc)
+          ElementFunctional(const DATACONTAINER& edc)
           {
-            return _OP.ElementFunctional(cdc);
+            return _OP.ElementFunctional(edc);
           }
 
         /******************************************************/
@@ -819,18 +819,18 @@ namespace DOpE
 
         template<typename DATACONTAINER>
           void
-          ElementEquation(const DATACONTAINER& cdc,
+          ElementEquation(const DATACONTAINER& edc,
               dealii::Vector<double> &local_vector, double scale = 1.,
               double scale_ico = 1.)
           {
-            _OP.ElementEquation(cdc, local_vector, scale, scale_ico);
+            _OP.ElementEquation(edc, local_vector, scale, scale_ico);
           }
 
         /******************************************************/
 
         template<typename DATACONTAINER>
           void
-          ElementRhs(const DATACONTAINER& cdc,
+          ElementRhs(const DATACONTAINER& edc,
               dealii::Vector<double> &local_vector, double scale = 1.)
           {
             if (this->GetType() == "gradient")
@@ -842,9 +842,9 @@ namespace DOpE
               unsigned int tmp_num = this->GetTypeNum();
 
               {
-                cdc.GetParamValues("mma_multiplier_global",
+                edc.GetParamValues("mma_multiplier_global",
                     mma_multiplier_global);
-                cdc.GetParamValues("constraints_global",
+                edc.GetParamValues("constraints_global",
                     constraint_values_global);
               }
               for (unsigned int i = 0; i < mma_multiplier_global.size(); i++)
@@ -855,7 +855,7 @@ namespace DOpE
                 local_scaling *= local_scaling;
                 local_scaling *= mma_multiplier_global(i);
                 local_scaling *= (_p * _p);
-                _OP.ElementRhs(cdc, local_vector, scale * local_scaling);
+                _OP.ElementRhs(edc, local_vector, scale * local_scaling);
               }
               _OP.SetType(tmp, tmp_num);
             }
@@ -867,9 +867,9 @@ namespace DOpE
               dealii::Vector<double> constraint_values_global;
 
               {
-                cdc.GetParamValues("mma_multiplier_global",
+                edc.GetParamValues("mma_multiplier_global",
                     mma_multiplier_global);
-                cdc.GetParamValues("constraints_global",
+                edc.GetParamValues("constraints_global",
                     constraint_values_global);
               }
 
@@ -880,13 +880,13 @@ namespace DOpE
                 local_scaling *= local_scaling;
                 local_scaling *= mma_multiplier_global(i);
                 local_scaling *= 1. / (_p * _p);
-                _OP.ElementRhs(cdc, local_vector, scale * local_scaling);
+                _OP.ElementRhs(edc, local_vector, scale * local_scaling);
               }
               _OP.SetType(tmp, tmp_num);
             }
             else if (this->GetType() == "global_constraint_gradient")
             {
-              _OP.ElementRhs(cdc, local_vector, scale);
+              _OP.ElementRhs(edc, local_vector, scale);
             }
             else
             {
@@ -909,11 +909,11 @@ namespace DOpE
 
         template<typename DATACONTAINER>
           void
-          ElementMatrix(const DATACONTAINER& cdc,
+          ElementMatrix(const DATACONTAINER& edc,
               dealii::FullMatrix<double> &local_matrix, double scale = 1.,
               double scale_ico = 1.)
           {
-            _OP.ElementMatrix(cdc, local_matrix, scale, scale_ico);
+            _OP.ElementMatrix(edc, local_matrix, scale, scale_ico);
           }
 
         /******************************************************/

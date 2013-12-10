@@ -85,7 +85,7 @@ typedef Integrator<IDC, VECTOR, double, DIM> INTEGRATOR;
 typedef DirectLinearSolverWithMatrix<SPARSITYPATTERN, MATRIX, VECTOR> LINEARSOLVER;
 typedef NewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR> NLS;
 typedef StatReducedProblem<NLS, NLS, INTEGRATOR, INTEGRATOR, OP, VECTOR, CDIM,
-    DIM> SSolver;
+    DIM> RP;
 typedef Reduced_SnoptAlgorithm<OP, VECTOR> SNOPT_Alg;
 
 int
@@ -108,7 +108,7 @@ main(int argc, char **argv)
   }
 
   ParameterReader pr;
-  SSolver::declare_params(pr);
+  RP::declare_params(pr);
   SNOPT_Alg::declare_params(pr);
   NLS::declare_params(pr);
 
@@ -168,7 +168,7 @@ main(int argc, char **argv)
   P.SetBoundaryFunctionalColors(3);
   P.SetBoundaryEquationColors(3);
 
-  SSolver solver(&P, "fullmem", pr, idc);
+  RP solver(&P, "fullmem", pr, idc);
 
   SNOPT_Alg Alg(&P, &solver, "fullmem", pr);
 

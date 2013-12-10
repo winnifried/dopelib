@@ -31,11 +31,11 @@ using namespace dealii;
 using namespace DOpE;
 
 template<
-    template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+    template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
     template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
     template<int, int> class DH, typename VECTOR, int dopedim, int dealdim =
         dopedim>
-  class LocalMeanValueFunctional : public FunctionalInterface<CDC, FDC, DH,
+  class LocalMeanValueFunctional : public FunctionalInterface<EDC, FDC, DH,
       VECTOR, dopedim, dealdim>
   {
     public:
@@ -44,14 +44,14 @@ template<
       }
 
       double
-      ElementValue(const CDC<DH, VECTOR, dealdim>& cdc)
+      ElementValue(const EDC<DH, VECTOR, dealdim>& edc)
       {
         const DOpEWrapper::FEValues<dealdim> & state_fe_values =
-            cdc.GetFEValuesState();
-        unsigned int n_q_points = cdc.GetNQPoints();
+            edc.GetFEValuesState();
+        unsigned int n_q_points = edc.GetNQPoints();
         {
           _uvalues.resize(n_q_points);
-          cdc.GetValuesState("state", _uvalues);
+          edc.GetValuesState("state", _uvalues);
         }
 
         double r = 0.;
@@ -86,11 +86,11 @@ template<
 /****************************************************************************************/
 
 template<
-    template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+    template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
     template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
     template<int, int> class DH, typename VECTOR, int dopedim, int dealdim =
         dopedim>
-  class LocalPointFunctional : public FunctionalInterface<CDC, FDC, DH, VECTOR,
+  class LocalPointFunctional : public FunctionalInterface<EDC, FDC, DH, VECTOR,
       dopedim, dealdim>
   {
     public:

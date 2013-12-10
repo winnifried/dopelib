@@ -75,24 +75,24 @@ namespace DOpE
 	 * Functions providing the required information for the integrator.
 	 * see OptProblemContainer for details.
 	 */
-      template<typename CDC>
-      void Init_ElementEquation(const CDC& cdc,
+      template<typename EDC>
+      void Init_ElementEquation(const EDC& edc,
 			     dealii::Vector<double> &local_vector, double scale,
 			     double scale_ico)
       {
-        _pde.Init_ElementEquation(cdc, local_vector, scale, scale_ico);
+        _pde.Init_ElementEquation(edc, local_vector, scale, scale_ico);
       }
 
         /**
 	 * Functions providing the required information for the integrator.
 	 * see OptProblemContainer for details.
 	 */
-      template<typename CDC>
+      template<typename EDC>
       void
-      Init_ElementRhs(const CDC& cdc,
+      Init_ElementRhs(const EDC& edc,
           dealii::Vector<double> &local_vector, double scale)
       {
-        _pde.Init_ElementRhs(& GetInitialValues(), cdc, local_vector, scale);
+        _pde.Init_ElementRhs(& GetInitialValues(), edc, local_vector, scale);
       }
 
         /**
@@ -113,12 +113,12 @@ namespace DOpE
 	 * Functions providing the required information for the integrator.
 	 * see OptProblemContainer for details.
 	 */
-      template<typename CDC>
-      void Init_ElementMatrix(const CDC& cdc,
+      template<typename EDC>
+      void Init_ElementMatrix(const EDC& edc,
 			   dealii::FullMatrix<double> &local_entry_matrix, double scale,
 			   double scale_ico)
       {
-        _pde.Init_ElementMatrix(cdc, local_entry_matrix, scale, scale_ico);
+        _pde.Init_ElementMatrix(edc, local_entry_matrix, scale, scale_ico);
       }
 
       /******************************************************/
@@ -127,9 +127,9 @@ namespace DOpE
 	 * Functions providing the required information for the integrator.
 	 * see OptProblemContainer for details.
 	 */
-      template<typename CDC>
+      template<typename EDC>
         inline void
-        ElementEquation(const CDC& cdc,
+        ElementEquation(const EDC& edc,
             dealii::Vector<double> &local_vector, double scale,
             double scale_ico);
 
@@ -137,27 +137,27 @@ namespace DOpE
 	 * Functions providing the required information for the integrator.
 	 * see OptProblemContainer for details.
 	 */
-      template<typename CDC>
+      template<typename EDC>
         inline void
-        ElementTimeEquation(const CDC& cdc,
+        ElementTimeEquation(const EDC& edc,
             dealii::Vector<double> &local_vector, double scale = 1.);
 
         /**
 	 * Functions providing the required information for the integrator.
 	 * see OptProblemContainer for details.
 	 */
-      template<typename CDC>
+      template<typename EDC>
         inline void
-        ElementTimeEquationExplicit(const CDC& cdc,
+        ElementTimeEquationExplicit(const EDC& edc,
             dealii::Vector<double> &local_vector, double scale = 1.);
 
         /**
 	 * Functions providing the required information for the integrator.
 	 * see OptProblemContainer for details.
 	 */
-      template<typename CDC>
+      template<typename EDC>
         inline void
-        ElementRhs(const CDC& cdc,
+        ElementRhs(const EDC& edc,
             dealii::Vector<double> &local_vector, double scale = 1.);
 
         /**
@@ -174,9 +174,9 @@ namespace DOpE
 	 * Functions providing the required information for the integrator.
 	 * see OptProblemContainer for details.
 	 */
-      template<typename CDC>
+      template<typename EDC>
         inline void
-        ElementMatrix(const CDC& cdc,
+        ElementMatrix(const EDC& edc,
             dealii::FullMatrix<double> &local_entry_matrix, double scale = 1.,
             double scale_ico = 1.);
 
@@ -184,18 +184,18 @@ namespace DOpE
 	 * Functions providing the required information for the integrator.
 	 * see OptProblemContainer for details.
 	 */
-      template<typename CDC>
+      template<typename EDC>
         inline void
-        ElementTimeMatrix(const CDC& cdc,
+        ElementTimeMatrix(const EDC& edc,
             dealii::FullMatrix<double> &local_entry_matrix);
 
         /**
 	 * Functions providing the required information for the integrator.
 	 * see OptProblemContainer for details.
 	 */
-      template<typename CDC>
+      template<typename EDC>
         inline void
-        ElementTimeMatrixExplicit(const CDC& cdc,
+        ElementTimeMatrixExplicit(const EDC& edc,
             dealii::FullMatrix<double> &local_entry_matrix);
 
         /**
@@ -417,40 +417,40 @@ namespace DOpE
 
   template<typename OPTPROBLEM, typename PDE, typename DD,
       typename SPARSITYPATTERN, typename VECTOR, int dim>
-    template<typename CDC>
+    template<typename EDC>
       void
       StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, 
-          dim>::ElementEquation(const CDC& cdc,
+          dim>::ElementEquation(const EDC& edc,
           dealii::Vector<double> &local_vector, double scale,
           double scale_ico)
       {
-        _pde.ElementEquation(cdc, local_vector, scale, scale_ico);
+        _pde.ElementEquation(edc, local_vector, scale, scale_ico);
       }
 
   /******************************************************/
 
   template<typename OPTPROBLEM, typename PDE, typename DD,
       typename SPARSITYPATTERN, typename VECTOR, int dim>
-    template<typename CDC>
+    template<typename EDC>
       void
       StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR,
-          dim>::ElementTimeEquation(const CDC& cdc,
+          dim>::ElementTimeEquation(const EDC& edc,
           dealii::Vector<double> &local_vector, double scale)
       {
-        _pde.ElementTimeEquation(cdc, local_vector, scale);
+        _pde.ElementTimeEquation(edc, local_vector, scale);
       }
 
   /******************************************************/
 
   template<typename OPTPROBLEM, typename PDE, typename DD,
       typename SPARSITYPATTERN, typename VECTOR, int dim>
-    template<typename CDC>
+    template<typename EDC>
       void
       StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR,
-          dim>::ElementTimeEquationExplicit(const CDC& cdc,
+          dim>::ElementTimeEquationExplicit(const EDC& edc,
           dealii::Vector<double> &local_vector, double scale)
       {
-        _pde.ElementTimeEquationExplicit(cdc, local_vector, scale);
+        _pde.ElementTimeEquationExplicit(edc, local_vector, scale);
       }
 
   /******************************************************/
@@ -495,13 +495,13 @@ namespace DOpE
 
   template<typename OPTPROBLEM, typename PDE, typename DD,
       typename SPARSITYPATTERN, typename VECTOR, int dim>
-    template<typename CDC>
+    template<typename EDC>
       void
       StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR,
-          dim>::ElementRhs(const CDC& cdc,
+          dim>::ElementRhs(const EDC& edc,
           dealii::Vector<double> &local_vector, double scale)
       {
-        _pde.ElementRightHandSide(cdc, local_vector, scale);
+        _pde.ElementRightHandSide(edc, local_vector, scale);
       }
 
   /******************************************************/
@@ -547,40 +547,40 @@ namespace DOpE
 
   template<typename OPTPROBLEM, typename PDE, typename DD,
       typename SPARSITYPATTERN, typename VECTOR, int dim>
-    template<typename CDC>
+    template<typename EDC>
       void
       StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR,
-          dim>::ElementMatrix(const CDC& cdc,
+          dim>::ElementMatrix(const EDC& edc,
           dealii::FullMatrix<double> &local_entry_matrix, double scale,
           double scale_ico)
       {
-        _pde.ElementMatrix(cdc, local_entry_matrix, scale, scale_ico);
+        _pde.ElementMatrix(edc, local_entry_matrix, scale, scale_ico);
       }
 
   /******************************************************/
 
   template<typename OPTPROBLEM, typename PDE, typename DD,
       typename SPARSITYPATTERN, typename VECTOR, int dim>
-    template<typename CDC>
+    template<typename EDC>
       void
       StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR,
-          dim>::ElementTimeMatrix(const CDC& cdc,
+          dim>::ElementTimeMatrix(const EDC& edc,
           FullMatrix<double> &local_entry_matrix)
       {
-        _pde.ElementTimeMatrix(cdc, local_entry_matrix);
+        _pde.ElementTimeMatrix(edc, local_entry_matrix);
       }
 
   /******************************************************/
 
   template<typename OPTPROBLEM, typename PDE, typename DD,
       typename SPARSITYPATTERN, typename VECTOR, int dim>
-    template<typename CDC>
+    template<typename EDC>
       void
       StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR,
-          dim>::ElementTimeMatrixExplicit(const CDC& cdc,
+          dim>::ElementTimeMatrixExplicit(const EDC& edc,
           dealii::FullMatrix<double> &local_entry_matrix)
       {
-        _pde.ElementTimeMatrixExplicit(cdc, local_entry_matrix);
+        _pde.ElementTimeMatrixExplicit(edc, local_entry_matrix);
       }
 
   /******************************************************/

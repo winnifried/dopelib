@@ -106,7 +106,7 @@ typedef DirectLinearSolverWithMatrix<SPARSITYPATTERN, MATRIX, VECTOR> LINEARSOLV
 typedef NewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR> NLS;
 
 //This class represents the PDEProblem and steers the solution process.
-typedef StatPDEProblem<NLS, INTEGRATOR, OP, VECTOR, DIM> SSolver;
+typedef StatPDEProblem<NLS, INTEGRATOR, OP, VECTOR, DIM> RP;
 
 //The spacetimehandler manages all the things related to the degrees of
 //freedom in space and time.
@@ -138,7 +138,7 @@ main(int argc, char **argv)
   ParameterReader pr; //The parameter reader is responsible for the param-files handling
 
   //Declaration of the parameters
-  SSolver::declare_params(pr);
+  RP::declare_params(pr);
   DOpEOutputHandler<VECTOR>::declare_params(pr);
 
   pr.read_parameters(paramfile); //we read the parameters
@@ -209,7 +209,7 @@ main(int argc, char **argv)
   P.SetBoundaryEquationColors(1);
 
   //We define the stateproblem, which steers the solution process.
-  SSolver solver(&P, "fullmem", pr, idc);
+  RP solver(&P, "fullmem", pr, idc);
 
   //Only needed for pure PDE Problems: We define and register
   //the output- and exception handler. The first handels the

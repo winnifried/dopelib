@@ -42,7 +42,7 @@ namespace DOpE
    * GlobalConstraints are dealt with as a Functional, 
    * hence all functions from Functionals are inherited.
    *
-   * @tparam <CDC>             The ElementDataContainer object
+   * @tparam <EDC>             The ElementDataContainer object
    *                           needed by the base class.
    * @tparam <FDC>             The FaceDataContainer object
    *                           needed by the base class.
@@ -55,10 +55,10 @@ namespace DOpE
    *                           
    */
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
-    class ConstraintInterface : public FunctionalInterface<CDC, FDC, DH,
+    class ConstraintInterface : public FunctionalInterface<EDC, FDC, DH,
         VECTOR, dopedim, dealdim>
     {
       public:

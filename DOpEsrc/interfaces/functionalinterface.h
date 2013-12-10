@@ -46,7 +46,7 @@ namespace DOpE
    * the derivatives thereof.
    */
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dopedim, int dealdim =
           dopedim>
@@ -60,16 +60,16 @@ namespace DOpE
         /**
          * This evaluates the Cost Functional J(q,u) = \int_\Omega j(q(x),u(x)) \dx on a given element T.
          *
-         * @param cdc     The ElementDataContainer containing all the data necessary to evaluate the functional on
+         * @param edc     The ElementDataContainer containing all the data necessary to evaluate the functional on
          *                a element.
          */
         virtual double
-        ElementValue(const CDC<DH, VECTOR, dealdim>& cdc);
+        ElementValue(const EDC<DH, VECTOR, dealdim>& edc);
 
         /**
          * This evaluates the Cost Functional J_u'(q,u)(.) = \int_\Omega j_u'(q(x),u(x))(.) \dx on a given element T.
          *
-         * @param cdc                      The ElementDataContainer containing all the data necessary to evaluate the functional on
+         * @param edc                      The ElementDataContainer containing all the data necessary to evaluate the functional on
          *                                 a element.
          * @param local_vector        A Vector to contain the result. After completion local_vector fulfills
          *                                 local_vector(i) += scale * \int_T j_u'(q(x),u(x))(\phi_i) \dx where \phi_i is
@@ -77,13 +77,13 @@ namespace DOpE
          * @param scale                    A factor by which the result is scaled.
          */
         virtual void
-        ElementValue_U(const CDC<DH, VECTOR, dealdim>& cdc,
+        ElementValue_U(const EDC<DH, VECTOR, dealdim>& edc,
             dealii::Vector<double> &local_vector, double scale);
 
         /**
          * This evaluates the Cost Functional J_q'(q,u)(.) = \int_\Omega j_q'(q(x),u(x))(.) \dx on a given element T.
          *
-         * @param cdc                      The ElementDataContainer containing all the data necessary to evaluate the functional on
+         * @param edc                      The ElementDataContainer containing all the data necessary to evaluate the functional on
          *                                 a element.
          * @param local_vector        A Vector to contain the result. After completion local_vector fullfils
          *                                 local_vector(i) += scale * \int_T j_q'(q(x),u(x))(\phi_i) \dx where \phi_i is
@@ -91,13 +91,13 @@ namespace DOpE
          * @param scale                    A factor by which the result is scaled.
          */
         virtual void
-        ElementValue_Q(const CDC<DH, VECTOR, dealdim>& cdc,
+        ElementValue_Q(const EDC<DH, VECTOR, dealdim>& edc,
             dealii::Vector<double> &local_vector, double scale);
 
         /**
          * This evaluates the Cost Functional J_uu'(q,u)(.,DU) = \int_\Omega j_uu'(q(x),u(x))(.,DU) \dx on a given element T.
          *
-         * @param cdc                      The ElementDataContainer containing all the data necessary to evaluate the functional on
+         * @param edc                      The ElementDataContainer containing all the data necessary to evaluate the functional on
          *                                 a element.
          * @param local_vector        A Vector to contain the result. After completion local_vector fullfils
          *                                 local_vector(i) += scale * \int_T j_uu'(q(x),u(x))(\phi_i,DU) \dx where \phi_i is
@@ -105,13 +105,13 @@ namespace DOpE
          * @param scale                    A factor by which the result is scaled.
          */
         virtual void
-        ElementValue_UU(const CDC<DH, VECTOR, dealdim>& cdc,
+        ElementValue_UU(const EDC<DH, VECTOR, dealdim>& edc,
             dealii::Vector<double> &local_vector, double scale);
 
         /**
          * This evaluates the Cost Functional J_qu'(q,u)(.,DQ) = \int_\Omega j_qu'(q(x),u(x))(.,DQ) \dx on a given element T.
          *
-         * @param cdc                      The ElementDataContainer containing all the data necessary to evaluate the functional on
+         * @param edc                      The ElementDataContainer containing all the data necessary to evaluate the functional on
          *                                 a element.
          * @param local_vector        A Vector to contain the result. After completion local_vector fullfils
          *                                 local_vector(i) += scale * \int_T j_qu'(q(x),u(x))(\phi_i,DQ) \dx where \phi_i is
@@ -119,13 +119,13 @@ namespace DOpE
          * @param scale                    A factor by which the result is scaled.
          */
         virtual void
-        ElementValue_QU(const CDC<DH, VECTOR, dealdim>& cdc,
+        ElementValue_QU(const EDC<DH, VECTOR, dealdim>& edc,
             dealii::Vector<double> &local_vector, double scale);
 
         /**
          * This evaluates the Cost Functional J_uq'(q,u)(.,DU) = \int_\Omega j_uq'(q(x),u(x))(.,DU) \dx on a given element T.
          *
-         * @param cdc                      The ElementDataContainer containing all the data necessary to evaluate the functional on
+         * @param edc                      The ElementDataContainer containing all the data necessary to evaluate the functional on
          *                                 a element.
          * @param local_vector        A Vector to contain the result. After completion local_vector fullfils
          *                                 local_vector(i) += scale * \int_T j_uq'(q(x),u(x))(\phi_i,DU) \dx where \phi_i is
@@ -133,13 +133,13 @@ namespace DOpE
          * @param scale                    A factor by which the result is scaled.
          */
         virtual void
-        ElementValue_UQ(const CDC<DH, VECTOR, dealdim>& cdc,
+        ElementValue_UQ(const EDC<DH, VECTOR, dealdim>& edc,
             dealii::Vector<double> &local_vector, double scale);
 
         /**
          * This evaluates the Cost Functional J_qq'(q,u)(.,DQ) = \int_\Omega j_qq'(q(x),u(x))(.,DQ) \dx on a given element T.
          *
-         * @param cdc                      The ElementDataContainer containing all the data necessary to evaluate the functional on
+         * @param edc                      The ElementDataContainer containing all the data necessary to evaluate the functional on
          *                                 a element.
          * @param local_vector        A Vector to contain the result. After completion local_vector fullfils
          *                                 local_vector(i) += scale * \int_T j_qq'(q(x),u(x))(\phi_i,DQ) \dx where \phi_i is
@@ -147,7 +147,7 @@ namespace DOpE
          * @param scale                    A factor by which the result is scaled.
          */
         virtual void
-        ElementValue_QQ(const CDC<DH, VECTOR, dealdim>& cdc,
+        ElementValue_QQ(const EDC<DH, VECTOR, dealdim>& edc,
             dealii::Vector<double> &local_vector, double scale);
 
         /**

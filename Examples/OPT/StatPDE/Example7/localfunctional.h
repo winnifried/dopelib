@@ -31,11 +31,11 @@ using namespace dealii;
 using namespace DOpE;
 
 template<
-    template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+    template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
     template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
     template<int, int> class DH, typename VECTOR, int dopedim, int dealdim =
         dopedim>
-  class LocalFunctional : public FunctionalInterface<CDC, FDC, DH, VECTOR,
+  class LocalFunctional : public FunctionalInterface<EDC, FDC, DH, VECTOR,
       dopedim, dealdim>
   {
     public:
@@ -45,19 +45,19 @@ template<
       }
 
       double
-      ElementValue(const CDC<DH, VECTOR, dealdim>& cdc)
+      ElementValue(const EDC<DH, VECTOR, dealdim>& edc)
       {
         const DOpEWrapper::FEValues<dealdim> & state_fe_values =
-            cdc.GetFEValuesState();
-        unsigned int n_q_points = cdc.GetNQPoints();
+            edc.GetFEValuesState();
+        unsigned int n_q_points = edc.GetNQPoints();
 
         {
           _qvalues.resize(n_q_points);
           _fvalues.resize(n_q_points);
           _uvalues.resize(n_q_points);
 
-          cdc.GetValuesControl("control", _qvalues);
-          cdc.GetValuesState("state", _uvalues);
+          edc.GetValuesControl("control", _qvalues);
+          edc.GetValuesState("state", _uvalues);
         }
 
         double r = 0.;
@@ -80,18 +80,18 @@ template<
       }
 
       void
-      ElementValue_U(const CDC<DH, VECTOR, dealdim>& cdc,
+      ElementValue_U(const EDC<DH, VECTOR, dealdim>& edc,
           dealii::Vector<double> &local_vector, double scale)
       {
         const DOpEWrapper::FEValues<dealdim> & state_fe_values =
-            cdc.GetFEValuesState();
-        unsigned int n_dofs_per_element = cdc.GetNDoFsPerElement();
-        unsigned int n_q_points = cdc.GetNQPoints();
+            edc.GetFEValuesState();
+        unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
+        unsigned int n_q_points = edc.GetNQPoints();
         {
           _fvalues.resize(n_q_points);
           _uvalues.resize(n_q_points);
 
-          cdc.GetValuesState("state", _uvalues);
+          edc.GetValuesState("state", _uvalues);
         }
 
         for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
@@ -112,17 +112,17 @@ template<
       }
 
       void
-      ElementValue_Q(const CDC<DH, VECTOR, dealdim>& cdc,
+      ElementValue_Q(const EDC<DH, VECTOR, dealdim>& edc,
           dealii::Vector<double> &local_vector, double scale)
       {
         const DOpEWrapper::FEValues<dealdim> & control_fe_values =
-            cdc.GetFEValuesControl();
-        unsigned int n_dofs_per_element = cdc.GetNDoFsPerElement();
-        unsigned int n_q_points = cdc.GetNQPoints();
+            edc.GetFEValuesControl();
+        unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
+        unsigned int n_q_points = edc.GetNQPoints();
         {
           _qvalues.resize(n_q_points);
 
-          cdc.GetValuesControl("control", _qvalues);
+          edc.GetValuesControl("control", _qvalues);
         }
 
         for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
@@ -139,16 +139,16 @@ template<
       }
 
       void
-      ElementValue_UU(const CDC<DH, VECTOR, dealdim>& cdc,
+      ElementValue_UU(const EDC<DH, VECTOR, dealdim>& edc,
           dealii::Vector<double> &local_vector, double scale)
       {
         const DOpEWrapper::FEValues<dealdim> & state_fe_values =
-            cdc.GetFEValuesState();
-        unsigned int n_dofs_per_element = cdc.GetNDoFsPerElement();
-        unsigned int n_q_points = cdc.GetNQPoints();
+            edc.GetFEValuesState();
+        unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
+        unsigned int n_q_points = edc.GetNQPoints();
         {
           _duvalues.resize(n_q_points);
-          cdc.GetValuesState("tangent", _duvalues);
+          edc.GetValuesState("tangent", _duvalues);
         }
 
         for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
@@ -163,28 +163,28 @@ template<
       }
 
       void
-      ElementValue_QU(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
+      ElementValue_QU(const EDC<DH, VECTOR, dealdim>& /*edc*/,
           dealii::Vector<double> &/*local_vector*/, double /*scale*/)
       {
       }
 
       void
-      ElementValue_UQ(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
+      ElementValue_UQ(const EDC<DH, VECTOR, dealdim>& /*edc*/,
           dealii::Vector<double> &/*local_vector*/, double /*scale*/)
       {
       }
 
       void
-      ElementValue_QQ(const CDC<DH, VECTOR, dealdim>& cdc,
+      ElementValue_QQ(const EDC<DH, VECTOR, dealdim>& edc,
           dealii::Vector<double> &local_vector, double scale)
       {
         const DOpEWrapper::FEValues<dealdim> & control_fe_values =
-            cdc.GetFEValuesControl();
-        unsigned int n_dofs_per_element = cdc.GetNDoFsPerElement();
-        unsigned int n_q_points = cdc.GetNQPoints();
+            edc.GetFEValuesControl();
+        unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
+        unsigned int n_q_points = edc.GetNQPoints();
         {
           _dqvalues.resize(n_q_points);
-          cdc.GetValuesControl("dq", _dqvalues);
+          edc.GetValuesControl("dq", _dqvalues);
         }
 
         for (unsigned int q_point = 0; q_point < n_q_points; q_point++)

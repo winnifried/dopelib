@@ -66,7 +66,7 @@ typedef IntegratorDataContainer<DOFHANDLER, QUADRATURE, FACEQUADRATURE, VECTOR,
 typedef Integrator<IDC, VECTOR, double, DIM> INTEGRATOR;
 typedef DirectLinearSolverWithMatrix<SPARSITYPATTERN, MATRIX, VECTOR> LINEARSOLVER;
 typedef NewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR> NLS;
-typedef StatPDEProblem<NLS, INTEGRATOR, OP, VECTOR, DIM> SSolver;
+typedef StatPDEProblem<NLS, INTEGRATOR, OP, VECTOR, DIM> RP;
 typedef MethodOfLines_StateSpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN,
     VECTOR, DIM> STH;
 
@@ -91,7 +91,7 @@ main(int argc, char **argv)
   }
 
   ParameterReader pr;
-  SSolver::declare_params(pr);
+  RP::declare_params(pr);
   DOpEOutputHandler<VECTOR>::declare_params(pr);
   pr.read_parameters(paramfile);
 
@@ -128,7 +128,7 @@ main(int argc, char **argv)
 
   P.SetDirichletBoundaryColors(0, comp_mask, &DD1);
 
-  SSolver solver(&P, "fullmem", pr, idc);
+  RP solver(&P, "fullmem", pr, idc);
   //Only needed for pure PDE Problems
   DOpEOutputHandler<VECTOR> out(&solver, pr);
   DOpEExceptionHandler<VECTOR> ex(&out);

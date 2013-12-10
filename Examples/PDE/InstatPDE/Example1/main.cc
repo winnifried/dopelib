@@ -119,7 +119,7 @@ typedef NewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR> CNLS;
 typedef InstatStepNewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR> NLS;
 typedef ReducedNewtonAlgorithm<OP, VECTOR> RNA;
 typedef InstatReducedProblem<CNLS, NLS, INTEGRATOR, INTEGRATOR, OP, VECTOR, DIM,
-    DIM> SSolver;
+    DIM> RP;
 
 int
 main(int argc, char **argv)
@@ -142,7 +142,7 @@ main(int argc, char **argv)
   }
 
   ParameterReader pr;
-  SSolver::declare_params(pr);
+  RP::declare_params(pr);
   RNA::declare_params(pr);
   LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>::declare_params(pr);
   BoundaryParabel::declare_params(pr);
@@ -234,7 +234,7 @@ main(int argc, char **argv)
 //  BoundaryParabelExact boundary_parabel_ex;
 //  P.SetInitialValues(&boundary_parabel_ex);
 
-  SSolver solver(&P, "fullmem", pr, idc);
+  RP solver(&P, "fullmem", pr, idc);
   RNA Alg(&P, &solver, pr);
 
   try

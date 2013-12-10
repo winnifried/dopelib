@@ -79,7 +79,7 @@ typedef IntegratorDataContainer<DOFHANDLER, QUADRATURE, FACEQUADRATURE, VECTOR,
 typedef Integrator<IDC, VECTOR, double, DIM> INTEGRATOR;
 typedef DirectLinearSolverWithMatrix<SPARSITYPATTERN, MATRIX, VECTOR> LINEARSOLVER;
 typedef NewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR> NLS;
-typedef StatPDEProblem<NLS, INTEGRATOR, OP, VECTOR, DIM> SSolver;
+typedef StatPDEProblem<NLS, INTEGRATOR, OP, VECTOR, DIM> RP;
 typedef MethodOfLines_StateSpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN,
     VECTOR, DIM> STH;
 
@@ -118,7 +118,7 @@ main(int argc, char **argv)
 
   ParameterReader pr;
   ConvergenceTable convergence_table;
-  SSolver::declare_params(pr);
+  RP::declare_params(pr);
   DOpEOutputHandler<VECTOR>::declare_params(pr);
   declare_params(pr);
 
@@ -174,9 +174,9 @@ main(int argc, char **argv)
 
   P_q1.SetDirichletBoundaryColors(0, comp_mask, &DD1);
 
-  SSolver solver(&P, "fullmem", pr, idc);
+  RP solver(&P, "fullmem", pr, idc);
 
-  SSolver solver_q1(&P_q1, "fullmem", pr, idc);
+  RP solver_q1(&P_q1, "fullmem", pr, idc);
 
   //Only needed for pure PDE Problems
   DOpEOutputHandler<VECTOR> out(&solver, pr);
@@ -232,7 +232,7 @@ main(int argc, char **argv)
 
       solver.ComputeReducedFunctionals();
 
-      SolutionExtractor<SSolver, VECTOR> a(solver);
+      SolutionExtractor<RP, VECTOR> a(solver);
       const StateVector<VECTOR> &gu = a.GetU();
 
       solution = gu.GetSpacialVector();
@@ -251,7 +251,7 @@ main(int argc, char **argv)
 
       solver_q1.ComputeReducedFunctionals();
 
-      SolutionExtractor<SSolver, VECTOR> a_q1(solver_q1);
+      SolutionExtractor<RP, VECTOR> a_q1(solver_q1);
       const StateVector<VECTOR> &gu_q1 = a_q1.GetU();
 
       solution = gu_q1.GetSpacialVector();

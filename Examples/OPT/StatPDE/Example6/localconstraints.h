@@ -34,10 +34,10 @@ namespace DOpE
    * GlobalConstraints are dealt with as a Functional, hence all functions from Functionals are inherited.
    */
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
-    class LocalConstraint : public ConstraintInterface<CDC, FDC, DH, VECTOR,
+    class LocalConstraint : public ConstraintInterface<EDC, FDC, DH, VECTOR,
         dopedim, dealdim>
     {
       public:
@@ -72,19 +72,19 @@ namespace DOpE
         }
 
         double
-        ElementValue(const CDC<DH, VECTOR, dealdim>& cdc)
+        ElementValue(const EDC<DH, VECTOR, dealdim>& edc)
         {
           if (this->GetProblemType() == "global_constraints"
               && this->GetProblemTypeNum() == 0)
           {
             const DOpEWrapper::FEValues<dealdim> & control_fe_values =
-                cdc.GetFEValuesControl();
-            unsigned int n_q_points = cdc.GetNQPoints();
+                edc.GetFEValuesControl();
+            unsigned int n_q_points = edc.GetNQPoints();
 
             double ret = 0.;
             {
               _qvalues.resize(n_q_points, Vector<double>(1));
-              cdc.GetValuesControl("control", _qvalues);
+              edc.GetValuesControl("control", _qvalues);
             }
             for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
             {
@@ -100,22 +100,22 @@ namespace DOpE
         }
 
         void
-	  ElementValue_U(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
+	  ElementValue_U(const EDC<DH, VECTOR, dealdim>& /*edc*/,
 		  dealii::Vector<double> &/*local_vector*/, double /*scale*/)
         {
         }
 
         void
-        ElementValue_Q(const CDC<DH, VECTOR, dealdim>& cdc,
+        ElementValue_Q(const EDC<DH, VECTOR, dealdim>& edc,
             dealii::Vector<double> &local_vector, double scale)
         {
           if (this->GetProblemType() == "global_constraint_gradient"
               && this->GetProblemTypeNum() == 0)
           {
             const DOpEWrapper::FEValues<dealdim> & control_fe_values =
-                cdc.GetFEValuesControl();
-            unsigned int n_dofs_per_element = cdc.GetNDoFsPerElement();
-            unsigned int n_q_points = cdc.GetNQPoints();
+                edc.GetFEValuesControl();
+            unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
+            unsigned int n_q_points = edc.GetNQPoints();
 
             for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
             {
@@ -134,22 +134,22 @@ namespace DOpE
         }
 
         void
-        ElementValue_UU(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
+        ElementValue_UU(const EDC<DH, VECTOR, dealdim>& /*edc*/,
             dealii::Vector<double> &/*local_vector*/, double /*scale*/)
         {
         }
         void
-        ElementValue_QU(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
+        ElementValue_QU(const EDC<DH, VECTOR, dealdim>& /*edc*/,
             dealii::Vector<double> &/*local_vector*/, double /*scale*/)
         {
         }
         void
-        ElementValue_UQ(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
+        ElementValue_UQ(const EDC<DH, VECTOR, dealdim>& /*edc*/,
             dealii::Vector<double> &/*local_vector*/, double /*scale*/)
         {
         }
         void
-        ElementValue_QQ(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
+        ElementValue_QQ(const EDC<DH, VECTOR, dealdim>& /*edc*/,
             dealii::Vector<double> &/*local_vector*/, double /*scale*/)
         {
         }

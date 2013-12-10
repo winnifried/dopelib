@@ -37,10 +37,10 @@ namespace DOpE
   /********************************************/
 
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dealdim>
-    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::PDEInterface()
+    PDEInterface<EDC, FDC, DH, VECTOR, dealdim>::PDEInterface()
     {
 
     }
@@ -48,10 +48,10 @@ namespace DOpE
   /********************************************/
 
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dealdim>
-    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::~PDEInterface()
+    PDEInterface<EDC, FDC, DH, VECTOR, dealdim>::~PDEInterface()
     {
 
     }
@@ -59,12 +59,12 @@ namespace DOpE
   /********************************************/
 
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dealdim>
     void
-    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::ElementEquation(
-        const CDC<DH, VECTOR, dealdim>& /*cdc*/,
+    PDEInterface<EDC, FDC, DH, VECTOR, dealdim>::ElementEquation(
+        const EDC<DH, VECTOR, dealdim>& /*edc*/,
         dealii::Vector<double> &/*local_vector*/, double /*scale*/,
         double /*scale_ico*/)
     {
@@ -74,13 +74,13 @@ namespace DOpE
   /********************************************/
 
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dealdim>
     void
-    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::StrongElementResidual(
-        const CDC<DH, VECTOR, dealdim>& /*cdc*/,
-        const CDC<DH, VECTOR, dealdim>& /*cdc_weight*/, double&,
+    PDEInterface<EDC, FDC, DH, VECTOR, dealdim>::StrongElementResidual(
+        const EDC<DH, VECTOR, dealdim>& /*edc*/,
+        const EDC<DH, VECTOR, dealdim>& /*edc_weight*/, double&,
         double /*scale*/)
     {
       throw DOpEException("Not Implemented",
@@ -90,12 +90,12 @@ namespace DOpE
   /********************************************/
 
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dealdim>
     void
-    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::ElementTimeEquation(
-        const CDC<DH, VECTOR, dealdim>&,
+    PDEInterface<EDC, FDC, DH, VECTOR, dealdim>::ElementTimeEquation(
+        const EDC<DH, VECTOR, dealdim>&,
         dealii::Vector<double> &/*local_vector*/, double /*scale*/)
     {
       throw DOpEException("Not Implemented", "PDEInterface::ElementTimeEquation");
@@ -104,12 +104,12 @@ namespace DOpE
   /********************************************/
 
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dealdim>
     void
-    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::ElementTimeEquation_U(
-        const CDC<DH, VECTOR, dealdim>&,
+    PDEInterface<EDC, FDC, DH, VECTOR, dealdim>::ElementTimeEquation_U(
+        const EDC<DH, VECTOR, dealdim>&,
         dealii::Vector<double> &/*local_vector*/, double /*scale*/)
     {
       throw DOpEException("Not Implemented",
@@ -118,12 +118,12 @@ namespace DOpE
   /********************************************/
 
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dealdim>
     void
-    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::ElementTimeEquation_UT(
-        const CDC<DH, VECTOR, dealdim>&,
+    PDEInterface<EDC, FDC, DH, VECTOR, dealdim>::ElementTimeEquation_UT(
+        const EDC<DH, VECTOR, dealdim>&,
         dealii::Vector<double> &/*local_vector*/, double /*scale*/)
     {
       throw DOpEException("Not Implemented",
@@ -132,12 +132,12 @@ namespace DOpE
   /********************************************/
 
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dealdim>
     void
-    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::ElementTimeEquation_UTT(
-        const CDC<DH, VECTOR, dealdim>&,
+    PDEInterface<EDC, FDC, DH, VECTOR, dealdim>::ElementTimeEquation_UTT(
+        const EDC<DH, VECTOR, dealdim>&,
         dealii::Vector<double> &/*local_vector*/, double /*scale*/)
     {
       throw DOpEException("Not Implemented",
@@ -147,12 +147,12 @@ namespace DOpE
   /********************************************/
 
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dealdim>
     void
-    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::ElementTimeEquationExplicit(
-        const CDC<DH, VECTOR, dealdim>& /*cdc*/,
+    PDEInterface<EDC, FDC, DH, VECTOR, dealdim>::ElementTimeEquationExplicit(
+        const EDC<DH, VECTOR, dealdim>& /*edc*/,
         dealii::Vector<double> &/*local_vector*/, double /*scale*/)
     {
       //This should be left empty, then one can use the default case *Time* without the 
@@ -162,12 +162,12 @@ namespace DOpE
   /********************************************/
 
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dealdim>
     void
-    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::ElementTimeEquationExplicit_U(
-        const CDC<DH, VECTOR, dealdim>& /*cdc*/,
+    PDEInterface<EDC, FDC, DH, VECTOR, dealdim>::ElementTimeEquationExplicit_U(
+        const EDC<DH, VECTOR, dealdim>& /*edc*/,
         dealii::Vector<double> &/*local_vector*/, double /*scale*/)
     {
       //This should be left empty, then one can use the default case *Time* without the 
@@ -177,12 +177,12 @@ namespace DOpE
   /********************************************/
 
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dealdim>
     void
-    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::ElementTimeEquationExplicit_UT(
-        const CDC<DH, VECTOR, dealdim>& /*cdc*/,
+    PDEInterface<EDC, FDC, DH, VECTOR, dealdim>::ElementTimeEquationExplicit_UT(
+        const EDC<DH, VECTOR, dealdim>& /*edc*/,
         dealii::Vector<double> &/*local_vector*/, double /*scale*/)
     {
       //This should be left empty, then one can use the default case *Time* without the 
@@ -192,12 +192,12 @@ namespace DOpE
   /********************************************/
 
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dealdim>
     void
-    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::ElementTimeEquationExplicit_UTT(
-        const CDC<DH, VECTOR, dealdim>& /*cdc*/,
+    PDEInterface<EDC, FDC, DH, VECTOR, dealdim>::ElementTimeEquationExplicit_UTT(
+        const EDC<DH, VECTOR, dealdim>& /*edc*/,
         dealii::Vector<double> &/*local_vector*/, double /*scale*/)
     {
       //This should be left empty, then one can use the default case *Time* without the 
@@ -207,12 +207,12 @@ namespace DOpE
   /********************************************/
 
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dealdim>
     void
-    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::ElementTimeEquationExplicit_UU(
-        const CDC<DH, VECTOR, dealdim>& /*cdc*/,
+    PDEInterface<EDC, FDC, DH, VECTOR, dealdim>::ElementTimeEquationExplicit_UU(
+        const EDC<DH, VECTOR, dealdim>& /*edc*/,
         dealii::Vector<double> &/*local_vector*/, double /*scale*/)
     {
       //This should be left empty, then one can use the default case *Time* without the 
@@ -222,12 +222,12 @@ namespace DOpE
   /********************************************/
 
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dealdim>
     void
-    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::ElementEquation_U(
-        const CDC<DH, VECTOR, dealdim>&,
+    PDEInterface<EDC, FDC, DH, VECTOR, dealdim>::ElementEquation_U(
+        const EDC<DH, VECTOR, dealdim>&,
         dealii::Vector<double> &/*local_vector*/, double /*scale*/,
         double /*scale_ico*/)
     {
@@ -237,13 +237,13 @@ namespace DOpE
   /********************************************/
 
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dealdim>
     void
-    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::StrongElementResidual_U(
-        const CDC<DH, VECTOR, dealdim>&,
-        const CDC<DH, VECTOR, dealdim>& /*cdc_weight*/, double&,
+    PDEInterface<EDC, FDC, DH, VECTOR, dealdim>::StrongElementResidual_U(
+        const EDC<DH, VECTOR, dealdim>&,
+        const EDC<DH, VECTOR, dealdim>& /*edc_weight*/, double&,
         double /*scale*/)
     {
       throw DOpEException("Not Implemented",
@@ -253,12 +253,12 @@ namespace DOpE
   /********************************************/
 
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dealdim>
     void
-    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::ElementEquation_UT(
-        const CDC<DH, VECTOR, dealdim>&,
+    PDEInterface<EDC, FDC, DH, VECTOR, dealdim>::ElementEquation_UT(
+        const EDC<DH, VECTOR, dealdim>&,
         dealii::Vector<double> &/*local_vector*/, double /*scale*/,
         double /*scale_ico*/)
     {
@@ -268,12 +268,12 @@ namespace DOpE
   /********************************************/
 
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dealdim>
     void
-    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::ElementEquation_UTT(
-        const CDC<DH, VECTOR, dealdim>&,
+    PDEInterface<EDC, FDC, DH, VECTOR, dealdim>::ElementEquation_UTT(
+        const EDC<DH, VECTOR, dealdim>&,
         dealii::Vector<double> &/*local_vector*/, double /*scale*/,
         double /*scale_ico*/)
     {
@@ -283,12 +283,12 @@ namespace DOpE
   /********************************************/
 
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dealdim>
     void
-    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::ElementEquation_Q(
-        const CDC<DH, VECTOR, dealdim>&,
+    PDEInterface<EDC, FDC, DH, VECTOR, dealdim>::ElementEquation_Q(
+        const EDC<DH, VECTOR, dealdim>&,
         dealii::Vector<double> &/*local_vector*/, double /*scale*/,
         double /*scale_ico*/)
     {
@@ -298,12 +298,12 @@ namespace DOpE
   /********************************************/
 
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dealdim>
     void
-    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::ElementEquation_QT(
-        const CDC<DH, VECTOR, dealdim>&,
+    PDEInterface<EDC, FDC, DH, VECTOR, dealdim>::ElementEquation_QT(
+        const EDC<DH, VECTOR, dealdim>&,
         dealii::Vector<double> &/*local_vector*/, double /*scale*/,
         double /*scale_ico*/)
     {
@@ -313,12 +313,12 @@ namespace DOpE
   /********************************************/
 
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dealdim>
     void
-    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::ElementEquation_QTT(
-        const CDC<DH, VECTOR, dealdim>&,
+    PDEInterface<EDC, FDC, DH, VECTOR, dealdim>::ElementEquation_QTT(
+        const EDC<DH, VECTOR, dealdim>&,
         dealii::Vector<double> &/*local_vector*/, double /*scale*/,
         double /*scale_ico*/)
     {
@@ -328,12 +328,12 @@ namespace DOpE
   /********************************************/
 
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dealdim>
     void
-    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::ElementEquation_UU(
-        const CDC<DH, VECTOR, dealdim>&,
+    PDEInterface<EDC, FDC, DH, VECTOR, dealdim>::ElementEquation_UU(
+        const EDC<DH, VECTOR, dealdim>&,
         dealii::Vector<double> &/*local_vector*/, double /*scale*/,
         double /*scale_ico*/)
     {
@@ -343,12 +343,12 @@ namespace DOpE
   /********************************************/
 
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dealdim>
     void
-    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::ElementEquation_QU(
-        const CDC<DH, VECTOR, dealdim>&,
+    PDEInterface<EDC, FDC, DH, VECTOR, dealdim>::ElementEquation_QU(
+        const EDC<DH, VECTOR, dealdim>&,
         dealii::Vector<double> &/*local_vector*/, double /*scale*/,
         double /*scale_ico*/)
     {
@@ -358,12 +358,12 @@ namespace DOpE
   /********************************************/
 
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dealdim>
     void
-    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::ElementEquation_UQ(
-        const CDC<DH, VECTOR, dealdim>&,
+    PDEInterface<EDC, FDC, DH, VECTOR, dealdim>::ElementEquation_UQ(
+        const EDC<DH, VECTOR, dealdim>&,
         dealii::Vector<double> &/*local_vector*/, double /*scale*/,
         double /*scale_ico*/)
     {
@@ -373,12 +373,12 @@ namespace DOpE
   /********************************************/
 
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dealdim>
     void
-    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::ElementEquation_QQ(
-        const CDC<DH, VECTOR, dealdim>&,
+    PDEInterface<EDC, FDC, DH, VECTOR, dealdim>::ElementEquation_QQ(
+        const EDC<DH, VECTOR, dealdim>&,
         dealii::Vector<double> &/*local_vector*/, double /*scale*/,
         double /*scale_ico*/)
     {
@@ -388,12 +388,12 @@ namespace DOpE
   /********************************************/
 
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dealdim>
     void
-    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::ControlElementEquation(
-        const CDC<DH, VECTOR, dealdim>&,
+    PDEInterface<EDC, FDC, DH, VECTOR, dealdim>::ControlElementEquation(
+        const EDC<DH, VECTOR, dealdim>&,
         dealii::Vector<double> &/*local_vector*/, double /*scale*/)
     {
       throw DOpEException("Not Implemented",
@@ -403,12 +403,12 @@ namespace DOpE
   /********************************************/
 
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dealdim>
     void
-    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::ElementRightHandSide(
-        const CDC<DH, VECTOR, dealdim>&,
+    PDEInterface<EDC, FDC, DH, VECTOR, dealdim>::ElementRightHandSide(
+        const EDC<DH, VECTOR, dealdim>&,
         dealii::Vector<double> &/*local_vector*/, double /*scale*/)
     {
       throw DOpEException("Not Implemented", "PDEInterface::ElementRightHandSide");
@@ -417,12 +417,12 @@ namespace DOpE
   /********************************************/
 
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dealdim>
     void
-    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::ControlElementMatrix(
-        const CDC<DH, VECTOR, dealdim>&,
+    PDEInterface<EDC, FDC, DH, VECTOR, dealdim>::ControlElementMatrix(
+        const EDC<DH, VECTOR, dealdim>&,
         FullMatrix<double> &/*local_entry_matrix*/)
     {
       throw DOpEException("Not Implemented", "PDEInterface::ControlElementMatrix");
@@ -431,12 +431,12 @@ namespace DOpE
   /********************************************/
 
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dealdim>
     void
-    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::StrongElementResidual_Control(
-        const CDC<DH, VECTOR, dealdim>&, const CDC<DH, VECTOR, dealdim>&,
+    PDEInterface<EDC, FDC, DH, VECTOR, dealdim>::StrongElementResidual_Control(
+        const EDC<DH, VECTOR, dealdim>&, const EDC<DH, VECTOR, dealdim>&,
         double&, double)
     {
       throw DOpEException("Not Implemented",
@@ -446,11 +446,11 @@ namespace DOpE
   /********************************************/
 
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dealdim>
     void
-    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::StrongFaceResidual_Control(
+    PDEInterface<EDC, FDC, DH, VECTOR, dealdim>::StrongFaceResidual_Control(
         const FDC<DH, VECTOR, dealdim>&, const FDC<DH, VECTOR, dealdim>&,
         double&, double)
     {
@@ -461,11 +461,11 @@ namespace DOpE
   /********************************************/
 
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dealdim>
     void
-    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::StrongBoundaryResidual_Control(
+    PDEInterface<EDC, FDC, DH, VECTOR, dealdim>::StrongBoundaryResidual_Control(
         const FDC<DH, VECTOR, dealdim>&, const FDC<DH, VECTOR, dealdim>&,
         double&, double)
     {
@@ -476,12 +476,12 @@ namespace DOpE
   /********************************************/
 
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dealdim>
     void
-    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::ElementMatrix(
-        const CDC<DH, VECTOR, dealdim>&,
+    PDEInterface<EDC, FDC, DH, VECTOR, dealdim>::ElementMatrix(
+        const EDC<DH, VECTOR, dealdim>&,
         FullMatrix<double> &/*local_entry_matrix*/, double/*scale*/,
         double /*scale_ico*/)
     {
@@ -491,12 +491,12 @@ namespace DOpE
   /********************************************/
 
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dealdim>
     void
-    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::ElementTimeMatrix(
-        const CDC<DH, VECTOR, dealdim>&,
+    PDEInterface<EDC, FDC, DH, VECTOR, dealdim>::ElementTimeMatrix(
+        const EDC<DH, VECTOR, dealdim>&,
         FullMatrix<double> &/*local_entry_matrix*/)
     {
       throw DOpEException("Not Implemented", "PDEInterface::ElementTimeMatrix");
@@ -504,12 +504,12 @@ namespace DOpE
   /********************************************/
 
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dealdim>
     void
-    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::ElementTimeMatrix_T(
-        const CDC<DH, VECTOR, dealdim>& cdc,
+    PDEInterface<EDC, FDC, DH, VECTOR, dealdim>::ElementTimeMatrix_T(
+        const EDC<DH, VECTOR, dealdim>& edc,
         FullMatrix<double> &local_entry_matrix)
     {
       FullMatrix<double> tmp_mat = local_entry_matrix;
@@ -517,8 +517,8 @@ namespace DOpE
 
       //FIXME is this the right behaviour in the instationary case? or what
       //are the correct values for scale and scale_ico?
-      ElementTimeMatrix(cdc, tmp_mat);
-      unsigned int n_dofs_per_element = cdc.GetNDoFsPerElement();
+      ElementTimeMatrix(edc, tmp_mat);
+      unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
 
       for (unsigned int i = 0; i < n_dofs_per_element; i++)
       {
@@ -532,12 +532,12 @@ namespace DOpE
   /********************************************/
 
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dealdim>
     void
-    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::ElementTimeMatrixExplicit(
-        const CDC<DH, VECTOR, dealdim>& /*cdc*/,
+    PDEInterface<EDC, FDC, DH, VECTOR, dealdim>::ElementTimeMatrixExplicit(
+        const EDC<DH, VECTOR, dealdim>& /*edc*/,
         FullMatrix<double> &/*local_entry_matrix*/)
     {
       //This should be left empty, then one can use the default case *Time* without the 
@@ -547,12 +547,12 @@ namespace DOpE
   /********************************************/
 
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dealdim>
     void
-    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::ElementTimeMatrixExplicit_T(
-        const CDC<DH, VECTOR, dealdim>& cdc,
+    PDEInterface<EDC, FDC, DH, VECTOR, dealdim>::ElementTimeMatrixExplicit_T(
+        const EDC<DH, VECTOR, dealdim>& edc,
         FullMatrix<double> &local_entry_matrix)
     {
       FullMatrix<double> tmp_mat = local_entry_matrix;
@@ -560,8 +560,8 @@ namespace DOpE
 
       //FIXME is this the right behaviour in the instationary case? or what
       //are the correct values for scale and scale_ico?
-      ElementTimeMatrixExplicit(cdc, tmp_mat);
-      unsigned int n_dofs_per_element = cdc.GetNDoFsPerElement();
+      ElementTimeMatrixExplicit(edc, tmp_mat);
+      unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
 
       for (unsigned int i = 0; i < n_dofs_per_element; i++)
       {
@@ -575,12 +575,12 @@ namespace DOpE
   /********************************************/
 
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dealdim>
     void
-    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::ElementMatrix_T(
-        const CDC<DH, VECTOR, dealdim>& cdc,
+    PDEInterface<EDC, FDC, DH, VECTOR, dealdim>::ElementMatrix_T(
+        const EDC<DH, VECTOR, dealdim>& edc,
         FullMatrix<double> &local_entry_matrix, double scale, double scale_ico)
     {
       FullMatrix<double> tmp_mat = local_entry_matrix;
@@ -588,8 +588,8 @@ namespace DOpE
 
       //FIXME is this the right behaviour in the instationary case? or what
       //are the correct values for scale and scale_ico?
-      ElementMatrix(cdc, tmp_mat, scale, scale_ico);
-      unsigned int n_dofs_per_element = cdc.GetNDoFsPerElement();
+      ElementMatrix(edc, tmp_mat, scale, scale_ico);
+      unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
 
       for (unsigned int i = 0; i < n_dofs_per_element; i++)
       {
@@ -603,11 +603,11 @@ namespace DOpE
   /********************************************/
 
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dealdim>
     void
-    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::FaceEquation(
+    PDEInterface<EDC, FDC, DH, VECTOR, dealdim>::FaceEquation(
         const FDC<DH, VECTOR, dealdim>&,
         dealii::Vector<double> &/*local_vector*/, double /*scale*/,
         double /*scale_ico*/)
@@ -618,11 +618,11 @@ namespace DOpE
   /********************************************/
 
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dealdim>
     void
-    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::StrongFaceResidual(
+    PDEInterface<EDC, FDC, DH, VECTOR, dealdim>::StrongFaceResidual(
         const FDC<DH, VECTOR, dealdim>&,
         const FDC<DH, VECTOR, dealdim>& /*fdc_weight*/, double&,
         double /*scale*/)
@@ -633,11 +633,11 @@ namespace DOpE
 
   /********************************************/
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dealdim>
     void
-    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::FaceEquation_U(
+    PDEInterface<EDC, FDC, DH, VECTOR, dealdim>::FaceEquation_U(
         const FDC<DH, VECTOR, dealdim>&,
         dealii::Vector<double> &/*local_vector*/, double /*scale*/,
         double /*scale_ico*/)
@@ -647,11 +647,11 @@ namespace DOpE
 
   /********************************************/
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dealdim>
     void
-    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::StrongFaceResidual_U(
+    PDEInterface<EDC, FDC, DH, VECTOR, dealdim>::StrongFaceResidual_U(
         const FDC<DH, VECTOR, dealdim>&,
         const FDC<DH, VECTOR, dealdim>& /*fdc_weight*/, double&,
         double /*scale*/)
@@ -662,11 +662,11 @@ namespace DOpE
 
   /********************************************/
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dealdim>
     void
-    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::FaceEquation_UT(
+    PDEInterface<EDC, FDC, DH, VECTOR, dealdim>::FaceEquation_UT(
         const FDC<DH, VECTOR, dealdim>&,
         dealii::Vector<double> &/*local_vector*/, double /*scale*/,
         double /*scale_ico*/)
@@ -676,11 +676,11 @@ namespace DOpE
 
   /********************************************/
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dealdim>
     void
-    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::FaceEquation_UTT(
+    PDEInterface<EDC, FDC, DH, VECTOR, dealdim>::FaceEquation_UTT(
         const FDC<DH, VECTOR, dealdim>&,
         dealii::Vector<double> &/*local_vector*/, double /*scale*/,
         double /*scale_ico*/)
@@ -690,11 +690,11 @@ namespace DOpE
 
   /********************************************/
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dealdim>
     void
-    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::FaceEquation_Q(
+    PDEInterface<EDC, FDC, DH, VECTOR, dealdim>::FaceEquation_Q(
         const FDC<DH, VECTOR, dealdim>&,
         dealii::Vector<double> &/*local_vector*/, double /*scale*/,
         double /*scale_ico*/)
@@ -704,11 +704,11 @@ namespace DOpE
 
   /********************************************/
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dealdim>
     void
-    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::FaceEquation_QT(
+    PDEInterface<EDC, FDC, DH, VECTOR, dealdim>::FaceEquation_QT(
         const FDC<DH, VECTOR, dealdim>&,
         dealii::Vector<double> &/*local_vector*/, double /*scale*/,
         double /*scale_ico*/)
@@ -718,11 +718,11 @@ namespace DOpE
 
   /********************************************/
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dealdim>
     void
-    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::FaceEquation_QTT(
+    PDEInterface<EDC, FDC, DH, VECTOR, dealdim>::FaceEquation_QTT(
         const FDC<DH, VECTOR, dealdim>&,
         dealii::Vector<double> &/*local_vector*/, double /*scale*/,
         double /*scale_ico*/)
@@ -732,11 +732,11 @@ namespace DOpE
 
   /********************************************/
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dealdim>
     void
-    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::FaceEquation_UU(
+    PDEInterface<EDC, FDC, DH, VECTOR, dealdim>::FaceEquation_UU(
         const FDC<DH, VECTOR, dealdim>&,
         dealii::Vector<double> &/*local_vector*/, double /*scale*/,
         double /*scale_ico*/)
@@ -746,11 +746,11 @@ namespace DOpE
 
   /********************************************/
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dealdim>
     void
-    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::FaceEquation_QU(
+    PDEInterface<EDC, FDC, DH, VECTOR, dealdim>::FaceEquation_QU(
         const FDC<DH, VECTOR, dealdim>&,
         dealii::Vector<double> &/*local_vector*/, double /*scale*/,
         double /*scale_ico*/)
@@ -760,11 +760,11 @@ namespace DOpE
 
   /********************************************/
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dealdim>
     void
-    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::FaceEquation_UQ(
+    PDEInterface<EDC, FDC, DH, VECTOR, dealdim>::FaceEquation_UQ(
         const FDC<DH, VECTOR, dealdim>&,
         dealii::Vector<double> &/*local_vector*/, double /*scale*/,
         double /*scale_ico*/)
@@ -774,11 +774,11 @@ namespace DOpE
 
   /********************************************/
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dealdim>
     void
-    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::FaceEquation_QQ(
+    PDEInterface<EDC, FDC, DH, VECTOR, dealdim>::FaceEquation_QQ(
         const FDC<DH, VECTOR, dealdim>&,
         dealii::Vector<double> &/*local_vector*/, double /*scale*/,
         double /*scale_ico*/)
@@ -788,11 +788,11 @@ namespace DOpE
 
   /********************************************/
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dealdim>
     void
-    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::FaceRightHandSide(
+    PDEInterface<EDC, FDC, DH, VECTOR, dealdim>::FaceRightHandSide(
         const FDC<DH, VECTOR, dealdim>&,
         dealii::Vector<double> &/*local_vector*/, double /*scale*/)
     {
@@ -801,11 +801,11 @@ namespace DOpE
 
   /********************************************/
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dealdim>
     void
-    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::FaceMatrix(
+    PDEInterface<EDC, FDC, DH, VECTOR, dealdim>::FaceMatrix(
         const FDC<DH, VECTOR, dealdim>&,
         FullMatrix<double> &/*local_entry_matrix*/, double /*scale*/,
         double /*scale_ico*/)
@@ -815,11 +815,11 @@ namespace DOpE
 
   /********************************************/
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dealdim>
     void
-    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::FaceMatrix_T(
+    PDEInterface<EDC, FDC, DH, VECTOR, dealdim>::FaceMatrix_T(
         const FDC<DH, VECTOR, dealdim>& fdc,
         FullMatrix<double> &local_entry_matrix, double scale, double scale_ico)
     {
@@ -841,11 +841,11 @@ namespace DOpE
   /********************************************/
 
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dealdim>
     void
-    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::InterfaceEquation(
+    PDEInterface<EDC, FDC, DH, VECTOR, dealdim>::InterfaceEquation(
         const FDC<DH, VECTOR, dealdim>&,
         dealii::Vector<double> &/*local_vector*/, double /*scale*/,
         double /*scale_ico*/)
@@ -855,11 +855,11 @@ namespace DOpE
   /********************************************/
 
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dealdim>
     void
-    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::InterfaceEquation_U(
+    PDEInterface<EDC, FDC, DH, VECTOR, dealdim>::InterfaceEquation_U(
         const FDC<DH, VECTOR, dealdim>&,
         dealii::Vector<double> &/*local_vector*/, double /*scale*/,
         double /*scale_ico*/)
@@ -871,11 +871,11 @@ namespace DOpE
   /********************************************/
 
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dealdim>
     void
-    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::InterfaceMatrix(
+    PDEInterface<EDC, FDC, DH, VECTOR, dealdim>::InterfaceMatrix(
         const FDC<DH, VECTOR, dealdim>&,
         FullMatrix<double> &/*local_entry_matrix*/, double /*scale*/,
         double /*scale_ico*/)
@@ -886,11 +886,11 @@ namespace DOpE
   /********************************************/
 
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dealdim>
     void
-    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::InterfaceMatrix_T(
+    PDEInterface<EDC, FDC, DH, VECTOR, dealdim>::InterfaceMatrix_T(
         const FDC<DH, VECTOR, dealdim>&,
         FullMatrix<double> &/*local_entry_matrix*/, double /*scale*/,
         double /*scale_ico*/)
@@ -901,11 +901,11 @@ namespace DOpE
   /********************************************/
 
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dealdim>
     void
-    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::BoundaryEquation(
+    PDEInterface<EDC, FDC, DH, VECTOR, dealdim>::BoundaryEquation(
         const FDC<DH, VECTOR, dealdim>&,
         dealii::Vector<double> &/*local_vector*/, double /*scale*/,
         double /*scale_ico*/)
@@ -916,11 +916,11 @@ namespace DOpE
   /********************************************/
 
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dealdim>
     void
-    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::StrongBoundaryResidual(
+    PDEInterface<EDC, FDC, DH, VECTOR, dealdim>::StrongBoundaryResidual(
         const FDC<DH, VECTOR, dealdim>&,
         const FDC<DH, VECTOR, dealdim>& /*Fdc_weight*/, double&,
         double /*scale*/)
@@ -932,11 +932,11 @@ namespace DOpE
   /********************************************/
 
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dealdim>
     void
-    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::BoundaryEquation_U(
+    PDEInterface<EDC, FDC, DH, VECTOR, dealdim>::BoundaryEquation_U(
         const FDC<DH, VECTOR, dealdim>&,
         dealii::Vector<double> &/*local_vector*/, double /*scale*/,
         double /*scale_ico*/)
@@ -947,11 +947,11 @@ namespace DOpE
 
   /********************************************/
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dealdim>
     void
-    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::StrongBoundaryResidual_U(
+    PDEInterface<EDC, FDC, DH, VECTOR, dealdim>::StrongBoundaryResidual_U(
         const FDC<DH, VECTOR, dealdim>&,
         const FDC<DH, VECTOR, dealdim>& /*fdc_weight*/, double&,
         double /*scale*/)
@@ -962,11 +962,11 @@ namespace DOpE
 
   /********************************************/
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dealdim>
     void
-    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::BoundaryEquation_UT(
+    PDEInterface<EDC, FDC, DH, VECTOR, dealdim>::BoundaryEquation_UT(
         const FDC<DH, VECTOR, dealdim>&,
         dealii::Vector<double> &/*local_vector*/, double /*scale*/,
         double /*scale_ico*/)
@@ -977,11 +977,11 @@ namespace DOpE
 
   /********************************************/
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dealdim>
     void
-    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::BoundaryEquation_UTT(
+    PDEInterface<EDC, FDC, DH, VECTOR, dealdim>::BoundaryEquation_UTT(
         const FDC<DH, VECTOR, dealdim>&,
         dealii::Vector<double> &/*local_vector*/, double /*scale*/,
         double /*scale_ico*/)
@@ -992,11 +992,11 @@ namespace DOpE
 
   /********************************************/
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dealdim>
     void
-    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::BoundaryEquation_Q(
+    PDEInterface<EDC, FDC, DH, VECTOR, dealdim>::BoundaryEquation_Q(
         const FDC<DH, VECTOR, dealdim>&,
         dealii::Vector<double> &/*local_vector*/, double /*scale*/,
         double /*scale_ico*/)
@@ -1007,11 +1007,11 @@ namespace DOpE
 
   /********************************************/
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dealdim>
     void
-    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::BoundaryEquation_QT(
+    PDEInterface<EDC, FDC, DH, VECTOR, dealdim>::BoundaryEquation_QT(
         const FDC<DH, VECTOR, dealdim>&,
         dealii::Vector<double> &/*local_vector*/, double /*scale*/,
         double /*scale_ico*/)
@@ -1022,11 +1022,11 @@ namespace DOpE
 
   /********************************************/
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dealdim>
     void
-    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::BoundaryEquation_QTT(
+    PDEInterface<EDC, FDC, DH, VECTOR, dealdim>::BoundaryEquation_QTT(
         const FDC<DH, VECTOR, dealdim>&,
         dealii::Vector<double> &/*local_vector*/, double /*scale*/,
         double /*scale_ico*/)
@@ -1037,11 +1037,11 @@ namespace DOpE
 
   /********************************************/
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dealdim>
     void
-    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::BoundaryEquation_UU(
+    PDEInterface<EDC, FDC, DH, VECTOR, dealdim>::BoundaryEquation_UU(
         const FDC<DH, VECTOR, dealdim>&,
         dealii::Vector<double> &/*local_vector*/, double /*scale*/,
         double /*scale_ico*/)
@@ -1052,11 +1052,11 @@ namespace DOpE
 
   /********************************************/
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dealdim>
     void
-    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::BoundaryEquation_QU(
+    PDEInterface<EDC, FDC, DH, VECTOR, dealdim>::BoundaryEquation_QU(
         const FDC<DH, VECTOR, dealdim>&,
         dealii::Vector<double> &/*local_vector*/, double /*scale*/,
         double /*scale_ico*/)
@@ -1067,11 +1067,11 @@ namespace DOpE
 
   /********************************************/
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dealdim>
     void
-    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::BoundaryEquation_UQ(
+    PDEInterface<EDC, FDC, DH, VECTOR, dealdim>::BoundaryEquation_UQ(
         const FDC<DH, VECTOR, dealdim>&,
         dealii::Vector<double> &/*local_vector*/, double /*scale*/,
         double /*scale_ico*/)
@@ -1082,11 +1082,11 @@ namespace DOpE
 
   /********************************************/
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dealdim>
     void
-    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::BoundaryEquation_QQ(
+    PDEInterface<EDC, FDC, DH, VECTOR, dealdim>::BoundaryEquation_QQ(
         const FDC<DH, VECTOR, dealdim>&,
         dealii::Vector<double> &/*local_vector*/, double /*scale*/,
         double /*scale_ico*/)
@@ -1097,11 +1097,11 @@ namespace DOpE
 
   /********************************************/
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dealdim>
     void
-    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::BoundaryRightHandSide(
+    PDEInterface<EDC, FDC, DH, VECTOR, dealdim>::BoundaryRightHandSide(
         const FDC<DH, VECTOR, dealdim>&,
         dealii::Vector<double> &/*local_vector*/, double /*scale*/)
     {
@@ -1111,11 +1111,11 @@ namespace DOpE
 
   /********************************************/
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dealdim>
     void
-    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::BoundaryMatrix(
+    PDEInterface<EDC, FDC, DH, VECTOR, dealdim>::BoundaryMatrix(
         const FDC<DH, VECTOR, dealdim>&,
         FullMatrix<double> &/*local_entry_matrix*/, double /*scale*/,
         double /*scale_ico*/)
@@ -1125,11 +1125,11 @@ namespace DOpE
 
   /********************************************/
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dealdim>
     void
-    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::BoundaryMatrix_T(
+    PDEInterface<EDC, FDC, DH, VECTOR, dealdim>::BoundaryMatrix_T(
         const FDC<DH, VECTOR, dealdim>& fdc,
         FullMatrix<double> &local_entry_matrix, double scale, double scale_ico)
     {
@@ -1152,11 +1152,11 @@ namespace DOpE
   /********************************************/
 
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dealdim>
     UpdateFlags
-    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::GetUpdateFlags() const
+    PDEInterface<EDC, FDC, DH, VECTOR, dealdim>::GetUpdateFlags() const
     {
       return update_default; //no update
     }
@@ -1164,11 +1164,11 @@ namespace DOpE
   /********************************************/
 
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dealdim>
     UpdateFlags
-    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::GetFaceUpdateFlags() const
+    PDEInterface<EDC, FDC, DH, VECTOR, dealdim>::GetFaceUpdateFlags() const
     {
       return update_default; //no update
     }
@@ -1176,22 +1176,22 @@ namespace DOpE
   /********************************************/
 
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dealdim>
     bool
-    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::HasFaces() const
+    PDEInterface<EDC, FDC, DH, VECTOR, dealdim>::HasFaces() const
     {
       return false;
     }
   /********************************************/
 
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dealdim>
     bool
-    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::HasInterfaces() const
+    PDEInterface<EDC, FDC, DH, VECTOR, dealdim>::HasInterfaces() const
     {
       return false;
     }
@@ -1199,11 +1199,11 @@ namespace DOpE
   /********************************************/
 
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dealdim>
     unsigned int
-    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::GetControlNBlocks() const
+    PDEInterface<EDC, FDC, DH, VECTOR, dealdim>::GetControlNBlocks() const
     {
       throw DOpEException("Not Implemented", "PDEInterface::GetControlNBlocks");
     }
@@ -1211,11 +1211,11 @@ namespace DOpE
   /********************************************/
 
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dealdim>
     unsigned int
-    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::GetStateNBlocks() const
+    PDEInterface<EDC, FDC, DH, VECTOR, dealdim>::GetStateNBlocks() const
     {
       throw DOpEException("Not Implemented", "PDEInterface::GetStateNBlocks");
     }
@@ -1223,11 +1223,11 @@ namespace DOpE
   /********************************************/
 
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dealdim>
     std::vector<unsigned int>&
-    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::GetControlBlockComponent()
+    PDEInterface<EDC, FDC, DH, VECTOR, dealdim>::GetControlBlockComponent()
     {
       throw DOpEException("Not Implemented",
           "PDEInterface::GetControlBlockComponent");
@@ -1236,11 +1236,11 @@ namespace DOpE
   /********************************************/
 
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dealdim>
     const std::vector<unsigned int>&
-    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::GetControlBlockComponent() const
+    PDEInterface<EDC, FDC, DH, VECTOR, dealdim>::GetControlBlockComponent() const
     {
       throw DOpEException("Not Implemented",
           "PDEInterface::GetControlBlockComponent");
@@ -1249,11 +1249,11 @@ namespace DOpE
   /********************************************/
 
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dealdim>
     std::vector<unsigned int>&
-    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::GetStateBlockComponent()
+    PDEInterface<EDC, FDC, DH, VECTOR, dealdim>::GetStateBlockComponent()
     {
       throw DOpEException("Not Implemented",
           "PDEInterface::GetStateBlockComponent");
@@ -1262,11 +1262,11 @@ namespace DOpE
   /********************************************/
 
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dealdim>
     const std::vector<unsigned int>&
-    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::GetStateBlockComponent() const
+    PDEInterface<EDC, FDC, DH, VECTOR, dealdim>::GetStateBlockComponent() const
     {
       throw DOpEException("Not Implemented",
           "PDEInterface::GetStateBlockComponent");
@@ -1275,11 +1275,11 @@ namespace DOpE
   /********************************************/
 
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dealdim>
     unsigned int
-    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::GetStateNComponents() const
+    PDEInterface<EDC, FDC, DH, VECTOR, dealdim>::GetStateNComponents() const
     {
       return this->GetStateBlockComponent().size();
     }
@@ -1287,11 +1287,11 @@ namespace DOpE
   /********************************************/
 
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dealdim>
     void
-    PDEInterface<CDC, FDC, DH, VECTOR, dealdim>::SetProblemType(
+    PDEInterface<EDC, FDC, DH, VECTOR, dealdim>::SetProblemType(
         std::string type)
     {
       _problem_type = type;

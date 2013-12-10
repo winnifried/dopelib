@@ -57,9 +57,9 @@ namespace DOpE
    * The function should actually never get called, but with this
    * construction, we save 4 unnecessary template parameters!
    */
-  template<class CDC, typename VECTOR>
-    CDC*
-    ExtractCDC(const ResidualErrorContainer<VECTOR>& /*dwrc*/)
+  template<class EDC, typename VECTOR>
+    EDC*
+    ExtractEDC(const ResidualErrorContainer<VECTOR>& /*dwrc*/)
     {
       return NULL;
     }

@@ -541,7 +541,7 @@ namespace DOpE
    * They have to get implemented in derived classes. These two methods are
    * excluded from DWRDataContainerBase() to save two template parameters.
    */
-  template<class STH, class IDC, class CDC, class FDC, typename VECTOR>
+  template<class STH, class IDC, class EDC, class FDC, typename VECTOR>
     class DWRDataContainer : public DWRDataContainerBase<VECTOR>
     {
       public:
@@ -561,7 +561,7 @@ namespace DOpE
          * Returns a ElementDataContainer for the weights on the
          * elements. Pure virtual.
          */
-        virtual CDC&
+        virtual EDC&
         GetElementWeight() const = 0;
 
         /**
@@ -587,15 +587,15 @@ namespace DOpE
      * interface for dwrdatacontainer and residualestimators,
      * see there for further information.
      */
-  template<class CDC, class STH, class IDC, class FDC, typename VECTOR>
-    CDC*
-    ExtractCDC(const DWRDataContainer<STH, IDC, CDC, FDC, VECTOR>& dwrc)
+  template<class EDC, class STH, class IDC, class FDC, typename VECTOR>
+    EDC*
+    ExtractEDC(const DWRDataContainer<STH, IDC, EDC, FDC, VECTOR>& dwrc)
     {
       return &dwrc.GetElementWeight();
     }
-  template<class FDC, class STH, class IDC, class CDC, typename VECTOR>
+  template<class FDC, class STH, class IDC, class EDC, typename VECTOR>
     FDC*
-    ExtractFDC(const DWRDataContainer<STH, IDC, CDC, FDC, VECTOR>& dwrc)
+    ExtractFDC(const DWRDataContainer<STH, IDC, EDC, FDC, VECTOR>& dwrc)
     {
       return &dwrc.GetFaceWeight();
     }

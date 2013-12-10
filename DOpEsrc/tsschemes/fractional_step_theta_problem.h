@@ -110,9 +110,9 @@ namespace DOpE
         }
         /******************************************************/
 
-         template<typename CDC>
+         template<typename EDC>
           void
-          ElementEquation(const CDC& cdc,
+          ElementEquation(const EDC& edc,
 		       dealii::Vector<double> &local_vector, double scale, double /*scale_ico*/)
           {
             if (this->GetPart() == "New_for_1st_and_3rd_cycle")
@@ -120,7 +120,7 @@ namespace DOpE
               dealii::Vector<double> tmp(local_vector);
 
               tmp = 0.0;
-              this->GetProblem().ElementEquation(cdc, tmp,
+              this->GetProblem().ElementEquation(edc, tmp,
                   scale * _fs_alpha
                       * this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize(),
                   scale
@@ -128,10 +128,10 @@ namespace DOpE
               local_vector += tmp;
 
               tmp = 0.0;
-              this->GetProblem().ElementTimeEquation(cdc, tmp, scale / (_fs_theta));
+              this->GetProblem().ElementTimeEquation(edc, tmp, scale / (_fs_theta));
               local_vector += tmp;
 
-              this->GetProblem().ElementTimeEquationExplicit(cdc, local_vector,
+              this->GetProblem().ElementTimeEquationExplicit(edc, local_vector,
                   scale / (_fs_theta));
             }
             else if (this->GetPart() == "Old_for_1st_cycle")
@@ -140,13 +140,13 @@ namespace DOpE
               tmp = 0.0;
 
               // The explicit parts with old_time_values; e.g. for fluid problems: laplace, convection, etc.
-              this->GetProblem().ElementEquation(cdc, tmp,
+              this->GetProblem().ElementEquation(edc, tmp,
                   scale * _fs_beta
                       * this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize(),
                   0.);
               local_vector += tmp;
 
-              this->GetProblem().ElementTimeEquation(cdc, local_vector,
+              this->GetProblem().ElementTimeEquation(edc, local_vector,
                   (-1) * scale / (_fs_theta));
             }
             else if (this->GetPart() == "Old_for_3rd_cycle")
@@ -155,13 +155,13 @@ namespace DOpE
               tmp = 0.0;
 
               // The explicit parts with old_time_values; e.g. for fluid problems: laplace, convection, etc.
-              this->GetProblem().ElementEquation(cdc, tmp,
+              this->GetProblem().ElementEquation(edc, tmp,
                   scale * _fs_beta
                       * this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize(),
                   0.);
               local_vector += tmp;
 
-              this->GetProblem().ElementTimeEquation(cdc, local_vector,
+              this->GetProblem().ElementTimeEquation(edc, local_vector,
                   (-1) * scale / (_fs_theta));
             }
             else if (this->GetPart() == "New_for_2nd_cycle")
@@ -169,7 +169,7 @@ namespace DOpE
               dealii::Vector<double> tmp(local_vector);
 
               tmp = 0.0;
-              this->GetProblem().ElementEquation(cdc, tmp,
+              this->GetProblem().ElementEquation(edc, tmp,
                   scale * _fs_beta
                       * this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize(),
                   scale
@@ -177,11 +177,11 @@ namespace DOpE
               local_vector += tmp;
 
               tmp = 0.0;
-              this->GetProblem().ElementTimeEquation(cdc, tmp,
+              this->GetProblem().ElementTimeEquation(edc, tmp,
                   scale / (_fs_theta_prime));
               local_vector += tmp;
 
-              this->GetProblem().ElementTimeEquationExplicit(cdc, local_vector,
+              this->GetProblem().ElementTimeEquationExplicit(edc, local_vector,
                   scale / (_fs_theta_prime));
             }
             else if (this->GetPart() == "Old_for_2nd_cycle")
@@ -190,13 +190,13 @@ namespace DOpE
               tmp = 0.0;
 
               // The explicit parts with old_time_values; e.g. for fluid problems: laplace, convection, etc.
-              this->GetProblem().ElementEquation(cdc, tmp,
+              this->GetProblem().ElementEquation(edc, tmp,
                   scale * _fs_alpha
                       * this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize(),
                   0.);
               local_vector += tmp;
 
-              this->GetProblem().ElementTimeEquation(cdc, local_vector,
+              this->GetProblem().ElementTimeEquation(edc, local_vector,
                   (-1) * scale / (_fs_theta_prime));
             }
             else
@@ -207,9 +207,9 @@ namespace DOpE
 
         /******************************************************/
 
-        template<typename CDC>
+        template<typename EDC>
           void
-          ElementRhs(const CDC& cdc,
+          ElementRhs(const EDC& edc,
               dealii::Vector<double> &local_vector, double scale)
           {
             if (this->GetPart() == "New_for_1st_and_3rd_cycle")
@@ -219,13 +219,13 @@ namespace DOpE
             else if (this->GetPart() == "Old_for_1st_cycle"
                 || this->GetPart() == "Old_for_3rd_cycle")
             {
-              this->GetProblem().ElementRhs(cdc, local_vector,
+              this->GetProblem().ElementRhs(edc, local_vector,
                   scale
                       * this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize());
             }
             else if (this->GetPart() == "New_for_2nd_cycle")
             {
-              this->GetProblem().ElementRhs(cdc, local_vector,
+              this->GetProblem().ElementRhs(edc, local_vector,
                   scale
                       * this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize());
             }
@@ -273,16 +273,16 @@ namespace DOpE
 
         /******************************************************/
 
-        template<typename CDC>
+        template<typename EDC>
           void
-          ElementMatrix(const CDC& cdc,
+          ElementMatrix(const EDC& edc,
               dealii::FullMatrix<double> &local_matrix)
           {
             if (this->GetPart() == "New_for_1st_and_3rd_cycle")
             {
               dealii::FullMatrix<double> m(local_matrix);
               m = 0.;
-              this->GetProblem().ElementMatrix(cdc, m,
+              this->GetProblem().ElementMatrix(edc, m,
                   _fs_alpha
                       * this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize(),
                   1.
@@ -290,18 +290,18 @@ namespace DOpE
               local_matrix.add(1.0, m);
 
               m = 0.;
-              this->GetProblem().ElementTimeMatrix(cdc, m);
+              this->GetProblem().ElementTimeMatrix(edc, m);
               local_matrix.add(1.0 / (_fs_theta), m);
 
               m = 0.;
-              this->GetProblem().ElementTimeMatrixExplicit(cdc, m);
+              this->GetProblem().ElementTimeMatrixExplicit(edc, m);
               local_matrix.add(1.0 / (_fs_theta), m);
             }
             else if (this->GetPart() == "New_for_2nd_cycle")
             {
               dealii::FullMatrix<double> m(local_matrix);
               m = 0.;
-              this->GetProblem().ElementMatrix(cdc, local_matrix,
+              this->GetProblem().ElementMatrix(edc, local_matrix,
                   _fs_beta
                       * this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize(),
                   1.
@@ -309,11 +309,11 @@ namespace DOpE
               local_matrix.add(1.0, m);
 
               m = 0.;
-              this->GetProblem().ElementTimeMatrix(cdc, m);
+              this->GetProblem().ElementTimeMatrix(edc, m);
               local_matrix.add(1.0 / (_fs_theta_prime), m);
 
               m = 0.;
-              this->GetProblem().ElementTimeMatrixExplicit(cdc, m);
+              this->GetProblem().ElementTimeMatrixExplicit(edc, m);
               local_matrix.add(1.0 / (_fs_theta_prime), m);
             }
           }

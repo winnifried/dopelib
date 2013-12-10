@@ -34,8 +34,8 @@ namespace DOpE
    * the case of the DWRMethod with higher order interpolation of the weights
    * and evaluation of strong element and jump residuals.
    */
-  template<class STH, class IDC, class CDC, class FDC, typename VECTOR>
-    class HigherOrderDWRContainer : public DWRDataContainer<STH, IDC, CDC, FDC,
+  template<class STH, class IDC, class EDC, class FDC, typename VECTOR>
+    class HigherOrderDWRContainer : public DWRDataContainer<STH, IDC, EDC, FDC,
         VECTOR>
     {
       public:
@@ -54,7 +54,7 @@ namespace DOpE
             std::string state_behavior, ParameterReader &param_reader,
             DOpEtypes::EETerms ee_terms = DOpEtypes::EETerms::mixed,
             DOpEtypes::ResidualEvaluation res_eval = DOpEtypes::strong_residual)
-            : DWRDataContainer<STH, IDC, CDC, FDC, VECTOR>(ee_terms), _sth_higher_order(
+            : DWRDataContainer<STH, IDC, EDC, FDC, VECTOR>(ee_terms), _sth_higher_order(
 	      higher_order_sth), _idc_higher_order(higher_order_idc), _res_eval(res_eval),
 	      _PI_h_u(NULL), _PI_h_z(NULL)
         {
@@ -239,7 +239,7 @@ namespace DOpE
         /**
          * Implementation of virtual method from base class.
          */
-        virtual CDC&
+        virtual EDC&
         GetElementWeight() const
         {
           return GetHigherOrderIDC().GetElementDataContainer();
@@ -341,12 +341,12 @@ namespace DOpE
         StateVector<VECTOR> * _PI_h_u, *_PI_h_z;
     };
 
-  template<class STH, class IDC, class CDC, class FDC, typename VECTOR>
+  template<class STH, class IDC, class EDC, class FDC, typename VECTOR>
     void
-    HigherOrderDWRContainer<STH, IDC, CDC, FDC, VECTOR>::ReInit(
+    HigherOrderDWRContainer<STH, IDC, EDC, FDC, VECTOR>::ReInit(
         unsigned int n_elements)
     {
-      DWRDataContainer<STH, IDC, CDC, FDC, VECTOR>::ReInit(n_elements);
+      DWRDataContainer<STH, IDC, EDC, FDC, VECTOR>::ReInit(n_elements);
 
       GetHigherOrderSTH().ReInit(_state_n_blocks, *_state_block_component);
       if (this->GetEETerms() == DOpEtypes::primal_only

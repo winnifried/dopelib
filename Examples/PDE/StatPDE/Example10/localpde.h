@@ -31,10 +31,10 @@ using namespace dealii;
 using namespace DOpE;
 
 template<
-    template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+    template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
     template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
     template<int, int> class DH, typename VECTOR, int dealdim>
-  class LocalPDE : public PDEInterface<CDC, FDC, DH, VECTOR, dealdim>
+  class LocalPDE : public PDEInterface<EDC, FDC, DH, VECTOR, dealdim>
   {
     public:
 
@@ -71,26 +71,26 @@ template<
 
       // Domain values for elements
       void
-      ElementEquation(const CDC<DH, VECTOR, 2>& cdc,
+      ElementEquation(const EDC<DH, VECTOR, 2>& edc,
           dealii::Vector<double> &local_vector, double scale,
           double /*scale_ico*/)
       {
         assert(this->_problem_type == "state");
 
         const DOpEWrapper::FEValues<dealdim> & state_fe_values =
-            cdc.GetFEValuesState();
-        unsigned int n_q_points = cdc.GetNQPoints();
-        unsigned int n_dofs_per_element = cdc.GetNDoFsPerElement();
-        unsigned int material_id = cdc.GetMaterialId();
-        double element_diameter = cdc.GetElementDiameter();
+            edc.GetFEValuesState();
+        unsigned int n_q_points = edc.GetNQPoints();
+        unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
+        unsigned int material_id = edc.GetMaterialId();
+        double element_diameter = edc.GetElementDiameter();
 
         lambda = (2 * poisson_ratio_nu * mu) / (1.0 - 2 * poisson_ratio_nu);
 
         _uvalues.resize(n_q_points, Vector<double>(5));
         _ugrads.resize(n_q_points, vector<Tensor<1, 2> >(5));
 
-        cdc.GetValuesState("last_newton_solution", _uvalues);
-        cdc.GetGradsState("last_newton_solution", _ugrads);
+        edc.GetValuesState("last_newton_solution", _uvalues);
+        edc.GetGradsState("last_newton_solution", _ugrads);
 
         const FEValuesExtractors::Vector velocities(0);
         const FEValuesExtractors::Scalar pressure(2);
@@ -234,24 +234,24 @@ template<
       }
 
       void
-      ElementMatrix(const CDC<DH, VECTOR, 2>& cdc,
+      ElementMatrix(const EDC<DH, VECTOR, 2>& edc,
           dealii::FullMatrix<double> &local_matrix, double scale,
           double /*scale_ico*/)
       {
         assert(this->_problem_type == "state");
 
         const DOpEWrapper::FEValues<dealdim> & state_fe_values =
-            cdc.GetFEValuesState();
-        unsigned int n_q_points = cdc.GetNQPoints();
-        unsigned int n_dofs_per_element = cdc.GetNDoFsPerElement();
-        unsigned int material_id = cdc.GetMaterialId();
-        double element_diameter = cdc.GetElementDiameter();
+            edc.GetFEValuesState();
+        unsigned int n_q_points = edc.GetNQPoints();
+        unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
+        unsigned int material_id = edc.GetMaterialId();
+        double element_diameter = edc.GetElementDiameter();
 
         _uvalues.resize(n_q_points, Vector<double>(5));
         _ugrads.resize(n_q_points, vector<Tensor<1, 2> >(5));
 
-        cdc.GetValuesState("last_newton_solution", _uvalues);
-        cdc.GetGradsState("last_newton_solution", _ugrads);
+        edc.GetValuesState("last_newton_solution", _uvalues);
+        edc.GetGradsState("last_newton_solution", _ugrads);
 
         const FEValuesExtractors::Vector velocities(0);
         const FEValuesExtractors::Scalar pressure(2);
@@ -487,7 +487,7 @@ template<
       }
 
       void
-      ElementRightHandSide(const CDC<DH, VECTOR, 2>& /*cdc*/,
+      ElementRightHandSide(const EDC<DH, VECTOR, 2>& /*edc*/,
           dealii::Vector<double> &/*local_vector*/, double /*scale*/)
       {
       }

@@ -60,7 +60,7 @@ namespace DOpE
    *           test space
    */
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class CDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR,  int dealdim>
     class PDEInterface
@@ -81,7 +81,7 @@ namespace DOpE
 	 * a_T may depend upon any spatial derivatives, but not on temporal 
 	 * derivatives.
 	 * 
-	 * @param cdc                The ElementDataContainer object which provides 
+	 * @param edc                The ElementDataContainer object which provides 
 	 *                           access to all information on the element, 
 	 *                           e.g., test-functions, mesh size,...
 	 * @param local_vector  The vector containing the integrals
@@ -97,7 +97,7 @@ namespace DOpE
 	 *                           
          */
         virtual void
-	  ElementEquation(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
+	  ElementEquation(const EDC<DH, VECTOR, dealdim>& /*edc*/,
 		       dealii::Vector<double> &/*local_vector*/, 
 		       double /*scale*/,
 		       double /*scale_ico*/);
@@ -108,10 +108,10 @@ namespace DOpE
          * This function is used for error estimation and should implement
 	 * the strong form of the residual on an element T.
 	 * 
-	 * @param cdc                The ElementDataContainer object which provides 
+	 * @param edc                The ElementDataContainer object which provides 
 	 *                           access to all information on the element, 
 	 *                           e.g., test-functions, mesh size,...
-	 * @param cdc_wight          The ElementDataContainer for the weight-function,
+	 * @param edc_wight          The ElementDataContainer for the weight-function,
 	 *                           e.g., the testfunction by which the
 	 *                           residual needs to be multiplied
 	 * @param ret                The value of the integral on the element 
@@ -121,8 +121,8 @@ namespace DOpE
 	 *                           
          */
         virtual void
-        StrongElementResidual(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
-			   const CDC<DH, VECTOR, dealdim>& /*cdc_weight*/, 
+        StrongElementResidual(const EDC<DH, VECTOR, dealdim>& /*edc*/,
+			   const EDC<DH, VECTOR, dealdim>& /*edc_weight*/, 
 			   double& /*ret*/, 
 			   double /*scale*/);
 
@@ -139,7 +139,7 @@ namespace DOpE
 	 * This equation is used to implement the element contribution
 	 * \int_T T(u,\phi)
 	 * 
-	 * @param cdc                The ElementDataContainer object which provides 
+	 * @param edc                The ElementDataContainer object which provides 
 	 *                           access to all information on the element, 
 	 *                           e.g., test-functions, mesh size,...
 	 * @param local_vector  The vector containing the integrals
@@ -150,7 +150,7 @@ namespace DOpE
 	 */
         //Note that the _UU term is not needed, since we assume that ElementTimeEquation is linear!
         virtual void
-	  ElementTimeEquation(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
+	  ElementTimeEquation(const EDC<DH, VECTOR, dealdim>& /*edc*/,
 			   dealii::Vector<double> &/*local_vector*/, 
 			   double /*scale*/);
 
@@ -165,7 +165,7 @@ namespace DOpE
 	 * This equation is used to implement the element contribution
 	 * \int_T T'(u;\phi,z)
 	 * 
-	 * @param cdc                The ElementDataContainer object which provides 
+	 * @param edc                The ElementDataContainer object which provides 
 	 *                           access to all information on the element, 
 	 *                           e.g., test-functions, mesh size,...
 	 * @param local_vector  The vector containing the integrals
@@ -175,7 +175,7 @@ namespace DOpE
 	 *                           equations.
 	 */
 	virtual void
-	  ElementTimeEquation_U(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
+	  ElementTimeEquation_U(const EDC<DH, VECTOR, dealdim>& /*edc*/,
 			     dealii::Vector<double> &/*local_vector*/, 
 			     double /*scale*/);
 
@@ -187,7 +187,7 @@ namespace DOpE
 	 * This equation is used to implement the element contribution
 	 * \int_T T'(u;du,\phi)
 	 * 
-	 * @param cdc                The ElementDataContainer object which provides 
+	 * @param edc                The ElementDataContainer object which provides 
 	 *                           access to all information on the element, 
 	 *                           e.g., test-functions, mesh size,...
 	 * @param local_vector  The vector containing the integrals
@@ -197,7 +197,7 @@ namespace DOpE
 	 *                           equations.
 	 */  
 	virtual void
-	  ElementTimeEquation_UT(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
+	  ElementTimeEquation_UT(const EDC<DH, VECTOR, dealdim>& /*edc*/,
 			      dealii::Vector<double> &/*local_vector*/,
 			      double /*scale*/);
 
@@ -212,7 +212,7 @@ namespace DOpE
 	 * Note that this is the same function as in ElementTimeEquation_U,
 	 * but it is used with an other argument dz instead of z.
 	 * 
-	 * @param cdc                The ElementDataContainer object which provides 
+	 * @param edc                The ElementDataContainer object which provides 
 	 *                           access to all information on the element, 
 	 *                           e.g., test-functions, mesh size,...
 	 * @param local_vector  The vector containing the integrals
@@ -222,7 +222,7 @@ namespace DOpE
 	 *                           equations.
 	 */
         virtual void
-	  ElementTimeEquation_UTT(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
+	  ElementTimeEquation_UTT(const EDC<DH, VECTOR, dealdim>& /*edc*/,
 			       dealii::Vector<double> &/*local_vector*/, 
 			       double /*scale*/);
 
@@ -236,7 +236,7 @@ namespace DOpE
 	 * funtion is used, where the user can implement the
 	 * complete approximation of the temporal derivative.
 	 *
-	 * @param cdc                The ElementDataContainer object which provides 
+	 * @param edc                The ElementDataContainer object which provides 
 	 *                           access to all information on the element, 
 	 *                           e.g., test-functions, mesh size,...
 	 * @param local_vector  The vector containing the integrals
@@ -246,7 +246,7 @@ namespace DOpE
 	 *                           equations.
 	 */
         virtual void
-	  ElementTimeEquationExplicit(const CDC<DH, VECTOR, dealdim>& /*cdc**/,
+	  ElementTimeEquationExplicit(const EDC<DH, VECTOR, dealdim>& /*edc**/,
 				   dealii::Vector<double> &/*local_vector*/, 
 				   double /*scale*/);
         /******************************************************/
@@ -254,7 +254,7 @@ namespace DOpE
 	 * Analog to ElementTimeEquationExplicit, this function is used 
 	 * to replace ElementTimeEquation_U if needed.
 	 *
-	 * @param cdc                The ElementDataContainer object which provides 
+	 * @param edc                The ElementDataContainer object which provides 
 	 *                           access to all information on the element, 
 	 *                           e.g., test-functions, mesh size,...
 	 * @param local_vector  The vector containing the integrals
@@ -264,7 +264,7 @@ namespace DOpE
 	 *                           equations.
 	 */
 	virtual void
-	  ElementTimeEquationExplicit_U(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
+	  ElementTimeEquationExplicit_U(const EDC<DH, VECTOR, dealdim>& /*edc*/,
 				     dealii::Vector<double> &/*local_vector*/, 
 				     double /*scale*/);
 
@@ -273,7 +273,7 @@ namespace DOpE
 	 * Analog to ElementTimeEquationExplicit, this function is used 
 	 * to replace ElementTimeEquation_UT if needed.
 	 *
-	 * @param cdc                The ElementDataContainer object which provides 
+	 * @param edc                The ElementDataContainer object which provides 
 	 *                           access to all information on the element, 
 	 *                           e.g., test-functions, mesh size,...
 	 * @param local_vector  The vector containing the integrals
@@ -284,7 +284,7 @@ namespace DOpE
 	 */
 
         virtual void
-	  ElementTimeEquationExplicit_UT(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
+	  ElementTimeEquationExplicit_UT(const EDC<DH, VECTOR, dealdim>& /*edc*/,
 				      dealii::Vector<double> &/*local_vector*/, 
 				      double /*scale*/);
 
@@ -293,7 +293,7 @@ namespace DOpE
 	 * Analog to ElementTimeEquationExplicit, this function is used 
 	 * to replace ElementTimeEquation_UTT if needed.
 	 *
-	 * @param cdc                The ElementDataContainer object which provides 
+	 * @param edc                The ElementDataContainer object which provides 
 	 *                           access to all information on the element, 
 	 *                           e.g., test-functions, mesh size,...
 	 * @param local_vector  The vector containing the integrals
@@ -303,7 +303,7 @@ namespace DOpE
 	 *                           equations.
 	 */
         virtual void
-	  ElementTimeEquationExplicit_UTT(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
+	  ElementTimeEquationExplicit_UTT(const EDC<DH, VECTOR, dealdim>& /*edc*/,
 				       dealii::Vector<double> &/*local_vector*/, 
 				       double /*scale*/);
 
@@ -313,7 +313,7 @@ namespace DOpE
 	 * the second derivatives with respect to the state of the 
 	 * time derivative are implemented here.
 	 *
-	 * @param cdc                The ElementDataContainer object which provides 
+	 * @param edc                The ElementDataContainer object which provides 
 	 *                           access to all information on the element, 
 	 *                           e.g., test-functions, mesh size,...
 	 * @param local_vector  The vector containing the integrals
@@ -324,7 +324,7 @@ namespace DOpE
 	 */
 
         virtual void
-	  ElementTimeEquationExplicit_UU(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
+	  ElementTimeEquationExplicit_UU(const EDC<DH, VECTOR, dealdim>& /*edc*/,
 				      dealii::Vector<double> &/*local_vector*/, 
 				      double /*scale*/);
 
@@ -338,7 +338,7 @@ namespace DOpE
 	 * where \phi denotes the direction to which the derivative 
 	 * is applied
 	 * 
-	 * @param cdc                The ElementDataContainer object which provides 
+	 * @param edc                The ElementDataContainer object which provides 
 	 *                           access to all information on the element, 
 	 *                           e.g., test-functions, mesh size,...
 	 * @param local_vector  The vector containing the integrals
@@ -353,7 +353,7 @@ namespace DOpE
 	 *                           for more details.
 	 */
         virtual void
-	  ElementEquation_U(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
+	  ElementEquation_U(const EDC<DH, VECTOR, dealdim>& /*edc*/,
 			 dealii::Vector<double> &/*local_vector*/, 
 			 double /*scale*/,
 			 double /*scale_ico*/);
@@ -363,10 +363,10 @@ namespace DOpE
 	 * Similar to the StongElementResidual, this function implements the
 	 * strong element residual for the adjoint equation.
 	 * 
-	 * @param cdc                The ElementDataContainer object which provides 
+	 * @param edc                The ElementDataContainer object which provides 
 	 *                           access to all information on the element, 
 	 *                           e.g., test-functions, mesh size,...
-	 * @param cdc_weight          The ElementDataContainer for the weight-function,
+	 * @param edc_weight          The ElementDataContainer for the weight-function,
 	 *                           e.g., the testfunction by which the
 	 *                           residual needs to be multiplied
 	 * @param ret                The value of the integral on the element 
@@ -376,8 +376,8 @@ namespace DOpE
 	 */
 
         virtual void
-	  StrongElementResidual_U(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
-			       const CDC<DH, VECTOR, dealdim>& /*cdc_weight*/, 
+	  StrongElementResidual_U(const EDC<DH, VECTOR, dealdim>& /*edc*/,
+			       const EDC<DH, VECTOR, dealdim>& /*edc_weight*/, 
 			       double& /*ret*/, 
 			       double /*scale*/);
 
@@ -390,7 +390,7 @@ namespace DOpE
 	 * implements \int_T a_T'(u;du,\phi) .
 	 * In contrast to ElementEquation_U the arguments are exchanged.
 	 * 
-	 * @param cdc                The ElementDataContainer object which provides 
+	 * @param edc                The ElementDataContainer object which provides 
 	 *                           access to all information on the element, 
 	 *                           e.g., test-functions, mesh size,...
 	 * @param local_vector  The vector containing the integrals
@@ -406,7 +406,7 @@ namespace DOpE
 	 */
 
         virtual void
-	  ElementEquation_UT(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
+	  ElementEquation_UT(const EDC<DH, VECTOR, dealdim>& /*edc*/,
 			  dealii::Vector<double> &/*local_vector*/, 
 			  double /*scale*/,
 			  double /*scale_ico*/);
@@ -422,7 +422,7 @@ namespace DOpE
 	 * This implements the same form as ElementEquation_U, but
 	 * with exchanged functions, i.e., dz instead of z.
 	 * 
-	 * @param cdc                The ElementDataContainer object which provides 
+	 * @param edc                The ElementDataContainer object which provides 
 	 *                           access to all information on the element, 
 	 *                           e.g., test-functions, mesh size,...
 	 * @param local_vector  The vector containing the integrals
@@ -438,7 +438,7 @@ namespace DOpE
 	 */
 
         virtual void
-        ElementEquation_UTT(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
+        ElementEquation_UTT(const EDC<DH, VECTOR, dealdim>& /*edc*/,
 			 dealii::Vector<double> &/*local_vector*/, 
 			 double /*scale*/,
 			 double /*scale_ico*/);
@@ -456,7 +456,7 @@ namespace DOpE
 	 * int_T a_T(u,q;\phi) then this method
 	 * implements \int_T a_T'_q(u,q;\phi_q,z) .
 	 * 
-	 * @param cdc                The ElementDataContainer object which provides 
+	 * @param edc                The ElementDataContainer object which provides 
 	 *                           access to all information on the element, 
 	 *                           e.g., test-functions, mesh size,...
 	 * @param local_vector  The vector containing the integrals
@@ -471,7 +471,7 @@ namespace DOpE
 	 *                           for more details.
 	 */
         virtual void
-        ElementEquation_Q(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
+        ElementEquation_Q(const EDC<DH, VECTOR, dealdim>& /*edc*/,
 		       dealii::Vector<double> &/*local_vector*/, 
 		       double /*scale*/,
 		       double /*scale_ico*/);
@@ -488,7 +488,7 @@ namespace DOpE
 	 * int_T a_T(u,q;\phi) then this method
 	 * implements \int_T a_T'_q(u,q;dq,\phi) .
 	 * 
-	 * @param cdc                The ElementDataContainer object which provides 
+	 * @param edc                The ElementDataContainer object which provides 
 	 *                           access to all information on the element, 
 	 *                           e.g., test-functions, mesh size,...
 	 * @param local_vector  The vector containing the integrals
@@ -503,7 +503,7 @@ namespace DOpE
 	 *                           for more details.
 	 */
         virtual void
-	  ElementEquation_QT(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
+	  ElementEquation_QT(const EDC<DH, VECTOR, dealdim>& /*edc*/,
 			  dealii::Vector<double> &/*local_vector*/, 
 			  double /*scale*/,
 			  double scale_ico);
@@ -516,7 +516,7 @@ namespace DOpE
 	 * int_T a_T(u,q;\phi) then this method
 	 * implements \int_T a_T'_q(u,q;\phi_q,dz) .
 	 * 
-	 * @param cdc                The ElementDataContainer object which provides 
+	 * @param edc                The ElementDataContainer object which provides 
 	 *                           access to all information on the element, 
 	 *                           e.g., test-functions, mesh size,...
 	 * @param local_vector  The vector containing the integrals
@@ -531,7 +531,7 @@ namespace DOpE
 	 *                           for more details.
 	 */
         virtual void
-        ElementEquation_QTT(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
+        ElementEquation_QTT(const EDC<DH, VECTOR, dealdim>& /*edc*/,
 			 dealii::Vector<double> &/*local_vector*/, 
 			 double /*scale*/,
 			 double /*scale_ico*/);
@@ -544,7 +544,7 @@ namespace DOpE
 	 * \int_T a_T''_{uu}(u,q;du,\phi,z)
 	 * where du is the given tangent direction
 	 * 
-	 * @param cdc                The ElementDataContainer object which provides 
+	 * @param edc                The ElementDataContainer object which provides 
 	 *                           access to all information on the element, 
 	 *                           e.g., test-functions, mesh size,...
 	 * @param local_vector  The vector containing the integrals
@@ -560,7 +560,7 @@ namespace DOpE
 	 */
 
         virtual void
-        ElementEquation_UU(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
+        ElementEquation_UU(const EDC<DH, VECTOR, dealdim>& /*edc*/,
 			dealii::Vector<double> &/*local_vector*/, 
 			double /*scale*/,
 			double /*scale_ico*/);
@@ -575,7 +575,7 @@ namespace DOpE
 	 * where dq is a given variation for the control. This means the 
 	 * test function is taken in the state space.
 	 * 
-	 * @param cdc                The ElementDataContainer object which provides 
+	 * @param edc                The ElementDataContainer object which provides 
 	 *                           access to all information on the element, 
 	 *                           e.g., test-functions, mesh size,...
 	 * @param local_vector  The vector containing the integrals
@@ -591,7 +591,7 @@ namespace DOpE
 	 */
 
         virtual void
-        ElementEquation_QU(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
+        ElementEquation_QU(const EDC<DH, VECTOR, dealdim>& /*edc*/,
 			dealii::Vector<double> &/*local_vector*/, 
 			double /*scale*/,
 			double /*scale_ico*/);
@@ -603,7 +603,7 @@ namespace DOpE
 	 * where du is the given tangent direction. This means the 
 	 * test function is taken in the control space.
 	 * 
-	 * @param cdc                The ElementDataContainer object which provides 
+	 * @param edc                The ElementDataContainer object which provides 
 	 *                           access to all information on the element, 
 	 *                           e.g., test-functions, mesh size,...
 	 * @param local_vector  The vector containing the integrals
@@ -619,7 +619,7 @@ namespace DOpE
 	 */
 
         virtual void
-        ElementEquation_UQ(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
+        ElementEquation_UQ(const EDC<DH, VECTOR, dealdim>& /*edc*/,
 			dealii::Vector<double> &/*local_vector*/, 
 			double /*scale*/,
 			double /*scale_ico*/);
@@ -631,7 +631,7 @@ namespace DOpE
 	 * \int_T a_T''_{qq}(u,q;dq,\phi_q,z)
 	 * where dq is the given direction.
 	 * 
-	 * @param cdc                The ElementDataContainer object which provides 
+	 * @param edc                The ElementDataContainer object which provides 
 	 *                           access to all information on the element, 
 	 *                           e.g., test-functions, mesh size,...
 	 * @param local_vector  The vector containing the integrals
@@ -646,7 +646,7 @@ namespace DOpE
 	 *                           for more details.
 	 */
         virtual void
-        ElementEquation_QQ(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
+        ElementEquation_QQ(const EDC<DH, VECTOR, dealdim>& /*edc*/,
 			dealii::Vector<double> &/*local_vector*/, 
 			double /*scale*/,
 			double /*scale_ico*/);
@@ -656,7 +656,7 @@ namespace DOpE
 	 * Implements the element integral corresponding to given volume 
 	 * data for the PDE.
 	 * 
-	 * @param cdc                The ElementDataContainer object which provides 
+	 * @param edc                The ElementDataContainer object which provides 
 	 *                           access to all information on the element, 
 	 *                           e.g., test-functions, mesh size,...
 	 * @param local_vector  The vector containing the integrals
@@ -666,7 +666,7 @@ namespace DOpE
 	 *                           equations.
 	 */
         virtual void
-	  ElementRightHandSide(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
+	  ElementRightHandSide(const EDC<DH, VECTOR, dealdim>& /*edc*/,
 			    dealii::Vector<double> &/*local_vector*/, 
 			    double /*scale*/);
 
@@ -679,7 +679,7 @@ namespace DOpE
 	 * a_ij = \int_T a_T'(u;\phi_j,\phi_i)
 	 *
 	 * 
-	 * @param cdc                The ElementDataContainer object which provides 
+	 * @param edc                The ElementDataContainer object which provides 
 	 *                           access to all information on the element, 
 	 *                           e.g., test-functions, mesh size,...
 	 * @param local_entry_matrix The matrix containing the integrals
@@ -694,7 +694,7 @@ namespace DOpE
 	 *                           for more details.
 	 */
         virtual void
-        ElementMatrix(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
+        ElementMatrix(const EDC<DH, VECTOR, dealdim>& /*edc*/,
 		   dealii::FullMatrix<double> &/*local_entry_matrix*/,
 		   double /*scale*/, 
 		   double /*scale_ico*/);
@@ -705,7 +705,7 @@ namespace DOpE
 	 * matrix for the primal PDE corresponding to the time derivatives 
 	 * given in ElementTimeEquation. 
 	 * 
-	 * @param cdc                The ElementDataContainer object which provides 
+	 * @param edc                The ElementDataContainer object which provides 
 	 *                           access to all information on the element, 
 	 *                           e.g., test-functions, mesh size,...
 	 * @param local_entry_matrix The matrix containing the integrals
@@ -714,14 +714,14 @@ namespace DOpE
 	 */
 	
         virtual void
-	  ElementTimeMatrix(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
+	  ElementTimeMatrix(const EDC<DH, VECTOR, dealdim>& /*edc*/,
 			 dealii::FullMatrix<double> &/*local_entry_matrix*/);
 
         /******************************************************/
 	/**
 	 * The transposed of ElementTimeEquation. 
 	 * 
-	 * @param cdc                The ElementDataContainer object which provides 
+	 * @param edc                The ElementDataContainer object which provides 
 	 *                           access to all information on the element, 
 	 *                           e.g., test-functions, mesh size,...
 	 * @param local_entry_matrix The matrix containing the integrals
@@ -729,7 +729,7 @@ namespace DOpE
 	 *                           of the testfunction.
 	 */
         virtual void
-	  ElementTimeMatrix_T(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
+	  ElementTimeMatrix_T(const EDC<DH, VECTOR, dealdim>& /*edc*/,
 			   dealii::FullMatrix<double> &/*local_entry_matrix*/);
 
         /******************************************************/
@@ -738,7 +738,7 @@ namespace DOpE
 	 * matrix for the primal PDE corresponding to the time derivatives 
 	 * given in ElementTimeEquationExplicit. 
 	 * 
-	 * @param cdc                The ElementDataContainer object which provides 
+	 * @param edc                The ElementDataContainer object which provides 
 	 *                           access to all information on the element, 
 	 *                           e.g., test-functions, mesh size,...
 	 * @param local_entry_matrix The matrix containing the integrals
@@ -747,14 +747,14 @@ namespace DOpE
 	 */
 
          virtual void
-	   ElementTimeMatrixExplicit(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
+	   ElementTimeMatrixExplicit(const EDC<DH, VECTOR, dealdim>& /*edc*/,
 				  dealii::FullMatrix<double> &/*local_entry_matrix*/);
 
         /******************************************************/
 	/**
 	 * The transposed of ElementTimeEquationExplicit. 
 	 * 
-	 * @param cdc                The ElementDataContainer object which provides 
+	 * @param edc                The ElementDataContainer object which provides 
 	 *                           access to all information on the element, 
 	 *                           e.g., test-functions, mesh size,...
 	 * @param local_entry_matrix The matrix containing the integrals
@@ -762,7 +762,7 @@ namespace DOpE
 	 *                           of the testfunction.
 	 */
 	 virtual void
-	   ElementTimeMatrixExplicit_T(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
+	   ElementTimeMatrixExplicit_T(const EDC<DH, VECTOR, dealdim>& /*edc*/,
 				    dealii::FullMatrix<double> &/*local_entry_matrix*/);
 
         /******************************************************/
@@ -776,7 +776,7 @@ namespace DOpE
 	 * returns the transposed of the matrix.
 	 *
 	 * 
-	 * @param cdc                The ElementDataContainer object which provides 
+	 * @param edc                The ElementDataContainer object which provides 
 	 *                           access to all information on the element, 
 	 *                           e.g., test-functions, mesh size,...
 	 * @param local_entry_vector The matrix containing the integrals
@@ -791,7 +791,7 @@ namespace DOpE
 	 *                           for more details.
 	 */
         virtual void
-	  ElementMatrix_T(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
+	  ElementMatrix_T(const EDC<DH, VECTOR, dealdim>& /*edc*/,
 		       dealii::FullMatrix<double> &/*local_entry_matrix*/, 
 		       double /*scale*/, 
 		       double /*scale_ico*/);
@@ -804,7 +804,7 @@ namespace DOpE
 	 * of the cost functional gradient given the derivative
 	 * of the cost functional
 	 * 
-	 * @param cdc                The ElementDataContainer object which provides 
+	 * @param edc                The ElementDataContainer object which provides 
 	 *                           access to all information on the element, 
 	 *                           e.g., test-functions, mesh size,...
 	 * @param local_vector  The vector containing the integrals
@@ -814,7 +814,7 @@ namespace DOpE
 	 *                           equations.
 	 */
         virtual void
-	  ControlElementEquation(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
+	  ControlElementEquation(const EDC<DH, VECTOR, dealdim>& /*edc*/,
 			      dealii::Vector<double> &/*local_vector*/, 
 			      double /*scale*/);
 
@@ -822,7 +822,7 @@ namespace DOpE
         /**
 	 * This implements the matrix corresponding to ControlElementEquation
 	 * 
-	 * @param cdc                The ElementDataContainer object which provides 
+	 * @param edc                The ElementDataContainer object which provides 
 	 *                           access to all information on the element, 
 	 *                           e.g., test-functions, mesh size,...
 	 * @param local_entry_matrix The matrix containing the integrals
@@ -830,7 +830,7 @@ namespace DOpE
 	 *                           of the testfunction.
 	 */
         virtual void
-	  ControlElementMatrix(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
+	  ControlElementMatrix(const EDC<DH, VECTOR, dealdim>& /*edc*/,
 			    dealii::FullMatrix<double> &/*local_entry_matrix*/);
         /******************************************************/
 
@@ -838,10 +838,10 @@ namespace DOpE
 	 * Similar to the StongElementResidual, this function implements the
 	 * strong element residual for the gradient equation, i.e., j'(q) = 0.
 	 * 
-	 * @param cdc                The ElementDataContainer object which provides 
+	 * @param edc                The ElementDataContainer object which provides 
 	 *                           access to all information on the element, 
 	 *                           e.g., test-functions, mesh size,...
-	 * @param cdc_weight         The ElementDataContainer for the weight-function,
+	 * @param edc_weight         The ElementDataContainer for the weight-function,
 	 *                           e.g., the testfunction by which the
 	 *                           residual needs to be multiplied
 	 * @param ret                The value of the integral on the element 
@@ -850,8 +850,8 @@ namespace DOpE
 	 *                           equations.
 	 */
 	virtual void
-        StrongElementResidual_Control(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
-				   const CDC<DH, VECTOR, dealdim>& /*cdc_weight*/, 
+        StrongElementResidual_Control(const EDC<DH, VECTOR, dealdim>& /*edc*/,
+				   const EDC<DH, VECTOR, dealdim>& /*edc_weight*/, 
 				   double& /*ret*/, 
 				   double /*scale*/);
         /******************************************************/
@@ -1216,19 +1216,19 @@ namespace DOpE
 	 **/
 
         virtual void
-	  Init_ElementEquation(const CDC<DH, VECTOR, dealdim>& cdc,
+	  Init_ElementEquation(const EDC<DH, VECTOR, dealdim>& edc,
 			    dealii::Vector<double> &local_vector, 
 			    double scale,
 			    double /*scale_ico*/)
         {
           const DOpEWrapper::FEValues<dealdim> & state_fe_values =
-	    cdc.GetFEValuesState();
-          unsigned int n_dofs_per_element = cdc.GetNDoFsPerElement();
-          unsigned int n_q_points = cdc.GetNQPoints();
+	    edc.GetFEValuesState();
+          unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
+          unsigned int n_q_points = edc.GetNQPoints();
           std::vector<dealii::Vector<double> > uvalues;
           uvalues.resize(n_q_points,
 			 dealii::Vector<double>(this->GetStateNComponents()));
-          cdc.GetValuesState("last_newton_solution", uvalues);
+          edc.GetValuesState("last_newton_solution", uvalues);
 	  
           dealii::Vector<double> f_values(
 	    dealii::Vector<double>(this->GetStateNComponents()));
@@ -1250,25 +1250,25 @@ namespace DOpE
         }
 
         virtual void
-	  Init_ElementRhs_Q(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
+	  Init_ElementRhs_Q(const EDC<DH, VECTOR, dealdim>& /*edc*/,
 			 dealii::Vector<double> &/*local_vector*/, double /*scale*/)
         {
 	  
         }
         virtual void
-	  Init_ElementRhs_QT(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
+	  Init_ElementRhs_QT(const EDC<DH, VECTOR, dealdim>& /*edc*/,
 			  dealii::Vector<double> &/*local_vector*/, double /*scale*/)
         {
 	  
         }
         virtual void
-	  Init_ElementRhs_QTT(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
+	  Init_ElementRhs_QTT(const EDC<DH, VECTOR, dealdim>& /*edc*/,
 			   dealii::Vector<double> &/*local_vector*/, double /*scale*/)
         {
 	  
         }
         virtual void
-	  Init_ElementRhs_QQ(const CDC<DH, VECTOR, dealdim>& /*cdc*/,
+	  Init_ElementRhs_QQ(const EDC<DH, VECTOR, dealdim>& /*edc*/,
 			  dealii::Vector<double> &/*local_vector*/, double /*scale*/)
         {
 
@@ -1276,14 +1276,14 @@ namespace DOpE
 	
         virtual void
         Init_ElementRhs(const dealii::Function<dealdim>* init_values,
-		     const CDC<DH, VECTOR, dealdim>& cdc,
+		     const EDC<DH, VECTOR, dealdim>& edc,
 		     dealii::Vector<double> &local_vector, 
 		     double scale)
         {
           const DOpEWrapper::FEValues<dealdim> & state_fe_values =
-	    cdc.GetFEValuesState();
-          unsigned int n_dofs_per_element = cdc.GetNDoFsPerElement();
-          unsigned int n_q_points = cdc.GetNQPoints();
+	    edc.GetFEValuesState();
+          unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
+          unsigned int n_q_points = edc.GetNQPoints();
 	  
           dealii::Vector<double> f_values(
 	    dealii::Vector<double>(this->GetStateNComponents()));
@@ -1308,15 +1308,15 @@ namespace DOpE
         }
 
         virtual void
-        Init_ElementMatrix(const CDC<DH, VECTOR, dealdim>& cdc,
+        Init_ElementMatrix(const EDC<DH, VECTOR, dealdim>& edc,
 			dealii::FullMatrix<double> &local_entry_matrix, 
 			double scale,
 			double /*scale_ico*/)
         {
           const DOpEWrapper::FEValues<dealdim> & state_fe_values =
-              cdc.GetFEValuesState();
-          unsigned int n_dofs_per_element = cdc.GetNDoFsPerElement();
-          unsigned int n_q_points = cdc.GetNQPoints();
+              edc.GetFEValuesState();
+          unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
+          unsigned int n_q_points = edc.GetNQPoints();
 
           for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
           {

@@ -133,11 +133,11 @@ namespace DOpE
          * computation of the old Newton- or time step equation parts. After,
          * computation of the actual parts.
          *
-	 * @tparam <CDC>                   A container that contains all relevant data
+	 * @tparam <EDC>                   A container that contains all relevant data
 	 *                                 needed on the element, e.g., element size, finite element values;
 	 *                                 see, e.g., ElementDataContainer
          *
-	 * @param cdc                      The CDC object.
+	 * @param edc                      The EDC object.
          * @param local_vector        This vector contains the locally computed values 
          *                                 of the element equation. For more information
          *                                 on dealii::Vector, please visit, the deal.ii manual pages.
@@ -146,16 +146,16 @@ namespace DOpE
 	 * @param scale_ico                Given for compatibility reasons with the ElementEquation 
 	 *                                 in PDEInterface. Should not be used here!
          */
-        template<typename CDC>
+        template<typename EDC>
           void
-          ElementEquation(const CDC & cdc,
+          ElementEquation(const EDC & edc,
 		       dealii::Vector<double> &local_vector, double scale, double /*scale_ico*/)
           {
             if (this->GetPart() == "New")
             {
               dealii::Vector<double> tmp(local_vector);
               tmp = 0.0;
-              this->GetProblem().ElementEquation(cdc, tmp,
+              this->GetProblem().ElementEquation(edc, tmp,
                   scale
                       * this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize(),
                   scale
@@ -163,15 +163,15 @@ namespace DOpE
               local_vector += tmp;
 
               tmp = 0.0;
-              this->GetProblem().ElementTimeEquation(cdc, tmp, scale);
+              this->GetProblem().ElementTimeEquation(edc, tmp, scale);
               local_vector += tmp;
 
-              this->GetProblem().ElementTimeEquationExplicit(cdc, local_vector,
+              this->GetProblem().ElementTimeEquationExplicit(edc, local_vector,
                   scale);
             }
             else if (this->GetPart() == "Old")
             {
-              this->GetProblem().ElementTimeEquation(cdc, local_vector,
+              this->GetProblem().ElementTimeEquation(edc, local_vector,
                   (-1) * scale);
             }
             else
@@ -189,11 +189,11 @@ namespace DOpE
          * computation of the old Newton- or time step equation parts. After,
          * computation of the actual parts.
          *
-	 * @tparam <CDC>                   A container that contains all relevant data
+	 * @tparam <EDC>                   A container that contains all relevant data
 	 *                                 needed on the element, e.g., element size, finite element values;
 	 *                                 see, e.g., ElementDataContainer
          *
-         * @param cdc                      A DataContainer holding all the needed information
+         * @param edc                      A DataContainer holding all the needed information
          *                                 of the element
          * @param local_vector        This vector contains the locally computed values of 
 	 *                                 the ElementRhs. For more information
@@ -201,14 +201,14 @@ namespace DOpE
          * @param scale                    A scaling factor which is -1 or 1 depending on the subroutine 
 	 *                                 to compute.
          */
-        template<typename CDC>
+        template<typename EDC>
           void
-          ElementRhs(const CDC & cdc,
+          ElementRhs(const EDC & edc,
               dealii::Vector<double> &local_vector, double scale)
           {
             if (this->GetPart() == "New")
             {
-              this->GetProblem().ElementRhs(cdc, local_vector,
+              this->GetProblem().ElementRhs(edc, local_vector,
                   scale
                       * this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize());
             }
@@ -290,10 +290,10 @@ namespace DOpE
          * derivatives vanish if they are applied to old values which are, of course,
          * already computed and therefore constant.
          *
-	 * @tparam <CDC>                   A container that contains all relevant data
+	 * @tparam <EDC>                   A container that contains all relevant data
 	 *                                 needed on the element, e.g., element size, finite element values;
 	 *                                 see, e.g., ElementDataContainer
-         * @param cdc                      A DataContainer holding all the needed information
+         * @param edc                      A DataContainer holding all the needed information
          *                                 of the element
          * @param local_matrix       The local matrix is quadratic and has size local DoFs 
  	 *                                 times local DoFs and is
@@ -301,26 +301,26 @@ namespace DOpE
 	 *                                 of its functionality, please
          *                                 search for the keyword `FullMatrix' in the deal.ii manual.
          */
-        template<typename CDC>
+        template<typename EDC>
           void
-          ElementMatrix(const CDC & cdc,
+          ElementMatrix(const EDC & edc,
               dealii::FullMatrix<double> &local_matrix)
           {
             assert(this->GetPart() == "New");
             dealii::FullMatrix<double> m(local_matrix);
 
-            this->GetProblem().ElementMatrix(cdc, local_matrix,
+            this->GetProblem().ElementMatrix(edc, local_matrix,
                 1.
                     * this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize(),
                 1.
                     * this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize());
 
             m = 0.;
-            this->GetProblem().ElementTimeMatrix(cdc, m);
+            this->GetProblem().ElementTimeMatrix(edc, m);
             local_matrix.add(1.0, m);
 
             m = 0.;
-            this->GetProblem().ElementTimeMatrixExplicit(cdc, m);
+            this->GetProblem().ElementTimeMatrixExplicit(edc, m);
             local_matrix.add(1.0, m);
 
           }

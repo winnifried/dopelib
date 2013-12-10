@@ -176,15 +176,15 @@ typedef ReducedNewtonAlgorithm<OP4, VECTOR> RNA4;
 typedef ReducedNewtonAlgorithm<OP5, VECTOR> RNA5;
 
 typedef InstatReducedProblem<CNLS, NLS, INTEGRATOR, INTEGRATOR, OP1, VECTOR,
-    DIM, DIM> SSolver1;
+    DIM, DIM> RP1;
 typedef InstatReducedProblem<CNLS, NLS, INTEGRATOR, INTEGRATOR, OP2, VECTOR,
-    DIM, DIM> SSolver2;
+    DIM, DIM> RP2;
 typedef InstatReducedProblem<CNLS, NLS, INTEGRATOR, INTEGRATOR, OP3, VECTOR,
-    DIM, DIM> SSolver3;
+    DIM, DIM> RP3;
 typedef InstatReducedProblem<CNLS, NLS, INTEGRATOR, INTEGRATOR, OP4, VECTOR,
-    DIM, DIM> SSolver4;
+    DIM, DIM> RP4;
 typedef InstatReducedProblem<CNLS, NLS2, INTEGRATOR, INTEGRATOR, OP5, VECTOR,
-    DIM, DIM> SSolver5;
+    DIM, DIM> RP5;
 
 int
 main(int argc, char **argv)
@@ -207,11 +207,11 @@ main(int argc, char **argv)
 
   //First, declare the parameters and read them in.
   ParameterReader pr;
-  SSolver1::declare_params(pr);
-  SSolver2::declare_params(pr);
-  SSolver3::declare_params(pr);
-  SSolver4::declare_params(pr);
-  SSolver5::declare_params(pr);
+  RP1::declare_params(pr);
+  RP2::declare_params(pr);
+  RP3::declare_params(pr);
+  RP4::declare_params(pr);
+  RP5::declare_params(pr);
   RNA1::declare_params(pr);
   pr.read_parameters(paramfile);
 
@@ -284,11 +284,11 @@ main(int argc, char **argv)
   P4.SetInitialValues(&initial_data);
   P5.SetInitialValues(&initial_data);
 
-  SSolver1 solver1(&P1, "fullmem", pr, idc);
-  SSolver2 solver2(&P2, "fullmem", pr, idc);
-  SSolver3 solver3(&P3, "fullmem", pr, idc);
-  SSolver4 solver4(&P4, "fullmem", pr, idc);
-  SSolver5 solver5(&P5, "fullmem", pr, idc);
+  RP1 solver1(&P1, "fullmem", pr, idc);
+  RP2 solver2(&P2, "fullmem", pr, idc);
+  RP3 solver3(&P3, "fullmem", pr, idc);
+  RP4 solver4(&P4, "fullmem", pr, idc);
+  RP5 solver5(&P5, "fullmem", pr, idc);
 
   //Use one outputhandler for all problems
   DOpEOutputHandler<VECTOR> output(&solver1, pr);
@@ -320,15 +320,15 @@ main(int argc, char **argv)
 
     // The soluction extractor class allows us
     // to get the solution vector from the solver
-    SolutionExtractor<SSolver1, VECTOR> a1(solver1);
+    SolutionExtractor<RP1, VECTOR> a1(solver1);
     const StateVector<VECTOR> &statevec1 = a1.GetU();
-    SolutionExtractor<SSolver2, VECTOR> a2(solver2);
+    SolutionExtractor<RP2, VECTOR> a2(solver2);
     const StateVector<VECTOR> &statevec2 = a2.GetU();
-    SolutionExtractor<SSolver3, VECTOR> a3(solver3);
+    SolutionExtractor<RP3, VECTOR> a3(solver3);
     const StateVector<VECTOR> &statevec3 = a3.GetU();
-    SolutionExtractor<SSolver4, VECTOR> a4(solver4);
+    SolutionExtractor<RP4, VECTOR> a4(solver4);
     const StateVector<VECTOR> &statevec4 = a4.GetU();
-    SolutionExtractor<SSolver5, VECTOR> a5(solver5);
+    SolutionExtractor<RP5, VECTOR> a5(solver5);
     const StateVector<VECTOR> &statevec5 = a5.GetU();
 
     stringstream out;

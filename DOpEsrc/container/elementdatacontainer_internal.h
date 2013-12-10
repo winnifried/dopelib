@@ -31,7 +31,7 @@
 
 namespace DOpE
 {
-  namespace cdcinternal
+  namespace edcinternal
   {
     /**
      * This class houses all the functionality which is shared between
@@ -657,7 +657,7 @@ namespace DOpE
           fe_values.get_function_hessians(*(it->second), values);
         }
 
-  } //end of namespace cdcinternal
+  } //end of namespace edcinternal
 }
 
 #endif /* ElementDataContainer_INTERNAL_H_ */

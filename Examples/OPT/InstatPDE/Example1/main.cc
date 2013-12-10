@@ -115,7 +115,7 @@ typedef NewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR> CNLS;
 typedef InstatStepNewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR> NLS;
 typedef ReducedNewtonAlgorithm<OP, VECTOR> RNA;
 typedef InstatReducedProblem<CNLS, NLS, INTEGRATOR, INTEGRATOR, OP, VECTOR, DIM,
-    DIM> SSolver;
+    DIM> RP;
 
 int
 main(int argc, char **argv)
@@ -139,7 +139,7 @@ main(int argc, char **argv)
 
   //First, declare the parameters and read them in.
   ParameterReader pr;
-  SSolver::declare_params(pr);
+  RP::declare_params(pr);
   RNA::declare_params(pr);
   pr.read_parameters(paramfile);
 
@@ -190,7 +190,7 @@ main(int argc, char **argv)
   //prepare the initial data
   P.SetInitialValues(&zf);
 
-  SSolver solver(&P, "fullmem", pr, idc);
+  RP solver(&P, "fullmem", pr, idc);
 
   RNA Alg(&P, &solver, pr);
   try

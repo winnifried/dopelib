@@ -99,24 +99,24 @@ namespace DOpE
       }
       /******************************************************/
       
-      template<typename CDC>
+      template<typename EDC>
         void
-        ElementEquation(const CDC& cdc,
+        ElementEquation(const EDC& edc,
 		     dealii::Vector<double> &local_vector, double scale, double /*scale_ico*/)
         {
           if (this->GetPart() == "New")
             {
               dealii::Vector<double> tmp(local_vector);
               tmp = 0.0;
-              this->GetProblem().ElementEquation(cdc, tmp, 0., scale * this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize());
+              this->GetProblem().ElementEquation(edc, tmp, 0., scale * this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize());
               local_vector += tmp;
 
               tmp = 0.0;
-              this->GetProblem().ElementTimeEquation(cdc, tmp,
+              this->GetProblem().ElementTimeEquation(edc, tmp,
                   scale );
               local_vector += tmp;
 
-              this->GetProblem().ElementTimeEquationExplicit(cdc, local_vector,
+              this->GetProblem().ElementTimeEquationExplicit(edc, local_vector,
                   scale );
 
             }
@@ -124,11 +124,11 @@ namespace DOpE
             {
               dealii::Vector<double> tmp(local_vector);
               tmp = 0.0;
-              this->GetProblem().ElementEquation(cdc, tmp, scale * this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize(), 0.);
+              this->GetProblem().ElementEquation(edc, tmp, scale * this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize(), 0.);
               local_vector += tmp;
 
               this->GetProblem().ElementTimeEquation(
-                  cdc,
+                  edc,
                   local_vector,
                   (-1) * scale);
             }
@@ -140,9 +140,9 @@ namespace DOpE
 
       /******************************************************/
 
-     template<typename CDC>
+     template<typename EDC>
         void
-        ElementRhs(const CDC& cdc,
+        ElementRhs(const EDC& edc,
             dealii::Vector<double> &local_vector, double scale)
         {
           if (this->GetPart() == "New")
@@ -151,7 +151,7 @@ namespace DOpE
             }
           else if (this->GetPart() == "Old")
             {
-              this->GetProblem().ElementRhs(cdc, local_vector, scale* this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize());
+              this->GetProblem().ElementRhs(edc, local_vector, scale* this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize());
             }
           else
             {
@@ -181,23 +181,23 @@ namespace DOpE
 
       /******************************************************/
 
-      template<typename CDC>
+      template<typename EDC>
         void
-        ElementMatrix(const CDC& cdc,
+        ElementMatrix(const EDC& edc,
 		   dealii::FullMatrix<double> &local_matrix)
         {
           assert(this->GetPart() == "New");
           dealii::FullMatrix<double> m(local_matrix);
 
-          this->GetProblem().ElementMatrix(cdc, local_matrix, 0., 1.* this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize());
+          this->GetProblem().ElementMatrix(edc, local_matrix, 0., 1.* this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize());
 
           m = 0.;
-          this->GetProblem().ElementTimeMatrix(cdc, m);
+          this->GetProblem().ElementTimeMatrix(edc, m);
           local_matrix.add(
               1.0, m);
 
           m = 0.;
-          this->GetProblem().ElementTimeMatrixExplicit(cdc, m);
+          this->GetProblem().ElementTimeMatrixExplicit(edc, m);
           local_matrix.add(
               1.0 , m);
 
