@@ -1,35 +1,9 @@
 \chapter{Foreword}
-\textcolor{red}{Ich habe Section 2.8 etc. 'how this library is structured' zu 
-einem eigenen chapter gemacht}
 In this report, we describe the \dope{}
 \textit{Differential Equations and  Optimization Environment} project. 
 Originally, the project was initiated in the year 2009 at the 
 University of Heidelberg (Germany) in the numerical analysis
 group of Rolf Rannacher. 
-
-
-\textcolor{blue}{Eigentlich kann dieser ganze paragraph weg. Im naechsten
-  Paragraphen steht das
-im Prinzip nochmal!
-Its key feature is to give a unified interface to high level algorithms such as 
-time stepping methods, nonlinear solvers and optimization routines. 
-We aim that the user should only need to write those parts
-of code that are problem dependent while all invariant parts of the algorithms
-should be reusable without any need for further coding.
-In particular, the user should be able to switch between various different 
-algorithms without the need to rewrite the problem dependent code, though he or she will
-have to replace the algorithm object with an other one. 
-Another aim of \dope{} is to provide a software toolkit to solve forward PDE
-problems as well as optimal control problems constrained by PDE. The
-solution of a broad variety of PDE is possible in deal.II as well, but
-\dope{} concentrates on a unified approach for both linear and nonlinear
-problems by interpreting every PDE problem as nonlinear and applying a
-Newton method to solve it. 
-The focus is on the numerical solution of both stationary and nonstationary
-problems which come from different application fields, like elasticity and
-plasticity, fluid dynamics, and multiphysics problems such as 
-fluid-structure interactions.
-}
 
 The main feature of \dope{} is to give a unified interface to high level 
 algorithms such as 
@@ -80,7 +54,8 @@ and finally a coupled Biot-Lam\'e-Navier system.
   additional other constraints.
 \item Several examples showing how to solve various kinds of optimization problems
   involving stationary PDE constraints.
-\item Mesh adaptation and \textcolor{red}{goal-oriented error estimation}.
+\item Mesh adaptation and goal-oriented error estimation with
+the dual-weighted residual (DWR) method.
 \item Different spatial triangulations for control and state variables.
 \end{itemize}
 
@@ -103,27 +78,25 @@ are trying to implement some new features to the library so that you can check t
 the new code did not break anything.
 
 %\paragraph{Contributors \& Thanks:}
-\paragraph{\color{red}Thanks:}
-\textcolor{red}{Ich habe das von oben hierhin verschoben und etwas 
-umgeschrieben:
+\paragraph{Thanks:}
 The \dope{} project is 
 mainly based on the \textit{deal.II} finite element library which has been developed
  initially by W. Bangerth, R. Hartmann, and G. Kanschat \cite{deal} and 
-now maintained by \cite{deal2}. Special thanks go to them!}
+now maintained by \cite{deal2}. Special thanks go to them!
 
-\textcolor{red}{In addition to deal.II, the authors 
+In addition to deal.II, the authors 
 gratefully acknowledge their past experience as well as discussions with 
 the authors of  
 the software toolkits \texttt{Gascoigne} and \texttt{RoDoBo}
 \cite{Gascoigne} and \cite{rodobo-web}, 
 from which some of the ideas to modularize the algorithms have arisen.
-Similar thanks go to the developers of \texttt{Ipopt},~\cite{ipopt}.}
+Similar thanks go to the developers of \texttt{Ipopt},~\cite{ipopt}.
 
-\textcolor{red}{
+
 Last, but not least, we would like to express our gratitude 
 to all contributors listed in Section~\ref{sec:contrib}
 for their respective contribution to the library.
-}
+
  
 
 %{We wish to express our gratitude to those people that have contributed to the library or

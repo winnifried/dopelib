@@ -1,21 +1,24 @@
 \chapter{Regression Tests}\label{chap:test}
-\textcolor{red}{Ich habe die Ueberschrift geandert}
-The DOpE test suite consists of regression tests. They are run to compare 
+The \dope{} test suite consists of regression tests. They are run to compare 
 the output to previous outputs. This is useful (necessary) after 
-changing programming code anywhere in the library. If a test
-succeeds, everything is fine in the library. If not, you should not
-check in your code into DOpE. Please make sure what is going wrong and WHY!
+changing programming code anywhere in the library. 
 
-Every command is computed via a Makefile. In the basic example 
+\begin{itemize}
+\item If a test
+succeeds, everything is fine in the library. 
+\item If not, you should not
+check in your code into \dope{}. 
+Please make sure what is going wrong and WHY!
+\item 
+Every command is computed via a Makefile in the basic example 
 directory.
+\end{itemize}
 
-\textcolor{red}{
 \begin{remark}
 Please keep in mind that there are two optimization examples that 
 need external packages to be able to run successfully. These tests will
 fail if these libraries are not installed!
 \end{remark}
-}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Where can I find the tests}

@@ -60,13 +60,13 @@ one.
 The only entry \texttt{lcc[0]} is a vector of size two (in the case of more than one 
 control block, each block would be given a size of $2$). 
 Each of the two entries has a specific meaning. 
-The first entry \texttt{lcc[0][\textcolor{red}{0}] = 1} tells 
+The first entry \texttt{lcc[0][\textcolor{blue}{0}] = 1} tells 
 you how many local entries in the present block are locally constrained, here 
 it is one local entry. ({\em Note that this entry will typically be one. 
 it is not one  would be if we have constraints of the type $q_{i} + q_{i+1} \le 1$ for each 
 even $i$, or similar combinations of multiple entries in the control vector.})
 
-The second entry \texttt{lcc[0][\textcolor{red}{1}] = 2}, determines the number of 
+The second entry \texttt{lcc[0][\textcolor{blue}{1}] = 2}, determines the number of 
 constraints on this local entry. Here, we impose 
 a lower and an upper bound, i.e., we give 2 constraints.
 This information tells the SpaceTimeHandler, that the vector 

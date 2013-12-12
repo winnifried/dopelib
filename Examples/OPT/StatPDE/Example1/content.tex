@@ -169,13 +169,13 @@ matrix valued terms are indexed in $i$ and $j$. Test functions in the control
 space $Q$ are denoted as $\phi^q_i$ while those in the state space $V$ are denoted 
 as $\phi_i$.
 
-To solve the linear equations the following matrices are needed{\color{red}
+To solve the linear equations the following matrices are needed
 \begin{align*}
 &\texttt{ElementMatrix} 
 &\Leftrightarrow \quad a_{i,j} &= a'_u(q,u)(\phi_j,\phi_i), \\
 &\texttt{ControlElementMatrix}  
 &\Leftrightarrow \quad a_{i,j} &= (\phi^q_j, \phi^q_i)_Q.
-\end{align*}}
+\end{align*}
 The first one is required for all primal and dual PDE solves, while the second one is needed 
 to calculate the Riesz representation of the derivatives of $j$. 
 If desired, the matrix for the adjoint PDEs can be provided separately as 
@@ -184,7 +184,7 @@ calculated automatically from the primal matrix.
 
 Additional terms are needed to calculate the corresponding 
 right hand sides. These are for the PDE the following: 
-{\color{red}
+{
 \begin{align*}
 &\texttt{ElementEquation}\text{ (state)} &\Leftrightarrow &\quad a(q,u)(\phi_i), \\
 &\texttt{ElementRightHandSide}\text{ (state)}  &\Leftrightarrow &\quad f(\phi_i), \\
@@ -222,7 +222,7 @@ and finally
 As for PDE problems, it is up to the user to decide if the \texttt{ElementRightHandSide}
 is used, or if the terms are included in the \texttt{ElementEquation}. 
 
-For the cost functional, we have to provide{\color{red}
+For the cost functional, we have to provide{
 \begin{align*}
 &\texttt{ElementValue}\text{ (all)}   &\Leftrightarrow &\quad J(q,u), \\
 &\texttt{ElementValue\underline{ }U}\text{ (all)}    &\Leftrightarrow &\quad J_u'(q,u)(\phi_i), \\
