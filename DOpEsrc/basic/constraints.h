@@ -38,7 +38,10 @@ namespace DOpE
        *
        * @param local_control_constraints    Each entry in the vector corresponds to one
        *                                     block of the control variable.
-       *                                     Where the first unsigned int describes
+       *                                     (Here blocks refer to the blocks in a
+       *                                      deal.II BlockVector)
+       *                                     Each entry consist of a vector of length two.
+       *                                     In these, the first unsigned int describes
        *                                     how many local entries in this Block are
        *                                     locally constrained, and the second entry
        *                                     defines how many constraints are given on
