@@ -1,40 +1,35 @@
 \chapter{Foreword}
-In this report, we describe the DOpE
+\textcolor{red}{Ich habe Section 2.8 etc. 'how this library is structured' zu 
+einem eigenen chapter gemacht}
+In this report, we describe the \dope{}
 \textit{Differential Equations and  Optimization Environment} project. 
 Originally, the project was initiated in the year 2009 at the 
 University of Heidelberg (Germany) in the numerical analysis
 group of Rolf Rannacher. 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-The \textit{Differential Equations and  Optimization Environment} (DOpE) project is 
-mainly based on the \textit{deal.II} finite element library which has been developed
- initially by W. Bangerth, R. Hartmann, and G. Kanschat \cite{deal}.
-Its main feature is to give a unified interface to high level algorithms such as 
+
+\textcolor{blue}{Eigentlich kann dieser ganze paragraph weg. Im naechsten
+  Paragraphen steht das
+im Prinzip nochmal!
+Its key feature is to give a unified interface to high level algorithms such as 
 time stepping methods, nonlinear solvers and optimization routines. 
 We aim that the user should only need to write those parts
-of the code that are problem dependent while all invariant parts of the algorithms
+of code that are problem dependent while all invariant parts of the algorithms
 should be reusable without any need for further coding.
 In particular, the user should be able to switch between various different 
 algorithms without the need to rewrite the problem dependent code, though he or she will
 have to replace the algorithm object with an other one. 
-
-The authors acknowledge their past experience as well as discussions with 
-the authors of the libraries 
-Gascoigne/RoDoBo project, which was initiated by 
-Roland Becker, Dominik Meidner,  and Boris Vexler \cite{rodobo}. 
-From which some of the ideas to modularize the algorithms have arisen.
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-The aim of DOpE is to provide a software toolkit to solve forward PDE
+Another aim of \dope{} is to provide a software toolkit to solve forward PDE
 problems as well as optimal control problems constrained by PDE. The
 solution of a broad variety of PDE is possible in deal.II as well, but
-DOpE concentrates on a unified approach for both linear and nonlinear
+\dope{} concentrates on a unified approach for both linear and nonlinear
 problems by interpreting every PDE problem as nonlinear and applying a
 Newton method to solve it. 
 The focus is on the numerical solution of both stationary and nonstationary
 problems which come from different application fields, like elasticity and
 plasticity, fluid dynamics, and multiphysics problems such as 
 fluid-structure interactions.
+}
 
 The main feature of \dope{} is to give a unified interface to high level 
 algorithms such as 
@@ -56,9 +51,16 @@ the presented library
 prefabricated tools which require adjustments by the user only for parts
 connected to his specific problem. 
 This is in contrast to deal.II which leaves the implementation of all high-level algorithms to the user.
-The possible solution of 
-optimization problems with PDE constraints is an innovative feature in \dope{}.
 
+An innovative feature of \dope{} is to provide a software toolkit to solve forward PDE
+problems as well as optimal control problems constrained by PDE. 
+\dope{} concentrates on a unified approach for both linear and nonlinear
+problems by interpreting every PDE problem as nonlinear and applying a
+Newton method to solve it. 
+The focus is on the numerical solution of both stationary and nonstationary
+problems which come from different application fields, like elasticity and
+plasticity, fluid dynamics, and multiphysics problems such as 
+fluid-structure interactions.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -71,19 +73,20 @@ At the present stage the following features are supported by the library
 \item All finite elements of from deal.II including hp-support.
 \item Several examples showing the solution of several PDEs including
    Poisson, Navier-Stokes, plasticity, fluid-structure interaction problems,
-and finally a coupled Biot-Lam\'e-Navier system
-\item Self written line search and trust region newton algorithms for the 
+and finally a coupled Biot-Lam\'e-Navier system.
+\item Self-written line search and trust region newton algorithms for the 
    solution of optimization problems with PDEs \cite{NoWr00}
 \item Interface to SNOPT for the solution of optimization problems with PDEs and
   additional other constraints.
 \item Several examples showing how to solve various kinds of optimization problems
   involving stationary PDE constraints.
-\item Mesh adaptation.
+\item Mesh adaptation and \textcolor{red}{goal-oriented error estimation}.
 \item Different spatial triangulations for control and state variables.
 \end{itemize}
- 
+
+
 The rest of this document is structured as follows: We start with an introduction in
-Chapter~\ref{chap:intro} where you will learn what is needed to run {\tt DOpElib}. 
+Chapter~\ref{chap:intro} where you will learn what is needed to run \dope{}. 
 Further you will learn what problems we can solve and how all the different classes 
 work together for this purpose. This should help you figure out what the different classes
 do if you are in need of writing your own algorithm.
@@ -100,19 +103,39 @@ are trying to implement some new features to the library so that you can check t
 the new code did not break anything.
 
 \paragraph{Contributors \& Thanks:}
-{We wish to express our gratitude to those people that have contributed to the library or
-  have been providing open software to which we have provided interface.
-
-These are the developers of the software toolkits \texttt{Gascoigne} and \texttt{RoDoBo}
-\cite{Gascoigne} and \cite{rodobo-web}, as their software as well as the discussions 
-have shaped some of the initial design ideas for this library. 
-
-Further, we would like the thank the developers of the \texttt{deal.II} finite element library 
-\cite{deal,DealIIReference} for providing the finite elements to which we have interfaced. 
+\textcolor{red}{Ich habe das von oben hierhin verschoben und etwas 
+umgeschrieben:
+The \dope{} project is 
+mainly based on the \textit{deal.II} finite element library which has been developed
+ initially by W. Bangerth, R. Hartmann, and G. Kanschat \cite{deal} and 
+now maintained by \cite{deal2}. Special thanks go to them!
+In addition to deal.II, the authors 
+gratefully acknowledge their past experience as well as discussions with 
+the authors of  
+the software toolkits \texttt{Gascoigne} and \texttt{RoDoBo}
+\cite{Gascoigne} and \cite{rodobo-web}, 
+from which some of the ideas to modularize the algorithms have arisen.
 Similar thanks go to the developers of \texttt{Ipopt},~\cite{ipopt}.
-
-Last, but not least, we would like to thank all contributors listed in Section~\ref{sec:contrib}
+Last, but not least, we would like to express our gratitude 
+to all contributors listed in Section~\ref{sec:contrib}
 for their respective contribution to the library.
 }
+ 
+
+%{We wish to express our gratitude to those people that have contributed to the library or
+%  have been providing open software to which we have provided interface.
+%
+%
+%These are the developers of the software toolkits \texttt{Gascoigne} and \texttt{RoDoBo}
+%\cite{Gascoigne} and \cite{rodobo-web}, as their software as well as the discussions 
+%have shaped some of the initial design ideas for this library. 
+%
+%Further, we would like the thank the developers of the \texttt{deal.II} finite element library 
+%\cite{deal,DealIIReference} for providing the finite elements to which we have interfaced. 
+%
+
+
+
+
 
 

@@ -12,13 +12,13 @@ this section we explain how to modify such information using as model
 
 \begin{enumerate}
  \item In a first step, we copy \texttt{Example1} and renamed it, e.g., 
-\texttt{ExampleNew}. At the same time it is important to remove the repository 
+\texttt{MyWonderfulFirstExample}. At the same time it is important to remove the repository 
 information that it is stored in the directory \texttt{.svn/}. \\
 After having reached the folder of the example in question in the terminal, 
 \texttt{PDE/StatPDE} in our case, we perform these operation writing the following:
 \begin{verbatim}
-cp -r Example1 ExampleNew
-cd ExampleNew
+cp -r Example1 MyWonderfulFirstExample
+cd MyWonderfulFirstExample
 rm -rf .svn
 cd Test
 rm -rf .svn
@@ -31,7 +31,7 @@ you might accidentally overwrite the original example, here \texttt{Example1}.
 \item We now have to change the target in the \texttt{Makefile}, 
   otherwise our new example will refer to the executable of the old one.
   
-  Thus we open the \texttt{Makefile} in the directory \texttt{ExampleNew}
+  Thus we open the \texttt{Makefile} in the directory \texttt{MyWonderfulFirstExample}
   to change the name of the executable. In our example you will find a line
 \begin{verbatim}
 target   = $(BINDIR)/DOpE-PDE-StatPDE-Example1-$
@@ -40,11 +40,11 @@ target   = $(BINDIR)/DOpE-PDE-StatPDE-Example1-$
 Here we need to replace the target to a new name to avoid any 
 possible complication. Thus for example we change the line to 
 \begin{verbatim}
-target   = $(BINDIR)/MyExampleNew
+target   = $(BINDIR)/MyWonderfulFirstExample
 \end{verbatim}
 This will build the executable file in the standard binary directory 
 of \texttt{DOpElib}, i.e., \texttt{\$(DOpE)/bin}, under the name 
-\texttt{MyExampleNew}.
+\texttt{MyWonderfulFirstExample}.
 
 \textit{Note that you should use a different name for all your 
 examples as otherwise you may experience a lot of strange behavior, as
@@ -71,8 +71,8 @@ if you made a copy of an other example the part \texttt{DOpE-PDE-StatPDE-Example
 may differ. These lines need to be replaced with the new name of the 
 executable, i.e., for our given example
 \begin{verbatim}
-echo "Running Program ../../../../../bin/MyExampleNew test.prm"
-(../../../../../bin/MyExampleNew test.prm 2>&1) > /dev/null
+echo "Running Program ../../../../../bin/MyWonderfulFirstExample test.prm"
+(../../../../../bin/MyWonderfulFirstExample test.prm 2>&1) > /dev/null
 \end{verbatim} 
 
 \item  Now, you are prepared to change any of the problem

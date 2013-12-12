@@ -8,8 +8,8 @@ There are two ways to obtain a copy of \dope{}:\\
 \hspace*{5mm}https://ganymed.iwr.uni-heidelberg.de/svn/dope}\\
 (The backslash in the first line means that the line will be continued as one!)
 
-Note that you need a valid username and password. If you have none you can contact the 
-maintainer by sending an EMail to \url{dope@dopelib.net}.
+Note that you need a valid username and password. If you have none, please contact the 
+maintainers by sending an EMail to \url{dope@dopelib.net}.
 %
 \item You can download the sources as a tar-ball from the project website\\ 
 \url{http://www.dopelib.net}.
@@ -36,6 +36,8 @@ details.\\[2mm]
 Please refer to the file LICENSE.TXT included in this distribution
 for further information on this license.
 
+
+\newpage
 \section{References}
 If you like the library and use it for your own projects, please give credits by 
 referencing the project \dope{}~\cite{dope} using the following bibtex entry:
@@ -100,12 +102,14 @@ The \texttt{deal.II} library is open source and is freely available for noncomme
 It can be downloaded from \url{http://www.dealii.org/}. On this
 homepage, one also finds lots of further information on deal.II as well as
 an extensive tutorial where many features of deal.II are discussed in a
-well-documented example framework. In order to use DOpE, it is highly
+well-documented example framework. In order to use DOpE, it is
 recommendable to be roughly acquainted with deal.II.
 
 When installing \texttt{deal.II} you should take care to configure 
 it to use UMFPACK, i.e.,\\
 \texttt{./configure --with-umfpack}
+in version up to 7.3.0. From 8.0.0 on, deal.II is compited with 
+cmake, which makes the inclusion of external packages easier.
 
 \subsection{ThirdPartyLibraries}
 In order for \texttt{DOpE} to be able to auto-detect some of the installed 
@@ -196,7 +200,9 @@ Chapter~\ref{chap:test}.
   using macports. Then you can find, e.g., g++ version 4.5 on OSX Lion 
   in \texttt{/opt/local/bin/g++-mp-4.5}. 
 
-\section{How this library is structured}
+
+%%%%%%%%%%%%%%%%%%
+\chapter{The Structure of \dope{}}
 This library is designed to allow easy implementation and numerical solutions 
 of problems involving partial differential equations (PDEs). The easiest case 
 is that of a PDE in weak form to find some $u$
