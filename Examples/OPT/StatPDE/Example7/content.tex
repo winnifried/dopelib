@@ -21,10 +21,11 @@ The implementation is done using the following three additional files:
 
 
 \subsubsection{Program description}
-\textcolor{red}{
-In addition to the previous Example \ref{OPT_Stat_MBB-Beam}, we consider now 
-in addition 1 global constraint, which is realized by setting $1$ in the 
-second argument of \texttt{constraints(lcc, 1)}. 
+In addition to the previous Example \ref{OPT_Stat_Box_controlconstraints_SNOPT}, 
+we consider now in addition one global constraint. To calculate the correct 
+storrage needed we use the 
+second argument of \texttt{constraints(lcc, 1)}, which is now one. 
+
 We use 
 \texttt{localconstraints.h} and \texttt{localconstraintaccessor.h} to impose 
 all constraints. First, we have again one control block with a lower and 
@@ -36,5 +37,6 @@ with $\rho_{min} = 10^{-4}$ and $\rho_{max} = 1$ ($\rho$ denotes the density
 of the material). These are implemented in \texttt{localconstraintaccessor.h}.
 The global constraint is the maximum volume of the material,
 which should remain constant with the value $0.5$. Its implementation is 
-provided in \texttt{localconstraints.h}.
-}
+provided in \texttt{localconstraints.h} where the global constraint is handled as 
+a functional, which again is normalized to be nonpositive if the control is feasible.
+

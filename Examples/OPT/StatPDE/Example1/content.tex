@@ -101,42 +101,42 @@ $z\in V$ solving the\\[3mm]
 %
 \textbf{Dual equation}\\
 \begin{equation*}
-{\cal L}_U'(q,U,Z)(\Psi) = 0 \quad\forall\Psi\in V.
+{\cal L}_u'(q,u,z)(\psi) = 0 \quad\forall\psi\in V.
 \end{equation*}
 Then,
 \begin{equation*}
-j'(q)(\delta q) = {\cal L}_q' (q,U,Z)(\delta q) \quad \text{for }\delta q\in Q.
+j'(q)(\delta q) = {\cal L}_q' (q,u,z)(\delta q) \quad \text{for }\delta q\in Q.
 \end{equation*}
 \\[2mm]
 %
 To calculate the second derivatives, we need to solve additional equations.\\
 %
-Let $\delta q\in Q$ be a given direction. Then we search $\delta U\in V$  
+Let $\delta q\in Q$ be a given direction. Then we search $\delta u\in V$  
 solving the\\[2mm]
 %
 \textbf{Tangent equation}\\
 %
 \begin{equation*}
-{\cal L}_{qZ}'' (q,U,Z)(\delta q,\Phi) + {\cal L}_{UZ}'' (q,U,Z)(\delta
-U,\Phi) = 0
-\quad\forall \Phi\in V.
+{\cal L}_{qz}'' (q,u,z)(\delta q,\phi) + {\cal L}_{uz}'' (q,u,z)(\delta
+u,\phi) = 0
+\quad\forall \phi\in V.
 \end{equation*}
 Further, we have an auxilliary\\[2mm]  
 %
 \textbf{Dual for Hessian equation}
-to find $\delta Z\in V$ solving
+to find $\delta z\in V$ solving
 \begin{equation*}
-{\cal L}_{qU}'' (q,U,Z)(\delta q,\Phi) + {\cal L}_{UU}'' 
-(q,U,Z)(\delta U,\Phi) + {\cal L}_{ZU}'' (q,U,Z)(\delta Z,\Phi) =0 
-\quad\forall \Phi\in V.
+{\cal L}_{qu}'' (q,u,z)(\delta q,\phi) + {\cal L}_{uu}'' 
+(q,u,z)(\delta u,\phi) + {\cal L}_{zu}'' (q,u,z)(\delta z,\phi) =0 
+\quad\forall \phi\in V.
 \end{equation*}
 
 Then, for $\delta r\in Q$, we can express the second derivatives of $j$ by
 \begin{align*}
 j''(q)(\delta q, \delta r) 
-&= {\cal L}_{qq}'' (q,U,Z)(\delta q,\delta r) \\
-&\;\;\;\;+ {\cal L}_{Uq}'' (q,U,Z)(\delta U,\delta r) \\ 
-&\;\;\;\;+ {\cal L}_{Zq}'' (q,U,Z)(\delta Z,\delta r).
+&= {\cal L}_{qq}'' (q,u,z)(\delta q,\delta r) \\
+&\;\;\;\;+ {\cal L}_{uq}'' (q,u,z)(\delta u,\delta r) \\ 
+&\;\;\;\;+ {\cal L}_{zq}'' (q,u,z)(\delta z,\delta r).
 \end{align*}
 With these terms, we can calculate the Newton direction $\delta q$, at a given 
 iterate $q^n$, as solution to the problem
