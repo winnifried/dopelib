@@ -10,7 +10,7 @@ The implementation is done using the following three additional files:
 \item \texttt{generalized\underline{ }mma\underline{ }algorithm.h}
   An implementation of the MMA-Algorithm for structural optimization using an augmented
   Lagrangian formulation for the subproblems. The subproblem is implemented using the 
-  special purpose file \texttt{augmentedlagrangianproblem.h}.
+  special purpose\\ file \texttt{augmentedlagrangianproblem.h}.
 \item \texttt{augmentedlagrangianproblem.h} The problem container 
   for the augmented Lagrangian problem.
 \item \texttt{voidreducedproblem.h} A wrapper file that eliminates $u$ 
@@ -18,3 +18,23 @@ The implementation is done using the following three additional files:
   solve problems that have no PDE constraint. This is used to fit the augmentedlagrangian 
   problem into our framework.
 \end{itemize}
+
+
+\subsubsection{Program description}
+\textcolor{red}{
+In addition to the previous Example \ref{OPT_Stat_MBB-Beam}, we consider now 
+in addition 1 global constraint, which is realized by setting $1$ in the 
+second argument of \texttt{constraints(lcc, 1)}. 
+We use 
+\texttt{localconstraints.h} and \texttt{localconstraintaccessor.h} to impose 
+all constraints. First, we have again one control block with a lower and 
+an upper bound, 
+\[
+\rho_{min} \leq q \leq \rho_{max}
+\]
+with $\rho_{min} = 10^{-4}$ and $\rho_{max} = 1$ ($\rho$ denotes the density
+of the material). These are implemented in \texttt{localconstraintaccessor.h}.
+The global constraint is the maximum volume of the material,
+which should remain constant with the value $0.54$. Its implementation is 
+provided in \texttt{localconstraints.h}.
+}

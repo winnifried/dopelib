@@ -20,29 +20,39 @@ In addition the following functionals are evaluated:
 
 
 \subsubsection{Program description}
-{
+
+{\textcolor{red}{
 The Problem is similar to that of {\tt OPT/StatPDE/Example1} except for the box control constraints.
 The implementation of these constraints is taken care of in the main file
-where we add a constrained description \texttt{lcc}.
+(where we add a constrained description \texttt{lcc}) and in the
+\texttt{localconstraints.h} file. This files serves to implement the actual constraints. 
+In this example, we introduce the handling of \textit{local} constraints
+whereas the mixture of local and \textit{global} constraints will be discussed
+in the next Example \ref{OPT_Stat_MBB-Beam}. 
+%
+First, we implement the upper and lower control bounds in 
+\texttt{localconstraints.h}, i.e,
+\[
+q_{min} \leq q \leq q_{max}.
+\]
+with $q_{min} = -500$ and $q_{max} = 500$.
+%
+Second, the \texttt{lcc} vector describes the meaning and the applicability of
+these constraints. Further information can be found
+in \texttt{basic/constraints.h}. We give here the necessary information for
+the 
+present example. We initialize \texttt{lcc(1)}, i.e., we have 1 control block.
+Then, this block is given the constant size $2$ (in the case of more than one 
+control block, each block would be given a size of $2$). The first
+entry \texttt{lcc[0][\textcolor{red}{0}] = 1} tells 
+you how many local entries in the present block are locally constrained, here 
+it is $1$ local entry. The second entry \texttt{lcc[0][\textcolor{red}{1}] =
+2}, determines the number of constraints on this local entry. Here, we impose 
+a lower and an upper bound, i.e., we give 2 constraints.
 }
 
-\textcolor{blue}{Winni: Aus den numerischen 
-Ergebnissen lese ich ab, das die Kontrolle zwischen 0 und 1 liegt.
-\[
-0 \leq q \leq 1.
-\]
- Aber ich habe keine Ahnung was die Assoziierung zu 
-\texttt{
-lcc[0][0] = 1; //each component is constrained individualy
-  lcc[0][1] = 2; // each two constraints (lower and upper bound)
-}
-ist. Auch die zugehoerigen Kommentare im main.cc file bringen mich nicht
-  wirklich
-weiter. Wieso each component? Das ist nur eine Kontrolle?! Oder meint
-  component die state-equation component? 
-Also konkret: ich kann nicht sagen, wofuer bei \texttt{lcc[0][0] = 1}  die 
-einzelnen Eintraege stehen.
-}
+
+
 
 \subsubsection{External optimization solver}
 The problem is solved using the optimization library IPOPT that you can obtain for free. To use it 

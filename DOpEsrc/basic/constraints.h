@@ -40,7 +40,7 @@ namespace DOpE
        *                                     block of the control variable.
        *                                     Where the first unsigned int describes
        *                                     how many local entries in this Block are
-       *                                     localy constrained, and the second entry
+       *                                     locally constrained, and the second entry
        *                                     defines how many constraints are given on
        *                                     this quantity.
        * @param global_constraints           The number of global constraints on the

@@ -8,7 +8,13 @@ This Example demonstrate how global constraints on
 the control variable can be included into the optimization call.
 
 \subsubsection{Program description}
-The global constraint is inserted in the main file via 
-\texttt{constraints(lcc, 1)} instead of 
-\texttt{constraints(lcc, 0)} what we had in the previous two examples.
+\textcolor{red}{
+In this example, we have now some local (point) constraints, local constraints and a global
+constraint. In constrast to the previous example, these 
+constraints are all taken care of in the 
+\texttt{localconstraints.h} file. 
+Specifically, the point constraints are handled by the 
+\texttt{DOpE::PointConstraints<...>} function, which is also initializad 
+in the main file. 
+}
 

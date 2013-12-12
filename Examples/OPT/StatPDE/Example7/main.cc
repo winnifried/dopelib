@@ -101,7 +101,7 @@ int
 main(int argc, char **argv)
 {
   /**
-   * 1This example implements the minimum compliance problem for
+   * This example implements the minimum compliance problem for
    * the thickness optimization of an MBB-Beam. Using the
    * MMA-Method of K. Svanberg together with an augmented
    * Lagrangian approach for the subproblems following M. Stingl.
@@ -170,8 +170,8 @@ main(int argc, char **argv)
   std::vector<std::vector<unsigned int> > lcc(1); //1 Control Block
   lcc[0].resize(2);
   lcc[0][0] = 1; //each component is constrained individualy
-  lcc[0][1] = 2; // each two constraints (lower and upper bound)
-  Constraints constraints(lcc, 1);
+  lcc[0][1] = 2; // number of constraints (lower and upper bound)
+  Constraints constraints(lcc, 1); // here, we impose one global constraint
 
   MethodOfLines_SpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR, CDIM,
       DIM> DOFH(triangulation, control_fe, state_fe, constraints,

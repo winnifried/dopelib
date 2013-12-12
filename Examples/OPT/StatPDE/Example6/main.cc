@@ -145,8 +145,8 @@ main(int argc, char **argv)
   //Add Constrained description
   std::vector<std::vector<unsigned int> > lcc(1); //1 Control Block
   lcc[0].resize(2);
-  lcc[0][0] = 1; //each component is constrained individualy
-  lcc[0][1] = 2; // each two constraints (lower and upper bound)
+  lcc[0][0] = 1; // each component is constrained individualy
+  lcc[0][1] = 2; // number of constraints (lower and upper bound)
   Constraints constraints(lcc, 0); //Second entry defines the numer of global constraints, here we have none
 
   MethodOfLines_SpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR, CDIM,
