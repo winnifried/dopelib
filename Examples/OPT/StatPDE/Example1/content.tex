@@ -152,14 +152,13 @@ for the gradient $\nabla j(q) \in H$ using the definition:
 \]
 In the given example, $Q = L^2(\Omega)$ and hence the scalar product will be the
 standard $L^2$-inner product. Simillarly, we can define the Hessian operator 
-$H(q) \in mathcal L(Q,Q)$ by defining
+$H(q) \in \mathcal L(Q,Q)$ by defining
 \[
  (H(q)\tau q,\delta q)_Q = j''(q)(\tau q,\delta q) \quad \forall\,\delta q,\tau q\in Q.
 \]
 }
 
 \subsubsection{Implementation in \dope{}}
-{
 From the previous details, and the definition of the Lagrangian and its 
 derivatives it is clear, that the user has to provide the respective derivatives. 
 Since the Lagrangian consists of the PDE and the cost functional it 
@@ -170,13 +169,13 @@ matrix valued terms are indexed in $i$ and $j$. Test functions in the control
 space $Q$ are denoted as $\phi^q_i$ while those in the state space $V$ are denoted 
 as $\phi_i$.
 
-To solve the linear equations the following matrices are needed
+To solve the linear equations the following matrices are needed{\color{red}
 \begin{align*}
-\text{ElementMatrix} \quad 
-&\Leftrightarrow \quad a_{i,j} = a'_u(q,u)(\phi_j,\phi_i), \\
-\text{ControlElementMatrix } \quad 
-&\Leftrightarrow \quad a_{i,j} = (\phi^q_j, \phi^q_i)_Q.
-\end{align*}
+&\texttt{ElementMatrix} 
+&\Leftrightarrow \quad a_{i,j} &= a'_u(q,u)(\phi_j,\phi_i), \\
+&\texttt{ControlElementMatrix}  
+&\Leftrightarrow \quad a_{i,j} &= (\phi^q_j, \phi^q_i)_Q.
+\end{align*}}
 The first one is required for all primal and dual PDE solves, while the second one is needed 
 to calculate the Riesz representation of the derivatives of $j$. 
 If desired, the matrix for the adjoint PDEs can be provided separately as 
@@ -184,47 +183,55 @@ If desired, the matrix for the adjoint PDEs can be provided separately as
 calculated automatically from the primal matrix.
 
 Additional terms are needed to calculate the corresponding 
-right hand sides. These are for the PDE
+right hand sides. These are for the PDE the following: 
+{\color{red}
 \begin{align*}
-\text{ElementEquation (state)} \quad &\Leftrightarrow \quad a(q,u)(\phi_i), \\
-\text{ElementEquation\underline{ }U (adjoint)} \quad 
-&\Leftrightarrow \quad a_u'(q,u)(\phi_i, z), \\ 
-\text{ElementEquation\underline{ }UT (tangent)} \quad 
-&\Leftrightarrow \quad a_u'(q,u)(\delta u, \phi_i), \\
-\text{ElementEquation\underline{ }UTT (adjoint hessian)} \quad 
-&\Leftrightarrow \quad  a_u'(q,u)(\phi_i, \delta z), \\
-\text{ElementEquation\underline{ }Q (gradient)} \quad 
-&\Leftrightarrow \quad a_q'(q,u)(\phi^q_i,z), \\
-\text{ElementEquation\underline{ }QT (tangent)} \quad 
-&\Leftrightarrow \quad a_q'(q,u)(\delta q, \phi_i), \\
-\text{ElementEquation\underline{ }QTT (hessian)} \quad 
-&\Leftrightarrow \quad a_{q}'(q,u)(\phi^q_i,\delta z), \\
-\text{ElementEquation\underline{ }UU (adjoint hessian)} \quad 
-&\Leftrightarrow \quad a_{uu}''(q,u)(\delta u, \phi_i, z), \\
-\text{ElementEquation\underline{ }QU (adjoint hessian)} \quad 
-&\Leftrightarrow \quad a_{qu}''(q,u)(\delta q, \phi_i, z), \\
-\text{ElementEquation\underline{ }UQ (hessian)} \quad 
-&\Leftrightarrow \quad a_{uq}''(q,u)(\delta u, \phi^q_i, z),\\
-\text{ElementEquation\underline{ }QQ (hessian)} \quad 
-&\Leftrightarrow \quad a_{qq}''(q,u)(\delta q, \phi^q_i, z),\\
-\text{ElementRightHandSide (state)} \quad 
-&\Leftrightarrow \quad f(\phi_i), \\
-\text{ControlElementEquation (gradient or hessian)} \quad 
-&\Leftrightarrow \quad (\nabla j(q),\phi^q_i)_Q.
+&\texttt{ElementEquation}\text{ (state)} &\Leftrightarrow &\quad a(q,u)(\phi_i), \\
+&\texttt{ElementRightHandSide}\text{ (state)}  &\Leftrightarrow &\quad f(\phi_i), \\
+&\texttt{ControlElementEquation}\text{ (gradient or hessian)}  &\Leftrightarrow &\quad (\nabla j(q),\phi^q_i)_Q,
 \end{align*}
-As for PDE problems, it is up to the user to decide if the ElementRightHandSide
-is used, or if the terms are included in the ElementEquation. 
+as well as 
+\begin{align*}
+&\texttt{ElementEquation\underline{ }U}\text{ (adjoint)} 
+&\Leftrightarrow &\quad a_u'(q,u)(\phi_i, z),\\
+&\texttt{ElementEquation\underline{ }Q}\text{ (gradient)} 
+&\Leftrightarrow &\quad a_q'(q,u)(\phi^q_i,z), \\
+\end{align*}
+the terms
+\begin{align*}
+&\texttt{ElementEquation\underline{ }UU}\text{ (adjoint hessian)}  
+&\Leftrightarrow &\quad a_{uu}''(q,u)(\delta u, \phi_i, z),\\
+&\texttt{ElementEquation\underline{ }UQ}\text{ (hessian)}
+&\Leftrightarrow &\quad a_{uq}''(q,u)(\delta u, \phi^q_i, z),\\
+&\texttt{ElementEquation\underline{ }QU}\text{ (adjoint hessian)} 
+&\Leftrightarrow &\quad a_{qu}''(q,u)(\delta q, \phi_i, z), \\
+&\texttt{ElementEquation\underline{ }QQ}\text{ (hessian)} 
+&\Leftrightarrow &\quad a_{qq}''(q,u)(\delta q, \phi^q_i, z),\\
+&\texttt{ElementEquation\underline{ }UT}\text{ (tangent)}  
+&\Leftrightarrow &\quad a_u'(q,u)(\delta u, \phi_i), \\
+&\texttt{ElementEquation\underline{ }QT}\text{ (tangent)}  
+&\Leftrightarrow &\quad a_q'(q,u)(\delta q, \phi_i),
+\end{align*}
+and finally
+\begin{align*}
+&\texttt{ElementEquation\underline{ }UTT}\text{ (adjoint hessian)} \quad 
+&\Leftrightarrow &\quad  a_u'(q,u)(\phi_i, \delta z), \\
+&\texttt{ElementEquation\underline{ }QTT}\text{ (hessian)} \quad 
+&\Leftrightarrow &\quad a_{q}'(q,u)(\phi^q_i,\delta z).
+\end{align*}}
+As for PDE problems, it is up to the user to decide if the \texttt{ElementRightHandSide}
+is used, or if the terms are included in the \texttt{ElementEquation}. 
 
-For the cost functional, we have to provide
+For the cost functional, we have to provide{\color{red}
 \begin{align*}
-\text{ElementValue (all)} \quad  & \Leftrightarrow \quad J(q,u), \\
-\text{ElementValue\underline{ }U (all)} \quad  & \Leftrightarrow \quad J_u'(q,u)(\phi_i), \\
-\text{ElementValue\underline{ }Q (all)} \quad  & \Leftrightarrow \quad J_q'(q,u)(\phi_i), \\
-\text{ElementValue\underline{ }UU (all)} \quad & \Leftrightarrow \quad J_{uu}''(q,u)(\delta u, \phi_i), \\
-\text{ElementValue\underline{ }QU (all)} \quad & \Leftrightarrow \quad J_{qu}''(q,u)(\delta q, \phi_i), \\
-\text{ElementValue\underline{ }UQ (all)} \quad & \Leftrightarrow \quad J_{uq}''(q,u)(\delta u, \phi^q_i), \\
-\text{ElementValue\underline{ }QQ (all)} \quad & \Leftrightarrow \quad J_{qq}''(q,u)(\delta q, \phi^q_i).
-\end{align*}
+&\texttt{ElementValue}\text{ (all)}   &\Leftrightarrow &\quad J(q,u), \\
+&\texttt{ElementValue\underline{ }U}\text{ (all)}    &\Leftrightarrow &\quad J_u'(q,u)(\phi_i), \\
+&\texttt{ElementValue\underline{ }Q}\text{ (all)}    &\Leftrightarrow &\quad J_q'(q,u)(\phi_i), \\
+&\texttt{ElementValue\underline{ }UU}\text{ (all)}  &\Leftrightarrow &\quad J_{uu}''(q,u)(\delta u, \phi_i), \\
+&\texttt{ElementValue\underline{ }UQ}\text{ (all)}  &\Leftrightarrow &\quad J_{uq}''(q,u)(\delta u, \phi^q_i), \\
+&\texttt{ElementValue\underline{ }QU}\text{ (all)}   &\Leftrightarrow &\quad J_{qu}''(q,u)(\delta q, \phi_i), \\
+&\texttt{ElementValue\underline{ }QQ}\text{ (all)}  &\Leftrightarrow &\quad J_{qq}''(q,u)(\delta q, \phi^q_i).
+\end{align*}}
 
 Clearly, if the PDE or cost functional contains other terms, such as boundary or face integrals 
 corresponding derivatives must be provided as well.
@@ -244,9 +251,9 @@ a_{q}'(q,u)(\delta q,\delta z) &= - (\delta z,\psi^q).
 For the cost functional, we have the following terms:
 \begin{align*}
 J(q,u) &= \frac{1}{2} \|u-u^d\|^2 + \frac{\alpha}{2}\|q\|^2,\\
-J_u'(q,u)(\phi) = (u-u^d, \phi),\\
-J_q'(q,u)(\phi) = \alpha (q,\psi^q),\\
-J_{uu}''(q,u)(\psi, \phi) = (\delta u, \phi).
+J_u'(q,u)(\phi) &= (u-u^d, \phi),\\
+J_q'(q,u)(\phi) &= \alpha (q,\psi^q),\\
+J_{uu}''(q,u)(\psi, \phi) &= (\delta u, \phi).
 \end{align*}
 All other terms, specifically mixed terms with $QU$ etc. are zero in this
 example. 
@@ -272,5 +279,3 @@ derivatives are implemented correctly by calling
 \texttt{Alg.CheckGrads} or \texttt{Alg.CheckHessian}. The latter 
 two functionalities are highly recommended to check your
 implementation before wondering about your results.
-
-}

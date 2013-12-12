@@ -37,16 +37,16 @@ In addition, }notice that the cost functional is of mixed type (from our computa
         return "point domain";
       }
 \end{verbatim}
-This brings along that we have not only to implement 
-\begin{itemize} 
-\item \texttt{ElementValue},
-\item \texttt{ElementValue\_U},
-\item \texttt{ElementValue\_Q}, 
-\item \texttt{ElementValue\_UU},
-\item \texttt{ElementValue\_UQ},
-\item \texttt{ElementValue\_QU},
-\item \texttt{ElementValue\_QQ}
-\end{itemize}
+This brings along that we have not only to implement {\color{red}the methods
+\begin{align*} 
+ &\texttt{ElementValue},&&
+ \texttt{ElementValue\_U},\\
+ &\texttt{ElementValue\_Q}, &&
+ \texttt{ElementValue\_UU},\\
+ &\texttt{ElementValue\_UQ},&&
+ \texttt{ElementValue\_QU},\\
+ &\texttt{ElementValue\_QQ},
+\end{align*}}
  from \texttt{FunctionalInterface}, but also all the aforementioned methods with a preceding \text{Point} (\texttt{PointValue} etc.).
 %FE_Nothing, handle of the control erlaeutern.
 
