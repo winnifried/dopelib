@@ -1,10 +1,8 @@
 TODO DOpE
 =========
 
-
 Standard TODO fuer naechstes Treffen
 ------------------------------------
-- content.tex for PDE/Instat OPT/Stat and OPT/Instat
 - CDC and FDC should be local template arguments of the methods in 
   PDE and Functional.
 - Beeing more clever, it should be possible to remove alle the UTT and QTT terms,

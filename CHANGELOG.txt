@@ -1,6 +1,6 @@
 Changelog DOpE
 ==============
-12.12.2013: 1) descrition.tex ueberarbeitet
+13.12.2013: 1) description.tex ueberarbeitet
 	    2) contents.tex insbesondere der OPT examples
 	       und PDE/Instat/Example2
 	       Speziell: wie werden Optimierungsprobleme
@@ -9,7 +9,6 @@ Changelog DOpE
             3) PDE/Instat/Example2 auf FSI mit biharmonic mesh
 	       motion erweitert, da altes Programm im 
 	       instationaeren nicht mehr richtig lief.
-
 13.12.2013 Code Cleaning in the examples:
 		Unified look of the code, deleted unnecessary includes, give
 		localpde instead of PDEInterface as template etc., typedefs instead
