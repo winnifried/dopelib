@@ -112,13 +112,19 @@ typedef InstatStepNewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR> NLS;
 typedef ReducedNewtonAlgorithm<OP, VECTOR> RNA;
 typedef InstatReducedProblem<CNLS, NLS, INTEGRATOR, INTEGRATOR, OP, VECTOR, DIM,
     DIM> RP;
+	
+ /**
+  * In this example we solve the two dimensional Black-Scholes equation.
+  * As the initial conditions are only H1 regular, we use the shifted
+  * Crank Nicolson time stepping.
+  */
 
-/**
- * Colorize the spatial triangulation, i.e. set the correct boundary colors.
- */
 void
 ColorizeTriangulation(Triangulation<2> &coarse_grid, double upper_bound)
 {
+/**
+ * Colorize the spatial triangulation, i.e. set the correct boundary colors.
+ */
   Triangulation<2>::cell_iterator element = coarse_grid.begin();
   Triangulation<2>::cell_iterator endc = coarse_grid.end();
   for (; element != endc; ++element)
@@ -146,10 +152,6 @@ ColorizeTriangulation(Triangulation<2> &coarse_grid, double upper_bound)
 int
 main(int argc, char **argv)
 {
-  /**
-   * In this example we solve the two dimensional Black-Scholes equation.
-   */
-
   string paramfile = "dope.prm";
 
   if (argc == 2)

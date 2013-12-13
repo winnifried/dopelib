@@ -35,4 +35,5 @@ In this particular example we examine the case of two uncorrelated stocks (with 
     \end{tabular}
   \end{table}
 
-%\subsubsection{Program description}
+\subsubsection{Program description}
+Note that the initial conditions are only $H^1$-regular. Because of this, the Crank-Nicolson scheme, which is not strongly A-stable, is not suited to solve this problem. As we want to use a second order accurate time stepping scheme, we use the shifted Crank-Nicolson method. The rest of the program is as before.
