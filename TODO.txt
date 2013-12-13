@@ -5,7 +5,6 @@ Aufraeumen fuer ersten *.tar.tgz
 -------------------------------
 
 content.tex	Thomas
-doxygen		Winni
 
 Speziell:
 - TW: content.tex for PDE/Instat OPT/Stat and OPT/Instat
