@@ -53,7 +53,7 @@ template<
         const unsigned int n_q_points = fdc.GetNQPoints();
         const unsigned int color = fdc.GetBoundaryIndicator();
 
-        double mass_flux_stokes = 0;
+        double mass_flux = 0;
 
         if (color == 1)
         {
@@ -70,13 +70,13 @@ template<
             v[0] = _ufacevalues[q_point](0);
             v[1] = _ufacevalues[q_point](1);
 
-            mass_flux_stokes += v
+            mass_flux += v
                 * fdc.GetFEFaceValuesState().normal_vector(q_point)
                 * fdc.GetFEFaceValuesState().JxW(q_point);
           }
 
         }
-        return mass_flux_stokes;
+        return mass_flux;
       }
 
       UpdateFlags

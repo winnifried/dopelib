@@ -97,7 +97,7 @@ int
 main(int argc, char **argv)
 {
   /**
-   * We solve the laplace equation with periodic boundary conditions.
+   * We solve the Laplace equation with periodic boundary conditions.
    */
   string paramfile = "dope.prm";
 

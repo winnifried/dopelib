@@ -114,7 +114,8 @@ main(int argc, char **argv)
    * In this example we study
    * stationary flow control. The configuration
    * comes from the original fluid benchmark problem
-   * and has been modified to reduce drag around the
+   * (Schaefer/Turek; 1996)
+   * and has been modified (as R. Becker; 2000) to reduce drag around the
    * cylinder. To gain the solvability of
    * the optimization problem we add a quadratic
    * regularization term to the cost functional.

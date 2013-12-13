@@ -76,6 +76,10 @@ main(int argc, char **argv)
   /**
    *  Solving the vector valued Laplace equation in 2d
    *  with constant rhs (1,1) and zero dirichlet values.
+   *
+   *  This example is the most simplest one and its goal
+   *  is to demonstrate how DOpE implements this 
+   *  well-known test.
    */
 
   string paramfile = "dope.prm";

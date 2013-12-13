@@ -204,7 +204,9 @@ main(int argc, char **argv)
   P.SetDirichletBoundaryColors(2, comp_mask, &DD1);
   P.SetDirichletBoundaryColors(3, comp_mask, &DD1);
 
-  //As our weak formulation has some boundary-integrals, we tell the problemcontainer
+  //As our weak formulation has some boundary-integrals
+  //(here the symmetric part of the do-nothing condition), 
+  //we tell the problemcontainer
   //on which part of the boundary these live.
   P.SetBoundaryEquationColors(1);
 

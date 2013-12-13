@@ -9,7 +9,7 @@ The fluid reads: \index{fluid!Eulerian framework}
  Find $\{v_f,p_f\} \in \{ v_f^D + V\} \times L_f$, such that,
   \begin{equation*}
     \begin{aligned} 
-      (\rho_f v\cdot\nabla v_f,\phi^v)_{\Omega_f} +
+  %    (\rho_f v\cdot\nabla v_f,\phi^v)_{\Omega_f} +
       (\sigma_f,\nabla\phi^v)_{\Omega_f} 
       &= \langle n_f\cdot g_s^\sigma ,\phi^v \rangle_{\Gamma_i}
       &&\forall \phi^v\in V_f, \\
@@ -48,7 +48,7 @@ The structure equations are given by incompressible neo-Hookean material
       %%%%%%%%%%%%%%%% 
       (\hat v_s,\hat\phi^u)_{\hat\Omega_s}&=0
       &&\quad\forall\hat \phi^u\in\hat V_s    ,\\
-      (\text{det}\,\hat F_s-1,\hat\phi^p)_{\hat\Omega_s} &=0
+      (\hat J-1,\hat\phi^p)_{\hat\Omega_s} &=0
       &&\quad\forall\hat \phi^p\in\hat L_s,\\
     \end{aligned}
   \end{equation*}
@@ -65,9 +65,9 @@ The resulting FSI problem is then given by: \index{fluid-structure interaction (
 \begin{Problem}[Stationary Fluid-Structure Interaction (ALE)]
   \begin{equation*}
     \begin{aligned}
-      (\hat J \rho_f \hat F^{-1}\hat  v\cdot\hat\nabla \hat v,
-      \hat\phi^v)_{\hat\Omega_f}
-      + (\hat J\hat\sigma_f\hat F^{-T},\hat \nabla\hat\phi^v)_{\hat\Omega_f}\\
+%      (\hat J \rho_f \hat F^{-1}\hat  v\cdot\hat\nabla \hat v,
+%      \hat\phi^v)_{\hat\Omega_f}
+      (\hat J\hat\sigma_f\hat F^{-T},\hat \nabla\hat\phi^v)_{\hat\Omega_f}
       + (\hat J\hat\sigma_s\hat F^{-T},\hat \nabla\hat\phi^v)_{\hat\Omega_s}
       &= 0&&\forall\hat\phi^v\in \hat V,\\
       %%%%%%%%%%%% 
@@ -85,7 +85,8 @@ The resulting FSI problem is then given by: \index{fluid-structure interaction (
 
 \subsubsection{Program description}
 
-There is not much difference to the prior example, so we will keep our remarks rather short. The \textit{functionals.h} and \textit{myfunctions.cc} files did not change at all, so we simply refer to the corresponding sections in the last example.\\
+%%% Unsinn! Das example hat nicht viel mit dem davor zu tun!
+%There is not much difference to the prior example, so we will keep our remarks rather short. The \textit{functionals.h} and \textit{myfunctions.cc} files did not change at all, so we simply refer to the corresponding sections in the last example.\\
 In the \textit{localpde.h} file, all functions of the \texttt{LocalPDE} class have to be adjusted to the current FSI problem. This only makes the equations and matrices a little more complicated, and our solution vector now consists of five components (two velocity components of the fluid, the pressure component, and two additional displacement components for the structure variables). Otherwise, everything is analogous to the former example.\\
 In the \textit{main.cc} we only have to add two components to the \texttt{compmask} vector and prescribe boundary conditions for the structure variables. Apart from that, we define objects for the same classes as before that are even named equally and use the same solvers.\\ 
 Again, the solution is reached within one Newton step, and all we see from the program output is the values of the functionals.

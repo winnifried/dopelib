@@ -82,7 +82,7 @@ main(int argc, char **argv)
 {
   /**
    * Stationary FSI problem in an ALE framework
-   * Fluid: Stokes equ.
+   * Fluid: Navier-Stokes equations.
    * Structure: Incompressible INH model and compressible STVK material
    * We use the Q2^c-Q1^c element for discretization.
    * Computation of PointFunctionals, i.e. pressure, x-and y-deflections

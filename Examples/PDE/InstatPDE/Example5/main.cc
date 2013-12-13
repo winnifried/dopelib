@@ -119,7 +119,7 @@ int
 main(int argc, char **argv)
 {
   /**
-   * In this example we  solve a nonlinear, timedependent PDE,
+   * In this example we  solve the nonlinear, timedependent heat equation;
    * see the documentation for more information.
    */
 

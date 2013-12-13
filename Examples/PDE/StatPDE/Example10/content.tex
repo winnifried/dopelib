@@ -37,6 +37,18 @@ given by:
 \nu_s = \frac{\lambda_s}{2(\lambda_s + \mu_s)}, \qquad 
 E = \frac{\mu_s (\lambda_s + 2\mu_s)}{(\lambda_s + \mu_s )} . 
 \end{eqnarray}
+On fluid side, we extend the problem from Stokes flow 
+to stationary Navier-Stokes flow to demonstrate how to 
+implement the nonlinear convection term
+\[
+             (\hat J \rho_f \hat F^{-1}\hat  v\cdot\hat\nabla \hat v,
+             \hat\phi^v)_{\hat\Omega_f}.
+\]
+
+
+
+
+
 The whole equation system is solved on the benchmark configuration domain. For 
 details on parameters and geometry, we refer to the 
 numerical FSI benchmark \index{fluid-structure interaction (FSI)} \index{fluid-structure interaction (FSI)!FSI benchmark} proposal from Hron and Turek [2006].
@@ -46,7 +58,8 @@ the following values of interest: $x$-displacement, $y$-displacement, drag, and 
 
 \subsubsection{Program description}
 
-Compared to the two former examples, there are some differences which we will briefly discuss in the following. First of all, the problem is nonlinear in contrast to the former ones. We work on a different domain (given in the \textit{benchfst0100tw.inp} file), namely a channel with a cylinder put at half height near the inflow boundary; further \textit{.inp} files yield the possibility to vary the domain.\\
+Compared to the previous Example \ref{PDE_Stat_FSI_STVK}, 
+there are some differences which we will briefly discuss in the following. First of all, the problem is nonlinear in contrast to the former ones. We work on a different domain (given in the \textit{benchfst0100tw.inp} file), namely a channel with a cylinder put at half height near the inflow boundary; further \textit{.inp} files yield the possibility to vary the domain.\\
 Furthermore, in the \textit{dope.prm} parameter file there are two additional subsections which are added only for the current problem. From the denotation of these subsections one can immediately see where in the code the parameters are used.\\
 As we want to compute certain benchmark quantities, we have to regard corresponding functionals in the \textit{functionals.h} file. The pressure at a point as well as the displacement in $x$- and $y$-directions are point values; furthermore we implement the drag and lift functionals (for which we need the additionally defined problem parameters).\\
 As before, we build up the element and boundary equations and matrices in the \textit{localpde.h} file. Apart from using the additionally defined problem parameters and modeling compressible STVK material instead of INH material (which leads to changes in the weak formulation of the equations), there are no major differences to the corresponding file in the last example.\\

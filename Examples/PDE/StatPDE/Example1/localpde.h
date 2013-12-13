@@ -103,7 +103,8 @@ template<
                 q_point);
 
             //Define the weak formulation. scale_ico makes only
-            //sense in the instationary context. In a stationary
+            //sense in the nonstationary context (treating those
+	    //terms fully implicitly). In a stationary
             //problem it holds scale_ico = scale.
             local_vector(i) += scale
                 * (0.5 * scalar_product(vgrads, phi_i_grads_v)

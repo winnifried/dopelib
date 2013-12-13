@@ -191,6 +191,7 @@ main(int argc, char **argv)
 {
   /**
    * In this example we solve the one dimensional heat equation.
+   * It shows how DopE handels 1d equations.
    */
 
   string paramfile = "dope.prm";

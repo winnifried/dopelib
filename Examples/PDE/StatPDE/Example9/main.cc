@@ -80,7 +80,7 @@ main(int argc, char **argv)
   /**
    * Stationary FSI problem in an ALE framework
    * Fluid: Stokes equ.
-   * Structure: Incompressible neo hookean (INH) model
+   * Structure: Incompressible neo Hookean (INH) model
    * We use the Q2^c-P1^dc element for discretization of Stokes.
    */
 

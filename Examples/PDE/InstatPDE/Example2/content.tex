@@ -20,12 +20,12 @@ for almost all time steps $t$, and
       \hat\psi^v)_{\hat\Omega_f} &\\
       + (\hat J\hat\sigma_f\hat
       F^{-T},\hat\nabla\hat\psi^v)_{\hat\Omega_f}
+      - \langle \hat g, \hat\psi^v \rangle_{\hat\Gamma_N}&\\ 
       %
-      + (\hat\rho_s \partial_t \hat v,\hat\psi^v)_{\Omega_s}  
-      + (\hat J\hat\sigma_s\hat F^{-T},\hat\nabla\hat\psi^v)_{\hat\Omega_s}&\\
-      - \langle \hat g, \hat\psi^v \rangle_{\hat\Gamma_N} -
-      (\hat\rho_f \hat J\hat f_f, \hat\psi^v)_{\hat\Omega_f}
-      - (\hat\rho_s\hat f_s, \hat\psi^v)_{\hat\Omega_s}
+      + (\hat\rho_s \partial_t \hat v,\hat\psi^v)_{\hat\Omega_s}  
+      + (\hat J\hat\sigma_s\hat F^{-T},\hat\nabla\hat\psi^v)_{\hat\Omega_s}
+%      - (\hat\rho_f \hat J\hat f_f, \hat\psi^v)_{\hat\Omega_f}
+%      - (\hat\rho_s\hat f_s, \hat\psi^v)_{\hat\Omega_s}
       &= 0&&\forall\hat\psi^v\in \hat V^0,
       \\
       %%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
@@ -53,20 +53,29 @@ determinant $\hat J$. The stress tensors for the fluid and structure are
 implemented by 
 \[
 \hat\sigma_f = -\hat pI + \hat\rho_f\nu_f (\hat\nabla\hat v \hat F^{-1}
-  + \hat F^{-T} \hat\nabla\hat v^T)
-\], 
+  + \hat F^{-T} \hat\nabla\hat v^T),
+\] 
 and 
 \[
 \hat\sigma_s = \hat F (\lambda_s \text{tr}\hat E I + 2\mu_s \hat E)
 \]
 with $\hat E = \frac{1}{2}(\hat F^T \hat F - I)$.
+Finally, we notice that this problem is driven by a Dirichlet 
+inflow condition. It is possible to add a gravity term $\hat f_f$ or 
+$\hat f_s$, which 
+would enter as a right hand side force 
+\[
+- (\hat\rho_f \hat J\hat f_f, \hat\psi^v)_{\hat\Omega_f}
+      - (\hat\rho_s\hat f_s, \hat\psi^v)_{\hat\Omega_s}
+\]
+into the problem.
 \end{Problem}
 The ALE approach belongs to interface-tracking methods in which 
 the mesh is moved such that it fits in all time steps with 
 the FSI-interface. However, this leads to 
 a degeneration of the ALE map. Methods to circumvent such as 
 degeneration as long as possible are re-meshing techniques or 
-to use a biharmonic mesh motion technique.
+to use (as suggested here) a biharmonic mesh motion technique.
 
 
 
@@ -81,7 +90,7 @@ problems as well as FSI computations.
 In the case of fluid problems the deformation
 gradient and its determinant become:
 \begin{equation*}
-F:= I , \quad \det F = J = 1.
+\hat F:= I , \quad \det \hat F = \hat J = 1.
 \end{equation*}
 
 The code is validated by the well-known 
@@ -121,8 +130,8 @@ and the drag and lift forces acting on the cylinder and the elastic beam:
 \begin{align}
 \label{drag_lift_forces}
 (F_D , F_L) 
-= {\int_{S_f} \sigma_f \cdot n_f \, ds + 
-\int_{\Gamma_i} \sigma_s \cdot n_s \, ds},
+= {\int_{S_f} \hat\sigma_f \cdot \hat n_f \, ds + 
+\int_{\hat\Gamma_i} \hat\sigma_s \cdot \hat n_s \, ds},
 \end{align}
 where $S_{f}$ denotes the path over the cylinder in the fluid part and
 $\Gamma_i$ the interface between the elastic beam and the 
@@ -163,7 +172,7 @@ fluid.
 %
 %\vspace{0.2cm}
 %
-\textbf{Program description}
+\subsubsection{Program description}
 
 The major difference to the first nonstationary program
 is the introduction of the 

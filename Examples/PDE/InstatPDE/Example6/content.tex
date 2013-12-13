@@ -70,7 +70,8 @@ the boundary conditions on $\partial\Omega_B$ reduce
 to interface conditions $\partial\Omega_B :=\Gamma_i =
 \Omega_B \cap \Omega_S$.
 Let $I:=[0,T]$ denote the time interval.
-The underlying Biot system reads:
+
+\begin{Problem}[The Biot system]
 Find the pressure $p_{\text{B}}$ and displacement 
 $u_{\text{B}}$ such that
 \begin{align*}
@@ -98,6 +99,7 @@ fluid injection). In the second equation,
 the Lam\'e coefficients are denoted 
 by $\lambda_B >0$ and $\mu_B >0$ 
 and $f_{\text{B}}$ is a volume force.
+\end{Problem}
 
 The velocity $v_{\text{B}}$ 
 in the porous medium is obtained 
@@ -108,8 +110,12 @@ It holds:
 \begin{equation*}
 v_{\text{B}} = -\frac{1}{\eta_f} K(\nabla p_{\text{B}} - \rho_f g).
 \end{equation*}
+
+
 Usually the non-pay zone is described 
-in terms of linear elasticity: Find 
+in terms of linear elasticity: 
+\begin{Problem}
+Find 
 a displacement $u_S$ such that
 \begin{align*}
 - \text{div}\bigl( \sigma_S (u_S)  \bigr) = f_S \quad \text{in }\Omega_{\text{S}} \times I,
@@ -127,6 +133,7 @@ conditions
 u_S = \bar{u}_S \quad\text{on } \Gamma_D , \quad \sigma_S (u_S) n_S = \bar{t}_S \quad\text{on } \Gamma_N,
 \end{equation*}
 are prescribed with given $\bar{u}_S$ and $\bar{t}_S$.
+\end{Problem}
 
 It finally remains to describe the interface 
 conditions on $\Gamma_{i}$ between the two sub-systems:
@@ -139,7 +146,35 @@ u_{\text{B}} &= u_S ,   \\
 -\frac{1}{\eta_f} K(\nabla p_{\text{B}} - \rho_f g) \cdot n_S &= 0. 
 \end{aligned} 
 \end{equation}
-It is important to notice that the second condition 
+
+
+\subsubsection{Program description}
+In this example, the crucial aspect (from mathematical point of view 
+as well as from the implementation) are the interface conditions
+\eqref{interface_conditions}.
+Here, it is important to notice that the second condition 
 in \eqref{interface_conditions}, requires careful 
 implementation on the interface, which is 
 carried out with the help of deal.II's FE Nothing element.
+Second, please do not forget to activate the flag
+\begin{verbatim}
+      HasFaces() const
+      {
+        return true;
+      }
+\end{verbatim}
+
+The problem is driven by traction forces (Neumann conditions), which 
+are imposed via the 
+\begin{verbatim}
+      void
+      BoundaryEquation(...)
+      {
+        ...   
+      }
+\end{verbatim}
+
+As functionals, we evaluate the pressure in two different 
+points of the domain. The observation should be that the 
+pressure first starts increasing reaching a maximum and then
+starts decaying. This is the so-called Mandel-Creyer effect.

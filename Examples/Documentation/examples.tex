@@ -1,10 +1,42 @@
 \chapter{Example Handling, Creating new Examples}
 \label{chap:howtoex}
+\section{Getting started}
+Beside the fact that \dope{} is still under development,
+it offers already various different (linear and nonlinear) 
+examples for a lots 
+of different applications in two and three dimensions; 
+we refer the reader to the 
+next two Chapters \ref{PDE} and \ref{OPT}. 
+
 To implement new examples or to use existing examples 
 from the library for own research, the user 
 can simply copy an existing example. In this 
-new example, own code and changes can be compiled.
+new example, own code and changes can be compiled. Here is some 
+advice to get started:
+\begin{itemize}
+\item If you are a first time user of \dope{} 
+with some numerics background, you 
+might be familiar with the Poisson (or more general Laplace) equation.
+\dope{} has it too. Check-out Example \ref{PDE_Stat_Laplace_2D},
+to see how \dope{} implements this well-known equation in two
+dimensions or \ref{PDE_Stat_Laplace_3D} for its three-dimensional version.
+\item Before you implement a new example, please check which 
+existing example might be similar to your goals and get familiar 
+to it. Then, proceed as described in Section \ref{getting_started}. 
+\end{itemize}
+\begin{remark}[Why two examples for the Laplace equation?]
+\dope{} offers dimensional-independent programming! So, we could have 
+implemented the 2d and 3d case in one file. The reason why we
+present
+to separate programs \ref{PDE_Stat_Laplace_2D} and \ref{PDE_Stat_Laplace_3D}
+is, that in the 3d case, we show additional 
+capabilities of the library itself; specifically how to use different
+iterative linear solvers.
+\end{remark}
 
+
+\section{Creating new examples}
+\label{getting_started}
 Before being able to change and compile the new code, the user must 
 follow some easy steps in order to modify the information related to the old code. In 
 this section we explain how to modify such information using as model 

@@ -102,9 +102,8 @@ template<
             const double div_phi_v = state_fe_values[velocities].divergence(i,
                 q_point);
 
-            //Define the weak formulation. scale_ico makes only
-            //sense in the instationary context. In a stationary
-            //problem it holds scale_ico = scale.
+            // We refer to PDE/StatPDE/Example 1 for the 
+	    // meaning of the scale_ico parameter.
             local_vector(i) += scale
                 * (0.5 * scalar_product(vgrads, phi_i_grads_v)
                     + 0.5 * scalar_product(transpose(vgrads), phi_i_grads_v))

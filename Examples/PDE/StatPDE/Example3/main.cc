@@ -124,7 +124,7 @@ main(int argc, char **argv)
    *  the outflow boundary. In this case we employ an additional
    *  term on the outflow boundary due the symmetry of the stress tensor.
    *
-   *  This example uses hp finite elements.
+   *  This example uses hp finite elements as extension to PDE/StatPDE/Example 1
    */
 
   //Handling of the param file.

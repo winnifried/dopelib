@@ -93,7 +93,7 @@ int
 main(int argc, char **argv)
 {
   /**
-   *  In this example solve the vector valued laplace equation
+   *  In this example solve the vector valued Laplace equation
    *  in mixed formulation. The novelty is the use of 
    *  Raviart-Thomas elements together with a schur complement solver.
    *  This is the DOpE implementation of the deal.ii example 

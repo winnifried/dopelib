@@ -103,7 +103,7 @@ int
 main(int argc, char **argv)
 {
   /**
-   * We solve an optimization problem of mixed Type, i.e. the
+   * We solve an optimization problem of mixed type, i.e. the
    * costfunctional has a point-part as well as a distributed
    * part. To handle this, we use IntegratorMixedDimensions.
    */

@@ -119,8 +119,9 @@ main(int argc, char **argv)
 {
   /**
    * In this example we study
-   * stationary FSI optimization. The configuration
+   * stationary (nonlinear) FSI optimization. The configuration
    * comes from the original fluid benchmark problem
+   * (Schaefer/Turek; 1996)
    * and has been modified to reduce drag around the 
    * cylinder and the beam. The gain the solvability of
    * the optimization problem we add a quadratic

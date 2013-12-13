@@ -118,7 +118,8 @@ int
 main(int argc, char **argv)
 {
   /**
-   * First version of quasi-static Biot-Lame_Navier problem.
+   * The quasi-static Biot problem
+   * coupled with the Lame-Navier equations for linear elasticity
    */
 
   string paramfile = "dope.prm";
@@ -153,9 +154,14 @@ main(int argc, char **argv)
   hp::FECollection<DIM> control_fe_collection(control_fe);
   control_fe_collection.push_back(control_fe); //Need same number of entries in FECollection as state
 
-  // FE for the state equation: u,p
-  FESystem<DIM> state_fe(FE_Q<DIM>(2), 2, FE_Q<DIM>(1), 1);
-  FESystem<DIM> state_fe_2(FE_Q<DIM>(2), 2, FE_Nothing<DIM>(1), 1);
+
+  // FE for the state equation: 
+  FESystem<DIM> state_fe(FE_Q<DIM>(2), 2,  // u
+			 FE_Q<DIM>(1), 1); // p
+  FESystem<DIM> state_fe_2(FE_Q<DIM>(2), 2, // u
+			   FE_Nothing<DIM>(1), 1); // nothing
+
+
   hp::FECollection<DIM> state_fe_collection(state_fe);
   state_fe_collection.push_back(state_fe_2);
 

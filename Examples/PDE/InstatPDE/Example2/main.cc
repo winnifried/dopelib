@@ -170,11 +170,10 @@ main(int argc, char **argv)
 
   FESystem<DIM> control_fe(FE_Nothing<DIM>(), 1);
 
-  // FE for the state equation: v,u,p
-  FESystem<DIM> state_fe(FE_Q<DIM>(2), 2, 
-			 FE_Q<DIM>(2), 2, 
-			 FE_DGP<DIM>(1), 1,
-			 FE_Q<DIM>(2), 2);
+  FESystem<DIM> state_fe(FE_Q<DIM>(2), 2,   // v
+			 FE_Q<DIM>(2), 2,   // u
+			 FE_DGP<DIM>(1), 1, // p
+			 FE_Q<DIM>(2), 2);  // w (add. displacement)
 
   QGauss<DIM> quadrature_formula(3);
   QGauss<DIM - 1> face_quadrature_formula(3);
