@@ -83,6 +83,19 @@ The resulting FSI problem is then given by: \index{fluid-structure interaction (
   \end{equation*}  
 \end{Problem}
 
+\begin{remark}
+In the problems above and the code, we implement the term
+\[
+(\hat v_s, \hat\phi^u),
+\]
+although this is not physically necessary. It is first for computational
+convenience in order to extend the fluid velocity variable to the whole
+domain.
+This could be resolved by using the FE Nothing element. Second, 
+using $\hat v_s$ here makes it easier to understand the 
+nonstationary FSI problem.
+\end{remark}
+
 \subsubsection{Program description}
 
 %%% Unsinn! Das example hat nicht viel mit dem davor zu tun!

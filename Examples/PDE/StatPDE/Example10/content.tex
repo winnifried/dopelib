@@ -6,18 +6,14 @@ INH material (see Problem definition before)
 or St. Venant Kirchhoff material STVK: \index{structure} \index{structure!compressible St.Venant-Kirchhoff (STVK) material}
 \begin{Problem}[Compressible Saint Venant-Kirchhoff, Lagrangian framework]
   \label{prob:stvk:lagrange}
-  Find $\{\hat v_f,\hat u_f\} \in \{ \hat v_f^D + \hat V\} 
-  \times \{ \hat u_f^D + \hat V\}$, 
+  Find $\{\hat u_s\} \in \{ \hat u_s^D + \hat V\}$, 
   such that 
   \begin{eqnarray}
     \begin{aligned}   
-      (\hat J_s \hat\sigma_s \hat F_s^{-T},\hat\nabla\hat\phi^v)_{\hat\Omega_s}
+      (\hat J_s \hat\sigma_s(\hat u_s) \hat F_s^{-T},\hat\nabla\hat\phi^v)_{\hat\Omega_s}
       &= \langle\hat J_s\hat n_s\cdot \hat g_s^\sigma\hat
       F_s^{-T},\hat\phi^v  \rangle_{\hat\Gamma_i}
-      &&\quad\forall\hat \phi^v\in\hat V_s\\
-      %%%%%%%%%%%%%%%% 
-      (\hat v_s,\hat\phi^u)_{\hat\Omega_s}&=0
-      &&\quad\forall\hat \phi^u\in\hat V_s    ,\\
+      &&\quad\forall\hat \phi^v\in\hat V_s
     \end{aligned}
   \end{eqnarray}
   where $\rho_s$ is the density of the structure, $\mu_s$ and $\lambda_s$ 
@@ -25,9 +21,24 @@ or St. Venant Kirchhoff material STVK: \index{structure} \index{structure!compre
   $\hat g_s^\sigma$ some forces on the interface.\index{Lam\'e coefficients} The properties of the STVK material
   is specified by the constitutive law
   \begin{eqnarray}
-    \hat\sigma_s:=\hat J^{-1} \hat F (\lambda_s (tr\hat E) I + 2\mu_s \hat E)\hat F^{-T}.
+    \hat\sigma_s(\hat u_s):=\hat J^{-1} \hat F (\lambda_s (tr\hat E) I + 2\mu_s \hat E)\hat F^{-T}.
   \end{eqnarray}
 \end{Problem}
+\begin{remark}
+In the code, we also implement 
+\[
+(\hat v_s, \hat\phi),
+\]
+although this is not physically necessary. It is first for computational
+convenience in order to extend the fluid velocity variable to the whole
+domain.
+This could be resolved by using the FE Nothing element. Second, 
+using $\hat v_s$ here makes it easier to understand the 
+nonstationary FSI problem. The same holds for the (artificial) 
+pressure variable 
+in the STVK case.
+\end{remark}
+
 Often, the elasticity properties of structure materials is characterized by 
 Poisson's ratio $\nu_s$ ($\nu_s < \frac{1}{2}$ \index{Poisson's ratio} for 
 compressible materials) and the Young modulus $E$ \index{Young modulus}. The 
@@ -38,8 +49,11 @@ given by:
 E = \frac{\mu_s (\lambda_s + 2\mu_s)}{(\lambda_s + \mu_s )} . 
 \end{eqnarray}
 On fluid side, we extend the problem from Stokes flow 
-to stationary Navier-Stokes flow to demonstrate how to 
-implement the nonlinear convection term
+to stationary Navier-Stokes flow considering the convection term
+\[
+v\cdot \nabla v
+\]
+which reads in transformed form \cite{Wi11}
 \[
              (\hat J \rho_f \hat F^{-1}\hat  v\cdot\hat\nabla \hat v,
              \hat\phi^v)_{\hat\Omega_f}.
