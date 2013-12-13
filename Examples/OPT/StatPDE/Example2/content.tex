@@ -37,6 +37,11 @@ In addition, }notice that the cost functional is of mixed type (from our computa
         return "point domain";
       }
 \end{verbatim}
+Indicating, we have both some point values in the functional, as well as a domain contribution, 
+i.e., we calculate $\|q\| = \int_\Omega |q|\,dx$,
+even though this in not necessary, since $\alpha =0$ and the euclidean 
+norm of $q\in \mathbb R^3$ could be evaluated more easily using an \text{AlgebraicValue} in the functional.
+  
 This brings along that we have not only to implement {the methods
 \begin{align*} 
  &\texttt{ElementValue},&&

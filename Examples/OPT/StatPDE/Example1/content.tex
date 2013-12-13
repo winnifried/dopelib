@@ -269,8 +269,7 @@ Furthermore, we define \texttt{ReducedNewtonAlgorithm} and
 \texttt{ReducedTrustregion\underline{ }NewtonAlgorithm}
 to solve the optimization problem with a linesearch and a trust-region Newton algorithm.
 Of course one would be sufficient, but we wanted to show how to change optimization 
-solvers easily using \texttt{DOpElib}.
-
+solvers easily using \texttt{DOpElib}.\\
 Next, in the body of the main file, we introduce a second FE function for the 
 control variable. Then, we define 
 a \texttt{COSTFUNCTIONAL}. Finally, the problem is either solved 
@@ -278,4 +277,8 @@ by calling \texttt{Alg.Solve(q)} and/or the user might check if the
 derivatives are implemented correctly by calling 
 \texttt{Alg.CheckGrads} or \texttt{Alg.CheckHessian}. The latter 
 two functionalities are highly recommended to check your
-implementation before wondering about your results.
+implementation before wondering about your results.\\
+Finally, this example uses a DWR-error estimator to estimate the 
+error made in the cost functional. In contrast to the 
+error estimation for PDEs here, we have to include the error in the
+control by using the \texttt{HigherOrderDWRContainerControl}.
