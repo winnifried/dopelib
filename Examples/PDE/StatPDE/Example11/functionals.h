@@ -61,7 +61,6 @@ template<
         return cw / 2;
       }
 
-      //Achtung, hier kein gradient update
       UpdateFlags
       GetFaceUpdateFlags() const
       {

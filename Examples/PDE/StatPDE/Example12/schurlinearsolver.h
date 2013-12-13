@@ -226,7 +226,7 @@ namespace DOpE
       m_inverse.vmult (solution.block(0), tmp);
     }
     
-    //Here the code ends, we only have to make shure our constraints are handled appropriately
+    //Here the code ends, we only have to make sure our constraints are handled appropriately
     pde.GetDoFConstraints().distribute(solution);
   }
 /******************************************************/

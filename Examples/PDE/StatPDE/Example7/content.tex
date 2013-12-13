@@ -39,8 +39,7 @@ The goal of our computations is to match the following functional reference valu
 
 \subsubsection{Program description}
 
-From the previous examples we know how to read a grid from an \textit{.inp} file. The grid of our current example comes from the above mentioned benchmark problem. The parameter file (\textit{dope.prm}) contains the same variables as in the first two examples.\\
-Apart from different point values of derivatives of the solution, we want to evaluate an integral over part of the boundary. \index{functional} \index{functional!boundary integral} This is newly implemented in \textit{functionals.h}.\\
-The (linear) elasticity equation is much simpler than the FSI problems we treated before, which can be seen in \textit{localpde.h} where the \texttt{ElementEquation} and \texttt{ElementMatrix} are implemented. In principle, everything is clear from the preceding examples.\\
-The \textit{main.cc} file does not contain any innovation, either. Here, we refine the grid globally instead of using an error estimator for local refinement.\\
+From the previous examples we know how to read a grid from an \textit{.inp} file. The grid of our current example comes from the above mentioned benchmark problem.\\
+Apart from different point values of derivatives of the solution, we want to evaluate an integral over part of the boundary. \index{functional} \index{functional!boundary integral}This is newly implemented in \textit{functionals.h}.\\
+In principle, everything is clear from the preceding examples. We refine the grid globally instead of using an error estimator for local refinement.
 The output of the program reflects again the linearity of the problem (only one Newton step is needed for solution).\\

@@ -47,7 +47,6 @@ template<
         assert(dealdim == 2);
       }
 
-      // compute drag value around cylinder
       double
       BoundaryValue(const FDC<DH, VECTOR, dealdim>& fdc)
       {
@@ -80,7 +79,6 @@ template<
         return mass_flux_stokes;
       }
 
-      //Achtung, hier kein gradient update
       UpdateFlags
       GetFaceUpdateFlags() const
       {

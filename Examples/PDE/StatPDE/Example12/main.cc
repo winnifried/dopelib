@@ -93,10 +93,11 @@ int
 main(int argc, char **argv)
 {
   /**
-   *  In this example we do not really solve
-   *  a PDE but test the functionality of the higher order mappings.
-   *  To this end we approximate PI by the computation of the
-   *  circumference of a circle. See the deal.II tutorial step 10.
+   *  In this example solve the vector valued laplace equation
+   *  in mixed formulation. The novelty is the use of 
+   *  Raviart-Thomas elements together with a schur complement solver.
+   *  This is the DOpE implementation of the deal.ii example 
+   *  step-20.
    */
   string paramfile = "dope.prm";
 

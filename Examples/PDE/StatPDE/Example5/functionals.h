@@ -102,7 +102,7 @@ template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
         }
       }
 
-      //Achtung, hier kein gradient update
+
       UpdateFlags
       GetFaceUpdateFlags() const
       {
