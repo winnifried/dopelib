@@ -5,14 +5,9 @@ Aufraeumen fuer ersten *.tar.tgz
 -------------------------------
 
 content.tex	Thomas
-code cleaning	Christian
 doxygen		Winni
 
 Speziell:
-- Code cleaning PDE and OPT Instat
-  -- Beispiel (Erklaerung), PDEInterface nicht als template geben, 
-	sondern die LocalPDE
-
 - TW: content.tex for PDE/Instat OPT/Stat and OPT/Instat
 
 
@@ -41,9 +36,6 @@ ex 6+8) zusaetzlich mittelwert constraint - functional
 
 Standard TODO fuer naechstes Treffen
 ------------------------------------
-
-- Code cleaning PDE and OPT Instat
-  -- Beispiel (Erklaerung), PDEInterface nicht als template geben, sondern die LocalPDE.
 - content.tex for PDE/Instat OPT/Stat and OPT/Instat
 - CDC and FDC should be local template arguments of the methods in 
   PDE and Functional.

@@ -1,5 +1,9 @@
 Changelog DOpE
 ==============
+13.12.2013 Code Cleaning in the examples:
+		Unified look of the code, deleted unnecessary includes, give
+		localpde instead of PDEInterface as template etc., typedefs instead
+		of defines for the abbreviations
 09.12.2013 Renamed Functions: 
 	   FunctionalInterface::Value*
 		now is FunctionalInterface:ElementValue*/ 
