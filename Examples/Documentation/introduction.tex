@@ -453,6 +453,8 @@ problem where the PDE constraint has been eliminated as explained in the previou
 Beyond these clearly structured groups before there are some classes remaining that
 do not fit the above but are important for the user to know.
 
+
+
 \subsubsection{Vectors}
 \begin{itemize}
 \item \texttt{include/statevector.h} This stores all dofs in space and time for the state 
@@ -464,6 +466,20 @@ do not fit the above but are important for the user to know.
   non PDE constraints (and corresponding multipliers). 
   At present no time dependence is implemented.
 \end{itemize}
+\begin{remark}
+\label{remark_state_behavior}
+We notice that the behavior of the statevector can be chosen as 
+\texttt{fullmem} or \texttt{store\underline{ }on\underline{ }disc}. In the
+first state, the RAM memory of the computer is used. In the second state,
+all vectors are written on disc, to avoid the RAM. This might take some 
+time at the beginning of a new executing program (cleary depending 
+on the number of spatial and temporal unknowns and the capabilities of your 
+local machine). In addition, if the program aborts abnormally in the 
+using \texttt{store\underline{ }on\underline{ }disc} behavior, please make 
+sure to remove manually the \texttt{tmp\underline{ }state} folder in your 
+\texttt{Results} folder. 
+\end{remark}
+
 
 \subsubsection{Parameter handling}
 \begin{itemize}

@@ -188,5 +188,13 @@ other solutions variables have to be considered
 around $\partial_t v$ such as $J:=J(u)$. 
 The same holds for the corresponding matrix part.
 
+In addition, we notice that specifically the FSI 3 version of this 
+code introduces a large amount of total DOFs. Probably, your machine 
+will terminate in \texttt{fullmem} modus. Here you might change the 
+statevector behavior to \texttt{store\underline{ }on\underline{ }disc}.
+However, it takes some time to write all vectors locally on your disc.
+On a Lenovo X230, it takes $3$ minutes. In a future version of the library,
+we plan to introduce a less expensive statevector behavior.
+We also refer to Remark \ref{remark_state_behavior}.
 
 \vspace{0.2cm}

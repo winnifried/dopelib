@@ -1,12 +1,6 @@
 TODO DOpE
 =========
 
-- In Doku, dass fullmem and store_on_disc abbrechen koennen
-  bzw. lange dauern.
-- Als Beispiel PDE/Instat/Example 2 FSI 3 erwaehnen.
-- Fehlermeldung bei fullmem Abbruch nicht aussagekraeftig.
-- Falls Programm nicht richtig beendet wird, dann tmp_state 
-  Ordner bei store_on_disc manuell loeschen.
 
 TODO nach Herausgabe des releases
 ---------------------------------
