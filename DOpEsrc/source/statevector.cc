@@ -96,7 +96,7 @@ namespace DOpE
                   _filestream.close();
                   throw DOpEException(
                       "The directory " + _tmp_dir
-                          + " is propaply already in use.",
+                          + " is probably already in use.",
                       "StateVector<VECTOR>::StateVector");
                 }
               else
