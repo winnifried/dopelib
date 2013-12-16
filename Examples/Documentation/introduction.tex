@@ -222,7 +222,7 @@ fixed number of parameters, $a$ and $b$ are constraint bounds for the control $q
 and $g(\cdot)$ is some state constraint.
 
 
-\subsection{Problem description}
+\section{Problem description}
 In order to allow our algorithms the automatic assembly of all required 
 data we need to have some container which contains the complete problem 
 description in a common data format. For this we have the following 
@@ -250,13 +250,13 @@ but if you want to use Newton's method, derivatives are needed.
 We will start by discussing the problem description components implemented so far
 
 
-\subsection{Numeric components}
+\section{Numeric components}
 These are the components from which a user needs to select some in order to actually 
 solve the given problem. They will not require any rewriting, but sometimes it is 
 advisable to write other than the default parameter into the param file for the 
 solution.
 
-\subsubsection{Space-time handler}
+\subsection{Space-time handler}
 First we need to select a method how to handle all dofs in space and time.
 \begin{itemize}
 \item \texttt{basic/spacetimehandler\underline{ }base.h} This class is used to define 
@@ -282,7 +282,7 @@ First we need to select a method how to handle all dofs in space and time.
 Note that we use these for stationary problems as well, but then you don't have to specify
 any time information.
 
-\subsubsection{Container classes}
+\subsection{Container classes}
 Second you will need to specify some container classes to be used to 
 pass data between objects. At present you don't have much choice, but you may wish 
 to reimplement some of these if you need data that is not currently included in 
@@ -306,7 +306,7 @@ the containers.
 \item \texttt{container/refinementcontainer.h} The classes defined herein are given to the \texttt{RefineSpace} method of the \texttt{SpaceTimeHandler} and determine how we define the spatial mesh (i.e. globally or locally with a fixed fraction, fixed number or 'optimized' strategy).
 \end{itemize}
 
-\subsubsection{Time stepping schemes}
+\subsection{Time stepping schemes}
 Third, at least for nonstationary PDEs we need to select a time stepping scheme
 the file names of which are mostly self explanatory:
 \begin{itemize}
@@ -318,7 +318,7 @@ implemented for the convenience of the user!
 \item \texttt{tsschemes/crank\underline{ }nicolson\underline{ }problem.h}
 \end{itemize}
 
-\subsubsection{Integrator routines}
+\subsection{Integrator routines}
 Finally, we need to select a way how to integrate and solve linear and nonlinear equations
 \begin{itemize}
 \item \texttt{templates/integrator.h} This class computes integrals over a given 
@@ -331,7 +331,7 @@ Finally, we need to select a way how to integrate and solve linear and nonlinear
   used if the control variable is given by some parameters. Which means \texttt{dopedim == 0}). 
 \end{itemize}
 
-\subsubsection{Nonlinear solvers}
+\subsection{Nonlinear solvers}
 \begin{itemize}
 \item \texttt{templates/newtonsolver.h} This solves some nonlinear equation using a 
   line-search Newton method.
@@ -346,7 +346,7 @@ Finally, we need to select a way how to integrate and solve linear and nonlinear
   fractional-step-theta scheme. It combines the computation of all three sub steps.
 \end{itemize}
 
-\subsubsection{Linear solvers}
+\subsection{Linear solvers}
 \begin{itemize}
 \item \texttt{templates/cglinearsolver.h} This is a wrapper for the cg solver implemented in 
   \texttt{deal.II}. The solver will build and store the stiffness matrix for the PDE.
@@ -363,7 +363,7 @@ Finally, we need to select a way how to integrate and solve linear and nonlinear
 
 
 
-\subsection{Problem specific classes}
+\section{Problem specific classes}
 The following classes are used to describe the problem and will usually require 
 some implementation.
 
@@ -398,7 +398,7 @@ some implementation.
 
 
 
-\subsection{Reduced problems (Solve the PDE)}
+\section{Reduced problems (Solve the PDE)}
 At times it is nice to remove the PDE constraint in (OPT). 
 This is handled by so called reduced 
 problems (for algorithmic aspects we refer the reader to 
@@ -421,7 +421,7 @@ and eliminates the variable $u$ from the problem.
   hides the interface to IPOPT.
 \end{itemize}
 
-\subsection{Optimization algorithms}
+\section{Optimization algorithms}
 Now, in order to solve optimization algorithms we need to define some algorithms.
 At present we offer a selection of algorithms that solve the reduced optimization 
 problem where the PDE constraint has been eliminated as explained in the previous section.
@@ -449,13 +449,13 @@ problem where the PDE constraint has been eliminated as explained in the previou
   PDE constraint.)
 \end{itemize} 
 
-\subsection{Other Components}
+\section{Other Components}
 Beyond these clearly structured groups before there are some classes remaining that
 do not fit the above but are important for the user to know.
 
 
 
-\subsubsection{Vectors}
+\subsection{Vectors}
 \begin{itemize}
 \item \texttt{include/statevector.h} This stores all dofs in space and time for the state 
   variable $u$. It is possible to select whether all this should be kept in memory or 
@@ -481,13 +481,13 @@ sure to remove manually the \texttt{tmp\underline{ }state} folder in your
 \end{remark}
 
 
-\subsubsection{Parameter handling}
+\subsection{Parameter handling}
 \begin{itemize}
 \item \texttt{include/parameterreader.h} This file is used to define a parameter reader
   that is used to read run time parameters from a given file.
 \end{itemize}
 
-\subsubsection{Exception handling}
+\subsection{Exception handling}
 \begin{itemize}
 \item \texttt{include/dopeexception.h} Defines some Exceptions that are thrown by the program
   should it encounter any unexpected errors.
@@ -495,7 +495,7 @@ sure to remove manually the \texttt{tmp\underline{ }state} folder in your
   contained in the exceptions to the output in a uniform manner.
 \end{itemize}
 
-\subsubsection{Output handling}
+\subsection{Output handling}
 \begin{itemize}
 \item \texttt{include/outputhandler.h} This file defines an outputhandler object which 
   can be used to decide whether some information should be written to screen or file.
@@ -503,13 +503,13 @@ sure to remove manually the \texttt{tmp\underline{ }state} folder in your
   parameter file.
 \end{itemize}
 
-\subsection{Data Access}
+\section{Data Access}
 \begin{itemize}
 \item \texttt{include/solutionextractor.h} This class is used to gain access to the finite element 
   solutions stored in the reduced problems.
 \end{itemize}
 
-\subsubsection{Constraints and system matrix}
+\subsection{Constraints and system matrix}
 \begin{itemize}
 \item \texttt{include/userdefineddofconstraints.h} This class sets the constraints on the DOFs of the state and/or control FE solution. DOpE itself builds the hanging-node-constraints, but the user can reimplement this class and thus include other constraints as well (for example periodic BC). Note, that the hanging-node-constraints come first (in case of conflicting constraints.)
 \item \texttt{include/sparsitymaker.h} This class sets the sparsity pattern for the state FE solution. The standard implementation is just a wrapper for \texttt{dealii::DoFTools::} \texttt{make\_sparsity\_pattern}, but the user can reimplement this class to allow for more sophisticated sparsity patterns.
@@ -517,13 +517,13 @@ sure to remove manually the \texttt{tmp\underline{ }state} folder in your
   homogeneous Dirichlet values at given points/components.
 \end{itemize}
 
-\subsubsection{HP components}
+\subsection{HP components}
 \begin{itemize}
 \item \texttt{interfaces/active\underline{ }fe\underline{ }index\underline{ }setter\underline{ }interface.h} In the case of hp finite elements, one has to specify for each element which finite element to use. This is done via this interface.
 \end{itemize}
 
-\subsection{Internal structures}
-\subsubsection{Interface Classes}
+\section{Internal structures}
+\subsection{Interface Classes}
 \begin{itemize}
   \item \texttt{interfaces/transposeddirichletdatainterface.h} This provides an interface to 
     the functionality required by {\em transposed Dirichlet data}. Usually when one applies Dirichlet 
@@ -538,7 +538,7 @@ sure to remove manually the \texttt{tmp\underline{ }state} folder in your
   \item \texttt{interfaces/pdeprobleminterface.h} The same as above but for (PDE) problems.
 \end{itemize}
 
-\subsubsection{Default Classes}
+\subsection{Default Classes}
 \begin{itemize}
   \item \texttt{problemdata/noconstraints.h} A class that can be used for optimization problems 
     having only a PDE constraint but no further constraints.
@@ -546,7 +546,7 @@ sure to remove manually the \texttt{tmp\underline{ }state} folder in your
     data that are given as a fixed function (independent of the control).
   \end{itemize}
 
-\subsubsection{Auto-generated Problem Descriptions}
+\subsection{Auto-generated Problem Descriptions}
 \begin{itemize}
   \item \texttt{problemdata/stateproblem.h} This is the problem description for the (forward/primal) PDE constraint.
     {\bf Similar descriptors will be build for the other problems (adjoint, tangent, $\ldots$) when time allows.}
@@ -564,12 +564,12 @@ sure to remove manually the \texttt{tmp\underline{ }state} folder in your
     to calculate the hessian of the reduced objective functional, 
     for detail see \texttt{interfaces/transposeddirichletdatainterface.h}.
 \end{itemize}
-\subsubsection{Management of Time Dependent Problems}
+\subsection{Management of Time Dependent Problems}
 \begin{itemize}
 \item \texttt{include/timedofhandler.h} DoFHandler responsible for the management of the timedofs (this is a part of the \texttt{SpaceTimeDoFHandler}-classes). Basically a wrapper for a $1d$ \texttt{deal.II}-DoFHandler.
 \item \texttt{include/timeiterator.h} This class works as an iterator on the \texttt{TimeDoFHandler}.                 
 \end{itemize}
-\subsection{Wrapper classes}
+\section{Wrapper classes}
 \begin{itemize}
   \item \texttt{wrapper/dofhandler\underline{ }wrapper.h} A wrapper class for the \texttt{deal.II} DoFHandlers. This 
     class is needed to provide support for the \texttt{dim $= 0$} case and to have a uniform interface to 
@@ -590,7 +590,7 @@ sure to remove manually the \texttt{tmp\underline{ }state} folder in your
   \item \texttt{wrapper/dataout\underline{ }wrapper.h} A wrapper for the DataOut class from \texttt{deal.II}.
 \end{itemize}
 
-\subsection{Other}
+\section{Other}
 \begin{itemize}
   \item \texttt{basic/dopetypes.h} This file contains type definitions used in the library. 
 \item \texttt{basic/sth\underline{ }internals.h} Wrapper for the \texttt{MapDoFsToSupportPoints} function. The implementation of this changes with the \texttt{deal.II} version in use.

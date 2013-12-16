@@ -36,4 +36,32 @@ In this particular example we examine the case of two uncorrelated stocks (with 
   \end{table}
 
 \subsubsection{Program description}
-Note that the initial conditions are only $H^1$-regular. Because of this, the Crank-Nicolson scheme, which is not strongly A-stable, is not suited to solve this problem. As we want to use a second order accurate time stepping scheme, we use the shifted Crank-Nicolson method. The rest of the program is as before.
+Note that the initial conditions are only $H^1$-regular. Because of this, 
+the Crank-Nicolson scheme, which is not strongly A-stable, is not suited to solve 
+this problem. As we want to use a second order accurate time stepping scheme, we use 
+the shifted Crank-Nicolson method. The rest of the program is as before.
+
+In addition, this program shows how to change the vector behavior, from our
+default option \texttt{fullmem}, where the whole vector
+is stored in the computers main memory. Here the storage behavior is set to 
+\texttt{store\underline{ }on\underline{ }disc}, where only those unknowns are loaded into 
+main memory that are needed in the current time step, while all other 
+unknowns are stored on the hard drive. 
+
+This behavior is particularly useful, if many time steps are taken; so that the 
+whole set of unknowns can no longer be stored in main memory. Note that all vectors 
+will allocate the required memory when the vector is reinitialized to a new size.
+Hence, for large vectors this may need some time.
+
+To avoid multiple programs accessing the same files on the hard drive, a 
+\texttt{lock} file is initialized. Under normal conditions, this will be deleted 
+once the program terminates. However, should the program exit exceptionally, the 
+lock file will still exist. Calling the program in this case will produce an 
+exception, with the following text:
+\begin{verbatim}
+Warning: During execution of `StateVector<VECTOR>::StateVector` 
+         the following Problem occurred!
+The directory Results/tmp_state/ is propaply already in use.
+\end{verbatim}
+To resolve the issue, you have to delete the named directory with the 
+temporary storage files manually.

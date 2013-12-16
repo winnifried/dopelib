@@ -223,12 +223,11 @@ main(int argc, char **argv)
   InitialData initial_data(pr);
   P.SetInitialValues(&initial_data);
 
-  RP solver(&P, "store_on_disc", pr, idc);
-
-  RNA Alg(&P, &solver, pr);
-
   try
   {
+    RP solver(&P, "store_on_disc", pr, idc);
+    
+    RNA Alg(&P, &solver, pr);
 
     Alg.ReInit();
     ControlVector<VECTOR> q(&DOFH, "fullmem");
