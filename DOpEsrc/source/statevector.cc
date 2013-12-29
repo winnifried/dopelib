@@ -53,7 +53,7 @@ namespace DOpE
       _sfh_ticket = 0;
       _tmp_dir = ref._tmp_dir;
 
-      if (_behavior == "store_on_disc")
+      if (_behavior == DOpEtypes::VectorStorageType::store_on_disc)
         {
           _local_vectors.resize(1, NULL);
           _local_vectors[0] = new VECTOR;
@@ -68,7 +68,7 @@ namespace DOpE
   /******************************************************/
   template<typename VECTOR>
     StateVector<VECTOR>::StateVector(const SpaceTimeHandlerBase<VECTOR>* STH,
-        std::string behavior, ParameterReader &param_reader) :
+        DOpEtypes::VectorStorageType behavior, ParameterReader &param_reader) :
       _unique_id(_id_counter)
     {
       _behavior = behavior;
@@ -76,7 +76,7 @@ namespace DOpE
       _sfh_ticket = 0;
       param_reader.SetSubsection("output parameters");
       _tmp_dir = param_reader.get_string("results_dir") + "tmp_state/";
-      if (_behavior == "store_on_disc")
+      if (_behavior == DOpEtypes::VectorStorageType::store_on_disc)
         {
           //make the directory
           std::string command = "mkdir -p " + _tmp_dir;
@@ -126,7 +126,7 @@ namespace DOpE
     {
       if (!GetSpaceTimeHandler()->IsValidStateTicket(_sfh_ticket))
         {
-          if (GetBehavior() == "fullmem")
+          if (GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
             {
               _state.resize(GetSpaceTimeHandler()->GetMaxTimePoint() + 1, NULL);
               for (unsigned int t = 0; t
@@ -139,7 +139,7 @@ namespace DOpE
             }
           else
             {
-              if (GetBehavior() == "store_on_disc")
+              if (GetBehavior() == DOpEtypes::VectorStorageType::store_on_disc)
                 {
                   _state_information.clear();
                   _state_information.resize(
@@ -178,7 +178,7 @@ namespace DOpE
   template<typename VECTOR>
     StateVector<VECTOR>::~StateVector()
     {
-      if (GetBehavior() == "fullmem")
+      if (GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
         {
           for (unsigned int i = 0; i < _state.size(); i++)
             {
@@ -188,7 +188,7 @@ namespace DOpE
         }
       else
         {
-          if (GetBehavior() == "store_on_disc")
+          if (GetBehavior() == DOpEtypes::VectorStorageType::store_on_disc)
             {
               for (unsigned int i = 0; i < _local_vectors.size(); i++)
                 {
@@ -231,13 +231,13 @@ namespace DOpE
     StateVector<VECTOR>::SetTimeDoFNumber(unsigned int dof_number,
         const TimeIterator& interval) const
     {
-      if (GetBehavior() == "fullmem")
+      if (GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
         {
           this->SetTimeDoFNumber(dof_number);
         }
       else
         {
-          if (GetBehavior() == "store_on_disc")
+          if (GetBehavior() == DOpEtypes::VectorStorageType::store_on_disc)
             {
               //check, if we have already loaded the interval
               if (_accessor_index == interval.GetIndex())
@@ -273,14 +273,14 @@ namespace DOpE
     void
     StateVector<VECTOR>::SetTimeDoFNumber(unsigned int time_point) const
     {
-      if (GetBehavior() == "fullmem")
+      if (GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
         {
           _accessor = static_cast<int> (time_point);
           assert(_accessor < static_cast<int>(_state.size()));
         }
       else
         {
-          if (GetBehavior() == "store_on_disc")
+          if (GetBehavior() == DOpEtypes::VectorStorageType::store_on_disc)
             {
               StoreOnDisc();
               _accessor = time_point;
@@ -328,7 +328,7 @@ namespace DOpE
     VECTOR&
     StateVector<VECTOR>::GetSpacialVector()
     {
-      if (GetBehavior() == "fullmem")
+      if (GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
         {
           if (_accessor >= 0)
             {
@@ -340,7 +340,7 @@ namespace DOpE
         }
       else
         {
-          if (GetBehavior() == "store_on_disc")
+          if (GetBehavior() == DOpEtypes::VectorStorageType::store_on_disc)
             {
               if (_accessor >= 0)
                 {
@@ -360,7 +360,7 @@ namespace DOpE
     const VECTOR&
     StateVector<VECTOR>::GetSpacialVector() const
     {
-      if (GetBehavior() == "fullmem")
+      if (GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
         {
           if (_accessor >= 0)
             {
@@ -372,7 +372,7 @@ namespace DOpE
         }
       else
         {
-          if (GetBehavior() == "store_on_disc")
+          if (GetBehavior() == DOpEtypes::VectorStorageType::store_on_disc)
             {
               if (_accessor >= 0)
                 {
@@ -399,7 +399,7 @@ namespace DOpE
         }
       _lock = true;
 
-      if (GetBehavior() == "fullmem")
+      if (GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
         {
           if (_accessor >= 0)
             {
@@ -411,7 +411,7 @@ namespace DOpE
         }
       else
         {
-          if (GetBehavior() == "store_on_disc")
+          if (GetBehavior() == DOpEtypes::VectorStorageType::store_on_disc)
             {
               if (_accessor >= 0)
                 {
@@ -435,7 +435,7 @@ namespace DOpE
     DOpE::StateVector<dealii::BlockVector<double> >::ReSizeSpace(
         unsigned int ndofs, const std::vector<unsigned int>& dofs_per_block)
     {
-      if (GetBehavior() == "fullmem")
+      if (GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
         {
           if (_accessor >= 0)
             {
@@ -503,7 +503,7 @@ namespace DOpE
         }
       else
         {
-          if (GetBehavior() == "store_on_disc")
+          if (GetBehavior() == DOpEtypes::VectorStorageType::store_on_disc)
             {
               if (_accessor >= 0)
                 {
@@ -572,7 +572,7 @@ namespace DOpE
     DOpE::StateVector<dealii::Vector<double> >::ReSizeSpace(unsigned int ndofs,
         const std::vector<unsigned int>& /*dofs_per_block*/)
     {
-      if (GetBehavior() == "fullmem")
+      if (GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
         {
           if (_accessor >= 0)
             {
@@ -613,7 +613,7 @@ namespace DOpE
         }
       else
         {
-          if (GetBehavior() == "store_on_disc")
+          if (GetBehavior() == DOpEtypes::VectorStorageType::store_on_disc)
             {
               if (_accessor >= 0)
                 {
@@ -656,7 +656,7 @@ namespace DOpE
         }
       else
         {
-          if (GetBehavior() == "fullmem")
+          if (GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
             {
               for (unsigned int i = 0; i < _state.size(); i++)
                 {
@@ -667,7 +667,7 @@ namespace DOpE
             }
           else
             {
-              if (GetBehavior() == "store_on_disc")
+              if (GetBehavior() == DOpEtypes::VectorStorageType::store_on_disc)
                 {
                   for (unsigned int t = 0; t
                       <= GetSpaceTimeHandler()->GetMaxTimePoint(); t++)
@@ -702,7 +702,7 @@ namespace DOpE
         {
           if (GetBehavior() == dq.GetBehavior())
             {
-              if (GetBehavior() == "fullmem")
+              if (GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
                 {
                   if (dq._state.size() != _state.size())
                     {
@@ -741,7 +741,7 @@ namespace DOpE
 
               else
                 {
-                  if (GetBehavior() == "store_on_disc")
+                  if (GetBehavior() == DOpEtypes::VectorStorageType::store_on_disc)
                     {
                       //Delete all vectors on the disc.
                       std::string command = "mkdir -p " + _tmp_dir + "; rm -f "
@@ -786,8 +786,8 @@ namespace DOpE
           else
             {
               throw DOpEException(
-                  "Own Behavior does not match dq.Behavior. Own Behavior:"
-                      + GetBehavior() + "dq.Behavior" + dq.GetBehavior(),
+		"Own Behavior does not match dq.Behavior. Own Behavior:"
+		+ GetBehavior(),
                   "StateVector<VECTOR>::equ");
             }
         }
@@ -808,7 +808,7 @@ namespace DOpE
         {
           if (GetBehavior() == dq.GetBehavior())
             {
-              if (GetBehavior() == "fullmem")
+              if (GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
                 {
                   assert(dq._state.size() == _state.size());
                   for (unsigned int i = 0; i < _state.size(); i++)
@@ -821,7 +821,7 @@ namespace DOpE
                 }
               else
                 {
-                  if (GetBehavior() == "store_on_disc")
+                  if (GetBehavior() == DOpEtypes::VectorStorageType::store_on_disc)
                     {
                       assert(dq.GetSpaceTimeHandler()->GetMaxTimePoint() == GetSpaceTimeHandler()->GetMaxTimePoint() );
                       dq.StoreOnDisc();
@@ -848,7 +848,7 @@ namespace DOpE
             {
               throw DOpEException(
                   "Own Behavior does not match dq.Behavior. Own Behavior:"
-                      + GetBehavior() + "dq.Behavior" + dq.GetBehavior(),
+		  + GetBehavior(),
                   "StateVector<VECTOR>::equ");
             }
         }
@@ -867,7 +867,7 @@ namespace DOpE
         }
       else
         {
-          if (GetBehavior() == "fullmem")
+          if (GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
             {
               for (unsigned int i = 0; i < _state.size(); i++)
                 {
@@ -878,7 +878,7 @@ namespace DOpE
             }
           else
             {
-              if (GetBehavior() == "store_on_disc")
+              if (GetBehavior() == DOpEtypes::VectorStorageType::store_on_disc)
                 {
                   for (unsigned int t = 0; t
                       <= GetSpaceTimeHandler()->GetMaxTimePoint(); t++)
@@ -905,7 +905,7 @@ namespace DOpE
     {
       if (GetBehavior() == dq.GetBehavior())
         {
-          if (GetBehavior() == "fullmem")
+          if (GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
             {
               assert(dq._state.size() == _state.size());
 
@@ -918,7 +918,7 @@ namespace DOpE
                 }
               return ret;
             }
-          if (GetBehavior() == "store_on_disc")
+          if (GetBehavior() == DOpEtypes::VectorStorageType::store_on_disc)
             {
               if (_lock || dq._lock)
                 {
@@ -962,7 +962,7 @@ namespace DOpE
         {
           throw DOpEException(
               "Own Behavior does not match dq.Behavior. Own Behavior:"
-                  + GetBehavior() + "dq.Behavior" + dq.GetBehavior(),
+	      + GetBehavior(),
               "StateVector<VECTOR>::equ");
         }
     }
@@ -982,7 +982,7 @@ namespace DOpE
         {
           if (GetBehavior() == dq.GetBehavior())
             {
-              if (GetBehavior() == "fullmem")
+              if (GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
                 {
                   assert(dq._state.size() == _state.size());
 
@@ -996,7 +996,7 @@ namespace DOpE
                 }
               else
                 {
-                  if (GetBehavior() == "store_on_disc")
+                  if (GetBehavior() == DOpEtypes::VectorStorageType::store_on_disc)
                     {
                       assert(dq.GetSpaceTimeHandler()->GetMaxTimePoint() == GetSpaceTimeHandler()->GetMaxTimePoint() );
 
@@ -1024,7 +1024,7 @@ namespace DOpE
             {
               throw DOpEException(
                   "Own Behavior does not match dq.Behavior. Own Behavior:"
-                      + GetBehavior() + "dq.Behavior" + dq.GetBehavior(),
+		  + GetBehavior(),
                   "StateVector<VECTOR>::equ");
             }
         }
@@ -1045,7 +1045,7 @@ namespace DOpE
         {
           if (GetBehavior() == dq.GetBehavior())
             {
-              if (GetBehavior() == "fullmem")
+              if (GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
                 {
                   assert(dq._state.size() == _state.size());
                   for (unsigned int i = 0; i < _state.size(); i++)
@@ -1058,7 +1058,7 @@ namespace DOpE
                 }
               else
                 {
-                  if (GetBehavior() == "store_on_disc")
+                  if (GetBehavior() == DOpEtypes::VectorStorageType::store_on_disc)
                     {
                       dq.StoreOnDisc();
                       for (unsigned int t = 0; t
@@ -1085,7 +1085,7 @@ namespace DOpE
             {
               throw DOpEException(
                   "Own Behavior does not match dq.Behavior. Own Behavior:"
-                      + GetBehavior() + "dq.Behavior" + dq.GetBehavior(),
+		  + GetBehavior(),
                   "StateVector<VECTOR>::equ");
             }
         }
@@ -1098,14 +1098,14 @@ namespace DOpE
     {
       if (GetSpaceTimeHandler()->GetMaxTimePoint() == 0)
         {
-          if (GetBehavior() == "fullmem")
+          if (GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
             {
               assert(_state.size()==1);
               out << "\t" << _state[0]->size() << std::endl;
             }
           else
             {
-              if (GetBehavior() == "store_on_disc")
+              if (GetBehavior() == DOpEtypes::VectorStorageType::store_on_disc)
                 {
                   SetTimeDoFNumber(0);
                   assert(_global_to_local[_accessor]==0);
@@ -1118,7 +1118,7 @@ namespace DOpE
         }
       else
         {
-          if (GetBehavior() == "fullmem")
+          if (GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
             {
               out << "\tNumber of Timepoints: " << _state.size() << std::endl;
               unsigned int min_dofs = 0;
@@ -1141,7 +1141,7 @@ namespace DOpE
             }
           else
             {
-              if (GetBehavior() == "store_on_disc")
+              if (GetBehavior() == DOpEtypes::VectorStorageType::store_on_disc)
                 {
                   out << "\tNumber of Timepoints: "
                       << _state_information.size() << std::endl;
@@ -1265,7 +1265,7 @@ namespace DOpE
       //clear out _global_to_local
       _global_to_local.clear();
 
-      if (GetBehavior() == "fullmem")
+      if (GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
         {
           _local_vectors.resize(n_local_dofs);
           for (unsigned int i = 0; i < n_local_dofs; ++i)
@@ -1276,7 +1276,7 @@ namespace DOpE
         }
       else
         {
-          if (GetBehavior() == "store_on_disc")
+          if (GetBehavior() == DOpEtypes::VectorStorageType::store_on_disc)
             {
               //Resize _local_vectors to the right size.
               //We have to take more care in this case because of the
@@ -1309,7 +1309,7 @@ namespace DOpE
     {
       //we need this function only in the store on disc case, because
       //else, we would not have dynamic Speicherverwaltung
-      assert(GetBehavior() == "store_on_disc");
+      assert(GetBehavior() == DOpEtypes::VectorStorageType::store_on_disc);
 
       //just do sth, when local_vectors has not the right size
       if (_local_vectors.size() != size)

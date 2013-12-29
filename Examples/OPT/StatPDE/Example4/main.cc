@@ -154,7 +154,7 @@ main(int argc, char **argv)
   P.SetDirichletBoundaryColors(2, comp_mask, &DD);
   P.SetDirichletBoundaryColors(3, comp_mask, &DD);
 
-  RP solver(&P, "fullmem", pr, idc);
+  RP solver(&P, DOpEtypes::VectorStorageType::fullmem, pr, idc);
   RNA Alg(&P, &solver, pr);
 
   //Set the initial control values:
@@ -167,7 +167,7 @@ main(int argc, char **argv)
     qinit(4) = 1.;
   }
   Alg.ReInit();
-  ControlVector<VECTOR> q(&DOFH, "fullmem");
+  ControlVector<VECTOR> q(&DOFH, DOpEtypes::VectorStorageType::fullmem);
   q.GetSpacialVector() = qinit;
 
   for (int i = 0; i < niter; i++)

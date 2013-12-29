@@ -223,14 +223,14 @@ main(int argc, char **argv)
   P.SetControlBoundaryEquationColors(50); // upper control bc \Gamma_q1
   P.SetControlBoundaryEquationColors(51); // lower control bc \Gamma_q2
 
-  RP solver(&P, "fullmem", pr, idc);
+  RP solver(&P, DOpEtypes::VectorStorageType::fullmem, pr, idc);
   RNA Alg(&P, &solver, pr);
 
   std::string cases = "solve";
 
   Vector<double> solution;
   Alg.ReInit();
-  ControlVector<VECTOR> q(&DOFH, "fullmem");
+  ControlVector<VECTOR> q(&DOFH, DOpEtypes::VectorStorageType::fullmem);
   q = 0.1;
   for (int i = 0; i < niter; i++)
   {

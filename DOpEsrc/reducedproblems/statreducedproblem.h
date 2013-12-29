@@ -96,7 +96,7 @@ namespace DOpE
 	 *                          the OutputHandler
          */
         template<typename INTEGRATORDATACONT>
-          StatReducedProblem(PROBLEM *OP, std::string state_behavior,
+          StatReducedProblem(PROBLEM *OP, DOpEtypes::VectorStorageType state_behavior,
               ParameterReader &param_reader, INTEGRATORDATACONT& idc,
               int base_priority = 0);
 
@@ -115,7 +115,7 @@ namespace DOpE
          */
         template<typename STATEINTEGRATORDATACONT,
             typename CONTROLINTEGRATORCONT>
-          StatReducedProblem(PROBLEM *OP, std::string state_behavior,
+          StatReducedProblem(PROBLEM *OP, DOpEtypes::VectorStorageType state_behavior,
               ParameterReader &param_reader, CONTROLINTEGRATORCONT& c_idc,
               STATEINTEGRATORDATACONT & s_idc, int base_priority = 0);
 
@@ -445,7 +445,7 @@ namespace DOpE
     template<typename INTEGRATORDATACONT>
       StatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER,
           CONTROLINTEGRATOR, INTEGRATOR, PROBLEM, VECTOR, dopedim, dealdim>::StatReducedProblem(
-          PROBLEM *OP, std::string state_behavior,
+          PROBLEM *OP, DOpEtypes::VectorStorageType state_behavior,
           ParameterReader &param_reader, INTEGRATORDATACONT& idc,
           int base_priority)
           : ReducedProblemInterface<PROBLEM, VECTOR>(OP,
@@ -476,7 +476,7 @@ namespace DOpE
     template<typename STATEINTEGRATORDATACONT, typename CONTROLINTEGRATORCONT>
       StatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER,
           CONTROLINTEGRATOR, INTEGRATOR, PROBLEM, VECTOR, dopedim, dealdim>::StatReducedProblem(
-          PROBLEM *OP, std::string state_behavior,
+          PROBLEM *OP, DOpEtypes::VectorStorageType state_behavior,
           ParameterReader &param_reader, CONTROLINTEGRATORCONT& c_idc,
           STATEINTEGRATORDATACONT & s_idc, int base_priority)
           : ReducedProblemInterface<PROBLEM, VECTOR>(OP,

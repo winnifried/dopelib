@@ -106,6 +106,24 @@ namespace DOpE
       initial,
       nonstationary
     };
+    
+    /**
+     * An enum that describes the storage behavior of 
+     * all Control-, State-, and ConstraintVectors
+     *
+     * fullmem          Store all data in the main memory (RAM)
+     * store_on_disc    Stores all unused timesteps on the harddisc
+     * only_recent      Only keep a copy of the most recent timestep
+     *                  (Only useful for pure forward runs and 
+     *                   Pseudo-Timestepping methods)
+     */
+    enum VectorStorageType
+    {
+      fullmem,
+      store_on_disc,
+      only_recent
+    };
+
 
   }
 }

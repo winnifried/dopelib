@@ -163,12 +163,12 @@ main(int argc, char **argv)
   std::vector<bool> comp_mask(1, true);
   P.SetDirichletBoundaryColors(0, comp_mask, &DD);
 
-  RP solver(&P, "fullmem", pr, idc);
+  RP solver(&P, DOpEtypes::VectorStorageType::fullmem, pr, idc);
 
   RNA Alg(&P, &solver, pr);
 
   Alg.ReInit();
-  ControlVector<VECTOR> q(&DOFH, "fullmem");
+  ControlVector<VECTOR> q(&DOFH, DOpEtypes::VectorStorageType::fullmem);
   DOFH.RefineStateSpace();
   Alg.ReInit();
 

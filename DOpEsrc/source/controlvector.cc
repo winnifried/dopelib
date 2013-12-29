@@ -45,7 +45,7 @@ ControlVector<VECTOR>::ControlVector(const ControlVector& ref)
 
 /******************************************************/
 template<typename VECTOR>
-ControlVector<VECTOR>::ControlVector(const SpaceTimeHandlerBase<VECTOR>* STH, std::string behavior)
+ControlVector<VECTOR>::ControlVector(const SpaceTimeHandlerBase<VECTOR>* STH, DOpEtypes::VectorStorageType behavior)
 {
   _behavior = behavior;
   _STH      = STH;
@@ -63,7 +63,7 @@ void ControlVector<VECTOR>::ReInit()
 
   if(!GetSpaceTimeHandler()->IsValidControlTicket(_sfh_ticket))
   {
-    if(GetBehavior() == "fullmem")
+    if(GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
     {
       
       _control.resize(1,NULL);
@@ -84,7 +84,7 @@ void ControlVector<VECTOR>::ReInit()
 template<typename VECTOR>
 ControlVector<VECTOR>::~ControlVector()
 {
-  if(GetBehavior() == "fullmem")
+  if(GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
   {
     for(unsigned int i =0; i<_control.size(); i++)
     {
@@ -148,7 +148,7 @@ namespace DOpE
 template<>
 void ControlVector<dealii::BlockVector<double> >::ReSizeSpace(unsigned int ndofs, const std::vector<unsigned int>& dofs_per_block)
 {
-  if(GetBehavior() == "fullmem")
+  if(GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
   {
     if(_accessor >= 0)
     {
@@ -195,7 +195,7 @@ void ControlVector<dealii::BlockVector<double> >::ReSizeSpace(unsigned int ndofs
 template<>
 void ControlVector<dealii::Vector<double> >::ReSizeSpace(unsigned int ndofs, const std::vector<unsigned int>& /*dofs_per_block*/)
 {
-  if (GetBehavior() == "fullmem")
+  if (GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
   {
     if (_accessor >= 0)
     {
@@ -238,7 +238,7 @@ void ControlVector<dealii::Vector<double> >::ReSizeSpace(unsigned int ndofs, con
 template<typename VECTOR>
 void ControlVector<VECTOR>::operator=(double value)
 {
-  if(GetBehavior() == "fullmem")
+  if(GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
   {
     for(unsigned int i = 0; i < _control.size(); i++)
     {
@@ -256,7 +256,7 @@ void ControlVector<VECTOR>::operator=(double value)
 template<typename VECTOR>
 void ControlVector<VECTOR>::operator=(const ControlVector& dq)
 {
-  if(GetBehavior() == "fullmem")
+  if(GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
   {
     if(dq._control.size() != _control.size())
     {
@@ -301,7 +301,7 @@ void ControlVector<VECTOR>::operator=(const ControlVector& dq)
 template<typename VECTOR>
 void ControlVector<VECTOR>::operator+=(const ControlVector& dq)
 {
-  if(GetBehavior() == "fullmem")
+  if(GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
   {
     assert(dq._control.size() == _control.size());
     for(unsigned int i = 0; i < _control.size(); i++)
@@ -321,7 +321,7 @@ void ControlVector<VECTOR>::operator+=(const ControlVector& dq)
 template<typename VECTOR>
 void ControlVector<VECTOR>::operator*=(double a)
 {
-  if(GetBehavior() == "fullmem")
+  if(GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
   {
     for(unsigned int i = 0; i < _control.size(); i++)
     {
@@ -339,7 +339,7 @@ void ControlVector<VECTOR>::operator*=(double a)
 template<typename VECTOR>
 double ControlVector<VECTOR>::operator*(const ControlVector& dq) const
 {
-  if(GetBehavior() == "fullmem")
+  if(GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
   {
     assert(dq._control.size() == _control.size());
 
@@ -362,7 +362,7 @@ double ControlVector<VECTOR>::operator*(const ControlVector& dq) const
 template<typename VECTOR>
 void ControlVector<VECTOR>::add(double s, const ControlVector& dq)
 {
-  if(GetBehavior() == "fullmem")
+  if(GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
   {
     assert(dq._control.size() == _control.size());
 
@@ -383,7 +383,7 @@ void ControlVector<VECTOR>::add(double s, const ControlVector& dq)
 template<typename VECTOR>
 void ControlVector<VECTOR>::equ(double s, const ControlVector& dq)
 {
-  if(GetBehavior() == "fullmem")
+  if(GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
   {
     assert(dq._control.size() == _control.size());
 
@@ -404,7 +404,7 @@ void ControlVector<VECTOR>::equ(double s, const ControlVector& dq)
 template<typename VECTOR>
 void ControlVector<VECTOR>::max(const ControlVector& dq)
 {
-  if(GetBehavior() == "fullmem")
+  if(GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
   {
     assert(dq._control.size() == _control.size());
 
@@ -432,7 +432,7 @@ void ControlVector<VECTOR>::max(const ControlVector& dq)
 template<typename VECTOR>
 void ControlVector<VECTOR>::min(const ControlVector& dq)
 {
-  if(GetBehavior() == "fullmem")
+  if(GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
   {
     assert(dq._control.size() == _control.size());
 
@@ -458,7 +458,7 @@ void ControlVector<VECTOR>::min(const ControlVector& dq)
 template<typename VECTOR>
 void ControlVector<VECTOR>::comp_mult(const ControlVector& dq)
 {
-  if(GetBehavior() == "fullmem")
+  if(GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
   {
     assert(dq._control.size() == _control.size());
 
@@ -485,7 +485,7 @@ void ControlVector<VECTOR>::comp_mult(const ControlVector& dq)
 template<typename VECTOR>
 void ControlVector<VECTOR>::comp_invert()
 {
-  if(GetBehavior() == "fullmem")
+  if(GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
   {
     for(unsigned int i = 0; i < _control.size(); i++)
     {
@@ -507,7 +507,7 @@ void ControlVector<VECTOR>::comp_invert()
 template<typename VECTOR>
 void ControlVector<VECTOR>::init_by_sign(double smaller, double larger, double unclear, double TOL)
 {
-  if(GetBehavior() == "fullmem")
+  if(GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
   {
     
     for(unsigned int i = 0; i < _control.size(); i++)
@@ -547,7 +547,7 @@ void ControlVector<VECTOR>::PrintInfos(std::stringstream& out)
   }
   else
   {
-    if(GetBehavior() == "fullmem")
+    if(GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
     {
       out<<"\tNumber of Timepoints: "<<_control.size()<<std::endl;
       unsigned int min_dofs =0;

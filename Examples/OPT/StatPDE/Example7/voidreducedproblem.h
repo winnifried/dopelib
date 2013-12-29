@@ -93,7 +93,7 @@ namespace DOpE
      */
   template<typename INTEGRATORDATACONT>
     VoidReducedProblem(PROBLEM *OP,
-		       std::string vector_behavior,
+		       DOpEtypes::VectorStorageType vector_behavior,
 		       ParameterReader &param_reader,
 		       INTEGRATORDATACONT& idc,
 		       int base_priority=0);
@@ -305,7 +305,7 @@ namespace DOpE
     bool _build_control_matrix;
     bool  _gradient_reinit;
     std::vector<ControlVector<VECTOR>*> _constraint_gradient;
-    std::string _vector_behavior;
+    DOpEtypes::VectorStorageType _vector_behavior;
 
     ConstraintVector<VECTOR> _constraints;
     double _p;
@@ -329,7 +329,7 @@ template <typename CONTROLNONLINEARSOLVER, typename CONTROLINTEGRATOR, typename 
   template<typename INTEGRATORDATACONT>
  VoidReducedProblem<CONTROLNONLINEARSOLVER, CONTROLINTEGRATOR, PROBLEM, VECTOR, dopedim, dealdim>
     ::VoidReducedProblem(PROBLEM *OP,
-			 std::string vector_behavior,
+			 DOpEtypes::VectorStorageType vector_behavior,
 			 ParameterReader &param_reader,
 			 INTEGRATORDATACONT& idc,
 			 int base_priority)

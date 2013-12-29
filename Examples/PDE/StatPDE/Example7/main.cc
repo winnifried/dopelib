@@ -159,7 +159,7 @@ main(int argc, char **argv)
 
   P.SetBoundaryEquationColors(3);
 
-  RP solver(&P, "fullmem", pr, idc);
+  RP solver(&P, DOpEtypes::VectorStorageType::fullmem, pr, idc);
 
   //Only needed for pure PDE Problems
   DOpEOutputHandler<VECTOR> out(&solver, pr);

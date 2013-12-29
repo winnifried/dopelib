@@ -234,13 +234,13 @@ main(int argc, char **argv)
 //  BoundaryParabelExact boundary_parabel_ex;
 //  P.SetInitialValues(&boundary_parabel_ex);
 
-  RP solver(&P, "fullmem", pr, idc);
+  RP solver(&P, DOpEtypes::VectorStorageType::fullmem, pr, idc);
   RNA Alg(&P, &solver, pr);
 
   try
   {
     Alg.ReInit();
-    ControlVector<VECTOR> q(&DOFH, "fullmem");
+    ControlVector<VECTOR> q(&DOFH, DOpEtypes::VectorStorageType::fullmem);
     Alg.SolveForward(q);
   }
   catch (DOpEException &e)

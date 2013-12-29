@@ -26,6 +26,7 @@
 
 #include "spacetimehandler_base.h"
 #include "parameterreader.h"
+#include "dopetypes.h"
 
 #include <base/utilities.h>
 #include <lac/vector.h>
@@ -52,8 +53,9 @@ class StateVector
     //FIXME this is not a real copyconstructor, it just
     //uses the information of ref about size and so on. Is this correct?
 		StateVector(const StateVector<VECTOR>& ref);
-		StateVector(const SpaceTimeHandlerBase<VECTOR>* STH, std::string behavior,
-								ParameterReader &param_reader);
+		StateVector(const SpaceTimeHandlerBase<VECTOR>* STH, 
+			    DOpEtypes::VectorStorageType behavior,
+			    ParameterReader &param_reader);
 		~StateVector();
 
     /**
@@ -185,7 +187,7 @@ class StateVector
 		 *
 		 * @return               A string indicating the behavior.
 		 */
-		std::string GetBehavior() const
+		DOpEtypes::VectorStorageType GetBehavior() const
 		{
 			return _behavior;
 		}
@@ -291,7 +293,7 @@ class StateVector
 		//the index of the interval, to which the vectors stored in local_vectors belong
 		mutable int _accessor_index;
 
-		std::string _behavior;
+		DOpEtypes::VectorStorageType _behavior;
 		std::string _tmp_dir;
 		unsigned int _sfh_ticket;
 

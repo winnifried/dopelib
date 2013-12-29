@@ -192,7 +192,7 @@ main(int argc, char **argv)
   SimpleDirichletData<VECTOR, DIM> DD(zf);
   P.SetDirichletBoundaryColors(0, comp_mask, &DD);
 
-  RP solver(&P, "fullmem", pr, idc, 2);
+  RP solver(&P, DOpEtypes::VectorStorageType::fullmem, pr, idc, 2);
   //Make sure we use the same outputhandler
   DOpEOutputHandler<VECTOR> out(&solver, pr);
   DOpEExceptionHandler<VECTOR> ex(&out);
@@ -209,14 +209,14 @@ main(int argc, char **argv)
   STH DOFH_higher_order(triangulation, control_fe_high, state_fe_high,
       DOpEtypes::stationary);
   DOFH_higher_order.SetDoFHandlerOrdering(1, 0);
-  HO_DWRC dwrc(DOFH_higher_order, idc_high, "fullmem", "fullmem", pr,
+  HO_DWRC dwrc(DOFH_higher_order, idc_high, DOpEtypes::VectorStorageType::fullmem, DOpEtypes::VectorStorageType::fullmem, pr,
       DOpEtypes::mixed_control);
   solver.InitializeDWRC(dwrc);
   /********************************************************************/
 
   Alg.ReInit();
   out.ReInit();
-  ControlVector<VECTOR> q(&DOFH, "fullmem");
+  ControlVector<VECTOR> q(&DOFH, DOpEtypes::VectorStorageType::fullmem);
 
   double ex_value = 1. / 8. * (25 * M_PI * M_PI * M_PI * M_PI + 1. / alpha);
 

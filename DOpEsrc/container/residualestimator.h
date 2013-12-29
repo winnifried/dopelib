@@ -78,7 +78,7 @@ namespace DOpE
     class L2ResidualErrorContainer : public ResidualErrorContainer<VECTOR>
     {
       public:
-        L2ResidualErrorContainer(STH& sth, std::string state_behavior,
+        L2ResidualErrorContainer(STH& sth, DOpEtypes::VectorStorageType state_behavior,
             ParameterReader &param_reader, DOpEtypes::EETerms ee_terms =
                 DOpEtypes::EETerms::mixed) :
             ResidualErrorContainer<VECTOR>(ee_terms), _sth(sth), _PI_h_u(NULL), _PI_h_z(
@@ -294,7 +294,7 @@ namespace DOpE
     class H1ResidualErrorContainer : public ResidualErrorContainer<VECTOR>
     {
       public:
-        H1ResidualErrorContainer(STH& sth, std::string state_behavior,
+        H1ResidualErrorContainer(STH& sth, DOpEtypes::VectorStorageType state_behavior,
             ParameterReader &param_reader, DOpEtypes::EETerms ee_terms =
                 DOpEtypes::EETerms::mixed) :
             ResidualErrorContainer<VECTOR>(ee_terms), _sth(sth), _PI_h_u(NULL), _PI_h_z(

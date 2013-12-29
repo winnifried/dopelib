@@ -53,7 +53,7 @@ namespace DOpE
          *                              to compute? (primal, dual, both).
          */
         HigherOrderDWRContainerControl(STH& higher_order_sth, IDC& higher_order_idc,
-            std::string control_behavior, std::string state_behavior, ParameterReader &param_reader,
+            DOpEtypes::VectorStorageType control_behavior, DOpEtypes::VectorStorageType state_behavior, ParameterReader &param_reader,
             DOpEtypes::EETerms ee_terms = DOpEtypes::EETerms::mixed,
             DOpEtypes::ResidualEvaluation res_eval = DOpEtypes::strong_residual)
             : DWRDataContainer<STH, IDC, EDC, FDC, VECTOR>(ee_terms), _sth_higher_order(

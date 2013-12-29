@@ -45,7 +45,7 @@ ConstraintVector<VECTOR>::ConstraintVector(const ConstraintVector& ref)
 
 /******************************************************/
 template<typename VECTOR>
-ConstraintVector<VECTOR>::ConstraintVector(const SpaceTimeHandlerBase<VECTOR>* STH, std::string behavior)
+ConstraintVector<VECTOR>::ConstraintVector(const SpaceTimeHandlerBase<VECTOR>* STH, DOpEtypes::VectorStorageType behavior)
 {
   _behavior = behavior;
   _STH      = STH;
@@ -62,7 +62,7 @@ void ConstraintVector<VECTOR>::ReInit()
   _accessor =0;
   if(!GetSpaceTimeHandler()->IsValidControlTicket(_sfh_ticket))
   {
-    if(GetBehavior() == "fullmem")
+    if(GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
     {
       _local_control_constraint.resize(1,NULL);
       ReSizeLocalSpace(GetSpaceTimeHandler()->GetConstraintNDoFs("local"),
@@ -83,7 +83,7 @@ void ConstraintVector<VECTOR>::ReInit()
 template<typename VECTOR>
 ConstraintVector<VECTOR>::~ConstraintVector()
 {
-  if(GetBehavior() == "fullmem")
+  if(GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
   {
     for(unsigned int i =0; i<_local_control_constraint.size(); i++)
     {
@@ -129,7 +129,7 @@ bool ConstraintVector<VECTOR>::HasType(std::string name) const
 template<typename VECTOR>
 VECTOR& ConstraintVector<VECTOR>::GetSpacialVector(std::string name)
 {
-  if(GetBehavior() == "fullmem")
+  if(GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
   {
     if(name == "local")
     {
@@ -151,7 +151,7 @@ VECTOR& ConstraintVector<VECTOR>::GetSpacialVector(std::string name)
 template<typename VECTOR>
 const VECTOR& ConstraintVector<VECTOR>::GetSpacialVector(std::string name) const
 {
-  if(GetBehavior() == "fullmem")
+  if(GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
   {
     if(name == "local")
     {
@@ -200,7 +200,7 @@ void DOpE::ConstraintVector<dealii::BlockVector<double> >::ReSizeLocalSpace(
   unsigned int ndofs,
   const std::vector<unsigned int>& dofs_per_block)
 {
-  if (GetBehavior() == "fullmem")
+  if (GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
   {
     if (_accessor >= 0)
     {
@@ -237,7 +237,7 @@ template<>
 void ConstraintVector<dealii::Vector<double> >::ReSizeLocalSpace(unsigned int ndofs, const std::vector<
     unsigned int>& /*dofs_per_block*/)
 {
-  if (GetBehavior() == "fullmem")
+  if (GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
   {
     if (_accessor >= 0)
     {
@@ -267,7 +267,7 @@ void ConstraintVector<dealii::Vector<double> >::ReSizeLocalSpace(unsigned int nd
 template<typename VECTOR>
 void ConstraintVector<VECTOR>::operator=(double value)
 {
-  if(GetBehavior() == "fullmem")
+  if(GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
   {
     for(unsigned int i = 0; i < _local_control_constraint.size(); i++)
     {
@@ -287,7 +287,7 @@ void ConstraintVector<VECTOR>::operator=(double value)
 template<typename VECTOR>
 void ConstraintVector<VECTOR>::operator=(const ConstraintVector& dq)
 {
-  if(GetBehavior() == "fullmem")
+  if(GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
   {
     if(dq._local_control_constraint.size() != _local_control_constraint.size())
     {
@@ -335,7 +335,7 @@ void ConstraintVector<VECTOR>::operator=(const ConstraintVector& dq)
 template<typename VECTOR>
 void ConstraintVector<VECTOR>::operator+=(const ConstraintVector& dq)
 {
-  if(GetBehavior() == "fullmem")
+  if(GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
   {
     assert(dq._local_control_constraint.size() == _local_control_constraint.size());
     for(unsigned int i = 0; i < _local_control_constraint.size(); i++)
@@ -357,7 +357,7 @@ void ConstraintVector<VECTOR>::operator+=(const ConstraintVector& dq)
 template<typename VECTOR>
 void ConstraintVector<VECTOR>::operator*=(double a)
 {
-  if(GetBehavior() == "fullmem")
+  if(GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
   {
     for(unsigned int i = 0; i < _local_control_constraint.size(); i++)
     {
@@ -377,7 +377,7 @@ void ConstraintVector<VECTOR>::operator*=(double a)
 template<typename VECTOR>
 double ConstraintVector<VECTOR>::operator*(const ConstraintVector& dq) const
 {
-  if(GetBehavior() == "fullmem")
+  if(GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
   {
     assert(dq._local_control_constraint.size() == _local_control_constraint.size());
 
@@ -402,7 +402,7 @@ double ConstraintVector<VECTOR>::operator*(const ConstraintVector& dq) const
 template<typename VECTOR>
 void ConstraintVector<VECTOR>::add(double s, const ConstraintVector& dq)
 {
-  if(GetBehavior() == "fullmem")
+  if(GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
   {
     assert(dq._local_control_constraint.size() == _local_control_constraint.size());
 
@@ -425,7 +425,7 @@ void ConstraintVector<VECTOR>::add(double s, const ConstraintVector& dq)
 template<typename VECTOR>
 void ConstraintVector<VECTOR>::equ(double s, const ConstraintVector& dq)
 {
-  if(GetBehavior() == "fullmem")
+  if(GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
   {
     assert(dq._local_control_constraint.size() == _local_control_constraint.size());
 
@@ -455,7 +455,7 @@ void ConstraintVector<VECTOR>::PrintInfos(std::stringstream& out)
   }
   else
   {
-    if(GetBehavior() == "fullmem")
+    if(GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
     {
       out<<"\tNumber of Timepoints: "<<_local_control_constraint.size()<<std::endl;
       unsigned int min_dofs =0;

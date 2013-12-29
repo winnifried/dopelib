@@ -54,5 +54,6 @@ void ReSizeVector(unsigned int ndofs,
  */
 void ReSizeVector(const dealii::BlockIndices&, dealii::Vector<double>& vector);
 
+
 }//end of namespace
 #endif /* _DOpEHelper_H_ */

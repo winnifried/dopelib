@@ -94,7 +94,7 @@ class InstatReducedProblem: public ReducedProblemInterface<PROBLEM, VECTOR>
 	 *                          the OutputHandler
 	 */
   template<typename INTEGRATORDATACONT>
-    InstatReducedProblem(PROBLEM *OP, std::string state_behavior,
+    InstatReducedProblem(PROBLEM *OP, DOpEtypes::VectorStorageType state_behavior,
 			 ParameterReader &param_reader,
 			 INTEGRATORDATACONT& idc,
 			 int base_priority = 0);
@@ -114,7 +114,7 @@ class InstatReducedProblem: public ReducedProblemInterface<PROBLEM, VECTOR>
 	 *                          the OutputHandler
          */
   template<typename STATEINTEGRATORDATACONT, typename CONTROLINTEGRATORCONT>
-    InstatReducedProblem(PROBLEM *OP, std::string state_behavior,
+    InstatReducedProblem(PROBLEM *OP, DOpEtypes::VectorStorageType state_behavior,
 			 ParameterReader &param_reader, CONTROLINTEGRATORCONT& c_idc,
 			 STATEINTEGRATORDATACONT & s_idc, int base_priority = 0);
   
@@ -420,7 +420,7 @@ void InstatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER, CONTROLINTEGR
       InstatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER,
           CONTROLINTEGRATOR, INTEGRATOR, PROBLEM, VECTOR, dopedim, dealdim>::InstatReducedProblem(
           PROBLEM *OP,
-          std::string state_behavior,
+          DOpEtypes::VectorStorageType state_behavior,
           ParameterReader &param_reader,
           INTEGRATORDATACONT& idc,
           int base_priority) :
@@ -455,7 +455,7 @@ void InstatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER, CONTROLINTEGR
   template<typename STATEINTEGRATORDATACONT, typename CONTROLINTEGRATORCONT>
       InstatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER,
           CONTROLINTEGRATOR, INTEGRATOR, PROBLEM, VECTOR, dopedim, dealdim>::InstatReducedProblem(
-          PROBLEM *OP, std::string state_behavior,
+          PROBLEM *OP, DOpEtypes::VectorStorageType state_behavior,
           ParameterReader &param_reader,
           CONTROLINTEGRATORCONT& c_idc,
           STATEINTEGRATORDATACONT & s_idc,

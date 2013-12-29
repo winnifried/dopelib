@@ -164,14 +164,14 @@ main(int argc, char **argv)
   DD DD_1(zf);
   P.SetDirichletBoundaryColors(0, comp_mask, &DD_1);
 
-  RP solver(&P, "fullmem", pr, idc, 2);
+  RP solver(&P, DOpEtypes::VectorStorageType::fullmem, pr, idc, 2);
 
   //uncomment to use SNOPT if installed
-  //SNOPT_Alg Alg(&P,&solver,"fullmem",pr);
-  IPOPT_Alg Alg(&P, &solver, "fullmem", pr);
+  //SNOPT_Alg Alg(&P,&solver,DOpEtypes::VectorStorageType::fullmem,pr);
+  IPOPT_Alg Alg(&P, &solver, DOpEtypes::VectorStorageType::fullmem, pr);
 
   Alg.ReInit();
-  ControlVector<BlockVector<double> > q(&DOFH, "fullmem");
+  ControlVector<BlockVector<double> > q(&DOFH, DOpEtypes::VectorStorageType::fullmem);
 
   for (int i = 0; i < niter; i++)
   {

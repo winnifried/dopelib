@@ -285,11 +285,11 @@ main(int argc, char **argv)
   P4.SetInitialValues(&initial_data);
   P5.SetInitialValues(&initial_data);
 
-  RP1 solver1(&P1, "fullmem", pr, idc);
-  RP2 solver2(&P2, "fullmem", pr, idc);
-  RP3 solver3(&P3, "fullmem", pr, idc);
-  RP4 solver4(&P4, "fullmem", pr, idc);
-  RP5 solver5(&P5, "fullmem", pr, idc);
+  RP1 solver1(&P1, DOpEtypes::VectorStorageType::fullmem, pr, idc);
+  RP2 solver2(&P2, DOpEtypes::VectorStorageType::fullmem, pr, idc);
+  RP3 solver3(&P3, DOpEtypes::VectorStorageType::fullmem, pr, idc);
+  RP4 solver4(&P4, DOpEtypes::VectorStorageType::fullmem, pr, idc);
+  RP5 solver5(&P5, DOpEtypes::VectorStorageType::fullmem, pr, idc);
 
   //Use one outputhandler for all problems
   DOpEOutputHandler<VECTOR> output(&solver1, pr);
@@ -311,7 +311,7 @@ main(int argc, char **argv)
     Alg5.ReInit();
 
     Vector<double> solution;
-    ControlVector<VECTOR> q(&DOFH, "fullmem");
+    ControlVector<VECTOR> q(&DOFH, DOpEtypes::VectorStorageType::fullmem);
 
     Alg1.SolveForward(q);
     Alg2.SolveForward(q);

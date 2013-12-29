@@ -171,7 +171,7 @@ main(int argc, char **argv)
   //Set zero dirichlet at the hole in the middle of the domain
   P.SetDirichletBoundaryColors(4, comp_mask, &DD1);
   /************************************************/
-  RP solver(&P, "fullmem", pr, idc);
+  RP solver(&P, DOpEtypes::VectorStorageType::fullmem, pr, idc);
 
   //Only needed for pure PDE Problems
   DOpEOutputHandler<VECTOR> out(&solver, pr);

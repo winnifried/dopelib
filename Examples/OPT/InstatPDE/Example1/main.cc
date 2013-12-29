@@ -190,7 +190,7 @@ main(int argc, char **argv)
   //prepare the initial data
   P.SetInitialValues(&zf);
 
-  RP solver(&P, "fullmem", pr, idc);
+  RP solver(&P, DOpEtypes::VectorStorageType::fullmem, pr, idc);
 
   RNA Alg(&P, &solver, pr);
   try
@@ -198,7 +198,7 @@ main(int argc, char **argv)
     Alg.ReInit();
 
     Vector<double> solution;
-    ControlVector<VECTOR> q(&DOFH, "fullmem");
+    ControlVector<VECTOR> q(&DOFH, DOpEtypes::VectorStorageType::fullmem);
 
     Alg.Solve(q);
   }

@@ -1,5 +1,7 @@
 Changelog DOpE
 ==============
+29.12.2013: Added DOpEType::VectorStorageType for the vector behavior in 
+	    the *Vectors replacing the std::string.
 13.12.2013: 1) description.tex ueberarbeitet
 	    2) contents.tex insbesondere der OPT examples
 	       und PDE/Instat/Example2

@@ -71,7 +71,7 @@ namespace DOpE
      */
     Reduced_IpoptAlgorithm(PROBLEM* OP,
 			   ReducedProblemInterface<PROBLEM, VECTOR>* S,
-			   std::string vector_behavior,
+			   DOpEtypes::VectorStorageType vector_behavior,
 			   ParameterReader &param_reader,
 			   DOpEExceptionHandler<VECTOR>* Except=NULL,
 			   DOpEOutputHandler<VECTOR>* Output=NULL,
@@ -103,7 +103,7 @@ namespace DOpE
 
   private:
     std::string _postindex;
-    std::string _vector_behavior;
+    DOpEtypes::VectorStorageType _vector_behavior;
 
     double _tol;
     bool _capture_out;
@@ -132,7 +132,7 @@ void Reduced_IpoptAlgorithm<PROBLEM, VECTOR>::declare_params(ParameterReader &pa
 template <typename PROBLEM, typename VECTOR>
 Reduced_IpoptAlgorithm<PROBLEM, VECTOR>::Reduced_IpoptAlgorithm(PROBLEM* OP,
 										  ReducedProblemInterface<PROBLEM, VECTOR>* S,
-										  std::string vector_behavior,
+										  DOpEtypes::VectorStorageType vector_behavior,
 										  ParameterReader &param_reader,
 										  DOpEExceptionHandler<VECTOR>* Except,
 										  DOpEOutputHandler<VECTOR>* Output,

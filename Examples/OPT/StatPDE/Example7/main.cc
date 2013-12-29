@@ -196,12 +196,12 @@ main(int argc, char **argv)
   P.SetBoundaryFunctionalColors(3);
   P.SetBoundaryEquationColors(3);
 
-  RP solver(&P, "fullmem", pr, idc);
+  RP solver(&P, DOpEtypes::VectorStorageType::fullmem, pr, idc);
 
-  MMA Alg(&P, &CA, &solver, "fullmem", pr, idc);
+  MMA Alg(&P, &CA, &solver, DOpEtypes::VectorStorageType::fullmem, pr, idc);
 
   Alg.ReInit();
-  ControlVector<VECTOR> q(&DOFH, "fullmem");
+  ControlVector<VECTOR> q(&DOFH, DOpEtypes::VectorStorageType::fullmem);
   //init q
   {
     q = 0.4;

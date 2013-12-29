@@ -234,7 +234,7 @@ main(int argc, char **argv)
   P.SetBoundaryEquationColors(1);
 
   //We define the stateproblem, which steers the solution process.
-  RP solver(&P, "fullmem", pr, idc);
+  RP solver(&P, DOpEtypes::VectorStorageType::fullmem, pr, idc);
 
   //Only needed for pure PDE Problems: We define and register
   //the output- and exception handler. The first handels the

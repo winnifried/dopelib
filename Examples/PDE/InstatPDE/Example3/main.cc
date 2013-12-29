@@ -225,12 +225,12 @@ main(int argc, char **argv)
 
   try
   {
-    RP solver(&P, "store_on_disc", pr, idc);
+    RP solver(&P, DOpEtypes::VectorStorageType::fullmem, pr, idc);
     
     RNA Alg(&P, &solver, pr);
 
     Alg.ReInit();
-    ControlVector<VECTOR> q(&DOFH, "fullmem");
+    ControlVector<VECTOR> q(&DOFH, DOpEtypes::VectorStorageType::fullmem);
 
     Alg.SolveForward(q);
 

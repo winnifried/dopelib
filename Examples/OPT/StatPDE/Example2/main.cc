@@ -154,14 +154,14 @@ main(int argc, char **argv)
 
   P.SetDirichletBoundaryColors(0, comp_mask, &DD);
 
-  RP solver(&P, "fullmem", pr, idc);
+  RP solver(&P, DOpEtypes::VectorStorageType::fullmem, pr, idc);
   RNA Alg(&P, &solver, pr);
 
   try
   {
     Alg.ReInit();
 
-    ControlVector<VECTOR> q(&DOFH, "fullmem");
+    ControlVector<VECTOR> q(&DOFH, DOpEtypes::VectorStorageType::fullmem);
     {
       //PreInitialization of q
       q = 2.;

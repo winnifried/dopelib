@@ -55,7 +55,7 @@ namespace DOpE
       public:
         Reduced_SnoptAlgorithm(PROBLEM* OP,
             ReducedProblemInterface<PROBLEM, VECTOR>* S,
-            std::string vector_behavior, ParameterReader &param_reader,
+            DOpEtypes::VectorStorageType vector_behavior, ParameterReader &param_reader,
             DOpEExceptionHandler<VECTOR>* Except = NULL,
             DOpEOutputHandler<VECTOR>* Output = NULL, int base_priority = 0);
         ~Reduced_SnoptAlgorithm();
@@ -90,7 +90,7 @@ namespace DOpE
         int rsa_func_(DOpEWrapper::SNOPT_FUNC_DATA& data);
 #endif
         std::string _postindex;
-        std::string _vector_behavior;
+        DOpEtypes::VectorStorageType _vector_behavior;
 
         double _func_prec, _feas_tol, _opt_tol;
         int _max_inner_iter, _max_outer_iter;
@@ -135,7 +135,7 @@ namespace DOpE
   template<typename PROBLEM, typename VECTOR>
     Reduced_SnoptAlgorithm<PROBLEM, VECTOR>::Reduced_SnoptAlgorithm(PROBLEM* OP,
         ReducedProblemInterface<PROBLEM, VECTOR>* S,
-        std::string vector_behavior, ParameterReader &param_reader,
+        DOpEtypes::VectorStorageType vector_behavior, ParameterReader &param_reader,
         DOpEExceptionHandler<VECTOR>* Except, DOpEOutputHandler<VECTOR>* Output,
         int base_priority) :
         ReducedAlgorithm<PROBLEM, VECTOR>(OP, S, param_reader, Except, Output,

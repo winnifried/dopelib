@@ -208,7 +208,7 @@ main(int argc, char **argv)
   P.SetDirichletBoundaryColors(0, comp_mask, &DD1);
   P.SetDirichletBoundaryColors(1, comp_mask, &DD1);
   /************************************************/
-  RP solver(&P, "fullmem", pr, idc);
+  RP solver(&P, DOpEtypes::VectorStorageType::fullmem, pr, idc);
 
   //Only needed for pure PDE Problems
   DOpEOutputHandler<VECTOR> out(&solver, pr);
@@ -231,11 +231,11 @@ main(int argc, char **argv)
       pr.get_integer("facequad order") + 1);
   IDC idc_high(quadrature_formula_high, face_quadrature_formula_high);
   STH DOFH_higher_order(triangulation, state_fe_high);
-  HO_DWRC dwrc(DOFH_higher_order, idc_high, "fullmem", pr,
+  HO_DWRC dwrc(DOFH_higher_order, idc_high, DOpEtypes::VectorStorageType::fullmem, pr,
       DOpEtypes::primal_only);
 
-  L2_RESC l2resc(DOFH, "fullmem", pr, DOpEtypes::primal_only);
-  H1_RESC h1resc(DOFH, "fullmem", pr, DOpEtypes::primal_only);
+  L2_RESC l2resc(DOFH, DOpEtypes::VectorStorageType::fullmem, pr, DOpEtypes::primal_only);
+  H1_RESC h1resc(DOFH, DOpEtypes::VectorStorageType::fullmem, pr, DOpEtypes::primal_only);
 
   solver.InitializeDWRC(dwrc);
   //**************************************************************************************************

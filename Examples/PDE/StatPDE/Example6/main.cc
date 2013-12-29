@@ -187,7 +187,7 @@ main(int argc, char **argv)
 
   //We solve first with the nonpreconditioned GMRES with blockstructure.
   {
-    RP1 solver1(&Pblock, "fullmem", pr, idcblock);
+    RP1 solver1(&Pblock, DOpEtypes::VectorStorageType::fullmem, pr, idcblock);
 
     DOpEOutputHandler<VECTORBLOCK> out(&solver1, pr);
     DOpEExceptionHandler<VECTORBLOCK> ex(&out);
@@ -250,8 +250,8 @@ main(int argc, char **argv)
   //Here we solve with nonpreconditioned GMRES without blockstructure as
   //well as with the SSOR preconditioned GMRES.
   {
-    RP2 solver2(&P, "fullmem", pr, idc);
-    RP3 solver3(&P, "fullmem", pr, idc);
+    RP2 solver2(&P, DOpEtypes::VectorStorageType::fullmem, pr, idc);
+    RP3 solver3(&P, DOpEtypes::VectorStorageType::fullmem, pr, idc);
 
     DOpEOutputHandler<VECTOR> out(&solver2, pr);
     DOpEExceptionHandler<VECTOR> ex(&out);

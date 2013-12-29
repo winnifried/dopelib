@@ -5,7 +5,7 @@ TODO DOpE
 TODO nach Herausgabe des releases
 ---------------------------------
 
-- only_last_step -> PDE/Instat/Example 2 
+- only_recent -> PDE/Instat/Example 2 
 
 Standard TODO fuer naechstes Treffen
 ------------------------------------

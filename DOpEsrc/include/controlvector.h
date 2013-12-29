@@ -25,6 +25,7 @@
 #define _CONTROL_VECTOR_H_
 
 #include "spacetimehandler_base.h"
+#include "dopetypes.h"
 
 #include <lac/vector.h>
 #include <lac/block_vector_base.h>
@@ -56,7 +57,7 @@ template<typename VECTOR>
     //      Note that this requires to keep track of the interpolation
     //      between state and control time points...
     ControlVector(const ControlVector& ref);
-    ControlVector(const SpaceTimeHandlerBase<VECTOR>* STH, std::string behavior);
+    ControlVector(const SpaceTimeHandlerBase<VECTOR>* STH, DOpEtypes::VectorStorageType behavior);
     ~ControlVector();
 
     /**
@@ -197,13 +198,14 @@ template<typename VECTOR>
 
     /**
      * This returns the behavior of the ControlVector
-     * Currently implemented are the following posibilities
-     * @par  fullmem         Means there is a spacial vector for each time point. The whole vector
+     * 
+     * @par  fullmem         Means there is a spacial vector for each time point. 
+     *                       The whole vector
      *                       is stored in main memory.
      *
      * @return               A string indicating the behavior.
      */
-    std::string GetBehavior() const { return _behavior; }
+    DOpEtypes::VectorStorageType GetBehavior() const { return _behavior; }
 
     /**
      * @return               A const pointer to the SpaceTimeHandler associated with this vector.
@@ -241,7 +243,7 @@ template<typename VECTOR>
     mutable bool _lock;
 
     const SpaceTimeHandlerBase<VECTOR>* _STH;
-    std::string _behavior;
+    DOpEtypes::VectorStorageType _behavior;
     unsigned int _sfh_ticket;
   };
 

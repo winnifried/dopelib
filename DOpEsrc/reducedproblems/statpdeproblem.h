@@ -92,7 +92,7 @@ namespace DOpE
 	 *                          the OutputHandler
 	 */
         template<typename INTEGRATORDATACONT>
-          StatPDEProblem(PROBLEM *OP, std::string state_behavior,
+          StatPDEProblem(PROBLEM *OP, DOpEtypes::VectorStorageType state_behavior,
               ParameterReader &param_reader, INTEGRATORDATACONT& idc,
               int base_priority = 0);
 
@@ -109,7 +109,7 @@ namespace DOpE
 	 *                          the OutputHandler
          */
         template<typename INTEGRATORDATACONT>
-          StatPDEProblem(PROBLEM *OP, std::string state_behavior,
+          StatPDEProblem(PROBLEM *OP, DOpEtypes::VectorStorageType state_behavior,
               ParameterReader &param_reader, INTEGRATORDATACONT& idc1,
               INTEGRATORDATACONT& idc2, int base_priority = 0);
 
@@ -436,7 +436,7 @@ namespace DOpE
       typename VECTOR, int dealdim>
     template<typename INTEGRATORDATACONT>
       StatPDEProblem<NONLINEARSOLVER, INTEGRATOR, PROBLEM, VECTOR, dealdim>::StatPDEProblem(
-          PROBLEM *OP, std::string state_behavior,
+          PROBLEM *OP, DOpEtypes::VectorStorageType state_behavior,
           ParameterReader &param_reader, INTEGRATORDATACONT& idc,
           int base_priority)
           : PDEProblemInterface<PROBLEM, VECTOR, dealdim>(OP, base_priority), _u(
@@ -458,7 +458,7 @@ namespace DOpE
       typename VECTOR, int dealdim>
     template<typename INTEGRATORDATACONT>
       StatPDEProblem<NONLINEARSOLVER, INTEGRATOR, PROBLEM, VECTOR, dealdim>::StatPDEProblem(
-          PROBLEM *OP, std::string state_behavior,
+          PROBLEM *OP, DOpEtypes::VectorStorageType state_behavior,
           ParameterReader &param_reader, INTEGRATORDATACONT& idc,
           INTEGRATORDATACONT& idc2, int base_priority)
           : PDEProblemInterface<PROBLEM, VECTOR, dealdim>(OP, base_priority), _u(

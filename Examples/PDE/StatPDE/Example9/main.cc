@@ -146,7 +146,7 @@ main(int argc, char **argv)
   P.SetDirichletBoundaryColors(3, comp_mask, &DD1);
   P.SetBoundaryEquationColors(1);
 
-  RP solver(&P, "fullmem", pr, idc);
+  RP solver(&P, DOpEtypes::VectorStorageType::fullmem, pr, idc);
   //Only needed for pure PDE Problems
   DOpEOutputHandler<VECTOR> out(&solver, pr);
   DOpEExceptionHandler<VECTOR> ex(&out);

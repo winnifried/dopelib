@@ -168,14 +168,14 @@ main(int argc, char **argv)
   P.SetBoundaryFunctionalColors(3);
   P.SetBoundaryEquationColors(3);
 
-  RP solver(&P, "fullmem", pr, idc);
+  RP solver(&P, DOpEtypes::VectorStorageType::fullmem, pr, idc);
 
-  SNOPT_Alg Alg(&P, &solver, "fullmem", pr);
+  SNOPT_Alg Alg(&P, &solver, DOpEtypes::VectorStorageType::fullmem, pr);
 
   int niter = 2;
 
   Alg.ReInit();
-  ControlVector<BlockVector<double> > q(&DOFH, "fullmem");
+  ControlVector<BlockVector<double> > q(&DOFH, DOpEtypes::VectorStorageType::fullmem);
   //init q
   {
     q = 0.4;
