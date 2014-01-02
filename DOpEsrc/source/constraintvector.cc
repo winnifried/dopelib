@@ -143,7 +143,7 @@ VECTOR& ConstraintVector<VECTOR>::GetSpacialVector(std::string name)
   }
   else
   {
-    throw DOpEException("Unknown Behavior " + GetBehavior(),"ConstraintVector<VECTOR>::GetSpacialVector");
+    throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),"ConstraintVector<VECTOR>::GetSpacialVector");
   }
 }
 
@@ -165,7 +165,7 @@ const VECTOR& ConstraintVector<VECTOR>::GetSpacialVector(std::string name) const
   }
   else
   {
-    throw DOpEException("Unknown Behavior " + GetBehavior(),"ConstraintVector<VECTOR>::GetSpacialVector");
+    throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),"ConstraintVector<VECTOR>::GetSpacialVector");
   }
 }
 
@@ -225,7 +225,7 @@ void DOpE::ConstraintVector<dealii::BlockVector<double> >::ReSizeLocalSpace(
   }
   else
   {
-    throw DOpEException("Unknown Behavior " + GetBehavior(),
+    throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),
                         "ConstraintVector<dealii::BlockVector<double> >::ReSizeSpace");
   }
 
@@ -256,7 +256,7 @@ void ConstraintVector<dealii::Vector<double> >::ReSizeLocalSpace(unsigned int nd
   }
   else
   {
-    throw DOpEException("Unknown Behavior " + GetBehavior(),
+    throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),
                         "ConstraintVector<dealii::Vector<double> >::ReSizeSpace");
   }
 
@@ -279,7 +279,7 @@ void ConstraintVector<VECTOR>::operator=(double value)
   }
   else
   {
-    throw DOpEException("Unknown Behavior " + GetBehavior(),"ConstraintVector<VECTOR>::opterator=");
+    throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),"ConstraintVector<VECTOR>::opterator=");
   }
 }
 
@@ -327,7 +327,7 @@ void ConstraintVector<VECTOR>::operator=(const ConstraintVector& dq)
   }
   else
   {
-    throw DOpEException("Unknown Behavior " + GetBehavior(),"ConstraintVector<VECTOR>::operator=");
+    throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),"ConstraintVector<VECTOR>::operator=");
   }
 }
 
@@ -349,7 +349,7 @@ void ConstraintVector<VECTOR>::operator+=(const ConstraintVector& dq)
   }
   else
   {
-    throw DOpEException("Unknown Behavior " + GetBehavior(),"ConstraintVector<VECTOR>::operator+=");
+    throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),"ConstraintVector<VECTOR>::operator+=");
   }
 }
 
@@ -369,7 +369,7 @@ void ConstraintVector<VECTOR>::operator*=(double a)
   }
   else
   {
-    throw DOpEException("Unknown Behavior " + GetBehavior(),"ConstraintVector<VECTOR>::operator*=");
+    throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),"ConstraintVector<VECTOR>::operator*=");
   }
 }
 
@@ -394,7 +394,7 @@ double ConstraintVector<VECTOR>::operator*(const ConstraintVector& dq) const
   }
   else
   {
-    throw DOpEException("Unknown Behavior " + GetBehavior(),"ConstraintVector<VECTOR>::operator*");
+    throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),"ConstraintVector<VECTOR>::operator*");
   }
 }
 
@@ -417,7 +417,7 @@ void ConstraintVector<VECTOR>::add(double s, const ConstraintVector& dq)
   }
   else
   {
-    throw DOpEException("Unknown Behavior " + GetBehavior(),"ConstraintVector<VECTOR>::add");
+    throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),"ConstraintVector<VECTOR>::add");
   }
 }
 
@@ -440,7 +440,7 @@ void ConstraintVector<VECTOR>::equ(double s, const ConstraintVector& dq)
   }
   else
   {
-    throw DOpEException("Unknown Behavior " + GetBehavior(),"ConstraintVector<VECTOR>::equ");
+    throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),"ConstraintVector<VECTOR>::equ");
   }
 }
 
@@ -478,7 +478,7 @@ void ConstraintVector<VECTOR>::PrintInfos(std::stringstream& out)
     }
     else
     {
-      throw DOpEException("Unknown Behavior " + GetBehavior(),"ConstraintVector<VECTOR>::PrintInfos");
+      throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),"ConstraintVector<VECTOR>::PrintInfos");
     }
   }
 }

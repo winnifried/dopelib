@@ -26,6 +26,8 @@
 
 #include <string>
 
+#include "dopeexception.h"
+
 namespace DOpE
 {
   namespace DOpEtypes
@@ -124,8 +126,42 @@ namespace DOpE
       only_recent
     };
 
+  }//End of namespace DOpEtypes
 
-  }
-}
+
+  /**
+   * Transfers DOpEtypes::VectorStorageType to Human readable values
+   */
+  template<typename C>
+    static std::string DOpEtypesToString(const C& t)
+    {
+      throw DOpEException("Not implemented!","DOpEtypesToString");
+    }
+
+    template <>
+    std::string DOpEtypesToString(const DOpEtypes::VectorStorageType& t)
+    {
+      if( DOpEtypes::VectorStorageType::fullmem == t )
+      {
+	return "fullmem";
+      }
+      else if( DOpEtypes::VectorStorageType::store_on_disc == t )
+      {
+	return "store_on_disc";
+      }
+      else if( DOpEtypes::VectorStorageType::only_recent == t )
+      {
+	return "only_recent";
+      }
+      else
+      {
+	std::stringstream out;
+	out<<"Unknown DOpEtypes::VectorStorageType"<< std::endl;
+	out<<"Code given is "<< t<<std::endl;
+	throw DOpEException(out.str(),"DOpEtypesToString<DOpEtypes::VectorStorageType");
+      }
+    }
+
+}//End of Namespace DOpE
 
 #endif /* DOPETYPES_H_ */

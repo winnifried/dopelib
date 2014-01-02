@@ -469,8 +469,13 @@ do not fit the above but are important for the user to know.
 \begin{remark}
 \label{remark_state_behavior}
 We notice that the behavior of the statevector can be chosen as 
-\texttt{fullmem} or \texttt{store\underline{ }on\underline{ }disc}. In the
+\texttt{fullmem}, \texttt{only_recent}, or 
+\texttt{store\underline{ }on\underline{ }disc}. In the
 first state, the RAM memory of the computer is used. In the second state,
+only the spatial vectors at the current time step (and the preious one)
+are stored. This reduces memory requirements, but also prohibits access to the
+whole space-time trajectory after the computation.
+In the third state,
 all vectors are written on disc, to avoid the RAM. This might take some 
 time at the beginning of a new executing program (cleary depending 
 on the number of spatial and temporal unknowns and the capabilities of your 

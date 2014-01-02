@@ -72,7 +72,7 @@ void ControlVector<VECTOR>::ReInit()
     }
     else
     {
-      throw DOpEException("Unknown Behavior " + GetBehavior(),"ControlVector<VECTOR>::ReInit");
+      throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),"ControlVector<VECTOR>::ReInit");
     }
 
     _lock= false;
@@ -94,7 +94,7 @@ ControlVector<VECTOR>::~ControlVector()
   }
   else
   {
-    throw DOpEException("Unknown Behavior " + GetBehavior(),"ControlVector<VECTOR>::~ControlVector");
+    throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),"ControlVector<VECTOR>::~ControlVector");
   }
 }
 
@@ -186,7 +186,7 @@ void ControlVector<dealii::BlockVector<double> >::ReSizeSpace(unsigned int ndofs
   }
   else
   {
-    throw DOpEException("Unknown Behavior " + GetBehavior(),"ControlVector<VECTOR>::ReSizeSpace");
+    throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),"ControlVector<VECTOR>::ReSizeSpace");
   }
 
 }
@@ -227,7 +227,7 @@ void ControlVector<dealii::Vector<double> >::ReSizeSpace(unsigned int ndofs, con
   }
   else
   {
-    throw DOpEException("Unknown Behavior " + GetBehavior(), "ControlVector<VECTOR>::ReSizeSpace");
+    throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()), "ControlVector<VECTOR>::ReSizeSpace");
   }
 
 }
@@ -248,7 +248,7 @@ void ControlVector<VECTOR>::operator=(double value)
   }
   else
   {
-    throw DOpEException("Unknown Behavior " + GetBehavior(),"ControlVector<VECTOR>::opterator=");
+    throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),"ControlVector<VECTOR>::opterator=");
   }
 }
 
@@ -293,7 +293,7 @@ void ControlVector<VECTOR>::operator=(const ControlVector& dq)
   }
   else
   {
-    throw DOpEException("Unknown Behavior " + GetBehavior(),"ControlVector<VECTOR>::operator=");
+    throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),"ControlVector<VECTOR>::operator=");
   }
 }
 
@@ -313,7 +313,7 @@ void ControlVector<VECTOR>::operator+=(const ControlVector& dq)
   }
   else
   {
-    throw DOpEException("Unknown Behavior " + GetBehavior(),"ControlVector<VECTOR>::operator+=");
+    throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),"ControlVector<VECTOR>::operator+=");
   }
 }
 
@@ -331,7 +331,7 @@ void ControlVector<VECTOR>::operator*=(double a)
   }
   else
   {
-    throw DOpEException("Unknown Behavior " + GetBehavior(),"ControlVector<VECTOR>::operator*=");
+    throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),"ControlVector<VECTOR>::operator*=");
   }
 }
 
@@ -354,7 +354,7 @@ double ControlVector<VECTOR>::operator*(const ControlVector& dq) const
   }
   else
   {
-    throw DOpEException("Unknown Behavior " + GetBehavior(),"ControlVector<VECTOR>::operator*");
+    throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),"ControlVector<VECTOR>::operator*");
   }
 }
 
@@ -375,7 +375,7 @@ void ControlVector<VECTOR>::add(double s, const ControlVector& dq)
   }
   else
   {
-    throw DOpEException("Unknown Behavior " + GetBehavior(),"ControlVector<VECTOR>::add");
+    throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),"ControlVector<VECTOR>::add");
   }
 }
 
@@ -396,7 +396,7 @@ void ControlVector<VECTOR>::equ(double s, const ControlVector& dq)
   }
   else
   {
-    throw DOpEException("Unknown Behavior " + GetBehavior(),"ControlVector<VECTOR>::equ");
+    throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),"ControlVector<VECTOR>::equ");
   }
 }
 
@@ -423,7 +423,7 @@ void ControlVector<VECTOR>::max(const ControlVector& dq)
   }
   else
   {
-    throw DOpEException("Unknown Behavior " + GetBehavior(),"ControlVector<VECTOR>::equ");
+    throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),"ControlVector<VECTOR>::equ");
   }
 }
 
@@ -451,7 +451,7 @@ void ControlVector<VECTOR>::min(const ControlVector& dq)
   }
   else
   {
-    throw DOpEException("Unknown Behavior " + GetBehavior(),"ControlVector<VECTOR>::equ");
+    throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),"ControlVector<VECTOR>::equ");
   }
 }
 /******************************************************/
@@ -477,7 +477,7 @@ void ControlVector<VECTOR>::comp_mult(const ControlVector& dq)
   }
   else
   {
-    throw DOpEException("Unknown Behavior " + GetBehavior(),"ControlVector<VECTOR>::equ");
+    throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),"ControlVector<VECTOR>::equ");
   }
 }
 
@@ -499,7 +499,7 @@ void ControlVector<VECTOR>::comp_invert()
   }
   else
   {
-    throw DOpEException("Unknown Behavior " + GetBehavior(),"ControlVector<VECTOR>::equ");
+    throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),"ControlVector<VECTOR>::equ");
   }
 }
 
@@ -533,7 +533,7 @@ void ControlVector<VECTOR>::init_by_sign(double smaller, double larger, double u
   }
   else
   {
-    throw DOpEException("Unknown Behavior " + GetBehavior(),"ControlVector<VECTOR>::equ");
+    throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),"ControlVector<VECTOR>::equ");
   }
 }
 /******************************************************/
@@ -570,7 +570,7 @@ void ControlVector<VECTOR>::PrintInfos(std::stringstream& out)
     }
     else
     {
-      throw DOpEException("Unknown Behavior " + GetBehavior(),"ControlVector<VECTOR>::PrintInfos");
+      throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),"ControlVector<VECTOR>::PrintInfos");
     }
   }
 }

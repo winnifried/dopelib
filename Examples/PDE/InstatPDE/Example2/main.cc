@@ -255,32 +255,42 @@ main(int argc, char **argv)
 
   P.SetInitialValues(&zf);
 
-  RP solver(&P, DOpEtypes::VectorStorageType::fullmem, pr, idc);
-  RNA Alg(&P, &solver, pr);
-
-  // Mesh-refinement cycles
-  int niter = 1;
-  Alg.ReInit();
-  ControlVector<VECTOR> q(&DOFH, DOpEtypes::VectorStorageType::fullmem);
-
-  for (int i = 0; i < niter; i++)
+  try
   {
-    try
+    RP solver(&P, DOpEtypes::VectorStorageType::only_recent, pr, idc);
+    RNA Alg(&P, &solver, pr);
+    
+    // Mesh-refinement cycles
+    int niter = 1;
+    Alg.ReInit();
+    ControlVector<VECTOR> q(&DOFH, DOpEtypes::VectorStorageType::fullmem);
+    
+    for (int i = 0; i < niter; i++)
     {
-      Alg.SolveForward(q);
-    }
-    catch (DOpEException &e)
-    {
-      std::cout
+      try
+      {
+	Alg.SolveForward(q);
+      }
+      catch (DOpEException &e)
+      {
+	std::cout
           << "Warning: During execution of `" + e.GetThrowingInstance()
-              + "` the following Problem occurred!" << std::endl;
-      std::cout << e.GetErrorMessage() << std::endl;
+	  + "` the following Problem occurred!" << std::endl;
+	std::cout << e.GetErrorMessage() << std::endl;
+      }
+      if (i != niter - 1)
+      {
+	DOFH.RefineSpace();
+	Alg.ReInit();
+      }
     }
-    if (i != niter - 1)
-    {
-      DOFH.RefineSpace();
-      Alg.ReInit();
-    }
+  }
+  catch (DOpEException &e)
+  {
+    std::cout
+          << "Warning: During execution of `" + e.GetThrowingInstance()
+      + "` the following Problem occurred!" << std::endl;
+    std::cout << e.GetErrorMessage() << std::endl;
   }
 
   return 0;

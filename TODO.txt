@@ -1,12 +1,6 @@
 TODO DOpE
 =========
 
-
-TODO nach Herausgabe des releases
----------------------------------
-
-- only_recent -> PDE/Instat/Example 2 
-
 Standard TODO fuer naechstes Treffen
 ------------------------------------
 - CDC and FDC should be local template arguments of the methods in 

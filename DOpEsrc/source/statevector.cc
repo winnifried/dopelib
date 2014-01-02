@@ -124,61 +124,91 @@ namespace DOpE
     void
     StateVector<VECTOR>::ReInit()
     {
-      if (!GetSpaceTimeHandler()->IsValidStateTicket(_sfh_ticket))
-        {
-          if (GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
-            {
-              _state.resize(GetSpaceTimeHandler()->GetMaxTimePoint() + 1, NULL);
-              for (unsigned int t = 0; t
-                  <= GetSpaceTimeHandler()->GetMaxTimePoint(); t++)
-                {
-                  SetTimeDoFNumber(t);
-                  ReSizeSpace(GetSpaceTimeHandler()->GetStateNDoFs(t),
-                      GetSpaceTimeHandler()->GetStateDoFsPerBlock(t));
-                }
-            }
-          else
-            {
-              if (GetBehavior() == DOpEtypes::VectorStorageType::store_on_disc)
-                {
-                  _state_information.clear();
-                  _state_information.resize(
-                      GetSpaceTimeHandler()->GetMaxTimePoint() + 1);
-
-                  //delete all old DOpE-Files in the directory
-                  std::string command = "rm -f " + _tmp_dir + "*."
-                      + Utilities::int_to_string(_unique_id) + ".dope";
-                  if (system(command.c_str()) != 0)
-                    {
+      if (GetBehavior() == DOpEtypes::VectorStorageType::only_recent)
+      {
+	//In the only_recent storage case, reinit must be 
+	// called to reset the time to zero!
+	//Since we don't know if the size of the vectors at 
+	//zero corresponds to the length in our given vector
+	//we always reinitialize
+	//As a specialty, in the ReInit function 
+	//in the case only recent, we can't use the 
+	//SetTimeDoFNumber function, as it would fail since 
+	//we move backward in time!
+	_state.resize(2, NULL);
+	if( GetSpaceTimeHandler()->GetMaxTimePoint() < 1)
+	{
+	  throw DOpEException("There are not even two time points. Are you shure this is a non stationary problem?", 
+			       "StateVector::ReInit()");
+	}
+	for (unsigned int t = 0; t
+	       <= 1; t++)
+	{
+	  
+	  _accessor = t;
+	  ReSizeSpace(GetSpaceTimeHandler()->GetStateNDoFs(t),
+		      GetSpaceTimeHandler()->GetStateDoFsPerBlock(t));
+	}
+	
+	_accessor = 0;
+	_lock = false;
+      }
+      else if (!GetSpaceTimeHandler()->IsValidStateTicket(_sfh_ticket))
+      {
+	if (GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
+	{
+	  _state.resize(GetSpaceTimeHandler()->GetMaxTimePoint() + 1, NULL);
+	  for (unsigned int t = 0; t
+		 <= GetSpaceTimeHandler()->GetMaxTimePoint(); t++)
+	  {
+	    SetTimeDoFNumber(t);
+	    ReSizeSpace(GetSpaceTimeHandler()->GetStateNDoFs(t),
+			GetSpaceTimeHandler()->GetStateDoFsPerBlock(t));
+	  }
+	}
+	else
+	{
+	  if (GetBehavior() == DOpEtypes::VectorStorageType::store_on_disc)
+	  {
+	    _state_information.clear();
+	    _state_information.resize(
+	      GetSpaceTimeHandler()->GetMaxTimePoint() + 1);
+	    
+	    //delete all old DOpE-Files in the directory
+	    std::string command = "rm -f " + _tmp_dir + "*."
+	      + Utilities::int_to_string(_unique_id) + ".dope";
+	    if (system(command.c_str()) != 0)
+	    {
                       throw DOpEException("The command " + command + "failed!",
-                          "StateVector<VECTOR>::ReInit");
-                    }
-                  for (unsigned int t = 0; t
-                      <= GetSpaceTimeHandler()->GetMaxTimePoint(); t++)
-                    {
-                      //this is important, because in SetTimeDoFNumber, the
+					  "StateVector<VECTOR>::ReInit");
+	    }
+	    for (unsigned int t = 0; t
+		   <= GetSpaceTimeHandler()->GetMaxTimePoint(); t++)
+	    {
+	      //this is important, because in SetTimeDoFNumber, the
                       //vecotr _state_information gets its updates!
-                      SetTimeDoFNumber(t);
-                      ReSizeSpace(GetSpaceTimeHandler()->GetStateNDoFs(t),
+	      SetTimeDoFNumber(t);
+	      ReSizeSpace(GetSpaceTimeHandler()->GetStateNDoFs(t),
                           GetSpaceTimeHandler()->GetStateDoFsPerBlock(t));
-                    }
-
-                }
-              else
-                {
-                  throw DOpEException("Unknown Behavior " + GetBehavior(),
-                      "StateVector<VECTOR>::ReInit");
-                }
-            }
-          SetTimeDoFNumber(0);
-          _lock = false;
-        }
+	    }
+	    
+	  }
+	  else
+	  {
+	    throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),
+				"StateVector<VECTOR>::ReInit");
+	  }
+	}
+	SetTimeDoFNumber(0);
+	_lock = false;
+      }
     }
   /******************************************************/
   template<typename VECTOR>
     StateVector<VECTOR>::~StateVector()
     {
-      if (GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
+      if (GetBehavior() == DOpEtypes::VectorStorageType::fullmem
+	|| GetBehavior() == DOpEtypes::VectorStorageType::only_recent)
         {
           for (unsigned int i = 0; i < _state.size(); i++)
             {
@@ -219,7 +249,7 @@ namespace DOpE
               _num_active--;
             }
           else
-            throw DOpEException("Unknown Behavior " + GetBehavior(),
+            throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),
                 "StateVector<VECTOR>::~StateVector");
         }
     }
@@ -231,7 +261,8 @@ namespace DOpE
     StateVector<VECTOR>::SetTimeDoFNumber(unsigned int dof_number,
         const TimeIterator& interval) const
     {
-      if (GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
+      if (GetBehavior() == DOpEtypes::VectorStorageType::fullmem
+	|| GetBehavior() == DOpEtypes::VectorStorageType::only_recent)
         {
           this->SetTimeDoFNumber(dof_number);
         }
@@ -262,7 +293,7 @@ namespace DOpE
             }
           else
             {
-              throw DOpEException("Unknown Behavior " + GetBehavior(),
+              throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),
                   "StateVector<VECTOR>::SetTimeDoFNumber");
             }
         }
@@ -273,11 +304,32 @@ namespace DOpE
     void
     StateVector<VECTOR>::SetTimeDoFNumber(unsigned int time_point) const
     {
-      if (GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
-        {
-          _accessor = static_cast<int> (time_point);
-          assert(_accessor < static_cast<int>(_state.size()));
-        }
+      if (GetBehavior() == DOpEtypes::VectorStorageType::only_recent)
+      {
+	if ( time_point - _current_dof_number == 0)
+	{
+	  //nothing to do
+	}
+	else if ( time_point - _current_dof_number == 1)
+	{
+	  //We moved to the next time point.
+	  _accessor = (_accessor + 1)%2;
+	  _current_dof_number = time_point;
+	  //Resize spatial vector.
+	  ReSizeSpace(GetSpaceTimeHandler()->GetStateNDoFs(time_point),
+		      GetSpaceTimeHandler()->GetStateDoFsPerBlock(time_point));
+	}
+	else 
+	{
+	  //invalid movement in time
+	  throw DOpEException("Invalid movement in time. Using the only_recent behavior you may only move forward in time by exatly one time_dof per update. To reset the time to the initial value call the ReInit method of this vector.","StateVector::SetTimeDoFNumber");
+	}  
+      }
+      else if (GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
+      {
+	_accessor = static_cast<int> (time_point);
+	assert(_accessor < static_cast<int>(_state.size()));
+      }
       else
         {
           if (GetBehavior() == DOpEtypes::VectorStorageType::store_on_disc)
@@ -302,7 +354,7 @@ namespace DOpE
             }
           else
             {
-              throw DOpEException("Unknown Behavior " + GetBehavior(),
+              throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),
                   "StateVector<VECTOR>::SetTimeDoFNumber");
             }
         }
@@ -328,7 +380,8 @@ namespace DOpE
     VECTOR&
     StateVector<VECTOR>::GetSpacialVector()
     {
-      if (GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
+      if ( GetBehavior() == DOpEtypes::VectorStorageType::fullmem
+	|| GetBehavior() == DOpEtypes::VectorStorageType::only_recent)
         {
           if (_accessor >= 0)
             {
@@ -350,7 +403,7 @@ namespace DOpE
               else
                 return _local_state;
             }
-          throw DOpEException("Unknown Behavior " + GetBehavior(),
+          throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),
               "StateVector<VECTOR>::GetSpacialVector");
         }
     }
@@ -360,7 +413,8 @@ namespace DOpE
     const VECTOR&
     StateVector<VECTOR>::GetSpacialVector() const
     {
-      if (GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
+      if (GetBehavior() == DOpEtypes::VectorStorageType::fullmem
+	|| GetBehavior() == DOpEtypes::VectorStorageType::only_recent)
         {
           if (_accessor >= 0)
             {
@@ -381,7 +435,7 @@ namespace DOpE
               else
                 return _local_state;
             }
-          throw DOpEException("Unknown Behavior " + GetBehavior(),
+          throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),
               "StateVector<VECTOR>::GetSpacialVector const");
         }
     }
@@ -399,7 +453,8 @@ namespace DOpE
         }
       _lock = true;
 
-      if (GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
+      if (GetBehavior() == DOpEtypes::VectorStorageType::fullmem
+	|| GetBehavior() == DOpEtypes::VectorStorageType::only_recent)
         {
           if (_accessor >= 0)
             {
@@ -422,7 +477,7 @@ namespace DOpE
             }
           else
             {
-              throw DOpEException("Unknown Behavior " + GetBehavior(),
+              throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),
                   "StateVector<VECTOR>::GetSpacialVectorCopy");
             }
         }
@@ -433,9 +488,10 @@ namespace DOpE
   template<>
     void
     DOpE::StateVector<dealii::BlockVector<double> >::ReSizeSpace(
-        unsigned int ndofs, const std::vector<unsigned int>& dofs_per_block)
+        unsigned int ndofs, const std::vector<unsigned int>& dofs_per_block) const
     {
-      if (GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
+      if (GetBehavior() == DOpEtypes::VectorStorageType::fullmem
+	|| GetBehavior() == DOpEtypes::VectorStorageType::only_recent)
         {
           if (_accessor >= 0)
             {
@@ -488,7 +544,7 @@ namespace DOpE
                 }
             }
           else
-            {
+	  { //_accessor < 0
               unsigned int nblocks = dofs_per_block.size();
               if (_local_state.size() != ndofs)
                 {
@@ -560,7 +616,7 @@ namespace DOpE
                 }
             }
           else
-            throw DOpEException("Unknown Behavior " + GetBehavior(),
+            throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),
                 "StateVector<dealii::BlockVector<double> >::ReSizeSpace");
         }
 
@@ -570,9 +626,10 @@ namespace DOpE
   template<>
     void
     DOpE::StateVector<dealii::Vector<double> >::ReSizeSpace(unsigned int ndofs,
-        const std::vector<unsigned int>& /*dofs_per_block*/)
+        const std::vector<unsigned int>& /*dofs_per_block*/) const
     {
-      if (GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
+      if (GetBehavior() == DOpEtypes::VectorStorageType::fullmem
+	|| GetBehavior() == DOpEtypes::VectorStorageType::only_recent)
         {
           if (_accessor >= 0)
             {
@@ -604,12 +661,12 @@ namespace DOpE
                 }
             }
           else
-            {
-              if (_local_state.size() != ndofs)
-                {
-                  _local_state.reinit(ndofs);
-                }
-            }
+	  {//accessor < 0
+	    if (_local_state.size() != ndofs)
+	    {
+	      _local_state.reinit(ndofs);
+	    }
+	  }
         }
       else
         {
@@ -637,7 +694,7 @@ namespace DOpE
                 }
             }
           else
-            throw DOpEException("Unknown Behavior " + GetBehavior(),
+            throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),
                 "StateVector<dealii::Vector<double> >::ReSizeSpace");
         }
 
@@ -665,7 +722,22 @@ namespace DOpE
                 }
               SetTimeDoFNumber(0);
             }
-          else
+          else if (GetBehavior() == DOpEtypes::VectorStorageType::only_recent)
+            {
+	      //No sense in doing so! Only usefull to initialize with zero
+	      if(value != 0.)
+	      {
+		throw DOpEException("Using this function with any value other than zero is not supported in the only_recent behavior",
+				    "StateVector::operator=");
+	      }
+              for (unsigned int i = 0; i < _state.size(); i++)
+                {
+                  assert(_state[i] != NULL);
+                  _state[i]->operator=(value);
+                }
+	      //We don't reset the time here!
+            }
+	  else
             {
               if (GetBehavior() == DOpEtypes::VectorStorageType::store_on_disc)
                 {
@@ -680,7 +752,7 @@ namespace DOpE
                 }
               else
                 {
-                  throw DOpEException("Unknown Behavior " + GetBehavior(),
+                  throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),
                       "StateVector<VECTOR>::opterator=");
                 }
             }
@@ -738,8 +810,13 @@ namespace DOpE
                     }
                   SetTimeDoFNumber(0);
                 }//endif fullmem
-
-              else
+	      else if (GetBehavior() == DOpEtypes::VectorStorageType::only_recent)
+	      {
+		//No sense in doing so! 
+		throw DOpEException("Using this function is not supported in the only_recent behavior",
+				    "StateVector::operator=");
+	      }
+	      else
                 {
                   if (GetBehavior() == DOpEtypes::VectorStorageType::store_on_disc)
                     {
@@ -778,7 +855,7 @@ namespace DOpE
                     }
                   else
                     {
-                      throw DOpEException("Unknown Behavior " + GetBehavior(),
+                      throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),
                           "StateVector<VECTOR>::opterator=");
                     }
                 }
@@ -787,7 +864,8 @@ namespace DOpE
             {
               throw DOpEException(
 		"Own Behavior does not match dq.Behavior. Own Behavior:"
-		+ GetBehavior(),
+		+ DOpEtypesToString(GetBehavior()) + " but dq.Behavior is "
+		+ DOpEtypesToString(dq.GetBehavior()),
                   "StateVector<VECTOR>::equ");
             }
         }
@@ -818,7 +896,13 @@ namespace DOpE
                       _state[i]->operator+=(*(dq._state[i]));
                     }
                   SetTimeDoFNumber(0);
-                }
+                }//endif fullmem
+	      else if (GetBehavior() == DOpEtypes::VectorStorageType::only_recent)
+	      {
+		//No sense in doing so! 
+		throw DOpEException("Using this function is not supported in the only_recent behavior",
+				    "StateVector::operator+=");
+	      }
               else
                 {
                   if (GetBehavior() == DOpEtypes::VectorStorageType::store_on_disc)
@@ -840,7 +924,7 @@ namespace DOpE
                       SetTimeDoFNumber(0);
                     }
                   else
-                    throw DOpEException("Unknown Behavior " + GetBehavior(),
+                    throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),
                         "StateVector<VECTOR>::operator+=");
                 }
             }
@@ -848,7 +932,8 @@ namespace DOpE
             {
               throw DOpEException(
                   "Own Behavior does not match dq.Behavior. Own Behavior:"
-		  + GetBehavior(),
+		  + DOpEtypesToString(GetBehavior()) + " but dq.GetBehavior is "
+		  + DOpEtypesToString(dq.GetBehavior()),
                   "StateVector<VECTOR>::equ");
             }
         }
@@ -875,7 +960,13 @@ namespace DOpE
                   _state[i]->operator*=(value);
                 }
               SetTimeDoFNumber(0);
-            }
+            }//endif fullmem
+	      else if (GetBehavior() == DOpEtypes::VectorStorageType::only_recent)
+	      {
+		//No sense in doing so! 
+		throw DOpEException("Using this function is not supported in the only_recent behavior",
+				    "StateVector::operator*=");
+	      }
           else
             {
               if (GetBehavior() == DOpEtypes::VectorStorageType::store_on_disc)
@@ -891,7 +982,7 @@ namespace DOpE
                 }
               else
                 {
-                  throw DOpEException("Unknown Behavior " + GetBehavior(),
+                  throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),
                       "StateVector<VECTOR>::operator*=");
                 }
             }
@@ -917,7 +1008,13 @@ namespace DOpE
                   ret += _state[i]->operator*(*(dq._state[i]));
                 }
               return ret;
-            }
+            }//endif fullmem
+	  if (GetBehavior() == DOpEtypes::VectorStorageType::only_recent)
+	  {
+		//No sense in doing so! 
+	    throw DOpEException("Using this function is not supported in the only_recent behavior",
+				"StateVector::operator*");
+	  }
           if (GetBehavior() == DOpEtypes::VectorStorageType::store_on_disc)
             {
               if (_lock || dq._lock)
@@ -954,7 +1051,7 @@ namespace DOpE
             }
           else
             {
-              throw DOpEException("Unknown Behavior " + GetBehavior(),
+              throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),
                   "StateVector<VECTOR>::operator*");
             }
         }
@@ -962,7 +1059,8 @@ namespace DOpE
         {
           throw DOpEException(
               "Own Behavior does not match dq.Behavior. Own Behavior:"
-	      + GetBehavior(),
+	      + DOpEtypesToString(GetBehavior()) + " but dq.Behavior is "
+		+ DOpEtypesToString(dq.GetBehavior()),
               "StateVector<VECTOR>::equ");
         }
     }
@@ -993,7 +1091,13 @@ namespace DOpE
                       _state[i]->add(s, *(dq._state[i]));
                     }
                   SetTimeDoFNumber(0);
-                }
+                }//endif fullmem
+	      else if (GetBehavior() == DOpEtypes::VectorStorageType::only_recent)
+	      {
+		//No sense in doing so! 
+		throw DOpEException("Using this function is not supported in the only_recent behavior",
+				    "StateVector::add");
+	      }
               else
                 {
                   if (GetBehavior() == DOpEtypes::VectorStorageType::store_on_disc)
@@ -1016,7 +1120,7 @@ namespace DOpE
                       SetTimeDoFNumber(0);
                     }
                   else
-                    throw DOpEException("Unknown Behavior " + GetBehavior(),
+                    throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),
                         "StateVector<VECTOR>::add");
                 }
             }
@@ -1024,7 +1128,8 @@ namespace DOpE
             {
               throw DOpEException(
                   "Own Behavior does not match dq.Behavior. Own Behavior:"
-		  + GetBehavior(),
+		  + DOpEtypesToString(GetBehavior()) + " but dq.Behavior is "
+		+ DOpEtypesToString(dq.GetBehavior()),
                   "StateVector<VECTOR>::equ");
             }
         }
@@ -1055,7 +1160,13 @@ namespace DOpE
                       _state[i]->equ(s, *(dq._state[i]));
                     }
                   SetTimeDoFNumber(0);
-                }
+                }//endif fullmem
+	      else if (GetBehavior() == DOpEtypes::VectorStorageType::only_recent)
+	      {
+		//No sense in doing so! 
+		throw DOpEException("Using this function is not supported in the only_recent behavior",
+				    "StateVector::equ");
+	      }
               else
                 {
                   if (GetBehavior() == DOpEtypes::VectorStorageType::store_on_disc)
@@ -1077,7 +1188,7 @@ namespace DOpE
                       SetTimeDoFNumber(0);
                     }
                   else
-                    throw DOpEException("Unknown Behavior " + GetBehavior(),
+                    throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),
                         "StateVector<VECTOR>::equ");
                 }
             }
@@ -1085,7 +1196,8 @@ namespace DOpE
             {
               throw DOpEException(
                   "Own Behavior does not match dq.Behavior. Own Behavior:"
-		  + GetBehavior(),
+		  + DOpEtypesToString(GetBehavior()) + " but dq.Behavior is "
+		+ DOpEtypesToString(dq.GetBehavior()),
                   "StateVector<VECTOR>::equ");
             }
         }
@@ -1112,7 +1224,7 @@ namespace DOpE
                   out << "\t" << _local_vectors[0]->size() << std::endl;
                 }
               else
-                throw DOpEException("Unknown Behavior " + GetBehavior(),
+                throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),
                     "StateyVector::PrintInfos");
             }
         }
@@ -1138,6 +1250,14 @@ namespace DOpE
               out << "\tTotal   DoFs: " << total_dofs << std::endl;
               out << "\tMinimal DoFs: " << min_dofs << std::endl;
               out << "\tMaximal DoFs: " << max_dofs << std::endl;
+            }
+          else if (GetBehavior() == DOpEtypes::VectorStorageType::only_recent)
+            {
+              out << "\tNumber of Timepoints: " << 
+		GetSpaceTimeHandler()->GetMaxTimePoint()+1<< std::endl;
+              unsigned int this_size = 0;
+	      this_size = _state[_accessor]->size();
+              out << "\tSpatial DoFs: " << this_size << std::endl;
             }
           else
             {
@@ -1165,7 +1285,7 @@ namespace DOpE
                   out << "\tMaximal DoFs: " << max_dofs << std::endl;
                 }
               else
-                throw DOpEException("Unknown Behavior " + GetBehavior(),
+                throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),
                     "StateyVector::PrintInfos");
             }
         }
@@ -1255,7 +1375,10 @@ namespace DOpE
     void
     StateVector<VECTOR>::ComputeLocalVectors(const TimeIterator& interval) const
     {
-
+      //FIXME: It appears, the _global_to_local stuff is 
+      // needed only for store_on_disc? Then why do we 
+      //take care of the other cases?
+      
       unsigned int n_local_dofs =
           GetSpaceTimeHandler()->GetTimeDoFHandler().GetLocalNbrOfDoFs();
       std::vector<unsigned int> global_indices(n_local_dofs);
@@ -1271,6 +1394,25 @@ namespace DOpE
           for (unsigned int i = 0; i < n_local_dofs; ++i)
             {
               _local_vectors[i] = _state[global_indices[i]];
+              _global_to_local[global_indices[i]] = i;
+            }
+        }
+      else if (GetBehavior() == DOpEtypes::VectorStorageType::only_recent)
+        {
+	  if(n_local_dofs != 2)
+	  {
+	    throw DOpEException("Behavior only_recent can only work with 2 local DoFs per time interval.", "StateVector::ComputeLocalVectors");
+	  }
+	  if(global_indices[1] != _current_dof_number)
+	  {//We do not have the needed information!
+	    throw DOpEException("When using the behavior only_recent you may only use the currently selected interval.", "StateVector::ComputeLocalVectors");	    
+	  }
+          _local_vectors.resize(n_local_dofs);
+          for (unsigned int i = 0; i < n_local_dofs; ++i)
+            {
+              _local_vectors[i] = _state[(_accessor + ((i+1))%2)%2];
+	      //FixMe: Is this the right coordinate, or should this be 
+	      //something else? 
               _global_to_local[global_indices[i]] = i;
             }
         }
@@ -1296,7 +1438,7 @@ namespace DOpE
                 }
             }
           else
-            throw DOpEException("Unknown Behavior " + GetBehavior(),
+            throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),
                 "StateyVector::PrintInfos");
         }
     }

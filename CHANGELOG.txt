@@ -1,13 +1,19 @@
 Changelog DOpE
 ==============
+02.01.2014: Added the StateVector behavior only_recent where only the 
+	    spatial vector of the current timestep exist in memory. 
+	    An example is included in PDE/InstatPDE/Example2
 29.12.2013: Added DOpEType::VectorStorageType for the vector behavior in 
 	    the *Vectors replacing the std::string.
+===============================================================================
+17.12.2013: Release of DOpElib 1.0
+===============================================================================
 13.12.2013: 1) description.tex ueberarbeitet
 	    2) contents.tex insbesondere der OPT examples
 	       und PDE/Instat/Example2
 	       Speziell: wie werden Optimierungsprobleme
 	       mit DOpE geloest (_U _UT _UTT Terme, constraints, etc.)
-	       Hier OPT/STatPDE/Example1 content.tex nun ganz ausfuehrlich
+	       Hier OPT/StatPDE/Example1 content.tex nun ganz ausfuehrlich
             3) PDE/Instat/Example2 auf FSI mit biharmonic mesh
 	       motion erweitert, da altes Programm im 
 	       instationaeren nicht mehr richtig lief.

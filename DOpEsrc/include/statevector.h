@@ -221,7 +221,7 @@ class StateVector
 		 * This function resizes the spatial vector at a prior given time point.
 		 * Hence SetTimeDoFNumber must be called before this function.
 		 */
-		void ReSizeSpace(unsigned int ndofs, const std::vector<unsigned int>& dofs_per_block);
+		void ReSizeSpace(unsigned int ndofs, const std::vector<unsigned int>& dofs_per_block) const;
 
 		/**
 		 * Sets the membervariable '_filename' to the name of the file (e.g. the whole path!) corresponding to 'time_point'.
@@ -284,6 +284,9 @@ class StateVector
 		mutable std::string _filename;
 		mutable std::fstream _filestream;
 
+		//Needed in the only_recent case to decide if the operation is allowed.
+		mutable unsigned int _current_dof_number;
+		
 		//pointer to the dofs in the actual interval. Is only used if the interval is set!
 		mutable std::vector<VECTOR*> _local_vectors;
 

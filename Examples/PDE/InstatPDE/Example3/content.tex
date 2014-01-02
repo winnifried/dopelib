@@ -49,7 +49,10 @@ main memory that are needed in the current time step, while all other
 unknowns are stored on the hard drive. 
 
 This behavior is particularly useful, if many time steps are taken; so that the 
-whole set of unknowns can no longer be stored in main memory. Note that all vectors 
+whole set of unknowns can no longer be stored in main memory, but access to all
+parts of the solution is required after the solution process and thus the 
+option \texttt{only_recent} used in Example~\ref{PDE_Instat_FSI} is not sufficient.
+Note that all vectors 
 will allocate the required memory when the vector is reinitialized to a new size.
 Hence, for large vectors this may need some time.
 

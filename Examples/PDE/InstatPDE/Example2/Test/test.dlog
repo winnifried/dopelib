@@ -10,9 +10,7 @@ This is DOpElib Version: 1.0.0 alpha
 	*   Solving : InstatOptProblemContainer	*
 	*  CDoFs : 	0
 	*  SDoFs : 	Number of Timepoints: 26
-		Total   DoFs: 186576
-		Minimal DoFs: 7176
-		Maximal DoFs: 7176
+		Spatial DoFs: 7176
 	**************************************************
 
 	Computing State Solution:

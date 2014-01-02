@@ -188,13 +188,14 @@ other solutions variables have to be considered
 around $\partial_t v$ such as $J:=J(u)$. 
 The same holds for the corresponding matrix part.
 
-%In addition, we notice that specifically the FSI 3 version of this 
-%code introduces a large amount of total DOFs. Probably, your machine 
-%will terminate in \texttt{fullmem} modus. Here you might change the 
-%statevector behavior to \texttt{store\underline{ }on\underline{ }disc}.
-%However, it takes some time to write all vectors locally on your disc.
-%On a Lenovo X230, it takes $3$ minutes. In a future version of the library,
-%we plan to introduce a less expensive statevector behavior.
-%We also refer to Remark \ref{remark_state_behavior}.
+Further, this example shows, how to change the vector behavior, from 
+our default option \texttt{fullmem}, where the whole vector is stored in 
+the computers main memory. Here, we are only interested in calculating the 
+solution once, hence two vectors, one for the current time point and one for the
+previous one are sufficient. Hence we choose the option 
+\texttt{only_recent} so that we don't have to reserve unneccessary memory.
+If we need to store the whole trajectory for some reason another option is available 
+to circumvent the restrictions due to the size of the main memory, it will be 
+described in Example~\ref{PDE_Instat_Black_Scholes}.
 
 \vspace{0.2cm}
