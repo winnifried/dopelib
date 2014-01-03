@@ -86,6 +86,8 @@ main(int argc, char **argv)
    * Structure: Incompressible INH model and compressible STVK material
    * We use the Q2^c-Q1^c element for discretization.
    * Computation of PointFunctionals, i.e. pressure, x-and y-deflections
+   * Main innovation is the usage of the Kelly error estimator to compute
+   * solutions on adaptively refined meshes.
    */
 
   string paramfile = "dope.prm";
