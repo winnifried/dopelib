@@ -61,6 +61,7 @@ namespace DOpE
           _accessor_index = -3;
         }
       _id_counter++;
+      _current_dof_number = 0;
 
       ReInit();
     }
@@ -116,6 +117,7 @@ namespace DOpE
         }
       _id_counter++;
       _num_active++;
+      _current_dof_number = 0;
       ReInit();
     }
 
@@ -149,7 +151,7 @@ namespace DOpE
 	  ReSizeSpace(GetSpaceTimeHandler()->GetStateNDoFs(t),
 		      GetSpaceTimeHandler()->GetStateDoFsPerBlock(t));
 	}
-	
+	_current_dof_number = 0;
 	_accessor = 0;
 	_lock = false;
       }
