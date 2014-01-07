@@ -241,7 +241,7 @@ main(int argc, char **argv)
     out.Write(outp, 1, 1, 1);
 
     //We compute the value of the functionals. To this end, we have to solve
-    //the PDE at hand. The output of numbers on the screen as well
+    //the PDE at hand. 
     solver.ComputeReducedFunctionals();
   }
   catch (DOpEException &e)
