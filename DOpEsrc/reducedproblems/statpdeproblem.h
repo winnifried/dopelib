@@ -516,7 +516,7 @@ namespace DOpE
       PDEProblemInterface < PROBLEM, VECTOR, dealdim > ::ReInit();
 
       //Some Solvers must be reinited when called
-      // Better have subproblems, so that solver can be reinited here
+      // Better we have subproblems, so that solver can be reinited here
       {
         _state_reinit = true;
         _adjoint_reinit = true;

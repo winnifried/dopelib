@@ -45,7 +45,7 @@ namespace DOpE
   /////////////////////////////
 
   /**
-   * Teis class is the basis for the reduced problems,
+   * This class is the basis for the reduced problems,
    * i.e., those in which the PDE has been elimiated for
    * the solution of stationary and nonstationary PDEs.
    */
