@@ -64,8 +64,11 @@ template<
         const FEValuesExtractors::Vector displacements(0);
 
         const double mu = 80193.800283;
-        const double kappa = 271131.389455;
         const double lambda = 110743.788889;
+
+	// kappa = 2*mu + lambda
+        const double kappa = 271131.389455;
+
 
         for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
         {
@@ -111,8 +114,11 @@ template<
         const FEValuesExtractors::Vector displacements(0);
 
         const double mu = 80193.800283;
-        const double kappa = 271131.389455;
         const double lambda = 110743.788889;
+
+	// kappa = 2*mu + lambda
+        const double kappa = 271131.389455;
+
 
         std::vector<Tensor<2, 2> > phi_grads_v(n_dofs_per_element);
         std::vector<Tensor<2, 2> > phi_grads_real(n_dofs_per_element);
