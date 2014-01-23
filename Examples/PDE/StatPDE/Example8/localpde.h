@@ -64,10 +64,15 @@ template<
 
         const FEValuesExtractors::Vector displacements(0);
 
+	// Physical Lame parameters
         const double mu = 80193.800283;
-        const double kappa = 271131.389455;
         const double lambda = 110743.788889;
+
+	// Abbrev. to avoid lengthy terms 
+	// in the following: rho = mu + lambda
+	//                   kappa = 2*mu + lambda
         const double rho = 190937.589172;
+        const double kappa = 271131.389455;
 
         const double sigma = sqrt(2. / 3.) * 450.0;
         double norm = 0.;
@@ -166,10 +171,15 @@ template<
 
         const FEValuesExtractors::Vector displacements(0);
 
+	// Physical Lame parameters
         const double mu = 80193.800283;
-        const double kappa = 271131.389455;
         const double lambda = 110743.788889;
+
+	// Abbrev. to avoid lengthy terms 
+	// in the following: rho = mu + lambda
+	//                   kappa = 2*mu + lambda
         const double rho = 190937.589172;
+        const double kappa = 271131.389455;
 
         const double sigma = sqrt(2. / 3.) * 450.0;
         double norm = 0.;

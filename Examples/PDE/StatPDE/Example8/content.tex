@@ -6,13 +6,16 @@ Similar to the previous example, we consider the following benchmark problem fro
 \end{equation}
 Here $\tilde{\Omega}$ is again the quadratic domain with a circular hole around the center cut out. Again, we restrict our actual computational domain $\Omega$ to the upper left quarter of $\tilde{\Omega}$ for reasons of symmetry.\\
 We use the symmetric strain tensor $\varepsilon(v) := \frac{1}{2}(\nabla v + \nabla v^T)$, and the symmetric stress tensor $\sigma$ is defined as
-\begin{equation*}
-   \sigma(v) := 2\mu \varepsilon(v)^D + \kappa \cdot tr (\varepsilon(v)) I
-\end{equation*}
+\begin{align*}
+   \sigma(v) &:= 2\mu \varepsilon(v)^D + \rho \, tr (\varepsilon(v)) I = 2\mu\varepsilon(v) + \lambda tr(\varepsilon(v)) I,
+\end{align*}
 where $\tau^D$ is the deviatoric part of a tensor $\tau$, in two dimensions defined as
 \begin{equation*}
    \tau^D := \tau - \frac{1}{2} tr(\tau) I.
 \end{equation*}
+Furthermore, the (standard) Lam\'e parameters are denoted by $\mu$ and
+$\lambda$ and which are more conveniently (here and in the code) expressed through
+$\rho = \mu + \lambda$ and $\kappa = 2\mu + \lambda$.
 The main difference with respect to the elastic case is the projection operator $\Pi$ in equation $(1)$. It is defined as follows:
 \begin{equation*}
 \Pi(\tau) = \left\{
@@ -22,7 +25,9 @@ The main difference with respect to the elastic case is the projection operator 
             \end{array}
             \right. 
 \end{equation*}
-In our computations, we choose $\sigma_0 = \sqrt{\frac{2}{3}}\cdot 450$, and the above parameters $\mu$ and $\kappa$ as $\mu = 80193.800283$ resp. $\kappa = 190937.589172$. The corner points of our computational domain are the same as before, and the boundary conditions are not altered, either.\\
+In our computations, we choose $\sigma_0 = \sqrt{\frac{2}{3}}\cdot 450$, and
+the above parameters $\mu, \lambda$ and $\rho$ as $\mu = 80193.800283, \lambda
+= 110743.788889, $ and $\rho = 190937.589172$, respectively. The corner points of our computational domain are the same as before, and the boundary conditions are not altered, either.\\
 The goal of our computations is to detect a subdomain in $\Omega$ where plastic behavior occurs (compare \textit{E. Stein (editor), Error-controlled Adaptive Finite Elements in Solid Mechanics, Wiley (2003), pp. 386 - 389}). This subdomain depends on the right hand side $g$ in equation $(1)$ which we write as $g = \lambda \cdot p$ with $p = 100$ and $\lambda \in [1.5;4.5]$.\\
 
 \subsubsection{Program description}
