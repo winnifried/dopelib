@@ -26,6 +26,7 @@
 
 #include "reducedalgorithm.h"
 #include "parameterreader.h"
+#include "dopetypes.h"
 
 #include "snopt_wrapper.h"
 
@@ -154,6 +155,12 @@ namespace DOpE
       _vector_behavior = vector_behavior;
       _postindex = "_" + this->GetProblem()->GetName();
 
+      DOpEtypes::ControlType ct = S->GetProblem()->GetSpaceTimeHandler()->GetControlType();
+      if((ct != DOpEtypes::ControlType::initial) && (ct != DOpEtypes::ControlType::stationary))
+      {
+	throw DOpEException("The ControlType: "+ DOpEtypesToString(ct) + " is not supported.",
+              "Reduced_SnoptAlgorithm::Reduced_SnoptAlgorithm");
+      }
     }
 
   /******************************************************/

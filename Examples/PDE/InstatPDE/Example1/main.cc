@@ -195,7 +195,7 @@ main(int argc, char **argv)
   // the type of the control, see dopetypes.h for more information.
   MethodOfLines_SpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR, DIM,
       DIM> DOFH(triangulation, control_fe, state_fe, times,
-      DOpEtypes::undefined);
+      DOpEtypes::ControlType::stationary);
 
   // As we solve a pure PDE problem, we have no constraints
   NoConstraints<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM> Constraints;

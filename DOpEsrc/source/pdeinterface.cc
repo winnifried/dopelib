@@ -423,7 +423,7 @@ namespace DOpE
     void
     PDEInterface<EDC, FDC, DH, VECTOR, dealdim>::ControlElementMatrix(
         const EDC<DH, VECTOR, dealdim>&,
-        FullMatrix<double> &/*local_entry_matrix*/)
+        FullMatrix<double> &/*local_entry_matrix*/, double /*scale*/)
     {
       throw DOpEException("Not Implemented", "PDEInterface::ControlElementMatrix");
     }

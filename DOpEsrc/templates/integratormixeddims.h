@@ -117,7 +117,9 @@ class IntegratorMixedDimensions
   protected: 
       inline const std::map<std::string, const VECTOR*>& GetDomainData() const;
       inline const std::map<std::string, const dealii::Vector<SCALAR>*>& GetParamData() const;
-     
+      
+      inline void AddPresetRightHandSide(double s, dealii::Vector<SCALAR> &residual) const;
+
   private:
     INTEGRATORDATACONT & _idc;
 
@@ -254,6 +256,13 @@ template<typename PROBLEM>
       {
         ApplyTransposedInitialBoundaryValues(pde,residual, -1.);
       }
+      //Check if some preset righthandside exists.
+      local_vector = 0;
+      AddPresetRightHandSide(-1.,local_vector);
+      for (unsigned int i = 0; i < dofs; ++i)
+      {
+        residual(i) += local_vector(i);
+      }
 
       if (apply_boundary_values)
       {
@@ -354,6 +363,13 @@ template<typename PROBLEM>
       {
         ApplyTransposedInitialBoundaryValues(pde,residual, -1.);
       }
+      //Check if some preset righthandside exists.
+      local_vector = 0;
+      AddPresetRightHandSide(-1.,local_vector);
+      for (unsigned int i = 0; i < dofs; ++i)
+      {
+        residual(i) += local_vector(i);
+      }
 
       if (apply_boundary_values)
       {
@@ -406,9 +422,6 @@ template<typename PROBLEM>
           this->GetParamData(), this->GetDomainData());
       auto& edc = _idc.GetElementDataContainer();
 
-
-      bool need_faces = pde.HasFaces();
-
       for (; element[0] != endc[0]; element[0]++)
       {
         for (unsigned int dh = 1; dh < dof_handler.size(); dh++)
@@ -422,13 +435,7 @@ template<typename PROBLEM>
 
         ret += pde.ElementFunctional(edc);
 
-        if (need_faces)
-        {
-          throw DOpEException("Face Integrals not Implemented!",
-                              "IntegratorMixedDimensions::ComputeDomainScalar");
-        }
-
-        for (unsigned int dh = 1; dh < dof_handler.size(); dh++)
+	for (unsigned int dh = 1; dh < dof_handler.size(); dh++)
         {
           element[dh]++;
         }
@@ -797,6 +804,23 @@ template<typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR,
   {
     return _idc;
   }
+
+  /*******************************************************************************************/
+
+  template<typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR,
+      int dimlow, int dimhigh>
+    void
+  IntegratorMixedDimensions<INTEGRATORDATACONT, VECTOR, SCALAR, dimlow, dimhigh>::AddPresetRightHandSide(double s, 
+													 dealii::Vector<SCALAR> &residual) const
+    {
+      typename std::map<std::string, const dealii::Vector<SCALAR>*>::const_iterator it =
+          _param_data.find("fixed_rhs");
+      if (it != _param_data.end())
+      {
+	assert(residual.size() == it->second->size());
+	residual.add(s,*(it->second));
+      }
+    }
 
 /*******************************************************************************************/
 }

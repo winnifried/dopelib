@@ -510,12 +510,13 @@ namespace DOpE
          * The Time is assumed to be set prior by FunctionalInterface::SetTime
          *
          * @return A boolean that is true if the functional should be evaluated at the current time point.
-         *         If not reimplemented this is overwritten
+         *         The default is true, i.e., we assume that unless stated otherwise the functional 
+	 *         should be evaluated.
          */
         virtual bool
         NeedTime() const
         {
-          return false;
+          return true;
         }
 
         /**

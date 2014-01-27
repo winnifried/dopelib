@@ -114,7 +114,7 @@ namespace DOpE
               tmp = 0.0;
               // The remaining parts; e.g. for fluid problems: laplace, convection, etc.
               // Multiplication by 1/2 due to CN discretization
-              this->GetProblem().ElementEquation(edc, tmp, 0.5 * scale* this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize(), scale* this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize());
+              this->GetProblem().ElementEquation(edc, tmp, 0.5 * scale, scale);
               local_vector += tmp;
 
               tmp = 0.0;
@@ -133,7 +133,7 @@ namespace DOpE
 
               // The explicit parts with old_time_values; e.g. for fluid problems: laplace, convection, etc.
               // Multiplication by 1/2 due to CN discretization
-              this->GetProblem().ElementEquation(edc, tmp, 0.5 * scale* this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize(), 0.);
+              this->GetProblem().ElementEquation(edc, tmp, 0.5 * scale, 0.);
               local_vector += tmp;
 
               this->GetProblem().ElementTimeEquation(
@@ -156,11 +156,11 @@ namespace DOpE
         {
           if (this->GetPart() == "New")
             {
-              this->GetProblem().ElementRhs(edc, local_vector, 0.5 * scale* this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize());
+              this->GetProblem().ElementRhs(edc, local_vector, 0.5 * scale);
             }
           else if (this->GetPart() == "Old")
             {
-              this->GetProblem().ElementRhs(edc, local_vector, 0.5 * scale* this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize());
+              this->GetProblem().ElementRhs(edc, local_vector, 0.5 * scale);
             }
           else
             {
@@ -179,12 +179,12 @@ namespace DOpE
            if (this->GetPart() == "New")
            {
              this->GetProblem().PointRhs(param_values, domain_values, rhs_vector,
-                 0.5 * scale* this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize());
+                 0.5 * scale);
            }
            else if (this->GetPart() == "Old")
            {
              this->GetProblem().PointRhs(param_values, domain_values, rhs_vector,
-                 (0.5) * scale* this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize());
+                 (0.5) * scale);
            }
            else
            {
@@ -204,7 +204,7 @@ namespace DOpE
 
           // multiplication with 1/2 for scale due to CN discretization,
           //no multiplication with 1/2 for scale_ico due to implicit treatment of pressure, etc. (in the case of fluid problems)
-          this->GetProblem().ElementMatrix(edc, local_matrix, 0.5* this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize(), 1.* this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize());
+          this->GetProblem().ElementMatrix(edc, local_matrix, 0.5, 1.);
 
           m = 0.;
           this->GetProblem().ElementTimeMatrix(edc, m);
@@ -226,11 +226,11 @@ namespace DOpE
         {
           if (this->GetPart() == "New")
             {
-              this->GetProblem().FaceEquation(fdc, local_vector, 0.5 * scale* this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize(), scale* this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize());
+              this->GetProblem().FaceEquation(fdc, local_vector, 0.5 * scale, scale);
             }
           else if (this->GetPart() == "Old")
             {
-              this->GetProblem().FaceEquation(fdc, local_vector, 0.5 * scale* this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize(),0.);
+              this->GetProblem().FaceEquation(fdc, local_vector, 0.5 * scale,0.);
             }
           else
             {
@@ -249,12 +249,12 @@ namespace DOpE
           if (this->GetPart() == "New")
             {
               this->GetProblem().InterfaceEquation(fdc, local_vector,
-						   0.5 * scale* this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize(), scale* this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize());
+						   0.5 * scale, scale);
             }
           else if (this->GetPart() == "Old")
             {
               this->GetProblem().InterfaceEquation(fdc,  local_vector,
-                  0.5 * scale* this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize(), 0.);
+						   0.5 * scale, 0.);
             }
           else
             {
@@ -270,7 +270,7 @@ namespace DOpE
         FaceRhs(const FDC & fdc,
             dealii::Vector<double> &local_vector, double scale = 1.)
         {
-          this->GetProblem().FaceRhs(fdc, local_vector, scale* this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize());
+          this->GetProblem().FaceRhs(fdc, local_vector, scale);
         }
 
       /******************************************************/
@@ -286,7 +286,7 @@ namespace DOpE
 
           m = 0.;
           // Multiplication with 1/2 due to CN time discretization
-          this->GetProblem().FaceMatrix(fdc, m, 0.5* this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize(), 1.* this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize());
+          this->GetProblem().FaceMatrix(fdc, m, 0.5, 1.);
 
           local_matrix.add(1., m);
         }
@@ -303,7 +303,7 @@ namespace DOpE
 
           m = 0.;
           // Multiplication with 1/2 due to CN time discretization
-          this->GetProblem().InterfaceMatrix(fdc,  m, 0.5* this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize(), 1.* this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize());
+          this->GetProblem().InterfaceMatrix(fdc,  m, 0.5, 1.);
 
           local_matrix.add(1., m);
         }
@@ -317,11 +317,11 @@ namespace DOpE
         {
           if (this->GetPart() == "New")
             {
-              this->GetProblem().BoundaryEquation(fdc, local_vector, 0.5 * scale* this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize(), scale* this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize());
+              this->GetProblem().BoundaryEquation(fdc, local_vector, 0.5 * scale, scale);
             }
           else if (this->GetPart() == "Old")
             {
-              this->GetProblem().BoundaryEquation(fdc, local_vector, 0.5 * scale* this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize(), 0.);
+              this->GetProblem().BoundaryEquation(fdc, local_vector, 0.5 * scale, 0.);
             }
           else
             {
@@ -337,7 +337,7 @@ namespace DOpE
         BoundaryRhs(const FDC & fdc,
             dealii::Vector<double> &local_vector, double scale)
         {
-          this->GetProblem().BoundaryRhs(fdc, local_vector, scale* this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize());
+          this->GetProblem().BoundaryRhs(fdc, local_vector, scale);
         }
 
       /******************************************************/
@@ -352,7 +352,7 @@ namespace DOpE
 
           m = 0.;
           // Multiplication with 1/2 due to CN time discretization
-          this->GetProblem().BoundaryMatrix(fdc, m, 0.5* this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize(), 1.* this->GetProblem().GetBaseProblem().GetSpaceTimeHandler()->GetStepSize());
+          this->GetProblem().BoundaryMatrix(fdc, m, 0.5, 1.);
           local_matrix.add(1., m);
 
         }

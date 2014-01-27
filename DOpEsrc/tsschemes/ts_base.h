@@ -81,12 +81,13 @@ namespace DOpE
          * @param time      The actual time.
          * @param interval  The actual interval. Make sure that time
          *                  lies in interval!
+         * @param initial   Do we solve at the initial time?
          */
 
         void
-        SetTime(double time, const TimeIterator& interval)
+        SetTime(double time, const TimeIterator& interval, bool initial = false)
         {
-          _OP.SetTime(time, interval);
+          _OP.SetTime(time, interval,initial);
         }
 
         /******************************************************/

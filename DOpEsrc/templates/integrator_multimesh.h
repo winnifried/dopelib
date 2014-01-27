@@ -121,19 +121,22 @@ namespace DOpE
         AddDomainData(std::string name, const VECTOR* new_data);
         inline void
         DeleteDomainData(std::string name);
-        inline const std::map<std::string, const VECTOR*>&
-        GetDomainData() const;
 
         inline void
         AddParamData(std::string name, const dealii::Vector<SCALAR>* new_data);
         inline void
         DeleteParamData(std::string name);
+	
+    protected:
         inline const std::map<std::string, const dealii::Vector<SCALAR>*>&
-        GetParamData() const;
-
+	  GetParamData() const;
+	
         inline  INTEGRATORDATACONT&
-        GetIntegratorDataContainer() const;
-
+	  GetIntegratorDataContainer() const;
+        inline const std::map<std::string, const VECTOR*>&
+	  GetDomainData() const;
+	inline void AddPresetRightHandSide(double s, VECTOR &residual) const;
+	
       private:
         template<template<int, int> class DH>
           void
@@ -325,6 +328,8 @@ namespace DOpE
 	      ComputeNonlinearResidual_Recursive(pde,residual,element,tria_element,prolong_matrix,coarse_index,fine_index,edc,fdc);
 	      tria_element_iter++;
 	    }
+	    //Check if some preset righthandside exists.
+	    AddPresetRightHandSide(-1.,residual);
 
             if (apply_boundary_values)
 	    {
@@ -425,6 +430,8 @@ namespace DOpE
 	      ComputeNonlinearRhs_Recursive(pde,residual,element,tria_element,prolong_matrix,coarse_index,fine_index,edc,fdc);
 	      tria_element_iter++;
 	    }
+            //Check if some preset righthandside exists.
+	    AddPresetRightHandSide(1.,residual);
 
             if (apply_boundary_values)
 	    {
@@ -787,6 +794,8 @@ namespace DOpE
   {
     residual = 0.;
     pde.AlgebraicResidual(residual,this->GetParamData(),this->GetDomainData());
+    //Check if some preset righthandside exists.
+    AddPresetRightHandSide(-1.,residual);
   }
 
   /*******************************************************************************************/
@@ -929,6 +938,22 @@ namespace DOpE
               "IntegratorMultiMesh::DeleteDomainData");
         }
       _domain_data.erase(it);
+    }
+  /*******************************************************************************************/
+
+  template<typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR,
+      int dim>
+    void
+    IntegratorMultiMesh<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::AddPresetRightHandSide(double s, 
+											 VECTOR &residual) const
+    {
+      typename std::map<std::string, const VECTOR *>::const_iterator it =
+          _domain_data.find("fixed_rhs");
+      if (it != _domain_data.end())
+      {
+	assert(residual.size() == it->second->size());
+	residual.add(s,*(it->second));
+      }
     }
 
   /*******************************************************************************************/

@@ -297,13 +297,13 @@ template<
 
       void
       ControlElementMatrix(const EDC<DH, VECTOR, dealdim>& /*edc*/,
-          FullMatrix<double> &local_matrix)
+          FullMatrix<double> &local_matrix, double scale)
       {
 //        for(unsigned int q_point = 0; q_point < n_q_points; q_point++)
 //        {
         for (unsigned int i = 0; i < GetControlNBlocks(); i++)
         {
-          local_matrix(i, i) += 1.;
+          local_matrix(i, i) += scale * 1.;
         }
 //        }
       }

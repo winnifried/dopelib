@@ -190,7 +190,7 @@ main(int argc, char **argv)
   DIM, DIM> DOFH(triangulation,
       control_fe_collection,
       state_fe_collection,
-      times, DOpEtypes::undefined,
+      times, DOpEtypes::ControlType::stationary,
       indexsetter);
 
   NoConstraints<ElementDataContainer, FaceDataContainer, DOFHANDLER, VECTOR,

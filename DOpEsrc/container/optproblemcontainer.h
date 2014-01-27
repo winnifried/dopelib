@@ -833,9 +833,10 @@ namespace DOpE
          * @param time      The actual time.
          * @param interval  The actual interval. Make sure that time
          *                  lies in interval!
+	 * @param initial   Do we solve at the initial time?
          */
-        void
-        SetTime(double time, const TimeIterator& interval);
+         void
+         SetTime(double time, const TimeIterator& interval, bool initial = false);
 
         /******************************************************/
 
@@ -919,31 +920,44 @@ namespace DOpE
           return it->second;
         }
         /*****************************************************************/
+        /**
+	 * Adds the auxiliary Vectors from the integrator, so that their values are
+	 * available for the integrated object. 
+	 *
+	 * @param integrator         The integrator in which the vecors should be available
+	 *
+	 */
 
         template<typename INTEGRATOR>
           void
-          AddAuxiliaryToIntegrator(INTEGRATOR& integrator)
+      AddAuxiliaryToIntegrator(INTEGRATOR& integrator)
           {
             {
-              typename std::map<std::string, const ControlVector<VECTOR> *>::iterator it =
-                  _auxiliary_controls.begin();
-              for (; it != _auxiliary_controls.end(); it++)
-              {
-                if (dopedim == dealdim)
-                {
-                  integrator.AddDomainData(it->first,
-                      &(it->second->GetSpacialVector()));
-                }
-                else if (dopedim == 0)
-                {
-                  integrator.AddParamData(it->first,
-                      &(it->second->GetSpacialVectorCopy()));
-                }
-                else
-                {
-                  throw DOpEException("dopedim not implemented",
-                      "OptProblemContainer::AddAuxiliaryToIntegrator");
-                }
+	      //Only add control vector if the vecor is distributed in time, or
+	      //we are calculating the initial value.
+	      if((GetSpaceTimeHandler()->GetControlType()==DOpEtypes::ControlType::initial && _initial) 
+		 || (GetSpaceTimeHandler()->GetControlType()!=DOpEtypes::ControlType::initial))
+	      {
+		typename std::map<std::string, const ControlVector<VECTOR> *>::iterator it =
+		_auxiliary_controls.begin();
+		for (; it != _auxiliary_controls.end(); it++)
+		{
+		  if (dopedim == dealdim)
+		  {
+		    integrator.AddDomainData(it->first,
+					     &(it->second->GetSpacialVector()));
+		  }
+		  else if (dopedim == 0)
+		  {
+		    integrator.AddParamData(it->first,
+					    &(it->second->GetSpacialVectorCopy()));
+		  }
+		  else
+		  {
+		    throw DOpEException("dopedim not implemented",
+					"OptProblemContainer::AddAuxiliaryToIntegrator");
+		  }
+		}
               }
             }
             {
@@ -969,30 +983,43 @@ namespace DOpE
           }
 
         /******************************************************/
+        /**
+	 * Deletes the auxiliary Vectors from the integrator. 
+	 * This is required to add vecors of the same name but possibly 
+	 * at a different point in time.
+	 *
+	 * @param integrator         The integrator in which the vecors should be available
+	 */
 
         template<typename INTEGRATOR>
           void
           DeleteAuxiliaryFromIntegrator(INTEGRATOR& integrator)
           {
             {
-              typename std::map<std::string, const ControlVector<VECTOR> *>::iterator it =
-                  _auxiliary_controls.begin();
-              for (; it != _auxiliary_controls.end(); it++)
-              {
-                if (dopedim == dealdim)
-                {
-                  integrator.DeleteDomainData(it->first);
-                }
-                else if (dopedim == 0)
-                {
-                  integrator.DeleteParamData(it->first);
-                  it->second->UnLockCopy();
-                }
-                else
-                {
-                  throw DOpEException("dopedim not implemented",
-                      "OptProblemContainer::AddAuxiliaryToIntegrator");
-                }
+	      //Only delete control vector if the vecor is distributed in time, or
+	      //we are calculating the initial value. Otherwise it would not have been added.
+	      if((GetSpaceTimeHandler()->GetControlType()==DOpEtypes::ControlType::initial && _initial) 
+		 || (GetSpaceTimeHandler()->GetControlType()!=DOpEtypes::ControlType::initial))
+	      {
+		typename std::map<std::string, const ControlVector<VECTOR> *>::iterator it =
+		_auxiliary_controls.begin();
+		for (; it != _auxiliary_controls.end(); it++)
+		{
+		  if (dopedim == dealdim)
+		  {
+		    integrator.DeleteDomainData(it->first);
+		  }
+		  else if (dopedim == 0)
+		  {
+		    integrator.DeleteParamData(it->first);
+		    it->second->UnLockCopy();
+		  }
+		  else
+		  {
+		    throw DOpEException("dopedim not implemented",
+					"OptProblemContainer::AddAuxiliaryToIntegrator");
+		  }
+		}
               }
             }
             {
@@ -1240,6 +1267,7 @@ namespace DOpE
         std::string _algo_type;
 
         bool _functional_for_ee_is_cost;
+        double _c_interval_length, _interval_length;
         unsigned int _functional_for_ee_num;
         std::vector<FUNCTIONAL_INTERFACE*> _aux_functionals;
         std::map<std::string, unsigned int> _functional_position;
@@ -1274,6 +1302,8 @@ namespace DOpE
         std::map<std::string, const StateVector<VECTOR>*> _auxiliary_state;
         std::map<std::string, const ConstraintVector<VECTOR>*> _auxiliary_constraints;
 
+        bool _initial; //Do we solve the problem at initial time?
+      
         StateProblem<
             OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
                 CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>,
@@ -1305,6 +1335,8 @@ namespace DOpE
       _functional_position[_functional->GetName()] = 0;
       //remember! At _functional_values[0] we store always the cost functional!
       _functional_for_ee_num = dealii::numbers::invalid_unsigned_int;
+      _c_interval_length = 1.;
+      _interval_length = 1.;
     }
 
   /******************************************************/
@@ -1690,32 +1722,32 @@ namespace DOpE
         if (this->GetType() == "state")
         {
           // state values in quadrature points
-          this->GetPDE().ElementEquation(edc, local_vector, scale, scale_ico);
+          this->GetPDE().ElementEquation(edc, local_vector, scale*_interval_length, scale_ico*_interval_length);
         }
         else if ((this->GetType() == "adjoint")
             || (this->GetType() == "adjoint_for_ee"))
         {
           // state values in quadrature points
-          this->GetPDE().ElementEquation_U(edc, local_vector, scale,
-              scale_ico);
+          this->GetPDE().ElementEquation_U(edc, local_vector, scale*_interval_length,
+              scale_ico*_interval_length);
         }
         else if (this->GetType() == "adjoint_hessian")
         {
           // state values in quadrature points
-          this->GetPDE().ElementEquation_UTT(edc, local_vector, scale,
-              scale_ico);
+          this->GetPDE().ElementEquation_UTT(edc, local_vector, scale*_interval_length,
+              scale_ico*_interval_length);
         }
         else if (this->GetType() == "tangent")
         {
           // state values in quadrature points
-          this->GetPDE().ElementEquation_UT(edc, local_vector, scale,
-              scale_ico);
+          this->GetPDE().ElementEquation_UT(edc, local_vector, scale*_interval_length,
+              scale_ico*_interval_length);
         }
         else if ((this->GetType() == "gradient")
             || (this->GetType() == "hessian"))
         {
           // control values in quadrature points
-          this->GetPDE().ControlElementEquation(edc, local_vector, scale);
+          this->GetPDE().ControlElementEquation(edc, local_vector, scale*_c_interval_length);
         }
         else
         {
@@ -1859,26 +1891,26 @@ namespace DOpE
         if (this->GetType() == "state")
         {
           // state values in quadrature points
-          this->GetPDE().FaceEquation(fdc, local_vector, scale, scale_ico);
+          this->GetPDE().FaceEquation(fdc, local_vector, scale*_interval_length, scale_ico*_interval_length);
         }
         else if (this->GetType() == "adjoint"
             || this->GetType() == "adjoint_for_ee")
         {
           // state values in quadrature points
-          this->GetPDE().FaceEquation_U(fdc, local_vector, scale,
-              scale_ico);
+          this->GetPDE().FaceEquation_U(fdc, local_vector, scale*_interval_length,
+              scale_ico*_interval_length);
         }
         else if (this->GetType() == "adjoint_hessian")
         {
           // state values in quadrature points
-          this->GetPDE().FaceEquation_UTT(fdc, local_vector, scale,
-              scale_ico);
+          this->GetPDE().FaceEquation_UTT(fdc, local_vector, scale*_interval_length,
+              scale_ico*_interval_length);
         }
         else if (this->GetType() == "tangent")
         {
           // state values in quadrature points
-          this->GetPDE().FaceEquation_UT(fdc, local_vector, scale,
-              scale_ico);
+          this->GetPDE().FaceEquation_UT(fdc, local_vector, scale*_interval_length,
+              scale_ico*_interval_length);
         }
 //        else if ((this->GetType() == "gradient") || (this->GetType() == "hessian"))
 //        {
@@ -1908,15 +1940,15 @@ namespace DOpE
       {
         if (this->GetType() == "state")
         {
-          this->GetPDE().InterfaceEquation(fdc, local_vector, scale,
-              scale_ico);
+          this->GetPDE().InterfaceEquation(fdc, local_vector, scale*_interval_length,
+              scale_ico*_interval_length);
         }
         else if (this->GetType() == "adjoint"
             || this->GetType() == "adjoint_for_ee")
         {
           // state values in quadrature points
-          this->GetPDE().InterfaceEquation_U(fdc, local_vector, scale,
-              scale_ico);
+          this->GetPDE().InterfaceEquation_U(fdc, local_vector, scale*_interval_length,
+              scale_ico*_interval_length);
         }
         else
         {
@@ -1941,27 +1973,27 @@ namespace DOpE
         if (this->GetType() == "state")
         {
           // state values in quadrature points
-          this->GetPDE().BoundaryEquation(fdc, local_vector, scale,
-              scale_ico);
+          this->GetPDE().BoundaryEquation(fdc, local_vector, scale*_interval_length,
+              scale_ico*_interval_length);
         }
         else if (this->GetType() == "adjoint"
             || this->GetType() == "adjoint_for_ee")
         {
           // state values in quadrature points
-          this->GetPDE().BoundaryEquation_U(fdc, local_vector, scale,
-              scale_ico);
+          this->GetPDE().BoundaryEquation_U(fdc, local_vector, scale*_interval_length,
+              scale_ico*_interval_length);
         }
         else if (this->GetType() == "adjoint_hessian")
         {
           // state values in quadrature points
-          this->GetPDE().BoundaryEquation_UTT(fdc, local_vector, scale,
-              scale_ico);
+          this->GetPDE().BoundaryEquation_UTT(fdc, local_vector, scale*_interval_length,
+              scale_ico*_interval_length);
         }
         else if (this->GetType() == "tangent")
         {
           // state values in quadrature points
-          this->GetPDE().BoundaryEquation_UT(fdc, local_vector, scale,
-              scale_ico);
+          this->GetPDE().BoundaryEquation_UT(fdc, local_vector, scale*_interval_length,
+              scale_ico*_interval_length);
         }
 //        else if ((this->GetType() == "gradient") || (this->GetType() == "hessian"))
 //        {
@@ -1988,46 +2020,95 @@ namespace DOpE
           const DATACONTAINER& edc, dealii::Vector<double> &local_vector,
           double scale)
       {
-        //FIXME: In timedependent Problems one should evaluate the
-        // Functional terms here only if they are time distributed,
-        //otherwise the scaling should be different (e.g. +-1 for local in time
-        //Functionals)
-        //The same applies to all ...Rhs functions, except init_...
-
-        if (this->GetType() == "state")
+	if (this->GetType() == "state")
         {
           // state values in quadrature points
-          this->GetPDE().ElementRightHandSide(edc, local_vector, scale);
+          this->GetPDE().ElementRightHandSide(edc, local_vector, scale*_interval_length);
         }
         else if (this->GetType() == "adjoint")
         {
           // state values in quadrature points
-          if (GetFunctional()->GetType().find("domain") != std::string::npos)
-            GetFunctional()->ElementValue_U(edc, local_vector, scale);
+          if(GetFunctional()->NeedTime())
+	  {
+	    if (GetFunctional()->GetType().find("domain") != std::string::npos)
+	    {
+	      if(GetFunctional()->GetType().find("timedistributed") != std::string::npos)
+	      {
+		GetFunctional()->ElementValue_U(edc, local_vector, scale*_interval_length);
+	      }
+	      else // Otherwise always local if(GetFunctional()->GetType().find("timelocal") != std::string::npos)
+	      {
+		GetFunctional()->ElementValue_U(edc, local_vector, scale);
+	      }
+	      
+	      if(GetFunctional()->GetType().find("timedistributed") != std::string::npos && GetFunctional()->GetType().find("timelocal") != std::string::npos)
+	      {
+		throw DOpEException("Conflicting functional types: "+ GetFunctional()->GetType(),
+				    "OptProblemContainer::ElementRhs");
+	      } 
+	    }
+	  }
         }
         else if (this->GetType() == "adjoint_for_ee")
         {
           //values of the derivative of the functional for error estimation
-          _aux_functionals[_functional_for_ee_num]->ElementValue_U(edc,
-              local_vector, scale);
+          if (_aux_functionals[_functional_for_ee_num]->NeedTime())
+	  {
+	    if (_aux_functionals[_functional_for_ee_num]->GetType().find("domain") != std::string::npos)
+	    {
+	      if(_aux_functionals[_functional_for_ee_num]->GetType().find("timedistributed") != std::string::npos)
+	      {
+		_aux_functionals[_functional_for_ee_num]->ElementValue_U(edc,
+									 local_vector, scale*_interval_length);
+	      }
+	      else 
+	      {
+		_aux_functionals[_functional_for_ee_num]->ElementValue_U(edc, local_vector, scale);
+	      }
+	      if(_aux_functionals[_functional_for_ee_num]->GetType().find("timedistributed") != std::string::npos && _aux_functionals[_functional_for_ee_num]->GetType().find("timelocal") != std::string::npos)
+	      {
+		throw DOpEException("Conflicting functional types: "+ _aux_functionals[_functional_for_ee_num]->GetType(),
+				    "OptProblemContainer::ElementRhs");
+	      } 
+	    }
+	  }
         }
         else if (this->GetType() == "tangent")
         {
           // state values in quadrature points
           scale *= -1;
-          this->GetPDE().ElementEquation_QT(edc, local_vector, scale, scale);
+          this->GetPDE().ElementEquation_QT(edc, local_vector, scale*_interval_length, scale*_interval_length);
         }
         else if (this->GetType() == "adjoint_hessian")
         {
           // state values in quadrature points
-          if (GetFunctional()->GetType().find("domain") != std::string::npos)
-          {
-            GetFunctional()->ElementValue_UU(edc, local_vector, scale);
-            GetFunctional()->ElementValue_QU(edc, local_vector, scale);
+          if(GetFunctional()->NeedTime())
+	  {
+	    if (GetFunctional()->GetType().find("domain") != std::string::npos)
+	    {
+	      if (GetFunctional()->GetType().find("domain") != std::string::npos)
+	      {
+		if(GetFunctional()->GetType().find("timedistributed") != std::string::npos)
+		{
+		  GetFunctional()->ElementValue_UU(edc, local_vector, scale*_interval_length);
+		  GetFunctional()->ElementValue_QU(edc, local_vector, scale*_interval_length);
+		}
+		else 
+		{
+		  GetFunctional()->ElementValue_UU(edc, local_vector, scale);
+		  GetFunctional()->ElementValue_QU(edc, local_vector, scale);
+		}
+		if(GetFunctional()->GetType().find("timedistributed") != std::string::npos && GetFunctional()->GetType().find("timelocal") != std::string::npos)
+		{
+		  throw DOpEException("Conflicting functional types: "+ GetFunctional()->GetType(),
+				      "OptProblemContainer::ElementRhs");
+		} 
+	      }
+	    }
           }
           scale *= -1;
-          this->GetPDE().ElementEquation_UU(edc, local_vector, scale, scale);
-          this->GetPDE().ElementEquation_QU(edc, local_vector, scale, scale);
+          this->GetPDE().ElementEquation_UU(edc, local_vector, scale*_interval_length, scale*_interval_length);
+          this->GetPDE().ElementEquation_QU(edc, local_vector, scale*_interval_length, scale*_interval_length);
           //TODO: make some example where this realy matters to check if this is right
           this->GetPDE().ElementTimeEquationExplicit_UU(edc, local_vector,
               scale);
@@ -2035,43 +2116,76 @@ namespace DOpE
         else if (this->GetType() == "gradient")
         {
           if (GetSpaceTimeHandler()->GetControlType()
-              == DOpEtypes::ControlType::initial)
+              == DOpEtypes::ControlType::initial && _initial)
           {
             this->GetPDE().Init_ElementRhs_Q(edc, local_vector, scale);
           }
           // state values in quadrature points
-          if (GetFunctional()->GetType().find("domain") != std::string::npos)
-            GetFunctional()->ElementValue_Q(edc, local_vector, scale);
-
+	  if(GetFunctional()->NeedTime())
+	  {
+	    if (GetFunctional()->GetType().find("domain") != std::string::npos)
+	    {
+	      if(GetFunctional()->GetType().find("timedistributed") != std::string::npos)
+	      {
+		GetFunctional()->ElementValue_Q(edc, local_vector, scale*_interval_length);
+	      }
+	      else
+	      {
+		GetFunctional()->ElementValue_Q(edc, local_vector, scale);
+	      }
+	      if(GetFunctional()->GetType().find("timedistributed") != std::string::npos && GetFunctional()->GetType().find("timelocal") != std::string::npos)
+	      {
+		throw DOpEException("Conflicting functional types: "+ GetFunctional()->GetType(),
+				    "OptProblemContainer::ElementRhs");
+	      } 
+	    }
+	  }
           scale *= -1;
-          this->GetPDE().ElementEquation_Q(edc, local_vector, scale, scale);
+          this->GetPDE().ElementEquation_Q(edc, local_vector, scale*_interval_length, scale*_interval_length);
         }
         else if (this->GetType() == "hessian")
         {
           if (GetSpaceTimeHandler()->GetControlType()
-              == DOpEtypes::ControlType::initial)
+              == DOpEtypes::ControlType::initial && _initial)
           {
             this->GetPDE().Init_ElementRhs_QTT(edc, local_vector, scale);
             this->GetPDE().Init_ElementRhs_QQ(edc, local_vector, scale);
           }
-
-          if (GetFunctional()->GetType().find("domain") != std::string::npos)
-          {
-            GetFunctional()->ElementValue_QQ(edc, local_vector, scale);
-            GetFunctional()->ElementValue_UQ(edc, local_vector, scale);
-          }
+	  if(GetFunctional()->NeedTime())
+	  {
+	    if (GetFunctional()->GetType().find("domain") != std::string::npos)
+	    {
+	      if(GetFunctional()->GetType().find("timedistributed") != std::string::npos)
+	      {
+		GetFunctional()->ElementValue_QQ(edc, local_vector, scale*_interval_length);
+		GetFunctional()->ElementValue_UQ(edc, local_vector, scale*_interval_length);
+	      }
+	      else
+	      {
+		GetFunctional()->ElementValue_QQ(edc, local_vector, scale);
+		GetFunctional()->ElementValue_UQ(edc, local_vector, scale);
+	      }
+	      if(GetFunctional()->GetType().find("timedistributed") != std::string::npos && GetFunctional()->GetType().find("timelocal") != std::string::npos)
+	      {
+		throw DOpEException("Conflicting functional types: "+ GetFunctional()->GetType(),
+				    "OptProblemContainer::ElementRhs");
+	      } 
+	    }
+	  }
 
           scale *= -1;
-          this->GetPDE().ElementEquation_QTT(edc, local_vector, scale, scale);
-          this->GetPDE().ElementEquation_UQ(edc, local_vector, scale, scale);
-          this->GetPDE().ElementEquation_QQ(edc, local_vector, scale, scale);
+          this->GetPDE().ElementEquation_QTT(edc, local_vector, scale*_interval_length, scale*_interval_length);
+          this->GetPDE().ElementEquation_UQ(edc, local_vector, scale*_interval_length, scale*_interval_length);
+          this->GetPDE().ElementEquation_QQ(edc, local_vector, scale*_interval_length, scale*_interval_length);
         }
         else if (this->GetType() == "global_constraint_gradient")
         {
+	  assert(_interval_length==1.);
           GetConstraints()->ElementValue_Q(edc, local_vector, scale);
         }
         else if (this->GetType() == "global_constraint_hessian")
         {
+          assert(_interval_length==1.);
           GetConstraints()->ElementValue_QQ(edc, local_vector, scale);
         }
         else
@@ -2099,61 +2213,162 @@ namespace DOpE
       if (this->GetType() == "adjoint")
       {
         // state values in quadrature points
-        if (GetFunctional()->GetType().find("point") != std::string::npos)
-        {
-          GetFunctional()->PointValue_U(
-              this->GetSpaceTimeHandler()->GetControlDoFHandler(),
-              this->GetSpaceTimeHandler()->GetStateDoFHandler(), param_values,
-              domain_values, rhs_vector, scale);
-        }
+         if(GetFunctional()->NeedTime())
+	  {
+	    if (GetFunctional()->GetType().find("point") != std::string::npos)
+	    {
+	      if(GetFunctional()->GetType().find("timedistributed") != std::string::npos)
+	      {
+		GetFunctional()->PointValue_U(
+		  this->GetSpaceTimeHandler()->GetControlDoFHandler(),
+		  this->GetSpaceTimeHandler()->GetStateDoFHandler(), param_values,
+		  domain_values, rhs_vector, scale*_interval_length);
+	      }
+	      else 
+	      {
+		GetFunctional()->PointValue_U(
+		  this->GetSpaceTimeHandler()->GetControlDoFHandler(),
+		  this->GetSpaceTimeHandler()->GetStateDoFHandler(), param_values,
+		  domain_values, rhs_vector, scale);
+	      }
+	      if(GetFunctional()->GetType().find("timedistributed") != std::string::npos && GetFunctional()->GetType().find("timelocal") != std::string::npos)
+	      {
+		throw DOpEException("Conflicting functional types: "+ GetFunctional()->GetType(),
+				    "OptProblemContainer::PointRhs");
+	      }
+	    }
+	  }
       }
       else if (this->GetType() == "adjoint_for_ee")
       {
         //values of the derivative of the functional for error estimation
-        _aux_functionals[_functional_for_ee_num]->PointValue_U(
-            this->GetSpaceTimeHandler()->GetControlDoFHandler(),
-            this->GetSpaceTimeHandler()->GetStateDoFHandler(), param_values,
-            domain_values, rhs_vector, scale);
+        if (_aux_functionals[_functional_for_ee_num]->NeedTime())
+	  {
+	    if (_aux_functionals[_functional_for_ee_num]->GetType().find("point") != std::string::npos)
+	    {
+	      if(_aux_functionals[_functional_for_ee_num]->GetType().find("timedistributed") != std::string::npos)
+	      {
+		_aux_functionals[_functional_for_ee_num]->PointValue_U(
+		  this->GetSpaceTimeHandler()->GetControlDoFHandler(),
+		  this->GetSpaceTimeHandler()->GetStateDoFHandler(), param_values,
+		  domain_values, rhs_vector, scale*_interval_length);
+	      }
+	      else 
+	      {
+		_aux_functionals[_functional_for_ee_num]->PointValue_U(
+		  this->GetSpaceTimeHandler()->GetControlDoFHandler(),
+		  this->GetSpaceTimeHandler()->GetStateDoFHandler(), param_values,
+		  domain_values, rhs_vector, scale);
+	      }
+	      if(_aux_functionals[_functional_for_ee_num]->GetType().find("timedistributed") != std::string::npos && _aux_functionals[_functional_for_ee_num]->GetType().find("timelocal") != std::string::npos)
+	      {
+		throw DOpEException("Conflicting functional types: "+ _aux_functionals[_functional_for_ee_num]->GetType(),
+				    "OptProblemContainer::PointRhs");
+	      } 
+	    }
+	  }
       }
       else if (this->GetType() == "adjoint_hessian")
       {
         // state values in quadrature points
-        if (GetFunctional()->GetType().find("point") != std::string::npos)
-        {
-          GetFunctional()->PointValue_UU(
-              this->GetSpaceTimeHandler()->GetControlDoFHandler(),
-              this->GetSpaceTimeHandler()->GetStateDoFHandler(), param_values,
-              domain_values, rhs_vector, scale);
-          GetFunctional()->PointValue_QU(
-              this->GetSpaceTimeHandler()->GetControlDoFHandler(),
-              this->GetSpaceTimeHandler()->GetStateDoFHandler(), param_values,
-              domain_values, rhs_vector, scale);
-        }
+        if(GetFunctional()->NeedTime())
+	{
+	  if (GetFunctional()->GetType().find("point") != std::string::npos)
+	  {
+	    if(GetFunctional()->GetType().find("timedistributed") != std::string::npos)
+	    {
+	      GetFunctional()->PointValue_UU(
+		this->GetSpaceTimeHandler()->GetControlDoFHandler(),
+		this->GetSpaceTimeHandler()->GetStateDoFHandler(), param_values,
+		domain_values, rhs_vector, scale*_interval_length);
+	      GetFunctional()->PointValue_QU(
+		this->GetSpaceTimeHandler()->GetControlDoFHandler(),
+		this->GetSpaceTimeHandler()->GetStateDoFHandler(), param_values,
+		domain_values, rhs_vector, scale*_interval_length);
+	    }
+	    else 
+	    {
+	      GetFunctional()->PointValue_UU(
+		this->GetSpaceTimeHandler()->GetControlDoFHandler(),
+		this->GetSpaceTimeHandler()->GetStateDoFHandler(), param_values,
+		domain_values, rhs_vector, scale);
+	      GetFunctional()->PointValue_QU(
+		this->GetSpaceTimeHandler()->GetControlDoFHandler(),
+		this->GetSpaceTimeHandler()->GetStateDoFHandler(), param_values,
+		domain_values, rhs_vector, scale);
+	    }
+	    if(GetFunctional()->GetType().find("timedistributed") != std::string::npos && GetFunctional()->GetType().find("timelocal") != std::string::npos)
+	    {
+	      throw DOpEException("Conflicting functional types: "+ GetFunctional()->GetType(),
+				  "OptProblemContainer::PointRhs");
+	    } 
+	  }
+	}
       }
       else if (this->GetType() == "gradient")
       {
         // state values in quadrature points
-        if (GetFunctional()->GetType().find("point") != std::string::npos)
-        {
-          GetFunctional()->PointValue_Q(
-              this->GetSpaceTimeHandler()->GetControlDoFHandler(),
-              this->GetSpaceTimeHandler()->GetStateDoFHandler(), param_values,
-              domain_values, rhs_vector, scale);
+        if(GetFunctional()->NeedTime())
+	{
+	  if (GetFunctional()->GetType().find("point") != std::string::npos)
+	  {
+	    if(GetFunctional()->GetType().find("timedistributed") != std::string::npos)
+	    {
+	      GetFunctional()->PointValue_Q(
+		this->GetSpaceTimeHandler()->GetControlDoFHandler(),
+		this->GetSpaceTimeHandler()->GetStateDoFHandler(), param_values,
+		domain_values, rhs_vector, scale*_interval_length);
+	    }
+	    else
+	    {
+	      GetFunctional()->PointValue_Q(
+		this->GetSpaceTimeHandler()->GetControlDoFHandler(),
+		this->GetSpaceTimeHandler()->GetStateDoFHandler(), param_values,
+		domain_values, rhs_vector, scale);
+	    }
+	    if(GetFunctional()->GetType().find("timedistributed") != std::string::npos && GetFunctional()->GetType().find("timelocal") != std::string::npos)
+	    {
+	      throw DOpEException("Conflicting functional types: "+ GetFunctional()->GetType(),
+				  "OptProblemContainer::PointRhs");
+	    }
+	  }
         }
       }
       else if (this->GetType() == "hessian")
       {
         // state values in quadrature points
-        if (GetFunctional()->GetType().find("point") != std::string::npos)
-        {
-          GetFunctional()->PointValue_QQ(
-              this->GetSpaceTimeHandler()->GetControlDoFHandler(),
-              this->GetSpaceTimeHandler()->GetStateDoFHandler(), param_values,
-              domain_values, rhs_vector, scale);
-          GetFunctional()->PointValue_UQ(
-              this->GetSpaceTimeHandler()->GetControlDoFHandler(),
-              this->GetSpaceTimeHandler()->GetStateDoFHandler(), param_values,
-              domain_values, rhs_vector, scale);
+        if(GetFunctional()->NeedTime())
+	{
+	  if (GetFunctional()->GetType().find("point") != std::string::npos)
+	  {
+	    if(GetFunctional()->GetType().find("timedistributed") != std::string::npos)
+	    {
+	      GetFunctional()->PointValue_QQ(
+		this->GetSpaceTimeHandler()->GetControlDoFHandler(),
+		this->GetSpaceTimeHandler()->GetStateDoFHandler(), param_values,
+		domain_values, rhs_vector, scale*_interval_length);
+	      GetFunctional()->PointValue_UQ(
+		this->GetSpaceTimeHandler()->GetControlDoFHandler(),
+		this->GetSpaceTimeHandler()->GetStateDoFHandler(), param_values,
+		domain_values, rhs_vector, scale*_interval_length);
+	    }
+	    else 
+	    {
+	      GetFunctional()->PointValue_QQ(
+		this->GetSpaceTimeHandler()->GetControlDoFHandler(),
+		this->GetSpaceTimeHandler()->GetStateDoFHandler(), param_values,
+		domain_values, rhs_vector, scale);
+	      GetFunctional()->PointValue_UQ(
+		this->GetSpaceTimeHandler()->GetControlDoFHandler(),
+		this->GetSpaceTimeHandler()->GetStateDoFHandler(), param_values,
+		domain_values, rhs_vector, scale);
+	    }
+	    if(GetFunctional()->GetType().find("timedistributed") != std::string::npos && GetFunctional()->GetType().find("timelocal") != std::string::npos)
+	    {
+	      throw DOpEException("Conflicting functional types: "+ GetFunctional()->GetType(),
+				  "OptProblemContainer::PointRhs");
+	    }
+	  }
         }
       }
       else
@@ -2180,68 +2395,149 @@ namespace DOpE
         if (this->GetType() == "state")
         {
           // state values in face quadrature points
-          this->GetPDE().FaceRightHandSide(fdc, local_vector, scale);
+          this->GetPDE().FaceRightHandSide(fdc, local_vector, scale*_interval_length);
         }
         else if (this->GetType() == "adjoint")
         {
           // state values in quadrature points
-          if (GetFunctional()->GetType().find("face") != std::string::npos)
-            GetFunctional()->FaceValue_U(fdc, local_vector, scale);
+          if(GetFunctional()->NeedTime())
+	  {
+	    if (GetFunctional()->GetType().find("face") != std::string::npos)
+	    {
+	      if(GetFunctional()->GetType().find("timedistributed") != std::string::npos)
+	      {
+		GetFunctional()->FaceValue_U(fdc, local_vector, scale*_interval_length);
+	      }
+	      else
+	      {
+		GetFunctional()->FaceValue_U(fdc, local_vector, scale);
+	      }
+	      
+	      if(GetFunctional()->GetType().find("timedistributed") != std::string::npos && GetFunctional()->GetType().find("timelocal") != std::string::npos)
+	      {
+		throw DOpEException("Conflicting functional types: "+ GetFunctional()->GetType(),
+				    "OptProblemContainer::FaceRhs");
+	      } 
+	    }
+	  }            
         }
         else if (this->GetType() == "adjoint_for_ee")
         {
           //values of the derivative of the functional for error estimation
-          if (_aux_functionals[_functional_for_ee_num]->GetType().find("face")
-              != std::string::npos)
-            _aux_functionals[_functional_for_ee_num]->FaceValue_U(fdc,
-                local_vector, scale);
+          if (_aux_functionals[_functional_for_ee_num]->NeedTime())
+	  {
+	    if (_aux_functionals[_functional_for_ee_num]->GetType().find("face")
+		!= std::string::npos)
+	    {
+	      if(_aux_functionals[_functional_for_ee_num]->GetType().find("timedistributed") != std::string::npos)
+	      {
+		_aux_functionals[_functional_for_ee_num]->FaceValue_U(fdc,
+								      local_vector, scale*_interval_length);
+	      }
+	      else 
+	      {
+		_aux_functionals[_functional_for_ee_num]->FaceValue_U(fdc,
+								      local_vector, scale);
+	      }
+	      if(_aux_functionals[_functional_for_ee_num]->GetType().find("timedistributed") != std::string::npos && _aux_functionals[_functional_for_ee_num]->GetType().find("timelocal") != std::string::npos)
+	      {
+		throw DOpEException("Conflicting functional types: "+ _aux_functionals[_functional_for_ee_num]->GetType(),
+				    "OptProblemContainer::FaceRhs");
+	      } 
+	    }
+	  } 
+	  
         }
         else if (this->GetType() == "tangent")
         {
           // state values in quadrature points
           scale *= -1;
-          this->GetPDE().FaceEquation_QT(fdc, local_vector, scale, scale);
+          this->GetPDE().FaceEquation_QT(fdc, local_vector, scale*_interval_length, scale*_interval_length);
         }
         else if (this->GetType() == "adjoint_hessian")
         {
           // state values in quadrature points
-          if (GetFunctional()->GetType().find("face") != std::string::npos)
-          {
-            GetFunctional()->FaceValue_UU(fdc, local_vector, scale);
-            GetFunctional()->FaceValue_QU(fdc, local_vector, scale);
+          if(GetFunctional()->NeedTime())
+	  {
+	    if (GetFunctional()->GetType().find("face") != std::string::npos)
+	    {
+	      if(GetFunctional()->GetType().find("timedistributed") != std::string::npos)
+	      {
+		GetFunctional()->FaceValue_UU(fdc, local_vector, scale*_interval_length);
+		GetFunctional()->FaceValue_QU(fdc, local_vector, scale*_interval_length);
+	      }
+	      else
+	      {
+		GetFunctional()->FaceValue_UU(fdc, local_vector, scale);
+		GetFunctional()->FaceValue_QU(fdc, local_vector, scale);
+	      }
+	      if(GetFunctional()->GetType().find("timedistributed") != std::string::npos && GetFunctional()->GetType().find("timelocal") != std::string::npos)
+	      {
+		throw DOpEException("Conflicting functional types: "+ GetFunctional()->GetType(),
+				    "OptProblemContainer::FaceRhs");
+	      }
+	    }
           }
 
           scale *= -1;
-          this->GetPDE().FaceEquation_UU(fdc, local_vector, scale, scale);
-
-          this->GetPDE().FaceEquation_QU(fdc, local_vector, scale, scale);
+          this->GetPDE().FaceEquation_UU(fdc, local_vector, scale*_interval_length, scale*_interval_length);
+          this->GetPDE().FaceEquation_QU(fdc, local_vector, scale*_interval_length, scale*_interval_length);
         }
         else if (this->GetType() == "gradient")
         {
           // state values in quadrature points
-          if (GetFunctional()->GetType().find("face") != std::string::npos)
-          {
-            GetFunctional()->FaceValue_Q(fdc, local_vector, scale);
-          }
+          if(GetFunctional()->NeedTime())
+	  {
+	    if (GetFunctional()->GetType().find("face") != std::string::npos)
+	    {
+	      if(GetFunctional()->GetType().find("timedistributed") != std::string::npos)
+	      {
+		GetFunctional()->FaceValue_Q(fdc, local_vector, scale*_interval_length);
+	      }
+	      else 
+	      {
+		GetFunctional()->FaceValue_Q(fdc, local_vector, scale);
+	      }
+	      if(GetFunctional()->GetType().find("timedistributed") != std::string::npos && GetFunctional()->GetType().find("timelocal") != std::string::npos)
+	      {
+		throw DOpEException("Conflicting functional types: "+ GetFunctional()->GetType(),
+				    "OptProblemContainer::FaceRhs");
+	      }
+	    }
+	  }
 
           scale *= -1;
-          this->GetPDE().FaceEquation_Q(fdc, local_vector, scale, scale);
+          this->GetPDE().FaceEquation_Q(fdc, local_vector, scale*_interval_length, scale*_interval_length);
         }
         else if (this->GetType() == "hessian")
         {
           // state values in quadrature points
-          if (GetFunctional()->GetType().find("face") != std::string::npos)
-          {
-            GetFunctional()->FaceValue_QQ(fdc, local_vector, scale);
-            GetFunctional()->FaceValue_UQ(fdc, local_vector, scale);
+          if(GetFunctional()->NeedTime())
+	  {
+	    if (GetFunctional()->GetType().find("face") != std::string::npos)
+	    {
+	      if(GetFunctional()->GetType().find("timedistributed") != std::string::npos)
+	      {
+		GetFunctional()->FaceValue_QQ(fdc, local_vector, scale*_interval_length);
+		GetFunctional()->FaceValue_UQ(fdc, local_vector, scale*_interval_length);
+	      }
+	      else 
+	      {
+		GetFunctional()->FaceValue_QQ(fdc, local_vector, scale);
+		GetFunctional()->FaceValue_UQ(fdc, local_vector, scale);
+	      }
+	      if(GetFunctional()->GetType().find("timedistributed") != std::string::npos && GetFunctional()->GetType().find("timelocal") != std::string::npos)
+	      {
+		throw DOpEException("Conflicting functional types: "+ GetFunctional()->GetType(),
+				    "OptProblemContainer::FaceRhs");
+	      }
+	    }
           }
 
           scale *= -1;
-          this->GetPDE().FaceEquation_QTT(fdc, local_vector, scale, scale);
-
-          this->GetPDE().FaceEquation_UQ(fdc, local_vector, scale, scale);
-
-          this->GetPDE().FaceEquation_QQ(fdc, local_vector, scale, scale);
+          this->GetPDE().FaceEquation_QTT(fdc, local_vector, scale*_interval_length, scale*_interval_length);
+          this->GetPDE().FaceEquation_UQ(fdc, local_vector, scale*_interval_length, scale*_interval_length);
+          this->GetPDE().FaceEquation_QQ(fdc, local_vector, scale*_interval_length, scale*_interval_length);
         }
         else
         {
@@ -2268,70 +2564,154 @@ namespace DOpE
         if (this->GetType() == "state")
         {
           // state values in face quadrature points
-          this->GetPDE().BoundaryRightHandSide(fdc, local_vector, scale);
+          this->GetPDE().BoundaryRightHandSide(fdc, local_vector, scale*_interval_length);
         }
         else if (this->GetType() == "adjoint")
         {
           // state values in quadrature points
-          if (GetFunctional()->GetType().find("boundary") != std::string::npos)
-            GetFunctional()->BoundaryValue_U(fdc, local_vector, scale);
+          if(GetFunctional()->NeedTime())
+	  {
+	    if (GetFunctional()->GetType().find("boundary") != std::string::npos)
+	    {
+	      if(GetFunctional()->GetType().find("timedistributed") != std::string::npos)
+	      {
+		GetFunctional()->BoundaryValue_U(fdc, local_vector, scale*_interval_length);
+	      }
+	      else 
+	      {
+		GetFunctional()->BoundaryValue_U(fdc, local_vector, scale);
+	      }
+	      if(GetFunctional()->GetType().find("timedistributed") != std::string::npos && GetFunctional()->GetType().find("timelocal") != std::string::npos)
+	      {
+		throw DOpEException("Conflicting functional types: "+ GetFunctional()->GetType(),
+				    "OptProblemContainer::BoundaryRhs");
+	      } 
+	    }
+	  } 
         }
         else if (this->GetType() == "adjoint_for_ee")
         {
           //values of the derivative of the functional for error estimation
-          if (_aux_functionals[_functional_for_ee_num]->GetType().find(
-              "boundary") != std::string::npos)
-            _aux_functionals[_functional_for_ee_num]->BoundaryValue_U(fdc,
-                local_vector, scale);
+          if (_aux_functionals[_functional_for_ee_num]->NeedTime())
+	  {
+	    if (_aux_functionals[_functional_for_ee_num]->GetType().find(
+		  "boundary") != std::string::npos)
+	    {
+	      if(_aux_functionals[_functional_for_ee_num]->GetType().find("timedistributed") != std::string::npos)
+	      {
+		_aux_functionals[_functional_for_ee_num]->BoundaryValue_U(fdc,
+									  local_vector, scale*_interval_length);
+	      }
+	      else
+	      {
+		_aux_functionals[_functional_for_ee_num]->BoundaryValue_U(fdc,
+									  local_vector, scale);
+	      }
+	      if(_aux_functionals[_functional_for_ee_num]->GetType().find("timedistributed") != std::string::npos  && _aux_functionals[_functional_for_ee_num]->GetType().find("timelocal") != std::string::npos)
+	      {
+		throw DOpEException("Conflicting functional types: "+ _aux_functionals[_functional_for_ee_num]->GetType(),
+				    "OptProblemContainer::BoundaryRhs");
+	      } 
+	    }
+	  }
         }
         else if (this->GetType() == "tangent")
         {
           // state values in quadrature points
           scale *= -1;
-          this->GetPDE().BoundaryEquation_QT(fdc, local_vector, scale,
-              scale);
+          this->GetPDE().BoundaryEquation_QT(fdc, local_vector, scale*_interval_length,
+              scale*_interval_length);
         }
         else if (this->GetType() == "adjoint_hessian")
         {
           // state values in quadrature points
-          if (GetFunctional()->GetType().find("boundary") != std::string::npos)
-          {
-            GetFunctional()->BoundaryValue_UU(fdc, local_vector, scale);
-            GetFunctional()->BoundaryValue_QU(fdc, local_vector, scale);
+          if(GetFunctional()->NeedTime())
+	  {
+	    if (GetFunctional()->GetType().find("boundary") != std::string::npos)
+	    {
+	      if(GetFunctional()->GetType().find("timedistributed") != std::string::npos)
+	      {
+		GetFunctional()->BoundaryValue_UU(fdc, local_vector, scale*_interval_length);
+		GetFunctional()->BoundaryValue_QU(fdc, local_vector, scale*_interval_length);
+	      }
+	      else 
+	      {
+		GetFunctional()->BoundaryValue_UU(fdc, local_vector, scale);
+		GetFunctional()->BoundaryValue_QU(fdc, local_vector, scale);
+	      }
+	      if(GetFunctional()->GetType().find("timedistributed") != std::string::npos && GetFunctional()->GetType().find("timelocal") != std::string::npos)
+	      {
+		throw DOpEException("Conflicting functional types: "+ GetFunctional()->GetType(),
+				    "OptProblemContainer::BoundaryRhs");
+	      } 
+	    }
           }
 
           scale *= -1;
-          this->GetPDE().BoundaryEquation_UU(fdc, local_vector, scale,
-              scale);
-          this->GetPDE().BoundaryEquation_QU(fdc, local_vector, scale,
-              scale);
+          this->GetPDE().BoundaryEquation_UU(fdc, local_vector, scale*_interval_length,
+              scale*_interval_length);
+          this->GetPDE().BoundaryEquation_QU(fdc, local_vector, scale*_interval_length,
+              scale*_interval_length);
         }
         else if (this->GetType() == "gradient")
         {
           // state values in quadrature points
-          if (GetFunctional()->GetType().find("boundary") != std::string::npos)
-            GetFunctional()->BoundaryValue_Q(fdc, local_vector, scale);
+          if(GetFunctional()->NeedTime())
+	  {
+	    if (GetFunctional()->GetType().find("boundary") != std::string::npos)
+	    {
+	      if(GetFunctional()->GetType().find("timedistributed") != std::string::npos)
+	      {
+		GetFunctional()->BoundaryValue_Q(fdc, local_vector, scale*_interval_length);
+	      }
+	      else
+	      {
+		GetFunctional()->BoundaryValue_Q(fdc, local_vector, scale);
+	      }
+	      if(GetFunctional()->GetType().find("timedistributed") != std::string::npos && GetFunctional()->GetType().find("timelocal") != std::string::npos)
+	      {
+		throw DOpEException("Conflicting functional types: "+ GetFunctional()->GetType(),
+				    "OptProblemContainer::BoundaryRhs");
+	      } 
+	    }
+	  }  
 
           scale *= -1;
-          this->GetPDE().BoundaryEquation_Q(fdc, local_vector, scale,
-              scale);
+          this->GetPDE().BoundaryEquation_Q(fdc, local_vector, scale*_interval_length,
+              scale*_interval_length);
         }
         else if (this->GetType() == "hessian")
         {
           // state values in quadrature points
-          if (GetFunctional()->GetType().find("boundary") != std::string::npos)
-          {
-            GetFunctional()->BoundaryValue_QQ(fdc, local_vector, scale);
-            GetFunctional()->BoundaryValue_UQ(fdc, local_vector, scale);
+          if(GetFunctional()->NeedTime())
+	  {
+	    if (GetFunctional()->GetType().find("boundary") != std::string::npos)
+	    {
+	      if(GetFunctional()->GetType().find("timedistributed") != std::string::npos)
+	      {
+		GetFunctional()->BoundaryValue_QQ(fdc, local_vector, scale*_interval_length);
+		GetFunctional()->BoundaryValue_UQ(fdc, local_vector, scale*_interval_length);
+	      }
+	      else 
+	      {
+		GetFunctional()->BoundaryValue_QQ(fdc, local_vector, scale);
+		GetFunctional()->BoundaryValue_UQ(fdc, local_vector, scale);
+	      }
+	      if(GetFunctional()->GetType().find("timedistributed") != std::string::npos && GetFunctional()->GetType().find("timelocal") != std::string::npos)
+	      {
+		throw DOpEException("Conflicting functional types: "+ GetFunctional()->GetType(),
+				    "OptProblemContainer::BoundaryRhs");
+	      }
+	    }
           }
 
           scale *= -1;
-          this->GetPDE().BoundaryEquation_QTT(fdc, local_vector, scale,
-              scale);
-          this->GetPDE().BoundaryEquation_UQ(fdc, local_vector, scale,
-              scale);
-          this->GetPDE().BoundaryEquation_QQ(fdc, local_vector, scale,
-              scale);
+          this->GetPDE().BoundaryEquation_QTT(fdc, local_vector, scale*_interval_length,
+              scale*_interval_length);
+          this->GetPDE().BoundaryEquation_UQ(fdc, local_vector, scale*_interval_length,
+              scale*_interval_length);
+          this->GetPDE().BoundaryEquation_QQ(fdc, local_vector, scale*_interval_length,
+              scale*_interval_length);
         }
         else
         {
@@ -2359,21 +2739,21 @@ namespace DOpE
         if (this->GetType() == "state" || this->GetType() == "tangent")
         {
           // state values in quadrature points
-          this->GetPDE().ElementMatrix(edc, local_entry_matrix, scale, scale_ico);
+          this->GetPDE().ElementMatrix(edc, local_entry_matrix, scale*_interval_length, scale_ico*_interval_length);
         }
         else if (this->GetType() == "adjoint"
             || this->GetType() == "adjoint_for_ee"
             || this->GetType() == "adjoint_hessian")
         {
           // state values in quadrature points
-          this->GetPDE().ElementMatrix_T(edc, local_entry_matrix, scale,
-              scale_ico);
+          this->GetPDE().ElementMatrix_T(edc, local_entry_matrix, scale*_interval_length,
+              scale_ico*_interval_length);
         }
         else if ((this->GetType() == "gradient")
             || (this->GetType() == "hessian"))
         {
           // control values in quadrature points
-          this->GetPDE().ControlElementMatrix(edc, local_entry_matrix);
+          this->GetPDE().ControlElementMatrix(edc, local_entry_matrix, scale*_c_interval_length);
         }
         else
         {
@@ -2474,15 +2854,15 @@ namespace DOpE
         if (this->GetType() == "state" || this->GetType() == "tangent")
         {
           // state values in face quadrature points
-          this->GetPDE().FaceMatrix(fdc, local_entry_matrix, scale, scale_ico);
+          this->GetPDE().FaceMatrix(fdc, local_entry_matrix, scale*_interval_length, scale_ico*_interval_length);
         }
         else if (this->GetType() == "adjoint"
             || this->GetType() == "adjoint_for_ee"
             || this->GetType() == "adjoint_hessian")
         {
           // state values in quadrature points
-          this->GetPDE().FaceMatrix_T(fdc, local_entry_matrix, scale,
-              scale_ico);
+          this->GetPDE().FaceMatrix_T(fdc, local_entry_matrix, scale*_interval_length,
+              scale_ico*_interval_length);
         }
 //        else if ((this->GetType() == "gradient") || (this->GetType() == "hessian"))
 //        {
@@ -2512,15 +2892,15 @@ namespace DOpE
       {
         if (this->GetType() == "state")
         {
-          this->GetPDE().InterfaceMatrix(fdc, local_entry_matrix, scale,
-              scale_ico);
+          this->GetPDE().InterfaceMatrix(fdc, local_entry_matrix, scale*_interval_length,
+              scale_ico*_interval_length);
         }
         else if (this->GetType() == "adjoint"
             || this->GetType() == "adjoint_for_ee"
             || this->GetType() == "adjoint_hessian")
         {
-          this->GetPDE().InterfaceMatrix_T(fdc, local_entry_matrix, scale,
-              scale_ico);
+          this->GetPDE().InterfaceMatrix_T(fdc, local_entry_matrix, scale*_interval_length,
+              scale_ico*_interval_length);
         }
         else
         {
@@ -2545,16 +2925,16 @@ namespace DOpE
         if (this->GetType() == "state" || this->GetType() == "tangent")
         {
           // state values in face quadrature points
-          this->GetPDE().BoundaryMatrix(fdc, local_matrix, scale,
-              scale_ico);
+          this->GetPDE().BoundaryMatrix(fdc, local_matrix, scale*_interval_length,
+              scale_ico*_interval_length);
         }
         else if (this->GetType() == "adjoint"
             || this->GetType() == "adjoint_for_ee"
             || this->GetType() == "adjoint_hessian")
         {
           // state values in quadrature points
-          this->GetPDE().BoundaryMatrix_T(fdc, local_matrix, scale,
-              scale_ico);
+          this->GetPDE().BoundaryMatrix_T(fdc, local_matrix, scale*_interval_length,
+              scale_ico*_interval_length);
         }
 //        else if ((this->GetType() == "gradient") || (this->GetType() == "hessian"))
 //        {
@@ -2812,11 +3192,22 @@ namespace DOpE
     void
     OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
         SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::SetTime(double time,
-        const TimeIterator& interval)
+								    const TimeIterator& interval, bool initial)
     {
       GetSpaceTimeHandler()->SetInterval(interval);
+      _initial = initial;
       //      GetSpaceTimeHandler()->SetTimeDoFNumber(time_point);
+      _interval_length = GetSpaceTimeHandler()->GetStepSize();
 
+      if(GetSpaceTimeHandler()->GetControlType() == DOpEtypes::ControlType::initial || GetSpaceTimeHandler()->GetControlType() == DOpEtypes::ControlType::stationary )
+      {
+	_c_interval_length = 1.;
+      }
+      else
+      {
+	_c_interval_length = GetSpaceTimeHandler()->GetStepSize();
+      }
+      
       { //Zeit an Dirichlet Werte uebermitteln
         for (unsigned int i = 0;
             i < _transposed_control_gradient_dirichlet_values.size(); i++)

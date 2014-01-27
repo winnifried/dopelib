@@ -1,5 +1,13 @@
 Changelog DOpE
 ==============
+27.01.2014: Moved the timestepsize from the timestepping scheme into the problem,
+	    i.e., the scheme has to be written for stepsize one. This allows 
+	    to handle timedependent pdes with time indepenent functionals automatically
+	    by scaling only the appropriate terms with the stepsize.
+	    Additionally, the FunctionalInterface::NeedTime has now the default
+	    return value true to avoid the implementation of this function in stationary 
+	    problems.	    
+	    Third, the ControlType is now a DOpEtype and no longer a std::string.
 02.01.2014: Added the StateVector behavior only_recent where only the 
 	    spatial vector of the current timestep exist in memory. 
 	    An example is included in PDE/InstatPDE/Example2

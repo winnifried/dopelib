@@ -349,7 +349,7 @@ template<
 
       void
       BoundaryMatrix(const FDC<DH, VECTOR, dealdim>& fdc,
-          dealii::FullMatrix<double> &local_matrix, double /*scale_ico*/,
+          dealii::FullMatrix<double> &local_matrix, double scale,
           double /*scale_ico*/)
       {
         assert(this->_problem_type == "state");
@@ -379,7 +379,7 @@ template<
                 const Tensor<1, 2> phi_i_v =
                     state_fe_face_values[velocities].value(j, q_point);
 
-                local_matrix(j, i) -= neumann_value * phi_i_v
+                local_matrix(j, i) -= scale * neumann_value * phi_i_v
                     * state_fe_face_values.JxW(q_point);
               }
             }

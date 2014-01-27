@@ -48,13 +48,13 @@ class SpaceTimeHandlerBase
 {
   public:
 
-    SpaceTimeHandlerBase(DOpEtypes::ControlType control_type = DOpEtypes::undefined) : _control_type(control_type)
+    SpaceTimeHandlerBase(DOpEtypes::ControlType control_type = DOpEtypes::stationary) : _control_type(control_type)
     {
       _state_ticket = 1;
       _control_ticket = 1;
     }
 
-    SpaceTimeHandlerBase(const dealii::Triangulation<1> & times, DOpEtypes::ControlType type = DOpEtypes::undefined) :
+    SpaceTimeHandlerBase(const dealii::Triangulation<1> & times, DOpEtypes::ControlType type = DOpEtypes::stationary) :
       _tdfh(times), _interval(_tdfh.first_interval()), _control_type(type)
     {
       _state_ticket = 1;
@@ -63,7 +63,7 @@ class SpaceTimeHandlerBase
 
     SpaceTimeHandlerBase(const dealii::Triangulation<1> & times,
         const dealii::FiniteElement<1>& fe,
-        DOpEtypes::ControlType type = DOpEtypes::undefined) :
+        DOpEtypes::ControlType type = DOpEtypes::stationary) :
           _tdfh(times, fe), _interval(_tdfh.first_interval()), _control_type(type)
     {
       _state_ticket = 1;

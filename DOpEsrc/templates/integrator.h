@@ -449,6 +449,21 @@ namespace DOpE
 	inline const std::map<std::string, const dealii::Vector<SCALAR>*>&
 	  GetParamData() const;
 
+	/**
+	 * This function is used to add usergiven righthandsides to the residual.
+	 * This is usefull if the rhs is expensive to compute.
+	 *
+	 * The given rhs needs to be given to the integrator as domain data
+	 * with the name "fixed_rhs"
+	 *
+	 *
+	 * @param s          A scaling parameter
+	 * @param residual   The given residual. Upon exit from this method
+	 *                   This vector is residual = residual + s* "fixed_rhs"
+	 *
+	 */	 
+	inline void AddPresetRightHandSide(double s, VECTOR &residual) const;
+
       private:
         template<template<int, int> class DH>
           void
@@ -686,6 +701,8 @@ namespace DOpE
               -1.);
           residual += point_rhs;
         }
+	//Check if some preset righthandside exists.
+	AddPresetRightHandSide(-1.,residual);
 
         if (apply_boundary_values)
         {
@@ -968,6 +985,8 @@ namespace DOpE
               1.);
           residual += point_rhs;
         }
+        //Check if some preset righthandside exists.
+	AddPresetRightHandSide(1.,residual);
 
         if (apply_boundary_values)
         {
@@ -1187,8 +1206,6 @@ namespace DOpE
               this->GetParamData(), this->GetDomainData());
           auto& edc = GetIntegratorDataContainerFunc().GetElementDataContainer();
 
-          bool need_faces = pde.HasFaces();
-
           for (; element[0] != endc[0]; element[0]++)
           {
             for (unsigned int dh = 1; dh < dof_handler.size(); dh++)
@@ -1203,12 +1220,6 @@ namespace DOpE
 
             edc.ReInit();
             ret += pde.ElementFunctional(edc);
-
-            if (need_faces)
-            {
-              throw DOpEException("Face Integrals not Implemented!",
-                  "Integrator::ComputeDomainScalar");
-            }
 
             for (unsigned int dh = 1; dh < dof_handler.size(); dh++)
             {
@@ -1391,8 +1402,10 @@ namespace DOpE
           PROBLEM& pde, VECTOR &residual)
       {
         residual = 0.;
-        pde.AlgebraicResidual(residual, this->GetParamData(),
+	pde.AlgebraicResidual(residual, this->GetParamData(),
             this->GetDomainData());
+	//Check if some preset righthandside exists.
+	AddPresetRightHandSide(-1.,residual);
       }
 
   /*******************************************************************************************/
@@ -2138,6 +2151,22 @@ namespace DOpE
             dof_handler->GetDEALDoFHandler(), color, function,
             boundary_values, comp_mask);
       }
+  /*******************************************************************************************/
+
+  template<typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR,
+      int dim>
+    void
+    Integrator<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::AddPresetRightHandSide(double s, 
+										VECTOR &residual) const
+    {
+      typename std::map<std::string, const VECTOR *>::const_iterator it =
+          _domain_data.find("fixed_rhs");
+      if (it != _domain_data.end())
+      {
+	assert(residual.size() == it->second->size());
+	residual.add(s,*(it->second));
+      }
+    }
 
 
 }

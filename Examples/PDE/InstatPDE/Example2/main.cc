@@ -209,7 +209,7 @@ main(int argc, char **argv)
 
   MethodOfLines_SpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR, DIM,
       DIM> DOFH(triangulation, control_fe, state_fe, times,
-      DOpEtypes::undefined);
+      DOpEtypes::ControlType::stationary);
 
   NoConstraints<ElementDataContainer, FaceDataContainer, DOFHANDLER, VECTOR, DIM,
       DIM> Constraints;

@@ -56,6 +56,7 @@ namespace DOpE
         _primal_dirichlet_values = _opt_problem._primal_dirichlet_values;
         _state_boundary_equation_colors
             = _opt_problem._state_boundary_equation_colors;
+	_interval_length = 1.;
       }
 
       std::string
@@ -327,7 +328,7 @@ namespace DOpE
 	 * see OptProblemContainer for details.
 	 */
       inline void
-      SetTime(double time, const TimeIterator& interval);
+      SetTime(double time, const TimeIterator& interval, bool initial = false);
 
         /**
 	 * Functions providing the required information for the integrator.
@@ -408,7 +409,7 @@ namespace DOpE
       std::vector<PrimalDirichletData<DD, VECTOR, dim>*>
           _primal_dirichlet_values;
       std::vector<unsigned int> _state_boundary_equation_colors;
-
+      double _interval_length;
     };
 
   /*****************************************************************************************/
@@ -424,7 +425,7 @@ namespace DOpE
           dealii::Vector<double> &local_vector, double scale,
           double scale_ico)
       {
-        _pde.ElementEquation(edc, local_vector, scale, scale_ico);
+        _pde.ElementEquation(edc, local_vector, scale*_interval_length, scale_ico*_interval_length);
       }
 
   /******************************************************/
@@ -463,7 +464,7 @@ namespace DOpE
           dim>::FaceEquation(const FDC& fdc,
 				 dealii::Vector<double> &local_vector, double scale, double scale_ico)
       {
-        _pde.FaceEquation(fdc, local_vector, scale, scale_ico);
+        _pde.FaceEquation(fdc, local_vector, scale*_interval_length, scale_ico*_interval_length);
       }
 
   /******************************************************/
@@ -476,7 +477,7 @@ namespace DOpE
           dim>::InterfaceEquation(const FDC& fdc,
           dealii::Vector<double> &local_vector, double scale, double scale_ico)
       {
-        _pde.InterfaceEquation(fdc,  local_vector, scale, scale_ico);
+        _pde.InterfaceEquation(fdc,  local_vector, scale*_interval_length, scale_ico*_interval_length);
       }
   /******************************************************/
 
@@ -488,7 +489,7 @@ namespace DOpE
           dim>::BoundaryEquation(const FDC& fdc,
           dealii::Vector<double> &local_vector, double scale, double scale_ico)
       {
-        _pde.BoundaryEquation(fdc, local_vector, scale, scale_ico);
+        _pde.BoundaryEquation(fdc, local_vector, scale*_interval_length, scale_ico*_interval_length);
       }
 
   /******************************************************/
@@ -501,7 +502,7 @@ namespace DOpE
           dim>::ElementRhs(const EDC& edc,
           dealii::Vector<double> &local_vector, double scale)
       {
-        _pde.ElementRightHandSide(edc, local_vector, scale);
+        _pde.ElementRightHandSide(edc, local_vector, scale*_interval_length);
       }
 
   /******************************************************/
@@ -527,7 +528,7 @@ namespace DOpE
           dim>::FaceRhs(const FDC& fdc,
           dealii::Vector<double> &local_vector, double scale)
       {
-        _pde.FaceRightHandSide(fdc, local_vector, scale);
+        _pde.FaceRightHandSide(fdc, local_vector, scale*_interval_length);
       }
 
   /******************************************************/
@@ -540,7 +541,7 @@ namespace DOpE
           dim>::BoundaryRhs(const FDC& fdc,
           dealii::Vector<double> &local_vector, double scale)
       {
-        _pde.BoundaryRightHandSide(fdc, local_vector, scale);
+        _pde.BoundaryRightHandSide(fdc, local_vector, scale*_interval_length);
       }
 
   /******************************************************/
@@ -554,7 +555,7 @@ namespace DOpE
           dealii::FullMatrix<double> &local_entry_matrix, double scale,
           double scale_ico)
       {
-        _pde.ElementMatrix(edc, local_entry_matrix, scale, scale_ico);
+        _pde.ElementMatrix(edc, local_entry_matrix, scale*_interval_length, scale_ico*_interval_length);
       }
 
   /******************************************************/
@@ -594,7 +595,7 @@ namespace DOpE
 			       FullMatrix<double> &local_entry_matrix, double scale,
 			       double scale_ico)
       {
-        _pde.FaceMatrix(fdc, local_entry_matrix, scale, scale_ico);
+        _pde.FaceMatrix(fdc, local_entry_matrix, scale*_interval_length, scale_ico*_interval_length);
       }
 
   /******************************************************/
@@ -608,7 +609,7 @@ namespace DOpE
 				    FullMatrix<double> &local_entry_matrix, double scale,
 				    double scale_ico)
       {
-        _pde.InterfaceMatrix(fdc,  local_entry_matrix, scale, scale_ico);
+        _pde.InterfaceMatrix(fdc,  local_entry_matrix, scale*_interval_length, scale_ico*_interval_length);
       }
 
   /******************************************************/
@@ -622,7 +623,7 @@ namespace DOpE
 				   FullMatrix<double> &local_matrix, double scale,
 				   double scale_ico)
       {
-        _pde.BoundaryMatrix(fdc, local_matrix, scale, scale_ico);
+        _pde.BoundaryMatrix(fdc, local_matrix, scale*_interval_length, scale_ico*_interval_length);
       }
 
   /******************************************************/
@@ -684,9 +685,10 @@ namespace DOpE
       typename SPARSITYPATTERN, typename VECTOR, int dim>
     void
     StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dim>::SetTime(
-        double time, const TimeIterator& interval)
+        double time, const TimeIterator& interval, bool initial)
     {
-      _opt_problem.SetTime(time, interval);
+      _opt_problem.SetTime(time, interval, initial);
+      _interval_length = _opt_problem.GetSpaceTimeHandler()->GetStepSize();
     }
 
   /******************************************************/

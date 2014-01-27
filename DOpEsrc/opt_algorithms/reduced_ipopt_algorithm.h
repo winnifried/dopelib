@@ -149,6 +149,12 @@ Reduced_IpoptAlgorithm<PROBLEM, VECTOR>::Reduced_IpoptAlgorithm(PROBLEM* OP,
     _vector_behavior = vector_behavior;
     _postindex = "_"+this->GetProblem()->GetName();
 
+    DOpEtypes::ControlType ct = S->GetProblem()->GetSpaceTimeHandler()->GetControlType();
+    if((ct != DOpEtypes::ControlType::initial) && (ct != DOpEtypes::ControlType::stationary))
+    {
+      throw DOpEException("The ControlType: "+ DOpEtypesToString(ct) + " is not supported.",
+			  "Reduced_IpoptAlgorithm::Reduced_IpoptAlgorithm");
+    }
   }
 
 /******************************************************/

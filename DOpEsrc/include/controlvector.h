@@ -83,6 +83,8 @@ template<typename VECTOR>
     void SetTimeDoFNumber(unsigned int time_point) const;
     /**
      * Returns a reference to the spacial vector associated to the last time given by SetTime*
+     * If the vecor behavior is initial this generates an error if we are not in the 
+     * initial time point.
      */
     VECTOR& GetSpacialVector();
     /**
@@ -244,6 +246,7 @@ template<typename VECTOR>
 
     const SpaceTimeHandlerBase<VECTOR>* _STH;
     DOpEtypes::VectorStorageType _behavior;
+    DOpEtypes::ControlType _c_type;
     unsigned int _sfh_ticket;
   };
 

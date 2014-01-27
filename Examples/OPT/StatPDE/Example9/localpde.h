@@ -1930,12 +1930,12 @@ template<
 
       void
 	ControlElementMatrix(const EDC<DH, VECTOR, dealdim>& /*edc*/,
-          FullMatrix<double> &local_matrix)
+			     FullMatrix<double> &local_matrix, double scale)
       {
         assert(local_matrix.m() == local_matrix.n());
         for (unsigned int i = 0; i < local_matrix.m(); i++)
         {
-          local_matrix(i, i) += 1.;
+          local_matrix(i, i) += scale * 1.;
         }
       }
 

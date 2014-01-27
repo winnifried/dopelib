@@ -96,14 +96,12 @@ namespace DOpE
     /**
      * An enum describing the type of the control.
      *
-     * undefined      self explanatory
      * stationary     the control is not time dependent
      * initial        the control acts in the initial conditions
      * nonstationary  the control is timedependent
      */
     enum ControlType
     {
-      undefined,
       stationary,
       initial,
       nonstationary
@@ -130,7 +128,7 @@ namespace DOpE
 
 
   /**
-   * Transfers DOpEtypes::VectorStorageType to Human readable values
+   * Transfers DOpEtypes::VectorStorageType etc to Human readable values
    */
   template<typename C>
     static std::string DOpEtypesToString(const C& t)
@@ -159,6 +157,30 @@ namespace DOpE
 	out<<"Unknown DOpEtypes::VectorStorageType"<< std::endl;
 	out<<"Code given is "<< t<<std::endl;
 	throw DOpEException(out.str(),"DOpEtypesToString<DOpEtypes::VectorStorageType");
+      }
+    }
+
+    template <>
+    std::string DOpEtypesToString(const DOpEtypes::ControlType& t)
+    {
+      if( DOpEtypes::ControlType::initial== t )
+      {
+	return "initial";
+      }
+      else if( DOpEtypes::ControlType::stationary == t )
+      {
+	return "stationary";
+      }
+      else if( DOpEtypes::ControlType::nonstationary == t )
+      {
+	return "nonstationary";
+      }
+      else
+      {
+	std::stringstream out;
+	out<<"Unknown DOpEtypes::ControlType"<< std::endl;
+	out<<"Code given is "<< t<<std::endl;
+	throw DOpEException(out.str(),"DOpEtypesToString<DOpEtypes::ControlType");
       }
     }
 

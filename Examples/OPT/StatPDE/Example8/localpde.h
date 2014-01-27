@@ -323,7 +323,7 @@ template<
 
       void
       ControlElementMatrix(const EDC<DH, VECTOR, dealdim>& edc,
-          FullMatrix<double> &local_matrix)
+          FullMatrix<double> &local_matrix, double scale)
       {
         const DOpEWrapper::FEValues<dealdim> & control_fe_values =
             edc.GetFEValuesControl();
@@ -335,7 +335,7 @@ template<
           {
             for (unsigned int j = 0; j < n_dofs_per_element; j++)
             {
-              local_matrix(i, j) += control_fe_values.shape_value(i,
+              local_matrix(i, j) += scale * control_fe_values.shape_value(i,
                   q_point) * control_fe_values.shape_value(j, q_point)
                   * control_fe_values.JxW(q_point);
             }

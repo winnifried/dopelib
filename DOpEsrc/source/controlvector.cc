@@ -39,6 +39,24 @@ ControlVector<VECTOR>::ControlVector(const ControlVector& ref)
   _behavior = ref.GetBehavior();
   _STH      = ref.GetSpaceTimeHandler();
   _sfh_ticket = 0;
+  _c_type = _STH->GetControlType();
+ 
+  //Check consistency
+  if(_c_type == DOpEtypes::ControlType::initial || _c_type == DOpEtypes::ControlType::stationary)
+  {
+    if(_behavior!= DOpEtypes::VectorStorageType::fullmem)
+    {
+      throw DOpEException("Storage behavior: " + DOpEtypesToString(GetBehavior()) + 
+			  " is not compatible with control type: " + DOpEtypesToString(_c_type),
+			  "ControlVector<VECTOR>::ControlVector<VECTOR>");
+    }
+  }
+  if(_behavior != DOpEtypes::VectorStorageType::fullmem)
+  {
+    throw DOpEException("Storage behavior: " + DOpEtypesToString(GetBehavior()) + 
+			" not implemented",
+			"ControlVector<VECTOR>::ControlVector<VECTOR>");
+  }
 
   ReInit();
 }
@@ -50,7 +68,25 @@ ControlVector<VECTOR>::ControlVector(const SpaceTimeHandlerBase<VECTOR>* STH, DO
   _behavior = behavior;
   _STH      = STH;
   _sfh_ticket = 0;
+  _c_type = _STH->GetControlType();
 
+  //Check consistency
+  if(_c_type == DOpEtypes::ControlType::initial || _c_type == DOpEtypes::ControlType::stationary)
+  {
+    if(_behavior!= DOpEtypes::VectorStorageType::fullmem)
+    {
+      throw DOpEException("Storage behavior: " + DOpEtypesToString(GetBehavior()) + 
+			  " is not compatible with control type: " + DOpEtypesToString(_c_type),
+			  "ControlVector<VECTOR>::ControlVector<VECTOR>");
+    }
+  }
+  if(_behavior != DOpEtypes::VectorStorageType::fullmem)
+  {
+    throw DOpEException("Storage behavior: " + DOpEtypesToString(GetBehavior()) + 
+			" not implemented",
+			"ControlVector<VECTOR>::ControlVector<VECTOR>");
+  }
+  
   ReInit();
 }
 
@@ -100,16 +136,32 @@ ControlVector<VECTOR>::~ControlVector()
 
 /******************************************************/
 template<typename VECTOR>
-void ControlVector<VECTOR>::SetTimeDoFNumber(unsigned int /*time_point*/) const
+void ControlVector<VECTOR>::SetTimeDoFNumber(unsigned int time_point) const
 {
-  //TODO if temporal behavior is required one needs to do something here!
+  if(_c_type == DOpEtypes::ControlType::nonstationary)
+  {
+    //TODO if temporal behavior is required one needs to do something here!
+    throw DOpEException("Control type: " + DOpEtypesToString(_c_type) + " is not implemented.",
+			"ControlVector<VECTOR>::SetTimeDoFNumber");
+  }
+  else if(_c_type == DOpEtypes::ControlType::initial)
+  {
+    if(time_point != 0)
+      throw DOpEException("With control type: " + DOpEtypesToString(_c_type) + "the time should never differ from 0.",
+			  "ControlVector<VECTOR>::SetTimeDoFNumber");
+  }
 }
 
 /******************************************************/
 template<typename VECTOR>
 void ControlVector<VECTOR>::SetTime(double /*t*/,  const TimeIterator& /*interval*/) const
 {
-  //TODO if temporal behavior is required one needs to do something here!
+  if(_c_type == DOpEtypes::ControlType::nonstationary)
+  {
+    //TODO if temporal behavior is required one needs to do something here!
+    throw DOpEException("control type: " + DOpEtypesToString(_c_type) + " is not implemented.",
+			"ControlVector<VECTOR>::Time");
+  }
 }
 
 /******************************************************/
@@ -117,14 +169,30 @@ void ControlVector<VECTOR>::SetTime(double /*t*/,  const TimeIterator& /*interva
 template<typename VECTOR>
 VECTOR& ControlVector<VECTOR>::GetSpacialVector()
 {
-  return *(_control[_accessor]);
+  if(_c_type == DOpEtypes::ControlType::stationary || _c_type == DOpEtypes::ControlType::initial)
+  {
+    return *(_control[_accessor]);
+  }
+  else
+  {
+    throw DOpEException("Control type: " + DOpEtypesToString(_c_type) + " is not implemented.",
+			"ControlVector<VECTOR>::GetSpacialVector");
+  }
 }
 
 /******************************************************/
 template<typename VECTOR>
 const VECTOR& ControlVector<VECTOR>::GetSpacialVector() const
 {
-  return *(_control[_accessor]);
+  if(_c_type == DOpEtypes::ControlType::stationary || _c_type == DOpEtypes::ControlType::initial)
+  {
+    return *(_control[_accessor]);
+  }
+  else
+  {
+    throw DOpEException("Control type: " + DOpEtypesToString(_c_type) + " is not implemented.",
+			"ControlVector<VECTOR>::GetSpacialVector");
+  }
 }
 
 /******************************************************/
@@ -136,9 +204,16 @@ const Vector<double>& ControlVector<VECTOR>::GetSpacialVectorCopy() const
     throw DOpEException("Trying to create a new copy while the old is still in use!","ControlVector:GetSpacialVectorCopy");
   }
   _lock = true;
-  _copy_control = *(_control[_accessor]);
-  
-  return _copy_control;
+  if(_c_type == DOpEtypes::ControlType::stationary || _c_type == DOpEtypes::ControlType::initial)
+  {
+    _copy_control = *(_control[_accessor]);
+    return _copy_control;
+  }
+  else
+  {
+    throw DOpEException("Control type: " + DOpEtypesToString(_c_type) + " is not implemented.",
+			"ControlVector<VECTOR>::GetSpacialVectorCopy");
+  }
 }
 
 /******************************************************/
@@ -423,7 +498,7 @@ void ControlVector<VECTOR>::max(const ControlVector& dq)
   }
   else
   {
-    throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),"ControlVector<VECTOR>::equ");
+    throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),"ControlVector<VECTOR>::max");
   }
 }
 
@@ -451,7 +526,7 @@ void ControlVector<VECTOR>::min(const ControlVector& dq)
   }
   else
   {
-    throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),"ControlVector<VECTOR>::equ");
+    throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),"ControlVector<VECTOR>::min");
   }
 }
 /******************************************************/
@@ -477,7 +552,7 @@ void ControlVector<VECTOR>::comp_mult(const ControlVector& dq)
   }
   else
   {
-    throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),"ControlVector<VECTOR>::equ");
+    throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),"ControlVector<VECTOR>::comp_mult");
   }
 }
 
@@ -499,7 +574,7 @@ void ControlVector<VECTOR>::comp_invert()
   }
   else
   {
-    throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),"ControlVector<VECTOR>::equ");
+    throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),"ControlVector<VECTOR>::comp_invert");
   }
 }
 
@@ -533,7 +608,7 @@ void ControlVector<VECTOR>::init_by_sign(double smaller, double larger, double u
   }
   else
   {
-    throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),"ControlVector<VECTOR>::equ");
+    throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),"ControlVector<VECTOR>::init_by_sign");
   }
 }
 /******************************************************/

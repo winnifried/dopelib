@@ -831,7 +831,8 @@ namespace DOpE
 	 */
         virtual void
 	  ControlElementMatrix(const EDC<DH, VECTOR, dealdim>& /*edc*/,
-			    dealii::FullMatrix<double> &/*local_entry_matrix*/);
+			       dealii::FullMatrix<double> &/*local_entry_matrix*/, 
+			       double /*scale*/);
         /******************************************************/
 
 	/**

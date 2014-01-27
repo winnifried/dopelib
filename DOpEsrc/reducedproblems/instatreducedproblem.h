@@ -342,8 +342,10 @@ class InstatReducedProblem: public ReducedProblemInterface<PROBLEM, VECTOR>
      *
      *
      * @param q            The control vector is given to this function.
+     * @param temp_q       A storage vector to hold precomputed values for the gradient 
+     *                     of the cost functional.
      */
-    void ComputeReducedAdjoint(const ControlVector<VECTOR>& q);
+    void ComputeReducedAdjoint(const ControlVector<VECTOR>& q, ControlVector<VECTOR>& temp_q);
 
     /******************************************************/
 
@@ -370,9 +372,12 @@ class InstatReducedProblem: public ReducedProblemInterface<PROBLEM, VECTOR>
      * @param q            The given control vector
      * @param outname      The name prefix given to the solution vectors
      *                     if they are written to files, e.g., Adjoint, Hessian, ...
+     * @param eval_grads   Decide wether to evaluate the gradients of the functionals or not.
+     *                     Should be true for the adjoint and dual_hessian-problem but false
+     *                     for auxilliary backward pdes.
      */
     template<typename PDE>
-      void BackwardTimeLoop(PDE& problem, StateVector<VECTOR>& sol, std::string outname);
+      void BackwardTimeLoop(PDE& problem, StateVector<VECTOR>& sol, ControlVector<VECTOR>& temp_q, std::string outname, bool eval_grads);
 
   private:
 
@@ -442,10 +447,6 @@ void InstatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER, CONTROLINTEGR
             _adjoint_reinit = true;
             _gradient_reinit = true;
           }
-	  if(this->GetProblem()->GetSpaceTimeHandler()->GetControlType() == DOpEtypes::ControlType::stationary)
-	  {
-	    throw DOpEException("ControlType: stationary has no meeaning here." , "InstatReducedProblem::InstatReducedProblem");
-	  }
       }
 
 /******************************************************/
@@ -478,10 +479,6 @@ void InstatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER, CONTROLINTEGR
             _adjoint_reinit = true;
             _gradient_reinit = true;
           }
-	  if(this->GetProblem()->GetSpaceTimeHandler()->GetControlType() == DOpEtypes::ControlType::stationary)
-	  {
-	    throw DOpEException("ControlType: stationary has no meeaning here." , "InstatReducedProblem::InstatReducedProblem");
-	  }
       }
 
 /******************************************************/
@@ -621,7 +618,7 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER, typename CON
     int dealdim>
 void InstatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER, CONTROLINTEGRATOR, INTEGRATOR,
     PROBLEM, VECTOR, dopedim, dealdim>::ComputeReducedAdjoint(
-      const ControlVector<VECTOR>& q)
+      const ControlVector<VECTOR>& q, ControlVector<VECTOR>& temp_q)
 {
   this->GetOutputHandler()->Write("Computing Adjoint Solution:", 4 + this->GetBasePriority());
 
@@ -635,7 +632,7 @@ void InstatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER, CONTROLINTEGR
 
   this->GetProblem()->AddAuxiliaryState(&(this->GetU()),"state");
   this->GetProblem()->AddAuxiliaryControl(&q,"control");
-  this->BackwardTimeLoop(problem,this->GetZ(),"Adjoint");
+  this->BackwardTimeLoop(problem,this->GetZ(),temp_q,"Adjoint",true);
   this->GetProblem()->DeleteAuxiliaryControl("control");
   this->GetProblem()->DeleteAuxiliaryState("state");
 }
@@ -651,7 +648,11 @@ void InstatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER, CONTROLINTEGR
       ControlVector<VECTOR>& gradient,
       ControlVector<VECTOR>& gradient_transposed)
 {
-  this->ComputeReducedAdjoint(q);
+  if(this->GetProblem()->GetSpaceTimeHandler()->GetControlType() != DOpEtypes::ControlType::initial)
+  {
+    gradient = 0.;
+  }
+  this->ComputeReducedAdjoint(q,gradient);
 
   this->GetOutputHandler()->Write("Computing Reduced Gradient:",
 				  4 + this->GetBasePriority());
@@ -670,6 +671,7 @@ void InstatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER, CONTROLINTEGR
 
   if(this->GetProblem()->GetSpaceTimeHandler()->GetControlType() == DOpEtypes::ControlType::initial)
   {
+    
     //Set time to initial 
     const std::vector<double> times =
       this->GetProblem()->GetSpaceTimeHandler()->GetTimes();
@@ -681,9 +683,12 @@ void InstatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER, CONTROLINTEGR
       TimeIterator it =
 	this->GetProblem()->GetSpaceTimeHandler()->GetTimeDoFHandler().first_interval();
       it.get_time_dof_indices(local_to_global);
-      this->GetProblem()->SetTime(times[local_to_global[0]], it);
+      this->GetProblem()->SetTime(times[local_to_global[0]], it,true);
       GetU().SetTimeDoFNumber(local_to_global[0], it);
       GetZ().SetTimeDoFNumber(local_to_global[0], it);
+      q.SetTimeDoFNumber(local_to_global[0]);
+      gradient.SetTimeDoFNumber(local_to_global[0]);
+      gradient_transposed.SetTimeDoFNumber(local_to_global[0]);
     }
     
     this->GetProblem()->AddAuxiliaryToIntegrator(this->GetControlIntegrator());
@@ -761,11 +766,119 @@ void InstatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER, CONTROLINTEGR
     this->GetOutputHandler()->Write(gradient_transposed,
 				    "Gradient_Transposed" + this->GetPostIndex(),
 				    this->GetProblem()->GetDoFType());
-  }
+  }//End initial
+  else if(this->GetProblem()->GetSpaceTimeHandler()->GetControlType() == DOpEtypes::ControlType::stationary)
+  {
+    
+    //Set time to initial 
+    const std::vector<double> times =
+      this->GetProblem()->GetSpaceTimeHandler()->GetTimes();
+    const unsigned int
+      n_dofs_per_interval =
+      this->GetProblem()->GetSpaceTimeHandler()->GetTimeDoFHandler().GetLocalNbrOfDoFs();
+    std::vector<unsigned int> local_to_global(n_dofs_per_interval);
+    {
+      TimeIterator it =
+	this->GetProblem()->GetSpaceTimeHandler()->GetTimeDoFHandler().first_interval();
+      it.get_time_dof_indices(local_to_global);
+      this->GetProblem()->SetTime(times[local_to_global[0]], it,true);
+      GetU().SetTimeDoFNumber(local_to_global[0], it);
+      GetZ().SetTimeDoFNumber(local_to_global[0], it);
+      q.SetTimeDoFNumber(local_to_global[0]);
+      gradient.SetTimeDoFNumber(local_to_global[0]);
+      gradient_transposed.SetTimeDoFNumber(local_to_global[0]);
+    }
+    //Dupliziere ggf. vorberechnete Werte.
+    ControlVector<VECTOR> tmp = gradient;
+    tmp.GetSpacialVector() = gradient.GetSpacialVector();
+    
+
+    this->GetProblem()->AddAuxiliaryToIntegrator(this->GetControlIntegrator());
+    
+    if (dopedim == dealdim)
+    {
+      this->GetControlIntegrator().AddDomainData("control",
+						 &(q.GetSpacialVector()));
+      this->GetControlIntegrator().AddDomainData("fixed_rhs",&tmp.GetSpacialVector());
+    }
+    else if (dopedim == 0)
+    {
+      this->GetControlIntegrator().AddParamData("control",
+						&(q.GetSpacialVectorCopy()));
+      this->GetControlIntegrator().AddParamData("fixed_rhs",
+						&(tmp.GetSpacialVectorCopy()));
+    }
+    else
+    {
+      throw DOpEException("dopedim not implemented",
+			  "InstatReducedProblem::ComputeReducedGradient");
+    }
+
+    this->GetControlIntegrator().AddDomainData("state",
+					       &(GetU().GetSpacialVector()));
+    this->GetControlIntegrator().AddDomainData("adjoint",
+					       &(GetZ().GetSpacialVector()));
+    gradient_transposed = 0.;
+    if (dopedim == dealdim)
+    {
+      this->GetControlIntegrator().AddDomainData("last_newton_solution",
+						 &(gradient_transposed.GetSpacialVector()));
+      this->GetControlIntegrator().ComputeNonlinearResidual(
+	*(this->GetProblem()), gradient.GetSpacialVector(), true);
+      this->GetControlIntegrator().DeleteDomainData("last_newton_solution");
+    }
+    else if (dopedim == 0)
+    {
+      this->GetControlIntegrator().AddParamData("last_newton_solution",
+						&(gradient_transposed.GetSpacialVectorCopy()));
+      this->GetControlIntegrator().ComputeNonlinearResidual(
+	*(this->GetProblem()), gradient.GetSpacialVector(), true);
+      
+      this->GetControlIntegrator().DeleteParamData("last_newton_solution");
+      gradient_transposed.UnLockCopy();
+    }
+
+    gradient *= -1.;
+    gradient_transposed = gradient;
+    
+    //Compute l^2 representation of the Gradient
+    
+    _build_control_matrix = this->GetControlNonlinearSolver().NonlinearSolve(
+      *(this->GetProblem()), gradient_transposed.GetSpacialVector(), true,
+      _build_control_matrix);
+    if (dopedim == dealdim)
+    {
+      this->GetControlIntegrator().DeleteDomainData("control");
+      this->GetControlIntegrator().DeleteDomainData("fixed_rhs");
+    }
+    else if (dopedim == 0)
+    {
+      this->GetControlIntegrator().DeleteParamData("control");
+      q.UnLockCopy();
+      this->GetControlIntegrator().DeleteParamData("fixed_rhs");
+      tmp.UnLockCopy();
+    }
+    else
+    {
+      throw DOpEException("dopedim not implemented",
+			  "InstatReducedProblem::ComputeReducedGradient");
+    }
+    this->GetControlIntegrator().DeleteDomainData("state");
+    this->GetControlIntegrator().DeleteDomainData("adjoint");
+    
+    this->GetProblem()->DeleteAuxiliaryFromIntegrator(
+      this->GetControlIntegrator());
+    
+    this->GetOutputHandler()->Write(gradient,
+				    "Gradient" + this->GetPostIndex(), this->GetProblem()->GetDoFType());
+    this->GetOutputHandler()->Write(gradient_transposed,
+				    "Gradient_Transposed" + this->GetPostIndex(),
+				    this->GetProblem()->GetDoFType());
+  }//End stationary
   else
   {
     std::stringstream out;
-    out << "Unknown ControlType: "<<this->GetProblem()->GetSpaceTimeHandler()->GetControlType();
+    out << "Unknown ControlType: "<<DOpEtypesToString(this->GetProblem()->GetSpaceTimeHandler()->GetControlType());
     throw DOpEException(out.str(), "InstatReducedProblem::ComputeReducedGradient");
   }
 }
@@ -877,7 +990,10 @@ void InstatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER, CONTROLINTEGR
 {
   this->GetOutputHandler()->Write("Computing ReducedHessianVector:",
 				  4 + this->GetBasePriority());
-  
+  if(this->GetProblem()->GetSpaceTimeHandler()->GetControlType() != DOpEtypes::ControlType::initial)
+  {
+    hessian_direction = 0.;
+  }
   //Solving the Tangent Problem
   {
     this->GetOutputHandler()->Write("\tSolving Tangent:",
@@ -902,7 +1018,7 @@ void InstatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER, CONTROLINTEGR
     
     this->GetProblem()->AddAuxiliaryState(&(this->GetDU()),"tangent");
     
-    this->BackwardTimeLoop(problem,this->GetDZ(),"Hessian");
+    this->BackwardTimeLoop(problem,this->GetDZ(),hessian_direction,"Hessian",true);
   }
   if (this->GetProblem()->HasControlInDirichletData())
   {
@@ -932,11 +1048,14 @@ void InstatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER, CONTROLINTEGR
 	TimeIterator it =
 	  this->GetProblem()->GetSpaceTimeHandler()->GetTimeDoFHandler().first_interval();
 	it.get_time_dof_indices(local_to_global);
-	this->GetProblem()->SetTime(times[local_to_global[0]], it);
+	this->GetProblem()->SetTime(times[local_to_global[0]], it,true);
 	GetU().SetTimeDoFNumber(local_to_global[0], it);
 	GetZ().SetTimeDoFNumber(local_to_global[0], it);
 	GetDU().SetTimeDoFNumber(local_to_global[0], it);
 	GetDZ().SetTimeDoFNumber(local_to_global[0], it);
+	q.SetTimeDoFNumber(local_to_global[0]);
+	hessian_direction.SetTimeDoFNumber(local_to_global[0]);
+	hessian_direction_transposed.SetTimeDoFNumber(local_to_global[0]);
       }
       
       this->GetProblem()->AddAuxiliaryToIntegrator(
@@ -983,10 +1102,86 @@ void InstatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER, CONTROLINTEGR
       this->GetProblem()->DeleteAuxiliaryFromIntegrator(
 	this->GetControlIntegrator());
     }//Endof the case of control in the initial values
+    else if(this->GetProblem()->GetSpaceTimeHandler()->GetControlType() == DOpEtypes::ControlType::stationary)
+    {
+      //Set time to initial 
+      const std::vector<double> times =
+	this->GetProblem()->GetSpaceTimeHandler()->GetTimes();
+      const unsigned int
+	n_dofs_per_interval =
+	this->GetProblem()->GetSpaceTimeHandler()->GetTimeDoFHandler().GetLocalNbrOfDoFs();
+      std::vector<unsigned int> local_to_global(n_dofs_per_interval);
+      {
+	TimeIterator it =
+	  this->GetProblem()->GetSpaceTimeHandler()->GetTimeDoFHandler().first_interval();
+	it.get_time_dof_indices(local_to_global);
+	this->GetProblem()->SetTime(times[local_to_global[0]], it,true);
+	GetU().SetTimeDoFNumber(local_to_global[0], it);
+	GetZ().SetTimeDoFNumber(local_to_global[0], it);
+	GetDU().SetTimeDoFNumber(local_to_global[0], it);
+	GetDZ().SetTimeDoFNumber(local_to_global[0], it);
+	q.SetTimeDoFNumber(local_to_global[0]);
+	hessian_direction.SetTimeDoFNumber(local_to_global[0]);
+	hessian_direction_transposed.SetTimeDoFNumber(local_to_global[0]);
+      }
+      //Dupliziere ggf. vorberechnete Werte.
+      ControlVector<VECTOR> tmp = hessian_direction;
+      tmp.GetSpacialVector() = hessian_direction.GetSpacialVector();
+
+      this->GetProblem()->AddAuxiliaryToIntegrator(
+	this->GetControlIntegrator());
+
+      hessian_direction_transposed = 0.;
+      if (dopedim == dealdim)
+      {
+	this->GetControlIntegrator().AddDomainData("fixed_rhs",&tmp.GetSpacialVector());
+	this->GetControlIntegrator().AddDomainData("last_newton_solution",
+						   &(hessian_direction_transposed.GetSpacialVector()));
+	this->GetControlIntegrator().ComputeNonlinearResidual(
+	  *(this->GetProblem()), hessian_direction.GetSpacialVector(),
+	  true);
+	this->GetControlIntegrator().DeleteDomainData("last_newton_solution");
+	this->GetControlIntegrator().DeleteDomainData("fixed_rhs");
+      }
+      else if (dopedim == 0)
+      {
+	this->GetControlIntegrator().AddParamData("fixed_rhs",
+						&(tmp.GetSpacialVectorCopy()));
+	this->GetControlIntegrator().AddParamData("last_newton_solution",
+						  &(hessian_direction_transposed.GetSpacialVectorCopy()));
+	this->GetControlIntegrator().ComputeNonlinearResidual(
+	  *(this->GetProblem()), hessian_direction.GetSpacialVector(),
+	  true);
+	this->GetControlIntegrator().DeleteParamData("last_newton_solution");
+	hessian_direction_transposed.UnLockCopy();  
+	this->GetControlIntegrator().DeleteParamData("fixed_rhs");
+	tmp.UnLockCopy();
+      }
+
+      hessian_direction *= -1.;
+      hessian_direction_transposed = hessian_direction;
+      //Compute l^2 representation of the HessianVector
+      //hessian Matrix is the same as control matrix
+      _build_control_matrix =
+	this->GetControlNonlinearSolver().NonlinearSolve(
+	  *(this->GetProblem()),
+	  hessian_direction_transposed.GetSpacialVector(), true,
+	  _build_control_matrix);
+      
+      this->GetOutputHandler()->Write(hessian_direction,
+				      "HessianDirection" + this->GetPostIndex(),
+				      this->GetProblem()->GetDoFType());
+      this->GetOutputHandler()->Write(hessian_direction_transposed,
+				      "HessianDirection_Transposed" + this->GetPostIndex(),
+				      this->GetProblem()->GetDoFType());
+
+      this->GetProblem()->DeleteAuxiliaryFromIntegrator(
+	this->GetControlIntegrator());
+    }//Endof stationary
     else
     {
       std::stringstream out;
-      out << "Unknown ControlType: "<<this->GetProblem()->GetSpaceTimeHandler()->GetControlType();
+      out << "Unknown ControlType: "<<DOpEtypesToString(this->GetProblem()->GetSpaceTimeHandler()->GetControlType());
       throw DOpEException(out.str(), "InstatReducedProblem::ComputeReducedHessianVector");
     }
   }//End of HessianVector Repr.
@@ -1308,7 +1503,7 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
       TimeIterator it =
 	problem.GetSpaceTimeHandler()->GetTimeDoFHandler().first_interval();
       it.get_time_dof_indices(local_to_global);
-      problem.SetTime(times[local_to_global[0]], it);
+      problem.SetTime(times[local_to_global[0]], it,true);
       sol.SetTimeDoFNumber(local_to_global[0], it);
     }
     //u_alt auf initial_values setzen
@@ -1372,7 +1567,7 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 	this->GetOutputHandler()->SetIterationNumber(local_to_global[i],
 						     "Time");
 	double time = times[local_to_global[i]];
-	
+
 	std::stringstream out;
   this->GetOutputHandler()->InitOut(out);
 	out << "\t\t Timestep: " << local_to_global[i] << " ("
@@ -1426,7 +1621,7 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
   template<typename PDE>
   void InstatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER,
   CONTROLINTEGRATOR, INTEGRATOR, PROBLEM, VECTOR, dopedim, dealdim>::
-  BackwardTimeLoop(PDE& problem, StateVector<VECTOR>& sol, std::string outname)
+  BackwardTimeLoop(PDE& problem, StateVector<VECTOR>& sol, ControlVector<VECTOR>& temp_q, std::string outname, bool eval_grads)
   {
     VECTOR u_alt;
 
@@ -1442,6 +1637,7 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
       TimeIterator it =
 	problem.GetSpaceTimeHandler()->GetTimeDoFHandler().last_interval();
       it.get_time_dof_indices(local_to_global);
+      //The initial values for the dual problem
       problem.SetTime(times[local_to_global[local_to_global.size()-1]], it);
       sol.SetTimeDoFNumber(local_to_global[local_to_global.size()-1], it);
     }
@@ -1538,8 +1734,113 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 					outname + this->GetPostIndex(), problem.GetDoFType());
 
 	//Maybe build local gradient here
-      }
-    }
+	if(eval_grads)
+	{
+	  if(outname == "Adjoint")
+	  {
+	    this->SetProblemType("gradient");
+	    if(this->GetProblem()->GetSpaceTimeHandler()->GetControlType() == DOpEtypes::ControlType::initial)
+	    {
+	      //Nothing to do
+	    }
+	    else if(this->GetProblem()->GetSpaceTimeHandler()->GetControlType() == DOpEtypes::ControlType::stationary)
+	    {
+	      if(local_to_global[j] != 0)
+	      {
+		//Update Residual
+		//Only if not the initial time: Calculations at initial time are 
+		//performed in the ComputeReducedGradient function.
+		this->GetProblem()->AddAuxiliaryToIntegrator(this->GetControlIntegrator());
+		temp_q.SetTimeDoFNumber(local_to_global[j]);
+		this->GetControlIntegrator().AddDomainData("adjoint",&(sol.GetSpacialVector()));
+		
+		VECTOR tmp = temp_q.GetSpacialVector();
+		if (dopedim == dealdim)
+		{
+		  VECTOR tmp_2 = temp_q.GetSpacialVector();
+		  tmp = 0.; 
+		  tmp_2 = 0.;
+		  this->GetControlIntegrator().AddDomainData("last_newton_solution",&tmp_2);
+		  this->GetControlIntegrator().ComputeNonlinearResidual(*(this->GetProblem()), tmp, true);
+		  this->GetControlIntegrator().DeleteDomainData("last_newton_solution");
+		}
+		else if (dopedim == 0)
+		{	
+		  dealii::Vector<double> tmp_2 = temp_q.GetSpacialVectorCopy();
+		  tmp = 0.; 
+		  tmp_2 = 0.;
+		  this->GetControlIntegrator().AddParamData("last_newton_solution",&tmp_2);
+		  this->GetControlIntegrator().ComputeNonlinearResidual(*(this->GetProblem()), tmp, true);
+		  this->GetControlIntegrator().DeleteParamData("last_newton_solution");
+		  temp_q.UnLockCopy();
+		}	
+		this->GetControlIntegrator().DeleteDomainData("adjoint");
+		temp_q.GetSpacialVector() -= tmp;
+		this->GetProblem()->DeleteAuxiliaryFromIntegrator(this->GetControlIntegrator());	      
+	      }
+	    }
+	    else
+	    {
+	      throw DOpEException("Unknown ControlType: "+DOpEtypesToString(this->GetProblem()->GetSpaceTimeHandler()->GetControlType())+". In case Adjoint.", "InstatReducedProblem::BackwardTimeLoop");
+	    }
+	    this->SetProblemType("adjoint");
+	  }//Endof Adjoint case
+	  else if (outname == "Hessian")
+	  {
+	    this->SetProblemType("hessian");
+	    if(this->GetProblem()->GetSpaceTimeHandler()->GetControlType() == DOpEtypes::ControlType::initial)
+	    {
+	      //Nothing to do
+	    }
+	    else if(this->GetProblem()->GetSpaceTimeHandler()->GetControlType() == DOpEtypes::ControlType::stationary)
+	    {
+	      if(local_to_global[j] != 0)
+	      {
+		//Update Residual
+		//Only if not the initial time: Calculations at initial time are 
+		//performed in the ComputeReducedHessian function.
+		this->GetProblem()->AddAuxiliaryToIntegrator(this->GetControlIntegrator());
+		temp_q.SetTimeDoFNumber(local_to_global[j]);
+		this->GetControlIntegrator().AddDomainData("adjoint_hessian",&(sol.GetSpacialVector()));
+		
+		VECTOR tmp = temp_q.GetSpacialVector();
+		if (dopedim == dealdim)
+		{
+		  VECTOR tmp_2 = temp_q.GetSpacialVector();
+		  tmp = 0.; 
+		  tmp_2 = 0.;
+		  this->GetControlIntegrator().AddDomainData("last_newton_solution",&tmp_2);
+		  this->GetControlIntegrator().ComputeNonlinearResidual(*(this->GetProblem()), tmp, true);
+		  this->GetControlIntegrator().DeleteDomainData("last_newton_solution");
+		}
+		else if (dopedim == 0)
+		{	
+		  dealii::Vector<double> tmp_2 = temp_q.GetSpacialVectorCopy();
+		  tmp = 0.; 
+		  tmp_2 = 0.;
+		  this->GetControlIntegrator().AddParamData("last_newton_solution",&tmp_2);
+		  this->GetControlIntegrator().ComputeNonlinearResidual(*(this->GetProblem()), tmp, true);
+		  this->GetControlIntegrator().DeleteParamData("last_newton_solution");
+		  temp_q.UnLockCopy();
+		}	
+		this->GetControlIntegrator().DeleteDomainData("adjoint_hessian");
+		temp_q.GetSpacialVector() -= tmp;
+		this->GetProblem()->DeleteAuxiliaryFromIntegrator(this->GetControlIntegrator());	      
+	      }
+	    }
+	    else
+	    {
+	      throw DOpEException("Unknown ControlType: "+DOpEtypesToString(this->GetProblem()->GetSpaceTimeHandler()->GetControlType())+". In case Hessian.", "InstatReducedProblem::BackwardTimeLoop");
+	    }
+	    this->SetProblemType("adjoint_hessian");
+	  }//Endof Hessian case
+	  else
+	  {
+	    throw DOpEException("Unknown type "+outname,"InstatReducedProblem::BackwardTimeLoop");
+	  }
+	}
+      }//End interval loop
+    }//End time loop
   }
 ////////////////////////////////ENDOF NAMESPACE DOPE/////////////////////////////
 }
