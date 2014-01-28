@@ -70,7 +70,7 @@ namespace DOpE
         }
         MethodOfLines_StateSpaceTimeHandler(
             dealii::Triangulation<dealdim>& triangulation, const FE<dealdim, dealdim>& state_fe,
-            const dealii::Triangulation<1> & times,
+            dealii::Triangulation<1> & times,
             const ActiveFEIndexSetterInterface<dealdim>& index_setter =
                 ActiveFEIndexSetterInterface<dealdim>())
             : StateSpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR,
@@ -101,7 +101,8 @@ namespace DOpE
         MethodOfLines_StateSpaceTimeHandler(
             dealii::Triangulation<dealdim>& triangulation,
             const DOpEWrapper::Mapping<dealdim, DH>& mapping,
-            const FE<dealdim, dealdim>& state_fe, const dealii::Triangulation<1> & times,
+            const FE<dealdim, dealdim>& state_fe, 
+	    dealii::Triangulation<1> & times,
             const ActiveFEIndexSetterInterface<dealdim>& index_setter =
                 ActiveFEIndexSetterInterface<dealdim>())
             : StateSpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR,

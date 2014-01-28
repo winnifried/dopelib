@@ -110,10 +110,12 @@ namespace DOpE
     if(_ts_tangent_problem != NULL)
     {
       delete _ts_tangent_problem;
+      _ts_tangent_problem = NULL;
     }
     if(_ts_adjoint_hessian_problem != NULL)
     {
       delete _ts_adjoint_hessian_problem;
+      _ts_adjoint_hessian_problem = NULL;
     }
     OptProblemContainer<FUNCTIONAL_INTERFACE,FUNCTIONAL,PDE,DD,CONSTRAINTS,SPARSITYPATTERN,VECTOR,dopedim,dealdim,FE, DH>::ReInit(algo_type);
 	

@@ -80,7 +80,7 @@ namespace DOpE
         MethodOfLines_MultiMesh_SpaceTimeHandler(
             dealii::Triangulation<dim>& triangulation,
             const FE<dim, dim>& control_fe, const FE<dim, dim>& state_fe,
-            const dealii::Triangulation<1> & times, DOpEtypes::ControlType type,
+            dealii::Triangulation<1> & times, DOpEtypes::ControlType type,
             const ActiveFEIndexSetterInterface<dim, dim>& index_setter =
                 ActiveFEIndexSetterInterface<dim, dim>()) :
             SpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dim, dim>(times,
@@ -119,7 +119,7 @@ namespace DOpE
         MethodOfLines_MultiMesh_SpaceTimeHandler(
             dealii::Triangulation<dim>& triangulation,
             const FE<dim, dim>& control_fe, const FE<dim, dim>& state_fe,
-            const dealii::Triangulation<1> & times, const Constraints& c,
+            dealii::Triangulation<1> & times, const Constraints& c,
             DOpEtypes::ControlType type,
             const ActiveFEIndexSetterInterface<dim, dim>& index_setter =
                 ActiveFEIndexSetterInterface<dim, dim>()) :

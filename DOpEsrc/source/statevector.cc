@@ -52,7 +52,7 @@ namespace DOpE
       _STH = ref.GetSpaceTimeHandler();
       _sfh_ticket = 0;
       _tmp_dir = ref._tmp_dir;
-
+      _accessor_index = 0;
       if (_behavior == DOpEtypes::VectorStorageType::store_on_disc)
         {
           _local_vectors.resize(1, NULL);

@@ -98,7 +98,7 @@ namespace DOpE
         MethodOfLines_SpaceTimeHandler(dealii::Triangulation<dealdim>& triangulation, 
 				       const FE<dealdim, dealdim>& control_fe,
 				       const FE<dealdim, dealdim>& state_fe, 
-				       const dealii::Triangulation<1> & times,
+				       dealii::Triangulation<1> & times,
 				       DOpEtypes::ControlType type,
 				       const ActiveFEIndexSetterInterface<dopedim, dealdim>& index_setter =
 				       ActiveFEIndexSetterInterface<dopedim, dealdim>()) :
@@ -163,7 +163,7 @@ namespace DOpE
         MethodOfLines_SpaceTimeHandler(dealii::Triangulation<dealdim>& triangulation, 
 				       const FE<dealdim, dealdim>& control_fe,
 				       const FE<dealdim, dealdim>& state_fe, 
-				       const dealii::Triangulation<1> & times,
+				       dealii::Triangulation<1> & times,
 				       const Constraints& c, 
 				       DOpEtypes::ControlType type,
 				       const ActiveFEIndexSetterInterface<dopedim, dealdim>& index_setter =
@@ -506,6 +506,25 @@ namespace DOpE
 
         /******************************************************/
         /**
+         * This Function is used to refine the spatial and temporal mesh globally.
+         * After calling a refinement function a reinitialization is required!
+         *
+         * @param ref_type       A DOpEtypes::RefinementType telling how to refine the
+         *                       spatial mesh. Only DOpEtypes::RefinementType::global
+         *                       is allowed in this method, else one has to specify
+         *                       additionally a RefinementContainer
+         */
+        void
+        RefineSpaceTime(DOpEtypes::RefinementType ref_type =
+            DOpEtypes::RefinementType::global)
+        {
+          assert(ref_type == DOpEtypes::RefinementType::global);
+	  RefineSpace(ref_type);
+	  SpaceTimeHandlerBase<VECTOR>::RefineTime(ref_type);
+        }
+
+        /******************************************************/
+        /**
          * This Function is used to refine the spatial mesh globally.
          * After calling a refinement function a reinitialization is required!
          *
@@ -597,6 +616,7 @@ namespace DOpE
 
           _triangulation.execute_coarsening_and_refinement();
         }
+	
         /******************************************************/
 
         /**

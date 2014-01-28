@@ -64,7 +64,7 @@ namespace DOpE
         {
           _domain_dofhandler_vector.resize(1);
         }
-        StateSpaceTimeHandler(const dealii::Triangulation<1> & times) :
+        StateSpaceTimeHandler(dealii::Triangulation<1> & times) :
             SpaceTimeHandlerBase<VECTOR>(times)
         {
           _domain_dofhandler_vector.resize(1);
@@ -75,7 +75,7 @@ namespace DOpE
         {
           _domain_dofhandler_vector.resize(1);
         }
-        StateSpaceTimeHandler(const dealii::Triangulation<1> & times,
+        StateSpaceTimeHandler(dealii::Triangulation<1> & times,
             const ActiveFEIndexSetterInterface<dealdim>& index_setter) :
             SpaceTimeHandlerBase<VECTOR>(times), _fe_index_setter(&index_setter)
         {

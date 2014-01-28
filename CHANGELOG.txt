@@ -1,5 +1,9 @@
 Changelog DOpE
 ==============
+28.01.2014: Fixed missing initializations in InstatOptProblemContainer::ReInit.
+	    Added temporal refinement (global) to the SpaceTimeHandlers.
+	    Added Examples/OPT/InstatPDE/Example2 to demonstrate the 
+	    ControlType::stationary.
 27.01.2014: Moved the timestepsize from the timestepping scheme into the problem,
 	    i.e., the scheme has to be written for stepsize one. This allows 
 	    to handle timedependent pdes with time indepenent functionals automatically

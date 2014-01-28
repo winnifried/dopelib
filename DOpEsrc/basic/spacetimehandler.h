@@ -77,7 +77,7 @@ namespace DOpE
                 dealii::numbers::invalid_unsigned_int)
         {
         }
-        SpaceTimeHandler(const dealii::Triangulation<1> & times,
+        SpaceTimeHandler(dealii::Triangulation<1> & times,
             DOpEtypes::ControlType type) :
             SpaceTimeHandlerBase<VECTOR>(times, type), _control_index(
                 dealii::numbers::invalid_unsigned_int), _state_index(
@@ -92,7 +92,7 @@ namespace DOpE
                 &index_setter)
         {
         }
-        SpaceTimeHandler(const dealii::Triangulation<1> & times,
+        SpaceTimeHandler(dealii::Triangulation<1> & times,
             DOpEtypes::ControlType type,
             const ActiveFEIndexSetterInterface<dopedim, dealdim>& index_setter) :
             SpaceTimeHandlerBase<VECTOR>(times, type), _control_index(

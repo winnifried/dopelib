@@ -35,6 +35,7 @@
 
 #include "timedofhandler.h"
 #include "timeiterator.h"
+#include "refinementcontainer.h"
 #include "dopetypes.h"
 
 namespace DOpE
@@ -50,22 +51,25 @@ class SpaceTimeHandlerBase
 
     SpaceTimeHandlerBase(DOpEtypes::ControlType control_type = DOpEtypes::stationary) : _control_type(control_type)
     {
+      _time_triangulation = NULL;
       _state_ticket = 1;
       _control_ticket = 1;
     }
 
-    SpaceTimeHandlerBase(const dealii::Triangulation<1> & times, DOpEtypes::ControlType type = DOpEtypes::stationary) :
+    SpaceTimeHandlerBase(dealii::Triangulation<1> & times, DOpEtypes::ControlType type = DOpEtypes::stationary) :
       _tdfh(times), _interval(_tdfh.first_interval()), _control_type(type)
-    {
-      _state_ticket = 1;
-      _control_ticket = 1;
-    }
+      {
+	_time_triangulation = &times;
+	_state_ticket = 1;
+	_control_ticket = 1;
+      }
 
-    SpaceTimeHandlerBase(const dealii::Triangulation<1> & times,
+    SpaceTimeHandlerBase(dealii::Triangulation<1> & times,
         const dealii::FiniteElement<1>& fe,
         DOpEtypes::ControlType type = DOpEtypes::stationary) :
           _tdfh(times, fe), _interval(_tdfh.first_interval()), _control_type(type)
     {
+      _time_triangulation = &times;
       _state_ticket = 1;
       _control_ticket = 1;
     }
@@ -366,6 +370,59 @@ class SpaceTimeHandlerBase
     
     virtual void SpatialMeshTransferState(const VECTOR& /*old_values*/, VECTOR& /*new_values*/) const { abort(); }
 
+    /******************************************************/
+        /**
+         * This Function is used to refine the temporal mesh globally.
+         * After calling a refinement function a reinitialization is required!
+         *
+         * @param ref_type       A DOpEtypes::RefinementType telling how to refine the
+         *                       spatial mesh. Only DOpEtypes::RefinementType::global
+         *                       is allowed in this method.
+         */
+        void
+        RefineTime(DOpEtypes::RefinementType ref_type =
+            DOpEtypes::RefinementType::global)
+        {
+          assert(ref_type == DOpEtypes::RefinementType::global);
+	  RefinementContainer ref_con_dummy;
+          RefineTime(ref_con_dummy);
+        }
+
+	/******************************************************/
+        /**
+         * This Function is used to refine the temporal mesh.
+         * After calling a refinement function a reinitialization is required!
+         *
+         * @param ref_container   Steers the local mesh refinement. Currently availabe are
+         *                        RefinementContainer (for global refinement), RefineFixedFraction,
+         *                        RefineFixedNumber and RefineOptimized.
+         */
+
+        void
+        RefineTime(const RefinementContainer& ref_container)
+        {
+          DOpEtypes::RefinementType ref_type = ref_container.GetRefType();
+
+          //make sure that we do not use any coarsening
+          assert(!ref_container.UsesCoarsening());
+	  assert(_time_triangulation != NULL);
+
+          if (DOpEtypes::RefinementType::global == ref_type)
+          {
+            _time_triangulation->set_all_refine_flags();
+          }
+          else
+          {
+            throw DOpEException("Not implemented for name =" + ref_type,
+                "MethodOfLines_SpaceTimeHandler::RefineTime");
+          }
+          _time_triangulation->prepare_coarsening_and_refinement();
+
+	  _time_triangulation->execute_coarsening_and_refinement();
+	  ReInitTime();
+        }
+        /******************************************************/
+
   protected:
     /**
      * Call this function if any StateDoF related stuff has changed to invalidate all previous tickets.
@@ -388,7 +445,7 @@ class SpaceTimeHandlerBase
   private:
     mutable TimeDoFHandler _tdfh;//FIXME Is it really necessary for _tdfh and _interval to be mutable? this is really ugly
     mutable TimeIterator _interval;
-
+    dealii::Triangulation<1>* _time_triangulation;
     unsigned int _control_ticket;
     unsigned int _state_ticket;
     mutable DOpEtypes::ControlType _control_type;
