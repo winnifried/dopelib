@@ -418,7 +418,7 @@ int Reduced_SnoptAlgorithm<PROBLEM, VECTOR>
 {
   //Needs to implement the evaluation of j and its derivative using the 
   //Interface required by SNOPT
-  ConstraintVector<VECTOR>* constraints = NULL;
+  ConstraintVector<VECTOR> constraints(this->GetReducedProblem()->GetProblem()->GetSpaceTimeHandler(),_vector_behavior);
   ControlVector<VECTOR> tmp(this->GetReducedProblem()->GetProblem()->GetSpaceTimeHandler(),_vector_behavior);
   VECTOR& ref_x = tmp.GetSpacialVector();
   assert(ref_x.size() == *(data.n));
@@ -439,21 +439,17 @@ int Reduced_SnoptAlgorithm<PROBLEM, VECTOR>
 
   if(*(data.neF) > 1)
   {
-    constraints = new ConstraintVector<VECTOR>(this->GetReducedProblem()->GetProblem()->GetSpaceTimeHandler(),_vector_behavior);
     try
     {
-      this->GetReducedProblem()->ComputeReducedConstraints(tmp,*constraints);
+      this->GetReducedProblem()->ComputeReducedConstraints(tmp,constraints);
     }
     catch(DOpEException& e)
     {
       *(data.Status) = -1;
       this->GetExceptionHandler()->HandleException(e,"Reduced_SnoptAlgorithm::rsa_func_");
-
-      if(constraints != NULL)
-      delete constraints;
       return -1;
     }
-    const dealii::Vector<double>& gc = constraints->GetGlobalConstraints();
+    const dealii::Vector<double>& gc = constraints.GetGlobalConstraints();
     assert(*(data.neF) == gc.size()+1);
     for(unsigned int i=0; i < gc.size(); i++)
     {
@@ -474,9 +470,6 @@ int Reduced_SnoptAlgorithm<PROBLEM, VECTOR>
     {
       *(data.Status) = -2;
       this->GetExceptionHandler()->HandleException(e,"Reduced_SnoptAlgorithm::rsa_func_");
-
-      if(constraints != NULL)
-      delete constraints;
       return -1;
     }
     assert(*(data.neG) == *(data.n)**(data.neF));
@@ -485,36 +478,28 @@ int Reduced_SnoptAlgorithm<PROBLEM, VECTOR>
     {
       (data.G)[i] = ref_g(i);
     }
-    if(constraints != NULL)
+    //Evaluate global constraint gradients
+    const dealii::Vector<double>& gc = constraints.GetGlobalConstraints();
+    for(unsigned int j=0; j < gc.size(); j++)
     {
-      //Evaluate global constraint gradients
-      const dealii::Vector<double>& gc = constraints->GetGlobalConstraints();
-      for(unsigned int j=0; j < gc.size(); j++)
+      try
       {
-        try
-        {
-          this->GetReducedProblem()->ComputeReducedGradientOfGlobalConstraints(j,tmp,*constraints,gradient,gradient_transposed);
-        }
-        catch(DOpEException& e)
-        {
-          *(data.Status) = -2;
-          this->GetExceptionHandler()->HandleException(e,"Reduced_SnoptAlgorithm::rsa_func_");
-
-          if(constraints != NULL)
-          delete constraints;
-          return -1;
-        }
-        const VECTOR& ref_g = gradient_transposed.GetSpacialVector();
-        for(unsigned int i=0; i < *(data.n); i++)
-        {
-          (data.G)[*(data.n)*(j+1)+i] = ref_g(i);
-        }
+	this->GetReducedProblem()->ComputeReducedGradientOfGlobalConstraints(j,tmp,constraints,gradient,gradient_transposed);
+      }
+      catch(DOpEException& e)
+      {
+	*(data.Status) = -2;
+	this->GetExceptionHandler()->HandleException(e,"Reduced_SnoptAlgorithm::rsa_func_");
+	return -1;
+      }
+      const VECTOR& ref_g = gradient_transposed.GetSpacialVector();
+      for(unsigned int i=0; i < *(data.n); i++)
+      {
+	(data.G)[*(data.n)*(j+1)+i] = ref_g(i);
       }
     }
   }
 
-  if(constraints != NULL)
-  delete constraints;
   *(data.Status) = 0;
   return 0;
 }

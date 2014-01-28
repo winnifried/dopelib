@@ -638,18 +638,9 @@ template<
             const Tensor<1, dealdim> u = ALE_Transformations::get_u<dealdim>(
                 q_point, _uvalues);
 
-            const Tensor<2, dealdim> F = ALE_Transformations::get_F<dealdim>(
-                q_point, _ugrads);
-            const double J = ALE_Transformations::get_J<dealdim>(F);
-
             const Tensor<1, dealdim> last_timestep_v =
                 ALE_Transformations::get_v<dealdim>(q_point,
                     _last_timestep_uvalues);
-            const Tensor<2, dealdim> last_timestep_F =
-                ALE_Transformations::get_F<dealdim>(q_point,
-                    _last_timestep_ugrads);
-            const double last_timestep_J = ALE_Transformations::get_J<dealdim>(
-                last_timestep_F);
 
             const Tensor<1, dealdim> last_timestep_u =
                 ALE_Transformations::get_u<dealdim>(q_point,
@@ -798,26 +789,8 @@ template<
                   q_point);
             }
 
-            const Tensor<1, dealdim> v = ALE_Transformations::get_v<dealdim>(
-                q_point, _uvalues);
-            const Tensor<2, dealdim> F = ALE_Transformations::get_F<dealdim>(
-                q_point, _ugrads);
-            const double J = ALE_Transformations::get_J<dealdim>(F);
-
-            const Tensor<1, dealdim> last_timestep_v =
-                ALE_Transformations::get_v<dealdim>(q_point,
-                    _last_timestep_uvalues);
-            const Tensor<2, dealdim> last_timestep_F =
-                ALE_Transformations::get_F<dealdim>(q_point,
-                    _last_timestep_ugrads);
-            const double last_timestep_J = ALE_Transformations::get_J<dealdim>(
-                last_timestep_F);
-
             for (unsigned int i = 0; i < n_dofs_per_element; i++)
             {
-
-              const double J_LinU = ALE_Transformations::get_J_LinU<dealdim>(
-                  q_point, _ugrads, phi_grads_u[i]);
 
               for (unsigned int j = 0; j < n_dofs_per_element; j++)
               {
