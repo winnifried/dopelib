@@ -416,24 +416,7 @@ namespace DOpE
   {
     if(AllowWrite(name))
     {
-      //Construct Name
-      std::stringstream outfile;
-      outfile<<_results_basedir;
-      outfile<<_results_outdir;
-      outfile<<name;
-      outfile<<GetPostIndex();
-      if(dof_type == "control")
-	outfile<<_control_ending;
-      else if(dof_type == "state")
-	outfile<<_ending;
-      else
-	abort();
-      Write("Writing ["+outfile.str()+"]",4);
-
-      if(dof_type == "control")
-	GetReducedProblem()->WriteToFile(q,name,outfile.str(),dof_type,_control_ending);
-      else if(dof_type == "state")
-	GetReducedProblem()->WriteToFile(q,name,outfile.str(),dof_type,_ending);
+      GetReducedProblem()->WriteToFile(q,name,dof_type);
     }
   }
 

@@ -652,7 +652,7 @@ template<
       string
       GetType() const
       {
-        return "boundary face ime_local";
+        return "boundary face timelocal";
         // 1) point domain boundary face
         // 2) timelocal timedistributed
       }

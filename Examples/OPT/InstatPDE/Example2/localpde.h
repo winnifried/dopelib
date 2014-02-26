@@ -39,7 +39,7 @@ template<
     public:
 
       LocalPDE() :
-          _my_time(0), _state_block_components(1, 0)
+          _my_time(0), _state_block_components(1, 0), _block_components(1, 0)
       {
 
       }

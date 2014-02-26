@@ -236,11 +236,23 @@ template<typename VECTOR>
      * Hence SetTimeDoFNumber should be called before this function.
      */
     void ReSizeSpace(unsigned int ndofs, const std::vector<unsigned int>& dofs_per_block);
-
+    /**
+     * Writes the vectors corresponding to the current interval
+     * into _local_vectors, and adjusts _global_to_local;
+     */
+    void ComputeLocalVectors(const TimeIterator& interval) const;
+    
     std::vector<VECTOR* > _control;
     mutable VECTOR _local_control;
     mutable dealii::Vector<double> _copy_control;
-
+    
+    //pointer to the dofs in the actual interval. Is only used if the interval is set!
+    mutable std::vector<VECTOR*> _local_vectors;
+    //Map: global time dof index - local time DoF index
+    mutable std::map<unsigned int, unsigned int> _global_to_local;
+    //the index of the interval, to which the vectors stored in local_vectors belong
+    mutable int _accessor_index;
+		
     mutable int _accessor;
     mutable bool _lock;
 

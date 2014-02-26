@@ -1,0 +1,42 @@
+\subsubsection{General problem description}
+
+This example is a modified version of \texttt{OPT/InstatPDE/Example2}. 
+The governing equation is
+\begin{equation*}
+\partial_t u(t,x,y) - \Delta u(t,x,y) = q(t)\cdot f(x,y),
+\end{equation*}
+with homogeneous Dirichlet-data. Hence, we now allow for a time dependence of the control. 
+
+The computational domain is $\Omega \times I = [0,\pi]^2 \times [0,1]$. From the known solution, we can compute the appropriate data 
+\begin{align*}
+f(x,y) &= \sin(x)\sin(y),\\
+u_0(x,y) &= 0,\\
+u^d(t,x,y)&= \sin(x)\sin(y) \bigl(\tfrac{1}{4}(3-2t-3e^{-2t}) + \tfrac{4}{\pi^2} + (1-t)\tfrac{8}{\pi^2}\bigr).
+\end{align*}
+
+With the cost functional 
+\begin{align*}
+ \min_{q,u} J(q,u) =&\; \frac{1}{2}\int_I\int_{\Omega} \bigl(u(t,x,y) - u^d(t,x,y)\bigr)^2\,d(x,y)\,dt + \frac{1}{2} \int_{I} q(t)^2\,d(t).
+\end{align*}
+It has the optimal solution 
+\begin{align*}
+\overline{u}(t,x,y) &= \tfrac{1}{4}(3-2t-3e^{-2t})\sin(x) \sin(y),\\
+\overline{q}(t) &= 1-t 
+\end{align*}
+together with the optimal adjoint state 
+\[
+ \overline{z}(t,x,y) = \sin(x) \sin(y) \frac{4(t-1)}{\pi^2}.
+\]
+Additionally, we evaluate the following functionals
+\begin{align*}
+  \overline{u}_h(1,0.5\pi,0.5\pi) &= \frac{1-3e^{-2}}{4} \approx 0.148499,\\
+  \| \overline{u}_h - \overline{u}\|^2_{\Omega \times I},& \\
+  \| \overline{q}_h - \overline{q}\|^2_I. &  
+\end{align*}
+
+\subsubsection{Program description}
+In this example, we demonstrate how to implement a control that acts distributed in time. 
+For this, the control vector type is set to be 
+{\texttt ControlType::nonstationary}. 
+Obviously one can implement space and time dependence by considering a ControlVector in
+dimension $\ne 0$.

@@ -388,7 +388,7 @@ namespace DOpE
          * Returns the control dofs per Block at the current time
          */
         virtual const std::vector<unsigned int>&
-        GetControlDoFsPerBlock() const =0;
+        GetControlDoFsPerBlock(int time_point = -1) const =0;
 
         /******************************************************/
 

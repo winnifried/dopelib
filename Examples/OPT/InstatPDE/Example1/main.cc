@@ -82,8 +82,8 @@ typedef BlockVector<double> VECTOR;
 
 typedef FunctionalInterface<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> FUNC;
 
-typedef OptProblemContainer<
-    LocalFunctional<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM>, FUNC,
+typedef OptProblemContainer<FUNC,
+    LocalFunctional<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM>, 
     LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
     SimpleDirichletData<VECTOR, DIM>,
     NoConstraints<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM>, SPARSITYPATTERN,

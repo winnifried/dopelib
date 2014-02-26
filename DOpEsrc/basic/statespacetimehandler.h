@@ -302,16 +302,6 @@ namespace DOpE
         /******************************************************/
 
         /**
-         * Returns the state dofs per Block at the  time indicated by time_point.
-         *
-         * \\TODO
-         */
-        virtual const std::vector<unsigned int>&
-        GetStateDoFsPerBlock(int time_point = -1) const =0;
-
-        /******************************************************/
-
-        /**
          * Returns the state HN-Constraints at the current time
          */
         virtual const dealii::ConstraintMatrix &

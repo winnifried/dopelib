@@ -234,15 +234,11 @@ namespace DOpE
      *
      *  @param v           The ControlVector to write to a file.
      *  @param name        The names of the variables, e.g., in a fluid problem: v1, v2, p.
-     *  @param outfile     The basic name for the output file to print.
      *  @param dof_type    Has the DoF type: state or control.
-     *  @param filetype    The filetype. Actually, *.vtk outputs are possible.
      */
     void WriteToFile(const ControlVector<VECTOR> &v,
 		     std::string name,
-		     std::string outfile,
-		     std::string dof_type,
-		     std::string filetype);
+		     std::string dof_type);
 
     /**
      * Basic function to write a std::vector to a file.
@@ -1093,12 +1089,9 @@ void VoidReducedProblem<CONTROLNONLINEARSOLVER, CONTROLINTEGRATOR, PROBLEM, VECT
 /******************************************************/
 
 template <typename CONTROLNONLINEARSOLVER, typename CONTROLINTEGRATOR, typename PROBLEM, typename VECTOR,int dopedim,int dealdim>
-void VoidReducedProblem<CONTROLNONLINEARSOLVER, CONTROLINTEGRATOR, PROBLEM, VECTOR, dopedim, dealdim>::WriteToFile(const ControlVector<VECTOR> &v,
-						       std::string  name, std::string outfile,
-						       std::string dof_type,
-						       std::string filetype)
+void VoidReducedProblem<CONTROLNONLINEARSOLVER, CONTROLINTEGRATOR, PROBLEM, VECTOR, dopedim, dealdim>::WriteToFile(const ControlVector<VECTOR> &v, std::string  name, std::string dof_type)
 {
-  WriteToFile(v.GetSpacialVector(), name, outfile,dof_type, filetype);
+   this->GetOutputHandler()->Write(v.GetSpacialVector(), name, dof_type);
 }
 /******************************************************/
 

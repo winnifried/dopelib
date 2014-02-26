@@ -154,7 +154,7 @@ namespace DOpE
 	_current_dof_number = 0;
 	_accessor = 0;
 	_lock = false;
-      }
+      }//End only_recent
       else if (!GetSpaceTimeHandler()->IsValidStateTicket(_sfh_ticket))
       {
 	if (GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
@@ -451,7 +451,7 @@ namespace DOpE
         {
           throw DOpEException(
               "Trying to create a new copy while the old is still in use!",
-              "StateVector:GetSpacialVectorCopy");
+              "StateVector::GetSpacialVectorCopy");
         }
       _lock = true;
 
@@ -711,7 +711,7 @@ namespace DOpE
         {
           throw DOpEException(
               "Trying to use operator= while a copy is in use!",
-              "StateVector:operator=");
+              "StateVector::operator=");
         }
       else
         {
@@ -755,7 +755,7 @@ namespace DOpE
               else
                 {
                   throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),
-                      "StateVector<VECTOR>::opterator=");
+                      "StateVector<VECTOR>::operator=");
                 }
             }
         }
@@ -770,7 +770,7 @@ namespace DOpE
         {
           throw DOpEException(
               "Trying to use operator= while a copy is in use!",
-              "StateVector:operator=");
+              "StateVector::operator=");
         }
       else
         {
@@ -858,7 +858,7 @@ namespace DOpE
                   else
                     {
                       throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),
-                          "StateVector<VECTOR>::opterator=");
+                          "StateVector<VECTOR>::operator=");
                     }
                 }
             }
@@ -868,7 +868,7 @@ namespace DOpE
 		"Own Behavior does not match dq.Behavior. Own Behavior:"
 		+ DOpEtypesToString(GetBehavior()) + " but dq.Behavior is "
 		+ DOpEtypesToString(dq.GetBehavior()),
-                  "StateVector<VECTOR>::equ");
+                  "StateVector<VECTOR>::operator=");
             }
         }
     }
@@ -881,8 +881,8 @@ namespace DOpE
       if (_lock)
         {
           throw DOpEException(
-              "Trying to use operator= while a copy is in use!",
-              "StateVector:operator=");
+              "Trying to use operator+= while a copy is in use!",
+              "StateVector::operator+=");
         }
       else
         {
@@ -936,7 +936,7 @@ namespace DOpE
                   "Own Behavior does not match dq.Behavior. Own Behavior:"
 		  + DOpEtypesToString(GetBehavior()) + " but dq.GetBehavior is "
 		  + DOpEtypesToString(dq.GetBehavior()),
-                  "StateVector<VECTOR>::equ");
+                  "StateVector<VECTOR>::operator+=");
             }
         }
     }
@@ -949,8 +949,8 @@ namespace DOpE
       if (_lock)
         {
           throw DOpEException(
-              "Trying to use operator= while a copy is in use!",
-              "StateVector:operator=");
+              "Trying to use operator*= while a copy is in use!",
+              "StateVector::operator*=");
         }
       else
         {
@@ -1023,7 +1023,7 @@ namespace DOpE
                 {
                   throw DOpEException(
                       "Trying to use operator* while a copy is in use!",
-                      "StateVector:operator*");
+                      "StateVector::operator*");
                 }
               else
                 {
@@ -1063,7 +1063,7 @@ namespace DOpE
               "Own Behavior does not match dq.Behavior. Own Behavior:"
 	      + DOpEtypesToString(GetBehavior()) + " but dq.Behavior is "
 		+ DOpEtypesToString(dq.GetBehavior()),
-              "StateVector<VECTOR>::equ");
+              "StateVector<VECTOR>::operator*");
         }
     }
 
@@ -1075,8 +1075,8 @@ namespace DOpE
       if (_lock)
         {
           throw DOpEException(
-              "Trying to use operator= while a copy is in use!",
-              "StateVector:operator=");
+              "Trying to use add while a copy is in use!",
+              "StateVector::add");
         }
       else
         {
@@ -1145,8 +1145,8 @@ namespace DOpE
       if (_lock)
         {
           throw DOpEException(
-              "Trying to use operator= while a copy is in use!",
-              "StateVector:operator=");
+              "Trying to use equ while a copy is in use!",
+              "StateVector::equ");
         }
       else
         {
@@ -1441,7 +1441,7 @@ namespace DOpE
             }
           else
             throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),
-                "StateyVector::PrintInfos");
+                "StateVector::ComputeLocalVectors");
         }
     }
 

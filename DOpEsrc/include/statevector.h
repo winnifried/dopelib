@@ -275,7 +275,7 @@ class StateVector
 		mutable std::vector<SpatialVectorInfos> _state_information;
 
 		mutable VECTOR _local_state;
-		mutable dealii::Vector<double> _copy_state;//FIXME why is this not of type VECTOR??
+		mutable dealii::Vector<double> _copy_state;
 		mutable int _accessor;
 
 		mutable bool _lock;

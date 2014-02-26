@@ -341,7 +341,7 @@ namespace DOpE
          * Implementation of virtual function in SpaceTimeHandlerBase
          */
         const std::vector<unsigned int>&
-        GetControlDoFsPerBlock() const
+        GetControlDoFsPerBlock(int /*time_point*/= -1) const
         {
           return _control_dofs_per_block;
         }
@@ -382,6 +382,28 @@ namespace DOpE
          * Implementation of virtual function in SpaceTimeHandlerBase
          */
         virtual void
+        InterpolateControl(VECTOR& result,
+            const std::vector<VECTOR*> & local_vectors, double t,
+            const TimeIterator& it) const
+        {
+          assert(it.get_left() <= t);
+          assert(it.get_right() >= t);
+          if (local_vectors.size() != 2)
+          {
+            throw DOpEException(
+                "This function is currently not implemented for anything other than"
+                    " linear interpolation of 2 DoFs.",
+                "MethodOfLine_SpaceTimeHandler::InterpolateControl");
+          }
+          double lambda_l = (it.get_right() - t) / it.get_k();
+          double lambda_r = (t - it.get_left()) / it.get_k();
+
+          //Here we assume that the numbering of dofs goes from left to right!
+          result = *local_vectors[0];
+
+          result.sadd(lambda_l, lambda_r, *local_vectors[1]);
+        }
+        virtual void
         InterpolateState(VECTOR& result,
             const std::vector<VECTOR*> & local_vectors, double t,
             const TimeIterator& it) const
@@ -408,7 +430,7 @@ namespace DOpE
          * Implementation of virtual function in SpaceTimeHandlerBase
          */
         unsigned int
-        GetControlNDoFs() const
+        GetControlNDoFs(int /*time_point*/= -1) const
         {
           return GetControlDoFHandler().n_dofs();
         }

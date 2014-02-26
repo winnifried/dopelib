@@ -72,7 +72,7 @@ template<
       string
       GetType() const
       {
-        return "domain time_local";
+        return "domain timelocal";
       }
 
       string

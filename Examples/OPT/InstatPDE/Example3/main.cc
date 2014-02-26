@@ -42,9 +42,11 @@
 #include "mol_spacetimehandler.h"
 #include "simpledirichletdata.h"
 #include "integratordatacontainer.h"
-#include "newtonsolver.h"
 #include "functionalinterface.h"
 #include "noconstraints.h"
+
+#include "integratormixeddims.h" // for mixed dim opt. control
+#include "newtonsolvermixeddims.h" // for mixed dim opt. control
 
 //DOpE includes for instationary problems
 #include "instatreducedproblem.h"
@@ -65,7 +67,7 @@ using namespace DOpE;
 
 // Define dimensions for control- and state problem
 const static int DIM = 2;
-const static int CDIM = 2;
+const static int CDIM = 0;
 
 #define DOFHANDLER DoFHandler
 #define FE FESystem
@@ -97,22 +99,28 @@ typedef StateProblem<OP_BASE, LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
 
 //typedef InstatOptProblemContainer<TSP,DTSP,FUNC,FUNC,PDE,DD,CONS,SPARSITYPATTERN, VECTOR, CDIM,DIM> OP;
 typedef InstatOptProblemContainer<TSP, DTSP, FUNC,
-    LocalFunctional<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM>,
+    LocalFunctional<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM>,
     LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
     SimpleDirichletData<VECTOR, DIM>,
-    NoConstraints<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM>, SPARSITYPATTERN,
-    VECTOR, DIM, DIM> OP;
+    NoConstraints<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM>, SPARSITYPATTERN,
+    VECTOR, CDIM, DIM> OP;
 #undef TSP
 #undef DTSP
 
 typedef IntegratorDataContainer<DOFHANDLER, QUADRATURE, FACEQUADRATURE, VECTOR,
     DIM> IDC;
 typedef Integrator<IDC, VECTOR, double, DIM> INTEGRATOR;
+//special integrator for the mixed dims
+typedef IntegratorMixedDimensions<IDC, VECTOR, double, CDIM, DIM> INTEGRATORM;
+
 typedef DirectLinearSolverWithMatrix<SPARSITYPATTERN, MATRIX, VECTOR> LINEARSOLVER;
-typedef NewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR> CNLS;
+//dummy solver for the 0d control
+typedef VoidLinearSolver<VECTOR> VOIDLS;
+//special newtonsolver for the mixed dims
+typedef NewtonSolverMixedDimensions<INTEGRATORM, VOIDLS, VECTOR> CNLS;
 typedef InstatStepNewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR> NLS;
 typedef ReducedNewtonAlgorithm<OP, VECTOR> RNA;
-typedef InstatReducedProblem<CNLS, NLS, INTEGRATOR, INTEGRATOR, OP, VECTOR, DIM,
+typedef InstatReducedProblem<CNLS, NLS, INTEGRATORM, INTEGRATOR, OP, VECTOR, CDIM,
     DIM> RP;
 
 int
@@ -134,7 +142,7 @@ main(int argc, char **argv)
     std::cout << "Usage: " << argv[0] << " [ paramfile ] " << std::endl;
     return -1;
   }
-  const int niter = 2;
+  const int niter = 3;
 
   //First, declare the parameters and read them in.
   ParameterReader pr;
@@ -145,10 +153,10 @@ main(int argc, char **argv)
   //Create the triangulation.
   Triangulation<DIM> triangulation;
   GridGenerator::hyper_cube(triangulation, 0., PI);
-  triangulation.refine_global(3);
+  triangulation.refine_global(2);
 
   //Define the Finite Elements and quadrature formulas for control and state.
-  FESystem<DIM> control_fe(FE_Q<CDIM>(1), 1); //Q1
+  FE<DIM> control_fe(FE_Nothing<DIM>(1), 1);
   FESystem<DIM> state_fe(FE_Q<DIM>(1), 1); //Q1
 
   QGauss<DIM> quadrature_formula(3);
@@ -159,24 +167,26 @@ main(int argc, char **argv)
   LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM> LPDE;
   LocalFunctional<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> LFunc;
   LocalPointFunctional<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> LPF;
-  LocalPointFunctional2<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> LPF2;
+  StateErrorFunctional<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> SEF;
+  ControlErrorFunctional<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> CEF;
 
   //Time grid of [0,1] with 20 subintervalls as initial discretization.
   dealii::Triangulation<1> times;
-  dealii::GridGenerator::subdivided_hyper_cube(times, 20);
+  dealii::GridGenerator::subdivided_hyper_cube(times, 10);
 
 
   //Note that we give DOpEtypes::initial as the type of control.
   MethodOfLines_SpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR, CDIM,
 				 DIM> DOFH(triangulation, control_fe, state_fe, times, 
-					   DOpEtypes::ControlType::stationary);
+					   DOpEtypes::ControlType::nonstationary);
 
   NoConstraints<ElementDataContainer, FaceDataContainer, DOFHANDLER, VECTOR, CDIM,
       DIM> Constraints;
   OP P(LFunc, LPDE, Constraints, DOFH);
 
   P.AddFunctional(&LPF);
-  P.AddFunctional(&LPF2);
+  P.AddFunctional(&SEF);
+  P.AddFunctional(&CEF);
 
   std::vector<bool> comp_mask(1);
   comp_mask[0] = true;
@@ -186,6 +196,7 @@ main(int argc, char **argv)
   SimpleDirichletData<VECTOR, DIM> DD1(zf);
 
   P.SetDirichletBoundaryColors(0, comp_mask, &DD1);
+  P.SetInitialValues(&zf);
 
   RP solver(&P, DOpEtypes::VectorStorageType::fullmem, pr, idc);
 

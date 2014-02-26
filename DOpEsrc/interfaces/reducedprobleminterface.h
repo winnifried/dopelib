@@ -112,13 +112,11 @@ namespace DOpE
          *
          *  @param v           The ControlVector to write to a file.
          *  @param name        The names of the variables, e.g., in a fluid problem: v1, v2, p.
-         *  @param outfile     The basic name for the output file to print.
-         *  @param dof_type    Has the DoF type: state or control.
-         *  @param filetype    The filetype. Actually, *.vtk outputs are possible.
+	 *  @param dof_type    Has the DoF type: state or control.
          */
         virtual void
         WriteToFile(const ControlVector<VECTOR> &v, std::string name,
-            std::string outfile, std::string dof_type, std::string filetype)=0;
+		    std::string dof_type)=0;
 
         /******************************************************/
 

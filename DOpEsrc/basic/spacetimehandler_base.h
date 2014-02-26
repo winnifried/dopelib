@@ -270,15 +270,19 @@ class SpaceTimeHandlerBase
         double /*t*/, const TimeIterator&/*interval*/) const { abort(); }
 
     /**
-     * Returns the DoFs for the control vector at the current time which has  to be set prior to calling this function using SetTime.
+     * Returns the DoFs for the control vector at the given point time_point.
+     * If time_point==-1, it returns the DoFs for the current time which has
+     * to be set prior to calling this function using SetTimeDoFNumber.
+     *
+     * @ param time_point	Indicating the time at which we want to know the DoFs. -1 means now.
      */
-    virtual unsigned int GetControlNDoFs() const { abort(); }
+    virtual unsigned int GetControlNDoFs(int /*time_point*/ = -1) const { abort(); }
     /**
      * Returns the DoFs for the state vector at the given point time_point.
      * If time_point==-1, it returns the DoFs for the current time which has
      * to be set prior to calling this function using SetTimeDoFNumber.
      *
-     * @ param time_point			Indicating the time at which we want to know the DoFs. -1 means now.
+     * @ param time_point	Indicating the time at which we want to know the DoFs. -1 means now.
      */
     virtual unsigned int GetStateNDoFs(int time_point = -1) const = 0;
     /**
@@ -287,16 +291,19 @@ class SpaceTimeHandlerBase
      */
     virtual unsigned int GetConstraintNDoFs(std::string /*name*/) const { abort(); return 0; }
     /**
-     * Returns the DoFs per  block for the control vector at the current time which has
+     * Returns the DoFs per block for the control vector at the given point time_point.
+     * If time_point==-1, it returns the DoFs per block for the current time which has
      * to be set prior to calling this function using SetTime.
+     *
+     * @ param time_point	Indicating the time at which we want to know the DoFs per block. -1 means now.
      */
-    virtual const std::vector<unsigned int>& GetControlDoFsPerBlock() const { abort(); }
+    virtual const std::vector<unsigned int>& GetControlDoFsPerBlock(int /*time_point*/ = -1) const  { abort(); }
     /**
      * Returns the DoFs per block for the state vector at the given point time_point.
      * If time_point==-1, it returns the DoFs per block for the current time which has
      * to be set prior to calling this function using SetTime.
      *
-     * @ param time_point			Indicating the time at which we want to know the DoFs per block. -1 means now.
+     * @ param time_point	Indicating the time at which we want to know the DoFs per block. -1 means now.
      */
     virtual const std::vector<unsigned int>& GetStateDoFsPerBlock(int time_point = -1) const = 0;
     /**
