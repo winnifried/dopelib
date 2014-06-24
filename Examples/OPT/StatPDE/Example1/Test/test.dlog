@@ -31,14 +31,14 @@ LOG: Allowing IterationCounter `OptNewton_OptProblem' for filenames!
 	CostFunctional: 4.29e+02
 		 TR-Newton step: 7	delta: 4.00e+04->8.00e+04  accepting step!	 Residual: 1.29e-05	 LinearIters [2]
 	CostFunctional: 4.29e+02
-		 TR-Newton step: 8	delta: 8.00e+04->1.00e+05  accepting step!	 Residual: 1.21e-08	 LinearIters [4]
+		 TR-Newton step: 8	delta: 8.00e+04->1.00e+05  accepting step!	 Residual: 1.22e-08	 LinearIters [4]
 	CostFunctional: 4.29e+02
 	CostFunctional: 4.29e+02
 
 	**************************************************
 	*        Stopping Reduced Trustregion_Newton Algorithm       *
 	*             after      8  Iterations           *
-	*             with rel. Residual    1.72e-08          *
+	*             with rel. Residual  < 5.00e-08          *
 	*             with Cost  4.2940e+02          *
 	*             n_good: 8 n_bad: 0          *
 	**************************************************
@@ -56,13 +56,13 @@ LOG: Allowing IterationCounter `OptNewton_OptProblem' for filenames!
 		 Newton step: 0	 Residual (rel.): 1.00e+00
 	
 	CostFunctional: 4.29e+02
-		 Newton step: 1	 Residual (rel.):   4.51e-08	 LinearIters [2]	 LineSearch {0} 
+		 Newton step: 1	 Residual (rel.): < 5.00e-08	 LinearIters [2]	 LineSearch {0} 
 	CostFunctional: 4.29e+02
 
 	**************************************************
 	*        Stopping Reduced Newton Algorithm       *
 	*             after      1  Iterations           *
-	*             with rel. Residual    4.51e-08          *
+	*             with rel. Residual  < 5.00e-08          *
 	**************************************************
 
 
@@ -96,7 +96,7 @@ LOG: Allowing IterationCounter `OptNewton_OptProblem' for filenames!
 	**************************************************
 	*        Stopping Reduced Trustregion_Newton Algorithm       *
 	*             after      4  Iterations           *
-	*             with rel. Residual    8.25e-09          *
+	*             with rel. Residual  < 5.00e-08          *
 	*             with Cost  4.2940e+02          *
 	*             n_good: 4 n_bad: 0          *
 	**************************************************
@@ -114,13 +114,13 @@ LOG: Allowing IterationCounter `OptNewton_OptProblem' for filenames!
 		 Newton step: 0	 Residual (rel.): 1.00e+00
 	
 	CostFunctional: 4.29e+02
-		 Newton step: 1	 Residual (rel.): < 5.00e-09	 LinearIters [2]	 LineSearch {0} 
+		 Newton step: 1	 Residual (rel.): < 5.00e-08	 LinearIters [2]	 LineSearch {0} 
 	CostFunctional: 4.29e+02
 
 	**************************************************
 	*        Stopping Reduced Newton Algorithm       *
 	*             after      1  Iterations           *
-	*             with rel. Residual  < 5.00e-09          *
+	*             with rel. Residual  < 5.00e-08          *
 	**************************************************
 
 
