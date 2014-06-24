@@ -17,21 +17,21 @@ LOG: Allowing IterationCounter `OptNewton_OptProblem' for filenames!
 		 Newton step: 0	 Residual (abs.): 0.71
 		 Newton step: 0	 Residual (rel.): 1.00e+00
 	
-		 TR-Newton step: 1	delta: 1.00e+00->1.00e+01  accepting step!	 Residual: 7.05e-01	 LinearIters [2]
+		 TR-Newton step: 1	delta: 1.00e+00->1.00e+01  accepting step!	 Residual:  (rel.):  1.00e+00	 LinearIters [2]
 	CostFunctional: 6.06e+02
-		 TR-Newton step: 2	delta: 1.00e+01->1.00e+02  accepting step!	 Residual: 7.05e-01	 LinearIters [2]
+		 TR-Newton step: 2	delta: 1.00e+01->1.00e+02  accepting step!	 Residual:  (rel.):  9.99e-01	 LinearIters [2]
 	CostFunctional: 6.05e+02
-		 TR-Newton step: 3	delta: 1.00e+02->1.00e+03  accepting step!	 Residual: 7.00e-01	 LinearIters [2]
+		 TR-Newton step: 3	delta: 1.00e+02->1.00e+03  accepting step!	 Residual:  (rel.):  9.93e-01	 LinearIters [2]
 	CostFunctional: 6.03e+02
-		 TR-Newton step: 4	delta: 1.00e+03->1.00e+04  accepting step!	 Residual: 6.57e-01	 LinearIters [2]
+		 TR-Newton step: 4	delta: 1.00e+03->1.00e+04  accepting step!	 Residual:  (rel.):  9.31e-01	 LinearIters [2]
 	CostFunctional: 5.82e+02
-		 TR-Newton step: 5	delta: 1.00e+04->2.00e+04  accepting step!	 Residual: 2.17e-01	 LinearIters [2]
+		 TR-Newton step: 5	delta: 1.00e+04->2.00e+04  accepting step!	 Residual:  (rel.):  3.08e-01	 LinearIters [2]
 	CostFunctional: 4.46e+02
-		 TR-Newton step: 6	delta: 2.00e+04->4.00e+04  accepting step!	 Residual: 1.26e-03	 LinearIters [2]
+		 TR-Newton step: 6	delta: 2.00e+04->4.00e+04  accepting step!	 Residual:  (rel.):  1.78e-03	 LinearIters [2]
 	CostFunctional: 4.29e+02
-		 TR-Newton step: 7	delta: 4.00e+04->8.00e+04  accepting step!	 Residual: 1.29e-05	 LinearIters [2]
+		 TR-Newton step: 7	delta: 4.00e+04->8.00e+04  accepting step!	 Residual:  (rel.):  1.83e-05	 LinearIters [2]
 	CostFunctional: 4.29e+02
-		 TR-Newton step: 8	delta: 8.00e+04->1.00e+05  accepting step!	 Residual: 1.22e-08	 LinearIters [4]
+		 TR-Newton step: 8	delta: 8.00e+04->1.00e+05  accepting step!	 Residual:  (rel.):< 5.00e-08	 LinearIters [4]
 	CostFunctional: 4.29e+02
 	CostFunctional: 4.29e+02
 
@@ -83,13 +83,13 @@ LOG: Allowing IterationCounter `OptNewton_OptProblem' for filenames!
 		 Newton step: 0	 Residual (abs.): 0.00072
 		 Newton step: 0	 Residual (rel.): 1.00e+00
 	
-		 TR-Newton step: 1	delta: 1.00e+00->1.00e+01  accepting step!	 Residual: 7.11e-04	 LinearIters [2]
+		 TR-Newton step: 1	delta: 1.00e+00->1.00e+01  accepting step!	 Residual:  (rel.):  9.87e-01	 LinearIters [2]
 	CostFunctional: 4.29e+02
-		 TR-Newton step: 2	delta: 1.00e+01->7.87e+01  accepting step!	 Residual: 6.21e-04	 LinearIters [2]
+		 TR-Newton step: 2	delta: 1.00e+01->7.87e+01  accepting step!	 Residual:  (rel.):  8.62e-01	 LinearIters [2]
 	CostFunctional: 4.29e+02
-		 TR-Newton step: 3	delta: 7.87e+01->1.57e+02  accepting step!	 Residual: 8.03e-07	 LinearIters [2]
+		 TR-Newton step: 3	delta: 7.87e+01->1.57e+02  accepting step!	 Residual:  (rel.):  1.12e-03	 LinearIters [2]
 	CostFunctional: 4.29e+02
-		 TR-Newton step: 4	delta: 1.57e+02->3.15e+02  accepting step!	 Residual: 5.94e-12	 LinearIters [2]
+		 TR-Newton step: 4	delta: 1.57e+02->3.15e+02  accepting step!	 Residual:  (rel.):< 5.00e-08	 LinearIters [2]
 	CostFunctional: 4.29e+02
 	CostFunctional: 4.29e+02
 

@@ -472,7 +472,7 @@ int ReducedTrustregion_NewtonAlgorithm<PROBLEM,VECTOR>::Solve(ControlVector<VECT
     
     res = Residual(gradient,gradient_transposed);
     
-    out<<"\t Residual: "<<sqrt(res)<<"\t LinearIters ["<<liniter<<"]";
+    out<<"\t Residual:  (rel.):"<<this->GetOutputHandler()->ZeroTolerance(sqrt(res)/sqrt(firstres),1.0)<<"\t LinearIters ["<<liniter<<"]";
     this->GetOutputHandler()->Write(out,3+this->GetBasePriority());
     
     out<< "CostFunctional: " << cost;
