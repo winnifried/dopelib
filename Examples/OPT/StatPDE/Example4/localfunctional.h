@@ -106,11 +106,7 @@ template<
         {
           _fvalues[q_point](0) = (sin(
               M_PI * state_fe_values.quadrature_point(q_point)(0))
-              * (sin(M_PI * state_fe_values.quadrature_point(q_point)(1))
-                  + 0.5
-                      * sin(
-                          2 * M_PI
-                              * state_fe_values.quadrature_point(q_point)(1))))
+              * sin(M_PI * state_fe_values.quadrature_point(q_point)(1)))
               * (state_fe_values.quadrature_point(q_point)(0));
           _fvalues[q_point](1) = (state_fe_values.quadrature_point(q_point)(0));
 
