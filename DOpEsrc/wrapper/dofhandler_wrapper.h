@@ -47,7 +47,7 @@ namespace DOpEWrapper
    *                            It has the default value dealii::DoFHandler<dim>
    */
   template<int dim,
-      template<int dim, int spacedim> class DOFHANDLER = dealii::DoFHandler>
+      template<int DIM, int spacedim> class DOFHANDLER = dealii::DoFHandler>
     class DoFHandler : public DOFHANDLER<dim, dim>
     {
       public:

@@ -85,7 +85,7 @@ flags += $(DOPE_FLAGS)
 # Next define how to link the executable
 $(target)$(EXEEXT) : $(libraries) Makefile
 	@echo =====waves=======$(dope_dimension)d==$(deal_II_dimension)d==============$(MT)== Linking $(@F)
-	@$(CXX) -o $@ $(libraries) $(LIBS) $(LDFLAGS)
+	@$(CXX) $(LDFLAGS) -o $@ $(libraries) $(LIBS) 
 
 
 # Rule how to run the program

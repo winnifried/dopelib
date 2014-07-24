@@ -40,9 +40,9 @@ SNOPT_AR_LIBS = $(SNOPT_AR:%=$(SNOPT_LIBDIR)/%.a)
 DOPE_LIBS += -I$(SNOPT)/cppsrc -I$(SNOPT_F2CINC)
 
 #additional linker information
-DOPE_LDFLAGS += -L$(SNOPT_LIBDIR) $(SNOPT_AR_LIBS) $(SNOPT_F2CLIB)/libf2c.a
+DOPE_LIBS += -L$(SNOPT_LIBDIR) $(SNOPT_AR_LIBS) $(SNOPT_F2CLIB)/libf2c.a
 #use fortran libs
-DOPE_LDFLAGS += -lgfortranbegin -lgfortran
+DOPE_LIBS += -lgfortranbegin -lgfortran
 
 #endof With SNOPT
 endif

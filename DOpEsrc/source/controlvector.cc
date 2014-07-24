@@ -1049,5 +1049,5 @@ double ControlVector<VECTOR>::Norm(std::string name,std::string restriction) con
 /******************************************************/
 /******************************************************/
 
-template class ControlVector<dealii::Vector<double> >;
-template class ControlVector<dealii::BlockVector<double> >;
+template class DOpE::ControlVector<dealii::Vector<double> >;
+template class DOpE::ControlVector<dealii::BlockVector<double> >;

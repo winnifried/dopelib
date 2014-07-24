@@ -659,5 +659,5 @@ double ConstraintVector<VECTOR>::Complementarity(const ConstraintVector<VECTOR>&
 /******************************************************/
 /******************************************************/
 
-template class ConstraintVector<dealii::Vector<double> >;
-template class ConstraintVector<dealii::BlockVector<double> >;
+template class DOpE::ConstraintVector<dealii::Vector<double> >;
+template class DOpE::ConstraintVector<dealii::BlockVector<double> >;
