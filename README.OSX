@@ -1,5 +1,5 @@
 a) To compile this library with Apple OSX
-   you need to install a recent g++ (4.4 or newer)
+   you need to install a recent g++ (4.7 or newer)
    using macports.
 
 **************************************************************
