@@ -26,7 +26,8 @@
 ####################################################################
 #installation of ipopt
 ####################################################################
-ARCHIVE_BASE=Ipopt-3.10.4
+#ARCHIVE_BASE=Ipopt-3.10.4
+ARCHIVE_BASE=Ipopt-3.11.8
 ARCHIVE=${ARCHIVE_BASE}.tgz
 
 
@@ -269,7 +270,7 @@ fi
 echo ""
 echo "Starting the configuration!"
 echo ""
-./configure -enable-static -with-asl -with-mumps -with-hsl 
+./configure -enable-static -with-asl -with-mumps -with-hsl --enable-dependency-linking
 
 read -t 1 -n 10000 discard #remove unwanted input
 echo "Configuration complete:"
