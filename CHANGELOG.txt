@@ -1,5 +1,6 @@
 Changelog DOpE
 ==============
+30.07.2014: Bugfixes for: clang and ubuntu 14.04 
 26.02.2014: Support for the ControlVectorBehavior::nostationary has been added
 	    to allow controls that vary in time. Added Examples/OPT/InstatPDE/Example3.
 26.02.2014: Fixed Bug in nonstationary problems. Up to now, the type timelocal 
