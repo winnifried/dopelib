@@ -53,7 +53,7 @@ template<
       bool
       NeedTime() const
       {
-        if (fabs(_time - 1.) < 1.e-13)
+        if (fabs(_time - 100000.) < 1.e-13)
           return true;
         return false;
       }

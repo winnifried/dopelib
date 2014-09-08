@@ -824,8 +824,9 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		         Precalculating functional values 
 		P1: 2.05194e+07
 		P2: 1.84942e+07
- ERROR: The following `DOpEException` reports!
- ERROR: Error: During execution of `InstatReducedProblem::ComputeReducedCostFunctional` the following fatal Problem occurred!
- ERROR: Apparently the CostFunctional was never evaluated! 
-	Check if the return value of `NeedTimes' is set correctly.
- ERROR: Reported by `undefined`
+	CostFunctional: 0
+	Computing Functionals:
+	P1 too large. Writing to file instead: 
+	Writing [./Mesh0/P1_InstatOptProblemContainer.00100.gpl]
+	P2 too large. Writing to file instead: 
+	Writing [./Mesh0/P2_InstatOptProblemContainer.00100.gpl]
