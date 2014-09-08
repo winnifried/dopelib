@@ -180,7 +180,8 @@ main(int argc, char **argv)
   LocalPointFunctionalP1<CDC, FDC, DOFHANDLER,VECTOR, DIM, DIM> LPFP1;
   LocalPointFunctionalP2<CDC, FDC, DOFHANDLER,VECTOR, DIM, DIM> LPFP2;
 
-  //Time grid of [0,25]
+  //Time grid of [0,100000] divided into 100 intervals
+  //corresponding to a time step size of 1000 (days).
   Triangulation<1> times;
   GridGenerator::subdivided_hyper_cube(times, 100, 0, 100000);
 
