@@ -5,6 +5,8 @@ if [ $# -ne 1 ]
     exit 1
 fi
 
+PROGRAM=../../../../../bin/DOpE-OPT-StatPDE-Example5-2d-2d
+
 if [ -f dope.log ]
 then
 	rm dope.log
@@ -14,8 +16,8 @@ if [ $1 == "Test" ]
 then
     if [ -f test.dlog ]
     then
-	echo "Running Program ../../../../../bin/DOpE-OPT-StatPDE-Example5-2d-2d test.prm"
-	(../../../../../bin/DOpE-OPT-StatPDE-Example5-2d-2d test.prm 2>&1) > /dev/null
+	echo "Running Program ${PROGRAM} test.prm"
+	(${PROGRAM} test.prm 2>&1) > /dev/null
 	echo "Comparing Results:"
 	(diff dope.log test.dlog 2>&1) > /dev/null
 	if [ $? -eq 0 ]
@@ -37,8 +39,8 @@ then
 else
     if [ $1 == "Store" ]
     then
-	echo "Running Program ../../../../../bin/DOpE-OPT-StatPDE-Example5-2d-2d test.prm"
-	(../../../../../bin/DOpE-OPT-StatPDE-Example5-2d-2d test.prm 2>&1) > /dev/null
+	echo "Running Program ${PROGRAM} test.prm"
+	(${PROGRAM} test.prm 2>&1) > /dev/null
 	echo "Run completed. Cleaning up ..."
 	mv dope.log test.dlog
 	rm -r Mesh[0-6]/

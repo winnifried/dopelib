@@ -94,17 +94,15 @@ the executable will be overwritten by all your examples!}
 \begin{verbatim}
 PDE/StatPDE/Example1/Test> emacs test.sh
 \end{verbatim}
-where, in our example you find two times the lines
+where, in our example you find the line
 \begin{verbatim}
-echo "Running Program ../../../../../bin/DOpE-PDE-StatPDE-Example1-2d-2d test.prm"
-(../../../../../bin/DOpE-PDE-StatPDE-Example1-2d-2d test.prm 2>&1) > /dev/null
+PROGRAM=../../../../../bin/DOpE-PDE-StatPDE-Example1-2d-2d
 \end{verbatim} 
 if you made a copy of an other example the part \texttt{DOpE-PDE-StatPDE-Example1-2d-2d}
 may differ. These lines need to be replaced with the new name of the 
 executable, i.e., for our given example
 \begin{verbatim}
-echo "Running Program ../../../../../bin/MyWonderfulFirstExample test.prm"
-(../../../../../bin/MyWonderfulFirstExample test.prm 2>&1) > /dev/null
+PROGRAM=../../../../../bin/MyWonderfulFirstExample
 \end{verbatim} 
 
 \item  Now, you are prepared to change any of the problem
@@ -119,7 +117,7 @@ main.cc, localpde.h, functionals.h, localfunctional.h, etc
   
   To do so, change to the \texttt{Test} sub-directory and run the test:
 \begin{verbatim}
-./test Test
+./test.sh Test
 \end{verbatim}
   Note that this should fail, otherwise you have not changed anything in the program, 
   or forgot part 3) of this description.
@@ -131,7 +129,7 @@ main.cc, localpde.h, functionals.h, localfunctional.h, etc
   Once your satisfied with what you see in the log-file \texttt{dope.log} you need to store 
   that information using
 \begin{verbatim}
-./test Store
+./test.sh Store
 \end{verbatim}
 \end{enumerate}
 
