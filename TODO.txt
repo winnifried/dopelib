@@ -1,5 +1,12 @@
 TODO DOpE
 =========
+- Translate TODO and CHANGELOG into English
+- Add doxygen documentation to website -> WW
+- Change private data member notation to trailing underscore
+- Update manual to contain full code blocks in particular for Section 2.6
+- Add more code examples to Section 5 of the manual
+- Move example executables from global bin directory to the example directory -> WW
+ 
 
 Standard TODO fuer naechstes Treffen
 ------------------------------------
