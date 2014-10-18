@@ -5,7 +5,7 @@ dope_dimension  = 1
 
 # the DOpE toplevel directory:
 DOpE = ../../../../
-BINDIR = $(DOpE)/bin/
+BINDIR = ./
 
 # The second tells us the name of the executable. It is prefixed by
 # `lib/' to designate its destination directory. Note that the program

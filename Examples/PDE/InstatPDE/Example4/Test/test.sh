@@ -5,7 +5,7 @@ if [ $# -ne 1 ]
     exit 1
 fi
 
-PROGRAM=../../../../../bin/DOpE-PDE-InstatPDE-Example4-1d-1d
+PROGRAM=../DOpE-PDE-InstatPDE-Example4-1d-1d
 
 if [ -f dope.log ]
 then

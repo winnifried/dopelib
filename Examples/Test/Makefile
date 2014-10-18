@@ -13,7 +13,7 @@ dope_dimension  = 2
 #DOpE = ../../
 
 DOpE = ../../
-BINDIR = $(DOpE)/bin/
+BINDIR = ./
 # The second tells us the name of the executable. It is prefixed by
 # `lib/' to designate its destination directory. Note that the program
 # name depends on the dimension, so you can keep copies for the

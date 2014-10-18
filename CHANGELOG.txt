@@ -1,5 +1,9 @@
 Changelog DOpE
 ==============
+18.10.2014: Changelog now completely in english
+18.10.2014: Executables for the examples are now, by default, 
+	    placed in the respective example directory and no longer in a 
+	    global bin directory
 30.07.2014: Bugfixes for: clang and ubuntu 14.04 
 26.02.2014: Support for the ControlVectorBehavior::nostationary has been added
 	    to allow controls that vary in time. Added Examples/OPT/InstatPDE/Example3.
@@ -26,15 +30,14 @@ Changelog DOpE
 ===============================================================================
 17.12.2013: Release of DOpElib 1.0
 ===============================================================================
-13.12.2013: 1) description.tex ueberarbeitet
-	    2) contents.tex insbesondere der OPT examples
-	       und PDE/Instat/Example2
-	       Speziell: wie werden Optimierungsprobleme
-	       mit DOpE geloest (_U _UT _UTT Terme, constraints, etc.)
-	       Hier OPT/StatPDE/Example1 content.tex nun ganz ausfuehrlich
-            3) PDE/Instat/Example2 auf FSI mit biharmonic mesh
-	       motion erweitert, da altes Programm im 
-	       instationaeren nicht mehr richtig lief.
+13.12.2013: 1) description.tex has been rewritten
+	    2) contents.tex especially OPT examples
+	       and PDE/Instat/Example2 have been updated
+	       In particular, explained how optimization problems are 
+	       solved using DOpE (_U _UT _UTT Terme, constraints, etc)
+	       OPT/StatPDE/Example1 content.tex is now very detailed
+            3) PDE/Instat/Example2 extended to FSI with biharmonic mesh
+	       motion.
 13.12.2013 Code Cleaning in the examples:
 		Unified look of the code, deleted unnecessary includes, give
 		localpde instead of PDEInterface as template etc., typedefs instead
@@ -70,7 +73,6 @@ Changelog DOpE
 07.02.2013: Changed Interface of RefineSpace of the MOL-SpaceTimeHandlers
 21.12.2012: Removed the now unnecessary deal_II_dim > 1 checks for boundary and face integrals.
 	    Now also in 1d we can use boundary equation ...
-10.12.2012: Paper on DOpElib structure submitted to ACM TOMS
 05.10.2012: Output handler now checks for nan and -nan values to assert that only nan is written in any case.
 22.08.2012: OptProblemContainer and PDEProblemContainer now only evaluate Functionals
 	    appearing in *Rhs if the type is required by the functional
@@ -85,7 +87,7 @@ Jun 2012  : Logo and Website have been created
 
 2. DOpE Treffen 3.5.2012-5.5.2012:
 ==================================
-- Zeitschrittverfahren nochmals anschauen! Diverse Funktionen sind noch nicht umgestellt (faceequation etc.)
+- Time stepping shemes rechecked for typos.
 - Renamed optproblem.h to optproblemcontainer.h (OptProblem to OptProblemContainer)
 - Initial Value Computation now done by DOpE, nolonger the fixed dealii function project.
 - Changed interface for incorporation of user defined dofconstraints: Dope computes always
@@ -103,57 +105,46 @@ Jun 2012  : Logo and Website have been created
 
 before 2.5.2012
 -------------------------
-done - SVN in Heidelberg ~tw
-done - Manual: Additional Chapter on what this Library does and why it is doing so. ~ww
-done - Multimesh: Support of vector valued FE. ~ww
+- SVN in Heidelberg 
+- Manual: Additional Chapter on what this Library does and why it is doing so.
+- Multimesh: Support of vector valued FE.
 
-15.02.2011: Trennung der Ortsdiskretisierung (verschieden Feine Gitter) ~ww
+15.02.2011: Splitting of spatial meshes for different variables beeing defined 
+	    on different meshes
 
-Programm (1. DOpE Treffen)
+Programm (1. DOpE Meeting)
 ==========================
 
-Wo:         Hamburg
-Wann:       2.1.2012 - 6.1.2012
-Teilnehmer: Christian, Michael, Thomas, Winni
+Where:        Hamburg
+When:         2.1.2012 - 6.1.2012
+Participants: Christian, Michael, Thomas, Winni
 ---------------------------------------------
 
-done	- Umbenennung von statsolver und instatsolver in statreducedproblem und instatreducedproblem. ~ww
-done (Welcher Fehler?) - Statpde/example6, Probleme mit cvs ~ww
-done    - Trennung der Zeitdiskretisierung von Kontrolle und Zustand. 
-done	  -- Schmeisse Zeitdiskretisierung aus controlvector raus.~ww
-done - Aenderung der Genauigkeit der Ausgabe im outputhaendler (sowas wie set.precision). ~tw
-done --set precision ~tw
-done -- Angabe von "epsilon" im Paramfile, Normierung des Residuums im
-        Newtonsolver (inkl. firstres)~tw
-done - integrator und newtonsolver unabh. von PDEPOBLEM (als Funktionstemplate einführen)~ww
-done - reducednewtonalgorithm mit precision anpassen~ww
-done - Example 7 (Laplace-Gleichung), iterative Löser mit precond testen,
-       lokale Gitterverfeinerung in 3D~tw
-done - Verschiebe pdeinterface.h aus include in interfaces ~cg
-done - Instat Beispiele duplizieren, um alle Zeitschrittverfahren zu testen,~cg
-done - Blockvector zu Vector fuer VK -> PDE Beispiel 8 ~tw	
-done - Die vielen Warnungen beim Compilieren reduzieren
-	-- #warnings anschauen, falls berechtigt, nicht mehr ueber compiler, sondern ueber 
-	    //FIXME (fuer bugs etc.) bzw. //TODO ~ww
-	-- unused variable etc. durchschauen.	~ww
-done - 1d Heat equation to test all timestepping schemes ~mg
-  
-done - Vorhandene Beispiele ueberarbeiten (s.o.) ~mg
-done - PDE/StatPDE		
-		-- Kommentare zu Beispielen sollten beinhalten:
-		--- Was wird geloest?
-  		--- Welche Features werden hier (erstmalig) benutzt? Diese sollten
-  		ueber \index indiziert werden.
+- Renamed statsolver and instatsolver: Now statreducedproblem and instatreducedproblem.
+- Splitting of time discretization of state and control variables
+- Precison for output of numbers added to outputhandler.
+- integrator and newtonsolver now independent of PDEPOBLEM 
+- reducednewtonalgorithm supports output precision 
+- Example 7 (Laplace-Equation), iterative solvers with preconditioner
+  and local mesh refinement in 3d.
+- Moved pdeinterface.h from include to interfaces 
+- Instat Examples duplicated to assert that all time stepping schemes are tested
+- Removed compiler warnings (unused variable ...)
+- 1d Heat equation to test all timestepping schemes
+- Updated existing examples to the new structures
+- PDE/StatPDE		
+   Comments to the examples (in content.tex) should contain:
+	-- What is solved
+  	-- What new features are used. These should be \indexed
   		
-done - 	-- Extra Klasse, die ueber die Zeitintervalle laeuft.(Timeiterator)
-done -  -- Splitten von Zeitintervall und Zeitpunkt. ~cg
+- Class to iterate over the timesteps
+- Splitting of intervall and point in the timediscretization
 
-done -- - DoFHandler als Template (d.h. hp und normal case mergen) ~cg
-				 -- CellDataContainer und FaceDataContainer anpassen
+- DoFHandler as template (i.e. hp and normal case merged)
+  	 -- CellDataContainer and FaceDataContainer adjusted
+	 -- Integrator adjusted
+	 -- Timestepping schemes adjusted
+	 -- hp is now running
+	 -- Code cleaned (removed commented old code fragments
 					
-					-- Integrator fertig anpassen.
-					-- Zeitschrittverfahren anpassen.
-					-- hp lauffaehig machen.
-					-- Code aufraeumen (auskommentierte Textyeilen)
-					
-done --- IntegratorDataContainer schreiben, Integrator entsprechend anpassen, eventuell auch die DataContianer-Klassen?
+- IntegratorDataContainer introduced to remove the long list of arguments.
