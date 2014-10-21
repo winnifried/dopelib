@@ -13,6 +13,7 @@ Review von unserem Paper: (Wer macht was)
 
 1.) Das hätte ich eh machen wollen.
     Aaaeeh? Haben wir das TODO.txt in die veroeffentlichte Version miteingecheckt? Ist das sinnvoll? 
+    -> WW Changelog ist erledigt.
     -> TW (erledigt JA / NEIN)
 
 2.) Finde ich nicht! Wir können uns aber provisorisch von den
@@ -57,12 +58,7 @@ Review von unserem Paper: (Wer macht was)
 	Sachen wegen der templates eh nicht drin sind.
     -> Bleibt so!
 
-10.) Mir ist das wurscht. Es hat Vorteile, wenn man das bin Verzeichnis
-	in den PATH legt, man braucht dann nur den Executablenamen.
-	Kann von mir aus auch lokal liegen.
-     Wenn Ihr das wollt, dann kann ich das ändern. Sollen wir dann den
-     target namen so lassen, oder ist dann alles nur example?
-     -> WW (erledigt JA / NEIN)
+10.) -> WW erledigt 
 
 11.) Finde ich echt nicht wichtig.
      -> Ja; bleibt so!
