@@ -12,7 +12,7 @@ Review von unserem Paper: (Wer macht was)
 (Wichtig sind 1,3,4,7,10)
 
 1.) Das hätte ich eh machen wollen.
-    Aaaeeh? Haben wir das TODO.txt miteingecheckt? Ist das sinnvoll? 
+    Aaaeeh? Haben wir das TODO.txt in die veroeffentlichte Version miteingecheckt? Ist das sinnvoll? 
     -> TW (erledigt JA / NEIN)
 
 2.) Finde ich nicht! Wir können uns aber provisorisch von den
@@ -63,6 +63,7 @@ Review von unserem Paper: (Wer macht was)
      Wenn Ihr das wollt, dann kann ich das ändern. Sollen wir dann den
      target namen so lassen, oder ist dann alles nur example?
      -> WW (erledigt JA / NEIN)
+
 11.) Finde ich echt nicht wichtig.
      -> Ja; bleibt so!
 
