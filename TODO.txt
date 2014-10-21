@@ -5,6 +5,60 @@ TODO DOpE
 - Change private data member notation to trailing underscore
 - Update manual to contain full code blocks in particular for Section 2.6
 - Add more code examples to Section 5 of the manual
+
+
+Review von unserem Paper: (Wer macht was)
+(Wichtig sind 1,3,4,7,10)
+
+1.) Das hätte ich eh machen wollen 
+    -> TW (erledigt JA / NEIN)
+
+2.) Finde ich nicht! Wir können uns aber provisorisch von den
+	Contributors die Zustimmung zu einer relizensierung holen.
+    -> Machen wir nicht (einstimmig beschlossen)
+
+3.) Ist kein Problem, vermutlich 10 Zeilen in meinem Webseitenskript
+    -> WW (erledigt JA / NEIN)
+
+4.) Hänge ich nicht dran. Die Google Code Convention ist ein underscore
+	am Ende. Wenn das ok für Euch ist? dann kann ich das 	
+	suchen/ersetzen
+	-> WW (erledigt JA / NEIN)
+
+5.) Würde ich die Antwort so lassen.
+    -> Ja; bleibt so.
+
+6.) Wie 5. da hatten wir lange drüber diskutiert. Oder seit Ihr anderer
+	Meinung?
+    -> Ja; bleibt so. Dem Reviewer scheint das aber wichtig zu sein. 
+       Da sollten wir eine ueberzeugenede Antwort haben!!!
+
+7.) Kann man ergänzen.
+    -> TW (erledigt JA / NEIN)
+
+8.) Ich bin da anderer Meinung, für den `Code mit Kommentaren' gibt es
+	den Code mit Kommentaren. Das Manual soll m.E. nur klarstellen
+	was man in dem Beispiel sieht. (und ich finde in deal.ii
+	ist es manchmal auch etwas viel Kommentar, weil man den
+	Überblick über die Funktion verliert aber darüber kann man	
+	sich streiten...)
+    -> TW (vielleicht minimal - ich schaue mal nach)
+
+9.) Ich halte die Frage ehrlich gesagt für irrelevant. Es gibt pro und 	
+	contra zu statisch/dynamisch linken und unsere statisch 	
+	gelinkten Binaries sind nicht furchtbar groß, weil die meisten 	
+	Sachen wegen der templates eh nicht drin sind.
+    -> Bleibt so!
+
+10.) Mir ist das wurscht. Es hat Vorteile, wenn man das bin Verzeichnis
+	in den PATH legt, man braucht dann nur den Executablenamen.
+	Kann von mir aus auch lokal liegen.
+     Wenn Ihr das wollt, dann kann ich das ändern. Sollen wir dann den
+     target namen so lassen, oder ist dann alles nur example?
+     -> WW (erledigt JA / NEIN)
+11.) Finde ich echt nicht wichtig.
+     -> Ja; bleibt so!
+
  
 
 Standard TODO fuer naechstes Treffen
