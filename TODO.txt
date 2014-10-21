@@ -8,9 +8,11 @@ TODO DOpE
 
 
 Review von unserem Paper: (Wer macht was)
+-----------------------------------------
 (Wichtig sind 1,3,4,7,10)
 
-1.) Das hätte ich eh machen wollen 
+1.) Das hätte ich eh machen wollen.
+    Aaaeeh? Haben wir das TODO.txt miteingecheckt? Ist das sinnvoll? 
     -> TW (erledigt JA / NEIN)
 
 2.) Finde ich nicht! Wir können uns aber provisorisch von den
@@ -34,6 +36,11 @@ Review von unserem Paper: (Wer macht was)
        Da sollten wir eine ueberzeugenede Antwort haben!!!
 
 7.) Kann man ergänzen.
+    In Examples/description_full.pdf, section 2.6, it would be nice if the
+    steps to install dopelib were actually spelled out in terms of commands, not
+    just in words. For example, in step II, "Configure it properly and make the
+    whole deal.II library" is not very descriptive -- what does "it" refer to,
+    what does "configure properly" mean, and what is "whole" here?
     -> TW (erledigt JA / NEIN)
 
 8.) Ich bin da anderer Meinung, für den `Code mit Kommentaren' gibt es
