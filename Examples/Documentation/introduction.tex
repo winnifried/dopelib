@@ -143,34 +143,93 @@ script.
 
 
 \section{Installation}
+To work with DOpElib, your need necessarily deal.II, which installation 
+we describe first. Afterwards, the DOpElib installation is described and finally
+other optional packages might be installed.
 \label{sec_installation}
-I) Get a copy of \texttt{DOpElib}, see Section~\ref{sec:obtain} for details.\\[1mm]
-%
-II) Install \texttt{deal.II} to your home directory, i.e., it should be located in \\
+\begin{itemize}
+\item Install \texttt{deal.II} to your home directory, i.e., it should be located in \\
 \texttt{\textasciitilde/deal.II}. \\[1mm]
 If you would like to have another path you will either have to manually edit the files
 \texttt{DOpEsrc/source/Makefile} and \texttt{Examples/Make.global\underline{ }options} and replace the 
 line \\
 \texttt{D = \$(HOME)/deal.II} with the appropriate path.\\[1mm]
-Configure it properly and make the whole \texttt{deal.II} library.\\[3mm]
+Detailed installing instructions for deal.II (here the last version
+8.1.0) can be found on 
+\texttt{http://www.dealii.org/8.1.0/readme.html}. The deal.II 
+installation instructions are descriptive enough and we omit 
+any further comments and refer to their webpage.
 %
-III) If you want to use some of the supported third party libraries install them and follow 
- the instructions in \texttt{ThirdPartyLibs/README}. There may be further information 
- in some \texttt{ThirdPartyLibs/*.INSTALLNOTES} that you may want to consider.\\[3mm]
+
 %
-IV) To build the \texttt{DOpElib} you have to change to the directory 
-\texttt{DOpEsrc} where you can call\\ 
-\texttt{make all}\\
-to build the library. If you want to generate some documentation you may use
-\texttt{make pdf-doc} or \texttt{make html-doc} which will require either 
-latex or doxygen to be installed on your computer.\\[3mm]
+\item Get a copy of \texttt{DOpElib}, see Section~\ref{sec:obtain} for details.
 %
-V) To build the Examples change to the \texttt{Examples} directory and \texttt{make all}.
-%
-VI) Finally you may wish to test if everything worked. To do so you can 
+\item Unpack in your preferred directory:
+\begin{lstlisting}
+~/Software/> tar -xzf dopelib-1.0.tar.gz
+\end{lstlisting}
+to get
+\begin{lstlisting}
+~/Software/dopelib-1.0
+\end{lstlisting}
+To build the \texttt{DOpElib} you have to change to the directory 
+\texttt{DOpEsrc} where you can call 
+\begin{lstlisting}
+~/Software/dopelib-1.0/DOpEsrc> make all
+\end{lstlisting}
+to build the library. You also get various installation options by just typing 
+\texttt{make}.
+\item To generate documentation, please go into:
+\begin{lstlisting}
+~/Software/dopelib-1.0/Examples
+\end{lstlisting}
+Here, you get all options by typing:
+\begin{lstlisting}
+make
+\end{lstlisting}
+Specifically, you can create and run all examples, running a test suite,
+and generating documentation:
+{\footnotesize
+\begin{lstlisting}
+===========================================================================
+=              Makefile for the DOpE documentation                        =
+===========================================================================
+=                                                                         =
+= The following targets exist:                                            =
+=    all       :  Make all examples (in optimized mode)                   =
+=    allignore :  Make all examples (in optimized mode), ignore errors.   =
+=    clean     :  Cleaning up all examples                                =
+=    tests     :  Run all test param data.                                =
+=    cat       :  Run clean, run all, run tests (combine these commands)  =
+=    catignore :  Same as cat, but ignores compiler errors.               =
+=    pdf-doc   :  Create documentation in pdf file format via latexmk     =
+=    doc       :  Create documentation in pdf file format via latexmk     =
+=    distclean :  Cleaning up, including documentation                    =
+=    warncheck :  Checks whether all Examples compile without warnings    =
+===========================================================================
+\end{lstlisting}
+}
+For html documentation, change into:
+\begin{lstlisting}
+~/Software/dopelib-1.0/doxygen
+\end{lstlisting}
+and then typing \texttt{make}. Doxygen documentation
+will require either 
+latex or doxygen to be installed on your computer.
+\item If you wish to test if everything worked. To do so you can 
 change to the \texttt{Examples} directory and \texttt{make tests} which will give you a 
 list of all the examples and whether they behave as expected by the library, see also 
 Chapter~\ref{chap:test}.
+\item  If you want to use some of the supported third party libraries install them and follow 
+ the instructions in \texttt{ThirdPartyLibs/README}. There may be further information 
+ in some \texttt{ThirdPartyLibs/*.INSTALLNOTES} that you may want to
+ consider.\\[3mm]
+ As example, the installation of ipopt works as follows:\\
+In the path \texttt{~/dope/ThirdPartyLibs>} type in the terminal\\
+\texttt{./install-free-libs.sh}
+
+
+\end{itemize}
 
 \section{FAQs}
 \paragraph{1.) When building the library I get an error message:}
