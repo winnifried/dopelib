@@ -72,7 +72,7 @@ namespace DOpE
 		     ParameterReader &param_reader,
 		     DOpEExceptionHandler<VECTOR>* Except = NULL,
 		     DOpEOutputHandler<VECTOR>* Output = NULL, int base_priority = 0);
-    ~ReducedAlgorithm();
+    virtual ~ReducedAlgorithm();
     
     /**
      * Used to declare run time parameters. This is needed to declare all

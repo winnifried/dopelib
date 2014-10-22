@@ -69,7 +69,7 @@ namespace DOpE
 			   DOpEExceptionHandler<VECTOR>* Except=NULL,
 			   DOpEOutputHandler<VECTOR>* Output=NULL,
 			   int base_priority=0);
-    ~ReducedNewtonAlgorithm();
+    virtual ~ReducedNewtonAlgorithm();
 
     /**
      * Used to declare run time parameters. This is needed to declare all
