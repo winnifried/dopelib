@@ -776,29 +776,7 @@ namespace DOpE
     DOpE::MethodOfLines_SpaceTimeHandler<dealii::FESystem,
         dealii::DoFHandler, dealii::BlockSparsityPattern,
         dealii::BlockVector<double>, dope_dimension, deal_II_dimension>::ComputeControlSparsityPattern(
-        dealii::BlockSparsityPattern & sparsity) const
-    {
-      const std::vector<unsigned int>& blocks = this->GetControlDoFsPerBlock();
-      dealii::BlockCompressedSimpleSparsityPattern csp(blocks.size(),
-          blocks.size());
-      for (unsigned int i = 0; i < blocks.size(); i++)
-      {
-        for (unsigned int j = 0; j < blocks.size(); j++)
-        {
-          csp.block(i, j).reinit(this->GetControlDoFsPerBlock(i),
-              this->GetControlDoFsPerBlock(j));
-        }
-      }
-      csp.collect_sizes();
-#if dope_dimension > 0
-      //We use here dealii::DoFHandler<dealdim>, because if dope_dim >0 then dopedim = dealdim.
-      dealii::DoFTools::make_sparsity_pattern (this->GetControlDoFHandler().GetDEALDoFHandler(),csp);
-#else
-      abort();
-#endif
-      this->GetControlDoFConstraints().condense(csp);
-      sparsity.copy_from(csp);
-    }
+	  dealii::BlockSparsityPattern & sparsity) const;
 
   /******************************************************/
 
@@ -807,19 +785,8 @@ namespace DOpE
     MethodOfLines_SpaceTimeHandler<dealii::FESystem,
         dealii::DoFHandler, dealii::SparsityPattern,
         dealii::Vector<double>, dope_dimension, deal_II_dimension>::ComputeControlSparsityPattern(
-        dealii::SparsityPattern & sparsity) const
-    {
-      const unsigned int total_dofs = this->GetControlNDoFs();
-      dealii::CompressedSimpleSparsityPattern csp(total_dofs, total_dofs);
+	  dealii::SparsityPattern & sparsity) const;
 
-#if dope_dimension > 0
-      dealii::DoFTools::make_sparsity_pattern (this->GetControlDoFHandler().GetDEALDoFHandler(),csp);
-#else
-      abort();
-#endif
-      this->GetControlDoFConstraints().condense(csp);
-      sparsity.copy_from(csp);
-    }
 
   /**
    * Implementation of virtual function in SpaceTimeHandler
@@ -830,29 +797,7 @@ namespace DOpE
         dealii::hp::FECollection,
         dealii::hp::DoFHandler, dealii::BlockSparsityPattern,
         dealii::BlockVector<double>, dope_dimension, deal_II_dimension>::ComputeControlSparsityPattern(
-        dealii::BlockSparsityPattern & sparsity) const
-    {
-      const std::vector<unsigned int>& blocks = this->GetControlDoFsPerBlock();
-      dealii::BlockCompressedSimpleSparsityPattern csp(blocks.size(),
-          blocks.size());
-      for (unsigned int i = 0; i < blocks.size(); i++)
-      {
-        for (unsigned int j = 0; j < blocks.size(); j++)
-        {
-          csp.block(i, j).reinit(this->GetControlDoFsPerBlock(i),
-              this->GetControlDoFsPerBlock(j));
-        }
-      }
-      csp.collect_sizes();
-#if dope_dimension > 0
-      //We use here dealii::DoFHandler<dealdim>, because if dope_dim >0 then dopedim = dealdim.
-      dealii::DoFTools::make_sparsity_pattern (this->GetControlDoFHandler().GetDEALDoFHandler(),csp);
-#else
-      abort();
-#endif
-      this->GetControlDoFConstraints().condense(csp);
-      sparsity.copy_from(csp);
-    }
+	  dealii::BlockSparsityPattern & sparsity) const;
 
   /******************************************************/
 
@@ -861,19 +806,7 @@ namespace DOpE
     MethodOfLines_SpaceTimeHandler<dealii::hp::FECollection,
         dealii::hp::DoFHandler, dealii::SparsityPattern,
         dealii::Vector<double>, dope_dimension, deal_II_dimension>::ComputeControlSparsityPattern(
-        dealii::SparsityPattern & sparsity) const
-    {
-      const unsigned int total_dofs = this->GetControlNDoFs();
-      dealii::CompressedSimpleSparsityPattern csp(total_dofs, total_dofs);
-
-#if dope_dimension > 0
-      dealii::DoFTools::make_sparsity_pattern (this->GetControlDoFHandler().GetDEALDoFHandler(),csp);
-#else
-      abort();
-#endif
-      this->GetControlDoFConstraints().condense(csp);
-      sparsity.copy_from(csp);
-    }
+	  dealii::SparsityPattern & sparsity) const;
 
 }
 
