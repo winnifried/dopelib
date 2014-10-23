@@ -704,30 +704,30 @@ namespace DOpE
           _sparse_mkr_dynamic = false;
         }
 
-        /******************************************************/
-        /**
-         * Through this function one can reinitialize the 
-         * triangulation for the state variable to be a copy of the
-         * given argument.
-         */
-
-        void
-        ResetTriangulation(const dealii::Triangulation<dealdim>& tria)
-        {
-          _state_dof_handler.clear();
-          _triangulation.clear();
-          _triangulation.copy_triangulation(tria);
-          _state_dof_handler.initialize(_triangulation, *_state_fe);
-          this->IncrementControlTicket();
-          this->IncrementStateTicket();
-          if (_control_mesh_transfer != NULL)
-            delete _control_mesh_transfer;
-          _control_mesh_transfer = NULL;
-          if (_state_mesh_transfer != NULL)
-            delete _state_mesh_transfer;
-          _state_mesh_transfer = NULL;
-
-        }
+//        /******************************************************/
+//        /**
+//         * Through this function one can reinitialize the 
+//         * triangulation for the state variable to be a copy of the
+//         * given argument.
+//         */
+//
+//        void
+//        ResetTriangulation(const dealii::Triangulation<dealdim>& tria)
+//        {
+//          _state_dof_handler.clear();
+//          _triangulation.clear();
+//          _triangulation.copy_triangulation(tria);
+//          _state_dof_handler.initialize(_triangulation, *_state_fe);
+//          this->IncrementControlTicket();
+//          this->IncrementStateTicket();
+//          if (_control_mesh_transfer != NULL)
+//            delete _control_mesh_transfer;
+//          _control_mesh_transfer = NULL;
+//          if (_state_mesh_transfer != NULL)
+//            delete _state_mesh_transfer;
+//          _state_mesh_transfer = NULL;
+//
+//        }
 
       private:
         const SparsityMaker<DH, dealdim>*
