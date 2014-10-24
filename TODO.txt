@@ -68,6 +68,11 @@ Review von unserem Paper: (Wer macht was)
 
 Standard TODO fuer naechstes Treffen
 ------------------------------------
+- Sollen wir DOpElib ueber NA Digest bekannt machen?
+  Vorteil: Werbung
+  Nachteil: evtl. tatsaechlich viele Interessierte, d.h. fuer uns 
+  viel Arbeit E-Mails zu beantworten - wollen wir das?
+
 - Check the notation in the library:
   	check for space after , ; ( * & + - |
 	      and before (*&+-|
@@ -91,9 +96,6 @@ Standard TODO fuer naechstes Treffen
   das gewählte funktional.
 - Moeglichkeit schaffen, relaxationsparameter etc. an lineare Loeser zu uebergeben.
 - Moeglichkeit schaffen, Informationen der linearen Loeser ausgeben (z.B. Anzahl cg-Schritte)
-- Nutzung von MUMPS als Direkter Löser.
-
-- Oeffentlicher Download (erstmal Doku und funktionstuechtige Software)
 
 - Funktionalauswertung in Opt-Problemen abhängig vom Typ machen: zur 
   Zeit werden die Ableitungen der Funktionale (sobald diese 
@@ -116,6 +118,7 @@ Standard TODO fuer naechstes Treffen
 
 -  Rueckgabeklassen fuer Loeser
 -  Parallelisierung mit Trilinos, mpi und p4est
+   (ueber trilinos kann man auch parallele direkte Loeser einfuegen)
 
 Future:
 -------
