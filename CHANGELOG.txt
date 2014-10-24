@@ -4,7 +4,7 @@ Changelog DOpE
 24.10.2014: Release of DOpElib 2.0
 ===============================================================================
 24.10.2014: Add doxygen documentation to website 
-24.10.2014: Change private data member notation to trailing underscore (done for DOpEsrc Examples missing)
+24.10.2014: Change private data member notation to trailing underscore 
 18.10.2014: Changelog now completely in english
 18.10.2014: Executables for the examples are now, by default, 
 	    placed in the respective example directory and no longer in a 
