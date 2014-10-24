@@ -31,13 +31,13 @@ namespace DOpE
   /***Implementation of RefinementContainer*******************/
 
   RefinementContainer::RefinementContainer(DOpEtypes::RefinementType ref_type)
-      : _dummy(0), _ref_type(ref_type)
+      : dummy_(0), ref_type_(ref_type)
   {
     if (ref_type == DOpEtypes::RefinementType::global
         || ref_type == DOpEtypes::RefinementType::finest_of_both)
-      _coarsening = false; //we know that in these cases no coarsening is performed
+      coarsening_ = false; //we know that in these cases no coarsening is performed
     else
-      _coarsening = true; // we do not know, coarsening might be a part of the strategy
+      coarsening_ = true; // we do not know, coarsening might be a part of the strategy
   }
 
   /***********************************************************/
@@ -47,7 +47,7 @@ namespace DOpE
   {
     throw DOpEException("Not implemented",
         "RefinementContainer::GetLocalErrorIndicators()");
-    return _dummy;
+    return dummy_;
   }
 
   /***********************************************************/
@@ -94,7 +94,7 @@ namespace DOpE
   DOpEtypes::RefinementType
   RefinementContainer::GetRefType() const
   {
-    return _ref_type;
+    return ref_type_;
   }
 
   /***********************************************************/
@@ -102,7 +102,7 @@ namespace DOpE
   bool
   RefinementContainer::UsesCoarsening() const
   {
-    return _coarsening;
+    return coarsening_;
   }
 
   /***********************************************************/
@@ -111,14 +111,14 @@ namespace DOpE
 
   LocalRefinement::LocalRefinement(const dealii::Vector<float>& indicators,
       DOpEtypes::RefinementType ref_type)
-      : RefinementContainer(ref_type), _indicators(indicators)
+      : RefinementContainer(ref_type), indicators_(indicators)
   {
   }
 
   const dealii::Vector<float>&
   LocalRefinement::GetLocalErrorIndicators() const
   {
-    return _indicators;
+    return indicators_;
   }
 
   /***********************************************************/
@@ -128,23 +128,23 @@ namespace DOpE
   RefineFixedFraction::RefineFixedFraction(
       const dealii::Vector<float>& indicators, double top_fraction,
       double bottom_fraction, const unsigned int max_n_elements)
-      : LocalRefinement(indicators, DOpEtypes::RefinementType::fixed_fraction), _top_fraction(
-          top_fraction), _bottom_fraction(bottom_fraction), _max_n_elements(
+      : LocalRefinement(indicators, DOpEtypes::RefinementType::fixed_fraction), top_fraction_(
+          top_fraction), bottom_fraction_(bottom_fraction), max_n_elements_(
           max_n_elements)
   {
-    assert(_top_fraction<=1. && _top_fraction>=0.);
-    assert(_bottom_fraction<=1. && _bottom_fraction>=0.);
+    assert(top_fraction_<=1. && top_fraction_>=0.);
+    assert(bottom_fraction_<=1. && bottom_fraction_>=0.);
 
-    if (_bottom_fraction == 0.0)
-      _coarsening = false;
+    if (bottom_fraction_ == 0.0)
+      coarsening_ = false;
     else
-      _coarsening = true;
+      coarsening_ = true;
   }
 
   double
   RefineFixedFraction::GetTopFraction() const
   {
-    return _top_fraction;
+    return top_fraction_;
   }
 
   /***********************************************************/
@@ -152,7 +152,7 @@ namespace DOpE
   double
   RefineFixedFraction::GetBottomFraction() const
   {
-    return _bottom_fraction;
+    return bottom_fraction_;
   }
 
   /***********************************************************/
@@ -162,23 +162,23 @@ namespace DOpE
   RefineFixedNumber::RefineFixedNumber(const dealii::Vector<float>& indicators,
       double top_fraction, double bottom_fraction,
       const unsigned int max_n_elements)
-      : LocalRefinement(indicators, DOpEtypes::RefinementType::fixed_number), _top_fraction(
-          top_fraction), _bottom_fraction(bottom_fraction), _max_n_elements(
+      : LocalRefinement(indicators, DOpEtypes::RefinementType::fixed_number), top_fraction_(
+          top_fraction), bottom_fraction_(bottom_fraction), max_n_elements_(
           max_n_elements)
   {
-    assert(_top_fraction<=1. && _top_fraction>=0.);
-    assert(_bottom_fraction<=1. && _bottom_fraction>=0.);
+    assert(top_fraction_<=1. && top_fraction_>=0.);
+    assert(bottom_fraction_<=1. && bottom_fraction_>=0.);
 
-    if (_bottom_fraction == 0.0)
-      _coarsening = false;
+    if (bottom_fraction_ == 0.0)
+      coarsening_ = false;
     else
-      _coarsening = true;
+      coarsening_ = true;
   }
 
   double
   RefineFixedNumber::GetTopFraction() const
   {
-    return _top_fraction;
+    return top_fraction_;
   }
 
   /***********************************************************/
@@ -186,7 +186,7 @@ namespace DOpE
   double
   RefineFixedNumber::GetBottomFraction() const
   {
-    return _bottom_fraction;
+    return bottom_fraction_;
   }
 
   /***********************************************************/
@@ -195,10 +195,10 @@ namespace DOpE
 
   RefineOptimized::RefineOptimized(const dealii::Vector<float>& indicators,
       double convergence_order)
-      : LocalRefinement(indicators, DOpEtypes::RefinementType::optimized), _convergence_order(
+      : LocalRefinement(indicators, DOpEtypes::RefinementType::optimized), convergence_order_(
           convergence_order)
   {
-    _coarsening = false; //the method uses no coarsening.
+    coarsening_ = false; //the method uses no coarsening.
   }
 
   /***********************************************************/
@@ -206,7 +206,7 @@ namespace DOpE
   double
   RefineOptimized::GetConvergenceOrder() const
   {
-    return _convergence_order;
+    return convergence_order_;
   }
 
 }

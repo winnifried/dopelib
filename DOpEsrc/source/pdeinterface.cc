@@ -1294,7 +1294,7 @@ namespace DOpE
     PDEInterface<EDC, FDC, DH, VECTOR, dealdim>::SetProblemType(
         std::string type)
     {
-      _problem_type = type;
+      problem_type_ = type;
     }
 
 /********************************************/

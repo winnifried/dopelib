@@ -21,8 +21,8 @@
  *
  **/
 
-#ifndef _LOCAL_CONSTRAINT_H_
-#define _LOCAL_CONSTRAINT_H_
+#ifndef LOCAL_CONSTRAINT_H_
+#define LOCAL_CONSTRAINT_H_
 
 #include "constraintinterface.h"
 #include "localconstraintaccessor.h"
@@ -42,9 +42,9 @@ namespace DOpE
     {
       public:
         LocalConstraint(LocalConstraintAccessor& CA) :
-            LCA(CA)
+            LCA_(CA)
         {
-          _vol_max = 0.5;
+          vol_max_ = 0.5;
         }
         ~LocalConstraint()
         {
@@ -60,15 +60,15 @@ namespace DOpE
           for (unsigned int i = 0; i < control.block(0).size(); i++)
           {
             //Add Control Constraints, such that if control is feasible all  entries are not positive!
-            // _rho_min <= control <= _rho_max
-            LCA.ControlToLowerConstraint(control, constraints);
-            LCA.ControlToUpperConstraint(control, constraints);
+            // rho_min_ <= control <= rho_max_
+            LCA_.ControlToLowerConstraint(control, constraints);
+            LCA_.ControlToUpperConstraint(control, constraints);
           }
         }
         void
         GetControlBoxConstraints(VECTOR& lb, VECTOR& ub) const
         {
-          LCA.GetControlBoxConstraints(lb, ub);
+          LCA_.GetControlBoxConstraints(lb, ub);
         }
 
         double
@@ -83,12 +83,12 @@ namespace DOpE
 
             double ret = 0.;
             {
-              _qvalues.resize(n_q_points, Vector<double>(1));
-              edc.GetValuesControl("control", _qvalues);
+              qvalues_.resize(n_q_points, Vector<double>(1));
+              edc.GetValuesControl("control", qvalues_);
             }
             for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
             {
-              ret += (_qvalues[q_point](0) - _vol_max)
+              ret += (qvalues_[q_point](0) - vol_max_)
                   * control_fe_values.JxW(q_point);
             }
             return ret;
@@ -172,9 +172,9 @@ namespace DOpE
         }
 
       private:
-        double _vol_max;
-        std::vector<dealii::Vector<double> > _qvalues;
-        LocalConstraintAccessor& LCA;
+        double vol_max_;
+        std::vector<dealii::Vector<double> > qvalues_;
+        LocalConstraintAccessor& LCA_;
 
     };
 }

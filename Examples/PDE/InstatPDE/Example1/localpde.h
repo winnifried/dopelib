@@ -21,8 +21,8 @@
  *
  **/
 
-#ifndef _LOCALPDE_
-#define _LOCALPDE_
+#ifndef LOCALPDE_
+#define LOCALPDE_
 
 #include "pdeinterface.h"
 
@@ -52,13 +52,13 @@ template<
       }
 
       LocalPDE(ParameterReader &param_reader) :
-          _state_block_components(3, 0)
+          state_block_component_(3, 0)
       {
-        _state_block_components[2] = 1;
+        state_block_component_[2] = 1;
 
         param_reader.SetSubsection("Local PDE parameters");
-	_density_fluid = param_reader.get_double("density_fluid");
-        _viscosity = param_reader.get_double("viscosity");
+	density_fluid_ = param_reader.get_double("density_fluid");
+        viscosity_ = param_reader.get_double("viscosity");
       }
 
       void
@@ -66,18 +66,18 @@ template<
           dealii::Vector<double> &local_vector, double scale,
           double scale_ico)
       {
-        assert(this->_problem_type == "state");
+        assert(this->problem_type_ == "state");
         const DOpEWrapper::FEValues<dealdim> & state_fe_values =
             edc.GetFEValuesState();
         unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
         unsigned int n_q_points = edc.GetNQPoints();
         //unsigned int material_id = edc.GetMaterialId();
 
-        _uvalues.resize(n_q_points, Vector<double>(3));
-        _ugrads.resize(n_q_points, vector<Tensor<1, 2> >(3));
+        uvalues_.resize(n_q_points, Vector<double>(3));
+        ugrads_.resize(n_q_points, vector<Tensor<1, 2> >(3));
 
-        edc.GetValuesState("last_newton_solution", _uvalues);
-        edc.GetGradsState("last_newton_solution", _ugrads);
+        edc.GetValuesState("last_newton_solution", uvalues_);
+        edc.GetGradsState("last_newton_solution", ugrads_);
 
         const FEValuesExtractors::Vector velocities(0);
         const FEValuesExtractors::Scalar pressure(2);
@@ -86,23 +86,23 @@ template<
         {
           Tensor<2, dealdim> fluid_pressure;
           fluid_pressure.clear();
-          fluid_pressure[0][0] = -_uvalues[q_point](2);
-          fluid_pressure[1][1] = -_uvalues[q_point](2);
+          fluid_pressure[0][0] = -uvalues_[q_point](2);
+          fluid_pressure[1][1] = -uvalues_[q_point](2);
 
-          double incompressibility = _ugrads[q_point][0][0]
-              + _ugrads[q_point][1][1];
+          double incompressibility = ugrads_[q_point][0][0]
+              + ugrads_[q_point][1][1];
 
           Tensor<2, 2> vgrads;
           vgrads.clear();
-          vgrads[0][0] = _ugrads[q_point][0][0];
-          vgrads[0][1] = _ugrads[q_point][0][1];
-          vgrads[1][0] = _ugrads[q_point][1][0];
-          vgrads[1][1] = _ugrads[q_point][1][1];
+          vgrads[0][0] = ugrads_[q_point][0][0];
+          vgrads[0][1] = ugrads_[q_point][0][1];
+          vgrads[1][0] = ugrads_[q_point][1][0];
+          vgrads[1][1] = ugrads_[q_point][1][1];
 
           Tensor<1, 2> v;
           v.clear();
-          v[0] = _uvalues[q_point](0);
-          v[1] = _uvalues[q_point](1);
+          v[0] = uvalues_[q_point](0);
+          v[1] = uvalues_[q_point](1);
 
           Tensor<1, 2> convection_fluid = vgrads * v;
 
@@ -115,8 +115,8 @@ template<
             const double phi_i_p = state_fe_values[pressure].value(i, q_point);
 
             local_vector(i) += scale
-                * _density_fluid * (convection_fluid * phi_i_v
-				    + _viscosity
+                * density_fluid_ * (convection_fluid * phi_i_v
+				    + viscosity_
 				    * scalar_product(vgrads + transpose(vgrads),
 						     phi_i_grads_v)) * state_fe_values.JxW(q_point);
 
@@ -144,11 +144,11 @@ template<
         const FEValuesExtractors::Vector velocities(0);
         const FEValuesExtractors::Scalar pressure(2);
 
-        _uvalues.resize(n_q_points, Vector<double>(3));
-        _ugrads.resize(n_q_points, vector<Tensor<1, 2> >(3));
+        uvalues_.resize(n_q_points, Vector<double>(3));
+        ugrads_.resize(n_q_points, vector<Tensor<1, 2> >(3));
 
-        edc.GetValuesState("last_newton_solution", _uvalues);
-        edc.GetGradsState("last_newton_solution", _ugrads);
+        edc.GetValuesState("last_newton_solution", uvalues_);
+        edc.GetGradsState("last_newton_solution", ugrads_);
 
         std::vector<Tensor<1, 2> > phi_v(n_dofs_per_element);
         std::vector<Tensor<2, 2> > phi_grads_v(n_dofs_per_element);
@@ -167,14 +167,14 @@ template<
 
           Tensor<2, 2> vgrads;
           vgrads.clear();
-          vgrads[0][0] = _ugrads[q_point][0][0];
-          vgrads[0][1] = _ugrads[q_point][0][1];
-          vgrads[1][0] = _ugrads[q_point][1][0];
-          vgrads[1][1] = _ugrads[q_point][1][1];
+          vgrads[0][0] = ugrads_[q_point][0][0];
+          vgrads[0][1] = ugrads_[q_point][0][1];
+          vgrads[1][0] = ugrads_[q_point][1][0];
+          vgrads[1][1] = ugrads_[q_point][1][1];
 
           Tensor<1, 2> v;
-          v[0] = _uvalues[q_point](0);
-          v[1] = _uvalues[q_point](1);
+          v[0] = uvalues_[q_point](0);
+          v[1] = uvalues_[q_point](1);
 
           for (unsigned int i = 0; i < n_dofs_per_element; i++)
           {
@@ -189,8 +189,8 @@ template<
             for (unsigned int j = 0; j < n_dofs_per_element; j++)
             {
               local_matrix(j, i) += scale
-                  * _density_fluid * (convection_fluid_LinV * phi_v[j]
-                      + _viscosity
+                  * density_fluid_ * (convection_fluid_LinV * phi_v[j]
+                      + viscosity_
                           * scalar_product(
                               phi_grads_v[i] + transpose(phi_grads_v[i]),
                               phi_grads_v[j])) * state_fe_values.JxW(q_point);
@@ -211,7 +211,7 @@ template<
 			dealii::Vector<double> & /*local_vector*/,
 			double /*scale*/)
       {
-        assert(this->_problem_type == "state");
+        assert(this->problem_type_ == "state");
       }
 
       void
@@ -219,7 +219,7 @@ template<
 			       dealii::Vector<double> & /*local_vector*/,
 			       double /*scale*/)
       {
-        assert(this->_problem_type == "state");
+        assert(this->problem_type_ == "state");
       }
 
       void
@@ -227,31 +227,31 @@ template<
 		       dealii::Vector<double> & local_vector,
 		       double scale)
       {
-        assert(this->_problem_type == "state");
+        assert(this->problem_type_ == "state");
 
         const DOpEWrapper::FEValues<dealdim> & state_fe_values =
             edc.GetFEValuesState();
         unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
         unsigned int n_q_points = edc.GetNQPoints();
 
-        _uvalues.resize(n_q_points, Vector<double>(3));
+        uvalues_.resize(n_q_points, Vector<double>(3));
 
-        edc.GetValuesState("last_newton_solution", _uvalues);
+        edc.GetValuesState("last_newton_solution", uvalues_);
 
         const FEValuesExtractors::Vector velocities(0);
 
         for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
         {
           Tensor<1, 2> v;
-          v[0] = _uvalues[q_point](0);
-          v[1] = _uvalues[q_point](1);
+          v[0] = uvalues_[q_point](0);
+          v[1] = uvalues_[q_point](1);
 
           for (unsigned int i = 0; i < n_dofs_per_element; i++)
           {
             const Tensor<1, 2> phi_i_v = state_fe_values[velocities].value(i,
                 q_point);
 
-            local_vector(i) += scale * _density_fluid * (v * phi_i_v)
+            local_vector(i) += scale * density_fluid_ * (v * phi_i_v)
                 * state_fe_values.JxW(q_point);
           }
         }
@@ -262,14 +262,14 @@ template<
 	ElementTimeMatrixExplicit(const EDC<DH, VECTOR, dealdim>& /*edc*/,
 			       FullMatrix<double> &/*local_matrix*/)
       {
-        assert(this->_problem_type == "state");
+        assert(this->problem_type_ == "state");
       }
 
       void
       ElementTimeMatrix(const EDC<DH, VECTOR, dealdim>& edc,
           FullMatrix<double> &local_matrix)
       {
-        assert(this->_problem_type == "state");
+        assert(this->problem_type_ == "state");
 
         const DOpEWrapper::FEValues<dealdim> & state_fe_values =
             edc.GetFEValuesState();
@@ -291,7 +291,7 @@ template<
           {
             for (unsigned int j = 0; j < n_dofs_per_element; j++)
             {
-              local_matrix(j, i) += _density_fluid * (phi_v[i] * phi_v[j])
+              local_matrix(j, i) += density_fluid_ * (phi_v[i] * phi_v[j])
                   * state_fe_values.JxW(q_point);
             }
           }
@@ -306,7 +306,7 @@ template<
           double /*scale_ico*/)
       {
 
-        assert(this->_problem_type == "state");
+        assert(this->problem_type_ == "state");
 
         const auto & state_fe_face_values = fdc.GetFEFaceValuesState();
         unsigned int n_dofs_per_element = fdc.GetNDoFsPerElement();
@@ -316,26 +316,26 @@ template<
         // do-nothing applied on outflow boundary
         if (color == 1)
         {
-          _ufacegrads.resize(n_q_points, vector<Tensor<1, 2> >(3));
+          ufacegrads_.resize(n_q_points, vector<Tensor<1, 2> >(3));
 
-          fdc.GetFaceGradsState("last_newton_solution", _ufacegrads);
+          fdc.GetFaceGradsState("last_newton_solution", ufacegrads_);
 
           const FEValuesExtractors::Vector velocities(0);
 
           for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
           {
             Tensor<2, 2> vgrads;
-            vgrads[0][0] = _ufacegrads[q_point][0][0];
-            vgrads[0][1] = _ufacegrads[q_point][0][1];
-            vgrads[1][0] = _ufacegrads[q_point][1][0];
-            vgrads[1][1] = _ufacegrads[q_point][1][1];
+            vgrads[0][0] = ufacegrads_[q_point][0][0];
+            vgrads[0][1] = ufacegrads_[q_point][0][1];
+            vgrads[1][0] = ufacegrads_[q_point][1][0];
+            vgrads[1][1] = ufacegrads_[q_point][1][1];
 
             for (unsigned int i = 0; i < n_dofs_per_element; i++)
             {
               const Tensor<1, 2> phi_i_v =
                   state_fe_face_values[velocities].value(i, q_point);
 
-              const Tensor<1, 2> neumann_value = _viscosity * _density_fluid 
+              const Tensor<1, 2> neumann_value = viscosity_ * density_fluid_ 
                   * (transpose(vgrads)
                       * state_fe_face_values.normal_vector(q_point));
 
@@ -352,7 +352,7 @@ template<
           dealii::FullMatrix<double> &local_matrix, double scale,
           double /*scale_ico*/)
       {
-        assert(this->_problem_type == "state");
+        assert(this->problem_type_ == "state");
 
         const auto & state_fe_face_values = fdc.GetFEFaceValuesState();
         unsigned int n_dofs_per_element = fdc.GetNDoFsPerElement();
@@ -370,7 +370,7 @@ template<
             {
               const Tensor<2, 2> phi_j_grads_v =
                   state_fe_face_values[velocities].gradient(i, q_point);
-              const Tensor<1, 2> neumann_value = _viscosity * _density_fluid 
+              const Tensor<1, 2> neumann_value = viscosity_ * density_fluid_ 
                   * (transpose(phi_j_grads_v)
                       * state_fe_face_values.normal_vector(q_point));
 
@@ -392,7 +392,7 @@ template<
 			      dealii::Vector<double> & /*local_vector*/,
 			      double /*scale*/)
       {
-        assert(this->_problem_type == "state");
+        assert(this->problem_type_ == "state");
       }
 
       UpdateFlags
@@ -428,35 +428,35 @@ template<
       std::vector<unsigned int>&
       GetControlBlockComponent()
       {
-        return _block_components;
+        return control_block_component_;
       }
       const std::vector<unsigned int>&
       GetControlBlockComponent() const
       {
-        return _block_components;
+        return control_block_component_;
       }
       std::vector<unsigned int>&
       GetStateBlockComponent()
       {
-        return _state_block_components;
+        return state_block_component_;
       }
       const std::vector<unsigned int>&
       GetStateBlockComponent() const
       {
-        return _state_block_components;
+        return state_block_component_;
       }
 
     private:
-      vector<Vector<double> > _uvalues;
-      vector<vector<Tensor<1, dealdim> > > _ugrads;
+      vector<Vector<double> > uvalues_;
+      vector<vector<Tensor<1, dealdim> > > ugrads_;
 
       // face values
-      vector<vector<Tensor<1, dealdim> > > _ufacegrads;
+      vector<vector<Tensor<1, dealdim> > > ufacegrads_;
 
-      vector<unsigned int> _state_block_components;
-      vector<unsigned int> _block_components;
+      vector<unsigned int> state_block_component_;
+      vector<unsigned int> control_block_component_;
 
-      double _density_fluid, _viscosity;
+      double density_fluid_, viscosity_;
 
   };
 #endif

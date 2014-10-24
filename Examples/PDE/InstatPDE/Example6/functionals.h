@@ -21,8 +21,8 @@
  *
  **/
 
-#ifndef _LOCALFunctionalS_
-#define _LOCALFunctionalS_
+#ifndef LOCALFunctionalS_
+#define LOCALFunctionalS_
 
 #include "pdeinterface.h"
 

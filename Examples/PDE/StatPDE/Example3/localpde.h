@@ -21,8 +21,8 @@
  *
  **/
 
-#ifndef _LOCALPDE_
-#define _LOCALPDE_
+#ifndef LOCALPDE_
+#define LOCALPDE_
 
 #include "pdeinterface.h"
 
@@ -40,13 +40,13 @@ template<
   {
     public:
       LocalPDE() :
-          _state_block_components(3, 0)
+          state_block_component_(3, 0)
       {
         assert(dealdim==2);
         //The solution has dealdim+1 components, and we
         //want to group the components 0,..,dealdim into
         //block zero and the component dealdim+1 into the block 1.
-        _state_block_components[2] = 1;
+        state_block_component_[2] = 1;
       }
 
       /**
@@ -65,15 +65,15 @@ template<
         const unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
         const unsigned int n_q_points = edc.GetNQPoints();
         //This should only get called if the problem type is state.
-        assert(this->_problem_type == "state");
+        assert(this->problem_type_ == "state");
 
         //Resize uvalues and ugrads properly. These will hold the
         //solution of the last newton iteration.
-        _uvalues.resize(n_q_points, Vector<double>(3));
-        _ugrads.resize(n_q_points, std::vector<Tensor<1, 2> >(3));
+        uvalues_.resize(n_q_points, Vector<double>(3));
+        ugrads_.resize(n_q_points, std::vector<Tensor<1, 2> >(3));
 
-        edc.GetValuesState("last_newton_solution", _uvalues);
-        edc.GetGradsState("last_newton_solution", _ugrads);
+        edc.GetValuesState("last_newton_solution", uvalues_);
+        edc.GetGradsState("last_newton_solution", ugrads_);
 
         const FEValuesExtractors::Vector velocities(0);
         const FEValuesExtractors::Scalar pressure(2);
@@ -84,12 +84,12 @@ template<
           //An abbreviations to declatter the weak formulation.
           Tensor<2, 2> vgrads;
           vgrads.clear();
-          vgrads[0][0] = _ugrads[q_point][0][0];
-          vgrads[0][1] = _ugrads[q_point][0][1];
-          vgrads[1][0] = _ugrads[q_point][1][0];
-          vgrads[1][1] = _ugrads[q_point][1][1];
+          vgrads[0][0] = ugrads_[q_point][0][0];
+          vgrads[0][1] = ugrads_[q_point][0][1];
+          vgrads[1][0] = ugrads_[q_point][1][0];
+          vgrads[1][1] = ugrads_[q_point][1][1];
 
-          double press = _uvalues[q_point](2);
+          double press = uvalues_[q_point](2);
           double incompressibility = vgrads[0][0] + vgrads[1][1];
 
           //loop over all degrees of freedom
@@ -192,15 +192,15 @@ template<
         const unsigned int n_q_points = fdc.GetNQPoints();
         const unsigned int color = fdc.GetBoundaryIndicator();
 
-        assert(this->_problem_type == "state");
+        assert(this->problem_type_ == "state");
 
         //Do-nothing condition applied on the outflow boundary.
         //The latter has boundary color 1 in this example.
         if (color == 1)
         {
-          _ufacegrads.resize(n_q_points, std::vector<Tensor<1, 2> >(3));
+          ufacegrads_.resize(n_q_points, std::vector<Tensor<1, 2> >(3));
 
-          fdc.GetFaceGradsState("last_newton_solution", _ufacegrads);
+          fdc.GetFaceGradsState("last_newton_solution", ufacegrads_);
 
           const FEValuesExtractors::Vector velocities(0);
 
@@ -208,10 +208,10 @@ template<
           {
             Tensor<2, 2> vgrads;
             vgrads.clear();
-            vgrads[0][0] = _ufacegrads[q_point][0][0];
-            vgrads[0][1] = _ufacegrads[q_point][0][1];
-            vgrads[1][0] = _ufacegrads[q_point][1][0];
-            vgrads[1][1] = _ufacegrads[q_point][1][1];
+            vgrads[0][0] = ufacegrads_[q_point][0][0];
+            vgrads[0][1] = ufacegrads_[q_point][0][1];
+            vgrads[1][0] = ufacegrads_[q_point][1][0];
+            vgrads[1][1] = ufacegrads_[q_point][1][1];
 
             for (unsigned int i = 0; i < n_dofs_per_element; i++)
             {
@@ -241,7 +241,7 @@ template<
         const unsigned int n_dofs_per_element = fdc.GetNDoFsPerElement();
         const unsigned int n_q_points = fdc.GetNQPoints();
         const unsigned int color = fdc.GetBoundaryIndicator();
-        assert(this->_problem_type == "state");
+        assert(this->problem_type_ == "state");
 
         // do-nothing applied on outflow boundary
         if (color == 1)
@@ -312,19 +312,19 @@ template<
       std::vector<unsigned int>&
       GetStateBlockComponent()
       {
-        return _state_block_components;
+        return state_block_component_;
       }
       const std::vector<unsigned int>&
       GetStateBlockComponent() const
       {
-        return _state_block_components;
+        return state_block_component_;
       }
 
     private:
-      std::vector<Vector<double> > _uvalues;
-      std::vector<std::vector<Tensor<1, dealdim> > > _ugrads;
-      std::vector<std::vector<Tensor<1, dealdim> > > _ufacegrads;
+      std::vector<Vector<double> > uvalues_;
+      std::vector<std::vector<Tensor<1, dealdim> > > ugrads_;
+      std::vector<std::vector<Tensor<1, dealdim> > > ufacegrads_;
 
-     std::vector<unsigned int> _state_block_components;
+     std::vector<unsigned int> state_block_component_;
   };
 #endif

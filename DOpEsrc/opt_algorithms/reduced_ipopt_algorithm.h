@@ -21,8 +21,8 @@
 *
 **/
 
-#ifndef _REDUCED_IPOPT__ALGORITHM_H_
-#define _REDUCED_IPOPT__ALGORITHM_H_
+#ifndef REDUCED_IPOPT__ALGORITHM_H_
+#define REDUCED_IPOPT__ALGORITHM_H_
 
 #include "reducedalgorithm.h"
 #include "parameterreader.h"
@@ -102,12 +102,12 @@ namespace DOpE
   protected:
 
   private:
-    std::string _postindex;
-    DOpEtypes::VectorStorageType _vector_behavior;
+    std::string postindex_;
+    DOpEtypes::VectorStorageType vector_behavior_;
 
-    double _tol;
-    bool _capture_out;
-    std::string _lin_solve;
+    double tol_;
+    bool capture_out_;
+    std::string lin_solve_;
   };
 
   /***************************************************************************************/
@@ -142,12 +142,12 @@ Reduced_IpoptAlgorithm<PROBLEM, VECTOR>::Reduced_IpoptAlgorithm(PROBLEM* OP,
 
     param_reader.SetSubsection("reduced_ipoptalgorithm parameters");
 
-    _tol        = param_reader.get_double("tol");
-    _capture_out   = param_reader.get_bool("capture ipopt output");
-    _lin_solve   = param_reader.get_string("ipopt linsolve");
+    tol_        = param_reader.get_double("tol");
+    capture_out_   = param_reader.get_bool("capture ipopt output");
+    lin_solve_   = param_reader.get_string("ipopt linsolve");
 
-    _vector_behavior = vector_behavior;
-    _postindex = "_"+this->GetProblem()->GetName();
+    vector_behavior_ = vector_behavior;
+    postindex_ = "_"+this->GetProblem()->GetName();
 
     DOpEtypes::ControlType ct = S->GetProblem()->GetSpaceTimeHandler()->GetControlType();
     if((ct != DOpEtypes::ControlType::initial) && (ct != DOpEtypes::ControlType::stationary))
@@ -180,14 +180,14 @@ int Reduced_IpoptAlgorithm<PROBLEM, VECTOR>::Solve(ControlVector<VECTOR>& q,doub
   ControlVector<VECTOR> q_min(q), q_max(q);
   this->GetReducedProblem()->GetControlBoxConstraints(q_min,q_max);
 
-  ConstraintVector<VECTOR> constraints(this->GetReducedProblem()->GetProblem()->GetSpaceTimeHandler(),_vector_behavior);
+  ConstraintVector<VECTOR> constraints(this->GetReducedProblem()->GetProblem()->GetSpaceTimeHandler(),vector_behavior_);
   
   unsigned int iter=0;
   double cost=0.;
   double cost_start=0.;
   std::stringstream out;
   this->GetOutputHandler()->InitNewtonOut(out);
-  global_tol =  std::max(_tol,global_tol);
+  global_tol =  std::max(tol_,global_tol);
 
   out << "**************************************************\n";
   out << "*        Starting Solution using IPOPT           *\n";
@@ -201,9 +201,9 @@ int Reduced_IpoptAlgorithm<PROBLEM, VECTOR>::Solve(ControlVector<VECTOR>& q,doub
   out << "**************************************************";
   this->GetOutputHandler()->Write(out,1+this->GetBasePriority(),1,1);
 
-  this->GetOutputHandler()->SetIterationNumber(iter,"Opt_Ipopt"+_postindex);
+  this->GetOutputHandler()->SetIterationNumber(iter,"Opt_Ipopt"+postindex_);
 
-  this->GetOutputHandler()->Write(q,"Control"+_postindex,"control");
+  this->GetOutputHandler()->Write(q,"Control"+postindex_,"control");
 
   try
   {
@@ -222,7 +222,7 @@ int Reduced_IpoptAlgorithm<PROBLEM, VECTOR>::Solve(ControlVector<VECTOR>& q,doub
   /////////////////////////////////DO SOMETHING to Solve.../////////////////////////
   out<<"************************************************\n";
   out<<"*               Calling IPOPT                  *\n";
-  if(_capture_out)
+  if(capture_out_)
     out<<"*  output will be written to logfile only!     *\n";
   else
     out<<"*  output will not be written to logfile!      *\n";
@@ -230,7 +230,7 @@ int Reduced_IpoptAlgorithm<PROBLEM, VECTOR>::Solve(ControlVector<VECTOR>& q,doub
   this->GetOutputHandler()->Write(out,1+this->GetBasePriority());
   
   this->GetOutputHandler()->DisallowAllOutput();
-  if(_capture_out)
+  if(capture_out_)
     this->GetOutputHandler()->StartSaveCTypeOutputToLog();
 
   int ret_val = -1;
@@ -248,10 +248,10 @@ int Reduced_IpoptAlgorithm<PROBLEM, VECTOR>::Solve(ControlVector<VECTOR>& q,doub
     // Change some options
     // Note: The following choices are only examples, they might not be
     //       suitable for your optimization problem.
-    app->Options()->SetNumericValue("tol", _tol);
+    app->Options()->SetNumericValue("tol", tol_);
     app->Options()->SetStringValue("mu_strategy", "adaptive");
     app->Options()->SetStringValue("output_file", this->GetOutputHandler()->GetResultsDir()+"ipopt.out");
-    app->Options()->SetStringValue("linear_solver", _lin_solve);
+    app->Options()->SetStringValue("linear_solver", lin_solve_);
     app->Options()->SetStringValue("hessian_approximation","limited-memory");
 
     // Intialize the IpoptApplication and process the options
@@ -266,7 +266,7 @@ int Reduced_IpoptAlgorithm<PROBLEM, VECTOR>::Solve(ControlVector<VECTOR>& q,doub
     status = app->OptimizeTNLP(mynlp);
   } 
   
-  if(_capture_out)
+  if(capture_out_)
     this->GetOutputHandler()->StopSaveCTypeOutputToLog();
   this->GetOutputHandler()->ResumeOutput();
   out<<"\n************************************************\n";
@@ -281,9 +281,9 @@ int Reduced_IpoptAlgorithm<PROBLEM, VECTOR>::Solve(ControlVector<VECTOR>& q,doub
   this->GetOutputHandler()->Write(out,1+this->GetBasePriority());
 
   iter++;
-  this->GetOutputHandler()->SetIterationNumber(iter,"Opt_Ipopt"+_postindex);
+  this->GetOutputHandler()->SetIterationNumber(iter,"Opt_Ipopt"+postindex_);
 
-  this->GetOutputHandler()->Write(q,"Control"+_postindex,"control");
+  this->GetOutputHandler()->Write(q,"Control"+postindex_,"control");
   try
   {
      cost = this->GetReducedProblem()->ComputeReducedCostFunctional(q);

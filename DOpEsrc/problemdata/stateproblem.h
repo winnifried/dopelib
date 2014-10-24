@@ -21,8 +21,8 @@
 *
 **/
 
-#ifndef _STATE_PROBLEM_H_
-#define _STATE_PROBLEM_H_
+#ifndef STATE_PROBLEM_H_
+#define STATE_PROBLEM_H_
 
 #include "spacetimehandler.h"
 
@@ -49,14 +49,14 @@ namespace DOpE
     {
     public:
       StateProblem(OPTPROBLEM& OP, PDE& pde) :
-        _pde(pde), _opt_problem(OP)
+        pde_(pde), opt_problem_(OP)
       {
-        _dirichlet_colors = _opt_problem._dirichlet_colors;
-        _dirichlet_comps = _opt_problem._dirichlet_comps;
-        _primal_dirichlet_values = _opt_problem._primal_dirichlet_values;
-        _state_boundary_equation_colors
-            = _opt_problem._state_boundary_equation_colors;
-	_interval_length = 1.;
+        dirichlet_colors_ = opt_problem_.dirichlet_colors_;
+        dirichlet_comps_ = opt_problem_.dirichlet_comps_;
+        primal_dirichlet_values_ = opt_problem_.primal_dirichlet_values_;
+        state_boundary_equation_colors_
+            = opt_problem_.state_boundary_equation_colors_;
+	interval_length_ = 1.;
       }
 
       std::string
@@ -81,7 +81,7 @@ namespace DOpE
 			     dealii::Vector<double> &local_vector, double scale,
 			     double scale_ico)
       {
-        _pde.Init_ElementEquation(edc, local_vector, scale, scale_ico);
+        pde_.Init_ElementEquation(edc, local_vector, scale, scale_ico);
       }
 
         /**
@@ -93,7 +93,7 @@ namespace DOpE
       Init_ElementRhs(const EDC& edc,
           dealii::Vector<double> &local_vector, double scale)
       {
-        _pde.Init_ElementRhs(& GetInitialValues(), edc, local_vector, scale);
+        pde_.Init_ElementRhs(& GetInitialValues(), edc, local_vector, scale);
       }
 
         /**
@@ -119,7 +119,7 @@ namespace DOpE
 			   dealii::FullMatrix<double> &local_entry_matrix, double scale,
 			   double scale_ico)
       {
-        _pde.Init_ElementMatrix(edc, local_entry_matrix, scale, scale_ico);
+        pde_.Init_ElementMatrix(edc, local_entry_matrix, scale, scale_ico);
       }
 
       /******************************************************/
@@ -391,25 +391,25 @@ namespace DOpE
       DOpEOutputHandler<VECTOR>*
       GetOutputHandler()
       {
-        return _opt_problem.GetOutputHandler();
+        return opt_problem_.GetOutputHandler();
       } 
       OPTPROBLEM&
       GetBaseProblem()
       {
-        return _opt_problem;
+        return opt_problem_;
       }
     protected:
 
     private:
-      PDE& _pde;
-      OPTPROBLEM& _opt_problem;
+      PDE& pde_;
+      OPTPROBLEM& opt_problem_;
 
-      std::vector<unsigned int> _dirichlet_colors;
-      std::vector<std::vector<bool> > _dirichlet_comps;
+      std::vector<unsigned int> dirichlet_colors_;
+      std::vector<std::vector<bool> > dirichlet_comps_;
       std::vector<PrimalDirichletData<DD, VECTOR, dim>*>
-          _primal_dirichlet_values;
-      std::vector<unsigned int> _state_boundary_equation_colors;
-      double _interval_length;
+          primal_dirichlet_values_;
+      std::vector<unsigned int> state_boundary_equation_colors_;
+      double interval_length_;
     };
 
   /*****************************************************************************************/
@@ -425,7 +425,7 @@ namespace DOpE
           dealii::Vector<double> &local_vector, double scale,
           double scale_ico)
       {
-        _pde.ElementEquation(edc, local_vector, scale*_interval_length, scale_ico*_interval_length);
+        pde_.ElementEquation(edc, local_vector, scale*interval_length_, scale_ico*interval_length_);
       }
 
   /******************************************************/
@@ -438,7 +438,7 @@ namespace DOpE
           dim>::ElementTimeEquation(const EDC& edc,
           dealii::Vector<double> &local_vector, double scale)
       {
-        _pde.ElementTimeEquation(edc, local_vector, scale);
+        pde_.ElementTimeEquation(edc, local_vector, scale);
       }
 
   /******************************************************/
@@ -451,7 +451,7 @@ namespace DOpE
           dim>::ElementTimeEquationExplicit(const EDC& edc,
           dealii::Vector<double> &local_vector, double scale)
       {
-        _pde.ElementTimeEquationExplicit(edc, local_vector, scale);
+        pde_.ElementTimeEquationExplicit(edc, local_vector, scale);
       }
 
   /******************************************************/
@@ -464,7 +464,7 @@ namespace DOpE
           dim>::FaceEquation(const FDC& fdc,
 				 dealii::Vector<double> &local_vector, double scale, double scale_ico)
       {
-        _pde.FaceEquation(fdc, local_vector, scale*_interval_length, scale_ico*_interval_length);
+        pde_.FaceEquation(fdc, local_vector, scale*interval_length_, scale_ico*interval_length_);
       }
 
   /******************************************************/
@@ -477,7 +477,7 @@ namespace DOpE
           dim>::InterfaceEquation(const FDC& fdc,
           dealii::Vector<double> &local_vector, double scale, double scale_ico)
       {
-        _pde.InterfaceEquation(fdc,  local_vector, scale*_interval_length, scale_ico*_interval_length);
+        pde_.InterfaceEquation(fdc,  local_vector, scale*interval_length_, scale_ico*interval_length_);
       }
   /******************************************************/
 
@@ -489,7 +489,7 @@ namespace DOpE
           dim>::BoundaryEquation(const FDC& fdc,
           dealii::Vector<double> &local_vector, double scale, double scale_ico)
       {
-        _pde.BoundaryEquation(fdc, local_vector, scale*_interval_length, scale_ico*_interval_length);
+        pde_.BoundaryEquation(fdc, local_vector, scale*interval_length_, scale_ico*interval_length_);
       }
 
   /******************************************************/
@@ -502,7 +502,7 @@ namespace DOpE
           dim>::ElementRhs(const EDC& edc,
           dealii::Vector<double> &local_vector, double scale)
       {
-        _pde.ElementRightHandSide(edc, local_vector, scale*_interval_length);
+        pde_.ElementRightHandSide(edc, local_vector, scale*interval_length_);
       }
 
   /******************************************************/
@@ -528,7 +528,7 @@ namespace DOpE
           dim>::FaceRhs(const FDC& fdc,
           dealii::Vector<double> &local_vector, double scale)
       {
-        _pde.FaceRightHandSide(fdc, local_vector, scale*_interval_length);
+        pde_.FaceRightHandSide(fdc, local_vector, scale*interval_length_);
       }
 
   /******************************************************/
@@ -541,7 +541,7 @@ namespace DOpE
           dim>::BoundaryRhs(const FDC& fdc,
           dealii::Vector<double> &local_vector, double scale)
       {
-        _pde.BoundaryRightHandSide(fdc, local_vector, scale*_interval_length);
+        pde_.BoundaryRightHandSide(fdc, local_vector, scale*interval_length_);
       }
 
   /******************************************************/
@@ -555,7 +555,7 @@ namespace DOpE
           dealii::FullMatrix<double> &local_entry_matrix, double scale,
           double scale_ico)
       {
-        _pde.ElementMatrix(edc, local_entry_matrix, scale*_interval_length, scale_ico*_interval_length);
+        pde_.ElementMatrix(edc, local_entry_matrix, scale*interval_length_, scale_ico*interval_length_);
       }
 
   /******************************************************/
@@ -568,7 +568,7 @@ namespace DOpE
           dim>::ElementTimeMatrix(const EDC& edc,
           FullMatrix<double> &local_entry_matrix)
       {
-        _pde.ElementTimeMatrix(edc, local_entry_matrix);
+        pde_.ElementTimeMatrix(edc, local_entry_matrix);
       }
 
   /******************************************************/
@@ -581,7 +581,7 @@ namespace DOpE
           dim>::ElementTimeMatrixExplicit(const EDC& edc,
           dealii::FullMatrix<double> &local_entry_matrix)
       {
-        _pde.ElementTimeMatrixExplicit(edc, local_entry_matrix);
+        pde_.ElementTimeMatrixExplicit(edc, local_entry_matrix);
       }
 
   /******************************************************/
@@ -595,7 +595,7 @@ namespace DOpE
 			       FullMatrix<double> &local_entry_matrix, double scale,
 			       double scale_ico)
       {
-        _pde.FaceMatrix(fdc, local_entry_matrix, scale*_interval_length, scale_ico*_interval_length);
+        pde_.FaceMatrix(fdc, local_entry_matrix, scale*interval_length_, scale_ico*interval_length_);
       }
 
   /******************************************************/
@@ -609,7 +609,7 @@ namespace DOpE
 				    FullMatrix<double> &local_entry_matrix, double scale,
 				    double scale_ico)
       {
-        _pde.InterfaceMatrix(fdc,  local_entry_matrix, scale*_interval_length, scale_ico*_interval_length);
+        pde_.InterfaceMatrix(fdc,  local_entry_matrix, scale*interval_length_, scale_ico*interval_length_);
       }
 
   /******************************************************/
@@ -623,7 +623,7 @@ namespace DOpE
 				   FullMatrix<double> &local_matrix, double scale,
 				   double scale_ico)
       {
-        _pde.BoundaryMatrix(fdc, local_matrix, scale*_interval_length, scale_ico*_interval_length);
+        pde_.BoundaryMatrix(fdc, local_matrix, scale*interval_length_, scale_ico*interval_length_);
       }
 
   /******************************************************/
@@ -643,7 +643,7 @@ namespace DOpE
     const SmartPointer<const dealii::FESystem<dim> >
     StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dim>::GetFESystem() const
     {
-      return _opt_problem.GetSpaceTimeHandler()->GetFESystem("state");
+      return opt_problem_.GetSpaceTimeHandler()->GetFESystem("state");
     }
 
   /******************************************************/
@@ -652,7 +652,7 @@ namespace DOpE
     const SmartPointer<const dealii::hp::FECollection<dim> >
     StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dim>::GetFECollection() const
     {
-      return _opt_problem.GetSpaceTimeHandler()->GetFECollection("state");
+      return opt_problem_.GetSpaceTimeHandler()->GetFECollection("state");
     }
 
   /******************************************************/
@@ -663,7 +663,7 @@ namespace DOpE
     StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dim>::GetUpdateFlags() const
     {
       UpdateFlags r;
-      r = _pde.GetUpdateFlags();
+      r = pde_.GetUpdateFlags();
       return r | update_JxW_values;
     }
 
@@ -675,7 +675,7 @@ namespace DOpE
     StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dim>::GetFaceUpdateFlags() const
     {
       UpdateFlags r;
-      r = _pde.GetFaceUpdateFlags();
+      r = pde_.GetFaceUpdateFlags();
       return r | update_JxW_values;
     }
 
@@ -687,8 +687,8 @@ namespace DOpE
     StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dim>::SetTime(
         double time, const TimeIterator& interval, bool initial)
     {
-      _opt_problem.SetTime(time, interval, initial);
-      _interval_length = _opt_problem.GetSpaceTimeHandler()->GetStepSize();
+      opt_problem_.SetTime(time, interval, initial);
+      interval_length_ = opt_problem_.GetSpaceTimeHandler()->GetStepSize();
     }
 
   /******************************************************/
@@ -699,7 +699,7 @@ namespace DOpE
     StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dim>::ComputeSparsityPattern(
         SPARSITYPATTERN & sparsity) const
     {
-      _opt_problem.GetSpaceTimeHandler()->ComputeStateSparsityPattern(sparsity);
+      opt_problem_.GetSpaceTimeHandler()->ComputeStateSparsityPattern(sparsity);
     }
 
  /******************************************************/
@@ -711,7 +711,7 @@ namespace DOpE
         dealii::MGLevelObject<dealii::BlockSparsityPattern> & mg_sparsity_patterns,
 				      unsigned int n_levels) const
     {
-      _opt_problem.GetSpaceTimeHandler()->ComputeMGStateSparsityPattern(mg_sparsity_patterns, n_levels);
+      opt_problem_.GetSpaceTimeHandler()->ComputeMGStateSparsityPattern(mg_sparsity_patterns, n_levels);
     }
 
 /******************************************************/
@@ -723,7 +723,7 @@ namespace DOpE
         dealii::MGLevelObject<dealii::SparsityPattern> & mg_sparsity_patterns,
 				      unsigned int n_levels) const
     {
-      _opt_problem.GetSpaceTimeHandler()->ComputeMGStateSparsityPattern(mg_sparsity_patterns, n_levels);
+      opt_problem_.GetSpaceTimeHandler()->ComputeMGStateSparsityPattern(mg_sparsity_patterns, n_levels);
     }
 
 
@@ -735,7 +735,7 @@ namespace DOpE
     bool
     StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dim>::HasFaces() const
     {
-      return _pde.HasFaces();
+      return pde_.HasFaces();
     }
 
   /******************************************************/
@@ -756,7 +756,7 @@ namespace DOpE
     bool
     StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dim>::HasInterfaces() const
     {
-      return _pde.HasInterfaces();
+      return pde_.HasInterfaces();
     }
 
   /******************************************************/
@@ -766,7 +766,7 @@ namespace DOpE
     const std::vector<unsigned int>&
     StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dim>::GetDirichletColors() const
     {
-      return _dirichlet_colors;
+      return dirichlet_colors_;
     }
 
   /******************************************************/
@@ -777,22 +777,22 @@ namespace DOpE
     StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dim>::GetDirichletCompMask(
         unsigned int color) const
     {
-      unsigned int comp = _dirichlet_colors.size();
-      for (unsigned int i = 0; i < _dirichlet_colors.size(); ++i)
+      unsigned int comp = dirichlet_colors_.size();
+      for (unsigned int i = 0; i < dirichlet_colors_.size(); ++i)
         {
-          if (_dirichlet_colors[i] == color)
+          if (dirichlet_colors_[i] == color)
             {
               comp = i;
               break;
             }
         }
-      if (comp == _dirichlet_colors.size())
+      if (comp == dirichlet_colors_.size())
         {
           std::stringstream s;
           s << "DirichletColor" << color << " has not been found !";
           throw DOpEException(s.str(), "OptProblem::GetDirichletCompMask");
         }
-      return _dirichlet_comps[comp];
+      return dirichlet_comps_[comp];
     }
 
   /******************************************************/
@@ -805,23 +805,23 @@ namespace DOpE
         const std::map<std::string, const dealii::Vector<double>*> &param_values,
         const std::map<std::string, const VECTOR*> &domain_values) const
     {
-      unsigned int col = _dirichlet_colors.size();
-      for (unsigned int i = 0; i < _dirichlet_colors.size(); ++i)
+      unsigned int col = dirichlet_colors_.size();
+      for (unsigned int i = 0; i < dirichlet_colors_.size(); ++i)
         {
-          if (_dirichlet_colors[i] == color)
+          if (dirichlet_colors_[i] == color)
             {
               col = i;
               break;
             }
         }
-      if (col == _dirichlet_colors.size())
+      if (col == dirichlet_colors_.size())
         {
           std::stringstream s;
           s << "DirichletColor" << color << " has not been found !";
           throw DOpEException(s.str(), "OptProblem::GetDirichletValues");
         }
-      _primal_dirichlet_values[col]->ReInit(param_values, domain_values, color);
-      return *(_primal_dirichlet_values[col]);
+      primal_dirichlet_values_[col]->ReInit(param_values, domain_values, color);
+      return *(primal_dirichlet_values_[col]);
     }
 
   /******************************************************/
@@ -831,7 +831,7 @@ namespace DOpE
     const std::vector<unsigned int>&
     StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dim>::GetBoundaryEquationColors() const
     {
-      return _state_boundary_equation_colors;
+      return state_boundary_equation_colors_;
     }
 
   /******************************************************/
@@ -841,13 +841,13 @@ namespace DOpE
     const dealii::ConstraintMatrix&
     StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dim>::GetDoFConstraints() const
     {
-      return _opt_problem.GetSpaceTimeHandler()->GetStateDoFConstraints();
+      return opt_problem_.GetSpaceTimeHandler()->GetStateDoFConstraints();
     }
   template<typename OPTPROBLEM, typename PDE, typename DD,
     typename SPARSITYPATTERN, typename VECTOR, int dim>  const dealii::Function<dim>&
     StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dim>::GetInitialValues() const
   {
-    return _opt_problem.GetInitialValues();
+    return opt_problem_.GetInitialValues();
   }
 ///////////////ENDOF NAMESPACE DOPE///////////////////////////
 }

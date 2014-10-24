@@ -21,8 +21,8 @@
 *
 **/
 
-#ifndef _Integrator_H_
-#define _Integrator_H_
+#ifndef Integrator_H_
+#define Integrator_H_
 
 #include <lac/vector.h>
 #include <lac/block_sparsity_pattern.h>
@@ -495,11 +495,11 @@ namespace DOpE
             return false;
           }
 
-        INTEGRATORDATACONT & _idc1;
-        INTEGRATORDATACONT & _idc2;
+        INTEGRATORDATACONT & idc1_;
+        INTEGRATORDATACONT & idc2_;
 
-        std::map<std::string, const VECTOR*> _domain_data;
-        std::map<std::string, const dealii::Vector<SCALAR>*> _param_data;
+        std::map<std::string, const VECTOR*> domain_data_;
+        std::map<std::string, const dealii::Vector<SCALAR>*> param_data_;
     };
 
   /**********************************Implementation*******************************************/
@@ -508,7 +508,7 @@ namespace DOpE
       int dim>
     Integrator<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::Integrator(
         INTEGRATORDATACONT& idc)
-        : _idc1(idc), _idc2(idc)
+        : idc1_(idc), idc2_(idc)
     {
     }
 
@@ -516,7 +516,7 @@ namespace DOpE
       int dim>
     Integrator<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::Integrator(
         INTEGRATORDATACONT& idc1, INTEGRATORDATACONT& idc2)
-        : _idc1(idc1), _idc2(idc2)
+        : idc1_(idc1), idc2_(idc2)
     {
     }
 
@@ -1539,13 +1539,13 @@ namespace DOpE
     Integrator<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::AddDomainData(
         std::string name, const VECTOR* new_data)
     {
-      if (_domain_data.find(name) != _domain_data.end())
+      if (domain_data_.find(name) != domain_data_.end())
       {
         throw DOpEException(
             "Adding multiple Data with name " + name + " is prohibited!",
             "Integrator::AddDomainData");
       }
-      _domain_data.insert(
+      domain_data_.insert(
           std::pair<std::string, const VECTOR*>(name, new_data));
     }
 
@@ -1558,14 +1558,14 @@ namespace DOpE
         std::string name)
     {
       typename std::map<std::string, const VECTOR *>::iterator it =
-          _domain_data.find(name);
-      if (it == _domain_data.end())
+          domain_data_.find(name);
+      if (it == domain_data_.end())
       {
         throw DOpEException(
             "Deleting Data " + name + " is impossible! Data not found",
             "Integrator::DeleteDomainData");
       }
-      _domain_data.erase(it);
+      domain_data_.erase(it);
     }
 
   /*******************************************************************************************/
@@ -1575,7 +1575,7 @@ namespace DOpE
     const std::map<std::string, const VECTOR*>&
     Integrator<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::GetDomainData() const
     {
-      return _domain_data;
+      return domain_data_;
     }
 
   /*******************************************************************************************/
@@ -1586,13 +1586,13 @@ namespace DOpE
     Integrator<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::AddParamData(
         std::string name, const dealii::Vector<SCALAR>* new_data)
     {
-      if (_param_data.find(name) != _param_data.end())
+      if (param_data_.find(name) != param_data_.end())
       {
         throw DOpEException(
             "Adding multiple Data with name " + name + " is prohibited!",
             "Integrator::AddParamData");
       }
-      _param_data.insert(
+      param_data_.insert(
           std::pair<std::string, const dealii::Vector<SCALAR>*>(name,
               new_data));
     }
@@ -1606,14 +1606,14 @@ namespace DOpE
         std::string name)
     {
       typename std::map<std::string, const dealii::Vector<SCALAR>*>::iterator it =
-          _param_data.find(name);
-      if (it == _param_data.end())
+          param_data_.find(name);
+      if (it == param_data_.end())
       {
         throw DOpEException(
             "Deleting Data " + name + " is impossible! Data not found",
             "Integrator::DeleteParamData");
       }
-      _param_data.erase(it);
+      param_data_.erase(it);
     }
 
   /*******************************************************************************************/
@@ -1623,7 +1623,7 @@ namespace DOpE
     const std::map<std::string, const dealii::Vector<SCALAR>*>&
     Integrator<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::GetParamData() const
     {
-      return _param_data;
+      return param_data_;
     }
 
   /*******************************************************************************************/
@@ -2119,7 +2119,7 @@ namespace DOpE
     INTEGRATORDATACONT&
     Integrator<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::GetIntegratorDataContainer() const
     {
-      return _idc1;
+      return idc1_;
     }
 
   /*******************************************************************************************/
@@ -2129,7 +2129,7 @@ namespace DOpE
     INTEGRATORDATACONT&
     Integrator<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::GetIntegratorDataContainerFunc() const
     {
-      return _idc2;
+      return idc2_;
     }
 
   /*******************************************************************************************/
@@ -2160,8 +2160,8 @@ namespace DOpE
 										VECTOR &residual) const
     {
       typename std::map<std::string, const VECTOR *>::const_iterator it =
-          _domain_data.find("fixed_rhs");
-      if (it != _domain_data.end())
+          domain_data_.find("fixed_rhs");
+      if (it != domain_data_.end())
       {
 	assert(residual.size() == it->second->size());
 	residual.add(s,*(it->second));

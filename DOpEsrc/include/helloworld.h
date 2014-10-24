@@ -21,6 +21,9 @@
 *
 **/
 
+#ifndef HELLO_H
+#define HELLO_H
+
 namespace DOpE
 {
   class Hello
@@ -29,3 +32,5 @@ namespace DOpE
     Hello();
   };
 }
+
+#endif

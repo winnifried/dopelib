@@ -21,8 +21,8 @@
 *
 **/
 
-#ifndef _DIRECT_LINEAR_SOLVER_H_
-#define _DIRECT_LINEAR_SOLVER_H_
+#ifndef DIRECT_LINEAR_SOLVER_H_
+#define DIRECT_LINEAR_SOLVER_H_
 
 #include <lac/vector.h>
 #include <lac/block_sparsity_pattern.h>
@@ -96,13 +96,11 @@ namespace DOpE
   protected:
 
   private:
-    SPARSITYPATTERN _sparsity_pattern;
-    MATRIX _matrix;
+    SPARSITYPATTERN sparsity_pattern_;
+    MATRIX matrix_;
 
-    dealii::SparseDirectUMFPACK* _A_direct;
+    dealii::SparseDirectUMFPACK* A_direct_;
 
-    double _linear_global_tol, _linear_tol;
-    int  _linear_maxiter;
   };
 
 /*********************************Implementation************************************************/
@@ -118,7 +116,7 @@ namespace DOpE
     DirectLinearSolverWithMatrix<SPARSITYPATTERN,MATRIX,VECTOR>::DirectLinearSolverWithMatrix(
       ParameterReader &/*param_reader*/) 
   {
-    _A_direct = NULL;
+    A_direct_ = NULL;
   }
 
 /******************************************************/
@@ -126,9 +124,9 @@ namespace DOpE
 template <typename SPARSITYPATTERN, typename MATRIX, typename VECTOR>
  DirectLinearSolverWithMatrix<SPARSITYPATTERN,MATRIX,VECTOR>::~DirectLinearSolverWithMatrix()
 {
-  if(_A_direct != NULL)
+  if(A_direct_ != NULL)
   {
-    delete _A_direct;
+    delete A_direct_;
   }
 }
 
@@ -138,14 +136,14 @@ template <typename SPARSITYPATTERN, typename MATRIX, typename VECTOR>
   template<typename PROBLEM>
   void  DirectLinearSolverWithMatrix<SPARSITYPATTERN,MATRIX,VECTOR>::ReInit(PROBLEM& pde)
 {
-  _matrix.clear();
-  pde.ComputeSparsityPattern(_sparsity_pattern);
-  _matrix.reinit(_sparsity_pattern);
+  matrix_.clear();
+  pde.ComputeSparsityPattern(sparsity_pattern_);
+  matrix_.reinit(sparsity_pattern_);
   
-  if(_A_direct != NULL)
+  if(A_direct_ != NULL)
   {
-    delete _A_direct;
-    _A_direct= NULL;
+    delete A_direct_;
+    A_direct_= NULL;
   }
 }
 
@@ -161,24 +159,24 @@ template <typename SPARSITYPATTERN, typename MATRIX, typename VECTOR>
 {
   if(force_matrix_build)
   { 
-    integr.ComputeMatrix (pde,_matrix);    
+    integr.ComputeMatrix (pde,matrix_);    
   }
 
-  integr.ApplyNewtonBoundaryValues(pde,_matrix,rhs,solution);
+  integr.ApplyNewtonBoundaryValues(pde,matrix_,rhs,solution);
   
-  if(_A_direct == NULL)
+  if(A_direct_ == NULL)
   {
-    _A_direct = new dealii::SparseDirectUMFPACK;
-    _A_direct->initialize(_matrix);
+    A_direct_ = new dealii::SparseDirectUMFPACK;
+    A_direct_->initialize(matrix_);
   }
   else if(force_matrix_build)
   {
-     _A_direct->factorize(_matrix);
+     A_direct_->factorize(matrix_);
   }
  
   dealii::Vector<double> sol;
   sol = rhs;
-  _A_direct->solve(sol);
+  A_direct_->solve(sol);
   solution = sol;
 
   pde.GetDoFConstraints().distribute(solution);

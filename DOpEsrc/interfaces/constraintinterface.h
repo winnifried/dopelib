@@ -21,8 +21,8 @@
  *
  **/
 
-#ifndef _CONSTRAINT_INTERFACE_H_
-#define _CONSTRAINT_INTERFACE_H_
+#ifndef CONSTRAINT_INTERFACE_H_
+#define CONSTRAINT_INTERFACE_H_
 
 #include <map>
 #include <string>
@@ -106,8 +106,8 @@ namespace DOpE
         void
         SetProblemType(std::string type, unsigned int num)
         {
-          _problem_type_num = num;
-          _problem_type = type;
+          problem_type_num_ = num;
+          problem_type_ = type;
         }
 
 	/**
@@ -128,16 +128,16 @@ namespace DOpE
         std::string
         GetProblemType() const
         {
-          return _problem_type;
+          return problem_type_;
         }
         unsigned int
         GetProblemTypeNum() const
         {
-          return _problem_type_num;
+          return problem_type_num_;
         }
       private:
-        std::string _problem_type;
-        unsigned int _problem_type_num;
+        std::string problem_type_;
+        unsigned int problem_type_num_;
     };
 }
 

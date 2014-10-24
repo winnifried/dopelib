@@ -21,8 +21,8 @@
  *
  **/
 
-#ifndef _LOCALFunctionalS_
-#define _LOCALFunctionalS_
+#ifndef LOCALFunctionalS_
+#define LOCALFunctionalS_
 
 #include "pdeinterface.h"
 
@@ -205,11 +205,11 @@ template<
 
         double yy_stress = 0.;
 
-        vector<vector<Tensor<1, 2> > > _ugrads;
+        vector<vector<Tensor<1, 2> > > ugrads;
 
-        _ugrads.resize(n_q_points, vector<Tensor<1, 2> >(2));
+        ugrads.resize(n_q_points, vector<Tensor<1, 2> >(2));
 
-        edc.GetGradsState("state", _ugrads);
+        edc.GetGradsState("state", ugrads);
 
         const double mu = 80193.800283;
         const double kappa = 271131.389455;
@@ -219,10 +219,10 @@ template<
         {
           Tensor<2, 2> vgrads;
           vgrads.clear();
-          vgrads[0][0] = _ugrads[q_point][0][0];
-          vgrads[0][1] = _ugrads[q_point][0][1];
-          vgrads[1][0] = _ugrads[q_point][1][0];
-          vgrads[1][1] = _ugrads[q_point][1][1];
+          vgrads[0][0] = ugrads[q_point][0][0];
+          vgrads[0][1] = ugrads[q_point][0][1];
+          vgrads[1][0] = ugrads[q_point][1][0];
+          vgrads[1][1] = ugrads[q_point][1][1];
 
           Tensor<2, 2> realgrads;
           realgrads.clear();
@@ -288,15 +288,15 @@ template<
         double integral = 0;
         if (color == 3)
         {
-          vector<Vector<double> > _ufacevalues;
+          vector<Vector<double> > ufacevalues;
 
-          _ufacevalues.resize(n_q_points, Vector<double>(2));
+          ufacevalues.resize(n_q_points, Vector<double>(2));
 
-          fdc.GetFaceValuesState("state", _ufacevalues);
+          fdc.GetFaceValuesState("state", ufacevalues);
 
           for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
           {
-            double y_displacement = _ufacevalues[q_point](1);
+            double y_displacement = ufacevalues[q_point](1);
 
             integral += y_displacement * state_fe_face_values.JxW(q_point);
           }

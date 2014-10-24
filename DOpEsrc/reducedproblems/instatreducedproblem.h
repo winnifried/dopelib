@@ -21,8 +21,8 @@
 *
 **/
 
-#ifndef _INSTAT_REDUCED_PROBLEM_H_
-#define _INSTAT_REDUCED_PROBLEM_H_
+#ifndef INSTAT_REDUCED_PROBLEM_H_
+#define INSTAT_REDUCED_PROBLEM_H_
 
 #include "reducedprobleminterface.h"
 #include "integrator.h"
@@ -278,34 +278,34 @@ class InstatReducedProblem: public ReducedProblemInterface<PROBLEM, VECTOR>
   protected:
     const StateVector<VECTOR> & GetU() const
     {
-      return _u;
+      return u_;
     }
     StateVector<VECTOR> & GetU()
     {
-      return _u;
+      return u_;
     }
     StateVector<VECTOR> & GetZ()
     {
-      return _z;
+      return z_;
     }
     StateVector<VECTOR> & GetDU()
     {
-      return _du;
+      return du_;
     }
     StateVector<VECTOR> & GetDZ()
     {
-      return _dz;
+      return dz_;
     }
 
     NONLINEARSOLVER& GetNonlinearSolver(std::string type);
     CONTROLNONLINEARSOLVER& GetControlNonlinearSolver();
     INTEGRATOR& GetIntegrator()
     {
-      return _integrator;
+      return integrator_;
     }
     CONTROLINTEGRATOR& GetControlIntegrator()
     {
-      return _control_integrator;
+      return control_integrator_;
     }
 
     /******************************************************/
@@ -378,21 +378,21 @@ class InstatReducedProblem: public ReducedProblemInterface<PROBLEM, VECTOR>
 
   private:
 
-    StateVector<VECTOR> _u;
-    StateVector<VECTOR> _z;
-    StateVector<VECTOR> _du;
-    StateVector<VECTOR> _dz;
+    StateVector<VECTOR> u_;
+    StateVector<VECTOR> z_;
+    StateVector<VECTOR> du_;
+    StateVector<VECTOR> dz_;
 
-    INTEGRATOR _integrator;
-    CONTROLINTEGRATOR _control_integrator;
-    NONLINEARSOLVER _nonlinear_state_solver;
-    NONLINEARSOLVER _nonlinear_adjoint_solver;
-    CONTROLNONLINEARSOLVER _nonlinear_gradient_solver;
+    INTEGRATOR integrator_;
+    CONTROLINTEGRATOR control_integrator_;
+    NONLINEARSOLVER nonlinear_state_solver_;
+    NONLINEARSOLVER nonlinear_adjoint_solver_;
+    CONTROLNONLINEARSOLVER nonlinear_gradient_solver_;
 
-    bool _build_state_matrix, _build_adjoint_matrix, _build_control_matrix;
-    bool _state_reinit, _adjoint_reinit, _gradient_reinit;
+    bool build_state_matrix_, build_adjoint_matrix_, build_control_matrix_;
+    bool state_reinit_, adjoint_reinit_, gradient_reinit_;
 
-    bool _project_initial_data;
+    bool project_initial_data_;
 
     friend class SolutionExtractor<InstatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER,
         CONTROLINTEGRATOR, INTEGRATOR, PROBLEM, VECTOR,dopedim, dealdim>,   VECTOR > ;
@@ -428,21 +428,21 @@ void InstatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER, CONTROLINTEGR
           int base_priority) :
            ReducedProblemInterface<PROBLEM, VECTOR> (OP,
                 base_priority),
-            _u(OP->GetSpaceTimeHandler(), state_behavior, param_reader),
-            _z(OP->GetSpaceTimeHandler(), state_behavior, param_reader),
-            _du(OP->GetSpaceTimeHandler(), state_behavior, param_reader),
-            _dz(OP->GetSpaceTimeHandler(), state_behavior, param_reader),
-            _integrator(idc),
-            _control_integrator(idc),
-            _nonlinear_state_solver(_integrator, param_reader),
-            _nonlinear_adjoint_solver(_integrator, param_reader),
-            _nonlinear_gradient_solver(_control_integrator, param_reader)
+            u_(OP->GetSpaceTimeHandler(), state_behavior, param_reader),
+            z_(OP->GetSpaceTimeHandler(), state_behavior, param_reader),
+            du_(OP->GetSpaceTimeHandler(), state_behavior, param_reader),
+            dz_(OP->GetSpaceTimeHandler(), state_behavior, param_reader),
+            integrator_(idc),
+            control_integrator_(idc),
+            nonlinear_state_solver_(integrator_, param_reader),
+            nonlinear_adjoint_solver_(integrator_, param_reader),
+            nonlinear_gradient_solver_(control_integrator_, param_reader)
       {
         //Solvers should be ReInited
           {
-            _state_reinit = true;
-            _adjoint_reinit = true;
-            _gradient_reinit = true;
+            state_reinit_ = true;
+            adjoint_reinit_ = true;
+            gradient_reinit_ = true;
           }
       }
 
@@ -460,21 +460,21 @@ void InstatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER, CONTROLINTEGR
           int base_priority) :
            ReducedProblemInterface<PROBLEM, VECTOR> (OP,
                 base_priority),
-            _u(OP->GetSpaceTimeHandler(), state_behavior, param_reader),
-            _z(OP->GetSpaceTimeHandler(), state_behavior, param_reader),
-            _du(OP->GetSpaceTimeHandler(), state_behavior, param_reader),
-            _dz(OP->GetSpaceTimeHandler(), state_behavior, param_reader),
-            _integrator(s_idc),
-            _control_integrator(c_idc),
-            _nonlinear_state_solver(_integrator, param_reader),
-            _nonlinear_adjoint_solver(_integrator, param_reader),
-            _nonlinear_gradient_solver(_control_integrator, param_reader)
+            u_(OP->GetSpaceTimeHandler(), state_behavior, param_reader),
+            z_(OP->GetSpaceTimeHandler(), state_behavior, param_reader),
+            du_(OP->GetSpaceTimeHandler(), state_behavior, param_reader),
+            dz_(OP->GetSpaceTimeHandler(), state_behavior, param_reader),
+            integrator_(s_idc),
+            control_integrator_(c_idc),
+            nonlinear_state_solver_(integrator_, param_reader),
+            nonlinear_adjoint_solver_(integrator_, param_reader),
+            nonlinear_gradient_solver_(control_integrator_, param_reader)
       {
         //Solvers should be ReInited
           {
-            _state_reinit = true;
-            _adjoint_reinit = true;
-            _gradient_reinit = true;
+            state_reinit_ = true;
+            adjoint_reinit_ = true;
+            gradient_reinit_ = true;
           }
       }
 
@@ -498,11 +498,11 @@ NONLINEARSOLVER& InstatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER, C
 {
   if ((type == "state") || (type == "tangent"))
   {
-    return _nonlinear_state_solver;
+    return nonlinear_state_solver_;
   }
   else if ((type == "adjoint") || (type == "adjoint_hessian"))
   {
-    return _nonlinear_adjoint_solver;
+    return nonlinear_adjoint_solver_;
   }
   else
   {
@@ -521,7 +521,7 @@ CONTROLNONLINEARSOLVER& InstatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSO
 {
   if ((this->GetProblem()->GetType() == "gradient") || (this->GetProblem()->GetType() == "hessian"))
   {
-    return _nonlinear_gradient_solver;
+    return nonlinear_gradient_solver_;
   }
   else
   {
@@ -543,20 +543,20 @@ void InstatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER, CONTROLINTEGR
   //Some Solvers must be reinited when called
   // Better have subproblems, so that solver can be reinited here
   {
-    _state_reinit = true;
-    _adjoint_reinit = true;
-    _gradient_reinit = true;
+    state_reinit_ = true;
+    adjoint_reinit_ = true;
+    gradient_reinit_ = true;
   }
 
-  _build_state_matrix = true;
-  _build_adjoint_matrix = true;
+  build_state_matrix_ = true;
+  build_adjoint_matrix_ = true;
 
   GetU().ReInit();
   GetZ().ReInit();
   GetDU().ReInit();
   GetDZ().ReInit();
 
-  _build_control_matrix = true;
+  build_control_matrix_ = true;
 }
 
 /******************************************************/
@@ -574,10 +574,10 @@ void InstatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER, CONTROLINTEGR
   this->SetProblemType("state");
   auto& problem = this->GetProblem()->GetStateProblem();
 
-  if (_state_reinit == true)
+  if (state_reinit_ == true)
   {
     GetNonlinearSolver("state").ReInit(problem);
-    _state_reinit = false;
+    state_reinit_ = false;
   }
 
   this->GetProblem()->AddAuxiliaryControl(&q,"control");
@@ -621,10 +621,10 @@ void InstatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER, CONTROLINTEGR
 
   this->SetProblemType("adjoint");
   auto& problem = this->GetProblem()->GetAdjointProblem();
-  if (_adjoint_reinit == true)
+  if (adjoint_reinit_ == true)
   {
     GetNonlinearSolver("adjoint").ReInit(problem);
-    _adjoint_reinit = false;
+    adjoint_reinit_ = false;
   }
 
   this->GetProblem()->AddAuxiliaryState(&(this->GetU()),"state");
@@ -660,10 +660,10 @@ void InstatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER, CONTROLINTEGR
   }
 
   this->SetProblemType("gradient");
-  if (_gradient_reinit == true)
+  if (gradient_reinit_ == true)
   {
     GetControlNonlinearSolver().ReInit(*(this->GetProblem()));
-    _state_reinit = false;
+    state_reinit_ = false;
   }
 
   if(this->GetProblem()->GetSpaceTimeHandler()->GetControlType() == DOpEtypes::ControlType::initial)
@@ -735,9 +735,9 @@ void InstatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER, CONTROLINTEGR
     
     //Compute l^2 representation of the Gradient
     
-    _build_control_matrix = this->GetControlNonlinearSolver().NonlinearSolve(
+    build_control_matrix_ = this->GetControlNonlinearSolver().NonlinearSolve(
       *(this->GetProblem()), gradient_transposed.GetSpacialVector(), true,
-      _build_control_matrix);
+      build_control_matrix_);
     if (dopedim == dealdim)
     {
       this->GetControlIntegrator().DeleteDomainData("control");
@@ -840,9 +840,9 @@ void InstatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER, CONTROLINTEGR
     
     //Compute l^2 representation of the Gradient
     
-    _build_control_matrix = this->GetControlNonlinearSolver().NonlinearSolve(
+    build_control_matrix_ = this->GetControlNonlinearSolver().NonlinearSolve(
       *(this->GetProblem()), gradient_transposed.GetSpacialVector(), true,
-      _build_control_matrix);
+      build_control_matrix_);
     if (dopedim == dealdim)
     {
       this->GetControlIntegrator().DeleteDomainData("control");
@@ -1087,11 +1087,11 @@ void InstatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER, CONTROLINTEGR
       hessian_direction_transposed = hessian_direction;
       //Compute l^2 representation of the HessianVector
       //hessian Matrix is the same as control matrix
-      _build_control_matrix =
+      build_control_matrix_ =
 	this->GetControlNonlinearSolver().NonlinearSolve(
 	  *(this->GetProblem()),
 	  hessian_direction_transposed.GetSpacialVector(), true,
-	  _build_control_matrix);
+	  build_control_matrix_);
       
       this->GetOutputHandler()->Write(hessian_direction,
 				      "HessianDirection" + this->GetPostIndex(),
@@ -1163,11 +1163,11 @@ void InstatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER, CONTROLINTEGR
       hessian_direction_transposed = hessian_direction;
       //Compute l^2 representation of the HessianVector
       //hessian Matrix is the same as control matrix
-      _build_control_matrix =
+      build_control_matrix_ =
 	this->GetControlNonlinearSolver().NonlinearSolve(
 	  *(this->GetProblem()),
 	  hessian_direction_transposed.GetSpacialVector(), true,
-	  _build_control_matrix);
+	  build_control_matrix_);
       
       this->GetOutputHandler()->Write(hessian_direction,
 				      "HessianDirection" + this->GetPostIndex(),
@@ -1560,9 +1560,9 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
       this->GetProblem()->AddAuxiliaryToIntegrator(this->GetIntegrator());
 
       //TODO: Possibly another solver for the initial value than for the pde...
-      _build_state_matrix = this->GetNonlinearSolver("state").NonlinearSolve_Initial(
+      build_state_matrix_ = this->GetNonlinearSolver("state").NonlinearSolve_Initial(
           initial_problem, u_alt, true, true);
-      _build_state_matrix = true;
+      build_state_matrix_ = true;
       
       this->GetProblem()->DeleteAuxiliaryFromIntegrator(this->GetIntegrator());
       
@@ -1621,10 +1621,10 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 	this->GetProblem()->AddAuxiliaryToIntegrator(
 	  this->GetIntegrator());
 	
-	_build_state_matrix
+	build_state_matrix_
 	  = this->GetNonlinearSolver("state").NonlinearSolve(problem,
 							     u_alt, sol.GetSpacialVector(), true,
-							     _build_state_matrix);
+							     build_state_matrix_);
 
 	this->GetProblem()->DeleteAuxiliaryFromIntegrator(
 	  this->GetIntegrator());
@@ -1694,9 +1694,9 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
       this->GetProblem()->AddAuxiliaryToIntegrator(this->GetIntegrator());
 
       //TODO: Possibly another solver for the initial value than for the pde...
-      _build_state_matrix = this->GetNonlinearSolver("adjoint").NonlinearSolve_Initial(
+      build_state_matrix_ = this->GetNonlinearSolver("adjoint").NonlinearSolve_Initial(
           initial_problem, u_alt, true, true);
-      _build_state_matrix = true;
+      build_state_matrix_ = true;
 
       this->GetProblem()->DeleteAuxiliaryFromIntegrator(this->GetIntegrator());
       
@@ -1749,10 +1749,10 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 	this->GetProblem()->AddAuxiliaryToIntegrator(
 	  this->GetIntegrator());
 		
-	_build_adjoint_matrix
+	build_adjoint_matrix_
 	  = this->GetNonlinearSolver("adjoint").NonlinearSolve(problem,
 							     u_alt, sol.GetSpacialVector(), true,
-							     _build_adjoint_matrix);
+							     build_adjoint_matrix_);
 	
 	this->GetProblem()->DeleteAuxiliaryFromIntegrator(
 	  this->GetIntegrator());
@@ -1850,9 +1850,9 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 	      temp_q_trans.GetSpacialVector().equ(1./problem.GetSpaceTimeHandler()->GetStepSize(),temp_q.GetSpacialVector());
               //Compute l^2 representation of the Gradient
 
-	      _build_control_matrix = this->GetControlNonlinearSolver().NonlinearSolve(
+	      build_control_matrix_ = this->GetControlNonlinearSolver().NonlinearSolve(
 		*(this->GetProblem()), temp_q_trans.GetSpacialVector(), true,
-		_build_control_matrix);
+		build_control_matrix_);
 	      
 	      this->GetControlIntegrator().DeleteDomainData("adjoint");
 	      
@@ -1957,11 +1957,11 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 
               //Compute l^2 representation of the HessianVector
 	      //hessian Matrix is the same as control matrix
-		_build_control_matrix =
+		build_control_matrix_ =
 		this->GetControlNonlinearSolver().NonlinearSolve(
 		  *(this->GetProblem()),
 		  temp_q_trans.GetSpacialVector(), true,
-		  _build_control_matrix);
+		  build_control_matrix_);
       
 	      this->GetOutputHandler()->Write(temp_q.GetSpacialVector(),
 					      "HessianDirection" + this->GetPostIndex(),

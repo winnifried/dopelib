@@ -21,8 +21,8 @@
 *
 **/
 
-#ifndef _DOPETYPES_H_
-#define _DOPETYPES_H_
+#ifndef DOPETYPES_H_
+#define DOPETYPES_H_
 
 #include <string>
 

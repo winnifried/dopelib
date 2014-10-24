@@ -21,8 +21,8 @@
  *
  **/
 
-#ifndef _LOCALPDE_
-#define _LOCALPDE_
+#ifndef LOCALPDE_
+#define LOCALPDE_
 
 #include "pdeinterface.h"
 
@@ -59,9 +59,9 @@ template<
       }
 
       LocalPDE(ParameterReader &param_reader) :
-          _state_block_components(3, 0)
+          state_block_component_(3, 0)
       {
-        _state_block_components[2] = 1;
+        state_block_component_[2] = 1;
 
         param_reader.SetSubsection("Local PDE parameters");
         M_biot = param_reader.get_double("m_biot");
@@ -97,7 +97,7 @@ template<
           dealii::Vector<double> &local_vector, double scale,
           double scale_ico)
       {
-        assert(this->_problem_type == "state");
+        assert(this->problem_type_ == "state");
 
         const DOpEWrapper::FEValues<dealdim> & state_fe_values =
             edc.GetFEValuesState();
@@ -107,18 +107,18 @@ template<
 //        double element_diameter = edc.GetElementDiameter();
 
         // old Newton step solution values and gradients
-        _uvalues.resize(n_q_points, Vector<double>(3));
-        _ugrads.resize(n_q_points, vector<Tensor<1, 2> >(3));
+        uvalues_.resize(n_q_points, Vector<double>(3));
+        ugrads_.resize(n_q_points, vector<Tensor<1, 2> >(3));
 
-        edc.GetValuesState("last_newton_solution", _uvalues);
-        edc.GetGradsState("last_newton_solution", _ugrads);
+        edc.GetValuesState("last_newton_solution", uvalues_);
+        edc.GetGradsState("last_newton_solution", ugrads_);
 
         // old timestep solution values and gradients
-        _last_timestep_uvalues.resize(n_q_points, Vector<double>(3));
-        _last_timestep_ugrads.resize(n_q_points, vector<Tensor<1, 2> >(3));
+        last_timestep_uvalues_.resize(n_q_points, Vector<double>(3));
+        last_timestep_ugrads_.resize(n_q_points, vector<Tensor<1, 2> >(3));
 
-        edc.GetValuesState("last_time_solution", _last_timestep_uvalues);
-        edc.GetGradsState("last_time_solution", _last_timestep_ugrads);
+        edc.GetValuesState("last_time_solution", last_timestep_uvalues_);
+        edc.GetGradsState("last_time_solution", last_timestep_ugrads_);
 
         const FEValuesExtractors::Vector displacements(0);
         const FEValuesExtractors::Scalar pressure(2);
@@ -136,28 +136,28 @@ template<
           {
             Tensor<2, dealdim> fluid_pressure;
             fluid_pressure.clear();
-            fluid_pressure[0][0] = _uvalues[q](2);
-            fluid_pressure[1][1] = _uvalues[q](2);
+            fluid_pressure[0][0] = uvalues_[q](2);
+            fluid_pressure[1][1] = uvalues_[q](2);
 
             Tensor<1, dealdim> grad_p;
-            grad_p[0] = _ugrads[q][2][0];
-            grad_p[1] = _ugrads[q][2][1];
+            grad_p[0] = ugrads_[q][2][0];
+            grad_p[1] = ugrads_[q][2][1];
 
             Tensor<1, dealdim> u;
-            u[0] = _uvalues[q](0);
-            u[1] = _uvalues[q](1);
+            u[0] = uvalues_[q](0);
+            u[1] = uvalues_[q](1);
 
-//            double p = _uvalues[q](2);
+//            double p = uvalues_[q](2);
 
             Tensor<2, dealdim> grad_u;
-            grad_u[0][0] = _ugrads[q][0][0];
-            grad_u[0][1] = _ugrads[q][0][1];
-            grad_u[1][0] = _ugrads[q][1][0];
-            grad_u[1][1] = _ugrads[q][1][1];
+            grad_u[0][0] = ugrads_[q][0][0];
+            grad_u[0][1] = ugrads_[q][0][1];
+            grad_u[1][0] = ugrads_[q][1][0];
+            grad_u[1][1] = ugrads_[q][1][1];
 
-//            const double divergence_u = _ugrads[q][0][0] + _ugrads[q][1][1];
+//            const double divergence_u = ugrads_[q][0][0] + ugrads_[q][1][1];
 //            const double old_timestep_divergence_u =
-//                _last_timestep_ugrads[q][0][0] + _last_timestep_ugrads[q][1][1];
+//                last_timestep_ugrads_[q][0][0] + last_timestep_ugrads_[q][1][1];
 
             double q_biot = volume_source;
 
@@ -195,17 +195,17 @@ template<
         {
           for (unsigned int q = 0; q < n_q_points; q++)
           {
-//            double p = _uvalues[q](2);
+//            double p = uvalues_[q](2);
 
             Tensor<1, dealdim> grad_p;
-            grad_p[0] = _ugrads[q][2][0];
-            grad_p[1] = _ugrads[q][2][1];
+            grad_p[0] = ugrads_[q][2][0];
+            grad_p[1] = ugrads_[q][2][1];
 
             Tensor<2, dealdim> grad_u;
-            grad_u[0][0] = _ugrads[q][0][0];
-            grad_u[0][1] = _ugrads[q][0][1];
-            grad_u[1][0] = _ugrads[q][1][0];
-            grad_u[1][1] = _ugrads[q][1][1];
+            grad_u[0][0] = ugrads_[q][0][0];
+            grad_u[0][1] = ugrads_[q][0][1];
+            grad_u[1][0] = ugrads_[q][1][0];
+            grad_u[1][1] = ugrads_[q][1][1];
 
             Tensor<2, dealdim> E = 0.5 * (grad_u + transpose(grad_u));
             Tensor<2, dealdim> sigma_s = 2.0 * lame_coefficient_mu * E
@@ -244,18 +244,18 @@ template<
 //        double element_diameter = edc.GetElementDiameter();
 
         // old Newton step solution values and gradients
-        _uvalues.resize(n_q_points, Vector<double>(3));
-        _ugrads.resize(n_q_points, vector<Tensor<1, 2> >(3));
+        uvalues_.resize(n_q_points, Vector<double>(3));
+        ugrads_.resize(n_q_points, vector<Tensor<1, 2> >(3));
 
-        edc.GetValuesState("last_newton_solution", _uvalues);
-        edc.GetGradsState("last_newton_solution", _ugrads);
+        edc.GetValuesState("last_newton_solution", uvalues_);
+        edc.GetGradsState("last_newton_solution", ugrads_);
 
         // old timestep solution values and gradients
-        _last_timestep_uvalues.resize(n_q_points, Vector<double>(3));
-        _last_timestep_ugrads.resize(n_q_points, vector<Tensor<1, 2> >(3));
+        last_timestep_uvalues_.resize(n_q_points, Vector<double>(3));
+        last_timestep_ugrads_.resize(n_q_points, vector<Tensor<1, 2> >(3));
 
-        edc.GetValuesState("last_time_solution", _last_timestep_uvalues);
-        edc.GetGradsState("last_time_solution", _last_timestep_ugrads);
+        edc.GetValuesState("last_time_solution", last_timestep_uvalues_);
+        edc.GetGradsState("last_time_solution", last_timestep_ugrads_);
 
         const FEValuesExtractors::Vector displacements(0);
         const FEValuesExtractors::Scalar pressure(2);
@@ -285,10 +285,10 @@ template<
             }
 
             Tensor<2, dealdim> grad_u;
-            grad_u[0][0] = _ugrads[q][0][0];
-            grad_u[0][1] = _ugrads[q][0][1];
-            grad_u[1][0] = _ugrads[q][1][0];
-            grad_u[1][1] = _ugrads[q][1][1];
+            grad_u[0][0] = ugrads_[q][0][0];
+            grad_u[0][1] = ugrads_[q][0][1];
+            grad_u[1][0] = ugrads_[q][1][0];
+            grad_u[1][1] = ugrads_[q][1][1];
 
             for (unsigned int i = 0; i < n_dofs_per_element; i++)
             {
@@ -359,7 +359,7 @@ template<
 			dealii::Vector<double> & /*local_vector*/,
 			double /*scale*/)
       {
-        assert(this->_problem_type == "state");
+        assert(this->problem_type_ == "state");
       }
 
       void
@@ -367,14 +367,14 @@ template<
 		       dealii::Vector<double> & /*local_vector*/,
 		       double /*scale*/)
       {
-        assert(this->_problem_type == "state");
+        assert(this->problem_type_ == "state");
       }
 
       void
       ElementTimeEquationExplicit(const EDC<DH, VECTOR, dealdim>& edc,
           dealii::Vector<double> &local_vector, double scale)
       {
-        assert(this->_problem_type == "state");
+        assert(this->problem_type_ == "state");
 
         const DOpEWrapper::FEValues<dealdim> & state_fe_values =
             edc.GetFEValuesState();
@@ -383,18 +383,18 @@ template<
         unsigned int material_id = edc.GetMaterialId();
 
         // old Newton step solution values and gradients
-        _uvalues.resize(n_q_points, Vector<double>(3));
-        _ugrads.resize(n_q_points, vector<Tensor<1, 2> >(3));
+        uvalues_.resize(n_q_points, Vector<double>(3));
+        ugrads_.resize(n_q_points, vector<Tensor<1, 2> >(3));
 
-        edc.GetValuesState("last_newton_solution", _uvalues);
-        edc.GetGradsState("last_newton_solution", _ugrads);
+        edc.GetValuesState("last_newton_solution", uvalues_);
+        edc.GetGradsState("last_newton_solution", ugrads_);
 
         // old timestep solution values and gradients
-        _last_timestep_uvalues.resize(n_q_points, Vector<double>(3));
-        _last_timestep_ugrads.resize(n_q_points, vector<Tensor<1, 2> >(3));
+        last_timestep_uvalues_.resize(n_q_points, Vector<double>(3));
+        last_timestep_ugrads_.resize(n_q_points, vector<Tensor<1, 2> >(3));
 
-        edc.GetValuesState("last_time_solution", _last_timestep_uvalues);
-        edc.GetGradsState("last_time_solution", _last_timestep_ugrads);
+        edc.GetValuesState("last_time_solution", last_timestep_uvalues_);
+        edc.GetGradsState("last_time_solution", last_timestep_ugrads_);
 
         const FEValuesExtractors::Vector displacements(0);
         const FEValuesExtractors::Scalar pressure(2);
@@ -404,9 +404,9 @@ template<
           for (unsigned int q = 0; q < n_q_points; q++)
           {
 
-            const double divergence_u = _ugrads[q][0][0] + _ugrads[q][1][1];
+            const double divergence_u = ugrads_[q][0][0] + ugrads_[q][1][1];
             const double old_timestep_divergence_u =
-                _last_timestep_ugrads[q][0][0] + _last_timestep_ugrads[q][1][1];
+                last_timestep_ugrads_[q][0][0] + last_timestep_ugrads_[q][1][1];
 
             for (unsigned int i = 0; i < n_dofs_per_element; i++)
             {
@@ -414,7 +414,7 @@ template<
               const double phi_i_p = state_fe_values[pressure].value(i, q);
 
               local_vector(i) += scale
-                  * (c_biot * (_uvalues[q](2) - _last_timestep_uvalues[q](2))
+                  * (c_biot * (uvalues_[q](2) - last_timestep_uvalues_[q](2))
                       * phi_i_p
                       + alpha_biot * (divergence_u - old_timestep_divergence_u)
                           * phi_i_p) * state_fe_values.JxW(q);
@@ -428,14 +428,14 @@ template<
       ElementTimeMatrix(const EDC<DH, VECTOR, dealdim>& /*edc*/,
           FullMatrix<double> &/*local_matrix*/)
       {
-        assert(this->_problem_type == "state");
+        assert(this->problem_type_ == "state");
       }
 
       void
       ElementTimeMatrixExplicit(const EDC<DH, VECTOR, dealdim>& edc,
           FullMatrix<double> &local_matrix)
       {
-        assert(this->_problem_type == "state");
+        assert(this->problem_type_ == "state");
 
         const DOpEWrapper::FEValues<dealdim> & state_fe_values =
             edc.GetFEValuesState();
@@ -445,18 +445,18 @@ template<
         //double element_diameter = edc.GetElementDiameter();
 
         // old Newton step solution values and gradients
-        _uvalues.resize(n_q_points, Vector<double>(3));
-        _ugrads.resize(n_q_points, vector<Tensor<1, 2> >(3));
+        uvalues_.resize(n_q_points, Vector<double>(3));
+        ugrads_.resize(n_q_points, vector<Tensor<1, 2> >(3));
 
-        edc.GetValuesState("last_newton_solution", _uvalues);
-        edc.GetGradsState("last_newton_solution", _ugrads);
+        edc.GetValuesState("last_newton_solution", uvalues_);
+        edc.GetGradsState("last_newton_solution", ugrads_);
 
         // old timestep solution values and gradients
-        _last_timestep_uvalues.resize(n_q_points, Vector<double>(3));
-        _last_timestep_ugrads.resize(n_q_points, vector<Tensor<1, 2> >(3));
+        last_timestep_uvalues_.resize(n_q_points, Vector<double>(3));
+        last_timestep_ugrads_.resize(n_q_points, vector<Tensor<1, 2> >(3));
 
-        edc.GetValuesState("last_time_solution", _last_timestep_uvalues);
-        edc.GetGradsState("last_time_solution", _last_timestep_ugrads);
+        edc.GetValuesState("last_time_solution", last_timestep_uvalues_);
+        edc.GetGradsState("last_time_solution", last_timestep_ugrads_);
 
         const FEValuesExtractors::Vector displacements(0);
         const FEValuesExtractors::Scalar pressure(2);
@@ -498,7 +498,7 @@ template<
 		       double scale_ico)
       {
 
-        assert(this->_problem_type == "state");
+        assert(this->problem_type_ == "state");
 
         const auto & state_fe_face_values = fdc.GetFEFaceValuesState();
         unsigned int n_dofs_per_element = fdc.GetNDoFsPerElement();
@@ -509,11 +509,11 @@ template<
         if (color == 3)
         {
           // old Newton step face_solution values and gradients
-          _ufacevalues.resize(n_q_points, Vector<double>(3));
-          _ufacegrads.resize(n_q_points, vector<Tensor<1, 2> >(3));
+          ufacefvalues_.resize(n_q_points, Vector<double>(3));
+          ufacegrads_.resize(n_q_points, vector<Tensor<1, 2> >(3));
 
-          fdc.GetFaceValuesState("last_newton_solution", _ufacevalues);
-          fdc.GetFaceGradsState("last_newton_solution", _ufacegrads);
+          fdc.GetFaceValuesState("last_newton_solution", ufacefvalues_);
+          fdc.GetFaceGradsState("last_newton_solution", ufacegrads_);
 
           const FEValuesExtractors::Vector displacements(0);
 
@@ -541,7 +541,7 @@ template<
 		       dealii::FullMatrix<double> & /*local_matrix*/, double /*scale*/,
 		       double /*scale_ico*/)
       {
-        assert(this->_problem_type == "state");
+        assert(this->problem_type_ == "state");
 
       }
 
@@ -549,7 +549,7 @@ template<
       BoundaryRightHandSide(const FDC<DH, VECTOR, dealdim>& /*fdc*/,
           dealii::Vector<double> &/*local_vector*/, double /*scale*/)
       {
-        assert(this->_problem_type == "state");
+        assert(this->problem_type_ == "state");
       }
 
       // Values for boundary integrals
@@ -559,7 +559,7 @@ template<
 		   double scale_ico)
       {
 
-        assert(this->_problem_type == "state");
+        assert(this->problem_type_ == "state");
 
         const auto & state_fe_face_values = fdc.GetFEFaceValuesState();
         unsigned int n_dofs_per_element = fdc.GetNDoFsPerElement();
@@ -573,27 +573,27 @@ template<
           if ((material_id != material_id_neighbor) && (!at_boundary))
           {
             // old Newton step face_solution values and gradients
-            _ufacevalues.resize(n_q_points, Vector<double>(3));
-            _ufacegrads.resize(n_q_points, vector<Tensor<1, 2> >(3));
+            ufacefvalues_.resize(n_q_points, Vector<double>(3));
+            ufacegrads_.resize(n_q_points, vector<Tensor<1, 2> >(3));
 
-            fdc.GetFaceValuesState("last_newton_solution", _ufacevalues);
-            fdc.GetFaceGradsState("last_newton_solution", _ufacegrads);
+            fdc.GetFaceValuesState("last_newton_solution", ufacefvalues_);
+            fdc.GetFaceGradsState("last_newton_solution", ufacegrads_);
 
             // old timestep solution values and gradients
-            _last_timestep_ufacevalues.resize(n_q_points, Vector<double>(3));
-            _last_timestep_ufacegrads.resize(n_q_points,
+            last_timestep_ufacefvalues_.resize(n_q_points, Vector<double>(3));
+            last_timestep_ufacegrads_.resize(n_q_points,
                 vector<Tensor<1, 2> >(3));
 
             fdc.GetFaceValuesState("last_time_solution",
-                _last_timestep_ufacevalues);
+                last_timestep_ufacefvalues_);
             fdc.GetFaceGradsState("last_time_solution",
-                _last_timestep_ufacegrads);
+                last_timestep_ufacegrads_);
 
             const FEValuesExtractors::Vector displacements(0);
 
             for (unsigned int q = 0; q < n_q_points; q++)
             {
-              double fluid_pressure = _last_timestep_ufacevalues[q](2);
+              double fluid_pressure = last_timestep_ufacefvalues_[q](2);
 
               for (unsigned int i = 0; i < n_dofs_per_element; i++)
               {
@@ -616,7 +616,7 @@ template<
 		   dealii::FullMatrix<double> &/*local_matrix*/, double /*scale*/,
 		   double /*scale_ico*/)
       {
-        assert(this->_problem_type == "state");
+        assert(this->problem_type_ == "state");
 
       }
 
@@ -624,7 +624,7 @@ template<
       FaceRightHandSide(const FDC<DH, VECTOR, dealdim>& /*fdc*/,
           dealii::Vector<double> &/*local_vector*/, double /*scale*/)
       {
-        assert(this->_problem_type == "state");
+        assert(this->problem_type_ == "state");
       }
 
       UpdateFlags
@@ -655,42 +655,42 @@ template<
       std::vector<unsigned int>&
       GetControlBlockComponent()
       {
-        return _block_components;
+        return control_block_component_;
       }
       const std::vector<unsigned int>&
       GetControlBlockComponent() const
       {
-        return _block_components;
+        return control_block_component_;
       }
       std::vector<unsigned int>&
       GetStateBlockComponent()
       {
-        return _state_block_components;
+        return state_block_component_;
       }
       const std::vector<unsigned int>&
       GetStateBlockComponent() const
       {
-        return _state_block_components;
+        return state_block_component_;
       }
 
     private:
-      vector<Vector<double> > _uvalues;
+      vector<Vector<double> > uvalues_;
 
-      vector<vector<Tensor<1, dealdim> > > _ugrads;
+      vector<vector<Tensor<1, dealdim> > > ugrads_;
 
       //last timestep solution values
-      vector<Vector<double> > _last_timestep_uvalues;
-      vector<vector<Tensor<1, dealdim> > > _last_timestep_ugrads;
+      vector<Vector<double> > last_timestep_uvalues_;
+      vector<vector<Tensor<1, dealdim> > > last_timestep_ugrads_;
 
       // face values
-      vector<Vector<double> > _ufacevalues;
-      vector<vector<Tensor<1, dealdim> > > _ufacegrads;
+      vector<Vector<double> > ufacefvalues_;
+      vector<vector<Tensor<1, dealdim> > > ufacegrads_;
 
-      vector<Vector<double> > _last_timestep_ufacevalues;
-      vector<vector<Tensor<1, dealdim> > > _last_timestep_ufacegrads;
+      vector<Vector<double> > last_timestep_ufacefvalues_;
+      vector<vector<Tensor<1, dealdim> > > last_timestep_ufacegrads_;
 
-      vector<unsigned int> _state_block_components;
-      vector<unsigned int> _block_components;
+      vector<unsigned int> state_block_component_;
+      vector<unsigned int> control_block_component_;
 
       // material variables
       double density_structure, lame_coefficient_mu, poisson_ratio_nu,

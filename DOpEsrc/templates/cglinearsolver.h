@@ -21,8 +21,8 @@
 *
 **/
 
-#ifndef _CG_LINEAR_SOLVER_H_
-#define _CG_LINEAR_SOLVER_H_
+#ifndef CG_LINEAR_SOLVER_H_
+#define CG_LINEAR_SOLVER_H_
 
 #include <lac/vector.h>
 #include <lac/block_sparsity_pattern.h>
@@ -93,11 +93,11 @@ namespace DOpE
   protected:
 
   private:
-    SPARSITYPATTERN _sparsity_pattern;
-    MATRIX _matrix;
+    SPARSITYPATTERN sparsity_pattern_;
+    MATRIX matrix_;
  
-    double _linear_global_tol, _linear_tol;
-    int  _linear_maxiter;
+    double linear_global_tol_, linear_tol_;
+    int  linear_maxiter_;
   };
 
 /*********************************Implementation************************************************/
@@ -117,9 +117,9 @@ template <typename PRECONDITIONER,typename SPARSITYPATTERN, typename MATRIX, typ
     ::CGLinearSolverWithMatrix(ParameterReader &param_reader) 
 {
   param_reader.SetSubsection("cglinearsolver_withmatrix parameters");
-  _linear_global_tol = param_reader.get_double ("linear_global_tol");
-  _linear_tol        = param_reader.get_double ("linear_tol"); 
-  _linear_maxiter    = param_reader.get_integer ("linear_maxiter"); 
+  linear_global_tol_ = param_reader.get_double ("linear_global_tol");
+  linear_tol_        = param_reader.get_double ("linear_tol"); 
+  linear_maxiter_    = param_reader.get_integer ("linear_maxiter"); 
 
 }
 
@@ -136,9 +136,9 @@ template <typename PRECONDITIONER,typename SPARSITYPATTERN, typename MATRIX, typ
   template<typename PROBLEM>
   void  CGLinearSolverWithMatrix<PRECONDITIONER,SPARSITYPATTERN,MATRIX,VECTOR>::ReInit(PROBLEM& pde)
 {
-  _matrix.clear();
-  pde.ComputeSparsityPattern(_sparsity_pattern);
-  _matrix.reinit(_sparsity_pattern);
+  matrix_.clear();
+  pde.ComputeSparsityPattern(sparsity_pattern_);
+  matrix_.reinit(sparsity_pattern_);
 }
 
 /******************************************************/
@@ -152,16 +152,16 @@ template <typename PRECONDITIONER,typename SPARSITYPATTERN, typename MATRIX, typ
 {
   if(force_matrix_build)
   { 
-    integr.ComputeMatrix (pde,_matrix);
+    integr.ComputeMatrix (pde,matrix_);
   }
  
-  integr.ApplyNewtonBoundaryValues(pde,_matrix,rhs,solution);
+  integr.ApplyNewtonBoundaryValues(pde,matrix_,rhs,solution);
 
-  dealii::SolverControl solver_control (_linear_maxiter, _linear_global_tol,false,false);
+  dealii::SolverControl solver_control (linear_maxiter_, linear_global_tol_,false,false);
   dealii::SolverCG<VECTOR> cg (solver_control);
   PRECONDITIONER precondition;
-  precondition.initialize(_matrix);
-  cg.solve (_matrix, solution, rhs,
+  precondition.initialize(matrix_);
+  cg.solve (matrix_, solution, rhs,
 	    precondition);
   
   pde.GetDoFConstraints().distribute(solution);

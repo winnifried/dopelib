@@ -21,8 +21,8 @@
  *
  **/
 
-#ifndef _LOCALFunctionalS_
-#define _LOCALFunctionalS_
+#ifndef LOCALFunctionalS_
+#define LOCALFunctionalS_
 
 #include "pdeinterface.h"
 
@@ -49,9 +49,9 @@ template<
 
         double cw = 0;
 
-        _ufacevalues.resize(n_q_points);
+        ufacevalues_.resize(n_q_points);
 
-        fdc.GetFaceValuesState("state", _ufacevalues);
+        fdc.GetFaceValuesState("state", ufacevalues_);
 
         for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
         {
@@ -86,7 +86,7 @@ template<
       }
 
     private:
-      vector<double> _ufacevalues;
+      vector<double> ufacevalues_;
 
   };
 

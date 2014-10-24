@@ -21,8 +21,8 @@
  *
  **/
 
-#ifndef _LOCALFunctionalS_
-#define _LOCALFunctionalS_
+#ifndef LOCALFunctionalS_
+#define LOCALFunctionalS_
 
 #include "pdeinterface.h"
 #include "my_functions.h"
@@ -112,19 +112,19 @@ template<
         unsigned int n_q_points = edc.GetNQPoints();
 
         {
-          _fvalues.resize(n_q_points);
-          _uvalues.resize(n_q_points);
+          fvalues_.resize(n_q_points);
+          uvalues_.resize(n_q_points);
 
-          edc.GetValuesState("state", _uvalues);
+          edc.GetValuesState("state", uvalues_);
         }
 
         double r = 0.;
         for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
         {
-          _fvalues[q_point] = my::optu(time,state_fe_values.quadrature_point(q_point));
+          fvalues_[q_point] = my::optu(time,state_fe_values.quadrature_point(q_point));
 
-          r +=  (_uvalues[q_point] - _fvalues[q_point])
-              * (_uvalues[q_point] - _fvalues[q_point])
+          r +=  (uvalues_[q_point] - fvalues_[q_point])
+              * (uvalues_[q_point] - fvalues_[q_point])
               * state_fe_values.JxW(q_point);
         }
         return r;
@@ -161,8 +161,8 @@ template<
 
     private:
       mutable double time; 
-      vector<double> _uvalues;
-      vector<double> _fvalues;
+      vector<double> uvalues_;
+      vector<double> fvalues_;
   };
 
    /****************************************************************************************/
@@ -182,18 +182,18 @@ template<
         unsigned int n_q_points = edc.GetNQPoints();
 
         {
-          _fvalues.reinit(1);
-          _qvalues.reinit(1);
+          fvalues_.reinit(1);
+          qvalues_.reinit(1);
 
-          edc.GetParamValues("control", _qvalues);
+          edc.GetParamValues("control", qvalues_);
         }
 
         double r = 0.;
-	_fvalues(0) = my::optq(time);
+	fvalues_(0) = my::optq(time);
         for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
         {
-          r += 1./(M_PI*M_PI)* (_qvalues(0) - _fvalues(0))
-              * (_qvalues(0) - _fvalues(0))
+          r += 1./(M_PI*M_PI)* (qvalues_(0) - fvalues_(0))
+              * (qvalues_(0) - fvalues_(0))
               * state_fe_values.JxW(q_point);
         }
         return r;
@@ -230,7 +230,7 @@ template<
 
     private:
       mutable double time; 
-      Vector<double> _qvalues;
-      Vector<double> _fvalues;
+      Vector<double> qvalues_;
+      Vector<double> fvalues_;
   };
 #endif

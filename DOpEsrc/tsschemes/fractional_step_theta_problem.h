@@ -21,8 +21,8 @@
  *
  **/
 
-#ifndef _FRACTIONALSTEPTHETAPROBLEM_H_
-#define _FRACTIONALSTEPTHETAPROBLEM_H_
+#ifndef FRACTIONALSTEPTHETAPROBLEM_H_
+#define FRACTIONALSTEPTHETAPROBLEM_H_
 
 #include "initialproblem.h" 
 #include "primal_ts_base.h"
@@ -65,17 +65,17 @@ namespace DOpE
             PrimalTSBase<OPTPROBLEM, SPARSITYPATTERN, VECTOR, dopedim, dealdim,
                 FE, DH>(OP)
         {
-          _fs_theta = 1.0 - std::sqrt(2.0) / 2.0;
-          _fs_theta_prime = 1.0 - 2.0 * _fs_theta;
-          _fs_alpha = (1.0 - 2.0 * _fs_theta) / (1.0 - _fs_theta);
-          _fs_beta = 1.0 - _fs_alpha;
-          _initial_problem = NULL;
+          fs_theta_ = 1.0 - std::sqrt(2.0) / 2.0;
+          fs_theta_prime_ = 1.0 - 2.0 * fs_theta_;
+          fs_alpha_ = (1.0 - 2.0 * fs_theta_) / (1.0 - fs_theta_);
+          fs_beta_ = 1.0 - fs_alpha_;
+          initial_problem_ = NULL;
         }
 
         ~FractionalStepThetaProblem()
         {
-          if (_initial_problem != NULL)
-            delete _initial_problem;
+          if (initial_problem_ != NULL)
+            delete initial_problem_;
         }
 
         /******************************************************/
@@ -92,13 +92,13 @@ namespace DOpE
                 dopedim, dealdim, FE, DH>, VECTOR, dealdim>&
         GetInitialProblem()
         {
-          if (_initial_problem == NULL)
+          if (initial_problem_ == NULL)
           {
-            _initial_problem = new InitialProblem<
+            initial_problem_ = new InitialProblem<
                 FractionalStepThetaProblem<OPTPROBLEM, SPARSITYPATTERN, VECTOR,
                     dopedim, dealdim, FE, DH>, VECTOR, dealdim>(*this);
           }
-          return *_initial_problem;
+          return *initial_problem_;
         }
 
         /******************************************************/
@@ -121,16 +121,16 @@ namespace DOpE
 
               tmp = 0.0;
               this->GetProblem().ElementEquation(edc, tmp,
-						 scale * _fs_alpha,
+						 scale * fs_alpha_,
 						 scale);
               local_vector += tmp;
 
               tmp = 0.0;
-              this->GetProblem().ElementTimeEquation(edc, tmp, scale / (_fs_theta));
+              this->GetProblem().ElementTimeEquation(edc, tmp, scale / (fs_theta_));
               local_vector += tmp;
 
               this->GetProblem().ElementTimeEquationExplicit(edc, local_vector,
-                  scale / (_fs_theta));
+                  scale / (fs_theta_));
             }
             else if (this->GetPart() == "Old_for_1st_cycle")
             {
@@ -139,12 +139,12 @@ namespace DOpE
 
               // The explicit parts with old_time_values; e.g. for fluid problems: laplace, convection, etc.
               this->GetProblem().ElementEquation(edc, tmp,
-						 scale * _fs_beta,
+						 scale * fs_beta_,
 						 0.);
               local_vector += tmp;
 
               this->GetProblem().ElementTimeEquation(edc, local_vector,
-                  (-1) * scale / (_fs_theta));
+                  (-1) * scale / (fs_theta_));
             }
             else if (this->GetPart() == "Old_for_3rd_cycle")
             {
@@ -153,12 +153,12 @@ namespace DOpE
 
               // The explicit parts with old_time_values; e.g. for fluid problems: laplace, convection, etc.
               this->GetProblem().ElementEquation(edc, tmp,
-						 scale * _fs_beta,
+						 scale * fs_beta_,
 						 0.);
               local_vector += tmp;
 
               this->GetProblem().ElementTimeEquation(edc, local_vector,
-                  (-1) * scale / (_fs_theta));
+                  (-1) * scale / (fs_theta_));
             }
             else if (this->GetPart() == "New_for_2nd_cycle")
             {
@@ -166,17 +166,17 @@ namespace DOpE
 
               tmp = 0.0;
               this->GetProblem().ElementEquation(edc, tmp,
-						 scale * _fs_beta,
+						 scale * fs_beta_,
 						 scale);
               local_vector += tmp;
 
               tmp = 0.0;
               this->GetProblem().ElementTimeEquation(edc, tmp,
-                  scale / (_fs_theta_prime));
+                  scale / (fs_theta_prime_));
               local_vector += tmp;
 
               this->GetProblem().ElementTimeEquationExplicit(edc, local_vector,
-                  scale / (_fs_theta_prime));
+                  scale / (fs_theta_prime_));
             }
             else if (this->GetPart() == "Old_for_2nd_cycle")
             {
@@ -185,12 +185,12 @@ namespace DOpE
 
               // The explicit parts with old_time_values; e.g. for fluid problems: laplace, convection, etc.
               this->GetProblem().ElementEquation(edc, tmp,
-						 scale * _fs_alpha,
+						 scale * fs_alpha_,
 						 0.);
               local_vector += tmp;
 
               this->GetProblem().ElementTimeEquation(edc, local_vector,
-                  (-1) * scale / (_fs_theta_prime));
+                  (-1) * scale / (fs_theta_prime_));
             }
             else
             {
@@ -272,34 +272,34 @@ namespace DOpE
               dealii::FullMatrix<double> m(local_matrix);
               m = 0.;
               this->GetProblem().ElementMatrix(edc, m,
-					       _fs_alpha,
+					       fs_alpha_,
 					       1.);
               local_matrix.add(1.0, m);
 
               m = 0.;
               this->GetProblem().ElementTimeMatrix(edc, m);
-              local_matrix.add(1.0 / (_fs_theta), m);
+              local_matrix.add(1.0 / (fs_theta_), m);
 
               m = 0.;
               this->GetProblem().ElementTimeMatrixExplicit(edc, m);
-              local_matrix.add(1.0 / (_fs_theta), m);
+              local_matrix.add(1.0 / (fs_theta_), m);
             }
             else if (this->GetPart() == "New_for_2nd_cycle")
             {
               dealii::FullMatrix<double> m(local_matrix);
               m = 0.;
               this->GetProblem().ElementMatrix(edc, local_matrix,
-					       _fs_beta,
+					       fs_beta_,
 					       1.);
               local_matrix.add(1.0, m);
 
               m = 0.;
               this->GetProblem().ElementTimeMatrix(edc, m);
-              local_matrix.add(1.0 / (_fs_theta_prime), m);
+              local_matrix.add(1.0 / (fs_theta_prime_), m);
 
               m = 0.;
               this->GetProblem().ElementTimeMatrixExplicit(edc, m);
-              local_matrix.add(1.0 / (_fs_theta_prime), m);
+              local_matrix.add(1.0 / (fs_theta_prime_), m);
             }
           }
 
@@ -313,7 +313,7 @@ namespace DOpE
             if (this->GetPart() == "New_for_1st_and_3rd_cycle")
             {
               this->GetProblem().FaceEquation(fdc, local_vector,
-					      scale * _fs_alpha,
+					      scale * fs_alpha_,
 					      scale);
 
             }
@@ -321,19 +321,19 @@ namespace DOpE
                 || (this->GetPart() == "Old_for_3rd_cycle"))
             {
               this->GetProblem().FaceEquation(fdc, local_vector,
-					      scale * _fs_beta,
+					      scale * fs_beta_,
 					      0);
             }
             else if (this->GetPart() == "New_for_2nd_cycle")
             {
               this->GetProblem().FaceEquation(fdc, local_vector,
-					      scale * _fs_beta,
+					      scale * fs_beta_,
 					      scale);
             }
             else if (this->GetPart() == "Old_for_2nd_cycle")
             {
               this->GetProblem().FaceEquation(fdc, local_vector,
-					      scale * _fs_alpha,
+					      scale * fs_alpha_,
 					      0.);
             }
             else
@@ -354,7 +354,7 @@ namespace DOpE
             if (this->GetPart() == "New_for_1st_and_3rd_cycle")
             {
               this->GetProblem().InterfaceEquation(fdc, local_vector,
-						   scale * _fs_alpha,
+						   scale * fs_alpha_,
 						   scale);
 
             }
@@ -362,19 +362,19 @@ namespace DOpE
                 || (this->GetPart() == "Old_for_3rd_cycle"))
             {
               this->GetProblem().InterfaceEquation(fdc, local_vector,
-						   scale * _fs_beta,
+						   scale * fs_beta_,
 						   0);
             }
             else if (this->GetPart() == "New_for_2nd_cycle")
             {
               this->GetProblem().InterfaceEquation(fdc, local_vector,
-						   scale * _fs_beta,
+						   scale * fs_beta_,
 						   scale);
             }
             else if (this->GetPart() == "Old_for_2nd_cycle")
             {
               this->GetProblem().InterfaceEquation(fdc, local_vector,
-						   scale * _fs_alpha,
+						   scale * fs_alpha_,
 						   0.);
             }
             else
@@ -407,7 +407,7 @@ namespace DOpE
               dealii::FullMatrix<double> m(local_matrix);
               m = 0.;
               this->GetProblem().FaceMatrix(fdc, m,
-					    _fs_alpha,
+					    fs_alpha_,
 					    1.);
               local_matrix.add(1., m);
             }
@@ -416,7 +416,7 @@ namespace DOpE
               dealii::FullMatrix<double> m(local_matrix);
               m = 0.;
               this->GetProblem().FaceMatrix(fdc, m,
-					    _fs_beta,
+					    fs_beta_,
 					    1.);
               local_matrix.add(1.0, m);
             }
@@ -435,7 +435,7 @@ namespace DOpE
               dealii::FullMatrix<double> m(local_matrix);
               m = 0.;
               this->GetProblem().InterfaceMatrix(fdc, m,
-						 _fs_alpha,
+						 fs_alpha_,
 						 1.);
               local_matrix.add(1.0, m);
             }
@@ -444,7 +444,7 @@ namespace DOpE
               dealii::FullMatrix<double> m(local_matrix);
               m = 0.;
               this->GetProblem().InterfaceMatrix(fdc, m,
-						 _fs_beta,
+						 fs_beta_,
 						 1.);
               local_matrix.add(1.0, m);
             }
@@ -461,25 +461,25 @@ namespace DOpE
             if (this->GetPart() == "New_for_1st_and_3rd_cycle")
             {
               this->GetProblem().BoundaryEquation(fdc, local_vector,
-						  scale * _fs_alpha, scale);
+						  scale * fs_alpha_, scale);
             }
             else if ((this->GetPart() == "Old_for_1st_cycle")
                 || (this->GetPart() == "Old_for_3rd_cycle"))
             {
               this->GetProblem().BoundaryEquation(fdc, local_vector,
-						  scale * _fs_beta,
+						  scale * fs_beta_,
 						  0.);
             }
             else if (this->GetPart() == "New_for_2nd_cycle")
             {
               this->GetProblem().BoundaryEquation(fdc, local_vector,
-						  scale * _fs_beta,
+						  scale * fs_beta_,
 						  scale);
             }
             else if (this->GetPart() == "Old_for_2nd_cycle")
             {
               this->GetProblem().BoundaryEquation(fdc, local_vector,
-						  scale * _fs_alpha,
+						  scale * fs_alpha_,
 						  0);
             }
             else
@@ -512,7 +512,7 @@ namespace DOpE
               dealii::FullMatrix<double> m(local_matrix);
               m = 0.;
               this->GetProblem().BoundaryMatrix(fdc, m,
-						_fs_alpha,
+						fs_alpha_,
 						1.);
               local_matrix.add(1.0, m);
             }
@@ -521,21 +521,21 @@ namespace DOpE
               dealii::FullMatrix<double> m(local_matrix);
               m = 0.;
               this->GetProblem().BoundaryMatrix(fdc, m,
-						_fs_beta,
+						fs_beta_,
 						1.);
               local_matrix.add(1.0, m);
             }
           }
       private:
         // parameters for FS scheme
-        double _fs_theta;
-        double _fs_theta_prime;
-        double _fs_alpha;
-        double _fs_beta;
+        double fs_theta_;
+        double fs_theta_prime_;
+        double fs_alpha_;
+        double fs_beta_;
 
         InitialProblem<
             FractionalStepThetaProblem<OPTPROBLEM, SPARSITYPATTERN, VECTOR,
-                dopedim, dealdim, FE, DH>, VECTOR, dealdim> * _initial_problem;
+                dopedim, dealdim, FE, DH>, VECTOR, dealdim> * initial_problem_;
     };
 }
 

@@ -21,8 +21,8 @@
  *
  **/
 
-#ifndef _LOCALFunctional_
-#define _LOCALFunctional_
+#ifndef LOCALFunctional_
+#define LOCALFunctional_
 
 #include "functionalinterface.h"
 
@@ -38,7 +38,7 @@ template<
       dopedim, dealdim>
   {
     public:
-      LocalFunctional() : _time(0)
+      LocalFunctional() : time_(0)
       {
       }
 
@@ -46,13 +46,13 @@ template<
       void
       SetTime(double t) const
       {
-        _time = t;
+        time_ = t;
       }
 
       bool
       NeedTime() const
       {
-        if (fabs(_time - 1.) < 1.e-13)
+        if (fabs(time_ - 1.) < 1.e-13)
           return true;
         return false;
       }
@@ -83,7 +83,7 @@ template<
 
     private:
 
-      mutable double _time;
+      mutable double time_;
 
   };
 #endif

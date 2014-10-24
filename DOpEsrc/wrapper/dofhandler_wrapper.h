@@ -21,8 +21,8 @@
  *
  **/
 
-#ifndef _DOPE_DOFHANDLER_H_
-#define _DOPE_DOFHANDLER_H_
+#ifndef DOPE_DOFHANDLER_H_
+#define DOPE_DOFHANDLER_H_
 
 #include <dofs/dof_handler.h>
 #include <hp/dof_handler.h>
@@ -153,7 +153,7 @@ namespace DOpEWrapper
     class DoFHandler<0, dealii::DoFHandler>
     {
       private:
-        unsigned int _dofs;
+        unsigned int dofs_;
 
       public:
         /**
@@ -169,7 +169,7 @@ namespace DOpEWrapper
           distribute_dofs(const dealii::FESystem<dim> &fe,
 			  const unsigned int /*offset*/=0)
           {
-            _dofs = fe.element_multiplicity(0);
+            dofs_ = fe.element_multiplicity(0);
           }
         void
         clear()
@@ -178,7 +178,7 @@ namespace DOpEWrapper
         unsigned int
         n_dofs() const
         {
-          return _dofs;
+          return dofs_;
         }
         static bool
         NeedIndexSetter()
@@ -191,7 +191,7 @@ namespace DOpEWrapper
     class DoFHandler<0, dealii::hp::DoFHandler>
     {
       private:
-        unsigned int _dofs;
+        unsigned int dofs_;
 
       public:
         /**
@@ -207,7 +207,7 @@ namespace DOpEWrapper
           distribute_dofs(const dealii::hp::FECollection<dim> &fe_collection,
 			  const unsigned int /*offset*/ = 0)
           {
-            _dofs = fe_collection[0].element_multiplicity(0);
+            dofs_ = fe_collection[0].element_multiplicity(0);
           }
         void
         clear()
@@ -216,7 +216,7 @@ namespace DOpEWrapper
         unsigned int
         n_dofs() const
         {
-          return _dofs;
+          return dofs_;
         }
         static bool
         NeedIndexSetter()

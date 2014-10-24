@@ -21,8 +21,8 @@
  *
  **/
 
-#ifndef _LOCALFunctional_
-#define _LOCALFunctional_
+#ifndef LOCALFunctional_
+#define LOCALFunctional_
 
 #include "functionalinterface.h"
 
@@ -49,8 +49,8 @@ template<
         unsigned int n_q_points = edc.GetNQPoints();
 
         {
-	  _uvalues.resize(n_q_points,Vector<double>(3));
-          edc.GetValuesState("state", _uvalues);
+	  uvalues_.resize(n_q_points,Vector<double>(3));
+          edc.GetValuesState("state", uvalues_);
         }
 	const FEValuesExtractors::Vector velocities (0);
 	const FEValuesExtractors::Scalar pressure (dealdim);
@@ -66,7 +66,7 @@ template<
 	  exact(1) = alpha*p[0]*p[1];
 	  exact(2) = -(alpha*p[0]*p[1]*p[1]/2 + beta*p[0] - alpha*p[0]*p[0]*p[0]/6);
 
-	  exact -= _uvalues[q_point];
+	  exact -= uvalues_[q_point];
 	  r += exact*exact*state_fe_values.JxW(q_point);
         }
         return r;
@@ -91,6 +91,6 @@ template<
       }
 
     private:
-      vector<Vector<double> > _uvalues;
+      vector<Vector<double> > uvalues_;
   };
 #endif

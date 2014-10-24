@@ -21,8 +21,8 @@
  *
  **/
 
-#ifndef _MYFUNCS_
-#define _MYFUNCS_
+#ifndef MYFUNCS_
+#define MYFUNCS_
 
 //Helper functions to calculate the coefficients
 namespace my

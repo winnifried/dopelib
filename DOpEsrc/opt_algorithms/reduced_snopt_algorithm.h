@@ -21,8 +21,8 @@
  *
  **/
 
-#ifndef _REDUCED_SNOPT__ALGORITHM_H_
-#define _REDUCED_SNOPT__ALGORITHM_H_
+#ifndef REDUCED_SNOPT__ALGORITHM_H_
+#define REDUCED_SNOPT__ALGORITHM_H_
 
 #include "reducedalgorithm.h"
 #include "parameterreader.h"
@@ -90,12 +90,12 @@ namespace DOpE
 #ifdef WITH_SNOPT
         int rsa_func_(DOpEWrapper::SNOPT_FUNC_DATA& data);
 #endif
-        std::string _postindex;
-        DOpEtypes::VectorStorageType _vector_behavior;
+        std::string postindex_;
+        DOpEtypes::VectorStorageType vector_behavior_;
 
-        double _func_prec, _feas_tol, _opt_tol;
-        int _max_inner_iter, _max_outer_iter;
-        bool _capture_out;
+        double func_prec_, feas_tol_, opt_tol_;
+        int max_inner_iter_, max_outer_iter_;
+        bool capture_out_;
     };
 
   /***************************************************************************************/
@@ -145,15 +145,15 @@ namespace DOpE
 
       param_reader.SetSubsection("reduced_snoptalgorithm parameters");
 
-      _func_prec = param_reader.get_double("function precision");
-      _feas_tol = param_reader.get_double("feasibility tol");
-      _opt_tol = param_reader.get_double("optimality tol");
-      _max_inner_iter = param_reader.get_integer("max inner iterations");
-      _max_outer_iter = param_reader.get_integer("max iterations");
-      _capture_out = param_reader.get_bool("capture snopt output");
+      func_prec_ = param_reader.get_double("function precision");
+      feas_tol_ = param_reader.get_double("feasibility tol");
+      opt_tol_ = param_reader.get_double("optimality tol");
+      max_inner_iter_ = param_reader.get_integer("max inner iterations");
+      max_outer_iter_ = param_reader.get_integer("max iterations");
+      capture_out_ = param_reader.get_bool("capture snopt output");
 
-      _vector_behavior = vector_behavior;
-      _postindex = "_" + this->GetProblem()->GetName();
+      vector_behavior_ = vector_behavior;
+      postindex_ = "_" + this->GetProblem()->GetName();
 
       DOpEtypes::ControlType ct = S->GetProblem()->GetSpaceTimeHandler()->GetControlType();
       if((ct != DOpEtypes::ControlType::initial) && (ct != DOpEtypes::ControlType::stationary))
@@ -187,14 +187,14 @@ namespace DOpE
       ControlVector<VECTOR> q_min(q), q_max(q);
       this->GetReducedProblem()->GetControlBoxConstraints(q_min,q_max);
 
-      ConstraintVector<VECTOR> constraints(this->GetReducedProblem()->GetProblem()->GetSpaceTimeHandler(),_vector_behavior);
+      ConstraintVector<VECTOR> constraints(this->GetReducedProblem()->GetProblem()->GetSpaceTimeHandler(),vector_behavior_);
 
       unsigned int iter=0;
       double cost=0.;
       double cost_start=0.;
       std::stringstream out;
       this->GetOutputHandler()->InitNewtonOut(out);
-      global_tol = std::max(_opt_tol,global_tol);
+      global_tol = std::max(opt_tol_,global_tol);
 
       out << "**************************************************\n";
       out << "*        Starting Solution using SNOPT           *\n";
@@ -208,9 +208,9 @@ namespace DOpE
       out << "**************************************************";
       this->GetOutputHandler()->Write(out,1+this->GetBasePriority(),1,1);
 
-      this->GetOutputHandler()->SetIterationNumber(iter,"Opt_Snopt"+_postindex);
+      this->GetOutputHandler()->SetIterationNumber(iter,"Opt_Snopt"+postindex_);
 
-      this->GetOutputHandler()->Write(q,"Control"+_postindex,"control");
+      this->GetOutputHandler()->Write(q,"Control"+postindex_,"control");
 
       try
       {
@@ -229,7 +229,7 @@ namespace DOpE
       /////////////////////////////////DO SOMETHING to Solve.../////////////////////////
       out<<"************************************************\n";
       out<<"*               Calling SNOPT                  *\n";
-      if(_capture_out)
+      if(capture_out_)
       out<<"*  output will be written to logfile only!     *\n";
       else
       out<<"*  output will not be written to logfile!      *\n";
@@ -237,7 +237,7 @@ namespace DOpE
       this->GetOutputHandler()->Write(out,1+this->GetBasePriority());
 
       this->GetOutputHandler()->DisallowAllOutput();
-      if(_capture_out)
+      if(capture_out_)
       this->GetOutputHandler()->StartSaveCTypeOutputToLog();
 
       int ret_val;
@@ -327,12 +327,12 @@ namespace DOpE
         RSAProb.setUserFun ( DOpEWrapper::SNOPT_A_userfunc_ );
 
         RSAProb.setIntParameter( "Derivative option", 1 );
-        RSAProb.setRealParameter( "Function precison", _func_prec);
+        RSAProb.setRealParameter( "Function precison", func_prec_);
         RSAProb.setRealParameter( "Major optimality tolerance", global_tol);
-        RSAProb.setRealParameter( "Major feasibility tolerance", _feas_tol);
-        RSAProb.setRealParameter( "Minor feasibility tolerance", _feas_tol);
-        RSAProb.setIntParameter( "Minor iterations limit", _max_inner_iter);
-        RSAProb.setIntParameter( "Major iterations limit", _max_outer_iter);
+        RSAProb.setRealParameter( "Major feasibility tolerance", feas_tol_);
+        RSAProb.setRealParameter( "Minor feasibility tolerance", feas_tol_);
+        RSAProb.setIntParameter( "Minor iterations limit", max_inner_iter_);
+        RSAProb.setIntParameter( "Major iterations limit", max_outer_iter_);
         RSAProb.solve(2);
         ret_val = RSAProb.GetReturnStatus();
         {
@@ -358,7 +358,7 @@ namespace DOpE
 
       }
 
-      if(_capture_out)
+      if(capture_out_)
       this->GetOutputHandler()->StopSaveCTypeOutputToLog();
       this->GetOutputHandler()->ResumeOutput();
       out<<"\n************************************************\n";
@@ -373,9 +373,9 @@ namespace DOpE
       this->GetOutputHandler()->Write(out,1+this->GetBasePriority());
 
       iter++;
-      this->GetOutputHandler()->SetIterationNumber(iter,"Opt_Snopt"+_postindex);
+      this->GetOutputHandler()->SetIterationNumber(iter,"Opt_Snopt"+postindex_);
 
-      this->GetOutputHandler()->Write(q,"Control"+_postindex,"control");
+      this->GetOutputHandler()->Write(q,"Control"+postindex_,"control");
       try
       {
         cost = this->GetReducedProblem()->ComputeReducedCostFunctional(q);
@@ -418,8 +418,8 @@ int Reduced_SnoptAlgorithm<PROBLEM, VECTOR>
 {
   //Needs to implement the evaluation of j and its derivative using the 
   //Interface required by SNOPT
-  ConstraintVector<VECTOR> constraints(this->GetReducedProblem()->GetProblem()->GetSpaceTimeHandler(),_vector_behavior);
-  ControlVector<VECTOR> tmp(this->GetReducedProblem()->GetProblem()->GetSpaceTimeHandler(),_vector_behavior);
+  ConstraintVector<VECTOR> constraints(this->GetReducedProblem()->GetProblem()->GetSpaceTimeHandler(),vector_behavior_);
+  ControlVector<VECTOR> tmp(this->GetReducedProblem()->GetProblem()->GetSpaceTimeHandler(),vector_behavior_);
   VECTOR& ref_x = tmp.GetSpacialVector();
   assert(ref_x.size() == *(data.n));
   for(unsigned int i=0; i < ref_x.size(); i++)

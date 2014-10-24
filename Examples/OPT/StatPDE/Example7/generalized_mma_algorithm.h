@@ -21,8 +21,8 @@
 *
 **/
 
-#ifndef _GENERALIZED_MMA__ALGORITHM2_H_
-#define _GENERALIZED_MMA__ALGORITHM2_H_
+#ifndef GENERALIZED_MMA_ALGORITHM2_H_
+#define GENERALIZED_MMA_ALGORITHM2_H_
 
 #include "reducedalgorithm.h"
 #include "parameterreader.h"
@@ -101,7 +101,7 @@ namespace DOpE
     void ReInit() 
     {  
       ReducedAlgorithm<PROBLEM,VECTOR>::ReInit();
-      _sub_problem_opt_alg.ReInit();
+      sub_problem_opt_alg_.ReInit();
     }
 
 
@@ -215,15 +215,15 @@ namespace DOpE
 			     double  J);
   private:
     
-     unsigned int _line_maxiter, _mma_outer_maxiter, _mma_inner_maxiter;
-     double       _linesearch_rho, _linesearch_c, _mma_global_tol, _ndofs;
-     double _merit_multiplier, _rho, _p, _initial_lagrange_mult_scale;
+     unsigned int line_maxiter_, mma_outer_maxiter_, mma_inner_maxiter_;
+     double       linesearch_rho_, linesearch_c_, mma_global_tol_, n_dofs_;
+     double merit_multiplier_, rho_, p_, initial_lagrange_mult_scale_;
 
-     ConstraintVector<VECTOR> _mma_constraints, _mma_multiplier;
-     CONSTRAINTACCESSOR& _CA;
-     AugmentedLagrangianProblem<CONSTRAINTACCESSOR,STH, PROBLEM,dopedim,dealdim,localdim> _augmented_lagrangian_problem;
-     SOLVER _augmented_lagrangian_solver;
-     ReducedNewtonAlgorithmWithInverse<AugmentedLagrangianProblem<CONSTRAINTACCESSOR,STH, PROBLEM,dopedim,dealdim,localdim>,VECTOR> _sub_problem_opt_alg;
+     ConstraintVector<VECTOR> mma_constraints_, mma_multiplier_;
+     CONSTRAINTACCESSOR& CA_;
+     AugmentedLagrangianProblem<CONSTRAINTACCESSOR,STH, PROBLEM,dopedim,dealdim,localdim> augmented_lagrangian_problem_;
+     SOLVER augmented_lagrangian_solver_;
+     ReducedNewtonAlgorithmWithInverse<AugmentedLagrangianProblem<CONSTRAINTACCESSOR,STH, PROBLEM,dopedim,dealdim,localdim>,VECTOR> sub_problem_opt_alg_;
   };
 
 /**************************************************Implementation*********************************/
@@ -257,47 +257,47 @@ GeneralizedMMAAlgorithm<CONSTRAINTACCESSOR, INTEGRATORDATACONT, STH, PROBLEM,VEC
 			     DOpEExceptionHandler<VECTOR>* Except,
 			    DOpEOutputHandler<VECTOR>* Output)
   : ReducedAlgorithm<PROBLEM,VECTOR>(OP,S,param_reader,Except,Output),
-  _mma_constraints(OP->GetSpaceTimeHandler(),vector_behavior),
-  _mma_multiplier(OP->GetSpaceTimeHandler(),vector_behavior),
-  _CA(*CA),
-  _augmented_lagrangian_problem(*OP,*CA),
-  _augmented_lagrangian_solver(&_augmented_lagrangian_problem,vector_behavior,param_reader,idc,5),
-  _sub_problem_opt_alg(&_augmented_lagrangian_problem,&_augmented_lagrangian_solver,param_reader,this->GetExceptionHandler(),this->GetOutputHandler(),5)
+  mma_constraints_(OP->GetSpaceTimeHandler(),vector_behavior),
+  mma_multiplier_(OP->GetSpaceTimeHandler(),vector_behavior),
+  CA_(*CA),
+  augmented_lagrangian_problem_(*OP,*CA),
+  augmented_lagrangian_solver_(&augmented_lagrangian_problem_,vector_behavior,param_reader,idc,5),
+  sub_problem_opt_alg_(&augmented_lagrangian_problem_,&augmented_lagrangian_solver_,param_reader,this->GetExceptionHandler(),this->GetOutputHandler(),5)
 {
   param_reader.SetSubsection("MMAalgorithm parameters");
-  _line_maxiter         = param_reader.get_integer ("line_maxiter");
-  _linesearch_rho       = param_reader.get_double ("linesearch_rho");
-  _linesearch_c         = param_reader.get_double ("linesearch_c");
+  line_maxiter_         = param_reader.get_integer ("line_maxiter");
+  linesearch_rho_       = param_reader.get_double ("linesearch_rho");
+  linesearch_c_         = param_reader.get_double ("linesearch_c");
 
-  _mma_outer_maxiter    = param_reader.get_integer ("mma_outer_maxiter");
-  _mma_inner_maxiter    = param_reader.get_integer ("mma_inner_maxiter");
-  _mma_global_tol = param_reader.get_double  ("mma_global_tol");
+  mma_outer_maxiter_    = param_reader.get_integer ("mma_outer_maxiter");
+  mma_inner_maxiter_    = param_reader.get_integer ("mma_inner_maxiter");
+  mma_global_tol_ = param_reader.get_double  ("mma_global_tol");
 
-  _augmented_lagrangian_problem.SetValue(1.e-1,"p");
-  _augmented_lagrangian_solver.SetValue(1.e-1,"p");
+  augmented_lagrangian_problem_.SetValue(1.e-1,"p");
+  augmented_lagrangian_solver_.SetValue(1.e-1,"p");
 
-  _merit_multiplier = 1.;
-  _initial_lagrange_mult_scale = 1.;
-  _rho = 1.e-8;
+  merit_multiplier_ = 1.;
+  initial_lagrange_mult_scale_ = 1.;
+  rho_ = 1.e-8;
 }
 /******************************************************/
 
 template <typename CONSTRAINTACCESSOR,typename INTEGRATORDATACONT, typename STH, typename PROBLEM,typename VECTOR,typename SOLVER,int dopedim,int dealdim, int localdim>
   int GeneralizedMMAAlgorithm<CONSTRAINTACCESSOR, INTEGRATORDATACONT, STH, PROBLEM,VECTOR, SOLVER,dopedim, dealdim,localdim>::Solve(ControlVector<VECTOR>& q, double /*global_tol*/)
 {
-  _mma_constraints.ReInit();
-  _mma_multiplier.ReInit();
-  _mma_multiplier = 0; 
+  mma_constraints_.ReInit();
+  mma_multiplier_.ReInit();
+  mma_multiplier_ = 0; 
 
-  _p = 0.1;
+  p_ = 0.1;
 
-  _augmented_lagrangian_problem.SetValue(_p,"p");
-  _augmented_lagrangian_solver.SetValue(_p,"p");
+  augmented_lagrangian_problem_.SetValue(p_,"p");
+  augmented_lagrangian_solver_.SetValue(p_,"p");
 
   q.ReInit();
 
   ControlVector<VECTOR> dq(q), gradient(q), gradient_transposed(q), q_pre(q), q_pre_pre(q);
-  ConstraintVector<VECTOR> dm(_mma_multiplier);
+  ConstraintVector<VECTOR> dm(mma_multiplier_);
   ControlVector<VECTOR> lb(q), ub(q),q_min_recent(q), q_max_recent(q),q_min(q), q_max(q), sigma(q);
   ControlVector<VECTOR> tmp(q);
 
@@ -315,7 +315,7 @@ template <typename CONSTRAINTACCESSOR,typename INTEGRATORDATACONT, typename STH,
   double rho;
 
   dq = 1.;
-  _ndofs = dq.Norm("l1");
+  n_dofs_ = dq.Norm("l1");
 
   out << "**************************************************\n";
   out << "*        Starting MMA Algorithm       *\n";
@@ -324,7 +324,7 @@ template <typename CONSTRAINTACCESSOR,typename INTEGRATORDATACONT, typename STH,
   out << "*  SDoFs       : ";
   this->GetReducedProblem()->StateSizeInfo(out);
   out << "*  Constraints : ";
-  _mma_constraints.PrintInfos(out);
+  mma_constraints_.PrintInfos(out);
   out << "**************************************************";
   this->GetOutputHandler()->Write(out,1,1,1);
   
@@ -361,7 +361,7 @@ template <typename CONSTRAINTACCESSOR,typename INTEGRATORDATACONT, typename STH,
 
   try
   {
-    this->GetReducedProblem()->ComputeReducedConstraints(q,_mma_constraints);
+    this->GetReducedProblem()->ComputeReducedConstraints(q,mma_constraints_);
     //if(!this->GetReducedProblem()->ComputeReducedConstraints(q,_constraints))
       //throw DOpEException("Infeasible starting value!","GeneralizedMMAAlgorithm::Solve");
   }
@@ -388,7 +388,7 @@ template <typename CONSTRAINTACCESSOR,typename INTEGRATORDATACONT, typename STH,
     q_max_recent.min(q_max);
   }
 
-  _augmented_lagrangian_problem.InitMultiplier(_mma_multiplier,gradient);
+  augmented_lagrangian_problem_.InitMultiplier(mma_multiplier_,gradient);
   //All values initialized.
   unsigned int iter=0;
   unsigned int n_inner_loops=0;
@@ -398,21 +398,21 @@ template <typename CONSTRAINTACCESSOR,typename INTEGRATORDATACONT, typename STH,
   double kkt_error = 0.;
   double kkt_error_initial = 0.;
   double accuracy = 0.;
-  {//Compute _rho
+  {//Compute rho_
     rho = 1.;
-    _augmented_lagrangian_problem.SetValue(rho,"rho");
+    augmented_lagrangian_problem_.SetValue(rho,"rho");
   }
   {
-    double complementarity_error = _mma_multiplier.Complementarity(_mma_constraints);
-    complementarity_error *= 1./_ndofs;
-    double stationarity_error = AugmentedLagrangianResidual(q,gradient,lb,ub,q_min,q_max,_mma_multiplier,q,cost);
-    double feasibility_error = _mma_constraints.Norm("infty","positive");
+    double complementarity_error = mma_multiplier_.Complementarity(mma_constraints_);
+    complementarity_error *= 1./n_dofs_;
+    double stationarity_error = AugmentedLagrangianResidual(q,gradient,lb,ub,q_min,q_max,mma_multiplier_,q,cost);
+    double feasibility_error = mma_constraints_.Norm("infty","positive");
 
     this->GetOutputHandler()->InitOut(out);
     out << "MMA-Outer (0) - [NA/NA/NA] - CE: "<<complementarity_error<< "\tSE: ";
     out<< stationarity_error<<"\t FE: " << feasibility_error<<"\t CostFunctional: "<<cost;
     out<<"\t Step: NA      ";
-    out<<"\t p: "<<_p<<"\t acc: NA      "<<"\t rho: "<<rho;
+    out<<"\t p: "<<p_<<"\t acc: NA      "<<"\t rho: "<<rho;
     this->GetOutputHandler()->Write(out,2);
     this->GetOutputHandler()->InitNewtonOut(out);
     //and error to check for the convergence of the asymptotes is missing!
@@ -428,10 +428,10 @@ template <typename CONSTRAINTACCESSOR,typename INTEGRATORDATACONT, typename STH,
   int n_rho_updates = 0;
   double length = 0.;
   double prediction = 0.;
-  double p_init = _p;
+  double p_init = p_;
   bool inner_iter_succeeded = true;
 
-  while( kkt_error > _mma_global_tol)
+  while( kkt_error > mma_global_tol_)
   {
     iter++;
     this->GetOutputHandler()->SetIterationNumber(iter,"MMA-Outer");
@@ -441,14 +441,14 @@ template <typename CONSTRAINTACCESSOR,typename INTEGRATORDATACONT, typename STH,
     {    
       inner_iter_succeeded = true;
       n_inner_loops++;
-      cost_alt = cost+2.*_mma_multiplier.Norm("infty")*_mma_constraints.Norm("l1","positive");
+      cost_alt = cost+2.*mma_multiplier_.Norm("infty")*mma_constraints_.Norm("l1","positive");
   
-      inner_iters += SolveMMASubProblem(dq,q,lb,ub,q_min_recent,q_max_recent,gradient,_mma_multiplier,cost,prediction,accuracy);
+      inner_iters += SolveMMASubProblem(dq,q,lb,ub,q_min_recent,q_max_recent,gradient,mma_multiplier_,cost,prediction,accuracy);
     }
     catch(DOpEException& e)
     {
       this->GetExceptionHandler()->HandleException(e,"GeneralizedMMAAlgorithm::Solve");
-      inner_iters += _mma_inner_maxiter;
+      inner_iters += mma_inner_maxiter_;
       //std::cout<<"HOHOHO Inner Iteration failed"<<prediction<<" -- "<<cost<<std::endl;
       inner_iter_succeeded = false;
     }
@@ -461,7 +461,7 @@ template <typename CONSTRAINTACCESSOR,typename INTEGRATORDATACONT, typename STH,
 
       cost = this->GetReducedProblem()->ComputeReducedCostFunctional(dq);
       this->GetReducedProblem()->ComputeReducedGradient(dq,gradient,gradient_transposed);
-      this->GetReducedProblem()->ComputeReducedConstraints(dq,_mma_constraints);
+      this->GetReducedProblem()->ComputeReducedConstraints(dq,mma_constraints_);
 
      }
     catch(DOpEException& e)
@@ -469,7 +469,7 @@ template <typename CONSTRAINTACCESSOR,typename INTEGRATORDATACONT, typename STH,
       this->GetExceptionHandler()->HandleCriticalException(e,"GeneralizedMMAAlgorithm::Solve");
     }
     
-    if(prediction < cost-_mma_global_tol && rho < 1.e+8)
+    if(prediction < cost-mma_global_tol_ && rho < 1.e+8)
     { 
       //increase conservativity
       double delta = cost-prediction;
@@ -488,23 +488,23 @@ template <typename CONSTRAINTACCESSOR,typename INTEGRATORDATACONT, typename STH,
       n_rho_updates++;
       out<<"Bad Model in Minimizer: Making Model more conservative: New Rho: "<<rho;
       this->GetOutputHandler()->Write(out,3);
-      _p = p_init;
-      _augmented_lagrangian_problem.SetValue(_p,"p");
-      _augmented_lagrangian_problem.SetValue(rho,"rho");
-      _augmented_lagrangian_solver.SetValue(_p,"p");
+      p_ = p_init;
+      augmented_lagrangian_problem_.SetValue(p_,"p");
+      augmented_lagrangian_problem_.SetValue(rho,"rho");
+      augmented_lagrangian_solver_.SetValue(p_,"p");
       
       cost = this->GetReducedProblem()->ComputeReducedCostFunctional(dq);
       this->GetReducedProblem()->ComputeReducedGradient(dq,gradient,gradient_transposed);
-      this->GetReducedProblem()->ComputeReducedConstraints(dq,_mma_constraints);
+      this->GetReducedProblem()->ComputeReducedConstraints(dq,mma_constraints_);
       retry = true;
     }
-    else if(cost + 2.*_mma_multiplier.Norm("infty")*_mma_constraints.Norm("l1","positive")< cost_alt)
+    else if(cost + 2.*mma_multiplier_.Norm("infty")*mma_constraints_.Norm("l1","positive")< cost_alt)
     {
       q_pre_pre = q_pre;
       q_pre = q;
       {
 	q.add(-1.,dq);
-	length = sqrt(1./_ndofs*(q*q));
+	length = sqrt(1./n_dofs_*(q*q));
 	q = dq;
       }
  
@@ -512,12 +512,12 @@ template <typename CONSTRAINTACCESSOR,typename INTEGRATORDATACONT, typename STH,
     }
     else
     {    
-      if(inner_iter_succeeded&& accuracy > _mma_global_tol*0.01)
+      if(inner_iter_succeeded&& accuracy > mma_global_tol_*0.01)
       {
 	//dq = q;
 	cost = this->GetReducedProblem()->ComputeReducedCostFunctional(q);
 	this->GetReducedProblem()->ComputeReducedGradient(q,gradient,gradient_transposed);
-	this->GetReducedProblem()->ComputeReducedConstraints(q,_mma_constraints);
+	this->GetReducedProblem()->ComputeReducedConstraints(q,mma_constraints_);
 	retry = true;
 	accuracy *= 0.1;
 	{
@@ -547,14 +547,14 @@ template <typename CONSTRAINTACCESSOR,typename INTEGRATORDATACONT, typename STH,
 	n_rho_updates++;
 	out<<"Iteration failed, trying again with more convex function: New Rho: "<<rho;
 	this->GetOutputHandler()->Write(out,3);
-	_p = p_init;
-	_augmented_lagrangian_problem.SetValue(_p,"p");
-	_augmented_lagrangian_problem.SetValue(rho,"rho");
-	_augmented_lagrangian_solver.SetValue(_p,"p");
+	p_ = p_init;
+	augmented_lagrangian_problem_.SetValue(p_,"p");
+	augmented_lagrangian_problem_.SetValue(rho,"rho");
+	augmented_lagrangian_solver_.SetValue(p_,"p");
 	
 	cost = this->GetReducedProblem()->ComputeReducedCostFunctional(dq);
 	this->GetReducedProblem()->ComputeReducedGradient(dq,gradient,gradient_transposed);
-	this->GetReducedProblem()->ComputeReducedConstraints(dq,_mma_constraints);
+	this->GetReducedProblem()->ComputeReducedConstraints(dq,mma_constraints_);
 	retry = true;
       }
       else
@@ -619,16 +619,16 @@ template <typename CONSTRAINTACCESSOR,typename INTEGRATORDATACONT, typename STH,
 
       //Update the Error-Measure and accuracy requirements.
       {
-	double complementarity_error = _mma_multiplier.Complementarity(_mma_constraints);
-	complementarity_error *= 1./_ndofs;
-	double stationarity_error = AugmentedLagrangianResidual(q,gradient,lb,ub,q_min,q_max,_mma_multiplier,q,cost);
-	double feasibility_error = _mma_constraints.Norm("infty","positive");
+	double complementarity_error = mma_multiplier_.Complementarity(mma_constraints_);
+	complementarity_error *= 1./n_dofs_;
+	double stationarity_error = AugmentedLagrangianResidual(q,gradient,lb,ub,q_min,q_max,mma_multiplier_,q,cost);
+	double feasibility_error = mma_constraints_.Norm("infty","positive");
 
   this->GetOutputHandler()->InitOut(out);
 	out << "MMA-Outer ("<<iter<<") - ["<<inner_iters<<"/"<<n_inner_loops<<"/"<<n_rho_updates<<"] - CE: "<<this->GetOutputHandler()->ZeroTolerance(complementarity_error,kkt_error_initial)<< "\tSE: ";
 	out<< this->GetOutputHandler()->ZeroTolerance(stationarity_error,kkt_error_initial)<<"\t FE: " << this->GetOutputHandler()->ZeroTolerance(feasibility_error,kkt_error_initial)<<"\t CostFunctional: "<<cost;
 	out<<"\t Step: "<<this->GetOutputHandler()->ZeroTolerance(length,1.);
-        out<<"\t p: "<<this->GetOutputHandler()->ZeroTolerance(_p,1.)<<"\t acc: "<<this->GetOutputHandler()->ZeroTolerance(accuracy,1.)<<"\t rho: "<<rho;
+        out<<"\t p: "<<this->GetOutputHandler()->ZeroTolerance(p_,1.)<<"\t acc: "<<this->GetOutputHandler()->ZeroTolerance(accuracy,1.)<<"\t rho: "<<rho;
 	this->GetOutputHandler()->Write(out,2);
   this->GetOutputHandler()->InitNewtonOut(out);
 	
@@ -645,11 +645,11 @@ template <typename CONSTRAINTACCESSOR,typename INTEGRATORDATACONT, typename STH,
       rho = std::max(0.6*rho,1.e-5);
       
       n_rho_updates = 0;
-      _augmented_lagrangian_problem.SetValue(rho,"rho");
+      augmented_lagrangian_problem_.SetValue(rho,"rho");
       cost = this->GetReducedProblem()->ComputeReducedCostFunctional(q);
       this->GetReducedProblem()->ComputeReducedGradient(q,gradient,gradient_transposed);
-      this->GetReducedProblem()->ComputeReducedConstraints(q,_mma_constraints);
-      p_init = _p;
+      this->GetReducedProblem()->ComputeReducedConstraints(q,mma_constraints_);
+      p_init = p_;
       
       n_total_inner_iters += inner_iters;
       n_inner_loops = 0;
@@ -738,8 +738,8 @@ template <typename CONSTRAINTACCESSOR,typename INTEGRATORDATACONT, typename STH,
   {
     bool run=true;
     int piter=0;
-    _augmented_lagrangian_problem.SetValue(_p,"p");
-    _augmented_lagrangian_solver.SetValue(_p,"p");
+    augmented_lagrangian_problem_.SetValue(p_,"p");
+    augmented_lagrangian_solver_.SetValue(p_,"p");
     double alpha = sqrt(gradient*gradient)*0.5;
     
     ConstraintVector<VECTOR> constraints(dm);
@@ -755,28 +755,28 @@ template <typename CONSTRAINTACCESSOR,typename INTEGRATORDATACONT, typename STH,
       has_last_good = true;
       last_good_control = dq;
     }
-    _augmented_lagrangian_problem.AddAuxiliaryControl(&q_min,"mma_lower_bound");
-    _augmented_lagrangian_problem.AddAuxiliaryControl(&q_max,"mma_upper_bound");
-    feasible = _augmented_lagrangian_solver.ComputeReducedConstraints(dq,constraints);
+    augmented_lagrangian_problem_.AddAuxiliaryControl(&q_min,"mma_lower_bound");
+    augmented_lagrangian_problem_.AddAuxiliaryControl(&q_max,"mma_upper_bound");
+    feasible = augmented_lagrangian_solver_.ComputeReducedConstraints(dq,constraints);
     //Recompute feasibility, since only feasibility for the augmented Lagrangian is needed.
     //i.e., we do require that x is choosen in the domain of phi(g), this is equivalent to phi(g(x)) > -p
-    feasible = constraints.IsLargerThan(-_p);
+    feasible = constraints.IsLargerThan(-p_);
     if(!feasible)
     { 
-      _augmented_lagrangian_problem.DeleteAuxiliaryControl("mma_lower_bound");
-      _augmented_lagrangian_problem.DeleteAuxiliaryControl("mma_upper_bound");
+      augmented_lagrangian_problem_.DeleteAuxiliaryControl("mma_lower_bound");
+      augmented_lagrangian_problem_.DeleteAuxiliaryControl("mma_upper_bound");
 
       throw DOpEException("Infeasible iterate!","GeneralizedMMAAlgorithm::SolveMMASubProblem");
     }  
-    _augmented_lagrangian_problem.DeleteAuxiliaryControl("mma_lower_bound");
-    _augmented_lagrangian_problem.DeleteAuxiliaryControl("mma_upper_bound");
+    augmented_lagrangian_problem_.DeleteAuxiliaryControl("mma_lower_bound");
+    augmented_lagrangian_problem_.DeleteAuxiliaryControl("mma_upper_bound");
    
 
     cost = ComputeModelValue(dq,q,gradient,lb,ub,q_min,q_max,dm,constraints,J);
 
     double complementarity_error = 0.;
     complementarity_error = mult.Complementarity(real_constraints);
-    complementarity_error *= 1./_ndofs;
+    complementarity_error *= 1./n_dofs_;
     double stationarity_error = AugmentedLagrangianResidual(q,gradient,lb,ub,q_min,q_max,mult,dq,J);
     double feasibility_error = real_constraints.Norm("infty","positive");
     prediction = cost - mult*constraints;
@@ -799,7 +799,7 @@ template <typename CONSTRAINTACCESSOR,typename INTEGRATORDATACONT, typename STH,
     while(run)
     {
       iter++;
-      if(iter > _mma_inner_maxiter)
+      if(iter > mma_inner_maxiter_)
       {
 	throw DOpEIterationException("Iteration count exceeded bounds!","GeneralizedMMAAlgorithm::SolveMMASubProblem");
       }
@@ -815,7 +815,7 @@ template <typename CONSTRAINTACCESSOR,typename INTEGRATORDATACONT, typename STH,
       {
 	//Try again with new multiplier
 	double scale = mult.Norm("infty");
-	_augmented_lagrangian_problem.InitMultiplier(mult,gradient);
+	augmented_lagrangian_problem_.InitMultiplier(mult,gradient);
 	mult *= scale*2.;
 
 	//If the prediced value is better than the last value we stop here.
@@ -840,7 +840,7 @@ template <typename CONSTRAINTACCESSOR,typename INTEGRATORDATACONT, typename STH,
 	dm = mult;
 
 //	std::cout<<"Reinit ... ! "<<kkt_error<<" -- "<<scale<<" --- "<<prediction<<std::endl;
-//	std::cout<< "\tReinit ("<<iter<<") -  a="<<alpha<<" p="<<_p<<" - CE: "<<complementarity_error<< "\tSE: ";
+//	std::cout<< "\tReinit ("<<iter<<") -  a="<<alpha<<" p="<<p_<<" - CE: "<<complementarity_error<< "\tSE: ";
 //	std::cout<< stationarity_error <<"\t FE: " << feasibility_error<<"\t CostFunctional: "<<cost<<"\t Prediction: "<<prediction<<"\t Multiplier: "<<mult.Norm("infty")<<std::endl;
 	
 	try{
@@ -877,7 +877,7 @@ template <typename CONSTRAINTACCESSOR,typename INTEGRATORDATACONT, typename STH,
 	  catch(DOpEException& e)
 	  {
 	    //this->GetExceptionHandler()->HandleCriticalException(e);
-	    _augmented_lagrangian_problem.InitMultiplier(mult,gradient);
+	    augmented_lagrangian_problem_.InitMultiplier(mult,gradient);
 
 	    if(has_last_good)
 	    {
@@ -893,25 +893,25 @@ template <typename CONSTRAINTACCESSOR,typename INTEGRATORDATACONT, typename STH,
 	}
 	this->GetOutputHandler()->Write(dq,"ControlUpdate","control");
 	
-	_augmented_lagrangian_problem.AddAuxiliaryControl(&q_min,"mma_lower_bound");
-	_augmented_lagrangian_problem.AddAuxiliaryControl(&q_max,"mma_upper_bound");
-	feasible = _augmented_lagrangian_solver.ComputeReducedConstraints(dq,constraints);
+	augmented_lagrangian_problem_.AddAuxiliaryControl(&q_min,"mma_lower_bound");
+	augmented_lagrangian_problem_.AddAuxiliaryControl(&q_max,"mma_upper_bound");
+	feasible = augmented_lagrangian_solver_.ComputeReducedConstraints(dq,constraints);
 	//Recompute feasibility, since only feasibility for the augmented Lagrangian is needed.
-	feasible = constraints.IsLargerThan(-_p);
+	feasible = constraints.IsLargerThan(-p_);
 	this->GetReducedProblem()->ComputeReducedConstraints(dq,real_constraints);
 	if(!feasible)
 	{
-	  _augmented_lagrangian_problem.DeleteAuxiliaryControl("mma_lower_bound");
-	  _augmented_lagrangian_problem.DeleteAuxiliaryControl("mma_upper_bound");
+	  augmented_lagrangian_problem_.DeleteAuxiliaryControl("mma_lower_bound");
+	  augmented_lagrangian_problem_.DeleteAuxiliaryControl("mma_upper_bound");
 	  throw DOpEException("Infeasible iterate!","GeneralizedMMAAlgorithm::SolveMMASubProblem");
 	} 
-	_augmented_lagrangian_problem.DeleteAuxiliaryControl("mma_lower_bound");
-	_augmented_lagrangian_problem.DeleteAuxiliaryControl("mma_upper_bound");
+	augmented_lagrangian_problem_.DeleteAuxiliaryControl("mma_lower_bound");
+	augmented_lagrangian_problem_.DeleteAuxiliaryControl("mma_upper_bound");
 	
 	if(!retry)
 	{
 	  complementarity_error = mult.Complementarity(real_constraints);
-	  _augmented_lagrangian_solver.ComputeReducedConstraintGradient(mult,constraints,dm);
+	  augmented_lagrangian_solver_.ComputeReducedConstraintGradient(mult,constraints,dm);
 	  
 	  //Update Multiplier
 	  dm.add(-1.,mult);
@@ -936,12 +936,12 @@ template <typename CONSTRAINTACCESSOR,typename INTEGRATORDATACONT, typename STH,
 	//Check stopping Criterium Step 4 of Alg 9.4.1
 	{
 	  complementarity_error = mult.Complementarity(real_constraints);
-	  complementarity_error *= 1./_ndofs;
+	  complementarity_error *= 1./n_dofs_;
 	  stationarity_error = AugmentedLagrangianResidual(q,gradient,lb,ub,q_min,q_max,mult,dq,J);
 	  feasibility_error = real_constraints.Norm("infty","positive");
 	  this->GetOutputHandler()->InitOut(out);
 	  //out << "\tAugLag-Outer ("<<iter<<") - ls["<<nl_iter<<"/"<<lineiter<<"/"<<m_lineiter<<"] a="<<alpha<<" p="<<p<<" - Complementarity Error: "<<complementarity_error<< "\tStationarity Violation: ";
-	  out << "\tAugLag-Outer ("<<iter<<") - ls["<<nl_iter<<"/"<<lineiter<<"/"<<m_lineiter<<"] a="<<alpha<<" p="<<_p<<" - CE: "<<complementarity_error<< "\tSE: ";
+	  out << "\tAugLag-Outer ("<<iter<<") - ls["<<nl_iter<<"/"<<lineiter<<"/"<<m_lineiter<<"] a="<<alpha<<" p="<<p_<<" - CE: "<<complementarity_error<< "\tSE: ";
 	  out<< stationarity_error <<"\t FE: " << feasibility_error<<"\t CostFunctional: "<<cost<<"\t Prediction: "<<prediction<<"\t Multiplier: "<<mult.Norm("infty");
 	  this->GetOutputHandler()->Write(out,4);
 	  this->GetOutputHandler()->InitNewtonOut(out);
@@ -955,7 +955,7 @@ template <typename CONSTRAINTACCESSOR,typename INTEGRATORDATACONT, typename STH,
 	  kkt_error_last = kkt_error;
 	  kkt_error = std::max(std::max(complementarity_error,stationarity_error),feasibility_error);
 	  //check stopping criterion
-	  if(kkt_error < std::max(global_tol,_mma_global_tol*0.01))
+	  if(kkt_error < std::max(global_tol,mma_global_tol_*0.01))
 	  {
 	    run = false;
 	    break;
@@ -964,17 +964,17 @@ template <typename CONSTRAINTACCESSOR,typename INTEGRATORDATACONT, typename STH,
 	if(run)
 	{
 	  //update p Step 5 of Alg 9.4.1
-//	  if((((std::max(std::max(complementarity_error,stationarity_error),feasibility_error) >= kkt_error_last)|| feasibility_error > 0.1*stationarity_error)|| ((-1 == lineiter))) && _p > 1.e-6 )
-	  if((((std::max(std::max(complementarity_error,stationarity_error),feasibility_error) >= kkt_error_last)|| feasibility_error > 0.1*stationarity_error)|| ((-1 == lineiter))) && _p > _mma_global_tol )
+//	  if((((std::max(std::max(complementarity_error,stationarity_error),feasibility_error) >= kkt_error_last)|| feasibility_error > 0.1*stationarity_error)|| ((-1 == lineiter))) && p_ > 1.e-6 )
+	  if((((std::max(std::max(complementarity_error,stationarity_error),feasibility_error) >= kkt_error_last)|| feasibility_error > 0.1*stationarity_error)|| ((-1 == lineiter))) && p_ > mma_global_tol_ )
 	  {
 	    double gamma = 0.5;
 	    
-	    if(! real_constraints.IsEpsilonFeasible(gamma*_p))
+	    if(! real_constraints.IsEpsilonFeasible(gamma*p_))
 	    {
 	      if(piter < 30)
 	      {
 		piter++;
-		gamma = (real_constraints.Norm("infty","positive")+_p)/(2.*_p);
+		gamma = (real_constraints.Norm("infty","positive")+p_)/(2.*p_);
 	      }
 	      else
 	      {
@@ -993,13 +993,13 @@ template <typename CONSTRAINTACCESSOR,typename INTEGRATORDATACONT, typename STH,
 		    }
 
 		    this->GetReducedProblem()->ComputeReducedConstraints(dq,real_constraints);
-		    l_run = !real_constraints.IsEpsilonFeasible(gamma*_p);
+		    l_run = !real_constraints.IsEpsilonFeasible(gamma*p_);
 		  }
 		}
 		else
 		{
 		  double scale = mult.Norm("infty");
-		  _augmented_lagrangian_problem.InitMultiplier(mult,gradient);
+		  augmented_lagrangian_problem_.InitMultiplier(mult,gradient);
 		  mult *= scale*2.;
 		  gamma = 1.;
 		}
@@ -1010,32 +1010,32 @@ template <typename CONSTRAINTACCESSOR,typename INTEGRATORDATACONT, typename STH,
 	    {
 	      piter = 0;
 	    }
-	    out<<"\tUpdate barrier parameter: "<<_p<<" -> ";
-	    _p *=gamma;
-	    out<<_p;
+	    out<<"\tUpdate barrier parameter: "<<p_<<" -> ";
+	    p_ *=gamma;
+	    out<<p_;
 	    this->GetOutputHandler()->Write(out,5);
-	    _augmented_lagrangian_problem.SetValue(_p,"p");
-	    _augmented_lagrangian_solver.SetValue(_p,"p");
+	    augmented_lagrangian_problem_.SetValue(p_,"p");
+	    augmented_lagrangian_solver_.SetValue(p_,"p");
 
 	    cost = ComputeModelValue(dq,q,gradient,lb,ub,q_min,q_max,dm,constraints,J);
 	    
 	    complementarity_error = mult.Complementarity(real_constraints);
-	    complementarity_error *= 1./_ndofs;
+	    complementarity_error *= 1./n_dofs_;
 	    stationarity_error = AugmentedLagrangianResidual(q,gradient,lb,ub,q_min,q_max,mult,dq,J);
 	    feasibility_error = real_constraints.Norm("infty","positive");
 	    
-	    _augmented_lagrangian_problem.AddAuxiliaryControl(&q_min,"mma_lower_bound");
-	    _augmented_lagrangian_problem.AddAuxiliaryControl(&q_max,"mma_upper_bound");
-	    feasible = _augmented_lagrangian_solver.ComputeReducedConstraints(dq,constraints);
+	    augmented_lagrangian_problem_.AddAuxiliaryControl(&q_min,"mma_lower_bound");
+	    augmented_lagrangian_problem_.AddAuxiliaryControl(&q_max,"mma_upper_bound");
+	    feasible = augmented_lagrangian_solver_.ComputeReducedConstraints(dq,constraints);
 	    //Recompute feasibility, since only feasibility for the augmented Lagrangian is needed.
-	    feasible = constraints.IsLargerThan(-_p);
+	    feasible = constraints.IsLargerThan(-p_);
 	    this->GetReducedProblem()->ComputeReducedConstraints(dq,real_constraints);
 	    if(!feasible)
 	    {
 	      throw DOpEException("Infeasible iterate!","GeneralizedMMAAlgorithm::SolveMMASubProblem");
 	    } 
-	    _augmented_lagrangian_problem.DeleteAuxiliaryControl("mma_lower_bound");
-	    _augmented_lagrangian_problem.DeleteAuxiliaryControl("mma_upper_bound");
+	    augmented_lagrangian_problem_.DeleteAuxiliaryControl("mma_lower_bound");
+	    augmented_lagrangian_problem_.DeleteAuxiliaryControl("mma_upper_bound");
 
 	  }
 	  kkt_error = std::max(std::max(complementarity_error,stationarity_error),feasibility_error);
@@ -1102,21 +1102,21 @@ int GeneralizedMMAAlgorithm<CONSTRAINTACCESSOR, INTEGRATORDATACONT, STH, PROBLEM
   int ret = FindStationaryPointOfAugmentedLagrangian(q,gradient,lb,ub,q_min,q_max,dm,dq,alpha,J);
   //update multiplier and p, alpha 
   
-  _augmented_lagrangian_problem.AddAuxiliaryControl(&q_min,"mma_lower_bound");
-  _augmented_lagrangian_problem.AddAuxiliaryControl(&q_max,"mma_upper_bound");
+  augmented_lagrangian_problem_.AddAuxiliaryControl(&q_min,"mma_lower_bound");
+  augmented_lagrangian_problem_.AddAuxiliaryControl(&q_max,"mma_upper_bound");
 
-  feasible = _augmented_lagrangian_solver.ComputeReducedConstraints(dq,constraints);
+  feasible = augmented_lagrangian_solver_.ComputeReducedConstraints(dq,constraints);
   //Recompute feasibility, since only feasibility for the augmented Lagrangian is needed.
-  feasible = constraints.IsLargerThan(-_p);
+  feasible = constraints.IsLargerThan(-p_);
   if(!feasible)
   { 
-    _augmented_lagrangian_problem.DeleteAuxiliaryControl("mma_lower_bound");
-    _augmented_lagrangian_problem.DeleteAuxiliaryControl("mma_upper_bound");
+    augmented_lagrangian_problem_.DeleteAuxiliaryControl("mma_lower_bound");
+    augmented_lagrangian_problem_.DeleteAuxiliaryControl("mma_upper_bound");
 
     throw DOpEException("Too Infeasible iterate!","GeneralizedMMAAlgorithm::SolveSCSDPSubProblem");
   }  
-  _augmented_lagrangian_problem.DeleteAuxiliaryControl("mma_lower_bound");
-  _augmented_lagrangian_problem.DeleteAuxiliaryControl("mma_upper_bound");
+  augmented_lagrangian_problem_.DeleteAuxiliaryControl("mma_lower_bound");
+  augmented_lagrangian_problem_.DeleteAuxiliaryControl("mma_upper_bound");
 
   return ret;
 }
@@ -1135,24 +1135,24 @@ template <typename CONSTRAINTACCESSOR,typename INTEGRATORDATACONT, typename STH,
 				const ControlVector<VECTOR>& dq,
 				double  J)
 {
-  _augmented_lagrangian_problem.SetValue(J,"mma_functional");
-  _augmented_lagrangian_problem.AddAuxiliaryControl(&q,"mma_control");
-  _augmented_lagrangian_problem.AddAuxiliaryControl(&lb,"mma_lower_asymptote");
-  _augmented_lagrangian_problem.AddAuxiliaryControl(&ub,"mma_upper_asymptote");
-  _augmented_lagrangian_problem.AddAuxiliaryControl(&gradient,"mma_functional_gradient");
-  _augmented_lagrangian_problem.AddAuxiliaryConstraint(&dm,"mma_multiplier");
-  _augmented_lagrangian_problem.AddAuxiliaryControl(&q_min,"mma_lower_bound");
-  _augmented_lagrangian_problem.AddAuxiliaryControl(&q_max,"mma_upper_bound");
+  augmented_lagrangian_problem_.SetValue(J,"mma_functional");
+  augmented_lagrangian_problem_.AddAuxiliaryControl(&q,"mma_control");
+  augmented_lagrangian_problem_.AddAuxiliaryControl(&lb,"mma_lower_asymptote");
+  augmented_lagrangian_problem_.AddAuxiliaryControl(&ub,"mma_upper_asymptote");
+  augmented_lagrangian_problem_.AddAuxiliaryControl(&gradient,"mma_functional_gradient");
+  augmented_lagrangian_problem_.AddAuxiliaryConstraint(&dm,"mma_multiplier");
+  augmented_lagrangian_problem_.AddAuxiliaryControl(&q_min,"mma_lower_bound");
+  augmented_lagrangian_problem_.AddAuxiliaryControl(&q_max,"mma_upper_bound");
  
-  double ret = _sub_problem_opt_alg.NewtonResidual(dq);
+  double ret = sub_problem_opt_alg_.NewtonResidual(dq);
 
-  _augmented_lagrangian_problem.DeleteAuxiliaryControl("mma_control");
-  _augmented_lagrangian_problem.DeleteAuxiliaryControl("mma_lower_asymptote");
-  _augmented_lagrangian_problem.DeleteAuxiliaryControl("mma_upper_asymptote");
-  _augmented_lagrangian_problem.DeleteAuxiliaryControl("mma_functional_gradient");
-  _augmented_lagrangian_problem.DeleteAuxiliaryConstraint("mma_multiplier");
-  _augmented_lagrangian_problem.DeleteAuxiliaryControl("mma_lower_bound");
-  _augmented_lagrangian_problem.DeleteAuxiliaryControl("mma_upper_bound");
+  augmented_lagrangian_problem_.DeleteAuxiliaryControl("mma_control");
+  augmented_lagrangian_problem_.DeleteAuxiliaryControl("mma_lower_asymptote");
+  augmented_lagrangian_problem_.DeleteAuxiliaryControl("mma_upper_asymptote");
+  augmented_lagrangian_problem_.DeleteAuxiliaryControl("mma_functional_gradient");
+  augmented_lagrangian_problem_.DeleteAuxiliaryConstraint("mma_multiplier");
+  augmented_lagrangian_problem_.DeleteAuxiliaryControl("mma_lower_bound");
+  augmented_lagrangian_problem_.DeleteAuxiliaryControl("mma_upper_bound");
   return ret;
 }
 
@@ -1171,18 +1171,18 @@ template <typename CONSTRAINTACCESSOR,typename INTEGRATORDATACONT, typename STH,
 					     double alpha,
                                              double  J)
 {
-  _augmented_lagrangian_problem.SetValue(J,"mma_functional");
-  _augmented_lagrangian_problem.AddAuxiliaryControl(&q,"mma_control");
-  _augmented_lagrangian_problem.AddAuxiliaryControl(&lb,"mma_lower_asymptote");
-  _augmented_lagrangian_problem.AddAuxiliaryControl(&ub,"mma_upper_asymptote");
-  _augmented_lagrangian_problem.AddAuxiliaryControl(&gradient,"mma_functional_gradient");
-  _augmented_lagrangian_problem.AddAuxiliaryConstraint(&dm,"mma_multiplier");
-  _augmented_lagrangian_problem.AddAuxiliaryControl(&q_min,"mma_lower_bound");
-  _augmented_lagrangian_problem.AddAuxiliaryControl(&q_max,"mma_upper_bound");
+  augmented_lagrangian_problem_.SetValue(J,"mma_functional");
+  augmented_lagrangian_problem_.AddAuxiliaryControl(&q,"mma_control");
+  augmented_lagrangian_problem_.AddAuxiliaryControl(&lb,"mma_lower_asymptote");
+  augmented_lagrangian_problem_.AddAuxiliaryControl(&ub,"mma_upper_asymptote");
+  augmented_lagrangian_problem_.AddAuxiliaryControl(&gradient,"mma_functional_gradient");
+  augmented_lagrangian_problem_.AddAuxiliaryConstraint(&dm,"mma_multiplier");
+  augmented_lagrangian_problem_.AddAuxiliaryControl(&q_min,"mma_lower_bound");
+  augmented_lagrangian_problem_.AddAuxiliaryControl(&q_max,"mma_upper_bound");
   int ret = 0;
   try
   {
-    ret = _sub_problem_opt_alg.Solve(dq,alpha);
+    ret = sub_problem_opt_alg_.Solve(dq,alpha);
   }
   catch(DOpEIterationException& e)
   {
@@ -1192,22 +1192,22 @@ template <typename CONSTRAINTACCESSOR,typename INTEGRATORDATACONT, typename STH,
   catch(DOpEException& e)
   {
     this->GetExceptionHandler()->HandleException(e,"GeneralizedMMAAlgorithm::FindStationaryPointOfAugmentedLagrangian");
-    _augmented_lagrangian_problem.DeleteAuxiliaryControl("mma_control");
-    _augmented_lagrangian_problem.DeleteAuxiliaryControl("mma_lower_asymptote");
-    _augmented_lagrangian_problem.DeleteAuxiliaryControl("mma_upper_asymptote");
-    _augmented_lagrangian_problem.DeleteAuxiliaryControl("mma_functional_gradient");
-    _augmented_lagrangian_problem.DeleteAuxiliaryConstraint("mma_multiplier");
-    _augmented_lagrangian_problem.DeleteAuxiliaryControl("mma_lower_bound");
-    _augmented_lagrangian_problem.DeleteAuxiliaryControl("mma_upper_bound");
+    augmented_lagrangian_problem_.DeleteAuxiliaryControl("mma_control");
+    augmented_lagrangian_problem_.DeleteAuxiliaryControl("mma_lower_asymptote");
+    augmented_lagrangian_problem_.DeleteAuxiliaryControl("mma_upper_asymptote");
+    augmented_lagrangian_problem_.DeleteAuxiliaryControl("mma_functional_gradient");
+    augmented_lagrangian_problem_.DeleteAuxiliaryConstraint("mma_multiplier");
+    augmented_lagrangian_problem_.DeleteAuxiliaryControl("mma_lower_bound");
+    augmented_lagrangian_problem_.DeleteAuxiliaryControl("mma_upper_bound");
     throw e;
   }
-  _augmented_lagrangian_problem.DeleteAuxiliaryControl("mma_control");
-  _augmented_lagrangian_problem.DeleteAuxiliaryControl("mma_lower_asymptote");
-  _augmented_lagrangian_problem.DeleteAuxiliaryControl("mma_upper_asymptote");
-  _augmented_lagrangian_problem.DeleteAuxiliaryControl("mma_functional_gradient");
-  _augmented_lagrangian_problem.DeleteAuxiliaryConstraint("mma_multiplier");
-  _augmented_lagrangian_problem.DeleteAuxiliaryControl("mma_lower_bound");
-  _augmented_lagrangian_problem.DeleteAuxiliaryControl("mma_upper_bound");
+  augmented_lagrangian_problem_.DeleteAuxiliaryControl("mma_control");
+  augmented_lagrangian_problem_.DeleteAuxiliaryControl("mma_lower_asymptote");
+  augmented_lagrangian_problem_.DeleteAuxiliaryControl("mma_upper_asymptote");
+  augmented_lagrangian_problem_.DeleteAuxiliaryControl("mma_functional_gradient");
+  augmented_lagrangian_problem_.DeleteAuxiliaryConstraint("mma_multiplier");
+  augmented_lagrangian_problem_.DeleteAuxiliaryControl("mma_lower_bound");
+  augmented_lagrangian_problem_.DeleteAuxiliaryControl("mma_upper_bound");
   return ret;
 }
 
@@ -1228,8 +1228,8 @@ template <typename CONSTRAINTACCESSOR,typename INTEGRATORDATACONT, typename STH,
 		      ConstraintVector<VECTOR>& constraints,
 		      double J)
 {
-  double rho = _linesearch_rho;
-  //double c   = _linesearch_c;
+  double rho = linesearch_rho_;
+  //double c   = linesearch_c_;
 
   double costnew = 0.;
   bool force_linesearch = false;
@@ -1237,13 +1237,13 @@ template <typename CONSTRAINTACCESSOR,typename INTEGRATORDATACONT, typename STH,
   
   q+=dq;
 
-  _augmented_lagrangian_problem.AddAuxiliaryControl(&q_min,"mma_lower_bound");
-  _augmented_lagrangian_problem.AddAuxiliaryControl(&q_max,"mma_upper_bound");
-  bool feasible = _augmented_lagrangian_solver.ComputeReducedConstraints(q,constraints);
+  augmented_lagrangian_problem_.AddAuxiliaryControl(&q_min,"mma_lower_bound");
+  augmented_lagrangian_problem_.AddAuxiliaryControl(&q_max,"mma_upper_bound");
+  bool feasible = augmented_lagrangian_solver_.ComputeReducedConstraints(q,constraints);
   //Recompute feasibility, since only feasibility for the augmented Lagrangian is needed.
-  feasible = constraints.IsLargerThan(-_p);
-  _augmented_lagrangian_problem.DeleteAuxiliaryControl("mma_lower_bound");
-  _augmented_lagrangian_problem.DeleteAuxiliaryControl("mma_upper_bound");
+  feasible = constraints.IsLargerThan(-p_);
+  augmented_lagrangian_problem_.DeleteAuxiliaryControl("mma_lower_bound");
+  augmented_lagrangian_problem_.DeleteAuxiliaryControl("mma_upper_bound");
   if(!feasible)
   {
     force_linesearch = true;
@@ -1260,7 +1260,7 @@ template <typename CONSTRAINTACCESSOR,typename INTEGRATORDATACONT, typename STH,
     }
   }
   unsigned int iter =0;
-  if(_line_maxiter > 0)
+  if(line_maxiter_ > 0)
   {
     if(std::isinf(costnew) ||std::isnan(costnew) || (costnew > cost) || force_linesearch)
     {
@@ -1268,7 +1268,7 @@ template <typename CONSTRAINTACCESSOR,typename INTEGRATORDATACONT, typename STH,
       while(std::isinf(costnew) ||std::isnan(costnew) || (costnew > cost) || force_linesearch)
       {
 	iter++; 
-	if(iter > _line_maxiter)
+	if(iter > line_maxiter_)
 	{
 	  cost = costnew;
 	  if(force_linesearch)
@@ -1284,13 +1284,13 @@ template <typename CONSTRAINTACCESSOR,typename INTEGRATORDATACONT, typename STH,
 	q.add(alpha*(rho-1.),dq);
 	alpha *= rho;
 	
-	_augmented_lagrangian_problem.AddAuxiliaryControl(&q_min,"mma_lower_bound");
-	_augmented_lagrangian_problem.AddAuxiliaryControl(&q_max,"mma_upper_bound");
-	feasible = _augmented_lagrangian_solver.ComputeReducedConstraints(q,constraints);
+	augmented_lagrangian_problem_.AddAuxiliaryControl(&q_min,"mma_lower_bound");
+	augmented_lagrangian_problem_.AddAuxiliaryControl(&q_max,"mma_upper_bound");
+	feasible = augmented_lagrangian_solver_.ComputeReducedConstraints(q,constraints);
 	//Recompute feasibility, since only feasibility for the augmented Lagrangian is needed.
-	feasible = constraints.IsLargerThan(-_p);
-	_augmented_lagrangian_problem.DeleteAuxiliaryControl("mma_lower_bound");
-	_augmented_lagrangian_problem.DeleteAuxiliaryControl("mma_upper_bound");
+	feasible = constraints.IsLargerThan(-p_);
+	augmented_lagrangian_problem_.DeleteAuxiliaryControl("mma_lower_bound");
+	augmented_lagrangian_problem_.DeleteAuxiliaryControl("mma_upper_bound");
 	if(!feasible)
 	{
 	  force_linesearch = true;
@@ -1348,39 +1348,39 @@ template <typename CONSTRAINTACCESSOR,typename INTEGRATORDATACONT, typename STH,
 		      const ConstraintVector<VECTOR>& /*constraints*/,
 		      double  J)
 {
-  _augmented_lagrangian_problem.SetValue(J,"mma_functional");
-  _augmented_lagrangian_problem.AddAuxiliaryControl(&q,"mma_control");
-  _augmented_lagrangian_problem.AddAuxiliaryControl(&gradient,"mma_functional_gradient");
-  _augmented_lagrangian_problem.AddAuxiliaryConstraint(&dm,"mma_multiplier");
-  _augmented_lagrangian_problem.AddAuxiliaryControl(&lb,"mma_lower_asymptote");
-  _augmented_lagrangian_problem.AddAuxiliaryControl(&ub,"mma_upper_asymptote");
-  _augmented_lagrangian_problem.AddAuxiliaryControl(&q_min,"mma_lower_bound");
-  _augmented_lagrangian_problem.AddAuxiliaryControl(&q_max,"mma_upper_bound");
+  augmented_lagrangian_problem_.SetValue(J,"mma_functional");
+  augmented_lagrangian_problem_.AddAuxiliaryControl(&q,"mma_control");
+  augmented_lagrangian_problem_.AddAuxiliaryControl(&gradient,"mma_functional_gradient");
+  augmented_lagrangian_problem_.AddAuxiliaryConstraint(&dm,"mma_multiplier");
+  augmented_lagrangian_problem_.AddAuxiliaryControl(&lb,"mma_lower_asymptote");
+  augmented_lagrangian_problem_.AddAuxiliaryControl(&ub,"mma_upper_asymptote");
+  augmented_lagrangian_problem_.AddAuxiliaryControl(&q_min,"mma_lower_bound");
+  augmented_lagrangian_problem_.AddAuxiliaryControl(&q_max,"mma_upper_bound");
   double ret = 0.;
   try 
   {
-    ret = _augmented_lagrangian_solver.ComputeReducedCostFunctional(dq);
+    ret = augmented_lagrangian_solver_.ComputeReducedCostFunctional(dq);
   }
   catch( DOpEException& e)
   {
-    _augmented_lagrangian_problem.DeleteAuxiliaryControl("mma_control");
-    _augmented_lagrangian_problem.DeleteAuxiliaryControl("mma_functional_gradient");
-    _augmented_lagrangian_problem.DeleteAuxiliaryConstraint("mma_multiplier");
-    _augmented_lagrangian_problem.DeleteAuxiliaryControl("mma_lower_asymptote");
-    _augmented_lagrangian_problem.DeleteAuxiliaryControl("mma_upper_asymptote");
-    _augmented_lagrangian_problem.DeleteAuxiliaryControl("mma_lower_bound");
-    _augmented_lagrangian_problem.DeleteAuxiliaryControl("mma_upper_bound");
+    augmented_lagrangian_problem_.DeleteAuxiliaryControl("mma_control");
+    augmented_lagrangian_problem_.DeleteAuxiliaryControl("mma_functional_gradient");
+    augmented_lagrangian_problem_.DeleteAuxiliaryConstraint("mma_multiplier");
+    augmented_lagrangian_problem_.DeleteAuxiliaryControl("mma_lower_asymptote");
+    augmented_lagrangian_problem_.DeleteAuxiliaryControl("mma_upper_asymptote");
+    augmented_lagrangian_problem_.DeleteAuxiliaryControl("mma_lower_bound");
+    augmented_lagrangian_problem_.DeleteAuxiliaryControl("mma_upper_bound");
     throw e;
   }
   //ret -=dm*constraints;
   
-  _augmented_lagrangian_problem.DeleteAuxiliaryControl("mma_control");
-  _augmented_lagrangian_problem.DeleteAuxiliaryControl("mma_functional_gradient");
-  _augmented_lagrangian_problem.DeleteAuxiliaryConstraint("mma_multiplier");
-  _augmented_lagrangian_problem.DeleteAuxiliaryControl("mma_lower_asymptote");
-  _augmented_lagrangian_problem.DeleteAuxiliaryControl("mma_upper_asymptote");
-  _augmented_lagrangian_problem.DeleteAuxiliaryControl("mma_lower_bound");
-  _augmented_lagrangian_problem.DeleteAuxiliaryControl("mma_upper_bound");
+  augmented_lagrangian_problem_.DeleteAuxiliaryControl("mma_control");
+  augmented_lagrangian_problem_.DeleteAuxiliaryControl("mma_functional_gradient");
+  augmented_lagrangian_problem_.DeleteAuxiliaryConstraint("mma_multiplier");
+  augmented_lagrangian_problem_.DeleteAuxiliaryControl("mma_lower_asymptote");
+  augmented_lagrangian_problem_.DeleteAuxiliaryControl("mma_upper_asymptote");
+  augmented_lagrangian_problem_.DeleteAuxiliaryControl("mma_lower_bound");
+  augmented_lagrangian_problem_.DeleteAuxiliaryControl("mma_upper_bound");
   return ret;
 }
 

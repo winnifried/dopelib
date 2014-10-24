@@ -21,8 +21,8 @@
 *
 **/
 
-#ifndef _CRANKNICOLSONProblem_H_
-#define _CRANKNICOLSONProblem_H_
+#ifndef CRANKNICOLSONProblem_H_
+#define CRANKNICOLSONProblem_H_
 
 #include "initialproblem.h" 
 #include "primal_ts_base.h"
@@ -61,12 +61,12 @@ namespace DOpE
             PrimalTSBase<OPTPROBLEM, SPARSITYPATTERN, VECTOR, dopedim, dealdim,
                 FE, DH>(OP)
         {
-          _initial_problem = NULL;
+          initial_problem_ = NULL;
         }
         ~CrankNicolsonProblem()
         {
-          if (_initial_problem != NULL)
-            delete _initial_problem;
+          if (initial_problem_ != NULL)
+            delete initial_problem_;
         }
 
       /******************************************************/
@@ -83,13 +83,13 @@ namespace DOpE
                 dealdim, FE, DH>, VECTOR, dealdim>&
         GetInitialProblem()
         {
-          if (_initial_problem == NULL)
+          if (initial_problem_ == NULL)
           {
-            _initial_problem = new InitialProblem<
+            initial_problem_ = new InitialProblem<
                 CrankNicolsonProblem<OPTPROBLEM, SPARSITYPATTERN, VECTOR,
                     dopedim, dealdim, FE, DH>, VECTOR, dealdim>(*this);
           }
-          return *_initial_problem;
+          return *initial_problem_;
         }
     
       /******************************************************/
@@ -357,7 +357,7 @@ namespace DOpE
 
         }
     private:
-    InitialProblem<CrankNicolsonProblem<OPTPROBLEM, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>, VECTOR, dealdim> * _initial_problem;
+    InitialProblem<CrankNicolsonProblem<OPTPROBLEM, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>, VECTOR, dealdim> * initial_problem_;
     };
 }
 

@@ -21,8 +21,8 @@
 *
 **/
 
-#ifndef _INTEGRATORDATACONTAINER_H_
-#define _INTEGRATORDATACONTAINER_H_
+#ifndef INTEGRATORDATACONTAINER_H_
+#define INTEGRATORDATACONTAINER_H_
 
 #include <base/quadrature.h>
 #include <dofs/dof_handler.h>
@@ -50,32 +50,32 @@ namespace DOpE
       public:
         IntegratorDataContainer(const QUADRATURE& quad,
             const FACEQUADRATURE & face_quad)
-            : _quad(&quad), _face_quad(&face_quad), _fdc(NULL), _edc(NULL), _mm_fdc(
-                NULL), _mm_edc(NULL)
+            : quad_(&quad), face_quad_(&face_quad), fdc_(NULL), edc_(NULL), mm_fdc_(
+                NULL), mm_edc_(NULL)
         {
         }
 
         ~IntegratorDataContainer()
         {
-          if (_fdc != NULL)
+          if (fdc_ != NULL)
           {
-            delete _fdc;
-            _fdc = NULL;
+            delete fdc_;
+            fdc_ = NULL;
           }
-          if (_edc != NULL)
+          if (edc_ != NULL)
           {
-            delete _edc;
-            _edc = NULL;
+            delete edc_;
+            edc_ = NULL;
           }
-          if (_mm_fdc != NULL)
+          if (mm_fdc_ != NULL)
           {
-            delete _mm_fdc;
-            _mm_fdc = NULL;
+            delete mm_fdc_;
+            mm_fdc_ = NULL;
           }
-          if (_mm_edc != NULL)
+          if (mm_edc_ != NULL)
           {
-            delete _mm_edc;
-            _mm_edc = NULL;
+            delete mm_edc_;
+            mm_edc_ = NULL;
           }
         }
 
@@ -92,8 +92,8 @@ namespace DOpE
               const std::map<std::string, const VECTOR*> &domain_values,
               bool need_interfaces = false)
           {
-              delete _fdc;
-            _fdc = new FaceDataContainer<DH, VECTOR, dim>(fquad,
+              delete fdc_;
+            fdc_ = new FaceDataContainer<DH, VECTOR, dim>(fquad,
                 update_flags, sth, element, param_values, domain_values,
                 need_interfaces);
           }
@@ -127,9 +127,9 @@ namespace DOpE
               const std::map<std::string, const Vector<double>*> &param_values,
               const std::map<std::string, const VECTOR*> &domain_values)
           {
-            if (_edc != NULL)
-              delete _edc;
-            _edc = new ElementDataContainer<DH, VECTOR, dim>(quad,
+            if (edc_ != NULL)
+              delete edc_;
+            edc_ = new ElementDataContainer<DH, VECTOR, dim>(quad,
                 update_flags, sth, element, param_values, domain_values);
           }
 
@@ -162,9 +162,9 @@ namespace DOpE
               const std::map<std::string, const VECTOR*> &domain_values,
               bool need_interfaces = false)
           {
-            if (_mm_fdc != NULL)
-              delete _mm_fdc;
-            _mm_fdc = new Multimesh_FaceDataContainer<DH, VECTOR, dim>(
+            if (mm_fdc_ != NULL)
+              delete mm_fdc_;
+            mm_fdc_ = new Multimesh_FaceDataContainer<DH, VECTOR, dim>(
                 GetFaceQuad(), update_flags, sth, element, tria_element, param_values,
                 domain_values, need_interfaces);
           }
@@ -181,9 +181,9 @@ namespace DOpE
               const std::map<std::string, const Vector<double>*> &param_values,
               const std::map<std::string, const VECTOR*> &domain_values)
           {
-            if (_mm_edc != NULL)
-              delete _mm_edc;
-            _mm_edc = new Multimesh_ElementDataContainer<DH, VECTOR, dim>(
+            if (mm_edc_ != NULL)
+              delete mm_edc_;
+            mm_edc_ = new Multimesh_ElementDataContainer<DH, VECTOR, dim>(
                 GetQuad(), update_flags, sth, element, tria_element, param_values,
                 domain_values);
           }
@@ -191,20 +191,20 @@ namespace DOpE
         const QUADRATURE&
         GetQuad() const
         {
-          return *_quad;
+          return *quad_;
         }
 
         const FACEQUADRATURE&
         GetFaceQuad() const
         {
-          return *_face_quad;
+          return *face_quad_;
         }
 
         FaceDataContainer<DH, VECTOR, dim>&
         GetFaceDataContainer() const
         {
-          if (_fdc != NULL)
-            return *_fdc;
+          if (fdc_ != NULL)
+            return *fdc_;
           else
             throw DOpEException("Pointer has to be initialized.",
                 "IntegratorDataContainer::GetFaceDataContainer");
@@ -213,8 +213,8 @@ namespace DOpE
         ElementDataContainer<DH, VECTOR, dim>&
         GetElementDataContainer() const
         {
-          if (_edc != NULL)
-            return *_edc;
+          if (edc_ != NULL)
+            return *edc_;
           else
             throw DOpEException("Pointer has to be initialized.",
                 "IntegratorDataContainer::GetElementDataContainer");
@@ -223,8 +223,8 @@ namespace DOpE
         Multimesh_FaceDataContainer<DH, VECTOR, dim>&
         GetMultimeshFaceDataContainer() const
         {
-          if (_mm_fdc != NULL)
-            return *_mm_fdc;
+          if (mm_fdc_ != NULL)
+            return *mm_fdc_;
           else
             throw DOpEException("Pointer has to be initialized.",
                 "IntegratorDataContainer::GetMultimeshFaceDataContainer");
@@ -233,19 +233,19 @@ namespace DOpE
         Multimesh_ElementDataContainer<DH, VECTOR, dim>&
         GetMultimeshElementDataContainer() const
         {
-          if (_mm_edc != NULL)
-            return *_mm_edc;
+          if (mm_edc_ != NULL)
+            return *mm_edc_;
           else
             throw DOpEException("Pointer has to be initialized.",
                 "IntegratorDataContainer::GetMultimeshElementDataContainer");
         }
       private:
-        QUADRATURE const* _quad;
-        FACEQUADRATURE const* _face_quad;
-        FaceDataContainer<DH, VECTOR, dim>* _fdc;
-        ElementDataContainer<DH, VECTOR, dim>* _edc;
-        Multimesh_FaceDataContainer<DH, VECTOR, dim>* _mm_fdc;
-        Multimesh_ElementDataContainer<DH, VECTOR, dim>* _mm_edc;
+        QUADRATURE const* quad_;
+        FACEQUADRATURE const* face_quad_;
+        FaceDataContainer<DH, VECTOR, dim>* fdc_;
+        ElementDataContainer<DH, VECTOR, dim>* edc_;
+        Multimesh_FaceDataContainer<DH, VECTOR, dim>* mm_fdc_;
+        Multimesh_ElementDataContainer<DH, VECTOR, dim>* mm_edc_;
     };
 
 } //end of namespace

@@ -21,8 +21,8 @@
 *
 **/
 
-#ifndef _HIGHER_ORDER_DWRC_CONTROL_H_
-#define _HIGHER_ORDER_DWRC_CONTROL_H_
+#ifndef HIGHER_ORDER_DWRC_CONTROL_H_
+#define HIGHER_ORDER_DWRC_CONTROL_H_
 
 #include "dwrdatacontainer.h"
 #include <deal.II/fe/fe_tools.h>
@@ -56,27 +56,27 @@ namespace DOpE
             DOpEtypes::VectorStorageType control_behavior, DOpEtypes::VectorStorageType state_behavior, ParameterReader &param_reader,
             DOpEtypes::EETerms ee_terms = DOpEtypes::EETerms::mixed,
             DOpEtypes::ResidualEvaluation res_eval = DOpEtypes::strong_residual)
-            : DWRDataContainer<STH, IDC, EDC, FDC, VECTOR>(ee_terms), _sth_higher_order(
-                higher_order_sth), _idc_higher_order(higher_order_idc), _res_eval(res_eval), 
-	        _PI_h_u(NULL), _PI_h_z(NULL), _PI_h_q(NULL)
+            : DWRDataContainer<STH, IDC, EDC, FDC, VECTOR>(ee_terms), sth_higher_order_(
+                higher_order_sth), idc_higher_order_(higher_order_idc), res_eval_(res_eval), 
+	        PI_h_u_(NULL), PI_h_z_(NULL), PI_h_q_(NULL)
         {
           if (this->GetEETerms() == DOpEtypes::primal_only
               || this->GetEETerms() == DOpEtypes::mixed
 	      || this->GetEETerms() == DOpEtypes::mixed_control)
           {
-            _PI_h_z = new StateVector<VECTOR>(&GetHigherOrderSTH(),
+            PI_h_z_ = new StateVector<VECTOR>(&GetHigherOrderSTH(),
                 state_behavior, param_reader);
           }
           if (this->GetEETerms() == DOpEtypes::dual_only
               || this->GetEETerms() == DOpEtypes::mixed
 	      || this->GetEETerms() == DOpEtypes::mixed_control)
           {
-            _PI_h_u = new StateVector<VECTOR>(&GetHigherOrderSTH(),
+            PI_h_u_ = new StateVector<VECTOR>(&GetHigherOrderSTH(),
                 state_behavior, param_reader);
           }
 	  if (this->GetEETerms() == DOpEtypes::mixed_control)
 	  {
-	    _PI_h_q = new ControlVector<VECTOR>(&GetHigherOrderSTH(),
+	    PI_h_q_ = new ControlVector<VECTOR>(&GetHigherOrderSTH(),
 						control_behavior);
 	  }
         }
@@ -84,12 +84,12 @@ namespace DOpE
         virtual
         ~HigherOrderDWRContainerControl()
         {
-          if (_PI_h_z != NULL)
-            delete _PI_h_z;
-          if (_PI_h_u != NULL)
-            delete _PI_h_u;
-          if (_PI_h_q != NULL)
-            delete _PI_h_q;
+          if (PI_h_z_ != NULL)
+            delete PI_h_z_;
+          if (PI_h_u_ != NULL)
+            delete PI_h_u_;
+          if (PI_h_q_ != NULL)
+            delete PI_h_q_;
         }
 
         std::string
@@ -105,11 +105,11 @@ namespace DOpE
 		     unsigned int state_n_blocks,
 		     std::vector<unsigned int>& state_block_component)
           {
-            _sth = dynamic_cast<STH*>(sth);
-	    _control_n_blocks        =  control_n_blocks;
-            _control_block_component = &control_block_component;
-            _state_n_blocks        =  state_n_blocks;
-            _state_block_component = &state_block_component;
+            sth_ = dynamic_cast<STH*>(sth);
+	    control_n_blocks_        =  control_n_blocks;
+            control_block_component_ = &control_block_component;
+            state_n_blocks_        =  state_n_blocks;
+            state_block_component_ = &state_block_component;
           }
 
         /**
@@ -146,18 +146,18 @@ namespace DOpE
         StateVector<VECTOR>&
         GetPI_h_u()
         {
-          return *_PI_h_u;
+          return *PI_h_u_;
         }
 
         StateVector<VECTOR>&
         GetPI_h_z()
         {
-          return *_PI_h_z;
+          return *PI_h_z_;
         }
         ControlVector<VECTOR>&
         GetPI_h_q()
         {
-          return *_PI_h_q;
+          return *PI_h_q_;
         }
 
         /**
@@ -302,7 +302,7 @@ namespace DOpE
         GetResidualEvaluation() const
         {
 //          return DOpEtypes::strong_residual;
-          return _res_eval;
+          return res_eval_;
         }
 
         /**
@@ -324,46 +324,46 @@ namespace DOpE
         STH&
         GetSTH()
         {
-          return *_sth;
+          return *sth_;
         }
 
         STH&
         GetHigherOrderSTH()
         {
-          return _sth_higher_order;
+          return sth_higher_order_;
         }
 
         const STH&
         GetHigherOrderSTH() const
         {
-          return _sth_higher_order;
+          return sth_higher_order_;
         }
 
         IDC&
         GetHigherOrderIDC()
         {
-          return _idc_higher_order;
+          return idc_higher_order_;
         }
 
         const IDC&
         GetHigherOrderIDC() const
         {
-          return _idc_higher_order;
+          return idc_higher_order_;
         }
 
       private:
-        unsigned int _control_n_blocks, _state_n_blocks;
-        std::vector<unsigned int>* _control_block_component;
-	std::vector<unsigned int>* _state_block_component;
+        unsigned int control_n_blocks_, state_n_blocks_;
+        std::vector<unsigned int>* control_block_component_;
+	std::vector<unsigned int>* state_block_component_;
 
-        STH& _sth_higher_order;
-        STH* _sth;
-        IDC& _idc_higher_order;
+        STH& sth_higher_order_;
+        STH* sth_;
+        IDC& idc_higher_order_;
 
-        const DOpEtypes::ResidualEvaluation _res_eval;
+        const DOpEtypes::ResidualEvaluation res_eval_;
 
-        StateVector<VECTOR> * _PI_h_u, *_PI_h_z;
-	ControlVector<VECTOR> * _PI_h_q;
+        StateVector<VECTOR> * PI_h_u_, *PI_h_z_;
+	ControlVector<VECTOR> * PI_h_q_;
     };
 
   template<class STH, class IDC, class EDC, class FDC, typename VECTOR>
@@ -373,7 +373,7 @@ namespace DOpE
     {
       DWRDataContainer<STH, IDC, EDC, FDC, VECTOR>::ReInit(n_elements);
 
-      GetHigherOrderSTH().ReInit(_control_n_blocks, *_control_block_component, _state_n_blocks, *_state_block_component);
+      GetHigherOrderSTH().ReInit(control_n_blocks_, *control_block_component_, state_n_blocks_, *state_block_component_);
       if (this->GetEETerms() == DOpEtypes::primal_only
           || this->GetEETerms() == DOpEtypes::mixed
 	  || this->GetEETerms() == DOpEtypes::mixed_control)

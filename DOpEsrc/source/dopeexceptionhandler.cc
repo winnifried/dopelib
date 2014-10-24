@@ -38,7 +38,7 @@ namespace DOpE
 template<typename VECTOR>
 DOpEExceptionHandler<VECTOR>::DOpEExceptionHandler(DOpEOutputHandler<VECTOR>* OutputHandler)
 {
-  _OutputHandler = OutputHandler;
+  OutputHandler_ = OutputHandler;
 }
 
 /*******************************************************/

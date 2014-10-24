@@ -21,8 +21,8 @@
  *
  **/
 
-#ifndef _LOCALPDE_
-#define _LOCALPDE_
+#ifndef LOCALPDE_
+#define LOCALPDE_
 
 #include "pdeinterface.h"
 
@@ -38,7 +38,7 @@ template<
   {
     public:
       LocalPDE() :
-          _state_block_components(2, 0)
+          state_block_component_(2, 0)
       {
         assert(dealdim==2);
       }
@@ -48,18 +48,18 @@ template<
       ElementEquation(const EDC<DH, VECTOR, dealdim>& edc,
           dealii::Vector<double> &local_vector, double scale, double /*scale_ico*/)
       {
-        assert(this->_problem_type == "state");
+        assert(this->problem_type_ == "state");
 
         const DOpEWrapper::FEValues<dealdim> & state_fe_values =
             edc.GetFEValuesState();
         unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
         unsigned int n_q_points = edc.GetNQPoints();
 
-        _uvalues.resize(n_q_points, Vector<double>(2));
-        _ugrads.resize(n_q_points, vector<Tensor<1, 2> >(2));
+        uvalues_.resize(n_q_points, Vector<double>(2));
+        ugrads_.resize(n_q_points, vector<Tensor<1, 2> >(2));
 
-        edc.GetValuesState("last_newton_solution", _uvalues);
-        edc.GetGradsState("last_newton_solution", _ugrads);
+        edc.GetValuesState("last_newton_solution", uvalues_);
+        edc.GetGradsState("last_newton_solution", ugrads_);
 
         const FEValuesExtractors::Vector displacements(0);
 
@@ -74,10 +74,10 @@ template<
         {
           Tensor<2, 2> vgrads;
           vgrads.clear();
-          vgrads[0][0] = _ugrads[q_point][0][0];
-          vgrads[0][1] = _ugrads[q_point][0][1];
-          vgrads[1][0] = _ugrads[q_point][1][0];
-          vgrads[1][1] = _ugrads[q_point][1][1];
+          vgrads[0][0] = ugrads_[q_point][0][0];
+          vgrads[0][1] = ugrads_[q_point][0][1];
+          vgrads[1][0] = ugrads_[q_point][1][0];
+          vgrads[1][1] = ugrads_[q_point][1][1];
 
           Tensor<2, 2> realgrads;
           realgrads.clear();
@@ -104,7 +104,7 @@ template<
       ElementMatrix(const EDC<DH, VECTOR, dealdim>& edc,
           FullMatrix<double> &local_matrix, double scale, double /*scale_ico*/)
       {
-        assert(this->_problem_type == "state");
+        assert(this->problem_type_ == "state");
 
         const DOpEWrapper::FEValues<dealdim> & state_fe_values =
             edc.GetFEValuesState();
@@ -171,7 +171,7 @@ template<
           double /*scale_ico*/)
       {
 
-        assert(this->_problem_type == "state");
+        assert(this->problem_type_ == "state");
 
         const auto & state_fe_face_values = fdc.GetFEFaceValuesState();
         unsigned int n_dofs_per_element = fdc.GetNDoFsPerElement();
@@ -206,14 +206,14 @@ template<
           dealii::FullMatrix<double> &/*local_matrix*/, double /*scale*/,
           double/*scale_ico*/)
       {
-        assert(this->_problem_type == "state");
+        assert(this->problem_type_ == "state");
       }
 
       void
       BoundaryRightHandSide(const FDC<DH, VECTOR, dealdim>& /*fdc*/,
           dealii::Vector<double> &/*local_vector*/, double /*scale*/)
       {
-        assert(this->_problem_type == "state");
+        assert(this->problem_type_ == "state");
       }
 
       UpdateFlags
@@ -237,21 +237,21 @@ template<
       std::vector<unsigned int>&
       GetStateBlockComponent()
       {
-        return _state_block_components;
+        return state_block_component_;
       }
       const std::vector<unsigned int>&
       GetStateBlockComponent() const
       {
-        return _state_block_components;
+        return state_block_component_;
       }
 
     protected:
 
     private:
-      vector<Vector<double> > _uvalues;
+      vector<Vector<double> > uvalues_;
 
-      vector<vector<Tensor<1, dealdim> > > _ugrads;
+      vector<vector<Tensor<1, dealdim> > > ugrads_;
 
-      vector<unsigned int> _state_block_components;
+      vector<unsigned int> state_block_component_;
   };
 #endif

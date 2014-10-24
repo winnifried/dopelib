@@ -21,8 +21,8 @@
  *
  **/
 
-#ifndef _LOCAL_CONSTRAINT_H_
-#define _LOCAL_CONSTRAINT_H_
+#ifndef LOCAL_CONSTRAINT_H_
+#define LOCAL_CONSTRAINT_H_
 
 #include "constraintinterface.h"
 
@@ -42,9 +42,9 @@ namespace DOpE
       public:
         LocalConstraint() 
         {
-          _vol_max = 0.5;
-	  _rho_min = 1.e-4;
-	  _rho_max = 1.;
+          vol_max_ = 0.5;
+	  rho_min_ = 1.e-4;
+	  rho_max_ = 1.;
 
         }
         ~LocalConstraint()
@@ -54,7 +54,7 @@ namespace DOpE
 	void
 	  SetRhoMin(double val)
 	{
-	  _rho_min = val;
+	  rho_min_ = val;
 	}
 
         void
@@ -65,18 +65,18 @@ namespace DOpE
           assert(constraints.block(0).size() == 2*control.block(0).size());
 
 	  //Add Control Constraints, such that if control is feasible all  entries are not positive!
-	  // _rho_min <= control <= _rho_max
+	  // rho_min_ <= control <= rho_max_
 	  for (unsigned int i = 0; i < control.block(0).size(); i++)
 	  {
-	    constraints.block(0)(i) = _rho_min - control.block(0)(i);
-	    constraints.block(0)(control.block(0).size() + i) = control.block(0)(i) - _rho_max;
+	    constraints.block(0)(i) = rho_min_ - control.block(0)(i);
+	    constraints.block(0)(control.block(0).size() + i) = control.block(0)(i) - rho_max_;
 	  }
         }
         void
         GetControlBoxConstraints(VECTOR& lb, VECTOR& ub) const
         {
-	  lb = _rho_min;
-	  ub = _rho_max;
+	  lb = rho_min_;
+	  ub = rho_max_;
         }
 
         double
@@ -91,12 +91,12 @@ namespace DOpE
 
             double ret = 0.;
             {
-              _qvalues.resize(n_q_points, Vector<double>(1));
-              edc.GetValuesControl("control", _qvalues);
+              qvalues_.resize(n_q_points, Vector<double>(1));
+              edc.GetValuesControl("control", qvalues_);
             }
             for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
             {
-              ret += (_qvalues[q_point](0) - _vol_max)
+              ret += (qvalues_[q_point](0) - vol_max_)
                   * control_fe_values.JxW(q_point);
             }
             return ret;
@@ -194,8 +194,8 @@ namespace DOpE
         }
 	
       private:
-        double _vol_max, _rho_min, _rho_max;
-        std::vector<dealii::Vector<double> > _qvalues;
+        double vol_max_, rho_min_, rho_max_;
+        std::vector<dealii::Vector<double> > qvalues_;
 
     };
 }

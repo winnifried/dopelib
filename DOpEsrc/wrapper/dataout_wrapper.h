@@ -21,8 +21,8 @@
  *
  **/
 
-#ifndef _DOPE_DATAOUT_H_
-#define _DOPE_DATAOUT_H_
+#ifndef DOPE_DATAOUT_H_
+#define DOPE_DATAOUT_H_
 
 #include <numerics/data_out.h>
 #include <dofs/dof_handler.h>

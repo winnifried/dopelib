@@ -21,8 +21,8 @@
 *
 **/
 
-#ifndef _PRIMAL_TS_BASE_H_
-#define _PRIMAL_TS_BASE_H_
+#ifndef PRIMAL_TS_BASE_H_
+#define PRIMAL_TS_BASE_H_
 
 #include "ts_base.h"
 namespace DOpE

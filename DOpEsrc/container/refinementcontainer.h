@@ -21,8 +21,8 @@
  *
  **/
 
-#ifndef _REFINEMENTCONTAINER_H_
-#define _REFINEMENTCONTAINER_H_
+#ifndef REFINEMENTCONTAINER_H_
+#define REFINEMENTCONTAINER_H_
 
 #include <deal.II/lac/vector.h>
 #include "dopetypes.h"
@@ -84,10 +84,10 @@ namespace DOpE
       bool
       UsesCoarsening() const;
     protected:
-      bool _coarsening;
+      bool coarsening_;
     private:
-      const dealii::Vector<float> _dummy;
-      const DOpEtypes::RefinementType _ref_type;
+      const dealii::Vector<float> dummy_;
+      const DOpEtypes::RefinementType ref_type_;
 
   };
 
@@ -119,7 +119,7 @@ namespace DOpE
        * Constructor made private. Should not get used!
        */
       LocalRefinement();
-      const dealii::Vector<float>& _indicators;
+      const dealii::Vector<float>& indicators_;
   };
 
   /***************************************************************/
@@ -155,8 +155,8 @@ namespace DOpE
       virtual double
       GetBottomFraction() const;
     private:
-      const double _top_fraction, _bottom_fraction;
-      const unsigned int _max_n_elements;
+      const double top_fraction_, bottom_fraction_;
+      const unsigned int max_n_elements_;
   };
 
   /***************************************************************/
@@ -196,8 +196,8 @@ namespace DOpE
       GetBottomFraction() const;
 
     private:
-      const double _top_fraction, _bottom_fraction;
-      const unsigned int _max_n_elements;
+      const double top_fraction_, bottom_fraction_;
+      const unsigned int max_n_elements_;
   };
 
   /***************************************************************/
@@ -228,9 +228,9 @@ namespace DOpE
       GetConvergenceOrder() const;
 
     private:
-      const double _convergence_order;
+      const double convergence_order_;
   };
 
 }
 
-#endif /* _RefinementContainer_H_ */
+#endif /* RefinementContainer_H_ */

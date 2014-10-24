@@ -21,8 +21,8 @@
 *
 **/
 
-#ifndef _STATE_VECTOR_H_
-#define _STATE_VECTOR_H_
+#ifndef STATE_VECTOR_H_
+#define STATE_VECTOR_H_
 
 #include "spacetimehandler_base.h"
 #include "parameterreader.h"
@@ -173,7 +173,7 @@ class StateVector
 		 */
 		void UnLockCopy() const
 		{
-			_lock = false;
+			lock_ = false;
 		}
 		/**
 		 * This returns the behavior of the StateVector
@@ -189,14 +189,14 @@ class StateVector
 		 */
 		DOpEtypes::VectorStorageType GetBehavior() const
 		{
-			return _behavior;
+			return behavior_;
 		}
 		/**
 		 * @return               A const pointer to the SpaceTimeHandler associated with this vector.
 		 */
 		const SpaceTimeHandlerBase<VECTOR>* GetSpaceTimeHandler() const
 		{
-			return _STH;
+			return STH_;
 		}
 		/**
 		 * Call if the SpaceTimeHandler has changed to reinitialize vector sizes.
@@ -207,13 +207,13 @@ class StateVector
 	private:
 		struct SpatialVectorInfos
         {
-            int _size;
-            bool _on_disc;
+            int size_;
+            bool on_disc_;
 
             SpatialVectorInfos(int size = -1, bool on_disc = false)
             {
-              _size = size;
-              _on_disc = on_disc;
+              size_ = size;
+              on_disc_ = on_disc;
             }
             ;
         };
@@ -231,7 +231,7 @@ class StateVector
 		void MakeName(unsigned int time_point) const;
 		/**
 		 * Stores the BlockVector stored in *_state[1] on the Disc. The name of the file will be
-		 * createt by the function call 'MakeName(_local_state.at(1))'.
+		 * createt by the function call 'MakeName(local_state_.at(1))'.
 		 *
 		 */
 		void StoreOnDisc() const;
@@ -246,7 +246,7 @@ class StateVector
 		 */
 		void FetchFromDisc(unsigned int time_point, VECTOR & vector) const;
 		/**
-		 * This function checks if a file named '_filename' exists in _tmp_dir.
+		 * This function checks if a file named 'filename_' exists in tmp_dir_.
 		 *
 		 * @param time_point			The timepoint we are actually interested in.
 		 *
@@ -262,49 +262,49 @@ class StateVector
 
 		/**
 		 * Writes the vectors corresponding to the current interval
-		 * into _local_vectors, and adjusts _global_to_local;
+		 * into local_vectors_, and adjusts global_to_local_;
 		 */
 		void ComputeLocalVectors(const TimeIterator& interval) const;
 
 		/**
-		 * Helper function, resizes _local_vectors to the size given by size.
+		 * Helper function, resizes local_vectors_ to the size given by size.
 		 */
 		void ResizeLocalVectors(unsigned int size) const;
 
-		mutable std::vector<VECTOR*> _state;
-		mutable std::vector<SpatialVectorInfos> _state_information;
+		mutable std::vector<VECTOR*> state_;
+		mutable std::vector<SpatialVectorInfos> state_information_;
 
-		mutable VECTOR _local_state;
-		mutable dealii::Vector<double> _copy_state;
-		mutable int _accessor;
+		mutable VECTOR local_state_;
+		mutable dealii::Vector<double> copy_state_;
+		mutable int accessor_;
 
-		mutable bool _lock;
+		mutable bool lock_;
 
 		//Needed in the store_on_disc case for read/write operations on the hard disc
-		mutable std::string _filename;
-		mutable std::fstream _filestream;
+		mutable std::string filename_;
+		mutable std::fstream filestream_;
 
 		//Needed in the only_recent case to decide if the operation is allowed.
-		mutable unsigned int _current_dof_number;
+		mutable unsigned int current_dof_number_;
 		
 		//pointer to the dofs in the actual interval. Is only used if the interval is set!
-		mutable std::vector<VECTOR*> _local_vectors;
+		mutable std::vector<VECTOR*> local_vectors_;
 
 
 		//Map: global time dof index - local time DoF index
-		mutable std::map<unsigned int, unsigned int> _global_to_local;
+		mutable std::map<unsigned int, unsigned int> global_to_local_;
 		//the index of the interval, to which the vectors stored in local_vectors belong
-		mutable int _accessor_index;
+		mutable int accessor_index_;
 
-		DOpEtypes::VectorStorageType _behavior;
-		std::string _tmp_dir;
-		unsigned int _sfh_ticket;
+		DOpEtypes::VectorStorageType behavior_;
+		std::string tmp_dir_;
+		unsigned int sfh_ticket_;
 
-		const SpaceTimeHandlerBase<VECTOR>* _STH;
-		const unsigned int _unique_id;
+		const SpaceTimeHandlerBase<VECTOR>* STH_;
+		const unsigned int unique_id_;
 
-		static unsigned int _id_counter;
-		static unsigned int _num_active;
+		static unsigned int id_counter_;
+		static unsigned int num_active_;
 };
 
 }

@@ -21,8 +21,8 @@
 *
 **/
 
-#ifndef _SOLVER_INTERFACE_H_
-#define _SOLVER_INTERFACE_H_
+#ifndef SOLVER_INTERFACE_H_
+#define SOLVER_INTERFACE_H_
 
 #include "dopeexceptionhandler.h"
 #include "outputhandler.h"
@@ -54,8 +54,8 @@ namespace DOpE
       public:
         ReducedProblemInterface_Base()
         {
-          _ExceptionHandler = NULL;
-          _OutputHandler = NULL;
+          ExceptionHandler_ = NULL;
+          OutputHandler_ = NULL;
         }
 
         virtual
@@ -132,25 +132,25 @@ namespace DOpE
         void
         RegisterOutputHandler(DOpEOutputHandler<VECTOR>* OH)
         {
-          _OutputHandler = OH;
+          OutputHandler_ = OH;
         }
         void
         RegisterExceptionHandler(DOpEExceptionHandler<VECTOR>* OH)
         {
-          _ExceptionHandler = OH;
+          ExceptionHandler_ = OH;
         }
 
         DOpEExceptionHandler<VECTOR>*
         GetExceptionHandler()
         {
-          assert(_ExceptionHandler);
-          return _ExceptionHandler;
+          assert(ExceptionHandler_);
+          return ExceptionHandler_;
         }
         DOpEOutputHandler<VECTOR>*
         GetOutputHandler()
         {
-          assert(_OutputHandler);
-          return _OutputHandler;
+          assert(OutputHandler_);
+          return OutputHandler_;
         }
 
         /**
@@ -241,13 +241,13 @@ namespace DOpE
          */
         void AddUserDomainData(std::string name,const VECTOR* new_data)
         {
-          if (_user_domain_data.find(name) != _user_domain_data.end())
+          if (user_domain_data_.find(name) != user_domain_data_.end())
           {
             throw DOpEException(
                 "Adding multiple Data with name " + name + " is prohibited!",
                 "ReducedProblemInterface::AddUserDomainData");
           }
-          _user_domain_data.insert(
+          user_domain_data_.insert(
               std::pair<std::string, const VECTOR*>(name, new_data));
         }
 
@@ -260,18 +260,18 @@ namespace DOpE
             std::string name)
         {
           typename std::map<std::string, const VECTOR *>::iterator it =
-              _user_domain_data.find(name);
-          if (it == _user_domain_data.end())
+              user_domain_data_.find(name);
+          if (it == user_domain_data_.end())
           {
             throw DOpEException(
                 "Deleting Data " + name + " is impossible! Data not found",
                 "Integrator::DeleteDomainData");
           }
-          _user_domain_data.erase(it);
+          user_domain_data_.erase(it);
         }
       protected:
         /**
-         * Resets the _functional_values to their proper size.
+         * Resets the functional_values_ to their proper size.
          * 
          * @ param N            Number of functionals (aux + cost).
          */
@@ -288,19 +288,19 @@ namespace DOpE
         std::vector<std::vector<double> >&
         GetFunctionalValues()
         {
-          return _functional_values;
+          return functional_values_;
         }
 
         const std::vector<std::vector<double> >&
         GetFunctionalValues() const
         {
-          return _functional_values;
+          return functional_values_;
         }
 
         const std::map<std::string, const VECTOR*>&
         GetUserDomainData() const
         {
-          return _user_domain_data;
+          return user_domain_data_;
         }
 
         /**
@@ -308,9 +308,9 @@ namespace DOpE
          * like optproblem, pdeproblemcontainer etc.
          * It returns a map connecting the names of the
          * added functionals with their position in
-         * _functional_values. 
+         * functional_values_. 
          * If a cost functional is present, its values are always 
-         * stored in _functional_values[0]. Auxiliary functionals are stored after
+         * stored in functional_values_[0]. Auxiliary functionals are stored after
          * the cost functional (present or not!) in the order as they are added.
          */
         virtual const std::map<std::string, unsigned int>&
@@ -322,10 +322,10 @@ namespace DOpE
         ;
 
       private:
-        DOpEExceptionHandler<VECTOR>* _ExceptionHandler;
-        DOpEOutputHandler<VECTOR>* _OutputHandler;
-        std::vector<std::vector<double> > _functional_values;
-        std::map<std::string, const VECTOR*> _user_domain_data;
+        DOpEExceptionHandler<VECTOR>* ExceptionHandler_;
+        DOpEOutputHandler<VECTOR>* OutputHandler_;
+        std::vector<std::vector<double> > functional_values_;
+        std::map<std::string, const VECTOR*> user_domain_data_;
     };
 
   /**
@@ -339,9 +339,9 @@ namespace DOpE
         ReducedProblemInterface(PROBLEM *OP, int base_priority = 0)
             : ReducedProblemInterface_Base<VECTOR>()
         {
-          _OP = OP;
-          _base_priority = base_priority;
-          _post_index = "_" + this->GetProblem()->GetName();
+          OP_ = OP;
+          base_priority_ = base_priority;
+          post_index_ = "_" + this->GetProblem()->GetName();
         }
         ~ReducedProblemInterface()
         {
@@ -479,7 +479,7 @@ namespace DOpE
 
         /*****************************************************/
         /**
-         * Sets the type of the Problem _OP. This function secures the proper initialization of the
+         * Sets the type of the Problem OP_. This function secures the proper initialization of the
          * FEValues after the type has changed. See also the documentation of SetType in optproblemcontainer.h
          */
         void
@@ -490,13 +490,13 @@ namespace DOpE
         PROBLEM*
         GetProblem()
         {
-          return _OP;
+          return OP_;
         }
 
         const PROBLEM*
         GetProblem() const
         {
-          return _OP;
+          return OP_;
         }
         /**
          * Initializes the HigherOrderDWRDataContainer
@@ -521,17 +521,17 @@ namespace DOpE
         std::string
         GetPostIndex() const
         {
-          return _post_index;
+          return post_index_;
         }
         int
         GetBasePriority() const
         {
-          return _base_priority;
+          return base_priority_;
         }
       private:
-        PROBLEM* _OP;
-        int _base_priority;
-        std::string _post_index;
+        PROBLEM* OP_;
+        int base_priority_;
+        std::string post_index_;
     };
 
 }

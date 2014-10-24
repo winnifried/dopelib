@@ -21,8 +21,8 @@
 *
 **/
 
-#ifndef _PARAMETERREADER_h_
-#define _PARAMETERREADER_h_
+#ifndef PARAMETERREADER_h_
+#define PARAMETERREADER_h_
 
 #include <base/parameter_handler.h>
 
@@ -81,18 +81,18 @@ class ParameterReader : public Subscriptor
 
    private:
      ParameterHandler prm;
-     std::string _subsection;
+     std::string subsection_;
  };
 
 
   ParameterReader::ParameterReader()
   { 
-    _subsection = "";
+    subsection_ = "";
   }
 
 void ParameterReader::SetSubsection(const std::string subsection)
   {
-    _subsection = subsection;
+    subsection_ = subsection;
   }
 
 void ParameterReader::declare_entry(const std::string &entry, 
@@ -100,7 +100,7 @@ void ParameterReader::declare_entry(const std::string &entry,
 				    const Patterns::PatternBase &pattern, 
 				    const std::string &documentation)
 {
-  prm.enter_subsection (_subsection);
+  prm.enter_subsection (subsection_);
   {
     prm.declare_entry(entry,default_value,pattern,documentation);
   }
@@ -115,7 +115,7 @@ void ParameterReader::read_parameters (const std::string parameter_file)
 double ParameterReader::get_double (const std::string &entry_name) 
 {
   double ret;
-  prm.enter_subsection(_subsection);
+  prm.enter_subsection(subsection_);
   {
     ret = prm.get_double(entry_name);
   }
@@ -126,7 +126,7 @@ double ParameterReader::get_double (const std::string &entry_name)
 int ParameterReader::get_integer (const std::string &entry_name)
 {
   int ret;
-  prm.enter_subsection(_subsection);
+  prm.enter_subsection(subsection_);
   {
     ret = prm.get_integer(entry_name);
   }
@@ -137,7 +137,7 @@ int ParameterReader::get_integer (const std::string &entry_name)
  std::string ParameterReader::get_string (const std::string &entry_name)
 {
   std::string ret;
-  prm.enter_subsection(_subsection);
+  prm.enter_subsection(subsection_);
   {
     ret = prm.get(entry_name);
   }
@@ -148,7 +148,7 @@ int ParameterReader::get_integer (const std::string &entry_name)
 bool ParameterReader::get_bool(const std::string &entry_name)
 {
   bool ret;
-  prm.enter_subsection(_subsection);
+  prm.enter_subsection(subsection_);
   {
     ret = prm.get_bool(entry_name);
   }

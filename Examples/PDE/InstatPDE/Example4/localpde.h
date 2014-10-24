@@ -21,8 +21,8 @@
  *
  **/
 
-#ifndef _LOCALPDE_
-#define _LOCALPDE_
+#ifndef LOCALPDE_
+#define LOCALPDE_
 
 #include "pdeinterface.h"
 
@@ -39,7 +39,7 @@ template<
     public:
 
       LocalPDE() :
-          _state_block_components(1, 0)
+          state_block_component_(1, 0)
       {
 
       }
@@ -50,18 +50,18 @@ template<
           dealii::Vector<double> &local_vector, double scale,
           double /*scale_ico*/)
       {
-        assert(this->_problem_type == "state");
+        assert(this->problem_type_ == "state");
 
         const DOpEWrapper::FEValues<dealdim> & state_fe_values =
             edc.GetFEValuesState();
         unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
         unsigned int n_q_points = edc.GetNQPoints();
 
-        _uvalues.resize(n_q_points);
-        _ugrads.resize(n_q_points);
+        uvalues_.resize(n_q_points);
+        ugrads_.resize(n_q_points);
 
-        edc.GetValuesState("last_newton_solution", _uvalues);
-        edc.GetGradsState("last_newton_solution", _ugrads);
+        edc.GetValuesState("last_newton_solution", uvalues_);
+        edc.GetGradsState("last_newton_solution", ugrads_);
 
         for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
         {
@@ -71,7 +71,7 @@ template<
             const Tensor<1, dealdim> phi_i_grads = state_fe_values.shape_grad(i,
                 q_point);
 
-            local_vector(i) += scale * (_ugrads[q_point] * phi_i_grads)
+            local_vector(i) += scale * (ugrads_[q_point] * phi_i_grads)
                 * state_fe_values.JxW(q_point);
 
           }
@@ -112,7 +112,7 @@ template<
 			dealii::Vector<double> & /*local_vector*/,
 			double /*scale*/)
       {
-        assert(this->_problem_type == "state");
+        assert(this->problem_type_ == "state");
 
       }
 
@@ -121,7 +121,7 @@ template<
 			       dealii::Vector<double> & /*local_vector*/,
 			       double /*scale*/)
       {
-        assert(this->_problem_type == "state");
+        assert(this->problem_type_ == "state");
       }
 
       void
@@ -129,16 +129,16 @@ template<
 		       dealii::Vector<double> & local_vector,
 		       double scale)
       {
-        assert(this->_problem_type == "state");
+        assert(this->problem_type_ == "state");
 
         const DOpEWrapper::FEValues<dealdim> & state_fe_values =
             edc.GetFEValuesState();
         unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
         unsigned int n_q_points = edc.GetNQPoints();
 
-        _uvalues.resize(n_q_points);
+        uvalues_.resize(n_q_points);
 
-        edc.GetValuesState("last_newton_solution", _uvalues);
+        edc.GetValuesState("last_newton_solution", uvalues_);
 
         for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
         {
@@ -146,7 +146,7 @@ template<
           for (unsigned int i = 0; i < n_dofs_per_element; i++)
           {
             const double phi_i = state_fe_values.shape_value(i, q_point);
-            local_vector(i) += scale * (_uvalues[q_point] * phi_i)
+            local_vector(i) += scale * (uvalues_[q_point] * phi_i)
                 * state_fe_values.JxW(q_point);
           }
         }
@@ -156,14 +156,14 @@ template<
       ElementTimeMatrixExplicit(const EDC<DH, VECTOR, dealdim>& /*edc*/,
 			     FullMatrix<double> &/*local_matrix*/)
       {
-        assert(this->_problem_type == "state");
+        assert(this->problem_type_ == "state");
       }
 
       void
       ElementTimeMatrix(const EDC<DH, VECTOR, dealdim>& edc,
 		     FullMatrix<double> &local_matrix)
       {
-        assert(this->_problem_type == "state");
+        assert(this->problem_type_ == "state");
 
         const DOpEWrapper::FEValues<dealdim> & state_fe_values =
             edc.GetFEValuesState();
@@ -194,21 +194,21 @@ template<
       UpdateFlags
       GetUpdateFlags() const
       {
-        if (this->_problem_type == "state")
+        if (this->problem_type_ == "state")
           return update_values | update_gradients | update_quadrature_points;
         else
-          throw DOpEException("Unknown Problem Type " + this->_problem_type,
+          throw DOpEException("Unknown Problem Type " + this->problem_type_,
               "LocalPDE::GetUpdateFlags");
       }
 
       UpdateFlags
       GetFaceUpdateFlags() const
       {
-        if (this->_problem_type == "state")
+        if (this->problem_type_ == "state")
           return update_values | update_gradients | update_normal_vectors
               | update_quadrature_points;
         else
-          throw DOpEException("Unknown Problem Type " + this->_problem_type,
+          throw DOpEException("Unknown Problem Type " + this->problem_type_,
               "LocalPDE::GetUpdateFlags");
       }
 
@@ -227,32 +227,32 @@ template<
       std::vector<unsigned int>&
       GetControlBlockComponent()
       {
-        return _block_components;
+        return control_block_component_;
       }
       const std::vector<unsigned int>&
       GetControlBlockComponent() const
       {
-        return _block_components;
+        return control_block_component_;
       }
       std::vector<unsigned int>&
       GetStateBlockComponent()
       {
-        return _state_block_components;
+        return state_block_component_;
       }
       const std::vector<unsigned int>&
       GetStateBlockComponent() const
       {
-        return _state_block_components;
+        return state_block_component_;
       }
 
     private:
-      vector<double> _fvalues;
-      vector<double> _uvalues;
+      vector<double> fvalues_;
+      vector<double> uvalues_;
 
-      vector<Tensor<1, dealdim> > _ugrads;
+      vector<Tensor<1, dealdim> > ugrads_;
 
-      vector<unsigned int> _state_block_components;
-      vector<unsigned int> _block_components;
+      vector<unsigned int> state_block_component_;
+      vector<unsigned int> control_block_component_;
 
   };
 #endif

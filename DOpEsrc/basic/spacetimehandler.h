@@ -21,8 +21,8 @@
  *
  **/
 
-#ifndef _SPACE_TIME_HANDLER_H_
-#define _SPACE_TIME_HANDLER_H_
+#ifndef SPACE_TIME_HANDLER_H_
+#define SPACE_TIME_HANDLER_H_
 
 #include "spacetimehandler_base.h"
 #include "active_fe_index_setter_interface.h"
@@ -72,32 +72,32 @@ namespace DOpE
     {
       public:
         SpaceTimeHandler(DOpEtypes::ControlType type) :
-            SpaceTimeHandlerBase<VECTOR>(type), _control_index(
-                dealii::numbers::invalid_unsigned_int), _state_index(
+            SpaceTimeHandlerBase<VECTOR>(type), control_index_(
+                dealii::numbers::invalid_unsigned_int), state_index_(
                 dealii::numbers::invalid_unsigned_int)
         {
         }
         SpaceTimeHandler(dealii::Triangulation<1> & times,
             DOpEtypes::ControlType type) :
-            SpaceTimeHandlerBase<VECTOR>(times, type), _control_index(
-                dealii::numbers::invalid_unsigned_int), _state_index(
+            SpaceTimeHandlerBase<VECTOR>(times, type), control_index_(
+                dealii::numbers::invalid_unsigned_int), state_index_(
                 dealii::numbers::invalid_unsigned_int)
         {
         }
         SpaceTimeHandler(DOpEtypes::ControlType type,
             const ActiveFEIndexSetterInterface<dopedim, dealdim>& index_setter) :
-            SpaceTimeHandlerBase<VECTOR>(type), _control_index(
-                dealii::numbers::invalid_unsigned_int), _state_index(
-                dealii::numbers::invalid_unsigned_int), _fe_index_setter(
+            SpaceTimeHandlerBase<VECTOR>(type), control_index_(
+                dealii::numbers::invalid_unsigned_int), state_index_(
+                dealii::numbers::invalid_unsigned_int), fe_index_setter_(
                 &index_setter)
         {
         }
         SpaceTimeHandler(dealii::Triangulation<1> & times,
             DOpEtypes::ControlType type,
             const ActiveFEIndexSetterInterface<dopedim, dealdim>& index_setter) :
-            SpaceTimeHandlerBase<VECTOR>(times, type), _control_index(
-                dealii::numbers::invalid_unsigned_int), _state_index(
-                dealii::numbers::invalid_unsigned_int), _fe_index_setter(
+            SpaceTimeHandlerBase<VECTOR>(times, type), control_index_(
+                dealii::numbers::invalid_unsigned_int), state_index_(
+                dealii::numbers::invalid_unsigned_int), fe_index_setter_(
                 &index_setter)
         {
         }
@@ -154,15 +154,15 @@ namespace DOpE
         const std::vector<const DOpEWrapper::DoFHandler<dealdim, DH>*>&
         GetDoFHandler() const
         {
-          assert(_state_index != dealii::numbers::invalid_unsigned_int);
+          assert(state_index_ != dealii::numbers::invalid_unsigned_int);
 #if dope_dimension > 0
-          assert(_control_index != dealii::numbers::invalid_unsigned_int);
-          _domain_dofhandler_vector[_control_index] = &GetControlDoFHandler();
-          _domain_dofhandler_vector[_state_index] = &GetStateDoFHandler();
+          assert(control_index_ != dealii::numbers::invalid_unsigned_int);
+          domain_dofhandler_vector_[control_index_] = &GetControlDoFHandler();
+          domain_dofhandler_vector_[state_index_] = &GetStateDoFHandler();
 #else
-          _domain_dofhandler_vector[_state_index] = &GetStateDoFHandler();
+          domain_dofhandler_vector_[state_index_] = &GetStateDoFHandler();
 #endif
-          return _domain_dofhandler_vector;
+          return domain_dofhandler_vector_;
         }
 
         /******************************************************/
@@ -270,24 +270,24 @@ namespace DOpE
         SetDoFHandlerOrdering(unsigned int control_index,
             unsigned int state_index)
         {
-          _control_index = control_index;
-          _state_index = state_index;
+          control_index_ = control_index;
+          state_index_ = state_index;
 #if dope_dimension > 0
           {
-            assert(( _control_index ==0 && _state_index ==1 )||( _control_index ==1 && _state_index ==0 ));
-            _domain_dofhandler_vector.clear();
-            if(_domain_dofhandler_vector.size() != 2)
+            assert(( control_index_ ==0 && state_index_ ==1 )||( control_index_ ==1 && state_index_ ==0 ));
+            domain_dofhandler_vector_.clear();
+            if(domain_dofhandler_vector_.size() != 2)
             {
-              _domain_dofhandler_vector.resize(2,NULL);
+              domain_dofhandler_vector_.resize(2,NULL);
             }
           }
 #else
           {
-            assert(_state_index == 0);
-            _domain_dofhandler_vector.clear();
-            if (_domain_dofhandler_vector.size() != 1)
+            assert(state_index_ == 0);
+            domain_dofhandler_vector_.clear();
+            if (domain_dofhandler_vector_.size() != 1)
             {
-              _domain_dofhandler_vector.resize(1, NULL);
+              domain_dofhandler_vector_.resize(1, NULL);
             }
           }
 #endif
@@ -301,7 +301,7 @@ namespace DOpE
         unsigned int
         GetStateIndex()
         {
-          return _state_index;
+          return state_index_;
         }
 
         /******************************************************/
@@ -313,7 +313,7 @@ namespace DOpE
         GetFEIndexSetter() const
         {
           //makes only sense in the hp case.
-          return *_fe_index_setter;
+          return *fe_index_setter_;
         }
 
         /******************************************************/
@@ -495,8 +495,8 @@ namespace DOpE
         DOpEWrapper::DataOut<dealdim, DH>&
         GetDataOut()
         {
-          _data_out.clear();
-          return _data_out;
+          data_out_.clear();
+          return data_out_;
         }
 
         /******************************************************/
@@ -504,10 +504,10 @@ namespace DOpE
       protected:
         //we need this here, because we know the type of the DoFHandler in use.
         //This saves us a template argument for statpdeproblem etc.
-        DOpEWrapper::DataOut<dealdim, DH> _data_out;
-        unsigned int _control_index, _state_index;
-        const ActiveFEIndexSetterInterface<dopedim, dealdim>* _fe_index_setter;
-        mutable std::vector<const DOpEWrapper::DoFHandler<dealdim, DH>*> _domain_dofhandler_vector;
+        DOpEWrapper::DataOut<dealdim, DH> data_out_;
+        unsigned int control_index_, state_index_;
+        const ActiveFEIndexSetterInterface<dopedim, dealdim>* fe_index_setter_;
+        mutable std::vector<const DOpEWrapper::DoFHandler<dealdim, DH>*> domain_dofhandler_vector_;
         //TODO What if control and state have different dofhandlertypes??
 
     };

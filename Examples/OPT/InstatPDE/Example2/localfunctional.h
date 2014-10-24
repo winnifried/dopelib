@@ -21,8 +21,8 @@
  *
  **/
 
-#ifndef _LOCALFunctional_
-#define _LOCALFunctional_
+#ifndef LOCALFunctional_
+#define LOCALFunctional_
 
 //#include "pdeinterface.h"
 #include "functionalinterface.h"
@@ -40,7 +40,7 @@ template<
   {
     public:
       LocalFunctional() :
-          _time(0)
+          time_(0)
       {
       }
 
@@ -48,15 +48,15 @@ template<
       void
       SetTime(double t) const
       {
-        _time = t;
+        time_ = t;
       }
 
       bool
       NeedTime() const
       {
-        if (fabs(_time - 1.0) < 1.e-13)
+        if (fabs(time_ - 1.0) < 1.e-13)
           return true;
-        if (fabs(_time) < 1.e-13)
+        if (fabs(time_) < 1.e-13)
           return true;
         return false;
       }
@@ -66,38 +66,38 @@ template<
       {
         unsigned int n_q_points = edc.GetNQPoints();
         double ret = 0.;
-        if (fabs(_time - 1.0) < 1.e-13)
+        if (fabs(time_ - 1.0) < 1.e-13)
         {
           const DOpEWrapper::FEValues<dealdim> & state_fe_values =
               edc.GetFEValuesState();
           //endtimevalue
-          _fvalues.resize(n_q_points);
-          _uvalues.resize(n_q_points);
+          fvalues_.resize(n_q_points);
+          uvalues_.resize(n_q_points);
 
-          edc.GetValuesState("state", _uvalues);
+          edc.GetValuesState("state", uvalues_);
 
           for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
           {
-            _fvalues[q_point] =  ud(state_fe_values.quadrature_point(q_point));
+            fvalues_[q_point] =  ud(state_fe_values.quadrature_point(q_point));
 
-            ret += 0.5 * (_uvalues[q_point] - _fvalues[q_point])
-                * (_uvalues[q_point] - _fvalues[q_point])
+            ret += 0.5 * (uvalues_[q_point] - fvalues_[q_point])
+                * (uvalues_[q_point] - fvalues_[q_point])
                 * state_fe_values.JxW(q_point);
           }
           return ret;
         }
-        if (fabs(_time) < 1.e-13)
+        if (fabs(time_) < 1.e-13)
         {
           const DOpEWrapper::FEValues<dealdim> & state_fe_values =
               edc.GetFEValuesControl();
           //initialvalue
-          _qvalues.resize(n_q_points);
-          edc.GetValuesControl("control", _qvalues);
+          qvalues_.resize(n_q_points);
+          edc.GetValuesControl("control", qvalues_);
 
           for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
           {
-            ret += 0.5 * (_qvalues[q_point] 
-                * _qvalues[q_point])
+            ret += 0.5 * (qvalues_[q_point] 
+                * qvalues_[q_point])
                 * state_fe_values.JxW(q_point);
           }
           return ret;
@@ -114,22 +114,22 @@ template<
             edc.GetFEValuesState();
         unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
         unsigned int n_q_points = edc.GetNQPoints();
-        if (fabs(_time - 1.0) < 1.e-13)
+        if (fabs(time_ - 1.0) < 1.e-13)
         {
           //endtimevalue
-          _fvalues.resize(n_q_points);
-          _uvalues.resize(n_q_points);
+          fvalues_.resize(n_q_points);
+          uvalues_.resize(n_q_points);
 
-          edc.GetValuesState("state", _uvalues);
+          edc.GetValuesState("state", uvalues_);
 
           for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
           {
-            _fvalues[q_point] = ud(state_fe_values.quadrature_point(q_point));
+            fvalues_[q_point] = ud(state_fe_values.quadrature_point(q_point));
 
             for (unsigned int i = 0; i < n_dofs_per_element; i++)
             {
               local_vector(i) += scale
-                  * (_uvalues[q_point] - _fvalues[q_point])
+                  * (uvalues_[q_point] - fvalues_[q_point])
                   * state_fe_values.shape_value(i, q_point)
                   * state_fe_values.JxW(q_point);
             }
@@ -146,19 +146,19 @@ template<
         unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
         unsigned int n_q_points = edc.GetNQPoints();
 
-        if (fabs(_time) < 1.e-13)
+        if (fabs(time_) < 1.e-13)
         {
           //endtimevalue
-          _qvalues.resize(n_q_points);
+          qvalues_.resize(n_q_points);
 
-          edc.GetValuesControl("control", _qvalues);
+          edc.GetValuesControl("control", qvalues_);
 
           for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
           {
 	    for (unsigned int i = 0; i < n_dofs_per_element; i++)
             {
               local_vector(i) += scale
-                  * _qvalues[q_point]
+                  * qvalues_[q_point]
                   * state_fe_values.shape_value(i, q_point)
                   * state_fe_values.JxW(q_point);
             }
@@ -175,18 +175,18 @@ template<
         unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
         unsigned int n_q_points = edc.GetNQPoints();
 
-        if (fabs(_time - 1.0) < 1.e-13)
+        if (fabs(time_ - 1.0) < 1.e-13)
         {
           //endtimevalue
-          _duvalues.resize(n_q_points);
+          duvalues_.resize(n_q_points);
 
-          edc.GetValuesState("tangent", _duvalues);
+          edc.GetValuesState("tangent", duvalues_);
 
           for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
           {
             for (unsigned int i = 0; i < n_dofs_per_element; i++)
             {
-              local_vector(i) += scale * _duvalues[q_point]
+              local_vector(i) += scale * duvalues_[q_point]
                   * state_fe_values.shape_value(i, q_point)
                   * state_fe_values.JxW(q_point);
             }
@@ -215,17 +215,17 @@ template<
         unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
         unsigned int n_q_points = edc.GetNQPoints();
 
-        if (fabs(_time) < 1.e-13)
+        if (fabs(time_) < 1.e-13)
         {
-          _dqvalues.resize(n_q_points);
+          dqvalues_.resize(n_q_points);
 
-          edc.GetValuesControl("dq", _dqvalues);
+          edc.GetValuesControl("dq", dqvalues_);
 
           for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
           {
             for (unsigned int i = 0; i < n_dofs_per_element; i++)
             {
-              local_vector(i) += scale * _dqvalues[q_point]
+              local_vector(i) += scale * dqvalues_[q_point]
                   * state_fe_values.shape_value(i, q_point)
                   * state_fe_values.JxW(q_point);
             }
@@ -252,18 +252,18 @@ template<
       }
 
     private:
-      vector<double> _qvalues;
-      vector<double> _fvalues;
-      vector<double> _uvalues;
-      vector<double> _duvalues;
-      vector<double> _dqvalues;
+      vector<double> qvalues_;
+      vector<double> fvalues_;
+      vector<double> uvalues_;
+      vector<double> duvalues_;
+      vector<double> dqvalues_;
 
       inline double ud(const dealii::Point<2>& p) const
       {
 	return (2.*exp(2.)-1.)/(exp(2.)-1.)*sin(p(0)) * sin(p(1));
       }
 
-      mutable double _time;
+      mutable double time_;
 
   };
 #endif

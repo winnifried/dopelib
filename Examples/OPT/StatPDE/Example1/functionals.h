@@ -21,8 +21,8 @@
  *
  **/
 
-#ifndef _LOCALFunctionalS_
-#define _LOCALFunctionalS_
+#ifndef LOCALFunctionalS_
+#define LOCALFunctionalS_
 
 #include "functionalinterface.h"
 
@@ -50,14 +50,14 @@ template<
             edc.GetFEValuesState();
         unsigned int n_q_points = edc.GetNQPoints();
         {
-          _uvalues.resize(n_q_points);
-          edc.GetValuesState("state", _uvalues);
+          uvalues_.resize(n_q_points);
+          edc.GetValuesState("state", uvalues_);
         }
 
         double r = 0.;
         for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
         {
-          r += fabs(_uvalues[q_point]) * state_fe_values.JxW(q_point);
+          r += fabs(uvalues_[q_point]) * state_fe_values.JxW(q_point);
         }
         return r;
       }
@@ -80,7 +80,7 @@ template<
       }
 
     private:
-      vector<double> _uvalues;
+      vector<double> uvalues_;
   };
 
 /****************************************************************************************/

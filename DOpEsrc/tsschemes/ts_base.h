@@ -21,8 +21,8 @@
 *
 **/
 
-#ifndef _TSBase_H_
-#define _TSBase_H_
+#ifndef TSBase_H_
+#define TSBase_H_
 
 #include "lac/vector.h"
 
@@ -51,7 +51,7 @@ namespace DOpE
     {
       public:
         TSBase(OPTPROBLEM& OP) :
-            _OP(OP)
+            OP_(OP)
         {
         }
         ;
@@ -70,7 +70,7 @@ namespace DOpE
         void
         SetStepPart(std::string s)
         {
-          _part = s;
+          part_ = s;
         }
 
         /******************************************************/
@@ -87,26 +87,26 @@ namespace DOpE
         void
         SetTime(double time, const TimeIterator& interval, bool initial = false)
         {
-          _OP.SetTime(time, interval,initial);
+          OP_.SetTime(time, interval,initial);
         }
 
         /******************************************************/
 
         /**
-         * Returns just _OP.ElementFunctional(...). For more information we refer to
+         * Returns just OP_.ElementFunctional(...). For more information we refer to
          * the file optproblemcontainer.h
          */
         template<typename DATACONTAINER>
           double
           ElementFunctional(const DATACONTAINER& dc)
           {
-            return _OP.ElementFunctional(dc);
+            return OP_.ElementFunctional(dc);
           }
 
         /******************************************************/
 
         /**
-         *  Returns just _OP.PointFunctional(...). For more information we refer to
+         *  Returns just OP_.PointFunctional(...). For more information we refer to
          * the file optproblemcontainer.h
          */
 
@@ -115,33 +115,33 @@ namespace DOpE
             const std::map<std::string, const dealii::Vector<double>*> &param_values,
             const std::map<std::string, const VECTOR*> &domain_values)
         {
-          return _OP.PointFunctional(param_values, domain_values);
+          return OP_.PointFunctional(param_values, domain_values);
         }
 
         /******************************************************/
 
         /**
-         * Not implemented so far. Returns just _OP.BoundaryFunctional(...). For more information we refer to
+         * Not implemented so far. Returns just OP_.BoundaryFunctional(...). For more information we refer to
          * the file optproblemcontainer.h
          */
         template<typename FACEDATACONTAINER>
           double
           BoundaryFunctional(const FACEDATACONTAINER& fdc)
           {
-            return _OP.BoundaryFunctional(fdc);
+            return OP_.BoundaryFunctional(fdc);
           }
 
         /******************************************************/
 
         /**
-         * Not implemented so far. Returns just _OP.FaceFunctional(...). For more information we refer to
+         * Not implemented so far. Returns just OP_.FaceFunctional(...). For more information we refer to
          * the file optproblemcontainer.h
          */
         template<typename FACEDATACONTAINER>
           double
           FaceFunctional(const FACEDATACONTAINER& fdc)
           {
-            return _OP.FaceFunctional(fdc);
+            return OP_.FaceFunctional(fdc);
           }
 
         /******************************************************/
@@ -154,7 +154,7 @@ namespace DOpE
       const dealii::SmartPointer<const dealii::FESystem<dealdim> >
         GetFESystem() const
         {
-          return _OP.GetFESystem();
+          return OP_.GetFESystem();
         }
 
         /******************************************************/
@@ -168,7 +168,7 @@ namespace DOpE
         bool
         HasFaces() const
         {
-          return _OP.HasFaces();
+          return OP_.HasFaces();
         }
 
         /******************************************************/
@@ -178,7 +178,7 @@ namespace DOpE
         bool
         HasPoints() const
         {
-          return _OP.HasPoints();
+          return OP_.HasPoints();
         }
 
         /******************************************************/
@@ -191,7 +191,7 @@ namespace DOpE
         bool
         HasInterfaces() const
         {
-          return _OP.HasInterfaces();
+          return OP_.HasInterfaces();
         }
 
         /******************************************************/
@@ -207,7 +207,7 @@ namespace DOpE
         dealii::UpdateFlags
         GetUpdateFlags() const
         {
-          return _OP.GetUpdateFlags();
+          return OP_.GetUpdateFlags();
         }
 
         /******************************************************/
@@ -224,7 +224,7 @@ namespace DOpE
         dealii::UpdateFlags
         GetFaceUpdateFlags() const
         {
-          return _OP.GetFaceUpdateFlags();
+          return OP_.GetFaceUpdateFlags();
         }
 
         /******************************************************/
@@ -237,7 +237,7 @@ namespace DOpE
         const std::vector<unsigned int>&
         GetDirichletColors() const
         {
-          return _OP.GetDirichletColors();
+          return OP_.GetDirichletColors();
         }
 
         /******************************************************/
@@ -251,7 +251,7 @@ namespace DOpE
         const std::vector<bool>&
         GetDirichletCompMask(unsigned int color) const
         {
-          return _OP.GetDirichletCompMask(color);
+          return OP_.GetDirichletCompMask(color);
         }
 
         /******************************************************/
@@ -267,7 +267,7 @@ namespace DOpE
             const std::map<std::string, const dealii::Vector<double>*> &param_values,
             const std::map<std::string, const VECTOR*> &domain_values) const
         {
-          return _OP.GetDirichletValues(color, param_values, domain_values);
+          return OP_.GetDirichletValues(color, param_values, domain_values);
         }
 
         /******************************************************/
@@ -281,7 +281,7 @@ namespace DOpE
         const dealii::Function<dealdim>&
         GetInitialValues() const
         {
-          return _OP.GetInitialValues();
+          return OP_.GetInitialValues();
         }
 
         /******************************************************/
@@ -294,7 +294,7 @@ namespace DOpE
         const std::vector<unsigned int>&
         GetBoundaryEquationColors() const
         {
-          return _OP.GetBoundaryEquationColors();
+          return OP_.GetBoundaryEquationColors();
         }
 
         /******************************************************/
@@ -307,7 +307,7 @@ namespace DOpE
         const std::vector<unsigned int>&
         GetBoundaryFunctionalColors() const
         {
-          return _OP.GetBoundaryFunctionalColors();
+          return OP_.GetBoundaryFunctionalColors();
         }
 
         /******************************************************/
@@ -320,7 +320,7 @@ namespace DOpE
         unsigned int
         GetNFunctionals() const
         {
-          return _OP.GetNFunctionals();
+          return OP_.GetNFunctionals();
         }
 
         /******************************************************/
@@ -333,7 +333,7 @@ namespace DOpE
         unsigned int
         GetNBlocks() const
         {
-          return _OP.GetNBlocks();
+          return OP_.GetNBlocks();
         }
 
         /******************************************************/
@@ -346,7 +346,7 @@ namespace DOpE
         unsigned int
         GetDoFsPerBlock(unsigned int b) const
         {
-          return _OP.GetDoFsPerBlock(b);
+          return OP_.GetDoFsPerBlock(b);
         }
 
         /******************************************************/
@@ -359,7 +359,7 @@ namespace DOpE
         const std::vector<unsigned int>&
         GetDoFsPerBlock() const
         {
-          return _OP.GetDoFsPerBlock();
+          return OP_.GetDoFsPerBlock();
         }
 
         /******************************************************/
@@ -372,18 +372,18 @@ namespace DOpE
         const dealii::ConstraintMatrix&
         GetDoFConstraints() const
         {
-          return _OP.GetDoFConstraints();
+          return OP_.GetDoFConstraints();
         }
 
         std::string
         GetType() const
         {
-          return _OP.GetType();
+          return OP_.GetType();
         }
         std::string
         GetDoFType() const
         {
-          return _OP.GetDoFType();
+          return OP_.GetDoFType();
         }
 
         /******************************************************/
@@ -402,7 +402,7 @@ namespace DOpE
         std::string
         GetFunctionalType() const
         {
-          return _OP.GetFunctionalType();
+          return OP_.GetFunctionalType();
         }
 
         /******************************************************/
@@ -415,7 +415,7 @@ namespace DOpE
         std::string
         GetFunctionalName() const
         {
-          return _OP.GetFunctionalName();
+          return OP_.GetFunctionalName();
         }
 
         /******************************************************/
@@ -428,7 +428,7 @@ namespace DOpE
         DOpEOutputHandler<VECTOR>*
         GetOutputHandler()
         {
-          return _OP.GetOutputHandler();
+          return OP_.GetOutputHandler();
         }
 
         /******************************************************/
@@ -442,13 +442,13 @@ namespace DOpE
             dealdim>*
         GetSpaceTimeHandler() const
         {
-          return _OP.GetBaseProblem().GetSpaceTimeHandler();
+          return OP_.GetBaseProblem().GetSpaceTimeHandler();
         }
         SpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dopedim,
             dealdim>*
         GetSpaceTimeHandler()
         {
-          return _OP.GetBaseProblem().GetSpaceTimeHandler();
+          return OP_.GetBaseProblem().GetSpaceTimeHandler();
         }
 
         /******************************************************/
@@ -456,7 +456,7 @@ namespace DOpE
         void
         ComputeSparsityPattern(SPARSITYPATTERN & sparsity) const
         {
-          _OP.ComputeSparsityPattern(sparsity);
+          OP_.ComputeSparsityPattern(sparsity);
         }
       protected:
         /******************************************************/
@@ -466,7 +466,7 @@ namespace DOpE
         OPTPROBLEM&
         GetProblem()
         {
-          return _OP;
+          return OP_;
         }
         /******************************************************/
 
@@ -479,12 +479,12 @@ namespace DOpE
         std::string
         GetPart() const
         {
-          return _part;
+          return part_;
         }
 
       private:
-        OPTPROBLEM& _OP;
-        std::string _part;
+        OPTPROBLEM& OP_;
+        std::string part_;
     };
 }
 #endif

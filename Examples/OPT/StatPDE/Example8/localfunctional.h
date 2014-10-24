@@ -21,8 +21,8 @@
  *
  **/
 
-#ifndef _LOCALFunctional_
-#define _LOCALFunctional_
+#ifndef LOCALFunctional_
+#define LOCALFunctional_
 
 #include "functionalinterface.h"
 #include "myfunctions.h"
@@ -50,10 +50,10 @@ template<
         unsigned int color = fdc.GetBoundaryIndicator();
         {
           //Reading data
-          _uvalues.resize(n_q_points, Vector<double>(2));
+          uvalues_.resize(n_q_points, Vector<double>(2));
 
-          fdc.GetFaceValuesState("state", _uvalues);
-          _fvalues.resize(2);
+          fdc.GetFaceValuesState("state", uvalues_);
+          fvalues_.resize(2);
         }
         double ret = 0.;
 
@@ -61,11 +61,11 @@ template<
         {
           for (unsigned int q_point = 0; q_point < n_q_points; ++q_point)
           {
-            MyFunctions::Forces(_fvalues,
+            MyFunctions::Forces(fvalues_,
                 state_fe_face_values.quadrature_point(q_point)(0),
                 state_fe_face_values.quadrature_point(q_point)(1));
-            ret += (_fvalues[0] * _uvalues[q_point](0)
-                + _fvalues[1] * _uvalues[q_point](1))
+            ret += (fvalues_[0] * uvalues_[q_point](0)
+                + fvalues_[1] * uvalues_[q_point](1))
                 * state_fe_face_values.JxW(q_point);
           }
         }
@@ -81,7 +81,7 @@ template<
         unsigned int n_q_points = fdc.GetNQPoints();
         unsigned int color = fdc.GetBoundaryIndicator();
         {
-          _fvalues.resize(2);
+          fvalues_.resize(2);
         }
 
         if (color == 3)
@@ -91,15 +91,15 @@ template<
 
           for (unsigned int q_point = 0; q_point < n_q_points; ++q_point)
           {
-            MyFunctions::Forces(_fvalues,
+            MyFunctions::Forces(fvalues_,
                 state_fe_face_values.quadrature_point(q_point)(0),
                 state_fe_face_values.quadrature_point(q_point)(1));
             for (unsigned int i = 0; i < n_dofs_per_element; i++)
             {
               local_vector(i) += scale
-                  * (_fvalues[0]
+                  * (fvalues_[0]
                       * state_fe_face_values[comp_0].value(i, q_point)
-                      + _fvalues[1]
+                      + fvalues_[1]
                           * state_fe_face_values[comp_1].value(i, q_point))
                   * state_fe_face_values.JxW(q_point);
             }
@@ -168,7 +168,7 @@ template<
       }
 
     private:
-      std::vector<double> _fvalues;
-      std::vector<Vector<double> > _uvalues;
+      std::vector<double> fvalues_;
+      std::vector<Vector<double> > uvalues_;
   };
 #endif

@@ -21,8 +21,8 @@
 *
 **/
 
-#ifndef _SHIFTEDCRANKNICOLSONProblem_H_
-#define _SHIFTEDCRANKNICOLSONProblem_H_
+#ifndef SHIFTEDCRANKNICOLSONProblem_H_
+#define SHIFTEDCRANKNICOLSONProblem_H_
 
 #include "initialproblem.h" 
 #include "primal_ts_base.h"
@@ -61,12 +61,12 @@ namespace DOpE
             PrimalTSBase<OPTPROBLEM, SPARSITYPATTERN, VECTOR, dopedim, dealdim,
                 FE, DH>(OP)
         {
-          _initial_problem = NULL;
+          initial_problem_ = NULL;
         }
         ~ShiftedCrankNicolsonProblem()
         {
-          if (_initial_problem != NULL)
-            delete _initial_problem;
+          if (initial_problem_ != NULL)
+            delete initial_problem_;
         }
 
         /******************************************************/
@@ -81,12 +81,12 @@ namespace DOpE
         InitialProblem<ShiftedCrankNicolsonProblem, VECTOR, dealdim>&
         GetInitialProblem()
         {
-          if (_initial_problem == NULL)
+          if (initial_problem_ == NULL)
           {
-            _initial_problem = new InitialProblem<ShiftedCrankNicolsonProblem,
+            initial_problem_ = new InitialProblem<ShiftedCrankNicolsonProblem,
                 VECTOR, dealdim>(*this);
           }
-          return *_initial_problem;
+          return *initial_problem_;
         }
 
         /******************************************************/
@@ -395,7 +395,7 @@ namespace DOpE
 
       private:
         double damped_cn_theta;
-        InitialProblem<ShiftedCrankNicolsonProblem, VECTOR, dealdim> * _initial_problem;
+        InitialProblem<ShiftedCrankNicolsonProblem, VECTOR, dealdim> * initial_problem_;
     };
 }
 

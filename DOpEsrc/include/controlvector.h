@@ -21,8 +21,8 @@
 *
 **/
 
-#ifndef _CONTROL_VECTOR_H_
-#define _CONTROL_VECTOR_H_
+#ifndef CONTROL_VECTOR_H_
+#define CONTROL_VECTOR_H_
 
 #include "spacetimehandler_base.h"
 #include "dopetypes.h"
@@ -196,7 +196,7 @@ template<typename VECTOR>
     /**
      * This unlocks the function GetSpacialVectorCopy
      */
-    void UnLockCopy() const { _lock = false; }
+    void UnLockCopy() const { lock_ = false; }
 
     /**
      * This returns the behavior of the ControlVector
@@ -207,12 +207,12 @@ template<typename VECTOR>
      *
      * @return               A string indicating the behavior.
      */
-    DOpEtypes::VectorStorageType GetBehavior() const { return _behavior; }
+    DOpEtypes::VectorStorageType GetBehavior() const { return behavior_; }
 
     /**
      * @return               A const pointer to the SpaceTimeHandler associated with this vector.
      */
-    const SpaceTimeHandlerBase<VECTOR>* GetSpaceTimeHandler() const { return _STH; }
+    const SpaceTimeHandlerBase<VECTOR>* GetSpaceTimeHandler() const { return STH_; }
 
     /**
      * Call if the SpaceTimeHandler has changed to reinitialize vector sizes.
@@ -238,28 +238,28 @@ template<typename VECTOR>
     void ReSizeSpace(unsigned int ndofs, const std::vector<unsigned int>& dofs_per_block);
     /**
      * Writes the vectors corresponding to the current interval
-     * into _local_vectors, and adjusts _global_to_local;
+     * into local_vectors_, and adjusts global_to_local_;
      */
     void ComputeLocalVectors(const TimeIterator& interval) const;
     
-    std::vector<VECTOR* > _control;
-    mutable VECTOR _local_control;
-    mutable dealii::Vector<double> _copy_control;
+    std::vector<VECTOR* > control_;
+    mutable VECTOR local_control_;
+    mutable dealii::Vector<double> copy_control_;
     
     //pointer to the dofs in the actual interval. Is only used if the interval is set!
-    mutable std::vector<VECTOR*> _local_vectors;
+    mutable std::vector<VECTOR*> local_vectors_;
     //Map: global time dof index - local time DoF index
-    mutable std::map<unsigned int, unsigned int> _global_to_local;
+    mutable std::map<unsigned int, unsigned int> global_to_local_;
     //the index of the interval, to which the vectors stored in local_vectors belong
-    mutable int _accessor_index;
+    mutable int accessor_index_;
 		
-    mutable int _accessor;
-    mutable bool _lock;
+    mutable int accessor_;
+    mutable bool lock_;
 
-    const SpaceTimeHandlerBase<VECTOR>* _STH;
-    DOpEtypes::VectorStorageType _behavior;
-    DOpEtypes::ControlType _c_type;
-    unsigned int _sfh_ticket;
+    const SpaceTimeHandlerBase<VECTOR>* STH_;
+    DOpEtypes::VectorStorageType behavior_;
+    DOpEtypes::ControlType c_type_;
+    unsigned int sfh_ticket_;
   };
 
 

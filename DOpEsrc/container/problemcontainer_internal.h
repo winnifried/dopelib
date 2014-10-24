@@ -39,7 +39,7 @@ namespace DOpE
     {
       public:
         ProblemContainerInternal(PDE& pde)
-            : _pde(pde)
+            : pde_(pde)
         {
 
         }
@@ -102,44 +102,44 @@ namespace DOpE
         const PDE&
         GetPDE() const
         {
-          return _pde;
+          return pde_;
         }
 
         std::string
         GetType() const
         {
-          return _problem_type;
+          return problem_type_;
         }
 
         unsigned int
         GetTypeNum() const
         {
-          return _problem_type_num;
+          return problem_type_num_;
         }
 
       protected:
         PDE&
         GetPDE()
         {
-          return _pde;
+          return pde_;
         }
         void
         SetTypeInternal(std::string a)
         {
-          _problem_type = a;
+          problem_type_ = a;
         }
 
         void
         SetTypeNumInternal(unsigned int i)
         {
-          _problem_type_num = i;
+          problem_type_num_ = i;
         }
 
       private:
-        std::string _problem_type, _algo_type;
+        std::string problem_type_, algo_type_;
 
-        unsigned int _problem_type_num;
-        PDE& _pde;
+        unsigned int problem_type_num_;
+        PDE& pde_;
 
     };
 

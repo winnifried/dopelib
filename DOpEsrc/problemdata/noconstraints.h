@@ -21,8 +21,8 @@
  *
  **/
 
-#ifndef _NOCONSTRAINT_INTERFACE_H_
-#define _NOCONSTRAINT_INTERFACE_H_
+#ifndef NOCONSTRAINT_INTERFACE_H_
+#define NOCONSTRAINT_INTERFACE_H_
 
 #include "constraintinterface.h"
 

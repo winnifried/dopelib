@@ -34,13 +34,13 @@ class InitialData: public DOpEWrapper::Function<2>
 			DOpEWrapper::Function<2>()
 			{
 				param_reader.SetSubsection("Local PDE parameters");
-				_strike= param_reader.get_double("strike price");
+				strike_= param_reader.get_double("strike price");
 			}
 			virtual double value(const Point<2> &p, const unsigned int component = 0) const;
 			virtual void vector_value(const Point<2> &p, Vector<double> &value) const;
 			static void declare_params(ParameterReader &param_reader);
 	private:
-		double _strike;
+		double strike_;
 
 };
 
@@ -51,7 +51,7 @@ double InitialData::value(const Point<2> &p, const unsigned int /*component*/) c
 	double x = p[0];
 	double y = p[1];
 
-	return std::max(_strike - 0.5 * x - 0.5 * y, 0.);
+	return std::max(strike_ - 0.5 * x - 0.5 * y, 0.);
 }
 
 /******************************************************/

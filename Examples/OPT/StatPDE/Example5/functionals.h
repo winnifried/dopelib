@@ -21,8 +21,8 @@
  *
  **/
 
-#ifndef _LOCALFunctionalS_
-#define _LOCALFunctionalS_
+#ifndef LOCALFunctionalS_
+#define LOCALFunctionalS_
 
 #include "pdeinterface.h"
 
@@ -50,20 +50,20 @@ template<
             edc.GetFEValuesControl();
         unsigned int n_q_points = edc.GetNQPoints();
         {
-          _uvalues.resize(n_q_points);
-          _fvalues.resize(n_q_points);
-          edc.GetValuesControl("control", _uvalues);
+          uvalues_.resize(n_q_points);
+          fvalues_.resize(n_q_points);
+          edc.GetValuesControl("control", uvalues_);
         }
         double alpha = 1.e-3;
 
         double r = 0.;
         for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
         {
-          _fvalues[q_point] = 1. / alpha
+          fvalues_[q_point] = 1. / alpha
               * sin(M_PI * fe_values.quadrature_point(q_point)(0))
               * sin(2 * M_PI * fe_values.quadrature_point(q_point)(1));
-          r += (_uvalues[q_point] - _fvalues[q_point])
-              * (_uvalues[q_point] - _fvalues[q_point])
+          r += (uvalues_[q_point] - fvalues_[q_point])
+              * (uvalues_[q_point] - fvalues_[q_point])
               * fe_values.JxW(q_point);
         }
         return r;
@@ -87,8 +87,8 @@ template<
       }
 
     private:
-      vector<double> _uvalues;
-      vector<double> _fvalues;
+      vector<double> uvalues_;
+      vector<double> fvalues_;
   };
 
 /****************************************************************************************/
@@ -113,19 +113,19 @@ template<
             edc.GetFEValuesState();
         unsigned int n_q_points = edc.GetNQPoints();
         {
-          _uvalues.resize(n_q_points);
-          _fvalues.resize(n_q_points);
-          edc.GetValuesState("state", _uvalues);
+          uvalues_.resize(n_q_points);
+          fvalues_.resize(n_q_points);
+          edc.GetValuesState("state", uvalues_);
         }
 
         double r = 0.;
         for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
         {
-          _fvalues[q_point] = sin(
+          fvalues_[q_point] = sin(
               4 * M_PI * fe_values.quadrature_point(q_point)(0))
               * sin(2 * M_PI * fe_values.quadrature_point(q_point)(1));
-          r += (_uvalues[q_point] - _fvalues[q_point])
-              * (_uvalues[q_point] - _fvalues[q_point])
+          r += (uvalues_[q_point] - fvalues_[q_point])
+              * (uvalues_[q_point] - fvalues_[q_point])
               * fe_values.JxW(q_point);
         }
         return r;
@@ -149,8 +149,8 @@ template<
       }
 
     private:
-      vector<double> _uvalues;
-      vector<double> _fvalues;
+      vector<double> uvalues_;
+      vector<double> fvalues_;
   };
 
 /****************************************************************************************/
@@ -174,14 +174,14 @@ template<
             edc.GetFEValuesState();
         unsigned int n_q_points = edc.GetNQPoints();
         {
-          _uvalues.resize(n_q_points);
-          edc.GetValuesState("state", _uvalues);
+          uvalues_.resize(n_q_points);
+          edc.GetValuesState("state", uvalues_);
         }
 
         double r = 0.;
         for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
         {
-          r += fabs(_uvalues[q_point]) * state_fe_values.JxW(q_point);
+          r += fabs(uvalues_[q_point]) * state_fe_values.JxW(q_point);
         }
         return r;
       }
@@ -204,7 +204,7 @@ template<
       }
 
     private:
-      vector<double> _uvalues;
+      vector<double> uvalues_;
   };
 
 /****************************************************************************************/

@@ -21,8 +21,8 @@
 *
 **/
 
-#ifndef _REDUCEDTRUSTREGION_NEWTON__ALGORITHM_H_
-#define _REDUCEDTRUSTREGION_NEWTON__ALGORITHM_H_
+#ifndef REDUCEDTRUSTREGION_NEWTON__ALGORITHM_H_
+#define REDUCEDTRUSTREGION_NEWTON__ALGORITHM_H_
 
 #include "reducedalgorithm.h"
 #include "parameterreader.h"
@@ -166,12 +166,12 @@ namespace DOpE
 			    const ControlVector<VECTOR>& gradient_transposed)
                             {return  gradient*gradient_transposed;}
   private:
-    unsigned int _nonlinear_maxiter;
-    double       _nonlinear_tol, _nonlinear_global_tol,_tr_delta_max,_tr_delta_null,_tr_delta_eta;
-    unsigned int _linear_maxiter;
-    double       _linear_tol, _linear_global_tol;
-    std::string _postindex;
-    std::string _tr_method;
+    unsigned int nonlinear_maxiter_;
+    double       nonlinear_tol_, nonlinear_global_tol_, tr_delta_max_, tr_delta_null_, tr_delta_eta_;
+    unsigned int linear_max_iter_;
+    double       linear_tol_, linear_global_tol_;
+    std::string postindex_;
+    std::string tr_method_;
   };
 
   /***************************************************************************************/
@@ -213,23 +213,23 @@ template <typename PROBLEM, typename VECTOR>
   : ReducedAlgorithm<PROBLEM,VECTOR>(OP,S,param_reader,Except,Output,base_priority)
   {
     param_reader.SetSubsection("reducedtrustregionnewtonalgorithm parameters");
-    _nonlinear_maxiter    = param_reader.get_integer ("nonlinear_maxiter");
-    _nonlinear_tol        = param_reader.get_double ("nonlinear_tol");
-    _nonlinear_global_tol = param_reader.get_double ("nonlinear_global_tol");
-    _tr_delta_max         = param_reader.get_double("tr_delta_max");
-    _tr_delta_null        = param_reader.get_double("tr_delta_null");
-    _tr_delta_eta         = param_reader.get_double("tr_delta_eta");
+    nonlinear_maxiter_    = param_reader.get_integer ("nonlinear_maxiter");
+    nonlinear_tol_        = param_reader.get_double ("nonlinear_tol");
+    nonlinear_global_tol_ = param_reader.get_double ("nonlinear_global_tol");
+    tr_delta_max_         = param_reader.get_double("tr_delta_max");
+    tr_delta_null_        = param_reader.get_double("tr_delta_null");
+    tr_delta_eta_         = param_reader.get_double("tr_delta_eta");
 
-    assert(_tr_delta_eta < 0.25);
-    assert(_tr_delta_null<_tr_delta_max);
+    assert(tr_delta_eta_ < 0.25);
+    assert(tr_delta_null_<tr_delta_max_);
 
-    _linear_maxiter       = param_reader.get_integer ("linear_maxiter");
-    _linear_tol           = param_reader.get_double ("linear_tol");
-    _linear_global_tol    = param_reader.get_double ("linear_global_tol");
+    linear_max_iter_       = param_reader.get_integer ("linear_maxiter");
+    linear_tol_           = param_reader.get_double ("linear_tol");
+    linear_global_tol_    = param_reader.get_double ("linear_global_tol");
 
-    _tr_method = param_reader.get_string("tr_method");
+    tr_method_ = param_reader.get_string("tr_method");
 
-    _postindex = "_"+this->GetProblem()->GetName();
+    postindex_ = "_"+this->GetProblem()->GetName();
   }
 
 /******************************************************/
@@ -297,9 +297,9 @@ int ReducedTrustregion_NewtonAlgorithm<PROBLEM,VECTOR>::Solve(ControlVector<VECT
   out << "**************************************************";
   this->GetOutputHandler()->Write(out,1+this->GetBasePriority(),1,1);
 
-  this->GetOutputHandler()->SetIterationNumber(iter,"OptNewton"+_postindex);
+  this->GetOutputHandler()->SetIterationNumber(iter,"OptNewton"+postindex_);
 
-  this->GetOutputHandler()->Write(q,"Control"+_postindex,"control");
+  this->GetOutputHandler()->Write(q,"Control"+postindex_,"control");
   
   try
   {
@@ -336,8 +336,8 @@ int ReducedTrustregion_NewtonAlgorithm<PROBLEM,VECTOR>::Solve(ControlVector<VECT
   double res = Residual(gradient,gradient_transposed);
   double firstres = res; 
 
-  double tr_delta_max = _tr_delta_max;
-  double tr_delta = _tr_delta_null;
+  double tr_delta_max = tr_delta_max_;
+  double tr_delta = tr_delta_null_;
   double tr_eta = 0.01;
   double tr_rho = 0.;
   double tr_model  = 0.;
@@ -345,18 +345,18 @@ int ReducedTrustregion_NewtonAlgorithm<PROBLEM,VECTOR>::Solve(ControlVector<VECT
 
   assert(res >= 0);
 
-  this->GetOutputHandler()->Write(gradient,"NewtonResidual"+_postindex,"control");
+  this->GetOutputHandler()->Write(gradient,"NewtonResidual"+postindex_,"control");
   out<< "\t Newton step: " <<iter<<"\t Residual (abs.): "<<sqrt(res)<<"\n";
   out<< "\t Newton step: " <<iter<<"\t Residual (rel.): "<<std::scientific<<sqrt(res)/sqrt(res)<<"\n";
   this->GetOutputHandler()->Write(out,3+this->GetBasePriority());
   int liniter = 0;
-  global_tol =  std::max(_nonlinear_global_tol,global_tol);
-  //while( (res >= global_tol*global_tol) && (res >= _nonlinear_tol*_nonlinear_tol*firstres) )
-  while( iter==0 ||  iter ==1 || ((res >= global_tol*global_tol) && (res >= _nonlinear_tol*_nonlinear_tol*firstres) ))
+  global_tol =  std::max(nonlinear_global_tol_,global_tol);
+  //while( (res >= global_tol*global_tol) && (res >= nonlinear_tol_*nonlinear_tol_*firstres) )
+  while( iter==0 ||  iter ==1 || ((res >= global_tol*global_tol) && (res >= nonlinear_tol_*nonlinear_tol_*firstres) ))
   {
-    this->GetOutputHandler()->SetIterationNumber(iter,"OptNewton"+_postindex);
+    this->GetOutputHandler()->SetIterationNumber(iter,"OptNewton"+postindex_);
     tr_model = 0.;
-    if(iter > _nonlinear_maxiter)
+    if(iter > nonlinear_maxiter_)
     {
       out << "**************************************************\n";
       out << "*        Aborting Reduced Trustregion_Newton Algorithm       *\n";
@@ -478,8 +478,8 @@ int ReducedTrustregion_NewtonAlgorithm<PROBLEM,VECTOR>::Solve(ControlVector<VECT
     out<< "CostFunctional: " << cost;
     this->GetOutputHandler()->Write(out,3+this->GetBasePriority());
     
-    this->GetOutputHandler()->Write(q,"Control"+_postindex,"control");
-    this->GetOutputHandler()->Write(gradient,"NewtonResidual"+_postindex,"control");
+    this->GetOutputHandler()->Write(q,"Control"+postindex_,"control");
+    this->GetOutputHandler()->Write(gradient,"NewtonResidual"+postindex_,"control");
   }
 
   //We are done write total evaluation
@@ -527,7 +527,7 @@ template <typename PROBLEM, typename VECTOR>
 {
 
   bool ret = true;
-  if("dogleg" == _tr_method)
+  if("dogleg" == tr_method_)
   { 
     //Compute the unconstraint model minimizer
     try
@@ -635,17 +635,17 @@ template <typename PROBLEM, typename VECTOR>
     else
       model = 0.;
   }
-  else if("exact" == _tr_method)
+  else if("exact" == tr_method_)
   {
-    throw DOpEException("Method not yet implemented: "+_tr_method,"ReducedTrustregion_NewtonAlgorithm::ComputeTRModelMinimizer");
+    throw DOpEException("Method not yet implemented: "+tr_method_,"ReducedTrustregion_NewtonAlgorithm::ComputeTRModelMinimizer");
   }
-  else if("steinhaug" == _tr_method)
+  else if("steinhaug" == tr_method_)
   {
-    throw DOpEException("Method not yet implemented: "+_tr_method,"ReducedTrustregion_NewtonAlgorithm::ComputeTRModelMinimizer");
+    throw DOpEException("Method not yet implemented: "+tr_method_,"ReducedTrustregion_NewtonAlgorithm::ComputeTRModelMinimizer");
   }
   else
   {
-    throw DOpEException("Unknown Method: "+_tr_method,"ReducedTrustregion_NewtonAlgorithm::ComputeTRModelMinimizer");
+    throw DOpEException("Unknown Method: "+tr_method_,"ReducedTrustregion_NewtonAlgorithm::ComputeTRModelMinimizer");
   }
   
   return ret;
@@ -679,15 +679,15 @@ template <typename PROBLEM, typename VECTOR>
   unsigned int iter = 0;
   double cgalpha, cgbeta, oldres;
 
-  this->GetOutputHandler()->SetIterationNumber(iter,"OptNewtonCg"+_postindex);
+  this->GetOutputHandler()->SetIterationNumber(iter,"OptNewtonCg"+postindex_);
 
-  //while(res>=_linear_tol*_linear_tol*firstres && res>=_linear_global_tol*_linear_global_tol)
+  //while(res>=linear_tol_*linear_tol_*firstres && res>=linear_global_tol_*linear_global_tol_)
   //using Algorithm 6.1 from Nocedal Wright
-  while(res>= std::min(0.25,sqrt(firstres))*firstres && res>=_linear_global_tol*_linear_global_tol)
+  while(res>= std::min(0.25,sqrt(firstres))*firstres && res>=linear_global_tol_*linear_global_tol_)
   {
     iter++;
-    this->GetOutputHandler()->SetIterationNumber(iter,"OptNewtonCg"+_postindex);
-    if(iter > _linear_maxiter)
+    this->GetOutputHandler()->SetIterationNumber(iter,"OptNewtonCg"+postindex_);
+    if(iter > linear_max_iter_)
     {
       throw DOpEIterationException("Iteration count exceeded bounds!","ReducedNewtonAlgorithm::SolveReducedLinearSystem");
     }

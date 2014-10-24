@@ -111,18 +111,18 @@ namespace DOpE
               const std::map<std::string, const Vector<double>*> &param_values,
               const std::map<std::string, const VECTOR*> &domain_values) :
               edcinternal::ElementDataContainerInternal<VECTOR, dim>(param_values,
-                  domain_values), _element(element), _state_fe_values(
+                  domain_values), element_(element), state_fe_values_(
                   sth.GetMapping(), (sth.GetFESystem("state")), quad,
-                  update_flags), _control_fe_values(sth.GetMapping(),
+                  update_flags), control_fe_values_(sth.GetMapping(),
                   (sth.GetFESystem("control")), quad, update_flags)
           {
-            _state_index = sth.GetStateIndex();
-            if (_state_index == 1)
-              _control_index = 0;
+            state_index_ = sth.GetStateIndex();
+            if (state_index_ == 1)
+              control_index_ = 0;
             else
-              _control_index = 1;
-            _n_q_points_per_element = quad.size();
-            _n_dofs_per_element = element[0]->get_fe().dofs_per_cell;
+              control_index_ = 1;
+            n_q_points_per_element_ = quad.size();
+            n_dofs_per_element_ = element[0]->get_fe().dofs_per_cell;
           }
 
         /**
@@ -153,15 +153,15 @@ namespace DOpE
               const std::map<std::string, const Vector<double>*> &param_values,
               const std::map<std::string, const VECTOR*> &domain_values) :
               edcinternal::ElementDataContainerInternal<VECTOR, dim>(param_values,
-                  domain_values), _element(element), _state_fe_values(
+                  domain_values), element_(element), state_fe_values_(
                   sth.GetMapping(), (sth.GetFESystem("state")), quad,
-                  update_flags), _control_fe_values(sth.GetMapping(),
+                  update_flags), control_fe_values_(sth.GetMapping(),
                   (sth.GetFESystem("state")), quad, update_flags)
           {
-            _state_index = sth.GetStateIndex();
-            _control_index = element.size(); //Make sure they are never used ...
-            _n_q_points_per_element = quad.size();
-            _n_dofs_per_element = element[0]->get_fe().dofs_per_cell;
+            state_index_ = sth.GetStateIndex();
+            control_index_ = element.size(); //Make sure they are never used ...
+            n_q_points_per_element_ = quad.size();
+            n_dofs_per_element_ = element[0]->get_fe().dofs_per_cell;
           }
         ~ElementDataContainer()
         {
@@ -210,15 +210,15 @@ namespace DOpE
 
         /***********************************************************/
         //"global" member data, part of every instantiation
-        unsigned int _state_index;
-        unsigned int _control_index;
+        unsigned int state_index_;
+        unsigned int control_index_;
 
-        const std::vector<typename dealii::DoFHandler<dim>::active_cell_iterator> & _element;
-        DOpEWrapper::FEValues<dim> _state_fe_values;
-        DOpEWrapper::FEValues<dim> _control_fe_values;
+        const std::vector<typename dealii::DoFHandler<dim>::active_cell_iterator> & element_;
+        DOpEWrapper::FEValues<dim> state_fe_values_;
+        DOpEWrapper::FEValues<dim> control_fe_values_;
 
-        unsigned int _n_q_points_per_element;
-        unsigned int _n_dofs_per_element;
+        unsigned int n_q_points_per_element_;
+        unsigned int n_dofs_per_element_;
     };
 
   /*****************************************************************/
@@ -272,18 +272,18 @@ namespace DOpE
               const std::map<std::string, const Vector<double>*> &param_values,
               const std::map<std::string, const VECTOR*> &domain_values)
               : edcinternal::ElementDataContainerInternal<VECTOR, dim>(
-                  param_values, domain_values), _element(element), _state_fe_values(
+                  param_values, domain_values), element_(element), state_fe_values_(
                   sth.GetMapping(), (sth.GetFESystem("state")), quad,
-                  update_flags), _control_fe_values(sth.GetMapping(),
+                  update_flags), control_fe_values_(sth.GetMapping(),
                   (sth.GetFESystem("control")), quad, update_flags)
                   {
-                    _state_index = sth.GetStateIndex();
-                    if (_state_index == 1)
-                    _control_index = 0;
+                    state_index_ = sth.GetStateIndex();
+                    if (state_index_ == 1)
+                    control_index_ = 0;
                     else
-                    _control_index = 1;
-                    _n_q_points_per_element = quad.size();
-                    _n_dofs_per_element = element[0]->get_fe().dofs_per_cell;
+                    control_index_ = 1;
+                    n_q_points_per_element_ = quad.size();
+                    n_dofs_per_element_ = element[0]->get_fe().dofs_per_cell;
                   }
 
 
@@ -318,15 +318,15 @@ namespace DOpE
                 const std::map<std::string, const Vector<double>*> &param_values,
               const std::map<std::string, const VECTOR*> &domain_values)
               : edcinternal::ElementDataContainerInternal<VECTOR, dim>(
-                  param_values, domain_values), _element(element), _state_fe_values(
+                  param_values, domain_values), element_(element), state_fe_values_(
                   sth.GetMapping(), (sth.GetFESystem("state")), quad,
-                  update_flags), _control_fe_values(sth.GetMapping(),
+                  update_flags), control_fe_values_(sth.GetMapping(),
                   (sth.GetFESystem("state")), quad, update_flags)
           {
-            _state_index = sth.GetStateIndex();
-            _control_index = element.size(); //Make sure they are never used ...
-            _n_q_points_per_element = quad.size();
-            _n_dofs_per_element = element[0]->get_fe().dofs_per_cell;
+            state_index_ = sth.GetStateIndex();
+            control_index_ = element.size(); //Make sure they are never used ...
+            n_q_points_per_element_ = quad.size();
+            n_dofs_per_element_ = element[0]->get_fe().dofs_per_cell;
           }
 
 
@@ -376,15 +376,15 @@ namespace DOpE
 
         /***********************************************************/
         //"global" member data, part of every instantiation
-        unsigned int _state_index;
-        unsigned int _control_index;
+        unsigned int state_index_;
+        unsigned int control_index_;
 
-        const std::vector<typename dealii::MGDoFHandler<dim>::active_cell_iterator> & _element;
-        DOpEWrapper::FEValues<dim> _state_fe_values;
-        DOpEWrapper::FEValues<dim> _control_fe_values;
+        const std::vector<typename dealii::MGDoFHandler<dim>::active_cell_iterator> & element_;
+        DOpEWrapper::FEValues<dim> state_fe_values_;
+        DOpEWrapper::FEValues<dim> control_fe_values_;
 
-        unsigned int _n_q_points_per_element;
-        unsigned int _n_dofs_per_element;
+        unsigned int n_q_points_per_element_;
+        unsigned int n_dofs_per_element_;
     };
 
   /*  end MGDofHandler */
@@ -427,17 +427,17 @@ namespace DOpE
               const std::map<std::string, const Vector<double>*> &param_values,
               const std::map<std::string, const VECTOR*> &domain_values) :
               edcinternal::ElementDataContainerInternal<VECTOR, dim>(param_values,
-                  domain_values), _element(element), _state_hp_fe_values(
+                  domain_values), element_(element), state_hp_fe_values_(
                   sth.GetMapping(), (sth.GetFESystem("state")), q_collection,
-                  update_flags), _control_hp_fe_values(sth.GetMapping(),
-                  (sth.GetFESystem("control")), q_collection, update_flags), _q_collection(
+                  update_flags), control_hp_fe_values_(sth.GetMapping(),
+                  (sth.GetFESystem("control")), q_collection, update_flags), q_collection_(
                   q_collection)
           {
-            _state_index = sth.GetStateIndex();
-            if (_state_index == 1)
-              _control_index = 0;
+            state_index_ = sth.GetStateIndex();
+            if (state_index_ == 1)
+              control_index_ = 0;
             else
-              _control_index = 1;
+              control_index_ = 1;
           }
 
         /**
@@ -467,14 +467,14 @@ namespace DOpE
               const std::map<std::string, const Vector<double>*> &param_values,
               const std::map<std::string, const VECTOR*> &domain_values) :
               edcinternal::ElementDataContainerInternal<VECTOR, dim>(param_values,
-                  domain_values), _element(element), _state_hp_fe_values(
+                  domain_values), element_(element), state_hp_fe_values_(
                   sth.GetMapping(), (sth.GetFESystem("state")), q_collection,
-                  update_flags), _control_hp_fe_values(sth.GetMapping(),
-                  (sth.GetFESystem("state")), q_collection, update_flags), _q_collection(
+                  update_flags), control_hp_fe_values_(sth.GetMapping(),
+                  (sth.GetFESystem("state")), q_collection, update_flags), q_collection_(
                   q_collection)
           {
-            _state_index = sth.GetStateIndex();
-            _control_index = element.size(); //Make sure they are never used ...
+            state_index_ = sth.GetStateIndex();
+            control_index_ = element.size(); //Make sure they are never used ...
           }
         ~ElementDataContainer()
         {
@@ -559,15 +559,15 @@ namespace DOpE
 
         /***********************************************************/
         //"global" member data, part of every instantiation
-        unsigned int _state_index;
-        unsigned int _control_index;
+        unsigned int state_index_;
+        unsigned int control_index_;
 
         const std::vector<
-            typename dealii::hp::DoFHandler<dim>::active_cell_iterator> & _element;
-        DOpEWrapper::HpFEValues<dim> _state_hp_fe_values;
-        DOpEWrapper::HpFEValues<dim> _control_hp_fe_values;
+            typename dealii::hp::DoFHandler<dim>::active_cell_iterator> & element_;
+        DOpEWrapper::HpFEValues<dim> state_hp_fe_values_;
+        DOpEWrapper::HpFEValues<dim> control_hp_fe_values_;
 
-        const hp::QCollection<dim>& _q_collection;
+        const hp::QCollection<dim>& q_collection_;
     };
 
   /***********************************************************************/
@@ -578,10 +578,10 @@ namespace DOpE
     void
     DOpE::ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::ReInit()
     {
-      _state_fe_values.reinit(_element[this->GetStateIndex()]);
+      state_fe_values_.reinit(element_[this->GetStateIndex()]);
       //Make sure that the Control must be initialized.
-      if (this->GetControlIndex() < _element.size())
-        _control_fe_values.reinit(_element[this->GetControlIndex()]);
+      if (this->GetControlIndex() < element_.size())
+        control_fe_values_.reinit(element_[this->GetControlIndex()]);
     }
 
   /***********************************************************************/
@@ -589,7 +589,7 @@ namespace DOpE
     unsigned int
     ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::GetNDoFsPerElement() const
     {
-      return _n_dofs_per_element;
+      return n_dofs_per_element_;
     }
 
   /**********************************************/
@@ -597,7 +597,7 @@ namespace DOpE
     unsigned int
     ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::GetNQPoints() const
     {
-      return _n_q_points_per_element;
+      return n_q_points_per_element_;
     }
 
   /**********************************************/
@@ -605,7 +605,7 @@ namespace DOpE
     unsigned int
     ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::GetMaterialId() const
     {
-      return _element[0]->material_id();
+      return element_[0]->material_id();
     }
 
   /**********************************************/
@@ -614,8 +614,8 @@ namespace DOpE
     ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::GetNbrMaterialId(
         unsigned int face) const
     {
-      if (_element[0]->neighbor_index(face) != -1)
-        return _element[0]->neighbor(face)->material_id();
+      if (element_[0]->neighbor_index(face) != -1)
+        return element_[0]->neighbor(face)->material_id();
       else
         throw DOpEException("There is no neighbor with number " + face,
             "ElementDataContainer::GetNbrMaterialId");
@@ -627,7 +627,7 @@ namespace DOpE
     ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::GetFaceBoundaryIndicator(
         unsigned int face) const
     {
-      return _element[0]->face(face)->boundary_indicator();
+      return element_[0]->face(face)->boundary_indicator();
     }
 
   /**********************************************/
@@ -635,21 +635,21 @@ namespace DOpE
     bool
     ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::GetIsAtBoundary() const
     {
-      return _element[0]->at_boundary();
+      return element_[0]->at_boundary();
     }
   /**********************************************/
   template<typename VECTOR, int dim>
     double
     ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::GetElementDiameter() const
     {
-      return _element[0]->diameter();
+      return element_[0]->diameter();
     }
   /**********************************************/
   template<typename VECTOR, int dim>
     Point<dim>
     ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::GetCenter() const
     {
-      return _element[0]->center();
+      return element_[0]->center();
     }
 
   /**********************************************/
@@ -657,7 +657,7 @@ namespace DOpE
     const DOpEWrapper::FEValues<dim>&
     ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::GetFEValuesState() const
     {
-      return _state_fe_values;
+      return state_fe_values_;
     }
 
   /**********************************************/
@@ -665,7 +665,7 @@ namespace DOpE
     const DOpEWrapper::FEValues<dim>&
     ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::GetFEValuesControl() const
     {
-      return _control_fe_values;
+      return control_fe_values_;
     }
 
   /***********************************************************************/
@@ -674,7 +674,7 @@ namespace DOpE
     unsigned int
     ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::GetStateIndex() const
     {
-      return _state_index;
+      return state_index_;
     }
 
   /***********************************************************************/
@@ -683,7 +683,7 @@ namespace DOpE
     unsigned int
     ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::GetControlIndex() const
     {
-      return _control_index;
+      return control_index_;
     }
 
   /***********************************************************************/
@@ -703,10 +703,10 @@ namespace DOpE
     void
     DOpE::ElementDataContainer<dealii::MGDoFHandler, VECTOR, dim>::ReInit()
     {
-      _state_fe_values.reinit(_element[this->GetStateIndex()]);
+      state_fe_values_.reinit(element_[this->GetStateIndex()]);
       //Make sure that the Control must be initialized.
-      if (this->GetControlIndex() < _element.size())
-        _control_fe_values.reinit(_element[this->GetControlIndex()]);
+      if (this->GetControlIndex() < element_.size())
+        control_fe_values_.reinit(element_[this->GetControlIndex()]);
     }
 
   /***********************************************************************/
@@ -714,7 +714,7 @@ namespace DOpE
     unsigned int
     ElementDataContainer<dealii::MGDoFHandler, VECTOR, dim>::GetNDoFsPerElement() const
     {
-      return _n_dofs_per_element;
+      return n_dofs_per_element_;
     }
 
   /**********************************************/
@@ -722,7 +722,7 @@ namespace DOpE
     unsigned int
     ElementDataContainer<dealii::MGDoFHandler, VECTOR, dim>::GetNQPoints() const
     {
-      return _n_q_points_per_element;
+      return n_q_points_per_element_;
     }
 
   /**********************************************/
@@ -730,7 +730,7 @@ namespace DOpE
     unsigned int
     ElementDataContainer<dealii::MGDoFHandler, VECTOR, dim>::GetMaterialId() const
     {
-      return _element[0]->material_id();
+      return element_[0]->material_id();
     }
 
   /**********************************************/
@@ -739,8 +739,8 @@ namespace DOpE
     ElementDataContainer<dealii::MGDoFHandler, VECTOR, dim>::GetNbrMaterialId(
         unsigned int face) const
     {
-      if (_element[0]->neighbor_index(face) != -1)
-        return _element[0]->neighbor(face)->material_id();
+      if (element_[0]->neighbor_index(face) != -1)
+        return element_[0]->neighbor(face)->material_id();
       else
         throw DOpEException("There is no neighbor with number " + face,
             "ElementDataContainer::GetNbrMaterialId");
@@ -752,7 +752,7 @@ namespace DOpE
     ElementDataContainer<dealii::MGDoFHandler, VECTOR, dim>::GetFaceBoundaryIndicator(
         unsigned int face) const
     {
-      return _element[0]->face(face)->boundary_indicator();
+      return element_[0]->face(face)->boundary_indicator();
     }
 
   /**********************************************/
@@ -760,21 +760,21 @@ namespace DOpE
     bool
     ElementDataContainer<dealii::MGDoFHandler, VECTOR, dim>::GetIsAtBoundary() const
     {
-      return _element[0]->at_boundary();
+      return element_[0]->at_boundary();
     }
   /**********************************************/
   template<typename VECTOR, int dim>
     double
     ElementDataContainer<dealii::MGDoFHandler, VECTOR, dim>::GetElementDiameter() const
     {
-      return _element[0]->diameter();
+      return element_[0]->diameter();
     }
   /**********************************************/
   template<typename VECTOR, int dim>
     Point<dim>
     ElementDataContainer<dealii::MGDoFHandler, VECTOR, dim>::GetCenter() const
     {
-      return _element[0]->center();
+      return element_[0]->center();
     }
 
   /**********************************************/
@@ -782,7 +782,7 @@ namespace DOpE
     const DOpEWrapper::FEValues<dim>&
     ElementDataContainer<dealii::MGDoFHandler, VECTOR, dim>::GetFEValuesState() const
     {
-      return _state_fe_values;
+      return state_fe_values_;
     }
 
   /**********************************************/
@@ -790,7 +790,7 @@ namespace DOpE
     const DOpEWrapper::FEValues<dim>&
     ElementDataContainer<dealii::MGDoFHandler, VECTOR, dim>::GetFEValuesControl() const
     {
-      return _control_fe_values;
+      return control_fe_values_;
     }
 
   /***********************************************************************/
@@ -799,7 +799,7 @@ namespace DOpE
     unsigned int
     ElementDataContainer<dealii::MGDoFHandler, VECTOR, dim>::GetStateIndex() const
     {
-      return _state_index;
+      return state_index_;
     }
 
   /***********************************************************************/
@@ -808,7 +808,7 @@ namespace DOpE
     unsigned int
     ElementDataContainer<dealii::MGDoFHandler, VECTOR, dim>::GetControlIndex() const
     {
-      return _control_index;
+      return control_index_;
     }
 
   /***********************************************************************/
@@ -825,10 +825,10 @@ namespace DOpE
     void
     ElementDataContainer<dealii::hp::DoFHandler, VECTOR, dim>::ReInit()
     {
-      _state_hp_fe_values.reinit(_element[this->GetStateIndex()]);
+      state_hp_fe_values_.reinit(element_[this->GetStateIndex()]);
       //Make sure that the Control must be initialized.
-      if (this->GetControlIndex() < _element.size())
-        _control_hp_fe_values.reinit(_element[this->GetControlIndex()]);
+      if (this->GetControlIndex() < element_.size())
+        control_hp_fe_values_.reinit(element_[this->GetControlIndex()]);
     }
   /*********************************************/
 
@@ -836,14 +836,14 @@ namespace DOpE
     unsigned int
     ElementDataContainer<dealii::hp::DoFHandler, VECTOR, dim>::GetNDoFsPerElement() const
     {
-      return _element[0]->get_fe().dofs_per_cell;
+      return element_[0]->get_fe().dofs_per_cell;
     }
   /*********************************************/
   template<typename VECTOR, int dim>
     unsigned int
     ElementDataContainer<dealii::hp::DoFHandler, VECTOR, dim>::GetNQPoints() const
     {
-      return (_q_collection[_element[0]->active_fe_index()]).size();
+      return (q_collection_[element_[0]->active_fe_index()]).size();
     }
   /*********************************************/
 
@@ -851,7 +851,7 @@ namespace DOpE
     unsigned int
     ElementDataContainer<dealii::hp::DoFHandler, VECTOR, dim>::GetMaterialId() const
     {
-      return _element[0]->material_id();
+      return element_[0]->material_id();
     }
   /*********************************************/
 
@@ -860,8 +860,8 @@ namespace DOpE
     ElementDataContainer<dealii::hp::DoFHandler, VECTOR, dim>::GetNbrMaterialId(
         unsigned int face) const
     {
-      if (_element[0]->neighbor_index(face) != -1)
-        return _element[0]->neighbor(face)->material_id();
+      if (element_[0]->neighbor_index(face) != -1)
+        return element_[0]->neighbor(face)->material_id();
       else
         throw DOpEException("There is no neighbor with number" + face,
             "HpElementDataContainer::GetNbrMaterialId");
@@ -873,7 +873,7 @@ namespace DOpE
     ElementDataContainer<dealii::hp::DoFHandler, VECTOR, dim>::GetFaceBoundaryIndicator(
         unsigned int face) const
     {
-      return _element[0]->face(face)->boundary_indicator();
+      return element_[0]->face(face)->boundary_indicator();
     }
 
   /*********************************************/
@@ -882,7 +882,7 @@ namespace DOpE
     bool
     ElementDataContainer<dealii::hp::DoFHandler, VECTOR, dim>::GetIsAtBoundary() const
     {
-      return _element[0]->at_boundary();
+      return element_[0]->at_boundary();
     }
 
   /*********************************************/
@@ -891,7 +891,7 @@ namespace DOpE
     double
     ElementDataContainer<dealii::hp::DoFHandler, VECTOR, dim>::GetElementDiameter() const
     {
-      return _element[0]->diameter();
+      return element_[0]->diameter();
     }
 
   /**********************************************/
@@ -899,7 +899,7 @@ namespace DOpE
     Point<dim>
     ElementDataContainer<dealii::hp::DoFHandler, VECTOR, dim>::GetCenter() const
     {
-      return _element[0]->center();
+      return element_[0]->center();
     }
 
   /*********************************************/
@@ -907,14 +907,14 @@ namespace DOpE
     const DOpEWrapper::FEValues<dim>&
     ElementDataContainer<dealii::hp::DoFHandler, VECTOR, dim>::GetFEValuesState() const
     {
-      return static_cast<const DOpEWrapper::FEValues<dim>&>(_state_hp_fe_values.get_present_fe_values());
+      return static_cast<const DOpEWrapper::FEValues<dim>&>(state_hp_fe_values_.get_present_fe_values());
     }
   /*********************************************/
   template<typename VECTOR, int dim>
     const DOpEWrapper::FEValues<dim>&
     ElementDataContainer<dealii::hp::DoFHandler, VECTOR, dim>::GetFEValuesControl() const
     {
-      return static_cast<const DOpEWrapper::FEValues<dim>&>(_control_hp_fe_values.get_present_fe_values());
+      return static_cast<const DOpEWrapper::FEValues<dim>&>(control_hp_fe_values_.get_present_fe_values());
     }
   /*********************************************/
 
@@ -922,14 +922,14 @@ namespace DOpE
     unsigned int
     ElementDataContainer<dealii::hp::DoFHandler, VECTOR, dim>::GetStateIndex() const
     {
-      return _state_index;
+      return state_index_;
     }
   /*********************************************/
   template<typename VECTOR, int dim>
     unsigned int
     ElementDataContainer<dealii::hp::DoFHandler, VECTOR, dim>::GetControlIndex() const
     {
-      return _control_index;
+      return control_index_;
     }
 } //end of namespace
 

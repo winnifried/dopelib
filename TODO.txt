@@ -1,8 +1,6 @@
 TODO DOpE
 =========
 - Translate TODO into English
-- Add doxygen documentation to website -> WW
-- Change private data member notation to trailing underscore
 - Update manual to contain full code blocks in particular for Section 2.6
 - Add more code examples to Section 5 of the manual
 
@@ -28,7 +26,7 @@ Review von unserem Paper: (Wer macht was)
 4.) Hänge ich nicht dran. Die Google Code Convention ist ein underscore
 	am Ende. Wenn das ok für Euch ist? dann kann ich das 	
 	suchen/ersetzen
-	-> WW (erledigt JA / NEIN)
+	-> WW Done
 
 5.) Würde ich die Antwort so lassen.
     -> Ja; bleibt so.
@@ -70,6 +68,15 @@ Review von unserem Paper: (Wer macht was)
 
 Standard TODO fuer naechstes Treffen
 ------------------------------------
+- Check the notation in the library:
+  	check for space after , ; ( * & + - |
+	      and before (*&+-|
+	recheck for leading _ and resolve (trailing _)
+        remove double __    
+
+	check for unused class member variables
+	captialize all defines in headers (no mixed or lower case)
+
 - CDC and FDC should be local template arguments of the methods in 
   PDE and Functional.
 - Beeing more clever, it should be possible to remove alle the UTT and QTT terms,

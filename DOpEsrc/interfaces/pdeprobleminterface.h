@@ -21,8 +21,8 @@
 *
 **/
 
-#ifndef _PDEPROBLEM_INTERFACE_H_
-#define _PDEPROBLEM_INTERFACE_H_
+#ifndef PDEPROBLEM_INTERFACE_H_
+#define PDEPROBLEM_INTERFACE_H_
 
 #include "dopeexceptionhandler.h"
 #include "outputhandler.h"
@@ -56,9 +56,9 @@ namespace DOpE
         PDEProblemInterface(PROBLEM *OP, int base_priority = 0)
             : ReducedProblemInterface_Base<VECTOR>()
         {
-          _OP = OP;
-          _base_priority = base_priority;
-          _post_index = "_" + this->GetProblem()->GetName();
+          OP_ = OP;
+          base_priority_ = base_priority;
+          post_index_ = "_" + this->GetProblem()->GetName();
         }
         virtual
         ~PDEProblemInterface()
@@ -92,7 +92,7 @@ namespace DOpE
         /******************************************************/
 
         /**
-         * Sets the type of the Problem _OP. This function secures the proper initialization of the
+         * Sets the type of the Problem OP_. This function secures the proper initialization of the
          * FEValues after the type has changed. See also the documentation of SetType in optproblemcontainer.h
          */
         void
@@ -128,27 +128,27 @@ namespace DOpE
         PROBLEM*
         GetProblem()
         {
-          return _OP;
+          return OP_;
         }
         const PROBLEM*
         GetProblem() const
         {
-          return _OP;
+          return OP_;
         }
         std::string
         GetPostIndex()
         {
-          return _post_index;
+          return post_index_;
         }
         int
         GetBasePriority()
         {
-          return _base_priority;
+          return base_priority_;
         }
       private:
-        PROBLEM* _OP;
-        int _base_priority;
-        std::string _post_index;
+        PROBLEM* OP_;
+        int base_priority_;
+        std::string post_index_;
     };
 
 }

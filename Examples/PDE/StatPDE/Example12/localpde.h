@@ -21,8 +21,8 @@
  *
  **/
 
-#ifndef _LOCALPDE_
-#define _LOCALPDE_
+#ifndef LOCALPDE_
+#define LOCALPDE_
 
 #include "pdeinterface.h"
 
@@ -38,9 +38,9 @@ template<
   {
     public:
   LocalPDE() :
-    _state_block_components(2, 0)
+    state_block_component_(2, 0)
       {
-	_state_block_components[1] = 1;
+	state_block_component_[1] = 1;
       }
 
       void
@@ -52,11 +52,11 @@ template<
         const DOpEWrapper::FEValues<dealdim> &state_fe_values =
 	  edc.GetFEValuesState();
 
-        assert(this->_problem_type == "state");
-	_uvalues.resize(n_q_points,Vector<double>(3));
-        _ugrads.resize(n_q_points, vector<Tensor<1, dealdim> >(3));
-        edc.GetGradsState("last_newton_solution", _ugrads);
-        edc.GetValuesState("last_newton_solution", _uvalues);
+        assert(this->problem_type_ == "state");
+	uvalues_.resize(n_q_points,Vector<double>(3));
+        ugrads_.resize(n_q_points, vector<Tensor<1, dealdim> >(3));
+        edc.GetGradsState("last_newton_solution", ugrads_);
+        edc.GetValuesState("last_newton_solution", uvalues_);
 
 	const FEValuesExtractors::Vector velocities (0);
 	const FEValuesExtractors::Scalar pressure (dealdim);
@@ -65,10 +65,10 @@ template<
         {
 	  Tensor<1, dealdim> u;
 	  u.clear();
-	  u[0] = _uvalues[q_point](0);
-	  u[1] = _uvalues[q_point](1);
-	  double p = _uvalues[q_point](2);
-	  double div_u = _ugrads[q_point][0][0] + _ugrads[q_point][1][1];
+	  u[0] = uvalues_[q_point](0);
+	  u[1] = uvalues_[q_point](1);
+	  double p = uvalues_[q_point](2);
+	  double div_u = ugrads_[q_point][0][0] + ugrads_[q_point][1][1];
 
 	  Tensor<2,dealdim> K;
 	  K[0][0] = 1.; 
@@ -132,21 +132,21 @@ template<
       ElementRightHandSide(const EDC<DH, VECTOR, dealdim>& edc,
           dealii::Vector<double> &local_vector, double scale)
       {
-        assert(this->_problem_type == "state");
+        assert(this->problem_type_ == "state");
         unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
         unsigned int n_q_points = edc.GetNQPoints();
         const DOpEWrapper::FEValues<dealdim> &state_fe_values =
             edc.GetFEValuesState();
 
-        _fvalues.resize(n_q_points);
+        fvalues_.resize(n_q_points);
         const FEValuesExtractors::Scalar pressure(dealdim);
 
         for (unsigned int q_point = 0; q_point < n_q_points; ++q_point)
         {
-          _fvalues[q_point] = 0.;
+          fvalues_[q_point] = 0.;
           for (unsigned int i = 0; i < n_dofs_per_element; i++)
           {
-            local_vector(i) += scale * _fvalues[q_point]
+            local_vector(i) += scale * fvalues_[q_point]
                 * state_fe_values[pressure].value(i, q_point)
                 * state_fe_values.JxW(q_point);
           }
@@ -172,13 +172,13 @@ template<
       BoundaryRightHandSide(const FDC<DH, VECTOR, dealdim>& fdc,
           dealii::Vector<double> & local_vector, double scale)
       {
-	assert(this->_problem_type == "state");
+	assert(this->problem_type_ == "state");
         unsigned int n_dofs_per_element = fdc.GetNDoFsPerElement();
         unsigned int n_q_points = fdc.GetNQPoints();
         const auto &state_fe_face_values =
             fdc.GetFEFaceValuesState();
 
-        _fvalues.resize(n_q_points);
+        fvalues_.resize(n_q_points);
         const FEValuesExtractors::Vector velocities(0);
 	const double alpha = 0.3;
 	const double beta = 1;
@@ -186,11 +186,11 @@ template<
         for (unsigned int q_point = 0; q_point < n_q_points; ++q_point)
         {
 	  Tensor<1,dealdim> p = state_fe_face_values.quadrature_point(q_point);
-	  _fvalues[q_point] = (alpha*p[0]*p[1]*p[1]/2 + beta*p[0] - alpha*p[0]*p[0]*p[0]/6);
+	  fvalues_[q_point] = (alpha*p[0]*p[1]*p[1]/2 + beta*p[0] - alpha*p[0]*p[0]*p[0]/6);
 
           for (unsigned int i = 0; i < n_dofs_per_element; i++)
           {
-          local_vector(i) += scale * _fvalues[q_point]
+          local_vector(i) += scale * fvalues_[q_point]
 	    * (state_fe_face_values[velocities].value(i, q_point) 
 	       * state_fe_face_values.normal_vector(q_point))
 	    * state_fe_face_values.JxW(q_point);
@@ -220,19 +220,19 @@ template<
       std::vector<unsigned int>&
       GetStateBlockComponent()
       {
-        return _state_block_components;
+        return state_block_component_;
       }
       const std::vector<unsigned int>&
       GetStateBlockComponent() const
       {
-        return _state_block_components;
+        return state_block_component_;
       }
 
     private:
-      vector<double> _fvalues;
-      vector<Vector<double> > _uvalues;
-      vector<vector<Tensor<1, dealdim> > > _ugrads;
+      vector<double> fvalues_;
+      vector<Vector<double> > uvalues_;
+      vector<vector<Tensor<1, dealdim> > > ugrads_;
 
-      vector<unsigned int> _state_block_components;
+      vector<unsigned int> state_block_component_;
   };
 #endif

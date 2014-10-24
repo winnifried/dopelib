@@ -35,8 +35,8 @@
 */ 
 
 
-#ifndef _ALE_TRANSFORMATIONS_H_
-#define _ALE_TRANSFORMATIONS_H_
+#ifndef ALE_TRANSFORMATIONS_H_
+#define ALE_TRANSFORMATIONS_H_
 
 namespace ALE_Transformations
 {    

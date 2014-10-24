@@ -21,8 +21,8 @@
 *
 **/
 
-#ifndef _IntegratorMultiMesh_H_
-#define _IntegratorMultiMesh_H_
+#ifndef IntegratorMultiMesh_H_
+#define IntegratorMultiMesh_H_
 
 #include <lac/vector.h>
 #include <lac/block_sparsity_pattern.h>
@@ -212,10 +212,10 @@ namespace DOpE
 	    const FullMatrix<SCALAR>& prolong_matrix,unsigned int coarse_index,unsigned int fine_index,
 	    Multimesh_FaceDataContainer<DH, VECTOR, dim>& edc);
 
-        INTEGRATORDATACONT & _idc;
+        INTEGRATORDATACONT & idc_;
 
-        std::map<std::string, const VECTOR*> _domain_data;
-        std::map<std::string, const dealii::Vector<SCALAR>*> _param_data;
+        std::map<std::string, const VECTOR*> domain_data_;
+        std::map<std::string, const dealii::Vector<SCALAR>*> param_data_;
     };
 
   /**********************************Implementation*******************************************/
@@ -224,7 +224,7 @@ namespace DOpE
       int dim>
     IntegratorMultiMesh<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::IntegratorMultiMesh(
         INTEGRATORDATACONT& idc) :
-      _idc(idc)
+      idc_(idc)
     {
     }
 
@@ -282,20 +282,20 @@ namespace DOpE
 	    int fine_index = 0; //element[fine_index] is the finer of the two (both indices are 2 = element.size() if they are equally refined.
 
             // Generate the data containers.
-            _idc.InitializeMMEDC(pde.GetUpdateFlags(),
+            idc_.InitializeMMEDC(pde.GetUpdateFlags(),
 				 *(pde.GetBaseProblem().GetSpaceTimeHandler()), element, tria_element,
 				 this->GetParamData(), this->GetDomainData());
-            auto& edc = _idc.GetMultimeshElementDataContainer();
+            auto& edc = idc_.GetMultimeshElementDataContainer();
 
             bool need_interfaces = pde.HasInterfaces();
-            _idc.InitializeMMFDC(pde.GetFaceUpdateFlags(),
+            idc_.InitializeMMFDC(pde.GetFaceUpdateFlags(),
 				 *(pde.GetBaseProblem().GetSpaceTimeHandler()),
 				 element,
 				 tria_element,
 				 this->GetParamData(),
 				 this->GetDomainData(),
 				 need_interfaces);
-            auto& fdc = _idc.GetMultimeshFaceDataContainer();
+            auto& fdc = idc_.GetMultimeshFaceDataContainer();
 
 	    for(; element_iter != element_list.end(); element_iter++)
 	    {
@@ -386,18 +386,18 @@ namespace DOpE
 	int fine_index = 0; //element[fine_index] is the finer of the two (both indices are 2 = element.size() if they are equally refined.
 	
 	// Generate the data containers.
-	_idc.InitializeMMEDC(pde.GetUpdateFlags(),
+	idc_.InitializeMMEDC(pde.GetUpdateFlags(),
 			     *(pde.GetBaseProblem().GetSpaceTimeHandler()), element, tria_element,
 			     this->GetParamData(), this->GetDomainData());
-	auto& edc = _idc.GetMultimeshElementDataContainer();
+	auto& edc = idc_.GetMultimeshElementDataContainer();
 	
-            _idc.InitializeMMFDC(pde.GetFaceUpdateFlags(),
+            idc_.InitializeMMFDC(pde.GetFaceUpdateFlags(),
 				 *(pde.GetBaseProblem().GetSpaceTimeHandler()),
 				 element,
 				 tria_element,
 				 this->GetParamData(),
 				 this->GetDomainData());
-            auto& fdc = _idc.GetMultimeshFaceDataContainer();
+            auto& fdc = idc_.GetMultimeshFaceDataContainer();
 
 	    for(; element_iter != element_list.end(); element_iter++)
 	    {
@@ -474,20 +474,20 @@ namespace DOpE
 	int fine_index = 0; //element[fine_index] is the finer of the two (both indices are 2 = element.size() if they are equally refined.
 
 	// Generate the data containers.
-        _idc.InitializeMMEDC(pde.GetUpdateFlags(),
+        idc_.InitializeMMEDC(pde.GetUpdateFlags(),
 			     *(pde.GetBaseProblem().GetSpaceTimeHandler()), element, tria_element,
 			     this->GetParamData(), this->GetDomainData());
-        auto& edc = _idc.GetMultimeshElementDataContainer();
+        auto& edc = idc_.GetMultimeshElementDataContainer();
 
         bool need_interfaces = pde.HasInterfaces();
-        _idc.InitializeMMFDC(pde.GetFaceUpdateFlags(),
+        idc_.InitializeMMFDC(pde.GetFaceUpdateFlags(),
 			     *(pde.GetBaseProblem().GetSpaceTimeHandler()),
 			     element,
 			     tria_element,
 			     this->GetParamData(),
 			     this->GetDomainData(),
 			     need_interfaces);
-        auto & fdc = _idc.GetMultimeshFaceDataContainer();
+        auto & fdc = idc_.GetMultimeshFaceDataContainer();
 
 	for(; element_iter != element_list.end(); element_iter++)
 	{
@@ -561,10 +561,10 @@ namespace DOpE
     }
     
     // Generate the data containers.
-    _idc.InitializeMMEDC(pde.GetUpdateFlags(),
+    idc_.InitializeMMEDC(pde.GetUpdateFlags(),
 			 *(pde.GetBaseProblem().GetSpaceTimeHandler()), element, tria_element,
 			 this->GetParamData(), this->GetDomainData());
-    auto& edc = _idc.GetMultimeshElementDataContainer();
+    auto& edc = idc_.GetMultimeshElementDataContainer();
     
     for(; element_iter != element_list.end(); element_iter++)
     {
@@ -653,12 +653,12 @@ namespace DOpE
 	int fine_index = 0; //element[fine_index] is the finer of the two (both indices are 2 = element.size() if they are equally refined.
 	
 
-	_idc.InitializeMMFDC(pde.GetFaceUpdateFlags(),
+	idc_.InitializeMMFDC(pde.GetFaceUpdateFlags(),
 			   *(pde.GetBaseProblem().GetSpaceTimeHandler()),
 			   element, tria_element,
 			   this->GetParamData(),
 			   this->GetDomainData());
-	auto & fdc = _idc.GetMultimeshFaceDataContainer();
+	auto & fdc = idc_.GetMultimeshFaceDataContainer();
 
 	std::vector<unsigned int> boundary_functional_colors = pde.GetBoundaryFunctionalColors();
 	bool need_boundary_integrals = (boundary_functional_colors.size() > 0);
@@ -721,12 +721,12 @@ namespace DOpE
 //            auto element = pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandlerBeginActive();
 //            auto endc = pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandlerEnd();
 //
-//            _idc.InitializeFDC(pde.GetFaceUpdateFlags(),
+//            idc_.InitializeFDC(pde.GetFaceUpdateFlags(),
 //                *(pde.GetBaseProblem().GetSpaceTimeHandler()),
 //                element,
 //                this->GetParamData(),
 //                this->GetDomainData());
-//            auto & fdc = _idc.GetFaceDataContainer();
+//            auto & fdc = idc_.GetFaceDataContainer();
 //
 //            bool need_faces = pde.HasFaces();
 //            if(!need_faces)
@@ -912,13 +912,13 @@ namespace DOpE
     IntegratorMultiMesh<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::AddDomainData(
         std::string name, const VECTOR* new_data)
     {
-      if (_domain_data.find(name) != _domain_data.end())
+      if (domain_data_.find(name) != domain_data_.end())
         {
           throw DOpEException(
               "Adding multiple Data with name " + name + " is prohibited!",
               "IntegratorMultiMesh::AddDomainData");
         }
-      _domain_data.insert(std::pair<std::string, const VECTOR*>(name, new_data));
+      domain_data_.insert(std::pair<std::string, const VECTOR*>(name, new_data));
     }
 
   /*******************************************************************************************/
@@ -930,14 +930,14 @@ namespace DOpE
         std::string name)
     {
       typename std::map<std::string, const VECTOR *>::iterator it =
-          _domain_data.find(name);
-      if (it == _domain_data.end())
+          domain_data_.find(name);
+      if (it == domain_data_.end())
         {
           throw DOpEException(
               "Deleting Data " + name + " is impossible! Data not found",
               "IntegratorMultiMesh::DeleteDomainData");
         }
-      _domain_data.erase(it);
+      domain_data_.erase(it);
     }
   /*******************************************************************************************/
 
@@ -948,8 +948,8 @@ namespace DOpE
 											 VECTOR &residual) const
     {
       typename std::map<std::string, const VECTOR *>::const_iterator it =
-          _domain_data.find("fixed_rhs");
-      if (it != _domain_data.end())
+          domain_data_.find("fixed_rhs");
+      if (it != domain_data_.end())
       {
 	assert(residual.size() == it->second->size());
 	residual.add(s,*(it->second));
@@ -963,7 +963,7 @@ namespace DOpE
     const std::map<std::string, const VECTOR*>&
     IntegratorMultiMesh<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::GetDomainData() const
     {
-      return _domain_data;
+      return domain_data_;
     }
 
   /*******************************************************************************************/
@@ -974,13 +974,13 @@ namespace DOpE
     IntegratorMultiMesh<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::AddParamData(
         std::string name, const dealii::Vector<SCALAR>* new_data)
     {
-      if (_param_data.find(name) != _param_data.end())
+      if (param_data_.find(name) != param_data_.end())
         {
           throw DOpEException(
               "Adding multiple Data with name " + name + " is prohibited!",
               "IntegratorMultiMesh::AddParamData");
         }
-      _param_data.insert(
+      param_data_.insert(
           std::pair<std::string, const dealii::Vector<SCALAR>*>(name, new_data));
     }
 
@@ -993,14 +993,14 @@ namespace DOpE
         std::string name)
     {
       typename std::map<std::string, const dealii::Vector<SCALAR>*>::iterator
-          it = _param_data.find(name);
-      if (it == _param_data.end())
+          it = param_data_.find(name);
+      if (it == param_data_.end())
         {
           throw DOpEException(
               "Deleting Data " + name + " is impossible! Data not found",
               "IntegratorMultiMesh::DeleteParamData");
         }
-      _param_data.erase(it);
+      param_data_.erase(it);
     }
 
   /*******************************************************************************************/
@@ -1010,7 +1010,7 @@ namespace DOpE
     const std::map<std::string, const dealii::Vector<SCALAR>*>&
     IntegratorMultiMesh<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::GetParamData() const
     {
-      return _param_data;
+      return param_data_;
     }
 
   /*******************************************************************************************/
@@ -1020,7 +1020,7 @@ namespace DOpE
      INTEGRATORDATACONT&
     IntegratorMultiMesh<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::GetIntegratorDataContainer() const
     {
-      return _idc;
+      return idc_;
     }
 
 

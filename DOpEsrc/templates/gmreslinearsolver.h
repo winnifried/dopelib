@@ -21,8 +21,8 @@
 *
 **/
 
-#ifndef _GMRES_LINEAR_SOLVER_H_
-#define _GMRES_LINEAR_SOLVER_H_
+#ifndef GMRES_LINEAR_SOLVER_H_
+#define GMRES_LINEAR_SOLVER_H_
 
 #include <lac/vector.h>
 #include <lac/block_sparsity_pattern.h>
@@ -93,11 +93,11 @@ namespace DOpE
   protected:
 
   private:
-    SPARSITYPATTERN _sparsity_pattern;
-    MATRIX _matrix;
+    SPARSITYPATTERN sparsity_pattern_;
+    MATRIX matrix_;
 
-    double _linear_global_tol, _linear_tol;
-    int  _linear_maxiter, _no_tmp_vectors;
+    double linear_global_tol_, linear_tol_;
+    int  linear_maxiter_, no_tmp_vectors_;
   };
 
 /*********************************Implementation************************************************/
@@ -117,9 +117,9 @@ template <typename PRECONDITIONER,typename SPARSITYPATTERN, typename MATRIX, typ
     ::GMRESLinearSolverWithMatrix(ParameterReader &param_reader) 
 {
   param_reader.SetSubsection("gmres_withmatrix parameters");
-  _linear_global_tol = param_reader.get_double ("linear_global_tol");
-  _linear_maxiter    = param_reader.get_integer ("linear_maxiter"); 
-  _no_tmp_vectors    = param_reader.get_integer ("no_tmp_vectors"); 
+  linear_global_tol_ = param_reader.get_double ("linear_global_tol");
+  linear_maxiter_    = param_reader.get_integer ("linear_maxiter"); 
+  no_tmp_vectors_    = param_reader.get_integer ("no_tmp_vectors"); 
 
 }
 
@@ -136,9 +136,9 @@ template <typename PRECONDITIONER,typename SPARSITYPATTERN, typename MATRIX, typ
   template<typename PROBLEM>
   void  GMRESLinearSolverWithMatrix<PRECONDITIONER,SPARSITYPATTERN,MATRIX,VECTOR>::ReInit(PROBLEM& pde)
 {
-  _matrix.clear();
-  pde.ComputeSparsityPattern(_sparsity_pattern);
-  _matrix.reinit(_sparsity_pattern);
+  matrix_.clear();
+  pde.ComputeSparsityPattern(sparsity_pattern_);
+  matrix_.reinit(sparsity_pattern_);
 }
 
 /******************************************************/
@@ -153,23 +153,23 @@ template <typename PRECONDITIONER,typename SPARSITYPATTERN, typename MATRIX, typ
 {
   if(force_matrix_build)
   { 
-    integr.ComputeMatrix (pde,_matrix);
+    integr.ComputeMatrix (pde,matrix_);
   }
  
-  integr.ApplyNewtonBoundaryValues(pde,_matrix,rhs,solution);
+  integr.ApplyNewtonBoundaryValues(pde,matrix_,rhs,solution);
 
-  dealii::SolverControl solver_control (_linear_maxiter, _linear_global_tol,false,false);
+  dealii::SolverControl solver_control (linear_maxiter_, linear_global_tol_,false,false);
 
   // This is gmres specific
   dealii::GrowingVectorMemory<VECTOR> vector_memory;
   typename dealii::SolverGMRES<VECTOR>::AdditionalData gmres_data;
-  gmres_data.max_n_tmp_vectors = _no_tmp_vectors;
+  gmres_data.max_n_tmp_vectors = no_tmp_vectors_;
 
 
   dealii::SolverGMRES<VECTOR> gmres (solver_control, vector_memory, gmres_data);
   PRECONDITIONER precondition;
-  precondition.initialize(_matrix);
-  gmres.solve (_matrix, solution, rhs,
+  precondition.initialize(matrix_);
+  gmres.solve (matrix_, solution, rhs,
     precondition);
 
   pde.GetDoFConstraints().distribute(solution);

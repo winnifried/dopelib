@@ -21,8 +21,8 @@
  *
  **/
 
-#ifndef _ELEMENTDATACONTAINER_INTERNAL_H_
-#define _ELEMENTDATACONTAINER_INTERNAL_H_
+#ifndef ELEMENTDATACONTAINER_INTERNAL_H_
+#define ELEMENTDATACONTAINER_INTERNAL_H_
 
 #include <deal.II/lac/vector.h>
 
@@ -58,7 +58,7 @@ namespace DOpE
           ;
 
           /**
-           * Looks up the given name in _parameter_data and returns the
+           * Looks up the given name in parameter_data_ and returns the
            * corresponding value through 'value'.
            */
           void
@@ -70,7 +70,7 @@ namespace DOpE
           const std::map<std::string, const VECTOR*> &
           GetDomainValues() const
           {
-            return _domain_values;
+            return domain_values_;
           }
           ;
 
@@ -308,8 +308,8 @@ namespace DOpE
                 std::string name,
                 std::vector<std::vector<dealii::Tensor<2, targetdim> > >& values) const;
 
-          const std::map<std::string, const dealii::Vector<double>*> &_param_values;
-          const std::map<std::string, const VECTOR*> &_domain_values;
+          const std::map<std::string, const dealii::Vector<double>*> &param_values_;
+          const std::map<std::string, const VECTOR*> &domain_values_;
       };
 
     /**********************************************************************/
@@ -317,7 +317,7 @@ namespace DOpE
       ElementDataContainerInternal<VECTOR, dim>::ElementDataContainerInternal(
           const std::map<std::string, const dealii::Vector<double>*> &param_values,
           const std::map<std::string, const VECTOR*> &domain_values)
-          : _param_values(param_values), _domain_values(domain_values)
+          : param_values_(param_values), domain_values_(domain_values)
       {
       }
 
@@ -327,8 +327,8 @@ namespace DOpE
           dealii::Vector<double>& value) const
       {
         typename std::map<std::string, const dealii::Vector<double>*>::const_iterator it =
-            _param_values.find(name);
-        if (it == _param_values.end())
+            param_values_.find(name);
+        if (it == param_values_.end())
         {
           throw DOpEException("Did not find " + name,
               "ElementDataContainerInternal::GetParamValues");

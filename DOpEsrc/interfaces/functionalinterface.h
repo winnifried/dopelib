@@ -21,8 +21,8 @@
  *
  **/
 
-#ifndef _FUNCTIONAL_INTERFACE_H_
-#define _FUNCTIONAL_INTERFACE_H_
+#ifndef FUNCTIONAL_INTERFACE_H_
+#define FUNCTIONAL_INTERFACE_H_
 
 #include <map>
 #include <string>
@@ -570,7 +570,7 @@ namespace DOpE
         std::string
         GetProblemType() const;
       private:
-        std::string _problem_type;
+        std::string problem_type_;
 
     };
 }

@@ -21,8 +21,8 @@
  *
  **/
 
-#ifndef _LOCALPDE_
-#define _LOCALPDE_
+#ifndef LOCALPDE_
+#define LOCALPDE_
 
 #include "pdeinterface.h"
 
@@ -38,13 +38,13 @@ template<
   {
     public:
       LocalPDE() :
-          _state_block_components(5, 0)
+          state_block_component_(5, 0)
       {
         assert(dealdim==2);
         //first block velocity, second block pressure, third block displacement
-        _state_block_components[2] = 1;
-        _state_block_components[3] = 2;
-        _state_block_components[4] = 2;
+        state_block_component_[2] = 1;
+        state_block_component_[3] = 2;
+        state_block_component_[4] = 2;
       }
 
       // Domain values for elements
@@ -53,7 +53,7 @@ template<
           dealii::Vector<double> &local_vector, double scale,
           double /*scale_ico*/)
       {
-        assert(this->_problem_type == "state");
+        assert(this->problem_type_ == "state");
         const DOpEWrapper::FEValues<dealdim> & state_fe_values =
             edc.GetFEValuesState();
         const unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
@@ -65,11 +65,11 @@ template<
         const double alpha_u = 1.0;
         const double mu = 1.0;
 
-        _uvalues.resize(n_q_points, Vector<double>(5));
-        _ugrads.resize(n_q_points, vector<Tensor<1, 2> >(5));
+        uvalues_.resize(n_q_points, Vector<double>(5));
+        ugrads_.resize(n_q_points, vector<Tensor<1, 2> >(5));
 
-        edc.GetValuesState("last_newton_solution", _uvalues);
-        edc.GetGradsState("last_newton_solution", _ugrads);
+        edc.GetValuesState("last_newton_solution", uvalues_);
+        edc.GetGradsState("last_newton_solution", ugrads_);
 
         const FEValuesExtractors::Vector velocities(0);
         const FEValuesExtractors::Scalar pressure(2);
@@ -85,10 +85,10 @@ template<
         {
           // ALE Transformations
           Tensor<2, 2> F;
-          F[0][0] = 1.0 + _ugrads[q_point][3][0];
-          F[0][1] = _ugrads[q_point][3][1];
-          F[1][0] = _ugrads[q_point][4][0];
-          F[1][1] = 1.0 + _ugrads[q_point][4][1];
+          F[0][0] = 1.0 + ugrads_[q_point][3][0];
+          F[0][1] = ugrads_[q_point][3][1];
+          F[1][0] = ugrads_[q_point][4][0];
+          F[1][1] = 1.0 + ugrads_[q_point][4][1];
 
           Tensor<2, 2> F_Inverse;
           F_Inverse = invert(F);
@@ -100,34 +100,34 @@ template<
           J = determinant(F);
 
           Tensor<2, 2> pI;
-          pI[0][0] = _uvalues[q_point](2);
-          pI[1][1] = _uvalues[q_point](2);
+          pI[0][0] = uvalues_[q_point](2);
+          pI[1][1] = uvalues_[q_point](2);
 
           Tensor<2, 2> v_grad;
-          v_grad[0][0] = _ugrads[q_point][0][0];
-          v_grad[0][1] = _ugrads[q_point][0][1];
-          v_grad[1][0] = _ugrads[q_point][1][0];
-          v_grad[1][1] = _ugrads[q_point][1][1];
+          v_grad[0][0] = ugrads_[q_point][0][0];
+          v_grad[0][1] = ugrads_[q_point][0][1];
+          v_grad[1][0] = ugrads_[q_point][1][0];
+          v_grad[1][1] = ugrads_[q_point][1][1];
 
           Tensor<1, 2> v;
           v.clear();
-          v[0] = _uvalues[q_point](0);
-          v[1] = _uvalues[q_point](1);
+          v[0] = uvalues_[q_point](0);
+          v[1] = uvalues_[q_point](1);
 
           Tensor<2, 2> u_grad;
-          u_grad[0][0] = _ugrads[q_point][3][0];
-          u_grad[0][1] = _ugrads[q_point][3][1];
-          u_grad[1][0] = _ugrads[q_point][4][0];
-          u_grad[1][1] = _ugrads[q_point][4][1];
+          u_grad[0][0] = ugrads_[q_point][3][0];
+          u_grad[0][1] = ugrads_[q_point][3][1];
+          u_grad[1][0] = ugrads_[q_point][4][0];
+          u_grad[1][1] = ugrads_[q_point][4][1];
 
           //div(J * F^{-1} * v)
           double incompressiblity_fluid;
-          incompressiblity_fluid = (_ugrads[q_point][0][0]
-              + _ugrads[q_point][4][1] * _ugrads[q_point][0][0]
-              - _ugrads[q_point][3][1] * _ugrads[q_point][1][0]
-              - _ugrads[q_point][4][0] * _ugrads[q_point][0][1]
-              + _ugrads[q_point][1][1]
-              + _ugrads[q_point][3][0] * _ugrads[q_point][1][1]);
+          incompressiblity_fluid = (ugrads_[q_point][0][0]
+              + ugrads_[q_point][4][1] * ugrads_[q_point][0][0]
+              - ugrads_[q_point][3][1] * ugrads_[q_point][1][0]
+              - ugrads_[q_point][4][0] * ugrads_[q_point][0][1]
+              + ugrads_[q_point][1][1]
+              + ugrads_[q_point][3][0] * ugrads_[q_point][1][1]);
 
           // constitutive stress tensors for fluid and structure
           Tensor<2, 2> cauchy_stress_fluid;
@@ -174,7 +174,7 @@ template<
           FullMatrix<double> &local_matrix, double scale,
           double /*scale_ico*/)
       {
-        assert(this->_problem_type == "state");
+        assert(this->problem_type_ == "state");
         const DOpEWrapper::FEValues<dealdim> & state_fe_values =
             edc.GetFEValuesState();
         const unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
@@ -186,11 +186,11 @@ template<
         const double alpha_u = 1.0;
         const double mu = 1.0;
 
-        _uvalues.resize(n_q_points, Vector<double>(5));
-        _ugrads.resize(n_q_points, vector<Tensor<1, 2> >(5));
+        uvalues_.resize(n_q_points, Vector<double>(5));
+        ugrads_.resize(n_q_points, vector<Tensor<1, 2> >(5));
 
-        edc.GetValuesState("last_newton_solution", _uvalues);
-        edc.GetGradsState("last_newton_solution", _ugrads);
+        edc.GetValuesState("last_newton_solution", uvalues_);
+        edc.GetGradsState("last_newton_solution", ugrads_);
 
         const FEValuesExtractors::Vector velocities(0);
         const FEValuesExtractors::Scalar pressure(2);
@@ -206,10 +206,10 @@ template<
         {
           // ALE Transformations
           Tensor<2, 2> F;
-          F[0][0] = 1.0 + _ugrads[q_point][3][0];
-          F[0][1] = _ugrads[q_point][3][1];
-          F[1][0] = _ugrads[q_point][4][0];
-          F[1][1] = 1.0 + _ugrads[q_point][4][1];
+          F[0][0] = 1.0 + ugrads_[q_point][3][0];
+          F[0][1] = ugrads_[q_point][3][1];
+          F[1][0] = ugrads_[q_point][4][0];
+          F[1][1] = 1.0 + ugrads_[q_point][4][1];
 
           Tensor<2, 2> F_Inverse;
           F_Inverse = invert(F);
@@ -221,31 +221,31 @@ template<
           J = determinant(F);
 
           Tensor<2, 2> F_tilde;
-          F_tilde[0][0] = 1.0 + _ugrads[q_point][4][1];
-          F_tilde[0][1] = -_ugrads[q_point][3][1];
-          F_tilde[1][0] = -_ugrads[q_point][4][0];
-          F_tilde[1][1] = 1.0 + _ugrads[q_point][3][0];
+          F_tilde[0][0] = 1.0 + ugrads_[q_point][4][1];
+          F_tilde[0][1] = -ugrads_[q_point][3][1];
+          F_tilde[1][0] = -ugrads_[q_point][4][0];
+          F_tilde[1][1] = 1.0 + ugrads_[q_point][3][0];
 
           Tensor<2, 2> pI;
-          pI[0][0] = _uvalues[q_point](2);
-          pI[1][1] = _uvalues[q_point](2);
+          pI[0][0] = uvalues_[q_point](2);
+          pI[1][1] = uvalues_[q_point](2);
 
           Tensor<2, 2> v_grad;
-          v_grad[0][0] = _ugrads[q_point][0][0];
-          v_grad[0][1] = _ugrads[q_point][0][1];
-          v_grad[1][0] = _ugrads[q_point][1][0];
-          v_grad[1][1] = _ugrads[q_point][1][1];
+          v_grad[0][0] = ugrads_[q_point][0][0];
+          v_grad[0][1] = ugrads_[q_point][0][1];
+          v_grad[1][0] = ugrads_[q_point][1][0];
+          v_grad[1][1] = ugrads_[q_point][1][1];
 
           Tensor<1, 2> v;
           v.clear();
-          v[0] = _uvalues[q_point](0);
-          v[1] = _uvalues[q_point](1);
+          v[0] = uvalues_[q_point](0);
+          v[1] = uvalues_[q_point](1);
 
           Tensor<2, 2> u_grad;
-          u_grad[0][0] = _ugrads[q_point][3][0];
-          u_grad[0][1] = _ugrads[q_point][3][1];
-          u_grad[1][0] = _ugrads[q_point][4][0];
-          u_grad[1][1] = _ugrads[q_point][4][1];
+          u_grad[0][0] = ugrads_[q_point][3][0];
+          u_grad[0][1] = ugrads_[q_point][3][1];
+          u_grad[1][0] = ugrads_[q_point][4][0];
+          u_grad[1][1] = ugrads_[q_point][4][1];
 
           for (unsigned int j = 0; j < n_dofs_per_element; j++)
           {
@@ -271,10 +271,10 @@ template<
             F_tilde_LinU[1][1] = phi_j_grads_u[0][0];
 
             double J_LinU;
-            J_LinU = (phi_j_grads_u[0][0] * (1 + _ugrads[q_point][4][1])
-                + (1 + _ugrads[q_point][3][0]) * phi_j_grads_u[1][1]
-                - phi_j_grads_u[0][1] * _ugrads[q_point][4][0]
-                - _ugrads[q_point][3][1] * phi_j_grads_u[1][0]);
+            J_LinU = (phi_j_grads_u[0][0] * (1 + ugrads_[q_point][4][1])
+                + (1 + ugrads_[q_point][3][0]) * phi_j_grads_u[1][1]
+                - phi_j_grads_u[0][1] * ugrads_[q_point][4][0]
+                - ugrads_[q_point][3][1] * phi_j_grads_u[1][0]);
 
             Tensor<2, 2> F_Inverse_LinU;
             F_Inverse_LinU = (-1.0 / std::pow(J, 2) * J_LinU * F_tilde
@@ -324,10 +324,10 @@ template<
             double incompressiblity_fluid_LinAll;
             incompressiblity_fluid_LinAll = phi_j_grads_v[0][0]
                 + phi_j_grads_v[1][1]
-                + (phi_j_grads_u[1][1] * _ugrads[q_point][0][0]
-                    - phi_j_grads_u[0][1] * _ugrads[q_point][1][0]
-                    - phi_j_grads_u[1][0] * _ugrads[q_point][0][1]
-                    + phi_j_grads_u[0][0] * _ugrads[q_point][1][1]);
+                + (phi_j_grads_u[1][1] * ugrads_[q_point][0][0]
+                    - phi_j_grads_u[0][1] * ugrads_[q_point][1][0]
+                    - phi_j_grads_u[1][0] * ugrads_[q_point][0][1]
+                    + phi_j_grads_u[0][0] * ugrads_[q_point][1][1]);
 
             for (unsigned int i = 0; i < n_dofs_per_element; i++)
             {
@@ -377,7 +377,7 @@ template<
       ElementRightHandSide(const EDC<DH, VECTOR, dealdim>& /*edc*/,
 			dealii::Vector<double> &/*local_vector*/, double /*scale*/)
       {
-        assert(this->_problem_type == "state");
+        assert(this->problem_type_ == "state");
       }
 
       // Values for Boundary integrals
@@ -386,7 +386,7 @@ template<
           dealii::Vector<double> &local_vector, double scale,
           double /*scale_ico*/)
       {
-        assert(this->_problem_type == "state");
+        assert(this->problem_type_ == "state");
         const auto & state_fe_face_values = fdc.GetFEFaceValuesState();
         unsigned int n_dofs_per_element = fdc.GetNDoFsPerElement();
         unsigned int n_q_points = fdc.GetNQPoints();
@@ -398,9 +398,9 @@ template<
           double density_fluid = 1.0;
           double viscosity = 1.0;
 
-          _uboundarygrads.resize(n_q_points, vector<Tensor<1, 2> >(5));
+          uboundarygrads_.resize(n_q_points, vector<Tensor<1, 2> >(5));
 
-          fdc.GetFaceGradsState("last_newton_solution", _uboundarygrads);
+          fdc.GetFaceGradsState("last_newton_solution", uboundarygrads_);
 
           const FEValuesExtractors::Vector velocities(0);
           const FEValuesExtractors::Scalar pressure(2);
@@ -409,19 +409,19 @@ template<
           for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
           {
             Tensor<2, 2> F;
-            F[0][0] = 1.0 + _uboundarygrads[q_point][3][0];
-            F[0][1] = _uboundarygrads[q_point][3][1];
-            F[1][0] = _uboundarygrads[q_point][4][0];
-            F[1][1] = 1.0 + _uboundarygrads[q_point][4][1];
+            F[0][0] = 1.0 + uboundarygrads_[q_point][3][0];
+            F[0][1] = uboundarygrads_[q_point][3][1];
+            F[1][0] = uboundarygrads_[q_point][4][0];
+            F[1][1] = 1.0 + uboundarygrads_[q_point][4][1];
 
             double J = determinant(F);
 
             Tensor<2, 2> v_grad;
             v_grad.clear();
-            v_grad[0][0] = _uboundarygrads[q_point][0][0];
-            v_grad[0][1] = _uboundarygrads[q_point][0][1];
-            v_grad[1][0] = _uboundarygrads[q_point][1][0];
-            v_grad[1][1] = _uboundarygrads[q_point][1][1];
+            v_grad[0][0] = uboundarygrads_[q_point][0][0];
+            v_grad[0][1] = uboundarygrads_[q_point][0][1];
+            v_grad[1][0] = uboundarygrads_[q_point][1][0];
+            v_grad[1][1] = uboundarygrads_[q_point][1][1];
 
             const Tensor<2, 2> do_nothing_ALE = density_fluid * viscosity
                 * transpose(invert(F)) * transpose(v_grad);
@@ -447,7 +447,7 @@ template<
           dealii::FullMatrix<double> &local_matrix, double scale,
           double /*scale_ico*/)
       {
-        assert(this->_problem_type == "state");
+        assert(this->problem_type_ == "state");
         const auto & state_fe_face_values = fdc.GetFEFaceValuesState();
         unsigned int n_dofs_per_element = fdc.GetNDoFsPerElement();
         unsigned int n_q_points = fdc.GetNQPoints();
@@ -459,9 +459,9 @@ template<
           double density_fluid = 1.0;
           double viscosity = 1.0;
 
-          _uboundarygrads.resize(n_q_points, vector<Tensor<1, 2> >(5));
+          uboundarygrads_.resize(n_q_points, vector<Tensor<1, 2> >(5));
 
-          fdc.GetFaceGradsState("last_newton_solution", _uboundarygrads);
+          fdc.GetFaceGradsState("last_newton_solution", uboundarygrads_);
 
           const FEValuesExtractors::Vector velocities(0);
           const FEValuesExtractors::Vector displacements(3);
@@ -470,10 +470,10 @@ template<
           {
             // ALE Transformations
             Tensor<2, 2> F;
-            F[0][0] = 1.0 + _uboundarygrads[q_point][3][0];
-            F[0][1] = _uboundarygrads[q_point][3][1];
-            F[1][0] = _uboundarygrads[q_point][4][0];
-            F[1][1] = 1.0 + _uboundarygrads[q_point][4][1];
+            F[0][0] = 1.0 + uboundarygrads_[q_point][3][0];
+            F[0][1] = uboundarygrads_[q_point][3][1];
+            F[1][0] = uboundarygrads_[q_point][4][0];
+            F[1][1] = 1.0 + uboundarygrads_[q_point][4][1];
 
             Tensor<2, 2> F_Inverse;
             F_Inverse = invert(F);
@@ -482,16 +482,16 @@ template<
             J = determinant(F);
 
             Tensor<2, 2> F_tilde;
-            F_tilde[0][0] = 1.0 + _uboundarygrads[q_point][4][1];
-            F_tilde[0][1] = -_uboundarygrads[q_point][3][1];
-            F_tilde[1][0] = -_uboundarygrads[q_point][4][0];
-            F_tilde[1][1] = 1.0 + _uboundarygrads[q_point][3][0];
+            F_tilde[0][0] = 1.0 + uboundarygrads_[q_point][4][1];
+            F_tilde[0][1] = -uboundarygrads_[q_point][3][1];
+            F_tilde[1][0] = -uboundarygrads_[q_point][4][0];
+            F_tilde[1][1] = 1.0 + uboundarygrads_[q_point][3][0];
 
             Tensor<2, 2> v_grad;
-            v_grad[0][0] = _uboundarygrads[q_point][0][0];
-            v_grad[0][1] = _uboundarygrads[q_point][0][1];
-            v_grad[1][0] = _uboundarygrads[q_point][1][0];
-            v_grad[1][1] = _uboundarygrads[q_point][1][1];
+            v_grad[0][0] = uboundarygrads_[q_point][0][0];
+            v_grad[0][1] = uboundarygrads_[q_point][0][1];
+            v_grad[1][0] = uboundarygrads_[q_point][1][0];
+            v_grad[1][1] = uboundarygrads_[q_point][1][1];
 
             for (unsigned int i = 0; i < n_dofs_per_element; i++)
             {
@@ -520,10 +520,10 @@ template<
 
                 double J_LinU;
                 J_LinU = (phi_j_grads_u[0][0]
-                    * (1 + _uboundarygrads[q_point][4][1])
-                    + (1 + _uboundarygrads[q_point][3][0]) * phi_j_grads_u[1][1]
-                    - phi_j_grads_u[0][1] * _uboundarygrads[q_point][4][0]
-                    - _uboundarygrads[q_point][3][1] * phi_j_grads_u[1][0]);
+                    * (1 + uboundarygrads_[q_point][4][1])
+                    + (1 + uboundarygrads_[q_point][3][0]) * phi_j_grads_u[1][1]
+                    - phi_j_grads_u[0][1] * uboundarygrads_[q_point][4][0]
+                    - uboundarygrads_[q_point][3][1] * phi_j_grads_u[1][0]);
 
                 Tensor<2, 2> F_Inverse_LinU;
                 F_Inverse_LinU = (-1.0 / std::pow(J, 2) * J_LinU * F_tilde
@@ -578,22 +578,22 @@ template<
       std::vector<unsigned int>&
       GetStateBlockComponent()
       {
-        return _state_block_components;
+        return state_block_component_;
       }
       const std::vector<unsigned int>&
       GetStateBlockComponent() const
       {
-        return _state_block_components;
+        return state_block_component_;
       }
 
     private:
-      vector<Vector<double> > _uvalues;
+      vector<Vector<double> > uvalues_;
 
-      vector<vector<Tensor<1, dealdim> > > _ugrads;
+      vector<vector<Tensor<1, dealdim> > > ugrads_;
 
       // boundary values
-      vector<vector<Tensor<1, dealdim> > > _uboundarygrads;
+      vector<vector<Tensor<1, dealdim> > > uboundarygrads_;
 
-      vector<unsigned int> _state_block_components;
+      vector<unsigned int> state_block_component_;
   };
 #endif

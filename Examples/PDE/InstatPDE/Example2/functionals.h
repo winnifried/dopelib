@@ -21,8 +21,8 @@
  *
  **/
 
-#ifndef _LOCALFunctionalS_
-#define _LOCALFunctionalS_
+#ifndef LOCALFunctionalS_
+#define LOCALFunctionalS_
 
 #include "pdeinterface.h"
 
@@ -41,14 +41,14 @@ template<
       VECTOR, dopedim, dealdim>
   {
     private:
-      mutable double time;
+      mutable double time_;
 
     public:
 
       void
       SetTime(double t) const
       {
-        time = t;
+        time_ = t;
       }
 
       bool
@@ -110,14 +110,14 @@ template<
       DH, VECTOR, dopedim, dealdim>
   {
     private:
-      mutable double time;
+      mutable double time_;
 
     public:
 
       void
       SetTime(double t) const
       {
-        time = t;
+        time_ = t;
       }
 
       bool
@@ -172,14 +172,14 @@ template<
       DH, VECTOR, dopedim, dealdim>
   {
     private:
-      mutable double time;
+      mutable double time_;
 
     public:
 
       void
       SetTime(double t) const
       {
-        time = t;
+        time_ = t;
       }
 
       bool
@@ -235,9 +235,9 @@ template<
       DH, VECTOR, dopedim, dealdim>
   {
     private:
-      mutable double time;
-      double _density_fluid, _viscosity, _lame_coefficient_mu,
-          _poisson_ratio_nu, _lame_coefficient_lambda;
+      mutable double time_;
+      double density_fluid, viscosity_, lame_coefficient_mu_,
+          poisson_ratio_nu_, lame_coefficient_lambda_;
 
     public:
       static void
@@ -255,20 +255,20 @@ template<
       LocalBoundaryFaceFunctionalDrag(ParameterReader &param_reader)
       {
         param_reader.SetSubsection("Local PDE parameters");
-        _density_fluid = param_reader.get_double("density_fluid");
-        _viscosity = param_reader.get_double("viscosity");
-        _lame_coefficient_mu = param_reader.get_double("mu");
-        _poisson_ratio_nu = param_reader.get_double("poisson_ratio_nu");
+        density_fluid = param_reader.get_double("density_fluid");
+        viscosity_ = param_reader.get_double("viscosity");
+        lame_coefficient_mu_ = param_reader.get_double("mu");
+        poisson_ratio_nu_ = param_reader.get_double("poisson_ratio_nu");
 
-        _lame_coefficient_lambda =
-            (2 * _poisson_ratio_nu * _lame_coefficient_mu)
-                / (1.0 - 2 * _poisson_ratio_nu);
+        lame_coefficient_lambda_ =
+            (2 * poisson_ratio_nu_ * lame_coefficient_mu_)
+                / (1.0 - 2 * poisson_ratio_nu_);
       }
 
       void
       SetTime(double t) const
       {
-        time = t;
+        time_ = t;
       }
 
       bool
@@ -328,7 +328,7 @@ template<
 
             const Tensor<2, 2> sigma_ALE =
                 NSE_in_ALE::get_stress_fluid_except_pressure_ALE<2>(
-                    _density_fluid, _viscosity, grad_v, grad_v_T, F_Inverse,
+                    density_fluid, viscosity_, grad_v, grad_v_T, F_Inverse,
                     F_Inverse_T);
 
             Tensor<2, 2> stress_fluid;
@@ -397,7 +397,7 @@ template<
 
               const Tensor<2, 2> sigma_ALE =
                   NSE_in_ALE::get_stress_fluid_except_pressure_ALE<2>(
-                      _density_fluid, _viscosity, grad_v, grad_v_T, F_Inverse,
+                      density_fluid, viscosity_, grad_v, grad_v_T, F_Inverse,
                       F_Inverse_T);
 
               Tensor<2, 2> stress_fluid;
@@ -451,9 +451,9 @@ template<
       DH, VECTOR, dopedim, dealdim>
   {
     private:
-      mutable double time;
-      double _density_fluid, _viscosity, _lame_coefficient_mu,
-          _poisson_ratio_nu, _lame_coefficient_lambda;
+      mutable double time_;
+      double density_fluid, viscosity_, lame_coefficient_mu_,
+          poisson_ratio_nu_, lame_coefficient_lambda_;
 
     public:
       static void
@@ -471,20 +471,20 @@ template<
       LocalBoundaryFaceFunctionalLift(ParameterReader &param_reader)
       {
         param_reader.SetSubsection("Local PDE parameters");
-        _density_fluid = param_reader.get_double("density_fluid");
-        _viscosity = param_reader.get_double("viscosity");
-        _lame_coefficient_mu = param_reader.get_double("mu");
-        _poisson_ratio_nu = param_reader.get_double("poisson_ratio_nu");
+        density_fluid = param_reader.get_double("density_fluid");
+        viscosity_ = param_reader.get_double("viscosity");
+        lame_coefficient_mu_ = param_reader.get_double("mu");
+        poisson_ratio_nu_ = param_reader.get_double("poisson_ratio_nu");
 
-        _lame_coefficient_lambda =
-            (2 * _poisson_ratio_nu * _lame_coefficient_mu)
-                / (1.0 - 2 * _poisson_ratio_nu);
+        lame_coefficient_lambda_ =
+            (2 * poisson_ratio_nu_ * lame_coefficient_mu_)
+                / (1.0 - 2 * poisson_ratio_nu_);
       }
 
       void
       SetTime(double t) const
       {
-        time = t;
+        time_ = t;
       }
 
       bool
@@ -511,28 +511,28 @@ template<
         drag_lift_value.clear();
         if (color == 80)
         {
-          vector<Vector<double> > _ufacevalues;
-          vector<vector<Tensor<1, dealdim> > > _ufacegrads;
+          vector<Vector<double> > ufacevalues;
+          vector<vector<Tensor<1, dealdim> > > ufacegrads;
 
-          _ufacevalues.resize(n_q_points, Vector<double>(7));
-          _ufacegrads.resize(n_q_points, vector<Tensor<1, 2> >(7));
+          ufacevalues.resize(n_q_points, Vector<double>(7));
+          ufacegrads.resize(n_q_points, vector<Tensor<1, 2> >(7));
 
-          fdc.GetFaceValuesState("state", _ufacevalues);
-          fdc.GetFaceGradsState("state", _ufacegrads);
+          fdc.GetFaceValuesState("state", ufacevalues);
+          fdc.GetFaceGradsState("state", ufacegrads);
 
           for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
           {
             const Tensor<2, 2> pI = ALE_Transformations::get_pI<2>(q_point,
-                _ufacevalues);
+                ufacevalues);
 
             const Tensor<2, 2> grad_v = ALE_Transformations::get_grad_v<2>(
-                q_point, _ufacegrads);
+                q_point, ufacegrads);
 
             const Tensor<2, 2> grad_v_T = ALE_Transformations::get_grad_v_T<2>(
                 grad_v);
 
             const Tensor<2, 2> F = ALE_Transformations::get_F<2>(q_point,
-                _ufacegrads);
+                ufacegrads);
 
             const Tensor<2, 2> F_Inverse =
                 ALE_Transformations::get_F_Inverse<2>(F);
@@ -544,7 +544,7 @@ template<
 
             const Tensor<2, 2> sigma_ALE =
                 NSE_in_ALE::get_stress_fluid_except_pressure_ALE<2>(
-                    _density_fluid, _viscosity, grad_v, grad_v_T, F_Inverse,
+                    density_fluid, viscosity_, grad_v, grad_v_T, F_Inverse,
                     F_Inverse_T);
 
             Tensor<2, 2> stress_fluid;
@@ -581,14 +581,14 @@ template<
         {
           if (material_id != material_id_neighbor)
           {
-            vector<Vector<double> > _ufacevalues;
-            vector<vector<Tensor<1, dealdim> > > _ufacegrads;
+            vector<Vector<double> > ufacevalues;
+            vector<vector<Tensor<1, dealdim> > > ufacegrads;
 
-            _ufacevalues.resize(n_q_points, Vector<double>(7));
-            _ufacegrads.resize(n_q_points, vector<Tensor<1, 2> >(7));
+            ufacevalues.resize(n_q_points, Vector<double>(7));
+            ufacegrads.resize(n_q_points, vector<Tensor<1, 2> >(7));
 
-            fdc.GetFaceValuesState("state", _ufacevalues);
-            fdc.GetFaceGradsState("state", _ufacegrads);
+            fdc.GetFaceValuesState("state", ufacevalues);
+            fdc.GetFaceGradsState("state", ufacegrads);
 
             const FEValuesExtractors::Vector velocities(0);
             const FEValuesExtractors::Scalar pressure(2);
@@ -596,19 +596,19 @@ template<
             for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
             {
               const Tensor<2, 2> pI = ALE_Transformations::get_pI<2>(q_point,
-                  _ufacevalues);
+                  ufacevalues);
 
 //		  const Tensor<1,2> v = ALE_Transformations
-//		    ::get_v<2> (q_point, _ufacevalues);
+//		    ::get_v<2> (q_point, ufacevalues);
 
               const Tensor<2, 2> grad_v = ALE_Transformations::get_grad_v<2>(
-                  q_point, _ufacegrads);
+                  q_point, ufacegrads);
 
               const Tensor<2, 2> grad_v_T =
                   ALE_Transformations::get_grad_v_T<2>(grad_v);
 
               const Tensor<2, 2> F = ALE_Transformations::get_F<2>(q_point,
-                  _ufacegrads);
+                  ufacegrads);
 
               const Tensor<2, 2> F_Inverse = ALE_Transformations::get_F_Inverse<
                   2>(F);
@@ -620,7 +620,7 @@ template<
 
               const Tensor<2, 2> sigma_ALE =
                   NSE_in_ALE::get_stress_fluid_except_pressure_ALE<2>(
-                      _density_fluid, _viscosity, grad_v, grad_v_T, F_Inverse,
+                      density_fluid, viscosity_, grad_v, grad_v_T, F_Inverse,
                       F_Inverse_T);
 
               Tensor<2, 2> stress_fluid;

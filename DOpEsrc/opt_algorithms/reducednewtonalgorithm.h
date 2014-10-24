@@ -21,8 +21,8 @@
 *
 **/
 
-#ifndef _REDUCEDNEWTON__ALGORITHM_H_
-#define _REDUCEDNEWTON__ALGORITHM_H_
+#ifndef REDUCEDNEWTON__ALGORITHM_H_
+#define REDUCEDNEWTON__ALGORITHM_H_
 
 #include "reducedalgorithm.h"
 #include "parameterreader.h"
@@ -144,10 +144,10 @@ namespace DOpE
 			    const ControlVector<VECTOR>& gradient_transposed)
                             {return  gradient*gradient_transposed;}
   private:
-    unsigned int _nonlinear_maxiter, _linear_maxiter, _line_maxiter;
-    double       _nonlinear_tol, _nonlinear_global_tol, _linear_tol, _linear_global_tol, _linesearch_rho, _linesearch_c;
-    bool         _compute_functionals_in_every_step;
-    std::string _postindex;
+    unsigned int nonlinear_maxiter_, linear_maxiter_, line_maxiter_;
+    double       nonlinear_tol_, nonlinear_global_tol_, linear_tol_, linear_global_tol_, lineasearch_rho_, linesearch_c_;
+    bool         compute_functionals_in_every_step_;
+    std::string postindex_;
   };
 
   /***************************************************************************************/
@@ -190,21 +190,21 @@ ReducedNewtonAlgorithm<PROBLEM, VECTOR>::ReducedNewtonAlgorithm(PROBLEM* OP,
   {
 
     param_reader.SetSubsection("reducednewtonalgorithm parameters");
-    _nonlinear_maxiter    = param_reader.get_integer ("nonlinear_maxiter");
-    _nonlinear_tol        = param_reader.get_double ("nonlinear_tol");
-    _nonlinear_global_tol = param_reader.get_double ("nonlinear_global_tol");
+    nonlinear_maxiter_    = param_reader.get_integer ("nonlinear_maxiter");
+    nonlinear_tol_        = param_reader.get_double ("nonlinear_tol");
+    nonlinear_global_tol_ = param_reader.get_double ("nonlinear_global_tol");
 
-    _linear_maxiter       = param_reader.get_integer ("linear_maxiter");
-    _linear_tol           = param_reader.get_double ("linear_tol");
-    _linear_global_tol    = param_reader.get_double ("linear_global_tol");
+    linear_maxiter_       = param_reader.get_integer ("linear_maxiter");
+    linear_tol_           = param_reader.get_double ("linear_tol");
+    linear_global_tol_    = param_reader.get_double ("linear_global_tol");
 
-    _line_maxiter         = param_reader.get_integer ("line_maxiter");
-    _linesearch_rho       = param_reader.get_double ("linesearch_rho");
-    _linesearch_c         = param_reader.get_double ("linesearch_c");
+    line_maxiter_         = param_reader.get_integer ("line_maxiter");
+    lineasearch_rho_       = param_reader.get_double ("linesearch_rho");
+    linesearch_c_         = param_reader.get_double ("linesearch_c");
 
-    _compute_functionals_in_every_step  = param_reader.get_bool ("compute_functionals_in_every_step");
+    compute_functionals_in_every_step_  = param_reader.get_bool ("compute_functionals_in_every_step");
 
-    _postindex = "_"+this->GetProblem()->GetName();
+    postindex_ = "_"+this->GetProblem()->GetName();
   }
 
 /******************************************************/
@@ -269,9 +269,9 @@ int ReducedNewtonAlgorithm<PROBLEM, VECTOR>::Solve(ControlVector<VECTOR>& q,doub
   out << "**************************************************";
   this->GetOutputHandler()->Write(out,1+this->GetBasePriority(),1,1);
 
-  this->GetOutputHandler()->SetIterationNumber(iter,"OptNewton"+_postindex);
+  this->GetOutputHandler()->SetIterationNumber(iter,"OptNewton"+postindex_);
 
-  this->GetOutputHandler()->Write(q,"Control"+_postindex,"control");
+  this->GetOutputHandler()->Write(q,"Control"+postindex_,"control");
 
   try
   {
@@ -285,7 +285,7 @@ int ReducedNewtonAlgorithm<PROBLEM, VECTOR>::Solve(ControlVector<VECTOR>& q,doub
   out<< "CostFunctional: " << cost;
   this->GetOutputHandler()->Write(out,2+this->GetBasePriority());
 
-  if (_compute_functionals_in_every_step == true)
+  if (compute_functionals_in_every_step_ == true)
     {
       try
 	{
@@ -311,7 +311,7 @@ int ReducedNewtonAlgorithm<PROBLEM, VECTOR>::Solve(ControlVector<VECTOR>& q,doub
 
   assert(res >= 0);
 
-  this->GetOutputHandler()->Write(gradient,"NewtonResidual"+_postindex,"control");
+  this->GetOutputHandler()->Write(gradient,"NewtonResidual"+postindex_,"control");
   out<< "\t Newton step: " <<iter<<"\t Residual (abs.): "<<sqrt(res)<<"\n";
   out<< "\t Newton step: " <<iter<<"\t Residual (rel.): "<<std::scientific<<sqrt(res)/sqrt(res)<<"\n";
   this->GetOutputHandler()->Write(out,3+this->GetBasePriority());
@@ -321,13 +321,13 @@ int ReducedNewtonAlgorithm<PROBLEM, VECTOR>::Solve(ControlVector<VECTOR>& q,doub
   if(global_tol > 0.)
     miniter = 1;
 
-  global_tol =  std::max(_nonlinear_global_tol,global_tol);
-  while(( (res >= global_tol*global_tol) && (res >= _nonlinear_tol*_nonlinear_tol*firstres) ) ||  iter < miniter )
+  global_tol =  std::max(nonlinear_global_tol_,global_tol);
+  while(( (res >= global_tol*global_tol) && (res >= nonlinear_tol_*nonlinear_tol_*firstres) ) ||  iter < miniter )
   {
     iter++;
-    this->GetOutputHandler()->SetIterationNumber(iter,"OptNewton"+_postindex);
+    this->GetOutputHandler()->SetIterationNumber(iter,"OptNewton"+postindex_);
 
-    if(iter > _nonlinear_maxiter)
+    if(iter > nonlinear_maxiter_)
     {
       throw DOpEIterationException("Iteration count exceeded bounds!","ReducedNewtonAlgorithm::Solve");
     }
@@ -373,7 +373,7 @@ int ReducedNewtonAlgorithm<PROBLEM, VECTOR>::Solve(ControlVector<VECTOR>& q,doub
     out<< "CostFunctional: " << cost;
     this->GetOutputHandler()->Write(out,3+this->GetBasePriority());
 
-    if (_compute_functionals_in_every_step == true)
+    if (compute_functionals_in_every_step_ == true)
       {
 	try
 	  {
@@ -396,8 +396,8 @@ int ReducedNewtonAlgorithm<PROBLEM, VECTOR>::Solve(ControlVector<VECTOR>& q,doub
       this->GetExceptionHandler()->HandleCriticalException(e,"ReducedNewtonAlgorithm::Solve");
     }
 
-    this->GetOutputHandler()->Write(q,"Control"+_postindex,"control");
-    this->GetOutputHandler()->Write(gradient,"NewtonResidual"+_postindex,"control");
+    this->GetOutputHandler()->Write(q,"Control"+postindex_,"control");
+    this->GetOutputHandler()->Write(gradient,"NewtonResidual"+postindex_,"control");
 
     res = Residual(gradient,gradient_transposed);//gradient*gradient_transposed;
 
@@ -455,15 +455,15 @@ int ReducedNewtonAlgorithm<PROBLEM, VECTOR>::SolveReducedLinearSystem(const Cont
   unsigned int iter = 0;
   double cgalpha, cgbeta, oldres;
 
-  this->GetOutputHandler()->SetIterationNumber(iter,"OptNewtonCg"+_postindex);
+  this->GetOutputHandler()->SetIterationNumber(iter,"OptNewtonCg"+postindex_);
 
-  //while(res>=_linear_tol*_linear_tol*firstres && res>=_linear_global_tol*_linear_global_tol)
+  //while(res>=linear_tol_*linear_tol_*firstres && res>=linear_global_tol_*linear_global_tol_)
   //using Algorithm 6.1 from Nocedal Wright
-  while(res>= std::min(0.25,sqrt(firstres))*firstres && res>=_linear_global_tol*_linear_global_tol)
+  while(res>= std::min(0.25,sqrt(firstres))*firstres && res>=linear_global_tol_*linear_global_tol_)
   {
     iter++;
-    this->GetOutputHandler()->SetIterationNumber(iter,"OptNewtonCg"+_postindex);
-    if(iter > _linear_maxiter)
+    this->GetOutputHandler()->SetIterationNumber(iter,"OptNewtonCg"+postindex_);
+    if(iter > linear_maxiter_)
     {
       throw DOpEIterationException("Iteration count exceeded bounds!","ReducedNewtonAlgorithm::SolveReducedLinearSystem");
     }
@@ -532,8 +532,8 @@ template <typename PROBLEM, typename VECTOR>
 								       double& cost,
 								       ControlVector<VECTOR>& q)
 {
-  double rho = _linesearch_rho;
-  double c   = _linesearch_c;
+  double rho = lineasearch_rho_;
+  double c   = linesearch_c_;
 
   double costnew = 0.;
   bool force_linesearch = false;
@@ -560,7 +560,7 @@ template <typename PROBLEM, typename VECTOR>
     reduction = 0;
   }
 
-  if(_line_maxiter > 0)
+  if(line_maxiter_ > 0)
   {
     if(fabs(reduction) < 1.e-10*cost)
       reduction = 0.;
@@ -570,7 +570,7 @@ template <typename PROBLEM, typename VECTOR>
       while(std::isinf(costnew) || std::isnan(costnew) || (costnew >= cost + c*alpha*reduction) || force_linesearch)
       {
 	iter++;
-	if(iter > _line_maxiter)
+	if(iter > line_maxiter_)
 	{ 
 	  if(force_linesearch)
 	  {

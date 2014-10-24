@@ -21,8 +21,8 @@
  *
  **/
 
-#ifndef _STATE_SPACE_TIME_HANDLER_H_
-#define _STATE_SPACE_TIME_HANDLER_H_
+#ifndef STATE_SPACE_TIME_HANDLER_H_
+#define STATE_SPACE_TIME_HANDLER_H_
 
 #include "spacetimehandler_base.h"
 #include "active_fe_index_setter_interface.h"
@@ -62,24 +62,24 @@ namespace DOpE
         StateSpaceTimeHandler() :
             SpaceTimeHandlerBase<VECTOR>()
         {
-          _domain_dofhandler_vector.resize(1);
+          domain_dofhandler_vector_.resize(1);
         }
         StateSpaceTimeHandler(dealii::Triangulation<1> & times) :
             SpaceTimeHandlerBase<VECTOR>(times)
         {
-          _domain_dofhandler_vector.resize(1);
+          domain_dofhandler_vector_.resize(1);
         }
         StateSpaceTimeHandler(
             const ActiveFEIndexSetterInterface<dealdim>& index_setter) :
-            SpaceTimeHandlerBase<VECTOR>(), _fe_index_setter(&index_setter)
+            SpaceTimeHandlerBase<VECTOR>(), fe_index_setter_(&index_setter)
         {
-          _domain_dofhandler_vector.resize(1);
+          domain_dofhandler_vector_.resize(1);
         }
         StateSpaceTimeHandler(dealii::Triangulation<1> & times,
             const ActiveFEIndexSetterInterface<dealdim>& index_setter) :
-            SpaceTimeHandlerBase<VECTOR>(times), _fe_index_setter(&index_setter)
+            SpaceTimeHandlerBase<VECTOR>(times), fe_index_setter_(&index_setter)
         {
-          _domain_dofhandler_vector.resize(1);
+          domain_dofhandler_vector_.resize(1);
         }
         virtual
         ~StateSpaceTimeHandler()
@@ -123,8 +123,8 @@ namespace DOpE
         const std::vector<const DOpEWrapper::DoFHandler<dealdim, DH>*>&
         GetDoFHandler() const
         {
-          _domain_dofhandler_vector[0] = &GetStateDoFHandler();
-          return _domain_dofhandler_vector;
+          domain_dofhandler_vector_[0] = &GetStateDoFHandler();
+          return domain_dofhandler_vector_;
         }
 
         /******************************************************/
@@ -239,7 +239,7 @@ namespace DOpE
         GetFEIndexSetter() const
         {
           //makes only sense in the hp case.
-          return *_fe_index_setter;
+          return *fe_index_setter_;
         }
 
         /******************************************************/
@@ -368,16 +368,16 @@ namespace DOpE
         DOpEWrapper::DataOut<dealdim, DH>&
         GetDataOut()
         {
-          _data_out.clear();
-          return _data_out;
+          data_out_.clear();
+          return data_out_;
         }
 
       protected:
         //we need this here, because we know the type of the DoFHandler in use.
         //This saves us a template argument for statpdeproblem etc.
-        DOpEWrapper::DataOut<dealdim, DH> _data_out;
-        const ActiveFEIndexSetterInterface<dealdim>* _fe_index_setter;
-        mutable std::vector<const DOpEWrapper::DoFHandler<dealdim, DH>*> _domain_dofhandler_vector;
+        DOpEWrapper::DataOut<dealdim, DH> data_out_;
+        const ActiveFEIndexSetterInterface<dealdim>* fe_index_setter_;
+        mutable std::vector<const DOpEWrapper::DoFHandler<dealdim, DH>*> domain_dofhandler_vector_;
 
     };
 }

@@ -21,8 +21,8 @@
  *
  **/
 
-#ifndef _LOCALPDE_
-#define _LOCALPDE_
+#ifndef LOCALPDE_
+#define LOCALPDE_
 
 #include "pdeinterface.h"
 #include "my_functions.h"
@@ -39,7 +39,7 @@ template<
   {
     public:
       LocalPDE(unsigned int order) :
-          _exact_solution(order), _state_block_components(1, 0)
+          exact_solution_(order), state_block_component_(1, 0)
       {
       }
 
@@ -52,10 +52,10 @@ template<
         const DOpEWrapper::FEValues<dealdim> &state_fe_values =
             edc.GetFEValuesState();
 
-        assert(this->_problem_type == "state");
+        assert(this->problem_type_ == "state");
 
-        _ugrads.resize(n_q_points, Tensor<1, dealdim>());
-        edc.GetGradsState("last_newton_solution", _ugrads);
+        ugrads_.resize(n_q_points, Tensor<1, dealdim>());
+        edc.GetGradsState("last_newton_solution", ugrads_);
 
         const FEValuesExtractors::Scalar velocities(0);
 
@@ -63,8 +63,8 @@ template<
         {
           Tensor<1, 2> vgrads;
           vgrads.clear();
-          vgrads[0] = _ugrads[q_point][0];
-          vgrads[1] = _ugrads[q_point][1];
+          vgrads[0] = ugrads_[q_point][0];
+          vgrads[1] = ugrads_[q_point][1];
 
           for (unsigned int i = 0; i < n_dofs_per_element; i++)
           {
@@ -114,22 +114,22 @@ template<
       ElementRightHandSide(const EDC<DH, VECTOR, dealdim>& edc,
           dealii::Vector<double> &local_vector, double scale)
       {
-        assert(this->_problem_type == "state");
+        assert(this->problem_type_ == "state");
         unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
         unsigned int n_q_points = edc.GetNQPoints();
         const DOpEWrapper::FEValues<dealdim> &state_fe_values =
             edc.GetFEValuesState();
 
-        _fvalues.resize(n_q_points);
+        fvalues_.resize(n_q_points);
         const FEValuesExtractors::Scalar velocities(0);
 
         for (unsigned int q_point = 0; q_point < n_q_points; ++q_point)
         {
-          _fvalues[q_point] = -_exact_solution.laplacian(
+          fvalues_[q_point] = -exact_solution_.laplacian(
               state_fe_values.quadrature_point(q_point));
           for (unsigned int i = 0; i < n_dofs_per_element; i++)
           {
-            local_vector(i) += scale * _fvalues[q_point]
+            local_vector(i) += scale * fvalues_[q_point]
                 * state_fe_values[velocities].value(i, q_point)
                 * state_fe_values.JxW(q_point);
           }
@@ -177,21 +177,21 @@ template<
       std::vector<unsigned int>&
       GetStateBlockComponent()
       {
-        return _state_block_components;
+        return state_block_component_;
       }
       const std::vector<unsigned int>&
       GetStateBlockComponent() const
       {
-        return _state_block_components;
+        return state_block_component_;
       }
 
     private:
-      vector<double> _fvalues;
+      vector<double> fvalues_;
 
-      vector<Tensor<1, dealdim> > _ugrads;
+      vector<Tensor<1, dealdim> > ugrads_;
 
-      ExactSolution _exact_solution;
+      ExactSolution exact_solution_;
 
-      vector<unsigned int> _state_block_components;
+      vector<unsigned int> state_block_component_;
   };
 #endif

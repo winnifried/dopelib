@@ -21,8 +21,8 @@
  *
  **/
 
-#ifndef _PDE_INTERFACE_H_
-#define _PDE_INTERFACE_H_
+#ifndef PDE_INTERFACE_H_
+#define PDE_INTERFACE_H_
 
 #include <map>
 #include <string>
@@ -1407,7 +1407,7 @@ namespace DOpE
         boost::function1<void, dealii::Vector<double>&> VectorResidualModifier;
 
       protected:
-        std::string _problem_type;
+        std::string problem_type_;
 
       private:
     };

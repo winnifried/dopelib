@@ -21,8 +21,8 @@
  *
  **/
 
-#ifndef _MYFUNCTIONS_
-#define _MYFUNCTIONS_
+#ifndef MYFUNCTIONS_
+#define MYFUNCTIONS_
 
 namespace MyFunctions
 {

@@ -22,8 +22,8 @@
 **/
 
 
-#ifndef _FUNCTIONALS_H_
-#define _FUNCTIONALS_H_
+#ifndef FUNCTIONALS_H_
+#define FUNCTIONALS_H_
 
 #include "functionalinterface.h"
 
@@ -58,17 +58,17 @@ template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
         {
           if (material_id_neighbor == 2)
           {
-            vector<double> _ufacevalues;
+            vector<double> ufacevalues;
 
-            _ufacevalues.resize(n_q_points);
+            ufacevalues.resize(n_q_points);
 
-            fdc.GetFaceValuesState("state", _ufacevalues);
+            fdc.GetFaceValuesState("state", ufacevalues);
 
             for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
             {
               double v;
 
-              v = _ufacevalues[q_point];
+              v = ufacevalues[q_point];
 
               mean += 1. / (1.5) * v * fdc.GetFEFaceValuesState().JxW(q_point);
             }
@@ -127,6 +127,6 @@ template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       }
 
     private:
-      int _outflow_fluid_boundary_color;
+      int outflow_fluid_boundary_color_;
   };
 #endif /* FUNCTIONALS_H_ */

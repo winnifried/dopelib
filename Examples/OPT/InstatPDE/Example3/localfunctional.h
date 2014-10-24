@@ -21,8 +21,8 @@
  *
  **/
 
-#ifndef _LOCALFunctional_
-#define _LOCALFunctional_
+#ifndef LOCALFunctional_
+#define LOCALFunctional_
 
 #include "functionalinterface.h"
 #include "my_functions.h"
@@ -40,7 +40,7 @@ template<
   {
     public:
       LocalFunctional() :
-          _time(0)
+          time_(0)
       {
       }
 
@@ -48,7 +48,7 @@ template<
       void
       SetTime(double t) const
       {
-        _time = t;
+        time_ = t;
       }
 
       bool
@@ -66,22 +66,22 @@ template<
         const DOpEWrapper::FEValues<dealdim> & state_fe_values =
 	  edc.GetFEValuesState();
 
-	_fvalues.resize(n_q_points);
-	_uvalues.resize(n_q_points);
-	_qvalues.reinit(1);
-	edc.GetParamValues("control", _qvalues);
+	fvalues_.resize(n_q_points);
+	uvalues_.resize(n_q_points);
+	qvalues_.reinit(1);
+	edc.GetParamValues("control", qvalues_);
 	
-	edc.GetValuesState("state", _uvalues);
+	edc.GetValuesState("state", uvalues_);
 	
 	for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
 	{
-	  _fvalues[q_point] =  my::ud(_time,state_fe_values.quadrature_point(q_point));
+	  fvalues_[q_point] =  my::ud(time_,state_fe_values.quadrature_point(q_point));
 	  
-	  ret += 0.5 * (_uvalues[q_point] - _fvalues[q_point])
-	    * (_uvalues[q_point] - _fvalues[q_point])
+	  ret += 0.5 * (uvalues_[q_point] - fvalues_[q_point])
+	    * (uvalues_[q_point] - fvalues_[q_point])
 	    * state_fe_values.JxW(q_point);
 	  //In control correct for the volume integral.
-	  ret += 0.5/(M_PI*M_PI) * _qvalues(0) * _qvalues(0)
+	  ret += 0.5/(M_PI*M_PI) * qvalues_(0) * qvalues_(0)
 	    * state_fe_values.JxW(q_point);
 	}
 	return ret;
@@ -96,19 +96,19 @@ template<
             edc.GetFEValuesState();
         unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
         unsigned int n_q_points = edc.GetNQPoints();
-	_fvalues.resize(n_q_points);
-	_uvalues.resize(n_q_points);
+	fvalues_.resize(n_q_points);
+	uvalues_.resize(n_q_points);
 	
-	edc.GetValuesState("state", _uvalues);
+	edc.GetValuesState("state", uvalues_);
 	
 	for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
 	{
-	  _fvalues[q_point] = my::ud(_time,state_fe_values.quadrature_point(q_point));
+	  fvalues_[q_point] = my::ud(time_,state_fe_values.quadrature_point(q_point));
 	  
 	  for (unsigned int i = 0; i < n_dofs_per_element; i++)
 	  {
 	    local_vector(i) += scale
-	      * (_uvalues[q_point] - _fvalues[q_point])
+	      * (uvalues_[q_point] - fvalues_[q_point])
 	      * state_fe_values.shape_value(i, q_point)
 	      * state_fe_values.JxW(q_point);
           }
@@ -124,12 +124,12 @@ template<
    
         const DOpEWrapper::FEValues<dealdim> & state_fe_values =
 	  edc.GetFEValuesState();
-	_qvalues.reinit(1);
-	edc.GetParamValues("control", _qvalues);
+	qvalues_.reinit(1);
+	edc.GetParamValues("control", qvalues_);
 	
 	for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
 	{
-	  local_vector(0) += scale * 1./(M_PI*M_PI) * _qvalues(0) 
+	  local_vector(0) += scale * 1./(M_PI*M_PI) * qvalues_(0) 
 	    * state_fe_values.JxW(q_point);
 	}
       }
@@ -143,15 +143,15 @@ template<
         unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
         unsigned int n_q_points = edc.GetNQPoints();
 
-	_duvalues.resize(n_q_points);
+	duvalues_.resize(n_q_points);
 	
-	edc.GetValuesState("tangent", _duvalues);
+	edc.GetValuesState("tangent", duvalues_);
 	
 	for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
 	{
 	  for (unsigned int i = 0; i < n_dofs_per_element; i++)
 	  {
-	    local_vector(i) += scale * _duvalues[q_point]
+	    local_vector(i) += scale * duvalues_[q_point]
 	      * state_fe_values.shape_value(i, q_point)
 	      * state_fe_values.JxW(q_point);
 	  }
@@ -179,12 +179,12 @@ template<
 	
         const DOpEWrapper::FEValues<dealdim> & state_fe_values =
 	  edc.GetFEValuesState();
-	_dqvalues.reinit(1);
-	edc.GetParamValues("dq", _dqvalues);
+	dqvalues_.reinit(1);
+	edc.GetParamValues("dq", dqvalues_);
 	
 	for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
 	{
-	  local_vector(0) += scale * 1./(M_PI*M_PI) * _dqvalues(0) 
+	  local_vector(0) += scale * 1./(M_PI*M_PI) * dqvalues_(0) 
 	    * state_fe_values.JxW(q_point);
 	}
 
@@ -209,13 +209,13 @@ template<
       }
 
     private:
-      Vector<double> _qvalues;
-      vector<double> _fvalues;
-      vector<double> _uvalues;
-      vector<double> _duvalues;
-      Vector<double> _dqvalues;
+      Vector<double> qvalues_;
+      vector<double> fvalues_;
+      vector<double> uvalues_;
+      vector<double> duvalues_;
+      Vector<double> dqvalues_;
 
-      mutable double _time;
+      mutable double time_;
 
   };
 #endif

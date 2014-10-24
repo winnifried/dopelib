@@ -21,8 +21,8 @@
  *
  **/
 
-#ifndef _LOCALPDE_
-#define _LOCALPDE_
+#ifndef LOCALPDE_
+#define LOCALPDE_
 
 #include "pdeinterface.h"
 #include "myfunctions.h"
@@ -39,7 +39,7 @@ template<
   {
     public:
       LocalPDE() :
-          _control_block_components(1, 0), _state_block_components(2, 0)
+          control_block_component_(1, 0), state_block_component_(2, 0)
       {
 
       }
@@ -55,14 +55,14 @@ template<
         unsigned int n_q_points = edc.GetNQPoints();
         {
           //Reading data
-          assert(this->_problem_type == "state");
-          _qvalues.resize(n_q_points, Vector<double>(1));
-          _ugrads.resize(n_q_points, vector<Tensor<1, 2> >(2));
+          assert(this->problem_type_ == "state");
+          qvalues_.resize(n_q_points, Vector<double>(1));
+          ugrads_.resize(n_q_points, vector<Tensor<1, 2> >(2));
 
           //Getting q
-          edc.GetValuesControl("control", _qvalues);
+          edc.GetValuesControl("control", qvalues_);
           //Geting u
-          edc.GetGradsState("last_newton_solution", _ugrads);
+          edc.GetGradsState("last_newton_solution", ugrads_);
         }
         const FEValuesExtractors::Vector displacements(0);
 
@@ -70,17 +70,17 @@ template<
         {
           Tensor<2, 2> u_grad;
           u_grad.clear();
-          u_grad[0][0] = _ugrads[q_point][0][0];
-          u_grad[0][1] = _ugrads[q_point][0][1];
-          u_grad[1][0] = _ugrads[q_point][1][0];
-          u_grad[1][1] = _ugrads[q_point][1][1];
+          u_grad[0][0] = ugrads_[q_point][0][0];
+          u_grad[0][1] = ugrads_[q_point][0][1];
+          u_grad[1][0] = ugrads_[q_point][1][0];
+          u_grad[1][1] = ugrads_[q_point][1][1];
 
           for (unsigned int i = 0; i < n_dofs_per_element; i++)
           {
             const Tensor<2, 2> phi_grads =
                 state_fe_values[displacements].gradient(i, q_point);
 
-            local_vector(i) += scale * _qvalues[q_point](0) * 0.25
+            local_vector(i) += scale * qvalues_[q_point](0) * 0.25
                 * scalar_product(u_grad + transpose(u_grad),
                     phi_grads + transpose(phi_grads))
                 * state_fe_values.JxW(q_point);
@@ -98,14 +98,14 @@ template<
         unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
         unsigned int n_q_points = edc.GetNQPoints();
         {
-          assert(this->_problem_type == "adjoint");
-          _qvalues.resize(n_q_points, Vector<double>(1));
-          _zgrads.resize(n_q_points, vector<Tensor<1, 2> >(2));
+          assert(this->problem_type_ == "adjoint");
+          qvalues_.resize(n_q_points, Vector<double>(1));
+          zgrads_.resize(n_q_points, vector<Tensor<1, 2> >(2));
 
           //Getting q
-          edc.GetValuesControl("control", _qvalues);
+          edc.GetValuesControl("control", qvalues_);
           //Geting u
-          edc.GetGradsState("last_newton_solution", _zgrads);
+          edc.GetGradsState("last_newton_solution", zgrads_);
         }
         const FEValuesExtractors::Vector displacements(0);
 
@@ -113,17 +113,17 @@ template<
         {
           Tensor<2, 2> z_grad;
           z_grad.clear();
-          z_grad[0][0] = _zgrads[q_point][0][0];
-          z_grad[0][1] = _zgrads[q_point][0][1];
-          z_grad[1][0] = _zgrads[q_point][1][0];
-          z_grad[1][1] = _zgrads[q_point][1][1];
+          z_grad[0][0] = zgrads_[q_point][0][0];
+          z_grad[0][1] = zgrads_[q_point][0][1];
+          z_grad[1][0] = zgrads_[q_point][1][0];
+          z_grad[1][1] = zgrads_[q_point][1][1];
 
           for (unsigned int i = 0; i < n_dofs_per_element; i++)
           {
             const Tensor<2, 2> phi_grads =
                 state_fe_values[displacements].gradient(i, q_point);
 
-            local_vector(i) += scale * _qvalues[q_point](0) * 0.25
+            local_vector(i) += scale * qvalues_[q_point](0) * 0.25
                 * scalar_product(phi_grads + transpose(phi_grads),
                     z_grad + transpose(z_grad)) * state_fe_values.JxW(q_point);
           }
@@ -135,7 +135,7 @@ template<
           dealii::Vector<double> &/*local_vector*/, double /*scale*/,
           double /*scale_ico*/)
       {
-        assert(this->_problem_type == "tangent");
+        assert(this->problem_type_ == "tangent");
       }
 
       void
@@ -143,7 +143,7 @@ template<
           dealii::Vector<double> &/*local_vector*/, double /*scale*/,
           double /*scale_ico*/)
       {
-        assert(this->_problem_type == "adjoint_hessian");
+        assert(this->problem_type_ == "adjoint_hessian");
       }
 
       void
@@ -157,13 +157,13 @@ template<
         unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
         unsigned int n_q_points = edc.GetNQPoints();
         {
-          assert(this->_problem_type == "gradient");
-          _zgrads.resize(n_q_points, vector<Tensor<1, 2> >(2));
-          _ugrads.resize(n_q_points, vector<Tensor<1, 2> >(2));
+          assert(this->problem_type_ == "gradient");
+          zgrads_.resize(n_q_points, vector<Tensor<1, 2> >(2));
+          ugrads_.resize(n_q_points, vector<Tensor<1, 2> >(2));
 
           //Geting u
-          edc.GetGradsState("adjoint", _zgrads);
-          edc.GetGradsState("state", _ugrads);
+          edc.GetGradsState("adjoint", zgrads_);
+          edc.GetGradsState("state", ugrads_);
         }
         const FEValuesExtractors::Vector displacements(0);
 
@@ -171,16 +171,16 @@ template<
         {
           Tensor<2, 2> z_grad;
           z_grad.clear();
-          z_grad[0][0] = _zgrads[q_point][0][0];
-          z_grad[0][1] = _zgrads[q_point][0][1];
-          z_grad[1][0] = _zgrads[q_point][1][0];
-          z_grad[1][1] = _zgrads[q_point][1][1];
+          z_grad[0][0] = zgrads_[q_point][0][0];
+          z_grad[0][1] = zgrads_[q_point][0][1];
+          z_grad[1][0] = zgrads_[q_point][1][0];
+          z_grad[1][1] = zgrads_[q_point][1][1];
           Tensor<2, 2> u_grad;
           u_grad.clear();
-          u_grad[0][0] = _ugrads[q_point][0][0];
-          u_grad[0][1] = _ugrads[q_point][0][1];
-          u_grad[1][0] = _ugrads[q_point][1][0];
-          u_grad[1][1] = _ugrads[q_point][1][1];
+          u_grad[0][0] = ugrads_[q_point][0][0];
+          u_grad[0][1] = ugrads_[q_point][0][1];
+          u_grad[1][0] = ugrads_[q_point][1][0];
+          u_grad[1][1] = ugrads_[q_point][1][1];
 
           for (unsigned int i = 0; i < n_dofs_per_element; i++)
           {
@@ -198,7 +198,7 @@ template<
           dealii::Vector<double> &/*local_vector*/, double /*scale*/,
           double /*scale_ico*/)
       {
-        assert(this->_problem_type == "tangent");
+        assert(this->problem_type_ == "tangent");
       }
 
       void
@@ -206,7 +206,7 @@ template<
           dealii::Vector<double> &/*local_vector*/, double /*scale*/,
           double /*scale_ico*/)
       {
-        assert(this->_problem_type == "hessian");
+        assert(this->problem_type_ == "hessian");
       }
 
       void
@@ -214,35 +214,35 @@ template<
           dealii::Vector<double> &/*local_vector*/, double/*scale*/,
           double /*scale_ico*/)
       {
-        assert(this->_problem_type == "adjoint_hessian");
+        assert(this->problem_type_ == "adjoint_hessian");
       }
       void
       ElementEquation_QU(const EDC<DH, VECTOR, dealdim>& /*edc*/,
           dealii::Vector<double> &/*local_vector*/, double/*scale*/,
           double /*scale_ico*/)
       {
-        assert(this->_problem_type == "adjoint_hessian");
+        assert(this->problem_type_ == "adjoint_hessian");
       }
       void
       ElementEquation_UQ(const EDC<DH, VECTOR, dealdim>& /*edc*/,
           dealii::Vector<double> &/*local_vector*/, double/*scale*/,
           double /*scale_ico*/)
       {
-        assert(this->_problem_type == "hessian");
+        assert(this->problem_type_ == "hessian");
       }
       void
       ElementEquation_QQ(const EDC<DH, VECTOR, dealdim>& /*edc*/,
           dealii::Vector<double> &/*local_vector*/, double/*scale*/,
           double /*scale_ico*/)
       {
-        assert(this->_problem_type == "hessian");
+        assert(this->problem_type_ == "hessian");
       }
       void
       ElementRightHandSide(const EDC<DH, VECTOR, dealdim>& /*edc*/,
           dealii::Vector<double> &/*local_vector*/, double/*scale*/)
       {
         {
-          assert(this->_problem_type == "state");
+          assert(this->problem_type_ == "state");
         }
       }
 
@@ -256,7 +256,7 @@ template<
         unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
         unsigned int n_q_points = edc.GetNQPoints();
         {
-          edc.GetValuesControl("control", _qvalues);
+          edc.GetValuesControl("control", qvalues_);
         }
         const FEValuesExtractors::Vector displacements(0);
 
@@ -271,7 +271,7 @@ template<
               const Tensor<2, 2> psi_grads =
                   state_fe_values[displacements].gradient(j, q_point);
 
-              local_matrix(i, j) += _qvalues[q_point](0) * 0.25
+              local_matrix(i, j) += qvalues_[q_point](0) * 0.25
                   * scalar_product(psi_grads + transpose(psi_grads),
                       phi_grads + transpose(phi_grads))
                   * state_fe_values.JxW(q_point);
@@ -290,9 +290,9 @@ template<
         unsigned int n_q_points = edc.GetNQPoints();
         {
           assert(
-              (this->_problem_type == "gradient")||(this->_problem_type == "hessian"));
-          _funcgradvalues.resize(n_q_points, Vector<double>(1));
-          edc.GetValuesControl("last_newton_solution", _funcgradvalues);
+              (this->problem_type_ == "gradient")||(this->problem_type_ == "hessian"));
+          funcgradvalues_.resize(n_q_points, Vector<double>(1));
+          edc.GetValuesControl("last_newton_solution", funcgradvalues_);
         }
 
         for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
@@ -300,7 +300,7 @@ template<
           for (unsigned int i = 0; i < n_dofs_per_element; i++)
           {
             local_vector(i) += scale
-                * (_funcgradvalues[q_point](0)
+                * (funcgradvalues_[q_point](0)
                     * control_fe_values.shape_value(i, q_point))
                 * control_fe_values.JxW(q_point);
           }
@@ -339,7 +339,7 @@ template<
         unsigned int n_q_points = fdc.GetNQPoints();
         unsigned int color = fdc.GetBoundaryIndicator();
         {
-          _fvalues.resize(2);
+          fvalues_.resize(2);
         }
 
         if (color == 3)
@@ -349,15 +349,15 @@ template<
 
           for (unsigned int q_point = 0; q_point < n_q_points; ++q_point)
           {
-            MyFunctions::Forces(_fvalues,
+            MyFunctions::Forces(fvalues_,
                 state_fe_face_values.quadrature_point(q_point)(0),
                 state_fe_face_values.quadrature_point(q_point)(1));
             for (unsigned int i = 0; i < n_dofs_per_element; i++)
             {
               local_vector(i) -= scale
-                  * (_fvalues[0]
+                  * (fvalues_[0]
                       * state_fe_face_values[comp_0].value(i, q_point)
-                      + _fvalues[1]
+                      + fvalues_[1]
                           * state_fe_face_values[comp_1].value(i, q_point))
                   * state_fe_face_values.JxW(q_point);
             }
@@ -451,38 +451,38 @@ template<
       UpdateFlags
       GetUpdateFlags() const
       {
-        if ((this->_problem_type == "adjoint")
-            || (this->_problem_type == "state")
-            || (this->_problem_type == "tangent")
-            || (this->_problem_type == "adjoint_hessian")
-            || (this->_problem_type == "hessian"))
+        if ((this->problem_type_ == "adjoint")
+            || (this->problem_type_ == "state")
+            || (this->problem_type_ == "tangent")
+            || (this->problem_type_ == "adjoint_hessian")
+            || (this->problem_type_ == "hessian"))
           return update_values | update_gradients | update_quadrature_points;
-        else if ((this->_problem_type == "gradient"))
+        else if ((this->problem_type_ == "gradient"))
           return update_values | update_gradients | update_quadrature_points;
-        else if ((this->_problem_type == "hessian_inverse")
-            || (this->_problem_type == "global_constraint_gradient")
-            || (this->_problem_type == "global_constraint_hessian"))
+        else if ((this->problem_type_ == "hessian_inverse")
+            || (this->problem_type_ == "global_constraint_gradient")
+            || (this->problem_type_ == "global_constraint_hessian"))
           return update_values | update_quadrature_points;
         else
-          throw DOpEException("Unknown Problem Type " + this->_problem_type,
+          throw DOpEException("Unknown Problem Type " + this->problem_type_,
               "LocalPDE::GetUpdateFlags");
       }
       UpdateFlags
       GetFaceUpdateFlags() const
       {
-        if ((this->_problem_type == "adjoint")
-            || (this->_problem_type == "state")
-            || (this->_problem_type == "tangent")
-            || (this->_problem_type == "adjoint_hessian")
-            || (this->_problem_type == "hessian"))
+        if ((this->problem_type_ == "adjoint")
+            || (this->problem_type_ == "state")
+            || (this->problem_type_ == "tangent")
+            || (this->problem_type_ == "adjoint_hessian")
+            || (this->problem_type_ == "hessian"))
           return update_values | update_quadrature_points;
-        else if ((this->_problem_type == "hessian_inverse")
-            || (this->_problem_type == "gradient")
-            || (this->_problem_type == "global_constraint_gradient")
-            || (this->_problem_type == "global_constraint_hessian"))
+        else if ((this->problem_type_ == "hessian_inverse")
+            || (this->problem_type_ == "gradient")
+            || (this->problem_type_ == "global_constraint_gradient")
+            || (this->problem_type_ == "global_constraint_hessian"))
           return update_default;
         else
-          throw DOpEException("Unknown Problem Type " + this->_problem_type,
+          throw DOpEException("Unknown Problem Type " + this->problem_type_,
               "LocalPDE::GetFaceUpdateFlags");
       }
 
@@ -499,36 +499,36 @@ template<
       std::vector<unsigned int>&
       GetControlBlockComponent()
       {
-        return _control_block_components;
+        return control_block_component_;
       }
       const std::vector<unsigned int>&
       GetControlBlockComponent() const
       {
-        return _control_block_components;
+        return control_block_component_;
       }
       std::vector<unsigned int>&
       GetStateBlockComponent()
       {
-        return _state_block_components;
+        return state_block_component_;
       }
       const std::vector<unsigned int>&
       GetStateBlockComponent() const
       {
-        return _state_block_components;
+        return state_block_component_;
       }
 
     private:
-      vector<double> _fvalues;
+      vector<double> fvalues_;
 
-      vector<Vector<double> > _qvalues;
-      vector<Vector<double> > _dqvalues;
-      vector<Vector<double> > _funcgradvalues;
+      vector<Vector<double> > qvalues_;
+      vector<Vector<double> > dqvalues_;
+      vector<Vector<double> > funcgradvalues_;
 
-      vector<Vector<double> > _uvalues;
-      vector<vector<Tensor<1, dealdim> > > _ugrads;
-      vector<vector<Tensor<1, dealdim> > > _zgrads;
+      vector<Vector<double> > uvalues_;
+      vector<vector<Tensor<1, dealdim> > > ugrads_;
+      vector<vector<Tensor<1, dealdim> > > zgrads_;
 
-      vector<unsigned int> _control_block_components;
-      vector<unsigned int> _state_block_components;
+      vector<unsigned int> control_block_component_;
+      vector<unsigned int> state_block_component_;
   };
 #endif

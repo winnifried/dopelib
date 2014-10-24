@@ -21,8 +21,8 @@
  *
  **/
 
-#ifndef _DOPE_FEVALUES_H_
-#define _DOPE_FEVALUES_H_
+#ifndef DOPE_FEVALUES_H_
+#define DOPE_FEVALUES_H_
 
 #include <fe/fe_values.h>
 #include <hp/fe_values.h>

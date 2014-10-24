@@ -21,8 +21,8 @@
  *
  **/
 
-#ifndef _AugmentedLagrangianProblem_H_
-#define _AugmentedLagrangianProblem_H_
+#ifndef AugmentedLagrangianProblem_H_
+#define AugmentedLagrangianProblem_H_
 
 namespace DOpE
 {
@@ -49,10 +49,10 @@ namespace DOpE
       public:
         AugmentedLagrangianProblem<CONSTRAINTACCESSOR, STH, OPTPROBLEM, dopedim,
             dealdim, localdim>(OPTPROBLEM& OP, CONSTRAINTACCESSOR& CA) :
-            _OP(OP), _CA(CA)
+            OP_(OP), CA_(CA)
         {
-          _p = 1.;
-          _rho = 0.;
+          p_ = 1.;
+          rho_ = 0.;
         }
         ~AugmentedLagrangianProblem<CONSTRAINTACCESSOR, STH, OPTPROBLEM,
             dopedim, dealdim, localdim>()
@@ -83,7 +83,7 @@ namespace DOpE
         void
         ReInit(std::string algo_type)
         {
-          _OP.ReInit(algo_type);
+          OP_.ReInit(algo_type);
         }
 
         /******************************************************/
@@ -92,7 +92,7 @@ namespace DOpE
         RegisterOutputHandler(
             DOpEOutputHandler<dealii::BlockVector<double> >* OH)
         {
-          _OP.RegisterOutputHandler(OH);
+          OP_.RegisterOutputHandler(OH);
         }
 
         /******************************************************/
@@ -101,7 +101,7 @@ namespace DOpE
         RegisterExceptionHandler(
             DOpEExceptionHandler<dealii::BlockVector<double> >* OH)
         {
-          _OP.RegisterExceptionHandler(OH);
+          OP_.RegisterExceptionHandler(OH);
         }
 
         /******************************************************/
@@ -109,7 +109,7 @@ namespace DOpE
         void
         SetType(std::string type, unsigned int num = 0)
         {
-          _OP.SetType(type, num);
+          OP_.SetType(type, num);
         }
 
         /**
@@ -122,15 +122,15 @@ namespace DOpE
           if ("p" == name)
           {
             assert(p > 0.);
-            _p = p;
+            p_ = p;
           }
           else if ("mma_functional" == name)
           {
-            _J = p;
+            J_ = p;
           }
           else if ("rho" == name)
           {
-            _rho = p;
+            rho_ = p;
           }
           else
           {
@@ -152,8 +152,8 @@ namespace DOpE
 
           for (unsigned int i = 0; i < constr.size(); i++)
           {
-            double Z = (constr(i) + _p) / (-1. * _p * _p);
-            hessian(i) = -2. * _p * _p * Z * Z * Z;
+            double Z = (constr(i) + p_) / (-1. * p_ * p_);
+            hessian(i) = -2. * p_ * p_ * Z * Z * Z;
           }
         }
 
@@ -179,18 +179,18 @@ namespace DOpE
             Tensor<2, localdim> Z, identity;
             identity = 0;
             for (unsigned int i = 0; i < localdim; i++)
-              identity[i][i] = _p;
+              identity[i][i] = p_;
 
             for (unsigned int i = 0;
-                i < _CA.GetNLocalControlConstraintDoFs(&dir); i++)
+                i < CA_.GetNLocalControlConstraintDoFs(&dir); i++)
             {
-              _CA.CopyLocalConstraintToTensor(constr, local_constraints, i);
-              _CA.CopyLocalConstraintToTensor(dir, local_dir, i);
+              CA_.CopyLocalConstraintToTensor(constr, local_constraints, i);
+              CA_.CopyLocalConstraintToTensor(dir, local_dir, i);
               Z = local_constraints + identity;
-              Z *= -1. / (_p * _p);
-              local_constraints = _p * _p * Z * local_dir * Z;
+              Z *= -1. / (p_ * p_);
+              local_constraints = p_ * p_ * Z * local_dir * Z;
               assert(local_constraints[0][0] >= 0.);
-              _CA.CopyTensorToLocalConstraint(local_constraints, grad, i);
+              CA_.CopyTensorToLocalConstraint(local_constraints, grad, i);
             }
           }
           {
@@ -203,9 +203,9 @@ namespace DOpE
 
             for (unsigned int i = 0; i < dir.size(); i++)
             {
-              double dd_phi = (constr(i) + _p) / (-1. * _p * _p);
+              double dd_phi = (constr(i) + p_) / (-1. * p_ * p_);
               dd_phi *= dd_phi;
-              dd_phi *= dir(i) * _p * _p;
+              dd_phi *= dir(i) * p_ * p_;
               assert(dd_phi >= 0.);
               grad(i) = dd_phi;
             }
@@ -233,12 +233,12 @@ namespace DOpE
 
             //Loop over local control and state constraints
             for (unsigned int i = 0;
-                i < _CA.GetNLocalControlConstraintDoFs(&bv_m); i++)
+                i < CA_.GetNLocalControlConstraintDoFs(&bv_m); i++)
             {
-              _CA.CopyLocalControlToVector(bv_grad, grad, i);
+              CA_.CopyLocalControlToVector(bv_grad, grad, i);
               for (unsigned int j = 0; j < localdim; j++)
                 identity[j][j] = scale * (1. + fabs(grad(j)));
-              _CA.CopyTensorToLocalConstraint(identity, bv_m, i);
+              CA_.CopyTensorToLocalConstraint(identity, bv_m, i);
             }
           }
           {
@@ -263,7 +263,7 @@ namespace DOpE
             const std::map<std::string, const dealii::Vector<double>*> &values,
             const std::map<std::string, const dealii::BlockVector<double>*> &block_values)
         {
-          double ret = _J;
+          double ret = J_;
           if (dopedim == 0)
             throw DOpEException("Not implemented for this dopedim ",
                 "AumentedLagrangianProblem::AlgebraicFunctional");
@@ -302,29 +302,29 @@ namespace DOpE
             Tensor<2, localdim> p_val, q_val, uf, lf, uf_cor, lf_cor, tmp;
 
             //assume bounds are constant, but choose outside the feasible region
-            //_CA.FillLowerUpperControlBound(lower_asymptote,upper_asymptote,true);
+            //CA_.FillLowerUpperControlBound(lower_asymptote,upper_asymptote,true);
             double tau = 0.;
             for (unsigned int i = 0;
-                i < _CA.GetNLocalControlDoFs(linearization_point); i++)
+                i < CA_.GetNLocalControlDoFs(linearization_point); i++)
             {
-              _CA.CopyLocalControlToTensor(*functional_gradient, grad_J, i);
-              _CA.CopyLocalControlToTensor(*linearization_point, control, i);
-              _CA.CopyLocalControlToTensor(*eval_point, point, i);
-              _CA.CopyLocalControlToTensor(*mma_lower_asymptote,
+              CA_.CopyLocalControlToTensor(*functional_gradient, grad_J, i);
+              CA_.CopyLocalControlToTensor(*linearization_point, control, i);
+              CA_.CopyLocalControlToTensor(*eval_point, point, i);
+              CA_.CopyLocalControlToTensor(*mma_lower_asymptote,
                   lower_asymptote, i);
-              _CA.CopyLocalControlToTensor(*mma_upper_asymptote,
+              CA_.CopyLocalControlToTensor(*mma_upper_asymptote,
                   upper_asymptote, i);
 
               //Project to positive and negative part! And compute tau = largest eigenvalue of grad_J
-              _CA.ProjectToPositiveAndNegativePart(grad_J, grad_J_plus,
+              CA_.ProjectToPositiveAndNegativePart(grad_J, grad_J_plus,
                   grad_J_minus, tau);
               //adjust tau, such that. -  gradJ + tau Id is pos def.
               tmp = invert(upper_asymptote - lower_asymptote); 
               p_val = (upper_asymptote - control)
-                  * (grad_J_plus + _rho / 2. * tmp)
+                  * (grad_J_plus + rho_ / 2. * tmp)
                   * (upper_asymptote - control);
               q_val = (control - lower_asymptote)
-                  * (-1. * grad_J_minus + _rho / 2. * tmp)
+                  * (-1. * grad_J_minus + rho_ / 2. * tmp)
                   * (control - lower_asymptote);
 
               uf = invert(upper_asymptote - point);
@@ -408,26 +408,26 @@ namespace DOpE
               double tau = 0.;
 
 	      for (unsigned int i = 0;
-                  i < _CA.GetNLocalControlDoFs(linearization_point); i++)
+                  i < CA_.GetNLocalControlDoFs(linearization_point); i++)
               {
-                _CA.CopyLocalControlToTensor(*functional_gradient, grad_J, i);
-                _CA.CopyLocalControlToTensor(*linearization_point, control, i);
-                _CA.CopyLocalControlToTensor(*eval_point, point, i);
-                _CA.CopyLocalControlToTensor(*mma_lower_asymptote,
+                CA_.CopyLocalControlToTensor(*functional_gradient, grad_J, i);
+                CA_.CopyLocalControlToTensor(*linearization_point, control, i);
+                CA_.CopyLocalControlToTensor(*eval_point, point, i);
+                CA_.CopyLocalControlToTensor(*mma_lower_asymptote,
                     lower_asymptote, i);
-                _CA.CopyLocalControlToTensor(*mma_upper_asymptote,
+                CA_.CopyLocalControlToTensor(*mma_upper_asymptote,
                     upper_asymptote, i);
 
                 //Project to positive and negative part! And compute tau = largest eigenvalue of grad_J
-                _CA.ProjectToPositiveAndNegativePart(grad_J, grad_J_plus,
+                CA_.ProjectToPositiveAndNegativePart(grad_J, grad_J_plus,
                     grad_J_minus, tau);
                 //adjust tau, such that -  gradJ + tau Id  is pos def.
                 tmp = invert(upper_asymptote - lower_asymptote); 
                 p_val = (upper_asymptote - control)
-                    * (grad_J_plus + _rho / 2. * tmp)
+                    * (grad_J_plus + rho_ / 2. * tmp)
                     * (upper_asymptote - control);
                 q_val = (control - lower_asymptote)
-                    * (-1. * grad_J_minus + _rho / 2. * tmp)
+                    * (-1. * grad_J_minus + rho_ / 2. * tmp)
                     * (control - lower_asymptote);
 
                 uf = invert(upper_asymptote - point);
@@ -435,7 +435,7 @@ namespace DOpE
 
                 result = uf * p_val * uf;
                 result -= lf * q_val * lf;
-                _CA.CopyTensorToLocalControl(result, residual, i);
+                CA_.CopyTensorToLocalControl(result, residual, i);
                 //Now done with J'
               }
               //Derivative of  Multiplier times constraints
@@ -443,39 +443,39 @@ namespace DOpE
                   local_constraint_derivative;
 
               {
-                identity *= _p;
-                Vector<double> local_control_directions(_CA.NLocalDirections());
+                identity *= p_;
+                Vector<double> local_control_directions(CA_.NLocalDirections());
 
                 Tensor < 2, localdim > Z;
                 Tensor < 2, localdim > lhs;
                 //Local Blocked constraints
                 std::vector<std::vector<unsigned int> > control_to_constraint_index;
-                _CA.LocalControlToConstraintBlocks(linearization_point,
+                CA_.LocalControlToConstraintBlocks(linearization_point,
                     control_to_constraint_index);
                 for (unsigned int i = 0;
-                    i < _CA.GetNLocalControlDoFs(linearization_point); i++)
+                    i < CA_.GetNLocalControlDoFs(linearization_point); i++)
                 {
                   for (unsigned int j = 0;
                       j < control_to_constraint_index[i].size(); j++)
                   {
                     unsigned int index = control_to_constraint_index[i][j];
 
-                    _CA.CopyLocalConstraintToTensor(*constraint_values,
+                    CA_.CopyLocalConstraintToTensor(*constraint_values,
                         local_constraints, index);
-                    _CA.CopyLocalConstraintToTensor(*mma_multiplier,
+                    CA_.CopyLocalConstraintToTensor(*mma_multiplier,
                         local_multiplier, index);
 
                     //Compute Z
                     Z = local_constraints + identity;
-                    Z *= -1. / (_p * _p);
+                    Z *= -1. / (p_ * p_);
 
-                    _CA.GetLocalConstraintDerivative(
+                    CA_.GetLocalConstraintDerivative(
                         local_constraint_derivative, *constraint_values, index);
 
                     lhs = Z * local_multiplier * Z
                         * local_constraint_derivative;
-                    lhs *= _p * _p;
-                    _CA.AddTensorToLocalControl(lhs, residual, i);
+                    lhs *= p_ * p_;
+                    CA_.AddTensorToLocalControl(lhs, residual, i);
                   }
                 }
               }
@@ -541,10 +541,10 @@ namespace DOpE
               for (unsigned int i = 0; i < constraint_gradients.size(); i++)
               {
                 //phi''
-                double Z = (constraint_values_global->operator()(i) + _p)
-                    / (-1. * _p * _p);
+                double Z = (constraint_values_global->operator()(i) + p_)
+                    / (-1. * p_ * p_);
                 double dd_phi = *(constraint_gradients[i]) * (*direction);
-                dd_phi *= -_p * _p * 2. * Z * Z * Z;
+                dd_phi *= -p_ * p_ * 2. * Z * Z * Z;
                 dd_phi *= mma_multiplier->block(global_block)(i);
                 residual.add(dd_phi, *(constraint_gradients[i]));
               }
@@ -557,58 +557,58 @@ namespace DOpE
               identity = 0;
               for (unsigned int i = 0; i < localdim; i++)
               {
-                identity[i][i] = _p;
+                identity[i][i] = p_;
               }
 
-              Vector<double> local_control_directions(_CA.NLocalDirections());
+              Vector<double> local_control_directions(CA_.NLocalDirections());
               Tensor < 2, localdim > Z;
               Tensor < 2, localdim > lhs;
-              Vector<double> dq(_CA.NLocalDirections());
-              Vector<double> H_dq(_CA.NLocalDirections());
+              Vector<double> dq(CA_.NLocalDirections());
+              Vector<double> H_dq(CA_.NLocalDirections());
 
               //Local Blocked constraints
               for (unsigned int i = 0;
-                  i < _CA.GetNLocalControlConstraintDoFs(mma_multiplier); i++)
+                  i < CA_.GetNLocalControlConstraintDoFs(mma_multiplier); i++)
               {
-                _CA.CopyLocalConstraintToTensor(*constraint_values,
+                CA_.CopyLocalConstraintToTensor(*constraint_values,
                     local_constraints, i);
-                _CA.CopyLocalConstraintToTensor(*mma_multiplier,
+                CA_.CopyLocalConstraintToTensor(*mma_multiplier,
                     local_multiplier, i);
-                _CA.CopyLocalControlToVector(*direction, dq, i);
+                CA_.CopyLocalControlToVector(*direction, dq, i);
                 //Compute Z
-                _CA.CopyLocalConstraintToTensor(*constraint_values,
+                CA_.CopyLocalConstraintToTensor(*constraint_values,
                     local_constraints, i);
 
                 Z = local_constraints + identity;
-                Z *= -1. / (_p * _p);
+                Z *= -1. / (p_ * p_);
                 lhs = Z * local_multiplier * Z;
-                lhs *= _p * _p;
+                lhs *= p_ * p_;
                 local_control_directions = 0.;
 
-                for (unsigned int j = 0; j < _CA.NLocalDirections(); j++)
+                for (unsigned int j = 0; j < CA_.NLocalDirections(); j++)
                 {
-                  _CA.GetLocalConstraintDerivative(local_constraint_derivative,
+                  CA_.GetLocalConstraintDerivative(local_constraint_derivative,
                       *constraint_values, i, j);
                   tmp = lhs * local_constraint_derivative * Z;
 
-                  for (unsigned int k = 0; k < _CA.NLocalDirections(); k++)
+                  for (unsigned int k = 0; k < CA_.NLocalDirections(); k++)
                   {
                     //phi''\nabla g \nabla g^T
-                    _CA.GetLocalConstraintDerivative(
+                    CA_.GetLocalConstraintDerivative(
                         local_constraint_derivative, *constraint_values, i, k);
                     local_control_directions(k) -= 2
                         * scalar_product(tmp, local_constraint_derivative)
                         * dq(k);
 
                     // phi' \nabla^2g
-                    _CA.GetLocalConstraintSecondDerivative(
+                    CA_.GetLocalConstraintSecondDerivative(
                         local_constraint_derivative, *constraint_values, i, j,
                         k);
                     local_control_directions(k) += scalar_product(lhs,
                         local_constraint_derivative) * dq(k);
                   }
                 }
-                _CA.AddVectorToLocalControl(local_control_directions, residual,
+                CA_.AddVectorToLocalControl(local_control_directions, residual,
                     i);
               }
             }
@@ -620,28 +620,28 @@ namespace DOpE
               double tau = 0.;
 
               for (unsigned int i = 0;
-                  i < _CA.GetNLocalControlDoFs(linearization_point); i++)
+                  i < CA_.GetNLocalControlDoFs(linearization_point); i++)
               {
-                _CA.CopyLocalControlToTensor(*functional_gradient, grad_J, i);
-                _CA.CopyLocalControlToTensor(*linearization_point, control, i);
-                _CA.CopyLocalControlToTensor(*eval_point, point, i);
-                _CA.CopyLocalControlToTensor(*direction, dq, i);
-                _CA.CopyLocalControlToTensor(*mma_lower_asymptote,
+                CA_.CopyLocalControlToTensor(*functional_gradient, grad_J, i);
+                CA_.CopyLocalControlToTensor(*linearization_point, control, i);
+                CA_.CopyLocalControlToTensor(*eval_point, point, i);
+                CA_.CopyLocalControlToTensor(*direction, dq, i);
+                CA_.CopyLocalControlToTensor(*mma_lower_asymptote,
                     lower_asymptote, i);
-                _CA.CopyLocalControlToTensor(*mma_upper_asymptote,
+                CA_.CopyLocalControlToTensor(*mma_upper_asymptote,
                     upper_asymptote, i);
 
                 //Project to positive and negative part! And compute tau = largest eigenvalue of grad_J
-                _CA.ProjectToPositiveAndNegativePart(grad_J, grad_J_plus,
+                CA_.ProjectToPositiveAndNegativePart(grad_J, grad_J_plus,
                     grad_J_minus, tau);
 
                 //adjust tau, s.t. -  gradJ + tau Id is pos def.
                 tmp = invert(upper_asymptote - lower_asymptote); 
                 p_val = (upper_asymptote - control)
-                    * (grad_J_plus + _rho / 2. * tmp)
+                    * (grad_J_plus + rho_ / 2. * tmp)
                     * (upper_asymptote - control);
                 q_val = (control - lower_asymptote)
-                    * (-1. * grad_J_minus + _rho / 2. * tmp)
+                    * (-1. * grad_J_minus + rho_ / 2. * tmp)
                     * (control - lower_asymptote);
 
                 uf = invert(upper_asymptote - point);
@@ -655,7 +655,7 @@ namespace DOpE
                   std::cout << "negative block! " << i << std::endl;
                   abort();
                 }
-                _CA.AddTensorToLocalControl(result, residual, i);
+                CA_.AddTensorToLocalControl(result, residual, i);
                 //Done with J''
               }
             }
@@ -693,7 +693,7 @@ namespace DOpE
             }
 
             std::vector<std::vector<unsigned int> > control_to_constraint_index;
-            _CA.LocalControlToConstraintBlocks(linearization_point,
+            CA_.LocalControlToConstraintBlocks(linearization_point,
                 control_to_constraint_index);
 
             Tensor<2, localdim> H, identity, result;
@@ -708,35 +708,35 @@ namespace DOpE
             identity = 0;
             for (unsigned int i = 0; i < localdim; i++)
             {
-              identity[i][i] = _p;
+              identity[i][i] = p_;
             }
 
             //Build  local Blocks of the hessian
             for (unsigned int i = 0;
-                i < _CA.GetNLocalControlDoFs(linearization_point); i++)
+                i < CA_.GetNLocalControlDoFs(linearization_point); i++)
             {
               H = 0.;
 
               //MMA Approx
-              _CA.CopyLocalControlToTensor(*functional_gradient, grad_J, i);
-              _CA.CopyLocalControlToTensor(*linearization_point, control, i);
-              _CA.CopyLocalControlToTensor(*eval_point, point, i);
-              _CA.CopyLocalControlToTensor(*direction, dq, i);
-              _CA.CopyLocalControlToTensor(*mma_lower_asymptote,
+              CA_.CopyLocalControlToTensor(*functional_gradient, grad_J, i);
+              CA_.CopyLocalControlToTensor(*linearization_point, control, i);
+              CA_.CopyLocalControlToTensor(*eval_point, point, i);
+              CA_.CopyLocalControlToTensor(*direction, dq, i);
+              CA_.CopyLocalControlToTensor(*mma_lower_asymptote,
                   lower_asymptote, i);
-              _CA.CopyLocalControlToTensor(*mma_upper_asymptote,
+              CA_.CopyLocalControlToTensor(*mma_upper_asymptote,
                   upper_asymptote, i);
 
               //Project to positive and negative part! And compute tau = largest eigenvalue of grad_J
-              _CA.ProjectToPositiveAndNegativePart(grad_J, grad_J_plus,
+              CA_.ProjectToPositiveAndNegativePart(grad_J, grad_J_plus,
                   grad_J_minus, tau);
               //adjust tau, such that -  gradJ + tau Id is pos def.
               tmp = invert(upper_asymptote - lower_asymptote); 
               p_val = (upper_asymptote - control)
-                  * (grad_J_plus + _rho / 2. * tmp)
+                  * (grad_J_plus + rho_ / 2. * tmp)
                   * (upper_asymptote - control);
               q_val = (control - lower_asymptote)
-                  * (-1. * grad_J_minus + _rho / 2. * tmp)
+                  * (-1. * grad_J_minus + rho_ / 2. * tmp)
                   * (control - lower_asymptote);
 
               uf = invert(upper_asymptote - point);
@@ -749,28 +749,28 @@ namespace DOpE
                   j < control_to_constraint_index[i].size(); j++)
               {
                 unsigned int index = control_to_constraint_index[i][j];
-                _CA.CopyLocalConstraintToTensor(*constraint_values,
+                CA_.CopyLocalConstraintToTensor(*constraint_values,
                     local_constraints, index);
-                _CA.CopyLocalConstraintToTensor(*mma_multiplier,
+                CA_.CopyLocalConstraintToTensor(*mma_multiplier,
                     local_multiplier, index);
 
                 Z = local_constraints + identity;
-                Z *= -1. / (_p * _p);
+                Z *= -1. / (p_ * p_);
 
-                _CA.GetLocalConstraintDerivative(local_constraint_derivative,
+                CA_.GetLocalConstraintDerivative(local_constraint_derivative,
                     *constraint_values, index);
-                _CA.GetLocalConstraintSecondDerivative(
+                CA_.GetLocalConstraintSecondDerivative(
                     local_constraint_second_derivative, *constraint_values,
                     index);
 
-                H += _p * _p * local_multiplier * Z * Z
+                H += p_ * p_ * local_multiplier * Z * Z
                     * (local_constraint_second_derivative
                         - 2. * Z * local_constraint_derivative
                             * local_constraint_derivative);
               }
               //Computation of H done
               result = invert(H) * dq;
-              _CA.AddTensorToLocalControl(result, residual, i);
+              CA_.AddTensorToLocalControl(result, residual, i);
             }
           }
           else
@@ -784,7 +784,7 @@ namespace DOpE
           double
           ElementFunctional(const DATACONTAINER& edc)
           {
-            return _OP.ElementFunctional(edc);
+            return OP_.ElementFunctional(edc);
           }
 
         /******************************************************/
@@ -794,7 +794,7 @@ namespace DOpE
             const std::map<std::string, const dealii::Vector<double>*> &param_values,
             const std::map<std::string, const dealii::BlockVector<double>*> &domain_values)
         {
-          return _OP.PointFunctional(param_values, domain_values);
+          return OP_.PointFunctional(param_values, domain_values);
         }
 
         /******************************************************/
@@ -803,7 +803,7 @@ namespace DOpE
           double
           BoundaryFunctional(const FACEDATACONTAINER& fdc)
           {
-            return _OP.BoundaryFunctional(fdc);
+            return OP_.BoundaryFunctional(fdc);
           }
 
         /******************************************************/
@@ -812,7 +812,7 @@ namespace DOpE
           double
           FaceFunctional(const FACEDATACONTAINER& fdc)
           {
-            return _OP.FaceFunctional(fdc);
+            return OP_.FaceFunctional(fdc);
           }
 
         /******************************************************/
@@ -823,7 +823,7 @@ namespace DOpE
               dealii::Vector<double> &local_vector, double scale = 1.,
               double scale_ico = 1.)
           {
-            _OP.ElementEquation(edc, local_vector, scale, scale_ico);
+            OP_.ElementEquation(edc, local_vector, scale, scale_ico);
           }
 
         /******************************************************/
@@ -849,15 +849,15 @@ namespace DOpE
               }
               for (unsigned int i = 0; i < mma_multiplier_global.size(); i++)
               {
-                _OP.SetType("global_constraint_gradient", i);
-                double local_scaling = (constraint_values_global(i) + _p)
-                    / (-1. * _p * _p);
+                OP_.SetType("global_constraint_gradient", i);
+                double local_scaling = (constraint_values_global(i) + p_)
+                    / (-1. * p_ * p_);
                 local_scaling *= local_scaling;
                 local_scaling *= mma_multiplier_global(i);
-                local_scaling *= (_p * _p);
-                _OP.ElementRhs(edc, local_vector, scale * local_scaling);
+                local_scaling *= (p_ * p_);
+                OP_.ElementRhs(edc, local_vector, scale * local_scaling);
               }
-              _OP.SetType(tmp, tmp_num);
+              OP_.SetType(tmp, tmp_num);
             }
             else if (this->GetType() == "hessian")
             {
@@ -875,18 +875,18 @@ namespace DOpE
 
               for (unsigned int i = 0; i < mma_multiplier_global.size(); i++)
               {
-                _OP.SetType("global_constraint_hessian", i);
-                double local_scaling = (constraint_values_global(i) + _p);
+                OP_.SetType("global_constraint_hessian", i);
+                double local_scaling = (constraint_values_global(i) + p_);
                 local_scaling *= local_scaling;
                 local_scaling *= mma_multiplier_global(i);
-                local_scaling *= 1. / (_p * _p);
-                _OP.ElementRhs(edc, local_vector, scale * local_scaling);
+                local_scaling *= 1. / (p_ * p_);
+                OP_.ElementRhs(edc, local_vector, scale * local_scaling);
               }
-              _OP.SetType(tmp, tmp_num);
+              OP_.SetType(tmp, tmp_num);
             }
             else if (this->GetType() == "global_constraint_gradient")
             {
-              _OP.ElementRhs(edc, local_vector, scale);
+              OP_.ElementRhs(edc, local_vector, scale);
             }
             else
             {
@@ -913,7 +913,7 @@ namespace DOpE
               dealii::FullMatrix<double> &local_matrix, double scale = 1.,
               double scale_ico = 1.)
           {
-            _OP.ElementMatrix(edc, local_matrix, scale, scale_ico);
+            OP_.ElementMatrix(edc, local_matrix, scale, scale_ico);
           }
 
         /******************************************************/
@@ -1051,7 +1051,7 @@ namespace DOpE
         const dealii::SmartPointer<const dealii::Quadrature<dealdim> >
         GetQuadratureFormula() const
         {
-          return _OP.GetQuadratureFormula();
+          return OP_.GetQuadratureFormula();
         }
 
         /******************************************************/
@@ -1064,7 +1064,7 @@ namespace DOpE
         const dealii::SmartPointer<const dealii::Quadrature<dealdim - 1> >
         GetFaceQuadratureFormula() const
         {
-          return _OP.GetFaceQuadratureFormula();
+          return OP_.GetFaceQuadratureFormula();
         }
 
         /******************************************************/
@@ -1077,7 +1077,7 @@ namespace DOpE
         const dealii::SmartPointer<const dealii::FESystem<dealdim> >
         GetFESystem() const
         {
-          return _OP.GetFESystem();
+          return OP_.GetFESystem();
         }
 
         /******************************************************/
@@ -1091,18 +1091,18 @@ namespace DOpE
         bool
         HasFaces() const
         {
-          return _OP.HasFaces();
+          return OP_.HasFaces();
         }
         bool
         HasPoints() const
         {
-          return _OP.HasPoints();
+          return OP_.HasPoints();
         }
         ;
         bool
         HasInterfaces() const
         {
-          return _OP.HasInterfaces();
+          return OP_.HasInterfaces();
         }
 
         /******************************************************/
@@ -1118,7 +1118,7 @@ namespace DOpE
         dealii::UpdateFlags
         GetUpdateFlags() const
         {
-          return _OP.GetUpdateFlags();
+          return OP_.GetUpdateFlags();
         }
 
         /******************************************************/
@@ -1135,7 +1135,7 @@ namespace DOpE
         dealii::UpdateFlags
         GetFaceUpdateFlags() const
         {
-          return _OP.GetFaceUpdateFlags();
+          return OP_.GetFaceUpdateFlags();
         }
 
         /******************************************************/
@@ -1148,7 +1148,7 @@ namespace DOpE
         const std::vector<unsigned int>&
         GetDirichletColors() const
         {
-          return _OP.GetDirichletColors();
+          return OP_.GetDirichletColors();
         }
 
         /******************************************************/
@@ -1162,7 +1162,7 @@ namespace DOpE
         const std::vector<bool>&
         GetDirichletCompMask(unsigned int color) const
         {
-          return _OP.GetDirichletCompMask(color);
+          return OP_.GetDirichletCompMask(color);
         }
 
         /******************************************************/
@@ -1178,7 +1178,7 @@ namespace DOpE
 			   const std::map<std::string, const dealii::Vector<double>*> &param_values,
 			   const std::map<std::string, const dealii::BlockVector<double>*> &domain_values) const
         {
-          return _OP.GetDirichletValues(color, param_values, domain_values);
+          return OP_.GetDirichletValues(color, param_values, domain_values);
         }
 
         /******************************************************/
@@ -1192,7 +1192,7 @@ namespace DOpE
         const dealii::Function<dealdim>&
         GetInitialValues() const
         {
-          return _OP.GetInitialValues();
+          return OP_.GetInitialValues();
         }
 
         /******************************************************/
@@ -1205,7 +1205,7 @@ namespace DOpE
         const std::vector<unsigned int>&
         GetBoundaryEquationColors() const
         {
-          return _OP.GetBoundaryEquationColors();
+          return OP_.GetBoundaryEquationColors();
         }
 
         /******************************************************/
@@ -1218,7 +1218,7 @@ namespace DOpE
         const std::vector<unsigned int>&
         GetBoundaryFunctionalColors() const
         {
-          return _OP.GetBoundaryFunctionalColors();
+          return OP_.GetBoundaryFunctionalColors();
         }
 
         /******************************************************/
@@ -1248,7 +1248,7 @@ namespace DOpE
         unsigned int
         GetNBlocks() const
         {
-          return _OP.GetNBlocks();
+          return OP_.GetNBlocks();
         }
 
         /******************************************************/
@@ -1261,7 +1261,7 @@ namespace DOpE
         unsigned int
         GetDoFsPerBlock(unsigned int b) const
         {
-          return _OP.GetDoFsPerBlock(b);
+          return OP_.GetDoFsPerBlock(b);
         }
 
         /******************************************************/
@@ -1274,7 +1274,7 @@ namespace DOpE
         const std::vector<unsigned int>&
         GetDoFsPerBlock() const
         {
-          return _OP.GetDoFsPerBlock();
+          return OP_.GetDoFsPerBlock();
         }
 
         /******************************************************/
@@ -1287,23 +1287,23 @@ namespace DOpE
         const dealii::ConstraintMatrix&
         GetDoFConstraints() const
         {
-          return _OP.GetDoFConstraints();
+          return OP_.GetDoFConstraints();
         }
 
         std::string
         GetType() const
         {
-          return _OP.GetType();
+          return OP_.GetType();
         }
         unsigned int
         GetTypeNum() const
         {
-          return _OP.GetTypeNum();
+          return OP_.GetTypeNum();
         }
         std::string
         GetDoFType() const
         {
-          return _OP.GetDoFType();
+          return OP_.GetDoFType();
         }
 
         /******************************************************/
@@ -1319,7 +1319,7 @@ namespace DOpE
               || this->GetType() == "gradient" || this->GetType() == "hessian"
               || this->GetType() == "hessian_inverse")
             return "algebraic";
-          return _OP.GetFunctionalType();
+          return OP_.GetFunctionalType();
         }
 
         /******************************************************/
@@ -1340,7 +1340,7 @@ namespace DOpE
         std::string
         GetConstraintType() const
         {
-          return _OP.GetConstraintType();
+          return OP_.GetConstraintType();
         }
 
         /******************************************************/
@@ -1348,7 +1348,7 @@ namespace DOpE
         bool
         HasControlInDirichletData() const
         {
-          return _OP.HasControlInDirichletData();
+          return OP_.HasControlInDirichletData();
         }
 
         /******************************************************/
@@ -1361,7 +1361,7 @@ namespace DOpE
         DOpEOutputHandler<dealii::BlockVector<double> >*
         GetOutputHandler()
         {
-          return _OP.GetOutputHandler();
+          return OP_.GetOutputHandler();
         }
 
         /******************************************************/
@@ -1374,7 +1374,7 @@ namespace DOpE
         const STH*
         GetSpaceTimeHandler() const
         {
-          return _OP.GetSpaceTimeHandler();
+          return OP_.GetSpaceTimeHandler();
         }
 
         /******************************************************/
@@ -1387,7 +1387,7 @@ namespace DOpE
         STH*
         GetSpaceTimeHandler()
         {
-          return _OP.GetSpaceTimeHandler();
+          return OP_.GetSpaceTimeHandler();
         }
 
         /******************************************************/
@@ -1395,7 +1395,7 @@ namespace DOpE
         void
         ComputeSparsityPattern(BlockSparsityPattern & sparsity) const
         {
-          _OP.ComputeSparsityPattern(sparsity);
+          OP_.ComputeSparsityPattern(sparsity);
         }
 
         /******************************************************/
@@ -1404,7 +1404,7 @@ namespace DOpE
         PostProcessConstraints(
             ConstraintVector<dealii::BlockVector<double> >& g) const
         {
-          //_OP.PostProcessConstraints(g,process_global_in_time_constraints);
+          //OP_.PostProcessConstraints(g,process_global_in_time_constraints);
           {
             dealii::BlockVector<double>& bv_g = g.GetSpacialVector("local");
 
@@ -1414,14 +1414,14 @@ namespace DOpE
               identity[i][i] = 1.;
             //Loop over local control and state constraints
             for (unsigned int i = 0;
-                i < _CA.GetNLocalControlConstraintDoFs(&bv_g); i++)
+                i < CA_.GetNLocalControlConstraintDoFs(&bv_g); i++)
             {
-              _CA.CopyLocalConstraintToTensor(bv_g, tmp, i);
-              tmp -= _p * identity;
+              CA_.CopyLocalConstraintToTensor(bv_g, tmp, i);
+              tmp -= p_ * identity;
               tmp2 = invert(tmp);
-              tmp2 *= -_p * _p;
-              tmp2 -= _p * identity;
-              _CA.CopyTensorToLocalConstraint(tmp2, bv_g, i);
+              tmp2 *= -p_ * p_;
+              tmp2 -= p_ * identity;
+              CA_.CopyTensorToLocalConstraint(tmp2, bv_g, i);
             }
           }
           {
@@ -1429,7 +1429,7 @@ namespace DOpE
             //Loop over global constraints.
             for (unsigned int i = 0; i < bv_g.size(); i++)
             {
-              bv_g(i) = -_p * _p / (bv_g(i) - _p) - _p;
+              bv_g(i) = -p_ * p_ / (bv_g(i) - p_) - p_;
             }
           }
         }
@@ -1438,74 +1438,74 @@ namespace DOpE
             const ControlVector<dealii::BlockVector<double> >* c,
             std::string name)
         {
-          _OP.AddAuxiliaryControl(c, name);
+          OP_.AddAuxiliaryControl(c, name);
         }
         const ControlVector<dealii::BlockVector<double> >*
         GetAuxiliaryControl(std::string name) const
         {
-          return _OP.GetAuxiliaryControl(name);
+          return OP_.GetAuxiliaryControl(name);
         }
         void
         AddAuxiliaryConstraint(
             const ConstraintVector<dealii::BlockVector<double> >* c,
             std::string name)
         {
-          _OP.AddAuxiliaryConstraint(c, name);
+          OP_.AddAuxiliaryConstraint(c, name);
         }
         void
         DeleteAuxiliaryControl(std::string name)
         {
-          _OP.DeleteAuxiliaryControl(name);
+          OP_.DeleteAuxiliaryControl(name);
         }
         void
         DeleteAuxiliaryConstraint(std::string name)
         {
-          _OP.DeleteAuxiliaryConstraint(name);
+          OP_.DeleteAuxiliaryConstraint(name);
         }
         const ConstraintVector<dealii::BlockVector<double> >*
         GetAuxiliaryConstraint(std::string name)
         {
-          return _OP.GetAuxiliaryConstraint(name);
+          return OP_.GetAuxiliaryConstraint(name);
         }
 
         template<typename INTEGRATOR>
           void
           AddAuxiliaryToIntegrator(INTEGRATOR& integrator)
           {
-            _OP.AddAuxiliaryToIntegrator<INTEGRATOR>(integrator);
+            OP_.AddAuxiliaryToIntegrator<INTEGRATOR>(integrator);
           }
         template<typename INTEGRATOR>
           void
           DeleteAuxiliaryFromIntegrator(INTEGRATOR& integrator)
           {
-            _OP.DeleteAuxiliaryFromIntegrator<INTEGRATOR>(integrator);
+            OP_.DeleteAuxiliaryFromIntegrator<INTEGRATOR>(integrator);
           }
 
         /*************************************************************************************/
         bool
         GetFEValuesNeededToBeInitialized() const
         {
-          return _OP.GetFEValuesNeededToBeInitialized();
+          return OP_.GetFEValuesNeededToBeInitialized();
         }
 
         /******************************************************/
         void
         SetFEValuesAreInitialized()
         {
-          _OP.SetFEValuesAreInitialized();
+          OP_.SetFEValuesAreInitialized();
         }
 
         /******************************************************/
         const std::map<std::string, unsigned int>&
         GetFunctionalPosition() const
         {
-          return _OP.GetFunctionalPosition();
+          return OP_.GetFunctionalPosition();
         }
 
       private:
-        OPTPROBLEM& _OP;
-        CONSTRAINTACCESSOR& _CA;
-        double _p, _J, _rho;
+        OPTPROBLEM& OP_;
+        CONSTRAINTACCESSOR& CA_;
+        double p_, J_, rho_;
 
         const dealii::BlockVector<double>*
         GetBlockVector(

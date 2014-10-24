@@ -21,8 +21,8 @@
  *
  **/
 
-#ifndef _LOCALFunctionalS_
-#define _LOCALFunctionalS_
+#ifndef LOCALFunctionalS_
+#define LOCALFunctionalS_
 
 #include "functionalinterface.h"
 
@@ -112,16 +112,16 @@ template<
         double flux = 0.0;
         if (color == 1)
         {
-          std::vector<dealii::Vector<double> > _ufacevalues;
-          _ufacevalues.resize(n_q_points, dealii::Vector<double>(3));
-          fdc.GetFaceValuesState("state", _ufacevalues);
+          std::vector<dealii::Vector<double> > ufacevalues;
+          ufacevalues.resize(n_q_points, dealii::Vector<double>(3));
+          fdc.GetFaceValuesState("state", ufacevalues);
 
           for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
           {
             dealii::Tensor<1, 2> v;
             v.clear();
-            v[0] = _ufacevalues[q_point](0);
-            v[1] = _ufacevalues[q_point](1);
+            v[0] = ufacevalues[q_point](0);
+            v[1] = ufacevalues[q_point](1);
 
             flux += v * state_fe_face_values.normal_vector(q_point)
                 * state_fe_face_values.JxW(q_point);

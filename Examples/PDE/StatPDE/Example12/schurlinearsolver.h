@@ -21,8 +21,8 @@
 *
 **/
 
-#ifndef _Schur_LINEAR_SOLVER_H_
-#define _Schur_LINEAR_SOLVER_H_
+#ifndef Schur_LINEAR_SOLVER_H_
+#define Schur_LINEAR_SOLVER_H_
 
 #include <lac/vector.h>
 #include <lac/block_sparsity_pattern.h>
@@ -138,8 +138,8 @@ namespace DOpE
     };
     //End of code from step-20
 
-    dealii::BlockSparsityPattern _sparsity_pattern;
-    dealii::BlockSparseMatrix<double> _matrix;
+    dealii::BlockSparsityPattern sparsity_pattern_;
+    dealii::BlockSparseMatrix<double> matrix_;
   };
 
 /*********************************Implementation************************************************/
@@ -164,9 +164,9 @@ namespace DOpE
   template<typename PROBLEM>
     void  SchurLinearSolverWithMatrix::ReInit(PROBLEM& pde)
   {
-    _matrix.clear();
-    pde.ComputeSparsityPattern(_sparsity_pattern);
-    _matrix.reinit(_sparsity_pattern);
+    matrix_.clear();
+    pde.ComputeSparsityPattern(sparsity_pattern_);
+    matrix_.reinit(sparsity_pattern_);
   }
   
 /******************************************************/
@@ -179,16 +179,16 @@ namespace DOpE
   {
     if(force_matrix_build)
     { 
-      integr.ComputeMatrix (pde,_matrix);
+      integr.ComputeMatrix (pde,matrix_);
     }
     
-    integr.ApplyNewtonBoundaryValues(pde,_matrix,rhs,solution);
+    integr.ApplyNewtonBoundaryValues(pde,matrix_,rhs,solution);
     
     
     //This is the code coming from the dealii step-20 solve method:
     dealii::PreconditionIdentity identity;
     dealii::IterativeInverse<dealii::Vector<double> > m_inverse;
-    m_inverse.initialize(_matrix.block(0,0), identity);
+    m_inverse.initialize(matrix_.block(0,0), identity);
     m_inverse.solver.select("cg");
     static ReductionControl inner_control(1000, 0., 1.e-13,false,false);
     m_inverse.solver.set_control(inner_control);
@@ -199,12 +199,12 @@ namespace DOpE
       dealii::Vector<double> schur_rhs (solution.block(1).size());
       
       m_inverse.vmult (tmp, rhs.block(0));
-      _matrix.block(1,0).vmult (schur_rhs, tmp);
+      matrix_.block(1,0).vmult (schur_rhs, tmp);
       schur_rhs -= rhs.block(1);
       
-      SchurComplement schur_complement (_matrix, m_inverse);
+      SchurComplement schur_complement (matrix_, m_inverse);
       
-      ApproximateSchurComplement approximate_schur_complement (_matrix);
+      ApproximateSchurComplement approximate_schur_complement (matrix_);
       
       dealii::IterativeInverse<Vector<double> > preconditioner;
       preconditioner.initialize(approximate_schur_complement, identity);
@@ -219,7 +219,7 @@ namespace DOpE
 		preconditioner);
     }
     {
-      _matrix.block(0,1).vmult (tmp, solution.block(1));
+      matrix_.block(0,1).vmult (tmp, solution.block(1));
       tmp *= -1;
       tmp += rhs.block(0);
     

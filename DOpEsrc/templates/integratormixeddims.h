@@ -21,8 +21,8 @@
 *
 **/
 
-#ifndef _IntegratorMixed_H_
-#define _IntegratorMixed_H_
+#ifndef IntegratorMixed_H_
+#define IntegratorMixed_H_
 
 #include <lac/vector.h>
 #include <lac/block_sparsity_pattern.h>
@@ -121,10 +121,10 @@ class IntegratorMixedDimensions
       inline void AddPresetRightHandSide(double s, dealii::Vector<SCALAR> &residual) const;
 
   private:
-    INTEGRATORDATACONT & _idc;
+    INTEGRATORDATACONT & idc_;
 
-    std::map<std::string, const VECTOR*> _domain_data;
-    std::map<std::string, const dealii::Vector<SCALAR>*> _param_data;
+    std::map<std::string, const VECTOR*> domain_data_;
+    std::map<std::string, const dealii::Vector<SCALAR>*> param_data_;
 };
 
 /**********************************Implementation*******************************************/
@@ -133,7 +133,7 @@ class IntegratorMixedDimensions
       int dimlow, int dimhigh>
     IntegratorMixedDimensions<INTEGRATORDATACONT, VECTOR, SCALAR, dimlow,
         dimhigh>::IntegratorMixedDimensions(INTEGRATORDATACONT& idc) :
-      _idc(idc)
+      idc_(idc)
     {
     }
 
@@ -177,20 +177,20 @@ template<typename PROBLEM>
       auto endc = pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandlerEnd();
 
      // Initialize the data containers.
-      _idc.InitializeEDC(pde.GetUpdateFlags(),
+      idc_.InitializeEDC(pde.GetUpdateFlags(),
                 *(pde.GetBaseProblem().GetSpaceTimeHandler()), element,
                 this->GetParamData(), this->GetDomainData());
-      auto& edc = _idc.GetElementDataContainer();
+      auto& edc = idc_.GetElementDataContainer();
 
       bool need_faces = pde.HasFaces();
       std::vector<unsigned int> boundary_equation_colors = pde.GetBoundaryEquationColors();
       bool need_boundary_integrals = (boundary_equation_colors.size() > 0);
-      _idc.InitializeFDC(pde.GetFaceUpdateFlags(),
+      idc_.InitializeFDC(pde.GetFaceUpdateFlags(),
                 *(pde.GetBaseProblem().GetSpaceTimeHandler()),
                 element,
                 this->GetParamData(),
                 this->GetDomainData());
-      auto & fdc = _idc.GetFaceDataContainer();
+      auto & fdc = idc_.GetFaceDataContainer();
 
       for (; element[0] != endc[0]; element[0]++)
       {
@@ -292,20 +292,20 @@ template<typename PROBLEM>
       auto endc = pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandlerEnd();
 
      // Initialize the data containers.
-      _idc.InitializeEDC(pde.GetUpdateFlags(),
+      idc_.InitializeEDC(pde.GetUpdateFlags(),
                 *(pde.GetBaseProblem().GetSpaceTimeHandler()), element,
                 this->GetParamData(), this->GetDomainData());
-      auto& edc = _idc.GetElementDataContainer();
+      auto& edc = idc_.GetElementDataContainer();
 
       bool need_faces = pde.HasFaces();
       std::vector<unsigned int> boundary_equation_colors = pde.GetBoundaryEquationColors();
       bool need_boundary_integrals = (boundary_equation_colors.size() > 0);
-      _idc.InitializeFDC(pde.GetFaceUpdateFlags(),
+      idc_.InitializeFDC(pde.GetFaceUpdateFlags(),
                 *(pde.GetBaseProblem().GetSpaceTimeHandler()),
                 element,
                 this->GetParamData(),
                 this->GetDomainData());
-      auto & fdc = _idc.GetFaceDataContainer();
+      auto & fdc = idc_.GetFaceDataContainer();
 
       for (; element[0] != endc[0]; element[0]++)
       {
@@ -417,10 +417,10 @@ template<typename PROBLEM>
       auto element = pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandlerBeginActive();
       auto endc = pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandlerEnd();
 
-      _idc.InitializeEDC(pde.GetUpdateFlags(),
+      idc_.InitializeEDC(pde.GetUpdateFlags(),
           *(pde.GetBaseProblem().GetSpaceTimeHandler()), element,
           this->GetParamData(), this->GetDomainData());
-      auto& edc = _idc.GetElementDataContainer();
+      auto& edc = idc_.GetElementDataContainer();
 
       for (; element[0] != endc[0]; element[0]++)
       {
@@ -718,12 +718,12 @@ void IntegratorMixedDimensions<INTEGRATORDATACONT, VECTOR, SCALAR, dimlow, dimhi
                                                                                                    std::string name,
                                                                                                    const VECTOR* new_data)
 {
-  if (_domain_data.find(name) != _domain_data.end())
+  if (domain_data_.find(name) != domain_data_.end())
   {
     throw DOpEException("Adding multiple Data with name " + name + " is prohibited!",
                         "IntegratorMixedDimensions::AddDomainData");
   }
-  _domain_data.insert(std::pair<std::string, const VECTOR*>(name, new_data));
+  domain_data_.insert(std::pair<std::string, const VECTOR*>(name, new_data));
 }
 
 /*******************************************************************************************/
@@ -733,13 +733,13 @@ template<typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR, int diml
 void IntegratorMixedDimensions<INTEGRATORDATACONT, VECTOR, SCALAR, dimlow, dimhigh>::DeleteDomainData(
                                                                                                       std::string name)
 {
-  typename std::map<std::string, const VECTOR *>::iterator it = _domain_data.find(name);
-  if (it == _domain_data.end())
+  typename std::map<std::string, const VECTOR *>::iterator it = domain_data_.find(name);
+  if (it == domain_data_.end())
   {
     throw DOpEException("Deleting Data " + name + " is impossible! Data not found",
                         "IntegratorMixedDimensions::DeleteDomainData");
   }
-  _domain_data.erase(it);
+  domain_data_.erase(it);
 }
 
 /*******************************************************************************************/
@@ -749,7 +749,7 @@ template<typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR, int diml
 const std::map<std::string, const VECTOR*>& IntegratorMixedDimensions<INTEGRATORDATACONT, VECTOR,
     SCALAR, dimlow, dimhigh>::GetDomainData() const
 {
-  return _domain_data;
+  return domain_data_;
 }
 
 /*******************************************************************************************/
@@ -761,12 +761,12 @@ void IntegratorMixedDimensions<INTEGRATORDATACONT, VECTOR, SCALAR, dimlow, dimhi
                                                                                                   const dealii::Vector<
                                                                                                       SCALAR>* new_data)
 {
-  if (_param_data.find(name) != _param_data.end())
+  if (param_data_.find(name) != param_data_.end())
   {
     throw DOpEException("Adding multiple Data with name " + name + " is prohibited!",
                         "IntegratorMixedDimensions::AddParamData");
   }
-  _param_data.insert(std::pair<std::string, const dealii::Vector<SCALAR>*>(name, new_data));
+  param_data_.insert(std::pair<std::string, const dealii::Vector<SCALAR>*>(name, new_data));
 }
 
 /*******************************************************************************************/
@@ -777,13 +777,13 @@ void IntegratorMixedDimensions<INTEGRATORDATACONT, VECTOR, SCALAR, dimlow, dimhi
                                                                                                      std::string name)
 {
   typename std::map<std::string, const dealii::Vector<SCALAR>*>::iterator it =
-      _param_data.find(name);
-  if (it == _param_data.end())
+      param_data_.find(name);
+  if (it == param_data_.end())
   {
     throw DOpEException("Deleting Data " + name + " is impossible! Data not found",
                         "IntegratorMixedDimensions::DeleteParamData");
   }
-  _param_data.erase(it);
+  param_data_.erase(it);
 }
 
 /*******************************************************************************************/
@@ -793,7 +793,7 @@ template<typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR, int diml
 const std::map<std::string, const dealii::Vector<SCALAR>*>& IntegratorMixedDimensions<
     INTEGRATORDATACONT, VECTOR, SCALAR, dimlow, dimhigh>::GetParamData() const
 {
-  return _param_data;
+  return param_data_;
 }
 /*******************************************************************************************/
 
@@ -802,7 +802,7 @@ template<typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR,
   const INTEGRATORDATACONT&
   IntegratorMixedDimensions<INTEGRATORDATACONT, VECTOR, SCALAR, dimlow, dimhigh>::GetIntegratorDataContainer() const
   {
-    return _idc;
+    return idc_;
   }
 
   /*******************************************************************************************/
@@ -814,8 +814,8 @@ template<typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR,
 													 dealii::Vector<SCALAR> &residual) const
     {
       typename std::map<std::string, const dealii::Vector<SCALAR>*>::const_iterator it =
-          _param_data.find("fixed_rhs");
-      if (it != _param_data.end())
+          param_data_.find("fixed_rhs");
+      if (it != param_data_.end())
       {
 	assert(residual.size() == it->second->size());
 	residual.add(s,*(it->second));

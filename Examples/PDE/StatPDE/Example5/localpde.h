@@ -21,8 +21,8 @@
  *
  **/
 
-#ifndef _LOCALPDE_H_
-#define _LOCALPDE_H_
+#ifndef LOCALPDE_H_
+#define LOCALPDE_H_
 
 #include "pdeinterface.h"
 #include "myfunctions.h"
@@ -41,7 +41,7 @@ template<
   {
     public:
       LocalPDELaplace() :
-          _state_block_components(1, 0)
+          state_block_component_(1, 0)
       {
       }
 
@@ -55,10 +55,10 @@ template<
         const DOpEWrapper::FEValues<dealdim> &state_fe_values =
             edc.GetFEValuesState();
 
-        assert(this->_problem_type == "state");
+        assert(this->problem_type_ == "state");
 
-        _ugrads.resize(n_q_points, Tensor<1, dealdim>());
-        edc.GetGradsState("last_newton_solution", _ugrads);
+        ugrads_.resize(n_q_points, Tensor<1, dealdim>());
+        edc.GetGradsState("last_newton_solution", ugrads_);
 
         const FEValuesExtractors::Scalar velocities(0);
 
@@ -66,8 +66,8 @@ template<
         {
           Tensor<1, 2> vgrads;
           vgrads.clear();
-          vgrads[0] = _ugrads[q_point][0];
-          vgrads[1] = _ugrads[q_point][1];
+          vgrads[0] = ugrads_[q_point][0];
+          vgrads[1] = ugrads_[q_point][1];
 
           for (unsigned int i = 0; i < n_dofs_per_element; i++)
           {
@@ -88,12 +88,12 @@ template<
         const DOpEWrapper::FEValues<dealdim> &state_fe_values =
             edc.GetFEValuesState();
 
-        _fvalues.resize(n_q_points);
+        fvalues_.resize(n_q_points);
 
-        _PI_h_z.resize(n_q_points);
-        _lap_u.resize(n_q_points);
-        edc.GetLaplaciansState("state", _lap_u);
-        edc_w.GetValuesState("weight_for_primal_residual", _PI_h_z);
+        PI_h_z_.resize(n_q_points);
+        lap_u_.resize(n_q_points);
+        edc.GetLaplaciansState("state", lap_u_);
+        edc_w.GetValuesState("weight_for_primal_residual", PI_h_z_);
 
         const FEValuesExtractors::Scalar velocities(0);
 
@@ -101,15 +101,15 @@ template<
         assert(this->ResidualModifier);
         for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
         {
-          _fvalues[q_point] = -_ex_sol.laplacian(
+          fvalues_[q_point] = -ex_sol_.laplacian(
               state_fe_values.quadrature_point(q_point));
           double res;
-          res = _fvalues[q_point] + _lap_u[q_point];
+          res = fvalues_[q_point] + lap_u_[q_point];
 
           //Modify the residual as required by the error estimator
           this->ResidualModifier(res);
 
-          sum += scale * (res * _PI_h_z[q_point])
+          sum += scale * (res * PI_h_z_[q_point])
               * state_fe_values.JxW(q_point);
         }
       }
@@ -122,12 +122,12 @@ template<
         const DOpEWrapper::FEValues<dealdim> &state_fe_values =
             edc.GetFEValuesState();
 
-        _fvalues.resize(n_q_points);
+        fvalues_.resize(n_q_points);
 
-        _PI_h_z.resize(n_q_points);
-        _lap_u.resize(n_q_points);
-        edc.GetLaplaciansState("adjoint_for_ee", _lap_u);
-        edc_w.GetValuesState("weight_for_dual_residual", _PI_h_z);
+        PI_h_z_.resize(n_q_points);
+        lap_u_.resize(n_q_points);
+        edc.GetLaplaciansState("adjoint_for_ee", lap_u_);
+        edc_w.GetValuesState("weight_for_dual_residual", PI_h_z_);
 
         const FEValuesExtractors::Scalar velocities(0);
 
@@ -135,11 +135,11 @@ template<
         {
 
           double res;
-          res = _lap_u[q_point];
+          res = lap_u_[q_point];
           //Modify the residual as required by the error estimator
           this->ResidualModifier(res);
 
-          sum += scale * (res * _PI_h_z[q_point])
+          sum += scale * (res * PI_h_z_[q_point])
               * state_fe_values.JxW(q_point);
         }
       }
@@ -151,19 +151,19 @@ template<
           double& sum, double scale)
       {
         unsigned int n_q_points = fdc.GetNQPoints();
-        _ugrads.resize(n_q_points, Tensor<1, dealdim>());
-        _ugrads_nbr.resize(n_q_points, Tensor<1, dealdim>());
-        _PI_h_z.resize(n_q_points);
+        ugrads_.resize(n_q_points, Tensor<1, dealdim>());
+        ugrads_nbr_.resize(n_q_points, Tensor<1, dealdim>());
+        PI_h_z_.resize(n_q_points);
 
-        fdc.GetFaceGradsState("state", _ugrads);
-        fdc.GetNbrFaceGradsState("state", _ugrads_nbr);
-        fdc_w.GetFaceValuesState("weight_for_primal_residual", _PI_h_z);
+        fdc.GetFaceGradsState("state", ugrads_);
+        fdc.GetNbrFaceGradsState("state", ugrads_nbr_);
+        fdc_w.GetFaceValuesState("weight_for_primal_residual", PI_h_z_);
         vector<double> jump(n_q_points);
         for (unsigned int q = 0; q < n_q_points; q++)
         {
-          jump[q] = (_ugrads_nbr[q][0] - _ugrads[q][0])
+          jump[q] = (ugrads_nbr_[q][0] - ugrads_[q][0])
               * fdc.GetFEFaceValuesState().normal_vector(q)[0]
-              + (_ugrads_nbr[q][1] - _ugrads[q][1])
+              + (ugrads_nbr_[q][1] - ugrads_[q][1])
                   * fdc.GetFEFaceValuesState().normal_vector(q)[1];
         }
         //make sure the binding of the function has worked
@@ -176,7 +176,7 @@ template<
           res = jump[q_point];
           this->ResidualModifier(res);
 
-          sum += scale * (res * _PI_h_z[q_point])
+          sum += scale * (res * PI_h_z_[q_point])
               * fdc.GetFEFaceValuesState().JxW(q_point);
         }
       }
@@ -188,13 +188,13 @@ template<
           double& sum, double scale)
       {
         unsigned int n_q_points = fdc.GetNQPoints();
-        _ugrads.resize(n_q_points, Tensor<1, dealdim>());
-        _ugrads_nbr.resize(n_q_points, Tensor<1, dealdim>());
-        _PI_h_z.resize(n_q_points);
+        ugrads_.resize(n_q_points, Tensor<1, dealdim>());
+        ugrads_nbr_.resize(n_q_points, Tensor<1, dealdim>());
+        PI_h_z_.resize(n_q_points);
 
-        fdc.GetFaceGradsState("adjoint_for_ee", _ugrads);
-        fdc.GetNbrFaceGradsState("adjoint_for_ee", _ugrads_nbr);
-        fdc_w.GetFaceValuesState("weight_for_dual_residual", _PI_h_z);
+        fdc.GetFaceGradsState("adjoint_for_ee", ugrads_);
+        fdc.GetNbrFaceGradsState("adjoint_for_ee", ugrads_nbr_);
+        fdc_w.GetFaceValuesState("weight_for_dual_residual", PI_h_z_);
         vector<double> jump(n_q_points);
         double f = 0;
 
@@ -210,9 +210,9 @@ template<
 
         for (unsigned int q = 0; q < n_q_points; q++)
         {
-          jump[q] = (_ugrads_nbr[q][0] - _ugrads[q][0])
+          jump[q] = (ugrads_nbr_[q][0] - ugrads_[q][0])
               * fdc.GetFEFaceValuesState().normal_vector(q)[0]
-              + (_ugrads_nbr[q][1] - _ugrads[q][1])
+              + (ugrads_nbr_[q][1] - ugrads_[q][1])
                   * fdc.GetFEFaceValuesState().normal_vector(q)[1];
         }
 
@@ -223,7 +223,7 @@ template<
           //Modify the residual as required by the error estimator
           this->ResidualModifier(res);
 
-          sum += scale * (res * _PI_h_z[q_point])
+          sum += scale * (res * PI_h_z_[q_point])
               * fdc.GetFEFaceValuesState().JxW(q_point);
         }
       }
@@ -272,18 +272,18 @@ template<
         unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
         unsigned int n_q_points = edc.GetNQPoints();
 
-        assert(this->_problem_type == "adjoint_for_ee");
-        _zgrads.resize(n_q_points, Tensor<1, dealdim>());
+        assert(this->problem_type_ == "adjoint_for_ee");
+        zgrads_.resize(n_q_points, Tensor<1, dealdim>());
         //We don't need u so we don't search for state
-        edc.GetGradsState("last_newton_solution", _zgrads);
+        edc.GetGradsState("last_newton_solution", zgrads_);
 
         const FEValuesExtractors::Scalar velocities(0);
         for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
         {
           Tensor<1, 2> vgrads;
           vgrads.clear();
-          vgrads[0] = _zgrads[q_point][0];
-          vgrads[1] = _zgrads[q_point][1];
+          vgrads[0] = zgrads_[q_point][0];
+          vgrads[1] = zgrads_[q_point][1];
           for (unsigned int i = 0; i < n_dofs_per_element; i++)
           {
             const Tensor<1, 2> phi_i_grads_v =
@@ -366,23 +366,23 @@ template<
       ElementRightHandSide(const EDC<DH, VECTOR, dealdim>& edc,
           dealii::Vector<double> &local_vector, double scale)
       {
-        assert(this->_problem_type == "state");
+        assert(this->problem_type_ == "state");
         unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
         unsigned int n_q_points = edc.GetNQPoints();
         const DOpEWrapper::FEValues<dealdim> &state_fe_values =
             edc.GetFEValuesState();
 
-        _fvalues.resize(n_q_points);
+        fvalues_.resize(n_q_points);
         const FEValuesExtractors::Scalar velocities(0);
 
         for (unsigned int q_point = 0; q_point < n_q_points; ++q_point)
         {
-          _fvalues[q_point] = -_ex_sol.laplacian(
+          fvalues_[q_point] = -ex_sol_.laplacian(
               state_fe_values.quadrature_point(q_point));
 
           for (unsigned int i = 0; i < n_dofs_per_element; i++)
           {
-            local_vector(i) += scale * _fvalues[q_point]
+            local_vector(i) += scale * fvalues_[q_point]
                 * state_fe_values[velocities].value(i, q_point)
                 * state_fe_values.JxW(q_point);
           }
@@ -411,12 +411,12 @@ template<
       std::vector<unsigned int>&
       GetStateBlockComponent()
       {
-        return _state_block_components;
+        return state_block_component_;
       }
       const std::vector<unsigned int>&
       GetStateBlockComponent() const
       {
-        return _state_block_components;
+        return state_block_component_;
       }
       bool
       HasFaces() const
@@ -430,19 +430,18 @@ template<
       }
     private:
 
-      vector<double> _fvalues;
-      vector<double> _PI_h_z;
-      vector<double> _lap_u;
+      vector<double> fvalues_;
+      vector<double> PI_h_z_;
+      vector<double> lap_u_;
 
-      vector<Tensor<1, dealdim> > _ugrads;
-      vector<Tensor<1, dealdim> > _PI_h_z_grads;
-      vector<Tensor<1, dealdim> > _ugrads_nbr;
+      vector<Tensor<1, dealdim> > ugrads_;
+      vector<Tensor<1, dealdim> > ugrads_nbr_;
 
-      vector<Tensor<1, dealdim> > _zgrads;
+      vector<Tensor<1, dealdim> > zgrads_;
 
-      vector<unsigned int> _state_block_components;
+      vector<unsigned int> state_block_component_;
 
-      ExactSolution _ex_sol;
+      ExactSolution ex_sol_;
   }
   ;
 //**********************************************************************************

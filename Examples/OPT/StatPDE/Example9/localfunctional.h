@@ -21,8 +21,8 @@
  *
  **/
 
-#ifndef _LOCALFunctional_
-#define _LOCALFunctional_
+#ifndef LOCALFunctional_
+#define LOCALFunctional_
 
 #include "pdeinterface.h"
 
@@ -65,18 +65,18 @@ template<
 
         // Fluid- and material parameters
         param_reader.SetSubsection("Local PDE parameters");
-        _mu_regularization = param_reader.get_double("mu_regularization");
-        _density_fluid = param_reader.get_double("density_fluid");
-        _viscosity = param_reader.get_double("viscosity");
-        _alpha_u = param_reader.get_double("alpha_u");
+        mu_regularization_ = param_reader.get_double("mu_regularization");
+        density_fluid_ = param_reader.get_double("density_fluid");
+        viscosity_ = param_reader.get_double("viscosity");
+        alpha_u_ = param_reader.get_double("alpha_u");
 
-        _lame_coefficient_mu = param_reader.get_double("mu");
-        _poisson_ratio_nu = param_reader.get_double("poisson_ratio_nu");
-        _lame_coefficient_lambda =
-            (2 * _poisson_ratio_nu * _lame_coefficient_mu)
-                / (1.0 - 2 * _poisson_ratio_nu);
+        lame_coefficient_mu_ = param_reader.get_double("mu");
+        poisson_ratio_nu_ = param_reader.get_double("poisson_ratio_nu");
+        lame_coefficient_lambda_ =
+            (2 * poisson_ratio_nu_ * lame_coefficient_mu_)
+                / (1.0 - 2 * poisson_ratio_nu_);
 
-        _control_constant = param_reader.get_double("control_constant");
+        control_constant_ = param_reader.get_double("control_constant");
       }
 
       bool
@@ -110,34 +110,34 @@ template<
         // Asking for boundary color of the cylinder
         if (color == 80)
         {
-          _ufacevalues.resize(n_q_points, Vector<double>(5));
-          _ufacegrads.resize(n_q_points, vector<Tensor<1, 2> >(5));
+          ufacevalues_.resize(n_q_points, Vector<double>(5));
+          ufacegrads_.resize(n_q_points, vector<Tensor<1, 2> >(5));
 
-          fdc.GetFaceValuesState("state", _ufacevalues);
-          fdc.GetFaceGradsState("state", _ufacegrads);
+          fdc.GetFaceValuesState("state", ufacevalues_);
+          fdc.GetFaceGradsState("state", ufacegrads_);
 
           for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
           {
             Tensor<2, 2> pI;
-            pI[0][0] = _ufacevalues[q_point](4);
-            pI[1][1] = _ufacevalues[q_point](4);
+            pI[0][0] = ufacevalues_[q_point](4);
+            pI[1][1] = ufacevalues_[q_point](4);
 
             Tensor<1, 2> v;
             v.clear();
-            v[0] = _ufacevalues[q_point](0);
-            v[1] = _ufacevalues[q_point](1);
+            v[0] = ufacevalues_[q_point](0);
+            v[1] = ufacevalues_[q_point](1);
 
             Tensor<2, 2> grad_v;
-            grad_v[0][0] = _ufacegrads[q_point][0][0];
-            grad_v[0][1] = _ufacegrads[q_point][0][1];
-            grad_v[1][0] = _ufacegrads[q_point][1][0];
-            grad_v[1][1] = _ufacegrads[q_point][1][1];
+            grad_v[0][0] = ufacegrads_[q_point][0][0];
+            grad_v[0][1] = ufacegrads_[q_point][0][1];
+            grad_v[1][0] = ufacegrads_[q_point][1][0];
+            grad_v[1][1] = ufacegrads_[q_point][1][1];
 
             Tensor<2, 2> F;
-            F[0][0] = 1.0 + _ufacegrads[q_point][2][0];
-            F[0][1] = _ufacegrads[q_point][2][1];
-            F[1][0] = _ufacegrads[q_point][3][0];
-            F[1][1] = 1.0 + _ufacegrads[q_point][3][1];
+            F[0][0] = 1.0 + ufacegrads_[q_point][2][0];
+            F[0][1] = ufacegrads_[q_point][2][1];
+            F[1][0] = ufacegrads_[q_point][3][0];
+            F[1][1] = 1.0 + ufacegrads_[q_point][3][1];
 
             Tensor<2, 2> F_Inverse;
             F_Inverse = invert(F);
@@ -156,7 +156,7 @@ template<
             cauchy_stress_fluid =
                 1.0 * J
                     * (-pI
-                        + _density_fluid * _viscosity
+                        + density_fluid_ * viscosity_
                             * (grad_v * F_Inverse
                                 + F_Inverse_T * transpose(grad_v)))
                     * F_Inverse_T;
@@ -177,14 +177,14 @@ template<
         if (color == 50)
         {
           // Regularization
-          _qvalues.reinit(2);
-          fdc.GetParamValues("control", _qvalues);
+          qvalues_.reinit(2);
+          fdc.GetParamValues("control", qvalues_);
 
           for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
           {
-            functional_value_J += _mu_regularization * 0.5
-                * ((_qvalues(0) - _control_constant)
-                    * (_qvalues(0) - _control_constant))
+            functional_value_J += mu_regularization_ * 0.5
+                * ((qvalues_(0) - control_constant_)
+                    * (qvalues_(0) - control_constant_))
                 * state_fe_face_values.JxW(q_point);
           }
 
@@ -192,14 +192,14 @@ template<
         if (color == 51)
         {
           // Regularization
-          _qvalues.reinit(2);
-          fdc.GetParamValues("control", _qvalues);
+          qvalues_.reinit(2);
+          fdc.GetParamValues("control", qvalues_);
 
           for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
           {
-            functional_value_J += _mu_regularization * 0.5
-                * ((_qvalues(0) - _control_constant)
-                    * (_qvalues(0) - _control_constant))
+            functional_value_J += mu_regularization_ * 0.5
+                * ((qvalues_(0) - control_constant_)
+                    * (qvalues_(0) - control_constant_))
                 * state_fe_face_values.JxW(q_point);
           }
 
@@ -219,11 +219,11 @@ template<
 
         if (color == 80)
         {
-          _ufacevalues.resize(n_q_points, Vector<double>(5));
-          _ufacegrads.resize(n_q_points, vector<Tensor<1, 2> >(5));
+          ufacevalues_.resize(n_q_points, Vector<double>(5));
+          ufacegrads_.resize(n_q_points, vector<Tensor<1, 2> >(5));
 
-          fdc.GetFaceValuesState("state", _ufacevalues);
-          fdc.GetFaceGradsState("state", _ufacegrads);
+          fdc.GetFaceValuesState("state", ufacevalues_);
+          fdc.GetFaceGradsState("state", ufacegrads_);
 
           const FEValuesExtractors::Vector velocities(0);
           const FEValuesExtractors::Vector displacements(2);
@@ -249,14 +249,14 @@ template<
             }
 
             const Tensor<2, dealdim> pI = ALE_Transformations::get_pI<dealdim>(
-                q_point, _ufacevalues);
+                q_point, ufacevalues_);
             const Tensor<2, dealdim> grad_v = ALE_Transformations::get_grad_v<
-                dealdim>(q_point, _ufacegrads);
+                dealdim>(q_point, ufacegrads_);
 
             const Tensor<2, dealdim> grad_v_T =
                 ALE_Transformations::get_grad_v_T<dealdim>(grad_v);
             const Tensor<2, dealdim> F = ALE_Transformations::get_F<dealdim>(
-                q_point, _ufacegrads);
+                q_point, ufacegrads_);
             const Tensor<2, dealdim> F_Inverse =
                 ALE_Transformations::get_F_Inverse<dealdim>(F);
 
@@ -265,8 +265,8 @@ template<
             const double J = ALE_Transformations::get_J<dealdim>(F);
 
             const Tensor<2, dealdim> sigma_ALE =
-                NSE_in_ALE::get_stress_fluid_ALE<dealdim>(_density_fluid,
-                    _viscosity, pI, grad_v, grad_v_T, F_Inverse, F_Inverse_T);
+                NSE_in_ALE::get_stress_fluid_ALE<dealdim>(density_fluid_,
+                    viscosity_, pI, grad_v, grad_v_T, F_Inverse, F_Inverse_T);
 
             Tensor<1, 2> stress_normal;
             stress_normal = sigma_ALE
@@ -281,7 +281,7 @@ template<
                   ALE_Transformations::get_grad_v_LinV<dealdim>(phi_grads_v[j]);
 
               const double J_LinU = ALE_Transformations::get_J_LinU<dealdim>(
-                  q_point, _ufacegrads, phi_grads_u[j]);
+                  q_point, ufacegrads_, phi_grads_u[j]);
 
               const Tensor<2, dealdim> J_F_Inverse_T_LinU =
                   ALE_Transformations::get_J_F_Inverse_T_LinU<dealdim>(
@@ -289,7 +289,7 @@ template<
 
               const Tensor<2, dealdim> F_Inverse_LinU =
                   ALE_Transformations::get_F_Inverse_LinU(phi_grads_u[j], J,
-                      J_LinU, q_point, _ufacegrads);
+                      J_LinU, q_point, ufacegrads_);
 
               const Tensor<2, dealdim> stress_fluid_ALE_1st_term_LinAll =
                   NSE_in_ALE::get_stress_fluid_ALE_1st_term_LinAll_short<dealdim>(
@@ -298,7 +298,7 @@ template<
               const Tensor<2, dealdim> stress_fluid_ALE_2nd_term_LinAll =
                   NSE_in_ALE::get_stress_fluid_ALE_2nd_term_LinAll_short(
                       J_F_Inverse_T_LinU, sigma_ALE, grad_v, grad_v_LinV,
-                      F_Inverse, F_Inverse_LinU, J, _viscosity, _density_fluid);
+                      F_Inverse, F_Inverse_LinU, J, viscosity_, density_fluid_);
 
               Tensor<1, 2> neumann_value = (stress_fluid_ALE_1st_term_LinAll
                   + stress_fluid_ALE_2nd_term_LinAll)
@@ -324,15 +324,15 @@ template<
         if (color == 50)
         {
           // Regularization
-          _qvalues.reinit(2);
-          fdc.GetParamValues("control", _qvalues);
+          qvalues_.reinit(2);
+          fdc.GetParamValues("control", qvalues_);
 
           for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
           {
             for (unsigned int j = 0; j < n_dofs_per_element; j++)
             {
-              local_vector(j) += scale * _mu_regularization
-                  * (_qvalues(j) - _control_constant)
+              local_vector(j) += scale * mu_regularization_
+                  * (qvalues_(j) - control_constant_)
                   * state_fe_face_values.JxW(q_point);
             }
           }
@@ -340,15 +340,15 @@ template<
         if (color == 51)
         {
           // Regularization
-          _qvalues.reinit(2);
-          fdc.GetParamValues("control", _qvalues);
+          qvalues_.reinit(2);
+          fdc.GetParamValues("control", qvalues_);
 
           for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
           {
             for (unsigned int j = 0; j < n_dofs_per_element; j++)
             {
-              local_vector(j) += scale * _mu_regularization
-                  * (_qvalues(j) - _control_constant)
+              local_vector(j) += scale * mu_regularization_
+                  * (qvalues_(j) - control_constant_)
                   * state_fe_face_values.JxW(q_point);
             }
           }
@@ -367,36 +367,36 @@ template<
         if (color == 50)
         {
           // Regularization
-          _dqvalues.reinit(2);
-          fdc.GetParamValues("dq", _dqvalues);
+          dqvalues_.reinit(2);
+          fdc.GetParamValues("dq", dqvalues_);
 
-          _qvalues.reinit(2);
-          fdc.GetParamValues("control", _qvalues);
+          qvalues_.reinit(2);
+          fdc.GetParamValues("control", qvalues_);
 
           for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
           {
             for (unsigned int j = 0; j < n_dofs_per_element; j++)
             {
-              local_vector(j) += scale * _mu_regularization
-                  * (_dqvalues(j)) * state_fe_face_values.JxW(q_point);
+              local_vector(j) += scale * mu_regularization_
+                  * (dqvalues_(j)) * state_fe_face_values.JxW(q_point);
             }
           }
         }
         if (color == 51)
         {
           // Regularization
-          _dqvalues.reinit(2);
-          fdc.GetParamValues("dq", _dqvalues);
+          dqvalues_.reinit(2);
+          fdc.GetParamValues("dq", dqvalues_);
 
-          _qvalues.reinit(2);
-          fdc.GetParamValues("control", _qvalues);
+          qvalues_.reinit(2);
+          fdc.GetParamValues("control", qvalues_);
 
           for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
           {
             for (unsigned int j = 0; j < n_dofs_per_element; j++)
             {
-              local_vector(j) += scale * _mu_regularization
-                  * (_dqvalues(j)) * state_fe_face_values.JxW(q_point);
+              local_vector(j) += scale * mu_regularization_
+                  * (dqvalues_(j)) * state_fe_face_values.JxW(q_point);
             }
           }
         }
@@ -438,34 +438,34 @@ template<
         {
           if ((material_id != material_id_neighbor) && (!at_boundary))
           {
-            _ufacevalues.resize(n_q_points, Vector<double>(5));
-            _ufacegrads.resize(n_q_points, vector<Tensor<1, 2> >(5));
+            ufacevalues_.resize(n_q_points, Vector<double>(5));
+            ufacegrads_.resize(n_q_points, vector<Tensor<1, 2> >(5));
 
-            fdc.GetFaceValuesState("state", _ufacevalues);
-            fdc.GetFaceGradsState("state", _ufacegrads);
+            fdc.GetFaceValuesState("state", ufacevalues_);
+            fdc.GetFaceGradsState("state", ufacegrads_);
 
             for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
             {
               Tensor<2, 2> pI;
-              pI[0][0] = _ufacevalues[q_point](4);
-              pI[1][1] = _ufacevalues[q_point](4);
+              pI[0][0] = ufacevalues_[q_point](4);
+              pI[1][1] = ufacevalues_[q_point](4);
 
               Tensor<1, 2> v;
               v.clear();
-              v[0] = _ufacevalues[q_point](0);
-              v[1] = _ufacevalues[q_point](1);
+              v[0] = ufacevalues_[q_point](0);
+              v[1] = ufacevalues_[q_point](1);
 
               Tensor<2, 2> grad_v;
-              grad_v[0][0] = _ufacegrads[q_point][0][0];
-              grad_v[0][1] = _ufacegrads[q_point][0][1];
-              grad_v[1][0] = _ufacegrads[q_point][1][0];
-              grad_v[1][1] = _ufacegrads[q_point][1][1];
+              grad_v[0][0] = ufacegrads_[q_point][0][0];
+              grad_v[0][1] = ufacegrads_[q_point][0][1];
+              grad_v[1][0] = ufacegrads_[q_point][1][0];
+              grad_v[1][1] = ufacegrads_[q_point][1][1];
 
               Tensor<2, 2> F;
-              F[0][0] = 1.0 + _ufacegrads[q_point][2][0];
-              F[0][1] = _ufacegrads[q_point][2][1];
-              F[1][0] = _ufacegrads[q_point][3][0];
-              F[1][1] = 1.0 + _ufacegrads[q_point][3][1];
+              F[0][0] = 1.0 + ufacegrads_[q_point][2][0];
+              F[0][1] = ufacegrads_[q_point][2][1];
+              F[1][0] = ufacegrads_[q_point][3][0];
+              F[1][1] = 1.0 + ufacegrads_[q_point][3][1];
 
               Tensor<2, 2> F_Inverse;
               F_Inverse = invert(F);
@@ -483,7 +483,7 @@ template<
               Tensor<2, 2> cauchy_stress_fluid;
               cauchy_stress_fluid = J
                   * (-pI
-                      + _density_fluid * _viscosity
+                      + density_fluid_ * viscosity_
                           * (grad_v * F_Inverse
                               + F_Inverse_T * transpose(grad_v))) * F_Inverse_T;
 
@@ -516,11 +516,11 @@ template<
         {
           if ((material_id != material_id_neighbor) && (!at_boundary))
           {
-            _ufacevalues.resize(n_q_points, Vector<double>(5));
-            _ufacegrads.resize(n_q_points, vector<Tensor<1, 2> >(5));
+            ufacevalues_.resize(n_q_points, Vector<double>(5));
+            ufacegrads_.resize(n_q_points, vector<Tensor<1, 2> >(5));
 
-            fdc.GetFaceValuesState("state", _ufacevalues);
-            fdc.GetFaceGradsState("state", _ufacegrads);
+            fdc.GetFaceValuesState("state", ufacevalues_);
+            fdc.GetFaceGradsState("state", ufacegrads_);
 
             const FEValuesExtractors::Vector velocities(0);
             const FEValuesExtractors::Vector displacements(2);
@@ -547,14 +547,14 @@ template<
               }
 
               const Tensor<2, dealdim> pI =
-                  ALE_Transformations::get_pI<dealdim>(q_point, _ufacevalues);
+                  ALE_Transformations::get_pI<dealdim>(q_point, ufacevalues_);
               const Tensor<2, dealdim> grad_v = ALE_Transformations::get_grad_v<
-                  dealdim>(q_point, _ufacegrads);
+                  dealdim>(q_point, ufacegrads_);
 
               const Tensor<2, dealdim> grad_v_T =
                   ALE_Transformations::get_grad_v_T<dealdim>(grad_v);
               const Tensor<2, dealdim> F = ALE_Transformations::get_F<dealdim>(
-                  q_point, _ufacegrads);
+                  q_point, ufacegrads_);
               const Tensor<2, dealdim> F_Inverse =
                   ALE_Transformations::get_F_Inverse<dealdim>(F);
 
@@ -563,8 +563,8 @@ template<
               const double J = ALE_Transformations::get_J<dealdim>(F);
 
               const Tensor<2, dealdim> sigma_ALE =
-                  NSE_in_ALE::get_stress_fluid_ALE<dealdim>(_density_fluid,
-                      _viscosity, pI, grad_v, grad_v_T, F_Inverse, F_Inverse_T);
+                  NSE_in_ALE::get_stress_fluid_ALE<dealdim>(density_fluid_,
+                      viscosity_, pI, grad_v, grad_v_T, F_Inverse, F_Inverse_T);
 
               Tensor<1, 2> stress_normal;
               stress_normal = sigma_ALE
@@ -580,7 +580,7 @@ template<
                         phi_grads_v[j]);
 
                 const double J_LinU = ALE_Transformations::get_J_LinU<dealdim>(
-                    q_point, _ufacegrads, phi_grads_u[j]);
+                    q_point, ufacegrads_, phi_grads_u[j]);
 
                 const Tensor<2, dealdim> J_F_Inverse_T_LinU =
                     ALE_Transformations::get_J_F_Inverse_T_LinU<dealdim>(
@@ -588,7 +588,7 @@ template<
 
                 const Tensor<2, dealdim> F_Inverse_LinU =
                     ALE_Transformations::get_F_Inverse_LinU(phi_grads_u[j], J,
-                        J_LinU, q_point, _ufacegrads);
+                        J_LinU, q_point, ufacegrads_);
 
                 const Tensor<2, dealdim> stress_fluid_ALE_1st_term_LinAll =
                     NSE_in_ALE::get_stress_fluid_ALE_1st_term_LinAll_short<
@@ -597,8 +597,8 @@ template<
                 const Tensor<2, dealdim> stress_fluid_ALE_2nd_term_LinAll =
                     NSE_in_ALE::get_stress_fluid_ALE_2nd_term_LinAll_short(
                         J_F_Inverse_T_LinU, sigma_ALE, grad_v, grad_v_LinV,
-                        F_Inverse, F_Inverse_LinU, J, _viscosity,
-                        _density_fluid);
+                        F_Inverse, F_Inverse_LinU, J, viscosity_,
+                        density_fluid_);
 
                 Tensor<1, 2> neumann_value = (stress_fluid_ALE_1st_term_LinAll
                     + stress_fluid_ALE_2nd_term_LinAll)
@@ -756,23 +756,23 @@ template<
         values = *(it->second);
       }
     private:
-      Vector<double> _qvalues;
-      Vector<double> _dqvalues;
-      vector<Vector<double> > _ufacevalues;
-      vector<Vector<double> > _dufacevalues;
+      Vector<double> qvalues_;
+      Vector<double> dqvalues_;
+      vector<Vector<double> > ufacevalues_;
+      vector<Vector<double> > dufacevalues_;
 
-      vector<vector<Tensor<1, dealdim> > > _ufacegrads;
-      vector<vector<Tensor<1, dealdim> > > _dufacegrads;
+      vector<vector<Tensor<1, dealdim> > > ufacegrads_;
+      vector<vector<Tensor<1, dealdim> > > dufacegrads;
 
       // Artifcial parameter for FSI (later)
-      double _alpha_u;
+      double alpha_u_;
 
       // Fluid- and material parameters
-      double _density_fluid, _viscosity, _lame_coefficient_mu,
-          _poisson_ratio_nu, _lame_coefficient_lambda;
+      double density_fluid_, viscosity_, lame_coefficient_mu_,
+          poisson_ratio_nu_, lame_coefficient_lambda_;
 
       // Control- and regularization parameters
-      double _mu_regularization, _control_constant;
+      double mu_regularization_, control_constant_;
 
   };
 #endif

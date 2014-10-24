@@ -21,8 +21,8 @@
  *
  **/
 
-#ifndef _STAT_PDE_PROBLEM_H_
-#define _STAT_PDE_PROBLEM_H_
+#ifndef STAT_PDE_PROBLEM_H_
+#define STAT_PDE_PROBLEM_H_
 
 #include "pdeprobleminterface.h"
 #include "integrator.h"
@@ -282,12 +282,12 @@ namespace DOpE
         const StateVector<VECTOR> &
         GetU() const
         {
-          return _u;
+          return u_;
         }
         StateVector<VECTOR> &
         GetU()
         {
-          return _u;
+          return u_;
         }
         /**
          * Returns the solution of the dual equation for error estimation.
@@ -295,12 +295,12 @@ namespace DOpE
         const StateVector<VECTOR> &
         GetZForEE() const
         {
-          return _z_for_ee;
+          return z_for_ee_;
         }
         StateVector<VECTOR> &
         GetZForEE()
         {
-          return _z_for_ee;
+          return z_for_ee_;
         }
 
         NONLINEARSOLVER&
@@ -308,56 +308,56 @@ namespace DOpE
         INTEGRATOR&
         GetIntegrator()
         {
-          return _integrator;
+          return integrator_;
         }
 
         const bool&
         GetBuildStateMatrix() const
         {
-          return _build_state_matrix;
+          return build_state_matrix_;
         }
 
         const bool&
         GetBuildAdjointMatrix() const
         {
-          return _build_adjoint_matrix;
+          return build_adjoint_matrix_;
         }
 
         const bool&
         GetStateReinit() const
         {
-          return _state_reinit;
+          return state_reinit_;
         }
 
         const bool&
         GetAdjointReinit() const
         {
-          return _adjoint_reinit;
+          return adjoint_reinit_;
         }
 
 
         bool&
         GetBuildStateMatrix()
         {
-          return _build_state_matrix;
+          return build_state_matrix_;
         }
 
         bool&
         GetBuildAdjointMatrix()
         {
-          return _build_adjoint_matrix;
+          return build_adjoint_matrix_;
         }
 
         bool&
         GetStateReinit()
         {
-          return _state_reinit;
+          return state_reinit_;
         }
 
         bool&
         GetAdjointReinit()
         {
-          return _adjoint_reinit;
+          return adjoint_reinit_;
         }
 
 
@@ -390,19 +390,19 @@ namespace DOpE
           }
         }
 
-        StateVector<VECTOR> _u;
-        StateVector<VECTOR> _z_for_ee;
+        StateVector<VECTOR> u_;
+        StateVector<VECTOR> z_for_ee_;
 
-        INTEGRATOR _integrator;
-        NONLINEARSOLVER _nonlinear_state_solver;
-        NONLINEARSOLVER _nonlinear_adjoint_solver;
+        INTEGRATOR integrator_;
+        NONLINEARSOLVER nonlinear_state_solver_;
+        NONLINEARSOLVER nonlinear_adjoint_solver_;
 
-        bool _build_state_matrix;
-        bool _build_adjoint_matrix;
-        bool _state_reinit;
-        bool _adjoint_reinit;
+        bool build_state_matrix_;
+        bool build_adjoint_matrix_;
+        bool state_reinit_;
+        bool adjoint_reinit_;
 
-        int _n_patches;
+        int n_patches_;
 
         friend class SolutionExtractor<
             StatPDEProblem<NONLINEARSOLVER, INTEGRATOR, PROBLEM, VECTOR, dealdim>,
@@ -436,18 +436,18 @@ namespace DOpE
           PROBLEM *OP, DOpEtypes::VectorStorageType state_behavior,
           ParameterReader &param_reader, INTEGRATORDATACONT& idc,
           int base_priority)
-          : PDEProblemInterface<PROBLEM, VECTOR, dealdim>(OP, base_priority), _u(
-              OP->GetSpaceTimeHandler(), state_behavior, param_reader), _z_for_ee(
-              OP->GetSpaceTimeHandler(), state_behavior, param_reader), _integrator(
-              idc), _nonlinear_state_solver(_integrator, param_reader), _nonlinear_adjoint_solver(
-              _integrator, param_reader)
+          : PDEProblemInterface<PROBLEM, VECTOR, dealdim>(OP, base_priority), u_(
+              OP->GetSpaceTimeHandler(), state_behavior, param_reader), z_for_ee_(
+              OP->GetSpaceTimeHandler(), state_behavior, param_reader), integrator_(
+              idc), nonlinear_state_solver_(integrator_, param_reader), nonlinear_adjoint_solver_(
+              integrator_, param_reader)
       {
         param_reader.SetSubsection("output parameters");
-        _n_patches = param_reader.get_integer("number of patches");
+        n_patches_ = param_reader.get_integer("number of patches");
         //PDEProblems should be ReInited
         {
-          _state_reinit = true;
-          _adjoint_reinit = true;
+          state_reinit_ = true;
+          adjoint_reinit_ = true;
         }
       }
 
@@ -458,16 +458,16 @@ namespace DOpE
           PROBLEM *OP, DOpEtypes::VectorStorageType state_behavior,
           ParameterReader &param_reader, INTEGRATORDATACONT& idc,
           INTEGRATORDATACONT& idc2, int base_priority)
-          : PDEProblemInterface<PROBLEM, VECTOR, dealdim>(OP, base_priority), _u(
-              OP->GetSpaceTimeHandler(), state_behavior, param_reader), _z_for_ee(
-              OP->GetSpaceTimeHandler(), state_behavior, param_reader), _integrator(
-              idc, idc2), _nonlinear_state_solver(_integrator, param_reader), _nonlinear_adjoint_solver(
-              _integrator, param_reader)
+          : PDEProblemInterface<PROBLEM, VECTOR, dealdim>(OP, base_priority), u_(
+              OP->GetSpaceTimeHandler(), state_behavior, param_reader), z_for_ee_(
+              OP->GetSpaceTimeHandler(), state_behavior, param_reader), integrator_(
+              idc, idc2), nonlinear_state_solver_(integrator_, param_reader), nonlinear_adjoint_solver_(
+              integrator_, param_reader)
       {
         //PDEProblems should be ReInited
         {
-          _state_reinit = true;
-          _adjoint_reinit = true;
+          state_reinit_ = true;
+          adjoint_reinit_ = true;
         }
       }
 
@@ -489,11 +489,11 @@ namespace DOpE
     {
       if (type == "state")
       {
-        return _nonlinear_state_solver;
+        return nonlinear_state_solver_;
       }
       else if (type == "adjoint_for_ee")
       {
-        return _nonlinear_adjoint_solver;
+        return nonlinear_adjoint_solver_;
       }
       else
       {
@@ -515,12 +515,12 @@ namespace DOpE
       //Some Solvers must be reinited when called
       // Better we have subproblems, so that solver can be reinited here
       {
-        _state_reinit = true;
-        _adjoint_reinit = true;
+        state_reinit_ = true;
+        adjoint_reinit_ = true;
       }
 
-      _build_state_matrix = true;
-      _build_adjoint_matrix = true;
+      build_state_matrix_ = true;
+      build_adjoint_matrix_ = true;
 
       GetU().ReInit();
       GetZForEE().ReInit();
@@ -539,16 +539,16 @@ namespace DOpE
 
       this->SetProblemType("state");
       auto& problem = this->GetProblem()->GetStateProblem();
-      if (_state_reinit == true)
+      if (state_reinit_ == true)
       {
         GetNonlinearSolver("state").ReInit(problem);
-        _state_reinit = false;
+        state_reinit_ = false;
       }
 
       this->GetProblem()->AddAuxiliaryToIntegrator(this->GetIntegrator());
       AddUDD();
-      _build_state_matrix = this->GetNonlinearSolver("state").NonlinearSolve(
-          problem, (GetU().GetSpacialVector()), true, _build_state_matrix);
+      build_state_matrix_ = this->GetNonlinearSolver("state").NonlinearSolve(
+          problem, (GetU().GetSpacialVector()), true, build_state_matrix_);
       DeleteUDD();
       
       this->GetProblem()->DeleteAuxiliaryFromIntegrator(this->GetIntegrator());
@@ -580,10 +580,10 @@ namespace DOpE
 
       //      auto& problem = this->GetProblem()->GetStateProblem();//Hier ist adjoint problem einzufuegen
       auto& problem = *(this->GetProblem());
-      if (_adjoint_reinit == true)
+      if (adjoint_reinit_ == true)
       {
         GetNonlinearSolver("adjoint_for_ee").ReInit(problem);
-        _adjoint_reinit = false;
+        adjoint_reinit_ = false;
       }
 
       this->GetProblem()->AddAuxiliaryToIntegrator(this->GetIntegrator());
@@ -592,9 +592,9 @@ namespace DOpE
           &(GetU().GetSpacialVector()));
       AddUDD();
 
-      _build_adjoint_matrix =
+      build_adjoint_matrix_ =
           this->GetNonlinearSolver("adjoint_for_ee").NonlinearSolve(problem,
-              (GetZForEE().GetSpacialVector()), true, _build_adjoint_matrix);
+              (GetZForEE().GetSpacialVector()), true, build_adjoint_matrix_);
 
       this->GetIntegrator().DeleteDomainData("state");
       DeleteUDD();
@@ -842,7 +842,7 @@ namespace DOpE
             this->GetProblem()->GetSpaceTimeHandler()->GetStateDoFHandler());
 
         data_out.add_data_vector(v, name);
-        data_out.build_patches(_n_patches);
+        data_out.build_patches(n_patches_);
 
         std::ofstream output(outfile.c_str());
 

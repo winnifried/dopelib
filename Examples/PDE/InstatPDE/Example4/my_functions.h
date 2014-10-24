@@ -21,8 +21,8 @@
  *
  **/
 
-#ifndef _MY_FUNCTIONS_
-#define _MY_FUNCTIONS_
+#ifndef MY_FUNCTIONS_
+#define MY_FUNCTIONS_
 
 #include "function_wrapper.h"
 

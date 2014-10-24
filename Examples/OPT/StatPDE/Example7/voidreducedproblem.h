@@ -21,8 +21,8 @@
 *
 **/
 
-#ifndef _VOID_REDUCED_PROBLEM_H_
-#define _VOID_REDUCED_PROBLEM_H_
+#ifndef VOID_REDUCED_PROBLEM_H_
+#define VOID_REDUCED_PROBLEM_H_
 
 #include "reducedprobleminterface.h"
 #include "integrator.h"
@@ -268,7 +268,7 @@ namespace DOpE
       if ("p" == name)
       {
 	assert(p > 0.);
-	_p = p;
+	p_ = p;
       }
       else
       {
@@ -278,7 +278,7 @@ namespace DOpE
     }
   protected:
     CONTROLNONLINEARSOLVER& GetControlNonlinearSolver();
-    CONTROLINTEGRATOR& GetControlIntegrator() { return _control_integrator; }
+    CONTROLINTEGRATOR& GetControlIntegrator() { return control_integrator_; }
 
     /**
      * Solves the Equation H(q) sol = rhs
@@ -295,16 +295,16 @@ namespace DOpE
 		   ControlVector<VECTOR>& sol);
 
   private:
-    CONTROLINTEGRATOR _control_integrator;
-    CONTROLNONLINEARSOLVER _nonlinear_gradient_solver;
+    CONTROLINTEGRATOR control_integrator_;
+    CONTROLNONLINEARSOLVER nonlinear_gradient_solver_;
 
-    bool _build_control_matrix;
-    bool  _gradient_reinit;
-    std::vector<ControlVector<VECTOR>*> _constraint_gradient;
-    DOpEtypes::VectorStorageType _vector_behavior;
+    bool build_control_matrix_;
+    bool  gradient_reinit_;
+    std::vector<ControlVector<VECTOR>*> constraint_gradient_;
+    DOpEtypes::VectorStorageType vector_behavior_;
 
-    ConstraintVector<VECTOR> _constraints;
-    double _p;
+    ConstraintVector<VECTOR> constraints_;
+    double p_;
   };
 
 /*************************************************************************/
@@ -330,15 +330,15 @@ template <typename CONTROLNONLINEARSOLVER, typename CONTROLINTEGRATOR, typename 
 			 INTEGRATORDATACONT& idc,
 			 int base_priority)
   : ReducedProblemInterface<PROBLEM, VECTOR>(OP,base_priority),
-  _control_integrator(idc),
-  _nonlinear_gradient_solver(_control_integrator, param_reader),
-  _constraints(OP->GetSpaceTimeHandler(),vector_behavior)
+  control_integrator_(idc),
+  nonlinear_gradient_solver_(control_integrator_, param_reader),
+  constraints_(OP->GetSpaceTimeHandler(),vector_behavior)
 {
       //ReducedProblems should be ReInited
       {
-	_gradient_reinit = true;
+	gradient_reinit_ = true;
       }
-      _vector_behavior = vector_behavior;
+      vector_behavior_ = vector_behavior;
 }
 
 /******************************************************/
@@ -346,11 +346,11 @@ template <typename CONTROLNONLINEARSOLVER, typename CONTROLINTEGRATOR, typename 
   template <typename CONTROLNONLINEARSOLVER, typename CONTROLINTEGRATOR, typename PROBLEM, typename VECTOR,int dopedim,int dealdim>
   VoidReducedProblem<CONTROLNONLINEARSOLVER, CONTROLINTEGRATOR, PROBLEM, VECTOR, dopedim, dealdim>::~VoidReducedProblem()
 {
-  for(unsigned int i = 0; i < _constraint_gradient.size(); i++)
+  for(unsigned int i = 0; i < constraint_gradient_.size(); i++)
   {
-    if(_constraint_gradient[i] != NULL)
+    if(constraint_gradient_[i] != NULL)
     {
-      delete _constraint_gradient[i];
+      delete constraint_gradient_[i];
     }
   }
 }
@@ -362,7 +362,7 @@ template <typename CONTROLNONLINEARSOLVER, typename CONTROLINTEGRATOR, typename 
   {
     if((this->GetProblem()->GetType() == "gradient") || (this->GetProblem()->GetType() == "hessian"))
     {
-      return _nonlinear_gradient_solver;
+      return nonlinear_gradient_solver_;
     }
     else
     {
@@ -380,19 +380,19 @@ template <typename CONTROLNONLINEARSOLVER, typename CONTROLINTEGRATOR, typename 
   //Some Solvers must be reinited when called
   // Better have subproblems, so that solver can be reinited here
   {
-    _gradient_reinit = true;
+    gradient_reinit_ = true;
   }
-  _build_control_matrix = true;
+  build_control_matrix_ = true;
 
-  _constraints.ReInit();
-  _constraint_gradient.resize(_constraints.GetGlobalConstraints().size(), NULL);
-  for(unsigned int i = 0; i < _constraint_gradient.size(); i++)
+  constraints_.ReInit();
+  constraint_gradient_.resize(constraints_.GetGlobalConstraints().size(), NULL);
+  for(unsigned int i = 0; i < constraint_gradient_.size(); i++)
   {
-    if(_constraint_gradient[i] == NULL)
+    if(constraint_gradient_[i] == NULL)
     {
-      _constraint_gradient[i] = new ControlVector<VECTOR>(this->GetProblem()->GetSpaceTimeHandler(),_vector_behavior);
+      constraint_gradient_[i] = new ControlVector<VECTOR>(this->GetProblem()->GetSpaceTimeHandler(),vector_behavior_);
     }
-    _constraint_gradient[i]->ReInit();
+    constraint_gradient_[i]->ReInit();
   }
 }
 
@@ -540,10 +540,10 @@ void VoidReducedProblem<CONTROLNONLINEARSOLVER, CONTROLINTEGRATOR, PROBLEM, VECT
   }
 
   this->SetProblemType("gradient");
-  if(_gradient_reinit ==  true)
+  if(gradient_reinit_ ==  true)
   {
     GetControlNonlinearSolver().ReInit(*(this->GetProblem()));
-    _gradient_reinit = false;
+    gradient_reinit_ = false;
   }
 
   if(dopedim==dealdim)
@@ -559,8 +559,8 @@ void VoidReducedProblem<CONTROLNONLINEARSOLVER, CONTROLINTEGRATOR, PROBLEM, VECT
     throw DOpEException("dopedim not implemented","VoidReducedProblem::ComputeReducedGradient");
   }
   this->GetProblem()->AddAuxiliaryToIntegrator(this->GetControlIntegrator());
-  this->GetControlIntegrator().AddDomainData("constraints_local",&_constraints.GetSpacialVector("local"));
-  this->GetControlIntegrator().AddParamData("constraints_global",&_constraints.GetGlobalConstraints());
+  this->GetControlIntegrator().AddDomainData("constraints_local",&constraints_.GetSpacialVector("local"));
+  this->GetControlIntegrator().AddParamData("constraints_global",&constraints_.GetGlobalConstraints());
 
   gradient_transposed = 0.;
   if(dopedim==dealdim)
@@ -599,11 +599,11 @@ void VoidReducedProblem<CONTROLNONLINEARSOLVER, CONTROLINTEGRATOR, PROBLEM, VECT
   {
     this->GetOutputHandler()->Write(this->GetName()+"->Computing Constraint Gradient:",4+this->GetBasePriority());
 
-    for(unsigned int i = 0; i < _constraints.GetGlobalConstraints().size(); i++)
+    for(unsigned int i = 0; i < constraints_.GetGlobalConstraints().size(); i++)
     {
       //this->SetProblemType("local_global_constraint_gradient",i);
       this->SetProblemType("global_constraint_gradient",i);
-      this->GetControlIntegrator().ComputeNonlinearRhs(*(this->GetProblem()),_constraint_gradient[i]->GetSpacialVector(),true);
+      this->GetControlIntegrator().ComputeNonlinearRhs(*(this->GetProblem()),constraint_gradient_[i]->GetSpacialVector(),true);
     }
   }
   if(dopedim==dealdim)
@@ -641,10 +641,10 @@ double VoidReducedProblem<CONTROLNONLINEARSOLVER, CONTROLINTEGRATOR, PROBLEM, VE
   double ret = 0;
   bool found=false;
   //Functional may depend on constraints
-  ComputeReducedConstraints(q,_constraints);
+  ComputeReducedConstraints(q,constraints_);
     //Only trouble if too small values! This is
     //a special adaptation for the Augmented Lagrangian!
-  if(!_constraints.IsLargerThan(-_p))
+  if(!constraints_.IsLargerThan(-p_))
   {
     //Infeasible q!
     throw DOpEException("Infeasible value!","VoidReducedProblem::ComputeReducedCostFunctional");
@@ -654,8 +654,8 @@ double VoidReducedProblem<CONTROLNONLINEARSOLVER, CONTROLINTEGRATOR, PROBLEM, VE
 
   this->SetProblemType("cost_functional");
 
-  this->GetControlIntegrator().AddDomainData("constraints_local",&_constraints.GetSpacialVector("local"));
-  this->GetControlIntegrator().AddParamData("constraints_global",&_constraints.GetGlobalConstraints());
+  this->GetControlIntegrator().AddDomainData("constraints_local",&constraints_.GetSpacialVector("local"));
+  this->GetControlIntegrator().AddParamData("constraints_global",&constraints_.GetGlobalConstraints());
 
   if(dopedim==dealdim)
   {
@@ -833,8 +833,8 @@ void VoidReducedProblem<CONTROLNONLINEARSOLVER, CONTROLINTEGRATOR, PROBLEM, VECT
     throw DOpEException("dopedim not implemented","VoidReducedProblem::ComputeReducedHessianVector");
   }
   this->GetProblem()->AddAuxiliaryToIntegrator(this->GetControlIntegrator());
-  this->GetControlIntegrator().AddDomainData("constraints_local",&_constraints.GetSpacialVector("local"));
-  this->GetControlIntegrator().AddParamData("constraints_global",&_constraints.GetGlobalConstraints());
+  this->GetControlIntegrator().AddDomainData("constraints_local",&constraints_.GetSpacialVector("local"));
+  this->GetControlIntegrator().AddParamData("constraints_global",&constraints_.GetGlobalConstraints());
 
   {
     hessian_direction_transposed = 0.;
@@ -855,15 +855,15 @@ void VoidReducedProblem<CONTROLNONLINEARSOLVER, CONTROLINTEGRATOR, PROBLEM, VECT
     hessian_direction_transposed=hessian_direction;
     //Compute l^2 representation of the HessianVector
     //hessian Matrix is the same as control matrix
-    _build_control_matrix = this->GetControlNonlinearSolver().NonlinearSolve(*(this->GetProblem()),hessian_direction_transposed.GetSpacialVector(),true,_build_control_matrix,this->GetBasePriority());
+    build_control_matrix_ = this->GetControlNonlinearSolver().NonlinearSolve(*(this->GetProblem()),hessian_direction_transposed.GetSpacialVector(),true,build_control_matrix_,this->GetBasePriority());
 
     //Add constraint Gradients
 
-    for(unsigned int i = 0; i < _constraint_gradient.size(); i++)
+    for(unsigned int i = 0; i < constraint_gradient_.size(); i++)
     {
       std::stringstream name;
       name << "constraint_gradient_"<<i;
-      this->GetControlIntegrator().AddDomainData(name.str(),&(_constraint_gradient[i]->GetSpacialVector()));
+      this->GetControlIntegrator().AddDomainData(name.str(),&(constraint_gradient_[i]->GetSpacialVector()));
     }
     if(this->GetProblem()->GetFunctionalType() == "algebraic")
     {
@@ -873,7 +873,7 @@ void VoidReducedProblem<CONTROLNONLINEARSOLVER, CONTROLINTEGRATOR, PROBLEM, VECT
       hessian_direction_transposed.GetSpacialVector() += tmp;
     }
     //Delete constraint Gradients
-    for(unsigned int i = 0; i < _constraint_gradient.size(); i++)
+    for(unsigned int i = 0; i < constraint_gradient_.size(); i++)
     {
       std::stringstream name;
       name << "constraint_gradient_"<<i;
@@ -916,37 +916,37 @@ void VoidReducedProblem<CONTROLNONLINEARSOLVER, CONTROLINTEGRATOR, PROBLEM, VECT
   this->GetOutputHandler()->Write(this->GetName()+"->Computing ReducedHessianInverseVector:",4+this->GetBasePriority());
 
   //Solve (A^T H^(-1)A + diag(beta)) y = -A^TH^(-1) direction
-  Vector<double> y(_constraint_gradient.size());
+  Vector<double> y(constraint_gradient_.size());
   ControlVector<VECTOR> tmp(q);
   {
-    Vector<double> rhs(_constraint_gradient.size());
-    Vector<double> beta(_constraint_gradient.size());
+    Vector<double> rhs(constraint_gradient_.size());
+    Vector<double> beta(constraint_gradient_.size());
     H_inverse(q,direction,tmp);
     tmp *=-1.;
     //store H^{-1}direction
     hessian_direction.equ(1.,tmp);
 
 
-    for(unsigned int i = 0; i < _constraint_gradient.size(); i++)
+    for(unsigned int i = 0; i < constraint_gradient_.size(); i++)
     {
-      rhs(i) = (*(_constraint_gradient[i]))*tmp;
+      rhs(i) = (*(constraint_gradient_[i]))*tmp;
     }
 
-    dealii::FullMatrix<double> X(_constraint_gradient.size(),_constraint_gradient.size());
-    dealii::FullMatrix<double> Y(_constraint_gradient.size(),_constraint_gradient.size());
-    dealii::FullMatrix<double> Z(_constraint_gradient.size(),_constraint_gradient.size());
+    dealii::FullMatrix<double> X(constraint_gradient_.size(),constraint_gradient_.size());
+    dealii::FullMatrix<double> Y(constraint_gradient_.size(),constraint_gradient_.size());
+    dealii::FullMatrix<double> Z(constraint_gradient_.size(),constraint_gradient_.size());
     Y = 0.;
     //Build Matrix -A^TH^{-1}A
-    for(unsigned int i = 0; i < _constraint_gradient.size(); i++)
+    for(unsigned int i = 0; i < constraint_gradient_.size(); i++)
     {
-      H_inverse(q,*(_constraint_gradient[i]),tmp);
+      H_inverse(q,*(constraint_gradient_[i]),tmp);
 
-      this->GetOutputHandler()->Write (*(_constraint_gradient[i]), "ConstraintGradient"+this->GetPostIndex(), this->GetProblem()->GetDoFType());
+      this->GetOutputHandler()->Write (*(constraint_gradient_[i]), "ConstraintGradient"+this->GetPostIndex(), this->GetProblem()->GetDoFType());
       this->GetOutputHandler()->Write (tmp, "HessianInverseConstraintGradient"+this->GetPostIndex(), this->GetProblem()->GetDoFType());
 
-      for(unsigned int j = 0; j < _constraint_gradient.size(); j++)
+      for(unsigned int j = 0; j < constraint_gradient_.size(); j++)
       {
-	X(i,j) = ((*(_constraint_gradient[j]))*tmp);
+	X(i,j) = ((*(constraint_gradient_[j]))*tmp);
       }
     }
 
@@ -954,11 +954,11 @@ void VoidReducedProblem<CONTROLNONLINEARSOLVER, CONTROLINTEGRATOR, PROBLEM, VECT
     const ConstraintVector<VECTOR>* multiplier = this->GetProblem()->GetAuxiliaryConstraint("mma_multiplier");
     const dealii::Vector<double>& lambda = multiplier->GetGlobalConstraints();
 
-    assert(lambda.size()  == _constraint_gradient.size());
+    assert(lambda.size()  == constraint_gradient_.size());
 
-    this->GetProblem()->ComputeReducedGlobalConstraintHessian(_constraints,beta);
+    this->GetProblem()->ComputeReducedGlobalConstraintHessian(constraints_,beta);
 
-    for(unsigned int i = 0; i < _constraint_gradient.size(); i++)
+    for(unsigned int i = 0; i < constraint_gradient_.size(); i++)
     {
       Y(i,i) = 1./(lambda(i)*beta(i));
       assert(lambda(i) > 0.);
@@ -972,9 +972,9 @@ void VoidReducedProblem<CONTROLNONLINEARSOLVER, CONTROLINTEGRATOR, PROBLEM, VECT
     //Solve H hessian_direction = -Ay+direction
     //Da hessian_direction = H^{-1}direction
     //fehlt nur noch hessian_direction -= H^{-1}Ay
-    for(unsigned int i = 0; i < _constraint_gradient.size(); i++)
+    for(unsigned int i = 0; i < constraint_gradient_.size(); i++)
     {
-      H_inverse(q,*(_constraint_gradient[i]),tmp);
+      H_inverse(q,*(constraint_gradient_[i]),tmp);
       hessian_direction.add(-1.*y(i),tmp);
     }
   }
@@ -1004,8 +1004,8 @@ void VoidReducedProblem<CONTROLNONLINEARSOLVER, CONTROLINTEGRATOR, PROBLEM, VECT
     throw DOpEException("dopedim not implemented","VoidReducedProblem::H_inverse");
   }
   this->GetProblem()->AddAuxiliaryToIntegrator(this->GetControlIntegrator());
-  this->GetControlIntegrator().AddDomainData("constraints_local",&_constraints.GetSpacialVector("local"));
-  this->GetControlIntegrator().AddParamData("constraints_global",&_constraints.GetGlobalConstraints());
+  this->GetControlIntegrator().AddDomainData("constraints_local",&constraints_.GetSpacialVector("local"));
+  this->GetControlIntegrator().AddParamData("constraints_global",&constraints_.GetGlobalConstraints());
 
   if(this->GetProblem()->GetFunctionalType() == "algebraic")
   {

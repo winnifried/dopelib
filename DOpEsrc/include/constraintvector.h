@@ -21,8 +21,8 @@
 *
 **/
 
-#ifndef _CONSTRAINT_VECTOR_H_
-#define _CONSTRAINT_VECTOR_H_
+#ifndef CONSTRAINT_VECTOR_H_
+#define CONSTRAINT_VECTOR_H_
 
 #include "spacetimehandler_base.h"
 #include "dopetypes.h"
@@ -176,12 +176,12 @@ namespace DOpE
      *
      * @return               A string indicating the behavior.
      */
-    DOpEtypes::VectorStorageType GetBehavior() const { return _behavior; }
+    DOpEtypes::VectorStorageType GetBehavior() const { return behavior_; }
 
     /**
      * @return               A const pointer to the SpaceTimeHandler associated with this vector.
      */
-    const SpaceTimeHandlerBase<VECTOR>* GetSpaceTimeHandler() const { return _STH; }
+    const SpaceTimeHandlerBase<VECTOR>* GetSpaceTimeHandler() const { return STH_; }
 
     /**
      * Call if the SpaceTimeHandler has changed to reinitialize vector sizes.
@@ -258,16 +258,16 @@ namespace DOpE
 
     void ReSizeGlobal(unsigned int ndofs);
 
-    std::vector<VECTOR* > _local_control_constraint;
-    mutable VECTOR _local_constraint__control;
+    std::vector<VECTOR* > local_control_constraint_;
+    mutable VECTOR local_constraint_control_;
 
-    dealii::Vector<double> _global_constraint;
+    dealii::Vector<double> global_constraint_;
 
-    mutable int _accessor;
+    mutable int accessor_;
 
-    const SpaceTimeHandlerBase<VECTOR>* _STH;
-    DOpEtypes::VectorStorageType _behavior;
-    unsigned int _sfh_ticket;
+    const SpaceTimeHandlerBase<VECTOR>* STH_;
+    DOpEtypes::VectorStorageType behavior_;
+    unsigned int sfh_ticket_;
   };
 
 

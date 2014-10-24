@@ -58,7 +58,7 @@ namespace DOpE
           ;
 
           /**
-           * Looks up the given name in _parameter_data and returns the
+           * Looks up the given name in parameter_data_ and returns the
            * corresponding value through 'value'.
            */
           void
@@ -70,7 +70,7 @@ namespace DOpE
           const std::map<std::string, const VECTOR*> &
           GetDomainValues() const
           {
-            return _domain_values;
+            return domain_values_;
           }
 
 
@@ -238,27 +238,27 @@ namespace DOpE
           void
           SetFace(unsigned int face)
           {
-            _face = face;
+            face_ = face;
           }
           unsigned int
           GetFace() const
           {
-            return _face;
+            return face_;
           }
           void
           SetSubFace(unsigned int subface)
           {
-            _subface = subface;
+            subface_ = subface;
           }
           unsigned int
           GetSubFace() const
           {
-            return _subface;
+            return subface_;
           }
           bool
           NeedNeighbour() const
           {
-            return _need_neighbour;
+            return need_neighbour_;
           }
 
         private:
@@ -296,12 +296,12 @@ namespace DOpE
                 std::string name,
                 std::vector<std::vector<dealii::Tensor<1, targetdim> > >& values) const;
 
-          const std::map<std::string, const dealii::Vector<double>*> &_param_values;
-          const std::map<std::string, const VECTOR*> &_domain_values;
+          const std::map<std::string, const dealii::Vector<double>*> & param_values_;
+          const std::map<std::string, const VECTOR*> & domain_values_;
 
-          unsigned int _face;
-          unsigned int _subface;
-          bool _need_neighbour;
+          unsigned int face_;
+          unsigned int subface_;
+          bool need_neighbour_;
       };
 
     /**********************************************************************/
@@ -310,7 +310,7 @@ namespace DOpE
           const std::map<std::string, const dealii::Vector<double>*> &param_values,
           const std::map<std::string, const VECTOR*> &domain_values,
           bool need_neighbour)
-          : _param_values(param_values), _domain_values(domain_values), _need_neighbour(
+          : param_values_(param_values), domain_values_(domain_values), need_neighbour_(
               need_neighbour)
       {
       }
@@ -321,8 +321,8 @@ namespace DOpE
           dealii::Vector<double>& value) const
       {
         typename std::map<std::string, const dealii::Vector<double>*>::const_iterator it =
-            _param_values.find(name);
-        if (it == _param_values.end())
+            param_values_.find(name);
+        if (it == param_values_.end())
         {
           throw DOpEException("Did not find " + name,
               "FaceDataContainerInternal::GetParamValues");

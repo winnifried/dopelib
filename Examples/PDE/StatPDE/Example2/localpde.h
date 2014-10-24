@@ -21,8 +21,8 @@
  *
  **/
 
-#ifndef __LOCALPDE
-#define __LOCALPDE
+#ifndef LOCALPDE_
+#define LOCALPDE_
 
 #include "pdeinterface.h"
 
@@ -39,7 +39,7 @@ template<
   {
     public:
       LocalPDE() :
-          _state_block_components(2, 0)
+          state_block_component_(2, 0)
       {
         assert(dealdim==2);
       }
@@ -54,12 +54,12 @@ template<
         const DOpEWrapper::FEValues<dealdim> &state_fe_values =
             edc.GetFEValuesState();
 
-        assert(this->_problem_type == "state");
+        assert(this->problem_type_ == "state");
 
-        _uvalues.resize(n_q_points, Vector<double>(2));
-        _ugrads.resize(n_q_points, vector<Tensor<1, dealdim> >(2));
-        edc.GetValuesState("last_newton_solution", _uvalues);
-        edc.GetGradsState("last_newton_solution", _ugrads);
+        uvalues_.resize(n_q_points, Vector<double>(2));
+        ugrads_.resize(n_q_points, vector<Tensor<1, dealdim> >(2));
+        edc.GetValuesState("last_newton_solution", uvalues_);
+        edc.GetGradsState("last_newton_solution", ugrads_);
 
         const FEValuesExtractors::Vector velocities(0);
         const FEValuesExtractors::Scalar pressure(dealdim);
@@ -68,10 +68,10 @@ template<
         {
           Tensor<2, 2> vgrads;
           vgrads.clear();
-          vgrads[0][0] = _ugrads[q_point][0][0];
-          vgrads[0][1] = _ugrads[q_point][0][1];
-          vgrads[1][0] = _ugrads[q_point][1][0];
-          vgrads[1][1] = _ugrads[q_point][1][1];
+          vgrads[0][0] = ugrads_[q_point][0][0];
+          vgrads[0][1] = ugrads_[q_point][0][1];
+          vgrads[1][0] = ugrads_[q_point][1][0];
+          vgrads[1][1] = ugrads_[q_point][1][1];
 
           for (unsigned int i = 0; i < n_dofs_per_element; i++)
           {
@@ -127,13 +127,13 @@ template<
       ElementRightHandSide(const EDC<DH, VECTOR, dealdim>& edc,
           dealii::Vector<double> &local_vector, double scale)
       {
-        assert(this->_problem_type == "state");
+        assert(this->problem_type_ == "state");
         const unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
         const unsigned int n_q_points = edc.GetNQPoints();
         const DOpEWrapper::FEValues<dealdim> &state_fe_values =
             edc.GetFEValuesState();
 
-        _fvalues.resize(n_q_points);
+        fvalues_.resize(n_q_points);
         std::vector<Tensor<1, 2> > phi_v(n_dofs_per_element);
         const FEValuesExtractors::Vector velocities(0);
 
@@ -143,13 +143,13 @@ template<
           const double y = state_fe_values.quadrature_point(q_point)(1);
           for (unsigned int i = 0; i < dealdim; i++)
           {
-            _fvalues[q_point][0] = cos(exp(10 * x)) * y * y * x + sin(y);
-            _fvalues[q_point][1] = cos(exp(10 * y)) * x * x * y + sin(x);
+            fvalues_[q_point][0] = cos(exp(10 * x)) * y * y * x + sin(y);
+            fvalues_[q_point][1] = cos(exp(10 * y)) * x * x * y + sin(x);
           }
           for (unsigned int i = 0; i < n_dofs_per_element; i++)
           {
             local_vector(i) += scale
-                * (contract(_fvalues[q_point],
+                * (contract(fvalues_[q_point],
                     state_fe_values[velocities].value(i, q_point)))
                 * state_fe_values.JxW(q_point);
           }
@@ -176,18 +176,18 @@ template<
       std::vector<unsigned int>&
       GetStateBlockComponent()
       {
-        return _state_block_components;
+        return state_block_component_;
       }
       const std::vector<unsigned int>&
       GetStateBlockComponent() const
       {
-        return _state_block_components;
+        return state_block_component_;
       }
     private:
-      vector<Tensor<1, dealdim> > _fvalues;
-      vector<Vector<double> > _uvalues;
-      vector<vector<Tensor<1, dealdim> > > _ugrads;
-      vector<unsigned int> _state_block_components;
+      vector<Tensor<1, dealdim> > fvalues_;
+      vector<Vector<double> > uvalues_;
+      vector<vector<Tensor<1, dealdim> > > ugrads_;
+      vector<unsigned int> state_block_component_;
   };
 //**********************************************************************************
 

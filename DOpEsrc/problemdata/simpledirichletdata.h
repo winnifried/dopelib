@@ -21,8 +21,8 @@
 *
 **/
 
-#ifndef _SIMPLE_DIRICHLET_H_
-#define _SIMPLE_DIRICHLET_H_
+#ifndef SIMPLE_DIRICHLET_H_
+#define SIMPLE_DIRICHLET_H_
 
 #include "dirichletdatainterface.h"
 #include "function_wrapper.h"
@@ -38,7 +38,7 @@ namespace DOpE
     class SimpleDirichletData : public DirichletDataInterface<VECTOR, dealdim>
   {
   public:
-  SimpleDirichletData(const DOpEWrapper::Function<dealdim>& data) : DirichletDataInterface<VECTOR,dealdim>(), _data(data)
+  SimpleDirichletData(const DOpEWrapper::Function<dealdim>& data) : DirichletDataInterface<VECTOR,dealdim>(), data_(data)
     {}
 
   double Data(const std::map<std::string, const dealii::Vector<double>* > */*param_values*/,
@@ -47,7 +47,7 @@ namespace DOpE
 	      const dealii::Point<dealdim>& point,
 	      const unsigned int component) const
   {
-    return _data.value(point,component);
+    return data_.value(point,component);
   }
 
   double Data_Q(const std::map<std::string, const dealii::Vector<double>* > */*param_values*/,
@@ -61,18 +61,18 @@ namespace DOpE
 
   void SetTime(double time) const
   {
-    _data.SetTime(time);
+    data_.SetTime(time);
   }
 
   unsigned int n_components() const
   {
-    return _data.n_components;
+    return data_.n_components;
   }
 
-  double InitialTime() const { return _data.InitialTime();}
+  double InitialTime() const { return data_.InitialTime();}
 
   private:
-    const DOpEWrapper::Function<dealdim>& _data;
+    const DOpEWrapper::Function<dealdim>& data_;
   };
 
 }

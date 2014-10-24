@@ -21,8 +21,8 @@
 *
 **/
 
-#ifndef _DOPE_EXCEPTION_H_
-#define _DOPE_EXCEPTION_H_
+#ifndef DOPE_EXCEPTION_H_
+#define DOPE_EXCEPTION_H_
 
 #include <string>
 
@@ -43,8 +43,8 @@ namespace DOpE
      */
     DOpEException(std::string message, std::string thrower="unspecified throwing instance") 
     { 
-      _msg = message;
-      _thrower = thrower;
+      msg_ = message;
+      thrower_ = thrower;
     }
       
     ~DOpEException() {}
@@ -54,19 +54,19 @@ namespace DOpE
      *
      * @return A string containing the message by which this object was initialized.
      */
-    std::string GetErrorMessage() { return _msg; }
+    std::string GetErrorMessage() { return msg_; }
     /**
      * Access method for the stored throwing instance.
      *
      * @return A string containing the throwing instance by which this object was initialized.
      */
-    std::string GetThrowingInstance() {return  _thrower; }
+    std::string GetThrowingInstance() {return  thrower_; }
     virtual std::string GetName() {return "DOpEException";} 
   protected:
 
   private:
-    std::string _msg;
-    std::string _thrower;
+    std::string msg_;
+    std::string thrower_;
   };
 
   /**

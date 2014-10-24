@@ -21,8 +21,8 @@
  *
  **/
 
-#ifndef _LOCALFunctional_
-#define _LOCALFunctional_
+#ifndef LOCALFunctional_
+#define LOCALFunctional_
 
 #include "functionalinterface.h"
 
@@ -41,7 +41,7 @@ template<
     public:
       LocalFunctional()
       {
-        _alpha = 10.;
+        alpha_ = 10.;
       }
 
       double
@@ -51,34 +51,34 @@ template<
             edc.GetFEValuesState();
         unsigned int n_q_points = edc.GetNQPoints();
         {
-          _qvalues.reinit(5);
-          _fvalues.resize(n_q_points, Vector<double>(2));
-          _uvalues.resize(n_q_points, Vector<double>(2));
+          qvalues_.reinit(5);
+          fvalues_.resize(n_q_points, Vector<double>(2));
+          uvalues_.resize(n_q_points, Vector<double>(2));
 
-          edc.GetParamValues("control", _qvalues);
-          edc.GetValuesState("state", _uvalues);
+          edc.GetParamValues("control", qvalues_);
+          edc.GetValuesState("state", uvalues_);
         }
         double r = 0.;
 
         for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
         {
-          _fvalues[q_point](0) = (sin(
+          fvalues_[q_point](0) = (sin(
               M_PI * state_fe_values.quadrature_point(q_point)(0))
               * sin(M_PI * state_fe_values.quadrature_point(q_point)(1)))
               * (state_fe_values.quadrature_point(q_point)(0));
-          _fvalues[q_point](1) = (state_fe_values.quadrature_point(q_point)(0));
+          fvalues_[q_point](1) = (state_fe_values.quadrature_point(q_point)(0));
 
-          r += 0.5 * (_uvalues[q_point](0) - _fvalues[q_point](0))
-              * (_uvalues[q_point](0) - _fvalues[q_point](0))
+          r += 0.5 * (uvalues_[q_point](0) - fvalues_[q_point](0))
+              * (uvalues_[q_point](0) - fvalues_[q_point](0))
               * state_fe_values.JxW(q_point);
-          r += 0.5 * (_uvalues[q_point](1) - _fvalues[q_point](1))
-              * (_uvalues[q_point](1) - _fvalues[q_point](1))
+          r += 0.5 * (uvalues_[q_point](1) - fvalues_[q_point](1))
+              * (uvalues_[q_point](1) - fvalues_[q_point](1))
               * state_fe_values.JxW(q_point);
 
-          r += _alpha * 0.5
-              * (_qvalues(0) * _qvalues(0) + _qvalues(1) * _qvalues(1)
-                  + _qvalues(2) * _qvalues(2) + _qvalues(3) * _qvalues(3)
-                  + _qvalues(4) * _qvalues(4)) * state_fe_values.JxW(q_point);
+          r += alpha_ * 0.5
+              * (qvalues_(0) * qvalues_(0) + qvalues_(1) * qvalues_(1)
+                  + qvalues_(2) * qvalues_(2) + qvalues_(3) * qvalues_(3)
+                  + qvalues_(4) * qvalues_(4)) * state_fe_values.JxW(q_point);
 
         }
         return r;
@@ -93,10 +93,10 @@ template<
         unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
         unsigned int n_q_points = edc.GetNQPoints();
         {
-          _fvalues.resize(n_q_points, Vector<double>(2));
-          _uvalues.resize(n_q_points, Vector<double>(2));
+          fvalues_.resize(n_q_points, Vector<double>(2));
+          uvalues_.resize(n_q_points, Vector<double>(2));
 
-          edc.GetValuesState("state", _uvalues);
+          edc.GetValuesState("state", uvalues_);
         }
 
         const FEValuesExtractors::Scalar comp_0(0);
@@ -104,20 +104,20 @@ template<
 
         for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
         {
-          _fvalues[q_point](0) = (sin(
+          fvalues_[q_point](0) = (sin(
               M_PI * state_fe_values.quadrature_point(q_point)(0))
               * sin(M_PI * state_fe_values.quadrature_point(q_point)(1)))
               * (state_fe_values.quadrature_point(q_point)(0));
-          _fvalues[q_point](1) = (state_fe_values.quadrature_point(q_point)(0));
+          fvalues_[q_point](1) = (state_fe_values.quadrature_point(q_point)(0));
 
           for (unsigned int i = 0; i < n_dofs_per_element; i++)
           {
             local_vector(i) += scale
-                * (_uvalues[q_point](0) - _fvalues[q_point](0))
+                * (uvalues_[q_point](0) - fvalues_[q_point](0))
                 * state_fe_values[comp_0].value(i, q_point)
                 * state_fe_values.JxW(q_point);
             local_vector(i) += scale
-                * (_uvalues[q_point](1) - _fvalues[q_point](1))
+                * (uvalues_[q_point](1) - fvalues_[q_point](1))
                 * state_fe_values[comp_1].value(i, q_point)
                 * state_fe_values.JxW(q_point);
           }
@@ -132,16 +132,16 @@ template<
             edc.GetFEValuesState();
         unsigned int n_q_points = edc.GetNQPoints();
         {
-          _qvalues.reinit(local_vector.size());
+          qvalues_.reinit(local_vector.size());
 
-          edc.GetParamValues("control", _qvalues);
+          edc.GetParamValues("control", qvalues_);
         }
 
         for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
         {
           for (unsigned int i = 0; i < local_vector.size(); i++)
           {
-            local_vector(i) += scale * _alpha * (_qvalues(i))
+            local_vector(i) += scale * alpha_ * (qvalues_(i))
                 * state_fe_values.JxW(q_point);
           }
         }
@@ -156,8 +156,8 @@ template<
         unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
         unsigned int n_q_points = edc.GetNQPoints();
         {
-          _duvalues.resize(n_q_points, Vector<double>(2));
-          edc.GetValuesState("tangent", _duvalues);
+          duvalues_.resize(n_q_points, Vector<double>(2));
+          edc.GetValuesState("tangent", duvalues_);
         }
 
         const FEValuesExtractors::Scalar comp_0(0);
@@ -167,10 +167,10 @@ template<
         {
           for (unsigned int i = 0; i < n_dofs_per_element; i++)
           {
-            local_vector(i) += scale * _duvalues[q_point](0)
+            local_vector(i) += scale * duvalues_[q_point](0)
                 * state_fe_values[comp_0].value(i, q_point)
                 * state_fe_values.JxW(q_point);
-            local_vector(i) += scale * _duvalues[q_point](1)
+            local_vector(i) += scale * duvalues_[q_point](1)
                 * state_fe_values[comp_1].value(i, q_point)
                 * state_fe_values.JxW(q_point);
           }
@@ -197,15 +197,15 @@ template<
             edc.GetFEValuesState();
         unsigned int n_q_points = edc.GetNQPoints();
         {
-          _dqvalues.reinit(local_vector.size());
-          edc.GetParamValues("dq", _dqvalues);
+          dqvalues_.reinit(local_vector.size());
+          edc.GetParamValues("dq", dqvalues_);
         }
 
         for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
         {
           for (unsigned int i = 0; i < local_vector.size(); i++)
           {
-            local_vector(i) += scale * _alpha * _dqvalues(i)
+            local_vector(i) += scale * alpha_ * dqvalues_(i)
                 * state_fe_values.JxW(q_point);
           }
         }
@@ -230,11 +230,11 @@ template<
       }
 
     private:
-      Vector<double> _qvalues;
-      Vector<double> _dqvalues;
-      vector<Vector<double> > _fvalues;
-      vector<Vector<double> > _uvalues;
-      vector<Vector<double> > _duvalues;
-      double _alpha;
+      Vector<double> qvalues_;
+      Vector<double> dqvalues_;
+      vector<Vector<double> > fvalues_;
+      vector<Vector<double> > uvalues_;
+      vector<Vector<double> > duvalues_;
+      double alpha_;
   };
 #endif

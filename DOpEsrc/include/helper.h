@@ -21,8 +21,8 @@
 *
 **/
 
-#ifndef _DOpEHelper_H_
-#define _DOpEHelper_H_
+#ifndef DOpEHelper_H_
+#define DOpEHelper_H_
 
 #include <lac/block_vector.h>
 #include <lac/vector.h>
@@ -56,4 +56,4 @@ void ReSizeVector(const dealii::BlockIndices&, dealii::Vector<double>& vector);
 
 
 }//end of namespace
-#endif /* _DOpEHelper_H_ */
+#endif /* DOpEHelper_H_ */

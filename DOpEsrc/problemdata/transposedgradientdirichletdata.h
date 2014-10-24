@@ -21,8 +21,8 @@
 *
 **/
 
-#ifndef _TRANSPOSED_GRADIENT_DIRICHLET_DATA_H_
-#define _TRANSPOSED_GRADIENT_DIRICHLET_DATA_H_
+#ifndef TRANSPOSED_GRADIENT_DIRICHLET_DATA_H_
+#define TRANSPOSED_GRADIENT_DIRICHLET_DATA_H_
 
 #include "transposeddirichletdatainterface.h"
 
@@ -41,11 +41,11 @@ namespace DOpE
     class TransposedGradientDirichletData : public TransposedDirichletDataInterface<dealdim>
   {
   public:
-  TransposedGradientDirichletData(const DD& data) : TransposedDirichletDataInterface<dealdim>(), _dirichlet_data(data)
+  TransposedGradientDirichletData(const DD& data) : TransposedDirichletDataInterface<dealdim>(), dirichlet_data_(data)
     {
-      _param_values = NULL;
-      _domain_values = NULL;
-      _color = 0;
+      param_values_ = NULL;
+      domain_values_ = NULL;
+      color_ = 0;
     }
 
     /**
@@ -56,9 +56,9 @@ namespace DOpE
 		const std::map<std::string, const VECTOR* > &domain_values,
 		unsigned int color)
     {
-      _param_values = &param_values;
-      _domain_values = &domain_values;
-      _color = color;
+      param_values_ = &param_values;
+      domain_values_ = &domain_values;
+      color_ = color;
     }
 
 
@@ -79,10 +79,10 @@ namespace DOpE
 		const unsigned int  dof_number,
 		dealii::Vector<double>& local_vector) const
     {
-      _dirichlet_data.Data_QT(
-			      _param_values,
-			      _domain_values,
-			      _color,
+      dirichlet_data_.Data_QT(
+			      param_values_,
+			      domain_values_,
+			      color_,
 			      p,
 			      component,
 			      dof_number,
@@ -96,13 +96,13 @@ namespace DOpE
      */
     void SetTime(double time) const
     {
-      _dirichlet_data.SetTime(time);
+      dirichlet_data_.SetTime(time);
     }
   private:
-    const DD& _dirichlet_data;
-    const std::map<std::string, const dealii::Vector<double>* >* _param_values;
-    const std::map<std::string, const VECTOR* >* _domain_values;
-    unsigned int _color;
+    const DD& dirichlet_data_;
+    const std::map<std::string, const dealii::Vector<double>* >* param_values_;
+    const std::map<std::string, const VECTOR* >* domain_values_;
+    unsigned int color_;
   };
 
 }

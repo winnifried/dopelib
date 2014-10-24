@@ -21,8 +21,8 @@
 *
 **/
 
-#ifndef _STAT_REDUCED_PROBLEM_H_
-#define _STAT_REDUCED_PROBLEM_H_
+#ifndef STAT_REDUCED_PROBLEM_H_
+#define STAT_REDUCED_PROBLEM_H_
 
 #include "reducedprobleminterface.h"
 #include "integrator.h"
@@ -345,27 +345,27 @@ namespace DOpE
         const StateVector<VECTOR> &
         GetU() const
         {
-          return _u;
+          return u_;
         }
         StateVector<VECTOR> &
         GetU()
         {
-          return _u;
+          return u_;
         }
         StateVector<VECTOR> &
         GetZ()
         {
-          return _z;
+          return z_;
         }
         StateVector<VECTOR> &
         GetDU()
         {
-          return _du;
+          return du_;
         }
         StateVector<VECTOR> &
         GetDZ()
         {
-          return _dz;
+          return dz_;
         }
         /**
          * Returns the solution of the dual equation for error estimation.
@@ -373,12 +373,12 @@ namespace DOpE
         const StateVector<VECTOR> &
         GetZForEE() const
         {
-          return _z_for_ee;
+          return z_for_ee_;
         }
         StateVector<VECTOR> &
         GetZForEE()
         {
-          return _z_for_ee;
+          return z_for_ee_;
         }
 
         NONLINEARSOLVER&
@@ -388,29 +388,29 @@ namespace DOpE
         INTEGRATOR&
         GetIntegrator()
         {
-          return _integrator;
+          return integrator_;
         }
         CONTROLINTEGRATOR&
         GetControlIntegrator()
         {
-          return _control_integrator;
+          return control_integrator_;
         }
 
       private:
-        StateVector<VECTOR> _u;
-        StateVector<VECTOR> _z;
-        StateVector<VECTOR> _du;
-        StateVector<VECTOR> _dz;
-        StateVector<VECTOR> _z_for_ee;
+        StateVector<VECTOR> u_;
+        StateVector<VECTOR> z_;
+        StateVector<VECTOR> du_;
+        StateVector<VECTOR> dz_;
+        StateVector<VECTOR> z_for_ee_;
 
-        INTEGRATOR _integrator;
-        CONTROLINTEGRATOR _control_integrator;
-        NONLINEARSOLVER _nonlinear_state_solver;
-        NONLINEARSOLVER _nonlinear_adjoint_solver;
-        CONTROLNONLINEARSOLVER _nonlinear_gradient_solver;
+        INTEGRATOR integrator_;
+        CONTROLINTEGRATOR control_integrator_;
+        NONLINEARSOLVER nonlinear_state_solver_;
+        NONLINEARSOLVER nonlinear_adjoint_solver_;
+        CONTROLNONLINEARSOLVER nonlinear_gradient_solver_;
 
-        bool _build_state_matrix, _build_adjoint_matrix, _build_control_matrix;
-        bool _state_reinit, _adjoint_reinit, _gradient_reinit;
+        bool build_state_matrix_, build_adjoint_matrix_, build_control_matrix_;
+        bool state_reinit_, adjoint_reinit_, gradient_reinit_;
 
         friend class SolutionExtractor<
             StatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER,
@@ -446,22 +446,22 @@ namespace DOpE
           ParameterReader &param_reader, INTEGRATORDATACONT& idc,
           int base_priority)
           : ReducedProblemInterface<PROBLEM, VECTOR>(OP,
-              base_priority), _u(OP->GetSpaceTimeHandler(), state_behavior,
-              param_reader), _z(OP->GetSpaceTimeHandler(), state_behavior,
-              param_reader), _du(OP->GetSpaceTimeHandler(), state_behavior,
-              param_reader), _dz(OP->GetSpaceTimeHandler(), state_behavior,
-              param_reader), _z_for_ee(OP->GetSpaceTimeHandler(),
-              state_behavior, param_reader), _integrator(idc), _control_integrator(
-              idc), _nonlinear_state_solver(_integrator, param_reader), _nonlinear_adjoint_solver(
-              _integrator, param_reader), _nonlinear_gradient_solver(
-              _control_integrator, param_reader)
+              base_priority), u_(OP->GetSpaceTimeHandler(), state_behavior,
+              param_reader), z_(OP->GetSpaceTimeHandler(), state_behavior,
+              param_reader), du_(OP->GetSpaceTimeHandler(), state_behavior,
+              param_reader), dz_(OP->GetSpaceTimeHandler(), state_behavior,
+              param_reader), z_for_ee_(OP->GetSpaceTimeHandler(),
+              state_behavior, param_reader), integrator_(idc), control_integrator_(
+              idc), nonlinear_state_solver_(integrator_, param_reader), nonlinear_adjoint_solver_(
+              integrator_, param_reader), nonlinear_gradient_solver_(
+              control_integrator_, param_reader)
 
       {
         //ReducedProblems should be ReInited
         {
-          _state_reinit = true;
-          _adjoint_reinit = true;
-          _gradient_reinit = true;
+          state_reinit_ = true;
+          adjoint_reinit_ = true;
+          gradient_reinit_ = true;
         }
       }
 
@@ -477,22 +477,22 @@ namespace DOpE
           ParameterReader &param_reader, CONTROLINTEGRATORCONT& c_idc,
           STATEINTEGRATORDATACONT & s_idc, int base_priority)
           : ReducedProblemInterface<PROBLEM, VECTOR>(OP,
-              base_priority), _u(OP->GetSpaceTimeHandler(), state_behavior,
-              param_reader), _z(OP->GetSpaceTimeHandler(), state_behavior,
-              param_reader), _du(OP->GetSpaceTimeHandler(), state_behavior,
-              param_reader), _dz(OP->GetSpaceTimeHandler(), state_behavior,
-              param_reader), _z_for_ee(OP->GetSpaceTimeHandler(),
-              state_behavior, param_reader), _integrator(s_idc), _control_integrator(
-              c_idc), _nonlinear_state_solver(_integrator, param_reader), _nonlinear_adjoint_solver(
-              _integrator, param_reader), _nonlinear_gradient_solver(
-              _control_integrator, param_reader)
+              base_priority), u_(OP->GetSpaceTimeHandler(), state_behavior,
+              param_reader), z_(OP->GetSpaceTimeHandler(), state_behavior,
+              param_reader), du_(OP->GetSpaceTimeHandler(), state_behavior,
+              param_reader), dz_(OP->GetSpaceTimeHandler(), state_behavior,
+              param_reader), z_for_ee_(OP->GetSpaceTimeHandler(),
+              state_behavior, param_reader), integrator_(s_idc), control_integrator_(
+              c_idc), nonlinear_state_solver_(integrator_, param_reader), nonlinear_adjoint_solver_(
+              integrator_, param_reader), nonlinear_gradient_solver_(
+              control_integrator_, param_reader)
 
       {
         //ReducedProblems should be ReInited
         {
-          _state_reinit = true;
-          _adjoint_reinit = true;
-          _gradient_reinit = true;
+          state_reinit_ = true;
+          adjoint_reinit_ = true;
+          gradient_reinit_ = true;
         }
       }
 
@@ -518,12 +518,12 @@ namespace DOpE
     {
       if ((type == "state") || (type == "tangent"))
       {
-        return _nonlinear_state_solver;
+        return nonlinear_state_solver_;
       }
       else if ((type == "adjoint") || (type == "adjoint_hessian")
           || (type == "adjoint_for_ee"))
       {
-        return _nonlinear_adjoint_solver;
+        return nonlinear_adjoint_solver_;
       }
       else
       {
@@ -544,7 +544,7 @@ namespace DOpE
       if ((this->GetProblem()->GetType() == "gradient")
           || (this->GetProblem()->GetType() == "hessian"))
       {
-        return _nonlinear_gradient_solver;
+        return nonlinear_gradient_solver_;
       }
       else
       {
@@ -568,13 +568,13 @@ namespace DOpE
       //Some Solvers must be reinited when called
       // Better have subproblems, so that solver can be reinited here
       {
-        _state_reinit = true;
-        _adjoint_reinit = true;
-        _gradient_reinit = true;
+        state_reinit_ = true;
+        adjoint_reinit_ = true;
+        gradient_reinit_ = true;
       }
 
-      _build_state_matrix = true;
-      _build_adjoint_matrix = true;
+      build_state_matrix_ = true;
+      build_adjoint_matrix_ = true;
 
       GetU().ReInit();
       GetZ().ReInit();
@@ -582,7 +582,7 @@ namespace DOpE
       GetDZ().ReInit();
       GetZForEE().ReInit();
 
-      _build_control_matrix = true;
+      build_control_matrix_ = true;
     }
 
   /******************************************************/
@@ -603,10 +603,10 @@ namespace DOpE
 
       this->SetProblemType("state");
       auto& problem = this->GetProblem()->GetStateProblem();
-      if (_state_reinit == true)
+      if (state_reinit_ == true)
       {
         GetNonlinearSolver("state").ReInit(problem);
-        _state_reinit = false;
+        state_reinit_ = false;
       }
 
       this->GetProblem()->AddAuxiliaryToIntegrator(this->GetIntegrator());
@@ -625,8 +625,8 @@ namespace DOpE
             "StatReducedProblem::ComputeReducedState");
       }
 
-      _build_state_matrix = this->GetNonlinearSolver("state").NonlinearSolve(
-          problem, (GetU().GetSpacialVector()), true, _build_state_matrix);
+      build_state_matrix_ = this->GetNonlinearSolver("state").NonlinearSolve(
+          problem, (GetU().GetSpacialVector()), true, build_state_matrix_);
 
       if (dopedim == dealdim)
       {
@@ -837,10 +837,10 @@ namespace DOpE
           4 + this->GetBasePriority());
 
       this->SetProblemType("adjoint");
-      if (_adjoint_reinit == true)
+      if (adjoint_reinit_ == true)
       {
         GetNonlinearSolver("adjoint").ReInit(*(this->GetProblem()));
-        _adjoint_reinit = false;
+        adjoint_reinit_ = false;
       }
 
       this->GetProblem()->AddAuxiliaryToIntegrator(this->GetIntegrator());
@@ -863,10 +863,10 @@ namespace DOpE
             "StatReducedProblem::ComputeReducedAdjoint");
       }
 
-      _build_adjoint_matrix =
+      build_adjoint_matrix_ =
           this->GetNonlinearSolver("adjoint").NonlinearSolve(
               *(this->GetProblem()), (GetZ().GetSpacialVector()), true,
-              _build_adjoint_matrix);
+              build_adjoint_matrix_);
 
       if (dopedim == dealdim)
       {
@@ -916,10 +916,10 @@ namespace DOpE
 
       //      auto& problem = this->GetProblem()->GetStateProblem();//Hier ist adjoint problem einzufuegen
       auto& problem = *(this->GetProblem());
-      if (_adjoint_reinit == true)
+      if (adjoint_reinit_ == true)
       {
         GetNonlinearSolver("adjoint_for_ee").ReInit(problem);
-        _adjoint_reinit = false;
+        adjoint_reinit_ = false;
       }
 
       this->GetProblem()->AddAuxiliaryToIntegrator(this->GetIntegrator());
@@ -942,9 +942,9 @@ namespace DOpE
             "StatReducedProblem::ComputeReducedAdjoint");
       }
 
-      _build_adjoint_matrix =
+      build_adjoint_matrix_ =
           this->GetNonlinearSolver("adjoint_for_ee").NonlinearSolve(problem,
-              (GetZForEE().GetSpacialVector()), true, _build_adjoint_matrix);
+              (GetZForEE().GetSpacialVector()), true, build_adjoint_matrix_);
 
       if (dopedim == dealdim)
       {
@@ -1041,10 +1041,10 @@ namespace DOpE
       }
       //Endof Dirichletdata Preparations
       this->SetProblemType("gradient");
-      if (_gradient_reinit == true)
+      if (gradient_reinit_ == true)
       {
         GetControlNonlinearSolver().ReInit(*(this->GetProblem()));
-        _gradient_reinit = false;
+        gradient_reinit_ = false;
       }
 
       this->GetProblem()->AddAuxiliaryToIntegrator(
@@ -1099,9 +1099,9 @@ namespace DOpE
 
       //Compute l^2 representation of the Gradient
 
-      _build_control_matrix = this->GetControlNonlinearSolver().NonlinearSolve(
+      build_control_matrix_ = this->GetControlNonlinearSolver().NonlinearSolve(
           *(this->GetProblem()), gradient_transposed.GetSpacialVector(), true,
-          _build_control_matrix);
+          build_control_matrix_);
       if (dopedim == dealdim)
       {
         this->GetControlIntegrator().DeleteDomainData("control");
@@ -1473,9 +1473,9 @@ namespace DOpE
       }
 
       //tangent Matrix is the same as state matrix
-      _build_state_matrix = this->GetNonlinearSolver("tangent").NonlinearSolve(
+      build_state_matrix_ = this->GetNonlinearSolver("tangent").NonlinearSolve(
           *(this->GetProblem()), (GetDU().GetSpacialVector()), true,
-          _build_state_matrix);
+          build_state_matrix_);
 
       this->GetOutputHandler()->Write((GetDU().GetSpacialVector()),
           "Tangent" + this->GetPostIndex(), this->GetProblem()->GetDoFType());
@@ -1493,10 +1493,10 @@ namespace DOpE
           &(GetDU().GetSpacialVector()));
 
       //adjoint_hessian Matrix is the same as adjoint matrix
-      _build_adjoint_matrix =
+      build_adjoint_matrix_ =
           this->GetNonlinearSolver("adjoint_hessian").NonlinearSolve(
               *(this->GetProblem()), (GetDZ().GetSpacialVector()), true,
-              _build_adjoint_matrix);
+              build_adjoint_matrix_);
 
       this->GetOutputHandler()->Write((GetDZ().GetSpacialVector()),
           "Hessian" + this->GetPostIndex(), this->GetProblem()->GetDoFType());
@@ -1598,11 +1598,11 @@ namespace DOpE
         hessian_direction_transposed = hessian_direction;
         //Compute l^2 representation of the HessianVector
         //hessian Matrix is the same as control matrix
-        _build_control_matrix =
+        build_control_matrix_ =
             this->GetControlNonlinearSolver().NonlinearSolve(
                 *(this->GetProblem()),
                 hessian_direction_transposed.GetSpacialVector(), true,
-                _build_control_matrix);
+                build_control_matrix_);
 
         this->GetOutputHandler()->Write(hessian_direction,
             "HessianDirection" + this->GetPostIndex(),

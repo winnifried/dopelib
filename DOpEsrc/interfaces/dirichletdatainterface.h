@@ -21,8 +21,8 @@
  *
  **/
 
-#ifndef _DIRICHLET_INTERFAC_H_
-#define _DIRICHLET_INTERFAC_H_
+#ifndef DIRICHLET_INTERFAC_H_
+#define DIRICHLET_INTERFAC_H_
 
 namespace DOpE
 {

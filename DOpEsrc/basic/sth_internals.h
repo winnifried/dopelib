@@ -21,8 +21,8 @@
 *
 **/
 
-#ifndef _STH_INTERNALS_H_
-#define _STH_INTERNALS_H_
+#ifndef STH_INTERNALS_H_
+#define STH_INTERNALS_H_
 
 #include "mapping_wrapper.h"
 

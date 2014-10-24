@@ -21,8 +21,8 @@
  *
  **/
 
-#ifndef _DOPE_SOLUTIONTRANSFER_H_
-#define _DOPE_SOLUTIONTRANSFER_H_
+#ifndef DOPE_SOLUTIONTRANSFER_H_
+#define DOPE_SOLUTIONTRANSFER_H_
 
 #include <deal.II/numerics/solution_transfer.h>
 #include <dofs/dof_handler.h>

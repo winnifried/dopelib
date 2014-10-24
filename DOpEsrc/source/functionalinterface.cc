@@ -606,7 +606,7 @@ namespace DOpE
     FunctionalInterface<EDC, FDC, DH, VECTOR, dopedim, dealdim>::SetProblemType(
         std::string p_type)
     {
-      _problem_type = p_type;
+      problem_type_ = p_type;
     }
 
   /********************************************/
@@ -617,7 +617,7 @@ namespace DOpE
     std::string
     FunctionalInterface<EDC, FDC, DH, VECTOR, dopedim, dealdim>::GetProblemType() const
     {
-      return _problem_type;
+      return problem_type_;
     }
 
 } //Endof namespace

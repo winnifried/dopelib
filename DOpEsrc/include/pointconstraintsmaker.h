@@ -44,9 +44,9 @@ namespace DOpE
 	public:
 	  PointConstraints(const std::vector<dealii::Point<dealdim> > &c_points,
 			   const std::vector<std::vector<bool> > &c_comps)
-	: UserDefinedDoFConstraints<DH,dopedim,dealdim>(), _c_points(c_points), _c_comps(c_comps)
+	: UserDefinedDoFConstraints<DH,dopedim,dealdim>(), c_points_(c_points), c_comps_(c_comps)
 	{
-	  if(_c_points.size() != _c_comps.size())
+	  if(c_points_.size() != c_comps_.size())
 	    throw DOpEException("Number of Entries not matching!","PointConstraints::PointConstraints");
 	}
 	  
@@ -61,8 +61,8 @@ namespace DOpE
 
 	private:
 	  
-	  const std::vector<Point<dealdim> > & _c_points;
-	  const std::vector<std::vector<bool> > & _c_comps;
+	  const std::vector<Point<dealdim> > & c_points_;
+	  const std::vector<std::vector<bool> > & c_comps_;
 	};
 
 	template<template<int, int> class DH, int dopedim, int dealdim>
@@ -72,31 +72,31 @@ namespace DOpE
 	{
 	  std::vector<dealii::Point<dealdim> > support_points(dof_handler.n_dofs());
 	  STHInternals::MapDoFsToSupportPoints(this->GetMapping(),dof_handler, support_points);
-	  for(unsigned int i = 0; i < _c_points.size(); i++)
+	  for(unsigned int i = 0; i < c_points_.size(); i++)
 	  {	  
 	    std::vector<bool> selected_dofs(dof_handler.n_dofs());
 #if DEAL_II_MAJOR_VERSION >= 8
 	    //Newer dealii Versions have changed the interface
-	    dealii::ComponentMask components(_c_comps[i]);
+	    dealii::ComponentMask components(c_comps_[i]);
 	    DoFTools::extract_dofs(dof_handler,components,selected_dofs);
 #else //Less than 8.0
 #if DEAL_II_MAJOR_VERSION >= 7
 #if DEAL_II_MINOR_VERSION >= 3
 	    //Newer dealii Versions have changed the interface
-	    dealii::ComponentMask components(_c_comps[i]);
+	    dealii::ComponentMask components(c_comps_[i]);
 	    DoFTools::extract_dofs(dof_handler,components,selected_dofs);
 #else //Less than 7.3 
-	    DoFTools::extract_dofs(dof_handler,_c_comps[i],selected_dofs);
+	    DoFTools::extract_dofs(dof_handler,c_comps_[i],selected_dofs);
 #endif
 #else //Less than 7.0
-	    DoFTools::extract_dofs(dof_handler,_c_comps[i],selected_dofs);
+	    DoFTools::extract_dofs(dof_handler,c_comps_[i],selected_dofs);
 #endif
 #endif
 
 	    bool found = false;
 	    for(unsigned int p = 0; p < support_points.size(); p++)
 	    {
-	      if(_c_points[i].distance(support_points[p]) < 1.e-12)
+	      if(c_points_[i].distance(support_points[p]) < 1.e-12)
 	      {
 		found = true;
 		if(selected_dofs[p] == true)

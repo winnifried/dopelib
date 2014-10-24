@@ -41,17 +41,17 @@ class SolutionExtractor
 {
 	public:
 		SolutionExtractor(const SOLVERCLASS &solver) :
-			_solverpointer(&solver) {};
+			solverpointer_(&solver) {};
 		const StateVector<VECTOR> & GetU() const
 		{
-			return _solverpointer->GetU();
+			return solverpointer_->GetU();
 		}
     const StateVector<VECTOR> & GetZForEE() const
     {
-      return _solverpointer->GetZForEE();
+      return solverpointer_->GetZForEE();
     }
 	private:
-		const SOLVERCLASS* _solverpointer;
+		const SOLVERCLASS* solverpointer_;
 };
 }
 

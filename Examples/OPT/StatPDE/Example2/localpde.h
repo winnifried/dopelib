@@ -21,8 +21,8 @@
  *
  **/
 
-#ifndef _LOCALPDE_
-#define _LOCALPDE_
+#ifndef LOCALPDE_
+#define LOCALPDE_
 
 #include "pdeinterface.h"
 
@@ -38,11 +38,11 @@ template<
   {
     public:
       LocalPDE() :
-          _control_block_components(3, 0), _state_block_components(2, 0)
+          control_block_components_(3, 0), state_block_component_(2, 0)
       {
-        _state_block_components[1] = 1;
-        _control_block_components[1] = 1;
-        _control_block_components[2] = 2;
+        state_block_component_[1] = 1;
+        control_block_components_[1] = 1;
+        control_block_components_[2] = 2;
       }
 
       void
@@ -56,33 +56,33 @@ template<
         unsigned int n_q_points = edc.GetNQPoints();
         {
           //Reading data
-          assert(this->_problem_type == "state");
-          _ugrads.resize(n_q_points, vector<Tensor<1, dealdim> >(2));
-          _qvalues.reinit(3);
+          assert(this->problem_type_ == "state");
+          ugrads_.resize(n_q_points, vector<Tensor<1, dealdim> >(2));
+          qvalues_.reinit(3);
 
-          _fvalues.resize(n_q_points, Vector<double>(3));
+          fvalues_.resize(n_q_points, Vector<double>(3));
 
           //Geting q
-          edc.GetParamValues("control", _qvalues);
+          edc.GetParamValues("control", qvalues_);
 
           //Geting u
-          edc.GetGradsState("last_newton_solution", _ugrads);
+          edc.GetGradsState("last_newton_solution", ugrads_);
         }
         const FEValuesExtractors::Scalar comp_0(0);
         const FEValuesExtractors::Scalar comp_1(1);
 
         for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
         {
-          _fvalues[q_point](0) = 2. * M_PI * M_PI
+          fvalues_[q_point](0) = 2. * M_PI * M_PI
               * (sin(M_PI * state_fe_values.quadrature_point(q_point)(0))
                   * sin(M_PI * state_fe_values.quadrature_point(q_point)(1)));
-          _fvalues[q_point](1) =
+          fvalues_[q_point](1) =
               5. * M_PI * M_PI
                   * (sin(M_PI * state_fe_values.quadrature_point(q_point)(0))
                       * sin(
                           2 * M_PI
                               * state_fe_values.quadrature_point(q_point)(1)));
-          _fvalues[q_point](2) =
+          fvalues_[q_point](2) =
               8. * M_PI * M_PI
                   * (sin(
                       2 * M_PI * state_fe_values.quadrature_point(q_point)(0))
@@ -93,15 +93,15 @@ template<
           for (unsigned int i = 0; i < n_dofs_per_element; i++)
           {
             local_vector(i) += scale
-                * (_ugrads[q_point][0]
+                * (ugrads_[q_point][0]
                     * state_fe_values[comp_0].gradient(i, q_point)
-                    + _ugrads[q_point][1]
+                    + ugrads_[q_point][1]
                         * state_fe_values[comp_1].gradient(i, q_point)
-                    - _qvalues(0) * _fvalues[q_point](0)
+                    - qvalues_(0) * fvalues_[q_point](0)
                         * state_fe_values[comp_0].value(i, q_point)
-                    - _qvalues(1) * _fvalues[q_point](1)
+                    - qvalues_(1) * fvalues_[q_point](1)
                         * state_fe_values[comp_0].value(i, q_point)
-                    - _qvalues(2) * _fvalues[q_point](2)
+                    - qvalues_(2) * fvalues_[q_point](2)
                         * state_fe_values[comp_1].value(i, q_point))
                 * state_fe_values.JxW(q_point);
           }
@@ -118,10 +118,10 @@ template<
         unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
         unsigned int n_q_points = edc.GetNQPoints();
         {
-          assert(this->_problem_type == "adjoint");
-          _zgrads.resize(n_q_points, vector<Tensor<1, dealdim> >(2));
+          assert(this->problem_type_ == "adjoint");
+          zgrads_.resize(n_q_points, vector<Tensor<1, dealdim> >(2));
           //We don't need u so we don't search for state
-          edc.GetGradsState("last_newton_solution", _zgrads);
+          edc.GetGradsState("last_newton_solution", zgrads_);
         }
 
         const FEValuesExtractors::Scalar comp_0(0);
@@ -131,9 +131,9 @@ template<
           for (unsigned int i = 0; i < n_dofs_per_element; i++)
           {
             local_vector(i) += scale
-                * (_zgrads[q_point][0]
+                * (zgrads_[q_point][0]
                     * state_fe_values[comp_0].gradient(i, q_point)
-                    + _zgrads[q_point][1]
+                    + zgrads_[q_point][1]
                         * state_fe_values[comp_1].gradient(i, q_point))
                 * state_fe_values.JxW(q_point);
           }
@@ -150,9 +150,9 @@ template<
         unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
         unsigned int n_q_points = edc.GetNQPoints();
         {
-          assert(this->_problem_type == "tangent");
-          _dugrads.resize(n_q_points, vector<Tensor<1, dealdim> >(2));
-          edc.GetGradsState("last_newton_solution", _dugrads);
+          assert(this->problem_type_ == "tangent");
+          dugrads_.resize(n_q_points, vector<Tensor<1, dealdim> >(2));
+          edc.GetGradsState("last_newton_solution", dugrads_);
         }
         const FEValuesExtractors::Scalar comp_0(0);
         const FEValuesExtractors::Scalar comp_1(1);
@@ -161,9 +161,9 @@ template<
           for (unsigned int i = 0; i < n_dofs_per_element; i++)
           {
             local_vector(i) += scale
-                * (_dugrads[q_point][0]
+                * (dugrads_[q_point][0]
                     * state_fe_values[comp_0].gradient(i, q_point)
-                    + _dugrads[q_point][1]
+                    + dugrads_[q_point][1]
                         * state_fe_values[comp_1].gradient(i, q_point))
                 * state_fe_values.JxW(q_point);
           }
@@ -180,9 +180,9 @@ template<
         unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
         unsigned int n_q_points = edc.GetNQPoints();
         {
-          assert(this->_problem_type == "adjoint_hessian");
-          _dzgrads.resize(n_q_points, vector<Tensor<1, dealdim> >(2));
-          edc.GetGradsState("last_newton_solution", _dzgrads);
+          assert(this->problem_type_ == "adjoint_hessian");
+          dzgrads_.resize(n_q_points, vector<Tensor<1, dealdim> >(2));
+          edc.GetGradsState("last_newton_solution", dzgrads_);
         }
         const FEValuesExtractors::Scalar comp_0(0);
         const FEValuesExtractors::Scalar comp_1(1);
@@ -191,9 +191,9 @@ template<
           for (unsigned int i = 0; i < n_dofs_per_element; i++)
           {
             local_vector(i) += scale
-                * (_dzgrads[q_point][0]
+                * (dzgrads_[q_point][0]
                     * state_fe_values[comp_0].gradient(i, q_point)
-                    + _dzgrads[q_point][1]
+                    + dzgrads_[q_point][1]
                         * state_fe_values[comp_1].gradient(i, q_point))
                 * state_fe_values.JxW(q_point);
           }
@@ -209,23 +209,23 @@ template<
             edc.GetFEValuesState();
         unsigned int n_q_points = edc.GetNQPoints();
         {
-          assert(this->_problem_type == "gradient");
-          _zvalues.resize(n_q_points, Vector<double>(2));
-          edc.GetValuesState("adjoint", _zvalues);
+          assert(this->problem_type_ == "gradient");
+          zvalues_.resize(n_q_points, Vector<double>(2));
+          edc.GetValuesState("adjoint", zvalues_);
         }
 
         for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
         {
-          _fvalues[q_point](0) = 2. * M_PI * M_PI
+          fvalues_[q_point](0) = 2. * M_PI * M_PI
               * (sin(M_PI * state_fe_values.quadrature_point(q_point)(0))
                   * sin(M_PI * state_fe_values.quadrature_point(q_point)(1)));
-          _fvalues[q_point](1) =
+          fvalues_[q_point](1) =
               5. * M_PI * M_PI
                   * (sin(M_PI * state_fe_values.quadrature_point(q_point)(0))
                       * sin(
                           2 * M_PI
                               * state_fe_values.quadrature_point(q_point)(1)));
-          _fvalues[q_point](2) =
+          fvalues_[q_point](2) =
               8. * M_PI * M_PI
                   * (sin(
                       2 * M_PI * state_fe_values.quadrature_point(q_point)(0))
@@ -235,13 +235,13 @@ template<
 
           {
             local_vector(0) -= scale
-                * (_fvalues[q_point](0) * _zvalues[q_point](0))
+                * (fvalues_[q_point](0) * zvalues_[q_point](0))
                 * state_fe_values.JxW(q_point);
             local_vector(1) -= scale
-                * (_fvalues[q_point](1) * _zvalues[q_point](0))
+                * (fvalues_[q_point](1) * zvalues_[q_point](0))
                 * state_fe_values.JxW(q_point);
             local_vector(2) -= scale
-                * (_fvalues[q_point](2) * _zvalues[q_point](1))
+                * (fvalues_[q_point](2) * zvalues_[q_point](1))
                 * state_fe_values.JxW(q_point);
           }
         }
@@ -257,25 +257,25 @@ template<
         unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
         unsigned int n_q_points = edc.GetNQPoints();
         {
-          assert(this->_problem_type == "tangent");
-          _dqvalues.reinit(3);
-          edc.GetParamValues("dq", _dqvalues);
+          assert(this->problem_type_ == "tangent");
+          dqvalues_.reinit(3);
+          edc.GetParamValues("dq", dqvalues_);
         }
         const FEValuesExtractors::Scalar comp_0(0);
         const FEValuesExtractors::Scalar comp_1(1);
 
         for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
         {
-          _fvalues[q_point](0) = 2. * M_PI * M_PI
+          fvalues_[q_point](0) = 2. * M_PI * M_PI
               * (sin(M_PI * state_fe_values.quadrature_point(q_point)(0))
                   * sin(M_PI * state_fe_values.quadrature_point(q_point)(1)));
-          _fvalues[q_point](1) =
+          fvalues_[q_point](1) =
               5. * M_PI * M_PI
                   * (sin(M_PI * state_fe_values.quadrature_point(q_point)(0))
                       * sin(
                           2 * M_PI
                               * state_fe_values.quadrature_point(q_point)(1)));
-          _fvalues[q_point](2) =
+          fvalues_[q_point](2) =
               8. * M_PI * M_PI
                   * (sin(
                       2 * M_PI * state_fe_values.quadrature_point(q_point)(0))
@@ -286,11 +286,11 @@ template<
           for (unsigned int i = 0; i < n_dofs_per_element; i++)
           {
             local_vector(i) += scale
-                * (-_dqvalues(0) * _fvalues[q_point](0)
+                * (-dqvalues_(0) * fvalues_[q_point](0)
                     * state_fe_values[comp_0].value(i, q_point)
-                    - _dqvalues(1) * _fvalues[q_point](1)
+                    - dqvalues_(1) * fvalues_[q_point](1)
                         * state_fe_values[comp_0].value(i, q_point)
-                    - _dqvalues(2) * _fvalues[q_point](2)
+                    - dqvalues_(2) * fvalues_[q_point](2)
                         * state_fe_values[comp_1].value(i, q_point))
                 * state_fe_values.JxW(q_point);
           }
@@ -306,23 +306,23 @@ template<
             edc.GetFEValuesState();
         unsigned int n_q_points = edc.GetNQPoints();
         {
-          assert(this->_problem_type == "hessian");
-          _dzvalues.resize(n_q_points, Vector<double>(2));
-          edc.GetValuesState("adjoint_hessian", _dzvalues);
+          assert(this->problem_type_ == "hessian");
+          dzvalues_.resize(n_q_points, Vector<double>(2));
+          edc.GetValuesState("adjoint_hessian", dzvalues_);
         }
 
         for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
         {
-          _fvalues[q_point](0) = 2. * M_PI * M_PI
+          fvalues_[q_point](0) = 2. * M_PI * M_PI
               * (sin(M_PI * state_fe_values.quadrature_point(q_point)(0))
                   * sin(M_PI * state_fe_values.quadrature_point(q_point)(1)));
-          _fvalues[q_point](1) =
+          fvalues_[q_point](1) =
               5. * M_PI * M_PI
                   * (sin(M_PI * state_fe_values.quadrature_point(q_point)(0))
                       * sin(
                           2 * M_PI
                               * state_fe_values.quadrature_point(q_point)(1)));
-          _fvalues[q_point](2) =
+          fvalues_[q_point](2) =
               8. * M_PI * M_PI
                   * (sin(
                       2 * M_PI * state_fe_values.quadrature_point(q_point)(0))
@@ -332,13 +332,13 @@ template<
 
           {
             local_vector(0) -= scale
-                * (_fvalues[q_point](0) * _dzvalues[q_point](0))
+                * (fvalues_[q_point](0) * dzvalues_[q_point](0))
                 * state_fe_values.JxW(q_point);
             local_vector(1) -= scale
-                * (_fvalues[q_point](1) * _dzvalues[q_point](0))
+                * (fvalues_[q_point](1) * dzvalues_[q_point](0))
                 * state_fe_values.JxW(q_point);
             local_vector(2) -= scale
-                * (_fvalues[q_point](2) * _dzvalues[q_point](1))
+                * (fvalues_[q_point](2) * dzvalues_[q_point](1))
                 * state_fe_values.JxW(q_point);
           }
         }
@@ -349,35 +349,35 @@ template<
           dealii::Vector<double> &/*local_vector*/, double /*scale*/,
           double /*scale_ico*/)
       {
-        assert(this->_problem_type == "adjoint_hessian");
+        assert(this->problem_type_ == "adjoint_hessian");
       }
       void
       ElementEquation_QU(const EDC<DH, VECTOR, dealdim>& /*edc*/,
 		      dealii::Vector<double> &/*local_vector*/, double /*scale*/,
 		      double /*scale_ico*/)
       {
-        assert(this->_problem_type == "adjoint_hessian");
+        assert(this->problem_type_ == "adjoint_hessian");
       }
       void
       ElementEquation_UQ(const EDC<DH, VECTOR, dealdim>& /*edc*/,
           dealii::Vector<double> &/*local_vector*/, double /*scale*/,
           double /*scale_ico*/)
       {
-        assert(this->_problem_type == "hessian");
+        assert(this->problem_type_ == "hessian");
       }
       void
       ElementEquation_QQ(const EDC<DH, VECTOR, dealdim>& /*edc*/,
           dealii::Vector<double> &/*local_vector*/, double /*scale*/,
           double /*scale_ico*/)
       {
-        assert(this->_problem_type == "hessian");
+        assert(this->problem_type_ == "hessian");
       }
       void
       ElementRightHandSide(const EDC<DH, VECTOR, dealdim>& /*edc*/,
           dealii::Vector<double> &/*local_vector*/, double /*scale*/)
       {
         {
-          assert(this->_problem_type == "state");
+          assert(this->problem_type_ == "state");
         }
       }
 
@@ -420,14 +420,14 @@ template<
       {
         {
           assert(
-              (this->_problem_type == "gradient")||(this->_problem_type == "hessian"));
-          _funcgradvalues.reinit(local_vector.size());
-          edc.GetParamValues("last_newton_solution", _funcgradvalues);
+              (this->problem_type_ == "gradient")||(this->problem_type_ == "hessian"));
+          funcgradvalues_.reinit(local_vector.size());
+          edc.GetParamValues("last_newton_solution", funcgradvalues_);
         }
 
         for (unsigned int i = 0; i < local_vector.size(); i++)
         {
-          local_vector(i) += scale * _funcgradvalues(i);
+          local_vector(i) += scale * funcgradvalues_(i);
         }
       }
 
@@ -461,37 +461,37 @@ template<
       std::vector<unsigned int>&
       GetControlBlockComponent()
       {
-        return _control_block_components;
+        return control_block_components_;
       }
       const std::vector<unsigned int>&
       GetControlBlockComponent() const
       {
-        return _control_block_components;
+        return control_block_components_;
       }
       std::vector<unsigned int>&
       GetStateBlockComponent()
       {
-        return _state_block_components;
+        return state_block_component_;
       }
       const std::vector<unsigned int>&
       GetStateBlockComponent() const
       {
-        return _state_block_components;
+        return state_block_component_;
       }
 
     private:
-      Vector<double> _qvalues;
-      Vector<double> _dqvalues;
-      Vector<double> _funcgradvalues;
-      vector<Vector<double> > _fvalues;
-      vector<Vector<double> > _zvalues;
-      vector<Vector<double> > _dzvalues;
+      Vector<double> qvalues_;
+      Vector<double> dqvalues_;
+      Vector<double> funcgradvalues_;
+      vector<Vector<double> > fvalues_;
+      vector<Vector<double> > zvalues_;
+      vector<Vector<double> > dzvalues_;
 
-      vector<vector<Tensor<1, dealdim> > > _ugrads;
-      vector<vector<Tensor<1, dealdim> > > _zgrads;
-      vector<vector<Tensor<1, dealdim> > > _dugrads;
-      vector<vector<Tensor<1, dealdim> > > _dzgrads;
-      vector<unsigned int> _control_block_components;
-      vector<unsigned int> _state_block_components;
+      vector<vector<Tensor<1, dealdim> > > ugrads_;
+      vector<vector<Tensor<1, dealdim> > > zgrads_;
+      vector<vector<Tensor<1, dealdim> > > dugrads_;
+      vector<vector<Tensor<1, dealdim> > > dzgrads_;
+      vector<unsigned int> control_block_components_;
+      vector<unsigned int> state_block_component_;
   };
 #endif

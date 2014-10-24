@@ -21,8 +21,8 @@
  *
  **/
 
-#ifndef _LOCALPDE_
-#define _LOCALPDE_
+#ifndef LOCALPDE_
+#define LOCALPDE_
 
 #include "pdeinterface.h"
 #include "elementdatacontainer.h"
@@ -54,14 +54,14 @@ template<
       }
 
       LocalPDE(ParameterReader &param_reader) :
-          _state_block_components(1, 0)
+          state_block_component_(1, 0)
       {
         param_reader.SetSubsection("Local PDE parameters");
-        _rate = param_reader.get_double("interest rate");
-        _volatility(0) = param_reader.get_double("volatility_1");
-        _volatility(1) = param_reader.get_double("volatility_2");
-        _rho = param_reader.get_double("rho");
-        _strike = param_reader.get_double("strike price");
+        rate_ = param_reader.get_double("interest rate");
+        volatility_(0) = param_reader.get_double("volatility_1");
+        volatility_(1) = param_reader.get_double("volatility_2");
+        rho_ = param_reader.get_double("rho");
+        strike_ = param_reader.get_double("strike price");
       }
 
       void
@@ -69,22 +69,22 @@ template<
           dealii::Vector<double> &local_vector, double scale,
           double /*scale_ico*/)
       {
-        assert(this->_problem_type == "state");
+        assert(this->problem_type_ == "state");
 
         const DOpEWrapper::FEValues<dealdim> & state_fe_values =
             edc.GetFEValuesState();
         unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
         unsigned int n_q_points = edc.GetNQPoints();
 
-        _uvalues.resize(n_q_points);
-        _ugrads.resize(n_q_points);
+        uvalues_.resize(n_q_points);
+        ugrads_.resize(n_q_points);
 
-        edc.GetValuesState("last_newton_solution", _uvalues);
-        edc.GetGradsState("last_newton_solution", _ugrads);
+        edc.GetValuesState("last_newton_solution", uvalues_);
+        edc.GetGradsState("last_newton_solution", ugrads_);
 
         Tensor<2, 2> CoeffMatrix;
         Tensor<1, 2> CoeffVector;
-        const double correlation = 2 * _rho * 1. / (1 + _rho * _rho);
+        const double correlation = 2 * rho_ * 1. / (1 + rho_ * rho_);
 
         for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
         {
@@ -96,31 +96,31 @@ template<
             CoeffMatrix.clear();
             CoeffVector.clear();
 
-            CoeffMatrix[0][0] = _volatility(0) * _volatility(0) * x * x;
-            CoeffMatrix[1][0] = _volatility(1) * _volatility(0) * x * y
+            CoeffMatrix[0][0] = volatility_(0) * volatility_(0) * x * x;
+            CoeffMatrix[1][0] = volatility_(1) * volatility_(0) * x * y
                 * correlation;
-            CoeffMatrix[0][1] = _volatility(0) * _volatility(1) * y * x
+            CoeffMatrix[0][1] = volatility_(0) * volatility_(1) * y * x
                 * correlation;
-            CoeffMatrix[1][1] = _volatility(1) * _volatility(1) * y * y;
+            CoeffMatrix[1][1] = volatility_(1) * volatility_(1) * y * y;
             CoeffMatrix.operator*=(0.5);
 
             CoeffVector[0] = x
-                * (_volatility(0) * _volatility(0)
-                    + 0.5 * correlation * _volatility(0) * _volatility(1)
-                    - _rate);
+                * (volatility_(0) * volatility_(0)
+                    + 0.5 * correlation * volatility_(0) * volatility_(1)
+                    - rate_);
             CoeffVector[1] = y
-                * (_volatility(1) * _volatility(1)
-                    + 0.5 * correlation * _volatility(0) * _volatility(1)
-                    - _rate);
+                * (volatility_(1) * volatility_(1)
+                    + 0.5 * correlation * volatility_(0) * volatility_(1)
+                    - rate_);
 
             const double phi_i = state_fe_values.shape_value(i, q_point);
             const Tensor<1, 2> phi_i_grads = state_fe_values.shape_grad(i,
                 q_point);
 
             local_vector(i) += scale
-                * ((CoeffMatrix * _ugrads[q_point]) * phi_i_grads
-                    + (CoeffVector * _ugrads[q_point]) * phi_i
-                    + _rate * _uvalues[q_point] * phi_i)
+                * ((CoeffMatrix * ugrads_[q_point]) * phi_i_grads
+                    + (CoeffVector * ugrads_[q_point]) * phi_i
+                    + rate_ * uvalues_[q_point] * phi_i)
                 * state_fe_values.JxW(q_point);
 
           }
@@ -144,7 +144,7 @@ template<
 
         Tensor<2, 2> CoeffMatrix;
         Tensor<1, 2> CoeffVector;
-        const double correlation = 2 * _rho * 1. / (1 + _rho * _rho);
+        const double correlation = 2 * rho_ * 1. / (1 + rho_ * rho_);
 
         for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
         {
@@ -162,29 +162,29 @@ template<
             CoeffMatrix.clear();
             CoeffVector.clear();
 
-            CoeffMatrix[0][0] = _volatility(0) * _volatility(0) * x * x;
-            CoeffMatrix[1][0] = _volatility(1) * _volatility(0) * x * y
+            CoeffMatrix[0][0] = volatility_(0) * volatility_(0) * x * x;
+            CoeffMatrix[1][0] = volatility_(1) * volatility_(0) * x * y
                 * correlation;
-            CoeffMatrix[0][1] = _volatility(0) * _volatility(1) * y * x
+            CoeffMatrix[0][1] = volatility_(0) * volatility_(1) * y * x
                 * correlation;
-            CoeffMatrix[1][1] = _volatility(1) * _volatility(1) * y * y;
+            CoeffMatrix[1][1] = volatility_(1) * volatility_(1) * y * y;
             CoeffMatrix.operator *=(0.5);
 
             CoeffVector[0] = x
-                * (_volatility(0) * _volatility(0)
-                    + 0.5 * correlation * _volatility(0) * _volatility(1)
-                    - _rate);
+                * (volatility_(0) * volatility_(0)
+                    + 0.5 * correlation * volatility_(0) * volatility_(1)
+                    - rate_);
             CoeffVector[1] = y
-                * (_volatility(1) * _volatility(1)
-                    + 0.5 * correlation * _volatility(0) * _volatility(1)
-                    - _rate);
+                * (volatility_(1) * volatility_(1)
+                    + 0.5 * correlation * volatility_(0) * volatility_(1)
+                    - rate_);
 
             for (unsigned int j = 0; j < n_dofs_per_element; j++)
             {
               local_matrix(i, j) += scale
                   * ((phi_grads[j] * CoeffMatrix) * phi_grads[i]
                       + (CoeffVector * phi_grads[j]) * phi[i]
-                      + _rate * phi[j] * phi[i]) * state_fe_values.JxW(q_point);
+                      + rate_ * phi[j] * phi[i]) * state_fe_values.JxW(q_point);
             }
           }
         }
@@ -195,7 +195,7 @@ template<
 			dealii::Vector<double> & /*local_vector*/,
 			double /*scale*/)
       {
-        assert(this->_problem_type == "state");
+        assert(this->problem_type_ == "state");
         //i.e. f=0
       }
 
@@ -204,7 +204,7 @@ template<
 			       dealii::Vector<double> & /*local_vector*/,
 			       double /*scale*/)
       {
-        assert(this->_problem_type == "state");
+        assert(this->problem_type_ == "state");
       }
 
       void
@@ -212,16 +212,16 @@ template<
 		       dealii::Vector<double> &local_vector,
 		       double scale)
       {
-        assert(this->_problem_type == "state");
+        assert(this->problem_type_ == "state");
 
         const DOpEWrapper::FEValues<dealdim> & state_fe_values =
             edc.GetFEValuesState();
         unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
         unsigned int n_q_points = edc.GetNQPoints();
 
-        _uvalues.resize(n_q_points);
+        uvalues_.resize(n_q_points);
 
-        edc.GetValuesState("last_newton_solution", _uvalues);
+        edc.GetValuesState("last_newton_solution", uvalues_);
 
         for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
         {
@@ -229,7 +229,7 @@ template<
           {
             const double phi_i = state_fe_values.shape_value(i, q_point);
 
-            local_vector(i) += scale * (_uvalues[q_point] * phi_i)
+            local_vector(i) += scale * (uvalues_[q_point] * phi_i)
                 * state_fe_values.JxW(q_point);
           }
         }
@@ -240,14 +240,14 @@ template<
           const ElementDataContainer<DH, VECTOR, dealdim>& /*edc*/,
           FullMatrix<double> &/*local_matrix*/)
       {
-        assert(this->_problem_type == "state");
+        assert(this->problem_type_ == "state");
       }
 
       void
       ElementTimeMatrix(const ElementDataContainer<DH, VECTOR, dealdim>& edc,
           FullMatrix<double> &local_matrix)
       {
-        assert(this->_problem_type == "state");
+        assert(this->problem_type_ == "state");
 
         const DOpEWrapper::FEValues<dealdim> & state_fe_values =
             edc.GetFEValuesState();
@@ -282,7 +282,7 @@ template<
           double /*scale_ico*/)
       {
 
-        assert(this->_problem_type == "state");
+        assert(this->problem_type_ == "state");
 
       }
 
@@ -291,7 +291,7 @@ template<
           const FaceDataContainer<DH, VECTOR, dealdim>& /*fdc*/,
           dealii::Vector<double> &/*local_vector*/, double /*scale*/)
       {
-        assert(this->_problem_type == "state");
+        assert(this->problem_type_ == "state");
       }
 
       UpdateFlags
@@ -322,33 +322,33 @@ template<
       std::vector<unsigned int>&
       GetControlBlockComponent()
       {
-        return _block_components;
+        return control_block_component_;
       }
       const std::vector<unsigned int>&
       GetControlBlockComponent() const
       {
-        return _block_components;
+        return control_block_component_;
       }
       std::vector<unsigned int>&
       GetStateBlockComponent()
       {
-        return _state_block_components;
+        return state_block_component_;
       }
       const std::vector<unsigned int>&
       GetStateBlockComponent() const
       {
-        return _state_block_components;
+        return state_block_component_;
       }
     private:
-      vector<double> _uvalues;
+      vector<double> uvalues_;
 
-      vector<Tensor<1, dealdim> > _ugrads;
+      vector<Tensor<1, dealdim> > ugrads_;
 
-      vector<unsigned int> _state_block_components;
-      vector<unsigned int> _block_components;
+      vector<unsigned int> state_block_component_;
+      vector<unsigned int> control_block_component_;
 
-      double _rate, _rho, _strike;
-      Point<dealdim> _volatility;
+      double rate_, rho_, strike_;
+      Point<dealdim> volatility_;
 
   };
 #endif

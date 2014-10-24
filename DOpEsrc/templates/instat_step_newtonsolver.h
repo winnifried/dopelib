@@ -21,8 +21,8 @@
 *
 **/
 
-#ifndef _INSTAT_STEP_NEWTON_SOLVER_H_
-#define _INSTAT_STEP_NEWTON_SOLVER_H_
+#ifndef INSTAT_STEP_NEWTON_SOLVER_H_
+#define INSTAT_STEP_NEWTON_SOLVER_H_
 
 #include <lac/vector.h>
 #include <lac/block_sparsity_pattern.h>
@@ -166,13 +166,13 @@ namespace DOpE
     inline INTEGRATOR& GetIntegrator();
    
   private:
-    INTEGRATOR &_integrator;
+    INTEGRATOR &integrator_;
 
-    bool _build_matrix;
+    bool build_matrix_;
 
-    double _nonlinear_global_tol, _nonlinear_tol, _nonlinear_rho;
-    double _linesearch_rho;
-    int _nonlinear_maxiter, _line_maxiter;
+    double nonlinear_global_tol_, nonlinear_tol_, nonlinear_rho_;
+    double linesearch_rho_;
+    int nonlinear_maxiter_, line_maxiter_;
   };
 
   /**********************************Implementation*******************************************/
@@ -198,16 +198,16 @@ template <typename INTEGRATOR, typename LINEARSOLVER, typename VECTOR>
   template <typename INTEGRATOR, typename LINEARSOLVER, typename VECTOR>
     InstatStepNewtonSolver<INTEGRATOR,LINEARSOLVER, VECTOR>
     ::InstatStepNewtonSolver(INTEGRATOR &integrator, ParameterReader &param_reader)
-    : LINEARSOLVER(param_reader), _integrator(integrator)
+    : LINEARSOLVER(param_reader), integrator_(integrator)
     {
        param_reader.SetSubsection("newtonsolver parameters");
-       _nonlinear_global_tol = param_reader.get_double ("nonlinear_global_tol");
-       _nonlinear_tol        = param_reader.get_double ("nonlinear_tol"); 
-       _nonlinear_maxiter    = param_reader.get_integer ("nonlinear_maxiter"); 
-       _nonlinear_rho        = param_reader.get_double ("nonlinear_rho"); 
+       nonlinear_global_tol_ = param_reader.get_double ("nonlinear_global_tol");
+       nonlinear_tol_        = param_reader.get_double ("nonlinear_tol"); 
+       nonlinear_maxiter_    = param_reader.get_integer ("nonlinear_maxiter"); 
+       nonlinear_rho_        = param_reader.get_double ("nonlinear_rho"); 
 
-       _line_maxiter   = param_reader.get_integer ("line_maxiter");
-       _linesearch_rho = param_reader.get_double ("linesearch_rho");
+       line_maxiter_   = param_reader.get_integer ("line_maxiter");
+       linesearch_rho_ = param_reader.get_double ("linesearch_rho");
      
     }
 
@@ -295,11 +295,11 @@ template <typename INTEGRATOR, typename LINEARSOLVER, typename VECTOR>
    pde.GetOutputHandler()->Write(out,priority);
    
    int iter=0;
-   while(res > _nonlinear_global_tol && res > firstres * _nonlinear_tol)
+   while(res > nonlinear_global_tol_ && res > firstres * nonlinear_tol_)
    {
      iter++;
      
-     if(iter > _nonlinear_maxiter)
+     if(iter > nonlinear_maxiter_)
      {
        GetIntegrator().DeleteDomainData("last_newton_solution");
        throw DOpEIterationException("Iteration count exceeded bounds!","InstatStepNewtonSolver::NonlinearSolve_Initial");
@@ -321,7 +321,7 @@ template <typename INTEGRATOR, typename LINEARSOLVER, typename VECTOR>
        
        double newres = residual.linfty_norm();
        int lineiter=0;
-       double rho = _linesearch_rho;
+       double rho = linesearch_rho_;
        double alpha=1;
        
        while(newres > res)
@@ -333,7 +333,7 @@ template <typename INTEGRATOR, typename LINEARSOLVER, typename VECTOR>
 	 pde.GetOutputHandler()->Write(out,priority+1);
 	 
 	 lineiter++;
-	 if(lineiter > _line_maxiter)
+	 if(lineiter > line_maxiter_)
 	 {
 	   GetIntegrator().DeleteDomainData("last_newton_solution");
 	   throw DOpEIterationException("Line-Iteration count exceeded bounds!","InstatStepNewtonSolver::NonlinearSolve_Initial");
@@ -348,7 +348,7 @@ template <typename INTEGRATOR, typename LINEARSOLVER, typename VECTOR>
 	 newres = residual.linfty_norm();	    
 	 
        }
-       if(res/lastres > _nonlinear_rho)
+       if(res/lastres > nonlinear_rho_)
        {
 	 build_matrix=true;
        }
@@ -447,10 +447,10 @@ template <typename INTEGRATOR, typename LINEARSOLVER, typename VECTOR>
 
           
       pde.GetOutputHandler()->Write(out,priority);
-      while(res > _nonlinear_global_tol && res > firstres * _nonlinear_tol)
+      while(res > nonlinear_global_tol_ && res > firstres * nonlinear_tol_)
       {
 	iter++;
-	if(iter > _nonlinear_maxiter)
+	if(iter > nonlinear_maxiter_)
 	{
 	  throw DOpEIterationException("Iteration count exceeded bounds!","StatSolver::NonlinearSolve");
 	}
@@ -468,7 +468,7 @@ template <typename INTEGRATOR, typename LINEARSOLVER, typename VECTOR>
 	  
 	  double newres = residual.linfty_norm();
 	  int lineiter=0;
-	  double rho = _linesearch_rho;
+	  double rho = linesearch_rho_;
 	  double alpha=1;
 	  
 	  while(newres > res)	 
@@ -477,7 +477,7 @@ template <typename INTEGRATOR, typename LINEARSOLVER, typename VECTOR>
 	       <<pde.GetOutputHandler()->ZeroTolerance(newres/firstres, 1.0);
 	    pde.GetOutputHandler()->Write(out,priority+1);
 	    lineiter++;
-	    if(lineiter > _line_maxiter)
+	    if(lineiter > line_maxiter_)
 	    {
 	      throw DOpEIterationException("Line-Iteration count exceeded bounds!","StatSolver::NonlinearSolve");
 	    }
@@ -492,7 +492,7 @@ template <typename INTEGRATOR, typename LINEARSOLVER, typename VECTOR>
 	    newres = residual.linfty_norm();	    
 
 	  }
-	  if(res/lastres > _nonlinear_rho)
+	  if(res/lastres > nonlinear_rho_)
 	  {
 	    build_matrix=true;
 	  }
@@ -518,7 +518,7 @@ template <typename INTEGRATOR, typename LINEARSOLVER, typename VECTOR>
     INTEGRATOR& InstatStepNewtonSolver<INTEGRATOR,LINEARSOLVER, VECTOR>
                                ::GetIntegrator()
     {
-      return _integrator;
+      return integrator_;
     }
 
   /*******************************************************************************************/

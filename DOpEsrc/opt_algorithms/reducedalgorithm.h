@@ -21,8 +21,8 @@
  *
  **/
 
-#ifndef _REDUCED_ALGORITHM_H_
-#define _REDUCED_ALGORITHM_H_
+#ifndef REDUCED_ALGORITHM_H_
+#define REDUCED_ALGORITHM_H_
 
 #include "optproblemcontainer.h"
 #include "reducedprobleminterface.h"
@@ -90,7 +90,7 @@ namespace DOpE
       ReInit()
     {
       this->GetReducedProblem()->ReInit();
-      if (_rem_output)
+      if (rem_output_)
       {
 	this->GetOutputHandler()->ReInit();
       }
@@ -172,12 +172,12 @@ namespace DOpE
     DOpEExceptionHandler<VECTOR>*
       GetExceptionHandler()
     {
-      return _ExceptionHandler;
+      return ExceptionHandler_;
     }
     DOpEOutputHandler<VECTOR>*
       GetOutputHandler()
     {
-      return _OutputHandler;
+      return OutputHandler_;
         }
   protected:
     /**
@@ -186,7 +186,7 @@ namespace DOpE
     PROBLEM*
       GetProblem()
     {
-      return _OP;
+      return OP_;
     }
     /**
      * Grants access to the optimization problem container
@@ -194,7 +194,7 @@ namespace DOpE
     const PROBLEM*
       GetProblem() const
     {
-      return _OP;
+      return OP_;
     }
     /**
      * Grants access to the reduced optimization problem
@@ -202,7 +202,7 @@ namespace DOpE
     const  ReducedProblemInterface<PROBLEM,VECTOR>*
       GetReducedProblem() const
     {
-      return _Solver;
+      return Solver_;
     }
     /**
      * Grants access to the reduced optimization problem
@@ -210,23 +210,23 @@ namespace DOpE
     ReducedProblemInterface<PROBLEM,VECTOR>*
       GetReducedProblem()
     {
-          return _Solver;
+          return Solver_;
     }
     
     int
       GetBasePriority() const
     {
-      return _base_priority;
+      return base_priority_;
     }
     
   private:
-    PROBLEM* _OP;
-    ReducedProblemInterface<PROBLEM,VECTOR>* _Solver;
-    DOpEExceptionHandler<VECTOR>* _ExceptionHandler;
-    DOpEOutputHandler<VECTOR>* _OutputHandler;
-    bool _rem_exception;
-    bool _rem_output;
-    int _base_priority;
+    PROBLEM* OP_;
+    ReducedProblemInterface<PROBLEM,VECTOR>* Solver_;
+    DOpEExceptionHandler<VECTOR>* ExceptionHandler_;
+    DOpEOutputHandler<VECTOR>* OutputHandler_;
+    bool rem_exception_;
+    bool rem_output_;
+    int base_priority_;
   };
   
   /***************************************************************************************/
@@ -255,34 +255,34 @@ namespace DOpE
       assert(OP);
       assert(S);
 
-      _OP = OP;
-      _Solver = S;
+      OP_ = OP;
+      Solver_ = S;
       if (Output == NULL)
       {
-        _OutputHandler = new DOpEOutputHandler<VECTOR>(S, param_reader);
-        _rem_output = true;
+        OutputHandler_ = new DOpEOutputHandler<VECTOR>(S, param_reader);
+        rem_output_ = true;
       }
       else
       {
-        _OutputHandler = Output;
-        _rem_output = false;
+        OutputHandler_ = Output;
+        rem_output_ = false;
       }
       if (Except == NULL)
       {
-        _ExceptionHandler = new DOpEExceptionHandler<VECTOR>(_OutputHandler);
-        _rem_exception = true;
+        ExceptionHandler_ = new DOpEExceptionHandler<VECTOR>(OutputHandler_);
+        rem_exception_ = true;
       }
       else
       {
-        _ExceptionHandler = Except;
-        _rem_exception = false;
+        ExceptionHandler_ = Except;
+        rem_exception_ = false;
       }
-      _OP->RegisterOutputHandler(_OutputHandler);
-      _OP->RegisterExceptionHandler(_ExceptionHandler);
-      _Solver->RegisterOutputHandler(_OutputHandler);
-      _Solver->RegisterExceptionHandler(_ExceptionHandler);
+      OP_->RegisterOutputHandler(OutputHandler_);
+      OP_->RegisterExceptionHandler(ExceptionHandler_);
+      Solver_->RegisterOutputHandler(OutputHandler_);
+      Solver_->RegisterExceptionHandler(ExceptionHandler_);
 
-      _base_priority = base_priority;
+      base_priority_ = base_priority;
     }
 
   /******************************************************/
@@ -290,13 +290,13 @@ namespace DOpE
   template<typename PROBLEM, typename VECTOR>
     ReducedAlgorithm<PROBLEM, VECTOR>::~ReducedAlgorithm()
     {
-      if (_ExceptionHandler && _rem_exception)
+      if (ExceptionHandler_ && rem_exception_)
       {
-        delete _ExceptionHandler;
+        delete ExceptionHandler_;
       }
-      if (_OutputHandler && _rem_output)
+      if (OutputHandler_ && rem_output_)
       {
-        delete _OutputHandler;
+        delete OutputHandler_;
       }
     }
   /******************************************************/

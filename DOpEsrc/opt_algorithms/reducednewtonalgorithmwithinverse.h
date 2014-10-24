@@ -21,8 +21,8 @@
 *
 **/
 
-#ifndef _REDUCEDNEWTON__ALGORITHM_INVERSE_H_
-#define _REDUCEDNEWTON__ALGORITHM_INVERSE_H_
+#ifndef REDUCEDNEWTON__ALGORITHM_INVERSE_H_
+#define REDUCEDNEWTON__ALGORITHM_INVERSE_H_
 
 #include "reducednewtonalgorithm.h"
 #include "parameterreader.h"
@@ -117,8 +117,8 @@ namespace DOpE
 		    const ControlVector<VECTOR>& /*gradient_transposed*/)
     {return  gradient*gradient;}
   private:
-    unsigned int _line_maxiter;
-    double       _linesearch_rho, _linesearch_c;
+    unsigned int line_maxiter_;
+    double       linesearch_rho_, linesearch_c_;
     
   };
 
@@ -147,9 +147,9 @@ ReducedNewtonAlgorithmWithInverse<PROBLEM, VECTOR>
   : ReducedNewtonAlgorithm<PROBLEM, VECTOR>(OP,S,param_reader,Except,Output,base_priority)
   {
     param_reader.SetSubsection("reducednewtonalgorithm parameters");
-    _line_maxiter         = param_reader.get_integer ("line_maxiter");
-    _linesearch_rho       = param_reader.get_double ("linesearch_rho");
-    _linesearch_c         = param_reader.get_double ("linesearch_c");
+    line_maxiter_         = param_reader.get_integer ("line_maxiter");
+    linesearch_rho_       = param_reader.get_double ("linesearch_rho");
+    linesearch_c_         = param_reader.get_double ("linesearch_c");
   }
 
 /******************************************************/

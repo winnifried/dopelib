@@ -21,8 +21,8 @@
 *
 **/
 
-#ifndef _VOID_LINEAR_SOLVER_H_
-#define _VOID_LINEAR_SOLVER_H_
+#ifndef VOID_LINEAR_SOLVER_H_
+#define VOID_LINEAR_SOLVER_H_
 
 #include <lac/vector.h>
 #include <lac/block_sparsity_pattern.h>

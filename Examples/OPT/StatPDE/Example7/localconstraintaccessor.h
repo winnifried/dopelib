@@ -21,8 +21,8 @@
  *
  **/
 
-#ifndef _LOCAL_CONSTRAINT_ACCESSOR_H_
-#define _LOCAL_CONSTRAINT_ACCESSOR_H_
+#ifndef LOCAL_CONSTRAINT_ACCESSOR_H_
+#define LOCAL_CONSTRAINT_ACCESSOR_H_
 
 namespace DOpE
 {
@@ -32,14 +32,14 @@ namespace DOpE
     public:
       LocalConstraintAccessor()
       {
-        _rho_min = 1.e-4;
-        _rho_max = 1.;
+        rho_min_ = 1.e-4;
+        rho_max_ = 1.;
       }
 
       void
       SetRhoMin(double val)
       {
-        _rho_min = val;
+        rho_min_ = val;
       }
 
       /* Write Control Values into Constraint vector shifted by the lower or upper bounds respectively*/
@@ -51,7 +51,7 @@ namespace DOpE
         for (unsigned int i = 0; i < control.block(0).size(); i++)
         {
           //Add Control Constraints, such that if control is feasible all  entries are not positive!
-          constraints.block(0)(i) = _rho_min - control.block(0)(i);
+          constraints.block(0)(i) = rho_min_ - control.block(0)(i);
         }
       }
 
@@ -64,7 +64,7 @@ namespace DOpE
         {
           //Add Control Constraints, such that if control is feasible all  entries are not positive!
           constraints.block(0)(control.block(0).size() + i) = control.block(0)(
-              i) - _rho_max;
+              i) - rho_max_;
         }
       }
 
@@ -152,8 +152,8 @@ namespace DOpE
       GetControlBoxConstraints(dealii::BlockVector<double>& lb,
           dealii::BlockVector<double>& ub) const
       {
-        lb = _rho_min;
-        ub = _rho_max;
+        lb = rho_min_;
+        ub = rho_max_;
       }
 
 
@@ -243,7 +243,7 @@ namespace DOpE
       /************************************************************************************************/
 
     private:
-      double _rho_min, _rho_max;
+      double rho_min_, rho_max_;
   };
 }
 #endif

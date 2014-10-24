@@ -21,8 +21,8 @@
 *
 **/
 
-#ifndef _CONSTRAINTMAKER_H_
-#define _CONSTRAINTMAKER_H_
+#ifndef CONSTRAINTMAKER_H_
+#define CONSTRAINTMAKER_H_
 
 #include <dofs/dof_tools.h>
 #include <dofs/dof_handler.h>
@@ -75,17 +75,17 @@ namespace DOpE
         void
         RegisterMapping(const typename DOpEWrapper::Mapping<dealdim, DH>& mapping)
         {
-          _mapping = &mapping;
+          mapping_ = &mapping;
         }
 
     protected:
       const DOpEWrapper::Mapping<dealdim, DH> &
         GetMapping() const
         {
-          return *_mapping;
+          return *mapping_;
         }
     private:
-      const DOpEWrapper::Mapping<dealdim, DH> * _mapping;
+      const DOpEWrapper::Mapping<dealdim, DH> * mapping_;
     };
 
   template<template<int, int> class DH, int dopedim, int dealdim>

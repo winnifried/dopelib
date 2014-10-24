@@ -21,8 +21,8 @@
  *
  **/
 
-#ifndef _LOCALFunctional_
-#define _LOCALFunctional_
+#ifndef LOCALFunctional_
+#define LOCALFunctional_
 
 #include <numerics/vector_tools.h>
 #include <base/quadrature.h>
@@ -48,17 +48,17 @@ template<
     public:
       LocalFunctional()
       {
-        _alpha = 0.;
-        _eval_points.resize(3);
+        alpha_ = 0.;
+        eval_points_.resize(3);
         //for q0
-        _eval_points[0][0] = 0.5;
-        _eval_points[0][1] = 0.5;
+        eval_points_[0][0] = 0.5;
+        eval_points_[0][1] = 0.5;
         //for q1
-        _eval_points[1][0] = 0.5;
-        _eval_points[1][1] = 0.25;
+        eval_points_[1][0] = 0.5;
+        eval_points_[1][1] = 0.25;
         //for q2
-        _eval_points[2][0] = 0.25;
-        _eval_points[2][1] = 0.25;
+        eval_points_[2][0] = 0.25;
+        eval_points_[2][1] = 0.25;
       }
 
       double
@@ -68,16 +68,16 @@ template<
             edc.GetFEValuesState();
         unsigned int n_q_points = edc.GetNQPoints();
         {
-          _qvalues.reinit(3);
-          edc.GetParamValues("control", _qvalues);
+          qvalues_.reinit(3);
+          edc.GetParamValues("control", qvalues_);
         }
         double r = 0.;
 
         for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
         {
-          r += _alpha * 0.5
-              * (_qvalues(0) * _qvalues(0) + _qvalues(1) * _qvalues(1)
-                  + _qvalues(2) * _qvalues(2)) * state_fe_values.JxW(q_point);
+          r += alpha_ * 0.5
+              * (qvalues_(0) * qvalues_(0) + qvalues_(1) * qvalues_(1)
+                  + qvalues_(2) * qvalues_(2)) * state_fe_values.JxW(q_point);
         }
 
         return r;
@@ -104,11 +104,11 @@ template<
         //J[i] = (u_h - \overline{u})(x_i)
         std::vector<Vector<double> > J(3, Vector<double>(2));
 
-        for (unsigned int i = 0; i < _eval_points.size(); i++)
+        for (unsigned int i = 0; i < eval_points_.size(); i++)
         {
-          VectorTools::point_value(state_dof_handler, U, _eval_points[i], J[i]);
+          VectorTools::point_value(state_dof_handler, U, eval_points_[i], J[i]);
           Vector<double> u_ex(2);
-          _exact_u.vector_value(_eval_points[i], u_ex);
+          exact_u_.vector_value(eval_points_[i], u_ex);
           J[i].add(-1., u_ex);
           r += std::pow(J[i].l2_norm(), 2);
         }
@@ -148,20 +148,20 @@ template<
         rhs_tmp_0.reinit(U);
         rhs_tmp_1.reinit(U);
 
-        for (unsigned int i = 0; i < _eval_points.size(); i++)
+        for (unsigned int i = 0; i < eval_points_.size(); i++)
         {
-          VectorTools::point_value(state_dof_handler, U, _eval_points[i], J[i]);
+          VectorTools::point_value(state_dof_handler, U, eval_points_[i], J[i]);
 
           Vector<double> u_ex(2);
-          _exact_u.vector_value(_eval_points[i], u_ex);
+          exact_u_.vector_value(eval_points_[i], u_ex);
           J[i].add(-1., u_ex);
 
           create_point_source(state_dof_handler.GetDEALDoFHandler(),
-              _eval_points[i], 0, rhs_tmp_0);
+              eval_points_[i], 0, rhs_tmp_0);
           rhs_tmp_0 *= J[i][0];
           rhs.add(rhs_tmp_0);
           create_point_source(state_dof_handler.GetDEALDoFHandler(),
-              _eval_points[i], 1, rhs_tmp_1);
+              eval_points_[i], 1, rhs_tmp_1);
           rhs_tmp_1 *= J[i][1];
           rhs.add(rhs_tmp_1);
         }
@@ -186,16 +186,16 @@ template<
             edc.GetFEValuesState();
         unsigned int n_q_points = edc.GetNQPoints();
         {
-          _qvalues.reinit(3);
+          qvalues_.reinit(3);
 
-          edc.GetParamValues("control", _qvalues);
+          edc.GetParamValues("control", qvalues_);
         }
 
         for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
         {
           for (unsigned int i = 0; i < local_vector.size(); i++)
           {
-            local_vector(i) += scale * _alpha * (_qvalues(i))
+            local_vector(i) += scale * alpha_ * (qvalues_(i))
                 * state_fe_values.JxW(q_point);
           }
         }
@@ -230,17 +230,17 @@ template<
         rhs_tmp_0.reinit(DU);
         rhs_tmp_1.reinit(DU);
 
-        for (unsigned int i = 0; i < _eval_points.size(); i++)
+        for (unsigned int i = 0; i < eval_points_.size(); i++)
         {
-          VectorTools::point_value(state_dof_handler, DU, _eval_points[i],
+          VectorTools::point_value(state_dof_handler, DU, eval_points_[i],
               J[i]);
 
           create_point_source(state_dof_handler.GetDEALDoFHandler(),
-              _eval_points[i], 0, rhs_tmp_0);
+              eval_points_[i], 0, rhs_tmp_0);
           rhs_tmp_0 *= J[i][0];
           rhs.add(rhs_tmp_0);
           create_point_source(state_dof_handler.GetDEALDoFHandler(),
-              _eval_points[i], 1, rhs_tmp_1);
+              eval_points_[i], 1, rhs_tmp_1);
           rhs_tmp_1 *= J[i][1];
           rhs.add(rhs_tmp_1);
         }
@@ -301,15 +301,15 @@ template<
             edc.GetFEValuesState();
         unsigned int n_q_points = edc.GetNQPoints();
         {
-          _dqvalues.reinit(3);
-          edc.GetParamValues("dq", _dqvalues);
+          dqvalues_.reinit(3);
+          edc.GetParamValues("dq", dqvalues_);
         }
 
         for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
         {
           for (unsigned int i = 0; i < local_vector.size(); i++)
           {
-            local_vector(i) += scale * _alpha * _dqvalues(i)
+            local_vector(i) += scale * alpha_ * dqvalues_(i)
                 * state_fe_values.JxW(q_point);
           }
         }
@@ -365,13 +365,10 @@ template<
           rhs_vector(local_dof_indices[i]) = fe_values.shape_value_component(i,
               0, component);
       }
-      vector<Point<2> > _eval_points;
-      Vector<double> _qvalues;
-      Vector<double> _dqvalues;
-      vector<Vector<double> > _fvalues;
-      vector<Vector<double> > _uvalues;
-      vector<Vector<double> > _duvalues;
-      double _alpha;
-      ExactU _exact_u;
+      vector<Point<2> > eval_points_;
+      Vector<double> qvalues_;
+      Vector<double> dqvalues_;
+      double alpha_;
+      ExactU exact_u_;
   };
 #endif

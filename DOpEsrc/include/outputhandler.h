@@ -21,8 +21,8 @@
 *
 **/
 
-#ifndef _DOPE_OUTPUT_HANDLER_H_
-#define _DOPE_OUTPUT_HANDLER_H_
+#ifndef DOPE_OUTPUT_HANDLER_H_
+#define DOPE_OUTPUT_HANDLER_H_
 
 #include <iostream>
 #include <fstream>
@@ -210,12 +210,12 @@ class DOpEOutputHandler
     /**
      * This function can be called to disable all output.
      */
-    void DisallowAllOutput() { _disallow_all = true; };
+    void DisallowAllOutput() { disallow_all_ = true; };
     /**
      * This function is used to restore normal output behavior after a call
      * of DisallowAllOutput
      */
-    void ResumeOutput() { _disallow_all = false; }
+    void ResumeOutput() { disallow_all_ = false; }
 
     /**
      * This function constructs the correct output name given by name and dof_type.
@@ -256,7 +256,7 @@ class DOpEOutputHandler
     std::string GetPostIndex();
     ReducedProblemInterface_Base<VECTOR>* GetReducedProblem()
     {
-      return _Solver;
+      return Solver_;
     }
 
     /**
@@ -289,25 +289,25 @@ class DOpEOutputHandler
     void ParseString(const std::string tmp, std::vector<std::string>& list);
 
   private:
-    std::map<std::string, unsigned int> _iteration_type_pos;
-    std::vector<unsigned int> _iteration_number;
-    int _printlevel;
-    std::string _results_basedir, _results_outdir, _ending, _control_ending, _logfile;
-    ReducedProblemInterface_Base<VECTOR>* _Solver;
-    unsigned int _n_reinits;
-    bool _debug;
-    unsigned int _number_precision;
-    unsigned int _functional_number_precision;
-    double _user_eps_machine;
-    bool _disallow_all;
+    std::map<std::string, unsigned int> iteration_type_pos_;
+    std::vector<unsigned int> iteration_number_;
+    int printlevel_;
+    std::string results_basedir_, results_outdir_, ending_, control_ending_, logfile_;
+    ReducedProblemInterface_Base<VECTOR>* Solver_;
+    unsigned int n_reinits_;
+    bool debug_;
+    unsigned int number_precision_;
+    unsigned int functional_number_precision_;
+    double user_eps_machine_;
+    bool disallow_all_;
 
     std::vector<std::string> never_write_list;
     std::vector<std::string> ignore_iterations;
 
-    std::ofstream _log;
+    std::ofstream log_;
 
-    fpos_t _std_out_pos;
-    int    _stdout_backup; 
+    fpos_t std_out_pos_;
+    int    stdout_backup_; 
 
    /**
      * Prints Copyright information

@@ -21,8 +21,8 @@
 *
 **/
 
-#ifndef _DOPE_FUNCTION_H_
-#define _DOPE_FUNCTION_H_
+#ifndef DOPE_FUNCTION_H_
+#define DOPE_FUNCTION_H_
 
 #include <base/exceptions.h>
 #include <base/function.h>
@@ -48,7 +48,7 @@ namespace DOpEWrapper
             const double initial_time = 0.0)
             : dealii::Function<dim>(n_components, initial_time)
         {
-          _init_time = initial_time;
+          init_time_ = initial_time;
         }
 
         /******************************************************/
@@ -82,11 +82,11 @@ namespace DOpEWrapper
         double
         InitialTime() const
         {
-          return _init_time;
+          return init_time_;
         }
         ;
       private:
-        double _init_time;
+        double init_time_;
     };
 
   /******************************************************/
@@ -215,7 +215,7 @@ namespace DOpEWrapper
     public:
   ConstantFunction(const double value,
 		   const unsigned int n_components = 1)
-    : ZeroFunction<dim>(n_components), _function_value(value)
+    : ZeroFunction<dim>(n_components), function_value_(value)
     {
     }
     ;
@@ -230,7 +230,7 @@ namespace DOpEWrapper
       value(const dealii::Point<dim> &/*p*/,
             const unsigned int /*component*/) const
     {
-      return _function_value;
+      return function_value_;
     }
 
     virtual void
@@ -240,7 +240,7 @@ namespace DOpEWrapper
       Assert(return_value.size() == this->n_components,
 	     ExcDimensionMismatch (return_value.size(), this->n_components));
       
-      std::fill(return_value.begin(), return_value.end(), _function_value);
+      std::fill(return_value.begin(), return_value.end(), function_value_);
     }
 
     virtual void
@@ -251,7 +251,7 @@ namespace DOpEWrapper
       Assert(values.size() == points.size(),
 	     ExcDimensionMismatch(values.size(), points.size()));
       
-      std::fill(values.begin(), values.end(), _function_value);
+      std::fill(values.begin(), values.end(), function_value_);
     }
     
     virtual void
@@ -265,12 +265,12 @@ namespace DOpEWrapper
       {
 	Assert(values[i].size() == this->n_components,
 	       ExcDimensionMismatch(values[i].size(), this->n_components));
-	std::fill(values[i].begin(), values[i].end(), _function_value);
+	std::fill(values[i].begin(), values[i].end(), function_value_);
       };
     }
     
   private:
-    const double _function_value;
+    const double function_value_;
   };
   
 } //end of namespace

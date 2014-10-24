@@ -21,8 +21,8 @@
  *
  **/
 
-#ifndef _TIMEDOFHANDLER_H_
-#define _TIMEDOFHANDLER_H_
+#ifndef TIMEDOFHANDLER_H_
+#define TIMEDOFHANDLER_H_
 
 //DOpE
 #include <timeiterator.h>
@@ -67,11 +67,11 @@ namespace DOpE
       //Constructors
       TimeDoFHandler()
       {
-        _fe = NULL;
-        _times.resize(1, 0.);
-        _dofs_per_element = 1;
-        _need_delete = false;
-        _initialized = false;
+        fe_ = NULL;
+        times_.resize(1, 0.);
+        dofs_per_element_ = 1;
+        need_delete_ = false;
+        initialized_ = false;
       }
 
       /**
@@ -82,17 +82,17 @@ namespace DOpE
           const dealii::FiniteElement<1>& fe)
           : dealii::DoFHandler<1>(tria)
       {
-        _fe = &fe;
+        fe_ = &fe;
         this->distribute_dofs();
-        _need_delete = false;
+        need_delete_ = false;
       }
 
       TimeDoFHandler(const Triangulation<1>& tria)
           : dealii::DoFHandler<1>(tria)
       {
-        _fe = new dealii::FE_Q<1>(1);
+        fe_ = new dealii::FE_Q<1>(1);
         this->distribute_dofs();
-        _need_delete = true;
+        need_delete_ = true;
       }
 
       //Destructor
@@ -100,11 +100,11 @@ namespace DOpE
       {
         this->clear();
 
-        if (_need_delete)
+        if (need_delete_)
         {
-          delete _fe;
+          delete fe_;
         }
-        _fe = NULL;
+        fe_ = NULL;
       }
 
       /**
@@ -114,9 +114,9 @@ namespace DOpE
       void
       distribute_dofs()
       {
-        if (_fe != NULL)
+        if (fe_ != NULL)
         {
-          dealii::DoFHandler<1>::distribute_dofs(*_fe);
+          dealii::DoFHandler<1>::distribute_dofs(*fe_);
           //make sure that the dofs are numbered 'downstream' (referring to the time variable!)
 
   #if DEAL_II_VERSION_GTE(7,3)
@@ -128,8 +128,8 @@ namespace DOpE
   #endif
           find_ends();
           compute_times();
-          _initialized = true;
-          _dofs_per_element = this->get_fe().dofs_per_cell;
+          initialized_ = true;
+          dofs_per_element_ = this->get_fe().dofs_per_cell;
         }
       }
 
@@ -139,7 +139,7 @@ namespace DOpE
       unsigned int
       GetNbrOfIntervals() const
       {
-        if (_initialized)
+        if (initialized_)
           return this->get_tria().n_active_cells();
         else
           return 0;
@@ -151,7 +151,7 @@ namespace DOpE
       unsigned int
       GetNbrOfDoFs() const
       {
-        if (_initialized)
+        if (initialized_)
           return this->n_dofs();
         else
           return 1;
@@ -163,7 +163,7 @@ namespace DOpE
       const std::vector<double>&
       GetTimes() const
       {
-        return _times;
+        return times_;
       }
 
       /**
@@ -182,7 +182,7 @@ namespace DOpE
         interval.get_time_dof_indices(global_dof_indices);
         for (unsigned int i = 0; i < GetLocalNbrOfDoFs(); ++i)
         {
-          local_times[i] = _times[global_dof_indices[i]];
+          local_times[i] = times_[global_dof_indices[i]];
         }
       }
 
@@ -192,8 +192,8 @@ namespace DOpE
       double
       GetTime(unsigned int timestep)
       {
-        assert(timestep < _times.size());
-        return _times[timestep];
+        assert(timestep < times_.size());
+        return times_[timestep];
       }
 
       /**
@@ -202,8 +202,8 @@ namespace DOpE
       TimeIterator
       first_interval() const
       {
-        assert(_initialized);
-        return _first_interval;
+        assert(initialized_);
+        return first_interval_;
       }
 
       /**
@@ -213,8 +213,8 @@ namespace DOpE
       TimeIterator
       before_first_interval() const
       {
-        assert(_initialized);
-        return _before_first_interval;
+        assert(initialized_);
+        return before_first_interval_;
       }
 
       /**
@@ -223,8 +223,8 @@ namespace DOpE
       TimeIterator
       last_interval() const
       {
-        assert(_initialized);
-        return _last_interval;
+        assert(initialized_);
+        return last_interval_;
       }
 
       /**
@@ -234,8 +234,8 @@ namespace DOpE
       TimeIterator
       after_last_interval() const
       {
-        assert(_initialized);
-        return _after_last_interval;
+        assert(initialized_);
+        return after_last_interval_;
       }
 
       /**
@@ -244,13 +244,13 @@ namespace DOpE
       unsigned int
       GetLocalNbrOfDoFs() const
       {
-        return _dofs_per_element;
+        return dofs_per_element_;
       }
 
     private:
       /**
        * Find the first and last interval and store them
-       * in _first_interval as well as _last_interval
+       * in first_interval_ as well as last_interval_
        */
       void
       find_ends()
@@ -260,8 +260,8 @@ namespace DOpE
         {
           element = element->neighbor(0);
         }
-        _first_interval.Initialize(element, 0);
-        _before_first_interval.Initialize(element, -2);
+        first_interval_.Initialize(element, 0);
+        before_first_interval_.Initialize(element, -2);
 
         element = this->begin_active();
         while (element->face(1)->boundary_indicator() != 1)
@@ -269,8 +269,8 @@ namespace DOpE
           element = element->neighbor(1);
         }
         assert(static_cast<int>(this->get_tria().n_active_cells() - 1) >= 0);
-        _last_interval.Initialize(element,
-            static_cast<int>(this->get_tria().n_active_cells() - 1));_after_last_interval
+        last_interval_.Initialize(element,
+            static_cast<int>(this->get_tria().n_active_cells() - 1));after_last_interval_
         .Initialize(element, -1);
       }
 
@@ -283,7 +283,7 @@ namespace DOpE
       {
         assert(this->get_fe().has_support_points());
         //get the right length
-        _times.resize(this->n_dofs());
+        times_.resize(this->n_dofs());
 
         //geht the support points and build a quadrature rule from it
         dealii::Quadrature<1> quadrature_formula(
@@ -299,7 +299,7 @@ namespace DOpE
             this->get_fe().dofs_per_cell);
 
         //the usual loops. Go over all elements, in every element go through the quad
-        //points and store thei position in _times
+        //points and store thei position in times_
         //typename DoFHandler<1>::active_cell_iterator element =
         DoFHandler<1>::active_cell_iterator element = this->begin_active(), endc =
             this->end();
@@ -309,28 +309,28 @@ namespace DOpE
           element->get_dof_indices(global_dof_indices);
           for (unsigned int i = 0; i < n_q_points; ++i)
           {
-            _times[global_dof_indices[i]] =
+            times_[global_dof_indices[i]] =
                 fe_values.get_quadrature_points()[i](0);
           }
         }
       }
       //member variables
 
-      TimeIterator _first_interval, _last_interval, _before_first_interval,
-          _after_last_interval;
+      TimeIterator first_interval_, last_interval_, before_first_interval_,
+          after_last_interval_;
 
       //FIXME
       //Dummy FE which is used, if no fe is specified from the user.
       //At the moment, this is necessary, because we use an DoFCellAccessor
       //-iterator to go through our timegrid. Is this ok?
-      const dealii::FiniteElement<1>* _fe;
+      const dealii::FiniteElement<1>* fe_;
 
       /**
        * A vector containing the place of the time Dofs.
        */
-      std::vector<double> _times;
-      unsigned int _dofs_per_element;
-      bool _need_delete, _initialized;
+      std::vector<double> times_;
+      unsigned int dofs_per_element_;
+      bool need_delete_, initialized_;
   };
 
 }      //end of namespace

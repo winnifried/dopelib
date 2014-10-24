@@ -21,8 +21,8 @@
 *
 **/
 
-#ifndef _SPACE_TIME_HANDLER_BASE_H_
-#define _SPACE_TIME_HANDLER_BASE_H_
+#ifndef SPACE_TIME_HANDLER_BASE_H_
+#define SPACE_TIME_HANDLER_BASE_H_
 
 #include <lac/vector.h>
 #include <lac/block_vector_base.h>
@@ -49,35 +49,35 @@ class SpaceTimeHandlerBase
 {
   public:
 
-    SpaceTimeHandlerBase(DOpEtypes::ControlType control_type = DOpEtypes::stationary) : _control_type(control_type)
+    SpaceTimeHandlerBase(DOpEtypes::ControlType control_type = DOpEtypes::stationary) : control_type_(control_type)
     {
-      _time_triangulation = NULL;
-      _state_ticket = 1;
-      _control_ticket = 1;
+      time_triangulation_ = NULL;
+      state_ticket_ = 1;
+      control_ticket_ = 1;
     }
 
     SpaceTimeHandlerBase(dealii::Triangulation<1> & times, DOpEtypes::ControlType type = DOpEtypes::stationary) :
-      _tdfh(times), _interval(_tdfh.first_interval()), _control_type(type)
+      tdfh_(times), interval_(tdfh_.first_interval()), control_type_(type)
       {
-	_time_triangulation = &times;
-	_state_ticket = 1;
-	_control_ticket = 1;
+	time_triangulation_ = &times;
+	state_ticket_ = 1;
+	control_ticket_ = 1;
       }
 
     SpaceTimeHandlerBase(dealii::Triangulation<1> & times,
         const dealii::FiniteElement<1>& fe,
         DOpEtypes::ControlType type = DOpEtypes::stationary) :
-          _tdfh(times, fe), _interval(_tdfh.first_interval()), _control_type(type)
+          tdfh_(times, fe), interval_(tdfh_.first_interval()), control_type_(type)
     {
-      _time_triangulation = &times;
-      _state_ticket = 1;
-      _control_ticket = 1;
+      time_triangulation_ = &times;
+      state_ticket_ = 1;
+      control_ticket_ = 1;
     }
 
 
     virtual ~SpaceTimeHandlerBase()
     {
-      _tdfh.clear();
+      tdfh_.clear();
     }
 
     /**
@@ -86,9 +86,9 @@ class SpaceTimeHandlerBase
     void ReInitTime()
     {
       IncrementStateTicket();
-      _tdfh.distribute_dofs();
+      tdfh_.distribute_dofs();
       //FIXME When we have temporal discretization also for control and constraint,
-      //one has to increment here the _control_ticket!
+      //one has to increment here the control_ticket_!
     }
 
     /**
@@ -100,7 +100,7 @@ class SpaceTimeHandlerBase
      */
     unsigned int GetMaxTimePoint() const
     {
-      return (_tdfh.GetNbrOfDoFs()-1);//because we start counting at 0.
+      return (tdfh_.GetNbrOfDoFs()-1);//because we start counting at 0.
     }
 
     /**
@@ -108,7 +108,7 @@ class SpaceTimeHandlerBase
      */
     unsigned int GetNbrOfIntervals() const
     {
-      return _tdfh.GetNbrOfIntervals();
+      return tdfh_.GetNbrOfIntervals();
     }
 
 
@@ -119,18 +119,18 @@ class SpaceTimeHandlerBase
      */
     void SetInterval(const TimeIterator& it)
     {
-      _interval = it;
+      interval_ = it;
     }
 
 
     /**
      * Returns the actual interval, which has to be set prior to this function through Setinterval.
      *
-     * @return An iterator 'pointing' to the prevoisly given _interval.
+     * @return An iterator 'pointing' to the prevoisly given interval_.
      */
     const TimeIterator& GetInterval() const
     {
-      return _interval;
+      return interval_;
     }
 
 
@@ -143,7 +143,7 @@ class SpaceTimeHandlerBase
     double GetTime(unsigned int time_point) const
     {
 
-      return _tdfh.GetTime(time_point);
+      return tdfh_.GetTime(time_point);
     }
 
 
@@ -152,7 +152,7 @@ class SpaceTimeHandlerBase
      */
     const TimeDoFHandler& GetTimeDoFHandler() const
     {
-      return _tdfh;
+      return tdfh_;
     }
 
 
@@ -161,7 +161,7 @@ class SpaceTimeHandlerBase
      */
     const std::vector<double>& GetTimes() const
     {
-      return _tdfh.GetTimes();
+      return tdfh_.GetTimes();
     }
 
     /**
@@ -178,7 +178,7 @@ class SpaceTimeHandlerBase
     void
     GetTimes(const TimeIterator& interval, std::vector<double>& local_times) const
     {
-      return _tdfh.GetTimes(interval, local_times);
+      return tdfh_.GetTimes(interval, local_times);
     }
 
 
@@ -194,8 +194,8 @@ class SpaceTimeHandlerBase
      */
     bool IsValidStateTicket(unsigned int& ticket) const
     {
-      bool ret = (ticket == _state_ticket);
-      ticket = _state_ticket;
+      bool ret = (ticket == state_ticket_);
+      ticket = state_ticket_;
       return ret;
     }
 
@@ -211,8 +211,8 @@ class SpaceTimeHandlerBase
      */
     bool IsValidControlTicket(unsigned int& ticket) const
     {
-      bool ret = (ticket == _control_ticket);
-      ticket = _control_ticket;
+      bool ret = (ticket == control_ticket_);
+      ticket = control_ticket_;
       return ret;
     }
 
@@ -223,7 +223,7 @@ class SpaceTimeHandlerBase
 
     DOpEtypes::ControlType GetControlType() const
     {
-      return _control_type;
+      return control_type_;
     }
 
 
@@ -321,30 +321,30 @@ class SpaceTimeHandlerBase
     virtual unsigned int  GetNLocalConstraints() const { abort(); }
     
     /**
-     * Returns the length of _interval;
+     * Returns the length of interval_;
      */
     double GetStepSize() const
     {
-      return _interval.get_k();
+      return interval_.get_k();
     }
     /**
-     * Returns the length of _interval++;
+     * Returns the length of interval_++;
      */
     double GetNextStepSize() const
     {
-      assert(_interval!= _tdfh.last_interval());
-      double k = (++_interval).get_k();
-      --_interval;
+      assert(interval_!= tdfh_.last_interval());
+      double k = (++interval_).get_k();
+      --interval_;
       return k;
     }
     /**
-     * Returns the length of _interval--;
+     * Returns the length of interval_--;
      */
     double GetPreviousStepSize() const
     {
-      assert(_interval!= _tdfh.first_interval());
-      double k = (--_interval).get_k();
-      ++_interval;
+      assert(interval_!= tdfh_.first_interval());
+      double k = (--interval_).get_k();
+      ++interval_;
       return k;
     }
 
@@ -412,20 +412,20 @@ class SpaceTimeHandlerBase
 
           //make sure that we do not use any coarsening
           assert(!ref_container.UsesCoarsening());
-	  assert(_time_triangulation != NULL);
+	  assert(time_triangulation_ != NULL);
 
           if (DOpEtypes::RefinementType::global == ref_type)
           {
-            _time_triangulation->set_all_refine_flags();
+            time_triangulation_->set_all_refine_flags();
           }
           else
           {
             throw DOpEException("Not implemented for name =" + ref_type,
                 "MethodOfLines_SpaceTimeHandler::RefineTime");
           }
-          _time_triangulation->prepare_coarsening_and_refinement();
+          time_triangulation_->prepare_coarsening_and_refinement();
 
-	  _time_triangulation->execute_coarsening_and_refinement();
+	  time_triangulation_->execute_coarsening_and_refinement();
 	  ReInitTime();
         }
         /******************************************************/
@@ -436,8 +436,8 @@ class SpaceTimeHandlerBase
      */
     void IncrementStateTicket()
     {
-      assert( _state_ticket < std::numeric_limits<unsigned int>::max());
-      _state_ticket++;
+      assert( state_ticket_ < std::numeric_limits<unsigned int>::max());
+      state_ticket_++;
     }
 
     /**
@@ -445,17 +445,17 @@ class SpaceTimeHandlerBase
      */
     void IncrementControlTicket()
     {
-      assert( _control_ticket < std::numeric_limits<unsigned int>::max());
-      _control_ticket++;
+      assert( control_ticket_ < std::numeric_limits<unsigned int>::max());
+      control_ticket_++;
     }
 
   private:
-    mutable TimeDoFHandler _tdfh;//FIXME Is it really necessary for _tdfh and _interval to be mutable? this is really ugly
-    mutable TimeIterator _interval;
-    dealii::Triangulation<1>* _time_triangulation;
-    unsigned int _control_ticket;
-    unsigned int _state_ticket;
-    mutable DOpEtypes::ControlType _control_type;
+    mutable TimeDoFHandler tdfh_;//FIXME Is it really necessary for tdfh_ and interval_ to be mutable? this is really ugly
+    mutable TimeIterator interval_;
+    dealii::Triangulation<1>* time_triangulation_;
+    unsigned int control_ticket_;
+    unsigned int state_ticket_;
+    mutable DOpEtypes::ControlType control_type_;
 };
 
 }

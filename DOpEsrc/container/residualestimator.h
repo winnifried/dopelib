@@ -21,8 +21,8 @@
  *
  **/
 
-#ifndef _RESIDUAL_ERROR_H_
-#define _RESIDUAL_ERROR_H_
+#ifndef RESIDUAL_ERROR_H_
+#define RESIDUAL_ERROR_H_
 
 #include "dwrdatacontainer.h"
 #include <deal.II/fe/fe_tools.h>
@@ -81,31 +81,31 @@ namespace DOpE
         L2ResidualErrorContainer(STH& sth, DOpEtypes::VectorStorageType state_behavior,
             ParameterReader &param_reader, DOpEtypes::EETerms ee_terms =
                 DOpEtypes::EETerms::mixed) :
-            ResidualErrorContainer<VECTOR>(ee_terms), _sth(sth), _PI_h_u(NULL), _PI_h_z(
+            ResidualErrorContainer<VECTOR>(ee_terms), sth_(sth), PI_h_u_(NULL), PI_h_z_(
                 NULL)
         {
           if (this->GetEETerms() == DOpEtypes::primal_only
               || this->GetEETerms() == DOpEtypes::mixed)
           {
-            _PI_h_z = new StateVector<VECTOR>(&GetSTH(), state_behavior,
+            PI_h_z_ = new StateVector<VECTOR>(&GetSTH(), state_behavior,
                 param_reader);
           }
           if (this->GetEETerms() == DOpEtypes::dual_only
               || this->GetEETerms() == DOpEtypes::mixed)
           {
-            _PI_h_u = new StateVector<VECTOR>(&GetSTH(), state_behavior,
+            PI_h_u_ = new StateVector<VECTOR>(&GetSTH(), state_behavior,
                 param_reader);
           }
-          _weight = 0.;
+          weight_ = 0.;
         }
 
         virtual
         ~L2ResidualErrorContainer()
         {
-          if (_PI_h_z != NULL)
-            delete _PI_h_z;
-          if (_PI_h_u != NULL)
-            delete _PI_h_u;
+          if (PI_h_z_ != NULL)
+            delete PI_h_z_;
+          if (PI_h_u_ != NULL)
+            delete PI_h_u_;
 
         }
 
@@ -119,8 +119,8 @@ namespace DOpE
         Initialize(unsigned int state_n_blocks,
             std::vector<unsigned int>& state_block_component)
         {
-          _state_n_blocks = state_n_blocks;
-          _state_block_component = &state_block_component;
+          state_n_blocks_ = state_n_blocks;
+          state_block_component_ = &state_block_component;
         }
 
         /**
@@ -133,13 +133,13 @@ namespace DOpE
         StateVector<VECTOR>&
         GetPI_h_u()
         {
-          return *_PI_h_u;
+          return *PI_h_u_;
         }
 
         StateVector<VECTOR>&
         GetPI_h_z()
         {
-          return *_PI_h_z;
+          return *PI_h_z_;
         }
         ControlVector<VECTOR>&
         GetPI_h_q()
@@ -218,32 +218,32 @@ namespace DOpE
         inline void
         ResidualModifier(double& res)
         {
-          res = res * res * _weight;
+          res = res * res * weight_;
         }
 
         inline void
         VectorResidualModifier(dealii::Vector<double>& res)
         {
           for (unsigned int i = 0; i < res.size(); i++)
-            res(i) = res(i) * res(i) * _weight;
+            res(i) = res(i) * res(i) * weight_;
         }
 
         void
         InitFace(double h)
         {
-          _weight = h * h * h;
+          weight_ = h * h * h;
         }
         void
         InitElement(double h)
         {
-          _weight = h * h * h * h;
+          weight_ = h * h * h * h;
         }
 
       protected:
         STH&
         GetSTH()
         {
-          return _sth;
+          return sth_;
         }
 
         template<template<int, int> class DH>
@@ -251,19 +251,19 @@ namespace DOpE
           BuildConstantWeight(const DOpEWrapper::DoFHandler<dim, DH>* dofh,
               VECTOR& vals)
           {
-            VectorTools::interpolate(_sth.GetMapping(),
+            VectorTools::interpolate(sth_.GetMapping(),
                 *(static_cast<const DH<dim, dim>*>(dofh)),
                 ConstantFunction<dim>(1., dofh->get_fe().n_components()), vals);
           }
 
       private:
-        unsigned int _state_n_blocks;
-        std::vector<unsigned int>* _state_block_component;
-        double _weight;
+        unsigned int state_n_blocks_;
+        std::vector<unsigned int>* state_block_component_;
+        double weight_;
 
-        STH& _sth;
+        STH& sth_;
 
-        StateVector<VECTOR> * _PI_h_u, *_PI_h_z;
+        StateVector<VECTOR> * PI_h_u_, *PI_h_z_;
     };
 
   template<class STH, typename VECTOR, int dim>
@@ -297,19 +297,19 @@ namespace DOpE
         H1ResidualErrorContainer(STH& sth, DOpEtypes::VectorStorageType state_behavior,
             ParameterReader &param_reader, DOpEtypes::EETerms ee_terms =
                 DOpEtypes::EETerms::mixed) :
-            ResidualErrorContainer<VECTOR>(ee_terms), _sth(sth), _PI_h_u(NULL), _PI_h_z(
+            ResidualErrorContainer<VECTOR>(ee_terms), sth_(sth), PI_h_u_(NULL), PI_h_z_(
                 NULL)
         {
           if (this->GetEETerms() == DOpEtypes::primal_only
               || this->GetEETerms() == DOpEtypes::mixed)
           {
-            _PI_h_z = new StateVector<VECTOR>(&GetSTH(), state_behavior,
+            PI_h_z_ = new StateVector<VECTOR>(&GetSTH(), state_behavior,
                 param_reader);
           }
           if (this->GetEETerms() == DOpEtypes::dual_only
               || this->GetEETerms() == DOpEtypes::mixed)
           {
-            _PI_h_u = new StateVector<VECTOR>(&GetSTH(), state_behavior,
+            PI_h_u_ = new StateVector<VECTOR>(&GetSTH(), state_behavior,
                 param_reader);
           }
         }
@@ -317,10 +317,10 @@ namespace DOpE
         virtual
         ~H1ResidualErrorContainer()
         {
-          if (_PI_h_z != NULL)
-            delete _PI_h_z;
-          if (_PI_h_u != NULL)
-            delete _PI_h_u;
+          if (PI_h_z_ != NULL)
+            delete PI_h_z_;
+          if (PI_h_u_ != NULL)
+            delete PI_h_u_;
 
         }
 
@@ -334,8 +334,8 @@ namespace DOpE
         Initialize(unsigned int state_n_blocks,
             std::vector<unsigned int>& state_block_component)
         {
-          _state_n_blocks = state_n_blocks;
-          _state_block_component = &state_block_component;
+          state_n_blocks_ = state_n_blocks;
+          state_block_component_ = &state_block_component;
         }
 
         /**
@@ -348,13 +348,13 @@ namespace DOpE
         StateVector<VECTOR>&
         GetPI_h_u()
         {
-          return *_PI_h_u;
+          return *PI_h_u_;
         }
 
         StateVector<VECTOR>&
         GetPI_h_z()
         {
-          return *_PI_h_z;
+          return *PI_h_z_;
         }
         ControlVector<VECTOR>&
         GetPI_h_q()
@@ -433,31 +433,31 @@ namespace DOpE
         inline void
         ResidualModifier(double& res)
         {
-          res = res * res * _weight;
+          res = res * res * weight_;
         }
         inline void
         VectorResidualModifier(dealii::Vector<double>& res)
         {
           for (unsigned int i = 0; i < res.size(); i++)
-            res(i) = res(i) * res(i) * _weight;
+            res(i) = res(i) * res(i) * weight_;
         }
 
         void
         InitFace(double h)
         {
-          _weight = h;
+          weight_ = h;
         }
         void
         InitElement(double h)
         {
-          _weight = h * h;
+          weight_ = h * h;
         }
 
       protected:
         STH&
         GetSTH()
         {
-          return _sth;
+          return sth_;
         }
 
         template<template<int, int> class DH>
@@ -465,19 +465,19 @@ namespace DOpE
           BuildConstantWeight(const DOpEWrapper::DoFHandler<dim, DH>* dofh,
               VECTOR& vals)
           {
-            VectorTools::interpolate(_sth.GetMapping(),
+            VectorTools::interpolate(sth_.GetMapping(),
                 dofh->GetDEALDoFHandler(),
                 ConstantFunction<dim>(1., dofh->get_fe().n_components()), vals);
           }
 
       private:
-        unsigned int _state_n_blocks;
-        std::vector<unsigned int>* _state_block_component;
-        double _weight;
+        unsigned int state_n_blocks_;
+        std::vector<unsigned int>* state_block_component_;
+        double weight_;
 
-        STH& _sth;
+        STH& sth_;
 
-        StateVector<VECTOR> * _PI_h_u, *_PI_h_z;
+        StateVector<VECTOR> * PI_h_u_, *PI_h_z_;
     };
 
   template<class STH, typename VECTOR, int dim>

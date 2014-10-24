@@ -34,7 +34,7 @@ public:
   BoundaryParabel (ParameterReader &param_reader) : DOpEWrapper::Function<2>(3)
   {
     param_reader.SetSubsection("My functions parameters");
-    _mean_inflow_velocity = param_reader.get_double ("mean_inflow_velocity");
+    mean_inflow_velocity_ = param_reader.get_double ("mean_inflow_velocity");
   }
   
   virtual double value (const Point<2>   &p,
@@ -52,7 +52,7 @@ public:
 
   
 private:
-  double _mean_inflow_velocity;
+  double mean_inflow_velocity_;
 
 };
 
@@ -67,7 +67,7 @@ BoundaryParabel::value (const Point<2>  &p,
   
   if (component == 0)   
     {
-      return ( (p(0) == 0) && (p(1) <= 0.41) ? -_mean_inflow_velocity * 
+      return ( (p(0) == 0) && (p(1) <= 0.41) ? -mean_inflow_velocity_ * 
 	       (4.0/0.1681) * 		     		    
 	       (std::pow(p(1), 2) - 0.41 * std::pow(p(1),1)) : 0 );  
       

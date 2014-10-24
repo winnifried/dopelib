@@ -21,8 +21,8 @@
 *
 **/
 
-#ifndef _TANGENT_DIRICHLET_DATA_H_
-#define _TANGENT_DIRICHLET_DATA_H_
+#ifndef TANGENT_DIRICHLET_DATA_H_
+#define TANGENT_DIRICHLET_DATA_H_
 
 #include "function_wrapper.h"
 
@@ -39,11 +39,11 @@ namespace DOpE
     class TangentDirichletData : public DOpEWrapper::Function<dealdim>
   {
   public:
-  TangentDirichletData(const DD& data) : DOpEWrapper::Function<dealdim>(data.n_components(), data.InitialTime()), _dirichlet_data(data)
+  TangentDirichletData(const DD& data) : DOpEWrapper::Function<dealdim>(data.n_components(), data.InitialTime()), dirichlet_data_(data)
     {
-      _param_values = NULL;
-      _domain_values = NULL;
-      _color = 0;
+      param_values_ = NULL;
+      domain_values_ = NULL;
+      color_ = 0;
     }
 
     /**
@@ -54,9 +54,9 @@ namespace DOpE
 		const std::map<std::string, const VECTOR* > &domain_values,
 		unsigned int color)
     {
-      _param_values = &param_values;
-      _domain_values = &domain_values;
-      _color = color;
+      param_values_ = &param_values;
+      domain_values_ = &domain_values;
+      color_ = color;
     }
 
 
@@ -73,10 +73,10 @@ namespace DOpE
     double value (const dealii::Point<dealdim>   &p,
 		  const unsigned int  component) const
     {
-      return _dirichlet_data.Data_Q(
-	_param_values,
-	_domain_values,
-	_color,
+      return dirichlet_data_.Data_Q(
+	param_values_,
+	domain_values_,
+	color_,
 	p,
 	component);
     }
@@ -88,13 +88,13 @@ namespace DOpE
      */
     void SetTime(double time) const
     {
-      _dirichlet_data.SetTime(time);
+      dirichlet_data_.SetTime(time);
     }
   private:
-    const DD& _dirichlet_data;
-    const std::map<std::string, const dealii::Vector<double>* >* _param_values;
-    const std::map<std::string, const VECTOR* >* _domain_values;
-    unsigned int _color;
+    const DD& dirichlet_data_;
+    const std::map<std::string, const dealii::Vector<double>* >* param_values_;
+    const std::map<std::string, const VECTOR* >* domain_values_;
+    unsigned int color_;
   };
 }
 #endif

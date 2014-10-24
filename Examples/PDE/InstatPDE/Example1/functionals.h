@@ -21,8 +21,8 @@
  *
  **/
 
-#ifndef _LOCALFunctionalS_
-#define _LOCALFunctionalS_
+#ifndef LOCALFunctionalS_
+#define LOCALFunctionalS_
 
 #include "pdeinterface.h"
 
@@ -109,9 +109,9 @@ template<
       VECTOR, dopedim, dealdim>
   {
     private:
-      mutable double time;
-      double _density_fluid, _viscosity;
-      double _drag_lift_constant;
+      mutable double time_;
+      double density_fluid_, viscosity_;
+      double drag_lift_constant_;
 
     public:
       static void
@@ -125,18 +125,18 @@ template<
       }
 
       LocalBoundaryFunctionalDrag(ParameterReader &param_reader) :
-          time(0)
+          time_(0)
       {
         param_reader.SetSubsection("Local PDE parameters");
-        _density_fluid = param_reader.get_double("density_fluid");
-        _viscosity = param_reader.get_double("viscosity");
-        _drag_lift_constant = param_reader.get_double("drag_lift_constant");
+        density_fluid_ = param_reader.get_double("density_fluid");
+        viscosity_ = param_reader.get_double("viscosity");
+        drag_lift_constant_ = param_reader.get_double("drag_lift_constant");
       }
 
       void
       SetTime(double t) const
       {
-        time = t;
+        time_ = t;
       }
 
       bool
@@ -156,14 +156,14 @@ template<
         {
           Tensor<1, 2> drag_lift_value;
 
-          vector<Vector<double> > _ufacevalues;
-          vector<vector<Tensor<1, dealdim> > > _ufacegrads;
+          vector<Vector<double> > ufacevalues;
+          vector<vector<Tensor<1, dealdim> > > ufacegrads;
 
-          _ufacevalues.resize(n_q_points, Vector<double>(3));
-          _ufacegrads.resize(n_q_points, vector<Tensor<1, 2> >(3));
+          ufacevalues.resize(n_q_points, Vector<double>(3));
+          ufacegrads.resize(n_q_points, vector<Tensor<1, 2> >(3));
 
-          fdc.GetFaceValuesState("state", _ufacevalues);
-          fdc.GetFaceGradsState("state", _ufacegrads);
+          fdc.GetFaceValuesState("state", ufacevalues);
+          fdc.GetFaceGradsState("state", ufacegrads);
 
           const FEValuesExtractors::Vector velocities(0);
           const FEValuesExtractors::Scalar pressure(2);
@@ -172,23 +172,23 @@ template<
           {
             Tensor<2, 2> fluid_pressure;
             fluid_pressure.clear();
-            fluid_pressure[0][0] = -_ufacevalues[q_point](2);
-            fluid_pressure[1][1] = -_ufacevalues[q_point](2);
+            fluid_pressure[0][0] = -ufacevalues[q_point](2);
+            fluid_pressure[1][1] = -ufacevalues[q_point](2);
 
             Tensor<2, 2> vgrads;
             vgrads.clear();
-            vgrads[0][0] = _ufacegrads[q_point][0][0];
-            vgrads[0][1] = _ufacegrads[q_point][0][1];
-            vgrads[1][0] = _ufacegrads[q_point][1][0];
-            vgrads[1][1] = _ufacegrads[q_point][1][1];
+            vgrads[0][0] = ufacegrads[q_point][0][0];
+            vgrads[0][1] = ufacegrads[q_point][0][1];
+            vgrads[1][0] = ufacegrads[q_point][1][0];
+            vgrads[1][1] = ufacegrads[q_point][1][1];
 
             drag_lift_value -= (fluid_pressure
-                + _density_fluid * _viscosity * (vgrads + transpose(vgrads)))
+                + density_fluid_ * viscosity_ * (vgrads + transpose(vgrads)))
                 * state_fe_face_values.normal_vector(q_point)
                 * state_fe_face_values.JxW(q_point);
           }
 
-          drag_lift_value *= _drag_lift_constant;
+          drag_lift_value *= drag_lift_constant_;
 
           return drag_lift_value[0];
         }
@@ -226,9 +226,9 @@ template<
       VECTOR, dopedim, dealdim>
   {
     private:
-      mutable double time;
-      double _density_fluid, _viscosity;
-      double _drag_lift_constant;
+      mutable double time_;
+      double density_fluid_, viscosity_;
+      double drag_lift_constant_;
 
     public:
       static void
@@ -241,18 +241,18 @@ template<
             Patterns::Double(0));
       }
 
-      LocalBoundaryFunctionalLift(ParameterReader &param_reader) : time(0)
+      LocalBoundaryFunctionalLift(ParameterReader &param_reader) : time_(0)
       {
         param_reader.SetSubsection("Local PDE parameters");
-        _density_fluid = param_reader.get_double("density_fluid");
-        _viscosity = param_reader.get_double("viscosity");
-        _drag_lift_constant = param_reader.get_double("drag_lift_constant");
+        density_fluid_ = param_reader.get_double("density_fluid");
+        viscosity_ = param_reader.get_double("viscosity");
+        drag_lift_constant_ = param_reader.get_double("drag_lift_constant");
       }
 
       void
       SetTime(double t) const
       {
-        time = t;
+        time_ = t;
       }
 
       bool
@@ -273,14 +273,14 @@ template<
           Tensor<1, 2> drag_lift_value;
           //	double drag_lift_constant = 20;// 2D-1: 500 , 2D-2: 20
 
-          vector<Vector<double> > _ufacevalues;
-          vector<vector<Tensor<1, dealdim> > > _ufacegrads;
+          vector<Vector<double> > ufacevalues;
+          vector<vector<Tensor<1, dealdim> > > ufacegrads;
 
-          _ufacevalues.resize(n_q_points, Vector<double>(3));
-          _ufacegrads.resize(n_q_points, vector<Tensor<1, 2> >(3));
+          ufacevalues.resize(n_q_points, Vector<double>(3));
+          ufacegrads.resize(n_q_points, vector<Tensor<1, 2> >(3));
 
-          fdc.GetFaceValuesState("state", _ufacevalues);
-          fdc.GetFaceGradsState("state", _ufacegrads);
+          fdc.GetFaceValuesState("state", ufacevalues);
+          fdc.GetFaceGradsState("state", ufacegrads);
 
           const FEValuesExtractors::Vector velocities(0);
           const FEValuesExtractors::Scalar pressure(2);
@@ -289,23 +289,23 @@ template<
           {
             Tensor<2, 2> fluid_pressure;
             fluid_pressure.clear();
-            fluid_pressure[0][0] = -_ufacevalues[q_point](2);
-            fluid_pressure[1][1] = -_ufacevalues[q_point](2);
+            fluid_pressure[0][0] = -ufacevalues[q_point](2);
+            fluid_pressure[1][1] = -ufacevalues[q_point](2);
 
             Tensor<2, 2> vgrads;
             vgrads.clear();
-            vgrads[0][0] = _ufacegrads[q_point][0][0];
-            vgrads[0][1] = _ufacegrads[q_point][0][1];
-            vgrads[1][0] = _ufacegrads[q_point][1][0];
-            vgrads[1][1] = _ufacegrads[q_point][1][1];
+            vgrads[0][0] = ufacegrads[q_point][0][0];
+            vgrads[0][1] = ufacegrads[q_point][0][1];
+            vgrads[1][0] = ufacegrads[q_point][1][0];
+            vgrads[1][1] = ufacegrads[q_point][1][1];
 
             drag_lift_value -= (fluid_pressure
-                + _density_fluid * _viscosity * (vgrads + transpose(vgrads)))
+                + density_fluid_ * viscosity_ * (vgrads + transpose(vgrads)))
                 * state_fe_face_values.normal_vector(q_point)
                 * state_fe_face_values.JxW(q_point);
           }
 
-          drag_lift_value *= _drag_lift_constant;
+          drag_lift_value *= drag_lift_constant_;
 
           return drag_lift_value[1];
         }

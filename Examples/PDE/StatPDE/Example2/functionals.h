@@ -57,18 +57,18 @@ template<
 
         if (color == 1)
         {
-          vector<Vector<double> > _ufacevalues;
+          vector<Vector<double> > ufacevalues;
 
-          _ufacevalues.resize(n_q_points, Vector<double>(2));
+          ufacevalues.resize(n_q_points, Vector<double>(2));
 
-          fdc.GetFaceValuesState("state", _ufacevalues);
+          fdc.GetFaceValuesState("state", ufacevalues);
 
           for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
           {
             Tensor<1, 2> v;
             v.clear();
-            v[0] = _ufacevalues[q_point](0);
-            v[1] = _ufacevalues[q_point](1);
+            v[0] = ufacevalues[q_point](0);
+            v[1] = ufacevalues[q_point](1);
 
             mass_flux += v
                 * fdc.GetFEFaceValuesState().normal_vector(q_point)
@@ -97,6 +97,6 @@ template<
       }
 
     private:
-      int _outflow_fluid_boundary_color;
+      int outflow_fluid_boundary_color_;
   };
 #endif /* FUNCTIONALS_H_ */

@@ -21,8 +21,8 @@
  *
  **/
 
-#ifndef _LOCAL_DIRICHLET_INTERFAC_H_
-#define _LOCAL_DIRICHLET_INTERFAC_H_
+#ifndef LOCAL_DIRICHLET_INTERFAC_H_
+#define LOCAL_DIRICHLET_INTERFAC_H_
 
 #include "dirichletdatainterface.h"
 
@@ -42,21 +42,21 @@ template<typename VECTOR, int dealdim>
           unsigned int color, const dealii::Point<dealdim>& /*point*/,
           unsigned int component) const
       {
-        _qvalues.reinit(5);
-        GetParams(*param_values, "control", _qvalues);
+        qvalues_.reinit(5);
+        GetParams(*param_values, "control", qvalues_);
 
         if (component == 0)
         {
           if (color == 0)
-            return _qvalues(0);
+            return qvalues_(0);
           else if (color == 1)
-            return _qvalues(1);
+            return qvalues_(1);
           else if (color == 2)
-            return _qvalues(2);
+            return qvalues_(2);
           else if (color == 3)
-            return _qvalues(3);
+            return qvalues_(3);
         }
-        return _qvalues(4) * _qvalues(4) * _qvalues(4);
+        return qvalues_(4) * qvalues_(4) * qvalues_(4);
       }
 
       double
@@ -66,23 +66,23 @@ template<typename VECTOR, int dealdim>
           unsigned int color, const dealii::Point<dealdim>& /*point*/,
           unsigned int component) const
       {
-        _qvalues.reinit(5);
-        GetParams(*param_values, "control", _qvalues);
-        _dqvalues.reinit(5);
-        GetParams(*param_values, "dq", _dqvalues);
+        qvalues_.reinit(5);
+        GetParams(*param_values, "control", qvalues_);
+        dqvalues_.reinit(5);
+        GetParams(*param_values, "dq", dqvalues_);
 
         if (component == 0)
         {
           if (color == 0)
-            return _dqvalues(0);
+            return dqvalues_(0);
           else if (color == 1)
-            return _dqvalues(1);
+            return dqvalues_(1);
           else if (color == 2)
-            return _dqvalues(2);
+            return dqvalues_(2);
           else if (color == 3)
-            return _dqvalues(3);
+            return dqvalues_(3);
         }
-        return 3 * _qvalues(4) * _qvalues(4) * _dqvalues(4);
+        return 3 * qvalues_(4) * qvalues_(4) * dqvalues_(4);
       }
 
       void
@@ -93,22 +93,22 @@ template<typename VECTOR, int dealdim>
           unsigned int component, unsigned int dof_number,
           dealii::Vector<double>& local_vector) const
       {
-        _qvalues.reinit(5);
-        GetParams(*param_values, "control", _qvalues);
-        GetValues(*domain_values, "adjoint_residual", _resvalues, dof_number);
+        qvalues_.reinit(5);
+        GetParams(*param_values, "control", qvalues_);
+        GetValues(*domain_values, "adjoint_residual", resvalues_, dof_number);
         if (component == 0)
         {
           if (color == 0)
-            local_vector(0) += _resvalues;
+            local_vector(0) += resvalues_;
           if (color == 1)
-            local_vector(1) += _resvalues;
+            local_vector(1) += resvalues_;
           else if (color == 2)
-            local_vector(2) += _resvalues;
+            local_vector(2) += resvalues_;
           else if (color == 3)
-            local_vector(3) += _resvalues;
+            local_vector(3) += resvalues_;
         }
         if (component == 1)
-          local_vector(4) += 3 * _qvalues(4) * _qvalues(4) * _resvalues;
+          local_vector(4) += 3 * qvalues_(4) * qvalues_(4) * resvalues_;
       }
 
       void
@@ -119,13 +119,13 @@ template<typename VECTOR, int dealdim>
           unsigned int component, unsigned int dof_number,
           dealii::Vector<double>& local_vector) const
       {
-        _qvalues.reinit(5);
-        GetParams(*param_values, "control", _qvalues);
-        _dqvalues.reinit(5);
-        GetParams(*param_values, "dq", _dqvalues);
-        GetValues(*domain_values, "hessian_residual", _resvalues, dof_number);
+        qvalues_.reinit(5);
+        GetParams(*param_values, "control", qvalues_);
+        dqvalues_.reinit(5);
+        GetParams(*param_values, "dq", dqvalues_);
+        GetValues(*domain_values, "hessian_residual", resvalues_, dof_number);
         if (component == 1)
-          local_vector(4) += 6 * _qvalues(4) * _dqvalues(4) * _resvalues;
+          local_vector(4) += 6 * qvalues_(4) * dqvalues_(4) * resvalues_;
       }
 
       unsigned int
@@ -165,8 +165,8 @@ template<typename VECTOR, int dealdim>
         values = *(it->second);
       }
     private:
-      mutable Vector<double> _qvalues;
-      mutable Vector<double> _dqvalues;
-      mutable double _resvalues;
+      mutable Vector<double> qvalues_;
+      mutable Vector<double> dqvalues_;
+      mutable double resvalues_;
   };
 #endif

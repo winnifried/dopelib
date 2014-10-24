@@ -109,24 +109,24 @@ namespace DOpE
               const typename std::vector<typename dealii::Triangulation<dim>::cell_iterator>& tria_element,
               const std::map<std::string, const Vector<double>*> &param_values,
               const std::map<std::string, const VECTOR*> &domain_values) :
-                 _param_values(param_values),
-		   _domain_values(domain_values),
-		   _element(element),
-		   _tria_element(tria_element),
-		   _fine_state_fe_values((sth.GetFESystem("state")), quad,
+                   param_values_(param_values),
+		   domain_values_(domain_values),
+		   element_(element),
+		   tria_element_(tria_element),
+		   fine_state_fe_values_((sth.GetFESystem("state")), quad,
 					 update_flags),
-		   _fine_control_fe_values((sth.GetFESystem("control")), quad,
+		   fine_control_fe_values_((sth.GetFESystem("control")), quad,
 					   update_flags)
           {
-            _state_index = sth.GetStateIndex();
-            if (_state_index == 1)
-              _control_index = 0;
+            state_index_ = sth.GetStateIndex();
+            if (state_index_ == 1)
+              control_index_ = 0;
             else
-              _control_index = 1;
-            _n_q_points_per_element = quad.size();
-            _n_dofs_per_element = element[0]->get_fe().dofs_per_cell;
-	    _control_prolongation = IdentityMatrix(_element[this->GetControlIndex()]->get_fe().dofs_per_cell);
-	    _state_prolongation = IdentityMatrix(_element[this->GetStateIndex()]->get_fe().dofs_per_cell);
+              control_index_ = 1;
+            n_q_points_per_element_ = quad.size();
+            n_dofs_per_element_ = element[0]->get_fe().dofs_per_cell;
+	    control_prolongation_ = IdentityMatrix(element_[this->GetControlIndex()]->get_fe().dofs_per_cell);
+	    state_prolongation_ = IdentityMatrix(element_[this->GetStateIndex()]->get_fe().dofs_per_cell);
           }
 
 
@@ -165,7 +165,7 @@ namespace DOpE
 
         /**********************************************/
         /*
-         * Looks up the given name in _parameter_data and returns the corresponding value
+         * Looks up the given name in parameter_data_ and returns the corresponding value
          * through 'value'.
          */
         void
@@ -245,9 +245,9 @@ namespace DOpE
         unsigned int
         GetControlIndex() const;
 	unsigned int
-	  GetCoarseIndex() const { return _coarse_index; }
+	  GetCoarseIndex() const { return coarse_index_; }
         unsigned int
-	  GetFineIndex() const { return _fine_index; }
+	  GetFineIndex() const { return fine_index_; }
         /***********************************************************/
         /**
          * Helper Function. Vector valued case.
@@ -291,27 +291,27 @@ namespace DOpE
         inline const std::map<std::string, const VECTOR*> &
         GetDomainValues() const
         {
-          return _domain_values;
+          return domain_values_;
         }
 
         /***********************************************************/
         //"global" member data, part of every instantiation
-        const std::map<std::string, const Vector<double>*> &_param_values;
-        const std::map<std::string, const VECTOR*> &_domain_values;
-        unsigned int _state_index;
-        unsigned int _control_index;
+        const std::map<std::string, const Vector<double>*> &param_values_;
+        const std::map<std::string, const VECTOR*> &domain_values_;
+        unsigned int state_index_;
+        unsigned int control_index_;
 
-	const typename std::vector<typename dealii::DoFHandler<dim>::cell_iterator>& _element;
-        const typename std::vector<typename dealii::Triangulation<dim>::cell_iterator>& _tria_element;
-        DOpEWrapper::FEValues<dim> _fine_state_fe_values;
-        DOpEWrapper::FEValues<dim> _fine_control_fe_values;
+	const typename std::vector<typename dealii::DoFHandler<dim>::cell_iterator>& element_;
+        const typename std::vector<typename dealii::Triangulation<dim>::cell_iterator>& tria_element_;
+        DOpEWrapper::FEValues<dim> fine_state_fe_values_;
+        DOpEWrapper::FEValues<dim> fine_control_fe_values_;
 
-	FullMatrix<double> _control_prolongation;
-	FullMatrix<double> _state_prolongation;
-	unsigned int _coarse_index, _fine_index;
+	FullMatrix<double> control_prolongation_;
+	FullMatrix<double> state_prolongation_;
+	unsigned int coarse_index_, fine_index_;
 
-        unsigned int _n_q_points_per_element;
-        unsigned int _n_dofs_per_element;
+        unsigned int n_q_points_per_element_;
+        unsigned int n_dofs_per_element_;
     };
 
   /***********************************************************************/
@@ -322,30 +322,30 @@ namespace DOpE
     void
     DOpE::Multimesh_ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::ReInit(unsigned int coarse_index,unsigned int fine_index, const FullMatrix<double>& prolongation_matrix)
     {
-      _coarse_index = coarse_index;
-      _fine_index = fine_index;
-      assert(this->GetControlIndex() < _element.size());
+      coarse_index_ = coarse_index;
+      fine_index_ = fine_index;
+      assert(this->GetControlIndex() < element_.size());
       if(coarse_index == this->GetStateIndex())
       {
-	_state_prolongation = prolongation_matrix;
-	_control_prolongation = IdentityMatrix(_element[this->GetControlIndex()]->get_fe().dofs_per_cell);
+	state_prolongation_ = prolongation_matrix;
+	control_prolongation_ = IdentityMatrix(element_[this->GetControlIndex()]->get_fe().dofs_per_cell);
       }
       else
       {
 	if(coarse_index == this->GetControlIndex())
 	{
-	   _control_prolongation = prolongation_matrix;
-	   _state_prolongation = IdentityMatrix(_element[this->GetStateIndex()]->get_fe().dofs_per_cell);
+	   control_prolongation_ = prolongation_matrix;
+	   state_prolongation_ = IdentityMatrix(element_[this->GetStateIndex()]->get_fe().dofs_per_cell);
 	}
 	else
 	{
-	  _control_prolongation = IdentityMatrix(_element[this->GetControlIndex()]->get_fe().dofs_per_cell);
-	  _state_prolongation = IdentityMatrix(_element[this->GetStateIndex()]->get_fe().dofs_per_cell);
-	  _fine_index = 0;
+	  control_prolongation_ = IdentityMatrix(element_[this->GetControlIndex()]->get_fe().dofs_per_cell);
+	  state_prolongation_ = IdentityMatrix(element_[this->GetStateIndex()]->get_fe().dofs_per_cell);
+	  fine_index_ = 0;
 	}
       }
-      _fine_state_fe_values.reinit(_tria_element[GetFineIndex()]);
-      _fine_control_fe_values.reinit(_tria_element[GetFineIndex()]);
+      fine_state_fe_values_.reinit(tria_element_[GetFineIndex()]);
+      fine_control_fe_values_.reinit(tria_element_[GetFineIndex()]);
     }
 
   /***********************************************************************/
@@ -353,7 +353,7 @@ namespace DOpE
     unsigned int
     Multimesh_ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::GetNDoFsPerElement() const
     {
-      return _n_dofs_per_element;
+      return n_dofs_per_element_;
     }
 
   /**********************************************/
@@ -361,7 +361,7 @@ namespace DOpE
     unsigned int
     Multimesh_ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::GetNQPoints() const
     {
-      return _n_q_points_per_element;
+      return n_q_points_per_element_;
     }
 
   /**********************************************/
@@ -369,7 +369,7 @@ namespace DOpE
     unsigned int
     Multimesh_ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::GetMaterialId() const
     {
-      return _tria_element[GetFineIndex()]->material_id();
+      return tria_element_[GetFineIndex()]->material_id();
     }
 
   /**********************************************/
@@ -378,8 +378,8 @@ namespace DOpE
     Multimesh_ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::GetNbrMaterialId(
         unsigned int face) const
     {
-      if (_tria_element[GetFineIndex()]->neighbor_index(face) != -1)
-        return _tria_element[GetFineIndex()]->neighbor(face)->material_id();
+      if (tria_element_[GetFineIndex()]->neighbor_index(face) != -1)
+        return tria_element_[GetFineIndex()]->neighbor(face)->material_id();
       else
         throw DOpEException("There is no neighbor with number " + face,
             "Multimesh_ElementDataContainer::GetNbrMaterialId");
@@ -390,16 +390,16 @@ namespace DOpE
     bool
     Multimesh_ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::GetIsAtBoundary() const
     {
-      return _tria_element[GetFineIndex()]->at_boundary();
+      return tria_element_[GetFineIndex()]->at_boundary();
     }
 
   template<typename VECTOR, int dim>
     double
     Multimesh_ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::GetElementDiameter() const
     {
-      //Note that we return the diameter of the _element[0], which may be the coarse one,
+      //Note that we return the diameter of the element_[0], which may be the coarse one,
       //But it is the one for which we do the computation
-      return _element[0]->diameter();
+      return element_[0]->diameter();
     }
 
   /**********************************************/
@@ -407,7 +407,7 @@ namespace DOpE
     const DOpEWrapper::FEValues<dim>&
     Multimesh_ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::GetFEValuesState() const
     {
-      return _fine_state_fe_values;
+      return fine_state_fe_values_;
     }
 
   /**********************************************/
@@ -415,7 +415,7 @@ namespace DOpE
     const DOpEWrapper::FEValues<dim>&
     Multimesh_ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::GetFEValuesControl() const
     {
-      return _fine_control_fe_values;
+      return fine_control_fe_values_;
     }
 
   /**********************************************/
@@ -426,8 +426,8 @@ namespace DOpE
         std::string name, Vector<double>& value) const
     {
       typename std::map<std::string, const Vector<double>*>::const_iterator it =
-          _param_values.find(name);
-      if (it == _param_values.end())
+          param_values_.find(name);
+      if (it == param_values_.end())
         {
           throw DOpEException("Did not find " + name,
               "Multimesh_ElementDataContainer::GetParamValues");
@@ -441,7 +441,7 @@ namespace DOpE
     Multimesh_ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::GetValuesState(
         std::string name, std::vector<double>& values) const
     {
-      this->GetValues(_element[this->GetStateIndex()],_state_prolongation,this->GetFEValuesState(), name, values);
+      this->GetValues(element_[this->GetStateIndex()],state_prolongation_,this->GetFEValuesState(), name, values);
     }
   /*********************************************/
   template<typename VECTOR, int dim>
@@ -449,7 +449,7 @@ namespace DOpE
     Multimesh_ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::GetValuesState(
         std::string name, std::vector<Vector<double> >& values) const
     {
-      this->GetValues(_element[this->GetStateIndex()],_state_prolongation,this->GetFEValuesState(), name, values);
+      this->GetValues(element_[this->GetStateIndex()],state_prolongation_,this->GetFEValuesState(), name, values);
 
     }
 
@@ -459,7 +459,7 @@ namespace DOpE
     Multimesh_ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::GetValuesControl(
         std::string name, std::vector<double>& values) const
     {
-      this->GetValues(_element[this->GetControlIndex()],_control_prolongation,this->GetFEValuesControl(), name, values);
+      this->GetValues(element_[this->GetControlIndex()],control_prolongation_,this->GetFEValuesControl(), name, values);
     }
 
   /*********************************************/
@@ -468,7 +468,7 @@ namespace DOpE
     Multimesh_ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::GetValuesControl(
         std::string name, std::vector<Vector<double> >& values) const
     {
-      this->GetValues(_element[this->GetControlIndex()],_control_prolongation,this->GetFEValuesControl(), name, values);
+      this->GetValues(element_[this->GetControlIndex()],control_prolongation_,this->GetFEValuesControl(), name, values);
     }
 
   /*********************************************/
@@ -478,7 +478,7 @@ namespace DOpE
       Multimesh_ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::GetGradsState(
           std::string name, std::vector<Tensor<1, targetdim> >& values) const
       {
-        this->GetGrads<targetdim> (_element[this->GetStateIndex()],_state_prolongation,this->GetFEValuesState(), name, values);
+        this->GetGrads<targetdim> (element_[this->GetStateIndex()],state_prolongation_,this->GetFEValuesState(), name, values);
       }
 
   /*********************************************/
@@ -488,7 +488,7 @@ namespace DOpE
       Multimesh_ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::GetGradsState(
           std::string name, std::vector<std::vector<Tensor<1, targetdim> > >& values) const
       {
-        this->GetGrads<targetdim> (_element[this->GetStateIndex()],_state_prolongation,this->GetFEValuesState(), name, values);
+        this->GetGrads<targetdim> (element_[this->GetStateIndex()],state_prolongation_,this->GetFEValuesState(), name, values);
       }
 
   /***********************************************************************/
@@ -499,7 +499,7 @@ namespace DOpE
       Multimesh_ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::GetGradsControl(
           std::string name, std::vector<Tensor<1, targetdim> >& values) const
       {
-        this->GetGrads<targetdim> (_element[this->GetControlIndex()],_control_prolongation,this->GetFEValuesControl(), name, values);
+        this->GetGrads<targetdim> (element_[this->GetControlIndex()],control_prolongation_,this->GetFEValuesControl(), name, values);
       }
   /***********************************************************************/
 
@@ -509,7 +509,7 @@ namespace DOpE
       Multimesh_ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::GetGradsControl(
           std::string name, std::vector<std::vector<Tensor<1, targetdim> > >& values) const
       {
-        this->GetGrads<targetdim> (_element[this->GetControlIndex()],_control_prolongation,this->GetFEValuesControl(), name, values);
+        this->GetGrads<targetdim> (element_[this->GetControlIndex()],control_prolongation_,this->GetFEValuesControl(), name, values);
       }
 
   /***********************************************************************/
@@ -518,7 +518,7 @@ namespace DOpE
     unsigned int
     Multimesh_ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::GetStateIndex() const
     {
-      return _state_index;
+      return state_index_;
     }
 
   /***********************************************************************/
@@ -527,7 +527,7 @@ namespace DOpE
     unsigned int
     Multimesh_ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::GetControlIndex() const
     {
-      return _control_index;
+      return control_index_;
     }
 
   /***********************************************************************/

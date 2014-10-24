@@ -21,8 +21,8 @@
 *
 **/
 
-#ifndef _DOPE_PRECONDITIONER_H_
-#define _DOPE_PRECONDITIONER_H_
+#ifndef DOPE_PRECONDITIONER_H_
+#define DOPE_PRECONDITIONER_H_
 
 #include <lac/precondition.h>
 #include <lac/sparse_ilu.h>

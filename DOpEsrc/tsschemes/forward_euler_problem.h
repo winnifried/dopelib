@@ -21,8 +21,8 @@
 *
 **/
 
-#ifndef _ForwardEulerProblem_H_
-#define _ForwardEulerProblem_H_
+#ifndef ForwardEulerProblem_H_
+#define ForwardEulerProblem_H_
 
 #include "initialproblem.h" 
 #include "primal_ts_base.h"
@@ -61,12 +61,12 @@ namespace DOpE
             PrimalTSBase<OPTPROBLEM, SPARSITYPATTERN, VECTOR, dopedim, dealdim,
                 FE, DH>(OP)
         {
-          _initial_problem = NULL;
+          initial_problem_ = NULL;
         }
         ~ForwardEulerProblem()
         {
-          if (_initial_problem != NULL)
-            delete _initial_problem;
+          if (initial_problem_ != NULL)
+            delete initial_problem_;
         }
 
       /******************************************************/
@@ -82,12 +82,12 @@ namespace DOpE
       InitialProblem<ForwardEulerProblem<OPTPROBLEM, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>, VECTOR, dealdim>&
       GetInitialProblem()
       {
-	if (_initial_problem == NULL)
+	if (initial_problem_ == NULL)
 	{
-	  _initial_problem = new InitialProblem<ForwardEulerProblem<OPTPROBLEM, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>, VECTOR, dealdim>
+	  initial_problem_ = new InitialProblem<ForwardEulerProblem<OPTPROBLEM, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>, VECTOR, dealdim>
 	  (*this);
 	}
-	return *_initial_problem;
+	return *initial_problem_;
       }
 
       /******************************************************/
@@ -323,7 +323,7 @@ namespace DOpE
           this->GetProblem().BoundaryMatrix(fdc, local_matrix, 0., 1.);
         }
     private:
-      InitialProblem<ForwardEulerProblem<OPTPROBLEM, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>, VECTOR, dealdim> * _initial_problem;
+      InitialProblem<ForwardEulerProblem<OPTPROBLEM, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>, VECTOR, dealdim> * initial_problem_;
     };
 }
 

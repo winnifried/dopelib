@@ -21,8 +21,8 @@
  *
  **/
 
-#ifndef _LOCALPDE_
-#define _LOCALPDE_
+#ifndef LOCALPDE_
+#define LOCALPDE_
 
 #include "pdeinterface.h"
 #include "elementdatacontainer.h"
@@ -40,7 +40,7 @@ template<
   {
     public:
       LocalPDE() :
-          _state_block_components(2, 0)
+          state_block_component_(2, 0)
       {
       }
 
@@ -48,16 +48,16 @@ template<
       ElementEquation(const EDC<DH, VECTOR, dealdim>& edc,
           dealii::Vector<double> &local_vector, double scale, double)
       {
-        assert(this->_problem_type == "state");
+        assert(this->problem_type_ == "state");
 
         const DOpEWrapper::FEValues<dealdim> & state_fe_values =
             edc.GetFEValuesState();
         unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
         unsigned int n_q_points = edc.GetNQPoints();
 
-        _ugrads.resize(n_q_points, vector<Tensor<1, dealdim> >(2));
+        ugrads_.resize(n_q_points, vector<Tensor<1, dealdim> >(2));
 
-        edc.GetGradsState("last_newton_solution", _ugrads);
+        edc.GetGradsState("last_newton_solution", ugrads_);
 
         const FEValuesExtractors::Vector extracto(0);
 
@@ -65,10 +65,10 @@ template<
         {
           Tensor<2, dealdim> ugrads;
           ugrads.clear();
-          ugrads[0][0] = _ugrads[q_point][0][0];
-          ugrads[0][1] = _ugrads[q_point][0][1];
-          ugrads[1][0] = _ugrads[q_point][1][0];
-          ugrads[1][1] = _ugrads[q_point][1][1];
+          ugrads[0][0] = ugrads_[q_point][0][0];
+          ugrads[0][1] = ugrads_[q_point][0][1];
+          ugrads[1][0] = ugrads_[q_point][1][0];
+          ugrads[1][1] = ugrads_[q_point][1][1];
 
           for (unsigned int i = 0; i < n_dofs_per_element; i++)
           {
@@ -120,7 +120,7 @@ template<
 			dealii::Vector<double> & local_vector,
 			double scale)
       {
-        assert(this->_problem_type == "state");
+        assert(this->problem_type_ == "state");
 
         const DOpEWrapper::FEValues<dealdim> & state_fe_values =
             edc.GetFEValuesState();
@@ -161,18 +161,18 @@ template<
       std::vector<unsigned int>&
       GetStateBlockComponent()
       {
-        return _state_block_components;
+        return state_block_component_;
       }
       const std::vector<unsigned int>&
       GetStateBlockComponent() const
       {
-        return _state_block_components;
+        return state_block_component_;
       }
 
     private:
-      vector<vector<Tensor<1, dealdim> > > _ugrads;
+      vector<vector<Tensor<1, dealdim> > > ugrads_;
 
-      vector<unsigned int> _state_block_components;
+      vector<unsigned int> state_block_component_;
 
   };
 #endif

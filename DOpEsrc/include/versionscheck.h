@@ -1,6 +1,6 @@
 
-#ifndef _VERSIONSCHECK_H_
-#define _VERSIONSCHECK_H_
+#ifndef VERSIONSCHECK_H_
+#define VERSIONSCHECK_H_
 
 #define DEAL_II_VERSION_LT(major,minor) (DEAL_II_MAJOR_VERSION * 10000 + \
     DEAL_II_MINOR_VERSION  <  (major)*10000 + (minor))

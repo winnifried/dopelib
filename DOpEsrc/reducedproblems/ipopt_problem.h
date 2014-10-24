@@ -21,8 +21,8 @@
 *
 **/
 
-#ifndef _IPOPT_PROBLEM_H_
-#define _IPOPT_PROBLEM_H_
+#ifndef IPOPT_PROBLEM_H_
+#define IPOPT_PROBLEM_H_
 
 #ifdef WITH_IPOPT
 #include "IpTNLP.hpp"
@@ -113,13 +113,13 @@ namespace DOpE
 				   Ipopt::IpoptCalculatedQuantities* ip_cq);
     //@}
   private:
-    int& _ret_val;
-    RPROBLEM* _P;
-    ControlVector<VECTOR> _q;  
-    ControlVector<VECTOR>& _init; //Also the return value!
-    const ControlVector<VECTOR>* _q_min; 
-    const ControlVector<VECTOR>* _q_max; 
-    ConstraintVector<VECTOR> _c;
+    int& ret_val_;
+    RPROBLEM* P_;
+    ControlVector<VECTOR> q_;  
+    ControlVector<VECTOR>& init_; //Also the return value!
+    const ControlVector<VECTOR>* q_min_; 
+    const ControlVector<VECTOR>* q_max_; 
+    ConstraintVector<VECTOR> c_;
   }; 
   /***************************************************************************************/
   /****************************************IMPLEMENTATION*********************************/
@@ -130,8 +130,8 @@ namespace DOpE
 						  const ControlVector<VECTOR>* q_min, 
 						  const ControlVector<VECTOR>* q_max, 
 						  const ConstraintVector<VECTOR>& c) 
-    : _ret_val(ret_val), _P(OP), _q(q), _init(q), 
-      _q_min(q_min), _q_max(q_max), _c(c)
+    : ret_val_(ret_val), P_(OP), q_(q), init_(q), 
+      q_min_(q_min), q_max_(q_max), c_(c)
   {
   }
   
@@ -139,8 +139,8 @@ namespace DOpE
     bool Ipopt_Problem<RPROBLEM,VECTOR>::get_nlp_info(Ipopt::Index& n, Ipopt::Index& m, Ipopt::Index& nnz_jac_g,
 						     Ipopt::Index& nnz_h_lag, IndexStyleEnum& index_style)
   {
-    n = _q.GetSpacialVector().size();              //n unknowns
-    m = _c.GetGlobalConstraints().size(); //Only Global constraints
+    n = q_.GetSpacialVector().size();              //n unknowns
+    m = c_.GetGlobalConstraints().size(); //Only Global constraints
     nnz_jac_g = m*n; //Size of constraint jacobian
     nnz_h_lag = 0; //Size of hessian! (n * n Don't compute!)
     index_style = TNLP::C_STYLE; //C style indexing (0-based)
@@ -151,12 +151,12 @@ namespace DOpE
     bool Ipopt_Problem<RPROBLEM,VECTOR>::get_bounds_info(Ipopt::Index n, Ipopt::Number* x_l, Ipopt::Number* x_u,
 							Ipopt::Index m, Ipopt::Number* g_l, Ipopt::Number* g_u)
   {
-    assert(n == (int) _q.GetSpacialVector().size());
-    assert(m == (int) _c.GetGlobalConstraints().size());
+    assert(n == (int) q_.GetSpacialVector().size());
+    assert(m == (int) c_.GetGlobalConstraints().size());
     
     //Lower and upper bounds on q
-    const VECTOR& lb = _q_min->GetSpacialVector();
-    const VECTOR& ub = _q_max->GetSpacialVector();
+    const VECTOR& lb = q_min_->GetSpacialVector();
+    const VECTOR& ub = q_max_->GetSpacialVector();
     for(int i = 0; i < n; i++)
     {
       x_l[i] = lb(i);
@@ -180,7 +180,7 @@ namespace DOpE
     assert(init_x == true);
     assert(init_z == false);
     assert(init_lambda == false);
-    const VECTOR& in = _init.GetSpacialVector();
+    const VECTOR& in = init_.GetSpacialVector();
     
     for(int i = 0; i < n; i++)
     {
@@ -192,18 +192,18 @@ namespace DOpE
   template <typename RPROBLEM, typename VECTOR>
     bool Ipopt_Problem<RPROBLEM,VECTOR>::eval_f(Ipopt::Index n, const Ipopt::Number* x, bool /*new_x*/, Ipopt::Number& obj_value)
   {   
-    VECTOR& qval = _q.GetSpacialVector();
+    VECTOR& qval = q_.GetSpacialVector();
     for(int i = 0; i < n; i++)
     {
       qval(i) = x[i];
     }
     try
     {
-      obj_value = _P->ComputeReducedCostFunctional(_q);
+      obj_value = P_->ComputeReducedCostFunctional(q_);
     }
     catch(DOpEException& e)
     {
-      _P->GetExceptionHandler()->HandleCriticalException(e,"IPOPT_RPROBLEM::eval_f");
+      P_->GetExceptionHandler()->HandleCriticalException(e,"IPOPT_RPROBLEM::eval_f");
     }
     return true;
   }
@@ -211,33 +211,33 @@ namespace DOpE
   template <typename RPROBLEM, typename VECTOR>
     bool Ipopt_Problem<RPROBLEM,VECTOR>::eval_grad_f(Ipopt::Index n, const Ipopt::Number* x, bool new_x, Ipopt::Number* grad_f)
   {
-    ControlVector<VECTOR> gradient(_q);
-    ControlVector<VECTOR> gradient_transposed(_q);
+    ControlVector<VECTOR> gradient(q_);
+    ControlVector<VECTOR> gradient_transposed(q_);
     if( new_x )
     {
       //Need to calculate J!
-      VECTOR& qval = _q.GetSpacialVector();
+      VECTOR& qval = q_.GetSpacialVector();
       for(int i = 0; i < n; i++)
       {
 	qval(i) = x[i];
       }
       try
       {
-	_P->ComputeReducedCostFunctional(_q);
+	P_->ComputeReducedCostFunctional(q_);
       }
       catch(DOpEException& e)
       {
-	_P->GetExceptionHandler()->HandleCriticalException(e,"IPOPT_PROBLEM::eval_grad_f");
+	P_->GetExceptionHandler()->HandleCriticalException(e,"IPOPT_PROBLEM::eval_grad_f");
       }
     }
     //Compute Functional Gradient
     try
     {
-      _P->ComputeReducedGradient(_q,gradient,gradient_transposed);
+      P_->ComputeReducedGradient(q_,gradient,gradient_transposed);
     }
     catch(DOpEException& e)
     {
-      _P->GetExceptionHandler()->HandleCriticalException(e,"IPOPT_PROBLEM::eval_grad_f");
+      P_->GetExceptionHandler()->HandleCriticalException(e,"IPOPT_PROBLEM::eval_grad_f");
     }
     const VECTOR& ref_g = gradient_transposed.GetSpacialVector();
     for(int i=0; i < n; i++)
@@ -254,30 +254,30 @@ namespace DOpE
     if( new_x )
     {
       //Need to calculate J!
-      VECTOR& qval = _q.GetSpacialVector();
+      VECTOR& qval = q_.GetSpacialVector();
       for(int i = 0; i < n; i++)
       {
 	qval(i) = x[i];
       }
       try
       {
-	_P->ComputeReducedCostFunctional(_q);
+	P_->ComputeReducedCostFunctional(q_);
       }
       catch(DOpEException& e)
       {
-	_P->GetExceptionHandler()->HandleCriticalException(e,"IPOPT_PROBLEM::eval_g");
+	P_->GetExceptionHandler()->HandleCriticalException(e,"IPOPT_PROBLEM::eval_g");
       }
     }
     //Calculate constraints
     try
     {
-      _P->ComputeReducedConstraints(_q,_c);
+      P_->ComputeReducedConstraints(q_,c_);
     }
     catch(DOpEException& e)
     {
-      _P->GetExceptionHandler()->HandleCriticalException(e,"IPOPT_PROBLEM::eval_g");
+      P_->GetExceptionHandler()->HandleCriticalException(e,"IPOPT_PROBLEM::eval_g");
     }
-    const dealii::Vector<double>& gc = _c.GetGlobalConstraints();
+    const dealii::Vector<double>& gc = c_.GetGlobalConstraints();
     for(unsigned int i=0; i < gc.size(); i++)
     {
       g[i] = gc(i);
@@ -293,23 +293,23 @@ namespace DOpE
     if(values != NULL)
     {
       //Compute Jacobian of Constraints
-      ControlVector<VECTOR> gradient(_q);
-      ControlVector<VECTOR> gradient_transposed(_q);
+      ControlVector<VECTOR> gradient(q_);
+      ControlVector<VECTOR> gradient_transposed(q_);
       if( new_x )
       {
 	//Need to calculate J!
-	VECTOR& qval = _q.GetSpacialVector();
+	VECTOR& qval = q_.GetSpacialVector();
 	for(int i = 0; i < n; i++)
 	{
 	  qval(i) = x[i];
 	}
 	try
 	{
-	  _P->ComputeReducedCostFunctional(_q);
+	  P_->ComputeReducedCostFunctional(q_);
 	}
 	catch(DOpEException& e)
 	{
-	  _P->GetExceptionHandler()->HandleCriticalException(e,"IPOPT_PROBLEM::eval_grad_g");
+	  P_->GetExceptionHandler()->HandleCriticalException(e,"IPOPT_PROBLEM::eval_grad_g");
 	}
       }
       //Compute Constraint Gradients
@@ -317,12 +317,12 @@ namespace DOpE
       {
 	try
 	{
-	  _P->ComputeReducedGradientOfGlobalConstraints(j,_q,_c,
+	  P_->ComputeReducedGradientOfGlobalConstraints(j,q_,c_,
 							gradient,gradient_transposed);
 	}
 	catch(DOpEException& e)
 	{
-	  _P->GetExceptionHandler()->HandleCriticalException(e,"IPOPT_PROBLEM::eval_grad_g");
+	  P_->GetExceptionHandler()->HandleCriticalException(e,"IPOPT_PROBLEM::eval_grad_g");
 	}
 	const VECTOR& ref_g = gradient_transposed.GetSpacialVector();
 	for(int i=0; i < n; i++)
@@ -369,17 +369,17 @@ namespace DOpE
 							   const Ipopt::IpoptData* /*ip_data*/,
 							   Ipopt::IpoptCalculatedQuantities* /*ip_cq*/)
   {
-    //Check the result, _q should be x and then be copied to _init
+    //Check the result, q_ should be x and then be copied to init_
     
-    VECTOR& ret = _init.GetSpacialVector();
+    VECTOR& ret = init_.GetSpacialVector();
     for(int i = 0; i < n; i++)
     {
       ret(i) = x[i];
     }  
     if(status == Ipopt::SUCCESS)
-      _ret_val = 1;
+      ret_val_ = 1;
     else 
-      _ret_val = 0;
+      ret_val_ = 0;
   }
 
 #endif //Endof WITH_IPOPT

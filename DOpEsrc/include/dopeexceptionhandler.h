@@ -21,8 +21,8 @@
 *
 **/
 
-#ifndef _DOPE_EXCEPTION_HANDLER_H_
-#define _DOPE_EXCEPTION_HANDLER_H_
+#ifndef DOPE_EXCEPTION_HANDLER_H_
+#define DOPE_EXCEPTION_HANDLER_H_
 
 #include "dopeexception.h"
 //#include "outputhandler.h"
@@ -53,9 +53,9 @@ template<typename VECTOR>
      */
     void HandleCriticalException(DOpEException& e, std::string reporter = "undefined");
   protected:
-    DOpEOutputHandler<VECTOR>* GetOutputHandler() { return _OutputHandler; }
+    DOpEOutputHandler<VECTOR>* GetOutputHandler() { return OutputHandler_; }
   private:
-    DOpEOutputHandler<VECTOR>* _OutputHandler;
+    DOpEOutputHandler<VECTOR>* OutputHandler_;
   };
 
 }

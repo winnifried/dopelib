@@ -30,7 +30,7 @@ class ExactSolution : public DOpEWrapper::Function<2>
 {
   public:
     ExactSolution(unsigned int order)
-        : _order(order)
+        : order_(order)
     {
     }
     double
@@ -56,7 +56,7 @@ class ExactSolution : public DOpEWrapper::Function<2>
         value(c) = ExactSolution::value(p, c);
     }
   private:
-    const double _order;
+    const double order_;
 };
 
 #endif /* MY_FUNCTIONS_H_ */

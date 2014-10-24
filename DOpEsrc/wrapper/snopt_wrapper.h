@@ -21,8 +21,8 @@
 *
 **/
 
-#ifndef __SNOPT_WRAPPER__
-#define __SNOPT_WRAPPER__
+#ifndef SNOPT_WRAPPER_
+#define SNOPT_WRAPPER_
 
 #ifdef WITH_SNOPT
 //BEGIN DONOT_TOUCH

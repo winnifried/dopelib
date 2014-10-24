@@ -36,22 +36,22 @@ using namespace DOpE;
 template<typename VECTOR>
 ControlVector<VECTOR>::ControlVector(const ControlVector& ref)
 {
-  _behavior = ref.GetBehavior();
-  _STH      = ref.GetSpaceTimeHandler();
-  _sfh_ticket = 0;
-  _c_type = _STH->GetControlType();
+  behavior_ = ref.GetBehavior();
+  STH_      = ref.GetSpaceTimeHandler();
+  sfh_ticket_ = 0;
+  c_type_ = STH_->GetControlType();
  
   //Check consistency
-  if(_c_type == DOpEtypes::ControlType::initial || _c_type == DOpEtypes::ControlType::stationary)
+  if(c_type_ == DOpEtypes::ControlType::initial || c_type_ == DOpEtypes::ControlType::stationary)
   {
-    if(_behavior!= DOpEtypes::VectorStorageType::fullmem)
+    if(behavior_!= DOpEtypes::VectorStorageType::fullmem)
     {
       throw DOpEException("Storage behavior: " + DOpEtypesToString(GetBehavior()) + 
-			  " is not compatible with control type: " + DOpEtypesToString(_c_type),
+			  " is not compatible with control type: " + DOpEtypesToString(c_type_),
 			  "ControlVector<VECTOR>::ControlVector<VECTOR>");
     }
   }
-  if(_behavior != DOpEtypes::VectorStorageType::fullmem)
+  if(behavior_ != DOpEtypes::VectorStorageType::fullmem)
   {
     throw DOpEException("Storage behavior: " + DOpEtypesToString(GetBehavior()) + 
 			" not implemented",
@@ -65,22 +65,22 @@ ControlVector<VECTOR>::ControlVector(const ControlVector& ref)
 template<typename VECTOR>
 ControlVector<VECTOR>::ControlVector(const SpaceTimeHandlerBase<VECTOR>* STH, DOpEtypes::VectorStorageType behavior)
 {
-  _behavior = behavior;
-  _STH      = STH;
-  _sfh_ticket = 0;
-  _c_type = _STH->GetControlType();
+  behavior_ = behavior;
+  STH_      = STH;
+  sfh_ticket_ = 0;
+  c_type_ = STH_->GetControlType();
 
   //Check consistency
-  if(_c_type == DOpEtypes::ControlType::initial || _c_type == DOpEtypes::ControlType::stationary)
+  if(c_type_ == DOpEtypes::ControlType::initial || c_type_ == DOpEtypes::ControlType::stationary)
   {
-    if(_behavior!= DOpEtypes::VectorStorageType::fullmem)
+    if(behavior_!= DOpEtypes::VectorStorageType::fullmem)
     {
       throw DOpEException("Storage behavior: " + DOpEtypesToString(GetBehavior()) + 
-			  " is not compatible with control type: " + DOpEtypesToString(_c_type),
+			  " is not compatible with control type: " + DOpEtypesToString(c_type_),
 			  "ControlVector<VECTOR>::ControlVector<VECTOR>");
     }
   }
-  if(_behavior != DOpEtypes::VectorStorageType::fullmem)
+  if(behavior_ != DOpEtypes::VectorStorageType::fullmem)
   {
     throw DOpEException("Storage behavior: " + DOpEtypesToString(GetBehavior()) + 
 			" not implemented",
@@ -95,24 +95,24 @@ ControlVector<VECTOR>::ControlVector(const SpaceTimeHandlerBase<VECTOR>* STH, DO
 template<typename VECTOR>
 void ControlVector<VECTOR>::ReInit()
 {    
-  _accessor =0;
+  accessor_ =0;
 
-  if(!GetSpaceTimeHandler()->IsValidControlTicket(_sfh_ticket))
+  if(!GetSpaceTimeHandler()->IsValidControlTicket(sfh_ticket_))
   {
     if(GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
     {
-      if(_c_type == DOpEtypes::ControlType::initial || _c_type == DOpEtypes::ControlType::stationary)
+      if(c_type_ == DOpEtypes::ControlType::initial || c_type_ == DOpEtypes::ControlType::stationary)
       {
-	_control.resize(1,NULL);
+	control_.resize(1,NULL);
 	ReSizeSpace(GetSpaceTimeHandler()->GetControlNDoFs(),
 		    GetSpaceTimeHandler()->GetControlDoFsPerBlock());
       }
       else
       {
-	if( _c_type == DOpEtypes::ControlType::nonstationary)
+	if( c_type_ == DOpEtypes::ControlType::nonstationary)
 	{
 	  //Time dofs for state and control are equal!
-	  _control.resize(GetSpaceTimeHandler()->GetMaxTimePoint() + 1, NULL);
+	  control_.resize(GetSpaceTimeHandler()->GetMaxTimePoint() + 1, NULL);
 	  for (unsigned int t = 0; t
 		 <= GetSpaceTimeHandler()->GetMaxTimePoint(); t++)
 	  {
@@ -124,7 +124,7 @@ void ControlVector<VECTOR>::ReInit()
 	}
 	else
 	{
-	  throw DOpEException("control type " + DOpEtypesToString(_c_type) + "Not implemented","ControlVector<VECTOR>::ReInit");
+	  throw DOpEException("control type " + DOpEtypesToString(c_type_) + "Not implemented","ControlVector<VECTOR>::ReInit");
 	}
       }
     }
@@ -133,7 +133,7 @@ void ControlVector<VECTOR>::ReInit()
       throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),"ControlVector<VECTOR>::ReInit");
     }
 
-    _lock= false;
+    lock_= false;
   }
 }
 
@@ -144,10 +144,10 @@ ControlVector<VECTOR>::~ControlVector()
 {
   if(GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
   {
-    for(unsigned int i =0; i<_control.size(); i++)
+    for(unsigned int i =0; i<control_.size(); i++)
     {
-      assert(_control[i] != NULL);
-      delete _control[i];
+      assert(control_[i] != NULL);
+      delete control_[i];
     }
   }
   else
@@ -160,24 +160,24 @@ ControlVector<VECTOR>::~ControlVector()
 template<typename VECTOR>
 void ControlVector<VECTOR>::SetTimeDoFNumber(unsigned int time_point) const
 {
-  if(_c_type == DOpEtypes::ControlType::nonstationary)
+  if(c_type_ == DOpEtypes::ControlType::nonstationary)
   {
     if(GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
     {
-      _accessor = static_cast<int> (time_point);
-      assert(_accessor < static_cast<int>(_control.size()));
+      accessor_ = static_cast<int> (time_point);
+      assert(accessor_ < static_cast<int>(control_.size()));
     }
     else
     {
       //TODO if temporal behavior is required one needs to do something here!
-      throw DOpEException("Control type: " + DOpEtypesToString(_c_type) + " is not implemented for behavior: " + DOpEtypesToString(GetBehavior()),
+      throw DOpEException("Control type: " + DOpEtypesToString(c_type_) + " is not implemented for behavior: " + DOpEtypesToString(GetBehavior()),
 			  "ControlVector<VECTOR>::SetTimeDoFNumber");
     }
   }
-  else if(_c_type == DOpEtypes::ControlType::initial)
+  else if(c_type_ == DOpEtypes::ControlType::initial)
   {
     if(time_point != 0)
-      throw DOpEException("With control type: " + DOpEtypesToString(_c_type) + "the time should never differ from 0.",
+      throw DOpEException("With control type: " + DOpEtypesToString(c_type_) + "the time should never differ from 0.",
 			  "ControlVector<VECTOR>::SetTimeDoFNumber");
   }
 }
@@ -186,16 +186,16 @@ void ControlVector<VECTOR>::SetTimeDoFNumber(unsigned int time_point) const
 template<typename VECTOR>
 void ControlVector<VECTOR>::SetTime(double t,  const TimeIterator& interval) const
 {
-  if(_c_type == DOpEtypes::ControlType::nonstationary)
+  if(c_type_ == DOpEtypes::ControlType::nonstationary)
   {
-    if (interval.GetIndex() != _accessor_index || _local_vectors.size()==0 )
+    if (interval.GetIndex() != accessor_index_ || local_vectors_.size()==0 )
     {
-      _accessor_index = interval.GetIndex();
+      accessor_index_ = interval.GetIndex();
       ComputeLocalVectors(interval);
     }
-    GetSpaceTimeHandler()->InterpolateControl(_local_control, _local_vectors, t,
+    GetSpaceTimeHandler()->InterpolateControl(local_control_, local_vectors_, t,
 					      interval);
-    _accessor = -1;
+    accessor_ = -1;
   }
 }
 
@@ -204,23 +204,23 @@ void ControlVector<VECTOR>::SetTime(double t,  const TimeIterator& interval) con
 template<typename VECTOR>
 VECTOR& ControlVector<VECTOR>::GetSpacialVector()
 {
-  if(_c_type == DOpEtypes::ControlType::stationary || _c_type == DOpEtypes::ControlType::initial)
+  if(c_type_ == DOpEtypes::ControlType::stationary || c_type_ == DOpEtypes::ControlType::initial)
   {
-    return *(_control[_accessor]);
+    return *(control_[accessor_]);
   }
   else
   {
-    if(_c_type == DOpEtypes::ControlType::nonstationary)
+    if(c_type_ == DOpEtypes::ControlType::nonstationary)
     {
       if ( GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
       {
-	if (_accessor >= 0)
+	if (accessor_ >= 0)
 	{
-	  assert(_control[_accessor] != NULL);
-	  return *(_control[_accessor]);
+	  assert(control_[accessor_] != NULL);
+	  return *(control_[accessor_]);
 	}
 	else
-	  return _local_control;
+	  return local_control_;
       }
       else
       {
@@ -230,7 +230,7 @@ VECTOR& ControlVector<VECTOR>::GetSpacialVector()
     }
     else
     {
-      throw DOpEException("Control type: " + DOpEtypesToString(_c_type) + " is not implemented.",
+      throw DOpEException("Control type: " + DOpEtypesToString(c_type_) + " is not implemented.",
 			  "ControlVector<VECTOR>::GetSpacialVector");
     }
   }
@@ -240,23 +240,23 @@ VECTOR& ControlVector<VECTOR>::GetSpacialVector()
 template<typename VECTOR>
 const VECTOR& ControlVector<VECTOR>::GetSpacialVector() const
 {
-  if(_c_type == DOpEtypes::ControlType::stationary || _c_type == DOpEtypes::ControlType::initial)
+  if(c_type_ == DOpEtypes::ControlType::stationary || c_type_ == DOpEtypes::ControlType::initial)
   {
-    return *(_control[_accessor]);
+    return *(control_[accessor_]);
   }
   else
   {
-    if(_c_type == DOpEtypes::ControlType::nonstationary)
+    if(c_type_ == DOpEtypes::ControlType::nonstationary)
     {
       if ( GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
       {
-	if (_accessor >= 0)
+	if (accessor_ >= 0)
 	{
-	  assert(_control[_accessor] != NULL);
-	  return *(_control[_accessor]);
+	  assert(control_[accessor_] != NULL);
+	  return *(control_[accessor_]);
 	}
 	else
-	  return _local_control;
+	  return local_control_;
       }
       else
       {
@@ -266,7 +266,7 @@ const VECTOR& ControlVector<VECTOR>::GetSpacialVector() const
     }
     else
     {
-      throw DOpEException("Control type: " + DOpEtypesToString(_c_type) + " is not implemented.",
+      throw DOpEException("Control type: " + DOpEtypesToString(c_type_) + " is not implemented.",
 			  "ControlVector<VECTOR>::GetSpacialVector");
     }
   }
@@ -276,40 +276,40 @@ const VECTOR& ControlVector<VECTOR>::GetSpacialVector() const
 template<typename VECTOR>
 const Vector<double>& ControlVector<VECTOR>::GetSpacialVectorCopy() const
 {
-  if(_lock)
+  if(lock_)
   {
     throw DOpEException("Trying to create a new copy while the old is still in use!","ControlVector::GetSpacialVectorCopy");
   }
-  _lock = true;
-  if(_c_type == DOpEtypes::ControlType::stationary || _c_type == DOpEtypes::ControlType::initial)
+  lock_ = true;
+  if(c_type_ == DOpEtypes::ControlType::stationary || c_type_ == DOpEtypes::ControlType::initial)
   {
-    _copy_control = *(_control[_accessor]);
-    return _copy_control;
+    copy_control_ = *(control_[accessor_]);
+    return copy_control_;
   }
   else
   {
-    if(_c_type == DOpEtypes::ControlType::nonstationary)
+    if(c_type_ == DOpEtypes::ControlType::nonstationary)
     {
       if ( GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
       {
-	if (_accessor >= 0)
+	if (accessor_ >= 0)
 	{
-	  assert(_control[_accessor] != NULL);
-	  _copy_control = *(_control[_accessor]);
+	  assert(control_[accessor_] != NULL);
+	  copy_control_ = *(control_[accessor_]);
 	}
 	else
-	  _copy_control = _local_control;
+	  copy_control_ = local_control_;
       } 
       else
       {
 	throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),
 			    "StateVector<VECTOR>::GetSpacialVectorCopy");
       }
-      return _copy_control;
+      return copy_control_;
     }
     else
     {
-      throw DOpEException("Control type: " + DOpEtypesToString(_c_type) + " is not implemented.",
+      throw DOpEException("Control type: " + DOpEtypesToString(c_type_) + " is not implemented.",
 			  "ControlVector<VECTOR>::GetSpacialVectorCopy");
     }
   }
@@ -324,24 +324,24 @@ void ControlVector<dealii::BlockVector<double> >::ReSizeSpace(unsigned int ndofs
 {
   if(GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
   {
-    if(_accessor >= 0)
+    if(accessor_ >= 0)
     {
       bool existed = true;
-      if(_control[_accessor] == NULL)
+      if(control_[accessor_] == NULL)
       {
-	_control[_accessor] = new dealii::BlockVector<double>;
+	control_[accessor_] = new dealii::BlockVector<double>;
 	existed = false; 
       }
       unsigned int nblocks = dofs_per_block.size();
       //Check if reinitialization is needed
       bool reinit = false;
-      if (_control[_accessor]->size() != ndofs)
+      if (control_[accessor_]->size() != ndofs)
       {
 	reinit = true;
       }
       else
       {
-	if (_control[_accessor]->n_blocks() != nblocks)
+	if (control_[accessor_]->n_blocks() != nblocks)
 	{
 	  reinit = true;
 	}
@@ -349,7 +349,7 @@ void ControlVector<dealii::BlockVector<double> >::ReSizeSpace(unsigned int ndofs
 	{
 	  for (unsigned int i = 0; i < nblocks; i++)
 	  {
-	    if (_control[_accessor]->block(i).size()
+	    if (control_[accessor_]->block(i).size()
 		!= dofs_per_block[i])
 	    {
 	      reinit = true;
@@ -362,33 +362,33 @@ void ControlVector<dealii::BlockVector<double> >::ReSizeSpace(unsigned int ndofs
       {
 	if(existed)
 	{
-	  _local_control = *(_control[_accessor]);
+	  local_control_ = *(control_[accessor_]);
 	}
 	     
-	_control[_accessor]->reinit(nblocks);
+	control_[accessor_]->reinit(nblocks);
 	for(unsigned int i = 0; i < nblocks; i++)
 	{
-	  _control[_accessor]->block(i).reinit(dofs_per_block[i]);
+	  control_[accessor_]->block(i).reinit(dofs_per_block[i]);
 	}
-	_control[_accessor]->collect_sizes();
+	control_[accessor_]->collect_sizes();
             
 	if(existed)
 	{
-	  GetSpaceTimeHandler()->SpatialMeshTransferControl(_local_control,*(_control[_accessor]));
+	  GetSpaceTimeHandler()->SpatialMeshTransferControl(local_control_,*(control_[accessor_]));
 	}
       }
     }//Done accessor \ge 0
     else
-    { //_accessor < 0
+    { //accessor_ < 0
       unsigned int nblocks = dofs_per_block.size();
-      if (_local_control.size() != ndofs)
+      if (local_control_.size() != ndofs)
       {
-	_local_control.reinit(nblocks);
+	local_control_.reinit(nblocks);
 	for (unsigned int i = 0; i < nblocks; i++)
 	{
-	  _local_control.block(i).reinit(dofs_per_block[i]);
+	  local_control_.block(i).reinit(dofs_per_block[i]);
 	}
-	_local_control.collect_sizes();
+	local_control_.collect_sizes();
       }
     }
   }
@@ -404,34 +404,34 @@ void ControlVector<dealii::Vector<double> >::ReSizeSpace(unsigned int ndofs, con
 {
   if (GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
   {
-    if (_accessor >= 0)
+    if (accessor_ >= 0)
     {
       bool existed = true;
-      if (_control[_accessor] == NULL)
+      if (control_[accessor_] == NULL)
       {
-	_control[_accessor] = new dealii::Vector<double>;
+	control_[accessor_] = new dealii::Vector<double>;
 	existed = false;
       }
-      if (_control[_accessor]->size() != ndofs)
+      if (control_[accessor_]->size() != ndofs)
       {	
 	if(existed)
 	{
-	  _local_control = *(_control[_accessor]);
+	  local_control_ = *(control_[accessor_]);
 	}
         
-	_control[_accessor]->reinit(ndofs);
+	control_[accessor_]->reinit(ndofs);
 
 	if(existed)
 	{
-	  GetSpaceTimeHandler()->SpatialMeshTransferControl(_local_control,*(_control[_accessor]));
+	  GetSpaceTimeHandler()->SpatialMeshTransferControl(local_control_,*(control_[accessor_]));
 	}
       }
     }
     else
     { //accessor < 0
-      if (_local_control.size() != ndofs)
+      if (local_control_.size() != ndofs)
       {
-	_local_control.reinit(ndofs);
+	local_control_.reinit(ndofs);
       }
     }
   }
@@ -448,7 +448,7 @@ void ControlVector<dealii::Vector<double> >::ReSizeSpace(unsigned int ndofs, con
 template<typename VECTOR>
 void ControlVector<VECTOR>::operator=(double value)
 {
-  if (_lock)
+  if (lock_)
   {
     throw DOpEException(
       "Trying to use operator= while a copy is in use!",
@@ -456,10 +456,10 @@ void ControlVector<VECTOR>::operator=(double value)
   }
   if(GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
   {
-    for(unsigned int i = 0; i < _control.size(); i++)
+    for(unsigned int i = 0; i < control_.size(); i++)
     {
-      assert(_control[i] != NULL);
-      _control[i]->operator=(value);
+      assert(control_[i] != NULL);
+      control_[i]->operator=(value);
     }
     SetTimeDoFNumber(0);
   }
@@ -473,7 +473,7 @@ void ControlVector<VECTOR>::operator=(double value)
 template<typename VECTOR>
 void ControlVector<VECTOR>::operator=(const ControlVector& dq)
 {
-  if (_lock)
+  if (lock_)
   {
     throw DOpEException(
       "Trying to use operator= while a copy is in use!",
@@ -489,36 +489,36 @@ void ControlVector<VECTOR>::operator=(const ControlVector& dq)
   }
   if(GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
   {
-    if(dq._control.size() != _control.size())
+    if(dq.control_.size() != control_.size())
     {
-      if(dq._control.size() > _control.size())
+      if(dq.control_.size() > control_.size())
 	{
-	  unsigned int s = _control.size();
-	  _control.resize(dq._control.size(),NULL);
-	  for(unsigned int i = s; i < _control.size(); i++)
+	  unsigned int s = control_.size();
+	  control_.resize(dq.control_.size(),NULL);
+	  for(unsigned int i = s; i < control_.size(); i++)
 	    {
-	      assert(_control[i] == NULL);
-	      _control[i] = new VECTOR;
+	      assert(control_[i] == NULL);
+	      control_[i] = new VECTOR;
 	    }
 	}
       else
 	{
-	  for(unsigned int i = _control.size()-1; i >=dq._control.size(); i--)
+	  for(unsigned int i = control_.size()-1; i >=dq.control_.size(); i--)
 	    {
-	      assert(_control[i] != NULL);
-	      delete _control[i];
-	      _control[i] = NULL;
-	      _control.pop_back();
+	      assert(control_[i] != NULL);
+	      delete control_[i];
+	      control_[i] = NULL;
+	      control_.pop_back();
 	    }
-	  assert(_control.size() == dq._control.size());
+	  assert(control_.size() == dq.control_.size());
 	}
     }
 
-    for(unsigned int i = 0; i < _control.size(); i++)
+    for(unsigned int i = 0; i < control_.size(); i++)
     {
-      assert(_control[i] != NULL);
-      assert(dq._control[i] != NULL);
-      _control[i]->operator=(*(dq._control[i]));
+      assert(control_[i] != NULL);
+      assert(dq.control_[i] != NULL);
+      control_[i]->operator=(*(dq.control_[i]));
     }
     SetTimeDoFNumber(0);
   }
@@ -532,7 +532,7 @@ void ControlVector<VECTOR>::operator=(const ControlVector& dq)
 template<typename VECTOR>
 void ControlVector<VECTOR>::operator+=(const ControlVector& dq)
 {
-  if (_lock)
+  if (lock_)
   {
     throw DOpEException(
       "Trying to use operator+= while a copy is in use!",
@@ -548,12 +548,12 @@ void ControlVector<VECTOR>::operator+=(const ControlVector& dq)
   }
   if(GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
   {
-    assert(dq._control.size() == _control.size());
-    for(unsigned int i = 0; i < _control.size(); i++)
+    assert(dq.control_.size() == control_.size());
+    for(unsigned int i = 0; i < control_.size(); i++)
     {
-      assert(_control[i] != NULL);
-      assert(dq._control[i] != NULL);
-      _control[i]->operator+=(*(dq._control[i]));
+      assert(control_[i] != NULL);
+      assert(dq.control_[i] != NULL);
+      control_[i]->operator+=(*(dq.control_[i]));
     }
     SetTimeDoFNumber(0);
   }
@@ -567,7 +567,7 @@ void ControlVector<VECTOR>::operator+=(const ControlVector& dq)
 template<typename VECTOR>
 void ControlVector<VECTOR>::operator*=(double a)
 {
-  if (_lock)
+  if (lock_)
   {
     throw DOpEException(
       "Trying to use operator= while a copy is in use!",
@@ -575,10 +575,10 @@ void ControlVector<VECTOR>::operator*=(double a)
   }
   if(GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
   {
-    for(unsigned int i = 0; i < _control.size(); i++)
+    for(unsigned int i = 0; i < control_.size(); i++)
     {
-      assert(_control[i] != NULL);
-      _control[i]->operator*=(a);
+      assert(control_[i] != NULL);
+      control_[i]->operator*=(a);
     }
     SetTimeDoFNumber(0);
   }
@@ -592,7 +592,7 @@ void ControlVector<VECTOR>::operator*=(double a)
 template<typename VECTOR>
 double ControlVector<VECTOR>::operator*(const ControlVector& dq) const
 {  
-  if (_lock || dq._lock)
+  if (lock_ || dq.lock_)
   {
     throw DOpEException(
       "Trying to use operator* while a copy is in use!",
@@ -608,14 +608,14 @@ double ControlVector<VECTOR>::operator*(const ControlVector& dq) const
   }
   if(GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
   {
-    assert(dq._control.size() == _control.size());
+    assert(dq.control_.size() == control_.size());
 
     double ret = 0.;
-    for(unsigned int i = 0; i < _control.size(); i++)
+    for(unsigned int i = 0; i < control_.size(); i++)
     {
-      assert(_control[i] != NULL);
-      assert(dq._control[i] != NULL);
-      ret += _control[i]->operator*(*(dq._control[i]));
+      assert(control_[i] != NULL);
+      assert(dq.control_[i] != NULL);
+      ret += control_[i]->operator*(*(dq.control_[i]));
     }
     return ret;
   }
@@ -629,7 +629,7 @@ double ControlVector<VECTOR>::operator*(const ControlVector& dq) const
 template<typename VECTOR>
 void ControlVector<VECTOR>::add(double s, const ControlVector& dq)
 {
-  if (_lock)
+  if (lock_)
   {
     throw DOpEException(
       "Trying to use add while a copy is in use!",
@@ -645,13 +645,13 @@ void ControlVector<VECTOR>::add(double s, const ControlVector& dq)
   }
   if(GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
   {
-    assert(dq._control.size() == _control.size());
+    assert(dq.control_.size() == control_.size());
 
-    for(unsigned int i = 0; i < _control.size(); i++)
+    for(unsigned int i = 0; i < control_.size(); i++)
     {
-      assert(_control[i] != NULL);
-      assert(dq._control[i] != NULL);
-      _control[i]->add(s,*(dq._control[i]));
+      assert(control_[i] != NULL);
+      assert(dq.control_[i] != NULL);
+      control_[i]->add(s,*(dq.control_[i]));
     }
     SetTimeDoFNumber(0);
   }
@@ -665,7 +665,7 @@ void ControlVector<VECTOR>::add(double s, const ControlVector& dq)
 template<typename VECTOR>
 void ControlVector<VECTOR>::equ(double s, const ControlVector& dq)
 {
-  if (_lock)
+  if (lock_)
   {
     throw DOpEException(
       "Trying to use add while a copy is in use!",
@@ -681,13 +681,13 @@ void ControlVector<VECTOR>::equ(double s, const ControlVector& dq)
   }
   if(GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
   {
-    assert(dq._control.size() == _control.size());
+    assert(dq.control_.size() == control_.size());
 
-    for(unsigned int i = 0; i < _control.size(); i++)
+    for(unsigned int i = 0; i < control_.size(); i++)
     {
-      assert(_control[i] != NULL);
-      assert(dq._control[i] != NULL);
-      _control[i]->equ(s,*(dq._control[i]));
+      assert(control_[i] != NULL);
+      assert(dq.control_[i] != NULL);
+      control_[i]->equ(s,*(dq.control_[i]));
     }
     SetTimeDoFNumber(0);
   }
@@ -701,7 +701,7 @@ void ControlVector<VECTOR>::equ(double s, const ControlVector& dq)
 template<typename VECTOR>
 void ControlVector<VECTOR>::max(const ControlVector& dq)
 {
-  if (_lock)
+  if (lock_)
   {
     throw DOpEException(
       "Trying to use add while a copy is in use!",
@@ -717,14 +717,14 @@ void ControlVector<VECTOR>::max(const ControlVector& dq)
   }
   if(GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
   {
-    assert(dq._control.size() == _control.size());
+    assert(dq.control_.size() == control_.size());
 
-    for(unsigned int i = 0; i < _control.size(); i++)
+    for(unsigned int i = 0; i < control_.size(); i++)
     {
-      assert(_control[i] != NULL);
-      assert(dq._control[i] != NULL);
-      VECTOR& t = *(_control[i]);
-      const VECTOR& tn = *(dq._control[i]);
+      assert(control_[i] != NULL);
+      assert(dq.control_[i] != NULL);
+      VECTOR& t = *(control_[i]);
+      const VECTOR& tn = *(dq.control_[i]);
       assert(t.size() == tn.size());
       for(unsigned int j = 0; j < t.size() ; j++)
       {
@@ -744,7 +744,7 @@ void ControlVector<VECTOR>::max(const ControlVector& dq)
 template<typename VECTOR>
 void ControlVector<VECTOR>::min(const ControlVector& dq)
 {
-  if (_lock)
+  if (lock_)
   {
     throw DOpEException(
       "Trying to use add while a copy is in use!",
@@ -760,14 +760,14 @@ void ControlVector<VECTOR>::min(const ControlVector& dq)
   }
   if(GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
   {
-    assert(dq._control.size() == _control.size());
+    assert(dq.control_.size() == control_.size());
 
-    for(unsigned int i = 0; i < _control.size(); i++)
+    for(unsigned int i = 0; i < control_.size(); i++)
     {
-      assert(_control[i] != NULL);
-      assert(dq._control[i] != NULL);
-      VECTOR& t = *(_control[i]);
-      const VECTOR& tn = *(dq._control[i]);
+      assert(control_[i] != NULL);
+      assert(dq.control_[i] != NULL);
+      VECTOR& t = *(control_[i]);
+      const VECTOR& tn = *(dq.control_[i]);
       assert(t.size() == tn.size());
       for(unsigned int j = 0; j < t.size() ; j++)
       {
@@ -785,7 +785,7 @@ void ControlVector<VECTOR>::min(const ControlVector& dq)
 template<typename VECTOR>
 void ControlVector<VECTOR>::comp_mult(const ControlVector& dq)
 {
-  if (_lock)
+  if (lock_)
   {
     throw DOpEException(
       "Trying to use add while a copy is in use!",
@@ -801,14 +801,14 @@ void ControlVector<VECTOR>::comp_mult(const ControlVector& dq)
   }
   if(GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
   {
-    assert(dq._control.size() == _control.size());
+    assert(dq.control_.size() == control_.size());
 
-    for(unsigned int i = 0; i < _control.size(); i++)
+    for(unsigned int i = 0; i < control_.size(); i++)
     {
-      assert(_control[i] != NULL);
-      assert(dq._control[i] != NULL);
-      VECTOR& t = *(_control[i]);
-      const VECTOR& tn = *(dq._control[i]);
+      assert(control_[i] != NULL);
+      assert(dq.control_[i] != NULL);
+      VECTOR& t = *(control_[i]);
+      const VECTOR& tn = *(dq.control_[i]);
       assert(t.size() == tn.size());
       for(unsigned int j = 0; j < t.size() ; j++)
       {
@@ -827,7 +827,7 @@ void ControlVector<VECTOR>::comp_mult(const ControlVector& dq)
 template<typename VECTOR>
 void ControlVector<VECTOR>::comp_invert()
 {
-  if (_lock)
+  if (lock_)
   {
     throw DOpEException(
       "Trying to use add while a copy is in use!",
@@ -835,10 +835,10 @@ void ControlVector<VECTOR>::comp_invert()
   }
   if(GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
   {
-    for(unsigned int i = 0; i < _control.size(); i++)
+    for(unsigned int i = 0; i < control_.size(); i++)
     {
-      assert(_control[i] != NULL);
-      VECTOR& t = *(_control[i]);
+      assert(control_[i] != NULL);
+      VECTOR& t = *(control_[i]);
       for(unsigned int j = 0; j < t.size() ; j++)
       {
 	t(j) = 1./t(j);
@@ -856,7 +856,7 @@ void ControlVector<VECTOR>::comp_invert()
 template<typename VECTOR>
 void ControlVector<VECTOR>::init_by_sign(double smaller, double larger, double unclear, double TOL)
 {
-  if (_lock)
+  if (lock_)
   {
     throw DOpEException(
       "Trying to use add while a copy is in use!",
@@ -864,10 +864,10 @@ void ControlVector<VECTOR>::init_by_sign(double smaller, double larger, double u
   }
   if(GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
   {
-    for(unsigned int i = 0; i < _control.size(); i++)
+    for(unsigned int i = 0; i < control_.size(); i++)
     {
-      assert(_control[i] != NULL);
-      VECTOR& t = *(_control[i]);
+      assert(control_[i] != NULL);
+      VECTOR& t = *(control_[i]);
       for(unsigned int j = 0; j < t.size() ; j++)
       {
 	if(t(j) < -TOL)
@@ -896,22 +896,22 @@ void ControlVector<VECTOR>::init_by_sign(double smaller, double larger, double u
 template<typename VECTOR>
 void ControlVector<VECTOR>::PrintInfos(std::stringstream& out)
 {
-  if(_control.size() ==1)
+  if(control_.size() ==1)
   {
-    out<<"\t"<<_control[0]->size()<<std::endl;
+    out<<"\t"<<control_[0]->size()<<std::endl;
   }
   else
   {
     if(GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
     {
-      out<<"\tNumber of Timepoints: "<<_control.size()<<std::endl;
+      out<<"\tNumber of Timepoints: "<<control_.size()<<std::endl;
       unsigned int min_dofs =0;
       unsigned int max_dofs =0;
       unsigned int total_dofs =0;
       unsigned int this_size=0;
-      for(unsigned int i = 0; i < _control.size(); i++)
+      for(unsigned int i = 0; i < control_.size(); i++)
       {
-	this_size = _control[i]->size();
+	this_size = control_[i]->size();
 	total_dofs += this_size;
 	if(i==0)
 	  min_dofs = this_size;
@@ -935,7 +935,7 @@ void ControlVector<VECTOR>::PrintInfos(std::stringstream& out)
 template<typename VECTOR> 
 double ControlVector<VECTOR>::Norm(std::string name,std::string restriction) const
 { 
-  if (_lock)
+  if (lock_)
   {
     throw DOpEException(
       "Trying to use Norm while a copy is in use!",
@@ -948,9 +948,9 @@ double ControlVector<VECTOR>::Norm(std::string name,std::string restriction) con
     {
       if( restriction == "all")
       {
-	for(unsigned int i = 0; i < _control.size(); i++)
+	for(unsigned int i = 0; i < control_.size(); i++)
 	{
-	  const VECTOR& tmp = *(_control[i]);
+	  const VECTOR& tmp = *(control_[i]);
 	  for( unsigned int j = 0; j < tmp.size(); j++)
 	  {
 	    ret = std::max(ret,std::fabs(tmp(j)));
@@ -959,9 +959,9 @@ double ControlVector<VECTOR>::Norm(std::string name,std::string restriction) con
       }
       else if (restriction == "positive")
       {
-	for(unsigned int i = 0; i < _control.size(); i++)
+	for(unsigned int i = 0; i < control_.size(); i++)
 	{
-	  const VECTOR& tmp = *(_control[i]);
+	  const VECTOR& tmp = *(control_[i]);
 	  for( unsigned int j = 0; j < tmp.size(); j++)
 	  {
 	    ret = std::max(ret,std::max(0.,tmp(j)));
@@ -977,9 +977,9 @@ double ControlVector<VECTOR>::Norm(std::string name,std::string restriction) con
     {
       if( restriction == "all")
       {
-	for(unsigned int i = 0; i < _control.size(); i++)
+	for(unsigned int i = 0; i < control_.size(); i++)
 	{
-	  const VECTOR& tmp = *(_control[i]);
+	  const VECTOR& tmp = *(control_[i]);
 	  for( unsigned int j = 0; j < tmp.size(); j++)
 	  {
 	    ret += std::fabs(tmp(j));
@@ -988,9 +988,9 @@ double ControlVector<VECTOR>::Norm(std::string name,std::string restriction) con
       }
       else if (restriction == "positive")
       {
-	for(unsigned int i = 0; i < _control.size(); i++)
+	for(unsigned int i = 0; i < control_.size(); i++)
 	{
-	  const VECTOR& tmp = *(_control[i]);
+	  const VECTOR& tmp = *(control_[i]);
 	  for( unsigned int j = 0; j < tmp.size(); j++)
 	  {
 	    ret += std::max(0.,tmp(j));
@@ -1026,16 +1026,16 @@ double ControlVector<VECTOR>::Norm(std::string name,std::string restriction) con
     //get the global indices
     interval.get_time_dof_indices(global_indices);
     
-    //clear out _global_to_local
-    _global_to_local.clear();
+    //clear out global_to_local_
+    global_to_local_.clear();
     
     if (GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
     {
-      _local_vectors.resize(n_local_dofs);
+      local_vectors_.resize(n_local_dofs);
       for (unsigned int i = 0; i < n_local_dofs; ++i)
       {
-	_local_vectors[i] = _control[global_indices[i]];
-	_global_to_local[global_indices[i]] = i;
+	local_vectors_[i] = control_[global_indices[i]];
+	global_to_local_[global_indices[i]] = i;
       }
     }
     else
