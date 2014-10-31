@@ -85,6 +85,16 @@ a correct link to the ipopt library needs to be created in  {\tt DOpE/ThirdParty
 example but when running the example you will only get an error message like\\
 {\tt Warning: During execution of `Reduced\underline{ }IpoptAlgorithm::Solve`\\ the following Problem occurred!\\
 To use this algorithm you need to have IPOPT installed! \\To use this set the WITH\underline{ }IPOPT CompilerFlag.}
+If you receive this message and have the ipopt installation complete, you
+might have overseen to add ipopt to your {\tt LD\underline{ }LIBRARY\underline{ }PATH}:
+\begin{lstlisting}
+**************************************************************
+                 Installation complete!
+Add /home/..../dopelib-2.0/ThirdPartyLibs/ipopt/lib64
+    to your $LD_LIBRARY_PATH variable
+**************************************************************
+\end{lstlisting}
+
 
 Alternatively the commercial optimization library SNOPT can be used in this example.
 In order to use this library you need to install SNOPT on your computer and then generate a symlink to 

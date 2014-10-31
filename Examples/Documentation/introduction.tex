@@ -151,6 +151,18 @@ manually. This is true in particular for the HSL solvers MA27, $\ldots$.
 For information on these see the information provided by the installation
 script.
 
+The installation is straighforward and has been tested on openSUSE 12.1
+machines as well as on MAC. At the end of the installtion do not forget to
+add ipopt to your {\tt LD\underline{ }LIBRARY\underline{ }PATH}:
+\begin{lstlisting}
+**************************************************************
+                 Installation complete!
+Add /home/..../dopelib-2.0/ThirdPartyLibs/ipopt/lib64
+    to your $LD_LIBRARY_PATH variable
+**************************************************************
+\end{lstlisting}
+
+
 
 \section{Installation}
 To work with DOpElib, your need necessarily deal.II, which installation 
