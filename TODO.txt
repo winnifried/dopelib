@@ -4,6 +4,11 @@ TODO DOpE
 - Update manual to contain full code blocks in particular for Section 2.6
 - Add more code examples to Section 5 of the manual
 
+- Check Examples/OPT/StatPDE/Example1 -> TW gets a negative curvutare error, cg and ww dont.
+- Check Examples/OPT/InstatPDE/Example2 -> Example aborts for cg (opt_algorithms/reducednewtonalgorithm.h:515: int  [...] Assertion `res >= 0.' failed.
+Aborted), runs fine for ww tw
+
+
 
 Review von unserem Paper: (Wer macht was)
 -----------------------------------------
