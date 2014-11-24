@@ -58,8 +58,16 @@ namespace DOpE
   template <typename VECTOR>
   DOpEOutputHandler<VECTOR>::DOpEOutputHandler(ReducedProblemInterface_Base<VECTOR>* SI, ParameterReader &param_reader)
   {
-    assert(SI);
-    Solver_ = SI;
+    //assert(SI);
+    if(!SI)
+    {
+      std::cerr<<"Attention: DOpEOutputHandler is configured without a ReducedProblem, hence no vectors can be written!"<<std::endl;
+      Solver_ = NULL;
+    }
+    else
+    {
+      Solver_ = SI;
+    }
 
     /* Note that smaller printlevel prints less*/
     /*******************************************

@@ -256,7 +256,12 @@ class DOpEOutputHandler
     std::string GetPostIndex();
     ReducedProblemInterface_Base<VECTOR>* GetReducedProblem()
     {
-      return Solver_;
+      if(NULL != Solver_)
+	return Solver_;
+      else
+      {
+	abort();
+      }
     }
 
     /**
