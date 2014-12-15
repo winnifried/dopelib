@@ -8,69 +8,6 @@ TODO DOpE
 - Check Examples/OPT/InstatPDE/Example2 -> Example aborts for cg (opt_algorithms/reducednewtonalgorithm.h:515: int  [...] Assertion `res >= 0.' failed.
 Aborted), runs fine for ww tw
 
-
-
-Review von unserem Paper: (Wer macht was)
------------------------------------------
-(Wichtig sind 1,3,4,7,10)
-
-1.) Das hätte ich eh machen wollen.
-    Aaaeeh? Haben wir das TODO.txt in die veroeffentlichte Version miteingecheckt? Ist das sinnvoll? 
-    -> WW Changelog ist erledigt.
-    -> TW: erledigt: ich bin dafuer, dass TODO aus der veroeffentlichten 
-       Version herauszunehmen: die Ideen sind unser Privateigentum und 
-       gehen in diesem Stadium die Offentlickeit nichts an.
-
-2.) Finde ich nicht! Wir können uns aber provisorisch von den
-	Contributors die Zustimmung zu einer relizensierung holen.
-    -> Machen wir nicht (einstimmig beschlossen)
-
-3.) Ist kein Problem, vermutlich 10 Zeilen in meinem Webseitenskript
-    -> WW (erledigt JA / NEIN)
-
-4.) Hänge ich nicht dran. Die Google Code Convention ist ein underscore
-	am Ende. Wenn das ok für Euch ist? dann kann ich das 	
-	suchen/ersetzen
-	-> WW Done
-
-5.) Würde ich die Antwort so lassen.
-    -> Ja; bleibt so.
-
-6.) Wie 5. da hatten wir lange drüber diskutiert. Oder seit Ihr anderer
-	Meinung?
-    -> Ja; bleibt so. Dem Reviewer scheint das aber wichtig zu sein. 
-       Da sollten wir eine ueberzeugenede Antwort haben!!!
-    -> TW: erledigt: wohl-ueberdachte Antwort im Antwortschreiben hinzugefuegt 
-
-7.) Kann man ergänzen.
-    In Examples/description_full.pdf, section 2.6, it would be nice if the
-    steps to install dopelib were actually spelled out in terms of commands, not
-    just in words. For example, in step II, "Configure it properly and make the
-    whole deal.II library" is not very descriptive -- what does "it" refer to,
-    what does "configure properly" mean, and what is "whole" here?
-    -> TW: erledigt und in der description eingefuegt.
-
-8.) Ich bin da anderer Meinung, für den `Code mit Kommentaren' gibt es
-	den Code mit Kommentaren. Das Manual soll m.E. nur klarstellen
-	was man in dem Beispiel sieht. (und ich finde in deal.ii
-	ist es manchmal auch etwas viel Kommentar, weil man den
-	Überblick über die Funktion verliert aber darüber kann man	
-	sich streiten...)
-    -> TW: ich finde das auch mittlerweile Quatsch -> damit erledigt.
-
-9.) Ich halte die Frage ehrlich gesagt für irrelevant. Es gibt pro und 	
-	contra zu statisch/dynamisch linken und unsere statisch 	
-	gelinkten Binaries sind nicht furchtbar groß, weil die meisten 	
-	Sachen wegen der templates eh nicht drin sind.
-    -> Bleibt so!
-
-10.) -> WW erledigt 
-
-11.) Finde ich echt nicht wichtig.
-     -> Ja; bleibt so!
-
- 
-
 Standard TODO fuer naechstes Treffen
 ------------------------------------
 - Sollen wir DOpElib ueber NA Digest bekannt machen?
@@ -131,12 +68,8 @@ Future:
   (Dann geht endlich auch Opt-Control im Instationaeren), sind noch
   fertigzustellen.
 - Verschiedene Kontrolltypen im Instationaeren, insbesondere Kontrolle in den AWen
--- Verschiedene Typen der Kontrolle (undefined, initial, timedistributed, timedistributedtimedependend). Diese gibt man dem Kontrollvektor, der den Typ wiederum an STH liefert. 
-   Dieser speichert ihn und stellt sicher, dass alle Kontrollen den selben Typen haben. 
 - DOpE Einfuehrung (wir sind alle dafuer, Winni faengt an)
-- FE_Values ? Kann man dim=0 anlegen? Dann kann der weg (Ja, habs auskommentiert,
-  trotzdem laeufen alle Probleme korrekt durch (ausser OPT/7+8))~tw
-	
+
 - Fehlerschaetzer fuer OPT (quantity of interest - Kostenfunktional geht bereits)	
 	
 - Interpretation der primalen Zeitschrittverfahren als Galerkin-Verfahren.
