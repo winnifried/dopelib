@@ -1,5 +1,5 @@
-# Listing of Parameters for PDE Instat Example 1 (Fluid problem)
-# --------------------------------------------------------------
+# Listing of Parameters for OPT Instat Example 3
+# ----------------------------------------------
 
 
 subsection newtonsolver parameters
