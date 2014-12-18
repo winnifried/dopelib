@@ -119,8 +119,8 @@ int
 main(int argc, char **argv)
 {
   /**
-   * In this example we show the control of a nonlinear
-   *  heat equation via the initial values.
+   * In this example we show the control of the
+   *  heat equation via a space dependent right hand side
    */
 
   string paramfile = "dope.prm";
