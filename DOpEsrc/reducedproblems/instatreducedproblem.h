@@ -680,7 +680,7 @@ void InstatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER, CONTROLINTEGR
       TimeIterator it =
 	this->GetProblem()->GetSpaceTimeHandler()->GetTimeDoFHandler().first_interval();
       it.get_time_dof_indices(local_to_global);
-      this->GetProblem()->SetTime(times[local_to_global[0]], it,true);
+      this->GetProblem()->SetTime(times[local_to_global[0]],local_to_global[0], it,true);
       GetU().SetTimeDoFNumber(local_to_global[0], it);
       GetZ().SetTimeDoFNumber(local_to_global[0], it);
       q.SetTimeDoFNumber(local_to_global[0]);
@@ -778,7 +778,7 @@ void InstatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER, CONTROLINTEGR
       TimeIterator it =
 	this->GetProblem()->GetSpaceTimeHandler()->GetTimeDoFHandler().first_interval();
       it.get_time_dof_indices(local_to_global);
-      this->GetProblem()->SetTime(times[local_to_global[0]], it,true);
+      this->GetProblem()->SetTime(times[local_to_global[0]],local_to_global[0], it,true);
       GetU().SetTimeDoFNumber(local_to_global[0], it);
       GetZ().SetTimeDoFNumber(local_to_global[0], it);
       q.SetTimeDoFNumber(local_to_global[0]);
@@ -1049,7 +1049,7 @@ void InstatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER, CONTROLINTEGR
 	TimeIterator it =
 	  this->GetProblem()->GetSpaceTimeHandler()->GetTimeDoFHandler().first_interval();
 	it.get_time_dof_indices(local_to_global);
-	this->GetProblem()->SetTime(times[local_to_global[0]], it,true);
+	this->GetProblem()->SetTime(times[local_to_global[0]],local_to_global[0], it,true);
 	GetU().SetTimeDoFNumber(local_to_global[0], it);
 	GetZ().SetTimeDoFNumber(local_to_global[0], it);
 	GetDU().SetTimeDoFNumber(local_to_global[0], it);
@@ -1116,7 +1116,7 @@ void InstatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER, CONTROLINTEGR
 	TimeIterator it =
 	  this->GetProblem()->GetSpaceTimeHandler()->GetTimeDoFHandler().first_interval();
 	it.get_time_dof_indices(local_to_global);
-	this->GetProblem()->SetTime(times[local_to_global[0]], it,true);
+	this->GetProblem()->SetTime(times[local_to_global[0]],local_to_global[0], it,true);
 	GetU().SetTimeDoFNumber(local_to_global[0], it);
 	GetZ().SetTimeDoFNumber(local_to_global[0], it);
 	GetDU().SetTimeDoFNumber(local_to_global[0], it);
@@ -1532,7 +1532,7 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
       TimeIterator it =
 	problem.GetSpaceTimeHandler()->GetTimeDoFHandler().first_interval();
       it.get_time_dof_indices(local_to_global);
-      problem.SetTime(times[local_to_global[0]], it,true);
+      problem.SetTime(times[local_to_global[0]], local_to_global[0], it,true);
       sol.SetTimeDoFNumber(local_to_global[0], it);
     }
     //u_alt auf initial_values setzen
@@ -1585,7 +1585,7 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 	   != problem.GetSpaceTimeHandler()->GetTimeDoFHandler().after_last_interval(); ++it)
     {
       it.get_time_dof_indices(local_to_global);
-      problem.SetTime(times[local_to_global[0]], it);
+      problem.SetTime(times[local_to_global[0]], local_to_global[0], it);
       sol.SetTimeDoFNumber(local_to_global[0], it);
       //TODO Eventuell waere ein Test mit nicht-gleichmaessigen Zeitschritten sinnvoll!
       
@@ -1617,8 +1617,10 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 	this->GetProblem()->DeleteAuxiliaryFromIntegrator(
 	  this->GetIntegrator());
 	
-	problem.SetTime(time, it);
+	problem.SetTime(time, local_to_global[i], it);
 	this->GetProblem()->AddAuxiliaryToIntegrator(
+	  this->GetIntegrator());
+	this->GetProblem()->AddPreviousAuxiliaryToIntegrator(
 	  this->GetIntegrator());
 	
 	build_state_matrix_
@@ -1628,7 +1630,9 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 
 	this->GetProblem()->DeleteAuxiliaryFromIntegrator(
 	  this->GetIntegrator());
-	
+	this->GetProblem()->DeletePreviousAuxiliaryFromIntegrator(
+	  this->GetIntegrator());
+
 	//TODO do a transfer to the next grid for changing spatial meshes!
 	u_alt = sol.GetSpacialVector();
 	this->GetOutputHandler()->Write(sol.GetSpacialVector(),
@@ -1667,7 +1671,7 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 	problem.GetSpaceTimeHandler()->GetTimeDoFHandler().last_interval();
       it.get_time_dof_indices(local_to_global);
       //The initial values for the dual problem
-      problem.SetTime(times[local_to_global[local_to_global.size()-1]], it);
+      problem.SetTime(times[local_to_global[local_to_global.size()-1]],local_to_global[local_to_global.size()-1], it);
       sol.SetTimeDoFNumber(local_to_global[local_to_global.size()-1], it);
     }
     //u_alt auf initial_values setzen
@@ -1692,6 +1696,7 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 
       auto& initial_problem = problem.GetInitialProblem();
       this->GetProblem()->AddAuxiliaryToIntegrator(this->GetIntegrator());
+      this->GetProblem()->AddPreviousAuxiliaryToIntegrator(this->GetIntegrator());
 
       //TODO: Possibly another solver for the initial value than for the pde...
       build_state_matrix_ = this->GetNonlinearSolver("adjoint").NonlinearSolve_Initial(
@@ -1699,6 +1704,7 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
       build_state_matrix_ = true;
 
       this->GetProblem()->DeleteAuxiliaryFromIntegrator(this->GetIntegrator());
+      this->GetProblem()->DeletePreviousAuxiliaryFromIntegrator(this->GetIntegrator());
       
     }
     sol.GetSpacialVector() = u_alt;
@@ -1712,7 +1718,7 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 	   != problem.GetSpaceTimeHandler()->GetTimeDoFHandler().before_first_interval(); --it)
     {
       it.get_time_dof_indices(local_to_global);
-      problem.SetTime(times[local_to_global[local_to_global.size()-1]], it);
+      problem.SetTime(times[local_to_global[local_to_global.size()-1]],local_to_global[local_to_global.size()-1], it);
       sol.SetTimeDoFNumber(local_to_global[local_to_global.size()-1], it);
      //TODO Eventuell waere ein Test mit nicht-gleichmaessigen Zeitschritten sinnvoll!
       
@@ -1745,10 +1751,15 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 	this->GetProblem()->DeleteAuxiliaryFromIntegrator(
 	  this->GetIntegrator());
 
-	problem.SetTime(time, it);
+	problem.SetTime(time,local_to_global[j], it);
 	this->GetProblem()->AddAuxiliaryToIntegrator(
 	  this->GetIntegrator());
-		
+	this->GetProblem()->AddNextAuxiliaryToIntegrator(
+	  this->GetIntegrator());
+	if(local_to_global[j] != 0)
+	  this->GetProblem()->AddPreviousAuxiliaryToIntegrator(
+	    this->GetIntegrator());
+	
 	build_adjoint_matrix_
 	  = this->GetNonlinearSolver("adjoint").NonlinearSolve(problem,
 							     u_alt, sol.GetSpacialVector(), true,
@@ -1756,6 +1767,11 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 	
 	this->GetProblem()->DeleteAuxiliaryFromIntegrator(
 	  this->GetIntegrator());
+	this->GetProblem()->DeleteNextAuxiliaryFromIntegrator(
+	  this->GetIntegrator());
+	if(local_to_global[j] != 0)
+	  this->GetProblem()->DeletePreviousAuxiliaryFromIntegrator(
+	    this->GetIntegrator());
 	
 	//TODO do a transfer to the next grid for changing spatial meshes!
 	u_alt = sol.GetSpacialVector();

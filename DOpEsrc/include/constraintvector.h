@@ -59,18 +59,18 @@ namespace DOpE
     ConstraintVector(const SpaceTimeHandlerBase<VECTOR>* STH, DOpEtypes::VectorStorageType behavior);
     ~ConstraintVector();
 
-    /**
-     * Sets the time in the vector. This Function or SetTimeDoFNumber
-     * must be called before calling GetSpacialVector
-     * in order to load the required data.
-     *
-     * @param t            A double containing the time we are interested in. If t doesn't match the time given by
-     *                     time_point, then an interpolation between the corresponding time_points is
-     *			               computed.
-     * @param interval      An TimeIterator. The interval containing t.
-     *
-     */
-    void SetTime(double t, const TimeIterator& interval) const;
+//    /**
+//     * Sets the time in the vector. This Function or SetTimeDoFNumber
+//     * must be called before calling GetSpacialVector
+//     * in order to load the required data.
+//     *
+//     * @param t            A double containing the time we are interested in. If t doesn't match the time given by
+//     *                     time_point, then an interpolation between the corresponding time_points is
+//     *			               computed.
+//     * @param interval      An TimeIterator. The interval containing t.
+//     *
+//     */
+//    void SetTime(double t, const TimeIterator& interval) const;
 
     /**
      * Sets the time in the vector. This Function or SetTime

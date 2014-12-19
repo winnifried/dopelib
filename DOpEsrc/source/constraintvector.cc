@@ -105,13 +105,13 @@ void ConstraintVector<VECTOR>::SetTimeDoFNumber(unsigned int /*time_point*/) con
   throw DOpEException("Not implemented", "ConstraintVector<VECTOR>::SetTimeDoFNumber");
 }
 
-/******************************************************/
-template<typename VECTOR>
-void ConstraintVector<VECTOR>::SetTime(double /*t*/,const TimeIterator& /*interval*/) const
-{
-   //TODO if temporal behavior is required one needs to do something here!
-  throw DOpEException("Not implemented", "ConstraintVector<VECTOR>::SetTime");
-}
+///******************************************************/
+//template<typename VECTOR>
+//void ConstraintVector<VECTOR>::SetTime(double /*t*/,const TimeIterator& /*interval*/) const
+//{
+//   //TODO if temporal behavior is required one needs to do something here!
+//  throw DOpEException("Not implemented", "ConstraintVector<VECTOR>::SetTime");
+//}
 
 /******************************************************/
 

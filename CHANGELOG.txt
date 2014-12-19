@@ -1,5 +1,18 @@
 Changelog DOpE
 ==============
+19.12.2014: Added support for nonstationary optimization problems with nonlinear	
+	    time-derivatives, when access to the state variable in adjacent timepoints 
+	    is needed. These values are accessible unless the problem-type is 
+	    "state" via the label "state_i-1" and "state_i+1". 
+	    If the problem-type is "state", 
+	    "state_i-1" is "last_time_solution" as it always has been and 
+	    access to state_i+1 is not possible: 
+	        - Don't take future values of the state.  
+19.12.2014: The SetTime function in the *Vector classes has been removed 
+	    - now SetTimeDoFNumber has to be used. 
+	    The functionality of SetTime to interpolate between these values 
+	    should not be part of the Vector, but needs to be calculated outside 
+	    analog to the nodal-vector and the FEValues object.
 ===============================================================================
 24.10.2014: Release of DOpElib 2.0
 ===============================================================================

@@ -328,7 +328,9 @@ namespace DOpE
 	 * see OptProblemContainer for details.
 	 */
       inline void
-      SetTime(double time, const TimeIterator& interval, bool initial = false);
+      SetTime(double time,
+	      unsigned int time_dof_number, 
+	      const TimeIterator& interval, bool initial = false);
 
         /**
 	 * Functions providing the required information for the integrator.
@@ -685,9 +687,10 @@ namespace DOpE
       typename SPARSITYPATTERN, typename VECTOR, int dim>
     void
     StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dim>::SetTime(
-        double time, const TimeIterator& interval, bool initial)
+      double time,
+      unsigned int time_dof_number, const TimeIterator& interval, bool initial)
     {
-      opt_problem_.SetTime(time, interval, initial);
+      opt_problem_.SetTime(time, time_dof_number, interval, initial);
       interval_length_ = opt_problem_.GetSpaceTimeHandler()->GetStepSize();
     }
 

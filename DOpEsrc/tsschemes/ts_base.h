@@ -79,15 +79,18 @@ namespace DOpE
          * Sets the actual time.
          *
          * @param time      The actual time.
+	 * @param time_dof_number The dofnumber in time associated to the vectors
          * @param interval  The actual interval. Make sure that time
          *                  lies in interval!
          * @param initial   Do we solve at the initial time?
          */
 
         void
-        SetTime(double time, const TimeIterator& interval, bool initial = false)
+        SetTime(double time, 		 
+		unsigned int time_dof_number,
+		const TimeIterator& interval, bool initial = false)
         {
-          OP_.SetTime(time, interval,initial);
+          OP_.SetTime(time, time_dof_number, interval,initial);
         }
 
         /******************************************************/

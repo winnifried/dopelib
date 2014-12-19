@@ -362,20 +362,20 @@ namespace DOpE
         }
     }
 
-  /******************************************************/
-  template<typename VECTOR>
-    void
-    StateVector<VECTOR>::SetTime(double t, const TimeIterator& interval) const
-    {
-      if (interval.GetIndex() != accessor_index_ || local_vectors_.size()==0 )
-        {
-          accessor_index_ = interval.GetIndex();
-          ComputeLocalVectors(interval);
-        }
-      GetSpaceTimeHandler()->InterpolateState(local_state_, local_vectors_, t,
-          interval);
-      accessor_ = -1;
-    }
+//  /******************************************************/
+//  template<typename VECTOR>
+//    void
+//    StateVector<VECTOR>::SetTime(double t, const TimeIterator& interval) const
+//    {
+//      if (interval.GetIndex() != accessor_index_ || local_vectors_.size()==0 )
+//        {
+//          accessor_index_ = interval.GetIndex();
+//          ComputeLocalVectors(interval);
+//        }
+//      GetSpaceTimeHandler()->InterpolateState(local_state_, local_vectors_, t,
+//          interval);
+//      accessor_ = -1;
+//    }
 
   /******************************************************/
   template<typename VECTOR>
@@ -439,6 +439,145 @@ namespace DOpE
             }
           throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),
               "StateVector<VECTOR>::GetSpacialVector const");
+        }
+    }
+
+    /******************************************************/
+  template<typename VECTOR>
+    VECTOR&
+    StateVector<VECTOR>::GetNextSpacialVector()
+    {
+      if ( GetBehavior() == DOpEtypes::VectorStorageType::fullmem
+	|| GetBehavior() == DOpEtypes::VectorStorageType::only_recent)
+        {
+          if (accessor_ >= 0 && accessor_ +1 < (int) state_.size())
+            {
+              assert(state_[accessor_+1] != NULL);
+              return *(state_[accessor_+1]);
+            }
+	  throw DOpEException("No Next Vector Available ",
+			      "StateVector<VECTOR>::GetNextSpacialVector");
+	  abort();
+        }
+      else
+        {
+          if (GetBehavior() == DOpEtypes::VectorStorageType::store_on_disc)
+            {
+              if (accessor_ >= 0 && accessor_ +1 < (int) global_to_local_.size())
+                {
+                  assert(global_to_local_[accessor_+1] <local_vectors_.size());
+                  return *(local_vectors_[global_to_local_[accessor_+1]]);
+                }
+	      throw DOpEException("No Next Vector Available ",
+				  "StateVector<VECTOR>::GetNextSpacialVector");
+	      abort();
+            }
+          throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),
+              "StateVector<VECTOR>::GetNextSpacialVector");
+        }
+    }
+
+    /******************************************************/
+  template<typename VECTOR>
+    const VECTOR&
+    StateVector<VECTOR>::GetNextSpacialVector() const
+    {
+      if ( GetBehavior() == DOpEtypes::VectorStorageType::fullmem
+	|| GetBehavior() == DOpEtypes::VectorStorageType::only_recent)
+        {
+          if (accessor_ >= 0 && accessor_ +1< (int) state_.size())
+            {
+              assert(state_[accessor_+1] != NULL);
+              return *(state_[accessor_+1]);
+            }
+	  throw DOpEException("No Next Vector Available ",
+			      "StateVector<VECTOR>::GetNextSpacialVector const");
+	  abort();
+        }
+      else
+        {
+          if (GetBehavior() == DOpEtypes::VectorStorageType::store_on_disc)
+            {
+              if (accessor_ >= 0 && accessor_ +1 < (int) global_to_local_.size())
+                {
+                  assert(global_to_local_[accessor_+1] <local_vectors_.size());
+                  return *(local_vectors_[global_to_local_[accessor_+1]]);
+                }
+	      throw DOpEException("No Next Vector Available ",
+				  "StateVector<VECTOR>::GetNextSpacialVector const");
+	      abort();
+            }
+          throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),
+              "StateVector<VECTOR>::GetNextSpacialVector const");
+        }
+    }
+
+    /******************************************************/
+  template<typename VECTOR>
+    VECTOR&
+    StateVector<VECTOR>::GetPreviousSpacialVector()
+    {
+      if ( GetBehavior() == DOpEtypes::VectorStorageType::fullmem
+	|| GetBehavior() == DOpEtypes::VectorStorageType::only_recent)
+        {
+          if (accessor_ > 0 )
+            {
+              assert(state_[accessor_-1] != NULL);
+              return *(state_[accessor_-1]);
+            }
+	  throw DOpEException("No Previous Vector Available ",
+			      "StateVector<VECTOR>::GetPreviousSpacialVector");
+	  abort();
+        }
+      else
+        {
+          if (GetBehavior() == DOpEtypes::VectorStorageType::store_on_disc)
+            {
+              if (accessor_ > 0 )
+                {
+                  assert(global_to_local_[accessor_-1] <local_vectors_.size());
+                  return *(local_vectors_[global_to_local_[accessor_-1]]);
+                }
+	      throw DOpEException("No Previous Vector Available ",
+				  "StateVector<VECTOR>::GetPreviousSpacialVector");
+	      abort();
+            }
+          throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),
+              "StateVector<VECTOR>::GetPreviousSpacialVector");
+        }
+    }
+    /******************************************************/
+  template<typename VECTOR>
+    const VECTOR&
+    StateVector<VECTOR>::GetPreviousSpacialVector() const
+    {
+      if ( GetBehavior() == DOpEtypes::VectorStorageType::fullmem
+	|| GetBehavior() == DOpEtypes::VectorStorageType::only_recent)
+        {
+          if (accessor_ > 0 )
+            {
+              assert(state_[accessor_-1] != NULL);
+              return *(state_[accessor_-1]);
+            }
+	  throw DOpEException("No Previous Vector Available ",
+			      "StateVector<VECTOR>::GetPreviousSpacialVector const");
+	  abort();
+        }
+      else
+        {
+          if (GetBehavior() == DOpEtypes::VectorStorageType::store_on_disc)
+            {
+              if (accessor_ > 0 )
+                {
+                  assert(global_to_local_[accessor_-1] <local_vectors_.size());
+                  return *(local_vectors_[global_to_local_[accessor_-1]]);
+                }
+	      throw DOpEException("No Previous Vector Available ",
+				  "StateVector<VECTOR>::GetPreviousSpacialVector const");
+	      abort();
+            }
+          throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),
+              "StateVector<VECTOR>::GetPreviousSpacialVector const");
         }
     }
 

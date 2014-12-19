@@ -174,30 +174,29 @@ void ControlVector<VECTOR>::SetTimeDoFNumber(unsigned int time_point) const
 			  "ControlVector<VECTOR>::SetTimeDoFNumber");
     }
   }
-  else if(c_type_ == DOpEtypes::ControlType::initial)
+  else
+  //In all other cases, ignore the argument since no timedependence is present!
   {
-    if(time_point != 0)
-      throw DOpEException("With control type: " + DOpEtypesToString(c_type_) + "the time should never differ from 0.",
-			  "ControlVector<VECTOR>::SetTimeDoFNumber");
+    accessor_ = 0;
   }
 }
 
-/******************************************************/
-template<typename VECTOR>
-void ControlVector<VECTOR>::SetTime(double t,  const TimeIterator& interval) const
-{
-  if(c_type_ == DOpEtypes::ControlType::nonstationary)
-  {
-    if (interval.GetIndex() != accessor_index_ || local_vectors_.size()==0 )
-    {
-      accessor_index_ = interval.GetIndex();
-      ComputeLocalVectors(interval);
-    }
-    GetSpaceTimeHandler()->InterpolateControl(local_control_, local_vectors_, t,
-					      interval);
-    accessor_ = -1;
-  }
-}
+///******************************************************/
+//template<typename VECTOR>
+//void ControlVector<VECTOR>::SetTime(double t,  const TimeIterator& interval) const
+//{
+//  if(c_type_ == DOpEtypes::ControlType::nonstationary)
+//  {
+//    if (interval.GetIndex() != accessor_index_ || local_vectors_.size()==0 )
+//    {
+//      accessor_index_ = interval.GetIndex();
+//      ComputeLocalVectors(interval);
+//    }
+//    GetSpaceTimeHandler()->InterpolateControl(local_control_, local_vectors_, t,
+//					      interval);
+//    accessor_ = -1;
+//  }
+//}
 
 /******************************************************/
 

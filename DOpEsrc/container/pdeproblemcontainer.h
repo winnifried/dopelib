@@ -760,7 +760,9 @@ namespace DOpE
         /******************************************************/
 
         void
-        SetTime(double time, const TimeIterator& interval);
+        SetTime(double time, 
+		unsigned int time_dof_number,
+		const TimeIterator& interval);
 
         /******************************************************/
 
@@ -1736,7 +1738,9 @@ namespace DOpE
       int dealdim, template<int, int> class FE, template<int, int> class DH>
     void
     PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE, DH>::SetTime(
-        double time, const TimeIterator& interval)
+        double time,
+	unsigned int time_dof_number, 
+	const TimeIterator& interval)
     {
       GetSpaceTimeHandler()->SetInterval(interval);
 

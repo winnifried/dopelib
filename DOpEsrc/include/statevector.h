@@ -71,17 +71,17 @@ class StateVector
 		void SetTimeDoFNumber(unsigned int dof_number,
 		    const TimeIterator& interval) const;
 
-		/**
-		 * Sets the time in the vector for interpolation. This Function or SetTimeDoFNumber
-		 * or SetTimeDoFNumber must be called before calling GetSpacialVector
-		 * in order to load the required data.
-		 *
-		 * @param t            A double containing the time we are interested in.
-     *
-		 * @param interval      An TimeIterator. The interval containing t.
-		 *
-		 */
-		void SetTime(double t, const TimeIterator& interval) const;
+//		/**
+//		 * Sets the time in the vector for interpolation. This Function or SetTimeDoFNumber
+//		 * or SetTimeDoFNumber must be called before calling GetSpacialVector
+//		 * in order to load the required data.
+//		 *
+//		 * @param t            A double containing the time we are interested in.
+//     *
+//		 * @param interval      An TimeIterator. The interval containing t.
+//		 *
+//		 */
+//		void SetTime(double t, const TimeIterator& interval) const;
 		/**
 		 * Sets the time in the vector. This Function or SetTime or SetTimeDoFNumber
 		 * must be called before calling GetSpacialVector
@@ -99,6 +99,22 @@ class StateVector
 		 * Returns a const reference to the spatial vector associated to the last time given by SetTime* or SetTimeDoFNumber
 		 */
 		const VECTOR& GetSpacialVector() const;
+		/**
+		 * Analog to GetSpacialVector, but the next timepoint in natural time direction
+		 */
+		VECTOR& GetNextSpacialVector();
+		/**
+		 * Analog to GetSpacialVector, but the next timepoint in natural time direction
+		 */
+		const VECTOR& GetNextSpacialVector() const;
+		/**
+		 * Analog to GetSpacialVector, but the previous timepoint in natural time direction
+		 */
+		VECTOR& GetPreviousSpacialVector();
+		/**
+		 * Analog to GetSpacialVector, but the previous timepoint in natural time direction
+		 */
+		const VECTOR& GetPreviousSpacialVector() const;
 		/**
 		 * Returns a const reference to the spatial vector associated to the last time given by SetTime*
 		 * This makes a copy of the real vector  in order to change the vector type.
