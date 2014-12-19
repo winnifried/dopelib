@@ -66,7 +66,7 @@ endif
 # for which the program shall be compiled:
 flags += -Ddeal_II_dimension=$(deal_II_dimension) -Ddope_dimension=$(dope_dimension) -DDEAL_II_MAJOR_VERSION=$(DEAL_II_MAJOR) -DDEAL_II_MINOR_VERSION=$(DEAL_II_MINOR)
 
-LIBS += -I$(DOpE)/DOpEsrc/include/ -I$(DOpE)/DOpEsrc/templates -I$(DOpE)/DOpEsrc/wrapper -I$(DOpE)/DOpEsrc/basic -I$(DOpE)/DOpEsrc/problemdata -I$(DOpE)/DOpEsrc/interfaces -I$(DOpE)/DOpEsrc/reducedproblems -I$(DOpE)/DOpEsrc/container -I$(DOpE)/DOpEsrc/opt_algorithms -I$(DOpE)/DOpEsrc/tsschemes
+DOPE_FLAGS += -I$(DOpE)/DOpEsrc/include/ -I$(DOpE)/DOpEsrc/templates -I$(DOpE)/DOpEsrc/wrapper -I$(DOpE)/DOpEsrc/basic -I$(DOpE)/DOpEsrc/problemdata -I$(DOpE)/DOpEsrc/interfaces -I$(DOpE)/DOpEsrc/reducedproblems -I$(DOpE)/DOpEsrc/container -I$(DOpE)/DOpEsrc/opt_algorithms -I$(DOpE)/DOpEsrc/tsschemes
 
 LIBS += $(DOPE_LIBS)
 LDFLAGS += $(DOPE_LDFLAGS)
@@ -76,10 +76,10 @@ flags += $(DOPE_FLAGS)
 # files:
 %.g.$(OBJEXT) :
 	@echo =====waves=======$(dope_dimension)d==$(deal_II_dimension)d====debug=====$(MT)== $(<F)
-	@$(CXX) $(flags) $(LIBS) -c $< -o $@
+	@$(CXX) $(flags) -c $< -o $@
 %.$(OBJEXT) :
 	@echo =====waves=======$(dope_dimension)d==$(deal_II_dimension)d====optimized=$(MT)== $(<F)
-	@$(CXX) $(flags) $(LIBS) -c $< -o $@
+	@$(CXX) $(flags) -c $< -o $@
 
 
 # Next define how to link the executable
