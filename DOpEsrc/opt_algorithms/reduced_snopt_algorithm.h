@@ -421,7 +421,7 @@ int Reduced_SnoptAlgorithm<PROBLEM, VECTOR>
   ConstraintVector<VECTOR> constraints(this->GetReducedProblem()->GetProblem()->GetSpaceTimeHandler(),vector_behavior_);
   ControlVector<VECTOR> tmp(this->GetReducedProblem()->GetProblem()->GetSpaceTimeHandler(),vector_behavior_);
   VECTOR& ref_x = tmp.GetSpacialVector();
-  assert(ref_x.size() == *(data.n));
+  assert((int) ref_x.size() ==  *(data.n));
   for(unsigned int i=0; i < ref_x.size(); i++)
   ref_x(i) = (data.x)[i];
 
@@ -450,7 +450,7 @@ int Reduced_SnoptAlgorithm<PROBLEM, VECTOR>
       return -1;
     }
     const dealii::Vector<double>& gc = constraints.GetGlobalConstraints();
-    assert(*(data.neF) == gc.size()+1);
+    assert(*(data.neF) == (int) gc.size()+1);
     for(unsigned int i=0; i < gc.size(); i++)
     {
       (data.F)[i+1] = gc(i);
