@@ -2107,11 +2107,11 @@ namespace DOpE
           this->GetPDE().BoundaryEquation_UT(fdc, local_vector, scale*interval_length_,
               scale_ico*interval_length_);
         }
-//        else if ((this->GetType() == "gradient") || (this->GetType() == "hessian"))
-//        {
-//          // control values in quadrature points
-//          this->GetPDE().ControlBoundaryEquation(fdc, local_vector, scale);
-//        }
+        else if ((this->GetType() == "gradient") || (this->GetType() == "hessian"))
+        {
+          // control values in quadrature points
+          this->GetPDE().ControlBoundaryEquation(fdc, local_vector, scale*c_interval_length_);
+        }
         else
         {
           throw DOpEException("Not implemented",

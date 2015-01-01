@@ -407,6 +407,21 @@ namespace DOpE
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dealdim>
     void
+    PDEInterface<EDC, FDC, DH, VECTOR, dealdim>::ControlBoundaryEquation(
+        const FDC<DH, VECTOR, dealdim>&,
+        dealii::Vector<double> &/*local_vector*/, double /*scale*/)
+    {
+      throw DOpEException("Not Implemented",
+          "PDEInterface::ControlBoundaryEquation");
+    }
+
+  /********************************************/
+
+  template<
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
+      template<int, int> class DH, typename VECTOR, int dealdim>
+    void
     PDEInterface<EDC, FDC, DH, VECTOR, dealdim>::ElementRightHandSide(
         const EDC<DH, VECTOR, dealdim>&,
         dealii::Vector<double> &/*local_vector*/, double /*scale*/)
@@ -426,6 +441,20 @@ namespace DOpE
         FullMatrix<double> &/*local_entry_matrix*/, double /*scale*/)
     {
       throw DOpEException("Not Implemented", "PDEInterface::ControlElementMatrix");
+    }
+
+  /********************************************/
+
+  template<
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
+      template<int, int> class DH, typename VECTOR, int dealdim>
+    void
+    PDEInterface<EDC, FDC, DH, VECTOR, dealdim>::ControlBoundaryMatrix(
+        const FDC<DH, VECTOR, dealdim>&,
+        FullMatrix<double> &/*local_entry_matrix*/, double /*scale*/)
+    {
+      throw DOpEException("Not Implemented", "PDEInterface::ControlBoundaryMatrix");
     }
 
   /********************************************/

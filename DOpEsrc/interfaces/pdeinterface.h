@@ -836,6 +836,43 @@ namespace DOpE
         /******************************************************/
 
 	/**
+	 * This implements the scalar product on the boundary in the control space.
+	 * The equation is used to calculate the representation 
+	 * of the cost functional gradient given the derivative
+	 * of the cost functional
+	 * 
+	 * @param fdc                The FaceDataContainer object which provides 
+	 *                           access to all information on the element, 
+	 *                           e.g., test-functions, mesh size,...
+	 * @param local_vector  The vector containing the integrals
+	 *                           ordered according to the local number 
+	 *                           of the testfunction.
+	 * @param scale              A scaling parameter to be used in all
+	 *                           equations.
+	 */
+        virtual void
+	  ControlBoundaryEquation(const FDC<DH, VECTOR, dealdim>& /*fdc*/,
+			      dealii::Vector<double> &/*local_vector*/, 
+			      double /*scale*/);
+
+        /******************************************************/
+        /**
+	 * This implements the matrix corresponding to ControlBoundaryEquation
+	 * 
+	 * @param fdc                The FaceDataContainer object which provides 
+	 *                           access to all information on the element, 
+	 *                           e.g., test-functions, mesh size,...
+	 * @param local_entry_matrix The matrix containing the integrals
+	 *                           ordered according to the local number 
+	 *                           of the testfunction.
+	 */
+        virtual void
+	  ControlBoundaryMatrix(const FDC<DH, VECTOR, dealdim>& /*fdc*/,
+			       dealii::FullMatrix<double> &/*local_entry_matrix*/, 
+			       double /*scale*/);
+        /******************************************************/
+
+	/**
 	 * Similar to the StongElementResidual, this function implements the
 	 * strong element residual for the gradient equation, i.e., j'(q) = 0.
 	 * 
