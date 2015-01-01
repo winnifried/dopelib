@@ -3048,11 +3048,11 @@ namespace DOpE
           this->GetPDE().BoundaryMatrix_T(fdc, local_matrix, scale*interval_length_,
               scale_ico*interval_length_);
         }
-//        else if ((this->GetType() == "gradient") || (this->GetType() == "hessian"))
-//        {
-//          // control values in quadrature points
-//          this->GetPDE().ControlBoundaryMatrix(fdc, local_matrix);
-//        }
+        else if ((this->GetType() == "gradient") || (this->GetType() == "hessian"))
+        {
+          // control values in quadrature points
+          this->GetPDE().ControlBoundaryMatrix(fdc, local_matrix, scale*c_interval_length_);
+        }
         else
         {
           throw DOpEException("Not implemented",
