@@ -1065,7 +1065,7 @@ namespace DOpE
           return aux_functionals_[this->GetTypeNum()]->BoundaryValue(fdc);
         }
         else if (this->GetType() == "error_evaluation")
-        //TODO ist das hier korrekt? Sollten wir eigentlich nicht benoetigen.
+        //TODO is this correct? Should not be needed.
         {
           return aux_functionals_[functional_for_ee_num_]->BoundaryValue(fdc);
         }
@@ -1096,7 +1096,7 @@ namespace DOpE
           return aux_functionals_[this->GetTypeNum()]->FaceValue(fdc);
         }
         else if (this->GetType() == "error_evaluation")
-        //TODO ist das hier korrekt? Sollten wir eigentlich nicht benoetigen.
+	  //TODO is this correct? Should not be needed.
         {
           return aux_functionals_[functional_for_ee_num_]->FaceValue(fdc);
         }
@@ -1128,7 +1128,7 @@ namespace DOpE
             param_values, domain_values);
       }
       else if (this->GetType() == "error_evaluation")
-      //TODO ist das hier korrekt? Sollten wir eigentlich nicht benoetigen.
+	//TODO is this correct? Should not be needed.
       {
         return aux_functionals_[functional_for_ee_num_]->AlgebraicValue(
             param_values, domain_values);

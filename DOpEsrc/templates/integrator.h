@@ -1112,7 +1112,7 @@ namespace DOpE
                     fdc.ReInit(face, subface_no);
                     fdc.ReInitNbr();
 
-                    //TODO auslagern?
+                    //TODO to be swapped out?
                     nbr_dofs_per_element = fdc.GetNbrNDoFsPerElement();
                     nbr_local_dof_indices.resize(0);
                     nbr_local_dof_indices.resize(nbr_dofs_per_element, 0);
@@ -1141,7 +1141,7 @@ namespace DOpE
                   fdc.ReInit(face);
                   fdc.ReInitNbr();
 
-                  //TODO auslagern?
+                  //TODO to be swapped out?
                   nbr_dofs_per_element = fdc.GetNbrNDoFsPerElement();
                   nbr_local_dof_indices.resize(0);
                   nbr_local_dof_indices.resize(nbr_dofs_per_element, 0);

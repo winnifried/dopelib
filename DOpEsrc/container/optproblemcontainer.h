@@ -1643,7 +1643,7 @@ namespace DOpE
           return aux_functionals_[this->GetTypeNum()]->ElementValue(edc);
         }
         else if (this->GetType() == "functional_for_ee")
-        { //TODO ist das hier korrekt? Sollten wir eigentlich nicht benoetigen.
+	  { // TODO is this correct? Should not be needed.
           return aux_functionals_[functional_for_ee_num_]->ElementValue(edc);
         }
         else if (this->GetType().find("constraints") != std::string::npos)
@@ -1688,7 +1688,7 @@ namespace DOpE
       } //endif aux_functional
       else if (this->GetType() == "functional_for_ee")
       {
-        //TODO ist das hier korrekt? Sollten wir eigentlich nicht benoetigen.
+	// TODO is this correct? Should not be needed.
         return aux_functionals_[functional_for_ee_num_]->PointValue(
             this->GetSpaceTimeHandler()->GetControlDoFHandler(),
             this->GetSpaceTimeHandler()->GetStateDoFHandler(), param_values,
@@ -1732,7 +1732,7 @@ namespace DOpE
           return aux_functionals_[this->GetTypeNum()]->BoundaryValue(fdc);
         }
         else if (this->GetType() == "functional_for_ee")
-        //TODO ist das hier korrekt? Sollten wir eigentlich nicht benoetigen.
+	  // TODO is this correct? Should not be needed.
         {
           return aux_functionals_[functional_for_ee_num_]->BoundaryValue(fdc);
         }
@@ -1770,7 +1770,7 @@ namespace DOpE
           return aux_functionals_[this->GetTypeNum()]->FaceValue(fdc);
         }
         else if (this->GetType() == "functional_for_ee")
-        //TODO ist das hier korrekt? Sollten wir eigentlich nicht benoetigen.
+	  // TODO is this correct? Should not be needed.
         {
           return aux_functionals_[functional_for_ee_num_]->FaceValue(fdc);
         }
@@ -1805,8 +1805,8 @@ namespace DOpE
             param_values, domain_values);
       }
       else if (this->GetType() == "functional_for_ee")
-      //TODO ist das hier korrekt? Sollten wir eigentlich nicht benoetigen.
-      {
+	// TODO is this correct? Should not be needed.
+	{
         return aux_functionals_[functional_for_ee_num_]->AlgebraicValue(
             param_values, domain_values);
       }
