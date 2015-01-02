@@ -37,7 +37,7 @@ SNOPT_AR      = libsnopt_cpp libsnopt libsnprint libblas
 SNOPT_AR_LIBS = $(SNOPT_AR:%=$(SNOPT_LIBDIR)/%.a)
 
 #Additional library header files 
-DOPE_LIBS += -I$(SNOPT)/cppsrc -I$(SNOPT_F2CINC)
+DOPE_FLAGS += -I$(SNOPT)/cppsrc -I$(SNOPT_F2CINC)
 
 #additional linker information
 DOPE_LIBS += -L$(SNOPT_LIBDIR) $(SNOPT_AR_LIBS) $(SNOPT_F2CLIB)/libf2c.a

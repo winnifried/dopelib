@@ -32,7 +32,7 @@ IPOPT_LIB = $(IPOPT)/lib64/
 
 
 #Additional library header files 
-DOPE_LIBS += -I$(IPOPT_INC)  
+DOPE_FLAGS += -I$(IPOPT_INC)  
 
 IPOPT_LDFLAGS = -lipopt
 
