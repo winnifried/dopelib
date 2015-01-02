@@ -512,6 +512,15 @@ int ReducedNewtonAlgorithm<PROBLEM, VECTOR>::SolveReducedLinearSystem(const Cont
       r_transposed.add(1.,Hd_transposed);
       res = Residual(r,r_transposed);
     }
+    if(res < 0. && ( res > -1. *linear_global_tol_*linear_global_tol_ || res > -1.*std::min(0.25,sqrt(firstres))*firstres) )
+    {
+      //Ignore the wrong sign, it may be due to cancellations, and we would stop now.
+      //This is precisely what will happen if we just `correct' the sign of res
+      res = fabs(res);
+      out<<"\t There seem to be cancellation errors accumulating in the Residual,"<<std::endl;
+      out<<"\t and its norm gets negative. Since it is below the tolerance, we stop the iteration.";
+      this->GetOutputHandler()->Write(out,4+this->GetBasePriority());
+    }
     assert(res >= 0.);
     out<<"\t Cg step: " <<iter<<"\t Residual: "<<sqrt(res);
     this->GetOutputHandler()->Write(out,4+this->GetBasePriority());

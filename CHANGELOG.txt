@@ -1,5 +1,12 @@
 Changelog DOpE
 ==============
+02.01.2015: Fixed a bug, that the norm of the residual in the 
+	    ReducedNewtonAlgorithm can get negative due to
+	    cancellation errors, aborting the calculation.
+	    Now, the calculation is only aborted if the negative 
+	    value is too large compared to the requested tolerance;
+	    otherwise the iteration is stopped, since the tolerances 
+	    are met.
 19.12.2014: Fixed Make.global_options in the Examples directory.
 	    Now, the linker options are no longer passed to the 
 	    creation of the object files but only to linking.
