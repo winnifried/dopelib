@@ -201,7 +201,7 @@ main(int argc, char **argv)
   // FSI 2: k = 1.0e-2 until T=10
   // Below: times, 1000, 0, 10
 
-  // FSI 3: k = 1.0e-2 until T=10
+  // FSI 3: k = 1.0e-3 until T=10
   // Below: times, 10000, 0, 10
   Triangulation<1> times;
   GridGenerator::subdivided_hyper_cube(times, 25, 0, 25);
