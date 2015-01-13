@@ -23,7 +23,8 @@ FOREACH(_deal_ii_dimension 1 2 3)
       COMPILE_DEFINITIONS "deal_II_dimension=${_deal_ii_dimension};dope_dimension=${_dope_dimension};DEAL_II_MAJOR_VERSION=${DEAL_II_VERSION_MAJOR};DEAL_II_MINOR_VERSION=${DEAL_II_VERSION_MINOR}"
       )
 
-    FOREACH(_this_type SHARED STATIC)
+#    FOREACH(_this_type SHARED STATIC)
+    FOREACH(_this_type STATIC)
 
       ADD_LIBRARY(dope_${_dope_dimension}${_deal_ii_dimension}${_this_type} ${_this_type} 
 	$<TARGET_OBJECTS:dope_${_dope_dimension}${_deal_ii_dimension}>)

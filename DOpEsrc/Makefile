@@ -5,6 +5,7 @@ help:
 	@echo "=                                                                      ="
 	@echo "= The following targets exist:                                         ="
 	@echo "=    all      : Create all DOpE libraries                              ="
+	@echo "=    c-all    : Create all DOpE libraries using the cmake system       ="
 	@echo "=    debug    : Create DOpE libraries in debug version                 ="
 	@echo "=    opt      : Create DOpE libraries in optimized version             ="
 	@echo "=    pdf-doc  : Make documentation of DOpE examples in pdf file format ="
@@ -16,7 +17,10 @@ help:
 
 all: 
 	cd source ;  $(MAKE)
-
+c-all:
+	./autocmake.sh configure
+	cd autobuild/release; make 
+	cd autobuild/debug; make
 debug:
 	cd source ; $(MAKE) debug
 
@@ -29,11 +33,13 @@ pdf-doc:
 html-doc:
 	cd ../doxygen ; $(MAKE) all
 clean:
+	./autocmake.sh clean
 	rm -rf *~ TAGS 
 	cd source ; $(MAKE) clean
 	rm lib/?d/?d/*.a
 
 distclean:
+	./autocmake.sh distclean
 	rm -rf *~ TAGS 
 	cd source ; $(MAKE) veryclean
 	cd ../doxygen ; $(MAKE) clean
