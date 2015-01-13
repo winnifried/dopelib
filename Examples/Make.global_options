@@ -49,8 +49,8 @@ else
 endif
 
 #in gcc 4.7 and later use -std=c++11
-CXXFLAGS.g += -std=c++0x -fvisibility-inlines-hidden
-CXXFLAGS.o += -std=c++0x -fvisibility-inlines-hidden
+CXXFLAGS.g += -std=c++0x 
+CXXFLAGS.o += -std=c++0x 
 
 # Now use the information from above to define the set of libraries to
 # link with and the flags to be passed to the compiler:
