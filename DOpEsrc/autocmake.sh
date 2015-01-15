@@ -46,6 +46,7 @@ else
 		make clean
 		cd ../..
 	    fi
+	    exit 0
 	fi
     fi
 fi
