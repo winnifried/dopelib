@@ -1,5 +1,6 @@
 Changelog DOpE
 ==============
+13.01.2015: Added CMake build system to the library
 02.01.2015: Moved the repository to a new home https://svn.dopelib.net
 02.01.2015: Fixed a bug, that the norm of the residual in the 
 	    ReducedNewtonAlgorithm can get negative due to
