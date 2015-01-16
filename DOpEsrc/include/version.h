@@ -7,18 +7,18 @@ namespace DOpE
   {
     //Don't increase unless some major changes have happend
     //Then set minor and fix to zero
-    const unsigned int major         = 2;
+    const unsigned int major         = 3;
     //Update when you add new functionality
     //Then set fix to zero
     const unsigned int minor         = 0;
     //Update when you have fixed a bug
     const unsigned int fix           = 0;
     //If we want we can give additional information here 
-    const std::string  postfix       = "";
+    const std::string  postfix       = "pre";
     //When updating, please increase the time
-    const unsigned int day           = 24;
-    const unsigned int month         = 10;
-    const unsigned int year          = 2014;
+    const unsigned int day           = 15;
+    const unsigned int month         = 01;
+    const unsigned int year          = 2015;
   }
 }
 

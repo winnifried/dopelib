@@ -19,8 +19,8 @@ all:
 	cd source ;  $(MAKE)
 c-all:
 	./autocmake.sh configure
-	cd autobuild/release; make 
-	cd autobuild/debug; make
+	cd autobuild/release; $(MAKE)
+	cd autobuild/debug; $(MAKE)
 debug:
 	cd source ; $(MAKE) debug
 
