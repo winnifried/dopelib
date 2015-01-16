@@ -47,20 +47,65 @@ IF(NOT ${deal.II_FOUND})
     )
 ENDIF()
 
+STRING(TOLOWER "${CMAKE_BUILD_TYPE}" _cmake_build_type)
+IF("${_cmake_build_type}" STREQUAL "debug")
+  SET(_suffix ".g")
+ENDIF()
+
+SET(DOPE_LINK_LIBS dope${_suffix})
+
+#Finding Thirdparty libraries
+#IPOPT
+SET(IPOPT_PATH ${DOpE}/ThirdPartyLibs/ipopt/)
+IF(IS_DIRECTORY ${IPOPT_PATH})
+	MESSAGE(STATUS "Thirdparty-Library IPOPT has been found at ${IPOPT_PATH}")
+ 	ADD_DEFINITIONS(-DWITH_IPOPT)
+	INCLUDE_DIRECTORIES(${IPOPT_PATH}/include/coin/)
+	SET(IPOPT_LIB_PATH ${IPOPT_PATH}/lib64/)
+	LINK_DIRECTORIES(${IPOPT_LIB_PATH})
+	SET(DOPE_LINK_LIBS ${DOPE_LINK_LIBS} ipopt)
+	#Additional IPOPT libraries
+
+	FOREACH(aux_lib coinasl coinmetis coinmumps coinlapack)
+	       FIND_LIBRARY(AUX_LIBS $aux_lib ${DOPE_LIB_PATH})
+	       	IF(NOT AUX_LIBS-NOTFOUND)    
+	     	       MESSAGE(STATUS "IPOPT Thirdparty-Library ${aux_lib} found")
+	     	       SET(DOPE_LINK_LIBS ${DOPE_LINK_LIBS} ${aux_lib})
+		ELSE()		  	  
+		       MESSAGE(STATUS "NO HSL Library found")
+		ENDIF()
+	ENDFOREACH()
+	
+ELSE()
+	MESSAGE(STATUS "No IPOPT could be found.")
+	SET(IPOPT_PATH "")			
+ENDIF()	
+
+#SNOPT
+SET(SNOPT_PATH ${DOpE}/ThirdPartyLibs/snopt/)
+IF(IS_DIRECTORY ${SNOPT_PATH})
+	MESSAGE(STATUS "Thirdparty-Library SNOPT has been found at ${SNOPT_PATH}")
+ 	ADD_DEFINITIONS(-DWITH_SNOPT -fPIC)
+	INCLUDE_DIRECTORIES(${SNOPT_PATH}/include/
+	                    ${SNOPT_PATH}/cppsrc)
+	SET(SNOPT_LIB_PATH ${SNOPT_PATH}/lib/)
+	LINK_DIRECTORIES(${SNOPT_LIB_PATH})
+	SET(DOPE_LINK_LIBS ${DOPE_LINK_LIBS} snopt_cpp snopt snprint gfortranbegin gfortran f2c)
+ELSE()
+	MESSAGE(STATUS "No SNOPT could be found.")
+	SET(SNOPT_PATH "")			
+ENDIF()	
+
 DEAL_II_INITIALIZE_CACHED_VARIABLES()
 
 ADD_EXECUTABLE(${TARGET} ${TARGET_SRC})
 
 DEAL_II_SETUP_TARGET(${TARGET})
    
-STRING(TOLOWER "${CMAKE_BUILD_TYPE}" _cmake_build_type)
-IF("${_cmake_build_type}" STREQUAL "debug")
-  SET(_suffix ".g")
-ENDIF()
-
-TARGET_LINK_LIBRARIES(${TARGET} dope${_suffix})
+TARGET_LINK_LIBRARIES(${TARGET} ${DOPE_LINK_LIBS})
 
 SET_PROPERTY(TARGET ${TARGET} APPEND PROPERTY
       COMPILE_DEFINITIONS "deal_II_dimension=${deal_dimension};dope_dimension=${dope_dimension};DEAL_II_MAJOR_VERSION=${DEAL_II_VERSION_MAJOR};DEAL_II_MINOR_VERSION=${DEAL_II_VERSION_MINOR}"
       )
+
 SET_PROPERTY(TARGET ${TARGET} PROPERTY RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR})

@@ -95,16 +95,22 @@ run: $(target)$(EXEEXT)
 all: 
 	$(MAKE)
 
+c-all:
+	$(DOpE)/Examples/autocmake-examples.sh configure
+	cd autobuild; $(MAKE)
+	
 # Rule how to clean up. This is split into several different rules to
 # allow for parallel execution of commands:
-clean: clean-lib clean-data
+clean: clean-lib clean-data    
 
 veryclean: clean
+	 $(DOpE)/Examples/autocmake-examples.sh distclean 
 	-rm -f *~ */*~ */*/*~ Makefile.dep
 
 clean-lib:
+	$(DOpE)/Examples/autocmake-examples.sh clean
 	-rm -f *.$(OBJEXT) *.g.$(OBJEXT) $(target)$(EXEEXT) TAGS
-
+	
 clean-data:
 	-rm -f $(clean-up-files)
 

@@ -1,5 +1,7 @@
 Changelog DOpE
 ==============
+16.01.2015: Added CMake build system for the examples and updated
+	    the documentation. Set Version to 3.0 pre.
 13.01.2015: Added CMake build system to the library
 02.01.2015: Moved the repository to a new home https://svn.dopelib.net
 02.01.2015: Fixed a bug, that the norm of the residual in the 
