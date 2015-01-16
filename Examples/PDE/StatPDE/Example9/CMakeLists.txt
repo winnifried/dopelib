@@ -1,6 +1,6 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
 # Set the name of the project and target:
-SET(TARGET "DDOpE-PDE-StatPDE-Example9")
+SET(TARGET "DOpE-PDE-StatPDE-Example9")
 
 # Declare all source files the target consists of:
 SET(TARGET_SRC
