@@ -11,7 +11,7 @@ BINDIR = ./
 # `lib/' to designate its destination directory. Note that the program
 # name depends on the dimension, so you can keep copies for the
 # different dimensions around:
-target   = $(BINDIR)/DOpE-PDE-StatPDE-Example5-$(dope_dimension)d-$(deal_II_dimension)d
+target   = $(BINDIR)/DOpE-PDE-StatPDE-Example5
 
 # The `debug-mode' variable works as in the small projects Makefile:
 debug-mode = off
