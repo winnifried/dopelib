@@ -1,5 +1,8 @@
 TODO DOpE
 =========
+- In the adjoint/adjoint_hessian run of nonstationary problems,
+  at the initial time of the forward problem, the corresponding 
+  Init_* Integrals should be used!
 - Translate TODO into English
 - Update manual to contain full code blocks in particular for Section 2.6
 - Add more code examples to Section 5 of the manual
