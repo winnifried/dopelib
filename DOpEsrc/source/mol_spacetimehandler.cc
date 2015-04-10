@@ -61,7 +61,7 @@ namespace DOpE
 
   template<>
     void
-    MethodOfLines_SpaceTimeHandler<dealii::FESystem,
+    DOpE::MethodOfLines_SpaceTimeHandler<dealii::FESystem,
         dealii::DoFHandler, dealii::SparsityPattern,
         dealii::Vector<double>, dope_dimension, deal_II_dimension>::ComputeControlSparsityPattern(
         dealii::SparsityPattern & sparsity) const
@@ -115,7 +115,7 @@ namespace DOpE
 
   template<>
     void
-    MethodOfLines_SpaceTimeHandler<dealii::hp::FECollection,
+    DOpE::MethodOfLines_SpaceTimeHandler<dealii::hp::FECollection,
         dealii::hp::DoFHandler, dealii::SparsityPattern,
         dealii::Vector<double>, dope_dimension, deal_II_dimension>::ComputeControlSparsityPattern(
         dealii::SparsityPattern & sparsity) const
@@ -133,6 +133,65 @@ namespace DOpE
     }
 
 }
+ 
+///////////////////////////ResetTriangulation
+ template<>
+    void
+    DOpE::MethodOfLines_SpaceTimeHandler<dealii::FESystem,
+        dealii::DoFHandler, dealii::BlockSparsityPattern,
+        dealii::BlockVector<double>, dope_dimension, deal_II_dimension>::ResetTriangulation(
+	  const dealii::Triangulation<deal_II_dimension>& tria)
+ {
+   state_dof_handler_.clear();
+   triangulation_.clear();
+   triangulation_.copy_triangulation(tria);
+   state_dof_handler_.initialize(triangulation_, *state_fe_);
+   this->IncrementControlTicket();
+   this->IncrementStateTicket();
+   if (control_mesh_transfer_ != NULL)
+     delete control_mesh_transfer_;
+   control_mesh_transfer_ = NULL;
+   if (state_mesh_transfer_ != NULL)
+     delete state_mesh_transfer_;
+   state_mesh_transfer_ = NULL;
+  }
+
+  template<>
+    void
+    DOpE::MethodOfLines_SpaceTimeHandler<dealii::FESystem,
+        dealii::DoFHandler, dealii::SparsityPattern,
+    dealii::Vector<double>, dope_dimension, deal_II_dimension>::ResetTriangulation(
+      const dealii::Triangulation<deal_II_dimension>& tria)      
+ {
+   state_dof_handler_.clear();
+   triangulation_.clear();
+   triangulation_.copy_triangulation(tria);
+   state_dof_handler_.initialize(triangulation_, *state_fe_);
+   this->IncrementControlTicket();
+   this->IncrementStateTicket();
+   if (control_mesh_transfer_ != NULL)
+     delete control_mesh_transfer_;
+   control_mesh_transfer_ = NULL;
+   if (state_mesh_transfer_ != NULL)
+     delete state_mesh_transfer_;
+   state_mesh_transfer_ = NULL;
+  }
+
+  template<>
+    void
+    DOpE::MethodOfLines_SpaceTimeHandler<
+        dealii::hp::FECollection,
+        dealii::hp::DoFHandler, dealii::BlockSparsityPattern,
+    dealii::BlockVector<double>, dope_dimension, deal_II_dimension>::ResetTriangulation(
+      const dealii::Triangulation<deal_II_dimension>& tria) { abort(); }
+
+  template<>
+    void
+    DOpE::MethodOfLines_SpaceTimeHandler<dealii::hp::FECollection,
+        dealii::hp::DoFHandler, dealii::SparsityPattern,
+        dealii::Vector<double>, dope_dimension, deal_II_dimension>::ResetTriangulation(
+	  const dealii::Triangulation<deal_II_dimension>& tria) { abort(); }
+
 
 template class DOpE::MethodOfLines_SpaceTimeHandler<dealii::FESystem,
 						    dealii::DoFHandler, 

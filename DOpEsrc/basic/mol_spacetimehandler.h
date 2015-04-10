@@ -704,31 +704,15 @@ namespace DOpE
           sparse_mkr_dynamic_ = false;
         }
 
-//        /******************************************************/
-//        /**
-//         * Through this function one can reinitialize the 
-//         * triangulation for the state variable to be a copy of the
-//         * given argument.
-//         */
-//
-//        void
-//        ResetTriangulation(const dealii::Triangulation<dealdim>& tria)
-//        {
-//          state_dof_handler_.clear();
-//          triangulation_.clear();
-//          triangulation_.copytriangulation_(tria);
-//          state_dof_handler_.initialize(triangulation_, *state_fe_);
-//          this->IncrementControlTicket();
-//          this->IncrementStateTicket();
-//          if (control_mesh_transfer_ != NULL)
-//            delete control_mesh_transfer_;
-//          control_mesh_transfer_ = NULL;
-//          if (state_mesh_transfer_ != NULL)
-//            delete state_mesh_transfer_;
-//          state_mesh_transfer_ = NULL;
-//
-//        }
-
+        /******************************************************/
+        /**
+         * Through this function one can reinitialize the 
+         * triangulation for the state variable to be a copy of the
+         * given argument.
+         */
+        void
+	  ResetTriangulation(const dealii::Triangulation<dealdim>& tria);
+        
       private:
         const SparsityMaker<DH, dealdim>*
         GetSparsityMaker() const
@@ -777,6 +761,12 @@ namespace DOpE
         dealii::DoFHandler, dealii::BlockSparsityPattern,
         dealii::BlockVector<double>, dope_dimension, deal_II_dimension>::ComputeControlSparsityPattern(
 	  dealii::BlockSparsityPattern & sparsity) const;
+  template<>
+    void
+    DOpE::MethodOfLines_SpaceTimeHandler<dealii::FESystem,
+        dealii::DoFHandler, dealii::BlockSparsityPattern,
+        dealii::BlockVector<double>, dope_dimension, deal_II_dimension>::ResetTriangulation(
+	  const dealii::Triangulation<deal_II_dimension>& tria);
 
   /******************************************************/
 
@@ -786,6 +776,12 @@ namespace DOpE
         dealii::DoFHandler, dealii::SparsityPattern,
         dealii::Vector<double>, dope_dimension, deal_II_dimension>::ComputeControlSparsityPattern(
 	  dealii::SparsityPattern & sparsity) const;
+  template<>
+    void
+    MethodOfLines_SpaceTimeHandler<dealii::FESystem,
+        dealii::DoFHandler, dealii::SparsityPattern,
+    dealii::Vector<double>, dope_dimension, deal_II_dimension>::ResetTriangulation(
+      const dealii::Triangulation<deal_II_dimension>& tria);
 
 
   /**
@@ -798,6 +794,13 @@ namespace DOpE
         dealii::hp::DoFHandler, dealii::BlockSparsityPattern,
         dealii::BlockVector<double>, dope_dimension, deal_II_dimension>::ComputeControlSparsityPattern(
 	  dealii::BlockSparsityPattern & sparsity) const;
+  template<>
+    void
+    DOpE::MethodOfLines_SpaceTimeHandler<
+        dealii::hp::FECollection,
+        dealii::hp::DoFHandler, dealii::BlockSparsityPattern,
+    dealii::BlockVector<double>, dope_dimension, deal_II_dimension>::ResetTriangulation(
+      const dealii::Triangulation<deal_II_dimension>& tria);
 
   /******************************************************/
 
@@ -807,6 +810,12 @@ namespace DOpE
         dealii::hp::DoFHandler, dealii::SparsityPattern,
         dealii::Vector<double>, dope_dimension, deal_II_dimension>::ComputeControlSparsityPattern(
 	  dealii::SparsityPattern & sparsity) const;
+  template<>
+    void
+    MethodOfLines_SpaceTimeHandler<dealii::hp::FECollection,
+        dealii::hp::DoFHandler, dealii::SparsityPattern,
+        dealii::Vector<double>, dope_dimension, deal_II_dimension>::ResetTriangulation(
+	  const dealii::Triangulation<deal_II_dimension>& tria);
 
 }
 
