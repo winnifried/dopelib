@@ -32,9 +32,8 @@
 #include "dwrdatacontainer.h"
 
 #include <assert.h>
-#include <numerics/data_out.h>
-
-#include <lac/vector.h>
+#include <deal.II/numerics/data_out.h>
+#include <deal.II/lac/vector.h>
 
 namespace DOpE
 {

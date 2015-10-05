@@ -23,13 +23,13 @@
 #include <iostream>
 #include <fstream>
 
-#include <grid/tria.h>
-#include <grid/tria_boundary_lib.h>
-#include <grid/grid_generator.h>
-#include <grid/grid_in.h>
-#include <grid/grid_out.h>
-#include <fe/fe_q.h>
-#include <base/quadrature_lib.h>
+#include <deal.II/grid/tria.h>
+#include <deal.II/grid/tria_boundary_lib.h>
+#include <deal.II/grid/grid_generator.h>
+#include <deal.II/grid/grid_in.h>
+#include <deal.II/grid/grid_out.h>
+#include <deal.II/fe/fe_q.h>
+#include <deal.II/base/quadrature_lib.h>
 
 #include "pdeproblemcontainer.h"
 #include "functionalinterface.h"

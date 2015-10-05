@@ -24,14 +24,14 @@
 #include <iostream>
 #include <fstream>
 
-#include <grid/tria.h>
-#include <grid/grid_in.h>
-#include <grid/tria_boundary_lib.h>
-#include <fe/fe_q.h>
-#include <base/quadrature_lib.h>
+#include <deal.II/grid/tria.h>
+#include <deal.II/grid/grid_in.h>
+#include <deal.II/grid/tria_boundary_lib.h>
+#include <deal.II/fe/fe_q.h>
+#include <deal.II/base/quadrature_lib.h>
 // for grid local refinement
-#include <numerics/error_estimator.h>
-#include <grid/grid_refinement.h>
+#include <deal.II/numerics/error_estimator.h>
+#include <deal.II/grid/grid_refinement.h>
 
 #include "pdeproblemcontainer.h"
 #include "statpdeproblem.h"

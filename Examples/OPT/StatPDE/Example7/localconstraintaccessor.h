@@ -187,10 +187,10 @@ namespace DOpE
 
       inline void
       GetLocalConstraintDerivative(Tensor<2, 1>& derivative,
-          const dealii::BlockVector<double>& constraints,
-          unsigned int local_block, unsigned int local_index) const
+				   const dealii::BlockVector<double>& constraints,
+				   unsigned int local_block, unsigned int /*local_index*/) const
       {
-        assert(local_index == 0);
+//        assert(local_index == 0);
         if (local_block < constraints.block(0).size() / 2)
         {
           // It is a lower bound
@@ -207,8 +207,8 @@ namespace DOpE
       GetLocalConstraintSecondDerivative(Tensor<2, 1>& derivative,
 					 const dealii::BlockVector<double>& /*constraints*/,
 					 unsigned int /*local_block*/, 
-					 unsigned int local_index_1,
-					 unsigned int local_index_2) const
+					 unsigned int /*local_index_1*/,
+					 unsigned int /*local_index_2*/) const
       {
         assert(local_index_1 == 0);
         assert(local_index_2 == 0);

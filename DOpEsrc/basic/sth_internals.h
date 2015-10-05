@@ -26,9 +26,9 @@
 
 #include "mapping_wrapper.h"
 
-#include <dofs/dof_tools.h>
-#include <fe/mapping_q1.h>
-#include <hp/mapping_collection.h>
+#include <deal.II/dofs/dof_tools.h>
+#include <deal.II/fe/mapping_q1.h>
+#include <deal.II/hp/mapping_collection.h>
 
 #include "dofhandler_wrapper.h"
 
@@ -55,22 +55,22 @@ namespace DOpE
         DoFTools::map_dofs_to_support_points(mapping, dh, support_points);
       }
 
-    /**
-     * Calls the deal.II map_dofs_to_support_points routine.
-     * For MGDoFHandler (Experimental)
-     */
-    template<typename VECTOR, int dealdim>
-      void
-      MapDoFsToSupportPoints(
-          const DOpEWrapper::Mapping<dealdim, dealii::MGDoFHandler >& mapping,
-          const DOpEWrapper::DoFHandler<dealdim, dealii::MGDoFHandler >& dh,
-          VECTOR& support_points)
-      {
-
-//        MappingQ1 < dealdim > mapping;
-
-        DoFTools::map_dofs_to_support_points(mapping, dh, support_points);
-      }
+//    /**
+//     * Calls the deal.II map_dofs_to_support_points routine.
+//     * For MGDoFHandler (Experimental)
+//     */
+//    template<typename VECTOR, int dealdim>
+//      void
+//      MapDoFsToSupportPoints(
+//          const DOpEWrapper::Mapping<dealdim, dealii::MGDoFHandler >& mapping,
+//          const DOpEWrapper::DoFHandler<dealdim, dealii::MGDoFHandler >& dh,
+//          VECTOR& support_points)
+//      {
+//
+////        MappingQ1 < dealdim > mapping;
+//
+//        DoFTools::map_dofs_to_support_points(mapping, dh, support_points);
+//      }
 
     /**
      * Calls the deal.II map_dofs_to_support_points routine.

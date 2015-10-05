@@ -23,14 +23,14 @@
 
 #include <iostream>
 
-#include <grid/tria.h>
-#include <dofs/dof_handler.h>
-#include <grid/grid_generator.h>
-#include <fe/fe_q.h>
-#include <fe/fe_dgp.h>
-#include <dofs/dof_tools.h>
-#include <base/quadrature_lib.h>
-#include <base/function.h>
+#include <deal.II/grid/tria.h>
+#include <deal.II/dofs/dof_handler.h>
+#include <deal.II/grid/grid_generator.h>
+#include <deal.II/fe/fe_q.h>
+#include <deal.II/fe/fe_dgp.h>
+#include <deal.II/dofs/dof_tools.h>
+#include <deal.II/base/quadrature_lib.h>
+#include <deal.II/base/function.h>
 
 #include "generalized_mma_algorithm.h"
 #include "optproblemcontainer.h"
@@ -155,11 +155,19 @@ main(int argc, char **argv)
         {
           if (element->face(f)->center()[1] == 0)
           {
-            element->face(f)->set_all_boundary_indicators(5);
+#if DEAL_II_VERSION_GTE(8,3,0)
+	    element->face(f)->set_all_boundary_ids(5);
+#else
+	    element->face(f)->set_all_boundary_indicators(5);
+#endif
             if (fabs(element->face(f)->center()[0] - 2.)
                 < std::max(0.25, element->face(f)->diameter()))
             {
-              element->face(f)->set_all_boundary_indicators(2);
+ #if DEAL_II_VERSION_GTE(8,3,0)
+	    element->face(f)->set_all_boundary_ids(2);
+#else
+             element->face(f)->set_all_boundary_indicators(2);
+#endif
             }
           }
         }
@@ -231,11 +239,19 @@ main(int argc, char **argv)
             {
               if (element->face(f)->center()[1] == 0)
               {
+ #if DEAL_II_VERSION_GTE(8,3,0)
+		element->face(f)->set_all_boundary_ids(5);
+#else
                 element->face(f)->set_all_boundary_indicators(5);
+#endif
                 if ((fabs(element->face(f)->center()[0] - 2.)
                     < std::max(0.25, element->face(f)->diameter())))
                 {
+#if DEAL_II_VERSION_GTE(8,3,0)
+                  element->face(f)->set_all_boundary_ids(2);
+#else
                   element->face(f)->set_all_boundary_indicators(2);
+#endif
                 }
               }
             }

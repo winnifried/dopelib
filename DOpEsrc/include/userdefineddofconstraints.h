@@ -24,9 +24,9 @@
 #ifndef CONSTRAINTMAKER_H_
 #define CONSTRAINTMAKER_H_
 
-#include <dofs/dof_tools.h>
-#include <dofs/dof_handler.h>
-#include <lac/constraint_matrix.h>
+#include <deal.II/dofs/dof_tools.h>
+#include <deal.II/dofs/dof_handler.h>
+#include <deal.II/lac/constraint_matrix.h>
 
 #include "dofhandler_wrapper.h"
 #include "mapping_wrapper.h"

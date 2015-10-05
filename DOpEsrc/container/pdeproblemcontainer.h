@@ -36,32 +36,32 @@
 #include "facedatacontainer.h"
 #include "stateproblem.h"
 #include "problemcontainer_internal.h"
-#include <deal.II/multigrid/mg_dof_handler.h>
+//#include <deal.II/multigrid/mg_dof_handler.h>
 #include "dopetypes.h"
 #include "dwrdatacontainer.h"
 
-#include <lac/vector.h>
-#include <lac/full_matrix.h>
-#include <grid/tria_iterator.h>
-#include <dofs/dof_handler.h>
-#include <dofs/dof_accessor.h>
-#include <dofs/dof_tools.h>
-#include <fe/fe_system.h>
-#include <fe/fe_values.h>
-#include <fe/mapping.h>
-#include <base/quadrature_lib.h>
-#include <lac/block_sparsity_pattern.h>
-#include <lac/compressed_simple_sparsity_pattern.h>
+#include <deal.II/lac/vector.h>
+#include <deal.II/lac/full_matrix.h>
+#include <deal.II/grid/tria_iterator.h>
+#include <deal.II/dofs/dof_handler.h>
+#include <deal.II/dofs/dof_accessor.h>
+#include <deal.II/dofs/dof_tools.h>
+#include <deal.II/fe/fe_system.h>
+#include <deal.II/fe/fe_values.h>
+#include <deal.II/fe/mapping.h>
+#include <deal.II/base/quadrature_lib.h>
+#include <deal.II/lac/block_sparsity_pattern.h>
+#include <deal.II/lac/compressed_simple_sparsity_pattern.h>
 
-// Multi-level routines (step-16 in deal.II)
-#include <deal.II/multigrid/mg_dof_handler.h>
-#include <deal.II/multigrid/mg_constrained_dofs.h>
-#include <deal.II/multigrid/multigrid.h>
-#include <deal.II/multigrid/mg_transfer.h>
-#include <deal.II/multigrid/mg_tools.h>
-#include <deal.II/multigrid/mg_coarse.h>
-#include <deal.II/multigrid/mg_smoother.h>
-#include <deal.II/multigrid/mg_matrix.h>
+//// Multi-level routines (step-16 in deal.II)
+//#include <deal.II/multigrid/mg_dof_handler.h>
+//#include <deal.II/multigrid/mg_constrained_dofs.h>
+//#include <deal.II/multigrid/multigrid.h>
+//#include <deal.II/multigrid/mg_transfer.h>
+//#include <deal.II/multigrid/mg_tools.h>
+//#include <deal.II/multigrid/mg_coarse.h>
+//#include <deal.II/multigrid/mg_smoother.h>
+//#include <deal.II/multigrid/mg_matrix.h>
 
 
 
@@ -786,22 +786,22 @@ namespace DOpE
         ComputeSparsityPattern(SPARSITYPATTERN & sparsity) const;
 
         /******************************************************/
-      /*
-       * Experimental status:
-       * Needed for MG prec
-       */
-      void
-        ComputeMGSparsityPattern(dealii::MGLevelObject<dealii::BlockSparsityPattern> & mg_sparsity_patterns,
-				      unsigned int n_levels) const;
-
-      /******************************************************/
-      /*
-       * Experimental status:
-       * Needed for MG prec
-       */
-        void
-        ComputeMGSparsityPattern(dealii::MGLevelObject<dealii::SparsityPattern> & mg_sparsity_patterns,
-				      unsigned int n_levels) const;
+//      /*
+//       * Experimental status:
+//       * Needed for MG prec
+//       */
+//      void
+//        ComputeMGSparsityPattern(dealii::MGLevelObject<dealii::BlockSparsityPattern> & mg_sparsity_patterns,
+//				      unsigned int n_levels) const;
+//
+//      /******************************************************/
+//      /*
+//       * Experimental status:
+//       * Needed for MG prec
+//       */
+//        void
+//        ComputeMGSparsityPattern(dealii::MGLevelObject<dealii::SparsityPattern> & mg_sparsity_patterns,
+//				      unsigned int n_levels) const;
 
         /******************************************************/
 
@@ -1773,45 +1773,45 @@ namespace DOpE
       }
     }
 
-  /******************************************************/
-
-  template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
-      int dealdim, template<int, int> class FE, template<int, int> class DH>
-    void
-    PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE, DH>::ComputeMGSparsityPattern(
-        dealii::MGLevelObject<dealii::BlockSparsityPattern> & mg_sparsity_patterns,
-				      unsigned int n_levels) const
-    {
-      if (this->GetType() == "state")
-      {
-        this->GetSpaceTimeHandler()->ComputeMGStateSparsityPattern(mg_sparsity_patterns, n_levels);
-      }
-      else
-      {
-        throw DOpEException("Unknown type " + this->GetType(),
-            "PDEProblemContainer::ComputeMGSparsityPattern");
-      }
-    }
-
-  /******************************************************/
-
-  template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
-      int dealdim, template<int, int> class FE, template<int, int> class DH>
-    void
-    PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE, DH>::ComputeMGSparsityPattern(
-        dealii::MGLevelObject<dealii::SparsityPattern> & mg_sparsity_patterns,
-				      unsigned int n_levels) const
-    {
-      if (this->GetType() == "state")
-      {
-        this->GetSpaceTimeHandler()->ComputeMGStateSparsityPattern(mg_sparsity_patterns, n_levels);
-      }
-      else
-      {
-        throw DOpEException("Unknown type " + this->GetType(),
-            "PDEProblemContainer::ComputeMGSparsityPattern");
-      }
-    }
+// /******************************************************/
+//
+// template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
+//     int dealdim, template<int, int> class FE, template<int, int> class DH>
+//   void
+//   PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE, DH>::ComputeMGSparsityPattern(
+//       dealii::MGLevelObject<dealii::BlockSparsityPattern> & mg_sparsity_patterns,
+//				      unsigned int n_levels) const
+//   {
+//     if (this->GetType() == "state")
+//     {
+//       this->GetSpaceTimeHandler()->ComputeMGStateSparsityPattern(mg_sparsity_patterns, n_levels);
+//     }
+//     else
+//     {
+//       throw DOpEException("Unknown type " + this->GetType(),
+//           "PDEProblemContainer::ComputeMGSparsityPattern");
+//     }
+//   }
+//
+// /******************************************************/
+//
+// template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
+//     int dealdim, template<int, int> class FE, template<int, int> class DH>
+//   void
+//   PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE, DH>::ComputeMGSparsityPattern(
+//       dealii::MGLevelObject<dealii::SparsityPattern> & mg_sparsity_patterns,
+//				      unsigned int n_levels) const
+//   {
+//     if (this->GetType() == "state")
+//     {
+//       this->GetSpaceTimeHandler()->ComputeMGStateSparsityPattern(mg_sparsity_patterns, n_levels);
+//     }
+//     else
+//     {
+//       throw DOpEException("Unknown type " + this->GetType(),
+//           "PDEProblemContainer::ComputeMGSparsityPattern");
+//     }
+//   }
 
 
 

@@ -24,8 +24,8 @@
 #ifndef DOPE_PRECONDITIONER_H_
 #define DOPE_PRECONDITIONER_H_
 
-#include <lac/precondition.h>
-#include <lac/sparse_ilu.h>
+#include <deal.II/lac/precondition.h>
+#include <deal.II/lac/sparse_ilu.h>
   
   /**
    * @file preconditioner_wrapper.h

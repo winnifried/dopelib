@@ -112,13 +112,13 @@ namespace DOpE
               error_ind_ = GetDualErrorIndicators();
               break;
             case DOpEtypes::mixed:
-              error_ind_.equ(0.5, GetPrimalErrorIndicators(), 0.5,
-                  GetDualErrorIndicators());
+              error_ind_.equ(0.5, GetPrimalErrorIndicators());
+	      error_ind_.add(0.5, GetDualErrorIndicators());
               break;
              case DOpEtypes::mixed_control:
-              error_ind_.equ(0.5, GetPrimalErrorIndicators(), 0.5,
-			     GetDualErrorIndicators(), 0.5, 
-		             GetControlErrorIndicators());
+	       error_ind_.equ(0.5, GetPrimalErrorIndicators());
+	       error_ind_.add(0.5, GetDualErrorIndicators());
+	       error_ind_.add(0.5, GetControlErrorIndicators());
               break;
             default:
               throw DOpEException("Unknown DOpEtypes::EEterms.",

@@ -24,11 +24,11 @@
 #ifndef INTEGRATORDATACONTAINER_H_
 #define INTEGRATORDATACONTAINER_H_
 
-#include <base/quadrature.h>
-#include <dofs/dof_handler.h>
-#include <hp/q_collection.h>
-#include <hp/dof_handler.h>
-#include <lac/vector.h>
+#include <deal.II/base/quadrature.h>
+#include <deal.II/dofs/dof_handler.h>
+#include <deal.II/hp/q_collection.h>
+#include <deal.II/hp/dof_handler.h>
+#include <deal.II/lac/vector.h>
 
 #include "dofhandler_wrapper.h"
 #include "elementdatacontainer.h"

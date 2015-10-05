@@ -24,10 +24,10 @@
 #ifndef NEWTON_MIXED_SOLVER_H_
 #define NEWTON_MIXED_SOLVER_H_
 
-#include <lac/vector.h>
-#include <lac/block_sparsity_pattern.h>
-#include <lac/block_sparse_matrix.h>
-#include <numerics/vector_tools.h>
+#include <deal.II/lac/vector.h>
+#include <deal.II/lac/block_sparsity_pattern.h>
+#include <deal.II/lac/block_sparse_matrix.h>
+#include <deal.II/numerics/vector_tools.h>
 
 #include <vector>
 #include <iostream>

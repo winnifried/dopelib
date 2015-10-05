@@ -28,13 +28,13 @@
 #include "active_fe_index_setter_interface.h"
 #include "dataout_wrapper.h"
 
-#include <lac/vector.h>
-#include <lac/block_vector_base.h>
-#include <lac/block_vector.h>
-#include <lac/constraint_matrix.h>
-#include <dofs/dof_handler.h>
-#include <deal.II/multigrid/mg_dof_handler.h>
-#include <deal.II/multigrid/mg_constrained_dofs.h>
+#include <deal.II/lac/vector.h>
+#include <deal.II/lac/block_vector_base.h>
+#include <deal.II/lac/block_vector.h>
+#include <deal.II/lac/constraint_matrix.h>
+#include <deal.II/dofs/dof_handler.h>
+//#include <deal.II/multigrid/mg_dof_handler.h>
+//#include <deal.II/multigrid/mg_constrained_dofs.h>
 
 #include <vector>
 #include <iostream>
@@ -265,16 +265,16 @@ namespace DOpE
 
 	/******************************************************/
 	/*
-	 * Experimental status for MG prec
-	 */ 
-	virtual const dealii::MGConstrainedDoFs & 
-	  GetMGConstrainedDoFs() const
-	  {
-	    throw DOpEException(
-                "Not used for normal DofHandler",
-                "StateSpaceTimeHandler.h");
-
-	  }
+//	 * Experimental status for MG prec
+//	 */ 
+//	virtual const dealii::MGConstrainedDoFs & 
+//	  GetMGConstrainedDoFs() const
+//	  {
+//	    throw DOpEException(
+//                "Not used for normal DofHandler",
+//                "StateSpaceTimeHandler.h");
+//
+//	  }
 
 	/******************************************************/
 	/**
@@ -326,33 +326,33 @@ namespace DOpE
 
 	/******************************************************/
 
-        /**
-	 * Experimental status: 
-         * Needed for MG prec.
-         */
-        virtual void
-	  ComputeMGStateSparsityPattern(dealii::MGLevelObject<dealii::BlockSparsityPattern> & /*mg_sparsity_patterns*/,
-					unsigned int /*n_levels*/) const
-	{
-	   throw DOpEException(
-                "Not used for normal DofHandler",
-                "StateSpaceTimeHandler.h");
-	}
-
-	/******************************************************/
-
-        /**
-         * Experimental status: 
-         * Needed for MG prec.
-         */
-        virtual void
-	  ComputeMGStateSparsityPattern(dealii::MGLevelObject<dealii::SparsityPattern> & /*mg_sparsity_patterns*/,
-					unsigned int /*n_levels*/) const
-	{
-	   throw DOpEException(
-                "Not used for normal DofHandler",
-                "StateSpaceTimeHandler.h");
-	}
+//        /**
+//	 * Experimental status: 
+//         * Needed for MG prec.
+//         */
+//        virtual void
+//	  ComputeMGStateSparsityPattern(dealii::MGLevelObject<dealii::BlockSparsityPattern> & /*mg_sparsity_patterns*/,
+//					unsigned int /*n_levels*/) const
+//	{
+//	   throw DOpEException(
+//                "Not used for normal DofHandler",
+//                "StateSpaceTimeHandler.h");
+//	}
+//
+//	/******************************************************/
+//
+//        /**
+//         * Experimental status: 
+//         * Needed for MG prec.
+//         */
+//        virtual void
+//	  ComputeMGStateSparsityPattern(dealii::MGLevelObject<dealii::SparsityPattern> & /*mg_sparsity_patterns*/,
+//					unsigned int /*n_levels*/) const
+//	{
+//	   throw DOpEException(
+//                "Not used for normal DofHandler",
+//                "StateSpaceTimeHandler.h");
+//	}
 
 
         /******************************************************/

@@ -29,11 +29,11 @@
 #include "mapping_wrapper.h"
 #include "dataout_wrapper.h"
 
-#include <lac/vector.h>
-#include <lac/block_vector_base.h>
-#include <lac/block_vector.h>
-#include <lac/constraint_matrix.h>
-#include <dofs/dof_handler.h>
+#include <deal.II/lac/vector.h>
+#include <deal.II/lac/block_vector_base.h>
+#include <deal.II/lac/block_vector.h>
+#include <deal.II/lac/constraint_matrix.h>
+#include <deal.II/dofs/dof_handler.h>
 
 
 // Multi-level routines 

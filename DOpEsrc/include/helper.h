@@ -24,9 +24,9 @@
 #ifndef DOpEHelper_H_
 #define DOpEHelper_H_
 
-#include <lac/block_vector.h>
-#include <lac/vector.h>
-#include <lac/block_indices.h>
+#include <deal.II/lac/block_vector.h>
+#include <deal.II/lac/vector.h>
+#include <deal.II/lac/block_indices.h>
 
 namespace DOpEHelper
 {

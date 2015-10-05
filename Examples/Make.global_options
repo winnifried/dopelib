@@ -2,8 +2,6 @@
 # Path to the deal.II toplevel directory:
 D = $(HOME)/deal.II
 
-# This tells `make' where to find the global settings of deal.ii and rules:
-include $D/common/Make.global_options
 
 # First get a list of files belonging to the project. Include files
 # are expected in `include/', while implementation files are expected
@@ -93,7 +91,10 @@ run: $(target)$(EXEEXT)
 	./$(target)$(EXEEXT) $(run-parameters)
 
 all: 
+	# This tells `make' where to find the global settings of deal.ii and rules:
+	include $D/common/Make.global_options
 	$(MAKE)
+	include Makefile.dep
 
 c-all:
 	$(DOpE)/Examples/autocmake-examples.sh configure
@@ -118,15 +119,15 @@ clean-data:
 .PHONY: clean clean-data clean-lib run
 
 
-
 # Finally produce the list of dependencies. Note that this time, the
 # object files end up in directories of their own, so we have to
 # modify the output a bit. The file with the dependencies is put into
-# `lib/'.
+# `lib/'.    
 Makefile.dep: $(cc-files) $(h-files) $(lib-h-files) Makefile
 	@echo =====waves=======$(dope_dimension)d==$(deal_II_dimension)d================== Remaking $@
 	@$D/common/scripts/make_dependencies $(INCLUDE) -B. $(cc-files) $(h-files) $(lib-h-files)\
 	 | $(PERL) -p -e 's!^(.*):!$$1:!g;' \
 		> $@
 
-include Makefile.dep
+
+

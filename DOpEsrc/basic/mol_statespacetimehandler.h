@@ -31,10 +31,10 @@
 #include "sth_internals.h"
 #include "refinementcontainer.h"
 
-#include <dofs/dof_handler.h>
-#include <dofs/dof_renumbering.h>
-#include <dofs/dof_tools.h>
-#include <lac/constraint_matrix.h>
+#include <deal.II/dofs/dof_handler.h>
+#include <deal.II/dofs/dof_renumbering.h>
+#include <deal.II/dofs/dof_tools.h>
+#include <deal.II/lac/constraint_matrix.h>
 #include <deal.II/numerics/solution_transfer.h>
 #include <deal.II/grid/grid_refinement.h>
 
@@ -305,10 +305,10 @@ namespace DOpE
          *                       RefineSpace method.
          */
         void
-        RefineSpace(DOpEtypes::RefinementType ref_type =
+	  RefineSpace(DOpEtypes::RefinementType /*ref_type*/ =
             DOpEtypes::RefinementType::global)
         {
-          assert(ref_type == DOpEtypes::RefinementType::global);
+          //assert(ref_type == DOpEtypes::RefinementType::global);
           RefinementContainer ref_con_dummy;
           RefineSpace(ref_con_dummy);
         }

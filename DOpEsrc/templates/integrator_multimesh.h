@@ -24,14 +24,13 @@
 #ifndef IntegratorMultiMesh_H_
 #define IntegratorMultiMesh_H_
 
-#include <lac/vector.h>
-#include <lac/block_sparsity_pattern.h>
-#include <lac/block_sparse_matrix.h>
-
-#include <numerics/matrix_tools.h>
-#include <numerics/vector_tools.h>
+#include <deal.II/lac/vector.h>
+#include <deal.II/lac/block_sparsity_pattern.h>
+#include <deal.II/lac/block_sparse_matrix.h>
+#include <deal.II/numerics/matrix_tools.h>
+#include <deal.II/numerics/vector_tools.h>
 #include <deal.II/grid/grid_tools.h>
-#include <base/function.h>
+#include <deal.II/base/function.h>
 
 #include <vector>
 
@@ -1092,10 +1091,17 @@ namespace DOpE
 	  {
 	    for (unsigned int face=0; face < dealii::GeometryInfo<dim>::faces_per_cell; ++face)
 	    {
+#if DEAL_II_VERSION_GTE(8,3,0)
+	      if (element[b_index]->face(face)->at_boundary()
+		  &&
+		  (find(boundary_equation_colors.begin(),boundary_equation_colors.end(),
+			element[b_index]->face(face)->boundary_id()) != boundary_equation_colors.end()))
+#else
 	      if (element[b_index]->face(face)->at_boundary()
 		  &&
 		  (find(boundary_equation_colors.begin(),boundary_equation_colors.end(),
 			element[b_index]->face(face)->boundary_indicator()) != boundary_equation_colors.end()))
+#endif
 	      {
 		fdc.ReInit(coarse_index,fine_index,prolong_matrix,face);
 		pde.BoundaryEquation(fdc,local_vector, 1., 1.);
@@ -1232,10 +1238,17 @@ namespace DOpE
 	  {
 	    for (unsigned int face=0; face < dealii::GeometryInfo<dim>::faces_per_cell; ++face)
 	    {
+#if DEAL_II_VERSION_GTE(8,3,0)
+	      if (element[b_index]->face(face)->at_boundary()
+		  &&
+		  (find(boundary_equation_colors.begin(),boundary_equation_colors.end(),
+			element[b_index]->face(face)->boundary_id()) != boundary_equation_colors.end()))
+#else
 	      if (element[b_index]->face(face)->at_boundary()
 		  &&
 		  (find(boundary_equation_colors.begin(),boundary_equation_colors.end(),
 			element[b_index]->face(face)->boundary_indicator()) != boundary_equation_colors.end()))
+#endif
 	      {
 		fdc.ReInit(coarse_index,fine_index,prolong_matrix,face);
 		pde.BoundaryRhs(fdc,local_vector,1.);
@@ -1350,10 +1363,17 @@ namespace DOpE
 	    
 	    for (unsigned int face=0; face < dealii::GeometryInfo<dim>::faces_per_cell; ++face)
 	    {
+#if DEAL_II_VERSION_GTE(8,3,0)
+	      if (element[b_index]->face(face)->at_boundary()
+		  &&
+		  (find(boundary_equation_colors.begin(),boundary_equation_colors.end(),
+			element[b_index]->face(face)->boundary_id()) != boundary_equation_colors.end()))
+#else
 	      if (element[b_index]->face(face)->at_boundary()
 		  &&
 		  (find(boundary_equation_colors.begin(),boundary_equation_colors.end(),
 			element[b_index]->face(face)->boundary_indicator()) != boundary_equation_colors.end()))
+#endif
 	      {
 		fdc.ReInit(coarse_index,fine_index,prolong_matrix,face);
 		pde.BoundaryMatrix(fdc, local_matrix);
@@ -1527,10 +1547,17 @@ namespace DOpE
                                            //zeros entry in the element vector
       for (unsigned int face=0; face < dealii::GeometryInfo<dim>::faces_per_cell; ++face)
       {
+#if DEAL_II_VERSION_GTE(8,3,0)
+	if (element[b_index]->face(face)->at_boundary()
+	    &&
+	    (find(boundary_functional_colors.begin(),boundary_functional_colors.end(),
+		  element[b_index]->face(face)->boundary_id()) != boundary_functional_colors.end()))
+#else
 	if (element[b_index]->face(face)->at_boundary()
 	    &&
 	    (find(boundary_functional_colors.begin(),boundary_functional_colors.end(),
 		  element[b_index]->face(face)->boundary_indicator()) != boundary_functional_colors.end()))
+#endif
 	{
 	  fdc.ReInit(coarse_index,fine_index,prolong_matrix,face);
 	  ret += pde.BoundaryFunctional(fdc);

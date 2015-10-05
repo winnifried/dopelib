@@ -25,18 +25,18 @@
 #define SPARSITYMAKER_H_
 
 #include "dofhandler_wrapper.h"
-#include <dofs/dof_tools.h>
-#include <lac/constraint_matrix.h>
+#include <deal.II/dofs/dof_tools.h>
+#include <deal.II/lac/constraint_matrix.h>
 
 // Multi-level routines (step-16 in deal.II)
-#include <deal.II/multigrid/mg_dof_handler.h>
-#include <deal.II/multigrid/mg_constrained_dofs.h>
-#include <deal.II/multigrid/multigrid.h>
-#include <deal.II/multigrid/mg_transfer.h>
-#include <deal.II/multigrid/mg_tools.h>
-#include <deal.II/multigrid/mg_coarse.h>
-#include <deal.II/multigrid/mg_smoother.h>
-#include <deal.II/multigrid/mg_matrix.h>
+//#include <deal.II/multigrid/mg_dof_handler.h>
+//#include <deal.II/multigrid/mg_constrained_dofs.h>
+//#include <deal.II/multigrid/multigrid.h>
+//#include <deal.II/multigrid/mg_transfer.h>
+//#include <deal.II/multigrid/mg_tools.h>
+//#include <deal.II/multigrid/mg_coarse.h>
+//#include <deal.II/multigrid/mg_smoother.h>
+//#include <deal.II/multigrid/mg_matrix.h>
 
 
 
@@ -72,30 +72,30 @@ namespace DOpE
           const std::vector<unsigned int>& blocks) const;
 
 
-      /*
-       * Experimental status: 
-       * Needed for MG prec.
-       */
-      virtual void
-      ComputeMGSparsityPattern(
-			       const DOpEWrapper::DoFHandler<dim, dealii::MGDoFHandler>& dof_handler,
-			       dealii::MGLevelObject<dealii::BlockSparsityPattern> & mg_sparsity_pattern, 
-			       const dealii::ConstraintMatrix& hanging_node_constraints,
-			       const std::vector<unsigned int>& blocks,
-			       const unsigned int n_levels) const;
-
-      /*
-       * Experimental status: 
-       * Needed for MG prec.
-       */
-      virtual void
-	ComputeMGSparsityPattern(
-          const DOpEWrapper::DoFHandler<dim, dealii::MGDoFHandler>& dof_handler,
-	  dealii::MGLevelObject<dealii::SparsityPattern> & mg_sparsity_pattern, 
-          const dealii::ConstraintMatrix& hanging_node_constraints,
-          const std::vector<unsigned int>& blocks,
-	  const unsigned int n_levels) const;
-
+//      /*
+//       * Experimental status: 
+//       * Needed for MG prec.
+//       */
+//      virtual void
+//      ComputeMGSparsityPattern(
+//			       const DOpEWrapper::DoFHandler<dim, dealii::MGDoFHandler>& dof_handler,
+//			       dealii::MGLevelObject<dealii::BlockSparsityPattern> & mg_sparsity_pattern, 
+//			       const dealii::ConstraintMatrix& hanging_node_constraints,
+//			       const std::vector<unsigned int>& blocks,
+//			       const unsigned int n_levels) const;
+//
+//      /*
+//       * Experimental status: 
+//       * Needed for MG prec.
+//       */
+//      virtual void
+//	ComputeMGSparsityPattern(
+//          const DOpEWrapper::DoFHandler<dim, dealii::MGDoFHandler>& dof_handler,
+//	  dealii::MGLevelObject<dealii::SparsityPattern> & mg_sparsity_pattern, 
+//          const dealii::ConstraintMatrix& hanging_node_constraints,
+//          const std::vector<unsigned int>& blocks,
+//	  const unsigned int n_levels) const;
+//
 
       //TODO: If one wishes to change the sparsity-pattern of the control, one
       //has to implement this here.
@@ -114,8 +114,14 @@ namespace DOpE
         const dealii::ConstraintMatrix& hanging_node_constraints,
         const std::vector<unsigned int>& blocks) const
     {
+#if DEAL_II_VERSION_GTE(8,3,0)
+      dealii::BlockDynamicSparsityPattern csp(blocks.size(),
+					      blocks.size());
+#else
       dealii::BlockCompressedSimpleSparsityPattern csp(blocks.size(),
-          blocks.size());
+						       blocks.size());
+#endif
+
       for (unsigned int i = 0; i < blocks.size(); i++)
         {
           for (unsigned int j = 0; j < blocks.size(); j++)
@@ -144,78 +150,82 @@ namespace DOpE
           total_dofs += blocks.at(j);
         }
 
+#if DEAL_II_VERSION_GTE(8,3,0)
+      dealii::DynamicSparsityPattern csp(total_dofs, total_dofs);
+#else
       dealii::CompressedSimpleSparsityPattern csp(total_dofs, total_dofs);
+#endif
       dealii::DoFTools::make_sparsity_pattern(
           dof_handler.GetDEALDoFHandler(), csp, hanging_node_constraints);
       sparsity.copy_from(csp);
     }
 
-/***********************************************************/
-  template<template<int, int> class DH, int dim>
-    void
-    SparsityMaker<DH, dim>
-    ::ComputeMGSparsityPattern(
-			       const DOpEWrapper::DoFHandler<dim, dealii::MGDoFHandler>& dof_handler,
-			       dealii::MGLevelObject<dealii::BlockSparsityPattern> & mg_sparsity_patterns, 
-			       const dealii::ConstraintMatrix& /*hanging_node_constraints*/,
-			       const std::vector<unsigned int>& blocks,
-			       const unsigned int n_levels) const
-    {
-      // Hard coded for FE_System with 1 FE and 2 components: 
-      // MUST be changed later!!!!!
-      std::vector<unsigned int> block_component (dim,0);
- 
-
-     std::vector<std::vector<unsigned int> >   mg_dofs_per_block;
-      mg_dofs_per_block.resize (n_levels);
-      mg_sparsity_patterns.resize(0, n_levels-1);
-      mg_dofs_per_block.resize (n_levels);
-
-
-      for (unsigned int level=0; level<n_levels; ++level)
-	mg_dofs_per_block[level].resize (blocks.size());
-
-      dealii::MGTools::count_dofs_per_block (dof_handler.GetDEALDoFHandler(), 
-					     mg_dofs_per_block,
-					     block_component);
-      
-      for (unsigned int level=0; level<n_levels; ++level)
-	{	  
-	  dealii::BlockCompressedSparsityPattern csp(mg_dofs_per_block[level],
-					     mg_dofs_per_block[level]);
-	  
-	  dealii::MGTools::make_sparsity_pattern(dof_handler.GetDEALDoFHandler(), csp, level);
-	  
-	  mg_sparsity_patterns[level].copy_from (csp);
-
-	}
-    }
-
-/***********************************************************/
-
- 
- template<template<int, int> class DH, int dim>
-    void
-    SparsityMaker<DH, dim>
-    ::ComputeMGSparsityPattern(
-			       const DOpEWrapper::DoFHandler<dim, dealii::MGDoFHandler>& dof_handler,
-			       dealii::MGLevelObject<dealii::SparsityPattern> & mg_sparsity_patterns, 
-			       const dealii::ConstraintMatrix& /*hanging_node_constraints*/,
-			       const std::vector<unsigned int>& /*blocks*/,
-			       const unsigned int n_levels) const
-    {   
-      
-      for (unsigned int level=0; level<n_levels; ++level)
-	{	  
-	  dealii::CompressedSparsityPattern csp(dof_handler.GetDEALDoFHandler().n_dofs(level), dof_handler.GetDEALDoFHandler().n_dofs(level));
-	  
-	  dealii::MGTools::make_sparsity_pattern(dof_handler.GetDEALDoFHandler(), csp, level);
-	  
-	  mg_sparsity_patterns[level].copy_from (csp);
-
-	}
-    }
-
+///***********************************************************/
+//  template<template<int, int> class DH, int dim>
+//    void
+//    SparsityMaker<DH, dim>
+//    ::ComputeMGSparsityPattern(
+//			       const DOpEWrapper::DoFHandler<dim, dealii::MGDoFHandler>& dof_handler,
+//			       dealii::MGLevelObject<dealii::BlockSparsityPattern> & mg_sparsity_patterns, 
+//			       const dealii::ConstraintMatrix& /*hanging_node_constraints*/,
+//			       const std::vector<unsigned int>& blocks,
+//			       const unsigned int n_levels) const
+//    {
+//      // Hard coded for FE_System with 1 FE and 2 components: 
+//      // MUST be changed later!!!!!
+//      std::vector<unsigned int> block_component (dim,0);
+// 
+//
+//     std::vector<std::vector<unsigned int> >   mg_dofs_per_block;
+//      mg_dofs_per_block.resize (n_levels);
+//      mg_sparsity_patterns.resize(0, n_levels-1);
+//      mg_dofs_per_block.resize (n_levels);
+//
+//
+//      for (unsigned int level=0; level<n_levels; ++level)
+//	mg_dofs_per_block[level].resize (blocks.size());
+//
+//      dealii::MGTools::count_dofs_per_block (dof_handler.GetDEALDoFHandler(), 
+//					     mg_dofs_per_block,
+//					     block_component);
+//      
+//      for (unsigned int level=0; level<n_levels; ++level)
+//	{	  
+//	  dealii::BlockCompressedSparsityPattern csp(mg_dofs_per_block[level],
+//					     mg_dofs_per_block[level]);
+//	  
+//	  dealii::MGTools::make_sparsity_pattern(dof_handler.GetDEALDoFHandler(), csp, level);
+//	  
+//	  mg_sparsity_patterns[level].copy_from (csp);
+//
+//	}
+//    }
+//
+///***********************************************************/
+//
+// 
+// template<template<int, int> class DH, int dim>
+//    void
+//    SparsityMaker<DH, dim>
+//    ::ComputeMGSparsityPattern(
+//			       const DOpEWrapper::DoFHandler<dim, dealii::MGDoFHandler>& dof_handler,
+//			       dealii::MGLevelObject<dealii::SparsityPattern> & mg_sparsity_patterns, 
+//			       const dealii::ConstraintMatrix& /*hanging_node_constraints*/,
+//			       const std::vector<unsigned int>& /*blocks*/,
+//			       const unsigned int n_levels) const
+//    {   
+//      
+//      for (unsigned int level=0; level<n_levels; ++level)
+//	{	  
+//	  dealii::CompressedSparsityPattern csp(dof_handler.GetDEALDoFHandler().n_dofs(level), dof_handler.GetDEALDoFHandler().n_dofs(level));
+//	  
+//	  dealii::MGTools::make_sparsity_pattern(dof_handler.GetDEALDoFHandler(), csp, level);
+//	  
+//	  mg_sparsity_patterns[level].copy_from (csp);
+//
+//	}
+//    }
+//
 
 
 

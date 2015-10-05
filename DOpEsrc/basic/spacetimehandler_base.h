@@ -24,9 +24,9 @@
 #ifndef SPACE_TIME_HANDLER_BASE_H_
 #define SPACE_TIME_HANDLER_BASE_H_
 
-#include <lac/vector.h>
-#include <lac/block_vector_base.h>
-#include <lac/block_vector.h>
+#include <deal.II/lac/vector.h>
+#include <deal.II/lac/block_vector_base.h>
+#include <deal.II/lac/block_vector.h>
 
 #include <vector>
 #include <iostream>
@@ -387,10 +387,10 @@ class SpaceTimeHandlerBase
          *                       is allowed in this method.
          */
         void
-        RefineTime(DOpEtypes::RefinementType ref_type =
-            DOpEtypes::RefinementType::global)
+	  RefineTime(DOpEtypes::RefinementType /*ref_type*/ =
+		     DOpEtypes::RefinementType::global)
         {
-          assert(ref_type == DOpEtypes::RefinementType::global);
+          //assert(ref_type == DOpEtypes::RefinementType::global);
 	  RefinementContainer ref_con_dummy;
           RefineTime(ref_con_dummy);
         }

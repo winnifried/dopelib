@@ -26,11 +26,11 @@
 #include <iostream>
 #include <cmath>
 
-#include <grid/tria.h>
-#include <grid/grid_generator.h>
-#include <fe/fe_q.h>
-#include <fe/fe_dgp.h>
-#include <base/quadrature_lib.h>
+#include <deal.II/grid/tria.h>
+#include <deal.II/grid/grid_generator.h>
+#include <deal.II/fe/fe_q.h>
+#include <deal.II/fe/fe_dgp.h>
+#include <deal.II/base/quadrature_lib.h>
 
 #include "reduced_snopt_algorithm.h"
 #include "optproblemcontainer.h"

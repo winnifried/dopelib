@@ -30,7 +30,7 @@
 #include <map>
 #include <vector>
 #include <sstream>
-#include <lac/vector.h>
+#include <deal.II/lac/vector.h>
 
 #include "optproblemcontainer.h"
 #include "controlvector.h"

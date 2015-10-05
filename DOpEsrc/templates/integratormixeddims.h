@@ -24,26 +24,22 @@
 #ifndef IntegratorMixed_H_
 #define IntegratorMixed_H_
 
-#include <lac/vector.h>
-#include <lac/block_sparsity_pattern.h>
-#include <lac/block_sparse_matrix.h>
-
-#include <numerics/matrix_tools.h>
-#include <numerics/vector_tools.h>
-
-#include <base/function.h>
-
-#include <dofs/dof_tools.h>
-
-#include <fe/mapping_q1.h>
+#include <deal.II/lac/vector.h>
+#include <deal.II/lac/block_sparsity_pattern.h>
+#include <deal.II/lac/block_sparse_matrix.h>
+#include <deal.II/numerics/matrix_tools.h>
+#include <deal.II/numerics/vector_tools.h>
+#include <deal.II/base/function.h>
+#include <deal.II/dofs/dof_tools.h>
+#include <deal.II/fe/mapping_q1.h>
 
 #include <vector>
 
 #include "elementdatacontainer.h"
 #include "facedatacontainer.h"
 #include "optproblemcontainer.h"
-#if DEAL_II_VERSION_GTE(7,3)
-	#include <base/types.h>
+#if DEAL_II_VERSION_GTE(7,3,0)
+	#include <deal.II/base/types.h>
  #endif
 
 namespace DOpE
@@ -212,9 +208,15 @@ template<typename PROBLEM>
         {
           for (unsigned int face=0; face < dealii::GeometryInfo<dimhigh>::faces_per_cell; ++face)
           {
+#if DEAL_II_VERSION_GTE(8,3,0)
+            if (element[0]->face(face)->at_boundary()
+                &&
+                (find(boundary_equation_colors.begin(),boundary_equation_colors.end(),element[0]->face(face)->boundary_id()) != boundary_equation_colors.end()))
+#else
             if (element[0]->face(face)->at_boundary()
                 &&
                 (find(boundary_equation_colors.begin(),boundary_equation_colors.end(),element[0]->face(face)->boundary_indicator()) != boundary_equation_colors.end()))
+#endif
             {
 	      fdc.ReInit(face);
 	      pde.BoundaryRhs(fdc,local_vector,-1.);
@@ -327,9 +329,15 @@ template<typename PROBLEM>
         {
           for (unsigned int face=0; face < dealii::GeometryInfo<dimhigh>::faces_per_cell; ++face)
           {
+#if DEAL_II_VERSION_GTE(8,3,0)
+            if (element[0]->face(face)->at_boundary()
+                &&
+                (find(boundary_equation_colors.begin(),boundary_equation_colors.end(),element[0]->face(face)->boundary_id()) != boundary_equation_colors.end()))
+#else
             if (element[0]->face(face)->at_boundary()
                 &&
                 (find(boundary_equation_colors.begin(),boundary_equation_colors.end(),element[0]->face(face)->boundary_indicator()) != boundary_equation_colors.end()))
+#endif
             {
 	      fdc.ReInit(face);
 	      pde.BoundaryRhs(fdc,local_vector,1.);
@@ -518,10 +526,17 @@ template<typename PROBLEM>
         {
           for (unsigned int face=0; face < dealii::GeometryInfo<dimhigh>::faces_per_cell; ++face)
           {
+#if DEAL_II_VERSION_GTE(8,3,0)
+            if (element[0]->face(face)->at_boundary()
+                &&
+                (find(boundary_functional_colors.begin(),boundary_functional_colors.end(),
+                        element[0]->face(face)->boundary_id()) != boundary_functional_colors.end()))
+#else
             if (element[0]->face(face)->at_boundary()
                 &&
                 (find(boundary_functional_colors.begin(),boundary_functional_colors.end(),
                         element[0]->face(face)->boundary_indicator()) != boundary_functional_colors.end()))
+#endif
             {
 //              pde.GetBaseProblem().GetSpaceTimeHandler()->ComputeFaceFEValues(element, face, pde.GetType());
               fdc.ReInit(face);
@@ -648,7 +663,7 @@ template<typename PROBLEM>
       unsigned int color = dirichlet_colors[i];
       std::vector<bool> comp_mask = pde.GetTransposedDirichletCompMask(color);
       std::vector<bool> current_comp(comp_mask.size(), false);
-#if DEAL_II_VERSION_GTE(7,3)
+#if DEAL_II_VERSION_GTE(7,3,0)
 		std::set<types::boundary_id> boundary_indicators;
 #else
 		std::set<unsigned char> boundary_indicators;

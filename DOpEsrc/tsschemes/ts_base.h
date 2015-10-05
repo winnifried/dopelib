@@ -24,7 +24,7 @@
 #ifndef TSBase_H_
 #define TSBase_H_
 
-#include "lac/vector.h"
+#include <deal.II/lac/vector.h>
 
 namespace DOpE
 {

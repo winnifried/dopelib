@@ -25,9 +25,8 @@
 #define TIMEITERATOR_H_
 
 #include <deal.II/dofs/dof_handler.h>
-#include <dofs/dof_accessor.h>
-
-#include <grid/tria_iterator.h>
+#include <deal.II/dofs/dof_accessor.h>
+#include <deal.II/grid/tria_iterator.h>
 
 namespace DOpE
 {

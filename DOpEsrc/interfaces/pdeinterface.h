@@ -27,11 +27,11 @@
 #include <map>
 #include <string>
 
-#include <fe/fe_system.h>
-#include <fe/fe_values.h>
-#include <fe/mapping.h>
-#include <lac/full_matrix.h>
-#include <base/function.h>
+#include <deal.II/fe/fe_system.h>
+#include <deal.II/fe/fe_values.h>
+#include <deal.II/fe/mapping.h>
+#include <deal.II/lac/full_matrix.h>
+#include <deal.II/base/function.h>
 
 #include "fevalues_wrapper.h"
 #include "elementdatacontainer.h"

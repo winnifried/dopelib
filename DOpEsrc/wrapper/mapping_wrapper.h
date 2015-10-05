@@ -24,11 +24,11 @@
 #ifndef MAPPING_WRAPPER_H_
 #define MAPPING_WRAPPER_H_
 
-#include <dofs/dof_handler.h>
-#include <multigrid/mg_dof_handler.h>
-#include <hp/dof_handler.h>
-#include <hp/mapping_collection.h>
-#include <fe/mapping_q.h>
+#include <deal.II/dofs/dof_handler.h>
+//#include <deal.II/multigrid/mg_dof_handler.h>
+#include <deal.II/hp/dof_handler.h>
+#include <deal.II/hp/mapping_collection.h>
+#include <deal.II/fe/mapping_q.h>
 
 namespace DOpEWrapper
 { 
@@ -86,49 +86,49 @@ namespace DOpEWrapper
          * or MappingCollections in the hp-framework).
          */
         const typename dealii::MappingQ<dim> &
-        operator[](const unsigned int index) const
+	  operator[](const unsigned int /*index*/) const
         {
-          assert(index == 0);
+          //assert(index == 0);
           return *this;
         }
 
     };
 
-  /************************************************************************************/
-
-  template<int dim>
-    class Mapping<dim, dealii::MGDoFHandler > : public dealii::MappingQ<dim>
-    {
-      public:
-        Mapping(const unsigned int p, const bool use_mapping_q_on_all_elements =
-            false)
-            : dealii::MappingQ<dim>(p, use_mapping_q_on_all_elements)
-        {
-        }
-
-        Mapping(const dealii::MappingQ<dim> &mapping)
-            : dealii::MappingQ<dim>(mapping)
-        {
-        }
-
-      ~Mapping()
-	{
-	}
-
-        /**
-         * This function is needed for a workaround
-         * linked to the hp-version (i.e. deal.ii is not
-         * consistent at the current stage using Mappings
-         * or MappingCollections in the hp-framework).
-         */
-        const typename dealii::MappingQ<dim> &
-        operator[](const unsigned int index) const
-        {
-          assert(index == 0);
-          return *this;
-        }
-
-    };
+//  /************************************************************************************/
+//
+//  template<int dim>
+//    class Mapping<dim, dealii::MGDoFHandler > : public dealii::MappingQ<dim>
+//    {
+//      public:
+//        Mapping(const unsigned int p, const bool use_mapping_q_on_all_elements =
+//            false)
+//            : dealii::MappingQ<dim>(p, use_mapping_q_on_all_elements)
+//        {
+//        }
+//
+//        Mapping(const dealii::MappingQ<dim> &mapping)
+//            : dealii::MappingQ<dim>(mapping)
+//        {
+//        }
+//
+//      ~Mapping()
+//	{
+//	}
+//
+//        /**
+//         * This function is needed for a workaround
+//         * linked to the hp-version (i.e. deal.ii is not
+//         * consistent at the current stage using Mappings
+//         * or MappingCollections in the hp-framework).
+//         */
+//        const typename dealii::MappingQ<dim> &
+//        operator[](const unsigned int index) const
+//        {
+//          assert(index == 0);
+//          return *this;
+//        }
+//
+//    };
 
   /************************************************************************************/
 
@@ -175,12 +175,12 @@ namespace DOpEWrapper
         static Mapping<dim, dealii::DoFHandler> mapping_q1;
     };
 
- template<int dim>
-    struct StaticMappingQ1<dim, dealii::MGDoFHandler >
-    {
-      public:
-        static Mapping<dim, dealii::MGDoFHandler > mapping_q1;
-    };
+// template<int dim>
+//    struct StaticMappingQ1<dim, dealii::MGDoFHandler >
+//    {
+//      public:
+//        static Mapping<dim, dealii::MGDoFHandler > mapping_q1;
+//    };
 
   template<int dim>
     struct StaticMappingQ1<dim, dealii::hp::DoFHandler>

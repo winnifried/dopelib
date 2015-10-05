@@ -33,7 +33,7 @@
 
 #include <assert.h>
 
-#include <lac/vector.h>
+#include <deal.II/lac/vector.h>
 
 namespace DOpE
 {

@@ -24,12 +24,12 @@
 #include <iostream>
 #include <fstream>
 
-#include <grid/tria.h>
-#include <grid/tria_boundary_lib.h>
-#include <grid/grid_generator.h>
-#include <fe/fe_q.h>
-#include <base/quadrature_lib.h>
-#include <base/function.h>
+#include <deal.II/grid/tria.h>
+#include <deal.II/grid/tria_boundary_lib.h>
+#include <deal.II/grid/grid_generator.h>
+#include <deal.II/fe/fe_q.h>
+#include <deal.II/base/quadrature_lib.h>
+#include <deal.II/base/function.h>
 
 #include "pdeproblemcontainer.h"
 #include "statpdeproblem.h"

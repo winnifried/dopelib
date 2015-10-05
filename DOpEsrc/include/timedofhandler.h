@@ -119,7 +119,7 @@ namespace DOpE
           dealii::DoFHandler<1>::distribute_dofs(*fe_);
           //make sure that the dofs are numbered 'downstream' (referring to the time variable!)
 
-  #if DEAL_II_VERSION_GTE(7,3)
+#if DEAL_II_VERSION_GTE(7,3,0)
            dealii::DoFRenumbering::downstream<dealii::DoFHandler<1> >(*this,
                dealii::Point<1>(1.), true);
   #else
@@ -256,7 +256,11 @@ namespace DOpE
       find_ends()
       {
         DoFHandler<1>::active_cell_iterator element = this->begin_active();
+#if DEAL_II_VERSION_GTE(8,3,0)
+	while (element->face(0)->boundary_id() != 0)
+#else
         while (element->face(0)->boundary_indicator() != 0)
+#endif
         {
           element = element->neighbor(0);
         }
@@ -264,7 +268,11 @@ namespace DOpE
         before_first_interval_.Initialize(element, -2);
 
         element = this->begin_active();
+#if DEAL_II_VERSION_GTE(8,3,0)
+	while (element->face(1)->boundary_id() != 1)
+#else
         while (element->face(1)->boundary_indicator() != 1)
+#endif
         {
           element = element->neighbor(1);
         }

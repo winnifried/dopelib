@@ -37,17 +37,17 @@
 #include <iostream>
 #include <fstream>
 
-#include <grid/tria.h>
-#include <grid/grid_in.h>
-#include <dofs/dof_handler.h>
-#include <grid/grid_generator.h>
-#include <grid/tria_boundary_lib.h>
+#include <deal.II/grid/tria.h>
+#include <deal.II/grid/grid_in.h>
+#include <deal.II/dofs/dof_handler.h>
+#include <deal.II/grid/grid_generator.h>
+#include <deal.II/grid/tria_boundary_lib.h>
 #include <deal.II/grid/grid_out.h>
-#include <fe/fe_q.h>
-#include <dofs/dof_tools.h>
-#include <base/quadrature_lib.h>
-#include <base/function.h>
-#include <numerics/vector_tools.h>
+#include <deal.II/fe/fe_q.h>
+#include <deal.II/dofs/dof_tools.h>
+#include <deal.II/base/quadrature_lib.h>
+#include <deal.II/base/function.h>
+#include <deal.II/numerics/vector_tools.h>
 #include <deal.II/base/convergence_table.h>
 
 #include "localpde.h"

@@ -24,11 +24,11 @@
 #ifndef LOCALFunctional_
 #define LOCALFunctional_
 
-#include <numerics/vector_tools.h>
-#include <base/quadrature.h>
-#include <fe/fe_values.h>
-#include <grid/grid_tools.h>
-#include <fe/mapping_q1.h>
+#include <deal.II/numerics/vector_tools.h>
+#include <deal.II/base/quadrature.h>
+#include <deal.II/fe/fe_values.h>
+#include <deal.II/grid/grid_tools.h>
+#include <deal.II/fe/mapping_q1.h>
 
 #include "functionalinterface.h"
 #include "myfunctions.h"
@@ -159,11 +159,11 @@ template<
           create_point_source(state_dof_handler.GetDEALDoFHandler(),
               eval_points_[i], 0, rhs_tmp_0);
           rhs_tmp_0 *= J[i][0];
-          rhs.add(rhs_tmp_0);
+          rhs += rhs_tmp_0;
           create_point_source(state_dof_handler.GetDEALDoFHandler(),
               eval_points_[i], 1, rhs_tmp_1);
           rhs_tmp_1 *= J[i][1];
-          rhs.add(rhs_tmp_1);
+          rhs += rhs_tmp_1;
         }
 
         rhs *= scale;
@@ -238,11 +238,11 @@ template<
           create_point_source(state_dof_handler.GetDEALDoFHandler(),
               eval_points_[i], 0, rhs_tmp_0);
           rhs_tmp_0 *= J[i][0];
-          rhs.add(rhs_tmp_0);
+          rhs += rhs_tmp_0;
           create_point_source(state_dof_handler.GetDEALDoFHandler(),
               eval_points_[i], 1, rhs_tmp_1);
           rhs_tmp_1 *= J[i][1];
-          rhs.add(rhs_tmp_1);
+          rhs += rhs_tmp_1;
         }
 
         rhs *= scale;

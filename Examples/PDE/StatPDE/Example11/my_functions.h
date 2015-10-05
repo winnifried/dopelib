@@ -34,10 +34,10 @@ class ExactSolution : public DOpEWrapper::Function<2>
     {
     }
     double
-    value(const dealii::Point<2> &p, const unsigned int component = 0) const
+      value(const dealii::Point<2> &p, const unsigned int /*component*/ = 0) const
     {
-      Assert(component < this->n_components,
-          ExcIndexRange (component, 0, this->n_components));
+//      Assert(component < this->n_components,
+//          ExcIndexRange (component, 0, this->n_components));
 
       return std::pow(p[0],2.) + std::pow(p[1],2.);
     }

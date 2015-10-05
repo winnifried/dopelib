@@ -24,7 +24,7 @@
 #ifndef PARAMETERREADER_h_
 #define PARAMETERREADER_h_
 
-#include <base/parameter_handler.h>
+#include <deal.II/base/parameter_handler.h>
 
 using namespace dealii;
 namespace DOpE

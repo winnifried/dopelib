@@ -26,16 +26,16 @@
 #include <fstream>
 
 //deal.ii includes
-#include <base/quadrature_lib.h>
-#include <base/function.h>
-#include <dofs/dof_handler.h>
-#include <fe/fe_q.h>
-#include <fe/fe_dgp.h> //for discont. finite elements
-#include <fe/fe_nothing.h>
-#include <grid/tria.h>
-#include <grid/grid_in.h>
-#include <grid/tria_boundary_lib.h>
-#include <grid/grid_generator.h>
+#include <deal.II/base/quadrature_lib.h>
+#include <deal.II/base/function.h>
+#include <deal.II/dofs/dof_handler.h>
+#include <deal.II/fe/fe_q.h>
+#include <deal.II/fe/fe_dgp.h> //for discont. finite elements
+#include <deal.II/fe/fe_nothing.h>
+#include <deal.II/grid/tria.h>
+#include <deal.II/grid/grid_in.h>
+#include <deal.II/grid/tria_boundary_lib.h>
+#include <deal.II/grid/grid_generator.h>
 
 //DOpE includes
 #include "parameterreader.h"
@@ -132,19 +132,35 @@ ColorizeTriangulation(Triangulation<2> &coarse_grid, double upper_bound)
     {
       if (std::fabs(element->face(face)->center()(1) - (0)) < 1e-12)
       {
+#if DEAL_II_VERSION_GTE(8,3,0)
+        element->face(face)->set_boundary_id(1);
+#else
         element->face(face)->set_boundary_indicator(1);
+#endif
       }
       else if (std::fabs(element->face(face)->center()(0) - (upper_bound)) < 1e-12)
       {
+#if DEAL_II_VERSION_GTE(8,3,0)
+        element->face(face)->set_boundary_id(0);
+#else
         element->face(face)->set_boundary_indicator(0);
+#endif
       }
       else if (std::fabs(element->face(face)->center()(1) - (upper_bound)) < 1e-12)
       {
+#if DEAL_II_VERSION_GTE(8,3,0)
+        element->face(face)->set_boundary_id(0);
+#else
         element->face(face)->set_boundary_indicator(0);
+#endif
       }
       else if (std::fabs(element->face(face)->center()(0) - (0)) < 1e-12)
       {
+#if DEAL_II_VERSION_GTE(8,3,0)
+        element->face(face)->set_boundary_id(1);
+#else
         element->face(face)->set_boundary_indicator(1);
+#endif
       }
     }
 }

@@ -24,9 +24,9 @@
 #ifndef DOPE_DOFHANDLER_H_
 #define DOPE_DOFHANDLER_H_
 
-#include <dofs/dof_handler.h>
-#include <hp/dof_handler.h>
-#include <fe/fe_system.h>
+#include <deal.II/dofs/dof_handler.h>
+#include <deal.II/hp/dof_handler.h>
+#include <deal.II/fe/fe_system.h>
 
 namespace DOpEWrapper
 {
@@ -124,27 +124,27 @@ namespace DOpEWrapper
         }
     };
 
- //Template specialization DOFHANDLER = dealii::MGDoFHandler<dim>
-  template<int dim>
-    class DoFHandler<dim, dealii::MGDoFHandler > : public dealii::MGDoFHandler<
-        dim>
-    {
-      public:
-        DoFHandler(const dealii::Triangulation<dim, dim> &tria)
-            : dealii::MGDoFHandler<dim>(tria)
-        {
-        }
-        static bool
-        NeedIndexSetter()
-        {
-          return true;
-        }
-        const dealii::MGDoFHandler<dim>&
-        GetDEALDoFHandler() const
-        {
-          return *this;
-        }
-    };
+// //Template specialization DOFHANDLER = dealii::MGDoFHandler<dim>
+//  template<int dim>
+//    class DoFHandler<dim, dealii::MGDoFHandler > : public dealii::MGDoFHandler<
+//        dim>
+//    {
+//      public:
+//        DoFHandler(const dealii::Triangulation<dim, dim> &tria)
+//            : dealii::MGDoFHandler<dim>(tria)
+//        {
+//        }
+//        static bool
+//        NeedIndexSetter()
+//        {
+//          return true;
+//        }
+//        const dealii::MGDoFHandler<dim>&
+//        GetDEALDoFHandler() const
+//        {
+//          return *this;
+//        }
+//    };
 
   /**
    * Template specializations for dim=0.

@@ -24,10 +24,10 @@
 #ifndef DOPE_DATAOUT_H_
 #define DOPE_DATAOUT_H_
 
-#include <numerics/data_out.h>
-#include <dofs/dof_handler.h>
-#include <hp/dof_handler.h>
-#include <multigrid/mg_dof_handler.h>
+#include <deal.II/numerics/data_out.h>
+#include <deal.II/dofs/dof_handler.h>
+#include <deal.II/hp/dof_handler.h>
+//#include <deal.II/multigrid/mg_dof_handler.h>
 
 namespace DOpEWrapper
 {
@@ -54,16 +54,16 @@ namespace DOpEWrapper
       {
       } 
     };
-
-  //Special treatment of MGDoFHandler...
-  template <int dim>
-    class DataOut<dim, dealii::MGDoFHandler> : public dealii::DataOut<dim, dealii::DoFHandler<dim,dim> >
-    {
-     public:
-      DataOut() 
-      {
-      }
-    };
+//TODO: This makes no sense if MGDoFHandler is no longer present
+//  //Special treatment of MGDoFHandler...
+//  template <int dim>
+//    class DataOut<dim, dealii::MGDoFHandler> : public dealii::DataOut<dim, dealii::DoFHandler<dim,dim> >
+//    {
+//     public:
+//      DataOut() 
+//      {
+//      }
+//    };
 
 }//Endof Namespace DOpEWrapper
 #endif

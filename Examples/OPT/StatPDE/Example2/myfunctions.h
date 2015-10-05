@@ -24,7 +24,7 @@
 #ifndef MYFUNCTIONS_H_
 #define MYFUNCTIONS_H_
 
-#include <base/function.h>
+#include <deal.II/base/function.h>
 
 namespace DOpE
 {

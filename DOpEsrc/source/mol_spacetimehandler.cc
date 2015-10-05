@@ -36,8 +36,14 @@ namespace DOpE
         dealii::BlockSparsityPattern & sparsity) const
     {
       const std::vector<unsigned int>& blocks = this->GetControlDoFsPerBlock();
+#if DEAL_II_VERSION_GTE(8,3,0)
+      dealii::BlockDynamicSparsityPattern csp(blocks.size(),
+					      blocks.size());
+#else
       dealii::BlockCompressedSimpleSparsityPattern csp(blocks.size(),
-          blocks.size());
+						       blocks.size());
+#endif
+
       for (unsigned int i = 0; i < blocks.size(); i++)
       {
         for (unsigned int j = 0; j < blocks.size(); j++)
@@ -67,7 +73,11 @@ namespace DOpE
         dealii::SparsityPattern & sparsity) const
     {
       const unsigned int total_dofs = this->GetControlNDoFs();
+#if DEAL_II_VERSION_GTE(8,3,0)
+      dealii::DynamicSparsityPattern csp(total_dofs, total_dofs);
+#else
       dealii::CompressedSimpleSparsityPattern csp(total_dofs, total_dofs);
+#endif
 
 #if dope_dimension > 0
       dealii::DoFTools::make_sparsity_pattern (this->GetControlDoFHandler().GetDEALDoFHandler(),csp);
@@ -90,8 +100,14 @@ namespace DOpE
         dealii::BlockSparsityPattern & sparsity) const
     {
       const std::vector<unsigned int>& blocks = this->GetControlDoFsPerBlock();
+#if DEAL_II_VERSION_GTE(8,3,0)
+      dealii::BlockDynamicSparsityPattern csp(blocks.size(),
+					      blocks.size());
+#else
       dealii::BlockCompressedSimpleSparsityPattern csp(blocks.size(),
-          blocks.size());
+						       blocks.size());
+#endif
+
       for (unsigned int i = 0; i < blocks.size(); i++)
       {
         for (unsigned int j = 0; j < blocks.size(); j++)
@@ -121,7 +137,11 @@ namespace DOpE
         dealii::SparsityPattern & sparsity) const
     {
       const unsigned int total_dofs = this->GetControlNDoFs();
+#if DEAL_II_VERSION_GTE(8,3,0)
+      dealii::DynamicSparsityPattern csp(total_dofs, total_dofs);
+#else
       dealii::CompressedSimpleSparsityPattern csp(total_dofs, total_dofs);
+#endif
 
 #if dope_dimension > 0
       dealii::DoFTools::make_sparsity_pattern (this->GetControlDoFHandler().GetDEALDoFHandler(),csp);
@@ -183,14 +203,14 @@ namespace DOpE
         dealii::hp::FECollection,
         dealii::hp::DoFHandler, dealii::BlockSparsityPattern,
     dealii::BlockVector<double>, dope_dimension, deal_II_dimension>::ResetTriangulation(
-      const dealii::Triangulation<deal_II_dimension>& tria) { abort(); }
+      const dealii::Triangulation<deal_II_dimension>& /*tria*/) { abort(); }
 
   template<>
     void
     DOpE::MethodOfLines_SpaceTimeHandler<dealii::hp::FECollection,
         dealii::hp::DoFHandler, dealii::SparsityPattern,
         dealii::Vector<double>, dope_dimension, deal_II_dimension>::ResetTriangulation(
-	  const dealii::Triangulation<deal_II_dimension>& tria) { abort(); }
+	  const dealii::Triangulation<deal_II_dimension>& /*tria*/) { abort(); }
 
 
 template class DOpE::MethodOfLines_SpaceTimeHandler<dealii::FESystem,

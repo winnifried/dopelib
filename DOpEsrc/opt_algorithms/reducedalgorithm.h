@@ -30,7 +30,7 @@
 #include "outputhandler.h"
 #include "controlvector.h"
 
-#include <lac/vector.h>
+#include <deal.II/lac/vector.h>
 
 #include <iostream>
 #include <assert.h>

@@ -28,10 +28,10 @@
 #include "parameterreader.h"
 #include "dopetypes.h"
 
-#include <base/utilities.h>
-#include <lac/vector.h>
-#include <lac/block_vector_base.h>
-#include <lac/block_vector.h>
+#include <deal.II/base/utilities.h>
+#include <deal.II/lac/vector.h>
+#include <deal.II/lac/block_vector_base.h>
+#include <deal.II/lac/block_vector.h>
 
 #include <vector>
 #include <iostream>

@@ -24,18 +24,16 @@
 #ifndef DIRECT_LINEAR_SOLVER_H_
 #define DIRECT_LINEAR_SOLVER_H_
 
-#include <lac/vector.h>
-#include <lac/block_sparsity_pattern.h>
-#include <lac/block_sparse_matrix.h>
-#include <lac/compressed_simple_sparsity_pattern.h>
-#include <lac/solver_cg.h>
-#include <lac/precondition.h>
-#include <lac/full_matrix.h>
-#include <lac/sparse_direct.h>
-
-#include <dofs/dof_tools.h>
-
-#include <numerics/vector_tools.h>
+#include <deal.II/lac/vector.h>
+#include <deal.II/lac/block_sparsity_pattern.h>
+#include <deal.II/lac/block_sparse_matrix.h>
+#include <deal.II/lac/compressed_simple_sparsity_pattern.h>
+#include <deal.II/lac/solver_cg.h>
+#include <deal.II/lac/precondition.h>
+#include <deal.II/lac/full_matrix.h>
+#include <deal.II/lac/sparse_direct.h>
+#include <deal.II/dofs/dof_tools.h>
+#include <deal.II/numerics/vector_tools.h>
 
 #include <vector>
 

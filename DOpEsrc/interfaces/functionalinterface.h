@@ -27,9 +27,9 @@
 #include <map>
 #include <string>
 
-#include <fe/fe_system.h>
-#include <fe/fe_values.h>
-#include <fe/mapping.h>
+#include <deal.II/fe/fe_system.h>
+#include <deal.II/fe/fe_values.h>
+#include <deal.II/fe/mapping.h>
 
 #include "fevalues_wrapper.h"
 #include "dofhandler_wrapper.h"

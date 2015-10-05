@@ -32,11 +32,11 @@
 #include "refinementcontainer.h"
 #include "solutiontransfer_wrapper.h"
 
-#include <dofs/dof_handler.h>
-#include <dofs/dof_renumbering.h>
-#include <dofs/dof_tools.h>
-#include <hp/mapping_collection.h>
-#include <lac/constraint_matrix.h>
+#include <deal.II/dofs/dof_handler.h>
+#include <deal.II/dofs/dof_renumbering.h>
+#include <deal.II/dofs/dof_tools.h>
+#include <deal.II/hp/mapping_collection.h>
+#include <deal.II/lac/constraint_matrix.h>
 #include <deal.II/grid/grid_refinement.h>
 
 namespace DOpE
@@ -481,10 +481,10 @@ namespace DOpE
          *                       RefineSpace method.
          */
         void
-        RefineStateSpace(DOpEtypes::RefinementType ref_type =
+	  RefineStateSpace(DOpEtypes::RefinementType /*ref_type*/ =
             DOpEtypes::RefinementType::global)
         {
-          assert(ref_type == DOpEtypes::RefinementType::global);
+          //assert(ref_type == DOpEtypes::RefinementType::global);
           RefinementContainer ref_con_dummy;
           RefineStateSpace(ref_con_dummy);
         }
@@ -500,10 +500,10 @@ namespace DOpE
          *                       RefineSpace method.
          */
         void
-        RefineControlSpace(DOpEtypes::RefinementType ref_type =
+	  RefineControlSpace(DOpEtypes::RefinementType /*ref_type*/ =
             DOpEtypes::RefinementType::global)
         {
-          assert(ref_type == DOpEtypes::RefinementType::global);
+          //assert(ref_type == DOpEtypes::RefinementType::global);
           RefinementContainer ref_con_dummy;
           RefineControlSpace(ref_con_dummy);
         }
@@ -829,8 +829,13 @@ namespace DOpE
         dealii::BlockSparsityPattern & sparsity) const
     {
       const std::vector<unsigned int>& blocks = this->GetControlDoFsPerBlock();
+#if DEAL_II_VERSION_GTE(8,3,0)
+      dealii::BlockDynamicSparsityPattern csp(blocks.size(),
+          blocks.size());
+#else
       dealii::BlockCompressedSimpleSparsityPattern csp(blocks.size(),
           blocks.size());
+#endif
       for (unsigned int i = 0; i < blocks.size(); i++)
       {
         for (unsigned int j = 0; j < blocks.size(); j++)
@@ -858,8 +863,11 @@ namespace DOpE
         dealii::SparsityPattern & sparsity) const
     {
       const unsigned int total_dofs = this->GetControlNDoFs();
+#if DEAL_II_VERSION_GTE(8,3,0)
+      dealii::DynamicSparsityPattern csp(total_dofs, total_dofs);
+#else
       dealii::CompressedSimpleSparsityPattern csp(total_dofs, total_dofs);
-
+#endif
       dealii::DoFTools::make_sparsity_pattern(
           static_cast<const dealii::DoFHandler<deal_II_dimension>&>(this->GetControlDoFHandler()),
           csp);
@@ -878,8 +886,13 @@ namespace DOpE
         dealii::BlockSparsityPattern & sparsity) const
     {
       const std::vector<unsigned int>& blocks = this->GetControlDoFsPerBlock();
+#if DEAL_II_VERSION_GTE(8,3,0)
+      dealii::BlockDynamicSparsityPattern csp(blocks.size(),
+          blocks.size());
+#else
       dealii::BlockCompressedSimpleSparsityPattern csp(blocks.size(),
           blocks.size());
+#endif      
       for (unsigned int i = 0; i < blocks.size(); i++)
       {
         for (unsigned int j = 0; j < blocks.size(); j++)
@@ -907,8 +920,11 @@ namespace DOpE
         dealii::SparsityPattern & sparsity) const
     {
       const unsigned int total_dofs = this->GetControlNDoFs();
+#if DEAL_II_VERSION_GTE(8,3,0)
+      dealii::DynamicSparsityPattern csp(total_dofs, total_dofs);
+#else
       dealii::CompressedSimpleSparsityPattern csp(total_dofs, total_dofs);
-
+#endif
       dealii::DoFTools::make_sparsity_pattern(
           static_cast<const dealii::hp::DoFHandler<deal_II_dimension>&>(this->GetControlDoFHandler()),
           csp);

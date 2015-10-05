@@ -30,10 +30,9 @@
 #include "statevector.h"
 #include "stateproblem.h"
 
-#include <lac/vector.h>
-
-#include <lac/block_sparsity_pattern.h>
-#include <lac/block_sparse_matrix.h>
+#include <deal.II/lac/vector.h>
+#include <deal.II/lac/block_sparsity_pattern.h>
+#include <deal.II/lac/block_sparse_matrix.h>
 
 #include "pdeproblemcontainer.h"
 #include "pdeinterface.h"
@@ -46,16 +45,16 @@
 #include "directlinearsolver.h"
 #include "solutionextractor.h"
 
-#include <base/data_out_base.h>
-#include <base/utilities.h>
-#include <numerics/data_out.h>
-#include <numerics/matrix_tools.h>
-#include <numerics/vector_tools.h>
-#include <base/function.h>
-#include <lac/sparse_matrix.h>
-#include <lac/compressed_simple_sparsity_pattern.h>
-#include <lac/block_sparsity_pattern.h>
-#include <lac/sparse_direct.h>
+#include <deal.II/base/data_out_base.h>
+#include <deal.II/base/utilities.h>
+#include <deal.II/numerics/data_out.h>
+#include <deal.II/numerics/matrix_tools.h>
+#include <deal.II/numerics/vector_tools.h>
+#include <deal.II/base/function.h>
+#include <deal.II/lac/sparse_matrix.h>
+#include <deal.II/lac/compressed_simple_sparsity_pattern.h>
+#include <deal.II/lac/block_sparsity_pattern.h>
+#include <deal.II/lac/sparse_direct.h>
 
 #include <fstream>
 namespace DOpE
@@ -918,7 +917,7 @@ namespace DOpE
       typename VECTOR, int dealdim>
     void
     StatPDEProblem<NONLINEARSOLVER, INTEGRATOR, PROBLEM, VECTOR, dealdim>::WriteToFile(
-        const ControlVector<VECTOR> &v, std::string name, std::string dof_type)
+      const ControlVector<VECTOR> &/*v*/, std::string /*name*/, std::string /*dof_type*/)
     {
       throw DOpEException("This Problem does not support ControlVectors","StatPDEProblem::WriteToFile");
     }

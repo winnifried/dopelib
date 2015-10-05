@@ -23,12 +23,12 @@
 
 #include <iostream>
 
-#include <grid/tria.h>
-#include <dofs/dof_handler.h>
-#include <grid/grid_generator.h>
-#include <fe/fe_q.h>
-#include <fe/fe_nothing.h>
-#include <base/quadrature_lib.h>
+#include <deal.II/grid/tria.h>
+#include <deal.II/dofs/dof_handler.h>
+#include <deal.II/grid/grid_generator.h>
+#include <deal.II/fe/fe_q.h>
+#include <deal.II/fe/fe_nothing.h>
+#include <deal.II/base/quadrature_lib.h>
 
 #include "reducednewtonalgorithm.h"
 #include "optproblemcontainer.h"

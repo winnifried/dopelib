@@ -25,9 +25,9 @@
 #define DOPE_SOLUTIONTRANSFER_H_
 
 #include <deal.II/numerics/solution_transfer.h>
-#include <dofs/dof_handler.h>
-#include <hp/dof_handler.h>
-#include <multigrid/mg_dof_handler.h>
+#include <deal.II/dofs/dof_handler.h>
+#include <deal.II/hp/dof_handler.h>
+//#include <deal.II/multigrid/mg_dof_handler.h>
 
 namespace DOpEWrapper
 {
@@ -56,16 +56,16 @@ namespace DOpEWrapper
      }
     };
 
-  //Special treatment of MGDoFHandler...
-  template <int dim, typename VECTOR>
-    class SolutionTransfer<dim,VECTOR,MGDoFHandler> : public dealii::SolutionTransfer<dim,VECTOR, dealii::DoFHandler<dim,dim> >
-    {
-     public:
-      SolutionTransfer(const MGDoFHandler<dim,dim> &dof) : 
-           dealii::SolutionTransfer<dim,VECTOR, dealii::DoFHandler<dim,dim> >(dof)
-     {
-     }
-    };
+ // //Special treatment of MGDoFHandler...
+ // template <int dim, typename VECTOR>
+ //   class SolutionTransfer<dim,VECTOR,MGDoFHandler> : public dealii::SolutionTransfer<dim,VECTOR, dealii::DoFHandler<dim,dim> >
+ //   {
+ //    public:
+ //     SolutionTransfer(const MGDoFHandler<dim,dim> &dof) : 
+ //          dealii::SolutionTransfer<dim,VECTOR, dealii::DoFHandler<dim,dim> >(dof)
+ //    {
+ //    }
+ //   };
 
 }//Endof Namespace DOpEWrapper
 #endif

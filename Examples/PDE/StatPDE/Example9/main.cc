@@ -24,11 +24,11 @@
 #include <iostream>
 #include <fstream>
 
-#include <grid/tria.h>
-#include <grid/grid_in.h>
-#include <fe/fe_q.h>
-#include <fe/fe_dgp.h>
-#include <base/quadrature_lib.h>
+#include <deal.II/grid/tria.h>
+#include <deal.II/grid/grid_in.h>
+#include <deal.II/fe/fe_q.h>
+#include <deal.II/fe/fe_dgp.h>
+#include <deal.II/base/quadrature_lib.h>
 
 #include "pdeproblemcontainer.h"
 #include "pdeinterface.h"

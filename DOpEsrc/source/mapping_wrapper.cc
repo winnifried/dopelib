@@ -23,9 +23,9 @@
 
 
 #include"mapping_wrapper.h"
-#include <dofs/dof_handler.h>
-#include <multigrid/mg_dof_handler.h>
-#include <hp/dof_handler.h>
+#include <deal.II/dofs/dof_handler.h>
+//#include <deal.II/multigrid/mg_dof_handler.h>
+#include <deal.II/hp/dof_handler.h>
 
 namespace DOpEWrapper
 {
@@ -40,10 +40,10 @@ namespace DOpEWrapper
     StaticMappingQ1<dim, dealii::hp::DoFHandler>::mapping_q1(
         StaticMappingQ1<dim, dealii::DoFHandler >::mapping_q1);
 
-  template<int dim>
-    Mapping<dim, dealii::MGDoFHandler>
-    StaticMappingQ1<dim, dealii::MGDoFHandler >::mapping_q1(
-        StaticMappingQ1<dim, dealii::DoFHandler >::mapping_q1);
+//  template<int dim>
+//    Mapping<dim, dealii::MGDoFHandler>
+//    StaticMappingQ1<dim, dealii::MGDoFHandler >::mapping_q1(
+//        StaticMappingQ1<dim, dealii::DoFHandler >::mapping_q1);
 
 }
 
@@ -51,9 +51,9 @@ template class DOpEWrapper::Mapping<1, dealii::DoFHandler>;
 template class DOpEWrapper::Mapping<2, dealii::DoFHandler>;
 template class DOpEWrapper::Mapping<3, dealii::DoFHandler>;
 
-template class DOpEWrapper::Mapping<1, dealii::MGDoFHandler>;
-template class DOpEWrapper::Mapping<2, dealii::MGDoFHandler>;
-template class DOpEWrapper::Mapping<3, dealii::MGDoFHandler>;
+//template class DOpEWrapper::Mapping<1, dealii::MGDoFHandler>;
+//template class DOpEWrapper::Mapping<2, dealii::MGDoFHandler>;
+//template class DOpEWrapper::Mapping<3, dealii::MGDoFHandler>;
 
 template class DOpEWrapper::Mapping<1, dealii::hp::DoFHandler>;
 template class DOpEWrapper::Mapping<2, dealii::hp::DoFHandler>;
@@ -63,9 +63,9 @@ template class DOpEWrapper::StaticMappingQ1<1, dealii::DoFHandler>;
 template class DOpEWrapper::StaticMappingQ1<2, dealii::DoFHandler>;
 template class DOpEWrapper::StaticMappingQ1<3, dealii::DoFHandler>;
 
-template class DOpEWrapper::StaticMappingQ1<1, dealii::MGDoFHandler>;
-template class DOpEWrapper::StaticMappingQ1<2, dealii::MGDoFHandler>;
-template class DOpEWrapper::StaticMappingQ1<3, dealii::MGDoFHandler>;
+//template class DOpEWrapper::StaticMappingQ1<1, dealii::MGDoFHandler>;
+//template class DOpEWrapper::StaticMappingQ1<2, dealii::MGDoFHandler>;
+//template class DOpEWrapper::StaticMappingQ1<3, dealii::MGDoFHandler>;
 
 template class DOpEWrapper::StaticMappingQ1<1, dealii::hp::DoFHandler>;
 template class DOpEWrapper::StaticMappingQ1<2, dealii::hp::DoFHandler>;

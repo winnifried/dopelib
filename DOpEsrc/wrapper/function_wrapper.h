@@ -24,9 +24,9 @@
 #ifndef DOPE_FUNCTION_H_
 #define DOPE_FUNCTION_H_
 
-#include <base/exceptions.h>
-#include <base/function.h>
-#include <lac/vector.h>
+#include <deal.II/base/exceptions.h>
+#include <deal.II/base/function.h>
+#include <deal.II/lac/vector.h>
 
 namespace DOpEWrapper
 {
@@ -130,12 +130,12 @@ namespace DOpEWrapper
         }
 
         virtual void
-        value_list(const std::vector<dealii::Point<dim> > &points,
+	  value_list(const std::vector<dealii::Point<dim> > &/*points*/,
 		   std::vector<double> &values,
 		   const unsigned int /*component*/ = 0) const
         {
-          Assert(values.size() == points.size(),
-		 ExcDimensionMismatch(values.size(), points.size()));
+        // Assert(values.size() == points.size(),
+	//	 ExcDimensionMismatch(values.size(), points.size()));
 	  
           std::fill(values.begin(), values.end(), 0.);
         }
@@ -244,12 +244,12 @@ namespace DOpEWrapper
     }
 
     virtual void
-      value_list(const std::vector<dealii::Point<dim> > &points,
+      value_list(const std::vector<dealii::Point<dim> > &/*points*/,
 		 std::vector<double> &values,
 		 const unsigned int /*component*/ = 0) const
     {
-      Assert(values.size() == points.size(),
-	     ExcDimensionMismatch(values.size(), points.size()));
+//      Assert(values.size() == points.size(),
+//	     ExcDimensionMismatch(values.size(), points.size()));
       
       std::fill(values.begin(), values.end(), function_value_);
     }

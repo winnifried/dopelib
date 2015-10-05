@@ -23,12 +23,12 @@
 
 #include <iostream>
 
-#include <grid/tria.h>
-#include <grid/grid_generator.h>
-#include <fe/fe_q.h>
-#include <dofs/dof_tools.h>
-#include <base/quadrature_lib.h>
-#include <lac/precondition_block.h>
+#include <deal.II/grid/tria.h>
+#include <deal.II/grid/grid_generator.h>
+#include <deal.II/fe/fe_q.h>
+#include <deal.II/dofs/dof_tools.h>
+#include <deal.II/base/quadrature_lib.h>
+#include <deal.II/lac/precondition_block.h>
 
 #include "reduced_ipopt_algorithm.h"
 #include "reduced_snopt_algorithm.h"
