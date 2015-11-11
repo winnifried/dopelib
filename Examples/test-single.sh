@@ -48,6 +48,7 @@ then
 	    fi
 	else
 	    echo "Executable '"$2" not found."
+	    exit 1
 	fi
     else
 	echo "No File test.dlog found for comparisson. Run '"$0" Store' to create one."
@@ -73,6 +74,7 @@ else
 	    exit 0;
 	else
 	    echo "Executable '"$2" not found."
+	    exit 1
 	fi
     else
 	echo "Unknown Option: "$1
