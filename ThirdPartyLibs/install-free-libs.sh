@@ -27,7 +27,8 @@
 #installation of ipopt
 ####################################################################
 #ARCHIVE_BASE=Ipopt-3.10.4
-ARCHIVE_BASE=Ipopt-3.11.8
+#ARCHIVE_BASE=Ipopt-3.11.8
+ARCHIVE_BASE=Ipopt-3.12.4
 ARCHIVE=${ARCHIVE_BASE}.tgz
 
 
@@ -249,14 +250,14 @@ cd ../..
 
 #HSL
 echo "Please install/or download appropriate linear solvers"
-echo "This script has been tested with HSL MA 27 and HSL MA 77"
+#echo "This script has been tested with HSL MA 27 and HSL MA 77"
 echo "See the file "${INST_DIR}"/ThirdParty/HSL/INSTALL.HSL"
 echo "on how to obtain the required sources. "
-echo "Copy the required files to "${INST_DIR}"/ThirdParty/HSL/INSTALL.HSL:"
-echo "For MA27 copy the file ma27d.f to ma27ad.f"
-echo "For MA77 see the INSTALL.HSL file"
+#echo "Copy the required files to "${INST_DIR}"/ThirdParty/HSL/:"
+#echo "For MA27 copy the file ma27d.f to ma27ad.f"
+#echo "For MA77 see the INSTALL.HSL file"
 echo ""
-echo "This has been done? [y/n]"
+echo "Do you wish to continue? [y/n]"
 read line
 if [[ $line != "y" ]]
 then
