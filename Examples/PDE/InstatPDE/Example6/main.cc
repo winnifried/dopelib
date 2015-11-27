@@ -189,10 +189,11 @@ main(int argc, char **argv)
   ActiveFEIndexSetter<DIM> indexsetter;
   MethodOfLines_SpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR,
   DIM, DIM> DOFH(triangulation,
-      control_fe_collection,
-      state_fe_collection,
-      times, DOpEtypes::ControlType::stationary,
-      indexsetter);
+		 control_fe_collection,
+		 state_fe_collection,
+		 times, DOpEtypes::ControlType::stationary,
+		 false,
+		 indexsetter);
 
   NoConstraints<ElementDataContainer, FaceDataContainer, DOFHANDLER, VECTOR,
   DIM, DIM> Constraints;

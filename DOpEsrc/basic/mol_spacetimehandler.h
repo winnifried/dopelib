@@ -60,12 +60,14 @@ namespace DOpE
          * @param control_fe        The finite elements used for the discretization of the control variable.
          * @param state_fe          The finite elements used for the discretization of the state variable.
          * @param type              The type of the control, see dopetypes.h for more information.
+	 * @param flux_pattern      True if a flux sparsity pattern is needed (for DG discretizations)
          * @param index_setter      The index setter object (only needed in case of hp elements).
          */
         MethodOfLines_SpaceTimeHandler(dealii::Triangulation<dealdim>& triangulation, 
 				       const FE<dealdim, dealdim>& control_fe,
 				       const FE<dealdim, dealdim>& state_fe, 
 				       DOpEtypes::ControlType type,
+				       bool flux_pattern = false,
 				       const ActiveFEIndexSetterInterface<dopedim, dealdim>& index_setter =
 				       ActiveFEIndexSetterInterface<dopedim, dealdim>()) :
       SpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dopedim, dealdim>(type, index_setter), 
@@ -80,7 +82,7 @@ namespace DOpE
 	state_mesh_transfer_(NULL), 
 	sparse_mkr_dynamic_(true)
         {
-          sparsitymaker_ = new SparsityMaker<DH, dealdim>;
+          sparsitymaker_ = new SparsityMaker<DH, dealdim>(flux_pattern);
           user_defined_dof_constr_ = NULL;
         }
 
@@ -93,6 +95,7 @@ namespace DOpE
          * @param state_fe          The finite elements used for the discretization of the state variable.
          * @param times             The timegrid for instationary problems.
          * @param type              The type of the control, see dopetypes.h for more information.
+         * @param flux_pattern      True if a flux sparsity pattern is needed (for DG discretizations)
          * @param index_setter      The index setter object (only needed in case of hp elements).
          */      
         MethodOfLines_SpaceTimeHandler(dealii::Triangulation<dealdim>& triangulation, 
@@ -100,6 +103,7 @@ namespace DOpE
 				       const FE<dealdim, dealdim>& state_fe, 
 				       dealii::Triangulation<1> & times,
 				       DOpEtypes::ControlType type,
+				       bool flux_pattern = false,
 				       const ActiveFEIndexSetterInterface<dopedim, dealdim>& index_setter =
 				       ActiveFEIndexSetterInterface<dopedim, dealdim>()) :
       SpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dopedim, dealdim>(times, type, index_setter), 
@@ -112,7 +116,7 @@ namespace DOpE
 	constraints_(), 
 	control_mesh_transfer_(NULL), state_mesh_transfer_(NULL), sparse_mkr_dynamic_(true)
         {
-          sparsitymaker_ = new SparsityMaker<DH, dealdim>;
+          sparsitymaker_ = new SparsityMaker<DH, dealdim>(flux_pattern);
           user_defined_dof_constr_ = NULL;
         }
 
@@ -125,6 +129,7 @@ namespace DOpE
          * @param constraints       An object describing the constraints imposed on an optimization
 	 *                          problem in term of the number of unknowns in the control and state.
          * @param type              The type of the control, see dopetypes.h for more information.
+         * @param flux_pattern      True if a flux sparsity pattern is needed (for DG discretizations)
          * @param index_setter      The index setter object (only needed in case of hp elements).
          */
          MethodOfLines_SpaceTimeHandler(dealii::Triangulation<dealdim>& triangulation, 
@@ -132,6 +137,7 @@ namespace DOpE
 					const FE<dealdim, dealdim>& state_fe, 
 					const Constraints& c,
 					DOpEtypes::ControlType type,
+					bool flux_pattern = false,
 					const ActiveFEIndexSetterInterface<dopedim, dealdim>& index_setter =
 					ActiveFEIndexSetterInterface<dopedim, dealdim>()) :
       SpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dopedim, dealdim>(type, index_setter), 
@@ -144,7 +150,7 @@ namespace DOpE
 	constraints_(c), 
 	control_mesh_transfer_(NULL), state_mesh_transfer_(NULL), sparse_mkr_dynamic_(true)
         {
-          sparsitymaker_ = new SparsityMaker<DH, dealdim>;
+          sparsitymaker_ = new SparsityMaker<DH, dealdim>(flux_pattern);
           user_defined_dof_constr_ = NULL;
         }
 
@@ -158,6 +164,7 @@ namespace DOpE
          * @param constraints       An object describing the constraints imposed on an optimization
 	 *                          problem in term of the number of unknowns in the control and state.
          * @param type              The type of the control, see dopetypes.h for more information.
+         * @param flux_pattern      True if a flux sparsity pattern is needed (for DG discretizations)
          * @param index_setter      The index setter object (only needed in case of hp elements).
          */
         MethodOfLines_SpaceTimeHandler(dealii::Triangulation<dealdim>& triangulation, 
@@ -166,6 +173,7 @@ namespace DOpE
 				       dealii::Triangulation<1> & times,
 				       const Constraints& c, 
 				       DOpEtypes::ControlType type,
+				       bool flux_pattern = false,
 				       const ActiveFEIndexSetterInterface<dopedim, dealdim>& index_setter =
 				       ActiveFEIndexSetterInterface<dopedim, dealdim>()) :
       SpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dopedim, dealdim>(times, type, index_setter), 
@@ -178,7 +186,7 @@ namespace DOpE
 	constraints_(c), 
 	control_mesh_transfer_(NULL), state_mesh_transfer_(NULL), sparse_mkr_dynamic_(true)
         {
-          sparsitymaker_ = new SparsityMaker<DH, dealdim>;
+          sparsitymaker_ = new SparsityMaker<DH, dealdim>(flux_pattern);
           user_defined_dof_constr_ = NULL;
         }
 
@@ -698,6 +706,7 @@ namespace DOpE
         void
         SetSparsityMaker(SparsityMaker<DH, dealdim>& sparsity_maker)
         {
+	  assert(sparse_mkr_dynamic_==true); //If not true, we already set the sparsity maker
           if (sparsitymaker_ != NULL && sparse_mkr_dynamic_)
             delete sparsitymaker_;
           sparsitymaker_ = &sparsity_maker;

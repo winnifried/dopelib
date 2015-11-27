@@ -62,7 +62,8 @@ namespace DOpE
             dealii::Triangulation<dim>& triangulation,
             const FE<dim, dim>& control_fe, const FE<dim, dim>& state_fe,
             DOpEtypes::ControlType type,
-            const ActiveFEIndexSetterInterface<dim, dim>& index_setter =
+            bool flux_pattern = false,
+	    const ActiveFEIndexSetterInterface<dim, dim>& index_setter =
                 ActiveFEIndexSetterInterface<dim, dim>()) :
             SpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dim, dim>(type,
                 index_setter), state_triangulation_(triangulation), control_dof_handler_(
@@ -73,7 +74,7 @@ namespace DOpE
                 NULL), state_mesh_transfer_(NULL), sparse_mkr_dynamic_(true)
         {
           control_triangulation_.copy_triangulation(state_triangulation_);
-          sparsitymaker_ = new SparsityMaker<DH, dim>;
+          sparsitymaker_ = new SparsityMaker<DH, dim>(flux_pattern);
           user_defined_dof_constr_ = NULL;
         }
 
@@ -81,7 +82,8 @@ namespace DOpE
             dealii::Triangulation<dim>& triangulation,
             const FE<dim, dim>& control_fe, const FE<dim, dim>& state_fe,
             dealii::Triangulation<1> & times, DOpEtypes::ControlType type,
-            const ActiveFEIndexSetterInterface<dim, dim>& index_setter =
+            bool flux_pattern = false,
+	    const ActiveFEIndexSetterInterface<dim, dim>& index_setter =
                 ActiveFEIndexSetterInterface<dim, dim>()) :
             SpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dim, dim>(times,
                 type, index_setter), state_triangulation_(triangulation), control_dof_handler_(
@@ -92,7 +94,7 @@ namespace DOpE
                 NULL), state_mesh_transfer_(NULL), sparse_mkr_dynamic_(true)
         {
           control_triangulation_.copy_triangulation(state_triangulation_);
-          sparsitymaker_ = new SparsityMaker<DH, dim>;
+          sparsitymaker_ = new SparsityMaker<DH, dim>(flux_pattern);
           user_defined_dof_constr_ = NULL;
         }
 
@@ -100,7 +102,8 @@ namespace DOpE
             dealii::Triangulation<dim>& triangulation,
             const FE<dim, dim>& control_fe, const FE<dim, dim>& state_fe,
             const Constraints& c, DOpEtypes::ControlType type,
-            const ActiveFEIndexSetterInterface<dim, dim>& index_setter =
+            bool flux_pattern = false,
+	    const ActiveFEIndexSetterInterface<dim, dim>& index_setter =
                 ActiveFEIndexSetterInterface<dim, dim>()) :
             SpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dim, dim>(type,
                 index_setter), state_triangulation_(triangulation), control_dof_handler_(
@@ -112,7 +115,7 @@ namespace DOpE
                 true)
         {
           control_triangulation_.copy_triangulation(state_triangulation_);
-          sparsitymaker_ = new SparsityMaker<DH, dim>;
+          sparsitymaker_ = new SparsityMaker<DH, dim>(flux_pattern);
           user_defined_dof_constr_ = NULL;
         }
 
@@ -121,7 +124,8 @@ namespace DOpE
             const FE<dim, dim>& control_fe, const FE<dim, dim>& state_fe,
             dealii::Triangulation<1> & times, const Constraints& c,
             DOpEtypes::ControlType type,
-            const ActiveFEIndexSetterInterface<dim, dim>& index_setter =
+            bool flux_pattern = false,
+	    const ActiveFEIndexSetterInterface<dim, dim>& index_setter =
                 ActiveFEIndexSetterInterface<dim, dim>()) :
             SpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dim, dim>(times,
                 type, index_setter), state_triangulation_(triangulation), control_dof_handler_(
@@ -133,7 +137,7 @@ namespace DOpE
                 true)
         {
           control_triangulation_.copy_triangulation(state_triangulation_);
-          sparsitymaker_ = new SparsityMaker<DH, dim>;
+          sparsitymaker_ = new SparsityMaker<DH, dim>(flux_pattern);
           user_defined_dof_constr_ = NULL;
         }
 
@@ -728,6 +732,7 @@ namespace DOpE
         void
         SetSparsityMaker(SparsityMaker<DH, dim>& sparsity_maker)
         {
+          assert(sparse_mkr_dynamic_==true); //If not true, we already set the sparsity maker
           if (sparsitymaker_ != NULL && sparse_mkr_dynamic_)
             delete sparsitymaker_;
           sparsitymaker_ = &sparsity_maker;

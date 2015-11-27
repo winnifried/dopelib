@@ -50,8 +50,9 @@ namespace DOpE
     class SparsityMaker
     {
     public:
-      SparsityMaker()
+      SparsityMaker(bool flux_pattern = false)
       {
+	flux_pattern_ = flux_pattern;
       }
       virtual
       ~SparsityMaker()
@@ -99,7 +100,8 @@ namespace DOpE
 
       //TODO: If one wishes to change the sparsity-pattern of the control, one
       //has to implement this here.
-
+    private:
+      bool flux_pattern_;
     };
 
 
@@ -130,8 +132,16 @@ namespace DOpE
             }
         }
       csp.collect_sizes();
-      dealii::DoFTools::make_sparsity_pattern(
+      if( flux_pattern_ )
+      {
+	dealii::DoFTools::make_flux_sparsity_pattern(
           dof_handler.GetDEALDoFHandler(), csp, hanging_node_constraints);
+      }
+      else
+      {
+	dealii::DoFTools::make_sparsity_pattern(
+          dof_handler.GetDEALDoFHandler(), csp, hanging_node_constraints);
+      }
       sparsity.copy_from(csp);
     }
 
@@ -155,8 +165,16 @@ namespace DOpE
 #else
       dealii::CompressedSimpleSparsityPattern csp(total_dofs, total_dofs);
 #endif
-      dealii::DoFTools::make_sparsity_pattern(
+      if( flux_pattern_ )
+      {
+	dealii::DoFTools::make_flux_sparsity_pattern(
           dof_handler.GetDEALDoFHandler(), csp, hanging_node_constraints);
+      }
+      else
+      {
+	dealii::DoFTools::make_sparsity_pattern(
+          dof_handler.GetDEALDoFHandler(), csp, hanging_node_constraints);
+      }
       sparsity.copy_from(csp);
     }
 

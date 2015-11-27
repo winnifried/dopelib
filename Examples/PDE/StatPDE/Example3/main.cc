@@ -193,7 +193,7 @@ main(int argc, char **argv)
   //The indexsetter determines on which part of the domain
   //which FE, quadrature rule etc. is used.
   ActiveFEIndexSetter<DIM> indexsetter(pr);
-  STH DOFH(triangulation, state_fe_collection, indexsetter);
+  STH DOFH(triangulation, state_fe_collection, false, indexsetter);
   /***************hp********************/
 
   OP P(LPDE, DOFH);
