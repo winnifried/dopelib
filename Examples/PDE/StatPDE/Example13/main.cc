@@ -42,6 +42,8 @@
 #include "statpdeproblem.h"
 #include "newtonsolver.h"
 #include "directlinearsolver.h"
+#include "gmreslinearsolver.h"
+#include "preconditioner_wrapper.h"
 #include "userdefineddofconstraints.h"
 #include "sparsitymaker.h"
 #include "integratordatacontainer.h"
@@ -55,8 +57,9 @@
 
 #include "localpde.h"
 #include "functionals.h"
-#include "higher_order_dwrc.h"
-#include "residualestimator.h"
+//ToDo Remove
+#include "pointconstraintsmaker.h"
+
 
 using namespace std;
 using namespace dealii;
@@ -75,20 +78,15 @@ typedef SparseMatrix<double> MATRIX;
 typedef SparsityPattern SPARSITYPATTERN;
 typedef Vector<double> VECTOR;
 
-#define VECTOR Vector<double>
-#define MATRIX SparseMatrix<double>
-#define SPARSITYPATTERN SparsityPattern
-#define DOFHANDLER DoFHandler
-#define FE FESystem
-#define CDC ElementDataContainer
-#define FDC FaceDataContainer
+typedef DOpEWrapper::PreconditionSSOR_Wrapper<MATRIX> PRECONDITIONERSSOR;
 
 typedef PDEProblemContainer<LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
     SimpleDirichletData<VECTOR, DIM>, SPARSITYPATTERN, VECTOR, DIM> OP;
 typedef IntegratorDataContainer<DOFHANDLER, QUADRATURE, FACEQUADRATURE,
     VECTOR, DIM> IDC;
 typedef Integrator<IDC, VECTOR, double, DIM> INTEGRATOR;
-typedef DirectLinearSolverWithMatrix<SPARSITYPATTERN, MATRIX, VECTOR> LINEARSOLVER;
+//typedef DirectLinearSolverWithMatrix<SPARSITYPATTERN, MATRIX, VECTOR> LINEARSOLVER;
+typedef GMRESLinearSolverWithMatrix<PRECONDITIONERSSOR, SPARSITYPATTERN, MATRIX, VECTOR> LINEARSOLVER;
 
 typedef NewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR> NLS;
 typedef StatPDEProblem<NLS, INTEGRATOR, OP, VECTOR, DIM> RP;
@@ -142,7 +140,8 @@ main(int argc, char **argv)
 
   //Make triangulation *************************************************
   Triangulation<DIM> triangulation;
-  GridGenerator::hyper_cube(triangulation, 0, 1,true);
+  //GridGenerator::hyper_cube(triangulation, 0, 1,true);
+  GridGenerator::hyper_rectangle(triangulation, Point<2>(0,0), Point<2>(1,1),true);
   triangulation.refine_global(prerefine);
   //*************************************************************
 
@@ -151,8 +150,8 @@ main(int argc, char **argv)
 
   //Quadrature formulas*************************************************
   pr.SetSubsection("main parameters");
-  QGauss<DIM> quadrature_formula(2);
-  QGauss<1> face_quadrature_formula(2);
+  QGauss<DIM> quadrature_formula(3);
+  QGauss<1> face_quadrature_formula(3);
   IDC idc(quadrature_formula, face_quadrature_formula);
   //**************************************************************************
 
@@ -164,8 +163,18 @@ main(int argc, char **argv)
   LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM> LPDE;
   //*************************************************
   
+  //Fix one point to remove kernel of the equation
+  std::vector<Point<DIM> > c_points(1);
+  std::vector<std::vector<bool> > c_comps(1, std::vector<bool>(1));
+  c_points[0][0] = 1.0; //We want to constrain the value in (1,1)
+  c_points[0][1] = 1.0;
+  c_comps[0][0] = true; //Indeed what we want 
+  DOpE::PointConstraints<DOFHANDLER, 2, 2> constraints_mkr(c_points, c_comps);
+
+
   //space time handler***********************************/
   STH DOFH(triangulation, state_fe);
+  DOFH.SetUserDefinedDoFConstraints(constraints_mkr);
   /***********************************/
 
   OP P(LPDE, DOFH);

@@ -77,7 +77,7 @@ template<
 
           for (unsigned int i = 0; i < n_dofs_per_element; i++)
           {
-	    local_vector(i) += scale * uvalues_[q_point]
+	    local_vector(i) -= scale * uvalues_[q_point]
 	      * (b1 * state_fe_values.shape_grad(i,q_point)[0]
 		 + b2 * state_fe_values.shape_grad(i,q_point)[1]
 		)
@@ -94,7 +94,7 @@ template<
       {
 	unsigned int n_dofs_per_element = fdc.GetNDoFsPerElement();
         unsigned int n_q_points = fdc.GetNQPoints();
-        unsigned int material_id = fdc.GetMaterialId();
+        unsigned int color = fdc.GetBoundaryIndicator();
 	const auto & state_fe_values =
             fdc.GetFEFaceValuesState();
 
@@ -118,7 +118,7 @@ template<
 
 	  for (unsigned int i = 0; i < n_dofs_per_element; i++)
           {
-	      if(material_id == 1 || material_id == 2)
+	      if(color == 1 || color == 2)
 	      {
 		local_vector(i) += scale 
 		* (ex_sol_.value(state_fe_values.quadrature_point(q_point))
@@ -148,7 +148,7 @@ template<
       {
        unsigned int n_dofs_per_element = fdc.GetNDoFsPerElement();
        unsigned int n_q_points = fdc.GetNQPoints();
-       unsigned int material_id = fdc.GetMaterialId();
+       unsigned int color = fdc.GetBoundaryIndicator();
        const auto &state_fe_values =
 	 fdc.GetFEFaceValuesState();
 
@@ -169,7 +169,7 @@ template<
           {
             for (unsigned int j = 0; j < n_dofs_per_element; j++)
             {
-	      if(material_id == 1 || material_id == 2)
+	      if(color == 1 || color == 2)
 	      {
 	      }
 	      else
@@ -219,10 +219,10 @@ template<
           {
             for (unsigned int j = 0; j < n_dofs_per_element; j++)
             {
-              local_matrix(i, j) += scale * state_fe_values.shape_value(i, q_point)
-		* (b1 * state_fe_values.shape_grad(j,q_point)[0]
+              local_matrix(i, j) -= scale * state_fe_values.shape_value(i, q_point)
+                * (b1 * state_fe_values.shape_grad(j,q_point)[0]
 		   + b2 * state_fe_values.shape_grad(j,q_point)[1]
-		  )
+	         )
 		* state_fe_values.JxW(q_point);
             }
           }

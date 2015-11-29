@@ -76,14 +76,6 @@ typedef SparseMatrix<double> MATRIX;
 typedef SparsityPattern SPARSITYPATTERN;
 typedef Vector<double> VECTOR;
 
-#define VECTOR Vector<double>
-#define MATRIX SparseMatrix<double>
-#define SPARSITYPATTERN SparsityPattern
-#define DOFHANDLER DoFHandler
-#define FE FESystem
-#define CDC ElementDataContainer
-#define FDC FaceDataContainer
-
 typedef PDEProblemContainer<LocalPDELaplace<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
     SimpleDirichletData<VECTOR, DIM>, SPARSITYPATTERN, VECTOR, DIM> OP;
 typedef IntegratorDataContainer<DOFHANDLER, QUADRATURE, FACEQUADRATURE,

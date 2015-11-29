@@ -2,7 +2,7 @@
 # ---------------------
 subsection main parameters
   set max_iter = 5
-  set order fe = 1
+  set prerefine = 2
 end
 
 subsection output parameters
