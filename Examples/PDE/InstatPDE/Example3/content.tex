@@ -1,7 +1,7 @@
 \subsubsection{General problem description}
 
 The problem under consideration is the so called multivariate Black-Scholes equation arising from pricing European style options in finance. \index{instationary PDE} \index{instationary PDE!Black-Scholes equation}\\
-To state the general form of the equation we need some nomenclature: We consider an option on $d$ risky assets with {\it maturity} $T>0$ and {\it strikeprice} $K>0$. For the sake of simplicity we assume the {\it interest rate} $r>0$ and the {\it volatility} of the i-th asset $\sigma_i>0$, $1\leq i\leq d$, to be constant. Besides, we assume the matrix $\rho=(\rho_{ij})$ of the {\it correlation factors} $\rho_{ij}$ with  $-1\leq \rho_{ij}\leq 1$ for  $1\leq i,j \leq d$, to be positive definite. Of course $\rho$ is symmetric with $\rho_{ii}=1$.\\ 
+To state the general form of the equation we need some nomenclature: We consider an option on $d$ risky assets with \textit{maturity} $T>0$ and \textit{strikeprice} $K>0$. For the sake of simplicity we assume the \textit{interest rate} $r>0$ and the \textit{volatility} of the i-th asset $\sigma_i>0$, $1\leq i\leq d$, to be constant. Besides, we assume the matrix $\rho=(\rho_{ij})$ of the \textit{correlation factors} $\rho_{ij}$ with  $-1\leq \rho_{ij}\leq 1$ for  $1\leq i,j \leq d$, to be positive definite. Of course $\rho$ is symmetric with $\rho_{ii}=1$.\\ 
 With $(t,x) \in I=(0,T] \times \mathbb{R}^d_+$ denoting the prices of the underlying assets at time $t$, the problem of determining the fair price $u$ of such an option is (after a time reversal) given by the following equation:
 \begin{subequations}
 \begin{align} 
@@ -9,7 +9,7 @@ With $(t,x) \in I=(0,T] \times \mathbb{R}^d_+$ denoting the prices of the underl
    u(0)&=u_0 &&\mbox{in } \mathbb{R}_+^d.
 \end{align}
 \end{subequations}
-The initial condition $u_0\in C^{0}\left({\mathbb{R}_+^d}\right) $ (i.e. the {\it payoff}) is given depending of the type of the option. For example
+The initial condition $u_0\in C^{0}\left({\mathbb{R}_+^d}\right) $ (i.e. the \textit{payoff}) is given depending of the type of the option. For example
 \begin{equation}
 u_0 :=\begin{cases} 
 \max(\sum_{i=1}^d \lambda_i x_i-K,0),&  u\text{ is a \textit{Call},}\\

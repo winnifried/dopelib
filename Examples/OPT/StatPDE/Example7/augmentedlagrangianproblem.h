@@ -1104,7 +1104,11 @@ namespace DOpE
         {
           return OP_.HasInterfaces();
         }
-
+	template<typename ELEMENTITERATOR>
+	  bool AtInterface(ELEMENTITERATOR& element, unsigned int face) const 
+	{
+	  return OP_.AtInterface(element,face);
+	}
         /******************************************************/
 
         /**
