@@ -1330,6 +1330,9 @@ namespace DOpE
           return functional_for_ee_is_cost_;
         }
 
+      template<typename ELEMENTITERATOR>
+      bool AtInterface(ELEMENTITERATOR& element, unsigned int face) const;
+
       protected:
         FUNCTIONAL*
         GetFunctional();
@@ -1372,6 +1375,7 @@ namespace DOpE
           }
           return it->second;
         }
+      
         /******************************************************/
       private:
         DOpEExceptionHandler<VECTOR>* ExceptionHandler_;
@@ -3749,11 +3753,51 @@ namespace DOpE
         else
         {
           throw DOpEException("Unknown Type: '" + this->GetType() + "'!",
-              "OptProblemContainer::HasFaces");
+              "OptProblemContainer::HasInterfaces");
         }
       }
     }
 
+  /******************************************************/
+
+  template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
+    typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+    typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+    template<int, int> class DH>
+    template<typename ELEMENTITERATOR>
+    bool
+    OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
+        SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::AtInterface(ELEMENTITERATOR& element, unsigned int face) const
+    {
+      if (this->GetType().find("aux_functional") != std::string::npos)
+      {
+        return false;
+      }
+      else if (this->GetType().find("functional") != std::string::npos)
+      {
+        return false;
+      }
+      else if (this->GetType().find("constraint") != std::string::npos)
+      {
+        return false;
+      }
+      else
+      {
+        if ((this->GetType() == "state") || this->GetType() == "adjoint_for_ee"
+            || (this->GetType() == "tangent") || (this->GetType() == "gradient")
+            || (this->GetType() == "adjoint")
+            || (this->GetType() == "adjoint_hessian")
+            || (this->GetType() == "hessian"))
+        {
+          return this->GetPDE().AtInterface(element,face);
+        }
+        else
+        {
+          throw DOpEException("Unknown Type: '" + this->GetType() + "'!",
+              "OptProblemContainer::HasFaces");
+        }
+      }
+    }
   /******************************************************/
 
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,

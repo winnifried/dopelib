@@ -144,10 +144,10 @@ namespace DOpE
           StateSpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dealdim>::SetActiveFEIndicesState(
               state_dof_handler_);
           state_dof_handler_.distribute_dofs(GetFESystem("state"));
-          DoFRenumbering::Cuthill_McKee(
-              static_cast<DH<dealdim, dealdim>&>(state_dof_handler_));
+//          DoFRenumbering::Cuthill_McKee(
+//              static_cast<DH<dealdim, dealdim>&>(state_dof_handler_));
           DoFRenumbering::component_wise(
-              static_cast<DH<dealdim, dealdim>&>(state_dof_handler_));
+	    static_cast<DH<dealdim, dealdim>&>(state_dof_handler_));
 
           state_dof_constraints_.clear();
           DoFTools::make_hanging_node_constraints(

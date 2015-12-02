@@ -25,6 +25,7 @@
 #define DOPE_PRECONDITIONER_H_
 
 #include <deal.II/lac/precondition.h>
+#include <deal.II/lac/precondition_block.h>
 #include <deal.II/lac/sparse_ilu.h>
   
   /**
@@ -61,6 +62,29 @@ namespace DOpEWrapper
     }
   };
 
+  /**
+   * @class PreconditionBlockSSOR_Wrapper
+   *
+   * Wrapper for the dealii::PreconditionBlockSSOR preconditioner.
+   * 
+   * This is provided to provide a unified initialization interface 
+   * to the preconditioners making them useable as template arguments 
+   * in our linear solvers.
+   *
+   * @tparam <MATRIX>      The used matrix type
+   * @tparam <blocksize>   The Blocksize to be considered
+   */
+  template <typename MATRIX,int blocksize>
+    class PreconditionBlockSSOR_Wrapper : public dealii::PreconditionBlockSSOR<MATRIX>
+  {
+  public:
+    void initialize(const MATRIX& A)
+    {
+      dealii::PreconditionBlockSSOR<MATRIX>::initialize(A,blocksize);
+    }
+  };
+
+ 
  /**
    * @class PreconditionIdentity_Wrapper
    *

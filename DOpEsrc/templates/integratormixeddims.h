@@ -179,6 +179,7 @@ template<typename PROBLEM>
       auto& edc = idc_.GetElementDataContainer();
 
       bool need_faces = pde.HasFaces();
+      bool need_interfaces = pde.HasInterfaces();
       std::vector<unsigned int> boundary_equation_colors = pde.GetBoundaryEquationColors();
       bool need_boundary_integrals = (boundary_equation_colors.size() > 0);
       idc_.InitializeFDC(pde.GetFaceUpdateFlags(),
@@ -233,7 +234,12 @@ template<typename PROBLEM>
 	      pde.FaceRhs(fdc,local_vector,-1.);
             }
           }
-        }
+        } 
+	if( need_interfaces)
+	{
+	  throw DOpEException("Interfaces not implemented!",
+                                "IntegratorMixedDimensions::ComputeNonlinearResidual");
+	}
         //LocalToGlobal
         for (unsigned int i = 0; i < dofs; ++i)
         {
@@ -300,6 +306,7 @@ template<typename PROBLEM>
       auto& edc = idc_.GetElementDataContainer();
 
       bool need_faces = pde.HasFaces();
+      bool need_interfaces = pde.HasInterfaces();
       std::vector<unsigned int> boundary_equation_colors = pde.GetBoundaryEquationColors();
       bool need_boundary_integrals = (boundary_equation_colors.size() > 0);
       idc_.InitializeFDC(pde.GetFaceUpdateFlags(),
@@ -355,6 +362,11 @@ template<typename PROBLEM>
             }
           }
         }
+	if( need_interfaces)
+	{
+	  throw DOpEException("Interfaces not implemented!",
+                                "IntegratorMixedDimensions::ComputeNonlinearRhs");
+	}
         //LocalToGlobal
         for (unsigned int i = 0; i < dofs; ++i)
         {

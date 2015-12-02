@@ -198,6 +198,16 @@ namespace DOpE
         }
 
         /******************************************************/
+        /**
+	 * see pdeinterface.h  
+	 */   
+         template<typename ELEMENTITERATOR>
+         bool AtInterface(ELEMENTITERATOR& element, unsigned int face) const
+         {
+	   return OP_.AtInterface(element,face);
+	 }
+
+        /******************************************************/
 
         /**
          * This function returns the update flags for domain values

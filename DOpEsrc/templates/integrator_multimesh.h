@@ -390,12 +390,14 @@ namespace DOpE
 			     this->GetParamData(), this->GetDomainData());
 	auto& edc = idc_.GetMultimeshElementDataContainer();
 	
+            bool need_interfaces = pde.HasInterfaces();
             idc_.InitializeMMFDC(pde.GetFaceUpdateFlags(),
 				 *(pde.GetBaseProblem().GetSpaceTimeHandler()),
 				 element,
 				 tria_element,
 				 this->GetParamData(),
-				 this->GetDomainData());
+				 this->GetDomainData(),
+				 need_interfaces);
             auto& fdc = idc_.GetMultimeshFaceDataContainer();
 
 	    for(; element_iter != element_list.end(); element_iter++)

@@ -400,6 +400,10 @@ namespace DOpE
       {
         return opt_problem_;
       }
+
+      template<typename ELEMENTITERATOR>
+      bool AtInterface(ELEMENTITERATOR& element, unsigned int face) const;
+
     protected:
 
     private:
@@ -846,12 +850,28 @@ namespace DOpE
     {
       return opt_problem_.GetSpaceTimeHandler()->GetStateDoFConstraints();
     }
+
+  /******************************************************/
+
   template<typename OPTPROBLEM, typename PDE, typename DD,
     typename SPARSITYPATTERN, typename VECTOR, int dim>  const dealii::Function<dim>&
     StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dim>::GetInitialValues() const
   {
     return opt_problem_.GetInitialValues();
   }
+
+  /******************************************************/
+
+  template<typename OPTPROBLEM, typename PDE, typename DD,
+      typename SPARSITYPATTERN, typename VECTOR, int dim>
+    template<typename ELEMENTITERATOR>
+    bool StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dim>
+                      ::AtInterface(ELEMENTITERATOR& element, unsigned int face) const
+  {
+    return pde_.AtInterface(element,face);
+  }
+
+
 ///////////////ENDOF NAMESPACE DOPE///////////////////////////
 }
 #endif

@@ -851,6 +851,12 @@ namespace DOpE
           return functional_position_;
         }
 
+      template<typename ELEMENTITERATOR>
+      bool AtInterface(ELEMENTITERATOR& element, unsigned int face) const
+      {
+	return this->GetPDE().AtInterface(element,face);
+      }
+
         /******************************************************/
       private:
         DOpEExceptionHandler<VECTOR>* ExceptionHandler_;

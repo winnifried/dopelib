@@ -288,7 +288,10 @@ namespace DOpE
         GetBaseProblem()
         {
           return pde_;
-        }
+        } 
+	template<typename ELEMENTITERATOR>
+	  bool AtInterface(ELEMENTITERATOR& element, unsigned int face) const;
+
       protected:
 
       private:
@@ -575,12 +578,26 @@ namespace DOpE
     {
       return pde_.GetDoFConstraints();
     }
+
+  /******************************************************/
+
   template<typename PDE, typename VECTOR, int dim>
     const dealii::Function<dim>&
     InitialProblem<PDE, VECTOR, dim>::GetInitialValues() const
     {
       return pde_.GetInitialValues();
     }
+
+  /******************************************************/
+
+  template<typename PDE, typename VECTOR, int dim>
+    template<typename ELEMENTITERATOR>
+    bool InitialProblem<PDE, VECTOR, dim>
+                      ::AtInterface(ELEMENTITERATOR& element, unsigned int face) const
+  {
+    return pde_.AtInterface(element,face);
+  }
+
 ///////////////ENDOF NAMESPACE DOPE///////////////////////////
 }
 #endif

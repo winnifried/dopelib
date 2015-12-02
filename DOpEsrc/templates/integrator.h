@@ -472,26 +472,26 @@ namespace DOpE
               std::map<unsigned int, SCALAR>& boundary_values,
               const std::vector<bool>& comp_mask) const;
 
-        /**
-         * Given a vector of active element iterators and a facenumber, checks if the face
-         * belongs to an 'interface' (i.e. the adjoining elements have different material ids).
-         *
-         * @template ELEMENTITERATOR   Class of the elementiterator.
-         *
-         * @param   element            The element in question.
-         * @param   face            Local number of the face for which we ask if it is
-         *                          at the interface.
-         */
-        template<typename ELEMENTITERATOR>
-          bool
-          AtInterface(ELEMENTITERATOR& element, unsigned int face)
-          {
-            if (element[0]->neighbor_index(face) != -1)
-              if (element[0]->material_id()
-                  != element[0]->neighbor(face)->material_id())
-                return true;
-            return false;
-          }
+//        /**
+//         * Given a vector of active element iterators and a facenumber, checks if the face
+//         * belongs to an 'interface' (i.e. the adjoining elements have different material ids).
+//         *
+//         * @template ELEMENTITERATOR   Class of the elementiterator.
+//         *
+//         * @param   element            The element in question.
+//         * @param   face            Local number of the face for which we ask if it is
+//         *                          at the interface.
+//         */
+//        template<typename ELEMENTITERATOR>
+//          bool
+//          AtInterface(ELEMENTITERATOR& element, unsigned int face)
+//          {
+//            if (element[0]->neighbor_index(face) != -1)
+//              if (element[0]->material_id()
+//                  != element[0]->neighbor(face)->material_id())
+//                return true;
+//            return false;
+//          }
 
         INTEGRATORDATACONT & idc1_;
         INTEGRATORDATACONT & idc2_;
@@ -648,7 +648,7 @@ namespace DOpE
               // auto face_it = element[0]->face(face);
               // first, check if we are at an interface, i.e. not the neighbour exists and
               // it has a different material_id than the actual element
-              if(AtInterface(element, face))
+              if(pde.AtInterface(element, face))
               {
                 //There exist now 3 different scenarios, given the actual element and face:
                 // The neighbour behind this face is [ more | as much | less] refined
@@ -826,7 +826,7 @@ namespace DOpE
                 //auto face_it = element[0]->face(face);
                 // first, check if we are at an interface, i.e. not the neighbour exists and
                 // it has a different material_id than the actual element
-                if(AtInterface(element, face))
+                if(pde.AtInterface(element, face))
                 {
                   //There exist now 3 different scenarios, given the actual element and face:
                   // The neighbour behind this face is [ more | as much | less] refined
@@ -915,8 +915,8 @@ namespace DOpE
         bool need_interfaces = pde.HasInterfaces();
         if(need_interfaces )
         {
-          throw DOpEException(" Faces on multiple meshes not implemented yet!",
-              "IntegratorMultiMesh::ComputeNonlinearRhs_Recursive");
+          throw DOpEException(" Interfaces not implemented yet!",
+              "Integrator::ComputeNonlinearRhs");
         }
         bool need_faces = pde.HasFaces();
         std::vector<unsigned int> boundary_equation_colors = pde.GetBoundaryEquationColors();
@@ -1118,7 +1118,7 @@ namespace DOpE
               //auto face_it = element[0]->face(face);
               // first, check if we are at an interface, i.e. not the neighbour exists and
               // it has a different material_id than the actual element
-              if(AtInterface(element, face))
+              if(pde.AtInterface(element, face))
               {
                 //There exist now 3 different scenarios, given the actual element and face:
                 // The neighbour behind this face is [ more | as much | less] refined

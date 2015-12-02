@@ -552,6 +552,7 @@ namespace DOpE
             this->GetProblem().BoundaryMatrix(fdc, local_matrix,
 					      1., 1.);
           }
+
       private:
         InitialProblem<
             BackwardEulerProblem<OPTPROBLEM, SPARSITYPATTERN, VECTOR, dopedim,

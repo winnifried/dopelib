@@ -1443,6 +1443,30 @@ namespace DOpE
         boost::function1<void, double&> ResidualModifier;
         boost::function1<void, dealii::Vector<double>&> VectorResidualModifier;
 
+	/**
+         * Given a vector of active element iterators and a facenumber, checks if the face
+         * belongs to an 'interface' (i.e. the adjoining elements have different material ids).
+	 *
+	 * Can be changed by the user to allow the use of dg-methods (i.e., then this function
+	 * needs to return true for all input arguments.
+         *
+         * @template ELEMENTITERATOR   Class of the elementiterator.
+         *
+         * @param   element            The element in question.
+         * @param   face            Local number of the face for which we ask if it is
+         *                          at the interface.
+         */
+        template<typename ELEMENTITERATOR>
+          bool
+          AtInterface(ELEMENTITERATOR& element, unsigned int face) const
+          {
+            if (element[0]->neighbor_index(face) != -1)
+              if (element[0]->material_id()
+                  != element[0]->neighbor(face)->material_id())
+                return true;
+            return false;
+          }
+
       protected:
         std::string problem_type_;
 
