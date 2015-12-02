@@ -1,0 +1,57 @@
+DOpElib Copyright (C) 2012 - 2015 DOpElib authors
+This program comes with ABSOLUTELY NO WARRANTY.
+For License details read LICENSE.TXT distributed with this software!
+
+This is DOpElib Version: 3.0.0 pre
+	Status as of: 15/01/2015
+
+	**************************************************
+	*             Starting Forward Solve             *
+	*   Solving : PDEProblemContainer	*
+	*   SDoFs   : 	256
+	**************************************************
+
+	Computing State Solution:
+			 Newton step: 0	 Residual (abs.):   6.2500e-02
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-10	 LineSearch {0} 
+	Computing Functionals:
+	Mean-value: 0.196097
+
+	Mean value: 0.196097 - Mean value error: 0.000252577
+	
+
+
+	**************************************************
+	*             Starting Forward Solve             *
+	*   Solving : PDEProblemContainer	*
+	*   SDoFs   : 	1024
+	**************************************************
+
+	Computing State Solution:
+			 Newton step: 0	 Residual (abs.):   2.3058e-03
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-10	 LineSearch {0} 
+	Computing Functionals:
+	Mean-value: 0.19628
+
+	Mean value: 0.19628 - Mean value error: 6.92698e-05
+	
+
+
+	**************************************************
+	*             Starting Forward Solve             *
+	*   Solving : PDEProblemContainer	*
+	*   SDoFs   : 	4096
+	**************************************************
+
+	Computing State Solution:
+			 Newton step: 0	 Residual (abs.):   9.7306e-04
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-10	 LineSearch {0} 
+	Computing Functionals:
+	Mean-value: 0.196331
+
+	Mean value: 0.196331 - Mean value error: 1.8076e-05
+	
+

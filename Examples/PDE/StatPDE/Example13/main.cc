@@ -30,7 +30,7 @@
 #include <deal.II/dofs/dof_handler.h>
 #include <deal.II/grid/grid_generator.h>
 #include <deal.II/fe/fe_q.h>
-#include <deal.II/fe/fe_nothing.h>
+#include <deal.II/fe/fe_dgq.h>
 #include <deal.II/dofs/dof_tools.h>
 #include <deal.II/base/quadrature_lib.h>
 #include <deal.II/base/function.h>
@@ -42,7 +42,7 @@
 #include "statpdeproblem.h"
 #include "newtonsolver.h"
 #include "directlinearsolver.h"
-#include "gmreslinearsolver.h"
+#include "richardsonlinearsolver.h"
 #include "preconditioner_wrapper.h"
 #include "userdefineddofconstraints.h"
 #include "sparsitymaker.h"
@@ -57,9 +57,6 @@
 
 #include "localpde.h"
 #include "functionals.h"
-//ToDo Remove
-#include "pointconstraintsmaker.h"
-
 
 using namespace std;
 using namespace dealii;
@@ -78,7 +75,8 @@ typedef SparseMatrix<double> MATRIX;
 typedef SparsityPattern SPARSITYPATTERN;
 typedef Vector<double> VECTOR;
 
-typedef DOpEWrapper::PreconditionSSOR_Wrapper<MATRIX> PRECONDITIONERSSOR;
+//Second number denotes the number of unknowns per element (the blocksize we want to use)
+typedef DOpEWrapper::PreconditionBlockSSOR_Wrapper<MATRIX,4> PRECONDITIONERSSOR; 
 
 typedef PDEProblemContainer<LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
     SimpleDirichletData<VECTOR, DIM>, SPARSITYPATTERN, VECTOR, DIM> OP;
@@ -86,7 +84,7 @@ typedef IntegratorDataContainer<DOFHANDLER, QUADRATURE, FACEQUADRATURE,
     VECTOR, DIM> IDC;
 typedef Integrator<IDC, VECTOR, double, DIM> INTEGRATOR;
 //typedef DirectLinearSolverWithMatrix<SPARSITYPATTERN, MATRIX, VECTOR> LINEARSOLVER;
-typedef GMRESLinearSolverWithMatrix<PRECONDITIONERSSOR, SPARSITYPATTERN, MATRIX, VECTOR> LINEARSOLVER;
+typedef RichardsonLinearSolverWithMatrix<PRECONDITIONERSSOR, SPARSITYPATTERN, MATRIX, VECTOR> LINEARSOLVER;
 
 typedef NewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR> NLS;
 typedef StatPDEProblem<NLS, INTEGRATOR, OP, VECTOR, DIM> RP;
@@ -146,12 +144,12 @@ main(int argc, char **argv)
   //*************************************************************
 
   //FiniteElemente*************************************************
-  FE<DIM> state_fe(FE_Q<DIM>(1), 1);
+  FE<DIM> state_fe(FE_DGQ<DIM>(1), 1);
 
   //Quadrature formulas*************************************************
   pr.SetSubsection("main parameters");
-  QGauss<DIM> quadrature_formula(3);
-  QGauss<1> face_quadrature_formula(3);
+  QGauss<DIM> quadrature_formula(2);
+  QGauss<1> face_quadrature_formula(2);
   IDC idc(quadrature_formula, face_quadrature_formula);
   //**************************************************************************
 
@@ -163,25 +161,17 @@ main(int argc, char **argv)
   LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM> LPDE;
   //*************************************************
   
-  //Fix one point to remove kernel of the equation
-  std::vector<Point<DIM> > c_points(1);
-  std::vector<std::vector<bool> > c_comps(1, std::vector<bool>(1));
-  c_points[0][0] = 1.0; //We want to constrain the value in (1,1)
-  c_points[0][1] = 1.0;
-  c_comps[0][0] = true; //Indeed what we want 
-  DOpE::PointConstraints<DOFHANDLER, 2, 2> constraints_mkr(c_points, c_comps);
-
-
   //space time handler***********************************/
-  STH DOFH(triangulation, state_fe);
-  DOFH.SetUserDefinedDoFConstraints(constraints_mkr);
+  STH DOFH(triangulation, state_fe, true);
   /***********************************/
 
   OP P(LPDE, DOFH);
   P.AddFunctional(&MVF);
   //Boundary conditions************************************************
+  P.SetBoundaryEquationColors(0);
   P.SetBoundaryEquationColors(1);
   P.SetBoundaryEquationColors(2);
+  P.SetBoundaryEquationColors(3);
   /************************************************/
   RP solver(&P, DOpEtypes::VectorStorageType::fullmem, pr, idc);
 
@@ -216,7 +206,7 @@ main(int argc, char **argv)
       const double exact_value = 0.25*0.25*M_PI;
 
       double error = exact_value - solver.GetFunctionalValue(MVF.GetName());
-      outp << "Mean value: " <<solver.GetFunctionalValue(MVF.GetName()) << "Mean value error: " << error << std::endl;
+      outp << "Mean value: " <<solver.GetFunctionalValue(MVF.GetName()) << " - Mean value error: " << error << std::endl;
       out.Write(outp, 1, 1, 1);
     }
     catch (DOpEException &e)

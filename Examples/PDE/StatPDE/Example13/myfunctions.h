@@ -51,8 +51,7 @@ namespace DOpE
     ExactSolution::value(const Point<2> &p, const unsigned int /*component*/) const
   {
     const double x = p[0];
-    const double y = p[1];
-    if (x*x+y*y <= 0.25)
+    if (x <= 0.5)
       return 1.;
     else
       return 0.;

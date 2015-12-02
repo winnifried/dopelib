@@ -120,6 +120,7 @@ template<
           {
 	      if(color == 1 || color == 2)
 	      {
+		assert(bn < 0);
 		local_vector(i) += scale 
 		* (ex_sol_.value(state_fe_values.quadrature_point(q_point))
 		   * bn 
@@ -129,6 +130,7 @@ template<
 	      }
 	      else
 	      {
+		assert(bn > 0);
 		local_vector(i) += scale 
 		  * (uvalues_[q_point]
 		     * bn 
@@ -138,6 +140,108 @@ template<
 	      }
           }
         }
+      }
+
+    void
+      FaceEquation(
+          const FaceDataContainer<DH, VECTOR, dealdim>& fdc,
+          dealii::Vector<double> &local_vector, double scale,
+          double /*scale_ico*/)
+      {
+	//The face equation contains the coupling of the element DOFs 
+	//with the DOFs from the same element induced by the face integrals
+	unsigned int n_dofs_per_element = fdc.GetNDoFsPerElement();
+        unsigned int n_q_points = fdc.GetNQPoints();
+	const auto & state_fe_values = fdc.GetFEFaceValuesState();
+
+        assert(this->problem_type_ == "state");
+
+        uvalues_.resize(n_q_points);
+        fdc.GetFaceValuesState("last_newton_solution", uvalues_);
+
+        for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
+        {
+	  double bn = 0.;
+	  {
+	    double x = state_fe_values.quadrature_point(q_point)[0];
+	    double y = state_fe_values.quadrature_point(q_point)[1];
+	    double r = sqrt(x*x+y*y);
+	    double n1 = state_fe_values.normal_vector(q_point)[0];
+	    double n2 = state_fe_values.normal_vector(q_point)[1];
+	    if( r != 0 )
+	      bn = (-y*n1+x*n2)/r;
+	  }
+
+	  for (unsigned int i = 0; i < n_dofs_per_element; i++)
+          {
+	    if(bn < 0)
+	    {
+	      //This is the downstream element, i.e., $(u^-, [\beta n v_h])$ has no
+	      //inner element coupling
+	    }
+	    else
+	    {
+	      assert(bn > 0); //This is the upstream element, i.e., u^- = u
+	      local_vector(i) += scale 
+		* (uvalues_[q_point]
+		   * bn 
+		   * state_fe_values.shape_value(i,q_point)
+		  )
+		* state_fe_values.JxW(q_point);
+	    }
+	  }
+	}
+      }
+    void
+      InterfaceEquation(
+          const FaceDataContainer<DH, VECTOR, dealdim>& fdc,
+          dealii::Vector<double> &local_vector, double scale,
+          double /*scale_ico*/)
+      {
+	//The interface equation contains the coupling of the element DOFs 
+	//with the DOFs from the neigbouring element induced by the face integrals
+		//The face equation contains the coupling of the element DOFs 
+	//with the DOFs from the same element induced by the face integrals
+	unsigned int n_dofs_per_element = fdc.GetNDoFsPerElement();
+        unsigned int n_q_points = fdc.GetNQPoints();
+	const auto & state_fe_values = fdc.GetFEFaceValuesState();
+
+        assert(this->problem_type_ == "state");
+
+        uvalues_nbr_.resize(n_q_points);
+        fdc.GetNbrFaceValuesState("last_newton_solution", uvalues_nbr_);
+
+        for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
+        {
+	  double bn = 0.;
+	  {
+	    double x = state_fe_values.quadrature_point(q_point)[0];
+	    double y = state_fe_values.quadrature_point(q_point)[1];
+	    double r = sqrt(x*x+y*y);
+	    double n1 = state_fe_values.normal_vector(q_point)[0];
+	    double n2 = state_fe_values.normal_vector(q_point)[1];
+	    if( r != 0 )
+	      bn = (-y*n1+x*n2)/r;
+	  }
+	  
+	  for (unsigned int i = 0; i < n_dofs_per_element; i++)
+          {
+	    if(bn < 0)
+	    {
+	      //This is the downstream element, i.e., u^- is the u from the adjacent element
+	      local_vector(i) += scale 
+		* (uvalues_nbr_[q_point]
+		   * bn 
+		   * state_fe_values.shape_value(i,q_point)
+		  )
+		* state_fe_values.JxW(q_point);
+	    }
+	    else
+	    {
+	      assert(bn >= 0); //This is the upstream element, i.e., there is no interelement coupling on this face
+	    }
+	  }
+	}
       }
 
       void
@@ -171,10 +275,12 @@ template<
             {
 	      if(color == 1 || color == 2)
 	      {
+		assert(bn < 0);
 	      }
 	      else
-	      {
-		local_matrix(i, j) += scale * bn * state_fe_values.shape_value(i, q_point)
+	      {		
+		assert(bn > 0);
+		local_matrix(i,j) += scale * bn * state_fe_values.shape_value(i, q_point)
 		  * state_fe_values.shape_value(j, q_point)
 		  * state_fe_values.JxW(q_point);
 	      }
@@ -184,10 +290,99 @@ template<
       }
       void
       FaceMatrix(
-          const FaceDataContainer<DH, VECTOR, dealdim>&/*fdc*/,
-          FullMatrix<double> & /*local_matrix*/, double /*scale*/,
+          const FaceDataContainer<DH, VECTOR, dealdim>& fdc,
+          FullMatrix<double> & local_matrix, double scale,
           double/*scale_ico*/)
-      {
+      {     
+	unsigned int n_dofs_per_element = fdc.GetNDoFsPerElement();
+	unsigned int n_q_points = fdc.GetNQPoints();
+	
+	const auto &state_fe_values = fdc.GetFEFaceValuesState();
+	
+	for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
+	{
+	  double bn = 0.;
+	  {
+	    double x = state_fe_values.quadrature_point(q_point)[0];
+	    double y = state_fe_values.quadrature_point(q_point)[1];
+	    double r = sqrt(x*x+y*y);
+	    double n1 = state_fe_values.normal_vector(q_point)[0];
+	    double n2 = state_fe_values.normal_vector(q_point)[1];
+	    if( r != 0 )
+	      bn = (-y*n1+x*n2)/r;
+	  }
+	  
+	  for (unsigned int i = 0; i < n_dofs_per_element; i++)
+          {
+            for (unsigned int j = 0; j < n_dofs_per_element; j++)
+            {
+	      if(bn < 0)
+	      {
+		//This is the downstream element, i.e., $(u^-, [\beta n v_h])$ has no
+		//inner element coupling
+	      }
+	      else
+	      {
+		assert(bn > 0); //This is the upstream element, i.e., u^- = u
+		local_matrix(i,j) += scale 
+		  * (state_fe_values.shape_value(j,q_point)
+		     * bn 
+		     * state_fe_values.shape_value(i,q_point)
+		    )
+		  * state_fe_values.JxW(q_point);
+	      }
+            }
+          }
+	}
+      }
+
+      void
+      InterfaceMatrix(
+          const FaceDataContainer<DH, VECTOR, dealdim>& fdc,
+          FullMatrix<double> & local_matrix, double scale,
+          double/*scale_ico*/)
+      {	
+	unsigned int n_dofs_per_element = fdc.GetNDoFsPerElement();
+	unsigned int n_dofs_per_element_nbr = fdc.GetNbrNDoFsPerElement();
+	unsigned int n_q_points = fdc.GetNQPoints();
+
+	const auto &state_fe_values = fdc.GetFEFaceValuesState();
+	const auto &state_fe_values_nbr = fdc.GetNbrFEFaceValuesState();
+	
+	for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
+	{
+	  double bn = 0.;
+	  {
+	    double x = state_fe_values.quadrature_point(q_point)[0];
+	    double y = state_fe_values.quadrature_point(q_point)[1];
+	    double r = sqrt(x*x+y*y);
+	    double n1 = state_fe_values.normal_vector(q_point)[0];
+	    double n2 = state_fe_values.normal_vector(q_point)[1];
+	    if( r != 0 )
+	      bn = (-y*n1+x*n2)/r;
+	  }
+	  
+	  for (unsigned int i = 0; i < n_dofs_per_element; i++)
+          {
+            for (unsigned int j = 0; j < n_dofs_per_element_nbr; j++)
+            {
+	      if(bn < 0)
+	      {
+		//This is the downstream element, i.e., u^- is the u from the adjacent element
+		local_matrix(i,j) += scale 
+		  * (state_fe_values_nbr.shape_value(j,q_point)
+		     * bn 
+		     * state_fe_values.shape_value(i,q_point)
+		    )
+		  * state_fe_values.JxW(q_point);
+	      }
+	      else
+	      {
+		assert(bn >= 0); //This is the upstream element, i.e., there is no interelement coupling on this face
+	      }
+	    }
+	  }
+	}
       }
 
       void
@@ -219,9 +414,9 @@ template<
           {
             for (unsigned int j = 0; j < n_dofs_per_element; j++)
             {
-              local_matrix(i, j) -= scale * state_fe_values.shape_value(i, q_point)
-                * (b1 * state_fe_values.shape_grad(j,q_point)[0]
-		   + b2 * state_fe_values.shape_grad(j,q_point)[1]
+              local_matrix(i,j) -= scale * state_fe_values.shape_value(j, q_point)
+                * (b1 * state_fe_values.shape_grad(i,q_point)[0]
+		   + b2 * state_fe_values.shape_grad(i,q_point)[1]
 	         )
 		* state_fe_values.JxW(q_point);
             }
@@ -235,6 +430,14 @@ template<
       {
         
       }
+
+      void
+      FaceRightHandSide(
+	const FaceDataContainer<DH, VECTOR, dealdim>& /*fdc*/,
+	dealii::Vector<double> &/*local_vector*/, double /*scale*/)
+      {
+      }
+
       void
       BoundaryRightHandSide(
 	const FaceDataContainer<DH, VECTOR, dealdim>& /*fdc*/,
@@ -273,12 +476,20 @@ template<
       bool
       HasFaces() const
       {
-        return false;
+        return true;
       }
       bool
       HasInterfaces() const
       {
-        return false;
+        return true;
+      }  
+      template<typename ELEMENTITERATOR>
+	bool
+	AtInterface(ELEMENTITERATOR& element, unsigned int face) const
+      {
+	if (element[0]->neighbor_index(face) != -1) //make shure its no boundary
+	  return true;
+	return false;
       }
     private:
 
