@@ -912,12 +912,13 @@ namespace DOpE
             this->GetParamData(), this->GetDomainData());
         auto& edc = GetIntegratorDataContainer().GetElementDataContainer();
 
-        bool need_interfaces = pde.HasInterfaces();
-        if(need_interfaces )
-        {
-          throw DOpEException(" Interfaces not implemented yet!",
-              "Integrator::ComputeNonlinearRhs");
-        }
+//       We don't have interface terms in the Rhs! They are all to be included in the Equation!
+//        bool need_interfaces = pde.HasInterfaces();
+//        if(need_interfaces )
+//        {
+//          throw DOpEException(" Interfaces not implemented yet!",
+//              "Integrator::ComputeNonlinearRhs");
+//        }
         bool need_faces = pde.HasFaces();
         std::vector<unsigned int> boundary_equation_colors = pde.GetBoundaryEquationColors();
         bool need_boundary_integrals = (boundary_equation_colors.size() > 0);

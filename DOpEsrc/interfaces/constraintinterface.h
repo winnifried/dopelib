@@ -34,6 +34,7 @@
 #include "fevalues_wrapper.h"
 #include "dofhandler_wrapper.h"
 #include "functionalinterface.h"
+#include "constraintvector.h"
 
 namespace DOpE
 {
