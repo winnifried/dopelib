@@ -1,5 +1,10 @@
 Changelog DOpE
 ==============
+03.12.2015: New Example dG-Discretization in a non-stationary setting
+	    for the isothermal Euler equations
+	    PDE/InstatPDE/Example7
+	    Bugfix in integrator needed to allow dG in space 
+	    discretizations in time-dependent problems.
 02.12.2015: Added support for dG-Discretizations (integration on faces
 	    coupling elements) - and corresponding 
 	    example PDE/StatPDE/Example13
