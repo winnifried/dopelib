@@ -15,7 +15,7 @@ then
     else
 	mkdir autobuild
 	cd autobuild
-	cmake -D CMAKE_BUILD_TYPE=release ../
+	cmake -DCMAKE_BUILD_TYPE=release ../
 	cd ../
     #done with configure
 	exit 0

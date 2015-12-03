@@ -210,8 +210,8 @@ namespace DOpE
 					 unsigned int /*local_index_1*/,
 					 unsigned int /*local_index_2*/) const
       {
-        assert(local_index_1 == 0);
-        assert(local_index_2 == 0);
+//        assert(local_index_1 == 0);
+//        assert(local_index_2 == 0);
 
         derivative[0][0] = 0.;
       }

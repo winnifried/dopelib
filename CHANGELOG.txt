@@ -1,5 +1,8 @@
 Changelog DOpE
 ==============
+03.12.2015: Updated checkwarn.sh to be useful with the deal 8.3.0
+	    since the old make-scripts no longer work with the 
+	    new cmake system.
 03.12.2015: New Example dG-Discretization in a non-stationary setting
 	    for the isothermal Euler equations
 	    PDE/InstatPDE/Example7
@@ -10,6 +13,7 @@ Changelog DOpE
 	    example PDE/StatPDE/Example13
 02.12.2015: Updated Documentation: Removed TeX warnings. Added Thanks to 
 	    Christian Goll for his work in the last six years.
+19.11.2015: Updated Website - moved website to TU Darmstadt
 05.10.2015: Adjusted DOpE to compile with deal.ii 8.3.0
 16.01.2015: Added CMake build system for the examples and updated
 	    the documentation. Set Version to 3.0 pre.
@@ -130,7 +134,7 @@ Changelog DOpE
 Jun 2012  : Logo and Website have been created
 09.05.2012: Backward-Time Loop is running
 
-2. DOpE Treffen 3.5.2012-5.5.2012:
+2. DOpE Meeting 3.5.2012-5.5.2012:
 ==================================
 - Time stepping shemes rechecked for typos.
 - Renamed optproblem.h to optproblemcontainer.h (OptProblem to OptProblemContainer)

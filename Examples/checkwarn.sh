@@ -18,13 +18,25 @@ do echo "Trying "$bd
 		cd $sd
 		for i in `ls -d Example*`
 		do cd $i
-		    echo "Cleaning "$i
-		    (make clean 2>&1 ) > /dev/null
+		    if [ -d warnbuild ]
+		    then
+			#directory should not exist
+			echo "Directory "$bd"/"$sd"/"$i"/warnbuild exists. This should not be..."
+			exit 1
+		    else
+			mkdir warnbuild
+		    fi
+		    cd warnbuild
+		    echo "Configuring..."
+		    (cmake -DCMAKE_BUILD_TYPE=debug ../ 2>&1) > /dev/null
 		    echo "Making ..."
 		    echo "In Directory: "$bd"/"$sd"/"$i >> $CURRENT/comp.txt
-		    (make debug-mode=on 2>&1) >>  $CURRENT/comp.txt
-		    (make clean 2>&1 ) > /dev/null
+		    (make 2>&1) >>  $CURRENT/comp.txt
+		    echo "Cleaning ..."
+		    (cmake -DCMAKE_BUILD_TYPE=release ../ 2>&1) > /dev/null
 		    (make 2>&1 ) > /dev/null
+		    cd .. #leaving warnbuild
+		    rm -r warnbuild
 		    cd ..
 		done
 		cd ..
