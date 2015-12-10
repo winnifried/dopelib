@@ -1,7 +1,7 @@
 # Listing of Parameters
 # ---------------------
 subsection main parameters
-  set max_iter = 8
+  set max_iter = 4
   set prerefine = 3
 end
 

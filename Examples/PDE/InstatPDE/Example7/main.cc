@@ -96,8 +96,8 @@ typedef StateProblem<OP_BASE, LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
     SimpleDirichletData<VECTOR, DIM>, SPARSITYPATTERN, VECTOR, DIM> PROB;
 
 // Typedefs for timestep problem
-//#define TSP ShiftedCrankNicolsonProblem
-#define TSP BackwardEulerProblem
+#define TSP ShiftedCrankNicolsonProblem
+//#define TSP BackwardEulerProblem
 //FIXME: This should be a reasonable dual timestepping scheme
 #define DTSP ShiftedCrankNicolsonProblem
 typedef InstatOptProblemContainer<TSP, DTSP, FUNC,
@@ -173,12 +173,12 @@ main(int argc, char **argv)
 
   //FiniteElemente*************************************************
   FESystem<DIM> control_fe(FE_Nothing<DIM>(), 1);
-  FE<DIM> state_fe(FE_DGQ<DIM>(1), 2);
+  FE<DIM> state_fe(FE_DGQ<DIM>(0), 2);
 
   //Quadrature formulas*************************************************
   pr.SetSubsection("main parameters");
-  QGauss<DIM> quadrature_formula(2);
-  QGauss<DIM-1> face_quadrature_formula(2);
+  QGauss<DIM> quadrature_formula(1);
+  QGauss<DIM-1> face_quadrature_formula(1);
   IDC idc(quadrature_formula, face_quadrature_formula);
   //**************************************************************************
 
