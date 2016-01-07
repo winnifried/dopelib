@@ -111,6 +111,7 @@ namespace DOpE
        * Go through the triangulation and distribute the degrees of freedoms
        * needed for the given finite element.
        */
+      using dealii::DoFHandler<1>::distribute_dofs;   //Remove the clang warning that the function below overloads the distribute_dofs
       void
       distribute_dofs()
       {
