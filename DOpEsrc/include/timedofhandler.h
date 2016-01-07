@@ -111,7 +111,6 @@ namespace DOpE
        * Go through the triangulation and distribute the degrees of freedoms
        * needed for the given finite element.
        */
-      using dealii::DoFHandler<1>::distribute_dofs;   //Remove the clang warning that the function below overloads the distribute_dofs
       void
       distribute_dofs()
       {
@@ -249,6 +248,7 @@ namespace DOpE
       }
 
     private:
+      using dealii::DoFHandler<1>::distribute_dofs;   //Remove the clang warning that the function below overloads the distribute_dofs
       /**
        * Find the first and last interval and store them
        * in first_interval_ as well as last_interval_
