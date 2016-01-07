@@ -72,15 +72,6 @@ namespace DOpE
 
   /***********************************************************/
 
-  unsigned int
-  RefinementContainer::GetMaxNElements() const
-  {
-    throw DOpEException("Not implemented", "RefinementContainer::GetMaxNElements");
-    return std::numeric_limits<unsigned int>::max();
-  }
-
-  /***********************************************************/
-
   double
   RefinementContainer::GetConvergenceOrder() const
   {
@@ -127,10 +118,9 @@ namespace DOpE
 
   RefineFixedFraction::RefineFixedFraction(
       const dealii::Vector<float>& indicators, double top_fraction,
-      double bottom_fraction, const unsigned int max_n_elements)
+      double bottom_fraction)
       : LocalRefinement(indicators, DOpEtypes::RefinementType::fixed_fraction), top_fraction_(
-          top_fraction), bottom_fraction_(bottom_fraction), max_n_elements_(
-          max_n_elements)
+          top_fraction), bottom_fraction_(bottom_fraction)
   {
     assert(top_fraction_<=1. && top_fraction_>=0.);
     assert(bottom_fraction_<=1. && bottom_fraction_>=0.);
@@ -160,11 +150,9 @@ namespace DOpE
   /***********************************************************/
 
   RefineFixedNumber::RefineFixedNumber(const dealii::Vector<float>& indicators,
-      double top_fraction, double bottom_fraction,
-      const unsigned int max_n_elements)
+      double top_fraction, double bottom_fraction)
       : LocalRefinement(indicators, DOpEtypes::RefinementType::fixed_number), top_fraction_(
-          top_fraction), bottom_fraction_(bottom_fraction), max_n_elements_(
-          max_n_elements)
+          top_fraction), bottom_fraction_(bottom_fraction)
   {
     assert(top_fraction_<=1. && top_fraction_>=0.);
     assert(bottom_fraction_<=1. && bottom_fraction_>=0.);

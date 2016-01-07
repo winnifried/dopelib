@@ -890,6 +890,10 @@ namespace DOpE
   /***********************************************************************/
 
     namespace {
+//The following will only be used in debug mode; switch of warning of unused functions
+#pragma GCC diagnostic push 
+#pragma GCC diagnostic ignored "-Wunused-function"
+
 	template<int dim, template<int, int> class DH>
 	bool sanity_check(const 
             typename DOpEWrapper::DoFHandler<dim, DH>::active_cell_iterator & element_,
@@ -923,6 +927,8 @@ namespace DOpE
 	{
 	  return  true;
 	}
+//Reenable warning or unused functions
+#pragma GCC diagnostic pop
   }
  
   template<typename VECTOR, int dim>

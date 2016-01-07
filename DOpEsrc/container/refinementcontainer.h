@@ -65,8 +65,8 @@ namespace DOpE
       GetTopFraction() const;
       virtual double
       GetBottomFraction() const;
-      virtual unsigned int
-      GetMaxNElements() const;
+      //     virtual unsigned int
+      //GetMaxNElements() const;
       virtual double
       GetConvergenceOrder() const;
 
@@ -138,12 +138,9 @@ namespace DOpE
        * @param indicators        A set of positive values, used to guide refinement.
        * @param topfraction       is the fraction of the total estimate which should be refined.
        * @param bottomfraction    is the fraction of the estimate coarsened.
-       * @param max_n_elements       The maximal number of elements allowed.
        */
       RefineFixedFraction(const dealii::Vector<float>& indicators,
-          double top_fraction = 0.1, double bottom_fraction = 0.0,
-          const unsigned int max_n_elements =
-              std::numeric_limits<unsigned int>::max());
+			  double top_fraction = 0.1, double bottom_fraction = 0.0);
 
       virtual
       ~ RefineFixedFraction()
@@ -156,7 +153,6 @@ namespace DOpE
       GetBottomFraction() const;
     private:
       const double top_fraction_, bottom_fraction_;
-      const unsigned int max_n_elements_;
   };
 
   /***************************************************************/
@@ -178,13 +174,9 @@ namespace DOpE
        *
        * @param bottomfraction    In a fixed fraction/fixed number strategy,
        *                          wich part should be coarsened.
-       * @param max_n_elements       The maximal number of elements allowed.
        */
       RefineFixedNumber(const dealii::Vector<float>& indicators,
-          double top_fraction = 0.1, double bottom_fraction = 0.0,
-          const unsigned int max_n_elements =
-              std::numeric_limits<unsigned int>::max());
-
+			double top_fraction = 0.1, double bottom_fraction = 0.0);
       virtual
       ~ RefineFixedNumber()
       {
@@ -197,7 +189,6 @@ namespace DOpE
 
     private:
       const double top_fraction_, bottom_fraction_;
-      const unsigned int max_n_elements_;
   };
 
   /***************************************************************/

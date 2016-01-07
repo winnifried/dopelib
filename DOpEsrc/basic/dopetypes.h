@@ -131,13 +131,13 @@ namespace DOpE
    * Transfers DOpEtypes::VectorStorageType etc to Human readable values
    */
   template<typename C>
-    static std::string DOpEtypesToString(const C& /*t*/)
+    inline std::string DOpEtypesToString(const C& /*t*/)
     {
       throw DOpEException("Not implemented!","DOpEtypesToString");
     }
 
     template <>
-    std::string DOpEtypesToString(const DOpEtypes::VectorStorageType& t)
+    inline std::string DOpEtypesToString(const DOpEtypes::VectorStorageType& t)
     {
       if( DOpEtypes::VectorStorageType::fullmem == t )
       {
@@ -161,7 +161,7 @@ namespace DOpE
     }
 
     template <>
-    std::string DOpEtypesToString(const DOpEtypes::ControlType& t)
+    inline std::string DOpEtypesToString(const DOpEtypes::ControlType& t)
     {
       if( DOpEtypes::ControlType::initial== t )
       {
@@ -185,7 +185,7 @@ namespace DOpE
     }
     
     template <>
-    std::string DOpEtypesToString(const DOpEtypes::RefinementType& t)
+    inline std::string DOpEtypesToString(const DOpEtypes::RefinementType& t)
     {
       if( DOpEtypes::RefinementType::global== t )
       {
