@@ -93,7 +93,7 @@ ConstraintVector<VECTOR>::~ConstraintVector()
   }
   else
   {
-    throw DOpEException("Unknown Behavior " + GetBehavior(),"ConstraintVector<VECTOR>::~ConstraintVector");
+    throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),"ConstraintVector<VECTOR>::~ConstraintVector");
   }
 }
 
