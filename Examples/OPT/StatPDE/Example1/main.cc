@@ -248,7 +248,8 @@ main(int argc, char **argv)
             << dwrc.GetDualError();
         outp << "\t Control Err: " << dwrc.GetControlError() << std::endl;
         outp << "Est Total Error: " << est_error << " \tError: " << error;
-        outp << "  Ieff (eh/e)= " << est_error / error << std::endl;
+	outp.precision(4);
+        outp << "  Ieff (eh/e)= " <<  est_error / error << std::endl;
         out.Write(outp, 1, 1, 1);
       }
     }
