@@ -70,7 +70,7 @@ void ConstraintVector<VECTOR>::ReInit()
     }
     else
     {
-      throw DOpEException("Unknown Behavior " + GetBehavior(),"ConstraintVector<VECTOR>::ReInit");
+      throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),"ConstraintVector<VECTOR>::ReInit");
     }
     
     ReSizeGlobal(GetSpaceTimeHandler()->GetConstraintNDoFs("global"));
