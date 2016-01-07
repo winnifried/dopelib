@@ -49,8 +49,8 @@ pdf-doc doc:
 distclean:
 	rm -rf *~ 
 	$(MAKE) veryclean 
-	rm description.aux description.aux.bak description.log description.pdf description.toc
-	rm Documentation/*.aux Documentation/*.aux.bak
+	rm description.aux description.aux.bak description.log description.pdf description.toc description.bbl description.blg description.fdb_latexmk description.fls description.idx description.ilg description.ind 2>/dev/null
+	rm Documentation/*.aux Documentation/*.aux.bak 2>/dev/null
 
 warncheck:
 	./checkwarn.sh
