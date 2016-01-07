@@ -131,7 +131,7 @@ namespace DOpE
    * Transfers DOpEtypes::VectorStorageType etc to Human readable values
    */
   template<typename C>
-    static std::string DOpEtypesToString(const C& t)
+    static std::string DOpEtypesToString(const C& /*t*/)
     {
       throw DOpEException("Not implemented!","DOpEtypesToString");
     }
@@ -181,6 +181,38 @@ namespace DOpE
 	out<<"Unknown DOpEtypes::ControlType"<< std::endl;
 	out<<"Code given is "<< t<<std::endl;
 	throw DOpEException(out.str(),"DOpEtypesToString<DOpEtypes::ControlType");
+      }
+    }
+    
+    template <>
+    std::string DOpEtypesToString(const DOpEtypes::RefinementType& t)
+    {
+      if( DOpEtypes::RefinementType::global== t )
+      {
+	return "global";
+      }
+      else if( DOpEtypes::RefinementType::fixed_fraction == t )
+      {
+	return "fixed_fraction";
+      }
+      else if( DOpEtypes::RefinementType::fixed_number == t )
+      {
+	return "fixed_number";
+      }
+      else if( DOpEtypes::RefinementType::optimized == t )
+      {
+	return "optimized";
+      }
+      else if( DOpEtypes::RefinementType::finest_of_both == t )
+      {
+	return "finest_of_both";
+      }
+      else
+      {
+	std::stringstream out;
+	out<<"Unknown DOpEtypes::RefinementType"<< std::endl;
+	out<<"Code given is "<< t<<std::endl;
+	throw DOpEException(out.str(),"DOpEtypesToString<DOpEtypes::RefinementType>");
       }
     }
 

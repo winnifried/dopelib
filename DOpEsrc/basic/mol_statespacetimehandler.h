@@ -371,7 +371,7 @@ namespace DOpE
           }
           else
           {
-            throw DOpEException("Not implemented for name =" + ref_type,
+            throw DOpEException("Not implemented for name =" + DOpEtypesToString(ref_type),
                 "MethodOfLines_StateSpaceTimeHandler::RefineStateSpace");
           }
           triangulation_.prepare_coarsening_and_refinement();

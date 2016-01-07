@@ -30,6 +30,8 @@
 #include "dopeexception.h"
 #include "elementdatacontainer_internal.h"
 
+#include <sstream>
+
 #include <deal.II/dofs/dof_handler.h>
 //#include <deal.II/multigrid/mg_dof_handler.h>
 #include <deal.II/hp/dof_handler.h>
@@ -617,8 +619,12 @@ namespace DOpE
       if (element_[0]->neighbor_index(face) != -1)
         return element_[0]->neighbor(face)->material_id();
       else
-        throw DOpEException("There is no neighbor with number " + face,
+      {
+	std::stringstream out;
+	out << "There is no neighbor with number " << face;
+        throw DOpEException(out.str(),
             "ElementDataContainer::GetNbrMaterialId");
+      }
     }
 
   /**********************************************/
@@ -742,8 +748,12 @@ namespace DOpE
 //      if (element_[0]->neighbor_index(face) != -1)
 //        return element_[0]->neighbor(face)->material_id();
 //      else
-//        throw DOpEException("There is no neighbor with number " + face,
-//            "ElementDataContainer::GetNbrMaterialId");
+//       {
+//	  std::stringstream out;
+//	  out << "There is no neighbor with number " << face;
+//	  throw DOpEException(out.str(),
+//           "ElementDataContainer::GetNbrMaterialId");
+//	}
 //    }
 //
 //  /**********************************************/
@@ -863,8 +873,12 @@ namespace DOpE
       if (element_[0]->neighbor_index(face) != -1)
         return element_[0]->neighbor(face)->material_id();
       else
-        throw DOpEException("There is no neighbor with number" + face,
-            "HpElementDataContainer::GetNbrMaterialId");
+      {
+	std::stringstream out;
+	out << "There is no neighbor with number " << face;
+        throw DOpEException(out.str(),
+			    "HpElementDataContainer::GetNbrMaterialId");
+      }
     }
 
   /**********************************************/

@@ -156,7 +156,7 @@ template <typename PRECONDITIONER,typename SPARSITYPATTERN, typename MATRIX, typ
   integr.ApplyNewtonBoundaryValues(pde,matrix_,rhs,solution);
 
   dealii::SolverControl solver_control (linear_maxiter_, linear_global_tol_,false,false);
-
+  
   dealii::SolverRichardson<VECTOR> richardson(solver_control);
   PRECONDITIONER precondition;
   precondition.initialize(matrix_);

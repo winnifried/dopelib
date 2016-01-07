@@ -29,6 +29,8 @@
 #include "fevalues_wrapper.h"
 #include "dopeexception.h"
 
+#include <sstream>
+
 #include <deal.II/dofs/dof_handler.h>
 #include <deal.II/hp/dof_handler.h>
 
@@ -381,8 +383,12 @@ namespace DOpE
       if (tria_element_[GetFineIndex()]->neighbor_index(face) != -1)
         return tria_element_[GetFineIndex()]->neighbor(face)->material_id();
       else
-        throw DOpEException("There is no neighbor with number " + face,
-            "Multimesh_ElementDataContainer::GetNbrMaterialId");
+      {
+	std::stringstream out;
+	out << "There is no neighbor with number " << face;
+        throw DOpEException(out.str(),
+			    "Multimesh_ElementDataContainer::GetNbrMaterialId");
+      }
     }
 
   /**********************************************/

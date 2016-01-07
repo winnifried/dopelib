@@ -587,7 +587,7 @@ namespace DOpE
           }
           else
           {
-            throw DOpEException("Not implemented for name =" + ref_type,
+            throw DOpEException("Not implemented for name =" + DOpEtypesToString(ref_type),
                 "MethodOfLines_MultiMesh_SpaceTimeHandler::RefineSpace");
           }
           state_triangulation_.prepare_coarsening_and_refinement();
@@ -657,7 +657,7 @@ namespace DOpE
           }
           else
           {
-            throw DOpEException("Not implemented for name =" + ref_type,
+            throw DOpEException("Not implemented for name =" + DOpEtypesToString(ref_type),
                 "MethodOfLines_MultiMesh_SpaceTimeHandler::RefineSpace");
           }
           control_triangulation_.prepare_coarsening_and_refinement();
