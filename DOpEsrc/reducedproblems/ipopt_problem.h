@@ -25,7 +25,11 @@
 #define IPOPT_PROBLEM_H_
 
 #ifdef WITH_IPOPT
+//Make shure the unused variable warnings from ipopt don't bother us
+#pragma GCC diagnostic push 
+#pragma GCC diagnostic ignored "-Wunused-parameter"
 #include "IpTNLP.hpp"
+#pragma GCC diagnostic pop
 #endif
 
 #include "controlvector.h"
@@ -172,14 +176,14 @@ namespace DOpE
   }
     
   template <typename RPROBLEM, typename VECTOR>
-    bool Ipopt_Problem<RPROBLEM,VECTOR>::get_starting_point(Ipopt::Index n, bool init_x, Ipopt::Number* x,
-							    bool init_z, Ipopt::Number* /*z_L*/, Ipopt::Number* /*z_U*/,
-							    Ipopt::Index /*m*/, bool init_lambda,
+    bool Ipopt_Problem<RPROBLEM,VECTOR>::get_starting_point(Ipopt::Index n, bool /*init_x*/, Ipopt::Number* x,
+							    bool /*init_z*/, Ipopt::Number* /*z_L*/, Ipopt::Number* /*z_U*/,
+							    Ipopt::Index /*m*/, bool /*init_lambda*/,
 							    Ipopt::Number* /*lambda*/)
   {
-    assert(init_x == true);
-    assert(init_z == false);
-    assert(init_lambda == false);
+//    assert(init_x == true);
+//    assert(init_z == false);
+//    assert(init_lambda == false);
     const VECTOR& in = init_.GetSpacialVector();
     
     for(int i = 0; i < n; i++)
@@ -287,7 +291,7 @@ namespace DOpE
   
   template <typename RPROBLEM, typename VECTOR>
     bool Ipopt_Problem<RPROBLEM,VECTOR>::eval_jac_g(Ipopt::Index n, const Ipopt::Number* x, bool new_x,
-						   Ipopt::Index m, Ipopt::Index nele_jac, Ipopt::Index* iRow, Ipopt::Index *jCol,
+						    Ipopt::Index m, Ipopt::Index /*nele_jac*/, Ipopt::Index* iRow, Ipopt::Index *jCol,
 						   Ipopt::Number* values)
   {    
     if(values != NULL)

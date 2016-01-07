@@ -29,7 +29,11 @@
 #include "ipopt_problem.h"
 
 #ifdef WITH_IPOPT
+//Make shure the unused variable warnings from ipopt don't bother us
+#pragma GCC diagnostic push 
+#pragma GCC diagnostic ignored "-Wunused-parameter"
 #include "IpIpoptApplication.hpp"
+#pragma GCC diagnostic pop
 #endif
 
 #include <iostream>
