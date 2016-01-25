@@ -1,5 +1,8 @@
 Changelog DOpE
 ==============
+===============================================================================
+25.01.2016: Release of DOpElib 3.0
+===============================================================================
 03.12.2015: Updated checkwarn.sh to be useful with the deal 8.3.0
 	    since the old make-scripts no longer work with the 
 	    new cmake system.
