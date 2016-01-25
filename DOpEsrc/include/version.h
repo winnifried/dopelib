@@ -14,11 +14,11 @@ namespace DOpE
     //Update when you have fixed a bug
     const unsigned int fix           = 0;
     //If we want we can give additional information here 
-    const std::string  postfix       = "pre";
+    const std::string  postfix       = "";
     //When updating, please increase the time
-    const unsigned int day           = 15;
+    const unsigned int day           = 25;
     const unsigned int month         = 01;
-    const unsigned int year          = 2015;
+    const unsigned int year          = 2016;
   }
 }
 
