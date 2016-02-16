@@ -140,7 +140,11 @@ namespace DOpE
       GetNbrOfIntervals() const
       {
         if (initialized_)
+#if DEAL_II_VERSION_GTE(8,4,0)
+          return this->get_triangulation().n_active_cells();
+#else
           return this->get_tria().n_active_cells();
+#endif
         else
           return 0;
       }
@@ -272,15 +276,21 @@ namespace DOpE
 #if DEAL_II_VERSION_GTE(8,3,0)
 	while (element->face(1)->boundary_id() != 1)
 #else
-        while (element->face(1)->boundary_indicator() != 1)
+        while (element->face(1)-t>boundary_indicator() != 1)
 #endif
         {
           element = element->neighbor(1);
         }
+#if DEAL_II_VERSION_GTE(8,4,0)
+        assert(static_cast<int>(this->get_triangulation().n_active_cells() - 1) >= 0);
+        last_interval_.Initialize(element,
+            static_cast<int>(this->get_triangulation().n_active_cells() - 1));
+#else
         assert(static_cast<int>(this->get_tria().n_active_cells() - 1) >= 0);
         last_interval_.Initialize(element,
-            static_cast<int>(this->get_tria().n_active_cells() - 1));after_last_interval_
-        .Initialize(element, -1);
+            static_cast<int>(this->get_tria().n_active_cells() - 1));
+#endif
+	after_last_interval_.Initialize(element, -1);
       }
 
       /**

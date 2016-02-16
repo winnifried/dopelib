@@ -261,12 +261,17 @@ namespace DOpE
                 pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandler();
 
 	    assert(dof_handler.size() == 2);
-	    
-	    const auto tria_element_list = GridTools::get_finest_common_cells (dof_handler[0]->GetDEALDoFHandler().get_tria(),
-								       dof_handler[1]->GetDEALDoFHandler().get_tria());
-	    const auto element_list = GridTools::get_finest_common_cells (dof_handler[0]->GetDEALDoFHandler(),
-								       dof_handler[1]->GetDEALDoFHandler());
 
+#if DEAL_II_VERSION_GTE(8,4,0)
+	    const auto tria_element_list = GridTools::get_finest_common_cells (dof_handler[0]->GetDEALDoFHandler().get_triangulation(),
+									       dof_handler[1]->GetDEALDoFHandler().get_triangulation());
+#else
+	    const auto tria_element_list = GridTools::get_finest_common_cells (dof_handler[0]->GetDEALDoFHandler().get_tria(),
+									       dof_handler[1]->GetDEALDoFHandler().get_tria());
+#endif
+
+	    const auto element_list = GridTools::get_finest_common_cells (dof_handler[0]->GetDEALDoFHandler(),
+									  dof_handler[1]->GetDEALDoFHandler());
 	    auto element_iter = element_list.begin();
 	    auto tria_element_iter = tria_element_list.begin();
 	    
@@ -365,12 +370,16 @@ namespace DOpE
 	  pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandler();
 	
 	assert(dof_handler.size() == 2);
-	
+#if DEAL_II_VERSION_GTE(8,4,0)
+	const auto tria_element_list = GridTools::get_finest_common_cells (dof_handler[0]->GetDEALDoFHandler().get_triangulation(),
+									   dof_handler[1]->GetDEALDoFHandler().get_triangulation());
+#else	
 	const auto tria_element_list = GridTools::get_finest_common_cells (dof_handler[0]->GetDEALDoFHandler().get_tria(),
-									dof_handler[1]->GetDEALDoFHandler().get_tria());
+									   dof_handler[1]->GetDEALDoFHandler().get_tria());
+#endif	
+
 	const auto element_list = GridTools::get_finest_common_cells (dof_handler[0]->GetDEALDoFHandler(),
-								   dof_handler[1]->GetDEALDoFHandler());
-	
+								      dof_handler[1]->GetDEALDoFHandler());
 	auto element_iter = element_list.begin();
 	auto tria_element_iter = tria_element_list.begin();
 	
@@ -455,12 +464,16 @@ namespace DOpE
             pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandler();
 
 	assert(dof_handler.size() == 2);
-	    
-	const auto tria_element_list = GridTools::get_finest_common_cells (dof_handler[0]->GetDEALDoFHandler().get_tria(),
-									dof_handler[1]->GetDEALDoFHandler().get_tria());
-	const auto element_list = GridTools::get_finest_common_cells (dof_handler[0]->GetDEALDoFHandler(),
-								   dof_handler[1]->GetDEALDoFHandler());
 
+#if DEAL_II_VERSION_GTE(8,4,0)
+	const auto tria_element_list = GridTools::get_finest_common_cells (dof_handler[0]->GetDEALDoFHandler().get_triangulation(),
+									   dof_handler[1]->GetDEALDoFHandler().get_triangulation());
+#else
+	const auto tria_element_list = GridTools::get_finest_common_cells (dof_handler[0]->GetDEALDoFHandler().get_tria(),
+									   dof_handler[1]->GetDEALDoFHandler().get_tria());
+#endif
+	const auto element_list = GridTools::get_finest_common_cells (dof_handler[0]->GetDEALDoFHandler(),
+								      dof_handler[1]->GetDEALDoFHandler());
 	auto element_iter = element_list.begin();
 	auto tria_element_iter = tria_element_list.begin();
 	
@@ -537,11 +550,15 @@ namespace DOpE
       
     assert(dof_handler.size() == 2);
 	    
+#if DEAL_II_VERSION_GTE(8,4,0)
+    const auto tria_element_list = GridTools::get_finest_common_cells (dof_handler[0]->GetDEALDoFHandler().get_triangulation(),
+								       dof_handler[1]->GetDEALDoFHandler().get_triangulation());
+#else
     const auto tria_element_list = GridTools::get_finest_common_cells (dof_handler[0]->GetDEALDoFHandler().get_tria(),
-								    dof_handler[1]->GetDEALDoFHandler().get_tria());
+								       dof_handler[1]->GetDEALDoFHandler().get_tria());
+#endif
     const auto element_list = GridTools::get_finest_common_cells (dof_handler[0]->GetDEALDoFHandler(),
-							       dof_handler[1]->GetDEALDoFHandler());
-
+								  dof_handler[1]->GetDEALDoFHandler());
     auto element_iter = element_list.begin();
     auto tria_element_iter = tria_element_list.begin();
     
@@ -635,11 +652,15 @@ namespace DOpE
 	const auto& dof_handler =
 	  pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandler();
 	
+#if DEAL_II_VERSION_GTE(8,4,0)
+	const auto tria_element_list = GridTools::get_finest_common_cells (dof_handler[0]->GetDEALDoFHandler().get_triangulation(),
+									   dof_handler[1]->GetDEALDoFHandler().get_triangulation());
+#else
 	const auto tria_element_list = GridTools::get_finest_common_cells (dof_handler[0]->GetDEALDoFHandler().get_tria(),
-									dof_handler[1]->GetDEALDoFHandler().get_tria());
+									   dof_handler[1]->GetDEALDoFHandler().get_tria());
+#endif	    
 	const auto element_list = GridTools::get_finest_common_cells (dof_handler[0]->GetDEALDoFHandler(),
-								   dof_handler[1]->GetDEALDoFHandler());
-	    
+								      dof_handler[1]->GetDEALDoFHandler());
 	auto element_iter = element_list.begin();
 	auto tria_element_iter = tria_element_list.begin();
 	
