@@ -32,7 +32,6 @@ ADD_CUSTOM_TARGET(run COMMAND ${TARGET}
   COMMENT "Run with ${CMAKE_BUILD_TYPE} configuration"
   )
 
-LINK_DIRECTORIES(${DOpE}/DOpEsrc/lib/${dope_dimension}d/${deal_dimension}d/)
 
 CMAKE_MINIMUM_REQUIRED(VERSION 2.8.8)
 
@@ -52,7 +51,10 @@ IF("${_cmake_build_type}" STREQUAL "debug")
   SET(_suffix ".g")
 ENDIF()
 
-SET(DOPE_LINK_LIBS dope${_suffix})
+FIND_LIBRARY(DOPE_LIBRARY dope${_suffix} ${DOpE}/DOpEsrc/lib/${dope_dimension}d/${deal_dimension}d/)
+
+SET(DOPE_LINK_LIBS ${DOPE_LIBRARY})
+
 
 #Finding Thirdparty libraries
 #IPOPT
@@ -62,17 +64,17 @@ IF(IS_DIRECTORY ${IPOPT_PATH})
  	ADD_DEFINITIONS(-DWITH_IPOPT)
 	INCLUDE_DIRECTORIES(${IPOPT_PATH}/include/coin/)
 	SET(IPOPT_LIB_PATH ${IPOPT_PATH}/lib64/)
-	LINK_DIRECTORIES(${IPOPT_LIB_PATH})
-	SET(DOPE_LINK_LIBS ${DOPE_LINK_LIBS} ipopt)
+	FIND_LIBRARY(IPOPT_LIBRARY ipopt ${IPOPT_LIB_PATH})
+	SET(DOPE_LINK_LIBS ${DOPE_LINK_LIBS} ${IPOPT_LIBRARY})
 	#Additional IPOPT libraries
 
-	FOREACH(aux_lib coinasl coinmetis coinmumps coinlapack)
-	       FIND_LIBRARY(AUX_LIBS $aux_lib ${DOPE_LIB_PATH})
-	       	IF(NOT AUX_LIBS-NOTFOUND)    
-	     	       MESSAGE(STATUS "IPOPT Thirdparty-Library ${aux_lib} found")
-	     	       SET(DOPE_LINK_LIBS ${DOPE_LINK_LIBS} ${aux_lib})
+	FOREACH(aux_lib coinasl coinmetis coinmumps coinlapack coinhsl openblas)
+	       FIND_LIBRARY(AUX_LIBS${aux_lib} ${aux_lib} ${IPOPT_LIB_PATH})
+	       	IF(AUX_LIBS${aux_lib})    
+	     	       MESSAGE(STATUS "IPOPT Thirdparty-Library: ${aux_lib} found.")
+	     	       SET(DOPE_LINK_LIBS ${DOPE_LINK_LIBS} ${AUX_LIBS${aux_lib}})
 		ELSE()		  	  
-		       MESSAGE(STATUS "NO HSL Library found")
+		       MESSAGE(STATUS "IPOPT Thirdparty-Library: ${aux_lib} not found!")
 		ENDIF()
 	ENDFOREACH()
 	
@@ -89,8 +91,17 @@ IF(IS_DIRECTORY ${SNOPT_PATH})
 	INCLUDE_DIRECTORIES(${SNOPT_PATH}/include/
 	                    ${SNOPT_PATH}/cppsrc)
 	SET(SNOPT_LIB_PATH ${SNOPT_PATH}/lib/)
-	LINK_DIRECTORIES(${SNOPT_LIB_PATH})
-	SET(DOPE_LINK_LIBS ${DOPE_LINK_LIBS} snopt_cpp snopt snprint gfortranbegin gfortran f2c)
+
+	FOREACH(snopt_aux snopt_cpp snopt snprint)
+	       FIND_LIBRARY(SNOPT_AUX_LIBRARY${snopt_aux} ${snopt_aux} ${SNOPT_LIB_PATH})
+	        IF(SNOPT_AUX_LIBRARY${snopt_aux})
+	       	      	 MESSAGE(STATUS "SNOPT: ${snopt_aux} found.")
+			 SET(DOPE_LINK_LIBS ${DOPE_LINK_LIBS} ${SNOPT_AUX_LIBRARY${snopt_aux}})
+	        ELSE()
+			 MESSAGE(STATUS "SNOPT: ${snopt_aux} not found!")	
+	        ENDIF()	
+	ENDFOREACH()
+	SET(DOPE_LINK_LIBS ${DOPE_LINK_LIBS} gfortranbegin gfortran f2c)
 ELSE()
 	MESSAGE(STATUS "No SNOPT could be found.")
 	SET(SNOPT_PATH "")			

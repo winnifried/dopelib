@@ -1,5 +1,8 @@
 Changelog DOpE
 ==============
+16.02.2016: Fixed bug in the CMakeExample.txt file. The search for 
+	    additional libraries in ipopt and snopt was broken 
+	    and always returned true - this is now fixed.
 16.02.2016: Adjustments for release of dealii V8.4: removing deprecated
 	    function calls.
 ===============================================================================
