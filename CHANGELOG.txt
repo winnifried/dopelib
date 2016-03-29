@@ -1,5 +1,12 @@
 Changelog DOpE
 ==============
+29.03.2016: Added a function `NeedInitialState' to the 
+	    PDEInterface. It defaults to false but can be set to
+	    true. If true is returned the initialvalues given to 
+	    the problem are used in the stationary case to 
+	    initialize the state variable in Newton's method. This
+	    can be used if a good starting value is present, or if 
+	    zero is a non-feasible value in the Newton iteration. 
 16.02.2016: Fixed bug in the CMakeExample.txt file. The search for 
 	    additional libraries in ipopt and snopt was broken 
 	    and always returned true - this is now fixed.

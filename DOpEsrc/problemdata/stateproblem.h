@@ -25,6 +25,7 @@
 #define STATE_PROBLEM_H_
 
 #include "spacetimehandler.h"
+#include "initialnewtonproblem.h" 
 
 using namespace dealii;
 
@@ -49,7 +50,7 @@ namespace DOpE
     {
     public:
       StateProblem(OPTPROBLEM& OP, PDE& pde) :
-        pde_(pde), opt_problem_(OP)
+      pde_(pde), opt_problem_(OP), initial_newton_problem_(NULL)
       {
         dirichlet_colors_ = opt_problem_.dirichlet_colors_;
         dirichlet_comps_ = opt_problem_.dirichlet_comps_;
@@ -59,6 +60,12 @@ namespace DOpE
 	interval_length_ = 1.;
       }
 
+	~StateProblem()
+	{
+	  if (initial_newton_problem_ != NULL)
+            delete initial_newton_problem_;
+	}
+	
       std::string
       GetName() const
       {
@@ -68,6 +75,36 @@ namespace DOpE
       GetType() const
       {
         return "state";
+      }
+
+      /**
+       * Function returning whether the PDE needs to set a special initial 
+       * value for the newton solver to work.
+       * Relevant for stationary PDEs only when the constant zero is not a
+       * feasible starting point.
+       */
+      bool
+	NeedInitialState() const
+      {
+	return pde_.NeedInitialState();
+      }
+
+      InitialNewtonProblem<OPTPROBLEM,StateProblem<OPTPROBLEM,PDE,DD,SPARSITYPATTERN,VECTOR,dim>, VECTOR, dim>&
+	GetNewtonInitialProblem()
+      {
+	if(NeedInitialState())
+	{
+	  if ( initial_newton_problem_ == NULL)
+	  {
+	    initial_newton_problem_ = new InitialNewtonProblem<OPTPROBLEM,StateProblem<OPTPROBLEM,PDE,DD,SPARSITYPATTERN,VECTOR,dim>, VECTOR, dim>
+	  (*this);
+	  }
+	  return *initial_newton_problem_;
+	}
+	else
+	{
+	  throw DOpEException("GetNewtonInitialProblem has no meaning in case NeedInitialState() == false","StateProblem::GetNewtonInitialProblem");
+	}
       }
 
       /******************************************************/
@@ -409,6 +446,7 @@ namespace DOpE
     private:
       PDE& pde_;
       OPTPROBLEM& opt_problem_;
+      InitialNewtonProblem<OPTPROBLEM,StateProblem<OPTPROBLEM,PDE,DD,SPARSITYPATTERN,VECTOR,dim>, VECTOR, dim> * initial_newton_problem_;
 
       std::vector<unsigned int> dirichlet_colors_;
       std::vector<std::vector<bool> > dirichlet_comps_;

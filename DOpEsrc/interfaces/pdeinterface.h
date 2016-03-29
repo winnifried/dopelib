@@ -1467,6 +1467,18 @@ namespace DOpE
             return false;
           }
 
+      /**
+       * Function returning whether the PDE needs to set a special initial 
+       * value for the newton solver to work.
+       * Relevant for stationary PDEs only when the constant zero is not a
+       * feasible starting point.
+       */
+      virtual bool
+	NeedInitialState() const
+      {
+	return false;
+      }
+
       protected:
         std::string problem_type_;
 
