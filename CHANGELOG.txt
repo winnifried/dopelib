@@ -1,5 +1,9 @@
 Changelog DOpE
 ==============
+30.03.2016: Changed the FaceDataContainer Method GetElementDiameter.
+	    Now, as the name suggests, it returns the diameter of the 
+	    element - and not of the face as before. With this change 
+	    this function also work in 1d where faces are points.
 29.03.2016: Added a function `NeedInitialState' to the 
 	    PDEInterface. It defaults to false but can be set to
 	    true. If true is returned the initialvalues given to 

@@ -1146,7 +1146,8 @@ namespace DOpE
     double
     FaceDataContainer<dealii::DoFHandler, VECTOR, dim>::GetElementDiameter() const
     {
-      return element_[0]->face(this->GetFace())->diameter();
+//      return element_[0]->face(this->GetFace())->diameter();
+      return element_[0]->diameter();
     }
 
   /**********************************************/
@@ -1729,7 +1730,8 @@ namespace DOpE
     double
     FaceDataContainer<dealii::hp::DoFHandler, VECTOR, dim>::GetElementDiameter() const
     {
-      return element_[0]->face(this->GetFace())->diameter();
+//      return element_[0]->face(this->GetFace())->diameter();
+      return element_[0]->diameter();
     }
 
   /**********************************************/
