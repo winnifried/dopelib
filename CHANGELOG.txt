@@ -1,12 +1,17 @@
 Changelog DOpE
 ==============
+31.03.2016: Fixed Bug with NeedInitialState. Now, the initialization is 
+	    only performed if the state is still close to zero, i.e.,
+	    no previous information has been stored in it. This allows	
+	    to reuse iterates above different levels of refinement as 
+	    starting value.
 30.03.2016: Changed the FaceDataContainer Method GetElementDiameter.
 	    Now, as the name suggests, it returns the diameter of the 
 	    element - and not of the face as before. With this change 
 	    this function also work in 1d where faces are points.
 29.03.2016: Added a function `NeedInitialState' to the 
 	    PDEInterface. It defaults to false but can be set to
-	    true. If true is returned the initialvalues given to 
+	    true. If true is returned the initial values given to 
 	    the problem are used in the stationary case to 
 	    initialize the state variable in Newton's method. This
 	    can be used if a good starting value is present, or if 
@@ -68,7 +73,7 @@ Changelog DOpE
 ===============================================================================
 24.10.2014: Add doxygen documentation to website 
 24.10.2014: Change private data member notation to trailing underscore 
-18.10.2014: Changelog now completely in english
+18.10.2014: Changelog now completely in English
 18.10.2014: Executables for the examples are now, by default, 
 	    placed in the respective example directory and no longer in a 
 	    global bin directory
@@ -84,7 +89,7 @@ Changelog DOpE
 	    ControlType::stationary.
 27.01.2014: Moved the timestepsize from the timestepping scheme into the problem,
 	    i.e., the scheme has to be written for stepsize one. This allows 
-	    to handle timedependent pdes with time indepenent functionals automatically
+	    to handle timedependent pdes with time independent functionals automatically
 	    by scaling only the appropriate terms with the stepsize.
 	    Additionally, the FunctionalInterface::NeedTime has now the default
 	    return value true to avoid the implementation of this function in stationary 
@@ -119,7 +124,7 @@ Changelog DOpE
 	   Except for self explanatory functions all other
 	   should have a doxygen comment.
 05.12.2013 Unused parameters should now all be placed in a comment.	
-	   All occurences of the __attribute__((unused)) directive 
+	   All occurrences of the __attribute__((unused)) directive 
 	   have been removed.
 11.09.2013: 1) PDE and OPT StatPDE code cleaned
 	    2) Updated doxygen docu
@@ -147,7 +152,7 @@ Changelog DOpE
 12.07.2012: -Time stepping schemes rescaled. They now correspond to the scaling one 
 	    	  would get using Galerkin-Methods in time.
 	    -Removed Default setting in *Time*Explicit methods of the PDEINTERFACE.
-	     Now, if not desired they do nothing (and neednot be implemented).
+	     Now, if not desired they do nothing (and need not be implemented).
 	     In any other case user needs to write *Time*Explicit and write *Time* to 
 	     do nothing.
 Jun 2012  : Logo and Website have been created
@@ -155,9 +160,9 @@ Jun 2012  : Logo and Website have been created
 
 2. DOpE Meeting 3.5.2012-5.5.2012:
 ==================================
-- Time stepping shemes rechecked for typos.
+- Time stepping schemes rechecked for typos.
 - Renamed optproblem.h to optproblemcontainer.h (OptProblem to OptProblemContainer)
-- Initial Value Computation now done by DOpE, nolonger the fixed dealii function project.
+- Initial Value Computation now done by DOpE, no longer the fixed dealii function project.
 - Changed interface for incorporation of user defined dofconstraints: Dope computes always
    the hanging node constraints (for state and control), after that, the user specified dofconstraints
    (for state and control!) are added.
@@ -168,8 +173,8 @@ Jun 2012  : Logo and Website have been created
   like periodicity... (maybe with nonzero jump...). Also check the 
   condense(u)/distribute(u) stuff again, it should not be in the apply 
   boundary value stuff...	
-- pdeinterface.h - scale_ico auch fuer CellEquation_u etc. implementieren!
-- It is now possible to use pointfunctionals as cost functionals. OPT/StatPDE/Example2 showes this. 
+- pdeinterface.h - scale_ico in CellEquation_U etc. implemented!
+- It is now possible to use point-functionals as cost functionals. OPT/StatPDE/Example2 shows this. 
 
 before 2.5.2012
 -------------------------
@@ -177,10 +182,10 @@ before 2.5.2012
 - Manual: Additional Chapter on what this Library does and why it is doing so.
 - Multimesh: Support of vector valued FE.
 
-15.02.2011: Splitting of spatial meshes for different variables beeing defined 
+15.02.2011: Splitting of spatial meshes for different variables being defined 
 	    on different meshes
 
-Programm (1. DOpE Meeting)
+Program (1. DOpE Meeting)
 ==========================
 
 Where:        Hamburg
@@ -190,7 +195,7 @@ Participants: Christian, Michael, Thomas, Winni
 
 - Renamed statsolver and instatsolver: Now statreducedproblem and instatreducedproblem.
 - Splitting of time discretization of state and control variables
-- Precison for output of numbers added to outputhandler.
+- Precision for output of numbers added to outputhandler.
 - integrator and newtonsolver now independent of PDEPOBLEM 
 - reducednewtonalgorithm supports output precision 
 - Example 7 (Laplace-Equation), iterative solvers with preconditioner
@@ -206,7 +211,7 @@ Participants: Christian, Michael, Thomas, Winni
   	-- What new features are used. These should be \indexed
   		
 - Class to iterate over the timesteps
-- Splitting of intervall and point in the timediscretization
+- Splitting of interval and point in the timediscretization
 
 - DoFHandler as template (i.e. hp and normal case merged)
   	 -- CellDataContainer and FaceDataContainer adjusted

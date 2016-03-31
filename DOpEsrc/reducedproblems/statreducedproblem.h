@@ -606,18 +606,25 @@ namespace DOpE
 
 	if(problem.NeedInitialState())
 	{
-	  this->GetOutputHandler()->Write("Computing Initial Values:",
-					  4 + this->GetBasePriority());
-
-	  auto& initial_problem = problem.GetNewtonInitialProblem();
-	  this->GetProblem()->AddAuxiliaryToIntegrator(this->GetIntegrator());
-
-	  //TODO: Possibly another solver for the initial value than for the pde...
-	  build_state_matrix_ = this->GetNonlinearSolver("state").NonlinearSolve(
-	    initial_problem, GetU().GetSpacialVector(), true, true);
-	  build_state_matrix_ = true;
-	  
-	  this->GetProblem()->DeleteAuxiliaryFromIntegrator(this->GetIntegrator());
+	  //Only apply initial state if no previous values are present (i.e., u == 0)
+	  //thus, we can reuse good values from previous calculations
+	  if( GetU().GetSpacialVector().linfty_norm() <= 1.e-6 )
+	  {
+	    this->GetOutputHandler()->Write("Computing Initial Values:",
+					    4 + this->GetBasePriority());
+	    
+	    auto& initial_problem = problem.GetNewtonInitialProblem();
+	    this->GetProblem()->AddAuxiliaryToIntegrator(this->GetIntegrator());
+	    
+	    std::cout<< GetU().GetSpacialVector().linfty_norm()<<std::endl;
+	    
+	    //TODO: Possibly another solver for the initial value than for the pde...
+	    build_state_matrix_ = this->GetNonlinearSolver("state").NonlinearSolve(
+	      initial_problem, GetU().GetSpacialVector(), true, true);
+	    build_state_matrix_ = true;
+	    
+	    this->GetProblem()->DeleteAuxiliaryFromIntegrator(this->GetIntegrator());
+	  }
 	}
       }
 
