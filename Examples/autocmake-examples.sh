@@ -26,9 +26,9 @@ else
 	if [ -d autobuild ]
 	then
       #remove files 
-	    cd autobuild
-	    make clean;
-	    cd ../
+      	    cd autobuild
+      	    make clean;
+      	    cd ../
 	    rm -r autobuild
 	fi
 	exit 0

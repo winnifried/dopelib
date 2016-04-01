@@ -1,5 +1,7 @@
 Changelog DOpE
 ==============
+01.04.2016: Removed old code from the makefiles. This breaks compatibility 
+	    with deal versions prior to 8.0 not using cmake.
 01.04.2016: Removed hidden-virtual warnings when compiling with deal.ii
 	    version 8.4.0 
 31.03.2016: Updated CMake files for the examples. Now CMake fails with a
