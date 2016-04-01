@@ -149,8 +149,7 @@ template<
           for (unsigned int i = 0; i < n_dofs_per_element; i++)
           {
             local_vector(i) += scale
-                * (contract(fvalues_[q_point],
-                    state_fe_values[velocities].value(i, q_point)))
+                * (fvalues_[q_point]*state_fe_values[velocities].value(i, q_point))
                 * state_fe_values.JxW(q_point);
           }
         } //endfor qpoint

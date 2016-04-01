@@ -361,22 +361,6 @@ namespace DOpE
         /******************************************************/
 
         /**
-         * Returns the control dofs in Block b at the time given through time_point. Default value for the time is now.
-         */
-        virtual unsigned int
-        GetControlDoFsPerBlock(unsigned int b, int time_point = -1) const=0;
-
-        /******************************************************/
-
-        /**
-         * Returns the state dofs in Block b at at the time given through time_point. Default value for the time is now.
-         */
-        virtual unsigned int
-        GetStateDoFsPerBlock(unsigned int b, int time_point = -1) const =0;
-
-        /******************************************************/
-
-        /**
          * Returns the constraint dofs in Block b at the current time
          */
         virtual unsigned int

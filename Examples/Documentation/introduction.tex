@@ -120,10 +120,25 @@ it to use UMFPACK, i.e.,\\
 \texttt{./configure --with-umfpack}
 in version up to 7.3.0. From 8.0.0 on, deal.II is compiled with 
 cmake, which makes the inclusion of external packages easier.
-Detailed installing instructions for deal.II (here the last version
-8.1.0) can be found on\\ 
-\texttt{http://www.dealii.org/8.1.0/readme.html}. 
+Detailed installing instructions for deal.II can be found on\\ 
+\texttt{http://www.dealii.org/}. 
 
+In deal.II 8 and newer a configuration of deal.II working with \texttt{DOpElib} can be done with
+the following commands assuming that one is currently in the 
+directory where the deal.II sources are located.
+\begin{lstlisting}
+mkdir build
+mkdir install
+cd build
+cmake -DCMAKE_INSTALL_PREFIX=../install -DDEAL_II_WITH_UMFPACK=true -DDEAL_II_FORCE_BUNDLED_UMFPACK=true  ../
+make install
+\end{lstlisting}
+If in addition, features are desired corresponding flags need to be passed to cmake. If, for 
+example Trilinos solvers are desired, the above cmake command needs to have the additional flags
+
+\begin{lstlisting}
+-DDEAL_II_WITH_TRILINOS=true -DTRILINOS_DIR=[path to trilinos]
+\end{lstlisting}
 
 \subsection{ThirdPartyLibraries}
 In order for \texttt{DOpE} to be able to auto-detect some of the installed 

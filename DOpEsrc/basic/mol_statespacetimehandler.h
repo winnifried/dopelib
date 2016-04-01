@@ -194,15 +194,6 @@ namespace DOpE
         }
 
         /**
-         * Implementation of virtual function in StateSpaceTimeHandler
-         */
-        unsigned int
-        GetStateDoFsPerBlock(unsigned int b, int /*time_point*/= -1) const
-        {
-          return state_dofs_per_block_[b];
-        }
-
-        /**
          * Implementation of virtual function in StateSpaceTimeHandlerBase
          */
         const std::vector<unsigned int>&

@@ -48,8 +48,8 @@ namespace DOpE
       {
         for (unsigned int j = 0; j < blocks.size(); j++)
         {
-          csp.block(i, j).reinit(this->GetControlDoFsPerBlock(i),
-              this->GetControlDoFsPerBlock(j));
+          csp.block(i, j).reinit(this->GetControlDoFsPerBlock()[i],
+              this->GetControlDoFsPerBlock()[j]);
         }
       }
       csp.collect_sizes();
@@ -112,8 +112,8 @@ namespace DOpE
       {
         for (unsigned int j = 0; j < blocks.size(); j++)
         {
-          csp.block(i, j).reinit(this->GetControlDoFsPerBlock(i),
-              this->GetControlDoFsPerBlock(j));
+          csp.block(i, j).reinit(this->GetControlDoFsPerBlock()[i],
+              this->GetControlDoFsPerBlock()[j]);
         }
       }
       csp.collect_sizes();

@@ -56,7 +56,7 @@ class ActiveFEIndexSetterInterface
     /**
      * Just for compatibility issues.
      */
-    virtual void
+    void
     SetActiveFEIndexState(
         typename dealii::DoFHandler<dealdim>::active_cell_iterator&) const
     {
@@ -86,7 +86,7 @@ class ActiveFEIndexSetterInterface
     /**
      * Just for compatibility issues.
      */
-    virtual void
+    void
     SetActiveFEIndexControl(
         typename dealii::DoFHandler<dopedim>::active_cell_iterator&) const
     {

@@ -325,22 +325,6 @@ namespace DOpE
          * Implementation of virtual function in SpaceTimeHandler
          */
         unsigned int
-        GetControlDoFsPerBlock(unsigned int b, int /*time_point*/= -1) const
-        {
-          return control_dofs_per_block_[b];
-        }
-        /**
-         * Implementation of virtual function in SpaceTimeHandler
-         */
-        unsigned int
-        GetStateDoFsPerBlock(unsigned int b, int /*time_point*/= -1) const
-        {
-          return state_dofs_per_block_[b];
-        }
-        /**
-         * Implementation of virtual function in SpaceTimeHandler
-         */
-        unsigned int
         GetConstraintDoFsPerBlock(std::string name, unsigned int b) const
         {
           return (constraints_.GetDoFsPerBlock(name))[b];

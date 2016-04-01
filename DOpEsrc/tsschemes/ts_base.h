@@ -352,19 +352,6 @@ namespace DOpE
         /******************************************************/
 
         /**
-         * A function which has the number of degrees of freedom for the block `b'.
-         *
-         * @return Returns the number of DoFs for block `b'.
-         */
-        unsigned int
-        GetDoFsPerBlock(unsigned int b) const
-        {
-          return OP_.GetDoFsPerBlock(b);
-        }
-
-        /******************************************************/
-
-        /**
          * A std::vector which contains the number of degrees of freedom per block.
          *
          * @return Returns a vector with DoFs.

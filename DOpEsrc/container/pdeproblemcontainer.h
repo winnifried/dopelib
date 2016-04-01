@@ -2222,25 +2222,6 @@ namespace DOpE
 
   template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
       int dealdim, template<int, int> class FE, template<int, int> class DH>
-    unsigned int
-    PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE, DH>::GetDoFsPerBlock(
-        unsigned int b) const
-    {
-      if ((this->GetType() == "state") || (this->GetType() == "adjoint_for_ee"))
-      {
-        return GetSpaceTimeHandler()->GetStateDoFsPerBlock(b);
-      }
-      else
-      {
-        throw DOpEException("Unknown Type:" + this->GetType(),
-            "PDEProblemContainer::GetDoFsPerBlock");
-      }
-    }
-
-  /******************************************************/
-
-  template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
-      int dealdim, template<int, int> class FE, template<int, int> class DH>
     const std::vector<unsigned int>&
     PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE, DH>::GetDoFsPerBlock() const
     {

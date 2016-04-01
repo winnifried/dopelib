@@ -4440,36 +4440,6 @@ namespace DOpE
       typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
       typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
       template<int, int> class DH>
-    unsigned int
-    OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
-        SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetDoFsPerBlock(
-        unsigned int b) const
-    {
-      if ((this->GetType() == "state") || (this->GetType() == "adjoint")
-          || (this->GetType() == "adjoint_for_ee")
-          || (this->GetType() == "tangent")
-          || (this->GetType() == "adjoint_hessian"))
-      {
-        return GetSpaceTimeHandler()->GetStateDoFsPerBlock(b);
-      }
-      else if ((this->GetType() == "gradient")
-          || (this->GetType() == "hessian"))
-      {
-        return GetSpaceTimeHandler()->GetControlDoFsPerBlock(b);
-      }
-      else
-      {
-        throw DOpEException("Unknown Type:" + this->GetType(),
-            "OptProblemContainer::GetDoFsPerBlock");
-      }
-    }
-
-  /******************************************************/
-
-  template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-      typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-      typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-      template<int, int> class DH>
     const std::vector<unsigned int>&
     OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
         SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetDoFsPerBlock() const

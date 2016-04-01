@@ -1,5 +1,7 @@
 Changelog DOpE
 ==============
+01.04.2016: Removed hidden-virtual warnings when compiling with deal.ii
+	    version 8.4.0 
 31.03.2016: Updated CMake files for the examples. Now CMake fails with a
 	    warning if deal.ii is compiled without UMFPACK. 
 	    Moreover the Flags for found thirdparty libraries are now 
