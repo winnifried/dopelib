@@ -73,7 +73,7 @@ namespace DOpE
          * This solves an Optimizationproblem in only the control variable
          * using the commercial optimization library snopt.
          * To use it you need to define the compiler flag
-         * WITH_SNOPT and ensure that all required snopt headers and
+         * DOPELIB_WITH_SNOPT and ensure that all required snopt headers and
          * libraries are within the path or otherwise known.
          *
          * @param q           The initial point.
@@ -87,7 +87,7 @@ namespace DOpE
       protected:
 
       private:
-#ifdef WITH_SNOPT
+#ifdef DOPELIB_WITH_SNOPT
         int rsa_func_(DOpEWrapper::SNOPT_FUNC_DATA& data);
 #endif
         std::string postindex_;
@@ -178,8 +178,8 @@ namespace DOpE
     Reduced_SnoptAlgorithm<PROBLEM, VECTOR>::Solve(ControlVector<VECTOR>& q,
         double global_tol)
     {
-#ifndef WITH_SNOPT
-  throw DOpEException("To use this algorithm you need to have SNOPT installed! To use this set the WITH_SNOPT CompilerFlag.","Reduced_SnoptAlgorithm::Solve");
+#ifndef DOPELIB_WITH_SNOPT
+  throw DOpEException("To use this algorithm you need to have SNOPT installed! To use this set the DOPELIB_WITH_SNOPT CompilerFlag.","Reduced_SnoptAlgorithm::Solve");
 #else 
       q.ReInit();
 
@@ -411,7 +411,7 @@ namespace DOpE
 
 /******************************************************/
 
-#ifdef WITH_SNOPT
+#ifdef DOPELIB_WITH_SNOPT
 template <typename PROBLEM, typename VECTOR>
 int Reduced_SnoptAlgorithm<PROBLEM, VECTOR>
 ::rsa_func_(DOpEWrapper::SNOPT_FUNC_DATA& data )

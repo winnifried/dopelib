@@ -46,6 +46,22 @@ IF(NOT ${deal.II_FOUND})
     )
 ENDIF()
 
+IF(NOT DEAL_II_WITH_TRILINOS)
+  MESSAGE(STATUS "The deal.II library found at ${DEAL_II_PATH} was not configured with
+    DEAL_II_WITH_TRILINOS = ON. You may not use trilinos related solvers within your code."
+    )
+ELSE()
+	ADD_DEFINITIONS(-DDOPELIB_WITH_TRILINOS)	
+ENDIF()
+
+IF(NOT DEAL_II_WITH_UMFPACK)
+  MESSAGE(FATAL_ERROR "
+Error! The deal.II library found at ${DEAL_II_PATH} was not configured with
+    DEAL_II_WITH_UMFPACK = ON
+One or all of these are OFF in your installation but are required for most Examples."
+    )
+ENDIF()
+
 STRING(TOLOWER "${CMAKE_BUILD_TYPE}" _cmake_build_type)
 IF("${_cmake_build_type}" STREQUAL "debug")
   SET(_suffix ".g")
@@ -61,7 +77,7 @@ SET(DOPE_LINK_LIBS ${DOPE_LIBRARY})
 SET(IPOPT_PATH ${DOpE}/ThirdPartyLibs/ipopt/)
 IF(IS_DIRECTORY ${IPOPT_PATH})
 	MESSAGE(STATUS "Thirdparty-Library IPOPT has been found at ${IPOPT_PATH}")
- 	ADD_DEFINITIONS(-DWITH_IPOPT)
+ 	ADD_DEFINITIONS(-DDOPELIB_WITH_IPOPT)
 	INCLUDE_DIRECTORIES(${IPOPT_PATH}/include/coin/)
 	SET(IPOPT_LIB_PATH ${IPOPT_PATH}/lib64/)
 	FIND_LIBRARY(IPOPT_LIBRARY ipopt ${IPOPT_LIB_PATH})
@@ -87,7 +103,7 @@ ENDIF()
 SET(SNOPT_PATH ${DOpE}/ThirdPartyLibs/snopt/)
 IF(IS_DIRECTORY ${SNOPT_PATH})
 	MESSAGE(STATUS "Thirdparty-Library SNOPT has been found at ${SNOPT_PATH}")
- 	ADD_DEFINITIONS(-DWITH_SNOPT -fPIC)
+ 	ADD_DEFINITIONS(-DDOPELIB_WITH_SNOPT -fPIC)
 	INCLUDE_DIRECTORIES(${SNOPT_PATH}/include/
 	                    ${SNOPT_PATH}/cppsrc)
 	SET(SNOPT_LIB_PATH ${SNOPT_PATH}/lib/)

@@ -28,7 +28,7 @@
 #include "parameterreader.h"
 #include "ipopt_problem.h"
 
-#ifdef WITH_IPOPT
+#ifdef DOPELIB_WITH_IPOPT
 //Make shure the unused variable warnings from ipopt don't bother us
 #pragma GCC diagnostic push 
 #pragma GCC diagnostic ignored "-Wunused-parameter"
@@ -93,7 +93,7 @@ namespace DOpE
      * This solves an Optimizationproblem in only the control variable
      * using the commercial optimization library ipopt. 
      * To use it you need to define the compiler flag 
-     * WITH_IPOPT and ensure that all required ipopt headers and 
+     * DOPELIB_WITH_IPOPT and ensure that all required ipopt headers and 
      * libraries are within the path or otherwise known.
      *
      * @param q           The initial point.
@@ -175,8 +175,8 @@ Reduced_IpoptAlgorithm<PROBLEM, VECTOR>::~Reduced_IpoptAlgorithm()
 template <typename PROBLEM, typename VECTOR>
 int Reduced_IpoptAlgorithm<PROBLEM, VECTOR>::Solve(ControlVector<VECTOR>& q,double global_tol)
 {
-#ifndef WITH_IPOPT
-  throw DOpEException("To use this algorithm you need to have IPOPT installed! To use this set the WITH_IPOPT CompilerFlag.","Reduced_IpoptAlgorithm::Solve");
+#ifndef DOPELIB_WITH_IPOPT
+  throw DOpEException("To use this algorithm you need to have IPOPT installed! To use this set the DOPELIB_WITH_IPOPT CompilerFlag.","Reduced_IpoptAlgorithm::Solve");
 #else 
   q.ReInit();
   
@@ -318,7 +318,7 @@ int Reduced_IpoptAlgorithm<PROBLEM, VECTOR>::Solve(ControlVector<VECTOR>& q,doub
   out << "**************************************************";
   this->GetOutputHandler()->Write(out,1+this->GetBasePriority(),1,1);
   return iter;
-#endif //Endof ifdef WITH_IPOPT
+#endif //Endof ifdef DOPELIB_WITH_IPOPT
 }
 
 /*****************************END_OF_NAMESPACE_DOpE*********************************/

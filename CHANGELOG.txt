@@ -1,5 +1,10 @@
 Changelog DOpE
 ==============
+31.03.2016: Updated CMake files for the examples. Now CMake fails with a
+	    warning if deal.ii is compiled without UMFPACK. 
+	    Moreover the Flags for found thirdparty libraries are now 
+	    DOPELIB_WITH_SNOPT, DOPELIB_WITH_IPOPT and 
+	    DOPELIB_WITH_TRILINOS (for future trilinos incorporation)
 31.03.2016: Fixed Bug with NeedInitialState. Now, the initialization is 
 	    only performed if the state is still close to zero, i.e.,
 	    no previous information has been stored in it. This allows	

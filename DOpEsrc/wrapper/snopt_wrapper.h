@@ -24,7 +24,7 @@
 #ifndef SNOPT_WRAPPER_
 #define SNOPT_WRAPPER_
 
-#ifdef WITH_SNOPT
+#ifdef DOPELIB_WITH_SNOPT
 //BEGIN DONOT_TOUCH
 //The following code is sensitive to ordering
 //due to some bugs in f2c and snopt
@@ -127,5 +127,5 @@ namespace DOpEWrapper
     int GetReturnStatus() { return snoptProblem::inform; }
   };
 }
-#endif //Endof WITH_SNOPT
+#endif //Endof DOPELIB_WITH_SNOPT
 #endif //Endof File

@@ -24,7 +24,7 @@
 #ifndef IPOPT_PROBLEM_H_
 #define IPOPT_PROBLEM_H_
 
-#ifdef WITH_IPOPT
+#ifdef DOPELIB_WITH_IPOPT
 //Make shure the unused variable warnings from ipopt don't bother us
 #pragma GCC diagnostic push 
 #pragma GCC diagnostic ignored "-Wunused-parameter"
@@ -38,7 +38,7 @@
 
 namespace DOpE
 {
-#ifdef WITH_IPOPT
+#ifdef DOPELIB_WITH_IPOPT
 
   /**
    * This class is used to transfer the problem given by
@@ -386,7 +386,7 @@ namespace DOpE
       ret_val_ = 0;
   }
 
-#endif //Endof WITH_IPOPT
+#endif //Endof DOPELIB_WITH_IPOPT
 
     
 
