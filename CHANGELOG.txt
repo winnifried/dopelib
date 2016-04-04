@@ -1,5 +1,9 @@
 Changelog DOpE
 ==============
+04.04.2016: Updated CMakeExamples.txt so that now the static libraries
+	    of snopt are linked. Using the shared libraries may 
+	    provide problems, as shared linking to snopts own libblas
+	    gives complications if a system wide libblas is also found. 
 01.04.2016: Removed old code from the makefiles. This breaks compatibility 
 	    with deal versions prior to 8.0 not using cmake.
 01.04.2016: Removed hidden-virtual warnings when compiling with deal.ii
