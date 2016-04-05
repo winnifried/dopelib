@@ -15,6 +15,9 @@ subsection My functions parameters
 
 end
 
+subsection trilinos direct parameters
+	   set direct_solver = Amesos_Umfpack
+end
 
 # normal state problem
 subsection newtonsolver parameters

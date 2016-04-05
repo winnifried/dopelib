@@ -1,5 +1,8 @@
 Changelog DOpE
 ==============
+05.04.2016: Providing an interface to the direct solvers of trilinos
+	    via the TrilinosDirectSolverWithMatrix class. The use 
+	    is demonstrated in PDE/StatPDE/Example10
 04.04.2016: Updated CMakeExamples.txt so that now the static libraries
 	    of snopt are linked. Using the shared libraries may 
 	    provide problems, as shared linking to snopts own libblas

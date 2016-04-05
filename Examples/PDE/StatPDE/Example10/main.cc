@@ -36,6 +36,7 @@
 #include "pdeproblemcontainer.h"
 #include "statpdeproblem.h"
 #include "newtonsolver.h"
+#include "trilinosdirectlinearsolver.h"
 #include "directlinearsolver.h"
 #include "integrator.h"
 #include "parameterreader.h"
@@ -61,9 +62,9 @@ const static int DIM = 2;
 
 typedef QGauss<DIM> QUADRATURE;
 typedef QGauss<DIM - 1> FACEQUADRATURE;
-typedef BlockSparseMatrix<double> MATRIX;
-typedef BlockSparsityPattern SPARSITYPATTERN;
-typedef BlockVector<double> VECTOR;
+typedef SparseMatrix<double> MATRIX;
+typedef SparsityPattern SPARSITYPATTERN;
+typedef Vector<double> VECTOR;
 
 typedef PDEProblemContainer<LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
     SimpleDirichletData<VECTOR, DIM>, SPARSITYPATTERN, VECTOR, DIM, FE,
@@ -71,7 +72,7 @@ typedef PDEProblemContainer<LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
 typedef IntegratorDataContainer<DOFHANDLER, QUADRATURE, FACEQUADRATURE, VECTOR,
     DIM> IDC;
 typedef Integrator<IDC, VECTOR, double, DIM> INTEGRATOR;
-typedef DirectLinearSolverWithMatrix<SPARSITYPATTERN, MATRIX, VECTOR> LINEARSOLVER;
+typedef TrilinosDirectLinearSolverWithMatrix<SPARSITYPATTERN, MATRIX, VECTOR> LINEARSOLVER;
 typedef NewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR> NLS;
 typedef StatPDEProblem<NLS, INTEGRATOR, OP, VECTOR, DIM> RP;
 typedef MethodOfLines_StateSpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN,
@@ -111,6 +112,7 @@ main(int argc, char **argv)
       pr);
   LocalBoundaryFaceFunctionalLift<CDC, FDC, DOFHANDLER, VECTOR, DIM>::declare_params(
       pr);
+  LINEARSOLVER::declare_params(pr);
   pr.read_parameters(paramfile);
 
   //Create the triangulation
