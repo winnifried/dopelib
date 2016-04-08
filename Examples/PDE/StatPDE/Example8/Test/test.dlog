@@ -17,16 +17,14 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 0	 Residual (rel.):   1.00e+00
 			 Newton step: 1	 Residual (rel.):   6.91e-02	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   4.09e-02	 LineSearch {1} 
-			 Newton step: 3	 Residual (rel.):   2.61e-02	 LineSearch {2} 
-			 Newton step: 4	 Residual (rel.):   1.96e-02	 LineSearch {2} 
-			 Newton step: 5	 Residual (rel.):   1.81e-02	 LineSearch {1} 
-			 Newton step: 6	 Residual (rel.):   6.26e-03	 LineSearch {0} 
-			 Newton step: 7	 Residual (rel.):   4.86e-04	 LineSearch {0} 
-			 Newton step: 8	 Residual (rel.):   6.23e-05	 LineSearch {0} 
-			 Newton step: 9	 Residual (rel.):   1.75e-05	 LineSearch {0} 
-			 Newton step: 10	 Residual (rel.):   1.75e-10	 LineSearch {0} 
-			 Newton step: 11	 Residual (rel.): < 1.00e-11	 LineSearch {0} 
-	Writing [./Mesh0/State_PDEProblemContainer.00011.vtk]
+			 Newton step: 3	 Recalculate with new Matrix
+			 Newton step: 3	 Residual (rel.):   2.92e-02	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   4.11e-03	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   6.37e-04	 LineSearch {0} 
+			 Newton step: 6	 Residual (rel.):   1.28e-04	 LineSearch {0} 
+			 Newton step: 7	 Residual (rel.):   4.61e-08	 LineSearch {0} 
+			 Newton step: 8	 Residual (rel.): < 1.00e-11	 LineSearch {0} 
+	Writing [./Mesh0/State_PDEProblemContainer.00008.vtk]
 	Computing Functionals:
 	x-displacement_in_(90,0): 0.00921097
 	y-displacement_in_(100,100): 0.190367

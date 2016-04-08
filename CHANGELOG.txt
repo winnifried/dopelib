@@ -1,5 +1,9 @@
 Changelog DOpE
 ==============
+08.04.2016: Update in the Newton solvers. If the step calculation 
+	    fails with a matrix reused from a previous iteration, 
+	    instead of returning an error the Newton solvers now repeat 
+	    the step with a newly assembled matrix. 
 05.04.2016: Providing an interface to the direct solvers of trilinos
 	    via the TrilinosDirectSolverWithMatrix class. The use 
 	    is demonstrated in PDE/StatPDE/Example10
