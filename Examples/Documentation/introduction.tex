@@ -125,7 +125,9 @@ directory where the deal.II sources are located.
 mkdir build
 mkdir install
 cd build
-cmake -DCMAKE_INSTALL_PREFIX=../install -DDEAL_II_WITH_UMFPACK=true -DDEAL_II_FORCE_BUNDLED_UMFPACK=true  ../
+cmake -DCMAKE_INSTALL_PREFIX=../install \ 
+      -DDEAL_II_WITH_UMFPACK=true \
+      -DDEAL_II_FORCE_BUNDLED_UMFPACK=true  ../
 make install
 \end{lstlisting}
 If in addition, features are desired corresponding flags need to be passed to cmake. If, for 
