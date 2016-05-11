@@ -1,5 +1,7 @@
 Changelog DOpE
 ==============
+11.05.2016: Checking for MPI to avoid errors when using trilinos
+	    versions compiled with MPI.
 08.04.2016: Update in the Newton solvers. If the step calculation 
 	    fails with a matrix reused from a previous iteration, 
 	    instead of returning an error the Newton solvers now repeat 

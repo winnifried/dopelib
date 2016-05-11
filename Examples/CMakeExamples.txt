@@ -51,7 +51,17 @@ IF(NOT DEAL_II_WITH_TRILINOS)
     DEAL_II_WITH_TRILINOS = ON. You may not use trilinos related solvers within your code."
     )
 ELSE()
+	MESSAGE(STATUS "Configured for use of Trilinos")
 	ADD_DEFINITIONS(-DDOPELIB_WITH_TRILINOS)	
+ENDIF()
+
+IF(NOT DEAL_II_WITH_MPI)
+  MESSAGE(STATUS "The deal.II library found at ${DEAL_II_PATH} was not configured with
+    DEAL_II_WITH_MPI = ON. You may not use MPI functionality in your code"
+    )
+ELSE()
+	MESSAGE(STATUS "Configured for use of MPI")
+	ADD_DEFINITIONS(-DDOPELIB_WITH_MPI)	
 ENDIF()
 
 IF(NOT DEAL_II_WITH_UMFPACK)

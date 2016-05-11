@@ -90,7 +90,7 @@ main(int argc, char **argv)
    * Main innovation is the usage of the Kelly error estimator to compute
    * solutions on adaptively refined meshes.
    */
-
+  Utilities::MPI::MPI_InitFinalize mpi_initialization(argc, argv);
   string paramfile = "dope.prm";
 
   if (argc == 2)
@@ -178,6 +178,7 @@ main(int argc, char **argv)
   P.SetDirichletBoundaryColors(81, comp_mask, &DD1);
 
   P.SetBoundaryEquationColors(1);
+
   RP solver(&P, DOpEtypes::VectorStorageType::fullmem, pr, idc);
 
   //Only needed for pure PDE Problems
