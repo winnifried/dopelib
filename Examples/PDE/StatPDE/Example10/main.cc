@@ -81,6 +81,13 @@ typedef MethodOfLines_StateSpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN,
 int
 main(int argc, char **argv)
 {
+#ifdef DOPELIB_WITH_MPI
+  //If deal.II has been configured with MPI we need to initialize it
+  //athough we don't use MPI in the code explicitely.
+  //However, if not initialized the trilinos solver will fail.
+  Utilities::MPI::MPI_InitFinalize mpi_initialization(argc, argv);
+#endif
+
   /**
    * Stationary FSI problem in an ALE framework
    * Fluid: Navier-Stokes equations.
@@ -90,7 +97,6 @@ main(int argc, char **argv)
    * Main innovation is the usage of the Kelly error estimator to compute
    * solutions on adaptively refined meshes.
    */
-  Utilities::MPI::MPI_InitFinalize mpi_initialization(argc, argv);
   string paramfile = "dope.prm";
 
   if (argc == 2)
