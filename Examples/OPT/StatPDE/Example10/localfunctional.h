@@ -60,90 +60,109 @@ template<
         viscosity_ = param_reader.get_double("viscosity");
       }
 
-      double
-      BoundaryValue(const FDC<DH, VECTOR, dealdim>& fdc)
+    double AlgebraicValue(const std::map<std::string, const dealii::Vector<double>*> &param_values,
+        const std::map<std::string, const VECTOR*> &/*domain_values*/)
+    {
+      assert(this->GetProblemType() == "cost_functional");
+      //Search the vector with the precomputed functional values
+      std::map<std::string, const dealii::Vector<double>*>::const_iterator vals = param_values.find("cost_functional_pre");
+      //Return the postprocessed value
+      return vals->second->operator[](0); 
+    }
+    
+    double
+    BoundaryValue(const FDC<DH, VECTOR, dealdim>& fdc)
+    {
+      if( this->GetProblemType() == "cost_functional_pre" )
       {
-        const auto & state_fe_face_values = fdc.GetFEFaceValuesState();
-        unsigned int n_q_points = fdc.GetNQPoints();
-        unsigned int color = fdc.GetBoundaryIndicator();
-        double functional_value_J = 0;
-
-        Tensor<1, 2> drag_lift_value;
-        drag_lift_value.clear();
-        // Asking for boundary color of the cylinder
-        if (color == 80)
-        {
-          ufacevalues_.resize(n_q_points, Vector<double>(3));
-          ufacegrads_.resize(n_q_points, vector<Tensor<1, 2> >(3));
-
-          fdc.GetFaceValuesState("state", ufacevalues_);
-          fdc.GetFaceGradsState("state", ufacegrads_);
-
-          for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
-          {
-            Tensor<2, 2> pI;
-            pI[0][0] = ufacevalues_[q_point](2);
-            pI[1][1] = ufacevalues_[q_point](2);
-
-            Tensor<1, 2> v;
-            v.clear();
-            v[0] = ufacevalues_[q_point](0);
-            v[1] = ufacevalues_[q_point](1);
-
-            Tensor<2, 2> grad_v;
-            grad_v[0][0] = ufacegrads_[q_point][0][0];
-            grad_v[0][1] = ufacegrads_[q_point][0][1];
-            grad_v[1][0] = ufacegrads_[q_point][1][0];
-            grad_v[1][1] = ufacegrads_[q_point][1][1];
-
-            Tensor<2, 2> cauchy_stress_fluid;
-            cauchy_stress_fluid =
-                500.0
-                    * (-pI
-                        + density_fluid_ * viscosity_
-                            * (grad_v + transpose(grad_v)));
-
-            drag_lift_value -= cauchy_stress_fluid
-                * state_fe_face_values.normal_vector(q_point)
-                * state_fe_face_values.JxW(q_point);
-          }
-
-        }
-        functional_value_J = drag_lift_value[0];
-
-        // Regularization term for the cost functional
-        // defined above
-        if (color == 50)
-        {
-          // Regularization
-          qvalues_.reinit(2);
-          fdc.GetParamValues("control", qvalues_);
-
-          for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
-          {
-            functional_value_J += mu_regularization * 0.5
-                * (qvalues_(0) * qvalues_(0))
-                * state_fe_face_values.JxW(q_point);
-          }
-
-        }
-        if (color == 51)
-        {
-          // Regularization
-          qvalues_.reinit(2);
-          fdc.GetParamValues("control", qvalues_);
-
-          for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
-          {
-            functional_value_J += mu_regularization * 0.5
-                * (qvalues_(1) * qvalues_(1))
-                * state_fe_face_values.JxW(q_point);
-          }
-
-        }
-        return functional_value_J;
-
+	//Precalculation of Drag
+	const auto & state_fe_face_values = fdc.GetFEFaceValuesState();
+	unsigned int n_q_points = fdc.GetNQPoints();
+	unsigned int color = fdc.GetBoundaryIndicator();
+	
+	Tensor<1, 2> drag_lift_value;
+	drag_lift_value.clear();
+	// Asking for boundary color of the cylinder
+	if (color == 80)
+	{
+	  ufacevalues_.resize(n_q_points, Vector<double>(3));
+	  ufacegrads_.resize(n_q_points, vector<Tensor<1, 2> >(3));
+	  
+	  fdc.GetFaceValuesState("state", ufacevalues_);
+	  fdc.GetFaceGradsState("state", ufacegrads_);
+	  
+	  for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
+	  {
+	    Tensor<2, 2> pI;
+	    pI[0][0] = ufacevalues_[q_point](2);
+	    pI[1][1] = ufacevalues_[q_point](2);
+	    
+	    Tensor<1, 2> v;
+	    v.clear();
+	    v[0] = ufacevalues_[q_point](0);
+	    v[1] = ufacevalues_[q_point](1);
+	    
+	    Tensor<2, 2> grad_v;
+	    grad_v[0][0] = ufacegrads_[q_point][0][0];
+	    grad_v[0][1] = ufacegrads_[q_point][0][1];
+	    grad_v[1][0] = ufacegrads_[q_point][1][0];
+	    grad_v[1][1] = ufacegrads_[q_point][1][1];
+	    
+	    Tensor<2, 2> cauchy_stress_fluid;
+	    cauchy_stress_fluid =
+	      500.0
+	      * (-pI
+		 + density_fluid_ * viscosity_
+		 * (grad_v + transpose(grad_v)));
+	      
+	    drag_lift_value -= cauchy_stress_fluid
+	      * state_fe_face_values.normal_vector(q_point)
+	      * state_fe_face_values.JxW(q_point);
+	  }
+	  
+	}
+	return drag_lift_value[0];
       }
+      else
+      {
+	assert( this->GetProblemType() == "cost_functional" );
+	const auto & state_fe_face_values = fdc.GetFEFaceValuesState();
+	unsigned int n_q_points = fdc.GetNQPoints();
+	unsigned int color = fdc.GetBoundaryIndicator();
+	double functional_value_J = 0;
+	// Regularization term for the cost functional
+	// defined above
+	if (color == 50)
+	{
+	  // Regularization
+	  qvalues_.reinit(2);
+	  fdc.GetParamValues("control", qvalues_);
+	  
+	  for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
+	  {
+	    functional_value_J += mu_regularization * 0.5
+	      * (qvalues_(0) * qvalues_(0))
+	      * state_fe_face_values.JxW(q_point);
+	  }
+	  
+	}
+	if (color == 51)
+	{
+	  // Regularization
+	  qvalues_.reinit(2);
+	  fdc.GetParamValues("control", qvalues_);
+	  
+	  for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
+	  {
+	    functional_value_J += mu_regularization * 0.5
+	      * (qvalues_(1) * qvalues_(1))
+	      * state_fe_face_values.JxW(q_point);
+	  }
+	  
+	}
+	return functional_value_J;
+      }
+    }
 
       void
       BoundaryValue_U(const FDC<DH, VECTOR, dealdim>& fdc,
@@ -353,7 +372,27 @@ template<
       string
       GetType() const
       {
-        return "boundary";
+	//More complicated selection to avoid implementing
+	//unneeded derivatives
+	if ( this->GetProblemType() == "cost_functional_pre" //Only calculates drag
+	     || this->GetProblemType() == "adjoint" //J'_u is calculated as a boundary integral!
+	     || this->GetProblemType() == "gradient" //J'_q is calculated as a boundary integral!
+	     || this->GetProblemType() == "adjoint_hessian" //J'_{uu} is calculated as a boundary integral!
+	     || this->GetProblemType() == "hessian" //J'_{qq} is calculated as a boundary integral!
+	   )
+	  return "boundary";
+	else
+	{
+	  if( this->GetProblemType() == "cost_functional" )
+	  {
+	    return "boundary algebraic";
+	  }
+	  else
+	  {
+	    std::cout<<"Unknown type ,,"<<this->GetProblemType()<<"'' in LocalFunctional::GetType"<<std::endl;
+	    abort();
+	  }
+	}
       }
 
       string

@@ -631,6 +631,16 @@ namespace DOpE
     {
       return problem_type_;
     }
+  /********************************************/
+  template<
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
+      template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
+    unsigned int
+    FunctionalInterface<EDC, FDC, DH, VECTOR, dopedim, dealdim>::GetProblemNum() const
+    {
+      return problem_num_;
+    }
 
 } //Endof namespace
 /********************************************/

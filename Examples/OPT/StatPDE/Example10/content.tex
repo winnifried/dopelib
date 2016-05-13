@@ -12,10 +12,43 @@ value of $k(v,p)$ is no longer viable.
 
 Instead, we consider the objective 
 \[
-K(q,v,p) = |k(v,p)| + \frac{\alpha}{2}||q - q_0||^2
+K(q,v,p) = |k(v,p)|^2 + \frac{\alpha}{2}||q - q_0||^2
 \] 
 is to be minimized.
 
 In contrast to all previous examples, this means that the functional can
 no longer be calculated by one integration, but instead the values of the 
 integration (for the drag) need to be post-processed.
+
+To do so, the calculation of the functional and its derivatives
+is reordered in to two steps. First the value of $k(v,p)$ is
+calculated (and stored) then in a second sweep. The value of
+$K$ is calculated.
+
+To this end the following modifications are needed in the
+code:
+
+
+\textbf{\texttt{localpde.h}}
+There is a new method \texttt{unsigned int NeedPrecomputations() const}
+returning the value $1$ as we need one calculation of $k$ before we can
+assemble the value of the cost-functional.
+
+This pre-iteration has the Type \texttt{cost\_functional\_pre} and a corresponding
+number (here $0$ as only one pre-iteration is performed.
+
+In the cost functional, for the pre-iteration we set the type to
+\texttt{boundary} since $k$ is a boundary functional.
+For the evaluation of $K$ itself the type is \texttt{boundary algebraic}
+as we calculate the boundary integral $\|q\|^2$ and the algebraic calculation
+$|{k}|^2$.
+
+For higher derivatives, we notice that for a differentiable functions $g,f\colon \mathbb R\rightarrow \mathbb R$
+it holds for the directional derivative in direction $\delta u$
+\begin{align*}
+ \left((g\left(\int f(u(x))\,\mathrm{d}x\right)\right)'\delta u
+  &= g'(\int f(u(x))\,\mathrm{d}x) \int f'(u(x)) \delta u(x) \mathrm{d}x \\
+  &= \int g'(\int f(u(x))\,\mathrm{d}x) f'(u(x)) \delta u(x) \mathrm{d}x 
+\end{align*}
+Consequently, the first derivative can be calculated with only a single integration
+-- as a boundary integral in the present example.

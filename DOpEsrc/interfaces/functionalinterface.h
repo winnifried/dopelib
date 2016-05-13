@@ -582,7 +582,7 @@ namespace DOpE
       protected:
       std::string
       GetProblemType() const;
-
+      unsigned int GetProblemNum() const;
       private:
       std::string problem_type_;
       unsigned int problem_num_;

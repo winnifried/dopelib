@@ -1168,9 +1168,6 @@ namespace DOpE
     {
       this->ComputeReducedState(q);
 
-      double ret = 0;
-      bool found = false;
-
       this->GetOutputHandler()->Write("Computing Cost Functional:",
           4 + this->GetBasePriority());
 
@@ -1199,7 +1196,8 @@ namespace DOpE
 	  this->GetOutputHandler()->Write("\tprecomputations...",
 					  4 + this->GetBasePriority());
 	  //Begin Precomputations
-	  double pre = 0.;
+          bool found = false;
+	  double pre = 0;
 	  this->GetProblem()->AddAuxiliaryToIntegrator(this->GetIntegrator());
 	  
 	  if (dopedim == dealdim)
@@ -1276,7 +1274,7 @@ namespace DOpE
 	  this->GetIntegrator().DeleteDomainData("state");
 	  this->GetProblem()->DeleteAuxiliaryFromIntegrator(this->GetIntegrator());
 	  //Store Precomputed Values
-	  func_vals->second = pre; 
+	  func_vals->second[i] = pre; 
 	}
 	this->SetProblemType("cost_functional");
       }
@@ -1304,8 +1302,11 @@ namespace DOpE
 	this->GetIntegrator().AddParamData("cost_functional_pre",&(func_vals->second));
       }
       this->GetIntegrator().AddDomainData("state",
-          &(GetU().GetSpacialVector()));
+					  &(GetU().GetSpacialVector()));
+      double ret = 0;
+      bool found = false;
 
+      
       if (this->GetProblem()->GetFunctionalType().find("domain")
           != std::string::npos)
       {

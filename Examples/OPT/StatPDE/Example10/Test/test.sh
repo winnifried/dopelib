@@ -5,7 +5,7 @@ if [ $# -ne 1 ]
     exit 1
 fi
 
-PROGRAM=../DOpE-OPT-StatPDE-Example3
+PROGRAM=../DOpE-OPT-StatPDE-Example10
 
 ../../../../test-single.sh $1 $PROGRAM
     
