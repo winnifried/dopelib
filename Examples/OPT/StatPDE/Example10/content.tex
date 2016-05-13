@@ -1,0 +1,21 @@
+\subsubsection{General problem description}
+This example is similar to Example~\ref{OPT_Stat_Param_Nonlin_Fluid}.
+The notable difference in the setting is that now, the boundary control areas, 
+where the fluid can be sucked out of the domain, are in front of the 
+circular inclusion. Hense the drag
+\[
+k(v,p) = \int_{\Gamma_O} n\cdot \sigma(v,p)\cdot d \, ds,
+\]
+where $\Gamma_O$ denotes the cylinder boundary, and $d$ is a vector in the
+direction of the mean in-flow can become negative, i.e., minimizing the 
+value of $k(v,p)$ is no longer viable. 
+
+Instead, we consider the objective 
+\[
+K(q,v,p) = |k(v,p)| + \frac{\alpha}{2}||q - q_0||^2
+\] 
+is to be minimized.
+
+In contrast to all previous examples, this means that the functional can
+no longer be calculated by one integration, but instead the values of the 
+integration (for the drag) need to be post-processed.
