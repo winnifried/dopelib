@@ -796,6 +796,7 @@ namespace DOpE
         GetFunctionalName() const;
         std::string
         GetConstraintType() const;
+        unsigned int FunctionalNeedPrecomputations() const; 
 
         /******************************************************/
 
@@ -1556,8 +1557,9 @@ namespace DOpE
         this->SetTypeInternal(type);
         this->GetPDE().SetProblemType(type);
         if (functional_for_ee_num_ != dealii::numbers::invalid_unsigned_int)
-          aux_functionals_[functional_for_ee_num_]->SetProblemType(type);
+          aux_functionals_[functional_for_ee_num_]->SetProblemType(type,num);
         this->GetConstraints()->SetProblemType(type, num);
+	functional_->SetProblemType(type, num);
 
 #if dope_dimension > 0
         if(dealdim == dopedim)
@@ -1567,6 +1569,7 @@ namespace DOpE
           {
             if(this->GetType() == "state" ||this->GetType() == "adjoint"
                 || this->GetType() == "adjoint_for_ee" || this->GetType() == "cost_functional"
+                || this->GetType() == "cost_functional_pre"
                 || this->GetType() == "aux_functional" || this->GetType() == "functional_for_ee"
                 || this->GetType() == "tangent" || this->GetType() == "adjoint_hessian"
                 || this->GetType() == "error_evaluation"
@@ -1598,6 +1601,7 @@ namespace DOpE
                 || this->GetType() == "adjoint_for_ee"
                 || this->GetType() == "functional_for_ee"
                 || this->GetType() == "cost_functional"
+                || this->GetType() == "cost_functional_pre"
                 || this->GetType() == "aux_functional"
                 || this->GetType() == "tangent"
                 || this->GetType() == "error_evaluation"
@@ -1636,7 +1640,7 @@ namespace DOpE
           const DATACONTAINER& edc)
       {
 
-        if (this->GetType() == "cost_functional")
+        if ((this->GetType() == "cost_functional") || (this->GetType() == "cost_functional_pre"))
         {
           // state values in quadrature points
           return GetFunctional()->ElementValue(edc);
@@ -1672,7 +1676,7 @@ namespace DOpE
         const std::map<std::string, const dealii::Vector<double>*> &param_values,
         const std::map<std::string, const VECTOR*> &domain_values)
     {
-      if (this->GetType() == "cost_functional")
+      if ((this->GetType() == "cost_functional")||(this->GetType() == "cost_functional_pre"))
       {
         // state values in quadrature points
         return GetFunctional()->PointValue(
@@ -1725,7 +1729,7 @@ namespace DOpE
           CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::BoundaryFunctional(
           const FACEDATACONTAINER& fdc)
       {
-        if (this->GetType() == "cost_functional")
+        if ((this->GetType() == "cost_functional")||(this->GetType() == "cost_functional_pre"))
         {
           // state values in quadrature points
           return GetFunctional()->BoundaryValue(fdc);
@@ -1763,7 +1767,7 @@ namespace DOpE
           CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::FaceFunctional(
           const FACEDATACONTAINER& fdc)
       {
-        if (this->GetType() == "cost_functional")
+        if ((this->GetType() == "cost_functional")||(this->GetType() == "cost_functional_pre"))
         {
           // state values in quadrature points
           return GetFunctional()->FaceValue(fdc);
@@ -1797,7 +1801,7 @@ namespace DOpE
         const std::map<std::string, const dealii::Vector<double>*> &param_values,
         const std::map<std::string, const VECTOR*> &domain_values)
     {
-      if (this->GetType() == "cost_functional")
+      if ((this->GetType() == "cost_functional")||(this->GetType() == "cost_functional_pre"))
       {
         // state values in quadrature points
         return GetFunctional()->AlgebraicValue(param_values, domain_values);
@@ -3300,6 +3304,26 @@ namespace DOpE
     }
 
   /******************************************************/
+  template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
+      typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+      typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+      template<int, int> class DH>
+    unsigned int
+    OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
+        SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::FunctionalNeedPrecomputations() const
+    {
+      if (this->GetType() == "aux_functional")
+      {
+        return aux_functionals_[this->GetTypeNum()]->NeedPrecomputations();
+      }
+      else if (this->GetType() == "functional_for_ee")
+      {
+        return aux_functionals_[functional_for_ee_num_]->NeedPrecomputations();
+      }
+      return GetFunctional()->NeedPrecomputations();
+    }
+
+  /******************************************************/
 
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
       typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
@@ -4314,6 +4338,7 @@ namespace DOpE
         SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetBoundaryFunctionalColors() const
     {
       if (this->GetType() == "cost_functional"
+	  || this->GetType() == "cost_functional_pre"
           || this->GetType() == "aux_functional"
           || this->GetType() == "functional_for_ee") //fixme: what about error_evaluation?
       {
@@ -4502,7 +4527,7 @@ namespace DOpE
     OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
         SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::NeedTimeFunctional() const
     {
-      if (this->GetType() == "cost_functional")
+      if ((this->GetType() == "cost_functional")||(this->GetType() == "cost_functional_pre"))
         return GetFunctional()->NeedTime();
       else if (this->GetType() == "aux_functional")
         return aux_functionals_[this->GetTypeNum()]->NeedTime();

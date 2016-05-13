@@ -598,15 +598,27 @@ namespace DOpE
       return retrn;
     }
   /********************************************/
+
+  template<
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
+      template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
+    unsigned int
+    FunctionalInterface<EDC, FDC, DH, VECTOR, dopedim, dealdim>::NeedPrecomputations() const
+    {
+      return 0;
+    }
+  /********************************************/
   template<
       template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
       template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
     void
     FunctionalInterface<EDC, FDC, DH, VECTOR, dopedim, dealdim>::SetProblemType(
-        std::string p_type)
+      std::string p_type, unsigned int num)
     {
       problem_type_ = p_type;
+      problem_num_ = num;
     }
 
   /********************************************/

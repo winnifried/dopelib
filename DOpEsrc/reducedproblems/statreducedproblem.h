@@ -402,6 +402,8 @@ namespace DOpE
         StateVector<VECTOR> dz_;
         StateVector<VECTOR> z_for_ee_;
 
+	std::map<std::string,dealii::Vector<double> > auxiliary_params_;
+
         INTEGRATOR integrator_;
         CONTROLINTEGRATOR control_integrator_;
         NONLINEARSOLVER nonlinear_state_solver_;
@@ -1173,7 +1175,113 @@ namespace DOpE
           4 + this->GetBasePriority());
 
       this->SetProblemType("cost_functional");
-
+      if(this->GetProblem()->FunctionalNeedPrecomputations() != 0)
+      {
+	unsigned int n_pre = this->GetProblem()->FunctionalNeedPrecomputations();
+	std::map<std::string,dealii::Vector<double> >::iterator func_vals = auxiliary_params_.find("cost_functional_pre");
+	if(func_vals != auxiliary_params_.end())
+	{
+	  assert(func_vals->second.size() == n_pre);
+	}
+	else
+	{
+	  auxiliary_params_.emplace("cost_functional_pre",dealii::Vector<double>(n_pre));
+	  func_vals = auxiliary_params_.find("cost_functional_pre");
+	  if(func_vals == auxiliary_params_.end())
+	  {
+	    throw DOpEException("Creation of Storage for Cost-Functional Pre-values failed!",
+				"StatReducedProblem::ComputeReducedCostFunctional");
+	  }
+	}
+	for(unsigned int i = 0; i < n_pre; i++)
+	{
+	  this->SetProblemType("cost_functional_pre",i);
+	  this->GetOutputHandler()->Write("\tprecomputations...",
+					  4 + this->GetBasePriority());
+	  //Begin Precomputations
+	  double pre = 0.;
+	  this->GetProblem()->AddAuxiliaryToIntegrator(this->GetIntegrator());
+	  
+	  if (dopedim == dealdim)
+	  {
+	    this->GetIntegrator().AddDomainData("control", &(q.GetSpacialVector()));
+	  }
+	  else if (dopedim == 0)
+	  {
+	    this->GetIntegrator().AddParamData("control",
+					       &(q.GetSpacialVectorCopy()));
+	  }
+	  else
+	  {
+	    throw DOpEException("dopedim not implemented",
+				"StatReducedProblem::ComputeReducedCostFunctional");
+	  }
+	  this->GetIntegrator().AddDomainData("state",
+					      &(GetU().GetSpacialVector()));
+	  
+	  if (this->GetProblem()->GetFunctionalType().find("domain")
+	      != std::string::npos)
+	  {
+	    found = true;
+	    pre += this->GetIntegrator().ComputeDomainScalar(*(this->GetProblem()));
+	  }
+	  if (this->GetProblem()->GetFunctionalType().find("point")
+	      != std::string::npos)
+	  {
+	    found = true;
+	    pre += this->GetIntegrator().ComputePointScalar(*(this->GetProblem()));
+	  }
+	  if (this->GetProblem()->GetFunctionalType().find("boundary")
+	      != std::string::npos)
+	  {
+	    found = true;
+	    pre += this->GetIntegrator().ComputeBoundaryScalar(
+	      *(this->GetProblem()));
+	  }
+	  if (this->GetProblem()->GetFunctionalType().find("face")
+	      != std::string::npos)
+	  {
+	    found = true;
+	    pre += this->GetIntegrator().ComputeFaceScalar(*(this->GetProblem()));
+	  }
+	  if (this->GetProblem()->GetFunctionalType().find("algebraic")
+	      != std::string::npos)
+	  {
+	    found = true;
+	    pre += this->GetIntegrator().ComputeAlgebraicScalar(*(this->GetProblem()));
+	  }
+	  
+	  if (!found)
+	  {
+	    throw DOpEException(
+	      "Unknown Functional Type: "
+	      + this->GetProblem()->GetFunctionalType(),
+	      "StatReducedProblem::ComputeReducedCostFunctional");
+	  }
+	  
+	  if (dopedim == dealdim)
+	  {
+	    this->GetIntegrator().DeleteDomainData("control");
+	  }
+	  else if (dopedim == 0)
+	  {
+	    this->GetIntegrator().DeleteParamData("control");
+	    q.UnLockCopy();
+	  }
+	  else
+	  {
+	    throw DOpEException("dopedim not implemented",
+				"StatReducedProblem::ComputeReducedCostFunctional");
+	  }
+	  this->GetIntegrator().DeleteDomainData("state");
+	  this->GetProblem()->DeleteAuxiliaryFromIntegrator(this->GetIntegrator());
+	  //Store Precomputed Values
+	  func_vals->second = pre; 
+	}
+	this->SetProblemType("cost_functional");
+      }
+      //End of Precomputations
+      
       this->GetProblem()->AddAuxiliaryToIntegrator(this->GetIntegrator());
 
       if (dopedim == dealdim)
@@ -1189,6 +1297,11 @@ namespace DOpE
       {
         throw DOpEException("dopedim not implemented",
             "StatReducedProblem::ComputeReducedCostFunctional");
+      }
+      if(this->GetProblem()->FunctionalNeedPrecomputations() != 0)
+      {
+	std::map<std::string,dealii::Vector<double> >::iterator func_vals = auxiliary_params_.find("cost_functional_pre");
+	this->GetIntegrator().AddParamData("cost_functional_pre",&(func_vals->second));
       }
       this->GetIntegrator().AddDomainData("state",
           &(GetU().GetSpacialVector()));
@@ -1218,6 +1331,12 @@ namespace DOpE
         found = true;
         ret += this->GetIntegrator().ComputeFaceScalar(*(this->GetProblem()));
       }
+      if (this->GetProblem()->GetFunctionalType().find("algebraic")
+          != std::string::npos)
+      {
+        found = true;
+        ret += this->GetIntegrator().ComputeAlgebraicScalar(*(this->GetProblem()));
+      }
 
       if (!found)
       {
@@ -1240,6 +1359,10 @@ namespace DOpE
       {
         throw DOpEException("dopedim not implemented",
             "StatReducedProblem::ComputeReducedCostFunctional");
+      }
+      if(this->GetProblem()->FunctionalNeedPrecomputations() != 0)
+      {
+	this->GetIntegrator().DeleteParamData("cost_functional_pre");
       }
       this->GetIntegrator().DeleteDomainData("state");
       this->GetProblem()->DeleteAuxiliaryFromIntegrator(this->GetIntegrator());
@@ -1286,6 +1409,11 @@ namespace DOpE
         bool found = false;
 
         this->SetProblemType("aux_functional", i);
+	if(this->GetProblem()->FunctionalNeedPrecomputations() != 0)
+	{
+	  throw DOpEException("Precomputations not implemented",
+			      "StatReducedProblem::ComputeReducedFunctionals");
+	}
         if (this->GetProblem()->GetFunctionalType().find("domain")
             != std::string::npos)
         {

@@ -733,7 +733,8 @@ namespace DOpE
         GetFunctionalType() const;
         std::string
         GetFunctionalName() const;
-
+        unsigned int FunctionalNeedPrecomputations() const;
+  
         /******************************************************/
 
         bool
@@ -981,7 +982,7 @@ namespace DOpE
         this->SetTypeNumInternal(num);
         this->GetPDE().SetProblemType(type);
         if (functional_for_ee_num_ != dealii::numbers::invalid_unsigned_int)
-          aux_functionals_[functional_for_ee_num_]->SetProblemType(type);
+          aux_functionals_[functional_for_ee_num_]->SetProblemType(type,num);
       }
       //Nothing to do.
     }
@@ -1736,6 +1737,24 @@ namespace DOpE
         return aux_functionals_[functional_for_ee_num_]->GetName();
       }
       return "";
+    }
+
+  /******************************************************/
+
+  template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
+      int dealdim, template<int, int> class FE, template<int, int> class DH>
+    unsigned int
+    PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE, DH>::FunctionalNeedPrecomputations() const
+    {
+      if (this->GetType() == "aux_functional")
+      {
+        return aux_functionals_[this->GetTypeNum()]->NeedPrecomputations();
+      }
+      else if (this->GetType() == "error_evaluation")
+      {
+        return aux_functionals_[functional_for_ee_num_]->NeedPrecomputations();
+      }
+      return 0;
     }
 
   /******************************************************/

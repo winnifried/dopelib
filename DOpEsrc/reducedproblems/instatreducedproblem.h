@@ -924,6 +924,11 @@ void InstatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER, CONTROLINTEGR
   for (unsigned int i = 0; i < this->GetProblem()->GetNFunctionals(); i++)
   {
     this->SetProblemType("aux_functional", i);
+    if(this->GetProblem()->FunctionalNeedPrecomputations() != 0)
+    {
+      throw DOpEException("Precomputations not implemented",
+			  "StatPDEProblem::ComputeReducedFunctionals");
+    }
     if (this->GetProblem()->GetFunctionalType().find("timelocal") != std::string::npos)
     {
       if (this->GetFunctionalValues()[i + 1].size() == 1)
@@ -1220,6 +1225,11 @@ void InstatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER, CONTROLINTEGR
   bool found = false;
   {//CostFunctional
     this->SetProblemType("cost_functional");
+    if(this->GetProblem()->FunctionalNeedPrecomputations() != 0)
+    {
+      throw DOpEException("Precomputations not implemented",
+			  "StatPDEProblem::ComputeReducedFunctionals");
+    }
     if (this->GetProblem()->NeedTimeFunctional())
     {
       if (this->GetProblem()->GetFunctionalType().find("domain") != std::string::npos)
@@ -1298,6 +1308,11 @@ void InstatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER, CONTROLINTEGR
       ret = 0;
       found = false;
       this->SetProblemType("aux_functional", i);
+      if(this->GetProblem()->FunctionalNeedPrecomputations() != 0)
+      {
+	throw DOpEException("Precomputations not implemented",
+			    "StatPDEProblem::ComputeReducedFunctionals");
+      }
       if (this->GetProblem()->NeedTimeFunctional())
       {
         if (this->GetProblem()->GetFunctionalType().find("domain") != std::string::npos)

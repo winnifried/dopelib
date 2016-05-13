@@ -651,7 +651,12 @@ namespace DOpE
         bool found = false;
 
         this->SetProblemType("aux_functional", i);
-        if (this->GetProblem()->GetFunctionalType().find("domain")
+        if(this->GetProblem()->FunctionalNeedPrecomputations() != 0)
+	{
+	  throw DOpEException("Precomputations not implemented",
+			      "StatPDEProblem::ComputeReducedFunctionals");
+	}
+	if (this->GetProblem()->GetFunctionalType().find("domain")
             != std::string::npos)
         {
           found = true;
@@ -725,6 +730,11 @@ namespace DOpE
         bool found = false;
 
         this->SetProblemType("aux_functional", i);
+	if(this->GetProblem()->FunctionalNeedPrecomputations() != 0)
+	{
+	  throw DOpEException("Precomputations not implemented",
+			      "StatPDEProblem::ComputeReducedFunctionals");
+	}
         if (this->GetProblem()->GetFunctionalType().find("domain")
             != std::string::npos)
         {

@@ -564,14 +564,28 @@ namespace DOpE
         virtual bool
         HasPoints() const;
 
-        void
-        SetProblemType(std::string type);
-      protected:
-        std::string
-        GetProblemType() const;
-      private:
-        std::string problem_type_;
+      /**
+       * This function determines whether the functional needs multiple evaluation runs.
+       * This method needs to return values larger than zero to evaluate functionals like
+       * g(\int f(u(x)) dx)
+       * The number determines how many evaluation runs are necessary.
+       *
+       * Its default return value is zero!
+       *
+       */
+      virtual unsigned int
+      NeedPrecomputations() const;
+      
+      void
+      SetProblemType(std::string type,unsigned int num);
 
+      protected:
+      std::string
+      GetProblemType() const;
+
+      private:
+      std::string problem_type_;
+      unsigned int problem_num_;
     };
 }
 
