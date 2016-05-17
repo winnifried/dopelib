@@ -1,12 +1,17 @@
 Changelog DOpE
 ==============
-11.05.2016: Checking for MPI to avoid errors when using trilinos
+17.05.2016: Updated the statreducedproblem so that 
+	    optimization problems with cost-functionals given by 
+	    functions of integrals -- such as the absolute-value of the
+	    drag -- is possible. A corresponding example is available
+	    in OPT/StatPDE/Example10		 
+11.05.2016: Checking for MPI to avoid errors when using Trilinos
 	    versions compiled with MPI.
 08.04.2016: Update in the Newton solvers. If the step calculation 
 	    fails with a matrix reused from a previous iteration, 
 	    instead of returning an error the Newton solvers now repeat 
 	    the step with a newly assembled matrix. 
-05.04.2016: Providing an interface to the direct solvers of trilinos
+05.04.2016: Providing an interface to the direct solvers of Trilinos
 	    via the TrilinosDirectSolverWithMatrix class. The use 
 	    is demonstrated in PDE/StatPDE/Example10
 04.04.2016: Updated CMakeExamples.txt so that now the static libraries

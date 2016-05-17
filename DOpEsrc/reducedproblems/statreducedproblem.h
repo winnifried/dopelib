@@ -412,6 +412,7 @@ namespace DOpE
 
         bool build_state_matrix_, build_adjoint_matrix_, build_control_matrix_;
         bool state_reinit_, adjoint_reinit_, gradient_reinit_;
+	unsigned int cost_needs_precomputations_;
 
         friend class SolutionExtractor<
             StatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER,
@@ -868,7 +869,11 @@ namespace DOpE
       }
 
       this->GetProblem()->AddAuxiliaryToIntegrator(this->GetIntegrator());
-
+      if(cost_needs_precomputations_ != 0)
+      {
+	std::map<std::string,dealii::Vector<double> >::iterator func_vals = auxiliary_params_.find("cost_functional_pre");
+	this->GetIntegrator().AddParamData("cost_functional_pre",&(func_vals->second));
+      }
       this->GetIntegrator().AddDomainData("state",
           &(GetU().GetSpacialVector())); //&(GetU().GetSpacialVector())
 
@@ -905,6 +910,10 @@ namespace DOpE
       {
         throw DOpEException("dopedim not implemented",
             "StatReducedProblem::ComputeReducedAdjoint");
+      }
+      if(cost_needs_precomputations_ != 0)
+      {
+	this->GetIntegrator().DeleteParamData("cost_functional_pre");
       }
       this->GetIntegrator().DeleteDomainData("state");
 
@@ -1033,7 +1042,11 @@ namespace DOpE
           throw DOpEException("dopedim not implemented",
               "StatReducedProblem::ComputeReducedGradient");
         }
-
+	if(cost_needs_precomputations_ != 0)
+	{
+	  std::map<std::string,dealii::Vector<double> >::iterator func_vals = auxiliary_params_.find("cost_functional_pre");
+	  this->GetIntegrator().AddParamData("cost_functional_pre",&(func_vals->second));
+	}
         this->GetIntegrator().AddDomainData("state",
             &(GetU().GetSpacialVector()));
         this->GetIntegrator().AddDomainData("last_newton_solution",
@@ -1057,6 +1070,10 @@ namespace DOpE
           throw DOpEException("dopedim not implemented",
               "StatReducedProblem::ComputeReducedGradient");
         }
+	if(cost_needs_precomputations_ != 0)
+	{
+	  this->GetIntegrator().DeleteParamData("cost_functional_pre");
+	}
 
         this->GetIntegrator().DeleteDomainData("state");
         this->GetIntegrator().DeleteDomainData("last_newton_solution");
@@ -1089,7 +1106,11 @@ namespace DOpE
         throw DOpEException("dopedim not implemented",
             "StatReducedProblem::ComputeReducedGradient");
       }
-
+      if(cost_needs_precomputations_ != 0)
+      {
+	std::map<std::string,dealii::Vector<double> >::iterator func_vals = auxiliary_params_.find("cost_functional_pre");
+	this->GetIntegrator().AddParamData("cost_functional_pre",&(func_vals->second));
+      }
       this->GetControlIntegrator().AddDomainData("state",
           &(GetU().GetSpacialVector()));
       this->GetControlIntegrator().AddDomainData("adjoint",
@@ -1140,6 +1161,10 @@ namespace DOpE
         throw DOpEException("dopedim not implemented",
             "StatReducedProblem::ComputeReducedGradient");
       }
+      if(cost_needs_precomputations_ != 0)
+      {
+	this->GetIntegrator().DeleteParamData("cost_functional_pre");
+      }
       this->GetControlIntegrator().DeleteDomainData("state");
       this->GetControlIntegrator().DeleteDomainData("adjoint");
       if (this->GetProblem()->HasControlInDirichletData())
@@ -1172,9 +1197,10 @@ namespace DOpE
           4 + this->GetBasePriority());
 
       this->SetProblemType("cost_functional");
-      if(this->GetProblem()->FunctionalNeedPrecomputations() != 0)
+      cost_needs_precomputations_ = this->GetProblem()->FunctionalNeedPrecomputations();
+      if(cost_needs_precomputations_ != 0)
       {
-	unsigned int n_pre = this->GetProblem()->FunctionalNeedPrecomputations();
+	unsigned int n_pre = cost_needs_precomputations_;
 	std::map<std::string,dealii::Vector<double> >::iterator func_vals = auxiliary_params_.find("cost_functional_pre");
 	if(func_vals != auxiliary_params_.end())
 	{
@@ -1296,7 +1322,7 @@ namespace DOpE
         throw DOpEException("dopedim not implemented",
             "StatReducedProblem::ComputeReducedCostFunctional");
       }
-      if(this->GetProblem()->FunctionalNeedPrecomputations() != 0)
+      if(cost_needs_precomputations_ != 0)
       {
 	std::map<std::string,dealii::Vector<double> >::iterator func_vals = auxiliary_params_.find("cost_functional_pre");
 	this->GetIntegrator().AddParamData("cost_functional_pre",&(func_vals->second));
@@ -1361,7 +1387,7 @@ namespace DOpE
         throw DOpEException("dopedim not implemented",
             "StatReducedProblem::ComputeReducedCostFunctional");
       }
-      if(this->GetProblem()->FunctionalNeedPrecomputations() != 0)
+      if(cost_needs_precomputations_ != 0)
       {
 	this->GetIntegrator().DeleteParamData("cost_functional_pre");
       }
@@ -1636,17 +1662,104 @@ namespace DOpE
       this->GetOutputHandler()->Write((GetDU().GetSpacialVector()),
           "Tangent" + this->GetPostIndex(), this->GetProblem()->GetDoFType());
 
+
+      this->GetIntegrator().AddDomainData("adjoint",
+					  &(GetZ().GetSpacialVector()));
+      this->GetIntegrator().AddDomainData("tangent",
+					  &(GetDU().GetSpacialVector()));
+      this->GetControlIntegrator().AddDomainData("adjoint",
+						 &(GetZ().GetSpacialVector()));
+      this->GetControlIntegrator().AddDomainData("tangent",
+						 &(GetDU().GetSpacialVector()));
+
+      //After the Tangent has been computed, we can precompute 
+      //cost functional derivative-values (if necessary)
+      if(cost_needs_precomputations_ != 0)
+      {
+	unsigned int n_pre = cost_needs_precomputations_;
+	std::map<std::string,dealii::Vector<double> >::iterator func_vals = auxiliary_params_.find("cost_functional_pre_tangent");
+	if(func_vals != auxiliary_params_.end())
+	{
+	  assert(func_vals->second.size() == n_pre);
+	}
+	else
+	{
+	  auxiliary_params_.emplace("cost_functional_pre_tangent",dealii::Vector<double>(n_pre));
+	  func_vals = auxiliary_params_.find("cost_functional_pre_tangent");
+	  if(func_vals == auxiliary_params_.end())
+	  {
+	    throw DOpEException("Creation of Storage for Cost-Functional Pre-values in Tangent failed!",
+				"StatReducedProblem::ComputeReducedHessianVector");
+	  }
+	}
+	for(unsigned int i = 0; i < n_pre; i++)
+	{
+	  this->SetProblemType("cost_functional_pre_tangent",i);
+	  this->GetOutputHandler()->Write("\tprecomputations...",
+					  4 + this->GetBasePriority());
+	  //Begin Precomputations
+          bool found = false;
+	  double pre = 0;
+	  
+	  if (this->GetProblem()->GetFunctionalType().find("domain")
+	      != std::string::npos)
+	  {
+	    found = true;
+	    pre += this->GetIntegrator().ComputeDomainScalar(*(this->GetProblem()));
+	  }
+	  if (this->GetProblem()->GetFunctionalType().find("point")
+	      != std::string::npos)
+	  {
+	    found = true;
+	    pre += this->GetIntegrator().ComputePointScalar(*(this->GetProblem()));
+	  }
+	  if (this->GetProblem()->GetFunctionalType().find("boundary")
+	      != std::string::npos)
+	  {
+	    found = true;
+	    pre += this->GetIntegrator().ComputeBoundaryScalar(
+	      *(this->GetProblem()));
+	  }
+	  if (this->GetProblem()->GetFunctionalType().find("face")
+	      != std::string::npos)
+	  {
+	    found = true;
+	    pre += this->GetIntegrator().ComputeFaceScalar(*(this->GetProblem()));
+	  }
+	  if (this->GetProblem()->GetFunctionalType().find("algebraic")
+	      != std::string::npos)
+	  {
+	    found = true;
+	    pre += this->GetIntegrator().ComputeAlgebraicScalar(*(this->GetProblem()));
+	  }
+	  
+	  if (!found)
+	  {
+	    throw DOpEException(
+	      "Unknown Functional Type: "
+	      + this->GetProblem()->GetFunctionalType(),
+	      "StatReducedProblem::ComputeReducedCostFunctional");
+	  }
+	  //Store Precomputed Values
+	  func_vals->second[i] = pre; 
+	}
+      } // End precomputation of values
+
       this->GetOutputHandler()->Write("\tSolving Adjoint Hessian:",
           5 + this->GetBasePriority());
       this->SetProblemType("adjoint_hessian");
-      this->GetIntegrator().AddDomainData("adjoint",
-          &(GetZ().GetSpacialVector()));
-      this->GetIntegrator().AddDomainData("tangent",
-          &(GetDU().GetSpacialVector()));
-      this->GetControlIntegrator().AddDomainData("adjoint",
-          &(GetZ().GetSpacialVector()));
-      this->GetControlIntegrator().AddDomainData("tangent",
-          &(GetDU().GetSpacialVector()));
+
+      if(cost_needs_precomputations_ != 0)
+      {
+	{
+	  std::map<std::string,dealii::Vector<double> >::iterator func_vals = auxiliary_params_.find("cost_functional_pre");
+	  this->GetIntegrator().AddParamData("cost_functional_pre",&(func_vals->second));
+	}
+	{
+	  std::map<std::string,dealii::Vector<double> >::iterator func_vals = auxiliary_params_.find("cost_functional_pre_tangent");
+	  this->GetIntegrator().AddParamData("cost_functional_pre_tangent",&(func_vals->second));
+	}
+      }
 
       //adjoint_hessian Matrix is the same as adjoint matrix
       build_adjoint_matrix_ =
@@ -1800,6 +1913,12 @@ namespace DOpE
       }
       this->GetProblem()->DeleteAuxiliaryFromIntegrator(
           this->GetControlIntegrator());
+
+      if(cost_needs_precomputations_ != 0)
+      {
+	this->GetIntegrator().DeleteParamData("cost_functional_pre");
+	this->GetIntegrator().DeleteParamData("cost_functional_pre_tangent");
+      }
 
     }
 

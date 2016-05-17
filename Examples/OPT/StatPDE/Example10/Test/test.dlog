@@ -13,30 +13,32 @@ This is DOpElib Version: 4.0.0 pre
 	**************************************************
 
 LOG: Allowing IterationCounter `OptNewton_OptProblem' for filenames!
-	CostFunctional: 1.498
-		 Newton step: 0	 Residual (abs.): 2.374
+	CostFunctional: 1.116
+		 Newton step: 0	 Residual (abs.): 7.76
 		 Newton step: 0	 Residual (rel.): 1.0000e+00
 	
-	CostFunctional: 1.2454e+00
-		 Newton step: 1	 Residual (rel.):   4.5770e-01	 LinearIters [2]	 LineSearch {0} 
-	CostFunctional: 1.5686e-01
-		 Newton step: 2	 Residual (rel.):   5.1077e-01	 LinearIters [5]	 LineSearch {0} 
-	CostFunctional: -2.0404e+00
-		 Newton step: 3	 Residual (rel.):   1.4242e-02	 LinearIters [4]	 LineSearch {0} 
-	CostFunctional: -2.0937e+00
-		 Newton step: 4	 Residual (rel.):   2.2814e-03	 LinearIters [2]	 LineSearch {0} 
-	CostFunctional: -2.0961e+00
-		 Newton step: 5	 Residual (rel.):   2.0257e-05	 LinearIters [3]	 LineSearch {0} 
-	CostFunctional: -2.0962e+00
-		 Newton step: 6	 Residual (rel.): < 2.0000e-08	 LinearIters [4]	 LineSearch {0} 
-	CostFunctional: -2.0962e+00
-	Pressure difference: -0.074209
-	Drag: -2.73993
-	Lift: -0.89321
+	CostFunctional: 7.9648e-01
+		 Newton step: 1	 Residual (rel.):   4.6374e-01	 LinearIters [2]	 LineSearch {0} 
+	CostFunctional: 3.3332e-01
+		 Newton step: 2	 Residual (rel.):   3.3502e-01	 LinearIters [3]	 LineSearch {0} 
+	CostFunctional: 1.4032e-01
+		 Newton step: 3	 Residual (rel.):   7.6265e-02	 LinearIters [2]	 LineSearch {0} 
+	CostFunctional: 1.3154e-01
+		 Newton step: 4	 Residual (rel.):   1.0350e-03	 LinearIters [2]	 LineSearch {0} 
+	CostFunctional: 1.3154e-01
+		 Newton step: 5	 Residual (rel.):   6.1890e-05	 LinearIters [6]	 LineSearch {0} 
+	CostFunctional: 1.3154e-01
+		 Newton step: 6	 Residual (rel.):   9.2805e-07	 LinearIters [26]	 LineSearch {0} 
+	CostFunctional: 1.3154e-01
+		 Newton step: 7	 Residual (rel.): < 2.0000e-08	 LinearIters [32]	 LineSearch {0} 
+	CostFunctional: 1.3154e-01
+	Pressure difference: 0.0116146
+	Drag: 0.115414
+	Lift: -0.341395
 
 	**************************************************
 	*        Stopping Reduced Newton Algorithm       *
-	*             after      6  Iterations           *
+	*             after      7  Iterations           *
 	*             with rel. Residual < 2.0000e-08          *
 	**************************************************
 

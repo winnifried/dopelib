@@ -71,7 +71,7 @@ subsection output parameters
 
   # Defines what strings should be printed, the higher the number the more
   # output
-  set printlevel        = 5
+  set printlevel        = 4
 
   # Set the precision of the newton output
   set number_precision	 = 4

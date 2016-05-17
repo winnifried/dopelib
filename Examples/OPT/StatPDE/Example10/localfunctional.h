@@ -52,7 +52,6 @@ template<
       {
         // Control- and regularization parameters
         mu_regularization = 1.0e+1;
-        upper_bound_for_control_sum = 1.0e-2;
 
         // Fluid parameters
         param_reader.SetSubsection("Local PDE parameters");
@@ -67,14 +66,20 @@ template<
       //Search the vector with the precomputed functional values
       std::map<std::string, const dealii::Vector<double>*>::const_iterator vals = param_values.find("cost_functional_pre");
       //Return the postprocessed value
-      return vals->second->operator[](0); 
+      return 0.5*(vals->second->operator[](0)*vals->second->operator[](0)); 
     }
     
     double
     BoundaryValue(const FDC<DH, VECTOR, dealdim>& fdc)
     {
-      if( this->GetProblemType() == "cost_functional_pre" )
+      if( this->GetProblemType() == "cost_functional_pre" ||
+	  this->GetProblemType() == "cost_functional_pre_tangent" )
       {
+	//Same precalculations since drag k(v,p) is linear 
+	// The value k(v,p) = \int k(v,p) and k'(v,p)\delta u are 
+	//calculated identically - except that the values are taken
+	// from state for k and tangent for k'
+
 	//Precalculation of Drag
 	const auto & state_fe_face_values = fdc.GetFEFaceValuesState();
 	unsigned int n_q_points = fdc.GetNQPoints();
@@ -88,9 +93,22 @@ template<
 	  ufacevalues_.resize(n_q_points, Vector<double>(3));
 	  ufacegrads_.resize(n_q_points, vector<Tensor<1, 2> >(3));
 	  
-	  fdc.GetFaceValuesState("state", ufacevalues_);
-	  fdc.GetFaceGradsState("state", ufacegrads_);
-	  
+	  if(this->GetProblemType() == "cost_functional_pre" )
+	  {
+	    fdc.GetFaceValuesState("state", ufacevalues_);
+	    fdc.GetFaceGradsState("state", ufacegrads_);
+	  }
+	  else if(this->GetProblemType() == "cost_functional_pre_tangent" )
+	  {
+	    fdc.GetFaceValuesState("tangent", ufacevalues_);
+	    fdc.GetFaceGradsState("tangent", ufacegrads_);
+	  }
+	  else 
+	  {
+	    //This should not happen!
+	    abort();
+	  }
+
 	  for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
 	  {
 	    Tensor<2, 2> pI;
@@ -115,7 +133,7 @@ template<
 		 + density_fluid_ * viscosity_
 		 * (grad_v + transpose(grad_v)));
 	      
-	    drag_lift_value -= cauchy_stress_fluid
+	    drag_lift_value += cauchy_stress_fluid
 	      * state_fe_face_values.normal_vector(q_point)
 	      * state_fe_face_values.JxW(q_point);
 	  }
@@ -168,6 +186,8 @@ template<
       BoundaryValue_U(const FDC<DH, VECTOR, dealdim>& fdc,
           dealii::Vector<double> &local_vector, double scale)
       {
+	//Calculation of \partial_u g(k(v,p)) \phi is done as 
+	// g'(k(v,p)) k(phi) = \int_\gamma g'(k(v,p)) (drag) \ds
         const auto & state_fe_face_values = fdc.GetFEFaceValuesState();
         unsigned int n_dofs_per_element = fdc.GetNDoFsPerElement();
         unsigned int n_q_points = fdc.GetNQPoints();
@@ -176,6 +196,11 @@ template<
         {
           const FEValuesExtractors::Vector velocities(0);
           const FEValuesExtractors::Scalar pressure(2);
+	  dealii::Vector<double> pre_values(1);
+	  //Search the vector with the precomputed functional values
+	  fdc.GetParamValues("cost_functional_pre", pre_values);
+	  // The derivative of the outer function
+	  double g_prime = pre_values[0];
 
           for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
           {
@@ -199,7 +224,7 @@ template<
               Tensor<1, 2> neumann_value = cauchy_stress_fluid
                   * state_fe_face_values.normal_vector(q_point);
 
-              local_vector(j) -= scale * neumann_value[0] * 250
+              local_vector(j) += scale * g_prime * neumann_value[0] * 500
                   * state_fe_face_values.JxW(q_point);
             }
           }
@@ -212,7 +237,6 @@ template<
           dealii::Vector<double> &local_vector, double scale)
       {
         const auto & state_fe_face_values = fdc.GetFEFaceValuesState();
-        unsigned int n_dofs_per_element = local_vector.size();
         unsigned int n_q_points = fdc.GetNQPoints();
         unsigned int color = fdc.GetBoundaryIndicator();
 
@@ -224,11 +248,8 @@ template<
 
           for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
           {
-            for (unsigned int j = 0; j < n_dofs_per_element; j++)
-            {
-              local_vector(j) += scale * mu_regularization * (qvalues_(j))
+              local_vector(0) += scale * mu_regularization * (qvalues_(0))
                   * state_fe_face_values.JxW(q_point);
-            }
           }
         }
         if (color == 51)
@@ -239,11 +260,8 @@ template<
 
           for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
           {
-            for (unsigned int j = 0; j < n_dofs_per_element; j++)
-            {
-              local_vector(j) += scale * mu_regularization * (qvalues_(j))
+             local_vector(1) += scale * mu_regularization * (qvalues_(1))
                   * state_fe_face_values.JxW(q_point);
-            }
           }
         }
       }
@@ -253,7 +271,6 @@ template<
           dealii::Vector<double> &local_vector, double scale)
       {
         const auto & state_fe_face_values = fdc.GetFEFaceValuesState();
-        unsigned int n_dofs_per_element = local_vector.size();
         unsigned int n_q_points = fdc.GetNQPoints();
         unsigned int color = fdc.GetBoundaryIndicator();
 
@@ -268,11 +285,8 @@ template<
 
           for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
           {
-            for (unsigned int j = 0; j < n_dofs_per_element; j++)
-            {
-              local_vector(j) += scale * mu_regularization * (dqvalues_(j))
+               local_vector(0) += scale * mu_regularization * (dqvalues_(0))
                   * state_fe_face_values.JxW(q_point);
-            }
           }
         }
         if (color == 51)
@@ -286,19 +300,69 @@ template<
 
           for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
           {
-            for (unsigned int j = 0; j < n_dofs_per_element; j++)
-            {
-              local_vector(j) += scale * mu_regularization * (dqvalues_(j))
+              local_vector(1) += scale * mu_regularization * (dqvalues_(1))
                   * state_fe_face_values.JxW(q_point);
-            }
           }
         }
       }
 
       void
-      BoundaryValue_UU(const FDC<DH, VECTOR, dealdim>& /*fdc*/,
-          dealii::Vector<double> &/*local_vector*/, double /*scale*/)
+      BoundaryValue_UU(const FDC<DH, VECTOR, dealdim>& fdc,
+          dealii::Vector<double> &local_vector, double scale)
       {
+	//Calculation of \partial_{uu} g(k(v,p))(du, tu) is done as 
+	// \partial_{uu} g(k(v,p)) \du \tu = 
+	// = g''(k(v,p)) k'(v,p)(du) k'(v,p)(tu) + g'(k(v,p)) k''(v,p)(du,tu) 
+	//By linearity of k only the first term appears
+	//we can get k(v,p) and k'(v,p) du = k(du) as given data
+        const auto & state_fe_face_values = fdc.GetFEFaceValuesState();
+        unsigned int n_dofs_per_element = fdc.GetNDoFsPerElement();
+        unsigned int n_q_points = fdc.GetNQPoints();
+        unsigned int color = fdc.GetBoundaryIndicator();
+        if (color == 80)
+        {
+          const FEValuesExtractors::Vector velocities(0);
+          const FEValuesExtractors::Scalar pressure(2);
+
+	  //dealii::Vector<double> pre_values(1);
+	  dealii::Vector<double> pre_values_tangent(1);
+	  //Search the vector with the precomputed functional values
+	  //Values of k not needed since g'' is constant
+          //fdc.GetParamValues("cost_functional_pre", pre_values); //k(v,p)
+	  fdc.GetParamValues("cost_functional_pre_tangent", pre_values_tangent); //k(du)
+	  // The derivative of the outer function
+	  double g_primeprime = 1.;
+	  double k_du = pre_values_tangent[0];
+  
+
+          for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
+          {
+            for (unsigned int j = 0; j < n_dofs_per_element; j++)
+            {
+              const Tensor<2, 2> phi_j_grads_v =
+                  state_fe_face_values[velocities].gradient(j, q_point);
+              const double phi_j_p = state_fe_face_values[pressure].value(j,
+                  q_point);
+              Tensor<2, 2> pI_LinP;
+              pI_LinP[0][0] = phi_j_p;
+              pI_LinP[0][1] = 0.0;
+              pI_LinP[1][0] = 0.0;
+              pI_LinP[1][1] = phi_j_p;
+
+              Tensor<2, 2> cauchy_stress_fluid;
+              cauchy_stress_fluid = -pI_LinP
+                  + density_fluid_ * viscosity_
+                      * (phi_j_grads_v + transpose(phi_j_grads_v));
+
+              Tensor<1, 2> neumann_value = cauchy_stress_fluid
+                  * state_fe_face_values.normal_vector(q_point);
+
+              local_vector(j) += scale * g_primeprime * k_du * neumann_value[0] * 500
+                  * state_fe_face_values.JxW(q_point);
+            }
+          }
+
+        }
 
       }
 
@@ -375,6 +439,7 @@ template<
 	//More complicated selection to avoid implementing
 	//unneeded derivatives
 	if ( this->GetProblemType() == "cost_functional_pre" //Only calculates drag
+	     ||this->GetProblemType() == "cost_functional_pre_tangent" //Only calculates drag of du
 	     || this->GetProblemType() == "adjoint" //J'_u is calculated as a boundary integral!
 	     || this->GetProblemType() == "gradient" //J'_q is calculated as a boundary integral!
 	     || this->GetProblemType() == "adjoint_hessian" //J'_{uu} is calculated as a boundary integral!
@@ -418,9 +483,8 @@ template<
       // Fluid parameters
       double density_fluid_, viscosity_;
 
-      // Control- and regularization parameters
+      // Controlregularization parameters
       double mu_regularization;
-      double upper_bound_for_control_sum;
 
   };
 #endif
