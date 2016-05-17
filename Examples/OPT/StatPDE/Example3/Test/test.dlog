@@ -14,31 +14,33 @@ This is DOpElib Version: 4.0.0 pre
 
 LOG: Allowing IterationCounter `OptNewton_OptProblem' for filenames!
 	CostFunctional: 3.083
-		 Newton step: 0	 Residual (abs.): 1.56
+		 Newton step: 0	 Residual (abs.): 3.402
 		 Newton step: 0	 Residual (rel.): 1.0000e+00
 	
-	CostFunctional: 2.8711e+00
-		 Newton step: 1	 Residual (rel.):   3.6058e-01	 LinearIters [2]	 LineSearch {0} 
-	CostFunctional: 2.7337e+00
-		 Newton step: 2	 Residual (rel.):   1.6909e-01	 LinearIters [3]	 LineSearch {0} 
-	CostFunctional: 2.6078e+00
-		 Newton step: 3	 Residual (rel.):   7.2720e-02	 LinearIters [2]	 LineSearch {0} 
-	CostFunctional: 2.5661e+00
-		 Newton step: 4	 Residual (rel.):   1.2278e-02	 LinearIters [3]	 LineSearch {0} 
-	CostFunctional: 2.5601e+00
-		 Newton step: 5	 Residual (rel.):   1.3506e-03	 LinearIters [3]	 LineSearch {0} 
-	CostFunctional: 2.5595e+00
-		 Newton step: 6	 Residual (rel.):   1.4174e-05	 LinearIters [4]	 LineSearch {0} 
-	CostFunctional: 2.5595e+00
-		 Newton step: 7	 Residual (rel.): < 2.0000e-08	 LinearIters [6]	 LineSearch {0} 
-	CostFunctional: 2.5595e+00
-	Pressure difference: 0.0664966
-	Drag: 2.46292
-	Lift: -0.0684051
+	CostFunctional: 2.8483e+00
+		 Newton step: 1	 Residual (rel.):   4.3145e-01	 LinearIters [2]	 LineSearch {0} 
+	CostFunctional: 2.5863e+00
+		 Newton step: 2	 Residual (rel.):   2.7200e-01	 LinearIters [3]	 LineSearch {0} 
+	CostFunctional: 2.1420e+00
+		 Newton step: 3	 Residual (rel.):   6.1222e-02	 LinearIters [3]	 LineSearch {0} 
+	CostFunctional: 2.0642e+00
+		 Newton step: 4	 Residual (rel.):   9.3972e-03	 LinearIters [3]	 LineSearch {0} 
+	CostFunctional: 2.0544e+00
+		 Newton step: 5	 Residual (rel.):   1.3217e-03	 LinearIters [3]	 LineSearch {0} 
+	CostFunctional: 2.0530e+00
+		 Newton step: 6	 Residual (rel.):   3.6795e-05	 LinearIters [4]	 LineSearch {0} 
+	CostFunctional: 2.0530e+00
+		 Newton step: 7	 Residual (rel.):   3.1837e-07	 LinearIters [5]	 LineSearch {0} 
+	CostFunctional: 2.0530e+00
+		 Newton step: 8	 Residual (rel.): < 2.0000e-08	 LinearIters [7]	 LineSearch {0} 
+	CostFunctional: 2.0530e+00
+	Pressure difference: 0.0439283
+	Drag: 1.65444
+	Lift: -0.347635
 
 	**************************************************
 	*        Stopping Reduced Newton Algorithm       *
-	*             after      7  Iterations           *
+	*             after      8  Iterations           *
 	*             with rel. Residual < 2.0000e-08          *
 	**************************************************
 

@@ -180,7 +180,7 @@ template<
               Tensor<1, 2> neumann_value = cauchy_stress_fluid
                   * state_fe_face_values.normal_vector(q_point);
 
-              local_vector(j) -= scale * neumann_value[0] * 250
+              local_vector(j) -= scale * neumann_value[0] * 500
                   * state_fe_face_values.JxW(q_point);
             }
           }
