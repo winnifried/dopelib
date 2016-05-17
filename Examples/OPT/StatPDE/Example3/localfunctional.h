@@ -193,7 +193,6 @@ template<
           dealii::Vector<double> &local_vector, double scale)
       {
         const auto & state_fe_face_values = fdc.GetFEFaceValuesState();
-        unsigned int n_dofs_per_element = local_vector.size();
         unsigned int n_q_points = fdc.GetNQPoints();
         unsigned int color = fdc.GetBoundaryIndicator();
 
@@ -205,11 +204,8 @@ template<
 
           for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
           {
-            for (unsigned int j = 0; j < n_dofs_per_element; j++)
-            {
-              local_vector(j) += scale * mu_regularization * (qvalues_(j))
-                  * state_fe_face_values.JxW(q_point);
-            }
+	    local_vector(0) += scale * mu_regularization * (qvalues_(0))
+	      * state_fe_face_values.JxW(q_point);
           }
         }
         if (color == 51)
@@ -220,11 +216,8 @@ template<
 
           for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
           {
-            for (unsigned int j = 0; j < n_dofs_per_element; j++)
-            {
-              local_vector(j) += scale * mu_regularization * (qvalues_(j))
-                  * state_fe_face_values.JxW(q_point);
-            }
+	    local_vector(1) += scale * mu_regularization * (qvalues_(1))
+	      * state_fe_face_values.JxW(q_point);
           }
         }
       }
@@ -234,7 +227,6 @@ template<
           dealii::Vector<double> &local_vector, double scale)
       {
         const auto & state_fe_face_values = fdc.GetFEFaceValuesState();
-        unsigned int n_dofs_per_element = local_vector.size();
         unsigned int n_q_points = fdc.GetNQPoints();
         unsigned int color = fdc.GetBoundaryIndicator();
 
@@ -249,11 +241,8 @@ template<
 
           for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
           {
-            for (unsigned int j = 0; j < n_dofs_per_element; j++)
-            {
-              local_vector(j) += scale * mu_regularization * (dqvalues_(j))
-                  * state_fe_face_values.JxW(q_point);
-            }
+	    local_vector(0) += scale * mu_regularization * (dqvalues_(0))
+	      * state_fe_face_values.JxW(q_point);
           }
         }
         if (color == 51)
@@ -267,11 +256,8 @@ template<
 
           for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
           {
-            for (unsigned int j = 0; j < n_dofs_per_element; j++)
-            {
-              local_vector(j) += scale * mu_regularization * (dqvalues_(j))
-                  * state_fe_face_values.JxW(q_point);
-            }
+	    local_vector(1) += scale * mu_regularization * (dqvalues_(1))
+	      * state_fe_face_values.JxW(q_point);
           }
         }
       }
