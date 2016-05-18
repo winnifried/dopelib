@@ -383,6 +383,8 @@ class InstatReducedProblem: public ReducedProblemInterface<PROBLEM, VECTOR>
     StateVector<VECTOR> du_;
     StateVector<VECTOR> dz_;
 
+    std::map<std::string,std::vector<dealii::Vector<double> >> auxiliary_time_params_;
+
     INTEGRATOR integrator_;
     CONTROLINTEGRATOR control_integrator_;
     NONLINEARSOLVER nonlinear_state_solver_;
@@ -393,6 +395,7 @@ class InstatReducedProblem: public ReducedProblemInterface<PROBLEM, VECTOR>
     bool state_reinit_, adjoint_reinit_, gradient_reinit_;
 
     bool project_initial_data_;
+    unsigned int cost_needs_precomputations_;
 
     friend class SolutionExtractor<InstatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER,
         CONTROLINTEGRATOR, INTEGRATOR, PROBLEM, VECTOR,dopedim, dealdim>,   VECTOR > ;
@@ -444,6 +447,7 @@ void InstatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER, CONTROLINTEGR
             adjoint_reinit_ = true;
             gradient_reinit_ = true;
           }
+	  cost_needs_precomputations_=0;
       }
 
 /******************************************************/
@@ -476,6 +480,7 @@ void InstatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER, CONTROLINTEGR
             adjoint_reinit_ = true;
             gradient_reinit_ = true;
           }
+	  cost_needs_precomputations_=0;
       }
 
 /******************************************************/
@@ -556,6 +561,11 @@ void InstatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER, CONTROLINTEGR
   GetDU().ReInit();
   GetDZ().ReInit();
 
+  //Remove all time-params - they are now obsolete 
+  auxiliary_time_params_.clear();
+
+  cost_needs_precomputations_=0;
+  
   build_control_matrix_ = true;
 }
 
@@ -663,7 +673,7 @@ void InstatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER, CONTROLINTEGR
   if (gradient_reinit_ == true)
   {
     GetControlNonlinearSolver().ReInit(*(this->GetProblem()));
-    state_reinit_ = false;
+    gradient_reinit_ = false;
   }
 
   if(this->GetProblem()->GetSpaceTimeHandler()->GetControlType() == DOpEtypes::ControlType::initial)
@@ -1221,17 +1231,94 @@ void InstatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER, CONTROLINTEGR
   this->GetProblem()->AddAuxiliaryToIntegrator(this->GetIntegrator());
 
   this->GetIntegrator().AddDomainData("state", &(GetU().GetSpacialVector()));
-  double ret = 0;
-  bool found = false;
   {//CostFunctional
     this->SetProblemType("cost_functional");
-    if(this->GetProblem()->FunctionalNeedPrecomputations() != 0)
+    cost_needs_precomputations_ = this->GetProblem()->FunctionalNeedPrecomputations();
+    if(cost_needs_precomputations_ != 0)
     {
-      throw DOpEException("Precomputations not implemented",
-			  "StatPDEProblem::ComputeReducedFunctionals");
-    }
+      unsigned int n_pre = cost_needs_precomputations_;
+      std::map<std::string,std::vector<dealii::Vector<double> >>::iterator func_vals = auxiliary_time_params_.find("cost_functional_pre");
+	if(func_vals != auxiliary_time_params_.end())
+	{
+	  assert(func_vals->second.size() == num_steps+1);
+	}
+	else
+	{
+	  assert(step == 0);
+	  auxiliary_time_params_.emplace("cost_functional_pre",std::vector<dealii::Vector<double> >(num_steps+1,dealii::Vector<double>(n_pre)));
+	  func_vals = auxiliary_time_params_.find("cost_functional_pre");
+	  if(func_vals == auxiliary_time_params_.end())
+	  {
+	    throw DOpEException("Creation of Storage for Cost-Functional Pre-values failed!",
+				"InstatReducedProblem::ComputeTimeFunctionals");
+	  }
+	}
+	for(unsigned int i = 0; i < n_pre; i++)
+	{
+	  this->SetProblemType("cost_functional_pre",i);
+	  this->GetOutputHandler()->Write("\tprecomputations...",
+					  4 + this->GetBasePriority());
+	  //Begin Precomputations
+          bool found = false;
+	  double pre = 0;
+	  
+	  if (this->GetProblem()->GetFunctionalType().find("domain")
+	      != std::string::npos)
+	  {
+	    found = true;
+	    pre += this->GetIntegrator().ComputeDomainScalar(*(this->GetProblem()));
+	  }
+	  if (this->GetProblem()->GetFunctionalType().find("point")
+	      != std::string::npos)
+	  {
+	    found = true;
+	    pre += this->GetIntegrator().ComputePointScalar(*(this->GetProblem()));
+	  }
+	  if (this->GetProblem()->GetFunctionalType().find("boundary")
+	      != std::string::npos)
+	  {
+	    found = true;
+	    pre += this->GetIntegrator().ComputeBoundaryScalar(
+	      *(this->GetProblem()));
+	  }
+	  if (this->GetProblem()->GetFunctionalType().find("face")
+	      != std::string::npos)
+	  {
+	    found = true;
+	    pre += this->GetIntegrator().ComputeFaceScalar(*(this->GetProblem()));
+	  }
+	  if (this->GetProblem()->GetFunctionalType().find("algebraic")
+	      != std::string::npos)
+	  {
+	    found = true;
+	    pre += this->GetIntegrator().ComputeAlgebraicScalar(*(this->GetProblem()));
+	  }
+	  
+	  if (!found)
+	  {
+	    throw DOpEException(
+	      "Unknown Functional Type: "
+	      + this->GetProblem()->GetFunctionalType(),
+	      "InstatReducedProblem::ComputeTimeFunctionals");
+	  }
+	  //Store Precomputed Values
+	  func_vals->second[step][i] = pre; 
+	}
+	this->SetProblemType("cost_functional");
+      }
+    //End of Precomputations
+    
+    double ret = 0;
+    bool found = false;
+  
     if (this->GetProblem()->NeedTimeFunctional())
     {
+      if(cost_needs_precomputations_ != 0)
+      {
+	std::map<std::string,std::vector<dealii::Vector<double> >>::iterator func_vals = auxiliary_time_params_.find("cost_functional_pre");
+	this->GetIntegrator().AddParamData("cost_functional_pre",&(func_vals->second[step]));
+      }
+
       if (this->GetProblem()->GetFunctionalType().find("domain") != std::string::npos)
       {
         found = true;
@@ -1252,10 +1339,27 @@ void InstatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER, CONTROLINTEGR
         found = true;
         ret += this->GetIntegrator().ComputeFaceScalar(*(this->GetProblem()));
       }
-
+      if (this->GetProblem()->GetFunctionalType().find("algebraic")
+	      != std::string::npos)
+      {
+	found = true;
+	ret += this->GetIntegrator().ComputeAlgebraicScalar(*(this->GetProblem()));
+      }
+	  
       if (!found)
       {
         throw DOpEException("Unknown Functional Type: " + this->GetProblem()->GetFunctionalType(),
+                            "InstatReducedProblem::ComputeTimeFunctionals");
+      }
+      if(cost_needs_precomputations_ != 0)
+      {
+	this->GetIntegrator().DeleteParamData("cost_functional_pre");
+      }
+      //Check if selection is feasible!
+      if (this->GetProblem()->GetFunctionalType().find("timelocal") != std::string::npos
+	  && this->GetProblem()->GetFunctionalType().find("timedistributed") != std::string::npos)
+      {
+	throw DOpEException("A functional may not simultaneously be `timelocal' and `timedistributed'",
                             "InstatReducedProblem::ComputeTimeFunctionals");
       }
       //Wert speichern
@@ -1303,6 +1407,8 @@ void InstatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER, CONTROLINTEGR
     }
   }
   {//Aux Functionals
+    double ret = 0;
+    bool found = false;
     for (unsigned int i = 0; i < this->GetProblem()->GetNFunctionals(); i++)
     {
       ret = 0;
@@ -1335,7 +1441,12 @@ void InstatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER, CONTROLINTEGR
           found = true;
           ret += this->GetIntegrator().ComputeFaceScalar(*(this->GetProblem()));
         }
-
+	if (this->GetProblem()->GetFunctionalType().find("algebraic")
+	    != std::string::npos)
+	{
+	  found = true;
+	  ret += this->GetIntegrator().ComputeAlgebraicScalar(*(this->GetProblem()));
+	}
         if (!found)
         {
           throw DOpEException(
@@ -1543,6 +1654,26 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
       n_dofs_per_interval =
               problem.GetSpaceTimeHandler()->GetTimeDoFHandler().GetLocalNbrOfDoFs();
     std::vector<unsigned int> local_to_global(n_dofs_per_interval);
+    //Storage for pre-calculated tangent functional values
+    if(cost_needs_precomputations_ != 0 && outname == "Tangent")
+    {
+      unsigned int n_pre = cost_needs_precomputations_;
+      std::map<std::string,std::vector<dealii::Vector<double> >>::iterator func_vals = auxiliary_time_params_.find("cost_functional_pre_tangent");
+      if(func_vals != auxiliary_time_params_.end())
+	{
+	  assert(func_vals->second.size() == max_timestep+1);
+	}
+	else
+	{
+	  auxiliary_time_params_.emplace("cost_functional_pre_tangent",std::vector<dealii::Vector<double> >(max_timestep+1,dealii::Vector<double>(n_pre)));
+	  func_vals = auxiliary_time_params_.find("cost_functional_pre_tangent");
+	  if(func_vals == auxiliary_time_params_.end())
+	  {
+	    throw DOpEException("Creation of Storage for Cost-Functional Pre-values in Tangent failed!",
+				"InstatReducedProblem::ForwardTimeLoop");
+	  }
+	}
+    }
     {
       TimeIterator it =
 	problem.GetSpaceTimeHandler()->GetTimeDoFHandler().first_interval();
@@ -1586,6 +1717,7 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
     this->GetOutputHandler()->Write(u_alt, outname + this->GetPostIndex(),
           problem.GetDoFType());
     
+
     
     if(eval_funcs)
     {//Funktional Auswertung in t_0
@@ -1593,7 +1725,70 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 			     max_timestep);
           this->SetProblemType("state");
     }
-    
+    if(cost_needs_precomputations_ != 0 && outname == "Tangent")
+    {
+      //Precalculate Tangent functional values
+      this->GetIntegrator().AddDomainData("tangent",
+					  &(sol.GetSpacialVector()));
+      this->GetIntegrator().AddDomainData("state",&(GetU().GetSpacialVector()));
+      unsigned int n_pre = cost_needs_precomputations_;
+      std::map<std::string,std::vector<dealii::Vector<double> >>::iterator func_vals = auxiliary_time_params_.find("cost_functional_pre_tangent");
+
+      for(unsigned int pre_it = 0; pre_it  < n_pre; pre_it++)
+	{
+	  this->SetProblemType("cost_functional_pre_tangent",pre_it);
+	  this->GetOutputHandler()->Write("\tprecomputations...",
+					  4 + this->GetBasePriority());
+	  //Begin Precomputations
+          bool found = false;
+	  double pre = 0;
+	  
+	  if (this->GetProblem()->GetFunctionalType().find("domain")
+	      != std::string::npos)
+	  {
+	    found = true;
+	    pre += this->GetIntegrator().ComputeDomainScalar(*(this->GetProblem()));
+	  }
+	  if (this->GetProblem()->GetFunctionalType().find("point")
+	      != std::string::npos)
+	  {
+	    found = true;
+	    pre += this->GetIntegrator().ComputePointScalar(*(this->GetProblem()));
+	  }
+	  if (this->GetProblem()->GetFunctionalType().find("boundary")
+	      != std::string::npos)
+	  {
+	    found = true;
+	    pre += this->GetIntegrator().ComputeBoundaryScalar(
+	      *(this->GetProblem()));
+	  }
+	  if (this->GetProblem()->GetFunctionalType().find("face")
+	      != std::string::npos)
+	  {
+	    found = true;
+	    pre += this->GetIntegrator().ComputeFaceScalar(*(this->GetProblem()));
+	  }
+	  if (this->GetProblem()->GetFunctionalType().find("algebraic")
+	      != std::string::npos)
+	  {
+	    found = true;
+	    pre += this->GetIntegrator().ComputeAlgebraicScalar(*(this->GetProblem()));
+	  }
+	  
+	  if (!found)
+	  {
+	    throw DOpEException(
+	      "Unknown Functional Type: "
+	      + this->GetProblem()->GetFunctionalType(),
+	      "InstatReducedProblem::ForwardTimeLoop");
+	  }
+	  //Store Precomputed Values
+	  func_vals->second[0][pre_it] = pre; 
+	}
+      this->GetIntegrator().DeleteDomainData("tangent");
+      this->GetIntegrator().DeleteDomainData("state");
+      this->SetProblemType("tangent");
+    } // End precomputation of values
     
     for (TimeIterator it =
 	   problem.GetSpaceTimeHandler()->GetTimeDoFHandler().first_interval(); it
@@ -1657,6 +1852,70 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 	  ComputeTimeFunctionals(local_to_global[i], max_timestep);
 	  this->SetProblemType("state");
 	}
+	if(cost_needs_precomputations_ != 0 && outname == "Tangent")
+	{
+	  //Precalculate Tangent functional values
+	  this->GetIntegrator().AddDomainData("tangent",
+					  &(sol.GetSpacialVector()));
+	  this->GetIntegrator().AddDomainData("state",&(GetU().GetSpacialVector()));
+	  unsigned int n_pre = cost_needs_precomputations_;
+	  std::map<std::string,std::vector<dealii::Vector<double> >>::iterator func_vals = auxiliary_time_params_.find("cost_functional_pre_tangent");
+	  
+	  for(unsigned int pre_it = 0; pre_it  < n_pre; pre_it++)
+	  {
+	    this->SetProblemType("cost_functional_pre_tangent",pre_it);
+	    this->GetOutputHandler()->Write("\tprecomputations...",
+					    4 + this->GetBasePriority());
+	    //Begin Precomputations
+	    bool found = false;
+	    double pre = 0;
+	    
+	    if (this->GetProblem()->GetFunctionalType().find("domain")
+		!= std::string::npos)
+	    {
+	      found = true;
+	      pre += this->GetIntegrator().ComputeDomainScalar(*(this->GetProblem()));
+	    }
+	    if (this->GetProblem()->GetFunctionalType().find("point")
+		!= std::string::npos)
+	    {
+	      found = true;
+	      pre += this->GetIntegrator().ComputePointScalar(*(this->GetProblem()));
+	    }
+	    if (this->GetProblem()->GetFunctionalType().find("boundary")
+		!= std::string::npos)
+	    {
+	      found = true;
+	      pre += this->GetIntegrator().ComputeBoundaryScalar(
+		*(this->GetProblem()));
+	    }
+	    if (this->GetProblem()->GetFunctionalType().find("face")
+		!= std::string::npos)
+	    {
+	      found = true;
+	      pre += this->GetIntegrator().ComputeFaceScalar(*(this->GetProblem()));
+	    }
+	    if (this->GetProblem()->GetFunctionalType().find("algebraic")
+		!= std::string::npos)
+	    {
+	      found = true;
+	      pre += this->GetIntegrator().ComputeAlgebraicScalar(*(this->GetProblem()));
+	    }
+	    
+	    if (!found)
+	    {
+	      throw DOpEException(
+		"Unknown Functional Type: "
+		+ this->GetProblem()->GetFunctionalType(),
+		"InstatReducedProblem::ForwardTimeLoop");
+	    }
+	    //Store Precomputed Values
+	    func_vals->second[local_to_global[i]][pre_it] = pre; 
+	  }
+	this->GetIntegrator().DeleteDomainData("tangent");
+	this->GetIntegrator().DeleteDomainData("state");
+	this->SetProblemType("tangent");
+	} // End precomputation of values
       }
     }
   }
@@ -1713,6 +1972,23 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
       this->GetProblem()->AddAuxiliaryToIntegrator(this->GetIntegrator());
       this->GetProblem()->AddPreviousAuxiliaryToIntegrator(this->GetIntegrator());
 
+      if(outname == "Adjoint" && cost_needs_precomputations_ != 0)
+      {
+	std::map<std::string,std::vector<dealii::Vector<double> >>::iterator func_vals = auxiliary_time_params_.find("cost_functional_pre");
+	this->GetIntegrator().AddParamData("cost_functional_pre",&(func_vals->second[max_timestep]));
+      }
+      if(outname == "Hessian" && cost_needs_precomputations_ != 0)
+      {
+	{
+	  std::map<std::string,std::vector<dealii::Vector<double> >>::iterator func_vals = auxiliary_time_params_.find("cost_functional_pre");
+	  this->GetIntegrator().AddParamData("cost_functional_pre",&(func_vals->second[max_timestep]));
+	}
+	{
+	  std::map<std::string,std::vector<dealii::Vector<double> >>::iterator func_vals = auxiliary_time_params_.find("cost_functional_pre_tangent");
+	  this->GetIntegrator().AddParamData("cost_functional_pre_tangent",&(func_vals->second[max_timestep]));
+	}
+      }
+
       //TODO: Possibly another solver for the initial value than for the pde...
       build_state_matrix_ = this->GetNonlinearSolver("adjoint").NonlinearSolve_Initial(
           initial_problem, u_alt, true, true);
@@ -1720,6 +1996,15 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 
       this->GetProblem()->DeleteAuxiliaryFromIntegrator(this->GetIntegrator());
       this->GetProblem()->DeletePreviousAuxiliaryFromIntegrator(this->GetIntegrator());
+      if(outname == "Adjoint" && cost_needs_precomputations_ != 0)
+      {
+	this->GetIntegrator().DeleteParamData("cost_functional_pre");
+      }
+      if(outname == "Hessian" && cost_needs_precomputations_ != 0)
+      {
+	this->GetIntegrator().DeleteParamData("cost_functional_pre");
+	this->GetIntegrator().DeleteParamData("cost_functional_pre_tangent");
+      }
       
     }
     sol.GetSpacialVector() = u_alt;
@@ -1759,12 +2044,37 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 	
 	this->GetProblem()->AddAuxiliaryToIntegrator(
 	  this->GetIntegrator());
+	if(outname == "Adjoint" && cost_needs_precomputations_ != 0)
+	{
+	  std::map<std::string,std::vector<dealii::Vector<double> >>::iterator func_vals = auxiliary_time_params_.find("cost_functional_pre");
+	  this->GetIntegrator().AddParamData("cost_functional_pre",&(func_vals->second[local_to_global[j+1]]));
+	}
+	if(outname == "Hessian" && cost_needs_precomputations_ != 0)
+	{
+	  {
+	    std::map<std::string,std::vector<dealii::Vector<double> >>::iterator func_vals = auxiliary_time_params_.find("cost_functional_pre");
+	    this->GetIntegrator().AddParamData("cost_functional_pre",&(func_vals->second[local_to_global[j+1]]));
+	  }
+	  {
+	    std::map<std::string,std::vector<dealii::Vector<double> >>::iterator func_vals = auxiliary_time_params_.find("cost_functional_pre_tangent");
+	    this->GetIntegrator().AddParamData("cost_functional_pre_tangent",&(func_vals->second[local_to_global[j+1]]));
+	  }
+	}
 		
 	this->GetNonlinearSolver("adjoint").NonlinearLastTimeEvals(problem,
 								   u_alt, sol.GetSpacialVector());
 	
 	this->GetProblem()->DeleteAuxiliaryFromIntegrator(
 	  this->GetIntegrator());
+	if(outname == "Adjoint" && cost_needs_precomputations_ != 0)
+	{
+	  this->GetIntegrator().DeleteParamData("cost_functional_pre");
+	}
+	if(outname == "Hessian" && cost_needs_precomputations_ != 0)
+	{
+	  this->GetIntegrator().DeleteParamData("cost_functional_pre");
+	  this->GetIntegrator().DeleteParamData("cost_functional_pre_tangent");
+	}
 
 	problem.SetTime(time,local_to_global[j], it);
 	this->GetProblem()->AddAuxiliaryToIntegrator(
@@ -1774,6 +2084,22 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 	if(local_to_global[j] != 0)
 	  this->GetProblem()->AddPreviousAuxiliaryToIntegrator(
 	    this->GetIntegrator());
+	if(outname == "Adjoint" && cost_needs_precomputations_ != 0)
+	{
+	  std::map<std::string,std::vector<dealii::Vector<double> >>::iterator func_vals = auxiliary_time_params_.find("cost_functional_pre");
+	  this->GetIntegrator().AddParamData("cost_functional_pre",&(func_vals->second[local_to_global[j]]));
+	}
+	if(outname == "Hessian" && cost_needs_precomputations_ != 0)
+	{
+	  {
+	    std::map<std::string,std::vector<dealii::Vector<double> >>::iterator func_vals = auxiliary_time_params_.find("cost_functional_pre");
+	    this->GetIntegrator().AddParamData("cost_functional_pre",&(func_vals->second[local_to_global[j]]));
+	  }
+	  {
+	    std::map<std::string,std::vector<dealii::Vector<double> >>::iterator func_vals = auxiliary_time_params_.find("cost_functional_pre_tangent");
+	    this->GetIntegrator().AddParamData("cost_functional_pre_tangent",&(func_vals->second[local_to_global[j]]));
+	  }
+	}
 	
 	build_adjoint_matrix_
 	  = this->GetNonlinearSolver("adjoint").NonlinearSolve(problem,
@@ -1787,7 +2113,16 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 	if(local_to_global[j] != 0)
 	  this->GetProblem()->DeletePreviousAuxiliaryFromIntegrator(
 	    this->GetIntegrator());
-	
+	if(outname == "Adjoint" && cost_needs_precomputations_ != 0)
+	{
+	  this->GetIntegrator().DeleteParamData("cost_functional_pre");
+	}
+	if(outname == "Hessian" && cost_needs_precomputations_ != 0)
+	{
+	  this->GetIntegrator().DeleteParamData("cost_functional_pre");
+	  this->GetIntegrator().DeleteParamData("cost_functional_pre_tangent");
+	}
+
 	//TODO do a transfer to the next grid for changing spatial meshes!
 	u_alt = sol.GetSpacialVector();
 	this->GetOutputHandler()->Write(sol.GetSpacialVector(),

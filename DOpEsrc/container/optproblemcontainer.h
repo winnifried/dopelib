@@ -3370,11 +3370,11 @@ namespace DOpE
         for (unsigned int i = 0; i < control_dirichlet_values_.size(); i++)
           control_dirichlet_values_[i]->SetTime(time);
         //Functionals
-        GetFunctional()->SetTime(time);
+        GetFunctional()->SetTime(time,interval_length_);
         for (unsigned int i = 0; i < aux_functionals_.size(); i++)
-          aux_functionals_[i]->SetTime(time);
+          aux_functionals_[i]->SetTime(time,interval_length_);
         //PDE
-        this->GetPDE().SetTime(time);
+        this->GetPDE().SetTime(time,interval_length_);
       }
       //Update Auxiliary Control, State and Constraint Vectors
       {

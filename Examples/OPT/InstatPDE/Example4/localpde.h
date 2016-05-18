@@ -41,7 +41,7 @@ template<
     public:
 
       LocalPDE() :
-      state_block_component_(1, 0), control_block_component_(1, 0)
+           state_block_component_(1, 0), control_block_component_(1, 0)
       {
 
       }
@@ -385,7 +385,6 @@ template<
 		       * state_fe_values.shape_value(i,q_point)
 		       * state_fe_values.shape_value(j,q_point))
 		* state_fe_values.JxW(q_point);
-		       
             }
           }
         }

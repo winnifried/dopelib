@@ -40,16 +40,7 @@ template<
   class LocalPointFunctionalP1 : public FunctionalInterface<ElementDataContainer,
       FaceDataContainer, DH, VECTOR, dopedim, dealdim>
   {
-    private:
-      mutable double time;
-
     public:
-
-      void
-      SetTime(double t) const
-      {
-        time = t;
-      }
 
       bool
       NeedTime() const
@@ -104,16 +95,7 @@ template<
   class LocalPointFunctionalP2 : public FunctionalInterface<EDC, FDC, DH,
       VECTOR, dopedim, dealdim>
   {
-    private:
-      mutable double time;
-
     public:
-
-      void
-      SetTime(double t) const
-      {
-        time = t;
-      }
 
       bool
       NeedTime() const

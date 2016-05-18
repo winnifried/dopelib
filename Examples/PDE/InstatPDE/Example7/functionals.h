@@ -88,22 +88,14 @@ template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
       {
         return "Mean-value";
       }
-      // include NeedTime
-      void
-      SetTime(double t) const
-      {
-        time_ = t;
-      }
 
       bool
       NeedTime() const
       {
-        if (fabs(time_ - 1.) < 1.e-13)
+        if (fabs(this->GetTime() - 1.) < 1.e-13)
           return true;
         return false;
       }
 
-    private:   
-      mutable double time_;
   };
 #endif /* FUNCTIONALS_H_ */

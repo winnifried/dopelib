@@ -1,5 +1,12 @@
 Changelog DOpE
 ==============
+18.05.2016: Updated the instatreducedproblem so that 
+	    optimization problems with cost-functionals given as 
+	    time integrals of functions of space-integrals are possible.
+	    An example is provided in OPT/InstatPDE/Example4
+18.05.2016: Updated the pde and functional interfaces. Now both provide
+	    the current time and the time-step-size via corresponding
+	    GetTime and GetTimeStepSize functions.
 17.05.2016: Updated the statreducedproblem so that 
 	    optimization problems with cost-functionals given by 
 	    functions of integrals -- such as the absolute-value of the

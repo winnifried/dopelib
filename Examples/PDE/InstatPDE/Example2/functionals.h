@@ -40,17 +40,6 @@ template<
   class LocalPointFunctionalPressure : public FunctionalInterface<EDC, FDC, DH,
       VECTOR, dopedim, dealdim>
   {
-    private:
-      mutable double time_;
-
-    public:
-
-      void
-      SetTime(double t) const
-      {
-        time_ = t;
-      }
-
       bool
       NeedTime() const
       {
@@ -109,17 +98,7 @@ template<
   class LocalPointFunctionalDeflectionX : public FunctionalInterface<EDC, FDC,
       DH, VECTOR, dopedim, dealdim>
   {
-    private:
-      mutable double time_;
-
     public:
-
-      void
-      SetTime(double t) const
-      {
-        time_ = t;
-      }
-
       bool
       NeedTime() const
       {
@@ -171,16 +150,7 @@ template<
   class LocalPointFunctionalDeflectionY : public FunctionalInterface<EDC, FDC,
       DH, VECTOR, dopedim, dealdim>
   {
-    private:
-      mutable double time_;
-
     public:
-
-      void
-      SetTime(double t) const
-      {
-        time_ = t;
-      }
 
       bool
       NeedTime() const
@@ -235,7 +205,6 @@ template<
       DH, VECTOR, dopedim, dealdim>
   {
     private:
-      mutable double time_;
       double density_fluid, viscosity_, lame_coefficient_mu_,
           poisson_ratio_nu_, lame_coefficient_lambda_;
 
@@ -263,12 +232,6 @@ template<
         lame_coefficient_lambda_ =
             (2 * poisson_ratio_nu_ * lame_coefficient_mu_)
                 / (1.0 - 2 * poisson_ratio_nu_);
-      }
-
-      void
-      SetTime(double t) const
-      {
-        time_ = t;
       }
 
       bool
@@ -451,7 +414,6 @@ template<
       DH, VECTOR, dopedim, dealdim>
   {
     private:
-      mutable double time_;
       double density_fluid, viscosity_, lame_coefficient_mu_,
           poisson_ratio_nu_, lame_coefficient_lambda_;
 
@@ -479,12 +441,6 @@ template<
         lame_coefficient_lambda_ =
             (2 * poisson_ratio_nu_ * lame_coefficient_mu_)
                 / (1.0 - 2 * poisson_ratio_nu_);
-      }
-
-      void
-      SetTime(double t) const
-      {
-        time_ = t;
       }
 
       bool

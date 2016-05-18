@@ -39,16 +39,7 @@ template<
   class LocalPointFunctionalPressure : public FunctionalInterface<EDC, FDC, DH,
       VECTOR, dopedim, dealdim>
   {
-    private:
-      mutable double time;
-
     public:
-
-      void
-      SetTime(double t) const
-      {
-        time = t;
-      }
 
       bool
       NeedTime() const
@@ -108,8 +99,6 @@ template<
   class LocalBoundaryFunctionalDrag : public FunctionalInterface<EDC, FDC, DH,
       VECTOR, dopedim, dealdim>
   {
-    private:
-      mutable double time_;
       double density_fluid_, viscosity_;
       double drag_lift_constant_;
 
@@ -124,19 +113,12 @@ template<
             Patterns::Double(0));
       }
 
-      LocalBoundaryFunctionalDrag(ParameterReader &param_reader) :
-          time_(0)
+      LocalBoundaryFunctionalDrag(ParameterReader &param_reader) 
       {
         param_reader.SetSubsection("Local PDE parameters");
         density_fluid_ = param_reader.get_double("density_fluid");
         viscosity_ = param_reader.get_double("viscosity");
         drag_lift_constant_ = param_reader.get_double("drag_lift_constant");
-      }
-
-      void
-      SetTime(double t) const
-      {
-        time_ = t;
       }
 
       bool
@@ -226,7 +208,6 @@ template<
       VECTOR, dopedim, dealdim>
   {
     private:
-      mutable double time_;
       double density_fluid_, viscosity_;
       double drag_lift_constant_;
 
@@ -241,18 +222,12 @@ template<
             Patterns::Double(0));
       }
 
-      LocalBoundaryFunctionalLift(ParameterReader &param_reader) : time_(0)
+      LocalBoundaryFunctionalLift(ParameterReader &param_reader) 
       {
         param_reader.SetSubsection("Local PDE parameters");
         density_fluid_ = param_reader.get_double("density_fluid");
         viscosity_ = param_reader.get_double("viscosity");
         drag_lift_constant_ = param_reader.get_double("drag_lift_constant");
-      }
-
-      void
-      SetTime(double t) const
-      {
-        time_ = t;
       }
 
       bool

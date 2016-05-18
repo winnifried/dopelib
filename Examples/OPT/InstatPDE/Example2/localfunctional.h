@@ -39,24 +39,16 @@ template<
       dopedim, dealdim>
   {
     public:
-      LocalFunctional() :
-          time_(0)
+      LocalFunctional() 
       {
-      }
-
-      // include NeedTime
-      void
-      SetTime(double t) const
-      {
-        time_ = t;
       }
 
       bool
       NeedTime() const
       {
-        if (fabs(time_ - 1.0) < 1.e-13)
+        if (fabs(this->GetTime() - 1.0) < 1.e-13)
           return true;
-        if (fabs(time_) < 1.e-13)
+        if (fabs(this->GetTime()) < 1.e-13)
           return true;
         return false;
       }
@@ -66,7 +58,7 @@ template<
       {
         unsigned int n_q_points = edc.GetNQPoints();
         double ret = 0.;
-        if (fabs(time_ - 1.0) < 1.e-13)
+        if (fabs(this->GetTime() - 1.0) < 1.e-13)
         {
           const DOpEWrapper::FEValues<dealdim> & state_fe_values =
               edc.GetFEValuesState();
@@ -86,7 +78,7 @@ template<
           }
           return ret;
         }
-        if (fabs(time_) < 1.e-13)
+        if (fabs(this->GetTime()) < 1.e-13)
         {
           const DOpEWrapper::FEValues<dealdim> & state_fe_values =
               edc.GetFEValuesControl();
@@ -114,7 +106,7 @@ template<
             edc.GetFEValuesState();
         unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
         unsigned int n_q_points = edc.GetNQPoints();
-        if (fabs(time_ - 1.0) < 1.e-13)
+        if (fabs(this->GetTime() - 1.0) < 1.e-13)
         {
           //endtimevalue
           fvalues_.resize(n_q_points);
@@ -146,7 +138,7 @@ template<
         unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
         unsigned int n_q_points = edc.GetNQPoints();
 
-        if (fabs(time_) < 1.e-13)
+        if (fabs(this->GetTime()) < 1.e-13)
         {
           //endtimevalue
           qvalues_.resize(n_q_points);
@@ -175,7 +167,7 @@ template<
         unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
         unsigned int n_q_points = edc.GetNQPoints();
 
-        if (fabs(time_ - 1.0) < 1.e-13)
+        if (fabs(this->GetTime() - 1.0) < 1.e-13)
         {
           //endtimevalue
           duvalues_.resize(n_q_points);
@@ -215,7 +207,7 @@ template<
         unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
         unsigned int n_q_points = edc.GetNQPoints();
 
-        if (fabs(time_) < 1.e-13)
+        if (fabs(this->GetTime()) < 1.e-13)
         {
           dqvalues_.resize(n_q_points);
 
@@ -262,8 +254,6 @@ template<
       {
 	return (2.*exp(2.)-1.)/(exp(2.)-1.)*sin(p(0)) * sin(p(1));
       }
-
-      mutable double time_;
 
   };
 #endif

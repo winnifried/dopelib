@@ -683,6 +683,12 @@ namespace DOpE
           found = true;
           ret += this->GetIntegrator().ComputeFaceScalar(*(this->GetProblem()));
         }
+	if (this->GetProblem()->GetFunctionalType().find("algebraic")
+            != std::string::npos)
+        {
+          found = true;
+          ret += this->GetIntegrator().ComputeAlgebraicScalar(*(this->GetProblem()));
+        }
 
         if (!found)
         {
@@ -761,6 +767,12 @@ namespace DOpE
         {
           found = true;
           ret += this->GetIntegrator().ComputeFaceScalar(*(this->GetProblem()));
+        }
+	if (this->GetProblem()->GetFunctionalType().find("algebraic")
+            != std::string::npos)
+        {
+          found = true;
+          ret += this->GetIntegrator().ComputeAlgebraicScalar(*(this->GetProblem()));
         }
 
         if (!found)

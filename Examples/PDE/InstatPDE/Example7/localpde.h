@@ -641,16 +641,6 @@ template<
 				   "slope");
       }
 
-      void
-	SetTime(double t) const
-        {
-	  if (t > 0.)
-	  {
-	    if( fabs( time_ - t) > 1.e-12)
-	      time_step_ = fabs( time_ - t);
-	  }
-	  time_ = t;
-        }
     private:
       vector<Vector<double> > uvalues_;
       vector<Vector<double> > uvalues_nbr_;
@@ -659,7 +649,6 @@ template<
       vector<unsigned int> state_block_component_;   
       
       double R_, T_, alpha_, lambda_, D_,g_, hprime_;
-      mutable double time_, time_step_;
       double stab_param_;
 
       void SetStab()

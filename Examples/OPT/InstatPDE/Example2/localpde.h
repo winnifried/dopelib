@@ -39,7 +39,7 @@ template<
     public:
 
       LocalPDE() :
-          my_time_(0), state_block_component_(1, 0), control_block_component_(1, 0)
+          state_block_component_(1, 0), control_block_component_(1, 0)
       {
 
       }
@@ -636,12 +636,6 @@ template<
         return state_block_component_;
       }
 
-      void
-      SetTime(double t) const
-      {
-        my_time_ = t;
-      }
-
     private:
       vector<double> fvalues_;
       vector<double> uvalues_;
@@ -651,7 +645,6 @@ template<
       vector<double> dzvalues_;
       vector<double> duvalues_;
       vector<double> funcgradvalues_;
-      mutable double my_time_;
 
       vector<Tensor<1, dealdim> > ugrads_;
       vector<Tensor<1, dealdim> > zgrads_;

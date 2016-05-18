@@ -1423,9 +1423,11 @@ namespace DOpE
 
         /******************************************************/
 
-        virtual void
-	  SetTime(double /*t*/) const
+        void
+	  SetTime(double t, double step_size) const
         {
+	  time_ = t;
+	  step_size_ = step_size;
         }
 
         /******************************************************/
@@ -1481,8 +1483,12 @@ namespace DOpE
 
       protected:
         std::string problem_type_;
+	double GetTime() const { return time_; }
+	double GetTimeStepSize() const { return step_size_; } 
 
       private:
+	mutable double time_;
+	mutable double step_size_;
     };
 }
 

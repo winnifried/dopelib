@@ -1,5 +1,11 @@
 TODO DOpE
 =========
+- The integration of functionals can not deal with the 
+  case that parts of the functional are 
+  time-local and others are time-distributed. This should be 
+  fixed.
+  See the comments in localfunctional.h in 
+  OPT/InstatPDE/Example4
 - In the adjoint/adjoint_hessian run of nonstationary problems,
   at the initial time of the forward problem, the corresponding 
   Init_* Integrals should be used!

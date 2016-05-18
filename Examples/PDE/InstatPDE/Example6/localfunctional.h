@@ -38,22 +38,14 @@ template<
       dopedim, dealdim>
   {
     public:
-      LocalFunctional() :
-          time_(0)
+      LocalFunctional()
       {
-      }
-
-      // include NeedTime
-      void
-      SetTime(double t) const
-      {
-        time_ = t;
       }
 
       bool
       NeedTime() const
       {
-        if (fabs(time_ - 100000.) < 1.e-13)
+        if (fabs(this->GetTime() - 100000.) < 1.e-13)
           return true;
         return false;
       }
@@ -83,8 +75,6 @@ template<
       }
 
     private:
-
-      mutable double time_;
 
   };
 #endif

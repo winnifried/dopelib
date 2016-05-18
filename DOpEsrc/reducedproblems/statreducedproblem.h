@@ -465,6 +465,7 @@ namespace DOpE
           adjoint_reinit_ = true;
           gradient_reinit_ = true;
         }
+	cost_needs_precomputations_=0;
       }
 
   /******************************************************/
@@ -496,6 +497,7 @@ namespace DOpE
           adjoint_reinit_ = true;
           gradient_reinit_ = true;
         }
+	cost_needs_precomputations_ = 0;
       }
 
   /******************************************************/
@@ -585,6 +587,7 @@ namespace DOpE
       GetZForEE().ReInit();
 
       build_control_matrix_ = true;
+      cost_needs_precomputations_ = 0;
     }
 
   /******************************************************/
@@ -1467,6 +1470,12 @@ namespace DOpE
         {
           found = true;
           ret += this->GetIntegrator().ComputeFaceScalar(*(this->GetProblem()));
+        } 
+	if (this->GetProblem()->GetFunctionalType().find("algebraic")
+            != std::string::npos)
+        {
+          found = true;
+          ret += this->GetIntegrator().ComputeAlgebraicScalar(*(this->GetProblem()));
         }
 
         if (!found)

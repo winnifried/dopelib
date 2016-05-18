@@ -41,7 +41,7 @@ template<
     public:
 
       LocalPDE() :
-          state_block_component_(1, 0), my_time_(0)
+          state_block_component_(1, 0)
       {
 
       }
@@ -131,7 +131,7 @@ template<
         unsigned int n_q_points = edc.GetNQPoints();
 
         RightHandSideFunction fvalues;
-        fvalues.SetTime(my_time_);
+        fvalues.SetTime(this->GetTime());
 
         for (unsigned int q_point = 0; q_point < n_q_points; ++q_point)
         {
@@ -295,12 +295,6 @@ template<
         return state_block_component_;
       }
 
-      void
-      SetTime(double t) const
-      {
-        my_time_ = t;
-      }
-
     private:
       vector<double> fvalues_;
       vector<double> uvalues_;
@@ -310,6 +304,5 @@ template<
       vector<unsigned int> state_block_component_;
       vector<unsigned int> control_block_components_;
      
-      mutable double my_time_;
   };
 #endif

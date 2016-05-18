@@ -1,0 +1,67 @@
+\subsubsection{General problem description}
+
+This example is a modified version of \texttt{OPT/InstatPDE/Example1}. 
+Again, we consider the heat equation, this time with an additional nonlinear
+term and most important a time derivative leading to a 
+nonstationary optimization problem. The governing equation is
+\begin{equation*}
+\partial_t u(t,x,y) - \Delta u(t,x,y) + u(t,x,y)^2 = f(t,x,y),
+\end{equation*}
+with homogeneous Dirichlet-data.
+The computational domain is $\Omega \times I = [0,\pi]^2 \times [0,1]$ with the data
+\begin{align*}
+f(t,x,y) &= (3-2t)e^{t-t^2} \sin(x) \sin(y) + e^{(t-t^2)^2} \sin^2(x) \sin^2(y),\\
+u_0(x,y) &= q(x,y).
+\end{align*}
+
+In contrast to \texttt{OPT/InstatPDE/Example1}, we modify the cost-functional
+such that a (spatial) mean-value of zero is desired for the state.
+The corresponding functional is
+\[
+ \min_{q,u} J(q,u) = \int_0^1 \frac{1}{2}\left|\int_{\Omega} u(t,x,y) \,\mathrm{d}(x,y)\right|^2 \,\mathrm{d}t + \frac{1}{2} \int_{\Omega} (q(x,y) - \sin(x) \sin(y))^2\,\mathrm{d}(x,y).
+\]
+\subsubsection{Program description}
+The following things differ from the previous examples:\\[2mm]
+We are now considering a cost-functional, that can not be evaluated as one single integral. Instead,
+we need to evaluate the integral $\int_{\Omega} u(t,x,y) \,d(x,y)$ in space first in each time step and 
+then integrate over its absolute value in time. We have seen a similar structure in 
+\texttt{OPT/StatPDE/Example10}~\ref{OPT_Stat_Param_Nonlin_Fluid_extension}. Here, the integral 
+in question is of the form
+\[
+\int_I g(\int f(u(t,x)) \mathrm{d}x) \mathrm{d}t
+\]
+Consequently, we need to set \texttt{unsigned int NeedPrecomputations() const} to the value $1$ 
+as we need to calculate -- in each time point -- the values $\tilde{f}(t) = \int f(u(t,x)) \mathrm{d}x$ 
+prior to the evaluation of the cost functional.
+Then the first derivative of the functional in the direction $\delta u$ is given as 
+\begin{align*}
+   \left(\int_I(g\left(\tilde{f}(t)\right)\mathrm{d}t\right)'\delta u
+  &= \int_I g'(\tilde{f}(t)) \int f'(u(t,x)) \delta u(t,x) \mathrm{d}x\;\mathrm{d}t \\
+  &= \int_I \int g'(\tilde{f}(t)) f'(u(t,x)) \delta u(t,x) \mathrm{d}x\;\mathrm{d}t
+\end{align*}
+And for the second derivative, we also calculate the tangential derivatives 
+\[
+\tilde{f}_{u}(t) = \int f'(u(t,x)) \delta u(t,x) \mathrm{d}x = \int_{\Omega} \delta u(t,x,y) \,\mathrm{d}(x,y).
+\]
+With this the second derivative in direction $\delta u $ and $\tau u$ is given as 
+\begin{align*}
+   \Biggl(\int_Ig&\left(\tilde{f}(t)\right)\mathrm{d}t\Biggr)''(\delta u,\tau u)\\
+  &= \int_I g''(\tilde{f}(t)) \tilde{f}_{u}(t) \int f'(u(t,x)) \tau u(t,x) \mathrm{d}x\;\mathrm{d}t \\
+  &\;\;\;\;+ \int_I \int g'(\tilde{f}(t)) f''(u(t,x)) \delta u(t,x) \tau u(t,x) \mathrm{d}x\;\mathrm{d}t\\
+&= \int_I \int \left( g''(\tilde{f}(t)) \tilde{f}_{u}(t)f'(u(t,x))+ g'(\tilde{f}(t)) f''(u(t,x)) \delta u(t,x) \right) \tau u(t,x) \mathrm{d}x\;\mathrm{d}t.
+\end{align*}
+As in \texttt{OPT/StatPDE/Example10} the higher derivatives can be calculated by one space-time 
+integral if the needed values $\tilde{f}$ and $\tilde{f}_u$ are available at the 
+different time-points. These values can be accessed as ParamValues with the respective 
+labels \texttt{cost\_functional\_pre} and \texttt{cost\_functional\_pre\_tangent}.
+
+One further thing differs from the previous examples. This is that the cost functional 
+now has one part being integrated over space-time while the other 
+is acting in space (at initial-time) only. The two types of functionals can at present 
+not be mixed. Hence both terms are evaluated as a distributed integral 
+over space-time by adding an additional weight to the control-cost integral.
+This weight needs to be specially modified for the derivatives w.r.t. the control
+which are evaluated at the initial time only!
+This modification is not exact and consequently the derivatives are not exactly calculated. 
+The accuracy is increased as the temporal meshes are refined. Hence, if more accuracy 
+in the residual is desired the temporal mesh needs to be further refined. 

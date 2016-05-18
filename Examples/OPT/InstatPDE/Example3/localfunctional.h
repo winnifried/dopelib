@@ -39,16 +39,8 @@ template<
       dopedim, dealdim>
   {
     public:
-      LocalFunctional() :
-          time_(0)
+      LocalFunctional() 
       {
-      }
-
-      // include NeedTime
-      void
-      SetTime(double t) const
-      {
-        time_ = t;
       }
 
       bool
@@ -75,7 +67,7 @@ template<
 	
 	for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
 	{
-	  fvalues_[q_point] =  my::ud(time_,state_fe_values.quadrature_point(q_point));
+	  fvalues_[q_point] =  my::ud(this->GetTime(),state_fe_values.quadrature_point(q_point));
 	  
 	  ret += 0.5 * (uvalues_[q_point] - fvalues_[q_point])
 	    * (uvalues_[q_point] - fvalues_[q_point])
@@ -103,7 +95,7 @@ template<
 	
 	for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
 	{
-	  fvalues_[q_point] = my::ud(time_,state_fe_values.quadrature_point(q_point));
+	  fvalues_[q_point] = my::ud(this->GetTime(),state_fe_values.quadrature_point(q_point));
 	  
 	  for (unsigned int i = 0; i < n_dofs_per_element; i++)
 	  {
@@ -214,8 +206,6 @@ template<
       vector<double> uvalues_;
       vector<double> duvalues_;
       Vector<double> dqvalues_;
-
-      mutable double time_;
 
   };
 #endif

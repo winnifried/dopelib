@@ -40,21 +40,12 @@ template<
   class LocalPointFunctional : public FunctionalInterface<ElementDataContainer,
       FaceDataContainer, dealii::DoFHandler, VECTOR, dopedim, dealdim>
   {
-    private:
-      mutable double time;
-
     public:
-
-      void
-      SetTime(double t) const
-      {
-        time = t;
-      }
 
       bool
       NeedTime() const
       {
-        if (time == 0.)
+        if (this->GetTime() == 0.)
           return true;
         else
           return false;
@@ -103,21 +94,12 @@ template<
   class LocalPointFunctional2 : public FunctionalInterface<ElementDataContainer,
       FaceDataContainer, dealii::DoFHandler, VECTOR, dopedim, dealdim>
   {
-    private:
-      mutable double time;
-
     public:
-
-      void
-      SetTime(double t) const
-      {
-        time = t;
-      }
 
       bool
       NeedTime() const
       {
-        if (time == 1.)
+        if (this->GetTime() == 1.)
           return true;
         else
           return false;

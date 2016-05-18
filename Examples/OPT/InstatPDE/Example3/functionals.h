@@ -41,21 +41,11 @@ template<
   class LocalPointFunctional : public FunctionalInterface<ElementDataContainer,
       FaceDataContainer, dealii::DoFHandler, VECTOR, dopedim, dealdim>
   {
-    private:
-      mutable double time;
-
     public:
-
-      void
-      SetTime(double t) const
-      {
-        time = t;
-      }
-
       bool
       NeedTime() const
       {
-        if (time == 1.)
+        if (this->GetTime() == 1.)
           return true;
         else
           return false;
@@ -121,18 +111,13 @@ template<
         double r = 0.;
         for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
         {
-          fvalues_[q_point] = my::optu(time,state_fe_values.quadrature_point(q_point));
+          fvalues_[q_point] = my::optu(this->GetTime(),state_fe_values.quadrature_point(q_point));
 
           r +=  (uvalues_[q_point] - fvalues_[q_point])
               * (uvalues_[q_point] - fvalues_[q_point])
               * state_fe_values.JxW(q_point);
         }
         return r;
-      }
-      void
-      SetTime(double t) const
-      {
-        time = t;
       }
 
       bool
@@ -160,7 +145,6 @@ template<
       }
 
     private:
-      mutable double time; 
       vector<double> uvalues_;
       vector<double> fvalues_;
   };
@@ -189,7 +173,7 @@ template<
         }
 
         double r = 0.;
-	fvalues_(0) = my::optq(time);
+	fvalues_(0) = my::optq(this->GetTime());
         for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
         {
           r += 1./(M_PI*M_PI)* (qvalues_(0) - fvalues_(0))
@@ -197,11 +181,6 @@ template<
               * state_fe_values.JxW(q_point);
         }
         return r;
-      }
-      void
-      SetTime(double t) const
-      {
-        time = t;
       }
 
       bool
@@ -229,7 +208,6 @@ template<
       }
 
     private:
-      mutable double time; 
       Vector<double> qvalues_;
       Vector<double> fvalues_;
   };

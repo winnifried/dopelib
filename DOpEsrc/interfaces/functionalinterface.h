@@ -523,11 +523,14 @@ namespace DOpE
          * Sets the time for the functional. This is required by FunctionalInterface::NeedTime, and if the time is
          * used within the functional to compute its value.
          *
-         * @param t   The time that should be set.
+         * @param t           The time that should be set.
+         * @param step_size   The size of the time step.
          */
-      virtual void
-      SetTime(double /*t*/) const
+      void
+      SetTime(double t, double step_size) const
         {
+	  time_ = t;
+	  step_size_ = step_size;
         }
 
         /**
@@ -583,9 +586,15 @@ namespace DOpE
       std::string
       GetProblemType() const;
       unsigned int GetProblemNum() const;
-      private:
+      double GetTime() const { return time_; }
+      double GetTimeStepSize() const { return step_size_; } 
+      
+    private:
       std::string problem_type_;
       unsigned int problem_num_;
+      mutable double time_;
+      mutable double step_size_;
+      
     };
 }
 

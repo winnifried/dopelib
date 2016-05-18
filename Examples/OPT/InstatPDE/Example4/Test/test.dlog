@@ -1,0 +1,37 @@
+DOpElib Copyright (C) 2012 - 2016 DOpElib authors
+This program comes with ABSOLUTELY NO WARRANTY.
+For License details read LICENSE.TXT distributed with this software!
+
+This is DOpElib Version: 4.0.0 pre
+	Status as of: 16/02/2016
+
+	**************************************************
+	*        Starting Reduced Newton Algorithm       *
+	*   Solving : InstatOptProblemContainer	*
+	*  CDoFs : 	81
+	*  SDoFs : 	Number of Timepoints: 301
+		Total   DoFs: 24381
+		Minimal DoFs: 81
+		Maximal DoFs: 81
+	**************************************************
+
+LOG: Allowing IterationCounter `OptNewton_InstatOptProblemContainer' for filenames!
+LOG: Allowing IterationCounter `Time' for filenames!
+	CostFunctional: 8.2
+		 Newton step: 0	 Residual (abs.): 0.56
+		 Newton step: 0	 Residual (rel.): 1.00e+00
+	
+	CostFunctional: 8.07e+00
+		 Newton step: 1	 Residual (rel.):   4.49e-02	 LinearIters [2]	 LineSearch {0} 
+	CostFunctional: 8.07e+00
+		 Newton step: 2	 Residual (rel.):   3.29e-03	 LinearIters [4]	 LineSearch {0} 
+	CostFunctional: 8.07e+00
+		 Newton step: 3	 Residual (rel.):   1.24e-04	 LinearIters [4]	 LineSearch {0} 
+	CostFunctional: 8.07e+00
+
+	**************************************************
+	*        Stopping Reduced Newton Algorithm       *
+	*             after      3  Iterations           *
+	*             with rel. Residual    1.24e-04          *
+	**************************************************
+

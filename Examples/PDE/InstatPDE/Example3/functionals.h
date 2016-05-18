@@ -39,21 +39,12 @@ template<
   class LocalPointFunctional : public FunctionalInterface<EDC, FDC, DH, VECTOR,
       dopedim, dealdim>
   {
-    private:
-      mutable double time;
-
     public:
-
-      void
-      SetTime(double t) const
-      {
-        time = t;
-      }
 
       bool
       NeedTime() const
       {
-        if (time == 1)
+        if (this->GetTime() == 1)
           return true;
         else
           return false;
