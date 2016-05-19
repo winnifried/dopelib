@@ -84,8 +84,8 @@ The library DOpE has been tested to work on both Linux and
 MAC OSX. See also the \texttt{README.OSX} file 
 
 \subsection{g++}
-\texttt{DOpElib} requires a recent \texttt{g++} (at least 4.4.3) due to 
-some new \texttt{C++} features implemented in \texttt{C++0x} and \texttt{C++11}. 
+\texttt{DOpElib} requires a recent \texttt{g++} (at least 4.8) due to 
+some new \texttt{C++} features implemented in \texttt{C++11}. 
 You can check the version number using the command-line argument \texttt{g++ -v}.
 
 Under Linux-systems this typically means that you have to do nothing if you have a recent 
@@ -100,7 +100,7 @@ download \texttt{MacPorts} from \texttt{macports.org}. Once you have installed M
 you can use it to install additional Linux software. 
 First, update the MacPorts installation \texttt{sudo port selfupdate}
 after that you can install a new version of \texttt{g++} using for instance 
-\texttt{sudo port install gcc45} to install version $4.5$ of the compiler.
+\texttt{sudo port install gcc48} to install version $4.8$ of the compiler.
 Afterwards, you need to set the search path appropriate to find the macports version
 of \texttt{g++}, to check if this has been done use \texttt{g++ -v}.
 
@@ -176,7 +176,7 @@ add ipopt to your \texttt{LD\underline{ }LIBRARY\underline{ }PATH}:
 \begin{lstlisting}
 **************************************************************
                  Installation complete!
-Add /home/..../dopelib-2.0/ThirdPartyLibs/ipopt/lib64
+Add /home/..../dopelib-4.0/ThirdPartyLibs/ipopt/lib64
     to your LD\_LIBRARY\_PATH variable
 **************************************************************
 \end{lstlisting}
@@ -184,93 +184,6 @@ Add /home/..../dopelib-2.0/ThirdPartyLibs/ipopt/lib64
 
 
 \section{Installation}\label{sec_installation}
-\subsection{Until Version 2.0}
-To work with DOpElib, your need necessarily deal.II, which installation 
-we describe first. Afterwards, the DOpElib installation is described and finally
-other optional packages might be installed.
-\begin{itemize}
-\item Install \texttt{deal.II} to your home directory, i.e., it should be located in \\
-\texttt{\textasciitilde/deal.II}. \\[1mm]
-If you would like to have another path you will either have to manually edit the files
-\texttt{DOpEsrc/source/Makefile} and \texttt{Examples/Make.global\underline{ }options} and replace the 
-line \\
-\texttt{D = \$(HOME)/deal.II} with the appropriate path.\\[1mm]
-Detailed installing instructions for deal.II (here the last version
-8.1.0) can be found on 
-\texttt{http://www.dealii.org/8.1.0/readme.html}. The deal.II 
-installation instructions are descriptive enough and we omit 
-any further comments and refer to their webpage.
-%
-
-%
-\item Get a copy of \texttt{DOpElib}, see Section~\ref{sec:obtain} for details.
-%
-\item Unpack in your preferred directory:
-\begin{lstlisting}
-~/Software/> tar -xzf dopelib-2.0.tar.gz
-\end{lstlisting}
-to get
-\begin{lstlisting}
-~/Software/dopelib-2.0
-\end{lstlisting}
-To build the \texttt{DOpElib} you have to change to the directory 
-\texttt{DOpEsrc} where you can call 
-\begin{lstlisting}
-~/Software/dopelib-2.0/DOpEsrc> make all
-\end{lstlisting}
-to build the library. You also get various installation options by just typing 
-\texttt{make}.
-\item To generate documentation, please go into:
-\begin{lstlisting}
-~/Software/dopelib-2.0/Examples
-\end{lstlisting}
-Here, you get all options by typing:
-\begin{lstlisting}
-make
-\end{lstlisting}
-Specifically, you can create and run all examples, running a test suite,
-and generating documentation:
-{\footnotesize
-\begin{lstlisting}
-===========================================================================
-=              Makefile for the DOpE documentation                        =
-===========================================================================
-=                                                                         =
-= The following targets exist:                                            =
-=    all       :  Make all examples (in optimized mode)                   =
-=    allignore :  Make all examples (in optimized mode), ignore errors.   =
-=    clean     :  Cleaning up all examples                                =
-=    tests     :  Run all test param data.                                =
-=    cat       :  Run clean, run all, run tests (combine these commands)  =
-=    catignore :  Same as cat, but ignores compiler errors.               =
-=    pdf-doc   :  Create documentation in pdf file format via latexmk     =
-=    doc       :  Create documentation in pdf file format via latexmk     =
-=    distclean :  Cleaning up, including documentation                    =
-=    warncheck :  Checks whether all Examples compile without warnings    =
-===========================================================================
-\end{lstlisting}
-}
-For html documentation, change into:
-\begin{lstlisting}
-~/Software/dopelib-2.0/doxygen
-\end{lstlisting}
-and then typing \texttt{make}. Doxygen documentation
-will require either 
-latex or doxygen to be installed on your computer.
-\item If you wish to test if everything worked. To do so you can 
-change to the \texttt{Examples} directory and \texttt{make tests} which will give you a 
-list of all the examples and whether they behave as expected by the library, see also 
-Chapter~\ref{chap:test}.
-\item  If you want to use some of the supported third party libraries install them and follow 
- the instructions in \texttt{ThirdPartyLibs/README}. There may be further information 
- in some \texttt{ThirdPartyLibs/*.INSTALLNOTES} that you may want to
- consider.\\[3mm]
- As example, the installation of ipopt works as follows:\\
-In the path \texttt{~/dope/ThirdPartyLibs>} type in the terminal\\
-\texttt{./install-free-libs.sh}
-
-
-\end{itemize}
 \subsection{After Version 2.0 - CMake build system}
 To work with DOpElib, your need necessarily deal.II, which installation 
 we describe first. Afterwards, the DOpElib installation is described and finally
@@ -285,8 +198,8 @@ will be found by cmake, i.e.,
 export DEAL_II_DIR=[path to deal.ii]
 \end{lstlisting}
 Detailed installing instructions for deal.II (here the last version
-8.1.0) can be found on 
-\texttt{http://www.dealii.org/8.1.0/readme.html}. The deal.II 
+8.4.0) can be found on 
+\texttt{http://www.dealii.org/8.4.0/readme.html}. The deal.II 
 installation instructions are descriptive enough and we omit 
 any further comments and refer to their webpage.
 %
@@ -296,23 +209,23 @@ any further comments and refer to their webpage.
 %
 \item Unpack in your preferred directory:
 \begin{lstlisting}
-~/Software/> tar -xzf dopelib-3.0.tar.gz
+~/Software/> tar -xzf dopelib-4.0.tar.gz
 \end{lstlisting}
 to get
 \begin{lstlisting}
-~/Software/dopelib-3.0
+~/Software/dopelib-4.0
 \end{lstlisting}
 To build the \texttt{DOpElib} you have to change to the directory 
 \texttt{DOpEsrc} where you can call 
 \begin{lstlisting}
-~/Software/dopelib-3.0/DOpEsrc> make c-all
+~/Software/dopelib-4.0/DOpEsrc> make c-all
 \end{lstlisting}
 to build and configure the library using cmake. 
 You also get various installation options by just typing 
 \texttt{make}.
 \item To generate documentation, please go into:
 \begin{lstlisting}
-~/Software/dopelib-3.0/Examples
+~/Software/dopelib-4.0/Examples
 \end{lstlisting}
 Here, you get all options by typing:
 \begin{lstlisting}
@@ -327,25 +240,20 @@ and generating documentation:
 ===========================================================================
 =                                                                         =
 = The following targets exist:                                            =
-=    all       :  Make all examples (in optimized mode)                   =
 =    c-all     :  Make all examples using cmake                           =
-=    allignore :  Make all examples (in optimized mode), ignore errors.   =
 =    clean     :  Cleaning up all examples                                =
 =    tests     :  Run all test param data.                                =
-=    cat       :  Run clean, run all, run tests (combine these commands)  =
 =    c-cat     :  Run clean, run c-all, run tests (combine these commands)=
-=    catignore :  Same as cat, but ignores compiler errors.               =
-=    pdf-doc   :  Create documentation in pdf file format via latexmk     =
 =    doc       :  Create documentation in pdf file format via latexmk     =
 =    distclean :  Cleaning up, including documentation                    =
 =    warncheck :  Checks whether all Examples compile without warnings    =
 ===========================================================================
 \end{lstlisting}
 }
-The new options are $c-all$ and $c-cat$ utilizing the cmake build system.
+The options are $c-all$ and $c-cat$ utilizing the cmake build system.
 For html documentation, change into:
 \begin{lstlisting}
-~/Software/dopelib-3.0/doxygen
+~/Software/dopelib-4.0/doxygen
 \end{lstlisting}
 and then typing \texttt{make}. Doxygen documentation
 will require either 
@@ -367,10 +275,10 @@ In the path \texttt{~/dope/ThirdPartyLibs>} type in the terminal\\
 \section{FAQs}
 \paragraph{1.) When building the library I get an error message:}
 \begin{itemize}
-\item \textbf{unrecognized command line option "-std=gnu++0x"}\\
+\item \textbf{unrecognized command line option "-std=c++11"}\\
   This means that your compiler is too old. You can check the 
   version of your compiler using \texttt{g++ -v}. If the version is lower than
-  \texttt{4.5} you need to get a newer compiler version.
+  \texttt{4.8} you need to get a newer compiler version.
 \end{itemize}
 
 \paragraph{2.) I have installed a new g++ compiler but g++ -v still finds the old one :}
@@ -390,8 +298,8 @@ In the path \texttt{~/dope/ThirdPartyLibs>} type in the terminal\\
   For example on Mac OSX you will find only one g++ compiler \texttt{/usr/bin/g++}
   which is in fact a symlink to \texttt{/usr/bin/g++-4.2}. 
   So that you need to install a newer compiler. You can do so, for instance
-  using macports. Then you can find, e.g., g++ version 4.5 on OSX Lion 
-  in \texttt{/opt/local/bin/g++-mp-4.5}. 
+  using macports. Then you can find, e.g., g++ version 4.8 on OSX Lion 
+  in \texttt{/opt/local/bin/g++-mp-4.8}. 
 
 
 %%%%%%%%%%%%%%%%%%
