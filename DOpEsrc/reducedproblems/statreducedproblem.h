@@ -1418,7 +1418,10 @@ namespace DOpE
 	  AllocateAuxiliaryParams(tmp.str(),this->GetProblem()->FunctionalNeedPrecomputations());
 	  CalculatePreFunctional("aux_functional","_pre",
 				 this->GetProblem()->FunctionalNeedPrecomputations(),i);
+	  auto func_vals = GetAuxiliaryParams(tmp.str());
+	  this->GetIntegrator().AddParamData(tmp.str(),&(func_vals->second));
 	}
+
         if (this->GetProblem()->GetFunctionalType().find("domain")
             != std::string::npos)
         {
@@ -1460,6 +1463,13 @@ namespace DOpE
                   + this->GetProblem()->GetFunctionalType(),
               "StatReducedProblem::ComputeReducedFunctionals");
         }
+	if(this->GetProblem()->FunctionalNeedPrecomputations() != 0)
+	{
+	  std::stringstream tmp;
+	  tmp << "aux_functional_"<<i<<"_pre";
+	  this->GetIntegrator().DeleteParamData(tmp.str());
+	}
+
         this->GetFunctionalValues()[i + 1].push_back(ret);
         std::stringstream out;
         this->GetOutputHandler()->InitOut(out);

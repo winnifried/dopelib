@@ -389,8 +389,45 @@ namespace DOpE
           }
         }
 
+	/**
+	 * This function is used to allocate space for auxiliary parameters.
+	 *
+	 * @param name         The name under wich the params are stored.
+	 * @param n_components The number of components needed in the paramerter vector 
+	 *                     at each time-point.
+	 **/
+	void AllocateAuxiliaryParams(std::string name, 
+				     unsigned int n_components);
+	
+	std::map<std::string,dealii::Vector<double> >::iterator 
+	  GetAuxiliaryParams(std::string name);
+	
+	/**
+	 *
+	 * This function calulates the functional pre-values and stores them
+	 * in an auxilliary param-vector of the same name that needs 
+	 * to be allocated prior to calling this function.
+	 *
+	 * @param name        The name of the precomputation
+	 *                    for pde problems only 
+	 *                    `aux_functional` is feasible
+	 * @param postfix     A postfix to be attached to the name for the problem type of the 
+	 *                    precalculation
+	 * @param n_pre       Number of pre-iteration cycles
+	 * @param prob_num    The number of the functional (only relevant for aux_functionals)
+	 *
+	 * After finishing the problem type is reset to the value of the `name` param
+	 **/
+	void CalculatePreFunctional(std::string name, 
+				    std::string postfix, 
+				    unsigned int n_pre,
+				    unsigned int prob_num);
+
+
         StateVector<VECTOR> u_;
         StateVector<VECTOR> z_for_ee_;
+
+	std::map<std::string,dealii::Vector<double> > auxiliary_params_;
 
         INTEGRATOR integrator_;
         NONLINEARSOLVER nonlinear_state_solver_;
@@ -653,8 +690,13 @@ namespace DOpE
         this->SetProblemType("aux_functional", i);
         if(this->GetProblem()->FunctionalNeedPrecomputations() != 0)
 	{
-	  throw DOpEException("Precomputations not implemented",
-			      "StatPDEProblem::ComputeReducedFunctionals");
+	  std::stringstream tmp;
+	  tmp << "aux_functional_"<<i<<"_pre";
+	  AllocateAuxiliaryParams(tmp.str(),this->GetProblem()->FunctionalNeedPrecomputations());
+	  CalculatePreFunctional("aux_functional","_pre",
+				 this->GetProblem()->FunctionalNeedPrecomputations(),i);
+	  auto func_vals = GetAuxiliaryParams(tmp.str());
+	  this->GetIntegrator().AddParamData(tmp.str(),&(func_vals->second));
 	}
 	if (this->GetProblem()->GetFunctionalType().find("domain")
             != std::string::npos)
@@ -697,6 +739,13 @@ namespace DOpE
                   + this->GetProblem()->GetFunctionalType(),
               "StatPDEProblem::ComputeReducedFunctionals");
         }
+	if(this->GetProblem()->FunctionalNeedPrecomputations() != 0)
+	{
+	  std::stringstream tmp;
+	  tmp << "aux_functional_"<<i<<"_pre";
+	  this->GetIntegrator().DeleteParamData(tmp.str());
+	}
+
         this->GetFunctionalValues()[i].push_back(ret);
         std::stringstream out;
         this->GetOutputHandler()->InitOut(out);
@@ -738,8 +787,13 @@ namespace DOpE
         this->SetProblemType("aux_functional", i);
 	if(this->GetProblem()->FunctionalNeedPrecomputations() != 0)
 	{
-	  throw DOpEException("Precomputations not implemented",
-			      "StatPDEProblem::ComputeReducedFunctionals");
+	  std::stringstream tmp;
+	  tmp << "aux_functional_"<<i<<"_pre";
+	  AllocateAuxiliaryParams(tmp.str(),this->GetProblem()->FunctionalNeedPrecomputations());
+	  CalculatePreFunctional("aux_functional","_pre",
+				 this->GetProblem()->FunctionalNeedPrecomputations(),i);
+	  auto func_vals = GetAuxiliaryParams(tmp.str());
+	  this->GetIntegrator().AddParamData(tmp.str(),&(func_vals->second));
 	}
         if (this->GetProblem()->GetFunctionalType().find("domain")
             != std::string::npos)
@@ -782,6 +836,13 @@ namespace DOpE
                   + this->GetProblem()->GetFunctionalType(),
               "StatPDEProblem::ComputeReducedFunctionals");
         }
+	if(this->GetProblem()->FunctionalNeedPrecomputations() != 0)
+	{
+	  std::stringstream tmp;
+	  tmp << "aux_functional_"<<i<<"_pre";
+	  this->GetIntegrator().DeleteParamData(tmp.str());
+	}
+
         this->GetFunctionalValues()[i].push_back(ret);
         std::stringstream out;
         this->GetOutputHandler()->InitOut(out);
@@ -970,5 +1031,128 @@ namespace DOpE
     {
       throw DOpEException("This Problem does not support ControlVectors","StatPDEProblem::WriteToFile");
     }
+
+/******************************************************/
+
+template<typename NONLINEARSOLVER, typename INTEGRATOR, typename PROBLEM,
+  typename VECTOR, int dealdim>
+  void StatPDEProblem<NONLINEARSOLVER, INTEGRATOR, PROBLEM, VECTOR, dealdim>::
+  AllocateAuxiliaryParams(std::string name, 
+			  unsigned int n_components)
+  {
+    std::map<std::string,dealii::Vector<double> >::iterator func_vals = auxiliary_params_.find(name);
+    if(func_vals != auxiliary_params_.end())
+    {
+      assert(func_vals->second.size() == n_components);
+      //already created. Nothing to do
+    }
+    else
+    {
+      auto ret = auxiliary_params_.emplace(name,dealii::Vector<double>(n_components));
+      if(ret.second == false)
+      {
+	throw DOpEException("Creation of Storage for Auxiliary time params with name "+name+" failed!",
+			    "StatPDEProblem::AllocateAuxiliaryParams");
+      }
+    }
+  }
+
+/******************************************************/
+
+template<typename NONLINEARSOLVER, typename INTEGRATOR, typename PROBLEM,
+  typename VECTOR, int dealdim>
+  std::map<std::string,dealii::Vector<double> >::iterator 
+  StatPDEProblem<NONLINEARSOLVER, INTEGRATOR, PROBLEM, VECTOR, dealdim>::
+  GetAuxiliaryParams(std::string name)
+			      
+  {
+    return auxiliary_params_.find(name);
+  }
+
+/******************************************************/
+
+template<typename NONLINEARSOLVER, typename INTEGRATOR, typename PROBLEM,
+  typename VECTOR, int dealdim>
+  void StatPDEProblem<NONLINEARSOLVER, INTEGRATOR, PROBLEM, VECTOR, dealdim>::
+  CalculatePreFunctional(std::string name, 
+			 std::string postfix, 
+			 unsigned int n_pre, 
+			 unsigned int prob_num)
+  {
+    //Checking input
+    if(name != "aux_functional")
+    {
+      throw DOpEException("Only valid with name `aux_functional` but not: "+name ,
+			  "StatPDEProblem::CalculatePreFunctional");
+    }
+    if(postfix == "" || postfix == " ")
+    {
+      throw DOpEException("Postfix needs to be a non-empty string" ,
+			  "StatPDEProblem::CalculatePreFunctional");
+    }
+    //Create problem name 
+    std::string pname;
+    {
+      std::stringstream tmp;
+      tmp << name<<"_"<<prob_num<<postfix;
+      pname = tmp.str();
+    }
+    //Begin Precomputation
+    auto func_vals = GetAuxiliaryParams(pname);
+    for(unsigned int i = 0; i < n_pre; i++)
+    {
+      this->SetProblemType(pname,i);
+      this->GetOutputHandler()->Write("\tprecomputations for "+name,
+				      4 + this->GetBasePriority());
+      //Begin Precomputations
+      bool found = false;
+      double pre = 0;
+      
+      if (this->GetProblem()->GetFunctionalType().find("domain")
+	  != std::string::npos)
+      {
+	found = true;
+	pre += this->GetIntegrator().ComputeDomainScalar(*(this->GetProblem()));
+      }
+      if (this->GetProblem()->GetFunctionalType().find("point")
+	  != std::string::npos)
+      {
+	found = true;
+	pre += this->GetIntegrator().ComputePointScalar(*(this->GetProblem()));
+      }
+      if (this->GetProblem()->GetFunctionalType().find("boundary")
+	  != std::string::npos)
+      {
+	found = true;
+	pre += this->GetIntegrator().ComputeBoundaryScalar(
+	  *(this->GetProblem()));
+      }
+      if (this->GetProblem()->GetFunctionalType().find("face")
+	  != std::string::npos)
+      {
+	found = true;
+	pre += this->GetIntegrator().ComputeFaceScalar(*(this->GetProblem()));
+      }
+      if (this->GetProblem()->GetFunctionalType().find("algebraic")
+	  != std::string::npos)
+      {
+	found = true;
+	pre += this->GetIntegrator().ComputeAlgebraicScalar(*(this->GetProblem()));
+      }
+      
+      if (!found)
+      {
+	throw DOpEException(
+	  "Unknown Functional Type: "
+	  + this->GetProblem()->GetFunctionalType(),
+	  "StatPDEProblem::CalculatePreFunctional");
+      }
+      //Store Precomputed Values
+      func_vals->second[i] = pre; 
+    }
+    this->SetProblemType(name,prob_num);
+  }
+////////////////////////////////ENDOF NAMESPACE DOPE/////////////////////////////
+
 }
 #endif

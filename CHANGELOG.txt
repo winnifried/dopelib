@@ -1,5 +1,8 @@
 Changelog DOpE
 ==============
+19.05.2016: Evaluation Functionals given as functions of 
+	    integrals now also possible for auxilliary (non-cost) Functionals
+	    as well as for PDE problems.
 19.05.2016: Restructured code from previous updates to 
 	    simplify the code layout.
 18.05.2016: Updated the instatreducedproblem so that 

@@ -1390,6 +1390,13 @@ void InstatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER, CONTROLINTEGR
       }
       if (this->GetProblem()->NeedTimeFunctional())
       {
+	if(this->GetProblem()->FunctionalNeedPrecomputations() != 0)
+	{
+	  std::stringstream tmp;
+	  tmp << "aux_functional_"<<i<<"_pre";
+	  auto func_vals = GetAuxiliaryTimeParams(tmp.str());
+	  this->GetIntegrator().AddParamData(tmp.str(),&(func_vals->second[step]));
+	}
         if (this->GetProblem()->GetFunctionalType().find("domain") != std::string::npos)
         {
           found = true;
@@ -1422,6 +1429,12 @@ void InstatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER, CONTROLINTEGR
                               "Unknown Functional Type: " + this->GetProblem()->GetFunctionalType(),
                               "InstatReducedProblem::ComputeTimeFunctionals");
         }
+	if(this->GetProblem()->FunctionalNeedPrecomputations() != 0)
+	{
+	  std::stringstream tmp;
+	  tmp << "aux_functional_"<<i<<"_pre";
+	  this->GetIntegrator().DeleteParamData(tmp.str());
+	}	
         //Wert speichern
         if (this->GetProblem()->GetFunctionalType().find("timelocal") != std::string::npos)
         {
