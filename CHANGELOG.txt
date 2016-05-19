@@ -1,5 +1,7 @@
 Changelog DOpE
 ==============
+19.05.2016: Restructured code from previous updates to 
+	    simplify the code layout.
 18.05.2016: Updated the instatreducedproblem so that 
 	    optimization problems with cost-functionals given as 
 	    time integrals of functions of space-integrals are possible.
