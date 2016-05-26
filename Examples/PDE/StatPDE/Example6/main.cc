@@ -29,18 +29,18 @@
 #include <deal.II/base/quadrature_lib.h>
 #include <deal.II/numerics/error_estimator.h>
 
-#include "pdeproblemcontainer.h"
-#include "functionalinterface.h"
-#include "pdeinterface.h"
-#include "statpdeproblem.h"
-#include "newtonsolver.h"
-#include "gmreslinearsolver.h"
-#include "integrator.h"
-#include "parameterreader.h"
-#include "mol_statespacetimehandler.h"
-#include "simpledirichletdata.h"
-#include "preconditioner_wrapper.h"
-#include "integratordatacontainer.h"
+#include <container/pdeproblemcontainer.h>
+#include <interfaces/functionalinterface.h>
+#include <interfaces/pdeinterface.h>
+#include <reducedproblems/statpdeproblem.h>
+#include <templates/newtonsolver.h>
+#include <templates/gmreslinearsolver.h>
+#include <templates/integrator.h>
+#include <include/parameterreader.h>
+#include <basic/mol_statespacetimehandler.h>
+#include <problemdata/simpledirichletdata.h>
+#include <wrapper/preconditioner_wrapper.h>
+#include <container/integratordatacontainer.h>
 
 #include "localpde.h"
 #include "functionals.h"

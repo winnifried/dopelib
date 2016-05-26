@@ -35,23 +35,23 @@
 #include <deal.II/numerics/error_estimator.h>
 #include <deal.II/grid/grid_refinement.h>
 
-#include "reducednewtonalgorithm.h"
-#include "optproblemcontainer.h"
-#include "functionalinterface.h"
-#include "statreducedproblem.h" 
-#include "newtonsolver.h"
-#include "directlinearsolver.h"
-#include "voidlinearsolver.h"
-#include "integrator.h"
-#include "noconstraints.h"
-#include "solutionextractor.h"
+#include <opt_algorithms/reducednewtonalgorithm.h>
+#include <container/optproblemcontainer.h>
+#include <interfaces/functionalinterface.h>
+#include <reducedproblems/statreducedproblem.h> 
+#include <templates/newtonsolver.h>
+#include <templates/directlinearsolver.h>
+#include <templates/voidlinearsolver.h>
+#include <templates/integrator.h>
+#include <problemdata/noconstraints.h>
+#include <include/solutionextractor.h>
 
-#include "integratormixeddims.h"
-#include "newtonsolvermixeddims.h"
-#include "parameterreader.h"
-#include "mol_spacetimehandler.h"
-#include "simpledirichletdata.h"
-#include "integratordatacontainer.h"
+#include <templates/integratormixeddims.h>
+#include <templates/newtonsolvermixeddims.h>
+#include <include/parameterreader.h>
+#include <basic/mol_spacetimehandler.h>
+#include <problemdata/simpledirichletdata.h>
+#include <container/integratordatacontainer.h>
 
 #include "localpde.h"
 #include "localfunctional.h"

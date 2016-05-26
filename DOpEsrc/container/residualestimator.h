@@ -24,7 +24,7 @@
 #ifndef RESIDUAL_ERROR_H_
 #define RESIDUAL_ERROR_H_
 
-#include "dwrdatacontainer.h"
+#include <container/dwrdatacontainer.h>
 #include <deal.II/fe/fe_tools.h>
 
 namespace DOpE

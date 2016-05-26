@@ -31,12 +31,12 @@
 #include <deal.II/fe/fe_values.h>
 #include <deal.II/fe/mapping.h>
 
-#include "fevalues_wrapper.h"
-#include "dofhandler_wrapper.h"
-#include "elementdatacontainer.h"
-#include "facedatacontainer.h"
-#include "multimesh_elementdatacontainer.h"
-#include "multimesh_facedatacontainer.h"
+#include <wrapper/fevalues_wrapper.h>
+#include <wrapper/dofhandler_wrapper.h>
+#include <container/elementdatacontainer.h>
+#include <container/facedatacontainer.h>
+#include <container/multimesh_elementdatacontainer.h>
+#include <container/multimesh_facedatacontainer.h>
 
 namespace DOpE
 {

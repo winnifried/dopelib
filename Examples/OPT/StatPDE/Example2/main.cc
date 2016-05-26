@@ -30,21 +30,21 @@
 #include <deal.II/fe/fe_nothing.h>
 #include <deal.II/base/quadrature_lib.h>
 
-#include "reducednewtonalgorithm.h"
-#include "optproblemcontainer.h"
-#include "functionalinterface.h"
-#include "statreducedproblem.h"
-#include "directlinearsolver.h"
-#include "voidlinearsolver.h" // for mixed dim opt. control
-#include "integrator.h"
-#include "newtonsolver.h"
-#include "integratormixeddims.h" // for mixed dim opt. control
-#include "newtonsolvermixeddims.h" // for mixed dim opt. control
-#include "parameterreader.h"
-#include "mol_spacetimehandler.h"
-#include "simpledirichletdata.h"
-#include "noconstraints.h"
-#include "integratordatacontainer.h"
+#include <opt_algorithms/reducednewtonalgorithm.h>
+#include <container/optproblemcontainer.h>
+#include <interfaces/functionalinterface.h>
+#include <reducedproblems/statreducedproblem.h>
+#include <templates/directlinearsolver.h>
+#include <templates/voidlinearsolver.h> // for mixed dim opt. control
+#include <templates/integrator.h>
+#include <templates/newtonsolver.h>
+#include <templates/integratormixeddims.h> // for mixed dim opt. control
+#include <templates/newtonsolvermixeddims.h> // for mixed dim opt. control
+#include <include/parameterreader.h>
+#include <basic/mol_spacetimehandler.h>
+#include <problemdata/simpledirichletdata.h>
+#include <problemdata/noconstraints.h>
+#include <container/integratordatacontainer.h>
 
 #include "localpde.h"
 #include "localfunctional.h"

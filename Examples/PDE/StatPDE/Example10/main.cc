@@ -33,17 +33,17 @@
 #include <deal.II/numerics/error_estimator.h>
 #include <deal.II/grid/grid_refinement.h>
 
-#include "pdeproblemcontainer.h"
-#include "statpdeproblem.h"
-#include "newtonsolver.h"
-#include "trilinosdirectlinearsolver.h"
-#include "directlinearsolver.h"
-#include "integrator.h"
-#include "parameterreader.h"
-#include "mol_statespacetimehandler.h"
-#include "simpledirichletdata.h"
-#include "solutionextractor.h"
-#include "integratordatacontainer.h"
+#include <container/pdeproblemcontainer.h>
+#include <reducedproblems/statpdeproblem.h>
+#include <templates/newtonsolver.h>
+#include <templates/trilinosdirectlinearsolver.h>
+#include <templates/directlinearsolver.h>
+#include <templates/integrator.h>
+#include <include/parameterreader.h>
+#include <basic/mol_statespacetimehandler.h>
+#include <problemdata/simpledirichletdata.h>
+#include <include/solutionextractor.h>
+#include <container/integratordatacontainer.h>
 
 #include "localpde.h"
 #include "functionals.h"

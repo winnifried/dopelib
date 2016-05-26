@@ -24,7 +24,7 @@
 #ifndef LOCALFunctionalS_
 #define LOCALFunctionalS_
 
-#include "pdeinterface.h"
+#include <interfaces/pdeinterface.h>
 
 static const double PI = 3.14159265359;
 

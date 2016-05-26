@@ -3,18 +3,7 @@ GET_FILENAME_COMPONENT(DOpE "${CMAKE_SOURCE_DIR}/${DOpE}" ABSOLUTE)
 
 SET(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "-std=c++11")
 
-INCLUDE_DIRECTORIES(
-  ${DOpE}/DOpEsrc/basic
-  ${DOpE}/DOpEsrc/container
-  ${DOpE}/DOpEsrc/include
-  ${DOpE}/DOpEsrc/interfaces
-  ${DOpE}/DOpEsrc/opt_algorithms
-  ${DOpE}/DOpEsrc/problemdata
-  ${DOpE}/DOpEsrc/reducedproblems
-  ${DOpE}/DOpEsrc/templates
-  ${DOpE}/DOpEsrc/tsschemes
-  ${DOpE}/DOpEsrc/wrapper
-  )
+INCLUDE_DIRECTORIES(${DOpE}/DOpEsrc)
 
 ADD_CUSTOM_TARGET(debug
   COMMAND ${CMAKE_COMMAND} -DCMAKE_BUILD_TYPE=Debug ${CMAKE_SOURCE_DIR}
@@ -63,6 +52,16 @@ ELSE()
 	MESSAGE(STATUS "Configured for use of MPI")
 	ADD_DEFINITIONS(-DDOPELIB_WITH_MPI)	
 ENDIF()
+
+IF(NOT DEAL_II_WITH_P4EST)
+  MESSAGE(STATUS "The deal.II library found at ${DEAL_II_PATH} was not configured with
+    DEAL_II_WITH_P4EST = ON. You may not use trilinos related solvers within your code."
+    )
+ELSE()
+	MESSAGE(STATUS "Configured for use of P4EST")
+	ADD_DEFINITIONS(-DDOPELIB_WITH_P4EST)	
+ENDIF()
+
 
 IF(NOT DEAL_II_WITH_UMFPACK)
   MESSAGE(FATAL_ERROR "

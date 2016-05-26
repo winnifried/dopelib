@@ -24,9 +24,9 @@
 #ifndef LOCALFunctionalS_
 #define LOCALFunctionalS_
 
-#include "pdeinterface.h"
-#include "elementdatacontainer.h"
-#include "facedatacontainer.h"
+#include <interfaces/pdeinterface.h>
+#include <container/elementdatacontainer.h>
+#include <container/facedatacontainer.h>
 
 using namespace std;
 using namespace dealii;

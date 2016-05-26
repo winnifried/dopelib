@@ -24,12 +24,12 @@
 #ifndef MOL_STATESPACE_TIME_HANDLER_H_
 #define MOL_STATESPACE_TIME_HANDLER_H_
 
-#include "statespacetimehandler.h"
-#include "constraints.h"
-#include "sparsitymaker.h"
-#include "userdefineddofconstraints.h"
-#include "sth_internals.h"
-#include "refinementcontainer.h"
+#include <basic/statespacetimehandler.h>
+#include <basic/constraints.h>
+#include <include/sparsitymaker.h>
+#include <include/userdefineddofconstraints.h>
+#include <basic/sth_internals.h>
+#include <container/refinementcontainer.h>
 
 #include <deal.II/dofs/dof_handler.h>
 #include <deal.II/dofs/dof_renumbering.h>

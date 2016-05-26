@@ -24,21 +24,21 @@
 #ifndef PDEProblemContainer_H_
 #define PDEProblemContainer_H_
 
-#include "dopeexceptionhandler.h"
-#include "outputhandler.h"
-#include "functionalinterface.h"
-#include "dofhandler_wrapper.h"
-#include "fevalues_wrapper.h"
-#include "function_wrapper.h"
-#include "statespacetimehandler.h"
-#include "primaldirichletdata.h"
-#include "elementdatacontainer.h"
-#include "facedatacontainer.h"
-#include "stateproblem.h"
-#include "problemcontainer_internal.h"
+#include <include/dopeexceptionhandler.h>
+#include <include/outputhandler.h>
+#include <interfaces/functionalinterface.h>
+#include <wrapper/dofhandler_wrapper.h>
+#include <wrapper/fevalues_wrapper.h>
+#include <wrapper/function_wrapper.h>
+#include <basic/statespacetimehandler.h>
+#include <problemdata/primaldirichletdata.h>
+#include <container/elementdatacontainer.h>
+#include <container/facedatacontainer.h>
+#include <problemdata/stateproblem.h>
+#include <container/problemcontainer_internal.h>
 //#include <deal.II/multigrid/mg_dof_handler.h>
-#include "dopetypes.h"
-#include "dwrdatacontainer.h"
+#include <basic/dopetypes.h>
+#include <container/dwrdatacontainer.h>
 
 #include <deal.II/lac/vector.h>
 #include <deal.II/lac/full_matrix.h>

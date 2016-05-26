@@ -24,7 +24,7 @@
 #ifndef MY_FUNCTIONS_H_
 #define MY_FUNCTIONS_H_
 
-#include "function_wrapper.h"
+#include <wrapper/function_wrapper.h>
 
 class ExactSolution : public DOpEWrapper::Function<2>
 {

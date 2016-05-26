@@ -33,10 +33,10 @@
 #include <sstream>
 #include <limits>
 
-#include "timedofhandler.h"
-#include "timeiterator.h"
-#include "refinementcontainer.h"
-#include "dopetypes.h"
+#include <include/timedofhandler.h>
+#include <include/timeiterator.h>
+#include <container/refinementcontainer.h>
+#include <basic/dopetypes.h>
 
 namespace DOpE
 {

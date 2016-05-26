@@ -24,12 +24,12 @@
 #ifndef DWRDATACONTAINER_H_
 #define DWRDATACONTAINER_H_
 
-#include "constraintvector.h"
-#include "controlvector.h"
-#include "statevector.h"
-#include "dopetypes.h"
-#include "parameterreader.h"
-#include "dopetypes.h"
+#include <include/constraintvector.h>
+#include <include/controlvector.h>
+#include <include/statevector.h>
+#include <basic/dopetypes.h>
+#include <include/parameterreader.h>
+#include <basic/dopetypes.h>
 
 namespace DOpE
 {

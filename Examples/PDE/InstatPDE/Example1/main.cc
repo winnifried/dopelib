@@ -37,31 +37,31 @@
 #include <deal.II/grid/grid_generator.h>
 
 //DOpE includes
-#include "parameterreader.h"
-#include "directlinearsolver.h"
-#include "integrator.h"
-#include "mol_spacetimehandler.h"
-#include "simpledirichletdata.h"
-#include "integratordatacontainer.h"
-#include "newtonsolver.h"
-#include "functionalinterface.h"
+#include <include/parameterreader.h>
+#include <templates/directlinearsolver.h>
+#include <templates/integrator.h>
+#include <basic/mol_spacetimehandler.h>
+#include <problemdata/simpledirichletdata.h>
+#include <container/integratordatacontainer.h>
+#include <templates/newtonsolver.h>
+#include <interfaces/functionalinterface.h>
 // note that we solve a pure pde problem here,
 // but use the framework of an optimization problem.
 // Thus, the optimization ingredients are only
 // dummys, i.e. no functional, no constraints, etc.
-#include "noconstraints.h"
+#include <problemdata/noconstraints.h>
 
 //DOpE includes for instationary problems
-#include "instatreducedproblem.h"
-#include "instat_step_newtonsolver.h"
-#include "reducednewtonalgorithm.h"
-#include "instatoptproblemcontainer.h"
+#include <reducedproblems/instatreducedproblem.h>
+#include <templates/instat_step_newtonsolver.h>
+#include <opt_algorithms/reducednewtonalgorithm.h>
+#include <container/instatoptproblemcontainer.h>
 
 //various timestepping schemes
-//#include "forward_euler_problem.h"
-//#include "backward_euler_problem.h"
-//#include "crank_nicolson_problem.h"
-#include "shifted_crank_nicolson_problem.h"
+//#include <tsschemes/forward_euler_problem.h>
+//#include <tsschemes/backward_euler_problem.h>
+//#include <tsschemes/crank_nicolson_problem.h>
+#include <tsschemes/shifted_crank_nicolson_problem.h>
 
 //Problem specific includes
 #include "localpde.h"

@@ -33,11 +33,11 @@
 
 #include <vector>
 
-#include "elementdatacontainer.h"
-#include "facedatacontainer.h"
-#include "dwrdatacontainer.h"
-#include "residualestimator.h"
-#include "dopetypes.h"
+#include <container/elementdatacontainer.h>
+#include <container/facedatacontainer.h>
+#include <container/dwrdatacontainer.h>
+#include <container/residualestimator.h>
+#include <basic/dopetypes.h>
 
 namespace DOpE
 {

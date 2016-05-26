@@ -24,8 +24,8 @@
 #ifndef REDUCEDTRUSTREGION_NEWTON__ALGORITHM_H_
 #define REDUCEDTRUSTREGION_NEWTON__ALGORITHM_H_
 
-#include "reducedalgorithm.h"
-#include "parameterreader.h"
+#include <opt_algorithms/reducedalgorithm.h>
+#include <include/parameterreader.h>
 
 #include <iostream>
 #include <assert.h>

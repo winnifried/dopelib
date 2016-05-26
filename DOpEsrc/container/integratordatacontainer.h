@@ -30,12 +30,12 @@
 #include <deal.II/hp/dof_handler.h>
 #include <deal.II/lac/vector.h>
 
-#include "dofhandler_wrapper.h"
-#include "elementdatacontainer.h"
-#include "facedatacontainer.h"
-#include "multimesh_elementdatacontainer.h"
-#include "multimesh_facedatacontainer.h"
-#include "dopeexception.h"
+#include <wrapper/dofhandler_wrapper.h>
+#include <container/elementdatacontainer.h>
+#include <container/facedatacontainer.h>
+#include <container/multimesh_elementdatacontainer.h>
+#include <container/multimesh_facedatacontainer.h>
+#include <include/dopeexception.h>
 
 namespace DOpE
 {

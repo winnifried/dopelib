@@ -26,7 +26,7 @@
 
 #include <string>
 
-#include "dopeexception.h"
+#include <include/dopeexception.h>
 
 namespace DOpE
 {

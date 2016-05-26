@@ -24,26 +24,26 @@
 #ifndef STAT_PDE_PROBLEM_H_
 #define STAT_PDE_PROBLEM_H_
 
-#include "pdeprobleminterface.h"
-#include "integrator.h"
-#include "parameterreader.h"
-#include "statevector.h"
-#include "stateproblem.h"
+#include <interfaces/pdeprobleminterface.h>
+#include <templates/integrator.h>
+#include <include/parameterreader.h>
+#include <include/statevector.h>
+#include <problemdata/stateproblem.h>
 
 #include <deal.II/lac/vector.h>
 #include <deal.II/lac/block_sparsity_pattern.h>
 #include <deal.II/lac/block_sparse_matrix.h>
 
-#include "pdeproblemcontainer.h"
-#include "pdeinterface.h"
-#include "functionalinterface.h"
-#include "dirichletdatainterface.h"
-#include "dopeexception.h"
-#include "newtonsolver.h"
-#include "cglinearsolver.h"
-#include "gmreslinearsolver.h"
-#include "directlinearsolver.h"
-#include "solutionextractor.h"
+#include <container/pdeproblemcontainer.h>
+#include <interfaces/pdeinterface.h>
+#include <interfaces/functionalinterface.h>
+#include <interfaces/dirichletdatainterface.h>
+#include <include/dopeexception.h>
+#include <templates/newtonsolver.h>
+#include <templates/cglinearsolver.h>
+#include <templates/gmreslinearsolver.h>
+#include <templates/directlinearsolver.h>
+#include <include/solutionextractor.h>
 
 #include <deal.II/base/data_out_base.h>
 #include <deal.II/base/utilities.h>

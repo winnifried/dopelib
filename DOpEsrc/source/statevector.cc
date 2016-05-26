@@ -22,9 +22,9 @@
 **/
 
 
-#include "statevector.h"
-#include "dopeexception.h"
-#include "helper.h"
+#include <include/statevector.h>
+#include <include/dopeexception.h>
+#include <include/helper.h>
 
 #include <iostream>
 #include <assert.h>

@@ -1,15 +1,4 @@
-INCLUDE_DIRECTORIES(
-  ${CMAKE_SOURCE_DIR}/basic
-  ${CMAKE_SOURCE_DIR}/container
-  ${CMAKE_SOURCE_DIR}/include
-  ${CMAKE_SOURCE_DIR}/interfaces
-  ${CMAKE_SOURCE_DIR}/opt_algorithms
-  ${CMAKE_SOURCE_DIR}/problemdata
-  ${CMAKE_SOURCE_DIR}/reducedproblems
-  ${CMAKE_SOURCE_DIR}/templates
-  ${CMAKE_SOURCE_DIR}/tsschemes
-  ${CMAKE_SOURCE_DIR}/wrapper
-  )
+INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR})
 
 FILE(GLOB _src *.cc)
 

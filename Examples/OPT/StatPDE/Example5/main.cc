@@ -30,20 +30,20 @@
 #include <deal.II/lac/precondition_block.h>
 #include <deal.II/numerics/error_estimator.h>
 
-#include "reducednewtonalgorithm.h"
-#include "optproblemcontainer.h"
-#include "functionalinterface.h"
-#include "statreducedproblem.h"
-#include "newtonsolver.h"
-#include "cglinearsolver.h"
-#include "directlinearsolver.h"
-#include "integrator_multimesh.h" //for multimesh purposes
-#include "parameterreader.h"
-#include "mol_multimesh_spacetimehandler.h" //for multimesh purposes
-#include "simpledirichletdata.h"
-#include "noconstraints.h"
-#include "preconditioner_wrapper.h"
-#include "integratordatacontainer.h"
+#include <opt_algorithms/reducednewtonalgorithm.h>
+#include <container/optproblemcontainer.h>
+#include <interfaces/functionalinterface.h>
+#include <reducedproblems/statreducedproblem.h>
+#include <templates/newtonsolver.h>
+#include <templates/cglinearsolver.h>
+#include <templates/directlinearsolver.h>
+#include <templates/integrator_multimesh.h> //for multimesh purposes
+#include <include/parameterreader.h>
+#include <basic/mol_multimesh_spacetimehandler.h> //for multimesh purposes
+#include <problemdata/simpledirichletdata.h>
+#include <problemdata/noconstraints.h>
+#include <wrapper/preconditioner_wrapper.h>
+#include <container/integratordatacontainer.h>
 
 #include "localpde.h"
 #include "localfunctional.h"

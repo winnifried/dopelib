@@ -23,7 +23,7 @@
 #ifndef INDEXSETTER_H_
 #define INDEXSETTER_H_
 
-#include "active_fe_index_setter_interface.h"
+#include <interfaces/active_fe_index_setter_interface.h>
 
 using namespace DOpE;
 

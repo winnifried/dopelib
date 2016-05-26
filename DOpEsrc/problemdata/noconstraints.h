@@ -24,7 +24,7 @@
 #ifndef NOCONSTRAINT_INTERFACE_H_
 #define NOCONSTRAINT_INTERFACE_H_
 
-#include "constraintinterface.h"
+#include <interfaces/constraintinterface.h>
 
 namespace DOpE
 {

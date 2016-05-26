@@ -24,9 +24,9 @@
 #ifndef REDUCED_IPOPT__ALGORITHM_H_
 #define REDUCED_IPOPT__ALGORITHM_H_
 
-#include "reducedalgorithm.h"
-#include "parameterreader.h"
-#include "ipopt_problem.h"
+#include <opt_algorithms/reducedalgorithm.h>
+#include <include/parameterreader.h>
+#include <reducedproblems/ipopt_problem.h>
 
 #ifdef DOPELIB_WITH_IPOPT
 //Make shure the unused variable warnings from ipopt don't bother us

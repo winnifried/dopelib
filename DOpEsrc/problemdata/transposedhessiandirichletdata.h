@@ -24,7 +24,7 @@
 #ifndef TRANSPOSED_HESSIAN_DIRICHLET_DATA_H_
 #define TRANSPOSED_HESSIAN_DIRICHLET_DATA_H_
 
-#include "transposeddirichletdatainterface.h"
+#include <interfaces/transposeddirichletdatainterface.h>
 
 namespace DOpE
 {

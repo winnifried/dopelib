@@ -21,16 +21,16 @@
  *
  **/
 
-#include "pdeproblemcontainer.h"
-#include "statpdeproblem.h"
-#include "newtonsolver.h"
-#include "integrator.h"
-#include "parameterreader.h"
-#include "mol_statespacetimehandler.h"
-#include "simpledirichletdata.h"
-#include "sparsitymaker.h"
-#include "integratordatacontainer.h"
-#include "preconditioner_wrapper.h"
+#include <container/pdeproblemcontainer.h>
+#include <reducedproblems/statpdeproblem.h>
+#include <templates/newtonsolver.h>
+#include <templates/integrator.h>
+#include <include/parameterreader.h>
+#include <basic/mol_statespacetimehandler.h>
+#include <problemdata/simpledirichletdata.h>
+#include <include/sparsitymaker.h>
+#include <container/integratordatacontainer.h>
+#include <wrapper/preconditioner_wrapper.h>
 
 #include <iostream>
 #include <fstream>

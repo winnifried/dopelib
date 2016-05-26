@@ -24,29 +24,29 @@
 #ifndef STAT_REDUCED_PROBLEM_H_
 #define STAT_REDUCED_PROBLEM_H_
 
-#include "reducedprobleminterface.h"
-#include "integrator.h"
-#include "parameterreader.h"
-#include "statevector.h"
-#include "stateproblem.h"
+#include <interfaces/reducedprobleminterface.h>
+#include <templates/integrator.h>
+#include <include/parameterreader.h>
+#include <include/statevector.h>
+#include <problemdata/stateproblem.h>
 
 #include <deal.II/lac/vector.h>
 #include <deal.II/lac/block_sparsity_pattern.h>
 #include <deal.II/lac/block_sparse_matrix.h>
 
-#include "optproblemcontainer.h"
-#include "pdeinterface.h"
-#include "functionalinterface.h"
-#include "dirichletdatainterface.h"
-#include "dopeexception.h"
-#include "newtonsolver.h"
-#include "newtonsolvermixeddims.h"
-#include "cglinearsolver.h"
-#include "gmreslinearsolver.h"
-#include "directlinearsolver.h"
-#include "voidlinearsolver.h"
-#include "constraintinterface.h"
-#include "solutionextractor.h"
+#include <container/optproblemcontainer.h>
+#include <interfaces/pdeinterface.h>
+#include <interfaces/functionalinterface.h>
+#include <interfaces/dirichletdatainterface.h>
+#include <include/dopeexception.h>
+#include <templates/newtonsolver.h>
+#include <templates/newtonsolvermixeddims.h>
+#include <templates/cglinearsolver.h>
+#include <templates/gmreslinearsolver.h>
+#include <templates/directlinearsolver.h>
+#include <templates/voidlinearsolver.h>
+#include <interfaces/constraintinterface.h>
+#include <include/solutionextractor.h>
 
 #include <deal.II/base/data_out_base.h>
 #include <deal.II/numerics/data_out.h>

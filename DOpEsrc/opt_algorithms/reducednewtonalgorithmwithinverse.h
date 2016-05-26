@@ -24,8 +24,8 @@
 #ifndef REDUCEDNEWTON__ALGORITHM_INVERSE_H_
 #define REDUCEDNEWTON__ALGORITHM_INVERSE_H_
 
-#include "reducednewtonalgorithm.h"
-#include "parameterreader.h"
+#include <opt_algorithms/reducednewtonalgorithm.h>
+#include <include/parameterreader.h>
 
 #include <iostream>
 #include <assert.h>

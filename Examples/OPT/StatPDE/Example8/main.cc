@@ -32,20 +32,20 @@
 #include <deal.II/fe/fe_dgp.h>
 #include <deal.II/base/quadrature_lib.h>
 
-#include "reduced_snopt_algorithm.h"
-#include "optproblemcontainer.h"
-#include "functionalinterface.h"
-#include "pdeinterface.h"
-#include "statreducedproblem.h" 
-#include "newtonsolver.h"
-#include "directlinearsolver.h"
-#include "integrator.h"
-#include "parameterreader.h"
-#include "mol_spacetimehandler.h"
-#include "simpledirichletdata.h"
-#include "constraints.h"
-#include "integratordatacontainer.h"
-#include "pointconstraintsmaker.h"
+#include <opt_algorithms/reduced_snopt_algorithm.h>
+#include <container/optproblemcontainer.h>
+#include <interfaces/functionalinterface.h>
+#include <interfaces/pdeinterface.h>
+#include <reducedproblems/statreducedproblem.h> 
+#include <templates/newtonsolver.h>
+#include <templates/directlinearsolver.h>
+#include <templates/integrator.h>
+#include <include/parameterreader.h>
+#include <basic/mol_spacetimehandler.h>
+#include <problemdata/simpledirichletdata.h>
+#include <basic/constraints.h>
+#include <container/integratordatacontainer.h>
+#include <include/pointconstraintsmaker.h>
 
 #include "localconstraints.h"
 #include "localpde.h"

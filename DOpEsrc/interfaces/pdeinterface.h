@@ -33,11 +33,11 @@
 #include <deal.II/lac/full_matrix.h>
 #include <deal.II/base/function.h>
 
-#include "fevalues_wrapper.h"
-#include "elementdatacontainer.h"
-#include "facedatacontainer.h"
-#include "multimesh_elementdatacontainer.h"
-#include "multimesh_facedatacontainer.h"
+#include <wrapper/fevalues_wrapper.h>
+#include <container/elementdatacontainer.h>
+#include <container/facedatacontainer.h>
+#include <container/multimesh_elementdatacontainer.h>
+#include <container/multimesh_facedatacontainer.h>
 
 namespace DOpE
 {

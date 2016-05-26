@@ -1,5 +1,8 @@
 Changelog DOpE
 ==============
+26.05.2016: Restructured include commands in files now files
+	    in DOpEsrc are included with <> brackets and explicit
+	    mentioning of the subdirectory
 19.05.2016: Evaluation Functionals given as functions of 
 	    integrals now also possible for auxilliary (non-cost) Functionals
 	    as well as for PDE problems.

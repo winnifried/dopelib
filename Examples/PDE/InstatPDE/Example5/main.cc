@@ -38,23 +38,23 @@
 #include <deal.II/grid/grid_generator.h>
 
 //DOpE includes
-#include "parameterreader.h"
-#include "directlinearsolver.h"
-#include "integrator.h"
-#include "mol_spacetimehandler.h"
-#include "simpledirichletdata.h"
-#include "integratordatacontainer.h"
-#include "newtonsolver.h"
-#include "fractional_step_theta_step_newtonsolver.h"
-#include "functionalinterface.h"
-#include "noconstraints.h"
+#include <include/parameterreader.h>
+#include <templates/directlinearsolver.h>
+#include <templates/integrator.h>
+#include <basic/mol_spacetimehandler.h>
+#include <problemdata/simpledirichletdata.h>
+#include <container/integratordatacontainer.h>
+#include <templates/newtonsolver.h>
+#include <templates/fractional_step_theta_step_newtonsolver.h>
+#include <interfaces/functionalinterface.h>
+#include <problemdata/noconstraints.h>
 
-#include "instatreducedproblem.h"
-#include "instat_step_newtonsolver.h"
-#include "reducednewtonalgorithm.h"
-#include "instatoptproblemcontainer.h"
+#include <reducedproblems/instatreducedproblem.h>
+#include <templates/instat_step_newtonsolver.h>
+#include <opt_algorithms/reducednewtonalgorithm.h>
+#include <container/instatoptproblemcontainer.h>
 
-#include "backward_euler_problem.h"
+#include <tsschemes/backward_euler_problem.h>
 
 //Problem specific includes
 #include "localpde.h"

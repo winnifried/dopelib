@@ -37,29 +37,29 @@
 #include <deal.II/base/function.h>
 #include <deal.II/numerics/vector_tools.h>
 
-#include "functionalinterface.h"
-#include "pdeinterface.h"
-#include "newtonsolver.h"
-#include "richardsonlinearsolver.h"
-#include "preconditioner_wrapper.h"
-#include "sparsitymaker.h"
-#include "integratordatacontainer.h"
-#include "functionalinterface.h"
-#include "noconstraints.h"
+#include <interfaces/functionalinterface.h>
+#include <interfaces/pdeinterface.h>
+#include <templates/newtonsolver.h>
+#include <templates/richardsonlinearsolver.h>
+#include <wrapper/preconditioner_wrapper.h>
+#include <include/sparsitymaker.h>
+#include <container/integratordatacontainer.h>
+#include <interfaces/functionalinterface.h>
+#include <problemdata/noconstraints.h>
 
-#include "integrator.h"
-#include "parameterreader.h"
+#include <templates/integrator.h>
+#include <include/parameterreader.h>
 
-#include "mol_spacetimehandler.h"
-#include "simpledirichletdata.h"
-#include "active_fe_index_setter_interface.h"
+#include <basic/mol_spacetimehandler.h>
+#include <problemdata/simpledirichletdata.h>
+#include <interfaces/active_fe_index_setter_interface.h>
 
-#include "instatreducedproblem.h"
-#include "instat_step_newtonsolver.h"
-#include "reducednewtonalgorithm.h"
-#include "instatoptproblemcontainer.h"
-#include "shifted_crank_nicolson_problem.h"
-#include "backward_euler_problem.h"
+#include <reducedproblems/instatreducedproblem.h>
+#include <templates/instat_step_newtonsolver.h>
+#include <opt_algorithms/reducednewtonalgorithm.h>
+#include <container/instatoptproblemcontainer.h>
+#include <tsschemes/shifted_crank_nicolson_problem.h>
+#include <tsschemes/backward_euler_problem.h>
 
 #include "localpde.h"
 #include "functionals.h"

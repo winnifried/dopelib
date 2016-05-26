@@ -24,7 +24,7 @@
 #ifndef INSTAT_OPT_PROBLEM_CONTAINER_
 #define INSTAT_OPT_PROBLEM_CONTAINER_
 
-#include "optproblemcontainer.h"
+#include <container/optproblemcontainer.h>
 
 namespace DOpE
 {

@@ -24,12 +24,12 @@
 #ifndef GENERALIZED_MMA_ALGORITHM2_H_
 #define GENERALIZED_MMA_ALGORITHM2_H_
 
-#include "reducedalgorithm.h"
-#include "parameterreader.h"
-#include "constraintvector.h"
+#include <opt_algorithms/reducedalgorithm.h>
+#include <include/parameterreader.h>
+#include <include/constraintvector.h>
 #include "augmentedlagrangianproblem.h"
-#include "reducednewtonalgorithmwithinverse.h"
-#include "reducedtrustregionnewton.h"
+#include <opt_algorithms/reducednewtonalgorithmwithinverse.h>
+#include <opt_algorithms/reducedtrustregionnewton.h>
 
 #include <iostream>
 #include <assert.h>

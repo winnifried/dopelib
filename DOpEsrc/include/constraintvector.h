@@ -24,8 +24,8 @@
 #ifndef CONSTRAINT_VECTOR_H_
 #define CONSTRAINT_VECTOR_H_
 
-#include "spacetimehandler_base.h"
-#include "dopetypes.h"
+#include <basic/spacetimehandler_base.h>
+#include <basic/dopetypes.h>
 
 #include <deal.II/lac/vector.h>
 #include <deal.II/lac/block_vector_base.h>

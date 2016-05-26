@@ -137,6 +137,18 @@ example Trilinos solvers are desired, the above cmake command needs to have the 
 -DDEAL_II_WITH_TRILINOS=true -DTRILINOS_DIR=[path to trilinos]
 \end{lstlisting}
 
+for the use of MPI use 
+
+\begin{lstlisting}
+-DDEAL_II_WITH_MPI=true
+\end{lstlisting}
+
+and for the use of distributed meshes over several computers the p4est
+library is needed in deal.II to use this use the flags (in addition to the use of MPI)
+\begin{lstlisting}
+-DDEAL_II_WITH_P4EST=true -DP4EST_DIR=[path to p4est]
+\end{lstlisting}
+
 \subsection{ThirdPartyLibraries}
 In order for \texttt{DOpE} to be able to auto-detect some of the installed 
 Third Party Libraries you should generate according links in the 

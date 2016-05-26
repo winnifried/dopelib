@@ -31,18 +31,18 @@
 #include <deal.II/base/quadrature_lib.h>
 #include <deal.II/base/function.h>
 
-#include "pdeproblemcontainer.h"
-#include "statpdeproblem.h"
-#include "newtonsolver.h"
-#include "directlinearsolver.h"
-#include "userdefineddofconstraints.h"
+#include <container/pdeproblemcontainer.h>
+#include <reducedproblems/statpdeproblem.h>
+#include <templates/newtonsolver.h>
+#include <templates/directlinearsolver.h>
+#include <include/userdefineddofconstraints.h>
 
-#include "sparsitymaker.h"
-#include "integratordatacontainer.h"
-#include "integrator.h"
-#include "parameterreader.h"
-#include "mol_statespacetimehandler.h"
-#include "simpledirichletdata.h"
+#include <include/sparsitymaker.h>
+#include <container/integratordatacontainer.h>
+#include <templates/integrator.h>
+#include <include/parameterreader.h>
+#include <basic/mol_statespacetimehandler.h>
+#include <problemdata/simpledirichletdata.h>
 
 #include "localpde.h"
 #include "functionals.h"

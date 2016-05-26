@@ -25,9 +25,9 @@
 #define TIMEDOFHANDLER_H_
 
 //DOpE
-#include <timeiterator.h>
-#include <dopeexception.h>
-#include <versionscheck.h>
+#include <include/timeiterator.h>
+#include <include/dopeexception.h>
+#include <include/versionscheck.h>
 
 //deal.ii
 #include <deal.II/fe/fe_q.h>

@@ -22,8 +22,8 @@
 **/
 
 
-#include "constraintvector.h"
-#include "dopeexception.h"
+#include <include/constraintvector.h>
+#include <include/dopeexception.h>
 
 #include <iostream>
 #include <assert.h>

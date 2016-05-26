@@ -24,7 +24,7 @@
 #ifndef SOLUTIONEXTRACTOR_H_
 #define SOLUTIONEXTRACTOR_H_
 
-#include "statevector.h"
+#include <include/statevector.h>
 
 /**
  * This class is used to extract the computed solution u out of the template

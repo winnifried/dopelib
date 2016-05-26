@@ -24,13 +24,13 @@
 #ifndef STH_INTERNALS_H_
 #define STH_INTERNALS_H_
 
-#include "mapping_wrapper.h"
+#include <wrapper/mapping_wrapper.h>
 
 #include <deal.II/dofs/dof_tools.h>
 #include <deal.II/fe/mapping_q1.h>
 #include <deal.II/hp/mapping_collection.h>
 
-#include "dofhandler_wrapper.h"
+#include <wrapper/dofhandler_wrapper.h>
 
 using namespace dealii;
 

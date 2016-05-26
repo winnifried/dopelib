@@ -26,8 +26,8 @@
 
 #include <deal.II/lac/vector.h>
 
-#include "fevalues_wrapper.h"
-#include "dopeexception.h"
+#include <wrapper/fevalues_wrapper.h>
+#include <include/dopeexception.h>
 
 namespace DOpE
 {

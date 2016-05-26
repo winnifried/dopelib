@@ -24,8 +24,8 @@
 #ifndef CRANKNICOLSONProblem_H_
 #define CRANKNICOLSONProblem_H_
 
-#include "initialproblem.h" 
-#include "primal_ts_base.h"
+#include <problemdata/initialproblem.h> 
+#include <tsschemes/primal_ts_base.h>
 
 namespace DOpE
 {

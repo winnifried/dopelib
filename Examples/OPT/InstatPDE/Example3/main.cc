@@ -36,26 +36,26 @@
 #include <deal.II/grid/grid_generator.h>
 
 //DOpE includes
-#include "parameterreader.h"
-#include "directlinearsolver.h"
-#include "integrator.h"
-#include "mol_spacetimehandler.h"
-#include "simpledirichletdata.h"
-#include "integratordatacontainer.h"
-#include "functionalinterface.h"
-#include "noconstraints.h"
+#include <include/parameterreader.h>
+#include <templates/directlinearsolver.h>
+#include <templates/integrator.h>
+#include <basic/mol_spacetimehandler.h>
+#include <problemdata/simpledirichletdata.h>
+#include <container/integratordatacontainer.h>
+#include <interfaces/functionalinterface.h>
+#include <problemdata/noconstraints.h>
 
-#include "integratormixeddims.h" // for mixed dim opt. control
-#include "newtonsolvermixeddims.h" // for mixed dim opt. control
+#include <templates/integratormixeddims.h> // for mixed dim opt. control
+#include <templates/newtonsolvermixeddims.h> // for mixed dim opt. control
 
 //DOpE includes for instationary problems
-#include "instatreducedproblem.h"
-#include "instat_step_newtonsolver.h"
-#include "reducednewtonalgorithm.h"
-#include "instatoptproblemcontainer.h"
+#include <reducedproblems/instatreducedproblem.h>
+#include <templates/instat_step_newtonsolver.h>
+#include <opt_algorithms/reducednewtonalgorithm.h>
+#include <container/instatoptproblemcontainer.h>
 
 //various timestepping schemes
-#include "backward_euler_problem.h"
+#include <tsschemes/backward_euler_problem.h>
 
 #include "localpde.h"
 #include "localfunctional.h"

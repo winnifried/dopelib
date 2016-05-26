@@ -33,21 +33,21 @@
 
 //DOpE includes
 //This steers the whole solution process
-#include "statpdeproblem.h"
+#include <reducedproblems/statpdeproblem.h>
 //The newtonsolver
-#include "newtonsolver.h"
+#include <templates/newtonsolver.h>
 //The linear solver
-#include "directlinearsolver.h"
+#include <templates/directlinearsolver.h>
 //The integrator
-#include "integrator.h"
+#include <templates/integrator.h>
 //This one handles the param files
-#include "parameterreader.h"
+#include <include/parameterreader.h>
 //The SpaceTimeHandler manages the DoFs in space and time
-#include "mol_statespacetimehandler.h"
+#include <basic/mol_statespacetimehandler.h>
 //This represents the dirichletvalues
-#include "simpledirichletdata.h"
+#include <problemdata/simpledirichletdata.h>
 //Container class for the integrator
-#include "integratordatacontainer.h"
+#include <container/integratordatacontainer.h>
 
 //local includes
 //Defines the functionals we want to evaluate

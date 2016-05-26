@@ -21,8 +21,8 @@
  *
  **/
 
-#include "refinementcontainer.h"
-#include "dopeexception.h"
+#include <container/refinementcontainer.h>
+#include <include/dopeexception.h>
 #include <cassert>
 
 namespace DOpE

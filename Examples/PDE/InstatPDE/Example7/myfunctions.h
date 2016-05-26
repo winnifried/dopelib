@@ -28,7 +28,7 @@ using namespace std;
 using namespace dealii;
 
 #include <deal.II/base/numbers.h>
-#include "function_wrapper.h"
+#include <wrapper/function_wrapper.h>
 
 namespace DOpE
 {

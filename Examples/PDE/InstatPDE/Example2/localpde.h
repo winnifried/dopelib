@@ -24,7 +24,7 @@
 #ifndef LOCALPDE_
 #define LOCALPDE_
 
-#include "pdeinterface.h"
+#include <interfaces/pdeinterface.h>
 #include "ale_transformations.h"
 
 using namespace std;

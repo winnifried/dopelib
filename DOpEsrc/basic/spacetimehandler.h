@@ -24,10 +24,10 @@
 #ifndef SPACE_TIME_HANDLER_H_
 #define SPACE_TIME_HANDLER_H_
 
-#include "spacetimehandler_base.h"
-#include "active_fe_index_setter_interface.h"
-#include "mapping_wrapper.h"
-#include "dataout_wrapper.h"
+#include <basic/spacetimehandler_base.h>
+#include <interfaces/active_fe_index_setter_interface.h>
+#include <wrapper/mapping_wrapper.h>
+#include <wrapper/dataout_wrapper.h>
 
 #include <deal.II/lac/vector.h>
 #include <deal.II/lac/block_vector_base.h>

@@ -24,7 +24,7 @@
 #ifndef ACTIVE_FE_INDEX_INTERFACE_H_
 #define ACTIVE_FE_INDEX_INTERFACE_H_
 
-#include "dofhandler_wrapper.h"
+#include <wrapper/dofhandler_wrapper.h>
 
 namespace DOpE
 {

@@ -22,8 +22,8 @@
 **/
 
 
-#include "dopeexceptionhandler.h"
-#include "outputhandler.h"
+#include <include/dopeexceptionhandler.h>
+#include <include/outputhandler.h>
 
 #include <iostream>
 #include <string>

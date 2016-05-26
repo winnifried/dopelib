@@ -24,7 +24,7 @@
 #ifndef TANGENT_DIRICHLET_DATA_H_
 #define TANGENT_DIRICHLET_DATA_H_
 
-#include "function_wrapper.h"
+#include <wrapper/function_wrapper.h>
 
 namespace DOpE
 {

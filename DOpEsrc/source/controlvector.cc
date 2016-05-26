@@ -22,8 +22,8 @@
 **/
 
 
-#include "controlvector.h"
-#include "dopeexception.h"
+#include <include/controlvector.h>
+#include <include/dopeexception.h>
 
 #include <iostream>
 #include <assert.h>

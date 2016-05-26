@@ -24,7 +24,7 @@
 #ifndef LOCALFunctionalS_
 #define LOCALFunctionalS_
 
-#include "functionalinterface.h"
+#include <interfaces/functionalinterface.h>
 
 using namespace DOpE;
 

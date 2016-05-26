@@ -24,7 +24,7 @@
 #ifndef MY_FUNCTIONS_
 #define MY_FUNCTIONS_
 
-#include "function_wrapper.h"
+#include <wrapper/function_wrapper.h>
 
 using namespace dealii;
 

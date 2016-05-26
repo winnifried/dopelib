@@ -24,7 +24,7 @@
 #ifndef INITIAL_NEWTON_PROBLEM_H_
 #define INITIAL_NEWTON_PROBLEM_H_
 
-#include "spacetimehandler.h"
+#include <basic/spacetimehandler.h>
 
 using namespace dealii;
 

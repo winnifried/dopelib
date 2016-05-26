@@ -23,7 +23,7 @@
 #ifndef MYCONSTRAINTSMAKER_H_
 #define MYCONSTRAINTSMAKER_H_
 
-#include "userdefineddofconstraints.h"
+#include <include/userdefineddofconstraints.h>
 
 namespace DOpE
 {

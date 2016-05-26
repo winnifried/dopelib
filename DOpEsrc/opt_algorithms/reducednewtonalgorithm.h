@@ -24,8 +24,8 @@
 #ifndef REDUCEDNEWTON__ALGORITHM_H_
 #define REDUCEDNEWTON__ALGORITHM_H_
 
-#include "reducedalgorithm.h"
-#include "parameterreader.h"
+#include <opt_algorithms/reducedalgorithm.h>
+#include <include/parameterreader.h>
 
 #include <iostream>
 #include <assert.h>

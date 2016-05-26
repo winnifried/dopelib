@@ -24,8 +24,8 @@
 #ifndef SIMPLE_DIRICHLET_H_
 #define SIMPLE_DIRICHLET_H_
 
-#include "dirichletdatainterface.h"
-#include "function_wrapper.h"
+#include <interfaces/dirichletdatainterface.h>
+#include <wrapper/function_wrapper.h>
 
 namespace DOpE
 {

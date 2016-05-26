@@ -21,8 +21,8 @@
  *
  **/
 
-#include "pdeinterface.h"
-#include "dopeexception.h"
+#include <interfaces/pdeinterface.h>
+#include <include/dopeexception.h>
 
 #include <iostream>
 

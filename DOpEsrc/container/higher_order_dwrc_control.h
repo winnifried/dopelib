@@ -24,7 +24,7 @@
 #ifndef HIGHER_ORDER_DWRC_CONTROL_H_
 #define HIGHER_ORDER_DWRC_CONTROL_H_
 
-#include "dwrdatacontainer.h"
+#include <container/dwrdatacontainer.h>
 #include <deal.II/fe/fe_tools.h>
 
 namespace DOpE

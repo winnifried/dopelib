@@ -24,8 +24,8 @@
 #ifndef STATE_PROBLEM_H_
 #define STATE_PROBLEM_H_
 
-#include "spacetimehandler.h"
-#include "initialnewtonproblem.h" 
+#include <basic/spacetimehandler.h>
+#include <problemdata/initialnewtonproblem.h> 
 
 using namespace dealii;
 

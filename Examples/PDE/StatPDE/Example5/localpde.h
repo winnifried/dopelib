@@ -24,7 +24,7 @@
 #ifndef LOCALPDE_H_
 #define LOCALPDE_H_
 
-#include "pdeinterface.h"
+#include <interfaces/pdeinterface.h>
 #include "myfunctions.h"
 #include <deal.II/base/numbers.h>
 

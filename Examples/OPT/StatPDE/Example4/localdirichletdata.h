@@ -24,7 +24,7 @@
 #ifndef LOCAL_DIRICHLET_INTERFAC_H_
 #define LOCAL_DIRICHLET_INTERFAC_H_
 
-#include "dirichletdatainterface.h"
+#include <interfaces/dirichletdatainterface.h>
 
 using namespace std;
 using namespace dealii;

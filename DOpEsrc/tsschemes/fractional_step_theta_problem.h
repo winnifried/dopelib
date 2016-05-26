@@ -24,8 +24,8 @@
 #ifndef FRACTIONALSTEPTHETAPROBLEM_H_
 #define FRACTIONALSTEPTHETAPROBLEM_H_
 
-#include "initialproblem.h" 
-#include "primal_ts_base.h"
+#include <problemdata/initialproblem.h> 
+#include <tsschemes/primal_ts_base.h>
 
 namespace DOpE
 {

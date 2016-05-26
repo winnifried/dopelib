@@ -24,9 +24,9 @@
 #ifndef STATE_VECTOR_H_
 #define STATE_VECTOR_H_
 
-#include "spacetimehandler_base.h"
-#include "parameterreader.h"
-#include "dopetypes.h"
+#include <basic/spacetimehandler_base.h>
+#include <include/parameterreader.h>
+#include <basic/dopetypes.h>
 
 #include <deal.II/base/utilities.h>
 #include <deal.II/lac/vector.h>

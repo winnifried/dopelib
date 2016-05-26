@@ -24,10 +24,10 @@
 #ifndef MULTIMESH_FACEDATACONTAINER_H_
 #define MULTIMESH_FACEDATACONTAINER_H_
 
-#include "spacetimehandler.h"
-#include "statespacetimehandler.h"
-#include "fevalues_wrapper.h"
-#include "dopeexception.h"
+#include <basic/spacetimehandler.h>
+#include <basic/statespacetimehandler.h>
+#include <wrapper/fevalues_wrapper.h>
+#include <include/dopeexception.h>
 
 #include <deal.II/dofs/dof_handler.h>
 #include <deal.II/hp/dof_handler.h>

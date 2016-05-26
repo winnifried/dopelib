@@ -35,9 +35,9 @@
 
 #include <vector>
 
-#include "elementdatacontainer.h"
-#include "facedatacontainer.h"
-#include "optproblemcontainer.h"
+#include <container/elementdatacontainer.h>
+#include <container/facedatacontainer.h>
+#include <container/optproblemcontainer.h>
 #if DEAL_II_VERSION_GTE(7,3,0)
 	#include <deal.II/base/types.h>
  #endif

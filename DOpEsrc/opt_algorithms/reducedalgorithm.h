@@ -24,11 +24,11 @@
 #ifndef REDUCED_ALGORITHM_H_
 #define REDUCED_ALGORITHM_H_
 
-#include "optproblemcontainer.h"
-#include "reducedprobleminterface.h"
-#include "dopeexceptionhandler.h"
-#include "outputhandler.h"
-#include "controlvector.h"
+#include <container/optproblemcontainer.h>
+#include <interfaces/reducedprobleminterface.h>
+#include <include/dopeexceptionhandler.h>
+#include <include/outputhandler.h>
+#include <include/controlvector.h>
 
 #include <deal.II/lac/vector.h>
 

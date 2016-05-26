@@ -33,21 +33,21 @@
 #include <deal.II/base/function.h>
 
 #include "generalized_mma_algorithm.h"
-#include "optproblemcontainer.h"
-#include "functionalinterface.h"
-#include "pdeinterface.h"
-#include "statreducedproblem.h" 
+#include <container/optproblemcontainer.h>
+#include <interfaces/functionalinterface.h>
+#include <interfaces/pdeinterface.h>
+#include <reducedproblems/statreducedproblem.h> 
 #include "voidreducedproblem.h"
-#include "newtonsolver.h"
-#include "directlinearsolver.h"
-#include "integrator.h"
-#include "parameterreader.h"
-#include "mol_spacetimehandler.h"
-#include "simpledirichletdata.h"
-#include "constraints.h"
+#include <templates/newtonsolver.h>
+#include <templates/directlinearsolver.h>
+#include <templates/integrator.h>
+#include <include/parameterreader.h>
+#include <basic/mol_spacetimehandler.h>
+#include <problemdata/simpledirichletdata.h>
+#include <basic/constraints.h>
 #include "localconstraints.h"
 #include "localconstraintaccessor.h"
-#include "integratordatacontainer.h"
+#include <container/integratordatacontainer.h>
 
 #include "localpde.h"
 #include "localfunctional.h"

@@ -24,7 +24,7 @@
 #ifndef LOCAL_CONSTRAINT_H_
 #define LOCAL_CONSTRAINT_H_
 
-#include "constraintinterface.h"
+#include <interfaces/constraintinterface.h>
 
 namespace DOpE
 {

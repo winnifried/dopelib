@@ -24,7 +24,7 @@
 #ifndef FUNCTIONALS_H_
 #define FUNCTIONALS_H_
 
-#include "functionalinterface.h"
+#include <interfaces/functionalinterface.h>
 
 using namespace std;
 using namespace dealii;

@@ -36,27 +36,27 @@
 #include <deal.II/base/function.h>
 #include <deal.II/numerics/vector_tools.h>
 
-#include "pdeproblemcontainer.h"
-#include "functionalinterface.h"
-#include "pdeinterface.h"
-#include "statpdeproblem.h"
-#include "newtonsolver.h"
-#include "directlinearsolver.h"
-#include "userdefineddofconstraints.h"
-#include "sparsitymaker.h"
-#include "integratordatacontainer.h"
+#include <container/pdeproblemcontainer.h>
+#include <interfaces/functionalinterface.h>
+#include <interfaces/pdeinterface.h>
+#include <reducedproblems/statpdeproblem.h>
+#include <templates/newtonsolver.h>
+#include <templates/directlinearsolver.h>
+#include <include/userdefineddofconstraints.h>
+#include <include/sparsitymaker.h>
+#include <container/integratordatacontainer.h>
 
-#include "integrator.h"
-#include "parameterreader.h"
+#include <templates/integrator.h>
+#include <include/parameterreader.h>
 
-#include "mol_statespacetimehandler.h"
-#include "simpledirichletdata.h"
-#include "active_fe_index_setter_interface.h"
+#include <basic/mol_statespacetimehandler.h>
+#include <problemdata/simpledirichletdata.h>
+#include <interfaces/active_fe_index_setter_interface.h>
 
 #include "localpde.h"
 #include "functionals.h"
-#include "higher_order_dwrc.h"
-#include "residualestimator.h"
+#include <container/higher_order_dwrc.h>
+#include <container/residualestimator.h>
 #include "myfunctions.h"
 
 using namespace std;

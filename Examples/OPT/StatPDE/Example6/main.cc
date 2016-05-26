@@ -30,20 +30,20 @@
 #include <deal.II/base/quadrature_lib.h>
 #include <deal.II/lac/precondition_block.h>
 
-#include "reduced_ipopt_algorithm.h"
-#include "reduced_snopt_algorithm.h"
-#include "optproblemcontainer.h"
-#include "functionalinterface.h"
-#include "statreducedproblem.h" 
-#include "newtonsolver.h"
-#include "cglinearsolver.h"
-#include "integrator.h"
-#include "parameterreader.h"
-#include "mol_spacetimehandler.h"
-#include "simpledirichletdata.h"
-#include "noconstraints.h"
-#include "preconditioner_wrapper.h"
-#include "integratordatacontainer.h"
+#include <opt_algorithms/reduced_ipopt_algorithm.h>
+#include <opt_algorithms/reduced_snopt_algorithm.h>
+#include <container/optproblemcontainer.h>
+#include <interfaces/functionalinterface.h>
+#include <reducedproblems/statreducedproblem.h> 
+#include <templates/newtonsolver.h>
+#include <templates/cglinearsolver.h>
+#include <templates/integrator.h>
+#include <include/parameterreader.h>
+#include <basic/mol_spacetimehandler.h>
+#include <problemdata/simpledirichletdata.h>
+#include <problemdata/noconstraints.h>
+#include <wrapper/preconditioner_wrapper.h>
+#include <container/integratordatacontainer.h>
 
 #include "localpde.h"
 #include "localfunctional.h"

@@ -31,10 +31,10 @@
 #include <deal.II/fe/fe_values.h>
 #include <deal.II/fe/mapping.h>
 
-#include "fevalues_wrapper.h"
-#include "dofhandler_wrapper.h"
-#include "functionalinterface.h"
-#include "constraintvector.h"
+#include <wrapper/fevalues_wrapper.h>
+#include <wrapper/dofhandler_wrapper.h>
+#include <interfaces/functionalinterface.h>
+#include <include/constraintvector.h>
 
 namespace DOpE
 {

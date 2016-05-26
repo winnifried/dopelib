@@ -28,10 +28,10 @@
 #include <deal.II/dofs/dof_handler.h>
 #include <deal.II/lac/constraint_matrix.h>
 
-#include "dofhandler_wrapper.h"
-#include "mapping_wrapper.h"
-#include "parameterreader.h"
-#include "dopeexception.h"
+#include <wrapper/dofhandler_wrapper.h>
+#include <wrapper/mapping_wrapper.h>
+#include <include/parameterreader.h>
+#include <include/dopeexception.h>
 
 namespace DOpE
 {

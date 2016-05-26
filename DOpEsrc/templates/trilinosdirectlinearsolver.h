@@ -41,7 +41,7 @@
 
 #include <vector>
 
-#include "parameterreader.h"
+#include <include/parameterreader.h>
 
 namespace DOpE
 {

@@ -24,7 +24,7 @@
 #ifndef POINTCONSTRAINTSMAKER_H_
 #define POINTCONSTRAINTSMAKER_H_
 
-#include "userdefineddofconstraints.h"
+#include <include/userdefineddofconstraints.h>
 
 namespace DOpE
 {

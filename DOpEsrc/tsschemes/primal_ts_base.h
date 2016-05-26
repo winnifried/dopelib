@@ -24,7 +24,7 @@
 #ifndef PRIMAL_TS_BASE_H_
 #define PRIMAL_TS_BASE_H_
 
-#include "ts_base.h"
+#include <tsschemes/ts_base.h>
 namespace DOpE
 {
 

@@ -24,7 +24,7 @@
 #ifndef LOCALFunctional_
 #define LOCALFunctional_
 
-#include "functionalinterface.h"
+#include <interfaces/functionalinterface.h>
 #include "myfunctions.h"
 
 using namespace std;

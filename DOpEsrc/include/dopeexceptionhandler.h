@@ -24,8 +24,8 @@
 #ifndef DOPE_EXCEPTION_HANDLER_H_
 #define DOPE_EXCEPTION_HANDLER_H_
 
-#include "dopeexception.h"
-//#include "outputhandler.h"
+#include <include/dopeexception.h>
+//#include <include/outputhandler.h>
 #include <string>
 
 namespace DOpE

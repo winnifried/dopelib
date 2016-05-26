@@ -24,11 +24,11 @@
 #ifndef REDUCED_SNOPT__ALGORITHM_H_
 #define REDUCED_SNOPT__ALGORITHM_H_
 
-#include "reducedalgorithm.h"
-#include "parameterreader.h"
-#include "dopetypes.h"
+#include <opt_algorithms/reducedalgorithm.h>
+#include <include/parameterreader.h>
+#include <basic/dopetypes.h>
 
-#include "snopt_wrapper.h"
+#include <wrapper/snopt_wrapper.h>
 
 #include <iostream>
 #include <assert.h>

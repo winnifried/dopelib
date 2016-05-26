@@ -32,7 +32,7 @@
 #pragma GCC diagnostic pop
 #endif
 
-#include "controlvector.h"
+#include <include/controlvector.h>
 
 #include <iostream>
 

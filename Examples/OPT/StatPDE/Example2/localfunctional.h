@@ -30,7 +30,7 @@
 #include <deal.II/grid/grid_tools.h>
 #include <deal.II/fe/mapping_q1.h>
 
-#include "functionalinterface.h"
+#include <interfaces/functionalinterface.h>
 #include "myfunctions.h"
 
 using namespace std;

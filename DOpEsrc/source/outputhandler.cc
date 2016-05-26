@@ -22,9 +22,9 @@
 **/
 
 
-#include "outputhandler.h"
-#include "reducedprobleminterface.h"
-#include "version.h"
+#include <include/outputhandler.h>
+#include <interfaces/reducedprobleminterface.h>
+#include <include/version.h>
 
 #include <cstdlib>
 #include <assert.h>

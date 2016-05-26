@@ -21,8 +21,8 @@
  *
  **/
 
-#include "functionalinterface.h"
-#include "dopeexception.h"
+#include <interfaces/functionalinterface.h>
+#include <include/dopeexception.h>
 
 #include <iostream>
 

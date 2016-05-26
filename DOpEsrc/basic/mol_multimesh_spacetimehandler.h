@@ -24,13 +24,13 @@
 #ifndef MOL_MULTIMESH_SPACE_TIME_HANDLER_H_
 #define MOL_MULTIMESH_SPACE_TIME_HANDLER_H_
 
-#include "mol_spacetimehandler.h"
-#include "constraints.h"
-#include "sparsitymaker.h"
-#include "userdefineddofconstraints.h"
-#include "sth_internals.h"
-#include "refinementcontainer.h"
-#include "solutiontransfer_wrapper.h"
+#include <basic/mol_spacetimehandler.h>
+#include <basic/constraints.h>
+#include <include/sparsitymaker.h>
+#include <include/userdefineddofconstraints.h>
+#include <basic/sth_internals.h>
+#include <container/refinementcontainer.h>
+#include <wrapper/solutiontransfer_wrapper.h>
 
 #include <deal.II/dofs/dof_handler.h>
 #include <deal.II/dofs/dof_renumbering.h>

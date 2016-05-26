@@ -34,7 +34,7 @@
 #include <fstream>
 #include <iomanip>
 
-#include "parameterreader.h"
+#include <include/parameterreader.h>
 
 
 

@@ -32,9 +32,9 @@
 #include <sstream>
 #include <deal.II/lac/vector.h>
 
-#include "optproblemcontainer.h"
-#include "controlvector.h"
-#include "parameterreader.h"
+#include <container/optproblemcontainer.h>
+#include <include/controlvector.h>
+#include <include/parameterreader.h>
 
 namespace DOpE
 {

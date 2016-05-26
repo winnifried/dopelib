@@ -24,11 +24,11 @@
 #ifndef FACEDATACONTAINER_H_
 #define FACEDATACONTAINER_H_
 
-#include "spacetimehandler.h"
-#include "statespacetimehandler.h"
-#include "fevalues_wrapper.h"
-#include "dopeexception.h"
-#include "facedatacontainer_internal.h"
+#include <basic/spacetimehandler.h>
+#include <basic/statespacetimehandler.h>
+#include <wrapper/fevalues_wrapper.h>
+#include <include/dopeexception.h>
+#include <container/facedatacontainer_internal.h>
 
 #include <sstream>
 

@@ -24,7 +24,7 @@
 #ifndef LOCALPDE_
 #define LOCALPDE_
 
-#include "pdeinterface.h"
+#include <interfaces/pdeinterface.h>
 #include "my_functions.h"
 
 using namespace std;

@@ -21,7 +21,7 @@
  *
  **/
 
-#include "mol_spacetimehandler.h"
+#include <basic/mol_spacetimehandler.h>
 
 namespace DOpE
 {

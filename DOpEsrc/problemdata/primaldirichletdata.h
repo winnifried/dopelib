@@ -24,9 +24,9 @@
 #ifndef PRIMAL_DIRICHLET_DATA_H_
 #define PRIMAL_DIRICHLET_DATA_H_
 
-#include "function_wrapper.h"
-#include "dofhandler_wrapper.h"
-#include "fevalues_wrapper.h"
+#include <wrapper/function_wrapper.h>
+#include <wrapper/dofhandler_wrapper.h>
+#include <wrapper/fevalues_wrapper.h>
 
 namespace DOpE
 {

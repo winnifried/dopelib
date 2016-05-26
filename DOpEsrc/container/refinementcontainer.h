@@ -25,7 +25,7 @@
 #define REFINEMENTCONTAINER_H_
 
 #include <deal.II/lac/vector.h>
-#include "dopetypes.h"
+#include <basic/dopetypes.h>
 #include <limits>
 
 namespace DOpE

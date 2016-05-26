@@ -27,7 +27,7 @@
 #include <deal.II/fe/fe_values.h>
 #include <deal.II/hp/fe_values.h>
 
-#include "mapping_wrapper.h"
+#include <wrapper/mapping_wrapper.h>
 
 namespace DOpEWrapper
 {

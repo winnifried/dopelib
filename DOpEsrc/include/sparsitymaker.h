@@ -24,7 +24,7 @@
 #ifndef SPARSITYMAKER_H_
 #define SPARSITYMAKER_H_
 
-#include "dofhandler_wrapper.h"
+#include <wrapper/dofhandler_wrapper.h>
 #include <deal.II/dofs/dof_tools.h>
 #include <deal.II/lac/constraint_matrix.h>
 

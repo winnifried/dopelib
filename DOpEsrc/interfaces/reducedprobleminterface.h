@@ -24,12 +24,12 @@
 #ifndef SOLVER_INTERFACE_H_
 #define SOLVER_INTERFACE_H_
 
-#include "dopeexceptionhandler.h"
-#include "outputhandler.h"
-#include "controlvector.h"
-#include "constraintvector.h"
-#include "dopetypes.h"
-#include "dwrdatacontainer.h"
+#include <include/dopeexceptionhandler.h>
+#include <include/outputhandler.h>
+#include <include/controlvector.h>
+#include <include/constraintvector.h>
+#include <basic/dopetypes.h>
+#include <container/dwrdatacontainer.h>
 
 #include <assert.h>
 #include <deal.II/numerics/data_out.h>
