@@ -635,9 +635,8 @@ namespace DOpE
         throw DOpEException("Unknown WeightComputation",
             "StatPDEProblem::ComputeDualForErrorEstimation");
       }
+      auto& problem = this->GetProblem()->GetAdjoint_For_EEProblem();
 
-      //      auto& problem = this->GetProblem()->GetStateProblem();//Hier ist adjoint problem einzufuegen
-      auto& problem = *(this->GetProblem());
       if (adjoint_reinit_ == true)
       {
         GetNonlinearSolver("adjoint_for_ee").ReInit(problem);

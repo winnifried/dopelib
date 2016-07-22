@@ -1,5 +1,11 @@
 Changelog DOpE
 ==============
+22.07.2016: Added the file problemdata/pde_adjoint_for_eeproblem.h
+	    This file contains the pde information for the
+	    adjoint problem associated with error estimation for
+	    a pde solution. Now PDEProblemContainer is only
+	    needed to generate the problems used in stationary
+	    PDE calculations.
 26.05.2016: Restructured include commands in files now files
 	    in DOpEsrc are included with <> brackets and explicit
 	    mentioning of the subdirectory

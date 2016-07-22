@@ -35,6 +35,7 @@
 #include <container/elementdatacontainer.h>
 #include <container/facedatacontainer.h>
 #include <problemdata/stateproblem.h>
+#include <problemdata/pde_adjoint_for_eeproblem.h>
 #include <container/problemcontainer_internal.h>
 //#include <deal.II/multigrid/mg_dof_handler.h>
 #include <basic/dopetypes.h>
@@ -133,6 +134,24 @@ namespace DOpE
                 this->GetPDE());
           }
           return *state_problem_;
+        }
+
+      /**
+       * Returns a description of the PDE_Adjoint PDE for Error Estimation
+       */
+        PDE_Adjoint_For_EEProblem<
+            PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE,
+                DH>, PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>&
+        GetAdjoint_For_EEProblem()
+        {
+          if (adjoint_for_ee_problem_ == NULL)
+          {
+            adjoint_for_ee_problem_ = new PDE_Adjoint_For_EEProblem<
+                PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim,
+                    FE, DH>, PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>(*this,
+                this->GetPDE());
+          }
+          return *adjoint_for_ee_problem_;
         }
 
         //TODO This is Pfush needed to split into different subproblems and allow optproblem to
@@ -276,278 +295,6 @@ namespace DOpE
             const std::map<std::string, const VECTOR*> &block_values);
 
         /******************************************************/
-
-        /**
-         * Computes the value of the element equation which corresponds
-         * to the residuum in nonlinear cases. This function is the basis
-         * for all stationary examples and unsteady configurations as well.
-         * However, in unsteady computations one has to differentiate
-         * between explicit (diffusion, convection) and implicit terms
-         * (pressure, incompressibility). For that reason a second
-         * function ElementEquationImplicit also exists.
-         *
-         * If no differentiation between explicit and implicit terms is needed
-         * this function should be used.
-         *
-         * @template DATACONTAINER        Class of the datacontainer in use, distinguishes
-         *                                between hp- and classical case.
-         *
-         * @param edc                     A DataContainer holding all the needed information
-         *                                of the element
-         * @param local_vector        This vector contains the locally computed values of the element equation. For more information
-         *                                 on dealii::Vector, please visit, the deal.ii manual pages.
-         * @param scale                    A scaling factor which is -1 or 1 depending on the subroutine to compute.
-         * @param scale_ico             A scaling factor for terms which will be treated fully implicit
-         *                              in an instationary equation.
-         */
-        template<typename DATACONTAINER>
-          void
-          ElementEquation(const DATACONTAINER& edc,
-              dealii::Vector<double> &local_vector, double scale,
-              double scale_ico);
-
-        /******************************************************/
-
-        /******************************************************/
-
-        /**
-         * This function has the same functionality as the ElementEquation function.
-         * It is needed for time derivatives when working with
-         * time dependent problems.
-         */
-        template<typename DATACONTAINER>
-          void
-          ElementTimeEquation(const DATACONTAINER& dc,
-              dealii::Vector<double> &local_vector, double scale = 1.);
-
-        /******************************************************/
-
-        /**
-         * This function has the same functionality as the ElementTimeEquation function.
-         * It is needed for problems with nonlinearities in the time derivative, like
-	 * fluid-structure interaction problems and has
-         * special structure.
-         */
-        template<typename DATACONTAINER>
-          void
-          ElementTimeEquationExplicit(const DATACONTAINER& dc,
-              dealii::Vector<double> &local_vector, double scale = 1.);
-
-        /******************************************************/
-
-        /**
-         * Computes the value of the right-hand side of the problem at hand.
-         *
-         * @template DATACONTAINER         Class of the datacontainer in use, distinguishes
-         *                                 between hp- and classical case.
-         *
-         * @param edc                      A DataContainer holding all the needed information
-         * @param local_vector        This vector contains the locally computed values of the element equation. For more information
-         *                                 on dealii::Vector, please visit, the deal.ii manual pages.
-         * @param scale                    A scaling factor which is -1 or 1 depending on the subroutine to compute.
-         */
-        template<typename DATACONTAINER>
-          void
-          ElementRhs(const DATACONTAINER& dc,
-              dealii::Vector<double> &local_vector, double scale = 1.);
-
-        /******************************************************/
-
-        /**
-         * Computes the value of the right-hand side of the problem at hand, if it
-         * contains pointevaluations.
-         *
-         * @param param_values             A std::map containing parameter data (e.g. non space dependent data). If the control
-         *                                 is done by parameters, it is contained in this map at the position "control".
-         * @param domain_values            A std::map containing domain data (e.g. nodal vectors for FE-Functions). If the control
-         *                                 is distributed, it is contained in this map at the position "control". The state may always
-         *                                 be found in this map at the position "state"
-         * @param rhs_vector               This vector contains the complete point-rhs.
-         * @param scale                    A scaling factor which is -1 or 1 depending on the subroutine to compute.
-         */
-        void
-        PointRhs(
-            const std::map<std::string, const dealii::Vector<double>*> &param_values,
-            const std::map<std::string, const VECTOR*> &domain_values,
-            VECTOR& rhs_vector, double scale = 1.);
-
-        /******************************************************/
-
-        /**
-         * Computes the value of the element matrix which is derived
-         * by computing the directional derivatives of the residuum equation of the PDE
-         * problem under consideration.
-         *
-         * The differentiation between explicit and implicit terms is
-         * equivalent to the ElementEquation. We refer to its documentation.
-         *
-         * Moreover, you find an extensive explication in the
-         * time step algorithms, e.g., backward_euler_problem.h.
-         *
-         * @template DATACONTAINER      Class of the datacontainer in use, distinguishes
-         *                              between hp- and classical case.
-         *
-         * @param edc                   A DataContainer holding all the needed information
-         *
-
-         * @param local_entry_matrix    The local matrix is quadratic and has size local DoFs times local DoFs and is
-         *                              filled by the locally computed values. For more information of its functionality, please
-         *                              search for the keyword `FullMatrix' in the deal.ii manual.
-         * @param scale                 A scaling factor which is -1 or 1 depending on the subroutine to compute.
-         * @param scale_ico             A scaling factor for terms which will be treated fully implicit
-         *                              in an instationary equation.
-         */
-        template<typename DATACONTAINER>
-          void
-          ElementMatrix(const DATACONTAINER& dc,
-              dealii::FullMatrix<double> &local_entry_matrix, double scale = 1.,
-              double scale_ico = 1.);
-
-        /******************************************************/
-
-        /**
-         * Computes the value of the element matrix which is derived
-         * by computing the directional derivatives of the time residuum of the PDE
-         * problem under consideration.
-         *
-         * The differentiation between explicit and implicit terms is
-         * equivalent to the ElementTimeEquation. We refer to its documentation.
-         *
-         * Moreover, you find an extensive explication in the
-         * time step algorithms, e.g., backward_euler_problem.h.
-         */
-        template<typename DATACONTAINER>
-          void
-          ElementTimeMatrix(const DATACONTAINER& dc,
-              dealii::FullMatrix<double> &local_entry_matrix);
-
-        /******************************************************/
-
-        /**
-         * Computes the value of the element matrix which is derived
-         * by computing the directional derivatives of the time residuum of the PDE
-         * problem under consideration.
-         *
-         * This function is only needed for fluid-structure interaction problems.
-         * Please ask Thomas Wick WHY and HOW to use this function.
-         *
-         */
-        template<typename DATACONTAINER>
-          void
-          ElementTimeMatrixExplicit(const DATACONTAINER& dc,
-              dealii::FullMatrix<double> &local_entry_matrix);
-
-        /******************************************************/
-
-        /**
-         * Computes the value of face on a element.
-         * It has the same functionality as ElementEquation. We refer to its
-         * documentation.
-         *
-         */
-        template<typename FACEDATACONTAINER>
-          void
-          FaceEquation(const FACEDATACONTAINER& dc,
-              dealii::Vector<double> &local_vector, double scale,
-              double scale_ico);
-
-        /******************************************************/
-        /**
-         * Computes the product of two different finite elements
-         * on a interior face. It has the same functionality as ElementEquation.
-         * We refer to its documentation.
-         *
-         */
-        template<typename FACEDATACONTAINER>
-          void
-          InterfaceEquation(const FACEDATACONTAINER& dc,
-              dealii::Vector<double> &local_vector, double scale,
-              double scale_ico);
-
-        /******************************************************/
-        /**
-         * Computes the value of face on a element.
-         * It has the same functionality as ElementRhs. We refer to its
-         * documentation.
-         *
-         */
-        template<typename FACEDATACONTAINER>
-          void
-          FaceRhs(const FACEDATACONTAINER& dc,
-              dealii::Vector<double> &local_vector, double scale = 1.);
-
-        /******************************************************/
-
-        /**
-         * Computes the value of face on a element.
-         * It has the same functionality as ElementMatrix. We refer to its
-         * documentation.
-         *
-         */
-        template<typename FACEDATACONTAINER>
-          void
-          FaceMatrix(const FACEDATACONTAINER& dc,
-              dealii::FullMatrix<double> &local_entry_matrix, double scale = 1.,
-              double scale_ico = 1.);
-
-        /******************************************************/
-        /**
-         * Computes the product of two different finite elements
-         * on an interior face. It has the same functionality as
-         * ElementMatrix. We refer to its documentation.
-         *
-         */
-        template<typename FACEDATACONTAINER>
-          void
-          InterfaceMatrix(const FACEDATACONTAINER& dc,
-              dealii::FullMatrix<double> &local_entry_matrix, double scale = 1.,
-              double scale_ico = 1.);
-
-        /******************************************************/
-
-        /**
-         * Computes the value of face on a boundary.
-         * It has the same functionality as ElementEquation. We refer to its
-         * documentation.
-         */
-        template<typename FACEDATACONTAINER>
-          void
-          BoundaryEquation(const FACEDATACONTAINER& dc,
-              dealii::Vector<double> &local_vector, double scale,
-              double scale_ico);
-
-        /******************************************************/
-        /**
-         * Computes the value of the boundary on a element.
-         * It has the same functionality as ElementRhs. We refer to its
-         * documentation.
-         *
-         */
-        template<typename FACEDATACONTAINER>
-          void
-          BoundaryRhs(const FACEDATACONTAINER& dc,
-              dealii::Vector<double> &local_vector, double scale = 1.);
-
-        /******************************************************/
-
-        /**
-         * Computes the value of the boundary on a element.
-         * It has the same functionality as ElementMatrix. We refer to its
-         * documentation.
-         *
-         */
-        template<typename FACEDATACONTAINER>
-          void
-          BoundaryMatrix(const FACEDATACONTAINER& dc,
-              dealii::FullMatrix<double> &local_matrix, double scale = 1.,
-              double scale_ico = 1.);
-
-        /******************************************************/
-
-        const FE<dealdim, dealdim>&
-        GetFESystem() const;
-
-        /******************************************************/
         /**
          * This function determines whether a loop over all faces is required or not.
          *
@@ -591,20 +338,6 @@ namespace DOpE
 
         /******************************************************/
 
-        const std::vector<unsigned int>&
-        GetDirichletColors() const;
-        const std::vector<bool>&
-        GetDirichletCompMask(unsigned int color) const;
-
-        /******************************************************/
-
-        const dealii::Function<dealdim> &
-        GetDirichletValues(unsigned int color,
-            const std::map<std::string, const dealii::Vector<double>*> &param_values,
-            const std::map<std::string, const VECTOR*> &domain_values) const;
-
-        /******************************************************/
-
         void
         SetInitialValues(const dealii::Function<dealdim>* values)
         {
@@ -620,8 +353,6 @@ namespace DOpE
 
         void
         SetBoundaryEquationColors(unsigned int color);
-        const std::vector<unsigned int>&
-        GetBoundaryEquationColors() const;
         void
         SetBoundaryFunctionalColors(unsigned int color);
         const std::vector<unsigned int>&
@@ -722,11 +453,6 @@ namespace DOpE
 
         /******************************************************/
 
-        const dealii::ConstraintMatrix&
-        GetDoFConstraints() const;
-
-        /******************************************************/
-
         std::string
         GetDoFType() const;
         std::string
@@ -780,29 +506,6 @@ namespace DOpE
         {
           return STH_;
         }
-
-        /******************************************************/
-
-        void
-        ComputeSparsityPattern(SPARSITYPATTERN & sparsity) const;
-
-        /******************************************************/
-//      /*
-//       * Experimental status:
-//       * Needed for MG prec
-//       */
-//      void
-//        ComputeMGSparsityPattern(dealii::MGLevelObject<dealii::BlockSparsityPattern> & mg_sparsity_patterns,
-//				      unsigned int n_levels) const;
-//
-//      /******************************************************/
-//      /*
-//       * Experimental status:
-//       * Needed for MG prec
-//       */
-//        void
-//        ComputeMGSparsityPattern(dealii::MGLevelObject<dealii::SparsityPattern> & mg_sparsity_patterns,
-//				      unsigned int n_levels) const;
 
         /******************************************************/
 
@@ -888,8 +591,14 @@ namespace DOpE
         StateProblem<
             PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE,
                 DH>, PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>* state_problem_;
+        PDE_Adjoint_For_EEProblem<
+            PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE,
+      DH>, PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>* adjoint_for_ee_problem_;
 
         friend class StateProblem<
+            PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE,
+                DH>, PDE, DD, SPARSITYPATTERN, VECTOR, dealdim> ;
+        friend class PDE_Adjoint_For_EEProblem<
             PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE,
                 DH>, PDE, DD, SPARSITYPATTERN, VECTOR, dealdim> ;
     };
@@ -900,7 +609,8 @@ namespace DOpE
     PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE, DH>::PDEProblemContainer(
         PDE& pde,
         StateSpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dealdim>& STH) :
-        ProblemContainerInternal<PDE>(pde), STH_(&STH), state_problem_(NULL)
+        ProblemContainerInternal<PDE>(pde), STH_(&STH), state_problem_(NULL),
+        adjoint_for_ee_problem_(NULL)
     {
       ExceptionHandler_ = NULL;
       OutputHandler_ = NULL;
@@ -929,6 +639,10 @@ namespace DOpE
       {
         delete state_problem_;
       }
+      if (adjoint_for_ee_problem_ != NULL)
+      {
+        delete adjoint_for_ee_problem_;
+      }
     }
 
   /******************************************************/
@@ -943,6 +657,11 @@ namespace DOpE
       {
         delete state_problem_;
         state_problem_ = NULL;
+      }
+      if (adjoint_for_ee_problem_ != NULL)
+      {
+        delete adjoint_for_ee_problem_;
+        adjoint_for_ee_problem_ = NULL;
       }
 
       if (algo_type_ != algo_type && algo_type_ != "")
@@ -1151,477 +870,10 @@ namespace DOpE
 
   template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
       int dealdim, template<int, int> class FE, template<int, int> class DH>
-    template<typename DATACONTAINER>
-      void
-      PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE, DH>::ElementEquation(
-          const DATACONTAINER& edc, dealii::Vector<double> &local_vector,
-          double scale, double scale_ico)
-      {
-        if (this->GetType() == "state")
-        {
-          // state values in quadrature points
-          this->GetPDE().ElementEquation(edc, local_vector, scale, scale_ico);
-        }
-        else if (this->GetType() == "adjoint_for_ee")
-        {
-          // state values in quadrature points
-          this->GetPDE().ElementEquation_U(edc, local_vector, scale,
-              scale_ico);
-        }
-        else
-        {
-          throw DOpEException("Not implemented",
-              "PDEProblemContainer::ElementEquation");
-        }
-      }
-
-  /******************************************************/
-
-  template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
-      int dealdim, template<int, int> class FE, template<int, int> class DH>
-    template<typename DATACONTAINER>
-      void
-      PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE, DH>::ElementTimeEquation(
-          const DATACONTAINER& edc, dealii::Vector<double> &local_vector,
-          double scale)
-      {
-
-        if (this->GetType() == "state")
-        {
-          // state values in quadrature points
-          this->GetPDE().ElementTimeEquation(edc, local_vector, scale);
-        }
-        else if (this->GetType() == "adjoint_for_ee")
-        {
-          throw DOpEException("Not implemented",
-              "OptProblem::ElementTimeEquation");
-        }
-        else
-        {
-          throw DOpEException("Not implemented",
-              "PDEProblemContainer::ElementTimeEquation");
-        }
-      }
-
-  /******************************************************/
-
-  template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
-      int dealdim, template<int, int> class FE, template<int, int> class DH>
-    template<typename DATACONTAINER>
-      void
-      PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE, DH>::ElementTimeEquationExplicit(
-          const DATACONTAINER& edc, dealii::Vector<double> &local_vector,
-          double scale)
-      {
-
-        if (this->GetType() == "state")
-        {
-          // state values in quadrature points
-          this->GetPDE().ElementTimeEquationExplicit(edc, local_vector,
-              scale);
-        }
-        else if (this->GetType() == "adjoint_for_ee")
-        {
-          throw DOpEException("Not implemented",
-              "OptProblem::ElementTimeEquation");
-        }
-        else
-        {
-          throw DOpEException("Not implemented",
-              "PDEProblemContainer::ElementTimeEquation");
-        }
-      }
-
-  /******************************************************/
-
-  template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
-      int dealdim, template<int, int> class FE, template<int, int> class DH>
-    template<typename FACEDATACONTAINER>
-      void
-      PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE, DH>::FaceEquation(
-          const FACEDATACONTAINER& fdc,
-          dealii::Vector<double> &local_vector, double scale,
-          double scale_ico)
-      {
-        if (this->GetType() == "state")
-        {
-          // state values in quadrature points
-          this->GetPDE().FaceEquation(fdc, local_vector, scale, scale_ico);
-        }
-        else if (this->GetType() == "adjoint_for_ee")
-        {
-          // state values in quadrature points
-          this->GetPDE().FaceEquation_U(fdc, local_vector, scale,
-              scale_ico);
-        }
-        else
-        {
-          throw DOpEException("Not implemented",
-              "PDEProblemContainer::FaceEquation");
-        }
-      }
-
-  /******************************************************/
-
-  template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
-      int dealdim, template<int, int> class FE, template<int, int> class DH>
-    template<typename FACEDATACONTAINER>
-      void
-      PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE, DH>::InterfaceEquation(
-          const FACEDATACONTAINER& fdc,
-          dealii::Vector<double> &local_vector, double scale,
-          double scale_ico)
-      {
-        if (this->GetType() == "state")
-        {
-          // state values in quadrature points
-          this->GetPDE().InterfaceEquation(fdc, local_vector, scale,
-              scale_ico);
-        }
-        else if (this->GetType() == "adjoint_for_ee")
-        {
-          // state values in quadrature points
-          this->GetPDE().InterfaceEquation_U(fdc, local_vector, scale,
-              scale_ico);
-        }
-        else
-        {
-          throw DOpEException("Not implemented",
-              "PDEProblemContainer::InterfaceEquation");
-        }
-      }
-  /******************************************************/
-
-  template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
-      int dealdim, template<int, int> class FE, template<int, int> class DH>
-    template<typename FACEDATACONTAINER>
-      void
-      PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE, DH>::BoundaryEquation(
-          const FACEDATACONTAINER& fdc,
-          dealii::Vector<double> &local_vector, double scale,
-          double scale_ico)
-      {
-        if (this->GetType() == "state")
-        {
-          // state values in quadrature points
-          this->GetPDE().BoundaryEquation(fdc, local_vector, scale,
-              scale_ico);
-        }
-        else if (this->GetType() == "adjoint_for_ee")
-        {
-          // state values in quadrature points
-          this->GetPDE().BoundaryEquation_U(fdc, local_vector, scale,
-              scale_ico);
-        }
-        else
-        {
-          throw DOpEException("Not implemented",
-              "PDEProblemContainer::ElementBoundaryEquation");
-        }
-      }
-
-  /******************************************************/
-
-  template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
-      int dealdim, template<int, int> class FE, template<int, int> class DH>
-    template<typename DATACONTAINER>
-      void
-      PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE, DH>::ElementRhs(
-          const DATACONTAINER& edc, dealii::Vector<double> &local_vector,
-          double scale)
-      {
-
-        if (this->GetType() == "state")
-        {
-          // state values in quadrature points
-          this->GetPDE().ElementRightHandSide(edc, local_vector, scale);
-        }
-        else if (this->GetType() == "adjoint_for_ee")
-        {
-          //TODO currently, pointvalue is not working for dual error estimation!
-          //values of the derivative of the functional for error estimation.
-          //Check, if we have to evaluate an integral over a domain.
-          if (aux_functionals_[functional_for_ee_num_]->GetType().find("domain")
-              != std::string::npos)
-            aux_functionals_[functional_for_ee_num_]->ElementValue_U(edc,
-                local_vector, scale);
-        }
-        else
-        {
-          throw DOpEException("Not implemented",
-              "PDEProblemContainer::ElementRhs");
-        }
-      }
-
-  /******************************************************/
-
-  template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
-      int dealdim, template<int, int> class FE, template<int, int> class DH>
-    void
-    PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE, DH>::PointRhs(
-        const std::map<std::string, const dealii::Vector<double>*> &param_values,
-        const std::map<std::string, const VECTOR*> &domain_values,
-        VECTOR& rhs_vector, double scale)
-    {
-      if (this->GetType() == "adjoint_for_ee")
-      {
-        //values of the derivative of the functional for error estimation
-        if (aux_functionals_[functional_for_ee_num_]->GetType().find("point")
-            != std::string::npos)
-          aux_functionals_[functional_for_ee_num_]->PointValue_U(
-              this->GetSpaceTimeHandler()->GetStateDoFHandler(),
-              this->GetSpaceTimeHandler()->GetStateDoFHandler(), param_values,
-              domain_values, rhs_vector, scale);
-      }
-      else
-      {
-        throw DOpEException("Not implemented", "OptProblem::ElementRhs");
-      }
-    }
-
-  /******************************************************/
-
-  template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
-      int dealdim, template<int, int> class FE, template<int, int> class DH>
-    template<typename FACEDATACONTAINER>
-      void
-      PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE, DH>::FaceRhs(
-          const FACEDATACONTAINER& fdc,
-          dealii::Vector<double> &local_vector, double scale)
-      {
-        if (this->GetType() == "state")
-        {
-          // state values in face quadrature points
-          this->GetPDE().FaceRightHandSide(fdc, local_vector, scale);
-        }
-        else if (this->GetType() == "adjoint_for_ee")
-        {
-          //values of the derivative of the functional for error estimation
-          if (aux_functionals_[functional_for_ee_num_]->GetType().find("face")
-              != std::string::npos)
-            aux_functionals_[functional_for_ee_num_]->FaceValue_U(fdc,
-                local_vector, scale);
-        }
-        else
-        {
-          throw DOpEException("Not implemented",
-              "PDEProblemContainer::ElementFaceRhs");
-        }
-      }
-
-  /******************************************************/
-
-  template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
-      int dealdim, template<int, int> class FE, template<int, int> class DH>
-    template<typename FACEDATACONTAINER>
-      void
-      PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE, DH>::BoundaryRhs(
-          const FACEDATACONTAINER& fdc,
-          dealii::Vector<double> &local_vector, double scale)
-      {
-        if (this->GetType() == "state")
-        {
-          // state values in face quadrature points
-          this->GetPDE().BoundaryRightHandSide(fdc, local_vector, scale);
-        }
-        else if (this->GetType() == "adjoint_for_ee")
-        {
-          //values of the derivative of the functional for error estimation
-          if (aux_functionals_[functional_for_ee_num_]->GetType().find(
-              "boundary") != std::string::npos)
-            aux_functionals_[functional_for_ee_num_]->BoundaryValue_U(fdc,
-                local_vector, scale);
-        }
-        else
-        {
-          throw DOpEException("Not implemented",
-              "PDEProblemContainer::ElementBoundaryRhs");
-        }
-      }
-
-  /******************************************************/
-
-  template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
-      int dealdim, template<int, int> class FE, template<int, int> class DH>
-    template<typename DATACONTAINER>
-      void
-      PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE, DH>::ElementMatrix(
-          const DATACONTAINER& edc,
-          dealii::FullMatrix<double> &local_entry_matrix, double scale,
-          double scale_ico)
-      {
-
-        if (this->GetType() == "state")
-        {
-          // state values in quadrature points
-          this->GetPDE().ElementMatrix(edc, local_entry_matrix, scale, scale_ico);
-        }
-        else if (this->GetType() == "adjoint_for_ee")
-        {
-          // state values in quadrature points
-          this->GetPDE().ElementMatrix_T(edc, local_entry_matrix, scale,
-              scale_ico);
-        }
-        else
-        {
-          throw DOpEException("Not implemented",
-              "PDEProblemContainer::ElementMatrix");
-        }
-
-      }
-
-  /******************************************************/
-
-  template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
-      int dealdim, template<int, int> class FE, template<int, int> class DH>
-    template<typename DATACONTAINER>
-      void
-      PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE, DH>::ElementTimeMatrix(
-          const DATACONTAINER& edc, FullMatrix<double> &local_entry_matrix)
-      {
-
-        if (this->GetType() == "state")
-        {
-          // state values in quadrature points
-          this->GetPDE().ElementTimeMatrix(edc, local_entry_matrix);
-        }
-        else if (this->GetType() == "dual_for_ee")
-        {
-          throw DOpEException("Not implemented",
-              "PDEProblemContainer::ElementTimeMatrix");
-        }
-        else
-        {
-          throw DOpEException("Not implemented",
-              "PDEProblemContainer::ElementTimeMatrix");
-        }
-
-      }
-
-  /******************************************************/
-
-  template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
-      int dealdim, template<int, int> class FE, template<int, int> class DH>
-    template<typename DATACONTAINER>
-      void
-      PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE, DH>::ElementTimeMatrixExplicit(
-          const DATACONTAINER& edc,
-          dealii::FullMatrix<double> &local_entry_matrix)
-      {
-
-        if (this->GetType() == "state")
-        {
-          // state values in quadrature points
-          this->GetPDE().ElementTimeMatrixExplicit(edc, local_entry_matrix);
-        }
-        else if (this->GetType() == "dual_for_ee")
-        {
-          throw DOpEException("Not implemented",
-              "PDEProblemContainer::ElementTimeMatrix");
-        }
-        else
-        {
-          throw DOpEException("Not implemented",
-              "PDEProblemContainer::ElementTimeMatrix");
-        }
-
-      }
-
-  /******************************************************/
-
-  template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
-      int dealdim, template<int, int> class FE, template<int, int> class DH>
-    template<typename FACEDATACONTAINER>
-      void
-      PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE, DH>::FaceMatrix(
-          const FACEDATACONTAINER& fdc, FullMatrix<double> &local_entry_matrix,
-          double scale, double scale_ico)
-      {
-        if (this->GetType() == "state")
-        {
-          // state values in face quadrature points
-          this->GetPDE().FaceMatrix(fdc, local_entry_matrix, scale, scale_ico);
-        }
-        else if (this->GetType() == "adjoint_for_ee")
-        {
-          this->GetPDE().FaceMatrix_T(fdc, local_entry_matrix, scale,
-              scale_ico);
-        }
-        else
-        {
-          throw DOpEException("Not implemented",
-              "PDEProblemContainer::NewtonFaceMatrix");
-        }
-
-      }
-
-  /******************************************************/
-
-  template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
-      int dealdim, template<int, int> class FE, template<int, int> class DH>
-    template<typename FACEDATACONTAINER>
-      void
-      PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE, DH>::InterfaceMatrix(
-          const FACEDATACONTAINER& fdc, FullMatrix<double> &local_entry_matrix,
-          double scale, double scale_ico)
-      {
-        if (this->GetType() == "state")
-        {
-          // state values in face quadrature points
-          this->GetPDE().InterfaceMatrix(fdc, local_entry_matrix, scale,
-              scale_ico);
-        }
-        else if (this->GetType() == "adjoint_for_ee")
-        {
-          this->GetPDE().InterfaceMatrix_T(fdc, local_entry_matrix, scale,
-              scale_ico);
-        }
-        else
-        {
-          throw DOpEException("Not implemented",
-              "PDEProblemContainer::NewtonInterfaceMatrix");
-        }
-      }
-
-  /******************************************************/
-
-  template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
-      int dealdim, template<int, int> class FE, template<int, int> class DH>
-    template<typename FACEDATACONTAINER>
-      void
-      PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE, DH>::BoundaryMatrix(
-          const FACEDATACONTAINER& fdc, FullMatrix<double> &local_matrix,
-          double scale, double scale_ico)
-      {
-        if (this->GetType() == "state")
-        {
-          // state values in face quadrature points
-          this->GetPDE().BoundaryMatrix(fdc, local_matrix, scale,
-              scale_ico);
-        }
-        else if (this->GetType() == "adjoint_for_ee")
-        {
-          // state values in quadrature points
-          this->GetPDE().BoundaryMatrix_T(fdc, local_matrix, scale,
-              scale_ico);
-        }
-        else
-        {
-          throw DOpEException("Not implemented",
-              "PDEProblemContainer::ElementBoundaryMatrix");
-        }
-
-      }
-
-  /******************************************************/
-
-  template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
-      int dealdim, template<int, int> class FE, template<int, int> class DH>
     std::string
     PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE, DH>::GetDoFType() const
     {
-      if (this->GetType() == "state" || this->GetType() == "adjoint_for_ee"
-          || this->GetType() == "error_evaluation")
+      if (this->GetType() == "error_evaluation")
       {
         return "state";
       }
@@ -1629,24 +881,6 @@ namespace DOpE
       {
         throw DOpEException("Unknown Type:" + this->GetType(),
             "PDEProblemContainer::GetDoFType");
-      }
-    }
-
-  /******************************************************/
-
-  template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
-      int dealdim, template<int, int> class FE, template<int, int> class DH>
-    const FE<dealdim, dealdim>&
-    PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE, DH>::GetFESystem() const
-    {
-      if ((this->GetType() == "state") || this->GetType() == "adjoint_for_ee")
-      {
-        return this->GetSpaceTimeHandler()->GetFESystem("state");
-      }
-      else
-      {
-        throw DOpEException("Unknown Type:" + this->GetType(),
-            "PDEProblemContainer::GetFESystem");
       }
     }
 
@@ -1666,8 +900,7 @@ namespace DOpE
       else
       {
         r = this->GetPDE().GetUpdateFlags();
-        if (this->GetType() == "adjoint_for_ee"
-            || this->GetType() == "error_evaluation")
+        if (this->GetType() == "error_evaluation")
         {
           if (functional_for_ee_num_ != dealii::numbers::invalid_unsigned_int)
             r = r | aux_functionals_[functional_for_ee_num_]->GetUpdateFlags();
@@ -1691,8 +924,7 @@ namespace DOpE
       else
       {
         r = this->GetPDE().GetFaceUpdateFlags();
-        if (this->GetType() == "adjoint_for_ee"
-            || this->GetType() == "error_evaluation")
+        if (this->GetType() == "error_evaluation")
         {
           if (functional_for_ee_num_ != dealii::numbers::invalid_unsigned_int)
             r =
@@ -1779,67 +1011,6 @@ namespace DOpE
       }
     }
 
-  /******************************************************/
-
-  template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
-      int dealdim, template<int, int> class FE, template<int, int> class DH>
-    void
-    PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE, DH>::ComputeSparsityPattern(
-        SPARSITYPATTERN & sparsity) const
-    {
-      if (this->GetType() == "state" || this->GetType() == "adjoint_for_ee")
-      {
-        this->GetSpaceTimeHandler()->ComputeStateSparsityPattern(sparsity);
-      }
-      else
-      {
-        throw DOpEException("Unknown type " + this->GetType(),
-            "PDEProblemContainer::ComputeSparsityPattern");
-      }
-    }
-
-// /******************************************************/
-//
-// template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
-//     int dealdim, template<int, int> class FE, template<int, int> class DH>
-//   void
-//   PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE, DH>::ComputeMGSparsityPattern(
-//       dealii::MGLevelObject<dealii::BlockSparsityPattern> & mg_sparsity_patterns,
-//				      unsigned int n_levels) const
-//   {
-//     if (this->GetType() == "state")
-//     {
-//       this->GetSpaceTimeHandler()->ComputeMGStateSparsityPattern(mg_sparsity_patterns, n_levels);
-//     }
-//     else
-//     {
-//       throw DOpEException("Unknown type " + this->GetType(),
-//           "PDEProblemContainer::ComputeMGSparsityPattern");
-//     }
-//   }
-//
-// /******************************************************/
-//
-// template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
-//     int dealdim, template<int, int> class FE, template<int, int> class DH>
-//   void
-//   PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE, DH>::ComputeMGSparsityPattern(
-//       dealii::MGLevelObject<dealii::SparsityPattern> & mg_sparsity_patterns,
-//				      unsigned int n_levels) const
-//   {
-//     if (this->GetType() == "state")
-//     {
-//       this->GetSpaceTimeHandler()->ComputeMGStateSparsityPattern(mg_sparsity_patterns, n_levels);
-//     }
-//     else
-//     {
-//       throw DOpEException("Unknown type " + this->GetType(),
-//           "PDEProblemContainer::ComputeMGSparsityPattern");
-//     }
-//   }
-
-
-
 
   /******************************************************/
 
@@ -1854,20 +1025,8 @@ namespace DOpE
       }
       else
       {
-        if ((this->GetType() == "state"))
-        {
-          return this->GetPDE().HasFaces();
-        }
-        else if (this->GetType() == "adjoint_for_ee")
-        {
-          return this->GetPDE().HasFaces()
-              || aux_functionals_[functional_for_ee_num_]->HasFaces();
-        }
-        else
-        {
-          throw DOpEException("Unknown Type: '" + this->GetType() + "'!",
-              "PDEProblemContainer::HasFaces");
-        }
+	throw DOpEException("Unknown Type: '" + this->GetType() + "'!",
+			    "PDEProblemContainer::HasFaces");
       }
     }
 
@@ -1878,14 +1037,10 @@ namespace DOpE
     bool
     PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE, DH>::HasPoints() const
     {
-      if ((this->GetType() == "state") || this->GetType() == "aux_functional")
+      if (this->GetType() == "aux_functional")
       {
-        //We dont need PointRhs in these cases
+        //We dont have PointRhs in these cases
         return false;
-      }
-      else if (this->GetType() == "adjoint_for_ee")
-      {
-        return aux_functionals_[functional_for_ee_num_]->HasPoints();
       }
       else
       {
@@ -1908,15 +1063,8 @@ namespace DOpE
       }
       else
       {
-        if ((this->GetType() == "state") || this->GetType() == "adjoint_for_ee")
-        {
-          return this->GetPDE().HasInterfaces();
-        }
-        else
-        {
-          throw DOpEException("Unknown Type: '" + this->GetType() + "'!",
-              "PDEProblemContainer::HasFaces");
-        }
+	throw DOpEException("Unknown Type: '" + this->GetType() + "'!",
+			    "PDEProblemContainer::HasFaces");
       }
     }
 
@@ -1953,135 +1101,6 @@ namespace DOpE
       PrimalDirichletData<DD, VECTOR, dealdim> *data = new PrimalDirichletData<
           DD, VECTOR, dealdim>(*values);
       primal_dirichlet_values_.push_back(data);
-    }
-
-  /******************************************************/
-
-  template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
-      int dealdim, template<int, int> class FE, template<int, int> class DH>
-    const std::vector<unsigned int>&
-    PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE, DH>::GetDirichletColors() const
-    {
-      if ((this->GetType() == "state") || this->GetType() == "adjoint_for_ee")
-      {
-        return dirichlet_colors_;
-      }
-      else
-      {
-        throw DOpEException("Unknown Type:" + this->GetType(),
-            "PDEProblemContainer::GetDirichletColors");
-      }
-    }
-
-  /******************************************************/
-
-  template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
-      int dealdim, template<int, int> class FE, template<int, int> class DH>
-    const std::vector<bool>&
-    PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE, DH>::GetDirichletCompMask(
-        unsigned int color) const
-    {
-      if ((this->GetType() == "state" || this->GetType() == "adjoint_for_ee"))
-      {
-        unsigned int comp = dirichlet_colors_.size();
-        for (unsigned int i = 0; i < dirichlet_colors_.size(); ++i)
-        {
-          if (dirichlet_colors_[i] == color)
-          {
-            comp = i;
-            break;
-          }
-        }
-        if (comp == dirichlet_colors_.size())
-        {
-          std::stringstream s;
-          s << "DirichletColor" << color << " has not been found !";
-          throw DOpEException(s.str(),
-              "PDEProblemContainer::GetDirichletCompMask");
-        }
-        return dirichlet_comps_[comp];
-      }
-      else
-      {
-        throw DOpEException("Unknown Type:" + this->GetType(),
-            "PDEProblemContainer::GetDirichletCompMask");
-      }
-    }
-
-  /******************************************************/
-
-  template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
-      int dealdim, template<int, int> class FE, template<int, int> class DH>
-    const Function<dealdim>&
-    PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE, DH>::GetDirichletValues(
-        unsigned int color,
-        const std::map<std::string, const dealii::Vector<double>*> &param_values,
-        const std::map<std::string, const VECTOR*> &domain_values) const
-    {
-
-      unsigned int col = dirichlet_colors_.size();
-      if ((this->GetType() == "state") || this->GetType() == "adjoint_for_ee")
-      {
-        for (unsigned int i = 0; i < dirichlet_colors_.size(); ++i)
-        {
-          if (dirichlet_colors_[i] == color)
-          {
-            col = i;
-            break;
-          }
-        }
-        if (col == dirichlet_colors_.size())
-        {
-          std::stringstream s;
-          s << "DirichletColor" << color << " has not been found !";
-          throw DOpEException(s.str(),
-              "PDEProblemContainer::GetDirichletValues");
-        }
-      }
-      else
-      {
-        throw DOpEException("Unknown Type:" + this->GetType(),
-            "PDEProblemContainer::GetDirichletValues");
-      }
-
-      if (this->GetType() == "state")
-      {
-        primal_dirichlet_values_[col]->ReInit(param_values, domain_values,
-            color);
-        return *(primal_dirichlet_values_[col]);
-      }
-      else if (this->GetType() == "adjoint_for_ee"
-          || (this->GetType() == "adjoint_hessian"))
-      {
-        return *(zero_dirichlet_values_);
-      }
-      else
-      {
-        throw DOpEException("Unknown Type:" + this->GetType(),
-            "PDEProblemContainer::GetDirichletValues");
-      }
-    }
-
-  /******************************************************/
-
-  template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
-      int dealdim, template<int, int> class FE, template<int, int> class DH>
-    const std::vector<unsigned int>&
-    PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE, DH>::GetBoundaryEquationColors() const
-    {
-      if (this->GetType() == "state")
-      {
-        return state_boundary_equation_colors_;
-      }
-      else if (this->GetType() == "adjoint_for_ee")
-      {
-        return adjoint_boundary_equation_colors_;
-      }
-      else
-      {
-        throw DOpEException("Unknown Type:" + this->GetType(),
-            "PDEProblemContainer::GetBoundaryEquationColors");
-      }
     }
 
   /******************************************************/
@@ -2257,26 +1276,6 @@ namespace DOpE
 
   /******************************************************/
 
-  template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
-      int dealdim, template<int, int> class FE, template<int, int> class DH>
-    const dealii::ConstraintMatrix&
-    PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE, DH>::GetDoFConstraints() const
-    {
-//      std::cout << "Constraints:"
-//          << GetSpaceTimeHandler()->GetStateDoFConstraints().n_constraints()
-//          << " and type is " << this->GetType() << std::endl;
-      if ((this->GetType() == "state") || (this->GetType() == "adjoint_for_ee"))
-      {
-        return GetSpaceTimeHandler()->GetStateDoFConstraints();
-      }
-      else
-      {
-        throw DOpEException("Unknown Type:" + this->GetType(),
-            "PDEProblemContainer::GetDoFConstraints");
-      }
-    }
-
-  /******************************************************/
 
   template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
       int dealdim, template<int, int> class FE, template<int, int> class DH>
