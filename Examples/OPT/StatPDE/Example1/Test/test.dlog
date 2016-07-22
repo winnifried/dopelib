@@ -67,8 +67,8 @@ LOG: Allowing IterationCounter `OptNewton_OptProblem' for filenames!
 
 
 	Exact Value: 429.403	 Computed: 429.404
-	Primal Err: -9.92304e-07	 Dual Err: -1.02328e-06	 Control Err: -0.000552838
-	Est Total Error: -0.000277427 	Error: -0.000277575  Ieff (eh/e)= 0.9995
+	Primal Err:  < 5.53e-06	 Dual Err:  < 5.53e-06	 Control Err: -0.000553
+	Est Total Error: -0.00028 	Error: -0.00028  Ieff (eh/e)= 1
 	
 
 
@@ -125,7 +125,7 @@ LOG: Allowing IterationCounter `OptNewton_OptProblem' for filenames!
 
 
 	Exact Value: 429.403	 Computed: 429.403
-	Primal Err: -1.59318e-08	 Dual Err: -1.64145e-08	 Control Err: -3.43529e-05
-	Est Total Error: -1.71926e-05 	Error: -1.71901e-05  Ieff (eh/e)= 1
+	Primal Err:  < 3.44e-07	 Dual Err:  < 3.44e-07	 Control Err: -3.44e-05
+	Est Total Error: -1.7e-05 	Error: -1.7e-05  Ieff (eh/e)= 1
 	
 

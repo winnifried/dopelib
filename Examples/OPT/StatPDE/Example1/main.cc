@@ -244,12 +244,27 @@ main(int argc, char **argv)
         stringstream outp;
         outp << "Exact Value: " << ex_value << "\t Computed: " << value
             << std::endl;
-        outp << "Primal Err: " << dwrc.GetPrimalError() << "\t Dual Err: "
-            << dwrc.GetDualError();
-        outp << "\t Control Err: " << dwrc.GetControlError() << std::endl;
-        outp << "Est Total Error: " << est_error << " \tError: " << error;
-	outp.precision(4);
-        outp << "  Ieff (eh/e)= " <<  est_error / error << std::endl;
+	//Case distinction to make shure that the output is independent of
+	//compiler induced floating point cancellation in almost zero values
+	if(fabs(dwrc.GetPrimalError()) < 0.01 * fabs(dwrc.GetControlError()))
+	{
+	  outp << "Primal Err: " << std::setprecision(3) << " < " << 0.01 * fabs(dwrc.GetControlError());
+	}
+	else
+	{
+	  outp << "Primal Err: " << std::setprecision(3) << dwrc.GetPrimalError();
+	}
+	if(fabs(dwrc.GetDualError()) < 0.01 * fabs(dwrc.GetControlError()))
+	{
+	  outp << "\t Dual Err: " <<  std::setprecision(3) << " < " << 0.01 * fabs(dwrc.GetControlError());
+	}
+	else
+	{
+	  outp << "\t Dual Err: " <<  std::setprecision(3) <<dwrc.GetDualError();
+	}
+        outp << "\t Control Err: " <<  std::setprecision(3) <<dwrc.GetControlError() << std::endl;
+        outp << "Est Total Error: " <<  std::setprecision(2) << est_error << " \tError: " << std::setprecision(2) << error;
+        outp << "  Ieff (eh/e)= " <<  std::setprecision(2) << est_error / error << std::endl;
         out.Write(outp, 1, 1, 1);
       }
     }
