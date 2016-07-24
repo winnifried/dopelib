@@ -42,6 +42,7 @@
 #include <container/elementdatacontainer.h>
 #include <container/facedatacontainer.h>
 #include <problemdata/stateproblem.h>
+#include <problemdata/opt_adjoint_for_eeproblem.h>
 #include <basic/dopetypes.h>
 #include <container/dwrdatacontainer.h>
 #include <container/problemcontainer_internal.h>
@@ -138,6 +139,27 @@ namespace DOpE
           return *state_problem_;
         }
 
+      /**
+       * Returns a description of the Adjoint PDE for error estimation
+       */
+        OPT_Adjoint_For_EEProblem<
+            OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
+                                CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>,
+            PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>&
+        GetAdjoint_For_EEProblem()
+        {
+          if (adjoint_for_ee_problem_ == NULL)
+          {
+            adjoint_for_ee_problem_ = new OPT_Adjoint_For_EEProblem<
+                OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
+                    CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE,
+                    DH>, PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>(
+                *this, this->GetPDE());
+          }
+          return *adjoint_for_ee_problem_;
+        }
+
+      
         //TODO This is Pfush needed to split into different subproblems and allow optproblem to
         //be substituted as any of these problems. Can be removed once the splitting is complete.
         OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
@@ -1378,58 +1400,66 @@ namespace DOpE
         }
       
         /******************************************************/
-      private:
-        DOpEExceptionHandler<VECTOR>* ExceptionHandler_;
-        DOpEOutputHandler<VECTOR>* OutputHandler_;
-        std::string algo_type_;
-
-        bool functional_for_ee_is_cost_;
-        double c_interval_length_, interval_length_;
-        unsigned int functional_for_ee_num_;
-        std::vector<FUNCTIONAL_INTERFACE*> aux_functionals_;
-        std::map<std::string, unsigned int> functional_position_;
-        FUNCTIONAL* functional_;
-        CONSTRAINTS* constraints_;
-        SpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dopedim, dealdim>* STH_;
-
-        std::vector<unsigned int> control_dirichlet_colors_;
-        std::vector<unsigned int> control_transposed_dirichlet_colors_;
-        std::vector<std::vector<bool> > control_dirichlet_comps_;
-        std::vector<const DOpEWrapper::Function<dealdim>*> control_dirichlet_values_;
-        std::vector<
-            TransposedGradientDirichletData<DD, VECTOR, dealdim>*> transposed_control_gradient_dirichlet_values_;
-        std::vector<
-            TransposedHessianDirichletData<DD, VECTOR, dealdim>*> transposed_control_hessian_dirichlet_values_;
-
-        std::vector<unsigned int> dirichlet_colors_;
-        std::vector<std::vector<bool> > dirichlet_comps_;
-        std::vector<PrimalDirichletData<DD, VECTOR, dealdim>*> primal_dirichlet_values_;
-        std::vector<TangentDirichletData<DD, VECTOR, dealdim>*> tangent_dirichlet_values_;
-        const dealii::Function<dealdim>* zero_dirichlet_values_;
-
-        const dealii::Function<dealdim>* initial_values_;
-
-        std::vector<unsigned int> control_boundary_equation_colors_;
-        std::vector<unsigned int> state_boundary_equation_colors_;
-        std::vector<unsigned int> adjoint_boundary_equation_colors_;
-
-        std::vector<unsigned int> boundary_functional_colors_;
-
-        std::map<std::string, const ControlVector<VECTOR>*> auxiliary_controls_;
-        std::map<std::string, const StateVector<VECTOR>*> auxiliary_state_;
-        std::map<std::string, const ConstraintVector<VECTOR>*> auxiliary_constraints_;
-
-        bool initial_; //Do we solve the problem at initial time?
+    private:
+      DOpEExceptionHandler<VECTOR>* ExceptionHandler_;
+      DOpEOutputHandler<VECTOR>* OutputHandler_;
+      std::string algo_type_;
       
-        StateProblem<
-            OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
-                CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>,
-            PDE, DD, SPARSITYPATTERN, VECTOR, dealdim> * state_problem_;
+      bool functional_for_ee_is_cost_;
+      double c_interval_length_, interval_length_;
+      unsigned int functional_for_ee_num_;
+      std::vector<FUNCTIONAL_INTERFACE*> aux_functionals_;
+      std::map<std::string, unsigned int> functional_position_;
+      FUNCTIONAL* functional_;
+      CONSTRAINTS* constraints_;
+      SpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dopedim, dealdim>* STH_;
+      
+      std::vector<unsigned int> control_dirichlet_colors_;
+      std::vector<unsigned int> control_transposed_dirichlet_colors_;
+      std::vector<std::vector<bool> > control_dirichlet_comps_;
+      std::vector<const DOpEWrapper::Function<dealdim>*> control_dirichlet_values_;
+      std::vector<
+      TransposedGradientDirichletData<DD, VECTOR, dealdim>*> transposed_control_gradient_dirichlet_values_;
+      std::vector<
+      TransposedHessianDirichletData<DD, VECTOR, dealdim>*> transposed_control_hessian_dirichlet_values_;
+      
+      std::vector<unsigned int> dirichlet_colors_;
+      std::vector<std::vector<bool> > dirichlet_comps_;
+      std::vector<PrimalDirichletData<DD, VECTOR, dealdim>*> primal_dirichlet_values_;
+      std::vector<TangentDirichletData<DD, VECTOR, dealdim>*> tangent_dirichlet_values_;
+      const dealii::Function<dealdim>* zero_dirichlet_values_;
+      
+      const dealii::Function<dealdim>* initial_values_;
 
-        friend class StateProblem<
-            OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
+      std::vector<unsigned int> control_boundary_equation_colors_;
+      std::vector<unsigned int> state_boundary_equation_colors_;
+      std::vector<unsigned int> adjoint_boundary_equation_colors_;
+      
+      std::vector<unsigned int> boundary_functional_colors_;
+      
+      std::map<std::string, const ControlVector<VECTOR>*> auxiliary_controls_;
+      std::map<std::string, const StateVector<VECTOR>*> auxiliary_state_;
+      std::map<std::string, const ConstraintVector<VECTOR>*> auxiliary_constraints_;
+      
+      bool initial_; //Do we solve the problem at initial time?
+      
+      StateProblem<
+      OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
                 CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>,
-            PDE, DD, SPARSITYPATTERN, VECTOR, dealdim> ;
+      PDE, DD, SPARSITYPATTERN, VECTOR, dealdim> * state_problem_;
+      OPT_Adjoint_For_EEProblem<
+      OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
+      CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>,
+      PDE, DD, SPARSITYPATTERN, VECTOR, dealdim> * adjoint_for_ee_problem_;
+      
+      friend class StateProblem<
+          OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
+          CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>,
+          PDE, DD, SPARSITYPATTERN, VECTOR, dealdim> ;
+      friend class OPT_Adjoint_For_EEProblem<
+          OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
+          CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>,
+          PDE, DD, SPARSITYPATTERN, VECTOR, dealdim> ;
     };
   /******************************************************/
 
@@ -1442,7 +1472,7 @@ namespace DOpE
         FUNCTIONAL& functional, PDE& pde, CONSTRAINTS& constraints,
         SpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dopedim, dealdim>& STH) :
         ProblemContainerInternal<PDE>(pde), functional_(&functional), constraints_(
-            &constraints), STH_(&STH), state_problem_(NULL)
+            &constraints), STH_(&STH), state_problem_(NULL), adjoint_for_ee_problem_(NULL)
     {
       ExceptionHandler_ = NULL;
       OutputHandler_ = NULL;
@@ -1496,6 +1526,10 @@ namespace DOpE
       {
         delete state_problem_;
       }
+      if (adjoint_for_ee_problem_ != NULL)
+      {
+        delete adjoint_for_ee_problem_;
+      }
     }
 
   /******************************************************/
@@ -1513,6 +1547,11 @@ namespace DOpE
       {
         delete state_problem_;
         state_problem_ = NULL;
+      }
+      if (adjoint_for_ee_problem_ != NULL)
+      {
+        delete adjoint_for_ee_problem_;
+        adjoint_for_ee_problem_ = NULL;
       }
 
       if (algo_type_ != algo_type && algo_type_ != "")
@@ -1851,8 +1890,7 @@ namespace DOpE
           // state values in quadrature points
           this->GetPDE().ElementEquation(edc, local_vector, scale*interval_length_, scale_ico*interval_length_);
         }
-        else if ((this->GetType() == "adjoint")
-            || (this->GetType() == "adjoint_for_ee"))
+        else if ((this->GetType() == "adjoint"))
         {
           // state values in quadrature points
           this->GetPDE().ElementEquation_U(edc, local_vector, scale*interval_length_,
@@ -1927,8 +1965,7 @@ namespace DOpE
         {
           this->GetPDE().ElementTimeEquation(edc, local_vector, scale);
         }
-        else if (this->GetType() == "adjoint"
-            || this->GetType() == "adjoint_for_ee")
+        else if (this->GetType() == "adjoint")
         {
           this->GetPDE().ElementTimeEquation_U(edc, local_vector, scale);
         }
@@ -1972,8 +2009,7 @@ namespace DOpE
           this->GetPDE().ElementTimeEquationExplicit(edc, local_vector,
               scale);
         }
-        else if (this->GetType() == "adjoint"
-            || this->GetType() == "adjoint_for_ee")
+        else if (this->GetType() == "adjoint")
         {
           this->GetPDE().ElementTimeEquationExplicit_U(edc, local_vector,
               scale);
@@ -2020,8 +2056,7 @@ namespace DOpE
           // state values in quadrature points
           this->GetPDE().FaceEquation(fdc, local_vector, scale*interval_length_, scale_ico*interval_length_);
         }
-        else if (this->GetType() == "adjoint"
-            || this->GetType() == "adjoint_for_ee")
+        else if (this->GetType() == "adjoint")
         {
           // state values in quadrature points
           this->GetPDE().FaceEquation_U(fdc, local_vector, scale*interval_length_,
@@ -2070,8 +2105,7 @@ namespace DOpE
           this->GetPDE().InterfaceEquation(fdc, local_vector, scale*interval_length_,
               scale_ico*interval_length_);
         }
-        else if (this->GetType() == "adjoint"
-            || this->GetType() == "adjoint_for_ee")
+        else if (this->GetType() == "adjoint")
         {
           // state values in quadrature points
           this->GetPDE().InterfaceEquation_U(fdc, local_vector, scale*interval_length_,
@@ -2103,8 +2137,7 @@ namespace DOpE
           this->GetPDE().BoundaryEquation(fdc, local_vector, scale*interval_length_,
               scale_ico*interval_length_);
         }
-        else if (this->GetType() == "adjoint"
-            || this->GetType() == "adjoint_for_ee")
+        else if (this->GetType() == "adjoint")
         {
           // state values in quadrature points
           this->GetPDE().BoundaryEquation_U(fdc, local_vector, scale*interval_length_,
@@ -2171,30 +2204,6 @@ namespace DOpE
 	      if(GetFunctional()->GetType().find("timedistributed") != std::string::npos && GetFunctional()->GetType().find("timelocal") != std::string::npos)
 	      {
 		throw DOpEException("Conflicting functional types: "+ GetFunctional()->GetType(),
-				    "OptProblemContainer::ElementRhs");
-	      } 
-	    }
-	  }
-        }
-        else if (this->GetType() == "adjoint_for_ee")
-        {
-          //values of the derivative of the functional for error estimation
-          if (aux_functionals_[functional_for_ee_num_]->NeedTime())
-	  {
-	    if (aux_functionals_[functional_for_ee_num_]->GetType().find("domain") != std::string::npos)
-	    {
-	      if(aux_functionals_[functional_for_ee_num_]->GetType().find("timedistributed") != std::string::npos)
-	      {
-		aux_functionals_[functional_for_ee_num_]->ElementValue_U(edc,
-									 local_vector, scale*interval_length_);
-	      }
-	      else 
-	      {
-		aux_functionals_[functional_for_ee_num_]->ElementValue_U(edc, local_vector, scale);
-	      }
-	      if(aux_functionals_[functional_for_ee_num_]->GetType().find("timedistributed") != std::string::npos && aux_functionals_[functional_for_ee_num_]->GetType().find("timelocal") != std::string::npos)
-	      {
-		throw DOpEException("Conflicting functional types: "+ aux_functionals_[functional_for_ee_num_]->GetType(),
 				    "OptProblemContainer::ElementRhs");
 	      } 
 	    }
@@ -2366,35 +2375,6 @@ namespace DOpE
 	    }
 	  }
       }
-      else if (this->GetType() == "adjoint_for_ee")
-      {
-        //values of the derivative of the functional for error estimation
-        if (aux_functionals_[functional_for_ee_num_]->NeedTime())
-	  {
-	    if (aux_functionals_[functional_for_ee_num_]->GetType().find("point") != std::string::npos)
-	    {
-	      if(aux_functionals_[functional_for_ee_num_]->GetType().find("timedistributed") != std::string::npos)
-	      {
-		aux_functionals_[functional_for_ee_num_]->PointValue_U(
-		  this->GetSpaceTimeHandler()->GetControlDoFHandler(),
-		  this->GetSpaceTimeHandler()->GetStateDoFHandler(), param_values,
-		  domain_values, rhs_vector, scale*interval_length_);
-	      }
-	      else 
-	      {
-		aux_functionals_[functional_for_ee_num_]->PointValue_U(
-		  this->GetSpaceTimeHandler()->GetControlDoFHandler(),
-		  this->GetSpaceTimeHandler()->GetStateDoFHandler(), param_values,
-		  domain_values, rhs_vector, scale);
-	      }
-	      if(aux_functionals_[functional_for_ee_num_]->GetType().find("timedistributed") != std::string::npos && aux_functionals_[functional_for_ee_num_]->GetType().find("timelocal") != std::string::npos)
-	      {
-		throw DOpEException("Conflicting functional types: "+ aux_functionals_[functional_for_ee_num_]->GetType(),
-				    "OptProblemContainer::PointRhs");
-	      } 
-	    }
-	  }
-      }
       else if (this->GetType() == "adjoint_hessian")
       {
         // state values in quadrature points
@@ -2548,33 +2528,6 @@ namespace DOpE
 	    }
 	  }            
         }
-        else if (this->GetType() == "adjoint_for_ee")
-        {
-          //values of the derivative of the functional for error estimation
-          if (aux_functionals_[functional_for_ee_num_]->NeedTime())
-	  {
-	    if (aux_functionals_[functional_for_ee_num_]->GetType().find("face")
-		!= std::string::npos)
-	    {
-	      if(aux_functionals_[functional_for_ee_num_]->GetType().find("timedistributed") != std::string::npos)
-	      {
-		aux_functionals_[functional_for_ee_num_]->FaceValue_U(fdc,
-								      local_vector, scale*interval_length_);
-	      }
-	      else 
-	      {
-		aux_functionals_[functional_for_ee_num_]->FaceValue_U(fdc,
-								      local_vector, scale);
-	      }
-	      if(aux_functionals_[functional_for_ee_num_]->GetType().find("timedistributed") != std::string::npos && aux_functionals_[functional_for_ee_num_]->GetType().find("timelocal") != std::string::npos)
-	      {
-		throw DOpEException("Conflicting functional types: "+ aux_functionals_[functional_for_ee_num_]->GetType(),
-				    "OptProblemContainer::FaceRhs");
-	      } 
-	    }
-	  } 
-	  
-        }
         else if (this->GetType() == "tangent")
         {
           // state values in quadrature points
@@ -2716,32 +2669,6 @@ namespace DOpE
 	    }
 	  } 
         }
-        else if (this->GetType() == "adjoint_for_ee")
-        {
-          //values of the derivative of the functional for error estimation
-          if (aux_functionals_[functional_for_ee_num_]->NeedTime())
-	  {
-	    if (aux_functionals_[functional_for_ee_num_]->GetType().find(
-		  "boundary") != std::string::npos)
-	    {
-	      if(aux_functionals_[functional_for_ee_num_]->GetType().find("timedistributed") != std::string::npos)
-	      {
-		aux_functionals_[functional_for_ee_num_]->BoundaryValue_U(fdc,
-									  local_vector, scale*interval_length_);
-	      }
-	      else
-	      {
-		aux_functionals_[functional_for_ee_num_]->BoundaryValue_U(fdc,
-									  local_vector, scale);
-	      }
-	      if(aux_functionals_[functional_for_ee_num_]->GetType().find("timedistributed") != std::string::npos  && aux_functionals_[functional_for_ee_num_]->GetType().find("timelocal") != std::string::npos)
-	      {
-		throw DOpEException("Conflicting functional types: "+ aux_functionals_[functional_for_ee_num_]->GetType(),
-				    "OptProblemContainer::BoundaryRhs");
-	      } 
-	    }
-	  }
-        }
         else if (this->GetType() == "tangent")
         {
           // state values in quadrature points
@@ -2869,8 +2796,7 @@ namespace DOpE
           this->GetPDE().ElementMatrix(edc, local_entry_matrix, scale*interval_length_, scale_ico*interval_length_);
         }
         else if (this->GetType() == "adjoint"
-            || this->GetType() == "adjoint_for_ee"
-            || this->GetType() == "adjoint_hessian")
+		 || this->GetType() == "adjoint_hessian")
         {
           // state values in quadrature points
           this->GetPDE().ElementMatrix_T(edc, local_entry_matrix, scale*interval_length_,
@@ -2909,7 +2835,6 @@ namespace DOpE
           this->GetPDE().ElementTimeMatrix(edc, local_entry_matrix);
         }
         else if (this->GetType() == "adjoint"
-            || this->GetType() == "adjoint_for_ee"
             || this->GetType() == "adjoint_hessian")
         {
           this->GetPDE().ElementTimeMatrix_T(edc, local_entry_matrix);
@@ -2984,8 +2909,7 @@ namespace DOpE
           this->GetPDE().FaceMatrix(fdc, local_entry_matrix, scale*interval_length_, scale_ico*interval_length_);
         }
         else if (this->GetType() == "adjoint"
-            || this->GetType() == "adjoint_for_ee"
-            || this->GetType() == "adjoint_hessian")
+		 || this->GetType() == "adjoint_hessian")
         {
           // state values in quadrature points
           this->GetPDE().FaceMatrix_T(fdc, local_entry_matrix, scale*interval_length_,
@@ -3023,8 +2947,7 @@ namespace DOpE
               scale_ico*interval_length_);
         }
         else if (this->GetType() == "adjoint"
-            || this->GetType() == "adjoint_for_ee"
-            || this->GetType() == "adjoint_hessian")
+		 || this->GetType() == "adjoint_hessian")
         {
           this->GetPDE().InterfaceMatrix_T(fdc, local_entry_matrix, scale*interval_length_,
               scale_ico*interval_length_);
@@ -3056,8 +2979,7 @@ namespace DOpE
               scale_ico*interval_length_);
         }
         else if (this->GetType() == "adjoint"
-            || this->GetType() == "adjoint_for_ee"
-            || this->GetType() == "adjoint_hessian")
+		 || this->GetType() == "adjoint_hessian")
         {
           // state values in quadrature points
           this->GetPDE().BoundaryMatrix_T(fdc, local_matrix, scale*interval_length_,
@@ -3114,7 +3036,7 @@ namespace DOpE
         SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetDoFType() const
     {
       if (this->GetType() == "state" || this->GetType() == "adjoint"
-          || this->GetType() == "adjoint_for_ee" || this->GetType() == "tangent"
+          || this->GetType() == "tangent"
           || this->GetType() == "adjoint_hessian")
       {
         return "state";
@@ -3142,7 +3064,7 @@ namespace DOpE
         SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetFESystem() const
     {
       if ((this->GetType() == "state") || (this->GetType() == "adjoint")
-          || this->GetType() == "adjoint_for_ee" || this->GetType() == "tangent"
+          || this->GetType() == "tangent"
           || this->GetType() == "adjoint_hessian")
       {
         return this->GetSpaceTimeHandler()->GetFESystem("state");
@@ -3203,10 +3125,6 @@ namespace DOpE
         {
           r = r | this->GetFunctional()->GetUpdateFlags();
         }
-        else if (this->GetType() == "adjoint_for_ee")
-        {
-          r = r | aux_functionals_[functional_for_ee_num_]->GetUpdateFlags();
-        }
       }
       return r | update_JxW_values;
     }
@@ -3245,11 +3163,6 @@ namespace DOpE
             || (this->GetType() == "hessian"))
         {
           r = r | this->GetFunctional()->GetFaceUpdateFlags();
-        }
-        else if (this->GetType() == "adjoint_for_ee")
-        {
-          r = r
-              | aux_functionals_[functional_for_ee_num_]->GetFaceUpdateFlags();
         }
       }
       return r | update_JxW_values;
@@ -3416,7 +3329,7 @@ namespace DOpE
         SPARSITYPATTERN & sparsity) const
     {
       if (this->GetType() == "state" || this->GetType() == "tangent"
-          || this->GetType() == "adjoint_for_ee" || this->GetType() == "adjoint"
+          || this->GetType() == "adjoint"
           || this->GetType() == "adjoint_hessian")
       {
         this->GetSpaceTimeHandler()->ComputeStateSparsityPattern(sparsity);
@@ -3696,11 +3609,6 @@ namespace DOpE
         {
           return this->GetPDE().HasFaces() || this->GetFunctional()->HasFaces();
         }
-        else if (this->GetType() == "adjoint_for_ee")
-        {
-          return this->GetPDE().HasFaces()
-              || aux_functionals_[functional_for_ee_num_]->HasFaces();
-        }
         else
         {
           throw DOpEException("Unknown Type: '" + this->GetType() + "'!",
@@ -3732,10 +3640,6 @@ namespace DOpE
           || (this->GetType() == "hessian"))
       {
         return this->GetFunctional()->HasPoints();
-      }
-      else if (this->GetType() == "adjoint_for_ee")
-      {
-        return aux_functionals_[functional_for_ee_num_]->HasPoints();
       }
       else if (this->GetType() == "gradient")
       {
@@ -3773,7 +3677,7 @@ namespace DOpE
       }
       else
       {
-        if ((this->GetType() == "state") || this->GetType() == "adjoint_for_ee"
+        if ((this->GetType() == "state") 
             || (this->GetType() == "tangent") || (this->GetType() == "gradient")
             || (this->GetType() == "adjoint")
             || (this->GetType() == "adjoint_hessian")
@@ -3814,7 +3718,7 @@ namespace DOpE
       }
       else
       {
-        if ((this->GetType() == "state") || this->GetType() == "adjoint_for_ee"
+        if ((this->GetType() == "state") 
             || (this->GetType() == "tangent") || (this->GetType() == "gradient")
             || (this->GetType() == "adjoint")
             || (this->GetType() == "adjoint_hessian")
@@ -3929,8 +3833,7 @@ namespace DOpE
         SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetDirichletColors() const
     {
       if ((this->GetType() == "state") || (this->GetType() == "adjoint")
-          || this->GetType() == "adjoint_for_ee"
-          || (this->GetType() == "tangent")
+	  || (this->GetType() == "tangent")
           || (this->GetType() == "adjoint_hessian"))
       {
         return dirichlet_colors_;
@@ -3979,7 +3882,6 @@ namespace DOpE
         unsigned int color) const
     {
       if ((this->GetType() == "state") || (this->GetType() == "adjoint")
-          || this->GetType() == "adjoint_for_ee"
           || (this->GetType() == "tangent")
           || (this->GetType() == "adjoint_hessian"))
       {
@@ -4082,7 +3984,6 @@ namespace DOpE
 
       unsigned int col = dirichlet_colors_.size();
       if ((this->GetType() == "state") || (this->GetType() == "adjoint")
-          || this->GetType() == "adjoint_for_ee"
           || (this->GetType() == "tangent")
           || (this->GetType() == "adjoint_hessian"))
       {
@@ -4140,8 +4041,7 @@ namespace DOpE
         return *(tangent_dirichlet_values_[col]);
       }
       else if (this->GetType() == "adjoint"
-          || this->GetType() == "adjoint_for_ee"
-          || (this->GetType() == "adjoint_hessian"))
+	       || (this->GetType() == "adjoint_hessian"))
       {
         return *(zero_dirichlet_values_);
       }
@@ -4229,8 +4129,7 @@ namespace DOpE
         return state_boundary_equation_colors_;
       }
       else if (this->GetType() == "adjoint"
-          || this->GetType() == "adjoint_for_ee"
-          || this->GetType() == "adjoint_hessian")
+	       || this->GetType() == "adjoint_hessian")
       {
         return adjoint_boundary_equation_colors_;
       }
@@ -4507,7 +4406,6 @@ namespace DOpE
         SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetDoFConstraints() const
     {
       if ((this->GetType() == "state") || (this->GetType() == "adjoint")
-          || (this->GetType() == "adjoint_for_ee")
           || (this->GetType() == "tangent")
           || (this->GetType() == "adjoint_hessian"))
       {

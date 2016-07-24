@@ -1,5 +1,12 @@
 Changelog DOpE
 ==============
+24.07.2016: Cleanup of the OptProblemContainer. Removed the
+	    equation code for the subproblems 'adjoint_for_ee' and
+	    'state'.
+24.07.2016: Added the file problemdata/opt_adjoint_for_eeproblem.h
+	    This file contains the pde information for the
+	    adjoint problem associated with error estimation for
+	    an optimization problem. 
 22.07.2016: Added the file problemdata/pde_adjoint_for_eeproblem.h
 	    This file contains the pde information for the
 	    adjoint problem associated with error estimation for

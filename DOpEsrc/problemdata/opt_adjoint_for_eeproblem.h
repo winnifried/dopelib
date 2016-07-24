@@ -21,8 +21,8 @@
 *
 **/
 
-#ifndef PDE_ADJOINT_FOR_EE_PROBLEM_H_
-#define PDE_ADJOINT_FOR_EE_PROBLEM_H_
+#ifndef OPT_ADJOINT_FOR_EE_PROBLEM_H_
+#define OPT_ADJOINT_FOR_EE_PROBLEM_H_
 
 #include <basic/spacetimehandler.h>
 #include <problemdata/initialnewtonproblem.h> 
@@ -47,10 +47,10 @@ namespace DOpE
    */
   template<typename OPTPROBLEM, typename PDE, typename DD,
       typename SPARSITYPATTERN, typename VECTOR, int dim>
-    class PDE_Adjoint_For_EEProblem
+    class OPT_Adjoint_For_EEProblem
     {
     public:
-      PDE_Adjoint_For_EEProblem(OPTPROBLEM& OP, PDE& pde) :
+      OPT_Adjoint_For_EEProblem(OPTPROBLEM& OP, PDE& pde) :
       pde_(pde), opt_problem_(OP), initial_newton_problem_(NULL)
       {
         dirichlet_colors_ = opt_problem_.dirichlet_colors_;
@@ -61,7 +61,7 @@ namespace DOpE
 	interval_length_ = 1.;
       }
 
-      ~PDE_Adjoint_For_EEProblem()
+      ~OPT_Adjoint_For_EEProblem()
       {
 	if (initial_newton_problem_ != NULL)
 	  delete initial_newton_problem_;
@@ -70,7 +70,7 @@ namespace DOpE
       std::string
       GetName() const
       {
-        return "PDE_Adjoint_For_EEProblem";
+        return "OPT_Adjoint_For_EEProblem";
       }
       std::string
       GetType() const
@@ -88,21 +88,21 @@ namespace DOpE
 	return false;
       }
 
-      InitialNewtonProblem<OPTPROBLEM,PDE_Adjoint_For_EEProblem<OPTPROBLEM,PDE,DD,SPARSITYPATTERN,VECTOR,dim>, VECTOR, dim>&
+      InitialNewtonProblem<OPTPROBLEM,OPT_Adjoint_For_EEProblem<OPTPROBLEM,PDE,DD,SPARSITYPATTERN,VECTOR,dim>, VECTOR, dim>&
 	GetNewtonInitialProblem()
       {
 	if(NeedInitialState())
 	{
 	  if ( initial_newton_problem_ == NULL)
 	  {
-	    initial_newton_problem_ = new InitialNewtonProblem<OPTPROBLEM,PDE_Adjoint_For_EEProblem<OPTPROBLEM,PDE,DD,SPARSITYPATTERN,VECTOR,dim>, VECTOR, dim>
+	    initial_newton_problem_ = new InitialNewtonProblem<OPTPROBLEM,OPT_Adjoint_For_EEProblem<OPTPROBLEM,PDE,DD,SPARSITYPATTERN,VECTOR,dim>, VECTOR, dim>
 	  (*this);
 	  }
 	  return *initial_newton_problem_;
 	}
 	else
 	{
-	  throw DOpEException("GetNewtonInitialProblem has no meaning in case NeedInitialState() == false","PDE_Adjoint_For_EEProblem::GetNewtonInitialProblem");
+	  throw DOpEException("GetNewtonInitialProblem has no meaning in case NeedInitialState() == false","OPT_Adjoint_For_EEProblem::GetNewtonInitialProblem");
 	}
       }
 
@@ -117,7 +117,7 @@ namespace DOpE
 				  dealii::Vector<double> &/*local_vector*/, double /*scale*/,
 				  double /*scale_ico*/)
       {
-	  throw DOpEException("This method is not implemented; the problem is tested for stationary problems, only!","PDE_Adjoint_For_EEProblem::Init_ElementEquation");
+	  throw DOpEException("This method is not implemented; the problem is tested for stationary problems, only!","OPT_Adjoint_For_EEProblem::Init_ElementEquation");
       }
 
         /**
@@ -129,7 +129,7 @@ namespace DOpE
 	Init_ElementRhs(const EDC& /*edc*/,
 			dealii::Vector<double> &/*local_vector*/, double /*scale*/)
       {
-	  throw DOpEException("This method is not implemented; the problem is tested for stationary problems, only!","PDE_Adjoint_For_EEProblem::Init_ElementRhs");
+	  throw DOpEException("This method is not implemented; the problem is tested for stationary problems, only!","OPT_Adjoint_For_EEProblem::Init_ElementRhs");
       }
 
         /**
@@ -142,7 +142,7 @@ namespace DOpE
       const std::map<std::string, const VECTOR*> &/*domain_values*/,
       VECTOR& /*rhs_vector*/, double /*scale=1.*/)
       {
-	  throw DOpEException("This method is not implemented; the problem is tested for stationary problems, only!","PDE_Adjoint_For_EEProblem::Init_PointRhs");
+	  throw DOpEException("This method is not implemented; the problem is tested for stationary problems, only!","OPT_Adjoint_For_EEProblem::Init_PointRhs");
         //Note if this is implemented one needs to update Init_PointRhs in the
         // OptProblem container in the tangent case.
       }
@@ -156,7 +156,7 @@ namespace DOpE
 				dealii::FullMatrix<double> &/*local_entry_matrix*/, double /*scale*/,
 				double /*scale_ico*/)
       {
-	  throw DOpEException("This method is not implemented; the problem is tested for stationary problems, only!","PDE_Adjoint_For_EEProblem::Init_ElementMatrix");
+	  throw DOpEException("This method is not implemented; the problem is tested for stationary problems, only!","OPT_Adjoint_For_EEProblem::Init_ElementMatrix");
       }
 
       /******************************************************/
@@ -446,7 +446,7 @@ namespace DOpE
     private:
       PDE& pde_;
       OPTPROBLEM& opt_problem_;
-      InitialNewtonProblem<OPTPROBLEM,PDE_Adjoint_For_EEProblem<OPTPROBLEM,PDE,DD,SPARSITYPATTERN,VECTOR,dim>, VECTOR, dim> * initial_newton_problem_;
+      InitialNewtonProblem<OPTPROBLEM,OPT_Adjoint_For_EEProblem<OPTPROBLEM,PDE,DD,SPARSITYPATTERN,VECTOR,dim>, VECTOR, dim> * initial_newton_problem_;
 
       std::vector<unsigned int> dirichlet_colors_;
       std::vector<std::vector<bool> > dirichlet_comps_;
@@ -463,7 +463,7 @@ namespace DOpE
       typename SPARSITYPATTERN, typename VECTOR, int dim>
     template<typename EDC>
       void
-      PDE_Adjoint_For_EEProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, 
+      OPT_Adjoint_For_EEProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, 
           dim>::ElementEquation(const EDC& edc,
           dealii::Vector<double> &local_vector, double scale,
           double scale_ico)
@@ -477,7 +477,7 @@ namespace DOpE
       typename SPARSITYPATTERN, typename VECTOR, int dim>
     template<typename EDC>
       void
-      PDE_Adjoint_For_EEProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR,
+      OPT_Adjoint_For_EEProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR,
     dim>::ElementTimeEquation(const EDC& edc,
 			      dealii::Vector<double> &local_vector, double scale)
       {
@@ -490,7 +490,7 @@ namespace DOpE
       typename SPARSITYPATTERN, typename VECTOR, int dim>
     template<typename EDC>
       void
-      PDE_Adjoint_For_EEProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR,
+      OPT_Adjoint_For_EEProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR,
     dim>::ElementTimeEquationExplicit(const EDC& edc,
 				      dealii::Vector<double> &local_vector, double scale)
       {
@@ -504,7 +504,7 @@ namespace DOpE
       typename SPARSITYPATTERN, typename VECTOR, int dim>
     template<typename FDC>
       void
-      PDE_Adjoint_For_EEProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR,
+      OPT_Adjoint_For_EEProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR,
           dim>::FaceEquation(const FDC& fdc,
 				 dealii::Vector<double> &local_vector, double scale, double scale_ico)
       {
@@ -517,7 +517,7 @@ namespace DOpE
       typename SPARSITYPATTERN, typename VECTOR, int dim>
     template<typename FDC>
       void
-      PDE_Adjoint_For_EEProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR,
+      OPT_Adjoint_For_EEProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR,
           dim>::InterfaceEquation(const FDC& fdc,
           dealii::Vector<double> &local_vector, double scale, double scale_ico)
       {
@@ -529,7 +529,7 @@ namespace DOpE
       typename SPARSITYPATTERN, typename VECTOR, int dim>
     template<typename FDC>
       void
-      PDE_Adjoint_For_EEProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR,
+      OPT_Adjoint_For_EEProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR,
           dim>::BoundaryEquation(const FDC& fdc,
           dealii::Vector<double> &local_vector, double scale, double scale_ico)
       {
@@ -542,7 +542,7 @@ namespace DOpE
       typename SPARSITYPATTERN, typename VECTOR, int dim>
     template<typename EDC>
       void
-      PDE_Adjoint_For_EEProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR,
+      OPT_Adjoint_For_EEProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR,
           dim>::ElementRhs(const EDC& edc,
           dealii::Vector<double> &local_vector, double scale)
       {
@@ -564,7 +564,7 @@ namespace DOpE
 	    if(opt_problem_.aux_functionals_[opt_problem_.functional_for_ee_num_]->GetType().find("timedistributed") != std::string::npos && opt_problem_.aux_functionals_[opt_problem_.functional_for_ee_num_]->GetType().find("timelocal") != std::string::npos)
 	    {
 	      throw DOpEException("Conflicting functional types: "+ opt_problem_.aux_functionals_[opt_problem_.functional_for_ee_num_]->GetType(),
-				  "PDE_Adjoint_For_EEProblem::ElementRhs");
+				  "OPT_Adjoint_For_EEProblem::ElementRhs");
 	    } 
 	  }
 	}
@@ -575,7 +575,7 @@ namespace DOpE
   template<typename OPTPROBLEM, typename PDE, typename DD,
       typename SPARSITYPATTERN, typename VECTOR, int dim>
     void
-    PDE_Adjoint_For_EEProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dim>::PointRhs(
+    OPT_Adjoint_For_EEProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dim>::PointRhs(
         const std::map<std::string, const dealii::Vector<double>*> &param_values,
         const std::map<std::string, const VECTOR*> &domain_values,
         VECTOR& rhs_vector, double scale)
@@ -588,21 +588,21 @@ namespace DOpE
 	  if(opt_problem_.aux_functionals_[opt_problem_.functional_for_ee_num_]->GetType().find("timedistributed") != std::string::npos)
 	  {
 	    opt_problem_.aux_functionals_[opt_problem_.functional_for_ee_num_]->PointValue_U(
-	      opt_problem_.GetSpaceTimeHandler()->GetStateDoFHandler(),
+	      opt_problem_.GetSpaceTimeHandler()->GetControlDoFHandler(),
 	      opt_problem_.GetSpaceTimeHandler()->GetStateDoFHandler(), param_values,
 	      domain_values, rhs_vector, scale*interval_length_);
 	  }
 	  else 
 	  {
 	    opt_problem_.aux_functionals_[opt_problem_.functional_for_ee_num_]->PointValue_U(
-	      opt_problem_.GetSpaceTimeHandler()->GetStateDoFHandler(),
+	      opt_problem_.GetSpaceTimeHandler()->GetControlDoFHandler(),
 	      opt_problem_.GetSpaceTimeHandler()->GetStateDoFHandler(), param_values,
 	      domain_values, rhs_vector, scale);
 	  }
 	  if(opt_problem_.aux_functionals_[opt_problem_.functional_for_ee_num_]->GetType().find("timedistributed") != std::string::npos && opt_problem_.aux_functionals_[opt_problem_.functional_for_ee_num_]->GetType().find("timelocal") != std::string::npos)
 	  {
 	    throw DOpEException("Conflicting functional types: "+ opt_problem_.aux_functionals_[opt_problem_.functional_for_ee_num_]->GetType(),
-				"PDE_Adjoint_For_EEProblem::PointRhs");
+				"OPT_Adjoint_For_EEProblem::PointRhs");
 	  } 
 	}
       }
@@ -614,7 +614,7 @@ namespace DOpE
       typename SPARSITYPATTERN, typename VECTOR, int dim>
     template<typename FDC>
       void
-      PDE_Adjoint_For_EEProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR,
+      OPT_Adjoint_For_EEProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR,
           dim>::FaceRhs(const FDC& fdc,
           dealii::Vector<double> &local_vector, double scale)
       {
@@ -637,7 +637,7 @@ namespace DOpE
 	    if(opt_problem_.aux_functionals_[opt_problem_.functional_for_ee_num_]->GetType().find("timedistributed") != std::string::npos && opt_problem_.aux_functionals_[opt_problem_.functional_for_ee_num_]->GetType().find("timelocal") != std::string::npos)
 	    {
 	      throw DOpEException("Conflicting functional types: "+ opt_problem_.aux_functionals_[opt_problem_.functional_for_ee_num_]->GetType(),
-				  "PDE_Adjoint_For_EEProblem::FaceRhs");
+				  "OPT_Adjoint_For_EEProblem::FaceRhs");
 	    } 
 	  }
 	}
@@ -649,7 +649,7 @@ namespace DOpE
       typename SPARSITYPATTERN, typename VECTOR, int dim>
     template<typename FDC>
       void
-      PDE_Adjoint_For_EEProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR,
+      OPT_Adjoint_For_EEProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR,
           dim>::BoundaryRhs(const FDC& fdc,
           dealii::Vector<double> &local_vector, double scale)
       {
@@ -672,7 +672,7 @@ namespace DOpE
 	    if(opt_problem_.aux_functionals_[opt_problem_.functional_for_ee_num_]->GetType().find("timedistributed") != std::string::npos  && opt_problem_.aux_functionals_[opt_problem_.functional_for_ee_num_]->GetType().find("timelocal") != std::string::npos)
 	    {
 	      throw DOpEException("Conflicting functional types: "+ opt_problem_.aux_functionals_[opt_problem_.functional_for_ee_num_]->GetType(),
-				  "PDE_Adjoint_For_EEProblem::BoundaryRhs");
+				  "OPT_Adjoint_For_EEProblem::BoundaryRhs");
 	    } 
 	  }
 	}
@@ -684,7 +684,7 @@ namespace DOpE
       typename SPARSITYPATTERN, typename VECTOR, int dim>
     template<typename EDC>
       void
-      PDE_Adjoint_For_EEProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR,
+      OPT_Adjoint_For_EEProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR,
           dim>::ElementMatrix(const EDC& edc,
           dealii::FullMatrix<double> &local_entry_matrix, double scale,
           double scale_ico)
@@ -698,7 +698,7 @@ namespace DOpE
       typename SPARSITYPATTERN, typename VECTOR, int dim>
     template<typename EDC>
       void
-      PDE_Adjoint_For_EEProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR,
+      OPT_Adjoint_For_EEProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR,
     dim>::ElementTimeMatrix(const EDC& edc,
 			    FullMatrix<double> &local_entry_matrix)
     {
@@ -711,7 +711,7 @@ namespace DOpE
       typename SPARSITYPATTERN, typename VECTOR, int dim>
     template<typename EDC>
       void
-      PDE_Adjoint_For_EEProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR,
+      OPT_Adjoint_For_EEProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR,
     dim>::ElementTimeMatrixExplicit(const EDC& edc,
 				    dealii::FullMatrix<double> &local_entry_matrix)
       {
@@ -724,7 +724,7 @@ namespace DOpE
       typename SPARSITYPATTERN, typename VECTOR, int dim>
     template<typename FDC>
       void
-      PDE_Adjoint_For_EEProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR,
+      OPT_Adjoint_For_EEProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR,
           dim>::FaceMatrix(const FDC& fdc,
 			       FullMatrix<double> &local_entry_matrix, double scale,
 			       double scale_ico)
@@ -738,7 +738,7 @@ namespace DOpE
       typename SPARSITYPATTERN, typename VECTOR, int dim>
     template<typename FDC>
       void
-      PDE_Adjoint_For_EEProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR,
+      OPT_Adjoint_For_EEProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR,
           dim>::InterfaceMatrix(const FDC& fdc,
 				    FullMatrix<double> &local_entry_matrix, double scale,
 				    double scale_ico)
@@ -752,7 +752,7 @@ namespace DOpE
       typename SPARSITYPATTERN, typename VECTOR, int dim>
     template<typename FDC>
       void
-      PDE_Adjoint_For_EEProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR,
+      OPT_Adjoint_For_EEProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR,
           dim>::BoundaryMatrix(const FDC& fdc,
 				   FullMatrix<double> &local_matrix, double scale,
 				   double scale_ico)
@@ -765,7 +765,7 @@ namespace DOpE
   template<typename OPTPROBLEM, typename PDE, typename DD,
       typename SPARSITYPATTERN, typename VECTOR, int dim>
     std::string
-    PDE_Adjoint_For_EEProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dim>::GetDoFType() const
+    OPT_Adjoint_For_EEProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dim>::GetDoFType() const
     {
       return "state";
     }
@@ -775,7 +775,7 @@ namespace DOpE
   template<typename OPTPROBLEM, typename PDE, typename DD,
       typename SPARSITYPATTERN, typename VECTOR, int dim>
     const SmartPointer<const dealii::FESystem<dim> >
-    PDE_Adjoint_For_EEProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dim>::GetFESystem() const
+    OPT_Adjoint_For_EEProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dim>::GetFESystem() const
     {
       return opt_problem_.GetSpaceTimeHandler()->GetFESystem("state");
     }
@@ -784,7 +784,7 @@ namespace DOpE
   template<typename OPTPROBLEM, typename PDE, typename DD,
       typename SPARSITYPATTERN, typename VECTOR, int dim>
     const SmartPointer<const dealii::hp::FECollection<dim> >
-    PDE_Adjoint_For_EEProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dim>::GetFECollection() const
+    OPT_Adjoint_For_EEProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dim>::GetFECollection() const
     {
       return opt_problem_.GetSpaceTimeHandler()->GetFECollection("state");
     }
@@ -794,7 +794,7 @@ namespace DOpE
   template<typename OPTPROBLEM, typename PDE, typename DD,
       typename SPARSITYPATTERN, typename VECTOR, int dim>
     UpdateFlags
-    PDE_Adjoint_For_EEProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dim>::GetUpdateFlags() const
+    OPT_Adjoint_For_EEProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dim>::GetUpdateFlags() const
     {
       UpdateFlags r;
       r = pde_.GetUpdateFlags();
@@ -808,7 +808,7 @@ namespace DOpE
   template<typename OPTPROBLEM, typename PDE, typename DD,
       typename SPARSITYPATTERN, typename VECTOR, int dim>
     UpdateFlags
-    PDE_Adjoint_For_EEProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dim>::GetFaceUpdateFlags() const
+    OPT_Adjoint_For_EEProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dim>::GetFaceUpdateFlags() const
     {
       UpdateFlags r;
       r = pde_.GetFaceUpdateFlags();
@@ -822,7 +822,7 @@ namespace DOpE
   template<typename OPTPROBLEM, typename PDE, typename DD,
       typename SPARSITYPATTERN, typename VECTOR, int dim>
     void
-    PDE_Adjoint_For_EEProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dim>::SetTime(
+    OPT_Adjoint_For_EEProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dim>::SetTime(
       double time,
       unsigned int time_dof_number, const TimeIterator& interval, bool initial)
     {
@@ -835,7 +835,7 @@ namespace DOpE
   template<typename OPTPROBLEM, typename PDE, typename DD,
       typename SPARSITYPATTERN, typename VECTOR, int dim>
     void
-    PDE_Adjoint_For_EEProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dim>::ComputeSparsityPattern(
+    OPT_Adjoint_For_EEProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dim>::ComputeSparsityPattern(
         SPARSITYPATTERN & sparsity) const
     {
       opt_problem_.GetSpaceTimeHandler()->ComputeStateSparsityPattern(sparsity);
@@ -846,7 +846,7 @@ namespace DOpE
   template<typename OPTPROBLEM, typename PDE, typename DD,
       typename SPARSITYPATTERN, typename VECTOR, int dim>
     void
-    PDE_Adjoint_For_EEProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dim>::ComputeMGSparsityPattern(
+    OPT_Adjoint_For_EEProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dim>::ComputeMGSparsityPattern(
         dealii::MGLevelObject<dealii::BlockSparsityPattern> & mg_sparsity_patterns,
 				      unsigned int n_levels) const
     {
@@ -858,7 +858,7 @@ namespace DOpE
   template<typename OPTPROBLEM, typename PDE, typename DD,
       typename SPARSITYPATTERN, typename VECTOR, int dim>
     void
-    PDE_Adjoint_For_EEProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dim>::ComputeMGSparsityPattern(
+    OPT_Adjoint_For_EEProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dim>::ComputeMGSparsityPattern(
         dealii::MGLevelObject<dealii::SparsityPattern> & mg_sparsity_patterns,
 				      unsigned int n_levels) const
     {
@@ -872,7 +872,7 @@ namespace DOpE
   template<typename OPTPROBLEM, typename PDE, typename DD,
       typename SPARSITYPATTERN, typename VECTOR, int dim>
     bool
-    PDE_Adjoint_For_EEProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dim>::HasFaces() const
+    OPT_Adjoint_For_EEProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dim>::HasFaces() const
     {
       return pde_.HasFaces()
               || opt_problem_.aux_functionals_[opt_problem_.functional_for_ee_num_]->HasFaces();
@@ -883,7 +883,7 @@ namespace DOpE
   template<typename OPTPROBLEM, typename PDE, typename DD,
       typename SPARSITYPATTERN, typename VECTOR, int dim>
     bool
-    PDE_Adjoint_For_EEProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dim>::HasPoints() const
+    OPT_Adjoint_For_EEProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dim>::HasPoints() const
     {
       return opt_problem_.aux_functionals_[opt_problem_.functional_for_ee_num_]->HasPoints();
     }
@@ -894,7 +894,7 @@ namespace DOpE
   template<typename OPTPROBLEM, typename PDE, typename DD,
       typename SPARSITYPATTERN, typename VECTOR, int dim>
     bool
-    PDE_Adjoint_For_EEProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dim>::HasInterfaces() const
+    OPT_Adjoint_For_EEProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dim>::HasInterfaces() const
     {
       return pde_.HasInterfaces();
     }
@@ -904,7 +904,7 @@ namespace DOpE
   template<typename OPTPROBLEM, typename PDE, typename DD,
       typename SPARSITYPATTERN, typename VECTOR, int dim>
     const std::vector<unsigned int>&
-    PDE_Adjoint_For_EEProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dim>::GetDirichletColors() const
+    OPT_Adjoint_For_EEProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dim>::GetDirichletColors() const
     {
       return dirichlet_colors_;
     }
@@ -914,7 +914,7 @@ namespace DOpE
   template<typename OPTPROBLEM, typename PDE, typename DD,
       typename SPARSITYPATTERN, typename VECTOR, int dim>
     const std::vector<bool>&
-    PDE_Adjoint_For_EEProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dim>::GetDirichletCompMask(
+    OPT_Adjoint_For_EEProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dim>::GetDirichletCompMask(
         unsigned int color) const
     {
       unsigned int comp = dirichlet_colors_.size();
@@ -930,7 +930,7 @@ namespace DOpE
         {
           std::stringstream s;
           s << "DirichletColor" << color << " has not been found !";
-          throw DOpEException(s.str(), "PDE_Adjoint_For_EEProblem::GetDirichletCompMask");
+          throw DOpEException(s.str(), "OPT_Adjoint_For_EEProblem::GetDirichletCompMask");
         }
       return dirichlet_comps_[comp];
     }
@@ -940,7 +940,7 @@ namespace DOpE
   template<typename OPTPROBLEM, typename PDE, typename DD,
       typename SPARSITYPATTERN, typename VECTOR, int dim>
     const Function<dim>&
-    PDE_Adjoint_For_EEProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dim>::GetDirichletValues(
+    OPT_Adjoint_For_EEProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dim>::GetDirichletValues(
         unsigned int color,
         const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
         const std::map<std::string, const VECTOR*> &/*domain_values*/) const
@@ -969,7 +969,7 @@ namespace DOpE
   template<typename OPTPROBLEM, typename PDE, typename DD,
       typename SPARSITYPATTERN, typename VECTOR, int dim>
     const std::vector<unsigned int>&
-    PDE_Adjoint_For_EEProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dim>::GetBoundaryEquationColors() const
+    OPT_Adjoint_For_EEProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dim>::GetBoundaryEquationColors() const
     {
       return adjoint_for_ee_boundary_equation_colors_;
     }
@@ -979,7 +979,7 @@ namespace DOpE
   template<typename OPTPROBLEM, typename PDE, typename DD,
       typename SPARSITYPATTERN, typename VECTOR, int dim>
     const dealii::ConstraintMatrix&
-    PDE_Adjoint_For_EEProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dim>::GetDoFConstraints() const
+    OPT_Adjoint_For_EEProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dim>::GetDoFConstraints() const
     {
       return opt_problem_.GetSpaceTimeHandler()->GetStateDoFConstraints();
     }
@@ -988,7 +988,7 @@ namespace DOpE
 
   template<typename OPTPROBLEM, typename PDE, typename DD,
     typename SPARSITYPATTERN, typename VECTOR, int dim>  const dealii::Function<dim>&
-    PDE_Adjoint_For_EEProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dim>::GetInitialValues() const
+    OPT_Adjoint_For_EEProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dim>::GetInitialValues() const
   {
     return opt_problem_.GetInitialValues();
   }
@@ -998,7 +998,7 @@ namespace DOpE
   template<typename OPTPROBLEM, typename PDE, typename DD,
       typename SPARSITYPATTERN, typename VECTOR, int dim>
     template<typename ELEMENTITERATOR>
-    bool PDE_Adjoint_For_EEProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dim>
+    bool OPT_Adjoint_For_EEProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dim>
                       ::AtInterface(ELEMENTITERATOR& element, unsigned int face) const
   {
     return pde_.AtInterface(element,face);
