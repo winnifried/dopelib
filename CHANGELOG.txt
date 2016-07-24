@@ -1,5 +1,8 @@
 Changelog DOpE
 ==============
+24.07.2016: Added the file problemsdata/adjointproblem.h
+	    which contains all equation data needed for the
+	    solution of the adjoint problem.
 24.07.2016: Added the file problemsdata/tangentproblem.h
 	    which contains all equation data needed for the
 	    solution of the tangent problem.

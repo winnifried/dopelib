@@ -899,12 +899,14 @@ namespace DOpE
           4 + this->GetBasePriority());
 
       this->SetProblemType("adjoint");
+      auto& problem = this->GetProblem()->GetAdjointProblem();
+      
       if (adjoint_reinit_ == true)
       {
-        GetNonlinearSolver("adjoint").ReInit(*(this->GetProblem()));
-        adjoint_reinit_ = false;
+	GetNonlinearSolver("adjoint").ReInit(problem);
+	adjoint_reinit_ = false;
       }
-
+      
       this->GetProblem()->AddAuxiliaryToIntegrator(this->GetIntegrator());
       if(cost_needs_precomputations_ != 0)
       {
@@ -912,52 +914,52 @@ namespace DOpE
 	this->GetIntegrator().AddParamData("cost_functional_pre",&(func_vals->second));
       }
       this->GetIntegrator().AddDomainData("state",
-          &(GetU().GetSpacialVector())); //&(GetU().GetSpacialVector())
-
+					  &(GetU().GetSpacialVector())); 
+      
       if (dopedim == dealdim)
       {
-        this->GetIntegrator().AddDomainData("control", &(q.GetSpacialVector()));
+	this->GetIntegrator().AddDomainData("control", &(q.GetSpacialVector()));
       }
       else if (dopedim == 0)
       {
-        this->GetIntegrator().AddParamData("control",
-            &(q.GetSpacialVectorCopy()));
+	this->GetIntegrator().AddParamData("control",
+					   &(q.GetSpacialVectorCopy()));
       }
       else
       {
-        throw DOpEException("dopedim not implemented",
-            "StatReducedProblem::ComputeReducedAdjoint");
+	throw DOpEException("dopedim not implemented",
+			    "StatReducedProblem::ComputeReducedAdjoint");
       }
-
+      
       build_adjoint_matrix_ =
-          this->GetNonlinearSolver("adjoint").NonlinearSolve(
-              *(this->GetProblem()), (GetZ().GetSpacialVector()), true,
-              build_adjoint_matrix_);
-
+	this->GetNonlinearSolver("adjoint").NonlinearSolve(
+	  problem, (GetZ().GetSpacialVector()), true,
+	  build_adjoint_matrix_);
+      
       if (dopedim == dealdim)
       {
-        this->GetIntegrator().DeleteDomainData("control");
+	this->GetIntegrator().DeleteDomainData("control");
       }
       else if (dopedim == 0)
       {
-        this->GetIntegrator().DeleteParamData("control");
-        q.UnLockCopy();
+	this->GetIntegrator().DeleteParamData("control");
+	q.UnLockCopy();
       }
       else
       {
-        throw DOpEException("dopedim not implemented",
-            "StatReducedProblem::ComputeReducedAdjoint");
+	throw DOpEException("dopedim not implemented",
+			    "StatReducedProblem::ComputeReducedAdjoint");
       }
       if(cost_needs_precomputations_ != 0)
       {
 	this->GetIntegrator().DeleteParamData("cost_functional_pre");
       }
       this->GetIntegrator().DeleteDomainData("state");
-
+      
       this->GetProblem()->DeleteAuxiliaryFromIntegrator(this->GetIntegrator());
-
+      
       this->GetOutputHandler()->Write((GetZ().GetSpacialVector()),
-          "Adjoint" + this->GetPostIndex(), this->GetProblem()->GetDoFType());
+				      "Adjoint" + this->GetPostIndex(), problem.GetDoFType());
     }
 
   /******************************************************/
@@ -1062,6 +1064,8 @@ namespace DOpE
       {
         tmp.reinit(GetU().GetSpacialVector());
         this->SetProblemType("adjoint");
+	auto& problem = this->GetProblem()->GetAdjointProblem();
+	      
         this->GetProblem()->AddAuxiliaryToIntegrator(this->GetIntegrator());
 
         if (dopedim == dealdim)
@@ -1089,7 +1093,7 @@ namespace DOpE
         this->GetIntegrator().AddDomainData("last_newton_solution",
             &(GetZ().GetSpacialVector()));
 
-        this->GetIntegrator().ComputeNonlinearResidual(*(this->GetProblem()),
+        this->GetIntegrator().ComputeNonlinearResidual(problem,
             tmp, false);
         tmp *= -1.;
 
@@ -1718,15 +1722,19 @@ namespace DOpE
         tmp.reinit(GetU().GetSpacialVector());
         tmp_second.reinit(GetU().GetSpacialVector());
         this->SetProblemType("adjoint");
-        this->GetIntegrator().AddDomainData("last_newton_solution",
-            &(GetZ().GetSpacialVector()));
-
-        this->GetIntegrator().ComputeNonlinearResidual(*(this->GetProblem()),
-            tmp_second, false);
-        tmp_second *= -1.;
-
-        this->GetIntegrator().DeleteDomainData("last_newton_solution");
-        this->SetProblemType("adjoint_hessian");
+	{ // Adjoint
+	  auto& problem = this->GetProblem()->GetAdjointProblem();
+	  
+	  this->GetIntegrator().AddDomainData("last_newton_solution",
+					      &(GetZ().GetSpacialVector()));
+	  
+	  this->GetIntegrator().ComputeNonlinearResidual(problem,
+							 tmp_second, false);
+	  tmp_second *= -1.;
+	  
+	  this->GetIntegrator().DeleteDomainData("last_newton_solution");
+	}//End Adjoint
+	this->SetProblemType("adjoint_hessian");
         this->GetIntegrator().AddDomainData("last_newton_solution",
             &(GetDZ().GetSpacialVector()));
 

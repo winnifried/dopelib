@@ -74,7 +74,7 @@ namespace DOpE
       std::string
       GetType() const
       {
-        return "state";
+        return "tangent";
       }
 
       /**

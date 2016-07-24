@@ -1095,7 +1095,12 @@ namespace DOpE
 			    double /*scale_ico*/);
 	
         /******************************************************/
-	
+	// Integrals over interfaces (with test functions from
+	// an adjacent (but not the same) element.
+	// In optimization problems, at present, no control may
+	// act in these and the state shoult only appear
+	// linearly. Hence the derivatives UU, Q, ... are not
+	// availiable for implementation.
         virtual void
         InterfaceEquation(const FDC<DH, VECTOR, dealdim>& /*fdc*/,
 			  dealii::Vector<double> &/*local_vector*/, 
@@ -1116,8 +1121,16 @@ namespace DOpE
 			    dealii::Vector<double> &/*local_vector*/, 
 			    double /*scale*/,
 			    double /*scale_ico*/);
+        /******************************************************/
+
+        virtual void
+        InterfaceEquation_UTT(const FDC<DH, VECTOR, dealdim>& /*fdc*/,
+			    dealii::Vector<double> &/*local_vector*/, 
+			    double /*scale*/,
+			    double /*scale_ico*/);
 
         /******************************************************/
+
         // Functions for Boundary Integrals
 
         virtual void
