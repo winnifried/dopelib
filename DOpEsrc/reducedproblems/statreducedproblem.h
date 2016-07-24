@@ -984,8 +984,8 @@ namespace DOpE
             "StatPDEProblem::ComputeDualForErrorEstimation");
       }
 
-      //      auto& problem = this->GetProblem()->GetStateProblem();//Hier ist adjoint problem einzufuegen
-      auto& problem = *(this->GetProblem());
+      auto& problem = this->GetProblem()->GetAdjoint_For_EEProblem();
+      
       if (adjoint_reinit_ == true)
       {
         GetNonlinearSolver("adjoint_for_ee").ReInit(problem);
@@ -1621,41 +1621,43 @@ namespace DOpE
           5 + this->GetBasePriority());
 
       this->SetProblemType("tangent");
-
-      this->GetProblem()->AddAuxiliaryToIntegrator(this->GetIntegrator());
-
-      this->GetIntegrator().AddDomainData("state",
-          &(GetU().GetSpacialVector()));
-      this->GetControlIntegrator().AddDomainData("state",
-          &(GetU().GetSpacialVector()));
-
-      if (dopedim == dealdim)
-      {
-        this->GetIntegrator().AddDomainData("dq",
+      {//Start Tangent Calculatation
+	auto& problem = this->GetProblem()->GetTangentProblem();
+	
+	this->GetProblem()->AddAuxiliaryToIntegrator(this->GetIntegrator());
+	
+	this->GetIntegrator().AddDomainData("state",
+					    &(GetU().GetSpacialVector()));
+	this->GetControlIntegrator().AddDomainData("state",
+						   &(GetU().GetSpacialVector()));
+	
+	if (dopedim == dealdim)
+	{
+	  this->GetIntegrator().AddDomainData("dq",
             &(direction.GetSpacialVector()));
-        this->GetIntegrator().AddDomainData("control", &(q.GetSpacialVector()));
-      }
-      else if (dopedim == 0)
-      {
-        this->GetIntegrator().AddParamData("dq",
-            &(direction.GetSpacialVectorCopy()));
-        this->GetIntegrator().AddParamData("control",
-            &(q.GetSpacialVectorCopy()));
-      }
-      else
-      {
-        throw DOpEException("dopedim not implemented",
-            "StatReducedProblem::ComputeReducedHessianVector");
-      }
-
-      //tangent Matrix is the same as state matrix
-      build_state_matrix_ = this->GetNonlinearSolver("tangent").NonlinearSolve(
-          *(this->GetProblem()), (GetDU().GetSpacialVector()), true,
+	  this->GetIntegrator().AddDomainData("control", &(q.GetSpacialVector()));
+	}
+	else if (dopedim == 0)
+	{
+	  this->GetIntegrator().AddParamData("dq",
+					     &(direction.GetSpacialVectorCopy()));
+	  this->GetIntegrator().AddParamData("control",
+					     &(q.GetSpacialVectorCopy()));
+	}
+	else
+	{
+	  throw DOpEException("dopedim not implemented",
+			      "StatReducedProblem::ComputeReducedHessianVector");
+	}
+	
+	//tangent Matrix is the same as state matrix
+	build_state_matrix_ = this->GetNonlinearSolver("tangent").NonlinearSolve(
+          problem, (GetDU().GetSpacialVector()), true,
           build_state_matrix_);
-
-      this->GetOutputHandler()->Write((GetDU().GetSpacialVector()),
-          "Tangent" + this->GetPostIndex(), this->GetProblem()->GetDoFType());
-
+	
+	this->GetOutputHandler()->Write((GetDU().GetSpacialVector()),
+					"Tangent" + this->GetPostIndex(), problem.GetDoFType());
+      }//End Tangent Calculation
 
       this->GetIntegrator().AddDomainData("adjoint",
 					  &(GetZ().GetSpacialVector()));

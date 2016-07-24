@@ -1,5 +1,8 @@
 Changelog DOpE
 ==============
+24.07.2016: Added the file problemsdata/tangentproblem.h
+	    which contains all equation data needed for the
+	    solution of the tangent problem.
 24.07.2016: Cleanup of the OptProblemContainer. Removed the
 	    equation code for the subproblems 'adjoint_for_ee' and
 	    'state'.

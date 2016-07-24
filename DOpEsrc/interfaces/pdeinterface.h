@@ -1109,6 +1109,13 @@ namespace DOpE
 			    dealii::Vector<double> &/*local_vector*/, 
 			    double /*scale*/,
 			    double /*scale_ico*/);
+        /******************************************************/
+
+        virtual void
+        InterfaceEquation_UT(const FDC<DH, VECTOR, dealdim>& /*fdc*/,
+			    dealii::Vector<double> &/*local_vector*/, 
+			    double /*scale*/,
+			    double /*scale_ico*/);
 
         /******************************************************/
         // Functions for Boundary Integrals

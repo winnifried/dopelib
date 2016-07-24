@@ -896,6 +896,21 @@ namespace DOpE
       throw DOpEException("Not Implemented",
           "PDEInterface::InterfaceEquation_U");
     }
+  /********************************************/
+
+  template<
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
+      template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
+      template<int, int> class DH, typename VECTOR, int dealdim>
+    void
+    PDEInterface<EDC, FDC, DH, VECTOR, dealdim>::InterfaceEquation_UT(
+        const FDC<DH, VECTOR, dealdim>&,
+        dealii::Vector<double> &/*local_vector*/, double /*scale*/,
+        double /*scale_ico*/)
+    {
+      throw DOpEException("Not Implemented",
+          "PDEInterface::InterfaceEquation_UT");
+    }
 
   /********************************************/
 
