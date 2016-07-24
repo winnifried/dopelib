@@ -1684,6 +1684,8 @@ namespace DOpE
       this->GetOutputHandler()->Write("\tSolving Adjoint Hessian:",
           5 + this->GetBasePriority());
       this->SetProblemType("adjoint_hessian");
+      {//Adjoint_Hessian
+      auto& problem = this->GetProblem()->GetAdjoint_HessianProblem();
 
       if(cost_needs_precomputations_ != 0)
       {
@@ -1700,11 +1702,11 @@ namespace DOpE
       //adjoint_hessian Matrix is the same as adjoint matrix
       build_adjoint_matrix_ =
           this->GetNonlinearSolver("adjoint_hessian").NonlinearSolve(
-              *(this->GetProblem()), (GetDZ().GetSpacialVector()), true,
+              problem, (GetDZ().GetSpacialVector()), true,
               build_adjoint_matrix_);
 
       this->GetOutputHandler()->Write((GetDZ().GetSpacialVector()),
-          "Hessian" + this->GetPostIndex(), this->GetProblem()->GetDoFType());
+          "Hessian" + this->GetPostIndex(), problem.GetDoFType());
 
       this->GetIntegrator().AddDomainData("adjoint_hessian",
           &(GetDZ().GetSpacialVector()));
@@ -1714,6 +1716,7 @@ namespace DOpE
       this->GetOutputHandler()->Write(
           "\tComputing Representation of the Hessian:",
           5 + this->GetBasePriority());
+      }//End Adjoint Hessian
       //Preparations for Control In The Dirichlet Data
       VECTOR tmp;
       VECTOR tmp_second;
@@ -1735,14 +1738,18 @@ namespace DOpE
 	  this->GetIntegrator().DeleteDomainData("last_newton_solution");
 	}//End Adjoint
 	this->SetProblemType("adjoint_hessian");
-        this->GetIntegrator().AddDomainData("last_newton_solution",
-            &(GetDZ().GetSpacialVector()));
+	{//Adjoint_Hessian
+	  auto& problem = this->GetProblem()->GetAdjoint_HessianProblem();
+	  
+	  this->GetIntegrator().AddDomainData("last_newton_solution",
+					      &(GetDZ().GetSpacialVector()));
+	  
+	  this->GetIntegrator().ComputeNonlinearResidual(problem,
+							 tmp, false);
+	  tmp *= -1.;
 
-        this->GetIntegrator().ComputeNonlinearResidual(*(this->GetProblem()),
-            tmp, false);
-        tmp *= -1.;
-
-        this->GetIntegrator().DeleteDomainData("last_newton_solution");
+	  this->GetIntegrator().DeleteDomainData("last_newton_solution");
+	}
       }
       //Endof Dirichletdata Preparations
       this->GetProblem()->DeleteAuxiliaryFromIntegrator(this->GetIntegrator());

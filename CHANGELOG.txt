@@ -1,5 +1,9 @@
 Changelog DOpE
 ==============
+24.07.2016: Added the file problemsdata/adjoint_hessianproblem.h
+	    which contains all equation data needed for the
+	    solution of the adjoint problem for the
+	    evaluation of the reduced hessian.
 24.07.2016: Added the file problemsdata/adjointproblem.h
 	    which contains all equation data needed for the
 	    solution of the adjoint problem.

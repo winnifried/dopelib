@@ -195,14 +195,18 @@ namespace DOpE
    /**
     * Returns a description of the Auxilliary Adjoint PDE for the Hessian Operator
     */
-  ADJOINTTSPROBLEM<OptProblemContainer<FUNCTIONAL_INTERFACE,FUNCTIONAL,PDE,DD,CONSTRAINTS,SPARSITYPATTERN,VECTOR,dopedim,dealdim,FE, DH>,
-  SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>& GetAdjointHessianProblem()
+    ADJOINTTSPROBLEM<Adjoint_HessianProblem<
+      OptProblemContainer<FUNCTIONAL_INTERFACE,FUNCTIONAL,PDE,DD,CONSTRAINTS,SPARSITYPATTERN,VECTOR,dopedim,dealdim,FE, DH>,
+      PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>,
+      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>& GetAdjointHessianProblem()
   {
     if(ts_adjoint_hessian_problem_ == NULL)
     {
-      ts_adjoint_hessian_problem_ = new ADJOINTTSPROBLEM<OptProblemContainer<FUNCTIONAL_INTERFACE,FUNCTIONAL,PDE,DD,CONSTRAINTS,SPARSITYPATTERN,VECTOR,dopedim,dealdim,FE, DH>,
+      ts_adjoint_hessian_problem_ = new   ADJOINTTSPROBLEM<Adjoint_HessianProblem<
+      OptProblemContainer<FUNCTIONAL_INTERFACE,FUNCTIONAL,PDE,DD,CONSTRAINTS,SPARSITYPATTERN,VECTOR,dopedim,dealdim,FE, DH>,
+      PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>,
       SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>(OptProblemContainer<FUNCTIONAL_INTERFACE,FUNCTIONAL,PDE,DD,CONSTRAINTS,
-								 SPARSITYPATTERN,VECTOR,dopedim,dealdim,FE, DH>::GetBaseProblem());
+								 SPARSITYPATTERN,VECTOR,dopedim,dealdim,FE, DH>::GetAdjoint_HessianProblem());
     }
     return *ts_adjoint_hessian_problem_;
   }
@@ -220,7 +224,9 @@ private:
       OptProblemContainer<FUNCTIONAL_INTERFACE,FUNCTIONAL,PDE,DD,CONSTRAINTS,SPARSITYPATTERN,VECTOR,dopedim,dealdim,FE, DH>,
       PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>,
       SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>* ts_tangent_problem_;
-  ADJOINTTSPROBLEM<OptProblemContainer<FUNCTIONAL_INTERFACE,FUNCTIONAL,PDE,DD,CONSTRAINTS,SPARSITYPATTERN,VECTOR,dopedim,dealdim,FE, DH>,
+  ADJOINTTSPROBLEM<Adjoint_HessianProblem<
+      OptProblemContainer<FUNCTIONAL_INTERFACE,FUNCTIONAL,PDE,DD,CONSTRAINTS,SPARSITYPATTERN,VECTOR,dopedim,dealdim,FE, DH>,
+      PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>,
       SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>* ts_adjoint_hessian_problem_;
 };
 }

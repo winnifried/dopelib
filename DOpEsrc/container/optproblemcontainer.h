@@ -44,6 +44,7 @@
 #include <problemdata/stateproblem.h>
 #include <problemdata/tangentproblem.h>
 #include <problemdata/adjointproblem.h>
+#include <problemdata/adjoint_hessianproblem.h>
 #include <problemdata/opt_adjoint_for_eeproblem.h>
 #include <basic/dopetypes.h>
 #include <container/dwrdatacontainer.h>
@@ -178,6 +179,25 @@ namespace DOpE
                 *this, this->GetPDE());
           }
           return *adjoint_problem_;
+        }
+      /**
+       * Returns a description of the Adjoint for Hessian PDE for error estimation
+       */
+      Adjoint_HessianProblem<
+          OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
+          CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>,
+          PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>&
+      GetAdjoint_HessianProblem()
+        {
+          if (adjoint_hessian_problem_ == NULL)
+          {
+            adjoint_hessian_problem_ = new Adjoint_HessianProblem<
+                OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
+                    CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE,
+                    DH>, PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>(
+                *this, this->GetPDE());
+          }
+          return *adjoint_hessian_problem_;
         }
 
       /**
@@ -1247,100 +1267,6 @@ namespace DOpE
 
         /******************************************************/
         /******************************************************/
-        /****For the initial values ***************/
-        template<typename DATACONTAINER>
-          void
-          Init_ElementEquation(const DATACONTAINER& edc,
-              dealii::Vector<double> &local_vector, double scale,
-              double scale_ico)
-          {
-            if (this->GetType() == "adjoint_hessian")
-            {
-              this->GetPDE().Init_ElementEquation(edc, local_vector, scale,
-                  scale_ico);
-            }
-            else
-            {
-              throw DOpEException("Not implemented",
-                  "OptProblemContainer::Init_ElementEquation");
-            }
-          }
-
-        template<typename DATACONTAINER>
-          void
-          Init_ElementRhs(const DATACONTAINER& edc,
-              dealii::Vector<double> &local_vector, double scale)
-          {
-	    if (this->GetType() == "adjoint_hessian")
-            {
-              if (GetFunctional()->NeedTime())
-              {
-                if (GetFunctional()->GetType().find("timelocal")
-                    != std::string::npos)
-                {
-                  if (GetFunctional()->GetType().find("domain")
-                      != std::string::npos)
-                  {
-                    GetFunctional()->ElementValue_UU(edc, local_vector, scale);
-                  }
-                }
-              }
-            }
-            else
-            {
-              throw DOpEException("Not implemented",
-                  "OptProblemContainer::Init_ElementRhs");
-            }
-          }
-
-        void
-        Init_PointRhs(
-            const std::map<std::string, const dealii::Vector<double>*> &param_values,
-            const std::map<std::string, const VECTOR*> &domain_values,
-            VECTOR& rhs_vector, double scale = 1.)
-        {
-          if (this->GetType() == "adjoint_hessian")
-          {
-            if (GetFunctional()->NeedTime())
-            {
-              if (GetFunctional()->GetType().find("timelocal")
-                  != std::string::npos)
-              {
-                if (GetFunctional()->GetType().find("point")
-                    != std::string::npos)
-                {
-                  GetFunctional()->PointValue_UU(param_values, domain_values,
-                      rhs_vector, scale);
-                }
-              }
-            }
-          }
-          else
-          {
-            throw DOpEException("Not implemented",
-                "OptProblemContainer::Init_PointRhs");
-          }
-        }
-
-        template<typename DATACONTAINER>
-          void
-          Init_ElementMatrix(const DATACONTAINER& edc,
-              dealii::FullMatrix<double> &local_entry_matrix, double scale,
-              double scale_ico)
-          {
-            if (this->GetType() == "adjoint_hessian")
-            {
-              this->GetPDE().Init_ElementMatrix(edc, local_entry_matrix, scale,
-                  scale_ico);
-            }
-            else
-            {
-              throw DOpEException("Not implemented",
-                  "OptProblemContainer::Init_ElementMatrix");
-            }
-          }
-
-        /******************************************************/
 
         /**
          * Returns whether the functional for error estimation
@@ -1454,6 +1380,10 @@ namespace DOpE
                 OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
                 CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>,
                 PDE, DD, SPARSITYPATTERN, VECTOR, dealdim> * adjoint_problem_;
+      Adjoint_HessianProblem<
+                OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
+                CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>,
+                PDE, DD, SPARSITYPATTERN, VECTOR, dealdim> * adjoint_hessian_problem_;
       OPT_Adjoint_For_EEProblem<
                 OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
                 CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>,
@@ -1468,6 +1398,10 @@ namespace DOpE
           CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>,
           PDE, DD, SPARSITYPATTERN, VECTOR, dealdim> ;
       friend class AdjointProblem<
+          OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
+          CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>,
+          PDE, DD, SPARSITYPATTERN, VECTOR, dealdim> ;
+      friend class Adjoint_HessianProblem<
           OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
           CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>,
           PDE, DD, SPARSITYPATTERN, VECTOR, dealdim> ;
@@ -1489,7 +1423,7 @@ namespace DOpE
         ProblemContainerInternal<PDE>(pde), functional_(&functional), constraints_(
             &constraints), STH_(&STH), state_problem_(NULL),
             tangent_problem_(NULL),  adjoint_problem_(NULL),
-            adjoint_for_ee_problem_(NULL)
+            adjoint_hessian_problem_(NULL), adjoint_for_ee_problem_(NULL)
     {
       ExceptionHandler_ = NULL;
       OutputHandler_ = NULL;
@@ -1551,6 +1485,10 @@ namespace DOpE
       {
         delete adjoint_problem_;
       }
+      if (adjoint_hessian_problem_ != NULL)
+      {
+        delete adjoint_hessian_problem_;
+      }
       if (adjoint_for_ee_problem_ != NULL)
       {
         delete adjoint_for_ee_problem_;
@@ -1582,6 +1520,11 @@ namespace DOpE
       {
         delete adjoint_problem_;
 	adjoint_problem_ = NULL;
+      }
+      if (adjoint_hessian_problem_ != NULL)
+      {
+        delete adjoint_hessian_problem_;
+	adjoint_hessian_problem_ = NULL;
       }
       if (adjoint_for_ee_problem_ != NULL)
       {
@@ -1917,15 +1860,9 @@ namespace DOpE
       OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
           CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::ElementEquation(
           const DATACONTAINER& edc, dealii::Vector<double> &local_vector,
-          double scale, double scale_ico)
+          double scale, double /*scale_ico*/)
       {
-        if (this->GetType() == "adjoint_hessian")
-        {
-          // state values in quadrature points
-          this->GetPDE().ElementEquation_UTT(edc, local_vector, scale*interval_length_,
-              scale_ico*interval_length_);
-        }
-        else if ((this->GetType() == "gradient")
+        if ((this->GetType() == "gradient")
             || (this->GetType() == "hessian"))
         {
           // control values in quadrature points
@@ -1978,11 +1915,7 @@ namespace DOpE
           double scale)
       {
 
-        if (this->GetType() == "adjoint_hessian")
-        {
-          this->GetPDE().ElementTimeEquation_UTT(edc, local_vector, scale);
-        }
-        else if ((this->GetType() == "gradient")
+        if ((this->GetType() == "gradient")
             || (this->GetType() == "hessian"))
         {
           throw DOpEException("Not implemented",
@@ -2009,12 +1942,7 @@ namespace DOpE
           double scale)
       {
 
-        if (this->GetType() == "adjoint_hessian")
-        {
-          this->GetPDE().ElementTimeEquationExplicit_UTT(edc, local_vector,
-              scale);
-        }
-        else if ((this->GetType() == "gradient")
+        if ((this->GetType() == "gradient")
             || (this->GetType() == "hessian"))
         {
           throw DOpEException("Not implemented",
@@ -2036,76 +1964,12 @@ namespace DOpE
     template<typename FACEDATACONTAINER>
       void
       OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
-          CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::FaceEquation(
-          const FACEDATACONTAINER& fdc,
-          dealii::Vector<double> &local_vector, double scale,
-          double scale_ico)
-      {
-        if (this->GetType() == "adjoint_hessian")
-        {
-          // state values in quadrature points
-          this->GetPDE().FaceEquation_UTT(fdc, local_vector, scale*interval_length_,
-              scale_ico*interval_length_);
-        }
-//        else if ((this->GetType() == "gradient") || (this->GetType() == "hessian"))
-//        {
-//          // control values in quadrature points
-//          this->GetPDE().ControlFaceEquation(fdc, local_vector, scale);
-//        }
-        else
-        {
-          throw DOpEException("Not implemented",
-              "OptProblemContainer::FaceEquation");
-        }
-      }
-
-  /******************************************************/
-
-  template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-      typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-      typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-      template<int, int> class DH>
-    template<typename FACEDATACONTAINER>
-      void
-      OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
-          CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::InterfaceEquation(
-          const FACEDATACONTAINER& fdc,
-          dealii::Vector<double> &local_vector, double scale,
-          double scale_ico)
-      {
-        if (this->GetType() == "adjoint_hessian")
-        {
-          // state values in quadrature points
-          this->GetPDE().InterfaceEquation_UTT(fdc, local_vector, scale*interval_length_,
-              scale_ico*interval_length_);
-        }
-        else
-        {
-          throw DOpEException("Not implemented",
-              "OptProblemContainer::InterfaceEquation");
-        }
-      }
-  /******************************************************/
-
-  template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-      typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-      typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-      template<int, int> class DH>
-    template<typename FACEDATACONTAINER>
-      void
-      OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
           CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::BoundaryEquation(
           const FACEDATACONTAINER& fdc,
           dealii::Vector<double> &local_vector, double scale,
-          double scale_ico)
+          double /*scale_ico*/)
       {
-        if (this->GetType() == "adjoint_hessian")
-        {
-          // state values in quadrature points
-          this->GetPDE().BoundaryEquation_UTT(fdc, local_vector, scale*interval_length_,
-              scale_ico*interval_length_);
-        }
-        else if ((this->GetType() == "gradient") || (this->GetType() == "hessian"))
+        if ((this->GetType() == "gradient") || (this->GetType() == "hessian"))
         {
           // control values in quadrature points
           this->GetPDE().ControlBoundaryEquation(fdc, local_vector, scale*c_interval_length_);
@@ -2130,41 +1994,7 @@ namespace DOpE
           const DATACONTAINER& edc, dealii::Vector<double> &local_vector,
           double scale)
       {
-	if (this->GetType() == "adjoint_hessian")
-        {
-          // state values in quadrature points
-          if(GetFunctional()->NeedTime())
-	  {
-	    if (GetFunctional()->GetType().find("domain") != std::string::npos)
-	    {
-	      if (GetFunctional()->GetType().find("domain") != std::string::npos)
-	      {
-		if(GetFunctional()->GetType().find("timedistributed") != std::string::npos)
-		{
-		  GetFunctional()->ElementValue_UU(edc, local_vector, scale*interval_length_);
-		  GetFunctional()->ElementValue_QU(edc, local_vector, scale*interval_length_);
-		}
-		else 
-		{
-		  GetFunctional()->ElementValue_UU(edc, local_vector, scale);
-		  GetFunctional()->ElementValue_QU(edc, local_vector, scale);
-		}
-		if(GetFunctional()->GetType().find("timedistributed") != std::string::npos && GetFunctional()->GetType().find("timelocal") != std::string::npos)
-		{
-		  throw DOpEException("Conflicting functional types: "+ GetFunctional()->GetType(),
-				      "OptProblemContainer::ElementRhs");
-		} 
-	      }
-	    }
-          }
-          scale *= -1;
-          this->GetPDE().ElementEquation_UU(edc, local_vector, scale*interval_length_, scale*interval_length_);
-          this->GetPDE().ElementEquation_QU(edc, local_vector, scale*interval_length_, scale*interval_length_);
-          //TODO: make some example where this realy matters to check if this is right
-          this->GetPDE().ElementTimeEquationExplicit_UU(edc, local_vector,
-              scale);
-        }
-        else if (this->GetType() == "gradient")
+        if (this->GetType() == "gradient")
         {
           if (GetSpaceTimeHandler()->GetControlType()
               == DOpEtypes::ControlType::initial && initial_)
@@ -2260,45 +2090,7 @@ namespace DOpE
         const std::map<std::string, const VECTOR*> &domain_values,
         VECTOR& rhs_vector, double scale)
     {
-
-      if (this->GetType() == "adjoint_hessian")
-      {
-        // state values in quadrature points
-        if(GetFunctional()->NeedTime())
-	{
-	  if (GetFunctional()->GetType().find("point") != std::string::npos)
-	  {
-	    if(GetFunctional()->GetType().find("timedistributed") != std::string::npos)
-	    {
-	      GetFunctional()->PointValue_UU(
-		this->GetSpaceTimeHandler()->GetControlDoFHandler(),
-		this->GetSpaceTimeHandler()->GetStateDoFHandler(), param_values,
-		domain_values, rhs_vector, scale*interval_length_);
-	      GetFunctional()->PointValue_QU(
-		this->GetSpaceTimeHandler()->GetControlDoFHandler(),
-		this->GetSpaceTimeHandler()->GetStateDoFHandler(), param_values,
-		domain_values, rhs_vector, scale*interval_length_);
-	    }
-	    else 
-	    {
-	      GetFunctional()->PointValue_UU(
-		this->GetSpaceTimeHandler()->GetControlDoFHandler(),
-		this->GetSpaceTimeHandler()->GetStateDoFHandler(), param_values,
-		domain_values, rhs_vector, scale);
-	      GetFunctional()->PointValue_QU(
-		this->GetSpaceTimeHandler()->GetControlDoFHandler(),
-		this->GetSpaceTimeHandler()->GetStateDoFHandler(), param_values,
-		domain_values, rhs_vector, scale);
-	    }
-	    if(GetFunctional()->GetType().find("timedistributed") != std::string::npos && GetFunctional()->GetType().find("timelocal") != std::string::npos)
-	    {
-	      throw DOpEException("Conflicting functional types: "+ GetFunctional()->GetType(),
-				  "OptProblemContainer::PointRhs");
-	    } 
-	  }
-	}
-      }
-      else if (this->GetType() == "gradient")
+      if (this->GetType() == "gradient")
       {
         // state values in quadrature points
         if(GetFunctional()->NeedTime())
@@ -2384,37 +2176,7 @@ namespace DOpE
           const FACEDATACONTAINER& fdc,
           dealii::Vector<double> &local_vector, double scale)
       {
-
-        if (this->GetType() == "adjoint_hessian")
-        {
-          // state values in quadrature points
-          if(GetFunctional()->NeedTime())
-	  {
-	    if (GetFunctional()->GetType().find("face") != std::string::npos)
-	    {
-	      if(GetFunctional()->GetType().find("timedistributed") != std::string::npos)
-	      {
-		GetFunctional()->FaceValue_UU(fdc, local_vector, scale*interval_length_);
-		GetFunctional()->FaceValue_QU(fdc, local_vector, scale*interval_length_);
-	      }
-	      else
-	      {
-		GetFunctional()->FaceValue_UU(fdc, local_vector, scale);
-		GetFunctional()->FaceValue_QU(fdc, local_vector, scale);
-	      }
-	      if(GetFunctional()->GetType().find("timedistributed") != std::string::npos && GetFunctional()->GetType().find("timelocal") != std::string::npos)
-	      {
-		throw DOpEException("Conflicting functional types: "+ GetFunctional()->GetType(),
-				    "OptProblemContainer::FaceRhs");
-	      }
-	    }
-          }
-
-          scale *= -1;
-          this->GetPDE().FaceEquation_UU(fdc, local_vector, scale*interval_length_, scale*interval_length_);
-          this->GetPDE().FaceEquation_QU(fdc, local_vector, scale*interval_length_, scale*interval_length_);
-        }
-        else if (this->GetType() == "gradient")
+        if (this->GetType() == "gradient")
         {
           // state values in quadrature points
           if(GetFunctional()->NeedTime())
@@ -2491,39 +2253,7 @@ namespace DOpE
           const FACEDATACONTAINER& fdc,
           dealii::Vector<double> &local_vector, double scale)
       {
-
-        if (this->GetType() == "adjoint_hessian")
-        {
-          // state values in quadrature points
-          if(GetFunctional()->NeedTime())
-	  {
-	    if (GetFunctional()->GetType().find("boundary") != std::string::npos)
-	    {
-	      if(GetFunctional()->GetType().find("timedistributed") != std::string::npos)
-	      {
-		GetFunctional()->BoundaryValue_UU(fdc, local_vector, scale*interval_length_);
-		GetFunctional()->BoundaryValue_QU(fdc, local_vector, scale*interval_length_);
-	      }
-	      else 
-	      {
-		GetFunctional()->BoundaryValue_UU(fdc, local_vector, scale);
-		GetFunctional()->BoundaryValue_QU(fdc, local_vector, scale);
-	      }
-	      if(GetFunctional()->GetType().find("timedistributed") != std::string::npos && GetFunctional()->GetType().find("timelocal") != std::string::npos)
-	      {
-		throw DOpEException("Conflicting functional types: "+ GetFunctional()->GetType(),
-				    "OptProblemContainer::BoundaryRhs");
-	      } 
-	    }
-          }
-
-          scale *= -1;
-          this->GetPDE().BoundaryEquation_UU(fdc, local_vector, scale*interval_length_,
-              scale*interval_length_);
-          this->GetPDE().BoundaryEquation_QU(fdc, local_vector, scale*interval_length_,
-              scale*interval_length_);
-        }
-        else if (this->GetType() == "gradient")
+        if (this->GetType() == "gradient")
         {
           // state values in quadrature points
           if(GetFunctional()->NeedTime())
@@ -2603,16 +2333,10 @@ namespace DOpE
           CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::ElementMatrix(
           const DATACONTAINER& edc,
           dealii::FullMatrix<double> &local_entry_matrix, double scale,
-          double scale_ico)
+          double /*scale_ico*/)
       {
 
-        if (this->GetType() == "adjoint_hessian")
-        {
-          // state values in quadrature points
-          this->GetPDE().ElementMatrix_T(edc, local_entry_matrix, scale*interval_length_,
-              scale_ico*interval_length_);
-        }
-        else if ((this->GetType() == "gradient")
+        if ((this->GetType() == "gradient")
             || (this->GetType() == "hessian"))
         {
           // control values in quadrature points
@@ -2638,12 +2362,7 @@ namespace DOpE
           CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::ElementTimeMatrix(
           const DATACONTAINER& edc, FullMatrix<double> &local_entry_matrix)
       {
-
-        if (this->GetType() == "adjoint_hessian")
-        {
-          this->GetPDE().ElementTimeMatrix_T(edc, local_entry_matrix);
-        }
-        else if ((this->GetType() == "gradient")
+        if ((this->GetType() == "gradient")
             || (this->GetType() == "hessian"))
         {
           throw DOpEException("Not implemented",
@@ -2670,11 +2389,7 @@ namespace DOpE
           const DATACONTAINER& edc,
           dealii::FullMatrix<double> &local_entry_matrix)
       {
-        if (this->GetType() == "adjoint_hessian")
-        {
-          this->GetPDE().ElementTimeMatrixExplicit_T(edc, local_entry_matrix);
-        }
-        else if ((this->GetType() == "gradient")
+        if ((this->GetType() == "gradient")
             || (this->GetType() == "hessian"))
         {
           throw DOpEException("Not implemented",
@@ -2688,6 +2403,44 @@ namespace DOpE
 
       }
 
+  template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
+      typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+      typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+      template<int, int> class DH>
+    template<typename FACEDATACONTAINER>
+      void
+       OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
+          CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::FaceEquation(
+	    const FACEDATACONTAINER& /*fdc*/,
+	    dealii::Vector<double> &/*local_vector*/, double /*scale*/,
+	    double /*scale_ico*/)
+      {
+        {
+          throw DOpEException("Not implemented",
+              "OptProblemContainer::FaceEquation");
+        }
+      }
+
+  /******************************************************/
+
+  template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
+      typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+      typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+      template<int, int> class DH>
+    template<typename FACEDATACONTAINER>
+      void
+      OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
+          CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::InterfaceEquation(
+	    const FACEDATACONTAINER& /*fdc*/,
+	    dealii::Vector<double> &/*local_vector*/, double /*scale*/,
+	    double /*scale_ico*/)
+      {
+        {
+          throw DOpEException("Not implemented",
+              "OptProblemContainer::InterfaceEquation");
+        }
+      }
+
   /******************************************************/
 
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
@@ -2698,21 +2451,15 @@ namespace DOpE
       void
       OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
           CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::FaceMatrix(
-          const FACEDATACONTAINER& fdc, FullMatrix<double> &local_entry_matrix,
-          double scale, double scale_ico)
+	    const FACEDATACONTAINER& /*fdc*/, FullMatrix<double> &/*local_entry_matrix*/,
+	    double /*scale*/, double /*scale_ico*/)
       {
-        if (this->GetType() == "adjoint_hessian")
-        {
-          // state values in quadrature points
-          this->GetPDE().FaceMatrix_T(fdc, local_entry_matrix, scale*interval_length_,
-              scale_ico*interval_length_);
-        }
 //        else if ((this->GetType() == "gradient") || (this->GetType() == "hessian"))
 //        {
 //          // control values in quadrature points
 //          this->GetPDE().ControlFaceMatrix(fdc, local_entry_matrix);
 //        }
-        else
+//        else
         {
           throw DOpEException("Not implemented",
               "OptProblemContainer::NewtonFaceMatrix");
@@ -2730,15 +2477,9 @@ namespace DOpE
       void
       OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
           CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::InterfaceMatrix(
-          const FACEDATACONTAINER& fdc, FullMatrix<double> &local_entry_matrix,
-          double scale, double scale_ico)
+	    const FACEDATACONTAINER& /*fdc*/, FullMatrix<double> &/*local_entry_matrix*/,
+	    double /*scale*/, double /*scale_ico*/)
       {
-	if (this->GetType() == "adjoint_hessian")
-        {
-          this->GetPDE().InterfaceMatrix_T(fdc, local_entry_matrix, scale*interval_length_,
-              scale_ico*interval_length_);
-        }
-        else
         {
           throw DOpEException("Not implemented",
               "OptProblemContainer::NewtonInterfaceMatrix");
@@ -2756,15 +2497,9 @@ namespace DOpE
       OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
           CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::BoundaryMatrix(
           const FACEDATACONTAINER& fdc, FullMatrix<double> &local_matrix,
-          double scale, double scale_ico)
+          double scale, double /*scale_ico*/)
       {
-        if (this->GetType() == "adjoint_hessian")
-        {
-          // state values in quadrature points
-          this->GetPDE().BoundaryMatrix_T(fdc, local_matrix, scale*interval_length_,
-              scale_ico*interval_length_);
-        }
-        else if ((this->GetType() == "gradient") || (this->GetType() == "hessian"))
+        if ((this->GetType() == "gradient") || (this->GetType() == "hessian"))
         {
           // control values in quadrature points
           this->GetPDE().ControlBoundaryMatrix(fdc, local_matrix, scale*c_interval_length_);
@@ -2814,11 +2549,7 @@ namespace DOpE
     OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
         SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetDoFType() const
     {
-      if (this->GetType() == "adjoint_hessian")
-      {
-        return "state";
-      }
-      else if ((this->GetType() == "gradient") || (this->GetType() == "hessian")
+      if ((this->GetType() == "gradient") || (this->GetType() == "hessian")
           || (this->GetType() == "hessian_inverse"))
       {
         return "control";
@@ -2840,11 +2571,7 @@ namespace DOpE
     OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
         SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetFESystem() const
     {
-      if (this->GetType() == "adjoint_hessian")
-      {
-        return this->GetSpaceTimeHandler()->GetFESystem("state");
-      }
-      else if ((this->GetType() == "gradient") || (this->GetType() == "hessian")
+      if ((this->GetType() == "gradient") || (this->GetType() == "hessian")
           || (this->GetType() == "global_constraint_gradient"))
       {
 #if dope_dimension > 0
@@ -2894,8 +2621,7 @@ namespace DOpE
       else
       {
         r = this->GetPDE().GetUpdateFlags();
-        if (this->GetType() == "adjoint_hessian"
-            || (this->GetType() == "hessian")
+        if ((this->GetType() == "hessian")
             || (this->GetType() == "gradient"))
         {
           r = r | this->GetFunctional()->GetUpdateFlags();
@@ -2934,7 +2660,7 @@ namespace DOpE
       else
       {
         r = this->GetPDE().GetFaceUpdateFlags();
-        if (this->GetType() == "adjoint_hessian"
+        if (this->GetType() == "gradient"
             || (this->GetType() == "hessian"))
         {
           r = r | this->GetFunctional()->GetFaceUpdateFlags();
@@ -3103,11 +2829,7 @@ namespace DOpE
         SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::ComputeSparsityPattern(
         SPARSITYPATTERN & sparsity) const
     {
-      if (this->GetType() == "adjoint_hessian")
-      {
-        this->GetSpaceTimeHandler()->ComputeStateSparsityPattern(sparsity);
-      }
-      else if ((this->GetType() == "gradient")
+      if ((this->GetType() == "gradient")
           || (this->GetType() == "hessian"))
       {
 #if  dope_dimension > 0
@@ -3375,8 +3097,7 @@ namespace DOpE
         {
           return this->GetPDE().HasFaces();
         }
-        else if ((this->GetType() == "adjoint_hessian")
-            || (this->GetType() == "hessian"))
+        else if ((this->GetType() == "hessian"))
         {
           return this->GetPDE().HasFaces() || this->GetFunctional()->HasFaces();
         }
@@ -3405,8 +3126,7 @@ namespace DOpE
         // We dont need PointRhs in this cases.
         return false;
       }
-      else if ((this->GetType() == "adjoint_hessian")
-	       || (this->GetType() == "hessian"))
+      else if ((this->GetType() == "hessian"))
       {
         return this->GetFunctional()->HasPoints();
       }
@@ -3447,7 +3167,6 @@ namespace DOpE
       else
       {
         if ((this->GetType() == "gradient")
-            || (this->GetType() == "adjoint_hessian")
             || (this->GetType() == "hessian"))
         {
           return this->GetPDE().HasInterfaces();
@@ -3486,7 +3205,6 @@ namespace DOpE
       else
       {
         if ((this->GetType() == "gradient")
-            || (this->GetType() == "adjoint_hessian")
             || (this->GetType() == "hessian"))
         {
           return this->GetPDE().AtInterface(element,face);
@@ -3597,12 +3315,7 @@ namespace DOpE
     OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
         SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetDirichletColors() const
     {
-      if ((this->GetType() == "tangent")
-          || (this->GetType() == "adjoint_hessian"))
-      {
-        return dirichlet_colors_;
-      }
-      else if ((this->GetType() == "gradient") || (this->GetType() == "hessian")
+      if ((this->GetType() == "gradient") || (this->GetType() == "hessian")
           || (this->GetType() == "global_constraint_gradient"))
       {
         return control_dirichlet_colors_;
@@ -3645,28 +3358,7 @@ namespace DOpE
         SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetDirichletCompMask(
         unsigned int color) const
     {
-      if ((this->GetType() == "tangent")
-          || (this->GetType() == "adjoint_hessian"))
-      {
-        unsigned int comp = dirichlet_colors_.size();
-        for (unsigned int i = 0; i < dirichlet_colors_.size(); ++i)
-        {
-          if (dirichlet_colors_[i] == color)
-          {
-            comp = i;
-            break;
-          }
-        }
-        if (comp == dirichlet_colors_.size())
-        {
-          std::stringstream s;
-          s << "DirichletColor" << color << " has not been found !";
-          throw DOpEException(s.str(),
-              "OptProblemContainer::GetDirichletCompMask");
-        }
-        return dirichlet_comps_[comp];
-      }
-      else if ((this->GetType() == "gradient")
+      if ((this->GetType() == "gradient")
           || (this->GetType() == "hessian"))
       {
         unsigned int comp = control_dirichlet_colors_.size();
@@ -3741,31 +3433,12 @@ namespace DOpE
     OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
         SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetDirichletValues(
         unsigned int color,
-        const std::map<std::string, const dealii::Vector<double>*> &param_values,
-        const std::map<std::string, const VECTOR*> &domain_values) const
+        const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
+        const std::map<std::string, const VECTOR*> &/*domain_values*/) const
     {
 
       unsigned int col = dirichlet_colors_.size();
-      if ((this->GetType() == "tangent")
-          || (this->GetType() == "adjoint_hessian"))
-      {
-        for (unsigned int i = 0; i < dirichlet_colors_.size(); ++i)
-        {
-          if (dirichlet_colors_[i] == color)
-          {
-            col = i;
-            break;
-          }
-        }
-        if (col == dirichlet_colors_.size())
-        {
-          std::stringstream s;
-          s << "DirichletColor" << color << " has not been found !";
-          throw DOpEException(s.str(),
-              "OptProblemContainer::GetDirichletValues");
-        }
-      }
-      else if (this->GetType() == "gradient" || (this->GetType() == "hessian"))
+      if (this->GetType() == "gradient" || (this->GetType() == "hessian"))
       {
         col = control_dirichlet_colors_.size();
         for (unsigned int i = 0; i < control_dirichlet_colors_.size(); ++i)
@@ -3790,17 +3463,7 @@ namespace DOpE
             "OptProblemContainer::GetDirichletValues");
       }
 
-      if (this->GetType() == "tangent")
-      {
-        tangent_dirichlet_values_[col]->ReInit(param_values, domain_values,
-            color);
-        return *(tangent_dirichlet_values_[col]);
-      }
-      else if ((this->GetType() == "adjoint_hessian"))
-      {
-        return *(zero_dirichlet_values_);
-      }
-      else if (this->GetType() == "gradient" || (this->GetType() == "hessian"))
+      if (this->GetType() == "gradient" || (this->GetType() == "hessian"))
       {
         return *(control_dirichlet_values_[col]);
       }
@@ -3879,11 +3542,7 @@ namespace DOpE
     OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
         SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetBoundaryEquationColors() const
     {
-      if (this->GetType() == "adjoint_hessian")
-      {
-        return adjoint_boundary_equation_colors_;
-      }
-      else if (this->GetType() == "gradient" || (this->GetType() == "hessian")
+      if (this->GetType() == "gradient" || (this->GetType() == "hessian")
           || (this->GetType() == "global_constraint_gradient"))
       {
         return control_boundary_equation_colors_;
@@ -4155,11 +3814,7 @@ namespace DOpE
     OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
         SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetDoFConstraints() const
     {
-      if ((this->GetType() == "adjoint_hessian"))
-      {
-        return GetSpaceTimeHandler()->GetStateDoFConstraints();
-      }
-      else if ((this->GetType() == "gradient") || (this->GetType() == "hessian")
+      if ((this->GetType() == "gradient") || (this->GetType() == "hessian")
           || (this->GetType() == "global_constraint_gradient"))
       {
         return GetSpaceTimeHandler()->GetControlDoFConstraints();
