@@ -25,7 +25,6 @@
 #define OPT_ADJOINT_FOR_EE_PROBLEM_H_
 
 #include <basic/spacetimehandler.h>
-#include <problemdata/initialnewtonproblem.h> 
 
 using namespace dealii;
 
@@ -51,7 +50,7 @@ namespace DOpE
     {
     public:
       OPT_Adjoint_For_EEProblem(OPTPROBLEM& OP, PDE& pde) :
-      pde_(pde), opt_problem_(OP), initial_newton_problem_(NULL)
+      pde_(pde), opt_problem_(OP)
       {
         dirichlet_colors_ = opt_problem_.dirichlet_colors_;
         dirichlet_comps_ = opt_problem_.dirichlet_comps_;
@@ -63,8 +62,6 @@ namespace DOpE
 
       ~OPT_Adjoint_For_EEProblem()
       {
-	if (initial_newton_problem_ != NULL)
-	  delete initial_newton_problem_;
       }
 	
       std::string
@@ -76,34 +73,6 @@ namespace DOpE
       GetType() const
       {
         return "adjoint_for_ee";
-      }
-
-      /**
-       * The adjoint is implemented for stationary problems only.
-       * It needs to fail in nonstationary problems 
-       */
-      bool
-	NeedInitialState() const
-      {
-	return false;
-      }
-
-      InitialNewtonProblem<OPTPROBLEM,OPT_Adjoint_For_EEProblem<OPTPROBLEM,PDE,DD,SPARSITYPATTERN,VECTOR,dim>, VECTOR, dim>&
-	GetNewtonInitialProblem()
-      {
-	if(NeedInitialState())
-	{
-	  if ( initial_newton_problem_ == NULL)
-	  {
-	    initial_newton_problem_ = new InitialNewtonProblem<OPTPROBLEM,OPT_Adjoint_For_EEProblem<OPTPROBLEM,PDE,DD,SPARSITYPATTERN,VECTOR,dim>, VECTOR, dim>
-	  (*this);
-	  }
-	  return *initial_newton_problem_;
-	}
-	else
-	{
-	  throw DOpEException("GetNewtonInitialProblem has no meaning in case NeedInitialState() == false","OPT_Adjoint_For_EEProblem::GetNewtonInitialProblem");
-	}
       }
 
       /******************************************************/
@@ -446,7 +415,6 @@ namespace DOpE
     private:
       PDE& pde_;
       OPTPROBLEM& opt_problem_;
-      InitialNewtonProblem<OPTPROBLEM,OPT_Adjoint_For_EEProblem<OPTPROBLEM,PDE,DD,SPARSITYPATTERN,VECTOR,dim>, VECTOR, dim> * initial_newton_problem_;
 
       std::vector<unsigned int> dirichlet_colors_;
       std::vector<std::vector<bool> > dirichlet_comps_;

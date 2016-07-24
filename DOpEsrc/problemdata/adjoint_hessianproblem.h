@@ -25,7 +25,6 @@
 #define ADJOINT_HESSIAN_PROBLEM_H_
 
 #include <basic/spacetimehandler.h>
-#include <problemdata/initialnewtonproblem.h> 
 
 using namespace dealii;
 
@@ -50,7 +49,7 @@ namespace DOpE
     {
     public:
       Adjoint_HessianProblem(OPTPROBLEM& OP, PDE& pde) :
-      pde_(pde), opt_problem_(OP), initial_newton_problem_(NULL)
+      pde_(pde), opt_problem_(OP)
       {
         dirichlet_colors_ = opt_problem_.dirichlet_colors_;
         dirichlet_comps_ = opt_problem_.dirichlet_comps_;
@@ -62,8 +61,6 @@ namespace DOpE
 
       ~Adjoint_HessianProblem()
       {
-	if (initial_newton_problem_ != NULL)
-	  delete initial_newton_problem_;
       }
 	
       std::string
@@ -75,30 +72,6 @@ namespace DOpE
       GetType() const
       {
         return "adjoint_hessian";
-      }
-
-      bool
-	NeedInitialState() const
-      {
-	return false;
-      }
-
-      InitialNewtonProblem<OPTPROBLEM,Adjoint_HessianProblem<OPTPROBLEM,PDE,DD,SPARSITYPATTERN,VECTOR,dim>, VECTOR, dim>&
-	GetNewtonInitialProblem()
-      {
-	if(NeedInitialState())
-	{
-	  if ( initial_newton_problem_ == NULL)
-	  {
-	    initial_newton_problem_ = new InitialNewtonProblem<OPTPROBLEM,Adjoint_HessianProblem<OPTPROBLEM,PDE,DD,SPARSITYPATTERN,VECTOR,dim>, VECTOR, dim>
-	  (*this);
-	  }
-	  return *initial_newton_problem_;
-	}
-	else
-	{
-	  throw DOpEException("GetNewtonInitialProblem has no meaning in case NeedInitialState() == false","Adjoint_HessianProblem::GetNewtonInitialProblem");
-	}
       }
 
       /******************************************************/
@@ -464,7 +437,6 @@ namespace DOpE
     private:
       PDE& pde_;
       OPTPROBLEM& opt_problem_;
-      InitialNewtonProblem<OPTPROBLEM,Adjoint_HessianProblem<OPTPROBLEM,PDE,DD,SPARSITYPATTERN,VECTOR,dim>, VECTOR, dim> * initial_newton_problem_;
 
       std::vector<unsigned int> dirichlet_colors_;
       std::vector<std::vector<bool> > dirichlet_comps_;
