@@ -146,7 +146,7 @@ main(int argc, char **argv)
   FACEQUADRATURE face_quadrature_formula(2);
   IDC idc(quadrature_formula, face_quadrature_formula);
 
-  LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM> LPDE(order_fe);
+  LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM> LPDE;
   BoundaryFunctional<CDC, FDC, DOFHANDLER, VECTOR, DIM> BF;
 
   DOpEWrapper::Mapping<DIM, DOFHANDLER > mapping(order_mapping);
@@ -239,8 +239,8 @@ main(int argc, char **argv)
 
       Vector<float> difference_per_element(triangulation.n_active_cells());
       VectorTools::integrate_difference(mapping, dof_handler, solution,
-          ExactSolution, difference_per_element, QGauss<DIM>(4),
-          VectorTools::L2_norm);
+					ExactSolution(), difference_per_element, QGauss<DIM>(4),
+					VectorTools::L2_norm);
       outp << "L2-error: " << difference_per_element.l2_norm() << "\n";
       convergence_table.add_value("n-dofs ||", DOFH.GetStateNDoFs());
       convergence_table.add_value("L2-error ||", difference_per_element.l2_norm());
@@ -257,8 +257,8 @@ main(int argc, char **argv)
       solution = gu_q1.GetSpacialVector();
 
       VectorTools::integrate_difference(dof_handler_q1, solution,
-          ExactSolution, difference_per_element, QGauss<DIM>(4),
-          VectorTools::L2_norm);
+					ExactSolution(), difference_per_element, QGauss<DIM>(4),
+					VectorTools::L2_norm);
       outp << "L2-error: " << difference_per_element.l2_norm() << "\n";
       convergence_table.add_value("L2-error Q1 ||",
           difference_per_element.l2_norm());

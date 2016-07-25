@@ -38,8 +38,7 @@ template<
   class LocalPDE : public PDEInterface<EDC, FDC, DH, VECTOR, dealdim>
   {
     public:
-      LocalPDE(unsigned int order) :
-          exact_solution_(order), state_block_component_(1, 0)
+      LocalPDE() : state_block_component_(1, 0)
       {
       }
 
