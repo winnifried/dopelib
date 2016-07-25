@@ -1,5 +1,12 @@
 Changelog DOpE
 ==============
+25.07.2016: Reordered the hints in the CMakeLists files for 
+	    deal.ii. Now the order is
+	    cmake-flag -DDEAL_II_DIR, env{DEAL_II_DIR}, ${home}/deal.II
+	    So that setting the flags/or the environment variable 
+	    always wins against the path.
+25.07.2016: Minor changes in the code to be compatible with
+	    the use of clang compiler. 
 24.07.2016: Added the file problemsdata/adjoint_hessianproblem.h
 	    which contains all equation data needed for the
 	    solution of the adjoint problem for the

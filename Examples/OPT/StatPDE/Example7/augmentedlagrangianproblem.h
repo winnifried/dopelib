@@ -1476,13 +1476,13 @@ namespace DOpE
           void
           AddAuxiliaryToIntegrator(INTEGRATOR& integrator)
           {
-            OP_.AddAuxiliaryToIntegrator<INTEGRATOR>(integrator);
+            OP_.AddAuxiliaryToIntegrator(integrator);
           }
         template<typename INTEGRATOR>
           void
           DeleteAuxiliaryFromIntegrator(INTEGRATOR& integrator)
           {
-            OP_.DeleteAuxiliaryFromIntegrator<INTEGRATOR>(integrator);
+            OP_.DeleteAuxiliaryFromIntegrator(integrator);
           }
 
         /*************************************************************************************/

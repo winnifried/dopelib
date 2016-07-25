@@ -967,7 +967,7 @@ void InstatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER, CONTROLINTEGR
       const ControlVector<VECTOR>& /*q*/)
 {
   //We dont need q as the values are precomputed during Solve State...
-  this->GetOutputHandler()->Write("Computing Functionals:" + this->GetBasePriority(), 4);
+  this->GetOutputHandler()->Write("Computing Functionals:", 4  + this->GetBasePriority());
 
   for (unsigned int i = 0; i < this->GetProblem()->GetNFunctionals(); i++)
   {

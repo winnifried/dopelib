@@ -1666,9 +1666,12 @@ namespace DOpE
       if (element_[0]->neighbor_index(this->GetFace()) != -1)
         return element_[0]->neighbor(this->GetFace())->get_fe().dofs_per_cell;
       else
-        throw DOpEException(
-            "There is no neighbor with number" + this->GetFace(),
+      {
+	std::stringstream out;
+	out << "There is no neighbor with number " << this->GetFace();
+	throw DOpEException(out.str(),
             "HpFaceDataContainer::GetNbrNDoFsPerElement");
+      }
     }
   /*********************************************/
   template<typename VECTOR, int dim>
@@ -1686,9 +1689,12 @@ namespace DOpE
       if (element_[0]->neighbor_index(this->GetFace()) != -1)
         return q_collection_[element_[0]->neighbor(this->GetFace())->active_fe_index()].size();
       else
-        throw DOpEException(
-            "There is no neighbor with number" + this->GetFace(),
-            "HpFaceDataContainer::GetNbrNQPoints");
+      {
+	std::stringstream out;
+	out << "There is no neighbor with number " << this->GetFace();
+	throw DOpEException(out.str(),
+			    "HpFaceDataContainer::GetNbrNQPoints");
+      }
     }
   /*********************************************/
 

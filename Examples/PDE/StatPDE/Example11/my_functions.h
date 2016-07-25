@@ -29,10 +29,7 @@
 class ExactSolution : public DOpEWrapper::Function<2>
 {
   public:
-    ExactSolution(unsigned int order)
-        : order_(order)
-    {
-    }
+
     double
       value(const dealii::Point<2> &p, const unsigned int /*component*/ = 0) const
     {
@@ -55,8 +52,6 @@ class ExactSolution : public DOpEWrapper::Function<2>
       for (unsigned int c = 0; c < this->n_components; ++c)
         value(c) = ExactSolution::value(p, c);
     }
-  private:
-    const double order_;
 };
 
 #endif /* MY_FUNCTIONS_H_ */

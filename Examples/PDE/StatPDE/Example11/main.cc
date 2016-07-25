@@ -166,7 +166,7 @@ main(int argc, char **argv)
 
   comp_mask[0] = true;
 
-  ExactSolution ex_sol(order_fe);
+  ExactSolution ex_sol;
   DOpEWrapper::ConstantFunction<DIM> cs(1., 1);
   SimpleDirichletData<VECTOR, DIM> DD1(cs);
 
@@ -239,7 +239,7 @@ main(int argc, char **argv)
 
       Vector<float> difference_per_element(triangulation.n_active_cells());
       VectorTools::integrate_difference(mapping, dof_handler, solution,
-          ExactSolution(order_fe), difference_per_element, QGauss<DIM>(4),
+          ExactSolution, difference_per_element, QGauss<DIM>(4),
           VectorTools::L2_norm);
       outp << "L2-error: " << difference_per_element.l2_norm() << "\n";
       convergence_table.add_value("n-dofs ||", DOFH.GetStateNDoFs());
@@ -257,7 +257,7 @@ main(int argc, char **argv)
       solution = gu_q1.GetSpacialVector();
 
       VectorTools::integrate_difference(dof_handler_q1, solution,
-          ExactSolution(order_fe), difference_per_element, QGauss<DIM>(4),
+          ExactSolution, difference_per_element, QGauss<DIM>(4),
           VectorTools::L2_norm);
       outp << "L2-error: " << difference_per_element.l2_norm() << "\n";
       convergence_table.add_value("L2-error Q1 ||",
