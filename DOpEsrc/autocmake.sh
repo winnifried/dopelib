@@ -18,10 +18,10 @@ then
 	mkdir release
 	mkdir debug
 	cd release
-	cmake -D CMAKE_BUILD_TYPE=release ../../
+	cmake -D CMAKE_BUILD_TYPE=Release ../../
 	cd ..
 	cd debug
-	cmake -D CMAKE_BUILD_TYPE=debug ../../
+	cmake -D CMAKE_BUILD_TYPE=Debug ../../
 	cd ../..
     #done with configure
 	exit 0

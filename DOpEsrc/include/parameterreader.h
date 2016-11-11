@@ -108,8 +108,12 @@ void ParameterReader::declare_entry(const std::string &entry,
 }
 
 void ParameterReader::read_parameters (const std::string parameter_file)
- { 
-   prm.read_input (parameter_file); 
+ {
+#if DEAL_II_VERSION_GTE(8,5,0)
+   prm.parse_input (parameter_file);
+#else
+   prm.read_input (parameter_file);
+#endif
  }
 
 double ParameterReader::get_double (const std::string &entry_name) 
