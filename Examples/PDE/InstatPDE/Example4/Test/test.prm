@@ -1,20 +1,5 @@
 # Listing of Parameters for PDE Instat Example 1 (Fluid problem)
 # --------------------------------------------------------------
-subsection Local PDE parameters
-       set interest rate	   	= 0.05
-       set volatility_1		   	= 0.3
-       set volatility_2			= 0.5
-       set rho				= 0
-       set strike price			= 25
-       set expiration date		= 1.0
-end
-
-
-subsection Discretization parameters
-            set upper bound			= 100
-end
-
-
 subsection newtonsolver parameters
   # maximal number of linesearch steps
   set line_maxiter         = 10

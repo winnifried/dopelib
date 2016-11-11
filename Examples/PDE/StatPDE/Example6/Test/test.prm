@@ -22,7 +22,7 @@ end
 
 subsection gmres_withmatrix parameters
 	   set linear_global_tol = 1.e-16
-	   set linear_maxiters = 1000	
+	   set linear_maxiter = 1000	
 	   set no_tmp_vectors = 100
 end
 

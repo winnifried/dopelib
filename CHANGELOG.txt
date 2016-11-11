@@ -1,5 +1,6 @@
 Changelog DOpE
 ==============
+11.11.2016: Cleaned Examples: Paramfiles may no longer have undeclared entries.
 11.11.2016: Adapted ParameterReader and autocmake files to deal.II 8.5
 25.07.2016: Reordered the hints in the CMakeLists files for 
 	    deal.ii. Now the order is

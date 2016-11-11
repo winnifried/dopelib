@@ -2,7 +2,6 @@
 # ------------------------------------------------------------
 
 subsection Local PDE parameters
-	   set alpha_u		 = 1.0e-12
 	   set m_biot		 = 2.5e+12
 	   set alpha_biot	 = 1.0
 	   set viscosity_biot	 = 1.0e-3
@@ -12,12 +11,6 @@ subsection Local PDE parameters
 	   set density_structure = 1.0
 	   set mu		 = 0.5e+6
 	   set poisson_ratio_nu  = 0.4
-end
-
-subsection My functions parameters
-           # FSI 1: 0.2, FSI 2: 1.0, FSI 3: 2.0
-	   set mean_inflow_velocity = 0.2
-
 end
 
 
