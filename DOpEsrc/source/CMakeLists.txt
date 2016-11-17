@@ -27,8 +27,8 @@ FOREACH(_deal_ii_dimension 1 2 3)
 
       SET_PROPERTY(TARGET dope_${_dope_dimension}${_deal_ii_dimension}${_this_type} PROPERTY OUTPUT_NAME dope${_suffix})
       
-      SET_PROPERTY(TARGET dope_${_dope_dimension}${_deal_ii_dimension}${_this_type} PROPERTY LIBRARY_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/lib/${_dope_dimension}d/${_deal_ii_dimension}d/)
-      SET_PROPERTY(TARGET dope_${_dope_dimension}${_deal_ii_dimension}${_this_type} PROPERTY ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/lib/${_dope_dimension}d/${_deal_ii_dimension}d/)
+      SET_PROPERTY(TARGET dope_${_dope_dimension}${_deal_ii_dimension}${_this_type} PROPERTY LIBRARY_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/../lib/${_dope_dimension}d/${_deal_ii_dimension}d/)
+      SET_PROPERTY(TARGET dope_${_dope_dimension}${_deal_ii_dimension}${_this_type} PROPERTY ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/../lib/${_dope_dimension}d/${_deal_ii_dimension}d/)
 
     ENDFOREACH()
   ENDFOREACH()
