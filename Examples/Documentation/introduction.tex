@@ -17,7 +17,7 @@ maintainers by sending an EMail to \url{dope@dopelib.net}.
 
 
 \section{License information}
-Copyright (C) 2012--2014 by the DOpElib authors\\[2mm]
+Copyright (C) 2012--2016 by the DOpElib authors\\[2mm]
 %
 This file is part of DOpElib\\[2mm]
 %
@@ -57,8 +57,7 @@ referencing the project \dope{}~\cite{dope} using the following bibtex entry:
 \label{sec:contrib}
 The library is currently maintained by 
 \begin{itemize}
-  \item Christian Goll (Heidelberg University)
-  \item Thomas Wick (Johann Radon Institute for Computational and Applied Mathematics (RICAM))
+  \item Thomas Wick (Centre de Mathématiques Appliquées (CMAP) École Polytechnique)
   \item Winnifried Wollner (Technische Universität Darmstadt)
 \end{itemize}
 
@@ -163,9 +162,7 @@ check if
 there is a department license already available.
 For further information you should consult the file 
 \texttt{ThirdPartyLibs/SNOPT.INSTALLNOTES}. In particular you need to configure 
-\texttt{deal.II} with at least the following options:\\
-\texttt{./configure --with-umfpack --with-blas --with-lapack} (up to 7.3.0)
-or enabling UMFPACK in the ccmake options from version 8.0.0 on.
+\texttt{deal.II} with at least with enabled UMFPACK.
 
 
 
@@ -196,7 +193,6 @@ Add /home/..../dopelib-4.0/ThirdPartyLibs/ipopt/lib64
 
 
 \section{Installation}\label{sec_installation}
-\subsection{After Version 2.0 - CMake build system}
 To work with DOpElib, your need necessarily deal.II, which installation 
 we describe first. Afterwards, the DOpElib installation is described and finally
 other optional packages might be installed.

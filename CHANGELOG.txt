@@ -1,5 +1,8 @@
 Changelog DOpE
 ==============
+17.11.2016: Augmented the cmake-files. Now, the examples can search for the 
+	    dope sources. This means, the example directory can now be stored 
+	    anywhere and the DOpE/DOpEsrc directory can be stored somewhere else.
 11.11.2016: Cleaned Examples: Paramfiles may no longer have undeclared entries.
 11.11.2016: Adapted ParameterReader and autocmake files to deal.II 8.5
 25.07.2016: Reordered the hints in the CMakeLists files for 

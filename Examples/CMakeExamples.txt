@@ -1,6 +1,4 @@
 # Usually, you will not need to modify anything beyond this point...
-GET_FILENAME_COMPONENT(DOpE "${CMAKE_SOURCE_DIR}/${DOpE}" ABSOLUTE)
-
 SET(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "-std=c++11")
 
 INCLUDE_DIRECTORIES(${DOpE}/DOpEsrc)
@@ -76,7 +74,7 @@ IF("${_cmake_build_type}" STREQUAL "debug")
   SET(_suffix ".g")
 ENDIF()
 
-FIND_LIBRARY(DOPE_LIBRARY dope${_suffix} ${DOpE}/DOpEsrc/lib/${dope_dimension}d/${deal_dimension}d/)
+FIND_LIBRARY(DOPE_LIBRARY dope${_suffix} ${DOpE}/lib/${dope_dimension}d/${deal_dimension}d/)
 
 SET(DOPE_LINK_LIBS ${DOPE_LIBRARY})
 

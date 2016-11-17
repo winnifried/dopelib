@@ -60,27 +60,74 @@ as otherwise your files may be replaced or changed during your next
 update. Also, if you can submit information to the subversion repository 
 you might accidentally overwrite the original example, here \texttt{Example1}.
 
-\item We now have to change the target in the \texttt{Makefile}, 
-  otherwise our new example will refer to the executable of the old one.
-  
-  Thus we open the \texttt{Makefile} in the directory \texttt{MyWonderfulFirstExample}
-  to change the name of the executable. In our example you will find a line
+\item You will find a file \texttt{CMakeLists.txt} in the folder 
+\texttt{MyWonderfulFirstExample}. Open this file, in it you can 
+find the line 
 \begin{verbatim}
-target   = $(BINDIR)/DOpE-PDE-StatPDE-Example1-$
-           (dope_dimension)d-$(deal_II_dimension)d
+  SET(TARGET "DOpE-PDE-StatPDE-Example1")
 \end{verbatim}
-Here we need to replace the target to a new name to avoid any 
-possible complication. Thus for example we change the line to 
+the string \texttt{DOpE-PDE-StatPDE-Example1} will be the name of the
+executable of your program. Change it to something suitable, e.g.,
 \begin{verbatim}
-target   = $(BINDIR)/MyWonderfulFirstExample
+  SET(TARGET "MyWonderfulFirstExample")
 \end{verbatim}
-This will build the executable file in the standard binary directory 
-of \texttt{DOpElib}, i.e., \texttt{\$(DOpE)/bin}, under the name 
-\texttt{MyWonderfulFirstExample}.
+Moreover, this file contains the lines 
+\begin{verbatim}
+SET(dope_dimension 2)
+SET(deal_dimension 2)
+\end{verbatim}
+which define the dimension of the domain for the control-variable
+(\texttt{dope\_dimension})
+and the PDE solution (\texttt{deal\_dimension}). If for your example 
+one of these differs from $2$ adjust the number accordingly.
+This file will not need any further modifications.
 
-\textit{Note that you should use a different name for all your 
-examples as otherwise you may experience a lot of strange behavior, as
-the executable will be overwritten by all your examples!}
+\item  Now, you are prepared to change any of the problem
+  dependent data in information in the files 
+\begin{verbatim}
+main.cc, localpde.h, functionals.h, localfunctional.h, etc
+\end{verbatim} 
+If above you have changed the dimensions, make sure to adjust all
+files accordingly!
+
+\item The cmake system can - in principle be used
+  ''in-source'' to create the executable. 
+  However, this may break some of the automated tests (later),
+  so you are encouraged to proceed differently. To do this end
+  proceed as follows in the directory \texttt{MyWonderfulFirstExample}:
+  \begin{verbatim}
+MyWonderfulFirstExample$ mkdir build
+MyWonderfulFirstExample$ cd build
+MyWonderfulFirstExample/build$ cmake -DCMAKE_BUILD_TYPE=Release ../
+\end{verbatim}
+which will configure the build (if you want to debug it is useful to
+replace the string \texttt{Release} with \texttt{Debug}). 
+Once this is done, you can compile and run the code:
+\begin{verbatim}
+MyWonderfulFirstExample/build$ make 
+MyWonderfulFirstExample/build$ cd ..
+MyWonderfulFirstExample$ ./MyWonderfulFirstExample
+\end{verbatim}
+(Assuming that no errors occurred during the make call)
+
+\item The \texttt{Makefile} in the directory is present only to
+  preserve backward compatibility. If you wish to use the automated
+  build/test routines in DOpE lib, you need to make sure that it its
+  configured correctly. If you just want to use the cmake capabilities 
+  you can safely ignore this passage.
+
+  Furthermore, if you have followed the instructions above, then no
+  changes will be needed.
+
+  If you have moved the directory to some other place, i.e., it is not
+  in the same folder as Example1, then open the \texttt{Makefile} 
+  in the directory \texttt{MyWonderfulFirstExample}
+  you will find the line 
+  \begin{verbatim}
+  DOpE = ../../../../
+  \end{verbatim}
+  which points to the root directory of your DOpE installation.
+  Adjust the path to match accordingly.
 
 \item If you want to run automated tests on you program so that you can 
   verify whether your code is running as expected after updating the 
@@ -94,23 +141,17 @@ the executable will be overwritten by all your examples!}
 \begin{verbatim}
 PDE/StatPDE/Example1/Test> emacs test.sh
 \end{verbatim}
-where, in our example you find the line
+  where, in our example you find the line
 \begin{verbatim}
 PROGRAM=../DOpE-PDE-StatPDE-Example1-2d-2d
 \end{verbatim} 
-if you made a copy of an other example the part \texttt{DOpE-PDE-StatPDE-Example1-2d-2d}
-may differ. These lines need to be replaced with the new name of the 
-executable, i.e., for our given example
+  if you made a copy of an other example the part \texttt{DOpE-PDE-StatPDE-Example1-2d-2d}
+  may differ. These lines need to be replaced with the new name of the 
+  executable, i.e., for our given example
 \begin{verbatim}
-PROGRAM=..//MyWonderfulFirstExample
+PROGRAM=../MyWonderfulFirstExample
 \end{verbatim} 
-
-\item  Now, you are prepared to change any of the problem
-  dependent data in information in the files 
-\begin{verbatim}
-main.cc, localpde.h, functionals.h, localfunctional.h, etc
-\end{verbatim} 
-
+    
 \item Once you have finished and are sure that your example is running correctly
   and you want to use the automated test scripts --see 3) above-- You need 
   to store new test information to account for your changes. 

@@ -9,6 +9,8 @@ IF(NOT ${deal.II_FOUND})
     "You may want to either pass a flag -DDEAL_II_DIR=/path/to/deal.II to cmake\n"
     "or set an environment variable \"DEAL_II_DIR\" that contains this path."
     )
+ELSE()
+  MESSAGE(STATUS "Found deal.II at ${DEAL_II_PATH}.")
 ENDIF()
 
 DEAL_II_INITIALIZE_CACHED_VARIABLES()
@@ -19,4 +21,7 @@ ADD_SUBDIRECTORY(source)
 
 EXPORT(PACKAGE DOpElib)
 
-CONFIGURE_FILE(DOpElibConfig.cmake.in ${CMAKE_SOURCE_DIR}/../lib/${CMAKE_FILES_DIRECTORY}/DOpElibConfig.cmake @ONLY
+GET_FILENAME_COMPONENT(DOPELIB_ROOT_DIR "${CMAKE_SOURCE_DIR}/../" ABSOLUTE)
+
+CONFIGURE_FILE(DOpElibConfig.cmake.in ${DOPELIB_ROOT_DIR}/lib/cmake/DOpElib/DOpElibConfig.cmake )
+

@@ -13,7 +13,7 @@ help:
 
 c-all:
 	./autocmake.sh configure
-	cd autobuild/release; $(MAKE)
+	cd autobuild/release; $(MAKE) 
 	cd autobuild/debug; $(MAKE)
 
 pdf-doc:	
