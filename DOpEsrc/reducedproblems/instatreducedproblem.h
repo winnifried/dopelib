@@ -2235,7 +2235,7 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
     std::map<std::string,std::vector<dealii::Vector<double> >>::iterator func_vals = auxiliary_time_params_.find(name);
 	if(func_vals != auxiliary_time_params_.end())
 	{
-	  assert(func_vals->second.size() == num_steps+1);
+	  assert(func_vals->second.size() == n_steps+1);
 	  //already created. Nothing to do
 	}
 	else
