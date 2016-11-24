@@ -55,7 +55,7 @@ subsection output parameters
 
   # Do not write files whose name contains a substring given here by a list of
   # `;` separated words
-  set never_write_list        = Gradient;Residual;Hessian;Tangent;Adjoint;Update;State;Control
+  set never_write_list        = Gradient;Residual;Hessian;Tangent;Adjoint;Update;Control
 
   # Sets the precision of the output numbers
   set number_precision        = 4

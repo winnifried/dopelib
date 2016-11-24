@@ -337,7 +337,7 @@ namespace DOpE
     }
     else
     {
-      assert(nele_jac == n*m);
+      //assert(nele_jac == n*m);
       // return the structure of the Jacobian (here a dense one)
       for(int i = 0; i < n; i++)
       {
