@@ -1,5 +1,6 @@
 Changelog DOpE
 ==============
+04.03.2017: Moved to the git system.
 17.11.2016: Augmented the cmake-files. Now, the examples can search for the 
 	    dope sources. This means, the example directory can now be stored 
 	    anywhere and the DOpE/DOpEsrc directory can be stored somewhere else.
