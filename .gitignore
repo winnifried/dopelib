@@ -1,0 +1,6 @@
+autobuild
+lib
+ThirdPartyLibs/ipopt
+ThirdPartyLibs/snopt
+Examples/???/*PDE/Example*/DOpE*Example*
+*~
