@@ -655,6 +655,20 @@ namespace DOpE
 	    
 	    auto& initial_problem = problem.GetNewtonInitialProblem();
 	    this->GetProblem()->AddAuxiliaryToIntegrator(this->GetIntegrator());
+	    if (dopedim == dealdim)
+	    {
+	      this->GetIntegrator().AddDomainData("control", &(q.GetSpacialVector()));
+	    }
+	    else if (dopedim == 0)
+	    {
+	      this->GetIntegrator().AddParamData("control",
+						 &(q.GetSpacialVectorCopy()));
+	    }
+	    else
+	    {
+	      throw DOpEException("dopedim not implemented",
+				  "StatReducedProblem::ComputeReducedState");
+	    }
 	    
 	    std::cout<< GetU().GetSpacialVector().linfty_norm()<<std::endl;
 	    
@@ -662,7 +676,21 @@ namespace DOpE
 	    build_state_matrix_ = this->GetNonlinearSolver("state").NonlinearSolve(
 	      initial_problem, GetU().GetSpacialVector(), true, true);
 	    build_state_matrix_ = true;
-	    
+
+	    if (dopedim == dealdim)
+	    {
+	      this->GetIntegrator().DeleteDomainData("control");
+	    }
+	    else if (dopedim == 0)
+	    {
+	      this->GetIntegrator().DeleteParamData("control");
+	      q.UnLockCopy();
+	    }
+	    else
+	    {
+	      throw DOpEException("dopedim not implemented",
+				  "StatReducedProblem::ComputeReducedState");
+	    }
 	    this->GetProblem()->DeleteAuxiliaryFromIntegrator(this->GetIntegrator());
 	  }
 	}
