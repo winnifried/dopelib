@@ -42,7 +42,7 @@ Changelog DOpE
 	    in DOpEsrc are included with <> brackets and explicit
 	    mentioning of the subdirectory
 19.05.2016: Evaluation Functionals given as functions of 
-	    integrals now also possible for auxilliary (non-cost) Functionals
+	    integrals now also possible for auxiliary (non-cost) Functionals
 	    as well as for PDE problems.
 19.05.2016: Restructured code from previous updates to 
 	    simplify the code layout.
@@ -68,8 +68,8 @@ Changelog DOpE
 	    via the TrilinosDirectSolverWithMatrix class. The use 
 	    is demonstrated in PDE/StatPDE/Example10
 04.04.2016: Updated CMakeExamples.txt so that now the static libraries
-	    of snopt are linked. Using the shared libraries may 
-	    provide problems, as shared linking to snopts own libblas
+	    of SNOPT are linked. Using the shared libraries may 
+	    provide problems, as shared linking to SNOPT's own libblas
 	    gives complications if a system wide libblas is also found. 
 01.04.2016: Removed old code from the makefiles. This breaks compatibility 
 	    with deal versions prior to 8.0 not using cmake.
@@ -97,7 +97,7 @@ Changelog DOpE
 	    can be used if a good starting value is present, or if 
 	    zero is a non-feasible value in the Newton iteration. 
 16.02.2016: Fixed bug in the CMakeExample.txt file. The search for 
-	    additional libraries in ipopt and snopt was broken 
+	    additional libraries in ipopt and SNOPT was broken 
 	    and always returned true - this is now fixed.
 16.02.2016: Adjustments for release of dealii V8.4: removing deprecated
 	    function calls.
