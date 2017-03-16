@@ -1,6 +1,5 @@
 Changelog DOpE
 ==============
-16.03.2017 Test von Thomas, ob git funktioniert.
 08.03.2017: Now initial values in PDE-Newton are possible if
 	    Dirichlet-values depend on the control.
 04.03.2017: Moved to the git system.
