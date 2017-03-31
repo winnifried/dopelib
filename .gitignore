@@ -4,3 +4,15 @@ ThirdPartyLibs/ipopt
 ThirdPartyLibs/snopt
 Examples/???/*PDE/Example*/DOpE*Example*
 *~
+*.synctex.gz
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.idx
+*.ilg
+*.ind
+*.log
+*.toc
+Examples/description.pdf

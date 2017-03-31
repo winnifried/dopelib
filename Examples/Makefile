@@ -36,7 +36,7 @@ doc:
 distclean:
 	rm -rf *~ 
 	$(MAKE) veryclean 
-	rm -f description.aux description.aux.bak description.log description.pdf description.toc description.bbl description.blg description.fdb_latexmk description.fls description.idx description.ilg description.ind 
+	rm -f description.aux description.aux.bak description.log description.pdf description.toc description.bbl description.blg description.fdb_latexmk description.fls description.idx description.ilg description.ind description.synctex.gz
 	rm -f Documentation/*.aux Documentation/*.aux.bak 
 
 warncheck:

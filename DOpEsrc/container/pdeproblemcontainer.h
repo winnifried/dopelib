@@ -341,6 +341,7 @@ namespace DOpE
         void
         SetInitialValues(const dealii::Function<dealdim>* values)
         {
+          assert(values->n_components==this->GetPDE().GetStateNComponents());
           initial_values_ = values;
         }
         const dealii::Function<dealdim>&
