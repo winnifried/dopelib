@@ -1,7 +1,13 @@
 Changelog DOpE
 ==============
-12.04.2017: replaced compressed_simple sparsity pattern by dynamic
-	    in order to compile with deal.II 8.5.0 version
+=== DOPE Meeting on Apr 12, 2017 in Darmstadt ================================
+12.04.2017: - replaced compressed_simple sparsity pattern by dynamic
+	      in order to compile with deal.II 8.5.0 version
+	    - Updates of documentation: debug/release how to change them
+	      remarks to for the correct installation
+	      svn -> git how to create new examples
+	      
+====end of DOPE Meeting on Apr 12, 2017 ======================================
 31.03.2017: Added assertion for the initial condition to avoid obscure results 
 	    if initial conditions have too few components.
 08.03.2017: Now initial values in PDE-Newton are possible if
