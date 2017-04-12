@@ -136,6 +136,19 @@ cmake. An excellent description is provided on the deal.II webpage
 \begin{lstlisting}
 http://www.dealii.org/8.5.0/readme.html
 \end{lstlisting}
+Currently, for all features of \texttt{DOpElib} the following settings
+are useful to be passed to cmake
+\begin{lstlisting}
+  cmake -DCMAKE_INSTALL_PREFIX=[path to install dir] \ 
+      -DDEAL_II_WITH_UMFPACK=true \
+      -DDEAL_II_FORCE_BUNDLED_UMFPACK=true \
+      -DDEAL_II_WITH_TRILINOS=true \
+      -DTRILINOS_DIR=[path to trilinos] \
+      -DDEAL_II_WITH_MPI=true \
+      -DDEAL_II_WITH_P4EST=true \
+      -DP4EST_DIR=[path to p4est] \
+      [Path to deal.II sources]
+\end{lstlisting}
 
 \subsection{deal.II ThirdPartyLibraties}
 To install third party libraries used for deal.II we recommend to use
