@@ -3,13 +3,13 @@
 There are two ways to obtain a copy of \dope{}:\\
 
 \begin{enumerate}[A)]
-\item You can obtain a copy of \dope{} from the developers svn repository using\\
-\texttt{svn co --username=[your username] \textbackslash \\ 
-\hspace*{5mm}https://svn.dopelib.net/dope}\\
-(The backslash in the first line means that the line will be continued as one!)
+\item You can obtain a copy of \dope{} from the developers git repository using\\
+\texttt{git clone git://git.mathematik.tu-darmstadt.de/dopelib} \\
+in the command line of your terminal.
 
-Note that you need a valid username and password. If you have none, please contact the 
-maintainers by sending an EMail to \url{dope@dopelib.net}.
+
+%Note that you need a valid username and password. If you have none, please contact the 
+%maintainers by sending an EMail to \url{dope@dopelib.net}.
 %
 \item You can download the sources as a tar-ball from the project website\\ 
 \url{http://www.dopelib.net}.
@@ -65,6 +65,7 @@ We would like to express our gratitude to the former maintainer
 \begin{itemize}
 \item Christian Goll (Maintainer from 2009--2015)
 \end{itemize}
+%%% TODO: add Daniel Jodlbauer and Bernhard Endtmayer
 
 Furthermore, there are more highly appreciated contributions
 made by %(in alphabetical order)
@@ -117,36 +118,33 @@ recommendable to be roughly acquainted with deal.II.
 When installing \texttt{deal.II} (at least version 8.0) you should take care to configure 
 it to use UMFPACK.
 
+\begin{remark}
+Our current DOpE installation has been successfully tested for deal.II version 8.5.0.
+\end{remark}
+
 A configuration of deal.II working with \texttt{DOpElib} can be obtained with
 the following commands assuming that one is currently in the 
 directory where the deal.II sources are located.
 \begin{lstlisting}
 mkdir build
-mkdir install
-cd build
-cmake -DCMAKE_INSTALL_PREFIX=../install \ 
-      -DDEAL_II_WITH_UMFPACK=true \
-      -DDEAL_II_FORCE_BUNDLED_UMFPACK=true  ../
+cd build 
+cmake -DCMAKE_INSTALL_PREFIX=/path/to/install/dir ../deal.II
 make install
 \end{lstlisting}
-If in addition, features are desired corresponding flags need to be passed to cmake. If, for 
-example Trilinos solvers are desired, the above cmake command needs to have the additional flags
-
+If in addition, features are desired corresponding flags need to be passed to
+cmake. An excellent description is provided on the deal.II webpage
 \begin{lstlisting}
--DDEAL_II_WITH_TRILINOS=true -DTRILINOS_DIR=[path to trilinos]
+http://www.dealii.org/8.5.0/readme.html
 \end{lstlisting}
 
-for the use of MPI use 
-
+\subsection{deal.II ThirdPartyLibraties}
+To install third party libraries used for deal.II we recommend to use
+the candi script:
 \begin{lstlisting}
--DDEAL_II_WITH_MPI=true
+https://github.com/koecher/candi
 \end{lstlisting}
-
-and for the use of distributed meshes over several computers the p4est
-library is needed in deal.II to use this use the flags (in addition to the use of MPI)
-\begin{lstlisting}
--DDEAL_II_WITH_P4EST=true -DP4EST_DIR=[path to p4est]
-\end{lstlisting}
+On this webpage, you will find also enough information how to use 
+the candi script.
 
 \subsection{ThirdPartyLibraries}
 In order for \texttt{DOpE} to be able to auto-detect some of the installed 
