@@ -27,7 +27,7 @@
 #include <deal.II/lac/vector.h>
 #include <deal.II/lac/block_sparsity_pattern.h>
 #include <deal.II/lac/block_sparse_matrix.h>
-#include <deal.II/lac/compressed_simple_sparsity_pattern.h>
+#include <deal.II/lac/dynamic_sparsity_pattern.h>
 #include <deal.II/lac/solver_richardson.h>
 #include <deal.II/lac/precondition.h>
 #include <deal.II/lac/full_matrix.h>
