@@ -259,6 +259,12 @@ and generating documentation:
 \end{lstlisting}
 }
 The options are $c-all$ and $c-cat$ utilizing the cmake build system.
+
+It is \textbf{important} to generate the examples via make c-all 
+in the home folder of the examples and \textbf{not} as in deal.II by 
+using cmake . in the specific example itself. With this you
+would currently destroy the delivered Makefile. See also the FAQ below.
+
 For html documentation, change into:
 \begin{lstlisting}
 ~/Software/dopelib-4.0/doxygen
@@ -323,8 +329,19 @@ make: *** [OPT/StatPDE/Example1] Error 2
 \end{lstlisting}
 
 This means that the Makefile in the specific examples folder has been 
-modified in some illegal way. Remove this Makefile and get the original 
-one from DOpElib. Then try again make c-all (make always sure that before 
+modified in some illegal way. Remove this Makefile 
+\begin{lstlisting}
+rm Makefile
+rm -r CMakeFiles
+rm CMakeCache.txt
+rm -r autobuild
+\end{lstlisting}
+and get the original 
+one from DOpElib:
+\begin{lstlisting}
+git checkout Makefile
+\end{lstlisting}
+Then try again make c-all (make always sure that before 
 typing make c-all that the deal.II path is exported - see above). 
 
 

@@ -61,7 +61,7 @@
 #include <deal.II/fe/mapping.h>
 #include <deal.II/base/quadrature_lib.h>
 #include <deal.II/lac/block_sparsity_pattern.h>
-#include <deal.II/lac/compressed_simple_sparsity_pattern.h>
+#include <deal.II/lac/dynamic_sparsity_pattern.h>
 
 #include <assert.h>
 #include <string>
