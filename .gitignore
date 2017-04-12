@@ -1,4 +1,5 @@
 autobuild
+auto-emacs
 lib
 ThirdPartyLibs/ipopt
 ThirdPartyLibs/snopt
