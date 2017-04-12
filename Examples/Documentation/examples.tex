@@ -35,6 +35,37 @@ to it. Then, proceed as described in Section \ref{getting_started}.
 %\end{remark}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{How to run existing examples}
+The easiest way is to first build all examples. Go into 
+\begin{lstlisting}
+dopelib/Examples/
+\end{lstlisting}
+Herein, type 
+\begin{lstlisting}
+make c-all
+\end{lstlisting}
+By typing only `make' you will see all options.
+This procedure will take some minutes. Afterwards,
+go into the examples folder of your choice. For instance:
+\begin{lstlisting}
+dopelib/Examples/PDE/InstatPDE/Example1
+\end{lstlisting}
+Herein you create the executable via
+\begin{lstlisting}
+make 
+\end{lstlisting}
+and then 
+\begin{lstlisting}
+./DOpE-PDE-InstatPDE-Example1 
+\end{lstlisting}
+Or both commands together:
+\begin{lstlisting}
+make && ./DOpE-PDE-InstatPDE-Example1 
+\end{lstlisting}
+You will find the results on the screen in the terminal as well
+as some graphical output in the `Results' folder.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Changing from Release mode to Debug mode}
 In a specific example go into the autobuild folder 
 and change therein:
