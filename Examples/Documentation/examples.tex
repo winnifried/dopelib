@@ -34,7 +34,22 @@ to it. Then, proceed as described in Section \ref{getting_started}.
 %iterative linear solvers.
 %\end{remark}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Changing from Release mode to Debug mode}
+In a specific example go into the autobuild folder 
+and change therein:
+\begin{lstlisting}
+CMAKE_BUILD_TYPE:STRING=Release
+\end{lstlisting}
+to 
+\begin{lstlisting}
+Debug Release RelWithDebInfo MinSizeRel
+\end{lstlisting}
+Then go one folder back and type as usual `make' to build the executable file.
 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Creating new examples}
 \label{getting_started}
 Before being able to change and compile the new code, the user must 
@@ -43,7 +58,17 @@ this section we explain how to modify such information using as model
 \texttt{PDE/StatPDE/Example1}.
 
 \begin{enumerate}
- \item In a first step, we copy \texttt{Example1} and renamed it, e.g., 
+\item \textbf{New: in git from March 2017} In a first step, we copy \texttt{Example1} and renamed it, e.g., 
+\texttt{MyWonderfulFirstExample}. 
+After having reached the folder of the example in question in the terminal, 
+\texttt{PDE/StatPDE} in our case, we perform these operation writing the following:
+\begin{verbatim}
+cp -r Example1 MyWonderfulFirstExample
+cd MyWonderfulFirstExample
+\end{verbatim}
+
+
+ \item \textbf{Old: in the svn up to version 8.3} In a first step, we copy \texttt{Example1} and renamed it, e.g., 
 \texttt{MyWonderfulFirstExample}. At the same time it is important to remove the repository 
 information that it is stored in the directory \texttt{.svn/}. \\
 After having reached the folder of the example in question in the terminal, 
