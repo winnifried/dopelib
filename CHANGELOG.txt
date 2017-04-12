@@ -4,8 +4,10 @@ Changelog DOpE
 12.04.2017: - replaced compressed_simple sparsity pattern by dynamic
 	      in order to compile with deal.II 8.5.0 version
 	    - Updates of documentation: debug/release how to change them
-	      remarks to for the correct installation
-	      svn -> git how to create new examples
+	       * remarks to for the correct installation
+	       * svn -> git how to create new examples
+	       * changed more svn stuff to git (how to obtain from git)
+	       * to use candi for 3rd party 
 	      
 ====end of DOPE Meeting on Apr 12, 2017 ======================================
 31.03.2017: Added assertion for the initial condition to avoid obscure results 
