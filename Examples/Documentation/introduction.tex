@@ -310,6 +310,25 @@ In the path \texttt{~/dope/ThirdPartyLibs>} type in the terminal\\
   in \texttt{/opt/local/bin/g++-mp-4.8}. 
 
 
+\subsection*{3.) Problem using make c-all in the Examples folder :}
+
+\begin{lstlisting}
+wick@linux:~/Software/dopelib/Examples> make c-all
+cd OPT/StatPDE/Example1; make -s c-all
+make[2]: *** No targets specified and no makefile found.  Stop.
+../../../..//Examples/Make.global_options:2: recipe for target 'c-all' failed
+make[1]: *** [c-all] Error 2
+Makefile:24: recipe for target 'OPT/StatPDE/Example1' failed
+make: *** [OPT/StatPDE/Example1] Error 2
+\end{lstlisting}
+
+This means that the Makefile in the specific examples folder has been 
+modified in some illegal way. Remove this Makefile and get the original 
+one from DOpElib. Then try again make c-all (make always sure that before 
+typing make c-all that the deal.II path is exported - see above). 
+
+
+
 %%%%%%%%%%%%%%%%%%
 \chapter{The Structure of \dope{}}
 This library is designed to allow easy implementation and numerical solutions 
