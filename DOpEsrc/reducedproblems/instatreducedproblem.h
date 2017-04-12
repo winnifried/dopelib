@@ -484,7 +484,7 @@ void InstatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER, CONTROLINTEGR
             nonlinear_adjoint_solver_(integrator_, param_reader),
             nonlinear_gradient_solver_(control_integrator_, param_reader)
       {
-        //Solvers should be ReInited
+        // Solvers should be ReInited
           {
             state_reinit_ = true;
             adjoint_reinit_ = true;
@@ -588,7 +588,7 @@ void InstatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER, CONTROLINTEGR
 {
  ReducedProblemInterface<PROBLEM, VECTOR>::ReInit();
 
-  //Some Solvers must be reinited when called
+  // Some Solvers must be reinited when called
   // Better have subproblems, so that solver can be reinited here
   {
     state_reinit_ = true;
@@ -604,7 +604,7 @@ void InstatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER, CONTROLINTEGR
   GetDU().ReInit();
   GetDZ().ReInit();
 
-  //Remove all time-params - they are now obsolete 
+  // Remove all time-params - they are now obsolete 
   auxiliary_time_params_.clear();
 
   cost_needs_precomputations_=0;
@@ -838,7 +838,7 @@ void InstatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER, CONTROLINTEGR
       gradient.SetTimeDoFNumber(local_to_global[0]);
       gradient_transposed.SetTimeDoFNumber(local_to_global[0]);
     }
-    //Dupliziere ggf. vorberechnete Werte.
+    // Duplicate possibly already computed values 
     ControlVector<VECTOR> tmp = gradient;
     tmp.GetSpacialVector() = gradient.GetSpacialVector();
     
@@ -1334,7 +1334,7 @@ void InstatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER, CONTROLINTEGR
 	throw DOpEException("A functional may not simultaneously be `timelocal' and `timedistributed'",
                             "InstatReducedProblem::ComputeTimeFunctionals");
       }
-      //Wert speichern
+      // Save the value 
       if (this->GetProblem()->GetFunctionalType().find("timelocal") != std::string::npos)
       {
         if (this->GetFunctionalValues()[0].size() != 1)
@@ -1345,7 +1345,7 @@ void InstatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER, CONTROLINTEGR
 	this->GetFunctionalValues()[0][0] += ret;
       }
       else if (this->GetProblem()->GetFunctionalType().find("timedistributed") != std::string::npos)
-      {//TODO was passiert hier? Vermutlich sollte hier spaeter Zeitintegration durchgefuehrt werden?
+      {//TODO double-check! Possibly we need to include time integration later here?!
         if (this->GetFunctionalValues()[0].size() != 1)
         {
           this->GetFunctionalValues()[0].resize(1);
@@ -1440,7 +1440,7 @@ void InstatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER, CONTROLINTEGR
 	  tmp << "aux_functional_"<<i<<"_pre";
 	  this->GetIntegrator().DeleteParamData(tmp.str());
 	}	
-        //Wert speichern
+        // Save value
         if (this->GetProblem()->GetFunctionalType().find("timelocal") != std::string::npos)
         {
           std::stringstream out;
@@ -1631,7 +1631,7 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
     CONTROLINTEGRATOR, INTEGRATOR, PROBLEM, VECTOR, dopedim, dealdim>::
     ForwardTimeLoop(PDE& problem, StateVector<VECTOR>& sol, std::string outname, bool eval_funcs)
   {
-    VECTOR u_alt;
+    VECTOR u_old;
 
     unsigned int max_timestep =
       problem.GetSpaceTimeHandler()->GetMaxTimePoint();
@@ -1654,9 +1654,9 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
       problem.SetTime(times[local_to_global[0]], local_to_global[0], it,true);
       sol.SetTimeDoFNumber(local_to_global[0], it);
     }
-    //u_alt auf initial_values setzen
+    // Set u_old to initial_values 
     {
-      //dazu erstmal gesamt-dof berechnen
+      // Compute first all dofs
       const std::vector<unsigned int>& dofs_per_block =
 	this->GetProblem()->GetSpaceTimeHandler()->GetStateDoFsPerBlock();
       unsigned int n_dofs = 0;
@@ -1665,11 +1665,11 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
       {
 	n_dofs += dofs_per_block[i];
       }
-      //und dann auf den Helper zuerueckgreifen (wegen Templateisierung)
-      DOpEHelper::ReSizeVector(n_dofs, dofs_per_block, u_alt);
+      // ... then use helper because of templates 
+      DOpEHelper::ReSizeVector(n_dofs, dofs_per_block, u_old);
     }
     
-    //Projection der Anfangsdaten
+    // Projection of initial data
     this->GetOutputHandler()->SetIterationNumber(0, "Time");
     {
       this->GetOutputHandler()->Write("Computing Initial Values:",
@@ -1680,20 +1680,20 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 
       //TODO: Possibly another solver for the initial value than for the pde...
       build_state_matrix_ = this->GetNonlinearSolver("state").NonlinearSolve_Initial(
-          initial_problem, u_alt, true, true);
+          initial_problem, u_old, true, true);
       build_state_matrix_ = true;
       
       this->GetProblem()->DeleteAuxiliaryFromIntegrator(this->GetIntegrator());
       
     }
-    sol.GetSpacialVector() = u_alt;
-    this->GetOutputHandler()->Write(u_alt, outname + this->GetPostIndex(),
+    sol.GetSpacialVector() = u_old;
+    this->GetOutputHandler()->Write(u_old, outname + this->GetPostIndex(),
           problem.GetDoFType());
     
 
     
     if(eval_funcs)
-    {//Funktional Auswertung in t_0
+    {// Functional evaluation in t_0
       ComputeTimeFunctionals(0,
 			     max_timestep);
           this->SetProblemType("state");
@@ -1720,7 +1720,7 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
       it.get_time_dof_indices(local_to_global);
       problem.SetTime(times[local_to_global[0]], local_to_global[0], it);
       sol.SetTimeDoFNumber(local_to_global[0], it);
-      //TODO Eventuell waere ein Test mit nicht-gleichmaessigen Zeitschritten sinnvoll!
+      //TODO Test again with non-uniform time steps. 
       
       //we start here at i=1 because we assume that the most
       //left DoF in the actual interval is already computed!
@@ -1745,7 +1745,7 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 	  this->GetIntegrator());
 	
 	this->GetNonlinearSolver("state").NonlinearLastTimeEvals(problem,
-								 u_alt, sol.GetSpacialVector());
+								 u_old, sol.GetSpacialVector());
 
 	this->GetProblem()->DeleteAuxiliaryFromIntegrator(
 	  this->GetIntegrator());
@@ -1758,7 +1758,7 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 	
 	build_state_matrix_
 	  = this->GetNonlinearSolver("state").NonlinearSolve(problem,
-							     u_alt, sol.GetSpacialVector(), true,
+							     u_old, sol.GetSpacialVector(), true,
 							     build_state_matrix_);
 
 	this->GetProblem()->DeleteAuxiliaryFromIntegrator(
@@ -1767,11 +1767,11 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 	  this->GetIntegrator());
 
 	//TODO do a transfer to the next grid for changing spatial meshes!
-	u_alt = sol.GetSpacialVector();
+	u_old = sol.GetSpacialVector();
 	this->GetOutputHandler()->Write(sol.GetSpacialVector(),
 					outname + this->GetPostIndex(), problem.GetDoFType());
 	if(eval_funcs)
-	{//Funktional Auswertung in t_n//if abfrage, welcher typ
+	{//Functional evaluation in t_n  //if condition to get the type
 	  ComputeTimeFunctionals(local_to_global[i], max_timestep);
 	  this->SetProblemType("state");
 	}
@@ -1802,7 +1802,7 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
   CONTROLINTEGRATOR, INTEGRATOR, PROBLEM, VECTOR, dopedim, dealdim>::
   BackwardTimeLoop(PDE& problem, StateVector<VECTOR>& sol, ControlVector<VECTOR>& temp_q, ControlVector<VECTOR>& temp_q_trans, std::string outname, bool eval_grads)
   {
-    VECTOR u_alt;
+    VECTOR u_old;
 
     unsigned int max_timestep =
       problem.GetSpaceTimeHandler()->GetMaxTimePoint();
@@ -1816,13 +1816,13 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
       TimeIterator it =
 	problem.GetSpaceTimeHandler()->GetTimeDoFHandler().last_interval();
       it.get_time_dof_indices(local_to_global);
-      //The initial values for the dual problem
+      //The initial values for the adjoint problem
       problem.SetTime(times[local_to_global[local_to_global.size()-1]],local_to_global[local_to_global.size()-1], it);
       sol.SetTimeDoFNumber(local_to_global[local_to_global.size()-1], it);
     }
-    //u_alt auf initial_values setzen
+    // Set u_old to initial_values 
     {
-      //dazu erstmal gesamt-dof berechnen
+      // Compute total dofs first
       const std::vector<unsigned int>& dofs_per_block =
 	this->GetProblem()->GetSpaceTimeHandler()->GetStateDoFsPerBlock();
       unsigned int n_dofs = 0;
@@ -1831,10 +1831,10 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
       {
 	n_dofs += dofs_per_block[i];
       }
-      //und dann auf den Helper zuerueckgreifen (wegen Templateisierung)
-      DOpEHelper::ReSizeVector(n_dofs, dofs_per_block, u_alt);
+      // ... and then get helper (because of templates) 
+      DOpEHelper::ReSizeVector(n_dofs, dofs_per_block, u_old);
     }
-    //Projection der Anfangsdaten
+    // Projection of initial data
     this->GetOutputHandler()->SetIterationNumber(max_timestep, "Time");
     {
       this->GetOutputHandler()->Write("Computing Initial Values:",
@@ -1863,7 +1863,7 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 
       //TODO: Possibly another solver for the initial value than for the pde...
       build_state_matrix_ = this->GetNonlinearSolver("adjoint").NonlinearSolve_Initial(
-          initial_problem, u_alt, true, true);
+          initial_problem, u_old, true, true);
       build_state_matrix_ = true;
 
       this->GetProblem()->DeleteAuxiliaryFromIntegrator(this->GetIntegrator());
@@ -1879,8 +1879,8 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
       }
       
     }
-    sol.GetSpacialVector() = u_alt;
-    this->GetOutputHandler()->Write(u_alt, outname + this->GetPostIndex(),
+    sol.GetSpacialVector() = u_old;
+    this->GetOutputHandler()->Write(u_old, outname + this->GetPostIndex(),
           problem.GetDoFType());
     
     //TODO: Maybe we should calculate the local gradient computations here
@@ -1892,7 +1892,7 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
       it.get_time_dof_indices(local_to_global);
       problem.SetTime(times[local_to_global[local_to_global.size()-1]],local_to_global[local_to_global.size()-1], it);
       sol.SetTimeDoFNumber(local_to_global[local_to_global.size()-1], it);
-     //TODO Eventuell waere ein Test mit nicht-gleichmaessigen Zeitschritten sinnvoll!
+     //TODO Add a test with non-uniform time steps to check whether this is correct.
       
       //we start here at i= 1 and transform i -> n_dofs_per_interval-1-i because we assume that the most
       //right DoF in the actual interval is already computed!
@@ -1934,7 +1934,7 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 	}
 		
 	this->GetNonlinearSolver("adjoint").NonlinearLastTimeEvals(problem,
-								   u_alt, sol.GetSpacialVector());
+								   u_old, sol.GetSpacialVector());
 	
 	this->GetProblem()->DeleteAuxiliaryFromIntegrator(
 	  this->GetIntegrator());
@@ -1975,7 +1975,7 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 	
 	build_adjoint_matrix_
 	  = this->GetNonlinearSolver("adjoint").NonlinearSolve(problem,
-							     u_alt, sol.GetSpacialVector(), true,
+							     u_old, sol.GetSpacialVector(), true,
 							     build_adjoint_matrix_);
 	
 	this->GetProblem()->DeleteAuxiliaryFromIntegrator(
@@ -1996,7 +1996,7 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 	}
 
 	//TODO do a transfer to the next grid for changing spatial meshes!
-	u_alt = sol.GetSpacialVector();
+	u_old = sol.GetSpacialVector();
 	this->GetOutputHandler()->Write(sol.GetSpacialVector(),
 					outname + this->GetPostIndex(), problem.GetDoFType());
 
