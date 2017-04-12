@@ -202,7 +202,7 @@ Add /home/..../dopelib-4.0/ThirdPartyLibs/ipopt/lib64
 \end{lstlisting}
 
 
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%5
 \section{Installation}\label{sec_installation}
 To work with DOpElib, your need necessarily deal.II, which installation 
 we describe first. Afterwards, the DOpElib installation is described and finally
@@ -216,6 +216,17 @@ will be found by cmake, i.e.,
 \begin{lstlisting}
 export DEAL_II_DIR=[path to deal.ii]
 \end{lstlisting}
+\begin{remark}
+\textbf{Be careful} if you work in several terminal windows and have several deal.II versions. In this case, the
+export-command might have to be done again in that new window. Otherwise
+another deal.II version might be linked resulting in linker errors or
+segmentation faults without useful error message. In order to check to which
+deal.II version DOpE is linked, type 
+\begin{lstlisting}
+echo $DEAL_II_DIR
+\end{lstlisting}
+in the current terminal window.
+\end{remark}
 Detailed installing instructions for deal.II (here the last version
 8.4.0) can be found on 
 \texttt{http://www.dealii.org/8.4.0/readme.html}. The deal.II 

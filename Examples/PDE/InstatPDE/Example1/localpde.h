@@ -114,7 +114,7 @@ template<
                 state_fe_values[velocities].gradient(i, q_point);
             const double phi_i_p = state_fe_values[pressure].value(i, q_point);
 
-            local_vector(i) += scale
+            local_vector(i) += 1.0 * scale
                 * density_fluid_ * (convection_fluid * phi_i_v
 				    + viscosity_
 				    * scalar_product(vgrads + transpose(vgrads),
