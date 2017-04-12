@@ -104,7 +104,7 @@ template<
       {
         Point<2> p(0.125, 0.75);
 
-        typename map<string, const BlockVector<double>*>::const_iterator it =
+        typename map<string, const VECTOR*>::const_iterator it =
             domain_values.find("state");
         Vector<double> tmp_vector(1);
 

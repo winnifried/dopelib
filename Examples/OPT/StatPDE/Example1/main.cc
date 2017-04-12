@@ -64,9 +64,9 @@ const static int CDIM = 2;
 typedef QGauss<DIM> QUADRATURE;
 typedef QGauss<DIM - 1> FACEQUADRATURE;
 
-typedef BlockSparseMatrix<double> MATRIX;
-typedef BlockSparsityPattern SPARSITYPATTERN;
-typedef BlockVector<double> VECTOR;
+typedef SparseMatrix<double> MATRIX;
+typedef SparsityPattern SPARSITYPATTERN;
+typedef Vector<double> VECTOR;
 
 #define CDC ElementDataContainer
 #define FDC FaceDataContainer
