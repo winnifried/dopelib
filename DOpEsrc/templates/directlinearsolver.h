@@ -163,8 +163,6 @@ template <typename SPARSITYPATTERN, typename MATRIX, typename VECTOR>
   { 
     integr.ComputeMatrix (pde,matrix_);    
   }
-
-  integr.ApplyNewtonBoundaryValues(pde,matrix_,rhs,solution);
   
   if(A_direct_ == NULL)
   {

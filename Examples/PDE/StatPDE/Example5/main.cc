@@ -229,7 +229,7 @@ main(int argc, char **argv)
   L2_RESC l2resc(DOFH, DOpEtypes::VectorStorageType::fullmem, pr, DOpEtypes::primal_only);
   H1_RESC h1resc(DOFH, DOpEtypes::VectorStorageType::fullmem, pr, DOpEtypes::primal_only);
 
-  solver.InitializeDWRC(dwrc);
+  P.InitializeDWRC(dwrc);
   //**************************************************************************************************
 
   for (int i = 0; i < max_iter; i++)

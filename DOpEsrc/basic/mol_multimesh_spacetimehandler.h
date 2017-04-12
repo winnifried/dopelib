@@ -166,9 +166,11 @@ namespace DOpE
          */
         void
         ReInit(unsigned int control_n_blocks,
-            const std::vector<unsigned int>& control_block_component,
-            unsigned int state_n_blocks,
-            const std::vector<unsigned int>& state_block_component)
+	       const std::vector<unsigned int>& control_block_component,
+	       const DirichletDescriptor & DD_control,
+	       unsigned int state_n_blocks,
+	       const std::vector<unsigned int>& state_block_component,
+	       const DirichletDescriptor & DD_state)
         {
           SpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dim, dim>::SetActiveFEIndicesControl(
               control_dof_handler_);
@@ -181,6 +183,21 @@ namespace DOpE
           if (GetUserDefinedDoFConstraints() != NULL)
             GetUserDefinedDoFConstraints()->MakeControlDoFConstraints(
                 control_dof_handler_, control_dof_constraints_);
+
+	  {
+	    std::vector<unsigned int> dirichlet_colors = DD_control.GetDirichletColors();
+	    for (unsigned int i = 0; i < dirichlet_colors.size(); i++)
+	    {
+	      unsigned int color = dirichlet_colors[i];
+	      std::vector<bool> comp_mask = DD_control.GetDirichletCompMask(color);
+	      
+	      //TODO: mapping[0] is a workaround, as deal does not support interpolate
+	      // boundary_values with a mapping collection at this point.
+	      dealii::VectorTools::interpolate_boundary_values(GetMapping()[0], control_dof_handler_.GetDEALDoFHandler(), color, dealii::ZeroFunction<dim>(comp_mask.size()),
+							       control_dof_constraints_, comp_mask);
+	    }
+	  }
+
           control_dof_constraints_.close();
 
           control_dofs_per_block_.resize(control_n_blocks);
@@ -202,7 +219,21 @@ namespace DOpE
           if (GetUserDefinedDoFConstraints() != NULL)
             GetUserDefinedDoFConstraints()->MakeStateDoFConstraints(
                 state_dof_handler_, state_dof_constraints_);
-          state_dof_constraints_.close();
+	  {
+	    std::vector<unsigned int> dirichlet_colors = DD_state.GetDirichletColors();
+	    for (unsigned int i = 0; i < dirichlet_colors.size(); i++)
+	    {
+	      unsigned int color = dirichlet_colors[i];
+	      std::vector<bool> comp_mask = DD_state.GetDirichletCompMask(color);
+	      
+	      //TODO: mapping[0] is a workaround, as deal does not support interpolate
+	      // boundary_values with a mapping collection at this point.
+	      VectorTools::interpolate_boundary_values(GetMapping()[0], state_dof_handler_.GetDEALDoFHandler(), color, dealii::ZeroFunction<dim>(comp_mask.size()),
+						       state_dof_constraints_, comp_mask);
+	    }
+	  }
+
+	  state_dof_constraints_.close();
 
           state_dofs_per_block_.resize(state_n_blocks);
           DoFTools::count_dofs_per_block(static_cast<DH<dim, dim>&>(state_dof_handler_),

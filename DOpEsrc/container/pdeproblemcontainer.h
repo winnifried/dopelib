@@ -106,7 +106,7 @@ namespace DOpE
     {
       public:
         PDEProblemContainer(PDE& pde,
-            StateSpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dealdim>& STH);
+            StateSpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dealdim> & STH);
 
         /******************************************************/
 
@@ -565,6 +565,20 @@ namespace DOpE
       {
 	return this->GetPDE().AtInterface(element,face);
       }
+      
+      /**
+       * Initializes the HigherOrderDWRDataContainer
+       */
+      template<class DWRC>
+      void
+      InitializeDWRC(DWRC& dwrc)
+      {
+	dwrc.Initialize(GetSpaceTimeHandler(),
+			GetStateNBlocks(),
+			GetStateBlockComponent(),
+			&dirichlet_colors_,
+			&dirichlet_comps_);
+      }
 
         /******************************************************/
       private:
@@ -681,8 +695,10 @@ namespace DOpE
 
         if (algo_type_ == "reduced")
         {
+	  
           GetSpaceTimeHandler()->ReInit(this->GetPDE().GetStateNBlocks(),
-              this->GetPDE().GetStateBlockComponent());
+					this->GetPDE().GetStateBlockComponent(),
+	                                DirichletDescriptor(dirichlet_colors_,dirichlet_comps_));
         }
         else
         {

@@ -211,7 +211,7 @@ main(int argc, char **argv)
   DOFH_higher_order.SetDoFHandlerOrdering(1, 0);
   HO_DWRC dwrc(DOFH_higher_order, idc_high, DOpEtypes::VectorStorageType::fullmem, DOpEtypes::VectorStorageType::fullmem, pr,
       DOpEtypes::mixed_control);
-  solver.InitializeDWRC(dwrc);
+  P.InitializeDWRC(dwrc);
   /********************************************************************/
 
   Alg.ReInit();

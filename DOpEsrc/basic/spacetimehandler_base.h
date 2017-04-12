@@ -36,6 +36,7 @@
 #include <include/timedofhandler.h>
 #include <include/timeiterator.h>
 #include <container/refinementcontainer.h>
+#include <basic/dirichletdescriptor.h>
 #include <basic/dopetypes.h>
 
 namespace DOpE

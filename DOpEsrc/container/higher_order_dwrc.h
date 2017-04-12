@@ -97,12 +97,16 @@ namespace DOpE
         template<class STH2>
           void
           Initialize(STH2* sth, unsigned int state_n_blocks,
-              std::vector<unsigned int>& state_block_component)
+		     std::vector<unsigned int>& state_block_component,
+		     const std::vector<unsigned int>* sdcol,
+		     const std::vector<std::vector<bool> >* sdcomp)
           {
-            _sth = dynamic_cast<STH*>(sth);
-            _state_n_blocks = state_n_blocks;
-            _state_block_component = &state_block_component;
-          }
+            sth_ = dynamic_cast<STH*>(sth);
+            state_n_blocks_ = state_n_blocks;
+            state_block_component_ = &state_block_component;
+	    state_dirichlet_colors_ = sdcol;
+	    state_dirichlet_comps_ = sdcomp;
+	  }
 
         /**
          * ReInits the DWRDataContainer, the higher order STH
@@ -301,7 +305,7 @@ namespace DOpE
         STH&
         GetSTH()
         {
-          return *_sth;
+          return *sth_;
         }
 
         STH&
@@ -329,11 +333,13 @@ namespace DOpE
         }
 
       private:
-        unsigned int _state_n_blocks;
-	std::vector<unsigned int>* _state_block_component;
+        unsigned int state_n_blocks_;
+	std::vector<unsigned int>* state_block_component_;
+	const std::vector<unsigned int>* state_dirichlet_colors_;
+	const std::vector<std::vector<bool> >* state_dirichlet_comps_;
 
         STH& sth_higher_order_;
-        STH* _sth;
+        STH* sth_;
         IDC& idc_higher_order_;
 
         const DOpEtypes::ResidualEvaluation res_eval_;
@@ -348,7 +354,7 @@ namespace DOpE
     {
       DWRDataContainer<STH, IDC, EDC, FDC, VECTOR>::ReInit(n_elements);
 
-      GetHigherOrderSTH().ReInit(_state_n_blocks, *_state_block_component);
+      GetHigherOrderSTH().ReInit(state_n_blocks_, *state_block_component_,DirichletDescriptor(*state_dirichlet_colors_,*state_dirichlet_comps_));
       if (this->GetEETerms() == DOpEtypes::primal_only
           || this->GetEETerms() == DOpEtypes::mixed)
       {

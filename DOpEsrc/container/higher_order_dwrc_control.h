@@ -103,13 +103,21 @@ namespace DOpE
           Initialize(STH2* sth, unsigned int control_n_blocks,
 		     std::vector<unsigned int>& control_block_component, 
 		     unsigned int state_n_blocks,
-		     std::vector<unsigned int>& state_block_component)
+		     std::vector<unsigned int>& state_block_component,
+		     const std::vector<unsigned int>* cdcol,
+		     const std::vector<std::vector<bool> >* cdcomp,
+		     const std::vector<unsigned int>* sdcol,
+		     const std::vector<std::vector<bool> >* sdcomp)
           {
             sth_ = dynamic_cast<STH*>(sth);
 	    control_n_blocks_        =  control_n_blocks;
             control_block_component_ = &control_block_component;
             state_n_blocks_        =  state_n_blocks;
             state_block_component_ = &state_block_component;
+	    control_dirichlet_colors_ = cdcol;
+	    control_dirichlet_comps_ = cdcomp;
+	    state_dirichlet_colors_ = sdcol;
+	    state_dirichlet_comps_ = sdcomp;
           }
 
         /**
@@ -355,7 +363,12 @@ namespace DOpE
         unsigned int control_n_blocks_, state_n_blocks_;
         std::vector<unsigned int>* control_block_component_;
 	std::vector<unsigned int>* state_block_component_;
+	const std::vector<unsigned int>* control_dirichlet_colors_;
+	const std::vector<std::vector<bool> >* control_dirichlet_comps_;
+	const std::vector<unsigned int>* state_dirichlet_colors_;
+	const std::vector<std::vector<bool> >* state_dirichlet_comps_;
 
+	
         STH& sth_higher_order_;
         STH* sth_;
         IDC& idc_higher_order_;
@@ -373,7 +386,7 @@ namespace DOpE
     {
       DWRDataContainer<STH, IDC, EDC, FDC, VECTOR>::ReInit(n_elements);
 
-      GetHigherOrderSTH().ReInit(control_n_blocks_, *control_block_component_, state_n_blocks_, *state_block_component_);
+      GetHigherOrderSTH().ReInit(control_n_blocks_, *control_block_component_,DirichletDescriptor(*control_dirichlet_colors_,*control_dirichlet_comps_), state_n_blocks_, *state_block_component_,DirichletDescriptor(*state_dirichlet_colors_,*state_dirichlet_comps_));
       if (this->GetEETerms() == DOpEtypes::primal_only
           || this->GetEETerms() == DOpEtypes::mixed
 	  || this->GetEETerms() == DOpEtypes::mixed_control)

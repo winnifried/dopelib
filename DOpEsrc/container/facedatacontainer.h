@@ -96,11 +96,11 @@ namespace DOpE
          * @param need_neighbour          Describes whether we need all the GetNbr (= Get Neighbor) functions.
          *
          */
-        template<template<int, int> class FE, typename SPARSITYPATTERN, int dopedim, int dealdim>
+      template<template<int, int> class FE, typename SPARSITYPATTERN, int dopedim, int dealdim>
           FaceDataContainer(const Quadrature<dim - 1>& quad,
               UpdateFlags update_flags,
               SpaceTimeHandler<FE, dealii::DoFHandler, SPARSITYPATTERN, VECTOR,
-                  dopedim, dealdim>& sth,
+			    dopedim, dealdim>& sth,
               const std::vector<
                   typename DOpEWrapper::DoFHandler<dim, dealii::DoFHandler>::active_cell_iterator>& element,
               const std::map<std::string, const Vector<double>*> &param_values,
@@ -644,12 +644,12 @@ namespace DOpE
          * @param need_neighbour         Describes, whether we need all the GetNbr (= Get Neighbor) functions.
          *
          */
-        template<template<int, int> class FE, typename SPARSITYPATTERN, int dopedim, int dealdim>
+      template<template<int, int> class FE, typename SPARSITYPATTERN, int dopedim, int dealdim>
           FaceDataContainer<dealii::hp::DoFHandler, VECTOR, dim>(
               const hp::QCollection<dim - 1>& q_collection,
               UpdateFlags update_flags,
               SpaceTimeHandler<FE, dealii::hp::DoFHandler, SPARSITYPATTERN,
-                  VECTOR, dopedim, dealdim>& sth,
+	      VECTOR, dopedim, dealdim>& sth,
               const std::vector<
                   typename DOpEWrapper::DoFHandler<dim, dealii::hp::DoFHandler>::active_cell_iterator>& element,
               const std::map<std::string, const Vector<double>*> &param_values,

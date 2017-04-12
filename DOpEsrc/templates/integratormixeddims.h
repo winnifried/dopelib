@@ -73,12 +73,12 @@ class IntegratorMixedDimensions
     void ReInit();
 
     template<typename PROBLEM>
-    void ComputeNonlinearResidual(PROBLEM& pde, VECTOR &residual, bool apply_boundary_values = true);
+    void ComputeNonlinearResidual(PROBLEM& pde, VECTOR &residual);
     template<typename PROBLEM, typename MATRIX>
     void ComputeMatrix(PROBLEM& pde, MATRIX &matrix);
     template<typename PROBLEM>
       void
-      ComputeNonlinearRhs(PROBLEM& pde, VECTOR &residual, bool apply_boundary_values = true);
+      ComputeNonlinearRhs(PROBLEM& pde, VECTOR &residual);
 
     template<typename PROBLEM>
       void ComputeLocalControlConstraints (PROBLEM& pde, VECTOR &constraints);
@@ -97,10 +97,7 @@ class IntegratorMixedDimensions
     void ApplyInitialBoundaryValues(PROBLEM& pde, VECTOR &u);
     template<typename PROBLEM>
     void ApplyTransposedInitialBoundaryValues(PROBLEM& pde, VECTOR &u, SCALAR scale);
-    template<typename PROBLEM>
-    void ApplyNewtonBoundaryValues(PROBLEM& pde, VECTOR &u);
-    template<typename PROBLEM, typename MATRIX>
-    void ApplyNewtonBoundaryValues(PROBLEM& pde, MATRIX &matrix, VECTOR &rhs, VECTOR &sol);
+
 
     inline void AddDomainData(std::string name, const VECTOR* new_data);
     inline void DeleteDomainData(std::string name);
@@ -157,8 +154,7 @@ template<typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR, int diml
     int dimhigh>
 template<typename PROBLEM>
   void IntegratorMixedDimensions<INTEGRATORDATACONT, VECTOR, SCALAR, dimlow, dimhigh>::ComputeNonlinearResidual(PROBLEM& pde,
-												    VECTOR &residual,
-												    bool apply_boundary_values)
+												    VECTOR &residual)
 {
   {
       residual = 0.;
@@ -272,10 +268,10 @@ template<typename PROBLEM>
         residual(i) += local_vector(i);
       }
 
-      if (apply_boundary_values)
-      {
-        ApplyNewtonBoundaryValues(pde,residual);
-      }
+//      if (apply_boundary_values)
+//      {
+//        ApplyNewtonBoundaryValues(pde,residual);
+//      }
   }
 }
 /*******************************************************************************************/
@@ -284,8 +280,7 @@ template<typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR, int diml
     int dimhigh>
 template<typename PROBLEM>
   void IntegratorMixedDimensions<INTEGRATORDATACONT, VECTOR, SCALAR, dimlow, dimhigh>::ComputeNonlinearRhs(PROBLEM& pde,
-												    VECTOR &residual,
-												    bool apply_boundary_values)
+												    VECTOR &residual)
 {
   {
       residual = 0.;
@@ -391,10 +386,10 @@ template<typename PROBLEM>
         residual(i) += local_vector(i);
       }
 
-      if (apply_boundary_values)
-      {
-        ApplyNewtonBoundaryValues(pde,residual);
-      }
+//      if (apply_boundary_values)
+//      {
+//        ApplyNewtonBoundaryValues(pde,residual);
+//      }
   }
 }
 
@@ -712,29 +707,6 @@ template<typename PROBLEM>
       //end loop over components
     }
   }
-}
-
-/*******************************************************************************************/
-
-template<typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR, int dimlow,
-    int dimhigh>
-template<typename PROBLEM>
-  void IntegratorMixedDimensions<INTEGRATORDATACONT, VECTOR, SCALAR, dimlow, dimhigh>::ApplyNewtonBoundaryValues(PROBLEM& /*pde*/,
-														 VECTOR &/*u*/)
-{
-  //We don't need those in the mixed case...
-}
-/*******************************************************************************************/
-
-template<typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR, int dimlow,
-    int dimhigh>
-template<typename PROBLEM, typename MATRIX>
-    void IntegratorMixedDimensions<INTEGRATORDATACONT, VECTOR, SCALAR, dimlow, dimhigh>::ApplyNewtonBoundaryValues(PROBLEM& pde,
-														   MATRIX &/*matrix*/,
-														   VECTOR &/*rhs*/,
-														   VECTOR &/*sol*/)
-{
-  //We don't need those in the mixed case...
 }
 
 /*******************************************************************************************/

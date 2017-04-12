@@ -497,19 +497,19 @@ namespace DOpE
         {
           return OP_;
         }
-        /**
-         * Initializes the HigherOrderDWRDataContainer
-         */
-        template<class DWRC>
-          void
-          InitializeDWRC(DWRC& dwrc)
-          {
-            dwrc.Initialize(GetProblem()->GetSpaceTimeHandler(),
-                GetProblem()->GetControlNBlocks(),
-                GetProblem()->GetControlBlockComponent(),
-                GetProblem()->GetStateNBlocks(),
-                GetProblem()->GetStateBlockComponent());
-          }
+//        /**
+//         * Initializes the HigherOrderDWRDataContainer
+//         */
+//        template<class DWRC>
+//          void
+//          InitializeDWRC(DWRC& dwrc)
+//          {
+//            dwrc.Initialize(GetProblem()->GetSpaceTimeHandler(),
+//                GetProblem()->GetControlNBlocks(),
+//                GetProblem()->GetControlBlockComponent(),
+//                GetProblem()->GetStateNBlocks(),
+//                GetProblem()->GetStateBlockComponent());
+//          }
 
       protected:
         virtual const std::map<std::string, unsigned int>&

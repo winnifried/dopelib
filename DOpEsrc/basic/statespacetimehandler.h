@@ -89,14 +89,14 @@ namespace DOpE
         /**
          * Initializes the dof handlers corresponding to the finite elements.
          *
-         * @param control_n_blocks          Number of Blocks for the control variable
-         * @param control_block_components  Component to Block mapping for the control
          * @param state_n_blocks            Number of Blocks for the state variable
          * @param state_block_components    Component to Block mapping for the state
+	 * @param DD                        Description of the DirichletBoundaries
          */
         virtual void
         ReInit(unsigned int state_n_blocks,
-            const std::vector<unsigned int>& state_block_component) =0;
+	       const std::vector<unsigned int>& state_block_component,
+	       const DirichletDescriptor & DD) = 0;
 
         /******************************************************/
 

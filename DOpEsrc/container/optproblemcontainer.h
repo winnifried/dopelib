@@ -111,7 +111,7 @@ namespace DOpE
       public:
         OptProblemContainer(FUNCTIONAL& functional, PDE& pde,
             CONSTRAINTS& constraints,
-            SpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dopedim, dealdim>& STH);
+			    SpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dopedim, dealdim> & STH);
 
         /******************************************************/
 
@@ -932,7 +932,7 @@ namespace DOpE
 
         /******************************************************/
 
-        const SpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dopedim, dealdim>*
+      const SpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dopedim, dealdim>*
         GetSpaceTimeHandler() const
         {
           return STH_;
@@ -940,7 +940,7 @@ namespace DOpE
 
         /******************************************************/
 
-        SpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dopedim, dealdim>*
+      SpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dopedim, dealdim>*
         GetSpaceTimeHandler()
         {
           return STH_;
@@ -1286,6 +1286,25 @@ namespace DOpE
       template<typename ELEMENTITERATOR>
       bool AtInterface(ELEMENTITERATOR& element, unsigned int face) const;
 
+      /**
+       * Initializes the HigherOrderDWRDataContainer
+       */
+      template<class DWRC>
+      void
+      InitializeDWRC(DWRC& dwrc)
+      {
+	dwrc.Initialize(GetSpaceTimeHandler(),
+			GetControlNBlocks(),
+			GetControlBlockComponent(),
+			GetStateNBlocks(),
+			GetStateBlockComponent(),
+			&control_dirichlet_colors_,
+			&control_dirichlet_comps_,
+			&dirichlet_colors_,
+			&dirichlet_comps_);
+      }
+
+      
       protected:
         FUNCTIONAL*
         GetFunctional();
@@ -1550,9 +1569,11 @@ namespace DOpE
         if (algo_type_ == "reduced")
         {
           GetSpaceTimeHandler()->ReInit(this->GetPDE().GetControlNBlocks(),
-              this->GetPDE().GetControlBlockComponent(),
-              this->GetPDE().GetStateNBlocks(),
-              this->GetPDE().GetStateBlockComponent());
+					this->GetPDE().GetControlBlockComponent(),
+					DirichletDescriptor(control_dirichlet_colors_,control_dirichlet_comps_),
+					this->GetPDE().GetStateNBlocks(),
+					this->GetPDE().GetStateBlockComponent(),
+					DirichletDescriptor(dirichlet_colors_,dirichlet_comps_));
         }
         else
         {

@@ -184,8 +184,6 @@ namespace DOpE
       integr.ComputeMatrix (pde,matrix_);
     }
     
-    integr.ApplyNewtonBoundaryValues(pde,matrix_,rhs,solution);
-    
     
     //This is the code coming from the dealii step-20 solve method:
     dealii::PreconditionIdentity identity;

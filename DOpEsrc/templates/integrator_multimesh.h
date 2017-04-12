@@ -70,16 +70,13 @@ namespace DOpE
 
         template<typename PROBLEM>
           void
-          ComputeNonlinearResidual(PROBLEM& pde, VECTOR &residual,
-              bool apply_boundary_values = true);
+          ComputeNonlinearResidual(PROBLEM& pde, VECTOR &residual);
         template<typename PROBLEM>
           void
-          ComputeNonlinearLhs(PROBLEM& pde, VECTOR &residual,
-              bool apply_boundary_values = true);
+          ComputeNonlinearLhs(PROBLEM& pde, VECTOR &residual);
         template<typename PROBLEM>
           void
-          ComputeNonlinearRhs(PROBLEM& pde, VECTOR &residual,
-              bool apply_boundary_values = true);
+          ComputeNonlinearRhs(PROBLEM& pde, VECTOR &residual);
         template<typename PROBLEM, typename MATRIX>
           void
           ComputeMatrix(PROBLEM& pde, MATRIX &matrix);
@@ -108,13 +105,7 @@ namespace DOpE
         template<typename PROBLEM>
           void
           ApplyInitialBoundaryValues(PROBLEM& pde, VECTOR &u);
-        template<typename PROBLEM>
-          void
-          ApplyNewtonBoundaryValues(PROBLEM& pde, VECTOR &u);
-        template<typename PROBLEM, typename MATRIX>
-          void
-          ApplyNewtonBoundaryValues(PROBLEM& pde, MATRIX &matrix, VECTOR &rhs,
-              VECTOR &sol);
+
 
         inline void
         AddDomainData(std::string name, const VECTOR* new_data);
@@ -253,7 +244,7 @@ namespace DOpE
     template<typename PROBLEM>
       void
       IntegratorMultiMesh<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::ComputeNonlinearResidual(
-          PROBLEM& pde, VECTOR &residual, bool apply_boundary_values)
+          PROBLEM& pde, VECTOR &residual)
       {
             residual = 0.;
    
@@ -335,10 +326,6 @@ namespace DOpE
 	    //Check if some preset righthandside exists.
 	    AddPresetRightHandSide(-1.,residual);
 
-            if (apply_boundary_values)
-	    {
-	      ApplyNewtonBoundaryValues(pde, residual);
-	    }
       }
 
   /*******************************************************************************************/
@@ -348,7 +335,7 @@ namespace DOpE
     template<typename PROBLEM>
       void
       IntegratorMultiMesh<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::ComputeNonlinearLhs(
-          PROBLEM& pde, VECTOR &residual, bool apply_boundary_values)
+          PROBLEM& pde, VECTOR &residual)
       {
           {
 	    throw DOpEException("This function needs to be implemented!", "IntegratorMultiMesh::ComputeNonlinearLhs");
@@ -362,7 +349,7 @@ namespace DOpE
     template<typename PROBLEM>
       void
       IntegratorMultiMesh<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::ComputeNonlinearRhs(
-	PROBLEM& pde, VECTOR &residual, bool apply_boundary_values)
+	PROBLEM& pde, VECTOR &residual)
       {
 	residual = 0.;
    
@@ -443,10 +430,6 @@ namespace DOpE
             //Check if some preset righthandside exists.
 	    AddPresetRightHandSide(1.,residual);
 
-            if (apply_boundary_values)
-	    {
-	      ApplyNewtonBoundaryValues(pde, residual);
-	    }
       }
 
   /*******************************************************************************************/
@@ -867,69 +850,6 @@ namespace DOpE
 
   template<typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR,
       int dim>
-    template<typename PROBLEM>
-      void
-      IntegratorMultiMesh<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::ApplyNewtonBoundaryValues(
-          PROBLEM& pde, VECTOR &u)
-      {
-        //TODO Apply constraints locally, see, e.g., dealii step-27 ? But howto do this in the newton iter
-        // e.g. sometimes we need zero sometimes we need other values.
-
-        pde.GetDoFConstraints().condense(u);
-        std::vector<unsigned int> dirichlet_colors = pde.GetDirichletColors();
-        for (unsigned int i = 0; i < dirichlet_colors.size(); i++)
-          {
-            unsigned int color = dirichlet_colors[i];
-            std::vector<bool> comp_mask = pde.GetDirichletCompMask(color);
-            std::map<unsigned int, SCALAR> boundary_values;
-
-
-            InterpolateBoundaryValues(
-                pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandler()[0],
-                color, dealii::ZeroFunction<dim>(comp_mask.size()),
-                boundary_values, comp_mask);
-
-            for (typename std::map<unsigned int, SCALAR>::const_iterator p =
-                boundary_values.begin(); p != boundary_values.end(); p++)
-              {
-                u(p->first) = p->second;
-              }
-          }
-      }
-  /*******************************************************************************************/
-
-  template<typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR,
-      int dim>
-    template<typename PROBLEM, typename MATRIX>
-      void
-      IntegratorMultiMesh<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::ApplyNewtonBoundaryValues(
-          PROBLEM& pde, MATRIX& matrix, VECTOR &rhs, VECTOR &sol)
-      {
-        //TODO Apply constraints locally, see, e.g., dealii step-27 ? But howto do this in the newton iter
-        // e.g. sometimes we need zero sometimes we need other values.
-        pde.GetDoFConstraints().condense(rhs);
-        pde.GetDoFConstraints().condense(matrix);
-        std::vector<unsigned int> dirichlet_colors = pde.GetDirichletColors();
-        for (unsigned int i = 0; i < dirichlet_colors.size(); i++)
-          {
-            unsigned int color = dirichlet_colors[i];
-            std::vector<bool> comp_mask = pde.GetDirichletCompMask(color);
-            std::map<unsigned int, SCALAR> boundary_values;
-
-            InterpolateBoundaryValues(
-                pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandler()[0],
-                color, dealii::ZeroFunction<dim>(comp_mask.size()),
-                boundary_values, comp_mask);
-
-            dealii::MatrixTools::apply_boundary_values(boundary_values, matrix,
-                sol, rhs);
-          }
-      }
-
-  /*******************************************************************************************/
-
-  template<typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR,
-      int dim>
     void
     IntegratorMultiMesh<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::AddDomainData(
         std::string name, const VECTOR* new_data)
@@ -1164,20 +1084,17 @@ namespace DOpE
 	    prolong_matrix.Tvmult(tmp,local_vector);
 	    
 	    //LocalToGlobal
+	    const auto & C = pde.GetDoFConstraints();
 	    element[0]->get_dof_indices(local_dof_indices);
-	    for (unsigned int i = 0; i < dofs_per_element; ++i)
-	    {
-	      residual(local_dof_indices[i]) += tmp(i);
-	    }
+	    C.distribute_local_to_global(tmp, local_dof_indices, residual);
+
 	  }
 	  else //Testfunctions are already the right ones...
 	  {
 	    //LocalToGlobal
+	    const auto & C = pde.GetDoFConstraints();
 	    element[0]->get_dof_indices(local_dof_indices);
-	    for (unsigned int i = 0; i < dofs_per_element; ++i)
-	    {
-	      residual(local_dof_indices[i]) += local_vector(i);
-	    }
+	    C.distribute_local_to_global(local_vector, local_dof_indices, residual);
 	  }
 	  
     }//Endof the case on the finest level
@@ -1295,20 +1212,16 @@ namespace DOpE
 	    prolong_matrix.Tvmult(tmp,local_vector);
 	    
 	    //LocalToGlobal
+	    const auto & C = pde.GetDoFConstraints();
 	    element[0]->get_dof_indices(local_dof_indices);
-	    for (unsigned int i = 0; i < dofs_per_element; ++i)
-	    {
-	      residual(local_dof_indices[i]) += tmp(i);
-	    }
+	    C.distribute_local_to_global(tmp, local_dof_indices, residual);
 	  }
 	  else //Testfunctions are already the right ones...
 	  {
 	    //LocalToGlobal
+	    const auto & C = pde.GetDoFConstraints();
 	    element[0]->get_dof_indices(local_dof_indices);
-	    for (unsigned int i = 0; i < dofs_per_element; ++i)
-	    {
-	      residual(local_dof_indices[i]) += local_vector(i);
-	    }
+	    C.distribute_local_to_global(local_vector, local_dof_indices, residual);
 	  }
 	  
     }//Endof the case on the finest level
@@ -1456,28 +1369,16 @@ namespace DOpE
 	    tmp.mmult(local_matrix,prolong_matrix);
 
 	    //LocalToGlobal
-            element[0]->get_dof_indices(local_dof_indices);
-            for (unsigned int i = 0; i < dofs_per_element; ++i)
-	    {
-	      for (unsigned int j = 0; j < dofs_per_element; ++j)
-	      {
-		matrix.add(local_dof_indices[i], local_dof_indices[j],
-			   local_matrix(i, j));
-	      }
-	    }
+	    const auto & C = pde.GetDoFConstraints();
+	    element[0]->get_dof_indices(local_dof_indices);
+	    C.distribute_local_to_global(local_matrix, local_dof_indices, matrix);
           }
 	  else
 	  {
             //LocalToGlobal
-            element[0]->get_dof_indices(local_dof_indices);
-            for (unsigned int i = 0; i < dofs_per_element; ++i)
-              {
-                for (unsigned int j = 0; j < dofs_per_element; ++j)
-                  {
-                    matrix.add(local_dof_indices[i], local_dof_indices[j],
-                        local_matrix(i, j));
-                  }
-              }
+	    const auto & C = pde.GetDoFConstraints();
+	    element[0]->get_dof_indices(local_dof_indices);
+	    C.distribute_local_to_global(local_matrix, local_dof_indices, matrix);
 	  }
 
 	}//Endof the case on the finest level

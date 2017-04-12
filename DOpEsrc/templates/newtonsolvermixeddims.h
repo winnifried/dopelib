@@ -198,7 +198,7 @@ template <typename INTEGRATOR, typename LINEARSOLVER, typename VECTOR>
       
       GetIntegrator().AddParamData("last_newton_solution",&copy_solution);
     
-      GetIntegrator().ComputeNonlinearResidual(pde,residual,true);
+      GetIntegrator().ComputeNonlinearResidual(pde,residual);
       residual *= -1.;
     
       pde.GetOutputHandler()->SetIterationNumber(0,"PDENewton");
@@ -235,7 +235,7 @@ template <typename INTEGRATOR, typename LINEARSOLVER, typename VECTOR>
 	  solution += du;
 	  copy_solution = solution;
 
-	  GetIntegrator().ComputeNonlinearResidual(pde,residual,true);
+	  GetIntegrator().ComputeNonlinearResidual(pde,residual);
 	  residual *= -1.;
 	  pde.GetOutputHandler()->Write(residual,"Residual"+pde.GetType(),pde.GetDoFType());
 	  
@@ -259,7 +259,7 @@ template <typename INTEGRATOR, typename LINEARSOLVER, typename VECTOR>
 	    solution.add(alpha*(rho-1.),du);
 	    alpha*= rho;
 	    
-	    GetIntegrator().ComputeNonlinearResidual(pde,residual,true);
+	    GetIntegrator().ComputeNonlinearResidual(pde,residual);
 	    residual *= -1.;
 	    pde.GetOutputHandler()->Write(residual,"Residual"+pde.GetType(),pde.GetDoFType());
 	        

@@ -160,7 +160,6 @@ template <typename PRECONDITIONER,typename SPARSITYPATTERN, typename MATRIX, typ
     integr.ComputeMatrix (pde,matrix_);
   }
  
-  integr.ApplyNewtonBoundaryValues(pde,matrix_,rhs,solution);
 
   dealii::SolverControl solver_control (linear_maxiter_, linear_global_tol_,false,false);
 

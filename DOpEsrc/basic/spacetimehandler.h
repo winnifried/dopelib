@@ -112,14 +112,20 @@ namespace DOpE
          *
          * @param control_n_blocks          Number of Blocks for the control variable
          * @param control_block_components  Component to Block mapping for the control
-         * @param state_n_blocks            Number of Blocks for the state variable
+         * @param DD_control                Description of the Dirichlet Boundaries 
+	 *                                  for the control
+	 * @param state_n_blocks            Number of Blocks for the state variable
          * @param state_block_components    Component to Block mapping for the state
+         * @param DD_state                  Description of the Dirichlet Boundaries 
+	 *                                  for the state
          */
         virtual void
         ReInit(unsigned int control_n_blocks,
-            const std::vector<unsigned int>& control_block_component,
-            unsigned int state_n_blocks,
-            const std::vector<unsigned int>& state_block_component) =0;
+	       const std::vector<unsigned int>& control_block_component,
+	       const DirichletDescriptor & DD_control,
+	       unsigned int state_n_blocks,
+	       const std::vector<unsigned int>& state_block_component,
+	       const DirichletDescriptor & DD_state) =0;
 
         /******************************************************/
 

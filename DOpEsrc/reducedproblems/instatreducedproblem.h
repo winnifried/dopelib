@@ -769,7 +769,7 @@ void InstatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER, CONTROLINTEGR
       this->GetControlIntegrator().AddDomainData("last_newton_solution",
 						 &(gradient_transposed.GetSpacialVector()));
       this->GetControlIntegrator().ComputeNonlinearResidual(
-	*(this->GetProblem()), gradient.GetSpacialVector(), true);
+	*(this->GetProblem()), gradient.GetSpacialVector());
       this->GetControlIntegrator().DeleteDomainData("last_newton_solution");
     }
     else if (dopedim == 0)
@@ -777,7 +777,7 @@ void InstatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER, CONTROLINTEGR
       this->GetControlIntegrator().AddParamData("last_newton_solution",
 						&(gradient_transposed.GetSpacialVectorCopy()));
       this->GetControlIntegrator().ComputeNonlinearResidual(
-	*(this->GetProblem()), gradient.GetSpacialVector(), true);
+	*(this->GetProblem()), gradient.GetSpacialVector());
       
       this->GetControlIntegrator().DeleteParamData("last_newton_solution");
       gradient_transposed.UnLockCopy();
@@ -874,7 +874,7 @@ void InstatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER, CONTROLINTEGR
       this->GetControlIntegrator().AddDomainData("last_newton_solution",
 						 &(gradient_transposed.GetSpacialVector()));
       this->GetControlIntegrator().ComputeNonlinearResidual(
-	*(this->GetProblem()), gradient.GetSpacialVector(), true);
+	*(this->GetProblem()), gradient.GetSpacialVector());
       this->GetControlIntegrator().DeleteDomainData("last_newton_solution");
     }
     else if (dopedim == 0)
@@ -882,7 +882,7 @@ void InstatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER, CONTROLINTEGR
       this->GetControlIntegrator().AddParamData("last_newton_solution",
 						&(gradient_transposed.GetSpacialVectorCopy()));
       this->GetControlIntegrator().ComputeNonlinearResidual(
-	*(this->GetProblem()), gradient.GetSpacialVector(), true);
+	*(this->GetProblem()), gradient.GetSpacialVector());
       
       this->GetControlIntegrator().DeleteParamData("last_newton_solution");
       gradient_transposed.UnLockCopy();
@@ -1121,8 +1121,7 @@ void InstatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER, CONTROLINTEGR
 	this->GetControlIntegrator().AddDomainData("last_newton_solution",
 						   &(hessian_direction_transposed.GetSpacialVector()));
 	this->GetControlIntegrator().ComputeNonlinearResidual(
-	  *(this->GetProblem()), hessian_direction.GetSpacialVector(),
-	  true);
+	  *(this->GetProblem()), hessian_direction.GetSpacialVector());
 	this->GetControlIntegrator().DeleteDomainData("last_newton_solution");
       }
       else if (dopedim == 0)
@@ -1130,8 +1129,7 @@ void InstatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER, CONTROLINTEGR
 	this->GetControlIntegrator().AddParamData("last_newton_solution",
 						  &(hessian_direction_transposed.GetSpacialVectorCopy()));
 	this->GetControlIntegrator().ComputeNonlinearResidual(
-	  *(this->GetProblem()), hessian_direction.GetSpacialVector(),
-	  true);
+	  *(this->GetProblem()), hessian_direction.GetSpacialVector());
 	this->GetControlIntegrator().DeleteParamData("last_newton_solution");
 	hessian_direction_transposed.UnLockCopy();
       }
@@ -1192,8 +1190,7 @@ void InstatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER, CONTROLINTEGR
 	this->GetControlIntegrator().AddDomainData("last_newton_solution",
 						   &(hessian_direction_transposed.GetSpacialVector()));
 	this->GetControlIntegrator().ComputeNonlinearResidual(
-	  *(this->GetProblem()), hessian_direction.GetSpacialVector(),
-	  true);
+	  *(this->GetProblem()), hessian_direction.GetSpacialVector());
 	this->GetControlIntegrator().DeleteDomainData("last_newton_solution");
 	this->GetControlIntegrator().DeleteDomainData("fixed_rhs");
       }
@@ -1204,8 +1201,7 @@ void InstatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER, CONTROLINTEGR
 	this->GetControlIntegrator().AddParamData("last_newton_solution",
 						  &(hessian_direction_transposed.GetSpacialVectorCopy()));
 	this->GetControlIntegrator().ComputeNonlinearResidual(
-	  *(this->GetProblem()), hessian_direction.GetSpacialVector(),
-	  true);
+	  *(this->GetProblem()), hessian_direction.GetSpacialVector());
 	this->GetControlIntegrator().DeleteParamData("last_newton_solution");
 	hessian_direction_transposed.UnLockCopy();  
 	this->GetControlIntegrator().DeleteParamData("fixed_rhs");
@@ -2033,7 +2029,7 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 		  tmp = 0.; 
 		  tmp_2 = 0.;
 		  this->GetControlIntegrator().AddDomainData("last_newton_solution",&tmp_2);
-		  this->GetControlIntegrator().ComputeNonlinearResidual(*(this->GetProblem()), tmp, true);
+		  this->GetControlIntegrator().ComputeNonlinearResidual(*(this->GetProblem()), tmp);
 		  this->GetControlIntegrator().DeleteDomainData("last_newton_solution");
 		}
 		else if (dopedim == 0)
@@ -2042,7 +2038,7 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 		  tmp = 0.; 
 		  tmp_2 = 0.;
 		  this->GetControlIntegrator().AddParamData("last_newton_solution",&tmp_2);
-		  this->GetControlIntegrator().ComputeNonlinearResidual(*(this->GetProblem()), tmp, true);
+		  this->GetControlIntegrator().ComputeNonlinearResidual(*(this->GetProblem()), tmp);
 		  this->GetControlIntegrator().DeleteParamData("last_newton_solution");
 		  temp_q.UnLockCopy();
 		}	
@@ -2070,7 +2066,7 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 		this->GetControlIntegrator().AddDomainData("last_newton_solution",
 							   &(temp_q_trans.GetSpacialVector()));
 		this->GetControlIntegrator().ComputeNonlinearResidual(
-		  *(this->GetProblem()), temp_q.GetSpacialVector(), true);
+		  *(this->GetProblem()), temp_q.GetSpacialVector());
 		this->GetControlIntegrator().DeleteDomainData("last_newton_solution");
 	      }
 	      else if (dopedim == 0)
@@ -2078,7 +2074,7 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 		this->GetControlIntegrator().AddParamData("last_newton_solution",
 							  &(temp_q_trans.GetSpacialVectorCopy()));
 		this->GetControlIntegrator().ComputeNonlinearResidual(
-		  *(this->GetProblem()), temp_q.GetSpacialVector(), true);
+		  *(this->GetProblem()), temp_q.GetSpacialVector());
 		
 		this->GetControlIntegrator().DeleteParamData("last_newton_solution");
 		temp_q_trans.UnLockCopy();
@@ -2138,7 +2134,7 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 		  tmp = 0.; 
 		  tmp_2 = 0.;
 		  this->GetControlIntegrator().AddDomainData("last_newton_solution",&tmp_2);
-		  this->GetControlIntegrator().ComputeNonlinearResidual(*(this->GetProblem()), tmp, true);
+		  this->GetControlIntegrator().ComputeNonlinearResidual(*(this->GetProblem()), tmp);
 		  this->GetControlIntegrator().DeleteDomainData("last_newton_solution");
 		}
 		else if (dopedim == 0)
@@ -2147,7 +2143,7 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 		  tmp = 0.; 
 		  tmp_2 = 0.;
 		  this->GetControlIntegrator().AddParamData("last_newton_solution",&tmp_2);
-		  this->GetControlIntegrator().ComputeNonlinearResidual(*(this->GetProblem()), tmp, true);
+		  this->GetControlIntegrator().ComputeNonlinearResidual(*(this->GetProblem()), tmp);
 		  this->GetControlIntegrator().DeleteParamData("last_newton_solution");
 		  temp_q.UnLockCopy();
 		}	
@@ -2174,8 +2170,7 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 		this->GetControlIntegrator().AddDomainData("last_newton_solution",
 							   &(temp_q_trans.GetSpacialVector()));
 		this->GetControlIntegrator().ComputeNonlinearResidual(
-		  *(this->GetProblem()), temp_q.GetSpacialVector(),
-		  true);
+		  *(this->GetProblem()), temp_q.GetSpacialVector());
 		this->GetControlIntegrator().DeleteDomainData("last_newton_solution");
 	      }
 	      else if (dopedim == 0)
@@ -2183,8 +2178,7 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 		this->GetControlIntegrator().AddParamData("last_newton_solution",
 							  &(temp_q_trans.GetSpacialVectorCopy()));
 		this->GetControlIntegrator().ComputeNonlinearResidual(
-		  *(this->GetProblem()), temp_q.GetSpacialVector(),
-		  true);
+		  *(this->GetProblem()), temp_q.GetSpacialVector());
 		this->GetControlIntegrator().DeleteParamData("last_newton_solution");
 		temp_q_trans.UnLockCopy();
 	      }

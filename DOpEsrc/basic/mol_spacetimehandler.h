@@ -39,6 +39,8 @@
 #include <deal.II/hp/mapping_collection.h>
 #include <deal.II/lac/constraint_matrix.h>
 #include <deal.II/grid/grid_refinement.h>
+#include <deal.II/base/function.h>
+#include <deal.II/numerics/vector_tools.h>
 
 namespace DOpE
 {
@@ -47,9 +49,9 @@ namespace DOpE
    * This means there is only one fixed mesh for the spatial domain.
    */
   template<template <int, int> class FE, template<int, int> class DH, typename SPARSITYPATTERN,
-      typename VECTOR, int dopedim, int dealdim>
+    typename VECTOR, int dopedim, int dealdim>
     class MethodOfLines_SpaceTimeHandler : public SpaceTimeHandler<FE, DH,
-        SPARSITYPATTERN, VECTOR, dopedim, dealdim>
+    SPARSITYPATTERN, VECTOR, dopedim, dealdim>
     {
       public:
         /**
@@ -214,14 +216,21 @@ namespace DOpE
          * Implementation of virtual function in SpaceTimeHandler
          */
         void
-        ReInit(unsigned int control_n_blocks,
-            const std::vector<unsigned int>& control_block_component,
-            unsigned int state_n_blocks,
-            const std::vector<unsigned int>& state_block_component)
+	  ReInit(unsigned int control_n_blocks,
+		 const std::vector<unsigned int>& control_block_component,
+#if dope_dimension > 0
+		 const DirichletDescriptor & DD_control,
+#else
+		 const DirichletDescriptor &,
+#endif
+		 unsigned int state_n_blocks,
+		 const std::vector<unsigned int>& state_block_component,
+		 const DirichletDescriptor & DD_state) 
         {
+	  
 #if dope_dimension > 0
           SpaceTimeHandler<FE, DH, SPARSITYPATTERN,
-          VECTOR, dopedim, dealdim>::SetActiveFEIndicesControl(control_dof_handler_);
+	    VECTOR, dopedim, dealdim>::SetActiveFEIndicesControl(control_dof_handler_);
 #endif
           control_dof_handler_.distribute_dofs(*control_fe_);
 
@@ -235,6 +244,19 @@ namespace DOpE
             if (GetUserDefinedDoFConstraints() != NULL)
             GetUserDefinedDoFConstraints()->MakeControlDoFConstraints(control_dof_handler_,
                 control_dof_constraints_);
+
+	    std::vector<unsigned int> dirichlet_colors = DD_control.GetDirichletColors();
+            for (unsigned int i = 0; i < dirichlet_colors.size(); i++)
+            {
+               unsigned int color = dirichlet_colors[i];
+               std::vector<bool> comp_mask = DD_control.GetDirichletCompMask(color);
+
+	       //TODO: mapping[0] is a workaround, as deal does not support interpolate
+	       // boundary_values with a mapping collection at this point.
+	       dealii::VectorTools::interpolate_boundary_values(GetMapping()[0], control_dof_handler_.GetDEALDoFHandler(), color, dealii::ZeroFunction<dopedim>(comp_mask.size()),
+								control_dof_constraints_, comp_mask);
+            }
+
             control_dof_constraints_.close ();
           }
           else
@@ -274,7 +296,20 @@ namespace DOpE
           if (GetUserDefinedDoFConstraints() != NULL)
             GetUserDefinedDoFConstraints()->MakeStateDoFConstraints(
                 state_dof_handler_, state_dof_constraints_);
-          state_dof_constraints_.close();
+
+	  
+	  std::vector<unsigned int> dirichlet_colors = DD_state.GetDirichletColors();
+	  for (unsigned int i = 0; i < dirichlet_colors.size(); i++)
+	  {
+	    unsigned int color = dirichlet_colors[i];
+	    std::vector<bool> comp_mask = DD_state.GetDirichletCompMask(color);
+
+	    //TODO: mapping[0] is a workaround, as deal does not support interpolate
+	    // boundary_values with a mapping collection at this point.
+	    VectorTools::interpolate_boundary_values(GetMapping()[0], state_dof_handler_.GetDEALDoFHandler(), color, dealii::ZeroFunction<dealdim>(comp_mask.size()),
+						     state_dof_constraints_, comp_mask);
+	  }
+	  state_dof_constraints_.close();
 
           state_dofs_per_block_.resize(state_n_blocks);
           DoFTools::count_dofs_per_block(
@@ -752,7 +787,7 @@ namespace DOpE
     void
     DOpE::MethodOfLines_SpaceTimeHandler<dealii::FESystem,
         dealii::DoFHandler, dealii::BlockSparsityPattern,
-        dealii::BlockVector<double>, dope_dimension, deal_II_dimension>::ComputeControlSparsityPattern(
+    dealii::BlockVector<double>, dope_dimension, deal_II_dimension>::ComputeControlSparsityPattern(
 	  dealii::BlockSparsityPattern & sparsity) const;
   template<>
     void

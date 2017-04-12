@@ -569,13 +569,13 @@ void VoidReducedProblem<CONTROLNONLINEARSOLVER, CONTROLINTEGRATOR, PROBLEM, VECT
   if(dopedim==dealdim)
   {
     this->GetControlIntegrator().AddDomainData("last_newton_solution",&(gradient_transposed.GetSpacialVector()));
-    this->GetControlIntegrator().ComputeNonlinearResidual(*(this->GetProblem()),gradient.GetSpacialVector(),true);
+    this->GetControlIntegrator().ComputeNonlinearResidual(*(this->GetProblem()),gradient.GetSpacialVector());
     this->GetControlIntegrator().DeleteDomainData("last_newton_solution");
   }
   else if(dopedim == 0)
   {
     this->GetControlIntegrator().AddParamData("last_newton_solution",&(gradient_transposed.GetSpacialVectorCopy()));
-    this->GetControlIntegrator().ComputeNonlinearResidual(*(this->GetProblem()),gradient.GetSpacialVector(),true);
+    this->GetControlIntegrator().ComputeNonlinearResidual(*(this->GetProblem()),gradient.GetSpacialVector());
 
     this->GetControlIntegrator().DeleteParamData("last_newton_solution");
     gradient_transposed.UnLockCopy();
@@ -606,7 +606,7 @@ void VoidReducedProblem<CONTROLNONLINEARSOLVER, CONTROLINTEGRATOR, PROBLEM, VECT
     {
       //this->SetProblemType("local_global_constraint_gradient",i);
       this->SetProblemType("global_constraint_gradient",i);
-      this->GetControlIntegrator().ComputeNonlinearRhs(*(this->GetProblem()),constraint_gradient_[i]->GetSpacialVector(),true);
+      this->GetControlIntegrator().ComputeNonlinearRhs(*(this->GetProblem()),constraint_gradient_[i]->GetSpacialVector());
     }
   }
   if(dopedim==dealdim)
@@ -844,13 +844,13 @@ void VoidReducedProblem<CONTROLNONLINEARSOLVER, CONTROLINTEGRATOR, PROBLEM, VECT
     if(dopedim == dealdim)
     {
       this->GetControlIntegrator().AddDomainData("last_newton_solution",&(hessian_direction_transposed.GetSpacialVector()));
-      this->GetControlIntegrator().ComputeNonlinearResidual(*(this->GetProblem()),hessian_direction.GetSpacialVector(),true);
+      this->GetControlIntegrator().ComputeNonlinearResidual(*(this->GetProblem()),hessian_direction.GetSpacialVector());
       this->GetControlIntegrator().DeleteDomainData("last_newton_solution");
     }
     else if(dopedim == 0)
     {
       this->GetControlIntegrator().AddParamData("last_newton_solution",&(hessian_direction_transposed.GetSpacialVectorCopy()));
-      this->GetControlIntegrator().ComputeNonlinearResidual(*(this->GetProblem()),hessian_direction.GetSpacialVector(),true);
+      this->GetControlIntegrator().ComputeNonlinearResidual(*(this->GetProblem()),hessian_direction.GetSpacialVector());
       this->GetControlIntegrator().DeleteParamData("last_newton_solution");
       hessian_direction_transposed.UnLockCopy();
     }

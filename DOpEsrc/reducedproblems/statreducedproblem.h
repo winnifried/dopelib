@@ -1125,8 +1125,9 @@ namespace DOpE
         this->GetIntegrator().AddDomainData("last_newton_solution",
             &(GetZ().GetSpacialVector()));
 
-        this->GetIntegrator().ComputeNonlinearResidual(problem,
-            tmp, false);
+//        this->GetIntegrator().ComputeNonlinearResidual(problem, tmp, false);
+	this->GetIntegrator().ComputeNonlinearResidual(problem, tmp);
+
         tmp *= -1.;
 
         if (dopedim == dealdim)
@@ -1196,16 +1197,20 @@ namespace DOpE
       {
         this->GetControlIntegrator().AddDomainData("last_newton_solution",
             &(gradient_transposed.GetSpacialVector()));
+//        this->GetControlIntegrator().ComputeNonlinearResidual(
+//            *(this->GetProblem()), gradient.GetSpacialVector(), true);
         this->GetControlIntegrator().ComputeNonlinearResidual(
-            *(this->GetProblem()), gradient.GetSpacialVector(), true);
+            *(this->GetProblem()), gradient.GetSpacialVector());
         this->GetControlIntegrator().DeleteDomainData("last_newton_solution");
       }
       else if (dopedim == 0)
       {
         this->GetControlIntegrator().AddParamData("last_newton_solution",
             &(gradient_transposed.GetSpacialVectorCopy()));
+//        this->GetControlIntegrator().ComputeNonlinearResidual(
+//            *(this->GetProblem()), gradient.GetSpacialVector(), true);
         this->GetControlIntegrator().ComputeNonlinearResidual(
-            *(this->GetProblem()), gradient.GetSpacialVector(), true);
+            *(this->GetProblem()), gradient.GetSpacialVector());
 
         this->GetControlIntegrator().DeleteParamData("last_newton_solution");
         gradient_transposed.UnLockCopy();
@@ -1763,8 +1768,8 @@ namespace DOpE
 	  this->GetIntegrator().AddDomainData("last_newton_solution",
 					      &(GetZ().GetSpacialVector()));
 	  
-	  this->GetIntegrator().ComputeNonlinearResidual(problem,
-							 tmp_second, false);
+//	  this->GetIntegrator().ComputeNonlinearResidual(problem, tmp_second, false);
+	  this->GetIntegrator().ComputeNonlinearResidual(problem, tmp_second);
 	  tmp_second *= -1.;
 	  
 	  this->GetIntegrator().DeleteDomainData("last_newton_solution");
@@ -1776,8 +1781,8 @@ namespace DOpE
 	  this->GetIntegrator().AddDomainData("last_newton_solution",
 					      &(GetDZ().GetSpacialVector()));
 	  
-	  this->GetIntegrator().ComputeNonlinearResidual(problem,
-							 tmp, false);
+//	  this->GetIntegrator().ComputeNonlinearResidual(problem, tmp, false);
+	  this->GetIntegrator().ComputeNonlinearResidual(problem, tmp);
 	  tmp *= -1.;
 
 	  this->GetIntegrator().DeleteDomainData("last_newton_solution");
@@ -1827,18 +1832,22 @@ namespace DOpE
         {
           this->GetControlIntegrator().AddDomainData("last_newton_solution",
               &(hessian_direction_transposed.GetSpacialVector()));
+//          this->GetControlIntegrator().ComputeNonlinearResidual(
+//              *(this->GetProblem()), hessian_direction.GetSpacialVector(),
+//              true);
           this->GetControlIntegrator().ComputeNonlinearResidual(
-              *(this->GetProblem()), hessian_direction.GetSpacialVector(),
-              true);
+              *(this->GetProblem()), hessian_direction.GetSpacialVector());
           this->GetControlIntegrator().DeleteDomainData("last_newton_solution");
         }
         else if (dopedim == 0)
         {
           this->GetControlIntegrator().AddParamData("last_newton_solution",
               &(hessian_direction_transposed.GetSpacialVectorCopy()));
+//         this->GetControlIntegrator().ComputeNonlinearResidual(
+//             *(this->GetProblem()), hessian_direction.GetSpacialVector(),
+//              true);
           this->GetControlIntegrator().ComputeNonlinearResidual(
-              *(this->GetProblem()), hessian_direction.GetSpacialVector(),
-              true);
+              *(this->GetProblem()), hessian_direction.GetSpacialVector());
           this->GetControlIntegrator().DeleteParamData("last_newton_solution");
           hessian_direction_transposed.UnLockCopy();
         }
@@ -1944,8 +1953,8 @@ namespace DOpE
           &g.GetGlobalConstraints());
 
       //Compute
-      this->GetControlIntegrator().ComputeNonlinearRhs(*(this->GetProblem()),
-          gradient.GetSpacialVector(), true);
+//      this->GetControlIntegrator().ComputeNonlinearRhs(*(this->GetProblem()), gradient.GetSpacialVector(), true);
+      this->GetControlIntegrator().ComputeNonlinearRhs(*(this->GetProblem()), gradient.GetSpacialVector());
       gradient_transposed = gradient;
 
       this->GetControlIntegrator().DeleteDomainData("constraints_local");
