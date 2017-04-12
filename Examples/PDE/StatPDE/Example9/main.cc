@@ -83,7 +83,7 @@ main(int argc, char **argv)
    * Structure: Incompressible neo Hookean (INH) model
    * We use the Q2^c-P1^dc element for discretization of Stokes.
    */
-
+  #warning This example needs to be fixed - it fails with the new assembly
   string paramfile = "dope.prm";
 
   if (argc == 2)
