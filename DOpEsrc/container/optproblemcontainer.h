@@ -61,7 +61,11 @@
 #include <deal.II/fe/mapping.h>
 #include <deal.II/base/quadrature_lib.h>
 #include <deal.II/lac/block_sparsity_pattern.h>
-#include <deal.II/lac/dynamic_sparsity_pattern.h>
+#if DEAL_II_VERSION_GTE(8,5,0)
+  #include <deal.II/lac/dynamic_sparsity_pattern.h>
+#else
+  #include <deal.II/lac/compressed_simple_sparsity_pattern.h>
+#endif 
 
 #include <assert.h>
 #include <string>

@@ -435,16 +435,16 @@ namespace DOpE
       inline void
       ComputeSparsityPattern(SPARSITYPATTERN & sparsity) const;
       /**      
-       *  Experimental status: Needed for MG prec.
-       */
-      inline void
-      ComputeMGSparsityPattern(dealii::MGLevelObject<dealii::BlockSparsityPattern> & mg_sparsity_patterns,
-				      unsigned int n_levels) const;
-
-      inline void
-      ComputeMGSparsityPattern(dealii::MGLevelObject<dealii::SparsityPattern> & mg_sparsity_patterns,
-				      unsigned int n_levels) const;
-
+//       *  Experimental status: Needed for MG prec.
+//       */
+//      inline void
+//      ComputeMGSparsityPattern(dealii::MGLevelObject<dealii::BlockSparsityPattern> & mg_sparsity_patterns,
+//				      unsigned int n_levels) const;
+//
+//      inline void
+//      ComputeMGSparsityPattern(dealii::MGLevelObject<dealii::SparsityPattern> & mg_sparsity_patterns,
+//				      unsigned int n_levels) const;
+//
         /**
 	 * Functions providing the required information for the integrator.
 	 * see OptProblemContainer for details.
@@ -811,27 +811,27 @@ namespace DOpE
 
  /******************************************************/
 
-  template<typename OPTPROBLEM, typename PDE, typename DD,
-      typename SPARSITYPATTERN, typename VECTOR, int dim>
-    void
-    TangentProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dim>::ComputeMGSparsityPattern(
-        dealii::MGLevelObject<dealii::BlockSparsityPattern> & mg_sparsity_patterns,
-				      unsigned int n_levels) const
-    {
-      opt_problem_.GetSpaceTimeHandler()->ComputeMGStateSparsityPattern(mg_sparsity_patterns, n_levels);
-    }
-
-/******************************************************/
-
-  template<typename OPTPROBLEM, typename PDE, typename DD,
-      typename SPARSITYPATTERN, typename VECTOR, int dim>
-    void
-    TangentProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dim>::ComputeMGSparsityPattern(
-        dealii::MGLevelObject<dealii::SparsityPattern> & mg_sparsity_patterns,
-				      unsigned int n_levels) const
-    {
-      opt_problem_.GetSpaceTimeHandler()->ComputeMGStateSparsityPattern(mg_sparsity_patterns, n_levels);
-    }
+//  template<typename OPTPROBLEM, typename PDE, typename DD,
+//      typename SPARSITYPATTERN, typename VECTOR, int dim>
+//    void
+//    TangentProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dim>::ComputeMGSparsityPattern(
+//        dealii::MGLevelObject<dealii::BlockSparsityPattern> & mg_sparsity_patterns,
+//				      unsigned int n_levels) const
+//    {
+//      opt_problem_.GetSpaceTimeHandler()->ComputeMGStateSparsityPattern(mg_sparsity_patterns, n_levels);
+//    }
+//
+///******************************************************/
+//
+//  template<typename OPTPROBLEM, typename PDE, typename DD,
+//      typename SPARSITYPATTERN, typename VECTOR, int dim>
+//    void
+//    TangentProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dim>::ComputeMGSparsityPattern(
+//        dealii::MGLevelObject<dealii::SparsityPattern> & mg_sparsity_patterns,
+//				      unsigned int n_levels) const
+//    {
+//      opt_problem_.GetSpaceTimeHandler()->ComputeMGStateSparsityPattern(mg_sparsity_patterns, n_levels);
+//    }
 
 
 

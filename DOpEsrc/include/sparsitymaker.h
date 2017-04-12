@@ -27,6 +27,7 @@
 #include <wrapper/dofhandler_wrapper.h>
 #include <deal.II/dofs/dof_tools.h>
 #include <deal.II/lac/constraint_matrix.h>
+#include <deal.II/lac/block_sparsity_pattern.h>
 
 // Multi-level routines (step-16 in deal.II)
 //#include <deal.II/multigrid/mg_dof_handler.h>
