@@ -6,10 +6,9 @@ This is DOpElib Version: 4.0.0 pre
 	Status as of: 16/02/2016
 
 	**************************************************
-	*             Starting Forward Solver            *
-	*   Solving : InstatOptProblemContainer	*
-	*  CDoFs : 	0
-	*  SDoFs : 	Number of Timepoints: 81
+	*             Starting Forward Solve             *
+	*   Solving : InstatPDEProblemContainer	*
+	*   SDoFs   : 	Number of Timepoints: 81
 		Total   DoFs: 494100
 		Minimal DoFs: 6100
 		Maximal DoFs: 6100
@@ -757,11 +756,10 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		Pressure_difference: -0.116128
 		Drag: -0.193216
 		Lift: -0.00142209
-	CostFunctional: 0
 	Computing Functionals:
 	Pressure_difference too large. Writing to file instead: 
-	Writing [./Mesh0/Pressure_difference_InstatOptProblemContainer.00080.gpl]
+	Writing [./Mesh0/Pressure_difference_InstatPDEProblemContainer.00080.gpl]
 	Drag too large. Writing to file instead: 
-	Writing [./Mesh0/Drag_InstatOptProblemContainer.00080.gpl]
+	Writing [./Mesh0/Drag_InstatPDEProblemContainer.00080.gpl]
 	Lift too large. Writing to file instead: 
-	Writing [./Mesh0/Lift_InstatOptProblemContainer.00080.gpl]
+	Writing [./Mesh0/Lift_InstatPDEProblemContainer.00080.gpl]

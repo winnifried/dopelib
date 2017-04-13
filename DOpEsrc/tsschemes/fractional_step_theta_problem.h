@@ -46,7 +46,6 @@ namespace DOpE
    * @tparam <SPARSITYPATTERN>  The sparsity pattern for control & state.
    * @tparam <VECTOR>           The vector type for control & state 
    *                            (i.e. dealii::Vector<double> or dealii::BlockVector<double>)
-   * @tparam <dopedim>          The dimension for the control variable.
    * @tparam <dealdim>          The dimension of the state variable.
    * @tparam <FE>               The type of finite elements in use, must be compatible with the DH.
    * @tparam <DH>               The type of the DoFHandler in use 
@@ -55,14 +54,14 @@ namespace DOpE
    *
    */
   template<typename OPTPROBLEM, typename SPARSITYPATTERN, typename VECTOR,
-      int dopedim, int dealdim, template<int, int> class FE = dealii::FESystem,
+      int dealdim, template<int, int> class FE = dealii::FESystem,
       template<int, int> class DH = dealii::DoFHandler>
     class FractionalStepThetaProblem : public PrimalTSBase<OPTPROBLEM,
-        SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>
+        SPARSITYPATTERN, VECTOR, dealdim, FE, DH>
     {
       public:
         FractionalStepThetaProblem(OPTPROBLEM& OP) :
-            PrimalTSBase<OPTPROBLEM, SPARSITYPATTERN, VECTOR, dopedim, dealdim,
+            PrimalTSBase<OPTPROBLEM, SPARSITYPATTERN, VECTOR, dealdim,
                 FE, DH>(OP)
         {
           fs_theta_ = 1.0 - std::sqrt(2.0) / 2.0;
@@ -89,20 +88,20 @@ namespace DOpE
 
         InitialProblem<
             FractionalStepThetaProblem<OPTPROBLEM, SPARSITYPATTERN, VECTOR,
-                dopedim, dealdim, FE, DH>, VECTOR, dealdim>&
+                dealdim, FE, DH>, VECTOR, dealdim>&
         GetInitialProblem()
         {
           if (initial_problem_ == NULL)
           {
             initial_problem_ = new InitialProblem<
                 FractionalStepThetaProblem<OPTPROBLEM, SPARSITYPATTERN, VECTOR,
-                    dopedim, dealdim, FE, DH>, VECTOR, dealdim>(*this);
+                    dealdim, FE, DH>, VECTOR, dealdim>(*this);
           }
           return *initial_problem_;
         }
 
         /******************************************************/
-        FractionalStepThetaProblem<OPTPROBLEM, SPARSITYPATTERN, VECTOR, dopedim,
+        FractionalStepThetaProblem<OPTPROBLEM, SPARSITYPATTERN, VECTOR, 
             dealdim, FE, DH>&
         GetBaseProblem()
         {
@@ -535,7 +534,7 @@ namespace DOpE
 
         InitialProblem<
             FractionalStepThetaProblem<OPTPROBLEM, SPARSITYPATTERN, VECTOR,
-                dopedim, dealdim, FE, DH>, VECTOR, dealdim> * initial_problem_;
+                dealdim, FE, DH>, VECTOR, dealdim> * initial_problem_;
     };
 }
 

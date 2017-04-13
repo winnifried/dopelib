@@ -494,7 +494,7 @@ namespace DOpE
         void
         SetTime(double time, 
 		unsigned int time_dof_number,
-		const TimeIterator& interval);
+		const TimeIterator& interval, bool initial = false);
 
         /******************************************************/
 
@@ -514,21 +514,204 @@ namespace DOpE
 
         /******************************************************/
 
-        template<typename INTEGRATOR>
-          void
-          AddAuxiliaryToIntegrator(INTEGRATOR& /*integrator*/)
+        void
+        AddAuxiliaryState(const StateVector<VECTOR>* c, std::string name)
           {
+	    if (auxiliary_state_.find(name) != auxiliary_state_.end())
+	    {
+	      throw DOpEException(
+		"Adding multiple Data with name " + name + " is prohibited!",
+		"OptProblemContainer::AddAuxiliaryState");
+	    }
+	    auxiliary_state_.insert(
+	      std::pair<std::string, const StateVector<VECTOR>*>(name, c));
+	  }
 
-          }
 
         /******************************************************/
 
+        const StateVector<VECTOR>*
+        GetAuxiliaryState(std::string name) const
+          {
+	    typename std::map<std::string, const StateVector<VECTOR> *>::const_iterator it =
+	    auxiliary_state_.find(name);
+	    if (it == auxiliary_state_.end())
+	    {
+	      throw DOpEException("Could not find Data with name " + name,
+				  "OptProblemContainer::GetAuxiliaryState");
+	    }
+	    return it->second;
+	  }
+
+
+        /******************************************************/
+
+              void
+        DeleteAuxiliaryState(std::string name)
+          {
+	    typename std::map<std::string, const StateVector<VECTOR> *>::iterator it =
+	    auxiliary_state_.find(name);
+	    if (it == auxiliary_state_.end())
+	    {
+	      throw DOpEException(
+		"Deleting Data " + name + " is impossible! Data not found",
+		"OptProblemContainer::DeleteAuxiliaryState");
+	    }
+	    auxiliary_state_.erase(it);
+	  }
+
+
+        /******************************************************/
+        /*****************************************************************/
+        /**
+	 * Adds the auxiliary Vectors from the integrator, so that their values are
+	 * available for the integrated object. 
+	 *
+	 * @param integrator         The integrator in which the vecors should be available
+	 *
+	 */
+
         template<typename INTEGRATOR>
           void
-          DeleteAuxiliaryFromIntegrator(INTEGRATOR& /*integrator*/)
+      AddAuxiliaryToIntegrator(INTEGRATOR& integrator)
           {
-
+	    typename std::map<std::string, const StateVector<VECTOR> *>::iterator it =
+	    auxiliary_state_.begin();
+	    for (; it != auxiliary_state_.end(); it++)
+	    {
+	      integrator.AddDomainData(it->first,
+				       &(it->second->GetSpacialVector()));
+	    }
           }
+      
+              /*****************************************************************/
+      /**
+       * Adds the auxiliary Vectors from the integrator, so that their values are
+       * available for the integrated object. Takes the values from the next (in 
+       * natural time direction)
+       * time step to the integrator.
+       * 
+       * This adds only the vector named "state" and no other vectors!
+       *
+       * @param integrator         The integrator in which the vecors should be available
+       *
+       */
+
+      template<typename INTEGRATOR>
+      void
+      AddNextAuxiliaryToIntegrator(INTEGRATOR& integrator)
+          {
+            {
+	      typename std::map<std::string, const StateVector<VECTOR> *>::const_iterator it =
+	      auxiliary_state_.find("state");
+	      if (it != auxiliary_state_.end())
+	      {		
+		integrator.AddDomainData("state_i+1",
+					 &(it->second->GetNextSpacialVector()));
+	      }
+            }
+	  }
+              /*****************************************************************/
+      /**
+       * Adds the auxiliary Vectors from the integrator, so that their values are
+       * available for the integrated object. Takes the values from the previous (in 
+       * natural time direction)
+       * time step to the integrator.
+       * 
+       * This adds only the vector named "state" and no other vectors!
+       *
+       * @param integrator         The integrator in which the vecors should be available
+       *
+       */
+
+      template<typename INTEGRATOR>
+      void
+      AddPreviousAuxiliaryToIntegrator(INTEGRATOR& integrator)
+          {
+            {
+	      typename std::map<std::string, const StateVector<VECTOR> *>::const_iterator it =
+	      auxiliary_state_.find("state");
+	      if (it != auxiliary_state_.end())
+	      {		
+		integrator.AddDomainData("state_i-1",
+					 &(it->second->GetPreviousSpacialVector()));
+	      }
+            }
+	  }
+
+              /*****************************************************************/
+      /**
+       * Deletes the auxiliary Vectors from the integrator, so that their values are
+       * available for the integrated object. Takes the values from the next (in 
+       * natural time direction)
+       * time step to the integrator.
+       * 
+       * This adds only the vector named "state" and no other vectors!
+       *
+       * @param integrator         The integrator in which the vecors should be available
+       *
+       */
+
+      template<typename INTEGRATOR>
+      void
+      DeleteNextAuxiliaryFromIntegrator(INTEGRATOR& integrator)
+          {
+            {
+	      typename std::map<std::string, const StateVector<VECTOR> *>::const_iterator it =
+	      auxiliary_state_.find("state");
+	      if (it != auxiliary_state_.end())
+	      {		
+		integrator.DeleteDomainData("state_i+1");
+	      }
+            }
+	  }
+              /*****************************************************************/
+      /**
+       * Adds the auxiliary Vectors from the integrator, so that their values are
+       * available for the integrated object. Takes the values from the previous (in 
+       * natural time direction)
+       * time step to the integrator.
+       * 
+       * This adds only the vector named "state" and no other vectors!
+       *
+       * @param integrator         The integrator in which the vecors should be available
+       *
+       */
+
+      template<typename INTEGRATOR>
+      void
+      DeletePreviousAuxiliaryFromIntegrator(INTEGRATOR& integrator)
+          {
+            {
+	      typename std::map<std::string, const StateVector<VECTOR> *>::const_iterator it =
+	      auxiliary_state_.find("state");
+	      if (it != auxiliary_state_.end())
+	      {		
+		integrator.DeleteDomainData("state_i-1");
+	      }
+            }
+	  }
+        /******************************************************/
+        /**
+	 * Deletes the auxiliary Vectors from the integrator. 
+	 * This is required to add vecors of the same name but possibly 
+	 * at a different point in time.
+	 *
+	 * @param integrator         The integrator in which the vecors should be available
+	 */
+
+        template<typename INTEGRATOR>
+          void
+          DeleteAuxiliaryFromIntegrator(INTEGRATOR& integrator)
+          {
+	    typename std::map<std::string, const StateVector<VECTOR> *>::iterator it =
+	    auxiliary_state_.begin();
+	    for (; it != auxiliary_state_.end(); it++)
+	    {
+	      integrator.DeleteDomainData(it->first);
+	    }
+          }
+
 
         /******************************************************/
 
@@ -585,6 +768,9 @@ namespace DOpE
         DOpEExceptionHandler<VECTOR>* ExceptionHandler_;
         DOpEOutputHandler<VECTOR>* OutputHandler_;
 
+        double interval_length_;
+        bool initial_;
+      
         std::string algo_type_;
 
         std::vector<
@@ -607,6 +793,8 @@ namespace DOpE
 
         std::vector<unsigned int> boundary_functional_colors_;
 
+      std::map<std::string, const StateVector<VECTOR>*> auxiliary_state_;
+      
         StateProblem<
             PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE,
                 DH>, PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>* state_problem_;
@@ -637,6 +825,7 @@ namespace DOpE
           this->GetPDE().GetStateNComponents());
       algo_type_ = "";
       functional_for_ee_num_ = dealii::numbers::invalid_unsigned_int;
+      interval_length_=1.;
     }
 
   /******************************************************/
@@ -1018,18 +1207,30 @@ namespace DOpE
     PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE, DH>::SetTime(
         double time,
 	unsigned int time_dof_number, 
-	const TimeIterator& interval)
+	const TimeIterator& interval, bool initial)
     {
       GetSpaceTimeHandler()->SetInterval(interval);
+      initial_ = initial;
+      interval_length_ = GetSpaceTimeHandler()->GetStepSize();
 
       { //Zeit an Dirichlet Werte uebermitteln
         for (unsigned int i = 0; i < primal_dirichlet_values_.size(); i++)
           primal_dirichlet_values_[i]->SetTime(time);
         for (unsigned int i = 0; i < aux_functionals_.size(); i++)
-          aux_functionals_[i]->SetTime(time);
+          aux_functionals_[i]->SetTime(time,interval_length_);
         //PDE
-        this->GetPDE().SetTime(time);
+        this->GetPDE().SetTime(time,interval_length_);
       }
+      //Update Auxiliary State Vectors
+      {
+        typename std::map<std::string, const StateVector<VECTOR> *>::iterator it =
+            auxiliary_state_.begin();
+        for (; it != auxiliary_state_.end(); it++)
+        {
+          it->second->SetTimeDoFNumber(time_dof_number, interval);
+        }
+      }
+
     }
 
 

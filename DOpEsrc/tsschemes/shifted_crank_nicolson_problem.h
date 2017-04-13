@@ -42,7 +42,6 @@ namespace DOpE
    * @tparam <SPARSITYPATTERN>  The sparsity pattern for control & state.
    * @tparam <VECTOR>           The vector type for control & state 
    *                            (i.e. dealii::Vector<double> or dealii::BlockVector<double>)
-   * @tparam <dopedim>          The dimension for the control variable.
    * @tparam <dealdim>          The dimension of the state variable.
    * @tparam <FE>               The type of finite elements in use, must be compatible with the DH.
    * @tparam <DH>               The type of the DoFHandler in use 
@@ -50,15 +49,15 @@ namespace DOpE
    *                            the base class of the DOpEWrapper::DoFHandler in use.)
    */
   template<typename OPTPROBLEM, typename SPARSITYPATTERN, typename VECTOR,
-      int dopedim, int dealdim,
+      int dealdim,
       template<int, int> class  FE = dealii::FESystem,
       template<int, int> class  DH = dealii::DoFHandler>
     class ShiftedCrankNicolsonProblem : public PrimalTSBase<OPTPROBLEM,
-        SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>
+        SPARSITYPATTERN, VECTOR, dealdim, FE, DH>
     {
       public:
         ShiftedCrankNicolsonProblem(OPTPROBLEM& OP) :
-            PrimalTSBase<OPTPROBLEM, SPARSITYPATTERN, VECTOR, dopedim, dealdim,
+            PrimalTSBase<OPTPROBLEM, SPARSITYPATTERN, VECTOR, dealdim,
                 FE, DH>(OP)
         {
           initial_problem_ = NULL;

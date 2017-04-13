@@ -39,7 +39,6 @@ namespace DOpE
    * @tparam <SPARSITYPATTERN>  The sparsity pattern for control & state.
    * @tparam <VECTOR>           The vector type for control & state 
    *                            (i.e. dealii::Vector<double> or dealii::BlockVector<double>)
-   * @tparam <dopedim>          The dimension for the control variable.
    * @tparam <dealdim>          The dimension of the state variable.
    * @tparam <FE>               The type of finite elements in use, must be compatible with the DH.
    * @tparam <DH>               The type of the DoFHandler in use 
@@ -48,14 +47,14 @@ namespace DOpE
    *
    */
   template<typename OPTPROBLEM, typename SPARSITYPATTERN, typename VECTOR,
-      int dopedim, int dealdim, template<int, int> class FE = dealii::FESystem,
+      int dealdim, template<int, int> class FE = dealii::FESystem,
       template<int, int> class DH = dealii::DoFHandler>
     class BackwardEulerProblem : public PrimalTSBase<OPTPROBLEM,
-        SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>
+        SPARSITYPATTERN, VECTOR, dealdim, FE, DH>
     {
       public:
         BackwardEulerProblem(OPTPROBLEM& OP) :
-            PrimalTSBase<OPTPROBLEM, SPARSITYPATTERN, VECTOR, dopedim, dealdim,
+            PrimalTSBase<OPTPROBLEM, SPARSITYPATTERN, VECTOR, dealdim,
                 FE, DH>(OP)
         {
           initial_problem_ = NULL;
@@ -85,7 +84,7 @@ namespace DOpE
 	 * the initial values used for this scheme.
 	 */
         InitialProblem<
-            BackwardEulerProblem<OPTPROBLEM, SPARSITYPATTERN, VECTOR, dopedim,
+            BackwardEulerProblem<OPTPROBLEM, SPARSITYPATTERN, VECTOR, 
                 dealdim, FE, DH>, VECTOR, dealdim>&
         GetInitialProblem()
         {
@@ -93,7 +92,7 @@ namespace DOpE
           {
             initial_problem_ = new InitialProblem<
                 BackwardEulerProblem<OPTPROBLEM, SPARSITYPATTERN, VECTOR,
-                    dopedim, dealdim, FE, DH>, VECTOR, dealdim>(*this);
+                    dealdim, FE, DH>, VECTOR, dealdim>(*this);
           }
           return *initial_problem_;
         }
@@ -106,7 +105,7 @@ namespace DOpE
 	 * until all subproblems (i.e., Primal, Dual, Tangent,...)
 	 * have their own description.
 	 */
-        BackwardEulerProblem<OPTPROBLEM, SPARSITYPATTERN, VECTOR, dopedim,
+        BackwardEulerProblem<OPTPROBLEM, SPARSITYPATTERN, VECTOR, 
             dealdim, FE, DH> &
         GetBaseProblem()
         {
@@ -555,7 +554,7 @@ namespace DOpE
 
       private:
         InitialProblem<
-            BackwardEulerProblem<OPTPROBLEM, SPARSITYPATTERN, VECTOR, dopedim,
+            BackwardEulerProblem<OPTPROBLEM, SPARSITYPATTERN, VECTOR, 
                 dealdim, FE, DH>, VECTOR, dealdim> * initial_problem_;
     };
 }

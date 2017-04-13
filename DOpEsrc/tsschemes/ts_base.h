@@ -35,7 +35,6 @@ namespace DOpE
    * @tparam <SPARSITYPATTERN>  The sparsity pattern for control & state.
    * @tparam <VECTOR>           The vector type for control & state 
    *                            (i.e. dealii::Vector<double> or dealii::BlockVector<double>)
-   * @tparam <dopedim>          The dimension for the control variable.
    * @tparam <dealdim>          The dimension of the state variable.
    * @tparam <FE>               The type of finite elements in use, must be compatible with the DH.
    * @tparam <DH>               The type of the DoFHandler in use 
@@ -44,7 +43,7 @@ namespace DOpE
    */
 
   template<typename OPTPROBLEM, typename SPARSITYPATTERN, typename VECTOR,
-      int dopedim, int dealdim,
+      int dealdim,
       template <int, int> class FE = dealii::FESystem,
       template <int, int> class DH = dealii::DoFHandler>
     class TSBase
@@ -434,18 +433,16 @@ namespace DOpE
         /******************************************************/
 
         /**
-         * A pointer to the SpaceTimeHandler<dopedim,dealdim>  object.
+         * A pointer to the SpaceTimeHandler  object.
          *
          * @return The SpaceTimeHandler() object.
          */
-        const SpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dopedim,
-            dealdim>*
+        const auto*
         GetSpaceTimeHandler() const
         {
           return OP_.GetBaseProblem().GetSpaceTimeHandler();
         }
-        SpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dopedim,
-            dealdim>*
+        auto*
         GetSpaceTimeHandler()
         {
           return OP_.GetBaseProblem().GetSpaceTimeHandler();

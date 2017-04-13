@@ -4,7 +4,12 @@ Changelog DOpE
 13.04.2017: - Bernhard started working on a phase-field fracture example
 	    - Repaired PDE/StatPDE/Example 9 (UMFPACK failed due to 
 	      nonunique pressure with INH material)
-
+	    - Added InstationaryPDEProblemContainer. Now Nonstationary PDEs
+	      can be run without a fake control. PDE/InstatPDE/Example1
+	      has been adjusted to the new possibilities.
+	    - Unneccessary template-parameter in the timestepping schemes
+	      removed. The previously needed dopedim can now be avoided
+	      using the auto keyword.
 12.04.2017: - replaced compressed_simple sparsity pattern by dynamic
 	      in order to compile with deal.II 8.5.0 version
 	    - Updates of documentation: debug/release how to change them
