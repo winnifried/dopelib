@@ -225,8 +225,8 @@ class InstatReducedProblem: public ReducedProblemInterface<PROBLEM, VECTOR>
      */
     template<class DWRC, class PDE>
       void
-      ComputeRefinementIndicators(const ControlVector<VECTOR>& q,
-				  DWRC& dwrc, PDE& pde)
+      ComputeRefinementIndicators(const ControlVector<VECTOR>& /*q*/,
+				  DWRC& /*dwrc*/, PDE& /*pde*/)
     {
       throw DOpEException("ExcNotImplemented",
                           "InstatReducedProblem::ComputeRefinementIndicators");
