@@ -44,20 +44,17 @@
 #include <wrapper/preconditioner_wrapper.h>
 #include <include/sparsitymaker.h>
 #include <container/integratordatacontainer.h>
-#include <interfaces/functionalinterface.h>
-#include <problemdata/noconstraints.h>
 
 #include <templates/integrator.h>
 #include <include/parameterreader.h>
 
-#include <basic/mol_spacetimehandler.h>
+#include <basic/mol_statespacetimehandler.h>
 #include <problemdata/simpledirichletdata.h>
 #include <interfaces/active_fe_index_setter_interface.h>
 
-#include <reducedproblems/instatreducedproblem.h>
+#include <reducedproblems/instatpdeproblem.h>
 #include <templates/instat_step_newtonsolver.h>
-#include <opt_algorithms/reducednewtonalgorithm.h>
-#include <container/instatoptproblemcontainer.h>
+#include <container/instatpdeproblemcontainer.h>
 #include <tsschemes/shifted_crank_nicolson_problem.h>
 #include <tsschemes/backward_euler_problem.h>
 
@@ -84,14 +81,11 @@ typedef Vector<double> VECTOR;
 //Second number denotes the number of unknowns per element (the blocksize we want to use)
 typedef DOpEWrapper::PreconditionBlockSSOR_Wrapper<MATRIX,2> PRECONDITIONERSSOR;
 
-typedef FunctionalInterface<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM> FUNC;
-
-typedef OptProblemContainer<
-LocalFunctional<CDC, FDC, DOFHANDLER, VECTOR, DIM>, FUNC,
-                LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
-                SimpleDirichletData<VECTOR, DIM>,
-                NoConstraints<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM>, SPARSITYPATTERN,
-                VECTOR, DIM, DIM> OP_BASE;
+typedef PDEProblemContainer<
+LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
+         SimpleDirichletData<VECTOR, DIM>,
+         SPARSITYPATTERN,
+         VECTOR, DIM> OP_BASE;
 typedef StateProblem<OP_BASE, LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
         SimpleDirichletData<VECTOR, DIM>, SPARSITYPATTERN, VECTOR, DIM> PROB;
 
@@ -100,12 +94,11 @@ typedef StateProblem<OP_BASE, LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
 //#define TSP BackwardEulerProblem
 //FIXME: This should be a reasonable dual timestepping scheme
 #define DTSP ShiftedCrankNicolsonProblem
-typedef InstatOptProblemContainer<TSP, DTSP, FUNC,
-        LocalFunctional<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
+typedef InstatPDEProblemContainer<TSP, DTSP,
         LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
         SimpleDirichletData<VECTOR, DIM>,
-        NoConstraints<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM>, SPARSITYPATTERN,
-        VECTOR, DIM, DIM> OP;
+        SPARSITYPATTERN,
+        VECTOR, DIM> OP;
 #undef TSP
 #undef DTSP
 
@@ -116,12 +109,10 @@ typedef RichardsonLinearSolverWithMatrix<PRECONDITIONERSSOR, SPARSITYPATTERN, MA
 
 typedef NewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR> CNLS;
 typedef InstatStepNewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR> NLS;
-typedef ReducedNewtonAlgorithm<OP, VECTOR> RNA;
-typedef InstatReducedProblem<CNLS, NLS, INTEGRATOR, INTEGRATOR, OP, VECTOR, DIM,
-        DIM> RP;
+typedef InstatPDEProblem<NLS, INTEGRATOR, OP, VECTOR, DIM> RP;
 
-typedef MethodOfLines_SpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN,
-        VECTOR, DIM, DIM> STH;
+typedef MethodOfLines_StateSpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN,
+        VECTOR, DIM> STH;
 
 void
 declare_params(ParameterReader &param_reader)
@@ -150,7 +141,6 @@ main(int argc, char **argv)
   ParameterReader pr;
 
   RP::declare_params(pr);
-  RNA::declare_params(pr);
   LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>::declare_params(pr);
   DOpEOutputHandler<VECTOR>::declare_params(pr);
   declare_params(pr);
@@ -172,7 +162,6 @@ main(int argc, char **argv)
   //*************************************************************
 
   //FiniteElemente*************************************************
-  FESystem<DIM> control_fe(FE_Nothing<DIM>(), 1);
   FE<DIM> state_fe(FE_DGQ<DIM>(0), 2);
 
   //Quadrature formulas*************************************************
@@ -197,12 +186,11 @@ main(int argc, char **argv)
   times.refine_global(prerefine);
 
   //space time handler***********************************/
-  STH DOFH(triangulation, control_fe, state_fe, times, DOpEtypes::ControlType::stationary, true);
+  STH DOFH(triangulation, state_fe, times, true);
   /***********************************/
-  NoConstraints<ElementDataContainer, FaceDataContainer, DOFHANDLER, VECTOR, DIM,
-                DIM> Constraints;
 
-  OP P(MVF, LPDE, Constraints, DOFH);
+  OP P(LPDE, DOFH);
+  P.AddFunctional(&MVF);
   //Boundary conditions************************************************
   P.SetBoundaryEquationColors(0);
   P.SetBoundaryEquationColors(1);
@@ -214,7 +202,12 @@ main(int argc, char **argv)
 
   RP solver(&P, DOpEtypes::VectorStorageType::fullmem, pr, idc);
 
-  RNA Alg(&P, &solver, pr);
+  DOpEOutputHandler<VECTOR> out(&solver, pr);
+  DOpEExceptionHandler<VECTOR> ex(&out);
+  P.RegisterOutputHandler(&out);
+  P.RegisterExceptionHandler(&ex);
+  solver.RegisterOutputHandler(&out);
+  solver.RegisterExceptionHandler(&ex);
 
 
   //**************************************************************************************************
@@ -223,10 +216,23 @@ main(int argc, char **argv)
     {
       try
         {
-          Alg.ReInit();
-          ControlVector<VECTOR> q(&DOFH, DOpEtypes::VectorStorageType::fullmem);
+          //Before solving we have to reinitialize the stateproblem and outputhandler.
+          solver.ReInit();
+          out.ReInit();
 
-          Alg.SolveForward(q);
+          stringstream outp;
+          outp << "**************************************************\n";
+          outp << "*             Starting Forward Solve             *\n";
+          outp << "*   Solving : " << P.GetName() << "\t*\n";
+          outp << "*   SDoFs   : ";
+          solver.StateSizeInfo(outp);
+          outp << "**************************************************";
+          //We print this header with priority 1 and 1 empty line in front and after.
+          out.Write(outp, 1, 1, 1);
+
+          //We compute the value of the functionals. To this end, we have to solve
+          //the PDE at hand.
+          solver.ComputeReducedFunctionals();
         }
       catch (DOpEException &e)
         {

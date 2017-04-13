@@ -23,18 +23,6 @@ subsection newtonsolver parameters
 end
 
 
-subsection reducednewtonalgorithm parameters
-  set line_maxiter         = 4
-  set linear_global_tol    = 1.e-12
-  set linear_maxiter       = 40
-  set linear_tol           = 1.e-10
-  set linesearch_c         = 0.1
-  set linesearch_rho       = 0.9
-  set nonlinear_global_tol = 1.e-11
-  set nonlinear_maxiter    = 10
-  set nonlinear_tol        = 1.e-7
-end
-
 subsection output parameters
   # File format for the output of solution variables
   set file_format       = .vtk

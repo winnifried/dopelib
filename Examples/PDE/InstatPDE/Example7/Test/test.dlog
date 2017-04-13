@@ -6,10 +6,9 @@ This is DOpElib Version: 4.0.0 pre
 	Status as of: 16/02/2016
 
 	**************************************************
-	*             Starting Forward Solver            *
-	*   Solving : InstatOptProblemContainer	*
-	*  CDoFs : 	0
-	*  SDoFs : 	Number of Timepoints: 9
+	*             Starting Forward Solve             *
+	*   Solving : InstatPDEProblemContainer	*
+	*   SDoFs   : 	Number of Timepoints: 9
 		Total   DoFs: 144
 		Minimal DoFs: 16
 		Maximal DoFs: 16
@@ -80,14 +79,14 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 2	 Residual (rel.):   5.3854e-06	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   1.8951e-09	 LineSearch {0} 
 		         Precalculating functional values 
-	CostFunctional: 1.02195
+		Mean-value: 1.02195
 	Computing Functionals:
+	Mean-value: 1.02195
 
 	**************************************************
-	*             Starting Forward Solver            *
-	*   Solving : InstatOptProblemContainer	*
-	*  CDoFs : 	0
-	*  SDoFs : 	Number of Timepoints: 17
+	*             Starting Forward Solve             *
+	*   Solving : InstatPDEProblemContainer	*
+	*   SDoFs   : 	Number of Timepoints: 17
 		Total   DoFs: 544
 		Minimal DoFs: 32
 		Maximal DoFs: 32
@@ -212,14 +211,14 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 2	 Residual (rel.):   6.8741e-07	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   2.8730e-10	 LineSearch {0} 
 		         Precalculating functional values 
-	CostFunctional: 1.07356
+		Mean-value: 1.07356
 	Computing Functionals:
+	Mean-value: 1.07356
 
 	**************************************************
-	*             Starting Forward Solver            *
-	*   Solving : InstatOptProblemContainer	*
-	*  CDoFs : 	0
-	*  SDoFs : 	Number of Timepoints: 33
+	*             Starting Forward Solve             *
+	*   Solving : InstatPDEProblemContainer	*
+	*   SDoFs   : 	Number of Timepoints: 33
 		Total   DoFs: 2112
 		Minimal DoFs: 64
 		Maximal DoFs: 64
@@ -450,5 +449,6 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 1	 Residual (rel.):   4.8183e-04	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   5.3564e-08	 LineSearch {0} 
 		         Precalculating functional values 
-	CostFunctional: 1.12482
+		Mean-value: 1.12482
 	Computing Functionals:
+	Mean-value: 1.12482

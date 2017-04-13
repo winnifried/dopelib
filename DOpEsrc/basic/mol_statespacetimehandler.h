@@ -282,6 +282,24 @@ namespace DOpE
         }
 
     }
+    /******************************************************/
+    /**
+     * This Function is used to refine the spatial and temporal mesh globally.
+     * After calling a refinement function a reinitialization is required!
+     *
+     * @param ref_type       A DOpEtypes::RefinementType telling how to refine the
+     *                       spatial mesh. Only DOpEtypes::RefinementType::global
+     *                       is allowed in this method, else one has to specify
+     *                       additionally a RefinementContainer
+     */
+    void
+    RefineSpaceTime(DOpEtypes::RefinementType ref_type =
+                      DOpEtypes::RefinementType::global)
+    {
+      assert(ref_type == DOpEtypes::RefinementType::global);
+      RefineSpace(ref_type);
+      SpaceTimeHandlerBase<VECTOR>::RefineTime(ref_type);
+    }
 
     /******************************************************/
     /**

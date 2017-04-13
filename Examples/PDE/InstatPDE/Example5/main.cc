@@ -41,24 +41,20 @@
 #include <include/parameterreader.h>
 #include <templates/directlinearsolver.h>
 #include <templates/integrator.h>
-#include <basic/mol_spacetimehandler.h>
+#include <basic/mol_statespacetimehandler.h>
 #include <problemdata/simpledirichletdata.h>
 #include <container/integratordatacontainer.h>
 #include <templates/newtonsolver.h>
 #include <templates/fractional_step_theta_step_newtonsolver.h>
-#include <interfaces/functionalinterface.h>
-#include <problemdata/noconstraints.h>
 
-#include <reducedproblems/instatreducedproblem.h>
+#include <reducedproblems/instatpdeproblem.h>
 #include <templates/instat_step_newtonsolver.h>
-#include <opt_algorithms/reducednewtonalgorithm.h>
-#include <container/instatoptproblemcontainer.h>
+#include <container/instatpdeproblemcontainer.h>
 
 #include <tsschemes/backward_euler_problem.h>
 
 //Problem specific includes
 #include "localpde.h"
-#include "localfunctional.h"
 #include "functionals.h"
 #include "my_functions.h"
 
@@ -80,14 +76,11 @@ typedef BlockSparseMatrix<double> MATRIX;
 typedef BlockSparsityPattern SPARSITYPATTERN;
 typedef BlockVector<double> VECTOR;
 
-typedef FunctionalInterface<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM> FUNC;
-
-typedef OptProblemContainer<
-LocalFunctional<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM>, FUNC,
-                LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
-                SimpleDirichletData<VECTOR, DIM>,
-                NoConstraints<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM>, SPARSITYPATTERN,
-                VECTOR, DIM, DIM> OP_BASE;
+typedef PDEProblemContainer<
+LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
+         SimpleDirichletData<VECTOR, DIM>,
+         SPARSITYPATTERN,
+         VECTOR, DIM> OP_BASE;
 
 typedef StateProblem<OP_BASE, LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
         SimpleDirichletData<VECTOR, DIM>, SPARSITYPATTERN, VECTOR, DIM> PROB;
@@ -96,12 +89,11 @@ typedef StateProblem<OP_BASE, LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
 //FIXME: This should be a reasonable dual timestepping scheme
 #define DTSP BackwardEulerProblem
 
-typedef InstatOptProblemContainer<TSP, DTSP, FUNC,
-        LocalFunctional<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM>,
+typedef InstatPDEProblemContainer<TSP, DTSP,
         LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
         SimpleDirichletData<VECTOR, DIM>,
-        NoConstraints<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM>, SPARSITYPATTERN,
-        VECTOR, DIM, DIM> OP;
+        SPARSITYPATTERN,
+        VECTOR, DIM> OP;
 #undef TSP
 #undef DTSP
 
@@ -111,9 +103,7 @@ typedef Integrator<IDC, VECTOR, double, DIM> INTEGRATOR;
 typedef DirectLinearSolverWithMatrix<SPARSITYPATTERN, MATRIX, VECTOR> LINEARSOLVER;
 typedef NewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR> CNLS;
 typedef InstatStepNewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR> NLS;
-typedef ReducedNewtonAlgorithm<OP, VECTOR> RNA;
-typedef InstatReducedProblem<CNLS, NLS, INTEGRATOR, INTEGRATOR, OP, VECTOR, DIM,
-        DIM> RP;
+typedef InstatPDEProblem<NLS, INTEGRATOR, OP, VECTOR, DIM> RP;
 
 int
 main(int argc, char **argv)
@@ -138,7 +128,7 @@ main(int argc, char **argv)
   //First, declare the parameters and read them in.
   ParameterReader pr;
   RP::declare_params(pr);
-  RNA::declare_params(pr);
+  DOpEOutputHandler<VECTOR>::declare_params(pr);
   pr.read_parameters(paramfile);
 
   std::string cases = "solve";
@@ -147,8 +137,7 @@ main(int argc, char **argv)
   Triangulation<DIM> triangulation;
   GridGenerator::hyper_cube(triangulation, 0., PI);
 
-  //Define the Finite Elements and quadrature formulas for control and state.
-  FESystem<DIM> control_fe(FE_Nothing<DIM>(), 1);
+  //Define the Finite Elements and quadrature formulas for the state.
   FESystem<DIM> state_fe(FE_Q<DIM>(1), 1);
 
   QGauss<DIM> quadrature_formula(3);
@@ -158,7 +147,6 @@ main(int argc, char **argv)
   //Define the localPDE and the functionals we are interested in. Here, LFunc is a dummy necessary for the control,
   //LPF is a SpaceTimePointevaluation
   LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM> LPDE;
-  LocalFunctional<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM> LFunc;
   LocalPointFunctional<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM> LPF;
   LocalPointFunctional2<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM> LPF2;
 
@@ -167,12 +155,10 @@ main(int argc, char **argv)
   GridGenerator::subdivided_hyper_cube(times, 50);
 
   triangulation.refine_global(4);
-  MethodOfLines_SpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR, DIM,
-                                 DIM> DOFH(triangulation, control_fe, state_fe, times,
-                                           DOpEtypes::ControlType::stationary);
+  MethodOfLines_StateSpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR,
+                                      DIM> DOFH(triangulation, state_fe, times);
 
-  NoConstraints<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM> Constraints;
-  OP P(LFunc, LPDE, Constraints, DOFH);
+  OP P(LPDE, DOFH);
 
   P.AddFunctional(&LPF);
   P.AddFunctional(&LPF2);
@@ -192,26 +178,40 @@ main(int argc, char **argv)
 
   RP solver(&P, DOpEtypes::VectorStorageType::fullmem, pr, idc);
 
-  RNA Alg(&P, &solver, pr);
+  DOpEOutputHandler<VECTOR> out(&solver, pr);
+  DOpEExceptionHandler<VECTOR> ex(&out);
+  P.RegisterOutputHandler(&out);
+  P.RegisterExceptionHandler(&ex);
+  solver.RegisterOutputHandler(&out);
+  solver.RegisterExceptionHandler(&ex);
 
   try
     {
+      //Before solving we have to reinitialize the stateproblem and outputhandler.
+      solver.ReInit();
+      out.ReInit();
 
-      Alg.ReInit();
+      stringstream outp;
+      outp << "**************************************************\n";
+      outp << "*             Starting Forward Solve             *\n";
+      outp << "*   Solving : " << P.GetName() << "\t*\n";
+      outp << "*   SDoFs   : ";
+      solver.StateSizeInfo(outp);
+      outp << "**************************************************";
+      //We print this header with priority 1 and 1 empty line in front and after.
+      out.Write(outp, 1, 1, 1);
 
-      Vector<double> solution;
-      ControlVector<VECTOR> q(&DOFH, DOpEtypes::VectorStorageType::fullmem);
-
-      Alg.SolveForward(q);
+      //We compute the value of the functionals. To this end, we have to solve
+      //the PDE at hand.
+      solver.ComputeReducedFunctionals();
 
       SolutionExtractor<RP, VECTOR> a(solver);
       const StateVector<VECTOR> &statevec = a.GetU();
 
-      stringstream out;
       double product = statevec * statevec;
-      out << "Backward euler: u * u = " << product << std::endl;
+      outp << "Backward euler: u * u = " << product << std::endl;
 
-      P.GetOutputHandler()->Write(out, 0);
+      out.Write(outp, 0);
 
     }
   catch (DOpEException &e)
