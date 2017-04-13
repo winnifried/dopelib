@@ -2,7 +2,7 @@
 # ---------------------
 subsection newtonsolver parameters
   # maximal number of linesearch steps
-  set line_maxiter         = 5
+  set line_maxiter         = 10
 
   # reduction rate for the linesearch damping paramete
   set linesearch_rho       = 0.5

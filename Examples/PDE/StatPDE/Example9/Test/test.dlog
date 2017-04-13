@@ -8,18 +8,18 @@ This is DOpElib Version: 4.0.0 pre
 	**************************************************
 	*             Starting Forward Solve             *
 	*   Solving : PDEProblemContainer	*
-	*   SDoFs   : 	3908
+	*   SDoFs   : 	3557
 	**************************************************
 
 	Computing State Solution:
 			 Newton step: 0	 Residual (abs.):   1.7333e+00
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
-			 Newton step: 1	 Residual (rel.):   1.1928e-02	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   8.1076e-05	 LineSearch {0} 
-			 Newton step: 3	 Residual (rel.):   1.0420e-06	 LineSearch {0} 
-			 Newton step: 4	 Residual (rel.):   1.2744e-08	 LineSearch {0} 
-			 Newton step: 5	 Residual (rel.):   2.7680e-10	 LineSearch {0} 
-			 Newton step: 6	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   3.7038e-01	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.1734e-03	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   2.3562e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   8.4246e-08	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   1.9904e-09	 LineSearch {0} 
+			 Newton step: 6	 Residual (rel.):   8.8008e-11	 LineSearch {0} 
 	Computing Functionals:
-	X-displacement: -0.0200704
-	Flux: 1.33629
+	X-displacement: 0.0449791
+	Flux: 1.33325

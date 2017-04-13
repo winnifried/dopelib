@@ -41,7 +41,11 @@
 #include <problemdata/simpledirichletdata.h>
 #include <container/integratordatacontainer.h>
 
-#include "localpde.h"
+// Two header files localpde* in which two different material 
+// laws are described
+#include "localpde.h" // INH with pressure filtering (normalization)
+//#include "localpde_stvk_material.h" // simplified STVK (compressible)
+
 #include "functionals.h"
 #include "my_functions.h"
 
@@ -80,8 +84,9 @@ main(int argc, char **argv)
   /**
    * Stationary FSI problem in an ALE framework
    * Fluid: Stokes equ.
-   * Structure: Incompressible neo Hookean (INH) model
-   * We use the Q2^c-P1^dc element for discretization of Stokes.
+   * Structure: Incompressible neo Hookean (INH) model or 
+   * in a different header file, a simplified compressible SVTK solid.
+   * We use the Q2^c-Q1^c element for discretization of Stokes.
    */
   #warning This example needs to be fixed - it fails with the new assembly
   string paramfile = "dope.prm";
@@ -112,7 +117,8 @@ main(int argc, char **argv)
 
   //Define FE and Quadrature
   //(v_1, v_2, p, u_1, u_2) with velocity v, pressure p and displacement u
-  FE<DIM> state_fe(FE_Q<DIM>(2), 2, FE_DGP<DIM>(1), 1, FE_Q<DIM>(2), 2);
+  FE<DIM> state_fe(FE_Q<DIM>(2), 2, FE_Q<DIM>(1), 1, FE_Q<DIM>(2), 2);
+
 
   QUADRATURE quadrature_formula(3);
   FACEQUADRATURE face_quadrature_formula(3);
@@ -141,10 +147,16 @@ main(int argc, char **argv)
   std::vector<bool> comp_mask(5, true);
   comp_mask[2] = false;
 
+  // Inflow boundary (at left)
   P.SetDirichletBoundaryColors(0, comp_mask, &DD2);
   P.SetDirichletBoundaryColors(2, comp_mask, &DD1);
   P.SetDirichletBoundaryColors(3, comp_mask, &DD1);
+ 
+  // Substract the non-symmetric part from the outflow boundary
+  // (see do-nothing condition in the literature)
   P.SetBoundaryEquationColors(1);
+
+ 
 
   RP solver(&P, DOpEtypes::VectorStorageType::fullmem, pr, idc);
   //Only needed for pure PDE Problems

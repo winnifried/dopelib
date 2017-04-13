@@ -140,7 +140,7 @@ template<
                   * (v_grad * F_Inverse + F_Inverse_T * transpose(v_grad));
 
           Tensor<2, 2> cauchy_stress_structure;
-          cauchy_stress_structure = -pI + mu * (F * transpose(F) - I);
+          cauchy_stress_structure = mu * (F * transpose(F) - I);
 
           for (unsigned int i = 0; i < n_dofs_per_element; i++)
           {
@@ -167,12 +167,9 @@ template<
             {
               local_vector(i) += scale
                   * (scalar_product(J * cauchy_stress_structure * F_Inverse_T,
-				    phi_i_grads_v) + (J - 1.0) * phi_i_p 
-		     + v * phi_i_u
-		     // Normalize pressure for uniqueness
-		     + alpha_u * grad_p * phi_i_grads_p 
-		     ) * state_fe_values.JxW(q_point);
-                  
+				    phi_i_grads_v) + alpha_u * grad_p * phi_i_grads_p
+		     + v * phi_i_u)
+                  * state_fe_values.JxW(q_point);
             }
           }
         }
@@ -376,15 +373,10 @@ template<
               else if (material_id == 1)
               {
                 local_matrix(i, j) += scale
-                    * (scalar_product(piola_kirchhoff_stress_1st_term_LinALL,
-                        phi_i_grads_v)
-                        + scalar_product(
+                    * (scalar_product(
                             piola_kirchhoff_stress_structure_2nd_term_LinALL,
-                            phi_i_grads_v) + J_LinU * phi_i_p
-                        + phi_j_v * phi_i_u
-		       // Normalize pressure for uniqueness
-		       + alpha_u * phi_j_grads_p * phi_i_grads_p 
-		       ) * state_fe_values.JxW(q_point);
+                            phi_i_grads_v) + alpha_u * phi_j_grads_p * phi_i_grads_p
+                        + phi_j_v * phi_i_u) * state_fe_values.JxW(q_point);
               }
             }
           }
