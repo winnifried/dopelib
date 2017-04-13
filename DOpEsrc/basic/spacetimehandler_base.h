@@ -41,13 +41,13 @@
 
 namespace DOpE
 {
-/**
- * Interface to the dimension independent functionality of a
- * SpaceTimeDoFHandler
- */
-template<typename VECTOR>//has to be a class template because you can not have virtual member function templates.
-class SpaceTimeHandlerBase
-{
+  /**
+   * Interface to the dimension independent functionality of a
+   * SpaceTimeDoFHandler
+   */
+  template<typename VECTOR>//has to be a class template because you can not have virtual member function templates.
+  class SpaceTimeHandlerBase
+  {
   public:
 
     SpaceTimeHandlerBase(DOpEtypes::ControlType control_type = DOpEtypes::stationary) : control_type_(control_type)
@@ -57,18 +57,18 @@ class SpaceTimeHandlerBase
       control_ticket_ = 1;
     }
 
-    SpaceTimeHandlerBase(dealii::Triangulation<1> & times, DOpEtypes::ControlType type = DOpEtypes::stationary) :
+    SpaceTimeHandlerBase(dealii::Triangulation<1> &times, DOpEtypes::ControlType type = DOpEtypes::stationary) :
       tdfh_(times), interval_(tdfh_.first_interval()), control_type_(type)
-      {
-	time_triangulation_ = &times;
-	state_ticket_ = 1;
-	control_ticket_ = 1;
-      }
+    {
+      time_triangulation_ = &times;
+      state_ticket_ = 1;
+      control_ticket_ = 1;
+    }
 
-    SpaceTimeHandlerBase(dealii::Triangulation<1> & times,
-        const dealii::FiniteElement<1>& fe,
-        DOpEtypes::ControlType type = DOpEtypes::stationary) :
-          tdfh_(times, fe), interval_(tdfh_.first_interval()), control_type_(type)
+    SpaceTimeHandlerBase(dealii::Triangulation<1> &times,
+                         const dealii::FiniteElement<1> &fe,
+                         DOpEtypes::ControlType type = DOpEtypes::stationary) :
+      tdfh_(times, fe), interval_(tdfh_.first_interval()), control_type_(type)
     {
       time_triangulation_ = &times;
       state_ticket_ = 1;
@@ -118,7 +118,7 @@ class SpaceTimeHandlerBase
      *
      * @param interval   The current interval.
      */
-    void SetInterval(const TimeIterator& it)
+    void SetInterval(const TimeIterator &it)
     {
       interval_ = it;
     }
@@ -129,7 +129,7 @@ class SpaceTimeHandlerBase
      *
      * @return An iterator 'pointing' to the prevoisly given interval_.
      */
-    const TimeIterator& GetInterval() const
+    const TimeIterator &GetInterval() const
     {
       return interval_;
     }
@@ -151,7 +151,7 @@ class SpaceTimeHandlerBase
     /**
      * Returns the TimeDoFHandler.
      */
-    const TimeDoFHandler& GetTimeDoFHandler() const
+    const TimeDoFHandler &GetTimeDoFHandler() const
     {
       return tdfh_;
     }
@@ -160,7 +160,7 @@ class SpaceTimeHandlerBase
     /**
      * Returns the Vector of all time points.
      */
-    const std::vector<double>& GetTimes() const
+    const std::vector<double> &GetTimes() const
     {
       return tdfh_.GetTimes();
     }
@@ -177,7 +177,7 @@ class SpaceTimeHandlerBase
      *                      of the given interval. Needs the correct size beforehand!
      */
     void
-    GetTimes(const TimeIterator& interval, std::vector<double>& local_times) const
+    GetTimes(const TimeIterator &interval, std::vector<double> &local_times) const
     {
       return tdfh_.GetTimes(interval, local_times);
     }
@@ -193,7 +193,7 @@ class SpaceTimeHandlerBase
      * @return                 A Boolean that is true if the ticket is still valid. It is false if the SpaceTimeHandler has been
      *                         Updated.
      */
-    bool IsValidStateTicket(unsigned int& ticket) const
+    bool IsValidStateTicket(unsigned int &ticket) const
     {
       bool ret = (ticket == state_ticket_);
       ticket = state_ticket_;
@@ -210,7 +210,7 @@ class SpaceTimeHandlerBase
      * @return                 A Boolean that is true if the ticket is still valid. It is false if the SpaceTimeHandler has been
      *                         Updated.
      */
-    bool IsValidControlTicket(unsigned int& ticket) const
+    bool IsValidControlTicket(unsigned int &ticket) const
     {
       bool ret = (ticket == control_ticket_);
       ticket = control_ticket_;
@@ -240,8 +240,11 @@ class SpaceTimeHandlerBase
      * @param interval        The interval we are currently working on.
      */
     virtual void
-      InterpolateControl(VECTOR& /*result*/, const std::vector<VECTOR*> &/*local_vectors*/,
-          double /*t*/, const TimeIterator&/*interval*/) const { abort(); }
+    InterpolateControl(VECTOR & /*result*/, const std::vector<VECTOR *> &/*local_vectors*/,
+                       double /*t*/, const TimeIterator &/*interval*/) const
+    {
+      abort();
+    }
     /**
      * If one requires values at a time not corresponding to a degree of freedom in
      * time, one needs to interpolate this value from the others on the interval.
@@ -254,8 +257,8 @@ class SpaceTimeHandlerBase
      * @param interval        The interval we are currently working on.
      */
     virtual void
-      InterpolateState(VECTOR& /*result*/, const std::vector<VECTOR*> &/*local_vectors*/,
-		       double /*t*/, const TimeIterator&/*interval*/) const = 0;
+    InterpolateState(VECTOR & /*result*/, const std::vector<VECTOR *> &/*local_vectors*/,
+                     double /*t*/, const TimeIterator &/*interval*/) const = 0;
     /**
      * If one requires values at a time not corresponding to a degree of freedom in
      * time, one needs to interpolate this value from the others on the interval.
@@ -267,60 +270,82 @@ class SpaceTimeHandlerBase
      * @param t               The time at which we want to have the  interpolation
      * @param interval        The interval we are currently working on.
      */
-    virtual void InterpolateConstraint(VECTOR& /*result*/, const std::vector<VECTOR*> &/*local_vectors*/,
-        double /*t*/, const TimeIterator&/*interval*/) const { abort(); }
+    virtual void InterpolateConstraint(VECTOR & /*result*/, const std::vector<VECTOR *> &/*local_vectors*/,
+                                       double /*t*/, const TimeIterator &/*interval*/) const
+    {
+      abort();
+    }
 
     /**
      * Returns the DoFs for the control vector at the given point time_point.
      * If time_point==-1, it returns the DoFs for the current time which has
      * to be set prior to calling this function using SetTimeDoFNumber.
      *
-     * @ param time_point	Indicating the time at which we want to know the DoFs. -1 means now.
+     * @ param time_point Indicating the time at which we want to know the DoFs. -1 means now.
      */
-    virtual unsigned int GetControlNDoFs(int /*time_point*/ = -1) const { abort(); }
+    virtual unsigned int GetControlNDoFs(int /*time_point*/ = -1) const
+    {
+      abort();
+    }
     /**
      * Returns the DoFs for the state vector at the given point time_point.
      * If time_point==-1, it returns the DoFs for the current time which has
      * to be set prior to calling this function using SetTimeDoFNumber.
      *
-     * @ param time_point	Indicating the time at which we want to know the DoFs. -1 means now.
+     * @ param time_point Indicating the time at which we want to know the DoFs. -1 means now.
      */
     virtual unsigned int GetStateNDoFs(int time_point = -1) const = 0;
     /**
      * Returns the DoFs for the constraint vector at the current time which has
      *  to be set prior to calling this function using SetTime.
      */
-    virtual unsigned int GetConstraintNDoFs(std::string /*name*/) const { abort(); return 0; }
+    virtual unsigned int GetConstraintNDoFs(std::string /*name*/) const
+    {
+      abort();
+      return 0;
+    }
     /**
      * Returns the DoFs per block for the control vector at the given point time_point.
      * If time_point==-1, it returns the DoFs per block for the current time which has
      * to be set prior to calling this function using SetTime.
      *
-     * @ param time_point	Indicating the time at which we want to know the DoFs per block. -1 means now.
+     * @ param time_point Indicating the time at which we want to know the DoFs per block. -1 means now.
      */
-    virtual const std::vector<unsigned int>& GetControlDoFsPerBlock(int /*time_point*/ = -1) const  { abort(); }
+    virtual const std::vector<unsigned int> &GetControlDoFsPerBlock(int /*time_point*/ = -1) const
+    {
+      abort();
+    }
     /**
      * Returns the DoFs per block for the state vector at the given point time_point.
      * If time_point==-1, it returns the DoFs per block for the current time which has
      * to be set prior to calling this function using SetTime.
      *
-     * @ param time_point	Indicating the time at which we want to know the DoFs per block. -1 means now.
+     * @ param time_point Indicating the time at which we want to know the DoFs per block. -1 means now.
      */
-    virtual const std::vector<unsigned int>& GetStateDoFsPerBlock(int time_point = -1) const = 0;
+    virtual const std::vector<unsigned int> &GetStateDoFsPerBlock(int time_point = -1) const = 0;
     /**
      * Returns the DoFs per  block for the constraint vector at the current time which has
      * to be set prior to calling this function using SetTime.
      */
-    virtual const std::vector<unsigned int>& GetConstraintDoFsPerBlock(std::string /*name*/) const { abort(); }
+    virtual const std::vector<unsigned int> &GetConstraintDoFsPerBlock(std::string /*name*/) const
+    {
+      abort();
+    }
     /**
      * Returns the Number of global in space and time Constraints
      */
-    virtual unsigned int  GetNGlobalConstraints() const { abort(); }
+    virtual unsigned int  GetNGlobalConstraints() const
+    {
+      abort();
+    }
     /**
      * Returns the Number of local in space and time Constraints
      */
-    virtual unsigned int  GetNLocalConstraints() const { abort(); }
-    
+    virtual unsigned int  GetNLocalConstraints() const
+    {
+      abort();
+    }
+
     /**
      * Returns the length of interval_;
      */
@@ -367,69 +392,75 @@ class SpaceTimeHandlerBase
 
     /**
      * This functions is used to interpolate Control Vectors after a refinement of the spatial mesh.
-     * It expects that the timepoint of the mesh has been initialized correctly prior to 
+     * It expects that the timepoint of the mesh has been initialized correctly prior to
      * calling this function
      *
      * @param old_values  The Vector on the mesh before refinement.
      * @param new_values  The Vector where the interpolation should be placed
      *
      */
-    virtual void SpatialMeshTransferControl(const VECTOR& /*old_values*/, VECTOR& /*new_values*/) const { abort(); }
-    
-    virtual void SpatialMeshTransferState(const VECTOR& /*old_values*/, VECTOR& /*new_values*/) const { abort(); }
+    virtual void SpatialMeshTransferControl(const VECTOR & /*old_values*/, VECTOR & /*new_values*/) const
+    {
+      abort();
+    }
+
+    virtual void SpatialMeshTransferState(const VECTOR & /*old_values*/, VECTOR & /*new_values*/) const
+    {
+      abort();
+    }
 
     /******************************************************/
-        /**
-         * This Function is used to refine the temporal mesh globally.
-         * After calling a refinement function a reinitialization is required!
-         *
-         * @param ref_type       A DOpEtypes::RefinementType telling how to refine the
-         *                       spatial mesh. Only DOpEtypes::RefinementType::global
-         *                       is allowed in this method.
-         */
-        void
-	  RefineTime(DOpEtypes::RefinementType /*ref_type*/ =
-		     DOpEtypes::RefinementType::global)
+    /**
+     * This Function is used to refine the temporal mesh globally.
+     * After calling a refinement function a reinitialization is required!
+     *
+     * @param ref_type       A DOpEtypes::RefinementType telling how to refine the
+     *                       spatial mesh. Only DOpEtypes::RefinementType::global
+     *                       is allowed in this method.
+     */
+    void
+    RefineTime(DOpEtypes::RefinementType /*ref_type*/ =
+                 DOpEtypes::RefinementType::global)
+    {
+      //assert(ref_type == DOpEtypes::RefinementType::global);
+      RefinementContainer ref_con_dummy;
+      RefineTime(ref_con_dummy);
+    }
+
+    /******************************************************/
+    /**
+     * This Function is used to refine the temporal mesh.
+     * After calling a refinement function a reinitialization is required!
+     *
+     * @param ref_container   Steers the local mesh refinement. Currently availabe are
+     *                        RefinementContainer (for global refinement), RefineFixedFraction,
+     *                        RefineFixedNumber and RefineOptimized.
+     */
+
+    void
+    RefineTime(const RefinementContainer &ref_container)
+    {
+      DOpEtypes::RefinementType ref_type = ref_container.GetRefType();
+
+      //make sure that we do not use any coarsening
+      assert(!ref_container.UsesCoarsening());
+      assert(time_triangulation_ != NULL);
+
+      if (DOpEtypes::RefinementType::global == ref_type)
         {
-          //assert(ref_type == DOpEtypes::RefinementType::global);
-	  RefinementContainer ref_con_dummy;
-          RefineTime(ref_con_dummy);
+          time_triangulation_->set_all_refine_flags();
         }
-
-	/******************************************************/
-        /**
-         * This Function is used to refine the temporal mesh.
-         * After calling a refinement function a reinitialization is required!
-         *
-         * @param ref_container   Steers the local mesh refinement. Currently availabe are
-         *                        RefinementContainer (for global refinement), RefineFixedFraction,
-         *                        RefineFixedNumber and RefineOptimized.
-         */
-
-        void
-        RefineTime(const RefinementContainer& ref_container)
+      else
         {
-          DOpEtypes::RefinementType ref_type = ref_container.GetRefType();
-
-          //make sure that we do not use any coarsening
-          assert(!ref_container.UsesCoarsening());
-	  assert(time_triangulation_ != NULL);
-
-          if (DOpEtypes::RefinementType::global == ref_type)
-          {
-            time_triangulation_->set_all_refine_flags();
-          }
-          else
-          {
-            throw DOpEException("Not implemented for name =" + DOpEtypesToString(ref_type),
-                "MethodOfLines_SpaceTimeHandler::RefineTime");
-          }
-          time_triangulation_->prepare_coarsening_and_refinement();
-
-	  time_triangulation_->execute_coarsening_and_refinement();
-	  ReInitTime();
+          throw DOpEException("Not implemented for name =" + DOpEtypesToString(ref_type),
+                              "MethodOfLines_SpaceTimeHandler::RefineTime");
         }
-        /******************************************************/
+      time_triangulation_->prepare_coarsening_and_refinement();
+
+      time_triangulation_->execute_coarsening_and_refinement();
+      ReInitTime();
+    }
+    /******************************************************/
 
   protected:
     /**
@@ -453,11 +484,11 @@ class SpaceTimeHandlerBase
   private:
     mutable TimeDoFHandler tdfh_;//FIXME Is it really necessary for tdfh_ and interval_ to be mutable? this is really ugly
     mutable TimeIterator interval_;
-    dealii::Triangulation<1>* time_triangulation_;
+    dealii::Triangulation<1> *time_triangulation_;
     unsigned int control_ticket_;
     unsigned int state_ticket_;
     mutable DOpEtypes::ControlType control_type_;
-};
+  };
 
 }
 

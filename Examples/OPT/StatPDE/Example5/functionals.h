@@ -31,225 +31,225 @@ using namespace dealii;
 using namespace DOpE;
 
 template<
-    template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
-    template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
-    template<int, int> class DH, typename VECTOR, int dopedim, int dealdim =
-        dopedim>
-  class QErrorFunctional : public FunctionalInterface<EDC, FDC, DH, VECTOR,
-      dopedim, dealdim>
+template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
+         template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
+         template<int, int> class DH, typename VECTOR, int dopedim, int dealdim =
+         dopedim>
+class QErrorFunctional : public FunctionalInterface<EDC, FDC, DH, VECTOR,
+  dopedim, dealdim>
+{
+public:
+  QErrorFunctional()
   {
-    public:
-      QErrorFunctional()
-      {
-      }
+  }
 
-      double
-      ElementValue(const EDC<DH, VECTOR, dealdim>& edc)
-      {
-        const DOpEWrapper::FEValues<dealdim> & fe_values =
-            edc.GetFEValuesControl();
-        unsigned int n_q_points = edc.GetNQPoints();
-        {
-          uvalues_.resize(n_q_points);
-          fvalues_.resize(n_q_points);
-          edc.GetValuesControl("control", uvalues_);
-        }
-        double alpha = 1.e-3;
+  double
+  ElementValue(const EDC<DH, VECTOR, dealdim> &edc)
+  {
+    const DOpEWrapper::FEValues<dealdim> &fe_values =
+      edc.GetFEValuesControl();
+    unsigned int n_q_points = edc.GetNQPoints();
+    {
+      uvalues_.resize(n_q_points);
+      fvalues_.resize(n_q_points);
+      edc.GetValuesControl("control", uvalues_);
+    }
+    double alpha = 1.e-3;
 
-        double r = 0.;
-        for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
-        {
-          fvalues_[q_point] = 1. / alpha
-              * sin(M_PI * fe_values.quadrature_point(q_point)(0))
-              * sin(2 * M_PI * fe_values.quadrature_point(q_point)(1));
-          r += (uvalues_[q_point] - fvalues_[q_point])
-              * (uvalues_[q_point] - fvalues_[q_point])
-              * fe_values.JxW(q_point);
-        }
-        return r;
-      }
-
-      UpdateFlags
-      GetUpdateFlags() const
+    double r = 0.;
+    for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
       {
-        return update_values | update_quadrature_points;
+        fvalues_[q_point] = 1. / alpha
+                            * sin(M_PI * fe_values.quadrature_point(q_point)(0))
+                            * sin(2 * M_PI * fe_values.quadrature_point(q_point)(1));
+        r += (uvalues_[q_point] - fvalues_[q_point])
+             * (uvalues_[q_point] - fvalues_[q_point])
+             * fe_values.JxW(q_point);
       }
+    return r;
+  }
 
-      string
-      GetType() const
-      {
-        return "domain";
-      }
-      string
-      GetName() const
-      {
-        return "QError";
-      }
+  UpdateFlags
+  GetUpdateFlags() const
+  {
+    return update_values | update_quadrature_points;
+  }
 
-    private:
-      vector<double> uvalues_;
-      vector<double> fvalues_;
-  };
+  string
+  GetType() const
+  {
+    return "domain";
+  }
+  string
+  GetName() const
+  {
+    return "QError";
+  }
+
+private:
+  vector<double> uvalues_;
+  vector<double> fvalues_;
+};
 
 /****************************************************************************************/
 
 template<
-    template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
-    template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
-    template<int, int> class DH, typename VECTOR, int dopedim, int dealdim =
-        dopedim>
-  class UErrorFunctional : public FunctionalInterface<EDC, FDC, DH, VECTOR,
-      dopedim, dealdim>
+template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
+         template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
+         template<int, int> class DH, typename VECTOR, int dopedim, int dealdim =
+         dopedim>
+class UErrorFunctional : public FunctionalInterface<EDC, FDC, DH, VECTOR,
+  dopedim, dealdim>
+{
+public:
+  UErrorFunctional()
   {
-    public:
-      UErrorFunctional()
-      {
-      }
+  }
 
-      double
-      ElementValue(const EDC<DH, VECTOR, dealdim>& edc)
-      {
-        const DOpEWrapper::FEValues<dealdim> & fe_values =
-            edc.GetFEValuesState();
-        unsigned int n_q_points = edc.GetNQPoints();
-        {
-          uvalues_.resize(n_q_points);
-          fvalues_.resize(n_q_points);
-          edc.GetValuesState("state", uvalues_);
-        }
+  double
+  ElementValue(const EDC<DH, VECTOR, dealdim> &edc)
+  {
+    const DOpEWrapper::FEValues<dealdim> &fe_values =
+      edc.GetFEValuesState();
+    unsigned int n_q_points = edc.GetNQPoints();
+    {
+      uvalues_.resize(n_q_points);
+      fvalues_.resize(n_q_points);
+      edc.GetValuesState("state", uvalues_);
+    }
 
-        double r = 0.;
-        for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
-        {
-          fvalues_[q_point] = sin(
-              4 * M_PI * fe_values.quadrature_point(q_point)(0))
-              * sin(2 * M_PI * fe_values.quadrature_point(q_point)(1));
-          r += (uvalues_[q_point] - fvalues_[q_point])
-              * (uvalues_[q_point] - fvalues_[q_point])
-              * fe_values.JxW(q_point);
-        }
-        return r;
-      }
-
-      UpdateFlags
-      GetUpdateFlags() const
+    double r = 0.;
+    for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
       {
-        return update_values | update_quadrature_points;
+        fvalues_[q_point] = sin(
+                              4 * M_PI * fe_values.quadrature_point(q_point)(0))
+                            * sin(2 * M_PI * fe_values.quadrature_point(q_point)(1));
+        r += (uvalues_[q_point] - fvalues_[q_point])
+             * (uvalues_[q_point] - fvalues_[q_point])
+             * fe_values.JxW(q_point);
       }
+    return r;
+  }
 
-      string
-      GetType() const
-      {
-        return "domain";
-      }
-      string
-      GetName() const
-      {
-        return "UError";
-      }
+  UpdateFlags
+  GetUpdateFlags() const
+  {
+    return update_values | update_quadrature_points;
+  }
 
-    private:
-      vector<double> uvalues_;
-      vector<double> fvalues_;
-  };
+  string
+  GetType() const
+  {
+    return "domain";
+  }
+  string
+  GetName() const
+  {
+    return "UError";
+  }
+
+private:
+  vector<double> uvalues_;
+  vector<double> fvalues_;
+};
 
 /****************************************************************************************/
 template<
-    template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
-    template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
-    template<int, int> class DH, typename VECTOR, int dopedim, int dealdim =
-        dopedim>
-  class LocalMeanValueFunctional : public FunctionalInterface<EDC, FDC, DH,
-      VECTOR, dopedim, dealdim>
+template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
+         template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
+         template<int, int> class DH, typename VECTOR, int dopedim, int dealdim =
+         dopedim>
+class LocalMeanValueFunctional : public FunctionalInterface<EDC, FDC, DH,
+  VECTOR, dopedim, dealdim>
+{
+public:
+  LocalMeanValueFunctional()
   {
-    public:
-      LocalMeanValueFunctional()
-      {
-      }
+  }
 
-      double
-      ElementValue(const EDC<DH, VECTOR, dealdim>& edc)
-      {
-        const DOpEWrapper::FEValues<dealdim> & state_fe_values =
-            edc.GetFEValuesState();
-        unsigned int n_q_points = edc.GetNQPoints();
-        {
-          uvalues_.resize(n_q_points);
-          edc.GetValuesState("state", uvalues_);
-        }
+  double
+  ElementValue(const EDC<DH, VECTOR, dealdim> &edc)
+  {
+    const DOpEWrapper::FEValues<dealdim> &state_fe_values =
+      edc.GetFEValuesState();
+    unsigned int n_q_points = edc.GetNQPoints();
+    {
+      uvalues_.resize(n_q_points);
+      edc.GetValuesState("state", uvalues_);
+    }
 
-        double r = 0.;
-        for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
-        {
-          r += fabs(uvalues_[q_point]) * state_fe_values.JxW(q_point);
-        }
-        return r;
-      }
-
-      UpdateFlags
-      GetUpdateFlags() const
+    double r = 0.;
+    for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
       {
-        return update_values | update_quadrature_points;
+        r += fabs(uvalues_[q_point]) * state_fe_values.JxW(q_point);
       }
+    return r;
+  }
 
-      string
-      GetType() const
-      {
-        return "domain";
-      }
-      string
-      GetName() const
-      {
-        return "L1-Norm";
-      }
+  UpdateFlags
+  GetUpdateFlags() const
+  {
+    return update_values | update_quadrature_points;
+  }
 
-    private:
-      vector<double> uvalues_;
-  };
+  string
+  GetType() const
+  {
+    return "domain";
+  }
+  string
+  GetName() const
+  {
+    return "L1-Norm";
+  }
+
+private:
+  vector<double> uvalues_;
+};
 
 /****************************************************************************************/
 
 template<
-    template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
-    template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
-    template<int, int> class DH, typename VECTOR, int dopedim, int dealdim =
-        dopedim>
-  class LocalPointFunctional : public FunctionalInterface<EDC, FDC, DH, VECTOR,
-      dopedim, dealdim>
+template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
+         template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
+         template<int, int> class DH, typename VECTOR, int dopedim, int dealdim =
+         dopedim>
+class LocalPointFunctional : public FunctionalInterface<EDC, FDC, DH, VECTOR,
+  dopedim, dealdim>
+{
+public:
+
+  double
+  PointValue(
+    const DOpEWrapper::DoFHandler<dopedim, DH> & /*control_dof_handler*/,
+    const DOpEWrapper::DoFHandler<dealdim, DH> &state_dof_handler,
+    const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
+    const std::map<std::string, const VECTOR *> &domain_values)
   {
-    public:
+    Point<2> p(0.125, 0.75);
 
-      double
-      PointValue(
-          const DOpEWrapper::DoFHandler<dopedim, DH> & /*control_dof_handler*/,
-          const DOpEWrapper::DoFHandler<dealdim, DH> &state_dof_handler,
-          const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
-          const std::map<std::string, const VECTOR*> &domain_values)
-      {
-        Point<2> p(0.125, 0.75);
+    typename map<string, const BlockVector<double>*>::const_iterator it =
+      domain_values.find("state");
+    Vector<double> tmp_vector(1);
 
-        typename map<string, const BlockVector<double>*>::const_iterator it =
-            domain_values.find("state");
-        Vector<double> tmp_vector(1);
+    VectorTools::point_value(state_dof_handler, *(it->second), p,
+                             tmp_vector);
 
-        VectorTools::point_value(state_dof_handler, *(it->second), p,
-            tmp_vector);
+    return tmp_vector(0);
+  }
 
-        return tmp_vector(0);
-      }
+  string
+  GetType() const
+  {
+    return "point";
+  }
 
-      string
-      GetType() const
-      {
-        return "point";
-      }
+  string
+  GetName() const
+  {
+    return "PointValue";
+  }
 
-      string
-      GetName() const
-      {
-        return "PointValue";
-      }
-
-  };
+};
 
 #endif

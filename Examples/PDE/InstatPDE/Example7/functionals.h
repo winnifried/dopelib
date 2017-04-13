@@ -35,67 +35,67 @@ using namespace DOpE;
 
 template<
 template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
-  template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
-  template<int, int> class DH, typename VECTOR, int dealdim>
-  class LocalFunctional : public FunctionalInterface<EDC, FDC, DH, VECTOR, dealdim>
+         template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
+         template<int, int> class DH, typename VECTOR, int dealdim>
+class LocalFunctional : public FunctionalInterface<EDC, FDC, DH, VECTOR, dealdim>
+{
+public:
+  LocalFunctional()
   {
-    public:
-      LocalFunctional()
+  }
+
+  double
+  ElementValue(const EDC<DH,VECTOR,dealdim> &edc)
+  {
+    unsigned int n_q_points = edc.GetNQPoints();
+
+    double mean = 0;
+
+    vector<Vector<double> > uvalues;
+    uvalues.resize(n_q_points,Vector<double>(2));
+    edc.GetValuesState("state", uvalues);
+
+    for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
       {
+        double v;
+
+        v = uvalues[q_point][0];
+
+        mean += v * edc.GetFEValuesState().JxW(q_point);
       }
+    return mean;
+  }
 
-      double
-      ElementValue(const EDC<DH,VECTOR,dealdim>& edc)
-      {
-        unsigned int n_q_points = edc.GetNQPoints();
+  UpdateFlags
+  GetUpdateFlags() const
+  {
+    return update_values | update_quadrature_points;
+  }
 
-        double mean = 0;
+  string
+  GetType() const
+  {
+    return "domain timelocal";
+  }
 
-	vector<Vector<double> > uvalues;
-	uvalues.resize(n_q_points,Vector<double>(2));
-	edc.GetValuesState("state", uvalues);
-	
-	for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
-	{
-	  double v;
-	  
-	  v = uvalues[q_point][0];
-	  
-	  mean += v * edc.GetFEValuesState().JxW(q_point);
-	}
-        return mean;
-      }
+  bool HasFaces() const
+  {
+    return false;
+  }
 
-      UpdateFlags
-      GetUpdateFlags() const
-      {
-        return update_values | update_quadrature_points;
-      }
+  string
+  GetName() const
+  {
+    return "Mean-value";
+  }
 
-      string
-      GetType() const
-      {
-        return "domain timelocal";
-      }
+  bool
+  NeedTime() const
+  {
+    if (fabs(this->GetTime() - 1.) < 1.e-13)
+      return true;
+    return false;
+  }
 
-      bool HasFaces() const
-      {
-        return false;
-      }
-
-      string
-      GetName() const
-      {
-        return "Mean-value";
-      }
-
-      bool
-      NeedTime() const
-      {
-        if (fabs(this->GetTime() - 1.) < 1.e-13)
-          return true;
-        return false;
-      }
-
-  };
+};
 #endif /* FUNCTIONALS_H_ */

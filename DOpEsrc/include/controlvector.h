@@ -39,25 +39,25 @@
 namespace DOpE
 {
 
-/**
- * This class represents the controlvector.
- *
- * @tparam <VECTOR>     Class in which we want to store the spatial vector
- *                      (i.e. dealii::Vector<double> or dealii::BlockVector<double>)
- */
-template<typename VECTOR>
+  /**
+   * This class represents the controlvector.
+   *
+   * @tparam <VECTOR>     Class in which we want to store the spatial vector
+   *                      (i.e. dealii::Vector<double> or dealii::BlockVector<double>)
+   */
+  template<typename VECTOR>
   class ControlVector
   {
   public:
-    //TODO: Currently we only consider one fixed control 
-    //      for all timesteps, if more is desired one needs to augment the 
+    //TODO: Currently we only consider one fixed control
+    //      for all timesteps, if more is desired one needs to augment the
     //      Spacetimehandler to have a time discretization for the control,
-    //      Then one can update this vector similar to the statevector 
+    //      Then one can update this vector similar to the statevector
     //      with different meshes for Vectors.
     //      Note that this requires to keep track of the interpolation
     //      between state and control time points...
-    ControlVector(const ControlVector& ref);
-    ControlVector(const SpaceTimeHandlerBase<VECTOR>* STH, DOpEtypes::VectorStorageType behavior);
+    ControlVector(const ControlVector &ref);
+    ControlVector(const SpaceTimeHandlerBase<VECTOR> *STH, DOpEtypes::VectorStorageType behavior);
     ~ControlVector();
 
 //    /**
@@ -67,7 +67,7 @@ template<typename VECTOR>
 //     *
 //     * @param t            A double containing the time we are interested in. If t doesn't match the time given by
 //     *                     time_point, then an interpolation between the corresponding time_points is
-//     *			               computed.
+//     *                     computed.
 //     * @param interval      An TimeIterator. The interval containing t.
 //     *
 //     */
@@ -83,21 +83,21 @@ template<typename VECTOR>
     void SetTimeDoFNumber(unsigned int time_point) const;
     /**
      * Returns a reference to the spacial vector associated to the last time given by SetTime*
-     * If the vecor behavior is initial this generates an error if we are not in the 
+     * If the vecor behavior is initial this generates an error if we are not in the
      * initial time point.
      */
-    VECTOR& GetSpacialVector();
+    VECTOR &GetSpacialVector();
     /**
      * Returns a const reference to the spacial vector associated to the last time given by SetTime*
      */
-    const VECTOR& GetSpacialVector() const;
+    const VECTOR &GetSpacialVector() const;
     /**
      * Returns a const reference to the spacial vector associated to the last time given by SetTime*
      * This makes a copy of the real vector  in order to change the vector type.
      * To assert data integrity this Only one Copy may  be obtained at any time.
      * Hence prior to calling this Function again UnLockCopy must be called.
      */
-    const dealii::Vector<double>& GetSpacialVectorCopy() const;
+    const dealii::Vector<double> &GetSpacialVectorCopy() const;
 
     /**
      * Sets all the vector to a constant value.
@@ -111,7 +111,7 @@ template<typename VECTOR>
      *
      * @param dq    The other vector.
      */
-    void operator=(const ControlVector& dq);
+    void operator=(const ControlVector &dq);
     /**
      * Upon completion each entry of this Vector contains the following
      * Result this = this + dq;
@@ -119,7 +119,7 @@ template<typename VECTOR>
      *
      * @param dq    The increment.
      */
-    void operator+=(const ControlVector& dq);
+    void operator+=(const ControlVector &dq);
     /**
      * Multiplies the Vector with a constant.
      *
@@ -133,7 +133,7 @@ template<typename VECTOR>
      * @param dq    The argument for the computation of the scalarproduct.
      * @return      A double containing the scalar product.
      */
-    double operator*(const ControlVector& dq) const;
+    double operator*(const ControlVector &dq) const;
     /**
      * Sets this vector adds a multiple of an other vector to this vector.
      * this = this + s * dq
@@ -142,41 +142,41 @@ template<typename VECTOR>
      * @param s    A double, by which the other vector is scaled.
      * @param dq   The other vector.
      */
-    void add(double s, const ControlVector& dq);
+    void add(double s, const ControlVector &dq);
     /**
      * Sets this vector to the values of an other given vector.
      * The vector is not resized!
      *
      * @param dq    The other vector.
      */
-    void equ(double s, const ControlVector& dq);
+    void equ(double s, const ControlVector &dq);
     /**
-     * Sets this vector to the componentwise maximum of its own 
+     * Sets this vector to the componentwise maximum of its own
      * entries and that of the other vector
      * The vector is not resized!
      *
      * @param dq    The other vector.
      */
-    void max(const ControlVector& dq);
+    void max(const ControlVector &dq);
     /**
-     * Sets this vector to the componentwise minimum of its own 
+     * Sets this vector to the componentwise minimum of its own
      * entries and that of the other vector
      * The vector is not resized!
      *
      * @param dq    The other vector.
      */
-    void min(const ControlVector& dq);
+    void min(const ControlVector &dq);
 
     /**
      * Computes the component wise product of this vector with the argument.
      */
-    void comp_mult(const ControlVector& dq);
-    
+    void comp_mult(const ControlVector &dq);
+
     /**
-     * Inverts the elements of the vetor component wise 
+     * Inverts the elements of the vetor component wise
      */
     void comp_invert();
-    
+
     /**
      * Initializes this vector according to the signs in it.
      *
@@ -186,48 +186,57 @@ template<typename VECTOR>
      * @param TOL       if abs(value) < TOL we consider the sign to be unclear
      */
     void init_by_sign(double smaller, double larger, double unclear, double TOL = 1.e-10);
-    
+
     /**
      * Prints Information on this vector into the given stream.
      *
      * @param out    The output stream.
      */
-    void PrintInfos(std::stringstream& out);
+    void PrintInfos(std::stringstream &out);
     /**
      * This unlocks the function GetSpacialVectorCopy
      */
-    void UnLockCopy() const { lock_ = false; }
+    void UnLockCopy() const
+    {
+      lock_ = false;
+    }
 
     /**
      * This returns the behavior of the ControlVector
-     * 
-     * @par  fullmem         Means there is a spacial vector for each time point. 
+     *
+     * @par  fullmem         Means there is a spacial vector for each time point.
      *                       The whole vector
      *                       is stored in main memory.
      *
      * @return               A string indicating the behavior.
      */
-    DOpEtypes::VectorStorageType GetBehavior() const { return behavior_; }
+    DOpEtypes::VectorStorageType GetBehavior() const
+    {
+      return behavior_;
+    }
 
     /**
      * @return               A const pointer to the SpaceTimeHandler associated with this vector.
      */
-    const SpaceTimeHandlerBase<VECTOR>* GetSpaceTimeHandler() const { return STH_; }
+    const SpaceTimeHandlerBase<VECTOR> *GetSpaceTimeHandler() const
+    {
+      return STH_;
+    }
 
     /**
      * Call if the SpaceTimeHandler has changed to reinitialize vector sizes.
      *
      */
     void ReInit();
- 
-   /**
-     * Computes the norm given by name of the vector.
-     * Feasible values are "infty", and "l1"
-     * The string restriction defines if only certain values are
-     * to be considered. Currently "all" and "positive" are feasible
-     * Meaning that either all or only the positive entries are 
-     * considered.
-     */
+
+    /**
+      * Computes the norm given by name of the vector.
+      * Feasible values are "infty", and "l1"
+      * The string restriction defines if only certain values are
+      * to be considered. Currently "all" and "positive" are feasible
+      * Meaning that either all or only the positive entries are
+      * considered.
+      */
     double Norm(std::string name,std::string restriction = "all") const;
 
   private:
@@ -235,28 +244,28 @@ template<typename VECTOR>
      * This function resizes the spacial vector at a prior given time point.
      * Hence SetTimeDoFNumber should be called before this function.
      */
-    void ReSizeSpace(unsigned int ndofs, const std::vector<unsigned int>& dofs_per_block);
+    void ReSizeSpace(unsigned int ndofs, const std::vector<unsigned int> &dofs_per_block);
     /**
      * Writes the vectors corresponding to the current interval
      * into local_vectors_, and adjusts global_to_local_;
      */
-    void ComputeLocalVectors(const TimeIterator& interval) const;
-    
-    std::vector<VECTOR* > control_;
+    void ComputeLocalVectors(const TimeIterator &interval) const;
+
+    std::vector<VECTOR * > control_;
     mutable VECTOR local_control_;
     mutable dealii::Vector<double> copy_control_;
-    
+
     //pointer to the dofs in the actual interval. Is only used if the interval is set!
-    mutable std::vector<VECTOR*> local_vectors_;
+    mutable std::vector<VECTOR *> local_vectors_;
     //Map: global time dof index - local time DoF index
     mutable std::map<unsigned int, unsigned int> global_to_local_;
     //the index of the interval, to which the vectors stored in local_vectors belong
     mutable int accessor_index_;
-		
+
     mutable int accessor_;
     mutable bool lock_;
 
-    const SpaceTimeHandlerBase<VECTOR>* STH_;
+    const SpaceTimeHandlerBase<VECTOR> *STH_;
     DOpEtypes::VectorStorageType behavior_;
     DOpEtypes::ControlType c_type_;
     unsigned int sfh_ticket_;

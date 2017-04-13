@@ -34,47 +34,47 @@ using namespace DOpE;
 
 /****************************************************************************************/
 template<
-    template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
-    template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
-    template<int, int> class DH, typename VECTOR, int dealdim>
-  class LocalPointFunctionalX : public FunctionalInterface<EDC, FDC, DH, VECTOR,
-      dealdim>
+template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
+         template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
+         template<int, int> class DH, typename VECTOR, int dealdim>
+class LocalPointFunctionalX : public FunctionalInterface<EDC, FDC, DH, VECTOR,
+  dealdim>
+{
+public:
+  double
+  PointValue(
+    const DOpEWrapper::DoFHandler<dealdim, DH> & /*control_dof_handler*/,
+    const DOpEWrapper::DoFHandler<dealdim, DH> &state_dof_handler,
+    const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
+    const std::map<std::string, const VECTOR *> &domain_values)
   {
-    public:
-      double
-      PointValue(
-          const DOpEWrapper::DoFHandler<dealdim, DH> & /*control_dof_handler*/,
-          const DOpEWrapper::DoFHandler<dealdim, DH> &state_dof_handler,
-          const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
-          const std::map<std::string, const VECTOR*> &domain_values)
-      {
-        Point<dealdim> p1;
-        for (unsigned int i = 0; i < dealdim; i++)
-          p1[i] = 0.5;
+    Point<dealdim> p1;
+    for (unsigned int i = 0; i < dealdim; i++)
+      p1[i] = 0.5;
 
-        typename map<string, const VECTOR*>::const_iterator it =
-            domain_values.find("state");
-        Vector<double> tmp_vector(2);
+    typename map<string, const VECTOR *>::const_iterator it =
+      domain_values.find("state");
+    Vector<double> tmp_vector(2);
 
-        VectorTools::point_value(state_dof_handler, *(it->second), p1,
-            tmp_vector);
-        double x = tmp_vector(0);
+    VectorTools::point_value(state_dof_handler, *(it->second), p1,
+                             tmp_vector);
+    double x = tmp_vector(0);
 
-        return x;
+    return x;
 
-      }
+  }
 
-      string
-      GetType() const
-      {
-        return "point";
-      }
-      string
-      GetName() const
-      {
-        return "Point value in X";
-      }
+  string
+  GetType() const
+  {
+    return "point";
+  }
+  string
+  GetName() const
+  {
+    return "Point value in X";
+  }
 
-  };
+};
 
 #endif

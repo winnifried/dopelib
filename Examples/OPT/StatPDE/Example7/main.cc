@@ -36,7 +36,7 @@
 #include <container/optproblemcontainer.h>
 #include <interfaces/functionalinterface.h>
 #include <interfaces/pdeinterface.h>
-#include <reducedproblems/statreducedproblem.h> 
+#include <reducedproblems/statreducedproblem.h>
 #include "voidreducedproblem.h"
 #include <templates/newtonsolver.h>
 #include <templates/directlinearsolver.h>
@@ -82,20 +82,20 @@ typedef ConstraintInterface<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> CONS;
 typedef SpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR, CDIM, DIM> STH;
 
 typedef OptProblemContainer<FUNCTIONALINTERFACE, COSTFUNCTIONAL, PDE, DD, CONS,
-    SPARSITYPATTERN, VECTOR, CDIM, DIM> OP;
+        SPARSITYPATTERN, VECTOR, CDIM, DIM> OP;
 
 typedef AugmentedLagrangianProblem<LocalConstraintAccessor, STH, OP, CDIM, DIM,
-    1> ALagOP;
+        1> ALagOP;
 typedef IntegratorDataContainer<DOFHANDLER, Quadrature<DIM>, Quadrature<1>,
-    VECTOR, DIM> IDC;
+        VECTOR, DIM> IDC;
 typedef Integrator<IDC, VECTOR, double, DIM> INTEGRATOR;
 typedef DirectLinearSolverWithMatrix<SPARSITYPATTERN, MATRIX, VECTOR> LINEARSOLVER;
 typedef NewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR> NLS;
 typedef StatReducedProblem<NLS, NLS, INTEGRATOR, INTEGRATOR, OP, VECTOR, CDIM,
-    DIM> RP;
+        DIM> RP;
 typedef VoidReducedProblem<NLS, INTEGRATOR, ALagOP, VECTOR, CDIM, DIM> ALagRP;
 typedef GeneralizedMMAAlgorithm<LocalConstraintAccessor, IDC, STH, OP, VECTOR,
-    ALagRP, CDIM, DIM, 1> MMA;
+        ALagRP, CDIM, DIM, 1> MMA;
 
 int
 main(int argc, char **argv)
@@ -109,14 +109,14 @@ main(int argc, char **argv)
   string paramfile = "dope.prm";
 
   if (argc == 2)
-  {
-    paramfile = argv[1];
-  }
+    {
+      paramfile = argv[1];
+    }
   else if (argc > 2)
-  {
-    std::cout << "Usage: " << argv[0] << " [ paramfile ] " << std::endl;
-    return -1;
-  }
+    {
+      std::cout << "Usage: " << argv[0] << " [ paramfile ] " << std::endl;
+      return -1;
+    }
 
   ParameterReader pr;
   RP::declare_params(pr);
@@ -133,7 +133,7 @@ main(int argc, char **argv)
   rep[0] = 2;
   rep[1] = 1;
   GridGenerator::subdivided_hyper_rectangle(triangulation, rep,
-      Point<DIM>(0, 0), Point<DIM>(2, 1), true);
+                                            Point<DIM>(0, 0), Point<DIM>(2, 1), true);
   triangulation.refine_global(3);
 
   FE<DIM> control_fe(FE_DGP<DIM>(0), 1);
@@ -146,32 +146,33 @@ main(int argc, char **argv)
   PDE LPDE;
   COSTFUNCTIONAL LFunc;
 
-  { //Set Dirichlet Boundary!
+  {
+    //Set Dirichlet Boundary!
     for (Triangulation<DIM>::active_cell_iterator element =
-        triangulation.begin_active(); element != triangulation.end(); ++element)
+           triangulation.begin_active(); element != triangulation.end(); ++element)
       for (unsigned int f = 0; f < GeometryInfo<DIM>::faces_per_cell; ++f)
-      {
-        if (element->face(f)->at_boundary())
         {
-          if (element->face(f)->center()[1] == 0)
-          {
-#if DEAL_II_VERSION_GTE(8,3,0)
-	    element->face(f)->set_all_boundary_ids(5);
-#else
-	    element->face(f)->set_all_boundary_indicators(5);
-#endif
-            if (fabs(element->face(f)->center()[0] - 2.)
-                < std::max(0.25, element->face(f)->diameter()))
+          if (element->face(f)->at_boundary())
             {
- #if DEAL_II_VERSION_GTE(8,3,0)
-	    element->face(f)->set_all_boundary_ids(2);
+              if (element->face(f)->center()[1] == 0)
+                {
+#if DEAL_II_VERSION_GTE(8,3,0)
+                  element->face(f)->set_all_boundary_ids(5);
 #else
-             element->face(f)->set_all_boundary_indicators(2);
+                  element->face(f)->set_all_boundary_indicators(5);
 #endif
+                  if (fabs(element->face(f)->center()[0] - 2.)
+                      < std::max(0.25, element->face(f)->diameter()))
+                    {
+#if DEAL_II_VERSION_GTE(8,3,0)
+                      element->face(f)->set_all_boundary_ids(2);
+#else
+                      element->face(f)->set_all_boundary_indicators(2);
+#endif
+                    }
+                }
             }
-          }
         }
-      }
   }
 
   //Add Constrained description
@@ -182,8 +183,8 @@ main(int argc, char **argv)
   Constraints constraints(lcc, 1); // here, we impose one global constraint
 
   MethodOfLines_SpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR, CDIM,
-      DIM> DOFH(triangulation, control_fe, state_fe, constraints,
-      DOpEtypes::stationary);
+                                 DIM> DOFH(triangulation, control_fe, state_fe, constraints,
+                                           DOpEtypes::stationary);
 
   LocalConstraintAccessor CA;
   LocalConstraint<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> LC(CA);
@@ -215,51 +216,52 @@ main(int argc, char **argv)
     q = 0.4;
   }
   for (int i = 0; i < niter; i++)
-  {
-    try
     {
-      Alg.Solve(q);
-    }
-    catch (DOpEException &e)
-    {
-      std::cout
-          << "Warning: During execution of `" + e.GetThrowingInstance()
+      try
+        {
+          Alg.Solve(q);
+        }
+      catch (DOpEException &e)
+        {
+          std::cout
+              << "Warning: During execution of `" + e.GetThrowingInstance()
               + "` the following Problem occurred!" << std::endl;
-      std::cout << e.GetErrorMessage() << std::endl;
-    }
-    if (i != niter - 1)
-    {
-      DOFH.RefineSpace();
-      { //Set Dirichlet Boundary!
-        for (Triangulation<DIM>::active_cell_iterator element =
-            triangulation.begin_active(); element != triangulation.end(); ++element)
-          for (unsigned int f = 0; f < GeometryInfo<DIM>::faces_per_cell; ++f)
+          std::cout << e.GetErrorMessage() << std::endl;
+        }
+      if (i != niter - 1)
+        {
+          DOFH.RefineSpace();
           {
-            if (element->face(f)->at_boundary())
-            {
-              if (element->face(f)->center()[1] == 0)
-              {
- #if DEAL_II_VERSION_GTE(8,3,0)
-		element->face(f)->set_all_boundary_ids(5);
-#else
-                element->face(f)->set_all_boundary_indicators(5);
-#endif
-                if ((fabs(element->face(f)->center()[0] - 2.)
-                    < std::max(0.25, element->face(f)->diameter())))
+            //Set Dirichlet Boundary!
+            for (Triangulation<DIM>::active_cell_iterator element =
+                   triangulation.begin_active(); element != triangulation.end(); ++element)
+              for (unsigned int f = 0; f < GeometryInfo<DIM>::faces_per_cell; ++f)
                 {
+                  if (element->face(f)->at_boundary())
+                    {
+                      if (element->face(f)->center()[1] == 0)
+                        {
 #if DEAL_II_VERSION_GTE(8,3,0)
-                  element->face(f)->set_all_boundary_ids(2);
+                          element->face(f)->set_all_boundary_ids(5);
 #else
-                  element->face(f)->set_all_boundary_indicators(2);
+                          element->face(f)->set_all_boundary_indicators(5);
 #endif
+                          if ((fabs(element->face(f)->center()[0] - 2.)
+                               < std::max(0.25, element->face(f)->diameter())))
+                            {
+#if DEAL_II_VERSION_GTE(8,3,0)
+                              element->face(f)->set_all_boundary_ids(2);
+#else
+                              element->face(f)->set_all_boundary_indicators(2);
+#endif
+                            }
+                        }
+                    }
                 }
-              }
-            }
           }
-      }
-      Alg.ReInit();
+          Alg.ReInit();
+        }
     }
-  }
   return 0;
 }
 

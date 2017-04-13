@@ -74,30 +74,30 @@ typedef LocalFunctional<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> COSTFUNCTIONAL;
 typedef FunctionalInterface<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> FUNCTIONALINTERFACE;
 
 typedef OptProblemContainer<FUNCTIONALINTERFACE, COSTFUNCTIONAL,
-    LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
-    SimpleDirichletData<VECTOR, DIM>,
-    NoConstraints<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM>, SPARSITYPATTERN,
-    VECTOR, CDIM, DIM> OP;
+        LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
+        SimpleDirichletData<VECTOR, DIM>,
+        NoConstraints<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM>, SPARSITYPATTERN,
+        VECTOR, CDIM, DIM> OP;
 
 typedef IntegratorDataContainer<DOFHANDLER, QUADRATURE, FACEQUADRATURE, VECTOR,
-    DIM> IDC;
+        DIM> IDC;
 
 //We use the multimesh-integrator
 typedef IntegratorMultiMesh<IDC, VECTOR, double, DIM> INTEGRATOR;
 
 //Uncomment to use a CG-Method with Identity Preconditioner
 typedef CGLinearSolverWithMatrix<
-    DOpEWrapper::PreconditionIdentity_Wrapper<MATRIX>, SPARSITYPATTERN, MATRIX,
-    VECTOR> LINEARSOLVER;
+DOpEWrapper::PreconditionIdentity_Wrapper<MATRIX>, SPARSITYPATTERN, MATRIX,
+            VECTOR> LINEARSOLVER;
 //Uncomment to use UMFPACK
 //typedef DirectLinearSolverWithMatrix<SPARSITYPATTERN,MATRIX,VECTOR> LINEARSOLVER;
 
 typedef NewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR> NLS;
 typedef ReducedNewtonAlgorithm<OP, VECTOR> RNA;
 typedef StatReducedProblem<NLS, NLS, INTEGRATOR, INTEGRATOR, OP, VECTOR, CDIM,
-    DIM> RP;
+        DIM> RP;
 typedef MethodOfLines_MultiMesh_SpaceTimeHandler<FE, DOFHANDLER,
-    SPARSITYPATTERN, VECTOR, DIM> STH;
+        SPARSITYPATTERN, VECTOR, DIM> STH;
 
 int
 main(int argc, char **argv)
@@ -110,14 +110,14 @@ main(int argc, char **argv)
   string paramfile = "dope.prm";
 
   if (argc == 2)
-  {
-    paramfile = argv[1];
-  }
+    {
+      paramfile = argv[1];
+    }
   else if (argc > 2)
-  {
-    std::cout << "Usage: " << argv[0] << " [ paramfile ] " << std::endl;
-    return -1;
-  }
+    {
+      std::cout << "Usage: " << argv[0] << " [ paramfile ] " << std::endl;
+      return -1;
+    }
 
   ParameterReader pr;
   RP::declare_params(pr);
@@ -149,7 +149,7 @@ main(int argc, char **argv)
   STH DOFH(triangulation, control_fe, state_fe, DOpEtypes::stationary);
 
   NoConstraints<Multimesh_ElementDataContainer, Multimesh_FaceDataContainer,
-      DOFHANDLER, VECTOR, CDIM, DIM> Constraints;
+                DOFHANDLER, VECTOR, CDIM, DIM> Constraints;
 
   OP P(LFunc, LPDE, Constraints, DOFH);
 
@@ -174,84 +174,84 @@ main(int argc, char **argv)
 
   //First we test the multimesh setting with global refinement
   for (int i = 0; i < niter; i++)
-  {
-    try
     {
-      q = 0.;
-      Alg.Solve(q);
-    }
-    catch (DOpEException &e)
-    {
-      std::cout
-          << "Warning: During execution of `" + e.GetThrowingInstance()
+      try
+        {
+          q = 0.;
+          Alg.Solve(q);
+        }
+      catch (DOpEException &e)
+        {
+          std::cout
+              << "Warning: During execution of `" + e.GetThrowingInstance()
               + "` the following Problem occurred!" << std::endl;
-      std::cout << e.GetErrorMessage() << std::endl;
+          std::cout << e.GetErrorMessage() << std::endl;
+        }
+      if (i != niter - 1)
+        {
+          //DOFH.RefineSpace();
+          DOFH.RefineControlSpace();
+          Alg.ReInit();
+        }
     }
-    if (i != niter - 1)
-    {
-      //DOFH.RefineSpace();
-      DOFH.RefineControlSpace();
-      Alg.ReInit();
-    }
-  }
   DOFH.RefineStateSpace();
   Alg.ReInit();
 
   //Secondly, we use local refinement
   for (int i = 0; i < niter; i++)
-  {
-    try
     {
-      q = 0.;
-      Alg.Solve(q);
-    }
-    catch (DOpEException &e)
-    {
-      std::cout
-          << "Warning: During execution of `" + e.GetThrowingInstance()
+      try
+        {
+          q = 0.;
+          Alg.Solve(q);
+        }
+      catch (DOpEException &e)
+        {
+          std::cout
+              << "Warning: During execution of `" + e.GetThrowingInstance()
               + "` the following Problem occurred!" << std::endl;
-      std::cout << e.GetErrorMessage() << std::endl;
+          std::cout << e.GetErrorMessage() << std::endl;
+        }
+      if (i != niter - 1)
+        {
+          if (i % 2 == 0)
+            {
+              SolutionExtractor<RP, VECTOR> a(solver);
+              const StateVector<VECTOR> &gu = a.GetU();
+              Vector<double> solution;
+              solution = 0;
+              solution = gu.GetSpacialVector();
+              Vector<float> estimated_error_per_element(triangulation.n_active_cells());
+
+              std::vector<bool> component_mask(1, true);
+
+              KellyErrorEstimator<DIM>::estimate(
+                static_cast<const DoFHandler<DIM>&>(DOFH.GetStateDoFHandler()),
+                QGauss<1>(2), FunctionMap<DIM>::type(), solution,
+                estimated_error_per_element, component_mask);
+              DOFH.RefineStateSpace(
+                RefineFixedNumber(estimated_error_per_element, 0.1, 0.0));
+              Alg.ReInit();
+            }
+          if (i % 2 == 1)
+            {
+              Vector<double> solution;
+              solution = 0;
+              solution = q.GetSpacialVector();
+              Vector<float> estimated_error_per_element(triangulation.n_active_cells());
+
+              std::vector<bool> component_mask(1, true);
+
+              KellyErrorEstimator<DIM>::estimate(
+                static_cast<const DoFHandler<DIM>&>(DOFH.GetControlDoFHandler()),
+                QGauss<1>(2), FunctionMap<DIM>::type(), solution,
+                estimated_error_per_element, component_mask);
+              DOFH.RefineControlSpace(
+                RefineFixedNumber(estimated_error_per_element, 0.1, 0.0));
+              Alg.ReInit();
+            }
+        }
     }
-    if (i != niter - 1)
-    {
-      if (i % 2 == 0)
-      {
-        SolutionExtractor<RP, VECTOR> a(solver);
-        const StateVector<VECTOR> &gu = a.GetU();
-        Vector<double> solution;
-        solution = 0;
-        solution = gu.GetSpacialVector();
-        Vector<float> estimated_error_per_element(triangulation.n_active_cells());
-
-        std::vector<bool> component_mask(1, true);
-
-        KellyErrorEstimator<DIM>::estimate(
-            static_cast<const DoFHandler<DIM>&>(DOFH.GetStateDoFHandler()),
-            QGauss<1>(2), FunctionMap<DIM>::type(), solution,
-            estimated_error_per_element, component_mask);
-        DOFH.RefineStateSpace(
-            RefineFixedNumber(estimated_error_per_element, 0.1, 0.0));
-        Alg.ReInit();
-      }
-      if (i % 2 == 1)
-      {
-        Vector<double> solution;
-        solution = 0;
-        solution = q.GetSpacialVector();
-        Vector<float> estimated_error_per_element(triangulation.n_active_cells());
-
-        std::vector<bool> component_mask(1, true);
-
-        KellyErrorEstimator<DIM>::estimate(
-            static_cast<const DoFHandler<DIM>&>(DOFH.GetControlDoFHandler()),
-            QGauss<1>(2), FunctionMap<DIM>::type(), solution,
-            estimated_error_per_element, component_mask);
-        DOFH.RefineControlSpace(
-            RefineFixedNumber(estimated_error_per_element, 0.1, 0.0));
-        Alg.ReInit();
-      }
-    }
-  }
   return 0;
 }
 

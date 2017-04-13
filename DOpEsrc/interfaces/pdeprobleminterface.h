@@ -39,9 +39,9 @@ namespace DOpE
 {
   //Predeclaration necessary
   template<typename VECTOR>
-    class DOpEOutputHandler;
+  class DOpEOutputHandler;
   template<typename VECTOR>
-    class DOpEExceptionHandler;
+  class DOpEExceptionHandler;
   /////////////////////////////
 
   /**
@@ -50,106 +50,106 @@ namespace DOpE
    * the solution of stationary and nonstationary PDEs.
    */
   template<typename PROBLEM, typename VECTOR, int dealdim>
-    class PDEProblemInterface : public ReducedProblemInterface_Base<VECTOR>
+  class PDEProblemInterface : public ReducedProblemInterface_Base<VECTOR>
+  {
+  public:
+    PDEProblemInterface(PROBLEM *OP, int base_priority = 0)
+      : ReducedProblemInterface_Base<VECTOR>()
     {
-      public:
-        PDEProblemInterface(PROBLEM *OP, int base_priority = 0)
-            : ReducedProblemInterface_Base<VECTOR>()
-        {
-          OP_ = OP;
-          base_priority_ = base_priority;
-          post_index_ = "_" + this->GetProblem()->GetName();
-        }
-        virtual
-        ~PDEProblemInterface()
-        {
-        }
+      OP_ = OP;
+      base_priority_ = base_priority;
+      post_index_ = "_" + this->GetProblem()->GetName();
+    }
+    virtual
+    ~PDEProblemInterface()
+    {
+    }
 
-        /******************************************************/
+    /******************************************************/
 
-        /**
-	 * Reinitialization when needed to adjust vector and matrix 
-	 * sizes. 
-         *
-         */
-        virtual void
-        ReInit()
-        {
-          this->GetProblem()->ReInit("reduced");
-        }
+    /**
+    * Reinitialization when needed to adjust vector and matrix
+    * sizes.
+     *
+     */
+    virtual void
+    ReInit()
+    {
+      this->GetProblem()->ReInit("reduced");
+    }
 
-        /******************************************************/
+    /******************************************************/
 
-        /**
-         * Evaluation of the functionals in the solution of the
-         * PDE. This function needs to be specified separately for
-	 * stationary and non stationary problems since the
-	 * evaluation of the functionals differs.
-         */
-        virtual void
-        ComputeReducedFunctionals()=0;
+    /**
+     * Evaluation of the functionals in the solution of the
+     * PDE. This function needs to be specified separately for
+    * stationary and non stationary problems since the
+    * evaluation of the functionals differs.
+     */
+    virtual void
+    ComputeReducedFunctionals()=0;
 
-        /******************************************************/
+    /******************************************************/
 
-        /**
-         * Sets the type of the Problem OP_. This function secures the proper initialization of the
-         * FEValues after the type has changed. See also the documentation of SetType in optproblemcontainer.h
-         */
-        void
-        SetProblemType(std::string type, unsigned int num = 0)
-        {
-          this->GetProblem()->SetType(type, num);
-        }
+    /**
+     * Sets the type of the Problem OP_. This function secures the proper initialization of the
+     * FEValues after the type has changed. See also the documentation of SetType in optproblemcontainer.h
+     */
+    void
+    SetProblemType(std::string type, unsigned int num = 0)
+    {
+      this->GetProblem()->SetType(type, num);
+    }
 
-        /**
-         * Initializes the HigherOrderDWRDataContainer
-         * (we need GetStateNBlocks() and GetStateBlockComponent()!)
-         */
-        template<class DWRC>
-          void
-          InitializeDWRC(DWRC& dwrc)
-          {
-            dwrc.Initialize(GetProblem()->GetSpaceTimeHandler(),
-                GetProblem()->GetStateNBlocks(),
-                GetProblem()->GetStateBlockComponent());
-          }
+    /**
+     * Initializes the HigherOrderDWRDataContainer
+     * (we need GetStateNBlocks() and GetStateBlockComponent()!)
+     */
+    template<class DWRC>
+    void
+    InitializeDWRC(DWRC &dwrc)
+    {
+      dwrc.Initialize(GetProblem()->GetSpaceTimeHandler(),
+                      GetProblem()->GetStateNBlocks(),
+                      GetProblem()->GetStateBlockComponent());
+    }
 
-      protected:
-        /**
-         * Just calls the GetFunctioalPosition() method of the problem. See
-         * there for further documentation of the method.
-         */
-        virtual const std::map<std::string, unsigned int>&
-        GetFunctionalPosition() const
-        {
-          return GetProblem()->GetFunctionalPosition();
-        }
+  protected:
+    /**
+     * Just calls the GetFunctioalPosition() method of the problem. See
+     * there for further documentation of the method.
+     */
+    virtual const std::map<std::string, unsigned int> &
+    GetFunctionalPosition() const
+    {
+      return GetProblem()->GetFunctionalPosition();
+    }
 
-        PROBLEM*
-        GetProblem()
-        {
-          return OP_;
-        }
-        const PROBLEM*
-        GetProblem() const
-        {
-          return OP_;
-        }
-        std::string
-        GetPostIndex()
-        {
-          return post_index_;
-        }
-        int
-        GetBasePriority()
-        {
-          return base_priority_;
-        }
-      private:
-        PROBLEM* OP_;
-        int base_priority_;
-        std::string post_index_;
-    };
+    PROBLEM *
+    GetProblem()
+    {
+      return OP_;
+    }
+    const PROBLEM *
+    GetProblem() const
+    {
+      return OP_;
+    }
+    std::string
+    GetPostIndex()
+    {
+      return post_index_;
+    }
+    int
+    GetBasePriority()
+    {
+      return base_priority_;
+    }
+  private:
+    PROBLEM *OP_;
+    int base_priority_;
+    std::string post_index_;
+  };
 
 }
 #endif

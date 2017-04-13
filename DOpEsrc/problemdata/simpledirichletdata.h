@@ -31,48 +31,51 @@ namespace DOpE
 {
 
   /**
-   * A Simple Interface Class, that sets DirichletData given by a DOpEWrapper::Function. 
+   * A Simple Interface Class, that sets DirichletData given by a DOpEWrapper::Function.
    * This means they don't depend on control or state values
    */
   template<typename VECTOR, int dealdim>
-    class SimpleDirichletData : public DirichletDataInterface<VECTOR, dealdim>
+  class SimpleDirichletData : public DirichletDataInterface<VECTOR, dealdim>
   {
   public:
-  SimpleDirichletData(const DOpEWrapper::Function<dealdim>& data) : DirichletDataInterface<VECTOR,dealdim>(), data_(data)
+    SimpleDirichletData(const DOpEWrapper::Function<dealdim> &data) : DirichletDataInterface<VECTOR,dealdim>(), data_(data)
     {}
 
-  double Data(const std::map<std::string, const dealii::Vector<double>* > */*param_values*/,
-	      const std::map<std::string, const VECTOR* > */*domain_values*/,
-	      unsigned int /*color*/,
-	      const dealii::Point<dealdim>& point,
-	      const unsigned int component) const
-  {
-    return data_.value(point,component);
-  }
+    double Data(const std::map<std::string, const dealii::Vector<double>* > */*param_values*/,
+                const std::map<std::string, const VECTOR * > */*domain_values*/,
+                unsigned int /*color*/,
+                const dealii::Point<dealdim> &point,
+                const unsigned int component) const
+    {
+      return data_.value(point,component);
+    }
 
-  double Data_Q(const std::map<std::string, const dealii::Vector<double>* > */*param_values*/,
-		const std::map<std::string, const VECTOR* > */*domain_values*/,
-		unsigned int /*color*/,
-		const dealii::Point<dealdim>& /*point*/,
-		const unsigned int /*component*/) const
-  {
-    return 0.;
-  }
+    double Data_Q(const std::map<std::string, const dealii::Vector<double>* > */*param_values*/,
+                  const std::map<std::string, const VECTOR * > */*domain_values*/,
+                  unsigned int /*color*/,
+                  const dealii::Point<dealdim> & /*point*/,
+                  const unsigned int /*component*/) const
+    {
+      return 0.;
+    }
 
-  void SetTime(double time) const
-  {
-    data_.SetTime(time);
-  }
+    void SetTime(double time) const
+    {
+      data_.SetTime(time);
+    }
 
-  unsigned int n_components() const
-  {
-    return data_.n_components;
-  }
+    unsigned int n_components() const
+    {
+      return data_.n_components;
+    }
 
-  double InitialTime() const { return data_.InitialTime();}
+    double InitialTime() const
+    {
+      return data_.InitialTime();
+    }
 
   private:
-    const DOpEWrapper::Function<dealdim>& data_;
+    const DOpEWrapper::Function<dealdim> &data_;
   };
 
 }

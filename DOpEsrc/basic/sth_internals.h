@@ -43,17 +43,17 @@ namespace DOpE
      * For DoFHandler
      */
     template<typename VECTOR, int dealdim>
-      void
-      MapDoFsToSupportPoints(
-          const DOpEWrapper::Mapping<dealdim, dealii::DoFHandler >& mapping,
-          const DOpEWrapper::DoFHandler<dealdim, dealii::DoFHandler >& dh,
-          VECTOR& support_points)
-      {
+    void
+    MapDoFsToSupportPoints(
+      const DOpEWrapper::Mapping<dealdim, dealii::DoFHandler > &mapping,
+      const DOpEWrapper::DoFHandler<dealdim, dealii::DoFHandler > &dh,
+      VECTOR &support_points)
+    {
 
 //        MappingQ1 < dealdim > mapping;
 
-        DoFTools::map_dofs_to_support_points(mapping, dh, support_points);
-      }
+      DoFTools::map_dofs_to_support_points(mapping, dh, support_points);
+    }
 
 //    /**
 //     * Calls the deal.II map_dofs_to_support_points routine.
@@ -77,33 +77,33 @@ namespace DOpE
      * For hp::DoFHandler
      */
     template<typename VECTOR, int dealdim>
-      void
-      MapDoFsToSupportPoints(
-          const DOpEWrapper::Mapping<dealdim, dealii::hp::DoFHandler >& mapping,
-          const DOpEWrapper::DoFHandler<dealdim, dealii::hp::DoFHandler >& dh,
-          VECTOR& support_points)
-      {
+    void
+    MapDoFsToSupportPoints(
+      const DOpEWrapper::Mapping<dealdim, dealii::hp::DoFHandler > &mapping,
+      const DOpEWrapper::DoFHandler<dealdim, dealii::hp::DoFHandler > &dh,
+      VECTOR &support_points)
+    {
 
 #if DEAL_II_MAJOR_VERSION >= 7
 #if DEAL_II_MINOR_VERSION >= 2
 //        MappingQ1<dealdim> mapping;
 //        hp::MappingCollection<dealdim> map_col(mapping);
 
-        DoFTools::map_dofs_to_support_points(mapping, dh, support_points);
+      DoFTools::map_dofs_to_support_points(mapping, dh, support_points);
 //        DoFTools::map_dofs_to_support_points(map_col, dh, support_points);
 #else
-        throw DOpEException(
-            "Your deal.ii version is too old. We need DoFTools::map_dofs_to_support_points for hp::DoFhandler"
-            " (Implemented since 7.2, revision 24975)!",
-            "MapDoFsToSupportPoints");
+      throw DOpEException(
+        "Your deal.ii version is too old. We need DoFTools::map_dofs_to_support_points for hp::DoFhandler"
+        " (Implemented since 7.2, revision 24975)!",
+        "MapDoFsToSupportPoints");
 #endif
 #else
-        throw DOpEException(
-            "Your deal.ii version is too old. We need DoFTools::map_dofs_to_support_points for hp::DoFhandler"
-                " (Implemented since 7.2, revision 24975)!",
-            "MapDoFsToSupportPoints");
+      throw DOpEException(
+        "Your deal.ii version is too old. We need DoFTools::map_dofs_to_support_points for hp::DoFhandler"
+        " (Implemented since 7.2, revision 24975)!",
+        "MapDoFsToSupportPoints");
 #endif
-      }
+    }
   }
 }
 

@@ -83,13 +83,13 @@ typedef BlockVector<double> VECTOR;
 typedef FunctionalInterface<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM> FUNC;
 
 typedef OptProblemContainer<LocalFunctional<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM> , FUNC,
-LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
-SimpleDirichletData<VECTOR, DIM>,
-NoConstraints<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM>, SPARSITYPATTERN,
-VECTOR, DIM, DIM, FE, DOFHANDLER> OP_BASE;
+        LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
+        SimpleDirichletData<VECTOR, DIM>,
+        NoConstraints<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM>, SPARSITYPATTERN,
+        VECTOR, DIM, DIM, FE, DOFHANDLER> OP_BASE;
 
 typedef StateProblem<OP_BASE, LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
-SimpleDirichletData<VECTOR, DIM>, SPARSITYPATTERN, VECTOR, DIM> PROB;
+        SimpleDirichletData<VECTOR, DIM>, SPARSITYPATTERN, VECTOR, DIM> PROB;
 
 // Typedefs for timestep problem
 #define TSP BackwardEulerProblem
@@ -97,23 +97,23 @@ SimpleDirichletData<VECTOR, DIM>, SPARSITYPATTERN, VECTOR, DIM> PROB;
 #define DTSP BackwardEulerProblem
 
 typedef InstatOptProblemContainer<TSP, DTSP, FUNC,
-    LocalFunctional<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM>,
-    LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
-    SimpleDirichletData<VECTOR, DIM>,
-    NoConstraints<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM>, SPARSITYPATTERN,
-    VECTOR, DIM, DIM,  FE, DOFHANDLER> OP;
+        LocalFunctional<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM>,
+        LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
+        SimpleDirichletData<VECTOR, DIM>,
+        NoConstraints<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM>, SPARSITYPATTERN,
+        VECTOR, DIM, DIM,  FE, DOFHANDLER> OP;
 #undef TSP
 #undef DTSP
 
 typedef IntegratorDataContainer<DOFHANDLER, QUADRATURE,
-FACEQUADRATURE, VECTOR, DIM> IDC;
+        FACEQUADRATURE, VECTOR, DIM> IDC;
 typedef Integrator<IDC, VECTOR, double, DIM> INTEGRATOR;
 typedef DirectLinearSolverWithMatrix<SPARSITYPATTERN, MATRIX, VECTOR> LINEARSOLVER;
 typedef NewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR> CNLS;
 typedef InstatStepNewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR> NLS;
 typedef ReducedNewtonAlgorithm<OP, VECTOR> RNA;
 typedef InstatReducedProblem<CNLS, NLS, INTEGRATOR, INTEGRATOR, OP, VECTOR, DIM,
-    DIM> RP;
+        DIM> RP;
 int
 main(int argc, char **argv)
 {
@@ -125,14 +125,14 @@ main(int argc, char **argv)
   string paramfile = "dope.prm";
 
   if (argc == 2)
-  {
-    paramfile = argv[1];
-  }
+    {
+      paramfile = argv[1];
+    }
   else if (argc > 2)
-  {
-    std::cout << "Usage: " << argv[0] << " [ paramfile ] " << std::endl;
-    return -1;
-  }
+    {
+      std::cout << "Usage: " << argv[0] << " [ paramfile ] " << std::endl;
+      return -1;
+    }
 
   ParameterReader pr;
   RP::declare_params(pr);
@@ -155,11 +155,11 @@ main(int argc, char **argv)
   control_fe_collection.push_back(control_fe); //Need same number of entries in FECollection as state
 
 
-  // FE for the state equation: 
+  // FE for the state equation:
   FESystem<DIM> state_fe(FE_Q<DIM>(2), 2,  // u
-			 FE_Q<DIM>(1), 1); // p
+                         FE_Q<DIM>(1), 1); // p
   FESystem<DIM> state_fe_2(FE_Q<DIM>(2), 2, // u
-			   FE_Nothing<DIM>(1), 1); // nothing
+                           FE_Nothing<DIM>(1), 1); // nothing
 
 
   hp::FECollection<DIM> state_fe_collection(state_fe);
@@ -188,15 +188,15 @@ main(int argc, char **argv)
   triangulation.refine_global(3);
   ActiveFEIndexSetter<DIM> indexsetter;
   MethodOfLines_SpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR,
-  DIM, DIM> DOFH(triangulation,
-		 control_fe_collection,
-		 state_fe_collection,
-		 times, DOpEtypes::ControlType::stationary,
-		 false,
-		 indexsetter);
+                                 DIM, DIM> DOFH(triangulation,
+                                                control_fe_collection,
+                                                state_fe_collection,
+                                                times, DOpEtypes::ControlType::stationary,
+                                                false,
+                                                indexsetter);
 
   NoConstraints<ElementDataContainer, FaceDataContainer, DOFHANDLER, VECTOR,
-  DIM, DIM> Constraints;
+                DIM, DIM> Constraints;
 
   OP P(LFunc, LPDE, Constraints, DOFH);
 
@@ -251,27 +251,27 @@ main(int argc, char **argv)
   ControlVector<VECTOR> q(&DOFH, DOpEtypes::VectorStorageType::fullmem);
 
   for (int i = 0; i < niter; i++)
-  {
-    try
     {
+      try
+        {
 
-      Alg.SolveForward(q);
+          Alg.SolveForward(q);
 
-    }
-    catch (DOpEException &e)
-    {
-      std::cout
-          << "Warning: During execution of `" + e.GetThrowingInstance()
+        }
+      catch (DOpEException &e)
+        {
+          std::cout
+              << "Warning: During execution of `" + e.GetThrowingInstance()
               + "` the following Problem occurred!" << std::endl;
-      std::cout << e.GetErrorMessage() << std::endl;
+          std::cout << e.GetErrorMessage() << std::endl;
+        }
+      if (i != niter - 1)
+        {
+          //triangulation.refine_global (1);
+          DOFH.RefineSpace();
+          Alg.ReInit();
+        }
     }
-    if (i != niter - 1)
-    {
-      //triangulation.refine_global (1);
-      DOFH.RefineSpace();
-      Alg.ReInit();
-    }
-  }
 
   return 0;
 }

@@ -28,36 +28,36 @@
 using namespace DOpE;
 
 template<int dealdim>
-  class ActiveFEIndexSetter : public ActiveFEIndexSetterInterface<dealdim>
+class ActiveFEIndexSetter : public ActiveFEIndexSetterInterface<dealdim>
+{
+public:
+  ActiveFEIndexSetter(ParameterReader &/*param_reader*/)
   {
-    public:
-      ActiveFEIndexSetter(ParameterReader &/*param_reader*/)
-      {
-      }
+  }
 
-      static void
-      declare_params(ParameterReader &/*param_reader*/)
-      {
-      }
+  static void
+  declare_params(ParameterReader &/*param_reader*/)
+  {
+  }
 
-      /*
-       * Gets an iterator to a element and sets an active FE index
-       * on this element for the state variable. This function is
-       * used after the first grid generation.
-       *
-       */
-      virtual void
-      SetActiveFEIndexState(
-          typename dealii::hp::DoFHandler<dealdim>::active_cell_iterator&element) const
-      {
+  /*
+   * Gets an iterator to a element and sets an active FE index
+   * on this element for the state variable. This function is
+   * used after the first grid generation.
+   *
+   */
+  virtual void
+  SetActiveFEIndexState(
+    typename dealii::hp::DoFHandler<dealdim>::active_cell_iterator &element) const
+  {
 
-        if (element->center()[0] < 0)
-          element->set_active_fe_index(0);
-        else
-          element->set_active_fe_index(1);
-      }
+    if (element->center()[0] < 0)
+      element->set_active_fe_index(0);
+    else
+      element->set_active_fe_index(1);
+  }
 
-  };
+};
 
 #endif /* INDEXSETT
 ER_H_ */

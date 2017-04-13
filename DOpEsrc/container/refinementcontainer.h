@@ -41,53 +41,53 @@ namespace DOpE
    */
   class RefinementContainer
   {
-    public:
-      /**
-       * Constructor if one wants to use a refinement which does
-       * not need any special data apart from the given DOpEtypes::RefinementType
-       * (like global refinement). If no DOpEtypes::RefinementType is given, global
-       * mesh refinement is assumed.
-       * */
-      RefinementContainer(DOpEtypes::RefinementType ref_type =
-          DOpEtypes::RefinementType::global);
-      virtual
-      ~RefinementContainer()
-      {
-      }
+  public:
+    /**
+     * Constructor if one wants to use a refinement which does
+     * not need any special data apart from the given DOpEtypes::RefinementType
+     * (like global refinement). If no DOpEtypes::RefinementType is given, global
+     * mesh refinement is assumed.
+     * */
+    RefinementContainer(DOpEtypes::RefinementType ref_type =
+                          DOpEtypes::RefinementType::global);
+    virtual
+    ~RefinementContainer()
+    {
+    }
 
-      /**
-       * Get functions, self explanatory. Implemented
-       * in the derived classes.
-       */
-      virtual const dealii::Vector<float>&
-      GetLocalErrorIndicators() const;
-      virtual double
-      GetTopFraction() const;
-      virtual double
-      GetBottomFraction() const;
-      //     virtual unsigned int
-      //GetMaxNElements() const;
-      virtual double
-      GetConvergenceOrder() const;
+    /**
+     * Get functions, self explanatory. Implemented
+     * in the derived classes.
+     */
+    virtual const dealii::Vector<float> &
+    GetLocalErrorIndicators() const;
+    virtual double
+    GetTopFraction() const;
+    virtual double
+    GetBottomFraction() const;
+    //     virtual unsigned int
+    //GetMaxNElements() const;
+    virtual double
+    GetConvergenceOrder() const;
 
-      /**
-       * Returns the refinement type for which
-       * the RefinementContainer object is constructed,
-       * see dopetypes.h
-       */
-      DOpEtypes::RefinementType
-      GetRefType() const;
+    /**
+     * Returns the refinement type for which
+     * the RefinementContainer object is constructed,
+     * see dopetypes.h
+     */
+    DOpEtypes::RefinementType
+    GetRefType() const;
 
-      /**
-       * Specifies if the mesh refinement uses coarsening.
-       */
-      bool
-      UsesCoarsening() const;
-    protected:
-      bool coarsening_;
-    private:
-      const dealii::Vector<float> dummy_;
-      const DOpEtypes::RefinementType ref_type_;
+    /**
+     * Specifies if the mesh refinement uses coarsening.
+     */
+    bool
+    UsesCoarsening() const;
+  protected:
+    bool coarsening_;
+  private:
+    const dealii::Vector<float> dummy_;
+    const DOpEtypes::RefinementType ref_type_;
 
   };
 
@@ -99,27 +99,27 @@ namespace DOpE
    */
   class LocalRefinement : public RefinementContainer
   {
-    public:
-      virtual
-      ~LocalRefinement()
-      {
-      }
+  public:
+    virtual
+    ~LocalRefinement()
+    {
+    }
 
-      virtual const dealii::Vector<float>&
-      GetLocalErrorIndicators() const;
+    virtual const dealii::Vector<float> &
+    GetLocalErrorIndicators() const;
 
-    protected:
-      /**
-       * Protected constructor for use in the derived classes
-       */
-      LocalRefinement(const dealii::Vector<float>&,
-          DOpEtypes::RefinementType ref_type);
-    private:
-      /**
-       * Constructor made private. Should not get used!
-       */
-      LocalRefinement();
-      const dealii::Vector<float>& indicators_;
+  protected:
+    /**
+     * Protected constructor for use in the derived classes
+     */
+    LocalRefinement(const dealii::Vector<float> &,
+                    DOpEtypes::RefinementType ref_type);
+  private:
+    /**
+     * Constructor made private. Should not get used!
+     */
+    LocalRefinement();
+    const dealii::Vector<float> &indicators_;
   };
 
   /***************************************************************/
@@ -130,29 +130,29 @@ namespace DOpE
    */
   class RefineFixedFraction : public LocalRefinement
   {
-    public:
-      /**
-       * Constructor if one wants to use local refinement with the
-       * fixed fraction strategy.
-       *
-       * @param indicators        A set of positive values, used to guide refinement.
-       * @param topfraction       is the fraction of the total estimate which should be refined.
-       * @param bottomfraction    is the fraction of the estimate coarsened.
-       */
-      RefineFixedFraction(const dealii::Vector<float>& indicators,
-			  double top_fraction = 0.1, double bottom_fraction = 0.0);
+  public:
+    /**
+     * Constructor if one wants to use local refinement with the
+     * fixed fraction strategy.
+     *
+     * @param indicators        A set of positive values, used to guide refinement.
+     * @param topfraction       is the fraction of the total estimate which should be refined.
+     * @param bottomfraction    is the fraction of the estimate coarsened.
+     */
+    RefineFixedFraction(const dealii::Vector<float> &indicators,
+                        double top_fraction = 0.1, double bottom_fraction = 0.0);
 
-      virtual
-      ~ RefineFixedFraction()
-      {
-      }
+    virtual
+    ~ RefineFixedFraction()
+    {
+    }
 
-      virtual double
-      GetTopFraction() const;
-      virtual double
-      GetBottomFraction() const;
-    private:
-      const double top_fraction_, bottom_fraction_;
+    virtual double
+    GetTopFraction() const;
+    virtual double
+    GetBottomFraction() const;
+  private:
+    const double top_fraction_, bottom_fraction_;
   };
 
   /***************************************************************/
@@ -163,32 +163,32 @@ namespace DOpE
    */
   class RefineFixedNumber : public LocalRefinement
   {
-    public:
-      /**
-       * Constructor if one wants to use local refinement with the
-       * fixed number strategy. This leads to local mesh refinement
-       * with a predictable growth of the mesh.
-       *
-       * @param indicators        A set of positive values, used to guide refinement.
-       * @param topfraction        is the fraction of elements to be refined.
-       *
-       * @param bottomfraction    In a fixed fraction/fixed number strategy,
-       *                          wich part should be coarsened.
-       */
-      RefineFixedNumber(const dealii::Vector<float>& indicators,
-			double top_fraction = 0.1, double bottom_fraction = 0.0);
-      virtual
-      ~ RefineFixedNumber()
-      {
-      }
+  public:
+    /**
+     * Constructor if one wants to use local refinement with the
+     * fixed number strategy. This leads to local mesh refinement
+     * with a predictable growth of the mesh.
+     *
+     * @param indicators        A set of positive values, used to guide refinement.
+     * @param topfraction        is the fraction of elements to be refined.
+     *
+     * @param bottomfraction    In a fixed fraction/fixed number strategy,
+     *                          wich part should be coarsened.
+     */
+    RefineFixedNumber(const dealii::Vector<float> &indicators,
+                      double top_fraction = 0.1, double bottom_fraction = 0.0);
+    virtual
+    ~ RefineFixedNumber()
+    {
+    }
 
-      virtual double
-      GetTopFraction() const;
-      virtual double
-      GetBottomFraction() const;
+    virtual double
+    GetTopFraction() const;
+    virtual double
+    GetBottomFraction() const;
 
-    private:
-      const double top_fraction_, bottom_fraction_;
+  private:
+    const double top_fraction_, bottom_fraction_;
   };
 
   /***************************************************************/
@@ -200,26 +200,26 @@ namespace DOpE
 
   class RefineOptimized : public LocalRefinement
   {
-    public:
-      /**
-       * Constructor if one wants to use the optimized refinement strategy.
-       *
-       * @param indicators        A set of positive values, used to guide refinement.
-       * @param convergence_order Convergence order of the functional of interest.
-       */
-      RefineOptimized(const dealii::Vector<float>& indicators,
-          double convergence_order = 2.);
+  public:
+    /**
+     * Constructor if one wants to use the optimized refinement strategy.
+     *
+     * @param indicators        A set of positive values, used to guide refinement.
+     * @param convergence_order Convergence order of the functional of interest.
+     */
+    RefineOptimized(const dealii::Vector<float> &indicators,
+                    double convergence_order = 2.);
 
-      virtual
-      ~ RefineOptimized()
-      {
-      }
+    virtual
+    ~ RefineOptimized()
+    {
+    }
 
-      virtual double
-      GetConvergenceOrder() const;
+    virtual double
+    GetConvergenceOrder() const;
 
-    private:
-      const double convergence_order_;
+  private:
+    const double convergence_order_;
   };
 
 }

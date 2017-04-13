@@ -43,9 +43,9 @@ namespace DOpE
      * fixed_fraction   Local refinement using fixed fraction strategy
      * fixed_number     Local refinement using fixed number of elements strategy
      * optimized        Local refinement using optimized strategy
-     * finest_of_both   In the case that one has two grids, refine such that 
-     *                  elements are refined if, on the other mesh, the element 
-     *                  has been refined. 
+     * finest_of_both   In the case that one has two grids, refine such that
+     *                  elements are refined if, on the other mesh, the element
+     *                  has been refined.
      */
     enum RefinementType
     {
@@ -106,15 +106,15 @@ namespace DOpE
       initial,
       nonstationary
     };
-    
+
     /**
-     * An enum that describes the storage behavior of 
+     * An enum that describes the storage behavior of
      * all Control-, State-, and ConstraintVectors
      *
      * fullmem          Store all data in the main memory (RAM)
      * store_on_disc    Stores all unused timesteps on the harddisc
      * only_recent      Only keep a copy of the most recent timestep
-     *                  (Only useful for pure forward runs and 
+     *                  (Only useful for pure forward runs and
      *                   Pseudo-Timestepping methods)
      */
     enum VectorStorageType
@@ -131,90 +131,90 @@ namespace DOpE
    * Transfers DOpEtypes::VectorStorageType etc to Human readable values
    */
   template<typename C>
-    inline std::string DOpEtypesToString(const C& /*t*/)
-    {
-      throw DOpEException("Not implemented!","DOpEtypesToString");
-    }
+  inline std::string DOpEtypesToString(const C & /*t*/)
+  {
+    throw DOpEException("Not implemented!","DOpEtypesToString");
+  }
 
-    template <>
-    inline std::string DOpEtypesToString(const DOpEtypes::VectorStorageType& t)
-    {
-      if( DOpEtypes::VectorStorageType::fullmem == t )
+  template <>
+  inline std::string DOpEtypesToString(const DOpEtypes::VectorStorageType &t)
+  {
+    if ( DOpEtypes::VectorStorageType::fullmem == t )
       {
-	return "fullmem";
+        return "fullmem";
       }
-      else if( DOpEtypes::VectorStorageType::store_on_disc == t )
+    else if ( DOpEtypes::VectorStorageType::store_on_disc == t )
       {
-	return "store_on_disc";
+        return "store_on_disc";
       }
-      else if( DOpEtypes::VectorStorageType::only_recent == t )
+    else if ( DOpEtypes::VectorStorageType::only_recent == t )
       {
-	return "only_recent";
+        return "only_recent";
       }
-      else
+    else
       {
-	std::stringstream out;
-	out<<"Unknown DOpEtypes::VectorStorageType"<< std::endl;
-	out<<"Code given is "<< t<<std::endl;
-	throw DOpEException(out.str(),"DOpEtypesToString<DOpEtypes::VectorStorageType");
+        std::stringstream out;
+        out<<"Unknown DOpEtypes::VectorStorageType"<< std::endl;
+        out<<"Code given is "<< t<<std::endl;
+        throw DOpEException(out.str(),"DOpEtypesToString<DOpEtypes::VectorStorageType");
       }
-    }
+  }
 
-    template <>
-    inline std::string DOpEtypesToString(const DOpEtypes::ControlType& t)
-    {
-      if( DOpEtypes::ControlType::initial== t )
+  template <>
+  inline std::string DOpEtypesToString(const DOpEtypes::ControlType &t)
+  {
+    if ( DOpEtypes::ControlType::initial== t )
       {
-	return "initial";
+        return "initial";
       }
-      else if( DOpEtypes::ControlType::stationary == t )
+    else if ( DOpEtypes::ControlType::stationary == t )
       {
-	return "stationary";
+        return "stationary";
       }
-      else if( DOpEtypes::ControlType::nonstationary == t )
+    else if ( DOpEtypes::ControlType::nonstationary == t )
       {
-	return "nonstationary";
+        return "nonstationary";
       }
-      else
+    else
       {
-	std::stringstream out;
-	out<<"Unknown DOpEtypes::ControlType"<< std::endl;
-	out<<"Code given is "<< t<<std::endl;
-	throw DOpEException(out.str(),"DOpEtypesToString<DOpEtypes::ControlType");
+        std::stringstream out;
+        out<<"Unknown DOpEtypes::ControlType"<< std::endl;
+        out<<"Code given is "<< t<<std::endl;
+        throw DOpEException(out.str(),"DOpEtypesToString<DOpEtypes::ControlType");
       }
-    }
-    
-    template <>
-    inline std::string DOpEtypesToString(const DOpEtypes::RefinementType& t)
-    {
-      if( DOpEtypes::RefinementType::global== t )
+  }
+
+  template <>
+  inline std::string DOpEtypesToString(const DOpEtypes::RefinementType &t)
+  {
+    if ( DOpEtypes::RefinementType::global== t )
       {
-	return "global";
+        return "global";
       }
-      else if( DOpEtypes::RefinementType::fixed_fraction == t )
+    else if ( DOpEtypes::RefinementType::fixed_fraction == t )
       {
-	return "fixed_fraction";
+        return "fixed_fraction";
       }
-      else if( DOpEtypes::RefinementType::fixed_number == t )
+    else if ( DOpEtypes::RefinementType::fixed_number == t )
       {
-	return "fixed_number";
+        return "fixed_number";
       }
-      else if( DOpEtypes::RefinementType::optimized == t )
+    else if ( DOpEtypes::RefinementType::optimized == t )
       {
-	return "optimized";
+        return "optimized";
       }
-      else if( DOpEtypes::RefinementType::finest_of_both == t )
+    else if ( DOpEtypes::RefinementType::finest_of_both == t )
       {
-	return "finest_of_both";
+        return "finest_of_both";
       }
-      else
+    else
       {
-	std::stringstream out;
-	out<<"Unknown DOpEtypes::RefinementType"<< std::endl;
-	out<<"Code given is "<< t<<std::endl;
-	throw DOpEException(out.str(),"DOpEtypesToString<DOpEtypes::RefinementType>");
+        std::stringstream out;
+        out<<"Unknown DOpEtypes::RefinementType"<< std::endl;
+        out<<"Code given is "<< t<<std::endl;
+        throw DOpEException(out.str(),"DOpEtypesToString<DOpEtypes::RefinementType>");
       }
-    }
+  }
 
 }//End of Namespace DOpE
 

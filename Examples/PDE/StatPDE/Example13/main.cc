@@ -76,12 +76,12 @@ typedef SparsityPattern SPARSITYPATTERN;
 typedef Vector<double> VECTOR;
 
 //Second number denotes the number of unknowns per element (the blocksize we want to use)
-typedef DOpEWrapper::PreconditionBlockSSOR_Wrapper<MATRIX,4> PRECONDITIONERSSOR; 
+typedef DOpEWrapper::PreconditionBlockSSOR_Wrapper<MATRIX,4> PRECONDITIONERSSOR;
 
 typedef PDEProblemContainer<LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
-    SimpleDirichletData<VECTOR, DIM>, SPARSITYPATTERN, VECTOR, DIM> OP;
+        SimpleDirichletData<VECTOR, DIM>, SPARSITYPATTERN, VECTOR, DIM> OP;
 typedef IntegratorDataContainer<DOFHANDLER, QUADRATURE, FACEQUADRATURE,
-    VECTOR, DIM> IDC;
+        VECTOR, DIM> IDC;
 typedef Integrator<IDC, VECTOR, double, DIM> INTEGRATOR;
 //typedef DirectLinearSolverWithMatrix<SPARSITYPATTERN, MATRIX, VECTOR> LINEARSOLVER;
 typedef RichardsonLinearSolverWithMatrix<PRECONDITIONERSSOR, SPARSITYPATTERN, MATRIX, VECTOR> LINEARSOLVER;
@@ -89,16 +89,16 @@ typedef RichardsonLinearSolverWithMatrix<PRECONDITIONERSSOR, SPARSITYPATTERN, MA
 typedef NewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR> NLS;
 typedef StatPDEProblem<NLS, INTEGRATOR, OP, VECTOR, DIM> RP;
 typedef MethodOfLines_StateSpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN,
-    VECTOR, DIM> STH;
+        VECTOR, DIM> STH;
 
 void
 declare_params(ParameterReader &param_reader)
 {
   param_reader.SetSubsection("main parameters");
   param_reader.declare_entry("max_iter", "1", Patterns::Integer(0),
-      "How many iterations?");
+                             "How many iterations?");
   param_reader.declare_entry("prerefine", "1", Patterns::Integer(1),
-      "How often should we refine the coarse grid?");
+                             "How often should we refine the coarse grid?");
 }
 
 int
@@ -112,14 +112,14 @@ main(int argc, char **argv)
   string paramfile = "dope.prm";
 
   if (argc == 2)
-  {
-    paramfile = argv[1];
-  }
+    {
+      paramfile = argv[1];
+    }
   else if (argc > 2)
-  {
-    std::cout << "Usage: " << argv[0] << " [ paramfile ] " << std::endl;
-    return -1;
-  }
+    {
+      std::cout << "Usage: " << argv[0] << " [ paramfile ] " << std::endl;
+      return -1;
+    }
   ParameterReader pr;
 
   RP::declare_params(pr);
@@ -156,11 +156,11 @@ main(int argc, char **argv)
   //Functionals*************************************************
   MeanValueFunctional<CDC, FDC, DOFHANDLER, VECTOR, DIM> MVF;
   //*************************************************
-  
+
   //pde*************************************************
   LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM> LPDE;
   //*************************************************
-  
+
   //space time handler***********************************/
   STH DOFH(triangulation, state_fe, true);
   /***********************************/
@@ -182,46 +182,46 @@ main(int argc, char **argv)
   P.RegisterExceptionHandler(&ex);
   solver.RegisterOutputHandler(&out);
   solver.RegisterExceptionHandler(&ex);
-  
+
   //**************************************************************************************************
 
   for (int i = 0; i < max_iter; i++)
-  {
-    try
     {
-      solver.ReInit();
-      out.ReInit();
-      stringstream outp;
+      try
+        {
+          solver.ReInit();
+          out.ReInit();
+          stringstream outp;
 
-      outp << "**************************************************\n";
-      outp << "*             Starting Forward Solve             *\n";
-      outp << "*   Solving : " << P.GetName() << "\t*\n";
-      outp << "*   SDoFs   : ";
-      solver.StateSizeInfo(outp);
-      outp << "**************************************************";
-      out.Write(outp, 1, 1, 1);
+          outp << "**************************************************\n";
+          outp << "*             Starting Forward Solve             *\n";
+          outp << "*   Solving : " << P.GetName() << "\t*\n";
+          outp << "*   SDoFs   : ";
+          solver.StateSizeInfo(outp);
+          outp << "**************************************************";
+          out.Write(outp, 1, 1, 1);
 
-      solver.ComputeReducedFunctionals();
-      
-      const double exact_value = 0.25*0.25*M_PI;
+          solver.ComputeReducedFunctionals();
 
-      double error = exact_value - solver.GetFunctionalValue(MVF.GetName());
-      outp << "Mean value: " <<solver.GetFunctionalValue(MVF.GetName()) << " - Mean value error: " << error << std::endl;
-      out.Write(outp, 1, 1, 1);
+          const double exact_value = 0.25*0.25*M_PI;
+
+          double error = exact_value - solver.GetFunctionalValue(MVF.GetName());
+          outp << "Mean value: " <<solver.GetFunctionalValue(MVF.GetName()) << " - Mean value error: " << error << std::endl;
+          out.Write(outp, 1, 1, 1);
+        }
+      catch (DOpEException &e)
+        {
+          std::cout
+              << "Warning: During execution of `" + e.GetThrowingInstance()
+              + "` the following Problem occurred!" << std::endl;
+          std::cout << e.GetErrorMessage() << std::endl;
+        }
+      if (i != max_iter - 1)
+        {
+          //For global mesh refinement, uncomment the next line
+          DOFH.RefineSpace(DOpEtypes::RefinementType::global); //or just DOFH.RefineSpace()
+        }
     }
-    catch (DOpEException &e)
-    {
-      std::cout
-	<< "Warning: During execution of `" + e.GetThrowingInstance()
-	+ "` the following Problem occurred!" << std::endl;
-      std::cout << e.GetErrorMessage() << std::endl;
-    }
-    if (i != max_iter - 1)
-    {
-      //For global mesh refinement, uncomment the next line
-      DOFH.RefineSpace(DOpEtypes::RefinementType::global); //or just DOFH.RefineSpace()
-    }
-  }
   return 0;
 }
 #undef FDC

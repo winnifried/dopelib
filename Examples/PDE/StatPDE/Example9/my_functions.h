@@ -32,27 +32,27 @@ using namespace dealii;
 
 class BoundaryParabel : public DOpEWrapper::Function<2>
 {
-  public:
-    BoundaryParabel() :
-        DOpEWrapper::Function<2>(5)
-    {
-    }
+public:
+  BoundaryParabel() :
+    DOpEWrapper::Function<2>(5)
+  {
+  }
 
-    /**
-     * Returns the value of the component 'component' of the function
-     * in point 'p'.
-     */
-    virtual double
-    value(const Point<2> &p, const unsigned int component = 0) const;
+  /**
+   * Returns the value of the component 'component' of the function
+   * in point 'p'.
+   */
+  virtual double
+  value(const Point<2> &p, const unsigned int component = 0) const;
 
-    /**
-     * Returns the value  of the function  in point 'p'.
-     */
+  /**
+   * Returns the value  of the function  in point 'p'.
+   */
 
-    virtual void
-    vector_value(const Point<2> &p, Vector<double> &value) const;
+  virtual void
+  vector_value(const Point<2> &p, Vector<double> &value) const;
 
-  private:
+private:
 
 };
 
@@ -62,18 +62,18 @@ double
 BoundaryParabel::value(const Point<2> &p, const unsigned int component) const
 {
   Assert(component < this->n_components,
-      ExcIndexRange (component, 0, this->n_components));
+         ExcIndexRange (component, 0, this->n_components));
 
   double damping_inflow = 1.0;
 
   if (component == 0)
-  {
-    return (
-        (p(0) == -6.0) && (p(1) <= 2.0) ? -damping_inflow
-            * (std::pow(p(1), 2) - 2.0 * std::pow(p(1), 1)) :
-            0);
+    {
+      return (
+               (p(0) == -6.0) && (p(1) <= 2.0) ? -damping_inflow
+               * (std::pow(p(1), 2) - 2.0 * std::pow(p(1), 1)) :
+               0);
 
-  }
+    }
   return 0;
 }
 

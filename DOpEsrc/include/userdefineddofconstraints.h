@@ -52,61 +52,61 @@ namespace DOpE
    * get changed.
    */
   template<template<int, int> class DH, int dopedim, int dealdim = dopedim>
-    class UserDefinedDoFConstraints
+  class UserDefinedDoFConstraints
+  {
+  public:
+    UserDefinedDoFConstraints()
     {
-      public:
-        UserDefinedDoFConstraints()
-        {
-        }
-        virtual
-        ~UserDefinedDoFConstraints()
-        {
-        }
-        virtual void
-        MakeStateDoFConstraints(
-            const DOpEWrapper::DoFHandler<dealdim, DH> & dof_handler,
-            dealii::ConstraintMatrix& dof_constraints) const;
+    }
+    virtual
+    ~UserDefinedDoFConstraints()
+    {
+    }
+    virtual void
+    MakeStateDoFConstraints(
+      const DOpEWrapper::DoFHandler<dealdim, DH> &dof_handler,
+      dealii::ConstraintMatrix &dof_constraints) const;
 
-        virtual void
-        MakeControlDoFConstraints(
-            const DOpEWrapper::DoFHandler<dopedim, DH> & dof_handler,
-            dealii::ConstraintMatrix& dof_constraints) const;
+    virtual void
+    MakeControlDoFConstraints(
+      const DOpEWrapper::DoFHandler<dopedim, DH> &dof_handler,
+      dealii::ConstraintMatrix &dof_constraints) const;
 
-        void
-        RegisterMapping(const typename DOpEWrapper::Mapping<dealdim, DH>& mapping)
-        {
-          mapping_ = &mapping;
-        }
-
-    protected:
-      const DOpEWrapper::Mapping<dealdim, DH> &
-        GetMapping() const
-        {
-          return *mapping_;
-        }
-    private:
-      const DOpEWrapper::Mapping<dealdim, DH> * mapping_;
-    };
-
-  template<template<int, int> class DH, int dopedim, int dealdim>
     void
-    UserDefinedDoFConstraints<DH, dopedim, dealdim>::MakeStateDoFConstraints(
-        const DOpEWrapper::DoFHandler<dealdim, DH> & /*dof_handler*/,
-        dealii::ConstraintMatrix& /*dof_constraints*/) const
+    RegisterMapping(const typename DOpEWrapper::Mapping<dealdim, DH> &mapping)
     {
-      throw DOpEException("Not Implemented.",
-          "UserDefinedDoFConstraints::MakeStateDoFConstraints");
+      mapping_ = &mapping;
     }
 
-  template<template<int, int> class DH, int dopedim, int dealdim>
-    void
-    UserDefinedDoFConstraints<DH, dopedim, dealdim>::MakeControlDoFConstraints(
-        const DOpEWrapper::DoFHandler<dopedim, DH> & /*dof_handler*/,
-        dealii::ConstraintMatrix& /*dof_constraints*/) const
+  protected:
+    const DOpEWrapper::Mapping<dealdim, DH> &
+    GetMapping() const
     {
-      throw DOpEException("Not Implemented.",
-          "UserDefinedDoFConstraints::MakeControlDoFConstraints");
+      return *mapping_;
     }
+  private:
+    const DOpEWrapper::Mapping<dealdim, DH> *mapping_;
+  };
+
+  template<template<int, int> class DH, int dopedim, int dealdim>
+  void
+  UserDefinedDoFConstraints<DH, dopedim, dealdim>::MakeStateDoFConstraints(
+    const DOpEWrapper::DoFHandler<dealdim, DH> & /*dof_handler*/,
+    dealii::ConstraintMatrix & /*dof_constraints*/) const
+  {
+    throw DOpEException("Not Implemented.",
+                        "UserDefinedDoFConstraints::MakeStateDoFConstraints");
+  }
+
+  template<template<int, int> class DH, int dopedim, int dealdim>
+  void
+  UserDefinedDoFConstraints<DH, dopedim, dealdim>::MakeControlDoFConstraints(
+    const DOpEWrapper::DoFHandler<dopedim, DH> & /*dof_handler*/,
+    dealii::ConstraintMatrix & /*dof_constraints*/) const
+  {
+    throw DOpEException("Not Implemented.",
+                        "UserDefinedDoFConstraints::MakeControlDoFConstraints");
+  }
 
 } //end of namespace
 #endif /* CONSTRAINTMAKER_H_ */

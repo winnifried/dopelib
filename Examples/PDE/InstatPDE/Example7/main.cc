@@ -82,18 +82,18 @@ typedef SparsityPattern SPARSITYPATTERN;
 typedef Vector<double> VECTOR;
 
 //Second number denotes the number of unknowns per element (the blocksize we want to use)
-typedef DOpEWrapper::PreconditionBlockSSOR_Wrapper<MATRIX,2> PRECONDITIONERSSOR; 
+typedef DOpEWrapper::PreconditionBlockSSOR_Wrapper<MATRIX,2> PRECONDITIONERSSOR;
 
 typedef FunctionalInterface<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM> FUNC;
 
 typedef OptProblemContainer<
-    LocalFunctional<CDC, FDC, DOFHANDLER, VECTOR, DIM>, FUNC,
-    LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
-    SimpleDirichletData<VECTOR, DIM>,
-    NoConstraints<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM>, SPARSITYPATTERN,
-    VECTOR, DIM, DIM> OP_BASE;
+LocalFunctional<CDC, FDC, DOFHANDLER, VECTOR, DIM>, FUNC,
+                LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
+                SimpleDirichletData<VECTOR, DIM>,
+                NoConstraints<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM>, SPARSITYPATTERN,
+                VECTOR, DIM, DIM> OP_BASE;
 typedef StateProblem<OP_BASE, LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
-    SimpleDirichletData<VECTOR, DIM>, SPARSITYPATTERN, VECTOR, DIM> PROB;
+        SimpleDirichletData<VECTOR, DIM>, SPARSITYPATTERN, VECTOR, DIM> PROB;
 
 // Typedefs for timestep problem
 #define TSP ShiftedCrankNicolsonProblem
@@ -101,16 +101,16 @@ typedef StateProblem<OP_BASE, LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
 //FIXME: This should be a reasonable dual timestepping scheme
 #define DTSP ShiftedCrankNicolsonProblem
 typedef InstatOptProblemContainer<TSP, DTSP, FUNC,
-    LocalFunctional<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
-    LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
-    SimpleDirichletData<VECTOR, DIM>,
-    NoConstraints<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM>, SPARSITYPATTERN,
-    VECTOR, DIM, DIM> OP;
+        LocalFunctional<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
+        LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
+        SimpleDirichletData<VECTOR, DIM>,
+        NoConstraints<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM>, SPARSITYPATTERN,
+        VECTOR, DIM, DIM> OP;
 #undef TSP
 #undef DTSP
 
 typedef IntegratorDataContainer<DOFHANDLER, QUADRATURE, FACEQUADRATURE,
-    VECTOR, DIM> IDC;
+        VECTOR, DIM> IDC;
 typedef Integrator<IDC, VECTOR, double, DIM> INTEGRATOR;
 typedef RichardsonLinearSolverWithMatrix<PRECONDITIONERSSOR, SPARSITYPATTERN, MATRIX, VECTOR> LINEARSOLVER;
 
@@ -118,19 +118,19 @@ typedef NewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR> CNLS;
 typedef InstatStepNewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR> NLS;
 typedef ReducedNewtonAlgorithm<OP, VECTOR> RNA;
 typedef InstatReducedProblem<CNLS, NLS, INTEGRATOR, INTEGRATOR, OP, VECTOR, DIM,
-    DIM> RP;
+        DIM> RP;
 
 typedef MethodOfLines_SpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN,
-				       VECTOR, DIM, DIM> STH;
+        VECTOR, DIM, DIM> STH;
 
 void
 declare_params(ParameterReader &param_reader)
 {
   param_reader.SetSubsection("main parameters");
   param_reader.declare_entry("max_iter", "1", Patterns::Integer(0),
-      "How many iterations?");
+                             "How many iterations?");
   param_reader.declare_entry("prerefine", "1", Patterns::Integer(1),
-      "How often should we refine the coarse grid?");
+                             "How often should we refine the coarse grid?");
 }
 
 int
@@ -139,14 +139,14 @@ main(int argc, char **argv)
   string paramfile = "dope.prm";
 
   if (argc == 2)
-  {
-    paramfile = argv[1];
-  }
+    {
+      paramfile = argv[1];
+    }
   else if (argc > 2)
-  {
-    std::cout << "Usage: " << argv[0] << " [ paramfile ] " << std::endl;
-    return -1;
-  }
+    {
+      std::cout << "Usage: " << argv[0] << " [ paramfile ] " << std::endl;
+      return -1;
+    }
   ParameterReader pr;
 
   RP::declare_params(pr);
@@ -185,7 +185,7 @@ main(int argc, char **argv)
   //Functionals*************************************************
   LocalFunctional<CDC, FDC, DOFHANDLER, VECTOR, DIM> MVF;
   //*************************************************
-  
+
   //pde*************************************************
   LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM> LPDE(pr);
   //*************************************************
@@ -200,7 +200,7 @@ main(int argc, char **argv)
   STH DOFH(triangulation, control_fe, state_fe, times, DOpEtypes::ControlType::stationary, true);
   /***********************************/
   NoConstraints<ElementDataContainer, FaceDataContainer, DOFHANDLER, VECTOR, DIM,
-		DIM> Constraints;
+                DIM> Constraints;
 
   OP P(MVF, LPDE, Constraints, DOFH);
   //Boundary conditions************************************************
@@ -216,31 +216,31 @@ main(int argc, char **argv)
 
   RNA Alg(&P, &solver, pr);
 
-  
+
   //**************************************************************************************************
 
   for (int i = 0; i < max_iter; i++)
-  {
-    try
     {
-      Alg.ReInit();
-      ControlVector<VECTOR> q(&DOFH, DOpEtypes::VectorStorageType::fullmem);
-      
-      Alg.SolveForward(q);
+      try
+        {
+          Alg.ReInit();
+          ControlVector<VECTOR> q(&DOFH, DOpEtypes::VectorStorageType::fullmem);
+
+          Alg.SolveForward(q);
+        }
+      catch (DOpEException &e)
+        {
+          std::cout
+              << "Warning: During execution of `" + e.GetThrowingInstance()
+              + "` the following Problem occurred!" << std::endl;
+          std::cout << e.GetErrorMessage() << std::endl;
+        }
+      if (i != max_iter - 1)
+        {
+          //For global mesh refinement, uncomment the next line
+          DOFH.RefineSpaceTime(DOpEtypes::RefinementType::global); //or just DOFH.RefineSpace()
+        }
     }
-    catch (DOpEException &e)
-    {
-      std::cout
-	<< "Warning: During execution of `" + e.GetThrowingInstance()
-	+ "` the following Problem occurred!" << std::endl;
-      std::cout << e.GetErrorMessage() << std::endl;
-    }
-    if (i != max_iter - 1)
-    {
-      //For global mesh refinement, uncomment the next line
-      DOFH.RefineSpaceTime(DOpEtypes::RefinementType::global); //or just DOFH.RefineSpace()
-    }
-  }
   return 0;
 }
 #undef FDC

@@ -31,48 +31,48 @@ using namespace dealii;
 using namespace DOpE;
 
 template<
-    template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
-    template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
-    template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
-  class LocalFunctional : public FunctionalInterface<EDC, FDC, DH, VECTOR,
-      dopedim, dealdim>
+template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
+         template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
+         template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
+class LocalFunctional : public FunctionalInterface<EDC, FDC, DH, VECTOR,
+  dopedim, dealdim>
+{
+public:
+  LocalFunctional()
   {
-    public:
-      LocalFunctional() 
-      {
-      }
+  }
 
-      bool
-      NeedTime() const
-      {
-        if (fabs(this->GetTime() - 1.) < 1.e-13)
-          return true;
-        return false;
-      }
+  bool
+  NeedTime() const
+  {
+    if (fabs(this->GetTime() - 1.) < 1.e-13)
+      return true;
+    return false;
+  }
 
-      double
-	ElementValue(const EDC<DH, VECTOR, dealdim>& /*edc*/)
-      {
-        return 0.0;
-      }
+  double
+  ElementValue(const EDC<DH, VECTOR, dealdim> & /*edc*/)
+  {
+    return 0.0;
+  }
 
-      UpdateFlags
-      GetUpdateFlags() const
-      {
-        return update_quadrature_points;
-      }
+  UpdateFlags
+  GetUpdateFlags() const
+  {
+    return update_quadrature_points;
+  }
 
-      string
-      GetType() const
-      {
-        return "domain timelocal";
-      }
+  string
+  GetType() const
+  {
+    return "domain timelocal";
+  }
 
-      string
-      GetName() const
-      {
-        return "dummy functional";
-      }
+  string
+  GetName() const
+  {
+    return "dummy functional";
+  }
 
-  };
+};
 #endif

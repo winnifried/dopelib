@@ -87,15 +87,15 @@ typedef BlockVector<double> VECTOR;
 //typedef FunctionalInterface<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM> FUNC;
 
 typedef OptProblemContainer<
-    LocalFunctional<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM>,
-    LocalPointFunctional<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM>,
-    LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
-    SimpleDirichletData<VECTOR, DIM>,
-    NoConstraints<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM>, SPARSITYPATTERN,
-    VECTOR, DIM, DIM> OP_BASE;
+LocalFunctional<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM>,
+                LocalPointFunctional<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM>,
+                LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
+                SimpleDirichletData<VECTOR, DIM>,
+                NoConstraints<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM>, SPARSITYPATTERN,
+                VECTOR, DIM, DIM> OP_BASE;
 
 typedef StateProblem<OP_BASE, LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
-    SimpleDirichletData<VECTOR, DIM>, SPARSITYPATTERN, VECTOR, DIM> PROB;
+        SimpleDirichletData<VECTOR, DIM>, SPARSITYPATTERN, VECTOR, DIM> PROB;
 // Typedefs for timestep problem
 
 #define TSP1 ForwardEulerProblem
@@ -111,54 +111,54 @@ typedef StateProblem<OP_BASE, LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
 #define DTSP5 FractionalStepThetaProblem
 
 typedef InstatOptProblemContainer<TSP1, DTSP1,
-    LocalPointFunctional<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM>,
-    LocalFunctional<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM>,
-    LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
-    SimpleDirichletData<VECTOR, DIM>,
-    NoConstraints<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM>, SPARSITYPATTERN,
-    VECTOR, DIM, DIM> OP1;
+        LocalPointFunctional<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM>,
+        LocalFunctional<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM>,
+        LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
+        SimpleDirichletData<VECTOR, DIM>,
+        NoConstraints<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM>, SPARSITYPATTERN,
+        VECTOR, DIM, DIM> OP1;
 typedef InstatOptProblemContainer<TSP2, DTSP2,
-    LocalPointFunctional<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM>,
-    LocalFunctional<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM>,
-    LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
-    SimpleDirichletData<VECTOR, DIM>,
-    NoConstraints<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM>, SPARSITYPATTERN,
-    VECTOR, DIM, DIM> OP2;
+        LocalPointFunctional<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM>,
+        LocalFunctional<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM>,
+        LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
+        SimpleDirichletData<VECTOR, DIM>,
+        NoConstraints<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM>, SPARSITYPATTERN,
+        VECTOR, DIM, DIM> OP2;
 typedef InstatOptProblemContainer<TSP3, DTSP3,
-    LocalPointFunctional<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM>,
-    LocalFunctional<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM>,
-    LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
-    SimpleDirichletData<VECTOR, DIM>,
-    NoConstraints<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM>, SPARSITYPATTERN,
-    VECTOR, DIM, DIM> OP3;
+        LocalPointFunctional<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM>,
+        LocalFunctional<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM>,
+        LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
+        SimpleDirichletData<VECTOR, DIM>,
+        NoConstraints<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM>, SPARSITYPATTERN,
+        VECTOR, DIM, DIM> OP3;
 typedef InstatOptProblemContainer<TSP4, DTSP4,
-    LocalPointFunctional<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM>,
-    LocalFunctional<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM>,
-    LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
-    SimpleDirichletData<VECTOR, DIM>,
-    NoConstraints<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM>, SPARSITYPATTERN,
-    VECTOR, DIM, DIM> OP4;
+        LocalPointFunctional<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM>,
+        LocalFunctional<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM>,
+        LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
+        SimpleDirichletData<VECTOR, DIM>,
+        NoConstraints<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM>, SPARSITYPATTERN,
+        VECTOR, DIM, DIM> OP4;
 typedef InstatOptProblemContainer<TSP5, DTSP5,
-    LocalPointFunctional<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM>,
-    LocalFunctional<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM>,
-    LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
-    SimpleDirichletData<VECTOR, DIM>,
-    NoConstraints<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM>, SPARSITYPATTERN,
-    VECTOR, DIM, DIM> OP5;
+        LocalPointFunctional<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM>,
+        LocalFunctional<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM>,
+        LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
+        SimpleDirichletData<VECTOR, DIM>,
+        NoConstraints<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM>, SPARSITYPATTERN,
+        VECTOR, DIM, DIM> OP5;
 
-#undef TSP1  
-#undef TSP2  
-#undef TSP3  
-#undef TSP4  
-#undef TSP5  
-#undef DTSP1 
-#undef DTSP2 
-#undef DTSP3 
-#undef DTSP4 
-#undef DTSP5 
+#undef TSP1
+#undef TSP2
+#undef TSP3
+#undef TSP4
+#undef TSP5
+#undef DTSP1
+#undef DTSP2
+#undef DTSP3
+#undef DTSP4
+#undef DTSP5
 
 typedef IntegratorDataContainer<DOFHANDLER, QUADRATURE,
-    FACEQUADRATURE, VECTOR, DIM> IDC;
+        FACEQUADRATURE, VECTOR, DIM> IDC;
 
 typedef Integrator<IDC, VECTOR, double, DIM> INTEGRATOR;
 
@@ -176,15 +176,15 @@ typedef ReducedNewtonAlgorithm<OP4, VECTOR> RNA4;
 typedef ReducedNewtonAlgorithm<OP5, VECTOR> RNA5;
 
 typedef InstatReducedProblem<CNLS, NLS, INTEGRATOR, INTEGRATOR, OP1, VECTOR,
-    DIM, DIM> RP1;
+        DIM, DIM> RP1;
 typedef InstatReducedProblem<CNLS, NLS, INTEGRATOR, INTEGRATOR, OP2, VECTOR,
-    DIM, DIM> RP2;
+        DIM, DIM> RP2;
 typedef InstatReducedProblem<CNLS, NLS, INTEGRATOR, INTEGRATOR, OP3, VECTOR,
-    DIM, DIM> RP3;
+        DIM, DIM> RP3;
 typedef InstatReducedProblem<CNLS, NLS, INTEGRATOR, INTEGRATOR, OP4, VECTOR,
-    DIM, DIM> RP4;
+        DIM, DIM> RP4;
 typedef InstatReducedProblem<CNLS, NLS2, INTEGRATOR, INTEGRATOR, OP5, VECTOR,
-    DIM, DIM> RP5;
+        DIM, DIM> RP5;
 
 int
 main(int argc, char **argv)
@@ -197,14 +197,14 @@ main(int argc, char **argv)
   string paramfile = "dope.prm";
 
   if (argc == 2)
-  {
-    paramfile = argv[1];
-  }
+    {
+      paramfile = argv[1];
+    }
   else if (argc > 2)
-  {
-    std::cout << "Usage: " << argv[0] << " [ paramfile ] " << std::endl;
-    return -1;
-  }
+    {
+      std::cout << "Usage: " << argv[0] << " [ paramfile ] " << std::endl;
+      return -1;
+    }
 
   //First, declare the parameters and read them in.
   ParameterReader pr;
@@ -242,11 +242,11 @@ main(int argc, char **argv)
 
   triangulation.refine_global(4);
   MethodOfLines_SpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR, DIM,
-      DIM> DOFH(triangulation, control_fe, state_fe, times,
-      DOpEtypes::ControlType::stationary);
+                                 DIM> DOFH(triangulation, control_fe, state_fe, times,
+                                           DOpEtypes::ControlType::stationary);
 
   NoConstraints<ElementDataContainer, FaceDataContainer, DOFHANDLER, VECTOR, DIM,
-      DIM> Constraints;
+                DIM> Constraints;
   OP1 P1(LFunc, LPDE, Constraints, DOFH);
   OP2 P2(LFunc, LPDE, Constraints, DOFH);
   OP3 P3(LFunc, LPDE, Constraints, DOFH);
@@ -302,57 +302,57 @@ main(int argc, char **argv)
   RNA5 Alg5(&P5, &solver5, pr, &ex, &output);
 
   try
-  {
+    {
 
-    Alg1.ReInit();
-    Alg2.ReInit();
-    Alg3.ReInit();
-    Alg4.ReInit();
-    Alg5.ReInit();
+      Alg1.ReInit();
+      Alg2.ReInit();
+      Alg3.ReInit();
+      Alg4.ReInit();
+      Alg5.ReInit();
 
-    Vector<double> solution;
-    ControlVector<VECTOR> q(&DOFH, DOpEtypes::VectorStorageType::fullmem);
+      Vector<double> solution;
+      ControlVector<VECTOR> q(&DOFH, DOpEtypes::VectorStorageType::fullmem);
 
-    Alg1.SolveForward(q);
-    Alg2.SolveForward(q);
-    Alg3.SolveForward(q);
-    Alg4.SolveForward(q);
-    Alg5.SolveForward(q);
+      Alg1.SolveForward(q);
+      Alg2.SolveForward(q);
+      Alg3.SolveForward(q);
+      Alg4.SolveForward(q);
+      Alg5.SolveForward(q);
 
-    // The soluction extractor class allows us
-    // to get the solution vector from the solver
-    SolutionExtractor<RP1, VECTOR> a1(solver1);
-    const StateVector<VECTOR> &statevec1 = a1.GetU();
-    SolutionExtractor<RP2, VECTOR> a2(solver2);
-    const StateVector<VECTOR> &statevec2 = a2.GetU();
-    SolutionExtractor<RP3, VECTOR> a3(solver3);
-    const StateVector<VECTOR> &statevec3 = a3.GetU();
-    SolutionExtractor<RP4, VECTOR> a4(solver4);
-    const StateVector<VECTOR> &statevec4 = a4.GetU();
-    SolutionExtractor<RP5, VECTOR> a5(solver5);
-    const StateVector<VECTOR> &statevec5 = a5.GetU();
+      // The soluction extractor class allows us
+      // to get the solution vector from the solver
+      SolutionExtractor<RP1, VECTOR> a1(solver1);
+      const StateVector<VECTOR> &statevec1 = a1.GetU();
+      SolutionExtractor<RP2, VECTOR> a2(solver2);
+      const StateVector<VECTOR> &statevec2 = a2.GetU();
+      SolutionExtractor<RP3, VECTOR> a3(solver3);
+      const StateVector<VECTOR> &statevec3 = a3.GetU();
+      SolutionExtractor<RP4, VECTOR> a4(solver4);
+      const StateVector<VECTOR> &statevec4 = a4.GetU();
+      SolutionExtractor<RP5, VECTOR> a5(solver5);
+      const StateVector<VECTOR> &statevec5 = a5.GetU();
 
-    stringstream out;
-    double product1 = statevec1 * statevec1;
-    double product2 = statevec2 * statevec2;
-    double product3 = statevec3 * statevec3;
-    double product4 = statevec4 * statevec4;
-    double product5 = statevec5 * statevec5;
-    out << "Forward euler: u * u = " << product1 << std::endl;
-    out << "Backward euler: u * u = " << product2 << std::endl;
-    out << "CN: u * u = " << product3 << std::endl;
-    out << "ShiftedCN: u * u = " << product4 << std::endl;
-    out << "FractionalStepTheta: u * u = " << product5 << std::endl;
-    output.Write(out, 0);
+      stringstream out;
+      double product1 = statevec1 * statevec1;
+      double product2 = statevec2 * statevec2;
+      double product3 = statevec3 * statevec3;
+      double product4 = statevec4 * statevec4;
+      double product5 = statevec5 * statevec5;
+      out << "Forward euler: u * u = " << product1 << std::endl;
+      out << "Backward euler: u * u = " << product2 << std::endl;
+      out << "CN: u * u = " << product3 << std::endl;
+      out << "ShiftedCN: u * u = " << product4 << std::endl;
+      out << "FractionalStepTheta: u * u = " << product5 << std::endl;
+      output.Write(out, 0);
 
-  }
+    }
   catch (DOpEException &e)
-  {
-    std::cout
-        << "Warning: During execution of `" + e.GetThrowingInstance()
-            + "` the following Problem occurred!" << std::endl;
-    std::cout << e.GetErrorMessage() << std::endl;
-  }
+    {
+      std::cout
+          << "Warning: During execution of `" + e.GetThrowingInstance()
+          + "` the following Problem occurred!" << std::endl;
+      std::cout << e.GetErrorMessage() << std::endl;
+    }
 
   return 0;
 }

@@ -81,27 +81,27 @@ typedef BlockSparsityPattern SPARSITYPATTERN;
 typedef BlockVector<double> VECTOR;
 
 typedef PDEProblemContainer<
-    LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
-    SimpleDirichletData<VECTOR, DIM>,
-    SPARSITYPATTERN,
-    VECTOR, DIM> OP_BASE;
+LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
+         SimpleDirichletData<VECTOR, DIM>,
+         SPARSITYPATTERN,
+         VECTOR, DIM> OP_BASE;
 
 typedef StateProblem<OP_BASE, LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
-    SimpleDirichletData<VECTOR, DIM>, SPARSITYPATTERN, VECTOR, DIM> PROB;
+        SimpleDirichletData<VECTOR, DIM>, SPARSITYPATTERN, VECTOR, DIM> PROB;
 
 // Typedefs for timestep problem
 #define TSP ShiftedCrankNicolsonProblem
 //FIXME: This should be a reasonable dual timestepping scheme
 #define DTSP ShiftedCrankNicolsonProblem
-typedef InstatPDEProblemContainer<TSP, DTSP, 
-    LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
-    SimpleDirichletData<VECTOR, DIM>, SPARSITYPATTERN,
-    VECTOR, DIM> OP;
+typedef InstatPDEProblemContainer<TSP, DTSP,
+        LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
+        SimpleDirichletData<VECTOR, DIM>, SPARSITYPATTERN,
+        VECTOR, DIM> OP;
 #undef TSP
 #undef DTSP
 
 typedef IntegratorDataContainer<DOFHANDLER, QUADRATURE,
-    FACEQUADRATURE, VECTOR, DIM> IDC;
+        FACEQUADRATURE, VECTOR, DIM> IDC;
 typedef Integrator<IDC, VECTOR, double, DIM> INTEGRATOR;
 typedef DirectLinearSolverWithMatrix<SPARSITYPATTERN, MATRIX, VECTOR> LINEARSOLVER;
 typedef NewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR> CNLS;
@@ -119,14 +119,14 @@ main(int argc, char **argv)
   string paramfile = "dope.prm";
 
   if (argc == 2)
-  {
-    paramfile = argv[1];
-  }
+    {
+      paramfile = argv[1];
+    }
   else if (argc > 2)
-  {
-    std::cout << "Usage: " << argv[0] << " [ paramfile ] " << std::endl;
-    return -1;
-  }
+    {
+      std::cout << "Usage: " << argv[0] << " [ paramfile ] " << std::endl;
+      return -1;
+    }
 
   ParameterReader pr;
   RP::declare_params(pr);
@@ -134,9 +134,9 @@ main(int argc, char **argv)
   LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>::declare_params(pr);
   BoundaryParabel::declare_params(pr);
   LocalBoundaryFunctionalDrag<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM>::declare_params(
-      pr);
+    pr);
   LocalBoundaryFunctionalLift<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM>::declare_params(
-      pr);
+    pr);
   pr.read_parameters(paramfile);
 
   /*** Create the triangulation*********************************/
@@ -175,7 +175,7 @@ main(int argc, char **argv)
   // elements to the MOL-space time handler. DOpEtypes::undefined marks
   // the type of the control, see dopetypes.h for more information.
   MethodOfLines_StateSpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR, DIM>
-    DOFH(triangulation, state_fe, times);
+  DOFH(triangulation, state_fe, times);
 
   OP P(LPDE, DOFH);
 
@@ -226,33 +226,33 @@ main(int argc, char **argv)
   solver.RegisterExceptionHandler(&ex);
 
   try
-  {
-    //Before solving we have to reinitialize the stateproblem and outputhandler.
-    solver.ReInit();
-    out.ReInit();
-    
-    stringstream outp;
-    outp << "**************************************************\n";
-    outp << "*             Starting Forward Solve             *\n";
-    outp << "*   Solving : " << P.GetName() << "\t*\n";
-    outp << "*   SDoFs   : ";
-    solver.StateSizeInfo(outp);
-    outp << "**************************************************";
-    //We print this header with priority 1 and 1 empty line in front and after.
-    out.Write(outp, 1, 1, 1);
-    
-    //We compute the value of the functionals. To this end, we have to solve
-    //the PDE at hand. 
-    solver.ComputeReducedFunctionals();
+    {
+      //Before solving we have to reinitialize the stateproblem and outputhandler.
+      solver.ReInit();
+      out.ReInit();
 
-  }
+      stringstream outp;
+      outp << "**************************************************\n";
+      outp << "*             Starting Forward Solve             *\n";
+      outp << "*   Solving : " << P.GetName() << "\t*\n";
+      outp << "*   SDoFs   : ";
+      solver.StateSizeInfo(outp);
+      outp << "**************************************************";
+      //We print this header with priority 1 and 1 empty line in front and after.
+      out.Write(outp, 1, 1, 1);
+
+      //We compute the value of the functionals. To this end, we have to solve
+      //the PDE at hand.
+      solver.ComputeReducedFunctionals();
+
+    }
   catch (DOpEException &e)
-  {
-    std::cout
-        << "Warning: During execution of `" + e.GetThrowingInstance()
-            + "` the following Problem occurred!" << std::endl;
-    std::cout << e.GetErrorMessage() << std::endl;
-  }
+    {
+      std::cout
+          << "Warning: During execution of `" + e.GetThrowingInstance()
+          + "` the following Problem occurred!" << std::endl;
+      std::cout << e.GetErrorMessage() << std::endl;
+    }
 
   return 0;
 }

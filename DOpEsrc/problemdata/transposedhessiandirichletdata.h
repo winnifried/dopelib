@@ -31,17 +31,17 @@ namespace DOpE
 
   /**
    * This class is used to compute the reduced hessian in the case of dirichlet control
-   *						
+   *
    * @tparam  DD              The Dirichlet Data Object under consideration
    * @tparam  VECTOR          The Vector type
    * @tparam  dealdim         The dimension of the domain
-   * 
+   *
    */
   template<typename DD, typename VECTOR, int dealdim>
-    class TransposedHessianDirichletData : public TransposedDirichletDataInterface<dealdim>
+  class TransposedHessianDirichletData : public TransposedDirichletDataInterface<dealdim>
   {
   public:
-  TransposedHessianDirichletData(const DD& data) : TransposedDirichletDataInterface<dealdim>(), dirichlet_data_(data)
+    TransposedHessianDirichletData(const DD &data) : TransposedDirichletDataInterface<dealdim>(), dirichlet_data_(data)
     {
       param_values_ = NULL;
       domain_values_ = NULL;
@@ -52,9 +52,9 @@ namespace DOpE
      * Initializes the private data, should be called prior to any value call!
      */
     void ReInit(
-		const std::map<std::string, const dealii::Vector<double>* > &param_values,
-		const std::map<std::string, const VECTOR* > &domain_values,
-		unsigned int color)
+      const std::map<std::string, const dealii::Vector<double>* > &param_values,
+      const std::map<std::string, const VECTOR * > &domain_values,
+      unsigned int color)
     {
       param_values_ = &param_values;
       domain_values_ = &domain_values;
@@ -63,32 +63,32 @@ namespace DOpE
 
 
     /**
-     * Accesses the values of the dirichlet data transposed of the second 
+     * Accesses the values of the dirichlet data transposed of the second
      * derivative of the control-to-dirichlet-value map
      *
      * For details see TransposedGradientDirichletData
      */
     void value (const dealii::Point<dealdim>   &p,
-		const unsigned int  component,
-		const unsigned int  dof_number,
-		dealii::Vector<double>& local_vector) const
+                const unsigned int  component,
+                const unsigned int  dof_number,
+                dealii::Vector<double> &local_vector) const
     {
       dirichlet_data_.Data_QT(
-			      param_values_,
-			      domain_values_,
-			      color_,
-			      p,
-			      component,
-			      dof_number,
-			      local_vector);
+        param_values_,
+        domain_values_,
+        color_,
+        p,
+        component,
+        dof_number,
+        local_vector);
       dirichlet_data_.Data_QQT(
-			       param_values_,
-			       domain_values_,
-			       color_,
-			       p,
-			       component,
-			       dof_number,
-			       local_vector);
+        param_values_,
+        domain_values_,
+        color_,
+        p,
+        component,
+        dof_number,
+        local_vector);
     }
 
     /**
@@ -101,9 +101,9 @@ namespace DOpE
       dirichlet_data_.SetTime(time);
     }
   private:
-    const DD& dirichlet_data_;
-    const std::map<std::string, const dealii::Vector<double>* >* param_values_;
-    const std::map<std::string, const VECTOR* >* domain_values_;
+    const DD &dirichlet_data_;
+    const std::map<std::string, const dealii::Vector<double>* > *param_values_;
+    const std::map<std::string, const VECTOR * > *domain_values_;
     unsigned int color_;
   };
 

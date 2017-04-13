@@ -30,7 +30,7 @@ using namespace DOpE;
 template<int dealdim>
 class ActiveFEIndexSetter : public ActiveFEIndexSetterInterface<dealdim>
 {
-  public:
+public:
   /*
    * Gets an iterator to a element and sets an active FE index
    * on this element for the state variable. This function is
@@ -39,13 +39,13 @@ class ActiveFEIndexSetter : public ActiveFEIndexSetterInterface<dealdim>
    */
   virtual void
   SetActiveFEIndexState(
-      typename dealii::hp::DoFHandler<dealdim>::active_cell_iterator&element) const
+    typename dealii::hp::DoFHandler<dealdim>::active_cell_iterator &element) const
   {
 
     if (element->material_id() == 1)
-    element->set_active_fe_index(0);
+      element->set_active_fe_index(0);
     else
-    element->set_active_fe_index(1);
+      element->set_active_fe_index(1);
   }
 
 };

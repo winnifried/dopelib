@@ -83,14 +83,14 @@ typedef BlockVector<double> VECTOR;
 typedef FunctionalInterface<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> FUNC;
 
 typedef OptProblemContainer<FUNC,
-    LocalFunctional<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM>, 
-    LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
-    SimpleDirichletData<VECTOR, DIM>,
-    NoConstraints<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM>, SPARSITYPATTERN,
-    VECTOR, CDIM, DIM> OP_BASE;
+        LocalFunctional<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM>,
+        LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
+        SimpleDirichletData<VECTOR, DIM>,
+        NoConstraints<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM>, SPARSITYPATTERN,
+        VECTOR, CDIM, DIM> OP_BASE;
 
 typedef StateProblem<OP_BASE, LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
-    SimpleDirichletData<VECTOR, DIM>, SPARSITYPATTERN, VECTOR, DIM> PROB;
+        SimpleDirichletData<VECTOR, DIM>, SPARSITYPATTERN, VECTOR, DIM> PROB;
 
 // Typedefs for timestep problem
 #define TSP BackwardEulerProblem
@@ -99,16 +99,16 @@ typedef StateProblem<OP_BASE, LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
 
 //typedef InstatOptProblemContainer<TSP,DTSP,FUNC,FUNC,PDE,DD,CONS,SPARSITYPATTERN, VECTOR, CDIM,DIM> OP;
 typedef InstatOptProblemContainer<TSP, DTSP, FUNC,
-    LocalFunctional<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM>,
-    LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
-    SimpleDirichletData<VECTOR, DIM>,
-    NoConstraints<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM>, SPARSITYPATTERN,
-    VECTOR, CDIM, DIM> OP;
+        LocalFunctional<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM>,
+        LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
+        SimpleDirichletData<VECTOR, DIM>,
+        NoConstraints<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM>, SPARSITYPATTERN,
+        VECTOR, CDIM, DIM> OP;
 #undef TSP
 #undef DTSP
 
 typedef IntegratorDataContainer<DOFHANDLER, QUADRATURE, FACEQUADRATURE, VECTOR,
-    DIM> IDC;
+        DIM> IDC;
 typedef Integrator<IDC, VECTOR, double, DIM> INTEGRATOR;
 //special integrator for the mixed dims
 typedef IntegratorMixedDimensions<IDC, VECTOR, double, CDIM, DIM> INTEGRATORM;
@@ -121,27 +121,27 @@ typedef NewtonSolverMixedDimensions<INTEGRATORM, VOIDLS, VECTOR> CNLS;
 typedef InstatStepNewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR> NLS;
 typedef ReducedNewtonAlgorithm<OP, VECTOR> RNA;
 typedef InstatReducedProblem<CNLS, NLS, INTEGRATORM, INTEGRATOR, OP, VECTOR, CDIM,
-    DIM> RP;
+        DIM> RP;
 
 int
 main(int argc, char **argv)
 {
   /**
-   * In this example we show the control of the 
+   * In this example we show the control of the
    *  heat equation via a time-dependent right hand side
    */
 
   string paramfile = "dope.prm";
 
   if (argc == 2)
-  {
-    paramfile = argv[1];
-  }
+    {
+      paramfile = argv[1];
+    }
   else if (argc > 2)
-  {
-    std::cout << "Usage: " << argv[0] << " [ paramfile ] " << std::endl;
-    return -1;
-  }
+    {
+      std::cout << "Usage: " << argv[0] << " [ paramfile ] " << std::endl;
+      return -1;
+    }
   const int niter = 3;
 
   //First, declare the parameters and read them in.
@@ -177,11 +177,11 @@ main(int argc, char **argv)
 
   //Note that we give DOpEtypes::initial as the type of control.
   MethodOfLines_SpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR, CDIM,
-				 DIM> DOFH(triangulation, control_fe, state_fe, times, 
-					   DOpEtypes::ControlType::nonstationary);
+                                 DIM> DOFH(triangulation, control_fe, state_fe, times,
+                                           DOpEtypes::ControlType::nonstationary);
 
   NoConstraints<ElementDataContainer, FaceDataContainer, DOFHANDLER, VECTOR, CDIM,
-      DIM> Constraints;
+                DIM> Constraints;
   OP P(LFunc, LPDE, Constraints, DOFH);
 
   P.AddFunctional(&LPF);
@@ -205,25 +205,25 @@ main(int argc, char **argv)
   Alg.ReInit();
 
   for (int i = 0; i < niter; i++)
-  {
-    try
     {
-      Alg.Solve(q);
+      try
+        {
+          Alg.Solve(q);
+        }
+      catch (DOpEException &e)
+        {
+          std::cout
+              << "Warning: During execution of `" + e.GetThrowingInstance()
+              + "` the following Problem occurred!" << std::endl;
+          std::cout << e.GetErrorMessage() << std::endl;
+        }
+      if (i != niter - 1)
+        {
+          //global mesh refinement
+          DOFH.RefineSpaceTime();
+          Alg.ReInit();
+        }
     }
-    catch (DOpEException &e)
-    {
-      std::cout
-        << "Warning: During execution of `" + e.GetThrowingInstance()
-	+ "` the following Problem occurred!" << std::endl;
-      std::cout << e.GetErrorMessage() << std::endl;
-    }
-    if (i != niter - 1)
-    {
-      //global mesh refinement
-      DOFH.RefineSpaceTime();
-      Alg.ReInit();
-    }
-  }
 
   return 0;
 }

@@ -34,7 +34,7 @@
 #include <opt_algorithms/reduced_snopt_algorithm.h>
 #include <container/optproblemcontainer.h>
 #include <interfaces/functionalinterface.h>
-#include <reducedproblems/statreducedproblem.h> 
+#include <reducedproblems/statreducedproblem.h>
 #include <templates/newtonsolver.h>
 #include <templates/cglinearsolver.h>
 #include <templates/integrator.h>
@@ -76,19 +76,19 @@ typedef SimpleDirichletData<VECTOR, DIM> DD;
 typedef ConstraintInterface<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> CONS;
 
 typedef OptProblemContainer<FUNCTIONALINTERFACE, COSTFUNCTIONAL, PDE, DD, CONS,
-    SPARSITYPATTERN, VECTOR, CDIM, DIM> OP;
+        SPARSITYPATTERN, VECTOR, CDIM, DIM> OP;
 
 typedef IntegratorDataContainer<DOFHANDLER, QUADRATURE, FACEQUADRATURE, VECTOR,
-    DIM> IDC;
+        DIM> IDC;
 typedef Integrator<IDC, VECTOR, double, DIM> INTEGRATOR;
 
 typedef CGLinearSolverWithMatrix<
-    DOpEWrapper::PreconditionIdentity_Wrapper<MATRIX>, SPARSITYPATTERN, MATRIX,
-    VECTOR> LINEARSOLVER;
+DOpEWrapper::PreconditionIdentity_Wrapper<MATRIX>, SPARSITYPATTERN, MATRIX,
+            VECTOR> LINEARSOLVER;
 
 typedef NewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR> NLS;
 typedef StatReducedProblem<NLS, NLS, INTEGRATOR, INTEGRATOR, OP, VECTOR, CDIM,
-    DIM> RP;
+        DIM> RP;
 //The two optimization algorightms using SNOPT/IPOPT
 typedef Reduced_SnoptAlgorithm<OP, VECTOR> SNOPT_Alg;
 typedef Reduced_IpoptAlgorithm<OP, VECTOR> IPOPT_Alg;
@@ -105,14 +105,14 @@ main(int argc, char **argv)
   std::string paramfile = "dope.prm";
 
   if (argc == 2)
-  {
-    paramfile = argv[1];
-  }
+    {
+      paramfile = argv[1];
+    }
   else if (argc > 2)
-  {
-    std::cout << "Usage: " << argv[0] << " [ paramfile ] " << std::endl;
-    return -1;
-  }
+    {
+      std::cout << "Usage: " << argv[0] << " [ paramfile ] " << std::endl;
+      return -1;
+    }
 
   ParameterReader pr;
   RP::declare_params(pr);
@@ -150,8 +150,8 @@ main(int argc, char **argv)
   Constraints constraints(lcc, 0); //Second entry defines the numer of global constraints, here we have none
 
   MethodOfLines_SpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR, CDIM,
-      DIM> DOFH(triangulation, control_fe, state_fe, constraints,
-      DOpEtypes::stationary);
+                                 DIM> DOFH(triangulation, control_fe, state_fe, constraints,
+                                           DOpEtypes::stationary);
   LocalConstraint<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> LC;
 
   OP P(LFunc, LPDE, LC, DOFH);
@@ -174,24 +174,24 @@ main(int argc, char **argv)
   ControlVector<BlockVector<double> > q(&DOFH, DOpEtypes::VectorStorageType::fullmem);
 
   for (int i = 0; i < niter; i++)
-  {
-    try
     {
-      Alg.Solve(q);
-    }
-    catch (DOpEException &e)
-    {
-      std::cout
-          << "Warning: During execution of `" + e.GetThrowingInstance()
+      try
+        {
+          Alg.Solve(q);
+        }
+      catch (DOpEException &e)
+        {
+          std::cout
+              << "Warning: During execution of `" + e.GetThrowingInstance()
               + "` the following Problem occurred!" << std::endl;
-      std::cout << e.GetErrorMessage() << std::endl;
+          std::cout << e.GetErrorMessage() << std::endl;
+        }
+      if (i != niter - 1)
+        {
+          DOFH.RefineSpace();
+          Alg.ReInit();
+        }
     }
-    if (i != niter - 1)
-    {
-      DOFH.RefineSpace();
-      Alg.ReInit();
-    }
-  }
   return 0;
 }
 #undef FDC

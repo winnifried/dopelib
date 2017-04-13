@@ -88,13 +88,13 @@ typedef BlockVector<double> VECTOR;
 
 //The PDEProblemContainer holds all the information regarding the PDE.
 typedef PDEProblemContainer<LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
-    SimpleDirichletData<VECTOR, DIM>, SPARSITYPATTERN, VECTOR, DIM, FE,
-    DOFHANDLER> OP;
+        SimpleDirichletData<VECTOR, DIM>, SPARSITYPATTERN, VECTOR, DIM, FE,
+        DOFHANDLER> OP;
 
 //The IntegratorDataContainer holds quadrature formulas as
 //well as element- and facedatacontainer.
 typedef IntegratorDataContainer<DOFHANDLER, QUADRATURE, FACEQUADRATURE, VECTOR,
-    DIM> IDC;
+        DIM> IDC;
 
 //The integrator which handels the integration.
 typedef Integrator<IDC, VECTOR, double, DIM> INTEGRATOR;
@@ -111,7 +111,7 @@ typedef StatPDEProblem<NLS, INTEGRATOR, OP, VECTOR, DIM> RP;
 //The spacetimehandler manages all the things related to the degrees of
 //freedom in space and time.
 typedef MethodOfLines_StateSpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN,
-    VECTOR, DIM> STH;
+        VECTOR, DIM> STH;
 
 int
 main(int argc, char **argv)
@@ -127,14 +127,14 @@ main(int argc, char **argv)
   string paramfile = "dope.prm";
 
   if (argc == 2)
-  {
-    paramfile = argv[1];
-  }
+    {
+      paramfile = argv[1];
+    }
   else if (argc > 2)
-  {
-    std::cout << "Usage: " << argv[0] << " [ paramfile ] " << std::endl;
-    return -1;
-  }
+    {
+      std::cout << "Usage: " << argv[0] << " [ paramfile ] " << std::endl;
+      return -1;
+    }
   ParameterReader pr; //The parameter reader is responsible for the param-files handling
 
   //Declaration of the parameters
@@ -205,7 +205,7 @@ main(int argc, char **argv)
   P.SetDirichletBoundaryColors(3, comp_mask, &DD1);
 
   //As our weak formulation has some boundary-integrals
-  //(here the symmetric part of the do-nothing condition), 
+  //(here the symmetric part of the do-nothing condition),
   //we tell the problemcontainer
   //on which part of the boundary these live.
   P.SetBoundaryEquationColors(1);
@@ -225,32 +225,32 @@ main(int argc, char **argv)
   solver.RegisterExceptionHandler(&ex);
 
   try
-  {
-    //Before solving we have to reinitialize the stateproblem and outputhandler.
-    solver.ReInit();
-    out.ReInit();
+    {
+      //Before solving we have to reinitialize the stateproblem and outputhandler.
+      solver.ReInit();
+      out.ReInit();
 
-    stringstream outp;
-    outp << "**************************************************\n";
-    outp << "*             Starting Forward Solve             *\n";
-    outp << "*   Solving : " << P.GetName() << "\t*\n";
-    outp << "*   SDoFs   : ";
-    solver.StateSizeInfo(outp);
-    outp << "**************************************************";
-    //We print this header with priority 1 and 1 empty line in front and after.
-    out.Write(outp, 1, 1, 1);
+      stringstream outp;
+      outp << "**************************************************\n";
+      outp << "*             Starting Forward Solve             *\n";
+      outp << "*   Solving : " << P.GetName() << "\t*\n";
+      outp << "*   SDoFs   : ";
+      solver.StateSizeInfo(outp);
+      outp << "**************************************************";
+      //We print this header with priority 1 and 1 empty line in front and after.
+      out.Write(outp, 1, 1, 1);
 
-    //We compute the value of the functionals. To this end, we have to solve
-    //the PDE at hand. 
-    solver.ComputeReducedFunctionals();
-  }
+      //We compute the value of the functionals. To this end, we have to solve
+      //the PDE at hand.
+      solver.ComputeReducedFunctionals();
+    }
   catch (DOpEException &e)
-  {
-    std::cout
-        << "Warning: During execution of `" + e.GetThrowingInstance()
-            + "` the following Problem occurred!" << std::endl;
-    std::cout << e.GetErrorMessage() << std::endl;
-  }
+    {
+      std::cout
+          << "Warning: During execution of `" + e.GetThrowingInstance()
+          + "` the following Problem occurred!" << std::endl;
+      std::cout << e.GetErrorMessage() << std::endl;
+    }
 
   return 0;
 }

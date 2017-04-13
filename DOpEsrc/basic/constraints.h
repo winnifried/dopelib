@@ -32,31 +32,31 @@ namespace DOpE
    */
   class Constraints
   {
-    public:
-      /**
-       * Constructor for Constraint Descriptions
-       *
-       * @param local_control_constraints    Each entry in the vector corresponds to one
-       *                                     block of the control variable.
-       *                                     (Here blocks refer to the blocks in a
-       *                                      deal.II BlockVector)
-       *                                     Each entry consist of a vector of length two.
-       *                                     In these, the first unsigned int describes
-       *                                     how many local entries in this Block are
-       *                                     locally constrained, and the second entry
-       *                                     defines how many constraints are given on
-       *                                     this quantity.
-       * @param global_constraints           The number of global constraints on the
-       *                                     control and state variable.
-       */
-      Constraints(
-          const std::vector<std::vector<unsigned int> >& local_control_constraints,
-          unsigned int global_constraints)
-      {
-        local_control_constraints_.resize(local_control_constraints.size());
-        local_control_constraints_per_block_.resize(
-            local_control_constraints.size());
-        for (unsigned int i = 0; i < local_control_constraints.size(); i++)
+  public:
+    /**
+     * Constructor for Constraint Descriptions
+     *
+     * @param local_control_constraints    Each entry in the vector corresponds to one
+     *                                     block of the control variable.
+     *                                     (Here blocks refer to the blocks in a
+     *                                      deal.II BlockVector)
+     *                                     Each entry consist of a vector of length two.
+     *                                     In these, the first unsigned int describes
+     *                                     how many local entries in this Block are
+     *                                     locally constrained, and the second entry
+     *                                     defines how many constraints are given on
+     *                                     this quantity.
+     * @param global_constraints           The number of global constraints on the
+     *                                     control and state variable.
+     */
+    Constraints(
+      const std::vector<std::vector<unsigned int> > &local_control_constraints,
+      unsigned int global_constraints)
+    {
+      local_control_constraints_.resize(local_control_constraints.size());
+      local_control_constraints_per_block_.resize(
+        local_control_constraints.size());
+      for (unsigned int i = 0; i < local_control_constraints.size(); i++)
         {
           local_control_constraints_[i].resize(2);
           assert(local_control_constraints[i].size() == 2);
@@ -64,19 +64,19 @@ namespace DOpE
           local_control_constraints_[i][1] = local_control_constraints[i][1];
           local_control_constraints_per_block_[i] = 0;
         }
-        global_constraints_ = global_constraints;
-        n_dofs_ = 0;
-        n_local_control_dofs_ = 0;
-      }
-      /**
-       * Copy Constructor
-       */
-      Constraints(const Constraints& c)
-      {
-        local_control_constraints_.resize(c.local_control_constraints_.size());
-        local_control_constraints_per_block_.resize(
-            c.local_control_constraints_per_block_.size());
-        for (unsigned int i = 0; i < c.local_control_constraints_.size(); i++)
+      global_constraints_ = global_constraints;
+      n_dofs_ = 0;
+      n_local_control_dofs_ = 0;
+    }
+    /**
+     * Copy Constructor
+     */
+    Constraints(const Constraints &c)
+    {
+      local_control_constraints_.resize(c.local_control_constraints_.size());
+      local_control_constraints_per_block_.resize(
+        c.local_control_constraints_per_block_.size());
+      for (unsigned int i = 0; i < c.local_control_constraints_.size(); i++)
         {
           local_control_constraints_[i].resize(2);
           assert(c.local_control_constraints_[i].size() == 2);
@@ -84,47 +84,47 @@ namespace DOpE
           local_control_constraints_[i][1] = c.local_control_constraints_[i][1];
           local_control_constraints_per_block_[i] = 0;
         }
-        global_constraints_ = c.global_constraints_;
-        n_dofs_ = 0;
-        n_local_control_dofs_ = 0;
-      }
-      /**
-       * Constructor to be used when  no constraints are present.
-       */
-      Constraints()
-      {
-        local_control_constraints_.clear();
-        global_constraints_ = 0;
-        local_control_constraints_per_block_.clear();
-        n_dofs_ = 0;
-        n_local_control_dofs_ = 0;
-      }
+      global_constraints_ = c.global_constraints_;
+      n_dofs_ = 0;
+      n_local_control_dofs_ = 0;
+    }
+    /**
+     * Constructor to be used when  no constraints are present.
+     */
+    Constraints()
+    {
+      local_control_constraints_.clear();
+      global_constraints_ = 0;
+      local_control_constraints_per_block_.clear();
+      n_dofs_ = 0;
+      n_local_control_dofs_ = 0;
+    }
 
-      /**
-       * Reinitialize the required constraints.
-       *
-       */
-      void
-      ReInit(std::vector<unsigned int>& control_dofs_per_block)
-      {
-        if (local_control_constraints_per_block_.size()
-            == control_dofs_per_block.size())
+    /**
+     * Reinitialize the required constraints.
+     *
+     */
+    void
+    ReInit(std::vector<unsigned int> &control_dofs_per_block)
+    {
+      if (local_control_constraints_per_block_.size()
+          == control_dofs_per_block.size())
         {
           n_dofs_ = 0;
           for (unsigned int i = 0; i < local_control_constraints_.size(); i++)
-          {
-            assert(
+            {
+              assert(
                 control_dofs_per_block[i] % local_control_constraints_[i][0]
-                    == 0);
-            local_control_constraints_per_block_[i] = control_dofs_per_block[i]
-                / local_control_constraints_[i][0]
-                * local_control_constraints_[i][1];
-            n_dofs_ += local_control_constraints_per_block_[i];
-            n_local_control_dofs_ += local_control_constraints_per_block_[i];
-          }
+                == 0);
+              local_control_constraints_per_block_[i] = control_dofs_per_block[i]
+                                                        / local_control_constraints_[i][0]
+                                                        * local_control_constraints_[i][1];
+              n_dofs_ += local_control_constraints_per_block_[i];
+              n_local_control_dofs_ += local_control_constraints_per_block_[i];
+            }
           n_dofs_ += global_constraints_;
         }
-        else
+      else
         {
           local_control_constraints_.clear();
           global_constraints_ = 0;
@@ -132,45 +132,45 @@ namespace DOpE
           n_dofs_ = 0;
           n_local_control_dofs_ = 0;
         }
-      }
+    }
 
-      /**
-       * Returns the total number of local in time constraints.
-       */
-      unsigned int
-      n_dofs(std::string name) const
-      {
-        if (name == "local")
+    /**
+     * Returns the total number of local in time constraints.
+     */
+    unsigned int
+    n_dofs(std::string name) const
+    {
+      if (name == "local")
         {
           return n_local_control_dofs_;
         }
-        if (name == "global")
+      if (name == "global")
         {
           return global_constraints_;
         }
 
-        throw DOpEException("Unknown name " + name, "constraints::n_dofs_");
-      }
+      throw DOpEException("Unknown name " + name, "constraints::n_dofs_");
+    }
 
-      /**
-       * Returns the DoFs Per Block Vector
-       */
-      const std::vector<unsigned int>&
-      GetDoFsPerBlock(std::string name) const
-      {
-        if (name == "local")
+    /**
+     * Returns the DoFs Per Block Vector
+     */
+    const std::vector<unsigned int> &
+    GetDoFsPerBlock(std::string name) const
+    {
+      if (name == "local")
         {
           return local_control_constraints_per_block_;
         }
-        throw DOpEException("Unknown name " + name, "constraints::n_dofs_");
-      }
+      throw DOpEException("Unknown name " + name, "constraints::n_dofs_");
+    }
 
-    private:
-      std::vector<std::vector<unsigned int> > local_control_constraints_;
-      unsigned int global_constraints_;
+  private:
+    std::vector<std::vector<unsigned int> > local_control_constraints_;
+    unsigned int global_constraints_;
 
-      std::vector<unsigned int> local_control_constraints_per_block_;
-      unsigned int n_dofs_, n_local_control_dofs_;
+    std::vector<unsigned int> local_control_constraints_per_block_;
+    unsigned int n_dofs_, n_local_control_dofs_;
   };
 
 }

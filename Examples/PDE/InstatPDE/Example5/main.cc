@@ -83,37 +83,37 @@ typedef BlockVector<double> VECTOR;
 typedef FunctionalInterface<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM> FUNC;
 
 typedef OptProblemContainer<
-    LocalFunctional<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM>, FUNC,
-    LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
-    SimpleDirichletData<VECTOR, DIM>,
-    NoConstraints<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM>, SPARSITYPATTERN,
-    VECTOR, DIM, DIM> OP_BASE;
+LocalFunctional<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM>, FUNC,
+                LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
+                SimpleDirichletData<VECTOR, DIM>,
+                NoConstraints<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM>, SPARSITYPATTERN,
+                VECTOR, DIM, DIM> OP_BASE;
 
 typedef StateProblem<OP_BASE, LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
-    SimpleDirichletData<VECTOR, DIM>, SPARSITYPATTERN, VECTOR, DIM> PROB;
+        SimpleDirichletData<VECTOR, DIM>, SPARSITYPATTERN, VECTOR, DIM> PROB;
 
 #define TSP BackwardEulerProblem
 //FIXME: This should be a reasonable dual timestepping scheme
 #define DTSP BackwardEulerProblem
 
 typedef InstatOptProblemContainer<TSP, DTSP, FUNC,
-    LocalFunctional<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM>,
-    LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
-    SimpleDirichletData<VECTOR, DIM>,
-    NoConstraints<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM>, SPARSITYPATTERN,
-    VECTOR, DIM, DIM> OP;
+        LocalFunctional<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM>,
+        LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
+        SimpleDirichletData<VECTOR, DIM>,
+        NoConstraints<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM>, SPARSITYPATTERN,
+        VECTOR, DIM, DIM> OP;
 #undef TSP
 #undef DTSP
 
 typedef IntegratorDataContainer<DOFHANDLER, QUADRATURE,
-    FACEQUADRATURE, VECTOR, DIM> IDC;
+        FACEQUADRATURE, VECTOR, DIM> IDC;
 typedef Integrator<IDC, VECTOR, double, DIM> INTEGRATOR;
 typedef DirectLinearSolverWithMatrix<SPARSITYPATTERN, MATRIX, VECTOR> LINEARSOLVER;
 typedef NewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR> CNLS;
 typedef InstatStepNewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR> NLS;
 typedef ReducedNewtonAlgorithm<OP, VECTOR> RNA;
 typedef InstatReducedProblem<CNLS, NLS, INTEGRATOR, INTEGRATOR, OP, VECTOR, DIM,
-    DIM> RP;
+        DIM> RP;
 
 int
 main(int argc, char **argv)
@@ -126,14 +126,14 @@ main(int argc, char **argv)
   string paramfile = "dope.prm";
 
   if (argc == 2)
-  {
-    paramfile = argv[1];
-  }
+    {
+      paramfile = argv[1];
+    }
   else if (argc > 2)
-  {
-    std::cout << "Usage: " << argv[0] << " [ paramfile ] " << std::endl;
-    return -1;
-  }
+    {
+      std::cout << "Usage: " << argv[0] << " [ paramfile ] " << std::endl;
+      return -1;
+    }
 
   //First, declare the parameters and read them in.
   ParameterReader pr;
@@ -168,8 +168,8 @@ main(int argc, char **argv)
 
   triangulation.refine_global(4);
   MethodOfLines_SpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR, DIM,
-      DIM> DOFH(triangulation, control_fe, state_fe, times,
-      DOpEtypes::ControlType::stationary);
+                                 DIM> DOFH(triangulation, control_fe, state_fe, times,
+                                           DOpEtypes::ControlType::stationary);
 
   NoConstraints<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM> Constraints;
   OP P(LFunc, LPDE, Constraints, DOFH);
@@ -195,32 +195,32 @@ main(int argc, char **argv)
   RNA Alg(&P, &solver, pr);
 
   try
-  {
+    {
 
-    Alg.ReInit();
+      Alg.ReInit();
 
-    Vector<double> solution;
-    ControlVector<VECTOR> q(&DOFH, DOpEtypes::VectorStorageType::fullmem);
+      Vector<double> solution;
+      ControlVector<VECTOR> q(&DOFH, DOpEtypes::VectorStorageType::fullmem);
 
-    Alg.SolveForward(q);
+      Alg.SolveForward(q);
 
-    SolutionExtractor<RP, VECTOR> a(solver);
-    const StateVector<VECTOR> &statevec = a.GetU();
+      SolutionExtractor<RP, VECTOR> a(solver);
+      const StateVector<VECTOR> &statevec = a.GetU();
 
-    stringstream out;
-    double product = statevec * statevec;
-    out << "Backward euler: u * u = " << product << std::endl;
+      stringstream out;
+      double product = statevec * statevec;
+      out << "Backward euler: u * u = " << product << std::endl;
 
-    P.GetOutputHandler()->Write(out, 0);
+      P.GetOutputHandler()->Write(out, 0);
 
-  }
+    }
   catch (DOpEException &e)
-  {
-    std::cout
-        << "Warning: During execution of `" + e.GetThrowingInstance()
-            + "` the following Problem occurred!" << std::endl;
-    std::cout << e.GetErrorMessage() << std::endl;
-  }
+    {
+      std::cout
+          << "Warning: During execution of `" + e.GetThrowingInstance()
+          + "` the following Problem occurred!" << std::endl;
+      std::cout << e.GetErrorMessage() << std::endl;
+    }
 
   return 0;
 }

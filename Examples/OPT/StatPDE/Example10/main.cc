@@ -81,13 +81,13 @@ typedef LocalFunctional<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> COSTFUNCTIONAL;
 typedef FunctionalInterface<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> FUNCTIONALINTERFACE;
 
 typedef OptProblemContainer<FUNCTIONALINTERFACE, COSTFUNCTIONAL,
-    LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
-    SimpleDirichletData<VECTOR, DIM>,
-    NoConstraints<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM>, SPARSITYPATTERN,
-    VECTOR, CDIM, DIM> OP;
+        LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
+        SimpleDirichletData<VECTOR, DIM>,
+        NoConstraints<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM>, SPARSITYPATTERN,
+        VECTOR, CDIM, DIM> OP;
 
 typedef IntegratorDataContainer<DOFHANDLER, QUADRATURE, FACEQUADRATURE, VECTOR,
-    DIM> IDC;
+        DIM> IDC;
 typedef Integrator<IDC, VECTOR, double, DIM> INTEGRATOR;
 //special newtonsolver for the mixed dims
 typedef IntegratorMixedDimensions<IDC, VECTOR, double, CDIM, DIM> INTEGRATORM;
@@ -103,9 +103,9 @@ typedef NewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR> NLS;
 typedef ReducedNewtonAlgorithm<OP, VECTOR> RNA;
 
 typedef StatReducedProblem<NLSM, NLS, INTEGRATORM, INTEGRATOR, OP, VECTOR, CDIM,
-    DIM> RP;
+        DIM> RP;
 typedef MethodOfLines_SpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR,
-    CDIM, DIM> STH;
+        CDIM, DIM> STH;
 
 int
 main(int argc, char **argv)
@@ -124,14 +124,14 @@ main(int argc, char **argv)
   string paramfile = "dope.prm";
 
   if (argc == 2)
-  {
-    paramfile = argv[1];
-  }
+    {
+      paramfile = argv[1];
+    }
   else if (argc > 2)
-  {
-    std::cout << "Usage: " << argv[0] << " [ paramfile ] " << std::endl;
-    return -1;
-  }
+    {
+      std::cout << "Usage: " << argv[0] << " [ paramfile ] " << std::endl;
+      return -1;
+    }
 
   ParameterReader pr;
   RP::declare_params(pr);
@@ -140,9 +140,9 @@ main(int argc, char **argv)
   COSTFUNCTIONAL::declare_params(pr);
   BoundaryParabel::declare_params(pr);
   LocalBoundaryFaceFunctionalDrag<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM>::declare_params(
-      pr);
+    pr);
   LocalBoundaryFaceFunctionalLift<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM>::declare_params(
-      pr);
+    pr);
   pr.read_parameters(paramfile);
 
   // Mesh-refinement cycles
@@ -166,7 +166,7 @@ main(int argc, char **argv)
 
   FE<DIM> control_fe(FE_Nothing<DIM>(1), 2); //2 Parameter, thus 2 components
   FE<DIM> state_fe(FE_Q<DIM>(2), 2, // velocities
-      FE_Q<DIM>(1), 1); // pressure with CG(1)
+                   FE_Q<DIM>(1), 1); // pressure with CG(1)
 
   QUADRATURE quadrature_formula(3);
   FACEQUADRATURE face_quadrature_formula(3);
@@ -179,9 +179,9 @@ main(int argc, char **argv)
   LocalPointFunctionalDeflectionX<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> LPFDX;
   LocalPointFunctionalDeflectionY<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> LPFDY;
   LocalBoundaryFaceFunctionalDrag<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> LBFD(
-      pr);
+    pr);
   LocalBoundaryFaceFunctionalLift<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> LBFL(
-      pr);
+    pr);
 
 
   STH DOFH(triangulation, control_fe, state_fe, DOpEtypes::stationary);
@@ -233,53 +233,53 @@ main(int argc, char **argv)
   ControlVector<VECTOR> q(&DOFH, DOpEtypes::VectorStorageType::fullmem);
   q = 0.1;
   for (int i = 0; i < niter; i++)
-  {
-    try
     {
-      if (cases == "check")
-      {
+      try
+        {
+          if (cases == "check")
+            {
 
-        ControlVector<VECTOR> dq(q);
-        // eps: step size for difference quotient
-        // choose: 1.0, 0.1, 0.01, etc.
-        const double eps_diff = 1.0e-2;
-        Alg.CheckGrads(eps_diff, q, dq, 2);
-        Alg.CheckHessian(eps_diff, q, dq, 2);
-      }
-      else
-      {
-        //Alg.SolveForward(q);  // just solves the forward problem
-        Alg.Solve(q);
-      }
-    }
-    catch (DOpEException &e)
-    {
-      std::cout
-          << "Warning: During execution of `" + e.GetThrowingInstance()
+              ControlVector<VECTOR> dq(q);
+              // eps: step size for difference quotient
+              // choose: 1.0, 0.1, 0.01, etc.
+              const double eps_diff = 1.0e-2;
+              Alg.CheckGrads(eps_diff, q, dq, 2);
+              Alg.CheckHessian(eps_diff, q, dq, 2);
+            }
+          else
+            {
+              //Alg.SolveForward(q);  // just solves the forward problem
+              Alg.Solve(q);
+            }
+        }
+      catch (DOpEException &e)
+        {
+          std::cout
+              << "Warning: During execution of `" + e.GetThrowingInstance()
               + "` the following Problem occurred!" << std::endl;
-      std::cout << e.GetErrorMessage() << std::endl;
+          std::cout << e.GetErrorMessage() << std::endl;
+        }
+      if (i != niter - 1)
+        {
+          SolutionExtractor<RP, VECTOR> a(solver);
+          const StateVector<VECTOR> &gu = a.GetU();
+          solution = 0;
+          solution = gu.GetSpacialVector();
+          Vector<float> estimated_error_per_element(triangulation.n_active_cells());
+
+          std::vector<bool> component_mask(3, false);
+          component_mask[2] = true;
+
+          KellyErrorEstimator<DIM>::estimate(
+            static_cast<const DoFHandler<DIM>&>(DOFH.GetStateDoFHandler()),
+            QGauss<1>(2), FunctionMap<DIM>::type(), solution,
+            estimated_error_per_element, component_mask);
+
+          DOFH.RefineSpace(RefineFixedNumber(estimated_error_per_element, 0.5, 0.0));
+          Alg.ReInit();
+        }
+
     }
-    if (i != niter - 1)
-    {
-      SolutionExtractor<RP, VECTOR> a(solver);
-      const StateVector<VECTOR> &gu = a.GetU();
-      solution = 0;
-      solution = gu.GetSpacialVector();
-      Vector<float> estimated_error_per_element(triangulation.n_active_cells());
-
-      std::vector<bool> component_mask(3, false);
-      component_mask[2] = true;
-
-      KellyErrorEstimator<DIM>::estimate(
-          static_cast<const DoFHandler<DIM>&>(DOFH.GetStateDoFHandler()),
-          QGauss<1>(2), FunctionMap<DIM>::type(), solution,
-          estimated_error_per_element, component_mask);
-
-      DOFH.RefineSpace(RefineFixedNumber(estimated_error_per_element, 0.5, 0.0));
-      Alg.ReInit();
-    }
-
-  }
 
   return 0;
 }

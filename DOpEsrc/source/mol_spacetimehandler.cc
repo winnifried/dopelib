@@ -29,212 +29,218 @@ namespace DOpE
    * Implementation of virtual function in SpaceTimeHandler
    */
   template<>
-    void
-    DOpE::MethodOfLines_SpaceTimeHandler<dealii::FESystem,
-        dealii::DoFHandler, dealii::BlockSparsityPattern,
-        dealii::BlockVector<double>, dope_dimension, deal_II_dimension>::ComputeControlSparsityPattern(
-        dealii::BlockSparsityPattern & sparsity) const
-    {
-      const std::vector<unsigned int>& blocks = this->GetControlDoFsPerBlock();
+  void
+  DOpE::MethodOfLines_SpaceTimeHandler<dealii::FESystem,
+       dealii::DoFHandler, dealii::BlockSparsityPattern,
+       dealii::BlockVector<double>, dope_dimension, deal_II_dimension>::ComputeControlSparsityPattern(
+         dealii::BlockSparsityPattern &sparsity) const
+  {
+    const std::vector<unsigned int> &blocks = this->GetControlDoFsPerBlock();
 #if DEAL_II_VERSION_GTE(8,3,0)
-      dealii::BlockDynamicSparsityPattern csp(blocks.size(),
-					      blocks.size());
+    dealii::BlockDynamicSparsityPattern csp(blocks.size(),
+                                            blocks.size());
 #else
-      dealii::BlockCompressedSimpleSparsityPattern csp(blocks.size(),
-						       blocks.size());
+    dealii::BlockCompressedSimpleSparsityPattern csp(blocks.size(),
+                                                     blocks.size());
 #endif
 
-      for (unsigned int i = 0; i < blocks.size(); i++)
+    for (unsigned int i = 0; i < blocks.size(); i++)
       {
         for (unsigned int j = 0; j < blocks.size(); j++)
-        {
-          csp.block(i, j).reinit(this->GetControlDoFsPerBlock()[i],
-              this->GetControlDoFsPerBlock()[j]);
-        }
+          {
+            csp.block(i, j).reinit(this->GetControlDoFsPerBlock()[i],
+                                   this->GetControlDoFsPerBlock()[j]);
+          }
       }
-      csp.collect_sizes();
+    csp.collect_sizes();
 #if dope_dimension > 0
-      //We use here dealii::DoFHandler<dealdim>, because if dope_dim >0 then dopedim = dealdim.
-      dealii::DoFTools::make_sparsity_pattern (this->GetControlDoFHandler().GetDEALDoFHandler(),csp);
+    //We use here dealii::DoFHandler<dealdim>, because if dope_dim >0 then dopedim = dealdim.
+    dealii::DoFTools::make_sparsity_pattern (this->GetControlDoFHandler().GetDEALDoFHandler(),csp);
 #else
-      abort();
+    abort();
 #endif
-      this->GetControlDoFConstraints().condense(csp);
-      sparsity.copy_from(csp);
-    }
+    this->GetControlDoFConstraints().condense(csp);
+    sparsity.copy_from(csp);
+  }
 
   /******************************************************/
 
   template<>
-    void
-    DOpE::MethodOfLines_SpaceTimeHandler<dealii::FESystem,
-        dealii::DoFHandler, dealii::SparsityPattern,
-        dealii::Vector<double>, dope_dimension, deal_II_dimension>::ComputeControlSparsityPattern(
-        dealii::SparsityPattern & sparsity) const
-    {
-      const unsigned int total_dofs = this->GetControlNDoFs();
+  void
+  DOpE::MethodOfLines_SpaceTimeHandler<dealii::FESystem,
+       dealii::DoFHandler, dealii::SparsityPattern,
+       dealii::Vector<double>, dope_dimension, deal_II_dimension>::ComputeControlSparsityPattern(
+         dealii::SparsityPattern &sparsity) const
+  {
+    const unsigned int total_dofs = this->GetControlNDoFs();
 #if DEAL_II_VERSION_GTE(8,3,0)
-      dealii::DynamicSparsityPattern csp(total_dofs, total_dofs);
+    dealii::DynamicSparsityPattern csp(total_dofs, total_dofs);
 #else
-      dealii::CompressedSimpleSparsityPattern csp(total_dofs, total_dofs);
+    dealii::CompressedSimpleSparsityPattern csp(total_dofs, total_dofs);
 #endif
 
 #if dope_dimension > 0
-      dealii::DoFTools::make_sparsity_pattern (this->GetControlDoFHandler().GetDEALDoFHandler(),csp);
+    dealii::DoFTools::make_sparsity_pattern (this->GetControlDoFHandler().GetDEALDoFHandler(),csp);
 #else
-      abort();
+    abort();
 #endif
-      this->GetControlDoFConstraints().condense(csp);
-      sparsity.copy_from(csp);
-    }
+    this->GetControlDoFConstraints().condense(csp);
+    sparsity.copy_from(csp);
+  }
 
   /**
    * Implementation of virtual function in SpaceTimeHandler
    */
   template<>
-    void
-    DOpE::MethodOfLines_SpaceTimeHandler<
-        dealii::hp::FECollection,
-        dealii::hp::DoFHandler, dealii::BlockSparsityPattern,
-        dealii::BlockVector<double>, dope_dimension, deal_II_dimension>::ComputeControlSparsityPattern(
-        dealii::BlockSparsityPattern & sparsity) const
-    {
-      const std::vector<unsigned int>& blocks = this->GetControlDoFsPerBlock();
+  void
+  DOpE::MethodOfLines_SpaceTimeHandler<
+  dealii::hp::FECollection,
+         dealii::hp::DoFHandler, dealii::BlockSparsityPattern,
+         dealii::BlockVector<double>, dope_dimension, deal_II_dimension>::ComputeControlSparsityPattern(
+           dealii::BlockSparsityPattern &sparsity) const
+  {
+    const std::vector<unsigned int> &blocks = this->GetControlDoFsPerBlock();
 #if DEAL_II_VERSION_GTE(8,3,0)
-      dealii::BlockDynamicSparsityPattern csp(blocks.size(),
-					      blocks.size());
+    dealii::BlockDynamicSparsityPattern csp(blocks.size(),
+                                            blocks.size());
 #else
-      dealii::BlockCompressedSimpleSparsityPattern csp(blocks.size(),
-						       blocks.size());
+    dealii::BlockCompressedSimpleSparsityPattern csp(blocks.size(),
+                                                     blocks.size());
 #endif
 
-      for (unsigned int i = 0; i < blocks.size(); i++)
+    for (unsigned int i = 0; i < blocks.size(); i++)
       {
         for (unsigned int j = 0; j < blocks.size(); j++)
-        {
-          csp.block(i, j).reinit(this->GetControlDoFsPerBlock()[i],
-              this->GetControlDoFsPerBlock()[j]);
-        }
+          {
+            csp.block(i, j).reinit(this->GetControlDoFsPerBlock()[i],
+                                   this->GetControlDoFsPerBlock()[j]);
+          }
       }
-      csp.collect_sizes();
+    csp.collect_sizes();
 #if dope_dimension > 0
-      //We use here dealii::DoFHandler<dealdim>, because if dope_dim >0 then dopedim = dealdim.
-      dealii::DoFTools::make_sparsity_pattern (this->GetControlDoFHandler().GetDEALDoFHandler(),csp);
+    //We use here dealii::DoFHandler<dealdim>, because if dope_dim >0 then dopedim = dealdim.
+    dealii::DoFTools::make_sparsity_pattern (this->GetControlDoFHandler().GetDEALDoFHandler(),csp);
 #else
-      abort();
+    abort();
 #endif
-      this->GetControlDoFConstraints().condense(csp);
-      sparsity.copy_from(csp);
-    }
+    this->GetControlDoFConstraints().condense(csp);
+    sparsity.copy_from(csp);
+  }
 
   /******************************************************/
 
   template<>
-    void
-    DOpE::MethodOfLines_SpaceTimeHandler<dealii::hp::FECollection,
-        dealii::hp::DoFHandler, dealii::SparsityPattern,
-        dealii::Vector<double>, dope_dimension, deal_II_dimension>::ComputeControlSparsityPattern(
-        dealii::SparsityPattern & sparsity) const
-    {
-      const unsigned int total_dofs = this->GetControlNDoFs();
+  void
+  DOpE::MethodOfLines_SpaceTimeHandler<dealii::hp::FECollection,
+       dealii::hp::DoFHandler, dealii::SparsityPattern,
+       dealii::Vector<double>, dope_dimension, deal_II_dimension>::ComputeControlSparsityPattern(
+         dealii::SparsityPattern &sparsity) const
+  {
+    const unsigned int total_dofs = this->GetControlNDoFs();
 #if DEAL_II_VERSION_GTE(8,3,0)
-      dealii::DynamicSparsityPattern csp(total_dofs, total_dofs);
+    dealii::DynamicSparsityPattern csp(total_dofs, total_dofs);
 #else
-      dealii::CompressedSimpleSparsityPattern csp(total_dofs, total_dofs);
+    dealii::CompressedSimpleSparsityPattern csp(total_dofs, total_dofs);
 #endif
 
 #if dope_dimension > 0
-      dealii::DoFTools::make_sparsity_pattern (this->GetControlDoFHandler().GetDEALDoFHandler(),csp);
+    dealii::DoFTools::make_sparsity_pattern (this->GetControlDoFHandler().GetDEALDoFHandler(),csp);
 #else
-      abort();
+    abort();
 #endif
-      this->GetControlDoFConstraints().condense(csp);
-      sparsity.copy_from(csp);
-    }
+    this->GetControlDoFConstraints().condense(csp);
+    sparsity.copy_from(csp);
+  }
 
 }
- 
+
 ///////////////////////////ResetTriangulation
- template<>
-    void
-    DOpE::MethodOfLines_SpaceTimeHandler<dealii::FESystem,
-        dealii::DoFHandler, dealii::BlockSparsityPattern,
-        dealii::BlockVector<double>, dope_dimension, deal_II_dimension>::ResetTriangulation(
-	  const dealii::Triangulation<deal_II_dimension>& tria)
- {
-   state_dof_handler_.clear();
-   triangulation_.clear();
-   triangulation_.copy_triangulation(tria);
-   state_dof_handler_.initialize(triangulation_, *state_fe_);
-   this->IncrementControlTicket();
-   this->IncrementStateTicket();
-   if (control_mesh_transfer_ != NULL)
-     delete control_mesh_transfer_;
-   control_mesh_transfer_ = NULL;
-   if (state_mesh_transfer_ != NULL)
-     delete state_mesh_transfer_;
-   state_mesh_transfer_ = NULL;
-  }
+template<>
+void
+DOpE::MethodOfLines_SpaceTimeHandler<dealii::FESystem,
+     dealii::DoFHandler, dealii::BlockSparsityPattern,
+     dealii::BlockVector<double>, dope_dimension, deal_II_dimension>::ResetTriangulation(
+       const dealii::Triangulation<deal_II_dimension> &tria)
+{
+  state_dof_handler_.clear();
+  triangulation_.clear();
+  triangulation_.copy_triangulation(tria);
+  state_dof_handler_.initialize(triangulation_, *state_fe_);
+  this->IncrementControlTicket();
+  this->IncrementStateTicket();
+  if (control_mesh_transfer_ != NULL)
+    delete control_mesh_transfer_;
+  control_mesh_transfer_ = NULL;
+  if (state_mesh_transfer_ != NULL)
+    delete state_mesh_transfer_;
+  state_mesh_transfer_ = NULL;
+}
 
-  template<>
-    void
-    DOpE::MethodOfLines_SpaceTimeHandler<dealii::FESystem,
-        dealii::DoFHandler, dealii::SparsityPattern,
-    dealii::Vector<double>, dope_dimension, deal_II_dimension>::ResetTriangulation(
-      const dealii::Triangulation<deal_II_dimension>& tria)      
- {
-   state_dof_handler_.clear();
-   triangulation_.clear();
-   triangulation_.copy_triangulation(tria);
-   state_dof_handler_.initialize(triangulation_, *state_fe_);
-   this->IncrementControlTicket();
-   this->IncrementStateTicket();
-   if (control_mesh_transfer_ != NULL)
-     delete control_mesh_transfer_;
-   control_mesh_transfer_ = NULL;
-   if (state_mesh_transfer_ != NULL)
-     delete state_mesh_transfer_;
-   state_mesh_transfer_ = NULL;
-  }
+template<>
+void
+DOpE::MethodOfLines_SpaceTimeHandler<dealii::FESystem,
+     dealii::DoFHandler, dealii::SparsityPattern,
+     dealii::Vector<double>, dope_dimension, deal_II_dimension>::ResetTriangulation(
+       const dealii::Triangulation<deal_II_dimension> &tria)
+{
+  state_dof_handler_.clear();
+  triangulation_.clear();
+  triangulation_.copy_triangulation(tria);
+  state_dof_handler_.initialize(triangulation_, *state_fe_);
+  this->IncrementControlTicket();
+  this->IncrementStateTicket();
+  if (control_mesh_transfer_ != NULL)
+    delete control_mesh_transfer_;
+  control_mesh_transfer_ = NULL;
+  if (state_mesh_transfer_ != NULL)
+    delete state_mesh_transfer_;
+  state_mesh_transfer_ = NULL;
+}
 
-  template<>
-    void
-    DOpE::MethodOfLines_SpaceTimeHandler<
-        dealii::hp::FECollection,
-        dealii::hp::DoFHandler, dealii::BlockSparsityPattern,
-    dealii::BlockVector<double>, dope_dimension, deal_II_dimension>::ResetTriangulation(
-      const dealii::Triangulation<deal_II_dimension>& /*tria*/) { abort(); }
+template<>
+void
+DOpE::MethodOfLines_SpaceTimeHandler<
+dealii::hp::FECollection,
+       dealii::hp::DoFHandler, dealii::BlockSparsityPattern,
+       dealii::BlockVector<double>, dope_dimension, deal_II_dimension>::ResetTriangulation(
+         const dealii::Triangulation<deal_II_dimension> & /*tria*/)
+{
+  abort();
+}
 
-  template<>
-    void
-    DOpE::MethodOfLines_SpaceTimeHandler<dealii::hp::FECollection,
-        dealii::hp::DoFHandler, dealii::SparsityPattern,
-        dealii::Vector<double>, dope_dimension, deal_II_dimension>::ResetTriangulation(
-	  const dealii::Triangulation<deal_II_dimension>& /*tria*/) { abort(); }
+template<>
+void
+DOpE::MethodOfLines_SpaceTimeHandler<dealii::hp::FECollection,
+     dealii::hp::DoFHandler, dealii::SparsityPattern,
+     dealii::Vector<double>, dope_dimension, deal_II_dimension>::ResetTriangulation(
+       const dealii::Triangulation<deal_II_dimension> & /*tria*/)
+{
+  abort();
+}
 
 
 template class DOpE::MethodOfLines_SpaceTimeHandler<dealii::FESystem,
-						    dealii::DoFHandler, 
-						    dealii::BlockSparsityPattern,
-						    dealii::BlockVector<double>, 
-						    dope_dimension, 
-						    deal_II_dimension>;
+dealii::DoFHandler,
+dealii::BlockSparsityPattern,
+dealii::BlockVector<double>,
+dope_dimension,
+deal_II_dimension>;
 template class DOpE::MethodOfLines_SpaceTimeHandler<dealii::FESystem,
-						    dealii::DoFHandler, 
-						    dealii::SparsityPattern,
-						    dealii::Vector<double>, 
-						    dope_dimension, 
-						    deal_II_dimension>;
+         dealii::DoFHandler,
+         dealii::SparsityPattern,
+         dealii::Vector<double>,
+         dope_dimension,
+         deal_II_dimension>;
 
 template class DOpE::MethodOfLines_SpaceTimeHandler<dealii::hp::FECollection,
-						    dealii::hp::DoFHandler, 
-						    dealii::BlockSparsityPattern,
-						    dealii::BlockVector<double>, 
-						    dope_dimension, 
-						    deal_II_dimension>;
+         dealii::hp::DoFHandler,
+         dealii::BlockSparsityPattern,
+         dealii::BlockVector<double>,
+         dope_dimension,
+         deal_II_dimension>;
 template class DOpE::MethodOfLines_SpaceTimeHandler<dealii::hp::FECollection,
-						    dealii::hp::DoFHandler, 
-						    dealii::SparsityPattern,
-						    dealii::Vector<double>, 
-						    dope_dimension, 
-						    deal_II_dimension>;
+         dealii::hp::DoFHandler,
+         dealii::SparsityPattern,
+         dealii::Vector<double>,
+         dope_dimension,
+         deal_II_dimension>;

@@ -31,7 +31,7 @@
 #include <deal.II/fe/mapping_q.h>
 
 namespace DOpEWrapper
-{ 
+{
   /**
    * @class Mapping
    *
@@ -45,54 +45,54 @@ namespace DOpEWrapper
    * @template DOFHANDLER       The dealii DoFHandler Object
    */
   template<int dim, template<int, int> class DH = dealii::DoFHandler>
-    class Mapping
+  class Mapping
+  {
+  private:
+    Mapping()
     {
-      private:
-        Mapping()
-        {
-        }
+    }
 
-      ~Mapping()
-      {
-      }
+    ~Mapping()
+    {
+    }
 
-    };
+  };
 
   /************************************************************************************/
 
   template<int dim>
-    class Mapping<dim, dealii::DoFHandler > : public dealii::MappingQ<dim>
+  class Mapping<dim, dealii::DoFHandler > : public dealii::MappingQ<dim>
+  {
+  public:
+    Mapping(const unsigned int p, const bool use_mapping_q_on_all_elements =
+              false) :
+      dealii::MappingQ<dim>(p, use_mapping_q_on_all_elements)
     {
-      public:
-        Mapping(const unsigned int p, const bool use_mapping_q_on_all_elements =
-            false) :
-            dealii::MappingQ<dim>(p, use_mapping_q_on_all_elements)
-        {
-        }
+    }
 
-        Mapping(const dealii::MappingQ<dim> &mapping) :
-            dealii::MappingQ<dim>(mapping)
-        {
-        }
+    Mapping(const dealii::MappingQ<dim> &mapping) :
+      dealii::MappingQ<dim>(mapping)
+    {
+    }
 
-      ~Mapping()
-	{
-	}
+    ~Mapping()
+    {
+    }
 
-        /**
-         * This function is needed for a workaround
-         * linked to the hp-version (i.e. deal.ii is not
-         * consistent at the current stage using Mappings
-         * or MappingCollections in the hp-framework).
-         */
-        const typename dealii::MappingQ<dim> &
-	  operator[](const unsigned int /*index*/) const
-        {
-          //assert(index == 0);
-          return *this;
-        }
+    /**
+     * This function is needed for a workaround
+     * linked to the hp-version (i.e. deal.ii is not
+     * consistent at the current stage using Mappings
+     * or MappingCollections in the hp-framework).
+     */
+    const typename dealii::MappingQ<dim> &
+    operator[](const unsigned int /*index*/) const
+    {
+      //assert(index == 0);
+      return *this;
+    }
 
-    };
+  };
 
 //  /************************************************************************************/
 //
@@ -112,8 +112,8 @@ namespace DOpEWrapper
 //        }
 //
 //      ~Mapping()
-//	{
-//	}
+//  {
+//  }
 //
 //        /**
 //         * This function is needed for a workaround
@@ -138,42 +138,42 @@ namespace DOpEWrapper
    * Collections!
    */
   template<int dim>
-    class Mapping<dim, dealii::hp::DoFHandler> : public dealii::hp::MappingCollection<
-        dim>
+  class Mapping<dim, dealii::hp::DoFHandler> : public dealii::hp::MappingCollection<
+    dim>
+  {
+  public:
+    Mapping() :
+      dealii::hp::MappingCollection<dim>()
     {
-      public:
-        Mapping() :
-            dealii::hp::MappingCollection<dim>()
-        {
-        }
+    }
 
-      ~Mapping()
-	{
-	}
+    ~Mapping()
+    {
+    }
 
-        Mapping(const dealii::Mapping<dim>& mapping)
-            : dealii::hp::MappingCollection<dim>(mapping)
-        {
-        }
-        Mapping(const dealii::hp::MappingCollection<dim> & mapping_collection) :
-            dealii::hp::MappingCollection<dim>(mapping_collection)
-        {
-        }
-    };
+    Mapping(const dealii::Mapping<dim> &mapping)
+      : dealii::hp::MappingCollection<dim>(mapping)
+    {
+    }
+    Mapping(const dealii::hp::MappingCollection<dim> &mapping_collection) :
+      dealii::hp::MappingCollection<dim>(mapping_collection)
+    {
+    }
+  };
 
   /************************************************************************************/
 
   template<int dim, template<int, int> class DH>
-    struct StaticMappingQ1
-    {
-    };
+  struct StaticMappingQ1
+  {
+  };
 
   template<int dim>
-    struct StaticMappingQ1<dim, dealii::DoFHandler>
-    {
-      public:
-        static Mapping<dim, dealii::DoFHandler> mapping_q1;
-    };
+  struct StaticMappingQ1<dim, dealii::DoFHandler>
+  {
+  public:
+    static Mapping<dim, dealii::DoFHandler> mapping_q1;
+  };
 
 // template<int dim>
 //    struct StaticMappingQ1<dim, dealii::MGDoFHandler >
@@ -183,11 +183,11 @@ namespace DOpEWrapper
 //    };
 
   template<int dim>
-    struct StaticMappingQ1<dim, dealii::hp::DoFHandler>
-    {
-      public:
-        static Mapping<dim, dealii::hp::DoFHandler> mapping_q1;
-    };
+  struct StaticMappingQ1<dim, dealii::hp::DoFHandler>
+  {
+  public:
+    static Mapping<dim, dealii::hp::DoFHandler> mapping_q1;
+  };
 }
 
 #endif /* MAPPING_WRAPPER_H_ */
