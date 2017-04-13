@@ -88,7 +88,7 @@ main(int argc, char **argv)
    * in a different header file, a simplified compressible SVTK solid.
    * We use the Q2^c-Q1^c element for discretization of Stokes.
    */
-  #warning This example needs to be fixed - it fails with the new assembly
+
   string paramfile = "dope.prm";
 
   if (argc == 2)
