@@ -1,6 +1,9 @@
 Changelog DOpE
 ==============
-=== DOPE Meeting on Apr 12, 2017 in Darmstadt ================================
+=== DOPE Meeting on Apr 12-13, 2017 in Darmstadt ==============================
+13.04.2017: - Bernhard started working on a phase-field fracture example
+	    - Repaired PDE/StatPDE/Example 9 (UMFPACK failed due to 
+	      nonunique pressure with INH material)
 
 12.04.2017: - replaced compressed_simple sparsity pattern by dynamic
 	      in order to compile with deal.II 8.5.0 version
@@ -14,7 +17,7 @@ Changelog DOpE
 	      higherorder-dwr containers (OPT/StatPDE/Example1 and PDE/StatPDE/Example5)
 	      the initialization has now to be done in the problemcontainer and no longer
 	      in the reducedproblem.
-====end of DOPE Meeting on Apr 12, 2017 ======================================
+====end of DOPE Meeting on Apr 12-13, 2017 ====================================
 31.03.2017: Added assertion for the initial condition to avoid obscure results 
 	    if initial conditions have too few components.
 08.03.2017: Now initial values in PDE-Newton are possible if
