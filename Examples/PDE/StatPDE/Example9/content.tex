@@ -1,8 +1,19 @@
 \subsubsection{General problem description}
 \index{stationary PDE}\index{stationary PDE!FSI problem} \index{fluid} \index{fluid!incompressible} \index{fluid!Newtonian}
 In this example we consider a simple stationary FSI problem. The fluid
-is given as an incompressible Newtonian fluid modeled by the Stokes equation. Here, we use the symmetric stress tensor which has a little consequence when using the do-nothing outflow condition, see also section \ref{PDE_Stat_Stokes}.
-The computation domain is $\Omega = [-6,6]\times [0,2]$ and we choose for simplicity $f=0$. 
+is given as an incompressible Newtonian fluid modeled by the Stokes
+equation. Here, we use the symmetric stress tensor which has a little
+consequence when using the do-nothing outflow condition, see also
+section \ref{PDE_Stat_Stokes}. The flow is driven by non-homogeneous Dirichlet 
+condition on the left bounddary.
+
+The computation domain is $\Omega = [-6,6]\times [0,2]$ and we choose for
+simplicity $f=0$. 
+We add in the subdomain $\Omega_s = [0,2]\times [0,1]$ a solid obstacle. In
+this 
+solid we prescribe an incompressible neo-Hookean material law.
+
+
 
 The fluid reads: \index{fluid!Eulerian framework}
 \begin{Problem}[Variational fluid problem, Eulerian framework]
@@ -59,6 +70,12 @@ The structure equations are given by incompressible neo-Hookean material
   \hat\sigma_s:=-\hat p_sI+\mu_s(\hat F_s\hat F_s^T-I).
   \]
 \end{Problem}
+\begin{remark}
+At our developer meeting on Apr 13, 2017, we also added 
+a simplified STVK material for testing purposes. This STVK 
+material is implemented in a different header file (see also 
+further comments below).
+\end{remark}
 
 
 The resulting FSI problem is then given by: \index{fluid-structure interaction (FSI)!ALE model}
@@ -98,8 +115,21 @@ nonstationary FSI problem.
 
 \subsubsection{Program description}
 
-%%% Unsinn! Das example hat nicht viel mit dem davor zu tun!
-%There is not much difference to the prior example, so we will keep our remarks rather short. The \textit{functionals.h} and \textit{myfunctions.cc} files did not change at all, so we simply refer to the corresponding sections in the last example.\\
 In the \textit{localpde.h} file, all functions of the \texttt{LocalPDE} class have to be adjusted to the current FSI problem. This only makes the equations and matrices a little more complicated, and our solution vector now consists of five components (two velocity components of the fluid, the pressure component, and two additional displacement components for the structure variables). Otherwise, everything is analogous to the former example.\\
 In the \textit{main.cc} we only have to add two components to the \texttt{compmask} vector and prescribe boundary conditions for the structure variables. Apart from that, we define objects for the same classes as before that are even named equally and use the same solvers.\\ 
-Again, the solution is reached within one Newton step, and all we see from the program output is the values of the functionals.
+Again, the solution is reached within one Newton step, and all we see from the
+program output is the values of the functionals.
+
+We also demonstrate another very convenient feature. Since we have 
+two different material laws (INH and simplified STVK), we do not implement 
+them together in one \textit{localpde.h} file by using if-conditions etc. 
+But we implement them seperately in two different *.h files, namely
+\begin{lstlisting}
+localpde.h
+localpde_stvk_material.h
+\end{lstlisting}
+In the \texttt{main.cc} function we can now simply comment 
+or uncomment the respective file we want to work with.
+This allows us to keep a clean file for a running example and experiment 
+in other files (possibly more than $2$) and by just changing 
+two lines in the main.cc in order to change the equations.

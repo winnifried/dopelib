@@ -36,6 +36,7 @@ to it. Then, proceed as described in Section \ref{getting_started}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{How to run existing examples}
+\subsection{The global way}
 The easiest way is to first build all examples. Go into 
 \begin{lstlisting}
 dopelib/Examples/
@@ -49,35 +50,64 @@ By typing only `make' you will see all options
 This procedure will take some minutes. Afterwards,
 go into the examples folder of your choice. For instance:
 \begin{lstlisting}
-dopelib/Examples/PDE/InstatPDE/Example1
+dopelib/Examples/PDE/InstatPDE/Example1/autobuild
 \end{lstlisting}
 Herein you create the executable via
 \begin{lstlisting}
 make 
 \end{lstlisting}
-and then 
+and then go back via ../ and 
 \begin{lstlisting}
 ./DOpE-PDE-InstatPDE-Example1 
 \end{lstlisting}
 Or both commands together:
 \begin{lstlisting}
-make && ./DOpE-PDE-InstatPDE-Example1 
+autobuild> make && cd .. &&  ./DOpE-PDE-InstatPDE-Example1 
 \end{lstlisting}
 You will find the results on the screen in the terminal as well
 as some graphical output in the `Results' folder.
 
+\subsection{Building, making and running in the local folder}
+In case we have run first globally as previsously described, 
+in each examples folder we find an autobuild subfolder. 
+If we now want to work locally (which is the usual way) then 
+we have to type `make' in the autobuild folder:
+\begin{lstlisting}
+autobuild> make
+\end{lstlisting}
+In case we need to modify the Makefile, we need first to do:
+\begin{lstlisting}
+autobuild> cmake ..
+\end{lstlisting}
+For instance one reason to modify the Makefile could be 
+to change to debug mode as described in Section \ref{sec_release_debug}.
+Finally, go one folder back and run the object file.
+
+In case you work and test out new things (modifiying the 
+main.cc and localpde.h files etc.), one command for instance 
+in Example 9 is:
+\begin{lstlisting}
+Example9> cd autobuild/ && make && cd .. &&  ./DOpE-PDE-StatPDE-Example9
+\end{lstlisting}
+
+
+
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Changing from Release mode to Debug mode}
+\label{sec_release_debug}
 In a specific example go into the autobuild folder 
 and change therein:
 \begin{lstlisting}
-CMAKE_BUILD_TYPE:STRING=Release
+cmake CMAKE_BUILD_TYPE=Release ..
 \end{lstlisting}
-to 
+to some other behavior:
 \begin{lstlisting}
 Debug Release RelWithDebInfo MinSizeRel
 \end{lstlisting}
-Then go one folder back and type as usual `make' to build the executable file.
+Then type `make' to build the executable file and go back 
+into the parent folder and execute the object file.
 
 
 
