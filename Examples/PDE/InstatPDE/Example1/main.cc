@@ -60,7 +60,6 @@
 
 //Problem specific includes
 #include "localpde.h"
-#include "localfunctional.h"
 #include "functionals.h"
 #include "my_functions.h"
 
@@ -80,8 +79,6 @@ typedef QGauss<DIM - 1> FACEQUADRATURE;
 typedef BlockSparseMatrix<double> MATRIX;
 typedef BlockSparsityPattern SPARSITYPATTERN;
 typedef BlockVector<double> VECTOR;
-
-typedef FunctionalInterface<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM> FUNC;
 
 typedef PDEProblemContainer<
     LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
@@ -157,9 +154,6 @@ main(int argc, char **argv)
   triangulation.set_boundary(80, boundary);
   triangulation.refine_global(2);
 
-  // The control_fe is only a dummy finite element,
-  // as we solve a pure PDE problem
-  FE<DIM> control_fe(FE_Nothing<DIM>(), 1);
   FE<DIM> state_fe(FE_Q<DIM>(2), 2, FE_Q<DIM>(1), 1);
 
   QUADRATURE quadrature_formula(3);
@@ -167,9 +161,6 @@ main(int argc, char **argv)
   IDC idc(quadrature_formula, face_quadrature_formula);
 
   LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM> LPDE(pr);
-
-  // Define a dummy functional for the optimization framework.
-  LocalFunctional<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM> LFunc;
 
   LocalPointFunctionalPressure<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM> LPFP;
   LocalBoundaryFunctionalDrag<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM> LBFD(pr);
