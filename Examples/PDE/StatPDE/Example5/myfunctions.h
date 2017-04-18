@@ -34,17 +34,17 @@ namespace DOpE
 {
   class ExactSolution : public DOpEWrapper::Function<2>
   {
-    public:
-      ExactSolution() :
-          DOpEWrapper::Function<2>(1)
-      {
-      }
+  public:
+    ExactSolution() :
+      DOpEWrapper::Function<2>(1)
+    {
+    }
 
-      virtual double
-      value(const Point<2> &p, const unsigned int component = 0) const;
+    virtual double
+    value(const Point<2> &p, const unsigned int component = 0) const;
 
-      virtual double
-      laplacian(const Point<2> & p, const unsigned int component = 0) const;
+    virtual double
+    laplacian(const Point<2> &p, const unsigned int component = 0) const;
 
   };
 
@@ -54,21 +54,21 @@ namespace DOpE
   ExactSolution::value(const Point<2> &p, const unsigned int component) const
   {
     Assert(component < this->n_components,
-        ExcIndexRange(component, 0, this->n_components));
+           ExcIndexRange(component, 0, this->n_components));
 
     const double x = p[0];
     const double y = p[1];
     const double pi = numbers::PI;
     double erg = 0;
     switch (component)
-    {
-    case 0:
-      erg = sin(pi / (x * x + y * y));
-      break;
-    default:
-      erg = -123123123.;
-      break;
-    }
+      {
+      case 0:
+        erg = sin(pi / (x * x + y * y));
+        break;
+      default:
+        erg = -123123123.;
+        break;
+      }
     return erg;
   }
 
@@ -76,10 +76,10 @@ namespace DOpE
 
   double
   ExactSolution::laplacian(const Point<2> &p,
-      const unsigned int component) const
+                           const unsigned int component) const
   {
     Assert(component < this->n_components,
-        ExcIndexRange(component, 0, this->n_components));
+           ExcIndexRange(component, 0, this->n_components));
 
     const double x = p[0];
     const double y = p[1];
@@ -90,21 +90,21 @@ namespace DOpE
     const double y4 = y2 * y2;
     double erg = 0;
     switch (component)
-    {
-    case 0:
-      erg = -2 * pi
-          * (2 * pi * x2 * sin(pi / (x2 + y2))
-              + (-3 * x4 - 2 * x2 * y2 + y4) * cos(pi / (x2 + y2)))
-          / (std::pow(x2 + y2, 4.))
-          - 2 * pi
+      {
+      case 0:
+        erg = -2 * pi
+              * (2 * pi * x2 * sin(pi / (x2 + y2))
+                 + (-3 * x4 - 2 * x2 * y2 + y4) * cos(pi / (x2 + y2)))
+              / (std::pow(x2 + y2, 4.))
+              - 2 * pi
               * (2 * pi * y2 * sin(pi / (x2 + y2))
-                  + (-3 * y4 - 2 * x2 * y2 + x4) * cos(pi / (x2 + y2)))
+                 + (-3 * y4 - 2 * x2 * y2 + x4) * cos(pi / (x2 + y2)))
               / (std::pow(x2 + y2, 4.));
-      break;
-    default:
-      erg = -123123123.;
-      break;
-    }
+        break;
+      default:
+        erg = -123123123.;
+        break;
+      }
     return erg;
   }
 

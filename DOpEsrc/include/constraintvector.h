@@ -38,25 +38,25 @@
 
 namespace DOpE
 {
-/**
- * This class represents the constraint vector used for additional constraints beyond the PDE.
- *
- * @tparam <VECTOR>     Class in which we want to store the spatial vector
- *                      (i.e. dealii::Vector<double> or dealii::BlockVector<double>)
- */
+  /**
+   * This class represents the constraint vector used for additional constraints beyond the PDE.
+   *
+   * @tparam <VECTOR>     Class in which we want to store the spatial vector
+   *                      (i.e. dealii::Vector<double> or dealii::BlockVector<double>)
+   */
   template<typename VECTOR>
   class ConstraintVector
   {
   public:
-    //TODO: Currently we only consider one fixed control 
-    //      for all timesteps, if more is desired one needs to augment the 
+    //TODO: Currently we only consider one fixed control
+    //      for all timesteps, if more is desired one needs to augment the
     //      Spacetimehandler to have a time discretization for the control,
-    //      Then one can update this vector similar to the statevector 
+    //      Then one can update this vector similar to the statevector
     //      with different meshes for Vectors.
     //      Note that this requires to keep track of the interpolation
     //      between state and control time points...
-    ConstraintVector(const ConstraintVector& ref);
-    ConstraintVector(const SpaceTimeHandlerBase<VECTOR>* STH, DOpEtypes::VectorStorageType behavior);
+    ConstraintVector(const ConstraintVector &ref);
+    ConstraintVector(const SpaceTimeHandlerBase<VECTOR> *STH, DOpEtypes::VectorStorageType behavior);
     ~ConstraintVector();
 
 //    /**
@@ -66,7 +66,7 @@ namespace DOpE
 //     *
 //     * @param t            A double containing the time we are interested in. If t doesn't match the time given by
 //     *                     time_point, then an interpolation between the corresponding time_points is
-//     *			               computed.
+//     *                     computed.
 //     * @param interval      An TimeIterator. The interval containing t.
 //     *
 //     */
@@ -86,29 +86,29 @@ namespace DOpE
      * Returns true if there is a constraint associated to the name.
      */
     bool HasType(std::string name) const;
-   
+
     /**
      * Returns a reference to the spacial vector associated to the last time given by SetTime*
      * The Constrainttype must be indicated in the string name.
      * Feasible values are 'local' for local in time and space
      *                     'local_global' for local in space but global in time constraints.
      */
-    VECTOR& GetSpacialVector(std::string name);
+    VECTOR &GetSpacialVector(std::string name);
 
     /**
      * Returns a const reference to the spacial vector associated to the last time given by SetTime*
      * See also GetSpacialVector
      */
-    const VECTOR& GetSpacialVector(std::string name) const;
-    
+    const VECTOR &GetSpacialVector(std::string name) const;
+
     /**
      * Returns the vector containing information on global in space and time constraints
      */
-    const dealii::Vector<double>& GetGlobalConstraints() const;
+    const dealii::Vector<double> &GetGlobalConstraints() const;
     /**
      * Returns the vector containing information on global in space and time constraints
      */
-    dealii::Vector<double>& GetGlobalConstraints();
+    dealii::Vector<double> &GetGlobalConstraints();
     /**
      * Sets all the vector to a constant value.
      *
@@ -121,7 +121,7 @@ namespace DOpE
      *
      * @param dq    The other vector.
      */
-    void operator=(const ConstraintVector& dq);
+    void operator=(const ConstraintVector &dq);
     /**
      * Upon completion each entry of this Vector contains the following
      * Result this = this + dq;
@@ -129,7 +129,7 @@ namespace DOpE
      *
      * @param dq    The increment.
      */
-    void operator+=(const ConstraintVector& dq);
+    void operator+=(const ConstraintVector &dq);
     /**
      * Multiplies the Vector with a constant.
      *
@@ -143,7 +143,7 @@ namespace DOpE
      * @param dq    The argument for the computation of the scalarproduct.
      * @return      A double containing the scalar product.
      */
-    double operator*(const ConstraintVector& dq) const;
+    double operator*(const ConstraintVector &dq) const;
     /**
      * Sets this vector adds a multiple of an other vector to this vector.
      * this = this + s * dq
@@ -152,21 +152,21 @@ namespace DOpE
      * @param s    A double, by which the other vector is scaled.
      * @param dq   The other vector.
      */
-    void add(double s, const ConstraintVector& dq);
+    void add(double s, const ConstraintVector &dq);
     /**
      * Sets this vector to the values of an other given vector.
      * The vector is not resized!
      *
      * @param dq    The other vector.
      */
-    void equ(double s, const ConstraintVector& dq);
+    void equ(double s, const ConstraintVector &dq);
 
     /**
      * Prints Information on this vector into the given stream.
      *
      * @param out    The output stream.
      */
-    void PrintInfos(std::stringstream& out);
+    void PrintInfos(std::stringstream &out);
 
     /**
      * This returns the behavior of the ConstraintVector
@@ -176,12 +176,18 @@ namespace DOpE
      *
      * @return               A string indicating the behavior.
      */
-    DOpEtypes::VectorStorageType GetBehavior() const { return behavior_; }
+    DOpEtypes::VectorStorageType GetBehavior() const
+    {
+      return behavior_;
+    }
 
     /**
      * @return               A const pointer to the SpaceTimeHandler associated with this vector.
      */
-    const SpaceTimeHandlerBase<VECTOR>* GetSpaceTimeHandler() const { return STH_; }
+    const SpaceTimeHandlerBase<VECTOR> *GetSpaceTimeHandler() const
+    {
+      return STH_;
+    }
 
     /**
      * Call if the SpaceTimeHandler has changed to reinitialize vector sizes.
@@ -194,13 +200,13 @@ namespace DOpE
      * Feasible values are "infty", and "l1"
      * The string restriction defines if only certain values are
      * to be considered. Currently "all" and "positive" are feasible
-     * Meaning that either all or only the positive entries are 
+     * Meaning that either all or only the positive entries are
      * considered.
      */
     double Norm(std::string name,std::string restriction = "all") const;
 
     /**
-     *  This function is used to check whether the values 
+     *  This function is used to check whether the values
      *  stored in this vector
      *  corresponding to a feasible control,
      *  i.e., if all entries are non positive
@@ -209,9 +215,9 @@ namespace DOpE
      *                and false otherwise.
      */
     virtual bool
-      IsFeasible() const;
+    IsFeasible() const;
     /**
-     *  This function is used to check whether the values 
+     *  This function is used to check whether the values
      *  stored in this vector
      *  corresponding to an epsilon  feasible control,
      *  i.e., if all entries are not larger than the given eps.
@@ -222,23 +228,23 @@ namespace DOpE
      *                and false otherwise.
      */
     virtual bool
-      IsEpsilonFeasible(double eps) const;
-    
-     /**
-     *  This function is used to check whether the values 
-     *  stored in this vector are larger than the given epsilon.
-     *
-     *  @param  eps   The value of epsilon.
-     *
-     *  @return       A boolean beeing true if the constraint is larger than eps
-     *                and false otherwise.
-     */
-    virtual bool
-      IsLargerThan(double eps) const;
-   
-     
+    IsEpsilonFeasible(double eps) const;
+
     /**
-     *  This function calculates the element-wise product of the 
+    *  This function is used to check whether the values
+    *  stored in this vector are larger than the given epsilon.
+    *
+    *  @param  eps   The value of epsilon.
+    *
+    *  @return       A boolean beeing true if the constraint is larger than eps
+    *                and false otherwise.
+    */
+    virtual bool
+    IsLargerThan(double eps) const;
+
+
+    /**
+     *  This function calculates the element-wise product of the
      *  constraintvector with the given argument. The absolute value
      *  of these products is then summed.
      *
@@ -247,25 +253,25 @@ namespace DOpE
      *  @return the complementarity product.
      */
     virtual double
-      Complementarity(const ConstraintVector<VECTOR>& g) const;
+    Complementarity(const ConstraintVector<VECTOR> &g) const;
 
   private:
     /**
      * This function resizes the spacial vector at a prior given time point.
      * Hence SetTimeDoFNumber should be called before this function.
      */
-    void ReSizeLocalSpace(unsigned int ndofs, const std::vector<unsigned int>& dofs_per_block);
+    void ReSizeLocalSpace(unsigned int ndofs, const std::vector<unsigned int> &dofs_per_block);
 
     void ReSizeGlobal(unsigned int ndofs);
 
-    std::vector<VECTOR* > local_control_constraint_;
+    std::vector<VECTOR * > local_control_constraint_;
     mutable VECTOR local_constraint_control_;
 
     dealii::Vector<double> global_constraint_;
 
     mutable int accessor_;
 
-    const SpaceTimeHandlerBase<VECTOR>* STH_;
+    const SpaceTimeHandlerBase<VECTOR> *STH_;
     DOpEtypes::VectorStorageType behavior_;
     unsigned int sfh_ticket_;
   };

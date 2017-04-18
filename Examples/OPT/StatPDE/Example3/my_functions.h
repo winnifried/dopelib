@@ -28,7 +28,7 @@ using namespace dealii;
 
 /******************************************************/
 
-class BoundaryParabel : public DOpEWrapper::Function<2> 
+class BoundaryParabel : public DOpEWrapper::Function<2>
 {
 public:
   BoundaryParabel (ParameterReader &param_reader) : DOpEWrapper::Function<2>(3)
@@ -36,21 +36,21 @@ public:
     param_reader.SetSubsection("My functions parameters");
     mean_inflow_velocity_ = param_reader.get_double ("mean_inflow_velocity");
   }
-  
+
   virtual double value (const Point<2>   &p,
-			const unsigned int  component = 0) const;
-  
-  virtual void vector_value (const Point<2> &p, 
-			     Vector<double>   &value) const;
+                        const unsigned int  component = 0) const;
+
+  virtual void vector_value (const Point<2> &p,
+                             Vector<double>   &value) const;
 
   static void declare_params(ParameterReader &param_reader)
   {
     param_reader.SetSubsection("My functions parameters");
     param_reader.declare_entry("mean_inflow_velocity", "0.0",
-				 Patterns::Double(0));    
+                               Patterns::Double(0));
   }
 
-  
+
 private:
   double mean_inflow_velocity_;
 
@@ -58,20 +58,20 @@ private:
 
 /******************************************************/
 
-double 
+double
 BoundaryParabel::value (const Point<2>  &p,
-			    const unsigned int component) const
+                        const unsigned int component) const
 {
   Assert (component < this->n_components,
-	  ExcIndexRange (component, 0, this->n_components));
-  
-  if (component == 0)   
+          ExcIndexRange (component, 0, this->n_components));
+
+  if (component == 0)
     {
-      return ( (p(0) == 0) && (p(1) <= 0.41) ? -mean_inflow_velocity_ * 
-	       (4.0/0.1681) * 		     		    
-	       (std::pow(p(1), 2) - 0.41 * std::pow(p(1),1)) : 0 );  
-      
-    }	 
+      return ( (p(0) == 0) && (p(1) <= 0.41) ? -mean_inflow_velocity_ *
+               (4.0/0.1681) *
+               (std::pow(p(1), 2) - 0.41 * std::pow(p(1),1)) : 0 );
+
+    }
   return 0;
 }
 
@@ -79,7 +79,7 @@ BoundaryParabel::value (const Point<2>  &p,
 
 void
 BoundaryParabel::vector_value (const Point<2> &p,
-				   Vector<double>   &values) const 
+                               Vector<double>   &values) const
 {
   for (unsigned int c=0; c<this->n_components; ++c)
     values (c) = BoundaryParabel::value (p, c);

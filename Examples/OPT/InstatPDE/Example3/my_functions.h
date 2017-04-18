@@ -27,11 +27,11 @@
 //Helper functions to calculate the coefficients
 namespace my
 {
-  double f(const dealii::Point<2>& p) 
+  double f(const dealii::Point<2> &p)
   {
     return sin(p(0))*sin(p(1));
   }
-  
+
   double g(double t)
   {
     return 0.25*(-2.*t-3.*exp(-2.*t) + 3);
@@ -44,15 +44,15 @@ namespace my
   {
     return g(t) + 4./(M_PI*M_PI) + (1.-t)*8./(M_PI*M_PI);
   }
-  double ud(double t, const dealii::Point<2>& p) 
+  double ud(double t, const dealii::Point<2> &p)
   {
     return k(t)*f(p);
   }
-  double optu(double t, const dealii::Point<2>& p) 
+  double optu(double t, const dealii::Point<2> &p)
   {
     return g(t)*f(p);
   }
-  double optq(double t) 
+  double optq(double t)
   {
     return 1.-t;
   }

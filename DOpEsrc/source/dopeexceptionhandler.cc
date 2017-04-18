@@ -33,46 +33,46 @@
 namespace DOpE
 {
 
-/*******************************************************/
+  /*******************************************************/
 
-template<typename VECTOR>
-DOpEExceptionHandler<VECTOR>::DOpEExceptionHandler(DOpEOutputHandler<VECTOR>* OutputHandler)
-{
-  OutputHandler_ = OutputHandler;
-}
+  template<typename VECTOR>
+  DOpEExceptionHandler<VECTOR>::DOpEExceptionHandler(DOpEOutputHandler<VECTOR> *OutputHandler)
+  {
+    OutputHandler_ = OutputHandler;
+  }
 
-/*******************************************************/
+  /*******************************************************/
 
-template<typename VECTOR>
-DOpEExceptionHandler<VECTOR>::~DOpEExceptionHandler()
-{
+  template<typename VECTOR>
+  DOpEExceptionHandler<VECTOR>::~DOpEExceptionHandler()
+  {
 
-}
+  }
 
-/*******************************************************/
+  /*******************************************************/
 
-template<typename VECTOR>
-void DOpEExceptionHandler<VECTOR>::HandleException(DOpEException& e,std::string reporter)
-{
-  GetOutputHandler()->WriteError("The following `" + e.GetName() + "` reports!");
-  GetOutputHandler()->WriteError("Warning: During execution of `" + e.GetThrowingInstance()
-      + "` the following Problem occurred!");
-  GetOutputHandler()->WriteError(e.GetErrorMessage());
-  GetOutputHandler()->WriteError("Reported by `"+reporter+"`");
-}
+  template<typename VECTOR>
+  void DOpEExceptionHandler<VECTOR>::HandleException(DOpEException &e,std::string reporter)
+  {
+    GetOutputHandler()->WriteError("The following `" + e.GetName() + "` reports!");
+    GetOutputHandler()->WriteError("Warning: During execution of `" + e.GetThrowingInstance()
+                                   + "` the following Problem occurred!");
+    GetOutputHandler()->WriteError(e.GetErrorMessage());
+    GetOutputHandler()->WriteError("Reported by `"+reporter+"`");
+  }
 
-/*******************************************************/
+  /*******************************************************/
 
-template<typename VECTOR>
-void DOpEExceptionHandler<VECTOR>::HandleCriticalException(DOpEException& e,std::string reporter)
-{
-  GetOutputHandler()->WriteError("The following `" + e.GetName() + "` reports!");
-  GetOutputHandler()->WriteError("Error: During execution of `" + e.GetThrowingInstance()
-      + "` the following fatal Problem occurred!");
-  GetOutputHandler()->WriteError(e.GetErrorMessage());
-  GetOutputHandler()->WriteError("Reported by `"+reporter+"`");
-  abort();
-}
+  template<typename VECTOR>
+  void DOpEExceptionHandler<VECTOR>::HandleCriticalException(DOpEException &e,std::string reporter)
+  {
+    GetOutputHandler()->WriteError("The following `" + e.GetName() + "` reports!");
+    GetOutputHandler()->WriteError("Error: During execution of `" + e.GetThrowingInstance()
+                                   + "` the following fatal Problem occurred!");
+    GetOutputHandler()->WriteError(e.GetErrorMessage());
+    GetOutputHandler()->WriteError("Reported by `"+reporter+"`");
+    abort();
+  }
 
 }//Endof namespace
 /******************************************************/

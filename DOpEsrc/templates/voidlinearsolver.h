@@ -28,9 +28,9 @@
 #include <deal.II/lac/block_sparsity_pattern.h>
 #include <deal.II/lac/block_sparse_matrix.h>
 #if DEAL_II_VERSION_GTE(8,5,0)
-  #include <deal.II/lac/dynamic_sparsity_pattern.h>
+#include <deal.II/lac/dynamic_sparsity_pattern.h>
 #else
-  #include <deal.II/lac/compressed_simple_sparsity_pattern.h>
+#include <deal.II/lac/compressed_simple_sparsity_pattern.h>
 #endif
 #include <deal.II/lac/solver_cg.h>
 #include <deal.II/lac/precondition.h>
@@ -54,82 +54,82 @@ namespace DOpE
    *
    */
   template <typename VECTOR>
-    class VoidLinearSolver
+  class VoidLinearSolver
   {
   public:
     VoidLinearSolver(ParameterReader &param_reader);
     ~VoidLinearSolver();
-   
+
     static void declare_params(ParameterReader &param_reader);
- 
+
     /**
        This Function should be called once after grid refinement, or changes in boundary values
        to  recompute sparsity patterns, and constraint matrices.
      */
     template<typename PROBLEM>
-      void ReInit(PROBLEM& pde);
+    void ReInit(PROBLEM &pde);
 
     /**
      *  Copys the Rhs to the Solution Vector, als other params are ignored!
-     * 
+     *
      *
      * @param rhs                   Right Hand Side of the Equation.
      * @param solution              The Approximate Solution of the Linear Equation.
      *                              It is assumed to be zero!
      * @param force_build_matrix    A boolean value, that indicates whether the Matrix
      *                              should be build by the linear solver in the first iteration.
-     *				    The default is false, meaning that if we have no idea we don't
-     *				    want to build a matrix.
+     *            The default is false, meaning that if we have no idea we don't
+     *            want to build a matrix.
      *
      *
      */
     template<typename PROBLEM, typename INTEGRATOR>
-      void Solve(PROBLEM& pde, INTEGRATOR& integr, VECTOR &rhs, VECTOR &solution, bool force_matrix_build=false);
-     
+    void Solve(PROBLEM &pde, INTEGRATOR &integr, VECTOR &rhs, VECTOR &solution, bool force_matrix_build=false);
+
   protected:
 
   private:
-  
+
   };
 
-/*********************************Implementation************************************************/
- 
+  /*********************************Implementation************************************************/
+
   template <typename VECTOR>
-    void VoidLinearSolver<VECTOR>::declare_params(ParameterReader &/*param_reader*/) 
+  void VoidLinearSolver<VECTOR>::declare_params(ParameterReader &/*param_reader*/)
   {
   }
 
   /******************************************************/
 
   template <typename VECTOR>
-    VoidLinearSolver<VECTOR>::VoidLinearSolver(ParameterReader &/*param_reader*/) 
+  VoidLinearSolver<VECTOR>::VoidLinearSolver(ParameterReader &/*param_reader*/)
   {
   }
 
-/******************************************************/
+  /******************************************************/
 
-template <typename VECTOR>
- VoidLinearSolver<VECTOR>::~VoidLinearSolver()
-{
-}
+  template <typename VECTOR>
+  VoidLinearSolver<VECTOR>::~VoidLinearSolver()
+  {
+  }
 
-/******************************************************/
+  /******************************************************/
 
-template <typename VECTOR>
+  template <typename VECTOR>
   template<typename PROBLEM>
-  void  VoidLinearSolver<VECTOR>::ReInit(PROBLEM& /*pde*/)
-{
- 
-}
+  void  VoidLinearSolver<VECTOR>::ReInit(PROBLEM & /*pde*/)
+  {
 
-/******************************************************/
+  }
 
-template <typename VECTOR>
+  /******************************************************/
+
+  template <typename VECTOR>
   template<typename PROBLEM, typename INTEGRATOR>
-  void VoidLinearSolver<VECTOR>::Solve(PROBLEM& /*pde*/, INTEGRATOR& /*integr*/, VECTOR &rhs, VECTOR &solution, bool /*force_matrix_build*/)
-{
-  solution = rhs;
-}
+  void VoidLinearSolver<VECTOR>::Solve(PROBLEM & /*pde*/, INTEGRATOR & /*integr*/, VECTOR &rhs, VECTOR &solution, bool /*force_matrix_build*/)
+  {
+    solution = rhs;
+  }
 
 
 }

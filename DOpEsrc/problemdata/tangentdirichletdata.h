@@ -36,10 +36,10 @@ namespace DOpE
    * @tparam  VECTOR          The Vector type
    */
   template<typename DD, typename VECTOR, int dealdim>
-    class TangentDirichletData : public DOpEWrapper::Function<dealdim>
+  class TangentDirichletData : public DOpEWrapper::Function<dealdim>
   {
   public:
-  TangentDirichletData(const DD& data) : DOpEWrapper::Function<dealdim>(data.n_components(), data.InitialTime()), dirichlet_data_(data)
+    TangentDirichletData(const DD &data) : DOpEWrapper::Function<dealdim>(data.n_components(), data.InitialTime()), dirichlet_data_(data)
     {
       param_values_ = NULL;
       domain_values_ = NULL;
@@ -50,9 +50,9 @@ namespace DOpE
      * Initializes the private data, should be called prior to any value call!
      */
     void ReInit(
-		const std::map<std::string, const dealii::Vector<double>* > &param_values,
-		const std::map<std::string, const VECTOR* > &domain_values,
-		unsigned int color)
+      const std::map<std::string, const dealii::Vector<double>* > &param_values,
+      const std::map<std::string, const VECTOR * > &domain_values,
+      unsigned int color)
     {
       param_values_ = &param_values;
       domain_values_ = &domain_values;
@@ -68,17 +68,17 @@ namespace DOpE
      *                  values are evaluated
      * @param component The component of the Dirichlet data
      *
-     * @return The component of the Dirichlet data at p, i.e., DD'(q)(p)_{component} 
+     * @return The component of the Dirichlet data at p, i.e., DD'(q)(p)_{component}
      */
     double value (const dealii::Point<dealdim>   &p,
-		  const unsigned int  component) const
+                  const unsigned int  component) const
     {
       return dirichlet_data_.Data_Q(
-	param_values_,
-	domain_values_,
-	color_,
-	p,
-	component);
+               param_values_,
+               domain_values_,
+               color_,
+               p,
+               component);
     }
 
     /**
@@ -91,9 +91,9 @@ namespace DOpE
       dirichlet_data_.SetTime(time);
     }
   private:
-    const DD& dirichlet_data_;
-    const std::map<std::string, const dealii::Vector<double>* >* param_values_;
-    const std::map<std::string, const VECTOR* >* domain_values_;
+    const DD &dirichlet_data_;
+    const std::map<std::string, const dealii::Vector<double>* > *param_values_;
+    const std::map<std::string, const VECTOR * > *domain_values_;
     unsigned int color_;
   };
 }

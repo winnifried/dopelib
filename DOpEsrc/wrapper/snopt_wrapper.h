@@ -28,11 +28,11 @@
 //BEGIN DONOT_TOUCH
 //The following code is sensitive to ordering
 //due to some bugs in f2c and snopt
-//please do not touch this unless you are very 
+//please do not touch this unless you are very
 //sure of what you are doing! And even then---don't.
 //If you do something wrong here your code may compile
-//and then fail if you include some other headers you 
-//may additionally need for no apparent reason with no 
+//and then fail if you include some other headers you
+//may additionally need for no apparent reason with no
 //reasonable compiler warning whatsoever.
 //         You have been warned: HERE BE DRAGONS!
 #include "snopt.hh"
@@ -59,7 +59,7 @@ namespace DOpEWrapper
    * @struct SNOPT_FUNC_DATA
    *
    * A struct defined to contain all the data needed by the
-   * SNOPT interface. 
+   * SNOPT interface.
    *
    * Since the number of arguments required by the SNOPT userinterface
    * is larger than usually initialized number N of arguments
@@ -67,31 +67,41 @@ namespace DOpEWrapper
    * of the SNOPT interface with any boost functionality as it
    * uses only one argument now.
    */
-  struct SNOPT_FUNC_DATA{
-    integer    *Status; integer *n;    doublereal* x;
-    integer    *needF;  integer *neF;  doublereal* F;
-    integer    *needG;  integer *neG;  doublereal* G;
-    char       *cu;     integer *lencu;
-    integer    *iu;     integer *leniu;
-    doublereal *ru;     integer *lenru;
+  struct SNOPT_FUNC_DATA
+  {
+    integer    *Status;
+    integer *n;
+    doublereal *x;
+    integer    *needF;
+    integer *neF;
+    doublereal *F;
+    integer    *needG;
+    integer *neG;
+    doublereal *G;
+    char       *cu;
+    integer *lencu;
+    integer    *iu;
+    integer *leniu;
+    doublereal *ru;
+    integer *lenru;
   };
-      
+
   /**
    * @fn SNOPT_A_userfunc_
    *
    * This function is required by the SNOPT userinterface.
    * here it bundles the arguments into the struct SNOPT_FUNC_DATA
-   * which is then passed to the function 
+   * which is then passed to the function
    * SNOPT_A_userfunc_interface
    * which we will load at runtime using boost with the user defined data.
    */
-  boost::function1<int, SNOPT_FUNC_DATA&> SNOPT_A_userfunc_interface;
+  boost::function1<int, SNOPT_FUNC_DATA &> SNOPT_A_userfunc_interface;
   int SNOPT_A_userfunc_(integer    *Status, integer *n,    doublereal x[],
-			   integer    *needF,  integer *neF,  doublereal F[],
-			   integer    *needG,  integer *neG,  doublereal G[],
-			   char       *cu,     integer *lencu,
-			   integer    iu[],    integer *leniu,
-			   doublereal ru[],    integer *lenru )
+                        integer    *needF,  integer *neF,  doublereal F[],
+                        integer    *needG,  integer *neG,  doublereal G[],
+                        char       *cu,     integer *lencu,
+                        integer    iu[],    integer *leniu,
+                        doublereal ru[],    integer *lenru )
   {
     SNOPT_FUNC_DATA data;
     data.Status = Status;
@@ -110,12 +120,12 @@ namespace DOpEWrapper
     data.ru     = ru;
     data.lenru  = lenru;
 
-    if(SNOPT_A_userfunc_interface)
+    if (SNOPT_A_userfunc_interface)
       return SNOPT_A_userfunc_interface(data);
     else
       throw DOpE::DOpEException("The boost::function SNOPT_userfunc_interface has not been declared","DOpEWrapper::SNOPT::dope_snopt_userfunc_");
   }
-  
+
   /**
    * @class SNOPT_Problem
    *
@@ -124,7 +134,10 @@ namespace DOpEWrapper
   class SNOPT_Problem : public snoptProblem
   {
   public:
-    int GetReturnStatus() { return snoptProblem::inform; }
+    int GetReturnStatus()
+    {
+      return snoptProblem::inform;
+    }
   };
 }
 #endif //Endof DOPELIB_WITH_SNOPT

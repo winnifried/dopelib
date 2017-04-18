@@ -36,23 +36,23 @@
 
 namespace DOpE
 {
-template<class SOLVERCLASS, class VECTOR>
-class SolutionExtractor
-{
-	public:
-		SolutionExtractor(const SOLVERCLASS &solver) :
-			solverpointer_(&solver) {};
-		const StateVector<VECTOR> & GetU() const
-		{
-			return solverpointer_->GetU();
-		}
-    const StateVector<VECTOR> & GetZForEE() const
+  template<class SOLVERCLASS, class VECTOR>
+  class SolutionExtractor
+  {
+  public:
+    SolutionExtractor(const SOLVERCLASS &solver) :
+      solverpointer_(&solver) {};
+    const StateVector<VECTOR> &GetU() const
+    {
+      return solverpointer_->GetU();
+    }
+    const StateVector<VECTOR> &GetZForEE() const
     {
       return solverpointer_->GetZForEE();
     }
-	private:
-		const SOLVERCLASS* solverpointer_;
-};
+  private:
+    const SOLVERCLASS *solverpointer_;
+  };
 }
 
 #endif /* SOLUTIONEXTRACTOR_H_ */

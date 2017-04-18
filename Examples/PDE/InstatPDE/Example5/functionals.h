@@ -35,110 +35,110 @@ const static double PI = 3.14159265359;
 /****************************************************************************************/
 
 template<
-    template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
-    template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
-    template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
-  class LocalPointFunctional : public FunctionalInterface<ElementDataContainer,
-      FaceDataContainer, DH, VECTOR, dopedim, dealdim>
+template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
+         template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
+         template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
+class LocalPointFunctional : public FunctionalInterface<ElementDataContainer,
+  FaceDataContainer, DH, VECTOR, dopedim, dealdim>
+{
+public:
+
+  bool
+  NeedTime() const
   {
-    public:
+    if (this->GetTime() == 0.)
+      return true;
+    else
+      return false;
+  }
 
-      bool
-      NeedTime() const
-      {
-        if (this->GetTime() == 0.)
-          return true;
-        else
-          return false;
-      }
+  double
+  PointValue(
+    const DOpEWrapper::DoFHandler<dopedim, DH> &/* control_dof_handler*/,
+    const DOpEWrapper::DoFHandler<dealdim, DH> &state_dof_handler,
+    const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
+    const std::map<std::string, const VECTOR *> &domain_values)
+  {
 
-      double
-      PointValue(
-          const DOpEWrapper::DoFHandler<dopedim, DH> &/* control_dof_handler*/,
-          const DOpEWrapper::DoFHandler<dealdim, DH> & state_dof_handler,
-          const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
-          const std::map<std::string, const VECTOR*> &domain_values)
-      {
+    Point<2> evaluation_point(0.5 * PI, 0.5 * PI);
 
-        Point<2> evaluation_point(0.5 * PI, 0.5 * PI);
+    typename map<string, const VECTOR *>::const_iterator it =
+      domain_values.find("state");
 
-        typename map<string, const VECTOR*>::const_iterator it =
-            domain_values.find("state");
+    double point_value = VectorTools::point_value(state_dof_handler,
+                                                  *(it->second), evaluation_point);
 
-        double point_value = VectorTools::point_value(state_dof_handler,
-            *(it->second), evaluation_point);
+    return point_value;
+  }
 
-        return point_value;
-      }
+  string
+  GetType() const
+  {
+    return "point timelocal";
+    // 1) point domain boundary face
+    // 2) timelocal timedistributed
+  }
+  string
+  GetName() const
+  {
+    return "Start-Time-Point evaluation";
+  }
 
-      string
-      GetType() const
-      {
-        return "point timelocal";
-        // 1) point domain boundary face
-        // 2) timelocal timedistributed
-      }
-      string
-      GetName() const
-      {
-        return "Start-Time-Point evaluation";
-      }
-
-  };
+};
 
 /************************************************************************************************************************************************/
 
 template<
-    template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
-    template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
-    template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
-  class LocalPointFunctional2 : public FunctionalInterface<EDC, FDC, DH, VECTOR,
-      dopedim, dealdim>
+template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
+         template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
+         template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
+class LocalPointFunctional2 : public FunctionalInterface<EDC, FDC, DH, VECTOR,
+  dopedim, dealdim>
+{
+public:
+
+  bool
+  NeedTime() const
   {
-    public:
+    if (this->GetTime() == 1.)
+      return true;
+    else
+      return false;
+  }
 
-      bool
-      NeedTime() const
-      {
-        if (this->GetTime() == 1.)
-          return true;
-        else
-          return false;
-      }
+  double
+  PointValue(
+    const DOpEWrapper::DoFHandler<dopedim, DH> &/* control_dof_handler*/,
+    const DOpEWrapper::DoFHandler<dealdim, DH> &state_dof_handler,
+    const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
+    const std::map<std::string, const VECTOR *> &domain_values)
+  {
 
-      double
-      PointValue(
-          const DOpEWrapper::DoFHandler<dopedim, DH> &/* control_dof_handler*/,
-          const DOpEWrapper::DoFHandler<dealdim, DH> & state_dof_handler,
-          const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
-          const std::map<std::string, const VECTOR*> &domain_values)
-      {
+    Point<2> evaluation_point(0.5 * PI, 0.5 * PI);
 
-        Point<2> evaluation_point(0.5 * PI, 0.5 * PI);
+    typename map<string, const VECTOR *>::const_iterator it =
+      domain_values.find("state");
 
-        typename map<string, const VECTOR*>::const_iterator it =
-            domain_values.find("state");
+    double point_value = VectorTools::point_value(state_dof_handler,
+                                                  *(it->second), evaluation_point);
 
-        double point_value = VectorTools::point_value(state_dof_handler,
-            *(it->second), evaluation_point);
+    return point_value;
+  }
 
-        return point_value;
-      }
+  string
+  GetType() const
+  {
+    return "point timelocal";
+    // 1) point domain boundary face
+    // 2) timelocal timedistributed
+  }
+  string
+  GetName() const
+  {
+    return "End-Time-Point evaluation";
+  }
 
-      string
-      GetType() const
-      {
-        return "point timelocal";
-        // 1) point domain boundary face
-        // 2) timelocal timedistributed
-      }
-      string
-      GetName() const
-      {
-        return "End-Time-Point evaluation";
-      }
-
-  };
+};
 
 /****************************************************************************************/
 

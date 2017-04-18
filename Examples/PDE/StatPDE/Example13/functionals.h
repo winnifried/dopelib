@@ -35,60 +35,60 @@ using namespace DOpE;
 
 template<
 template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
-  template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
-  template<int, int> class DH, typename VECTOR, int dealdim>
-  class MeanValueFunctional : public FunctionalInterface<EDC, FDC, DH, VECTOR, dealdim>
+         template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
+         template<int, int> class DH, typename VECTOR, int dealdim>
+class MeanValueFunctional : public FunctionalInterface<EDC, FDC, DH, VECTOR, dealdim>
+{
+public:
+  MeanValueFunctional()
   {
-    public:
-      MeanValueFunctional()
+  }
+
+  double
+  ElementValue(const EDC<DH,VECTOR,dealdim> &edc)
+  {
+    unsigned int n_q_points = edc.GetNQPoints();
+
+    double mean = 0;
+
+    vector<double> uvalues;
+    uvalues.resize(n_q_points);
+    edc.GetValuesState("state", uvalues);
+
+    for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
       {
+        double v;
+
+        v = uvalues[q_point];
+
+        mean += v * edc.GetFEValuesState().JxW(q_point);
       }
+    return mean;
+  }
 
-      double
-      ElementValue(const EDC<DH,VECTOR,dealdim>& edc)
-      {
-        unsigned int n_q_points = edc.GetNQPoints();
+  UpdateFlags
+  GetUpdateFlags() const
+  {
+    return update_values | update_quadrature_points;
+  }
 
-        double mean = 0;
+  string
+  GetType() const
+  {
+    return "domain";
+  }
 
-	vector<double> uvalues;
-	uvalues.resize(n_q_points);
-	edc.GetValuesState("state", uvalues);
-	
-	for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
-	{
-	  double v;
-	  
-	  v = uvalues[q_point];
-	  
-	  mean += v * edc.GetFEValuesState().JxW(q_point);
-	}
-        return mean;
-      }
+  bool HasFaces() const
+  {
+    return false;
+  }
 
-      UpdateFlags
-      GetUpdateFlags() const
-      {
-        return update_values | update_quadrature_points;
-      }
+  string
+  GetName() const
+  {
+    return "Mean-value";
+  }
 
-      string
-      GetType() const
-      {
-        return "domain";
-      }
-
-      bool HasFaces() const
-      {
-        return false;
-      }
-
-      string
-      GetName() const
-      {
-        return "Mean-value";
-      }
-
-    private:
-  };
+private:
+};
 #endif /* FUNCTIONALS_H_ */

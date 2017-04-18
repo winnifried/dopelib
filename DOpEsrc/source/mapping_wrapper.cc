@@ -31,14 +31,14 @@ namespace DOpEWrapper
 {
 
   template<int dim>
-    Mapping<dim, dealii::DoFHandler >
-    StaticMappingQ1<dim, dealii::DoFHandler>::mapping_q1(1);
+  Mapping<dim, dealii::DoFHandler >
+  StaticMappingQ1<dim, dealii::DoFHandler>::mapping_q1(1);
 
 
   template<int dim>
-    Mapping<dim, dealii::hp::DoFHandler>
-    StaticMappingQ1<dim, dealii::hp::DoFHandler>::mapping_q1(
-        StaticMappingQ1<dim, dealii::DoFHandler >::mapping_q1);
+  Mapping<dim, dealii::hp::DoFHandler>
+  StaticMappingQ1<dim, dealii::hp::DoFHandler>::mapping_q1(
+    StaticMappingQ1<dim, dealii::DoFHandler >::mapping_q1);
 
 //  template<int dim>
 //    Mapping<dim, dealii::MGDoFHandler>

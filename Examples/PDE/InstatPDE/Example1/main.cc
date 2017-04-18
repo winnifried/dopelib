@@ -40,22 +40,17 @@
 #include <include/parameterreader.h>
 #include <templates/directlinearsolver.h>
 #include <templates/integrator.h>
-#include <basic/mol_spacetimehandler.h>
+#include <basic/mol_statespacetimehandler.h>
 #include <problemdata/simpledirichletdata.h>
 #include <container/integratordatacontainer.h>
 #include <templates/newtonsolver.h>
 #include <interfaces/functionalinterface.h>
-// note that we solve a pure pde problem here,
-// but use the framework of an optimization problem.
-// Thus, the optimization ingredients are only
-// dummys, i.e. no functional, no constraints, etc.
-#include <problemdata/noconstraints.h>
+
 
 //DOpE includes for instationary problems
-#include <reducedproblems/instatreducedproblem.h>
+#include <reducedproblems/instatpdeproblem.h>
 #include <templates/instat_step_newtonsolver.h>
-#include <opt_algorithms/reducednewtonalgorithm.h>
-#include <container/instatoptproblemcontainer.h>
+#include <container/instatpdeproblemcontainer.h>
 
 //various timestepping schemes
 //#include <tsschemes/forward_euler_problem.h>
@@ -65,7 +60,6 @@
 
 //Problem specific includes
 #include "localpde.h"
-#include "localfunctional.h"
 #include "functionals.h"
 #include "my_functions.h"
 
@@ -86,40 +80,33 @@ typedef BlockSparseMatrix<double> MATRIX;
 typedef BlockSparsityPattern SPARSITYPATTERN;
 typedef BlockVector<double> VECTOR;
 
-typedef FunctionalInterface<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM> FUNC;
-
-typedef OptProblemContainer<
-    LocalFunctional<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM>, FUNC,
-    LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
-    SimpleDirichletData<VECTOR, DIM>,
-    NoConstraints<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM>, SPARSITYPATTERN,
-    VECTOR, DIM, DIM> OP_BASE;
+typedef PDEProblemContainer<
+LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
+         SimpleDirichletData<VECTOR, DIM>,
+         SPARSITYPATTERN,
+         VECTOR, DIM> OP_BASE;
 
 typedef StateProblem<OP_BASE, LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
-    SimpleDirichletData<VECTOR, DIM>, SPARSITYPATTERN, VECTOR, DIM> PROB;
+        SimpleDirichletData<VECTOR, DIM>, SPARSITYPATTERN, VECTOR, DIM> PROB;
 
 // Typedefs for timestep problem
 #define TSP ShiftedCrankNicolsonProblem
 //FIXME: This should be a reasonable dual timestepping scheme
 #define DTSP ShiftedCrankNicolsonProblem
-typedef InstatOptProblemContainer<TSP, DTSP, FUNC,
-    LocalFunctional<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM>,
-    LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
-    SimpleDirichletData<VECTOR, DIM>,
-    NoConstraints<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM>, SPARSITYPATTERN,
-    VECTOR, DIM, DIM> OP;
+typedef InstatPDEProblemContainer<TSP, DTSP,
+        LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
+        SimpleDirichletData<VECTOR, DIM>, SPARSITYPATTERN,
+        VECTOR, DIM> OP;
 #undef TSP
 #undef DTSP
 
 typedef IntegratorDataContainer<DOFHANDLER, QUADRATURE,
-    FACEQUADRATURE, VECTOR, DIM> IDC;
+        FACEQUADRATURE, VECTOR, DIM> IDC;
 typedef Integrator<IDC, VECTOR, double, DIM> INTEGRATOR;
 typedef DirectLinearSolverWithMatrix<SPARSITYPATTERN, MATRIX, VECTOR> LINEARSOLVER;
 typedef NewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR> CNLS;
 typedef InstatStepNewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR> NLS;
-typedef ReducedNewtonAlgorithm<OP, VECTOR> RNA;
-typedef InstatReducedProblem<CNLS, NLS, INTEGRATOR, INTEGRATOR, OP, VECTOR, DIM,
-    DIM> RP;
+typedef InstatPDEProblem<NLS, INTEGRATOR, OP, VECTOR, DIM> RP;
 
 int
 main(int argc, char **argv)
@@ -132,24 +119,24 @@ main(int argc, char **argv)
   string paramfile = "dope.prm";
 
   if (argc == 2)
-  {
-    paramfile = argv[1];
-  }
+    {
+      paramfile = argv[1];
+    }
   else if (argc > 2)
-  {
-    std::cout << "Usage: " << argv[0] << " [ paramfile ] " << std::endl;
-    return -1;
-  }
+    {
+      std::cout << "Usage: " << argv[0] << " [ paramfile ] " << std::endl;
+      return -1;
+    }
 
   ParameterReader pr;
   RP::declare_params(pr);
-  RNA::declare_params(pr);
+  DOpEOutputHandler<VECTOR>::declare_params(pr);
   LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>::declare_params(pr);
   BoundaryParabel::declare_params(pr);
   LocalBoundaryFunctionalDrag<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM>::declare_params(
-      pr);
+    pr);
   LocalBoundaryFunctionalLift<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM>::declare_params(
-      pr);
+    pr);
   pr.read_parameters(paramfile);
 
   /*** Create the triangulation*********************************/
@@ -167,9 +154,6 @@ main(int argc, char **argv)
   triangulation.set_boundary(80, boundary);
   triangulation.refine_global(2);
 
-  // The control_fe is only a dummy finite element,
-  // as we solve a pure PDE problem
-  FE<DIM> control_fe(FE_Nothing<DIM>(), 1);
   FE<DIM> state_fe(FE_Q<DIM>(2), 2, FE_Q<DIM>(1), 1);
 
   QUADRATURE quadrature_formula(3);
@@ -177,9 +161,6 @@ main(int argc, char **argv)
   IDC idc(quadrature_formula, face_quadrature_formula);
 
   LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM> LPDE(pr);
-
-  // Define a dummy functional for the optimization framework.
-  LocalFunctional<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM> LFunc;
 
   LocalPointFunctionalPressure<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM> LPFP;
   LocalBoundaryFunctionalDrag<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM> LBFD(pr);
@@ -193,13 +174,10 @@ main(int argc, char **argv)
   // We give the spatial and time triangulation as well as the state/control finite
   // elements to the MOL-space time handler. DOpEtypes::undefined marks
   // the type of the control, see dopetypes.h for more information.
-  MethodOfLines_SpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR, DIM,
-      DIM> DOFH(triangulation, control_fe, state_fe, times,
-      DOpEtypes::ControlType::stationary);
+  MethodOfLines_StateSpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR, DIM>
+  DOFH(triangulation, state_fe, times);
 
-  // As we solve a pure PDE problem, we have no constraints
-  NoConstraints<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM> Constraints;
-  OP P(LFunc, LPDE, Constraints, DOFH);
+  OP P(LPDE, DOFH);
 
   P.AddFunctional(&LPFP);
   P.AddFunctional(&LBFD);
@@ -235,21 +213,46 @@ main(int argc, char **argv)
 //  P.SetInitialValues(&boundary_parabel_ex);
 
   RP solver(&P, DOpEtypes::VectorStorageType::fullmem, pr, idc);
-  RNA Alg(&P, &solver, pr);
+
+  //Only needed for pure PDE Problems: We define and register
+  //the output- and exception handler. The first handels the
+  //output on the screen as well as the output of files. The
+  //amount of the output can be steered by the paramfile.
+  DOpEOutputHandler<VECTOR> out(&solver, pr);
+  DOpEExceptionHandler<VECTOR> ex(&out);
+  P.RegisterOutputHandler(&out);
+  P.RegisterExceptionHandler(&ex);
+  solver.RegisterOutputHandler(&out);
+  solver.RegisterExceptionHandler(&ex);
 
   try
-  {
-    Alg.ReInit();
-    ControlVector<VECTOR> q(&DOFH, DOpEtypes::VectorStorageType::fullmem);
-    Alg.SolveForward(q);
-  }
+    {
+      //Before solving we have to reinitialize the stateproblem and outputhandler.
+      solver.ReInit();
+      out.ReInit();
+
+      stringstream outp;
+      outp << "**************************************************\n";
+      outp << "*             Starting Forward Solve             *\n";
+      outp << "*   Solving : " << P.GetName() << "\t*\n";
+      outp << "*   SDoFs   : ";
+      solver.StateSizeInfo(outp);
+      outp << "**************************************************";
+      //We print this header with priority 1 and 1 empty line in front and after.
+      out.Write(outp, 1, 1, 1);
+
+      //We compute the value of the functionals. To this end, we have to solve
+      //the PDE at hand.
+      solver.ComputeReducedFunctionals();
+
+    }
   catch (DOpEException &e)
-  {
-    std::cout
-        << "Warning: During execution of `" + e.GetThrowingInstance()
-            + "` the following Problem occurred!" << std::endl;
-    std::cout << e.GetErrorMessage() << std::endl;
-  }
+    {
+      std::cout
+          << "Warning: During execution of `" + e.GetThrowingInstance()
+          + "` the following Problem occurred!" << std::endl;
+      std::cout << e.GetErrorMessage() << std::endl;
+    }
 
   return 0;
 }

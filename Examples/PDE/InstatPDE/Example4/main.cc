@@ -41,18 +41,15 @@
 #include <include/parameterreader.h>
 #include <templates/directlinearsolver.h>
 #include <templates/integrator.h>
-#include <basic/mol_spacetimehandler.h>
+#include <basic/mol_statespacetimehandler.h>
 #include <problemdata/simpledirichletdata.h>
 #include <container/integratordatacontainer.h>
 #include <templates/newtonsolver.h>
 #include <templates/fractional_step_theta_step_newtonsolver.h>
-#include <interfaces/functionalinterface.h>
-#include <problemdata/noconstraints.h>
 
-#include <reducedproblems/instatreducedproblem.h>
+#include <reducedproblems/instatpdeproblem.h>
 #include <templates/instat_step_newtonsolver.h>
-#include <opt_algorithms/reducednewtonalgorithm.h>
-#include <container/instatoptproblemcontainer.h>
+#include <container/instatpdeproblemcontainer.h>
 
 #include <tsschemes/forward_euler_problem.h>
 #include <tsschemes/backward_euler_problem.h>
@@ -62,7 +59,6 @@
 
 //Problem specific includes
 #include "localpde.h"
-#include "localfunctional.h"
 #include "functionals.h"
 #include "my_functions.h"
 
@@ -86,16 +82,14 @@ typedef BlockVector<double> VECTOR;
 
 //typedef FunctionalInterface<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM> FUNC;
 
-typedef OptProblemContainer<
-    LocalFunctional<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM>,
-    LocalPointFunctional<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM>,
-    LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
-    SimpleDirichletData<VECTOR, DIM>,
-    NoConstraints<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM>, SPARSITYPATTERN,
-    VECTOR, DIM, DIM> OP_BASE;
+typedef PDEProblemContainer<
+LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
+         SimpleDirichletData<VECTOR, DIM>,
+         SPARSITYPATTERN,
+         VECTOR, DIM> OP_BASE;
 
 typedef StateProblem<OP_BASE, LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
-    SimpleDirichletData<VECTOR, DIM>, SPARSITYPATTERN, VECTOR, DIM> PROB;
+        SimpleDirichletData<VECTOR, DIM>, SPARSITYPATTERN, VECTOR, DIM> PROB;
 // Typedefs for timestep problem
 
 #define TSP1 ForwardEulerProblem
@@ -110,55 +104,45 @@ typedef StateProblem<OP_BASE, LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
 #define DTSP4 ShiftedCrankNicolsonProblem
 #define DTSP5 FractionalStepThetaProblem
 
-typedef InstatOptProblemContainer<TSP1, DTSP1,
-    LocalPointFunctional<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM>,
-    LocalFunctional<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM>,
-    LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
-    SimpleDirichletData<VECTOR, DIM>,
-    NoConstraints<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM>, SPARSITYPATTERN,
-    VECTOR, DIM, DIM> OP1;
-typedef InstatOptProblemContainer<TSP2, DTSP2,
-    LocalPointFunctional<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM>,
-    LocalFunctional<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM>,
-    LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
-    SimpleDirichletData<VECTOR, DIM>,
-    NoConstraints<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM>, SPARSITYPATTERN,
-    VECTOR, DIM, DIM> OP2;
-typedef InstatOptProblemContainer<TSP3, DTSP3,
-    LocalPointFunctional<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM>,
-    LocalFunctional<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM>,
-    LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
-    SimpleDirichletData<VECTOR, DIM>,
-    NoConstraints<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM>, SPARSITYPATTERN,
-    VECTOR, DIM, DIM> OP3;
-typedef InstatOptProblemContainer<TSP4, DTSP4,
-    LocalPointFunctional<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM>,
-    LocalFunctional<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM>,
-    LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
-    SimpleDirichletData<VECTOR, DIM>,
-    NoConstraints<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM>, SPARSITYPATTERN,
-    VECTOR, DIM, DIM> OP4;
-typedef InstatOptProblemContainer<TSP5, DTSP5,
-    LocalPointFunctional<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM>,
-    LocalFunctional<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM>,
-    LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
-    SimpleDirichletData<VECTOR, DIM>,
-    NoConstraints<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM>, SPARSITYPATTERN,
-    VECTOR, DIM, DIM> OP5;
+typedef InstatPDEProblemContainer<TSP1, DTSP1,
+        LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
+        SimpleDirichletData<VECTOR, DIM>,
+        SPARSITYPATTERN,
+        VECTOR, DIM> OP1;
+typedef InstatPDEProblemContainer<TSP2, DTSP2,
+        LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
+        SimpleDirichletData<VECTOR, DIM>,
+        SPARSITYPATTERN,
+        VECTOR, DIM> OP2;
+typedef InstatPDEProblemContainer<TSP3, DTSP3,
+        LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
+        SimpleDirichletData<VECTOR, DIM>,
+        SPARSITYPATTERN,
+        VECTOR, DIM> OP3;
+typedef InstatPDEProblemContainer<TSP4, DTSP4,
+        LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
+        SimpleDirichletData<VECTOR, DIM>,
+        SPARSITYPATTERN,
+        VECTOR, DIM> OP4;
+typedef InstatPDEProblemContainer<TSP5, DTSP5,
+        LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
+        SimpleDirichletData<VECTOR, DIM>,
+        SPARSITYPATTERN,
+        VECTOR, DIM> OP5;
 
-#undef TSP1  
-#undef TSP2  
-#undef TSP3  
-#undef TSP4  
-#undef TSP5  
-#undef DTSP1 
-#undef DTSP2 
-#undef DTSP3 
-#undef DTSP4 
-#undef DTSP5 
+#undef TSP1
+#undef TSP2
+#undef TSP3
+#undef TSP4
+#undef TSP5
+#undef DTSP1
+#undef DTSP2
+#undef DTSP3
+#undef DTSP4
+#undef DTSP5
 
 typedef IntegratorDataContainer<DOFHANDLER, QUADRATURE,
-    FACEQUADRATURE, VECTOR, DIM> IDC;
+        FACEQUADRATURE, VECTOR, DIM> IDC;
 
 typedef Integrator<IDC, VECTOR, double, DIM> INTEGRATOR;
 
@@ -169,22 +153,16 @@ typedef InstatStepNewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR> NLS;
 
 typedef FractionalStepThetaStepNewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR> NLS2;
 
-typedef ReducedNewtonAlgorithm<OP1, VECTOR> RNA1;
-typedef ReducedNewtonAlgorithm<OP2, VECTOR> RNA2;
-typedef ReducedNewtonAlgorithm<OP3, VECTOR> RNA3;
-typedef ReducedNewtonAlgorithm<OP4, VECTOR> RNA4;
-typedef ReducedNewtonAlgorithm<OP5, VECTOR> RNA5;
-
-typedef InstatReducedProblem<CNLS, NLS, INTEGRATOR, INTEGRATOR, OP1, VECTOR,
-    DIM, DIM> RP1;
-typedef InstatReducedProblem<CNLS, NLS, INTEGRATOR, INTEGRATOR, OP2, VECTOR,
-    DIM, DIM> RP2;
-typedef InstatReducedProblem<CNLS, NLS, INTEGRATOR, INTEGRATOR, OP3, VECTOR,
-    DIM, DIM> RP3;
-typedef InstatReducedProblem<CNLS, NLS, INTEGRATOR, INTEGRATOR, OP4, VECTOR,
-    DIM, DIM> RP4;
-typedef InstatReducedProblem<CNLS, NLS2, INTEGRATOR, INTEGRATOR, OP5, VECTOR,
-    DIM, DIM> RP5;
+typedef InstatPDEProblem<NLS, INTEGRATOR, OP1, VECTOR,
+        DIM> RP1;
+typedef InstatPDEProblem<NLS, INTEGRATOR, OP2, VECTOR,
+        DIM> RP2;
+typedef InstatPDEProblem<NLS, INTEGRATOR, OP3, VECTOR,
+        DIM> RP3;
+typedef InstatPDEProblem<NLS, INTEGRATOR, OP4, VECTOR,
+        DIM> RP4;
+typedef InstatPDEProblem<NLS2, INTEGRATOR, OP5, VECTOR,
+        DIM> RP5;
 
 int
 main(int argc, char **argv)
@@ -197,14 +175,14 @@ main(int argc, char **argv)
   string paramfile = "dope.prm";
 
   if (argc == 2)
-  {
-    paramfile = argv[1];
-  }
+    {
+      paramfile = argv[1];
+    }
   else if (argc > 2)
-  {
-    std::cout << "Usage: " << argv[0] << " [ paramfile ] " << std::endl;
-    return -1;
-  }
+    {
+      std::cout << "Usage: " << argv[0] << " [ paramfile ] " << std::endl;
+      return -1;
+    }
 
   //First, declare the parameters and read them in.
   ParameterReader pr;
@@ -213,7 +191,7 @@ main(int argc, char **argv)
   RP3::declare_params(pr);
   RP4::declare_params(pr);
   RP5::declare_params(pr);
-  RNA1::declare_params(pr);
+  DOpEOutputHandler<VECTOR>::declare_params(pr);
   pr.read_parameters(paramfile);
 
   std::string cases = "solve";
@@ -222,8 +200,7 @@ main(int argc, char **argv)
   Triangulation<DIM> triangulation;
   GridGenerator::hyper_cube(triangulation, 0., 1.);
 
-  //Define the Finite Elements and quadrature formulas for control and state.
-  FESystem<DIM> control_fe(FE_Nothing<DIM>(), 1);
+  //Define the Finite Elements and quadrature formulas for the state.
   FESystem<DIM> state_fe(FE_Q<DIM>(1), 1);
 
   QGauss<DIM> quadrature_formula(3);
@@ -233,7 +210,6 @@ main(int argc, char **argv)
   //Define the localPDE and the functionals we are interested in. Here, LFunc is a dummy necessary for the control,
   //LPF is a SpaceTimePointevaluation
   LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM> LPDE;
-  LocalFunctional<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM> LFunc;
   LocalPointFunctional<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM> LPF;
 
   //Time grid of [0,1]
@@ -241,17 +217,14 @@ main(int argc, char **argv)
   GridGenerator::subdivided_hyper_cube(times, 50);
 
   triangulation.refine_global(4);
-  MethodOfLines_SpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR, DIM,
-      DIM> DOFH(triangulation, control_fe, state_fe, times,
-      DOpEtypes::ControlType::stationary);
+  MethodOfLines_StateSpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR,
+                                      DIM> DOFH(triangulation, state_fe, times);
 
-  NoConstraints<ElementDataContainer, FaceDataContainer, DOFHANDLER, VECTOR, DIM,
-      DIM> Constraints;
-  OP1 P1(LFunc, LPDE, Constraints, DOFH);
-  OP2 P2(LFunc, LPDE, Constraints, DOFH);
-  OP3 P3(LFunc, LPDE, Constraints, DOFH);
-  OP4 P4(LFunc, LPDE, Constraints, DOFH);
-  OP5 P5(LFunc, LPDE, Constraints, DOFH);
+  OP1 P1(LPDE, DOFH);
+  OP2 P2(LPDE, DOFH);
+  OP3 P3(LPDE, DOFH);
+  OP4 P4(LPDE, DOFH);
+  OP5 P5(LPDE, DOFH);
 
   P1.AddFunctional(&LPF);
   P2.AddFunctional(&LPF);
@@ -295,64 +268,143 @@ main(int argc, char **argv)
   DOpEOutputHandler<VECTOR> output(&solver1, pr);
   DOpEExceptionHandler<VECTOR> ex(&output);
 
-  RNA1 Alg1(&P1, &solver1, pr, &ex, &output);
-  RNA2 Alg2(&P2, &solver2, pr, &ex, &output);
-  RNA3 Alg3(&P3, &solver3, pr, &ex, &output);
-  RNA4 Alg4(&P4, &solver4, pr, &ex, &output);
-  RNA5 Alg5(&P5, &solver5, pr, &ex, &output);
+  P1.RegisterOutputHandler(&output);
+  P1.RegisterExceptionHandler(&ex);
+  P2.RegisterOutputHandler(&output);
+  P2.RegisterExceptionHandler(&ex);
+  P3.RegisterOutputHandler(&output);
+  P3.RegisterExceptionHandler(&ex);
+  P4.RegisterOutputHandler(&output);
+  P4.RegisterExceptionHandler(&ex);
+  P5.RegisterOutputHandler(&output);
+  P5.RegisterExceptionHandler(&ex);
+  solver1.RegisterOutputHandler(&output);
+  solver1.RegisterExceptionHandler(&ex);
+  solver2.RegisterOutputHandler(&output);
+  solver2.RegisterExceptionHandler(&ex);
+  solver3.RegisterOutputHandler(&output);
+  solver3.RegisterExceptionHandler(&ex);
+  solver4.RegisterOutputHandler(&output);
+  solver4.RegisterExceptionHandler(&ex);
+  solver5.RegisterOutputHandler(&output);
+  solver5.RegisterExceptionHandler(&ex);
+
 
   try
-  {
+    {
 
-    Alg1.ReInit();
-    Alg2.ReInit();
-    Alg3.ReInit();
-    Alg4.ReInit();
-    Alg5.ReInit();
+      solver1.ReInit();
+      solver2.ReInit();
+      solver3.ReInit();
+      solver4.ReInit();
+      solver5.ReInit();
+      output.ReInit();
 
-    Vector<double> solution;
-    ControlVector<VECTOR> q(&DOFH, DOpEtypes::VectorStorageType::fullmem);
+      stringstream outp;
+      {
+        outp << "**************************************************\n";
+        outp << "*             Starting Forward Solve             *\n";
+        outp << "*   Solving : " << P1.GetName() << "\t*\n";
+        outp << "*   SDoFs   : ";
+        solver1.StateSizeInfo(outp);
+        outp << "**************************************************";
+        //We print this header with priority 1 and 1 empty line in front and after.
+        output.Write(outp, 1, 1, 1);
 
-    Alg1.SolveForward(q);
-    Alg2.SolveForward(q);
-    Alg3.SolveForward(q);
-    Alg4.SolveForward(q);
-    Alg5.SolveForward(q);
+        //We compute the value of the functionals. To this end, we have to solve
+        //the PDE at hand.
+        solver1.ComputeReducedFunctionals();
+      }
+      {
+        outp << "**************************************************\n";
+        outp << "*             Starting Forward Solve             *\n";
+        outp << "*   Solving : " << P2.GetName() << "\t*\n";
+        outp << "*   SDoFs   : ";
+        solver2.StateSizeInfo(outp);
+        outp << "**************************************************";
+        //We print this header with priority 1 and 1 empty line in front and after.
+        output.Write(outp, 1, 1, 1);
 
-    // The soluction extractor class allows us
-    // to get the solution vector from the solver
-    SolutionExtractor<RP1, VECTOR> a1(solver1);
-    const StateVector<VECTOR> &statevec1 = a1.GetU();
-    SolutionExtractor<RP2, VECTOR> a2(solver2);
-    const StateVector<VECTOR> &statevec2 = a2.GetU();
-    SolutionExtractor<RP3, VECTOR> a3(solver3);
-    const StateVector<VECTOR> &statevec3 = a3.GetU();
-    SolutionExtractor<RP4, VECTOR> a4(solver4);
-    const StateVector<VECTOR> &statevec4 = a4.GetU();
-    SolutionExtractor<RP5, VECTOR> a5(solver5);
-    const StateVector<VECTOR> &statevec5 = a5.GetU();
+        //We compute the value of the functionals. To this end, we have to solve
+        //the PDE at hand.
+        solver2.ComputeReducedFunctionals();
+      }
+      {
+        outp << "**************************************************\n";
+        outp << "*             Starting Forward Solve             *\n";
+        outp << "*   Solving : " << P3.GetName() << "\t*\n";
+        outp << "*   SDoFs   : ";
+        solver3.StateSizeInfo(outp);
+        outp << "**************************************************";
+        //We print this header with priority 1 and 1 empty line in front and after.
+        output.Write(outp, 1, 1, 1);
 
-    stringstream out;
-    double product1 = statevec1 * statevec1;
-    double product2 = statevec2 * statevec2;
-    double product3 = statevec3 * statevec3;
-    double product4 = statevec4 * statevec4;
-    double product5 = statevec5 * statevec5;
-    out << "Forward euler: u * u = " << product1 << std::endl;
-    out << "Backward euler: u * u = " << product2 << std::endl;
-    out << "CN: u * u = " << product3 << std::endl;
-    out << "ShiftedCN: u * u = " << product4 << std::endl;
-    out << "FractionalStepTheta: u * u = " << product5 << std::endl;
-    output.Write(out, 0);
+        //We compute the value of the functionals. To this end, we have to solve
+        //the PDE at hand.
+        solver3.ComputeReducedFunctionals();
+      }
+      {
+        outp << "**************************************************\n";
+        outp << "*             Starting Forward Solve             *\n";
+        outp << "*   Solving : " << P5.GetName() << "\t*\n";
+        outp << "*   SDoFs   : ";
+        solver4.StateSizeInfo(outp);
+        outp << "**************************************************";
+        //We print this header with priority 1 and 1 empty line in front and after.
+        output.Write(outp, 1, 1, 1);
 
-  }
+        //We compute the value of the functionals. To this end, we have to solve
+        //the PDE at hand.
+        solver4.ComputeReducedFunctionals();
+      }
+      {
+        outp << "**************************************************\n";
+        outp << "*             Starting Forward Solve             *\n";
+        outp << "*   Solving : " << P5.GetName() << "\t*\n";
+        outp << "*   SDoFs   : ";
+        solver5.StateSizeInfo(outp);
+        outp << "**************************************************";
+        //We print this header with priority 1 and 1 empty line in front and after.
+        output.Write(outp, 1, 1, 1);
+
+        //We compute the value of the functionals. To this end, we have to solve
+        //the PDE at hand.
+        solver5.ComputeReducedFunctionals();
+      }
+
+      // The soluction extractor class allows us
+      // to get the solution vector from the solver
+      SolutionExtractor<RP1, VECTOR> a1(solver1);
+      const StateVector<VECTOR> &statevec1 = a1.GetU();
+      SolutionExtractor<RP2, VECTOR> a2(solver2);
+      const StateVector<VECTOR> &statevec2 = a2.GetU();
+      SolutionExtractor<RP3, VECTOR> a3(solver3);
+      const StateVector<VECTOR> &statevec3 = a3.GetU();
+      SolutionExtractor<RP4, VECTOR> a4(solver4);
+      const StateVector<VECTOR> &statevec4 = a4.GetU();
+      SolutionExtractor<RP5, VECTOR> a5(solver5);
+      const StateVector<VECTOR> &statevec5 = a5.GetU();
+
+      double product1 = statevec1 * statevec1;
+      double product2 = statevec2 * statevec2;
+      double product3 = statevec3 * statevec3;
+      double product4 = statevec4 * statevec4;
+      double product5 = statevec5 * statevec5;
+      outp << "Forward euler: u * u = " << product1 << std::endl;
+      outp << "Backward euler: u * u = " << product2 << std::endl;
+      outp << "CN: u * u = " << product3 << std::endl;
+      outp << "ShiftedCN: u * u = " << product4 << std::endl;
+      outp << "FractionalStepTheta: u * u = " << product5 << std::endl;
+      output.Write(outp, 0);
+
+    }
   catch (DOpEException &e)
-  {
-    std::cout
-        << "Warning: During execution of `" + e.GetThrowingInstance()
-            + "` the following Problem occurred!" << std::endl;
-    std::cout << e.GetErrorMessage() << std::endl;
-  }
+    {
+      std::cout
+          << "Warning: During execution of `" + e.GetThrowingInstance()
+          + "` the following Problem occurred!" << std::endl;
+      std::cout << e.GetErrorMessage() << std::endl;
+    }
 
   return 0;
 }

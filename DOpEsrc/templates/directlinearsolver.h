@@ -28,9 +28,9 @@
 #include <deal.II/lac/block_sparsity_pattern.h>
 #include <deal.II/lac/block_sparse_matrix.h>
 #if DEAL_II_VERSION_GTE(8,5,0)
-  #include <deal.II/lac/dynamic_sparsity_pattern.h>
+#include <deal.II/lac/dynamic_sparsity_pattern.h>
 #else
-  #include <deal.II/lac/compressed_simple_sparsity_pattern.h>
+#include <deal.II/lac/compressed_simple_sparsity_pattern.h>
 #endif
 #include <deal.II/lac/solver_cg.h>
 #include <deal.II/lac/precondition.h>
@@ -59,20 +59,20 @@ namespace DOpE
    */
 
   template <typename SPARSITYPATTERN, typename MATRIX, typename VECTOR>
-    class DirectLinearSolverWithMatrix
+  class DirectLinearSolverWithMatrix
   {
   public:
     DirectLinearSolverWithMatrix(ParameterReader &param_reader);
     ~DirectLinearSolverWithMatrix();
-   
+
     static void declare_params(ParameterReader &param_reader);
- 
+
     /**
        This Function should be called once after grid refinement, or changes in boundary values
        to  recompute sparsity patterns, and constraint matrices.
      */
     template<typename PROBLEM>
-      void ReInit(PROBLEM& pde);
+    void ReInit(PROBLEM &pde);
 
     /**
      * Solves the linear PDE in the form Ax = b using dealii::SparseDirectUMFPACK
@@ -82,106 +82,106 @@ namespace DOpE
      *                              to calculate the matrix.
      * @tparam <INTEGRATOR>         The integrator used to calculate the matrix A.
      * @param rhs                   Right Hand Side of the Equation, i.e., the VECTOR b.
-     *                              Note that rhs is not const, this is because we need to apply 
+     *                              Note that rhs is not const, this is because we need to apply
      *                              the boundary values to this vector!
      * @param solution              The Approximate Solution of the Linear Equation.
      *                              It is assumed to be zero! Upon completion this VECTOR stores x
      * @param force_build_matrix    A boolean value, that indicates whether the Matrix
      *                              should be build by the linear solver in the first iteration.
-     *				    The default is false, meaning that if we have no idea we don't
-     *				    want to build a matrix.
+     *            The default is false, meaning that if we have no idea we don't
+     *            want to build a matrix.
      *
      */
     template<typename PROBLEM, typename INTEGRATOR>
-      void Solve(PROBLEM& pde, INTEGRATOR& integr, VECTOR &rhs, VECTOR &solution, bool force_matrix_build=false);
-     
+    void Solve(PROBLEM &pde, INTEGRATOR &integr, VECTOR &rhs, VECTOR &solution, bool force_matrix_build=false);
+
   protected:
 
   private:
     SPARSITYPATTERN sparsity_pattern_;
     MATRIX matrix_;
 
-    dealii::SparseDirectUMFPACK* A_direct_;
+    dealii::SparseDirectUMFPACK *A_direct_;
 
   };
 
-/*********************************Implementation************************************************/
- 
+  /*********************************Implementation************************************************/
+
   template <typename SPARSITYPATTERN, typename MATRIX, typename VECTOR>
-    void DirectLinearSolverWithMatrix<SPARSITYPATTERN,MATRIX,VECTOR>::declare_params(ParameterReader &/*param_reader*/) 
+  void DirectLinearSolverWithMatrix<SPARSITYPATTERN,MATRIX,VECTOR>::declare_params(ParameterReader &/*param_reader*/)
   {
   }
 
   /******************************************************/
 
   template <typename SPARSITYPATTERN, typename MATRIX, typename VECTOR>
-    DirectLinearSolverWithMatrix<SPARSITYPATTERN,MATRIX,VECTOR>::DirectLinearSolverWithMatrix(
-      ParameterReader &/*param_reader*/) 
+  DirectLinearSolverWithMatrix<SPARSITYPATTERN,MATRIX,VECTOR>::DirectLinearSolverWithMatrix(
+    ParameterReader &/*param_reader*/)
   {
     A_direct_ = NULL;
   }
 
-/******************************************************/
+  /******************************************************/
 
-template <typename SPARSITYPATTERN, typename MATRIX, typename VECTOR>
- DirectLinearSolverWithMatrix<SPARSITYPATTERN,MATRIX,VECTOR>::~DirectLinearSolverWithMatrix()
-{
-  if(A_direct_ != NULL)
+  template <typename SPARSITYPATTERN, typename MATRIX, typename VECTOR>
+  DirectLinearSolverWithMatrix<SPARSITYPATTERN,MATRIX,VECTOR>::~DirectLinearSolverWithMatrix()
   {
-    delete A_direct_;
+    if (A_direct_ != NULL)
+      {
+        delete A_direct_;
+      }
   }
-}
 
-/******************************************************/
+  /******************************************************/
 
-template <typename SPARSITYPATTERN, typename MATRIX, typename VECTOR>
+  template <typename SPARSITYPATTERN, typename MATRIX, typename VECTOR>
   template<typename PROBLEM>
-  void  DirectLinearSolverWithMatrix<SPARSITYPATTERN,MATRIX,VECTOR>::ReInit(PROBLEM& pde)
-{
-  matrix_.clear();
-  pde.ComputeSparsityPattern(sparsity_pattern_);
-  matrix_.reinit(sparsity_pattern_);
-  
-  if(A_direct_ != NULL)
+  void  DirectLinearSolverWithMatrix<SPARSITYPATTERN,MATRIX,VECTOR>::ReInit(PROBLEM &pde)
   {
-    delete A_direct_;
-    A_direct_= NULL;
+    matrix_.clear();
+    pde.ComputeSparsityPattern(sparsity_pattern_);
+    matrix_.reinit(sparsity_pattern_);
+
+    if (A_direct_ != NULL)
+      {
+        delete A_direct_;
+        A_direct_= NULL;
+      }
   }
-}
 
-/******************************************************/
+  /******************************************************/
 
-template <typename SPARSITYPATTERN, typename MATRIX, typename VECTOR>
+  template <typename SPARSITYPATTERN, typename MATRIX, typename VECTOR>
   template<typename PROBLEM, typename INTEGRATOR>
-  void DirectLinearSolverWithMatrix<SPARSITYPATTERN,MATRIX,VECTOR>::Solve(PROBLEM& pde,
-									  INTEGRATOR& integr,
-									  VECTOR &rhs, 
-									  VECTOR &solution, 
-									  bool force_matrix_build)
-{
-  if(force_matrix_build)
-  { 
-    integr.ComputeMatrix (pde,matrix_);    
-  }
-  
-  if(A_direct_ == NULL)
+  void DirectLinearSolverWithMatrix<SPARSITYPATTERN,MATRIX,VECTOR>::Solve(PROBLEM &pde,
+      INTEGRATOR &integr,
+      VECTOR &rhs,
+      VECTOR &solution,
+      bool force_matrix_build)
   {
-    A_direct_ = new dealii::SparseDirectUMFPACK;
-    A_direct_->initialize(matrix_);
-  }
-  else if(force_matrix_build)
-  {
-     A_direct_->factorize(matrix_);
-  }
- 
-  dealii::Vector<double> sol;
-  sol = rhs;
-  A_direct_->solve(sol);
-  solution = sol;
+    if (force_matrix_build)
+      {
+        integr.ComputeMatrix (pde,matrix_);
+      }
 
-  pde.GetDoFConstraints().distribute(solution);
+    if (A_direct_ == NULL)
+      {
+        A_direct_ = new dealii::SparseDirectUMFPACK;
+        A_direct_->initialize(matrix_);
+      }
+    else if (force_matrix_build)
+      {
+        A_direct_->factorize(matrix_);
+      }
 
-}
+    dealii::Vector<double> sol;
+    sol = rhs;
+    A_direct_->solve(sol);
+    solution = sol;
+
+    pde.GetDoFConstraints().distribute(solution);
+
+  }
 
 
 }

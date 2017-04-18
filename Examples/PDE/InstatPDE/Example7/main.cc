@@ -44,20 +44,17 @@
 #include <wrapper/preconditioner_wrapper.h>
 #include <include/sparsitymaker.h>
 #include <container/integratordatacontainer.h>
-#include <interfaces/functionalinterface.h>
-#include <problemdata/noconstraints.h>
 
 #include <templates/integrator.h>
 #include <include/parameterreader.h>
 
-#include <basic/mol_spacetimehandler.h>
+#include <basic/mol_statespacetimehandler.h>
 #include <problemdata/simpledirichletdata.h>
 #include <interfaces/active_fe_index_setter_interface.h>
 
-#include <reducedproblems/instatreducedproblem.h>
+#include <reducedproblems/instatpdeproblem.h>
 #include <templates/instat_step_newtonsolver.h>
-#include <opt_algorithms/reducednewtonalgorithm.h>
-#include <container/instatoptproblemcontainer.h>
+#include <container/instatpdeproblemcontainer.h>
 #include <tsschemes/shifted_crank_nicolson_problem.h>
 #include <tsschemes/backward_euler_problem.h>
 
@@ -82,55 +79,49 @@ typedef SparsityPattern SPARSITYPATTERN;
 typedef Vector<double> VECTOR;
 
 //Second number denotes the number of unknowns per element (the blocksize we want to use)
-typedef DOpEWrapper::PreconditionBlockSSOR_Wrapper<MATRIX,2> PRECONDITIONERSSOR; 
+typedef DOpEWrapper::PreconditionBlockSSOR_Wrapper<MATRIX,2> PRECONDITIONERSSOR;
 
-typedef FunctionalInterface<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM> FUNC;
-
-typedef OptProblemContainer<
-    LocalFunctional<CDC, FDC, DOFHANDLER, VECTOR, DIM>, FUNC,
-    LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
-    SimpleDirichletData<VECTOR, DIM>,
-    NoConstraints<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM>, SPARSITYPATTERN,
-    VECTOR, DIM, DIM> OP_BASE;
+typedef PDEProblemContainer<
+LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
+         SimpleDirichletData<VECTOR, DIM>,
+         SPARSITYPATTERN,
+         VECTOR, DIM> OP_BASE;
 typedef StateProblem<OP_BASE, LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
-    SimpleDirichletData<VECTOR, DIM>, SPARSITYPATTERN, VECTOR, DIM> PROB;
+        SimpleDirichletData<VECTOR, DIM>, SPARSITYPATTERN, VECTOR, DIM> PROB;
 
 // Typedefs for timestep problem
 #define TSP ShiftedCrankNicolsonProblem
 //#define TSP BackwardEulerProblem
 //FIXME: This should be a reasonable dual timestepping scheme
 #define DTSP ShiftedCrankNicolsonProblem
-typedef InstatOptProblemContainer<TSP, DTSP, FUNC,
-    LocalFunctional<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
-    LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
-    SimpleDirichletData<VECTOR, DIM>,
-    NoConstraints<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM>, SPARSITYPATTERN,
-    VECTOR, DIM, DIM> OP;
+typedef InstatPDEProblemContainer<TSP, DTSP,
+        LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
+        SimpleDirichletData<VECTOR, DIM>,
+        SPARSITYPATTERN,
+        VECTOR, DIM> OP;
 #undef TSP
 #undef DTSP
 
 typedef IntegratorDataContainer<DOFHANDLER, QUADRATURE, FACEQUADRATURE,
-    VECTOR, DIM> IDC;
+        VECTOR, DIM> IDC;
 typedef Integrator<IDC, VECTOR, double, DIM> INTEGRATOR;
 typedef RichardsonLinearSolverWithMatrix<PRECONDITIONERSSOR, SPARSITYPATTERN, MATRIX, VECTOR> LINEARSOLVER;
 
 typedef NewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR> CNLS;
 typedef InstatStepNewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR> NLS;
-typedef ReducedNewtonAlgorithm<OP, VECTOR> RNA;
-typedef InstatReducedProblem<CNLS, NLS, INTEGRATOR, INTEGRATOR, OP, VECTOR, DIM,
-    DIM> RP;
+typedef InstatPDEProblem<NLS, INTEGRATOR, OP, VECTOR, DIM> RP;
 
-typedef MethodOfLines_SpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN,
-				       VECTOR, DIM, DIM> STH;
+typedef MethodOfLines_StateSpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN,
+        VECTOR, DIM> STH;
 
 void
 declare_params(ParameterReader &param_reader)
 {
   param_reader.SetSubsection("main parameters");
   param_reader.declare_entry("max_iter", "1", Patterns::Integer(0),
-      "How many iterations?");
+                             "How many iterations?");
   param_reader.declare_entry("prerefine", "1", Patterns::Integer(1),
-      "How often should we refine the coarse grid?");
+                             "How often should we refine the coarse grid?");
 }
 
 int
@@ -139,18 +130,17 @@ main(int argc, char **argv)
   string paramfile = "dope.prm";
 
   if (argc == 2)
-  {
-    paramfile = argv[1];
-  }
+    {
+      paramfile = argv[1];
+    }
   else if (argc > 2)
-  {
-    std::cout << "Usage: " << argv[0] << " [ paramfile ] " << std::endl;
-    return -1;
-  }
+    {
+      std::cout << "Usage: " << argv[0] << " [ paramfile ] " << std::endl;
+      return -1;
+    }
   ParameterReader pr;
 
   RP::declare_params(pr);
-  RNA::declare_params(pr);
   LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>::declare_params(pr);
   DOpEOutputHandler<VECTOR>::declare_params(pr);
   declare_params(pr);
@@ -172,7 +162,6 @@ main(int argc, char **argv)
   //*************************************************************
 
   //FiniteElemente*************************************************
-  FESystem<DIM> control_fe(FE_Nothing<DIM>(), 1);
   FE<DIM> state_fe(FE_DGQ<DIM>(0), 2);
 
   //Quadrature formulas*************************************************
@@ -185,7 +174,7 @@ main(int argc, char **argv)
   //Functionals*************************************************
   LocalFunctional<CDC, FDC, DOFHANDLER, VECTOR, DIM> MVF;
   //*************************************************
-  
+
   //pde*************************************************
   LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM> LPDE(pr);
   //*************************************************
@@ -197,12 +186,11 @@ main(int argc, char **argv)
   times.refine_global(prerefine);
 
   //space time handler***********************************/
-  STH DOFH(triangulation, control_fe, state_fe, times, DOpEtypes::ControlType::stationary, true);
+  STH DOFH(triangulation, state_fe, times, true);
   /***********************************/
-  NoConstraints<ElementDataContainer, FaceDataContainer, DOFHANDLER, VECTOR, DIM,
-		DIM> Constraints;
 
-  OP P(MVF, LPDE, Constraints, DOFH);
+  OP P(LPDE, DOFH);
+  P.AddFunctional(&MVF);
   //Boundary conditions************************************************
   P.SetBoundaryEquationColors(0);
   P.SetBoundaryEquationColors(1);
@@ -214,33 +202,51 @@ main(int argc, char **argv)
 
   RP solver(&P, DOpEtypes::VectorStorageType::fullmem, pr, idc);
 
-  RNA Alg(&P, &solver, pr);
+  DOpEOutputHandler<VECTOR> out(&solver, pr);
+  DOpEExceptionHandler<VECTOR> ex(&out);
+  P.RegisterOutputHandler(&out);
+  P.RegisterExceptionHandler(&ex);
+  solver.RegisterOutputHandler(&out);
+  solver.RegisterExceptionHandler(&ex);
 
-  
+
   //**************************************************************************************************
 
   for (int i = 0; i < max_iter; i++)
-  {
-    try
     {
-      Alg.ReInit();
-      ControlVector<VECTOR> q(&DOFH, DOpEtypes::VectorStorageType::fullmem);
-      
-      Alg.SolveForward(q);
+      try
+        {
+          //Before solving we have to reinitialize the stateproblem and outputhandler.
+          solver.ReInit();
+          out.ReInit();
+
+          stringstream outp;
+          outp << "**************************************************\n";
+          outp << "*             Starting Forward Solve             *\n";
+          outp << "*   Solving : " << P.GetName() << "\t*\n";
+          outp << "*   SDoFs   : ";
+          solver.StateSizeInfo(outp);
+          outp << "**************************************************";
+          //We print this header with priority 1 and 1 empty line in front and after.
+          out.Write(outp, 1, 1, 1);
+
+          //We compute the value of the functionals. To this end, we have to solve
+          //the PDE at hand.
+          solver.ComputeReducedFunctionals();
+        }
+      catch (DOpEException &e)
+        {
+          std::cout
+              << "Warning: During execution of `" + e.GetThrowingInstance()
+              + "` the following Problem occurred!" << std::endl;
+          std::cout << e.GetErrorMessage() << std::endl;
+        }
+      if (i != max_iter - 1)
+        {
+          //For global mesh refinement, uncomment the next line
+          DOFH.RefineSpaceTime(DOpEtypes::RefinementType::global); //or just DOFH.RefineSpace()
+        }
     }
-    catch (DOpEException &e)
-    {
-      std::cout
-	<< "Warning: During execution of `" + e.GetThrowingInstance()
-	+ "` the following Problem occurred!" << std::endl;
-      std::cout << e.GetErrorMessage() << std::endl;
-    }
-    if (i != max_iter - 1)
-    {
-      //For global mesh refinement, uncomment the next line
-      DOFH.RefineSpaceTime(DOpEtypes::RefinementType::global); //or just DOFH.RefineSpace()
-    }
-  }
   return 0;
 }
 #undef FDC

@@ -72,27 +72,27 @@ typedef SparsityPattern SPARSITYPATTERN;
 typedef Vector<double> VECTOR;
 
 typedef PDEProblemContainer<LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
-    SimpleDirichletData<VECTOR, DIM>, SPARSITYPATTERN, VECTOR, DIM, FE,
-    DOFHANDLER> OP;
+        SimpleDirichletData<VECTOR, DIM>, SPARSITYPATTERN, VECTOR, DIM, FE,
+        DOFHANDLER> OP;
 typedef IntegratorDataContainer<DOFHANDLER, QUADRATURE, FACEQUADRATURE, VECTOR,
-    DIM> IDC;
+        DIM> IDC;
 typedef Integrator<IDC, VECTOR, double, DIM> INTEGRATOR;
 typedef DirectLinearSolverWithMatrix<SPARSITYPATTERN, MATRIX, VECTOR> LINEARSOLVER;
 typedef NewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR> NLS;
 typedef StatPDEProblem<NLS, INTEGRATOR, OP, VECTOR, DIM> RP;
 typedef MethodOfLines_StateSpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN,
-    VECTOR, DIM> STH;
+        VECTOR, DIM> STH;
 
 void
 declare_params(ParameterReader &param_reader)
 {
   param_reader.SetSubsection("main parameters");
   param_reader.declare_entry("max_iter", "1", Patterns::Integer(0),
-      "How many iterations?");
+                             "How many iterations?");
   param_reader.declare_entry("order fe", "2", Patterns::Integer(1),
-      "Order of the finite element?");
+                             "Order of the finite element?");
   param_reader.declare_entry("order mapping", "2", Patterns::Integer(1),
-      "Order of the finite element?");
+                             "Order of the finite element?");
 }
 
 int
@@ -107,14 +107,14 @@ main(int argc, char **argv)
   string paramfile = "dope.prm";
 
   if (argc == 2)
-  {
-    paramfile = argv[1];
-  }
+    {
+      paramfile = argv[1];
+    }
   else if (argc > 2)
-  {
-    std::cout << "Usage: " << argv[0] << " [ paramfile ] " << std::endl;
-    return -1;
-  }
+    {
+      std::cout << "Usage: " << argv[0] << " [ paramfile ] " << std::endl;
+      return -1;
+    }
 
   ParameterReader pr;
   ConvergenceTable convergence_table;
@@ -198,111 +198,111 @@ main(int argc, char **argv)
   solver_q1.RegisterExceptionHandler(&ex_q1);
 
   VECTOR solution;
-  auto& dof_handler = DOFH.GetStateDoFHandler().GetDEALDoFHandler();
-  auto& dof_handler_q1 = DOFH_q1.GetStateDoFHandler().GetDEALDoFHandler();
+  auto &dof_handler = DOFH.GetStateDoFHandler().GetDEALDoFHandler();
+  auto &dof_handler_q1 = DOFH_q1.GetStateDoFHandler().GetDEALDoFHandler();
   for (int i = 0; i < max_iter; i++)
-  {
-    //grid output*****************************************
-    // if you want to take a look at the resulting
-    // grids, uncomment the following section
-
-    /*std::string name = "grid" + dealii::Utilities::int_to_string(i, 2) + ".gpl";
-     std::ofstream outs(name.c_str());
-     dealii::GridOut grid_out;
-     GridOutFlags::Gnuplot gnuplot_flags(false, 30);
-     grid_out.set_flags(gnuplot_flags);
-     grid_out.write_gnuplot(triangulation, outs, &mapping);*/
-    //grid output*****************************************
-    try
     {
-      solver.ReInit();
-      solver_q1.ReInit();
-      out.ReInit();
-      out_q1.ReInit();
-      stringstream outp;
+      //grid output*****************************************
+      // if you want to take a look at the resulting
+      // grids, uncomment the following section
 
-      outp << "**************************************************\n";
-      outp << "*             Starting Forward Solve             *\n";
-      outp << "*   Solving : " << P.GetName() << "\t*\n";
-      outp << "*   SDoFs   : ";
-      solver.StateSizeInfo(outp);
-      outp << "**************************************************\n";
-      outp << "Computing solution and functionals with higher order mapping:";
-      out.Write(outp, 1, 1, 1);
+      /*std::string name = "grid" + dealii::Utilities::int_to_string(i, 2) + ".gpl";
+       std::ofstream outs(name.c_str());
+       dealii::GridOut grid_out;
+       GridOutFlags::Gnuplot gnuplot_flags(false, 30);
+       grid_out.set_flags(gnuplot_flags);
+       grid_out.write_gnuplot(triangulation, outs, &mapping);*/
+      //grid output*****************************************
+      try
+        {
+          solver.ReInit();
+          solver_q1.ReInit();
+          out.ReInit();
+          out_q1.ReInit();
+          stringstream outp;
 
-      solver.ComputeReducedFunctionals();
+          outp << "**************************************************\n";
+          outp << "*             Starting Forward Solve             *\n";
+          outp << "*   Solving : " << P.GetName() << "\t*\n";
+          outp << "*   SDoFs   : ";
+          solver.StateSizeInfo(outp);
+          outp << "**************************************************\n";
+          outp << "Computing solution and functionals with higher order mapping:";
+          out.Write(outp, 1, 1, 1);
 
-      SolutionExtractor<RP, VECTOR> a(solver);
-      const StateVector<VECTOR> &gu = a.GetU();
+          solver.ComputeReducedFunctionals();
 
-      solution = gu.GetSpacialVector();
+          SolutionExtractor<RP, VECTOR> a(solver);
+          const StateVector<VECTOR> &gu = a.GetU();
 
-      Vector<float> difference_per_element(triangulation.n_active_cells());
-      VectorTools::integrate_difference(mapping, dof_handler, solution,
-					ExactSolution(), difference_per_element, QGauss<DIM>(4),
-					VectorTools::L2_norm);
-      outp << "L2-error: " << difference_per_element.l2_norm() << "\n";
-      convergence_table.add_value("n-dofs ||", DOFH.GetStateNDoFs());
-      convergence_table.add_value("L2-error ||", difference_per_element.l2_norm());
+          solution = gu.GetSpacialVector();
 
-      /********************/
-      outp << "Computing solution and functionals with 1st order mapping:";
-      out_q1.Write(outp, 1, 1, 1);
+          Vector<float> difference_per_element(triangulation.n_active_cells());
+          VectorTools::integrate_difference(mapping, dof_handler, solution,
+                                            ExactSolution(), difference_per_element, QGauss<DIM>(4),
+                                            VectorTools::L2_norm);
+          outp << "L2-error: " << difference_per_element.l2_norm() << "\n";
+          convergence_table.add_value("n-dofs ||", DOFH.GetStateNDoFs());
+          convergence_table.add_value("L2-error ||", difference_per_element.l2_norm());
 
-      solver_q1.ComputeReducedFunctionals();
+          /********************/
+          outp << "Computing solution and functionals with 1st order mapping:";
+          out_q1.Write(outp, 1, 1, 1);
 
-      SolutionExtractor<RP, VECTOR> a_q1(solver_q1);
-      const StateVector<VECTOR> &gu_q1 = a_q1.GetU();
+          solver_q1.ComputeReducedFunctionals();
 
-      solution = gu_q1.GetSpacialVector();
+          SolutionExtractor<RP, VECTOR> a_q1(solver_q1);
+          const StateVector<VECTOR> &gu_q1 = a_q1.GetU();
 
-      VectorTools::integrate_difference(dof_handler_q1, solution,
-					ExactSolution(), difference_per_element, QGauss<DIM>(4),
-					VectorTools::L2_norm);
-      outp << "L2-error: " << difference_per_element.l2_norm() << "\n";
-      convergence_table.add_value("L2-error Q1 ||",
-          difference_per_element.l2_norm());
+          solution = gu_q1.GetSpacialVector();
 
-      convergence_table.add_value("Error PI by boundary Q1 ||",
-          solver_q1.GetFunctionalValue(BF.GetName()) - dealii::numbers::PI);
-      convergence_table.add_value("Error PI by boundary ||",
-          solver.GetFunctionalValue(BF.GetName()) - dealii::numbers::PI);
+          VectorTools::integrate_difference(dof_handler_q1, solution,
+                                            ExactSolution(), difference_per_element, QGauss<DIM>(4),
+                                            VectorTools::L2_norm);
+          outp << "L2-error: " << difference_per_element.l2_norm() << "\n";
+          convergence_table.add_value("L2-error Q1 ||",
+                                      difference_per_element.l2_norm());
 
-      out.Write(outp, 1, 1, 1);
-      out_q1.Write(outp, 1, 1, 1);
-    }
-    catch (DOpEException &e)
-    {
-      std::cout
-          << "Warning: During execution of `" + e.GetThrowingInstance()
+          convergence_table.add_value("Error PI by boundary Q1 ||",
+                                      solver_q1.GetFunctionalValue(BF.GetName()) - dealii::numbers::PI);
+          convergence_table.add_value("Error PI by boundary ||",
+                                      solver.GetFunctionalValue(BF.GetName()) - dealii::numbers::PI);
+
+          out.Write(outp, 1, 1, 1);
+          out_q1.Write(outp, 1, 1, 1);
+        }
+      catch (DOpEException &e)
+        {
+          std::cout
+              << "Warning: During execution of `" + e.GetThrowingInstance()
               + "` the following Problem occurred!" << std::endl;
-      std::cout << e.GetErrorMessage() << std::endl;
+          std::cout << e.GetErrorMessage() << std::endl;
+        }
+      if (i != max_iter - 1)
+        {
+          DOFH.RefineSpace();
+          DOFH_q1.RefineSpace();
+        }
     }
-    if (i != max_iter - 1)
-    {
-      DOFH.RefineSpace();
-      DOFH_q1.RefineSpace();
-    }
-  }
   convergence_table.set_scientific("L2-error ||", true);
   convergence_table.set_precision("L2-error ||", 2);
   convergence_table.evaluate_convergence_rates("L2-error ||", "n-dofs ||",
-      ConvergenceTable::reduction_rate_log2);
+                                               ConvergenceTable::reduction_rate_log2);
 
   convergence_table.set_scientific("L2-error Q1 ||", true);
   convergence_table.set_precision("L2-error Q1 ||", 2);
   convergence_table.evaluate_convergence_rates("L2-error Q1 ||", "n-dofs ||",
-      ConvergenceTable::reduction_rate_log2);
+                                               ConvergenceTable::reduction_rate_log2);
 
   convergence_table.set_scientific("Error PI by boundary ||", true);
   convergence_table.set_precision("Error PI by boundary ||", 2);
   convergence_table.evaluate_convergence_rates("Error PI by boundary ||",
-      "n-dofs ||", ConvergenceTable::reduction_rate_log2);
+                                               "n-dofs ||", ConvergenceTable::reduction_rate_log2);
 
   convergence_table.set_scientific("Error PI by boundary Q1 ||", true);
   convergence_table.set_precision("Error PI by boundary Q1 ||", 2);
   convergence_table.evaluate_convergence_rates("Error PI by boundary Q1 ||",
-      "n-dofs ||", ConvergenceTable::reduction_rate_log2);
+                                               "n-dofs ||", ConvergenceTable::reduction_rate_log2);
   stringstream outp;
   convergence_table.write_text(outp);
   out.Write(outp, 1, 1, 1);

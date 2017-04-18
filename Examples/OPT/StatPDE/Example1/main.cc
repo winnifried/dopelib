@@ -77,20 +77,20 @@ typedef FunctionalInterface<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> FUNCTIONALI
 //We use an optproblemcontainer instead of a pdeproblemcontainer, as we solve an optimization
 //problem. The optproblemcontainer holds all the information regarding the opt-problem.
 typedef OptProblemContainer<FUNCTIONALINTERFACE, COSTFUNCTIONAL,
-    LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
-    SimpleDirichletData<VECTOR, DIM>,
-    NoConstraints<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM>, SPARSITYPATTERN,
-    VECTOR, CDIM, DIM> OP;
+        LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
+        SimpleDirichletData<VECTOR, DIM>,
+        NoConstraints<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM>, SPARSITYPATTERN,
+        VECTOR, CDIM, DIM> OP;
 
 typedef IntegratorDataContainer<DOFHANDLER, QUADRATURE, FACEQUADRATURE, VECTOR,
-    DIM> IDC;
+        DIM> IDC;
 
 typedef Integrator<IDC, VECTOR, double, DIM> INTEGRATOR;
 
 //Uncomment to use a CG-Method with Identity Preconditioner
 typedef CGLinearSolverWithMatrix<
-    DOpEWrapper::PreconditionIdentity_Wrapper<MATRIX>, SPARSITYPATTERN, MATRIX,
-    VECTOR> LINEARSOLVER;
+DOpEWrapper::PreconditionIdentity_Wrapper<MATRIX>, SPARSITYPATTERN, MATRIX,
+            VECTOR> LINEARSOLVER;
 //Uncomment to use UMFPACK
 //typedef DirectLinearSolverWithMatrix<SPARSITYPATTERN,MATRIX,VECTOR> LINEARSOLVER;
 
@@ -102,15 +102,15 @@ typedef ReducedTrustregion_NewtonAlgorithm<OP, VECTOR> RNA2;
 
 //This class represents the reduced problem and steers the solution process.
 typedef StatReducedProblem<NLS, NLS, INTEGRATOR, INTEGRATOR, OP, VECTOR, CDIM,
-    DIM> RP;
+        DIM> RP;
 
 //The spacetimehandler manages all the things related to the degrees of
 //freedom in space and time (for the optimization as well as the state variable!)
 typedef MethodOfLines_SpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR,
-    CDIM, DIM> STH;
+        CDIM, DIM> STH;
 
 typedef HigherOrderDWRContainerControl<STH, IDC, CDC<DOFHANDLER, VECTOR, DIM>,
-    FDC<DOFHANDLER, VECTOR, DIM>, VECTOR> HO_DWRC;
+        FDC<DOFHANDLER, VECTOR, DIM>, VECTOR> HO_DWRC;
 
 int
 main(int argc, char **argv)
@@ -127,14 +127,14 @@ main(int argc, char **argv)
   string paramfile = "dope.prm";
 
   if (argc == 2)
-  {
-    paramfile = argv[1];
-  }
+    {
+      paramfile = argv[1];
+    }
   else if (argc > 2)
-  {
-    std::cout << "Usage: " << argv[0] << " [ paramfile ] " << std::endl;
-    return -1;
-  }
+    {
+      std::cout << "Usage: " << argv[0] << " [ paramfile ] " << std::endl;
+      return -1;
+    }
   const unsigned int c_fe_order = 1;
   const unsigned int s_fe_order = 2;
   const unsigned int q_order = std::max(c_fe_order, s_fe_order) + 1;
@@ -151,7 +151,7 @@ main(int argc, char **argv)
   std::string cases = "solve";
 
   Triangulation<DIM> triangulation(
-      Triangulation<DIM>::MeshSmoothing::patch_level_1);
+    Triangulation<DIM>::MeshSmoothing::patch_level_1);
   GridGenerator::hyper_cube(triangulation, 0, 1);
 
   // New in comparison to pure PDE problems
@@ -207,10 +207,10 @@ main(int argc, char **argv)
   FACEQUADRATURE face_quadrature_formula_high(2 * q_order);
   IDC idc_high(quadrature_formula_high, face_quadrature_formula_high);
   STH DOFH_higher_order(triangulation, control_fe_high, state_fe_high,
-      DOpEtypes::stationary);
+                        DOpEtypes::stationary);
   DOFH_higher_order.SetDoFHandlerOrdering(1, 0);
   HO_DWRC dwrc(DOFH_higher_order, idc_high, DOpEtypes::VectorStorageType::fullmem, DOpEtypes::VectorStorageType::fullmem, pr,
-      DOpEtypes::mixed_control);
+               DOpEtypes::mixed_control);
   P.InitializeDWRC(dwrc);
   /********************************************************************/
 
@@ -221,68 +221,68 @@ main(int argc, char **argv)
   double ex_value = 1. / 8. * (25 * M_PI * M_PI * M_PI * M_PI + 1. / alpha);
 
   for (int i = 0; i < niter; i++)
-  {
-    try
     {
-      if (cases == "check")
-      {
-        ControlVector<VECTOR> dq(q);
-        Alg.CheckGrads(1., q, dq, 2);
-        Alg.CheckHessian(1., q, dq, 2);
-      }
-      else
-      {
-        //We test ReducedNewtonAlgorithm as well as ReducedTrustedNewtonAlgorithm
-        Alg2.Solve(q);
-        q = 0.;
-        Alg.Solve(q);
+      try
+        {
+          if (cases == "check")
+            {
+              ControlVector<VECTOR> dq(q);
+              Alg.CheckGrads(1., q, dq, 2);
+              Alg.CheckHessian(1., q, dq, 2);
+            }
+          else
+            {
+              //We test ReducedNewtonAlgorithm as well as ReducedTrustedNewtonAlgorithm
+              Alg2.Solve(q);
+              q = 0.;
+              Alg.Solve(q);
 
-        solver.ComputeRefinementIndicators(q, dwrc, LPDE);
-        const double value = solver.GetFunctionalValue(LFunc.GetName());
-        const double est_error = dwrc.GetError();
-        const double error = ex_value - value;
-        stringstream outp;
-        outp << "Exact Value: " << ex_value << "\t Computed: " << value
-            << std::endl;
-	//Case distinction to make shure that the output is independent of
-	//compiler induced floating point cancellation in almost zero values
-	if(fabs(dwrc.GetPrimalError()) < 0.01 * fabs(dwrc.GetControlError()))
-	{
-	  outp << "Primal Err: " << std::setprecision(3) << " < " << 0.01 * fabs(dwrc.GetControlError());
-	}
-	else
-	{
-	  outp << "Primal Err: " << std::setprecision(3) << dwrc.GetPrimalError();
-	}
-	if(fabs(dwrc.GetDualError()) < 0.01 * fabs(dwrc.GetControlError()))
-	{
-	  outp << "\t Dual Err: " <<  std::setprecision(3) << " < " << 0.01 * fabs(dwrc.GetControlError());
-	}
-	else
-	{
-	  outp << "\t Dual Err: " <<  std::setprecision(3) <<dwrc.GetDualError();
-	}
-        outp << "\t Control Err: " <<  std::setprecision(3) <<dwrc.GetControlError() << std::endl;
-        outp << "Est Total Error: " <<  std::setprecision(2) << est_error << " \tError: " << std::setprecision(2) << error;
-        outp << "  Ieff (eh/e)= " <<  std::setprecision(2) << est_error / error << std::endl;
-        out.Write(outp, 1, 1, 1);
-      }
-    }
-    catch (DOpEException &e)
-    {
-      std::cout
-          << "Warning: During execution of `" + e.GetThrowingInstance()
+              solver.ComputeRefinementIndicators(q, dwrc, LPDE);
+              const double value = solver.GetFunctionalValue(LFunc.GetName());
+              const double est_error = dwrc.GetError();
+              const double error = ex_value - value;
+              stringstream outp;
+              outp << "Exact Value: " << ex_value << "\t Computed: " << value
+                   << std::endl;
+              //Case distinction to make shure that the output is independent of
+              //compiler induced floating point cancellation in almost zero values
+              if (fabs(dwrc.GetPrimalError()) < 0.01 * fabs(dwrc.GetControlError()))
+                {
+                  outp << "Primal Err: " << std::setprecision(3) << " < " << 0.01 * fabs(dwrc.GetControlError());
+                }
+              else
+                {
+                  outp << "Primal Err: " << std::setprecision(3) << dwrc.GetPrimalError();
+                }
+              if (fabs(dwrc.GetDualError()) < 0.01 * fabs(dwrc.GetControlError()))
+                {
+                  outp << "\t Dual Err: " <<  std::setprecision(3) << " < " << 0.01 * fabs(dwrc.GetControlError());
+                }
+              else
+                {
+                  outp << "\t Dual Err: " <<  std::setprecision(3) <<dwrc.GetDualError();
+                }
+              outp << "\t Control Err: " <<  std::setprecision(3) <<dwrc.GetControlError() << std::endl;
+              outp << "Est Total Error: " <<  std::setprecision(2) << est_error << " \tError: " << std::setprecision(2) << error;
+              outp << "  Ieff (eh/e)= " <<  std::setprecision(2) << est_error / error << std::endl;
+              out.Write(outp, 1, 1, 1);
+            }
+        }
+      catch (DOpEException &e)
+        {
+          std::cout
+              << "Warning: During execution of `" + e.GetThrowingInstance()
               + "` the following Problem occurred!" << std::endl;
-      std::cout << e.GetErrorMessage() << std::endl;
+          std::cout << e.GetErrorMessage() << std::endl;
+        }
+      if (i != niter - 1)
+        {
+          //global mesh refinement
+          DOFH.RefineSpace();
+          Alg.ReInit();
+          out.ReInit();
+        }
     }
-    if (i != niter - 1)
-    {
-      //global mesh refinement
-      DOFH.RefineSpace();
-      Alg.ReInit();
-      out.ReInit();
-    }
-  }
 
   return 0;
 }

@@ -67,16 +67,16 @@ typedef SparsityPattern SPARSITYPATTERN;
 typedef Vector<double> VECTOR;
 
 typedef PDEProblemContainer<LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
-    SimpleDirichletData<VECTOR, DIM>, SPARSITYPATTERN, VECTOR, DIM, FE,
-    DOFHANDLER> OP;
+        SimpleDirichletData<VECTOR, DIM>, SPARSITYPATTERN, VECTOR, DIM, FE,
+        DOFHANDLER> OP;
 typedef IntegratorDataContainer<DOFHANDLER, QUADRATURE, FACEQUADRATURE, VECTOR,
-    DIM> IDC;
+        DIM> IDC;
 typedef Integrator<IDC, VECTOR, double, DIM> INTEGRATOR;
 typedef TrilinosDirectLinearSolverWithMatrix<SPARSITYPATTERN, MATRIX, VECTOR> LINEARSOLVER;
 typedef NewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR> NLS;
 typedef StatPDEProblem<NLS, INTEGRATOR, OP, VECTOR, DIM> RP;
 typedef MethodOfLines_StateSpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN,
-    VECTOR, DIM> STH;
+        VECTOR, DIM> STH;
 
 int
 main(int argc, char **argv)
@@ -100,14 +100,14 @@ main(int argc, char **argv)
   string paramfile = "dope.prm";
 
   if (argc == 2)
-  {
-    paramfile = argv[1];
-  }
+    {
+      paramfile = argv[1];
+    }
   else if (argc > 2)
-  {
-    std::cout << "Usage: " << argv[0] << " [ paramfile ] " << std::endl;
-    return -1;
-  }
+    {
+      std::cout << "Usage: " << argv[0] << " [ paramfile ] " << std::endl;
+      return -1;
+    }
 
   ParameterReader pr;
   RP::declare_params(pr);
@@ -115,9 +115,9 @@ main(int argc, char **argv)
   LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>::declare_params(pr);
   BoundaryParabel::declare_params(pr);
   LocalBoundaryFaceFunctionalDrag<CDC, FDC, DOFHANDLER, VECTOR, DIM>::declare_params(
-      pr);
+    pr);
   LocalBoundaryFaceFunctionalLift<CDC, FDC, DOFHANDLER, VECTOR, DIM>::declare_params(
-      pr);
+    pr);
   LINEARSOLVER::declare_params(pr);
   pr.read_parameters(paramfile);
 
@@ -203,48 +203,48 @@ main(int argc, char **argv)
   out.ReInit();
 
   for (int i = 0; i < niter; i++)
-  {
-    try
     {
-      stringstream outp;
+      try
+        {
+          stringstream outp;
 
-      outp << "**************************************************\n";
-      outp << "*             Starting Forward Solve             *\n";
-      outp << "*   Solving : " << P.GetName() << "\t*\n";
-      outp << "*   SDoFs   : ";
-      solver.StateSizeInfo(outp);
-      outp << "**************************************************";
-      out.Write(outp, 1, 1, 1);
+          outp << "**************************************************\n";
+          outp << "*             Starting Forward Solve             *\n";
+          outp << "*   Solving : " << P.GetName() << "\t*\n";
+          outp << "*   SDoFs   : ";
+          solver.StateSizeInfo(outp);
+          outp << "**************************************************";
+          out.Write(outp, 1, 1, 1);
 
-      solver.ComputeReducedFunctionals();
-    }
-    catch (DOpEException &e)
-    {
-      std::cout
-          << "Warning: During execution of `" + e.GetThrowingInstance()
+          solver.ComputeReducedFunctionals();
+        }
+      catch (DOpEException &e)
+        {
+          std::cout
+              << "Warning: During execution of `" + e.GetThrowingInstance()
               + "` the following Problem occurred!" << std::endl;
-      std::cout << e.GetErrorMessage() << std::endl;
-    }
-    if (i != niter - 1)
-    {
-      SolutionExtractor<RP, VECTOR> a(solver);
-      const StateVector<VECTOR> &gu = a.GetU();
-      solution = 0;
-      solution = gu.GetSpacialVector();
-      Vector<float> estimated_error_per_element(triangulation.n_active_cells());
+          std::cout << e.GetErrorMessage() << std::endl;
+        }
+      if (i != niter - 1)
+        {
+          SolutionExtractor<RP, VECTOR> a(solver);
+          const StateVector<VECTOR> &gu = a.GetU();
+          solution = 0;
+          solution = gu.GetSpacialVector();
+          Vector<float> estimated_error_per_element(triangulation.n_active_cells());
 
-      std::vector<bool> component_mask(5, false);
-      component_mask[2] = true;
+          std::vector<bool> component_mask(5, false);
+          component_mask[2] = true;
 
-      KellyErrorEstimator<DIM>::estimate(
-          static_cast<const DoFHandler<DIM>&>(DOFH.GetStateDoFHandler()),
-          QGauss<1>(2), FunctionMap<DIM>::type(), solution,
-          estimated_error_per_element, component_mask);
-      DOFH.RefineSpace(RefineFixedNumber(estimated_error_per_element, 0.3, 0.0));
-      solver.ReInit();
-      out.ReInit();
+          KellyErrorEstimator<DIM>::estimate(
+            static_cast<const DoFHandler<DIM>&>(DOFH.GetStateDoFHandler()),
+            QGauss<1>(2), FunctionMap<DIM>::type(), solution,
+            estimated_error_per_element, component_mask);
+          DOFH.RefineSpace(RefineFixedNumber(estimated_error_per_element, 0.3, 0.0));
+          solver.ReInit();
+          out.ReInit();
+        }
     }
-  }
 
   return 0;
 }

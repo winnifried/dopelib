@@ -41,23 +41,19 @@
 #include <include/parameterreader.h>
 #include <templates/directlinearsolver.h>
 #include <templates/integrator.h>
-#include <basic/mol_spacetimehandler.h>
+#include <basic/mol_statespacetimehandler.h>
 #include <problemdata/simpledirichletdata.h>
 #include <container/integratordatacontainer.h>
 #include <templates/newtonsolver.h>
-#include <interfaces/functionalinterface.h>
-#include <problemdata/noconstraints.h>
 
-#include <reducedproblems/instatreducedproblem.h>
+#include <reducedproblems/instatpdeproblem.h>
 #include <templates/instat_step_newtonsolver.h>
-#include <opt_algorithms/reducednewtonalgorithm.h>
-#include <container/instatoptproblemcontainer.h>
+#include <container/instatpdeproblemcontainer.h>
 
 #include <tsschemes/shifted_crank_nicolson_problem.h>
 
 //Problem specific includes
 #include "localpde.h"
-#include "localfunctional.h"
 #include "functionals.h"
 #include "my_functions.h"
 
@@ -78,91 +74,86 @@ typedef BlockSparseMatrix<double> MATRIX;
 typedef BlockSparsityPattern SPARSITYPATTERN;
 typedef BlockVector<double> VECTOR;
 
-typedef FunctionalInterface<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM> FUNC;
-
-typedef OptProblemContainer<
-    LocalFunctional<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM>, FUNC,
-    LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
-    SimpleDirichletData<VECTOR, DIM>,
-    NoConstraints<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM>, SPARSITYPATTERN,
-    VECTOR, DIM, DIM> OP_BASE;
+typedef PDEProblemContainer<
+LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
+         SimpleDirichletData<VECTOR, DIM>,
+         SPARSITYPATTERN,
+         VECTOR, DIM> OP_BASE;
 
 typedef StateProblem<OP_BASE, LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
-    SimpleDirichletData<VECTOR, DIM>, SPARSITYPATTERN, VECTOR, DIM> PROB;
+        SimpleDirichletData<VECTOR, DIM>, SPARSITYPATTERN, VECTOR, DIM> PROB;
 
 // Typedefs for timestep problem
 #define TSP ShiftedCrankNicolsonProblem
 //FIXME: This should be a reasonable dual timestepping scheme
 #define DTSP ShiftedCrankNicolsonProblem
-typedef InstatOptProblemContainer<TSP, DTSP, FUNC,
-    LocalFunctional<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM>,
-    LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
-    SimpleDirichletData<VECTOR, DIM>,
-    NoConstraints<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM>, SPARSITYPATTERN,
-    VECTOR, DIM, DIM> OP;
+typedef InstatPDEProblemContainer<TSP, DTSP,
+        LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
+        SimpleDirichletData<VECTOR, DIM>,
+        SPARSITYPATTERN,
+        VECTOR, DIM> OP;
 #undef TSP
 #undef DTSP
 
 typedef IntegratorDataContainer<DOFHANDLER, QUADRATURE,
-    FACEQUADRATURE, VECTOR, DIM> IDC;
+        FACEQUADRATURE, VECTOR, DIM> IDC;
 typedef Integrator<IDC, VECTOR, double, DIM> INTEGRATOR;
 typedef DirectLinearSolverWithMatrix<SPARSITYPATTERN, MATRIX, VECTOR> LINEARSOLVER;
 typedef NewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR> CNLS;
 typedef InstatStepNewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR> NLS;
-typedef ReducedNewtonAlgorithm<OP, VECTOR> RNA;
-typedef InstatReducedProblem<CNLS, NLS, INTEGRATOR, INTEGRATOR, OP, VECTOR, DIM,
-    DIM> RP;
-	
- /**
-  * In this example we solve the two dimensional Black-Scholes equation.
-  * As the initial conditions are only H1 regular, we use the shifted
-  * Crank Nicolson time stepping.
-  */
+typedef InstatPDEProblem<NLS, INTEGRATOR, OP, VECTOR,
+        DIM> RP;
+
+/**
+ * In this example we solve the two dimensional Black-Scholes equation.
+ * As the initial conditions are only H1 regular, we use the shifted
+ * Crank Nicolson time stepping.
+ */
 
 void
 ColorizeTriangulation(Triangulation<2> &coarse_grid, double upper_bound)
 {
-/**
- * Colorize the spatial triangulation, i.e. set the correct boundary colors.
- */
+  /**
+   * Colorize the spatial triangulation, i.e. set the correct boundary colors.
+   */
   Triangulation<2>::cell_iterator element = coarse_grid.begin();
   Triangulation<2>::cell_iterator endc = coarse_grid.end();
   for (; element != endc; ++element)
     for (unsigned int face = 0; face < GeometryInfo<2>::faces_per_cell; ++face)
-    {
-      if (std::fabs(element->face(face)->center()(1) - (0)) < 1e-12)
       {
+        if (std::fabs(element->face(face)->center()(1) - (0)) < 1e-12)
+          {
 #if DEAL_II_VERSION_GTE(8,3,0)
-        element->face(face)->set_boundary_id(1);
+            element->face(face)->set_boundary_id(1);
 #else
-        element->face(face)->set_boundary_indicator(1);
+            element->face(face)->set_boundary_indicator(1);
 #endif
-      }
-      else if (std::fabs(element->face(face)->center()(0) - (upper_bound)) < 1e-12)
-      {
+          }
+        else if (std::fabs(element->face(face)->center()(0) - (upper_bound)) < 1e-12)
+          {
 #if DEAL_II_VERSION_GTE(8,3,0)
-        element->face(face)->set_boundary_id(0);
+            element->face(face)->set_boundary_id(0);
 #else
-        element->face(face)->set_boundary_indicator(0);
+            element->face(face)->set_boundary_indicator(0);
 #endif
-      }
-      else if (std::fabs(element->face(face)->center()(1) - (upper_bound)) < 1e-12)
-      {
+          }
+        else if (std::fabs(element->face(face)->center()(1) - (upper_bound)) < 1e-12)
+          {
 #if DEAL_II_VERSION_GTE(8,3,0)
-        element->face(face)->set_boundary_id(0);
+            element->face(face)->set_boundary_id(0);
 #else
-        element->face(face)->set_boundary_indicator(0);
+            element->face(face)->set_boundary_indicator(0);
 #endif
-      }
-      else if (std::fabs(element->face(face)->center()(0) - (0)) < 1e-12)
-      {
+          }
+        else if (std::fabs(element->face(face)->center()(0) - (0)) < 1e-12)
+          {
 #if DEAL_II_VERSION_GTE(8,3,0)
-        element->face(face)->set_boundary_id(1);
+            element->face(face)->set_boundary_id(1);
 #else
-        element->face(face)->set_boundary_indicator(1);
+            element->face(face)->set_boundary_indicator(1);
 #endif
+          }
       }
-    }
 }
 
 int
@@ -171,19 +162,19 @@ main(int argc, char **argv)
   string paramfile = "dope.prm";
 
   if (argc == 2)
-  {
-    paramfile = argv[1];
-  }
+    {
+      paramfile = argv[1];
+    }
   else if (argc > 2)
-  {
-    std::cout << "Usage: " << argv[0] << " [ paramfile ] " << std::endl;
-    return -1;
-  }
+    {
+      std::cout << "Usage: " << argv[0] << " [ paramfile ] " << std::endl;
+      return -1;
+    }
 
   //First, declare the parameters and read them in.
   ParameterReader pr;
   RP::declare_params(pr);
-  RNA::declare_params(pr);
+  DOpEOutputHandler<VECTOR>::declare_params(pr);
   LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>::declare_params(pr);
   InitialData::declare_params(pr);
   pr.SetSubsection("Discretization parameters");
@@ -196,8 +187,7 @@ main(int argc, char **argv)
   GridGenerator::hyper_cube(triangulation, 0., upper_bound);
   ColorizeTriangulation(triangulation, upper_bound);
 
-  //Define the Finite Elements and quadrature formulas for control and state.
-  FESystem<DIM> control_fe(FE_Nothing<DIM>(), 1);
+  //Define the Finite Elements and quadrature formulas for the state.
   FESystem<DIM> state_fe(FE_Q<DIM>(1), 1); //Q1
 
   QGauss<DIM> quadrature_formula(3);
@@ -207,7 +197,6 @@ main(int argc, char **argv)
   //Define the localPDE and the functionals we are interested in. Here, LFunc is a dummy necessary for the control,
   //LPF is a SpaceTimePointevaluation
   LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, 2> LPDE(pr);
-  LocalFunctional<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM> LFunc;
   LocalPointFunctional<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM> LPF;
 
   //Time grid of [0,expiration date] with 20 subintervalls.
@@ -216,13 +205,10 @@ main(int argc, char **argv)
   GridGenerator::subdivided_hyper_cube(times, 20,0.,pr.get_double("expiration date"));
 
   triangulation.refine_global(5);
-  MethodOfLines_SpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR, DIM,
-      DIM> DOFH(triangulation, control_fe, state_fe, times,
-      DOpEtypes::ControlType::stationary);
+  MethodOfLines_StateSpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR,
+                                      DIM> DOFH(triangulation, state_fe, times);
 
-  NoConstraints<ElementDataContainer, FaceDataContainer, DOFHANDLER, VECTOR, DIM,
-      DIM> Constraints;
-  OP P(LFunc, LPDE, Constraints, DOFH);
+  OP P(LPDE, DOFH);
 
   P.AddFunctional(&LPF);
 
@@ -240,32 +226,50 @@ main(int argc, char **argv)
   P.SetInitialValues(&initial_data);
 
   try
-  {
-    RP solver(&P, DOpEtypes::VectorStorageType::fullmem, pr, idc);
-    
-    RNA Alg(&P, &solver, pr);
+    {
+      RP solver(&P, DOpEtypes::VectorStorageType::fullmem, pr, idc);
+      DOpEOutputHandler<VECTOR> out(&solver, pr);
+      DOpEExceptionHandler<VECTOR> ex(&out);
+      P.RegisterOutputHandler(&out);
+      P.RegisterExceptionHandler(&ex);
+      solver.RegisterOutputHandler(&out);
+      solver.RegisterExceptionHandler(&ex);
 
-    Alg.ReInit();
-    ControlVector<VECTOR> q(&DOFH, DOpEtypes::VectorStorageType::fullmem);
+      //Before solving we have to reinitialize the stateproblem and outputhandler.
+      solver.ReInit();
+      out.ReInit();
 
-    Alg.SolveForward(q);
+      stringstream outp;
+      outp << "**************************************************\n";
+      outp << "*             Starting Forward Solve             *\n";
+      outp << "*   Solving : " << P.GetName() << "\t*\n";
+      outp << "*   SDoFs   : ";
+      solver.StateSizeInfo(outp);
+      outp << "**************************************************";
+      //We print this header with priority 1 and 1 empty line in front and after.
+      out.Write(outp, 1, 1, 1);
 
-    SolutionExtractor<RP, VECTOR> a(solver);
-    const StateVector<VECTOR> &statevec = a.GetU();
+      //We compute the value of the functionals. To this end, we have to solve
+      //the PDE at hand.
+      solver.ComputeReducedFunctionals();
 
-    stringstream out;
-    double product = statevec * statevec;
-    out << " u * u = " << product << std::endl;
-    P.GetOutputHandler()->Write(out, 0);
 
-  }
+      SolutionExtractor<RP, VECTOR> a(solver);
+      const StateVector<VECTOR> &statevec = a.GetU();
+
+
+      double product = statevec * statevec;
+      outp << " u * u = " << product << std::endl;
+      P.GetOutputHandler()->Write(outp, 0);
+
+    }
   catch (DOpEException &e)
-  {
-    std::cout
-        << "Warning: During execution of `" + e.GetThrowingInstance()
-            + "` the following Problem occurred!" << std::endl;
-    std::cout << e.GetErrorMessage() << std::endl;
-  }
+    {
+      std::cout
+          << "Warning: During execution of `" + e.GetThrowingInstance()
+          + "` the following Problem occurred!" << std::endl;
+      std::cout << e.GetErrorMessage() << std::endl;
+    }
 
   return 0;
 }

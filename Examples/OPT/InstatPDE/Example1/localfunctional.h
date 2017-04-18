@@ -32,236 +32,236 @@ using namespace dealii;
 using namespace DOpE;
 
 template<
-    template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
-    template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
-    template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
-  class LocalFunctional : public FunctionalInterface<EDC, FDC, DH, VECTOR,
-      dopedim, dealdim>
+template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
+         template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
+         template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
+class LocalFunctional : public FunctionalInterface<EDC, FDC, DH, VECTOR,
+  dopedim, dealdim>
+{
+public:
+  LocalFunctional()
   {
-    public:
-      LocalFunctional() 
+  }
+
+  bool
+  NeedTime() const
+  {
+    if (fabs(this->GetTime() - 1.0) < 1.e-13)
+      return true;
+    if (fabs(this->GetTime()) < 1.e-13)
+      return true;
+    return false;
+  }
+
+  double
+  ElementValue(const EDC<DH, VECTOR, dealdim> &edc)
+  {
+    unsigned int n_q_points = edc.GetNQPoints();
+    double ret = 0.;
+    if (fabs(this->GetTime() - 1.0) < 1.e-13)
       {
-      }
+        const DOpEWrapper::FEValues<dealdim> &state_fe_values =
+          edc.GetFEValuesState();
+        //endtimevalue
+        fvalues_.resize(n_q_points);
+        uvalues_.resize(n_q_points);
 
-      bool
-      NeedTime() const
-      {
-        if (fabs(this->GetTime() - 1.0) < 1.e-13)
-          return true;
-        if (fabs(this->GetTime()) < 1.e-13)
-          return true;
-        return false;
-      }
+        edc.GetValuesState("state", uvalues_);
 
-      double
-      ElementValue(const EDC<DH, VECTOR, dealdim>& edc)
-      {
-        unsigned int n_q_points = edc.GetNQPoints();
-        double ret = 0.;
-        if (fabs(this->GetTime() - 1.0) < 1.e-13)
-        {
-          const DOpEWrapper::FEValues<dealdim> & state_fe_values =
-              edc.GetFEValuesState();
-          //endtimevalue
-          fvalues_.resize(n_q_points);
-          uvalues_.resize(n_q_points);
-
-          edc.GetValuesState("state", uvalues_);
-
-          for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
+        for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
           {
             fvalues_[q_point] = sin(
-                state_fe_values.quadrature_point(q_point)(0))
-                * sin(state_fe_values.quadrature_point(q_point)(1));
+                                  state_fe_values.quadrature_point(q_point)(0))
+                                * sin(state_fe_values.quadrature_point(q_point)(1));
 
             ret += 0.5 * (uvalues_[q_point] - fvalues_[q_point])
-                * (uvalues_[q_point] - fvalues_[q_point])
-                * state_fe_values.JxW(q_point);
+                   * (uvalues_[q_point] - fvalues_[q_point])
+                   * state_fe_values.JxW(q_point);
           }
-          return ret;
-        }
-        if (fabs(this->GetTime()) < 1.e-13)
-        {
-          const DOpEWrapper::FEValues<dealdim> & state_fe_values =
-              edc.GetFEValuesControl();
-          //initialvalue
-          fvalues_.resize(n_q_points);
-          qvalues_.resize(n_q_points);
-          edc.GetValuesControl("control", qvalues_);
+        return ret;
+      }
+    if (fabs(this->GetTime()) < 1.e-13)
+      {
+        const DOpEWrapper::FEValues<dealdim> &state_fe_values =
+          edc.GetFEValuesControl();
+        //initialvalue
+        fvalues_.resize(n_q_points);
+        qvalues_.resize(n_q_points);
+        edc.GetValuesControl("control", qvalues_);
 
-          for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
+        for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
           {
             fvalues_[q_point] = sin(
-                state_fe_values.quadrature_point(q_point)(0))
-                * sin(state_fe_values.quadrature_point(q_point)(1));
+                                  state_fe_values.quadrature_point(q_point)(0))
+                                * sin(state_fe_values.quadrature_point(q_point)(1));
 
             ret += 0.5 * (qvalues_[q_point] - fvalues_[q_point])
-                * (qvalues_[q_point] - fvalues_[q_point])
-                * state_fe_values.JxW(q_point);
+                   * (qvalues_[q_point] - fvalues_[q_point])
+                   * state_fe_values.JxW(q_point);
           }
-          return ret;
-        }
-        throw DOpEException("This should not be evaluated here!",
-            "LocalFunctional::Value");
+        return ret;
       }
+    throw DOpEException("This should not be evaluated here!",
+                        "LocalFunctional::Value");
+  }
 
-      void
-      ElementValue_U(const EDC<DH, VECTOR, dealdim>& edc,
-          dealii::Vector<double> &local_vector, double scale)
+  void
+  ElementValue_U(const EDC<DH, VECTOR, dealdim> &edc,
+                 dealii::Vector<double> &local_vector, double scale)
+  {
+    const DOpEWrapper::FEValues<dealdim> &state_fe_values =
+      edc.GetFEValuesState();
+    unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
+    unsigned int n_q_points = edc.GetNQPoints();
+    if (fabs(this->GetTime() - 1.0) < 1.e-13)
       {
-        const DOpEWrapper::FEValues<dealdim> & state_fe_values =
-            edc.GetFEValuesState();
-        unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
-        unsigned int n_q_points = edc.GetNQPoints();
-        if (fabs(this->GetTime() - 1.0) < 1.e-13)
-        {
-          //endtimevalue
-          fvalues_.resize(n_q_points);
-          uvalues_.resize(n_q_points);
+        //endtimevalue
+        fvalues_.resize(n_q_points);
+        uvalues_.resize(n_q_points);
 
-          edc.GetValuesState("state", uvalues_);
+        edc.GetValuesState("state", uvalues_);
 
-          for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
+        for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
           {
             fvalues_[q_point] = sin(
-                state_fe_values.quadrature_point(q_point)(0))
-                * sin(state_fe_values.quadrature_point(q_point)(1));
+                                  state_fe_values.quadrature_point(q_point)(0))
+                                * sin(state_fe_values.quadrature_point(q_point)(1));
             for (unsigned int i = 0; i < n_dofs_per_element; i++)
-            {
-              local_vector(i) += scale
-                  * (uvalues_[q_point] - fvalues_[q_point])
-                  * state_fe_values.shape_value(i, q_point)
-                  * state_fe_values.JxW(q_point);
-            }
+              {
+                local_vector(i) += scale
+                                   * (uvalues_[q_point] - fvalues_[q_point])
+                                   * state_fe_values.shape_value(i, q_point)
+                                   * state_fe_values.JxW(q_point);
+              }
           }
-        }
       }
+  }
 
-      void
-      ElementValue_Q(const EDC<DH, VECTOR, dealdim>& edc,
-          dealii::Vector<double> &local_vector, double scale)
+  void
+  ElementValue_Q(const EDC<DH, VECTOR, dealdim> &edc,
+                 dealii::Vector<double> &local_vector, double scale)
+  {
+    const DOpEWrapper::FEValues<dealdim> &state_fe_values =
+      edc.GetFEValuesControl();
+    unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
+    unsigned int n_q_points = edc.GetNQPoints();
+
+    if (fabs(this->GetTime()) < 1.e-13)
       {
-        const DOpEWrapper::FEValues<dealdim> & state_fe_values =
-            edc.GetFEValuesControl();
-        unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
-        unsigned int n_q_points = edc.GetNQPoints();
+        //endtimevalue
+        fvalues_.resize(n_q_points);
+        qvalues_.resize(n_q_points);
 
-        if (fabs(this->GetTime()) < 1.e-13)
-        {
-          //endtimevalue
-          fvalues_.resize(n_q_points);
-          qvalues_.resize(n_q_points);
+        edc.GetValuesControl("control", qvalues_);
 
-          edc.GetValuesControl("control", qvalues_);
-
-          for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
+        for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
           {
             fvalues_[q_point] = sin(
-                state_fe_values.quadrature_point(q_point)(0))
-                * sin(state_fe_values.quadrature_point(q_point)(1));
+                                  state_fe_values.quadrature_point(q_point)(0))
+                                * sin(state_fe_values.quadrature_point(q_point)(1));
             for (unsigned int i = 0; i < n_dofs_per_element; i++)
-            {
-              local_vector(i) += scale
-                  * (qvalues_[q_point] - fvalues_[q_point])
-                  * state_fe_values.shape_value(i, q_point)
-                  * state_fe_values.JxW(q_point);
-            }
+              {
+                local_vector(i) += scale
+                                   * (qvalues_[q_point] - fvalues_[q_point])
+                                   * state_fe_values.shape_value(i, q_point)
+                                   * state_fe_values.JxW(q_point);
+              }
           }
-        }
       }
+  }
 
-      void
-      ElementValue_UU(const EDC<DH, VECTOR, dealdim>& edc,
-          dealii::Vector<double> &local_vector, double scale)
+  void
+  ElementValue_UU(const EDC<DH, VECTOR, dealdim> &edc,
+                  dealii::Vector<double> &local_vector, double scale)
+  {
+    const DOpEWrapper::FEValues<dealdim> &state_fe_values =
+      edc.GetFEValuesState();
+    unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
+    unsigned int n_q_points = edc.GetNQPoints();
+
+    if (fabs(this->GetTime() - 1.0) < 1.e-13)
       {
-        const DOpEWrapper::FEValues<dealdim> & state_fe_values =
-            edc.GetFEValuesState();
-        unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
-        unsigned int n_q_points = edc.GetNQPoints();
+        //endtimevalue
+        duvalues_.resize(n_q_points);
 
-        if (fabs(this->GetTime() - 1.0) < 1.e-13)
-        {
-          //endtimevalue
-          duvalues_.resize(n_q_points);
+        edc.GetValuesState("tangent", duvalues_);
 
-          edc.GetValuesState("tangent", duvalues_);
-
-          for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
+        for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
           {
             for (unsigned int i = 0; i < n_dofs_per_element; i++)
-            {
-              local_vector(i) += scale * duvalues_[q_point]
-                  * state_fe_values.shape_value(i, q_point)
-                  * state_fe_values.JxW(q_point);
-            }
+              {
+                local_vector(i) += scale * duvalues_[q_point]
+                                   * state_fe_values.shape_value(i, q_point)
+                                   * state_fe_values.JxW(q_point);
+              }
           }
-        }
       }
+  }
 
-      void
-      ElementValue_QU(const EDC<DH, VECTOR, dealdim>&,
-          dealii::Vector<double> &, double)
+  void
+  ElementValue_QU(const EDC<DH, VECTOR, dealdim> &,
+                  dealii::Vector<double> &, double)
+  {
+  }
+
+  void
+  ElementValue_UQ(const EDC<DH, VECTOR, dealdim> &,
+                  dealii::Vector<double> &, double)
+  {
+  }
+
+  void
+  ElementValue_QQ(const EDC<DH, VECTOR, dealdim> &edc,
+                  dealii::Vector<double> &local_vector, double scale)
+  {
+    const DOpEWrapper::FEValues<dealdim> &state_fe_values =
+      edc.GetFEValuesControl();
+    unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
+    unsigned int n_q_points = edc.GetNQPoints();
+
+    if (fabs(this->GetTime()) < 1.e-13)
       {
-      }
+        //endtimevalue
+        dqvalues_.resize(n_q_points);
 
-      void
-      ElementValue_UQ(const EDC<DH, VECTOR, dealdim>&,
-          dealii::Vector<double> &, double)
-      {
-      }
+        edc.GetValuesControl("dq", dqvalues_);
 
-      void
-      ElementValue_QQ(const EDC<DH, VECTOR, dealdim>& edc,
-          dealii::Vector<double> &local_vector, double scale)
-      {
-        const DOpEWrapper::FEValues<dealdim> & state_fe_values =
-            edc.GetFEValuesControl();
-        unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
-        unsigned int n_q_points = edc.GetNQPoints();
-
-        if (fabs(this->GetTime()) < 1.e-13)
-        {
-          //endtimevalue
-          dqvalues_.resize(n_q_points);
-
-          edc.GetValuesControl("dq", dqvalues_);
-
-          for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
+        for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
           {
             for (unsigned int i = 0; i < n_dofs_per_element; i++)
-            {
-              local_vector(i) += scale * dqvalues_[q_point]
-                  * state_fe_values.shape_value(i, q_point)
-                  * state_fe_values.JxW(q_point);
-            }
+              {
+                local_vector(i) += scale * dqvalues_[q_point]
+                                   * state_fe_values.shape_value(i, q_point)
+                                   * state_fe_values.JxW(q_point);
+              }
           }
-        }
       }
+  }
 
-      UpdateFlags
-      GetUpdateFlags() const
-      {
-        return update_values | update_quadrature_points;
-      }
+  UpdateFlags
+  GetUpdateFlags() const
+  {
+    return update_values | update_quadrature_points;
+  }
 
-      string
-      GetType() const
-      {
-        return "domain timelocal";
-      }
+  string
+  GetType() const
+  {
+    return "domain timelocal";
+  }
 
-      std::string
-      GetName() const
-      {
-        return "Cost-functional";
-      }
+  std::string
+  GetName() const
+  {
+    return "Cost-functional";
+  }
 
-    private:
-      vector<double> qvalues_;
-      vector<double> fvalues_;
-      vector<double> uvalues_;
-      vector<double> duvalues_;
-      vector<double> dqvalues_;
+private:
+  vector<double> qvalues_;
+  vector<double> fvalues_;
+  vector<double> uvalues_;
+  vector<double> duvalues_;
+  vector<double> dqvalues_;
 
-  };
+};
 #endif

@@ -36,7 +36,7 @@
 #include <container/optproblemcontainer.h>
 #include <interfaces/functionalinterface.h>
 #include <interfaces/pdeinterface.h>
-#include <reducedproblems/statreducedproblem.h> 
+#include <reducedproblems/statreducedproblem.h>
 #include <templates/newtonsolver.h>
 #include <templates/directlinearsolver.h>
 #include <templates/integrator.h>
@@ -78,14 +78,14 @@ typedef SimpleDirichletData<VECTOR, DIM> DD;
 typedef ConstraintInterface<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> CONS;
 
 typedef OptProblemContainer<FUNCTIONALINTERFACE, COSTFUNCTIONAL, PDE, DD, CONS,
-    SPARSITYPATTERN, VECTOR, CDIM, DIM> OP;
+        SPARSITYPATTERN, VECTOR, CDIM, DIM> OP;
 typedef IntegratorDataContainer<DOFHANDLER, QUADRATURE, FACEQUADRATURE, VECTOR,
-    DIM> IDC;
+        DIM> IDC;
 typedef Integrator<IDC, VECTOR, double, DIM> INTEGRATOR;
 typedef DirectLinearSolverWithMatrix<SPARSITYPATTERN, MATRIX, VECTOR> LINEARSOLVER;
 typedef NewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR> NLS;
 typedef StatReducedProblem<NLS, NLS, INTEGRATOR, INTEGRATOR, OP, VECTOR, CDIM,
-    DIM> RP;
+        DIM> RP;
 typedef Reduced_SnoptAlgorithm<OP, VECTOR> SNOPT_Alg;
 
 int
@@ -98,14 +98,14 @@ main(int argc, char **argv)
   std::string paramfile = "dope.prm";
 
   if (argc == 2)
-  {
-    paramfile = argv[1];
-  }
+    {
+      paramfile = argv[1];
+    }
   else if (argc > 2)
-  {
-    std::cout << "Usage: " << argv[0] << " [ paramfile ] " << std::endl;
-    return -1;
-  }
+    {
+      std::cout << "Usage: " << argv[0] << " [ paramfile ] " << std::endl;
+      return -1;
+    }
 
   ParameterReader pr;
   RP::declare_params(pr);
@@ -119,7 +119,7 @@ main(int argc, char **argv)
   rep[0] = 2;
   rep[1] = 1;
   GridGenerator::subdivided_hyper_rectangle(triangulation, rep,
-      Point<DIM>(0, 0), Point<DIM>(2, 1), true);
+                                            Point<DIM>(0, 0), Point<DIM>(2, 1), true);
 
   FE<DIM> control_fe(FE_DGP<DIM>(0), 1);
   FE<DIM> state_fe(FE_Q<DIM>(2), 2);
@@ -150,7 +150,7 @@ main(int argc, char **argv)
   DOpE::PointConstraints<DOFHANDLER, 2, 2> constraints_mkr(c_points, c_comps);
 
   MethodOfLines_SpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR, 2, 2> DOFH(
-      triangulation, control_fe, state_fe, constraints, DOpEtypes::stationary);
+    triangulation, control_fe, state_fe, constraints, DOpEtypes::stationary);
 
   DOFH.SetUserDefinedDoFConstraints(constraints_mkr);
 
@@ -181,29 +181,29 @@ main(int argc, char **argv)
     q = 0.4;
   }
   for (int i = 0; i < niter; i++)
-  {
-    try
     {
-      Alg.GetOutputHandler()->SetIterationNumber(0, "p_iter");
-      LPDE.SetP(1);
-      Alg.Solve(q);
-      Alg.GetOutputHandler()->SetIterationNumber(1, "p_iter");
-      LPDE.SetP(4);
-      Alg.Solve(q);
-    }
-    catch (DOpEException &e)
-    {
-      std::cout
-          << "Warning: During execution of `" + e.GetThrowingInstance()
+      try
+        {
+          Alg.GetOutputHandler()->SetIterationNumber(0, "p_iter");
+          LPDE.SetP(1);
+          Alg.Solve(q);
+          Alg.GetOutputHandler()->SetIterationNumber(1, "p_iter");
+          LPDE.SetP(4);
+          Alg.Solve(q);
+        }
+      catch (DOpEException &e)
+        {
+          std::cout
+              << "Warning: During execution of `" + e.GetThrowingInstance()
               + "` the following Problem occurred!" << std::endl;
-      std::cout << e.GetErrorMessage() << std::endl;
+          std::cout << e.GetErrorMessage() << std::endl;
+        }
+      if (i != niter - 1)
+        {
+          DOFH.RefineSpace();
+          Alg.ReInit();
+        }
     }
-    if (i != niter - 1)
-    {
-      DOFH.RefineSpace();
-      Alg.ReInit();
-    }
-  }
   return 0;
 }
 #undef FDC

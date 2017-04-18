@@ -43,542 +43,542 @@ namespace DOpE
      *                      interested in.
      */
     template<typename VECTOR, int dim>
-      class FaceDataContainerInternal
+    class FaceDataContainerInternal
+    {
+    public:
+      FaceDataContainerInternal(
+        const std::map<std::string, const dealii::Vector<double>*> &param_values,
+        const std::map<std::string, const VECTOR *> &domain_values,
+        bool need_neighbour);
+
+      virtual
+      ~FaceDataContainerInternal()
       {
-        public:
-          FaceDataContainerInternal(
-              const std::map<std::string, const dealii::Vector<double>*> &param_values,
-              const std::map<std::string, const VECTOR*> &domain_values,
-              bool need_neighbour);
+      }
+      ;
 
-          virtual
-          ~FaceDataContainerInternal()
-          {
-          }
-          ;
+      /**
+       * Looks up the given name in parameter_data_ and returns the
+       * corresponding value through 'value'.
+       */
+      void
+      GetParamValues(std::string name, dealii::Vector<double> &value) const;
 
-          /**
-           * Looks up the given name in parameter_data_ and returns the
-           * corresponding value through 'value'.
-           */
-          void
-          GetParamValues(std::string name, dealii::Vector<double>& value) const;
-
-          /**
-           * Returns the domain values.
-           */
-          const std::map<std::string, const VECTOR*> &
-          GetDomainValues() const
-          {
-            return domain_values_;
-          }
+      /**
+       * Returns the domain values.
+       */
+      const std::map<std::string, const VECTOR *> &
+      GetDomainValues() const
+      {
+        return domain_values_;
+      }
 
 
-          virtual const dealii::FEFaceValuesBase<dim>&
-          GetFEFaceValuesState() const =0;
-          virtual const dealii::FEFaceValuesBase<dim>&
-          GetFEFaceValuesControl() const = 0;
+      virtual const dealii::FEFaceValuesBase<dim> &
+      GetFEFaceValuesState() const =0;
+      virtual const dealii::FEFaceValuesBase<dim> &
+      GetFEFaceValuesControl() const = 0;
 
-          virtual const dealii::FEFaceValuesBase<dim>&
-          GetNbrFEFaceValuesState() const = 0;
-          virtual const dealii::FEFaceValuesBase<dim>&
-          GetNbrFEFaceValuesControl() const = 0;
+      virtual const dealii::FEFaceValuesBase<dim> &
+      GetNbrFEFaceValuesState() const = 0;
+      virtual const dealii::FEFaceValuesBase<dim> &
+      GetNbrFEFaceValuesControl() const = 0;
 
-          /*********************************************************************/
-          /**
-           * Return a triangulation iterator to the current element for the state.
-           */
-          const typename Triangulation<dim>::cell_iterator
-          GetElementState() const;
+      /*********************************************************************/
+      /**
+       * Return a triangulation iterator to the current element for the state.
+       */
+      const typename Triangulation<dim>::cell_iterator
+      GetElementState() const;
 
-          /********************************************************************/
-          /**
-           * Functions to extract values and gradients out of the FEValues
-           */
+      /********************************************************************/
+      /**
+       * Functions to extract values and gradients out of the FEValues
+       */
 
-          /**
-           * Writes the values of the state variable at the quadrature points into values.
-           */
-          void
-          GetFaceValuesState(std::string name,
-              std::vector<double>& values) const;
+      /**
+       * Writes the values of the state variable at the quadrature points into values.
+       */
+      void
+      GetFaceValuesState(std::string name,
+                         std::vector<double> &values) const;
 
-          /*********************************************/
-          /*
-           * Same as above for the Vector valued case.
-           */
-          void
-          GetFaceValuesState(std::string name,
-              std::vector<dealii::Vector<double> >& values) const;
+      /*********************************************/
+      /*
+       * Same as above for the Vector valued case.
+       */
+      void
+      GetFaceValuesState(std::string name,
+                         std::vector<dealii::Vector<double> > &values) const;
 
-          /*********************************************/
-          /*
-           * Writes the values of the control variable at the quadrature points into values
-           */
-          void
-          GetFaceValuesControl(std::string name,
-              std::vector<double>& values) const;
+      /*********************************************/
+      /*
+       * Writes the values of the control variable at the quadrature points into values
+       */
+      void
+      GetFaceValuesControl(std::string name,
+                           std::vector<double> &values) const;
 
-          /*********************************************/
-          /*
-           * Same as above for the Vector valued case.
-           */
-          void
-          GetFaceValuesControl(std::string name,
-              std::vector<dealii::Vector<double> >& values) const;
-          /*********************************************/
-          /*
-           * Writes the values of the state gradient at the quadrature points into values.
-           */
+      /*********************************************/
+      /*
+       * Same as above for the Vector valued case.
+       */
+      void
+      GetFaceValuesControl(std::string name,
+                           std::vector<dealii::Vector<double> > &values) const;
+      /*********************************************/
+      /*
+       * Writes the values of the state gradient at the quadrature points into values.
+       */
 
-          template<int targetdim>
-            void
-            GetFaceGradsState(std::string name,
-                std::vector<dealii::Tensor<1, targetdim> >& values) const;
+      template<int targetdim>
+      void
+      GetFaceGradsState(std::string name,
+                        std::vector<dealii::Tensor<1, targetdim> > &values) const;
 
-          /*********************************************/
-          /*
-           * Same as above for the Vector valued case.
-           */
-          template<int targetdim>
-            void
-            GetFaceGradsState(std::string name,
-                std::vector<std::vector<dealii::Tensor<1, targetdim> > >& values) const;
+      /*********************************************/
+      /*
+       * Same as above for the Vector valued case.
+       */
+      template<int targetdim>
+      void
+      GetFaceGradsState(std::string name,
+                        std::vector<std::vector<dealii::Tensor<1, targetdim> > > &values) const;
 
-          /*********************************************/
-          /*
-           * Writes the values of the control gradient at the quadrature points into values.
-           */
-          template<int targetdim>
-            void
-            GetFaceGradsControl(std::string name,
-                std::vector<dealii::Tensor<1, targetdim> >& values) const;
+      /*********************************************/
+      /*
+       * Writes the values of the control gradient at the quadrature points into values.
+       */
+      template<int targetdim>
+      void
+      GetFaceGradsControl(std::string name,
+                          std::vector<dealii::Tensor<1, targetdim> > &values) const;
 
-          /*********************************************/
-          /*
-           * Same as above for the Vector valued case.
-           */
-          template<int targetdim>
-            void
-            GetFaceGradsControl(std::string name,
-                std::vector<std::vector<dealii::Tensor<1, targetdim> > >& values) const;
+      /*********************************************/
+      /*
+       * Same as above for the Vector valued case.
+       */
+      template<int targetdim>
+      void
+      GetFaceGradsControl(std::string name,
+                          std::vector<std::vector<dealii::Tensor<1, targetdim> > > &values) const;
 
-          /*
-           * Writes the values of the state variable at the quadrature points into values.
-           */
-          inline void
-          GetNbrFaceValuesState(std::string name,
-              std::vector<double>& values) const;
-          /*********************************************/
-          /*
-           * Same as above for the Vector valued case.
-           */
-          inline void
-          GetNbrFaceValuesState(std::string name,
-              std::vector<Vector<double> >& values) const;
+      /*
+       * Writes the values of the state variable at the quadrature points into values.
+       */
+      inline void
+      GetNbrFaceValuesState(std::string name,
+                            std::vector<double> &values) const;
+      /*********************************************/
+      /*
+       * Same as above for the Vector valued case.
+       */
+      inline void
+      GetNbrFaceValuesState(std::string name,
+                            std::vector<Vector<double> > &values) const;
 
-          /*********************************************/
+      /*********************************************/
 
-          /*
-           * Writes the values of the control variable at the quadrature points into values
-           */
-          inline void
-          GetNbrFaceValuesControl(std::string name,
-              std::vector<double>& values) const;
-          /*********************************************/
+      /*
+       * Writes the values of the control variable at the quadrature points into values
+       */
+      inline void
+      GetNbrFaceValuesControl(std::string name,
+                              std::vector<double> &values) const;
+      /*********************************************/
 
-          /*
-           * Same as above for the Vector valued case.
-           */
-          inline void
-          GetNbrFaceValuesControl(std::string name,
-              std::vector<Vector<double> >& values) const;
-          /*********************************************/
+      /*
+       * Same as above for the Vector valued case.
+       */
+      inline void
+      GetNbrFaceValuesControl(std::string name,
+                              std::vector<Vector<double> > &values) const;
+      /*********************************************/
 
-          /*
-           * Writes the values of the state gradient at the quadrature points into values.
-           */
+      /*
+       * Writes the values of the state gradient at the quadrature points into values.
+       */
 
-          template<int targetdim>
-            inline void
-            GetNbrFaceGradsState(std::string name,
-                std::vector<dealii::Tensor<1, targetdim> >& values) const;
+      template<int targetdim>
+      inline void
+      GetNbrFaceGradsState(std::string name,
+                           std::vector<dealii::Tensor<1, targetdim> > &values) const;
 
-          /*********************************************/
+      /*********************************************/
 
-          /*
-           * Same as avoe for the Vector valued case.
-           */
-          template<int targetdim>
-            inline void
-            GetNbrFaceGradsState(std::string name,
-                std::vector<std::vector<dealii::Tensor<1, targetdim> > >& values) const;
+      /*
+       * Same as avoe for the Vector valued case.
+       */
+      template<int targetdim>
+      inline void
+      GetNbrFaceGradsState(std::string name,
+                           std::vector<std::vector<dealii::Tensor<1, targetdim> > > &values) const;
 
-          /*********************************************/
+      /*********************************************/
 
-          /*
-           * Writes the values of the control gradient at the quadrature points into values.
-           */
+      /*
+       * Writes the values of the control gradient at the quadrature points into values.
+       */
 
-          template<int targetdim>
-            inline void
-            GetNbrFaceGradsControl(std::string name,
-                std::vector<dealii::Tensor<1, targetdim> >& values) const;
+      template<int targetdim>
+      inline void
+      GetNbrFaceGradsControl(std::string name,
+                             std::vector<dealii::Tensor<1, targetdim> > &values) const;
 
-          /*********************************************/
-          /*
-           * Same as above for the Vector valued case.
-           */
-          template<int targetdim>
-            inline void
-            GetNbrFaceGradsControl(std::string name,
-                std::vector<std::vector<dealii::Tensor<1, targetdim> > >& values) const;
+      /*********************************************/
+      /*
+       * Same as above for the Vector valued case.
+       */
+      template<int targetdim>
+      inline void
+      GetNbrFaceGradsControl(std::string name,
+                             std::vector<std::vector<dealii::Tensor<1, targetdim> > > &values) const;
 
-        protected:
-          void
-          SetFace(unsigned int face)
-          {
-            face_ = face;
-          }
-          unsigned int
-          GetFace() const
-          {
-            return face_;
-          }
-          void
-          SetSubFace(unsigned int subface)
-          {
-            subface_ = subface;
-          }
-          unsigned int
-          GetSubFace() const
-          {
-            return subface_;
-          }
-          bool
-          NeedNeighbour() const
-          {
-            return need_neighbour_;
-          }
+    protected:
+      void
+      SetFace(unsigned int face)
+      {
+        face_ = face;
+      }
+      unsigned int
+      GetFace() const
+      {
+        return face_;
+      }
+      void
+      SetSubFace(unsigned int subface)
+      {
+        subface_ = subface;
+      }
+      unsigned int
+      GetSubFace() const
+      {
+        return subface_;
+      }
+      bool
+      NeedNeighbour() const
+      {
+        return need_neighbour_;
+      }
 
-        private:
-          /***********************************************************/
-          /**
-           * Helper Function. Vector valued case.
-           */
-          void
-          GetValues(const dealii::FEFaceValuesBase<dim>& fe_values,
-              std::string name, std::vector<double>& values) const;
-          /***********************************************************/
-          /**
-           * Helper Function. Vector valued case.
-           */
-          void
-          GetValues(const dealii::FEFaceValuesBase<dim>& fe_values,
-              std::string name,
-              std::vector<dealii::Vector<double> >& values) const;
-          /***********************************************************/
-          /**
-           * Helper Function.
-           */
-          template<int targetdim>
-            void
-            GetGrads(const dealii::FEFaceValuesBase<dim>& fe_values,
+    private:
+      /***********************************************************/
+      /**
+       * Helper Function. Vector valued case.
+       */
+      void
+      GetValues(const dealii::FEFaceValuesBase<dim> &fe_values,
+                std::string name, std::vector<double> &values) const;
+      /***********************************************************/
+      /**
+       * Helper Function. Vector valued case.
+       */
+      void
+      GetValues(const dealii::FEFaceValuesBase<dim> &fe_values,
                 std::string name,
-                std::vector<dealii::Tensor<1, targetdim> >& values) const;
-          /***********************************************************/
-          /**
-           * Helper Function. Vector valued case.
-           */
-          template<int targetdim>
-            void
-            GetGrads(const dealii::FEFaceValuesBase<dim>& fe_values,
-                std::string name,
-                std::vector<std::vector<dealii::Tensor<1, targetdim> > >& values) const;
+                std::vector<dealii::Vector<double> > &values) const;
+      /***********************************************************/
+      /**
+       * Helper Function.
+       */
+      template<int targetdim>
+      void
+      GetGrads(const dealii::FEFaceValuesBase<dim> &fe_values,
+               std::string name,
+               std::vector<dealii::Tensor<1, targetdim> > &values) const;
+      /***********************************************************/
+      /**
+       * Helper Function. Vector valued case.
+       */
+      template<int targetdim>
+      void
+      GetGrads(const dealii::FEFaceValuesBase<dim> &fe_values,
+               std::string name,
+               std::vector<std::vector<dealii::Tensor<1, targetdim> > > &values) const;
 
-          const std::map<std::string, const dealii::Vector<double>*> & param_values_;
-          const std::map<std::string, const VECTOR*> & domain_values_;
+      const std::map<std::string, const dealii::Vector<double>*> &param_values_;
+      const std::map<std::string, const VECTOR *> &domain_values_;
 
-          unsigned int face_;
-          unsigned int subface_;
-          bool need_neighbour_;
-      };
+      unsigned int face_;
+      unsigned int subface_;
+      bool need_neighbour_;
+    };
 
     /**********************************************************************/
     template<typename VECTOR, int dim>
-      FaceDataContainerInternal<VECTOR, dim>::FaceDataContainerInternal(
-          const std::map<std::string, const dealii::Vector<double>*> &param_values,
-          const std::map<std::string, const VECTOR*> &domain_values,
-          bool need_neighbour)
-          : param_values_(param_values), domain_values_(domain_values), need_neighbour_(
-              need_neighbour)
-      {
-      }
+    FaceDataContainerInternal<VECTOR, dim>::FaceDataContainerInternal(
+      const std::map<std::string, const dealii::Vector<double>*> &param_values,
+      const std::map<std::string, const VECTOR *> &domain_values,
+      bool need_neighbour)
+      : param_values_(param_values), domain_values_(domain_values), need_neighbour_(
+        need_neighbour)
+    {
+    }
 
     template<typename VECTOR, int dim>
-      void
-      FaceDataContainerInternal<VECTOR, dim>::GetParamValues(std::string name,
-          dealii::Vector<double>& value) const
-      {
-        typename std::map<std::string, const dealii::Vector<double>*>::const_iterator it =
-            param_values_.find(name);
-        if (it == param_values_.end())
+    void
+    FaceDataContainerInternal<VECTOR, dim>::GetParamValues(std::string name,
+                                                           dealii::Vector<double> &value) const
+    {
+      typename std::map<std::string, const dealii::Vector<double>*>::const_iterator it =
+        param_values_.find(name);
+      if (it == param_values_.end())
         {
           throw DOpEException("Did not find " + name,
-              "FaceDataContainerInternal::GetParamValues");
+                              "FaceDataContainerInternal::GetParamValues");
         }
-        value = *(it->second);
-      }
+      value = *(it->second);
+    }
 
     /*********************************************/
     template<typename VECTOR, int dim>
     const typename Triangulation<dim>::cell_iterator
-      FaceDataContainerInternal<VECTOR, dim>::GetElementState() const
-      {
-         return this->GetFEFaceValuesState().get_element();
-      }
+    FaceDataContainerInternal<VECTOR, dim>::GetElementState() const
+    {
+      return this->GetFEFaceValuesState().get_element();
+    }
 
     /*********************************************/
     template<typename VECTOR, int dim>
-      void
-      FaceDataContainerInternal<VECTOR, dim>::GetFaceValuesState(
-          std::string name, std::vector<double>& values) const
-      {
-        this->GetValues(this->GetFEFaceValuesState(), name, values);
-      }
+    void
+    FaceDataContainerInternal<VECTOR, dim>::GetFaceValuesState(
+      std::string name, std::vector<double> &values) const
+    {
+      this->GetValues(this->GetFEFaceValuesState(), name, values);
+    }
     /*********************************************/
     template<typename VECTOR, int dim>
-      void
-      FaceDataContainerInternal<VECTOR, dim>::GetFaceValuesState(
-          std::string name, std::vector<dealii::Vector<double> >& values) const
-      {
-        this->GetValues(this->GetFEFaceValuesState(), name, values);
+    void
+    FaceDataContainerInternal<VECTOR, dim>::GetFaceValuesState(
+      std::string name, std::vector<dealii::Vector<double> > &values) const
+    {
+      this->GetValues(this->GetFEFaceValuesState(), name, values);
 
-      }
-
-    /*********************************************/
-    template<typename VECTOR, int dim>
-      void
-      FaceDataContainerInternal<VECTOR, dim>::GetFaceValuesControl(
-          std::string name, std::vector<double>& values) const
-      {
-        this->GetValues(this->GetFEFaceValuesControl(), name, values);
-      }
+    }
 
     /*********************************************/
     template<typename VECTOR, int dim>
-      void
-      FaceDataContainerInternal<VECTOR, dim>::GetFaceValuesControl(
-          std::string name, std::vector<dealii::Vector<double> >& values) const
-      {
-        this->GetValues(this->GetFEFaceValuesControl(), name, values);
-      }
+    void
+    FaceDataContainerInternal<VECTOR, dim>::GetFaceValuesControl(
+      std::string name, std::vector<double> &values) const
+    {
+      this->GetValues(this->GetFEFaceValuesControl(), name, values);
+    }
 
     /*********************************************/
     template<typename VECTOR, int dim>
-      template<int targetdim>
-        void
-        FaceDataContainerInternal<VECTOR, dim>::GetFaceGradsState(
-            std::string name,
-            std::vector<dealii::Tensor<1, targetdim> >& values) const
-        {
-          this->GetGrads<targetdim>(this->GetFEFaceValuesState(), name, values);
-        }
+    void
+    FaceDataContainerInternal<VECTOR, dim>::GetFaceValuesControl(
+      std::string name, std::vector<dealii::Vector<double> > &values) const
+    {
+      this->GetValues(this->GetFEFaceValuesControl(), name, values);
+    }
 
     /*********************************************/
     template<typename VECTOR, int dim>
-      template<int targetdim>
-        void
-        FaceDataContainerInternal<VECTOR, dim>::GetFaceGradsState(
-            std::string name,
-            std::vector<std::vector<dealii::Tensor<1, targetdim> > >& values) const
-        {
-          this->GetGrads<targetdim>(this->GetFEFaceValuesState(), name, values);
-        }
+    template<int targetdim>
+    void
+    FaceDataContainerInternal<VECTOR, dim>::GetFaceGradsState(
+      std::string name,
+      std::vector<dealii::Tensor<1, targetdim> > &values) const
+    {
+      this->GetGrads<targetdim>(this->GetFEFaceValuesState(), name, values);
+    }
+
+    /*********************************************/
+    template<typename VECTOR, int dim>
+    template<int targetdim>
+    void
+    FaceDataContainerInternal<VECTOR, dim>::GetFaceGradsState(
+      std::string name,
+      std::vector<std::vector<dealii::Tensor<1, targetdim> > > &values) const
+    {
+      this->GetGrads<targetdim>(this->GetFEFaceValuesState(), name, values);
+    }
 
     /***********************************************************************/
 
     template<typename VECTOR, int dim>
-      template<int targetdim>
-        void
-        FaceDataContainerInternal<VECTOR, dim>::GetFaceGradsControl(
-            std::string name,
-            std::vector<dealii::Tensor<1, targetdim> >& values) const
-        {
-          this->GetGrads<targetdim>(this->GetFEFaceValuesControl(), name,
-              values);
-        }
+    template<int targetdim>
+    void
+    FaceDataContainerInternal<VECTOR, dim>::GetFaceGradsControl(
+      std::string name,
+      std::vector<dealii::Tensor<1, targetdim> > &values) const
+    {
+      this->GetGrads<targetdim>(this->GetFEFaceValuesControl(), name,
+                                values);
+    }
     /***********************************************************************/
 
     template<typename VECTOR, int dim>
-      template<int targetdim>
-        void
-        FaceDataContainerInternal<VECTOR, dim>::GetFaceGradsControl(
-            std::string name,
-            std::vector<std::vector<dealii::Tensor<1, targetdim> > >& values) const
-        {
-          this->GetGrads<targetdim>(this->GetFEFaceValuesControl(), name,
-              values);
-        }
+    template<int targetdim>
+    void
+    FaceDataContainerInternal<VECTOR, dim>::GetFaceGradsControl(
+      std::string name,
+      std::vector<std::vector<dealii::Tensor<1, targetdim> > > &values) const
+    {
+      this->GetGrads<targetdim>(this->GetFEFaceValuesControl(), name,
+                                values);
+    }
 
     /*********************************************/
     template<typename VECTOR, int dim>
-      void
-      FaceDataContainerInternal<VECTOR, dim>::GetNbrFaceValuesState(
-          std::string name, std::vector<double>& values) const
-      {
-        this->GetValues(this->GetNbrFEFaceValuesState(), name, values);
-      }
+    void
+    FaceDataContainerInternal<VECTOR, dim>::GetNbrFaceValuesState(
+      std::string name, std::vector<double> &values) const
+    {
+      this->GetValues(this->GetNbrFEFaceValuesState(), name, values);
+    }
     /*********************************************/
     template<typename VECTOR, int dim>
-      void
-      FaceDataContainerInternal<VECTOR, dim>::GetNbrFaceValuesState(
-          std::string name, std::vector<Vector<double> >& values) const
-      {
-        this->GetValues(this->GetNbrFEFaceValuesState(), name, values);
+    void
+    FaceDataContainerInternal<VECTOR, dim>::GetNbrFaceValuesState(
+      std::string name, std::vector<Vector<double> > &values) const
+    {
+      this->GetValues(this->GetNbrFEFaceValuesState(), name, values);
 
-      }
-
-    /*********************************************/
-    template<typename VECTOR, int dim>
-      void
-      FaceDataContainerInternal<VECTOR, dim>::GetNbrFaceValuesControl(
-          std::string name, std::vector<double>& values) const
-      {
-        this->GetValues(this->GetNbrFEFaceValuesControl(), name, values);
-      }
+    }
 
     /*********************************************/
     template<typename VECTOR, int dim>
-      void
-      FaceDataContainerInternal<VECTOR, dim>::GetNbrFaceValuesControl(
-          std::string name, std::vector<Vector<double> >& values) const
-      {
-        this->GetValues(this->GetNbrFEFaceValuesControl(), name, values);
-      }
+    void
+    FaceDataContainerInternal<VECTOR, dim>::GetNbrFaceValuesControl(
+      std::string name, std::vector<double> &values) const
+    {
+      this->GetValues(this->GetNbrFEFaceValuesControl(), name, values);
+    }
 
     /*********************************************/
     template<typename VECTOR, int dim>
-      template<int targetdim>
-        void
-        FaceDataContainerInternal<VECTOR, dim>::GetNbrFaceGradsState(
-            std::string name, std::vector<Tensor<1, targetdim> >& values) const
-        {
-          this->GetGrads<targetdim>(this->GetNbrFEFaceValuesState(), name,
-              values);
-        }
+    void
+    FaceDataContainerInternal<VECTOR, dim>::GetNbrFaceValuesControl(
+      std::string name, std::vector<Vector<double> > &values) const
+    {
+      this->GetValues(this->GetNbrFEFaceValuesControl(), name, values);
+    }
 
     /*********************************************/
     template<typename VECTOR, int dim>
-      template<int targetdim>
-        void
-        FaceDataContainerInternal<VECTOR, dim>::GetNbrFaceGradsState(
-            std::string name,
-            std::vector<std::vector<Tensor<1, targetdim> > >& values) const
-        {
-          this->GetGrads<targetdim>(this->GetNbrFEFaceValuesState(), name,
-              values);
-        }
+    template<int targetdim>
+    void
+    FaceDataContainerInternal<VECTOR, dim>::GetNbrFaceGradsState(
+      std::string name, std::vector<Tensor<1, targetdim> > &values) const
+    {
+      this->GetGrads<targetdim>(this->GetNbrFEFaceValuesState(), name,
+                                values);
+    }
+
+    /*********************************************/
+    template<typename VECTOR, int dim>
+    template<int targetdim>
+    void
+    FaceDataContainerInternal<VECTOR, dim>::GetNbrFaceGradsState(
+      std::string name,
+      std::vector<std::vector<Tensor<1, targetdim> > > &values) const
+    {
+      this->GetGrads<targetdim>(this->GetNbrFEFaceValuesState(), name,
+                                values);
+    }
 
     /***********************************************************************/
 
     template<typename VECTOR, int dim>
-      template<int targetdim>
-        void
-        FaceDataContainerInternal<VECTOR, dim>::GetNbrFaceGradsControl(
-            std::string name, std::vector<Tensor<1, targetdim> >& values) const
-        {
-          this->GetGrads<targetdim>(this->GetNbrFEFaceValuesControl(), name,
-              values);
-        }
+    template<int targetdim>
+    void
+    FaceDataContainerInternal<VECTOR, dim>::GetNbrFaceGradsControl(
+      std::string name, std::vector<Tensor<1, targetdim> > &values) const
+    {
+      this->GetGrads<targetdim>(this->GetNbrFEFaceValuesControl(), name,
+                                values);
+    }
     /***********************************************************************/
 
     template<typename VECTOR, int dim>
-      template<int targetdim>
-        void
-        FaceDataContainerInternal<VECTOR, dim>::GetNbrFaceGradsControl(
-            std::string name,
-            std::vector<std::vector<Tensor<1, targetdim> > >& values) const
-        {
-          this->GetGrads<targetdim>(this->GetNbrFEFaceValuesControl(), name,
-              values);
-        }
+    template<int targetdim>
+    void
+    FaceDataContainerInternal<VECTOR, dim>::GetNbrFaceGradsControl(
+      std::string name,
+      std::vector<std::vector<Tensor<1, targetdim> > > &values) const
+    {
+      this->GetGrads<targetdim>(this->GetNbrFEFaceValuesControl(), name,
+                                values);
+    }
 
     /***********************************************************************/
 
     /***********************************************************************/
     template<typename VECTOR, int dim>
-      void
-      FaceDataContainerInternal<VECTOR, dim>::GetValues(
-          const dealii::FEFaceValuesBase<dim>& fe_values, std::string name,
-          std::vector<double>& values) const
-      {
-        typename std::map<std::string, const VECTOR*>::const_iterator it =
-            this->GetDomainValues().find(name);
-        if (it == this->GetDomainValues().end())
+    void
+    FaceDataContainerInternal<VECTOR, dim>::GetValues(
+      const dealii::FEFaceValuesBase<dim> &fe_values, std::string name,
+      std::vector<double> &values) const
+    {
+      typename std::map<std::string, const VECTOR *>::const_iterator it =
+        this->GetDomainValues().find(name);
+      if (it == this->GetDomainValues().end())
         {
           throw DOpEException("Did not find " + name,
-              "ElementDataContainer::GetValues");
+                              "ElementDataContainer::GetValues");
         }
-        fe_values.get_function_values(*(it->second), values);
-      }
+      fe_values.get_function_values(*(it->second), values);
+    }
 
     /***********************************************************************/
     template<typename VECTOR, int dim>
-      void
-      FaceDataContainerInternal<VECTOR, dim>::GetValues(
-          const dealii::FEFaceValuesBase<dim>& fe_values, std::string name,
-          std::vector<dealii::Vector<double> >& values) const
-      {
-        typename std::map<std::string, const VECTOR*>::const_iterator it =
-            this->GetDomainValues().find(name);
-        if (it == this->GetDomainValues().end())
+    void
+    FaceDataContainerInternal<VECTOR, dim>::GetValues(
+      const dealii::FEFaceValuesBase<dim> &fe_values, std::string name,
+      std::vector<dealii::Vector<double> > &values) const
+    {
+      typename std::map<std::string, const VECTOR *>::const_iterator it =
+        this->GetDomainValues().find(name);
+      if (it == this->GetDomainValues().end())
         {
           throw DOpEException("Did not find " + name,
-              "ElementDataContainer::GetValues");
+                              "ElementDataContainer::GetValues");
         }
-        fe_values.get_function_values(*(it->second), values);
-      }
+      fe_values.get_function_values(*(it->second), values);
+    }
 
     /***********************************************************************/
 
     template<typename VECTOR, int dim>
-      template<int targetdim>
-        void
-        FaceDataContainerInternal<VECTOR, dim>::GetGrads(
-            const dealii::FEFaceValuesBase<dim>& fe_values, std::string name,
-            std::vector<dealii::Tensor<1, targetdim> >& values) const
+    template<int targetdim>
+    void
+    FaceDataContainerInternal<VECTOR, dim>::GetGrads(
+      const dealii::FEFaceValuesBase<dim> &fe_values, std::string name,
+      std::vector<dealii::Tensor<1, targetdim> > &values) const
+    {
+      typename std::map<std::string, const VECTOR *>::const_iterator it =
+        this->GetDomainValues().find(name);
+      if (it == this->GetDomainValues().end())
         {
-          typename std::map<std::string, const VECTOR*>::const_iterator it =
-              this->GetDomainValues().find(name);
-          if (it == this->GetDomainValues().end())
-          {
-            throw DOpEException("Did not find " + name,
-                "FaceDataContainerInternal::GetGrads");
-          }
-          fe_values.get_function_gradients(*(it->second), values);
+          throw DOpEException("Did not find " + name,
+                              "FaceDataContainerInternal::GetGrads");
         }
+      fe_values.get_function_gradients(*(it->second), values);
+    }
 
     /***********************************************************************/
 
     template<typename VECTOR, int dim>
-      template<int targetdim>
-        void
-        FaceDataContainerInternal<VECTOR, dim>::GetGrads(
-            const dealii::FEFaceValuesBase<dim>& fe_values, std::string name,
-            std::vector<std::vector<dealii::Tensor<1, targetdim> > >& values) const
+    template<int targetdim>
+    void
+    FaceDataContainerInternal<VECTOR, dim>::GetGrads(
+      const dealii::FEFaceValuesBase<dim> &fe_values, std::string name,
+      std::vector<std::vector<dealii::Tensor<1, targetdim> > > &values) const
+    {
+      typename std::map<std::string, const VECTOR *>::const_iterator it =
+        this->GetDomainValues().find(name);
+      if (it == this->GetDomainValues().end())
         {
-          typename std::map<std::string, const VECTOR*>::const_iterator it =
-              this->GetDomainValues().find(name);
-          if (it == this->GetDomainValues().end())
-          {
-            throw DOpEException("Did not find " + name,
-                "FaceDataContainerInternal::GetGrads");
-          }
-          fe_values.get_function_gradients(*(it->second), values);
+          throw DOpEException("Did not find " + name,
+                              "FaceDataContainerInternal::GetGrads");
         }
+      fe_values.get_function_gradients(*(it->second), values);
+    }
 
-  /***********************************************************************/
+    /***********************************************************************/
   }
 }
 

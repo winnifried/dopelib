@@ -33,200 +33,200 @@ using namespace DOpE;
 /****************************************************************************************/
 
 template<
-    template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
-    template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
-    template<int, int> class DH, typename VECTOR, int dopedim, int dealdim =
-        dopedim>
-  class LocalPointFunctionalPressure : public FunctionalInterface<EDC, FDC, DH,
-      VECTOR, dopedim, dealdim>
+template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
+         template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
+         template<int, int> class DH, typename VECTOR, int dopedim, int dealdim =
+         dopedim>
+class LocalPointFunctionalPressure : public FunctionalInterface<EDC, FDC, DH,
+  VECTOR, dopedim, dealdim>
+{
+public:
+
+  double
+  PointValue(
+    const DOpEWrapper::DoFHandler<dopedim, DH> & /*control_dof_handler*/,
+    const DOpEWrapper::DoFHandler<dealdim, DH> &state_dof_handler,
+    const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
+    const std::map<std::string, const VECTOR *> &domain_values)
   {
-    public:
+    Point<2> p1(0.15, 0.2);
+    Point<2> p2(0.25, 0.2);
 
-      double
-      PointValue(
-          const DOpEWrapper::DoFHandler<dopedim, DH> & /*control_dof_handler*/,
-          const DOpEWrapper::DoFHandler<dealdim, DH> & state_dof_handler,
-          const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
-          const std::map<std::string, const VECTOR*> &domain_values)
-      {
-        Point<2> p1(0.15, 0.2);
-        Point<2> p2(0.25, 0.2);
+    typename map<string, const VECTOR *>::const_iterator it =
+      domain_values.find("state");
+    Vector<double> tmp_vector(3);
 
-        typename map<string, const VECTOR*>::const_iterator it =
-            domain_values.find("state");
-        Vector<double> tmp_vector(3);
+    VectorTools::point_value(state_dof_handler, *(it->second), p1,
+                             tmp_vector);
+    double p1_value = tmp_vector(2);
+    tmp_vector = 0;
+    VectorTools::point_value(state_dof_handler, *(it->second), p2,
+                             tmp_vector);
+    double p2_value = tmp_vector(2);
 
-        VectorTools::point_value(state_dof_handler, *(it->second), p1,
-            tmp_vector);
-        double p1_value = tmp_vector(2);
-        tmp_vector = 0;
-        VectorTools::point_value(state_dof_handler, *(it->second), p2,
-            tmp_vector);
-        double p2_value = tmp_vector(2);
+    // pressure difference
+    return (p1_value - p2_value);
 
-        // pressure difference
-        return (p1_value - p2_value);
+  }
 
-      }
+  string
+  GetType() const
+  {
+    return "point";
+  }
+  string
+  GetName() const
+  {
+    return "Pressure difference";
+  }
 
-      string
-      GetType() const
-      {
-        return "point";
-      }
-      string
-      GetName() const
-      {
-        return "Pressure difference";
-      }
-
-  };
+};
 
 /****************************************************************************************/
 template<
-    template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
-    template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
-    template<int, int> class DH, typename VECTOR, int dopedim, int dealdim =
-        dopedim>
-  class LocalPointFunctionalDeflectionX : public FunctionalInterface<EDC, FDC,
-      DH, VECTOR, dopedim, dealdim>
+template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
+         template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
+         template<int, int> class DH, typename VECTOR, int dopedim, int dealdim =
+         dopedim>
+class LocalPointFunctionalDeflectionX : public FunctionalInterface<EDC, FDC,
+  DH, VECTOR, dopedim, dealdim>
+{
+public:
+
+  double
+  PointValue(
+    const DOpEWrapper::DoFHandler<dopedim, DH> & /*control_dof_handler*/,
+    const DOpEWrapper::DoFHandler<dealdim, DH> &state_dof_handler,
+    const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
+    const std::map<std::string, const VECTOR *> &domain_values)
   {
-    public:
+    Point<2> p1(0.6, 0.2);
 
-      double
-      PointValue(
-          const DOpEWrapper::DoFHandler<dopedim, DH> & /*control_dof_handler*/,
-          const DOpEWrapper::DoFHandler<dealdim, DH> &state_dof_handler,
-          const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
-          const std::map<std::string, const VECTOR*> &domain_values)
-      {
-        Point<2> p1(0.6, 0.2);
+    typename map<string, const VECTOR *>::const_iterator it =
+      domain_values.find("state");
+    Vector<double> tmp_vector(3);
 
-        typename map<string, const VECTOR*>::const_iterator it =
-            domain_values.find("state");
-        Vector<double> tmp_vector(3);
+    VectorTools::point_value(state_dof_handler, *(it->second), p1,
+                             tmp_vector);
+    double x = tmp_vector(3);
 
-        VectorTools::point_value(state_dof_handler, *(it->second), p1,
-            tmp_vector);
-        double x = tmp_vector(3);
+    // Deflection X
+    return x;
 
-        // Deflection X
-        return x;
+  }
 
-      }
+  string
+  GetType() const
+  {
+    return "point";
+  }
+  string
+  GetName() const
+  {
+    return "Deflection_X";
+  }
 
-      string
-      GetType() const
-      {
-        return "point";
-      }
-      string
-      GetName() const
-      {
-        return "Deflection_X";
-      }
-
-  };
+};
 
 /****************************************************************************************/
 template<
-    template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
-    template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
-    template<int, int> class DH, typename VECTOR, int dopedim, int dealdim =
-        dopedim>
-  class LocalPointFunctionalDeflectionY : public FunctionalInterface<EDC, FDC,
-      DH, VECTOR, dopedim, dealdim>
+template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
+         template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
+         template<int, int> class DH, typename VECTOR, int dopedim, int dealdim =
+         dopedim>
+class LocalPointFunctionalDeflectionY : public FunctionalInterface<EDC, FDC,
+  DH, VECTOR, dopedim, dealdim>
+{
+public:
+
+  double
+  PointValue(
+    const DOpEWrapper::DoFHandler<dopedim, DH> & /*control_dof_handler*/,
+    const DOpEWrapper::DoFHandler<dealdim, DH> &state_dof_handler,
+    const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
+    const std::map<std::string, const VECTOR *> &domain_values)
   {
-    public:
+    Point<2> p1(0.6, 0.2);
 
-      double
-      PointValue(
-          const DOpEWrapper::DoFHandler<dopedim, DH> & /*control_dof_handler*/,
-          const DOpEWrapper::DoFHandler<dealdim, DH> &state_dof_handler,
-          const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
-          const std::map<std::string, const VECTOR*> &domain_values)
-      {
-        Point<2> p1(0.6, 0.2);
+    typename map<string, const VECTOR *>::const_iterator it =
+      domain_values.find("state");
+    Vector<double> tmp_vector(3);
 
-        typename map<string, const VECTOR*>::const_iterator it =
-            domain_values.find("state");
-        Vector<double> tmp_vector(3);
+    VectorTools::point_value(state_dof_handler, *(it->second), p1,
+                             tmp_vector);
+    double y = tmp_vector(4);
 
-        VectorTools::point_value(state_dof_handler, *(it->second), p1,
-            tmp_vector);
-        double y = tmp_vector(4);
+    // Delfection Y
+    return y;
 
-        // Delfection Y
-        return y;
+  }
 
-      }
+  string
+  GetType() const
+  {
+    return "point";
+  }
+  string
+  GetName() const
+  {
+    return "Deflection_Y";
+  }
 
-      string
-      GetType() const
-      {
-        return "point";
-      }
-      string
-      GetName() const
-      {
-        return "Deflection_Y";
-      }
-
-  };
+};
 
 /****************************************************************************************/
 template<
-    template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
-    template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
-    template<int, int> class DH, typename VECTOR, int dopedim, int dealdim =
-        dopedim>
-  class LocalBoundaryFaceFunctionalDrag : public FunctionalInterface<EDC, FDC,
-      DH, VECTOR, dopedim, dealdim>
+template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
+         template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
+         template<int, int> class DH, typename VECTOR, int dopedim, int dealdim =
+         dopedim>
+class LocalBoundaryFaceFunctionalDrag : public FunctionalInterface<EDC, FDC,
+  DH, VECTOR, dopedim, dealdim>
+{
+public:
+  static void
+  declare_params(ParameterReader &param_reader)
   {
-    public:
-      static void
-      declare_params(ParameterReader &param_reader)
+    param_reader.SetSubsection("Local PDE parameters");
+    param_reader.declare_entry("density_fluid", "0.0", Patterns::Double(0));
+    param_reader.declare_entry("viscosity", "0.0", Patterns::Double(0));
+
+  }
+
+  LocalBoundaryFaceFunctionalDrag(ParameterReader &param_reader)
+  {
+    param_reader.SetSubsection("Local PDE parameters");
+    density_fluid_ = param_reader.get_double("density_fluid");
+    viscosity_ = param_reader.get_double("viscosity");
+  }
+
+  bool
+  HasFaces() const
+  {
+    return false;
+  }
+
+  double
+  BoundaryValue(const FaceDataContainer<DH, VECTOR, dealdim> &fdc)
+  {
+    const auto &state_fe_face_values = fdc.GetFEFaceValuesState();
+    unsigned int n_q_points = fdc.GetNQPoints();
+    unsigned int color = fdc.GetBoundaryIndicator();
+
+    Tensor<1, 2> drag_lift_value;
+    drag_lift_value.clear();
+    if (color == 80)
       {
-        param_reader.SetSubsection("Local PDE parameters");
-        param_reader.declare_entry("density_fluid", "0.0", Patterns::Double(0));
-        param_reader.declare_entry("viscosity", "0.0", Patterns::Double(0));
+        vector<Vector<double> > ufacevalues;
+        vector<vector<Tensor<1, dealdim> > > ufacegrads;
 
-      }
+        ufacevalues.resize(n_q_points, Vector<double>(3));
+        ufacegrads.resize(n_q_points, vector<Tensor<1, 2> >(3));
 
-      LocalBoundaryFaceFunctionalDrag(ParameterReader &param_reader)
-      {
-        param_reader.SetSubsection("Local PDE parameters");
-        density_fluid_ = param_reader.get_double("density_fluid");
-        viscosity_ = param_reader.get_double("viscosity");
-      }
+        fdc.GetFaceValuesState("state", ufacevalues);
+        fdc.GetFaceGradsState("state", ufacegrads);
 
-      bool
-      HasFaces() const
-      {
-        return false;
-      }
-
-      double
-      BoundaryValue(const FaceDataContainer<DH, VECTOR, dealdim>& fdc)
-      {
-        const auto & state_fe_face_values = fdc.GetFEFaceValuesState();
-        unsigned int n_q_points = fdc.GetNQPoints();
-        unsigned int color = fdc.GetBoundaryIndicator();
-
-        Tensor<1, 2> drag_lift_value;
-        drag_lift_value.clear();
-        if (color == 80)
-        {
-          vector<Vector<double> > ufacevalues;
-          vector<vector<Tensor<1, dealdim> > > ufacegrads;
-
-          ufacevalues.resize(n_q_points, Vector<double>(3));
-          ufacegrads.resize(n_q_points, vector<Tensor<1, 2> >(3));
-
-          fdc.GetFaceValuesState("state", ufacevalues);
-          fdc.GetFaceGradsState("state", ufacegrads);
-
-          for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
+        for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
           {
             Tensor<2, 2> pI;
             pI[0][0] = ufacevalues[q_point](2);
@@ -260,93 +260,93 @@ template<
 
             Tensor<2, 2> cauchy_stress_fluid;
             cauchy_stress_fluid = (-pI
-                + density_fluid_ * viscosity_ * (grad_v + transpose(grad_v)));
+                                   + density_fluid_ * viscosity_ * (grad_v + transpose(grad_v)));
 
             drag_lift_value -= cauchy_stress_fluid
-                * state_fe_face_values.normal_vector(q_point)
-                * state_fe_face_values.JxW(q_point);
+                               * state_fe_face_values.normal_vector(q_point)
+                               * state_fe_face_values.JxW(q_point);
           }
-        }
-        return 500 * drag_lift_value[0];
       }
+    return 500 * drag_lift_value[0];
+  }
 
-      UpdateFlags
-      GetFaceUpdateFlags() const
-      {
-        return update_values | update_quadrature_points | update_gradients
-            | update_normal_vectors;
-      }
+  UpdateFlags
+  GetFaceUpdateFlags() const
+  {
+    return update_values | update_quadrature_points | update_gradients
+           | update_normal_vectors;
+  }
 
-      string
-      GetType() const
-      {
-        return "boundary";
-      }
-      string
-      GetName() const
-      {
-        return "Drag";
-      }
+  string
+  GetType() const
+  {
+    return "boundary";
+  }
+  string
+  GetName() const
+  {
+    return "Drag";
+  }
 
-    private:
-      double density_fluid_, viscosity_;
+private:
+  double density_fluid_, viscosity_;
 
-  };
+};
 
 /****************************************************************************************/
 template<
-    template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
-    template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
-    template<int, int> class DH, typename VECTOR, int dopedim, int dealdim =
-        dopedim>
-  class LocalBoundaryFaceFunctionalLift : public FunctionalInterface<EDC, FDC,
-      DH, VECTOR, dopedim, dealdim>
+template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
+         template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
+         template<int, int> class DH, typename VECTOR, int dopedim, int dealdim =
+         dopedim>
+class LocalBoundaryFaceFunctionalLift : public FunctionalInterface<EDC, FDC,
+  DH, VECTOR, dopedim, dealdim>
+{
+public:
+  static void
+  declare_params(ParameterReader &param_reader)
   {
-    public:
-      static void
-      declare_params(ParameterReader &param_reader)
+    param_reader.SetSubsection("Local PDE parameters");
+    param_reader.declare_entry("density_fluid", "0.0", Patterns::Double(0));
+    param_reader.declare_entry("viscosity", "0.0", Patterns::Double(0));
+
+  }
+
+  LocalBoundaryFaceFunctionalLift(ParameterReader &param_reader)
+  {
+    param_reader.SetSubsection("Local PDE parameters");
+    density_fluid_ = param_reader.get_double("density_fluid");
+    viscosity_ = param_reader.get_double("viscosity");
+  }
+
+  bool
+  HasFaces() const
+  {
+    return false;
+  }
+
+  double
+  BoundaryValue(const FaceDataContainer<DH, VECTOR, dealdim> &fdc)
+  {
+    const auto &state_fe_face_values = fdc.GetFEFaceValuesState();
+
+    unsigned int n_q_points = fdc.GetNQPoints();
+    unsigned int color = fdc.GetBoundaryIndicator();
+
+    Tensor<1, 2> drag_lift_value;
+    drag_lift_value.clear();
+    if (color == 80)
       {
-        param_reader.SetSubsection("Local PDE parameters");
-        param_reader.declare_entry("density_fluid", "0.0", Patterns::Double(0));
-        param_reader.declare_entry("viscosity", "0.0", Patterns::Double(0));
+        vector<Vector<double> > ufacevalues;
+        vector<vector<Tensor<1, dealdim> > > ufacegrads;
 
-      }
+        ufacevalues.resize(n_q_points, Vector<double>(3));
+        ufacegrads.resize(n_q_points, vector<Tensor<1, 2> >(3));
 
-      LocalBoundaryFaceFunctionalLift(ParameterReader &param_reader)
-      {
-        param_reader.SetSubsection("Local PDE parameters");
-        density_fluid_ = param_reader.get_double("density_fluid");
-        viscosity_ = param_reader.get_double("viscosity");
-      }
+        fdc.GetFaceValuesState("state", ufacevalues);
+        fdc.GetFaceGradsState("state", ufacegrads);
 
-      bool
-      HasFaces() const
-      {
-        return false;
-      }
-
-      double
-      BoundaryValue(const FaceDataContainer<DH, VECTOR, dealdim>& fdc)
-      {
-        const auto & state_fe_face_values = fdc.GetFEFaceValuesState();
-
-        unsigned int n_q_points = fdc.GetNQPoints();
-        unsigned int color = fdc.GetBoundaryIndicator();
-
-        Tensor<1, 2> drag_lift_value;
-        drag_lift_value.clear();
-        if (color == 80)
-        {
-          vector<Vector<double> > ufacevalues;
-          vector<vector<Tensor<1, dealdim> > > ufacegrads;
-
-          ufacevalues.resize(n_q_points, Vector<double>(3));
-          ufacegrads.resize(n_q_points, vector<Tensor<1, 2> >(3));
-
-          fdc.GetFaceValuesState("state", ufacevalues);
-          fdc.GetFaceGradsState("state", ufacegrads);
-
-          for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
+        for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
           {
             Tensor<2, 2> pI;
             pI[0][0] = ufacevalues[q_point](2);
@@ -365,38 +365,38 @@ template<
 
             Tensor<2, 2> cauchy_stress_fluid;
             cauchy_stress_fluid = (-pI
-                + density_fluid_ * viscosity_ * (grad_v + transpose(grad_v)));
+                                   + density_fluid_ * viscosity_ * (grad_v + transpose(grad_v)));
 
             drag_lift_value -= cauchy_stress_fluid
-                * state_fe_face_values.normal_vector(q_point)
-                * state_fe_face_values.JxW(q_point);
+                               * state_fe_face_values.normal_vector(q_point)
+                               * state_fe_face_values.JxW(q_point);
           }
 
-        }
-        return 500 * drag_lift_value[1];
       }
+    return 500 * drag_lift_value[1];
+  }
 
-      UpdateFlags
-      GetFaceUpdateFlags() const
-      {
-        return update_values | update_quadrature_points | update_gradients
-            | update_normal_vectors;
-      }
+  UpdateFlags
+  GetFaceUpdateFlags() const
+  {
+    return update_values | update_quadrature_points | update_gradients
+           | update_normal_vectors;
+  }
 
-      string
-      GetType() const
-      {
-        return "boundary";
-      }
-      string
-      GetName() const
-      {
-        return "Lift";
-      }
+  string
+  GetType() const
+  {
+    return "boundary";
+  }
+  string
+  GetName() const
+  {
+    return "Lift";
+  }
 
-    private:
-      double density_fluid_, viscosity_;
+private:
+  double density_fluid_, viscosity_;
 
-  };
+};
 
 #endif

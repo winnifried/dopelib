@@ -6,10 +6,9 @@ This is DOpElib Version: 4.0.0 pre
 	Status as of: 16/02/2016
 
 	**************************************************
-	*             Starting Forward Solver            *
-	*   Solving : InstatOptProblemContainer	*
-	*  CDoFs : 	0
-	*  SDoFs : 	Number of Timepoints: 51
+	*             Starting Forward Solve             *
+	*   Solving : InstatPDEProblemContainer	*
+	*   SDoFs   : 	Number of Timepoints: 51
 		Total   DoFs: 867
 		Minimal DoFs: 17
 		Maximal DoFs: 17
@@ -273,15 +272,13 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
-	CostFunctional: 0
 	Computing Functionals:
 	Space-Time Pointevaluation: -6.52128e+41
 
 	**************************************************
-	*             Starting Forward Solver            *
-	*   Solving : InstatOptProblemContainer	*
-	*  CDoFs : 	0
-	*  SDoFs : 	Number of Timepoints: 51
+	*             Starting Forward Solve             *
+	*   Solving : InstatPDEProblemContainer	*
+	*   SDoFs   : 	Number of Timepoints: 51
 		Total   DoFs: 867
 		Minimal DoFs: 17
 		Maximal DoFs: 17
@@ -544,15 +541,13 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
-	CostFunctional: 0
 	Computing Functionals:
 	Space-Time Pointevaluation: 0.0044411
 
 	**************************************************
-	*             Starting Forward Solver            *
-	*   Solving : InstatOptProblemContainer	*
-	*  CDoFs : 	0
-	*  SDoFs : 	Number of Timepoints: 51
+	*             Starting Forward Solve             *
+	*   Solving : InstatPDEProblemContainer	*
+	*   SDoFs   : 	Number of Timepoints: 51
 		Total   DoFs: 867
 		Minimal DoFs: 17
 		Maximal DoFs: 17
@@ -815,15 +810,13 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
-	CostFunctional: 0
 	Computing Functionals:
 	Space-Time Pointevaluation: 0.00126746
 
 	**************************************************
-	*             Starting Forward Solver            *
-	*   Solving : InstatOptProblemContainer	*
-	*  CDoFs : 	0
-	*  SDoFs : 	Number of Timepoints: 51
+	*             Starting Forward Solve             *
+	*   Solving : InstatPDEProblemContainer	*
+	*   SDoFs   : 	Number of Timepoints: 51
 		Total   DoFs: 867
 		Minimal DoFs: 17
 		Maximal DoFs: 17
@@ -1086,15 +1079,13 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
-	CostFunctional: 0
 	Computing Functionals:
 	Space-Time Pointevaluation: 0.00267814
 
 	**************************************************
-	*             Starting Forward Solver            *
-	*   Solving : InstatOptProblemContainer	*
-	*  CDoFs : 	0
-	*  SDoFs : 	Number of Timepoints: 51
+	*             Starting Forward Solve             *
+	*   Solving : InstatPDEProblemContainer	*
+	*   SDoFs   : 	Number of Timepoints: 51
 		Total   DoFs: 867
 		Minimal DoFs: 17
 		Maximal DoFs: 17
@@ -1657,7 +1648,6 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
-	CostFunctional: 0
 	Computing Functionals:
 	Space-Time Pointevaluation: 0.00287191
 	Forward euler: u * u = 9.1374e+172

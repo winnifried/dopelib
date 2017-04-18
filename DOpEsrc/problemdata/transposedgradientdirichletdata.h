@@ -31,17 +31,17 @@ namespace DOpE
 
   /**
    * This class is used to compute the reduced gradient in the case of dirichlet control
-   *						
+   *
    * @tparam  DD              The Dirichlet Data Object under consideration
    * @tparam  VECTOR          The Vector type
    * @tparam  dealdim         The dimension of the domain
    *
    */
   template<typename DD, typename VECTOR, int dealdim>
-    class TransposedGradientDirichletData : public TransposedDirichletDataInterface<dealdim>
+  class TransposedGradientDirichletData : public TransposedDirichletDataInterface<dealdim>
   {
   public:
-  TransposedGradientDirichletData(const DD& data) : TransposedDirichletDataInterface<dealdim>(), dirichlet_data_(data)
+    TransposedGradientDirichletData(const DD &data) : TransposedDirichletDataInterface<dealdim>(), dirichlet_data_(data)
     {
       param_values_ = NULL;
       domain_values_ = NULL;
@@ -52,9 +52,9 @@ namespace DOpE
      * Initializes the private data, should be called prior to any value call!
      */
     void ReInit(
-		const std::map<std::string, const dealii::Vector<double>* > &param_values,
-		const std::map<std::string, const VECTOR* > &domain_values,
-		unsigned int color)
+      const std::map<std::string, const dealii::Vector<double>* > &param_values,
+      const std::map<std::string, const VECTOR * > &domain_values,
+      unsigned int color)
     {
       param_values_ = &param_values;
       domain_values_ = &domain_values;
@@ -63,7 +63,7 @@ namespace DOpE
 
 
     /**
-     * Accesses the values of the transposed of the first derivative of the 
+     * Accesses the values of the transposed of the first derivative of the
      * control-to-dirichlet-values map. I.e. if DD'(q): \R^n \rightarrow L^2(\partial\Omega;R^m)
      * then here we calculate DD'(q)^*: L^2(\partial\Omega;R^m) \rightarrow \R^n
      *
@@ -71,22 +71,22 @@ namespace DOpE
      *                      values are evaluated
      * @param component     The component of the Dirichlet data (in \R^m)
      * @param dof_number    The number of the dof for the domain data in V_h(\Omega;R^m)
-     *                      from which the influence is calculated. 
+     *                      from which the influence is calculated.
      * @param local_vector  The vector for the result in \R^n
      */
     void value (const dealii::Point<dealdim>   &p,
-		const unsigned int  component,
-		const unsigned int  dof_number,
-		dealii::Vector<double>& local_vector) const
+                const unsigned int  component,
+                const unsigned int  dof_number,
+                dealii::Vector<double> &local_vector) const
     {
       dirichlet_data_.Data_QT(
-			      param_values_,
-			      domain_values_,
-			      color_,
-			      p,
-			      component,
-			      dof_number,
-			      local_vector);
+        param_values_,
+        domain_values_,
+        color_,
+        p,
+        component,
+        dof_number,
+        local_vector);
     }
 
     /**
@@ -99,9 +99,9 @@ namespace DOpE
       dirichlet_data_.SetTime(time);
     }
   private:
-    const DD& dirichlet_data_;
-    const std::map<std::string, const dealii::Vector<double>* >* param_values_;
-    const std::map<std::string, const VECTOR* >* domain_values_;
+    const DD &dirichlet_data_;
+    const std::map<std::string, const dealii::Vector<double>* > *param_values_;
+    const std::map<std::string, const VECTOR * > *domain_values_;
     unsigned int color_;
   };
 

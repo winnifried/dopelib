@@ -77,18 +77,18 @@ typedef SparsityPattern SPARSITYPATTERN;
 typedef Vector<double> VECTOR;
 
 typedef PDEProblemContainer<LocalPDELaplace<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
-    SimpleDirichletData<VECTOR, DIM>, SPARSITYPATTERN, VECTOR, DIM> OP;
+        SimpleDirichletData<VECTOR, DIM>, SPARSITYPATTERN, VECTOR, DIM> OP;
 typedef IntegratorDataContainer<DOFHANDLER, QUADRATURE, FACEQUADRATURE,
-    VECTOR, DIM> IDC;
+        VECTOR, DIM> IDC;
 typedef Integrator<IDC, VECTOR, double, DIM> INTEGRATOR;
 typedef DirectLinearSolverWithMatrix<SPARSITYPATTERN, MATRIX, VECTOR> LINEARSOLVER;
 
 typedef NewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR> NLS;
 typedef StatPDEProblem<NLS, INTEGRATOR, OP, VECTOR, DIM> RP;
 typedef MethodOfLines_StateSpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN,
-    VECTOR, DIM> STH;
+        VECTOR, DIM> STH;
 typedef HigherOrderDWRContainer<STH, IDC, CDC<DOFHANDLER, VECTOR, DIM>,
-    FDC<DOFHANDLER, VECTOR, DIM>, VECTOR> HO_DWRC;
+        FDC<DOFHANDLER, VECTOR, DIM>, VECTOR> HO_DWRC;
 typedef L2ResidualErrorContainer<STH, VECTOR, DIM> L2_RESC;
 typedef H1ResidualErrorContainer<STH, VECTOR, DIM> H1_RESC;
 
@@ -97,15 +97,15 @@ declare_params(ParameterReader &param_reader)
 {
   param_reader.SetSubsection("main parameters");
   param_reader.declare_entry("max_iter", "1", Patterns::Integer(0),
-      "How many iterations?");
+                             "How many iterations?");
   param_reader.declare_entry("quad order", "2", Patterns::Integer(1),
-      "Order of the quad formula?");
+                             "Order of the quad formula?");
   param_reader.declare_entry("facequad order", "2", Patterns::Integer(1),
-      "Order of the face quad formula?");
+                             "Order of the face quad formula?");
   param_reader.declare_entry("order fe", "2", Patterns::Integer(1),
-      "Order of the finite element?");
+                             "Order of the finite element?");
   param_reader.declare_entry("prerefine", "1", Patterns::Integer(1),
-      "How often should we refine the coarse grid?");
+                             "How often should we refine the coarse grid?");
 }
 
 int
@@ -119,14 +119,14 @@ main(int argc, char **argv)
   string paramfile = "dope.prm";
 
   if (argc == 2)
-  {
-    paramfile = argv[1];
-  }
+    {
+      paramfile = argv[1];
+    }
   else if (argc > 2)
-  {
-    std::cout << "Usage: " << argv[0] << " [ paramfile ] " << std::endl;
-    return -1;
-  }
+    {
+      std::cout << "Usage: " << argv[0] << " [ paramfile ] " << std::endl;
+      return -1;
+    }
   ParameterReader pr;
 
   RP::declare_params(pr);
@@ -147,22 +147,22 @@ main(int argc, char **argv)
   const Point<DIM> center(0, 0);
   const HyperShellBoundary<DIM> boundary_description(center);
   Triangulation<DIM> triangulation(
-      Triangulation<DIM>::MeshSmoothing::patch_level_1);
+    Triangulation<DIM>::MeshSmoothing::patch_level_1);
   GridGenerator::hyper_cube_with_cylindrical_hole(triangulation, 0.5, 2., 1, 1);
   triangulation.set_boundary(1, boundary_description);
   triangulation.refine_global(1); //because we need the face located at x==0;
   for (auto it = triangulation.begin_active(); it != triangulation.end(); it++)
     if (it->center()[1] <= 0)
-    {
-      if (it->center()[0] < 0)
       {
-        it->set_material_id(1);
+        if (it->center()[0] < 0)
+          {
+            it->set_material_id(1);
+          }
+        else
+          {
+            it->set_material_id(2);
+          }
       }
-      else
-      {
-        it->set_material_id(2);
-      }
-    }
   if (prerefine > 0)
     triangulation.refine_global(prerefine);
   //*************************************************************
@@ -220,11 +220,11 @@ main(int argc, char **argv)
   pr.SetSubsection("main parameters");
   QUADRATURE quadrature_formula_high(pr.get_integer("quad order") + 1);
   FACEQUADRATURE face_quadrature_formula_high(
-      pr.get_integer("facequad order") + 1);
+    pr.get_integer("facequad order") + 1);
   IDC idc_high(quadrature_formula_high, face_quadrature_formula_high);
   STH DOFH_higher_order(triangulation, state_fe_high);
   HO_DWRC dwrc(DOFH_higher_order, idc_high, DOpEtypes::VectorStorageType::fullmem, pr,
-      DOpEtypes::primal_only);
+               DOpEtypes::primal_only);
 
   L2_RESC l2resc(DOFH, DOpEtypes::VectorStorageType::fullmem, pr, DOpEtypes::primal_only);
   H1_RESC h1resc(DOFH, DOpEtypes::VectorStorageType::fullmem, pr, DOpEtypes::primal_only);
@@ -233,57 +233,57 @@ main(int argc, char **argv)
   //**************************************************************************************************
 
   for (int i = 0; i < max_iter; i++)
-  {
-    try
     {
-      solver.ReInit();
-      out.ReInit();
-      stringstream outp;
+      try
+        {
+          solver.ReInit();
+          out.ReInit();
+          stringstream outp;
 
-      outp << "**************************************************\n";
-      outp << "*             Starting Forward Solve             *\n";
-      outp << "*   Solving : " << P.GetName() << "\t*\n";
-      outp << "*   SDoFs   : ";
-      solver.StateSizeInfo(outp);
-      outp << "**************************************************";
-      out.Write(outp, 1, 1, 1);
+          outp << "**************************************************\n";
+          outp << "*             Starting Forward Solve             *\n";
+          outp << "*   Solving : " << P.GetName() << "\t*\n";
+          outp << "*   SDoFs   : ";
+          solver.StateSizeInfo(outp);
+          outp << "**************************************************";
+          out.Write(outp, 1, 1, 1);
 
-      solver.ComputeReducedFunctionals();
-      solver.ComputeRefinementIndicators(dwrc, LPDE);
-      solver.ComputeRefinementIndicators(l2resc, LPDE);
-      solver.ComputeRefinementIndicators(h1resc, LPDE);
+          solver.ComputeReducedFunctionals();
+          solver.ComputeRefinementIndicators(dwrc, LPDE);
+          solver.ComputeRefinementIndicators(l2resc, LPDE);
+          solver.ComputeRefinementIndicators(h1resc, LPDE);
 
-      const double exact_value = 0.441956231972232;
+          const double exact_value = 0.441956231972232;
 
-      double error = exact_value - solver.GetFunctionalValue(LFF.GetName());
-      outp << "Mean value error: " << error << "  Ieff (eh/e)= "
-          << dwrc.GetError() / error << std::endl;
-      outp << "L2-Error estimator: " << sqrt(l2resc.GetError()) << std::endl;
-      outp << "H1-Error estimator: " << sqrt(h1resc.GetError()) << std::endl;
-      out.Write(outp, 1, 1, 1);
-    }
-    catch (DOpEException &e)
-    {
-      std::cout
-          << "Warning: During execution of `" + e.GetThrowingInstance()
+          double error = exact_value - solver.GetFunctionalValue(LFF.GetName());
+          outp << "Mean value error: " << error << "  Ieff (eh/e)= "
+               << dwrc.GetError() / error << std::endl;
+          outp << "L2-Error estimator: " << sqrt(l2resc.GetError()) << std::endl;
+          outp << "H1-Error estimator: " << sqrt(h1resc.GetError()) << std::endl;
+          out.Write(outp, 1, 1, 1);
+        }
+      catch (DOpEException &e)
+        {
+          std::cout
+              << "Warning: During execution of `" + e.GetThrowingInstance()
               + "` the following Problem occurred!" << std::endl;
-      std::cout << e.GetErrorMessage() << std::endl;
-    }
-    if (i != max_iter - 1)
-    {
-      //For global mesh refinement, uncomment the next line
-      // DOFH.RefineSpace(DOpEtypes::RefinementType::global); //or just DOFH.RefineSpace()
+          std::cout << e.GetErrorMessage() << std::endl;
+        }
+      if (i != max_iter - 1)
+        {
+          //For global mesh refinement, uncomment the next line
+          // DOFH.RefineSpace(DOpEtypes::RefinementType::global); //or just DOFH.RefineSpace()
 
-      Vector<float> error_ind(dwrc.GetErrorIndicators());
-      for (unsigned int i = 0; i < error_ind.size(); i++)
-        error_ind(i) = std::fabs(error_ind(i));
+          Vector<float> error_ind(dwrc.GetErrorIndicators());
+          for (unsigned int i = 0; i < error_ind.size(); i++)
+            error_ind(i) = std::fabs(error_ind(i));
 
-      DOFH.RefineSpace(RefineOptimized(error_ind));
-      //There are other mesh refinement strategies implemented, for example
-      //DOFH.RefineSpace(RefineFixedNumber(error_ind, 0.4));
-      //DOFH.RefineSpace(RefineFixedFraction(error_ind, 0.8));
+          DOFH.RefineSpace(RefineOptimized(error_ind));
+          //There are other mesh refinement strategies implemented, for example
+          //DOFH.RefineSpace(RefineFixedNumber(error_ind, 0.4));
+          //DOFH.RefineSpace(RefineFixedFraction(error_ind, 0.8));
+        }
     }
-  }
   return 0;
 }
 #undef FDC

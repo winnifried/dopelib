@@ -38,7 +38,7 @@
 #include <opt_algorithms/reducednewtonalgorithm.h>
 #include <container/optproblemcontainer.h>
 #include <interfaces/functionalinterface.h>
-#include <reducedproblems/statreducedproblem.h> 
+#include <reducedproblems/statreducedproblem.h>
 #include <templates/newtonsolver.h>
 #include <templates/directlinearsolver.h>
 #include <templates/voidlinearsolver.h>
@@ -83,17 +83,17 @@ typedef FunctionalInterface<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> FUNCTIONALI
 typedef LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM> PDE;
 
 typedef OptProblemContainer<FUNCTIONALINTERFACE, COSTFUNCTIONAL, PDE,
-    SimpleDirichletData<VECTOR, DIM>,
-    NoConstraints<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM>, SPARSITYPATTERN,
-    VECTOR, CDIM, DIM> OP;
+        SimpleDirichletData<VECTOR, DIM>,
+        NoConstraints<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM>, SPARSITYPATTERN,
+        VECTOR, CDIM, DIM> OP;
 
 typedef IntegratorDataContainer<DOFHANDLER, Quadrature<DIM>, Quadrature<1>,
-    VECTOR, DIM> IDC;
+        VECTOR, DIM> IDC;
 typedef Integrator<IDC, VECTOR, double, DIM> INTEGRATOR;
 typedef IntegratorMixedDimensions<IDC, VECTOR, double, CDIM, DIM> INTEGRATORM;
 
 typedef DirectLinearSolverWithMatrix<BlockSparsityPattern,
-    BlockSparseMatrix<double>, VECTOR> LINEARSOLVER;
+        BlockSparseMatrix<double>, VECTOR> LINEARSOLVER;
 
 typedef VoidLinearSolver<VECTOR> VOIDLS;
 
@@ -101,9 +101,9 @@ typedef NewtonSolverMixedDimensions<INTEGRATORM, VOIDLS, VECTOR> NLSM;
 typedef NewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR> NLS;
 typedef ReducedNewtonAlgorithm<OP, VECTOR> RNA;
 typedef StatReducedProblem<NLSM, NLS, INTEGRATORM, INTEGRATOR, OP, VECTOR, CDIM,
-    DIM> RP;
+        DIM> RP;
 typedef MethodOfLines_SpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR,
-    CDIM, DIM> STH;
+        CDIM, DIM> STH;
 
 void
 declare_params(ParameterReader &param_reader)
@@ -122,7 +122,7 @@ main(int argc, char **argv)
    * stationary (nonlinear) FSI optimization. The configuration
    * comes from the original fluid benchmark problem
    * (Schaefer/Turek; 1996)
-   * and has been modified to reduce drag around the 
+   * and has been modified to reduce drag around the
    * cylinder and the beam. The gain the solvability of
    * the optimization problem we add a quadratic
    * regularization term to the cost functional.
@@ -131,14 +131,14 @@ main(int argc, char **argv)
   string paramfile = "dope.prm";
 
   if (argc == 2)
-  {
-    paramfile = argv[1];
-  }
+    {
+      paramfile = argv[1];
+    }
   else if (argc > 2)
-  {
-    std::cout << "Usage: " << argv[0] << " [ paramfile ] " << std::endl;
-    return -1;
-  }
+    {
+      std::cout << "Usage: " << argv[0] << " [ paramfile ] " << std::endl;
+      return -1;
+    }
 
   ParameterReader pr;
   RP::declare_params(pr);
@@ -147,9 +147,9 @@ main(int argc, char **argv)
   COSTFUNCTIONAL::declare_params(pr);
   BoundaryParabel::declare_params(pr);
   LocalBoundaryFaceFunctionalDrag<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM>::declare_params(
-      pr);
+    pr);
   LocalBoundaryFaceFunctionalLift<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM>::declare_params(
-      pr);
+    pr);
 
   // Declare parameter for this section
   declare_params(pr);
@@ -181,8 +181,8 @@ main(int argc, char **argv)
 
   FE<DIM> control_fe(FE_Nothing<DIM>(1), 2); //2 Parameter
   FE<DIM> state_fe(FE_Q<DIM>(2), 2, // velocities
-      FE_Q<DIM>(2), 2, // displacements
-      FE_DGP<DIM>(1), 1); // pressure
+                   FE_Q<DIM>(2), 2, // displacements
+                   FE_DGP<DIM>(1), 1); // pressure
 
   QUADRATURE quadrature_formula(3);
   FACEQUADRATURE face_quadrature_formula(3);
@@ -194,14 +194,14 @@ main(int argc, char **argv)
   LocalPointFunctionalDeflectionX<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> LPFDX;
   LocalPointFunctionalDeflectionY<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> LPFDY;
   LocalBoundaryFaceFunctionalDrag<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> LBFD(
-      pr);
+    pr);
   LocalBoundaryFaceFunctionalLift<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> LBFL(
-      pr);
+    pr);
 
   STH DOFH(triangulation, control_fe, state_fe, DOpEtypes::stationary);
 
   NoConstraints<ElementDataContainer, FaceDataContainer, DOFHANDLER, VECTOR, CDIM,
-      DIM> Constraints;
+                DIM> Constraints;
 
   OP P(LFunc, LPDE, Constraints, DOFH);
 
@@ -252,58 +252,58 @@ main(int argc, char **argv)
   q = _initial_control;
 
   for (int i = 0; i < niter; i++)
-  {
-    try
     {
+      try
+        {
 
-      ControlVector<VECTOR> dq(q);
-      // Initialization of the control
-      if (cases == "check")
-      {
+          ControlVector<VECTOR> dq(q);
+          // Initialization of the control
+          if (cases == "check")
+            {
 
-        ControlVector<VECTOR> dq(q);
-        //dq = 1.0;
-        // eps: step size for difference quotient
-        // choose: 1.0, 0.1, 0.01, etc.
-        double eps_diff = 1.0;
-        Alg.CheckGrads(eps_diff, q, dq, 3);
-        Alg.CheckHessian(eps_diff, q, dq, 3);
-      }
-      else
-      {
-        //Alg.SolveForward(q);  // just solves the forward problem
-        Alg.Solve(q);
-      }
-    }
-    catch (DOpEException &e)
-    {
-      std::cout
-          << "Warning: During execution of `" + e.GetThrowingInstance()
+              ControlVector<VECTOR> dq(q);
+              //dq = 1.0;
+              // eps: step size for difference quotient
+              // choose: 1.0, 0.1, 0.01, etc.
+              double eps_diff = 1.0;
+              Alg.CheckGrads(eps_diff, q, dq, 3);
+              Alg.CheckHessian(eps_diff, q, dq, 3);
+            }
+          else
+            {
+              //Alg.SolveForward(q);  // just solves the forward problem
+              Alg.Solve(q);
+            }
+        }
+      catch (DOpEException &e)
+        {
+          std::cout
+              << "Warning: During execution of `" + e.GetThrowingInstance()
               + "` the following Problem occurred!" << std::endl;
-      std::cout << e.GetErrorMessage() << std::endl;
+          std::cout << e.GetErrorMessage() << std::endl;
+        }
+      if (i != niter - 1)
+        {
+          SolutionExtractor<RP, VECTOR> a(solver);
+          const StateVector<VECTOR> &gu = a.GetU();
+          solution = 0;
+          solution = gu.GetSpacialVector();
+          Vector<float> estimated_error_per_element(triangulation.n_active_cells());
+
+          std::vector<bool> component_mask(5, true);
+
+          KellyErrorEstimator<DIM>::estimate(
+            static_cast<const DoFHandler<DIM>&>(DOFH.GetStateDoFHandler()),
+            QGauss<1>(2), FunctionMap<DIM>::type(), solution,
+            estimated_error_per_element, component_mask);
+
+          GridRefinement::refine_and_coarsen_fixed_number(triangulation,
+                                                          estimated_error_per_element, 0.3, 0.0);
+
+          triangulation.prepare_coarsening_and_refinement();
+          triangulation.execute_coarsening_and_refinement();
+        }
     }
-    if (i != niter - 1)
-    {
-      SolutionExtractor<RP, VECTOR> a(solver);
-      const StateVector<VECTOR> &gu = a.GetU();
-      solution = 0;
-      solution = gu.GetSpacialVector();
-      Vector<float> estimated_error_per_element(triangulation.n_active_cells());
-
-      std::vector<bool> component_mask(5, true);
-
-      KellyErrorEstimator<DIM>::estimate(
-          static_cast<const DoFHandler<DIM>&>(DOFH.GetStateDoFHandler()),
-          QGauss<1>(2), FunctionMap<DIM>::type(), solution,
-          estimated_error_per_element, component_mask);
-
-      GridRefinement::refine_and_coarsen_fixed_number(triangulation,
-          estimated_error_per_element, 0.3, 0.0);
-
-      triangulation.prepare_coarsening_and_refinement();
-      triangulation.execute_coarsening_and_refinement();
-    }
-  }
 
   return 0;
 }

@@ -35,7 +35,7 @@ using namespace dealii;
 namespace DOpE
 {
 
-/*******************************************************/
+  /*******************************************************/
   template <typename VECTOR>
   void DOpEOutputHandler<VECTOR>::declare_params(ParameterReader &param_reader)
   {
@@ -54,20 +54,20 @@ namespace DOpE
 
   }
 
-/*******************************************************/
+  /*******************************************************/
   template <typename VECTOR>
-  DOpEOutputHandler<VECTOR>::DOpEOutputHandler(ReducedProblemInterface_Base<VECTOR>* SI, ParameterReader &param_reader)
+  DOpEOutputHandler<VECTOR>::DOpEOutputHandler(ReducedProblemInterface_Base<VECTOR> *SI, ParameterReader &param_reader)
   {
     //assert(SI);
-    if(!SI)
-    {
-      std::cerr<<"Attention: DOpEOutputHandler is configured without a ReducedProblem, hence no vectors can be written!"<<std::endl;
-      Solver_ = NULL;
-    }
+    if (!SI)
+      {
+        std::cerr<<"Attention: DOpEOutputHandler is configured without a ReducedProblem, hence no vectors can be written!"<<std::endl;
+        Solver_ = NULL;
+      }
     else
-    {
-      Solver_ = SI;
-    }
+      {
+        Solver_ = SI;
+      }
 
     /* Note that smaller printlevel prints less*/
     /*******************************************
@@ -100,11 +100,11 @@ namespace DOpE
     ParseString(tmp,ignore_iterations);
 
     std::string command = "mkdir -p " + results_basedir_;
-    if(system(command.c_str())!=0)
-    {
-      throw DOpEException("The command " + command +"failed!",
-			  "Outputhandler<VECTOR>::Outputhandler");
-    }
+    if (system(command.c_str())!=0)
+      {
+        throw DOpEException("The command " + command +"failed!",
+                            "Outputhandler<VECTOR>::Outputhandler");
+      }
 
     results_outdir_ = "";
 
@@ -113,22 +113,22 @@ namespace DOpE
     std::string logfilename = results_basedir_+logfile_;
     log_.open(logfilename.c_str(), std::ios::out);
     disallow_all_ = false;
-    stdout_backup_ = 0;    
+    stdout_backup_ = 0;
 
     PrintCopyrightNotice();
   }
 
-/*******************************************************/
+  /*******************************************************/
   template <typename VECTOR>
   DOpEOutputHandler<VECTOR>::~DOpEOutputHandler()
   {
-    if(log_.good())
-    {
-      log_.close();
-    }
+    if (log_.good())
+      {
+        log_.close();
+      }
   }
 
-/*******************************************************/
+  /*******************************************************/
   template <typename VECTOR>
   void DOpEOutputHandler<VECTOR>::ReInit()
   {
@@ -136,96 +136,96 @@ namespace DOpE
     tmp << "Mesh"<<n_reinits_<<"/";
     results_outdir_ =  tmp.str();
     std::string command = "mkdir -p " + results_basedir_ + results_outdir_;
-    if(system(command.c_str())!=0)
-    {
-      throw DOpEException("The command " + command +"failed!",
-			  "Outputhandler<VECTOR>::ReInit");
-    }
+    if (system(command.c_str())!=0)
+      {
+        throw DOpEException("The command " + command +"failed!",
+                            "Outputhandler<VECTOR>::ReInit");
+      }
     n_reinits_++;
   }
 
-/*******************************************************/
+  /*******************************************************/
   template <typename VECTOR>
   void DOpEOutputHandler<VECTOR>::SetIterationNumber(unsigned int iteration, std::string type)
   {
-    if(AllowIteration(type))
-    {
-      std::map<std::string,unsigned int>::const_iterator pos = iteration_type_pos_.find(type);
-      if(pos == iteration_type_pos_.end())
+    if (AllowIteration(type))
       {
-	log_<<"LOG: Allowing IterationCounter `"<<type<<"' for filenames!"<<std::endl;
-	pos = ReorderAndInsert(type);
+        std::map<std::string,unsigned int>::const_iterator pos = iteration_type_pos_.find(type);
+        if (pos == iteration_type_pos_.end())
+          {
+            log_<<"LOG: Allowing IterationCounter `"<<type<<"' for filenames!"<<std::endl;
+            pos = ReorderAndInsert(type);
+          }
+        iteration_number_[pos->second] = iteration;
       }
-      iteration_number_[pos->second] = iteration;
-    }
   }
 
-/*******************************************************/
+  /*******************************************************/
   template <typename VECTOR>
-  void DOpEOutputHandler<VECTOR>::ParseString(const std::string tmp, std::vector<std::string>& list)
+  void DOpEOutputHandler<VECTOR>::ParseString(const std::string tmp, std::vector<std::string> &list)
   {
     //Parse the list for the substrings
-    if(tmp.size() > 1)
-    {
-      size_t last = 0;
-      size_t next  = 0;
-      while( last != std::string::npos)
+    if (tmp.size() > 1)
       {
-	next = tmp.find(";",last);
-	if(tmp.substr(last,next-last) != "")
-	  list.push_back(tmp.substr(last,next-last));
-	last = next;
-	if(last != std::string::npos)
-	  last++;
+        size_t last = 0;
+        size_t next  = 0;
+        while ( last != std::string::npos)
+          {
+            next = tmp.find(";",last);
+            if (tmp.substr(last,next-last) != "")
+              list.push_back(tmp.substr(last,next-last));
+            last = next;
+            if (last != std::string::npos)
+              last++;
+          }
       }
-    }
   }
 
-/*******************************************************/
+  /*******************************************************/
   template <typename VECTOR>
   bool DOpEOutputHandler<VECTOR>::AllowWrite(std::string name)
   {
-    if(disallow_all_)
-    {
-      if(debug_)
+    if (disallow_all_)
       {
-	log_<<"DEBUG: Deny write of `"<<name<<"'! Since all output is supressed!"<<std::endl;
+        if (debug_)
+          {
+            log_<<"DEBUG: Deny write of `"<<name<<"'! Since all output is supressed!"<<std::endl;
+          }
+        return false;
       }
-      return false;
-    }
-    for(unsigned int i = 0; i < never_write_list.size(); i++)
-    {
-      if(name.find(never_write_list[i]) != std::string::npos)
+    for (unsigned int i = 0; i < never_write_list.size(); i++)
       {
-	if(debug_)
-	{
-	  log_<<"DEBUG: Deny write of `"<<name<<"'! It containes the substring "<< never_write_list[i]<<std::endl;
-	}
-	return false;
+        if (name.find(never_write_list[i]) != std::string::npos)
+          {
+            if (debug_)
+              {
+                log_<<"DEBUG: Deny write of `"<<name<<"'! It containes the substring "<< never_write_list[i]<<std::endl;
+              }
+            return false;
+          }
       }
-    }
     return true;
   }
 
-/*******************************************************/
+  /*******************************************************/
   template <typename VECTOR>
   bool DOpEOutputHandler<VECTOR>::AllowIteration(std::string name)
   {
-    for(unsigned int i = 0; i < ignore_iterations.size(); i++)
-    {
-      if(name.find(ignore_iterations[i]) != std::string::npos)
+    for (unsigned int i = 0; i < ignore_iterations.size(); i++)
       {
-	if(debug_)
-	{
-	  log_<<"DEBUG: Deny Iteration counter `"<<name<<"'! It containes the substring "<< ignore_iterations[i]<<std::endl;
-	}
-	return false;
+        if (name.find(ignore_iterations[i]) != std::string::npos)
+          {
+            if (debug_)
+              {
+                log_<<"DEBUG: Deny Iteration counter `"<<name<<"'! It containes the substring "<< ignore_iterations[i]<<std::endl;
+              }
+            return false;
+          }
       }
-    }
     return true;
   }
 
-/*******************************************************/
+  /*******************************************************/
   template <typename VECTOR>
   std::map<std::string,unsigned int>::const_iterator DOpEOutputHandler<VECTOR>::ReorderAndInsert(std::string type)
   {
@@ -236,243 +236,242 @@ namespace DOpE
     return iteration_type_pos_.find(type);
   }
 
-/*******************************************************/
+  /*******************************************************/
   template <typename VECTOR>
   void DOpEOutputHandler<VECTOR>::WriteError(std::string msg)
   {
-    if(disallow_all_)
-    {
-      if(debug_)
+    if (disallow_all_)
       {
-	log_<<"DEBUG: Output of Error was suppresed since all output is supressed!"<<std::endl;
+        if (debug_)
+          {
+            log_<<"DEBUG: Output of Error was suppresed since all output is supressed!"<<std::endl;
+          }
       }
-    }
     else
-    {
-      std::cerr<<msg<<std::endl;
-      log_ <<" ERROR: "<<msg<<std::endl;
-    }
+      {
+        std::cerr<<msg<<std::endl;
+        log_ <<" ERROR: "<<msg<<std::endl;
+      }
   }
-/*******************************************************/
+  /*******************************************************/
   template <typename VECTOR>
   void  DOpEOutputHandler<VECTOR>::WriteAux(std::string msg, std::string file, bool append)
   {
     std::stringstream ofile;
     ofile <<  results_basedir_ << results_outdir_ << file;
     std::ofstream outfile;
-    if(append)
-    {
-      outfile.open(ofile.str().c_str(), std::ios::app|std::ios::out);
-    }
+    if (append)
+      {
+        outfile.open(ofile.str().c_str(), std::ios::app|std::ios::out);
+      }
     else
-    {
-      outfile.open(ofile.str().c_str(), std::ios::out);
-    }
+      {
+        outfile.open(ofile.str().c_str(), std::ios::out);
+      }
     outfile<<msg;
     outfile.close();
   }
-/*******************************************************/
+  /*******************************************************/
   template <typename VECTOR>
   void DOpEOutputHandler<VECTOR>::Write(std::string msg,
-				int priority,
-				unsigned int pre_newlines,
-				unsigned int post_newlines)
+                                        int priority,
+                                        unsigned int pre_newlines,
+                                        unsigned int post_newlines)
   {
-    if(disallow_all_)
-    {
-      if(debug_)
+    if (disallow_all_)
       {
-	log_<<"DEBUG: Output of Error was suppresed since all output is supressed!"<<std::endl;
+        if (debug_)
+          {
+            log_<<"DEBUG: Output of Error was suppresed since all output is supressed!"<<std::endl;
+          }
       }
-    }
     else
-    {
-      if(priority < printlevel_ || printlevel_ < 0)
       {
-	if(debug_)
-	{
-	  log_<<"DEBUG: Write with priority "<<priority<<" allowed."<<std::endl;
-	}
-	for(unsigned int n=0; n < pre_newlines; n++)
-	{
-	  log_<<std::endl;
-	  std::cout<<std::endl;
-	}
-	log_ << "\t"<< msg<<std::endl;
-	std::cout<<msg<<std::endl;
-	for(unsigned int n=0; n < post_newlines; n++)
-	{
-	  log_<<std::endl;
-	  std::cout<<std::endl;
-	}
+        if (priority < printlevel_ || printlevel_ < 0)
+          {
+            if (debug_)
+              {
+                log_<<"DEBUG: Write with priority "<<priority<<" allowed."<<std::endl;
+              }
+            for (unsigned int n=0; n < pre_newlines; n++)
+              {
+                log_<<std::endl;
+                std::cout<<std::endl;
+              }
+            log_ << "\t"<< msg<<std::endl;
+            std::cout<<msg<<std::endl;
+            for (unsigned int n=0; n < post_newlines; n++)
+              {
+                log_<<std::endl;
+                std::cout<<std::endl;
+              }
+          }
+        else if (debug_)
+          {
+            log_<<"DEBUG: Write because priority "<<priority<<" is too small for printing at level "<<printlevel_<<std::endl;
+            {
+              log_ <<"D\t"<<msg<<std::endl;
+            }
+          }
       }
-      else if(debug_)
-      {
-	log_<<"DEBUG: Write because priority "<<priority<<" is too small for printing at level "<<printlevel_<<std::endl;
-	{
-	  log_ <<"D\t"<<msg<<std::endl;
-	}
-      }
-    }
   }
-/*******************************************************/
+  /*******************************************************/
   template <typename VECTOR>
-  void DOpEOutputHandler<VECTOR>::Write(std::stringstream& msg, int priority,unsigned int pre_newlines,unsigned int post_newlines)
+  void DOpEOutputHandler<VECTOR>::Write(std::stringstream &msg, int priority,unsigned int pre_newlines,unsigned int post_newlines)
   {
 
-    if(disallow_all_)
-    {
-      if(debug_)
+    if (disallow_all_)
       {
-	log_<<"DEBUG: Output of Error was suppresed since all output is supressed!"<<std::endl;
+        if (debug_)
+          {
+            log_<<"DEBUG: Output of Error was suppresed since all output is supressed!"<<std::endl;
+          }
       }
-    }
     else
-    {
-      if(priority < printlevel_ || printlevel_ < 0)
       {
-	if(debug_)
-	{
-	  log_<<"DEBUG: Write with priority "<<priority<<" allowed."<<std::endl;
-	}
-	for(unsigned int n=0; n < pre_newlines; n++)
-	{
-	  log_<<std::endl;
-	  std::cout<<std::endl;
-	}
-	std::cout<<msg.str()<<std::endl;
-	{
-	  //for logfile indentation
-	  std::string tmp = msg.str();
-	  size_t last = 0;
-	  size_t next  = 0;
-	  while(last != std::string::npos)
-	  {
-	    next = tmp.find("\n",last);
-	    if(next != std::string::npos)
-	    {
-	      tmp.insert(next," ");
-	      tmp.replace(next,2,"\n\t");
-	      next++;
-	    }
-	    last = next;
-	  }
-	  log_ <<"\t"<<tmp<<std::endl;
-	}
-	for(unsigned int n=0; n < post_newlines; n++)
-	{
-	  log_<<std::endl;
-	  std::cout<<std::endl;
-	}
+        if (priority < printlevel_ || printlevel_ < 0)
+          {
+            if (debug_)
+              {
+                log_<<"DEBUG: Write with priority "<<priority<<" allowed."<<std::endl;
+              }
+            for (unsigned int n=0; n < pre_newlines; n++)
+              {
+                log_<<std::endl;
+                std::cout<<std::endl;
+              }
+            std::cout<<msg.str()<<std::endl;
+            {
+              //for logfile indentation
+              std::string tmp = msg.str();
+              size_t last = 0;
+              size_t next  = 0;
+              while (last != std::string::npos)
+                {
+                  next = tmp.find("\n",last);
+                  if (next != std::string::npos)
+                    {
+                      tmp.insert(next," ");
+                      tmp.replace(next,2,"\n\t");
+                      next++;
+                    }
+                  last = next;
+                }
+              log_ <<"\t"<<tmp<<std::endl;
+            }
+            for (unsigned int n=0; n < post_newlines; n++)
+              {
+                log_<<std::endl;
+                std::cout<<std::endl;
+              }
+          }
+        else if (debug_)
+          {
+            log_<<"DEBUG: Write because priority "<<priority<<" is too small for printing at level "<<printlevel_<<std::endl;
+            {
+              //for logfile indentation
+              std::string tmp = msg.str();
+              size_t last = 0;
+              size_t next  = 0;
+              while (last != std::string::npos)
+                {
+                  next = tmp.find("\n",last);
+                  if (next != std::string::npos)
+                    {
+                      tmp.insert(next,"  ");
+                      tmp.replace(next,3,"\nD\t");
+                      next++;
+                    }
+                  last = next;
+                }
+              log_ <<"D\t"<<tmp<<std::endl;
+            }
+          }
+        msg.str("");
       }
-      else if(debug_)
+  }
+  /*******************************************************/
+  template <typename VECTOR>
+  void DOpEOutputHandler<VECTOR>::Write(const VECTOR &q, std::string name, std::string dof_type)
+  {
+    if (AllowWrite(name))
       {
-	log_<<"DEBUG: Write because priority "<<priority<<" is too small for printing at level "<<printlevel_<<std::endl;
-	{
-	  //for logfile indentation
-	  std::string tmp = msg.str();
-	  size_t last = 0;
-	  size_t next  = 0;
-	  while(last != std::string::npos)
-	  {
-	    next = tmp.find("\n",last);
-	    if(next != std::string::npos)
-	    {
-	      tmp.insert(next,"  ");
-	      tmp.replace(next,3,"\nD\t");
-	      next++;
-	    }
-	    last = next;
-	  }
-	  log_ <<"D\t"<<tmp<<std::endl;
-	}
+        //Construct Name
+        std::stringstream outfile;
+        outfile<<results_basedir_;
+        outfile<<results_outdir_;
+        outfile<<name;
+        outfile<<GetPostIndex();
+        if (dof_type == "control")
+          outfile<<control_ending_;
+        else if (dof_type == "state")
+          outfile<<ending_;
+        else
+          abort();
+
+        Write("Writing ["+outfile.str()+"]",4);
+
+        if (dof_type == "control")
+          GetReducedProblem()->WriteToFile(q,name,outfile.str(),dof_type,control_ending_);
+        else if (dof_type == "state")
+          GetReducedProblem()->WriteToFile(q,name,outfile.str(),dof_type,ending_);
       }
-      msg.str("");
-    }
   }
-/*******************************************************/
+
+  /*******************************************************/
   template <typename VECTOR>
-  void DOpEOutputHandler<VECTOR>::Write(const VECTOR&q, std::string name, std::string dof_type)
+  void DOpEOutputHandler<VECTOR>::Write(const ControlVector<VECTOR> &q, std::string name, std::string dof_type)
   {
-    if(AllowWrite(name))
-    {
-      //Construct Name
-      std::stringstream outfile;
-      outfile<<results_basedir_;
-      outfile<<results_outdir_;
-      outfile<<name;
-      outfile<<GetPostIndex();
-      if(dof_type == "control")
-	outfile<<control_ending_;
-      else if(dof_type == "state")
-	outfile<<ending_;
-      else
-	abort();
-
-      Write("Writing ["+outfile.str()+"]",4);
-
-      if(dof_type == "control")
-	GetReducedProblem()->WriteToFile(q,name,outfile.str(),dof_type,control_ending_);
-      else if(dof_type == "state")
-	GetReducedProblem()->WriteToFile(q,name,outfile.str(),dof_type,ending_);
-    }
+    if (AllowWrite(name))
+      {
+        GetReducedProblem()->WriteToFile(q,name,dof_type);
+      }
   }
 
-/*******************************************************/
+  /*******************************************************/
   template <typename VECTOR>
-  void DOpEOutputHandler<VECTOR>::Write(const ControlVector<VECTOR>&q, std::string name, std::string dof_type)
+  void DOpEOutputHandler<VECTOR>::Write(const std::vector<double> &q, std::string name, std::string dof_type)
   {
-    if(AllowWrite(name))
-    {
-      GetReducedProblem()->WriteToFile(q,name,dof_type);
-    }
+    if (AllowWrite(name))
+      {
+        //Construct Name
+        std::stringstream outfile;
+        outfile<<results_basedir_;
+        outfile<<results_outdir_;
+        outfile<<name;
+        outfile<<GetPostIndex();
+        if (dof_type == "time")
+          outfile<<".gpl";
+        else
+          abort();
+        Write("Writing ["+outfile.str()+"]",4);
+
+        GetReducedProblem()->WriteToFile(q,outfile.str());
+      }
   }
 
-/*******************************************************/
-  template <typename VECTOR>
-  void DOpEOutputHandler<VECTOR>::Write(const std::vector<double>& q, std::string name, std::string dof_type)
-  {
-    if(AllowWrite(name))
-    {
-      //Construct Name
-      std::stringstream outfile;
-      outfile<<results_basedir_;
-      outfile<<results_outdir_;
-      outfile<<name;
-      outfile<<GetPostIndex();
-      if(dof_type == "time")
-	outfile<<".gpl";
-      else
-	abort();
-      Write("Writing ["+outfile.str()+"]",4);
-
-      GetReducedProblem()->WriteToFile(q,outfile.str());
-    }
-  }
-
-/*******************************************************/
+  /*******************************************************/
   template <typename VECTOR>
   std::string DOpEOutputHandler<VECTOR>::ZeroTolerance(double value, double reference_value)
   {
     std::stringstream ret;
     ret.precision(number_precision_);
-    if(std::isnan(std::abs(value)))
-    {
-      std::string pre;
-      pre.resize(number_precision_+5,' ');
-      ret << pre << "NAN";
-    }
-    else if(std::isinf(std::abs(value)))
-    {
-      std::string pre;
-      pre.resize(number_precision_+5,' ');
-      ret << pre << "INF";
-    }   
-    else
-      if (std::abs(value) <= std::abs(reference_value) * user_eps_machine_)
+    if (std::isnan(std::abs(value)))
+      {
+        std::string pre;
+        pre.resize(number_precision_+5,' ');
+        ret << pre << "NAN";
+      }
+    else if (std::isinf(std::abs(value)))
+      {
+        std::string pre;
+        pre.resize(number_precision_+5,' ');
+        ret << pre << "INF";
+      }
+    else if (std::abs(value) <= std::abs(reference_value) * user_eps_machine_)
       ret << "< " << std::setfill(' ') << std::setw(number_precision_+6) <<  std::scientific << user_eps_machine_;
-    else 
-      ret << " " << std::setfill(' ') << std::setw(number_precision_+7) << std::scientific << value; 
+    else
+      ret << " " << std::setfill(' ') << std::setw(number_precision_+7) << std::scientific << value;
 
     return ret.str();
   }
@@ -495,46 +494,46 @@ namespace DOpE
 
   /*******************************************************/
 
-   template<typename VECTOR>
-     void
-     DOpEOutputHandler<VECTOR>::WriteElementwise(const Vector<double>&q,
-         std::string name, std::string dof_type)
-     {
-       if (AllowWrite(name))
-       {
-         //Construct Name
-         std::stringstream outfile;
-         outfile << results_basedir_;
-         outfile << results_outdir_;
-         outfile << name;
-         outfile << GetPostIndex();
-         if (dof_type == "control")
-           outfile << control_ending_;
-         else if (dof_type == "state")
-           outfile << ending_;
-         else
-           abort();
+  template<typename VECTOR>
+  void
+  DOpEOutputHandler<VECTOR>::WriteElementwise(const Vector<double> &q,
+                                              std::string name, std::string dof_type)
+  {
+    if (AllowWrite(name))
+      {
+        //Construct Name
+        std::stringstream outfile;
+        outfile << results_basedir_;
+        outfile << results_outdir_;
+        outfile << name;
+        outfile << GetPostIndex();
+        if (dof_type == "control")
+          outfile << control_ending_;
+        else if (dof_type == "state")
+          outfile << ending_;
+        else
+          abort();
 
-         Write("Writing [" + outfile.str() + "]", 4);
+        Write("Writing [" + outfile.str() + "]", 4);
 
-         if (dof_type == "control")
-           GetReducedProblem()->WriteToFileElementwise(q, name, outfile.str(),
-               dof_type, control_ending_);
-         else if (dof_type == "state")
-           GetReducedProblem()->WriteToFileElementwise(q, name, outfile.str(),
-               dof_type, ending_);
-       }
-     }
+        if (dof_type == "control")
+          GetReducedProblem()->WriteToFileElementwise(q, name, outfile.str(),
+                                                      dof_type, control_ending_);
+        else if (dof_type == "state")
+          GetReducedProblem()->WriteToFileElementwise(q, name, outfile.str(),
+                                                      dof_type, ending_);
+      }
+  }
 
-   /*******************************************************/
+  /*******************************************************/
 
-   template<typename VECTOR>
-     std::string
-     DOpEOutputHandler<VECTOR>::ConstructOutputName(std::string name,
-         std::string dof_type)
-    {
-      std::string outfile;
-      if (AllowWrite(name))
+  template<typename VECTOR>
+  std::string
+  DOpEOutputHandler<VECTOR>::ConstructOutputName(std::string name,
+                                                 std::string dof_type)
+  {
+    std::string outfile;
+    if (AllowWrite(name))
       {
         //Construct Name
         outfile += results_basedir_;
@@ -550,46 +549,46 @@ namespace DOpE
 
         Write("Writing [" + outfile + "]", 4);
       }
-      return outfile;
-    }
+    return outfile;
+  }
 
 
-/*******************************************************/
+  /*******************************************************/
   template <typename VECTOR>
   std::string DOpEOutputHandler<VECTOR>::GetPostIndex()
   {
     std::stringstream ret;
-    for(unsigned int n = 0; n < iteration_number_.size(); n++)
-    {
-      ret << "."<<std::setfill ('0')<<std::setw(5)<<iteration_number_[n];
-    }
+    for (unsigned int n = 0; n < iteration_number_.size(); n++)
+      {
+        ret << "."<<std::setfill ('0')<<std::setw(5)<<iteration_number_[n];
+      }
     return ret.str();
-  } 
+  }
 
-/*******************************************************/
+  /*******************************************************/
 
   template <typename VECTOR>
-   void DOpEOutputHandler<VECTOR>::StartSaveCTypeOutputToLog()
+  void DOpEOutputHandler<VECTOR>::StartSaveCTypeOutputToLog()
   {
-    if(log_.good())
-    {
-      log_.close();
-    }
+    if (log_.good())
+      {
+        log_.close();
+      }
     assert(stdout_backup_ == 0);
     fgetpos(stdout, &std_out_pos_);
     stdout_backup_ = dup(fileno(stdout));
     std::string logfilename = results_basedir_+logfile_;
-    if(freopen(logfilename.c_str(),"a+",stdout)==NULL)
-    {
-      throw DOpEException("Could not attach file to stdout",
-			  "Outputhandler<VECTOR>::StartSaveCTypeOutputToLog");
-    }
+    if (freopen(logfilename.c_str(),"a+",stdout)==NULL)
+      {
+        throw DOpEException("Could not attach file to stdout",
+                            "Outputhandler<VECTOR>::StartSaveCTypeOutputToLog");
+      }
   }
 
-/*******************************************************/
+  /*******************************************************/
 
   template <typename VECTOR>
-    void DOpEOutputHandler<VECTOR>::StopSaveCTypeOutputToLog()
+  void DOpEOutputHandler<VECTOR>::StopSaveCTypeOutputToLog()
   {
     fflush(stdout);
     dup2(stdout_backup_,fileno(stdout));
@@ -601,20 +600,20 @@ namespace DOpE
     std::string logfilename = results_basedir_+logfile_;
     log_.open(logfilename.c_str(), std::ios::app|std::ios::out);
   }
-/*******************************************************/
+  /*******************************************************/
 
   template <typename VECTOR>
-    std::string DOpEOutputHandler<VECTOR>::GetResultsDir() const
+  std::string DOpEOutputHandler<VECTOR>::GetResultsDir() const
   {
     return results_basedir_+results_outdir_;
   }
-  
-/*******************************************************/
+
+  /*******************************************************/
   template <typename VECTOR>
   void DOpEOutputHandler<VECTOR>::PrintCopyrightNotice()
   {
     std::stringstream out;
-    
+
     out<<"DOpElib Copyright (C) 2012 - "<<DOpE::VERSION::year<<" DOpElib authors"<<std::endl;
     out<<"This program comes with ABSOLUTELY NO WARRANTY."<<std::endl;
     out<<"For License details read LICENSE.TXT distributed with this software!"<<std::endl;

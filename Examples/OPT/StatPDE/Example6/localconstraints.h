@@ -33,67 +33,67 @@ namespace DOpE
    * GlobalConstraints are dealt with as a Functional, hence all functions from Functionals are inherited.
    */
   template<
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
-      template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
-      template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
-    class LocalConstraint : public ConstraintInterface<EDC, FDC, DH, VECTOR,
-        dopedim, dealdim>
+  template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
+           template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
+           template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
+  class LocalConstraint : public ConstraintInterface<EDC, FDC, DH, VECTOR,
+    dopedim, dealdim>
+  {
+  public:
+    LocalConstraint()
     {
-      public:
-        LocalConstraint() 
-        {
-	  q_min_ = -500.;
-	  q_max_ = 500.;
-        }
-        ~LocalConstraint()
-        {
-        }
+      q_min_ = -500.;
+      q_max_ = 500.;
+    }
+    ~LocalConstraint()
+    {
+    }
 
-        void
-        EvaluateLocalControlConstraints(
-            const dealii::BlockVector<double>& control,
-            dealii::BlockVector<double>& constraints)
-        {
-          assert(constraints.block(0).size() == 2*control.block(0).size());
+    void
+    EvaluateLocalControlConstraints(
+      const dealii::BlockVector<double> &control,
+      dealii::BlockVector<double> &constraints)
+    {
+      assert(constraints.block(0).size() == 2*control.block(0).size());
 
-            //Add Control Constraints, such that if control is feasible all  entries are not positive!
-            // q_min_ <= control <= q_max_
-          for (unsigned int i = 0; i < control.block(0).size(); i++)
-          {
-	    constraints.block(0)(i) = q_min_ - control.block(0)(i);
-	    constraints.block(0)(control.block(0).size() + i) = control.block(0)(i) - q_max_;
-	  }
-        }
-        void
-        GetControlBoxConstraints(VECTOR& lb, VECTOR& ub) const
+      //Add Control Constraints, such that if control is feasible all  entries are not positive!
+      // q_min_ <= control <= q_max_
+      for (unsigned int i = 0; i < control.block(0).size(); i++)
         {
-          lb = q_min_;
-	  ub = q_max_;
+          constraints.block(0)(i) = q_min_ - control.block(0)(i);
+          constraints.block(0)(control.block(0).size() + i) = control.block(0)(i) - q_max_;
         }
+    }
+    void
+    GetControlBoxConstraints(VECTOR &lb, VECTOR &ub) const
+    {
+      lb = q_min_;
+      ub = q_max_;
+    }
 
-        std::string
-        GetType() const
-        {
-          throw DOpEException("Unknown problem_type " + this->GetProblemType(),
-              "LocalConstraints::GetType");
-        }
-        std::string
-        GetName() const
-        {
-          throw DOpEException("Unknown problem_type " + this->GetProblemType(),
-              "LocalConstraints::GetName");
-        }
+    std::string
+    GetType() const
+    {
+      throw DOpEException("Unknown problem_type " + this->GetProblemType(),
+                          "LocalConstraints::GetType");
+    }
+    std::string
+    GetName() const
+    {
+      throw DOpEException("Unknown problem_type " + this->GetProblemType(),
+                          "LocalConstraints::GetName");
+    }
 
-        dealii::UpdateFlags
-        GetUpdateFlags() const
-        {
-          return update_values | update_quadrature_points;
-        }
+    dealii::UpdateFlags
+    GetUpdateFlags() const
+    {
+      return update_values | update_quadrature_points;
+    }
 
-      private:
-	double q_min_, q_max_;
+  private:
+    double q_min_, q_max_;
 
-    };
+  };
 }
 
 #endif

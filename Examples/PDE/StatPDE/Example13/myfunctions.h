@@ -34,21 +34,21 @@ namespace DOpE
 {
   class ExactSolution : public DOpEWrapper::Function<2>
   {
-    public:
-      ExactSolution() :
-          DOpEWrapper::Function<2>(1)
-      {
-      }
+  public:
+    ExactSolution() :
+      DOpEWrapper::Function<2>(1)
+    {
+    }
 
-      virtual double
-      value(const Point<2> &p, const unsigned int component = 0) const;
+    virtual double
+    value(const Point<2> &p, const unsigned int component = 0) const;
 
   };
 
   /******************************************************/
 
   double
-    ExactSolution::value(const Point<2> &p, const unsigned int /*component*/) const
+  ExactSolution::value(const Point<2> &p, const unsigned int /*component*/) const
   {
     const double x = p[0];
     if (x <= 0.5)

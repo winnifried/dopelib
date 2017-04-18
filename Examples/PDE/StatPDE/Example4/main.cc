@@ -59,16 +59,16 @@ typedef BlockSparsityPattern SPARSITYPATTERN;
 typedef BlockVector<double> VECTOR;
 
 typedef PDEProblemContainer<LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
-    SimpleDirichletData<VECTOR, DIM>, SPARSITYPATTERN, VECTOR, DIM, FE,
-    DOFHANDLER> OP;
+        SimpleDirichletData<VECTOR, DIM>, SPARSITYPATTERN, VECTOR, DIM, FE,
+        DOFHANDLER> OP;
 typedef IntegratorDataContainer<DOFHANDLER, QUADRATURE, FACEQUADRATURE, VECTOR,
-    DIM> IDC;
+        DIM> IDC;
 typedef Integrator<IDC, VECTOR, double, DIM> INTEGRATOR;
 typedef DirectLinearSolverWithMatrix<SPARSITYPATTERN, MATRIX, VECTOR> LINEARSOLVER;
 typedef NewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR> NLS;
 typedef StatPDEProblem<NLS, INTEGRATOR, OP, VECTOR, DIM> RP;
 typedef MethodOfLines_StateSpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN,
-    VECTOR, DIM> STH;
+        VECTOR, DIM> STH;
 
 int
 main(int argc, char **argv)
@@ -78,21 +78,21 @@ main(int argc, char **argv)
    *  with constant rhs (1,1) and zero dirichlet values.
    *
    *  This example is the most simplest one and its goal
-   *  is to demonstrate how DOpE implements this 
+   *  is to demonstrate how DOpE implements this
    *  well-known test.
    */
 
   string paramfile = "dope.prm";
 
   if (argc == 2)
-  {
-    paramfile = argv[1];
-  }
+    {
+      paramfile = argv[1];
+    }
   else if (argc > 2)
-  {
-    std::cout << "Usage: " << argv[0] << " [ paramfile ] " << std::endl;
-    return -1;
-  }
+    {
+      std::cout << "Usage: " << argv[0] << " [ paramfile ] " << std::endl;
+      return -1;
+    }
 
   ParameterReader pr;
   RP::declare_params(pr);
@@ -116,7 +116,7 @@ main(int argc, char **argv)
   triangulation.refine_global(3);
 
   MethodOfLines_StateSpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR,
-      DIM> DOFH(triangulation, state_fe);
+                                      DIM> DOFH(triangulation, state_fe);
 
   OP P(LPDE, DOFH);
 
@@ -142,28 +142,28 @@ main(int argc, char **argv)
   solver.RegisterExceptionHandler(&ex);
 
   try
-  {
-    solver.ReInit();
-    out.ReInit();
-    stringstream outp;
+    {
+      solver.ReInit();
+      out.ReInit();
+      stringstream outp;
 
-    outp << "**************************************************\n";
-    outp << "*             Starting Forward Solve             *\n";
-    outp << "*   Solving : " << P.GetName() << "\t*\n";
-    outp << "*   SDoFs   : ";
-    solver.StateSizeInfo(outp);
-    outp << "**************************************************";
-    out.Write(outp, 1, 1, 1);
+      outp << "**************************************************\n";
+      outp << "*             Starting Forward Solve             *\n";
+      outp << "*   Solving : " << P.GetName() << "\t*\n";
+      outp << "*   SDoFs   : ";
+      solver.StateSizeInfo(outp);
+      outp << "**************************************************";
+      out.Write(outp, 1, 1, 1);
 
-    solver.ComputeReducedFunctionals();
-  }
+      solver.ComputeReducedFunctionals();
+    }
   catch (DOpEException &e)
-  {
-    std::cout
-        << "Warning: During execution of `" + e.GetThrowingInstance()
-            + "` the following Problem occurred!" << std::endl;
-    std::cout << e.GetErrorMessage() << std::endl;
-  }
+    {
+      std::cout
+          << "Warning: During execution of `" + e.GetThrowingInstance()
+          + "` the following Problem occurred!" << std::endl;
+      std::cout << e.GetErrorMessage() << std::endl;
+    }
 
   return 0;
 }

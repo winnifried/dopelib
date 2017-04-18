@@ -29,37 +29,37 @@ using namespace dealii;
 
 class BoundaryParabel : public DOpEWrapper::Function<2>
 {
-  public:
-    BoundaryParabel(ParameterReader &param_reader) :
-        DOpEWrapper::Function<2>(7), mytime(0)
-    {
-      param_reader.SetSubsection("My functions parameters");
-      mean_inflow_velocity = param_reader.get_double("mean_inflow_velocity");
-    }
+public:
+  BoundaryParabel(ParameterReader &param_reader) :
+    DOpEWrapper::Function<2>(7), mytime(0)
+  {
+    param_reader.SetSubsection("My functions parameters");
+    mean_inflow_velocity = param_reader.get_double("mean_inflow_velocity");
+  }
 
-    virtual double
-    value(const Point<2> &p, const unsigned int component = 0) const;
+  virtual double
+  value(const Point<2> &p, const unsigned int component = 0) const;
 
-    virtual void
-    vector_value(const Point<2> &p, Vector<double> &value) const;
+  virtual void
+  vector_value(const Point<2> &p, Vector<double> &value) const;
 
-    static void
-    declare_params(ParameterReader &param_reader)
-    {
-      param_reader.SetSubsection("My functions parameters");
-      param_reader.declare_entry("mean_inflow_velocity", "0.0",
-          Patterns::Double(0));
-    }
+  static void
+  declare_params(ParameterReader &param_reader)
+  {
+    param_reader.SetSubsection("My functions parameters");
+    param_reader.declare_entry("mean_inflow_velocity", "0.0",
+                               Patterns::Double(0));
+  }
 
-    void
-    SetTime(double t) const
-    {
-      mytime = t;
-    }
+  void
+  SetTime(double t) const
+  {
+    mytime = t;
+  }
 
-  private:
-    double mean_inflow_velocity;
-    mutable double mytime;
+private:
+  double mean_inflow_velocity;
+  mutable double mytime;
 
 };
 
@@ -69,44 +69,44 @@ double
 BoundaryParabel::value(const Point<2> &p, const unsigned int component) const
 {
   Assert(component < this->n_components,
-      ExcIndexRange (component, 0, this->n_components));
+         ExcIndexRange (component, 0, this->n_components));
 
   if (component == 0)
-  {
-
-    /*
-     // Channel problem
-     return   ( (p(0) == -6.0) && (p(1) <= 2.0)  ? - mean_inflow_velocity *
-     (std::pow(p(1), 2) - 2.0 * std::pow(p(1),1)) : 0 );
-     */
-
-    /*
-     // Fluid Benchmark
-     return ( (p(0) == 0) && (p(1) <= 0.41) ? -mean_inflow_velocity *
-     (4.0/0.1681) *
-     (std::pow(p(1), 2) - 0.41 * std::pow(p(1),1)) : 0 );
-
-     */
-
-    //	FSI Benchmark
-    if (mytime < 2.0)
     {
-      return (
-          (p(0) == 0) && (p(1) <= 0.41) ? -1.5 * mean_inflow_velocity
-              * (1.0 - std::cos(M_PI / 2.0 * mytime)) / 2.0 * (4.0 / 0.1681)
-              * (std::pow(p(1), 2) - 0.41 * std::pow(p(1), 1)) :
-              0);
-    }
-    else
-    {
-      return (
-          (p(0) == 0) && (p(1) <= 0.41) ? -1.5 * mean_inflow_velocity
-              * (4.0 / 0.1681)
-              * (std::pow(p(1), 2) - 0.41 * std::pow(p(1), 1)) :
-              0);
-    }
 
-  }
+      /*
+       // Channel problem
+       return   ( (p(0) == -6.0) && (p(1) <= 2.0)  ? - mean_inflow_velocity *
+       (std::pow(p(1), 2) - 2.0 * std::pow(p(1),1)) : 0 );
+       */
+
+      /*
+       // Fluid Benchmark
+       return ( (p(0) == 0) && (p(1) <= 0.41) ? -mean_inflow_velocity *
+       (4.0/0.1681) *
+       (std::pow(p(1), 2) - 0.41 * std::pow(p(1),1)) : 0 );
+
+       */
+
+      //  FSI Benchmark
+      if (mytime < 2.0)
+        {
+          return (
+                   (p(0) == 0) && (p(1) <= 0.41) ? -1.5 * mean_inflow_velocity
+                   * (1.0 - std::cos(M_PI / 2.0 * mytime)) / 2.0 * (4.0 / 0.1681)
+                   * (std::pow(p(1), 2) - 0.41 * std::pow(p(1), 1)) :
+                   0);
+        }
+      else
+        {
+          return (
+                   (p(0) == 0) && (p(1) <= 0.41) ? -1.5 * mean_inflow_velocity
+                   * (4.0 / 0.1681)
+                   * (std::pow(p(1), 2) - 0.41 * std::pow(p(1), 1)) :
+                   0);
+        }
+
+    }
   return 0;
 }
 

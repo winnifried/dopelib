@@ -39,22 +39,22 @@
 namespace DOpE
 {
 //Predeclaration necessary
-template<typename VECTOR> class ReducedProblemInterface_Base;
+  template<typename VECTOR> class ReducedProblemInterface_Base;
 /////////////////////////////
 
-/**
- * This class takes care of all output from the programm.
- * It includes special filter routines on what information
- * is to be displayed, and what vectors should be stored.
- * The filters and output opptions can be configured
- * using a parameter file.
- */
-template<typename VECTOR>
-class DOpEOutputHandler
-{
+  /**
+   * This class takes care of all output from the programm.
+   * It includes special filter routines on what information
+   * is to be displayed, and what vectors should be stored.
+   * The filters and output opptions can be configured
+   * using a parameter file.
+   */
+  template<typename VECTOR>
+  class DOpEOutputHandler
+  {
   public:
 
-    DOpEOutputHandler(ReducedProblemInterface_Base<VECTOR>* SI, ParameterReader &param_reader);
+    DOpEOutputHandler(ReducedProblemInterface_Base<VECTOR> *SI, ParameterReader &param_reader);
     ~DOpEOutputHandler();
 
     /**
@@ -68,31 +68,31 @@ class DOpEOutputHandler
      * Call this function to write a string to an auxilliary file
      *
      * @param msg        The message that should be printed.
-     * @param file       Filename 
+     * @param file       Filename
      * @param append     String appendend to file ?
      */
     void WriteAux(std::string msg, std::string file, bool append=true);
 
-       /**
-     * Call this function to write a string both to std::out and into the logfile.
-     * If the debug mode is activated via the paramfile, the message is always printed into the log.
-     *
-     * @param msg        The message that should be printed.
-     * @param priority   The priority of the message. This is used to decide whether the string is actually be
-     *                   printed. By comparing this number with the printlevel given in the paramfile.
-     *                   A message is printed only if priority < printlevel, or if printlevel < 0
-     *                   As a general rule:
-     *                   priority 0 : Things that must be printed always and can't be turned of.
-     *                   priority 1 : Tell what Major Algorithms are running
-     *                   priority 2 : Things like number of Total Iterations
-     *                   priority 3 : Major subiterations
-     *                   priority 4 : Minor subiteration (e.g ComputeState)
-     *                   priority 5 : Subiteration infos
-     *                   priority 20: Debug Infos
-     *
-     * @param pre_newlines Number of empty lines in front of the message.
-     * @param post_newlines Number of empty lines after the message.
-     */
+    /**
+    * Call this function to write a string both to std::out and into the logfile.
+    * If the debug mode is activated via the paramfile, the message is always printed into the log.
+    *
+    * @param msg        The message that should be printed.
+    * @param priority   The priority of the message. This is used to decide whether the string is actually be
+    *                   printed. By comparing this number with the printlevel given in the paramfile.
+    *                   A message is printed only if priority < printlevel, or if printlevel < 0
+    *                   As a general rule:
+    *                   priority 0 : Things that must be printed always and can't be turned of.
+    *                   priority 1 : Tell what Major Algorithms are running
+    *                   priority 2 : Things like number of Total Iterations
+    *                   priority 3 : Major subiterations
+    *                   priority 4 : Minor subiteration (e.g ComputeState)
+    *                   priority 5 : Subiteration infos
+    *                   priority 20: Debug Infos
+    *
+    * @param pre_newlines Number of empty lines in front of the message.
+    * @param post_newlines Number of empty lines after the message.
+    */
     void Write(std::string msg, int priority = 20, unsigned int pre_newlines = 0,
                unsigned int post_newlines = 0);
     /**
@@ -115,7 +115,7 @@ class DOpEOutputHandler
      * @param pre_newlines Number of empty lines in front of the message.
      * @param post_newlines Number of empty lines after the message.
      */
-    void Write(std::stringstream& msg, int priority = 20, unsigned int pre_newlines = 0,
+    void Write(std::stringstream &msg, int priority = 20, unsigned int pre_newlines = 0,
                unsigned int post_newlines = 0);
     /**
      * Call this Function to write a BlockVector into a file. The method AllowWrite is called to check if
@@ -127,7 +127,7 @@ class DOpEOutputHandler
      * @param dof_type   A string indicating which dof_handler is associated to the BlockVector.
      *                   Valid options are 'control' and 'state'
      */
-    void Write(const VECTOR&q, std::string name, std::string dof_type);
+    void Write(const VECTOR &q, std::string name, std::string dof_type);
 
     /**
      * Call this Function to write a Vector containing element-related data into a file.
@@ -141,8 +141,8 @@ class DOpEOutputHandler
      *                   Valid options are 'control' and 'state'.
      */
     void
-    WriteElementwise(const Vector<double>&q, std::string name,
-        std::string dof_type);
+    WriteElementwise(const Vector<double> &q, std::string name,
+                     std::string dof_type);
 
     /**
      * Call this Function to write a ControlVector into a file. The method AllowWrite is called to check if
@@ -154,7 +154,7 @@ class DOpEOutputHandler
      * @param dof_type   A string indicating which dof_handler is associated to the BlockVector.
      *                   Valid options are 'control' and 'state'
      */
-    void Write(const ControlVector<VECTOR>& q, std::string name, std::string dof_type);
+    void Write(const ControlVector<VECTOR> &q, std::string name, std::string dof_type);
     //    /**
     //     * same as above for ControlVector<dealii::Vector<double> >
     //     *
@@ -171,7 +171,7 @@ class DOpEOutputHandler
      * @param dof_type   A string indicating which dof_handler is associated to the BlockVector.
      *                   Valid options are 'time'.
      */
-    void Write(const std::vector<double>& q, std::string name, std::string dof_type);
+    void Write(const std::vector<double> &q, std::string name, std::string dof_type);
     /**
      * Writes an error message to std::cerr and into the Log. This message is printed always
      * regardless of priorities.
@@ -193,29 +193,35 @@ class DOpEOutputHandler
      */
     void ReInit();
     /**
-     * Decides if the exact output value is written out or 
-     * zero (in case if the exact output value is below a 
+     * Decides if the exact output value is written out or
+     * zero (in case if the exact output value is below a
      * certain tolerance.
      */
     std::string ZeroTolerance(double value, double reference_value);
     /**
      * This function sets the precision of the newton output values.
      */
-    void InitNewtonOut(std::stringstream& msg);
+    void InitNewtonOut(std::stringstream &msg);
     /**
      * This function sets the precision of the functional output values.
      */
-    void InitOut(std::stringstream& msg);
+    void InitOut(std::stringstream &msg);
 
     /**
      * This function can be called to disable all output.
      */
-    void DisallowAllOutput() { disallow_all_ = true; };
+    void DisallowAllOutput()
+    {
+      disallow_all_ = true;
+    };
     /**
      * This function is used to restore normal output behavior after a call
      * of DisallowAllOutput
      */
-    void ResumeOutput() { disallow_all_ = false; }
+    void ResumeOutput()
+    {
+      disallow_all_ = false;
+    }
 
     /**
      * This function constructs the correct output name given by name and dof_type.
@@ -227,11 +233,11 @@ class DOpEOutputHandler
      * Redirects all output to std::cout to the logfile.
      * This is usefull if third party software directly prints
      * output onto the screen.
-     */ 
+     */
     void StartSaveCTypeOutputToLog();
     /**
      * Disables the redirect of std::cout
-     */ 
+     */
     void StopSaveCTypeOutputToLog();
 
     /**
@@ -254,14 +260,14 @@ class DOpEOutputHandler
      * @return The postfix to the filename.
      */
     std::string GetPostIndex();
-    ReducedProblemInterface_Base<VECTOR>* GetReducedProblem()
+    ReducedProblemInterface_Base<VECTOR> *GetReducedProblem()
     {
-      if(NULL != Solver_)
-	return Solver_;
+      if (NULL != Solver_)
+        return Solver_;
       else
-      {
-	abort();
-      }
+        {
+          abort();
+        }
     }
 
     /**
@@ -291,14 +297,14 @@ class DOpEOutputHandler
      * @param list    A reference to a vector of strings. All words in the string tmp
      *                are beeing stored as a separate string in this list.
      */
-    void ParseString(const std::string tmp, std::vector<std::string>& list);
+    void ParseString(const std::string tmp, std::vector<std::string> &list);
 
   private:
     std::map<std::string, unsigned int> iteration_type_pos_;
     std::vector<unsigned int> iteration_number_;
     int printlevel_;
     std::string results_basedir_, results_outdir_, ending_, control_ending_, logfile_;
-    ReducedProblemInterface_Base<VECTOR>* Solver_;
+    ReducedProblemInterface_Base<VECTOR> *Solver_;
     unsigned int n_reinits_;
     bool debug_;
     unsigned int number_precision_;
@@ -312,14 +318,14 @@ class DOpEOutputHandler
     std::ofstream log_;
 
     fpos_t std_out_pos_;
-    int    stdout_backup_; 
+    int    stdout_backup_;
 
-   /**
-     * Prints Copyright information
-     */
+    /**
+      * Prints Copyright information
+      */
     void PrintCopyrightNotice();
 
-};
+  };
 
 }
 #endif

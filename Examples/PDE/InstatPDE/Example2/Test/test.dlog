@@ -6,10 +6,9 @@ This is DOpElib Version: 4.0.0 pre
 	Status as of: 16/02/2016
 
 	**************************************************
-	*             Starting Forward Solver            *
-	*   Solving : InstatOptProblemContainer	*
-	*  CDoFs : 	0
-	*  SDoFs : 	Number of Timepoints: 26
+	*             Starting Forward Solve             *
+	*   Solving : InstatPDEProblemContainer	*
+	*   SDoFs   : 	Number of Timepoints: 26
 		Spatial DoFs: 7176
 	**************************************************
 
@@ -362,15 +361,14 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		Deflection_Y: 0.000876367
 		Drag: 14.1161
 		Lift: 0.766352
-	CostFunctional: 0
 	Computing Functionals:
 	Pressure_difference too large. Writing to file instead: 
-	Writing [./Mesh0/Pressure_difference_InstatOptProblemContainer.00025.gpl]
+	Writing [./Mesh0/Pressure_difference_InstatPDEProblemContainer.00025.gpl]
 	Deflection_X too large. Writing to file instead: 
-	Writing [./Mesh0/Deflection_X_InstatOptProblemContainer.00025.gpl]
+	Writing [./Mesh0/Deflection_X_InstatPDEProblemContainer.00025.gpl]
 	Deflection_Y too large. Writing to file instead: 
-	Writing [./Mesh0/Deflection_Y_InstatOptProblemContainer.00025.gpl]
+	Writing [./Mesh0/Deflection_Y_InstatPDEProblemContainer.00025.gpl]
 	Drag too large. Writing to file instead: 
-	Writing [./Mesh0/Drag_InstatOptProblemContainer.00025.gpl]
+	Writing [./Mesh0/Drag_InstatPDEProblemContainer.00025.gpl]
 	Lift too large. Writing to file instead: 
-	Writing [./Mesh0/Lift_InstatOptProblemContainer.00025.gpl]
+	Writing [./Mesh0/Lift_InstatPDEProblemContainer.00025.gpl]

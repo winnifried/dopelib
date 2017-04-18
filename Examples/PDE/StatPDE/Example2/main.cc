@@ -66,31 +66,31 @@ typedef SparsityPattern SPARSITYPATTERN;
 typedef Vector<double> VECTOR;
 
 typedef PDEProblemContainer<LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
-    SimpleDirichletData<VECTOR, DIM>, SPARSITYPATTERN, VECTOR, DIM, FE,
-    DOFHANDLER> OP;
+        SimpleDirichletData<VECTOR, DIM>, SPARSITYPATTERN, VECTOR, DIM, FE,
+        DOFHANDLER> OP;
 typedef IntegratorDataContainer<DOFHANDLER, QUADRATURE, FACEQUADRATURE, VECTOR,
-    DIM> IDC;
+        DIM> IDC;
 typedef Integrator<IDC, VECTOR, double, DIM> INTEGRATOR;
 typedef DirectLinearSolverWithMatrix<SPARSITYPATTERN, MATRIX, VECTOR> LINEARSOLVER;
 typedef NewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR> NLS;
 typedef StatPDEProblem<NLS, INTEGRATOR, OP, VECTOR, DIM> RP;
 typedef MethodOfLines_StateSpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN,
-    VECTOR, DIM> STH;
+        VECTOR, DIM> STH;
 
 void
 declare_params(ParameterReader &param_reader)
 {
   param_reader.SetSubsection("main parameters");
   param_reader.declare_entry("max_iter", "1", Patterns::Integer(0),
-      "How many iterations?");
+                             "How many iterations?");
   param_reader.declare_entry("quad order", "2", Patterns::Integer(1),
-      "Order of the quad formula?");
+                             "Order of the quad formula?");
   param_reader.declare_entry("facequad order", "2", Patterns::Integer(1),
-      "Order of the face quad formula?");
+                             "Order of the face quad formula?");
   param_reader.declare_entry("order fe", "2", Patterns::Integer(1),
-      "Order of the finite element?");
+                             "Order of the finite element?");
   param_reader.declare_entry("prerefine", "1", Patterns::Integer(1),
-      "How often should we refine the coarse grid?");
+                             "How often should we refine the coarse grid?");
 }
 
 int
@@ -102,14 +102,14 @@ main(int argc, char **argv)
   string paramfile = "dope.prm";
 
   if (argc == 2)
-  {
-    paramfile = argv[1];
-  }
+    {
+      paramfile = argv[1];
+    }
   else if (argc > 2)
-  {
-    std::cout << "Usage: " << argv[0] << " [ paramfile ] " << std::endl;
-    return -1;
-  }
+    {
+      std::cout << "Usage: " << argv[0] << " [ paramfile ] " << std::endl;
+      return -1;
+    }
   ParameterReader pr;
 
   RP::declare_params(pr);
@@ -131,7 +131,7 @@ main(int argc, char **argv)
   const HyperShellBoundary<DIM> boundary_description(center);
   Triangulation<DIM> triangulation;
   GridGenerator::hyper_cube_with_cylindrical_hole(triangulation, 0.1, 1., 1, 1,
-      true);
+                                                  true);
   triangulation.set_boundary(4, boundary_description);
   if (prerefine > 0)
     triangulation.refine_global(prerefine);
@@ -182,35 +182,35 @@ main(int argc, char **argv)
   solver.RegisterExceptionHandler(&ex);
   /**********************************************************************/
   for (int i = 0; i < max_iter; i++)
-  {
-    try
     {
-      solver.ReInit();
-      out.ReInit();
-      stringstream outp;
+      try
+        {
+          solver.ReInit();
+          out.ReInit();
+          stringstream outp;
 
-      outp << "**************************************************\n";
-      outp << "*             Starting Forward Solve             *\n";
-      outp << "*   Solving : " << P.GetName() << "\t*\n";
-      outp << "*   SDoFs   : ";
-      solver.StateSizeInfo(outp);
-      outp << "**************************************************";
-      out.Write(outp, 1, 1, 1);
+          outp << "**************************************************\n";
+          outp << "*             Starting Forward Solve             *\n";
+          outp << "*   Solving : " << P.GetName() << "\t*\n";
+          outp << "*   SDoFs   : ";
+          solver.StateSizeInfo(outp);
+          outp << "**************************************************";
+          out.Write(outp, 1, 1, 1);
 
-      solver.ComputeReducedFunctionals();
-    }
-    catch (DOpEException &e)
-    {
-      std::cout
-          << "Warning: During execution of `" + e.GetThrowingInstance()
+          solver.ComputeReducedFunctionals();
+        }
+      catch (DOpEException &e)
+        {
+          std::cout
+              << "Warning: During execution of `" + e.GetThrowingInstance()
               + "` the following Problem occurred!" << std::endl;
-      std::cout << e.GetErrorMessage() << std::endl;
+          std::cout << e.GetErrorMessage() << std::endl;
+        }
+      if (i != max_iter - 1)
+        {
+          DOFH.RefineSpace();
+        }
     }
-    if (i != max_iter - 1)
-    {
-      DOFH.RefineSpace();
-    }
-  }
   return 0;
 }
 #undef FDC

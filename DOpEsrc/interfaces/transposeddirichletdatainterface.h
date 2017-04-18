@@ -32,17 +32,17 @@ namespace DOpE
    * For details see the description of TransposedGradientDirichletData and
    * TransposedHessianDirichletData
    *
-   */  
+   */
   template<int dealdim>
-  class TransposedDirichletDataInterface 
+  class TransposedDirichletDataInterface
   {
   public:
     virtual ~TransposedDirichletDataInterface() {}
-    
+
     virtual void value (const dealii::Point<dealdim>   &p,
-			const unsigned int  component,
-			const unsigned int  dof_number, 
-			dealii::Vector<double>& local_vector) const=0;
-  }; 
+                        const unsigned int  component,
+                        const unsigned int  dof_number,
+                        dealii::Vector<double> &local_vector) const=0;
+  };
 }
 #endif

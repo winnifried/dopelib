@@ -70,23 +70,23 @@ typedef BlockSparsityPattern SPARSITYPATTERN;
 typedef BlockVector<double> VECTOR;
 
 typedef PDEProblemContainer<LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
-    SimpleDirichletData<VECTOR, DIM>, SPARSITYPATTERN, VECTOR, DIM, FE,
-    DOFHANDLER> OP;
+        SimpleDirichletData<VECTOR, DIM>, SPARSITYPATTERN, VECTOR, DIM, FE,
+        DOFHANDLER> OP;
 typedef IntegratorDataContainer<DOFHANDLER, QUADRATURE, FACEQUADRATURE, VECTOR,
-    DIM> IDC;
+        DIM> IDC;
 typedef Integrator<IDC, VECTOR, double, DIM> INTEGRATOR;
 typedef SchurLinearSolverWithMatrix LINEARSOLVER;
 typedef NewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR> NLS;
 typedef StatPDEProblem<NLS, INTEGRATOR, OP, VECTOR, DIM> RP;
 typedef MethodOfLines_StateSpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN,
-    VECTOR, DIM> STH;
+        VECTOR, DIM> STH;
 
 void
 declare_params(ParameterReader &param_reader)
 {
   param_reader.SetSubsection("main parameters");
   param_reader.declare_entry("max_iter", "1", Patterns::Integer(0),
-      "How many iterations?");
+                             "How many iterations?");
 }
 
 int
@@ -95,14 +95,14 @@ main(int argc, char **argv)
   string paramfile = "dope.prm";
 
   if (argc == 2)
-  {
-    paramfile = argv[1];
-  }
+    {
+      paramfile = argv[1];
+    }
   else if (argc > 2)
-  {
-    std::cout << "Usage: " << argv[0] << " [ paramfile ] " << std::endl;
-    return -1;
-  }
+    {
+      std::cout << "Usage: " << argv[0] << " [ paramfile ] " << std::endl;
+      return -1;
+    }
 
   ParameterReader pr;
   RP::declare_params(pr);
@@ -114,9 +114,9 @@ main(int argc, char **argv)
   //define some constants
   pr.SetSubsection("main parameters");
   const int max_iter = pr.get_integer("max_iter");
- 
+
   Triangulation<DIM> triangulation;
- 
+
   GridGenerator::hyper_cube (triangulation, -1, 1);
 
   FE<DIM> state_fe(FE_RaviartThomasNodal<DIM>(0),1,FE_DGQ<DIM>(0),1);
@@ -126,8 +126,8 @@ main(int argc, char **argv)
   IDC idc(quadrature_formula, face_quadrature_formula);
 
   LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM> LPDE;
-  
-  //We need to state the mapping explicitly, otherwise the divergence of 
+
+  //We need to state the mapping explicitly, otherwise the divergence of
   //the RT-elements provided by dealii will be NaN.
   DOpEWrapper::Mapping<DIM,DOFHANDLER> mapping(1,true);
 
@@ -155,36 +155,36 @@ main(int argc, char **argv)
   VECTOR solution;
 
   for (int i = 0; i < max_iter; i++)
-  {
-    try
     {
-      solver.ReInit();
-      out.ReInit();
-      stringstream outp;
+      try
+        {
+          solver.ReInit();
+          out.ReInit();
+          stringstream outp;
 
-      outp << "**************************************************\n";
-      outp << "*             Starting Forward Solve             *\n";
-      outp << "*   Solving : " << P.GetName() << "\t*\n";
-      outp << "*   SDoFs   : ";
-      solver.StateSizeInfo(outp);
-      outp << "**************************************************\n";
-      out.Write(outp, 1, 1, 1);
+          outp << "**************************************************\n";
+          outp << "*             Starting Forward Solve             *\n";
+          outp << "*   Solving : " << P.GetName() << "\t*\n";
+          outp << "*   SDoFs   : ";
+          solver.StateSizeInfo(outp);
+          outp << "**************************************************\n";
+          out.Write(outp, 1, 1, 1);
 
-      solver.ComputeReducedFunctionals();
+          solver.ComputeReducedFunctionals();
 
-    }
-    catch (DOpEException &e)
-    {
-      std::cout
-          << "Warning: During execution of `" + e.GetThrowingInstance()
+        }
+      catch (DOpEException &e)
+        {
+          std::cout
+              << "Warning: During execution of `" + e.GetThrowingInstance()
               + "` the following Problem occurred!" << std::endl;
-      std::cout << e.GetErrorMessage() << std::endl;
+          std::cout << e.GetErrorMessage() << std::endl;
+        }
+      if (i != max_iter - 1)
+        {
+          DOFH.RefineSpace();
+        }
     }
-    if (i != max_iter - 1)
-    {
-      DOFH.RefineSpace();
-    }
-  }
 
   return 0;
 }

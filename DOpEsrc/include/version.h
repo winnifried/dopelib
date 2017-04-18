@@ -13,7 +13,7 @@ namespace DOpE
     const unsigned int minor         = 0;
     //Update when you have fixed a bug
     const unsigned int fix           = 0;
-    //If we want we can give additional information here 
+    //If we want we can give additional information here
     const std::string  postfix       = "pre";
     //When updating, please increase the time
     const unsigned int day           = 16;

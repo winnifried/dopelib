@@ -28,18 +28,18 @@
 
 namespace DOpE
 {
-/**
- * Implements different methods to set the ActiveFEIndex on the elements in the
- * case of an hp FEMethod. This class defines the interface needed 
- * by the HP::DoFHandler. The user needs to reimplement the methods
- * according to the specific rules used for the element selection.
- */
+  /**
+   * Implements different methods to set the ActiveFEIndex on the elements in the
+   * case of an hp FEMethod. This class defines the interface needed
+   * by the HP::DoFHandler. The user needs to reimplement the methods
+   * according to the specific rules used for the element selection.
+   */
 
-template<int dopedim, int dealdim=dopedim>
-class ActiveFEIndexSetterInterface
-{
+  template<int dopedim, int dealdim=dopedim>
+  class ActiveFEIndexSetterInterface
+  {
   public:
-    ActiveFEIndexSetterInterface(){};
+    ActiveFEIndexSetterInterface() {};
 
     /**
      * Gets an iterator to a element and sets an active FE index
@@ -49,7 +49,7 @@ class ActiveFEIndexSetterInterface
      */
     virtual void
     SetActiveFEIndexState(
-        typename dealii::hp::DoFHandler<dealdim>::active_cell_iterator&) const
+      typename dealii::hp::DoFHandler<dealdim>::active_cell_iterator &) const
     {
     }
     ;
@@ -58,7 +58,7 @@ class ActiveFEIndexSetterInterface
      */
     void
     SetActiveFEIndexState(
-        typename dealii::DoFHandler<dealdim>::active_cell_iterator&) const
+      typename dealii::DoFHandler<dealdim>::active_cell_iterator &) const
     {
     }
     ;
@@ -79,7 +79,7 @@ class ActiveFEIndexSetterInterface
      */
     virtual void
     SetActiveFEIndexControl(
-        typename dealii::hp::DoFHandler<dopedim>::active_cell_iterator&) const
+      typename dealii::hp::DoFHandler<dopedim>::active_cell_iterator &) const
     {
     }
     ;
@@ -88,13 +88,13 @@ class ActiveFEIndexSetterInterface
      */
     void
     SetActiveFEIndexControl(
-        typename dealii::DoFHandler<dopedim>::active_cell_iterator&) const
+      typename dealii::DoFHandler<dopedim>::active_cell_iterator &) const
     {
     }
     ;
-  /**
-   * Just for compatibility issues.
-   */
+    /**
+     * Just for compatibility issues.
+     */
 //    virtual void
 //    SetActiveFEIndexControl(
 //        typename dealii::MGDoFHandler<dopedim>::active_cell_iterator&) const
@@ -104,13 +104,13 @@ class ActiveFEIndexSetterInterface
 
 
   protected:
-};
+  };
 
-template<int dealdim>
-class ActiveFEIndexSetterInterface<0, dealdim>
-{
+  template<int dealdim>
+  class ActiveFEIndexSetterInterface<0, dealdim>
+  {
   public:
-    ActiveFEIndexSetterInterface(){};
+    ActiveFEIndexSetterInterface() {};
     /*
      * Gets an iterator to a element and sets an active FE index
      * on this element for the state variable. This function is
@@ -137,7 +137,7 @@ class ActiveFEIndexSetterInterface<0, dealdim>
 //    ;
 
   protected:
-};
+  };
 
 }//end of namespace
 

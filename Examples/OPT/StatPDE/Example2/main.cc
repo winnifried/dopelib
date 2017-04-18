@@ -73,13 +73,13 @@ typedef LocalFunctional<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> COSTFUNCTIONAL;
 typedef FunctionalInterface<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> FUNCTIONALINTERFACE;
 
 typedef OptProblemContainer<FUNCTIONALINTERFACE, COSTFUNCTIONAL,
-    LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
-    SimpleDirichletData<VECTOR,  DIM>,
-    NoConstraints<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM>, SPARSITYPATTERN,
-    VECTOR, CDIM, DIM> OP;
+        LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
+        SimpleDirichletData<VECTOR,  DIM>,
+        NoConstraints<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM>, SPARSITYPATTERN,
+        VECTOR, CDIM, DIM> OP;
 
 typedef IntegratorDataContainer<DOFHANDLER, QUADRATURE, FACEQUADRATURE, VECTOR,
-    DIM> IDC;
+        DIM> IDC;
 typedef Integrator<IDC, VECTOR, double, DIM> INTEGRATOR;
 //special newtonsolver for the mixed dims
 typedef IntegratorMixedDimensions<IDC, VECTOR, double, CDIM, DIM> INTEGRATORM;
@@ -95,9 +95,9 @@ typedef NewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR> NLS;
 typedef ReducedNewtonAlgorithm<OP, VECTOR> RNA;
 
 typedef StatReducedProblem<NLSM, NLS, INTEGRATORM, INTEGRATOR, OP, VECTOR, CDIM,
-    DIM> RP;
+        DIM> RP;
 typedef MethodOfLines_SpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR,
-    CDIM, DIM> STH;
+        CDIM, DIM> STH;
 
 int
 main(int argc, char **argv)
@@ -110,14 +110,14 @@ main(int argc, char **argv)
   string paramfile = "dope.prm";
 
   if (argc == 2)
-  {
-    paramfile = argv[1];
-  }
+    {
+      paramfile = argv[1];
+    }
   else if (argc > 2)
-  {
-    std::cout << "Usage: " << argv[0] << " [ paramfile ] " << std::endl;
-    return -1;
-  }
+    {
+      std::cout << "Usage: " << argv[0] << " [ paramfile ] " << std::endl;
+      return -1;
+    }
 
   ParameterReader pr;
   RP::declare_params(pr);
@@ -158,25 +158,25 @@ main(int argc, char **argv)
   RNA Alg(&P, &solver, pr);
 
   try
-  {
-    Alg.ReInit();
-
-    ControlVector<VECTOR> q(&DOFH, DOpEtypes::VectorStorageType::fullmem);
     {
-      //PreInitialization of q
-      q = 2.;
+      Alg.ReInit();
+
+      ControlVector<VECTOR> q(&DOFH, DOpEtypes::VectorStorageType::fullmem);
+      {
+        //PreInitialization of q
+        q = 2.;
+      }
+
+      Alg.Solve(q);
     }
-
-    Alg.Solve(q);
-  }
   catch (DOpEException &e)
-  {
-    std::cout
-        << "Warning: During execution of `" + e.GetThrowingInstance()
-            + "` the following Problem occurred!" << std::endl;
+    {
+      std::cout
+          << "Warning: During execution of `" + e.GetThrowingInstance()
+          + "` the following Problem occurred!" << std::endl;
 
-    std::cout << e.GetErrorMessage() << std::endl;
-  }
+      std::cout << e.GetErrorMessage() << std::endl;
+    }
   return 0;
 }
 

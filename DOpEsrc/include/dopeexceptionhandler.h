@@ -33,11 +33,11 @@ namespace DOpE
 //Predeclaration necessary
   template<typename VECTOR> class DOpEOutputHandler;
 /////////////////////////////
-template<typename VECTOR>
+  template<typename VECTOR>
   class DOpEExceptionHandler
   {
   public:
-    DOpEExceptionHandler(DOpEOutputHandler<VECTOR>* OutputHandler);
+    DOpEExceptionHandler(DOpEOutputHandler<VECTOR> *OutputHandler);
     ~DOpEExceptionHandler();
 
     /**
@@ -45,17 +45,20 @@ template<typename VECTOR>
      * solver reached its maximal iteration count.
      * This function writes a warning message, but doesn't stop the computation.
      */
-    void HandleException(DOpEException& e, std::string reporter = "undefined");
+    void HandleException(DOpEException &e, std::string reporter = "undefined");
     /**
      * This function handles critical exceptions, e.g., the equation couln't be solved.
      * This function writes a warning message, and then terminates the program because
      * it is impossible to continue after a severe problem.
      */
-    void HandleCriticalException(DOpEException& e, std::string reporter = "undefined");
+    void HandleCriticalException(DOpEException &e, std::string reporter = "undefined");
   protected:
-    DOpEOutputHandler<VECTOR>* GetOutputHandler() { return OutputHandler_; }
+    DOpEOutputHandler<VECTOR> *GetOutputHandler()
+    {
+      return OutputHandler_;
+    }
   private:
-    DOpEOutputHandler<VECTOR>* OutputHandler_;
+    DOpEOutputHandler<VECTOR> *OutputHandler_;
   };
 
 }

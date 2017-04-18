@@ -28,9 +28,9 @@
 #include <deal.II/lac/block_sparsity_pattern.h>
 #include <deal.II/lac/block_sparse_matrix.h>
 #if DEAL_II_VERSION_GTE(8,5,0)
-  #include <deal.II/lac/dynamic_sparsity_pattern.h>
+#include <deal.II/lac/dynamic_sparsity_pattern.h>
 #else
-  #include <deal.II/lac/compressed_simple_sparsity_pattern.h>
+#include <deal.II/lac/compressed_simple_sparsity_pattern.h>
 #endif
 #include <deal.II/lac/solver_cg.h>
 #include <deal.II/lac/precondition.h>
@@ -62,20 +62,20 @@ namespace DOpE
    */
 
   template <typename SPARSITYPATTERN, typename MATRIX, typename VECTOR>
-    class TrilinosDirectLinearSolverWithMatrix
+  class TrilinosDirectLinearSolverWithMatrix
   {
   public:
     TrilinosDirectLinearSolverWithMatrix(ParameterReader &param_reader);
     ~TrilinosDirectLinearSolverWithMatrix();
-   
+
     static void declare_params(ParameterReader &param_reader);
- 
+
     /**
        This Function should be called once after grid refinement, or changes in boundary values
        to  recompute sparsity patterns, and constraint matrices.
      */
     template<typename PROBLEM>
-      void ReInit(PROBLEM& pde);
+    void ReInit(PROBLEM &pde);
 
     /**
      * Solves the linear PDE in the form Ax = b using direct solvers from Trilinos
@@ -85,19 +85,19 @@ namespace DOpE
      *                              to calculate the matrix.
      * @tparam <INTEGRATOR>         The integrator used to calculate the matrix A.
      * @param rhs                   Right Hand Side of the Equation, i.e., the VECTOR b.
-     *                              Note that rhs is not const, this is because we need to apply 
+     *                              Note that rhs is not const, this is because we need to apply
      *                              the boundary values to this vector!
      * @param solution              The Approximate Solution of the Linear Equation.
      *                              It is assumed to be zero! Upon completion this VECTOR stores x
      * @param force_build_matrix    A boolean value, that indicates whether the Matrix
      *                              should be build by the linear solver in the first iteration.
-     *				    The default is false, meaning that if we have no idea we don't
-     *				    want to build a matrix.
+     *            The default is false, meaning that if we have no idea we don't
+     *            want to build a matrix.
      *
      */
     template<typename PROBLEM, typename INTEGRATOR>
-      void Solve(PROBLEM& pde, INTEGRATOR& integr, VECTOR &rhs, VECTOR &solution, bool force_matrix_build=false);
-     
+    void Solve(PROBLEM &pde, INTEGRATOR &integr, VECTOR &rhs, VECTOR &solution, bool force_matrix_build=false);
+
   protected:
 
   private:
@@ -109,10 +109,10 @@ namespace DOpE
     std::string trilinos_solver_;
   };
 
-/*********************************Implementation************************************************/
- 
+  /*********************************Implementation************************************************/
+
   template <typename SPARSITYPATTERN, typename MATRIX, typename VECTOR>
-    void TrilinosDirectLinearSolverWithMatrix<SPARSITYPATTERN,MATRIX,VECTOR>::declare_params(ParameterReader &param_reader) 
+  void TrilinosDirectLinearSolverWithMatrix<SPARSITYPATTERN,MATRIX,VECTOR>::declare_params(ParameterReader &param_reader)
   {
     param_reader.SetSubsection("trilinos direct parameters");
     param_reader.declare_entry("direct_solver","Amesos_Klu",Patterns::Selection("Amesos_Klu|Amesos_Lapack|Amesos_Scalapack|Amesos_Umfpack|Amesos_Pardiso|Amesos_Taucs|Amesos_Superlu|Amesos_Superludist|Amesos_Dscpack|Amesos_Mumps"),"Direct Solver to be used by trilinos.");
@@ -122,66 +122,66 @@ namespace DOpE
   /******************************************************/
 
   template <typename SPARSITYPATTERN, typename MATRIX, typename VECTOR>
-    TrilinosDirectLinearSolverWithMatrix<SPARSITYPATTERN,MATRIX,VECTOR>::TrilinosDirectLinearSolverWithMatrix(
-      ParameterReader &param_reader) 
+  TrilinosDirectLinearSolverWithMatrix<SPARSITYPATTERN,MATRIX,VECTOR>::TrilinosDirectLinearSolverWithMatrix(
+    ParameterReader &param_reader)
   {
 #ifndef DOPELIB_WITH_TRILINOS
-      throw DOpEException("To use this algorithm you need to deal.II compiled with Trilinos!","TrilinosDirectLinearSolverWithMatrix");
+    throw DOpEException("To use this algorithm you need to deal.II compiled with Trilinos!","TrilinosDirectLinearSolverWithMatrix");
 #endif
     param_reader.SetSubsection("trilinos direct parameters");
     trilinos_solver_ = param_reader.get_string("direct_solver");
   }
 
-/******************************************************/
+  /******************************************************/
 
-template <typename SPARSITYPATTERN, typename MATRIX, typename VECTOR>
- TrilinosDirectLinearSolverWithMatrix<SPARSITYPATTERN,MATRIX,VECTOR>::~TrilinosDirectLinearSolverWithMatrix()
-{
-}
+  template <typename SPARSITYPATTERN, typename MATRIX, typename VECTOR>
+  TrilinosDirectLinearSolverWithMatrix<SPARSITYPATTERN,MATRIX,VECTOR>::~TrilinosDirectLinearSolverWithMatrix()
+  {
+  }
 
-/******************************************************/
+  /******************************************************/
 
-template <typename SPARSITYPATTERN, typename MATRIX, typename VECTOR>
+  template <typename SPARSITYPATTERN, typename MATRIX, typename VECTOR>
   template<typename PROBLEM>
-  void  TrilinosDirectLinearSolverWithMatrix<SPARSITYPATTERN,MATRIX,VECTOR>::ReInit(PROBLEM& pde)
-{
-  matrix_.clear();
-  pde.ComputeSparsityPattern(sparsity_pattern_);
-  matrix_.reinit(sparsity_pattern_);
-}
+  void  TrilinosDirectLinearSolverWithMatrix<SPARSITYPATTERN,MATRIX,VECTOR>::ReInit(PROBLEM &pde)
+  {
+    matrix_.clear();
+    pde.ComputeSparsityPattern(sparsity_pattern_);
+    matrix_.reinit(sparsity_pattern_);
+  }
 
-/******************************************************/
+  /******************************************************/
 
-template <typename SPARSITYPATTERN, typename MATRIX, typename VECTOR>
+  template <typename SPARSITYPATTERN, typename MATRIX, typename VECTOR>
   template<typename PROBLEM, typename INTEGRATOR>
-  void TrilinosDirectLinearSolverWithMatrix<SPARSITYPATTERN,MATRIX,VECTOR>::Solve(PROBLEM& pde,
-									   INTEGRATOR& integr,
-									   VECTOR &rhs, 
-									   VECTOR &solution, 
-									   bool force_matrix_build)
-{
+  void TrilinosDirectLinearSolverWithMatrix<SPARSITYPATTERN,MATRIX,VECTOR>::Solve(PROBLEM &pde,
+      INTEGRATOR &integr,
+      VECTOR &rhs,
+      VECTOR &solution,
+      bool force_matrix_build)
+  {
 #ifdef DOPELIB_WITH_TRILINOS
-  if(force_matrix_build)
-  { 
-    integr.ComputeMatrix (pde,matrix_);    
-  }
+    if (force_matrix_build)
+      {
+        integr.ComputeMatrix (pde,matrix_);
+      }
 
 
-  if(force_matrix_build)
-  { 
-   tril_matrix_.reinit(matrix_);
-  }
+    if (force_matrix_build)
+      {
+        tril_matrix_.reinit(matrix_);
+      }
 
-  SolverControl solver_control (1,0);
-  TrilinosWrappers::SolverDirect::AdditionalData data (false);
-  TrilinosWrappers::SolverDirect direct (solver_control, data);
-  direct.solve (tril_matrix_, solution, rhs);
+    SolverControl solver_control (1,0);
+    TrilinosWrappers::SolverDirect::AdditionalData data (false);
+    TrilinosWrappers::SolverDirect direct (solver_control, data);
+    direct.solve (tril_matrix_, solution, rhs);
 
-  pde.GetDoFConstraints().distribute(solution);
+    pde.GetDoFConstraints().distribute(solution);
 #else
-  throw DOpEException("To use this algorithm you need to deal.II compiled with Trilinos!","TrilinosDirectLinearSolverWithMatrix::Solve");
+    throw DOpEException("To use this algorithm you need to deal.II compiled with Trilinos!","TrilinosDirectLinearSolverWithMatrix::Solve");
 #endif
-}
+  }
 
 
 }

@@ -29,18 +29,18 @@ using namespace dealii;
 
 class InitialData: public DOpEWrapper::Function<2>
 {
-	public:
-		InitialData(ParameterReader &param_reader) :
-			DOpEWrapper::Function<2>()
-			{
-				param_reader.SetSubsection("Local PDE parameters");
-				strike_= param_reader.get_double("strike price");
-			}
-			virtual double value(const Point<2> &p, const unsigned int component = 0) const;
-			virtual void vector_value(const Point<2> &p, Vector<double> &value) const;
-			static void declare_params(ParameterReader &param_reader);
-	private:
-		double strike_;
+public:
+  InitialData(ParameterReader &param_reader) :
+    DOpEWrapper::Function<2>()
+  {
+    param_reader.SetSubsection("Local PDE parameters");
+    strike_= param_reader.get_double("strike price");
+  }
+  virtual double value(const Point<2> &p, const unsigned int component = 0) const;
+  virtual void vector_value(const Point<2> &p, Vector<double> &value) const;
+  static void declare_params(ParameterReader &param_reader);
+private:
+  double strike_;
 
 };
 
@@ -48,24 +48,24 @@ class InitialData: public DOpEWrapper::Function<2>
 
 double InitialData::value(const Point<2> &p, const unsigned int /*component*/) const
 {
-	double x = p[0];
-	double y = p[1];
+  double x = p[0];
+  double y = p[1];
 
-	return std::max(strike_ - 0.5 * x - 0.5 * y, 0.);
+  return std::max(strike_ - 0.5 * x - 0.5 * y, 0.);
 }
 
 /******************************************************/
 
 void InitialData::vector_value(const Point<2> &p, Vector<double> &values) const
 {
-	for (unsigned int c = 0; c < this->n_components; ++c)
-		values(c) = InitialData::value(p, c);
+  for (unsigned int c = 0; c < this->n_components; ++c)
+    values(c) = InitialData::value(p, c);
 }
 
 /******************************************************/
 
 void InitialData::declare_params(ParameterReader &param_reader)
 {
-	param_reader.SetSubsection("Local PDE parameters");
-	param_reader.declare_entry("strike price", "0.0", Patterns::Double(0));
+  param_reader.SetSubsection("Local PDE parameters");
+  param_reader.declare_entry("strike price", "0.0", Patterns::Double(0));
 }

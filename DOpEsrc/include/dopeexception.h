@@ -37,31 +37,40 @@ namespace DOpE
   public:
     /**
      * The Constructor for all exceptions.
-     * 
+     *
      * @param message          An (hopefully) informative error message, e.g., what is wrong.
      * @param thrower          Information on where (wich method) the exception occured.
      */
-    DOpEException(std::string message, std::string thrower="unspecified throwing instance") 
-    { 
+    DOpEException(std::string message, std::string thrower="unspecified throwing instance")
+    {
       msg_ = message;
       thrower_ = thrower;
     }
-      
+
     ~DOpEException() {}
-    
+
     /**
      * Access method for the stored error message.
      *
      * @return A string containing the message by which this object was initialized.
      */
-    std::string GetErrorMessage() { return msg_; }
+    std::string GetErrorMessage()
+    {
+      return msg_;
+    }
     /**
      * Access method for the stored throwing instance.
      *
      * @return A string containing the throwing instance by which this object was initialized.
      */
-    std::string GetThrowingInstance() {return  thrower_; }
-    virtual std::string GetName() {return "DOpEException";} 
+    std::string GetThrowingInstance()
+    {
+      return  thrower_;
+    }
+    virtual std::string GetName()
+    {
+      return "DOpEException";
+    }
   protected:
 
   private:
@@ -79,13 +88,16 @@ namespace DOpE
     DOpEIterationException(std::string message, std::string thrower="unspecified throwing instance")
       : DOpEException(message,thrower)
     {}
-    virtual std::string GetName() {return "DOpEIterationException";} 
-  }; 
+    virtual std::string GetName()
+    {
+      return "DOpEIterationException";
+    }
+  };
 
   /**
-   * A specialized exception that indicates that method a method, e.g., 
-   * conjugate gradient for the reduced hessian, 
-   * has terminated because of a negative curvature. 
+   * A specialized exception that indicates that method a method, e.g.,
+   * conjugate gradient for the reduced hessian,
+   * has terminated because of a negative curvature.
    */
   class DOpENegativeCurvatureException : public DOpEException
   {
@@ -93,7 +105,10 @@ namespace DOpE
     DOpENegativeCurvatureException(std::string message, std::string thrower="unspecified throwing instance")
       : DOpEException(message,thrower)
     {}
-    virtual std::string GetName() {return "DOpENegativeCurvatureException";} 
+    virtual std::string GetName()
+    {
+      return "DOpENegativeCurvatureException";
+    }
   };
 }
 #endif

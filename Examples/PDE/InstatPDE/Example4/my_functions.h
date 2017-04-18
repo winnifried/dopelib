@@ -30,18 +30,18 @@ using namespace dealii;
 
 class InitialData : public DOpEWrapper::Function<1>
 {
-  public:
-    InitialData() :
-        DOpEWrapper::Function<1>()
-    {
+public:
+  InitialData() :
+    DOpEWrapper::Function<1>()
+  {
 
-    }
-    virtual double
-    value(const Point<1> &p, const unsigned int component = 0) const;
-    virtual void
-    vector_value(const Point<1> &p, Vector<double> &value) const;
+  }
+  virtual double
+  value(const Point<1> &p, const unsigned int component = 0) const;
+  virtual void
+  vector_value(const Point<1> &p, Vector<double> &value) const;
 
-  private:
+private:
 
 };
 
