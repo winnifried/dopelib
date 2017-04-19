@@ -14,11 +14,19 @@ Every command is computed via a Makefile in the basic example
 directory.
 \end{itemize}
 
-\begin{remark}
-Please keep in mind that there are two optimization examples that 
-need external packages to be able to run successfully. These tests will
-fail if these libraries are not installed!
-\end{remark}
+\section{Tests with third-party packages}
+Please keep in mind that DOpElib does not 
+only link to deal.II but also to third party libraries.
+If these libraries are not installed, the respective regression tests 
+will fail. 
+
+Currently the following examples link to third-party examples:
+\begin{itemize}
+\item \texttt{OPT/StatPDE/Example6}: IPOPT
+\item \texttt{OPT/StatPDE/Example8}: SNOPT
+\item \texttt{PDE/StatPDE/Example10}: Trilinos (via deal.II)
+\end{itemize}
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Where can I find the tests}
