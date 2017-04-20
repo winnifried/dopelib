@@ -1,5 +1,6 @@
 Changelog DOpE
 ==============
+19.04.2017 Removed description.tex files from Example folders
 === DOPE Meeting on Apr 12-13, 2017 in Darmstadt ==============================
 13.04.2017: - Bernhard started working on a phase-field fracture example
 	    - Repaired PDE/StatPDE/Example 9 (UMFPACK failed due to 
