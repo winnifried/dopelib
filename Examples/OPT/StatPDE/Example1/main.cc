@@ -64,9 +64,22 @@ const static int CDIM = 2;
 typedef QGauss<DIM> QUADRATURE;
 typedef QGauss<DIM - 1> FACEQUADRATURE;
 
+//Fix for a bug in deal.ii 8.5.0
+#if DEAL_II_VERSION_GTE(8,5,0)
+#if DEAL_II_VERSION_GTE(9,0,0)//post deal 8.5.0
+typedef BlockSparseMatrix<double> MATRIX;
+typedef BlockSparsityPattern SPARSITYPATTERN;
+typedef BlockVector<double> VECTOR;
+#else //dealii 8.5.0
 typedef SparseMatrix<double> MATRIX;
 typedef SparsityPattern SPARSITYPATTERN;
 typedef Vector<double> VECTOR;
+#endif
+#else //pre deal 8.5.0
+typedef BlockSparseMatrix<double> MATRIX;
+typedef BlockSparsityPattern SPARSITYPATTERN;
+typedef BlockVector<double> VECTOR;
+#endif
 
 #define CDC ElementDataContainer
 #define FDC FaceDataContainer
