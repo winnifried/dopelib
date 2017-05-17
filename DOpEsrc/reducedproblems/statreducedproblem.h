@@ -696,6 +696,10 @@ namespace DOpE
                                         "StatReducedProblem::ComputeReducedState");
                   }
                 this->GetProblem()->DeleteAuxiliaryFromIntegrator(this->GetIntegrator());
+		
+		this->GetOutputHandler()->Write((GetU().GetSpacialVector()),
+						"Initial_State" + this->GetPostIndex(), problem.GetDoFType());
+		
               }
           }
       }
