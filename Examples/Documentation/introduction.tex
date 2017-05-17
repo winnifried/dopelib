@@ -368,6 +368,46 @@ git checkout Makefile
 Then try again make c-all (make always sure that before 
 typing make c-all that the deal.II path is exported - see above). 
 
+\subsection*{4.) Different g++ compilers are used for compiling DOpElib and the Examples folder}
+\begin{lstlisting}
+bernhard@ebook:~/Schreibtisch/Prog/DOpe/Dope/dopelib/Examples> make c-all
+cd OPT/StatPDE/Example1; make -s c-all
+[ 50%] Building CXX object CMakeFiles/DOpE-OPT-StatPDE-Example1.dir/main.cc.o
+c++: error: unrecognized command line option '-fopenmp-simd'
+c++: error: unrecognized command line option '-std=c++14'
+CMakeFiles/DOpE-OPT-StatPDE-Example1.dir/build.make:62: recipe for target 'CMakeFiles/DOpE-OPT-StatPDE-Example1.dir/main.cc.o' failed
+make[4]: *** [CMakeFiles/DOpE-OPT-StatPDE-Example1.dir/main.cc.o] Error 1
+CMakeFiles/Makefile2:131: recipe for target 'CMakeFiles/DOpE-OPT-StatPDE-Example1.dir/all' failed
+make[3]: *** [CMakeFiles/DOpE-OPT-StatPDE-Example1.dir/all] Error 2
+Makefile:83: recipe for target 'all' failed
+make[2]: *** [all] Error 2
+../../../..//Examples/Make.global_options:2: recipe for target 'c-all' failed
+make[1]: *** [c-all] Error 2
+Makefile:24: recipe for target 'OPT/StatPDE/Example1' failed
+make: *** [OPT/StatPDE/Example1] Error 2
+\end{lstlisting}
+
+The reason for this problem might be that the variables c++ and g++ as well as cc and gcc do not match.
+\newline
+You can remove the old Examples folder and replace it by a new one and set the compilers manually by
+\begin{lstlisting}
+export CXX=path/to/g++-compiler
+export CC=path/to/gcc-compiler
+\end{lstlisting}
+where path/to/compiler should be the path to compiler DOpElib was compiled with.
+You can check the current version of your gcc- and g++-compiler with 
+\begin{lstlisting}
+gcc --version
+g++ --version
+\end{lstlisting}
+Alternatively you can set the variable c++ to your g++ and the variable cc to gcc using update-alternatives
+as for example
+\begin{lstlisting}
+sudo update-alternatives --install /usr/bin/c++ c++ /usr/bin/g++-6 60
+sudo update-alternatives --install /usr/bin/cc cc /usr/bin/gcc-6 60
+\end{lstlisting}
+Thanks to Florian Tischler (Admin at RICAM Linz) for the help.
+
 
 
 %%%%%%%%%%%%%%%%%%
