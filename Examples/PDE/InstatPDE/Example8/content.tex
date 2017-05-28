@@ -1,9 +1,9 @@
 \subsubsection{General problem description}
-We consider phase-field fracture propagation on a slit domain, with timedependet 
+We consider phase-field fracture propagation on a slit domain, with time dependent 
 Dirichlet data and homogenous Neumann data.
 The main novelties are:
 \begin{itemize}
-\item Imposing a variational inequality constraint ($\frac{\partial \varphi}{\partial t} \ge 0$)
+\item Imposing a variational inequality constraint ($\frac{\partial \varphi}{\partial t} \leq 0$)
 via penalization;
 %\item Implementation of an augmented Lagrangian loop (not yet)
 \item Stress splitting into tension and compression \`a
@@ -14,7 +14,7 @@ stress_splitting.h
 \end{verbatim}
 \item Implementation of a Newton solver that 
 allows for an increase of the residual for which, however,
-no convergence results is available:
+no convergence results are available:
 \begin{verbatim}
 DOpEsrc/templates/instat_step_modified_newtonsolver.h
 \end{verbatim}
@@ -25,8 +25,9 @@ localpde_fully_implicit.h
 \end{verbatim}
 that provide implementations of a quasi-monolithic scheme (similar, but not
 the same as \cite{HeWheWi15}) and a fully implicit implementation.
-The fully implicit implementation requires a modified Newton scheme that 
-allows for a temporary increase of the Newton residual \cite{Wi17_pff_error_oriented_Newton}.
+The fully implicit implementation requires a modified Newton scheme (see the
+previous bullet point) that 
+allows for a temporary increase of the Newton residual (similar to \cite{Wi17_pff_error_oriented_Newton}).
 \end{itemize}
 Let $u$ be the displacement and $\varphi$ be the phase field variable which should highlight the crack.
 Furthermore we denote the $L^2(\Omega)$ inner product of $v_1$ and $v_2$ with $(v_1,v_2)$.
