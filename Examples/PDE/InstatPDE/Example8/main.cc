@@ -49,11 +49,13 @@
 
 //DOpE includes for instationary problems
 #include <reducedproblems/instatpdeproblem.h>
-#include <templates/instat_step_modified_newtonsolver.h>
 #include <container/instatpdeproblemcontainer.h>
 
 // Timestepping scheme
 #include <tsschemes/crank_nicolson_problem.h>
+
+// A new heuristic Newton solver
+#include "instat_step_modified_newtonsolver.h"
 
 //Problem specific includes
 // Here are two implementations for the local pde.
