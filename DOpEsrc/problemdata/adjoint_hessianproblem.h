@@ -107,6 +107,7 @@ namespace DOpE
                   != std::string::npos)
                 {
                   opt_problem_.GetFunctional()->ElementValue_UU(edc, local_vector, scale);
+                  opt_problem_.GetFunctional()->ElementValue_QU(edc, local_vector, scale);
                 }
             }
         }

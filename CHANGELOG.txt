@@ -1,5 +1,6 @@
 Changelog DOpE
 ==============
+16.06.2017: Fixed: missing cross derivative in inital-values for adjoint_hessian problem.
 16.06.2017: Fixed: When considering initial-value control the control could only be accessed 
 	    in the initial-time. This has been fixed, so that the control may be used at other times 
 	    as well. This is useful if periodicity is to be enforced and initial values need to be compared 
