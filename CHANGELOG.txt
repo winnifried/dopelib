@@ -1,5 +1,9 @@
 Changelog DOpE
 ==============
+16.06.2017: Fixed: When considering initial-value control the control could only be accessed 
+	    in the initial-time. This has been fixed, so that the control may be used at other times 
+	    as well. This is useful if periodicity is to be enforced and initial values need to be compared 
+	    with final values.
 17.05.2017: Fixed: When special initial-values for the nonlinear iteration are prescribed in 
 	    stationary problems these values can now also be written as files.
 19.04.2017: Removed description.tex files from Example folders

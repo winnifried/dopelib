@@ -1025,32 +1025,26 @@ namespace DOpE
     AddAuxiliaryToIntegrator(INTEGRATOR &integrator)
     {
       {
-        //Only add control vector if the vecor is distributed in time, or
-        //we are calculating the initial value.
-        if ((GetSpaceTimeHandler()->GetControlType()==DOpEtypes::ControlType::initial && initial_)
-            || (GetSpaceTimeHandler()->GetControlType()!=DOpEtypes::ControlType::initial))
-          {
-            typename std::map<std::string, const ControlVector<VECTOR> *>::iterator it =
-              auxiliary_controls_.begin();
-            for (; it != auxiliary_controls_.end(); it++)
-              {
-                if (dopedim == dealdim)
-                  {
-                    integrator.AddDomainData(it->first,
-                                             &(it->second->GetSpacialVector()));
-                  }
-                else if (dopedim == 0)
-                  {
-                    integrator.AddParamData(it->first,
-                                            &(it->second->GetSpacialVectorCopy()));
-                  }
-                else
-                  {
-                    throw DOpEException("dopedim not implemented",
-                                        "OptProblemContainer::AddAuxiliaryToIntegrator");
-                  }
-              }
-          }
+	typename std::map<std::string, const ControlVector<VECTOR> *>::iterator it =
+	auxiliary_controls_.begin();
+	for (; it != auxiliary_controls_.end(); it++)
+	{
+	  if (dopedim == dealdim)
+	  {
+	    integrator.AddDomainData(it->first,
+				     &(it->second->GetSpacialVector()));
+	  }
+	  else if (dopedim == 0)
+	  {
+	    integrator.AddParamData(it->first,
+				    &(it->second->GetSpacialVectorCopy()));
+	  }
+	  else
+	  {
+	    throw DOpEException("dopedim not implemented",
+				"OptProblemContainer::AddAuxiliaryToIntegrator");
+	  }
+	}
       }
       {
         typename std::map<std::string, const StateVector<VECTOR> *>::iterator it =
@@ -1197,31 +1191,25 @@ namespace DOpE
     DeleteAuxiliaryFromIntegrator(INTEGRATOR &integrator)
     {
       {
-        //Only delete control vector if the vecor is distributed in time, or
-        //we are calculating the initial value. Otherwise it would not have been added.
-        if ((GetSpaceTimeHandler()->GetControlType()==DOpEtypes::ControlType::initial && initial_)
-            || (GetSpaceTimeHandler()->GetControlType()!=DOpEtypes::ControlType::initial))
-          {
-            typename std::map<std::string, const ControlVector<VECTOR> *>::iterator it =
-              auxiliary_controls_.begin();
-            for (; it != auxiliary_controls_.end(); it++)
-              {
-                if (dopedim == dealdim)
-                  {
-                    integrator.DeleteDomainData(it->first);
-                  }
-                else if (dopedim == 0)
-                  {
-                    integrator.DeleteParamData(it->first);
-                    it->second->UnLockCopy();
-                  }
-                else
-                  {
-                    throw DOpEException("dopedim not implemented",
-                                        "OptProblemContainer::AddAuxiliaryToIntegrator");
-                  }
-              }
-          }
+	typename std::map<std::string, const ControlVector<VECTOR> *>::iterator it =
+	auxiliary_controls_.begin();
+	for (; it != auxiliary_controls_.end(); it++)
+	{
+	  if (dopedim == dealdim)
+	  {
+	    integrator.DeleteDomainData(it->first);
+	  }
+	  else if (dopedim == 0)
+	  {
+	    integrator.DeleteParamData(it->first);
+	    it->second->UnLockCopy();
+	  }
+	  else
+	  {
+	    throw DOpEException("dopedim not implemented",
+				"OptProblemContainer::AddAuxiliaryToIntegrator");
+	  }
+	}
       }
       {
         typename std::map<std::string, const StateVector<VECTOR> *>::iterator it =
