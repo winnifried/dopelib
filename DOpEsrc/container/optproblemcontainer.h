@@ -886,6 +886,8 @@ namespace DOpE
     GetConstraintType() const;
     unsigned int FunctionalNeedPrecomputations() const;
 
+    bool FunctionalNeedFinalValue() const;
+
     /******************************************************/
 
     bool
@@ -2759,6 +2761,18 @@ namespace DOpE
     return GetFunctional()->NeedPrecomputations();
   }
 
+
+/******************************************************/
+  template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
+    typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+    typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+    template<int, int> class DH>
+    bool
+    OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
+                      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::FunctionalNeedFinalValue() const
+  {
+    return GetFunctional()->NeedFinalValue();
+  }
   /******************************************************/
 
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,

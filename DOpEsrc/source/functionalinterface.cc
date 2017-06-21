@@ -608,6 +608,18 @@ namespace DOpE
   {
     return 0;
   }
+
+  /********************************************/
+
+  template<
+  template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
+           template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
+           template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
+  bool
+  FunctionalInterface<EDC, FDC, DH, VECTOR, dopedim, dealdim>::NeedFinalValue() const
+  {
+    return false;
+  }
   /********************************************/
   template<
   template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
