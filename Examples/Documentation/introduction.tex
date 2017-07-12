@@ -369,15 +369,18 @@ Then try again make c-all (make always sure that before
 typing make c-all that the deal.II path is exported - see above). 
 
 \subsection*{4.) Different g++ compilers are used for compiling DOpElib and the Examples folder}
+{\footnotesize
 \begin{lstlisting}
 bernhard@ebook:~/Schreibtisch/Prog/DOpe/Dope/dopelib/Examples> make c-all
 cd OPT/StatPDE/Example1; make -s c-all
 [ 50%] Building CXX object CMakeFiles/DOpE-OPT-StatPDE-Example1.dir/main.cc.o
 c++: error: unrecognized command line option '-fopenmp-simd'
 c++: error: unrecognized command line option '-std=c++14'
-CMakeFiles/DOpE-OPT-StatPDE-Example1.dir/build.make:62: recipe for target 'CMakeFiles/DOpE-OPT-StatPDE-Example1.dir/main.cc.o' failed
+CMakeFiles/DOpE-OPT-StatPDE-Example1.dir/build.make:62: 
+    recipe for target 'CMakeFiles/DOpE-OPT-StatPDE-Example1.dir/main.cc.o' failed
 make[4]: *** [CMakeFiles/DOpE-OPT-StatPDE-Example1.dir/main.cc.o] Error 1
-CMakeFiles/Makefile2:131: recipe for target 'CMakeFiles/DOpE-OPT-StatPDE-Example1.dir/all' failed
+CMakeFiles/Makefile2:131: recipe for target 
+    'CMakeFiles/DOpE-OPT-StatPDE-Example1.dir/all' failed
 make[3]: *** [CMakeFiles/DOpE-OPT-StatPDE-Example1.dir/all] Error 2
 Makefile:83: recipe for target 'all' failed
 make[2]: *** [all] Error 2
@@ -386,6 +389,7 @@ make[1]: *** [c-all] Error 2
 Makefile:24: recipe for target 'OPT/StatPDE/Example1' failed
 make: *** [OPT/StatPDE/Example1] Error 2
 \end{lstlisting}
+}
 
 The reason for this problem might be that the variables c++ and g++ as well as cc and gcc do not match.
 \newline
@@ -409,6 +413,46 @@ sudo update-alternatives --install /usr/bin/cc cc /usr/bin/gcc-6 60
 Thanks to Florian Tischler (Admin at RICAM Linz) for the help.
 
 
+\subsection*{5.) Different g++, cc, cxx compilers are used for compiling
+  DOpElib and the Examples folder}
+
+The error message is as before:
+{\footnotesize
+\begin{lstlisting}
+Linking CXX executable ../DOpE-PDE-StatPDE-Example1
+/usr/lib64/gcc/x86_64-suse-linux/4.8/../../../../x86_64-suse-linux/bin/ld: cannot find -lmpi_usempi
+/usr/lib64/gcc/x86_64-suse-linux/4.8/../../../../x86_64-suse-linux/bin/ld: cannot find -lmpi_mpifh
+/usr/lib64/gcc/x86_64-suse-linux/4.8/../../../../x86_64-suse-linux/bin/ld: cannot find -lmpi
+collect2: error: ld returned 1 exit status
+\end{lstlisting}
+}
+
+An alternative to the previous solution is:
+\begin{lstlisting}
+export DEAL_II_DIR =your_mpi_deal_II_version // only necessary 
+      // when not in the standard path
+export PATH=/usr/lib64/mpi/gcc/openmpi/bin:${PATH}  // obtain your MPI path
+      // with `whereis mpicxx' etc.
+export CC=mpicc; export CXX=mpicxx; export FC=mpif90; export FF=mpif77
+\end{lstlisting}
+Then compile first the DOpElib library and then the Examples folder with these 
+settings. Possibly pay attention that also the deal.II version has been
+compiled 
+with this MPI path.
+
+\begin{remark}
+Be careful that you work in the same shell when only using `export'. 
+Or include the export lines into the 
+\begin{lstlisting}
+.bash_rc 
+\end{lstlisting}
+or 
+\begin{lstlisting}
+.profile
+\end{lstlisting}
+file to assert that the correct
+compiler is always used.
+\end{remark}
 
 %%%%%%%%%%%%%%%%%%
 \chapter{The Structure of \dope{}}
