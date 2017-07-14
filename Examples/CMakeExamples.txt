@@ -31,7 +31,11 @@ IF(NOT ${deal.II_FOUND})
     "You may want to either pass a flag -DDEAL_II_DIR=/path/to/deal.II to cmake\n"
     "or set an environment variable \"DEAL_II_DIR\" that contains this path."
     )
+ELSE()
+  MESSAGE(STATUS "Found deal.II at ${DEAL_II_PATH}.")
 ENDIF()
+
+DEAL_II_INITIALIZE_CACHED_VARIABLES()
 
 IF(NOT DEAL_II_WITH_TRILINOS)
   MESSAGE(STATUS "The deal.II library found at ${DEAL_II_PATH} was not configured with
@@ -131,8 +135,6 @@ ELSE()
 	MESSAGE(STATUS "No SNOPT could be found.")
 	SET(SNOPT_PATH "")			
 ENDIF()	
-
-DEAL_II_INITIALIZE_CACHED_VARIABLES()
 
 ADD_EXECUTABLE(${TARGET} ${TARGET_SRC})
 

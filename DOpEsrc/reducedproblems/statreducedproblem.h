@@ -674,8 +674,6 @@ namespace DOpE
                                         "StatReducedProblem::ComputeReducedState");
                   }
 
-                std::cout<< GetU().GetSpacialVector().linfty_norm()<<std::endl;
-
                 //TODO: Possibly another solver for the initial value than for the pde...
                 build_state_matrix_ = this->GetNonlinearSolver("state").NonlinearSolve(
                                         initial_problem, GetU().GetSpacialVector(), true, true);
@@ -722,10 +720,34 @@ namespace DOpE
         throw DOpEException("dopedim not implemented",
                             "StatReducedProblem::ComputeReducedState");
       }
-
-    build_state_matrix_ = this->GetNonlinearSolver("state").NonlinearSolve(
-                            problem, (GetU().GetSpacialVector()), true, build_state_matrix_);
-
+    try{
+      build_state_matrix_ = this->GetNonlinearSolver("state").NonlinearSolve(
+	problem, (GetU().GetSpacialVector()), true, build_state_matrix_);
+    }
+    catch( DOpEException &e)
+    {
+      if (dopedim == dealdim)
+      {
+        this->GetIntegrator().DeleteDomainData("control");
+      }
+      else if (dopedim == 0)
+      {
+        this->GetIntegrator().DeleteParamData("control");
+        q.UnLockCopy();
+      }
+      else
+      {
+        throw DOpEException("dopedim not implemented",
+                            "StatReducedProblem::ComputeReducedState");
+      }
+      this->GetProblem()->DeleteAuxiliaryFromIntegrator(this->GetIntegrator());
+      //Reset Values
+      GetU().GetSpacialVector() = 0.;
+      build_state_matrix_ = true;
+      state_reinit_ = true;
+      throw e;
+    }
+    
     if (dopedim == dealdim)
       {
         this->GetIntegrator().DeleteDomainData("control");

@@ -15,6 +15,42 @@ ENDIF()
 
 DEAL_II_INITIALIZE_CACHED_VARIABLES()
 
+IF(NOT DEAL_II_WITH_TRILINOS)
+  MESSAGE(STATUS "The deal.II library found at ${DEAL_II_PATH} was not configured with
+    DEAL_II_WITH_TRILINOS = ON. You may not use trilinos related solvers within your code."
+    )
+ELSE()
+	MESSAGE(STATUS "Configured for use of Trilinos")
+	ADD_DEFINITIONS(-DDOPELIB_WITH_TRILINOS)	
+ENDIF()
+
+IF(NOT DEAL_II_WITH_MPI)
+  MESSAGE(STATUS "The deal.II library found at ${DEAL_II_PATH} was not configured with
+    DEAL_II_WITH_MPI = ON. You may not use MPI functionality in your code"
+    )
+ELSE()
+	MESSAGE(STATUS "Configured for use of MPI")
+	ADD_DEFINITIONS(-DDOPELIB_WITH_MPI)	
+ENDIF()
+
+IF(NOT DEAL_II_WITH_P4EST)
+  MESSAGE(STATUS "The deal.II library found at ${DEAL_II_PATH} was not configured with
+    DEAL_II_WITH_P4EST = ON. You may not use trilinos related solvers within your code."
+    )
+ELSE()
+	MESSAGE(STATUS "Configured for use of P4EST")
+	ADD_DEFINITIONS(-DDOPELIB_WITH_P4EST)	
+ENDIF()
+
+
+IF(NOT DEAL_II_WITH_UMFPACK)
+  MESSAGE(FATAL_ERROR "
+Error! The deal.II library found at ${DEAL_II_PATH} was not configured with
+    DEAL_II_WITH_UMFPACK = ON
+One or all of these are OFF in your installation but are required for most Examples."
+    )
+ENDIF()
+
 PROJECT(DOpElib)
 
 ADD_SUBDIRECTORY(source)
