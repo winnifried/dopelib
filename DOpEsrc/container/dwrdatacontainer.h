@@ -462,11 +462,13 @@ namespace DOpE
       //Dependend on the GetEETerms we let the dwrc compute the primal and/or dual weights
       switch (GetEETerms())
         {
+#if dope_dimension > 0
         case DOpEtypes::mixed_control:
           PreparePI_h_q(q);
           AddWeightData("weight_for_control_residual",
                         &(GetPI_h_q().GetSpacialVector()));
           break;
+#endif
         case DOpEtypes::primal_only:
           //Do nothing to be compatible with residual estimators not using the control!
           break;
