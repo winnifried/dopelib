@@ -244,8 +244,13 @@ namespace DOpE
      * control residual.
      */
     void
+#if dope_dimension > 0
     PreparePI_h_q(const ControlVector<VECTOR> &q)
+#else
+      PreparePI_h_q(const ControlVector<VECTOR> &/*q*/)
+#endif
     {
+#if dope_dimension > 0
       VECTOR q_high;
       q_high.reinit(GetPI_h_q().GetSpacialVector());
 
@@ -265,6 +270,11 @@ namespace DOpE
       GetPI_h_q().GetSpacialVector().add(-1., q_high);
       //FIXME With this construction we can not deal with control contraints,
       //There, the real weight needs to be build on the elements...
+#else
+      //The reasonable choice if control dimension is 0 is that the
+      //The error in the control is 0.
+      GetPI_h_q() = 0.;
+#endif
     }
 
     /**

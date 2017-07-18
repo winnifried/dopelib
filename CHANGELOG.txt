@@ -1,5 +1,9 @@
 Changelog DOpE
 ==============
+18.07.2017: Ficed: If control dimension is 0 then the error estimator failed
+	    since the higher order interpolation could not be defined.
+	    This is now fixed and the interpolation error is set to zero (as
+	    there is no interpolation error in 0d.
 14.07.2017: Fixed: When solving the PDE fails in (stationary) optimization problems a linesearch for the optimization
 	    is now done.
 21.06.2017: Added possibility to evaluate the final-time value of the solution in the functional together with the initial value.
