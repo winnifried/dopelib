@@ -1577,8 +1577,14 @@ namespace DOpE
     // we want to integrate the face-terms only once, so
     // we store the values on each face in this map
     // and distribute it at the end to the adjacent elements.
+    #if deal_II_dimension > 1
     typename std::map<typename dealii::Triangulation<dim>::face_iterator,std::vector<double> >
     face_integrals;
+    #else
+    //Points (Faces in 1d) have no working iterator, use vertex_number instead
+    typename std::map<unsigned int,std::vector<double> >
+    face_integrals;
+    #endif
     // initialize the map with a big value to make sure
     // that we take notice if we forget to add a face
     // during the error estimation process
@@ -1588,7 +1594,11 @@ namespace DOpE
       {
         for (unsigned int face_no=0; face_no<GeometryInfo<dim>::faces_per_cell; ++face_no)
           {
+#if deal_II_dimension > 1
             face_integrals[element_it->face(face_no)] = face_init;
+#else
+	    face_integrals[element_it->face(face_no)->vertex_index()] = face_init;
+#endif 
           }
       }
 
@@ -1666,12 +1676,21 @@ namespace DOpE
                 dwrc.GetFaceWeight().ReInit(face);
                 pde.BoundaryErrorContribution(fdc, dwrc, element_sum, 1.);
 
+#if deal_II_dimension > 1
                 Assert (face_integrals.find (element[0]->face(face)) != face_integrals.end(),
                         ExcInternalError());
                 Assert (face_integrals[element[0]->face(face)] == face_init,
                         ExcInternalError());
 
                 face_integrals[element[0]->face(face)] = element_sum;
+#else
+                Assert (face_integrals.find (element[0]->face(face)->vertex_index()) != face_integrals.end(),
+                        ExcInternalError());
+                Assert (face_integrals[element[0]->face(face)->vertex_index()] == face_init,
+                        ExcInternalError());
+
+                face_integrals[element[0]->face(face)->vertex_index()] = element_sum;
+#endif
                 element_sum.clear();
                 element_sum.resize(n_error_comps,0.);
               }
@@ -1700,18 +1719,32 @@ namespace DOpE
                           {
                             sum[l] += element_sum[l];
                           }
+#if deal_II_dimension > 1
                         face_integrals[element[0]->neighbor_child_on_subface(face, subface_no)
                                        ->face(element[0]->neighbor_of_neighbor(face))] = element_sum;
+#else
+                        face_integrals[element[0]->neighbor_child_on_subface(face, subface_no)
+                                       ->face(element[0]->neighbor_of_neighbor(face))->vertex_index()] = element_sum;
+#endif
                         element_sum.clear();
                         element_sum.resize(n_error_comps,0);
                       }
 
+#if deal_II_dimension > 1
                     Assert (face_integrals.find (element[0]->face(face)) != face_integrals.end(),
                             ExcInternalError());
                     Assert (face_integrals[element[0]->face(face)] == face_init,
                             ExcInternalError());
 
                     face_integrals[element[0]->face(face)] = sum;
+#else
+                    Assert (face_integrals.find (element[0]->face(face)->vertex_index()) != face_integrals.end(),
+                            ExcInternalError());
+                    Assert (face_integrals[element[0]->face(face)->vertex_index()] == face_init,
+                            ExcInternalError());
+
+                    face_integrals[element[0]->face(face)->vertex_index()] = sum;
+#endif
                     element_sum.clear();
                     element_sum.resize(n_error_comps,0);
                   }
@@ -1730,12 +1763,21 @@ namespace DOpE
                         dwrc.GetFaceWeight().ReInit(face);
 
                         pde.FaceErrorContribution(fdc, dwrc, element_sum, 1.);
+#if deal_II_dimension > 1
                         Assert (face_integrals.find (element[0]->face(face)) != face_integrals.end(),
                                 ExcInternalError());
                         Assert (face_integrals[element[0]->face(face)] == face_init,
                                 ExcInternalError());
 
                         face_integrals[element[0]->face(face)] = element_sum;
+#else 
+                        Assert (face_integrals.find (element[0]->face(face)->vertex_index()) != face_integrals.end(),
+                                ExcInternalError());
+                        Assert (face_integrals[element[0]->face(face)->vertex_index()] == face_init,
+                                ExcInternalError());
+
+                        face_integrals[element[0]->face(face)->vertex_index()] = element_sum;
+#endif
                         element_sum.clear();
                         element_sum.resize(n_error_comps,0);
                       }
@@ -1762,15 +1804,26 @@ namespace DOpE
         for (unsigned int face_no = 0;
              face_no < GeometryInfo<dim>::faces_per_cell; ++face_no)
           {
+#if deal_II_dimension > 1
             Assert(
               face_integrals.find(element[0]->face(face_no)) != face_integrals.end(),
               ExcInternalError());
+#else
+            Assert(
+              face_integrals.find(element[0]->face(face_no)->vertex_index()) != face_integrals.end(),
+              ExcInternalError());
+#endif
             if (element[0]->face(face_no)->at_boundary())
               {
                 for (unsigned int l =0; l < n_error_comps; l ++)
                   {
+#if deal_II_dimension > 1
                     dwrc.GetErrorIndicators(l)(present_element) +=
                       face_integrals[element[0]->face(face_no)][l];
+#else
+                    dwrc.GetErrorIndicators(l)(present_element) +=
+                      face_integrals[element[0]->face(face_no)->vertex_index()][l];
+#endif
                   }
 //              dwrc.GetPrimalErrorIndicators()(present_element) +=
 //              face_integrals[element[0]->face(face_no)][0];
@@ -1781,8 +1834,13 @@ namespace DOpE
               {
                 for (unsigned int l =0; l < n_error_comps; l ++)
                   {
+#if deal_II_dimension > 1
                     dwrc.GetErrorIndicators(l)(present_element) +=
                       0.5*face_integrals[element[0]->face(face_no)][l];
+#else
+                    dwrc.GetErrorIndicators(l)(present_element) +=
+                      0.5*face_integrals[element[0]->face(face_no)->vertex_index()][l];
+#endif
                   }
 //              dwrc.GetPrimalErrorIndicators()(present_element) +=
 //              0.5 * face_integrals[element[0]->face(face_no)][0];

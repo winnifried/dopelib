@@ -1625,8 +1625,9 @@ namespace DOpE
 
         //prepare the weights...
         dwrc.PrepareWeights(GetU(), GetZ());
+#if dope_dimension > 0
         dwrc.PrepareWeights(q);
-
+#endif
         //now we finally compute the refinement indicators
         this->GetIntegrator().ComputeRefinementIndicators(*this->GetProblem(),
                                                           dwrc);
