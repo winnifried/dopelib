@@ -1,6 +1,9 @@
 Changelog DOpE
 ==============
-18.07.2017: Ficed: If control dimension is 0 then the error estimator failed
+20.07.2017: Fixed: In one dimensional PDEs, the error estimation failed, because the 
+	    1d face-iterator of deal.II does not support the same features as in dimension 2 and 3.
+	    Thus the indexing of the faces by face_iterators failed in 1d. This is now fixed.
+18.07.2017: Fixed: If control dimension is 0 then the error estimator failed
 	    since the higher order interpolation could not be defined.
 	    This is now fixed and the interpolation error is set to zero (as
 	    there is no interpolation error in 0d.
