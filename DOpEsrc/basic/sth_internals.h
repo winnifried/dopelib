@@ -84,19 +84,12 @@ namespace DOpE
       VECTOR &support_points)
     {
 
-#if DEAL_II_MAJOR_VERSION >= 7
-#if DEAL_II_MINOR_VERSION >= 2
+#if DEAL_II_VERSION_GTE(7,2,0)      
 //        MappingQ1<dealdim> mapping;
 //        hp::MappingCollection<dealdim> map_col(mapping);
 
       DoFTools::map_dofs_to_support_points(mapping, dh, support_points);
 //        DoFTools::map_dofs_to_support_points(map_col, dh, support_points);
-#else
-      throw DOpEException(
-        "Your deal.ii version is too old. We need DoFTools::map_dofs_to_support_points for hp::DoFhandler"
-        " (Implemented since 7.2, revision 24975)!",
-        "MapDoFsToSupportPoints");
-#endif
 #else
       throw DOpEException(
         "Your deal.ii version is too old. We need DoFTools::map_dofs_to_support_points for hp::DoFhandler"

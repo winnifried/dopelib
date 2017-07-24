@@ -75,20 +75,16 @@ namespace DOpE
     for (unsigned int i = 0; i < c_points_.size(); i++)
       {
         std::vector<bool> selected_dofs(dof_handler.n_dofs());
-#if DEAL_II_MAJOR_VERSION >= 8
+#if DEAL_II_VERSION_GTE(8,0,0)
         //Newer dealii Versions have changed the interface
         dealii::ComponentMask components(c_comps_[i]);
         DoFTools::extract_dofs(dof_handler,components,selected_dofs);
 #else //Less than 8.0
-#if DEAL_II_MAJOR_VERSION >= 7
-#if DEAL_II_MINOR_VERSION >= 3
+#if DEAL_II_VERSION_GTE(7,3,0)
         //Newer dealii Versions have changed the interface
         dealii::ComponentMask components(c_comps_[i]);
         DoFTools::extract_dofs(dof_handler,components,selected_dofs);
-#else //Less than 7.3 
-        DoFTools::extract_dofs(dof_handler,c_comps_[i],selected_dofs);
-#endif
-#else //Less than 7.0
+#else //Less than 7.3
         DoFTools::extract_dofs(dof_handler,c_comps_[i],selected_dofs);
 #endif
 #endif
