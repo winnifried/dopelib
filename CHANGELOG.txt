@@ -1,5 +1,6 @@
 Changelog DOpE
 ==============
+26.07.2017: Added publication to licence file.
 24.07.2017: Fixed: Unified check for deal.II version.
 20.07.2017: Fixed: In one dimensional PDEs, the error estimation failed, because the 
 	    1d face-iterator of deal.II does not support the same features as in dimension 2 and 3.

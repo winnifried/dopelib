@@ -18,12 +18,20 @@ In addition to the terms imposed by the GPL, we ask for the following
 courtesy:
 
 	If you use DOpElib for calculations in your publications 
-	please cite the relevant publication for the used algorithms,
-	or the website, while no publication is available :
-
-	   Differential Equations and Optimization Environment		
-	   		     DOpElib
-			  http://www.dopelib.net
+	please cite the relevant publication for the used algorithms and
+	the initial publication:
+	
+ @Article{DOpElib,
+  Title                    = {{DOpElib}: {D}ifferential Equations and Optimization Environment;
+   {A} Goal Oriented Software Library for Solving {PDE}s and Optimization Problems with {PDE}s},
+  Author                   = {C. Goll and T. Wick and W. Wollner},
+  Journal                  = {Archive of Numerical Software},
+  Year                     = {2017},
+  Number                   = {2},
+  Pages                    = {1--14},
+  Volume                   = {5},
+  Doi                      = {10.11588/ans.2017.2.11815}
+}
 
 	We maintain a list of publications using DOpElib. 
 	Please let us know about your publications.   
