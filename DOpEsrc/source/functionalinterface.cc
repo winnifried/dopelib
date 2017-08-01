@@ -681,3 +681,9 @@ template class DOpE::FunctionalInterface<DOpE::ElementDataContainer,
 //template class DOpE::FunctionalInterface<DOpE::ElementDataContainer,
 //    DOpE::FaceDataContainer, dealii::MGDoFHandler,
 //    dealii::BlockVector<double>, dope_dimension, deal_II_dimension>;
+template class DOpE::FunctionalInterface<DOpE::Networks::Network_ElementDataContainer,
+         DOpE::Networks::Network_FaceDataContainer, dealii::DoFHandler, dealii::Vector<double>,
+         dope_dimension, deal_II_dimension>;
+template class DOpE::FunctionalInterface<DOpE::Networks::Network_ElementDataContainer,
+         DOpE::Networks::Network_FaceDataContainer, dealii::DoFHandler, dealii::BlockVector<double>,
+         dope_dimension, deal_II_dimension>;
