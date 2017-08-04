@@ -48,7 +48,9 @@ namespace DOpE
     public:
       Network_FaceDataContainerInternal(
 	unsigned int pipe_,
-        const std::map<std::string, const dealii::Vector<double>*> &param_values,
+        unsigned int n_pipes,
+	unsigned int n_comp,
+	const std::map<std::string, const dealii::Vector<double>*> &param_values,
         const std::map<std::string, const dealii::BlockVector<double> *> &domain_values,
         bool need_neighbour);
 
@@ -262,6 +264,9 @@ namespace DOpE
         return need_neighbour_;
       }
 
+      unsigned int GetPipe() const { return pipe_; }
+      unsigned int GetNPipes() const { return n_pipes_; }
+      unsigned int GetNComp() const { return n_comp_; }
     private:
       /***********************************************************/
       /**
@@ -303,13 +308,15 @@ namespace DOpE
       unsigned int face_;
       unsigned int subface_;
       bool need_neighbour_;
-      unsigned int pipe_;
+      unsigned int pipe_, n_pipes_, n_comp_;
     };
 
     /**********************************************************************/
     template<int dim>
     Network_FaceDataContainerInternal<dim>::Network_FaceDataContainerInternal(
       unsigned int pipe,
+      unsigned int n_pipes,
+      unsigned int n_comp,
       const std::map<std::string, const dealii::Vector<double>*> &param_values,
       const std::map<std::string, const dealii::BlockVector<double> *> &domain_values,
       bool need_neighbour)
@@ -317,6 +324,8 @@ namespace DOpE
         need_neighbour)
     {
       pipe_ = pipe;
+      n_pipes_ = n_pipes;
+      n_comp_ = n_comp;
     }
 
     template<int dim>
@@ -583,6 +592,10 @@ namespace DOpE
     }
 
     /***********************************************************************/
+
+
+    /***********************************************************************/
+
   }
   }
 }

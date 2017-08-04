@@ -534,6 +534,23 @@ namespace DOpE
     template<typename ELEMENTITERATOR>
     bool AtInterface(ELEMENTITERATOR &element, unsigned int face) const;
 
+    /********************Functions on Networks********************/
+    template<typename FDC>
+      inline void BoundaryEquation_BV(const FDC & fdc,
+				      dealii::Vector<double> &local_vector,
+				      double scale,
+				      double scale_ico) 
+    { 
+      pde_.BoundaryEquation_BV(fdc, local_vector, scale, scale_ico) ;
+    }
+    template<typename FDC>
+      inline void OutflowValues(const  FDC& fdc,
+				dealii::Vector<double> &local_vector,
+				std::vector<bool> &comp_mask) 
+    {
+      pde_.OutflowValues(fdc, local_vector, comp_mask);
+    }
+
   protected:
 
   private:

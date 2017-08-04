@@ -1503,6 +1503,40 @@ namespace DOpE
       return false;
     }
 
+    //Functions needed on networks.
+      /**
+       * Implements the derivative of the BoundaryEquation with respect to
+       * the given left or right values on the pipe
+       *
+       */
+      virtual void BoundaryEquation_BV(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
+				       dealii::Vector<double> &/*local_vector*/,
+				       double /*scale*/,
+				       double /*scale_ico*/) 
+      {
+	abort();
+      }
+      /**
+       * Evaluates the difference between the outfolw values on the pipe; i.e. those that 
+       * do not take the given left or right value and the given left or right value.
+       * E.g, it returns u-q_l if left boundary is and outflow boundary and u-q_r if right 
+       * boundary is an outflow boundary. 
+       *
+       * @param fdc          The container for the face information
+       * @param local_vector The Vector with the residuals. 
+       *                     local_vector is assumed to be the lenght of the 
+       *                     components of the used fe
+       * @param comp_mask    stores which components of local_vector have been filled.
+       * 
+       *
+       */
+      virtual void OutflowValues(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
+				 dealii::Vector<double> &/*local_vector*/,
+				 std::vector<bool> &/*comp_mask*/) 
+      {
+	abort();
+      }
+
   protected:
     std::string problem_type_;
     double GetTime() const

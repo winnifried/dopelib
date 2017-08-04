@@ -73,7 +73,8 @@ namespace DOpE
      */
     template<typename STH>
     void
-    InitializeFDC(unsigned int pipe, const FACEQUADRATURE &fquad, UpdateFlags update_flags,
+    InitializeFDC(unsigned int pipe, unsigned int n_pipes, unsigned int n_comp, 
+		  const FACEQUADRATURE &fquad, UpdateFlags update_flags,
                   STH &sth,
                   const std::vector<
                   typename DOpEWrapper::DoFHandler<dim, DH>::active_cell_iterator>& element,
@@ -82,7 +83,7 @@ namespace DOpE
                   bool need_interfaces = false)
     {
       delete fdc_;
-      fdc_ = new Network_FaceDataContainer<DH, VECTOR, dim>(pipe, fquad,
+      fdc_ = new Network_FaceDataContainer<DH, VECTOR, dim>(pipe, n_pipes, n_comp, fquad,
 							    update_flags, sth, element, param_values, domain_values,
 							    need_interfaces);
     }
@@ -93,14 +94,15 @@ namespace DOpE
      */
     template<typename STH>
     void
-    InitializeFDC(unsigned int pipe, UpdateFlags update_flags, STH &sth,
+    InitializeFDC(unsigned int pipe, unsigned int n_pipes, unsigned int n_comp,
+		  UpdateFlags update_flags, STH &sth,
                   const std::vector<
                   typename DOpEWrapper::DoFHandler<dim, DH>::active_cell_iterator>& element,
                   const std::map<std::string, const Vector<double>*> &param_values,
                   const std::map<std::string, const dealii::BlockVector<double> *> &domain_values,
                   bool need_interfaces = false)
     {
-      InitializeFDC(pipe, GetFaceQuad(), update_flags, sth, element, param_values,
+      InitializeFDC(pipe, n_pipes, n_comp, GetFaceQuad(), update_flags, sth, element, param_values,
                     domain_values, need_interfaces);
     }
 

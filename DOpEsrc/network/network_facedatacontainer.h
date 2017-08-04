@@ -96,16 +96,19 @@ namespace DOpE
      *
      */
     template<template<int, int> class FE, typename SPARSITYPATTERN, int dopedim, int dealdim>
-    Network_FaceDataContainer(unsigned int pipe, const Quadrature<dim - 1>& quad,
-                      UpdateFlags update_flags,
+    Network_FaceDataContainer(unsigned int pipe,
+			      unsigned int n_pipes,
+			      unsigned int n_comp,
+			      const Quadrature<dim - 1>& quad,
+			      UpdateFlags update_flags,
 			      SpaceTimeHandler<FE, dealii::DoFHandler, SPARSITYPATTERN, dealii::Vector<double>,
-                      dopedim, dealdim>& sth,
-                      const std::vector<
-                      typename DOpEWrapper::DoFHandler<dim, dealii::DoFHandler>::active_cell_iterator>& element,
-                      const std::map<std::string, const Vector<double>*> &param_values,
-                      const std::map<std::string, const dealii::BlockVector<double> *> &domain_values,
-                      bool need_neighbour) :
-    fdcinternal::Network_FaceDataContainerInternal<dim>(pipe, param_values,
+			      dopedim, dealdim>& sth,
+			      const std::vector<
+			      typename DOpEWrapper::DoFHandler<dim, dealii::DoFHandler>::active_cell_iterator>& element,
+			      const std::map<std::string, const Vector<double>*> &param_values,
+			      const std::map<std::string, const dealii::BlockVector<double> *> &domain_values,
+			      bool need_neighbour) :
+    fdcinternal::Network_FaceDataContainerInternal<dim>(pipe, n_pipes, n_comp, param_values,
                                                           domain_values, need_neighbour), element_(element), state_fe_values_(
                                                             sth.GetMapping(), (sth.GetFESystem("state")), quad,
                                                             update_flags), control_fe_values_(sth.GetMapping(),
@@ -147,16 +150,19 @@ namespace DOpE
      *
      */
     template<template<int, int> class FE, typename SPARSITYPATTERN>
-    Network_FaceDataContainer(unsigned int pipe, const Quadrature<dim - 1>& quad,
-                      UpdateFlags update_flags,
-                      StateSpaceTimeHandler<FE, dealii::DoFHandler, SPARSITYPATTERN, dealii::Vector<double>,
-                      dim>& sth,
-                      const std::vector<
-                      typename DOpEWrapper::DoFHandler<dim, dealii::DoFHandler>::active_cell_iterator>& element,
-                      const std::map<std::string, const Vector<double>*> &param_values,
-                      const std::map<std::string, const dealii::BlockVector<double> *> &domain_values,
-                      bool need_neighbour) :
-      fdcinternal::Network_FaceDataContainerInternal<dim>(pipe, param_values,
+    Network_FaceDataContainer(unsigned int pipe, 
+			      unsigned int n_pipes,
+			      unsigned int n_comp,
+			      const Quadrature<dim - 1>& quad,
+			      UpdateFlags update_flags,
+			      StateSpaceTimeHandler<FE, dealii::DoFHandler, SPARSITYPATTERN, dealii::Vector<double>,
+			      dim>& sth,
+			      const std::vector<
+			      typename DOpEWrapper::DoFHandler<dim, dealii::DoFHandler>::active_cell_iterator>& element,
+			      const std::map<std::string, const Vector<double>*> &param_values,
+			      const std::map<std::string, const dealii::BlockVector<double> *> &domain_values,
+			      bool need_neighbour) :
+      fdcinternal::Network_FaceDataContainerInternal<dim>(pipe, n_pipes, n_comp, param_values,
                                                           domain_values, need_neighbour), element_(element), state_fe_values_(
                                                             sth.GetMapping(), (sth.GetFESystem("state")), quad,
                                                             update_flags), control_fe_values_(sth.GetMapping(),
@@ -267,6 +273,22 @@ namespace DOpE
     inline const FEFaceValuesBase<dim> &
     GetNbrFEFaceValuesControl() const;
 
+    /**
+     * Writes the values of the flux values at the pipe boundary at the quadrature points 
+     * into values. Fails if called on non boundary nodes.
+     */
+    void
+      GetFluxValues(std::string name,
+		    std::vector<double> &values) const;
+    
+    /*********************************************/
+    /*
+     * Same as above for the Vector valued case.
+     */
+    void
+      GetFluxValues(std::string name,
+		    std::vector<dealii::Vector<double> > &values) const;
+    
   private:
     /*
      * Helper Functions
@@ -648,6 +670,73 @@ namespace DOpE
   {
     return control_index_;
   }
+
+  /***********************************************************************/
+
+  template<typename VECTOR, int dim>
+    void
+    Network_FaceDataContainer<dealii::DoFHandler, VECTOR, dim>::GetFluxValues(
+      std::string name,
+      std::vector<double> &values) const
+  {
+      typename std::map<std::string, const dealii::BlockVector<double> *>::const_iterator it =
+        this->GetDomainValues().find(name);
+      if (it == this->GetDomainValues().end())
+      {
+	throw DOpEException("Did not find " + name,
+			    "Network_FaceDataContainerInternal::GetFluxValues");
+      }
+      assert(this->GetIsAtBoundary());
+      assert(values.size() == 1);
+      assert(this->GetNComp() == 1);
+      assert(it->second->block(this->GetNPipes()).size() == 2*this->GetNPipes());
+      if(this->GetBoundaryIndicator()==0)
+      {
+	//left boundary
+	values[0] = it->second->block(this->GetNPipes())[this->GetPipe()*this->GetNComp()];
+      }
+      else
+      {
+	//right boundary
+	values[0] = it->second->block(this->GetNPipes())[this->GetNPipes()*this->GetNComp()+this->GetPipe()*this->GetNComp()];
+      }
+     }
+
+    /***********************************************************************/
+    template<typename VECTOR, int dim>
+    void
+    Network_FaceDataContainer<dealii::DoFHandler, VECTOR, dim>::GetFluxValues(
+      std::string name,
+      std::vector<dealii::Vector<double> > &values) const
+    {
+      typename std::map<std::string, const dealii::BlockVector<double> *>::const_iterator it =
+        this->GetDomainValues().find(name);
+      if (it == this->GetDomainValues().end())
+      {
+	throw DOpEException("Did not find " + name,
+			    "ElementDataContainer::GetValues");
+      }
+      assert(this->GetIsAtBoundary());
+      assert(values.size() == 1);
+      assert(values[0].size() == this->GetNComp());
+      assert(it->second->block(this->GetNPipes()).size() == 2*this->GetNPipes()*this->GetNComp());
+      if(this->GetBoundaryIndicator()==0)
+      {
+	//left boundary
+	for(unsigned int c = 0; c < this->GetNComp(); c++)
+	{
+	  values[0][c] = it->second->block(this->GetNPipes())[this->GetPipe()*this->GetNComp()+c];
+	}
+      }
+      else
+      {
+	//right boundary
+	for(unsigned int c = 0; c < this->GetNComp(); c++)
+	{
+	  values[0][c] = it->second->block(this->GetNPipes())[this->GetNPipes()*this->GetNComp()+this->GetPipe()*this->GetNComp()+c];
+	}
+      }
+     }
 
   /***********************************************************************/
   /************************END*OF*IMPLEMENTATION**************************/

@@ -39,7 +39,7 @@ namespace DOpE
    *                        note the PDE is the one we use for all
    *                        things related to the PDE. This is so to allow
    *                        switching between timesteps.
-   * @tparam DD             Dirichlet datan
+   * @tparam DD             Dirichlet data
    * @tparam VECTOR         The vector class
    * @tparam dim            The dimension of the domain.
    */
@@ -431,6 +431,23 @@ namespace DOpE
 
     template<typename ELEMENTITERATOR>
     bool AtInterface(ELEMENTITERATOR &element, unsigned int face) const;
+
+    /********************Functions on Networks********************/
+    template<typename FACEITERATOR>
+      inline void BoundaryEquation_BV(const FACEITERATOR & /*fdc*/,
+				      dealii::Vector<double> &/*local_vector*/,
+				      double /*scale*/,
+				      double /*scale_ico*/) 
+    { 
+      abort();
+    }
+    template<typename FACEITERATOR>
+      inline void OutflowValues(const  FACEITERATOR& /*fdc*/,
+				dealii::Vector<double> &/*local_vector*/,
+				std::vector<bool> &/*comp_mask*/) 
+    {
+      abort();
+    }
 
   protected:
 
