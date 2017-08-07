@@ -17,7 +17,7 @@ in the command line of your terminal.
 
 
 \section{License information}
-Copyright (C) 2012--2016 by the DOpElib authors\\[2mm]
+Copyright (C) 2012--2017 by the DOpElib authors\\[2mm]
 %
 This file is part of DOpElib\\[2mm]
 %
@@ -40,9 +40,23 @@ for further information on this license.
 \newpage
 \section{References}
 If you like the library and use it for your own projects, please give credits by 
-referencing the project \dope{}~\cite{dope} using the following bibtex entry:
+referencing the project \dope{}~\cite{dope} using the following bibtex entries:
 
 \begin{lstlisting}
+@Article{dopelib,
+  Title   = {{DOpElib}: {D}ifferential Equations and 
+    {O}ptimization {E}nvironment; {A} Goal Oriented 
+    Software Library for Solving {PDE}s and Optimization 
+    Problems with {PDE}s},
+  Author  = {C. Goll and T. Wick and W. Wollner},
+  Journal = {Archive of Numerical Software},
+  Year    = {2017},
+  Number  = {2},
+  Pages   = {1--14},
+  Volume  = {5},
+  Doi     = {10.11588/ans.2017.2.11815}
+}
+
 @MISC{dope,
   key   = {DOpElib},
   title = {The {D}ifferential {E}quation and 
@@ -98,7 +112,7 @@ source \texttt{gcc.gnu.org}.
 Under MAC OSX, you need to install the \texttt{XCode} tools delivered with the operating system 
 or available for free \texttt{developer.apple.com/xcode}. Unfortunately, the delivered 
 version of \texttt{g++} is too old, so you need to install the real thing. To do so, 
-download \texttt{MacPorts} from \texttt{macports.org}. Once you have installed MacPorts 
+download, e.g., \texttt{MacPorts} from \texttt{macports.org}. Once you have installed MacPorts 
 you can use it to install additional Linux software. 
 First, update the MacPorts installation \texttt{sudo port selfupdate}
 after that you can install a new version of \texttt{g++} using for instance 
@@ -175,7 +189,7 @@ check if
 there is a department license already available.
 For further information you should consult the file 
 \texttt{ThirdPartyLibs/SNOPT.INSTALLNOTES}. In particular you need to configure 
-\texttt{deal.II} with at least with enabled UMFPACK.
+\texttt{deal.II} at least with enabled UMFPACK.
 
 
 
@@ -192,9 +206,10 @@ manually. This is true in particular for the HSL solvers MA27, $\ldots$.
 For information on these see the information provided by the installation
 script.
 
-The installation is straighforward and has been tested on openSUSE 12.1
-machines as well as on MAC. At the end of the installtion do not forget to
-add ipopt to your \texttt{LD\underline{ }LIBRARY\underline{ }PATH}:
+The installation is straightforward and has been tested on OpenSUSE
+12.1, Ubuntu 14.04 LTS and 16.04 LTS
+machines as well as on MAC. At the end of the installation do not forget to
+add \texttt{IPOPT} to your \texttt{LD\underline{ }LIBRARY\underline{ }PATH}:
 \begin{lstlisting}
 **************************************************************
                  Installation complete!
@@ -210,9 +225,10 @@ To work with DOpElib, your need necessarily deal.II, which installation
 we describe first. Afterwards, the DOpElib installation is described and finally
 other optional packages might be installed.
 \begin{itemize}
-\item Install \texttt{deal.II} to your home directory, i.e., it should be located in \\
-\texttt{\textasciitilde/deal.II}. \\[1mm]
-If you prefer another position you can install it anywhere but need 
+\item We automatically search for \texttt{deal.II} to your home
+  directory, i.e., if \texttt{deal.II} is located in \\
+\texttt{\textasciitilde/deal.II} you don't have to do anything. 
+\item Alternatively, if you prefer another position you can install it anywhere but need 
 to set the \texttt{DEAL\_II\_DIR} environment variable, so that it 
 will be found by cmake, i.e.,
 \begin{lstlisting}
@@ -225,7 +241,7 @@ another deal.II version might be linked resulting in linker errors or
 segmentation faults without useful error message. In order to check to which
 deal.II version DOpE is linked, type 
 \begin{lstlisting}
-echo $DEAL_II_DIR
+echo ${DEAL_II_DIR}
 \end{lstlisting}
 in the current terminal window.
 \end{remark}
@@ -239,32 +255,34 @@ any further comments and refer to their webpage.
 %
 \item Get a copy of \texttt{DOpElib}, see Section~\ref{sec:obtain} for details.
 %
-\item Unpack in your preferred directory:
+\item If you obtained a tar-ball, unpack in your preferred directory:
 \begin{lstlisting}
-~/Software/> tar -xzf dopelib-4.0.tar.gz
+ tar -xzf dopelib-4.0.tar.gz
 \end{lstlisting}
-to get
+to get a directory 
 \begin{lstlisting}
-~/Software/dopelib-4.0
+dopelib-4.0/
 \end{lstlisting}
-To build the \texttt{DOpElib} you have to change to the directory 
-\texttt{DOpEsrc} where you can call 
+containing the source files. If you cloned the git repository you
+already have a directory; \texttt{dopelib} by default, containing the sources.
+\item Change to the directory with the sources, and then to the
+  subdirectory \texttt{DOpEsrc}.
+Once there, to build \texttt{DOpElib} you can call 
 \begin{lstlisting}
-~/Software/dopelib-4.0/DOpEsrc> make c-all
+ make c-all
 \end{lstlisting}
 to build and configure the library using cmake. 
-You also get various installation options by just typing 
-\texttt{make}.
-\item To generate documentation, please go into:
-\begin{lstlisting}
-~/Software/dopelib-4.0/Examples
-\end{lstlisting}
-Here, you get all options by typing:
+You also get various alternatives by just typing 
+\texttt{make}, including the generation of the documentation.
+Building the documentation will require  
+latex or doxygen to be installed on your computer.
+\item If your would like to check the examples, change to the
+  subfolder \texttt{Examples} from the main source directory.
+Typing 
 \begin{lstlisting}
 make
 \end{lstlisting}
-Specifically, you can create and run all examples, running a test suite,
-and generating documentation:
+will again provide you with the available options:
 {\footnotesize
 \begin{lstlisting}
 ===========================================================================
@@ -282,20 +300,15 @@ and generating documentation:
 ===========================================================================
 \end{lstlisting}
 }
-The options are $c-all$ and $c-cat$ utilizing the cmake build system.
+The options are $c-all$ and $c-cat$ utilizing the cmake build system
+to create the executables (and optionally run the tests if all went well).
 
 It is \textbf{important} to generate the examples via make c-all 
 in the home folder of the examples and \textbf{not} as in deal.II by 
-using cmake . in the specific example itself. With this you
-would currently destroy the delivered Makefile. See also the FAQ below.
+using cmake in the specific example itself. With this you
+would currently destroy the delivered Makefile; which is fine if you
+don't intend to use it but some automated tests will fail. See also the FAQ below.
 
-For html documentation, change into:
-\begin{lstlisting}
-~/Software/dopelib-4.0/doxygen
-\end{lstlisting}
-and then typing \texttt{make}. Doxygen documentation
-will require either 
-latex or doxygen to be installed on your computer.
 \item If you wish to test if everything worked. To do so you can 
 change to the \texttt{Examples} directory and \texttt{make tests} which will give you a 
 list of all the examples and whether they behave as expected by the library, see also 
@@ -304,8 +317,8 @@ Chapter~\ref{chap:test}.
  the instructions in \texttt{ThirdPartyLibs/README}. There may be further information 
  in some \texttt{ThirdPartyLibs/*.INSTALLNOTES} that you may want to
  consider.\\[3mm]
- As example, the installation of ipopt works as follows:\\
-In the path \texttt{~/dope/ThirdPartyLibs>} type in the terminal\\
+ As example, the installation of \texttt{IPOPT} works as follows:\\
+In the path \texttt{ThirdPartyLibs>} type in the terminal\\
 \texttt{./install-free-libs.sh}
 
 
@@ -341,37 +354,50 @@ In the path \texttt{~/dope/ThirdPartyLibs>} type in the terminal\\
 
 
 \subsection*{3.) Problem using make c-all in the Examples folder :}
-
+Sometimes people encounter problems when calling \texttt{make c-all}. 
+This can be due to several reasons:
+\begin{itemize}
+\item If you abort the script for the c-make auto-configuration prematurely,
+you might encounter the following error:
+{\small
 \begin{lstlisting}
-wick@linux:~/Software/dopelib/Examples> make c-all
+[...]> make c-all
 cd OPT/StatPDE/Example1; make -s c-all
 make[2]: *** No targets specified and no makefile found.  Stop.
-../../../..//Examples/Make.global_options:2: recipe for target 'c-all' failed
 make[1]: *** [c-all] Error 2
-Makefile:24: recipe for target 'OPT/StatPDE/Example1' failed
 make: *** [OPT/StatPDE/Example1] Error 2
 \end{lstlisting}
+}
+This is due to the fact, that some unfinished files from the previous
+run are in the way of the script. Go to the corresponding examples
+folder, and delete the folder \texttt{autobuild}. 
 
-This means that the Makefile in the specific examples folder has been 
-modified in some illegal way. Remove this Makefile 
+\item Some times the \texttt{Makefiles} in the example folders are
+  damaged, e.g., if an in-source cmake build was attempted in the
+  example folders. This gives an error message 
+{\small
 \begin{lstlisting}
-rm Makefile
-rm -r CMakeFiles
-rm CMakeCache.txt
-rm -r autobuild
+[...]> make c-all
+cd OPT/StatPDE/Example1; make -s c-all
+make[1]: *** No rule to make target `c-all'.  Stop.
+make: *** [OPT/StatPDE/Example1] Error 2   
 \end{lstlisting}
-and get the original 
-one from DOpElib:
-\begin{lstlisting}
-git checkout Makefile
-\end{lstlisting}
+}
+If this happens, go to the corresponding example directory, and replace
+the corresponding Makefile from a clean source, e.g., by a new
+checkout of the Makefile if you are using the git version.
+\end{itemize}
+
 Then try again make c-all (make always sure that before 
 typing make c-all that the deal.II path is exported - see above). 
 
-\subsection*{4.) Different g++ compilers are used for compiling DOpElib and the Examples folder}
+\subsection*{4.) Different g++ compilers are used for compiling
+  DOpElib and the Examples folder}
+On OpenSUSE and Fedora systems we have observed the following error 
+when calling \texttt{make c-all} in the examples folder:
 {\footnotesize
 \begin{lstlisting}
-bernhard@ebook:~/Schreibtisch/Prog/DOpe/Dope/dopelib/Examples> make c-all
+[...]> make c-all
 cd OPT/StatPDE/Example1; make -s c-all
 [ 50%] Building CXX object CMakeFiles/DOpE-OPT-StatPDE-Example1.dir/main.cc.o
 c++: error: unrecognized command line option '-fopenmp-simd'
@@ -391,50 +417,64 @@ make: *** [OPT/StatPDE/Example1] Error 2
 \end{lstlisting}
 }
 
-The reason for this problem might be that the variables c++ and g++ as well as cc and gcc do not match.
+The reason for this problem might be that the variables c++ and g++ as
+well as cc and gcc used for compiling \texttt{deal.II} and
+\texttt{DOpElib} do not match.
 \newline
-You can remove the old Examples folder and replace it by a new one and set the compilers manually by
+You can remove the old Examples/autobuild folder and set the compilers manually by
 \begin{lstlisting}
 export CXX=path/to/g++-compiler
 export CC=path/to/gcc-compiler
 \end{lstlisting}
-where path/to/compiler should be the path to the compiler, DOpElib was compiled with.
+where path/to/compiler should be the path to the compiler, DOpElib
+(and deal.II) was compiled with.
 You can check the current version of your gcc- and g++-compiler with 
 \begin{lstlisting}
 gcc --version
 g++ --version
 \end{lstlisting}
+It is even better if you automatically set these variables; e.g.,
+using your \texttt{\${HOME}.profile} file.
+
 Alternatively you can set the variable c++ to your g++ and the variable cc to gcc using update-alternatives
 as for example
+\footnote{Thanks to Florian Tischler (Admin at RICAM Linz) for the
+  help.}
+{\small
 \begin{lstlisting}
 sudo update-alternatives --install /usr/bin/c++ c++ /usr/bin/g++-6 60
 sudo update-alternatives --install /usr/bin/cc cc /usr/bin/gcc-6 60
-\end{lstlisting}
-Thanks to Florian Tischler (Admin at RICAM Linz) for the help.
-
+\end{lstlisting}}
 
 \subsection*{5.) Different g++, cc, cxx compilers are used for compiling
   DOpElib and the Examples folder}
 
-The error message is as before:
-{\footnotesize
+Similar to the previous error, using mpi-compilers bears a similar
+problem if the needed libraries are not in your \texttt{\${PATH}}.
+Again this problem seems to appear on OpenSUSE and Fedora systems
+where this happens by default.
+When running \texttt{make c-all} this gives a message like 
+{\small
 \begin{lstlisting}
 Linking CXX executable ../DOpE-PDE-StatPDE-Example1
-/usr/lib64/gcc/x86_64-suse-linux/4.8/../../../../x86_64-suse-linux/bin/ld: cannot find -lmpi_usempi
-/usr/lib64/gcc/x86_64-suse-linux/4.8/../../../../x86_64-suse-linux/bin/ld: cannot find -lmpi_mpifh
-/usr/lib64/gcc/x86_64-suse-linux/4.8/../../../../x86_64-suse-linux/bin/ld: cannot find -lmpi
+/usr/[...]/x86_64-suse-linux/bin/ld: cannot find -lmpi_usempi
+/usr/[...]/x86_64-suse-linux/bin/ld: cannot find -lmpi_mpifh
+/usr/[...]/x86_64-suse-linux/bin/ld: cannot find -lmpi
 collect2: error: ld returned 1 exit status
 \end{lstlisting}
 }
 
-An alternative to the previous solution is:
+To fix this issue, you need to set the correct environment variables.
+We assume you have a standard installation of openmpi done. If not you
+can find the correct replacement for the path
+\texttt{/usr/lib64/mpi/gcc/openmpi/bin} 
+using \texttt{whereis mpicxx}.
+{\small
 \begin{lstlisting}
-export DEAL_II_DIR =your_mpi_deal_II_version // only necessary 
-      // when not in the standard path
-export PATH=/usr/lib64/mpi/gcc/openmpi/bin:${PATH}  // obtain your MPI path
-      // with `whereis mpicxx' etc.
+export DEAL_II_DIR =your_mpi_deal_II_version 
+export PATH=/usr/lib64/mpi/gcc/openmpi/bin:${PATH}  
 export CC=mpicc; export CXX=mpicxx; export FC=mpif90; export FF=mpif77
-\end{lstlisting}
+\end{lstlisting}}
 Then compile first the DOpElib library and then the Examples folder with these 
 settings. Possibly pay attention that also the deal.II version has been
 compiled 
@@ -442,14 +482,8 @@ with this MPI path.
 
 \begin{remark}
 Be careful that you work in the same shell when only using `export'. 
-Or include the export lines into the 
-\begin{lstlisting}
-.bash_rc 
-\end{lstlisting}
-or 
-\begin{lstlisting}
-.profile
-\end{lstlisting}
+Or include the export lines into the \texttt{\${HOME}/.bash\_rc} 
+\texttt{\${HOME}/.profile}
 file to assert that the correct
 compiler is always used.
 \end{remark}
