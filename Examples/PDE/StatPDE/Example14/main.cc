@@ -193,14 +193,14 @@ main(int argc, char **argv)
   LocalFunctional2<CDC, FDC, DOFHANDLER, VECTOR, DIM> MVF2(pr);
   //*************************************************
   
-  //pde*************************************************
-  LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM> LPDE(pr);
-  //*************************************************
-  
   //Network-description 
   //*************************************************
   LocalNetwork mynet(pr);
     
+  //pde*************************************************
+  LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM> LPDE(pr,mynet);
+  //*************************************************
+  
   //space time handler***********************************/
   STH DOFH(tria_s, control_fe, state_fe, DOpEtypes::stationary, mynet, true);
   /***********************************/

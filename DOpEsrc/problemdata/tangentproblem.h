@@ -541,7 +541,8 @@ namespace DOpE
       abort();
     }
     inline void PipeCouplingResidual(dealii::Vector<double>& /*res*/, 
-				     const dealii::Vector<double>& /*u*/)
+				     const dealii::Vector<double>& /*u*/, 
+				     const std::vector<bool>& /*present_in_outflow*/)
     {
       abort();
     }

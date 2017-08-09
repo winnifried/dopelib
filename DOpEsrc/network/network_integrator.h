@@ -577,7 +577,7 @@ namespace DOpE
 	residual.block(n_pipes)[n_pipes*n_comp+n_comp*p+c] = flow[2*n_comp+c];
 	residual.block(n_pipes)[n_pipes*n_comp+n_comp*p+c] += flow[3*n_comp+c];
 	//Sort the bool-flags for the fluxes in the outflow to the right place
-
+	
 	assert(tmp[c]||tmp[n_comp+c]);//At least on must be outflow 
 	//(Both are allowed to deal with ) algebraic pipes where the boundary is induced by the 
 	//pipe
@@ -600,7 +600,7 @@ namespace DOpE
 
     //Cross Coupling of the nodal variables, e.g. continuity of the flux...
     dealii::Vector<double> coupling(2*n_pipes*n_comp);
-    sth->GetNetwork().PipeCouplingResidual(coupling,lin_pt.block(n_pipes),present_in_outflow);
+    pde.PipeCouplingResidual(coupling,lin_pt.block(n_pipes),present_in_outflow);
     assert(coupling.size() == 2*n_pipes*n_comp);
     for(unsigned int i = 0 ; i < coupling.size(); i++)
     {
@@ -972,41 +972,41 @@ namespace DOpE
     sth->SelectPipe(n_pipes);
     //Now the coupling block(n_pipes,n_pipes)
     //No linearization point needed since coupling conditions are linear!
-    sth->GetNetwork().CouplingMatrix(matrix.block(n_pipes,n_pipes),present_in_outflow);
+    pde.CouplingMatrix(matrix.block(n_pipes,n_pipes),present_in_outflow);
 
-//    //Print Matrix
-//    for(unsigned int p = 0; p <= n_pipes; p++)
-//    {
-//      for(unsigned int i = 0; i < matrix.block(p,0).m(); i++)
-//      {
-//	for(unsigned int r = 0; r <= n_pipes; r++)
-//	{
-//	  for(unsigned int j = 0; j < matrix.block(p,r).n(); j++)
-//	  {
-//	    if( p != n_pipes && r != n_pipes)
-//	    {
-//	      std::cout<<"   *  ";
-//	    }
-//	    else
-//	    {
-//	      std::cout<<" "<<std::setw(4)<<std::setprecision(1) <<matrix.block(p,r).el(i,j)<<" ";
-//	    }
-//	  }
-//	  std::cout<<" | ";
-//	}
-//	std::cout<<std::endl;
-//      }
-//      for(unsigned int r = 0; r <= n_pipes; r++)
-//      {
-//	for(unsigned int j = 0; j < matrix.block(p,r).n(); j++)
-//	{
-//	  std::cout<<"------";
-//	}
-//	std::cout<<" | ";
-//      }
-//      std::cout<<std::endl;
-//    }
-
+    //Print Matrix
+    for(unsigned int p = 0; p <= n_pipes; p++)
+    {
+      for(unsigned int i = 0; i < matrix.block(p,0).m(); i++)
+      {
+	for(unsigned int r = 0; r <= n_pipes; r++)
+	{
+	  for(unsigned int j = 0; j < matrix.block(p,r).n(); j++)
+	  {
+	    if( p != n_pipes && r != n_pipes)
+	    {
+	      std::cout<<"   *  ";
+	    }
+	    else
+	    {
+	      std::cout<<" "<<std::setw(4)<<std::setprecision(1) <<matrix.block(p,r).el(i,j)<<" ";
+	    }
+	  }
+	  std::cout<<" | ";
+	}
+	std::cout<<std::endl;
+      }
+      for(unsigned int r = 0; r <= n_pipes; r++)
+      {
+	for(unsigned int j = 0; j < matrix.block(p,r).n(); j++)
+	{
+	  std::cout<<"------";
+	}
+	std::cout<<" | ";
+      }
+      std::cout<<std::endl;
+    }
+    
   }
 
   /*******************************************************************************************/

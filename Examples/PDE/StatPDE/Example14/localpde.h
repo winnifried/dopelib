@@ -24,6 +24,7 @@
 #ifndef LOCALPDE_H_
 #define LOCALPDE_H_
 
+#include "localnetwork.h"
 #include <deal.II/base/numbers.h>
 
 using namespace std;
@@ -38,8 +39,8 @@ template<
   class LocalPDE : public PDEInterface<EDC, FDC, DH, VECTOR, dealdim>
   {
   public:
-  LocalPDE(ParameterReader &param_reader) :
-    state_block_component_(2, 0)
+  LocalPDE(ParameterReader &param_reader, const LocalNetwork& net) :
+    state_block_component_(2, 0), network_(net)
     {
       param_reader.SetSubsection("localpde parameters");
       win_    =	param_reader.get_double("win");
@@ -724,6 +725,18 @@ const FEValuesExtractors::Scalar w(0);
 	}
       }
 
+      void PipeCouplingResidual(dealii::Vector<double>& res, 
+				const dealii::Vector<double>& u, 
+				const std::vector<bool>& present_in_outflow)
+      {
+	network_.PipeCouplingResidual(res,u,present_in_outflow);
+      }
+      void CouplingMatrix(dealii::SparseMatrix<double>& matrix, 
+			  const std::vector<bool>& present_in_outflow)
+      {
+	network_.CouplingMatrix(matrix,present_in_outflow);
+      }
+
       UpdateFlags
       GetUpdateFlags() const
       {
@@ -808,6 +821,8 @@ const FEValuesExtractors::Scalar w(0);
       vector<unsigned int> control_block_component_;
       vector<unsigned int> state_block_component_;   
       
+      const LocalNetwork& network_;
+
       double win_, pin_;
       double stab_param_;
 

@@ -1575,6 +1575,41 @@ namespace DOpE
       }
 
       /**
+       * Same as OutflowValues, but for initial conditions.
+       *
+       *
+       * Only needed for calculations on networks.
+       *
+       * @param fdc          The container for the face information
+       * @param local_vector The resulting computation
+       * 
+       *
+       */
+      virtual void Init_OutflowValues(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
+				      std::vector<bool>& /*present_in_outflow*/,
+				      dealii::Vector<double> &/*local_vector*/,
+				      double /*scale*/,
+				      double /*scale_ico*/)  
+      {
+	abort();
+      }
+      /**
+       * Same as OutflowMatrix, but for initial conditions.
+       *
+       * Only needed for calculations on networks.
+       *
+       */
+      virtual void
+	Init_OutflowMatrix(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
+			   std::vector<bool>& /*present_in_outflow*/,
+			   dealii::FullMatrix<double> &/*local_entry_matrix*/,
+			   double /*scale*/,
+			   double /*scale_ico*/)
+      {
+	abort();
+      }
+
+      /**
        * Returns the global coupling residual between the individual pipes.
        *
        * Only needed on Networks.
@@ -1584,7 +1619,8 @@ namespace DOpE
        * @param u    The vector in which the residual is to be calculated
        */
       virtual void PipeCouplingResidual(dealii::Vector<double>& /*res*/, 
-					const dealii::Vector<double>& /*u*/)
+					const dealii::Vector<double>& /*u*/, 
+					const std::vector<bool>& /*present_in_outflow*/)
       {
 	abort();
       }
@@ -1598,6 +1634,33 @@ namespace DOpE
        * @param present_in_outflow A vector indicating which flux variables are outflow.
        */
       virtual void CouplingMatrix(dealii::SparseMatrix<double>& /*matrix*/, 
+				  const std::vector<bool>& /*present_in_outflow*/)
+      {
+	abort();
+      }
+
+      /**
+       * Same as PipeCouplingResidual, but for the initial problem
+       * 
+       * @param res  The residual of the coupling condition
+       * @param u    The vector in which the residual is to be calculated
+       */
+      virtual void Init_PipeCouplingResidual(dealii::Vector<double>& /*res*/, 
+					const dealii::Vector<double>& /*u*/, 
+					const std::vector<bool>& /*present_in_outflow*/)
+      {
+	abort();
+      }
+      /**
+       * Same as CouplingMatrix, but for the initial problem
+       *
+       * Only needed on Networks.
+       *
+       *
+       * @param matrix  The matrix to be calculated
+       * @param present_in_outflow A vector indicating which flux variables are outflow.
+       */
+      virtual void Init_CouplingMatrix(dealii::SparseMatrix<double>& /*matrix*/, 
 				  const std::vector<bool>& /*present_in_outflow*/)
       {
 	abort();
