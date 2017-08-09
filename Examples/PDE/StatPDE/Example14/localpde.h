@@ -622,12 +622,16 @@ template<
       }
 
       void OutflowValues(const FDC<DH, VECTOR, dealdim> & fdc,
+			 std::vector<bool>& present_in_outflow,
 			 dealii::Vector<double> &local_vector,
 			 double /*scale*/,
 			 double /*scale_ico*/) 
       {
-	assert(local_vector.size()==4);
-
+	assert(local_vector.size()==8);
+	//Values in local_vector
+	// n_comp left_outflow, n_comp right_outflow, 
+	// n_comp left_direct_coupling, n_comp right_direct_coupling
+	//Here only the first four are relevant.
 	unsigned int n_q_points = fdc.GetNQPoints();
         unsigned int color = fdc.GetBoundaryIndicator();
 	const auto & state_fe_values =
@@ -652,17 +656,17 @@ template<
 	  if(color == 1 )
 	  {
 	    assert(bn > 0);
-	    //Always! scale the flux with -1! 
 	    //Rightside of pipe -> Index n_comp+current_comp
-	    local_vector(2) += uvalues_[q_point][0]-uflux_[q_point][0];
+	    local_vector(2) += uvalues_[q_point][0];
+	    present_in_outflow[2] = true;
 	  }
 	  else 
 	  {
 	    assert(bn < 0);
 	    assert(color == 0);
-	    //Always! scale the flux with -1!
 	    //Leftside of pipe  -> current_comp
-	    local_vector(1) += uvalues_[q_point][1]-uflux_[q_point][1];
+	    local_vector(1) += uvalues_[q_point][1];
+	    present_in_outflow[1] = true;
 	  }
 	}
       }

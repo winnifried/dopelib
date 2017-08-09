@@ -446,7 +446,8 @@ namespace DOpE
 				   unsigned int n_comp, 
 				   PIPE_STH_* sth, PROBLEM &pde, 
 				   dealii::Vector<double> &residual, 
-				   dealii::Vector<double> & flow);
+				   dealii::Vector<double> & flow,
+				   std::vector<bool>& fluxes_in_outflow);
     /**
      * Integrate the matrix on a given pipe
      * Assumes that the pipe is selected prior to calling this function
@@ -556,22 +557,35 @@ namespace DOpE
     }
     unsigned int n_pipes = sth->GetNPipes();
     unsigned int n_comp = sth->GetFESystem("state").n_components();
-    dealii::Vector<double> flow(2*n_comp);
+    std::vector<bool> present_in_outflow(2*n_comp*n_pipes,false);
+    dealii::Vector<double> flow(4*n_comp);
 
     for(unsigned int p = 0; p < n_pipes; p++)
     {
       flow = 0.;
-
+      std::vector<bool> tmp(2*n_comp,false);
+      
       sth->SelectPipe(p);
-      ComputeNonlinearPipeResidual(p,n_pipes,n_comp,sth->GetPipeSTH(),pde,residual.block(p),flow);
+      ComputeNonlinearPipeResidual(p,n_pipes,n_comp,sth->GetPipeSTH(),pde,residual.block(p),flow,tmp);
+      
       //Sort the inconsistency in the outflow variable to the right position
       for(unsigned int c = 0; c < n_comp; c++)
       {
         //Residual for the first flow stored at n_comp*p+c in block n_pipes
 	residual.block(n_pipes)[n_comp*p+c] = flow[c];
-	residual.block(n_pipes)[n_pipes*n_comp+n_comp*p+c] = flow[n_comp+c];
+	residual.block(n_pipes)[n_comp*p+c] += flow[n_comp+c];
+	residual.block(n_pipes)[n_pipes*n_comp+n_comp*p+c] = flow[2*n_comp+c];
+	residual.block(n_pipes)[n_pipes*n_comp+n_comp*p+c] += flow[3*n_comp+c];
+	//Sort the bool-flags for the fluxes in the outflow to the right place
+
+	assert(tmp[c]||tmp[n_comp+c]);//At least on must be outflow 
+	//(Both are allowed to deal with ) algebraic pipes where the boundary is induced by the 
+	//pipe
+	present_in_outflow[p*n_comp+c]=tmp[c];
+	present_in_outflow[n_pipes*n_comp+p*n_comp+c]=tmp[n_comp+c];
       }
     }
+    
     sth->SelectPipe(n_pipes);
 
      //Find the current linearization point
@@ -585,12 +599,12 @@ namespace DOpE
     const VECTOR& lin_pt = *(it->second);
 
     //Cross Coupling of the nodal variables, e.g. continuity of the flux...
-    dealii::Vector<double> coupling(n_pipes*n_comp);
-    sth->GetNetwork().PipeCouplingResidual(coupling,lin_pt.block(n_pipes));
-    assert(coupling.size() == n_pipes*n_comp);
+    dealii::Vector<double> coupling(2*n_pipes*n_comp);
+    sth->GetNetwork().PipeCouplingResidual(coupling,lin_pt.block(n_pipes),present_in_outflow);
+    assert(coupling.size() == 2*n_pipes*n_comp);
     for(unsigned int i = 0 ; i < coupling.size(); i++)
     {
-      residual.block(n_pipes)[n_pipes*n_comp+i]=coupling[i];
+      residual.block(n_pipes)[i]+=coupling[i];
     }
 
     //Check if some preset righthandside exists.
@@ -951,7 +965,6 @@ namespace DOpE
 	}
 	//Sort the bool-flags for the fluxes in the outflow to the right place
 	assert(tmp[c]||tmp[n_comp+c]);
-	assert(!(tmp[c]&&tmp[n_comp+c]));
 	present_in_outflow[p*n_comp+c]=tmp[c];
 	present_in_outflow[n_pipes*n_comp+p*n_comp+c]=tmp[n_comp+c];
       }
@@ -2053,7 +2066,8 @@ namespace DOpE
     unsigned int n_comp,
     PIPE_STH_* sth, PROBLEM &pde, 
     dealii::Vector<double> &residual, 
-    dealii::Vector<double> & flow)
+    dealii::Vector<double> & flow,
+    std::vector<bool>& fluxes_in_outflow)
   {
     residual = 0.;
 
@@ -2140,7 +2154,7 @@ namespace DOpE
                     pde.BoundaryRhs(fdc,local_vector,-1.);
 
 		    //Compute the partial entries in the last column of the residual
-		    pde.OutflowValues(fdc,flow,1.,1.);
+		    pde.OutflowValues(fdc,fluxes_in_outflow,flow,1.,1.);
                   }
               }
           }

@@ -1503,10 +1503,13 @@ namespace DOpE
       return false;
     }
 
-    //Functions needed on networks.
+    //Functions needed on networks, all default to abort, so that no implementation is required 
+    //  for normal PDEs
       /**
        * Implements the derivative of the BoundaryEquation with respect to
-       * the given left or right values on the pipe
+       * the given left or right values on the pipe.
+       *
+       * Only needed for calculations on networks.
        *
        */
       virtual void BoundaryEquation_BV(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
@@ -1519,6 +1522,9 @@ namespace DOpE
       /**
        * Calculates the local matrix for the coupling between the unknowns and the 
        * locals flux values
+       *
+       * Only needed for calculations on networks.
+       *
        */
       virtual void
 	BoundaryMatrix_BV(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
@@ -1536,12 +1542,16 @@ namespace DOpE
        * E.g, it returns u-q_l if left boundary is and outflow boundary and u-q_r if right 
        * boundary is an outflow boundary. 
        *
+       *
+       * Only needed for calculations on networks.
+       *
        * @param fdc          The container for the face information
        * @param local_vector The resulting computation
        * 
        *
        */
       virtual void OutflowValues(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
+				 std::vector<bool>& /*present_in_outflow*/,
 				 dealii::Vector<double> &/*local_vector*/,
 				 double /*scale*/,
 				 double /*scale_ico*/)  
@@ -1550,6 +1560,9 @@ namespace DOpE
       }
       /**
        * The (local) matrix coupling the outflow values of the pde and the fluxes.
+       *
+       * Only needed for calculations on networks.
+       *
        */
       virtual void
 	OutflowMatrix(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
@@ -1560,6 +1573,36 @@ namespace DOpE
       {
 	abort();
       }
+
+      /**
+       * Returns the global coupling residual between the individual pipes.
+       *
+       * Only needed on Networks.
+       *
+       * 
+       * @param res  The residual of the coupling condition
+       * @param u    The vector in which the residual is to be calculated
+       */
+      virtual void PipeCouplingResidual(dealii::Vector<double>& /*res*/, 
+					const dealii::Vector<double>& /*u*/)
+      {
+	abort();
+      }
+      /**
+       * Returns the matrix for the (linear) global couplings between the flux variables
+       *
+       * Only needed on Networks.
+       *
+       *
+       * @param matrix  The matrix to be calculated
+       * @param present_in_outflow A vector indicating which flux variables are outflow.
+       */
+      virtual void CouplingMatrix(dealii::SparseMatrix<double>& /*matrix*/, 
+				  const std::vector<bool>& /*present_in_outflow*/)
+      {
+	abort();
+      }
+
 
   protected:
     std::string problem_type_;

@@ -21,7 +21,9 @@ namespace DOpE
        * @param res  The residual of the coupling condition
        * @param u    The vector in which the residual is to be calculated
        **/
-      virtual void PipeCouplingResidual(dealii::Vector<double>& res, const dealii::Vector<double>& u) const = 0;
+      virtual void PipeCouplingResidual(dealii::Vector<double>& res, 
+					const dealii::Vector<double>& u, 
+					const std::vector<bool>& present_in_outflow) const = 0;
 
       /**
        * Evaluates the Matrix of the pipe coupling conditions and the coupling to the outflow 
@@ -30,7 +32,8 @@ namespace DOpE
        * @param matrix  The matrix to be calculated
        * @param present_in_outflow A vector indicating which flux variables are outflow.
        **/
-      virtual void CouplingMatrix(dealii::SparseMatrix<double>& matrix, const std::vector<bool>& present_in_outflow) const = 0;
+      virtual void CouplingMatrix(dealii::SparseMatrix<double>& matrix, 
+				  const std::vector<bool>& present_in_outflow) const = 0;
 
 
       /** 

@@ -452,6 +452,7 @@ namespace DOpE
     }
     template<typename FDC>
       inline void OutflowValues(const  FDC& /*fdc*/,
+				std::vector<bool>& /*present_in_outflow*/,
 				dealii::Vector<double> &/*local_vector*/,
 				double /*scale*/,
 				double /*scale_ico*/) 
@@ -465,6 +466,16 @@ namespace DOpE
 		    dealii::FullMatrix<double> &/*local_entry_matrix*/,
 		    double /*scale*/,
 		    double /*scale_ico*/)
+    {
+      abort();
+    }
+    inline void PipeCouplingResidual(dealii::Vector<double>& /*res*/, 
+				     const dealii::Vector<double>& /*u*/)
+    {
+      abort();
+    }
+    inline void CouplingMatrix(dealii::SparseMatrix<double>& /*matrix*/, 
+			       const std::vector<bool>& /*present_in_outflow*/)
     {
       abort();
     }
