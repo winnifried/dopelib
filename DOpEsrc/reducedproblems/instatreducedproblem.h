@@ -731,18 +731,18 @@ namespace DOpE
           this->GetProblem()->GetSpaceTimeHandler()->GetTimeDoFHandler().GetLocalNbrOfDoFs();
         std::vector<unsigned int> local_to_global(n_dofs_per_interval);
 
-	VECTOR* tmp;
-	tmp = NULL;
+        VECTOR *tmp;
+        tmp = NULL;
         {
-	  if(this->GetProblem()->FunctionalNeedFinalValue())
-	  {
-	    TimeIterator it_last =
-            this->GetProblem()->GetSpaceTimeHandler()->GetTimeDoFHandler().last_interval();
-	    it_last.get_time_dof_indices(local_to_global);
-	    GetU().SetTimeDoFNumber(local_to_global[n_dofs_per_interval-1], it_last);
-	    tmp = new VECTOR;
-	    *tmp = GetU().GetSpacialVector();
-	  }
+          if (this->GetProblem()->FunctionalNeedFinalValue())
+            {
+              TimeIterator it_last =
+                this->GetProblem()->GetSpaceTimeHandler()->GetTimeDoFHandler().last_interval();
+              it_last.get_time_dof_indices(local_to_global);
+              GetU().SetTimeDoFNumber(local_to_global[n_dofs_per_interval-1], it_last);
+              tmp = new VECTOR;
+              *tmp = GetU().GetSpacialVector();
+            }
 
           TimeIterator it =
             this->GetProblem()->GetSpaceTimeHandler()->GetTimeDoFHandler().first_interval();
@@ -773,10 +773,10 @@ namespace DOpE
                                 "InstatReducedProblem::ComputeReducedGradient");
           }
 
-	if(tmp != NULL)
-	{
-	  this->GetControlIntegrator().AddDomainData("state_final",tmp);
-	}
+        if (tmp != NULL)
+          {
+            this->GetControlIntegrator().AddDomainData("state_final",tmp);
+          }
 
         this->GetControlIntegrator().AddDomainData("state",
                                                    &(GetU().GetSpacialVector()));
@@ -826,12 +826,12 @@ namespace DOpE
           }
         this->GetControlIntegrator().DeleteDomainData("state");
         this->GetControlIntegrator().DeleteDomainData("adjoint");
-	
-	if(tmp != NULL)
-	{
-	  this->GetControlIntegrator().DeleteDomainData("state_final");
-	  delete tmp;
-	}
+
+        if (tmp != NULL)
+          {
+            this->GetControlIntegrator().DeleteDomainData("state_final");
+            delete tmp;
+          }
         this->GetProblem()->DeleteAuxiliaryFromIntegrator(
           this->GetControlIntegrator());
 
@@ -1123,23 +1123,23 @@ namespace DOpE
             this->GetProblem()->GetSpaceTimeHandler()->GetTimeDoFHandler().GetLocalNbrOfDoFs();
           std::vector<unsigned int> local_to_global(n_dofs_per_interval);
 
-	  VECTOR* tmp_u;
-	  tmp_u = NULL;
-	  VECTOR* tmp_du;
-	  tmp_du = NULL;
+          VECTOR *tmp_u;
+          tmp_u = NULL;
+          VECTOR *tmp_du;
+          tmp_du = NULL;
           {
-	    if(this->GetProblem()->FunctionalNeedFinalValue())
-	    {
-	      TimeIterator it_last =
-		this->GetProblem()->GetSpaceTimeHandler()->GetTimeDoFHandler().last_interval();
-	      it_last.get_time_dof_indices(local_to_global);
-	      GetU().SetTimeDoFNumber(local_to_global[n_dofs_per_interval-1], it_last);
-	      tmp_u = new VECTOR;
-	      *tmp_u = GetU().GetSpacialVector();
-	      GetDU().SetTimeDoFNumber(local_to_global[n_dofs_per_interval-1], it_last);
-	      tmp_du = new VECTOR;
-	      *tmp_du = GetDU().GetSpacialVector();
-	    }
+            if (this->GetProblem()->FunctionalNeedFinalValue())
+              {
+                TimeIterator it_last =
+                  this->GetProblem()->GetSpaceTimeHandler()->GetTimeDoFHandler().last_interval();
+                it_last.get_time_dof_indices(local_to_global);
+                GetU().SetTimeDoFNumber(local_to_global[n_dofs_per_interval-1], it_last);
+                tmp_u = new VECTOR;
+                *tmp_u = GetU().GetSpacialVector();
+                GetDU().SetTimeDoFNumber(local_to_global[n_dofs_per_interval-1], it_last);
+                tmp_du = new VECTOR;
+                *tmp_du = GetDU().GetSpacialVector();
+              }
 
             TimeIterator it =
               this->GetProblem()->GetSpaceTimeHandler()->GetTimeDoFHandler().first_interval();
@@ -1156,16 +1156,16 @@ namespace DOpE
 
           this->GetProblem()->AddAuxiliaryToIntegrator(
             this->GetControlIntegrator());
-	  if(tmp_u != NULL)
-	  {
-	    this->GetControlIntegrator().AddDomainData("state_final",tmp_u);
-	    assert(tmp_du != NULL);
-	  }
-	  if(tmp_du != NULL)
-	  {
-	    this->GetControlIntegrator().AddDomainData("tangent_final",tmp_du);
-	    assert(tmp_u != NULL);
-	  }
+          if (tmp_u != NULL)
+            {
+              this->GetControlIntegrator().AddDomainData("state_final",tmp_u);
+              assert(tmp_du != NULL);
+            }
+          if (tmp_du != NULL)
+            {
+              this->GetControlIntegrator().AddDomainData("tangent_final",tmp_du);
+              assert(tmp_u != NULL);
+            }
 
           hessian_direction_transposed = 0.;
           if (dopedim == dealdim)
@@ -1205,16 +1205,16 @@ namespace DOpE
 
           this->GetProblem()->DeleteAuxiliaryFromIntegrator(
             this->GetControlIntegrator());
-	  if(tmp_u != NULL)
-	  {
-	    this->GetControlIntegrator().DeleteDomainData("state_final");
-	    delete tmp_u;
-	  }
-	  if(tmp_du != NULL)
-	  {
-	    this->GetControlIntegrator().DeleteDomainData("tangent_final");
-	    delete tmp_du;
-	  }
+          if (tmp_u != NULL)
+            {
+              this->GetControlIntegrator().DeleteDomainData("state_final");
+              delete tmp_u;
+            }
+          if (tmp_du != NULL)
+            {
+              this->GetControlIntegrator().DeleteDomainData("tangent_final");
+              delete tmp_du;
+            }
         }//Endof the case of control in the initial values
       else if (this->GetProblem()->GetSpaceTimeHandler()->GetControlType() == DOpEtypes::ControlType::stationary)
         {

@@ -157,9 +157,9 @@ namespace DOpE
   template<>
   void
   DOpE::MethodOfLines_SpaceTimeHandler<dealii::FESystem,
-				       dealii::DoFHandler, dealii::BlockSparsityPattern,
-				       dealii::BlockVector<double>, dope_dimension, deal_II_dimension>::ResetTriangulation(
-					 const dealii::Triangulation<deal_II_dimension> &tria)
+       dealii::DoFHandler, dealii::BlockSparsityPattern,
+       dealii::BlockVector<double>, dope_dimension, deal_II_dimension>::ResetTriangulation(
+         const dealii::Triangulation<deal_II_dimension> &tria)
   {
     state_dof_handler_.clear();
     triangulation_.clear();
@@ -174,13 +174,13 @@ namespace DOpE
       delete state_mesh_transfer_;
     state_mesh_transfer_ = NULL;
   }
-  
+
   template<>
   void
   DOpE::MethodOfLines_SpaceTimeHandler<dealii::FESystem,
-				       dealii::DoFHandler, dealii::SparsityPattern,
-				       dealii::Vector<double>, dope_dimension, deal_II_dimension>::ResetTriangulation(
-					 const dealii::Triangulation<deal_II_dimension> &tria)
+       dealii::DoFHandler, dealii::SparsityPattern,
+       dealii::Vector<double>, dope_dimension, deal_II_dimension>::ResetTriangulation(
+         const dealii::Triangulation<deal_II_dimension> &tria)
   {
     state_dof_handler_.clear();
     triangulation_.clear();
@@ -195,36 +195,36 @@ namespace DOpE
       delete state_mesh_transfer_;
     state_mesh_transfer_ = NULL;
   }
-  
+
   template<>
   void
   DOpE::MethodOfLines_SpaceTimeHandler<
-    dealii::hp::FECollection,
-    dealii::hp::DoFHandler, dealii::BlockSparsityPattern,
-    dealii::BlockVector<double>, dope_dimension, deal_II_dimension>::ResetTriangulation(
-      const dealii::Triangulation<deal_II_dimension> & /*tria*/)
+  dealii::hp::FECollection,
+         dealii::hp::DoFHandler, dealii::BlockSparsityPattern,
+         dealii::BlockVector<double>, dope_dimension, deal_II_dimension>::ResetTriangulation(
+           const dealii::Triangulation<deal_II_dimension> & /*tria*/)
   {
     abort();
   }
-  
+
   template<>
   void
   DOpE::MethodOfLines_SpaceTimeHandler<dealii::hp::FECollection,
-				       dealii::hp::DoFHandler, dealii::SparsityPattern,
-				       dealii::Vector<double>, dope_dimension, deal_II_dimension>::ResetTriangulation(
-					 const dealii::Triangulation<deal_II_dimension> & /*tria*/)
+       dealii::hp::DoFHandler, dealii::SparsityPattern,
+       dealii::Vector<double>, dope_dimension, deal_II_dimension>::ResetTriangulation(
+         const dealii::Triangulation<deal_II_dimension> & /*tria*/)
   {
     abort();
   }
-  
+
 }//End of namespace DOpE
 
 template class DOpE::MethodOfLines_SpaceTimeHandler<dealii::FESystem,
-dealii::DoFHandler,
-dealii::BlockSparsityPattern,
-dealii::BlockVector<double>,
-dope_dimension,
-deal_II_dimension>;
+         dealii::DoFHandler,
+         dealii::BlockSparsityPattern,
+         dealii::BlockVector<double>,
+         dope_dimension,
+         deal_II_dimension>;
 template class DOpE::MethodOfLines_SpaceTimeHandler<dealii::FESystem,
          dealii::DoFHandler,
          dealii::SparsityPattern,

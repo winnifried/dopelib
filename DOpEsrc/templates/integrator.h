@@ -1597,8 +1597,8 @@ namespace DOpE
 #if deal_II_dimension > 1
             face_integrals[element_it->face(face_no)] = face_init;
 #else
-	    face_integrals[element_it->face(face_no)->vertex_index()] = face_init;
-#endif 
+            face_integrals[element_it->face(face_no)->vertex_index()] = face_init;
+#endif
           }
       }
 
@@ -1770,7 +1770,7 @@ namespace DOpE
                                 ExcInternalError());
 
                         face_integrals[element[0]->face(face)] = element_sum;
-#else 
+#else
                         Assert (face_integrals.find (element[0]->face(face)->vertex_index()) != face_integrals.end(),
                                 ExcInternalError());
                         Assert (face_integrals[element[0]->face(face)->vertex_index()] == face_init,
@@ -1897,7 +1897,7 @@ namespace DOpE
     //Points (Faces in 1d) have no working iterator, use vertex_number instead
     typename std::map<unsigned int,std::vector<double> >
     face_integrals;
-#endif    
+#endif
 //initialize the map
     auto element_it = element[0];
     std::vector<double> face_init(2,-1e20);
@@ -1909,8 +1909,8 @@ namespace DOpE
             face_integrals[element_it->face(face_no)] = face_init;
 #else
             face_integrals[element_it->face(face_no)->vertex_index()] = face_init;
-#endif              
-	  }
+#endif
+          }
       }
 
 //        bool need_faces = pde.HasFaces();
@@ -2098,26 +2098,26 @@ namespace DOpE
          element[0] !=endc[0]; element[0]++, ++present_element)
       for (unsigned int face_no = 0;
            face_no < GeometryInfo<dim>::faces_per_cell; ++face_no)
-      {
+        {
 #if deal_II_dimension > 1
-	Assert(
-	  face_integrals.find(element[0]->face(face_no)) != face_integrals.end(),
-	  ExcInternalError());
-	dwrc.GetPrimalErrorIndicators()(present_element) +=
-	  0.5 * face_integrals[element[0]->face(face_no)][0];
-	dwrc.GetDualErrorIndicators()(present_element) +=
-	  0.5 * face_integrals[element[0]->face(face_no)][1];
+          Assert(
+            face_integrals.find(element[0]->face(face_no)) != face_integrals.end(),
+            ExcInternalError());
+          dwrc.GetPrimalErrorIndicators()(present_element) +=
+            0.5 * face_integrals[element[0]->face(face_no)][0];
+          dwrc.GetDualErrorIndicators()(present_element) +=
+            0.5 * face_integrals[element[0]->face(face_no)][1];
 #else
-	Assert(
-	  face_integrals.find(element[0]->face(face_no)->vertex_index()) != face_integrals.end(),
-	  ExcInternalError());
-	dwrc.GetPrimalErrorIndicators()(present_element) +=
-	  0.5 * face_integrals[element[0]->face(face_no)->vertex_index()][0];
-	dwrc.GetDualErrorIndicators()(present_element) +=
-	  0.5 * face_integrals[element[0]->face(face_no)->vertex_index()][1];
-	
+          Assert(
+            face_integrals.find(element[0]->face(face_no)->vertex_index()) != face_integrals.end(),
+            ExcInternalError());
+          dwrc.GetPrimalErrorIndicators()(present_element) +=
+            0.5 * face_integrals[element[0]->face(face_no)->vertex_index()][0];
+          dwrc.GetDualErrorIndicators()(present_element) +=
+            0.5 * face_integrals[element[0]->face(face_no)->vertex_index()][1];
+
 #endif
-      }
+        }
     {
       //Remove Weights
       auto wd = dwrc.GetWeightData().begin();

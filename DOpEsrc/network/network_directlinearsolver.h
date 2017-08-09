@@ -47,146 +47,146 @@ namespace DOpE
 {
   namespace Networks
   {
-  /**
-   * @class DirectLinearSolverWithMatrix
-   *
-   * This class provides a linear solve for the nonlinear solvers of DOpE.
-   *
-   */
-
-  class DirectLinearSolverWithMatrix
-  {
-  public:
-    DirectLinearSolverWithMatrix(ParameterReader &param_reader);
-    ~DirectLinearSolverWithMatrix();
-
-    static void declare_params(ParameterReader &param_reader);
-
     /**
-       This Function should be called once after grid refinement, or changes in boundary values
-       to  recompute sparsity patterns, and constraint matrices.
-     */
-    template<typename PROBLEM>
-    void ReInit(PROBLEM &pde);
-
-    /**
-     * Solves the linear PDE in the form Ax = b using direct solver
+     * @class DirectLinearSolverWithMatrix
      *
-     *
-     * @tparam <PROBLEM>            The problem that we want to solve, this is passed on to the INTEGRATOR
-     *                              to calculate the matrix.
-     * @tparam <INTEGRATOR>         The integrator used to calculate the matrix A.
-     * @param rhs                   Right Hand Side of the Equation, i.e., the VECTOR b.
-     *                              Note that rhs is not const, this is because we need to apply
-     *                              the boundary values to this vector!
-     * @param solution              The Approximate Solution of the Linear Equation.
-     *                              It is assumed to be zero! Upon completion this VECTOR stores x
-     * @param force_build_matrix    A boolean value, that indicates whether the Matrix
-     *                              should be build by the linear solver in the first iteration.
-     *            The default is false, meaning that if we have no idea we don't
-     *            want to build a matrix.
+     * This class provides a linear solve for the nonlinear solvers of DOpE.
      *
      */
-    template<typename PROBLEM, typename INTEGRATOR>
-    void Solve(PROBLEM &pde, INTEGRATOR &integr, BlockVector<double> &rhs, BlockVector<double> &solution, bool force_matrix_build=false);
 
-  protected:
+    class DirectLinearSolverWithMatrix
+    {
+    public:
+      DirectLinearSolverWithMatrix(ParameterReader &param_reader);
+      ~DirectLinearSolverWithMatrix();
 
-  private:
-    dealii::BlockSparsityPattern sparsity_pattern_;
-    dealii::BlockSparseMatrix<double> matrix_;
+      static void declare_params(ParameterReader &param_reader);
 
-    dealii::SparseDirectUMFPACK *A_direct_;
+      /**
+         This Function should be called once after grid refinement, or changes in boundary values
+         to  recompute sparsity patterns, and constraint matrices.
+       */
+      template<typename PROBLEM>
+      void ReInit(PROBLEM &pde);
 
-    MethodOfLines_Network_SpaceTimeHandler<FESystem,DoFHandler,BlockVector<double>,0,1>* sth_;
-    unsigned int n_pipes_;
-  };
+      /**
+       * Solves the linear PDE in the form Ax = b using direct solver
+       *
+       *
+       * @tparam <PROBLEM>            The problem that we want to solve, this is passed on to the INTEGRATOR
+       *                              to calculate the matrix.
+       * @tparam <INTEGRATOR>         The integrator used to calculate the matrix A.
+       * @param rhs                   Right Hand Side of the Equation, i.e., the VECTOR b.
+       *                              Note that rhs is not const, this is because we need to apply
+       *                              the boundary values to this vector!
+       * @param solution              The Approximate Solution of the Linear Equation.
+       *                              It is assumed to be zero! Upon completion this VECTOR stores x
+       * @param force_build_matrix    A boolean value, that indicates whether the Matrix
+       *                              should be build by the linear solver in the first iteration.
+       *            The default is false, meaning that if we have no idea we don't
+       *            want to build a matrix.
+       *
+       */
+      template<typename PROBLEM, typename INTEGRATOR>
+      void Solve(PROBLEM &pde, INTEGRATOR &integr, BlockVector<double> &rhs, BlockVector<double> &solution, bool force_matrix_build=false);
 
-  /*********************************Implementation************************************************/
+    protected:
 
-  void DirectLinearSolverWithMatrix::declare_params(ParameterReader &/*param_reader*/)
-  {
-  }
+    private:
+      dealii::BlockSparsityPattern sparsity_pattern_;
+      dealii::BlockSparseMatrix<double> matrix_;
 
-  /******************************************************/
+      dealii::SparseDirectUMFPACK *A_direct_;
+
+      MethodOfLines_Network_SpaceTimeHandler<FESystem,DoFHandler,BlockVector<double>,0,1> *sth_;
+      unsigned int n_pipes_;
+    };
+
+    /*********************************Implementation************************************************/
+
+    void DirectLinearSolverWithMatrix::declare_params(ParameterReader &/*param_reader*/)
+    {
+    }
+
+    /******************************************************/
 
     DirectLinearSolverWithMatrix::DirectLinearSolverWithMatrix(
       ParameterReader &/*param_reader*/)
-  {
-    A_direct_ = NULL;
-  }
-
-  /******************************************************/
-
-  DirectLinearSolverWithMatrix::~DirectLinearSolverWithMatrix()
-  {
-    if (A_direct_ != NULL)
-      {
-        delete A_direct_;
-      }
-  }
-
-  /******************************************************/
-
-  template<typename PROBLEM>
-  void  DirectLinearSolverWithMatrix::ReInit(PROBLEM &pde)
-  {
-    sth_ = dynamic_cast<MethodOfLines_Network_SpaceTimeHandler<FESystem,DoFHandler,BlockVector<double>,0,1>*>(pde.GetBaseProblem().GetSpaceTimeHandler());
-    if(sth_ == NULL)
     {
-      throw DOpEException("Using Networks::DirectLinearSolverWithMatrix with wrong SpaceTimeHandler","DirectLinearSolverWithMatrix::ReInit");
+      A_direct_ = NULL;
     }
-    n_pipes_ =  sth_->GetNPipes();
 
-    matrix_.clear();
-    pde.ComputeSparsityPattern(sparsity_pattern_);
-    matrix_.reinit(sparsity_pattern_);
+    /******************************************************/
 
-    if (A_direct_ != NULL)
-      {
-        delete A_direct_;
-        A_direct_= NULL;
-      }
-  }
+    DirectLinearSolverWithMatrix::~DirectLinearSolverWithMatrix()
+    {
+      if (A_direct_ != NULL)
+        {
+          delete A_direct_;
+        }
+    }
 
-  /******************************************************/
+    /******************************************************/
 
-  template<typename PROBLEM, typename INTEGRATOR>
+    template<typename PROBLEM>
+    void  DirectLinearSolverWithMatrix::ReInit(PROBLEM &pde)
+    {
+      sth_ = dynamic_cast<MethodOfLines_Network_SpaceTimeHandler<FESystem,DoFHandler,BlockVector<double>,0,1>*>(pde.GetBaseProblem().GetSpaceTimeHandler());
+      if (sth_ == NULL)
+        {
+          throw DOpEException("Using Networks::DirectLinearSolverWithMatrix with wrong SpaceTimeHandler","DirectLinearSolverWithMatrix::ReInit");
+        }
+      n_pipes_ =  sth_->GetNPipes();
+
+      matrix_.clear();
+      pde.ComputeSparsityPattern(sparsity_pattern_);
+      matrix_.reinit(sparsity_pattern_);
+
+      if (A_direct_ != NULL)
+        {
+          delete A_direct_;
+          A_direct_= NULL;
+        }
+    }
+
+    /******************************************************/
+
+    template<typename PROBLEM, typename INTEGRATOR>
     void DirectLinearSolverWithMatrix::Solve(PROBLEM &pde,
-					     INTEGRATOR &integr,
-					     BlockVector<double> &rhs,
-					     BlockVector<double> &solution,
-					     bool force_matrix_build)
-  {
-    if (force_matrix_build)
-      {
-        integr.ComputeMatrix (pde,matrix_);
-      }
-
-    if (A_direct_ == NULL)
-      {
-        A_direct_ = new dealii::SparseDirectUMFPACK;
-        A_direct_->initialize(matrix_);
-      }
-    else if (force_matrix_build)
-      {
-        A_direct_->factorize(matrix_);
-      }
-
-    dealii::Vector<double> sol;
-    sol = rhs;
-    A_direct_->solve(sol);
-    solution = sol;
-
-    
-    for(unsigned int p = 0; p < n_pipes_; p++)
+                                             INTEGRATOR &integr,
+                                             BlockVector<double> &rhs,
+                                             BlockVector<double> &solution,
+                                             bool force_matrix_build)
     {
-      sth_->SelectPipe(p);
-      pde.GetDoFConstraints().distribute(solution.block(p));
-    }
-    sth_->SelectPipe(n_pipes_);
+      if (force_matrix_build)
+        {
+          integr.ComputeMatrix (pde,matrix_);
+        }
 
-  }
+      if (A_direct_ == NULL)
+        {
+          A_direct_ = new dealii::SparseDirectUMFPACK;
+          A_direct_->initialize(matrix_);
+        }
+      else if (force_matrix_build)
+        {
+          A_direct_->factorize(matrix_);
+        }
+
+      dealii::Vector<double> sol;
+      sol = rhs;
+      A_direct_->solve(sol);
+      solution = sol;
+
+
+      for (unsigned int p = 0; p < n_pipes_; p++)
+        {
+          sth_->SelectPipe(p);
+          pde.GetDoFConstraints().distribute(solution.block(p));
+        }
+      sth_->SelectPipe(n_pipes_);
+
+    }
 
 ///////////////Endof Namespaces
   }

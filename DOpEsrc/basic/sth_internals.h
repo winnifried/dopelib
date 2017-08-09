@@ -84,7 +84,7 @@ namespace DOpE
       VECTOR &support_points)
     {
 
-#if DEAL_II_VERSION_GTE(7,2,0)      
+#if DEAL_II_VERSION_GTE(7,2,0)
 //        MappingQ1<dealdim> mapping;
 //        hp::MappingCollection<dealdim> map_col(mapping);
 

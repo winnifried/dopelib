@@ -59,24 +59,24 @@
 
 //Problem specific includes
 // Here are two implementations for the local pde.
-// Either of them can be activated by uncommenting the desired 
+// Either of them can be activated by uncommenting the desired
 // one and by commenting the other one.
 
 // PDE 1
-// A quasi-monolithic formulation based 
+// A quasi-monolithic formulation based
 // on ideas outlined in Heister/Wheeler/Wick; CMAME, 2015
 //#include "localpde_quasi_monolithic.h"
 
 // PDE 2
-// A fully implicit formulation without any time-lagging of 
-// the phase-field variable. For the fully 
+// A fully implicit formulation without any time-lagging of
+// the phase-field variable. For the fully
 // implicit setting, the Newton solver needs to be changed
-// to a modified heuristic version that temporarily allows for 
+// to a modified heuristic version that temporarily allows for
 // an increase of the residual.
 #include "localpde_fully_implicit.h"
 
 
-// Finally, as in the other DOpE examples, we 
+// Finally, as in the other DOpE examples, we
 // have goal functional evaluations and problem-specific data.
 #include "functionals.h"
 #include "problem_data.h"
@@ -134,8 +134,8 @@ main(int argc, char **argv)
 {
   /**
    *  We solve a quasi-static phase-field brittle fracture
-   *  propagation problem. The crack irreversibility 
-   *  constraint is imposed with the help of an augmented Lagrangian 
+   *  propagation problem. The crack irreversibility
+   *  constraint is imposed with the help of an augmented Lagrangian
    *  iteration. The configuration is the single edge notched shear test.
    */
 
@@ -199,7 +199,7 @@ main(int argc, char **argv)
   double end_time = 1.4e-2;
   GridGenerator::subdivided_hyper_cube(times, num_intervals, initial_time, end_time);
 
- /*********************************************************************************/
+  /*********************************************************************************/
   // We give the spatial and time triangulation as well as the state finite
   // elements to the MOL-space time handler. DOpEtypes::undefined marks
   // the type of the control, see dopetypes.h for more information.
@@ -231,7 +231,7 @@ main(int argc, char **argv)
   NonHomoDirichletData dirichlet_data(pr);
   SimpleDirichletData<VECTOR, DIM> DD2(dirichlet_data);
 
-  
+
   comp_mask[0] = true;
   comp_mask[1] = true;
 

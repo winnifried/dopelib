@@ -1503,168 +1503,168 @@ namespace DOpE
       return false;
     }
 
-    //Functions needed on networks, all default to abort, so that no implementation is required 
+    //Functions needed on networks, all default to abort, so that no implementation is required
     //  for normal PDEs
-      /**
-       * Implements the derivative of the BoundaryEquation with respect to
-       * the given left or right values on the pipe.
-       *
-       * Only needed for calculations on networks.
-       *
-       */
-      virtual void BoundaryEquation_BV(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
-				       dealii::Vector<double> &/*local_vector*/,
-				       double /*scale*/,
-				       double /*scale_ico*/) 
-      {
-	abort();
-      } 
-      /**
-       * Calculates the local matrix for the coupling between the unknowns and the 
-       * locals flux values
-       *
-       * Only needed for calculations on networks.
-       *
-       */
-      virtual void
-	BoundaryMatrix_BV(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
-			  std::vector<bool>& /*present_in_outflow*/,
-			  dealii::FullMatrix<double> &/*local_entry_matrix*/,
-			  double /*scale*/,
-			  double /*scale_ico*/)
-      {
-	abort();
-      }
+    /**
+     * Implements the derivative of the BoundaryEquation with respect to
+     * the given left or right values on the pipe.
+     *
+     * Only needed for calculations on networks.
+     *
+     */
+    virtual void BoundaryEquation_BV(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
+                                     dealii::Vector<double> &/*local_vector*/,
+                                     double /*scale*/,
+                                     double /*scale_ico*/)
+    {
+      abort();
+    }
+    /**
+     * Calculates the local matrix for the coupling between the unknowns and the
+     * locals flux values
+     *
+     * Only needed for calculations on networks.
+     *
+     */
+    virtual void
+    BoundaryMatrix_BV(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
+                      std::vector<bool> & /*present_in_outflow*/,
+                      dealii::FullMatrix<double> &/*local_entry_matrix*/,
+                      double /*scale*/,
+                      double /*scale_ico*/)
+    {
+      abort();
+    }
 
-      /**
-       * Evaluates the difference between the outfolw values on the pipe; i.e. those that 
-       * do not take the given left or right value and the given left or right value.
-       * E.g, it returns u-q_l if left boundary is and outflow boundary and u-q_r if right 
-       * boundary is an outflow boundary. 
-       *
-       *
-       * Only needed for calculations on networks.
-       *
-       * @param fdc          The container for the face information
-       * @param local_vector The resulting computation
-       * 
-       *
-       */
-      virtual void OutflowValues(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
-				 std::vector<bool>& /*present_in_outflow*/,
-				 dealii::Vector<double> &/*local_vector*/,
-				 double /*scale*/,
-				 double /*scale_ico*/)  
-      {
-	abort();
-      }
-      /**
-       * The (local) matrix coupling the outflow values of the pde and the fluxes.
-       *
-       * Only needed for calculations on networks.
-       *
-       */
-      virtual void
-	OutflowMatrix(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
-		      std::vector<bool>& /*present_in_outflow*/,
-		      dealii::FullMatrix<double> &/*local_entry_matrix*/,
-		      double /*scale*/,
-		      double /*scale_ico*/)
-      {
-	abort();
-      }
+    /**
+     * Evaluates the difference between the outfolw values on the pipe; i.e. those that
+     * do not take the given left or right value and the given left or right value.
+     * E.g, it returns u-q_l if left boundary is and outflow boundary and u-q_r if right
+     * boundary is an outflow boundary.
+     *
+     *
+     * Only needed for calculations on networks.
+     *
+     * @param fdc          The container for the face information
+     * @param local_vector The resulting computation
+     *
+     *
+     */
+    virtual void OutflowValues(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
+                               std::vector<bool> & /*present_in_outflow*/,
+                               dealii::Vector<double> &/*local_vector*/,
+                               double /*scale*/,
+                               double /*scale_ico*/)
+    {
+      abort();
+    }
+    /**
+     * The (local) matrix coupling the outflow values of the pde and the fluxes.
+     *
+     * Only needed for calculations on networks.
+     *
+     */
+    virtual void
+    OutflowMatrix(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
+                  std::vector<bool> & /*present_in_outflow*/,
+                  dealii::FullMatrix<double> &/*local_entry_matrix*/,
+                  double /*scale*/,
+                  double /*scale_ico*/)
+    {
+      abort();
+    }
 
-      /**
-       * Same as OutflowValues, but for initial conditions.
-       *
-       *
-       * Only needed for calculations on networks.
-       *
-       * @param fdc          The container for the face information
-       * @param local_vector The resulting computation
-       * 
-       *
-       */
-      virtual void Init_OutflowValues(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
-				      std::vector<bool>& /*present_in_outflow*/,
-				      dealii::Vector<double> &/*local_vector*/,
-				      double /*scale*/,
-				      double /*scale_ico*/)  
-      {
-	abort();
-      }
-      /**
-       * Same as OutflowMatrix, but for initial conditions.
-       *
-       * Only needed for calculations on networks.
-       *
-       */
-      virtual void
-	Init_OutflowMatrix(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
-			   std::vector<bool>& /*present_in_outflow*/,
-			   dealii::FullMatrix<double> &/*local_entry_matrix*/,
-			   double /*scale*/,
-			   double /*scale_ico*/)
-      {
-	abort();
-      }
+    /**
+     * Same as OutflowValues, but for initial conditions.
+     *
+     *
+     * Only needed for calculations on networks.
+     *
+     * @param fdc          The container for the face information
+     * @param local_vector The resulting computation
+     *
+     *
+     */
+    virtual void Init_OutflowValues(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
+                                    std::vector<bool> & /*present_in_outflow*/,
+                                    dealii::Vector<double> &/*local_vector*/,
+                                    double /*scale*/,
+                                    double /*scale_ico*/)
+    {
+      abort();
+    }
+    /**
+     * Same as OutflowMatrix, but for initial conditions.
+     *
+     * Only needed for calculations on networks.
+     *
+     */
+    virtual void
+    Init_OutflowMatrix(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
+                       std::vector<bool> & /*present_in_outflow*/,
+                       dealii::FullMatrix<double> &/*local_entry_matrix*/,
+                       double /*scale*/,
+                       double /*scale_ico*/)
+    {
+      abort();
+    }
 
-      /**
-       * Returns the global coupling residual between the individual pipes.
-       *
-       * Only needed on Networks.
-       *
-       * 
-       * @param res  The residual of the coupling condition
-       * @param u    The vector in which the residual is to be calculated
-       */
-      virtual void PipeCouplingResidual(dealii::Vector<double>& /*res*/, 
-					const dealii::Vector<double>& /*u*/, 
-					const std::vector<bool>& /*present_in_outflow*/)
-      {
-	abort();
-      }
-      /**
-       * Returns the matrix for the (linear) global couplings between the flux variables
-       *
-       * Only needed on Networks.
-       *
-       *
-       * @param matrix  The matrix to be calculated
-       * @param present_in_outflow A vector indicating which flux variables are outflow.
-       */
-      virtual void CouplingMatrix(dealii::SparseMatrix<double>& /*matrix*/, 
-				  const std::vector<bool>& /*present_in_outflow*/)
-      {
-	abort();
-      }
+    /**
+     * Returns the global coupling residual between the individual pipes.
+     *
+     * Only needed on Networks.
+     *
+     *
+     * @param res  The residual of the coupling condition
+     * @param u    The vector in which the residual is to be calculated
+     */
+    virtual void PipeCouplingResidual(dealii::Vector<double> & /*res*/,
+                                      const dealii::Vector<double> & /*u*/,
+                                      const std::vector<bool> & /*present_in_outflow*/)
+    {
+      abort();
+    }
+    /**
+     * Returns the matrix for the (linear) global couplings between the flux variables
+     *
+     * Only needed on Networks.
+     *
+     *
+     * @param matrix  The matrix to be calculated
+     * @param present_in_outflow A vector indicating which flux variables are outflow.
+     */
+    virtual void CouplingMatrix(dealii::SparseMatrix<double> & /*matrix*/,
+                                const std::vector<bool> & /*present_in_outflow*/)
+    {
+      abort();
+    }
 
-      /**
-       * Same as PipeCouplingResidual, but for the initial problem
-       * 
-       * @param res  The residual of the coupling condition
-       * @param u    The vector in which the residual is to be calculated
-       */
-      virtual void Init_PipeCouplingResidual(dealii::Vector<double>& /*res*/, 
-					const dealii::Vector<double>& /*u*/, 
-					const std::vector<bool>& /*present_in_outflow*/)
-      {
-	abort();
-      }
-      /**
-       * Same as CouplingMatrix, but for the initial problem
-       *
-       * Only needed on Networks.
-       *
-       *
-       * @param matrix  The matrix to be calculated
-       * @param present_in_outflow A vector indicating which flux variables are outflow.
-       */
-      virtual void Init_CouplingMatrix(dealii::SparseMatrix<double>& /*matrix*/, 
-				  const std::vector<bool>& /*present_in_outflow*/)
-      {
-	abort();
-      }
+    /**
+     * Same as PipeCouplingResidual, but for the initial problem
+     *
+     * @param res  The residual of the coupling condition
+     * @param u    The vector in which the residual is to be calculated
+     */
+    virtual void Init_PipeCouplingResidual(dealii::Vector<double> & /*res*/,
+                                           const dealii::Vector<double> & /*u*/,
+                                           const std::vector<bool> & /*present_in_outflow*/)
+    {
+      abort();
+    }
+    /**
+     * Same as CouplingMatrix, but for the initial problem
+     *
+     * Only needed on Networks.
+     *
+     *
+     * @param matrix  The matrix to be calculated
+     * @param present_in_outflow A vector indicating which flux variables are outflow.
+     */
+    virtual void Init_CouplingMatrix(dealii::SparseMatrix<double> & /*matrix*/,
+                                     const std::vector<bool> & /*present_in_outflow*/)
+    {
+      abort();
+    }
 
 
   protected:

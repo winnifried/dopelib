@@ -694,10 +694,10 @@ namespace DOpE
                                         "StatReducedProblem::ComputeReducedState");
                   }
                 this->GetProblem()->DeleteAuxiliaryFromIntegrator(this->GetIntegrator());
-		
-		this->GetOutputHandler()->Write((GetU().GetSpacialVector()),
-						"Initial_State" + this->GetPostIndex(), problem.GetDoFType());
-		
+
+                this->GetOutputHandler()->Write((GetU().GetSpacialVector()),
+                                                "Initial_State" + this->GetPostIndex(), problem.GetDoFType());
+
               }
           }
       }
@@ -720,34 +720,35 @@ namespace DOpE
         throw DOpEException("dopedim not implemented",
                             "StatReducedProblem::ComputeReducedState");
       }
-    try{
-      build_state_matrix_ = this->GetNonlinearSolver("state").NonlinearSolve(
-	problem, (GetU().GetSpacialVector()), true, build_state_matrix_);
-    }
-    catch( DOpEException &e)
-    {
-      if (dopedim == dealdim)
+    try
       {
-        this->GetIntegrator().DeleteDomainData("control");
+        build_state_matrix_ = this->GetNonlinearSolver("state").NonlinearSolve(
+                                problem, (GetU().GetSpacialVector()), true, build_state_matrix_);
       }
-      else if (dopedim == 0)
+    catch ( DOpEException &e)
       {
-        this->GetIntegrator().DeleteParamData("control");
-        q.UnLockCopy();
+        if (dopedim == dealdim)
+          {
+            this->GetIntegrator().DeleteDomainData("control");
+          }
+        else if (dopedim == 0)
+          {
+            this->GetIntegrator().DeleteParamData("control");
+            q.UnLockCopy();
+          }
+        else
+          {
+            throw DOpEException("dopedim not implemented",
+                                "StatReducedProblem::ComputeReducedState");
+          }
+        this->GetProblem()->DeleteAuxiliaryFromIntegrator(this->GetIntegrator());
+        //Reset Values
+        GetU().GetSpacialVector() = 0.;
+        build_state_matrix_ = true;
+        state_reinit_ = true;
+        throw e;
       }
-      else
-      {
-        throw DOpEException("dopedim not implemented",
-                            "StatReducedProblem::ComputeReducedState");
-      }
-      this->GetProblem()->DeleteAuxiliaryFromIntegrator(this->GetIntegrator());
-      //Reset Values
-      GetU().GetSpacialVector() = 0.;
-      build_state_matrix_ = true;
-      state_reinit_ = true;
-      throw e;
-    }
-    
+
     if (dopedim == dealdim)
       {
         this->GetIntegrator().DeleteDomainData("control");

@@ -434,49 +434,49 @@ namespace DOpE
 
     /********************Functions on Networks********************/
     template<typename FDC>
-      inline void BoundaryEquation_BV(const FDC& /*fdc*/,
-				      dealii::Vector<double> &/*local_vector*/,
-				      double /*scale*/,
-				      double /*scale_ico*/) 
-    { 
-      abort();
-    }
-    template<typename FDC>
-      inline void BoundaryMatrix_BV(const FDC& /*fdc*/,
-				    std::vector<bool>& /*present_in_outflow*/,
-				    dealii::FullMatrix<double> &/*local_entry_matrix*/,
-				    double /*scale*/,
-				    double /*scale_ico*/)
+    inline void BoundaryEquation_BV(const FDC & /*fdc*/,
+                                    dealii::Vector<double> &/*local_vector*/,
+                                    double /*scale*/,
+                                    double /*scale_ico*/)
     {
       abort();
     }
     template<typename FDC>
-      inline void OutflowValues(const  FDC& /*fdc*/,
-				std::vector<bool>& /*present_in_outflow*/,
-				dealii::Vector<double> &/*local_vector*/,
-				double /*scale*/,
-				double /*scale_ico*/) 
+    inline void BoundaryMatrix_BV(const FDC & /*fdc*/,
+                                  std::vector<bool> & /*present_in_outflow*/,
+                                  dealii::FullMatrix<double> &/*local_entry_matrix*/,
+                                  double /*scale*/,
+                                  double /*scale_ico*/)
     {
       abort();
     }
     template<typename FDC>
-      inline void
-      OutflowMatrix(const FDC& /*fdc*/,
-		    std::vector<bool>& /*present_in_outflow*/,
-		    dealii::FullMatrix<double> &/*local_entry_matrix*/,
-		    double /*scale*/,
-		    double /*scale_ico*/)
+    inline void OutflowValues(const  FDC & /*fdc*/,
+                              std::vector<bool> & /*present_in_outflow*/,
+                              dealii::Vector<double> &/*local_vector*/,
+                              double /*scale*/,
+                              double /*scale_ico*/)
     {
       abort();
     }
-    inline void PipeCouplingResidual(dealii::Vector<double>& /*res*/, 
-				     const dealii::Vector<double>& /*u*/, 
-				     const std::vector<bool>& /*present_in_outflow*/)
+    template<typename FDC>
+    inline void
+    OutflowMatrix(const FDC & /*fdc*/,
+                  std::vector<bool> & /*present_in_outflow*/,
+                  dealii::FullMatrix<double> &/*local_entry_matrix*/,
+                  double /*scale*/,
+                  double /*scale_ico*/)
     {
       abort();
     }
-    inline void CouplingMatrix(dealii::SparseMatrix<double>& /*matrix*/, 
-			       const std::vector<bool>& /*present_in_outflow*/)
+    inline void PipeCouplingResidual(dealii::Vector<double> & /*res*/,
+                                     const dealii::Vector<double> & /*u*/,
+                                     const std::vector<bool> & /*present_in_outflow*/)
+    {
+      abort();
+    }
+    inline void CouplingMatrix(dealii::SparseMatrix<double> & /*matrix*/,
+                               const std::vector<bool> & /*present_in_outflow*/)
     {
       abort();
     }

@@ -506,13 +506,13 @@ namespace DOpE
                      <<pde.GetOutputHandler()->ZeroTolerance(newres/firstres, 1.0);
                   pde.GetOutputHandler()->Write(out,priority+1);
                   lineiter++;
-                  
-		  // In this modified Newton method, we just 
-		  // go with the final update once the maximal
-		  // number of line search iterations is achieved.
-		  // There is no proof of convergence, but only 
-		  // heuristic computational evidence that 
-		  // this idea works for several cases.
+
+                  // In this modified Newton method, we just
+                  // go with the final update once the maximal
+                  // number of line search iterations is achieved.
+                  // There is no proof of convergence, but only
+                  // heuristic computational evidence that
+                  // this idea works for several cases.
                   solution.add(alpha*(rho-1.),du);
                   alpha*= rho;
 

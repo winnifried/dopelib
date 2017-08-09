@@ -28,55 +28,58 @@ using namespace dealii;
 
 /******************************************************/
 
-class NonHomoDirichletData : public DOpEWrapper::Function<2> 
+class NonHomoDirichletData : public DOpEWrapper::Function<2>
 {
 public:
-  NonHomoDirichletData (ParameterReader &param_reader) : DOpEWrapper::Function<2>(3) 
+  NonHomoDirichletData (ParameterReader &param_reader) : DOpEWrapper::Function<2>(3)
   {
     param_reader.SetSubsection("Problem data parameters");
     dis_step_per_timestep_ = param_reader.get_double ("dis_step_per_timestep");
   }
-  
+
   virtual double value (const Point<2>   &p,
-			const unsigned int  component = 0) const;
-  
-  virtual void vector_value (const Point<2> &p, 
-			     Vector<double>   &value) const;
-  
+                        const unsigned int  component = 0) const;
+
+  virtual void vector_value (const Point<2> &p,
+                             Vector<double>   &value) const;
+
   static void declare_params(ParameterReader &param_reader)
   {
     param_reader.SetSubsection("Problem data parameters");
     param_reader.declare_entry("dis_step_per_timestep", "0.0",
-			       Patterns::Double(0));    
+                               Patterns::Double(0));
   }
 
- void SetTime(double t) const { localtime=t;}
+  void SetTime(double t) const
+  {
+    localtime=t;
+  }
 
 private:
   double dis_step_per_timestep_;
-  mutable double localtime; 
+  mutable double localtime;
 
-  
+
 };
 
 /******************************************************/
 
-double 
+double
 NonHomoDirichletData::value (const Point<2>  &p,
-			    const unsigned int component) const
+                             const unsigned int component) const
 {
   Assert (component < this->n_components,
-	  ExcIndexRange (component, 0, this->n_components));
+          ExcIndexRange (component, 0, this->n_components));
 
 
-  if (component == 0)   
+  if (component == 0)
     {
-   
+
       return ( ((p(1) == 1.0) )
-	       ?
-	       (-1.0) * localtime * dis_step_per_timestep_ : 0 );
-    
-    }	 
+               ?
+               (-1.0) * localtime * dis_step_per_timestep_ : 0 );
+
+    }
   return 0;
 }
 
@@ -84,7 +87,7 @@ NonHomoDirichletData::value (const Point<2>  &p,
 
 void
 NonHomoDirichletData::vector_value (const Point<2> &p,
-				   Vector<double>   &values) const 
+                                    Vector<double>   &values) const
 {
   for (unsigned int c=0; c<this->n_components; ++c)
     values (c) = NonHomoDirichletData::value (p, c);
@@ -117,7 +120,7 @@ double InitialData::value(const Point<2> &/*p*/, const unsigned int component) c
 
   if (component == 2)
     return 1.0;
-  else 
+  else
     return 0.0;
 }
 

@@ -31,7 +31,7 @@
 // tools to compute eigenvectors and -functions.
 // Borden et al. (2012, 2013) suggested some papers to look into.
 
-// The following code has been copied from 
+// The following code has been copied from
 // https://github.com/tjhei/cracks
 // developed in Heister/Wheeler/Wick; CMAME, 2015.
 
@@ -94,9 +94,9 @@ void decompose_stress(
   const double lame_coefficient_mu,
   const bool derivative)
 {
-	Tensor<2,2> Identity;
-	Identity[0][0] = 1.0;
-	Identity[1][1] = 1.0;
+  Tensor<2,2> Identity;
+  Identity[0][0] = 1.0;
+  Identity[1][1] = 1.0;
 
 
   Tensor<2, dim> zero_matrix;

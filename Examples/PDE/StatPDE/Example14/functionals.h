@@ -35,142 +35,142 @@ using namespace DOpE;
 
 template<
 template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
-  template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
-  template<int, int> class DH, typename VECTOR, int dealdim>
-  class LocalFunctional : public FunctionalInterface<EDC, FDC, DH, VECTOR, 0, dealdim>
+         template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
+         template<int, int> class DH, typename VECTOR, int dealdim>
+class LocalFunctional : public FunctionalInterface<EDC, FDC, DH, VECTOR, 0, dealdim>
+{
+public:
+  LocalFunctional(ParameterReader &param_reader)
   {
-    public:
-      LocalFunctional(ParameterReader &param_reader)
+    param_reader.SetSubsection("localpde parameters");
+    w_in_   = param_reader.get_double("win");
+    p_in_  = param_reader.get_double("pin");
+
+  }
+
+  double
+  ElementValue(const EDC<DH,VECTOR,dealdim> &edc)
+  {
+    unsigned int n_q_points = edc.GetNQPoints();
+
+    double mean = 0;
+
+    vector<Vector<double> > uvalues;
+    uvalues.resize(n_q_points,Vector<double>(2));
+    edc.GetValuesState("state", uvalues);
+
+    for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
       {
-	param_reader.SetSubsection("localpde parameters");
-	w_in_   =	param_reader.get_double("win");
-	p_in_  = param_reader.get_double("pin");
+        double w;
 
+        w = uvalues[q_point][0];
+        double w_ex = w_in_ + edc.GetFEValuesState().quadrature_point(q_point)[0];
+
+        mean += fabs(w-w_ex) * edc.GetFEValuesState().JxW(q_point);
       }
+    return mean;
+  }
 
-      double
-      ElementValue(const EDC<DH,VECTOR,dealdim>& edc)
-      {
-        unsigned int n_q_points = edc.GetNQPoints();
+  UpdateFlags
+  GetUpdateFlags() const
+  {
+    return update_values | update_quadrature_points;
+  }
 
-        double mean = 0;
+  string
+  GetType() const
+  {
+    return "domain timelocal";
+  }
 
-	vector<Vector<double> > uvalues;
-	uvalues.resize(n_q_points,Vector<double>(2));
-	edc.GetValuesState("state", uvalues);
-	
-	for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
-	{
-	  double w;
-	  
-	  w = uvalues[q_point][0];
-	  double w_ex = w_in_ + edc.GetFEValuesState().quadrature_point(q_point)[0];
-	
-	  mean += fabs(w-w_ex) * edc.GetFEValuesState().JxW(q_point);
-	}
-        return mean;
-      }
+  bool HasFaces() const
+  {
+    return false;
+  }
 
-      UpdateFlags
-      GetUpdateFlags() const
-      {
-        return update_values | update_quadrature_points;
-      }
+  string
+  GetName() const
+  {
+    return "W-Error";
+  }
 
-      string
-      GetType() const
-      {
-        return "domain timelocal";
-      }
+  bool
+  NeedTime() const
+  {
+    return true;
+  }
 
-      bool HasFaces() const
-      {
-        return false;
-      }
-
-      string
-      GetName() const
-      {
-        return "W-Error";
-      }
-
-      bool
-      NeedTime() const
-      {
-	return true;
-      }
-
-    private:   
-      double w_in_, p_in_;
-  };
+private:
+  double w_in_, p_in_;
+};
 
 template<
 template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
-  template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
-  template<int, int> class DH, typename VECTOR, int dealdim>
-  class LocalFunctional2 : public FunctionalInterface<EDC, FDC, DH, VECTOR, 0, dealdim>
+         template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
+         template<int, int> class DH, typename VECTOR, int dealdim>
+class LocalFunctional2 : public FunctionalInterface<EDC, FDC, DH, VECTOR, 0, dealdim>
+{
+public:
+  LocalFunctional2(ParameterReader &param_reader)
   {
-    public:
-    LocalFunctional2(ParameterReader &param_reader)
+    param_reader.SetSubsection("localpde parameters");
+    w_in_   = param_reader.get_double("win");
+    p_in_  = param_reader.get_double("pin");
+  }
+
+  double
+  ElementValue(const EDC<DH,VECTOR,dealdim> &edc)
+  {
+    unsigned int n_q_points = edc.GetNQPoints();
+
+    double mean = 0;
+
+    vector<Vector<double> > uvalues;
+    uvalues.resize(n_q_points,Vector<double>(2));
+    edc.GetValuesState("state", uvalues);
+    const DOpEWrapper::FEValues<dealdim> &state_fe_values =
+      edc.GetFEValuesState();
+
+    for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
       {
-	param_reader.SetSubsection("localpde parameters");
-	w_in_   =	param_reader.get_double("win");
-	p_in_  = param_reader.get_double("pin");
+        double p = uvalues[q_point][1];
+        double p_ex = p_in_ + 2.*(100.-edc.GetFEValuesState().quadrature_point(q_point)[0]);
+
+        mean += fabs(p-p_ex) * state_fe_values.JxW(q_point);
       }
+    return mean;
+  }
 
-      double
-      ElementValue(const EDC<DH,VECTOR,dealdim>& edc)
-      {
-        unsigned int n_q_points = edc.GetNQPoints();
+  UpdateFlags
+  GetUpdateFlags() const
+  {
+    return update_values | update_quadrature_points;
+  }
 
-        double mean = 0;
+  string
+  GetType() const
+  {
+    return "domain timelocal";
+  }
 
-	vector<Vector<double> > uvalues;
-	uvalues.resize(n_q_points,Vector<double>(2));
-	edc.GetValuesState("state", uvalues);
-	const DOpEWrapper::FEValues<dealdim> & state_fe_values =
-	  edc.GetFEValuesState();
-	
-	for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
-	{
-	  double p = uvalues[q_point][1];
-	  double p_ex = p_in_ + 2.*(100.-edc.GetFEValuesState().quadrature_point(q_point)[0]);
+  bool HasFaces() const
+  {
+    return false;
+  }
 
-	  mean += fabs(p-p_ex) * state_fe_values.JxW(q_point);
-	}
-        return mean;
-      }
+  string
+  GetName() const
+  {
+    return "P-Error";
+  }
 
-      UpdateFlags
-      GetUpdateFlags() const
-      {
-        return update_values | update_quadrature_points;
-      }
+  bool
+  NeedTime() const
+  {
+    return true;
+  }
 
-      string
-      GetType() const
-      {
-        return "domain timelocal";
-      }
-
-      bool HasFaces() const
-      {
-        return false;
-      }
-
-      string
-      GetName() const
-      {
-        return "P-Error";
-      }
-
-      bool
-      NeedTime() const
-      {
-	return true;
-      }
-
-    private:   
-      double w_in_,p_in_;
-  };
+private:
+  double w_in_,p_in_;
+};
 #endif /* FUNCTIONALS_H_ */

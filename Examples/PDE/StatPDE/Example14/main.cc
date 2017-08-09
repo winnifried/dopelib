@@ -93,7 +93,7 @@ typedef FunctionalInterface<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> FUNC;
 #define DTSP BackwardEulerProblem
 
 typedef Networks::Network_IntegratorDataContainer<DOFHANDLER, QUADRATURE, FACEQUADRATURE,
-    VECTOR, DIM> IDC;
+        VECTOR, DIM> IDC;
 typedef Networks::Network_Integrator<IDC, VECTOR, double, DIM> INTEGRATOR;
 typedef Networks::Network_IntegratorMixedDimensions<IDC, VECTOR, double, CDIM, DIM> CINTEGRATOR;
 
@@ -108,19 +108,19 @@ typedef VoidLinearSolver<VECTOR> VOIDLS;
 typedef NewtonSolverMixedDimensions<CINTEGRATOR, VOIDLS, VECTOR> CNLS;
 typedef NewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR> NLS;
 typedef Networks::MethodOfLines_Network_SpaceTimeHandler<FE, DOFHANDLER,
-							 VECTOR, CDIM, DIM> STH;
+        VECTOR, CDIM, DIM> STH;
 
 typedef OptProblemContainer<
-  FUNC,
-  LocalFunctional<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
-  LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
-  SimpleDirichletData<VECTOR, DIM>,
-  NoConstraints<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM>, SPARSITYPATTERN,
-  VECTOR, CDIM, DIM> OP;
+FUNC,
+LocalFunctional<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
+LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
+SimpleDirichletData<VECTOR, DIM>,
+NoConstraints<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM>, SPARSITYPATTERN,
+VECTOR, CDIM, DIM> OP;
 
 typedef ReducedNewtonAlgorithm<OP, VECTOR> RNA;
 typedef Networks::Network_StatReducedProblem<CNLS, NLS, CINTEGRATOR, INTEGRATOR, OP, CDIM,
-					     DIM> RP;
+        DIM> RP;
 
 
 
@@ -130,41 +130,41 @@ declare_params(ParameterReader &param_reader)
 {
   param_reader.SetSubsection("main parameters");
   param_reader.declare_entry("max_iter", "1", Patterns::Integer(0),
-			     "How many iterations?");
+                             "How many iterations?");
   param_reader.declare_entry("prerefine", "1", Patterns::Integer(1),
-			     "How often should we refine the coarse grid?");
+                             "How often should we refine the coarse grid?");
 }
 
 int
 main(int argc, char **argv)
 {
   string paramfile = "dope.prm";
-  
+
   if (argc == 2)
-  {
-    paramfile = argv[1];
-  }
+    {
+      paramfile = argv[1];
+    }
   else if (argc > 2)
-  {
-    std::cout << "Usage: " << argv[0] << " [ paramfile ] " << std::endl;
-    return -1;
-  }
+    {
+      std::cout << "Usage: " << argv[0] << " [ paramfile ] " << std::endl;
+      return -1;
+    }
   ParameterReader pr;
-  
+
   RP::declare_params(pr);
   RNA::declare_params(pr);
   LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>::declare_params(pr);
   DOpEOutputHandler<VECTOR>::declare_params(pr);
   declare_params(pr);
-  
+
   pr.read_parameters(paramfile);
-  
+
   //************************************************
   //define some constants
   pr.SetSubsection("main parameters");
   int max_iter = pr.get_integer("max_iter");
   int prerefine = pr.get_integer("prerefine");
-  
+
   //Make triangulation *************************************************
   Triangulation<DIM> triangulation;
   GridGenerator::hyper_cube(triangulation, 0, 50);
@@ -176,31 +176,31 @@ main(int argc, char **argv)
   tria_s[0] = &triangulation;
   tria_s[1] = &triangulation2;
   //*************************************************************
-  
+
   //FiniteElemente*************************************************
   FESystem<DIM> control_fe(FE_Nothing<DIM>(1),1);
   FE<DIM> state_fe(FE_DGQ<DIM>(0), 2);
-  
+
   //Quadrature formulas*************************************************
   pr.SetSubsection("main parameters");
   QGauss<DIM> quadrature_formula(1);
   QGauss<DIM-1> face_quadrature_formula(1);
   IDC idc(quadrature_formula, face_quadrature_formula);
   //**************************************************************************
-  
+
   //Functionals*************************************************
   LocalFunctional<CDC, FDC, DOFHANDLER, VECTOR, DIM> MVF(pr);
   LocalFunctional2<CDC, FDC, DOFHANDLER, VECTOR, DIM> MVF2(pr);
   //*************************************************
-  
-  //Network-description 
+
+  //Network-description
   //*************************************************
   LocalNetwork mynet(pr);
-    
+
   //pde*************************************************
   LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM> LPDE(pr,mynet);
   //*************************************************
-  
+
   //space time handler***********************************/
   STH DOFH(tria_s, control_fe, state_fe, DOpEtypes::stationary, mynet, true);
   /***********************************/
@@ -217,35 +217,35 @@ main(int argc, char **argv)
 
   RNA Alg(&P, &solver, pr);
 
-  
+
   //**************************************************************************************************
   Alg.GetOutputHandler()->Write("Solving ...",1);
 
   for (int i = 0; i < max_iter; i++)
-  {
-    try
     {
-      Alg.ReInit();
-      ControlVector<VECTOR> q(&DOFH, DOpEtypes::VectorStorageType::fullmem);
-      
-      Alg.SolveForward(q);
+      try
+        {
+          Alg.ReInit();
+          ControlVector<VECTOR> q(&DOFH, DOpEtypes::VectorStorageType::fullmem);
+
+          Alg.SolveForward(q);
+        }
+      catch (DOpEException &e)
+        {
+          std::cout
+              << "Warning: During execution of `" + e.GetThrowingInstance()
+              + "` the following Problem occurred!" << std::endl;
+          std::cout << e.GetErrorMessage() << std::endl;
+        }
+      if (i != max_iter - 1)
+        {
+          //For global mesh refinement, uncomment the next line
+          DOFH.RefineSpace(DOpEtypes::RefinementType::global); //or just DOFH.RefineSpace()
+        }
     }
-    catch (DOpEException &e)
-    {
-      std::cout
-	<< "Warning: During execution of `" + e.GetThrowingInstance()
-	+ "` the following Problem occurred!" << std::endl;
-      std::cout << e.GetErrorMessage() << std::endl;
-    }
-    if (i != max_iter - 1)
-    {
-      //For global mesh refinement, uncomment the next line
-      DOFH.RefineSpace(DOpEtypes::RefinementType::global); //or just DOFH.RefineSpace()
-    }
-  }
 
 //*************************************************
- 
+
   return 0;
 }
 #undef FDC

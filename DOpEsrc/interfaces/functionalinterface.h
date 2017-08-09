@@ -582,10 +582,10 @@ namespace DOpE
     NeedPrecomputations() const;
 
     /**
-     * This function needs to return true if control in the initial value is done with a 
-     * functional coupling the control with the final value, e.g., to assert 
+     * This function needs to return true if control in the initial value is done with a
+     * functional coupling the control with the final value, e.g., to assert
      * periodicity of the solution. Then the corresponding container
-     * will make the final values of the state and tangent available during the 
+     * will make the final values of the state and tangent available during the
      * calculations of the gradient.
      *
      * Its default return value is false!

@@ -247,7 +247,7 @@ namespace DOpE
 #if dope_dimension > 0
     PreparePI_h_q(const ControlVector<VECTOR> &q)
 #else
-      PreparePI_h_q(const ControlVector<VECTOR> &/*q*/)
+    PreparePI_h_q(const ControlVector<VECTOR> &/*q*/)
 #endif
     {
 #if dope_dimension > 0

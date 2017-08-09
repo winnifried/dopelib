@@ -1027,26 +1027,26 @@ namespace DOpE
     AddAuxiliaryToIntegrator(INTEGRATOR &integrator)
     {
       {
-	typename std::map<std::string, const ControlVector<VECTOR> *>::iterator it =
-	auxiliary_controls_.begin();
-	for (; it != auxiliary_controls_.end(); it++)
-	{
-	  if (dopedim == dealdim)
-	  {
-	    integrator.AddDomainData(it->first,
-				     &(it->second->GetSpacialVector()));
-	  }
-	  else if (dopedim == 0)
-	  {
-	    integrator.AddParamData(it->first,
-				    &(it->second->GetSpacialVectorCopy()));
-	  }
-	  else
-	  {
-	    throw DOpEException("dopedim not implemented",
-				"OptProblemContainer::AddAuxiliaryToIntegrator");
-	  }
-	}
+        typename std::map<std::string, const ControlVector<VECTOR> *>::iterator it =
+          auxiliary_controls_.begin();
+        for (; it != auxiliary_controls_.end(); it++)
+          {
+            if (dopedim == dealdim)
+              {
+                integrator.AddDomainData(it->first,
+                                         &(it->second->GetSpacialVector()));
+              }
+            else if (dopedim == 0)
+              {
+                integrator.AddParamData(it->first,
+                                        &(it->second->GetSpacialVectorCopy()));
+              }
+            else
+              {
+                throw DOpEException("dopedim not implemented",
+                                    "OptProblemContainer::AddAuxiliaryToIntegrator");
+              }
+          }
       }
       {
         typename std::map<std::string, const StateVector<VECTOR> *>::iterator it =
@@ -1193,25 +1193,25 @@ namespace DOpE
     DeleteAuxiliaryFromIntegrator(INTEGRATOR &integrator)
     {
       {
-	typename std::map<std::string, const ControlVector<VECTOR> *>::iterator it =
-	auxiliary_controls_.begin();
-	for (; it != auxiliary_controls_.end(); it++)
-	{
-	  if (dopedim == dealdim)
-	  {
-	    integrator.DeleteDomainData(it->first);
-	  }
-	  else if (dopedim == 0)
-	  {
-	    integrator.DeleteParamData(it->first);
-	    it->second->UnLockCopy();
-	  }
-	  else
-	  {
-	    throw DOpEException("dopedim not implemented",
-				"OptProblemContainer::AddAuxiliaryToIntegrator");
-	  }
-	}
+        typename std::map<std::string, const ControlVector<VECTOR> *>::iterator it =
+          auxiliary_controls_.begin();
+        for (; it != auxiliary_controls_.end(); it++)
+          {
+            if (dopedim == dealdim)
+              {
+                integrator.DeleteDomainData(it->first);
+              }
+            else if (dopedim == 0)
+              {
+                integrator.DeleteParamData(it->first);
+                it->second->UnLockCopy();
+              }
+            else
+              {
+                throw DOpEException("dopedim not implemented",
+                                    "OptProblemContainer::AddAuxiliaryToIntegrator");
+              }
+          }
       }
       {
         typename std::map<std::string, const StateVector<VECTOR> *>::iterator it =
@@ -2762,13 +2762,13 @@ namespace DOpE
   }
 
 
-/******************************************************/
+  /******************************************************/
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-    typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-    typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-    template<int, int> class DH>
-    bool
-    OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
+  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+  template<int, int> class DH>
+  bool
+  OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
                       SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::FunctionalNeedFinalValue() const
   {
     return GetFunctional()->NeedFinalValue();
