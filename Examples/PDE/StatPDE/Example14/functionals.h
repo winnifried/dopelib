@@ -64,8 +64,9 @@ template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
 	  double w;
 	  
 	  w = uvalues[q_point][0];
+	  double w_ex = w_in_ + edc.GetFEValuesState().quadrature_point(q_point)[0];
 	
-	  mean += fabs(w-w_in_) * edc.GetFEValuesState().JxW(q_point);
+	  mean += fabs(w-w_ex) * edc.GetFEValuesState().JxW(q_point);
 	}
         return mean;
       }
@@ -133,8 +134,9 @@ template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
 	for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
 	{
 	  double p = uvalues[q_point][1];
+	  double p_ex = p_in_ + 2.*(100.-edc.GetFEValuesState().quadrature_point(q_point)[0]);
 
-	  mean += fabs(p-p_in_) * state_fe_values.JxW(q_point);
+	  mean += fabs(p-p_ex) * state_fe_values.JxW(q_point);
 	}
         return mean;
       }

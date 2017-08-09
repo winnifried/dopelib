@@ -1,7 +1,7 @@
 # Listing of Parameters
 # ---------------------
 subsection main parameters
-  set max_iter = 4 #15
+  set max_iter = 4
   set prerefine = 4
 end	 
 
@@ -13,20 +13,20 @@ end
 
 subsection output parameters
 # Directory where the output goes to
-  set results_dir       = Results/
+  set results_dir       = ./
   # File format for the output of solution variables
   set file_format       = .gpl
 
   # Iteration Counters that should not reflect in the outputname, seperated by
   # `;`
-  #set ignore_iterations = PDENewton;Cg
+  set ignore_iterations = PDENewton;Cg
 
   # Name of the logfile
   set logfile           = dope.log
 
   # Do not write files whose name contains a substring given here by a list of
   # `;` separated words
-  # set never_write_list  = Gradient;Residual;Hessian;Tangent;Update
+   set never_write_list  = Gradient;Residual;Hessian;Tangent;Update;State
 
   # Defines what strings should be printed, the higher the number the more
   # output

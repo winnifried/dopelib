@@ -465,6 +465,17 @@ namespace DOpE
 			dealii::FullMatrix<double> &outflow_coupling,
 	                std::vector<bool>& fluxes_in_outflow);
 
+    /**
+     * Integrate a functional on a pipe
+     * Assumes that the pipe is selected prior to calling this function
+     *
+     *
+     */
+    template<typename PROBLEM>
+    SCALAR
+      ComputePipeDomainScalar(unsigned int pipe,
+			      PIPE_STH_* sth, PROBLEM &pde);
+
 //        /**
 //         * Given a vector of active element iterators and a facenumber, checks if the face
 //         * belongs to an 'interface' (i.e. the adjoining elements have different material ids).
@@ -914,7 +925,7 @@ namespace DOpE
     
     if(sth == NULL)
     {
-      throw DOpEException("Using Networks::Network_Integrator with wrong SpaceTimeHandler","Networks::Network_Integrator::ComputeNonlinearResidual");
+      throw DOpEException("Using Networks::Network_Integrator with wrong SpaceTimeHandler","Networks::Network_Integrator::ComputeMatrix");
     }
 
     const std::vector<std::vector<unsigned int> >& left_vals = sth->GetPipeToLeftDoF();
@@ -1016,45 +1027,27 @@ namespace DOpE
   template<typename PROBLEM>
   SCALAR
   Network_Integrator<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::ComputeDomainScalar(
-    PROBLEM &/*pde*/)
+    PROBLEM &pde)
   {
-//    {
-//      SCALAR ret = 0.;
-//
-//      const auto &dof_handler =
-//        pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandler();
-//      auto element =
-//        pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandlerBeginActive();
-//      auto endc =
-//        pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandlerEnd();
-//      GetIntegratorDataContainerFunc().InitializeEDC(pde.GetUpdateFlags(),
-//                                                     *(pde.GetBaseProblem().GetSpaceTimeHandler()), element,
-//                                                     this->GetParamData(), this->GetDomainData());
-//      auto &edc = GetIntegratorDataContainerFunc().GetElementDataContainer();
-//
-//      for (; element[0] != endc[0]; element[0]++)
-//        {
-//          for (unsigned int dh = 1; dh < dof_handler.size(); dh++)
-//            {
-//              if (element[dh] == endc[dh])
-//                {
-//                  throw DOpEException(
-//                    "Elementnumbers in DoFHandlers are not matching!",
-//                    "Network_Integrator::ComputeDomainScalar");
-//                }
-//            }
-//
-//          edc.ReInit();
-//          ret += pde.ElementFunctional(edc);
-//
-//          for (unsigned int dh = 1; dh < dof_handler.size(); dh++)
-//            {
-//              element[dh]++;
-//            }
-//        }
-//      return ret;
-//    }
-    abort();
+    SCALAR ret = 0;
+
+    STH_* sth = dynamic_cast<STH_*>(pde.GetBaseProblem().GetSpaceTimeHandler());
+    
+    if(sth == NULL)
+    {
+      throw DOpEException("Using Networks::Network_Integrator with wrong SpaceTimeHandler","Networks::Network_Integrator::ComputeDomainScalar");
+    }
+
+    unsigned int n_pipes = sth->GetNPipes();
+    
+    for(unsigned int p = 0; p < n_pipes; p++)
+    {
+      sth->SelectPipe(p);
+      ret += ComputePipeDomainScalar(p, sth->GetPipeSTH(), pde);
+    }
+    sth->SelectPipe(n_pipes);
+    
+    return ret;
   }
   /*******************************************************************************************/
 
@@ -2428,11 +2421,58 @@ namespace DOpE
           }
       }
   }
+  /*******************************************************************************************/
+
+  template<typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR,
+           int dim>
+    template<typename PROBLEM>
+    SCALAR
+    Network_Integrator<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::ComputePipeDomainScalar(
+      unsigned int pipe,
+      PIPE_STH_* sth, PROBLEM &pde)
+  {
+    {
+      SCALAR ret = 0.;
+
+      const auto &dof_handler =
+        pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandler();
+      auto element =
+        pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandlerBeginActive();
+      auto endc =
+        pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandlerEnd();
+      GetIntegratorDataContainerFunc().InitializeEDC(pipe,pde.GetUpdateFlags(),
+                                                     *(sth), element,
+                                                     this->GetParamData(), this->GetDomainData());
+      auto &edc = GetIntegratorDataContainerFunc().GetElementDataContainer();
+
+      for (; element[0] != endc[0]; element[0]++)
+        {
+          for (unsigned int dh = 1; dh < dof_handler.size(); dh++)
+            {
+              if (element[dh] == endc[dh])
+                {
+                  throw DOpEException(
+                    "Elementnumbers in DoFHandlers are not matching!",
+                    "Network_Integrator::ComputePipeDomainScalar");
+                }
+            }
+
+          edc.ReInit();
+          ret += pde.ElementFunctional(edc);
+
+          for (unsigned int dh = 1; dh < dof_handler.size(); dh++)
+            {
+              element[dh]++;
+            }
+        }
+      return ret;
+    }
+  }
 
 
 
 
-
+//////////////////////////End of Namespaces//////////////////////////////////
   }
 }
 #endif

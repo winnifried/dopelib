@@ -1,0 +1,94 @@
+\subsubsection{General problem description}
+Within this example, we demonstrate how to solve a system of PDEs on a
+network\index{PDE on network}.
+The example contains the trivial network consisting of the two lines 
+\[
+(0,50) \qquad (50,100)
+\]
+and we solve the PDEs 
+\begin{align*}
+  \partial_x w &= 1& w(0)&=10,\\
+  -\partial_x p &= -1& p(100)&=1.
+\end{align*}
+together with the coupling conditions 
+\[
+w^-(50) = w^+(50),\qquad p^-(50) = p^+(50).
+\]
+The functionals evaluate the $L^1$-error between the computed discrete
+solutions and the known exact solution for this problem.
+
+\subsubsection{Implementational Details}
+In order to realize the coupling across multiple domains we no longer
+use a standard \texttt{dealii::DoFHandler} but rather one for each
+domain. Internally, the data is stored in a
+\texttt{dealii::BlockVector}, thus only a standard
+\texttt{dealii::Vector} may be used on each domain, otherwise the
+linker fails since, e.g., no implementation of the needed 
+\texttt{dealii::BlockVector<BlockVector>} exists.
+The first blocks contain each the variables for one of the PDEs on the
+given domains. The last block stores the boundary values for each of
+the given domains, first all `left' conditions than all `right'
+conditions (corresponding to the boundary\_id $0$ and $1$
+respectively).
+
+\paragraph{main.cc}
+In the main, not much is changing, for many of the already known
+classes there is an update given in the \texttt{namespace
+  DOpE::Networks} which internally handle the correct selection of
+subdomains.
+Further, we have to initialize triangulations for each of the domains
+and provide a description of the network topology given in the class \texttt{LocalNetwork}.
+
+\paragraph{localpde.h}
+In this class, as always we implement the local element and boundary
+integrals (this is unchanged), and the same object is used on all
+subdomains, hence if different PDEs need to be coupled these need to
+be selected, e.g., by setting the \texttt{material\_id} accordingly.
+The only difference is that now, we have to access the externally
+given boundary values from the other domains (these values are 
+now called fluxes). This can be done by
+calling \texttt{GetFluxValues} from 
+the \texttt{Networks::Network\_FaceDataContainer}.
+
+For the network, there are some new methods to be implemented.
+
+\texttt{BoundaryEquation\_BV} contains the derivative of the
+boundary equation with respect to the given flux variables and store
+them according to the residual line in which they appear.
+
+\texttt{BoundaryMatrix\_BV} implements the corresponding
+matrix. Notice, that it is implicitly assumed that the boundary values
+depend linearly on the fluxes!
+
+\texttt{OutflowValues} implements a selection routine to specify which
+of the fluxes are `OutflowValues', i.e., those values that are not
+considered in the PDE and thus the corresponding flux must be adjusted
+in order to match the given outflow.
+In addition, this method must set Boolean flags indicating if a value
+is to be considered as outflow.
+
+\texttt{OutflowMatrix} the matrix corresponding to the previous
+function. Again, it is assumed that the OutflowValues depend linearly
+on the solution variable.
+
+\texttt{PipeCouplingResidual} and \texttt{CouplingMatrix} just pass
+arguments to the network.
+
+\paragraph{localnetwork.h} This class implements the topology
+information needed on the network. In particular:
+
+\texttt{PipeCouplingResidual} needs to evaluate the residual in the 
+coupling conditions. These conditions are always \texttt{NPipes}
+outflow conditions and an additional \texttt{NPipes} coupling
+conditions between the different flux variables, i.e., the boundary
+values for $w$ and $p$ and the continuity condition at the point $50$.
+It is assumed, again, that these conditions are (affine)-linear.
+
+\texttt{CouplingMatrix} calculates the matrix corresponding to the
+coupling conditions.
+
+\texttt{GetFluxSparsityPattern} is needed to calculate the 
+sparsity pattern for the coupling ($2\cdot \text{NPipes} \cdot
+\text{NComp} \times 2\cdot \text{NPipes} \cdot
+\text{NComp}$) matrix. 
+

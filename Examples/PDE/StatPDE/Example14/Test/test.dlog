@@ -1,0 +1,71 @@
+DOpElib Copyright (C) 2012 - 2016 DOpElib authors
+This program comes with ABSOLUTELY NO WARRANTY.
+For License details read LICENSE.TXT distributed with this software!
+
+This is DOpElib Version: 4.0.0 pre
+	Status as of: 16/02/2016
+	Solving ...
+
+	**************************************************
+	*             Starting Forward Solver            *
+	*   Solving : OptProblem	*
+	*  CDoFs : 	0
+	*  SDoFs : 	40
+	**************************************************
+
+	Computing State Solution:
+			 Newton step: 0	 Residual (abs.):   1.2500e+01
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+	Computing Cost Functional:
+	CostFunctional: 310.943
+	Computing Functionals:
+	P-Error: 621.885
+
+	**************************************************
+	*             Starting Forward Solver            *
+	*   Solving : OptProblem	*
+	*  CDoFs : 	0
+	*  SDoFs : 	72
+	**************************************************
+
+	Computing State Solution:
+			 Newton step: 0	 Residual (abs.):   6.2500e+00
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+	Computing Cost Functional:
+	CostFunctional: 155.471
+	Computing Functionals:
+	P-Error: 310.943
+
+	**************************************************
+	*             Starting Forward Solver            *
+	*   Solving : OptProblem	*
+	*  CDoFs : 	0
+	*  SDoFs : 	136
+	**************************************************
+
+	Computing State Solution:
+			 Newton step: 0	 Residual (abs.):   3.1250e+00
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+	Computing Cost Functional:
+	CostFunctional: 77.7357
+	Computing Functionals:
+	P-Error: 155.471
+
+	**************************************************
+	*             Starting Forward Solver            *
+	*   Solving : OptProblem	*
+	*  CDoFs : 	0
+	*  SDoFs : 	264
+	**************************************************
+
+	Computing State Solution:
+			 Newton step: 0	 Residual (abs.):   1.5625e+00
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+	Computing Cost Functional:
+	CostFunctional: 38.8678
+	Computing Functionals:
+	P-Error: 77.7357

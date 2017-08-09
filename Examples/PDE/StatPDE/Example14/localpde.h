@@ -76,7 +76,11 @@ template<
 	    local_vector(i) += scale * uvalues_[q_point][1]
 	      * state_fe_values[p].gradient(i,q_point)[0]
 	      * state_fe_values.JxW(q_point);
-	  }
+	    local_vector(i) -= scale * (1. * state_fe_values[w].value(i,q_point))
+	      * state_fe_values.JxW(q_point);
+	    local_vector(i) -= scale * (2. * state_fe_values[p].value(i,q_point))
+	      * state_fe_values.JxW(q_point);
+ 	  }
         }
       }
 

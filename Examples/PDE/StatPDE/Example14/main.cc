@@ -169,7 +169,7 @@ main(int argc, char **argv)
   Triangulation<DIM> triangulation;
   GridGenerator::hyper_cube(triangulation, 0, 50);
   Triangulation<DIM> triangulation2;
-  GridGenerator::hyper_cube(triangulation2, 0, 50);
+  GridGenerator::hyper_cube(triangulation2, 50, 100);
   triangulation.refine_global(prerefine-1);
   triangulation2.refine_global(prerefine-1);
   std::vector<dealii::Triangulation<DIM> *> tria_s(2,NULL);
