@@ -639,8 +639,6 @@ public:
     //Here only the first four are relevant.
     unsigned int n_q_points = fdc.GetNQPoints();
     unsigned int color = fdc.GetBoundaryIndicator();
-    const auto &state_fe_values =
-      fdc.GetFEFaceValuesState();
 
     assert(this->problem_type_ == "state");
 
@@ -655,7 +653,6 @@ public:
     assert(n_q_points == 1);
     for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
       {
-        double bn = state_fe_values.normal_vector(q_point)[0];
         //At present fixed flow-direction!
         //Outflow is color ==1
         if (color == 1 )
@@ -687,8 +684,6 @@ public:
 
     unsigned int n_q_points = fdc.GetNQPoints();
     unsigned int color = fdc.GetBoundaryIndicator();
-    const auto &state_fe_values =
-      fdc.GetFEFaceValuesState();
 
     if (this->problem_type_ == "state")
       {
@@ -706,7 +701,6 @@ public:
     assert(n_q_points == 1);
     for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
       {
-        double bn = state_fe_values.normal_vector(q_point)[0];
         //At present fixed flow-direction!
         //Sort in matrix: first index is component!
         //                second index is component on left boundary and n_comp+comp on right
