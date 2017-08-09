@@ -501,22 +501,44 @@ namespace DOpE
     bool AtInterface(ELEMENTITERATOR &element, unsigned int face) const;
 
     /********************Functions on Networks********************/
-    template<typename FACEITERATOR>
-      inline void BoundaryEquation_BV(const FACEITERATOR & /*fdc*/,
-				      dealii::Vector<double> &/*local_vector*/,
-				      double /*scale*/,
-				      double /*scale_ico*/) 
+    template<typename FDC>
+      inline void BoundaryEquation_BV(const FDC & fdc,
+				      dealii::Vector<double> &local_vector,
+				      double scale,
+				      double scale_ico) 
     { 
-      abort();
+      pde_.BoundaryEquation_BV(fdc, local_vector, scale, scale_ico) ;
     }
-    template<typename FACEITERATOR>
-      inline void OutflowValues(const  FACEITERATOR& /*fdc*/,
-				dealii::Vector<double> &/*local_vector*/,
-				std::vector<bool> &/*comp_mask*/) 
+    
+    template<typename FDC>
+      inline void BoundaryMatrix_BV(const FDC & /*fdc*/,
+				    std::vector<bool>& /*present_in_outflow*/,
+				    dealii::FullMatrix<double> &/*local_entry_matrix*/,
+				    double /*scale*/,
+				    double /*scale_ico*/)
     {
       abort();
     }
 
+    template<typename FDC>
+      inline void OutflowValues(const  FDC& fdc,
+				dealii::Vector<double> &local_vector,
+				double scale,
+				double scale_ico) 
+    {
+      pde_.OutflowValues(fdc, local_vector, scale, scale_ico);
+    }
+
+    template<typename FDC>
+      inline void
+      OutflowMatrix(const FDC & /*fdc*/,
+		    std::vector<bool>& /*present_in_outflow*/,
+		    dealii::FullMatrix<double> &/*local_entry_matrix*/,
+		    double /*scale*/,
+		    double /*scale_ico*/)
+    {
+      abort();
+    }
 
   protected:
 

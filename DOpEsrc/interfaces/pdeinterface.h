@@ -1515,7 +1515,21 @@ namespace DOpE
 				       double /*scale_ico*/) 
       {
 	abort();
+      } 
+      /**
+       * Calculates the local matrix for the coupling between the unknowns and the 
+       * locals flux values
+       */
+      virtual void
+	BoundaryMatrix_BV(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
+			  std::vector<bool>& /*present_in_outflow*/,
+			  dealii::FullMatrix<double> &/*local_entry_matrix*/,
+			  double /*scale*/,
+			  double /*scale_ico*/)
+      {
+	abort();
       }
+
       /**
        * Evaluates the difference between the outfolw values on the pipe; i.e. those that 
        * do not take the given left or right value and the given left or right value.
@@ -1523,16 +1537,26 @@ namespace DOpE
        * boundary is an outflow boundary. 
        *
        * @param fdc          The container for the face information
-       * @param local_vector The Vector with the residuals. 
-       *                     local_vector is assumed to be the lenght of the 
-       *                     components of the used fe
-       * @param comp_mask    stores which components of local_vector have been filled.
+       * @param local_vector The resulting computation
        * 
        *
        */
       virtual void OutflowValues(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
 				 dealii::Vector<double> &/*local_vector*/,
-				 std::vector<bool> &/*comp_mask*/) 
+				 double /*scale*/,
+				 double /*scale_ico*/)  
+      {
+	abort();
+      }
+      /**
+       * The (local) matrix coupling the outflow values of the pde and the fluxes.
+       */
+      virtual void
+	OutflowMatrix(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
+		      std::vector<bool>& /*present_in_outflow*/,
+		      dealii::FullMatrix<double> &/*local_entry_matrix*/,
+		      double /*scale*/,
+		      double /*scale_ico*/)
       {
 	abort();
       }

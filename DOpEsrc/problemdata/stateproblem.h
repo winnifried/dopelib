@@ -543,14 +543,36 @@ namespace DOpE
     { 
       pde_.BoundaryEquation_BV(fdc, local_vector, scale, scale_ico) ;
     }
+    
+    template<typename FDC>
+      inline void BoundaryMatrix_BV(const FDC & fdc,
+				    std::vector<bool>& present_in_outflow,
+				    dealii::FullMatrix<double> &local_entry_matrix,
+				    double scale,
+				    double scale_ico)
+    {
+      pde_.BoundaryMatrix_BV(fdc, present_in_outflow, local_entry_matrix, scale, scale_ico);
+    }
+
     template<typename FDC>
       inline void OutflowValues(const  FDC& fdc,
 				dealii::Vector<double> &local_vector,
-				std::vector<bool> &comp_mask) 
+				double scale,
+				double scale_ico) 
     {
-      pde_.OutflowValues(fdc, local_vector, comp_mask);
+      pde_.OutflowValues(fdc, local_vector, scale, scale_ico);
     }
 
+    template<typename FDC>
+      inline void
+      OutflowMatrix(const FDC & fdc,
+		    std::vector<bool>& present_in_outflow,
+		    dealii::FullMatrix<double> &local_entry_matrix,
+		    double scale,
+		    double scale_ico)
+    {
+      pde_.OutflowMatrix(fdc, present_in_outflow, local_entry_matrix, scale, scale_ico);
+    }
   protected:
 
   private:
