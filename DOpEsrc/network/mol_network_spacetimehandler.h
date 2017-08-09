@@ -440,9 +440,9 @@ namespace DOpE
 	assert(n_comp == right_vals[i].size());
 	for( unsigned int n =0; n < left_vals[i].size(); n++)
 	{
-	  row_lenght[left_vals[i][n]]++;
-	  row_lenght[right_vals[i][n]]++;
-	  row_lenght[right_vals[i][n]]++;//Add one more to have symmetrie with the final row
+	  row_lenght[left_vals[i][n]]+=n_comp;//Can couple to all n_comp fluxes
+	  row_lenght[right_vals[i][n]]+=n_comp;
+	  row_lenght[right_vals[i][n]]+=n_comp;//Add one more to have symmetrie with the final row
 	}
 	//Reinit-size
 	sparsity.block(i,n_pipes).reinit(sth_s_[i]->GetStateNDoFs(),2*n_pipes*n_comp,row_lenght);
@@ -450,12 +450,16 @@ namespace DOpE
 	//For the i-th pipe the offset for the first component-flux is i*n_comp
 	for( unsigned int n =0; n < left_vals[i].size(); n++)
 	{
-	  //Left Values
-	  sparsity.block(i,n_pipes).add(left_vals[i][n],i*n_comp+n); 
-	  //Right Values
-	  sparsity.block(i,n_pipes).add(right_vals[i][n],n_pipes*n_comp+i*n_comp+n); 
-	  //For symmetrie
-	  sparsity.block(i,n_pipes).add(right_vals[i][n],i*n_comp+n); 
+	  for( unsigned int c=0; c < n_comp; c++)
+	  {
+	    //In each line coupling to all corresponding fluxes at the boundary are possible
+	    //Left Values
+	    sparsity.block(i,n_pipes).add(left_vals[i][n],i*n_comp+c); 
+	    //Right Values
+	    sparsity.block(i,n_pipes).add(right_vals[i][n],n_pipes*n_comp+i*n_comp+c); 
+	    //For symmetry
+	    sparsity.block(i,n_pipes).add(right_vals[i][n],i*n_comp+c); 
+	  }
 	}
 	sparsity.block(i,n_pipes).compress();
       }
@@ -467,8 +471,8 @@ namespace DOpE
 	//Howmany-coupling lines
 	for(unsigned int n=0; n < n_comp; n++)
 	{
-	  row_lenght[i*n_comp+n] = 2;//one left and right value!
-	  row_lenght[n_pipes*n_comp+i*n_comp+n] = 1;//For symmetrie with the final column
+	  row_lenght[i*n_comp+n] = 2*n_comp;//one left and right value + symmetrie to final column!
+	  row_lenght[n_pipes*n_comp+i*n_comp+n] = n_comp;//For symmetrie with the final column
 	}
 	//Reinit-size
 	sparsity.block(n_pipes,i).reinit(2*n_pipes*n_comp,sth_s_[i]->GetStateNDoFs(),row_lenght);
@@ -476,12 +480,15 @@ namespace DOpE
 	//For the i-th pipe the offset for the first component-flux is i*n_comp
 	for( unsigned int n =0; n < left_vals[i].size(); n++)
 	{
-	  //Left Values
-	  sparsity.block(n_pipes,i).add(i*n_comp+n,left_vals[i][n]); 
-	  //Right Values
-	  sparsity.block(n_pipes,i).add(i*n_comp+n,right_vals[i][n]); 
-	  //Symmetrie with final collumn
-	  sparsity.block(n_pipes,i).add(n_pipes*n_comp+i*n_comp+n,right_vals[i][n]); 
+	  for(unsigned int c=0; c < n_comp; c++)
+	  {
+	    //Left Values
+	    sparsity.block(n_pipes,i).add(i*n_comp+n,left_vals[i][c]); 
+	    //Right Values
+	    sparsity.block(n_pipes,i).add(i*n_comp+n,right_vals[i][c]); 
+	    //Symmetrie with final collumn
+	    sparsity.block(n_pipes,i).add(n_pipes*n_comp+i*n_comp+n,right_vals[i][c]); 
+	  }
 	}
 	sparsity.block(n_pipes,i).compress();
       }

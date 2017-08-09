@@ -974,38 +974,38 @@ namespace DOpE
     //No linearization point needed since coupling conditions are linear!
     pde.CouplingMatrix(matrix.block(n_pipes,n_pipes),present_in_outflow);
 
-    //Print Matrix
-    for(unsigned int p = 0; p <= n_pipes; p++)
-    {
-      for(unsigned int i = 0; i < matrix.block(p,0).m(); i++)
-      {
-	for(unsigned int r = 0; r <= n_pipes; r++)
-	{
-	  for(unsigned int j = 0; j < matrix.block(p,r).n(); j++)
-	  {
-	    if( p != n_pipes && r != n_pipes)
-	    {
-	      std::cout<<"   *  ";
-	    }
-	    else
-	    {
-	      std::cout<<" "<<std::setw(4)<<std::setprecision(1) <<matrix.block(p,r).el(i,j)<<" ";
-	    }
-	  }
-	  std::cout<<" | ";
-	}
-	std::cout<<std::endl;
-      }
-      for(unsigned int r = 0; r <= n_pipes; r++)
-      {
-	for(unsigned int j = 0; j < matrix.block(p,r).n(); j++)
-	{
-	  std::cout<<"------";
-	}
-	std::cout<<" | ";
-      }
-      std::cout<<std::endl;
-    }
+//    //Print Matrix
+//    for(unsigned int p = 0; p <= n_pipes; p++)
+//    {
+//      for(unsigned int i = 0; i < matrix.block(p,0).m(); i++)
+//      {
+//	for(unsigned int r = 0; r <= n_pipes; r++)
+//	{
+//	  for(unsigned int j = 0; j < matrix.block(p,r).n(); j++)
+//	  {
+//	    if( p != n_pipes && r != n_pipes)
+//	    {
+//	      std::cout<<"     *";
+//	    }
+//	    else
+//	    {
+//	      std::cout<<std::setw(6)<<std::setprecision(1)<<matrix.block(p,r).el(i,j);
+//	    }
+//	  }
+//	  std::cout<<" | ";
+//	}
+//	std::cout<<std::endl;
+//      }
+//      for(unsigned int r = 0; r <= n_pipes; r++)
+//      {
+//	for(unsigned int j = 0; j < matrix.block(p,r).n(); j++)
+//	{
+//	  std::cout<<"------";
+//	}
+//	std::cout<<" | ";
+//      }
+//      std::cout<<std::endl;
+//    }
     
   }
 
