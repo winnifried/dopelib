@@ -956,22 +956,22 @@ namespace DOpE
               for (unsigned int d = 0; d < n_comp; d++)
                 {
                   //Inflow coupling
-                  if (fabs(inflow_matrix(c,d)) > 1.e-12)
+                  if (fabs(inflow_matrix(c,d)) > std::numeric_limits<double>::min())
                     matrix.block(p,n_pipes).set(left_vals[p][c],p*n_comp+d,inflow_matrix(c,d));
-                  if (fabs(inflow_matrix(n_comp+c,d)) > 1.e-12)
+                  if (fabs(inflow_matrix(n_comp+c,d)) > std::numeric_limits<double>::min())
                     matrix.block(p,n_pipes).set(right_vals[p][c],p*n_comp+d,inflow_matrix(n_comp+c,d));
-                  if (fabs(inflow_matrix(c,n_comp+d)) > 1.e-12)
+                  if (fabs(inflow_matrix(c,n_comp+d)) > std::numeric_limits<double>::min())
                     matrix.block(p,n_pipes).set(left_vals[p][c],n_pipes*n_comp+p*n_comp+d,inflow_matrix(c,n_comp+d));
-                  if (fabs(inflow_matrix(n_comp+c,n_comp+d)) > 1.e-12)
+                  if (fabs(inflow_matrix(n_comp+c,n_comp+d)) > std::numeric_limits<double>::min())
                     matrix.block(p,n_pipes).set(right_vals[p][c],n_pipes*n_comp+p*n_comp+d,inflow_matrix(n_comp+c,n_comp+d));
                   //Outflow coupling
-                  if (fabs(outflow_matrix(c,d)) > 1.e-12) //left value is outflow
+                  if (fabs(outflow_matrix(c,d)) > std::numeric_limits<double>::min()) //left value is outflow
                     matrix.block(n_pipes,p).set(p*n_comp+c,left_vals[p][d],outflow_matrix(c,d));
-                  if (fabs(outflow_matrix(n_comp+c,d)) > 1.e-12)
+                  if (fabs(outflow_matrix(n_comp+c,d)) > std::numeric_limits<double>::min())
                     matrix.block(n_pipes,p).set(n_pipes*n_comp+p*n_comp+c,left_vals[p][d],outflow_matrix(n_comp+c,d));
-                  if (fabs(outflow_matrix(c,n_comp+d)) > 1.e-12)
+                  if (fabs(outflow_matrix(c,n_comp+d)) > std::numeric_limits<double>::min())
                     matrix.block(n_pipes,p).set(p*n_comp+c,right_vals[p][d],outflow_matrix(c,n_comp+d));
-                  if (fabs(outflow_matrix(n_comp+c,n_comp+d)) > 1.e-12)
+                  if (fabs(outflow_matrix(n_comp+c,n_comp+d)) > std::numeric_limits<double>::min())
                     matrix.block(n_pipes,p).set(n_pipes*n_comp+p*n_comp+c,right_vals[p][d],outflow_matrix(n_comp+c,n_comp+d));
                 }
               //Sort the bool-flags for the fluxes in the outflow to the right place

@@ -586,7 +586,7 @@ namespace DOpE
           {
             //Only apply initial state if no previous values are present (i.e., u == 0)
             //thus, we can reuse good values from previous calculations
-            if ( GetU().GetSpacialVector().linfty_norm() <= 1.e-6 )
+            if ( GetU().GetSpacialVector().linfty_norm() < std::numeric_limits<double>::min() )
               {
                 this->GetOutputHandler()->Write("Computing Initial Values:",
                                                 4 + this->GetBasePriority());
