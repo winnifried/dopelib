@@ -427,7 +427,7 @@ namespace DOpE
         this->GetOutputHandler()->Write(out,4+this->GetBasePriority());
         out<<"\t TR-Newton step: " <<iter<<"\t";
         out<<"delta: "<<tr_delta<<"->";
-        if ((tr_rho < 0.01) ||  !good)
+        if ((tr_rho <= tr_eta) ||  !good)
           {
             tr_delta=std::max(0.5*norm,0.125*tr_delta);
           }
