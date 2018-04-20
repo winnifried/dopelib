@@ -1,0 +1,93 @@
+#!/bin/bash
+## ---------------------------------------------------------------------
+##
+## Copyright (C) 2012 - 2013, 2015, 2016 by the deal.II authors
+##
+## This file is part of the deal.II library.
+##
+## The deal.II library is free software; you can use it, redistribute
+## it, and/or modify it under the terms of the GNU Lesser General
+## Public License as published by the Free Software Foundation; either
+## version 2.1 of the License, or (at your option) any later version.
+## The full text of the license can be found in the file LICENSE at
+## the top level of the deal.II distribution.
+##
+## ---------------------------------------------------------------------
+
+#
+# This script indents all source files of deal.II according to our
+# usual code formatting standards. It is used to ensure that our
+# code base looks uniform, as uniformity helps make code easier to
+# read.
+#
+# While we're already touching every file, this script also makes
+# sure we set permissions correctly
+#
+# The script needs to be executed as 
+#   ./contrib/utilities/indent
+# from the top-level directory of the source tree, or via
+#   make indent
+# from a build directory.
+#
+
+if test ! -f astyle.rc ; then
+  echo "*** No style file astyle.rc found."
+  exit 1
+fi
+
+if test -z "`which astyle`" ; then
+  echo "*** No astyle program found."
+  echo "***"
+  echo "*** You can download astyle from http://astyle.sourceforge.net/"
+  echo "*** Note that you will need exactly version 2.04 (no newer or"
+  echo "*** older version will yield the correct indentation)."
+  exit 1
+fi
+
+if test "`astyle --version 2>&1`" != "Artistic Style Version 2.04" ; then
+  echo "*** Found a version of astyle different than the required version 2.04."
+  exit 1
+fi
+
+
+
+# collect all header and source files and process them in batches of 50 files
+# with up to 10 in parallel
+find DOpEsrc Examples \( -name '*.cc' -o -name '*.h' -o -name '*.cu' -o -name '*.cuh' \) -print | xargs -n 50 -P 10 astyle --options=astyle.rc
+
+# use the same process to set file permissions for all source files
+find DOpEsrc Examples \( -name '*.cc' -o -name '*.h' -o -name '*.cu' -o -name '*.cuh' \) -print | xargs -n 50 -P 10 chmod 644
+
+# convert dos formatted files to unix file format by stripping out 
+# carriage returns (15=0x0D):
+dos_to_unix()
+{
+    f=$1
+    tr -d '\015' <$f >$f.tmp
+    diff -q $f $f.tmp >/dev/null || mv $f.tmp $f
+    rm -f $f.tmp
+}
+export -f dos_to_unix
+find DOpEsrc Examples \( -name '*.cc' -o -name '*.h' -o -name '*.cu' -o -name '*.cuh' \) -print | xargs -n 1 -P 10 -I {} bash -c 'dos_to_unix "$@"' _ {} 
+
+# format .inst.in files. We need to replace \{ and \} because it confuses
+# astyle.
+format_inst()
+{
+    f=$1
+    cp $f $f.tmp
+    sed -i.orig 's#\\{#{ //#g' $f.tmp
+    sed -i.orig 's#\\}#} //#g' $f.tmp
+    astyle --options=none --quiet $f.tmp
+    sed -i.orig 's#{ //#\\{#g' $f.tmp
+    sed -i.orig 's#} //#\\}#g' $f.tmp
+    if ! diff -q $f $f.tmp >/dev/null
+    then
+	cp $f.tmp $f
+    fi
+    rm $f.tmp $f.tmp.orig
+}
+
+# for i in `find source -name '*.inst.in'` ; do
+#   format_inst $i
+# done
