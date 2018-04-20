@@ -34,9 +34,7 @@
 #include <iomanip>
 
 #include <include/parameterreader.h>
-
-
-
+#include <include/helper.h> // !!! Daniel !!!
 
 namespace DOpE
 {
@@ -140,7 +138,7 @@ namespace DOpE
     nonlinear_global_tol_ = param_reader.get_double ("nonlinear_global_tol");
     nonlinear_tol_        = param_reader.get_double ("nonlinear_tol");
     nonlinear_maxiter_    = param_reader.get_integer ("nonlinear_maxiter");
-    nonlinear_rho_        = param_reader.get_double ("nonlinear_rho");
+    nonlinear_rho_        = param_reader.get_double ("nonli near_rho");
 
     line_maxiter_   = param_reader.get_integer ("line_maxiter");
     linesearch_rho_ = param_reader.get_double ("linesearch_rho");
@@ -179,6 +177,7 @@ namespace DOpE
     VECTOR residual;
     VECTOR du;
     std::stringstream out;
+    MPI_TILL_HERE;
     pde.GetOutputHandler()->InitNewtonOut(out);
 
     du.reinit(solution);
@@ -194,6 +193,7 @@ namespace DOpE
     GetIntegrator().ComputeNonlinearResidual(pde,residual);
     residual *= -1.;
 
+    MPI_TILL_HERE;
     pde.GetOutputHandler()->SetIterationNumber(0,"PDENewton");
     pde.GetOutputHandler()->Write(residual,"Residual"+pde.GetType(),pde.GetDoFType());
 
@@ -201,6 +201,7 @@ namespace DOpE
     double firstres = res;
     double lastres = res;
 
+    MPI_TILL_HERE;
 
     out<< algo_level << "Newton step: " <<0<<"\t Residual (abs.): "
        <<pde.GetOutputHandler()->ZeroTolerance(res, 1.0)
@@ -208,6 +209,7 @@ namespace DOpE
 
     out<< algo_level << "Newton step: " <<0<<"\t Residual (rel.):   " << std::scientific << firstres/firstres;
 
+    MPI_TILL_HERE;
 
     pde.GetOutputHandler()->Write(out,priority);
 
@@ -224,12 +226,19 @@ namespace DOpE
 
         pde.GetOutputHandler()->SetIterationNumber(iter,"PDENewton");
 
+        MPI_TILL_HERE;
+
         LINEARSOLVER::Solve(pde,GetIntegrator(),residual,du,build_matrix);
 
+        MPI_TILL_HERE;
         //Linesearch
         {
           solution += du;
+
+            MPI_TILL_HERE;
           GetIntegrator().ComputeNonlinearResidual(pde,residual);
+
+            MPI_TILL_HERE;
           residual *= -1.;
 
           pde.GetOutputHandler()->Write(residual,"Residual"+pde.GetType(),pde.GetDoFType());

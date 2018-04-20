@@ -661,3 +661,8 @@ double ConstraintVector<VECTOR>::Complementarity(const ConstraintVector<VECTOR> 
 
 template class DOpE::ConstraintVector<dealii::Vector<double> >;
 template class DOpE::ConstraintVector<dealii::BlockVector<double> >;
+
+// !!! Daniel !!!
+template class DOpE::ConstraintVector<dealii::TrilinosWrappers::MPI::Vector>;
+template class DOpE::ConstraintVector<dealii::TrilinosWrappers::MPI::BlockVector>;
+

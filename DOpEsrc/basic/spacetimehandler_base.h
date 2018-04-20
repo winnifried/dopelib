@@ -28,6 +28,13 @@
 #include <deal.II/lac/block_vector_base.h>
 #include <deal.II/lac/block_vector.h>
 
+#include <deal.II/lac/trilinos_vector.h>
+#include <deal.II/lac/trilinos_block_vector.h>
+#include <deal.II/lac/parallel_vector.h>
+#include <deal.II/lac/parallel_block_vector.h>
+
+#include <deal.II/base/index_set.h>
+
 #include <vector>
 #include <iostream>
 #include <sstream>
@@ -295,6 +302,39 @@ namespace DOpE
      * @ param time_point Indicating the time at which we want to know the DoFs. -1 means now.
      */
     virtual unsigned int GetStateNDoFs(int time_point = -1) const = 0;
+    
+    // !!! Daniel !!!
+    virtual std::vector<IndexSet> GetStateLocallyOwnedDoFsPerBlock(int time_point = -1) const = 0; // TODO documentation
+    virtual std::vector<IndexSet> GetStateLocallyRelevantDoFsPerBlock(int time_point = -1) const = 0; // TODO documentation
+    virtual IndexSet GetStateLocallyOwnedDoFs(int time_point = -1) const = 0;
+    virtual IndexSet GetStateLocallyRelevantDoFs(int time_point = -1) const = 0;
+
+    // TODO document, move where they belong
+    void ReinitVector(TrilinosWrappers::MPI::Vector & v) const
+    {
+        const auto locally_owned = GetStateLocallyOwnedDoFs();
+        const auto locally_relevant = GetStateLocallyRelevantDoFs();
+
+        v.reinit(locally_owned, locally_relevant, MPI_COMM_WORLD);
+    }
+    void ReinitVector(TrilinosWrappers::MPI::BlockVector & v) const
+    {
+        const auto locally_owned = GetStateLocallyOwnedDoFsPerBlock();
+        const auto locally_relevant = GetStateLocallyRelevantDoFsPerBlock();
+
+        v.reinit(locally_owned, locally_relevant, MPI_COMM_WORLD);
+    }
+    void ReinitVector(Vector<double> & v) const
+    {
+        const auto dofs = GetStateNDoFs();
+        v.reinit(dofs);
+    }
+    void ReinitVector(BlockVector<double> & v) const
+    {
+        const auto blocks = GetStateDoFsPerBlock();
+        v.reinit(blocks);
+    }
+
     /**
      * Returns the DoFs for the constraint vector at the current time which has
      *  to be set prior to calling this function using SetTime.

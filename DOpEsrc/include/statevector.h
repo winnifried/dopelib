@@ -27,11 +27,18 @@
 #include <basic/spacetimehandler_base.h>
 #include <include/parameterreader.h>
 #include <basic/dopetypes.h>
+#include <include/helper.h>
 
 #include <deal.II/base/utilities.h>
 #include <deal.II/lac/vector.h>
 #include <deal.II/lac/block_vector_base.h>
 #include <deal.II/lac/block_vector.h>
+
+// !!! Daniel !!!
+// TODO if MPI/Trilinos + documentation + rethink implementation
+#include <deal.II/lac/trilinos_vector.h>
+#include <deal.II/lac/trilinos_block_vector.h>
+#include <deal.II/lac/parallel_block_vector.h>
 
 #include <vector>
 #include <iostream>
@@ -231,7 +238,6 @@ namespace DOpE
         size_ = size;
         on_disc_ = on_disc;
       }
-      ;
     };
     /**
      * This function resizes the spatial vector at a prior given time point.
@@ -287,6 +293,9 @@ namespace DOpE
      */
     void ResizeLocalVectors(unsigned int size) const;
 
+    // !!! Daniel !!!
+    MPI_Comm mpi_comm = MPI_COMM_WORLD;  // TODO use user-defined communicator
+
     mutable std::vector<VECTOR *> state_;
     mutable std::vector<SpatialVectorInfos> state_information_;
 
@@ -305,7 +314,6 @@ namespace DOpE
 
     //pointer to the dofs in the actual interval. Is only used if the interval is set!
     mutable std::vector<VECTOR *> local_vectors_;
-
 
     //Map: global time dof index - local time DoF index
     mutable std::map<unsigned int, unsigned int> global_to_local_;

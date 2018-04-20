@@ -27,6 +27,8 @@
 #include <wrapper/dofhandler_wrapper.h>
 #include <deal.II/dofs/dof_tools.h>
 #include <deal.II/lac/constraint_matrix.h>
+// !!! Daniel !!!
+#include <include/helper.h>
 #include <deal.II/lac/block_sparsity_pattern.h>
 
 // Multi-level routines (step-16 in deal.II)
@@ -59,6 +61,7 @@ namespace DOpE
     ~SparsityMaker()
     {
     }
+
     virtual void
     ComputeSparsityPattern(
       const DOpEWrapper::DoFHandler<dim, DH> &dof_handler,
@@ -73,6 +76,20 @@ namespace DOpE
       const dealii::ConstraintMatrix &hanging_node_constraints,
       const std::vector<unsigned int> &blocks) const;
 
+    // !!! Daniel !!!
+    virtual void
+    ComputeSparsityPattern(
+        const DOpEWrapper::DoFHandler<dim, DH>& dof_handler,
+        dealii::TrilinosWrappers::BlockSparsityPattern & sparsity,
+        const dealii::ConstraintMatrix& hanging_node_constraints,
+        const std::vector<unsigned int>& blocks) const;
+
+    virtual void
+    ComputeSparsityPattern(
+        const DOpEWrapper::DoFHandler<dim, DH>& dof_handler,
+        dealii::TrilinosWrappers::SparsityPattern & sparsity,
+        const dealii::ConstraintMatrix& hanging_node_constraints,
+        const std::vector<unsigned int>& blocks) const;
 
 //      /*
 //       * Experimental status:
@@ -117,22 +134,8 @@ namespace DOpE
     const dealii::ConstraintMatrix &hanging_node_constraints,
     const std::vector<unsigned int> &blocks) const
   {
-#if DEAL_II_VERSION_GTE(8,3,0)
-    dealii::BlockDynamicSparsityPattern csp(blocks.size(),
-                                            blocks.size());
-#else
-    dealii::BlockCompressedSimpleSparsityPattern csp(blocks.size(),
-                                                     blocks.size());
-#endif
+    dealii::BlockDynamicSparsityPattern csp(blocks, blocks);
 
-    for (unsigned int i = 0; i < blocks.size(); i++)
-      {
-        for (unsigned int j = 0; j < blocks.size(); j++)
-          {
-            csp.block(i, j).reinit(blocks.at(i), blocks.at(j));
-          }
-      }
-    csp.collect_sizes();
     if ( flux_pattern_ )
       {
         dealii::DoFTools::make_flux_sparsity_pattern(
@@ -177,6 +180,72 @@ namespace DOpE
           dof_handler.GetDEALDoFHandler(), csp, hanging_node_constraints);
       }
     sparsity.copy_from(csp);
+}
+
+/***********************************************************/
+// !!! Daniel !!!
+template<template<int, int> class DH, int dim>
+void
+SparsityMaker<DH, dim>::ComputeSparsityPattern(
+    const DOpEWrapper::DoFHandler<dim, DH>& dof_handler,
+    dealii::TrilinosWrappers::BlockSparsityPattern & sparsity,
+    const dealii::ConstraintMatrix& hanging_node_constraints,
+    const std::vector<unsigned int>& blocks) const
+{
+    IndexSet locally_relevant;
+    IndexSet locally_owned = dof_handler.GetDEALDoFHandler().locally_owned_dofs();
+    DoFTools::extract_locally_relevant_dofs(dof_handler.GetDEALDoFHandler(), locally_relevant);
+
+    const auto block_owned = DOpEHelper::split_blockwise(locally_owned, blocks);
+    const auto block_relevant = DOpEHelper::split_blockwise(locally_relevant, blocks);
+
+    // TODO not 100% sure about this + replace MPI_COMM_WORLD)
+    sparsity.reinit(block_owned, block_owned, block_relevant, MPI_COMM_WORLD);
+
+    if( flux_pattern_ )
+    {
+        dealii::DoFTools::make_flux_sparsity_pattern(
+            dof_handler.GetDEALDoFHandler(), sparsity, hanging_node_constraints, false, dealii::Utilities::MPI::this_mpi_process(MPI_COMM_WORLD));
+    }
+    else
+    {
+        dealii::DoFTools::make_sparsity_pattern(
+            dof_handler.GetDEALDoFHandler(), sparsity, hanging_node_constraints, false, dealii::Utilities::MPI::this_mpi_process(MPI_COMM_WORLD));
+    }
+    sparsity.compress();
+}
+
+/***********************************************************/
+template<template<int, int> class DH, int dim>
+void
+SparsityMaker<DH, dim>::ComputeSparsityPattern(
+    const DOpEWrapper::DoFHandler<dim, DH>& dof_handler,
+    dealii::TrilinosWrappers::SparsityPattern & sparsity,
+    const dealii::ConstraintMatrix& hanging_node_constraints,
+    const std::vector<unsigned int>& blocks) const
+{
+    unsigned int total_dofs = 0;
+    for (unsigned int j = 0; j < blocks.size(); j++)
+        total_dofs += blocks.at(j);
+
+    IndexSet locally_relevant;
+    IndexSet locally_owned = dof_handler.GetDEALDoFHandler().locally_owned_dofs();
+    DoFTools::extract_locally_relevant_dofs(dof_handler.GetDEALDoFHandler(), locally_relevant);
+
+    // TODO not 100% sure about this + replace MPI_COMM_WORLD)
+    sparsity.reinit(locally_owned, locally_owned, locally_relevant, MPI_COMM_WORLD);
+
+    if( flux_pattern_ )
+    {
+        dealii::DoFTools::make_flux_sparsity_pattern(
+            dof_handler.GetDEALDoFHandler(), sparsity, hanging_node_constraints, false, dealii::Utilities::MPI::this_mpi_process(MPI_COMM_WORLD));
+    }
+    else
+    {
+        dealii::DoFTools::make_sparsity_pattern(
+            dof_handler.GetDEALDoFHandler(), sparsity, hanging_node_constraints, false, dealii::Utilities::MPI::this_mpi_process(MPI_COMM_WORLD));
+    }
+    sparsity.compress();
   }
 
 ///***********************************************************/

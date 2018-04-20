@@ -62,7 +62,7 @@ namespace DOpE
      * @param control_fe        The finite elements used for the discretization of the control variable.
      * @param state_fe          The finite elements used for the discretization of the state variable.
      * @param type              The type of the control, see dopetypes.h for more information.
-    * @param flux_pattern      True if a flux sparsity pattern is needed (for DG discretizations)
+     * @param flux_pattern      True if a flux sparsity pattern is needed (for DG discretizations)
      * @param index_setter      The index setter object (only needed in case of hp elements).
      */
     MethodOfLines_SpaceTimeHandler(dealii::Triangulation<dealdim> &triangulation,

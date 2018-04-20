@@ -79,6 +79,10 @@ namespace DOpE
 
 /******************************************************/
 /******************************************************/
+
 template class DOpE::DOpEExceptionHandler<dealii::Vector<double> >;
 template class DOpE::DOpEExceptionHandler<dealii::BlockVector<double> >;
+
+template class DOpE::DOpEExceptionHandler<dealii::TrilinosWrappers::MPI::Vector>;
+template class DOpE::DOpEExceptionHandler<dealii::TrilinosWrappers::MPI::BlockVector>;
 

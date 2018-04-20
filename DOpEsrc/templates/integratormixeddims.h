@@ -98,7 +98,6 @@ namespace DOpE
     template<typename PROBLEM>
     void ApplyTransposedInitialBoundaryValues(PROBLEM &pde, VECTOR &u, SCALAR scale);
 
-
     inline void AddDomainData(std::string name, const VECTOR *new_data);
     inline void DeleteDomainData(std::string name);
 

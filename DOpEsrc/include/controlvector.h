@@ -30,6 +30,8 @@
 #include <deal.II/lac/vector.h>
 #include <deal.II/lac/block_vector_base.h>
 #include <deal.II/lac/block_vector.h>
+#include <deal.II/lac/trilinos_vector.h>
+#include <deal.II/lac/trilinos_block_vector.h>
 
 #include <vector>
 #include <iostream>
@@ -97,6 +99,7 @@ namespace DOpE
      * To assert data integrity this Only one Copy may  be obtained at any time.
      * Hence prior to calling this Function again UnLockCopy must be called.
      */
+    // !!! Daniel !!! why dealii::Vector
     const dealii::Vector<double> &GetSpacialVectorCopy() const;
 
     /**

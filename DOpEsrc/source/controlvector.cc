@@ -1052,3 +1052,8 @@ ControlVector<VECTOR>::ComputeLocalVectors(const TimeIterator &interval) const
 
 template class DOpE::ControlVector<dealii::Vector<double> >;
 template class DOpE::ControlVector<dealii::BlockVector<double> >;
+
+// !!! Daniel !!!
+template class DOpE::ControlVector<dealii::TrilinosWrappers::MPI::Vector>;
+template class DOpE::ControlVector<dealii::TrilinosWrappers::MPI::BlockVector>;
+

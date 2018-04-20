@@ -91,7 +91,7 @@ namespace DOpE
      *
      * @param state_n_blocks            Number of Blocks for the state variable
      * @param state_block_components    Component to Block mapping for the state
-    * @param DD                        Description of the DirichletBoundaries
+     * @param DD                        Description of the DirichletBoundaries
      */
     virtual void
     ReInit(unsigned int state_n_blocks,

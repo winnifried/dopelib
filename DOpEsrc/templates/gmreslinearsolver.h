@@ -160,7 +160,6 @@ namespace DOpE
         integr.ComputeMatrix (pde,matrix_);
       }
 
-
     dealii::SolverControl solver_control (linear_maxiter_, linear_global_tol_,false,false);
 
     // This is gmres specific

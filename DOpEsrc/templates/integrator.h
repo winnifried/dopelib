@@ -39,6 +39,9 @@
 #include <container/residualestimator.h>
 #include <basic/dopetypes.h>
 
+// !!! Daniel !!!
+// TODO replace MPI_COMM_WORLD by GetMPIComm()
+
 namespace DOpE
 {
   /**
@@ -502,6 +505,7 @@ namespace DOpE
     PROBLEM &pde, VECTOR &residual)
   {
     residual = 0.;
+
     // Begin integration
     unsigned int dofs_per_element;
     dealii::Vector<SCALAR> local_vector;
@@ -546,6 +550,9 @@ namespace DOpE
               }
           }
 
+        // !!! Daniel !!!
+        if (element[0]->is_locally_owned())
+        {
         edc.ReInit();
 
         dofs_per_element = element[0]->get_fe().dofs_per_cell;
@@ -583,6 +590,7 @@ namespace DOpE
                   }
               }
           }
+
         if (need_faces)
           {
             for (unsigned int face=0; face < dealii::GeometryInfo<dim>::faces_per_cell; ++face)
@@ -595,6 +603,7 @@ namespace DOpE
                   }
               }
           }
+
         if ( need_interfaces)
           {
 
@@ -640,10 +649,12 @@ namespace DOpE
                   }                  //endif atinterface
               }                  //endfor faces
           }                  //endif need_interfaces
+
         //LocalToGlobal
         const auto &C = pde.GetDoFConstraints();
         element[0]->get_dof_indices(local_dof_indices);
         C.distribute_local_to_global(local_vector, local_dof_indices, residual);
+        }  // endif locally owned
 
         for (unsigned int dh = 1; dh < dof_handler.size(); dh++)
           {
@@ -659,6 +670,7 @@ namespace DOpE
                      -1.);
         residual += point_rhs;
       }
+
     //Check if some preset righthandside exists.
     AddPresetRightHandSide(-1.,residual);
   }
@@ -672,8 +684,6 @@ namespace DOpE
   Integrator<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::ComputeNonlinearLhs(
     PROBLEM &pde, VECTOR &residual)
   {
-    {
-
       residual = 0.;
       // Begin integration
       unsigned int dofs_per_element;
@@ -720,6 +730,9 @@ namespace DOpE
                 }
             }
 
+        // !!! Daniel !!!
+        if (element[0]->is_locally_owned())
+        {
           edc.ReInit();
           dofs_per_element = element[0]->get_fe().dofs_per_cell;
 
@@ -814,14 +827,15 @@ namespace DOpE
           const auto &C = pde.GetDoFConstraints();
           element[0]->get_dof_indices(local_dof_indices);
           C.distribute_local_to_global(local_vector, local_dof_indices, residual);
+        }  // endif locally owned
 
           for (unsigned int dh = 1; dh < dof_handler.size(); dh++)
             {
               element[dh]++;
             }
-        }
+    }  // endfor element
 
-    }
+    residual.compress(VectorOperation::add);
   }
 
   /*******************************************************************************************/
@@ -834,6 +848,7 @@ namespace DOpE
     PROBLEM &pde, VECTOR &residual)
   {
     residual = 0.;
+
     // Begin integration
     unsigned int dofs_per_element;
     dealii::Vector<SCALAR> local_vector;
@@ -884,6 +899,9 @@ namespace DOpE
               }
           }
 
+        // !!! Daniel !!!
+        if (element[0]->is_locally_owned())
+        {
         edc.ReInit();
         dofs_per_element = element[0]->get_fe().dofs_per_cell;
 
@@ -930,12 +948,15 @@ namespace DOpE
         const auto &C = pde.GetDoFConstraints();
         element[0]->get_dof_indices(local_dof_indices);
         C.distribute_local_to_global(local_vector, local_dof_indices, residual);
+        }  // endif locally owned
 
         for (unsigned int dh = 1; dh < dof_handler.size(); dh++)
           {
             element[dh]++;
           }
-      }
+    }  // endfor element
+
+    residual.compress(VectorOperation::add);
 
     //check if we need the evaluation of PointRhs
     if (need_point_rhs)
@@ -947,7 +968,6 @@ namespace DOpE
       }
     //Check if some preset righthandside exists.
     AddPresetRightHandSide(1.,residual);
-
   }
 
   /*******************************************************************************************/
@@ -960,6 +980,7 @@ namespace DOpE
     PROBLEM &pde, MATRIX &matrix)
   {
     matrix = 0.;
+
     // Begin integration
     unsigned int dofs_per_element;
     std::vector<unsigned int> local_dof_indices;
@@ -1004,6 +1025,10 @@ namespace DOpE
                   "Integrator::ComputeMatrix");
               }
           }
+
+        // !!! Daniel !!!
+        if (element[0]->is_locally_owned())
+        {
         edc.ReInit();
         dofs_per_element = element[0]->get_fe().dofs_per_cell;
 
@@ -1088,18 +1113,7 @@ namespace DOpE
                             element[0]->neighbor(face)->get_dof_indices(nbr_local_dof_indices);
 
                             const auto &C = pde.GetDoFConstraints();
-//                    element[0]->get_dof_indices(local_dof_indices);
                             C.distribute_local_to_global(local_interface_matrix, local_dof_indices, nbr_local_dof_indices, matrix);
-
-//                    for (unsigned int i = 0; i < dofs_per_element; ++i)
-//                    {
-//                      for (unsigned int j = 0; j < nbr_dofs_per_element; ++j)
-//                      {
-//                        matrix.add(local_dof_indices[i], nbr_local_dof_indices[j],
-//                            local_interface_matrix(i, j));
-//                      } //endfor j
-//                    } //endfor i
-
                           }
                       }
                     else
@@ -1122,31 +1136,24 @@ namespace DOpE
 
                         const auto &C = pde.GetDoFConstraints();
                         C.distribute_local_to_global(local_interface_matrix, local_dof_indices, nbr_local_dof_indices, matrix);
-
-//                  for (unsigned int i = 0; i < dofs_per_element; ++i)
-//                  {
-//                    for (unsigned int j = 0; j < nbr_dofs_per_element; ++j)
-//                    {
-//                      matrix.add(local_dof_indices[i], nbr_local_dof_indices[j],
-//                          local_interface_matrix(i, j));
-//                    } //endfor j
-//                  } //endfor i
                       }
                   } //endif atinterface
-
-              }
+                }  // endfor face
           } //endif need_interfaces
 
         //LocalToGlobal
         const auto &C = pde.GetDoFConstraints();
         element[0]->get_dof_indices(local_dof_indices);
         C.distribute_local_to_global(local_matrix, local_dof_indices, matrix);
+        }  // endif locally owned
 
         for (unsigned int dh = 1; dh < dof_handler.size(); dh++)
           {
             element[dh]++;
           }
-      }
+    }  // endfor element
+
+    matrix.compress(VectorOperation::add);
   }
 
   template<typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR,
@@ -1182,15 +1189,19 @@ namespace DOpE
                 }
             }
 
+            // !!! Daniel !!!
+            if (element[0]->is_locally_owned())
+            {
           edc.ReInit();
           ret += pde.ElementFunctional(edc);
+            }
 
           for (unsigned int dh = 1; dh < dof_handler.size(); dh++)
             {
               element[dh]++;
             }
         }
-      return ret;
+        return dealii::Utilities::MPI::sum(ret, MPI_COMM_WORLD);
     }
   }
   /*******************************************************************************************/
@@ -1253,6 +1264,10 @@ namespace DOpE
                 }
             }
 
+            // !!! Daniel !!!
+            if (element[0]->is_locally_owned())
+            {
+
           if (need_boundary_integrals)
             {
               for (unsigned int face=0; face < dealii::GeometryInfo<dim>::faces_per_cell; ++face)
@@ -1274,13 +1289,15 @@ namespace DOpE
                     }
                 }
             }
+            }  // endif locally owned
+
           for (unsigned int dh=1; dh<dof_handler.size(); dh++)
             {
               element[dh]++;
             }
         }
 
-      return ret;
+        return dealii::Utilities::MPI::sum(ret, MPI_COMM_WORLD);
 
     }
   }
@@ -1326,6 +1343,9 @@ namespace DOpE
                 }
             }
 
+        
+        if (element[0]->is_locally_owned())
+        {
           if (need_faces)
             {
               for (unsigned int face=0; face < dealii::GeometryInfo<dim>::faces_per_cell; ++face)
@@ -1337,13 +1357,14 @@ namespace DOpE
                     }
                 }
             }
+        }  // endif locally owned
+
           for (unsigned int dh=1; dh<dof_handler.size(); dh++)
             {
               element[dh]++;
             }
         }
-      return ret;
-    }
+    return dealii::Utilities::MPI::sum(ret, MPI_COMM_WORLD);
   }
   /*******************************************************************************************/
 
@@ -1414,6 +1435,8 @@ namespace DOpE
   Integrator<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::ApplyInitialBoundaryValues(
     PROBLEM &pde, VECTOR &u)
   {
+    //TODO Apply constraints locally, see, e.g., dealii step-27 ? But howto do this in the newton iter
+    // e.g. sometimes we need zero sometimes we need other values.
 
     //Never Condense Nodes Here ! Or All will fail if the state is not initialized with zero!
     //pde.GetDoFConstraints().condense(u);
@@ -1644,6 +1667,10 @@ namespace DOpE
                   "Integrator::ComputeRefinementIndicators");
               }
           }
+
+        // !!! Daniel !!!
+        if (element[0]->is_locally_owned())
+        {
         element_sum.clear();
         element_sum.resize(n_error_comps, 0);
 
@@ -1660,7 +1687,6 @@ namespace DOpE
         //dwrc.GetDualErrorIndicators()(element_index) = element_sum[1];
         element_sum.clear();
         element_sum.resize(n_error_comps, 0);
-
 
         //Now to the face terms. We compute them only once for each face and distribute the
         //afterwards. We choose always to work from the coarser element, if both neigbors of the
@@ -1784,6 +1810,8 @@ namespace DOpE
                   }
               }
           }                  //endfor faces
+        }  // endif locally owned
+
         for (unsigned int dh = 1; dh < dof_handler.size(); dh++)
           {
             element[dh]++;
@@ -1793,6 +1821,7 @@ namespace DOpE
             element_weight[dh]++;
           }
       }                  //endfor element
+
     //now we have to incorporate the face and boundary_values
     //into
     unsigned int present_element = 0;
@@ -1801,6 +1830,8 @@ namespace DOpE
     for (;
          element[0] !=endc[0]; element[0]++, ++present_element)
       {
+        if (element[0]->is_locally_owned())
+        {
         for (unsigned int face_no = 0;
              face_no < GeometryInfo<dim>::faces_per_cell; ++face_no)
           {
@@ -1849,6 +1880,7 @@ namespace DOpE
               }
 
           }
+        }  // endif locally owned
       }
   }
   /*******************************************************************************************/
@@ -1940,6 +1972,9 @@ namespace DOpE
               }
           }
 
+        // !!! Daniel !!!
+        if (element[0]->is_locally_owned())
+        {
         element_sum.clear();
         element_sum.resize(2, 0);
 
@@ -2082,13 +2117,14 @@ namespace DOpE
                   }
               }
           }                  //endfor faces
-//          }//end else
+        }  // endif locally owned
 
         for (unsigned int dh = 1; dh < dof_handler.size(); dh++)
           {
             element[dh]++;
           }
       }                  //endfor element
+
     //now we have to incorporate the face and boundary_values
     //into
     unsigned int present_element = 0;
@@ -2096,6 +2132,8 @@ namespace DOpE
       pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandlerBeginActive();
     for (;
          element[0] !=endc[0]; element[0]++, ++present_element)
+      if (element[0]->is_locally_owned())
+        {
       for (unsigned int face_no = 0;
            face_no < GeometryInfo<dim>::faces_per_cell; ++face_no)
         {
@@ -2126,6 +2164,7 @@ namespace DOpE
         {
           DeleteDomainData(wd->first);
         }
+        }  // endif locally owned
     }
   }
 
@@ -2184,7 +2223,6 @@ namespace DOpE
         residual.add(s,*(it->second));
       }
   }
-
 
 }
 #endif

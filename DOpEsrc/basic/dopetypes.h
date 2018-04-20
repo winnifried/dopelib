@@ -28,6 +28,10 @@
 
 #include <include/dopeexception.h>
 
+#include <deal.II/base/utilities.h>
+
+#define MPI_TILL_HERE printf("[%d] Line %d \t File %s \n", dealii::Utilities::MPI::this_mpi_process(MPI_COMM_WORLD), __LINE__, __FILE__)
+
 namespace DOpE
 {
   namespace DOpEtypes

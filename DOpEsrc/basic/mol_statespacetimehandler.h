@@ -139,7 +139,6 @@ namespace DOpE
            const std::vector<unsigned int> &state_block_component,
            const DirichletDescriptor &DD  )
     {
-
       StateSpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dealdim>::SetActiveFEIndicesState(
         state_dof_handler_);
       state_dof_handler_.distribute_dofs(GetFESystem("state"));
@@ -205,6 +204,8 @@ namespace DOpE
     const std::vector<unsigned int> &
     GetStateDoFsPerBlock(int /*time_point*/= -1) const
     {
+      // TODO ...
+      for (auto i : state_dofs_per_block_) std::cout << i << std::endl;
       return state_dofs_per_block_;
     }
 
@@ -243,6 +244,34 @@ namespace DOpE
     unsigned int GetStateNDoFs(int /*time_point*/= -1) const
     {
       return GetStateDoFHandler().n_dofs();
+    }
+
+    IndexSet GetStateLocallyOwnedDoFs(int /*time_point*/= -1) const
+    {
+        const IndexSet locally_owned = GetStateDoFHandler().GetDEALDoFHandler().locally_owned_dofs();
+        return locally_owned;
+    }
+
+    IndexSet GetStateLocallyRelevantDoFs(int /*time_point*/= -1) const
+    {
+        IndexSet locally_relevant;
+        DoFTools::extract_locally_relevant_dofs(GetStateDoFHandler().GetDEALDoFHandler(), locally_relevant);
+        return locally_relevant;
+    }
+
+    std::vector<IndexSet> GetStateLocallyOwnedDoFsPerBlock(int /*time_point*/= -1) const
+    {
+        const IndexSet locally_owned = GetStateDoFHandler().GetDEALDoFHandler().locally_owned_dofs();
+        const auto n_dofs = GetStateDoFsPerBlock(/*time_point*/);
+        return DOpEHelper::split_blockwise(locally_owned, n_dofs);
+    }
+
+    std::vector<IndexSet> GetStateLocallyRelevantDoFsPerBlock(int /*time_point*/= -1) const
+    {
+        IndexSet locally_relevant;
+        DoFTools::extract_locally_relevant_dofs(GetStateDoFHandler().GetDEALDoFHandler(), locally_relevant);
+        const auto n_dofs = GetStateDoFsPerBlock(/*time_point*/);
+        return DOpEHelper::split_blockwise(locally_relevant, n_dofs);
     }
 
     /**
@@ -343,6 +372,7 @@ namespace DOpE
         }
       state_mesh_transfer_ = new dealii::SolutionTransfer<dealdim, VECTOR, DH<dealdim, dealdim> >(state_dof_handler_);
 
+      // TODO switch
       if (DOpEtypes::RefinementType::global == ref_type)
         {
           triangulation_.set_all_refine_flags();
@@ -448,8 +478,7 @@ namespace DOpE
     dealii::ConstraintMatrix state_dof_constraints_;
 
     const dealii::SmartPointer<const FE<dealdim, dealdim> > state_fe_; //TODO is there a reason that this is not a reference?
-    const dealii::SmartPointer<
-    const DOpEWrapper::Mapping<dealdim, DH> > mapping_;
+    const dealii::SmartPointer<const DOpEWrapper::Mapping<dealdim, DH> > mapping_;
 
     std::vector<Point<dealdim> > support_points_;
     dealii::SolutionTransfer<dealdim, VECTOR, DH<dealdim, dealdim> > *state_mesh_transfer_;

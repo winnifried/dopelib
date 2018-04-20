@@ -76,4 +76,55 @@ namespace DOpEHelper
     DOpEHelper::ReSizeVector(ndofs, dofs_per_block, vector);
   }
 
+
+// !!! Daniel !!!
+
+/**
+ * Helper class for the VECTOR-templates. Resizes the given BlockVector vector.
+ */
+void ReSizeVector(unsigned int ndofs,
+                  const std::vector<unsigned int>& dofs_per_block,
+                  dealii::TrilinosWrappers::MPI::BlockVector & vector) {
+    assert(false);
+}
+
+/**
+ * Same as above with different input parameters.
+ */
+void ReSizeVector(const dealii::BlockIndices&, dealii::TrilinosWrappers::MPI::BlockVector & vector) {
+    assert(false);
+}
+
+/*************************************************************************************/
+/**
+ * Helper class for the VECTOR-templates. Resizes the given Vector vector.
+ */
+void ReSizeVector(unsigned int ndofs,
+                  const std::vector<unsigned int>& /*dofs_per_block*/,
+                  dealii::TrilinosWrappers::MPI::Vector & vector) {
+    assert(false);
+}
+/**
+ * Same as above with different input parameters.
+ */
+void ReSizeVector(const dealii::BlockIndices&, dealii::TrilinosWrappers::MPI::Vector & vector) {
+    assert(false);
+}
+
+/**
+ * Splits an index set source into different blocks, block_counts[i] = n_dofs within block i
+ * Application: split locally_owned for block vectors
+ */
+std::vector<dealii::IndexSet> split_blockwise(const dealii::IndexSet & source, const std::vector<unsigned int> & block_counts)
+{
+    std::vector<dealii::IndexSet> result;
+    unsigned int start = 0;
+    for (unsigned int i = 0; i < block_counts.size(); i++)
+    {
+        result.push_back(source.get_view(start, start + block_counts[i]));
+        start += block_counts[i];
+    }
+    return result;
+}
+
 }//end of namespace
