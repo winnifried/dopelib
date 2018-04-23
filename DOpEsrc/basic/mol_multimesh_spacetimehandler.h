@@ -178,6 +178,7 @@ namespace DOpE
       DoFRenumbering::component_wise(static_cast<DH<dim, dim>&>(control_dof_handler_));
 
       control_dof_constraints_.clear();
+      control_dof_constraints_.reinit(GetLocallyRelevantDoFs(DOpEtypes::VectorType::control));
       DoFTools::make_hanging_node_constraints(
         static_cast<DH<dim, dim>&>(control_dof_handler_), control_dof_constraints_);
       if (GetUserDefinedDoFConstraints() != NULL)
@@ -213,6 +214,7 @@ namespace DOpE
       DoFRenumbering::component_wise(static_cast<DH<dim, dim>&>(state_dof_handler_));
 
       state_dof_constraints_.clear();
+      state_dof_constraints_.reinit(GetLocallyRelevantDoFs(DOpEtypes::VectorType::state));
       DoFTools::make_hanging_node_constraints(
         static_cast<DH<dim, dim>&>(state_dof_handler_), state_dof_constraints_);
       //TODO Dirichlet Daten hierueber.
@@ -568,6 +570,7 @@ namespace DOpE
       state_mesh_transfer_ = new DOpEWrapper::SolutionTransfer<dim, VECTOR,
       DH>(state_dof_handler_);
 
+      // TODO switch
       if (DOpEtypes::RefinementType::global == ref_type)
         {
           state_triangulation_.set_all_refine_flags();
@@ -637,6 +640,7 @@ namespace DOpE
       control_mesh_transfer_ = new DOpEWrapper::SolutionTransfer<dim, VECTOR,
       DH>(control_dof_handler_);
 #endif
+      // TODO switch
       if (DOpEtypes::RefinementType::global == ref_type)
         {
           control_triangulation_.set_all_refine_flags();

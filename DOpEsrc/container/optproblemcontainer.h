@@ -3826,7 +3826,7 @@ namespace DOpE
     if ((this->GetType() == "state") || (this->GetType() == "adjoint")
         || (this->GetType() == "adjoint_for_ee")
         || (this->GetType() == "tangent")
-        || (this->GetType() == "adjoint_hessian"))
+        || (this->GetType() == "adjoint_hessian")) // TODO enum
       {
         return GetSpaceTimeHandler()->GetStateDoFsPerBlock();
       }

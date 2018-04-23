@@ -239,6 +239,7 @@ namespace DOpE
       if (dopedim==dealdim)
         {
           control_dof_constraints_.clear ();
+          control_dof_constraints_.reinit(this->GetLocallyRelevantDoFs(DOpEtypes::VectorType::control));
           DoFTools::make_hanging_node_constraints (static_cast<DH<dopedim, dopedim>&>(control_dof_handler_),
                                                    control_dof_constraints_);
           if (GetUserDefinedDoFConstraints() != NULL)
@@ -273,13 +274,10 @@ namespace DOpE
 #else
       {
         for (unsigned int i = 0; i < control_dofs_per_block_.size(); i++)
-          {
-            control_dofs_per_block_[i] = 0;
-          }
+          control_dofs_per_block_[i] = 0;
+
         for (unsigned int i = 0; i < control_block_component.size(); i++)
-          {
-            control_dofs_per_block_[control_block_component[i]]++;
-          }
+          control_dofs_per_block_[control_block_component[i]]++;
       }
 #endif
       SpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dopedim, dealdim>::SetActiveFEIndicesState(
@@ -289,6 +287,7 @@ namespace DOpE
         static_cast<DH<dealdim, dealdim>&>(state_dof_handler_));
 
       state_dof_constraints_.clear();
+      state_dof_constraints_.reinit(this->GetLocallyRelevantDoFs(DOpEtypes::VectorType::state));
       DoFTools::make_hanging_node_constraints(
         static_cast<DH<dealdim, dealdim>&>(state_dof_handler_),
         state_dof_constraints_);
@@ -535,7 +534,7 @@ namespace DOpE
      * Implementation of virtual function in SpaceTimeHandler
      */
     const FE<dealdim, dealdim> &
-    GetFESystem(std::string name) const
+    GetFESystem(std::string name) const // TODO enum
     {
       if (name == "state")
         {
@@ -626,6 +625,7 @@ namespace DOpE
 #endif
       state_mesh_transfer_ = new DOpEWrapper::SolutionTransfer<dealdim, VECTOR,
       DH>(state_dof_handler_);
+      // TODO switch
       if (DOpEtypes::RefinementType::global == ref_type)
         {
           triangulation_.set_all_refine_flags();

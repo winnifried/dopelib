@@ -411,7 +411,7 @@ namespace DOpE
 
         Write("Writing ["+outfile.str()+"]",4);
 
-        if (dof_type == "control")
+        if (dof_type == "control") // TODO enum
           GetReducedProblem()->WriteToFile(q,name,outfile.str(),dof_type,control_ending_);
         else if (dof_type == "state")
           GetReducedProblem()->WriteToFile(q,name,outfile.str(),dof_type,ending_);
