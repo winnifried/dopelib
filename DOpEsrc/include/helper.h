@@ -35,66 +35,6 @@
 
 using namespace dealii;
 
-template<typename >
-struct is_block_type : public std::false_type
-{
-};
-
-template<>
-struct is_block_type<dealii::BlockVector<double>> : public std::true_type
-{
-};
-
-template<>
-struct is_block_type<dealii::TrilinosWrappers::MPI::BlockVector> : public std::true_type
-{
-};
-
-
-// !!! Daniel !!!
-template<typename VectorType>
-struct IsParallelVector
-{
-private:
-  struct yes_type
-  {
-    char c[1];
-  };
-  struct no_type
-  {
-    char c[2];
-  };
-
-  /**
-   * Overload returning true if the class is MPI vector.
-   */
-  // TODO move to dealii library
-  // TODO more parallel vectors
-  static yes_type check_for_parallel_vector(const TrilinosWrappers::MPI::Vector *);
-  static yes_type check_for_parallel_vector(const TrilinosWrappers::MPI::BlockVector *);
-  template<typename T>
-  static yes_type check_for_parallel_vector(const LinearAlgebra::distributed::Vector<T> *);
-  template<typename T>
-  static yes_type check_for_parallel_vector(const LinearAlgebra::distributed::BlockVector<T> *);
-
-  /**
-   * Catch all for all other potential vector types that are not MPI vectors
-   */
-  static no_type check_for_parallel_vector(...);
-
-public:
-  /**
-   * A statically computable value that indicates whether the template
-   * argument to this class is a block vector (in fact whether the type is
-   * derived from BlockVectorBase<T>).
-   */
-  static const bool value = (sizeof(check_for_parallel_vector((VectorType *) 0)) == sizeof(yes_type));
-};
-
-// instantiation of the static member
-template<typename VectorType>
-const bool IsParallelVector<VectorType>::value;
-
 template<typename VECTOR>
 void write(const VECTOR &v, std::ostream &stream)
 {
@@ -144,7 +84,7 @@ namespace DOpEHelper
   inline TrilinosWrappers::MPI::Vector make_distributed(const TrilinosWrappers::MPI::Vector &source, const bool copy_values = true)
   {
     TrilinosWrappers::MPI::Vector res;
-    res.reinit(source.locally_owned_elements(), MPI_COMM_WORLD, true);
+    res.reinit(source.locally_owned_elements(), source.get_mpi_communicator(), true);
     if (copy_values) res = source;
     return res;
   }
@@ -158,7 +98,7 @@ namespace DOpEHelper
     const auto block_owned = DOpEHelper::split_blockwise(source.locally_owned_elements(), counts);
 
     TrilinosWrappers::MPI::BlockVector res;
-    res.reinit(block_owned, MPI_COMM_WORLD, true);
+    res.reinit(block_owned, source.block(0).get_mpi_communicator(), true);
     if (copy_values) res = source;
     return res;
   }

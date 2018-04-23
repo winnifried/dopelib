@@ -82,14 +82,16 @@ namespace DOpE
       const DOpEWrapper::DoFHandler<dim, DH> &dof_handler,
       dealii::TrilinosWrappers::BlockSparsityPattern &sparsity,
       const dealii::ConstraintMatrix &hanging_node_constraints,
-      const std::vector<unsigned int> &blocks) const;
+      const std::vector<unsigned int> &blocks,
+      const MPI_Comm mpi_comm = MPI_COMM_WORLD) const;
 
     virtual void
     ComputeSparsityPattern(
       const DOpEWrapper::DoFHandler<dim, DH> &dof_handler,
       dealii::TrilinosWrappers::SparsityPattern &sparsity,
       const dealii::ConstraintMatrix &hanging_node_constraints,
-      const std::vector<unsigned int> &blocks) const;
+      const std::vector<unsigned int> &blocks,
+      const MPI_Comm mpi_comm = MPI_COMM_WORLD) const;
 
 //      /*
 //       * Experimental status:
@@ -190,7 +192,8 @@ namespace DOpE
     const DOpEWrapper::DoFHandler<dim, DH> &dof_handler,
     dealii::TrilinosWrappers::BlockSparsityPattern &sparsity,
     const dealii::ConstraintMatrix &hanging_node_constraints,
-    const std::vector<unsigned int> &blocks) const
+    const std::vector<unsigned int> &blocks,
+    const MPI_Comm mpi_comm) const
   {
     IndexSet locally_relevant;
     IndexSet locally_owned = dof_handler.GetDEALDoFHandler().locally_owned_dofs();
@@ -199,18 +202,18 @@ namespace DOpE
     const auto block_owned = DOpEHelper::split_blockwise(locally_owned, blocks);
     const auto block_relevant = DOpEHelper::split_blockwise(locally_relevant, blocks);
 
-    // TODO not 100% sure about this + replace MPI_COMM_WORLD)
-    sparsity.reinit(block_owned, block_owned, block_relevant, MPI_COMM_WORLD);
+    // TODO not 100% sure about this
+    sparsity.reinit(block_owned, block_owned, block_relevant, mpi_comm);
 
     if ( flux_pattern_ )
       {
         dealii::DoFTools::make_flux_sparsity_pattern(
-          dof_handler.GetDEALDoFHandler(), sparsity, hanging_node_constraints, false, dealii::Utilities::MPI::this_mpi_process(MPI_COMM_WORLD));
+          dof_handler.GetDEALDoFHandler(), sparsity, hanging_node_constraints, false, dealii::Utilities::MPI::this_mpi_process(mpi_comm));
       }
     else
       {
         dealii::DoFTools::make_sparsity_pattern(
-          dof_handler.GetDEALDoFHandler(), sparsity, hanging_node_constraints, false, dealii::Utilities::MPI::this_mpi_process(MPI_COMM_WORLD));
+          dof_handler.GetDEALDoFHandler(), sparsity, hanging_node_constraints, false, dealii::Utilities::MPI::this_mpi_process(mpi_comm));
       }
     sparsity.compress();
   }
@@ -222,7 +225,8 @@ namespace DOpE
     const DOpEWrapper::DoFHandler<dim, DH> &dof_handler,
     dealii::TrilinosWrappers::SparsityPattern &sparsity,
     const dealii::ConstraintMatrix &hanging_node_constraints,
-    const std::vector<unsigned int> &blocks) const
+    const std::vector<unsigned int> &blocks,
+    const MPI_Comm mpi_comm) const
   {
     unsigned int total_dofs = 0;
     for (unsigned int j = 0; j < blocks.size(); j++)
@@ -232,18 +236,18 @@ namespace DOpE
     IndexSet locally_owned = dof_handler.GetDEALDoFHandler().locally_owned_dofs();
     DoFTools::extract_locally_relevant_dofs(dof_handler.GetDEALDoFHandler(), locally_relevant);
 
-    // TODO not 100% sure about this + replace MPI_COMM_WORLD)
-    sparsity.reinit(locally_owned, locally_owned, locally_relevant, MPI_COMM_WORLD);
+    // TODO not 100% sure about this
+    sparsity.reinit(locally_owned, locally_owned, locally_relevant, mpi_comm);
 
     if ( flux_pattern_ )
       {
         dealii::DoFTools::make_flux_sparsity_pattern(
-          dof_handler.GetDEALDoFHandler(), sparsity, hanging_node_constraints, false, dealii::Utilities::MPI::this_mpi_process(MPI_COMM_WORLD));
+          dof_handler.GetDEALDoFHandler(), sparsity, hanging_node_constraints, false, dealii::Utilities::MPI::this_mpi_process(mpi_comm));
       }
     else
       {
         dealii::DoFTools::make_sparsity_pattern(
-          dof_handler.GetDEALDoFHandler(), sparsity, hanging_node_constraints, false, dealii::Utilities::MPI::this_mpi_process(MPI_COMM_WORLD));
+          dof_handler.GetDEALDoFHandler(), sparsity, hanging_node_constraints, false, dealii::Utilities::MPI::this_mpi_process(mpi_comm));
       }
     sparsity.compress();
   }

@@ -85,6 +85,11 @@ namespace DOpE
       tdfh_.clear();
     }
 
+    virtual MPI_Comm GetMPIComm() const
+      {
+       return MPI_COMM_WORLD; // TODO user provided
+      }
+
     /**
      * This function has to get called after temporal refinement.
      */
@@ -354,12 +359,13 @@ namespace DOpE
     virtual unsigned int GetStateNDoFs(int time_point = -1) const = 0;
 
     // TODO we need only the VECTOR one of those ...
-    // TODO document, move where they belong
+    // TODO document
+
     void ReinitVector(TrilinosWrappers::MPI::Vector &v, const DOpEtypes::VectorType type, const int time_point = -1) const
     {
       const auto locally_owned = GetLocallyOwnedDoFs(type, time_point);
       const auto locally_relevant = GetLocallyRelevantDoFs(type, time_point);
-      v.reinit(locally_owned, locally_relevant, MPI_COMM_WORLD);
+      v.reinit(locally_owned, locally_relevant, GetMPIComm());
       return;
     }
 
@@ -367,7 +373,7 @@ namespace DOpE
     {
       const auto block_locally_owned = DOpEHelper::split_blockwise(GetLocallyOwnedDoFs(type, time_point), GetDoFsPerBlock(type, time_point));
       const auto block_locally_relevant = DOpEHelper::split_blockwise(GetLocallyRelevantDoFs(type, time_point), GetDoFsPerBlock(type, time_point));
-      v.reinit(block_locally_owned, block_locally_relevant, MPI_COMM_WORLD);
+      v.reinit(block_locally_owned, block_locally_relevant, GetMPIComm());
     }
 
     void ReinitVector(Vector<double> &v, const DOpEtypes::VectorType type, const int time_point = -1) const

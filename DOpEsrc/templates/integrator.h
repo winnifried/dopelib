@@ -39,9 +39,6 @@
 #include <container/residualestimator.h>
 #include <basic/dopetypes.h>
 
-// !!! Daniel !!!
-// TODO replace MPI_COMM_WORLD by GetMPIComm()
-
 namespace DOpE
 {
   /**
@@ -1201,7 +1198,7 @@ namespace DOpE
               element[dh]++;
             }
         }
-      return dealii::Utilities::MPI::sum(ret, MPI_COMM_WORLD);
+      return dealii::Utilities::MPI::sum(ret, pde.GetBaseProblem().GetSpaceTimeHandler()->GetMPIComm());
     }
   }
   /*******************************************************************************************/
@@ -1297,7 +1294,7 @@ namespace DOpE
             }
         }
 
-      return dealii::Utilities::MPI::sum(ret, MPI_COMM_WORLD);
+      return dealii::Utilities::MPI::sum(ret, pde.GetBaseProblem().GetSpaceTimeHandler()->GetMPIComm());
 
     }
   }
@@ -1362,7 +1359,7 @@ namespace DOpE
             element[dh]++;
           }
       }
-    return dealii::Utilities::MPI::sum(ret, MPI_COMM_WORLD);
+    return dealii::Utilities::MPI::sum(ret, pde.GetBaseProblem().GetSpaceTimeHandler()->GetMPIComm());
   }
   /*******************************************************************************************/
 

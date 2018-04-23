@@ -296,9 +296,6 @@ namespace DOpE
      */
     void ResizeLocalVectors(unsigned int size) const;
 
-    // !!! Daniel !!!
-    MPI_Comm mpi_comm = MPI_COMM_WORLD;  // TODO use user-defined communicator
-
     mutable std::vector<VECTOR *> state_;
     mutable std::vector<SpatialVectorInfos> state_information_;
 
