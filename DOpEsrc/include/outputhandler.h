@@ -31,9 +31,7 @@
 #include <vector>
 #include <sstream>
 #include <deal.II/lac/vector.h>
-// !!! Daniel !!!
-#include <deal.II/lac/trilinos_vector.h>
-#include <deal.II/lac/trilinos_block_vector.h>
+#include <include/parallel_vectors.h>
 
 #include <container/optproblemcontainer.h>
 #include <include/controlvector.h>

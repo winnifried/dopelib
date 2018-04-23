@@ -552,109 +552,109 @@ namespace DOpE
 
         // !!! Daniel !!!
         if (element[0]->is_locally_owned())
-        {
-        edc.ReInit();
-
-        dofs_per_element = element[0]->get_fe().dofs_per_cell;
-
-        local_vector.reinit(dofs_per_element);
-        local_vector = 0;
-
-        local_dof_indices.resize(0);
-        local_dof_indices.resize(dofs_per_element, 0);
-
-        //the second '1' plays only a role in the stationary case. In the non-stationary
-        //case, scale_ico is set by the time-stepping-scheme
-        pde.ElementEquation(edc, local_vector, 1., 1.);
-        pde.ElementRhs(edc, local_vector, -1.);
-
-        if (need_boundary_integrals && element[0]->at_boundary())
           {
-            for (unsigned int face=0; face < dealii::GeometryInfo<dim>::faces_per_cell; ++face)
+            edc.ReInit();
+
+            dofs_per_element = element[0]->get_fe().dofs_per_cell;
+
+            local_vector.reinit(dofs_per_element);
+            local_vector = 0;
+
+            local_dof_indices.resize(0);
+            local_dof_indices.resize(dofs_per_element, 0);
+
+            //the second '1' plays only a role in the stationary case. In the non-stationary
+            //case, scale_ico is set by the time-stepping-scheme
+            pde.ElementEquation(edc, local_vector, 1., 1.);
+            pde.ElementRhs(edc, local_vector, -1.);
+
+            if (need_boundary_integrals && element[0]->at_boundary())
               {
+                for (unsigned int face=0; face < dealii::GeometryInfo<dim>::faces_per_cell; ++face)
+                  {
 #if DEAL_II_VERSION_GTE(8,3,0)
-                if (element[0]->face(face)->at_boundary()
-                    &&
-                    (find(boundary_equation_colors.begin(),boundary_equation_colors.end(),
-                          element[0]->face(face)->boundary_id()) != boundary_equation_colors.end()))
+                    if (element[0]->face(face)->at_boundary()
+                        &&
+                        (find(boundary_equation_colors.begin(),boundary_equation_colors.end(),
+                              element[0]->face(face)->boundary_id()) != boundary_equation_colors.end()))
 #else
-                if (element[0]->face(face)->at_boundary()
-                    &&
-                    (find(boundary_equation_colors.begin(),boundary_equation_colors.end(),
-                          element[0]->face(face)->boundary_indicator()) != boundary_equation_colors.end()))
+                    if (element[0]->face(face)->at_boundary()
+                        &&
+                        (find(boundary_equation_colors.begin(),boundary_equation_colors.end(),
+                              element[0]->face(face)->boundary_indicator()) != boundary_equation_colors.end()))
 #endif
-                  {
-                    fdc.ReInit(face);
-                    pde.BoundaryEquation(fdc,local_vector, 1., 1.);
-                    pde.BoundaryRhs(fdc,local_vector,-1.);
-                  }
-              }
-          }
-
-        if (need_faces)
-          {
-            for (unsigned int face=0; face < dealii::GeometryInfo<dim>::faces_per_cell; ++face)
-              {
-                if (element[0]->neighbor_index(face) != -1)
-                  {
-                    fdc.ReInit(face);
-                    pde.FaceEquation(fdc, local_vector, 1., 1.);
-                    pde.FaceRhs(fdc, local_vector,-1.);
-                  }
-              }
-          }
-
-        if ( need_interfaces)
-          {
-
-            for (unsigned int face=0; face < dealii::GeometryInfo<dim>::faces_per_cell; ++face)
-              {
-                // auto face_it = element[0]->face(face);
-                // first, check if we are at an interface, i.e. not the neighbour exists and
-                // it has a different material_id than the actual element
-                if (pde.AtInterface(element, face))
-                  {
-                    //There exist now 3 different scenarios, given the actual element and face:
-                    // The neighbour behind this face is [ more | as much | less] refined
-                    // than/as the actual element. We have to distinguish here only between the case 1
-                    // and the other two, because these will be distinguished in in the FaceDataContainer.
-
-                    if (element[0]->neighbor(face)->has_children())
                       {
-                        //first: neighbour is finer
-
-                        for (unsigned int subface_no=0;
-                             subface_no < element[0]->face(face)->n_children();
-                             ++subface_no)
-                          {
-                            //TODO Now here we have to initialise the subface_values on the
-                            // actual element and then the facevalues of the neighbours
-                            fdc.ReInit(face, subface_no);
-                            fdc.ReInitNbr();
-
-                            pde.InterfaceEquation(fdc, local_vector, 1., 1.);
-
-                          }
-                      }
-                    else
-                      {
-                        // either neighbor is as fine as this element or
-                        // it is coarser
-
                         fdc.ReInit(face);
-                        fdc.ReInitNbr();
-                        pde.InterfaceEquation(fdc, local_vector, 1., 1.);
+                        pde.BoundaryEquation(fdc,local_vector, 1., 1.);
+                        pde.BoundaryRhs(fdc,local_vector,-1.);
                       }
+                  }
+              }
 
-                  }                  //endif atinterface
-              }                  //endfor faces
-          }                  //endif need_interfaces
+            if (need_faces)
+              {
+                for (unsigned int face=0; face < dealii::GeometryInfo<dim>::faces_per_cell; ++face)
+                  {
+                    if (element[0]->neighbor_index(face) != -1)
+                      {
+                        fdc.ReInit(face);
+                        pde.FaceEquation(fdc, local_vector, 1., 1.);
+                        pde.FaceRhs(fdc, local_vector,-1.);
+                      }
+                  }
+              }
 
-        //LocalToGlobal
-        const auto &C = pde.GetDoFConstraints();
-        element[0]->get_dof_indices(local_dof_indices);
-        C.distribute_local_to_global(local_vector, local_dof_indices, residual);
-        }  // endif locally owned
+            if ( need_interfaces)
+              {
+
+                for (unsigned int face=0; face < dealii::GeometryInfo<dim>::faces_per_cell; ++face)
+                  {
+                    // auto face_it = element[0]->face(face);
+                    // first, check if we are at an interface, i.e. not the neighbour exists and
+                    // it has a different material_id than the actual element
+                    if (pde.AtInterface(element, face))
+                      {
+                        //There exist now 3 different scenarios, given the actual element and face:
+                        // The neighbour behind this face is [ more | as much | less] refined
+                        // than/as the actual element. We have to distinguish here only between the case 1
+                        // and the other two, because these will be distinguished in in the FaceDataContainer.
+
+                        if (element[0]->neighbor(face)->has_children())
+                          {
+                            //first: neighbour is finer
+
+                            for (unsigned int subface_no=0;
+                                 subface_no < element[0]->face(face)->n_children();
+                                 ++subface_no)
+                              {
+                                //TODO Now here we have to initialise the subface_values on the
+                                // actual element and then the facevalues of the neighbours
+                                fdc.ReInit(face, subface_no);
+                                fdc.ReInitNbr();
+
+                                pde.InterfaceEquation(fdc, local_vector, 1., 1.);
+
+                              }
+                          }
+                        else
+                          {
+                            // either neighbor is as fine as this element or
+                            // it is coarser
+
+                            fdc.ReInit(face);
+                            fdc.ReInitNbr();
+                            pde.InterfaceEquation(fdc, local_vector, 1., 1.);
+                          }
+
+                      }                  //endif atinterface
+                  }                  //endfor faces
+              }                  //endif need_interfaces
+
+            //LocalToGlobal
+            const auto &C = pde.GetDoFConstraints();
+            element[0]->get_dof_indices(local_dof_indices);
+            C.distribute_local_to_global(local_vector, local_dof_indices, residual);
+          }  // endif locally owned
 
         for (unsigned int dh = 1; dh < dof_handler.size(); dh++)
           {
@@ -684,156 +684,156 @@ namespace DOpE
   Integrator<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::ComputeNonlinearLhs(
     PROBLEM &pde, VECTOR &residual)
   {
-      residual = 0.;
-      // Begin integration
-      unsigned int dofs_per_element;
+    residual = 0.;
+    // Begin integration
+    unsigned int dofs_per_element;
 
-      dealii::Vector<SCALAR> local_vector;
+    dealii::Vector<SCALAR> local_vector;
 
-      std::vector<unsigned int> local_dof_indices;
+    std::vector<unsigned int> local_dof_indices;
 
-      const auto &dof_handler =
-        pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandler();
-      auto element =
-        pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandlerBeginActive();
-      auto endc =
-        pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandlerEnd();
+    const auto &dof_handler =
+      pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandler();
+    auto element =
+      pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandlerBeginActive();
+    auto endc =
+      pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandlerEnd();
 
-      // Generate the data containers.
-      GetIntegratorDataContainer().InitializeEDC(pde.GetUpdateFlags(),
-                                                 *(pde.GetBaseProblem().GetSpaceTimeHandler()), element,
-                                                 this->GetParamData(), this->GetDomainData());
-      auto &edc = GetIntegratorDataContainer().GetElementDataContainer();
+    // Generate the data containers.
+    GetIntegratorDataContainer().InitializeEDC(pde.GetUpdateFlags(),
+                                               *(pde.GetBaseProblem().GetSpaceTimeHandler()), element,
+                                               this->GetParamData(), this->GetDomainData());
+    auto &edc = GetIntegratorDataContainer().GetElementDataContainer();
 
-      bool need_faces = pde.HasFaces();
-      bool need_interfaces = pde.HasInterfaces();
-      std::vector<unsigned int> boundary_equation_colors = pde.GetBoundaryEquationColors();
-      bool need_boundary_integrals = (boundary_equation_colors.size() > 0);
+    bool need_faces = pde.HasFaces();
+    bool need_interfaces = pde.HasInterfaces();
+    std::vector<unsigned int> boundary_equation_colors = pde.GetBoundaryEquationColors();
+    bool need_boundary_integrals = (boundary_equation_colors.size() > 0);
 
-      GetIntegratorDataContainer().InitializeFDC(pde.GetFaceUpdateFlags(),
-                                                 *(pde.GetBaseProblem().GetSpaceTimeHandler()),
-                                                 element,
-                                                 this->GetParamData(),
-                                                 this->GetDomainData(),
-                                                 need_interfaces);
-      auto &fdc = GetIntegratorDataContainer().GetFaceDataContainer();
+    GetIntegratorDataContainer().InitializeFDC(pde.GetFaceUpdateFlags(),
+                                               *(pde.GetBaseProblem().GetSpaceTimeHandler()),
+                                               element,
+                                               this->GetParamData(),
+                                               this->GetDomainData(),
+                                               need_interfaces);
+    auto &fdc = GetIntegratorDataContainer().GetFaceDataContainer();
 
-      for (; element[0] != endc[0]; element[0]++)
-        {
-          for (unsigned int dh = 1; dh < dof_handler.size(); dh++)
-            {
-              if (element[dh] == endc[dh])
-                {
-                  throw DOpEException(
-                    "Elementnumbers in DoFHandlers are not matching!",
-                    "mIntegrator::ComputeNonlinearLhs");
-                }
-            }
+    for (; element[0] != endc[0]; element[0]++)
+      {
+        for (unsigned int dh = 1; dh < dof_handler.size(); dh++)
+          {
+            if (element[dh] == endc[dh])
+              {
+                throw DOpEException(
+                  "Elementnumbers in DoFHandlers are not matching!",
+                  "mIntegrator::ComputeNonlinearLhs");
+              }
+          }
 
         // !!! Daniel !!!
         if (element[0]->is_locally_owned())
-        {
-          edc.ReInit();
-          dofs_per_element = element[0]->get_fe().dofs_per_cell;
+          {
+            edc.ReInit();
+            dofs_per_element = element[0]->get_fe().dofs_per_cell;
 
-          local_vector.reinit(dofs_per_element);
-          local_vector = 0;
+            local_vector.reinit(dofs_per_element);
+            local_vector = 0;
 
-          local_dof_indices.resize(0);
-          local_dof_indices.resize(dofs_per_element, 0);
+            local_dof_indices.resize(0);
+            local_dof_indices.resize(dofs_per_element, 0);
 
-          //the second '1' plays only a role in the stationary case. In the non-stationary
-          //case, scale_ico is set by the time-stepping-scheme
-          pde.ElementEquation(edc, local_vector, 1., 1.);
+            //the second '1' plays only a role in the stationary case. In the non-stationary
+            //case, scale_ico is set by the time-stepping-scheme
+            pde.ElementEquation(edc, local_vector, 1., 1.);
 
-          if (need_boundary_integrals)
-            {
-              for (unsigned int face=0; face < dealii::GeometryInfo<dim>::faces_per_cell; ++face)
-                {
+            if (need_boundary_integrals)
+              {
+                for (unsigned int face=0; face < dealii::GeometryInfo<dim>::faces_per_cell; ++face)
+                  {
 #if DEAL_II_VERSION_GTE(8,3,0)
-                  if (element[0]->face(face)->at_boundary()
-                      &&
-                      (find(boundary_equation_colors.begin(),boundary_equation_colors.end(),
-                            element[0]->face(face)->boundary_id()) != boundary_equation_colors.end()))
+                    if (element[0]->face(face)->at_boundary()
+                        &&
+                        (find(boundary_equation_colors.begin(),boundary_equation_colors.end(),
+                              element[0]->face(face)->boundary_id()) != boundary_equation_colors.end()))
 #else
-                  if (element[0]->face(face)->at_boundary()
-                      &&
-                      (find(boundary_equation_colors.begin(),boundary_equation_colors.end(),
-                            element[0]->face(face)->boundary_indicator()) != boundary_equation_colors.end()))
+                    if (element[0]->face(face)->at_boundary()
+                        &&
+                        (find(boundary_equation_colors.begin(),boundary_equation_colors.end(),
+                              element[0]->face(face)->boundary_indicator()) != boundary_equation_colors.end()))
 #endif
-                    {
-                      fdc.ReInit(face);
-                      pde.BoundaryEquation(fdc,local_vector, 1., 1.);
-                    }
-                }
-            }
-          if (need_faces)
-            {
-              for (unsigned int face=0; face < dealii::GeometryInfo<dim>::faces_per_cell; ++face)
-                {
-                  if (element[0]->neighbor_index(face) != -1)
-                    {
-                      fdc.ReInit(face);
-                      pde.FaceEquation(fdc, local_vector, 1., 1.);
-                    }
-                }
-            }
+                      {
+                        fdc.ReInit(face);
+                        pde.BoundaryEquation(fdc,local_vector, 1., 1.);
+                      }
+                  }
+              }
+            if (need_faces)
+              {
+                for (unsigned int face=0; face < dealii::GeometryInfo<dim>::faces_per_cell; ++face)
+                  {
+                    if (element[0]->neighbor_index(face) != -1)
+                      {
+                        fdc.ReInit(face);
+                        pde.FaceEquation(fdc, local_vector, 1., 1.);
+                      }
+                  }
+              }
 
-          if ( need_interfaces)
-            {
+            if ( need_interfaces)
+              {
 
-              for (unsigned int face=0; face < dealii::GeometryInfo<dim>::faces_per_cell; ++face)
-                {
-                  //auto face_it = element[0]->face(face);
-                  // first, check if we are at an interface, i.e. not the neighbour exists and
-                  // it has a different material_id than the actual element
-                  if (pde.AtInterface(element, face))
-                    {
-                      //There exist now 3 different scenarios, given the actual element and face:
-                      // The neighbour behind this face is [ more | as much | less] refined
-                      // than/as the actual element. We have to distinguish here only between the case 1
-                      // and the other two, because these will be distinguished in in the FaceDataContainer.
+                for (unsigned int face=0; face < dealii::GeometryInfo<dim>::faces_per_cell; ++face)
+                  {
+                    //auto face_it = element[0]->face(face);
+                    // first, check if we are at an interface, i.e. not the neighbour exists and
+                    // it has a different material_id than the actual element
+                    if (pde.AtInterface(element, face))
+                      {
+                        //There exist now 3 different scenarios, given the actual element and face:
+                        // The neighbour behind this face is [ more | as much | less] refined
+                        // than/as the actual element. We have to distinguish here only between the case 1
+                        // and the other two, because these will be distinguished in in the FaceDataContainer.
 
-                      if (element[0]->neighbor(face)->has_children())
-                        {
-                          //first: neighbour is finer
+                        if (element[0]->neighbor(face)->has_children())
+                          {
+                            //first: neighbour is finer
 
-                          for (unsigned int subface_no=0;
-                               subface_no < element[0]->face(face)->n_children();
-                               ++subface_no)
-                            {
-                              //TODO Now here we have to initialise the subface_values on the
-                              // actual element and then the facevalues of the neighbours
-                              fdc.ReInit(face, subface_no);
-                              fdc.ReInitNbr();
+                            for (unsigned int subface_no=0;
+                                 subface_no < element[0]->face(face)->n_children();
+                                 ++subface_no)
+                              {
+                                //TODO Now here we have to initialise the subface_values on the
+                                // actual element and then the facevalues of the neighbours
+                                fdc.ReInit(face, subface_no);
+                                fdc.ReInitNbr();
 
-                              pde.InterfaceEquation(fdc, local_vector, 1., 1.);
+                                pde.InterfaceEquation(fdc, local_vector, 1., 1.);
 
-                            }
-                        }
-                      else
-                        {
-                          // either neighbor is as fine as this element or
-                          // it is coarser
+                              }
+                          }
+                        else
+                          {
+                            // either neighbor is as fine as this element or
+                            // it is coarser
 
-                          fdc.ReInit(face);
-                          fdc.ReInitNbr();
-                          pde.InterfaceEquation(fdc, local_vector, 1., 1.);
-                        }
-                    }                    //endif atinterface
-                }                    //endfor face
-            }                    //endif need_interfaces
-          //LocalToGlobal
-          const auto &C = pde.GetDoFConstraints();
-          element[0]->get_dof_indices(local_dof_indices);
-          C.distribute_local_to_global(local_vector, local_dof_indices, residual);
-        }  // endif locally owned
+                            fdc.ReInit(face);
+                            fdc.ReInitNbr();
+                            pde.InterfaceEquation(fdc, local_vector, 1., 1.);
+                          }
+                      }                    //endif atinterface
+                  }                    //endfor face
+              }                    //endif need_interfaces
+            //LocalToGlobal
+            const auto &C = pde.GetDoFConstraints();
+            element[0]->get_dof_indices(local_dof_indices);
+            C.distribute_local_to_global(local_vector, local_dof_indices, residual);
+          }  // endif locally owned
 
-          for (unsigned int dh = 1; dh < dof_handler.size(); dh++)
-            {
-              element[dh]++;
-            }
-    }  // endfor element
+        for (unsigned int dh = 1; dh < dof_handler.size(); dh++)
+          {
+            element[dh]++;
+          }
+      }  // endfor element
 
     residual.compress(VectorOperation::add);
   }
@@ -901,60 +901,60 @@ namespace DOpE
 
         // !!! Daniel !!!
         if (element[0]->is_locally_owned())
-        {
-        edc.ReInit();
-        dofs_per_element = element[0]->get_fe().dofs_per_cell;
-
-        local_vector.reinit(dofs_per_element);
-        local_vector = 0;
-
-        local_dof_indices.resize(0);
-        local_dof_indices.resize(dofs_per_element, 0);
-        pde.ElementRhs(edc, local_vector, 1.);
-
-        if (need_boundary_integrals)
           {
-            for (unsigned int face=0; face < dealii::GeometryInfo<dim>::faces_per_cell; ++face)
+            edc.ReInit();
+            dofs_per_element = element[0]->get_fe().dofs_per_cell;
+
+            local_vector.reinit(dofs_per_element);
+            local_vector = 0;
+
+            local_dof_indices.resize(0);
+            local_dof_indices.resize(dofs_per_element, 0);
+            pde.ElementRhs(edc, local_vector, 1.);
+
+            if (need_boundary_integrals)
               {
+                for (unsigned int face=0; face < dealii::GeometryInfo<dim>::faces_per_cell; ++face)
+                  {
 #if DEAL_II_VERSION_GTE(8,3,0)
-                if (element[0]->face(face)->at_boundary()
-                    &&
-                    (find(boundary_equation_colors.begin(),boundary_equation_colors.end(),
-                          element[0]->face(face)->boundary_id()) != boundary_equation_colors.end()))
+                    if (element[0]->face(face)->at_boundary()
+                        &&
+                        (find(boundary_equation_colors.begin(),boundary_equation_colors.end(),
+                              element[0]->face(face)->boundary_id()) != boundary_equation_colors.end()))
 #else
-                if (element[0]->face(face)->at_boundary()
-                    &&
-                    (find(boundary_equation_colors.begin(),boundary_equation_colors.end(),
-                          element[0]->face(face)->boundary_indicator()) != boundary_equation_colors.end()))
+                    if (element[0]->face(face)->at_boundary()
+                        &&
+                        (find(boundary_equation_colors.begin(),boundary_equation_colors.end(),
+                              element[0]->face(face)->boundary_indicator()) != boundary_equation_colors.end()))
 #endif
-                  {
-                    fdc.ReInit(face);
-                    pde.BoundaryRhs(fdc,local_vector,1.);
+                      {
+                        fdc.ReInit(face);
+                        pde.BoundaryRhs(fdc,local_vector,1.);
+                      }
                   }
               }
-          }
-        if (need_faces)
-          {
-            for (unsigned int face=0; face < dealii::GeometryInfo<dim>::faces_per_cell; ++face)
+            if (need_faces)
               {
-                if (element[0]->neighbor_index(face) != -1)
+                for (unsigned int face=0; face < dealii::GeometryInfo<dim>::faces_per_cell; ++face)
                   {
-                    fdc.ReInit(face);
-                    pde.FaceRhs(fdc, local_vector);
+                    if (element[0]->neighbor_index(face) != -1)
+                      {
+                        fdc.ReInit(face);
+                        pde.FaceRhs(fdc, local_vector);
+                      }
                   }
               }
-          }
-        //LocalToGlobal
-        const auto &C = pde.GetDoFConstraints();
-        element[0]->get_dof_indices(local_dof_indices);
-        C.distribute_local_to_global(local_vector, local_dof_indices, residual);
-        }  // endif locally owned
+            //LocalToGlobal
+            const auto &C = pde.GetDoFConstraints();
+            element[0]->get_dof_indices(local_dof_indices);
+            C.distribute_local_to_global(local_vector, local_dof_indices, residual);
+          }  // endif locally owned
 
         for (unsigned int dh = 1; dh < dof_handler.size(); dh++)
           {
             element[dh]++;
           }
-    }  // endfor element
+      }  // endfor element
 
     residual.compress(VectorOperation::add);
 
@@ -1028,76 +1028,98 @@ namespace DOpE
 
         // !!! Daniel !!!
         if (element[0]->is_locally_owned())
-        {
-        edc.ReInit();
-        dofs_per_element = element[0]->get_fe().dofs_per_cell;
-
-        dealii::FullMatrix<SCALAR> local_matrix(dofs_per_element,
-                                                dofs_per_element);
-        local_matrix = 0;
-
-        local_dof_indices.resize(0);
-        local_dof_indices.resize(dofs_per_element, 0);
-        pde.ElementMatrix(edc, local_matrix);
-
-        if (need_boundary_integrals)
           {
-            for (unsigned int face=0; face < dealii::GeometryInfo<dim>::faces_per_cell; ++face)
+            edc.ReInit();
+            dofs_per_element = element[0]->get_fe().dofs_per_cell;
+
+            dealii::FullMatrix<SCALAR> local_matrix(dofs_per_element,
+                                                    dofs_per_element);
+            local_matrix = 0;
+
+            local_dof_indices.resize(0);
+            local_dof_indices.resize(dofs_per_element, 0);
+            pde.ElementMatrix(edc, local_matrix);
+
+            if (need_boundary_integrals)
               {
+                for (unsigned int face=0; face < dealii::GeometryInfo<dim>::faces_per_cell; ++face)
+                  {
 #if DEAL_II_VERSION_GTE(8,3,0)
-                if (element[0]->face(face)->at_boundary()
-                    &&
-                    (find(boundary_equation_colors.begin(),boundary_equation_colors.end(),
-                          element[0]->face(face)->boundary_id()) != boundary_equation_colors.end()))
+                    if (element[0]->face(face)->at_boundary()
+                        &&
+                        (find(boundary_equation_colors.begin(),boundary_equation_colors.end(),
+                              element[0]->face(face)->boundary_id()) != boundary_equation_colors.end()))
 #else
-                if (element[0]->face(face)->at_boundary()
-                    &&
-                    (find(boundary_equation_colors.begin(),boundary_equation_colors.end(),
-                          element[0]->face(face)->boundary_indicator()) != boundary_equation_colors.end()))
+                    if (element[0]->face(face)->at_boundary()
+                        &&
+                        (find(boundary_equation_colors.begin(),boundary_equation_colors.end(),
+                              element[0]->face(face)->boundary_indicator()) != boundary_equation_colors.end()))
 #endif
-                  {
-                    fdc.ReInit(face);
-                    pde.BoundaryMatrix(fdc, local_matrix);
-                  }
-              }
-          }
-        if (need_faces)
-          {
-            for (unsigned int face=0; face < dealii::GeometryInfo<dim>::faces_per_cell; ++face)
-              {
-                if (element[0]->neighbor_index(face) != -1)
-                  {
-                    fdc.ReInit(face);
-                    pde.FaceMatrix(fdc, local_matrix);
-                  }
-              }
-          }
-
-        if ( need_interfaces)
-          {
-            for (unsigned int face=0; face < dealii::GeometryInfo<dim>::faces_per_cell; ++face)
-              {
-                //auto face_it = element[0]->face(face);
-                // first, check if we are at an interface, i.e. not the neighbour exists and
-                // it has a different material_id than the actual element
-                if (pde.AtInterface(element, face))
-                  {
-                    //There exist now 3 different scenarios, given the actual element and face:
-                    // The neighbour behind this face is [ more | as much | less] refined
-                    // than/as the actual element. We have to distinguish here only between the case 1
-                    // and the other two, because these will be distinguished in in the FaceDataContainer.
-
-                    if (element[0]->neighbor(face)->has_children())
                       {
-                        //first: neighbour is finer
+                        fdc.ReInit(face);
+                        pde.BoundaryMatrix(fdc, local_matrix);
+                      }
+                  }
+              }
+            if (need_faces)
+              {
+                for (unsigned int face=0; face < dealii::GeometryInfo<dim>::faces_per_cell; ++face)
+                  {
+                    if (element[0]->neighbor_index(face) != -1)
+                      {
+                        fdc.ReInit(face);
+                        pde.FaceMatrix(fdc, local_matrix);
+                      }
+                  }
+              }
 
-                        for (unsigned int subface_no=0;
-                             subface_no < element[0]->face(face)->n_children();
-                             ++subface_no)
+            if ( need_interfaces)
+              {
+                for (unsigned int face=0; face < dealii::GeometryInfo<dim>::faces_per_cell; ++face)
+                  {
+                    //auto face_it = element[0]->face(face);
+                    // first, check if we are at an interface, i.e. not the neighbour exists and
+                    // it has a different material_id than the actual element
+                    if (pde.AtInterface(element, face))
+                      {
+                        //There exist now 3 different scenarios, given the actual element and face:
+                        // The neighbour behind this face is [ more | as much | less] refined
+                        // than/as the actual element. We have to distinguish here only between the case 1
+                        // and the other two, because these will be distinguished in in the FaceDataContainer.
+
+                        if (element[0]->neighbor(face)->has_children())
                           {
-                            //TODO Now here we have to initialise the subface_values on the
-                            // actual element and then the facevalues of the neighbours
-                            fdc.ReInit(face, subface_no);
+                            //first: neighbour is finer
+
+                            for (unsigned int subface_no=0;
+                                 subface_no < element[0]->face(face)->n_children();
+                                 ++subface_no)
+                              {
+                                //TODO Now here we have to initialise the subface_values on the
+                                // actual element and then the facevalues of the neighbours
+                                fdc.ReInit(face, subface_no);
+                                fdc.ReInitNbr();
+
+                                //TODO to be swapped out?
+                                nbr_dofs_per_element = fdc.GetNbrNDoFsPerElement();
+                                nbr_local_dof_indices.resize(0);
+                                nbr_local_dof_indices.resize(nbr_dofs_per_element, 0);
+                                dealii::FullMatrix<SCALAR> local_interface_matrix(dofs_per_element,nbr_dofs_per_element );
+                                local_interface_matrix = 0;
+
+                                pde.InterfaceMatrix(fdc, local_interface_matrix);
+
+                                element[0]->get_dof_indices(local_dof_indices);
+                                element[0]->neighbor(face)->get_dof_indices(nbr_local_dof_indices);
+
+                                const auto &C = pde.GetDoFConstraints();
+                                C.distribute_local_to_global(local_interface_matrix, local_dof_indices, nbr_local_dof_indices, matrix);
+                              }
+                          }
+                        else
+                          {
+                            // either neighbor is as fine as this element or it is coarser
+                            fdc.ReInit(face);
                             fdc.ReInitNbr();
 
                             //TODO to be swapped out?
@@ -1115,43 +1137,21 @@ namespace DOpE
                             const auto &C = pde.GetDoFConstraints();
                             C.distribute_local_to_global(local_interface_matrix, local_dof_indices, nbr_local_dof_indices, matrix);
                           }
-                      }
-                    else
-                      {
-                        // either neighbor is as fine as this element or it is coarser
-                        fdc.ReInit(face);
-                        fdc.ReInitNbr();
+                      } //endif atinterface
+                  }  // endfor face
+              } //endif need_interfaces
 
-                        //TODO to be swapped out?
-                        nbr_dofs_per_element = fdc.GetNbrNDoFsPerElement();
-                        nbr_local_dof_indices.resize(0);
-                        nbr_local_dof_indices.resize(nbr_dofs_per_element, 0);
-                        dealii::FullMatrix<SCALAR> local_interface_matrix(dofs_per_element,nbr_dofs_per_element );
-                        local_interface_matrix = 0;
-
-                        pde.InterfaceMatrix(fdc, local_interface_matrix);
-
-                        element[0]->get_dof_indices(local_dof_indices);
-                        element[0]->neighbor(face)->get_dof_indices(nbr_local_dof_indices);
-
-                        const auto &C = pde.GetDoFConstraints();
-                        C.distribute_local_to_global(local_interface_matrix, local_dof_indices, nbr_local_dof_indices, matrix);
-                      }
-                  } //endif atinterface
-                }  // endfor face
-          } //endif need_interfaces
-
-        //LocalToGlobal
-        const auto &C = pde.GetDoFConstraints();
-        element[0]->get_dof_indices(local_dof_indices);
-        C.distribute_local_to_global(local_matrix, local_dof_indices, matrix);
-        }  // endif locally owned
+            //LocalToGlobal
+            const auto &C = pde.GetDoFConstraints();
+            element[0]->get_dof_indices(local_dof_indices);
+            C.distribute_local_to_global(local_matrix, local_dof_indices, matrix);
+          }  // endif locally owned
 
         for (unsigned int dh = 1; dh < dof_handler.size(); dh++)
           {
             element[dh]++;
           }
-    }  // endfor element
+      }  // endfor element
 
     matrix.compress(VectorOperation::add);
   }
@@ -1189,11 +1189,11 @@ namespace DOpE
                 }
             }
 
-            // !!! Daniel !!!
-            if (element[0]->is_locally_owned())
+          // !!! Daniel !!!
+          if (element[0]->is_locally_owned())
             {
-          edc.ReInit();
-          ret += pde.ElementFunctional(edc);
+              edc.ReInit();
+              ret += pde.ElementFunctional(edc);
             }
 
           for (unsigned int dh = 1; dh < dof_handler.size(); dh++)
@@ -1201,7 +1201,7 @@ namespace DOpE
               element[dh]++;
             }
         }
-        return dealii::Utilities::MPI::sum(ret, MPI_COMM_WORLD);
+      return dealii::Utilities::MPI::sum(ret, MPI_COMM_WORLD);
     }
   }
   /*******************************************************************************************/
@@ -1264,31 +1264,31 @@ namespace DOpE
                 }
             }
 
-            // !!! Daniel !!!
-            if (element[0]->is_locally_owned())
+          // !!! Daniel !!!
+          if (element[0]->is_locally_owned())
             {
 
-          if (need_boundary_integrals)
-            {
-              for (unsigned int face=0; face < dealii::GeometryInfo<dim>::faces_per_cell; ++face)
+              if (need_boundary_integrals)
                 {
-#if DEAL_II_VERSION_GTE(8,3,0)
-                  if (element[0]->face(face)->at_boundary()
-                      &&
-                      (find(boundary_functional_colors.begin(),boundary_functional_colors.end(),
-                            element[0]->face(face)->boundary_id()) != boundary_functional_colors.end()))
-#else
-                  if (element[0]->face(face)->at_boundary()
-                      &&
-                      (find(boundary_functional_colors.begin(),boundary_functional_colors.end(),
-                            element[0]->face(face)->boundary_indicator()) != boundary_functional_colors.end()))
-#endif
+                  for (unsigned int face=0; face < dealii::GeometryInfo<dim>::faces_per_cell; ++face)
                     {
-                      fdc.ReInit(face);
-                      ret += pde.BoundaryFunctional(fdc);
+#if DEAL_II_VERSION_GTE(8,3,0)
+                      if (element[0]->face(face)->at_boundary()
+                          &&
+                          (find(boundary_functional_colors.begin(),boundary_functional_colors.end(),
+                                element[0]->face(face)->boundary_id()) != boundary_functional_colors.end()))
+#else
+                      if (element[0]->face(face)->at_boundary()
+                          &&
+                          (find(boundary_functional_colors.begin(),boundary_functional_colors.end(),
+                                element[0]->face(face)->boundary_indicator()) != boundary_functional_colors.end()))
+#endif
+                        {
+                          fdc.ReInit(face);
+                          ret += pde.BoundaryFunctional(fdc);
+                        }
                     }
                 }
-            }
             }  // endif locally owned
 
           for (unsigned int dh=1; dh<dof_handler.size(); dh++)
@@ -1297,7 +1297,7 @@ namespace DOpE
             }
         }
 
-        return dealii::Utilities::MPI::sum(ret, MPI_COMM_WORLD);
+      return dealii::Utilities::MPI::sum(ret, MPI_COMM_WORLD);
 
     }
   }
@@ -1311,59 +1311,57 @@ namespace DOpE
     PROBLEM &pde
   )
   {
+    SCALAR ret = 0.;
+    // Begin integration
+    const auto &dof_handler =
+      pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandler();
+    auto element = pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandlerBeginActive();
+    auto endc = pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandlerEnd();
 
-    {
-      SCALAR ret = 0.;
-      // Begin integration
-      const auto &dof_handler =
-        pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandler();
-      auto element = pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandlerBeginActive();
-      auto endc = pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandlerEnd();
+    GetIntegratorDataContainerFunc().InitializeFDC(pde.GetFaceUpdateFlags(),
+                                                   *(pde.GetBaseProblem().GetSpaceTimeHandler()),
+                                                   element,
+                                                   this->GetParamData(),
+                                                   this->GetDomainData());
+    auto &fdc = GetIntegratorDataContainerFunc().GetFaceDataContainer();
 
-      GetIntegratorDataContainerFunc().InitializeFDC(pde.GetFaceUpdateFlags(),
-                                                     *(pde.GetBaseProblem().GetSpaceTimeHandler()),
-                                                     element,
-                                                     this->GetParamData(),
-                                                     this->GetDomainData());
-      auto &fdc = GetIntegratorDataContainerFunc().GetFaceDataContainer();
+    bool need_faces = pde.HasFaces();
+    if (!need_faces)
+      {
+        throw DOpEException("No faces required!","Integrator::ComputeFaceScalar");
+      }
 
-      bool need_faces = pde.HasFaces();
-      if (!need_faces)
-        {
-          throw DOpEException("No faces required!","Integrator::ComputeFaceScalar");
-        }
+    for (; element[0]!=endc[0]; element[0]++)
+      {
+        for (unsigned int dh=1; dh<dof_handler.size(); dh++)
+          {
+            if ( element[dh] == endc[dh])
+              {
+                throw DOpEException("Elementnumbers in DoFHandlers are not matching!","Integrator::ComputeFaceScalar");
+              }
+          }
 
-      for (; element[0]!=endc[0]; element[0]++)
-        {
-          for (unsigned int dh=1; dh<dof_handler.size(); dh++)
-            {
-              if ( element[dh] == endc[dh])
-                {
-                  throw DOpEException("Elementnumbers in DoFHandlers are not matching!","Integrator::ComputeFaceScalar");
-                }
-            }
 
-        
         if (element[0]->is_locally_owned())
-        {
-          if (need_faces)
-            {
-              for (unsigned int face=0; face < dealii::GeometryInfo<dim>::faces_per_cell; ++face)
-                {
-                  if (element[0]->neighbor_index(face) != -1)
-                    {
-                      fdc.ReInit(face);
-                      ret +=pde.FaceFunctional(fdc);
-                    }
-                }
-            }
-        }  // endif locally owned
+          {
+            if (need_faces)
+              {
+                for (unsigned int face=0; face < dealii::GeometryInfo<dim>::faces_per_cell; ++face)
+                  {
+                    if (element[0]->neighbor_index(face) != -1)
+                      {
+                        fdc.ReInit(face);
+                        ret +=pde.FaceFunctional(fdc);
+                      }
+                  }
+              }
+          }  // endif locally owned
 
-          for (unsigned int dh=1; dh<dof_handler.size(); dh++)
-            {
-              element[dh]++;
-            }
-        }
+        for (unsigned int dh=1; dh<dof_handler.size(); dh++)
+          {
+            element[dh]++;
+          }
+      }
     return dealii::Utilities::MPI::sum(ret, MPI_COMM_WORLD);
   }
   /*******************************************************************************************/
@@ -1670,91 +1668,37 @@ namespace DOpE
 
         // !!! Daniel !!!
         if (element[0]->is_locally_owned())
-        {
-        element_sum.clear();
-        element_sum.resize(n_error_comps, 0);
-
-        edc.ReInit();
-        edc_weight.ReInit();
-
-        //first the element-residual
-        pde.ElementErrorContribution(edc, dwrc, element_sum, 1.);
-        for (unsigned int l =0; l < n_error_comps; l ++)
           {
-            dwrc.GetErrorIndicators(l)(element_index) = element_sum[l];
-          }
-        //dwrc.GetPrimalErrorIndicators()(element_index) = element_sum[0];
-        //dwrc.GetDualErrorIndicators()(element_index) = element_sum[1];
-        element_sum.clear();
-        element_sum.resize(n_error_comps, 0);
+            element_sum.clear();
+            element_sum.resize(n_error_comps, 0);
 
-        //Now to the face terms. We compute them only once for each face and distribute the
-        //afterwards. We choose always to work from the coarser element, if both neigbors of the
-        //face are on the same level, we pick the one with the lower index
-        for (unsigned int face=0; face < dealii::GeometryInfo<dim>::faces_per_cell; ++face)
-          {
-            auto face_it = element[0]->face(face);
+            edc.ReInit();
+            edc_weight.ReInit();
 
-            //check if the face lies at a boundary
-            if (face_it->at_boundary())
+            //first the element-residual
+            pde.ElementErrorContribution(edc, dwrc, element_sum, 1.);
+            for (unsigned int l =0; l < n_error_comps; l ++)
               {
-                fdc.ReInit(face);
-                dwrc.GetFaceWeight().ReInit(face);
-                pde.BoundaryErrorContribution(fdc, dwrc, element_sum, 1.);
-
-#if deal_II_dimension > 1
-                Assert (face_integrals.find (element[0]->face(face)) != face_integrals.end(),
-                        ExcInternalError());
-                Assert (face_integrals[element[0]->face(face)] == face_init,
-                        ExcInternalError());
-
-                face_integrals[element[0]->face(face)] = element_sum;
-#else
-                Assert (face_integrals.find (element[0]->face(face)->vertex_index()) != face_integrals.end(),
-                        ExcInternalError());
-                Assert (face_integrals[element[0]->face(face)->vertex_index()] == face_init,
-                        ExcInternalError());
-
-                face_integrals[element[0]->face(face)->vertex_index()] = element_sum;
-#endif
-                element_sum.clear();
-                element_sum.resize(n_error_comps,0.);
+                dwrc.GetErrorIndicators(l)(element_index) = element_sum[l];
               }
-            else
-              {
-                //There exist now 3 different scenarios, given the actual element and face:
-                // The neighbour behind this face is [ more | as much | less] refined
-                // than/as the actual element. We have to distinguish here only between the case 1
-                // and the other two, because these will be distinguished in in the FaceDataContainer.
-                if (element[0]->neighbor(face)->has_children())
-                  {
-                    //first: neighbour is finer
-                    std::vector<double> sum(n_error_comps,0.);
-                    for (unsigned int subface_no=0;
-                         subface_no < element[0]->face(face)->n_children();
-                         ++subface_no)
-                      {
-                        //TODO Now here we have to initialise the subface_values on the
-                        // actual element and then the facevalues of the neighbours
-                        fdc.ReInit(face, subface_no);
-                        fdc.ReInitNbr();
-                        dwrc.GetFaceWeight().ReInit(face, subface_no);
+            //dwrc.GetPrimalErrorIndicators()(element_index) = element_sum[0];
+            //dwrc.GetDualErrorIndicators()(element_index) = element_sum[1];
+            element_sum.clear();
+            element_sum.resize(n_error_comps, 0);
 
-                        pde.FaceErrorContribution(fdc, dwrc, element_sum, 1.);
-                        for (unsigned int l =0; l < n_error_comps; l ++)
-                          {
-                            sum[l] += element_sum[l];
-                          }
-#if deal_II_dimension > 1
-                        face_integrals[element[0]->neighbor_child_on_subface(face, subface_no)
-                                       ->face(element[0]->neighbor_of_neighbor(face))] = element_sum;
-#else
-                        face_integrals[element[0]->neighbor_child_on_subface(face, subface_no)
-                                       ->face(element[0]->neighbor_of_neighbor(face))->vertex_index()] = element_sum;
-#endif
-                        element_sum.clear();
-                        element_sum.resize(n_error_comps,0);
-                      }
+            //Now to the face terms. We compute them only once for each face and distribute the
+            //afterwards. We choose always to work from the coarser element, if both neigbors of the
+            //face are on the same level, we pick the one with the lower index
+            for (unsigned int face=0; face < dealii::GeometryInfo<dim>::faces_per_cell; ++face)
+              {
+                auto face_it = element[0]->face(face);
+
+                //check if the face lies at a boundary
+                if (face_it->at_boundary())
+                  {
+                    fdc.ReInit(face);
+                    dwrc.GetFaceWeight().ReInit(face);
+                    pde.BoundaryErrorContribution(fdc, dwrc, element_sum, 1.);
 
 #if deal_II_dimension > 1
                     Assert (face_integrals.find (element[0]->face(face)) != face_integrals.end(),
@@ -1762,55 +1706,109 @@ namespace DOpE
                     Assert (face_integrals[element[0]->face(face)] == face_init,
                             ExcInternalError());
 
-                    face_integrals[element[0]->face(face)] = sum;
+                    face_integrals[element[0]->face(face)] = element_sum;
 #else
                     Assert (face_integrals.find (element[0]->face(face)->vertex_index()) != face_integrals.end(),
                             ExcInternalError());
                     Assert (face_integrals[element[0]->face(face)->vertex_index()] == face_init,
                             ExcInternalError());
 
-                    face_integrals[element[0]->face(face)->vertex_index()] = sum;
+                    face_integrals[element[0]->face(face)->vertex_index()] = element_sum;
 #endif
                     element_sum.clear();
-                    element_sum.resize(n_error_comps,0);
+                    element_sum.resize(n_error_comps,0.);
                   }
                 else
                   {
-                    // either neighbor is as fine as this element or
-                    // it is coarser
-                    Assert(element[0]->neighbor(face)->level() <= element[0]->level(),ExcInternalError());
-                    //now we work always from the coarser element. if both elements
-                    //are on the same level, we pick the one with the lower index
-                    if (element[0]->level() == element[0]->neighbor(face)->level()
-                        && element[0]->index() < element[0]->neighbor(face)->index())
+                    //There exist now 3 different scenarios, given the actual element and face:
+                    // The neighbour behind this face is [ more | as much | less] refined
+                    // than/as the actual element. We have to distinguish here only between the case 1
+                    // and the other two, because these will be distinguished in in the FaceDataContainer.
+                    if (element[0]->neighbor(face)->has_children())
                       {
-                        fdc.ReInit(face);
-                        fdc.ReInitNbr();
-                        dwrc.GetFaceWeight().ReInit(face);
+                        //first: neighbour is finer
+                        std::vector<double> sum(n_error_comps,0.);
+                        for (unsigned int subface_no=0;
+                             subface_no < element[0]->face(face)->n_children();
+                             ++subface_no)
+                          {
+                            //TODO Now here we have to initialise the subface_values on the
+                            // actual element and then the facevalues of the neighbours
+                            fdc.ReInit(face, subface_no);
+                            fdc.ReInitNbr();
+                            dwrc.GetFaceWeight().ReInit(face, subface_no);
 
-                        pde.FaceErrorContribution(fdc, dwrc, element_sum, 1.);
+                            pde.FaceErrorContribution(fdc, dwrc, element_sum, 1.);
+                            for (unsigned int l =0; l < n_error_comps; l ++)
+                              {
+                                sum[l] += element_sum[l];
+                              }
+#if deal_II_dimension > 1
+                            face_integrals[element[0]->neighbor_child_on_subface(face, subface_no)
+                                           ->face(element[0]->neighbor_of_neighbor(face))] = element_sum;
+#else
+                            face_integrals[element[0]->neighbor_child_on_subface(face, subface_no)
+                                           ->face(element[0]->neighbor_of_neighbor(face))->vertex_index()] = element_sum;
+#endif
+                            element_sum.clear();
+                            element_sum.resize(n_error_comps,0);
+                          }
+
 #if deal_II_dimension > 1
                         Assert (face_integrals.find (element[0]->face(face)) != face_integrals.end(),
                                 ExcInternalError());
                         Assert (face_integrals[element[0]->face(face)] == face_init,
                                 ExcInternalError());
 
-                        face_integrals[element[0]->face(face)] = element_sum;
+                        face_integrals[element[0]->face(face)] = sum;
 #else
                         Assert (face_integrals.find (element[0]->face(face)->vertex_index()) != face_integrals.end(),
                                 ExcInternalError());
                         Assert (face_integrals[element[0]->face(face)->vertex_index()] == face_init,
                                 ExcInternalError());
 
-                        face_integrals[element[0]->face(face)->vertex_index()] = element_sum;
+                        face_integrals[element[0]->face(face)->vertex_index()] = sum;
 #endif
                         element_sum.clear();
                         element_sum.resize(n_error_comps,0);
                       }
+                    else
+                      {
+                        // either neighbor is as fine as this element or
+                        // it is coarser
+                        Assert(element[0]->neighbor(face)->level() <= element[0]->level(),ExcInternalError());
+                        //now we work always from the coarser element. if both elements
+                        //are on the same level, we pick the one with the lower index
+                        if (element[0]->level() == element[0]->neighbor(face)->level()
+                            && element[0]->index() < element[0]->neighbor(face)->index())
+                          {
+                            fdc.ReInit(face);
+                            fdc.ReInitNbr();
+                            dwrc.GetFaceWeight().ReInit(face);
+
+                            pde.FaceErrorContribution(fdc, dwrc, element_sum, 1.);
+#if deal_II_dimension > 1
+                            Assert (face_integrals.find (element[0]->face(face)) != face_integrals.end(),
+                                    ExcInternalError());
+                            Assert (face_integrals[element[0]->face(face)] == face_init,
+                                    ExcInternalError());
+
+                            face_integrals[element[0]->face(face)] = element_sum;
+#else
+                            Assert (face_integrals.find (element[0]->face(face)->vertex_index()) != face_integrals.end(),
+                                    ExcInternalError());
+                            Assert (face_integrals[element[0]->face(face)->vertex_index()] == face_init,
+                                    ExcInternalError());
+
+                            face_integrals[element[0]->face(face)->vertex_index()] = element_sum;
+#endif
+                            element_sum.clear();
+                            element_sum.resize(n_error_comps,0);
+                          }
+                      }
                   }
-              }
-          }                  //endfor faces
-        }  // endif locally owned
+              }                  //endfor faces
+          }  // endif locally owned
 
         for (unsigned int dh = 1; dh < dof_handler.size(); dh++)
           {
@@ -1831,56 +1829,56 @@ namespace DOpE
          element[0] !=endc[0]; element[0]++, ++present_element)
       {
         if (element[0]->is_locally_owned())
-        {
-        for (unsigned int face_no = 0;
-             face_no < GeometryInfo<dim>::faces_per_cell; ++face_no)
           {
-#if deal_II_dimension > 1
-            Assert(
-              face_integrals.find(element[0]->face(face_no)) != face_integrals.end(),
-              ExcInternalError());
-#else
-            Assert(
-              face_integrals.find(element[0]->face(face_no)->vertex_index()) != face_integrals.end(),
-              ExcInternalError());
-#endif
-            if (element[0]->face(face_no)->at_boundary())
+            for (unsigned int face_no = 0;
+                 face_no < GeometryInfo<dim>::faces_per_cell; ++face_no)
               {
-                for (unsigned int l =0; l < n_error_comps; l ++)
-                  {
 #if deal_II_dimension > 1
-                    dwrc.GetErrorIndicators(l)(present_element) +=
-                      face_integrals[element[0]->face(face_no)][l];
+                Assert(
+                  face_integrals.find(element[0]->face(face_no)) != face_integrals.end(),
+                  ExcInternalError());
 #else
-                    dwrc.GetErrorIndicators(l)(present_element) +=
-                      face_integrals[element[0]->face(face_no)->vertex_index()][l];
+                Assert(
+                  face_integrals.find(element[0]->face(face_no)->vertex_index()) != face_integrals.end(),
+                  ExcInternalError());
 #endif
-                  }
+                if (element[0]->face(face_no)->at_boundary())
+                  {
+                    for (unsigned int l =0; l < n_error_comps; l ++)
+                      {
+#if deal_II_dimension > 1
+                        dwrc.GetErrorIndicators(l)(present_element) +=
+                          face_integrals[element[0]->face(face_no)][l];
+#else
+                        dwrc.GetErrorIndicators(l)(present_element) +=
+                          face_integrals[element[0]->face(face_no)->vertex_index()][l];
+#endif
+                      }
 //              dwrc.GetPrimalErrorIndicators()(present_element) +=
 //              face_integrals[element[0]->face(face_no)][0];
 //              dwrc.GetDualErrorIndicators()(present_element) +=
 //              face_integrals[element[0]->face(face_no)][1];
-              }
-            else
-              {
-                for (unsigned int l =0; l < n_error_comps; l ++)
-                  {
-#if deal_II_dimension > 1
-                    dwrc.GetErrorIndicators(l)(present_element) +=
-                      0.5*face_integrals[element[0]->face(face_no)][l];
-#else
-                    dwrc.GetErrorIndicators(l)(present_element) +=
-                      0.5*face_integrals[element[0]->face(face_no)->vertex_index()][l];
-#endif
                   }
+                else
+                  {
+                    for (unsigned int l =0; l < n_error_comps; l ++)
+                      {
+#if deal_II_dimension > 1
+                        dwrc.GetErrorIndicators(l)(present_element) +=
+                          0.5*face_integrals[element[0]->face(face_no)][l];
+#else
+                        dwrc.GetErrorIndicators(l)(present_element) +=
+                          0.5*face_integrals[element[0]->face(face_no)->vertex_index()][l];
+#endif
+                      }
 //              dwrc.GetPrimalErrorIndicators()(present_element) +=
 //              0.5 * face_integrals[element[0]->face(face_no)][0];
 //              dwrc.GetDualErrorIndicators()(present_element) +=
 //              0.5 * face_integrals[element[0]->face(face_no)][1];
-              }
+                  }
 
-          }
-        }  // endif locally owned
+              }
+          }  // endif locally owned
       }
   }
   /*******************************************************************************************/
@@ -1974,150 +1972,150 @@ namespace DOpE
 
         // !!! Daniel !!!
         if (element[0]->is_locally_owned())
-        {
-        element_sum.clear();
-        element_sum.resize(2, 0);
-
-        edc.ReInit();
-        dwrc.InitElement(element[0]->diameter());
-        //first the element-residual
-        pde.ElementErrorContribution(edc, dwrc, element_sum, 1.);
-        dwrc.GetPrimalErrorIndicators()(element_index) = element_sum[0];
-        dwrc.GetDualErrorIndicators()(element_index) = element_sum[1];
-        element_sum.clear();
-        element_sum.resize(2, 0);
-        //Now to the face terms. We compute them only once for each face and distribute the
-        //afterwards. We choose always to work from the coarser element, if both neigbors of the
-        //face are on the same level, we pick the one with the lower index
-
-        for (unsigned int face=0; face < dealii::GeometryInfo<dim>::faces_per_cell; ++face)
           {
-            auto face_it = element[0]->face(face);
+            element_sum.clear();
+            element_sum.resize(2, 0);
 
-            //check if the face lies at a boundary
-            if (face_it->at_boundary())
-              {
-                fdc.ReInit(face);
-#if deal_II_dimension > 1
-                dwrc.InitFace(element[0]->face(face)->diameter());
-#else
-                dwrc.InitFace(element[0]->diameter());
-#endif
-                pde.BoundaryErrorContribution(fdc, dwrc, element_sum, 1.);
+            edc.ReInit();
+            dwrc.InitElement(element[0]->diameter());
+            //first the element-residual
+            pde.ElementErrorContribution(edc, dwrc, element_sum, 1.);
+            dwrc.GetPrimalErrorIndicators()(element_index) = element_sum[0];
+            dwrc.GetDualErrorIndicators()(element_index) = element_sum[1];
+            element_sum.clear();
+            element_sum.resize(2, 0);
+            //Now to the face terms. We compute them only once for each face and distribute the
+            //afterwards. We choose always to work from the coarser element, if both neigbors of the
+            //face are on the same level, we pick the one with the lower index
 
-#if deal_II_dimension > 1
-                Assert (face_integrals.find (element[0]->face(face)) != face_integrals.end(),
-                        ExcInternalError());
-                Assert (face_integrals[element[0]->face(face)] == face_init,
-                        ExcInternalError());
-                face_integrals[element[0]->face(face)] = element_sum;
-#else
-                Assert (face_integrals.find (element[0]->face(face)->vertex_index()) != face_integrals.end(),
-                        ExcInternalError());
-                Assert (face_integrals[element[0]->face(face)->vertex_index()] == face_init,
-                        ExcInternalError());
-                face_integrals[element[0]->face(face)->vertex_index()] = element_sum;
-#endif
-                element_sum.clear();
-                element_sum.resize(2,0.);
-              }
-            else
+            for (unsigned int face=0; face < dealii::GeometryInfo<dim>::faces_per_cell; ++face)
               {
-                //There exist now 3 different scenarios, given the actual element and face:
-                // The neighbour behind this face is [ more | as much | less] refined
-                // than/as the actual element. We have to distinguish here only between the case 1
-                // and the other two, because these will be distinguished in in the FaceDataContainer.
-                if (element[0]->neighbor(face)->has_children())
+                auto face_it = element[0]->face(face);
+
+                //check if the face lies at a boundary
+                if (face_it->at_boundary())
                   {
-                    //first: neighbour is finer
-                    std::vector<double> sum(2,0.);
-                    for (unsigned int subface_no=0;
-                         subface_no < element[0]->face(face)->n_children();
-                         ++subface_no)
-                      {
-                        //TODO Now here we have to initialise the subface_values on the
-                        // actual element and then the facevalues of the neighbours
-                        fdc.ReInit(face, subface_no);
-                        fdc.ReInitNbr();
+                    fdc.ReInit(face);
 #if deal_II_dimension > 1
-                        dwrc.InitFace(element[0]->face(face)->diameter());
+                    dwrc.InitFace(element[0]->face(face)->diameter());
 #else
-                        dwrc.InitFace(element[0]->diameter());
+                    dwrc.InitFace(element[0]->diameter());
 #endif
-
-                        pde.FaceErrorContribution(fdc, dwrc, element_sum, 1.);
-                        sum[0]= element_sum[0];
-                        sum[1]= element_sum[1];
-                        element_sum.clear();
-                        element_sum.resize(2,0);
-#if deal_II_dimension > 1
-                        face_integrals[element[0]->neighbor_child_on_subface(face, subface_no)
-                                       ->face(element[0]->neighbor_of_neighbor(face))] = element_sum;
-#else
-                        face_integrals[element[0]->neighbor_child_on_subface(face, subface_no)
-                                       ->face(element[0]->neighbor_of_neighbor(face))->vertex_index()] = element_sum;
-#endif
-                        element_sum.clear();
-                        element_sum.resize(2,0.);
-                      }
+                    pde.BoundaryErrorContribution(fdc, dwrc, element_sum, 1.);
 
 #if deal_II_dimension > 1
                     Assert (face_integrals.find (element[0]->face(face)) != face_integrals.end(),
                             ExcInternalError());
                     Assert (face_integrals[element[0]->face(face)] == face_init,
                             ExcInternalError());
-
-                    face_integrals[element[0]->face(face)] = sum;
+                    face_integrals[element[0]->face(face)] = element_sum;
 #else
                     Assert (face_integrals.find (element[0]->face(face)->vertex_index()) != face_integrals.end(),
                             ExcInternalError());
                     Assert (face_integrals[element[0]->face(face)->vertex_index()] == face_init,
                             ExcInternalError());
-
-                    face_integrals[element[0]->face(face)->vertex_index()] = sum;
+                    face_integrals[element[0]->face(face)->vertex_index()] = element_sum;
 #endif
+                    element_sum.clear();
+                    element_sum.resize(2,0.);
                   }
                 else
                   {
-                    // either neighbor is as fine as this element or
-                    // it is coarser
-                    Assert(element[0]->neighbor(face)->level() <= element[0]->level(),ExcInternalError());
-                    //now we work always from the coarser element. if both elements
-                    //are on the same level, we pick the one with the lower index
-                    if (element[0]->level() == element[0]->neighbor(face)->level()
-                        && element[0]->index() < element[0]->neighbor(face)->index())
+                    //There exist now 3 different scenarios, given the actual element and face:
+                    // The neighbour behind this face is [ more | as much | less] refined
+                    // than/as the actual element. We have to distinguish here only between the case 1
+                    // and the other two, because these will be distinguished in in the FaceDataContainer.
+                    if (element[0]->neighbor(face)->has_children())
                       {
-                        fdc.ReInit(face);
-                        fdc.ReInitNbr();
+                        //first: neighbour is finer
+                        std::vector<double> sum(2,0.);
+                        for (unsigned int subface_no=0;
+                             subface_no < element[0]->face(face)->n_children();
+                             ++subface_no)
+                          {
+                            //TODO Now here we have to initialise the subface_values on the
+                            // actual element and then the facevalues of the neighbours
+                            fdc.ReInit(face, subface_no);
+                            fdc.ReInitNbr();
 #if deal_II_dimension > 1
-                        dwrc.InitFace(element[0]->face(face)->diameter());
+                            dwrc.InitFace(element[0]->face(face)->diameter());
 #else
-                        dwrc.InitFace(element[0]->diameter());
+                            dwrc.InitFace(element[0]->diameter());
 #endif
 
-                        pde.FaceErrorContribution(fdc, dwrc, element_sum, 1.);
+                            pde.FaceErrorContribution(fdc, dwrc, element_sum, 1.);
+                            sum[0]= element_sum[0];
+                            sum[1]= element_sum[1];
+                            element_sum.clear();
+                            element_sum.resize(2,0);
+#if deal_II_dimension > 1
+                            face_integrals[element[0]->neighbor_child_on_subface(face, subface_no)
+                                           ->face(element[0]->neighbor_of_neighbor(face))] = element_sum;
+#else
+                            face_integrals[element[0]->neighbor_child_on_subface(face, subface_no)
+                                           ->face(element[0]->neighbor_of_neighbor(face))->vertex_index()] = element_sum;
+#endif
+                            element_sum.clear();
+                            element_sum.resize(2,0.);
+                          }
+
 #if deal_II_dimension > 1
                         Assert (face_integrals.find (element[0]->face(face)) != face_integrals.end(),
                                 ExcInternalError());
                         Assert (face_integrals[element[0]->face(face)] == face_init,
                                 ExcInternalError());
 
-                        face_integrals[element[0]->face(face)] = element_sum;
+                        face_integrals[element[0]->face(face)] = sum;
 #else
                         Assert (face_integrals.find (element[0]->face(face)->vertex_index()) != face_integrals.end(),
                                 ExcInternalError());
                         Assert (face_integrals[element[0]->face(face)->vertex_index()] == face_init,
                                 ExcInternalError());
 
-                        face_integrals[element[0]->face(face)->vertex_index()] = element_sum;
+                        face_integrals[element[0]->face(face)->vertex_index()] = sum;
 #endif
-                        element_sum.clear();
-                        element_sum.resize(2,0);
+                      }
+                    else
+                      {
+                        // either neighbor is as fine as this element or
+                        // it is coarser
+                        Assert(element[0]->neighbor(face)->level() <= element[0]->level(),ExcInternalError());
+                        //now we work always from the coarser element. if both elements
+                        //are on the same level, we pick the one with the lower index
+                        if (element[0]->level() == element[0]->neighbor(face)->level()
+                            && element[0]->index() < element[0]->neighbor(face)->index())
+                          {
+                            fdc.ReInit(face);
+                            fdc.ReInitNbr();
+#if deal_II_dimension > 1
+                            dwrc.InitFace(element[0]->face(face)->diameter());
+#else
+                            dwrc.InitFace(element[0]->diameter());
+#endif
+
+                            pde.FaceErrorContribution(fdc, dwrc, element_sum, 1.);
+#if deal_II_dimension > 1
+                            Assert (face_integrals.find (element[0]->face(face)) != face_integrals.end(),
+                                    ExcInternalError());
+                            Assert (face_integrals[element[0]->face(face)] == face_init,
+                                    ExcInternalError());
+
+                            face_integrals[element[0]->face(face)] = element_sum;
+#else
+                            Assert (face_integrals.find (element[0]->face(face)->vertex_index()) != face_integrals.end(),
+                                    ExcInternalError());
+                            Assert (face_integrals[element[0]->face(face)->vertex_index()] == face_init,
+                                    ExcInternalError());
+
+                            face_integrals[element[0]->face(face)->vertex_index()] = element_sum;
+#endif
+                            element_sum.clear();
+                            element_sum.resize(2,0);
+                          }
                       }
                   }
-              }
-          }                  //endfor faces
-        }  // endif locally owned
+              }                  //endfor faces
+          }  // endif locally owned
 
         for (unsigned int dh = 1; dh < dof_handler.size(); dh++)
           {
@@ -2134,38 +2132,38 @@ namespace DOpE
          element[0] !=endc[0]; element[0]++, ++present_element)
       if (element[0]->is_locally_owned())
         {
-      for (unsigned int face_no = 0;
-           face_no < GeometryInfo<dim>::faces_per_cell; ++face_no)
-        {
+          for (unsigned int face_no = 0;
+               face_no < GeometryInfo<dim>::faces_per_cell; ++face_no)
+            {
 #if deal_II_dimension > 1
-          Assert(
-            face_integrals.find(element[0]->face(face_no)) != face_integrals.end(),
-            ExcInternalError());
-          dwrc.GetPrimalErrorIndicators()(present_element) +=
-            0.5 * face_integrals[element[0]->face(face_no)][0];
-          dwrc.GetDualErrorIndicators()(present_element) +=
-            0.5 * face_integrals[element[0]->face(face_no)][1];
+              Assert(
+                face_integrals.find(element[0]->face(face_no)) != face_integrals.end(),
+                ExcInternalError());
+              dwrc.GetPrimalErrorIndicators()(present_element) +=
+                0.5 * face_integrals[element[0]->face(face_no)][0];
+              dwrc.GetDualErrorIndicators()(present_element) +=
+                0.5 * face_integrals[element[0]->face(face_no)][1];
 #else
-          Assert(
-            face_integrals.find(element[0]->face(face_no)->vertex_index()) != face_integrals.end(),
-            ExcInternalError());
-          dwrc.GetPrimalErrorIndicators()(present_element) +=
-            0.5 * face_integrals[element[0]->face(face_no)->vertex_index()][0];
-          dwrc.GetDualErrorIndicators()(present_element) +=
-            0.5 * face_integrals[element[0]->face(face_no)->vertex_index()][1];
+              Assert(
+                face_integrals.find(element[0]->face(face_no)->vertex_index()) != face_integrals.end(),
+                ExcInternalError());
+              dwrc.GetPrimalErrorIndicators()(present_element) +=
+                0.5 * face_integrals[element[0]->face(face_no)->vertex_index()][0];
+              dwrc.GetDualErrorIndicators()(present_element) +=
+                0.5 * face_integrals[element[0]->face(face_no)->vertex_index()][1];
 
 #endif
+            }
+          {
+            //Remove Weights
+            auto wd = dwrc.GetWeightData().begin();
+            auto wend = dwrc.GetWeightData().end();
+            for (; wd != wend; wd++)
+              {
+                DeleteDomainData(wd->first);
+              }
+          }  // endif locally owned
         }
-    {
-      //Remove Weights
-      auto wd = dwrc.GetWeightData().begin();
-      auto wend = dwrc.GetWeightData().end();
-      for (; wd != wend; wd++)
-        {
-          DeleteDomainData(wd->first);
-        }
-        }  // endif locally owned
-    }
   }
 
   /*******************************************************************************************/

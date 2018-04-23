@@ -1,28 +1,30 @@
 /**
-*
-* Copyright (C) 2012-2014 by the DOpElib authors
-*
-* This file is part of DOpElib
-*
-* DOpElib is free software: you can redistribute it
-* and/or modify it under the terms of the GNU General Public
-* License as published by the Free Software Foundation, either
-* version 3 of the License, or (at your option) any later
-* version.
-*
-* DOpElib is distributed in the hope that it will be
-* useful, but WITHOUT ANY WARRANTY; without even the implied
-* warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-* PURPOSE.  See the GNU General Public License for more
-* details.
-*
-* Please refer to the file LICENSE.TXT included in this distribution
-* for further information on this license.
-*
-**/
+ *
+ * Copyright (C) 2012-2014 by the DOpElib authors
+ *
+ * This file is part of DOpElib
+ *
+ * DOpElib is free software: you can redistribute it
+ * and/or modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation, either
+ * version 3 of the License, or (at your option) any later
+ * version.
+ *
+ * DOpElib is distributed in the hope that it will be
+ * useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+ * PURPOSE.  See the GNU General Public License for more
+ * details.
+ *
+ * Please refer to the file LICENSE.TXT included in this distribution
+ * for further information on this license.
+ *
+ **/
 
-#ifndef STATE_VECTOR_H_
-#define STATE_VECTOR_H_
+#pragma once
+
+// TODO remove ...
+#pragma GCC diagnostic ignored "-Wterminate"
 
 #include <basic/spacetimehandler_base.h>
 #include <include/parameterreader.h>
@@ -34,16 +36,14 @@
 #include <deal.II/lac/block_vector_base.h>
 #include <deal.II/lac/block_vector.h>
 
-// !!! Daniel !!!
-// TODO if MPI/Trilinos + documentation + rethink implementation
-#include <deal.II/lac/trilinos_vector.h>
-#include <deal.II/lac/trilinos_block_vector.h>
-#include <deal.II/lac/parallel_block_vector.h>
+#include <include/parallel_vectors.h>
 
 #include <vector>
 #include <iostream>
 #include <sstream>
 #include <fstream>
+
+// TODO is there any reason why dof_number, time_point, ... are non-const ?
 
 namespace DOpE
 {
@@ -60,9 +60,7 @@ namespace DOpE
     //FIXME this is not a real copyconstructor, it just
     //uses the information of ref about size and so on. Is this correct?
     StateVector(const StateVector<VECTOR> &ref);
-    StateVector(const SpaceTimeHandlerBase<VECTOR> *STH,
-                DOpEtypes::VectorStorageType behavior,
-                ParameterReader &param_reader);
+    StateVector(const SpaceTimeHandlerBase<VECTOR> *STH, DOpEtypes::VectorStorageType behavior, ParameterReader &param_reader);
     ~StateVector();
 
     /**
@@ -75,8 +73,7 @@ namespace DOpE
      * @param interval            A TimeIterator. The interval we are currently looking on.
      *
      */
-    void SetTimeDoFNumber(unsigned int dof_number,
-                          const TimeIterator &interval) const;
+    void SetTimeDoFNumber(unsigned int dof_number, const TimeIterator &interval) const;
 
 //    /**
 //     * Sets the time in the vector for interpolation. This Function or SetTimeDoFNumber
@@ -239,11 +236,17 @@ namespace DOpE
         on_disc_ = on_disc;
       }
     };
+
     /**
      * This function resizes the spatial vector at a prior given time point.
      * Hence SetTimeDoFNumber must be called before this function.
      */
-    void ReSizeSpace(unsigned int ndofs, const std::vector<unsigned int> &dofs_per_block) const;
+    // Note: the template<...> thing can be ignored, this is just a wrapper between block and non-block vectors.
+    template<typename _VECTOR = VECTOR, typename std::enable_if<IsBlockVector<_VECTOR>::value, int>::type = 0>
+    void ReSizeSpace(const unsigned int time_point) const;
+
+    template<typename _VECTOR = VECTOR, typename std::enable_if< !IsBlockVector<_VECTOR>::value, int>::type = 0>
+    void ReSizeSpace(const unsigned int time_point) const;
 
     /**
      * Sets the membervariable '_filename' to the name of the file (e.g. the whole path!) corresponding to 'time_point'.
@@ -280,7 +283,7 @@ namespace DOpE
      *
      * @param a, b      References to two BlockVector<double>-Pointers which will be swapped.
      */
-    void SwapPtr(VECTOR *&a,VECTOR *&b ) const;
+    void SwapPtr(VECTOR *&a, VECTOR *&b) const;
 
     /**
      * Writes the vectors corresponding to the current interval
@@ -331,5 +334,148 @@ namespace DOpE
     static unsigned int num_active_;
   };
 
+  template<typename VECTOR>
+  template<typename _VECTOR, typename std::enable_if<IsBlockVector<_VECTOR>::value, int>::type>
+  void StateVector<VECTOR>::ReSizeSpace(const unsigned int time_point) const
+  {
+    const auto ndofs = GetSpaceTimeHandler()->GetStateNDoFs();
+    const auto &dofs_per_block = GetSpaceTimeHandler()->GetStateDoFsPerBlock(time_point);
+
+    if (GetBehavior() == DOpEtypes::VectorStorageType::fullmem || GetBehavior() == DOpEtypes::VectorStorageType::only_recent)
+      {
+        if (accessor_ >= 0)
+          {
+            bool existed = true;
+            if (state_[accessor_] == NULL)
+              {
+                state_[accessor_] = new VECTOR;
+                existed = false;
+              }
+            unsigned int nblocks = dofs_per_block.size();
+            bool reinit = false;
+            if (state_[accessor_]->size() != ndofs)
+              {
+                reinit = true;
+              }
+            else
+              {
+                if (state_[accessor_]->n_blocks() != nblocks)
+                  {
+                    reinit = true;
+                  }
+                else
+                  {
+                    for (unsigned int i = 0; i < nblocks; i++)
+                      if (state_[accessor_]->block(i).size() != dofs_per_block[i]) reinit = true;
+                  }
+              }
+            if (reinit)
+              {
+                if (existed) local_state_ = *(state_[accessor_]);
+
+                GetSpaceTimeHandler()->ReinitVector( *state_[accessor_], DOpEtypes::VectorType::state);
+                if (existed) GetSpaceTimeHandler()->SpatialMeshTransferState(local_state_, *(state_[accessor_]));
+              }
+          }
+        else
+          {
+            //accessor_ < 0
+            if (local_state_.size() != ndofs) GetSpaceTimeHandler()->ReinitVector(local_state_, DOpEtypes::VectorType::state);
+          }
+      }
+    else
+      {
+        if (GetBehavior() == DOpEtypes::VectorStorageType::store_on_disc)
+          {
+            if (accessor_ >= 0)
+              {
+                unsigned int nblocks = dofs_per_block.size();
+                bool reinit = false;
+                if (local_vectors_[global_to_local_[accessor_]]->size() != ndofs)
+                  {
+                    reinit = true;
+                  }
+                else
+                  {
+                    if (local_vectors_[global_to_local_[accessor_]]->n_blocks() != nblocks)
+                      {
+                        reinit = true;
+                      }
+                    else
+                      {
+                        for (unsigned int i = 0; i < nblocks; i++)
+                          if (local_vectors_[global_to_local_[accessor_]]->block(i).size() != dofs_per_block[i]) reinit = true;
+                      }
+                  }
+                if (reinit) GetSpaceTimeHandler()->ReinitVector( *local_vectors_[global_to_local_[accessor_]], DOpEtypes::VectorType::state);
+              }
+            else
+              {
+                if (local_state_.size() != ndofs) GetSpaceTimeHandler()->ReinitVector(local_state_, DOpEtypes::VectorType::state);
+              }
+          }
+        else
+          throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()), "StateVector<dealii::BlockVector<double> >::ReSizeSpace");
+      }
+  }
+
+  template<typename VECTOR>
+  template<typename _VECTOR, typename std::enable_if< !IsBlockVector<_VECTOR>::value, int>::type>
+  void StateVector<VECTOR>::ReSizeSpace(const unsigned int time_point) const
+  {
+    const unsigned int ndofs = GetSpaceTimeHandler()->GetStateNDoFs(time_point);
+
+    if (ndofs == 0) return;
+
+    if (GetBehavior() == DOpEtypes::VectorStorageType::fullmem || GetBehavior() == DOpEtypes::VectorStorageType::only_recent)
+      {
+        if (accessor_ >= 0)
+          {
+            bool existed = true;
+            if (state_[accessor_] == NULL)
+              {
+                state_[accessor_] = new VECTOR;
+                existed = false;
+              }
+
+            bool reinit = false;
+            if (state_[accessor_]->size() != ndofs) reinit = true;
+
+            if (reinit)
+              {
+                if (existed) local_state_ = *(state_[accessor_]);
+
+                GetSpaceTimeHandler()->ReinitVector( *state_[accessor_], DOpEtypes::VectorType::state);
+
+                if (existed) GetSpaceTimeHandler()->SpatialMeshTransferState(local_state_, *(state_[accessor_]));
+              }
+          }
+        else
+          {
+            //accessor < 0
+            if (local_state_.size() != ndofs) GetSpaceTimeHandler()->ReinitVector(local_state_, DOpEtypes::VectorType::state);
+          }
+      }
+    else
+      {
+        if (GetBehavior() == DOpEtypes::VectorStorageType::store_on_disc)
+          {
+            if (accessor_ >= 0)
+              {
+                bool reinit = false;
+                if (local_vectors_[global_to_local_[accessor_]]->size() != ndofs) reinit = true;
+
+                if (reinit) GetSpaceTimeHandler()->ReinitVector( *local_vectors_[global_to_local_[accessor_]], DOpEtypes::VectorType::state);
+              }
+            else
+              {
+                if (local_state_.size() != ndofs) GetSpaceTimeHandler()->ReinitVector(local_state_, DOpEtypes::VectorType::state);
+              }
+          }
+        else
+          throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()), "StateVector<dealii::Vector<double> >::ReSizeSpace");
+      }
+  }
+
 }
-#endif
+

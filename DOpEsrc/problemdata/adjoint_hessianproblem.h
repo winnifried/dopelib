@@ -514,7 +514,7 @@ namespace DOpE
   /******************************************************/
 
   template<typename OPTPROBLEM, typename PDE, typename DD,
-  typename SPARSITYPATTERN, typename VECTOR, int dim>
+           typename SPARSITYPATTERN, typename VECTOR, int dim>
   template<typename EDC>
   void
   Adjoint_HessianProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR,
@@ -527,7 +527,7 @@ namespace DOpE
   /******************************************************/
 
   template<typename OPTPROBLEM, typename PDE, typename DD,
-  typename SPARSITYPATTERN, typename VECTOR, int dim>
+           typename SPARSITYPATTERN, typename VECTOR, int dim>
   template<typename EDC>
   void
   Adjoint_HessianProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR,
@@ -541,7 +541,7 @@ namespace DOpE
   /******************************************************/
 
   template<typename OPTPROBLEM, typename PDE, typename DD,
-  typename SPARSITYPATTERN, typename VECTOR, int dim>
+           typename SPARSITYPATTERN, typename VECTOR, int dim>
   template<typename FDC>
   void
   Adjoint_HessianProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR,
@@ -554,7 +554,7 @@ namespace DOpE
   /******************************************************/
 
   template<typename OPTPROBLEM, typename PDE, typename DD,
-  typename SPARSITYPATTERN, typename VECTOR, int dim>
+           typename SPARSITYPATTERN, typename VECTOR, int dim>
   template<typename FDC>
   void
   Adjoint_HessianProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR,
@@ -566,7 +566,7 @@ namespace DOpE
   /******************************************************/
 
   template<typename OPTPROBLEM, typename PDE, typename DD,
-  typename SPARSITYPATTERN, typename VECTOR, int dim>
+           typename SPARSITYPATTERN, typename VECTOR, int dim>
   template<typename FDC>
   void
   Adjoint_HessianProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR,
@@ -579,7 +579,7 @@ namespace DOpE
   /******************************************************/
 
   template<typename OPTPROBLEM, typename PDE, typename DD,
-  typename SPARSITYPATTERN, typename VECTOR, int dim>
+           typename SPARSITYPATTERN, typename VECTOR, int dim>
   template<typename EDC>
   void
   Adjoint_HessianProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR,
@@ -625,7 +625,7 @@ namespace DOpE
   /******************************************************/
 
   template<typename OPTPROBLEM, typename PDE, typename DD,
-  typename SPARSITYPATTERN, typename VECTOR, int dim>
+           typename SPARSITYPATTERN, typename VECTOR, int dim>
   void
   Adjoint_HessianProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dim>::PointRhs(
     const std::map<std::string, const dealii::Vector<double>*> &param_values,
@@ -711,7 +711,7 @@ namespace DOpE
   /******************************************************/
 
   template<typename OPTPROBLEM, typename PDE, typename DD,
-  typename SPARSITYPATTERN, typename VECTOR, int dim>
+           typename SPARSITYPATTERN, typename VECTOR, int dim>
   template<typename FDC>
   void
   Adjoint_HessianProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR,
@@ -752,7 +752,7 @@ namespace DOpE
   /******************************************************/
 
   template<typename OPTPROBLEM, typename PDE, typename DD,
-  typename SPARSITYPATTERN, typename VECTOR, int dim>
+           typename SPARSITYPATTERN, typename VECTOR, int dim>
   template<typename EDC>
   void
   Adjoint_HessianProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR,
@@ -766,7 +766,7 @@ namespace DOpE
   /******************************************************/
 
   template<typename OPTPROBLEM, typename PDE, typename DD,
-  typename SPARSITYPATTERN, typename VECTOR, int dim>
+           typename SPARSITYPATTERN, typename VECTOR, int dim>
   template<typename EDC>
   void
   Adjoint_HessianProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR,
@@ -779,7 +779,7 @@ namespace DOpE
   /******************************************************/
 
   template<typename OPTPROBLEM, typename PDE, typename DD,
-  typename SPARSITYPATTERN, typename VECTOR, int dim>
+           typename SPARSITYPATTERN, typename VECTOR, int dim>
   template<typename EDC>
   void
   Adjoint_HessianProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR,
@@ -792,7 +792,7 @@ namespace DOpE
   /******************************************************/
 
   template<typename OPTPROBLEM, typename PDE, typename DD,
-  typename SPARSITYPATTERN, typename VECTOR, int dim>
+           typename SPARSITYPATTERN, typename VECTOR, int dim>
   template<typename FDC>
   void
   Adjoint_HessianProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR,
@@ -806,7 +806,7 @@ namespace DOpE
   /******************************************************/
 
   template<typename OPTPROBLEM, typename PDE, typename DD,
-  typename SPARSITYPATTERN, typename VECTOR, int dim>
+           typename SPARSITYPATTERN, typename VECTOR, int dim>
   template<typename FDC>
   void
   Adjoint_HessianProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR,
@@ -820,7 +820,7 @@ namespace DOpE
   /******************************************************/
 
   template<typename OPTPROBLEM, typename PDE, typename DD,
-  typename SPARSITYPATTERN, typename VECTOR, int dim>
+           typename SPARSITYPATTERN, typename VECTOR, int dim>
   template<typename FDC>
   void
   Adjoint_HessianProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR,
@@ -834,7 +834,7 @@ namespace DOpE
   /******************************************************/
 
   template<typename OPTPROBLEM, typename PDE, typename DD,
-  typename SPARSITYPATTERN, typename VECTOR, int dim>
+           typename SPARSITYPATTERN, typename VECTOR, int dim>
   std::string
   Adjoint_HessianProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dim>::GetDoFType() const
   {

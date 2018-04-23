@@ -171,8 +171,14 @@ namespace DOpE
     dealii::SolverGMRES<VECTOR> gmres (solver_control, vector_memory, gmres_data);
     PRECONDITIONER precondition;
     precondition.initialize(matrix_);
-    gmres.solve (matrix_, solution, rhs,
-                 precondition);
+    try // TODO !!! remove
+      {
+        gmres.solve (matrix_, solution, rhs,
+                     precondition);
+      }
+    catch (SolverControl::NoConvergence &)
+      {
+      }
 
     pde.GetDoFConstraints().distribute(solution);
   }

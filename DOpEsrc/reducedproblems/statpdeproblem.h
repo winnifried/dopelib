@@ -460,7 +460,7 @@ namespace DOpE
   void
   StatPDEProblem<NONLINEARSOLVER, INTEGRATOR, PROBLEM, VECTOR, dealdim>::declare_params(
     ParameterReader &param_reader)
-{
+  {
     NONLINEARSOLVER::declare_params(param_reader);
     param_reader.SetSubsection("output parameters");
     param_reader.declare_entry("number of patches", "0",

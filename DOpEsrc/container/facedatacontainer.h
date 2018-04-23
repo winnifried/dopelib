@@ -100,7 +100,7 @@ namespace DOpE
     FaceDataContainer(const Quadrature<dim - 1>& quad,
                       UpdateFlags update_flags,
                       SpaceTimeHandler<FE, dealii::DoFHandler, SPARSITYPATTERN, VECTOR,
-                      dopedim, dealdim>& sth,
+                      dopedim, dealdim> &sth,
                       const std::vector<
                       typename DOpEWrapper::DoFHandler<dim, dealii::DoFHandler>::active_cell_iterator>& element,
                       const std::map<std::string, const Vector<double>*> &param_values,
@@ -151,7 +151,7 @@ namespace DOpE
     FaceDataContainer(const Quadrature<dim - 1>& quad,
                       UpdateFlags update_flags,
                       StateSpaceTimeHandler<FE, dealii::DoFHandler, SPARSITYPATTERN,
-                      VECTOR, dim>& sth,
+                      VECTOR, dim> &sth,
                       const std::vector<
                       typename DOpEWrapper::DoFHandler<dim, dealii::DoFHandler>::active_cell_iterator>& element,
                       const std::map<std::string, const Vector<double>*> &param_values,
@@ -649,7 +649,7 @@ namespace DOpE
       const hp::QCollection<dim - 1>& q_collection,
       UpdateFlags update_flags,
       SpaceTimeHandler<FE, dealii::hp::DoFHandler, SPARSITYPATTERN,
-      VECTOR, dopedim, dealdim>& sth,
+      VECTOR, dopedim, dealdim> &sth,
       const std::vector<
       typename DOpEWrapper::DoFHandler<dim, dealii::hp::DoFHandler>::active_cell_iterator>& element,
       const std::map<std::string, const Vector<double>*> &param_values,
@@ -706,7 +706,7 @@ namespace DOpE
       const hp::QCollection<dim - 1>& q_collection,
       UpdateFlags update_flags,
       StateSpaceTimeHandler<FE, dealii::hp::DoFHandler, SPARSITYPATTERN,
-      VECTOR, dealdim>& sth,
+      VECTOR, dealdim> &sth,
       const std::vector<
       typename DOpEWrapper::DoFHandler<dim, dealii::hp::DoFHandler>::active_cell_iterator>& element,
       const std::map<std::string, const Vector<double>*> &param_values,

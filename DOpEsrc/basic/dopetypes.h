@@ -128,6 +128,15 @@ namespace DOpE
       only_recent
     };
 
+    // TODO document + to string
+    enum VectorType
+    {
+      state,
+      control,
+      constraint,
+      local_constraint
+    };
+
   }//End of namespace DOpEtypes
 
 
@@ -140,6 +149,8 @@ namespace DOpE
     throw DOpEException("Not implemented!","DOpEtypesToString");
   }
 
+  // TODO switch
+
   template <>
   inline std::string DOpEtypesToString(const DOpEtypes::VectorStorageType &t)
   {
@@ -147,21 +158,21 @@ namespace DOpE
       {
         return "fullmem";
       }
-    else if ( DOpEtypes::VectorStorageType::store_on_disc == t )
+    if ( DOpEtypes::VectorStorageType::store_on_disc == t )
       {
         return "store_on_disc";
       }
-    else if ( DOpEtypes::VectorStorageType::only_recent == t )
+    if ( DOpEtypes::VectorStorageType::only_recent == t )
       {
         return "only_recent";
       }
-    else
-      {
-        std::stringstream out;
-        out<<"Unknown DOpEtypes::VectorStorageType"<< std::endl;
-        out<<"Code given is "<< t<<std::endl;
-        throw DOpEException(out.str(),"DOpEtypesToString<DOpEtypes::VectorStorageType");
-      }
+
+    {
+      std::stringstream out;
+      out<<"Unknown DOpEtypes::VectorStorageType"<< std::endl;
+      out<<"Code given is "<< t<<std::endl;
+      throw DOpEException(out.str(),"DOpEtypesToString<DOpEtypes::VectorStorageType");
+    }
   }
 
   template <>
@@ -171,21 +182,21 @@ namespace DOpE
       {
         return "initial";
       }
-    else if ( DOpEtypes::ControlType::stationary == t )
+    if ( DOpEtypes::ControlType::stationary == t )
       {
         return "stationary";
       }
-    else if ( DOpEtypes::ControlType::nonstationary == t )
+    if ( DOpEtypes::ControlType::nonstationary == t )
       {
         return "nonstationary";
       }
-    else
-      {
-        std::stringstream out;
-        out<<"Unknown DOpEtypes::ControlType"<< std::endl;
-        out<<"Code given is "<< t<<std::endl;
-        throw DOpEException(out.str(),"DOpEtypesToString<DOpEtypes::ControlType");
-      }
+
+    {
+      std::stringstream out;
+      out<<"Unknown DOpEtypes::ControlType"<< std::endl;
+      out<<"Code given is "<< t<<std::endl;
+      throw DOpEException(out.str(),"DOpEtypesToString<DOpEtypes::ControlType");
+    }
   }
 
   template <>
@@ -195,29 +206,29 @@ namespace DOpE
       {
         return "global";
       }
-    else if ( DOpEtypes::RefinementType::fixed_fraction == t )
+    if ( DOpEtypes::RefinementType::fixed_fraction == t )
       {
         return "fixed_fraction";
       }
-    else if ( DOpEtypes::RefinementType::fixed_number == t )
+    if ( DOpEtypes::RefinementType::fixed_number == t )
       {
         return "fixed_number";
       }
-    else if ( DOpEtypes::RefinementType::optimized == t )
+    if ( DOpEtypes::RefinementType::optimized == t )
       {
         return "optimized";
       }
-    else if ( DOpEtypes::RefinementType::finest_of_both == t )
+    if ( DOpEtypes::RefinementType::finest_of_both == t )
       {
         return "finest_of_both";
       }
-    else
-      {
-        std::stringstream out;
-        out<<"Unknown DOpEtypes::RefinementType"<< std::endl;
-        out<<"Code given is "<< t<<std::endl;
-        throw DOpEException(out.str(),"DOpEtypesToString<DOpEtypes::RefinementType>");
-      }
+
+    {
+      std::stringstream out;
+      out<<"Unknown DOpEtypes::RefinementType"<< std::endl;
+      out<<"Code given is "<< t<<std::endl;
+      throw DOpEException(out.str(),"DOpEtypesToString<DOpEtypes::RefinementType>");
+    }
   }
 
 }//End of Namespace DOpE

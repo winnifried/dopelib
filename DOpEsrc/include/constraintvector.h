@@ -1,28 +1,27 @@
 /**
-*
-* Copyright (C) 2012-2014 by the DOpElib authors
-*
-* This file is part of DOpElib
-*
-* DOpElib is free software: you can redistribute it
-* and/or modify it under the terms of the GNU General Public
-* License as published by the Free Software Foundation, either
-* version 3 of the License, or (at your option) any later
-* version.
-*
-* DOpElib is distributed in the hope that it will be
-* useful, but WITHOUT ANY WARRANTY; without even the implied
-* warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-* PURPOSE.  See the GNU General Public License for more
-* details.
-*
-* Please refer to the file LICENSE.TXT included in this distribution
-* for further information on this license.
-*
-**/
+ *
+ * Copyright (C) 2012-2014 by the DOpElib authors
+ *
+ * This file is part of DOpElib
+ *
+ * DOpElib is free software: you can redistribute it
+ * and/or modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation, either
+ * version 3 of the License, or (at your option) any later
+ * version.
+ *
+ * DOpElib is distributed in the hope that it will be
+ * useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+ * PURPOSE.  See the GNU General Public License for more
+ * details.
+ *
+ * Please refer to the file LICENSE.TXT included in this distribution
+ * for further information on this license.
+ *
+ **/
 
-#ifndef CONSTRAINT_VECTOR_H_
-#define CONSTRAINT_VECTOR_H_
+#pragma once
 
 #include <basic/spacetimehandler_base.h>
 #include <basic/dopetypes.h>
@@ -30,13 +29,12 @@
 #include <deal.II/lac/vector.h>
 #include <deal.II/lac/block_vector_base.h>
 #include <deal.II/lac/block_vector.h>
-#include <deal.II/lac/trilinos_vector.h>
-#include <deal.II/lac/trilinos_block_vector.h>
+
+#include <include/parallel_vectors.h>
 
 #include <vector>
 #include <iostream>
 #include <sstream>
-
 
 namespace DOpE
 {
@@ -205,7 +203,7 @@ namespace DOpE
      * Meaning that either all or only the positive entries are
      * considered.
      */
-    double Norm(std::string name,std::string restriction = "all") const;
+    double Norm(std::string name, std::string restriction = "all") const;
 
     /**
      *  This function is used to check whether the values
@@ -233,17 +231,16 @@ namespace DOpE
     IsEpsilonFeasible(double eps) const;
 
     /**
-    *  This function is used to check whether the values
-    *  stored in this vector are larger than the given epsilon.
-    *
-    *  @param  eps   The value of epsilon.
-    *
-    *  @return       A boolean beeing true if the constraint is larger than eps
-    *                and false otherwise.
-    */
+     *  This function is used to check whether the values
+     *  stored in this vector are larger than the given epsilon.
+     *
+     *  @param  eps   The value of epsilon.
+     *
+     *  @return       A boolean beeing true if the constraint is larger than eps
+     *                and false otherwise.
+     */
     virtual bool
     IsLargerThan(double eps) const;
-
 
     /**
      *  This function calculates the element-wise product of the
@@ -262,11 +259,11 @@ namespace DOpE
      * This function resizes the spacial vector at a prior given time point.
      * Hence SetTimeDoFNumber should be called before this function.
      */
-    void ReSizeLocalSpace(unsigned int ndofs, const std::vector<unsigned int> &dofs_per_block);
+    void ReSizeLocalSpace();
 
-    void ReSizeGlobal(unsigned int ndofs);
+    void ReSizeGlobal(const unsigned int ndofs);
 
-    std::vector<VECTOR * > local_control_constraint_;
+    std::vector<VECTOR *> local_control_constraint_;
     mutable VECTOR local_constraint_control_;
 
     dealii::Vector<double> global_constraint_;
@@ -278,6 +275,4 @@ namespace DOpE
     unsigned int sfh_ticket_;
   };
 
-
 }
-#endif

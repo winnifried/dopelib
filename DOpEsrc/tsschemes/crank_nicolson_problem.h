@@ -93,7 +93,7 @@ namespace DOpE
 
     /******************************************************/
     CrankNicolsonProblem<OPTPROBLEM, SPARSITYPATTERN, VECTOR,
-    dealdim, FE, DH>&
+    dealdim, FE, DH> &
     GetBaseProblem()
     {
       return *this;

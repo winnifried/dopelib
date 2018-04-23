@@ -62,9 +62,9 @@ namespace DOpE
    *           test space
    */
   template<
-  template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
-           template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
-           template<int, int> class DH, typename VECTOR,  int dealdim>
+    template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
+    template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
+    template<int, int> class DH, typename VECTOR,  int dealdim>
   class PDEInterface
   {
   public:

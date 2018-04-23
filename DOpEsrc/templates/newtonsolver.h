@@ -138,7 +138,7 @@ namespace DOpE
     nonlinear_global_tol_ = param_reader.get_double ("nonlinear_global_tol");
     nonlinear_tol_        = param_reader.get_double ("nonlinear_tol");
     nonlinear_maxiter_    = param_reader.get_integer ("nonlinear_maxiter");
-    nonlinear_rho_        = param_reader.get_double ("nonli near_rho");
+    nonlinear_rho_        = param_reader.get_double ("nonlinear_rho");
 
     line_maxiter_   = param_reader.get_integer ("line_maxiter");
     linesearch_rho_ = param_reader.get_double ("linesearch_rho");
@@ -235,10 +235,10 @@ namespace DOpE
         {
           solution += du;
 
-            MPI_TILL_HERE;
+          MPI_TILL_HERE;
           GetIntegrator().ComputeNonlinearResidual(pde,residual);
 
-            MPI_TILL_HERE;
+          MPI_TILL_HERE;
           residual *= -1.;
 
           pde.GetOutputHandler()->Write(residual,"Residual"+pde.GetType(),pde.GetDoFType());

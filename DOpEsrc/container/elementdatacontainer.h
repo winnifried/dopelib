@@ -106,7 +106,7 @@ namespace DOpE
     ElementDataContainer(const Quadrature<dim> &quad,
                          UpdateFlags update_flags,
                          SpaceTimeHandler<FE, dealii::DoFHandler, SPARSITYPATTERN, VECTOR,
-                         dopedim, dealdim>& sth,
+                         dopedim, dealdim> &sth,
                          const std::vector<
                          typename dealii::DoFHandler<dim>::active_cell_iterator>& element,
                          const std::map<std::string, const Vector<double>*> &param_values,
@@ -148,7 +148,7 @@ namespace DOpE
     ElementDataContainer(const Quadrature<dim> &quad,
                          UpdateFlags update_flags,
                          StateSpaceTimeHandler<FE, dealii::DoFHandler, SPARSITYPATTERN,
-                         VECTOR, dim>& sth,
+                         VECTOR, dim> &sth,
                          const std::vector<
                          typename dealii::DoFHandler<dim>::active_cell_iterator>& element,
                          const std::map<std::string, const Vector<double>*> &param_values,
@@ -422,7 +422,7 @@ namespace DOpE
     ElementDataContainer(const hp::QCollection<dim> &q_collection,
                          UpdateFlags update_flags,
                          SpaceTimeHandler<FE, dealii::hp::DoFHandler, SPARSITYPATTERN,
-                         VECTOR, dopedim, dealdim>& sth,
+                         VECTOR, dopedim, dealdim> &sth,
                          const std::vector<
                          typename DOpEWrapper::DoFHandler<dim, dealii::hp::DoFHandler>::active_cell_iterator>& element,
                          const std::map<std::string, const Vector<double>*> &param_values,
@@ -462,7 +462,7 @@ namespace DOpE
     ElementDataContainer(const hp::QCollection<dim> &q_collection,
                          UpdateFlags update_flags,
                          StateSpaceTimeHandler<FE, dealii::hp::DoFHandler, SPARSITYPATTERN,
-                         VECTOR, dim>& sth,
+                         VECTOR, dim> &sth,
                          const std::vector<
                          typename DOpEWrapper::DoFHandler<dim, dealii::hp::DoFHandler>::active_cell_iterator>& element,
                          const std::map<std::string, const Vector<double>*> &param_values,

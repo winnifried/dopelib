@@ -1,25 +1,25 @@
 /**
-*
-* Copyright (C) 2012-2014 by the DOpElib authors
-*
-* This file is part of DOpElib
-*
-* DOpElib is free software: you can redistribute it
-* and/or modify it under the terms of the GNU General Public
-* License as published by the Free Software Foundation, either
-* version 3 of the License, or (at your option) any later
-* version.
-*
-* DOpElib is distributed in the hope that it will be
-* useful, but WITHOUT ANY WARRANTY; without even the implied
-* warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-* PURPOSE.  See the GNU General Public License for more
-* details.
-*
-* Please refer to the file LICENSE.TXT included in this distribution
-* for further information on this license.
-*
-**/
+ *
+ * Copyright (C) 2012-2014 by the DOpElib authors
+ *
+ * This file is part of DOpElib
+ *
+ * DOpElib is free software: you can redistribute it
+ * and/or modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation, either
+ * version 3 of the License, or (at your option) any later
+ * version.
+ *
+ * DOpElib is distributed in the hope that it will be
+ * useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+ * PURPOSE.  See the GNU General Public License for more
+ * details.
+ *
+ * Please refer to the file LICENSE.TXT included in this distribution
+ * for further information on this license.
+ *
+ **/
 
 #ifndef SPACE_TIME_HANDLER_BASE_H_
 #define SPACE_TIME_HANDLER_BASE_H_
@@ -28,11 +28,8 @@
 #include <deal.II/lac/block_vector_base.h>
 #include <deal.II/lac/block_vector.h>
 
-#include <deal.II/lac/trilinos_vector.h>
-#include <deal.II/lac/trilinos_block_vector.h>
-#include <deal.II/lac/parallel_vector.h>
-#include <deal.II/lac/parallel_block_vector.h>
-
+// !!! Daniel !!!
+#include <include/parallel_vectors.h>
 #include <deal.II/base/index_set.h>
 
 #include <vector>
@@ -45,6 +42,7 @@
 #include <container/refinementcontainer.h>
 #include <basic/dirichletdescriptor.h>
 #include <basic/dopetypes.h>
+#include <include/helper.h>
 
 namespace DOpE
 {
@@ -52,12 +50,14 @@ namespace DOpE
    * Interface to the dimension independent functionality of a
    * SpaceTimeDoFHandler
    */
-  template<typename VECTOR>//has to be a class template because you can not have virtual member function templates.
+  template<typename VECTOR>
+  //has to be a class template because you can not have virtual member function templates.
   class SpaceTimeHandlerBase
   {
   public:
 
-    SpaceTimeHandlerBase(DOpEtypes::ControlType control_type = DOpEtypes::stationary) : control_type_(control_type)
+    SpaceTimeHandlerBase(DOpEtypes::ControlType control_type = DOpEtypes::stationary) :
+      control_type_(control_type)
     {
       time_triangulation_ = NULL;
       state_ticket_ = 1;
@@ -72,16 +72,13 @@ namespace DOpE
       control_ticket_ = 1;
     }
 
-    SpaceTimeHandlerBase(dealii::Triangulation<1> &times,
-                         const dealii::FiniteElement<1> &fe,
-                         DOpEtypes::ControlType type = DOpEtypes::stationary) :
+    SpaceTimeHandlerBase(dealii::Triangulation<1> &times, const dealii::FiniteElement<1> &fe, DOpEtypes::ControlType type = DOpEtypes::stationary) :
       tdfh_(times, fe), interval_(tdfh_.first_interval()), control_type_(type)
     {
       time_triangulation_ = &times;
       state_ticket_ = 1;
       control_ticket_ = 1;
     }
-
 
     virtual ~SpaceTimeHandlerBase()
     {
@@ -108,7 +105,7 @@ namespace DOpE
      */
     unsigned int GetMaxTimePoint() const
     {
-      return (tdfh_.GetNbrOfDoFs()-1);//because we start counting at 0.
+      return (tdfh_.GetNbrOfDoFs() - 1);  //because we start counting at 0.
     }
 
     /**
@@ -118,7 +115,6 @@ namespace DOpE
     {
       return tdfh_.GetNbrOfIntervals();
     }
-
 
     /**
      * Sets the current interval
@@ -130,7 +126,6 @@ namespace DOpE
       interval_ = it;
     }
 
-
     /**
      * Returns the actual interval, which has to be set prior to this function through Setinterval.
      *
@@ -140,7 +135,6 @@ namespace DOpE
     {
       return interval_;
     }
-
 
     /**
      *  Returns the time corresponding to the time_point.
@@ -154,7 +148,6 @@ namespace DOpE
       return tdfh_.GetTime(time_point);
     }
 
-
     /**
      * Returns the TimeDoFHandler.
      */
@@ -162,7 +155,6 @@ namespace DOpE
     {
       return tdfh_;
     }
-
 
     /**
      * Returns the Vector of all time points.
@@ -183,12 +175,10 @@ namespace DOpE
      *  @param local_tiems  A vector of doubles, in which we want to write the position of the
      *                      of the given interval. Needs the correct size beforehand!
      */
-    void
-    GetTimes(const TimeIterator &interval, std::vector<double> &local_times) const
+    void GetTimes(const TimeIterator &interval, std::vector<double> &local_times) const
     {
       return tdfh_.GetTimes(interval, local_times);
     }
-
 
     /**
      * Checks if a ticket is still valid, or if the SpaceTimeHandler has been updated in the meantime.
@@ -224,7 +214,6 @@ namespace DOpE
       return ret;
     }
 
-
     /**
      * Returns the ControlType.
      */
@@ -233,7 +222,6 @@ namespace DOpE
     {
       return control_type_;
     }
-
 
     /**
      * If one requires values at a time not corresponding to a degree of freedom in
@@ -246,9 +234,8 @@ namespace DOpE
      * @param t               The time at which we want to have the  interpolation
      * @param interval        The interval we are currently working on.
      */
-    virtual void
-    InterpolateControl(VECTOR & /*result*/, const std::vector<VECTOR *> &/*local_vectors*/,
-                       double /*t*/, const TimeIterator &/*interval*/) const
+    virtual void InterpolateControl(VECTOR & /*result*/, const std::vector<VECTOR *> &/*local_vectors*/, double /*t*/,
+                                    const TimeIterator &/*interval*/) const
     {
       abort();
     }
@@ -264,8 +251,7 @@ namespace DOpE
      * @param interval        The interval we are currently working on.
      */
     virtual void
-    InterpolateState(VECTOR & /*result*/, const std::vector<VECTOR *> &/*local_vectors*/,
-                     double /*t*/, const TimeIterator &/*interval*/) const = 0;
+    InterpolateState(VECTOR & /*result*/, const std::vector<VECTOR *> &/*local_vectors*/, double /*t*/, const TimeIterator &/*interval*/) const = 0;
     /**
      * If one requires values at a time not corresponding to a degree of freedom in
      * time, one needs to interpolate this value from the others on the interval.
@@ -277,8 +263,8 @@ namespace DOpE
      * @param t               The time at which we want to have the  interpolation
      * @param interval        The interval we are currently working on.
      */
-    virtual void InterpolateConstraint(VECTOR & /*result*/, const std::vector<VECTOR *> &/*local_vectors*/,
-                                       double /*t*/, const TimeIterator &/*interval*/) const
+    virtual void InterpolateConstraint(VECTOR & /*result*/, const std::vector<VECTOR *> &/*local_vectors*/, double /*t*/,
+                                       const TimeIterator &/*interval*/) const
     {
       abort();
     }
@@ -290,10 +276,74 @@ namespace DOpE
      *
      * @ param time_point Indicating the time at which we want to know the DoFs. -1 means now.
      */
-    virtual unsigned int GetControlNDoFs(int /*time_point*/ = -1) const
+    virtual unsigned int GetControlNDoFs(int /*time_point*/= -1) const
     {
       abort();
     }
+
+    // TODO this function should replace all Get...NDoFs functions, currently just wraps around
+    /**
+     * Returns the DoFs for the vector type at the given point time_point.
+     * If time_point==-1, it returns the DoFs for the current time which has
+     * to be set prior to calling this function using SetTimeDoFNumber.
+     *
+     * @ param type Indicates for which quantity (state, constrol, constraint, local constraint)
+     * we want to know the number of DoFs.
+     * @ param time_point Indicating the time at which we want to know the DoFs. -1 means now.
+     */
+    virtual unsigned int GetNDoFs(const DOpEtypes::VectorType type, int time_point = -1) const
+    {
+      switch (type)
+        {
+        case DOpEtypes::VectorType::state:
+          return GetStateNDoFs(time_point);
+        case DOpEtypes::VectorType::constraint:
+          return GetConstraintNDoFs("global");
+        case DOpEtypes::VectorType::local_constraint:
+          return GetConstraintNDoFs("local");
+        case DOpEtypes::VectorType::control:
+          return GetControlNDoFs(time_point);
+        default:
+          assert(false);
+          return 0;
+        }
+    }
+
+    /**
+     * Same as above, but block-wise.
+     *
+     * @ param type Indicates for which quantity (state, constrol, constraint, local constraint)
+     * we want to know the number of DoFs per block.
+     * @ param time_point Indicating the time at which we want to know the DoFs. -1 means now.
+     */
+    virtual std::vector<unsigned int> GetDoFsPerBlock(const DOpEtypes::VectorType type, int time_point = -1) const
+    {
+      switch (type)
+        {
+        case DOpEtypes::VectorType::state:
+          return GetStateDoFsPerBlock(time_point);
+        case DOpEtypes::VectorType::constraint:
+          return GetConstraintDoFsPerBlock("global");
+        case DOpEtypes::VectorType::local_constraint:
+          return GetConstraintDoFsPerBlock("local");
+        case DOpEtypes::VectorType::control:
+          return GetControlDoFsPerBlock(time_point);
+        default:
+          assert(false);
+          return std::vector<unsigned int> { };
+        }
+    }
+
+    /**
+     * Returns the locally owned / relevant DoFs for each type of vector at given time.
+     *
+     * @ param type Indicates for which quantity (state, constrol, constraint, local constraint)
+     * we want to know the number of DoFs per block.
+     * @ param time_point Indicating the time at which we want to know the DoFs. -1 means now.
+     */
+    virtual IndexSet GetLocallyOwnedDoFs(const DOpEtypes::VectorType type, int time_point = -1) const = 0;
+    virtual IndexSet GetLocallyRelevantDoFs(const DOpEtypes::VectorType type, int time_point = -1) const = 0;
+
     /**
      * Returns the DoFs for the state vector at the given point time_point.
      * If time_point==-1, it returns the DoFs for the current time which has
@@ -302,37 +352,34 @@ namespace DOpE
      * @ param time_point Indicating the time at which we want to know the DoFs. -1 means now.
      */
     virtual unsigned int GetStateNDoFs(int time_point = -1) const = 0;
-    
-    // !!! Daniel !!!
-    virtual std::vector<IndexSet> GetStateLocallyOwnedDoFsPerBlock(int time_point = -1) const = 0; // TODO documentation
-    virtual std::vector<IndexSet> GetStateLocallyRelevantDoFsPerBlock(int time_point = -1) const = 0; // TODO documentation
-    virtual IndexSet GetStateLocallyOwnedDoFs(int time_point = -1) const = 0;
-    virtual IndexSet GetStateLocallyRelevantDoFs(int time_point = -1) const = 0;
 
+    // TODO we need only the VECTOR one of those ...
     // TODO document, move where they belong
-    void ReinitVector(TrilinosWrappers::MPI::Vector & v) const
+    void ReinitVector(TrilinosWrappers::MPI::Vector &v, const DOpEtypes::VectorType type, const int time_point = -1) const
     {
-        const auto locally_owned = GetStateLocallyOwnedDoFs();
-        const auto locally_relevant = GetStateLocallyRelevantDoFs();
+      const auto locally_owned = GetLocallyOwnedDoFs(type, time_point);
+      const auto locally_relevant = GetLocallyRelevantDoFs(type, time_point);
+      v.reinit(locally_owned, locally_relevant, MPI_COMM_WORLD);
+      return;
+    }
 
-        v.reinit(locally_owned, locally_relevant, MPI_COMM_WORLD);
-    }
-    void ReinitVector(TrilinosWrappers::MPI::BlockVector & v) const
+    void ReinitVector(TrilinosWrappers::MPI::BlockVector &v, const DOpEtypes::VectorType type, const int time_point = -1) const
     {
-        const auto locally_owned = GetStateLocallyOwnedDoFsPerBlock();
-        const auto locally_relevant = GetStateLocallyRelevantDoFsPerBlock();
+      const auto block_locally_owned = DOpEHelper::split_blockwise(GetLocallyOwnedDoFs(type, time_point), GetDoFsPerBlock(type, time_point));
+      const auto block_locally_relevant = DOpEHelper::split_blockwise(GetLocallyRelevantDoFs(type, time_point), GetDoFsPerBlock(type, time_point));
+      v.reinit(block_locally_owned, block_locally_relevant, MPI_COMM_WORLD);
+    }
 
-        v.reinit(locally_owned, locally_relevant, MPI_COMM_WORLD);
-    }
-    void ReinitVector(Vector<double> & v) const
+    void ReinitVector(Vector<double> &v, const DOpEtypes::VectorType type, const int time_point = -1) const
     {
-        const auto dofs = GetStateNDoFs();
-        v.reinit(dofs);
+      const auto dofs = GetNDoFs(type, time_point);
+      v.reinit(dofs);
     }
-    void ReinitVector(BlockVector<double> & v) const
+
+    void ReinitVector(BlockVector<double> &v, const DOpEtypes::VectorType type, const int time_point = -1) const
     {
-        const auto blocks = GetStateDoFsPerBlock();
-        v.reinit(blocks);
+      const auto blocks = GetDoFsPerBlock(type, time_point);
+      v.reinit(blocks);
     }
 
     /**
@@ -351,7 +398,7 @@ namespace DOpE
      *
      * @ param time_point Indicating the time at which we want to know the DoFs per block. -1 means now.
      */
-    virtual const std::vector<unsigned int> &GetControlDoFsPerBlock(int /*time_point*/ = -1) const
+    virtual const std::vector<unsigned int> &GetControlDoFsPerBlock(int /*time_point*/= -1) const
     {
       abort();
     }
@@ -374,14 +421,14 @@ namespace DOpE
     /**
      * Returns the Number of global in space and time Constraints
      */
-    virtual unsigned int  GetNGlobalConstraints() const
+    virtual unsigned int GetNGlobalConstraints() const
     {
       abort();
     }
     /**
      * Returns the Number of local in space and time Constraints
      */
-    virtual unsigned int  GetNLocalConstraints() const
+    virtual unsigned int GetNLocalConstraints() const
     {
       abort();
     }
@@ -398,8 +445,8 @@ namespace DOpE
      */
     double GetNextStepSize() const
     {
-      assert(interval_!= tdfh_.last_interval());
-      double k = (++interval_).get_k();
+      assert(interval_ != tdfh_.last_interval());
+      double k = ( ++interval_).get_k();
       --interval_;
       return k;
     }
@@ -408,12 +455,11 @@ namespace DOpE
      */
     double GetPreviousStepSize() const
     {
-      assert(interval_!= tdfh_.first_interval());
-      double k = (--interval_).get_k();
+      assert(interval_ != tdfh_.first_interval());
+      double k = ( --interval_).get_k();
       ++interval_;
       return k;
     }
-
 
     /**
      * DEPRECATED. FIXME  We have to think about how to realize this with the new
@@ -428,7 +474,6 @@ namespace DOpE
      *         the return value is identical to argument t given to this function.
      */
     virtual unsigned int NewTimePointToOldTimePoint(unsigned int t) const = 0;
-
 
     /**
      * This functions is used to interpolate Control Vectors after a refinement of the spatial mesh.
@@ -458,9 +503,7 @@ namespace DOpE
      *                       spatial mesh. Only DOpEtypes::RefinementType::global
      *                       is allowed in this method.
      */
-    void
-    RefineTime(DOpEtypes::RefinementType /*ref_type*/ =
-                 DOpEtypes::RefinementType::global)
+    void RefineTime(DOpEtypes::RefinementType /*ref_type*/= DOpEtypes::RefinementType::global)
     {
       //assert(ref_type == DOpEtypes::RefinementType::global);
       RefinementContainer ref_con_dummy;
@@ -477,13 +520,12 @@ namespace DOpE
      *                        RefineFixedNumber and RefineOptimized.
      */
 
-    void
-    RefineTime(const RefinementContainer &ref_container)
+    void RefineTime(const RefinementContainer &ref_container)
     {
       DOpEtypes::RefinementType ref_type = ref_container.GetRefType();
 
       //make sure that we do not use any coarsening
-      assert(!ref_container.UsesCoarsening());
+      assert( !ref_container.UsesCoarsening());
       assert(time_triangulation_ != NULL);
 
       if (DOpEtypes::RefinementType::global == ref_type)
@@ -492,8 +534,7 @@ namespace DOpE
         }
       else
         {
-          throw DOpEException("Not implemented for name =" + DOpEtypesToString(ref_type),
-                              "MethodOfLines_SpaceTimeHandler::RefineTime");
+          throw DOpEException("Not implemented for name =" + DOpEtypesToString(ref_type), "MethodOfLines_SpaceTimeHandler::RefineTime");
         }
       time_triangulation_->prepare_coarsening_and_refinement();
 
@@ -508,7 +549,7 @@ namespace DOpE
      */
     void IncrementStateTicket()
     {
-      assert( state_ticket_ < std::numeric_limits<unsigned int>::max());
+      assert(state_ticket_ < std::numeric_limits<unsigned int>::max());
       state_ticket_++;
     }
 
@@ -517,12 +558,12 @@ namespace DOpE
      */
     void IncrementControlTicket()
     {
-      assert( control_ticket_ < std::numeric_limits<unsigned int>::max());
+      assert(control_ticket_ < std::numeric_limits<unsigned int>::max());
       control_ticket_++;
     }
 
   private:
-    mutable TimeDoFHandler tdfh_;//FIXME Is it really necessary for tdfh_ and interval_ to be mutable? this is really ugly
+    mutable TimeDoFHandler tdfh_;  //FIXME Is it really necessary for tdfh_ and interval_ to be mutable? this is really ugly
     mutable TimeIterator interval_;
     dealii::Triangulation<1> *time_triangulation_;
     unsigned int control_ticket_;

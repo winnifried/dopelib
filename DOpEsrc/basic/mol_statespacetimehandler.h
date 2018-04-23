@@ -204,8 +204,6 @@ namespace DOpE
     const std::vector<unsigned int> &
     GetStateDoFsPerBlock(int /*time_point*/= -1) const
     {
-      // TODO ...
-      for (auto i : state_dofs_per_block_) std::cout << i << std::endl;
       return state_dofs_per_block_;
     }
 
@@ -246,32 +244,59 @@ namespace DOpE
       return GetStateDoFHandler().n_dofs();
     }
 
+    /**
+     * Implementation of virtual function in StateSpaceTimeHandlerBase
+     */
+    virtual IndexSet GetLocallyOwnedDoFs(const DOpEtypes::VectorType type, int time_point = -1) const
+    {
+      switch (type)
+        {
+        case DOpEtypes::VectorType::state:
+        case DOpEtypes::VectorType::constraint:
+        case DOpEtypes::VectorType::local_constraint:
+        case DOpEtypes::VectorType::control:
+        {
+          return GetStateDoFHandler().GetDEALDoFHandler().locally_owned_dofs();
+        }
+        default:
+          assert(false);
+          return IndexSet();
+        }
+    }
+
+    /**
+     * Implementation of virtual function in StateSpaceTimeHandlerBase
+     */
+    virtual IndexSet GetLocallyRelevantDoFs(const DOpEtypes::VectorType type, int time_point = -1) const
+    {
+      switch (type)
+        {
+        case DOpEtypes::VectorType::state:
+        case DOpEtypes::VectorType::constraint:
+        case DOpEtypes::VectorType::local_constraint:
+        case DOpEtypes::VectorType::control:
+        {
+          IndexSet locally_relevant;
+          DoFTools::extract_locally_relevant_dofs(GetStateDoFHandler().GetDEALDoFHandler(), locally_relevant);
+          return locally_relevant;
+        }
+        default:
+          assert(false);
+          return IndexSet();
+        }
+    }
+
     IndexSet GetStateLocallyOwnedDoFs(int /*time_point*/= -1) const
     {
-        const IndexSet locally_owned = GetStateDoFHandler().GetDEALDoFHandler().locally_owned_dofs();
-        return locally_owned;
+      const IndexSet locally_owned = GetStateDoFHandler().GetDEALDoFHandler().locally_owned_dofs();
+      return locally_owned;
     }
 
     IndexSet GetStateLocallyRelevantDoFs(int /*time_point*/= -1) const
     {
-        IndexSet locally_relevant;
-        DoFTools::extract_locally_relevant_dofs(GetStateDoFHandler().GetDEALDoFHandler(), locally_relevant);
-        return locally_relevant;
-    }
-
-    std::vector<IndexSet> GetStateLocallyOwnedDoFsPerBlock(int /*time_point*/= -1) const
-    {
-        const IndexSet locally_owned = GetStateDoFHandler().GetDEALDoFHandler().locally_owned_dofs();
-        const auto n_dofs = GetStateDoFsPerBlock(/*time_point*/);
-        return DOpEHelper::split_blockwise(locally_owned, n_dofs);
-    }
-
-    std::vector<IndexSet> GetStateLocallyRelevantDoFsPerBlock(int /*time_point*/= -1) const
-    {
-        IndexSet locally_relevant;
-        DoFTools::extract_locally_relevant_dofs(GetStateDoFHandler().GetDEALDoFHandler(), locally_relevant);
-        const auto n_dofs = GetStateDoFsPerBlock(/*time_point*/);
-        return DOpEHelper::split_blockwise(locally_relevant, n_dofs);
+      IndexSet locally_relevant;
+      DoFTools::extract_locally_relevant_dofs(GetStateDoFHandler().GetDEALDoFHandler(), locally_relevant);
+      return locally_relevant;
     }
 
     /**

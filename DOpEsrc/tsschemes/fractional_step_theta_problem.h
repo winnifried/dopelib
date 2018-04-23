@@ -102,7 +102,7 @@ namespace DOpE
 
     /******************************************************/
     FractionalStepThetaProblem<OPTPROBLEM, SPARSITYPATTERN, VECTOR,
-    dealdim, FE, DH>&
+    dealdim, FE, DH> &
     GetBaseProblem()
     {
       return *this;

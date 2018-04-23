@@ -27,7 +27,6 @@
 #include <deal.II/lac/vector.h>
 // !!! Daniel !!!
 #include <deal.II/lac/trilinos_vector.h>
-#include <deal.II/lac/trilinos_block_vector.h>
 
 #include <wrapper/fevalues_wrapper.h>
 #include <include/dopeexception.h>
@@ -329,7 +328,7 @@ namespace DOpE
     ElementDataContainerInternal<VECTOR, dim>::GetParamValues(std::string name,
                                                               dealii::Vector<double> &value) const
     {
-    const auto it = param_values_.find(name);
+      const auto it = param_values_.find(name);
       if (it == param_values_.end())
         {
           throw DOpEException("Did not find " + name,

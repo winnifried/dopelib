@@ -1,28 +1,30 @@
 /**
-*
-* Copyright (C) 2012-2014 by the DOpElib authors
-*
-* This file is part of DOpElib
-*
-* DOpElib is free software: you can redistribute it
-* and/or modify it under the terms of the GNU General Public
-* License as published by the Free Software Foundation, either
-* version 3 of the License, or (at your option) any later
-* version.
-*
-* DOpElib is distributed in the hope that it will be
-* useful, but WITHOUT ANY WARRANTY; without even the implied
-* warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-* PURPOSE.  See the GNU General Public License for more
-* details.
-*
-* Please refer to the file LICENSE.TXT included in this distribution
-* for further information on this license.
-*
-**/
+ *
+ * Copyright (C) 2012-2014 by the DOpElib authors
+ *
+ * This file is part of DOpElib
+ *
+ * DOpElib is free software: you can redistribute it
+ * and/or modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation, either
+ * version 3 of the License, or (at your option) any later
+ * version.
+ *
+ * DOpElib is distributed in the hope that it will be
+ * useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+ * PURPOSE.  See the GNU General Public License for more
+ * details.
+ *
+ * Please refer to the file LICENSE.TXT included in this distribution
+ * for further information on this license.
+ *
+ **/
 
-#ifndef CONTROL_VECTOR_H_
-#define CONTROL_VECTOR_H_
+#pragma once
+
+// TODO remove ...
+#pragma GCC diagnostic ignored "-Wterminate"
 
 #include <basic/spacetimehandler_base.h>
 #include <basic/dopetypes.h>
@@ -30,13 +32,12 @@
 #include <deal.II/lac/vector.h>
 #include <deal.II/lac/block_vector_base.h>
 #include <deal.II/lac/block_vector.h>
-#include <deal.II/lac/trilinos_vector.h>
-#include <deal.II/lac/trilinos_block_vector.h>
+
+#include <include/parallel_vectors.h>
 
 #include <vector>
 #include <iostream>
 #include <sstream>
-
 
 namespace DOpE
 {
@@ -233,28 +234,34 @@ namespace DOpE
     void ReInit();
 
     /**
-      * Computes the norm given by name of the vector.
-      * Feasible values are "infty", and "l1"
-      * The string restriction defines if only certain values are
-      * to be considered. Currently "all" and "positive" are feasible
-      * Meaning that either all or only the positive entries are
-      * considered.
-      */
-    double Norm(std::string name,std::string restriction = "all") const;
+     * Computes the norm given by name of the vector.
+     * Feasible values are "infty", and "l1"
+     * The string restriction defines if only certain values are
+     * to be considered. Currently "all" and "positive" are feasible
+     * Meaning that either all or only the positive entries are
+     * considered.
+     */
+    // TODO dealii::NormType
+    double Norm(std::string name, std::string restriction = "all") const;
 
   private:
     /**
      * This function resizes the spacial vector at a prior given time point.
      * Hence SetTimeDoFNumber should be called before this function.
      */
-    void ReSizeSpace(unsigned int ndofs, const std::vector<unsigned int> &dofs_per_block);
+    template<typename _VECTOR = VECTOR, typename std::enable_if<IsBlockVector<_VECTOR>::value, int>::type = 0>
+    void ReSizeSpace(const unsigned int time_point = -1);
+
+    template<typename _VECTOR = VECTOR, typename std::enable_if< !IsBlockVector<_VECTOR>::value, int>::type = 0>
+    void ReSizeSpace(const unsigned int time_point = -1);
+
     /**
      * Writes the vectors corresponding to the current interval
      * into local_vectors_, and adjusts global_to_local_;
      */
     void ComputeLocalVectors(const TimeIterator &interval) const;
 
-    std::vector<VECTOR * > control_;
+    std::vector<VECTOR *> control_;
     mutable VECTOR local_control_;
     mutable dealii::Vector<double> copy_control_;
 
@@ -274,6 +281,99 @@ namespace DOpE
     unsigned int sfh_ticket_;
   };
 
+  // TODO document + move
+  template<typename VECTOR>
+  template<typename _VECTOR, typename std::enable_if< !IsBlockVector<_VECTOR>::value, int>::type>
+  void ControlVector<VECTOR>::ReSizeSpace(const unsigned int time_point)
+  {
+    if (GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
+      {
+        const unsigned int ndofs = GetSpaceTimeHandler()->GetControlNDoFs(time_point);
+
+        if (accessor_ >= 0)
+          {
+            bool existed = true;
+            if (control_[accessor_] == NULL)
+              {
+                control_[accessor_] = new VECTOR();
+                existed = false;
+              }
+
+            if (control_[accessor_]->size() != ndofs)
+              {
+                if (existed) local_control_ = *(control_[accessor_]);
+                GetSpaceTimeHandler()->ReinitVector( *control_[accessor_], DOpEtypes::VectorType::control);
+                if (existed) GetSpaceTimeHandler()->SpatialMeshTransferControl(local_control_, *(control_[accessor_]));
+              }
+          }
+        else
+          {
+            //accessor < 0
+            if (local_control_.size() != ndofs) GetSpaceTimeHandler()->ReinitVector(local_control_, DOpEtypes::VectorType::control);
+          }
+      }
+    else
+      {
+        throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()), "ControlVector<VECTOR>::ReSizeSpace");
+      }
+  }
+
+  template<typename VECTOR>
+  template<typename _VECTOR, typename std::enable_if<IsBlockVector<_VECTOR>::value, int>::type>
+  void ControlVector<VECTOR>::ReSizeSpace(const unsigned int time_point)
+  {
+    if (GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
+      {
+        const unsigned int ndofs = GetSpaceTimeHandler()->GetControlNDoFs(time_point);
+        const auto &dofs_per_block = GetSpaceTimeHandler()->GetStateDoFsPerBlock(time_point);
+        const unsigned int nblocks = dofs_per_block.size();
+
+        if (accessor_ >= 0)
+          {
+            bool existed = true;
+            if (control_[accessor_] == NULL)
+              {
+                control_[accessor_] = new VECTOR();
+                existed = false;
+              }
+
+            //Check if reinitialization is needed
+            bool reinit = false;
+            if (control_[accessor_]->size() != ndofs)
+              {
+                reinit = true;
+              }
+            else
+              {
+                if (control_[accessor_]->n_blocks() != nblocks)
+                  {
+                    reinit = true;
+                  }
+                else
+                  {
+                    for (unsigned int i = 0; i < nblocks; i++)
+                      if (control_[accessor_]->block(i).size() != dofs_per_block[i]) reinit = true;
+                  }
+              }
+            //Check done if reinitialization is needed
+            if (reinit)
+              {
+                if (existed) local_control_ = *(control_[accessor_]);
+                GetSpaceTimeHandler()->ReinitVector( *control_[accessor_], DOpEtypes::VectorType::control);
+                if (existed) GetSpaceTimeHandler()->SpatialMeshTransferControl(local_control_, *(control_[accessor_]));
+              }
+          }  //Done accessor \ge 0
+        else
+          {
+            //accessor_ < 0
+            if (local_control_.size() != ndofs) GetSpaceTimeHandler()->ReinitVector(local_control_, DOpEtypes::VectorType::control);
+          }
+      }
+    else
+      {
+        throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()), "ControlVector<VECTOR>::ReSizeSpace");
+      }
+  }
 
 }
-#endif
+
