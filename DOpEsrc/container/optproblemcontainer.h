@@ -227,7 +227,6 @@ namespace DOpE
       return *adjoint_for_ee_problem_;
     }
 
-
     //TODO This is Pfush needed to split into different subproblems and allow optproblem to
     //be substituted as any of these problems. Can be removed once the splitting is complete.
     OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
@@ -350,9 +349,9 @@ namespace DOpE
     /******************************************************/
     /**
      * This function returns a functional value that is computed entirely
-    * out of the knowledge of the coordinate vectors of state and control.
-    *
-    * No integration routine is implemented inbetween!
+     * out of the knowledge of the coordinate vectors of state and control.
+     *
+     * No integration routine is implemented inbetween!
      */
     double
     AlgebraicFunctional(
@@ -361,9 +360,9 @@ namespace DOpE
 
     /**
      * This function returns a residual to an equation that is depending
-    * directly on the knowledge of the coordinate vectors of state and control.
-    *
-    * No integration routine is implemented inbetween!
+     * directly on the knowledge of the coordinate vectors of state and control.
+     *
+     * No integration routine is implemented inbetween!
      */
     void
     AlgebraicResidual(VECTOR &residual,
@@ -925,10 +924,10 @@ namespace DOpE
      * Sets the actual time.
      *
      * @param time      The actual time.
-    * @param time_dof_number The dofnumber in time associated to the vectors
+     * @param time_dof_number The dofnumber in time associated to the vectors
      * @param interval  The actual interval. Make sure that time
      *                  lies in interval!
-    * @param initial   Do we solve at the initial time?
+     * @param initial   Do we solve at the initial time?
      */
     void
     SetTime(double time,
@@ -1018,12 +1017,12 @@ namespace DOpE
     }
     /*****************************************************************/
     /**
-    * Adds the auxiliary Vectors from the integrator, so that their values are
-    * available for the integrated object.
-    *
-    * @param integrator         The integrator in which the vecors should be available
-    *
-    */
+     * Adds the auxiliary Vectors from the integrator, so that their values are
+     * available for the integrated object.
+     *
+     * @param integrator         The integrator in which the vecors should be available
+     *
+     */
 
     template<typename INTEGRATOR>
     void
@@ -1181,15 +1180,14 @@ namespace DOpE
       }
     }
 
-
     /******************************************************/
     /**
-    * Deletes the auxiliary Vectors from the integrator.
-    * This is required to add vecors of the same name but possibly
-    * at a different point in time.
-    *
-    * @param integrator         The integrator in which the vecors should be available
-    */
+     * Deletes the auxiliary Vectors from the integrator.
+     * This is required to add vecors of the same name but possibly
+     * at a different point in time.
+     *
+     * @param integrator         The integrator in which the vecors should be available
+     */
 
     template<typename INTEGRATOR>
     void
@@ -1296,7 +1294,6 @@ namespace DOpE
                       &dirichlet_colors_,
                       &dirichlet_comps_);
     }
-
 
   protected:
     FUNCTIONAL *
@@ -1409,23 +1406,23 @@ namespace DOpE
     friend class StateProblem<
       OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
       CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>,
-      PDE, DD, SPARSITYPATTERN, VECTOR, dealdim> ;
+      PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>;
     friend class TangentProblem<
       OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
       CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>,
-      PDE, DD, SPARSITYPATTERN, VECTOR, dealdim> ;
+      PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>;
     friend class AdjointProblem<
       OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
       CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>,
-      PDE, DD, SPARSITYPATTERN, VECTOR, dealdim> ;
+      PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>;
     friend class Adjoint_HessianProblem<
       OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
       CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>,
-      PDE, DD, SPARSITYPATTERN, VECTOR, dealdim> ;
+      PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>;
     friend class OPT_Adjoint_For_EEProblem<
       OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
       CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>,
-      PDE, DD, SPARSITYPATTERN, VECTOR, dealdim> ;
+      PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>;
   };
   /******************************************************/
 
@@ -1439,7 +1436,7 @@ namespace DOpE
                         SpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dopedim, dealdim> &STH) :
                         ProblemContainerInternal<PDE>(pde), functional_(&functional), constraints_(
                           &constraints), STH_(&STH), state_problem_(NULL),
-                        tangent_problem_(NULL),  adjoint_problem_(NULL),
+                        tangent_problem_(NULL), adjoint_problem_(NULL),
                         adjoint_hessian_problem_(NULL), adjoint_for_ee_problem_(NULL)
   {
     ExceptionHandler_ = NULL;
@@ -2763,7 +2760,6 @@ namespace DOpE
       }
     return GetFunctional()->NeedPrecomputations();
   }
-
 
   /******************************************************/
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,

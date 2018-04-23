@@ -1,25 +1,25 @@
 /**
-*
-* Copyright (C) 2012-2014 by the DOpElib authors
-*
-* This file is part of DOpElib
-*
-* DOpElib is free software: you can redistribute it
-* and/or modify it under the terms of the GNU General Public
-* License as published by the Free Software Foundation, either
-* version 3 of the License, or (at your option) any later
-* version.
-*
-* DOpElib is distributed in the hope that it will be
-* useful, but WITHOUT ANY WARRANTY; without even the implied
-* warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-* PURPOSE.  See the GNU General Public License for more
-* details.
-*
-* Please refer to the file LICENSE.TXT included in this distribution
-* for further information on this license.
-*
-**/
+ *
+ * Copyright (C) 2012-2014 by the DOpElib authors
+ *
+ * This file is part of DOpElib
+ *
+ * DOpElib is free software: you can redistribute it
+ * and/or modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation, either
+ * version 3 of the License, or (at your option) any later
+ * version.
+ *
+ * DOpElib is distributed in the hope that it will be
+ * useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+ * PURPOSE.  See the GNU General Public License for more
+ * details.
+ *
+ * Please refer to the file LICENSE.TXT included in this distribution
+ * for further information on this license.
+ *
+ **/
 
 #ifndef DWRDATACONTAINER_H_
 #define DWRDATACONTAINER_H_
@@ -46,16 +46,16 @@ namespace DOpE
    *                    the computation of the PDE solution.
    *
    */
-  template<typename VECTOR>
+  template <typename VECTOR>
   class DWRDataContainerBase
   {
   public:
-    DWRDataContainerBase(DOpEtypes::EETerms ee_terms =
-                           DOpEtypes::EETerms::mixed)
-      : ee_terms_(ee_terms)
+    DWRDataContainerBase (DOpEtypes::EETerms ee_terms =
+                            DOpEtypes::EETerms::mixed)
+      : ee_terms_ (ee_terms)
     {
       lock_ = true;
-      switch (this->GetEETerms())
+      switch (this->GetEETerms ())
         {
         case DOpEtypes::primal_only:
           n_error_comps_ = 2;
@@ -70,19 +70,19 @@ namespace DOpE
           n_error_comps_ = 3;
           break;
         default:
-          throw DOpEException("Unknown DOpEtypes::EEterms.",
-                              "DWRDataContainer::ReleaseLock");
+          throw DOpEException ("Unknown DOpEtypes::EEterms.",
+                               "DWRDataContainer::ReleaseLock");
           break;
         }
     }
 
     virtual
-    ~DWRDataContainerBase()
+    ~DWRDataContainerBase ()
     {
     }
 
     virtual std::string
-    GetName() const = 0;
+    GetName () const = 0;
 
     /**
      * This initializes the vector of the error indicators and locks them.
@@ -90,7 +90,7 @@ namespace DOpE
      * is released (see ReleaseLock()).
      */
     virtual void
-    ReInit(unsigned int n_elements);
+    ReInit (unsigned int n_elements);
 
     /**
      * Releases the lock and fills the vector of error indicators
@@ -99,30 +99,30 @@ namespace DOpE
      * the rule given by EETerms.
      */
     void
-    ReleaseLock()
+    ReleaseLock ()
     {
       lock_ = false;
 
-      switch (this->GetEETerms())
+      switch (this->GetEETerms ())
         {
         case DOpEtypes::primal_only:
-          error_ind_ = GetPrimalErrorIndicators();
+          error_ind_ = GetPrimalErrorIndicators ();
           break;
         case DOpEtypes::dual_only:
-          error_ind_ = GetDualErrorIndicators();
+          error_ind_ = GetDualErrorIndicators ();
           break;
         case DOpEtypes::mixed:
-          error_ind_.equ(0.5, GetPrimalErrorIndicators());
-          error_ind_.add(0.5, GetDualErrorIndicators());
+          error_ind_.equ (0.5, GetPrimalErrorIndicators ());
+          error_ind_.add (0.5, GetDualErrorIndicators ());
           break;
         case DOpEtypes::mixed_control:
-          error_ind_.equ(0.5, GetPrimalErrorIndicators());
-          error_ind_.add(0.5, GetDualErrorIndicators());
-          error_ind_.add(0.5, GetControlErrorIndicators());
+          error_ind_.equ (0.5, GetPrimalErrorIndicators ());
+          error_ind_.add (0.5, GetDualErrorIndicators ());
+          error_ind_.add (0.5, GetControlErrorIndicators ());
           break;
         default:
-          throw DOpEException("Unknown DOpEtypes::EEterms.",
-                              "DWRDataContainer::ReleaseLock");
+          throw DOpEException ("Unknown DOpEtypes::EEterms.",
+                               "DWRDataContainer::ReleaseLock");
           break;
         }
     }
@@ -136,12 +136,12 @@ namespace DOpE
      * @ return   Error in the previously specified functional.
      */
     double
-    GetError() const
+    GetError () const
     {
       double error = 0;
-      for (unsigned int i = 0; i < GetErrorIndicators().size(); ++i)
+      for (unsigned int i = 0; i < GetErrorIndicators ().size (); ++i)
         {
-          error += GetErrorIndicators()(i);
+          error += GetErrorIndicators () (i);
         }
       return error;
     }
@@ -155,12 +155,13 @@ namespace DOpE
      * @ return   Error in the previously specified functional.
      */
     double
-    GetPrimalError() const
+    GetPrimalError () const
     {
       double error = 0;
-      for (unsigned int i = 0; i < GetAllErrorIndicators()[1]->size(); ++i)
+      for (unsigned int i = 0; i < GetAllErrorIndicators ()[1]->size ();
+           ++i)
         {
-          error += GetAllErrorIndicators()[1]->operator()(i);
+          error += GetAllErrorIndicators ()[1]->operator() (i);
         }
       return error;
     }
@@ -174,12 +175,13 @@ namespace DOpE
      * @ return   Error in the previously specified functional.
      */
     double
-    GetDualError() const
+    GetDualError () const
     {
       double error = 0;
-      for (unsigned int i = 0; i < GetAllErrorIndicators()[2]->size(); ++i)
+      for (unsigned int i = 0; i < GetAllErrorIndicators ()[2]->size ();
+           ++i)
         {
-          error += GetAllErrorIndicators()[2]->operator()(i);
+          error += GetAllErrorIndicators ()[2]->operator() (i);
         }
       return error;
     }
@@ -193,12 +195,13 @@ namespace DOpE
      * @ return   Error in the previously specified functional.
      */
     double
-    GetControlError() const
+    GetControlError () const
     {
       double error = 0;
-      for (unsigned int i = 0; i < GetAllErrorIndicators()[3]->size(); ++i)
+      for (unsigned int i = 0; i < GetAllErrorIndicators ()[3]->size ();
+           ++i)
         {
-          error += GetAllErrorIndicators()[3]->operator()(i);
+          error += GetAllErrorIndicators ()[3]->operator() (i);
         }
       return error;
     }
@@ -210,12 +213,12 @@ namespace DOpE
      * @return  Vector of raw error indicators (i.e. with sign)
      */
     const Vector<double> &
-    GetErrorIndicators() const
+    GetErrorIndicators () const
     {
       if (lock_)
         {
-          throw DOpEException("Error indicators are still locked.",
-                              "DWRDataContainer::GetErrorIndicators");
+          throw DOpEException ("Error indicators are still locked.",
+                               "DWRDataContainer::GetErrorIndicators");
         }
       else
         {
@@ -230,13 +233,13 @@ namespace DOpE
      * @return  Vector of raw primal error indicators (i.e. with sign)
      */
     Vector<double> &
-    GetPrimalErrorIndicators()
+    GetPrimalErrorIndicators ()
     {
       return error_ind_primal_;
     }
 
     const Vector<double> &
-    GetPrimalErrorIndicators() const
+    GetPrimalErrorIndicators () const
     {
       return error_ind_primal_;
     }
@@ -248,13 +251,13 @@ namespace DOpE
      * @return  Vector of raw dual error indicators (i.e. with sign)
      */
     Vector<double> &
-    GetDualErrorIndicators()
+    GetDualErrorIndicators ()
     {
       return error_ind_dual_;
     }
 
     const Vector<double> &
-    GetDualErrorIndicators() const
+    GetDualErrorIndicators () const
     {
       return error_ind_dual_;
     }
@@ -266,13 +269,13 @@ namespace DOpE
      * @return  Vector of raw control error indicators (i.e. with sign)
      */
     Vector<double> &
-    GetControlErrorIndicators()
+    GetControlErrorIndicators ()
     {
       return error_ind_control_;
     }
 
     const Vector<double> &
-    GetControlErrorIndicators() const
+    GetControlErrorIndicators () const
     {
       return error_ind_control_;
     }
@@ -282,35 +285,38 @@ namespace DOpE
      * call ReleaseLock() prior to this function.
      *
      * @return  Vector of raw error indicators given by the index
-    *           0 = primal, 1 = dual, 2 = control
+     *           0 = primal, 1 = dual, 2 = control
      */
     Vector<double> &
-    GetErrorIndicators(unsigned int i)
+    GetErrorIndicators (unsigned int i)
     {
-      if ( i == 0)
+      if (i == 0)
         return error_ind_primal_;
       else if (i == 1)
         return error_ind_dual_;
       else if (i == 2)
         return error_ind_control_;
       else
-        throw DOpEException("Unknown Indicator","DWRDataContainer::GetErrorIndicators");
+        throw DOpEException ("Unknown Indicator",
+                             "DWRDataContainer::GetErrorIndicators");
     }
 
     const Vector<double> &
-    GetErrorIndicators(unsigned int i) const
+    GetErrorIndicators (unsigned int i) const
     {
-      if ( i == 0)
+      if (i == 0)
         return error_ind_primal_;
       else if (i == 1)
         return error_ind_dual_;
       else if (i == 2)
         return error_ind_control_;
       else
-        throw DOpEException("Unknown Indicator","DWRDataContainer::GetErrorIndicators");
+        throw DOpEException ("Unknown Indicator",
+                             "DWRDataContainer::GetErrorIndicators");
     }
 
-    unsigned int GetNErrorComps() const
+    unsigned int
+    GetNErrorComps () const
     {
       //number of error components...
       return n_error_comps_;
@@ -324,20 +330,20 @@ namespace DOpE
      *          error indicators and the dual indicators (in this order).
      */
     std::vector<const Vector<double>*>
-    GetAllErrorIndicators() const
+    GetAllErrorIndicators () const
     {
       std::vector<const Vector<double>*> res;
       if (lock_)
         {
-          throw DOpEException("Error indicators are still locked.",
-                              "DWRDataContainer::GetErrorIndicators");
+          throw DOpEException ("Error indicators are still locked.",
+                               "DWRDataContainer::GetErrorIndicators");
         }
       else
         {
-          res.push_back(&error_ind_);
-          res.push_back(&this->GetPrimalErrorIndicators());
-          res.push_back(&this->GetDualErrorIndicators());
-          res.push_back(&this->GetControlErrorIndicators());
+          res.push_back (&error_ind_);
+          res.push_back (&this->GetPrimalErrorIndicators ());
+          res.push_back (&this->GetDualErrorIndicators ());
+          res.push_back (&this->GetControlErrorIndicators ());
         }
       return res;
     }
@@ -346,19 +352,19 @@ namespace DOpE
      * @return    How do we compute the weights? See dopetypes.h for the possibilities.
      */
     virtual DOpEtypes::WeightComputation
-    GetWeightComputation() const = 0;
+    GetWeightComputation () const = 0;
 
     /**
      * @return    In which form do we evaluate the residuals? See dopetypes.h for the possibilities.
      */
     virtual DOpEtypes::ResidualEvaluation
-    GetResidualEvaluation() const =0;
+    GetResidualEvaluation () const =0;
 
     /**
      * @return   Which terms do we compute for the error evaluation? See dopetypes.h for the possibilities.
      */
     DOpEtypes::EETerms
-    GetEETerms() const
+    GetEETerms () const
     {
       return ee_terms_;
     }
@@ -368,11 +374,12 @@ namespace DOpE
      * but we need the specialication  in the integrator.ComputeRefinementIndicators.
      * How to achieve this?
      */
-    template<class PROBLEM, class INTEGRATOR>
+    template <class PROBLEM, class INTEGRATOR>
     void
-    ComputeRefinementIndicators(PROBLEM &problem, INTEGRATOR &integrator)
+    ComputeRefinementIndicators (PROBLEM &problem,
+                                 INTEGRATOR &integrator)
     {
-      integrator.ComputeRefinementIndicators(problem, *this);
+      integrator.ComputeRefinementIndicators (problem, *this);
     }
 
     /**
@@ -382,7 +389,7 @@ namespace DOpE
      * @return    Do we need the computation of a adjoint equation?
      */
     virtual bool
-    NeedDual() const = 0;
+    NeedDual () const = 0;
 
     /**
      * Returns the FE-VECTORS of the weights used in the error evaluation.
@@ -391,7 +398,7 @@ namespace DOpE
      *          the information of the weight-functions.
      */
     const std::map<std::string, const VECTOR *> &
-    GetWeightData() const
+    GetWeightData () const
     {
       return weight_data_;
     }
@@ -400,9 +407,9 @@ namespace DOpE
      * Deletes the weights.
      */
     void
-    ClearWeightData()
+    ClearWeightData ()
     {
-      weight_data_.clear();
+      weight_data_.clear ();
     }
 
     /**
@@ -413,40 +420,41 @@ namespace DOpE
      * @param z   The FE-vector of the dual solution.
      */
     void
-    PrepareWeights(const StateVector<VECTOR> &u, const StateVector<VECTOR> &z)
+    PrepareWeights (const StateVector<VECTOR> &u,
+                    const StateVector<VECTOR> &z)
     {
       //Dependend on the GetEETerms we let the dwrc compute the primal and/or dual weights
-      switch (GetEETerms())
+      switch (GetEETerms ())
         {
         case DOpEtypes::primal_only:
-          PreparePI_h_z(z);
-          AddWeightData("weight_for_primal_residual",
-                        &(GetPI_h_z().GetSpacialVector()));
+          PreparePI_h_z (z);
+          AddWeightData ("weight_for_primal_residual",
+                         &(GetPI_h_z ().GetSpacialVector ()));
           break;
         case DOpEtypes::dual_only:
-          PreparePI_h_u(u);
-          AddWeightData("weight_for_dual_residual",
-                        &(GetPI_h_u().GetSpacialVector()));
+          PreparePI_h_u (u);
+          AddWeightData ("weight_for_dual_residual",
+                         &(GetPI_h_u ().GetSpacialVector ()));
           break;
         case DOpEtypes::mixed:
-          PreparePI_h_u(u);
-          AddWeightData("weight_for_dual_residual",
-                        &(GetPI_h_u().GetSpacialVector()));
-          PreparePI_h_z(z);
-          AddWeightData("weight_for_primal_residual",
-                        &(GetPI_h_z().GetSpacialVector()));
+          PreparePI_h_u (u);
+          AddWeightData ("weight_for_dual_residual",
+                         &(GetPI_h_u ().GetSpacialVector ()));
+          PreparePI_h_z (z);
+          AddWeightData ("weight_for_primal_residual",
+                         &(GetPI_h_z ().GetSpacialVector ()));
           break;
         case DOpEtypes::mixed_control:
-          PreparePI_h_u(u);
-          AddWeightData("weight_for_dual_residual",
-                        &(GetPI_h_u().GetSpacialVector()));
-          PreparePI_h_z(z);
-          AddWeightData("weight_for_primal_residual",
-                        &(GetPI_h_z().GetSpacialVector()));
+          PreparePI_h_u (u);
+          AddWeightData ("weight_for_dual_residual",
+                         &(GetPI_h_u ().GetSpacialVector ()));
+          PreparePI_h_z (z);
+          AddWeightData ("weight_for_primal_residual",
+                         &(GetPI_h_z ().GetSpacialVector ()));
           break;
         default:
-          throw DOpEException("Unknown DOpEtypes::EETerms!",
-                              "DWRDataContainerBase::PrepareWeights");
+          throw DOpEException ("Unknown DOpEtypes::EETerms!",
+                               "DWRDataContainerBase::PrepareWeights");
           break;
         }
     }
@@ -457,10 +465,10 @@ namespace DOpE
      * @param q   The FE-vector of the control.
      */
     void
-    PrepareWeights(const ControlVector<VECTOR> &q)
+    PrepareWeights (const ControlVector<VECTOR> &q)
     {
       //Dependend on the GetEETerms we let the dwrc compute the primal and/or dual weights
-      switch (GetEETerms())
+      switch (GetEETerms ())
         {
 #if dope_dimension > 0
         case DOpEtypes::mixed_control:
@@ -473,8 +481,8 @@ namespace DOpE
           //Do nothing to be compatible with residual estimators not using the control!
           break;
         default:
-          throw DOpEException("Unknown DOpEtypes::EETerms!",
-                              "DWRDataContainerBase::PrepareWeights");
+          throw DOpEException ("Unknown DOpEtypes::EETerms!",
+                               "DWRDataContainerBase::PrepareWeights");
           break;
         }
     }
@@ -484,34 +492,35 @@ namespace DOpE
     //Basically, one could replace them with 'primalweight' and 'dualweight',
     //but i found them a little bit misleading. ~cg
     virtual StateVector<VECTOR> &
-    GetPI_h_u() = 0;
+    GetPI_h_u () = 0;
 
     virtual StateVector<VECTOR> &
-    GetPI_h_z() = 0;
+    GetPI_h_z () = 0;
 
     virtual ControlVector<VECTOR> &
-    GetPI_h_q() = 0;
+    GetPI_h_q () = 0;
 
     virtual void
-    PreparePI_h_u(const StateVector<VECTOR> &u) = 0;
+    PreparePI_h_u (const StateVector<VECTOR> &u) = 0;
 
     virtual void
-    PreparePI_h_z(const StateVector<VECTOR> &z) = 0;
+    PreparePI_h_z (const StateVector<VECTOR> &z) = 0;
 
     virtual void
-    PreparePI_h_q(const ControlVector<VECTOR> &q) = 0;
+    PreparePI_h_q (const ControlVector<VECTOR> &q) = 0;
 
     void
-    AddWeightData(std::string name, const VECTOR *new_data)
+    AddWeightData (std::string name,
+                   const VECTOR *new_data)
     {
-      if (weight_data_.find(name) != weight_data_.end())
+      if (weight_data_.find (name) != weight_data_.end ())
         {
-          throw DOpEException(
+          throw DOpEException (
             "Adding multiple Data with name " + name + " is prohibited!",
             "Integrator::AddDomainData");
         }
-      weight_data_.insert(
-        std::pair<std::string, const VECTOR *>(name, new_data));
+      weight_data_.insert (
+        std::pair<std::string, const VECTOR *> (name, new_data));
     }
 
   private:
@@ -519,18 +528,19 @@ namespace DOpE
     bool lock_;
     unsigned int n_error_comps_;
     std::map<std::string, const VECTOR *> weight_data_;
-    Vector<double> error_ind_, error_ind_primal_, error_ind_dual_, error_ind_control_;
+    Vector<double> error_ind_, error_ind_primal_, error_ind_dual_,
+           error_ind_control_;
   }
   ;
 
-  template<typename VECTOR>
+  template <typename VECTOR>
   void
-  DWRDataContainerBase<VECTOR>::ReInit(unsigned int n_elements)
+  DWRDataContainerBase<VECTOR>::ReInit (unsigned int n_elements)
   {
-    error_ind_.reinit(n_elements);
-    GetPrimalErrorIndicators().reinit(n_elements);
-    GetDualErrorIndicators().reinit(n_elements);
-    GetControlErrorIndicators().reinit(n_elements);
+    error_ind_.reinit (n_elements);
+    GetPrimalErrorIndicators ().reinit (n_elements);
+    GetDualErrorIndicators ().reinit (n_elements);
+    GetControlErrorIndicators ().reinit (n_elements);
     lock_ = true;
   }
 
@@ -539,18 +549,18 @@ namespace DOpE
    * They have to get implemented in derived classes. These two methods are
    * excluded from DWRDataContainerBase() to save two template parameters.
    */
-  template<class STH, class IDC, class EDC, class FDC, typename VECTOR>
+  template <class STH, class IDC, class EDC, class FDC, typename VECTOR>
   class DWRDataContainer : public DWRDataContainerBase<VECTOR>
   {
   public:
-    DWRDataContainer(
-      DOpEtypes::EETerms ee_terms = DOpEtypes::EETerms::mixed)
-      : DWRDataContainerBase<VECTOR>(ee_terms)
+    DWRDataContainer (DOpEtypes::EETerms ee_terms =
+                        DOpEtypes::EETerms::mixed)
+      : DWRDataContainerBase<VECTOR> (ee_terms)
     {
     }
     ;
     virtual
-    ~DWRDataContainer()
+    ~DWRDataContainer ()
     {
     }
     ;
@@ -560,24 +570,24 @@ namespace DOpE
      * elements. Pure virtual.
      */
     virtual EDC &
-    GetElementWeight() const = 0;
+    GetElementWeight () const = 0;
 
     /**
      * Returns a FaceDataContainer for the weight on the
      * faces (and boundaries.). Pure virtual.
      */
     virtual FDC &
-    GetFaceWeight() const = 0;
+    GetFaceWeight () const = 0;
 
     virtual STH &
-    GetWeightSTH() = 0;
+    GetWeightSTH () = 0;
     virtual const STH &
-    GetWeightSTH() const = 0;
+    GetWeightSTH () const = 0;
 
     virtual IDC &
-    GetWeightIDC() = 0;
+    GetWeightIDC () = 0;
     virtual const IDC &
-    GetWeightIDC() const = 0;
+    GetWeightIDC () const = 0;
   };
 
   /**
@@ -585,17 +595,17 @@ namespace DOpE
    * interface for dwrdatacontainer and residualestimators,
    * see there for further information.
    */
-  template<class EDC, class STH, class IDC, class FDC, typename VECTOR>
+  template <class EDC, class STH, class IDC, class FDC, typename VECTOR>
   EDC *
-  ExtractEDC(const DWRDataContainer<STH, IDC, EDC, FDC, VECTOR> &dwrc)
+  ExtractEDC (const DWRDataContainer<STH, IDC, EDC, FDC, VECTOR> &dwrc)
   {
-    return &dwrc.GetElementWeight();
+    return &dwrc.GetElementWeight ();
   }
-  template<class FDC, class STH, class IDC, class EDC, typename VECTOR>
+  template <class FDC, class STH, class IDC, class EDC, typename VECTOR>
   FDC *
-  ExtractFDC(const DWRDataContainer<STH, IDC, EDC, FDC, VECTOR> &dwrc)
+  ExtractFDC (const DWRDataContainer<STH, IDC, EDC, FDC, VECTOR> &dwrc)
   {
-    return &dwrc.GetFaceWeight();
+    return &dwrc.GetFaceWeight ();
   }
 
 } //end of namespace

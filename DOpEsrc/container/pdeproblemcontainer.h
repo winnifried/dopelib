@@ -68,8 +68,6 @@
 //#include <deal.II/multigrid/mg_smoother.h>
 //#include <deal.II/multigrid/mg_matrix.h>
 
-
-
 #include <assert.h>
 #include <string>
 #include <vector>
@@ -289,9 +287,9 @@ namespace DOpE
     /******************************************************/
     /**
      * This function returns a functional value that is computed entirely
-    * out of the knowledge of the coordinate vectors of state and control.
-    *
-    * No integration routine is implemented inbetween!
+     * out of the knowledge of the coordinate vectors of state and control.
+     *
+     * No integration routine is implemented inbetween!
      */
     double
     AlgebraicFunctional(
@@ -527,7 +525,6 @@ namespace DOpE
         std::pair<std::string, const StateVector<VECTOR>*>(name, c));
     }
 
-
     /******************************************************/
 
     const StateVector<VECTOR> *
@@ -542,7 +539,6 @@ namespace DOpE
         }
       return it->second;
     }
-
 
     /******************************************************/
 
@@ -560,16 +556,15 @@ namespace DOpE
       auxiliary_state_.erase(it);
     }
 
-
     /******************************************************/
     /*****************************************************************/
     /**
-    * Adds the auxiliary Vectors from the integrator, so that their values are
-    * available for the integrated object.
-    *
-    * @param integrator         The integrator in which the vecors should be available
-    *
-    */
+     * Adds the auxiliary Vectors from the integrator, so that their values are
+     * available for the integrated object.
+     *
+     * @param integrator         The integrator in which the vecors should be available
+     *
+     */
 
     template<typename INTEGRATOR>
     void
@@ -693,12 +688,12 @@ namespace DOpE
     }
     /******************************************************/
     /**
-    * Deletes the auxiliary Vectors from the integrator.
-    * This is required to add vecors of the same name but possibly
-    * at a different point in time.
-    *
-    * @param integrator         The integrator in which the vecors should be available
-    */
+     * Deletes the auxiliary Vectors from the integrator.
+     * This is required to add vecors of the same name but possibly
+     * at a different point in time.
+     *
+     * @param integrator         The integrator in which the vecors should be available
+     */
 
     template<typename INTEGRATOR>
     void
@@ -711,7 +706,6 @@ namespace DOpE
           integrator.DeleteDomainData(it->first);
         }
     }
-
 
     /******************************************************/
 
@@ -804,10 +798,10 @@ namespace DOpE
 
     friend class StateProblem<
       PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE,
-      DH>, PDE, DD, SPARSITYPATTERN, VECTOR, dealdim> ;
+      DH>, PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>;
     friend class PDE_Adjoint_For_EEProblem<
       PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE,
-      DH>, PDE, DD, SPARSITYPATTERN, VECTOR, dealdim> ;
+      DH>, PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>;
   };
   /******************************************************/
 
@@ -1234,7 +1228,6 @@ namespace DOpE
 
   }
 
-
   /******************************************************/
 
   template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
@@ -1502,7 +1495,6 @@ namespace DOpE
   }
 
   /******************************************************/
-
 
   template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
            int dealdim, template<int, int> class FE, template<int, int> class DH>

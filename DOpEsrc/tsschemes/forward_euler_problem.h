@@ -1,25 +1,25 @@
 /**
-*
-* Copyright (C) 2012-2014 by the DOpElib authors
-*
-* This file is part of DOpElib
-*
-* DOpElib is free software: you can redistribute it
-* and/or modify it under the terms of the GNU General Public
-* License as published by the Free Software Foundation, either
-* version 3 of the License, or (at your option) any later
-* version.
-*
-* DOpElib is distributed in the hope that it will be
-* useful, but WITHOUT ANY WARRANTY; without even the implied
-* warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-* PURPOSE.  See the GNU General Public License for more
-* details.
-*
-* Please refer to the file LICENSE.TXT included in this distribution
-* for further information on this license.
-*
-**/
+ *
+ * Copyright (C) 2012-2014 by the DOpElib authors
+ *
+ * This file is part of DOpElib
+ *
+ * DOpElib is free software: you can redistribute it
+ * and/or modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation, either
+ * version 3 of the License, or (at your option) any later
+ * version.
+ *
+ * DOpElib is distributed in the hope that it will be
+ * useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+ * PURPOSE.  See the GNU General Public License for more
+ * details.
+ *
+ * Please refer to the file LICENSE.TXT included in this distribution
+ * for further information on this license.
+ *
+ **/
 
 #ifndef ForwardEulerProblem_H_
 #define ForwardEulerProblem_H_
@@ -48,21 +48,20 @@ namespace DOpE
    *                            the base class of the DOpEWrapper::DoFHandler in use.)
    *
    */
-  template<typename OPTPROBLEM, typename SPARSITYPATTERN, typename VECTOR,
-           int dealdim,
-           template <int, int> class FE = dealii::FESystem,
-           template <int, int> class DH = dealii::DoFHandler>
-  class ForwardEulerProblem : public PrimalTSBase<OPTPROBLEM,
-    SPARSITYPATTERN, VECTOR, dealdim, FE, DH>
+  template <typename OPTPROBLEM, typename SPARSITYPATTERN, typename VECTOR,
+            int dealdim, template <int, int> class FE = dealii::FESystem, template <
+              int, int> class DH = dealii::DoFHandler>
+  class ForwardEulerProblem : public PrimalTSBase<OPTPROBLEM, SPARSITYPATTERN,
+    VECTOR, dealdim, FE, DH>
   {
   public:
-    ForwardEulerProblem(OPTPROBLEM &OP) :
-      PrimalTSBase<OPTPROBLEM, SPARSITYPATTERN, VECTOR, dealdim,
-      FE, DH>(OP)
+    ForwardEulerProblem (OPTPROBLEM &OP)
+      : PrimalTSBase<OPTPROBLEM, SPARSITYPATTERN, VECTOR, dealdim, FE, DH> (
+        OP)
     {
       initial_problem_ = NULL;
     }
-    ~ForwardEulerProblem()
+    ~ForwardEulerProblem ()
     {
       if (initial_problem_ != NULL)
         delete initial_problem_;
@@ -71,258 +70,272 @@ namespace DOpE
     /******************************************************/
 
     std::string
-    GetName()
+    GetName ()
     {
       return "forward Euler";
     }
 
     /******************************************************/
 
-    InitialProblem<ForwardEulerProblem<OPTPROBLEM, SPARSITYPATTERN, VECTOR, dealdim, FE, DH>, VECTOR, dealdim> &
-    GetInitialProblem()
+    InitialProblem<
+    ForwardEulerProblem<OPTPROBLEM, SPARSITYPATTERN, VECTOR, dealdim,
+                        FE, DH>, VECTOR, dealdim> &
+                        GetInitialProblem ()
     {
       if (initial_problem_ == NULL)
         {
-          initial_problem_ = new InitialProblem<ForwardEulerProblem<OPTPROBLEM, SPARSITYPATTERN, VECTOR, dealdim, FE, DH>, VECTOR, dealdim>
-          (*this);
+          initial_problem_ = new InitialProblem<
+          ForwardEulerProblem<OPTPROBLEM, SPARSITYPATTERN, VECTOR,
+          dealdim, FE, DH>, VECTOR, dealdim> (*this);
         }
       return *initial_problem_;
     }
 
     /******************************************************/
-    ForwardEulerProblem<OPTPROBLEM, SPARSITYPATTERN, VECTOR,
-                        dealdim, FE, DH> &
-                        GetBaseProblem()
+    ForwardEulerProblem<OPTPROBLEM, SPARSITYPATTERN, VECTOR, dealdim, FE, DH> &
+    GetBaseProblem ()
     {
       return *this;
     }
     /******************************************************/
 
-    template<typename EDC>
+    template <typename EDC>
     void
-    ElementEquation(const EDC &edc,
-                    dealii::Vector<double> &local_vector, double scale, double /*scale_ico*/)
+    ElementEquation (const EDC &edc,
+                     dealii::Vector<double> &local_vector,
+                     double scale,
+                     double /*scale_ico*/)
     {
-      if (this->GetPart() == "New")
+      if (this->GetPart () == "New")
         {
-          dealii::Vector<double> tmp(local_vector);
+          dealii::Vector<double> tmp (local_vector);
           tmp = 0.0;
-          this->GetProblem().ElementEquation(edc, tmp, 0., scale);
+          this->GetProblem ().ElementEquation (edc, tmp, 0., scale);
           local_vector += tmp;
 
           tmp = 0.0;
-          this->GetProblem().ElementTimeEquation(edc, tmp,
-                                                 scale );
+          this->GetProblem ().ElementTimeEquation (edc, tmp, scale);
           local_vector += tmp;
 
-          this->GetProblem().ElementTimeEquationExplicit(edc, local_vector,
-                                                         scale );
+          this->GetProblem ().ElementTimeEquationExplicit (edc,
+                                                           local_vector, scale);
 
         }
-      else if (this->GetPart() == "Old")
+      else if (this->GetPart () == "Old")
         {
-          dealii::Vector<double> tmp(local_vector);
+          dealii::Vector<double> tmp (local_vector);
           tmp = 0.0;
-          this->GetProblem().ElementEquation(edc, tmp, scale, 0.);
+          this->GetProblem ().ElementEquation (edc, tmp, scale, 0.);
           local_vector += tmp;
 
-          this->GetProblem().ElementTimeEquation(
-            edc,
-            local_vector,
-            (-1) * scale);
+          this->GetProblem ().ElementTimeEquation (edc, local_vector,
+                                                   (-1) * scale);
         }
       else
         {
-          abort();
+          abort ();
         }
     }
 
     /******************************************************/
 
-    template<typename EDC>
+    template <typename EDC>
     void
-    ElementRhs(const EDC &edc,
-               dealii::Vector<double> &local_vector, double scale)
+    ElementRhs (const EDC &edc,
+                dealii::Vector<double> &local_vector,
+                double scale)
     {
-      if (this->GetPart() == "New")
+      if (this->GetPart () == "New")
         {
 
         }
-      else if (this->GetPart() == "Old")
+      else if (this->GetPart () == "Old")
         {
-          this->GetProblem().ElementRhs(edc, local_vector, scale);
+          this->GetProblem ().ElementRhs (edc, local_vector, scale);
         }
       else
         {
-          abort();
+          abort ();
         }
     }
 
-
     void
-    PointRhs(
-      const std::map<std::string, const dealii::Vector<double>*> &param_values,
-      const std::map<std::string, const VECTOR *> &domain_values,
-      VECTOR &rhs_vector, double scale)
+    PointRhs (const std::map<std::string, const dealii::Vector<double>*> &param_values,
+              const std::map<std::string, const VECTOR *> &domain_values,
+              VECTOR &rhs_vector,
+              double scale)
     {
-      if (this->GetPart() == "New")
+      if (this->GetPart () == "New")
         {
         }
-      else if (this->GetPart() == "Old")
+      else if (this->GetPart () == "Old")
         {
-          this->GetProblem().PointRhs(param_values, domain_values, rhs_vector, scale);
+          this->GetProblem ().PointRhs (param_values, domain_values,
+                                        rhs_vector, scale);
         }
       else
         {
-          abort();
+          abort ();
         }
     }
 
     /******************************************************/
 
-    template<typename EDC>
+    template <typename EDC>
     void
-    ElementMatrix(const EDC &edc,
-                  dealii::FullMatrix<double> &local_matrix)
-    {
-      assert(this->GetPart() == "New");
-      dealii::FullMatrix<double> m(local_matrix);
-
-      this->GetProblem().ElementMatrix(edc, local_matrix, 0., 1.);
-
-      m = 0.;
-      this->GetProblem().ElementTimeMatrix(edc, m);
-      local_matrix.add(
-        1.0, m);
-
-      m = 0.;
-      this->GetProblem().ElementTimeMatrixExplicit(edc, m);
-      local_matrix.add(
-        1.0 , m);
-
-    }
-
-    /******************************************************/
-
-    template<typename FDC>
-    void
-    FaceEquation(const FDC &fdc,
-                 dealii::Vector<double> &local_vector, double scale, double /*scale_ico*/)
-    {
-      if (this->GetPart() == "New")
-        {
-          this->GetProblem().FaceEquation(fdc, local_vector, 0., scale);
-        }
-      else if (this->GetPart() == "Old")
-        {
-          this->GetProblem().FaceEquation(fdc, local_vector, scale,0.);
-        }
-      else
-        {
-          abort();
-        }
-
-    }
-    /******************************************************/
-
-    template<typename FDC>
-    void
-    InterfaceEquation(const FDC &fdc,
-                      dealii::Vector<double> &local_vector, double scale, double /*scale_ico*/)
-    {
-      if (this->GetPart() == "New")
-        {
-          this->GetProblem().InterfaceEquation(fdc, local_vector, 0., scale);
-        }
-      else if (this->GetPart() == "Old")
-        {
-          this->GetProblem().InterfaceEquation(fdc, local_vector, scale,0.);
-        }
-      else
-        {
-          abort();
-        }
-
-    }
-
-    /******************************************************/
-
-    template<typename FDC>
-    void
-    FaceRhs(const FDC &fdc,
-            dealii::Vector<double> &local_vector, double scale = 1.)
-    {
-      this->GetProblem().FaceRhs(fdc, local_vector, scale);
-    }
-
-    /******************************************************/
-
-    template<typename FDC>
-    void
-    FaceMatrix(const FDC &fdc,
-               dealii::FullMatrix<double> &local_matrix)
-    {
-      assert(this->GetPart() == "New");
-      this->GetProblem().FaceMatrix(fdc, local_matrix, 0., 1.);
-
-    }
-
-    /******************************************************/
-
-    template<typename FDC>
-    void
-    InterfaceMatrix(const FDC &fdc,
-                    dealii::FullMatrix<double> &local_matrix)
-    {
-      assert(this->GetPart() == "New");
-      this->GetProblem().InterfaceMatrix(fdc, local_matrix, 0., 1.);
-
-    }
-
-    /******************************************************/
-
-    template<typename FDC>
-    void
-    BoundaryEquation(const FDC &fdc,
-                     dealii::Vector<double> &local_vector, double scale, double /*scale_ico*/)
-    {
-      if (this->GetPart() == "New")
-        {
-          this->GetProblem().BoundaryEquation(fdc, local_vector, 0., scale);
-        }
-      else if (this->GetPart() == "Old")
-        {
-          this->GetProblem().BoundaryEquation(fdc, local_vector, scale,0.);
-        }
-      else
-        {
-          abort();
-        }
-
-    }
-
-    /******************************************************/
-
-    template<typename FDC>
-    void
-    BoundaryRhs(const FDC &fdc,
-                dealii::Vector<double> &local_vector, double scale)
-    {
-      this->GetProblem().BoundaryRhs(fdc, local_vector, scale);
-    }
-
-    /******************************************************/
-
-    template<typename FDC>
-    void
-    BoundaryMatrix(const FDC &fdc,
+    ElementMatrix (const EDC &edc,
                    dealii::FullMatrix<double> &local_matrix)
     {
-      assert(this->GetPart() == "New");
-      this->GetProblem().BoundaryMatrix(fdc, local_matrix, 0., 1.);
+      assert(this->GetPart () == "New");
+      dealii::FullMatrix<double> m (local_matrix);
+
+      this->GetProblem ().ElementMatrix (edc, local_matrix, 0., 1.);
+
+      m = 0.;
+      this->GetProblem ().ElementTimeMatrix (edc, m);
+      local_matrix.add (1.0, m);
+
+      m = 0.;
+      this->GetProblem ().ElementTimeMatrixExplicit (edc, m);
+      local_matrix.add (1.0, m);
+
+    }
+
+    /******************************************************/
+
+    template <typename FDC>
+    void
+    FaceEquation (const FDC &fdc,
+                  dealii::Vector<double> &local_vector,
+                  double scale,
+                  double /*scale_ico*/)
+    {
+      if (this->GetPart () == "New")
+        {
+          this->GetProblem ().FaceEquation (fdc, local_vector, 0., scale);
+        }
+      else if (this->GetPart () == "Old")
+        {
+          this->GetProblem ().FaceEquation (fdc, local_vector, scale, 0.);
+        }
+      else
+        {
+          abort ();
+        }
+
+    }
+    /******************************************************/
+
+    template <typename FDC>
+    void
+    InterfaceEquation (const FDC &fdc,
+                       dealii::Vector<double> &local_vector,
+                       double scale,
+                       double /*scale_ico*/)
+    {
+      if (this->GetPart () == "New")
+        {
+          this->GetProblem ().InterfaceEquation (fdc, local_vector, 0.,
+                                                 scale);
+        }
+      else if (this->GetPart () == "Old")
+        {
+          this->GetProblem ().InterfaceEquation (fdc, local_vector, scale,
+                                                 0.);
+        }
+      else
+        {
+          abort ();
+        }
+
+    }
+
+    /******************************************************/
+
+    template <typename FDC>
+    void
+    FaceRhs (const FDC &fdc,
+             dealii::Vector<double> &local_vector,
+             double scale = 1.)
+    {
+      this->GetProblem ().FaceRhs (fdc, local_vector, scale);
+    }
+
+    /******************************************************/
+
+    template <typename FDC>
+    void
+    FaceMatrix (const FDC &fdc,
+                dealii::FullMatrix<double> &local_matrix)
+    {
+      assert(this->GetPart () == "New");
+      this->GetProblem ().FaceMatrix (fdc, local_matrix, 0., 1.);
+
+    }
+
+    /******************************************************/
+
+    template <typename FDC>
+    void
+    InterfaceMatrix (const FDC &fdc,
+                     dealii::FullMatrix<double> &local_matrix)
+    {
+      assert(this->GetPart () == "New");
+      this->GetProblem ().InterfaceMatrix (fdc, local_matrix, 0., 1.);
+
+    }
+
+    /******************************************************/
+
+    template <typename FDC>
+    void
+    BoundaryEquation (const FDC &fdc,
+                      dealii::Vector<double> &local_vector,
+                      double scale,
+                      double /*scale_ico*/)
+    {
+      if (this->GetPart () == "New")
+        {
+          this->GetProblem ().BoundaryEquation (fdc, local_vector, 0.,
+                                                scale);
+        }
+      else if (this->GetPart () == "Old")
+        {
+          this->GetProblem ().BoundaryEquation (fdc, local_vector, scale,
+                                                0.);
+        }
+      else
+        {
+          abort ();
+        }
+
+    }
+
+    /******************************************************/
+
+    template <typename FDC>
+    void
+    BoundaryRhs (const FDC &fdc,
+                 dealii::Vector<double> &local_vector,
+                 double scale)
+    {
+      this->GetProblem ().BoundaryRhs (fdc, local_vector, scale);
+    }
+
+    /******************************************************/
+
+    template <typename FDC>
+    void
+    BoundaryMatrix (const FDC &fdc,
+                    dealii::FullMatrix<double> &local_matrix)
+    {
+      assert(this->GetPart () == "New");
+      this->GetProblem ().BoundaryMatrix (fdc, local_matrix, 0., 1.);
     }
   private:
-    InitialProblem<ForwardEulerProblem<OPTPROBLEM, SPARSITYPATTERN, VECTOR, dealdim, FE, DH>, VECTOR, dealdim> *initial_problem_;
+    InitialProblem<
+    ForwardEulerProblem<OPTPROBLEM, SPARSITYPATTERN, VECTOR, dealdim,
+                        FE, DH>, VECTOR, dealdim> *initial_problem_;
   };
 }
 

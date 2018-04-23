@@ -1,25 +1,25 @@
 /**
-*
-* Copyright (C) 2012-2014 by the DOpElib authors
-*
-* This file is part of DOpElib
-*
-* DOpElib is free software: you can redistribute it
-* and/or modify it under the terms of the GNU General Public
-* License as published by the Free Software Foundation, either
-* version 3 of the License, or (at your option) any later
-* version.
-*
-* DOpElib is distributed in the hope that it will be
-* useful, but WITHOUT ANY WARRANTY; without even the implied
-* warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-* PURPOSE.  See the GNU General Public License for more
-* details.
-*
-* Please refer to the file LICENSE.TXT included in this distribution
-* for further information on this license.
-*
-**/
+ *
+ * Copyright (C) 2012-2014 by the DOpElib authors
+ *
+ * This file is part of DOpElib
+ *
+ * DOpElib is free software: you can redistribute it
+ * and/or modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation, either
+ * version 3 of the License, or (at your option) any later
+ * version.
+ *
+ * DOpElib is distributed in the hope that it will be
+ * useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+ * PURPOSE.  See the GNU General Public License for more
+ * details.
+ *
+ * Please refer to the file LICENSE.TXT included in this distribution
+ * for further information on this license.
+ *
+ **/
 
 #ifndef Network_Integrator_H_
 #define Network_Integrator_H_
@@ -39,7 +39,6 @@
 #include <container/residualestimator.h>
 #include <basic/dopetypes.h>
 
-
 namespace DOpE
 {
   namespace Networks
@@ -55,213 +54,220 @@ namespace DOpE
      * @template SCALAR                   Type of the scalars we use in the integrator.
      * @template dim                      dimesion of the domain
      */
-    template<typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR,
-             int dim>
+    template <typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR,
+              int dim>
     class Network_Integrator
     {
     public:
-      Network_Integrator(INTEGRATORDATACONT &idc1);
+      Network_Integrator (INTEGRATORDATACONT &idc1);
       /**
        * This constructor gets two INTEGRATORDATACONT. One for the evaluation
        * of the integrals during the assembling and residual computation, the
        * second one for the evaluation of functionals.
        */
-      Network_Integrator(INTEGRATORDATACONT &idc1, INTEGRATORDATACONT &idc2);
+      Network_Integrator (INTEGRATORDATACONT &idc1,
+                          INTEGRATORDATACONT &idc2);
 
-      ~Network_Integrator();
+      ~Network_Integrator ();
 
       /**
        This Function should be called once after grid refinement, or changes in boundary values
        to  recompute sparsity patterns, and constraint matrices.
        */
       void
-      ReInit();
+      ReInit ();
 
       /**
        * This method is used to evaluate the residual of the nonlinear equation.
-      *
-      * It assumes that the PROBLEM provides methods named
-      * ElementEquation, ElementRhs, BoundaryEquation, BoundaryRhs, FaceEquation, FaceRhs,
-      * InterfaceEquation, and PointRhs
+       *
+       * It assumes that the PROBLEM provides methods named
+       * ElementEquation, ElementRhs, BoundaryEquation, BoundaryRhs, FaceEquation, FaceRhs,
+       * InterfaceEquation, and PointRhs
        * For the calculation of the respective quantities, see, e.g., OptProblemContainer for
-      * details on these methods.
-      *
-      * @tparam <PROBLEM>                The problem description
-      *
-      * @param pde                       The object containing the description of the nonlinear pde.
-      * @param resiual                   A vector which contains the residual after completing the method.
-      */
-      template<typename PROBLEM>
+       * details on these methods.
+       *
+       * @tparam <PROBLEM>                The problem description
+       *
+       * @param pde                       The object containing the description of the nonlinear pde.
+       * @param resiual                   A vector which contains the residual after completing the method.
+       */
+      template <typename PROBLEM>
       void
-      ComputeNonlinearResidual(PROBLEM &pde, VECTOR &residual);
+      ComputeNonlinearResidual (PROBLEM &pde,
+                                VECTOR &residual);
       /**
        * This method is used to evaluate the left hand side of the residual of the nonlinear equation
-      * This are all terms depending on the nonlinear variable.
-      * The use of this function can be advantageous to avoid recalculation of terms that do
-      * not change with update of the evaluation point.
-      *
-      * It assumes that the PROBLEM provides methods named
-      * ElementEquation,BoundaryEquation, FaceEquation, and InterfaceEquation
+       * This are all terms depending on the nonlinear variable.
+       * The use of this function can be advantageous to avoid recalculation of terms that do
+       * not change with update of the evaluation point.
+       *
+       * It assumes that the PROBLEM provides methods named
+       * ElementEquation,BoundaryEquation, FaceEquation, and InterfaceEquation
        * For the calculation of the respective quantities, see, e.g., OptProblemContainer for
-      * details on these methods.
-      *
-      * @tparam <PROBLEM>                The problem description
-      *
-      * @param pde                       The object containing the description of the nonlinear pde.
-      * @param resiual                   A vector which contains the residual after completing the method.
-      */
-      template<typename PROBLEM>
+       * details on these methods.
+       *
+       * @tparam <PROBLEM>                The problem description
+       *
+       * @param pde                       The object containing the description of the nonlinear pde.
+       * @param resiual                   A vector which contains the residual after completing the method.
+       */
+      template <typename PROBLEM>
       void
-      ComputeNonlinearLhs(PROBLEM &pde, VECTOR &residual);
+      ComputeNonlinearLhs (PROBLEM &pde,
+                           VECTOR &residual);
       /**
        * This method is used to evaluate the righ hand side of the residual of the nonlinear equation
-      * This are all terms independent of the nonlinear variable.
-      * The use of this function can be advantageous to avoid recalculation of terms that do
-      * not change with update of the evaluation point.
-      *
-      * It assumes that the PROBLEM provides methods named
-      * ElementRhs, BoundaryRhs, FaceRhs, and PointRhs
+       * This are all terms independent of the nonlinear variable.
+       * The use of this function can be advantageous to avoid recalculation of terms that do
+       * not change with update of the evaluation point.
+       *
+       * It assumes that the PROBLEM provides methods named
+       * ElementRhs, BoundaryRhs, FaceRhs, and PointRhs
        * For the calculation of the respective quantities, see, e.g., OptProblemContainer for
-      * details on these methods.
-      *
-      * @tparam <PROBLEM>                The problem description
-      *
-      * @param pde                       The object containing the description of the nonlinear pde.
-      * @param resiual                   A vector which contains the residual after completing the method.
-      */
-      template<typename PROBLEM>
+       * details on these methods.
+       *
+       * @tparam <PROBLEM>                The problem description
+       *
+       * @param pde                       The object containing the description of the nonlinear pde.
+       * @param resiual                   A vector which contains the residual after completing the method.
+       */
+      template <typename PROBLEM>
       void
-      ComputeNonlinearRhs(PROBLEM &pde, VECTOR &residual);
+      ComputeNonlinearRhs (PROBLEM &pde,
+                           VECTOR &residual);
       /**
-        * This method is used to calculate the matrix corresponding to the linearized equation.
-      *
-      * It assumes that the PROBLEM provides methods named
-      * ElementMatrix, BoundaryMatrix, FaceMatrix, and InterfaceRhs
+       * This method is used to calculate the matrix corresponding to the linearized equation.
+       *
+       * It assumes that the PROBLEM provides methods named
+       * ElementMatrix, BoundaryMatrix, FaceMatrix, and InterfaceRhs
        * For the calculation of the respective quantities, see, e.g., OptProblemContainer for
-      * details on these methods.
-      *
-      * @tparam <PROBLEM>                The problem description
-      *
-      * @param pde                       The object containing the description of the nonlinear pde.
-      * @param matrix                    A matrix which contains the matrix after completing the method.
-      */
-      template<typename PROBLEM>
+       * details on these methods.
+       *
+       * @tparam <PROBLEM>                The problem description
+       *
+       * @param pde                       The object containing the description of the nonlinear pde.
+       * @param matrix                    A matrix which contains the matrix after completing the method.
+       */
+      template <typename PROBLEM>
       void
-      ComputeMatrix(PROBLEM &pde, dealii::BlockSparseMatrix<double> &matrix);
+      ComputeMatrix (PROBLEM &pde,
+                     dealii::BlockSparseMatrix<double> &matrix);
 
       /**
        * This routine is used as a dummy to allow for the solutions of problems that do not need any
-      * integration, i.e., that don't involve integration.
-      *
-      * It is assumed that a method AlgebraicResidual in
-      * PROBLEM provides a method for the calculation of the residual.
-      *
-      * @tparam <PROBLEM>                The problem description
-      *
-      * @param pde                       The object containing the description of the nonlinear pde.
-      * @param resiual                   A vector which contains the residual after completing the method.
-      */
-      template<typename PROBLEM>
+       * integration, i.e., that don't involve integration.
+       *
+       * It is assumed that a method AlgebraicResidual in
+       * PROBLEM provides a method for the calculation of the residual.
+       *
+       * @tparam <PROBLEM>                The problem description
+       *
+       * @param pde                       The object containing the description of the nonlinear pde.
+       * @param resiual                   A vector which contains the residual after completing the method.
+       */
+      template <typename PROBLEM>
       void
-      ComputeNonlinearAlgebraicResidual(PROBLEM &pde, VECTOR &residual);
+      ComputeNonlinearAlgebraicResidual (PROBLEM &pde,
+                                         VECTOR &residual);
       /**
        * This method is used to calculate local constraints, i.e., constraints that do not need
-      * any integration but can be calculated directly from the values in the unknowns.
-      * Typical examples are box constraints in Lagrange elements.
-      *
-      *
-      * It is assumed that a method ComputeLocalControlConstraints in
-      * PROBLEM provides a method for the calculation of the residual.
-      *
-      * @tparam <PROBLEM>                The problem description
-      *
-      * @param pde                       The object containing the description of the nonlinear pde.
-      * @param constraints               A vector which contains the constraints.
-      */
-      template<typename PROBLEM>
+       * any integration but can be calculated directly from the values in the unknowns.
+       * Typical examples are box constraints in Lagrange elements.
+       *
+       *
+       * It is assumed that a method ComputeLocalControlConstraints in
+       * PROBLEM provides a method for the calculation of the residual.
+       *
+       * @tparam <PROBLEM>                The problem description
+       *
+       * @param pde                       The object containing the description of the nonlinear pde.
+       * @param constraints               A vector which contains the constraints.
+       */
+      template <typename PROBLEM>
       void
-      ComputeLocalControlConstraints(PROBLEM &pde, VECTOR &constraints);
+      ComputeLocalControlConstraints (PROBLEM &pde,
+                                      VECTOR &constraints);
 
       /**
-      * This methods evaluates functionals that are given by an integration over the spatial domain.
-      *
-      * It is assumed that PROBLEM provides a method ElementFunctional.
-      *
-      * @tparam <PROBLEM>                The problem description
-      *
-      * @param pde                       The object containing the description of the functional.
-      *
-      * @return                          The value of the functional
-      */
-      template<typename PROBLEM>
+       * This methods evaluates functionals that are given by an integration over the spatial domain.
+       *
+       * It is assumed that PROBLEM provides a method ElementFunctional.
+       *
+       * @tparam <PROBLEM>                The problem description
+       *
+       * @param pde                       The object containing the description of the functional.
+       *
+       * @return                          The value of the functional
+       */
+      template <typename PROBLEM>
       SCALAR
-      ComputeDomainScalar(PROBLEM &pde);
+      ComputeDomainScalar (PROBLEM &pde);
       /**
-      * This methods evaluates functionals that are given by evaluation in certain
-      * fixed points in the domain.
-      *
-      * It is assumed that PROBLEM provides a method PointFunctional.
-      *
-      * @tparam <PROBLEM>                The problem description
-      *
-      * @param pde                       The object containing the description of the functional.
-      *
-      * @return                          The value of the functional
-      */
-      template<typename PROBLEM>
+       * This methods evaluates functionals that are given by evaluation in certain
+       * fixed points in the domain.
+       *
+       * It is assumed that PROBLEM provides a method PointFunctional.
+       *
+       * @tparam <PROBLEM>                The problem description
+       *
+       * @param pde                       The object containing the description of the functional.
+       *
+       * @return                          The value of the functional
+       */
+      template <typename PROBLEM>
       SCALAR
-      ComputePointScalar(PROBLEM &pde);
+      ComputePointScalar (PROBLEM &pde);
       /**
-      * This methods evaluates functionals that are given by evaluation of integrals
-      * over parts of the boundary.
-      *
-      * It is assumed that PROBLEM provides a method BoundaryFunctional.
-      *
-      * This routine assumes that a corresponding calculation method is provided by PROBLEM
-      *
-      * @tparam <PROBLEM>                The problem description
-      *
-      * @param pde                       The object containing the description of the functional.
-      *
-      * @return                          The value of the functional
-      */
-      template<typename PROBLEM>
+       * This methods evaluates functionals that are given by evaluation of integrals
+       * over parts of the boundary.
+       *
+       * It is assumed that PROBLEM provides a method BoundaryFunctional.
+       *
+       * This routine assumes that a corresponding calculation method is provided by PROBLEM
+       *
+       * @tparam <PROBLEM>                The problem description
+       *
+       * @param pde                       The object containing the description of the functional.
+       *
+       * @return                          The value of the functional
+       */
+      template <typename PROBLEM>
       SCALAR
-      ComputeBoundaryScalar(PROBLEM &pde);
+      ComputeBoundaryScalar (PROBLEM &pde);
       /**
-      * This methods evaluates functionals that are given by evaluation of integrals over
-      * certain faces in the domain.
-      *
-      * It is assumed that PROBLEM provides a method FaceFunctional.
-      *
-      * This routine assumes that a corresponding calculation method is provided by PROBLEM
-      *
-      * @tparam <PROBLEM>                The problem description
-      *
-      * @param pde                       The object containing the description of the functional.
-      *
-      * @return                          The value of the functional
-      */
-      template<typename PROBLEM>
+       * This methods evaluates functionals that are given by evaluation of integrals over
+       * certain faces in the domain.
+       *
+       * It is assumed that PROBLEM provides a method FaceFunctional.
+       *
+       * This routine assumes that a corresponding calculation method is provided by PROBLEM
+       *
+       * @tparam <PROBLEM>                The problem description
+       *
+       * @param pde                       The object containing the description of the functional.
+       *
+       * @return                          The value of the functional
+       */
+      template <typename PROBLEM>
       SCALAR
-      ComputeFaceScalar(PROBLEM &pde);
+      ComputeFaceScalar (PROBLEM &pde);
       /**
-      * This methods evaluates functionals that are given algebraic manipulation
-      * of the unknowns.
-      *
-      * It is assumed that PROBLEM provides a method ComputeAlgebraicScalar.
-      *
-      * This routine assumes that a corresponding calculation method is provided by PROBLEM
-      *
-      * @tparam <PROBLEM>                The problem description
-      *
-      * @param pde                       The object containing the description of the functional.
-      *
-      * @return                          The value of the functional
-      */
-      template<typename PROBLEM>
+       * This methods evaluates functionals that are given algebraic manipulation
+       * of the unknowns.
+       *
+       * It is assumed that PROBLEM provides a method ComputeAlgebraicScalar.
+       *
+       * This routine assumes that a corresponding calculation method is provided by PROBLEM
+       *
+       * @tparam <PROBLEM>                The problem description
+       *
+       * @param pde                       The object containing the description of the functional.
+       *
+       * @return                          The value of the functional
+       */
+      template <typename PROBLEM>
       SCALAR
-      ComputeAlgebraicScalar(PROBLEM &pde);
+      ComputeAlgebraicScalar (PROBLEM &pde);
 
       /**
        * This method applies inhomogeneous dirichlet boundary values.
@@ -275,28 +281,30 @@ namespace DOpE
        * @param pde                       The object containing the description of the functional.
        * @param u                         The vector to which the boundary values are applied.
        */
-      template<typename PROBLEM>
+      template <typename PROBLEM>
       void
-      ApplyInitialBoundaryValues(PROBLEM &pde, VECTOR &u);
+      ApplyInitialBoundaryValues (PROBLEM &pde,
+                                  VECTOR &u);
 
       /**
-        * This method is used in optimization problems with
-        * control in the dirichlet values, it then needs
-        * to calculate the transposed to the control-to-dirichletvalues
-        * mapping. Note that this is currently only usable
-        * of the control is 0-dimensional, i.e., a fixed number of
-        * parameters. Thus it is only implemented in
-        * IntegratorMixedDimensions and provided here for compatibility reasons
-        * only.
-        *
-        * @tparam <PROBLEM>                The problem description
-        *
-        * @param pde                       The object containing the description of the functional.
-        * @param u                         The vector to which the boundary values are applied.
-        */
-      template<typename PROBLEM>
+       * This method is used in optimization problems with
+       * control in the dirichlet values, it then needs
+       * to calculate the transposed to the control-to-dirichletvalues
+       * mapping. Note that this is currently only usable
+       * of the control is 0-dimensional, i.e., a fixed number of
+       * parameters. Thus it is only implemented in
+       * IntegratorMixedDimensions and provided here for compatibility reasons
+       * only.
+       *
+       * @tparam <PROBLEM>                The problem description
+       *
+       * @param pde                       The object containing the description of the functional.
+       * @param u                         The vector to which the boundary values are applied.
+       */
+      template <typename PROBLEM>
       void
-      ApplyTransposedInitialBoundaryValues(PROBLEM &pde, VECTOR &u);
+      ApplyTransposedInitialBoundaryValues (PROBLEM &pde,
+                                            VECTOR &u);
 
       /**
        * This function can be used to pass domain data, i.e., finite element
@@ -310,7 +318,8 @@ namespace DOpE
        * @param new_data     A pointer to the data to be added.
        */
       inline void
-      AddDomainData(std::string name, const VECTOR *new_data);
+      AddDomainData (std::string name,
+                     const VECTOR *new_data);
       /**
        * This function is used to remove previously added domain data from the
        * integrator.
@@ -322,7 +331,7 @@ namespace DOpE
        *                     the integrator.
        */
       inline void
-      DeleteDomainData(std::string name);
+      DeleteDomainData (std::string name);
       /**
        * This function can be used to pass parameter data, i.e., data independent
        * of the spatial position, to the problem.
@@ -334,7 +343,8 @@ namespace DOpE
        * @param new_data     A pointer to the data to be added.
        */
       inline void
-      AddParamData(std::string name, const dealii::Vector<SCALAR> *new_data);
+      AddParamData (std::string name,
+                    const dealii::Vector<SCALAR> *new_data);
       /**
        * This function is used to remove previously added parameter data from the
        * integrator.
@@ -344,8 +354,9 @@ namespace DOpE
        *
        * @param name         The identifier for the data to be removed from
        *                     the integrator.
-       */inline void
-      DeleteParamData(std::string name);
+       */
+      inline void
+      DeleteParamData (std::string name);
 
       /**
        * This function is used to calculate indicators based
@@ -363,10 +374,12 @@ namespace DOpE
        * @param dwrc          The data container for the error estimation.
        *                      This object also stores the refinement indicators.
        */
-      template<typename PROBLEM, class STH, class EDC, class FDC>
+      template <typename PROBLEM, class STH, class EDC, class FDC>
       void
-      ComputeRefinementIndicators(PROBLEM &pde,
-                                  DWRDataContainer<STH, INTEGRATORDATACONT, EDC, FDC, VECTOR> &dwrc);
+      ComputeRefinementIndicators (PROBLEM &pde,
+                                   DWRDataContainer<STH,
+                                   INTEGRATORDATACONT, EDC, FDC,
+                                   VECTOR> &dwrc);
       /**
        * This function is used to calculate indicators based
        * on Residual-type data containes. See ResidualErrorContainer
@@ -378,16 +391,16 @@ namespace DOpE
        * @param dwrc          The data container for the error estimation.
        *                      This object also stores the refinement indicators.
        */
-      template<typename PROBLEM>
+      template <typename PROBLEM>
       void
-      ComputeRefinementIndicators(PROBLEM &pde,
-                                  ResidualErrorContainer<VECTOR> &dwrc);
+      ComputeRefinementIndicators (PROBLEM &pde,
+                                   ResidualErrorContainer<VECTOR> &dwrc);
 
       inline INTEGRATORDATACONT &
-      GetIntegratorDataContainer() const;
+      GetIntegratorDataContainer () const;
 
       inline INTEGRATORDATACONT &
-      GetIntegratorDataContainerFunc() const;
+      GetIntegratorDataContainerFunc () const;
 
     protected:
       /**
@@ -396,14 +409,14 @@ namespace DOpE
        * @return The map with the stored data.
        */
       inline const std::map<std::string, const VECTOR *> &
-      GetDomainData() const;
+      GetDomainData () const;
       /**
        * This grants access to the parameter data stored in the integrator.
        *
        * @return The map with the stored data.
        */
       inline const std::map<std::string, const dealii::Vector<SCALAR>*> &
-      GetParamData() const;
+      GetParamData () const;
 
       /**
        * This function is used to add usergiven righthandsides to the residual.
@@ -418,20 +431,24 @@ namespace DOpE
        *                   This vector is residual = residual + s* "fixed_rhs"
        *
        */
-      inline void AddPresetRightHandSide(double s, VECTOR &residual) const;
+      inline void
+      AddPresetRightHandSide (double s,
+                              VECTOR &residual) const;
 
     private:
-      typedef MethodOfLines_Network_SpaceTimeHandler<FESystem,DoFHandler,BlockVector<double>,0,1> STH_;
-      typedef MethodOfLines_StateSpaceTimeHandler<FESystem,DoFHandler,SparsityPattern,Vector<double>,1> PIPE_STH_;
+      typedef MethodOfLines_Network_SpaceTimeHandler<FESystem, DoFHandler,
+              BlockVector<double>, 0, 1> STH_;
+      typedef MethodOfLines_StateSpaceTimeHandler<FESystem, DoFHandler,
+              SparsityPattern, Vector<double>, 1> PIPE_STH_;
 
-      template<template<int, int> class DH>
+      template <template <int, int> class DH>
       void
-      InterpolateBoundaryValues(
-        const DOpEWrapper::Mapping<dim, DH> &mapping,
-        const DOpEWrapper::DoFHandler<dim, DH> *dof_handler,
-        const unsigned int color, const dealii::Function<dim> &function,
-        std::map<unsigned int, SCALAR> &boundary_values,
-        const std::vector<bool> &comp_mask) const;
+      InterpolateBoundaryValues (const DOpEWrapper::Mapping<dim, DH> &mapping,
+                                 const DOpEWrapper::DoFHandler<dim, DH> *dof_handler,
+                                 const unsigned int color,
+                                 const dealii::Function<dim> &function,
+                                 std::map<unsigned int, SCALAR> &boundary_values,
+                                 const std::vector<bool> &comp_mask) const;
 
       /**
        * Integrate the nonlinear residual on a given pipe
@@ -439,31 +456,33 @@ namespace DOpE
        *
        *
        */
-      template<typename PROBLEM>
+      template <typename PROBLEM>
       void
-      ComputeNonlinearPipeResidual(unsigned int pipe,
-                                   unsigned int n_pipes,
-                                   unsigned int n_comp,
-                                   PIPE_STH_* sth, PROBLEM &pde,
-                                   dealii::Vector<double> &residual,
-                                   dealii::Vector<double> &flow,
-                                   std::vector<bool> &fluxes_in_outflow);
+      ComputeNonlinearPipeResidual (unsigned int pipe,
+                                    unsigned int n_pipes,
+                                    unsigned int n_comp,
+                                    PIPE_STH_* sth,
+                                    PROBLEM &pde,
+                                    dealii::Vector<double> &residual,
+                                    dealii::Vector<double> &flow,
+                                    std::vector<bool> &fluxes_in_outflow);
       /**
        * Integrate the matrix on a given pipe
        * Assumes that the pipe is selected prior to calling this function
        *
        *
        */
-      template<typename PROBLEM>
+      template <typename PROBLEM>
       void
-      ComputePipeMatrix(unsigned int pipe,
-                        unsigned int n_pipes,
-                        unsigned int n_comp,
-                        PIPE_STH_* sth, PROBLEM &pde,
-                        dealii::SparseMatrix<double> &matrix,
-                        dealii::FullMatrix<double> &inflow_coupling,
-                        dealii::FullMatrix<double> &outflow_coupling,
-                        std::vector<bool> &fluxes_in_outflow);
+      ComputePipeMatrix (unsigned int pipe,
+                         unsigned int n_pipes,
+                         unsigned int n_comp,
+                         PIPE_STH_* sth,
+                         PROBLEM &pde,
+                         dealii::SparseMatrix<double> &matrix,
+                         dealii::FullMatrix<double> &inflow_coupling,
+                         dealii::FullMatrix<double> &outflow_coupling,
+                         std::vector<bool> &fluxes_in_outflow);
 
       /**
        * Integrate a functional on a pipe
@@ -471,10 +490,11 @@ namespace DOpE
        *
        *
        */
-      template<typename PROBLEM>
+      template <typename PROBLEM>
       SCALAR
-      ComputePipeDomainScalar(unsigned int pipe,
-                              PIPE_STH_* sth, PROBLEM &pde);
+      ComputePipeDomainScalar (unsigned int pipe,
+                               PIPE_STH_* sth,
+                               PROBLEM &pde);
 
 //        /**
 //         * Given a vector of active element iterators and a facenumber, checks if the face
@@ -506,130 +526,142 @@ namespace DOpE
 
     /**********************************Implementation*******************************************/
 
-    template<typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR,
-             int dim>
-    Network_Integrator<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::Network_Integrator(
-      INTEGRATORDATACONT &idc)
-      : idc1_(idc), idc2_(idc)
+    template <typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR,
+              int dim>
+    Network_Integrator<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::Network_Integrator (INTEGRATORDATACONT &idc)
+      : idc1_ (idc),
+        idc2_ (idc)
     {
       if (dim != 1)
         {
-          throw DOpEException("Not implemented in given dimensions!","Network_Integrator::Network_Integrator");
+          throw DOpEException ("Not implemented in given dimensions!",
+                               "Network_Integrator::Network_Integrator");
         }
     }
 
-    template<typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR,
-             int dim>
-    Network_Integrator<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::Network_Integrator(
-      INTEGRATORDATACONT &idc1, INTEGRATORDATACONT &idc2)
-      : idc1_(idc1), idc2_(idc2)
+    template <typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR,
+              int dim>
+    Network_Integrator<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::Network_Integrator (INTEGRATORDATACONT &idc1,
+        INTEGRATORDATACONT &idc2)
+      : idc1_ (idc1),
+        idc2_ (idc2)
     {
       if (dim != 1)
         {
-          throw DOpEException("Not implemented in given dimensions!","Network_Integrator::Network_Integrator");
+          throw DOpEException ("Not implemented in given dimensions!",
+                               "Network_Integrator::Network_Integrator");
         }
     }
 
     /**********************************Implementation*******************************************/
 
-    template<typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR,
-             int dim>
-    Network_Integrator<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::~Network_Integrator()
+    template <typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR,
+              int dim>
+    Network_Integrator<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::~Network_Integrator ()
     {
 
     }
 
     /*******************************************************************************************/
 
-    template<typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR,
-             int dim>
+    template <typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR,
+              int dim>
     void
-    Network_Integrator<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::ReInit()
+    Network_Integrator<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::ReInit ()
     {
 
     }
 
     /*******************************************************************************************/
 
-    template<typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR,
-             int dim>
-    template<typename PROBLEM>
+    template <typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR,
+              int dim>
+    template <typename PROBLEM>
     void
-    Network_Integrator<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::ComputeNonlinearResidual(
-      PROBLEM &pde, VECTOR &residual)
+    Network_Integrator<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::ComputeNonlinearResidual (PROBLEM &pde,
+        VECTOR &residual)
     {
       residual = 0.;
 
-      STH_* sth = dynamic_cast<STH_ *>(pde.GetBaseProblem().GetSpaceTimeHandler());
+      STH_* sth =
+        dynamic_cast<STH_ *> (pde.GetBaseProblem ().GetSpaceTimeHandler ());
 
       if (sth == NULL)
         {
-          throw DOpEException("Using Networks::Network_Integrator with wrong SpaceTimeHandler","Networks::Network_Integrator::ComputeNonlinearResidual");
+          throw DOpEException (
+            "Using Networks::Network_Integrator with wrong SpaceTimeHandler",
+            "Networks::Network_Integrator::ComputeNonlinearResidual");
         }
-      unsigned int n_pipes = sth->GetNPipes();
-      unsigned int n_comp = sth->GetFESystem("state").n_components();
-      std::vector<bool> present_in_outflow(2*n_comp*n_pipes,false);
-      dealii::Vector<double> flow(4*n_comp);
+      unsigned int n_pipes = sth->GetNPipes ();
+      unsigned int n_comp = sth->GetFESystem ("state").n_components ();
+      std::vector<bool> present_in_outflow (2 * n_comp * n_pipes, false);
+      dealii::Vector<double> flow (4 * n_comp);
 
       for (unsigned int p = 0; p < n_pipes; p++)
         {
           flow = 0.;
-          std::vector<bool> tmp(2*n_comp,false);
+          std::vector<bool> tmp (2 * n_comp, false);
 
-          sth->SelectPipe(p);
-          ComputeNonlinearPipeResidual(p,n_pipes,n_comp,sth->GetPipeSTH(),pde,residual.block(p),flow,tmp);
+          sth->SelectPipe (p);
+          ComputeNonlinearPipeResidual (p, n_pipes, n_comp,
+                                        sth->GetPipeSTH (), pde, residual.block (p), flow, tmp);
 
           //Sort the inconsistency in the outflow variable to the right position
           for (unsigned int c = 0; c < n_comp; c++)
             {
               //Residual for the first flow stored at n_comp*p+c in block n_pipes
-              residual.block(n_pipes)[n_comp*p+c] = flow[c];
-              residual.block(n_pipes)[n_comp*p+c] += flow[n_comp+c];
-              residual.block(n_pipes)[n_pipes*n_comp+n_comp*p+c] = flow[2*n_comp+c];
-              residual.block(n_pipes)[n_pipes*n_comp+n_comp*p+c] += flow[3*n_comp+c];
+              residual.block (n_pipes)[n_comp * p + c] = flow[c];
+              residual.block (n_pipes)[n_comp * p + c] += flow[n_comp + c];
+              residual.block (n_pipes)[n_pipes * n_comp + n_comp * p + c] =
+                flow[2 * n_comp + c];
+              residual.block (n_pipes)[n_pipes * n_comp + n_comp * p + c] +=
+                flow[3 * n_comp + c];
               //Sort the bool-flags for the fluxes in the outflow to the right place
 
-              assert(tmp[c]||tmp[n_comp+c]);//At least on must be outflow
+              assert(tmp[c] || tmp[n_comp + c]); //At least on must be outflow
               //(Both are allowed to deal with ) algebraic pipes where the boundary is induced by the
               //pipe
-              present_in_outflow[p*n_comp+c]=tmp[c];
-              present_in_outflow[n_pipes*n_comp+p*n_comp+c]=tmp[n_comp+c];
+              present_in_outflow[p * n_comp + c] = tmp[c];
+              present_in_outflow[n_pipes * n_comp + p * n_comp + c] =
+                tmp[n_comp + c];
             }
         }
 
-      sth->SelectPipe(n_pipes);
+      sth->SelectPipe (n_pipes);
 
       //Find the current linearization point
-      typename std::map<std::string,const VECTOR *>::iterator it = domain_data_.find("last_newton_solution");
-      if (it == domain_data_.end())
+      typename std::map<std::string, const VECTOR *>::iterator it =
+        domain_data_.find ("last_newton_solution");
+      if (it == domain_data_.end ())
         {
-          throw DOpEException(
+          throw DOpEException (
             "Could not find data named last_newton_solution!",
             "Network_Integrator::ComputeNonlinearResidual");
         }
       const VECTOR &lin_pt = *(it->second);
 
       //Cross Coupling of the nodal variables, e.g. continuity of the flux...
-      dealii::Vector<double> coupling(2*n_pipes*n_comp);
-      pde.PipeCouplingResidual(coupling,lin_pt.block(n_pipes),present_in_outflow);
-      assert(coupling.size() == 2*n_pipes*n_comp);
-      for (unsigned int i = 0 ; i < coupling.size(); i++)
+      dealii::Vector<double> coupling (2 * n_pipes * n_comp);
+      pde.PipeCouplingResidual (coupling, lin_pt.block (n_pipes),
+                                present_in_outflow);
+      assert(coupling.size () == 2 * n_pipes * n_comp);
+      for (unsigned int i = 0; i < coupling.size (); i++)
         {
-          residual.block(n_pipes)[i]+=coupling[i];
+          residual.block (n_pipes)[i] += coupling[i];
         }
 
       //Check if some preset righthandside exists.
-      AddPresetRightHandSide(-1.,residual);
+      AddPresetRightHandSide (-1., residual);
     }
 
     /*******************************************************************************************/
 
-    template<typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR,
-             int dim>
-    template<typename PROBLEM>
+    template <typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR,
+              int dim>
+    template <typename PROBLEM>
     void
-    Network_Integrator<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::ComputeNonlinearLhs(
-      PROBLEM &/*pde*/, VECTOR &/*residual*/)
+    Network_Integrator<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::ComputeNonlinearLhs (PROBLEM &/*pde*/,
+        VECTOR &/*residual*/)
     {
 //    {
 //
@@ -781,17 +813,17 @@ namespace DOpE
 //        }
 //
 //    }
-      abort();
+      abort ();
     }
 
     /*******************************************************************************************/
 
-    template<typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR,
-             int dim>
-    template<typename PROBLEM>
+    template <typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR,
+              int dim>
+    template <typename PROBLEM>
     void
-    Network_Integrator<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::ComputeNonlinearRhs(
-      PROBLEM &/*pde*/, VECTOR &/*residual*/)
+    Network_Integrator<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::ComputeNonlinearRhs (PROBLEM &/*pde*/,
+        VECTOR &/*residual*/)
     {
 //    residual = 0.;
 //    // Begin integration
@@ -907,83 +939,111 @@ namespace DOpE
 //      }
 //    //Check if some preset righthandside exists.
 //    AddPresetRightHandSide(1.,residual);
-      abort();
+      abort ();
     }
 
     /*******************************************************************************************/
 
-    template<typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR,
-             int dim>
-    template<typename PROBLEM>
+    template <typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR,
+              int dim>
+    template <typename PROBLEM>
     void
-    Network_Integrator<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::ComputeMatrix(
-      PROBLEM &pde, dealii::BlockSparseMatrix<double> &matrix)
+    Network_Integrator<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::ComputeMatrix (PROBLEM &pde,
+        dealii::BlockSparseMatrix<
+        double> &matrix)
     {
       matrix = 0.;
 
-      STH_* sth = dynamic_cast<STH_ *>(pde.GetBaseProblem().GetSpaceTimeHandler());
+      STH_* sth =
+        dynamic_cast<STH_ *> (pde.GetBaseProblem ().GetSpaceTimeHandler ());
 
       if (sth == NULL)
         {
-          throw DOpEException("Using Networks::Network_Integrator with wrong SpaceTimeHandler","Networks::Network_Integrator::ComputeMatrix");
+          throw DOpEException (
+            "Using Networks::Network_Integrator with wrong SpaceTimeHandler",
+            "Networks::Network_Integrator::ComputeMatrix");
         }
 
-      const std::vector<std::vector<unsigned int> > &left_vals = sth->GetPipeToLeftDoF();
-      const std::vector<std::vector<unsigned int> > &right_vals = sth->GetPipeToRightDoF();
+      const std::vector<std::vector<unsigned int> > &left_vals =
+        sth->GetPipeToLeftDoF ();
+      const std::vector<std::vector<unsigned int> > &right_vals =
+        sth->GetPipeToRightDoF ();
 
-      unsigned int n_pipes = sth->GetNPipes();
-      unsigned int n_comp = sth->GetFESystem("state").n_components();
-      std::vector<bool> present_in_outflow(2*n_comp*n_pipes,false);
-      dealii::FullMatrix<double> inflow_matrix(2*n_comp);
-      dealii::FullMatrix<double> outflow_matrix(2*n_comp);
-
+      unsigned int n_pipes = sth->GetNPipes ();
+      unsigned int n_comp = sth->GetFESystem ("state").n_components ();
+      std::vector<bool> present_in_outflow (2 * n_comp * n_pipes, false);
+      dealii::FullMatrix<double> inflow_matrix (2 * n_comp);
+      dealii::FullMatrix<double> outflow_matrix (2 * n_comp);
 
       for (unsigned int p = 0; p < n_pipes; p++)
         {
           inflow_matrix = 0.;
           outflow_matrix = 0.;
-          sth->SelectPipe(p);
-          std::vector<bool> tmp(2*n_comp,false);
-          ComputePipeMatrix(p,n_pipes,n_comp,sth->GetPipeSTH(),pde,matrix.block(p,p),inflow_matrix,outflow_matrix,tmp);
-          assert(inflow_matrix.n()==inflow_matrix.m());
-          assert(outflow_matrix.n()==outflow_matrix.m());
-          assert(inflow_matrix.n()==outflow_matrix.n());
-          assert(inflow_matrix.n()==2*n_comp);
-          assert(left_vals[p].size()==n_comp);
+          sth->SelectPipe (p);
+          std::vector<bool> tmp (2 * n_comp, false);
+          ComputePipeMatrix (p, n_pipes, n_comp, sth->GetPipeSTH (), pde,
+                             matrix.block (p, p), inflow_matrix, outflow_matrix, tmp);
+          assert(inflow_matrix.n () == inflow_matrix.m ());
+          assert(outflow_matrix.n () == outflow_matrix.m ());
+          assert(inflow_matrix.n () == outflow_matrix.n ());
+          assert(inflow_matrix.n () == 2 * n_comp);
+          assert(left_vals[p].size () == n_comp);
           //Sort in and outflow matrices to the right places.
           for (unsigned int c = 0; c < n_comp; c++)
             {
               for (unsigned int d = 0; d < n_comp; d++)
                 {
                   //Inflow coupling
-                  if (fabs(inflow_matrix(c,d)) > std::numeric_limits<double>::min())
-                    matrix.block(p,n_pipes).set(left_vals[p][c],p*n_comp+d,inflow_matrix(c,d));
-                  if (fabs(inflow_matrix(n_comp+c,d)) > std::numeric_limits<double>::min())
-                    matrix.block(p,n_pipes).set(right_vals[p][c],p*n_comp+d,inflow_matrix(n_comp+c,d));
-                  if (fabs(inflow_matrix(c,n_comp+d)) > std::numeric_limits<double>::min())
-                    matrix.block(p,n_pipes).set(left_vals[p][c],n_pipes*n_comp+p*n_comp+d,inflow_matrix(c,n_comp+d));
-                  if (fabs(inflow_matrix(n_comp+c,n_comp+d)) > std::numeric_limits<double>::min())
-                    matrix.block(p,n_pipes).set(right_vals[p][c],n_pipes*n_comp+p*n_comp+d,inflow_matrix(n_comp+c,n_comp+d));
+                  if (fabs (inflow_matrix (c, d)) > std::numeric_limits<
+                      double>::min ())
+                    matrix.block (p, n_pipes).set (left_vals[p][c],
+                                                   p * n_comp + d, inflow_matrix (c, d));
+                  if (fabs (inflow_matrix (n_comp + c, d)) > std::numeric_limits<
+                      double>::min ())
+                    matrix.block (p, n_pipes).set (right_vals[p][c],
+                                                   p * n_comp + d, inflow_matrix (n_comp + c, d));
+                  if (fabs (inflow_matrix (c, n_comp + d)) > std::numeric_limits<
+                      double>::min ())
+                    matrix.block (p, n_pipes).set (left_vals[p][c],
+                                                   n_pipes * n_comp + p * n_comp + d,
+                                                   inflow_matrix (c, n_comp + d));
+                  if (fabs (inflow_matrix (n_comp + c, n_comp + d)) > std::numeric_limits<
+                      double>::min ())
+                    matrix.block (p, n_pipes).set (right_vals[p][c],
+                                                   n_pipes * n_comp + p * n_comp + d,
+                                                   inflow_matrix (n_comp + c, n_comp + d));
                   //Outflow coupling
-                  if (fabs(outflow_matrix(c,d)) > std::numeric_limits<double>::min()) //left value is outflow
-                    matrix.block(n_pipes,p).set(p*n_comp+c,left_vals[p][d],outflow_matrix(c,d));
-                  if (fabs(outflow_matrix(n_comp+c,d)) > std::numeric_limits<double>::min())
-                    matrix.block(n_pipes,p).set(n_pipes*n_comp+p*n_comp+c,left_vals[p][d],outflow_matrix(n_comp+c,d));
-                  if (fabs(outflow_matrix(c,n_comp+d)) > std::numeric_limits<double>::min())
-                    matrix.block(n_pipes,p).set(p*n_comp+c,right_vals[p][d],outflow_matrix(c,n_comp+d));
-                  if (fabs(outflow_matrix(n_comp+c,n_comp+d)) > std::numeric_limits<double>::min())
-                    matrix.block(n_pipes,p).set(n_pipes*n_comp+p*n_comp+c,right_vals[p][d],outflow_matrix(n_comp+c,n_comp+d));
+                  if (fabs (outflow_matrix (c, d)) > std::numeric_limits<
+                      double>::min ()) //left value is outflow
+                    matrix.block (n_pipes, p).set (p * n_comp + c,
+                                                   left_vals[p][d], outflow_matrix (c, d));
+                  if (fabs (outflow_matrix (n_comp + c, d)) > std::numeric_limits<
+                      double>::min ())
+                    matrix.block (n_pipes, p).set (
+                      n_pipes * n_comp + p * n_comp + c, left_vals[p][d],
+                      outflow_matrix (n_comp + c, d));
+                  if (fabs (outflow_matrix (c, n_comp + d)) > std::numeric_limits<
+                      double>::min ())
+                    matrix.block (n_pipes, p).set (p * n_comp + c,
+                                                   right_vals[p][d], outflow_matrix (c, n_comp + d));
+                  if (fabs (outflow_matrix (n_comp + c, n_comp + d)) > std::numeric_limits<
+                      double>::min ())
+                    matrix.block (n_pipes, p).set (
+                      n_pipes * n_comp + p * n_comp + c, right_vals[p][d],
+                      outflow_matrix (n_comp + c, n_comp + d));
                 }
               //Sort the bool-flags for the fluxes in the outflow to the right place
-              assert(tmp[c]||tmp[n_comp+c]);
-              present_in_outflow[p*n_comp+c]=tmp[c];
-              present_in_outflow[n_pipes*n_comp+p*n_comp+c]=tmp[n_comp+c];
+              assert(tmp[c] || tmp[n_comp + c]);
+              present_in_outflow[p * n_comp + c] = tmp[c];
+              present_in_outflow[n_pipes * n_comp + p * n_comp + c] =
+                tmp[n_comp + c];
             }
         }
-      sth->SelectPipe(n_pipes);
+      sth->SelectPipe (n_pipes);
       //Now the coupling block(n_pipes,n_pipes)
       //No linearization point needed since coupling conditions are linear!
-      pde.CouplingMatrix(matrix.block(n_pipes,n_pipes),present_in_outflow);
+      pde.CouplingMatrix (matrix.block (n_pipes, n_pipes),
+                          present_in_outflow);
 
 //    //Print Matrix
 //    for(unsigned int p = 0; p <= n_pipes; p++)
@@ -1022,41 +1082,42 @@ namespace DOpE
 
     /*******************************************************************************************/
 
-    template<typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR,
-             int dim>
-    template<typename PROBLEM>
+    template <typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR,
+              int dim>
+    template <typename PROBLEM>
     SCALAR
-    Network_Integrator<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::ComputeDomainScalar(
-      PROBLEM &pde)
+    Network_Integrator<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::ComputeDomainScalar (PROBLEM &pde)
     {
       SCALAR ret = 0;
 
-      STH_* sth = dynamic_cast<STH_ *>(pde.GetBaseProblem().GetSpaceTimeHandler());
+      STH_* sth =
+        dynamic_cast<STH_ *> (pde.GetBaseProblem ().GetSpaceTimeHandler ());
 
       if (sth == NULL)
         {
-          throw DOpEException("Using Networks::Network_Integrator with wrong SpaceTimeHandler","Networks::Network_Integrator::ComputeDomainScalar");
+          throw DOpEException (
+            "Using Networks::Network_Integrator with wrong SpaceTimeHandler",
+            "Networks::Network_Integrator::ComputeDomainScalar");
         }
 
-      unsigned int n_pipes = sth->GetNPipes();
+      unsigned int n_pipes = sth->GetNPipes ();
 
       for (unsigned int p = 0; p < n_pipes; p++)
         {
-          sth->SelectPipe(p);
-          ret += ComputePipeDomainScalar(p, sth->GetPipeSTH(), pde);
+          sth->SelectPipe (p);
+          ret += ComputePipeDomainScalar (p, sth->GetPipeSTH (), pde);
         }
-      sth->SelectPipe(n_pipes);
+      sth->SelectPipe (n_pipes);
 
       return ret;
     }
     /*******************************************************************************************/
 
-    template<typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR,
-             int dim>
-    template<typename PROBLEM>
+    template <typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR,
+              int dim>
+    template <typename PROBLEM>
     SCALAR
-    Network_Integrator<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::ComputePointScalar(
-      PROBLEM &/*pde*/)
+    Network_Integrator<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::ComputePointScalar (PROBLEM &/*pde*/)
     {
 //
 //    {
@@ -1066,17 +1127,16 @@ namespace DOpE
 //
 //      return ret;
 //    }
-      abort();
+      abort ();
     }
     /*******************************************************************************************/
 
-    template<typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR,
-             int dim>
-    template<typename PROBLEM>
+    template <typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR,
+              int dim>
+    template <typename PROBLEM>
     SCALAR
-    Network_Integrator<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::ComputeBoundaryScalar(
-      PROBLEM &/*pde*/
-    )
+    Network_Integrator<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::ComputeBoundaryScalar (PROBLEM &/*pde*/
+                                                                                       )
     {
 //    {
 //      SCALAR ret = 0.;
@@ -1140,17 +1200,16 @@ namespace DOpE
 //      return ret;
 //
 //    }
-      abort();
+      abort ();
     }
     /*******************************************************************************************/
 
-    template<typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR,
-             int dim>
-    template<typename PROBLEM>
+    template <typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR,
+              int dim>
+    template <typename PROBLEM>
     SCALAR
-    Network_Integrator<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::ComputeFaceScalar(
-      PROBLEM &/*pde*/
-    )
+    Network_Integrator<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::ComputeFaceScalar (PROBLEM &/*pde*/
+                                                                                   )
     {
 
 //    {
@@ -1202,206 +1261,209 @@ namespace DOpE
 //        }
 //      return ret;
 //    }
-      abort();
+      abort ();
     }
     /*******************************************************************************************/
 
-    template<typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR,
-             int dim>
-    template<typename PROBLEM>
+    template <typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR,
+              int dim>
+    template <typename PROBLEM>
     SCALAR
-    Network_Integrator<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::ComputeAlgebraicScalar(
-      PROBLEM &pde)
+    Network_Integrator<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::ComputeAlgebraicScalar (PROBLEM &pde)
     {
 
       {
         SCALAR ret = 0.;
-        ret = pde.AlgebraicFunctional(this->GetParamData(),
-                                      this->GetDomainData());
+        ret = pde.AlgebraicFunctional (this->GetParamData (),
+                                       this->GetDomainData ());
         return ret;
       }
     }
 
     /*******************************************************************************************/
 
-    template<typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR,
-             int dim>
-    template<typename PROBLEM>
+    template <typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR,
+              int dim>
+    template <typename PROBLEM>
     void
-    Network_Integrator<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::ComputeNonlinearAlgebraicResidual(
-      PROBLEM &pde, VECTOR &residual)
+    Network_Integrator<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::ComputeNonlinearAlgebraicResidual (PROBLEM &pde,
+        VECTOR &residual)
     {
       residual = 0.;
-      pde.AlgebraicResidual(residual, this->GetParamData(),
-                            this->GetDomainData());
+      pde.AlgebraicResidual (residual, this->GetParamData (),
+                             this->GetDomainData ());
       //Check if some preset righthandside exists.
-      AddPresetRightHandSide(-1.,residual);
+      AddPresetRightHandSide (-1., residual);
     }
 
     /*******************************************************************************************/
 
-    template<typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR,
-             int dim>
-    template<typename PROBLEM>
+    template <typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR,
+              int dim>
+    template <typename PROBLEM>
     void
-    Network_Integrator<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::ComputeLocalControlConstraints(
-      PROBLEM &pde, VECTOR &constraints)
+    Network_Integrator<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::ComputeLocalControlConstraints (PROBLEM &pde,
+        VECTOR &constraints)
     {
       constraints = 0.;
-      pde.ComputeLocalControlConstraints(constraints, this->GetParamData(),
-                                         this->GetDomainData());
+      pde.ComputeLocalControlConstraints (constraints,
+                                          this->GetParamData (), this->GetDomainData ());
     }
 
     /*******************************************************************************************/
 
-    template<typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR,
-             int dim>
-    template<typename PROBLEM>
+    template <typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR,
+              int dim>
+    template <typename PROBLEM>
     void
-    Network_Integrator<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::ApplyTransposedInitialBoundaryValues(
-      PROBLEM & /*pde*/, VECTOR &/*u*/)
+    Network_Integrator<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::ApplyTransposedInitialBoundaryValues (PROBLEM & /*pde*/,
+        VECTOR &/*u*/)
     {
       // Is not required here ...
     }
 
     /*******************************************************************************************/
 
-    template<typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR,
-             int dim>
-    template<typename PROBLEM>
+    template <typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR,
+              int dim>
+    template <typename PROBLEM>
     void
-    Network_Integrator<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::ApplyInitialBoundaryValues(
-      PROBLEM &pde, VECTOR &u)
+    Network_Integrator<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::ApplyInitialBoundaryValues (PROBLEM &pde,
+        VECTOR &u)
     {
 
       //Never Condense Nodes Here ! Or All will fail if the state is not initialized with zero!
       //pde.GetDoFConstraints().condense(u);
-      std::vector<unsigned int> dirichlet_colors = pde.GetDirichletColors();
-      for (unsigned int i = 0; i < dirichlet_colors.size(); i++)
+      std::vector<unsigned int> dirichlet_colors =
+        pde.GetDirichletColors ();
+      for (unsigned int i = 0; i < dirichlet_colors.size (); i++)
         {
           unsigned int color = dirichlet_colors[i];
-          std::vector<bool> comp_mask = pde.GetDirichletCompMask(color);
+          std::vector<bool> comp_mask = pde.GetDirichletCompMask (color);
           std::map<unsigned int, SCALAR> boundary_values;
 
-          InterpolateBoundaryValues( pde.GetBaseProblem().GetSpaceTimeHandler()->GetMapping(),
-                                     pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandler()[0],
-                                     color,
-                                     pde.GetDirichletValues(color, this->GetParamData(),
-                                                            this->GetDomainData()), boundary_values, comp_mask);
+          InterpolateBoundaryValues (
+            pde.GetBaseProblem ().GetSpaceTimeHandler ()->GetMapping (),
+            pde.GetBaseProblem ().GetSpaceTimeHandler ()->GetDoFHandler ()[0],
+            color,
+            pde.GetDirichletValues (color, this->GetParamData (),
+                                    this->GetDomainData ()), boundary_values, comp_mask);
 
           for (typename std::map<unsigned int, SCALAR>::const_iterator p =
-                 boundary_values.begin(); p != boundary_values.end(); p++)
+                 boundary_values.begin (); p != boundary_values.end (); p++)
             {
-              u(p->first) = p->second;
+              u (p->first) = p->second;
             }
         }
     }
 
-
     /*******************************************************************************************/
 
-    template<typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR,
-             int dim>
+    template <typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR,
+              int dim>
     void
-    Network_Integrator<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::AddDomainData(
-      std::string name, const VECTOR *new_data)
+    Network_Integrator<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::AddDomainData (std::string name,
+        const VECTOR *new_data)
     {
-      if (domain_data_.find(name) != domain_data_.end())
+      if (domain_data_.find (name) != domain_data_.end ())
         {
-          throw DOpEException(
+          throw DOpEException (
             "Adding multiple Data with name " + name + " is prohibited!",
             "Network_Integrator::AddDomainData");
         }
-      domain_data_.insert(
-        std::pair<std::string, const VECTOR *>(name, new_data));
+      domain_data_.insert (
+        std::pair<std::string, const VECTOR *> (name, new_data));
     }
 
     /*******************************************************************************************/
 
-    template<typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR,
-             int dim>
+    template <typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR,
+              int dim>
     void
-    Network_Integrator<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::DeleteDomainData(
-      std::string name)
+    Network_Integrator<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::DeleteDomainData (std::string name)
     {
       typename std::map<std::string, const VECTOR *>::iterator it =
-        domain_data_.find(name);
-      if (it == domain_data_.end())
+        domain_data_.find (name);
+      if (it == domain_data_.end ())
         {
-          throw DOpEException(
+          throw DOpEException (
             "Deleting Data " + name + " is impossible! Data not found",
             "Network_Integrator::DeleteDomainData");
         }
-      domain_data_.erase(it);
+      domain_data_.erase (it);
     }
 
     /*******************************************************************************************/
 
-    template<typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR,
-             int dim>
+    template <typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR,
+              int dim>
     const std::map<std::string, const VECTOR *> &
-    Network_Integrator<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::GetDomainData() const
+    Network_Integrator<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::GetDomainData () const
     {
       return domain_data_;
     }
 
     /*******************************************************************************************/
 
-    template<typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR,
-             int dim>
+    template <typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR,
+              int dim>
     void
-    Network_Integrator<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::AddParamData(
-      std::string name, const dealii::Vector<SCALAR> *new_data)
+    Network_Integrator<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::AddParamData (std::string name,
+        const dealii::Vector<
+        SCALAR> *new_data)
     {
-      if (param_data_.find(name) != param_data_.end())
+      if (param_data_.find (name) != param_data_.end ())
         {
-          throw DOpEException(
+          throw DOpEException (
             "Adding multiple Data with name " + name + " is prohibited!",
             "Network_Integrator::AddParamData");
         }
-      param_data_.insert(
-        std::pair<std::string, const dealii::Vector<SCALAR>*>(name,
-                                                              new_data));
+      param_data_.insert (
+        std::pair<std::string, const dealii::Vector<SCALAR>*> (name,
+                                                               new_data));
     }
 
     /*******************************************************************************************/
 
-    template<typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR,
-             int dim>
+    template <typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR,
+              int dim>
     void
-    Network_Integrator<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::DeleteParamData(
-      std::string name)
+    Network_Integrator<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::DeleteParamData (std::string name)
     {
       typename std::map<std::string, const dealii::Vector<SCALAR>*>::iterator it =
-        param_data_.find(name);
-      if (it == param_data_.end())
+        param_data_.find (name);
+      if (it == param_data_.end ())
         {
-          throw DOpEException(
+          throw DOpEException (
             "Deleting Data " + name + " is impossible! Data not found",
             "Network_Integrator::DeleteParamData");
         }
-      param_data_.erase(it);
+      param_data_.erase (it);
     }
 
     /*******************************************************************************************/
 
-    template<typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR,
-             int dim>
+    template <typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR,
+              int dim>
     const std::map<std::string, const dealii::Vector<SCALAR>*> &
-    Network_Integrator<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::GetParamData() const
+    Network_Integrator<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::GetParamData () const
     {
       return param_data_;
     }
 
     /*******************************************************************************************/
 
-    template<typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR,
-             int dim>
-    template<typename PROBLEM, class STH, class EDC, class FDC>
+    template <typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR,
+              int dim>
+    template <typename PROBLEM, class STH, class EDC, class FDC>
     void
-    Network_Integrator<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::ComputeRefinementIndicators(
-      PROBLEM &pde,
-      DWRDataContainer<STH, INTEGRATORDATACONT, EDC, FDC, VECTOR> &dwrc)
+    Network_Integrator<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::ComputeRefinementIndicators (PROBLEM &pde,
+        DWRDataContainer<
+        STH,
+        INTEGRATORDATACONT,
+        EDC,
+        FDC,
+        VECTOR> &dwrc)
     {
 //    unsigned int n_error_comps = dwrc.GetNErrorComps();
 //    //for primal and dual part of the error
@@ -1709,17 +1771,17 @@ namespace DOpE
 //
 //          }
 //      }
-      abort();
+      abort ();
     }
     /*******************************************************************************************/
 
-    template<typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR,
-             int dim>
-    template<typename PROBLEM>
+    template <typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR,
+              int dim>
+    template <typename PROBLEM>
     void
-    Network_Integrator<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::ComputeRefinementIndicators(
-      PROBLEM &pde,
-      ResidualErrorContainer<VECTOR> &dwrc)
+    Network_Integrator<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::ComputeRefinementIndicators (PROBLEM &pde,
+        ResidualErrorContainer<
+        VECTOR> &dwrc)
     {
 //    //for primal and dual part of the error
 //    std::vector<double> element_sum(2, 0);
@@ -1987,80 +2049,91 @@ namespace DOpE
 //          DeleteDomainData(wd->first);
 //        }
 //    }
-      abort();
+      abort ();
     }
 
     /*******************************************************************************************/
 
-    template<typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR,
-             int dim>
+    template <typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR,
+              int dim>
     INTEGRATORDATACONT &
-    Network_Integrator<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::GetIntegratorDataContainer() const
+    Network_Integrator<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::GetIntegratorDataContainer () const
     {
       return idc1_;
     }
 
     /*******************************************************************************************/
 
-    template<typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR,
-             int dim>
+    template <typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR,
+              int dim>
     INTEGRATORDATACONT &
-    Network_Integrator<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::GetIntegratorDataContainerFunc() const
+    Network_Integrator<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::GetIntegratorDataContainerFunc () const
     {
       return idc2_;
     }
 
     /*******************************************************************************************/
 
-    template<typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR,
-             int dim>
-    template<template<int, int> class DH>
+    template <typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR,
+              int dim>
+    template <template <int, int> class DH>
     void
-    Network_Integrator<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::InterpolateBoundaryValues(
-      const DOpEWrapper::Mapping<dim, DH> &mapping,
-      const DOpEWrapper::DoFHandler<dim, DH> *dof_handler,
-      const unsigned int color, const dealii::Function<dim> &function,
-      std::map<unsigned int, SCALAR> &boundary_values,
-      const std::vector<bool> &comp_mask) const
+    Network_Integrator<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::InterpolateBoundaryValues (const DOpEWrapper::Mapping<
+        dim,
+        DH> &mapping,
+        const DOpEWrapper::DoFHandler<
+        dim,
+        DH> *dof_handler,
+        const unsigned int color,
+        const dealii::Function<
+        dim> &function,
+        std::map<
+        unsigned int,
+        SCALAR> &boundary_values,
+        const std::vector<
+        bool> &comp_mask) const
     {
       //TODO: mapping[0] is a workaround, as deal does not support interpolate
       // boundary_values with a mapping collection at this point.
-      dealii::VectorTools::interpolate_boundary_values(mapping[0],
-                                                       dof_handler->GetDEALDoFHandler(), color, function,
-                                                       boundary_values, comp_mask);
+      dealii::VectorTools::interpolate_boundary_values (mapping[0],
+                                                        dof_handler->GetDEALDoFHandler (), color, function,
+                                                        boundary_values, comp_mask);
     }
     /*******************************************************************************************/
 
-    template<typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR,
-             int dim>
+    template <typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR,
+              int dim>
     void
-    Network_Integrator<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::AddPresetRightHandSide(double s,
+    Network_Integrator<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::AddPresetRightHandSide (double s,
         VECTOR &residual) const
     {
       typename std::map<std::string, const VECTOR *>::const_iterator it =
-        domain_data_.find("fixed_rhs");
-      if (it != domain_data_.end())
+        domain_data_.find ("fixed_rhs");
+      if (it != domain_data_.end ())
         {
-          assert(residual.size() == it->second->size());
-          residual.add(s,*(it->second));
+          assert(residual.size () == it->second->size ());
+          residual.add (s, *(it->second));
         }
     }
 
 //*************************Methods per Pipe*********************************/
     /*******************************************************************************************/
 
-    template<typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR,
-             int dim>
-    template<typename PROBLEM>
+    template <typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR,
+              int dim>
+    template <typename PROBLEM>
     void
-    Network_Integrator<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::ComputeNonlinearPipeResidual(
-      unsigned int pipe,
-      unsigned int n_pipes,
-      unsigned int n_comp,
-      PIPE_STH_* sth, PROBLEM &pde,
-      dealii::Vector<double> &residual,
-      dealii::Vector<double> &flow,
-      std::vector<bool> &fluxes_in_outflow)
+    Network_Integrator<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::ComputeNonlinearPipeResidual (unsigned int pipe,
+        unsigned int n_pipes,
+        unsigned int n_comp,
+        PIPE_STH_* sth,
+        PROBLEM &pde,
+        dealii::Vector<
+        double> &residual,
+        dealii::Vector<
+        double> &flow,
+        std::vector<
+        bool> &fluxes_in_outflow)
     {
       residual = 0.;
 
@@ -2069,72 +2142,70 @@ namespace DOpE
       dealii::Vector<SCALAR> local_vector;
       std::vector<unsigned int> local_dof_indices;
 
-      const bool need_point_rhs = pde.HasPoints();
+      const bool need_point_rhs = pde.HasPoints ();
 
       const auto &dof_handler =
-        pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandler();
+        pde.GetBaseProblem ().GetSpaceTimeHandler ()->GetDoFHandler ();
       auto element =
-        pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandlerBeginActive();
+        pde.GetBaseProblem ().GetSpaceTimeHandler ()->GetDoFHandlerBeginActive ();
       auto endc =
-        pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandlerEnd();
+        pde.GetBaseProblem ().GetSpaceTimeHandler ()->GetDoFHandlerEnd ();
 
       // Generate the data containers.
-      GetIntegratorDataContainer().InitializeEDC(pipe,pde.GetUpdateFlags(),
-                                                 *(sth), element,
-                                                 this->GetParamData(), this->GetDomainData());
-      auto &edc = GetIntegratorDataContainer().GetElementDataContainer();
+      GetIntegratorDataContainer ().InitializeEDC (pipe,
+                                                   pde.GetUpdateFlags (), *(sth), element, this->GetParamData (),
+                                                   this->GetDomainData ());
+      auto &edc = GetIntegratorDataContainer ().GetElementDataContainer ();
 
-      bool need_faces = pde.HasFaces();
-      bool need_interfaces = pde.HasInterfaces();
-      std::vector<unsigned int> boundary_equation_colors = pde.GetBoundaryEquationColors();
-      bool need_boundary_integrals = (boundary_equation_colors.size() > 0);
-      GetIntegratorDataContainer().InitializeFDC(pipe,
-                                                 n_pipes,
-                                                 n_comp,
-                                                 pde.GetFaceUpdateFlags(),
-                                                 *(sth),
-                                                 element,
-                                                 this->GetParamData(),
-                                                 this->GetDomainData(),
-                                                 need_interfaces);
-      auto &fdc = GetIntegratorDataContainer().GetFaceDataContainer();
+      bool need_faces = pde.HasFaces ();
+      bool need_interfaces = pde.HasInterfaces ();
+      std::vector<unsigned int> boundary_equation_colors =
+        pde.GetBoundaryEquationColors ();
+      bool need_boundary_integrals = (boundary_equation_colors.size () > 0);
+      GetIntegratorDataContainer ().InitializeFDC (pipe, n_pipes, n_comp,
+                                                   pde.GetFaceUpdateFlags (), *(sth), element, this->GetParamData (),
+                                                   this->GetDomainData (), need_interfaces);
+      auto &fdc = GetIntegratorDataContainer ().GetFaceDataContainer ();
 
       for (; element[0] != endc[0]; element[0]++)
         {
-          for (unsigned int dh = 1; dh < dof_handler.size(); dh++)
+          for (unsigned int dh = 1; dh < dof_handler.size (); dh++)
             {
               if (element[dh] == endc[dh])
                 {
-                  throw DOpEException(
+                  throw DOpEException (
                     "Elementnumbers in DoFHandlers are not matching!",
                     "Network_Integrator::ComputeNonlinearResidual");
                 }
             }
 
-          edc.ReInit();
+          edc.ReInit ();
 
-          dofs_per_element = element[0]->get_fe().dofs_per_cell;
+          dofs_per_element = element[0]->get_fe ().dofs_per_cell;
 
-          local_vector.reinit(dofs_per_element);
+          local_vector.reinit (dofs_per_element);
           local_vector = 0;
 
-          local_dof_indices.resize(0);
-          local_dof_indices.resize(dofs_per_element, 0);
+          local_dof_indices.resize (0);
+          local_dof_indices.resize (dofs_per_element, 0);
 
           //the second '1' plays only a role in the stationary case. In the non-stationary
           //case, scale_ico is set by the time-stepping-scheme
-          pde.ElementEquation(edc, local_vector, 1., 1.);
-          pde.ElementRhs(edc, local_vector, -1.);
+          pde.ElementEquation (edc, local_vector, 1., 1.);
+          pde.ElementRhs (edc, local_vector, -1.);
 
-          if (need_boundary_integrals && element[0]->at_boundary())
+          if (need_boundary_integrals && element[0]->at_boundary ())
             {
-              for (unsigned int face=0; face < dealii::GeometryInfo<dim>::faces_per_cell; ++face)
+              for (unsigned int face = 0;
+                   face < dealii::GeometryInfo<dim>::faces_per_cell; ++face)
                 {
 #if DEAL_II_VERSION_GTE(8,3,0)
-                  if (element[0]->face(face)->at_boundary()
-                      &&
-                      (find(boundary_equation_colors.begin(),boundary_equation_colors.end(),
-                            element[0]->face(face)->boundary_id()) != boundary_equation_colors.end()))
+                  if (element[0]->face (face)->at_boundary () && (find (
+                                                                    boundary_equation_colors.begin (),
+                                                                    boundary_equation_colors.end (),
+                                                                    element[0]->face (
+                                                                      face)->boundary_id ())
+                                                                  != boundary_equation_colors.end ()))
 #else
                   if (element[0]->face(face)->at_boundary()
                       &&
@@ -2142,56 +2213,60 @@ namespace DOpE
                             element[0]->face(face)->boundary_indicator()) != boundary_equation_colors.end()))
 #endif
                     {
-                      fdc.ReInit(face);
-                      pde.BoundaryEquation(fdc,local_vector, 1., 1.);
-                      pde.BoundaryRhs(fdc,local_vector,-1.);
+                      fdc.ReInit (face);
+                      pde.BoundaryEquation (fdc, local_vector, 1., 1.);
+                      pde.BoundaryRhs (fdc, local_vector, -1.);
 
                       //Compute the partial entries in the last column of the residual
-                      pde.OutflowValues(fdc,fluxes_in_outflow,flow,1.,1.);
+                      pde.OutflowValues (fdc, fluxes_in_outflow, flow, 1.,
+                                         1.);
                     }
                 }
             }
           if (need_faces)
             {
-              for (unsigned int face=0; face < dealii::GeometryInfo<dim>::faces_per_cell; ++face)
+              for (unsigned int face = 0;
+                   face < dealii::GeometryInfo<dim>::faces_per_cell; ++face)
                 {
-                  if (element[0]->neighbor_index(face) != -1)
+                  if (element[0]->neighbor_index (face) != -1)
                     {
-                      fdc.ReInit(face);
-                      pde.FaceEquation(fdc, local_vector, 1., 1.);
-                      pde.FaceRhs(fdc, local_vector,-1.);
+                      fdc.ReInit (face);
+                      pde.FaceEquation (fdc, local_vector, 1., 1.);
+                      pde.FaceRhs (fdc, local_vector, -1.);
                     }
                 }
             }
-          if ( need_interfaces)
+          if (need_interfaces)
             {
 
-              for (unsigned int face=0; face < dealii::GeometryInfo<dim>::faces_per_cell; ++face)
+              for (unsigned int face = 0;
+                   face < dealii::GeometryInfo<dim>::faces_per_cell; ++face)
                 {
                   // auto face_it = element[0]->face(face);
                   // first, check if we are at an interface, i.e. not the neighbour exists and
                   // it has a different material_id than the actual element
-                  if (pde.AtInterface(element, face))
+                  if (pde.AtInterface (element, face))
                     {
                       //There exist now 3 different scenarios, given the actual element and face:
                       // The neighbour behind this face is [ more | as much | less] refined
                       // than/as the actual element. We have to distinguish here only between the case 1
                       // and the other two, because these will be distinguished in in the FaceDataContainer.
 
-                      if (element[0]->neighbor(face)->has_children())
+                      if (element[0]->neighbor (face)->has_children ())
                         {
                           //first: neighbour is finer
 
-                          for (unsigned int subface_no=0;
-                               subface_no < element[0]->face(face)->n_children();
+                          for (unsigned int subface_no = 0;
+                               subface_no < element[0]->face (face)->n_children ();
                                ++subface_no)
                             {
                               //TODO Now here we have to initialise the subface_values on the
                               // actual element and then the facevalues of the neighbours
-                              fdc.ReInit(face, subface_no);
-                              fdc.ReInitNbr();
+                              fdc.ReInit (face, subface_no);
+                              fdc.ReInitNbr ();
 
-                              pde.InterfaceEquation(fdc, local_vector, 1., 1.);
+                              pde.InterfaceEquation (fdc, local_vector, 1.,
+                                                     1.);
 
                             }
                         }
@@ -2200,20 +2275,21 @@ namespace DOpE
                           // either neighbor is as fine as this element or
                           // it is coarser
 
-                          fdc.ReInit(face);
-                          fdc.ReInitNbr();
-                          pde.InterfaceEquation(fdc, local_vector, 1., 1.);
+                          fdc.ReInit (face);
+                          fdc.ReInitNbr ();
+                          pde.InterfaceEquation (fdc, local_vector, 1., 1.);
                         }
 
-                    }                  //endif atinterface
-                }                  //endfor faces
-            }                  //endif need_interfaces
+                    } //endif atinterface
+                } //endfor faces
+            } //endif need_interfaces
           //LocalToGlobal
-          const auto &C = pde.GetDoFConstraints();
-          element[0]->get_dof_indices(local_dof_indices);
-          C.distribute_local_to_global(local_vector, local_dof_indices, residual);
+          const auto &C = pde.GetDoFConstraints ();
+          element[0]->get_dof_indices (local_dof_indices);
+          C.distribute_local_to_global (local_vector, local_dof_indices,
+                                        residual);
 
-          for (unsigned int dh = 1; dh < dof_handler.size(); dh++)
+          for (unsigned int dh = 1; dh < dof_handler.size (); dh++)
             {
               element[dh]++;
             }
@@ -2222,25 +2298,30 @@ namespace DOpE
       //check if we need the evaluation of PointRhs
       if (need_point_rhs)
         {
-          throw DOpEException("No Point Rhs implemented!","Networks::Network_Integrator::ComputeNonlinearPipeResidual");
+          throw DOpEException ("No Point Rhs implemented!",
+                               "Networks::Network_Integrator::ComputeNonlinearPipeResidual");
         }
     }
 
     /*******************************************************************************************/
 
-    template<typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR,
-             int dim>
-    template<typename PROBLEM>
+    template <typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR,
+              int dim>
+    template <typename PROBLEM>
     void
-    Network_Integrator<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::ComputePipeMatrix(
-      unsigned int pipe,
-      unsigned int n_pipes,
-      unsigned int n_comp,
-      PIPE_STH_* sth, PROBLEM &pde,
-      dealii::SparseMatrix<double> &matrix,
-      dealii::FullMatrix<double> &inflow_coupling,
-      dealii::FullMatrix<double> &outflow_coupling,
-      std::vector<bool> &fluxes_in_outflow)
+    Network_Integrator<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::ComputePipeMatrix (unsigned int pipe,
+        unsigned int n_pipes,
+        unsigned int n_comp,
+        PIPE_STH_* sth,
+        PROBLEM &pde,
+        dealii::SparseMatrix<
+        double> &matrix,
+        dealii::FullMatrix<
+        double> &inflow_coupling,
+        dealii::FullMatrix<
+        double> &outflow_coupling,
+        std::vector<
+        bool> &fluxes_in_outflow)
     {
       matrix = 0.;
       // Begin integration
@@ -2248,66 +2329,66 @@ namespace DOpE
       std::vector<unsigned int> local_dof_indices;
 
       const auto &dof_handler =
-        pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandler();
+        pde.GetBaseProblem ().GetSpaceTimeHandler ()->GetDoFHandler ();
       auto element =
-        pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandlerBeginActive();
+        pde.GetBaseProblem ().GetSpaceTimeHandler ()->GetDoFHandlerBeginActive ();
       auto endc =
-        pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandlerEnd();
+        pde.GetBaseProblem ().GetSpaceTimeHandler ()->GetDoFHandlerEnd ();
 
-      GetIntegratorDataContainer().InitializeEDC(pipe,pde.GetUpdateFlags(),
-                                                 *(sth), element,
-                                                 this->GetParamData(), this->GetDomainData());
-      auto &edc = GetIntegratorDataContainer().GetElementDataContainer();
+      GetIntegratorDataContainer ().InitializeEDC (pipe,
+                                                   pde.GetUpdateFlags (), *(sth), element, this->GetParamData (),
+                                                   this->GetDomainData ());
+      auto &edc = GetIntegratorDataContainer ().GetElementDataContainer ();
 
       //for the interface-case
       unsigned int nbr_dofs_per_element;
       std::vector<unsigned int> nbr_local_dof_indices;
 
-      bool need_faces = pde.HasFaces();
-      bool need_interfaces = pde.HasInterfaces();
-      std::vector<unsigned int> boundary_equation_colors = pde.GetBoundaryEquationColors();
-      bool need_boundary_integrals = (boundary_equation_colors.size() > 0);
+      bool need_faces = pde.HasFaces ();
+      bool need_interfaces = pde.HasInterfaces ();
+      std::vector<unsigned int> boundary_equation_colors =
+        pde.GetBoundaryEquationColors ();
+      bool need_boundary_integrals = (boundary_equation_colors.size () > 0);
 
-      GetIntegratorDataContainer().InitializeFDC(pipe, n_pipes, n_comp,
-                                                 pde.GetFaceUpdateFlags(),
-                                                 *(sth),
-                                                 element,
-                                                 this->GetParamData(),
-                                                 this->GetDomainData(),
-                                                 need_interfaces);
-      auto &fdc = GetIntegratorDataContainer().GetFaceDataContainer();
+      GetIntegratorDataContainer ().InitializeFDC (pipe, n_pipes, n_comp,
+                                                   pde.GetFaceUpdateFlags (), *(sth), element, this->GetParamData (),
+                                                   this->GetDomainData (), need_interfaces);
+      auto &fdc = GetIntegratorDataContainer ().GetFaceDataContainer ();
 
       for (; element[0] != endc[0]; element[0]++)
         {
-          for (unsigned int dh = 1; dh < dof_handler.size(); dh++)
+          for (unsigned int dh = 1; dh < dof_handler.size (); dh++)
             {
               if (element[dh] == endc[dh])
                 {
-                  throw DOpEException(
+                  throw DOpEException (
                     "Elementnumbers in DoFHandlers are not matching!",
                     "Network_Integrator::ComputePipeMatrix");
                 }
             }
-          edc.ReInit();
-          dofs_per_element = element[0]->get_fe().dofs_per_cell;
+          edc.ReInit ();
+          dofs_per_element = element[0]->get_fe ().dofs_per_cell;
 
-          dealii::FullMatrix<SCALAR> local_matrix(dofs_per_element,
-                                                  dofs_per_element);
+          dealii::FullMatrix<SCALAR> local_matrix (dofs_per_element,
+                                                   dofs_per_element);
           local_matrix = 0;
 
-          local_dof_indices.resize(0);
-          local_dof_indices.resize(dofs_per_element, 0);
-          pde.ElementMatrix(edc, local_matrix);
+          local_dof_indices.resize (0);
+          local_dof_indices.resize (dofs_per_element, 0);
+          pde.ElementMatrix (edc, local_matrix);
 
           if (need_boundary_integrals)
             {
-              for (unsigned int face=0; face < dealii::GeometryInfo<dim>::faces_per_cell; ++face)
+              for (unsigned int face = 0;
+                   face < dealii::GeometryInfo<dim>::faces_per_cell; ++face)
                 {
 #if DEAL_II_VERSION_GTE(8,3,0)
-                  if (element[0]->face(face)->at_boundary()
-                      &&
-                      (find(boundary_equation_colors.begin(),boundary_equation_colors.end(),
-                            element[0]->face(face)->boundary_id()) != boundary_equation_colors.end()))
+                  if (element[0]->face (face)->at_boundary () && (find (
+                                                                    boundary_equation_colors.begin (),
+                                                                    boundary_equation_colors.end (),
+                                                                    element[0]->face (
+                                                                      face)->boundary_id ())
+                                                                  != boundary_equation_colors.end ()))
 #else
                   if (element[0]->face(face)->at_boundary()
                       &&
@@ -2315,94 +2396,110 @@ namespace DOpE
                             element[0]->face(face)->boundary_indicator()) != boundary_equation_colors.end()))
 #endif
                     {
-                      fdc.ReInit(face);
-                      pde.BoundaryMatrix(fdc, local_matrix);
+                      fdc.ReInit (face);
+                      pde.BoundaryMatrix (fdc, local_matrix);
 
                       //Calculate Outflow Matrix
-                      pde.OutflowMatrix(fdc, fluxes_in_outflow,
-                                        outflow_coupling, 1.,1.);
+                      pde.OutflowMatrix (fdc, fluxes_in_outflow,
+                                         outflow_coupling, 1., 1.);
                       //Calculate Matrix for Coupling between flux and pde (inflow)
-                      pde.BoundaryMatrix_BV(fdc,fluxes_in_outflow,
-                                            inflow_coupling,1.,1.);
+                      pde.BoundaryMatrix_BV (fdc, fluxes_in_outflow,
+                                             inflow_coupling, 1., 1.);
                     }
                 }
             }
           if (need_faces)
             {
-              for (unsigned int face=0; face < dealii::GeometryInfo<dim>::faces_per_cell; ++face)
+              for (unsigned int face = 0;
+                   face < dealii::GeometryInfo<dim>::faces_per_cell; ++face)
                 {
-                  if (element[0]->neighbor_index(face) != -1)
+                  if (element[0]->neighbor_index (face) != -1)
                     {
-                      fdc.ReInit(face);
-                      pde.FaceMatrix(fdc, local_matrix);
+                      fdc.ReInit (face);
+                      pde.FaceMatrix (fdc, local_matrix);
                     }
                 }
             }
 
-          if ( need_interfaces)
+          if (need_interfaces)
             {
-              for (unsigned int face=0; face < dealii::GeometryInfo<dim>::faces_per_cell; ++face)
+              for (unsigned int face = 0;
+                   face < dealii::GeometryInfo<dim>::faces_per_cell; ++face)
                 {
                   //auto face_it = element[0]->face(face);
                   // first, check if we are at an interface, i.e. not the neighbour exists and
                   // it has a different material_id than the actual element
-                  if (pde.AtInterface(element, face))
+                  if (pde.AtInterface (element, face))
                     {
                       //There exist now 3 different scenarios, given the actual element and face:
                       // The neighbour behind this face is [ more | as much | less] refined
                       // than/as the actual element. We have to distinguish here only between the case 1
                       // and the other two, because these will be distinguished in in the FaceDataContainer.
 
-                      if (element[0]->neighbor(face)->has_children())
+                      if (element[0]->neighbor (face)->has_children ())
                         {
                           //first: neighbour is finer
 
-                          for (unsigned int subface_no=0;
-                               subface_no < element[0]->face(face)->n_children();
+                          for (unsigned int subface_no = 0;
+                               subface_no < element[0]->face (face)->n_children ();
                                ++subface_no)
                             {
                               //TODO Now here we have to initialise the subface_values on the
                               // actual element and then the facevalues of the neighbours
-                              fdc.ReInit(face, subface_no);
-                              fdc.ReInitNbr();
+                              fdc.ReInit (face, subface_no);
+                              fdc.ReInitNbr ();
 
                               //TODO to be swapped out?
-                              nbr_dofs_per_element = fdc.GetNbrNDoFsPerElement();
-                              nbr_local_dof_indices.resize(0);
-                              nbr_local_dof_indices.resize(nbr_dofs_per_element, 0);
-                              dealii::FullMatrix<SCALAR> local_interface_matrix(dofs_per_element,nbr_dofs_per_element );
+                              nbr_dofs_per_element =
+                                fdc.GetNbrNDoFsPerElement ();
+                              nbr_local_dof_indices.resize (0);
+                              nbr_local_dof_indices.resize (
+                                nbr_dofs_per_element, 0);
+                              dealii::FullMatrix<SCALAR> local_interface_matrix (
+                                dofs_per_element, nbr_dofs_per_element);
                               local_interface_matrix = 0;
 
-                              pde.InterfaceMatrix(fdc, local_interface_matrix);
+                              pde.InterfaceMatrix (fdc,
+                                                   local_interface_matrix);
 
-                              element[0]->get_dof_indices(local_dof_indices);
-                              element[0]->neighbor(face)->get_dof_indices(nbr_local_dof_indices);
+                              element[0]->get_dof_indices (
+                                local_dof_indices);
+                              element[0]->neighbor (face)->get_dof_indices (
+                                nbr_local_dof_indices);
 
-                              const auto &C = pde.GetDoFConstraints();
-                              C.distribute_local_to_global(local_interface_matrix, local_dof_indices, nbr_local_dof_indices, matrix);
+                              const auto &C = pde.GetDoFConstraints ();
+                              C.distribute_local_to_global (
+                                local_interface_matrix, local_dof_indices,
+                                nbr_local_dof_indices, matrix);
 
                             }
                         }
                       else
                         {
                           // either neighbor is as fine as this element or it is coarser
-                          fdc.ReInit(face);
-                          fdc.ReInitNbr();
+                          fdc.ReInit (face);
+                          fdc.ReInitNbr ();
 
                           //TODO to be swapped out?
-                          nbr_dofs_per_element = fdc.GetNbrNDoFsPerElement();
-                          nbr_local_dof_indices.resize(0);
-                          nbr_local_dof_indices.resize(nbr_dofs_per_element, 0);
-                          dealii::FullMatrix<SCALAR> local_interface_matrix(dofs_per_element,nbr_dofs_per_element );
+                          nbr_dofs_per_element =
+                            fdc.GetNbrNDoFsPerElement ();
+                          nbr_local_dof_indices.resize (0);
+                          nbr_local_dof_indices.resize (
+                            nbr_dofs_per_element, 0);
+                          dealii::FullMatrix<SCALAR> local_interface_matrix (
+                            dofs_per_element, nbr_dofs_per_element);
                           local_interface_matrix = 0;
 
-                          pde.InterfaceMatrix(fdc, local_interface_matrix);
+                          pde.InterfaceMatrix (fdc, local_interface_matrix);
 
-                          element[0]->get_dof_indices(local_dof_indices);
-                          element[0]->neighbor(face)->get_dof_indices(nbr_local_dof_indices);
+                          element[0]->get_dof_indices (local_dof_indices);
+                          element[0]->neighbor (face)->get_dof_indices (
+                            nbr_local_dof_indices);
 
-                          const auto &C = pde.GetDoFConstraints();
-                          C.distribute_local_to_global(local_interface_matrix, local_dof_indices, nbr_local_dof_indices, matrix);
+                          const auto &C = pde.GetDoFConstraints ();
+                          C.distribute_local_to_global (
+                            local_interface_matrix, local_dof_indices,
+                            nbr_local_dof_indices, matrix);
 
                         }
                     } //endif atinterface
@@ -2411,11 +2508,12 @@ namespace DOpE
             } //endif need_interfaces
 
           //LocalToGlobal
-          const auto &C = pde.GetDoFConstraints();
-          element[0]->get_dof_indices(local_dof_indices);
-          C.distribute_local_to_global(local_matrix, local_dof_indices, matrix);
+          const auto &C = pde.GetDoFConstraints ();
+          element[0]->get_dof_indices (local_dof_indices);
+          C.distribute_local_to_global (local_matrix, local_dof_indices,
+                                        matrix);
 
-          for (unsigned int dh = 1; dh < dof_handler.size(); dh++)
+          for (unsigned int dh = 1; dh < dof_handler.size (); dh++)
             {
               element[dh]++;
             }
@@ -2423,44 +2521,45 @@ namespace DOpE
     }
     /*******************************************************************************************/
 
-    template<typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR,
-             int dim>
-    template<typename PROBLEM>
+    template <typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR,
+              int dim>
+    template <typename PROBLEM>
     SCALAR
-    Network_Integrator<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::ComputePipeDomainScalar(
-      unsigned int pipe,
-      PIPE_STH_* sth, PROBLEM &pde)
+    Network_Integrator<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::ComputePipeDomainScalar (unsigned int pipe,
+        PIPE_STH_* sth,
+        PROBLEM &pde)
     {
       {
         SCALAR ret = 0.;
 
         const auto &dof_handler =
-          pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandler();
+          pde.GetBaseProblem ().GetSpaceTimeHandler ()->GetDoFHandler ();
         auto element =
-          pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandlerBeginActive();
+          pde.GetBaseProblem ().GetSpaceTimeHandler ()->GetDoFHandlerBeginActive ();
         auto endc =
-          pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandlerEnd();
-        GetIntegratorDataContainerFunc().InitializeEDC(pipe,pde.GetUpdateFlags(),
-                                                       *(sth), element,
-                                                       this->GetParamData(), this->GetDomainData());
-        auto &edc = GetIntegratorDataContainerFunc().GetElementDataContainer();
+          pde.GetBaseProblem ().GetSpaceTimeHandler ()->GetDoFHandlerEnd ();
+        GetIntegratorDataContainerFunc ().InitializeEDC (pipe,
+                                                         pde.GetUpdateFlags (), *(sth), element, this->GetParamData (),
+                                                         this->GetDomainData ());
+        auto &edc =
+          GetIntegratorDataContainerFunc ().GetElementDataContainer ();
 
         for (; element[0] != endc[0]; element[0]++)
           {
-            for (unsigned int dh = 1; dh < dof_handler.size(); dh++)
+            for (unsigned int dh = 1; dh < dof_handler.size (); dh++)
               {
                 if (element[dh] == endc[dh])
                   {
-                    throw DOpEException(
+                    throw DOpEException (
                       "Elementnumbers in DoFHandlers are not matching!",
                       "Network_Integrator::ComputePipeDomainScalar");
                   }
               }
 
-            edc.ReInit();
-            ret += pde.ElementFunctional(edc);
+            edc.ReInit ();
+            ret += pde.ElementFunctional (edc);
 
-            for (unsigned int dh = 1; dh < dof_handler.size(); dh++)
+            for (unsigned int dh = 1; dh < dof_handler.size (); dh++)
               {
                 element[dh]++;
               }
@@ -2468,9 +2567,6 @@ namespace DOpE
         return ret;
       }
     }
-
-
-
 
 //////////////////////////End of Namespaces//////////////////////////////////
   }

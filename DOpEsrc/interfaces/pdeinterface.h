@@ -61,172 +61,172 @@ namespace DOpE
    *        \phi and \phi_q denote the basis functions in the state and control
    *           test space
    */
-  template<
-    template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
-    template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
-    template<int, int> class DH, typename VECTOR,  int dealdim>
+  template <
+    template <template <int, int> class DH, typename VECTOR, int dealdim> class EDC,
+    template <template <int, int> class DH, typename VECTOR, int dealdim> class FDC,
+    template <int, int> class DH, typename VECTOR, int dealdim>
   class PDEInterface
   {
   public:
-    PDEInterface();
+    PDEInterface ();
     virtual
-    ~PDEInterface();
+    ~PDEInterface ();
 
     /******************************************************/
 
     /**
      * Assuming that the PDE is given in the form a(u;\phi) = f(\phi),
-    * this function implements all terms in a(u;\phi) that are
-    * represented by intergrals over elements T.
-    * Hence, if a(u;\phi) = \sum_T \int_T a_T(u;\phi) + ...
-    * then this function needs to implement \int_T a_T(u;\phi)
-    * a_T may depend upon any spatial derivatives, but not on temporal
-    * derivatives.
-    *
-    * @param edc                The ElementDataContainer object which provides
-    *                           access to all information on the element,
-    *                           e.g., test-functions, mesh size,...
-    * @param local_vector  The vector containing the integrals
-    *                           ordered according to the local number
-    *                           of the testfunction.
-    * @param scale              A scaling parameter to be used in all
-    *                           equations.
-    * @param scale_ico          A special scaling parameter to be used
-    *                           in certain parts of the equation
-    *                           if they need to be treated differently in
-    *                           time-stepping schemes, see the PDF-documentation
-    *                           for more details.
-    *
+     * this function implements all terms in a(u;\phi) that are
+     * represented by intergrals over elements T.
+     * Hence, if a(u;\phi) = \sum_T \int_T a_T(u;\phi) + ...
+     * then this function needs to implement \int_T a_T(u;\phi)
+     * a_T may depend upon any spatial derivatives, but not on temporal
+     * derivatives.
+     *
+     * @param edc                The ElementDataContainer object which provides
+     *                           access to all information on the element,
+     *                           e.g., test-functions, mesh size,...
+     * @param local_vector  The vector containing the integrals
+     *                           ordered according to the local number
+     *                           of the testfunction.
+     * @param scale              A scaling parameter to be used in all
+     *                           equations.
+     * @param scale_ico          A special scaling parameter to be used
+     *                           in certain parts of the equation
+     *                           if they need to be treated differently in
+     *                           time-stepping schemes, see the PDF-documentation
+     *                           for more details.
+     *
      */
     virtual void
-    ElementEquation(const EDC<DH, VECTOR, dealdim> & /*edc*/,
-                    dealii::Vector<double> &/*local_vector*/,
-                    double /*scale*/,
-                    double /*scale_ico*/);
+    ElementEquation (const EDC<DH, VECTOR, dealdim> & /*edc*/,
+                     dealii::Vector<double> &/*local_vector*/,
+                     double /*scale*/,
+                     double /*scale_ico*/);
 
     /******************************************************/
 
     /**
      * This function is used for error estimation and should implement
-    * the strong form of the residual on an element T.
-    *
-    * @param edc                The ElementDataContainer object which provides
-    *                           access to all information on the element,
-    *                           e.g., test-functions, mesh size,...
-    * @param edc_wight          The ElementDataContainer for the weight-function,
-    *                           e.g., the testfunction by which the
-    *                           residual needs to be multiplied
-    * @param ret                The value of the integral on the element
-    *                           of residual times testfunction.
-    * @param scale              A scaling parameter to be used in all
-    *                           equations.
-    *
+     * the strong form of the residual on an element T.
+     *
+     * @param edc                The ElementDataContainer object which provides
+     *                           access to all information on the element,
+     *                           e.g., test-functions, mesh size,...
+     * @param edc_wight          The ElementDataContainer for the weight-function,
+     *                           e.g., the testfunction by which the
+     *                           residual needs to be multiplied
+     * @param ret                The value of the integral on the element
+     *                           of residual times testfunction.
+     * @param scale              A scaling parameter to be used in all
+     *                           equations.
+     *
      */
     virtual void
-    StrongElementResidual(const EDC<DH, VECTOR, dealdim> & /*edc*/,
-                          const EDC<DH, VECTOR, dealdim> & /*edc_weight*/,
-                          double & /*ret*/,
-                          double /*scale*/);
+    StrongElementResidual (const EDC<DH, VECTOR, dealdim> & /*edc*/,
+                           const EDC<DH, VECTOR, dealdim> & /*edc_weight*/,
+                           double & /*ret*/,
+                           double /*scale*/);
 
     /******************************************************/
 
     /**
      * Assuming that the discretization of temporal derivatives by a backward
-    * difference, i.e., \partial_t u(t_i) \approx 1/\delta t ( u(t_i) - u(t_{i-1})
-    * in several cases the the temporal derivatives of the
-    * equation give rise to a spacial integral of the form
-    *
-    * \int_Omega T(u(t_i); \phi(t_i)) - \int_Omega T(u(t_{i-1}); \phi(t_{i-1}))
-    *
-    * This equation is used to implement the element contribution
-    * \int_T T(u,\phi)
-    *
-    * @param edc                The ElementDataContainer object which provides
-    *                           access to all information on the element,
-    *                           e.g., test-functions, mesh size,...
-    * @param local_vector  The vector containing the integrals
-    *                           ordered according to the local number
-    *                           of the testfunction.
-    * @param scale              A scaling parameter to be used in all
-    *                           equations.
-    */
+     * difference, i.e., \partial_t u(t_i) \approx 1/\delta t ( u(t_i) - u(t_{i-1})
+     * in several cases the the temporal derivatives of the
+     * equation give rise to a spacial integral of the form
+     *
+     * \int_Omega T(u(t_i); \phi(t_i)) - \int_Omega T(u(t_{i-1}); \phi(t_{i-1}))
+     *
+     * This equation is used to implement the element contribution
+     * \int_T T(u,\phi)
+     *
+     * @param edc                The ElementDataContainer object which provides
+     *                           access to all information on the element,
+     *                           e.g., test-functions, mesh size,...
+     * @param local_vector  The vector containing the integrals
+     *                           ordered according to the local number
+     *                           of the testfunction.
+     * @param scale              A scaling parameter to be used in all
+     *                           equations.
+     */
     //Note that the _UU term is not needed, since we assume that ElementTimeEquation is linear!
     virtual void
-    ElementTimeEquation(const EDC<DH, VECTOR, dealdim> & /*edc*/,
-                        dealii::Vector<double> &/*local_vector*/,
-                        double /*scale*/);
+    ElementTimeEquation (const EDC<DH, VECTOR, dealdim> & /*edc*/,
+                         dealii::Vector<double> &/*local_vector*/,
+                         double /*scale*/);
 
     /******************************************************/
     /**
      * Same as ElementTimeEquation, but here the derivative of T with
-    * respect to u is considered.
-    * Here, the derivative of T in u in a direction du
-    * for a fixed test function z
-    * is denoted as T'(u;du,z)
-    *
-    * This equation is used to implement the element contribution
-    * \int_T T'(u;\phi,z)
-    *
-    * @param edc                The ElementDataContainer object which provides
-    *                           access to all information on the element,
-    *                           e.g., test-functions, mesh size,...
-    * @param local_vector  The vector containing the integrals
-    *                           ordered according to the local number
-    *                           of the testfunction.
-    * @param scale              A scaling parameter to be used in all
-    *                           equations.
-    */
+     * respect to u is considered.
+     * Here, the derivative of T in u in a direction du
+     * for a fixed test function z
+     * is denoted as T'(u;du,z)
+     *
+     * This equation is used to implement the element contribution
+     * \int_T T'(u;\phi,z)
+     *
+     * @param edc                The ElementDataContainer object which provides
+     *                           access to all information on the element,
+     *                           e.g., test-functions, mesh size,...
+     * @param local_vector  The vector containing the integrals
+     *                           ordered according to the local number
+     *                           of the testfunction.
+     * @param scale              A scaling parameter to be used in all
+     *                           equations.
+     */
     virtual void
-    ElementTimeEquation_U(const EDC<DH, VECTOR, dealdim> & /*edc*/,
-                          dealii::Vector<double> &/*local_vector*/,
-                          double /*scale*/);
-
-    /******************************************************/
-    /**
-     * Same as ElementTimeEquation_U, but we exchange the argument for
-    * the test function.
-    *
-    * This equation is used to implement the element contribution
-    * \int_T T'(u;du,\phi)
-    *
-    * @param edc                The ElementDataContainer object which provides
-    *                           access to all information on the element,
-    *                           e.g., test-functions, mesh size,...
-    * @param local_vector  The vector containing the integrals
-    *                           ordered according to the local number
-    *                           of the testfunction.
-    * @param scale              A scaling parameter to be used in all
-    *                           equations.
-    */
-    virtual void
-    ElementTimeEquation_UT(const EDC<DH, VECTOR, dealdim> & /*edc*/,
+    ElementTimeEquation_U (const EDC<DH, VECTOR, dealdim> & /*edc*/,
                            dealii::Vector<double> &/*local_vector*/,
                            double /*scale*/);
 
     /******************************************************/
     /**
-     * Same as ElementTimeEquation_UT, but we exchange the argument for
-    * the test function.
-    *
-    * This equation is used to implement the element contribution
-    * \int_T T'(u;\phi,dz)
-    *
-    * Note that this is the same function as in ElementTimeEquation_U,
-    * but it is used with an other argument dz instead of z.
-    *
-    * @param edc                The ElementDataContainer object which provides
-    *                           access to all information on the element,
-    *                           e.g., test-functions, mesh size,...
-    * @param local_vector  The vector containing the integrals
-    *                           ordered according to the local number
-    *                           of the testfunction.
-    * @param scale              A scaling parameter to be used in all
-    *                           equations.
-    */
+     * Same as ElementTimeEquation_U, but we exchange the argument for
+     * the test function.
+     *
+     * This equation is used to implement the element contribution
+     * \int_T T'(u;du,\phi)
+     *
+     * @param edc                The ElementDataContainer object which provides
+     *                           access to all information on the element,
+     *                           e.g., test-functions, mesh size,...
+     * @param local_vector  The vector containing the integrals
+     *                           ordered according to the local number
+     *                           of the testfunction.
+     * @param scale              A scaling parameter to be used in all
+     *                           equations.
+     */
     virtual void
-    ElementTimeEquation_UTT(const EDC<DH, VECTOR, dealdim> & /*edc*/,
+    ElementTimeEquation_UT (const EDC<DH, VECTOR, dealdim> & /*edc*/,
                             dealii::Vector<double> &/*local_vector*/,
                             double /*scale*/);
+
+    /******************************************************/
+    /**
+     * Same as ElementTimeEquation_UT, but we exchange the argument for
+     * the test function.
+     *
+     * This equation is used to implement the element contribution
+     * \int_T T'(u;\phi,dz)
+     *
+     * Note that this is the same function as in ElementTimeEquation_U,
+     * but it is used with an other argument dz instead of z.
+     *
+     * @param edc                The ElementDataContainer object which provides
+     *                           access to all information on the element,
+     *                           e.g., test-functions, mesh size,...
+     * @param local_vector  The vector containing the integrals
+     *                           ordered according to the local number
+     *                           of the testfunction.
+     * @param scale              A scaling parameter to be used in all
+     *                           equations.
+     */
+    virtual void
+    ElementTimeEquation_UTT (const EDC<DH, VECTOR, dealdim> & /*edc*/,
+                             dealii::Vector<double> &/*local_vector*/,
+                             double /*scale*/);
 
     /******************************************************/
 
@@ -248,9 +248,9 @@ namespace DOpE
      *                           equations.
      */
     virtual void
-    ElementTimeEquationExplicit(const EDC<DH, VECTOR, dealdim> & /*edc**/,
-                                dealii::Vector<double> &/*local_vector*/,
-                                double /*scale*/);
+    ElementTimeEquationExplicit (const EDC<DH, VECTOR, dealdim> & /*edc**/,
+                                 dealii::Vector<double> &/*local_vector*/,
+                                 double /*scale*/);
     /******************************************************/
     /**
      * Analog to ElementTimeEquationExplicit, this function is used
@@ -266,9 +266,9 @@ namespace DOpE
      *                           equations.
      */
     virtual void
-    ElementTimeEquationExplicit_U(const EDC<DH, VECTOR, dealdim> & /*edc*/,
-                                  dealii::Vector<double> &/*local_vector*/,
-                                  double /*scale*/);
+    ElementTimeEquationExplicit_U (const EDC<DH, VECTOR, dealdim> & /*edc*/,
+                                   dealii::Vector<double> &/*local_vector*/,
+                                   double /*scale*/);
 
     /******************************************************/
     /**
@@ -286,9 +286,9 @@ namespace DOpE
      */
 
     virtual void
-    ElementTimeEquationExplicit_UT(const EDC<DH, VECTOR, dealdim> & /*edc*/,
-                                   dealii::Vector<double> &/*local_vector*/,
-                                   double /*scale*/);
+    ElementTimeEquationExplicit_UT (const EDC<DH, VECTOR, dealdim> & /*edc*/,
+                                    dealii::Vector<double> &/*local_vector*/,
+                                    double /*scale*/);
 
     /******************************************************/
     /**
@@ -305,9 +305,9 @@ namespace DOpE
      *                           equations.
      */
     virtual void
-    ElementTimeEquationExplicit_UTT(const EDC<DH, VECTOR, dealdim> & /*edc*/,
-                                    dealii::Vector<double> &/*local_vector*/,
-                                    double /*scale*/);
+    ElementTimeEquationExplicit_UTT (const EDC<DH, VECTOR, dealdim> & /*edc*/,
+                                     dealii::Vector<double> &/*local_vector*/,
+                                     double /*scale*/);
 
     /******************************************************/
     /**
@@ -326,9 +326,9 @@ namespace DOpE
      */
 
     virtual void
-    ElementTimeEquationExplicit_UU(const EDC<DH, VECTOR, dealdim> & /*edc*/,
-                                   dealii::Vector<double> &/*local_vector*/,
-                                   double /*scale*/);
+    ElementTimeEquationExplicit_UU (const EDC<DH, VECTOR, dealdim> & /*edc*/,
+                                    dealii::Vector<double> &/*local_vector*/,
+                                    double /*scale*/);
 
     /******************************************************/
     /**
@@ -355,10 +355,10 @@ namespace DOpE
      *                           for more details.
      */
     virtual void
-    ElementEquation_U(const EDC<DH, VECTOR, dealdim> & /*edc*/,
-                      dealii::Vector<double> &/*local_vector*/,
-                      double /*scale*/,
-                      double /*scale_ico*/);
+    ElementEquation_U (const EDC<DH, VECTOR, dealdim> & /*edc*/,
+                       dealii::Vector<double> &/*local_vector*/,
+                       double /*scale*/,
+                       double /*scale_ico*/);
 
     /******************************************************/
     /**
@@ -378,10 +378,10 @@ namespace DOpE
      */
 
     virtual void
-    StrongElementResidual_U(const EDC<DH, VECTOR, dealdim> & /*edc*/,
-                            const EDC<DH, VECTOR, dealdim> & /*edc_weight*/,
-                            double & /*ret*/,
-                            double /*scale*/);
+    StrongElementResidual_U (const EDC<DH, VECTOR, dealdim> & /*edc*/,
+                             const EDC<DH, VECTOR, dealdim> & /*edc_weight*/,
+                             double & /*ret*/,
+                             double /*scale*/);
 
     /******************************************************/
     /**
@@ -408,10 +408,10 @@ namespace DOpE
      */
 
     virtual void
-    ElementEquation_UT(const EDC<DH, VECTOR, dealdim> & /*edc*/,
-                       dealii::Vector<double> &/*local_vector*/,
-                       double /*scale*/,
-                       double /*scale_ico*/);
+    ElementEquation_UT (const EDC<DH, VECTOR, dealdim> & /*edc*/,
+                        dealii::Vector<double> &/*local_vector*/,
+                        double /*scale*/,
+                        double /*scale_ico*/);
 
     /******************************************************/
     /**
@@ -440,10 +440,10 @@ namespace DOpE
      */
 
     virtual void
-    ElementEquation_UTT(const EDC<DH, VECTOR, dealdim> & /*edc*/,
-                        dealii::Vector<double> &/*local_vector*/,
-                        double /*scale*/,
-                        double /*scale_ico*/);
+    ElementEquation_UTT (const EDC<DH, VECTOR, dealdim> & /*edc*/,
+                         dealii::Vector<double> &/*local_vector*/,
+                         double /*scale*/,
+                         double /*scale_ico*/);
 
     /******************************************************/
 
@@ -473,70 +473,70 @@ namespace DOpE
      *                           for more details.
      */
     virtual void
-    ElementEquation_Q(const EDC<DH, VECTOR, dealdim> & /*edc*/,
-                      dealii::Vector<double> &/*local_vector*/,
-                      double /*scale*/,
-                      double /*scale_ico*/);
-
-    /******************************************************/
-
-    /**
-    * Analog to ElementEqution_Q this term implements the derivative
-    * of ElementEquation with respect to the control argument.
-    * In contrast to ElementEqution_Q the test function
-    * is taken from the state space, while the argument for
-    * the control variation dq is fixed.
-    * ElementEquation implements the term
-    * int_T a_T(u,q;\phi) then this method
-    * implements \int_T a_T'_q(u,q;dq,\phi) .
-    *
-    * @param edc                The ElementDataContainer object which provides
-    *                           access to all information on the element,
-    *                           e.g., test-functions, mesh size,...
-    * @param local_vector  The vector containing the integrals
-    *                           ordered according to the local number
-    *                           of the testfunction.
-    * @param scale              A scaling parameter to be used in all
-    *                           equations.
-    * @param scale_ico          A special scaling parameter to be used
-    *                           in certain parts of the equation
-    *                           if they need to be treated differently in
-    *                           time-stepping schemes, see the PDF-documentation
-    *                           for more details.
-    */
-    virtual void
-    ElementEquation_QT(const EDC<DH, VECTOR, dealdim> & /*edc*/,
+    ElementEquation_Q (const EDC<DH, VECTOR, dealdim> & /*edc*/,
                        dealii::Vector<double> &/*local_vector*/,
                        double /*scale*/,
-                       double scale_ico);
+                       double /*scale_ico*/);
 
     /******************************************************/
 
     /**
-    * Analog to ElementEqution_Q, the only difference is that
-    * the argument z is exchanged by dz
-    * int_T a_T(u,q;\phi) then this method
-    * implements \int_T a_T'_q(u,q;\phi_q,dz) .
-    *
-    * @param edc                The ElementDataContainer object which provides
-    *                           access to all information on the element,
-    *                           e.g., test-functions, mesh size,...
-    * @param local_vector  The vector containing the integrals
-    *                           ordered according to the local number
-    *                           of the testfunction.
-    * @param scale              A scaling parameter to be used in all
-    *                           equations.
-    * @param scale_ico          A special scaling parameter to be used
-    *                           in certain parts of the equation
-    *                           if they need to be treated differently in
-    *                           time-stepping schemes, see the PDF-documentation
-    *                           for more details.
-    */
+     * Analog to ElementEqution_Q this term implements the derivative
+     * of ElementEquation with respect to the control argument.
+     * In contrast to ElementEqution_Q the test function
+     * is taken from the state space, while the argument for
+     * the control variation dq is fixed.
+     * ElementEquation implements the term
+     * int_T a_T(u,q;\phi) then this method
+     * implements \int_T a_T'_q(u,q;dq,\phi) .
+     *
+     * @param edc                The ElementDataContainer object which provides
+     *                           access to all information on the element,
+     *                           e.g., test-functions, mesh size,...
+     * @param local_vector  The vector containing the integrals
+     *                           ordered according to the local number
+     *                           of the testfunction.
+     * @param scale              A scaling parameter to be used in all
+     *                           equations.
+     * @param scale_ico          A special scaling parameter to be used
+     *                           in certain parts of the equation
+     *                           if they need to be treated differently in
+     *                           time-stepping schemes, see the PDF-documentation
+     *                           for more details.
+     */
     virtual void
-    ElementEquation_QTT(const EDC<DH, VECTOR, dealdim> & /*edc*/,
+    ElementEquation_QT (const EDC<DH, VECTOR, dealdim> & /*edc*/,
                         dealii::Vector<double> &/*local_vector*/,
                         double /*scale*/,
-                        double /*scale_ico*/);
+                        double scale_ico);
+
+    /******************************************************/
+
+    /**
+     * Analog to ElementEqution_Q, the only difference is that
+     * the argument z is exchanged by dz
+     * int_T a_T(u,q;\phi) then this method
+     * implements \int_T a_T'_q(u,q;\phi_q,dz) .
+     *
+     * @param edc                The ElementDataContainer object which provides
+     *                           access to all information on the element,
+     *                           e.g., test-functions, mesh size,...
+     * @param local_vector  The vector containing the integrals
+     *                           ordered according to the local number
+     *                           of the testfunction.
+     * @param scale              A scaling parameter to be used in all
+     *                           equations.
+     * @param scale_ico          A special scaling parameter to be used
+     *                           in certain parts of the equation
+     *                           if they need to be treated differently in
+     *                           time-stepping schemes, see the PDF-documentation
+     *                           for more details.
+     */
+    virtual void
+    ElementEquation_QTT (const EDC<DH, VECTOR, dealdim> & /*edc*/,
+                         dealii::Vector<double> &/*local_vector*/,
+                         double /*scale*/,
+                         double /*scale_ico*/);
 
     /******************************************************/
 
@@ -562,10 +562,10 @@ namespace DOpE
      */
 
     virtual void
-    ElementEquation_UU(const EDC<DH, VECTOR, dealdim> & /*edc*/,
-                       dealii::Vector<double> &/*local_vector*/,
-                       double /*scale*/,
-                       double /*scale_ico*/);
+    ElementEquation_UU (const EDC<DH, VECTOR, dealdim> & /*edc*/,
+                        dealii::Vector<double> &/*local_vector*/,
+                        double /*scale*/,
+                        double /*scale_ico*/);
 
     /******************************************************/
 
@@ -593,10 +593,10 @@ namespace DOpE
      */
 
     virtual void
-    ElementEquation_QU(const EDC<DH, VECTOR, dealdim> & /*edc*/,
-                       dealii::Vector<double> &/*local_vector*/,
-                       double /*scale*/,
-                       double /*scale_ico*/);
+    ElementEquation_QU (const EDC<DH, VECTOR, dealdim> & /*edc*/,
+                        dealii::Vector<double> &/*local_vector*/,
+                        double /*scale*/,
+                        double /*scale_ico*/);
 
     /******************************************************/
     /**
@@ -621,56 +621,56 @@ namespace DOpE
      */
 
     virtual void
-    ElementEquation_UQ(const EDC<DH, VECTOR, dealdim> & /*edc*/,
-                       dealii::Vector<double> &/*local_vector*/,
-                       double /*scale*/,
-                       double /*scale_ico*/);
+    ElementEquation_UQ (const EDC<DH, VECTOR, dealdim> & /*edc*/,
+                        dealii::Vector<double> &/*local_vector*/,
+                        double /*scale*/,
+                        double /*scale_ico*/);
 
     /******************************************************/
     /**
-    * Analog to ElementEquation_Q, but now considering second
-    * derivatives with respect to q, i.e., we calculate
-    * \int_T a_T''_{qq}(u,q;dq,\phi_q,z)
-    * where dq is the given direction.
-    *
-    * @param edc                The ElementDataContainer object which provides
-    *                           access to all information on the element,
-    *                           e.g., test-functions, mesh size,...
-    * @param local_vector  The vector containing the integrals
-    *                           ordered according to the local number
-    *                           of the testfunction.
-    * @param scale              A scaling parameter to be used in all
-    *                           equations.
-    * @param scale_ico          A special scaling parameter to be used
-    *                           in certain parts of the equation
-    *                           if they need to be treated differently in
-    *                           time-stepping schemes, see the PDF-documentation
-    *                           for more details.
-    */
+     * Analog to ElementEquation_Q, but now considering second
+     * derivatives with respect to q, i.e., we calculate
+     * \int_T a_T''_{qq}(u,q;dq,\phi_q,z)
+     * where dq is the given direction.
+     *
+     * @param edc                The ElementDataContainer object which provides
+     *                           access to all information on the element,
+     *                           e.g., test-functions, mesh size,...
+     * @param local_vector  The vector containing the integrals
+     *                           ordered according to the local number
+     *                           of the testfunction.
+     * @param scale              A scaling parameter to be used in all
+     *                           equations.
+     * @param scale_ico          A special scaling parameter to be used
+     *                           in certain parts of the equation
+     *                           if they need to be treated differently in
+     *                           time-stepping schemes, see the PDF-documentation
+     *                           for more details.
+     */
     virtual void
-    ElementEquation_QQ(const EDC<DH, VECTOR, dealdim> & /*edc*/,
-                       dealii::Vector<double> &/*local_vector*/,
-                       double /*scale*/,
-                       double /*scale_ico*/);
+    ElementEquation_QQ (const EDC<DH, VECTOR, dealdim> & /*edc*/,
+                        dealii::Vector<double> &/*local_vector*/,
+                        double /*scale*/,
+                        double /*scale_ico*/);
 
     /******************************************************/
     /**
-    * Implements the element integral corresponding to given volume
-    * data for the PDE.
-    *
-    * @param edc                The ElementDataContainer object which provides
-    *                           access to all information on the element,
-    *                           e.g., test-functions, mesh size,...
-    * @param local_vector  The vector containing the integrals
-    *                           ordered according to the local number
-    *                           of the testfunction.
-    * @param scale              A scaling parameter to be used in all
-    *                           equations.
-    */
+     * Implements the element integral corresponding to given volume
+     * data for the PDE.
+     *
+     * @param edc                The ElementDataContainer object which provides
+     *                           access to all information on the element,
+     *                           e.g., test-functions, mesh size,...
+     * @param local_vector  The vector containing the integrals
+     *                           ordered according to the local number
+     *                           of the testfunction.
+     * @param scale              A scaling parameter to be used in all
+     *                           equations.
+     */
     virtual void
-    ElementRightHandSide(const EDC<DH, VECTOR, dealdim> & /*edc*/,
-                         dealii::Vector<double> &/*local_vector*/,
-                         double /*scale*/);
+    ElementRightHandSide (const EDC<DH, VECTOR, dealdim> & /*edc*/,
+                          dealii::Vector<double> &/*local_vector*/,
+                          double /*scale*/);
 
     /******************************************************/
 
@@ -696,10 +696,10 @@ namespace DOpE
      *                           for more details.
      */
     virtual void
-    ElementMatrix(const EDC<DH, VECTOR, dealdim> & /*edc*/,
-                  dealii::FullMatrix<double> &/*local_entry_matrix*/,
-                  double /*scale*/,
-                  double /*scale_ico*/);
+    ElementMatrix (const EDC<DH, VECTOR, dealdim> & /*edc*/,
+                   dealii::FullMatrix<double> &/*local_entry_matrix*/,
+                   double /*scale*/,
+                   double /*scale_ico*/);
 
     /******************************************************/
     /**
@@ -716,8 +716,8 @@ namespace DOpE
      */
 
     virtual void
-    ElementTimeMatrix(const EDC<DH, VECTOR, dealdim> & /*edc*/,
-                      dealii::FullMatrix<double> &/*local_entry_matrix*/);
+    ElementTimeMatrix (const EDC<DH, VECTOR, dealdim> & /*edc*/,
+                       dealii::FullMatrix<double> &/*local_entry_matrix*/);
 
     /******************************************************/
     /**
@@ -731,8 +731,8 @@ namespace DOpE
      *                           of the testfunction.
      */
     virtual void
-    ElementTimeMatrix_T(const EDC<DH, VECTOR, dealdim> & /*edc*/,
-                        dealii::FullMatrix<double> &/*local_entry_matrix*/);
+    ElementTimeMatrix_T (const EDC<DH, VECTOR, dealdim> & /*edc*/,
+                         dealii::FullMatrix<double> &/*local_entry_matrix*/);
 
     /******************************************************/
     /**
@@ -749,8 +749,8 @@ namespace DOpE
      */
 
     virtual void
-    ElementTimeMatrixExplicit(const EDC<DH, VECTOR, dealdim> & /*edc*/,
-                              dealii::FullMatrix<double> &/*local_entry_matrix*/);
+    ElementTimeMatrixExplicit (const EDC<DH, VECTOR, dealdim> & /*edc*/,
+                               dealii::FullMatrix<double> &/*local_entry_matrix*/);
 
     /******************************************************/
     /**
@@ -764,8 +764,8 @@ namespace DOpE
      *                           of the testfunction.
      */
     virtual void
-    ElementTimeMatrixExplicit_T(const EDC<DH, VECTOR, dealdim> & /*edc*/,
-                                dealii::FullMatrix<double> &/*local_entry_matrix*/);
+    ElementTimeMatrixExplicit_T (const EDC<DH, VECTOR, dealdim> & /*edc*/,
+                                 dealii::FullMatrix<double> &/*local_entry_matrix*/);
 
     /******************************************************/
     /**
@@ -793,10 +793,10 @@ namespace DOpE
      *                           for more details.
      */
     virtual void
-    ElementMatrix_T(const EDC<DH, VECTOR, dealdim> & /*edc*/,
-                    dealii::FullMatrix<double> &/*local_entry_matrix*/,
-                    double /*scale*/,
-                    double /*scale_ico*/);
+    ElementMatrix_T (const EDC<DH, VECTOR, dealdim> & /*edc*/,
+                     dealii::FullMatrix<double> &/*local_entry_matrix*/,
+                     double /*scale*/,
+                     double /*scale_ico*/);
 
     /******************************************************/
 
@@ -816,25 +816,25 @@ namespace DOpE
      *                           equations.
      */
     virtual void
-    ControlElementEquation(const EDC<DH, VECTOR, dealdim> & /*edc*/,
-                           dealii::Vector<double> &/*local_vector*/,
-                           double /*scale*/);
+    ControlElementEquation (const EDC<DH, VECTOR, dealdim> & /*edc*/,
+                            dealii::Vector<double> &/*local_vector*/,
+                            double /*scale*/);
 
     /******************************************************/
     /**
-    * This implements the matrix corresponding to ControlElementEquation
-    *
-    * @param edc                The ElementDataContainer object which provides
-    *                           access to all information on the element,
-    *                           e.g., test-functions, mesh size,...
-    * @param local_entry_matrix The matrix containing the integrals
-    *                           ordered according to the local number
-    *                           of the testfunction.
-    */
+     * This implements the matrix corresponding to ControlElementEquation
+     *
+     * @param edc                The ElementDataContainer object which provides
+     *                           access to all information on the element,
+     *                           e.g., test-functions, mesh size,...
+     * @param local_entry_matrix The matrix containing the integrals
+     *                           ordered according to the local number
+     *                           of the testfunction.
+     */
     virtual void
-    ControlElementMatrix(const EDC<DH, VECTOR, dealdim> & /*edc*/,
-                         dealii::FullMatrix<double> &/*local_entry_matrix*/,
-                         double /*scale*/);
+    ControlElementMatrix (const EDC<DH, VECTOR, dealdim> & /*edc*/,
+                          dealii::FullMatrix<double> &/*local_entry_matrix*/,
+                          double /*scale*/);
     /******************************************************/
 
     /**
@@ -853,25 +853,25 @@ namespace DOpE
      *                           equations.
      */
     virtual void
-    ControlBoundaryEquation(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
-                            dealii::Vector<double> &/*local_vector*/,
-                            double /*scale*/);
+    ControlBoundaryEquation (const FDC<DH, VECTOR, dealdim> & /*fdc*/,
+                             dealii::Vector<double> &/*local_vector*/,
+                             double /*scale*/);
 
     /******************************************************/
     /**
-    * This implements the matrix corresponding to ControlBoundaryEquation
-    *
-    * @param fdc                The FaceDataContainer object which provides
-    *                           access to all information on the element,
-    *                           e.g., test-functions, mesh size,...
-    * @param local_entry_matrix The matrix containing the integrals
-    *                           ordered according to the local number
-    *                           of the testfunction.
-    */
+     * This implements the matrix corresponding to ControlBoundaryEquation
+     *
+     * @param fdc                The FaceDataContainer object which provides
+     *                           access to all information on the element,
+     *                           e.g., test-functions, mesh size,...
+     * @param local_entry_matrix The matrix containing the integrals
+     *                           ordered according to the local number
+     *                           of the testfunction.
+     */
     virtual void
-    ControlBoundaryMatrix(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
-                          dealii::FullMatrix<double> &/*local_entry_matrix*/,
-                          double /*scale*/);
+    ControlBoundaryMatrix (const FDC<DH, VECTOR, dealdim> & /*fdc*/,
+                           dealii::FullMatrix<double> &/*local_entry_matrix*/,
+                           double /*scale*/);
     /******************************************************/
 
     /**
@@ -890,10 +890,10 @@ namespace DOpE
      *                           equations.
      */
     virtual void
-    StrongElementResidual_Control(const EDC<DH, VECTOR, dealdim> & /*edc*/,
-                                  const EDC<DH, VECTOR, dealdim> & /*edc_weight*/,
-                                  double & /*ret*/,
-                                  double /*scale*/);
+    StrongElementResidual_Control (const EDC<DH, VECTOR, dealdim> & /*edc*/,
+                                   const EDC<DH, VECTOR, dealdim> & /*edc_weight*/,
+                                   double & /*ret*/,
+                                   double /*scale*/);
     /******************************************************/
     /**
      * Similar to the StongElementResidual, this function implements the
@@ -913,10 +913,10 @@ namespace DOpE
      */
 
     virtual void
-    StrongFaceResidual_Control(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
-                               const FDC<DH, VECTOR, dealdim> & /*fdc_weight*/,
-                               double & /*ret*/,
-                               double /*scale*/);
+    StrongFaceResidual_Control (const FDC<DH, VECTOR, dealdim> & /*fdc*/,
+                                const FDC<DH, VECTOR, dealdim> & /*fdc_weight*/,
+                                double & /*ret*/,
+                                double /*scale*/);
     /******************************************************/
     /**
      * Similar to the StongElementResidual, this function implements the
@@ -936,14 +936,13 @@ namespace DOpE
      */
 
     virtual void
-    StrongBoundaryResidual_Control(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
-                                   const FDC<DH, VECTOR, dealdim> & /*fdc_weight*/,
-                                   double & /*ret*/,
-                                   double /*scale*/);
+    StrongBoundaryResidual_Control (const FDC<DH, VECTOR, dealdim> & /*fdc*/,
+                                    const FDC<DH, VECTOR, dealdim> & /*fdc_weight*/,
+                                    double & /*ret*/,
+                                    double /*scale*/);
 
     /******************************************************/
     // Functions for Face Integrals
-
     /**
      * The following Face... and Boundary... methods
      * implement the analog terms as the corresponding
@@ -953,38 +952,22 @@ namespace DOpE
      *
      */
     virtual void
-    FaceEquation(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
-                 dealii::Vector<double> &/*local_vector*/,
-                 double /*scale*/,
-                 double /*scale_ico*/);
+    FaceEquation (const FDC<DH, VECTOR, dealdim> & /*fdc*/,
+                  dealii::Vector<double> &/*local_vector*/,
+                  double /*scale*/,
+                  double /*scale_ico*/);
     /******************************************************/
 
     virtual void
-    StrongFaceResidual(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
-                       const FDC<DH, VECTOR, dealdim> & /*fdc_weight*/,
-                       double & /*ret*/,
-                       double /*scale*/);
-
-    /******************************************************/
-
-    virtual void
-    FaceEquation_U(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
-                   dealii::Vector<double> &/*local_vector*/,
-                   double /*scale*/,
-                   double /*scale_ico*/);
+    StrongFaceResidual (const FDC<DH, VECTOR, dealdim> & /*fdc*/,
+                        const FDC<DH, VECTOR, dealdim> & /*fdc_weight*/,
+                        double & /*ret*/,
+                        double /*scale*/);
 
     /******************************************************/
 
     virtual void
-    StrongFaceResidual_U(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
-                         const FDC<DH, VECTOR, dealdim> & /*fdc_weight*/,
-                         double & /*ret*/,
-                         double /*scale*/);
-
-    /******************************************************/
-
-    virtual void
-    FaceEquation_UT(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
+    FaceEquation_U (const FDC<DH, VECTOR, dealdim> & /*fdc*/,
                     dealii::Vector<double> &/*local_vector*/,
                     double /*scale*/,
                     double /*scale_ico*/);
@@ -992,7 +975,15 @@ namespace DOpE
     /******************************************************/
 
     virtual void
-    FaceEquation_UTT(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
+    StrongFaceResidual_U (const FDC<DH, VECTOR, dealdim> & /*fdc*/,
+                          const FDC<DH, VECTOR, dealdim> & /*fdc_weight*/,
+                          double & /*ret*/,
+                          double /*scale*/);
+
+    /******************************************************/
+
+    virtual void
+    FaceEquation_UT (const FDC<DH, VECTOR, dealdim> & /*fdc*/,
                      dealii::Vector<double> &/*local_vector*/,
                      double /*scale*/,
                      double /*scale_ico*/);
@@ -1000,65 +991,73 @@ namespace DOpE
     /******************************************************/
 
     virtual void
-    FaceEquation_Q(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
-                   dealii::Vector<double> &/*local_vector*/,
-                   double /*scale*/,
-                   double /*scale_ico*/);
-
-    /******************************************************/
-
-    virtual void
-    FaceEquation_QT(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
-                    dealii::Vector<double> &/*local_vector*/,
-                    double /*scale*/,
-                    double /*scale_ico*/);
-
-    /******************************************************/
-
-    virtual void
-    FaceEquation_QTT(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
-                     dealii::Vector<double> &/*local_vector*/,
-                     double /*scale*/,
-                     double /*scale_ico*/);
-
-    /******************************************************/
-
-    virtual void
-    FaceEquation_UU(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
-                    dealii::Vector<double> &/*local_vector*/,
-                    double /*scale*/,
-                    double /*scale_ico*/);
-
-    /******************************************************/
-
-    virtual void
-    FaceEquation_QU(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
-                    dealii::Vector<double> &/*local_vector*/,
-                    double /*scale*/,
-                    double /*scale_ico*/);
-
-    /******************************************************/
-
-    virtual void
-    FaceEquation_UQ(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
-                    dealii::Vector<double> &/*local_vector*/,
-                    double /*scale*/,
-                    double /*scale_ico*/);
-
-    /******************************************************/
-
-    virtual void
-    FaceEquation_QQ(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
-                    dealii::Vector<double> &/*local_vector*/,
-                    double /*scale*/,
-                    double /*scale_ico*/);
-
-    /******************************************************/
-
-    virtual void
-    FaceRightHandSide(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
+    FaceEquation_UTT (const FDC<DH, VECTOR, dealdim> & /*fdc*/,
                       dealii::Vector<double> &/*local_vector*/,
-                      double /*scale*/);
+                      double /*scale*/,
+                      double /*scale_ico*/);
+
+    /******************************************************/
+
+    virtual void
+    FaceEquation_Q (const FDC<DH, VECTOR, dealdim> & /*fdc*/,
+                    dealii::Vector<double> &/*local_vector*/,
+                    double /*scale*/,
+                    double /*scale_ico*/);
+
+    /******************************************************/
+
+    virtual void
+    FaceEquation_QT (const FDC<DH, VECTOR, dealdim> & /*fdc*/,
+                     dealii::Vector<double> &/*local_vector*/,
+                     double /*scale*/,
+                     double /*scale_ico*/);
+
+    /******************************************************/
+
+    virtual void
+    FaceEquation_QTT (const FDC<DH, VECTOR, dealdim> & /*fdc*/,
+                      dealii::Vector<double> &/*local_vector*/,
+                      double /*scale*/,
+                      double /*scale_ico*/);
+
+    /******************************************************/
+
+    virtual void
+    FaceEquation_UU (const FDC<DH, VECTOR, dealdim> & /*fdc*/,
+                     dealii::Vector<double> &/*local_vector*/,
+                     double /*scale*/,
+                     double /*scale_ico*/);
+
+    /******************************************************/
+
+    virtual void
+    FaceEquation_QU (const FDC<DH, VECTOR, dealdim> & /*fdc*/,
+                     dealii::Vector<double> &/*local_vector*/,
+                     double /*scale*/,
+                     double /*scale_ico*/);
+
+    /******************************************************/
+
+    virtual void
+    FaceEquation_UQ (const FDC<DH, VECTOR, dealdim> & /*fdc*/,
+                     dealii::Vector<double> &/*local_vector*/,
+                     double /*scale*/,
+                     double /*scale_ico*/);
+
+    /******************************************************/
+
+    virtual void
+    FaceEquation_QQ (const FDC<DH, VECTOR, dealdim> & /*fdc*/,
+                     dealii::Vector<double> &/*local_vector*/,
+                     double /*scale*/,
+                     double /*scale_ico*/);
+
+    /******************************************************/
+
+    virtual void
+    FaceRightHandSide (const FDC<DH, VECTOR, dealdim> & /*fdc*/,
+                       dealii::Vector<double> &/*local_vector*/,
+                       double /*scale*/);
 
     /******************************************************/
 
@@ -1066,35 +1065,34 @@ namespace DOpE
      * Documentation in optproblemcontainer.h.
      */
     virtual void
-    FaceMatrix(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
-               dealii::FullMatrix<double> &/*local_entry_matrix*/,
-               double /*scale*/,
-               double /*scale_ico*/);
+    FaceMatrix (const FDC<DH, VECTOR, dealdim> & /*fdc*/,
+                dealii::FullMatrix<double> &/*local_entry_matrix*/,
+                double /*scale*/,
+                double /*scale_ico*/);
 
     /******************************************************/
 
     virtual void
-    FaceMatrix_T(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
-                 dealii::FullMatrix<double> &/*local_entry_matrix*/,
-                 double /*scale*/,
-                 double /*scale_ico*/);
-
-    /******************************************************/
-    //Functions for Interface Integrals
-
-    virtual void
-    InterfaceMatrix(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
-                    dealii::FullMatrix<double> &/*local_entry_matrix*/,
-                    double /*scale*/,
-                    double /*scale_ico*/);
+    FaceMatrix_T (const FDC<DH, VECTOR, dealdim> & /*fdc*/,
+                  dealii::FullMatrix<double> &/*local_entry_matrix*/,
+                  double /*scale*/,
+                  double /*scale_ico*/);
 
     /******************************************************/
     //Functions for Interface Integrals
     virtual void
-    InterfaceMatrix_T(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
-                      dealii::FullMatrix<double> &/*local_entry_matrix*/,
-                      double /*scale*/,
-                      double /*scale_ico*/);
+    InterfaceMatrix (const FDC<DH, VECTOR, dealdim> & /*fdc*/,
+                     dealii::FullMatrix<double> &/*local_entry_matrix*/,
+                     double /*scale*/,
+                     double /*scale_ico*/);
+
+    /******************************************************/
+    //Functions for Interface Integrals
+    virtual void
+    InterfaceMatrix_T (const FDC<DH, VECTOR, dealdim> & /*fdc*/,
+                       dealii::FullMatrix<double> &/*local_entry_matrix*/,
+                       double /*scale*/,
+                       double /*scale_ico*/);
 
     /******************************************************/
     // Integrals over interfaces (with test functions from
@@ -1104,7 +1102,38 @@ namespace DOpE
     // linearly. Hence the derivatives UU, Q, ... are not
     // availiable for implementation.
     virtual void
-    InterfaceEquation(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
+    InterfaceEquation (const FDC<DH, VECTOR, dealdim> & /*fdc*/,
+                       dealii::Vector<double> &/*local_vector*/,
+                       double /*scale*/,
+                       double /*scale_ico*/);
+
+    /******************************************************/
+
+    virtual void
+    InterfaceEquation_U (const FDC<DH, VECTOR, dealdim> & /*fdc*/,
+                         dealii::Vector<double> &/*local_vector*/,
+                         double /*scale*/,
+                         double /*scale_ico*/);
+    /******************************************************/
+
+    virtual void
+    InterfaceEquation_UT (const FDC<DH, VECTOR, dealdim> & /*fdc*/,
+                          dealii::Vector<double> &/*local_vector*/,
+                          double /*scale*/,
+                          double /*scale_ico*/);
+    /******************************************************/
+
+    virtual void
+    InterfaceEquation_UTT (const FDC<DH, VECTOR, dealdim> & /*fdc*/,
+                           dealii::Vector<double> &/*local_vector*/,
+                           double /*scale*/,
+                           double /*scale_ico*/);
+
+    /******************************************************/
+
+    // Functions for Boundary Integrals
+    virtual void
+    BoundaryEquation (const FDC<DH, VECTOR, dealdim> & /*fdc*/,
                       dealii::Vector<double> &/*local_vector*/,
                       double /*scale*/,
                       double /*scale_ico*/);
@@ -1112,271 +1141,245 @@ namespace DOpE
     /******************************************************/
 
     virtual void
-    InterfaceEquation_U(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
+    StrongBoundaryResidual (const FDC<DH, VECTOR, dealdim> & /*fdc*/,
+                            const FDC<DH, VECTOR, dealdim> & /*fdc_weight*/,
+                            double & /*ret*/,
+                            double /*scale*/);
+
+    /******************************************************/
+
+    virtual void
+    BoundaryEquation_U (const FDC<DH, VECTOR, dealdim> &/*fdc*/,
                         dealii::Vector<double> &/*local_vector*/,
                         double /*scale*/,
                         double /*scale_ico*/);
+
     /******************************************************/
 
     virtual void
-    InterfaceEquation_UT(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
+    StrongBoundaryResidual_U (const FDC<DH, VECTOR, dealdim> & /*fdc*/,
+                              const FDC<DH, VECTOR, dealdim> & /*fdc_weight*/,
+                              double & /*ret*/,
+                              double /*scale*/);
+
+    /******************************************************/
+
+    virtual void
+    BoundaryEquation_UT (const FDC<DH, VECTOR, dealdim> & /*fdc*/,
                          dealii::Vector<double> &/*local_vector*/,
                          double /*scale*/,
                          double /*scale_ico*/);
+
     /******************************************************/
 
     virtual void
-    InterfaceEquation_UTT(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
+    BoundaryEquation_UTT (const FDC<DH, VECTOR, dealdim> & /*fdc*/,
                           dealii::Vector<double> &/*local_vector*/,
                           double /*scale*/,
                           double /*scale_ico*/);
 
     /******************************************************/
 
-    // Functions for Boundary Integrals
-
     virtual void
-    BoundaryEquation(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
-                     dealii::Vector<double> &/*local_vector*/,
-                     double /*scale*/,
-                     double /*scale_ico*/);
+    BoundaryEquation_Q (const FDC<DH, VECTOR, dealdim> & /*fdc*/,
+                        dealii::Vector<double> &/*local_vector*/,
+                        double /*scale*/,
+                        double /*scale_ico*/);
 
     /******************************************************/
 
     virtual void
-    StrongBoundaryResidual(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
-                           const FDC<DH, VECTOR, dealdim> & /*fdc_weight*/,
-                           double & /*ret*/,
+    BoundaryEquation_QT (const FDC<DH, VECTOR, dealdim> & /*fdc*/,
+                         dealii::Vector<double> &/*local_vector*/,
+                         double /*scale*/,
+                         double /*scale_ico*/);
+
+    /******************************************************/
+
+    virtual void
+    BoundaryEquation_QTT (const FDC<DH, VECTOR, dealdim> & /*fdc*/,
+                          dealii::Vector<double> &/*local_vector*/,
+                          double /*scale*/,
+                          double /*scale_ico*/);
+
+    /******************************************************/
+
+    virtual void
+    BoundaryEquation_UU (const FDC<DH, VECTOR, dealdim> & /*fdc*/,
+                         dealii::Vector<double> &/*local_vector*/,
+                         double /*scale*/,
+                         double /*scale_ico*/);
+
+    /******************************************************/
+
+    virtual void
+    BoundaryEquation_QU (const FDC<DH, VECTOR, dealdim> & /*fdc*/,
+                         dealii::Vector<double> &/*local_vector*/,
+                         double /*scale*/,
+                         double /*scale_ico*/);
+
+    /******************************************************/
+
+    virtual void
+    BoundaryEquation_UQ (const FDC<DH, VECTOR, dealdim> & /*fdc*/,
+                         dealii::Vector<double> &/*local_vector*/,
+                         double /*scale*/,
+                         double /*scale_ico*/);
+
+    /******************************************************/
+
+    virtual void
+    BoundaryEquation_QQ (const FDC<DH, VECTOR, dealdim> & /*fdc*/,
+                         dealii::Vector<double> &/*local_vector*/,
+                         double /*scale*/,
+                         double /*scale_ico*/);
+
+    /******************************************************/
+
+    virtual void
+    BoundaryRightHandSide (const FDC<DH, VECTOR, dealdim> & /*fdc*/,
+                           dealii::Vector<double> &/*local_vector*/,
                            double /*scale*/);
 
     /******************************************************/
 
     virtual void
-    BoundaryEquation_U(const FDC<DH, VECTOR, dealdim> &/*fdc*/,
-                       dealii::Vector<double> &/*local_vector*/,
-                       double /*scale*/,
-                       double /*scale_ico*/);
+    BoundaryMatrix (const FDC<DH, VECTOR, dealdim> & /*fdc*/,
+                    dealii::FullMatrix<double> &/*local_entry_matrix*/,
+                    double /*scale*/,
+                    double /*scale_ico*/);
 
     /******************************************************/
 
     virtual void
-    StrongBoundaryResidual_U(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
-                             const FDC<DH, VECTOR, dealdim> & /*fdc_weight*/,
-                             double & /*ret*/,
-                             double /*scale*/);
-
-    /******************************************************/
-
-    virtual void
-    BoundaryEquation_UT(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
-                        dealii::Vector<double> &/*local_vector*/,
-                        double /*scale*/,
-                        double /*scale_ico*/);
-
-    /******************************************************/
-
-    virtual void
-    BoundaryEquation_UTT(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
-                         dealii::Vector<double> &/*local_vector*/,
-                         double /*scale*/,
-                         double /*scale_ico*/);
-
-    /******************************************************/
-
-    virtual void
-    BoundaryEquation_Q(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
-                       dealii::Vector<double> &/*local_vector*/,
-                       double /*scale*/,
-                       double /*scale_ico*/);
-
-    /******************************************************/
-
-    virtual void
-    BoundaryEquation_QT(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
-                        dealii::Vector<double> &/*local_vector*/,
-                        double /*scale*/,
-                        double /*scale_ico*/);
-
-    /******************************************************/
-
-    virtual void
-    BoundaryEquation_QTT(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
-                         dealii::Vector<double> &/*local_vector*/,
-                         double /*scale*/,
-                         double /*scale_ico*/);
-
-    /******************************************************/
-
-    virtual void
-    BoundaryEquation_UU(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
-                        dealii::Vector<double> &/*local_vector*/,
-                        double /*scale*/,
-                        double /*scale_ico*/);
-
-    /******************************************************/
-
-    virtual void
-    BoundaryEquation_QU(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
-                        dealii::Vector<double> &/*local_vector*/,
-                        double /*scale*/,
-                        double /*scale_ico*/);
-
-    /******************************************************/
-
-    virtual void
-    BoundaryEquation_UQ(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
-                        dealii::Vector<double> &/*local_vector*/,
-                        double /*scale*/,
-                        double /*scale_ico*/);
-
-    /******************************************************/
-
-    virtual void
-    BoundaryEquation_QQ(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
-                        dealii::Vector<double> &/*local_vector*/,
-                        double /*scale*/,
-                        double /*scale_ico*/);
-
-    /******************************************************/
-
-    virtual void
-    BoundaryRightHandSide(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
-                          dealii::Vector<double> &/*local_vector*/,
-                          double /*scale*/);
-
-    /******************************************************/
-
-    virtual void
-    BoundaryMatrix(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
-                   dealii::FullMatrix<double> &/*local_entry_matrix*/,
-                   double /*scale*/,
-                   double /*scale_ico*/);
-
-    /******************************************************/
-
-    virtual void
-    BoundaryMatrix_T(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
-                     dealii::FullMatrix<double> &/*local_entry_matrix*/,
-                     double /*scale*/,
-                     double /*scale_ico*/);
+    BoundaryMatrix_T (const FDC<DH, VECTOR, dealdim> & /*fdc*/,
+                      dealii::FullMatrix<double> &/*local_entry_matrix*/,
+                      double /*scale*/,
+                      double /*scale_ico*/);
 
     /******************************************************/
     /******************************************************/
     /**
-    * The following functions Init_... implement the
-    * equation used for transfering the given initial
-    * values to the finite element space.
-    *
-    * The initial data may depend on the control, but (obviously)
-    * not on the state itself, hence derivatives with respect
-    * to the control are considered.
-    *
-    * Default is componentwise L2 projection.
-    *
-    **/
+     * The following functions Init_... implement the
+     * equation used for transfering the given initial
+     * values to the finite element space.
+     *
+     * The initial data may depend on the control, but (obviously)
+     * not on the state itself, hence derivatives with respect
+     * to the control are considered.
+     *
+     * Default is componentwise L2 projection.
+     *
+     **/
 
     virtual void
-    Init_ElementEquation(const EDC<DH, VECTOR, dealdim> &edc,
-                         dealii::Vector<double> &local_vector,
-                         double scale,
-                         double /*scale_ico*/)
+    Init_ElementEquation (const EDC<DH, VECTOR, dealdim> &edc,
+                          dealii::Vector<double> &local_vector,
+                          double scale,
+                          double /*scale_ico*/)
     {
       const DOpEWrapper::FEValues<dealdim> &state_fe_values =
-        edc.GetFEValuesState();
-      unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
-      unsigned int n_q_points = edc.GetNQPoints();
+        edc.GetFEValuesState ();
+      unsigned int n_dofs_per_element = edc.GetNDoFsPerElement ();
+      unsigned int n_q_points = edc.GetNQPoints ();
       std::vector<dealii::Vector<double> > uvalues;
-      uvalues.resize(n_q_points,
-                     dealii::Vector<double>(this->GetStateNComponents()));
-      edc.GetValuesState("last_newton_solution", uvalues);
+      uvalues.resize (n_q_points,
+                      dealii::Vector<double> (this->GetStateNComponents ()));
+      edc.GetValuesState ("last_newton_solution", uvalues);
 
-      dealii::Vector<double> f_values(
-        dealii::Vector<double>(this->GetStateNComponents()));
+      dealii::Vector<double> f_values (
+        dealii::Vector<double> (this->GetStateNComponents ()));
 
       for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
         {
           for (unsigned int i = 0; i < n_dofs_per_element; i++)
             {
-              for (unsigned int comp = 0; comp < this->GetStateNComponents();
-                   comp++)
+              for (unsigned int comp = 0;
+                   comp < this->GetStateNComponents (); comp++)
                 {
-                  local_vector(i) += scale
-                                     * (state_fe_values.shape_value_component(i, q_point, comp)
-                                        * uvalues[q_point](comp))
-                                     * state_fe_values.JxW(q_point);
+                  local_vector (i) += scale
+                                      * (state_fe_values.shape_value_component (i, q_point,
+                                          comp)
+                                         * uvalues[q_point] (comp))
+                                      * state_fe_values.JxW (q_point);
                 }
             }
         } //endfor q_point
     }
 
     virtual void
-    Init_ElementRhs_Q(const EDC<DH, VECTOR, dealdim> & /*edc*/,
-                      dealii::Vector<double> &/*local_vector*/, double /*scale*/)
+    Init_ElementRhs_Q (const EDC<DH, VECTOR, dealdim> & /*edc*/,
+                       dealii::Vector<double> &/*local_vector*/,
+                       double /*scale*/)
     {
 
     }
     virtual void
-    Init_ElementRhs_QT(const EDC<DH, VECTOR, dealdim> & /*edc*/,
-                       dealii::Vector<double> &/*local_vector*/, double /*scale*/)
+    Init_ElementRhs_QT (const EDC<DH, VECTOR, dealdim> & /*edc*/,
+                        dealii::Vector<double> &/*local_vector*/,
+                        double /*scale*/)
     {
 
     }
     virtual void
-    Init_ElementRhs_QTT(const EDC<DH, VECTOR, dealdim> & /*edc*/,
-                        dealii::Vector<double> &/*local_vector*/, double /*scale*/)
+    Init_ElementRhs_QTT (const EDC<DH, VECTOR, dealdim> & /*edc*/,
+                         dealii::Vector<double> &/*local_vector*/,
+                         double /*scale*/)
     {
 
     }
     virtual void
-    Init_ElementRhs_QQ(const EDC<DH, VECTOR, dealdim> & /*edc*/,
-                       dealii::Vector<double> &/*local_vector*/, double /*scale*/)
+    Init_ElementRhs_QQ (const EDC<DH, VECTOR, dealdim> & /*edc*/,
+                        dealii::Vector<double> &/*local_vector*/,
+                        double /*scale*/)
     {
 
     }
 
     virtual void
-    Init_ElementRhs(const dealii::Function<dealdim> *init_values,
-                    const EDC<DH, VECTOR, dealdim> &edc,
-                    dealii::Vector<double> &local_vector,
-                    double scale)
+    Init_ElementRhs (const dealii::Function<dealdim> *init_values,
+                     const EDC<DH, VECTOR, dealdim> &edc,
+                     dealii::Vector<double> &local_vector,
+                     double scale)
     {
       const DOpEWrapper::FEValues<dealdim> &state_fe_values =
-        edc.GetFEValuesState();
-      unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
-      unsigned int n_q_points = edc.GetNQPoints();
+        edc.GetFEValuesState ();
+      unsigned int n_dofs_per_element = edc.GetNDoFsPerElement ();
+      unsigned int n_q_points = edc.GetNQPoints ();
 
-      dealii::Vector<double> f_values(
-        dealii::Vector<double>(this->GetStateNComponents()));
+      dealii::Vector<double> f_values (
+        dealii::Vector<double> (this->GetStateNComponents ()));
 
       for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
         {
-          init_values->vector_value(state_fe_values.quadrature_point(q_point),
-                                    f_values);
+          init_values->vector_value (
+            state_fe_values.quadrature_point (q_point), f_values);
 
           for (unsigned int i = 0; i < n_dofs_per_element; i++)
             {
-              for (unsigned int comp = 0; comp < this->GetStateNComponents();
-                   comp++)
+              for (unsigned int comp = 0;
+                   comp < this->GetStateNComponents (); comp++)
                 {
-                  local_vector(i) += scale
-                                     * (f_values(comp)
-                                        * state_fe_values.shape_value_component(i, q_point,
-                                            comp)) * state_fe_values.JxW(q_point);
+                  local_vector (i) +=
+                    scale * (f_values (comp)
+                             * state_fe_values.shape_value_component (i,
+                                                                      q_point, comp))
+                    * state_fe_values.JxW (q_point);
                 }
             }
         }
     }
 
     virtual void
-    Init_ElementMatrix(const EDC<DH, VECTOR, dealdim> &edc,
-                       dealii::FullMatrix<double> &local_entry_matrix,
-                       double scale,
-                       double /*scale_ico*/)
+    Init_ElementMatrix (const EDC<DH, VECTOR, dealdim> &edc,
+                        dealii::FullMatrix<double> &local_entry_matrix,
+                        double scale,
+                        double /*scale_ico*/)
     {
       const DOpEWrapper::FEValues<dealdim> &state_fe_values =
-        edc.GetFEValuesState();
-      unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
-      unsigned int n_q_points = edc.GetNQPoints();
+        edc.GetFEValuesState ();
+      unsigned int n_dofs_per_element = edc.GetNDoFsPerElement ();
+      unsigned int n_q_points = edc.GetNQPoints ();
 
       for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
         {
@@ -1384,13 +1387,15 @@ namespace DOpE
             {
               for (unsigned int j = 0; j < n_dofs_per_element; j++)
                 {
-                  for (unsigned int comp = 0; comp < this->GetStateNComponents();
-                       comp++)
+                  for (unsigned int comp = 0;
+                       comp < this->GetStateNComponents (); comp++)
                     {
-                      local_entry_matrix(i, j) += scale
-                                                  * state_fe_values.shape_value_component(i, q_point, comp)
-                                                  * state_fe_values.shape_value_component(j, q_point, comp)
-                                                  * state_fe_values.JxW(q_point);
+                      local_entry_matrix (i, j) += scale
+                                                   * state_fe_values.shape_value_component (i,
+                                                       q_point, comp)
+                                                   * state_fe_values.shape_value_component (j,
+                                                       q_point, comp)
+                                                   * state_fe_values.JxW (q_point);
                     }
                 }
             }
@@ -1403,14 +1408,14 @@ namespace DOpE
      * be calculated on the next element.
      */
     virtual dealii::UpdateFlags
-    GetUpdateFlags() const;
+    GetUpdateFlags () const;
     /**
      * Returns the update flags needed by the integrator to
      * decide which finite element informations need to
      * be calculated on the next face (including on boundaries).
      */
     virtual dealii::UpdateFlags
-    GetFaceUpdateFlags() const;
+    GetFaceUpdateFlags () const;
 
     /**
      * Should return true, if integration on interior faces is
@@ -1419,34 +1424,35 @@ namespace DOpE
      * The default is false.
      */
     virtual bool
-    HasFaces() const;
+    HasFaces () const;
     virtual bool
-    HasInterfaces() const;
+    HasInterfaces () const;
 
     /******************************************************/
 
     void
-    SetProblemType(std::string type);
+    SetProblemType (std::string type);
 
     /******************************************************/
 
     virtual unsigned int
-    GetControlNBlocks() const;
+    GetControlNBlocks () const;
     virtual unsigned int
-    GetStateNBlocks() const;
+    GetStateNBlocks () const;
     virtual std::vector<unsigned int> &
-    GetControlBlockComponent();
+    GetControlBlockComponent ();
     virtual const std::vector<unsigned int> &
-    GetControlBlockComponent() const;
+    GetControlBlockComponent () const;
     virtual std::vector<unsigned int> &
-    GetStateBlockComponent();
+    GetStateBlockComponent ();
     virtual const std::vector<unsigned int> &
-    GetStateBlockComponent() const;
+    GetStateBlockComponent () const;
 
     /******************************************************/
 
     void
-    SetTime(double t, double step_size) const
+    SetTime (double t,
+             double step_size) const
     {
       time_ = t;
       step_size_ = step_size;
@@ -1455,7 +1461,7 @@ namespace DOpE
     /******************************************************/
 
     unsigned int
-    GetStateNComponents() const;
+    GetStateNComponents () const;
 
     /******************************************************/
     /**
@@ -1468,25 +1474,25 @@ namespace DOpE
     boost::function1<void, dealii::Vector<double>&> VectorResidualModifier;
 
     /**
-           * Given a vector of active element iterators and a facenumber, checks if the face
-           * belongs to an 'interface' (i.e. the adjoining elements have different material ids).
+     * Given a vector of active element iterators and a facenumber, checks if the face
+     * belongs to an 'interface' (i.e. the adjoining elements have different material ids).
      *
      * Can be changed by the user to allow the use of dg-methods (i.e., then this function
      * needs to return true for all input arguments.
-           *
-           * @template ELEMENTITERATOR   Class of the elementiterator.
-           *
-           * @param   element            The element in question.
-           * @param   face            Local number of the face for which we ask if it is
-           *                          at the interface.
-           */
-    template<typename ELEMENTITERATOR>
+     *
+     * @template ELEMENTITERATOR   Class of the elementiterator.
+     *
+     * @param   element            The element in question.
+     * @param   face            Local number of the face for which we ask if it is
+     *                          at the interface.
+     */
+    template <typename ELEMENTITERATOR>
     bool
-    AtInterface(ELEMENTITERATOR &element, unsigned int face) const
+    AtInterface (ELEMENTITERATOR &element,
+                 unsigned int face) const
     {
-      if (element[0]->neighbor_index(face) != -1)
-        if (element[0]->material_id()
-            != element[0]->neighbor(face)->material_id())
+      if (element[0]->neighbor_index (face) != -1)
+        if (element[0]->material_id () != element[0]->neighbor (face)->material_id ())
           return true;
       return false;
     }
@@ -1498,7 +1504,7 @@ namespace DOpE
      * feasible starting point.
      */
     virtual bool
-    NeedInitialState() const
+    NeedInitialState () const
     {
       return false;
     }
@@ -1512,12 +1518,13 @@ namespace DOpE
      * Only needed for calculations on networks.
      *
      */
-    virtual void BoundaryEquation_BV(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
-                                     dealii::Vector<double> &/*local_vector*/,
-                                     double /*scale*/,
-                                     double /*scale_ico*/)
+    virtual void
+    BoundaryEquation_BV (const FDC<DH, VECTOR, dealdim> & /*fdc*/,
+                         dealii::Vector<double> &/*local_vector*/,
+                         double /*scale*/,
+                         double /*scale_ico*/)
     {
-      abort();
+      abort ();
     }
     /**
      * Calculates the local matrix for the coupling between the unknowns and the
@@ -1527,13 +1534,13 @@ namespace DOpE
      *
      */
     virtual void
-    BoundaryMatrix_BV(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
-                      std::vector<bool> & /*present_in_outflow*/,
-                      dealii::FullMatrix<double> &/*local_entry_matrix*/,
-                      double /*scale*/,
-                      double /*scale_ico*/)
+    BoundaryMatrix_BV (const FDC<DH, VECTOR, dealdim> & /*fdc*/,
+                       std::vector<bool> & /*present_in_outflow*/,
+                       dealii::FullMatrix<double> &/*local_entry_matrix*/,
+                       double /*scale*/,
+                       double /*scale_ico*/)
     {
-      abort();
+      abort ();
     }
 
     /**
@@ -1550,13 +1557,14 @@ namespace DOpE
      *
      *
      */
-    virtual void OutflowValues(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
-                               std::vector<bool> & /*present_in_outflow*/,
-                               dealii::Vector<double> &/*local_vector*/,
-                               double /*scale*/,
-                               double /*scale_ico*/)
+    virtual void
+    OutflowValues (const FDC<DH, VECTOR, dealdim> & /*fdc*/,
+                   std::vector<bool> & /*present_in_outflow*/,
+                   dealii::Vector<double> &/*local_vector*/,
+                   double /*scale*/,
+                   double /*scale_ico*/)
     {
-      abort();
+      abort ();
     }
     /**
      * The (local) matrix coupling the outflow values of the pde and the fluxes.
@@ -1565,13 +1573,13 @@ namespace DOpE
      *
      */
     virtual void
-    OutflowMatrix(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
-                  std::vector<bool> & /*present_in_outflow*/,
-                  dealii::FullMatrix<double> &/*local_entry_matrix*/,
-                  double /*scale*/,
-                  double /*scale_ico*/)
+    OutflowMatrix (const FDC<DH, VECTOR, dealdim> & /*fdc*/,
+                   std::vector<bool> & /*present_in_outflow*/,
+                   dealii::FullMatrix<double> &/*local_entry_matrix*/,
+                   double /*scale*/,
+                   double /*scale_ico*/)
     {
-      abort();
+      abort ();
     }
 
     /**
@@ -1585,13 +1593,14 @@ namespace DOpE
      *
      *
      */
-    virtual void Init_OutflowValues(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
-                                    std::vector<bool> & /*present_in_outflow*/,
-                                    dealii::Vector<double> &/*local_vector*/,
-                                    double /*scale*/,
-                                    double /*scale_ico*/)
+    virtual void
+    Init_OutflowValues (const FDC<DH, VECTOR, dealdim> & /*fdc*/,
+                        std::vector<bool> & /*present_in_outflow*/,
+                        dealii::Vector<double> &/*local_vector*/,
+                        double /*scale*/,
+                        double /*scale_ico*/)
     {
-      abort();
+      abort ();
     }
     /**
      * Same as OutflowMatrix, but for initial conditions.
@@ -1600,13 +1609,13 @@ namespace DOpE
      *
      */
     virtual void
-    Init_OutflowMatrix(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
-                       std::vector<bool> & /*present_in_outflow*/,
-                       dealii::FullMatrix<double> &/*local_entry_matrix*/,
-                       double /*scale*/,
-                       double /*scale_ico*/)
+    Init_OutflowMatrix (const FDC<DH, VECTOR, dealdim> & /*fdc*/,
+                        std::vector<bool> & /*present_in_outflow*/,
+                        dealii::FullMatrix<double> &/*local_entry_matrix*/,
+                        double /*scale*/,
+                        double /*scale_ico*/)
     {
-      abort();
+      abort ();
     }
 
     /**
@@ -1618,11 +1627,12 @@ namespace DOpE
      * @param res  The residual of the coupling condition
      * @param u    The vector in which the residual is to be calculated
      */
-    virtual void PipeCouplingResidual(dealii::Vector<double> & /*res*/,
-                                      const dealii::Vector<double> & /*u*/,
-                                      const std::vector<bool> & /*present_in_outflow*/)
+    virtual void
+    PipeCouplingResidual (dealii::Vector<double> & /*res*/,
+                          const dealii::Vector<double> & /*u*/,
+                          const std::vector<bool> & /*present_in_outflow*/)
     {
-      abort();
+      abort ();
     }
     /**
      * Returns the matrix for the (linear) global couplings between the flux variables
@@ -1633,10 +1643,11 @@ namespace DOpE
      * @param matrix  The matrix to be calculated
      * @param present_in_outflow A vector indicating which flux variables are outflow.
      */
-    virtual void CouplingMatrix(dealii::SparseMatrix<double> & /*matrix*/,
-                                const std::vector<bool> & /*present_in_outflow*/)
+    virtual void
+    CouplingMatrix (dealii::SparseMatrix<double> & /*matrix*/,
+                    const std::vector<bool> & /*present_in_outflow*/)
     {
-      abort();
+      abort ();
     }
 
     /**
@@ -1645,11 +1656,12 @@ namespace DOpE
      * @param res  The residual of the coupling condition
      * @param u    The vector in which the residual is to be calculated
      */
-    virtual void Init_PipeCouplingResidual(dealii::Vector<double> & /*res*/,
-                                           const dealii::Vector<double> & /*u*/,
-                                           const std::vector<bool> & /*present_in_outflow*/)
+    virtual void
+    Init_PipeCouplingResidual (dealii::Vector<double> & /*res*/,
+                               const dealii::Vector<double> & /*u*/,
+                               const std::vector<bool> & /*present_in_outflow*/)
     {
-      abort();
+      abort ();
     }
     /**
      * Same as CouplingMatrix, but for the initial problem
@@ -1660,20 +1672,22 @@ namespace DOpE
      * @param matrix  The matrix to be calculated
      * @param present_in_outflow A vector indicating which flux variables are outflow.
      */
-    virtual void Init_CouplingMatrix(dealii::SparseMatrix<double> & /*matrix*/,
-                                     const std::vector<bool> & /*present_in_outflow*/)
+    virtual void
+    Init_CouplingMatrix (dealii::SparseMatrix<double> & /*matrix*/,
+                         const std::vector<bool> & /*present_in_outflow*/)
     {
-      abort();
+      abort ();
     }
-
 
   protected:
     std::string problem_type_;
-    double GetTime() const
+    double
+    GetTime () const
     {
       return time_;
     }
-    double GetTimeStepSize() const
+    double
+    GetTimeStepSize () const
     {
       return step_size_;
     }

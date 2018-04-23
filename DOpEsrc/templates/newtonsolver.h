@@ -47,21 +47,24 @@ namespace DOpE
    FS scheme and where the solution is stored in.
    */
 
-  template<typename INTEGRATOR, typename LINEARSOLVER, typename VECTOR>
+  template <typename INTEGRATOR, typename LINEARSOLVER, typename VECTOR>
   class NewtonSolver : public LINEARSOLVER
   {
   public:
-    NewtonSolver(INTEGRATOR &integrator, ParameterReader &param_reader);
-    ~NewtonSolver();
+    NewtonSolver (INTEGRATOR &integrator,
+                  ParameterReader &param_reader);
+    ~NewtonSolver ();
 
-    static void declare_params(ParameterReader &param_reader);
+    static void
+    declare_params (ParameterReader &param_reader);
 
     /**
      This Function should be called once after grid refinement, or changes in boundary values
      to  recompute sparsity patterns, and constraint matrices.
      */
-    template<typename PROBLEM>
-    void ReInit(PROBLEM &pde);
+    template <typename PROBLEM>
+    void
+    ReInit (PROBLEM &pde);
 
     /**
      * Solves the nonlinear PDE described by the PROBLEM using a Newton-Method
@@ -90,13 +93,19 @@ namespace DOpE
      *         this method is used, e.g. the value for force_build_matrix of the next call.
      *
      */
-    template<typename PROBLEM>
-    bool NonlinearSolve(PROBLEM &pde, VECTOR &solution, bool apply_boundary_values = true, bool force_matrix_build = false, int priority = 5,
-                        std::string algo_level = "\t\t ");
+    template <typename PROBLEM>
+    bool
+    NonlinearSolve (PROBLEM &pde,
+                    VECTOR &solution,
+                    bool apply_boundary_values = true,
+                    bool force_matrix_build = false,
+                    int priority = 5,
+                    std::string algo_level = "\t\t ");
 
   protected:
 
-    inline INTEGRATOR &GetIntegrator();
+    inline INTEGRATOR &
+    GetIntegrator ();
 
   private:
     INTEGRATOR &integrator_;
@@ -110,106 +119,123 @@ namespace DOpE
 
   /**********************************Implementation*******************************************/
 
-  template<typename INTEGRATOR, typename LINEARSOLVER, typename VECTOR>
-  void NewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR>::declare_params(ParameterReader &param_reader)
+  template <typename INTEGRATOR, typename LINEARSOLVER, typename VECTOR>
+  void
+  NewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR>::declare_params (ParameterReader &param_reader)
   {
-    param_reader.SetSubsection("newtonsolver parameters");
-    param_reader.declare_entry("nonlinear_global_tol", "1.e-12", Patterns::Double(0), "global tolerance for the newton iteration");
-    param_reader.declare_entry("nonlinear_tol", "1.e-10", Patterns::Double(0), "relative tolerance for the newton iteration");
-    param_reader.declare_entry("nonlinear_maxiter", "10", Patterns::Integer(0), "maximal number of newton iterations");
-    param_reader.declare_entry("nonlinear_rho", "0.1", Patterns::Double(0), "minimal  newton reduction, if actual reduction is less, matrix is rebuild ");
+    param_reader.SetSubsection ("newtonsolver parameters");
+    param_reader.declare_entry ("nonlinear_global_tol", "1.e-12",
+                                Patterns::Double (0), "global tolerance for the newton iteration");
+    param_reader.declare_entry ("nonlinear_tol", "1.e-10",
+                                Patterns::Double (0), "relative tolerance for the newton iteration");
+    param_reader.declare_entry ("nonlinear_maxiter", "10",
+                                Patterns::Integer (0), "maximal number of newton iterations");
+    param_reader.declare_entry ("nonlinear_rho", "0.1", Patterns::Double (0),
+                                "minimal  newton reduction, if actual reduction is less, matrix is rebuild ");
 
-    param_reader.declare_entry("line_maxiter", "4", Patterns::Integer(0), "maximal number of linesearch steps");
-    param_reader.declare_entry("linesearch_rho", "0.9", Patterns::Double(0), "reduction rate for the linesearch damping paramete");
+    param_reader.declare_entry ("line_maxiter", "4", Patterns::Integer (0),
+                                "maximal number of linesearch steps");
+    param_reader.declare_entry ("linesearch_rho", "0.9", Patterns::Double (0),
+                                "reduction rate for the linesearch damping paramete");
 
-    LINEARSOLVER::declare_params(param_reader);
+    LINEARSOLVER::declare_params (param_reader);
   }
 
   /*******************************************************************************************/
 
-  template<typename INTEGRATOR, typename LINEARSOLVER, typename VECTOR>
-  NewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR>::NewtonSolver(INTEGRATOR &integrator, ParameterReader &param_reader) :
-    LINEARSOLVER(param_reader), integrator_(integrator)
+  template <typename INTEGRATOR, typename LINEARSOLVER, typename VECTOR>
+  NewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR>::NewtonSolver (INTEGRATOR &integrator,
+      ParameterReader &param_reader)
+    : LINEARSOLVER (param_reader),
+      integrator_ (integrator)
   {
-    param_reader.SetSubsection("newtonsolver parameters");
-    nonlinear_global_tol_ = param_reader.get_double("nonlinear_global_tol");
-    nonlinear_tol_ = param_reader.get_double("nonlinear_tol");
-    nonlinear_maxiter_ = param_reader.get_integer("nonlinear_maxiter");
-    nonlinear_rho_ = param_reader.get_double("nonlinear_rho");
+    param_reader.SetSubsection ("newtonsolver parameters");
+    nonlinear_global_tol_ = param_reader.get_double ("nonlinear_global_tol");
+    nonlinear_tol_ = param_reader.get_double ("nonlinear_tol");
+    nonlinear_maxiter_ = param_reader.get_integer ("nonlinear_maxiter");
+    nonlinear_rho_ = param_reader.get_double ("nonlinear_rho");
 
-    line_maxiter_ = param_reader.get_integer("line_maxiter");
-    linesearch_rho_ = param_reader.get_double("linesearch_rho");
+    line_maxiter_ = param_reader.get_integer ("line_maxiter");
+    linesearch_rho_ = param_reader.get_double ("linesearch_rho");
 
   }
 
   /*******************************************************************************************/
 
-  template<typename INTEGRATOR, typename LINEARSOLVER, typename VECTOR>
-  NewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR>::~NewtonSolver()
+  template <typename INTEGRATOR, typename LINEARSOLVER, typename VECTOR>
+  NewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR>::~NewtonSolver ()
   {
   }
 
   /*******************************************************************************************/
-  template<typename INTEGRATOR, typename LINEARSOLVER, typename VECTOR>
-  template<typename PROBLEM>
-  void NewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR>::ReInit(PROBLEM &pde)
+  template <typename INTEGRATOR, typename LINEARSOLVER, typename VECTOR>
+  template <typename PROBLEM>
+  void
+  NewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR>::ReInit (PROBLEM &pde)
   {
-    LINEARSOLVER::ReInit(pde);
+    LINEARSOLVER::ReInit (pde);
   }
 
   /*******************************************************************************************/
-  template<typename INTEGRATOR, typename LINEARSOLVER, typename VECTOR>
-  template<typename PROBLEM>
-  bool NewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR>::NonlinearSolve(PROBLEM &pde, VECTOR &solution, bool apply_boundary_values, bool force_matrix_build,
-      int priority, std::string algo_level)
+  template <typename INTEGRATOR, typename LINEARSOLVER, typename VECTOR>
+  template <typename PROBLEM>
+  bool
+  NewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR>::NonlinearSolve (PROBLEM &pde,
+      VECTOR &solution,
+      bool apply_boundary_values,
+      bool force_matrix_build,
+      int priority,
+      std::string algo_level)
   {
     bool build_matrix = force_matrix_build;
-    VECTOR residual(solution);
-    VECTOR du(solution);
-    VECTOR u(solution);
+    VECTOR residual (solution);
+    VECTOR du (solution);
+    VECTOR u (solution);
 
-    DOpEHelper::make_distributed(u);
-    DOpEHelper::make_distributed(du);
-    DOpEHelper::make_distributed(residual);
+    DOpEHelper::make_distributed (u);
+    DOpEHelper::make_distributed (du);
+    DOpEHelper::make_distributed (residual);
 
     std::stringstream out;
     MPI_TILL_HERE;
-    pde.GetOutputHandler()->InitNewtonOut(out);
+    pde.GetOutputHandler ()->InitNewtonOut (out);
     MPI_TILL_HERE;
 
     if (apply_boundary_values)
       {
         MPI_TILL_HERE;
-        GetIntegrator().ApplyInitialBoundaryValues(pde, u);
+        GetIntegrator ().ApplyInitialBoundaryValues (pde, u);
         MPI_TILL_HERE;
       }
     MPI_TILL_HERE;
     // For the integrator we need a ghosted linearization point
     solution = u;
-    GetIntegrator().AddDomainData("last_newton_solution", &solution);
+    GetIntegrator ().AddDomainData ("last_newton_solution", &solution);
     MPI_TILL_HERE;
-    GetIntegrator().ComputeNonlinearResidual(pde, residual);
+    GetIntegrator ().ComputeNonlinearResidual (pde, residual);
     MPI_TILL_HERE;
     residual *= -1.;
     MPI_TILL_HERE;
-    pde.GetOutputHandler()->SetIterationNumber(0, "PDENewton");
+    pde.GetOutputHandler ()->SetIterationNumber (0, "PDENewton");
     MPI_TILL_HERE;
-//      pde.GetOutputHandler()->Write(residual, "Residual" + pde.GetType(), pde.GetDoFType());
+//      pde.GetOutputHandler()->Write(residual, "Residual" + pde.GetType(), pde.GetDoFType());// TODO !!!
 
     MPI_TILL_HERE;
-    double res = residual.linfty_norm();
+    double res = residual.linfty_norm ();
     double firstres = res;
     double lastres = res;
 
     MPI_TILL_HERE;
 
-    out << algo_level << "Newton step: " << 0 << "\t Residual (abs.): " << pde.GetOutputHandler()->ZeroTolerance(res, 1.0) << "\n";
+    out << algo_level << "Newton step: " << 0 << "\t Residual (abs.): "
+        << pde.GetOutputHandler ()->ZeroTolerance (res, 1.0) << "\n";
 
-    out << algo_level << "Newton step: " << 0 << "\t Residual (rel.):   " << std::scientific << firstres / firstres;
+    out << algo_level << "Newton step: " << 0 << "\t Residual (rel.):   "
+        << std::scientific << firstres / firstres;
 
     MPI_TILL_HERE;
 
-    pde.GetOutputHandler()->Write(out, priority);
+    pde.GetOutputHandler ()->Write (out, priority);
 
     int iter = 0;
     while (res > nonlinear_global_tol_ && res > firstres * nonlinear_tol_)
@@ -218,15 +244,18 @@ namespace DOpE
 
         if (iter > nonlinear_maxiter_)
           {
-            GetIntegrator().DeleteDomainData("last_newton_solution");
-            throw DOpEIterationException("Iteration count exceeded bounds!", "NewtonSolver::NonlinearSolve");
+            GetIntegrator ().DeleteDomainData ("last_newton_solution");
+            throw DOpEIterationException (
+              "Iteration count exceeded bounds!",
+              "NewtonSolver::NonlinearSolve");
           }
 
-        pde.GetOutputHandler()->SetIterationNumber(iter, "PDENewton");
+        pde.GetOutputHandler ()->SetIterationNumber (iter, "PDENewton");
 
         MPI_TILL_HERE;
 
-        LINEARSOLVER::Solve(pde, GetIntegrator(), residual, du, build_matrix);
+        LINEARSOLVER::Solve (pde, GetIntegrator (), residual, du,
+                             build_matrix);
 
         MPI_TILL_HERE;
         //Linesearch
@@ -234,15 +263,15 @@ namespace DOpE
           u += du;
 
           MPI_TILL_HERE;
-          GetIntegrator().ComputeNonlinearResidual(pde, residual);
+          GetIntegrator ().ComputeNonlinearResidual (pde, residual);
 
           MPI_TILL_HERE;
           residual *= -1.;
 
-//            pde.GetOutputHandler()->Write(residual, "Residual" + pde.GetType(), pde.GetDoFType());
-//            pde.GetOutputHandler()->Write(du, "Update" + pde.GetType(), pde.GetDoFType());
+//            pde.GetOutputHandler()->Write(residual, "Residual" + pde.GetType(), pde.GetDoFType());// TODO !!!
+//            pde.GetOutputHandler()->Write(du, "Update" + pde.GetType(), pde.GetDoFType());// TODO !!!
 
-          double newres = residual.linfty_norm();
+          double newres = residual.linfty_norm ();
           int lineiter = 0;
           double rho = linesearch_rho_;
           double alpha = 1;
@@ -251,36 +280,46 @@ namespace DOpE
               build_matrix = true;
               // Reuse of Matrix seems to be a bad idea, rebuild and repeat
               u -= du;
-              GetIntegrator().ComputeNonlinearResidual(pde, residual);
+              GetIntegrator ().ComputeNonlinearResidual (pde, residual);
               residual *= -1.;
-              out << algo_level << "Newton step: " << iter << "\t Recalculate with new Matrix";
+              out << algo_level << "Newton step: " << iter
+                  << "\t Recalculate with new Matrix";
               iter--;
-              pde.GetOutputHandler()->Write(out, priority);
+              pde.GetOutputHandler ()->Write (out, priority);
             }
           else
             {
               build_matrix = false;
               while (newres > res)
                 {
-                  out << algo_level << "Newton step: " << iter << "\t Residual (rel.): " << pde.GetOutputHandler()->ZeroTolerance(newres / firstres, 1.0)
+                  out << algo_level
+                      << "Newton step: "
+                      << iter
+                      << "\t Residual (rel.): "
+                      << pde.GetOutputHandler ()->ZeroTolerance (
+                        newres / firstres, 1.0)
                       << "\t LineSearch {" << lineiter << "} ";
 
-                  pde.GetOutputHandler()->Write(out, priority + 1);
+                  pde.GetOutputHandler ()->Write (out, priority + 1);
 
                   lineiter++;
                   if (lineiter > line_maxiter_)
                     {
-                      GetIntegrator().DeleteDomainData("last_newton_solution");
-                      throw DOpEIterationException("Line-Iteration count exceeded bounds!", "NewtonSolver::NonlinearSolve");
+                      GetIntegrator ().DeleteDomainData (
+                        "last_newton_solution");
+                      throw DOpEIterationException (
+                        "Line-Iteration count exceeded bounds!",
+                        "NewtonSolver::NonlinearSolve");
                     }
-                  u.add(alpha * (rho - 1.), du);
+                  u.add (alpha * (rho - 1.), du);
                   alpha *= rho;
 
-                  GetIntegrator().ComputeNonlinearResidual(pde, residual);
+                  GetIntegrator ().ComputeNonlinearResidual (pde,
+                                                             residual);
                   residual *= -1.;
-//                  pde.GetOutputHandler()->Write(residual, "Residual" + pde.GetType(), pde.GetDoFType());
+//                  pde.GetOutputHandler()->Write(residual, "Residual" + pde.GetType(), pde.GetDoFType()); // TODO !!!
 
-                  newres = residual.linfty_norm();
+                  newres = residual.linfty_norm ();
 
                 }
 
@@ -291,22 +330,28 @@ namespace DOpE
               lastres = res;
               res = newres;
 
-              out << algo_level << "Newton step: " << iter << "\t Residual (rel.): " << pde.GetOutputHandler()->ZeroTolerance(res / firstres, 1.0)
+              out << algo_level
+                  << "Newton step: "
+                  << iter
+                  << "\t Residual (rel.): "
+                  << pde.GetOutputHandler ()->ZeroTolerance (res / firstres,
+                                                             1.0)
                   << "\t LineSearch {" << lineiter << "} ";
 
-              pde.GetOutputHandler()->Write(out, priority);
+              pde.GetOutputHandler ()->Write (out, priority);
 
-            }  //End of Linesearch
+            } //End of Linesearch
         }
       }
-    GetIntegrator().DeleteDomainData("last_newton_solution");
+    GetIntegrator ().DeleteDomainData ("last_newton_solution");
 
     return build_matrix;
   }
 
   /*******************************************************************************************/
-  template<typename INTEGRATOR, typename LINEARSOLVER, typename VECTOR>
-  INTEGRATOR &NewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR>::GetIntegrator()
+  template <typename INTEGRATOR, typename LINEARSOLVER, typename VECTOR>
+  INTEGRATOR &
+  NewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR>::GetIntegrator ()
   {
     return integrator_;
   }

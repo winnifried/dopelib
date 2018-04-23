@@ -49,17 +49,16 @@ namespace DOpE
      * @param global_constraints           The number of global constraints on the
      *                                     control and state variable.
      */
-    Constraints(
-      const std::vector<std::vector<unsigned int> > &local_control_constraints,
-      unsigned int global_constraints)
+    Constraints (const std::vector<std::vector<unsigned int> > &local_control_constraints,
+                 unsigned int global_constraints)
     {
-      local_control_constraints_.resize(local_control_constraints.size());
-      local_control_constraints_per_block_.resize(
-        local_control_constraints.size());
-      for (unsigned int i = 0; i < local_control_constraints.size(); i++)
+      local_control_constraints_.resize (local_control_constraints.size ());
+      local_control_constraints_per_block_.resize (
+        local_control_constraints.size ());
+      for (unsigned int i = 0; i < local_control_constraints.size (); i++)
         {
-          local_control_constraints_[i].resize(2);
-          assert(local_control_constraints[i].size() == 2);
+          local_control_constraints_[i].resize (2);
+          assert (local_control_constraints[i].size () == 2);
           local_control_constraints_[i][0] = local_control_constraints[i][0];
           local_control_constraints_[i][1] = local_control_constraints[i][1];
           local_control_constraints_per_block_[i] = 0;
@@ -71,17 +70,20 @@ namespace DOpE
     /**
      * Copy Constructor
      */
-    Constraints(const Constraints &c)
+    Constraints (const Constraints &c)
     {
-      local_control_constraints_.resize(c.local_control_constraints_.size());
-      local_control_constraints_per_block_.resize(
-        c.local_control_constraints_per_block_.size());
-      for (unsigned int i = 0; i < c.local_control_constraints_.size(); i++)
+      local_control_constraints_.resize (
+        c.local_control_constraints_.size ());
+      local_control_constraints_per_block_.resize (
+        c.local_control_constraints_per_block_.size ());
+      for (unsigned int i = 0; i < c.local_control_constraints_.size (); i++)
         {
-          local_control_constraints_[i].resize(2);
-          assert(c.local_control_constraints_[i].size() == 2);
-          local_control_constraints_[i][0] = c.local_control_constraints_[i][0];
-          local_control_constraints_[i][1] = c.local_control_constraints_[i][1];
+          local_control_constraints_[i].resize (2);
+          assert (c.local_control_constraints_[i].size () == 2);
+          local_control_constraints_[i][0] =
+            c.local_control_constraints_[i][0];
+          local_control_constraints_[i][1] =
+            c.local_control_constraints_[i][1];
           local_control_constraints_per_block_[i] = 0;
         }
       global_constraints_ = c.global_constraints_;
@@ -91,11 +93,11 @@ namespace DOpE
     /**
      * Constructor to be used when  no constraints are present.
      */
-    Constraints()
+    Constraints ()
     {
-      local_control_constraints_.clear();
+      local_control_constraints_.clear ();
       global_constraints_ = 0;
-      local_control_constraints_per_block_.clear();
+      local_control_constraints_per_block_.clear ();
       n_dofs_ = 0;
       n_local_control_dofs_ = 0;
     }
@@ -105,30 +107,29 @@ namespace DOpE
      *
      */
     void
-    ReInit(std::vector<unsigned int> &control_dofs_per_block)
+    ReInit (std::vector<unsigned int> &control_dofs_per_block)
     {
-      if (local_control_constraints_per_block_.size()
-          == control_dofs_per_block.size())
+      if (local_control_constraints_per_block_.size () == control_dofs_per_block.size ())
         {
           n_dofs_ = 0;
-          for (unsigned int i = 0; i < local_control_constraints_.size(); i++)
+          for (unsigned int i = 0; i < local_control_constraints_.size ();
+               i++)
             {
-              assert(
-                control_dofs_per_block[i] % local_control_constraints_[i][0]
-                == 0);
-              local_control_constraints_per_block_[i] = control_dofs_per_block[i]
-                                                        / local_control_constraints_[i][0]
-                                                        * local_control_constraints_[i][1];
+              assert (
+                control_dofs_per_block[i] % local_control_constraints_[i][0] == 0);
+              local_control_constraints_per_block_[i] =
+                control_dofs_per_block[i] / local_control_constraints_[i][0] * local_control_constraints_[i][1];
               n_dofs_ += local_control_constraints_per_block_[i];
-              n_local_control_dofs_ += local_control_constraints_per_block_[i];
+              n_local_control_dofs_ +=
+                local_control_constraints_per_block_[i];
             }
           n_dofs_ += global_constraints_;
         }
       else
         {
-          local_control_constraints_.clear();
+          local_control_constraints_.clear ();
           global_constraints_ = 0;
-          local_control_constraints_per_block_.clear();
+          local_control_constraints_per_block_.clear ();
           n_dofs_ = 0;
           n_local_control_dofs_ = 0;
         }
@@ -138,7 +139,7 @@ namespace DOpE
      * Returns the total number of local in time constraints.
      */
     unsigned int
-    n_dofs(std::string name) const
+    n_dofs (std::string name) const
     {
       if (name == "local")
         {
@@ -149,20 +150,20 @@ namespace DOpE
           return global_constraints_;
         }
 
-      throw DOpEException("Unknown name " + name, "constraints::n_dofs_");
+      throw DOpEException ("Unknown name " + name, "constraints::n_dofs_");
     }
 
     /**
      * Returns the DoFs Per Block Vector
      */
     const std::vector<unsigned int> &
-    GetDoFsPerBlock(std::string name) const
+    GetDoFsPerBlock (std::string name) const
     {
       if (name == "local")
         {
           return local_control_constraints_per_block_;
         }
-      throw DOpEException("Unknown name " + name, "constraints::n_dofs_");
+      throw DOpEException ("Unknown name " + name, "constraints::n_dofs_");
     }
 
   private:

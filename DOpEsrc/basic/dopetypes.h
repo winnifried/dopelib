@@ -1,25 +1,25 @@
 /**
-*
-* Copyright (C) 2012-2014 by the DOpElib authors
-*
-* This file is part of DOpElib
-*
-* DOpElib is free software: you can redistribute it
-* and/or modify it under the terms of the GNU General Public
-* License as published by the Free Software Foundation, either
-* version 3 of the License, or (at your option) any later
-* version.
-*
-* DOpElib is distributed in the hope that it will be
-* useful, but WITHOUT ANY WARRANTY; without even the implied
-* warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-* PURPOSE.  See the GNU General Public License for more
-* details.
-*
-* Please refer to the file LICENSE.TXT included in this distribution
-* for further information on this license.
-*
-**/
+ *
+ * Copyright (C) 2012-2014 by the DOpElib authors
+ *
+ * This file is part of DOpElib
+ *
+ * DOpElib is free software: you can redistribute it
+ * and/or modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation, either
+ * version 3 of the License, or (at your option) any later
+ * version.
+ *
+ * DOpElib is distributed in the hope that it will be
+ * useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+ * PURPOSE.  See the GNU General Public License for more
+ * details.
+ *
+ * Please refer to the file LICENSE.TXT included in this distribution
+ * for further information on this license.
+ *
+ **/
 
 #ifndef DOPETYPES_H_
 #define DOPETYPES_H_
@@ -54,9 +54,12 @@ namespace DOpE
      */
     enum RefinementType
     {
-      global, fixed_fraction, fixed_number, optimized, finest_of_both
+      global,
+      fixed_fraction,
+      fixed_number,
+      optimized,
+      finest_of_both
     };
-
 
     /**
      * This enum describes which terms of the error identity
@@ -70,7 +73,10 @@ namespace DOpE
      */
     enum EETerms
     {
-      primal_only, dual_only, mixed, mixed_control
+      primal_only,
+      dual_only,
+      mixed,
+      mixed_control
     };
 
     /**
@@ -84,7 +90,10 @@ namespace DOpE
      */
     enum WeightComputation
     {
-      element_diameter, higher_order_interpolation, higher_order_computation, constant/*Not implemented!*/
+      element_diameter,
+      higher_order_interpolation,
+      higher_order_computation,
+      constant/*Not implemented!*/
     };
 
     /**
@@ -95,7 +104,8 @@ namespace DOpE
      */
     enum ResidualEvaluation
     {
-      strong_residual, smoothness_and_influence_factors
+      strong_residual,
+      smoothness_and_influence_factors
     };
 
     /**
@@ -146,21 +156,22 @@ namespace DOpE
       local_constraint
     };
 
-  }//End of namespace DOpEtypes
-
+  } //End of namespace DOpEtypes
 
   /**
    * Transfers DOpEtypes::VectorStorageType etc to Human readable values
    */
   // TODO BetterEnum could do this for us ...
-  template<typename C>
-  inline std::string DOpEtypesToString(const C & /*t*/)
+  template <typename C>
+  inline std::string
+  DOpEtypesToString (const C & /*t*/)
   {
-    throw DOpEException("Not implemented!","DOpEtypesToString");
+    throw DOpEException ("Not implemented!", "DOpEtypesToString");
   }
 
   template <>
-  inline std::string DOpEtypesToString(const DOpEtypes::VectorStorageType &t)
+  inline std::string
+  DOpEtypesToString (const DOpEtypes::VectorStorageType &t)
   {
     switch (t)
       {
@@ -173,15 +184,17 @@ namespace DOpE
       default:
       {
         std::stringstream out;
-        out<<"Unknown DOpEtypes::VectorStorageType"<< std::endl;
-        out<<"Code given is "<< t<<std::endl;
-        throw DOpEException(out.str(),"DOpEtypesToString<DOpEtypes::VectorStorageType");
+        out << "Unknown DOpEtypes::VectorStorageType" << std::endl;
+        out << "Code given is " << t << std::endl;
+        throw DOpEException (out.str (),
+                             "DOpEtypesToString<DOpEtypes::VectorStorageType");
       }
       }
   }
 
   template <>
-  inline std::string DOpEtypesToString(const DOpEtypes::ControlType &t)
+  inline std::string
+  DOpEtypesToString (const DOpEtypes::ControlType &t)
   {
     switch (t)
       {
@@ -194,15 +207,17 @@ namespace DOpE
       default:
       {
         std::stringstream out;
-        out<<"Unknown DOpEtypes::ControlType"<< std::endl;
-        out<<"Code given is "<< t<<std::endl;
-        throw DOpEException(out.str(),"DOpEtypesToString<DOpEtypes::ControlType");
+        out << "Unknown DOpEtypes::ControlType" << std::endl;
+        out << "Code given is " << t << std::endl;
+        throw DOpEException (out.str (),
+                             "DOpEtypesToString<DOpEtypes::ControlType");
       }
       }
   }
 
   template <>
-  inline std::string DOpEtypesToString(const DOpEtypes::RefinementType &t)
+  inline std::string
+  DOpEtypesToString (const DOpEtypes::RefinementType &t)
   {
     switch (t)
       {
@@ -219,15 +234,17 @@ namespace DOpE
       default:
       {
         std::stringstream out;
-        out<<"Unknown DOpEtypes::RefinementType"<< std::endl;
-        out<<"Code given is "<< t<<std::endl;
-        throw DOpEException(out.str(),"DOpEtypesToString<DOpEtypes::RefinementType>");
+        out << "Unknown DOpEtypes::RefinementType" << std::endl;
+        out << "Code given is " << t << std::endl;
+        throw DOpEException (out.str (),
+                             "DOpEtypesToString<DOpEtypes::RefinementType>");
       }
       }
   }
 
   template <>
-  inline std::string DOpEtypesToString(const DOpEtypes::VectorType &t)
+  inline std::string
+  DOpEtypesToString (const DOpEtypes::VectorType &t)
   {
     switch (t)
       {
@@ -242,13 +259,14 @@ namespace DOpE
       default:
       {
         std::stringstream out;
-        out<<"Unknown DOpEtypes::VectorType"<< std::endl;
-        out<<"Code given is "<< t<<std::endl;
-        throw DOpEException(out.str(),"DOpEtypesToString<DOpEtypes::VectorType>");
+        out << "Unknown DOpEtypes::VectorType" << std::endl;
+        out << "Code given is " << t << std::endl;
+        throw DOpEException (out.str (),
+                             "DOpEtypesToString<DOpEtypes::VectorType>");
       }
       }
   }
 
-}//End of Namespace DOpE
+} //End of Namespace DOpE
 
 #endif /* DOPETYPES_H_ */

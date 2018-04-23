@@ -1,25 +1,25 @@
 /**
-*
-* Copyright (C) 2012-2014 by the DOpElib authors
-*
-* This file is part of DOpElib
-*
-* DOpElib is free software: you can redistribute it
-* and/or modify it under the terms of the GNU General Public
-* License as published by the Free Software Foundation, either
-* version 3 of the License, or (at your option) any later
-* version.
-*
-* DOpElib is distributed in the hope that it will be
-* useful, but WITHOUT ANY WARRANTY; without even the implied
-* warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-* PURPOSE.  See the GNU General Public License for more
-* details.
-*
-* Please refer to the file LICENSE.TXT included in this distribution
-* for further information on this license.
-*
-**/
+ *
+ * Copyright (C) 2012-2014 by the DOpElib authors
+ *
+ * This file is part of DOpElib
+ *
+ * DOpElib is free software: you can redistribute it
+ * and/or modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation, either
+ * version 3 of the License, or (at your option) any later
+ * version.
+ *
+ * DOpElib is distributed in the hope that it will be
+ * useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+ * PURPOSE.  See the GNU General Public License for more
+ * details.
+ *
+ * Please refer to the file LICENSE.TXT included in this distribution
+ * for further information on this license.
+ *
+ **/
 
 #ifndef INSTAT_PDE_PROBLEM_H_
 #define INSTAT_PDE_PROBLEM_H_
@@ -86,21 +86,20 @@ namespace DOpE
     /**
      * Constructor for the InstatPDEProblem.
      *
-    * @tparam <INTEGRATORDATACONT> An IntegratorDataContainer
+     * @tparam <INTEGRATORDATACONT> An IntegratorDataContainer
      *
      * @param OP                Problem is given to the stationary solver.
      * @param state_behavior    Indicates the behavior of the StateVector.
      * @param param_reader      An object which has run time data.
      * @param idc       An INTETGRATORDATACONT which has all the data needed by the integrator.
-    * @param base_priority     An offset for the priority of the output written to
-    *                          the OutputHandler
-    */
+     * @param base_priority     An offset for the priority of the output written to
+     *                          the OutputHandler
+     */
     template<typename INTEGRATORDATACONT>
     InstatPDEProblem(PROBLEM *OP, DOpEtypes::VectorStorageType state_behavior,
                      ParameterReader &param_reader,
                      INTEGRATORDATACONT &idc,
                      int base_priority = 0);
-
 
     virtual ~InstatPDEProblem();
 
@@ -130,7 +129,6 @@ namespace DOpE
      *
      */
     void ComputeReducedFunctionals();
-
 
     /**
      * Computes the error indicators for the error of a previosly
@@ -205,7 +203,6 @@ namespace DOpE
     {
       abort();
     }
-
 
   protected:
     const StateVector<VECTOR> &GetU() const
@@ -325,7 +322,7 @@ namespace DOpE
     bool project_initial_data_;
 
     friend class SolutionExtractor<InstatPDEProblem<NONLINEARSOLVER,
-      INTEGRATOR, PROBLEM, VECTOR, dealdim>,   VECTOR > ;
+      INTEGRATOR, PROBLEM, VECTOR, dealdim>, VECTOR >;
   };
 
   /*************************************************************************/
@@ -463,7 +460,7 @@ namespace DOpE
   {
     this->ComputeReducedState();
 
-    this->GetOutputHandler()->Write("Computing Functionals:", 4  + this->GetBasePriority());
+    this->GetOutputHandler()->Write("Computing Functionals:", 4 + this->GetBasePriority());
 
     for (unsigned int i = 0; i < this->GetProblem()->GetNFunctionals(); i++)
       {
@@ -622,7 +619,7 @@ namespace DOpE
                       w = 0.5 * (this->GetProblem()->GetSpaceTimeHandler()->GetTime(step + 1)
                                  - this->GetProblem()->GetSpaceTimeHandler()->GetTime(step));
                     }
-                  else if (step  == num_steps)
+                  else if (step == num_steps)
                     {
                       w = 0.5 * (this->GetProblem()->GetSpaceTimeHandler()->GetTime(step)
                                  - this->GetProblem()->GetSpaceTimeHandler()->GetTime(step - 1));
@@ -659,7 +656,7 @@ namespace DOpE
   {
     if (dof_type == "state")
       {
-        auto &data_out =  this->GetProblem()->GetSpaceTimeHandler()->GetDataOut();
+        auto &data_out = this->GetProblem()->GetSpaceTimeHandler()->GetDataOut();
         data_out.attach_dof_handler(this->GetProblem()->GetSpaceTimeHandler()->GetStateDoFHandler());
 
         data_out.add_data_vector(v, name);
@@ -688,7 +685,6 @@ namespace DOpE
                             "InstatPDEProblem::WriteToFile");
       }
   }
-
 
   /******************************************************/
 
@@ -776,8 +772,6 @@ namespace DOpE
     sol.GetSpacialVector() = u_old;
     this->GetOutputHandler()->Write(u_old, outname + this->GetPostIndex(),
                                     problem.GetDoFType());
-
-
 
     if (eval_funcs)
       {
@@ -985,8 +979,8 @@ namespace DOpE
             this->GetOutputHandler()->Write(sol.GetSpacialVector(),
                                             outname + this->GetPostIndex(), problem.GetDoFType());
 
-          }//End interval loop
-      }//End time loop
+          } //End interval loop
+      } //End time loop
   }
 
   /******************************************************/

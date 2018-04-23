@@ -53,15 +53,17 @@ namespace DOpE
    * @tparam <VECTOR>     Class in which we want to store the spatial vector
    *                      (i.e. dealii::Vector<double> or dealii::BlockVector<double>)
    */
-  template<typename VECTOR>
+  template <typename VECTOR>
   class StateVector
   {
   public:
     //FIXME this is not a real copyconstructor, it just
     //uses the information of ref about size and so on. Is this correct?
-    StateVector(const StateVector<VECTOR> &ref);
-    StateVector(const SpaceTimeHandlerBase<VECTOR> *STH, DOpEtypes::VectorStorageType behavior, ParameterReader &param_reader);
-    ~StateVector();
+    StateVector (const StateVector<VECTOR> &ref);
+    StateVector (const SpaceTimeHandlerBase<VECTOR> *STH,
+                 DOpEtypes::VectorStorageType behavior,
+                 ParameterReader &param_reader);
+    ~StateVector ();
 
     /**
      * Sets the time in the vector. This Function or SetTimeDoFNumber or SetTime
@@ -73,7 +75,9 @@ namespace DOpE
      * @param interval            A TimeIterator. The interval we are currently looking on.
      *
      */
-    void SetTimeDoFNumber(unsigned int dof_number, const TimeIterator &interval) const;
+    void
+    SetTimeDoFNumber (unsigned int dof_number,
+                      const TimeIterator &interval) const;
 
 //    /**
 //     * Sets the time in the vector for interpolation. This Function or SetTimeDoFNumber
@@ -94,51 +98,61 @@ namespace DOpE
      * @param time_point   An unsigned integer. This gives the number of the point in the  time mesh.
      *
      */
-    void SetTimeDoFNumber(unsigned int time_point) const;
+    void
+    SetTimeDoFNumber (unsigned int time_point) const;
     /**
      * Returns a reference to the spatial vector associated to the last time given by SetTime*
      */
-    VECTOR &GetSpacialVector();
+    VECTOR &
+    GetSpacialVector ();
     /**
      * Returns a const reference to the spatial vector associated to the last time given by SetTime* or SetTimeDoFNumber
      */
-    const VECTOR &GetSpacialVector() const;
+    const VECTOR &
+    GetSpacialVector () const;
     /**
      * Analog to GetSpacialVector, but the next timepoint in natural time direction
      */
-    VECTOR &GetNextSpacialVector();
+    VECTOR &
+    GetNextSpacialVector ();
     /**
      * Analog to GetSpacialVector, but the next timepoint in natural time direction
      */
-    const VECTOR &GetNextSpacialVector() const;
+    const VECTOR &
+    GetNextSpacialVector () const;
     /**
      * Analog to GetSpacialVector, but the previous timepoint in natural time direction
      */
-    VECTOR &GetPreviousSpacialVector();
+    VECTOR &
+    GetPreviousSpacialVector ();
     /**
      * Analog to GetSpacialVector, but the previous timepoint in natural time direction
      */
-    const VECTOR &GetPreviousSpacialVector() const;
+    const VECTOR &
+    GetPreviousSpacialVector () const;
     /**
      * Returns a const reference to the spatial vector associated to the last time given by SetTime*
      * This makes a copy of the real vector  in order to change the vector type.
      * To assert data integrity this Only one Copy may  be obtained at any time.
      * Hence prior to calling this Function again UnLockCopy must be called.
      */
-    const dealii::Vector<double> &GetSpacialVectorCopy() const;
+    const dealii::Vector<double> &
+    GetSpacialVectorCopy () const;
     /**
      * Sets all the vector to a constant value. This function calls SetTime(0).
      *
      * @param value    The constant value to be assigned to the vector.
      */
-    void operator=(double value);
+    void
+    operator= (double value);
     /**
      * Sets this vector to the values of an other given vector.
      * If required this vector is resized. This function calls SetTime(0).
      *
      * @param dq    The other vector.
      */
-    void operator=(const StateVector<VECTOR> &dq);
+    void
+    operator= (const StateVector<VECTOR> &dq);
     /**
      * Upon completion each entry of this Vector contains the following
      * Result this = this + dq;
@@ -147,14 +161,16 @@ namespace DOpE
      *
      * @param dq    The increment.
      */
-    void operator+=(const StateVector<VECTOR> &dq);
+    void
+    operator+= (const StateVector<VECTOR> &dq);
     /**
      * Multiplies the Vector with a constant.  It expects both vectors  to be of
      * the same structure. This function calls SetTime(0).
      *
      * @param a    A double to be multiplied with the vector.
      */
-    void operator*=(double a);
+    void
+    operator*= (double a);
     /**
      * Computes the Euclidean scalar product of this vector with the argument.
      * Both Vectors must have the same structure.
@@ -162,7 +178,8 @@ namespace DOpE
      * @param dq    The argument for the computation of the scalarproduct.
      * @return      A double containing the scalar product.
      */
-    double operator*(const StateVector<VECTOR> &dq) const;
+    double
+    operator* (const StateVector<VECTOR> &dq) const;
     /**
      * Sets this vector adds a multiple of an other vector to this vector.
      * this = this + s * dq
@@ -172,7 +189,9 @@ namespace DOpE
      * @param s    A double, by which the other vector is scaled.
      * @param dq   The other vector.
      */
-    void add(double s, const StateVector<VECTOR> &dq);
+    void
+    add (double s,
+         const StateVector<VECTOR> &dq);
     /**
      * Sets this vector to the values of an other given vector.
      * The vector is not resized! It expects both vectors  to be of
@@ -180,18 +199,22 @@ namespace DOpE
      *
      * @param dq    The other vector.
      */
-    void equ(double s, const StateVector<VECTOR> &dq);
+    void
+    equ (double s,
+         const StateVector<VECTOR> &dq);
 
     /**
      * Prints Information on this vector into the given stream.
      *
      * @param out    The output stream.
      */
-    void PrintInfos(std::stringstream &out);
+    void
+    PrintInfos (std::stringstream &out);
     /**
      * This unlocks the function GetSpacialVectorCopy
      */
-    void UnLockCopy() const
+    void
+    UnLockCopy () const
     {
       lock_ = false;
     }
@@ -207,14 +230,16 @@ namespace DOpE
      *
      * @return               A string indicating the behavior.
      */
-    DOpEtypes::VectorStorageType GetBehavior() const
+    DOpEtypes::VectorStorageType
+    GetBehavior () const
     {
       return behavior_;
     }
     /**
      * @return               A const pointer to the SpaceTimeHandler associated with this vector.
      */
-    const SpaceTimeHandlerBase<VECTOR> *GetSpaceTimeHandler() const
+    const SpaceTimeHandlerBase<VECTOR> *
+    GetSpaceTimeHandler () const
     {
       return STH_;
     }
@@ -222,7 +247,8 @@ namespace DOpE
      * Call if the SpaceTimeHandler has changed to reinitialize vector sizes.
      *
      */
-    void ReInit();
+    void
+    ReInit ();
 
   private:
     struct SpatialVectorInfos
@@ -230,7 +256,8 @@ namespace DOpE
       int size_;
       bool on_disc_;
 
-      SpatialVectorInfos(int size = -1, bool on_disc = false)
+      SpatialVectorInfos (int size = -1,
+                          bool on_disc = false)
       {
         size_ = size;
         on_disc_ = on_disc;
@@ -242,24 +269,30 @@ namespace DOpE
      * Hence SetTimeDoFNumber must be called before this function.
      */
     // Note: the template<...> thing can be ignored, this is just a wrapper between block and non-block vectors.
-    template<typename _VECTOR = VECTOR, typename std::enable_if<IsBlockVector<_VECTOR>::value, int>::type = 0>
-    void ReSizeSpace(const unsigned int time_point) const;
+    template <typename _VECTOR = VECTOR, typename std::enable_if<
+                IsBlockVector<_VECTOR>::value, int>::type = 0>
+    void
+    ReSizeSpace (const unsigned int time_point) const;
 
-    template<typename _VECTOR = VECTOR, typename std::enable_if< !IsBlockVector<_VECTOR>::value, int>::type = 0>
-    void ReSizeSpace(const unsigned int time_point) const;
+    template <typename _VECTOR = VECTOR, typename std::enable_if<
+                !IsBlockVector<_VECTOR>::value, int>::type = 0>
+    void
+    ReSizeSpace (const unsigned int time_point) const;
 
     /**
      * Sets the membervariable '_filename' to the name of the file (e.g. the whole path!) corresponding to 'time_point'.
      *
      * @ param time_point     The timepoint we are actually interested in.
      */
-    void MakeName(unsigned int time_point) const;
+    void
+    MakeName (unsigned int time_point) const;
     /**
      * Stores the BlockVector stored in *_state[1] on the Disc. The name of the file will be
      * createt by the function call 'MakeName(local_state_.at(1))'.
      *
      */
-    void StoreOnDisc() const;
+    void
+    StoreOnDisc () const;
     /**
      * This function reads the BlockVector<double> stored in the file with the name
      * 'MakeName(time_point)' and stores him in vector.
@@ -269,7 +302,9 @@ namespace DOpE
      * @ param time_point   The timepoint we are actually interested in.
      * @ param vector       A BlockVector in which the Data read out from Disc will be stored.
      */
-    void FetchFromDisc(unsigned int time_point, VECTOR &vector) const;
+    void
+    FetchFromDisc (unsigned int time_point,
+                   VECTOR &vector) const;
     /**
      * This function checks if a file named 'filename_' exists in tmp_dir_.
      *
@@ -277,24 +312,29 @@ namespace DOpE
      *
      * @return                A bool indicating whether the file exists or not.
      */
-    bool FileExists(unsigned int time_point) const;
+    bool
+    FileExists (unsigned int time_point) const;
     /**
      * The Function swaps the Pointers a and b.
      *
      * @param a, b      References to two BlockVector<double>-Pointers which will be swapped.
      */
-    void SwapPtr(VECTOR *&a, VECTOR *&b) const;
+    void
+    SwapPtr (VECTOR *&a,
+             VECTOR *&b) const;
 
     /**
      * Writes the vectors corresponding to the current interval
      * into local_vectors_, and adjusts global_to_local_;
      */
-    void ComputeLocalVectors(const TimeIterator &interval) const;
+    void
+    ComputeLocalVectors (const TimeIterator &interval) const;
 
     /**
      * Helper function, resizes local_vectors_ to the size given by size.
      */
-    void ResizeLocalVectors(unsigned int size) const;
+    void
+    ResizeLocalVectors (unsigned int size) const;
 
     mutable std::vector<VECTOR *> state_;
     mutable std::vector<SpatialVectorInfos> state_information_;
@@ -331,14 +371,18 @@ namespace DOpE
     static unsigned int num_active_;
   };
 
-  template<typename VECTOR>
-  template<typename _VECTOR, typename std::enable_if<IsBlockVector<_VECTOR>::value, int>::type>
-  void StateVector<VECTOR>::ReSizeSpace(const unsigned int time_point) const
+  template <typename VECTOR>
+  template <typename _VECTOR, typename std::enable_if<
+              IsBlockVector<_VECTOR>::value, int>::type>
+  void
+  StateVector<VECTOR>::ReSizeSpace (const unsigned int time_point) const
   {
-    const auto ndofs = GetSpaceTimeHandler()->GetStateNDoFs();
-    const auto &dofs_per_block = GetSpaceTimeHandler()->GetStateDoFsPerBlock(time_point);
+    const auto ndofs = GetSpaceTimeHandler ()->GetStateNDoFs ();
+    const auto &dofs_per_block =
+      GetSpaceTimeHandler ()->GetStateDoFsPerBlock (time_point);
 
-    if (GetBehavior() == DOpEtypes::VectorStorageType::fullmem || GetBehavior() == DOpEtypes::VectorStorageType::only_recent)
+    if (GetBehavior () == DOpEtypes::VectorStorageType::fullmem || GetBehavior ()
+        == DOpEtypes::VectorStorageType::only_recent)
       {
         if (accessor_ >= 0)
           {
@@ -348,83 +392,105 @@ namespace DOpE
                 state_[accessor_] = new VECTOR;
                 existed = false;
               }
-            unsigned int nblocks = dofs_per_block.size();
+            unsigned int nblocks = dofs_per_block.size ();
             bool reinit = false;
-            if (state_[accessor_]->size() != ndofs)
+            if (state_[accessor_]->size () != ndofs)
               {
                 reinit = true;
               }
             else
               {
-                if (state_[accessor_]->n_blocks() != nblocks)
+                if (state_[accessor_]->n_blocks () != nblocks)
                   {
                     reinit = true;
                   }
                 else
                   {
                     for (unsigned int i = 0; i < nblocks; i++)
-                      if (state_[accessor_]->block(i).size() != dofs_per_block[i]) reinit = true;
+                      if (state_[accessor_]->block (i).size () != dofs_per_block[i])
+                        reinit = true;
                   }
               }
             if (reinit)
               {
-                if (existed) local_state_ = *(state_[accessor_]);
+                if (existed)
+                  local_state_ = *(state_[accessor_]);
 
-                GetSpaceTimeHandler()->ReinitVector( *state_[accessor_], DOpEtypes::VectorType::state);
-                if (existed) GetSpaceTimeHandler()->SpatialMeshTransferState(local_state_, *(state_[accessor_]));
+                GetSpaceTimeHandler ()->ReinitVector (*state_[accessor_],
+                                                      DOpEtypes::VectorType::state);
+                if (existed)
+                  GetSpaceTimeHandler ()->SpatialMeshTransferState (
+                    local_state_, *(state_[accessor_]));
               }
           }
         else
           {
             //accessor_ < 0
-            if (local_state_.size() != ndofs) GetSpaceTimeHandler()->ReinitVector(local_state_, DOpEtypes::VectorType::state);
+            if (local_state_.size () != ndofs)
+              GetSpaceTimeHandler ()->ReinitVector (local_state_,
+                                                    DOpEtypes::VectorType::state);
           }
       }
     else
       {
-        if (GetBehavior() == DOpEtypes::VectorStorageType::store_on_disc)
+        if (GetBehavior () == DOpEtypes::VectorStorageType::store_on_disc)
           {
             if (accessor_ >= 0)
               {
-                unsigned int nblocks = dofs_per_block.size();
+                unsigned int nblocks = dofs_per_block.size ();
                 bool reinit = false;
-                if (local_vectors_[global_to_local_[accessor_]]->size() != ndofs)
+                if (local_vectors_[global_to_local_[accessor_]]->size () != ndofs)
                   {
                     reinit = true;
                   }
                 else
                   {
-                    if (local_vectors_[global_to_local_[accessor_]]->n_blocks() != nblocks)
+                    if (local_vectors_[global_to_local_[accessor_]]->n_blocks () != nblocks)
                       {
                         reinit = true;
                       }
                     else
                       {
                         for (unsigned int i = 0; i < nblocks; i++)
-                          if (local_vectors_[global_to_local_[accessor_]]->block(i).size() != dofs_per_block[i]) reinit = true;
+                          if (local_vectors_[global_to_local_[accessor_]]->block (
+                                i).size ()
+                              != dofs_per_block[i])
+                            reinit = true;
                       }
                   }
-                if (reinit) GetSpaceTimeHandler()->ReinitVector( *local_vectors_[global_to_local_[accessor_]], DOpEtypes::VectorType::state);
+                if (reinit)
+                  GetSpaceTimeHandler ()->ReinitVector (
+                    *local_vectors_[global_to_local_[accessor_]],
+                    DOpEtypes::VectorType::state);
               }
             else
               {
-                if (local_state_.size() != ndofs) GetSpaceTimeHandler()->ReinitVector(local_state_, DOpEtypes::VectorType::state);
+                if (local_state_.size () != ndofs)
+                  GetSpaceTimeHandler ()->ReinitVector (local_state_,
+                                                        DOpEtypes::VectorType::state);
               }
           }
         else
-          throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()), "StateVector<dealii::BlockVector<double> >::ReSizeSpace");
+          throw DOpEException (
+            "Unknown Behavior " + DOpEtypesToString (GetBehavior ()),
+            "StateVector<dealii::BlockVector<double> >::ReSizeSpace");
       }
   }
 
-  template<typename VECTOR>
-  template<typename _VECTOR, typename std::enable_if< !IsBlockVector<_VECTOR>::value, int>::type>
-  void StateVector<VECTOR>::ReSizeSpace(const unsigned int time_point) const
+  template <typename VECTOR>
+  template <typename _VECTOR, typename std::enable_if<
+              !IsBlockVector<_VECTOR>::value, int>::type>
+  void
+  StateVector<VECTOR>::ReSizeSpace (const unsigned int time_point) const
   {
-    const unsigned int ndofs = GetSpaceTimeHandler()->GetStateNDoFs(time_point);
+    const unsigned int ndofs = GetSpaceTimeHandler ()->GetStateNDoFs (
+                                 time_point);
 
-    if (ndofs == 0) return;
+    if (ndofs == 0)
+      return;
 
-    if (GetBehavior() == DOpEtypes::VectorStorageType::fullmem || GetBehavior() == DOpEtypes::VectorStorageType::only_recent)
+    if (GetBehavior () == DOpEtypes::VectorStorageType::fullmem || GetBehavior ()
+        == DOpEtypes::VectorStorageType::only_recent)
       {
         if (accessor_ >= 0)
           {
@@ -436,41 +502,56 @@ namespace DOpE
               }
 
             bool reinit = false;
-            if (state_[accessor_]->size() != ndofs) reinit = true;
+            if (state_[accessor_]->size () != ndofs)
+              reinit = true;
 
             if (reinit)
               {
-                if (existed) local_state_ = *(state_[accessor_]);
+                if (existed)
+                  local_state_ = *(state_[accessor_]);
 
-                GetSpaceTimeHandler()->ReinitVector( *state_[accessor_], DOpEtypes::VectorType::state);
+                GetSpaceTimeHandler ()->ReinitVector (*state_[accessor_],
+                                                      DOpEtypes::VectorType::state);
 
-                if (existed) GetSpaceTimeHandler()->SpatialMeshTransferState(local_state_, *(state_[accessor_]));
+                if (existed)
+                  GetSpaceTimeHandler ()->SpatialMeshTransferState (
+                    local_state_, *(state_[accessor_]));
               }
           }
         else
           {
             //accessor < 0
-            if (local_state_.size() != ndofs) GetSpaceTimeHandler()->ReinitVector(local_state_, DOpEtypes::VectorType::state);
+            if (local_state_.size () != ndofs)
+              GetSpaceTimeHandler ()->ReinitVector (local_state_,
+                                                    DOpEtypes::VectorType::state);
           }
       }
     else
       {
-        if (GetBehavior() == DOpEtypes::VectorStorageType::store_on_disc)
+        if (GetBehavior () == DOpEtypes::VectorStorageType::store_on_disc)
           {
             if (accessor_ >= 0)
               {
                 bool reinit = false;
-                if (local_vectors_[global_to_local_[accessor_]]->size() != ndofs) reinit = true;
+                if (local_vectors_[global_to_local_[accessor_]]->size () != ndofs)
+                  reinit = true;
 
-                if (reinit) GetSpaceTimeHandler()->ReinitVector( *local_vectors_[global_to_local_[accessor_]], DOpEtypes::VectorType::state);
+                if (reinit)
+                  GetSpaceTimeHandler ()->ReinitVector (
+                    *local_vectors_[global_to_local_[accessor_]],
+                    DOpEtypes::VectorType::state);
               }
             else
               {
-                if (local_state_.size() != ndofs) GetSpaceTimeHandler()->ReinitVector(local_state_, DOpEtypes::VectorType::state);
+                if (local_state_.size () != ndofs)
+                  GetSpaceTimeHandler ()->ReinitVector (local_state_,
+                                                        DOpEtypes::VectorType::state);
               }
           }
         else
-          throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()), "StateVector<dealii::Vector<double> >::ReSizeSpace");
+          throw DOpEException (
+            "Unknown Behavior " + DOpEtypesToString (GetBehavior ()),
+            "StateVector<dealii::Vector<double> >::ReSizeSpace");
       }
   }
 

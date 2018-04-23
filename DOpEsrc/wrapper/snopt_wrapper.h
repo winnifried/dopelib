@@ -1,25 +1,25 @@
 /**
-*
-* Copyright (C) 2012-2014 by the DOpElib authors
-*
-* This file is part of DOpElib
-*
-* DOpElib is free software: you can redistribute it
-* and/or modify it under the terms of the GNU General Public
-* License as published by the Free Software Foundation, either
-* version 3 of the License, or (at your option) any later
-* version.
-*
-* DOpElib is distributed in the hope that it will be
-* useful, but WITHOUT ANY WARRANTY; without even the implied
-* warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-* PURPOSE.  See the GNU General Public License for more
-* details.
-*
-* Please refer to the file LICENSE.TXT included in this distribution
-* for further information on this license.
-*
-**/
+ *
+ * Copyright (C) 2012-2014 by the DOpElib authors
+ *
+ * This file is part of DOpElib
+ *
+ * DOpElib is free software: you can redistribute it
+ * and/or modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation, either
+ * version 3 of the License, or (at your option) any later
+ * version.
+ *
+ * DOpElib is distributed in the hope that it will be
+ * useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+ * PURPOSE.  See the GNU General Public License for more
+ * details.
+ *
+ * Please refer to the file LICENSE.TXT included in this distribution
+ * for further information on this license.
+ *
+ **/
 
 #ifndef SNOPT_WRAPPER_
 #define SNOPT_WRAPPER_
@@ -69,18 +69,18 @@ namespace DOpEWrapper
    */
   struct SNOPT_FUNC_DATA
   {
-    integer    *Status;
+    integer *Status;
     integer *n;
     doublereal *x;
-    integer    *needF;
+    integer *needF;
     integer *neF;
     doublereal *F;
-    integer    *needG;
+    integer *needG;
     integer *neG;
     doublereal *G;
-    char       *cu;
+    char *cu;
     integer *lencu;
-    integer    *iu;
+    integer *iu;
     integer *leniu;
     doublereal *ru;
     integer *lenru;
@@ -96,29 +96,29 @@ namespace DOpEWrapper
    * which we will load at runtime using boost with the user defined data.
    */
   boost::function1<int, SNOPT_FUNC_DATA &> SNOPT_A_userfunc_interface;
-  int SNOPT_A_userfunc_(integer    *Status, integer *n,    doublereal x[],
-                        integer    *needF,  integer *neF,  doublereal F[],
-                        integer    *needG,  integer *neG,  doublereal G[],
-                        char       *cu,     integer *lencu,
-                        integer    iu[],    integer *leniu,
-                        doublereal ru[],    integer *lenru )
+  int SNOPT_A_userfunc_(integer *Status, integer *n, doublereal x[],
+                        integer *needF, integer *neF, doublereal F[],
+                        integer *needG, integer *neG, doublereal G[],
+                        char *cu, integer *lencu,
+                        integer iu[], integer *leniu,
+                        doublereal ru[], integer *lenru )
   {
     SNOPT_FUNC_DATA data;
     data.Status = Status;
-    data.n      = n;
-    data.x      = x;
-    data.needF  = needF;
-    data.neF    = neF;
-    data.F      = F;
-    data.needG  = needG;
-    data.neG    = neG;
-    data.G      = G;
-    data.cu     = cu;
-    data.lencu  = lencu;
-    data.iu     = iu;
-    data.leniu  = leniu;
-    data.ru     = ru;
-    data.lenru  = lenru;
+    data.n = n;
+    data.x = x;
+    data.needF = needF;
+    data.neF = neF;
+    data.F = F;
+    data.needG = needG;
+    data.neG = neG;
+    data.G = G;
+    data.cu = cu;
+    data.lencu = lencu;
+    data.iu = iu;
+    data.leniu = leniu;
+    data.ru = ru;
+    data.lenru = lenru;
 
     if (SNOPT_A_userfunc_interface)
       return SNOPT_A_userfunc_interface(data);

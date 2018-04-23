@@ -1,4 +1,3 @@
-
 #ifndef VERSIONSCHECK_H_
 #define VERSIONSCHECK_H_
 

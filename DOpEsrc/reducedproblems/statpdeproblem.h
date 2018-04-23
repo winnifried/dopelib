@@ -85,15 +85,15 @@ namespace DOpE
     /**
      * Constructor for the StatPDEProblem.
      *
-    * @tparam <INTEGRATORDATACONT> An IntegratorDataContainer
+     * @tparam <INTEGRATORDATACONT> An IntegratorDataContainer
      *
      * @param OP                Problem is given to the stationary solver.
      * @param state_behavior    Indicates the behavior of the StateVector.
      * @param param_reader      An object which has run time data.
      * @param idc       An INTETGRATORDATACONT which has all the data needed by the integrator.
-    * @param base_priority     An offset for the priority of the output written to
-    *                          the OutputHandler
-    */
+     * @param base_priority     An offset for the priority of the output written to
+     *                          the OutputHandler
+     */
     template<typename INTEGRATORDATACONT>
     StatPDEProblem(PROBLEM *OP, DOpEtypes::VectorStorageType state_behavior,
                    ParameterReader &param_reader, INTEGRATORDATACONT &idc,
@@ -108,8 +108,8 @@ namespace DOpE
      * @param idc               An INTETGRATORDATACONT which has all the data needed by the integrator.
      * @param idc2              An INTETGRATORDATACONT which is used by the integrator to evalueate the
      *                          functionals.
-    * @param base_priority     An offset for the priority of the output written to
-    *                          the OutputHandler
+     * @param base_priority     An offset for the priority of the output written to
+     *                          the OutputHandler
      */
     template<typename INTEGRATORDATACONT>
     StatPDEProblem(PROBLEM *OP, DOpEtypes::VectorStorageType state_behavior,
@@ -143,7 +143,7 @@ namespace DOpE
 
     /**
      * Implementation of Virtual Method in Base Class
-    * ReducedProblemInterface
+     * ReducedProblemInterface
      *
      */
     void
@@ -169,13 +169,13 @@ namespace DOpE
      *
      * Everything else is determined by the DWRDataContainer
      * you use (represented by the template parameter DWRC).
-    *
-    * @tparam <DWRC>           A container for the refinement indicators
-    *                          See, e.g., DWRDataContainer
-    * @tparam <PDE>            The problem contrainer
-    *
-    * @param dwrc              The data container
-    * @param pde               The problem
+     *
+     * @tparam <DWRC>           A container for the refinement indicators
+     *                          See, e.g., DWRDataContainer
+     * @tparam <PDE>            The problem contrainer
+     *
+     * @param dwrc              The data container
+     * @param pde               The problem
      *
      */
     template<class DWRC, class PDE>
@@ -186,7 +186,7 @@ namespace DOpE
 
     /**
      * Implementation of Virtual Method in Base Class
-    * ReducedProblemInterface
+     * ReducedProblemInterface
      *
      */
     void
@@ -269,9 +269,9 @@ namespace DOpE
     /**
      * This function computes the solution for the dual variable
      * for error estimation.
-    *
-    * I is assumed that the state u(q) corresponding to
-    * the argument q is already calculated.
+     *
+     * I is assumed that the state u(q) corresponding to
+     * the argument q is already calculated.
      *
      * @param weight_comp  A flag deciding how the weights should be calculated
      */
@@ -338,7 +338,6 @@ namespace DOpE
       return adjoint_reinit_;
     }
 
-
     bool &
     GetBuildStateMatrix()
     {
@@ -362,7 +361,6 @@ namespace DOpE
     {
       return adjoint_reinit_;
     }
-
 
   private:
     /**
@@ -427,7 +425,6 @@ namespace DOpE
                                 unsigned int n_pre,
                                 unsigned int prob_num);
 
-
     StateVector<VECTOR> u_;
     StateVector<VECTOR> z_for_ee_;
 
@@ -446,7 +443,7 @@ namespace DOpE
 
     friend class SolutionExtractor<
       StatPDEProblem<NONLINEARSOLVER, INTEGRATOR, PROBLEM, VECTOR, dealdim>,
-      VECTOR> ;
+      VECTOR>;
   };
 
   /*************************************************************************/

@@ -35,7 +35,6 @@
 #include <deal.II/lac/constraint_matrix.h>
 #include <deal.II/dofs/dof_handler.h>
 
-
 // Multi-level routines
 //#include <deal.II/multigrid/mg_constrained_dofs.h>
 //#include <deal.II/multigrid/multigrid.h>
@@ -44,8 +43,6 @@
 //#include <deal.II/multigrid/mg_coarse.h>
 //#include <deal.II/multigrid/mg_smoother.h>
 //#include <deal.II/multigrid/mg_matrix.h>
-
-
 
 #include <vector>
 #include <iostream>
@@ -66,43 +63,43 @@ namespace DOpE
    * @tparam<dealdim>           The dimension for the state variable. This is the dimension the
    *                            mesh is in.
    */
-  template<template<int, int> class FE, template<int, int> class DH, typename SPARSITYPATTERN,
-           typename VECTOR, int dopedim, int dealdim>
+  template <template <int, int> class FE, template <int, int> class DH,
+            typename SPARSITYPATTERN, typename VECTOR, int dopedim, int dealdim>
   class SpaceTimeHandler : public SpaceTimeHandlerBase<VECTOR>
   {
   public:
-    SpaceTimeHandler(DOpEtypes::ControlType type) :
-      SpaceTimeHandlerBase<VECTOR>(type), control_index_(
-        dealii::numbers::invalid_unsigned_int), state_index_(
-          dealii::numbers::invalid_unsigned_int)
+    SpaceTimeHandler (DOpEtypes::ControlType type)
+      : SpaceTimeHandlerBase<VECTOR> (type),
+        control_index_ (dealii::numbers::invalid_unsigned_int),
+        state_index_ (dealii::numbers::invalid_unsigned_int)
     {
     }
-    SpaceTimeHandler(dealii::Triangulation<1> &times,
-                     DOpEtypes::ControlType type) :
-      SpaceTimeHandlerBase<VECTOR>(times, type), control_index_(
-        dealii::numbers::invalid_unsigned_int), state_index_(
-          dealii::numbers::invalid_unsigned_int)
+    SpaceTimeHandler (dealii::Triangulation<1> &times,
+                      DOpEtypes::ControlType type)
+      : SpaceTimeHandlerBase<VECTOR> (times, type),
+        control_index_ (dealii::numbers::invalid_unsigned_int),
+        state_index_ (dealii::numbers::invalid_unsigned_int)
     {
     }
-    SpaceTimeHandler(DOpEtypes::ControlType type,
-                     const ActiveFEIndexSetterInterface<dopedim, dealdim> &index_setter) :
-      SpaceTimeHandlerBase<VECTOR>(type), control_index_(
-        dealii::numbers::invalid_unsigned_int), state_index_(
-          dealii::numbers::invalid_unsigned_int), fe_index_setter_(
-            &index_setter)
+    SpaceTimeHandler (DOpEtypes::ControlType type,
+                      const ActiveFEIndexSetterInterface<dopedim, dealdim> &index_setter)
+      : SpaceTimeHandlerBase<VECTOR> (type),
+        control_index_ (dealii::numbers::invalid_unsigned_int),
+        state_index_ (dealii::numbers::invalid_unsigned_int),
+        fe_index_setter_ (&index_setter)
     {
     }
-    SpaceTimeHandler(dealii::Triangulation<1> &times,
-                     DOpEtypes::ControlType type,
-                     const ActiveFEIndexSetterInterface<dopedim, dealdim> &index_setter) :
-      SpaceTimeHandlerBase<VECTOR>(times, type), control_index_(
-        dealii::numbers::invalid_unsigned_int), state_index_(
-          dealii::numbers::invalid_unsigned_int), fe_index_setter_(
-            &index_setter)
+    SpaceTimeHandler (dealii::Triangulation<1> &times,
+                      DOpEtypes::ControlType type,
+                      const ActiveFEIndexSetterInterface<dopedim, dealdim> &index_setter)
+      : SpaceTimeHandlerBase<VECTOR> (times, type),
+        control_index_ (dealii::numbers::invalid_unsigned_int),
+        state_index_ (dealii::numbers::invalid_unsigned_int),
+        fe_index_setter_ (&index_setter)
     {
     }
     virtual
-    ~SpaceTimeHandler()
+    ~SpaceTimeHandler ()
     {
 
     }
@@ -113,19 +110,19 @@ namespace DOpE
      * @param control_n_blocks          Number of Blocks for the control variable
      * @param control_block_components  Component to Block mapping for the control
      * @param DD_control                Description of the Dirichlet Boundaries
-    *                                  for the control
-    * @param state_n_blocks            Number of Blocks for the state variable
+     *                                  for the control
+     * @param state_n_blocks            Number of Blocks for the state variable
      * @param state_block_components    Component to Block mapping for the state
      * @param DD_state                  Description of the Dirichlet Boundaries
-    *                                  for the state
+     *                                  for the state
      */
     virtual void
-    ReInit(unsigned int control_n_blocks,
-           const std::vector<unsigned int> &control_block_component,
-           const DirichletDescriptor &DD_control,
-           unsigned int state_n_blocks,
-           const std::vector<unsigned int> &state_block_component,
-           const DirichletDescriptor &DD_state) =0;
+    ReInit (unsigned int control_n_blocks,
+            const std::vector<unsigned int> &control_block_component,
+            const DirichletDescriptor &DD_control,
+            unsigned int state_n_blocks,
+            const std::vector<unsigned int> &state_block_component,
+            const DirichletDescriptor &DD_state) =0;
 
     /******************************************************/
 
@@ -133,7 +130,7 @@ namespace DOpE
      * Returns a reference to the DoF Handler for the Control at the current time point.
      */
     virtual const DOpEWrapper::DoFHandler<dopedim, DH> &
-    GetControlDoFHandler() const =0;
+    GetControlDoFHandler () const =0;
 
     /******************************************************/
 
@@ -141,7 +138,7 @@ namespace DOpE
      * Returns a reference to the DoF Handler for the State at the current time point.
      */
     virtual const DOpEWrapper::DoFHandler<dealdim, DH> &
-    GetStateDoFHandler() const = 0;
+    GetStateDoFHandler () const = 0;
 
     /******************************************************/
 
@@ -149,7 +146,7 @@ namespace DOpE
      * Returns a reference to the Mapping in use.
      */
     virtual const DOpEWrapper::Mapping<dealdim, DH> &
-    GetMapping() const = 0;
+    GetMapping () const = 0;
 
     /******************************************************/
 
@@ -158,7 +155,7 @@ namespace DOpE
      * be set prior by SetDoFHandlerOrdering
      */
     const std::vector<const DOpEWrapper::DoFHandler<dealdim, DH>*> &
-    GetDoFHandler() const
+    GetDoFHandler () const
     {
       assert(state_index_ != dealii::numbers::invalid_unsigned_int);
 #if dope_dimension > 0
@@ -166,7 +163,7 @@ namespace DOpE
       domain_dofhandler_vector_[control_index_] = &GetControlDoFHandler();
       domain_dofhandler_vector_[state_index_] = &GetStateDoFHandler();
 #else
-      domain_dofhandler_vector_[state_index_] = &GetStateDoFHandler();
+      domain_dofhandler_vector_[state_index_] = &GetStateDoFHandler ();
 #endif
       return domain_dofhandler_vector_;
     }
@@ -179,14 +176,14 @@ namespace DOpE
      */
     std::vector<
     typename DOpEWrapper::DoFHandler<dealdim, DH>::active_cell_iterator>
-    GetDoFHandlerBeginActive() const
+    GetDoFHandlerBeginActive () const
     {
       std::vector<
-      typename DOpEWrapper::DoFHandler<dealdim, DH>::active_cell_iterator> ret(
-        this->GetDoFHandler().size());
-      for (unsigned int dh = 0; dh < this->GetDoFHandler().size(); dh++)
+      typename DOpEWrapper::DoFHandler<dealdim, DH>::active_cell_iterator> ret (
+        this->GetDoFHandler ().size ());
+      for (unsigned int dh = 0; dh < this->GetDoFHandler ().size (); dh++)
         {
-          ret[dh] = this->GetDoFHandler()[dh]->begin_active();
+          ret[dh] = this->GetDoFHandler ()[dh]->begin_active ();
         }
       return ret;
     }
@@ -200,38 +197,36 @@ namespace DOpE
 
     std::vector<
     typename DOpEWrapper::DoFHandler<dealdim, DH>::active_cell_iterator>
-    GetDoFHandlerEnd() const
+    GetDoFHandlerEnd () const
     {
       std::vector<
-      typename DOpEWrapper::DoFHandler<dealdim, DH>::active_cell_iterator> ret(
-        this->GetDoFHandler().size());
-      for (unsigned int dh = 0; dh < this->GetDoFHandler().size(); dh++)
+      typename DOpEWrapper::DoFHandler<dealdim, DH>::active_cell_iterator> ret (
+        this->GetDoFHandler ().size ());
+      for (unsigned int dh = 0; dh < this->GetDoFHandler ().size (); dh++)
         {
-          ret[dh] = this->GetDoFHandler()[dh]->end();
+          ret[dh] = this->GetDoFHandler ()[dh]->end ();
         }
       return ret;
     }
 
-
     /******************************************************/
 
     /**
-    * Experimental status:
+     * Experimental status:
      * Returns a vector of the begin_celliterators of the
      * DoFHandlers in use.
-    * Iterator for multigrid's matrix assembling running
-    * over all elements on all levels.
+     * Iterator for multigrid's matrix assembling running
+     * over all elements on all levels.
      */
-    std::vector<
-    typename DOpEWrapper::DoFHandler<dealdim, DH>::cell_iterator>
-    GetDoFHandlerBeginActiveAllLevels() const
+    std::vector<typename DOpEWrapper::DoFHandler<dealdim, DH>::cell_iterator>
+    GetDoFHandlerBeginActiveAllLevels () const
     {
       std::vector<
-      typename DOpEWrapper::DoFHandler<dealdim, DH>::cell_iterator> ret(
-        this->GetDoFHandler().size());
-      for (unsigned int dh = 0; dh < this->GetDoFHandler().size(); dh++)
+      typename DOpEWrapper::DoFHandler<dealdim, DH>::cell_iterator> ret (
+        this->GetDoFHandler ().size ());
+      for (unsigned int dh = 0; dh < this->GetDoFHandler ().size (); dh++)
         {
-          ret[dh] = this->GetDoFHandler()[dh]->begin_active();
+          ret[dh] = this->GetDoFHandler ()[dh]->begin_active ();
         }
       return ret;
     }
@@ -239,28 +234,25 @@ namespace DOpE
     /******************************************************/
 
     /**
-    * Experimental status:
+     * Experimental status:
      * Returns a vector of the end-celliterators of the
      * DoFHandlers in use.
-    * Iterator for multigrid's matrix assembling running
-    * over all elements on all levels.
+     * Iterator for multigrid's matrix assembling running
+     * over all elements on all levels.
      */
 
-    std::vector<
-    typename DOpEWrapper::DoFHandler<dealdim, DH>::cell_iterator>
-    GetDoFHandlerEndAllLevels() const
+    std::vector<typename DOpEWrapper::DoFHandler<dealdim, DH>::cell_iterator>
+    GetDoFHandlerEndAllLevels () const
     {
       std::vector<
-      typename DOpEWrapper::DoFHandler<dealdim, DH>::cell_iterator> ret(
-        this->GetDoFHandler().size());
-      for (unsigned int dh = 0; dh < this->GetDoFHandler().size(); dh++)
+      typename DOpEWrapper::DoFHandler<dealdim, DH>::cell_iterator> ret (
+        this->GetDoFHandler ().size ());
+      for (unsigned int dh = 0; dh < this->GetDoFHandler ().size (); dh++)
         {
-          ret[dh] = this->GetDoFHandler()[dh]->end();
+          ret[dh] = this->GetDoFHandler ()[dh]->end ();
         }
       return ret;
     }
-
-
 
     /******************************************************/
 
@@ -273,8 +265,8 @@ namespace DOpE
      * @param state_index        Index for the state
      */
     void
-    SetDoFHandlerOrdering(unsigned int control_index,
-                          unsigned int state_index)
+    SetDoFHandlerOrdering (unsigned int control_index,
+                           unsigned int state_index)
     {
       control_index_ = control_index;
       state_index_ = state_index;
@@ -290,10 +282,10 @@ namespace DOpE
 #else
       {
         assert(state_index_ == 0);
-        domain_dofhandler_vector_.clear();
-        if (domain_dofhandler_vector_.size() != 1)
+        domain_dofhandler_vector_.clear ();
+        if (domain_dofhandler_vector_.size () != 1)
           {
-            domain_dofhandler_vector_.resize(1, NULL);
+            domain_dofhandler_vector_.resize (1, NULL);
           }
       }
 #endif
@@ -305,7 +297,7 @@ namespace DOpE
      *
      */
     unsigned int
-    GetStateIndex()
+    GetStateIndex ()
     {
       return state_index_;
     }
@@ -316,7 +308,7 @@ namespace DOpE
      * this class. This function is only useful in the hp case.
      */
     const ActiveFEIndexSetterInterface<dopedim, dealdim> &
-    GetFEIndexSetter() const
+    GetFEIndexSetter () const
     {
       //makes only sense in the hp case.
       return *fe_index_setter_;
@@ -330,15 +322,15 @@ namespace DOpE
      * @param dof_handler   The dof_handler for which the fe indices have to be set.
      */
     void
-    SetActiveFEIndicesState(
-      DOpEWrapper::DoFHandler<dealdim, DH> &dof_handler)
+    SetActiveFEIndicesState (DOpEWrapper::DoFHandler<dealdim, DH> &dof_handler)
     {
-      if (dof_handler.NeedIndexSetter()) //with this we distinguish between hp and classic
+      if (dof_handler.NeedIndexSetter ()) //with this we distinguish between hp and classic
         {
           for (typename DH<dealdim, dealdim>::active_cell_iterator element =
-                 dof_handler.begin_active(); element != dof_handler.end(); ++element)
+                 dof_handler.begin_active (); element != dof_handler.end ();
+               ++element)
             {
-              this->GetFEIndexSetter().SetActiveFEIndexState(element);
+              this->GetFEIndexSetter ().SetActiveFEIndexState (element);
             }
         }
     }
@@ -351,15 +343,15 @@ namespace DOpE
      * @param dof_handler   The dof_handler for which the fe indices have to be set.
      */
     void
-    SetActiveFEIndicesControl(
-      DOpEWrapper::DoFHandler<dopedim, DH> &dof_handler)
+    SetActiveFEIndicesControl (DOpEWrapper::DoFHandler<dopedim, DH> &dof_handler)
     {
-      if (dof_handler.NeedIndexSetter())
+      if (dof_handler.NeedIndexSetter ())
         {
           for (typename DH<dopedim, dopedim>::active_cell_iterator element =
-                 dof_handler.begin_active(); element != dof_handler.end(); ++element)
+                 dof_handler.begin_active (); element != dof_handler.end ();
+               ++element)
             {
-              this->GetFEIndexSetter().SetActiveFEIndexState(element);
+              this->GetFEIndexSetter ().SetActiveFEIndexState (element);
             }
         }
     }
@@ -370,7 +362,8 @@ namespace DOpE
      * Returns the constraint dofs in Block b at the current time
      */
     virtual unsigned int
-    GetConstraintDoFsPerBlock(std::string name, unsigned int b) const=0;
+    GetConstraintDoFsPerBlock (std::string name,
+                               unsigned int b) const=0;
 
     /******************************************************/
 
@@ -378,7 +371,7 @@ namespace DOpE
      * Returns the control dofs per Block at the current time
      */
     virtual const std::vector<unsigned int> &
-    GetControlDoFsPerBlock(int time_point = -1) const =0;
+    GetControlDoFsPerBlock (int time_point = -1) const =0;
 
     /******************************************************/
 
@@ -388,7 +381,7 @@ namespace DOpE
      * \\TODO
      */
     virtual const std::vector<unsigned int> &
-    GetStateDoFsPerBlock(int time_point = -1) const =0;
+    GetStateDoFsPerBlock (int time_point = -1) const =0;
 
     /******************************************************/
     /**
@@ -396,7 +389,7 @@ namespace DOpE
      * time which has to be set prior to calling this function using SetTime.
      */
     virtual const std::vector<unsigned int> &
-    GetConstraintDoFsPerBlock(std::string name) const = 0;
+    GetConstraintDoFsPerBlock (std::string name) const = 0;
 
     /******************************************************/
 
@@ -405,7 +398,7 @@ namespace DOpE
      */
     virtual const dealii::ConstraintMatrix
     &
-    GetControlDoFConstraints() const=0;
+    GetControlDoFConstraints () const=0;
 
     /******************************************************/
 
@@ -414,7 +407,7 @@ namespace DOpE
      */
     virtual const dealii::ConstraintMatrix
     &
-    GetStateDoFConstraints() const=0;
+    GetStateDoFConstraints () const=0;
 
     /*******************************************************/
 
@@ -424,7 +417,7 @@ namespace DOpE
      */
     virtual const std::vector<dealii::Point<dealdim> >
     &
-    GetMapDoFToSupportPoints()=0;
+    GetMapDoFToSupportPoints ()=0;
 
     /******************************************************/
 
@@ -432,7 +425,7 @@ namespace DOpE
      * Computes the current sparsity pattern for the control variable
      */
     virtual void
-    ComputeControlSparsityPattern(SPARSITYPATTERN &sparsity) const=0;
+    ComputeControlSparsityPattern (SPARSITYPATTERN &sparsity) const=0;
 
     /******************************************************/
 
@@ -440,7 +433,7 @@ namespace DOpE
      * Computes the current sparsity pattern for the state variable
      */
     virtual void
-    ComputeStateSparsityPattern(SPARSITYPATTERN &sparsity) const=0;
+    ComputeStateSparsityPattern (SPARSITYPATTERN &sparsity) const=0;
 
     /******************************************************/
 
@@ -456,7 +449,6 @@ namespace DOpE
 //                "Not used for normal DofHandler",
 //                "StateSpaceTimeHandler.h");
 //  }
-
     /******************************************************/
 
 //      /**
@@ -478,14 +470,14 @@ namespace DOpE
      */
 
     virtual const FE<dealdim, dealdim> &
-    GetFESystem(std::string name) const=0;
+    GetFESystem (std::string name) const=0;
 
     /******************************************************/
 
     DOpEWrapper::DataOut<dealdim, DH> &
-    GetDataOut()
+    GetDataOut ()
     {
-      data_out_.clear();
+      data_out_.clear ();
       return data_out_;
     }
 

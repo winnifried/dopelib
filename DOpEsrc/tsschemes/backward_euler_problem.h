@@ -46,20 +46,20 @@ namespace DOpE
    *                            the base class of the DOpEWrapper::DoFHandler in use.)
    *
    */
-  template<typename OPTPROBLEM, typename SPARSITYPATTERN, typename VECTOR,
-           int dealdim, template<int, int> class FE = dealii::FESystem,
-           template<int, int> class DH = dealii::DoFHandler>
+  template <typename OPTPROBLEM, typename SPARSITYPATTERN, typename VECTOR,
+            int dealdim, template <int, int> class FE = dealii::FESystem, template <
+              int, int> class DH = dealii::DoFHandler>
   class BackwardEulerProblem : public PrimalTSBase<OPTPROBLEM,
     SPARSITYPATTERN, VECTOR, dealdim, FE, DH>
   {
   public:
-    BackwardEulerProblem(OPTPROBLEM &OP) :
-      PrimalTSBase<OPTPROBLEM, SPARSITYPATTERN, VECTOR, dealdim,
-      FE, DH>(OP)
+    BackwardEulerProblem (OPTPROBLEM &OP)
+      : PrimalTSBase<OPTPROBLEM, SPARSITYPATTERN, VECTOR, dealdim, FE, DH> (
+        OP)
     {
       initial_problem_ = NULL;
     }
-    ~BackwardEulerProblem()
+    ~BackwardEulerProblem ()
     {
       if (initial_problem_ != NULL)
         delete initial_problem_;
@@ -73,26 +73,26 @@ namespace DOpE
      * @return A string containing the name of the time stepping scheme.
      */
     std::string
-    GetName()
+    GetName ()
     {
       return "backward Euler";
     }
     /******************************************************/
 
     /**
-    * Returns a pointer to the problem used to calculate
-    * the initial values used for this scheme.
-    */
+     * Returns a pointer to the problem used to calculate
+     * the initial values used for this scheme.
+     */
     InitialProblem<
-    BackwardEulerProblem<OPTPROBLEM, SPARSITYPATTERN, VECTOR,
-                         dealdim, FE, DH>, VECTOR, dealdim>&
-                         GetInitialProblem()
+    BackwardEulerProblem<OPTPROBLEM, SPARSITYPATTERN, VECTOR, dealdim,
+                         FE, DH>, VECTOR, dealdim>&
+                         GetInitialProblem ()
     {
       if (initial_problem_ == NULL)
         {
           initial_problem_ = new InitialProblem<
           BackwardEulerProblem<OPTPROBLEM, SPARSITYPATTERN, VECTOR,
-          dealdim, FE, DH>, VECTOR, dealdim>(*this);
+          dealdim, FE, DH>, VECTOR, dealdim> (*this);
         }
       return *initial_problem_;
     }
@@ -101,13 +101,13 @@ namespace DOpE
 
     /**
      * Returns a pointer to the base problem, here `this'.
-    * This behavior is temporary to allow use of the BackwardEulerProblem
-    * until all subproblems (i.e., Primal, Dual, Tangent,...)
-    * have their own description.
-    */
-    BackwardEulerProblem<OPTPROBLEM, SPARSITYPATTERN, VECTOR,
-    dealdim, FE, DH> &
-    GetBaseProblem()
+     * This behavior is temporary to allow use of the BackwardEulerProblem
+     * until all subproblems (i.e., Primal, Dual, Tangent,...)
+     * have their own description.
+     */
+    BackwardEulerProblem<OPTPROBLEM, SPARSITYPATTERN, VECTOR, dealdim, FE,
+    DH> &
+    GetBaseProblem ()
     {
       return *this;
     }
@@ -117,63 +117,63 @@ namespace DOpE
     /**
      * Computes the value of the element equation for the time-step problem.
      * This is build from the three functions
-    * ElementEquation, ElementTimeEquation, ElementTimeEquationExplicit
-    * provided by the PDE:
-    * ElementEquation: The spatial integrals
+     * ElementEquation, ElementTimeEquation, ElementTimeEquationExplicit
+     * provided by the PDE:
+     * ElementEquation: The spatial integrals
      * ElementTimeEquation: The time derivative part in the equation
-    *                   if \partial_t can be approximated with
-    *                   difference quotient between t_n and t_{n+1}.
-    * TimeEquationExplicit: Explicit calculation of the time derivative if
-    *                       a simple difference quotient is not sufficient
-    *                       as it may happen for timederivatives of nonlinear terms.
+     *                   if \partial_t can be approximated with
+     *                   difference quotient between t_n and t_{n+1}.
+     * TimeEquationExplicit: Explicit calculation of the time derivative if
+     *                       a simple difference quotient is not sufficient
+     *                       as it may happen for timederivatives of nonlinear terms.
      *
      * The function is divided into two parts `old' and `new' which  are given
      * to the Newton solver. Then, the computation is done in two steps: first
      * computation of the old Newton- or time step equation parts. After,
      * computation of the actual parts.
      *
-    * @tparam <EDC>                   A container that contains all relevant data
-    *                                 needed on the element, e.g., element size, finite element values;
-    *                                 see, e.g., ElementDataContainer
+     * @tparam <EDC>                   A container that contains all relevant data
+     *                                 needed on the element, e.g., element size, finite element values;
+     *                                 see, e.g., ElementDataContainer
      *
-    * @param edc                      The EDC object.
+     * @param edc                      The EDC object.
      * @param local_vector        This vector contains the locally computed values
      *                                 of the element equation. For more information
      *                                 on dealii::Vector, please visit, the deal.ii manual pages.
      * @param scale                    A scaling factor which is -1 or 1 depending on the subroutine
-    *                                 to compute.
-    * @param scale_ico                Given for compatibility reasons with the ElementEquation
-    *                                 in PDEInterface. Should not be used here!
+     *                                 to compute.
+     * @param scale_ico                Given for compatibility reasons with the ElementEquation
+     *                                 in PDEInterface. Should not be used here!
      */
-    template<typename EDC>
+    template <typename EDC>
     void
-    ElementEquation(const EDC &edc,
-                    dealii::Vector<double> &local_vector, double scale, double /*scale_ico*/)
+    ElementEquation (const EDC &edc,
+                     dealii::Vector<double> &local_vector,
+                     double scale,
+                     double /*scale_ico*/)
     {
-      if (this->GetPart() == "New")
+      if (this->GetPart () == "New")
         {
-          dealii::Vector<double> tmp(local_vector);
+          dealii::Vector<double> tmp (local_vector);
           tmp = 0.0;
-          this->GetProblem().ElementEquation(edc, tmp,
-                                             scale,
-                                             scale);
+          this->GetProblem ().ElementEquation (edc, tmp, scale, scale);
           local_vector += tmp;
 
           tmp = 0.0;
-          this->GetProblem().ElementTimeEquation(edc, tmp, scale);
+          this->GetProblem ().ElementTimeEquation (edc, tmp, scale);
           local_vector += tmp;
 
-          this->GetProblem().ElementTimeEquationExplicit(edc, local_vector,
-                                                         scale);
+          this->GetProblem ().ElementTimeEquationExplicit (edc,
+                                                           local_vector, scale);
         }
-      else if (this->GetPart() == "Old")
+      else if (this->GetPart () == "Old")
         {
-          this->GetProblem().ElementTimeEquation(edc, local_vector,
-                                                 (-1) * scale);
+          this->GetProblem ().ElementTimeEquation (edc, local_vector,
+                                                   (-1) * scale);
         }
       else
         {
-          abort();
+          abort ();
         }
     }
 
@@ -186,34 +186,34 @@ namespace DOpE
      * computation of the old Newton- or time step equation parts. After,
      * computation of the actual parts.
      *
-    * @tparam <EDC>                   A container that contains all relevant data
-    *                                 needed on the element, e.g., element size, finite element values;
-    *                                 see, e.g., ElementDataContainer
+     * @tparam <EDC>                   A container that contains all relevant data
+     *                                 needed on the element, e.g., element size, finite element values;
+     *                                 see, e.g., ElementDataContainer
      *
      * @param edc                      A DataContainer holding all the needed information
      *                                 of the element
      * @param local_vector        This vector contains the locally computed values of
-    *                                 the ElementRhs. For more information
+     *                                 the ElementRhs. For more information
      *                                 on dealii::Vector, please visit, the deal.ii manual pages.
      * @param scale                    A scaling factor which is -1 or 1 depending on the subroutine
-    *                                 to compute.
+     *                                 to compute.
      */
-    template<typename EDC>
+    template <typename EDC>
     void
-    ElementRhs(const EDC &edc,
-               dealii::Vector<double> &local_vector, double scale)
+    ElementRhs (const EDC &edc,
+                dealii::Vector<double> &local_vector,
+                double scale)
     {
-      if (this->GetPart() == "New")
+      if (this->GetPart () == "New")
         {
-          this->GetProblem().ElementRhs(edc, local_vector,
-                                        scale);
+          this->GetProblem ().ElementRhs (edc, local_vector, scale);
         }
-      else if (this->GetPart() == "Old")
+      else if (this->GetPart () == "Old")
         {
         }
       else
         {
-          abort();
+          abort ();
         }
     }
 
@@ -229,37 +229,37 @@ namespace DOpE
      *
      *
      * @param param_values             A std::map containing parameter data
-    *                                 (e.g. non space dependent data). If the control
+     *                                 (e.g. non space dependent data). If the control
      *                                 is done by parameters, it is contained in this map
-    *                                 at the position "control".
+     *                                 at the position "control".
      * @param domain_values            A std::map containing domain data
-    *                                 (i.e., nodal vectors for FE-Functions). If the control
+     *                                 (i.e., nodal vectors for FE-Functions). If the control
      *                                 is distributed, it is contained in this map at the
-    *                                 position "control". The state may always
+     *                                 position "control". The state may always
      *                                 be found in this map at the position "state"
      * @param local_vector        This vector contains the locally computed values
-    *                                 of the PointRhs. For more information
+     *                                 of the PointRhs. For more information
      *                                 on dealii::Vector, please visit, the deal.ii manual pages.
      * @param scale                    A scaling factor which is -1 or 1 depending on the subroutine
-    *                                 to compute.
+     *                                 to compute.
      */
     void
-    PointRhs(
-      const std::map<std::string, const dealii::Vector<double>*> &param_values,
-      const std::map<std::string, const VECTOR *> &domain_values,
-      VECTOR &rhs_vector, double scale)
+    PointRhs (const std::map<std::string, const dealii::Vector<double>*> &param_values,
+              const std::map<std::string, const VECTOR *> &domain_values,
+              VECTOR &rhs_vector,
+              double scale)
     {
-      if (this->GetPart() == "New")
+      if (this->GetPart () == "New")
         {
-          this->GetProblem().PointRhs(param_values, domain_values, rhs_vector,
-                                      scale);
+          this->GetProblem ().PointRhs (param_values, domain_values,
+                                        rhs_vector, scale);
         }
-      else if (this->GetPart() == "Old")
+      else if (this->GetPart () == "Old")
         {
         }
       else
         {
-          abort();
+          abort ();
         }
     }
 
@@ -285,35 +285,34 @@ namespace DOpE
      * derivatives vanish if they are applied to old values which are, of course,
      * already computed and therefore constant.
      *
-    * @tparam <EDC>                   A container that contains all relevant data
-    *                                 needed on the element, e.g., element size, finite element values;
-    *                                 see, e.g., ElementDataContainer
+     * @tparam <EDC>                   A container that contains all relevant data
+     *                                 needed on the element, e.g., element size, finite element values;
+     *                                 see, e.g., ElementDataContainer
      * @param edc                      A DataContainer holding all the needed information
      *                                 of the element
      * @param local_matrix       The local matrix is quadratic and has size local DoFs
-    *                                 times local DoFs and is
+     *                                 times local DoFs and is
      *                                 filled by the locally computed values. For more information
-    *                                 of its functionality, please
+     *                                 of its functionality, please
      *                                 search for the keyword `FullMatrix' in the deal.ii manual.
      */
-    template<typename EDC>
+    template <typename EDC>
     void
-    ElementMatrix(const EDC &edc,
-                  dealii::FullMatrix<double> &local_matrix)
+    ElementMatrix (const EDC &edc,
+                   dealii::FullMatrix<double> &local_matrix)
     {
-      assert(this->GetPart() == "New");
-      dealii::FullMatrix<double> m(local_matrix);
+      assert(this->GetPart () == "New");
+      dealii::FullMatrix<double> m (local_matrix);
 
-      this->GetProblem().ElementMatrix(edc, local_matrix,
-                                       1.,1.);
-
-      m = 0.;
-      this->GetProblem().ElementTimeMatrix(edc, m);
-      local_matrix.add(1.0, m);
+      this->GetProblem ().ElementMatrix (edc, local_matrix, 1., 1.);
 
       m = 0.;
-      this->GetProblem().ElementTimeMatrixExplicit(edc, m);
-      local_matrix.add(1.0, m);
+      this->GetProblem ().ElementTimeMatrix (edc, m);
+      local_matrix.add (1.0, m);
+
+      m = 0.;
+      this->GetProblem ().ElementTimeMatrixExplicit (edc, m);
+      local_matrix.add (1.0, m);
 
     }
 
@@ -321,185 +320,184 @@ namespace DOpE
 
     /**
      * Same functionality as for the ElementEquation, but on Faces.
-    * Note that no time derivatives may occure on faces of the domain at present!
-    * @tparam <FDC>                   A container that contains all relevant data
-    *                                 needed on the element, e.g., element size, finite element values;
-    *                                 see, e.g., FaceDataContainer
+     * Note that no time derivatives may occure on faces of the domain at present!
+     * @tparam <FDC>                   A container that contains all relevant data
+     *                                 needed on the element, e.g., element size, finite element values;
+     *                                 see, e.g., FaceDataContainer
      *
-    * @param fdc                      The FDC object.
+     * @param fdc                      The FDC object.
      * @param local_vector        This vector contains the locally computed values
      *                                 of the Facequation.
      * @param scale                    A scaling factor which is -1 or 1 depending on the subroutine
-    *                                 to compute.
-    * @param scale_ico                Given for compatibility reasons with the ElementEquation
-    *                                 in PDEInterface. Should not be used here!
-      */
-    template<typename FDC>
+     *                                 to compute.
+     * @param scale_ico                Given for compatibility reasons with the ElementEquation
+     *                                 in PDEInterface. Should not be used here!
+     */
+    template <typename FDC>
     void
-    FaceEquation(const FDC &fdc,
-                 dealii::Vector<double> &local_vector, double scale,
-                 double /*scale_ico*/)
+    FaceEquation (const FDC &fdc,
+                  dealii::Vector<double> &local_vector,
+                  double scale,
+                  double /*scale_ico*/)
     {
-      if (this->GetPart() == "New")
+      if (this->GetPart () == "New")
         {
-          this->GetProblem().FaceEquation(fdc, local_vector,
-                                          scale,
-                                          scale);
+          this->GetProblem ().FaceEquation (fdc, local_vector, scale,
+                                            scale);
         }
-      else if (this->GetPart() == "Old")
+      else if (this->GetPart () == "Old")
         {
         }
       else
         {
-          abort();
+          abort ();
         }
     }
 
     /******************************************************/
 
     /**
-      * Same functionality as for the ElementEquation, but on Interfaces, i.e. the same as
-    * FaceEquation but with access to the FEValues on both sides.
-    * Note that no time derivatives may occure on faces of the domain at present!
-    * @tparam <FDC>                   A container that contains all relevant data
-    *                                 needed on the element, e.g., element size, finite element values;
-    *                                 see, e.g., FaceDataContainer
-      *
-    * @param fdc                      The FDC object.
-      * @param local_vector        This vector contains the locally computed values
-      *                                 of the InterfaceEquation.
-      * @param scale                    A scaling factor which is -1 or 1 depending on the subroutine
-    *                                 to compute.
-    * @param scale_ico                Given for compatibility reasons with the ElementEquation
-    *                                 in PDEInterface. Should not be used here!
-    */
-    template<typename FDC>
+     * Same functionality as for the ElementEquation, but on Interfaces, i.e. the same as
+     * FaceEquation but with access to the FEValues on both sides.
+     * Note that no time derivatives may occure on faces of the domain at present!
+     * @tparam <FDC>                   A container that contains all relevant data
+     *                                 needed on the element, e.g., element size, finite element values;
+     *                                 see, e.g., FaceDataContainer
+     *
+     * @param fdc                      The FDC object.
+     * @param local_vector        This vector contains the locally computed values
+     *                                 of the InterfaceEquation.
+     * @param scale                    A scaling factor which is -1 or 1 depending on the subroutine
+     *                                 to compute.
+     * @param scale_ico                Given for compatibility reasons with the ElementEquation
+     *                                 in PDEInterface. Should not be used here!
+     */
+    template <typename FDC>
     void
-    InterfaceEquation(const FDC &fdc,
-                      dealii::Vector<double> &local_vector, double scale,
-                      double /*scale_ico*/)
+    InterfaceEquation (const FDC &fdc,
+                       dealii::Vector<double> &local_vector,
+                       double scale,
+                       double /*scale_ico*/)
     {
-      if (this->GetPart() == "New")
+      if (this->GetPart () == "New")
         {
-          this->GetProblem().InterfaceEquation(fdc, local_vector,
-                                               scale,
-                                               scale);
+          this->GetProblem ().InterfaceEquation (fdc, local_vector, scale,
+                                                 scale);
         }
-      else if (this->GetPart() == "Old")
+      else if (this->GetPart () == "Old")
         {
         }
       else
         {
-          abort();
+          abort ();
         }
     }
 
     /******************************************************/
 
     /**
-    * Same functionality as for the ElementRhs, but on Faces.
-    * Note that no time derivatives may occure on faces of the domain at present!
-    * @tparam <FDC>                   A container that contains all relevant data
-    *                                 needed on the element, e.g., element size, finite element values;
-    *                                 see, e.g., FaceDataContainer
-    *
-    * @param fdc                      The FDC object.
-    * @param local_vector        This vector contains the locally computed values
-    *                                 of the FaceRhs.
-    * @param scale                    A scaling factor which is -1 or 1 depending on the subroutine
-    *                                 to compute.
-    */
+     * Same functionality as for the ElementRhs, but on Faces.
+     * Note that no time derivatives may occure on faces of the domain at present!
+     * @tparam <FDC>                   A container that contains all relevant data
+     *                                 needed on the element, e.g., element size, finite element values;
+     *                                 see, e.g., FaceDataContainer
+     *
+     * @param fdc                      The FDC object.
+     * @param local_vector        This vector contains the locally computed values
+     *                                 of the FaceRhs.
+     * @param scale                    A scaling factor which is -1 or 1 depending on the subroutine
+     *                                 to compute.
+     */
 
-    template<typename FDC>
+    template <typename FDC>
     void
-    FaceRhs(const FDC &fdc,
-            dealii::Vector<double> &local_vector, double scale = 1.)
+    FaceRhs (const FDC &fdc,
+             dealii::Vector<double> &local_vector,
+             double scale = 1.)
     {
-      this->GetProblem().FaceRhs(fdc, local_vector,
-                                 scale);
+      this->GetProblem ().FaceRhs (fdc, local_vector, scale);
     }
 
     /******************************************************/
 
     /**
-    * Same functionality as for the ElementMatrix, but on Faces.
-    * Note that no time derivatives may occure on faces of the domain at present!
-    * @tparam <FDC>                   A container that contains all relevant data
-    *                                 needed on the element, e.g., element size, finite element values;
-    *                                 see, e.g., FaceDataContainer
-    *
-    * @param fdc                      The FDC object.
-    * @param local_matrix       This matrix contains the locally computed values
-    *                                 of the FaceMatrix.
-    */
-    template<typename FDC>
+     * Same functionality as for the ElementMatrix, but on Faces.
+     * Note that no time derivatives may occure on faces of the domain at present!
+     * @tparam <FDC>                   A container that contains all relevant data
+     *                                 needed on the element, e.g., element size, finite element values;
+     *                                 see, e.g., FaceDataContainer
+     *
+     * @param fdc                      The FDC object.
+     * @param local_matrix       This matrix contains the locally computed values
+     *                                 of the FaceMatrix.
+     */
+    template <typename FDC>
     void
-    FaceMatrix(const FDC &fdc,
-               dealii::FullMatrix<double> &local_matrix)
+    FaceMatrix (const FDC &fdc,
+                dealii::FullMatrix<double> &local_matrix)
     {
-      assert(this->GetPart() == "New");
-      this->GetProblem().FaceMatrix(fdc, local_matrix,
-                                    1.,1.);
+      assert(this->GetPart () == "New");
+      this->GetProblem ().FaceMatrix (fdc, local_matrix, 1., 1.);
 
     }
 
     /******************************************************/
 
     /**
-       * Same functionality as for the ElementMatrix, but on Interfaces.
-    * Note that no time derivatives may occure on faces of the domain at present!
-    * @tparam <FDC>                   A container that contains all relevant data
-    *                                 needed on the element, e.g., element size, finite element values;
-    *                                 see, e.g., FaceDataContainer
-       *
-    * @param fdc                      The FDC object.
-       * @param local_matrix       This matrix contains the locally computed values
-       *                                 of the InterfaceMatrix.
-    */
-    template<typename FDC>
+     * Same functionality as for the ElementMatrix, but on Interfaces.
+     * Note that no time derivatives may occure on faces of the domain at present!
+     * @tparam <FDC>                   A container that contains all relevant data
+     *                                 needed on the element, e.g., element size, finite element values;
+     *                                 see, e.g., FaceDataContainer
+     *
+     * @param fdc                      The FDC object.
+     * @param local_matrix       This matrix contains the locally computed values
+     *                                 of the InterfaceMatrix.
+     */
+    template <typename FDC>
     void
-    InterfaceMatrix(const FDC &fdc,
-                    dealii::FullMatrix<double> &local_matrix)
+    InterfaceMatrix (const FDC &fdc,
+                     dealii::FullMatrix<double> &local_matrix)
     {
-      assert(this->GetPart() == "New");
-      this->GetProblem().InterfaceMatrix(fdc, local_matrix,
-                                         1.,1.);
+      assert(this->GetPart () == "New");
+      this->GetProblem ().InterfaceMatrix (fdc, local_matrix, 1., 1.);
     }
 
     /******************************************************/
 
     /**
      * Same functionality as for the ElementEquation, but on Boundaries.
-    * Note that no time derivatives may occure on faces of the domain at present!
-    * @tparam <FDC>                   A container that contains all relevant data
-    *                                 needed on the element, e.g., element size, finite element values;
-    *                                 see, e.g., FaceDataContainer
+     * Note that no time derivatives may occure on faces of the domain at present!
+     * @tparam <FDC>                   A container that contains all relevant data
+     *                                 needed on the element, e.g., element size, finite element values;
+     *                                 see, e.g., FaceDataContainer
      *
-    * @param fdc                      The FDC object.
+     * @param fdc                      The FDC object.
      * @param local_vector        This vector contains the locally computed values
      *                                 of the Facequation.
      * @param scale                    A scaling factor which is -1 or 1 depending on the subroutine
-    *                                 to compute.
-    * @param scale_ico                Given for compatibility reasons with the ElementEquation
-    *                                 in PDEInterface. Should not be used here!
-      */
-    template<typename FDC>
+     *                                 to compute.
+     * @param scale_ico                Given for compatibility reasons with the ElementEquation
+     *                                 in PDEInterface. Should not be used here!
+     */
+    template <typename FDC>
     void
-    BoundaryEquation(const FDC &fdc,
-                     dealii::Vector<double> &local_vector, double scale,
-                     double /*scale_ico*/)
+    BoundaryEquation (const FDC &fdc,
+                      dealii::Vector<double> &local_vector,
+                      double scale,
+                      double /*scale_ico*/)
     {
-      if (this->GetPart() == "New")
+      if (this->GetPart () == "New")
         {
-          this->GetProblem().BoundaryEquation(fdc, local_vector,
-                                              scale, scale);
+          this->GetProblem ().BoundaryEquation (fdc, local_vector, scale,
+                                                scale);
         }
-      else if (this->GetPart() == "Old")
+      else if (this->GetPart () == "Old")
         {
         }
       else
         {
-          abort();
+          abort ();
         }
 
     }
@@ -519,43 +517,42 @@ namespace DOpE
      * @param scale                    A scaling factor which is -1 or 1 depending on the subroutine
      *                                 to compute.
      */
-    template<typename FDC>
+    template <typename FDC>
     void
-    BoundaryRhs(const FDC &fdc,
-                dealii::Vector<double> &local_vector, double scale)
+    BoundaryRhs (const FDC &fdc,
+                 dealii::Vector<double> &local_vector,
+                 double scale)
     {
-      this->GetProblem().BoundaryRhs(fdc, local_vector,
-                                     scale);
+      this->GetProblem ().BoundaryRhs (fdc, local_vector, scale);
     }
 
     /******************************************************/
 
     /**
      * Same functionality as for the ElementMatrix, but on Boundaries.
-    * Note that no time derivatives may occure on faces of the domain at present!
-    * @tparam <FDC>                   A container that contains all relevant data
-    *                                 needed on the element, e.g., element size, finite element values;
-    *                                 see, e.g., FaceDataContainer
+     * Note that no time derivatives may occure on faces of the domain at present!
+     * @tparam <FDC>                   A container that contains all relevant data
+     *                                 needed on the element, e.g., element size, finite element values;
+     *                                 see, e.g., FaceDataContainer
      *
-    * @param fdc                      The FDC object.
+     * @param fdc                      The FDC object.
      * @param local_matrix       This matrix contains the locally computed values
      *                                 of the FaceMatrix.
-    */
+     */
 
-    template<typename FDC>
+    template <typename FDC>
     void
-    BoundaryMatrix(const FDC &fdc,
-                   dealii::FullMatrix<double> &local_matrix)
+    BoundaryMatrix (const FDC &fdc,
+                    dealii::FullMatrix<double> &local_matrix)
     {
-      assert(this->GetPart() == "New");
-      this->GetProblem().BoundaryMatrix(fdc, local_matrix,
-                                        1., 1.);
+      assert(this->GetPart () == "New");
+      this->GetProblem ().BoundaryMatrix (fdc, local_matrix, 1., 1.);
     }
 
   private:
     InitialProblem<
-    BackwardEulerProblem<OPTPROBLEM, SPARSITYPATTERN, VECTOR,
-                         dealdim, FE, DH>, VECTOR, dealdim> * initial_problem_;
+    BackwardEulerProblem<OPTPROBLEM, SPARSITYPATTERN, VECTOR, dealdim,
+                         FE, DH>, VECTOR, dealdim> * initial_problem_;
   };
 }
 

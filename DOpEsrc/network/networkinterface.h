@@ -11,8 +11,10 @@ namespace DOpE
     class NetworkInterface
     {
     public:
-      virtual unsigned int GetNPipes() const = 0;
-      virtual unsigned int GetNNodes() const = 0;
+      virtual unsigned int
+      GetNPipes () const = 0;
+      virtual unsigned int
+      GetNNodes () const = 0;
 
       /**
        * Evaluates the residual of the pipe coupling conditions of the vector u of coupling
@@ -22,9 +24,10 @@ namespace DOpE
        * @param u    The vector in which the residual is to be calculated
        * @param present_in_outflow A vector indicating which flux variables are outflow.
        **/
-      virtual void PipeCouplingResidual(dealii::Vector<double> &res,
-                                        const dealii::Vector<double> &u,
-                                        const std::vector<bool> &present_in_outflow) const = 0;
+      virtual void
+      PipeCouplingResidual (dealii::Vector<double> &res,
+                            const dealii::Vector<double> &u,
+                            const std::vector<bool> &present_in_outflow) const = 0;
 
       /**
        * Evaluates the Matrix of the pipe coupling conditions and the coupling to the outflow
@@ -33,8 +36,9 @@ namespace DOpE
        * @param matrix  The matrix to be calculated
        * @param present_in_outflow A vector indicating which flux variables are outflow.
        **/
-      virtual void CouplingMatrix(dealii::SparseMatrix<double> &matrix,
-                                  const std::vector<bool> &present_in_outflow) const = 0;
+      virtual void
+      CouplingMatrix (dealii::SparseMatrix<double> &matrix,
+                      const std::vector<bool> &present_in_outflow) const = 0;
 
       /**
        * For initial conditions, it is sometime needed that an other coupling is used,
@@ -46,16 +50,17 @@ namespace DOpE
        * @param present_in_outflow A vector indicating which flux variables are outflow.
        **/
 
-      virtual void Init_PipeCouplingResidual(dealii::Vector<double> &res,
-                                             const dealii::Vector<double> &u,
-                                             const std::vector<bool> &/*present_in_outflow*/) const
+      virtual void
+      Init_PipeCouplingResidual (dealii::Vector<double> &res,
+                                 const dealii::Vector<double> &u,
+                                 const std::vector<bool> &/*present_in_outflow*/) const
       {
         //Sizes must all be equal (and 2*NPipes*NComp)
-        assert(res.size()==u.size());
+        assert(res.size () == u.size ());
         //assert(res.size()==present_in_outflow.size());
-        assert(2*(res.size()/2) == res.size());//an even number
+        assert(2 * (res.size () / 2) == res.size ()); //an even number
 
-        for (unsigned int i = 0; i< res.size(); i++)
+        for (unsigned int i = 0; i < res.size (); i++)
           {
             //assert(present_in_outflow[i]);
             res[i] = -u[i];
@@ -68,18 +73,18 @@ namespace DOpE
        * @param matrix  The matrix to be calculated
        * @param present_in_outflow A vector indicating which flux variables are outflow.
        **/
-      virtual void Init_CouplingMatrix(dealii::SparseMatrix<double> &matrix,
-                                       const std::vector<bool> &/*present_in_outflow*/) const
+      virtual void
+      Init_CouplingMatrix (dealii::SparseMatrix<double> &matrix,
+                           const std::vector<bool> &/*present_in_outflow*/) const
       {
-        assert(matrix.m()==matrix.n());
+        assert(matrix.m () == matrix.n ());
         //assert(matrix.m()==present_in_outflow.size());
-        for (unsigned int i = 0; i< matrix.m(); i++)
+        for (unsigned int i = 0; i < matrix.m (); i++)
           {
             //assert(present_in_outflow[i]);
-            matrix.set(i,i,-1);
+            matrix.set (i, i, -1);
           }
       }
-
 
       /**
        * Adds the flux-flux coupling indices to the given SparsityPattern
@@ -87,7 +92,8 @@ namespace DOpE
        *
        * @param sparsity   The pattern into which the entries need to be stored.
        **/
-      virtual void GetFluxSparsityPattern(dealii::SparsityPattern &sparsity) const = 0;
+      virtual void
+      GetFluxSparsityPattern (dealii::SparsityPattern &sparsity) const = 0;
 
     };
   }

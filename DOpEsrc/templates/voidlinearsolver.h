@@ -1,25 +1,25 @@
 /**
-*
-* Copyright (C) 2012-2014 by the DOpElib authors
-*
-* This file is part of DOpElib
-*
-* DOpElib is free software: you can redistribute it
-* and/or modify it under the terms of the GNU General Public
-* License as published by the Free Software Foundation, either
-* version 3 of the License, or (at your option) any later
-* version.
-*
-* DOpElib is distributed in the hope that it will be
-* useful, but WITHOUT ANY WARRANTY; without even the implied
-* warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-* PURPOSE.  See the GNU General Public License for more
-* details.
-*
-* Please refer to the file LICENSE.TXT included in this distribution
-* for further information on this license.
-*
-**/
+ *
+ * Copyright (C) 2012-2014 by the DOpElib authors
+ *
+ * This file is part of DOpElib
+ *
+ * DOpElib is free software: you can redistribute it
+ * and/or modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation, either
+ * version 3 of the License, or (at your option) any later
+ * version.
+ *
+ * DOpElib is distributed in the hope that it will be
+ * useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+ * PURPOSE.  See the GNU General Public License for more
+ * details.
+ *
+ * Please refer to the file LICENSE.TXT included in this distribution
+ * for further information on this license.
+ *
+ **/
 
 #ifndef VOID_LINEAR_SOLVER_H_
 #define VOID_LINEAR_SOLVER_H_
@@ -63,8 +63,8 @@ namespace DOpE
     static void declare_params(ParameterReader &param_reader);
 
     /**
-       This Function should be called once after grid refinement, or changes in boundary values
-       to  recompute sparsity patterns, and constraint matrices.
+     This Function should be called once after grid refinement, or changes in boundary values
+     to  recompute sparsity patterns, and constraint matrices.
      */
     template<typename PROBLEM>
     void ReInit(PROBLEM &pde);
@@ -117,7 +117,7 @@ namespace DOpE
 
   template <typename VECTOR>
   template<typename PROBLEM>
-  void  VoidLinearSolver<VECTOR>::ReInit(PROBLEM & /*pde*/)
+  void VoidLinearSolver<VECTOR>::ReInit(PROBLEM & /*pde*/)
   {
 
   }
@@ -130,7 +130,6 @@ namespace DOpE
   {
     solution = rhs;
   }
-
 
 }
 #endif

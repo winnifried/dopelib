@@ -35,40 +35,52 @@
 
 using namespace dealii;
 
-template<typename VECTOR>
-void write(const VECTOR &v, std::ostream &stream)
+template <typename VECTOR>
+void
+write (const VECTOR &v,
+       std::ostream &stream)
 {
-  v.block_write(stream);
+  v.block_write (stream);
 }
 
-template<>
-inline void write<dealii::TrilinosWrappers::MPI::Vector>(const dealii::TrilinosWrappers::MPI::Vector &v, std::ostream &stream)
+template <>
+inline void
+write<dealii::TrilinosWrappers::MPI::Vector> (const dealii::TrilinosWrappers::MPI::Vector &v,
+                                              std::ostream &stream)
 {
-  throw ExcNotImplemented();
+  throw ExcNotImplemented ();
 }
 
-template<>
-inline void write<dealii::TrilinosWrappers::MPI::BlockVector>(const dealii::TrilinosWrappers::MPI::BlockVector &v, std::ostream &stream)
+template <>
+inline void
+write<dealii::TrilinosWrappers::MPI::BlockVector> (const dealii::TrilinosWrappers::MPI::BlockVector &v,
+                                                   std::ostream &stream)
 {
-  throw ExcNotImplemented();
+  throw ExcNotImplemented ();
 }
 
-template<typename VECTOR>
-void read(VECTOR &v, std::istream &stream)
+template <typename VECTOR>
+void
+read (VECTOR &v,
+      std::istream &stream)
 {
-  v.block_read(stream);
+  v.block_read (stream);
 }
 
-template<>
-inline void read<dealii::TrilinosWrappers::MPI::Vector>(dealii::TrilinosWrappers::MPI::Vector &v, std::istream &stream)
+template <>
+inline void
+read<dealii::TrilinosWrappers::MPI::Vector> (dealii::TrilinosWrappers::MPI::Vector &v,
+                                             std::istream &stream)
 {
-  throw ExcNotImplemented();
+  throw ExcNotImplemented ();
 }
 
-template<>
-inline void read<dealii::TrilinosWrappers::MPI::BlockVector>(dealii::TrilinosWrappers::MPI::BlockVector &v, std::istream &stream)
+template <>
+inline void
+read<dealii::TrilinosWrappers::MPI::BlockVector> (dealii::TrilinosWrappers::MPI::BlockVector &v,
+                                                  std::istream &stream)
 {
-  throw ExcNotImplemented();
+  throw ExcNotImplemented ();
 }
 
 namespace DOpEHelper
@@ -77,48 +89,56 @@ namespace DOpEHelper
    * Splits an index set source into different blocks, block_counts[i] = n_dofs within block i
    * Application: split locally_owned for block vectors
    */
-  std::vector<dealii::IndexSet> split_blockwise(const dealii::IndexSet &source, const std::vector<unsigned int> &block_counts);
-
+  std::vector<dealii::IndexSet>
+  split_blockwise (const dealii::IndexSet &source,
+                   const std::vector<unsigned int> &block_counts);
 
   // Distributed: vmult, solve, +, -, constraints, assemble into
   // Ghosted: linearization point, output, anything that evaluates
 
 // TODO document, extend for other types, move to cc
 // TODO template + IsBlock, IsMPI, ...
-  inline void make_distributed(TrilinosWrappers::MPI::Vector &source)
+  inline void
+  make_distributed (TrilinosWrappers::MPI::Vector &source)
   {
-    if (source.has_ghost_elements())
+    if (source.has_ghost_elements ())
       {
-        TrilinosWrappers::MPI::Vector res(source);
-        source.reinit(source.locally_owned_elements(), source.get_mpi_communicator(), true);
+        TrilinosWrappers::MPI::Vector res (source);
+        source.reinit (source.locally_owned_elements (),
+                       source.get_mpi_communicator (), true);
         source = res;
       }
   }
 
-  inline void make_distributed(TrilinosWrappers::MPI::BlockVector &source)
+  inline void
+  make_distributed (TrilinosWrappers::MPI::BlockVector &source)
   {
-    if (source.has_ghost_elements())
+    if (source.has_ghost_elements ())
       {
         std::vector<unsigned int> counts;
-        for (unsigned int b = 0; b < source.n_blocks(); b++)
-          counts.push_back(source.block(b).size());
+        for (unsigned int b = 0; b < source.n_blocks (); b++)
+          counts.push_back (source.block (b).size ());
 
-        const auto block_owned = DOpEHelper::split_blockwise(source.locally_owned_elements(), counts);
+        const auto block_owned = DOpEHelper::split_blockwise (
+                                   source.locally_owned_elements (), counts);
 
-        TrilinosWrappers::MPI::BlockVector res(source);
-        source.reinit(block_owned, source.block(0).get_mpi_communicator(), true);
+        TrilinosWrappers::MPI::BlockVector res (source);
+        source.reinit (block_owned, source.block (0).get_mpi_communicator (),
+                       true);
         source = res;
       }
   }
 
-  inline void make_distributed(Vector<double> &source)
+  inline void
+  make_distributed (Vector<double> &source)
   {
     (void) source;
   }
 
-  inline void make_distributed(BlockVector<double> &source)
+  inline void
+  make_distributed (BlockVector<double> &source)
   {
     (void) source;
   }
-}  //end of namespace
+} //end of namespace
 

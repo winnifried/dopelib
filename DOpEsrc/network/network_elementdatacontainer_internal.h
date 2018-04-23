@@ -42,18 +42,20 @@ namespace DOpE
        * @template dim        The dimension of the integral we are actually
        *                      interested in.
        */
-      template<int dim>
+      template <int dim>
       class Network_ElementDataContainerInternal
       {
       public:
-        Network_ElementDataContainerInternal(
-          unsigned int pipe,
-          const std::map<std::string, const dealii::Vector<double>*> &param_values
-          ,
-          const std::map<std::string, const dealii::BlockVector<double> *> &domain_values);
+        Network_ElementDataContainerInternal (unsigned int pipe,
+                                              const std::map<std::string,
+                                              const dealii::Vector<
+                                              double>*> &param_values,
+                                              const std::map<std::string,
+                                              const dealii::BlockVector<
+                                              double> *> &domain_values);
 
         virtual
-        ~Network_ElementDataContainerInternal()
+        ~Network_ElementDataContainerInternal ()
         {
         }
         ;
@@ -63,31 +65,31 @@ namespace DOpE
          * corresponding value through 'value'.
          */
         void
-        GetParamValues(std::string name, dealii::Vector<double> &value) const;
+        GetParamValues (std::string name,
+                        dealii::Vector<double> &value) const;
 
         /**
          * Returns the domain values.
          */
         const std::map<std::string, const dealii::BlockVector<double> *> &
-        GetDomainValues() const
+        GetDomainValues () const
         {
           return domain_values_;
         }
         ;
 
         virtual const DOpEWrapper::FEValues<dim> &
-        GetFEValuesState() const = 0;
+        GetFEValuesState () const = 0;
 
         virtual const DOpEWrapper::FEValues<dim> &
-        GetFEValuesControl() const = 0;
+        GetFEValuesControl () const = 0;
 
         /*********************************************************************/
         /**
          * Return a triangulation iterator to the current element for the state.
          */
-        const typename  Triangulation<dim>::cell_iterator
-        GetElementState() const;
-
+        const typename Triangulation<dim>::cell_iterator
+        GetElementState () const;
 
         /********************************************************************/
         /**
@@ -98,105 +100,107 @@ namespace DOpE
          * Writes the values of the state variable at the quadrature points into values.
          */
         void
-        GetValuesState(std::string name, std::vector<double> &values) const;
+        GetValuesState (std::string name,
+                        std::vector<double> &values) const;
 
         /*********************************************/
         /*
          * Same as above for the Vector valued case.
          */
         void
-        GetValuesState(std::string name,
-                       std::vector<dealii::Vector<double> > &values) const;
+        GetValuesState (std::string name,
+                        std::vector<dealii::Vector<double> > &values) const;
 
         /*********************************************/
         /*
          * Writes the values of the control variable at the quadrature points into values
          */
         void
-        GetValuesControl(std::string name, std::vector<double> &values) const;
+        GetValuesControl (std::string name,
+                          std::vector<double> &values) const;
 
         /*********************************************/
         /*
          * Same as above for the Vector valued case.
          */
         void
-        GetValuesControl(std::string name,
-                         std::vector<dealii::Vector<double> > &values) const;
+        GetValuesControl (std::string name,
+                          std::vector<dealii::Vector<double> > &values) const;
         /*********************************************/
         /*
          * Writes the values of the state gradient at the quadrature points into values.
          */
 
-        template<int targetdim>
+        template <int targetdim>
         void
-        GetGradsState(std::string name,
-                      std::vector<dealii::Tensor<1, targetdim> > &values) const;
+        GetGradsState (std::string name,
+                       std::vector<dealii::Tensor<1, targetdim> > &values) const;
 
         /*********************************************/
         /*
          * Same as above for the Vector valued case.
          */
-        template<int targetdim>
+        template <int targetdim>
         void
-        GetGradsState(
-          std::string name,
-          std::vector<std::vector<dealii::Tensor<1, targetdim> > > &values) const;
+        GetGradsState (std::string name,
+                       std::vector<
+                       std::vector<dealii::Tensor<1, targetdim> > > &values) const;
 
         /*********************************************/
         /*
          * Writes the values of the control gradient at the quadrature points into values.
          */
-        template<int targetdim>
+        template <int targetdim>
         void
-        GetGradsControl(std::string name,
-                        std::vector<dealii::Tensor<1, targetdim> > &values) const;
+        GetGradsControl (std::string name,
+                         std::vector<dealii::Tensor<1, targetdim> > &values) const;
 
         /*********************************************/
         /*
          * Same as above for the Vector valued case.
          */
-        template<int targetdim>
+        template <int targetdim>
         void
-        GetGradsControl(
-          std::string name,
-          std::vector<std::vector<dealii::Tensor<1, targetdim> > > &values) const;
+        GetGradsControl (std::string name,
+                         std::vector<
+                         std::vector<dealii::Tensor<1, targetdim> > > &values) const;
         /*********************************************/
         /*
          * Writes the values of the state hessian at the quadrature points into values.
          */
-        template<int targetdim>
+        template <int targetdim>
         void
-        GetHessiansState(std::string name,
-                         std::vector<dealii::Tensor<2, targetdim> > &values) const;
+        GetHessiansState (std::string name,
+                          std::vector<dealii::Tensor<2, targetdim> > &values) const;
 
         /*********************************************/
         /*
          * Same as above for the Vector valued case.
          */
-        template<int targetdim>
+        template <int targetdim>
         void
-        GetHessiansState(
-          std::string name,
-          std::vector<std::vector<dealii::Tensor<2, targetdim> > > &values) const;
+        GetHessiansState (std::string name,
+                          std::vector<
+                          std::vector<dealii::Tensor<2, targetdim> > > &values) const;
 
         /*********************************************/
         /*
          * Writes the values of the control hessian at the quadrature points into values.
          */
-        template<int targetdim>
+        template <int targetdim>
         void
-        GetHessiansControl(std::string name,
-                           std::vector<dealii::Tensor<2, targetdim> > &values) const;
+        GetHessiansControl (std::string name,
+                            std::vector<dealii::Tensor<2, targetdim> > &values) const;
 
         /*********************************************/
         /*
          * Same as above for the Vector valued case.
          */
-        template<int targetdim>
+        template <int targetdim>
         void
-        GetHessiansControl(
-          std::string name,
-          std::vector<std::vector<dealii::Tensor<2, targetdim> > > &values) const;
+        GetHessiansControl (std::string name,
+                            std::vector<
+                            std::vector<dealii::Tensor<2, targetdim> > > &values) const;
 
         /*********************************************/
         /*
@@ -205,8 +209,8 @@ namespace DOpE
          */
 
         void
-        GetLaplaciansState(std::string name,
-                           std::vector<double> &values) const;
+        GetLaplaciansState (std::string name,
+                            std::vector<double> &values) const;
 
         /*********************************************/
         /*
@@ -214,8 +218,8 @@ namespace DOpE
          */
 
         void
-        GetLaplaciansState(std::string name,
-                           std::vector<dealii::Vector<double> > &values) const;
+        GetLaplaciansState (std::string name,
+                            std::vector<dealii::Vector<double> > &values) const;
 
         /*********************************************/
         /*
@@ -224,8 +228,8 @@ namespace DOpE
          */
 
         void
-        GetLaplaciansControl(std::string name,
-                             std::vector<double> &values) const;
+        GetLaplaciansControl (std::string name,
+                              std::vector<double> &values) const;
 
         /*********************************************/
         /*
@@ -233,8 +237,8 @@ namespace DOpE
          */
 
         void
-        GetLaplaciansControl(std::string name,
-                             std::vector<dealii::Vector<double> > &values) const;
+        GetLaplaciansControl (std::string name,
+                              std::vector<dealii::Vector<double> > &values) const;
 
       private:
         /***********************************************************/
@@ -242,72 +246,73 @@ namespace DOpE
          * Helper Function. Vector valued case.
          */
         void
-        GetValues(const DOpEWrapper::FEValues<dim> &fe_values,
-                  std::string name, std::vector<double> &values) const;
+        GetValues (const DOpEWrapper::FEValues<dim> &fe_values,
+                   std::string name,
+                   std::vector<double> &values) const;
         /***********************************************************/
         /**
          * Helper Function. Vector valued case.
          */
         void
-        GetValues(const DOpEWrapper::FEValues<dim> &fe_values,
+        GetValues (const DOpEWrapper::FEValues<dim> &fe_values,
+                   std::string name,
+                   std::vector<dealii::Vector<double> > &values) const;
+        /***********************************************************/
+        /**
+         * Helper Function.
+         */
+        template <int targetdim>
+        void
+        GetGrads (const DOpEWrapper::FEValues<dim> &fe_values,
                   std::string name,
-                  std::vector<dealii::Vector<double> > &values) const;
-        /***********************************************************/
-        /**
-         * Helper Function.
-         */
-        template<int targetdim>
-        void
-        GetGrads(const DOpEWrapper::FEValues<dim> &fe_values,
-                 std::string name,
-                 std::vector<dealii::Tensor<1, targetdim> > &values) const;
+                  std::vector<dealii::Tensor<1, targetdim> > &values) const;
         /***********************************************************/
         /**
          * Helper Function. Vector valued case.
          */
-        template<int targetdim>
+        template <int targetdim>
         void
-        GetGrads(
-          const DOpEWrapper::FEValues<dim> &fe_values,
-          std::string name,
-          std::vector<std::vector<dealii::Tensor<1, targetdim> > > &values) const;
+        GetGrads (const DOpEWrapper::FEValues<dim> &fe_values,
+                  std::string name,
+                  std::vector<std::vector<dealii::Tensor<1, targetdim> > > &values) const;
         /***********************************************************/
         /**
          * Helper Function.
          */
         void
-        GetLaplacians(const DOpEWrapper::FEValues<dim> &fe_values,
-                      std::string name, std::vector<double> &values) const;
+        GetLaplacians (const DOpEWrapper::FEValues<dim> &fe_values,
+                       std::string name,
+                       std::vector<double> &values) const;
 
         /***********************************************************/
         /**
          * Helper Function.
          */
         void
-        GetLaplacians(const DOpEWrapper::FEValues<dim> &fe_values,
-                      std::string name,
-                      std::vector<dealii::Vector<double> > &values) const;
+        GetLaplacians (const DOpEWrapper::FEValues<dim> &fe_values,
+                       std::string name,
+                       std::vector<dealii::Vector<double> > &values) const;
 
         /***********************************************************/
         /**
          * Helper Function.
          */
-        template<int targetdim>
+        template <int targetdim>
         void
-        GetHessians(const DOpEWrapper::FEValues<dim> &fe_values,
-                    std::string name,
-                    std::vector<dealii::Tensor<2, targetdim> > &values) const;
+        GetHessians (const DOpEWrapper::FEValues<dim> &fe_values,
+                     std::string name,
+                     std::vector<dealii::Tensor<2, targetdim> > &values) const;
 
         /***********************************************************/
         /**
          * Helper Function.
          */
-        template<int targetdim>
+        template <int targetdim>
         void
-        GetHessians(
-          const DOpEWrapper::FEValues<dim> &fe_values,
-          std::string name,
-          std::vector<std::vector<dealii::Tensor<2, targetdim> > > &values) const;
+        GetHessians (const DOpEWrapper::FEValues<dim> &fe_values,
+                     std::string name,
+                     std::vector<
+                     std::vector<dealii::Tensor<2, targetdim> > > &values) const;
 
         const std::map<std::string, const dealii::Vector<double>*> &param_values_;
         const std::map<std::string, const dealii::BlockVector<double> *> &domain_values_;
@@ -315,350 +320,421 @@ namespace DOpE
       };
 
       /**********************************************************************/
-      template<int dim>
-      Network_ElementDataContainerInternal<dim>::Network_ElementDataContainerInternal(
-        unsigned int pipe,
-        const std::map<std::string, const dealii::Vector<double>*> &param_values,
-        const std::map<std::string, const dealii::BlockVector<double> *> &domain_values)
-        : param_values_(param_values), domain_values_(domain_values)
+      template <int dim>
+      Network_ElementDataContainerInternal<dim>::Network_ElementDataContainerInternal (unsigned int pipe,
+          const std::map<
+          std::string,
+          const dealii::Vector<
+          double>*> &param_values,
+          const std::map<
+          std::string,
+          const dealii::BlockVector<
+          double> *> &domain_values)
+        : param_values_ (param_values),
+          domain_values_ (domain_values)
       {
         pipe_ = pipe;
       }
 
-      template<int dim>
+      template <int dim>
       void
-      Network_ElementDataContainerInternal<dim>::GetParamValues(std::string name,
-                                                                dealii::Vector<double> &value) const
+      Network_ElementDataContainerInternal<dim>::GetParamValues (std::string name,
+                                                                 dealii::Vector<
+                                                                 double> &value) const
       {
         typename std::map<std::string, const dealii::Vector<double>*>::const_iterator it =
-          param_values_.find(name);
-        if (it == param_values_.end())
+          param_values_.find (name);
+        if (it == param_values_.end ())
           {
-            throw DOpEException("Did not find " + name,
-                                "Network_ElementDataContainerInternal::GetParamValues");
+            throw DOpEException ("Did not find " + name,
+                                 "Network_ElementDataContainerInternal::GetParamValues");
           }
         value = *(it->second);
       }
 
       /*********************************************/
-      template<int dim>
+      template <int dim>
       void
-      Network_ElementDataContainerInternal<dim>::GetValuesState(std::string name,
-                                                                std::vector<double> &values) const
+      Network_ElementDataContainerInternal<dim>::GetValuesState (std::string name,
+                                                                 std::vector<
+                                                                 double> &values) const
       {
-        this->GetValues(this->GetFEValuesState(), name, values);
+        this->GetValues (this->GetFEValuesState (), name, values);
       }
       /*********************************************/
-      template<int dim>
+      template <int dim>
       void
-      Network_ElementDataContainerInternal<dim>::GetValuesState(std::string name,
-                                                                std::vector<dealii::Vector<double> > &values) const
+      Network_ElementDataContainerInternal<dim>::GetValuesState (std::string name,
+                                                                 std::vector<
+                                                                 dealii::Vector<
+                                                                 double> > &values) const
       {
-        this->GetValues(this->GetFEValuesState(), name, values);
+        this->GetValues (this->GetFEValuesState (), name, values);
 
       }
 
-
       /*********************************************/
-      template<int dim>
+      template <int dim>
       const typename Triangulation<dim>::cell_iterator
-      Network_ElementDataContainerInternal<dim>::GetElementState() const
+      Network_ElementDataContainerInternal<dim>::GetElementState () const
       {
-        return this->GetFEValuesState().get_element();
+        return this->GetFEValuesState ().get_element ();
       }
 
       /*********************************************/
-      template<int dim>
+      template <int dim>
       void
-      Network_ElementDataContainerInternal<dim>::GetValuesControl(std::string name,
-                                                                  std::vector<double> &values) const
+      Network_ElementDataContainerInternal<dim>::GetValuesControl (std::string name,
+          std::vector<
+          double> &values) const
       {
-        this->GetValues(this->GetFEValuesControl(), name, values);
+        this->GetValues (this->GetFEValuesControl (), name, values);
       }
 
       /*********************************************/
-      template<int dim>
+      template <int dim>
       void
-      Network_ElementDataContainerInternal<dim>::GetValuesControl(std::string name,
-                                                                  std::vector<dealii::Vector<double> > &values) const
+      Network_ElementDataContainerInternal<dim>::GetValuesControl (std::string name,
+          std::vector<
+          dealii::Vector<
+          double> > &values) const
       {
-        this->GetValues(this->GetFEValuesControl(), name, values);
+        this->GetValues (this->GetFEValuesControl (), name, values);
       }
 
       /*********************************************/
-      template<int dim>
-      template<int targetdim>
+      template <int dim>
+      template <int targetdim>
       void
-      Network_ElementDataContainerInternal<dim>::GetGradsState(std::string name,
-                                                               std::vector<dealii::Tensor<1, targetdim> > &values) const
+      Network_ElementDataContainerInternal<dim>::GetGradsState (std::string name,
+                                                                std::vector<
+                                                                dealii::Tensor<
+                                                                1,
+                                                                targetdim> > &values) const
       {
-        this->GetGrads<targetdim>(this->GetFEValuesState(), name, values);
+        this->GetGrads<targetdim> (this->GetFEValuesState (), name, values);
       }
 
       /*********************************************/
-      template<int dim>
-      template<int targetdim>
+      template <int dim>
+      template <int targetdim>
       void
-      Network_ElementDataContainerInternal<dim>::GetGradsState(
-        std::string name,
-        std::vector<std::vector<dealii::Tensor<1, targetdim> > > &values) const
+      Network_ElementDataContainerInternal<dim>::GetGradsState (std::string name,
+                                                                std::vector<
+                                                                std::vector<
+                                                                dealii::Tensor<
+                                                                1,
+                                                                targetdim> > > &values) const
       {
-        this->GetGrads<targetdim>(this->GetFEValuesState(), name, values);
+        this->GetGrads<targetdim> (this->GetFEValuesState (), name, values);
       }
 
       /***********************************************************************/
 
-      template<int dim>
-      template<int targetdim>
+      template <int dim>
+      template <int targetdim>
       void
-      Network_ElementDataContainerInternal<dim>::GetGradsControl(
-        std::string name,
-        std::vector<dealii::Tensor<1, targetdim> > &values) const
+      Network_ElementDataContainerInternal<dim>::GetGradsControl (std::string name,
+                                                                  std::vector<
+                                                                  dealii::Tensor<
+                                                                  1,
+                                                                  targetdim> > &values) const
       {
-        this->GetGrads<targetdim>(this->GetFEValuesControl(), name, values);
+        this->GetGrads<targetdim> (this->GetFEValuesControl (), name,
+                                   values);
       }
 
       /***********************************************************************/
 
-      template<int dim>
-      template<int targetdim>
+      template <int dim>
+      template <int targetdim>
       void
-      Network_ElementDataContainerInternal<dim>::GetGradsControl(
-        std::string name,
-        std::vector<std::vector<dealii::Tensor<1, targetdim> > > &values) const
+      Network_ElementDataContainerInternal<dim>::GetGradsControl (std::string name,
+                                                                  std::vector<
+                                                                  std::vector<
+                                                                  dealii::Tensor<
+                                                                  1,
+                                                                  targetdim> > > &values) const
       {
-        this->GetGrads<targetdim>(this->GetFEValuesControl(), name, values);
+        this->GetGrads<targetdim> (this->GetFEValuesControl (), name,
+                                   values);
       }
 
       /***********************************************************************/
 
-      template<int dim>
-      template<int targetdim>
+      template <int dim>
+      template <int targetdim>
       void
-      Network_ElementDataContainerInternal<dim>::GetHessiansState(
-        std::string name,
-        std::vector<std::vector<dealii::Tensor<2, targetdim> > > &values) const
+      Network_ElementDataContainerInternal<dim>::GetHessiansState (std::string name,
+          std::vector<
+          std::vector<
+          dealii::Tensor<
+          2,
+          targetdim> > > &values) const
       {
-        this->GetHessians<targetdim>(this->GetFEValuesState(), name, values);
+        this->GetHessians<targetdim> (this->GetFEValuesState (), name,
+                                      values);
       }
 
       /***********************************************************************/
 
-      template<int dim>
-      template<int targetdim>
+      template <int dim>
+      template <int targetdim>
       void
-      Network_ElementDataContainerInternal<dim>::GetHessiansState(
-        std::string name,
-        std::vector<dealii::Tensor<2, targetdim> > &values) const
+      Network_ElementDataContainerInternal<dim>::GetHessiansState (std::string name,
+          std::vector<
+          dealii::Tensor<
+          2,
+          targetdim> > &values) const
       {
-        this->GetHessians<targetdim>(this->GetFEValuesState(), name, values);
+        this->GetHessians<targetdim> (this->GetFEValuesState (), name,
+                                      values);
       }
 
       /***********************************************************************/
 
-      template<int dim>
-      template<int targetdim>
+      template <int dim>
+      template <int targetdim>
       void
-      Network_ElementDataContainerInternal<dim>::GetHessiansControl(
-        std::string name,
-        std::vector<std::vector<dealii::Tensor<2, targetdim> > > &values) const
+      Network_ElementDataContainerInternal<dim>::GetHessiansControl (std::string name,
+          std::vector<
+          std::vector<
+          dealii::Tensor<
+          2,
+          targetdim> > > &values) const
       {
-        this->GetHessians<targetdim>(this->GetFEValuesControl(), name, values);
+        this->GetHessians<targetdim> (this->GetFEValuesControl (), name,
+                                      values);
       }
 
       /***********************************************************************/
 
-      template<int dim>
-      template<int targetdim>
+      template <int dim>
+      template <int targetdim>
       void
-      Network_ElementDataContainerInternal<dim>::GetHessiansControl(
-        std::string name,
-        std::vector<dealii::Tensor<2, targetdim> > &values) const
+      Network_ElementDataContainerInternal<dim>::GetHessiansControl (std::string name,
+          std::vector<
+          dealii::Tensor<
+          2,
+          targetdim> > &values) const
       {
-        this->GetHessians<targetdim>(this->GetFEValuesControl(), name,
-                                     values);
+        this->GetHessians<targetdim> (this->GetFEValuesControl (), name,
+                                      values);
       }
 
       /***********************************************************************/
-      template<int dim>
+      template <int dim>
       void
-      Network_ElementDataContainerInternal<dim>::GetLaplaciansState(
-        std::string name, std::vector<double> &values) const
+      Network_ElementDataContainerInternal<dim>::GetLaplaciansState (std::string name,
+          std::vector<
+          double> &values) const
       {
-        this->GetLaplacians(this->GetFEValuesState(), name, values);
+        this->GetLaplacians (this->GetFEValuesState (), name, values);
       }
 
       /***********************************************************************/
-      template<int dim>
+      template <int dim>
       void
-      Network_ElementDataContainerInternal<dim>::GetLaplaciansState(
-        std::string name, std::vector<dealii::Vector<double> > &values) const
+      Network_ElementDataContainerInternal<dim>::GetLaplaciansState (std::string name,
+          std::vector<
+          dealii::Vector<
+          double> > &values) const
       {
-        this->GetLaplacians(this->GetFEValuesState(), name, values);
+        this->GetLaplacians (this->GetFEValuesState (), name, values);
       }
       /***********************************************************************/
-      template<int dim>
+      template <int dim>
       void
-      Network_ElementDataContainerInternal<dim>::GetLaplaciansControl(
-        std::string name, std::vector<double> &values) const
+      Network_ElementDataContainerInternal<dim>::GetLaplaciansControl (std::string name,
+          std::vector<
+          double> &values) const
       {
-        this->GetLaplacians(this->GetFEValuesControl(), name, values);
+        this->GetLaplacians (this->GetFEValuesControl (), name, values);
       }
 
       /***********************************************************************/
-      template<int dim>
+      template <int dim>
       void
-      Network_ElementDataContainerInternal<dim>::GetLaplaciansControl(
-        std::string name, std::vector<dealii::Vector<double> > &values) const
+      Network_ElementDataContainerInternal<dim>::GetLaplaciansControl (std::string name,
+          std::vector<
+          dealii::Vector<
+          double> > &values) const
       {
-        this->GetLaplacians(this->GetFEValuesControl(), name, values);
+        this->GetLaplacians (this->GetFEValuesControl (), name, values);
       }
       /***********************************************************************/
-      template<int dim>
+      template <int dim>
       void
-      Network_ElementDataContainerInternal<dim>::GetValues(
-        const DOpEWrapper::FEValues<dim> &fe_values, std::string name,
-        std::vector<double> &values) const
+      Network_ElementDataContainerInternal<dim>::GetValues (const DOpEWrapper::FEValues<
+                                                            dim> &fe_values,
+                                                            std::string name,
+                                                            std::vector<double> &values) const
       {
         typename std::map<std::string, const dealii::BlockVector<double> *>::const_iterator it =
-          this->GetDomainValues().find(name);
-        if (it == this->GetDomainValues().end())
+          this->GetDomainValues ().find (name);
+        if (it == this->GetDomainValues ().end ())
           {
-            throw DOpEException("Did not find " + name,
-                                "Network_ElementDataContainer::GetValues");
+            throw DOpEException ("Did not find " + name,
+                                 "Network_ElementDataContainer::GetValues");
           }
-        fe_values.get_function_values(it->second->block(pipe_), values);
+        fe_values.get_function_values (it->second->block (pipe_), values);
       }
 
       /***********************************************************************/
-      template<int dim>
+      template <int dim>
       void
-      Network_ElementDataContainerInternal<dim>::GetValues(
-        const DOpEWrapper::FEValues<dim> &fe_values, std::string name,
-        std::vector<dealii::Vector<double> > &values) const
+      Network_ElementDataContainerInternal<dim>::GetValues (const DOpEWrapper::FEValues<
+                                                            dim> &fe_values,
+                                                            std::string name,
+                                                            std::vector<
+                                                            dealii::Vector<
+                                                            double> > &values) const
       {
         typename std::map<std::string, const dealii::BlockVector<double> *>::const_iterator it =
-          this->GetDomainValues().find(name);
-        if (it == this->GetDomainValues().end())
+          this->GetDomainValues ().find (name);
+        if (it == this->GetDomainValues ().end ())
           {
-            throw DOpEException("Did not find " + name,
-                                "Network_ElementDataContainer::GetValues");
+            throw DOpEException ("Did not find " + name,
+                                 "Network_ElementDataContainer::GetValues");
           }
-        fe_values.get_function_values(it->second->block(pipe_), values);
-      }
-
-      /***********************************************************************/
-
-      template<int dim>
-      template<int targetdim>
-      void
-      Network_ElementDataContainerInternal<dim>::GetGrads(
-        const DOpEWrapper::FEValues<dim> &fe_values, std::string name,
-        std::vector<dealii::Tensor<1, targetdim> > &values) const
-      {
-        typename std::map<std::string, const dealii::BlockVector<double> *>::const_iterator it =
-          this->GetDomainValues().find(name);
-        if (it == this->GetDomainValues().end())
-          {
-            throw DOpEException("Did not find " + name,
-                                "Network_ElementDataContainerInternal::GetGrads");
-          }
-        fe_values.get_function_gradients(it->second->block(pipe_), values);
+        fe_values.get_function_values (it->second->block (pipe_), values);
       }
 
       /***********************************************************************/
 
-      template<int dim>
-      template<int targetdim>
+      template <int dim>
+      template <int targetdim>
       void
-      Network_ElementDataContainerInternal<dim>::GetGrads(
-        const DOpEWrapper::FEValues<dim> &fe_values,
-        std::string name,
-        std::vector<std::vector<dealii::Tensor<1, targetdim> > > &values) const
+      Network_ElementDataContainerInternal<dim>::GetGrads (const DOpEWrapper::FEValues<
+                                                           dim> &fe_values,
+                                                           std::string name,
+                                                           std::vector<
+                                                           dealii::Tensor<
+                                                           1,
+                                                           targetdim> > &values) const
       {
         typename std::map<std::string, const dealii::BlockVector<double> *>::const_iterator it =
-          this->GetDomainValues().find(name);
-        if (it == this->GetDomainValues().end())
+          this->GetDomainValues ().find (name);
+        if (it == this->GetDomainValues ().end ())
           {
-            throw DOpEException("Did not find " + name,
-                                "Network_ElementDataContainerInternal::GetGrads");
+            throw DOpEException ("Did not find " + name,
+                                 "Network_ElementDataContainerInternal::GetGrads");
           }
-        fe_values.get_function_gradients(it->second->block(pipe_), values);
+        fe_values.get_function_gradients (it->second->block (pipe_),
+                                          values);
       }
 
       /***********************************************************************/
 
-      template<int dim>
+      template <int dim>
+      template <int targetdim>
       void
-      Network_ElementDataContainerInternal<dim>::GetLaplacians(
-        const DOpEWrapper::FEValues<dim> &fe_values, std::string name,
-        std::vector<double> &values) const
+      Network_ElementDataContainerInternal<dim>::GetGrads (const DOpEWrapper::FEValues<
+                                                           dim> &fe_values,
+                                                           std::string name,
+                                                           std::vector<
+                                                           std::vector<
+                                                           dealii::Tensor<
+                                                           1,
+                                                           targetdim> > > &values) const
       {
         typename std::map<std::string, const dealii::BlockVector<double> *>::const_iterator it =
-          this->GetDomainValues().find(name);
-        if (it == this->GetDomainValues().end())
+          this->GetDomainValues ().find (name);
+        if (it == this->GetDomainValues ().end ())
           {
-            throw DOpEException("Did not find " + name,
-                                "Network_ElementDataContainerInternal::GetLaplacians");
+            throw DOpEException ("Did not find " + name,
+                                 "Network_ElementDataContainerInternal::GetGrads");
           }
-        fe_values.get_function_laplacians(it->second->block(pipe_), values);
+        fe_values.get_function_gradients (it->second->block (pipe_),
+                                          values);
       }
 
       /***********************************************************************/
 
-      template<int dim>
+      template <int dim>
       void
-      Network_ElementDataContainerInternal<dim>::GetLaplacians(
-        const DOpEWrapper::FEValues<dim> &fe_values, std::string name,
-        std::vector<dealii::Vector<double> > &values) const
+      Network_ElementDataContainerInternal<dim>::GetLaplacians (const DOpEWrapper::FEValues<
+                                                                dim> &fe_values,
+                                                                std::string name,
+                                                                std::vector<
+                                                                double> &values) const
       {
         typename std::map<std::string, const dealii::BlockVector<double> *>::const_iterator it =
-          this->GetDomainValues().find(name);
-        if (it == this->GetDomainValues().end())
+          this->GetDomainValues ().find (name);
+        if (it == this->GetDomainValues ().end ())
           {
-            throw DOpEException("Did not find " + name,
-                                "Network_ElementDataContainerInternal::GetLaplacians");
+            throw DOpEException ("Did not find " + name,
+                                 "Network_ElementDataContainerInternal::GetLaplacians");
           }
-        fe_values.get_function_laplacians(it->second->block(pipe_), values);
+        fe_values.get_function_laplacians (it->second->block (pipe_), values);
       }
 
       /***********************************************************************/
 
-      template<int dim>
-      template<int targetdim>
+      template <int dim>
       void
-      Network_ElementDataContainerInternal<dim>::GetHessians(
-        const DOpEWrapper::FEValues<dim> &fe_values,
-        std::string name,
-        std::vector<std::vector<dealii::Tensor<2, targetdim> > > &values) const
+      Network_ElementDataContainerInternal<dim>::GetLaplacians (const DOpEWrapper::FEValues<
+                                                                dim> &fe_values,
+                                                                std::string name,
+                                                                std::vector<
+                                                                dealii::Vector<
+                                                                double> > &values) const
       {
         typename std::map<std::string, const dealii::BlockVector<double> *>::const_iterator it =
-          this->GetDomainValues().find(name);
-        if (it == this->GetDomainValues().end())
+          this->GetDomainValues ().find (name);
+        if (it == this->GetDomainValues ().end ())
           {
-            throw DOpEException("Did not find " + name,
-                                "Network_ElementDataContainerInternal::GetGrads");
+            throw DOpEException ("Did not find " + name,
+                                 "Network_ElementDataContainerInternal::GetLaplacians");
           }
-        fe_values.get_function_hessians(it->second->block(pipe_), values);
+        fe_values.get_function_laplacians (it->second->block (pipe_), values);
       }
 
       /***********************************************************************/
 
-      template<int dim>
-      template<int targetdim>
+      template <int dim>
+      template <int targetdim>
       void
-      Network_ElementDataContainerInternal<dim>::GetHessians(
-        const DOpEWrapper::FEValues<dim> &fe_values, std::string name,
-        std::vector<dealii::Tensor<2, targetdim> > &values) const
+      Network_ElementDataContainerInternal<dim>::GetHessians (const DOpEWrapper::FEValues<
+                                                              dim> &fe_values,
+                                                              std::string name,
+                                                              std::vector<
+                                                              std::vector<
+                                                              dealii::Tensor<
+                                                              2,
+                                                              targetdim> > > &values) const
       {
         typename std::map<std::string, const dealii::BlockVector<double> *>::const_iterator it =
-          this->GetDomainValues().find(name);
-        if (it == this->GetDomainValues().end())
+          this->GetDomainValues ().find (name);
+        if (it == this->GetDomainValues ().end ())
           {
-            throw DOpEException("Did not find " + name,
-                                "Network_ElementDataContainerInternal::GetGrads");
+            throw DOpEException ("Did not find " + name,
+                                 "Network_ElementDataContainerInternal::GetGrads");
           }
-        fe_values.get_function_hessians(it->second->block(pipe_), values);
+        fe_values.get_function_hessians (it->second->block (pipe_), values);
+      }
+
+      /***********************************************************************/
+
+      template <int dim>
+      template <int targetdim>
+      void
+      Network_ElementDataContainerInternal<dim>::GetHessians (const DOpEWrapper::FEValues<
+                                                              dim> &fe_values,
+                                                              std::string name,
+                                                              std::vector<
+                                                              dealii::Tensor<
+                                                              2,
+                                                              targetdim> > &values) const
+      {
+        typename std::map<std::string, const dealii::BlockVector<double> *>::const_iterator it =
+          this->GetDomainValues ().find (name);
+        if (it == this->GetDomainValues ().end ())
+          {
+            throw DOpEException ("Did not find " + name,
+                                 "Network_ElementDataContainerInternal::GetGrads");
+          }
+        fe_values.get_function_hessians (it->second->block (pipe_), values);
       }
 
     } //end of namespace edcinternal

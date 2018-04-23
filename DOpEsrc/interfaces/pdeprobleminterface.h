@@ -1,25 +1,25 @@
 /**
-*
-* Copyright (C) 2012-2014 by the DOpElib authors
-*
-* This file is part of DOpElib
-*
-* DOpElib is free software: you can redistribute it
-* and/or modify it under the terms of the GNU General Public
-* License as published by the Free Software Foundation, either
-* version 3 of the License, or (at your option) any later
-* version.
-*
-* DOpElib is distributed in the hope that it will be
-* useful, but WITHOUT ANY WARRANTY; without even the implied
-* warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-* PURPOSE.  See the GNU General Public License for more
-* details.
-*
-* Please refer to the file LICENSE.TXT included in this distribution
-* for further information on this license.
-*
-**/
+ *
+ * Copyright (C) 2012-2014 by the DOpElib authors
+ *
+ * This file is part of DOpElib
+ *
+ * DOpElib is free software: you can redistribute it
+ * and/or modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation, either
+ * version 3 of the License, or (at your option) any later
+ * version.
+ *
+ * DOpElib is distributed in the hope that it will be
+ * useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+ * PURPOSE.  See the GNU General Public License for more
+ * details.
+ *
+ * Please refer to the file LICENSE.TXT included in this distribution
+ * for further information on this license.
+ *
+ **/
 
 #ifndef PDEPROBLEM_INTERFACE_H_
 #define PDEPROBLEM_INTERFACE_H_
@@ -38,9 +38,9 @@
 namespace DOpE
 {
   //Predeclaration necessary
-  template<typename VECTOR>
+  template <typename VECTOR>
   class DOpEOutputHandler;
-  template<typename VECTOR>
+  template <typename VECTOR>
   class DOpEExceptionHandler;
   /////////////////////////////
 
@@ -49,33 +49,34 @@ namespace DOpE
    * i.e., those in which the PDE has been elimiated for
    * the solution of stationary and nonstationary PDEs.
    */
-  template<typename PROBLEM, typename VECTOR, int dealdim>
+  template <typename PROBLEM, typename VECTOR, int dealdim>
   class PDEProblemInterface : public ReducedProblemInterface_Base<VECTOR>
   {
   public:
-    PDEProblemInterface(PROBLEM *OP, int base_priority = 0)
-      : ReducedProblemInterface_Base<VECTOR>()
+    PDEProblemInterface (PROBLEM *OP,
+                         int base_priority = 0)
+      : ReducedProblemInterface_Base<VECTOR> ()
     {
       OP_ = OP;
       base_priority_ = base_priority;
-      post_index_ = "_" + this->GetProblem()->GetName();
+      post_index_ = "_" + this->GetProblem ()->GetName ();
     }
     virtual
-    ~PDEProblemInterface()
+    ~PDEProblemInterface ()
     {
     }
 
     /******************************************************/
 
     /**
-    * Reinitialization when needed to adjust vector and matrix
-    * sizes.
+     * Reinitialization when needed to adjust vector and matrix
+     * sizes.
      *
      */
     virtual void
-    ReInit()
+    ReInit ()
     {
-      this->GetProblem()->ReInit("reduced");
+      this->GetProblem ()->ReInit ("reduced");
     }
 
     /******************************************************/
@@ -83,11 +84,11 @@ namespace DOpE
     /**
      * Evaluation of the functionals in the solution of the
      * PDE. This function needs to be specified separately for
-    * stationary and non stationary problems since the
-    * evaluation of the functionals differs.
+     * stationary and non stationary problems since the
+     * evaluation of the functionals differs.
      */
     virtual void
-    ComputeReducedFunctionals()=0;
+    ComputeReducedFunctionals ()=0;
 
     /******************************************************/
 
@@ -96,22 +97,23 @@ namespace DOpE
      * FEValues after the type has changed. See also the documentation of SetType in optproblemcontainer.h
      */
     void
-    SetProblemType(std::string type, unsigned int num = 0)
+    SetProblemType (std::string type,
+                    unsigned int num = 0)
     {
-      this->GetProblem()->SetType(type, num);
+      this->GetProblem ()->SetType (type, num);
     }
 
     /**
      * Initializes the HigherOrderDWRDataContainer
      * (we need GetStateNBlocks() and GetStateBlockComponent()!)
      */
-    template<class DWRC>
+    template <class DWRC>
     void
-    InitializeDWRC(DWRC &dwrc)
+    InitializeDWRC (DWRC &dwrc)
     {
-      dwrc.Initialize(GetProblem()->GetSpaceTimeHandler(),
-                      GetProblem()->GetStateNBlocks(),
-                      GetProblem()->GetStateBlockComponent());
+      dwrc.Initialize (GetProblem ()->GetSpaceTimeHandler (),
+                       GetProblem ()->GetStateNBlocks (),
+                       GetProblem ()->GetStateBlockComponent ());
     }
 
   protected:
@@ -120,28 +122,28 @@ namespace DOpE
      * there for further documentation of the method.
      */
     virtual const std::map<std::string, unsigned int> &
-    GetFunctionalPosition() const
+    GetFunctionalPosition () const
     {
-      return GetProblem()->GetFunctionalPosition();
+      return GetProblem ()->GetFunctionalPosition ();
     }
 
     PROBLEM *
-    GetProblem()
+    GetProblem ()
     {
       return OP_;
     }
     const PROBLEM *
-    GetProblem() const
+    GetProblem () const
     {
       return OP_;
     }
     std::string
-    GetPostIndex()
+    GetPostIndex ()
     {
       return post_index_;
     }
     int
-    GetBasePriority()
+    GetBasePriority ()
     {
       return base_priority_;
     }

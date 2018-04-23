@@ -50,16 +50,18 @@ namespace DOpE
    * @tparam <PROBLEM>    The problem container. See, e.g., OptProblemContainer
    * @tparam <VECTOR>     The vector type of the solution.
    */
-  template<typename PROBLEM, typename VECTOR>
+  template <typename PROBLEM, typename VECTOR>
   class Reduced_SnoptAlgorithm : public ReducedAlgorithm<PROBLEM, VECTOR>
   {
   public:
-    Reduced_SnoptAlgorithm(PROBLEM *OP,
-                           ReducedProblemInterface<PROBLEM, VECTOR> *S,
-                           DOpEtypes::VectorStorageType vector_behavior, ParameterReader &param_reader,
-                           DOpEExceptionHandler<VECTOR> *Except = NULL,
-                           DOpEOutputHandler<VECTOR> *Output = NULL, int base_priority = 0);
-    ~Reduced_SnoptAlgorithm();
+    Reduced_SnoptAlgorithm (PROBLEM *OP,
+                            ReducedProblemInterface<PROBLEM, VECTOR> *S,
+                            DOpEtypes::VectorStorageType vector_behavior,
+                            ParameterReader &param_reader,
+                            DOpEExceptionHandler<VECTOR> *Except = NULL,
+                            DOpEOutputHandler<VECTOR> *Output = NULL,
+                            int base_priority = 0);
+    ~Reduced_SnoptAlgorithm ();
 
     /**
      * Used to declare run time parameters. This is needed to declare all
@@ -67,7 +69,7 @@ namespace DOpE
      * declared.
      */
     static void
-    declare_params(ParameterReader &param_reader);
+    declare_params (ParameterReader &param_reader);
 
     /**
      * This solves an Optimizationproblem in only the control variable
@@ -82,7 +84,8 @@ namespace DOpE
      *                    file. Its default value is negative, so that it has no influence if not specified.
      */
     virtual int
-    Solve(ControlVector<VECTOR> &q, double global_tol = -1.);
+    Solve (ControlVector<VECTOR> &q,
+           double global_tol = -1.);
 
   protected:
 
@@ -105,81 +108,93 @@ namespace DOpE
 
   /******************************************************/
 
-  template<typename PROBLEM, typename VECTOR>
+  template <typename PROBLEM, typename VECTOR>
   void
-  Reduced_SnoptAlgorithm<PROBLEM, VECTOR>::declare_params(
-    ParameterReader &param_reader)
+  Reduced_SnoptAlgorithm<PROBLEM, VECTOR>::declare_params (ParameterReader &param_reader)
   {
-    param_reader.SetSubsection("reduced_snoptalgorithm parameters");
-    param_reader.declare_entry("function precision", "1.e-6",
-                               Patterns::Double(0, 1),
-                               "Declares how many digits we assume to have computed correctly, this should correspond to the tolerance used for the PDE solve");
-    param_reader.declare_entry("feasibility tol", "1.e-5",
-                               Patterns::Double(0, 1),
-                               "Tolerance with respect to the feasibility of the constraints.");
-    param_reader.declare_entry("optimality tol", "1.e-5",
-                               Patterns::Double(0, 1),
-                               "Tolerance with respect to the optimality condition.");
-    param_reader.declare_entry("max inner iterations", "500",
-                               Patterns::Integer(0),
-                               "Maximal allowed number of inner iterations over all outer iterations");
-    param_reader.declare_entry("max iterations", "1000", Patterns::Integer(0),
-                               "Maximal allowed number of outer iterations over all outer iterations");
-    param_reader.declare_entry("capture snopt output", "true",
-                               Patterns::Bool(),
-                               "Select if the snopt output should be stored in log file");
-    ReducedAlgorithm<PROBLEM, VECTOR>::declare_params(param_reader);
+    param_reader.SetSubsection ("reduced_snoptalgorithm parameters");
+    param_reader.declare_entry ("function precision", "1.e-6",
+                                Patterns::Double (0, 1),
+                                "Declares how many digits we assume to have computed correctly, this should correspond to the tolerance used for the PDE solve");
+    param_reader.declare_entry ("feasibility tol", "1.e-5",
+                                Patterns::Double (0, 1),
+                                "Tolerance with respect to the feasibility of the constraints.");
+    param_reader.declare_entry ("optimality tol", "1.e-5",
+                                Patterns::Double (0, 1),
+                                "Tolerance with respect to the optimality condition.");
+    param_reader.declare_entry ("max inner iterations", "500",
+                                Patterns::Integer (0),
+                                "Maximal allowed number of inner iterations over all outer iterations");
+    param_reader.declare_entry ("max iterations", "1000",
+                                Patterns::Integer (0),
+                                "Maximal allowed number of outer iterations over all outer iterations");
+    param_reader.declare_entry ("capture snopt output", "true",
+                                Patterns::Bool (),
+                                "Select if the snopt output should be stored in log file");
+    ReducedAlgorithm<PROBLEM, VECTOR>::declare_params (param_reader);
   }
 
   /******************************************************/
 
-  template<typename PROBLEM, typename VECTOR>
-  Reduced_SnoptAlgorithm<PROBLEM, VECTOR>::Reduced_SnoptAlgorithm(PROBLEM *OP,
-      ReducedProblemInterface<PROBLEM, VECTOR> *S,
-      DOpEtypes::VectorStorageType vector_behavior, ParameterReader &param_reader,
-      DOpEExceptionHandler<VECTOR> *Except, DOpEOutputHandler<VECTOR> *Output,
-      int base_priority) :
-    ReducedAlgorithm<PROBLEM, VECTOR>(OP, S, param_reader, Except, Output,
-                                      base_priority)
+  template <typename PROBLEM, typename VECTOR>
+  Reduced_SnoptAlgorithm<PROBLEM, VECTOR>::Reduced_SnoptAlgorithm (PROBLEM *OP,
+      ReducedProblemInterface<
+      PROBLEM,
+      VECTOR> *S,
+      DOpEtypes::VectorStorageType vector_behavior,
+      ParameterReader &param_reader,
+      DOpEExceptionHandler<
+      VECTOR> *Except,
+      DOpEOutputHandler<
+      VECTOR> *Output,
+      int base_priority)
+    : ReducedAlgorithm<PROBLEM, VECTOR> (OP, S, param_reader, Except,
+                                         Output, base_priority)
   {
 
-    param_reader.SetSubsection("reduced_snoptalgorithm parameters");
+    param_reader.SetSubsection ("reduced_snoptalgorithm parameters");
 
-    func_prec_ = param_reader.get_double("function precision");
-    feas_tol_ = param_reader.get_double("feasibility tol");
-    opt_tol_ = param_reader.get_double("optimality tol");
-    max_inner_iter_ = param_reader.get_integer("max inner iterations");
-    max_outer_iter_ = param_reader.get_integer("max iterations");
-    capture_out_ = param_reader.get_bool("capture snopt output");
+    func_prec_ = param_reader.get_double ("function precision");
+    feas_tol_ = param_reader.get_double ("feasibility tol");
+    opt_tol_ = param_reader.get_double ("optimality tol");
+    max_inner_iter_ = param_reader.get_integer ("max inner iterations");
+    max_outer_iter_ = param_reader.get_integer ("max iterations");
+    capture_out_ = param_reader.get_bool ("capture snopt output");
 
     vector_behavior_ = vector_behavior;
-    postindex_ = "_" + this->GetProblem()->GetName();
+    postindex_ = "_" + this->GetProblem ()->GetName ();
 
-    DOpEtypes::ControlType ct = S->GetProblem()->GetSpaceTimeHandler()->GetControlType();
-    if ((ct != DOpEtypes::ControlType::initial) && (ct != DOpEtypes::ControlType::stationary))
+    DOpEtypes::ControlType ct =
+      S->GetProblem ()->GetSpaceTimeHandler ()->GetControlType ();
+    if ((ct != DOpEtypes::ControlType::initial) && (ct
+                                                    != DOpEtypes::ControlType::stationary))
       {
-        throw DOpEException("The ControlType: "+ DOpEtypesToString(ct) + " is not supported.",
-                            "Reduced_SnoptAlgorithm::Reduced_SnoptAlgorithm");
+        throw DOpEException (
+          "The ControlType: " + DOpEtypesToString (ct)
+          + " is not supported.",
+          "Reduced_SnoptAlgorithm::Reduced_SnoptAlgorithm");
       }
   }
 
   /******************************************************/
 
-  template<typename PROBLEM, typename VECTOR>
-  Reduced_SnoptAlgorithm<PROBLEM, VECTOR>::~Reduced_SnoptAlgorithm()
+  template <typename PROBLEM, typename VECTOR>
+  Reduced_SnoptAlgorithm<PROBLEM, VECTOR>::~Reduced_SnoptAlgorithm ()
   {
 
   }
 
   /******************************************************/
 
-  template<typename PROBLEM, typename VECTOR>
+  template <typename PROBLEM, typename VECTOR>
   int
-  Reduced_SnoptAlgorithm<PROBLEM, VECTOR>::Solve(ControlVector<VECTOR> &q,
-                                                 double global_tol)
+  Reduced_SnoptAlgorithm<PROBLEM, VECTOR>::Solve (ControlVector<VECTOR> &q,
+                                                  double global_tol)
   {
 #ifndef DOPELIB_WITH_SNOPT
-    throw DOpEException("To use this algorithm you need to have SNOPT installed! To use this set the DOPELIB_WITH_SNOPT CompilerFlag.","Reduced_SnoptAlgorithm::Solve");
+    throw DOpEException (
+      "To use this algorithm you need to have SNOPT installed! To use this set the DOPELIB_WITH_SNOPT CompilerFlag.",
+      "Reduced_SnoptAlgorithm::Solve");
 #else
     q.ReInit();
 
@@ -254,7 +269,7 @@ namespace DOpE
 
       integer lenG = n*(neF); //We have that the derivative of J and the global constraints
       //are nonzero w.r.t. all components.
-      integer neG = lenG;     //Predefine the number of valid entries in iGfun and jGvar will be lenG.
+      integer neG = lenG;//Predefine the number of valid entries in iGfun and jGvar will be lenG.
       integer *iGfun = new integer[lenG];
       integer *jGvar = new integer[lenG];
 
@@ -430,7 +445,7 @@ namespace DOpE
     ConstraintVector<VECTOR> constraints(this->GetReducedProblem()->GetProblem()->GetSpaceTimeHandler(),vector_behavior_);
     ControlVector<VECTOR> tmp(this->GetReducedProblem()->GetProblem()->GetSpaceTimeHandler(),vector_behavior_);
     VECTOR &ref_x = tmp.GetSpacialVector();
-    assert((int) ref_x.size() ==  *(data.n));
+    assert((int) ref_x.size() == *(data.n));
     for (unsigned int i=0; i < ref_x.size(); i++)
       ref_x(i) = (data.x)[i];
 

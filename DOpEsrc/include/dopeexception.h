@@ -1,25 +1,25 @@
 /**
-*
-* Copyright (C) 2012-2014 by the DOpElib authors
-*
-* This file is part of DOpElib
-*
-* DOpElib is free software: you can redistribute it
-* and/or modify it under the terms of the GNU General Public
-* License as published by the Free Software Foundation, either
-* version 3 of the License, or (at your option) any later
-* version.
-*
-* DOpElib is distributed in the hope that it will be
-* useful, but WITHOUT ANY WARRANTY; without even the implied
-* warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-* PURPOSE.  See the GNU General Public License for more
-* details.
-*
-* Please refer to the file LICENSE.TXT included in this distribution
-* for further information on this license.
-*
-**/
+ *
+ * Copyright (C) 2012-2014 by the DOpElib authors
+ *
+ * This file is part of DOpElib
+ *
+ * DOpElib is free software: you can redistribute it
+ * and/or modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation, either
+ * version 3 of the License, or (at your option) any later
+ * version.
+ *
+ * DOpElib is distributed in the hope that it will be
+ * useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+ * PURPOSE.  See the GNU General Public License for more
+ * details.
+ *
+ * Please refer to the file LICENSE.TXT included in this distribution
+ * for further information on this license.
+ *
+ **/
 
 #ifndef DOPE_EXCEPTION_H_
 #define DOPE_EXCEPTION_H_
@@ -41,20 +41,24 @@ namespace DOpE
      * @param message          An (hopefully) informative error message, e.g., what is wrong.
      * @param thrower          Information on where (wich method) the exception occured.
      */
-    DOpEException(std::string message, std::string thrower="unspecified throwing instance")
+    DOpEException (std::string message,
+                   std::string thrower = "unspecified throwing instance")
     {
       msg_ = message;
       thrower_ = thrower;
     }
 
-    ~DOpEException() {}
+    ~DOpEException ()
+    {
+    }
 
     /**
      * Access method for the stored error message.
      *
      * @return A string containing the message by which this object was initialized.
      */
-    std::string GetErrorMessage()
+    std::string
+    GetErrorMessage ()
     {
       return msg_;
     }
@@ -63,11 +67,13 @@ namespace DOpE
      *
      * @return A string containing the throwing instance by which this object was initialized.
      */
-    std::string GetThrowingInstance()
+    std::string
+    GetThrowingInstance ()
     {
-      return  thrower_;
+      return thrower_;
     }
-    virtual std::string GetName()
+    virtual std::string
+    GetName ()
     {
       return "DOpEException";
     }
@@ -85,10 +91,14 @@ namespace DOpE
   class DOpEIterationException : public DOpEException
   {
   public:
-    DOpEIterationException(std::string message, std::string thrower="unspecified throwing instance")
-      : DOpEException(message,thrower)
-    {}
-    virtual std::string GetName()
+    DOpEIterationException (std::string message,
+                            std::string thrower =
+                              "unspecified throwing instance")
+      : DOpEException (message, thrower)
+    {
+    }
+    virtual std::string
+    GetName ()
     {
       return "DOpEIterationException";
     }
@@ -102,10 +112,14 @@ namespace DOpE
   class DOpENegativeCurvatureException : public DOpEException
   {
   public:
-    DOpENegativeCurvatureException(std::string message, std::string thrower="unspecified throwing instance")
-      : DOpEException(message,thrower)
-    {}
-    virtual std::string GetName()
+    DOpENegativeCurvatureException (std::string message,
+                                    std::string thrower =
+                                      "unspecified throwing instance")
+      : DOpEException (message, thrower)
+    {
+    }
+    virtual std::string
+    GetName ()
     {
       return "DOpENegativeCurvatureException";
     }

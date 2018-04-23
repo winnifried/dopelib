@@ -55,18 +55,18 @@ namespace DOpE
    * @tparam <dealdim>         The dimension of the domain for the state.
    *
    */
-  template<
-    template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
-    template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
-    template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
-  class ConstraintInterface : public FunctionalInterface<EDC, FDC, DH,
-    VECTOR, dopedim, dealdim>
+  template <
+    template <template <int, int> class DH, typename VECTOR, int dealdim> class EDC,
+    template <template <int, int> class DH, typename VECTOR, int dealdim> class FDC,
+    template <int, int> class DH, typename VECTOR, int dopedim, int dealdim>
+  class ConstraintInterface : public FunctionalInterface<EDC, FDC, DH, VECTOR,
+    dopedim, dealdim>
   {
   public:
-    ConstraintInterface()
+    ConstraintInterface ()
     {
     }
-    ~ConstraintInterface()
+    ~ConstraintInterface ()
     {
     }
 
@@ -85,8 +85,8 @@ namespace DOpE
      *                         considered to be infeasible.
      */
     virtual void
-    EvaluateLocalControlConstraints(const VECTOR &control,
-                                    VECTOR &constraints) = 0;
+    EvaluateLocalControlConstraints (const VECTOR &control,
+                                     VECTOR &constraints) = 0;
 
     /**
      *  This function returns the lower and upper box constraints
@@ -102,10 +102,12 @@ namespace DOpE
      *               size as the control.
      */
     virtual void
-    GetControlBoxConstraints(VECTOR &lb, VECTOR &ub) const = 0;
+    GetControlBoxConstraints (VECTOR &lb,
+                              VECTOR &ub) const = 0;
 
     void
-    SetProblemType(std::string type, unsigned int num)
+    SetProblemType (std::string type,
+                    unsigned int num)
     {
       problem_type_num_ = num;
       problem_type_ = type;
@@ -121,18 +123,18 @@ namespace DOpE
      * @param g   The vector to be transformed.
      */
     virtual void
-    PostProcessConstraints(ConstraintVector<VECTOR> & /*g*/) const
+    PostProcessConstraints (ConstraintVector<VECTOR> & /*g*/) const
     {
     }
 
   protected:
     std::string
-    GetProblemType() const
+    GetProblemType () const
     {
       return problem_type_;
     }
     unsigned int
-    GetProblemTypeNum() const
+    GetProblemTypeNum () const
     {
       return problem_type_num_;
     }

@@ -46,11 +46,11 @@ namespace DOpEWrapper
    * @tparam <DH>               The dealii DofHandler type used.
    */
 
-  template <int dim, template<int, int> class DH = dealii::DoFHandler>
-  class DataOut : public dealii::DataOut<dim, DH<dim,dim> >
+  template <int dim, template <int, int> class DH = dealii::DoFHandler>
+  class DataOut : public dealii::DataOut<dim, DH<dim, dim> >
   {
   public:
-    DataOut()
+    DataOut ()
     {
     }
   };
