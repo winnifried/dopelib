@@ -397,33 +397,32 @@ namespace DOpE
         }
       state_mesh_transfer_ = new dealii::SolutionTransfer<dealdim, VECTOR, DH<dealdim, dealdim> >(state_dof_handler_);
 
-      // TODO switch
-      if (DOpEtypes::RefinementType::global == ref_type)
+      switch (ref_type)
         {
+        case DOpEtypes::RefinementType::global:
           triangulation_.set_all_refine_flags();
-        }
-      else if (DOpEtypes::RefinementType::fixed_number == ref_type)
-        {
+          break;
+
+        case DOpEtypes::RefinementType::fixed_number:
           GridRefinement::refine_and_coarsen_fixed_number(triangulation_, ref_container.GetLocalErrorIndicators(), ref_container.GetTopFraction(),
                                                           ref_container.GetBottomFraction());
-        }
-      else if (DOpEtypes::RefinementType::fixed_fraction == ref_type)
-        {
+          break;
 
+        case DOpEtypes::RefinementType::fixed_fraction:
           GridRefinement::refine_and_coarsen_fixed_fraction(triangulation_, ref_container.GetLocalErrorIndicators(), ref_container.GetTopFraction(),
                                                             ref_container.GetBottomFraction());
-        }
-      else if (DOpEtypes::RefinementType::optimized == ref_type)
-        {
+          break;
 
+        case DOpEtypes::RefinementType::optimized:
           GridRefinement::refine_and_coarsen_optimize(triangulation_, ref_container.GetLocalErrorIndicators(),
                                                       ref_container.GetConvergenceOrder());
-        }
-      else
-        {
+          break;
+
+        default:
           throw DOpEException("Not implemented for name =" + DOpEtypesToString(ref_type),
                               "MethodOfLines_StateSpaceTimeHandler::RefineStateSpace");
         }
+
       triangulation_.prepare_coarsening_and_refinement();
       if (state_mesh_transfer_ != NULL) state_mesh_transfer_->prepare_for_pure_refinement();
       triangulation_.execute_coarsening_and_refinement();
@@ -507,7 +506,6 @@ namespace DOpE
 
     std::vector<Point<dealdim> > support_points_;
     dealii::SolutionTransfer<dealdim, VECTOR, DH<dealdim, dealdim> > *state_mesh_transfer_;
-
   };
 
 }
