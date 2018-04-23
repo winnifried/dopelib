@@ -79,40 +79,46 @@ namespace DOpEHelper
    */
   std::vector<dealii::IndexSet> split_blockwise(const dealii::IndexSet &source, const std::vector<unsigned int> &block_counts);
 
+
+  // Distributed: vmult, solve, +, -, constraints, assemble into
+  // Ghosted: linearization point, output, anything that evaluates
+
 // TODO document, extend for other types, move to cc
 // TODO template + IsBlock, IsMPI, ...
-  inline TrilinosWrappers::MPI::Vector make_distributed(const TrilinosWrappers::MPI::Vector &source, const bool copy_values = true)
+  inline void make_distributed(TrilinosWrappers::MPI::Vector &source)
   {
-    TrilinosWrappers::MPI::Vector res;
-    res.reinit(source.locally_owned_elements(), source.get_mpi_communicator(), true);
-    if (copy_values) res = source;
-    return res;
+    if (source.has_ghost_elements())
+      {
+        TrilinosWrappers::MPI::Vector res(source);
+        source.reinit(source.locally_owned_elements(), source.get_mpi_communicator(), true);
+        source = res;
+      }
   }
 
-  inline TrilinosWrappers::MPI::BlockVector make_distributed(const TrilinosWrappers::MPI::BlockVector &source, const bool copy_values = true)
+  inline void make_distributed(TrilinosWrappers::MPI::BlockVector &source)
   {
-    std::vector<unsigned int> counts;
-    for (unsigned int b = 0; b < source.n_blocks(); b++)
-      counts.push_back(source.block(b).size());
+    if (source.has_ghost_elements())
+      {
+        std::vector<unsigned int> counts;
+        for (unsigned int b = 0; b < source.n_blocks(); b++)
+          counts.push_back(source.block(b).size());
 
-    const auto block_owned = DOpEHelper::split_blockwise(source.locally_owned_elements(), counts);
+        const auto block_owned = DOpEHelper::split_blockwise(source.locally_owned_elements(), counts);
 
-    TrilinosWrappers::MPI::BlockVector res;
-    res.reinit(block_owned, source.block(0).get_mpi_communicator(), true);
-    if (copy_values) res = source;
-    return res;
+        TrilinosWrappers::MPI::BlockVector res(source);
+        source.reinit(block_owned, source.block(0).get_mpi_communicator(), true);
+        source = res;
+      }
   }
 
-  inline Vector<double> make_distributed(const Vector<double> &source, const bool copy_values = true)
+  inline void make_distributed(Vector<double> &source)
   {
-    (void) copy_values;
-    return source;
+    (void) source;
   }
 
-  inline BlockVector<double> make_distributed(const BlockVector<double> &source, const bool copy_values = true)
+  inline void make_distributed(BlockVector<double> &source)
   {
-    (void) copy_values;
-    return source;
+    (void) source;
   }
 }  //end of namespace
 

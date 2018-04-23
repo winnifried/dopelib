@@ -654,9 +654,7 @@ namespace DOpE
           }  // endif locally owned
 
         for (unsigned int dh = 1; dh < dof_handler.size(); dh++)
-          {
-            element[dh]++;
-          }
+          element[dh]++;
       }
 
     //check if we need the evaluation of PointRhs
@@ -1448,12 +1446,11 @@ namespace DOpE
                                    pde.GetDirichletValues(color, this->GetParamData(),
                                                           this->GetDomainData()), boundary_values, comp_mask);
 
-        for (typename std::map<unsigned int, SCALAR>::const_iterator p =
-               boundary_values.begin(); p != boundary_values.end(); p++)
-          {
-            u(p->first) = p->second;
-          }
+        // Requires distributed vector
+        for (const auto &p : boundary_values)
+          u(p.first) = p.second;
       }
+    u.compress(VectorOperation::insert);
   }
 
 

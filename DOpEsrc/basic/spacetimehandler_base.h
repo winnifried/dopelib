@@ -86,9 +86,9 @@ namespace DOpE
     }
 
     virtual MPI_Comm GetMPIComm() const
-      {
-       return MPI_COMM_WORLD; // TODO user provided
-      }
+    {
+      return MPI_COMM_WORLD; // TODO user provided
+    }
 
     /**
      * This function has to get called after temporal refinement.
