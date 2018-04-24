@@ -188,52 +188,45 @@ namespace DOpE
       std::string algo_level)
   {
     bool build_matrix = force_matrix_build;
+
     VECTOR residual (solution);
     VECTOR du (solution);
     VECTOR u (solution);
+    VECTOR ghosted (solution);
 
     DOpEHelper::make_distributed (u);
     DOpEHelper::make_distributed (du);
     DOpEHelper::make_distributed (residual);
 
     std::stringstream out;
-    MPI_TILL_HERE;
     pde.GetOutputHandler ()->InitNewtonOut (out);
-    MPI_TILL_HERE;
 
     if (apply_boundary_values)
-      {
-        MPI_TILL_HERE;
-        GetIntegrator ().ApplyInitialBoundaryValues (pde, u);
-        MPI_TILL_HERE;
-      }
-    MPI_TILL_HERE;
+      GetIntegrator ().ApplyInitialBoundaryValues (pde, u);
+
     // For the integrator we need a ghosted linearization point
     solution = u;
     GetIntegrator ().AddDomainData ("last_newton_solution", &solution);
-    MPI_TILL_HERE;
     GetIntegrator ().ComputeNonlinearResidual (pde, residual);
-    MPI_TILL_HERE;
-    residual *= -1.;
-    MPI_TILL_HERE;
-    pde.GetOutputHandler ()->SetIterationNumber (0, "PDENewton");
-    MPI_TILL_HERE;
-//      pde.GetOutputHandler()->Write(residual, "Residual" + pde.GetType(), pde.GetDoFType());// TODO !!!
 
-    MPI_TILL_HERE;
+    residual *= -1.;
+
+    {
+      ghosted = residual;
+      pde.GetOutputHandler ()->SetIterationNumber (0, "PDENewton");
+      pde.GetOutputHandler ()->Write (ghosted,
+                                      "Residual" + pde.GetType (), pde.GetDoFType ());
+    }
+
     double res = residual.linfty_norm ();
     double firstres = res;
     double lastres = res;
-
-    MPI_TILL_HERE;
 
     out << algo_level << "Newton step: " << 0 << "\t Residual (abs.): "
         << pde.GetOutputHandler ()->ZeroTolerance (res, 1.0) << "\n";
 
     out << algo_level << "Newton step: " << 0 << "\t Residual (rel.):   "
         << std::scientific << firstres / firstres;
-
-    MPI_TILL_HERE;
 
     pde.GetOutputHandler ()->Write (out, priority);
 
@@ -252,24 +245,28 @@ namespace DOpE
 
         pde.GetOutputHandler ()->SetIterationNumber (iter, "PDENewton");
 
-        MPI_TILL_HERE;
-
         LINEARSOLVER::Solve (pde, GetIntegrator (), residual, du,
                              build_matrix);
 
-        MPI_TILL_HERE;
         //Linesearch
         {
           u += du;
 
-          MPI_TILL_HERE;
+          // We have to update the ghosted solution as well ...
+          solution = u;
           GetIntegrator ().ComputeNonlinearResidual (pde, residual);
 
-          MPI_TILL_HERE;
           residual *= -1.;
 
-//            pde.GetOutputHandler()->Write(residual, "Residual" + pde.GetType(), pde.GetDoFType());// TODO !!!
-//            pde.GetOutputHandler()->Write(du, "Update" + pde.GetType(), pde.GetDoFType());// TODO !!!
+          {
+            ghosted = residual;
+            pde.GetOutputHandler ()->Write (ghosted,
+                                            "Residual" + pde.GetType (), pde.GetDoFType ());
+
+            ghosted = du;
+            pde.GetOutputHandler ()->Write (ghosted,
+                                            "Update" + pde.GetType (), pde.GetDoFType ());
+          }
 
           double newres = residual.linfty_norm ();
           int lineiter = 0;
@@ -280,6 +277,7 @@ namespace DOpE
               build_matrix = true;
               // Reuse of Matrix seems to be a bad idea, rebuild and repeat
               u -= du;
+              solution = u;
               GetIntegrator ().ComputeNonlinearResidual (pde, residual);
               residual *= -1.;
               out << algo_level << "Newton step: " << iter
@@ -311,22 +309,27 @@ namespace DOpE
                         "Line-Iteration count exceeded bounds!",
                         "NewtonSolver::NonlinearSolve");
                     }
+
                   u.add (alpha * (rho - 1.), du);
                   alpha *= rho;
 
+                  solution = u;
                   GetIntegrator ().ComputeNonlinearResidual (pde,
                                                              residual);
                   residual *= -1.;
-//                  pde.GetOutputHandler()->Write(residual, "Residual" + pde.GetType(), pde.GetDoFType()); // TODO !!!
+
+                  {
+                    ghosted = residual;
+                    pde.GetOutputHandler ()->Write (ghosted,
+                                                    "Residual" + pde.GetType (), pde.GetDoFType ());
+                  }
 
                   newres = residual.linfty_norm ();
-
                 }
 
               if (res / lastres > nonlinear_rho_)
-                {
-                  build_matrix = true;
-                }
+                build_matrix = true;
+
               lastres = res;
               res = newres;
 
@@ -339,7 +342,6 @@ namespace DOpE
                   << "\t LineSearch {" << lineiter << "} ";
 
               pde.GetOutputHandler ()->Write (out, priority);
-
             } //End of Linesearch
         }
       }
