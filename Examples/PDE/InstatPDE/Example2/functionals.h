@@ -34,9 +34,9 @@ using namespace DOpE;
 /****************************************************************************************/
 
 template<
-template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
-         template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
-         template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
+  template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
+  template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
+  template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
 class LocalPointFunctionalPressure : public FunctionalInterface<EDC, FDC, DH,
   VECTOR, dopedim, dealdim>
 {
@@ -92,9 +92,9 @@ class LocalPointFunctionalPressure : public FunctionalInterface<EDC, FDC, DH,
 // deflection x
 /****************************************************************************************/
 template<
-template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
-         template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
-         template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
+  template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
+  template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
+  template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
 class LocalPointFunctionalDeflectionX : public FunctionalInterface<EDC, FDC,
   DH, VECTOR, dopedim, dealdim>
 {
@@ -144,9 +144,9 @@ public:
 // deflection y
 /****************************************************************************************/
 template<
-template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
-         template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
-         template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
+  template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
+  template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
+  template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
 class LocalPointFunctionalDeflectionY : public FunctionalInterface<EDC, FDC,
   DH, VECTOR, dopedim, dealdim>
 {
@@ -198,9 +198,9 @@ public:
 /****************************************************************************************/
 
 template<
-template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
-         template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
-         template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
+  template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
+  template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
+  template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
 class LocalBoundaryFaceFunctionalDrag : public FunctionalInterface<EDC, FDC,
   DH, VECTOR, dopedim, dealdim>
 {
@@ -407,9 +407,9 @@ public:
 /****************************************************************************************/
 
 template<
-template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
-         template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
-         template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
+  template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
+  template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
+  template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
 class LocalBoundaryFaceFunctionalLift : public FunctionalInterface<EDC, FDC,
   DH, VECTOR, dopedim, dealdim>
 {

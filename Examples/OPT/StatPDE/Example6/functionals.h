@@ -31,10 +31,10 @@ using namespace dealii;
 using namespace DOpE;
 
 template<
-template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
-         template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
-         template<int, int> class DH, typename VECTOR, int dopedim, int dealdim =
-         dopedim>
+  template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
+  template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
+  template<int, int> class DH, typename VECTOR, int dopedim, int dealdim =
+  dopedim>
 class LocalMeanValueFunctional : public FunctionalInterface<EDC, FDC, DH,
   VECTOR, dopedim, dealdim>
 {
@@ -86,10 +86,10 @@ private:
 /****************************************************************************************/
 
 template<
-template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
-         template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
-         template<int, int> class DH, typename VECTOR, int dopedim, int dealdim =
-         dopedim>
+  template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
+  template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
+  template<int, int> class DH, typename VECTOR, int dopedim, int dealdim =
+  dopedim>
 class LocalPointFunctional : public FunctionalInterface<EDC, FDC, DH, VECTOR,
   dopedim, dealdim>
 {

@@ -78,7 +78,7 @@ namespace DOpE
   * @tparam <dealdim>                   The dimension for the state variable.
   */
   template <typename CONTROLNONLINEARSOLVER, typename CONTROLINTEGRATOR, typename PROBLEM,
-           typename VECTOR, int dopedim, int dealdim>
+            typename VECTOR, int dopedim, int dealdim>
   class VoidReducedProblem : public ReducedProblemInterface<PROBLEM,VECTOR>
   {
   public:

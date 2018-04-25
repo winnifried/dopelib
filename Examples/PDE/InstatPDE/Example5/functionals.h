@@ -35,9 +35,9 @@ const static double PI = 3.14159265359;
 /****************************************************************************************/
 
 template<
-template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
-         template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
-         template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
+  template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
+  template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
+  template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
 class LocalPointFunctional : public FunctionalInterface<ElementDataContainer,
   FaceDataContainer, DH, VECTOR, dopedim, dealdim>
 {
@@ -89,9 +89,9 @@ public:
 /************************************************************************************************************************************************/
 
 template<
-template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
-         template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
-         template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
+  template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
+  template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
+  template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
 class LocalPointFunctional2 : public FunctionalInterface<EDC, FDC, DH, VECTOR,
   dopedim, dealdim>
 {

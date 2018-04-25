@@ -51,7 +51,7 @@ namespace DOpE
     IntegratorDataContainer(const QUADRATURE &quad,
                             const FACEQUADRATURE &face_quad)
       : quad_(&quad), face_quad_(&face_quad), fdc_(NULL), edc_(NULL), mm_fdc_(
-        NULL), mm_edc_(NULL)
+          NULL), mm_edc_(NULL)
     {
     }
 

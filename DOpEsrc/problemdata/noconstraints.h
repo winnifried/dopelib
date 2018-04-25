@@ -35,9 +35,9 @@ namespace DOpE
    * For details on the methods see ConstraintInterface
    */
   template<
-  template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
-           template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
-           template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
+    template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
+    template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
+    template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
   class NoConstraints : public ConstraintInterface<EDC, FDC, DH,
     VECTOR, dopedim, dealdim>
   {

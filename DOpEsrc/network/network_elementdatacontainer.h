@@ -105,7 +105,7 @@ namespace DOpE
       Network_ElementDataContainer(unsigned int pipe, const Quadrature<dim> &quad,
                                    UpdateFlags update_flags,
                                    SpaceTimeHandler<FE, dealii::DoFHandler, SPARSITYPATTERN, dealii::Vector<double>,
-                                   dopedim, dealdim>& sth,
+                                   dopedim, dealdim> &sth,
                                    const std::vector<
                                    typename dealii::DoFHandler<dim>::active_cell_iterator>& element,
                                    const std::map<std::string, const Vector<double>*> &param_values,
@@ -147,7 +147,7 @@ namespace DOpE
       Network_ElementDataContainer(unsigned int pipe, const Quadrature<dim> &quad,
                                    UpdateFlags update_flags,
                                    StateSpaceTimeHandler<FE, dealii::DoFHandler, SPARSITYPATTERN, dealii::Vector<double>,
-                                   dim>& sth,
+                                   dim> &sth,
                                    const std::vector<
                                    typename dealii::DoFHandler<dim>::active_cell_iterator>& element,
                                    const std::map<std::string, const Vector<double>*> &param_values,

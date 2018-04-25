@@ -72,7 +72,7 @@ namespace DOpE
     //TODO This is Pfush needed to split into different subproblems and allow optproblem to
     //be substituted as any of these problems. Can be removed once the splitting is complete.
     AugmentedLagrangianProblem<CONSTRAINTACCESSOR, STH, OPTPROBLEM, dopedim,
-    dealdim, localdim>&
+    dealdim, localdim> &
     GetBaseProblem()
     {
       return *this;

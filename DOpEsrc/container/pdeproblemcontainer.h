@@ -376,7 +376,7 @@ namespace DOpE
     void
     AddFunctional(
       FunctionalInterface<ElementDataContainer, FaceDataContainer, DH,
-      VECTOR, dealdim>* F)
+      VECTOR, dealdim> *F)
     {
       aux_functionals_.push_back(F);
       if (functional_position_.find(F->GetName())
@@ -775,7 +775,7 @@ namespace DOpE
 
     std::vector<
     FunctionalInterface<ElementDataContainer, FaceDataContainer, DH,
-                        VECTOR, dealdim>*> aux_functionals_;
+                        VECTOR, dealdim> *> aux_functionals_;
     std::map<std::string, unsigned int> functional_position_;
 
     unsigned int functional_for_ee_num_;

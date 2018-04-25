@@ -311,7 +311,7 @@ namespace DOpE
       const std::map<std::string, const VECTOR *> &domain_values,
       bool need_neighbour)
       : param_values_(param_values), domain_values_(domain_values), need_neighbour_(
-        need_neighbour)
+          need_neighbour)
     {
     }
 

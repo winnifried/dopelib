@@ -460,7 +460,7 @@ namespace DOpE
   void
   StatPDEProblem<NONLINEARSOLVER, INTEGRATOR, PROBLEM, VECTOR, dealdim>::declare_params(
     ParameterReader &param_reader)
-{
+  {
     NONLINEARSOLVER::declare_params(param_reader);
     param_reader.SetSubsection("output parameters");
     param_reader.declare_entry("number of patches", "0",
@@ -477,10 +477,10 @@ namespace DOpE
     ParameterReader &param_reader, INTEGRATORDATACONT &idc,
     int base_priority)
     : PDEProblemInterface<PROBLEM, VECTOR, dealdim>(OP, base_priority), u_(
-      OP->GetSpaceTimeHandler(), state_behavior, param_reader), z_for_ee_(
+        OP->GetSpaceTimeHandler(), state_behavior, param_reader), z_for_ee_(
         OP->GetSpaceTimeHandler(), state_behavior, param_reader), integrator_(
-          idc), nonlinear_state_solver_(integrator_, param_reader), nonlinear_adjoint_solver_(
-            integrator_, param_reader)
+        idc), nonlinear_state_solver_(integrator_, param_reader), nonlinear_adjoint_solver_(
+        integrator_, param_reader)
   {
     param_reader.SetSubsection("output parameters");
     n_patches_ = param_reader.get_integer("number of patches");
@@ -499,10 +499,10 @@ namespace DOpE
     ParameterReader &param_reader, INTEGRATORDATACONT &idc,
     INTEGRATORDATACONT &idc2, int base_priority)
     : PDEProblemInterface<PROBLEM, VECTOR, dealdim>(OP, base_priority), u_(
-      OP->GetSpaceTimeHandler(), state_behavior, param_reader), z_for_ee_(
+        OP->GetSpaceTimeHandler(), state_behavior, param_reader), z_for_ee_(
         OP->GetSpaceTimeHandler(), state_behavior, param_reader), integrator_(
-          idc, idc2), nonlinear_state_solver_(integrator_, param_reader), nonlinear_adjoint_solver_(
-            integrator_, param_reader)
+        idc, idc2), nonlinear_state_solver_(integrator_, param_reader), nonlinear_adjoint_solver_(
+        integrator_, param_reader)
   {
     //PDEProblems should be ReInited
     {

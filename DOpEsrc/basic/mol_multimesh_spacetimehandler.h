@@ -954,7 +954,7 @@ namespace DOpE
 #endif //Endof explicit instanciation
   /*******************************************************/
   template<template<int, int> class FE, template<int, int> class DH,
-  typename SPARSITYPATTERN, typename VECTOR, int dim>
+           typename SPARSITYPATTERN, typename VECTOR, int dim>
   void
   MethodOfLines_MultiMesh_SpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR,
                                            dim>::FlagIfLeftIsNotFinest(dealii::Triangulation<dim> &left,

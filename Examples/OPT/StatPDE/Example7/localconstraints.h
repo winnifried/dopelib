@@ -34,9 +34,9 @@ namespace DOpE
    * GlobalConstraints are dealt with as a Functional, hence all functions from Functionals are inherited.
    */
   template<
-  template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
-           template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
-           template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
+    template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
+    template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
+    template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
   class LocalConstraint : public ConstraintInterface<EDC, FDC, DH, VECTOR,
     dopedim, dealdim>
   {
