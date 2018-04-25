@@ -654,36 +654,11 @@ namespace DOpE
   void InstatPDEProblem<NONLINEARSOLVER, INTEGRATOR,
        PROBLEM, VECTOR, dealdim>::WriteToFile(const VECTOR &v, std::string name, std::string outfile, std::string dof_type, std::string filetype)
   {
-    if (dof_type == "state")
-      {
-        auto &data_out = this->GetProblem()->GetSpaceTimeHandler()->GetDataOut();
-        data_out.attach_dof_handler(this->GetProblem()->GetSpaceTimeHandler()->GetStateDoFHandler());
+    if (dof_type != "state")
+      throw DOpEException("No such DoFHandler `" + dof_type + "'!",
+                          "InstatPDEProblem::WriteToFile");
 
-        data_out.add_data_vector(v, name);
-        data_out.build_patches();
-
-        std::ofstream output(outfile.c_str());
-
-        if (filetype == ".vtk")
-          {
-            data_out.write_vtk(output);
-          }
-        else if (filetype == ".gpl")
-          {
-            data_out.write_gnuplot(output);
-          }
-        else
-          {
-            throw DOpEException("Don't know how to write filetype `" + filetype + "'!",
-                                "InstatPDEProblem::WriteToFile");
-          }
-        data_out.clear();
-      }
-    else
-      {
-        throw DOpEException("No such DoFHandler `" + dof_type + "'!",
-                            "InstatPDEProblem::WriteToFile");
-      }
+    this->WriteToFile(v, name, outfile, dof_type, filetype);
   }
 
   /******************************************************/

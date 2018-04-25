@@ -630,6 +630,17 @@ namespace DOpE
     }
     /******************************************************/
 
+    /**
+     * Writes vector to file. Delegate to child classes which have the required information.
+     */
+    // TODO enum
+    virtual void
+    WriteToFile (const VECTOR &v,
+                 std::string name,
+                 std::string outfile,
+                 std::string dof_type,
+                 std::string filetype) = 0;
+
   protected:
     /**
      * Call this function if any StateDoF related stuff has changed to invalidate all previous tickets.

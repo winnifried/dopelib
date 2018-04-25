@@ -983,42 +983,11 @@ namespace DOpE
     const VECTOR &v, std::string name, std::string outfile,
     std::string dof_type, std::string filetype)
   {
-    if (dof_type == "state")
-      {
-        auto &data_out =
-          this->GetProblem()->GetSpaceTimeHandler()->GetDataOut();
-        data_out.attach_dof_handler(
-          this->GetProblem()->GetSpaceTimeHandler()->GetStateDoFHandler());
+    if (dof_type != "state")
+      throw DOpEException("No such DoFHandler `" + dof_type + "'!",
+                          "StatPDEProblem::WriteToFile");
 
-        data_out.add_data_vector(v, name);
-        //TODO: mapping[0] is a workaround, as deal does not support interpolate
-        // boundary_values with a mapping collection at this point.
-        data_out.build_patches(
-          this->GetProblem()->GetSpaceTimeHandler()->GetMapping()[0]);
-
-        std::ofstream output(outfile.c_str());
-
-        if (filetype == ".vtk")
-          {
-            data_out.write_vtk(output);
-          }
-        else if (filetype == ".gpl")
-          {
-            data_out.write_gnuplot(output);
-          }
-        else
-          {
-            throw DOpEException(
-              "Don't know how to write filetype `" + filetype + "'!",
-              "StatPDEProblem::WriteToFile");
-          }
-        data_out.clear();
-      }
-    else
-      {
-        throw DOpEException("No such DoFHandler `" + dof_type + "'!",
-                            "StatPDEProblem::WriteToFile");
-      }
+    this->GetProblem()->GetSpaceTimeHandler()->WriteToFile(v, name, outfile, dof_type, filetype);
   }
 
   /******************************************************/

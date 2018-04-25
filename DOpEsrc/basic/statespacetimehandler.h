@@ -354,14 +354,115 @@ namespace DOpE
       return data_out_;
     }
 
+
+    // TODO enum for filetype
+    virtual void
+    WriteToFile (const VECTOR &v,
+                 std::string name,
+                 std::string outfile,
+                 std::string dof_type,
+                 std::string filetype);
+
   protected:
     //we need this here, because we know the type of the DoFHandler in use.
     //This saves us a template argument for statpdeproblem etc.
     DOpEWrapper::DataOut<dealdim, DH> data_out_;
-    const ActiveFEIndexSetterInterface<dealdim> *fe_index_setter_;
+    const ActiveFEIndexSetterInterface<dealdim> *fe_index_setter_ = NULL;
     mutable std::vector<const DOpEWrapper::DoFHandler<dealdim, DH>*> domain_dofhandler_vector_;
-
   };
+
+  template <template <int, int> class FE, template <int, int> class DH,
+            typename SPARSITYPATTERN, typename VECTOR, int dealdim>
+  void
+  StateSpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dealdim>::WriteToFile (const VECTOR &v,
+      std::string name,
+      std::string outfile,
+      std::string dof_type,
+      std::string filetype)
+  {
+    // TODO remove MPI_COMM_WORLD
+    const bool parallel = dealii::Utilities::MPI::n_mpi_processes (
+                            MPI_COMM_WORLD)
+                          > 1;
+
+    if (dof_type == "state")
+      {
+        auto &data_out = GetDataOut ();
+        data_out.attach_dof_handler (GetStateDoFHandler ());
+
+        data_out.add_data_vector (v, name);
+        data_out.build_patches ();
+        // From statpdeproblem.h:
+        // TODO: mapping[0] is a workaround, as deal does not support interpolate
+        // boundary_values with a mapping collection at this point.
+        // data_out.build_patches(GetMapping()[0]);
+
+        std::string _outfile = outfile;
+
+        if (parallel)
+          {
+            Assert(filetype == ".vtu", ExcNotImplemented());
+            const unsigned int rank = Utilities::MPI::this_mpi_process (
+                                        MPI_COMM_WORLD);
+            _outfile = dealii::Utilities::replace_in_string (outfile, ".vtu",
+                                                             "_" + dealii::Utilities::int_to_string (rank) + ".vtu");
+          }
+
+        std::ofstream output (_outfile.c_str ());
+
+        if (filetype == ".vtk")
+          {
+            data_out.write_vtk (output);
+          }
+        else if (filetype == ".vtu")
+          {
+            data_out.write_vtu (output);
+          }
+        else if (filetype == ".gpl")
+          {
+            data_out.write_gnuplot (output);
+          }
+        else
+          {
+            throw DOpEException (
+              "Don't know how to write filetype `" + filetype + "'!",
+              "InstatPDEProblem::WriteToFile");
+          }
+
+        // In parallel computation, one cpu has to write a master file,
+        // containting information about all files from other cpus.
+        if (parallel)
+          {
+            if (Utilities::MPI::this_mpi_process (MPI_COMM_WORLD) == 0)
+              {
+                std::vector<std::string> filenames;
+                for (unsigned int i = 0;
+                     i < Utilities::MPI::n_mpi_processes (MPI_COMM_WORLD); ++i)
+                  {
+                    // TODO this is a hacky solution ... should be improved
+                    std::string filename =
+                      dealii::Utilities::replace_in_string (outfile, ".vtu",
+                                                            "_" + dealii::Utilities::int_to_string (i)
+                                                            + ".vtu");
+                    filenames.push_back (filename);
+                  }
+                std::string master_name =
+                  dealii::Utilities::replace_in_string (outfile, ".vtu",
+                                                        ".pvtu");
+                std::ofstream master_output (master_name.c_str ());
+                data_out.write_pvtu_record (master_output, filenames);
+              }
+          }
+
+        data_out.clear ();
+      }
+    else
+      {
+        throw DOpEException ("No such DoFHandler `" + dof_type + "'!",
+                             "ReducedProblemInterface::WriteToFile");
+      }
+  }
+
 }
 
 #endif

@@ -51,11 +51,11 @@ namespace DOpE
                                 Patterns::Anything (), "Directory where the output goes to");
     param_reader.declare_entry ("logfile", "dope.log", Patterns::Anything (),
                                 "Name of the logfile");
-    param_reader.declare_entry ("file_format", ".vtk",
-                                Patterns::Selection (".vtk|.gpl"),
+    param_reader.declare_entry ("file_format", ".vtu",
+                                Patterns::Selection (".vtu|.vtk|.gpl"),
                                 "File format for the output of solution variables");
-    param_reader.declare_entry ("control_file_format", ".vtk",
-                                Patterns::Selection (".vtk|.txt"),
+    param_reader.declare_entry ("control_file_format", ".vtu",
+                                Patterns::Selection (".vtu|.vtk|.txt"),
                                 "File format for the output of control variables");
     param_reader.declare_entry ("debug", "false", Patterns::Bool (),
                                 "Log Debug Information");
