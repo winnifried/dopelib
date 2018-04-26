@@ -373,23 +373,31 @@ namespace DOpE
         case DOpEtypes::VectorType::control:
           return GetControlDoFsPerBlock (time_point);
         default:
-          assert(false);
+          abort ();
           return std::vector<unsigned int>
                  { };
         }
     }
 
     /**
-     * Returns the locally owned / relevant DoFs for each type of vector at given time.
+     * Returns the locally owned DoFs for the given type of vector at given time point.
      *
      * @ param type Indicates for which quantity (state, constrol, constraint, local constraint)
      * we want to know the number of DoFs per block.
      * @ param time_point Indicating the time at which we want to know the DoFs. -1 means now.
      */
-    virtual IndexSet
+    virtual dealii::IndexSet
     GetLocallyOwnedDoFs (const DOpEtypes::VectorType type,
                          int time_point = -1) const = 0;
-    virtual IndexSet
+
+    /**
+     * Returns the locally relevant DoFs for the given type of vector at given time point.
+     *
+     * @ param type Indicates for which quantity (state, constrol, constraint, local constraint)
+     * we want to know the number of DoFs per block.
+     * @ param time_point Indicating the time at which we want to know the DoFs. -1 means now.
+     */
+    virtual dealii::IndexSet
     GetLocallyRelevantDoFs (const DOpEtypes::VectorType type,
                             int time_point = -1) const = 0;
 
@@ -402,53 +410,6 @@ namespace DOpE
      */
     virtual unsigned int
     GetStateNDoFs (int time_point = -1) const = 0;
-
-    // TODO we need only the VECTOR one of those ...
-    // TODO document
-
-    void
-    ReinitVector (TrilinosWrappers::MPI::Vector &v,
-                  const DOpEtypes::VectorType type,
-                  const int time_point = -1) const
-    {
-      const auto locally_owned = GetLocallyOwnedDoFs (type, time_point);
-      const auto locally_relevant = GetLocallyRelevantDoFs (type,
-                                                            time_point);
-      v.reinit (locally_owned, locally_relevant, GetMPIComm ());
-      return;
-    }
-
-    void
-    ReinitVector (TrilinosWrappers::MPI::BlockVector &v,
-                  const DOpEtypes::VectorType type,
-                  const int time_point = -1) const
-    {
-      const auto block_locally_owned = DOpEHelper::split_blockwise (
-                                         GetLocallyOwnedDoFs (type, time_point),
-                                         GetDoFsPerBlock (type, time_point));
-      const auto block_locally_relevant = DOpEHelper::split_blockwise (
-                                            GetLocallyRelevantDoFs (type, time_point),
-                                            GetDoFsPerBlock (type, time_point));
-      v.reinit (block_locally_owned, block_locally_relevant, GetMPIComm ());
-    }
-
-    void
-    ReinitVector (Vector<double> &v,
-                  const DOpEtypes::VectorType type,
-                  const int time_point = -1) const
-    {
-      const auto dofs = GetNDoFs (type, time_point);
-      v.reinit (dofs);
-    }
-
-    void
-    ReinitVector (BlockVector<double> &v,
-                  const DOpEtypes::VectorType type,
-                  const int time_point = -1) const
-    {
-      const auto blocks = GetDoFsPerBlock (type, time_point);
-      v.reinit (blocks);
-    }
 
     /**
      * Returns the DoFs for the constraint vector at the current time which has
@@ -628,12 +589,90 @@ namespace DOpE
       time_triangulation_->execute_coarsening_and_refinement ();
       ReInitTime ();
     }
-    /******************************************************/
 
+    /******************************************************/
+    // TODO we need only the VECTOR one of those ...
+    /**
+     * Initializes the given vector v at given time point.
+     * Type allows to chose between control, state, constraint.
+     *
+     * @ param v Vector to be initialized
+     * @ param type Indicates whether the vector should be state, control, constraint, etc.
+     * @ param time_point Indicating the time at which we want to initialize v. -1 means now.
+     */
+    void
+    ReinitVector (dealii::Vector<double> &v,
+                  const DOpEtypes::VectorType type,
+                  const int time_point = -1) const
+    {
+      const auto dofs = GetNDoFs (type, time_point);
+      v.reinit (dofs);
+    }
+
+    /**
+     * Same as above for BlockVector.
+     *
+     * @ param v Vector to be initialized
+     * @ param type Indicates whether the vector should be state, control, constraint, etc.
+     * @ param time_point Indicating the time at which we want to initialize v. -1 means now.
+     */
+    void
+    ReinitVector (dealii::BlockVector<double> &v,
+                  const DOpEtypes::VectorType type,
+                  const int time_point = -1) const
+    {
+      const auto blocks = GetDoFsPerBlock (type, time_point);
+      v.reinit (blocks);
+    }
+
+#ifdef DEAL_II_WITH_TRILINOS
+    /**
+     * Same as above for TrilinosWrappers::MPI::Vector.
+     *
+     * @ param v Vector to be initialized
+     * @ param type Indicates whether the vector should be state, control, constraint, etc.
+     * @ param time_point Indicating the time at which we want to initialize v. -1 means now.
+     */
+    void
+    ReinitVector (dealii::TrilinosWrappers::MPI::Vector &v,
+                  const DOpEtypes::VectorType type,
+                  const int time_point = -1) const
+    {
+      const auto locally_owned = GetLocallyOwnedDoFs (type, time_point);
+      const auto locally_relevant = GetLocallyRelevantDoFs (type,
+                                                            time_point);
+      v.reinit (locally_owned, locally_relevant, GetMPIComm ());
+      return;
+    }
+
+    /**
+     * Same as above for TrilinosWrappers::MPI::BlockVector.
+     *
+     * @ param v Vector to be initialized
+     * @ param type Indicates whether the vector should be state, control, constraint, etc.
+     * @ param time_point Indicating the time at which we want to initialize v. -1 means now.
+     */
+    void
+    ReinitVector (dealii::TrilinosWrappers::MPI::BlockVector &v,
+                  const DOpEtypes::VectorType type,
+                  const int time_point = -1) const
+    {
+      const auto block_locally_owned = DOpEHelper::split_blockwise (
+                                         GetLocallyOwnedDoFs (type, time_point),
+                                         GetDoFsPerBlock (type, time_point));
+      const auto block_locally_relevant = DOpEHelper::split_blockwise (
+                                            GetLocallyRelevantDoFs (type, time_point),
+                                            GetDoFsPerBlock (type, time_point));
+      v.reinit (block_locally_owned, block_locally_relevant, GetMPIComm ());
+    }
+#endif
+
+    /******************************************************/
     /**
      * Writes vector to file. Delegate to child classes which have the required information.
      */
     // TODO enum
+    // TODO param
     virtual void
     WriteToFile (const VECTOR &v,
                  std::string name,

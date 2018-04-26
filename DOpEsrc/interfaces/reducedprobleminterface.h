@@ -350,7 +350,7 @@ namespace DOpE
       base_priority_ = base_priority;
       post_index_ = "_" + this->GetProblem ()->GetName ();
     }
-    ~ReducedProblemInterface ()
+    virtual ~ReducedProblemInterface ()
     {
     }
 
@@ -506,6 +506,7 @@ namespace DOpE
     {
       return OP_;
     }
+
 //        /**
 //         * Initializes the HigherOrderDWRDataContainer
 //         */
@@ -541,6 +542,8 @@ namespace DOpE
     int base_priority_;
     std::string post_index_;
   };
+
+
 
 }
 #endif

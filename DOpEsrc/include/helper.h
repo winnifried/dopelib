@@ -48,6 +48,8 @@ inline void
 write<dealii::TrilinosWrappers::MPI::Vector> (const dealii::TrilinosWrappers::MPI::Vector &v,
                                               std::ostream &stream)
 {
+  (void) v;
+  (void) stream;
   throw ExcNotImplemented ();
 }
 
@@ -56,6 +58,8 @@ inline void
 write<dealii::TrilinosWrappers::MPI::BlockVector> (const dealii::TrilinosWrappers::MPI::BlockVector &v,
                                                    std::ostream &stream)
 {
+  (void) v;
+  (void) stream;
   throw ExcNotImplemented ();
 }
 
@@ -72,6 +76,8 @@ inline void
 read<dealii::TrilinosWrappers::MPI::Vector> (dealii::TrilinosWrappers::MPI::Vector &v,
                                              std::istream &stream)
 {
+  (void) v;
+  (void) stream;
   throw ExcNotImplemented ();
 }
 
@@ -80,13 +86,15 @@ inline void
 read<dealii::TrilinosWrappers::MPI::BlockVector> (dealii::TrilinosWrappers::MPI::BlockVector &v,
                                                   std::istream &stream)
 {
+  (void) v;
+  (void) stream;
   throw ExcNotImplemented ();
 }
 
 namespace DOpEHelper
 {
   /**
-   * Splits an index set source into different blocks, block_counts[i] = n_dofs within block i
+   * Splits an index set source into different blocks according to block_counts.
    * Application: split locally_owned for block vectors
    */
   std::vector<dealii::IndexSet>
