@@ -124,6 +124,23 @@ namespace DOpE
       only_recent
     };
 
+    /**
+     * An enum that describes whether we deal with
+     * a Control-, State-, or ConstraintVectors
+     *
+     * state            StateVector
+     * control          ControlVector
+     * constraint       ConstraintVector("global")
+     * local_constraint ConstraintVector("local")
+     */
+    enum VectorType
+    {
+      state,
+      control,
+      constraint,
+      local_constraint
+    };
+
   }//End of namespace DOpEtypes
 
 
@@ -139,19 +156,15 @@ namespace DOpE
   template <>
   inline std::string DOpEtypesToString(const DOpEtypes::VectorStorageType &t)
   {
-    if ( DOpEtypes::VectorStorageType::fullmem == t )
+    switch (t)
       {
+      case DOpEtypes::VectorStorageType::fullmem:
         return "fullmem";
-      }
-    else if ( DOpEtypes::VectorStorageType::store_on_disc == t )
-      {
+      case DOpEtypes::VectorStorageType::store_on_disc:
         return "store_on_disc";
-      }
-    else if ( DOpEtypes::VectorStorageType::only_recent == t )
-      {
+      case DOpEtypes::VectorStorageType::only_recent:
         return "only_recent";
-      }
-    else
+      default:
       {
         std::stringstream out;
         out<<"Unknown DOpEtypes::VectorStorageType"<< std::endl;
@@ -161,21 +174,18 @@ namespace DOpE
   }
 
   template <>
-  inline std::string DOpEtypesToString(const DOpEtypes::ControlType &t)
+  inline std::string
+  DOpEtypesToString (const DOpEtypes::ControlType &t)
   {
-    if ( DOpEtypes::ControlType::initial== t )
+    switch (t)
       {
+      case DOpEtypes::ControlType::initial:
         return "initial";
-      }
-    else if ( DOpEtypes::ControlType::stationary == t )
-      {
+      case DOpEtypes::ControlType::stationary:
         return "stationary";
-      }
-    else if ( DOpEtypes::ControlType::nonstationary == t )
-      {
+      case DOpEtypes::ControlType::nonstationary:
         return "nonstationary";
-      }
-    else
+      default:
       {
         std::stringstream out;
         out<<"Unknown DOpEtypes::ControlType"<< std::endl;
@@ -187,32 +197,50 @@ namespace DOpE
   template <>
   inline std::string DOpEtypesToString(const DOpEtypes::RefinementType &t)
   {
-    if ( DOpEtypes::RefinementType::global== t )
+    switch (t)
       {
+      case DOpEtypes::RefinementType::global:
         return "global";
-      }
-    else if ( DOpEtypes::RefinementType::fixed_fraction == t )
-      {
+      case DOpEtypes::RefinementType::fixed_fraction:
         return "fixed_fraction";
-      }
-    else if ( DOpEtypes::RefinementType::fixed_number == t )
-      {
+      case DOpEtypes::RefinementType::fixed_number:
         return "fixed_number";
-      }
-    else if ( DOpEtypes::RefinementType::optimized == t )
-      {
+      case DOpEtypes::RefinementType::optimized:
         return "optimized";
-      }
-    else if ( DOpEtypes::RefinementType::finest_of_both == t )
-      {
+      case DOpEtypes::RefinementType::finest_of_both:
         return "finest_of_both";
-      }
-    else
+      default:
       {
         std::stringstream out;
         out<<"Unknown DOpEtypes::RefinementType"<< std::endl;
         out<<"Code given is "<< t<<std::endl;
-        throw DOpEException(out.str(),"DOpEtypesToString<DOpEtypes::RefinementType>");
+        throw DOpEException (out.str(), DOpEtypesToString<DOpEtypes::RefinementType>");
+      }
+      }
+  }
+
+  template <>
+  inline std::string
+  DOpEtypesToString (const DOpEtypes::VectorType &t)
+  {
+    switch (t)
+      {
+      case DOpEtypes::VectorType::state:
+        return "state";
+      case DOpEtypes::VectorType::control:
+        return "control";
+      case DOpEtypes::VectorType::constraint:
+        return "constraint";
+      case DOpEtypes::VectorType::local_constraint:
+        return "local_constraint";
+      default:
+      {
+        std::stringstream out;
+        out << "Unknown DOpEtypes::VectorType" << std::endl;
+        out << "Code given is " << t << std::endl;
+        throw DOpEException (out.str (),
+                             "DOpEtypesToString<DOpEtypes::VectorType>");
+      }
       }
   }
 
