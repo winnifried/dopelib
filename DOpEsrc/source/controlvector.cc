@@ -1073,7 +1073,8 @@ template class DOpE::ControlVector<dealii::Vector<double> >;
 template class DOpE::ControlVector<dealii::BlockVector<double> >;
 
 #ifdef DOPELIB_WITH_TRILINOS
+#ifdef DOPELIB_WITH_MPI
 template class DOpE::ControlVector<dealii::TrilinosWrappers::MPI::Vector>;
 template class DOpE::ControlVector<dealii::TrilinosWrappers::MPI::BlockVector>;
 #endif
-
+#endif
