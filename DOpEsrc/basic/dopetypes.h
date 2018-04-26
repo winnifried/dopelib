@@ -171,11 +171,11 @@ namespace DOpE
         out<<"Code given is "<< t<<std::endl;
         throw DOpEException(out.str(),"DOpEtypesToString<DOpEtypes::VectorStorageType");
       }
+      }
   }
-
+  
   template <>
-  inline std::string
-  DOpEtypesToString (const DOpEtypes::ControlType &t)
+  inline std::string DOpEtypesToString (const DOpEtypes::ControlType &t)
   {
     switch (t)
       {
@@ -191,6 +191,7 @@ namespace DOpE
         out<<"Unknown DOpEtypes::ControlType"<< std::endl;
         out<<"Code given is "<< t<<std::endl;
         throw DOpEException(out.str(),"DOpEtypesToString<DOpEtypes::ControlType");
+      }
       }
   }
 
@@ -214,14 +215,13 @@ namespace DOpE
         std::stringstream out;
         out<<"Unknown DOpEtypes::RefinementType"<< std::endl;
         out<<"Code given is "<< t<<std::endl;
-        throw DOpEException (out.str(), DOpEtypesToString<DOpEtypes::RefinementType>");
+        throw DOpEException (out.str(), "DOpEtypesToString<DOpEtypes::RefinementType>");
       }
       }
   }
 
   template <>
-  inline std::string
-  DOpEtypesToString (const DOpEtypes::VectorType &t)
+  inline std::string DOpEtypesToString (const DOpEtypes::VectorType &t)
   {
     switch (t)
       {
