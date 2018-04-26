@@ -24,6 +24,9 @@
 #ifndef CONSTRAINT_VECTOR_H_
 #define CONSTRAINT_VECTOR_H_
 
+// TODO remove ...
+#pragma GCC diagnostic ignored "-Wterminate"
+
 #include <basic/spacetimehandler_base.h>
 #include <basic/dopetypes.h>
 

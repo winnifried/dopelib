@@ -55,10 +55,12 @@ namespace DOpE
     {
       flux_pattern_ = flux_pattern;
     }
+
     virtual
     ~SparsityMaker()
     {
     }
+
     virtual void
     ComputeSparsityPattern(
       const DOpEWrapper::DoFHandler<dim, DH> &dof_handler,
@@ -118,21 +120,11 @@ namespace DOpE
     const std::vector<unsigned int> &blocks) const
   {
 #if DEAL_II_VERSION_GTE(8,3,0)
-    dealii::BlockDynamicSparsityPattern csp(blocks.size(),
-                                            blocks.size());
+    dealii::BlockDynamicSparsityPattern csp(blocks, blocks);
 #else
-    dealii::BlockCompressedSimpleSparsityPattern csp(blocks.size(),
-                                                     blocks.size());
+    dealii::BlockCompressedSimpleSparsityPattern csp(blocks, blocks);
 #endif
 
-    for (unsigned int i = 0; i < blocks.size(); i++)
-      {
-        for (unsigned int j = 0; j < blocks.size(); j++)
-          {
-            csp.block(i, j).reinit(blocks.at(i), blocks.at(j));
-          }
-      }
-    csp.collect_sizes();
     if ( flux_pattern_ )
       {
         dealii::DoFTools::make_flux_sparsity_pattern(

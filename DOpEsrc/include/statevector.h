@@ -24,6 +24,9 @@
 #ifndef STATE_VECTOR_H_
 #define STATE_VECTOR_H_
 
+// TODO remove ...
+#pragma GCC diagnostic ignored "-Wterminate"
+
 #include <basic/spacetimehandler_base.h>
 #include <include/parameterreader.h>
 #include <basic/dopetypes.h>
@@ -37,6 +40,8 @@
 #include <iostream>
 #include <sstream>
 #include <fstream>
+
+// TODO is there any reason why dof_number, time_point, ... are non-const ?
 
 namespace DOpE
 {

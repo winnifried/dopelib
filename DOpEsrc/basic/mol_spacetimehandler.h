@@ -535,7 +535,7 @@ namespace DOpE
      * Implementation of virtual function in SpaceTimeHandler
      */
     const FE<dealdim, dealdim> &
-    GetFESystem(std::string name) const
+    GetFESystem (std::string name) const // TODO enum
     {
       if (name == "state")
         {
@@ -626,6 +626,7 @@ namespace DOpE
 #endif
       state_mesh_transfer_ = new DOpEWrapper::SolutionTransfer<dealdim, VECTOR,
       DH>(state_dof_handler_);
+      // TODO switch
       if (DOpEtypes::RefinementType::global == ref_type)
         {
           triangulation_.set_all_refine_flags();

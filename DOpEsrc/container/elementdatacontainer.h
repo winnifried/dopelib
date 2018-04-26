@@ -65,7 +65,6 @@ namespace DOpE
                "Dummy class, this constructor should never get called.",
                "ElementDataContainer<dealii::DoFHandler<dim> , VECTOR, dim>::ElementDataContainer"));
     }
-    ;
   };
 
   /**

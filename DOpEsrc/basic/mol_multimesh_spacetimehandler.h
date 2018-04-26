@@ -568,6 +568,7 @@ namespace DOpE
       state_mesh_transfer_ = new DOpEWrapper::SolutionTransfer<dim, VECTOR,
       DH>(state_dof_handler_);
 
+      // TODO switch
       if (DOpEtypes::RefinementType::global == ref_type)
         {
           state_triangulation_.set_all_refine_flags();
@@ -637,6 +638,7 @@ namespace DOpE
       control_mesh_transfer_ = new DOpEWrapper::SolutionTransfer<dim, VECTOR,
       DH>(control_dof_handler_);
 #endif
+      // TODO switch
       if (DOpEtypes::RefinementType::global == ref_type)
         {
           control_triangulation_.set_all_refine_flags();

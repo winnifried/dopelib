@@ -366,7 +366,7 @@ namespace DOpE
     //we need this here, because we know the type of the DoFHandler in use.
     //This saves us a template argument for statpdeproblem etc.
     DOpEWrapper::DataOut<dealdim, DH> data_out_;
-    const ActiveFEIndexSetterInterface<dealdim> *fe_index_setter_;
+    const ActiveFEIndexSetterInterface<dealdim> *fe_index_setter_ = NULL;
     mutable std::vector<const DOpEWrapper::DoFHandler<dealdim, DH>*> domain_dofhandler_vector_;
 
   };

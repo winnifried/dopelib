@@ -153,8 +153,8 @@ namespace DOpEWrapper
   class DoFHandler<0, dealii::DoFHandler>
   {
   private:
-    unsigned int dofs_;
-
+    unsigned int dofs_ = 0;
+    dealii::DoFHandler<1> tmp_dof_handler_;
   public:
     /**
      * We actually never need the triangulation, this constructur merely exists
@@ -162,6 +162,7 @@ namespace DOpEWrapper
      */
     template<int dim>
     DoFHandler(const dealii::Triangulation<dim, dim> &/*tria*/)
+      : tmp_dof_handler_ (dealii::Triangulation<1> ())
     {
     }
     template<int dim>
@@ -185,13 +186,22 @@ namespace DOpEWrapper
     {
       return false;
     }
+
+    // Quick-fix for dim = 0, just return some DoFHandler.
+    const dealii::DoFHandler<1> &
+    GetDEALDoFHandler () const
+    {
+      assert(false);
+      return tmp_dof_handler_;
+    }
   };
 
   template<>
   class DoFHandler<0, dealii::hp::DoFHandler>
   {
   private:
-    unsigned int dofs_;
+    unsigned int dofs_ = 0;
+    dealii::hp::DoFHandler<1> tmp_dof_handler_;
 
   public:
     /**
@@ -200,6 +210,7 @@ namespace DOpEWrapper
      */
     template<int dim>
     DoFHandler(const dealii::Triangulation<dim, dim> &/*tria*/)
+      : tmp_dof_handler_ (dealii::Triangulation<1> ())
     {
     }
     template<int dim>
@@ -222,6 +233,13 @@ namespace DOpEWrapper
     NeedIndexSetter()
     {
       return false;
+    }
+    // Quick-fix for dim = 0, just return some DoFHandler.
+    const dealii::hp::DoFHandler<1> &
+    GetDEALDoFHandler () const
+    {
+      assert(false);
+      return tmp_dof_handler_;
     }
   };
 }

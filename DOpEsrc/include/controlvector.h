@@ -24,6 +24,10 @@
 #ifndef CONTROL_VECTOR_H_
 #define CONTROL_VECTOR_H_
 
+// Quick fix for lots of warnings
+// TODO remove ...
+#pragma GCC diagnostic ignored "-Wterminate"
+
 #include <basic/spacetimehandler_base.h>
 #include <basic/dopetypes.h>
 
@@ -273,4 +277,5 @@ namespace DOpE
 
 
 }
+
 #endif
