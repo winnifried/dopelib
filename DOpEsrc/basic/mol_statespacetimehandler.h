@@ -246,6 +246,72 @@ namespace DOpE
     }
 
     /**
+     * Implementation of virtual function in StateSpaceTimeHandlerBase
+     */
+    virtual dealii::IndexSet
+    GetLocallyOwnedDoFs (const DOpEtypes::VectorType type,
+                         int time_point = -1) const
+    {
+      (void) time_point; // TODO same local dofs for all times ?
+
+      switch (type)
+        {
+        case DOpEtypes::VectorType::state:
+          return GetStateDoFHandler ().GetDEALDoFHandler().locally_owned_dofs();
+
+        case DOpEtypes::VectorType::constraint:
+        case DOpEtypes::VectorType::local_constraint:
+          assert(false);
+          return dealii::IndexSet ();
+
+        case DOpEtypes::VectorType::control:
+          return GetControlDoFHandler ().GetDEALDoFHandler().locally_owned_dofs ();
+
+        default:
+          abort ();
+          return dealii::IndexSet ();
+        }
+    }
+
+    /**
+     * Implementation of virtual function in StateSpaceTimeHandlerBase
+     */
+    virtual dealii::IndexSet
+    GetLocallyRelevantDoFs (const DOpEtypes::VectorType type,
+                            int time_point = -1) const
+    {
+      (void) time_point;
+
+      switch (type)
+        {
+        case DOpEtypes::VectorType::state:
+        {
+          dealii::IndexSet result;
+          DoFTools::extract_locally_relevant_dofs (GetStateDoFHandler ().GetDEALDoFHandler(),
+                                                   result);
+          return result;
+        }
+
+        case DOpEtypes::VectorType::constraint:
+        case DOpEtypes::VectorType::local_constraint:
+          assert(false);
+          return IndexSet ();
+
+        case DOpEtypes::VectorType::control:
+        {
+          dealii::IndexSet result;
+          DoFTools::extract_locally_relevant_dofs (GetControlDoFHandler ().GetDEALDoFHandler(),
+                                                   result);
+          return result;
+        }
+
+        default:
+          abort ();
+          return dealii::IndexSet ();
+        }
+    }
+
+    /**
      * Implementation of virtual function in StateSpaceTimeHandler
      */
     const std::vector<Point<dealdim> > &
