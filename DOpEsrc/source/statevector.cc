@@ -140,7 +140,7 @@ namespace DOpE
         state_.resize(2, NULL);
         if ( GetSpaceTimeHandler()->GetMaxTimePoint() < 1)
           {
-            throw DOpEException("There are not even two time points. Are you shure this is a non stationary problem?",
+            throw DOpEException("There are not even two time points. Are you sure this is a non stationary problem?",
                                 "StateVector::ReInit()");
           }
         for (unsigned int t = 0; t
@@ -843,6 +843,23 @@ namespace DOpE
 
   }
 
+#ifdef DOPELIB_WITH_TRILINOS
+// TODO intermediate compatibility
+template<>
+  void
+  DOpE::StateVector<dealii::TrilinosWrappers::MPI::Vector>::ReSizeSpace(unsigned int ,
+                                                          const std::vector<unsigned int> &) const
+{
+}
+template<>
+  void
+  DOpE::StateVector<dealii::TrilinosWrappers::MPI::BlockVector>::ReSizeSpace(unsigned int,
+                                                          const std::vector<unsigned int> &) const
+{
+}
+#endif
+
+
   /******************************************************/
   template<typename VECTOR>
   void
@@ -1468,7 +1485,7 @@ namespace DOpE
             filestream_.open(filename_.c_str(), std::fstream::out);
             if (!filestream_.fail())
               {
-                local_vectors_[global_to_local_[accessor_]]->block_write(
+                DOpEHelper::write (*local_vectors_[global_to_local_[accessor_]],
                   filestream_);
                 filestream_.close();
                 state_information_.at(accessor_).on_disc_ = true;
@@ -1493,7 +1510,7 @@ namespace DOpE
     filestream_.open(filename_.c_str(), std::fstream::in);
     if (!filestream_.fail())
       {
-        vector.block_read(filestream_);
+        DOpEHelper::read (vector, filestream_);
         filestream_.close();
       }
     else
@@ -1627,4 +1644,9 @@ namespace DOpE
 
 template class DOpE::StateVector<dealii::BlockVector<double> >;
 template class DOpE::StateVector<dealii::Vector<double> >;
+
+#ifdef DOPELIB_WITH_TRILINOS
+template class DOpE::StateVector<dealii::TrilinosWrappers::MPI::BlockVector>;
+template class DOpE::StateVector<dealii::TrilinosWrappers::MPI::Vector>;
+#endif
 

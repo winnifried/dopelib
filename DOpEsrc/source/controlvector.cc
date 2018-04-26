@@ -318,6 +318,19 @@ const Vector<double> &ControlVector<VECTOR>::GetSpacialVectorCopy() const
 
 namespace DOpE
 {
+
+// TODO intermediate compatibility
+#ifdef DOPELIB_WITH_TRILINOS
+  template<>
+  void ControlVector<dealii::TrilinosWrappers::MPI::Vector>::ReSizeSpace(unsigned int, const std::vector<unsigned int> &)
+  {
+  }
+  template<>
+  void ControlVector<dealii::TrilinosWrappers::MPI::BlockVector>::ReSizeSpace(unsigned int, const std::vector<unsigned int> &)
+  {
+  }
+#endif
+
   template<>
   void ControlVector<dealii::BlockVector<double> >::ReSizeSpace(unsigned int ndofs, const std::vector<unsigned int> &dofs_per_block)
   {
@@ -729,7 +742,10 @@ void ControlVector<VECTOR>::max(const ControlVector &dq)
           assert(t.size() == tn.size());
           for (unsigned int j = 0; j < t.size() ; j++)
             {
-              t(j) = std::max(t(j),tn(j));
+              // For Trilinos vectors, we have to explicitly cast them to doubles
+              typename VECTOR::value_type a = t (j);
+              typename VECTOR::value_type b = tn (j);
+              t (j) = std::max (a, b);
             }
         }
       SetTimeDoFNumber(0);
@@ -772,7 +788,10 @@ void ControlVector<VECTOR>::min(const ControlVector &dq)
           assert(t.size() == tn.size());
           for (unsigned int j = 0; j < t.size() ; j++)
             {
-              t(j) = std::min(t(j),tn(j));
+              // For Trilinos vectors, we have to explicitly cast them to doubles
+              typename VECTOR::value_type a = t (j);
+              typename VECTOR::value_type b = tn (j);
+              t (j) = std::min (a, b);
             }
         }
       SetTimeDoFNumber(0);
@@ -1052,3 +1071,9 @@ ControlVector<VECTOR>::ComputeLocalVectors(const TimeIterator &interval) const
 
 template class DOpE::ControlVector<dealii::Vector<double> >;
 template class DOpE::ControlVector<dealii::BlockVector<double> >;
+
+#ifdef DOPELIB_WITH_TRILINOS
+template class DOpE::ControlVector<dealii::TrilinosWrappers::MPI::Vector>;
+template class DOpE::ControlVector<dealii::TrilinosWrappers::MPI::BlockVector>;
+#endif
+

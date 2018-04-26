@@ -31,6 +31,7 @@
 #include <vector>
 #include <sstream>
 #include <deal.II/lac/vector.h>
+#include <include/parallel_vectors.h>
 
 #include <container/optproblemcontainer.h>
 #include <include/controlvector.h>

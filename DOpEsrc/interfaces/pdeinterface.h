@@ -40,6 +40,7 @@
 #include <container/multimesh_facedatacontainer.h>
 #include <network/network_elementdatacontainer.h>
 #include <network/network_facedatacontainer.h>
+#include <include/parallel_vectors.h>
 
 namespace DOpE
 {

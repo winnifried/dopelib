@@ -29,6 +29,8 @@
 
 #include <basic/spacetimehandler_base.h>
 #include <basic/dopetypes.h>
+#include <include/parallel_vectors.h>
+#include <include/helper.h>
 
 #include <deal.II/lac/vector.h>
 #include <deal.II/lac/block_vector_base.h>

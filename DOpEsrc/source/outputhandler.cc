@@ -633,8 +633,12 @@ namespace DOpE
 }//Endof namespace
 /******************************************************/
 /******************************************************/
+
 template class DOpE::DOpEOutputHandler<dealii::Vector<double> >;
 template class DOpE::DOpEOutputHandler<dealii::BlockVector<double> >;
 
-
+#ifdef DOPELIB_WITH_TRILINOS
+template class DOpE::DOpEOutputHandler<dealii::TrilinosWrappers::MPI::Vector>;
+template class DOpE::DOpEOutputHandler<dealii::TrilinosWrappers::MPI::BlockVector>;
+#endif
 

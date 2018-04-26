@@ -233,6 +233,20 @@ namespace DOpE
 
   /******************************************************/
 
+#ifdef DOPELIB_WITH_TRILINOS
+// TODO these exist just for the moment to provide intermediate compatibility
+  template<>
+  void ConstraintVector<dealii::TrilinosWrappers::MPI::Vector>::ReSizeLocalSpace(unsigned int, const std::vector<
+      unsigned int>& /*dofs_per_block*/)
+{
+}
+  template<>
+  void ConstraintVector<dealii::TrilinosWrappers::MPI::BlockVector>::ReSizeLocalSpace(unsigned int, const std::vector<
+      unsigned int>& /*dofs_per_block*/)
+{
+}
+#endif
+
   template<>
   void ConstraintVector<dealii::Vector<double> >::ReSizeLocalSpace(unsigned int ndofs, const std::vector<
       unsigned int>& /*dofs_per_block*/)
@@ -661,3 +675,9 @@ double ConstraintVector<VECTOR>::Complementarity(const ConstraintVector<VECTOR> 
 
 template class DOpE::ConstraintVector<dealii::Vector<double> >;
 template class DOpE::ConstraintVector<dealii::BlockVector<double> >;
+
+#ifdef DOPELIB_WITH_TRILINOS
+template class DOpE::ConstraintVector<dealii::TrilinosWrappers::MPI::Vector>;
+template class DOpE::ConstraintVector<dealii::TrilinosWrappers::MPI::BlockVector>;
+#endif
+
