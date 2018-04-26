@@ -150,7 +150,7 @@ namespace DOpE
 
       state_dof_constraints_.clear();
       state_dof_constraints_.reinit (
-        GetLocallyRelevantDoFs (DOpEtypes::VectorType::state));
+        this->GetLocallyRelevantDoFs (DOpEtypes::VectorType::state));
       DoFTools::make_hanging_node_constraints (
         static_cast<DH<dealdim, dealdim>&> (state_dof_handler_),
         state_dof_constraints_);
@@ -269,7 +269,8 @@ namespace DOpE
           return dealii::IndexSet ();
 
         case DOpEtypes::VectorType::control:
-          return GetControlDoFHandler ().GetDEALDoFHandler().locally_owned_dofs ();
+          assert(false);
+          return dealii::IndexSet ();
 
         default:
           abort ();
@@ -303,10 +304,8 @@ namespace DOpE
 
         case DOpEtypes::VectorType::control:
         {
-          dealii::IndexSet result;
-          DoFTools::extract_locally_relevant_dofs (GetControlDoFHandler ().GetDEALDoFHandler(),
-                                                   result);
-          return result;
+          assert(false);
+          return IndexSet ();
         }
 
         default:

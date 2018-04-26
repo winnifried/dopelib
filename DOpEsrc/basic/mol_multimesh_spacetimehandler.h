@@ -179,7 +179,7 @@ namespace DOpE
 
       control_dof_constraints_.clear();
       control_dof_constraints_.reinit (
-        GetLocallyRelevantDoFs (DOpEtypes::VectorType::control));
+        this->GetLocallyRelevantDoFs (DOpEtypes::VectorType::control));
       DoFTools::make_hanging_node_constraints(
         static_cast<DH<dim, dim>&>(control_dof_handler_), control_dof_constraints_);
       if (GetUserDefinedDoFConstraints() != NULL)
@@ -216,7 +216,7 @@ namespace DOpE
 
       state_dof_constraints_.clear();
       state_dof_constraints_.reinit (
-        GetLocallyRelevantDoFs (DOpEtypes::VectorType::state));
+        this->GetLocallyRelevantDoFs (DOpEtypes::VectorType::state));
       DoFTools::make_hanging_node_constraints(
         static_cast<DH<dim, dim>&>(state_dof_handler_), state_dof_constraints_);
       //TODO Dirichlet Daten hierueber.
