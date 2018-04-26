@@ -149,7 +149,11 @@ namespace DOpE
         static_cast<DH<dealdim, dealdim>&>(state_dof_handler_));
 
       state_dof_constraints_.clear();
-      DoFTools::make_hanging_node_constraints(static_cast<DH<dealdim, dealdim>&>(state_dof_handler_), state_dof_constraints_);
+      state_dof_constraints_.reinit (
+        GetLocallyRelevantDoFs (DOpEtypes::VectorType::state));
+      DoFTools::make_hanging_node_constraints (
+        static_cast<DH<dealdim, dealdim>&> (state_dof_handler_),
+        state_dof_constraints_);
       //TODO Dirichlet ueber Constraints
       if (GetUserDefinedDoFConstraints() != NULL) GetUserDefinedDoFConstraints()->MakeStateDoFConstraints(state_dof_handler_, state_dof_constraints_);
 
