@@ -89,7 +89,7 @@ namespace DOpE
                             INTEGRATORDATACONT &idc,
                             DOpEExceptionHandler<VECTOR> *Except=NULL,
                             DOpEOutputHandler<VECTOR> *Output=NULL);
-    ~GeneralizedMMAAlgorithm() {}
+    ~GeneralizedMMAAlgorithm()  throw() {}
 
     /**
      * Used to declare run time parameters. This is needed to declare all
