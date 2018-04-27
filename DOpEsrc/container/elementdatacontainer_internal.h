@@ -55,7 +55,6 @@ namespace DOpE
       ~ElementDataContainerInternal()
       {
       }
-      ;
 
       /**
        * Looks up the given name in parameter_data_ and returns the
@@ -72,7 +71,6 @@ namespace DOpE
       {
         return domain_values_;
       }
-      ;
 
       virtual const DOpEWrapper::FEValues<dim> &
       GetFEValuesState() const = 0;
@@ -326,8 +324,7 @@ namespace DOpE
     ElementDataContainerInternal<VECTOR, dim>::GetParamValues(std::string name,
                                                               dealii::Vector<double> &value) const
     {
-      typename std::map<std::string, const dealii::Vector<double>*>::const_iterator it =
-        param_values_.find(name);
+      const auto it = param_values_.find (name);
       if (it == param_values_.end())
         {
           throw DOpEException("Did not find " + name,
@@ -516,8 +513,7 @@ namespace DOpE
       const DOpEWrapper::FEValues<dim> &fe_values, std::string name,
       std::vector<double> &values) const
     {
-      typename std::map<std::string, const VECTOR *>::const_iterator it =
-        this->GetDomainValues().find(name);
+      const auto it = this->GetDomainValues().find(name);
       if (it == this->GetDomainValues().end())
         {
           throw DOpEException("Did not find " + name,
@@ -533,8 +529,7 @@ namespace DOpE
       const DOpEWrapper::FEValues<dim> &fe_values, std::string name,
       std::vector<dealii::Vector<double> > &values) const
     {
-      typename std::map<std::string, const VECTOR *>::const_iterator it =
-        this->GetDomainValues().find(name);
+      const auto it = this->GetDomainValues().find(name);
       if (it == this->GetDomainValues().end())
         {
           throw DOpEException("Did not find " + name,
@@ -552,8 +547,7 @@ namespace DOpE
       const DOpEWrapper::FEValues<dim> &fe_values, std::string name,
       std::vector<dealii::Tensor<1, targetdim> > &values) const
     {
-      typename std::map<std::string, const VECTOR *>::const_iterator it =
-        this->GetDomainValues().find(name);
+      const auto it = this->GetDomainValues().find(name);
       if (it == this->GetDomainValues().end())
         {
           throw DOpEException("Did not find " + name,
@@ -572,8 +566,7 @@ namespace DOpE
       std::string name,
       std::vector<std::vector<dealii::Tensor<1, targetdim> > > &values) const
     {
-      typename std::map<std::string, const VECTOR *>::const_iterator it =
-        this->GetDomainValues().find(name);
+      const auto it = this->GetDomainValues().find(name);
       if (it == this->GetDomainValues().end())
         {
           throw DOpEException("Did not find " + name,
@@ -590,8 +583,7 @@ namespace DOpE
       const DOpEWrapper::FEValues<dim> &fe_values, std::string name,
       std::vector<double> &values) const
     {
-      typename std::map<std::string, const VECTOR *>::const_iterator it =
-        this->GetDomainValues().find(name);
+      const auto it = this->GetDomainValues().find(name);
       if (it == this->GetDomainValues().end())
         {
           throw DOpEException("Did not find " + name,
@@ -608,8 +600,7 @@ namespace DOpE
       const DOpEWrapper::FEValues<dim> &fe_values, std::string name,
       std::vector<dealii::Vector<double> > &values) const
     {
-      typename std::map<std::string, const VECTOR *>::const_iterator it =
-        this->GetDomainValues().find(name);
+      const auto it = this->GetDomainValues().find(name);
       if (it == this->GetDomainValues().end())
         {
           throw DOpEException("Did not find " + name,
@@ -628,8 +619,7 @@ namespace DOpE
       std::string name,
       std::vector<std::vector<dealii::Tensor<2, targetdim> > > &values) const
     {
-      typename std::map<std::string, const VECTOR *>::const_iterator it =
-        this->GetDomainValues().find(name);
+      const auto it = this->GetDomainValues().find(name);
       if (it == this->GetDomainValues().end())
         {
           throw DOpEException("Did not find " + name,
@@ -647,8 +637,7 @@ namespace DOpE
       const DOpEWrapper::FEValues<dim> &fe_values, std::string name,
       std::vector<dealii::Tensor<2, targetdim> > &values) const
     {
-      typename std::map<std::string, const VECTOR *>::const_iterator it =
-        this->GetDomainValues().find(name);
+      const auto it = this->GetDomainValues().find(name);
       if (it == this->GetDomainValues().end())
         {
           throw DOpEException("Did not find " + name,

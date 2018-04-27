@@ -2761,7 +2761,6 @@ namespace DOpE
     return GetFunctional()->NeedPrecomputations();
   }
 
-
   /******************************************************/
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
            typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,

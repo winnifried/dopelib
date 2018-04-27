@@ -265,9 +265,6 @@ namespace DOpE
 
         case DOpEtypes::VectorType::constraint:
         case DOpEtypes::VectorType::local_constraint:
-          assert(false);
-          return dealii::IndexSet ();
-
         case DOpEtypes::VectorType::control:
           assert(false);
           return dealii::IndexSet ();
@@ -299,14 +296,9 @@ namespace DOpE
 
         case DOpEtypes::VectorType::constraint:
         case DOpEtypes::VectorType::local_constraint:
-          assert(false);
-          return IndexSet ();
-
         case DOpEtypes::VectorType::control:
-        {
           assert(false);
           return IndexSet ();
-        }
 
         default:
           abort ();

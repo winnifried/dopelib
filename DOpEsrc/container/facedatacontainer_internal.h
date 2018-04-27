@@ -55,7 +55,6 @@ namespace DOpE
       ~FaceDataContainerInternal()
       {
       }
-      ;
 
       /**
        * Looks up the given name in parameter_data_ and returns the
@@ -72,7 +71,6 @@ namespace DOpE
       {
         return domain_values_;
       }
-
 
       virtual const dealii::FEFaceValuesBase<dim> &
       GetFEFaceValuesState() const =0;
