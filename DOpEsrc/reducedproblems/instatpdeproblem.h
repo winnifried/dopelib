@@ -325,7 +325,7 @@ namespace DOpE
     bool project_initial_data_;
 
     friend class SolutionExtractor<InstatPDEProblem<NONLINEARSOLVER,
-             INTEGRATOR, PROBLEM, VECTOR, dealdim>,   VECTOR > ;
+      INTEGRATOR, PROBLEM, VECTOR, dealdim>,   VECTOR > ;
   };
 
   /*************************************************************************/

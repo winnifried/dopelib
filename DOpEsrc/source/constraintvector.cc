@@ -238,13 +238,13 @@ namespace DOpE
   template<>
   void ConstraintVector<dealii::TrilinosWrappers::MPI::Vector>::ReSizeLocalSpace(unsigned int, const std::vector<
       unsigned int>& /*dofs_per_block*/)
-{
-}
+  {
+  }
   template<>
   void ConstraintVector<dealii::TrilinosWrappers::MPI::BlockVector>::ReSizeLocalSpace(unsigned int, const std::vector<
       unsigned int>& /*dofs_per_block*/)
-{
-}
+  {
+  }
 #endif
 
   template<>

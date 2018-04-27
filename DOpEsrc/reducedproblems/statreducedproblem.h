@@ -492,9 +492,9 @@ namespace DOpE
                                                                     param_reader), dz_(OP->GetSpaceTimeHandler(), state_behavior,
                                                                         param_reader), z_for_ee_(OP->GetSpaceTimeHandler(),
                                                                             state_behavior, param_reader), integrator_(idc), control_integrator_(
-                           idc), nonlinear_state_solver_(integrator_, param_reader), nonlinear_adjoint_solver_(
-                           integrator_, param_reader), nonlinear_gradient_solver_(
-                           control_integrator_, param_reader)
+                         idc), nonlinear_state_solver_(integrator_, param_reader), nonlinear_adjoint_solver_(
+                         integrator_, param_reader), nonlinear_gradient_solver_(
+                         control_integrator_, param_reader)
 
   {
     //ReducedProblems should be ReInited
@@ -524,9 +524,9 @@ namespace DOpE
                                                                     param_reader), dz_(OP->GetSpaceTimeHandler(), state_behavior,
                                                                         param_reader), z_for_ee_(OP->GetSpaceTimeHandler(),
                                                                             state_behavior, param_reader), integrator_(s_idc), control_integrator_(
-                           c_idc), nonlinear_state_solver_(integrator_, param_reader), nonlinear_adjoint_solver_(
-                           integrator_, param_reader), nonlinear_gradient_solver_(
-                           control_integrator_, param_reader)
+                         c_idc), nonlinear_state_solver_(integrator_, param_reader), nonlinear_adjoint_solver_(
+                         integrator_, param_reader), nonlinear_gradient_solver_(
+                         control_integrator_, param_reader)
 
   {
     //ReducedProblems should be ReInited

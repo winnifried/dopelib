@@ -414,26 +414,26 @@ namespace DOpE
           GridRefinement::refine_and_coarsen_fixed_number (triangulation_,
                                                            ref_container.GetLocalErrorIndicators (),
                                                            ref_container.GetTopFraction (),
-                                                          ref_container.GetBottomFraction());
+                                                           ref_container.GetBottomFraction());
           break;
 
         case DOpEtypes::RefinementType::fixed_fraction:
           GridRefinement::refine_and_coarsen_fixed_fraction (triangulation_,
                                                              ref_container.GetLocalErrorIndicators (),
                                                              ref_container.GetTopFraction (),
-                                                            ref_container.GetBottomFraction());
+                                                             ref_container.GetBottomFraction());
           break;
 
         case DOpEtypes::RefinementType::optimized:
           GridRefinement::refine_and_coarsen_optimize (triangulation_,
                                                        ref_container.GetLocalErrorIndicators (),
-                                                      ref_container.GetConvergenceOrder());
+                                                       ref_container.GetConvergenceOrder());
           break;
 
         default:
           throw DOpEException (
             "Not implemented for name =" + DOpEtypesToString (ref_type),
-                              "MethodOfLines_StateSpaceTimeHandler::RefineStateSpace");
+            "MethodOfLines_StateSpaceTimeHandler::RefineStateSpace");
         }
 
       triangulation_.prepare_coarsening_and_refinement();

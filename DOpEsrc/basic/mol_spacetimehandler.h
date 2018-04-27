@@ -274,11 +274,11 @@ namespace DOpE
 #else
       {
         for (unsigned int i = 0; i < control_dofs_per_block_.size(); i++)
-            control_dofs_per_block_[i] = 0;
+          control_dofs_per_block_[i] = 0;
 
         for (unsigned int i = 0; i < control_block_component.size(); i++)
-            control_dofs_per_block_[control_block_component[i]]++;
-          }
+          control_dofs_per_block_[control_block_component[i]]++;
+      }
 #endif
       SpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dopedim, dealdim>::SetActiveFEIndicesState(
         state_dof_handler_);

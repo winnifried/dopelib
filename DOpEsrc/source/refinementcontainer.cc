@@ -120,7 +120,7 @@ namespace DOpE
     const dealii::Vector<float> &indicators, double top_fraction,
     double bottom_fraction)
     : LocalRefinement(indicators, DOpEtypes::RefinementType::fixed_fraction), top_fraction_(
-        top_fraction), bottom_fraction_(bottom_fraction)
+      top_fraction), bottom_fraction_(bottom_fraction)
   {
     assert(top_fraction_<=1. && top_fraction_>=0.);
     assert(bottom_fraction_<=1. && bottom_fraction_>=0.);
@@ -152,7 +152,7 @@ namespace DOpE
   RefineFixedNumber::RefineFixedNumber(const dealii::Vector<float> &indicators,
                                        double top_fraction, double bottom_fraction)
     : LocalRefinement(indicators, DOpEtypes::RefinementType::fixed_number), top_fraction_(
-        top_fraction), bottom_fraction_(bottom_fraction)
+      top_fraction), bottom_fraction_(bottom_fraction)
   {
     assert(top_fraction_<=1. && top_fraction_>=0.);
     assert(bottom_fraction_<=1. && bottom_fraction_>=0.);
@@ -184,7 +184,7 @@ namespace DOpE
   RefineOptimized::RefineOptimized(const dealii::Vector<float> &indicators,
                                    double convergence_order)
     : LocalRefinement(indicators, DOpEtypes::RefinementType::optimized), convergence_order_(
-        convergence_order)
+      convergence_order)
   {
     coarsening_ = false; //the method uses no coarsening.
   }

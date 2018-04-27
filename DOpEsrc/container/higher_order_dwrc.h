@@ -55,8 +55,8 @@ namespace DOpE
                             DOpEtypes::EETerms ee_terms = DOpEtypes::EETerms::mixed,
                             DOpEtypes::ResidualEvaluation res_eval = DOpEtypes::strong_residual)
       : DWRDataContainer<STH, IDC, EDC, FDC, VECTOR>(ee_terms), sth_higher_order_(
-          higher_order_sth), idc_higher_order_(higher_order_idc), res_eval_(res_eval),
-        PI_h_u_(NULL), PI_h_z_(NULL)
+        higher_order_sth), idc_higher_order_(higher_order_idc), res_eval_(res_eval),
+      PI_h_u_(NULL), PI_h_z_(NULL)
     {
       if (this->GetEETerms() == DOpEtypes::primal_only
           || this->GetEETerms() == DOpEtypes::mixed

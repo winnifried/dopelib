@@ -63,7 +63,7 @@ namespace DOpE
     InstatPDEProblemContainer(PDE &pde,
                               StateSpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR,dealdim> &STH)
       : PDEProblemContainer<PDE,DD,SPARSITYPATTERN,VECTOR,dealdim,FE, DH>(
-          pde,STH), ts_state_problem_(NULL)
+        pde,STH), ts_state_problem_(NULL)
     {
     }
 
@@ -98,8 +98,8 @@ namespace DOpE
      */
     PRIMALTSPROBLEM<StateProblem<
     PDEProblemContainer<PDE,DD,SPARSITYPATTERN,VECTOR,dealdim,FE, DH>,
-    PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>,
-    SPARSITYPATTERN, VECTOR, dealdim, FE, DH> &GetStateProblem()
+                        PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>,
+                        SPARSITYPATTERN, VECTOR, dealdim, FE, DH> &GetStateProblem()
     {
       if (ts_state_problem_ == NULL)
         {

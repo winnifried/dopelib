@@ -845,18 +845,18 @@ namespace DOpE
 
 #ifdef DOPELIB_WITH_TRILINOS
 // TODO intermediate compatibility
-template<>
+  template<>
   void
   DOpE::StateVector<dealii::TrilinosWrappers::MPI::Vector>::ReSizeSpace(unsigned int ,
-                                                          const std::vector<unsigned int> &) const
-{
-}
-template<>
+      const std::vector<unsigned int> &) const
+  {
+  }
+  template<>
   void
   DOpE::StateVector<dealii::TrilinosWrappers::MPI::BlockVector>::ReSizeSpace(unsigned int,
-                                                          const std::vector<unsigned int> &) const
-{
-}
+      const std::vector<unsigned int> &) const
+  {
+  }
 #endif
 
 
@@ -1486,7 +1486,7 @@ template<>
             if (!filestream_.fail())
               {
                 DOpEHelper::write (*local_vectors_[global_to_local_[accessor_]],
-                  filestream_);
+                                   filestream_);
                 filestream_.close();
                 state_information_.at(accessor_).on_disc_ = true;
               }
