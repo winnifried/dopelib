@@ -570,7 +570,7 @@ namespace DOpE
     //This saves us a template argument for statpdeproblem etc.
     DOpEWrapper::DataOut<dealdim, DH> data_out_;
     unsigned int control_index_, state_index_;
-    const ActiveFEIndexSetterInterface<dopedim, dealdim> *fe_index_setter_;
+    const ActiveFEIndexSetterInterface<dopedim, dealdim> *fe_index_setter_ = nullptr;
     mutable std::vector<const DOpEWrapper::DoFHandler<dealdim, DH>*> domain_dofhandler_vector_;
     //TODO What if control and state have different dofhandlertypes??
 

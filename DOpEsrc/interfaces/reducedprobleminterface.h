@@ -58,10 +58,10 @@ namespace DOpE
     }
 
     virtual
-    ~ReducedProblemInterface_Base()
+    ~ReducedProblemInterface_Base() noexcept(false)
     {
     }
-    ;
+
     /**
      * Basic function to get information of the state size.
      *

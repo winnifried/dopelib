@@ -871,16 +871,16 @@ namespace DOpE
     DOpEWrapper::HpFEFaceValues<dim> state_hp_fe_values_;
     DOpEWrapper::HpFEFaceValues<dim> control_hp_fe_values_;
 
-    DOpEWrapper::HpFEFaceValues<dim> *nbr_state_hp_fe_values_;
-    DOpEWrapper::HpFEFaceValues<dim> *nbr_control_hp_fe_values_;
+    DOpEWrapper::HpFEFaceValues<dim> *nbr_state_hp_fe_values_ = nullptr;
+    DOpEWrapper::HpFEFaceValues<dim> *nbr_control_hp_fe_values_ = nullptr;
 
-    DOpEWrapper::HpFESubfaceValues<dim> *state_hp_fe_subface_values_;
-    DOpEWrapper::HpFESubfaceValues<dim> *control_hp_fe_subface_values_;
+    DOpEWrapper::HpFESubfaceValues<dim> *state_hp_fe_subface_values_ = nullptr;
+    DOpEWrapper::HpFESubfaceValues<dim> *control_hp_fe_subface_values_ = nullptr;
 
-    const dealii::FEFaceValuesBase<dim> *state_hp_fe_values_ptr_;
-    const dealii::FEFaceValuesBase<dim> *control_hp_fe_values_ptr_;
-    const dealii::FEFaceValuesBase<dim> *nbr_state_hp_fe_values_ptr_;
-    const dealii::FEFaceValuesBase<dim> *nbr_control_hp_fe_values_ptr_;
+    const dealii::FEFaceValuesBase<dim> *state_hp_fe_values_ptr_ = nullptr;
+    const dealii::FEFaceValuesBase<dim> *control_hp_fe_values_ptr_ = nullptr;
+    const dealii::FEFaceValuesBase<dim> *nbr_state_hp_fe_values_ptr_ = nullptr;
+    const dealii::FEFaceValuesBase<dim> *nbr_control_hp_fe_values_ptr_ = nullptr;
 
     const hp::QCollection<dim - 1>& q_collection_;
   };
