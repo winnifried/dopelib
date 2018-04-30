@@ -29,20 +29,20 @@ do echo "Trying "$bd
 				echo -en '\E[31;40m'"failed!"
 				tput sgr0
 				echo 	
-				failed=1
+				failed=${failed}+1
 			    fi
 			else
 			    echo -en '\E[31;40m'"failed!"
 			    tput sgr0
 			    echo 
-			    failed=1
+			    failed=${failed}+1
 			fi
 			cd ..
 		    else
 			echo -en "'\E[31;40m'failed!"
 			tput sgr0
 			echo
-			failed=1
+			failed=${failed}+1
 		    fi
 		    cd ..
 		done
