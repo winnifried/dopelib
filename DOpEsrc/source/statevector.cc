@@ -1646,7 +1646,7 @@ template class DOpE::StateVector<dealii::BlockVector<double> >;
 template class DOpE::StateVector<dealii::Vector<double> >;
 
 #ifdef DOPELIB_WITH_TRILINOS
-#ifdef DOPELIB_WITH_MPI
+#if DEAL_II_VERSION_GTE(9,0,0)
 template class DOpE::StateVector<dealii::TrilinosWrappers::MPI::BlockVector>;
 template class DOpE::StateVector<dealii::TrilinosWrappers::MPI::Vector>;
 #endif

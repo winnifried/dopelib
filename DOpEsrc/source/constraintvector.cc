@@ -677,7 +677,7 @@ template class DOpE::ConstraintVector<dealii::Vector<double> >;
 template class DOpE::ConstraintVector<dealii::BlockVector<double> >;
 
 #ifdef DOPELIB_WITH_TRILINOS
-#ifdef DOPELIB_WITH_MPI
+#if DEAL_II_VERSION_GTE(9,0,0)
 template class DOpE::ConstraintVector<dealii::TrilinosWrappers::MPI::Vector>;
 template class DOpE::ConstraintVector<dealii::TrilinosWrappers::MPI::BlockVector>;
 #endif
