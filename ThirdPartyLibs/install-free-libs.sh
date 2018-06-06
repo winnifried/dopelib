@@ -28,7 +28,8 @@
 ####################################################################
 #ARCHIVE_BASE=Ipopt-3.10.4
 #ARCHIVE_BASE=Ipopt-3.11.8
-ARCHIVE_BASE=Ipopt-3.12.4
+#ARCHIVE_BASE=Ipopt-3.12.4
+ARCHIVE_BASE=Ipopt-3.12.10
 ARCHIVE=${ARCHIVE_BASE}.tgz
 
 
