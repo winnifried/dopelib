@@ -36,6 +36,9 @@
 #include <deal.II/grid/grid_in.h>
 #include <deal.II/grid/tria_boundary_lib.h>
 #include <deal.II/grid/grid_generator.h>
+#if DEAL_II_VERSION_GTE(9,0,0)
+#include <deal.II/grid/manifold_lib.h>
+#endif
 
 //DOpE includes
 #include <include/parameterreader.h>
@@ -150,6 +153,13 @@ main(int argc, char **argv)
   grid_in.read_ucd(input_file);
 
   Point<DIM> p(0.2, 0.2);
+#if DEAL_II_VERSION_GTE(9,0,0)
+  static const SphericalManifold<DIM> boundary(p);
+  triangulation.set_all_manifold_ids_on_boundary(80,80);
+  triangulation.set_all_manifold_ids_on_boundary(81,81);
+  triangulation.set_manifold(80,boundary);
+  triangulation.set_manifold(81,boundary);
+#else
   double radius = 0.05;
   static const HyperBallBoundary<DIM> boundary(p, radius);
 
@@ -157,6 +167,7 @@ main(int argc, char **argv)
   triangulation.set_boundary(80, boundary);
   // cylinder boundary attached to the flag
   triangulation.set_boundary(81, boundary);
+#endif
   triangulation.refine_global(1);
   /**************************************************************/
 
