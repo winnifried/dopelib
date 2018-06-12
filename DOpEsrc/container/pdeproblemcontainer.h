@@ -821,8 +821,11 @@ namespace DOpE
   {
     ExceptionHandler_ = NULL;
     OutputHandler_ = NULL;
-    zero_dirichlet_values_ = new ZeroFunction<dealdim>(
-      this->GetPDE().GetStateNComponents());
+#if DEAL_II_VERSION_GTE(9,0,0)
+    zero_dirichlet_values_ = new Functions::ZeroFunction<dealdim>(this->GetPDE().GetStateNComponents());
+#else
+    zero_dirichlet_values_ = new ZeroFunction<dealdim>(this->GetPDE().GetStateNComponents());
+#endif
     algo_type_ = "";
     functional_for_ee_num_ = dealii::numbers::invalid_unsigned_int;
     interval_length_=1.;

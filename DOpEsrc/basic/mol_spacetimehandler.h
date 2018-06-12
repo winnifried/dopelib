@@ -254,8 +254,13 @@ namespace DOpE
 
               //TODO: mapping[0] is a workaround, as deal does not support interpolate
               // boundary_values with a mapping collection at this point.
+#if DEAL_II_VERSION_GTE(9,0,0)
+              dealii::VectorTools::interpolate_boundary_values(GetMapping()[0], control_dof_handler_.GetDEALDoFHandler(), color, dealii::Functions::ZeroFunction<dopedim>(comp_mask.size()),
+                                                               control_dof_constraints_, comp_mask);
+#else
               dealii::VectorTools::interpolate_boundary_values(GetMapping()[0], control_dof_handler_.GetDEALDoFHandler(), color, dealii::ZeroFunction<dopedim>(comp_mask.size()),
                                                                control_dof_constraints_, comp_mask);
+#endif	      
             }
 
           control_dof_constraints_.close ();
@@ -306,8 +311,13 @@ namespace DOpE
 
           //TODO: mapping[0] is a workaround, as deal does not support interpolate
           // boundary_values with a mapping collection at this point.
+#if DEAL_II_VERSION_GTE(9,0,0)
+          VectorTools::interpolate_boundary_values(GetMapping()[0], state_dof_handler_.GetDEALDoFHandler(), color, dealii::Functions::ZeroFunction<dealdim>(comp_mask.size()),
+                                                   state_dof_constraints_, comp_mask);
+#else
           VectorTools::interpolate_boundary_values(GetMapping()[0], state_dof_handler_.GetDEALDoFHandler(), color, dealii::ZeroFunction<dealdim>(comp_mask.size()),
                                                    state_dof_constraints_, comp_mask);
+#endif	  
         }
       state_dof_constraints_.close();
 

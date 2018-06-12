@@ -33,6 +33,9 @@
 #include <include/userdefineddofconstraints.h>
 #include <container/integratordatacontainer.h>
 #include <wrapper/mapping_wrapper.h>
+#if DEAL_II_VERSION_GTE(9,0,0)
+#include <deal.II/grid/manifold_lib.h>
+#endif
 
 #include <iostream>
 #include <fstream>
@@ -132,14 +135,20 @@ main(int argc, char **argv)
 
   Triangulation<DIM> triangulation;
   Triangulation<DIM> triangulation_q1;
-
   GridGenerator::hyper_ball(triangulation);
+  GridGenerator::hyper_ball(triangulation_q1);
+
+#if DEAL_II_VERSION_GTE(9,0,0)
+  static const SphericalManifold<DIM> boundary;
+  triangulation.set_all_manifold_ids_on_boundary(0,0);
+  triangulation.set_manifold(0,boundary);
+  triangulation_q1.set_all_manifold_ids_on_boundary(0,0);
+  triangulation_q1.set_manifold(0,boundary);
+#else
   static const HyperBallBoundary<DIM> boundary;
   triangulation.set_boundary(0, boundary);
-
-  GridGenerator::hyper_ball(triangulation_q1);
   triangulation_q1.set_boundary(0, boundary);
-
+#endif
   FE<DIM> state_fe(FE_Q<DIM>(order_fe), 1);
 
   QUADRATURE quadrature_formula(2);
