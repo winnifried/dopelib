@@ -150,12 +150,12 @@ main(int argc, char **argv)
   Triangulation<DIM> triangulation(
     Triangulation<DIM>::MeshSmoothing::patch_level_1);
   GridGenerator::hyper_cube_with_cylindrical_hole(triangulation, 0.5, 2., 1, 1);
+  const Point<DIM> center(0, 0);
 #if DEAL_II_VERSION_GTE(9,0,0)
   static const SphericalManifold<DIM> boundary(center);
   triangulation.set_all_manifold_ids_on_boundary(1,1);
   triangulation.set_manifold(1,boundary);
 #else
-  const Point<DIM> center(0, 0);
   const HyperShellBoundary<DIM> boundary_description(center);
   triangulation.set_boundary(1, boundary_description);
 #endif
