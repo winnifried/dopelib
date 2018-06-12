@@ -32,6 +32,9 @@
 // for grid local refinement
 #include <deal.II/numerics/error_estimator.h>
 #include <deal.II/grid/grid_refinement.h>
+#if DEAL_II_VERSION_GTE(9,0,0)
+#include <deal.II/grid/manifold_lib.h>
+#endif
 
 #include <container/pdeproblemcontainer.h>
 #include <reducedproblems/statpdeproblem.h>
@@ -135,10 +138,18 @@ main(int argc, char **argv)
   grid_in.read_ucd(input_file);
 
   Point<DIM> p(0.2, 0.2);
+#if DEAL_II_VERSION_GTE(9,0,0)
+  static const SphericalManifold<DIM> boundary(p);
+  triangulation.set_all_manifold_ids_on_boundary(80,80);
+  triangulation.set_all_manifold_ids_on_boundary(81,81);
+  triangulation.set_manifold(80,boundary);
+  triangulation.set_manifold(81,boundary);
+#else
   double radius = 0.05;
   static const HyperBallBoundary<DIM> boundary(p, radius);
   triangulation.set_boundary(80, boundary);
   triangulation.set_boundary(81, boundary);
+#endif
   triangulation.refine_global(1);
 
   FESystem<DIM> state_fe(FE_Q<DIM>(2), 2, FE_Q<DIM>(1), 1, FE_Q<DIM>(2), 2);
