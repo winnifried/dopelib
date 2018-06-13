@@ -32,8 +32,8 @@ LOG: Allowing IterationCounter `OptNewton_OptProblem' for filenames!
 	CostFunctional: 1.7006e+00
 		 Newton step: 7	 Residual (rel.): < 2.0000e-08	 LinearIters [5]	 LineSearch {0} 
 	CostFunctional: 1.7006e+00
-	Pressure difference: -0.00290239
-	Drag: 0.310354
+	Pressure difference: -0.0029024
+	Drag: 0.31035
 	Lift: -0.8287
 
 	**************************************************
