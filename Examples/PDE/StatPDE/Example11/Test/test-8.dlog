@@ -4,6 +4,7 @@ For License details read LICENSE.TXT distributed with this software!
 
 This is DOpElib Version: 4.0.0 pre
 	Status as of: 16/02/2016
+Using dealii Version: 8.5
 
 	L2-error: 0.0693574
 	Computing solution and functionals with 1st order mapping:
