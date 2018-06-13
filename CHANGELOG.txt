@@ -1,5 +1,9 @@
 Changelog DOpE
 ==============
+13.06.2018: Code update for dealii v9.0.0:
+	    - Some Examples needed to have 'functional_number_precision' to be set in the tests
+	    - In some examples the Manifold induced refinement differed from the previous one
+	      from curved boundaries. Now Tests are depending on the deal.ii version in these examples
 12.06.2018: Code update for dealii v9.0.0:
 	    - fixed deprecated 'HyperBall' by updating the examples to use manifolds.
 	    - fixed deprecated 'ZeroFunction' by using 'Functions::ZeroFunction'.
