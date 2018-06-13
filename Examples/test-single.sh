@@ -35,8 +35,9 @@ then
 		log=test-${deal}.dlog
 		echo "Using alternative logfile ${log}"
 	    fi		
-	
-	    (diff dope.log ${log} 2>&1) > /dev/null
+
+	    #We don't compare the header (first seven lines of the log file)
+	    (diff <(tail -n +8 dope.log) <(tail -n +8 ${log}) 2>&1) > /dev/null
 	    if [ $? -eq 0 ]
 	    then
 		echo "No differences found."
