@@ -14,25 +14,25 @@ Using dealii Version: 9.0
 	**************************************************
 
 LOG: Allowing IterationCounter `OptNewton_OptProblem' for filenames!
-	CostFunctional: 1.12
-		 Newton step: 0	 Residual (abs.): 7.76
-		 Newton step: 0	 Residual (rel.): 1.000e+00
+	CostFunctional: 1.1
+		 Newton step: 0	 Residual (abs.): 7.8
+		 Newton step: 0	 Residual (rel.): 1.00e+00
 	
-	CostFunctional: 7.965e-01
-		 Newton step: 1	 Residual (rel.):   4.637e-01	 LinearIters [2]	 LineSearch {0} 
-	CostFunctional: 3.333e-01
-		 Newton step: 2	 Residual (rel.):   3.350e-01	 LinearIters [3]	 LineSearch {0} 
-	CostFunctional: 1.403e-01
-		 Newton step: 3	 Residual (rel.):   7.627e-02	 LinearIters [2]	 LineSearch {0} 
-	CostFunctional: 1.315e-01
-		 Newton step: 4	 Residual (rel.):   1.035e-03	 LinearIters [2]	 LineSearch {0} 
-	CostFunctional: 1.315e-01
-		 Newton step: 5	 Residual (rel.):   6.189e-05	 LinearIters [6]	 LineSearch {0} 
-	CostFunctional: 1.315e-01
-		 Newton step: 6	 Residual (rel.):   9.281e-07	 LinearIters [26]	 LineSearch {0} 
-	CostFunctional: 1.315e-01
-		 Newton step: 7	 Residual (rel.): < 2.000e-08	 LinearIters [32]	 LineSearch {0} 
-	CostFunctional: 1.315e-01
+	CostFunctional: 7.96e-01
+		 Newton step: 1	 Residual (rel.):   4.64e-01	 LinearIters [2]	 LineSearch {0} 
+	CostFunctional: 3.33e-01
+		 Newton step: 2	 Residual (rel.):   3.35e-01	 LinearIters [3]	 LineSearch {0} 
+	CostFunctional: 1.40e-01
+		 Newton step: 3	 Residual (rel.):   7.63e-02	 LinearIters [2]	 LineSearch {0} 
+	CostFunctional: 1.32e-01
+		 Newton step: 4	 Residual (rel.):   1.04e-03	 LinearIters [2]	 LineSearch {0} 
+	CostFunctional: 1.32e-01
+		 Newton step: 5	 Residual (rel.):   6.19e-05	 LinearIters [6]	 LineSearch {0} 
+	CostFunctional: 1.32e-01
+		 Newton step: 6	 Residual (rel.):   9.28e-07	 LinearIters [26]	 LineSearch {0} 
+	CostFunctional: 1.32e-01
+		 Newton step: 7	 Residual (rel.): < 2.00e-08	 LinearIters [32]	 LineSearch {0} 
+	CostFunctional: 1.32e-01
 	Pressure difference: 0.0116146
 	Drag: 0.115414
 	Lift: -0.341395
@@ -40,6 +40,6 @@ LOG: Allowing IterationCounter `OptNewton_OptProblem' for filenames!
 	**************************************************
 	*        Stopping Reduced Newton Algorithm       *
 	*             after      7  Iterations           *
-	*             with rel. Residual < 2.000e-08          *
+	*             with rel. Residual  < 2.00e-08          *
 	**************************************************
 
