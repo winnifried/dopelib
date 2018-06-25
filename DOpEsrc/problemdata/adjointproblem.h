@@ -130,8 +130,11 @@ namespace DOpE
               if (opt_problem_.GetFunctional()->GetType().find("point")
                   != std::string::npos)
                 {
-                  opt_problem_.GetFunctional()->PointValue_U(param_values, domain_values,
-                                                             rhs_vector, scale);
+                  opt_problem_.GetFunctional()->PointValue_U(
+		    opt_problem_.GetSpaceTimeHandler()->GetControlDoFHandler(),
+		    opt_problem_.GetSpaceTimeHandler()->GetStateDoFHandler(),
+		    param_values, domain_values,
+		    rhs_vector, scale);
                 }
             }
         }
