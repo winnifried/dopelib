@@ -655,6 +655,7 @@ namespace DOpE
     if (need_point_rhs)
       {
         VECTOR point_rhs;
+	point_rhs.reinit(residual);
         pde.PointRhs(this->GetParamData(), this->GetDomainData(), point_rhs,
                      -1.);
         residual += point_rhs;
@@ -941,6 +942,7 @@ namespace DOpE
     if (need_point_rhs)
       {
         VECTOR point_rhs;
+	point_rhs.reinit(residual);
         pde.PointRhs(this->GetParamData(), this->GetDomainData(), point_rhs,
                      1.);
         residual += point_rhs;
