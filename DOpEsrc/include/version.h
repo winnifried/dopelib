@@ -19,6 +19,10 @@ namespace DOpE
     const unsigned int day           = 16;
     const unsigned int month         = 02;
     const unsigned int year          = 2016;
+
+    //DEAL_II_INFO
+    const unsigned int dealii_major = DEAL_II_MAJOR_VERSION;
+    const unsigned int dealii_minor = DEAL_II_MINOR_VERSION;
   }
 }
 

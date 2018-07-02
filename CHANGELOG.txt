@@ -1,5 +1,12 @@
 Changelog DOpE
 ==============
+13.06.2018: Code update for dealii v9.0.0:
+	    - Some Examples needed to have 'functional_number_precision' to be set in the tests
+	    - In some examples the Manifold induced refinement differed from the previous one
+	      from curved boundaries. Now Tests are depending on the deal.ii version in these examples
+12.06.2018: Code update for dealii v9.0.0:
+	    - fixed deprecated 'HyperBall' by updating the examples to use manifolds.
+	    - fixed deprecated 'ZeroFunction' by using 'Functions::ZeroFunction'.
 14.08.2017: Removed comparisons with fixed tolerance for zero difference tests, now using relative scaling.
 09.08.2017: Implemented first functionality to simulate PDEs on networks. Together with an 
 	    example in Examples/PDE/StatPDE/Example14.

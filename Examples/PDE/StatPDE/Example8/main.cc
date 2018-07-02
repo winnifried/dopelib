@@ -31,6 +31,9 @@
 #include <deal.II/grid/grid_out.h>
 #include <deal.II/fe/fe_q.h>
 #include <deal.II/base/quadrature_lib.h>
+#if DEAL_II_VERSION_GTE(9,0,0)
+#include <deal.II/grid/manifold_lib.h>
+#endif
 
 #include <container/pdeproblemcontainer.h>
 #include <interfaces/functionalinterface.h>
@@ -107,16 +110,21 @@ main(int argc, char **argv)
 
   Triangulation<DIM> triangulation;
 
-  const Point<DIM> center(100, 0);
-  const double inner_radius = 10.0;
-
   GridIn<DIM> grid_in;
   grid_in.attach_triangulation(triangulation);
   std::ifstream input_file("benchmark_2.inp");
   grid_in.read_ucd(input_file);
 
+  const Point<DIM> center(100, 0);
+#if DEAL_II_VERSION_GTE(9,0,0)
+  static const SphericalManifold<DIM> boundary(center);
+  triangulation.set_all_manifold_ids_on_boundary(1,1);
+  triangulation.set_manifold(1,boundary);
+#else
+  const double inner_radius = 10.0;
   static const HyperBallBoundary<DIM> boundary(center, inner_radius);
   triangulation.set_boundary(1, boundary);
+#endif
   triangulation.refine_global(4);
   {
     std::ofstream out("grid.eps");

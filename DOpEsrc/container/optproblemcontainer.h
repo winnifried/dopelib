@@ -1441,8 +1441,11 @@ namespace DOpE
   {
     ExceptionHandler_ = NULL;
     OutputHandler_ = NULL;
-    zero_dirichlet_values_ = new ZeroFunction<dealdim>(
-      this->GetPDE().GetStateNComponents());
+#if DEAL_II_VERSION_GTE(9,0,0)
+    zero_dirichlet_values_ = new Functions::ZeroFunction<dealdim>(this->GetPDE().GetStateNComponents());
+#else
+    zero_dirichlet_values_ = new ZeroFunction<dealdim>(this->GetPDE().GetStateNComponents());
+#endif
     algo_type_ = "";
     functional_position_[functional_->GetName()] = 0;
     //remember! At functional_values_[0] we store always the cost functional!

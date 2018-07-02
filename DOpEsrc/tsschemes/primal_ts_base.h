@@ -156,10 +156,11 @@ namespace DOpE
      */
     void
     Init_PointRhs(
-      const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
-      const std::map<std::string, const VECTOR *> &/*domain_values*/,
-      VECTOR & /*rhs_vector*/, double /*scale*/)
+      const std::map<std::string, const dealii::Vector<double>*> &param_values,
+      const std::map<std::string, const VECTOR *> &domain_values,
+      VECTOR & rhs_vector, double scale)
     {
+      this->GetProblem().Init_PointRhs(param_values, domain_values, rhs_vector, scale);
     }
 
     /**

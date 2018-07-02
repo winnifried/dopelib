@@ -18,8 +18,26 @@ then
 	    then
 	    echo "Running Program $2 test.prm"
 	    ($2 test.prm 2>&1) > /dev/null
-	    echo "Comparing Results:"
-	    (diff dope.log test.dlog 2>&1) > /dev/null
+	    #Which Version of Deal.II are we using?
+	    if [ ! -f dope.log ]
+	    then
+		echo "No logfile written"
+		exit 1
+	    fi
+
+	    #Get deal major version
+	    deal=`grep "Using dealii Version: " dope.log | sed 's/.*Version: //g' | sed 's/\..//g'`
+	    
+	    echo "Comparing Results for dealii major version ${deal}:"
+	    log=test.dlog
+	    if [ -f test-${deal}.dlog ]
+	    then
+		log=test-${deal}.dlog
+		echo "Using alternative logfile ${log}"
+	    fi		
+
+	    #We don't compare the header (first seven lines of the log file)
+	    (diff <(tail -n +8 dope.log) <(tail -n +8 ${log}) 2>&1) > /dev/null
 	    if [ $? -eq 0 ]
 	    then
 		echo "No differences found."
@@ -35,7 +53,7 @@ then
 		exit 0
 	    else
 		echo "There where discrepancies in the Output."
-		diff dope.log test.dlog
+		diff dope.log ${log}
 		if [ -d Mesh0 ] 
 		then
 		    rm -r Mesh?/

@@ -60,7 +60,10 @@ subsection output parameters
   # Set the precision of the newton output
   set number_precision	 = 2
 
-  # Set manually the machine tolarance for the output
+  # Sets the precision of the output numbers for functionals.
+  set functional_number_precision = 5
+
+# Set manually the machine tolarance for the output
   set eps_machine_set_by_user	 = 1.0e-7
 
 

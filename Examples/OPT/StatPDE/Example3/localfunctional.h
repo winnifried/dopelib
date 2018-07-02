@@ -107,9 +107,8 @@ public:
                                * state_fe_face_values.normal_vector(q_point)
                                * state_fe_face_values.JxW(q_point);
           }
-
+	functional_value_J = drag_lift_value[0];
       }
-    functional_value_J = drag_lift_value[0];
 
     // Regularization term for the cost functional
     // defined above

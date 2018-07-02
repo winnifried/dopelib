@@ -30,6 +30,9 @@
 #include <deal.II/fe/fe_q.h>
 #include <deal.II/base/quadrature_lib.h>
 #include <deal.II/base/function.h>
+#if DEAL_II_VERSION_GTE(9,0,0)
+#include <deal.II/grid/manifold_lib.h>
+#endif
 
 #include <container/pdeproblemcontainer.h>
 #include <reducedproblems/statpdeproblem.h>
@@ -127,12 +130,18 @@ main(int argc, char **argv)
   //*************************************************
 
   //Make triangulation *************************************************
-  const Point<DIM> center(0, 0);
-  const HyperShellBoundary<DIM> boundary_description(center);
   Triangulation<DIM> triangulation;
   GridGenerator::hyper_cube_with_cylindrical_hole(triangulation, 0.1, 1., 1, 1,
                                                   true);
+  const Point<DIM> center(0, 0);
+#if DEAL_II_VERSION_GTE(9,0,0)
+  static const SphericalManifold<DIM> boundary(center);
+  triangulation.set_all_manifold_ids_on_boundary(4,4);
+  triangulation.set_manifold(4,boundary);
+#else
+  const HyperShellBoundary<DIM> boundary_description(center);
   triangulation.set_boundary(4, boundary_description);
+#endif
   if (prerefine > 0)
     triangulation.refine_global(prerefine);
   //*************************************************

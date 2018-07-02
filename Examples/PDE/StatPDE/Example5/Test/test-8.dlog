@@ -4,7 +4,7 @@ For License details read LICENSE.TXT distributed with this software!
 
 This is DOpElib Version: 4.0.0 pre
 	Status as of: 16/02/2016
-Using dealii Version: 9.0
+Using dealii Version: 8.5
 
 	**************************************************
 	*             Starting Forward Solve             *
@@ -13,64 +13,64 @@ Using dealii Version: 9.0
 	**************************************************
 
 	Computing State Solution:
-			 Newton step: 0	 Residual (abs.):   1.1774e+00
+			 Newton step: 0	 Residual (abs.):   1.1759e+00
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 	Writing [./Mesh0/State_PDEProblemContainer.vtk]
 	Computing Functionals:
-	Local Mean value: 0.449067
+	Local Mean value: 0.452914
 	Computing Dual for Error Estimation:
 			 Newton step: 0	 Residual (abs.):   1.2500e-01
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 	Writing [./Mesh0/Adjoint_for_ee_PDEProblemContainer.vtk]
 	Computing Error Indicators:
-	Error estimate using DWR-Estimator for the Local Mean value: -0.0443393
+	Error estimate using DWR-Estimator for the Local Mean value: -0.0466877
 	Writing [./Mesh0/Error_Indicators_PDEProblemContainer.vtk]
 	Computing Error Indicators:
-	Error estimate using L2-Residual-Estimator: 1638.01
+	Error estimate using L2-Residual-Estimator: 1607.75
 	Writing [./Mesh0/Error_Indicators_PDEProblemContainer.vtk]
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator: 26640.5
+	Error estimate using H1-Residual-Estimator: 26417.8
 	Writing [./Mesh0/Error_Indicators_PDEProblemContainer.vtk]
 
-	Mean value error: -0.0071107  Ieff (eh/e)= 6.23557
-	L2-Error estimator: 40.4723
-	H1-Error estimator: 163.219
+	Mean value error: -0.0109579  Ieff (eh/e)= 4.26063
+	L2-Error estimator: 40.0968
+	H1-Error estimator: 162.536
 	
 
 
 	**************************************************
 	*             Starting Forward Solve             *
 	*   Solving : PDEProblemContainer	*
-	*   SDoFs   : 	982
+	*   SDoFs   : 	954
 	**************************************************
 
 	Computing State Solution:
-			 Newton step: 0	 Residual (abs.):   6.8764e-01
+			 Newton step: 0	 Residual (abs.):   6.9121e-01
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 	Writing [./Mesh1/State_PDEProblemContainer.vtk]
 	Computing Functionals:
-	Local Mean value: 0.519847
+	Local Mean value: 0.518852
 	Computing Dual for Error Estimation:
-			 Newton step: 0	 Residual (abs.):   2.9503e-02
+			 Newton step: 0	 Residual (abs.):   2.9688e-02
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 	Writing [./Mesh1/Adjoint_for_ee_PDEProblemContainer.vtk]
 	Computing Error Indicators:
-	Error estimate using DWR-Estimator for the Local Mean value: -0.0532603
+	Error estimate using DWR-Estimator for the Local Mean value: -0.0529015
 	Writing [./Mesh1/Error_Indicators_PDEProblemContainer.vtk]
 	Computing Error Indicators:
-	Error estimate using L2-Residual-Estimator: 752.863
+	Error estimate using L2-Residual-Estimator: 811.71
 	Writing [./Mesh1/Error_Indicators_PDEProblemContainer.vtk]
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator: 14880.2
+	Error estimate using H1-Residual-Estimator: 15918.1
 	Writing [./Mesh1/Error_Indicators_PDEProblemContainer.vtk]
 
-	Mean value error: -0.0778911  Ieff (eh/e)= 0.683778
-	L2-Error estimator: 27.4383
-	H1-Error estimator: 121.984
+	Mean value error: -0.076896  Ieff (eh/e)= 0.687962
+	L2-Error estimator: 28.4905
+	H1-Error estimator: 126.167
 	
 
 
@@ -81,97 +81,97 @@ Using dealii Version: 9.0
 	**************************************************
 
 	Computing State Solution:
-			 Newton step: 0	 Residual (abs.):   1.2193e+00
+			 Newton step: 0	 Residual (abs.):   9.8973e-01
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 	Writing [./Mesh2/State_PDEProblemContainer.vtk]
 	Computing Functionals:
-	Local Mean value: 0.458857
+	Local Mean value: 0.458632
 	Computing Dual for Error Estimation:
-			 Newton step: 0	 Residual (abs.):   1.4660e-02
+			 Newton step: 0	 Residual (abs.):   1.4714e-02
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 	Writing [./Mesh2/Adjoint_for_ee_PDEProblemContainer.vtk]
 	Computing Error Indicators:
-	Error estimate using DWR-Estimator for the Local Mean value: -0.0170594
+	Error estimate using DWR-Estimator for the Local Mean value: -0.0168393
 	Writing [./Mesh2/Error_Indicators_PDEProblemContainer.vtk]
 	Computing Error Indicators:
-	Error estimate using L2-Residual-Estimator: 596.329
+	Error estimate using L2-Residual-Estimator: 587.956
 	Writing [./Mesh2/Error_Indicators_PDEProblemContainer.vtk]
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator: 11139.5
+	Error estimate using H1-Residual-Estimator: 11053.6
 	Writing [./Mesh2/Error_Indicators_PDEProblemContainer.vtk]
 
-	Mean value error: -0.0169008  Ieff (eh/e)= 1.00938
-	L2-Error estimator: 24.4199
-	H1-Error estimator: 105.544
+	Mean value error: -0.0166759  Ieff (eh/e)= 1.0098
+	L2-Error estimator: 24.2478
+	H1-Error estimator: 105.136
 	
 
 
 	**************************************************
 	*             Starting Forward Solve             *
 	*   Solving : PDEProblemContainer	*
-	*   SDoFs   : 	3384
+	*   SDoFs   : 	3134
 	**************************************************
 
 	Computing State Solution:
-			 Newton step: 0	 Residual (abs.):   1.5263e+00
+			 Newton step: 0	 Residual (abs.):   1.5065e+00
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 	Writing [./Mesh3/State_PDEProblemContainer.vtk]
 	Computing Functionals:
-	Local Mean value: 0.447511
+	Local Mean value: 0.446496
 	Computing Dual for Error Estimation:
-			 Newton step: 0	 Residual (abs.):   4.0664e-02
+			 Newton step: 0	 Residual (abs.):   7.2899e-03
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 	Writing [./Mesh3/Adjoint_for_ee_PDEProblemContainer.vtk]
 	Computing Error Indicators:
-	Error estimate using DWR-Estimator for the Local Mean value: -0.00623515
+	Error estimate using DWR-Estimator for the Local Mean value: -0.00555443
 	Writing [./Mesh3/Error_Indicators_PDEProblemContainer.vtk]
 	Computing Error Indicators:
-	Error estimate using L2-Residual-Estimator: 174.113
+	Error estimate using L2-Residual-Estimator: 168.975
 	Writing [./Mesh3/Error_Indicators_PDEProblemContainer.vtk]
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator: 5628.13
+	Error estimate using H1-Residual-Estimator: 5589.85
 	Writing [./Mesh3/Error_Indicators_PDEProblemContainer.vtk]
 
-	Mean value error: -0.00555521  Ieff (eh/e)= 1.1224
-	L2-Error estimator: 13.1952
-	H1-Error estimator: 75.0209
+	Mean value error: -0.0045399  Ieff (eh/e)= 1.22347
+	L2-Error estimator: 12.9991
+	H1-Error estimator: 74.7653
 	
 
 
 	**************************************************
 	*             Starting Forward Solve             *
 	*   Solving : PDEProblemContainer	*
-	*   SDoFs   : 	10402
+	*   SDoFs   : 	10126
 	**************************************************
 
 	Computing State Solution:
-			 Newton step: 0	 Residual (abs.):   1.3472e+00
+			 Newton step: 0	 Residual (abs.):   1.2923e+00
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 	Writing [./Mesh4/State_PDEProblemContainer.vtk]
 	Computing Functionals:
-	Local Mean value: 0.442973
+	Local Mean value: 0.442851
 	Computing Dual for Error Estimation:
-			 Newton step: 0	 Residual (abs.):   2.0420e-02
+			 Newton step: 0	 Residual (abs.):   4.0572e-02
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 	Writing [./Mesh4/Adjoint_for_ee_PDEProblemContainer.vtk]
 	Computing Error Indicators:
-	Error estimate using DWR-Estimator for the Local Mean value: -0.00123763
+	Error estimate using DWR-Estimator for the Local Mean value: -0.00117943
 	Writing [./Mesh4/Error_Indicators_PDEProblemContainer.vtk]
 	Computing Error Indicators:
-	Error estimate using L2-Residual-Estimator: 11.562
+	Error estimate using L2-Residual-Estimator: 11.2436
 	Writing [./Mesh4/Error_Indicators_PDEProblemContainer.vtk]
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator: 1486.22
+	Error estimate using H1-Residual-Estimator: 1474.84
 	Writing [./Mesh4/Error_Indicators_PDEProblemContainer.vtk]
 
-	Mean value error: -0.00101697  Ieff (eh/e)= 1.21697
-	L2-Error estimator: 3.40029
-	H1-Error estimator: 38.5516
+	Mean value error: -0.00089508  Ieff (eh/e)= 1.31768
+	L2-Error estimator: 3.35314
+	H1-Error estimator: 38.4036
 	
 
