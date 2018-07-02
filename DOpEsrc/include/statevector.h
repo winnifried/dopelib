@@ -25,7 +25,7 @@
 #define STATE_VECTOR_H_
 
 // TODO remove ...
-#pragma GCC diagnostic ignored "-Wterminate"
+//#pragma GCC diagnostic ignored "-Wterminate"
 
 #include <basic/spacetimehandler_base.h>
 #include <basic/dopetypes.h>
