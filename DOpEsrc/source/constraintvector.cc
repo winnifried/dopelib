@@ -93,7 +93,8 @@ ConstraintVector<VECTOR>::~ConstraintVector()
     }
   else
     {
-      throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),"ConstraintVector<VECTOR>::~ConstraintVector");
+      std::cerr<<"Unknown Behavior "<<DOpEtypesToString(GetBehavior())<<" in ConstraintVector<VECTOR>::~ConstraintVector"<<std::endl;
+      abort();
     }
 }
 

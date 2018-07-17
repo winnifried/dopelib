@@ -152,7 +152,8 @@ ControlVector<VECTOR>::~ControlVector()
     }
   else
     {
-      throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),"ControlVector<VECTOR>::~ControlVector");
+      std::cerr<<"Unknown Behavior "<<DOpEtypesToString(GetBehavior())<<" in ControlVector<VECTOR>::~ControlVector"<<std::endl;
+      abort();
     }
 }
 
