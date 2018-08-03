@@ -104,6 +104,8 @@ namespace DOpE
     /**
      * Create a vector associating to each global-vertex-id the number 
      * of neighboring elements.
+     *
+     * Returns 0 if a vertex is hanging
      */
     template<int dim>
     void CalculateNeigbourElementsToVertices(dealii::Triangulation<dim>& triangulation, std::vector<unsigned int>& n_neighbour_to_vertex)
@@ -115,6 +117,7 @@ namespace DOpE
 	auto cells = GridTools::find_cells_adjacent_to_vertex(triangulation,i);
 	unsigned int count = 0;
 	int level = -1;
+	bool hanging = false;
 	for(unsigned int c=0; c < cells.size(); c++)
 	{
 	  if( c == 0 )
@@ -125,12 +128,35 @@ namespace DOpE
 	  {
 	    if(level != cells[c]->level())
 	    {
-	      //TODO: Decide what to do if neighbors are not on
-	      //the same level...
-	      abort();
+	      //The vertex maybe hanging, we must check
+	      hanging = true;
 	    }
 	  }
 	  count++;
+	}
+	if(hanging == true)
+	{
+	  //Check if vertex is really hanging
+	  //A hanging Vertex is not a vertex of one of is neighbouring
+	  //elements
+	  for(unsigned int c=0; c < cells.size(); c++)
+	  {
+	    bool local_present=false;
+	    for(unsigned int j = 0; j < GeometryInfo<dim>::vertices_per_cell; j++)
+	    {
+	      local_present=local_present||(cells[c]->vertex_index(j) == i);
+	    }
+	    hanging = hanging && local_present;
+	    if(local_present==false)
+	    {
+	      break;
+	    }
+	  }
+	  //if still hanging the vertex was in all elements (its not hanging)
+	  if( !hanging )
+	  {
+	    count=0;
+	  }
 	}
 	n_neighbour_to_vertex[i]=count;
       }
