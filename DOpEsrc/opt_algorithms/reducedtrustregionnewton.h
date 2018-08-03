@@ -354,7 +354,7 @@ namespace DOpE
     int liniter = 0;
     global_tol =  std::max(nonlinear_global_tol_,global_tol);
     //while( (res >= global_tol*global_tol) && (res >= nonlinear_tol_*nonlinear_tol_*firstres) )
-    while ( iter==0 ||  iter ==1 || ((res >= global_tol*global_tol) && (res >= nonlinear_tol_*nonlinear_tol_*firstres) ))
+    while ( ((res >= global_tol*global_tol) && (res >= nonlinear_tol_*nonlinear_tol_*firstres) ))
       {
         this->GetOutputHandler()->SetIterationNumber(iter,"OptNewton"+postindex_);
         tr_model = 0.;
