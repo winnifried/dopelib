@@ -690,6 +690,13 @@ namespace DOpE
     bool
     HasInterfaces() const;
 
+    /**
+     * Do we need evaluation at the vertices?
+     */
+    inline bool
+    HasVertices() const;
+
+
     /******************************************************/
 
     dealii::UpdateFlags
@@ -3209,6 +3216,39 @@ namespace DOpE
                                 "OptProblemContainer::HasInterfaces");
           }
       }
+  }
+  /******************************************************/
+
+  template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
+           typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+           template<int, int> class DH>
+  bool
+  OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
+                      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::HasVertices() const
+  {
+    if (this->GetType().find("aux_functional") != std::string::npos)
+      {
+        return false;
+      }
+    else if (this->GetType().find("functional") != std::string::npos)
+      {
+        return false;
+      }
+    else if (this->GetType().find("constraint") != std::string::npos)
+      {
+        return false;
+      }
+    else if ((this->GetType() == "gradient")
+	     || (this->GetType() == "hessian") || (this->GetType() == "error_evaluation"))
+    {
+      return this->GetPDE().HasVertices();
+    }
+    else
+    {
+      throw DOpEException("Unknown Type: '" + this->GetType() + "'!",
+			  "OptProblemContainer::HasVertices");
+    }
   }
 
   /******************************************************/

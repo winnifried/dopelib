@@ -254,6 +254,7 @@ namespace DOpE
                                      state_dofs_per_block_, state_block_component);
 
       support_points_.clear();
+      n_neighbour_to_vertex_.clear();
 
       constraints_.ReInit(control_dofs_per_block_);
       //constraints_.ReInit(control_dofs_per_block_, state_dofs_per_block_);
@@ -446,6 +447,19 @@ namespace DOpE
       return support_points_;
     }
 
+    /**
+     * Implementation of virtual function in StateSpaceTimeHandler
+     * Always uses vertices of the state_triangulation!
+     */
+    const std::vector<unsigned int>* GetNNeighbourElements()
+    {
+      if(n_neighbour_to_vertex_.size()!=state_triangulation_.n_vertices())
+      {
+	DOpE::STHInternals::CalculateNeigbourElementsToVertices(state_triangulation_,n_neighbour_to_vertex_);
+      }
+      return &n_neighbour_to_vertex_;
+    }
+    
     /******************************************************/
     void
     ComputeControlSparsityPattern(SPARSITYPATTERN &sparsity) const;
@@ -850,6 +864,9 @@ namespace DOpE
     DOpEWrapper::SolutionTransfer<dim, VECTOR,DH> *control_mesh_transfer_;
     DOpEWrapper::SolutionTransfer<dim, VECTOR,DH> *state_mesh_transfer_;
     bool sparse_mkr_dynamic_;
+
+    std::vector<unsigned int> n_neighbour_to_vertex_;
+
   };
 
   /**************************explicit instantiation*************/

@@ -500,6 +500,12 @@ namespace DOpE
     &
     GetMapDoFToSupportPoints()=0;
 
+    /**
+     * Returns the list of the number of neighbouring elements to the vertices
+     */
+
+    virtual const std::vector<unsigned int>* GetNNeighbourElements() = 0;
+        
     /******************************************************/
 
     /**

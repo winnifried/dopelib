@@ -125,12 +125,13 @@ namespace DOpE
                   const std::vector<
                   typename DOpEWrapper::DoFHandler<dim, DH>::active_cell_iterator>& element,
                   const std::map<std::string, const Vector<double>*> &param_values,
-                  const std::map<std::string, const VECTOR *> &domain_values)
+                  const std::map<std::string, const VECTOR *> &domain_values,
+		  bool need_vertices)
     {
       if (edc_ != NULL)
         delete edc_;
       edc_ = new ElementDataContainer<DH, VECTOR, dim>(quad,
-                                                       update_flags, sth, element, param_values, domain_values);
+                                                       update_flags, sth, element, param_values, domain_values,need_vertices);
     }
 
     /**
@@ -143,10 +144,11 @@ namespace DOpE
                   const std::vector<
                   typename DOpEWrapper::DoFHandler<dim, DH>::active_cell_iterator>& element,
                   const std::map<std::string, const Vector<double>*> &param_values,
-                  const std::map<std::string, const VECTOR *> &domain_values)
+                  const std::map<std::string, const VECTOR *> &domain_values,
+		  bool need_vertices)
     {
       InitializeEDC(GetQuad(), update_flags, sth, element, param_values,
-                    domain_values);
+                    domain_values, need_vertices);
     }
 
     /**

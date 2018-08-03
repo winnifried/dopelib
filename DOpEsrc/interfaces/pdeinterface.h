@@ -1424,6 +1424,15 @@ namespace DOpE
     virtual bool
     HasInterfaces() const;
 
+    /**
+     * Is an evaluation of quantities at vertices needed,
+     * e.g., for the dual-basis of vertex based elements
+     * 
+     * Defaults to false
+     */
+    virtual bool
+      HasVertices() const; 
+    
     /******************************************************/
 
     void

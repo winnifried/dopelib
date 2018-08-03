@@ -28,6 +28,7 @@
 
 #include <wrapper/fevalues_wrapper.h>
 #include <include/dopeexception.h>
+#include <sstream>
 
 namespace DOpE
 {
@@ -46,10 +47,14 @@ namespace DOpE
     class ElementDataContainerInternal
     {
     public:
+      template<typename STH>
       ElementDataContainerInternal(
-        const std::map<std::string, const dealii::Vector<double>*> &param_values
-        ,
-        const std::map<std::string, const VECTOR *> &domain_values);
+        const std::map<std::string, const dealii::Vector<double>*> &param_values,
+        const std::map<std::string, const VECTOR *> &domain_values,
+	STH& sth,
+	const typename Triangulation<dim>::cell_iterator element_iter,
+	bool need_vertices
+	);
 
       virtual
       ~ElementDataContainerInternal()
@@ -83,7 +88,7 @@ namespace DOpE
        * Return a triangulation iterator to the current element for the state.
        */
       const typename  Triangulation<dim>::cell_iterator
-      GetElementState() const;
+      GetElement() const;
 
 
       /********************************************************************/
@@ -233,6 +238,34 @@ namespace DOpE
       GetLaplaciansControl(std::string name,
                            std::vector<dealii::Vector<double> > &values) const;
 
+      /*
+       * Returns the number of neighbouring elements to the vertex located at the given point
+       */
+      inline unsigned int GetNNeighbourElementsOfVertex(const Point<dim>& p) const
+      {
+	if( !has_vertices_)
+	{
+	  throw DOpEException("No Vertex information prepared. Have you set HasVertices() in the PDE?",
+			      "ElementDataContainerInternal::GetNNeighbourElementsOfVertex"); 
+	}
+	const typename Triangulation<dim>::cell_iterator element = GetElement();
+	for(unsigned int i = 0; i < GeometryInfo<dim>::vertices_per_cell; i++)
+	{
+	  if( p == element->vertex(i))
+	  {
+	    return (*n_neighbour_to_vertex_)[element->vertex_index(i)];
+	  }
+	}
+	std::stringstream out;
+	out <<"Could not find Point "<<p<<" !";
+	throw DOpEException(out.str(),
+	                    "ElementDataContainerInternal::GetNNeighbourElementsOfVertex");
+      }
+
+      void ReInit(typename Triangulation<dim>::cell_iterator element_iter)
+      {
+	element_iter_ = element_iter;
+      }
     private:
       /***********************************************************/
       /**
@@ -308,16 +341,30 @@ namespace DOpE
 
       const std::map<std::string, const dealii::Vector<double>*> &param_values_;
       const std::map<std::string, const VECTOR *> &domain_values_;
+      const std::vector<unsigned int>* n_neighbour_to_vertex_;
+      typename Triangulation<dim>::cell_iterator element_iter_;
+      bool has_vertices_;
     };
 
     /**********************************************************************/
     template<typename VECTOR, int dim>
+      template<typename STH>
     ElementDataContainerInternal<VECTOR, dim>::ElementDataContainerInternal(
       const std::map<std::string, const dealii::Vector<double>*> &param_values,
-      const std::map<std::string, const VECTOR *> &domain_values)
-      : param_values_(param_values), domain_values_(domain_values)
-    {
-    }
+      const std::map<std::string, const VECTOR *> &domain_values,
+      STH& sth,
+      const typename Triangulation<dim>::cell_iterator element_iter,
+      bool need_vertices)
+      : param_values_(param_values), domain_values_(domain_values),
+      n_neighbour_to_vertex_(NULL), element_iter_(element_iter)
+      {
+	has_vertices_ = false;
+	if(need_vertices)
+	{
+	  n_neighbour_to_vertex_ = sth.GetNNeighbourElements();
+	  has_vertices_ = true;
+	}
+      }
 
     template<typename VECTOR, int dim>
     void
@@ -355,9 +402,9 @@ namespace DOpE
     /*********************************************/
     template<typename VECTOR, int dim>
     const typename Triangulation<dim>::cell_iterator
-    ElementDataContainerInternal<VECTOR, dim>::GetElementState() const
+    ElementDataContainerInternal<VECTOR, dim>::GetElement() const
     {
-      return this->GetFEValuesState().get_element();
+      return element_iter_;
     }
 
     /*********************************************/

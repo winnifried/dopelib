@@ -518,8 +518,11 @@ namespace DOpE
 
     // Generate the data containers.
     GetIntegratorDataContainer().InitializeEDC(pde.GetUpdateFlags(),
-                                               *(pde.GetBaseProblem().GetSpaceTimeHandler()), element,
-                                               this->GetParamData(), this->GetDomainData());
+                                               *(pde.GetBaseProblem().GetSpaceTimeHandler()),
+					       element,
+                                               this->GetParamData(),
+					       this->GetDomainData(),
+					       pde.HasVertices());
     auto &edc = GetIntegratorDataContainer().GetElementDataContainer();
 
     bool need_faces = pde.HasFaces();
@@ -692,8 +695,11 @@ namespace DOpE
 
       // Generate the data containers.
       GetIntegratorDataContainer().InitializeEDC(pde.GetUpdateFlags(),
-                                                 *(pde.GetBaseProblem().GetSpaceTimeHandler()), element,
-                                                 this->GetParamData(), this->GetDomainData());
+                                                 *(pde.GetBaseProblem().GetSpaceTimeHandler()),
+						 element,
+                                                 this->GetParamData(),
+						 this->GetDomainData(),
+						 pde.HasVertices());
       auto &edc = GetIntegratorDataContainer().GetElementDataContainer();
 
       bool need_faces = pde.HasFaces();
@@ -851,8 +857,11 @@ namespace DOpE
 
     // Initialize the data containers.
     GetIntegratorDataContainer().InitializeEDC(pde.GetUpdateFlags(),
-                                               *(pde.GetBaseProblem().GetSpaceTimeHandler()), element,
-                                               this->GetParamData(), this->GetDomainData());
+                                               *(pde.GetBaseProblem().GetSpaceTimeHandler()),
+					       element,
+                                               this->GetParamData(),
+					       this->GetDomainData(),
+					       pde.HasVertices());
     auto &edc = GetIntegratorDataContainer().GetElementDataContainer();
 
 //       We don't have interface terms in the Rhs! They are all to be included in the Equation!
@@ -974,8 +983,11 @@ namespace DOpE
       pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandlerEnd();
 
     GetIntegratorDataContainer().InitializeEDC(pde.GetUpdateFlags(),
-                                               *(pde.GetBaseProblem().GetSpaceTimeHandler()), element,
-                                               this->GetParamData(), this->GetDomainData());
+                                               *(pde.GetBaseProblem().GetSpaceTimeHandler()),
+					       element,
+                                               this->GetParamData(),
+					       this->GetDomainData(),
+					       pde.HasVertices());
     auto &edc = GetIntegratorDataContainer().GetElementDataContainer();
 
     //for the interface-case
@@ -1168,8 +1180,11 @@ namespace DOpE
       auto endc =
         pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandlerEnd();
       GetIntegratorDataContainerFunc().InitializeEDC(pde.GetUpdateFlags(),
-                                                     *(pde.GetBaseProblem().GetSpaceTimeHandler()), element,
-                                                     this->GetParamData(), this->GetDomainData());
+                                                     *(pde.GetBaseProblem().GetSpaceTimeHandler()),
+						     element,
+                                                     this->GetParamData(),
+						     this->GetDomainData(),
+						     pde.HasVertices());
       auto &edc = GetIntegratorDataContainerFunc().GetElementDataContainer();
 
       for (; element[0] != endc[0]; element[0]++)
@@ -1565,15 +1580,21 @@ namespace DOpE
 
     // Generate the data containers. Notice that we use the quadrature
     //formula from the higher order idc!.
-    GetIntegratorDataContainer().InitializeEDC(
-      dwrc.GetWeightIDC().GetQuad(), pde.GetUpdateFlags(),
-      *(pde.GetBaseProblem().GetSpaceTimeHandler()), element,
-      this->GetParamData(), this->GetDomainData());
+    GetIntegratorDataContainer().InitializeEDC(dwrc.GetWeightIDC().GetQuad(),
+					       pde.GetUpdateFlags(),
+					       *(pde.GetBaseProblem().GetSpaceTimeHandler()),
+					       element,
+					       this->GetParamData(),
+					       this->GetDomainData(),
+					       pde.HasVertices());
     auto &edc = GetIntegratorDataContainer().GetElementDataContainer();
 
     dwrc.GetWeightIDC().InitializeEDC(pde.GetUpdateFlags(),
-                                      dwrc.GetWeightSTH(), element_weight, this->GetParamData(),
-                                      dwrc.GetWeightData());
+                                      dwrc.GetWeightSTH(),
+				      element_weight,
+				      this->GetParamData(),
+                                      dwrc.GetWeightData(),
+				      pde.HasVertices());
     auto &edc_weight = dwrc.GetElementWeight();
 
     // we want to integrate the face-terms only once, so
@@ -1887,8 +1908,11 @@ namespace DOpE
     // Generate the data containers. Notice that we use the quadrature
     // formula from the higher order idc!.
     GetIntegratorDataContainer().InitializeEDC(pde.GetUpdateFlags(),
-                                               *(pde.GetBaseProblem().GetSpaceTimeHandler()), element,
-                                               this->GetParamData(), this->GetDomainData());
+                                               *(pde.GetBaseProblem().GetSpaceTimeHandler()),
+					       element,
+                                               this->GetParamData(),
+					       this->GetDomainData(),
+					       pde.HasVertices());
     auto &edc = GetIntegratorDataContainer().GetElementDataContainer();
 
     //we want to integrate the face-terms only once

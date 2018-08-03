@@ -1104,6 +1104,11 @@ namespace DOpE
     {
       return OP_.HasInterfaces();
     }
+    bool
+    HasVertices() const
+    {
+      return OP_.HasVertices();
+    }
     template<typename ELEMENTITERATOR>
     bool AtInterface(ELEMENTITERATOR &element, unsigned int face) const
     {

@@ -1,5 +1,8 @@
 Changelog DOpE
 ==============
+03.08.2018: Added methods to count neighboring elements to a vertex. With this
+	    one can integrate over vertices, e.g., to evaluate the dual finite element
+	    basis in vertex based elements.
 13.06.2018: Code update for dealii v9.0.0:
 	    - Some Examples needed to have 'functional_number_precision' to be set in the tests
 	    - In some examples the Manifold induced refinement differed from the previous one

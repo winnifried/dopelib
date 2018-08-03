@@ -405,6 +405,12 @@ namespace DOpE
     HasInterfaces() const;
 
     /**
+      * Do we need evaluation at the vertices?
+      */
+    inline bool
+    HasVertices() const;
+
+    /**
     * Functions providing the required information for the integrator.
     * see OptProblemContainer for details.
     */
@@ -916,6 +922,16 @@ namespace DOpE
   TangentProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dim>::HasInterfaces() const
   {
     return pde_.HasInterfaces();
+  }
+
+  /******************************************************/
+
+  template<typename OPTPROBLEM, typename PDE, typename DD,
+           typename SPARSITYPATTERN, typename VECTOR, int dim>
+  bool
+  TangentProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dim>::HasVertices() const
+  {
+    return pde_.HasVertices();
   }
 
   /******************************************************/

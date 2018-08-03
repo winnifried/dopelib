@@ -324,6 +324,12 @@ namespace DOpE
     bool
     HasInterfaces() const;
 
+    /**
+      * Do we need evaluation at the vertices?
+      */
+    inline bool
+    HasVertices() const;
+
     /******************************************************/
 
     dealii::UpdateFlags
@@ -1291,6 +1297,28 @@ namespace DOpE
       {
         throw DOpEException("Unknown Type: '" + this->GetType() + "'!",
                             "PDEProblemContainer::HasFaces");
+      }
+  }
+  
+  /******************************************************/
+
+  template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
+           int dealdim, template<int, int> class FE, template<int, int> class DH>
+  bool
+  PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE, DH>::HasVertices() const
+  {
+    if (this->GetType().find("aux_functional") != std::string::npos)
+      {
+        return false;
+      }
+    else if (this->GetType() == "error_evaluation")
+    {
+      return this->GetPDE().HasVertices();
+    }
+    else
+      {
+        throw DOpEException("Unknown Type: '" + this->GetType() + "'!",
+                            "PDEProblemContainer::HasVertices");
       }
   }
 

@@ -1254,6 +1254,18 @@ namespace DOpE
   {
     return false;
   }
+  
+  /********************************************/
+
+  template<
+    template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
+    template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
+    template<int, int> class DH, typename VECTOR, int dealdim>
+  bool
+  PDEInterface<EDC, FDC, DH, VECTOR, dealdim>::HasVertices() const
+  {
+    return false;
+  }
 
   /********************************************/
 

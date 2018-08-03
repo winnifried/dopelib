@@ -195,6 +195,16 @@ namespace DOpE
     {
       return OP_.HasInterfaces();
     }
+  
+    /******************************************************/
+    /**
+     * Returns whether vertex information is needed
+     */
+    bool
+    HasVertices() const
+    {
+      return OP_.HasVertices();
+    }
 
     /******************************************************/
     /**

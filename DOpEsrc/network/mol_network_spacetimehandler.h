@@ -389,7 +389,20 @@ namespace DOpE
         abort();
         throw DOpEException("No pipe selected","MethodOfLines_Network_SpaceTimeHandler::GetMapDoFToSupportPoints");
       }
+      
+      /**
+       * Implementation of virtual function in StateSpaceTimeHandler
+       */
+      const std::vector<unsigned int>* GetNNeighbourElements()
+      {
+	if (selected_pipe_ < sth_s_.size())
+          return sth_s_[selected_pipe_]->GetNNeighbourElements();
+        //No pipe selected
+        abort();
+        throw DOpEException("No pipe selected","MethodOfLines_Network_SpaceTimeHandler::GetNNeighbourElements");
+      }
 
+      
       /******************************************************/
       /**
        * Computes the SparsityPattern for the stiffness matrix

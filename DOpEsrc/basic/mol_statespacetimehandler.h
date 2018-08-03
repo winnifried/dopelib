@@ -37,6 +37,7 @@
 #include <deal.II/lac/constraint_matrix.h>
 #include <deal.II/numerics/solution_transfer.h>
 #include <deal.II/grid/grid_refinement.h>
+#include <deal.II/grid/grid_tools.h>
 
 namespace DOpE
 {
@@ -181,7 +182,7 @@ namespace DOpE
       DoFTools::count_dofs_per_block(static_cast<DH<dealdim, dealdim>&>(state_dof_handler_), state_dofs_per_block_, state_block_component);
 
       support_points_.clear();
-
+      n_neighbour_to_vertex_.clear();
       //Initialize also the timediscretization.
       this->ReInitTime();
 
@@ -320,6 +321,18 @@ namespace DOpE
       support_points_.resize(GetStateNDoFs());
       DOpE::STHInternals::MapDoFsToSupportPoints<std::vector<Point<dealdim> >, dealdim>(this->GetMapping(), GetStateDoFHandler(), support_points_);
       return support_points_;
+    }
+
+    /**
+     * Implementation of virtual function in StateSpaceTimeHandler
+     */
+    const std::vector<unsigned int>* GetNNeighbourElements()
+    {
+      if(n_neighbour_to_vertex_.size()!=triangulation_.n_vertices())
+      {
+	DOpE::STHInternals::CalculateNeigbourElementsToVertices(triangulation_,n_neighbour_to_vertex_);
+      }
+      return &n_neighbour_to_vertex_;
     }
 
     /******************************************************/
@@ -524,6 +537,8 @@ namespace DOpE
 
     std::vector<Point<dealdim> > support_points_;
     dealii::SolutionTransfer<dealdim, VECTOR, DH<dealdim, dealdim> > *state_mesh_transfer_;
+
+    std::vector<unsigned int> n_neighbour_to_vertex_;
 
   };
 

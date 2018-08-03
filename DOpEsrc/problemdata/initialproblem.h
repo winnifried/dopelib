@@ -211,6 +211,12 @@ namespace DOpE
     HasInterfaces() const;
 
     /**
+      * Do we need evaluation at the vertices?
+      */
+    inline bool
+    HasVertices() const;
+
+    /**
     * Functions providing the required information for the integrator.
     * see OptProblemContainer for details.
     */
@@ -529,6 +535,15 @@ namespace DOpE
   InitialProblem<PDE, VECTOR, dim>::HasInterfaces() const
   {
     return pde_.HasInterfaces();
+  }
+
+  /******************************************************/
+
+  template<typename PDE, typename VECTOR, int dim>
+  bool
+  InitialProblem<PDE, VECTOR, dim>::HasVertices() const
+  {
+    return pde_.HasVertices();
   }
 
   /******************************************************/
