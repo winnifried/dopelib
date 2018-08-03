@@ -51,7 +51,7 @@ subsection output parameters
 
   # Do not write files whose name contains a substring given here by a list of
   # `;` separated words
-  set never_write_list            = Gradient;Residual;Hessian;Tangent;Update;State
+  set never_write_list            = Gradient;Residual;Hessian;Tangent;Update;State;Intermediate
   set number of patches           = 0
 
   # Sets the precision of the output numbers in the newton schemes.

@@ -237,6 +237,7 @@ namespace DOpE
 
           double newres = residual.linfty_norm();
           int lineiter=0;
+	  pde.GetOutputHandler()->SetIterationNumber(lineiter,"PDENewtonLS");
           double rho = linesearch_rho_;
           double alpha=1;
           if ( newres > res && build_matrix == false)
@@ -256,6 +257,7 @@ namespace DOpE
           else
             {
               build_matrix = false;
+	      pde.GetOutputHandler()->Write(solution,"Intermediate"+pde.GetType(),pde.GetDoFType());
               while (newres > res)
                 {
                   out<< algo_level << "Newton step: " <<iter<<"\t Residual (rel.): "
@@ -265,6 +267,7 @@ namespace DOpE
                   pde.GetOutputHandler()->Write(out,priority+1);
 
                   lineiter++;
+		  pde.GetOutputHandler()->SetIterationNumber(lineiter,"PDENewtonLS");
                   if (lineiter > line_maxiter_)
                     {
                       GetIntegrator().DeleteDomainData("last_newton_solution");
@@ -276,6 +279,7 @@ namespace DOpE
                   GetIntegrator().ComputeNonlinearResidual(pde,residual);
                   residual *= -1.;
                   pde.GetOutputHandler()->Write(residual,"Residual"+pde.GetType(),pde.GetDoFType());
+		  pde.GetOutputHandler()->Write(solution,"Intermediate"+pde.GetType(),pde.GetDoFType());
 
                   newres = residual.linfty_norm();
 

@@ -14,9 +14,7 @@ Using dealii Version: 9.0
 	**************************************************
 
 LOG: Allowing IterationCounter `OptNewton_OptProblem' for filenames!
-	Writing [./Mesh0/Control_OptProblem.00000.txt]
 	Computing State Solution:
-LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 0	 Residual (abs.):   1.37e+00
 			 Newton step: 0	 Residual (rel.):   1.00e+00
 			 Newton step: 1	 Residual (rel.):   1.94e+00	 LineSearch {0} 
@@ -33,7 +31,6 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 5	 Residual (rel.):   4.51e-03	 LineSearch {0} 
 			 Newton step: 6	 Residual (rel.):   2.04e-05	 LineSearch {0} 
 			 Newton step: 7	 Residual (rel.): < 3.00e-06	 LineSearch {0} 
-	Writing [./Mesh0/State_OptProblem.00000.00007.vtk]
 	Computing Cost Functional:
 	CostFunctional: 4.7e+02
 	Computing Functionals:
@@ -87,7 +84,6 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 3	 Residual (rel.):   1.34e-04	 LineSearch {0} 
 			 Newton step: 4	 Residual (rel.): < 3.00e-06	 LineSearch {0} 
 			 Newton step: 5	 Residual (rel.): < 3.00e-06	 LineSearch {0} 
-	Writing [./Mesh0/State_OptProblem.00001.00005.vtk]
 	Computing Cost Functional:
 	CostFunctional: 3.66e+02
 	Computing Functionals:
@@ -102,7 +98,6 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 	Computing Reduced Gradient:
 			  Newton step: 0	 Residual (abs.):  < 3.00e-06
 			  Newton step: 0	 Residual (rel.):        NAN
-	Writing [./Mesh0/Control_OptProblem.00001.00000.txt]
 		 Newton step: 1	 Residual (rel.):   4.40e-02	 LinearIters [2]	 LineSearch {0} 
 	Starting Reduced Linear Solver with Residual: 0.137807
 	Computing ReducedHessianVector:
@@ -138,7 +133,6 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 2	 Residual (rel.):   4.86e-03	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   1.58e-05	 LineSearch {0} 
 			 Newton step: 4	 Residual (rel.): < 3.00e-06	 LineSearch {0} 
-	Writing [./Mesh0/State_OptProblem.00002.00004.vtk]
 	Computing Cost Functional:
 	CostFunctional: 3.65e+02
 	Computing Functionals:
@@ -153,7 +147,6 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 	Computing Reduced Gradient:
 			  Newton step: 0	 Residual (abs.):  < 3.00e-06
 			  Newton step: 0	 Residual (rel.):        NAN
-	Writing [./Mesh0/Control_OptProblem.00002.00000.txt]
 		 Newton step: 2	 Residual (rel.):   1.08e-02	 LinearIters [2]	 LineSearch {0} 
 	Starting Reduced Linear Solver with Residual: 0.0339536
 	Computing ReducedHessianVector:
@@ -203,7 +196,6 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 2	 Residual (rel.):   1.46e-04	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   5.40e-06	 LineSearch {0} 
 			 Newton step: 4	 Residual (rel.): < 3.00e-06	 LineSearch {0} 
-	Writing [./Mesh0/State_OptProblem.00003.00004.vtk]
 	Computing Cost Functional:
 		 linesearch 
 	Computing State Solution:
@@ -213,7 +205,6 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 2	 Residual (rel.):   2.33e-04	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   9.45e-06	 LineSearch {0} 
 			 Newton step: 4	 Residual (rel.): < 3.00e-06	 LineSearch {0} 
-	Writing [./Mesh0/State_OptProblem.00003.00004.vtk]
 	Computing Cost Functional:
 	Computing State Solution:
 			 Newton step: 0	 Residual (abs.):   3.63e-03
@@ -222,7 +213,6 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 2	 Residual (rel.):   2.31e-04	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   9.41e-06	 LineSearch {0} 
 			 Newton step: 4	 Residual (rel.): < 3.00e-06	 LineSearch {0} 
-	Writing [./Mesh0/State_OptProblem.00003.00004.vtk]
 	Computing Cost Functional:
 	Computing State Solution:
 			 Newton step: 0	 Residual (abs.):   3.26e-03
@@ -231,7 +221,6 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 2	 Residual (rel.):   2.30e-04	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   9.36e-06	 LineSearch {0} 
 			 Newton step: 4	 Residual (rel.): < 3.00e-06	 LineSearch {0} 
-	Writing [./Mesh0/State_OptProblem.00003.00004.vtk]
 	Computing Cost Functional:
 	Computing State Solution:
 			 Newton step: 0	 Residual (abs.):   2.94e-03
@@ -240,7 +229,6 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 2	 Residual (rel.):   2.29e-04	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   9.33e-06	 LineSearch {0} 
 			 Newton step: 4	 Residual (rel.): < 3.00e-06	 LineSearch {0} 
-	Writing [./Mesh0/State_OptProblem.00003.00004.vtk]
 	Computing Cost Functional:
 	Computing State Solution:
 			 Newton step: 0	 Residual (abs.):   2.64e-03
@@ -249,7 +237,6 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 2	 Residual (rel.):   2.27e-04	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   9.29e-06	 LineSearch {0} 
 			 Newton step: 4	 Residual (rel.): < 3.00e-06	 LineSearch {0} 
-	Writing [./Mesh0/State_OptProblem.00003.00004.vtk]
 	Computing Cost Functional:
  ERROR: The following `DOpEIterationException` reports!
  ERROR: Warning: During execution of `ReducedNewtonAlgorithm::ReducedNewtonLineSearch` the following Problem occurred!
@@ -268,7 +255,6 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 	Computing Reduced Gradient:
 			  Newton step: 0	 Residual (abs.):  < 3.00e-06
 			  Newton step: 0	 Residual (rel.):        NAN
-	Writing [./Mesh0/Control_OptProblem.00003.00000.txt]
 		 Newton step: 3	 Residual (rel.):   4.32e-03	 LinearIters [3]	 LineSearch {-1} 
 	Starting Reduced Linear Solver with Residual: 0.0135372
 	Computing ReducedHessianVector:
@@ -317,7 +303,6 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 2	 Residual (rel.):   2.04e-04	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   8.27e-06	 LineSearch {0} 
 			 Newton step: 4	 Residual (rel.): < 3.00e-06	 LineSearch {0} 
-	Writing [./Mesh0/State_OptProblem.00004.00004.vtk]
 	Computing Cost Functional:
 		 linesearch 
 	Computing State Solution:
@@ -327,7 +312,6 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 2	 Residual (rel.):   2.43e-04	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   9.89e-06	 LineSearch {0} 
 			 Newton step: 4	 Residual (rel.): < 3.00e-06	 LineSearch {0} 
-	Writing [./Mesh0/State_OptProblem.00004.00004.vtk]
 	Computing Cost Functional:
 	Computing State Solution:
 			 Newton step: 0	 Residual (abs.):   1.44e-03
@@ -336,7 +320,6 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 2	 Residual (rel.):   2.43e-04	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   9.87e-06	 LineSearch {0} 
 			 Newton step: 4	 Residual (rel.): < 3.00e-06	 LineSearch {0} 
-	Writing [./Mesh0/State_OptProblem.00004.00004.vtk]
 	Computing Cost Functional:
 	Computing State Solution:
 			 Newton step: 0	 Residual (abs.):   1.30e-03
@@ -345,7 +328,6 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 2	 Residual (rel.):   2.42e-04	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   9.85e-06	 LineSearch {0} 
 			 Newton step: 4	 Residual (rel.): < 3.00e-06	 LineSearch {0} 
-	Writing [./Mesh0/State_OptProblem.00004.00004.vtk]
 	Computing Cost Functional:
 	Computing State Solution:
 			 Newton step: 0	 Residual (abs.):   1.17e-03
@@ -354,7 +336,6 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 2	 Residual (rel.):   2.42e-04	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   9.84e-06	 LineSearch {0} 
 			 Newton step: 4	 Residual (rel.): < 3.00e-06	 LineSearch {0} 
-	Writing [./Mesh0/State_OptProblem.00004.00004.vtk]
 	Computing Cost Functional:
 	Computing State Solution:
 			 Newton step: 0	 Residual (abs.):   1.05e-03
@@ -363,7 +344,6 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 2	 Residual (rel.):   2.41e-04	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   9.82e-06	 LineSearch {0} 
 			 Newton step: 4	 Residual (rel.): < 3.00e-06	 LineSearch {0} 
-	Writing [./Mesh0/State_OptProblem.00004.00004.vtk]
 	Computing Cost Functional:
  ERROR: The following `DOpEIterationException` reports!
  ERROR: Warning: During execution of `ReducedNewtonAlgorithm::ReducedNewtonLineSearch` the following Problem occurred!
@@ -382,7 +362,6 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 	Computing Reduced Gradient:
 			  Newton step: 0	 Residual (abs.):  < 3.00e-06
 			  Newton step: 0	 Residual (rel.):        NAN
-	Writing [./Mesh0/Control_OptProblem.00004.00000.txt]
 		 Newton step: 4	 Residual (rel.):   1.76e-03	 LinearIters [3]	 LineSearch {-1} 
 	Starting Reduced Linear Solver with Residual: 0.00550592
 	Computing ReducedHessianVector:
@@ -431,7 +410,6 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 2	 Residual (rel.):   2.41e-04	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   9.77e-06	 LineSearch {0} 
 			 Newton step: 4	 Residual (rel.): < 3.00e-06	 LineSearch {0} 
-	Writing [./Mesh0/State_OptProblem.00005.00004.vtk]
 	Computing Cost Functional:
 		 linesearch 
 	Computing State Solution:
@@ -441,7 +419,6 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 2	 Residual (rel.):   2.56e-04	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   1.04e-05	 LineSearch {0} 
 			 Newton step: 4	 Residual (rel.): < 3.00e-06	 LineSearch {0} 
-	Writing [./Mesh0/State_OptProblem.00005.00004.vtk]
 	Computing Cost Functional:
 	Computing State Solution:
 			 Newton step: 0	 Residual (abs.):   5.85e-04
@@ -450,7 +427,6 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 2	 Residual (rel.):   2.56e-04	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   1.04e-05	 LineSearch {0} 
 			 Newton step: 4	 Residual (rel.): < 3.00e-06	 LineSearch {0} 
-	Writing [./Mesh0/State_OptProblem.00005.00004.vtk]
 	Computing Cost Functional:
 	Computing State Solution:
 			 Newton step: 0	 Residual (abs.):   5.26e-04
@@ -459,7 +435,6 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 2	 Residual (rel.):   2.56e-04	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   1.04e-05	 LineSearch {0} 
 			 Newton step: 4	 Residual (rel.): < 3.00e-06	 LineSearch {0} 
-	Writing [./Mesh0/State_OptProblem.00005.00004.vtk]
 	Computing Cost Functional:
 	Computing State Solution:
 			 Newton step: 0	 Residual (abs.):   4.74e-04
@@ -468,7 +443,6 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 2	 Residual (rel.):   2.56e-04	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   1.04e-05	 LineSearch {0} 
 			 Newton step: 4	 Residual (rel.): < 3.00e-06	 LineSearch {0} 
-	Writing [./Mesh0/State_OptProblem.00005.00004.vtk]
 	Computing Cost Functional:
 	Computing State Solution:
 			 Newton step: 0	 Residual (abs.):   4.26e-04
@@ -477,7 +451,6 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 2	 Residual (rel.):   2.55e-04	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   1.04e-05	 LineSearch {0} 
 			 Newton step: 4	 Residual (rel.): < 3.00e-06	 LineSearch {0} 
-	Writing [./Mesh0/State_OptProblem.00005.00004.vtk]
 	Computing Cost Functional:
  ERROR: The following `DOpEIterationException` reports!
  ERROR: Warning: During execution of `ReducedNewtonAlgorithm::ReducedNewtonLineSearch` the following Problem occurred!
@@ -496,7 +469,6 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 	Computing Reduced Gradient:
 			  Newton step: 0	 Residual (abs.):  < 3.00e-06
 			  Newton step: 0	 Residual (rel.):        NAN
-	Writing [./Mesh0/Control_OptProblem.00005.00000.txt]
 		 Newton step: 5	 Residual (rel.):   7.26e-04	 LinearIters [3]	 LineSearch {-1} 
 	Starting Reduced Linear Solver with Residual: 0.00227396
 	Computing ReducedHessianVector:
@@ -545,7 +517,6 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 2	 Residual (rel.):   2.63e-04	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   1.07e-05	 LineSearch {0} 
 			 Newton step: 4	 Residual (rel.): < 3.00e-06	 LineSearch {0} 
-	Writing [./Mesh0/State_OptProblem.00006.00004.vtk]
 	Computing Cost Functional:
 		 linesearch 
 	Computing State Solution:
@@ -555,7 +526,6 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 2	 Residual (rel.):   2.69e-04	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   1.09e-05	 LineSearch {0} 
 			 Newton step: 4	 Residual (rel.): < 3.00e-06	 LineSearch {0} 
-	Writing [./Mesh0/State_OptProblem.00006.00004.vtk]
 	Computing Cost Functional:
 	Computing State Solution:
 			 Newton step: 0	 Residual (abs.):   2.40e-04
@@ -564,7 +534,6 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 2	 Residual (rel.):   2.69e-04	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   1.09e-05	 LineSearch {0} 
 			 Newton step: 4	 Residual (rel.): < 3.00e-06	 LineSearch {0} 
-	Writing [./Mesh0/State_OptProblem.00006.00004.vtk]
 	Computing Cost Functional:
 	Computing State Solution:
 			 Newton step: 0	 Residual (abs.):   2.16e-04
@@ -573,7 +542,6 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 2	 Residual (rel.):   2.69e-04	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   1.09e-05	 LineSearch {0} 
 			 Newton step: 4	 Residual (rel.): < 3.00e-06	 LineSearch {0} 
-	Writing [./Mesh0/State_OptProblem.00006.00004.vtk]
 	Computing Cost Functional:
 	Computing State Solution:
 			 Newton step: 0	 Residual (abs.):   1.95e-04
@@ -582,7 +550,6 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 2	 Residual (rel.):   2.69e-04	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   1.09e-05	 LineSearch {0} 
 			 Newton step: 4	 Residual (rel.): < 3.00e-06	 LineSearch {0} 
-	Writing [./Mesh0/State_OptProblem.00006.00004.vtk]
 	Computing Cost Functional:
 	Computing State Solution:
 			 Newton step: 0	 Residual (abs.):   1.75e-04
@@ -591,7 +558,6 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 2	 Residual (rel.):   2.69e-04	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   1.09e-05	 LineSearch {0} 
 			 Newton step: 4	 Residual (rel.): < 3.00e-06	 LineSearch {0} 
-	Writing [./Mesh0/State_OptProblem.00006.00004.vtk]
 	Computing Cost Functional:
  ERROR: The following `DOpEIterationException` reports!
  ERROR: Warning: During execution of `ReducedNewtonAlgorithm::ReducedNewtonLineSearch` the following Problem occurred!
@@ -610,7 +576,6 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 	Computing Reduced Gradient:
 			  Newton step: 0	 Residual (abs.):  < 3.00e-06
 			  Newton step: 0	 Residual (rel.):        NAN
-	Writing [./Mesh0/Control_OptProblem.00006.00000.txt]
 		 Newton step: 6	 Residual (rel.):   3.03e-04	 LinearIters [3]	 LineSearch {-1} 
 	Starting Reduced Linear Solver with Residual: 0.000949657
 	Computing ReducedHessianVector:
@@ -659,7 +624,6 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 2	 Residual (rel.):   2.79e-04	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   1.13e-05	 LineSearch {0} 
 			 Newton step: 4	 Residual (rel.): < 3.00e-06	 LineSearch {0} 
-	Writing [./Mesh0/State_OptProblem.00007.00004.vtk]
 	Computing Cost Functional:
 		 linesearch 
 	Computing State Solution:
@@ -669,7 +633,6 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 2	 Residual (rel.):   2.82e-04	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   1.14e-05	 LineSearch {0} 
 			 Newton step: 4	 Residual (rel.): < 3.00e-06	 LineSearch {0} 
-	Writing [./Mesh0/State_OptProblem.00007.00004.vtk]
 	Computing Cost Functional:
 	Computing State Solution:
 			 Newton step: 0	 Residual (abs.):   9.95e-05
@@ -678,7 +641,6 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 2	 Residual (rel.):   2.82e-04	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   1.14e-05	 LineSearch {0} 
 			 Newton step: 4	 Residual (rel.): < 3.00e-06	 LineSearch {0} 
-	Writing [./Mesh0/State_OptProblem.00007.00004.vtk]
 	Computing Cost Functional:
 	Computing State Solution:
 			 Newton step: 0	 Residual (abs.):   8.95e-05
@@ -687,7 +649,6 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 2	 Residual (rel.):   2.82e-04	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   1.14e-05	 LineSearch {0} 
 			 Newton step: 4	 Residual (rel.): < 3.00e-06	 LineSearch {0} 
-	Writing [./Mesh0/State_OptProblem.00007.00004.vtk]
 	Computing Cost Functional:
 	Computing State Solution:
 			 Newton step: 0	 Residual (abs.):   8.06e-05
@@ -696,7 +657,6 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 2	 Residual (rel.):   2.81e-04	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   1.14e-05	 LineSearch {0} 
 			 Newton step: 4	 Residual (rel.): < 3.00e-06	 LineSearch {0} 
-	Writing [./Mesh0/State_OptProblem.00007.00004.vtk]
 	Computing Cost Functional:
 	Computing State Solution:
 			 Newton step: 0	 Residual (abs.):   7.25e-05
@@ -705,7 +665,6 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 2	 Residual (rel.):   2.81e-04	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   1.14e-05	 LineSearch {0} 
 			 Newton step: 4	 Residual (rel.): < 3.00e-06	 LineSearch {0} 
-	Writing [./Mesh0/State_OptProblem.00007.00004.vtk]
 	Computing Cost Functional:
  ERROR: The following `DOpEIterationException` reports!
  ERROR: Warning: During execution of `ReducedNewtonAlgorithm::ReducedNewtonLineSearch` the following Problem occurred!
@@ -724,7 +683,6 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 	Computing Reduced Gradient:
 			  Newton step: 0	 Residual (abs.):  < 3.00e-06
 			  Newton step: 0	 Residual (rel.):        NAN
-	Writing [./Mesh0/Control_OptProblem.00007.00000.txt]
 		 Newton step: 7	 Residual (rel.):   1.28e-04	 LinearIters [3]	 LineSearch {-1} 
 	Starting Reduced Linear Solver with Residual: 0.000399623
 	Computing ReducedHessianVector:
@@ -786,7 +744,6 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 2	 Residual (rel.):   2.91e-04	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   1.18e-05	 LineSearch {0} 
 			 Newton step: 4	 Residual (rel.): < 3.00e-06	 LineSearch {0} 
-	Writing [./Mesh0/State_OptProblem.00008.00004.vtk]
 	Computing Cost Functional:
 		 linesearch 
 	Computing State Solution:
@@ -796,7 +753,6 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 2	 Residual (rel.):   2.92e-04	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   1.19e-05	 LineSearch {0} 
 			 Newton step: 4	 Residual (rel.): < 3.00e-06	 LineSearch {0} 
-	Writing [./Mesh0/State_OptProblem.00008.00004.vtk]
 	Computing Cost Functional:
 	Computing State Solution:
 			 Newton step: 0	 Residual (abs.):   4.26e-05
@@ -805,7 +761,6 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 2	 Residual (rel.):   2.92e-04	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   1.19e-05	 LineSearch {0} 
 			 Newton step: 4	 Residual (rel.): < 3.00e-06	 LineSearch {0} 
-	Writing [./Mesh0/State_OptProblem.00008.00004.vtk]
 	Computing Cost Functional:
 	Computing State Solution:
 			 Newton step: 0	 Residual (abs.):   3.83e-05
@@ -814,7 +769,6 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 2	 Residual (rel.):   2.92e-04	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   1.19e-05	 LineSearch {0} 
 			 Newton step: 4	 Residual (rel.): < 3.00e-06	 LineSearch {0} 
-	Writing [./Mesh0/State_OptProblem.00008.00004.vtk]
 	Computing Cost Functional:
 	Computing State Solution:
 			 Newton step: 0	 Residual (abs.):   3.45e-05
@@ -823,7 +777,6 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 2	 Residual (rel.):   2.92e-04	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   1.19e-05	 LineSearch {0} 
 			 Newton step: 4	 Residual (rel.): < 3.00e-06	 LineSearch {0} 
-	Writing [./Mesh0/State_OptProblem.00008.00004.vtk]
 	Computing Cost Functional:
 	Computing State Solution:
 			 Newton step: 0	 Residual (abs.):   3.10e-05
@@ -832,7 +785,6 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 2	 Residual (rel.):   2.92e-04	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   1.19e-05	 LineSearch {0} 
 			 Newton step: 4	 Residual (rel.): < 3.00e-06	 LineSearch {0} 
-	Writing [./Mesh0/State_OptProblem.00008.00004.vtk]
 	Computing Cost Functional:
  ERROR: The following `DOpEIterationException` reports!
  ERROR: Warning: During execution of `ReducedNewtonAlgorithm::ReducedNewtonLineSearch` the following Problem occurred!
@@ -851,7 +803,6 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 	Computing Reduced Gradient:
 			  Newton step: 0	 Residual (abs.):  < 3.00e-06
 			  Newton step: 0	 Residual (rel.):        NAN
-	Writing [./Mesh0/Control_OptProblem.00008.00000.txt]
 		 Newton step: 8	 Residual (rel.):   5.21e-05	 LinearIters [4]	 LineSearch {-1} 
 	Starting Reduced Linear Solver with Residual: 0.000163066
 	Computing ReducedHessianVector:
@@ -913,7 +864,6 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 2	 Residual (rel.):   3.04e-04	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   1.23e-05	 LineSearch {0} 
 			 Newton step: 4	 Residual (rel.): < 3.00e-06	 LineSearch {0} 
-	Writing [./Mesh0/State_OptProblem.00009.00004.vtk]
 	Computing Cost Functional:
 		 linesearch 
 	Computing State Solution:
@@ -923,7 +873,6 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 2	 Residual (rel.):   3.04e-04	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   1.24e-05	 LineSearch {0} 
 			 Newton step: 4	 Residual (rel.): < 3.00e-06	 LineSearch {0} 
-	Writing [./Mesh0/State_OptProblem.00009.00004.vtk]
 	Computing Cost Functional:
 	Computing State Solution:
 			 Newton step: 0	 Residual (abs.):   1.71e-05
@@ -932,7 +881,6 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 2	 Residual (rel.):   3.04e-04	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   1.24e-05	 LineSearch {0} 
 			 Newton step: 4	 Residual (rel.): < 3.00e-06	 LineSearch {0} 
-	Writing [./Mesh0/State_OptProblem.00009.00004.vtk]
 	Computing Cost Functional:
 	Computing State Solution:
 			 Newton step: 0	 Residual (abs.):   1.54e-05
@@ -941,7 +889,6 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 2	 Residual (rel.):   3.04e-04	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   1.24e-05	 LineSearch {0} 
 			 Newton step: 4	 Residual (rel.): < 3.00e-06	 LineSearch {0} 
-	Writing [./Mesh0/State_OptProblem.00009.00004.vtk]
 	Computing Cost Functional:
 	Computing State Solution:
 			 Newton step: 0	 Residual (abs.):   1.39e-05
@@ -950,7 +897,6 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 2	 Residual (rel.):   3.04e-04	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   1.24e-05	 LineSearch {0} 
 			 Newton step: 4	 Residual (rel.): < 3.00e-06	 LineSearch {0} 
-	Writing [./Mesh0/State_OptProblem.00009.00004.vtk]
 	Computing Cost Functional:
 	Computing State Solution:
 			 Newton step: 0	 Residual (abs.):   1.25e-05
@@ -959,7 +905,6 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 2	 Residual (rel.):   3.04e-04	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   1.24e-05	 LineSearch {0} 
 			 Newton step: 4	 Residual (rel.): < 3.00e-06	 LineSearch {0} 
-	Writing [./Mesh0/State_OptProblem.00009.00004.vtk]
 	Computing Cost Functional:
  ERROR: The following `DOpEIterationException` reports!
  ERROR: Warning: During execution of `ReducedNewtonAlgorithm::ReducedNewtonLineSearch` the following Problem occurred!
@@ -978,7 +923,6 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 	Computing Reduced Gradient:
 			  Newton step: 0	 Residual (abs.):  < 3.00e-06
 			  Newton step: 0	 Residual (rel.):        NAN
-	Writing [./Mesh0/Control_OptProblem.00009.00000.txt]
 		 Newton step: 9	 Residual (rel.):   2.14e-05	 LinearIters [4]	 LineSearch {-1} 
 	Starting Reduced Linear Solver with Residual: 6.69577e-05
 	Computing ReducedHessianVector:
@@ -1040,7 +984,6 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 2	 Residual (rel.):   3.15e-04	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   1.28e-05	 LineSearch {0} 
 			 Newton step: 4	 Residual (rel.): < 3.00e-06	 LineSearch {0} 
-	Writing [./Mesh0/State_OptProblem.00010.00004.vtk]
 	Computing Cost Functional:
 		 linesearch 
 	Computing State Solution:
@@ -1049,7 +992,6 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 1	 Residual (rel.):   7.73e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   3.15e-04	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   1.28e-05	 LineSearch {0} 
-	Writing [./Mesh0/State_OptProblem.00010.00003.vtk]
 	Computing Cost Functional:
 	Computing State Solution:
 			 Newton step: 0	 Residual (abs.):   6.91e-06
@@ -1057,7 +999,6 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 1	 Residual (rel.):   7.73e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   3.15e-04	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   1.28e-05	 LineSearch {0} 
-	Writing [./Mesh0/State_OptProblem.00010.00003.vtk]
 	Computing Cost Functional:
 	Computing State Solution:
 			 Newton step: 0	 Residual (abs.):   6.22e-06
@@ -1065,7 +1006,6 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 1	 Residual (rel.):   7.73e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   3.15e-04	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   1.28e-05	 LineSearch {0} 
-	Writing [./Mesh0/State_OptProblem.00010.00003.vtk]
 	Computing Cost Functional:
 	Computing State Solution:
 			 Newton step: 0	 Residual (abs.):   5.60e-06
@@ -1073,7 +1013,6 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 1	 Residual (rel.):   7.73e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   3.15e-04	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   1.28e-05	 LineSearch {0} 
-	Writing [./Mesh0/State_OptProblem.00010.00003.vtk]
 	Computing Cost Functional:
 	Computing State Solution:
 			 Newton step: 0	 Residual (abs.):   5.04e-06
@@ -1081,7 +1020,6 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 1	 Residual (rel.):   7.73e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   3.15e-04	 LineSearch {0} 
 			 Newton step: 3	 Residual (rel.):   1.28e-05	 LineSearch {0} 
-	Writing [./Mesh0/State_OptProblem.00010.00003.vtk]
 	Computing Cost Functional:
  ERROR: The following `DOpEIterationException` reports!
  ERROR: Warning: During execution of `ReducedNewtonAlgorithm::ReducedNewtonLineSearch` the following Problem occurred!
@@ -1100,7 +1038,6 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 	Computing Reduced Gradient:
 			  Newton step: 0	 Residual (abs.):  < 3.00e-06
 			  Newton step: 0	 Residual (rel.):        NAN
-	Writing [./Mesh0/Control_OptProblem.00010.00000.txt]
 		 Newton step: 10	 Residual (rel.):   8.82e-06	 LinearIters [4]	 LineSearch {-1} 
 	CostFunctional: 3.65e+02
 	Computing Functionals:
