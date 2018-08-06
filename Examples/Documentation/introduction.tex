@@ -40,7 +40,7 @@ for further information on this license.
 \newpage
 \section{References}
 If you like the library and use it for your own projects, please give credits by 
-referencing the project \dope{}~\cite{dope} using the following bibtex entries:
+referencing the project \dope{} using the following bibtex entries \cite{dope,dopelib}
 
 \begin{lstlisting}
 @Article{dopelib,
@@ -71,7 +71,7 @@ referencing the project \dope{}~\cite{dope} using the following bibtex entries:
 \label{sec:contrib}
 The library is currently maintained by 
 \begin{itemize}
-  \item Thomas Wick (Centre de Mathématiques Appliquées (CMAP) École Polytechnique)
+  \item Thomas Wick (Leibniz Universit\"at Hannover)
   \item Winnifried Wollner (Technische Universität Darmstadt)
 \end{itemize}
 
@@ -245,6 +245,12 @@ echo ${DEAL_II_DIR}
 \end{lstlisting}
 in the current terminal window.
 \end{remark}
+\begin{remark}
+\textbf{Furthermore:} please make sure that you point in the above path 
+to the deal.II \texttt{install} folder and NOT in the main directory of your deal.II 
+installation.
+\end{remark}
+
 Detailed installing instructions for deal.II (here the last version
 8.4.0) can be found on 
 \texttt{http://www.dealii.org/8.4.0/readme.html}. The deal.II 
@@ -272,6 +278,13 @@ Once there, to build \texttt{DOpElib} you can call
  make c-all
 \end{lstlisting}
 to build and configure the library using cmake. 
+\begin{remark}
+Due to very frequent problems at this stage, we strongly recommend 
+to read first now Section \ref{sec_FAQ} before yielding to despair.
+\end{remark}
+
+
+
 You also get various alternatives by just typing 
 \texttt{make}, including the generation of the documentation.
 Building the documentation will require  
@@ -324,6 +337,7 @@ In the path \texttt{ThirdPartyLibs>} type in the terminal\\
 
 \end{itemize}
 \section{FAQs}
+\label{sec_FAQ}
 \paragraph{1.) When building the library I get an error message:}
 \begin{itemize}
 \item \textbf{unrecognized command line option "-std=c++11"}\\
