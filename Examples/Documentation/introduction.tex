@@ -528,7 +528,25 @@ where $u$ is a FE-function and $q$ can either be a FE-function or some
 fixed number of parameters, $a$ and $b$ are constraint bounds for the control $q$,
 and $g(\cdot)$ is some state constraint.
 
+\section{Overview}
+The main library can be roughly split into three parts:
+\begin{verbatim}
+DOpEsrc, Examples, ThirdPartyLibs
+\end{verbatim}
+Here, \texttt{ThirdPartyLibs} was already previously discussed.
+The \texttt{Examples} will be discussed in the chapters \ref{chap:howtoex}
+to \ref{sec_terminal_output}. In this chapter, we concentrate on 
+\texttt{DOpEsrc}. Therein, the library implementation is divided into the following 
+subfolders:
+\begin{verbatim}
+container       reducedproblems    wrapper
+network         source             templates
+basic           include            opt_algorithms  
+interfaces      problemdata        tsschemes
+\end{verbatim}
 
+
+%\newpage
 \section{Problem description}
 In order to allow our algorithms the automatic assembly of all required 
 data we need to have some container which contains the complete problem 
