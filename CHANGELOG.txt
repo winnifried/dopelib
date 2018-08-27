@@ -1,5 +1,6 @@
 Changelog DOpE
 ==============
+27.08.2018: Updated date in version file.
 03.08.2018: Added methods to count neighboring elements to a vertex. With this
 	    one can integrate over vertices, e.g., to evaluate the dual finite element
 	    basis in vertex based elements.
