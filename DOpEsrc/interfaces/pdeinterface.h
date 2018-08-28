@@ -1436,7 +1436,7 @@ namespace DOpE
     /******************************************************/
 
     void
-    SetProblemType(std::string type);
+      SetProblemType(std::string type,unsigned int num);
 
     /******************************************************/
 
@@ -1676,9 +1676,36 @@ namespace DOpE
       abort();
     }
 
+    /**
+     * An interface needed to calculate nodal values, e.g. for error estimation
+     */
+    virtual void
+      ElementAuxRhs(const EDC<DH, VECTOR, dealdim> & /*edc*/,
+		    dealii::Vector<double> &/*local_vector*/,
+		    double /*scale*/)
+    {
+      abort();
+    }
+
+    virtual void
+      FaceAuxRhs(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
+		 dealii::Vector<double> &/*local_vector*/,
+		 double /*scale*/)
+    {
+      abort();
+    }
+    virtual void
+      BoundaryAuxRhs(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
+		     dealii::Vector<double> &/*local_vector*/,
+		     double /*scale*/)
+    {
+      abort();
+    }
+
 
   protected:
     std::string problem_type_;
+    unsigned int problem_type_num_;
     double GetTime() const
     {
       return time_;

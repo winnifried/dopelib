@@ -1363,9 +1363,10 @@ namespace DOpE
     template<int, int> class DH, typename VECTOR, int dealdim>
   void
   PDEInterface<EDC, FDC, DH, VECTOR, dealdim>::SetProblemType(
-    std::string type)
+    std::string type, unsigned int num)
   {
     problem_type_ = type;
+    problem_type_num_ = num;
   }
 
   /********************************************/

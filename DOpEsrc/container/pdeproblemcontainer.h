@@ -36,6 +36,7 @@
 #include <container/facedatacontainer.h>
 #include <problemdata/stateproblem.h>
 #include <problemdata/pde_adjoint_for_eeproblem.h>
+#include <problemdata/auxiliarynodalerrorproblem.h>
 #include <container/problemcontainer_internal.h>
 //#include <deal.II/multigrid/mg_dof_handler.h>
 #include <basic/dopetypes.h>
@@ -157,7 +158,23 @@ namespace DOpE
         }
       return *adjoint_for_ee_problem_;
     }
-
+    /**
+     * Returns a description to potentially needed precomputations for the error evaluation
+     */
+    AuxiliaryNodalErrorProblem<
+     PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE,
+     DH>, PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>&
+    GetErrorPrecomputations()
+    {
+      if (aux_nodal_error_problem_ == NULL)
+        {
+          aux_nodal_error_problem_ = new AuxiliaryNodalErrorProblem<
+          PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim,
+          FE, DH>, PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>(*this,
+                                                              this->GetPDE());
+        }
+      return *aux_nodal_error_problem_;
+    }
     //TODO This is Pfush needed to split into different subproblems and allow optproblem to
     //be substituted as any of these problems. Can be removed once the splitting is complete.
     PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE, DH> &
@@ -807,11 +824,17 @@ namespace DOpE
     PDE_Adjoint_For_EEProblem<
     PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE,
                         DH>, PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>* adjoint_for_ee_problem_;
+    AuxiliaryNodalErrorProblem<
+    PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE,
+                        DH>, PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>* aux_nodal_error_problem_;
 
     friend class StateProblem<
       PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE,
       DH>, PDE, DD, SPARSITYPATTERN, VECTOR, dealdim> ;
     friend class PDE_Adjoint_For_EEProblem<
+      PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE,
+      DH>, PDE, DD, SPARSITYPATTERN, VECTOR, dealdim> ;
+    friend class AuxiliaryNodalErrorProblem<
       PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE,
       DH>, PDE, DD, SPARSITYPATTERN, VECTOR, dealdim> ;
   };
@@ -823,7 +846,7 @@ namespace DOpE
     PDE &pde,
     StateSpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dealdim> &STH) :
     ProblemContainerInternal<PDE>(pde), STH_(&STH), state_problem_(NULL),
-    adjoint_for_ee_problem_(NULL)
+    adjoint_for_ee_problem_(NULL), aux_nodal_error_problem_(NULL)
   {
     ExceptionHandler_ = NULL;
     OutputHandler_ = NULL;
@@ -918,7 +941,7 @@ namespace DOpE
       {
         this->SetTypeInternal(type);
         this->SetTypeNumInternal(num);
-        this->GetPDE().SetProblemType(type);
+        this->GetPDE().SetProblemType(type,num);
         if (functional_for_ee_num_ != dealii::numbers::invalid_unsigned_int)
           aux_functionals_[functional_for_ee_num_]->SetProblemType(type,num);
       }

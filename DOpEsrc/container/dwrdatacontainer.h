@@ -479,6 +479,17 @@ namespace DOpE
         }
     }
 
+    /*
+     * In some cases, the evaluation of an error indicator requires precomputed nodal values,
+     * e.g., for the obstacle problem full contact nodes need to be identified.
+     * This function returns the number of such vectors needed by the error estimator
+     */
+    virtual unsigned int NPrecomputedNodalValues()
+    {
+      return 0;
+    }
+
+
   protected:
     //TODO PI_h_u and PI_h_z are probably not the best names.
     //Basically, one could replace them with 'primalweight' and 'dualweight',

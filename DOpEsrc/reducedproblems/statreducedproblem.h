@@ -1574,9 +1574,6 @@ namespace DOpE
   StatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER,
                      CONTROLINTEGRATOR, INTEGRATOR, PROBLEM, VECTOR, dopedim, dealdim>::ComputeRefinementIndicators(
                        const ControlVector<VECTOR> &q, DWRC &dwrc, PDE &pde)
-//    StatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER,
-//        CONTROLINTEGRATOR, INTEGRATOR, PROBLEM, VECTOR, dopedim, dealdim>::ComputeRefinementIndicators(
-//        const ControlVector<VECTOR>& q, DWRDataContainerBase<VECTOR>& dwrc)
   {
     //Attach the ResidualModifier to the PDE.
     pde.ResidualModifier = boost::bind<void>(boost::mem_fn(&DWRC::ResidualModifier),boost::ref(dwrc),_1);

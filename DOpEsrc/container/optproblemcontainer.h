@@ -1598,7 +1598,7 @@ namespace DOpE
       {
         this->SetTypeNumInternal(num);
         this->SetTypeInternal(type);
-        this->GetPDE().SetProblemType(type);
+        this->GetPDE().SetProblemType(type,num);
         if (functional_for_ee_num_ != dealii::numbers::invalid_unsigned_int)
           aux_functionals_[functional_for_ee_num_]->SetProblemType(type,num);
         this->GetConstraints()->SetProblemType(type, num);

@@ -1,5 +1,10 @@
 Changelog DOpE
 ==============
+28.08.2018: Added the possibility to conduct precalculation of nodal values in error estimation,
+	    such as information if a node is in 'full contact' for error estimation in the obstacle
+	    problem. To use this the method NPrecomputedNodalValues() needs to be implemented in an
+	    error estimator. The values to be computed must be implemented via the 
+	    *AuxRhs methods of the PDE which have been added to the PDEInterface. 
 27.08.2018: Updated date in version file.
 03.08.2018: Added methods to count neighboring elements to a vertex. With this
 	    one can integrate over vertices, e.g., to evaluate the dual finite element
