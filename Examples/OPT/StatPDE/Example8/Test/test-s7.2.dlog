@@ -1,14 +1,14 @@
-DOpElib Copyright (C) 2012 - 2016 DOpElib authors
+DOpElib Copyright (C) 2012 - 2018 DOpElib authors
 This program comes with ABSOLUTELY NO WARRANTY.
 For License details read LICENSE.TXT distributed with this software!
 
 This is DOpElib Version: 4.0.0 pre
-	Status as of: 16/02/2016
+	Status as of: 27/08/2018
 Using dealii Version: 9.0
 LOG: Allowing IterationCounter `p_iter' for filenames!
 
 	**************************************************
-	*        Starting Solution using SNOPT           *
+	*        Starting Solution using SNOPT 7.2       *
 	*   Solving : OptProblem	*
 	*  CDoFs : 	128
 	*  SDoFs : 	1122
@@ -39,7 +39,7 @@ LOG: Allowing IterationCounter `Opt_Snopt_OptProblem' for filenames!
 
 
 	**************************************************
-	*        Starting Solution using SNOPT           *
+	*        Starting Solution using SNOPT 7.2       *
 	*   Solving : OptProblem	*
 	*  CDoFs : 	128
 	*  SDoFs : 	1122
@@ -69,7 +69,7 @@ LOG: Allowing IterationCounter `Opt_Snopt_OptProblem' for filenames!
 
 
 	**************************************************
-	*        Starting Solution using SNOPT           *
+	*        Starting Solution using SNOPT 7.2       *
 	*   Solving : OptProblem	*
 	*  CDoFs : 	512
 	*  SDoFs : 	4290
@@ -99,7 +99,7 @@ LOG: Allowing IterationCounter `Opt_Snopt_OptProblem' for filenames!
 
 
 	**************************************************
-	*        Starting Solution using SNOPT           *
+	*        Starting Solution using SNOPT 7.2       *
 	*   Solving : OptProblem	*
 	*  CDoFs : 	512
 	*  SDoFs : 	4290
