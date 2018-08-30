@@ -204,7 +204,7 @@ namespace DOpE
     global_tol = std::max(opt_tol_,global_tol);
 
     out << "**************************************************\n";
-    out << "*        Starting Solution using SNOPT           *\n";
+    out << "*        Starting Solution using SNOPT "<<SNOPT_MAJOR_VERSION<<"."<<SNOPT_MINOR_VERSION<<"       *\n";
     out << "*   Solving : "<<this->GetProblem()->GetName()<<"\t*\n";
     out << "*  CDoFs : ";
     q.PrintInfos(out);
@@ -251,9 +251,9 @@ namespace DOpE
     {
       DOpEWrapper::SNOPT_Problem RSAProb;
 #if SNOPT_VERSION_GTE(7,6)
+      RSAProb.initialize("",1);
       int n=q.GetSpacialVector().size();
       int neF =1+constraints.GetGlobalConstraints().size();
-      int lenA=0;
       int neA=0;
       int *iAfun = NULL;
       int *jAvar = NULL;
@@ -320,7 +320,7 @@ namespace DOpE
         const VECTOR &gv_qmin = q_min.GetSpacialVector();
         const VECTOR &gv_qmax = q_max.GetSpacialVector();
 
-        for (unsigned int i=0; i < n; i++)
+        for (int i=0; i < n; i++)
           {
             x[i] = gv_q(i);
             xlow[i] = gv_qmin(i);
@@ -332,7 +332,7 @@ namespace DOpE
         Flow[0] = -1.e+20;
         Fupp[0] = 1.e+20;
         Fstate[0] = 0;
-        for (unsigned int j = 1; j<neF; j++)
+        for (int j = 1; j<neF; j++)
           {
             //Global constraints are to be given by the user such that
             //The feasible region is given by <= 0
@@ -340,7 +340,7 @@ namespace DOpE
             Flow[j] = -1.e+20;
             Fupp[j] = 0.;
             Fstate[j] = 0;
-            for (unsigned int i=0; i < n; i++)
+            for (int i=0; i < n; i++)
               {
                 iGfun[n*j+i] = j;
                 jGvar[n*j+i] = i;
@@ -539,7 +539,7 @@ namespace DOpE
           }
         assert(*(data.neG) == *(data.n) **(data.neF));
         const VECTOR &ref_g = gradient_transposed.GetSpacialVector();
-        for (unsigned int i=0; i < *(data.n); i++)
+        for (int i=0; i < *(data.n); i++)
           {
             (data.G)[i] = ref_g(i);
           }
@@ -558,7 +558,7 @@ namespace DOpE
                 return -2;
               }
             const VECTOR &ref_g = gradient_transposed.GetSpacialVector();
-            for (unsigned int i=0; i < *(data.n); i++)
+            for (int i=0; i < *(data.n); i++)
               {
                 (data.G)[*(data.n)*(j+1)+i] = ref_g(i);
               }

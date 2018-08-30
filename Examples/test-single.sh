@@ -35,7 +35,17 @@ then
 		log=test-${deal}.dlog
 		echo "Using alternative logfile ${log}"
 	    fi		
-
+	    #check if with snopt
+	    snopt=`grep "using SNOPT" dope.log -m 1 | sed 's/.*SNOPT //g' | sed 's/       \*//g'`
+	    if [ ${PIPESTATUS[0]} -eq 0 ]
+	    then
+		#using snopt
+		if [ -f test-s${snopt}.dlog ]
+		then
+		    log=test-s${snopt}.dlog
+		    echo "Using alternative logfile ${log}"
+		fi	
+	    fi
 	    #We don't compare the header (first seven lines of the log file)
 	    (diff <(tail -n +8 dope.log) <(tail -n +8 ${log}) 2>&1) > /dev/null
 	    if [ $? -eq 0 ]
