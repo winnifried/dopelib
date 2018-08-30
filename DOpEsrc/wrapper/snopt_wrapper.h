@@ -25,6 +25,98 @@
 #define SNOPT_WRAPPER_
 
 #ifdef DOPELIB_WITH_SNOPT
+#if SNOPT_VERSION_GTE(7,6)
+//#include "snopt.h"
+//#include "snfilewrapper.hh"
+#include "snoptProblem.hpp"
+
+#include <boost/function.hpp>
+
+namespace DOpEWrapper
+{
+  /**
+   * @struct SNOPT_FUNC_DATA
+   *
+   * A struct defined to contain all the data needed by the
+   * SNOPT interface.
+   *
+   * Since the number of arguments required by the SNOPT userinterface
+   * is larger than usually initialized number N of arguments
+   * accepted by boost::functionN we use this struct to allow use
+   * of the SNOPT interface with any boost functionality as it
+   * uses only one argument now.
+   */
+  struct SNOPT_FUNC_DATA
+  {
+    int    *Status;
+    int *n;
+    double *x;
+    int    *needF;
+    int *neF;
+    double *F;
+    int    *needG;
+    int *neG;
+    double *G;
+    char       *cu;
+    int *lencu;
+    int    *iu;
+    int *leniu;
+    double *ru;
+    int *lenru;
+  };
+
+  /**
+   * @fn SNOPT_A_userfunc_
+   *
+   * This function is required by the SNOPT userinterface.
+   * here it bundles the arguments into the struct SNOPT_FUNC_DATA
+   * which is then passed to the function
+   * SNOPT_A_userfunc_interface
+   * which we will load at runtime using boost with the user defined data.
+   */
+  boost::function1<int, SNOPT_FUNC_DATA &> SNOPT_A_userfunc_interface;
+  void SNOPT_A_userfunc_(int    *Status, int *n,    double x[],
+                        int    *needF,  int *neF,  double F[],
+                        int    *needG,  int *neG,  double G[],
+                        char       *cu,     int *lencu,
+                        int    iu[],    int *leniu,
+                        double ru[],    int *lenru )
+  {
+    SNOPT_FUNC_DATA data;
+    data.Status = Status;
+    data.n      = n;
+    data.x      = x;
+    data.needF  = needF;
+    data.neF    = neF;
+    data.F      = F;
+    data.needG  = needG;
+    data.neG    = neG;
+    data.G      = G;
+    data.cu     = cu;
+    data.lencu  = lencu;
+    data.iu     = iu;
+    data.leniu  = leniu;
+    data.ru     = ru;
+    data.lenru  = lenru;
+
+    if (SNOPT_A_userfunc_interface)
+      *Status=SNOPT_A_userfunc_interface(data);
+    else
+      throw DOpE::DOpEException("The boost::function SNOPT_userfunc_interface has not been declared","DOpEWrapper::SNOPT::dope_snopt_userfunc_");
+  }
+
+  /**
+   * @class SNOPT_Problem
+   *
+   * A class that wrapps the snoptProblem interface for us.
+   */
+  class SNOPT_Problem : public snoptProblemA
+  {
+  };
+}
+
+#else //Older SNOPT Versions
+
 //BEGIN DONOT_TOUCH
 //The following code is sensitive to ordering
 //due to some bugs in f2c and snopt
@@ -140,5 +232,6 @@ namespace DOpEWrapper
     }
   };
 }
+#endif //Endof older SNOPT Versions
 #endif //Endof DOPELIB_WITH_SNOPT
 #endif //Endof File

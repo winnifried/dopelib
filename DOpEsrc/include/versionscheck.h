@@ -10,4 +10,9 @@
                                                 DEAL_II_MINOR_VERSION  >=  (major)*10000 + (minor))
 #endif
 
+#ifndef SNOPT_VERSION_GTE
+#define SNOPT_VERSION_GTE(major,minor) (SNOPT_MAJOR_VERSION * 10000 + \
+					SNOPT_MINOR_VERSION  >=  (major)*10000 + (minor))
+#endif
+
 #endif /* _VERSIONSCHECK_H_ */
