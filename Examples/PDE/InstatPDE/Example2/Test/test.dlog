@@ -1,0 +1,375 @@
+DOpElib Copyright (C) 2012 - 2016 DOpElib authors
+This program comes with ABSOLUTELY NO WARRANTY.
+For License details read LICENSE.TXT distributed with this software!
+
+This is DOpElib Version: 4.0.0 pre
+	Status as of: 16/02/2016
+Using dealii Version: 8.5
+
+	**************************************************
+	*             Starting Forward Solve             *
+	*   Solving : InstatPDEProblemContainer	*
+	*   SDoFs   : 	Number of Timepoints: 26
+		Spatial DoFs: 7176
+	**************************************************
+
+	Computing State Solution:
+LOG: Allowing IterationCounter `Time' for filenames!
+	Computing Initial Values:
+			 Newton step: 0	 Residual (abs.): < 1.0e-05
+			 Newton step: 0	 Residual (rel.):         NAN
+		         Precalculating functional values 
+		Pressure_difference: 0
+		Deflection_X: 0
+		Deflection_Y: 0
+		Drag: 0
+		Lift: 0
+		 Timestep: 1 (0 -> 1) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   8.2e-01
+			 Newton step: 0	 Residual (rel.):     1.0e+00
+			 Newton step: 1	 Residual (rel.):   5.2e-01	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.1e-01	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   8.6e-03	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   5.6e-04	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   1.1e-04	 LineSearch {0} 
+			 Newton step: 6	 Residual (rel.):   2.1e-05	 LineSearch {0} 
+			 Newton step: 7	 Residual (rel.): < 1.0e-05	 LineSearch {0} 
+			 Newton step: 8	 Residual (rel.): < 1.0e-05	 LineSearch {0} 
+			 Newton step: 9	 Residual (rel.): < 1.0e-05	 LineSearch {0} 
+			 Newton step: 10	 Residual (rel.): < 1.0e-05	 LineSearch {0} 
+			 Newton step: 11	 Residual (rel.): < 1.0e-05	 LineSearch {0} 
+		         Precalculating functional values 
+		Pressure_difference: 241
+		Deflection_X: 1.2e-05
+		Deflection_Y: -2.09e-05
+		Drag: 9.03
+		Lift: 0.11
+		 Timestep: 2 (1 -> 2) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   1.6e+00
+			 Newton step: 0	 Residual (rel.):     1.0e+00
+			 Newton step: 1	 Residual (rel.):   2.8e-01	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   4.5e-03	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   5.6e-04	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   1.2e-04	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   2.3e-05	 LineSearch {0} 
+			 Newton step: 6	 Residual (rel.): < 1.0e-05	 LineSearch {0} 
+			 Newton step: 7	 Residual (rel.): < 1.0e-05	 LineSearch {0} 
+			 Newton step: 8	 Residual (rel.): < 1.0e-05	 LineSearch {0} 
+			 Newton step: 9	 Residual (rel.): < 1.0e-05	 LineSearch {0} 
+			 Newton step: 10	 Residual (rel.): < 1.0e-05	 LineSearch {0} 
+		         Precalculating functional values 
+		Pressure_difference: 391
+		Deflection_X: 2.32e-05
+		Deflection_Y: 0.000196
+		Drag: 17.9
+		Lift: 0.436
+		 Timestep: 3 (2 -> 3) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   1.3e+00
+			 Newton step: 0	 Residual (rel.):     1.0e+00
+			 Newton step: 1	 Residual (rel.):   4.8e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   6.2e-03	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.3e-04	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   1.4e-05	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.): < 1.0e-05	 LineSearch {0} 
+			 Newton step: 6	 Residual (rel.): < 1.0e-05	 LineSearch {0} 
+			 Newton step: 7	 Residual (rel.): < 1.0e-05	 LineSearch {0} 
+			 Newton step: 8	 Residual (rel.): < 1.0e-05	 LineSearch {0} 
+		         Precalculating functional values 
+		Pressure_difference: 232
+		Deflection_X: 2.45e-05
+		Deflection_Y: 0.00042
+		Drag: 15.6
+		Lift: 0.565
+		 Timestep: 4 (3 -> 4) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   5.2e-01
+			 Newton step: 0	 Residual (rel.):     1.0e+00
+			 Newton step: 1	 Residual (rel.):   9.9e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.8e-03	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   5.4e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 1.0e-05	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.): < 1.0e-05	 LineSearch {0} 
+			 Newton step: 6	 Residual (rel.): < 1.0e-05	 LineSearch {0} 
+			 Newton step: 7	 Residual (rel.): < 1.0e-05	 LineSearch {0} 
+		         Precalculating functional values 
+		Pressure_difference: 178
+		Deflection_X: 2.42e-05
+		Deflection_Y: 0.00059
+		Drag: 14.7
+		Lift: 0.644
+		 Timestep: 5 (4 -> 5) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   2.3e-01
+			 Newton step: 0	 Residual (rel.):     1.0e+00
+			 Newton step: 1	 Residual (rel.):   1.2e-01	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.2e-03	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   3.3e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 1.0e-05	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.): < 1.0e-05	 LineSearch {0} 
+			 Newton step: 6	 Residual (rel.): < 1.0e-05	 LineSearch {0} 
+		         Precalculating functional values 
+		Pressure_difference: 159
+		Deflection_X: 2.37e-05
+		Deflection_Y: 0.000705
+		Drag: 14.3
+		Lift: 0.692
+		 Timestep: 6 (5 -> 6) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   1.2e-01
+			 Newton step: 0	 Residual (rel.):     1.0e+00
+			 Newton step: 1	 Residual (rel.):   9.4e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   5.6e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   2.5e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 1.0e-05	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.): < 1.0e-05	 LineSearch {0} 
+		         Precalculating functional values 
+		Pressure_difference: 152
+		Deflection_X: 2.33e-05
+		Deflection_Y: 0.000777
+		Drag: 14.2
+		Lift: 0.722
+		 Timestep: 7 (6 -> 7) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   7.2e-02
+			 Newton step: 0	 Residual (rel.):     1.0e+00
+			 Newton step: 1	 Residual (rel.):   5.9e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   3.8e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   2.1e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 1.0e-05	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.): < 1.0e-05	 LineSearch {0} 
+		         Precalculating functional values 
+		Pressure_difference: 150
+		Deflection_X: 2.3e-05
+		Deflection_Y: 0.000821
+		Drag: 14.2
+		Lift: 0.739
+		 Timestep: 8 (7 -> 8) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   4.7e-02
+			 Newton step: 0	 Residual (rel.):     1.0e+00
+			 Newton step: 1	 Residual (rel.):   3.1e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   3.2e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.8e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 1.0e-05	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.): < 1.0e-05	 LineSearch {0} 
+		         Precalculating functional values 
+		Pressure_difference: 149
+		Deflection_X: 2.29e-05
+		Deflection_Y: 0.000846
+		Drag: 14.1
+		Lift: 0.75
+		 Timestep: 9 (8 -> 9) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   3.1e-02
+			 Newton step: 0	 Residual (rel.):     1.0e+00
+			 Newton step: 1	 Residual (rel.):   1.5e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.6e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.5e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 1.0e-05	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.): < 1.0e-05	 LineSearch {0} 
+		         Precalculating functional values 
+		Pressure_difference: 149
+		Deflection_X: 2.28e-05
+		Deflection_Y: 0.000861
+		Drag: 14.1
+		Lift: 0.756
+		 Timestep: 10 (9 -> 10) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   2.2e-02
+			 Newton step: 0	 Residual (rel.):     1.0e+00
+			 Newton step: 1	 Residual (rel.):   7.2e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.2e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.2e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 1.0e-05	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.): < 1.0e-05	 LineSearch {0} 
+		         Precalculating functional values 
+		Pressure_difference: 149
+		Deflection_X: 2.27e-05
+		Deflection_Y: 0.000869
+		Drag: 14.1
+		Lift: 0.759
+		 Timestep: 11 (10 -> 11) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   1.5e-02
+			 Newton step: 0	 Residual (rel.):     1.0e+00
+			 Newton step: 1	 Residual (rel.):   3.3e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.7e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.): < 1.0e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 1.0e-05	 LineSearch {0} 
+		         Precalculating functional values 
+		Pressure_difference: 149
+		Deflection_X: 2.27e-05
+		Deflection_Y: 0.000874
+		Drag: 14.1
+		Lift: 0.762
+		 Timestep: 12 (11 -> 12) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   1.1e-02
+			 Newton step: 0	 Residual (rel.):     1.0e+00
+			 Newton step: 1	 Residual (rel.):   2.4e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.4e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.): < 1.0e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 1.0e-05	 LineSearch {0} 
+		         Precalculating functional values 
+		Pressure_difference: 149
+		Deflection_X: 2.27e-05
+		Deflection_Y: 0.000877
+		Drag: 14.1
+		Lift: 0.763
+		 Timestep: 13 (12 -> 13) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   7.3e-03
+			 Newton step: 0	 Residual (rel.):     1.0e+00
+			 Newton step: 1	 Residual (rel.):   1.9e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.2e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.): < 1.0e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 1.0e-05	 LineSearch {0} 
+		         Precalculating functional values 
+		Pressure_difference: 149
+		Deflection_X: 2.27e-05
+		Deflection_Y: 0.000878
+		Drag: 14.1
+		Lift: 0.764
+		 Timestep: 14 (13 -> 14) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   5.0e-03
+			 Newton step: 0	 Residual (rel.):     1.0e+00
+			 Newton step: 1	 Residual (rel.):   1.6e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   9.5e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.): < 1.0e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 1.0e-05	 LineSearch {0} 
+		         Precalculating functional values 
+		Pressure_difference: 149
+		Deflection_X: 2.27e-05
+		Deflection_Y: 0.000879
+		Drag: 14.1
+		Lift: 0.764
+		 Timestep: 15 (14 -> 15) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   3.5e-03
+			 Newton step: 0	 Residual (rel.):     1.0e+00
+			 Newton step: 1	 Residual (rel.):   1.3e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   8.0e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.): < 1.0e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 1.0e-05	 LineSearch {0} 
+		         Precalculating functional values 
+		Pressure_difference: 149
+		Deflection_X: 2.27e-05
+		Deflection_Y: 0.00088
+		Drag: 14.1
+		Lift: 0.764
+		 Timestep: 16 (15 -> 16) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   2.4e-03
+			 Newton step: 0	 Residual (rel.):     1.0e+00
+			 Newton step: 1	 Residual (rel.):   1.1e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   6.8e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.): < 1.0e-05	 LineSearch {0} 
+		         Precalculating functional values 
+		Pressure_difference: 149
+		Deflection_X: 2.27e-05
+		Deflection_Y: 0.00088
+		Drag: 14.1
+		Lift: 0.764
+		 Timestep: 17 (16 -> 17) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   1.6e-03
+			 Newton step: 0	 Residual (rel.):     1.0e+00
+			 Newton step: 1	 Residual (rel.):   9.7e-04	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   5.8e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.): < 1.0e-05	 LineSearch {0} 
+		         Precalculating functional values 
+		Pressure_difference: 149
+		Deflection_X: 2.27e-05
+		Deflection_Y: 0.00088
+		Drag: 14.1
+		Lift: 0.764
+		 Timestep: 18 (17 -> 18) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   1.1e-03
+			 Newton step: 0	 Residual (rel.):     1.0e+00
+			 Newton step: 1	 Residual (rel.):   8.4e-04	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   5.0e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.): < 1.0e-05	 LineSearch {0} 
+		         Precalculating functional values 
+		Pressure_difference: 149
+		Deflection_X: 2.27e-05
+		Deflection_Y: 0.00088
+		Drag: 14.1
+		Lift: 0.765
+		 Timestep: 19 (18 -> 19) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   7.5e-04
+			 Newton step: 0	 Residual (rel.):     1.0e+00
+			 Newton step: 1	 Residual (rel.):   7.4e-04	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   4.4e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.): < 1.0e-05	 LineSearch {0} 
+		         Precalculating functional values 
+		Pressure_difference: 149
+		Deflection_X: 2.27e-05
+		Deflection_Y: 0.00088
+		Drag: 14.1
+		Lift: 0.765
+		 Timestep: 20 (19 -> 20) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   5.0e-04
+			 Newton step: 0	 Residual (rel.):     1.0e+00
+			 Newton step: 1	 Residual (rel.):   6.5e-04	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   3.9e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.): < 1.0e-05	 LineSearch {0} 
+		         Precalculating functional values 
+		Pressure_difference: 149
+		Deflection_X: 2.27e-05
+		Deflection_Y: 0.00088
+		Drag: 14.1
+		Lift: 0.765
+		 Timestep: 21 (20 -> 21) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   3.4e-04
+			 Newton step: 0	 Residual (rel.):     1.0e+00
+			 Newton step: 1	 Residual (rel.):   5.8e-04	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   3.5e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.): < 1.0e-05	 LineSearch {0} 
+		         Precalculating functional values 
+		Pressure_difference: 149
+		Deflection_X: 2.27e-05
+		Deflection_Y: 0.00088
+		Drag: 14.1
+		Lift: 0.765
+		 Timestep: 22 (21 -> 22) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   2.3e-04
+			 Newton step: 0	 Residual (rel.):     1.0e+00
+			 Newton step: 1	 Residual (rel.):   5.2e-04	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   3.1e-05	 LineSearch {0} 
+		         Precalculating functional values 
+		Pressure_difference: 149
+		Deflection_X: 2.27e-05
+		Deflection_Y: 0.00088
+		Drag: 14.1
+		Lift: 0.765
+		 Timestep: 23 (22 -> 23) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   1.6e-04
+			 Newton step: 0	 Residual (rel.):     1.0e+00
+			 Newton step: 1	 Residual (rel.):   4.7e-04	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.8e-05	 LineSearch {0} 
+		         Precalculating functional values 
+		Pressure_difference: 149
+		Deflection_X: 2.27e-05
+		Deflection_Y: 0.00088
+		Drag: 14.1
+		Lift: 0.765
+		 Timestep: 24 (23 -> 24) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   1.1e-04
+			 Newton step: 0	 Residual (rel.):     1.0e+00
+			 Newton step: 1	 Residual (rel.):   4.1e-04	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.4e-05	 LineSearch {0} 
+		         Precalculating functional values 
+		Pressure_difference: 149
+		Deflection_X: 2.27e-05
+		Deflection_Y: 0.00088
+		Drag: 14.1
+		Lift: 0.765
+		 Timestep: 25 (24 -> 25) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   7.8e-05
+			 Newton step: 0	 Residual (rel.):     1.0e+00
+			 Newton step: 1	 Residual (rel.):   3.4e-04	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.1e-05	 LineSearch {0} 
+		         Precalculating functional values 
+		Pressure_difference: 149
+		Deflection_X: 2.27e-05
+		Deflection_Y: 0.00088
+		Drag: 14.1
+		Lift: 0.765
+	Computing Functionals:
+	Pressure_difference too large. Writing to file instead: 
+	Writing [./Mesh0/Pressure_difference_InstatPDEProblemContainer.00025.gpl]
+	Deflection_X too large. Writing to file instead: 
+	Writing [./Mesh0/Deflection_X_InstatPDEProblemContainer.00025.gpl]
+	Deflection_Y too large. Writing to file instead: 
+	Writing [./Mesh0/Deflection_Y_InstatPDEProblemContainer.00025.gpl]
+	Drag too large. Writing to file instead: 
+	Writing [./Mesh0/Drag_InstatPDEProblemContainer.00025.gpl]
+	Lift too large. Writing to file instead: 
+	Writing [./Mesh0/Lift_InstatPDEProblemContainer.00025.gpl]

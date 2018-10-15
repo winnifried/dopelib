@@ -1,6 +1,6 @@
 /**
 *
-* Copyright (C) 2012-2014 by the DOpElib authors
+* Copyright (C) 2012-2018 by the DOpElib authors
 *
 * This file is part of DOpElib
 *
@@ -193,6 +193,16 @@ namespace DOpE
     HasInterfaces() const
     {
       return OP_.HasInterfaces();
+    }
+  
+    /******************************************************/
+    /**
+     * Returns whether vertex information is needed
+     */
+    bool
+    HasVertices() const
+    {
+      return OP_.HasVertices();
     }
 
     /******************************************************/

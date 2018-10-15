@@ -1,25 +1,25 @@
 /**
- *
- * Copyright (C) 2012-2014 by the DOpElib authors
- *
- * This file is part of DOpElib
- *
- * DOpElib is free software: you can redistribute it
- * and/or modify it under the terms of the GNU General Public
- * License as published by the Free Software Foundation, either
- * version 3 of the License, or (at your option) any later
- * version.
- *
- * DOpElib is distributed in the hope that it will be
- * useful, but WITHOUT ANY WARRANTY; without even the implied
- * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
- * PURPOSE.  See the GNU General Public License for more
- * details.
- *
- * Please refer to the file LICENSE.TXT included in this distribution
- * for further information on this license.
- *
- **/
+*
+* Copyright (C) 2012-2018 by the DOpElib authors
+*
+* This file is part of DOpElib
+*
+* DOpElib is free software: you can redistribute it
+* and/or modify it under the terms of the GNU General Public
+* License as published by the Free Software Foundation, either
+* version 3 of the License, or (at your option) any later
+* version.
+*
+* DOpElib is distributed in the hope that it will be
+* useful, but WITHOUT ANY WARRANTY; without even the implied
+* warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+* PURPOSE.  See the GNU General Public License for more
+* details.
+*
+* Please refer to the file LICENSE.TXT included in this distribution
+* for further information on this license.
+*
+**/
 
 #ifndef SPARSITYMAKER_H_
 #define SPARSITYMAKER_H_
@@ -28,7 +28,6 @@
 #include <deal.II/dofs/dof_tools.h>
 #include <deal.II/lac/constraint_matrix.h>
 #include <deal.II/lac/block_sparsity_pattern.h>
-
 #include <wrapper/dofhandler_wrapper.h>
 #include <include/helper.h>
 
@@ -50,33 +49,33 @@ namespace DOpE
    * Standard implementation of the object responsible
    * to construct the sparsitypattern.
    */
-  template <template <int, int> class DH, int dim>
+  template<template<int, int> class DH, int dim>
   class SparsityMaker
   {
   public:
-    SparsityMaker (bool flux_pattern = false)
+    SparsityMaker(bool flux_pattern = false)
     {
       flux_pattern_ = flux_pattern;
     }
 
     virtual
-    ~SparsityMaker ()
+    ~SparsityMaker()
     {
     }
 
     virtual void
     ComputeSparsityPattern(
       const DOpEWrapper::DoFHandler<dim, DH> &dof_handler,
-                            dealii::BlockSparsityPattern &sparsity,
-                            const dealii::ConstraintMatrix &hanging_node_constraints,
-                            const std::vector<unsigned int> &blocks) const;
+      dealii::BlockSparsityPattern &sparsity,
+      const dealii::ConstraintMatrix &hanging_node_constraints,
+      const std::vector<unsigned int> &blocks) const;
 
     virtual void
     ComputeSparsityPattern(
       const DOpEWrapper::DoFHandler<dim, DH> &dof_handler,
-                            dealii::SparsityPattern &sparsity,
-                            const dealii::ConstraintMatrix &hanging_node_constraints,
-                            const std::vector<unsigned int> &blocks) const;
+      dealii::SparsityPattern &sparsity,
+      const dealii::ConstraintMatrix &hanging_node_constraints,
+      const std::vector<unsigned int> &blocks) const;
 
     virtual void
     ComputeSparsityPattern (const DOpEWrapper::DoFHandler<dim, DH> &dof_handler,
@@ -117,8 +116,8 @@ namespace DOpE
 //    const unsigned int n_levels) const;
 //
 
-//TODO: If one wishes to change the sparsity-pattern of the control, one
-//has to implement this here.
+    //TODO: If one wishes to change the sparsity-pattern of the control, one
+    //has to implement this here.
   private:
     bool flux_pattern_;
   };
@@ -127,7 +126,7 @@ namespace DOpE
   /***********************************************************/
 
 
-  template <template <int, int> class DH, int dim>
+  template<template<int, int> class DH, int dim>
   void
   SparsityMaker<DH, dim>::ComputeSparsityPattern(
     const DOpEWrapper::DoFHandler<dim, DH> &dof_handler,
@@ -136,26 +135,26 @@ namespace DOpE
     const std::vector<unsigned int> &blocks) const
   {
 #if DEAL_II_VERSION_GTE(8,3,0)
-    dealii::BlockDynamicSparsityPattern csp (blocks, blocks);
+    dealii::BlockDynamicSparsityPattern csp(blocks, blocks);
 #else
     dealii::BlockCompressedSimpleSparsityPattern csp(blocks, blocks);
 #endif
 
-    if (flux_pattern_)
+    if ( flux_pattern_ )
       {
-        dealii::DoFTools::make_flux_sparsity_pattern (
-          dof_handler.GetDEALDoFHandler (), csp, hanging_node_constraints);
+        dealii::DoFTools::make_flux_sparsity_pattern(
+          dof_handler.GetDEALDoFHandler(), csp, hanging_node_constraints);
       }
     else
       {
-        dealii::DoFTools::make_sparsity_pattern (
-          dof_handler.GetDEALDoFHandler (), csp, hanging_node_constraints);
+        dealii::DoFTools::make_sparsity_pattern(
+          dof_handler.GetDEALDoFHandler(), csp, hanging_node_constraints);
       }
-    sparsity.copy_from (csp);
+    sparsity.copy_from(csp);
   }
 
   /***********************************************************/
-  template <template <int, int> class DH, int dim>
+  template<template<int, int> class DH, int dim>
   void
   SparsityMaker<DH, dim>::ComputeSparsityPattern(
     const DOpEWrapper::DoFHandler<dim, DH> &dof_handler,
@@ -164,27 +163,27 @@ namespace DOpE
     const std::vector<unsigned int> &blocks) const
   {
     unsigned int total_dofs = 0;
-    for (unsigned int j = 0; j < blocks.size (); j++)
+    for (unsigned int j = 0; j < blocks.size(); j++)
       {
-        total_dofs += blocks.at (j);
+        total_dofs += blocks.at(j);
       }
 
 #if DEAL_II_VERSION_GTE(8,3,0)
-    dealii::DynamicSparsityPattern csp (total_dofs, total_dofs);
+    dealii::DynamicSparsityPattern csp(total_dofs, total_dofs);
 #else
     dealii::CompressedSimpleSparsityPattern csp(total_dofs, total_dofs);
 #endif
-    if (flux_pattern_)
+    if ( flux_pattern_ )
       {
-        dealii::DoFTools::make_flux_sparsity_pattern (
-          dof_handler.GetDEALDoFHandler (), csp, hanging_node_constraints);
+        dealii::DoFTools::make_flux_sparsity_pattern(
+          dof_handler.GetDEALDoFHandler(), csp, hanging_node_constraints);
       }
     else
       {
-        dealii::DoFTools::make_sparsity_pattern (
-          dof_handler.GetDEALDoFHandler (), csp, hanging_node_constraints);
+        dealii::DoFTools::make_sparsity_pattern(
+          dof_handler.GetDEALDoFHandler(), csp, hanging_node_constraints);
       }
-    sparsity.copy_from (csp);
+    sparsity.copy_from(csp);
   }
 
   /***********************************************************/
@@ -339,6 +338,6 @@ namespace DOpE
 
 
 
-}//end of namespace
+} //end of namespace
 
 #endif /* SPARSITYMAKER_H_ */

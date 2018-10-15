@@ -1,5 +1,24 @@
 Changelog DOpE
 ==============
+30.08.2018: Updated ReducedSNOPTAlgorithm to be compatible with SNOPT v 7.6
+28.08.2018: Added the possibility to conduct precalculation of nodal values in error estimation,
+	    such as information if a node is in 'full contact' for error estimation in the obstacle
+	    problem. To use this the method NPrecomputedNodalValues() needs to be implemented in an
+	    error estimator. The values to be computed must be implemented via the 
+	    *AuxRhs methods of the PDE which have been added to the PDEInterface. 
+27.08.2018: Updated date in version file.
+03.08.2018: Added methods to count neighboring elements to a vertex. With this
+	    one can integrate over vertices, e.g., to evaluate the dual finite element
+	    basis in vertex based elements.
+	    Added potential output of intermediate solutions during the Newton loop to allow
+	    for easier debugging.
+13.06.2018: Code update for dealii v9.0.0:
+	    - Some Examples needed to have 'functional_number_precision' to be set in the tests
+	    - In some examples the Manifold induced refinement differed from the previous one
+	      from curved boundaries. Now Tests are depending on the deal.ii version in these examples
+12.06.2018: Code update for dealii v9.0.0:
+	    - fixed deprecated 'HyperBall' by updating the examples to use manifolds.
+	    - fixed deprecated 'ZeroFunction' by using 'Functions::ZeroFunction'.
 14.08.2017: Removed comparisons with fixed tolerance for zero difference tests, now using relative scaling.
 09.08.2017: Implemented first functionality to simulate PDEs on networks. Together with an 
 	    example in Examples/PDE/StatPDE/Example14.

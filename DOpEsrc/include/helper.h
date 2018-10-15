@@ -1,25 +1,25 @@
 /**
- *
- * Copyright (C) 2012-2014 by the DOpElib authors
- *
- * This file is part of DOpElib
- *
- * DOpElib is free software: you can redistribute it
- * and/or modify it under the terms of the GNU General Public
- * License as published by the Free Software Foundation, either
- * version 3 of the License, or (at your option) any later
- * version.
- *
- * DOpElib is distributed in the hope that it will be
- * useful, but WITHOUT ANY WARRANTY; without even the implied
- * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
- * PURPOSE.  See the GNU General Public License for more
- * details.
- *
- * Please refer to the file LICENSE.TXT included in this distribution
- * for further information on this license.
- *
- **/
+*
+* Copyright (C) 2012-2018 by the DOpElib authors
+*
+* This file is part of DOpElib
+*
+* DOpElib is free software: you can redistribute it
+* and/or modify it under the terms of the GNU General Public
+* License as published by the Free Software Foundation, either
+* version 3 of the License, or (at your option) any later
+* version.
+*
+* DOpElib is distributed in the hope that it will be
+* useful, but WITHOUT ANY WARRANTY; without even the implied
+* warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+* PURPOSE.  See the GNU General Public License for more
+* details.
+*
+* Please refer to the file LICENSE.TXT included in this distribution
+* for further information on this license.
+*
+**/
 
 #ifndef DOpEHelper_H_
 #define DOpEHelper_H_
@@ -105,12 +105,64 @@ namespace DOpEHelper
 #endif
 
   /**
-   * Splits an index set source into different blocks according to block_counts.
-   * Application: split locally_owned for block vectors
+   * Helper class for the VECTOR-templates. Resizes the given BlockVector vector.
    */
-  std::vector<dealii::IndexSet>
-  split_blockwise (const dealii::IndexSet &source,
-                   const std::vector<unsigned int> &block_counts);
+  void ReSizeVector(unsigned int ndofs,
+                    const std::vector<unsigned int> &dofs_per_block,
+                    dealii::BlockVector<double> &vector);
+
+  /**
+   * Same as above with different input parameters.
+   */
+  void ReSizeVector(const dealii::BlockIndices &, dealii::BlockVector<double> &vector);
+
+  /*************************************************************************************/
+  /**
+   * Helper class for the VECTOR-templates. Resizes the given Vector vector.
+   */
+  void ReSizeVector(unsigned int ndofs,
+                    const std::vector<unsigned int> & /*dofs_per_block*/,
+                    dealii::Vector<double> &vector);
+  /**
+   * Same as above with different input parameters.
+   */
+  void ReSizeVector(const dealii::BlockIndices &, dealii::Vector<double> &vector);
+
+#ifdef DOPELIB_WITH_TRILINOS
+
+// TODO these are just for temporary compatibility, to be removed !!!
+  inline void ReSizeVector(const dealii::BlockIndices &, dealii::TrilinosWrappers::MPI::BlockVector &)
+  {
+  }
+
+  inline void ReSizeVector(const dealii::BlockIndices &, dealii::TrilinosWrappers::MPI::Vector &)
+  {
+  }
+
+  inline void ReSizeVector(unsigned int ,
+                           const std::vector<unsigned int> &,
+                           dealii::TrilinosWrappers::MPI::Vector &)
+  {
+  }
+  inline void ReSizeVector(unsigned int ,
+                           const std::vector<unsigned int> &,
+                           dealii::TrilinosWrappers::MPI::BlockVector &)
+  {
+  }
+
+#endif
+
+  /*************************************************************************************/
+  /**
+   * Helper class for the VECTOR-templates. Resizes the given Vector vector.
+   */
+  void ReSizeVector(unsigned int ndofs,
+                    const std::vector<unsigned int> & /*dofs_per_block*/,
+                    dealii::Vector<double> &vector);
+  /**
+   * Same as above with different input parameters.
+   */
+  void ReSizeVector(const dealii::BlockIndices &, dealii::Vector<double> &vector);
 
   // Distributed: vmult, solve, +, -, constraints, assemble into
   // Ghosted: linearization point, output, anything that evaluates
@@ -156,6 +208,6 @@ namespace DOpEHelper
   }
 #endif
 
-} //end of namespace
+}//end of namespace
 
 #endif /* DOpEHelper_H_ */

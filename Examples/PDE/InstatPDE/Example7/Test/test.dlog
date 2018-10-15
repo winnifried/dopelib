@@ -1,0 +1,455 @@
+DOpElib Copyright (C) 2012 - 2016 DOpElib authors
+This program comes with ABSOLUTELY NO WARRANTY.
+For License details read LICENSE.TXT distributed with this software!
+
+This is DOpElib Version: 4.0.0 pre
+	Status as of: 16/02/2016
+Using dealii Version: 9.0
+
+	**************************************************
+	*             Starting Forward Solve             *
+	*   Solving : InstatPDEProblemContainer	*
+	*   SDoFs   : 	Number of Timepoints: 9
+		Total   DoFs: 144
+		Minimal DoFs: 16
+		Maximal DoFs: 16
+	**************************************************
+
+	Computing State Solution:
+LOG: Allowing IterationCounter `Time' for filenames!
+	Computing Initial Values:
+			 Newton step: 0	 Residual (abs.):   2.5000e-01
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep: 1 (0 -> 0.125) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   6.8750e-01
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   2.0570e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.7396e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   3.8754e-08	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   8.3936e-11	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep: 2 (0.125 -> 0.25) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   1.8223e-01
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   4.5886e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.1193e-06	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.1184e-09	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep: 3 (0.25 -> 0.375) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   8.3801e-02
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   3.5387e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.1462e-06	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   8.2977e-10	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep: 4 (0.375 -> 0.5) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   2.9187e-02
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   3.6925e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.6936e-06	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.0751e-09	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep: 5 (0.5 -> 0.625) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   1.6272e-02
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   4.2644e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   4.2811e-06	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.6038e-09	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep: 6 (0.625 -> 0.75) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   1.5261e-02
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   4.3550e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   4.4031e-06	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.6187e-09	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep: 7 (0.75 -> 0.875) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   1.3962e-02
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   4.8410e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   4.9233e-06	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.7825e-09	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep: 8 (0.875 -> 1) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   1.2590e-02
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   5.3831e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   5.3854e-06	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.8951e-09	 LineSearch {0} 
+		         Precalculating functional values 
+		Mean-value: 1.02195
+	Computing Functionals:
+	Mean-value: 1.02195
+
+	**************************************************
+	*             Starting Forward Solve             *
+	*   Solving : InstatPDEProblemContainer	*
+	*   SDoFs   : 	Number of Timepoints: 17
+		Total   DoFs: 544
+		Minimal DoFs: 32
+		Maximal DoFs: 32
+	**************************************************
+
+	Computing State Solution:
+	Computing Initial Values:
+			 Newton step: 0	 Residual (abs.):   1.2500e-01
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep: 1 (0 -> 0.0625) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   3.4375e-01
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   1.8086e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.5582e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   5.8149e-08	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   1.4299e-10	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep: 2 (0.0625 -> 0.125) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   1.2724e-01
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   2.3179e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.1806e-06	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   6.9516e-10	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep: 3 (0.125 -> 0.1875) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   6.6459e-02
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   3.2843e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   7.7523e-07	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   3.3805e-10	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep: 4 (0.1875 -> 0.25) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   2.7608e-02
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   1.7573e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   6.3489e-07	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   2.0565e-10	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep: 5 (0.25 -> 0.3125) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   1.7135e-02
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   1.9854e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   5.6432e-07	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   2.3203e-10	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep: 6 (0.3125 -> 0.375) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   8.5937e-03
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   2.3522e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   8.4563e-07	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   3.5422e-10	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep: 7 (0.375 -> 0.4375) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   5.7970e-03
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   2.7210e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   9.1505e-07	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   4.1030e-10	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep: 8 (0.4375 -> 0.5) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   4.6271e-03
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   2.4426e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   9.3921e-07	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   4.2101e-10	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep: 9 (0.5 -> 0.5625) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   4.6445e-03
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   2.0624e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   7.6491e-07	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   3.5094e-10	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep: 10 (0.5625 -> 0.625) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   4.8933e-03
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   1.6453e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   6.3322e-07	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   2.9180e-10	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep: 11 (0.625 -> 0.6875) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   5.0194e-03
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   1.4528e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   5.6251e-07	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   2.6033e-10	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep: 12 (0.6875 -> 0.75) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   5.0516e-03
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   1.3771e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   5.3914e-07	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   2.4772e-10	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep: 13 (0.75 -> 0.8125) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   5.0131e-03
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   1.3625e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   5.4724e-07	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   2.4770e-10	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep: 14 (0.8125 -> 0.875) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   4.9229e-03
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   1.3914e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   5.7902e-07	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   2.5625e-10	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep: 15 (0.875 -> 0.9375) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   4.7956e-03
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   1.4519e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   6.2752e-07	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   2.7026e-10	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep: 16 (0.9375 -> 1) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   4.6432e-03
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   1.5356e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   6.8741e-07	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   2.8730e-10	 LineSearch {0} 
+		         Precalculating functional values 
+		Mean-value: 1.07356
+	Computing Functionals:
+	Mean-value: 1.07356
+
+	**************************************************
+	*             Starting Forward Solve             *
+	*   Solving : InstatPDEProblemContainer	*
+	*   SDoFs   : 	Number of Timepoints: 33
+		Total   DoFs: 2112
+		Minimal DoFs: 64
+		Maximal DoFs: 64
+	**************************************************
+
+	Computing State Solution:
+	Computing Initial Values:
+			 Newton step: 0	 Residual (abs.):   6.2500e-02
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep: 1 (0 -> 0.03125) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   1.7188e-01
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   1.7829e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.1078e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   4.3629e-08	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   9.8826e-11	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep: 2 (0.03125 -> 0.0625) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   7.3936e-02
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   2.9496e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   7.5343e-07	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   3.7534e-10	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep: 3 (0.0625 -> 0.09375) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   4.3087e-02
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   3.5389e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   3.8632e-07	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.3464e-10	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep: 4 (0.09375 -> 0.125) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   1.9907e-02
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   1.0533e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.9183e-07	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   4.8820e-11	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep: 5 (0.125 -> 0.15625) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   1.3082e-02
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   1.2787e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.9450e-07	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   3.8668e-11	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep: 6 (0.15625 -> 0.1875) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   6.2331e-03
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   1.3327e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.9007e-07	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   5.7233e-11	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep: 7 (0.1875 -> 0.21875) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   4.4881e-03
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   1.4265e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   3.0037e-07	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   6.0861e-11	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep: 8 (0.21875 -> 0.25) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   2.6769e-03
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   1.8000e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   3.9117e-07	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   8.2808e-11	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep: 9 (0.25 -> 0.28125) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   2.2483e-03
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   1.6395e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   3.7117e-07	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   8.1239e-11	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep: 10 (0.28125 -> 0.3125) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   2.0871e-03
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   1.4833e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   3.2566e-07	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   7.3249e-11	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep: 11 (0.3125 -> 0.34375) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   1.9495e-03
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   1.3781e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.9236e-07	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   6.7884e-11	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep: 12 (0.34375 -> 0.375) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   1.8273e-03
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   1.2876e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.6538e-07	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   6.5979e-11	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep: 13 (0.375 -> 0.40625) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   1.7338e-03
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   1.2087e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.4028e-07	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   6.3328e-11	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep: 14 (0.40625 -> 0.4375) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   1.6450e-03
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   1.1464e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.1940e-07	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   6.0878e-11	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep: 15 (0.4375 -> 0.46875) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   1.5665e-03
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   1.0964e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.0111e-07	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   2.4021e-10	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep: 16 (0.46875 -> 0.5) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   1.4953e-03
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   1.0476e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.8515e-07	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   2.3269e-10	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep: 17 (0.5 -> 0.53125) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   1.4247e-03
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   1.0169e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.7185e-07	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   2.2699e-10	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep: 18 (0.53125 -> 0.5625) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   1.3591e-03
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   9.8393e-04	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.6024e-07	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   2.2086e-10	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep: 19 (0.5625 -> 0.59375) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   1.2909e-03
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   9.6223e-04	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.5091e-07	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   2.1582e-10	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep: 20 (0.59375 -> 0.625) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   1.2217e-03
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   9.4777e-04	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.4344e-07	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   2.1210e-10	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep: 21 (0.625 -> 0.65625) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   1.2633e-03
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   8.5441e-04	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.2547e-07	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.9343e-10	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep: 22 (0.65625 -> 0.6875) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   1.3424e-03
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   7.5515e-04	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.0742e-07	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.7202e-10	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep: 23 (0.6875 -> 0.71875) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   1.4113e-03
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   6.7800e-04	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   9.3529e-08	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.5515e-10	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep: 24 (0.71875 -> 0.75) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   1.4702e-03
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   6.1688e-04	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   8.2733e-08	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.4189e-10	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep: 25 (0.75 -> 0.78125) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   1.5191e-03
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   5.7040e-04	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   7.4318e-08	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.3231e-10	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep: 26 (0.78125 -> 0.8125) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   1.5584e-03
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   5.3702e-04	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   6.7777e-08	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.2575e-10	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep: 27 (0.8125 -> 0.84375) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   1.5887e-03
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   5.1219e-04	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   6.2753e-08	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep: 28 (0.84375 -> 0.875) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   1.6105e-03
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   4.9467e-04	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   5.8990e-08	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep: 29 (0.875 -> 0.90625) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   1.6244e-03
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   4.8523e-04	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   5.6303e-08	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep: 30 (0.90625 -> 0.9375) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   1.6311e-03
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   4.8067e-04	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   5.4562e-08	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep: 31 (0.9375 -> 0.96875) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   1.6314e-03
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   4.7978e-04	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   5.3671e-08	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep: 32 (0.96875 -> 1) using shifted Crank-Nicolson
+			 Newton step: 0	 Residual (abs.):   1.6258e-03
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.):   4.8183e-04	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   5.3564e-08	 LineSearch {0} 
+		         Precalculating functional values 
+		Mean-value: 1.12482
+	Computing Functionals:
+	Mean-value: 1.12482

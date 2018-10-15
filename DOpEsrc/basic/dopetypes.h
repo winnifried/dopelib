@@ -1,25 +1,25 @@
 /**
- *
- * Copyright (C) 2012-2014 by the DOpElib authors
- *
- * This file is part of DOpElib
- *
- * DOpElib is free software: you can redistribute it
- * and/or modify it under the terms of the GNU General Public
- * License as published by the Free Software Foundation, either
- * version 3 of the License, or (at your option) any later
- * version.
- *
- * DOpElib is distributed in the hope that it will be
- * useful, but WITHOUT ANY WARRANTY; without even the implied
- * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
- * PURPOSE.  See the GNU General Public License for more
- * details.
- *
- * Please refer to the file LICENSE.TXT included in this distribution
- * for further information on this license.
- *
- **/
+*
+* Copyright (C) 2012-2018 by the DOpElib authors
+*
+* This file is part of DOpElib
+*
+* DOpElib is free software: you can redistribute it
+* and/or modify it under the terms of the GNU General Public
+* License as published by the Free Software Foundation, either
+* version 3 of the License, or (at your option) any later
+* version.
+*
+* DOpElib is distributed in the hope that it will be
+* useful, but WITHOUT ANY WARRANTY; without even the implied
+* warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+* PURPOSE.  See the GNU General Public License for more
+* details.
+*
+* Please refer to the file LICENSE.TXT included in this distribution
+* for further information on this license.
+*
+**/
 
 #ifndef DOPETYPES_H_
 #define DOPETYPES_H_
@@ -146,16 +146,16 @@ namespace DOpE
       local_constraint
     };
 
-  } //End of namespace DOpEtypes
+  }//End of namespace DOpEtypes
 
 
   /**
    * Transfers DOpEtypes::VectorStorageType etc to Human readable values
    */
-  template <typename C>
+  template<typename C>
   inline std::string DOpEtypesToString(const C & /*t*/)
   {
-    throw DOpEException ("Not implemented!", "DOpEtypesToString");
+    throw DOpEException("Not implemented!","DOpEtypesToString");
   }
 
   template <>
@@ -172,10 +172,9 @@ namespace DOpE
       default:
       {
         std::stringstream out;
-        out << "Unknown DOpEtypes::VectorStorageType" << std::endl;
-        out << "Code given is " << t << std::endl;
+        out<<"Unknown DOpEtypes::VectorStorageType"<< std::endl;
+        out<<"Code given is "<< t<<std::endl;
         throw DOpEException(out.str(),"DOpEtypesToString<DOpEtypes::VectorStorageType");
-      }
       }
   }
 
@@ -194,8 +193,8 @@ namespace DOpE
       default:
       {
         std::stringstream out;
-        out << "Unknown DOpEtypes::ControlType" << std::endl;
-        out << "Code given is " << t << std::endl;
+        out<<"Unknown DOpEtypes::ControlType"<< std::endl;
+        out<<"Code given is "<< t<<std::endl;
         throw DOpEException(out.str(),"DOpEtypesToString<DOpEtypes::ControlType");
       }
       }
@@ -219,9 +218,9 @@ namespace DOpE
       default:
       {
         std::stringstream out;
-        out << "Unknown DOpEtypes::RefinementType" << std::endl;
-        out << "Code given is " << t << std::endl;
-        throw DOpEException (out.str(), "DOpEtypesToString<DOpEtypes::RefinementType>");
+        out<<"Unknown DOpEtypes::RefinementType"<< std::endl;
+        out<<"Code given is "<< t<<std::endl;
+        throw DOpEException(out.str(),"DOpEtypesToString<DOpEtypes::RefinementType>");
       }
       }
   }
@@ -251,6 +250,6 @@ namespace DOpE
       }
   }
 
-} //End of Namespace DOpE
+}//End of Namespace DOpE
 
 #endif /* DOPETYPES_H_ */

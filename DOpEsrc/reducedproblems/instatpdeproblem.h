@@ -1,25 +1,25 @@
 /**
- *
- * Copyright (C) 2012-2014 by the DOpElib authors
- *
- * This file is part of DOpElib
- *
- * DOpElib is free software: you can redistribute it
- * and/or modify it under the terms of the GNU General Public
- * License as published by the Free Software Foundation, either
- * version 3 of the License, or (at your option) any later
- * version.
- *
- * DOpElib is distributed in the hope that it will be
- * useful, but WITHOUT ANY WARRANTY; without even the implied
- * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
- * PURPOSE.  See the GNU General Public License for more
- * details.
- *
- * Please refer to the file LICENSE.TXT included in this distribution
- * for further information on this license.
- *
- **/
+*
+* Copyright (C) 2012-2018 by the DOpElib authors
+*
+* This file is part of DOpElib
+*
+* DOpElib is free software: you can redistribute it
+* and/or modify it under the terms of the GNU General Public
+* License as published by the Free Software Foundation, either
+* version 3 of the License, or (at your option) any later
+* version.
+*
+* DOpElib is distributed in the hope that it will be
+* useful, but WITHOUT ANY WARRANTY; without even the implied
+* warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+* PURPOSE.  See the GNU General Public License for more
+* details.
+*
+* Please refer to the file LICENSE.TXT included in this distribution
+* for further information on this license.
+*
+**/
 
 #ifndef INSTAT_PDE_PROBLEM_H_
 #define INSTAT_PDE_PROBLEM_H_
@@ -86,15 +86,15 @@ namespace DOpE
     /**
      * Constructor for the InstatPDEProblem.
      *
-     * @tparam <INTEGRATORDATACONT> An IntegratorDataContainer
+    * @tparam <INTEGRATORDATACONT> An IntegratorDataContainer
      *
      * @param OP                Problem is given to the stationary solver.
      * @param state_behavior    Indicates the behavior of the StateVector.
      * @param param_reader      An object which has run time data.
      * @param idc       An INTETGRATORDATACONT which has all the data needed by the integrator.
-     * @param base_priority     An offset for the priority of the output written to
-     *                          the OutputHandler
-     */
+    * @param base_priority     An offset for the priority of the output written to
+    *                          the OutputHandler
+    */
     template<typename INTEGRATORDATACONT>
     InstatPDEProblem(PROBLEM *OP, DOpEtypes::VectorStorageType state_behavior,
                      ParameterReader &param_reader,
@@ -304,7 +304,7 @@ namespace DOpE
     bool project_initial_data_ = false;
 
     friend class SolutionExtractor<InstatPDEProblem<NONLINEARSOLVER,
-      INTEGRATOR, PROBLEM, VECTOR, dealdim>, VECTOR >;
+      INTEGRATOR, PROBLEM, VECTOR, dealdim>,   VECTOR > ;
   };
 
   /*************************************************************************/
@@ -319,14 +319,14 @@ namespace DOpE
   void InstatPDEProblem<NONLINEARSOLVER, INTEGRATOR,
        PROBLEM, VECTOR, dealdim>::declare_params(
          ParameterReader &param_reader)
-  {
+{
     NONLINEARSOLVER::declare_params(param_reader);
   }
   /******************************************************/
 
   template<typename NONLINEARSOLVER,
-           typename INTEGRATOR, typename PROBLEM,
-           typename VECTOR, int dealdim>
+  typename INTEGRATOR, typename PROBLEM,
+  typename VECTOR, int dealdim>
   template<typename INTEGRATORDATACONT>
   InstatPDEProblem<NONLINEARSOLVER,
                    INTEGRATOR, PROBLEM, VECTOR, dealdim>::InstatPDEProblem(
@@ -362,8 +362,8 @@ namespace DOpE
   /******************************************************/
 
   template<typename NONLINEARSOLVER,
-           typename INTEGRATOR, typename PROBLEM, typename VECTOR,
-           int dealdim>
+  typename INTEGRATOR, typename PROBLEM, typename VECTOR,
+  int dealdim>
   NONLINEARSOLVER &InstatPDEProblem<NONLINEARSOLVER,
                   INTEGRATOR, PROBLEM, VECTOR, dealdim>::GetNonlinearSolver(std::string type)
   {
@@ -382,8 +382,8 @@ namespace DOpE
   /******************************************************/
 
   template<typename NONLINEARSOLVER,
-           typename INTEGRATOR, typename PROBLEM, typename VECTOR,
-           int dealdim>
+  typename INTEGRATOR, typename PROBLEM, typename VECTOR,
+  int dealdim>
   void InstatPDEProblem<NONLINEARSOLVER, INTEGRATOR,
        PROBLEM, VECTOR, dealdim>::ReInit()
   {
@@ -409,8 +409,8 @@ namespace DOpE
   /******************************************************/
 
   template<typename NONLINEARSOLVER,
-           typename INTEGRATOR, typename PROBLEM, typename VECTOR,
-           int dealdim>
+  typename INTEGRATOR, typename PROBLEM, typename VECTOR,
+  int dealdim>
   void InstatPDEProblem<NONLINEARSOLVER, INTEGRATOR,
        PROBLEM, VECTOR, dealdim>::ComputeReducedState()
   {
@@ -435,14 +435,14 @@ namespace DOpE
   /******************************************************/
 
   template<typename NONLINEARSOLVER,
-           typename INTEGRATOR, typename PROBLEM, typename VECTOR,
-           int dealdim>
+  typename INTEGRATOR, typename PROBLEM, typename VECTOR,
+  int dealdim>
   void InstatPDEProblem<NONLINEARSOLVER, INTEGRATOR,
        PROBLEM, VECTOR, dealdim>::ComputeReducedFunctionals()
   {
     this->ComputeReducedState();
 
-    this->GetOutputHandler()->Write("Computing Functionals:", 4 + this->GetBasePriority());
+    this->GetOutputHandler()->Write("Computing Functionals:", 4  + this->GetBasePriority());
 
     for (unsigned int i = 0; i < this->GetProblem()->GetNFunctionals(); i++)
       {
@@ -503,8 +503,8 @@ namespace DOpE
   /******************************************************/
 
   template<typename NONLINEARSOLVER,
-           typename INTEGRATOR, typename PROBLEM, typename VECTOR,
-           int dealdim>
+  typename INTEGRATOR, typename PROBLEM, typename VECTOR,
+  int dealdim>
   void InstatPDEProblem<NONLINEARSOLVER, INTEGRATOR,
        PROBLEM, VECTOR, dealdim>::ComputeTimeFunctionals(unsigned int step, unsigned int num_steps)
   {
@@ -601,7 +601,7 @@ namespace DOpE
                       w = 0.5 * (this->GetProblem()->GetSpaceTimeHandler()->GetTime(step + 1)
                                  - this->GetProblem()->GetSpaceTimeHandler()->GetTime(step));
                     }
-                  else if (step == num_steps)
+                  else if (step  == num_steps)
                     {
                       w = 0.5 * (this->GetProblem()->GetSpaceTimeHandler()->GetTime(step)
                                  - this->GetProblem()->GetSpaceTimeHandler()->GetTime(step - 1));
@@ -632,8 +632,8 @@ namespace DOpE
   /******************************************************/
 
   template<typename NONLINEARSOLVER,
-           typename INTEGRATOR, typename PROBLEM,
-           typename VECTOR, int dealdim>
+  typename INTEGRATOR, typename PROBLEM,
+  typename VECTOR, int dealdim>
   void
   InstatPDEProblem<NONLINEARSOLVER, INTEGRATOR, PROBLEM, VECTOR, dealdim>::WriteToFile(
     const std::vector<double> &v, std::string outfile)
@@ -783,8 +783,8 @@ namespace DOpE
   /******************************************************/
 
   template<typename NONLINEARSOLVER,
-           typename INTEGRATOR, typename PROBLEM,
-           typename VECTOR, int dealdim>
+  typename INTEGRATOR, typename PROBLEM,
+  typename VECTOR, int dealdim>
   template<typename PDE>
   void InstatPDEProblem<NONLINEARSOLVER,
        INTEGRATOR, PROBLEM, VECTOR, dealdim>::
@@ -899,15 +899,15 @@ namespace DOpE
             this->GetOutputHandler()->Write(sol.GetSpacialVector(),
                                             outname + this->GetPostIndex(), problem.GetDoFType());
 
-          } //End interval loop
-      } //End time loop
+          }//End interval loop
+      }//End time loop
   }
 
   /******************************************************/
 
   template<typename NONLINEARSOLVER,
-           typename INTEGRATOR, typename PROBLEM,
-           typename VECTOR, int dealdim>
+  typename INTEGRATOR, typename PROBLEM,
+  typename VECTOR, int dealdim>
   void InstatPDEProblem<NONLINEARSOLVER,
        INTEGRATOR, PROBLEM, VECTOR, dealdim>::
        AllocateAuxiliaryTimeParams(std::string name,
@@ -934,8 +934,8 @@ namespace DOpE
   /******************************************************/
 
   template<typename NONLINEARSOLVER,
-           typename INTEGRATOR, typename PROBLEM,
-           typename VECTOR, int dealdim>
+  typename INTEGRATOR, typename PROBLEM,
+  typename VECTOR, int dealdim>
   std::map<std::string,std::vector<dealii::Vector<double> >>::iterator
                                                           InstatPDEProblem<NONLINEARSOLVER,
                                                                            INTEGRATOR, PROBLEM, VECTOR, dealdim>::
@@ -948,7 +948,7 @@ namespace DOpE
   /******************************************************/
 
   template<typename NONLINEARSOLVER, typename INTEGRATOR, typename PROBLEM,
-           typename VECTOR, int dealdim>
+  typename VECTOR, int dealdim>
   void InstatPDEProblem<NONLINEARSOLVER,
        INTEGRATOR, PROBLEM, VECTOR, dealdim>::
        CalculatePreFunctional(std::string name,

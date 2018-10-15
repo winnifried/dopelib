@@ -1,6 +1,6 @@
 /**
 *
-* Copyright (C) 2012-2014 by the DOpElib authors
+* Copyright (C) 2012-2018 by the DOpElib authors
 *
 * This file is part of DOpElib
 *
@@ -117,6 +117,17 @@ namespace DOpE
       /******************************************************/
 
       /**
+       *  Here, the given ControlVector<VECTOR> v is printed to a file of *.vtk or *.gpl format.
+       *  However, in later implementations other file formats will be available.
+       *
+       *  @param v           The ControlVector<VECTOR> to write to a file.
+       *  @param name        The names of the variables, e.g., in a fluid problem: v1, v2, p.
+       *  @param dof_type    Has the DoF type: state or control.
+       */
+      void
+      WriteToFile(const ControlVector<dealii::BlockVector<double>> &v, std::string name, std::string dof_type);
+
+      /**
        * Basic function to write a std::vector to a file.
        *
        *  @param v           A std::vector to write to a file.
@@ -154,14 +165,14 @@ namespace DOpE
     Network_StatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER,
                                CONTROLINTEGRATOR, INTEGRATOR, PROBLEM, dopedim, dealdim>::declare_params(
                                  ParameterReader &param_reader)
-    {
+  {
       BASE_::declare_params(param_reader);
     }
     /******************************************************/
 
     template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
-             typename CONTROLINTEGRATOR, typename INTEGRATOR, typename PROBLEM,
-             int dopedim, int dealdim>
+    typename CONTROLINTEGRATOR, typename INTEGRATOR, typename PROBLEM,
+    int dopedim, int dealdim>
     template<typename INTEGRATORDATACONT>
     Network_StatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER,
                                CONTROLINTEGRATOR, INTEGRATOR, PROBLEM, dopedim, dealdim>::Network_StatReducedProblem(
@@ -201,8 +212,8 @@ namespace DOpE
     /******************************************************/
 
     template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
-             typename CONTROLINTEGRATOR, typename INTEGRATOR, typename PROBLEM,
-             int dopedim, int dealdim>
+    typename CONTROLINTEGRATOR, typename INTEGRATOR, typename PROBLEM,
+    int dopedim, int dealdim>
     void
     Network_StatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER,
                                CONTROLINTEGRATOR, INTEGRATOR, PROBLEM, dopedim, dealdim>::WriteToFile(
@@ -291,6 +302,19 @@ namespace DOpE
         {
           BASE_::WriteToFile(v,name,outfile,dof_type,filetype);
         }
+    }
+    /******************************************************/
+
+    template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
+    typename CONTROLINTEGRATOR, typename INTEGRATOR, typename PROBLEM,
+    int dopedim, int dealdim>
+    void
+    Network_StatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER,
+                               CONTROLINTEGRATOR, INTEGRATOR, PROBLEM, dopedim, dealdim>::WriteToFile(
+                                 const ControlVector<dealii::BlockVector<double>> &v, std::string name,
+                                 std::string dof_type)
+    {
+      BASE_::WriteToFile(v,name,dof_type);
     }
 
 ////////////////////////////////ENDOF NAMESPACE Networks/////////////////////////////

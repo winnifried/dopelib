@@ -1,0 +1,931 @@
+\chapter{Introduction}\label{chap:intro}
+\section{How to get \dope{}}\label{sec:obtain}
+There are two ways to obtain a copy of \dope{}:\\
+
+\begin{enumerate}[A)]
+\item You can obtain a copy of \dope{} from the developers git repository using\\
+\texttt{git clone git://git.mathematik.tu-darmstadt.de/dopelib} \\
+in the command line of your terminal.
+
+
+%Note that you need a valid username and password. If you have none, please contact the 
+%maintainers by sending an EMail to \url{dope@dopelib.net}.
+%
+\item You can download the sources as a tar-ball from the project website\\ 
+\url{http://www.dopelib.net}.
+\end{enumerate}
+
+
+\section{License information}
+Copyright (C) 2012--2017 by the DOpElib authors\\[2mm]
+%
+This file is part of DOpElib\\[2mm]
+%
+DOpElib is free software: you can redistribute it
+and/or modify it under the terms of the GNU General Public
+License as published by the Free Software Foundation, either
+version 3 of the License, or (at your option) any later
+version.\\[2mm]
+%
+DOpElib is distributed in the hope that it will be
+useful, but WITHOUT ANY WARRANTY; without even the implied
+warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+PURPOSE.  See the GNU General Public License for more
+details.\\[2mm]
+%
+Please refer to the file LICENSE.TXT included in this distribution
+for further information on this license.
+
+
+\section{Contact / Mailinglist}
+We encourage you to contact us in case you have questions:
+\begin{verbatim}
+dope@dopelib.net 
+\end{verbatim}
+
+
+\newpage
+\section{References}
+If you like the library and use it for your own projects, please give credits by 
+referencing the project \dope{} using the following bibtex entries \cite{dope,dopelib}
+
+\begin{lstlisting}
+@Article{dopelib,
+  Title   = {{DOpElib}: {D}ifferential Equations and 
+    {O}ptimization {E}nvironment; {A} Goal Oriented 
+    Software Library for Solving {PDE}s and Optimization 
+    Problems with {PDE}s},
+  Author  = {C. Goll and T. Wick and W. Wollner},
+  Journal = {Archive of Numerical Software},
+  Year    = {2017},
+  Number  = {2},
+  Pages   = {1--14},
+  Volume  = {5},
+  Doi     = {10.11588/ans.2017.2.11815}
+}
+
+@MISC{dope,
+  key   = {DOpElib},
+  title = {The {D}ifferential {E}quation and 
+               {O}ptimization {E}nvironment: \textsc{DOpElib}},
+  url   = {http://www.dopelib.net},
+  note  = {\texttt{http://www.dopelib.net}}
+}
+\end{lstlisting}
+
+
+\section{Contributors \& Developers}
+\label{sec:contrib}
+The library is currently maintained by 
+\begin{itemize}
+  \item Thomas Wick (Leibniz Universit\"at Hannover)
+  \item Winnifried Wollner (Technische Universität Darmstadt)
+\end{itemize}
+
+We would like to express our gratitude to the former maintainer
+\begin{itemize}
+\item Christian Goll (Maintainer from 2009--2015)
+\end{itemize}
+%%% TODO: add Daniel Jodlbauer and Bernhard Endtmayer
+
+Furthermore, there are more highly appreciated contributions
+made by %(in alphabetical order)
+\begin{itemize}
+  \item Daniel Jodlbauer (current work on parallelization)
+  \item Bernhard Endtmayer (phase-field fracture, PDE Instat Example 8 - in cooperation with T. Wick)
+  \item Michael Geiger (Examples for Plasticity, and Documentation of several PDE-Examples)
+  \item Masoud Ghaderi (Augmenting the Documentation)
+  \item Uwe K{\"o}cher (Makefile compatibility)
+  \item Francesco Ludovici (Augmenting the Documentation)
+  \item Matthias Maier (CMake)
+\end{itemize}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Software requirements}
+The library DOpE has been tested to work on both Linux and 
+MAC OSX. See also the \texttt{README.OSX} file 
+
+\subsection{g++}
+\texttt{DOpElib} requires a recent \texttt{g++} (at least 4.8) due to 
+some new \texttt{C++} features implemented in \texttt{C++11}. 
+You can check the version number using the command-line argument \texttt{g++ -v}.
+
+Under Linux-systems this typically means that you have to do nothing if you have a recent 
+version number. Otherwise you can either install the required version of g++ using the 
+appropriate software installation tool, or you can build the required version from 
+source \texttt{gcc.gnu.org}.
+
+Under MAC OSX, you need to install the \texttt{XCode} tools delivered with the operating system 
+or available for free \texttt{developer.apple.com/xcode}. Unfortunately, the delivered 
+version of \texttt{g++} is too old, so you need to install the real thing. To do so, 
+download, e.g., \texttt{MacPorts} from \texttt{macports.org}. Once you have installed MacPorts 
+you can use it to install additional Linux software. 
+First, update the MacPorts installation \texttt{sudo port selfupdate}
+after that you can install a new version of \texttt{g++} using for instance 
+\texttt{sudo port install gcc48} to install version $4.8$ of the compiler.
+Afterwards, you need to set the search path appropriate to find the macports version
+of \texttt{g++}, to check if this has been done use \texttt{g++ -v}.
+
+\subsection{deal.II}
+This library is mainly based upon \texttt{deal.II} hence in order to run 
+\texttt{DOpElib} you need a running copy of \texttt{deal.II}.
+
+The \texttt{deal.II} library is open source and is freely available for noncommercial project.
+It can be downloaded from \url{http://www.dealii.org/}. On this
+homepage, one also finds lots of further information on deal.II as well as
+an extensive tutorial where many features of deal.II are discussed in a
+well-documented example framework. In order to use DOpE, it is
+recommendable to be roughly acquainted with deal.II.
+
+When installing \texttt{deal.II} (at least version 8.0) you should take care to configure 
+it to use UMFPACK.
+
+\begin{remark}
+Our current \dope{} installation has been successfully tested for deal.II version 9.0.0.
+\end{remark}
+
+A configuration of deal.II working with \texttt{DOpElib} can be obtained with
+the following commands assuming that one is currently in the 
+directory where the deal.II sources are located.
+\begin{lstlisting}
+mkdir build
+cd build 
+cmake -DCMAKE_INSTALL_PREFIX=/path/to/install/dir ../deal.II
+make install
+\end{lstlisting}
+If in addition, features are desired corresponding flags need to be passed to
+cmake. An excellent description is provided on the deal.II webpage
+\begin{lstlisting}
+http://www.dealii.org/8.5.0/readme.html
+\end{lstlisting}
+Currently, for all features of \texttt{DOpElib} the following settings
+are useful to be passed to cmake
+\begin{lstlisting}
+  cmake -DCMAKE_INSTALL_PREFIX=[path to install dir] \ 
+      -DDEAL_II_WITH_UMFPACK=true \
+      -DDEAL_II_FORCE_BUNDLED_UMFPACK=true \
+      -DDEAL_II_WITH_TRILINOS=true \
+      -DTRILINOS_DIR=[path to trilinos] \
+      -DDEAL_II_WITH_MPI=true \
+      -DDEAL_II_WITH_P4EST=true \
+      -DP4EST_DIR=[path to p4est] \
+      [Path to deal.II sources]
+\end{lstlisting}
+
+\subsection{deal.II ThirdPartyLibraties}
+To install third party libraries used for deal.II we recommend to use
+the candi script:
+\begin{lstlisting}
+https://github.com/koecher/candi
+\end{lstlisting}
+On this webpage, you will find also enough information how to use 
+the candi script.
+
+\subsection{ThirdPartyLibraries}
+In order for \texttt{DOpE} to be able to auto-detect some of the installed 
+Third Party Libraries you should generate according links in the 
+\texttt{ThirdPartyLibs}. See also \texttt{ThirdPartyLibs/README}.
+
+\subsubsection{SNOPT}
+If you would like to use the features offered in our SNOPT wrapper. You will 
+need to obtain a license for \texttt{SNOPT} 
+\url{http://www.sbsi-sol-optimize.com/asp/sol_product_snopt.htm}.
+Unfortunately this is at present not available for free, but you should 
+check if 
+there is a department license already available.
+For further information you should consult the file 
+\texttt{ThirdPartyLibs/SNOPT.INSTALLNOTES}. In particular you need to configure 
+\texttt{deal.II} at least with enabled UMFPACK.
+
+
+
+
+\subsubsection{IPOPT}
+If you would like to use the optimization routines offered by IPOPT
+\url{https://projects.coin-or.org/Ipopt} you can  
+install this yourself and add a symlink as described in \texttt{ThirdPartyLibs/README}.
+
+Alternatively, you can use installation script
+\texttt{ThirdPartyLibs/install-free-libs.sh}. Note that to use all 
+available linear solvers you may have to obtain a corresponding license 
+manually. This is true in particular for the HSL solvers MA27, $\ldots$.
+For information on these see the information provided by the installation
+script.
+
+The installation is straightforward and has been tested on OpenSUSE
+12.1, Ubuntu 14.04 LTS and 16.04 LTS
+machines as well as on MAC. At the end of the installation do not forget to
+add \texttt{IPOPT} to your \texttt{LD\underline{ }LIBRARY\underline{ }PATH}:
+\begin{lstlisting}
+**************************************************************
+                 Installation complete!
+Add /home/..../dopelib-4.0/ThirdPartyLibs/ipopt/lib64
+    to your LD\_LIBRARY\_PATH variable
+**************************************************************
+\end{lstlisting}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%5
+\section{Installation}\label{sec_installation}
+Having deal.II and other possible libraries installed, we turn now our focus 
+to the installation of \dope{} itself:
+\begin{itemize}
+\item We automatically search for \texttt{deal.II} to your home
+  directory, i.e., if \texttt{deal.II} is located in \\
+\texttt{\textasciitilde/deal.II} you don't have to do anything. 
+\item Alternatively, if you prefer another position you can install it anywhere but need 
+to set the \texttt{DEAL\_II\_DIR} environment variable, so that it 
+will be found by cmake, i.e.,
+\begin{lstlisting}
+export DEAL_II_DIR=[path to deal.ii]
+\end{lstlisting}
+\begin{remark}
+\textbf{Be careful} if you work in several terminal windows and have several deal.II versions. In this case, the
+export-command might have to be done again in that new window. Otherwise
+another deal.II version might be linked resulting in linker errors or
+segmentation faults without useful error message. In order to check to which
+deal.II version DOpE is linked, type 
+\begin{lstlisting}
+echo ${DEAL_II_DIR}
+\end{lstlisting}
+in the current terminal window.
+\end{remark}
+\begin{remark}
+\textbf{Furthermore:} please make sure that you point in the above path 
+to the deal.II \texttt{install} folder and NOT in the main directory of your deal.II 
+installation.
+\end{remark}
+
+Detailed installing instructions for deal.II (here the last version
+9.0.0) can be found on 
+\url{http://www.dealii.org/9.0.0/readme.html}. These
+installation instructions are descriptive enough and we omit 
+any further comments and refer to their webpage.
+%
+
+%
+\item Get a copy of \texttt{DOpElib}, see Section~\ref{sec:obtain} for details.
+%
+\item If you obtained a tar-ball, unpack in your preferred directory:
+\begin{lstlisting}
+ tar -xzf dopelib-4.0.tar.gz
+\end{lstlisting}
+to get a directory 
+\begin{lstlisting}
+dopelib-4.0/
+\end{lstlisting}
+containing the source files. If you cloned the git repository you
+already have a directory; \texttt{dopelib} by default, containing the sources.
+\item Change to the directory with the sources, and then to the
+  subdirectory \texttt{DOpEsrc}.
+Once there, to build \texttt{DOpElib} you can call 
+\begin{lstlisting}
+ make c-all
+\end{lstlisting}
+to build and configure the library using cmake. 
+\begin{remark}
+Due to very frequent problems at this stage, we strongly recommend 
+to read first now Section \ref{sec_FAQ} before yielding to despair.
+\end{remark}
+
+
+
+You also get various alternatives by just typing 
+\texttt{make}, including the generation of the documentation.
+Building the documentation will require  
+latex or doxygen to be installed on your computer.
+\item If your would like to check the examples, change to the
+  subfolder \texttt{Examples} from the main source directory.
+Typing 
+\begin{lstlisting}
+make
+\end{lstlisting}
+will again provide you with the available options:
+{\footnotesize
+\begin{lstlisting}
+===========================================================================
+=              Makefile for the DOpE documentation                        =
+===========================================================================
+=                                                                         =
+= The following targets exist:                                            =
+=    c-all     :  Make all examples using cmake                           =
+=    clean     :  Cleaning up all examples                                =
+=    tests     :  Run all test param data.                                =
+=    c-cat     :  Run clean, run c-all, run tests (combine these commands)=
+=    doc       :  Create documentation in pdf file format via latexmk     =
+=    distclean :  Cleaning up, including documentation                    =
+=    warncheck :  Checks whether all Examples compile without warnings    =
+===========================================================================
+\end{lstlisting}
+}
+The options are $c-all$ and $c-cat$ utilizing the cmake build system
+to create the executables (and optionally run the tests if all went well).
+
+It is \textbf{important} to generate the examples via make c-all 
+in the home folder of the examples and \textbf{not} as in deal.II by 
+using cmake in the specific example itself. With this you
+would currently destroy the delivered Makefile; which is fine if you
+don't intend to use it but some automated tests will fail. See also the FAQ below.
+
+\item If you wish to test if everything worked. To do so you can 
+change to the \texttt{Examples} directory and \texttt{make tests} which will give you a 
+list of all the examples and whether they behave as expected by the library, see also 
+Chapter~\ref{chap:test}.
+\item  If you want to use some of the supported third party libraries install them and follow 
+ the instructions in \texttt{ThirdPartyLibs/README}. There may be further information 
+ in some \texttt{ThirdPartyLibs/*.INSTALLNOTES} that you may want to
+ consider.\\[3mm]
+ As example, the installation of \texttt{IPOPT} works as follows:\\
+In the path \texttt{ThirdPartyLibs>} type in the terminal\\
+\texttt{./install-free-libs.sh}
+
+
+\end{itemize}
+\section{FAQs}
+\label{sec_FAQ}
+\paragraph{1.) When building the library I get an error message:}
+\begin{itemize}
+\item \textbf{unrecognized command line option "-std=c++11"}\\
+  This means that your compiler is too old. You can check the 
+  version of your compiler using \texttt{g++ -v}. If the version is lower than
+  \texttt{4.8} you need to get a newer compiler version.
+\end{itemize}
+
+\paragraph{2.) I have installed a new g++ compiler but g++ -v still finds the old one :}
+\ \\
+  This means that your computer does not find the new compiler. Try
+  \texttt{which g++} to see whether it appears in the list of available 
+  compilers (but is maybe too far in the back of the list.) Then you should 
+  modify your \texttt{\$PATH} environment variable so that the new g++ compiler
+  appears.
+
+  If \texttt{which g++} only returns one g++ compiler, then probably you need to
+  set an appropriate symlink. Or more robust, you can configure \texttt{deal.II}
+  to use the compiler you intend by configuring deal with the right compiler. To
+  do so adjust  the \texttt{CC} and \texttt{CXX} environment variable appropriately
+  before configuring \texttt{deal.II}
+  
+  For example on Mac OSX you will find only one g++ compiler \texttt{/usr/bin/g++}
+  which is in fact a symlink to \texttt{/usr/bin/g++-4.2}. 
+  So that you need to install a newer compiler. You can do so, for instance
+  using macports. Then you can find, e.g., g++ version 4.8 on OSX Lion 
+  in \texttt{/opt/local/bin/g++-mp-4.8}. 
+
+
+\subsection*{3.) Problem using make c-all in the Examples folder :}
+Sometimes people encounter problems when calling \texttt{make c-all}. 
+This can be due to several reasons:
+\begin{itemize}
+\item If you abort the script for the c-make auto-configuration prematurely,
+you might encounter the following error:
+{\small
+\begin{lstlisting}
+[...]> make c-all
+cd OPT/StatPDE/Example1; make -s c-all
+make[2]: *** No targets specified and no makefile found.  Stop.
+make[1]: *** [c-all] Error 2
+make: *** [OPT/StatPDE/Example1] Error 2
+\end{lstlisting}
+}
+This is due to the fact, that some unfinished files from the previous
+run are in the way of the script. Go to the corresponding examples
+folder, and delete the folder \texttt{autobuild}. 
+
+\item Some times the \texttt{Makefiles} in the example folders are
+  damaged, e.g., if an in-source cmake build was attempted in the
+  example folders. This gives an error message 
+{\small
+\begin{lstlisting}
+[...]> make c-all
+cd OPT/StatPDE/Example1; make -s c-all
+make[1]: *** No rule to make target `c-all'.  Stop.
+make: *** [OPT/StatPDE/Example1] Error 2   
+\end{lstlisting}
+}
+If this happens, go to the corresponding example directory, and replace
+the corresponding Makefile from a clean source, e.g., by a new
+checkout of the Makefile if you are using the git version.
+\end{itemize}
+
+Then try again make c-all (make always sure that before 
+typing make c-all that the deal.II path is exported - see above). 
+
+\subsection*{4.) Different g++ compilers are used for compiling
+  DOpElib and the Examples folder}
+On OpenSUSE and Fedora systems we have observed the following error 
+when calling \texttt{make c-all} in the examples folder:
+{\footnotesize
+\begin{lstlisting}
+[...]> make c-all
+cd OPT/StatPDE/Example1; make -s c-all
+[ 50%] Building CXX object CMakeFiles/DOpE-OPT-StatPDE-Example1.dir/main.cc.o
+c++: error: unrecognized command line option '-fopenmp-simd'
+c++: error: unrecognized command line option '-std=c++14'
+CMakeFiles/DOpE-OPT-StatPDE-Example1.dir/build.make:62: 
+    recipe for target 'CMakeFiles/DOpE-OPT-StatPDE-Example1.dir/main.cc.o' failed
+make[4]: *** [CMakeFiles/DOpE-OPT-StatPDE-Example1.dir/main.cc.o] Error 1
+CMakeFiles/Makefile2:131: recipe for target 
+    'CMakeFiles/DOpE-OPT-StatPDE-Example1.dir/all' failed
+make[3]: *** [CMakeFiles/DOpE-OPT-StatPDE-Example1.dir/all] Error 2
+Makefile:83: recipe for target 'all' failed
+make[2]: *** [all] Error 2
+../../../..//Examples/Make.global_options:2: recipe for target 'c-all' failed
+make[1]: *** [c-all] Error 2
+Makefile:24: recipe for target 'OPT/StatPDE/Example1' failed
+make: *** [OPT/StatPDE/Example1] Error 2
+\end{lstlisting}
+}
+
+The reason for this problem might be that the variables c++ and g++ as
+well as cc and gcc used for compiling \texttt{deal.II} and
+\texttt{DOpElib} do not match.
+\newline
+You can remove the old Examples/autobuild folder and set the compilers manually by
+\begin{lstlisting}
+export CXX=path/to/g++-compiler
+export CC=path/to/gcc-compiler
+\end{lstlisting}
+where path/to/compiler should be the path to the compiler, DOpElib
+(and deal.II) was compiled with.
+You can check the current version of your gcc- and g++-compiler with 
+\begin{lstlisting}
+gcc --version
+g++ --version
+\end{lstlisting}
+It is even better if you automatically set these variables; e.g.,
+using your \texttt{\${HOME}.profile} file.
+
+Alternatively you can set the variable c++ to your g++ and the variable cc to gcc using update-alternatives
+as for example
+\footnote{Thanks to Florian Tischler (Admin at RICAM Linz) for the
+  help.}
+{\small
+\begin{lstlisting}
+sudo update-alternatives --install /usr/bin/c++ c++ /usr/bin/g++-6 60
+sudo update-alternatives --install /usr/bin/cc cc /usr/bin/gcc-6 60
+\end{lstlisting}}
+
+\subsection*{5.) Different g++, cc, cxx compilers are used for compiling
+  DOpElib and the Examples folder}
+
+Similar to the previous error, using mpi-compilers bears a similar
+problem if the needed libraries are not in your \texttt{\${PATH}}.
+Again this problem seems to appear on OpenSUSE and Fedora systems
+where this happens by default.
+When running \texttt{make c-all} this gives a message like 
+{\small
+\begin{lstlisting}
+Linking CXX executable ../DOpE-PDE-StatPDE-Example1
+/usr/[...]/x86_64-suse-linux/bin/ld: cannot find -lmpi_usempi
+/usr/[...]/x86_64-suse-linux/bin/ld: cannot find -lmpi_mpifh
+/usr/[...]/x86_64-suse-linux/bin/ld: cannot find -lmpi
+collect2: error: ld returned 1 exit status
+\end{lstlisting}
+}
+
+To fix this issue, you need to set the correct environment variables.
+We assume you have a standard installation of openmpi done. If not you
+can find the correct replacement for the path
+\texttt{/usr/lib64/mpi/gcc/openmpi/bin} 
+using \texttt{whereis mpicxx}.
+{\small
+\begin{lstlisting}
+export DEAL_II_DIR =your_mpi_deal_II_version 
+export PATH=/usr/lib64/mpi/gcc/openmpi/bin:${PATH}  
+export CC=mpicc; export CXX=mpicxx; export FC=mpif90; export FF=mpif77
+\end{lstlisting}}
+Then compile first the DOpElib library and then the Examples folder with these 
+settings. Possibly pay attention that also the deal.II version has been
+compiled 
+with this MPI path.
+
+\begin{remark}
+Be careful that you work in the same shell when only using `export'. 
+Or include the export lines into the \texttt{\${HOME}/.bash\_rc} 
+\texttt{\${HOME}/.profile}
+file to assert that the correct
+compiler is always used.
+\end{remark}
+
+%%%%%%%%%%%%%%%%%%
+\chapter{The Structure of \dope{}}
+This library is designed to allow easy implementation and numerical solutions 
+of problems involving partial differential equations (PDEs). The easiest case 
+is that of a PDE in weak form to find some $u$
+\[
+a(u)(\phi) = 0 \quad \forall \phi \in V,
+\]
+with some appropriate space $V$.
+More complex cases involve optimization problems given in the form (OPT)
+\begin{align*}
+\min\;&J(q,u) \\
+  &\text{s.t.}\; a(q,u)(\phi) = 0 \quad \forall \phi\in V,\\
+  &a \le q \le b,\\
+  &g(q,u) \le 0,  
+\end{align*}
+where $u$ is a FE-function and $q$ can either be a FE-function or some 
+fixed number of parameters, $a$ and $b$ are constraint bounds for the control $q$,
+and $g(\cdot)$ is some state constraint.
+
+\section{Overview}
+The main library can be roughly split into three parts:
+\begin{verbatim}
+DOpEsrc, Examples, ThirdPartyLibs
+\end{verbatim}
+Here, \texttt{ThirdPartyLibs} was already previously discussed.
+The \texttt{Examples} will be discussed in the chapters \ref{chap:howtoex}
+to \ref{sec_terminal_output}. In this chapter, we concentrate on 
+\texttt{DOpEsrc}. Therein, the library implementation is divided into the following 
+subfolders:
+\begin{verbatim}
+container       reducedproblems    wrapper
+network         source             templates
+basic           include            opt_algorithms  
+interfaces      problemdata        tsschemes
+\end{verbatim}
+
+
+%\newpage
+\section{Problem description}
+In order to allow our algorithms the automatic assembly of all required 
+data we need to have some container which contains the complete problem 
+description in a common data format. For this we have the following 
+classes in \texttt{DOpEsrc/container}
+\begin{itemize}
+  \item \texttt{pdeproblemcontainer.h} Is used to describe  stationary PDE problems.
+  \item \texttt{instatpdeproblemcontainer.h} 
+%\textbf{TODO is still missing but will be used for nonstationary problems.} 
+This will be implemented once we have nonstationary optimization problems running to avoid error duplication in the coding process.
+  \item \texttt{optproblemcontainer.h} Is used to describe  OPT problems governed by 
+    stationary PDEs. 
+  \item \texttt{instatoptproblemcontainer.h} Is used to describe  OPT problems governed by nonstationary PDEs. The only difference to the stationary case is that we need to specify a time-stepping method.  
+\end{itemize}
+In order to fill these containers there are two things to be done,
+first we need to actually write some data, for instance,
+the semilinear form $a(\cdot)(\cdot)$, a target functional $J(\cdot)$, etc.,
+which describe the problem. Then we have to select some numerical 
+algorithm components like finite elements, linear solvers $\ldots$.
+The latter ones should be written such that when exchanging these components
+none of the problem descriptions should require changes. 
+Note that it still may be necessary to write some additional descriptions, 
+e.g., if you solve the PDE with a fix point iteration you don't need derivatives
+but if you want to use Newton's method, derivatives are needed.
+
+We will start by discussing the problem description components implemented so far
+
+
+\section{Numeric components}
+These are the components from which a user needs to select some in order to actually 
+solve the given problem. They will not require any rewriting, but sometimes it is 
+advisable to write other than the default parameter into the param file for the 
+solution.
+
+\subsection{Space-time handler}
+First we need to select a method how to handle all dofs in space and time.
+\begin{itemize}
+\item \texttt{basic/spacetimehandler\underline{ }base.h} This class is used to define 
+  an interface to the dimension independent functionality of all space time dof handlers.
+  %\textbf{TODO: Beispiele geben}
+\item \texttt{basic/statespacetimehandler.h} Another intermediate interface class which adds 
+  the dimension dependent functionality if only the variable $u$ is considered, i.e., a 
+  PDE problem.
+\item \texttt{basic/spacetimehandler.h } Same as above but with both $q$ and $u$, i.e., for
+  OPT problems.
+\item \texttt{basic/mol\underline{ }statespacetimehandler.h} Implementation of a method of 
+  line space time dof handler for PDE problems. It has only one spatial 
+  dofhandler that is used for all time intervals.
+\item \texttt{basic/mol\underline{ }spacetimehandler.h} Same as above for OPT problems.
+  A separate spatial dof handler for each of the variables $q$ and $u$ is maintained 
+  but only one triangulation.
+\item \texttt{basic/mol\underline{ }multimesh\underline{ }spacetimehandler.h}
+  Same as above, but now in addition the triangulations for $q$ and $u$ can be refined
+  separately from one common initial coarse triangulation. Note that this will
+  in addition require the use of the multimesh version for integrator and 
+  face- as well as elementdatacontainer.
+\end{itemize}
+Note that we use these for stationary problems as well, but then you don't have to specify
+any time information.
+
+\subsection{Container classes}
+Second you will need to specify some container classes to be used to 
+pass data between objects. At present you don't have much choice, but you may wish 
+to reimplement some of these if you need data that is not currently included in 
+the containers.
+\begin{itemize}
+\item \texttt{container/elementdatacontainer.h} This object is used to pass data 
+  given on the current element of the mesh to the functions in PDE, functional, 
+  $\ldots$. 
+\item \texttt{container/facedatacontainer.h} This object is used to pass data 
+  given on the current face of the mesh to the functions in PDE, functional, 
+  $\ldots$. 
+\item \texttt{container/multimesh\underline{ }elementdatacontainer.h} This is the same as the 
+  elementdatacontainer, but it
+  is capable to handle data defined on an alternative triangulation.
+\item \texttt{container/multimesh\underline{ }facedatacontainer.h} This is the same as the
+  facedatacontainer, but it
+  is capable to handle data defined on an alternative triangulation.
+\item \texttt{container/integratordatacontainer.h} This contains some data that 
+  should be passed to the integrator like quadrature formulas and the above element and 
+  face data container.
+\item \texttt{container/refinementcontainer.h} The classes defined herein are given to the \texttt{RefineSpace} method of the \texttt{SpaceTimeHandler} and determine how we define the spatial mesh (i.e. globally or locally with a fixed fraction, fixed number or 'optimized' strategy).
+\end{itemize}
+
+\subsection{Time stepping schemes}
+Third, at least for nonstationary PDEs we need to select a time stepping scheme
+the file names of which are mostly self explanatory:
+\begin{itemize}
+\item \texttt{tsschemes/forward\underline{ }euler\underline{ }problem.h}
+\item \texttt{tsschemes/shifted\underline{ }crank\underline{ }nicolson\underline{ }problem.h}
+\item \texttt{tsschemes/backward\underline{ }euler\underline{ }problem.h}
+\item \texttt{tsschemes/fractional\underline{ }step\underline{ }theta\underline{ }problem.h} Note that the use of this scheme requires a special Newton solver, which is, however, already
+implemented for the convenience of the user!
+\item \texttt{tsschemes/crank\underline{ }nicolson\underline{ }problem.h}
+\end{itemize}
+
+\subsection{Integrator routines}
+Finally, we need to select a way how to integrate and solve linear and nonlinear equations
+\begin{itemize}
+\item \texttt{templates/integrator.h} This class computes integrals over a given 
+  triangulation (including its faces).
+\item \texttt{templates/integrator\underline{ }multimesh.h} The same as above but it is 
+  possible that some of the FE functions are defined on an other triangulation 
+  as long as the have a common coarse triangulation.
+\item \texttt{templates/integratormixeddims.h} This is used to compute integral which 
+  are given in another (larger) dimension than the current variable. (This is exclusively
+  used if the control variable is given by some parameters. Which means \texttt{dopedim == 0}). 
+\end{itemize}
+
+\subsection{Nonlinear solvers}
+\begin{itemize}
+\item \texttt{templates/newtonsolver.h} This solves some nonlinear equation using a 
+  line-search Newton method.
+\item \texttt{templates/newtonsolvermixeddims.h} The same but in the case when there is 
+  another variable in a (larger) dimension is involved. See 
+  \texttt{integratormixeddims.h}.
+\item \texttt{templates/instat\underline{ }step\underline{ }newtonsolver.h} This is a 
+  Newton method as above to invert the next time-step. It differs from the plain vanilla
+  version in that it computes certain data from the previous time step only once 
+  and not in every Newton iteration.
+\item \texttt{templates/fractional\underline{ }step\underline{ }theta\underline{ }step\underline{ }newtonsolver.h} This is the Newton solver for the time step in a 
+  fractional-step-theta scheme. It combines the computation of all three sub steps.
+\end{itemize}
+
+\subsection{Linear solvers}
+\begin{itemize}
+\item \texttt{templates/cglinearsolver.h} This is a wrapper for the cg solver implemented in 
+  \texttt{deal.II}. The solver will build and store the stiffness matrix for the PDE.
+\item \texttt{templates/gmreslinearsolver.h} This is a wrapper for the GMRES solver 
+  implemented in \texttt{deal.II}. The solver will build and store the stiffness matrix 
+  for the PDE.
+\item \texttt{templates/directlinearsolver.h} This is a wrapper for the direct solver 
+  implemented in \texttt{deal.II} using \texttt{UMFPACK}. 
+  The solver will build and store the stiffness matrix for the PDE.
+\item \texttt{templates/voidlinearsolver.h} This is a wrapper for certain cases when we 
+  know that the matrix to be inverted is the identity. It simply copies the right hand side to the
+  left hand side. This is only needed for compatibility reasons some other components.
+\end{itemize}
+
+
+
+\section{Problem specific classes}
+The following classes are used to describe the problem and will usually require 
+some implementation.
+
+\begin{itemize}
+  \item \texttt{basic/constraints.h} This is used by the spacetimehandlers to 
+    compute the number of constraints from the control and state vectors. 
+    It must not be reimplemented by the user, but needs to be properly 
+    initialized if OPT is used with box control constraints or $g(q,u) \le 0$.
+  \item \texttt{interfaces/functionalinterface.h} This gives an interface 
+    for the functional $J(\cdot)$ and any other functional you may want to evaluate.
+    In general this can be used as a base class to write your own functionals 
+    in examples. We note that we only need to write the integrands on 
+    elements or faces the loop over elements will be taken care of in the integrator.
+    Specifically, derivatives are written therein, too.
+  \item \texttt{interfaces/constraintinterface.h} This gives an interface for both 
+    the control box constraints as well as the general constraint $g \le 0$. This 
+    needs to be specified if constraints are to be used. If they are not needed 
+    a default class \texttt{problemdata/noconstraints.h} can be used. We note that we only 
+    need to write the integrands on 
+    elements or faces the loop over elements will be taken care of in the integrator.
+  \item \texttt{interfaces/pdeinterface.h} This defines an interface for the 
+    partial differential equation $a(q,u)(\phi) = 0$. This needs to be written
+    by the user. We note that we only need to write the integrands on 
+    elements or faces the loop over elements will be taken care of in the integrator.
+    Specifically, derivatives are written therein, too.
+  \item \texttt{interfaces/dirichletdatainterface.h} This gives an interface to the 
+    Dirichlet data for a problem. If the Dirichlet data are simply a function 
+    (and do not depend on the control $q$) one can use the default class\\
+    \texttt{problemdata/simpledirichletdata.h}.
+\end{itemize}
+
+
+
+
+\section{Reduced problems (Solve the PDE)}
+At times it is nice to remove the PDE constraint in (OPT). 
+This is handled by so called reduced 
+problems (for algorithmic aspects we refer the reader to 
+\cite{BeMeVe06}). 
+This means that the reduced problem implicitly solves the PDE whenever required
+and eliminates the variable $u$ from the problem.
+\begin{itemize}
+\item \texttt{reducedproblems/statpdeproblem.h} This is used to remove the variable $u$ in 
+  a stationary PDE problem. This means that call the method \\
+  \texttt{StatPDEProblem::ComputeReducedFunctionals} will evaluate the functionals 
+  defined in the problem description, i.e., in \texttt{PDEProblemContainer}, in the 
+  solution of the given PDE.
+\item \texttt{reducedproblems/statreducedproblem.h} This eliminates $u$ from the OPT
+  problem with a stationary PDE.
+\item \texttt{reducedproblems/instatreducedproblem.h} The same as above but for a
+  nonstationary PDE.
+\item \texttt{reducedproblems/ipopt\underline{ }problem.h} A wrapper file 
+ required when solving optimization problems using the 
+  reduced\underline{ }ipopt\underline{ }algorithm. This file
+  hides the interface to IPOPT.
+\end{itemize}
+
+\section{Optimization algorithms}
+Now, in order to solve optimization algorithms we need to define some algorithms.
+At present we offer a selection of algorithms that solve the reduced optimization 
+problem where the PDE constraint has been eliminated as explained in the previous section.
+\begin{itemize}
+\item \texttt{opt\underline{ }algorithms/reducedalgorithm.h} An interface for all 
+  optimization problems in the reduced formulation. It offers some test functionality
+  to assert that the derivatives of the problem are computed correctly.
+\item \texttt{opt\underline{ }algorithms/reducednewtonalgorithm.h}
+  A line-search Newton algorithm using a cg method to invert the reduced hessian. 
+  Implementation ignores any additional constraints.
+\item \texttt{opt\underline{ }algorithms/reducedtrustregionnewton.h}
+  A trust region Newton algorithm using a cg method to invert the reduced hessian.
+  Implementation ignores any additional constraints.
+\item \texttt{opt\underline{ }algorithms/reduced\underline{ }snopt\underline{ }algorithm.h}
+  An algorithm to solve reduced optimization problems with additional control constraints
+  using the third-party library SNOPT.
+  ((reduced) state constraints are not yet implemented.)
+\item \texttt{opt\underline{ }algorithms/reduced\underline{ }ipopt\underline{ }algorithm.h}
+  An algorithm to solve reduced optimization problems with additional control constraints.
+  using the third-party library IPOPT.
+  ((reduced) state constraints are not yet implemented.)
+\item \texttt{opt\underline{ }algorithms/reducednewtonalgorithmwithinverse.h}
+  Line-search Newton algorithm that assumes there exists a method in the reduced problem
+  that can invert the reduced hessian. (This usually makes sense only if there is no 
+  PDE constraint.)
+\end{itemize} 
+
+\section{Other Components}
+Beyond these clearly structured groups before there are some classes remaining that
+do not fit the above but are important for the user to know.
+
+
+
+\subsection{Vectors}
+\begin{itemize}
+\item \texttt{include/statevector.h} This stores all dofs in space and time for the state 
+  variable $u$. It is possible to select whether all this should be kept in memory or 
+  or unused parts can be written to the hard disk.
+\item \texttt{include/controlvector.h} This stores all dofs in space and time for the 
+  control variable $q$. At present no time dependence is implemented.
+\item \texttt{include/constraintvector.h} This stores all dofs in space and time for the 
+  non PDE constraints (and corresponding multipliers). 
+  At present no time dependence is implemented.
+\end{itemize}
+\begin{remark}
+\label{remark_state_behavior}
+We notice that the behavior of the statevector can be chosen as 
+\texttt{fullmem}, \texttt{only\underline{ }recent}, or 
+\texttt{store\underline{ }on\underline{ }disc}. In the
+first state, the RAM memory of the computer is used. In the second state,
+only the spatial vectors at the current time step (and the preious one)
+are stored. This reduces memory requirements, but also prohibits access to the
+whole space-time trajectory after the computation.
+In the third state,
+all vectors are written on disc, to avoid the RAM. This might take some 
+time at the beginning of a new executing program (cleary depending 
+on the number of spatial and temporal unknowns and the capabilities of your 
+local machine). In addition, if the program aborts abnormally in the 
+using \texttt{store\underline{ }on\underline{ }disc} behavior, please make 
+sure to remove manually the \texttt{tmp\underline{ }state} folder in your 
+\texttt{Results} folder. 
+\end{remark}
+
+
+\subsection{Parameter handling}
+\begin{itemize}
+\item \texttt{include/parameterreader.h} This file is used to define a parameter reader
+  that is used to read run time parameters from a given file.
+\end{itemize}
+
+\subsection{Exception handling}
+\begin{itemize}
+\item \texttt{include/dopeexception.h} Defines some Exceptions that are thrown by the program
+  should it encounter any unexpected errors.
+\item \texttt{include/dopeexceptionhandler.h} This class is used to write information 
+  contained in the exceptions to the output in a uniform manner.
+\end{itemize}
+
+\subsection{Output handling}
+\begin{itemize}
+\item \texttt{include/outputhandler.h} This file defines an outputhandler object which 
+  can be used to decide whether some information should be written to screen or file.
+  In addition it can format output according to some run time parameters given by a 
+  parameter file.
+\end{itemize}
+
+\section{Data Access}
+\begin{itemize}
+\item \texttt{include/solutionextractor.h} This class is used to gain access to the finite element 
+  solutions stored in the reduced problems.
+\end{itemize}
+
+\subsection{Constraints and system matrix}
+\begin{itemize}
+\item \texttt{include/userdefineddofconstraints.h} This class sets the constraints on the DOFs of the state and/or control FE solution. DOpE itself builds the hanging-node-constraints, but the user can reimplement this class and thus include other constraints as well (for example periodic BC). Note, that the hanging-node-constraints come first (in case of conflicting constraints.)
+\item \texttt{include/sparsitymaker.h} This class sets the sparsity pattern for the state FE solution. The standard implementation is just a wrapper for \texttt{dealii::DoFTools::} \texttt{make\_sparsity\_pattern}, but the user can reimplement this class to allow for more sophisticated sparsity patterns.
+\item \texttt{include/pointconstraintsmaker.h} This class allows to set 
+  homogeneous Dirichlet values at given points/components.
+\end{itemize}
+
+\subsection{HP components}
+\begin{itemize}
+\item \texttt{interfaces/active\underline{ }fe\underline{ }index\underline{ }setter\underline{ }interface.h} In the case of hp finite elements, one has to specify for each element which finite element to use. This is done via this interface.
+\end{itemize}
+
+\section{Internal structures}
+\subsection{Interface Classes}
+\begin{itemize}
+  \item \texttt{interfaces/transposeddirichletdatainterface.h} This provides an interface to 
+    the functionality required by {\em transposed Dirichlet data}. Usually when one applies Dirichlet 
+    data $g$ to a function one has to calculate a continuation $Bg$ which is defined on the whole domain.
+    In optimization problems when the Dirichlet data depends on the control one has to evaluate the 
+    dual operator $B^*$ in order to obtain a representation for the reduced gradient of the objective $J$.
+    This is done using the {\em transposed Dirichlet data}.
+  \item \texttt{interfaces/reducedprobleminterface.h} In order to allow all algorithms to be written independent
+    of the given (OPT) problem 
+    (and not requiring the problem as template argument) there is a common base class which 
+    defines the required interfaces. 
+  \item \texttt{interfaces/pdeprobleminterface.h} The same as above but for (PDE) problems.
+\end{itemize}
+
+\subsection{Default Classes}
+\begin{itemize}
+  \item \texttt{problemdata/noconstraints.h} A class that can be used for optimization problems 
+    having only a PDE constraint but no further constraints.
+  \item \texttt{problemdata/simpledirichletdata.h} A class that can be used to implement Dirichlet
+    data that are given as a fixed function (independent of the control).
+  \end{itemize}
+
+\subsection{Auto-generated Problem Descriptions}
+\begin{itemize}
+  \item \texttt{problemdata/stateproblem.h} This is the problem description for the (forward/primal) PDE constraint.
+    \textbf{Similar descriptors will be build for the other problems (adjoint, tangent, $\ldots$) when time allows.}
+  \item \texttt{problemdata/initialproblem.h} This is the problem descriptor to compute the finite element representation
+    of the initial values. This is generated by the different time-stepping schemes based upon the defined 
+    representation by the PDE, which is set to the component wise $L^2$ projection by default.
+  \item \texttt{problemdata/primaldirichletdata.h} This class contains the Dirichlet data for the 
+    forward/primal PDE.
+  \item \texttt{problemdata/tangentdirichletdata.h} This class contains the Dirichlet data for the tangent PDE, i.e.,
+    the first derivative of the Dirichlet data.
+  \item \texttt{problemdata/transposedgradientdirichletdata.h} This contains the transposed Dirichlet data needed 
+    to calculate the gradient of the reduced objective functional, 
+    for detail see \texttt{interfaces/transposeddirichletdatainterface.h}.
+  \item \texttt{problemdata/transposedhessiandirichletdata.h} This contains the transposed Dirichlet data needed 
+    to calculate the hessian of the reduced objective functional, 
+    for detail see \texttt{interfaces/transposeddirichletdatainterface.h}.
+\end{itemize}
+\subsection{Management of Time Dependent Problems}
+\begin{itemize}
+\item \texttt{include/timedofhandler.h} DoFHandler responsible for the management of the timedofs (this is a part of the \texttt{SpaceTimeDoFHandler}-classes). Basically a wrapper for a $1d$ \texttt{deal.II}-DoFHandler.
+\item \texttt{include/timeiterator.h} This class works as an iterator on the \texttt{TimeDoFHandler}.                 
+\end{itemize}
+\section{Wrapper classes}
+\begin{itemize}
+  \item \texttt{wrapper/dofhandler\underline{ }wrapper.h} A wrapper class for the \texttt{deal.II} DoFHandlers. This 
+    class is needed to provide support for the \texttt{dim $= 0$} case and to have a uniform interface to 
+    DoFHandler and HPDoFHandler.
+  \item \texttt{wrapper/fevalues\underline{ }wrapper.h} \textbf{Will be removed soon!}
+  \item \texttt{wrapper/function\underline{ }wrapper.h} An interface that allows to use functions that depend 
+    not only on space but also on time.
+  \item \texttt{wrapper/mapping\underline{ }wrapper.h} An interface that allows to use \texttt{deal.II}-mappings as well as  \texttt{deal.II}-mapping collections depending of the DoFHandler in use. To this end, the class has a template parameter \texttt{DOFHANDLER}.
+  \item \texttt{wrapper/preconditioner\underline{ }wrapper.h} Contains wrappers for several of the preconditioners
+    in \texttt{deal.II}. This is required since unfortunately the preconditioners in \texttt{deal.II} have different
+    interfaces for their initialization.
+  \item \texttt{wrapper/snopt\underline{ }wrapper.h} An interface to the FORTRAN library SNOPT. 
+    This is an additional
+    wrapper to the one provided by SNOPT to allow automatic construction of the functions required 
+    by SNOPT using our library.
+  \item \texttt{wrapper/solutiontransfer\underline{ }wrapper.h} A wrapper for the SolutionTransfer class
+    from \texttt{deal.II}. 
+  \item \texttt{wrapper/dataout\underline{ }wrapper.h} A wrapper for the DataOut class from \texttt{deal.II}.
+\end{itemize}
+
+\section{Other}
+\begin{itemize}
+  \item \texttt{basic/dopetypes.h} This file contains type definitions used in the library. 
+\item \texttt{basic/sth\underline{ }internals.h} Wrapper for the \texttt{MapDoFsToSupportPoints} function. The implementation of this changes with the \texttt{deal.II} version in use.
+\item \texttt{include/helper.h} Collection of various small helper functions.
+\item \texttt{reducedproblems/problemcontainer\underline{ }internal.h} Houses some functions and variables common in the various problemcontainer.
+\item \texttt{tsschemes/primal\_ts\_base.h}  This class contains the methods which all primal time stepping schemes share.
+\item \texttt{tsschemes/ts\_base.h}  This class contains the methods which all time stepping schemes share.
+\end{itemize}

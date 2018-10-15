@@ -1,25 +1,25 @@
 /**
- *
- * Copyright (C) 2012-2014 by the DOpElib authors
- *
- * This file is part of DOpElib
- *
- * DOpElib is free software: you can redistribute it
- * and/or modify it under the terms of the GNU General Public
- * License as published by the Free Software Foundation, either
- * version 3 of the License, or (at your option) any later
- * version.
- *
- * DOpElib is distributed in the hope that it will be
- * useful, but WITHOUT ANY WARRANTY; without even the implied
- * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
- * PURPOSE.  See the GNU General Public License for more
- * details.
- *
- * Please refer to the file LICENSE.TXT included in this distribution
- * for further information on this license.
- *
- **/
+*
+* Copyright (C) 2012-2018 by the DOpElib authors
+*
+* This file is part of DOpElib
+*
+* DOpElib is free software: you can redistribute it
+* and/or modify it under the terms of the GNU General Public
+* License as published by the Free Software Foundation, either
+* version 3 of the License, or (at your option) any later
+* version.
+*
+* DOpElib is distributed in the hope that it will be
+* useful, but WITHOUT ANY WARRANTY; without even the implied
+* warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+* PURPOSE.  See the GNU General Public License for more
+* details.
+*
+* Please refer to the file LICENSE.TXT included in this distribution
+* for further information on this license.
+*
+**/
 
 #ifndef TANGENT_DIRICHLET_DATA_H_
 #define TANGENT_DIRICHLET_DATA_H_
@@ -35,7 +35,7 @@ namespace DOpE
    * @tparam  DD              The Dirichlet Data Object under consideration
    * @tparam  VECTOR          The Vector type
    */
-  template <typename DD, typename VECTOR, int dealdim>
+  template<typename DD, typename VECTOR, int dealdim>
   class TangentDirichletData : public DOpEWrapper::Function<dealdim>
   {
   public:
@@ -51,7 +51,7 @@ namespace DOpE
      */
     void ReInit(
       const std::map<std::string, const dealii::Vector<double>* > &param_values,
-      const std::map<std::string, const VECTOR *> &domain_values,
+      const std::map<std::string, const VECTOR * > &domain_values,
       unsigned int color)
     {
       param_values_ = &param_values;
@@ -71,7 +71,7 @@ namespace DOpE
      * @return The component of the Dirichlet data at p, i.e., DD'(q)(p)_{component}
      */
     double value (const dealii::Point<dealdim>   &p,
-                  const unsigned int component) const
+                  const unsigned int  component) const
     {
       return dirichlet_data_.Data_Q(
                param_values_,
@@ -88,12 +88,12 @@ namespace DOpE
      */
     void SetTime(double time) const
     {
-      dirichlet_data_.SetTime (time);
+      dirichlet_data_.SetTime(time);
     }
   private:
     const DD &dirichlet_data_;
-    const std::map<std::string, const dealii::Vector<double>*> *param_values_;
-    const std::map<std::string, const VECTOR *> *domain_values_;
+    const std::map<std::string, const dealii::Vector<double>* > *param_values_;
+    const std::map<std::string, const VECTOR * > *domain_values_;
     unsigned int color_;
   };
 }

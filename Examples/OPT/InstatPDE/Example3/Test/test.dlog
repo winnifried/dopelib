@@ -1,0 +1,204 @@
+DOpElib Copyright (C) 2012 - 2016 DOpElib authors
+This program comes with ABSOLUTELY NO WARRANTY.
+For License details read LICENSE.TXT distributed with this software!
+
+This is DOpElib Version: 4.0.0 pre
+	Status as of: 16/02/2016
+Using dealii Version: 9.0
+
+	**************************************************
+	*        Starting Reduced Newton Algorithm       *
+	*   Solving : InstatOptProblemContainer	*
+	*  CDoFs : 	Number of Timepoints: 11
+		Total   DoFs: 11
+		Minimal DoFs: 1
+		Maximal DoFs: 1
+	*  SDoFs : 	Number of Timepoints: 11
+		Total   DoFs: 275
+		Minimal DoFs: 25
+		Maximal DoFs: 25
+	**************************************************
+
+LOG: Allowing IterationCounter `OptNewton_InstatOptProblemContainer' for filenames!
+LOG: Allowing IterationCounter `Time' for filenames!
+	CostFunctional: 1.3
+		 Newton step: 0	 Residual (abs.): 0.74
+		 Newton step: 0	 Residual (rel.): 1.00e+00
+	
+	CostFunctional: 1.09e+00
+		 Newton step: 1	 Residual (rel.):   7.50e-02	 LinearIters [2]	 LineSearch {0} 
+ ERROR: The following `DOpEIterationException` reports!
+ ERROR: Warning: During execution of `ReducedNewtonAlgorithm::ReducedNewtonLineSearch` the following Problem occurred!
+ ERROR: Iteration count exceeded bounds!
+ ERROR: Reported by `ReducedNewtonAlgorithm::Solve`
+	CostFunctional: 1.09e+00
+		 Newton step: 2	 Residual (rel.):   3.62e-02	 LinearIters [2]	 LineSearch {-1} 
+ ERROR: The following `DOpEIterationException` reports!
+ ERROR: Warning: During execution of `ReducedNewtonAlgorithm::ReducedNewtonLineSearch` the following Problem occurred!
+ ERROR: Iteration count exceeded bounds!
+ ERROR: Reported by `ReducedNewtonAlgorithm::Solve`
+	CostFunctional: 1.09e+00
+		 Newton step: 3	 Residual (rel.):   1.72e-02	 LinearIters [2]	 LineSearch {-1} 
+ ERROR: The following `DOpEIterationException` reports!
+ ERROR: Warning: During execution of `ReducedNewtonAlgorithm::ReducedNewtonLineSearch` the following Problem occurred!
+ ERROR: Iteration count exceeded bounds!
+ ERROR: Reported by `ReducedNewtonAlgorithm::Solve`
+	CostFunctional: 1.09e+00
+		 Newton step: 4	 Residual (rel.):   8.13e-03	 LinearIters [2]	 LineSearch {-1} 
+ ERROR: The following `DOpEIterationException` reports!
+ ERROR: Warning: During execution of `ReducedNewtonAlgorithm::ReducedNewtonLineSearch` the following Problem occurred!
+ ERROR: Iteration count exceeded bounds!
+ ERROR: Reported by `ReducedNewtonAlgorithm::Solve`
+	CostFunctional: 1.09e+00
+		 Newton step: 5	 Residual (rel.):   3.82e-03	 LinearIters [2]	 LineSearch {-1} 
+ ERROR: The following `DOpEIterationException` reports!
+ ERROR: Warning: During execution of `ReducedNewtonAlgorithm::ReducedNewtonLineSearch` the following Problem occurred!
+ ERROR: Iteration count exceeded bounds!
+ ERROR: Reported by `ReducedNewtonAlgorithm::Solve`
+	CostFunctional: 1.09e+00
+		 Newton step: 6	 Residual (rel.):   1.79e-03	 LinearIters [2]	 LineSearch {-1} 
+ ERROR: The following `DOpEIterationException` reports!
+ ERROR: Warning: During execution of `ReducedNewtonAlgorithm::ReducedNewtonLineSearch` the following Problem occurred!
+ ERROR: Iteration count exceeded bounds!
+ ERROR: Reported by `ReducedNewtonAlgorithm::Solve`
+	CostFunctional: 1.09e+00
+		 Newton step: 7	 Residual (rel.):   8.41e-04	 LinearIters [2]	 LineSearch {-1} 
+ ERROR: The following `DOpEIterationException` reports!
+ ERROR: Warning: During execution of `ReducedNewtonAlgorithm::ReducedNewtonLineSearch` the following Problem occurred!
+ ERROR: Iteration count exceeded bounds!
+ ERROR: Reported by `ReducedNewtonAlgorithm::Solve`
+	CostFunctional: 1.09e+00
+		 Newton step: 8	 Residual (rel.):   3.95e-04	 LinearIters [3]	 LineSearch {-1} 
+ ERROR: The following `DOpEIterationException` reports!
+ ERROR: Warning: During execution of `ReducedNewtonAlgorithm::ReducedNewtonLineSearch` the following Problem occurred!
+ ERROR: Iteration count exceeded bounds!
+ ERROR: Reported by `ReducedNewtonAlgorithm::Solve`
+	CostFunctional: 1.09e+00
+		 Newton step: 9	 Residual (rel.):   1.85e-04	 LinearIters [3]	 LineSearch {-1} 
+ ERROR: The following `DOpEIterationException` reports!
+ ERROR: Warning: During execution of `ReducedNewtonAlgorithm::ReducedNewtonLineSearch` the following Problem occurred!
+ ERROR: Iteration count exceeded bounds!
+ ERROR: Reported by `ReducedNewtonAlgorithm::Solve`
+	CostFunctional: 1.09e+00
+		 Newton step: 10	 Residual (rel.):   8.68e-05	 LinearIters [3]	 LineSearch {-1} 
+ ERROR: The following `DOpEIterationException` reports!
+ ERROR: Warning: During execution of `ReducedNewtonAlgorithm::ReducedNewtonLineSearch` the following Problem occurred!
+ ERROR: Iteration count exceeded bounds!
+ ERROR: Reported by `ReducedNewtonAlgorithm::Solve`
+	CostFunctional: 1.09e+00
+		 Newton step: 11	 Residual (rel.):   4.07e-05	 LinearIters [3]	 LineSearch {-1} 
+ ERROR: The following `DOpEIterationException` reports!
+ ERROR: Warning: During execution of `ReducedNewtonAlgorithm::ReducedNewtonLineSearch` the following Problem occurred!
+ ERROR: Iteration count exceeded bounds!
+ ERROR: Reported by `ReducedNewtonAlgorithm::Solve`
+	CostFunctional: 1.09e+00
+		 Newton step: 12	 Residual (rel.):   1.91e-05	 LinearIters [3]	 LineSearch {-1} 
+ ERROR: The following `DOpEIterationException` reports!
+ ERROR: Warning: During execution of `ReducedNewtonAlgorithm::ReducedNewtonLineSearch` the following Problem occurred!
+ ERROR: Iteration count exceeded bounds!
+ ERROR: Reported by `ReducedNewtonAlgorithm::Solve`
+	CostFunctional: 1.09e+00
+		 Newton step: 13	 Residual (rel.):   8.96e-06	 LinearIters [3]	 LineSearch {-1} 
+ ERROR: The following `DOpEIterationException` reports!
+ ERROR: Warning: During execution of `ReducedNewtonAlgorithm::ReducedNewtonLineSearch` the following Problem occurred!
+ ERROR: Iteration count exceeded bounds!
+ ERROR: Reported by `ReducedNewtonAlgorithm::Solve`
+	CostFunctional: 1.09e+00
+		 Newton step: 14	 Residual (rel.):   4.20e-06	 LinearIters [3]	 LineSearch {-1} 
+ ERROR: The following `DOpEIterationException` reports!
+ ERROR: Warning: During execution of `ReducedNewtonAlgorithm::ReducedNewtonLineSearch` the following Problem occurred!
+ ERROR: Iteration count exceeded bounds!
+ ERROR: Reported by `ReducedNewtonAlgorithm::Solve`
+	CostFunctional: 1.09e+00
+		 Newton step: 15	 Residual (rel.):   1.97e-06	 LinearIters [3]	 LineSearch {-1} 
+ ERROR: The following `DOpEIterationException` reports!
+ ERROR: Warning: During execution of `ReducedNewtonAlgorithm::ReducedNewtonLineSearch` the following Problem occurred!
+ ERROR: Iteration count exceeded bounds!
+ ERROR: Reported by `ReducedNewtonAlgorithm::Solve`
+	CostFunctional: 1.09e+00
+		 Newton step: 16	 Residual (rel.):   9.23e-07	 LinearIters [4]	 LineSearch {-1} 
+	CostFunctional: 1.09e+00
+	End-Time-Point evaluation: 0.137372
+	State L2-Error: 0.00161428
+	Control L2-Error: 5.29001e-05
+
+	**************************************************
+	*        Stopping Reduced Newton Algorithm       *
+	*             after     16  Iterations           *
+	*             with rel. Residual    9.23e-07          *
+	**************************************************
+
+
+	**************************************************
+	*        Starting Reduced Newton Algorithm       *
+	*   Solving : InstatOptProblemContainer	*
+	*  CDoFs : 	Number of Timepoints: 21
+		Total   DoFs: 21
+		Minimal DoFs: 1
+		Maximal DoFs: 1
+	*  SDoFs : 	Number of Timepoints: 21
+		Total   DoFs: 1701
+		Minimal DoFs: 81
+		Maximal DoFs: 81
+	**************************************************
+
+	CostFunctional: 1.1
+		 Newton step: 0	 Residual (abs.): 0.36
+		 Newton step: 0	 Residual (rel.): 1.00e+00
+	
+	CostFunctional: 1.07e+00
+		 Newton step: 1	 Residual (rel.):   1.03e-01	 LinearIters [2]	 LineSearch {0} 
+	CostFunctional: 1.07e+00
+		 Newton step: 2	 Residual (rel.):   1.00e-02	 LinearIters [2]	 LineSearch {0} 
+	CostFunctional: 1.07e+00
+		 Newton step: 3	 Residual (rel.):   1.05e-04	 LinearIters [3]	 LineSearch {0} 
+	CostFunctional: 1.07e+00
+		 Newton step: 4	 Residual (rel.): < 1.00e-07	 LinearIters [4]	 LineSearch {0} 
+	CostFunctional: 1.07e+00
+	End-Time-Point evaluation: 0.141881
+	State L2-Error: 0.000293879
+	Control L2-Error: 2.6363e-05
+
+	**************************************************
+	*        Stopping Reduced Newton Algorithm       *
+	*             after      4  Iterations           *
+	*             with rel. Residual  < 1.00e-07          *
+	**************************************************
+
+
+	**************************************************
+	*        Starting Reduced Newton Algorithm       *
+	*   Solving : InstatOptProblemContainer	*
+	*  CDoFs : 	Number of Timepoints: 41
+		Total   DoFs: 41
+		Minimal DoFs: 1
+		Maximal DoFs: 1
+	*  SDoFs : 	Number of Timepoints: 41
+		Total   DoFs: 11849
+		Minimal DoFs: 289
+		Maximal DoFs: 289
+	**************************************************
+
+	CostFunctional: 1.1
+		 Newton step: 0	 Residual (abs.): 0.36
+		 Newton step: 0	 Residual (rel.): 1.00e+00
+	
+	CostFunctional: 1.06e+00
+		 Newton step: 1	 Residual (rel.):   1.04e-01	 LinearIters [2]	 LineSearch {0} 
+	CostFunctional: 1.06e+00
+		 Newton step: 2	 Residual (rel.):   1.19e-02	 LinearIters [2]	 LineSearch {0} 
+	CostFunctional: 1.06e+00
+		 Newton step: 3	 Residual (rel.):   1.34e-04	 LinearIters [3]	 LineSearch {0} 
+	CostFunctional: 1.06e+00
+		 Newton step: 4	 Residual (rel.):   1.32e-07	 LinearIters [4]	 LineSearch {0} 
+	CostFunctional: 1.06e+00
+	End-Time-Point evaluation: 0.144866
+	State L2-Error: 6.20881e-05
+	Control L2-Error: 9.72177e-06
+
+	**************************************************
+	*        Stopping Reduced Newton Algorithm       *
+	*             after      4  Iterations           *
+	*             with rel. Residual    1.32e-07          *
+	**************************************************
+

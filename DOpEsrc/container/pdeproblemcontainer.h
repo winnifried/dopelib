@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (C) 2012-2014 by the DOpElib authors
+ * Copyright (C) 2012-2018 by the DOpElib authors
  *
  * This file is part of DOpElib
  *
@@ -36,6 +36,7 @@
 #include <container/facedatacontainer.h>
 #include <problemdata/stateproblem.h>
 #include <problemdata/pde_adjoint_for_eeproblem.h>
+#include <problemdata/auxiliarynodalerrorproblem.h>
 #include <container/problemcontainer_internal.h>
 //#include <deal.II/multigrid/mg_dof_handler.h>
 #include <basic/dopetypes.h>
@@ -157,7 +158,23 @@ namespace DOpE
         }
       return *adjoint_for_ee_problem_;
     }
-
+    /**
+     * Returns a description to potentially needed precomputations for the error evaluation
+     */
+    AuxiliaryNodalErrorProblem<
+     PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE,
+     DH>, PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>&
+    GetErrorPrecomputations()
+    {
+      if (aux_nodal_error_problem_ == NULL)
+        {
+          aux_nodal_error_problem_ = new AuxiliaryNodalErrorProblem<
+          PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim,
+          FE, DH>, PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>(*this,
+                                                              this->GetPDE());
+        }
+      return *aux_nodal_error_problem_;
+    }
     //TODO This is Pfush needed to split into different subproblems and allow optproblem to
     //be substituted as any of these problems. Can be removed once the splitting is complete.
     PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE, DH> &
@@ -289,9 +306,9 @@ namespace DOpE
     /******************************************************/
     /**
      * This function returns a functional value that is computed entirely
-     * out of the knowledge of the coordinate vectors of state and control.
-     *
-     * No integration routine is implemented inbetween!
+    * out of the knowledge of the coordinate vectors of state and control.
+    *
+    * No integration routine is implemented inbetween!
      */
     double
     AlgebraicFunctional(
@@ -323,6 +340,12 @@ namespace DOpE
      */
     bool
     HasInterfaces() const;
+
+    /**
+      * Do we need evaluation at the vertices?
+      */
+    inline bool
+    HasVertices() const;
 
     /******************************************************/
 
@@ -376,7 +399,7 @@ namespace DOpE
     void
     AddFunctional(
       FunctionalInterface<ElementDataContainer, FaceDataContainer, DH,
-      VECTOR, dealdim> *F)
+      VECTOR, dealdim>* F)
     {
       aux_functionals_.push_back(F);
       if (functional_position_.find(F->GetName())
@@ -564,12 +587,12 @@ namespace DOpE
     /******************************************************/
     /*****************************************************************/
     /**
-     * Adds the auxiliary Vectors from the integrator, so that their values are
-     * available for the integrated object.
-     *
-     * @param integrator         The integrator in which the vecors should be available
-     *
-     */
+    * Adds the auxiliary Vectors from the integrator, so that their values are
+    * available for the integrated object.
+    *
+    * @param integrator         The integrator in which the vecors should be available
+    *
+    */
 
     template<typename INTEGRATOR>
     void
@@ -693,12 +716,12 @@ namespace DOpE
     }
     /******************************************************/
     /**
-     * Deletes the auxiliary Vectors from the integrator.
-     * This is required to add vecors of the same name but possibly
-     * at a different point in time.
-     *
-     * @param integrator         The integrator in which the vecors should be available
-     */
+    * Deletes the auxiliary Vectors from the integrator.
+    * This is required to add vecors of the same name but possibly
+    * at a different point in time.
+    *
+    * @param integrator         The integrator in which the vecors should be available
+    */
 
     template<typename INTEGRATOR>
     void
@@ -775,7 +798,7 @@ namespace DOpE
 
     std::vector<
     FunctionalInterface<ElementDataContainer, FaceDataContainer, DH,
-                        VECTOR, dealdim> *> aux_functionals_;
+                        VECTOR, dealdim>*> aux_functionals_;
     std::map<std::string, unsigned int> functional_position_;
 
     unsigned int functional_for_ee_num_;
@@ -801,13 +824,19 @@ namespace DOpE
     PDE_Adjoint_For_EEProblem<
     PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE,
                         DH>, PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>* adjoint_for_ee_problem_;
+    AuxiliaryNodalErrorProblem<
+    PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE,
+                        DH>, PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>* aux_nodal_error_problem_;
 
     friend class StateProblem<
       PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE,
-      DH>, PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>;
+      DH>, PDE, DD, SPARSITYPATTERN, VECTOR, dealdim> ;
     friend class PDE_Adjoint_For_EEProblem<
       PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE,
-      DH>, PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>;
+      DH>, PDE, DD, SPARSITYPATTERN, VECTOR, dealdim> ;
+    friend class AuxiliaryNodalErrorProblem<
+      PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE,
+      DH>, PDE, DD, SPARSITYPATTERN, VECTOR, dealdim> ;
   };
   /******************************************************/
 
@@ -817,15 +846,15 @@ namespace DOpE
     PDE &pde,
     StateSpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dealdim> &STH) :
     ProblemContainerInternal<PDE>(pde), STH_(&STH), state_problem_(NULL),
-    adjoint_for_ee_problem_(NULL)
+    adjoint_for_ee_problem_(NULL), aux_nodal_error_problem_(NULL)
   {
     ExceptionHandler_ = NULL;
     OutputHandler_ = NULL;
-    zero_dirichlet_values_ = new
-#if DEAL_II_VERSION_GTE(8,5,0)
-        Functions::
+#if DEAL_II_VERSION_GTE(9,0,0)
+    zero_dirichlet_values_ = new Functions::ZeroFunction<dealdim>(this->GetPDE().GetStateNComponents());
+#else
+    zero_dirichlet_values_ = new ZeroFunction<dealdim>(this->GetPDE().GetStateNComponents());
 #endif
-        ZeroFunction<dealdim>(this->GetPDE().GetStateNComponents());
     algo_type_ = "";
     functional_for_ee_num_ = dealii::numbers::invalid_unsigned_int;
     interval_length_=1.;
@@ -912,7 +941,7 @@ namespace DOpE
       {
         this->SetTypeInternal(type);
         this->SetTypeNumInternal(num);
-        this->GetPDE().SetProblemType(type);
+        this->GetPDE().SetProblemType(type,num);
         if (functional_for_ee_num_ != dealii::numbers::invalid_unsigned_int)
           aux_functionals_[functional_for_ee_num_]->SetProblemType(type,num);
       }
@@ -1291,6 +1320,28 @@ namespace DOpE
       {
         throw DOpEException("Unknown Type: '" + this->GetType() + "'!",
                             "PDEProblemContainer::HasFaces");
+      }
+  }
+  
+  /******************************************************/
+
+  template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
+           int dealdim, template<int, int> class FE, template<int, int> class DH>
+  bool
+  PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE, DH>::HasVertices() const
+  {
+    if (this->GetType().find("aux_functional") != std::string::npos)
+      {
+        return false;
+      }
+    else if (this->GetType() == "error_evaluation")
+    {
+      return this->GetPDE().HasVertices();
+    }
+    else
+      {
+        throw DOpEException("Unknown Type: '" + this->GetType() + "'!",
+                            "PDEProblemContainer::HasVertices");
       }
   }
 

@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (C) 2012-2014 by the DOpElib authors
+ * Copyright (C) 2012-2018 by the DOpElib authors
  *
  * This file is part of DOpElib
  *
@@ -306,6 +306,12 @@ namespace DOpE
     virtual const std::vector<dealii::Point<dealdim> > &
     GetMapDoFToSupportPoints ()=0;
 
+    /**
+     * Returns the list of the number of neighbouring elements to the vertices
+     */
+
+    virtual const std::vector<unsigned int>* GetNNeighbourElements() = 0;
+        
     /******************************************************/
 
     /**

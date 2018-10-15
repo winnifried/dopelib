@@ -1,0 +1,167 @@
+# Usually, you will not need to modify anything beyond this point...
+SET(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "-std=c++11")
+
+INCLUDE_DIRECTORIES(${DOpE}/DOpEsrc)
+
+ADD_CUSTOM_TARGET(debug
+  COMMAND ${CMAKE_COMMAND} -DCMAKE_BUILD_TYPE=Debug ${CMAKE_SOURCE_DIR}
+  COMMAND ${CMAKE_COMMAND} --build ${CMAKE_BINARY_DIR} --target all
+  COMMENT "Switch CMAKE_BUILD_TYPE to Debug"
+  )
+
+ADD_CUSTOM_TARGET(release
+  COMMAND ${CMAKE_COMMAND} -DCMAKE_BUILD_TYPE=Release ${CMAKE_SOURCE_DIR}
+  COMMAND ${CMAKE_COMMAND} --build ${CMAKE_BINARY_DIR} --target all
+  COMMENT "Switch CMAKE_BUILD_TYPE to Release"
+  )
+
+ADD_CUSTOM_TARGET(run COMMAND ${TARGET} 
+  COMMENT "Run with ${CMAKE_BUILD_TYPE} configuration"
+  )
+
+
+CMAKE_MINIMUM_REQUIRED(VERSION 2.8.8)
+
+FIND_PACKAGE(deal.II 8.0 QUIET
+  HINTS ${DEAL_II_DIR} $ENV{DEAL_II_DIR} $ENV{HOME}/deal.II 
+  )
+IF(NOT ${deal.II_FOUND})
+  MESSAGE(FATAL_ERROR "\n"
+    "*** Could not locate deal.II. ***\n\n"
+    "You may want to either pass a flag -DDEAL_II_DIR=/path/to/deal.II to cmake\n"
+    "or set an environment variable \"DEAL_II_DIR\" that contains this path."
+    )
+ELSE()
+  MESSAGE(STATUS "Found deal.II at ${DEAL_II_PATH}.")
+ENDIF()
+
+DEAL_II_INITIALIZE_CACHED_VARIABLES()
+
+IF(NOT DEAL_II_WITH_TRILINOS)
+  MESSAGE(STATUS "The deal.II library found at ${DEAL_II_PATH} was not configured with
+    DEAL_II_WITH_TRILINOS = ON. You may not use trilinos related solvers within your code."
+    )
+ELSE()
+	MESSAGE(STATUS "Configured for use of Trilinos")
+	ADD_DEFINITIONS(-DDOPELIB_WITH_TRILINOS)	
+ENDIF()
+
+IF(NOT DEAL_II_WITH_MPI)
+  MESSAGE(STATUS "The deal.II library found at ${DEAL_II_PATH} was not configured with
+    DEAL_II_WITH_MPI = ON. You may not use MPI functionality in your code"
+    )
+ELSE()
+	MESSAGE(STATUS "Configured for use of MPI")
+	ADD_DEFINITIONS(-DDOPELIB_WITH_MPI)	
+ENDIF()
+
+IF(NOT DEAL_II_WITH_P4EST)
+  MESSAGE(STATUS "The deal.II library found at ${DEAL_II_PATH} was not configured with
+    DEAL_II_WITH_P4EST = ON. You may not use trilinos related solvers within your code."
+    )
+ELSE()
+	MESSAGE(STATUS "Configured for use of P4EST")
+	ADD_DEFINITIONS(-DDOPELIB_WITH_P4EST)	
+ENDIF()
+
+
+IF(NOT DEAL_II_WITH_UMFPACK)
+  MESSAGE(FATAL_ERROR "
+Error! The deal.II library found at ${DEAL_II_PATH} was not configured with
+    DEAL_II_WITH_UMFPACK = ON
+One or all of these are OFF in your installation but are required for most Examples."
+    )
+ENDIF()
+
+STRING(TOLOWER "${CMAKE_BUILD_TYPE}" _cmake_build_type)
+IF("${_cmake_build_type}" STREQUAL "debug")
+  SET(_suffix ".g")
+ENDIF()
+
+FIND_LIBRARY(DOPE_LIBRARY dope${_suffix} ${DOpE}/lib/${dope_dimension}d/${deal_dimension}d/)
+
+SET(DOPE_LINK_LIBS ${DOPE_LIBRARY})
+
+
+#Finding Thirdparty libraries
+#IPOPT
+SET(IPOPT_PATH ${DOpE}/ThirdPartyLibs/ipopt/)
+IF(IS_DIRECTORY ${IPOPT_PATH})
+	MESSAGE(STATUS "Thirdparty-Library IPOPT has been found at ${IPOPT_PATH}")
+ 	ADD_DEFINITIONS(-DDOPELIB_WITH_IPOPT)
+	INCLUDE_DIRECTORIES(${IPOPT_PATH}/include/coin/)
+	SET(IPOPT_LIB_PATH ${IPOPT_PATH}/lib64/)
+	FIND_LIBRARY(IPOPT_LIBRARY ipopt ${IPOPT_LIB_PATH})
+	SET(DOPE_LINK_LIBS ${DOPE_LINK_LIBS} ${IPOPT_LIBRARY})
+	#Additional IPOPT libraries
+
+	FOREACH(aux_lib coinasl coinmetis coinmumps coinlapack coinhsl openblas)
+	       FIND_LIBRARY(AUX_LIBS${aux_lib} ${aux_lib} ${IPOPT_LIB_PATH})
+	       	IF(AUX_LIBS${aux_lib})    
+	     	       MESSAGE(STATUS "IPOPT Thirdparty-Library: ${aux_lib} found.")
+	     	       SET(DOPE_LINK_LIBS ${DOPE_LINK_LIBS} ${AUX_LIBS${aux_lib}})
+		ELSE()		  	  
+		       MESSAGE(STATUS "IPOPT Thirdparty-Library: ${aux_lib} not found!")
+		ENDIF()
+	ENDFOREACH()
+	
+ELSE()
+	MESSAGE(STATUS "No IPOPT could be found.")
+	SET(IPOPT_PATH "")			
+ENDIF()	
+
+#SNOPT
+SET(SNOPT_PATH ${DOpE}/ThirdPartyLibs/snopt/)
+IF(IS_DIRECTORY ${SNOPT_PATH})
+#Check Version
+        file(STRINGS ${DOpE}/ThirdPartyLibs/snopt/README.WhatsNew VERSIONS REGEX "Version [0-9]" LIMIT_COUNT 1)
+	string(REGEX REPLACE "Version ([0-9])\\.([0-9]).*" \\1 SNOPT_MAJOR_VERSION ${VERSIONS})
+	string(REGEX REPLACE "Version ([0-9])\\.([0-9]).*" \\2 SNOPT_MINOR_VERSION ${VERSIONS})
+	MESSAGE(STATUS "Thirdparty-Library SNOPT version ${SNOPT_MAJOR_VERSION}.${SNOPT_MINOR_VERSION} has been found at ${SNOPT_PATH}")
+	ADD_DEFINITIONS(-DSNOPT_MAJOR_VERSION=${SNOPT_MAJOR_VERSION})
+ 	ADD_DEFINITIONS(-DSNOPT_MINOR_VERSION=${SNOPT_MINOR_VERSION})
+ 	ADD_DEFINITIONS(-DDOPELIB_WITH_SNOPT -fPIC)
+	INCLUDE_DIRECTORIES(${SNOPT_PATH}/include/
+	                    ${SNOPT_PATH}/cppsrc)
+	SET(SNOPT_LIB_PATH ${SNOPT_PATH}/lib/)
+
+#Compile with static libs as otherwise in deal 8.4 there is a conflict since the 
+#libblas of snopt may interfere with the system libblas
+	IF(${SNOPT_MAJOR_VERSION}.${SNOPT_MINOR_VERSION} VERSION_LESS 7.6)	
+	    FOREACH(snopt_aux libsnopt_cpp.a libsnopt.a libsnprint.a libf2c.a)
+	    	   FIND_LIBRARY(SNOPT_AUX_LIBRARY${snopt_aux} ${snopt_aux} ${SNOPT_LIB_PATH})
+	           IF(SNOPT_AUX_LIBRARY${snopt_aux})
+			 MESSAGE(STATUS "SNOPT: ${snopt_aux} found.")
+			 SET(DOPE_LINK_LIBS ${DOPE_LINK_LIBS} ${SNOPT_AUX_LIBRARY${snopt_aux}})
+	           ELSE()
+		   	 MESSAGE(STATUS "SNOPT: ${snopt_aux} not found!")	
+		   ENDIF()	 
+            ENDFOREACH()
+	ELSE()
+	    FOREACH(snopt_aux libsnopt7_cpp.a libsnopt7.a)
+	    	   FIND_LIBRARY(SNOPT_AUX_LIBRARY${snopt_aux} ${snopt_aux} ${SNOPT_LIB_PATH})
+	           IF(SNOPT_AUX_LIBRARY${snopt_aux})
+			 MESSAGE(STATUS "SNOPT: ${snopt_aux} found.")
+			 SET(DOPE_LINK_LIBS ${DOPE_LINK_LIBS} ${SNOPT_AUX_LIBRARY${snopt_aux}})
+	           ELSE()
+		   	 MESSAGE(STATUS "SNOPT: ${snopt_aux} not found!")	
+		   ENDIF()	 
+            ENDFOREACH()
+	ENDIF()
+	SET(DOPE_LINK_LIBS ${DOPE_LINK_LIBS} gfortran)
+ELSE()
+	MESSAGE(STATUS "No SNOPT could be found.")
+	SET(SNOPT_PATH "")			
+ENDIF()	
+
+ADD_EXECUTABLE(${TARGET} ${TARGET_SRC})
+
+DEAL_II_SETUP_TARGET(${TARGET})
+   
+TARGET_LINK_LIBRARIES(${TARGET} ${DOPE_LINK_LIBS})
+
+SET_PROPERTY(TARGET ${TARGET} APPEND PROPERTY
+      COMPILE_DEFINITIONS "deal_II_dimension=${deal_dimension};dope_dimension=${dope_dimension};DEAL_II_MAJOR_VERSION=${DEAL_II_VERSION_MAJOR};DEAL_II_MINOR_VERSION=${DEAL_II_VERSION_MINOR}"
+      )
+
+SET_PROPERTY(TARGET ${TARGET} PROPERTY RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR})

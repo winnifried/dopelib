@@ -1,0 +1,38 @@
+DOpElib Copyright (C) 2012 - 2016 DOpElib authors
+This program comes with ABSOLUTELY NO WARRANTY.
+For License details read LICENSE.TXT distributed with this software!
+
+This is DOpElib Version: 4.0.0 pre
+	Status as of: 16/02/2016
+Using dealii Version: 9.0
+
+	**************************************************
+	*        Starting Solution using IPOPT           *
+	*   Solving : OptProblem	*
+	*  CDoFs : 	1089
+	*  SDoFs : 	4225
+	*  Constraints : 	2178
+	**************************************************
+
+LOG: Allowing IterationCounter `Opt_Ipopt_OptProblem' for filenames!
+	CostFunctional: 605.732
+	************************************************
+	*               Calling IPOPT                  *
+	*  output will not be written to logfile!      *
+	************************************************
+	
+	
+	
+	************************************************
+	*               IPOPT Finished                 *
+	*          with Exit Code:   1 (success)       *
+	************************************************
+	
+	CostFunctional: 447.85
+
+	**************************************************
+	*        Stopping Solution Using IPOPT           *
+	*             Relative reduction in cost functional: -2.9970e-01          *
+	*             Final value: 4.4785033e+02                                     *
+	**************************************************
+

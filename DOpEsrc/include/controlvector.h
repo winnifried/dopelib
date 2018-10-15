@@ -1,28 +1,32 @@
 /**
- *
- * Copyright (C) 2012-2014 by the DOpElib authors
- *
- * This file is part of DOpElib
- *
- * DOpElib is free software: you can redistribute it
- * and/or modify it under the terms of the GNU General Public
- * License as published by the Free Software Foundation, either
- * version 3 of the License, or (at your option) any later
- * version.
- *
- * DOpElib is distributed in the hope that it will be
- * useful, but WITHOUT ANY WARRANTY; without even the implied
- * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
- * PURPOSE.  See the GNU General Public License for more
- * details.
- *
- * Please refer to the file LICENSE.TXT included in this distribution
- * for further information on this license.
- *
- **/
+*
+* Copyright (C) 2012-2018 by the DOpElib authors
+*
+* This file is part of DOpElib
+*
+* DOpElib is free software: you can redistribute it
+* and/or modify it under the terms of the GNU General Public
+* License as published by the Free Software Foundation, either
+* version 3 of the License, or (at your option) any later
+* version.
+*
+* DOpElib is distributed in the hope that it will be
+* useful, but WITHOUT ANY WARRANTY; without even the implied
+* warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+* PURPOSE.  See the GNU General Public License for more
+* details.
+*
+* Please refer to the file LICENSE.TXT included in this distribution
+* for further information on this license.
+*
+**/
 
 #ifndef CONTROL_VECTOR_H_
 #define CONTROL_VECTOR_H_
+
+// Quick fix for lots of warnings
+// TODO remove ...
+//#pragma GCC diagnostic ignored "-Wterminate"
 
 #include <basic/spacetimehandler_base.h>
 #include <basic/dopetypes.h>
@@ -47,7 +51,7 @@ namespace DOpE
    * @tparam <VECTOR>     Class in which we want to store the spatial vector
    *                      (i.e. dealii::Vector<double> or dealii::BlockVector<double>)
    */
-  template <typename VECTOR>
+  template<typename VECTOR>
   class ControlVector
   {
   public:
@@ -58,9 +62,9 @@ namespace DOpE
     //      with different meshes for Vectors.
     //      Note that this requires to keep track of the interpolation
     //      between state and control time points...
-    ControlVector (const ControlVector &ref);
+    ControlVector(const ControlVector &ref);
     ControlVector(const SpaceTimeHandlerBase<VECTOR> *STH, DOpEtypes::VectorStorageType behavior);
-    ~ControlVector () noexcept(false);
+    ~ControlVector();
 
 //    /**
 //     * Sets the time in the vector. This Function or SetTimeDoFNumber
@@ -232,13 +236,13 @@ namespace DOpE
     void ReInit();
 
     /**
-     * Computes the norm given by name of the vector.
-     * Feasible values are "infty", and "l1"
-     * The string restriction defines if only certain values are
-     * to be considered. Currently "all" and "positive" are feasible
-     * Meaning that either all or only the positive entries are
-     * considered.
-     */
+      * Computes the norm given by name of the vector.
+      * Feasible values are "infty", and "l1"
+      * The string restriction defines if only certain values are
+      * to be considered. Currently "all" and "positive" are feasible
+      * Meaning that either all or only the positive entries are
+      * considered.
+      */
     double Norm(std::string name,std::string restriction = "all") const;
 
   private:
@@ -262,7 +266,7 @@ namespace DOpE
      */
     void ComputeLocalVectors(const TimeIterator &interval) const;
 
-    std::vector<VECTOR *> control_;
+    std::vector<VECTOR * > control_;
     mutable VECTOR local_control_;
     mutable dealii::Vector<double> copy_control_;
 
@@ -301,7 +305,7 @@ namespace DOpE
               {
                 control_[accessor_] = new VECTOR ();
                 existed = false;
-              }
+}
 
             if (control_[accessor_]->size () != ndofs)
               {

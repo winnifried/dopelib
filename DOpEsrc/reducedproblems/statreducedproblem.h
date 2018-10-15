@@ -1,25 +1,25 @@
 /**
- *
- * Copyright (C) 2012-2014 by the DOpElib authors
- *
- * This file is part of DOpElib
- *
- * DOpElib is free software: you can redistribute it
- * and/or modify it under the terms of the GNU General Public
- * License as published by the Free Software Foundation, either
- * version 3 of the License, or (at your option) any later
- * version.
- *
- * DOpElib is distributed in the hope that it will be
- * useful, but WITHOUT ANY WARRANTY; without even the implied
- * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
- * PURPOSE.  See the GNU General Public License for more
- * details.
- *
- * Please refer to the file LICENSE.TXT included in this distribution
- * for further information on this license.
- *
- **/
+*
+* Copyright (C) 2012-2018 by the DOpElib authors
+*
+* This file is part of DOpElib
+*
+* DOpElib is free software: you can redistribute it
+* and/or modify it under the terms of the GNU General Public
+* License as published by the Free Software Foundation, either
+* version 3 of the License, or (at your option) any later
+* version.
+*
+* DOpElib is distributed in the hope that it will be
+* useful, but WITHOUT ANY WARRANTY; without even the implied
+* warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+* PURPOSE.  See the GNU General Public License for more
+* details.
+*
+* Please refer to the file LICENSE.TXT included in this distribution
+* for further information on this license.
+*
+**/
 
 #ifndef STAT_REDUCED_PROBLEM_H_
 #define STAT_REDUCED_PROBLEM_H_
@@ -89,14 +89,14 @@ namespace DOpE
     /**
      * Constructor for the StatReducedProblem.
      *
-     * @tparam <INTEGRATORDATACONT> An IntegratorDataContainer
+    * @tparam <INTEGRATORDATACONT> An IntegratorDataContainer
      *
-     * @param OP                Problem is given to the stationary solver.
+    * @param OP                Problem is given to the stationary solver.
      * @param state_behavior    Indicates the behavior of the StateVector.
      * @param param_reader      An object which has run time data.
-     * @param idc               The InegratorDataContainer for state and control integration
-     * @param base_priority     An offset for the priority of the output written to
-     *                          the OutputHandler
+    * @param idc               The InegratorDataContainer for state and control integration
+    * @param base_priority     An offset for the priority of the output written to
+    *                          the OutputHandler
      */
     template<typename INTEGRATORDATACONT>
     StatReducedProblem(PROBLEM *OP, DOpEtypes::VectorStorageType state_behavior,
@@ -106,15 +106,15 @@ namespace DOpE
     /**
      * Constructor for the StatReducedProblem.
      *
-     * @tparam <INTEGRATORDATACONT> An IntegratorDataContainer
+    * @tparam <INTEGRATORDATACONT> An IntegratorDataContainer
      *
-     * @param OP                Problem is given to the stationary solver.
+    * @param OP                Problem is given to the stationary solver.
      * @param state_behavior    Indicates the behavior of the StateVector.
      * @param param_reader      An object which has run time data.
-     * @param c_idc             The InegratorDataContainer for control integration
-     * @param s_idc             The InegratorDataContainer for state integration
-     * @param base_priority     An offset for the priority of the output written to
-     *                          the OutputHandler
+    * @param c_idc             The InegratorDataContainer for control integration
+    * @param s_idc             The InegratorDataContainer for state integration
+    * @param base_priority     An offset for the priority of the output written to
+    *                          the OutputHandler
      */
     template<typename STATEINTEGRATORDATACONT,
              typename CONTROLINTEGRATORCONT>
@@ -148,7 +148,7 @@ namespace DOpE
 
     /**
      * Implementation of Virtual Method in Base Class
-     * ReducedProblemInterface
+    * ReducedProblemInterface
      *
      */
     bool
@@ -159,7 +159,7 @@ namespace DOpE
 
     /**
      * Implementation of Virtual Method in Base Class
-     * ReducedProblemInterface
+    * ReducedProblemInterface
      *
      */
     void
@@ -170,7 +170,7 @@ namespace DOpE
 
     /**
      * Implementation of Virtual Method in Base Class
-     * ReducedProblemInterface
+    * ReducedProblemInterface
      *
      */
     void
@@ -182,7 +182,7 @@ namespace DOpE
 
     /**
      * Implementation of Virtual Method in Base Class
-     * ReducedProblemInterface
+    * ReducedProblemInterface
      *
      */
     double
@@ -192,7 +192,7 @@ namespace DOpE
 
     /**
      * Implementation of Virtual Method in Base Class
-     * ReducedProblemInterface
+    * ReducedProblemInterface
      *
      */
     void
@@ -209,14 +209,14 @@ namespace DOpE
      * Everything else is determined by the DWRDataContainer
      * you use (represented by the template parameter DWRC).
      *
-     * @tparam <DWRC>           A container for the refinement indicators
-     *                          See, e.g., DWRDataContainer
-     * @tparam <PDE>            The problem contrainer
-     *
+    * @tparam <DWRC>           A container for the refinement indicators
+    *                          See, e.g., DWRDataContainer
+    * @tparam <PDE>            The problem contrainer
+    *
      * @param q                 The ControlVector at which the indicators
-     *                          are to be evaluated.
-     * @param dwrc              The data container
-     * @param pde               The problem
+    *                          are to be evaluated.
+    * @param dwrc              The data container
+    * @param pde               The problem
      *
      */
     template<class DWRC,class PDE>
@@ -228,7 +228,7 @@ namespace DOpE
 
     /**
      * Implementation of Virtual Method in Base Class
-     * ReducedProblemInterface
+    * ReducedProblemInterface
      *
      */
     void
@@ -240,10 +240,10 @@ namespace DOpE
     /******************************************************/
 
     /**
-     * Implementation of Virtual Method in Base Class
-     * ReducedProblemInterface
-     *
-     */
+      * Implementation of Virtual Method in Base Class
+    * ReducedProblemInterface
+      *
+      */
     void
     ComputeReducedGradientOfGlobalConstraints(unsigned int num,
                                               const ControlVector<VECTOR> &q, const ConstraintVector<VECTOR> &g,
@@ -311,9 +311,9 @@ namespace DOpE
     /******************************************************/
     /**
      * This function computes the adjoint, i.e., the Lagrange
-     * multiplier to constraint given by the state equation.
-     * It is assumed that the state u(q) corresponding to
-     * the argument q is already calculated.
+    * multiplier to constraint given by the state equation.
+    * It is assumed that the state u(q) corresponding to
+    * the argument q is already calculated.
      *
      * @param q            The ControlVector<VECTOR> is given to this function.
      */
@@ -325,12 +325,12 @@ namespace DOpE
     /**
      * This function computes the solution for the dual variable
      * for error estimation.
-     *
-     * I is assumed that the state u(q) corresponding to
-     * the argument q is already calculated.
+    *
+    * I is assumed that the state u(q) corresponding to
+    * the argument q is already calculated.
      *
      * @param q            The ControlVector<VECTOR> is given to this function.
-     * @param weight_comp  A flag deciding how the weights should be calculated
+    * @param weight_comp  A flag deciding how the weights should be calculated
      */
     void
     ComputeDualForErrorEstimation(const ControlVector<VECTOR> &q,
@@ -446,7 +446,7 @@ namespace DOpE
     friend class SolutionExtractor<
       StatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER,
       CONTROLINTEGRATOR, INTEGRATOR, PROBLEM, VECTOR, dopedim, dealdim>,
-      VECTOR>;
+      VECTOR> ;
   };
 
   /*************************************************************************/
@@ -462,14 +462,14 @@ namespace DOpE
   StatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER,
                      CONTROLINTEGRATOR, INTEGRATOR, PROBLEM, VECTOR, dopedim, dealdim>::declare_params(
                        ParameterReader &param_reader)
-  {
+{
     NONLINEARSOLVER::declare_params(param_reader);
   }
   /******************************************************/
 
   template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
-           typename CONTROLINTEGRATOR, typename INTEGRATOR, typename PROBLEM,
-           typename VECTOR, int dopedim, int dealdim>
+  typename CONTROLINTEGRATOR, typename INTEGRATOR, typename PROBLEM,
+  typename VECTOR, int dopedim, int dealdim>
   template<typename INTEGRATORDATACONT>
   StatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER,
                      CONTROLINTEGRATOR, INTEGRATOR, PROBLEM, VECTOR, dopedim, dealdim>::StatReducedProblem(
@@ -542,8 +542,8 @@ namespace DOpE
   /******************************************************/
 
   template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
-           typename CONTROLINTEGRATOR, typename INTEGRATOR, typename PROBLEM,
-           typename VECTOR, int dopedim, int dealdim>
+  typename CONTROLINTEGRATOR, typename INTEGRATOR, typename PROBLEM,
+  typename VECTOR, int dopedim, int dealdim>
   NONLINEARSOLVER &
   StatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER,
                      CONTROLINTEGRATOR, INTEGRATOR, PROBLEM, VECTOR, dopedim, dealdim>::GetNonlinearSolver(
@@ -568,8 +568,8 @@ namespace DOpE
   /******************************************************/
 
   template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
-           typename CONTROLINTEGRATOR, typename INTEGRATOR, typename PROBLEM,
-           typename VECTOR, int dopedim, int dealdim>
+  typename CONTROLINTEGRATOR, typename INTEGRATOR, typename PROBLEM,
+  typename VECTOR, int dopedim, int dealdim>
   CONTROLNONLINEARSOLVER &
   StatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER,
                      CONTROLINTEGRATOR, INTEGRATOR, PROBLEM, VECTOR, dopedim, dealdim>::GetControlNonlinearSolver()
@@ -590,8 +590,8 @@ namespace DOpE
   /******************************************************/
 
   template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
-           typename CONTROLINTEGRATOR, typename INTEGRATOR, typename PROBLEM,
-           typename VECTOR, int dopedim, int dealdim>
+  typename CONTROLINTEGRATOR, typename INTEGRATOR, typename PROBLEM,
+  typename VECTOR, int dopedim, int dealdim>
   void
   StatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER,
                      CONTROLINTEGRATOR, INTEGRATOR, PROBLEM, VECTOR, dopedim, dealdim>::ReInit()
@@ -622,8 +622,8 @@ namespace DOpE
   /******************************************************/
 
   template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
-           typename CONTROLINTEGRATOR, typename INTEGRATOR, typename PROBLEM,
-           typename VECTOR, int dopedim, int dealdim>
+  typename CONTROLINTEGRATOR, typename INTEGRATOR, typename PROBLEM,
+  typename VECTOR, int dopedim, int dealdim>
   void
   StatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER,
                      CONTROLINTEGRATOR, INTEGRATOR, PROBLEM, VECTOR, dopedim, dealdim>::ComputeReducedState(
@@ -763,8 +763,8 @@ namespace DOpE
   /******************************************************/
 
   template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
-           typename CONTROLINTEGRATOR, typename INTEGRATOR, typename PROBLEM,
-           typename VECTOR, int dopedim, int dealdim>
+  typename CONTROLINTEGRATOR, typename INTEGRATOR, typename PROBLEM,
+  typename VECTOR, int dopedim, int dealdim>
   bool
   StatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER,
                      CONTROLINTEGRATOR, INTEGRATOR, PROBLEM, VECTOR, dopedim, dealdim>::ComputeReducedConstraints(
@@ -814,7 +814,7 @@ namespace DOpE
     dealii::Vector<double> &gc = g.GetGlobalConstraints();
     //dealii::Vector<double> global_values(gc.size());
 
-    unsigned int nglobal = gc.size();//global_values.size();
+    unsigned int nglobal = gc.size();      //global_values.size();
 
     if (nglobal > 0)
       {
@@ -924,8 +924,8 @@ namespace DOpE
   /******************************************************/
 
   template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
-           typename CONTROLINTEGRATOR, typename INTEGRATOR, typename PROBLEM,
-           typename VECTOR, int dopedim, int dealdim>
+  typename CONTROLINTEGRATOR, typename INTEGRATOR, typename PROBLEM,
+  typename VECTOR, int dopedim, int dealdim>
   void
   StatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER,
                      CONTROLINTEGRATOR, INTEGRATOR, PROBLEM, VECTOR, dopedim, dealdim>::GetControlBoxConstraints(
@@ -938,8 +938,8 @@ namespace DOpE
   /******************************************************/
 
   template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
-           typename CONTROLINTEGRATOR, typename INTEGRATOR, typename PROBLEM,
-           typename VECTOR, int dopedim, int dealdim>
+  typename CONTROLINTEGRATOR, typename INTEGRATOR, typename PROBLEM,
+  typename VECTOR, int dopedim, int dealdim>
   void
   StatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER,
                      CONTROLINTEGRATOR, INTEGRATOR, PROBLEM, VECTOR, dopedim, dealdim>::ComputeReducedAdjoint(
@@ -1015,8 +1015,8 @@ namespace DOpE
   /******************************************************/
 
   template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
-           typename CONTROLINTEGRATOR, typename INTEGRATOR, typename PROBLEM,
-           typename VECTOR, int dopedim, int dealdim>
+  typename CONTROLINTEGRATOR, typename INTEGRATOR, typename PROBLEM,
+  typename VECTOR, int dopedim, int dealdim>
   void
   StatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER,
                      CONTROLINTEGRATOR, INTEGRATOR, PROBLEM, VECTOR, dopedim, dealdim>::ComputeDualForErrorEstimation(
@@ -1095,8 +1095,8 @@ namespace DOpE
   /******************************************************/
 
   template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
-           typename CONTROLINTEGRATOR, typename INTEGRATOR, typename PROBLEM,
-           typename VECTOR, int dopedim, int dealdim>
+  typename CONTROLINTEGRATOR, typename INTEGRATOR, typename PROBLEM,
+  typename VECTOR, int dopedim, int dealdim>
   void
   StatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER,
                      CONTROLINTEGRATOR, INTEGRATOR, PROBLEM, VECTOR, dopedim, dealdim>::ComputeReducedGradient(
@@ -1280,8 +1280,8 @@ namespace DOpE
   /******************************************************/
 
   template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
-           typename CONTROLINTEGRATOR, typename INTEGRATOR, typename PROBLEM,
-           typename VECTOR, int dopedim, int dealdim>
+  typename CONTROLINTEGRATOR, typename INTEGRATOR, typename PROBLEM,
+  typename VECTOR, int dopedim, int dealdim>
   double
   StatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER,
                      CONTROLINTEGRATOR, INTEGRATOR, PROBLEM, VECTOR, dopedim, dealdim>::ComputeReducedCostFunctional(
@@ -1435,8 +1435,8 @@ namespace DOpE
   /******************************************************/
 
   template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
-           typename CONTROLINTEGRATOR, typename INTEGRATOR, typename PROBLEM,
-           typename VECTOR, int dopedim, int dealdim>
+  typename CONTROLINTEGRATOR, typename INTEGRATOR, typename PROBLEM,
+  typename VECTOR, int dopedim, int dealdim>
   void
   StatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER,
                      CONTROLINTEGRATOR, INTEGRATOR, PROBLEM, VECTOR, dopedim, dealdim>::ComputeReducedFunctionals(
@@ -1558,16 +1558,13 @@ namespace DOpE
   /******************************************************/
 
   template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
-           typename CONTROLINTEGRATOR, typename INTEGRATOR, typename PROBLEM,
-           typename VECTOR, int dopedim, int dealdim>
+  typename CONTROLINTEGRATOR, typename INTEGRATOR, typename PROBLEM,
+  typename VECTOR, int dopedim, int dealdim>
   template<class DWRC,class PDE>
   void
   StatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER,
                      CONTROLINTEGRATOR, INTEGRATOR, PROBLEM, VECTOR, dopedim, dealdim>::ComputeRefinementIndicators(
                        const ControlVector<VECTOR> &q, DWRC &dwrc, PDE &pde)
-//    StatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER,
-//        CONTROLINTEGRATOR, INTEGRATOR, PROBLEM, VECTOR, dopedim, dealdim>::ComputeRefinementIndicators(
-//        const ControlVector<VECTOR>& q, DWRDataContainerBase<VECTOR>& dwrc)
   {
     //Attach the ResidualModifier to the PDE.
     pde.ResidualModifier = boost::bind<void>(boost::mem_fn(&DWRC::ResidualModifier),boost::ref(dwrc),_1);
@@ -1666,8 +1663,8 @@ namespace DOpE
   /******************************************************/
 
   template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
-           typename CONTROLINTEGRATOR, typename INTEGRATOR, typename PROBLEM,
-           typename VECTOR, int dopedim, int dealdim>
+  typename CONTROLINTEGRATOR, typename INTEGRATOR, typename PROBLEM,
+  typename VECTOR, int dopedim, int dealdim>
   void
   StatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER,
                      CONTROLINTEGRATOR, INTEGRATOR, PROBLEM, VECTOR, dopedim, dealdim>::ComputeReducedHessianVector(
@@ -1718,7 +1715,7 @@ namespace DOpE
 
       this->GetOutputHandler()->Write((GetDU().GetSpacialVector()),
                                       "Tangent" + this->GetPostIndex(), problem.GetDoFType());
-    } //End Tangent Calculation
+    }//End Tangent Calculation
 
     this->GetIntegrator().AddDomainData("adjoint",
                                         &(GetZ().GetSpacialVector()));
@@ -1774,7 +1771,7 @@ namespace DOpE
       this->GetOutputHandler()->Write(
         "\tComputing Representation of the Hessian:",
         5 + this->GetBasePriority());
-    } //End Adjoint Hessian
+    }//End Adjoint Hessian
     //Preparations for Control In The Dirichlet Data
     VECTOR tmp;
     VECTOR tmp_second;
@@ -1795,7 +1792,7 @@ namespace DOpE
           tmp_second *= -1.;
 
           this->GetIntegrator().DeleteDomainData("last_newton_solution");
-        } //End Adjoint
+        }//End Adjoint
         this->SetProblemType("adjoint_hessian");
         {
           //Adjoint_Hessian
@@ -1936,8 +1933,8 @@ namespace DOpE
   /******************************************************/
 
   template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
-           typename CONTROLINTEGRATOR, typename INTEGRATOR, typename PROBLEM,
-           typename VECTOR, int dopedim, int dealdim>
+  typename CONTROLINTEGRATOR, typename INTEGRATOR, typename PROBLEM,
+  typename VECTOR, int dopedim, int dealdim>
   void
   StatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER,
                      CONTROLINTEGRATOR, INTEGRATOR, PROBLEM, VECTOR, dopedim, dealdim>::ComputeReducedGradientOfGlobalConstraints(
@@ -2003,8 +2000,8 @@ namespace DOpE
   /******************************************************/
 
   template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
-           typename CONTROLINTEGRATOR, typename INTEGRATOR, typename PROBLEM,
-           typename VECTOR, int dopedim, int dealdim>
+  typename CONTROLINTEGRATOR, typename INTEGRATOR, typename PROBLEM,
+  typename VECTOR, int dopedim, int dealdim>
   void StatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER,
        CONTROLINTEGRATOR, INTEGRATOR, PROBLEM, VECTOR, dopedim, dealdim>::
        AllocateAuxiliaryParams(std::string name,
@@ -2030,8 +2027,8 @@ namespace DOpE
   /******************************************************/
 
   template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
-           typename CONTROLINTEGRATOR, typename INTEGRATOR, typename PROBLEM,
-           typename VECTOR, int dopedim, int dealdim>
+  typename CONTROLINTEGRATOR, typename INTEGRATOR, typename PROBLEM,
+  typename VECTOR, int dopedim, int dealdim>
   std::map<std::string,dealii::Vector<double> >::iterator
   StatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER,
                      CONTROLINTEGRATOR, INTEGRATOR, PROBLEM, VECTOR, dopedim, dealdim>::
@@ -2044,8 +2041,8 @@ namespace DOpE
   /******************************************************/
 
   template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
-           typename CONTROLINTEGRATOR, typename INTEGRATOR, typename PROBLEM,
-           typename VECTOR, int dopedim, int dealdim>
+  typename CONTROLINTEGRATOR, typename INTEGRATOR, typename PROBLEM,
+  typename VECTOR, int dopedim, int dealdim>
   void StatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER,
        CONTROLINTEGRATOR, INTEGRATOR, PROBLEM, VECTOR, dopedim, dealdim>::
        CalculatePreFunctional(std::string name,

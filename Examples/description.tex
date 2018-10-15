@@ -1,0 +1,298 @@
+\documentclass[a4paper,cleardoubleempty]{scrreprt}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath,amssymb, amsthm, commath}
+\usepackage[pdftex,bookmarks=false,pdfpagelabels=true,plainpages=false]{hyperref}
+\usepackage{booktabs}
+\usepackage{makeidx}
+\usepackage{url}
+%\usepackage{sfmath}
+\usepackage{color}
+\usepackage{graphicx} 
+\usepackage{enumerate}
+\usepackage{listings}
+
+\theoremstyle{plain}
+\newtheorem{Problem}{Problem}[section]
+
+\theoremstyle{remark}
+\newtheorem{remark}[Problem]{Remark}
+
+
+%%% Geht bei mir nicht: habe tex neu installiert, geht aber trotzdem nicht
+%\usepackage{changes}
+%\usepackage{todonotes}
+
+%\newcommand{\twick}[1]{\added{#1}}
+%\newcommand{\twickremove}[1]{\deleted{#1}}
+
+\usepackage{wallpaper} % Hintergrundbild ueber ganze Titelseite
+\usepackage{eso-pic,transparent}
+
+
+\newcommand{\dope}{\texttt{DOpElib}}
+
+
+\makeindex
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+\title{DOpElib:\\ 
+Differential Equations and Optimization Environment}
+\author{
+  Thomas Wick\thanks{Leibniz Universit\"at Hannover, 
+    {thomas.wick@ifam.uni-hannover.de}} 
+   $\,$ and $\,$
+  Winnifried Wollner\thanks{Technische Universität Darmstadt, 
+    {wollner@mathematik.tu-darmstadt.de}}
+}
+
+
+
+
+\date{\today
+\vspace*{8.1cm}
+%\begin{figure}[h]
+%\centering
+%{\includegraphics[width=8cm]{Documentation/logo.png}}
+%\end{figure}
+}
+
+
+
+\transparent{1.0}{\ThisCenterWallPaper{0.5}{Documentation/logo.png}}
+%\ThisTileWallPaper
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\maketitle
+\cleardoublepage\pagestyle{headings}
+\tableofcontents
+\cleardoublepage
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\input{Documentation/foreword.tex}
+\input{Documentation/introduction.tex}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\input{Documentation/examples.tex}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{Examples for PDE Solution}
+\label{PDE}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Stationary PDEs} 
+\label{PDE_Stat}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Stationary Stokes Equations} 
+\label{PDE_Stat_Stokes}
+\input{PDE/StatPDE/Example1/content.tex}
+\clearpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Laplace equation with periodic BC} 
+\label{PDE_Stat_Periodic_Stokes}
+\input{PDE/StatPDE/Example2/content.tex}
+\clearpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Stationary Stokes Equations with hp-Elements} 
+\label{PDE_Stat_Stokes_hp}
+\input{PDE/StatPDE/Example3/content.tex}
+\clearpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Laplace Equation in 2D} 
+\label{PDE_Stat_Laplace_2D}
+\input{PDE/StatPDE/Example4/content.tex}
+\clearpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Adaptive Solution of Laplace Equation in 2D}
+\label{PDE_adap_Stat_Laplace}
+\input{PDE/StatPDE/Example5/content.tex}
+\clearpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Laplace Equation in 3D}
+\label{PDE_Stat_Laplace_3D}
+\input{PDE/StatPDE/Example6/content.tex}
+\clearpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Stationary Elasticity Benchmark} 
+\label{PDE_Stat_Elasticity}
+\input{PDE/StatPDE/Example7/content.tex}
+\clearpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Stationary Plasticity Benchmark} 
+\label{PDE_Stat_Plasticity}
+\input{PDE/StatPDE/Example8/content.tex}
+\clearpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Stationary FSI with Stokes and INH Material} 
+\label{PDE_Stat_FSI_INH}
+\input{PDE/StatPDE/Example9/content.tex}
+\clearpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Stationary FSI with Navier-Stokes and STVK Material} 
+\label{PDE_Stat_FSI_STVK}
+\input{PDE/StatPDE/Example10/content.tex}
+\clearpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Usage of Higher Order Mappings: Approximation of $\pi$}
+\label{PDE_higher_order_mapping}
+\input{PDE/StatPDE/Example11/content.tex}
+\clearpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Use of Raviart-Thomas element; Special linear solvers}
+\label{PDE_RT}
+\input{PDE/StatPDE/Example12/content.tex}
+\clearpage
+\subsection{Discontinuous Galerkin}
+\label{PDE_dG}
+\input{PDE/StatPDE/Example13/content.tex}
+\clearpage
+\subsection{PDEs on Networks}
+\label{PDE_network}
+\input{PDE/StatPDE/Example14/content.tex}
+\clearpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Nonstationary PDEs}
+\label{PDE_Instat}
+\input{PDE/InstatPDE/content.tex}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Nonstationary Navier-Stokes Equations}
+\label{PDE_Instat_Stokes}
+\input{PDE/InstatPDE/Example1/content.tex}
+\clearpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Nonstationary FSI Problem}
+\label{PDE_Instat_FSI}
+\input{PDE/InstatPDE/Example2/content.tex}
+\clearpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Black-Scholes Equation}
+\label{PDE_Instat_Black_Scholes}
+\input{PDE/InstatPDE/Example3/content.tex}
+\clearpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Heat Equation in 1D}
+\label{PDE_Instat_Heat_1D}
+\input{PDE/InstatPDE/Example4/content.tex}
+\clearpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Heat Equation in 2D with nonlinearity}
+\label{PDE_Instat_Heat_2D}
+\input{PDE/InstatPDE/Example5/content.tex}
+\clearpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Biot-Lam\'e-Navier problem}
+\label{PDE_Instat_biot_lame_navier}
+\input{PDE/InstatPDE/Example6/content.tex}
+\cleardoublepage
+\subsection{Isothermal Euler equations}
+\label{PDE_isothermal_euler}
+\input{PDE/InstatPDE/Example7/content.tex}
+\cleardoublepage
+\subsection{Fully monolithic phase-field fracture propagation}
+\label{PDE_phase_field_fracture}
+\input{PDE/InstatPDE/Example8/content.tex}
+\cleardoublepage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{Examples with Optimization}
+\label{OPT}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Subject to a Stationary PDE}
+\label{OPT_Stat}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Distributed control with a linear elliptic PDE}
+\label{OPT_Stat_Distrib_Lin_Ellipt}
+\input{OPT/StatPDE/Example1/content.tex}
+\clearpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Parameter control with a linear elliptic PDE}
+\label{OPT_Stat_Param_Lin_Ellipt}
+\input{OPT/StatPDE/Example2/content.tex}
+\clearpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Parameter control with a nonlinear PDE from fluid dynamcis}
+\label{OPT_Stat_Param_Nonlin_Fluid}
+\input{OPT/StatPDE/Example3/content.tex}
+\clearpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Control in the dirichlet boundary values}
+\label{OPT_Stat_Dirichlet_Boundary}
+\input{OPT/StatPDE/Example4/content.tex}
+\clearpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Distributed Control with Different Meshes for Control and State}
+\label{OPT_Stat_Distributed_MultiMesh}
+\input{OPT/StatPDE/Example5/content.tex}
+\clearpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Distributed control with a linear elliptic PDE using IPOPT/SNOPT}
+\label{OPT_Stat_Box_controlconstraints_SNOPT}
+\input{OPT/StatPDE/Example6/content.tex}
+\clearpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Compliance Minimization of a variable Thickness MBB-Beam}
+\label{OPT_Stat_MBB-Beam}
+\input{OPT/StatPDE/Example7/content.tex}
+\clearpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Topology optimization of an MBB-Beam using SNOPT}
+\label{OPT_Stat_TopOpt_MBB_SNOPT}
+\input{OPT/StatPDE/Example8/content.tex}
+\clearpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Parameter control with a non-linear PDE from FSI dynamics}
+\label{OPT_Stat_Param_Nonlin_FSI}
+\input{OPT/StatPDE/Example9/content.tex}
+\clearpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Parameter control with a nonlinear PDE from fluid dynamics - with cost functional
+not given as an integral but as function of an integral}
+\label{OPT_Stat_Param_Nonlin_Fluid_extension}
+\input{OPT/StatPDE/Example10/content.tex}
+\clearpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Subject to a Nonstationary PDE}
+\label{OPT_Instat}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Control of a nonlinear heat equation via the initial values}
+\label{OPT_Instat initial-value end-time}
+\input{OPT/InstatPDE/Example1/content.tex}
+\clearpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Control of the heat equation via a space dependent right hand side}
+\label{OPT_Instat stationary control}
+\input{OPT/InstatPDE/Example2/content.tex}
+\clearpage
+\subsection{Control of the heat equation via a time dependent right hand side}
+\label{OPT_Instat nonstationary control}
+\input{OPT/InstatPDE/Example3/content.tex}
+\clearpage
+\subsection{Minimizing the spatial mean-value - cost functional involves functions of integrals}
+\label{OPT_Instat initial-value extension}
+\input{OPT/InstatPDE/Example4/content.tex}
+\clearpage
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\input{Documentation/tests.tex}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\input{Documentation/terminal_output.tex}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\bibliographystyle{plain}
+\bibliography{Documentation/lit}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\addcontentsline{toc}{chapter}{Index}
+\printindex
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{document}

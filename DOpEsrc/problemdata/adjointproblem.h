@@ -1,6 +1,6 @@
 /**
 *
-* Copyright (C) 2012-2014 by the DOpElib authors
+* Copyright (C) 2012-2018 by the DOpElib authors
 *
 * This file is part of DOpElib
 *
@@ -130,8 +130,11 @@ namespace DOpE
               if (opt_problem_.GetFunctional()->GetType().find("point")
                   != std::string::npos)
                 {
-                  opt_problem_.GetFunctional()->PointValue_U(param_values, domain_values,
-                                                             rhs_vector, scale);
+                  opt_problem_.GetFunctional()->PointValue_U(
+		    opt_problem_.GetSpaceTimeHandler()->GetControlDoFHandler(),
+		    opt_problem_.GetSpaceTimeHandler()->GetStateDoFHandler(),
+		    param_values, domain_values,
+		    rhs_vector, scale);
                 }
             }
         }
@@ -335,6 +338,12 @@ namespace DOpE
     */
     inline bool
     HasInterfaces() const;
+
+    /**
+      * Do we need evaluation at the vertices?
+      */
+    inline bool
+    HasVertices() const;
 
     /**
     * Functions providing the required information for the integrator.
@@ -929,6 +938,16 @@ namespace DOpE
   AdjointProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dim>::HasInterfaces() const
   {
     return pde_.HasInterfaces();
+  }
+  
+  /******************************************************/
+
+  template<typename OPTPROBLEM, typename PDE, typename DD,
+           typename SPARSITYPATTERN, typename VECTOR, int dim>
+  bool
+  AdjointProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dim>::HasVertices() const
+  {
+    return pde_.HasVertices();
   }
 
   /******************************************************/

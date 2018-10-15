@@ -1,25 +1,25 @@
 /**
- *
- * Copyright (C) 2012-2014 by the DOpElib authors
- *
- * This file is part of DOpElib
- *
- * DOpElib is free software: you can redistribute it
- * and/or modify it under the terms of the GNU General Public
- * License as published by the Free Software Foundation, either
- * version 3 of the License, or (at your option) any later
- * version.
- *
- * DOpElib is distributed in the hope that it will be
- * useful, but WITHOUT ANY WARRANTY; without even the implied
- * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
- * PURPOSE.  See the GNU General Public License for more
- * details.
- *
- * Please refer to the file LICENSE.TXT included in this distribution
- * for further information on this license.
- *
- **/
+*
+* Copyright (C) 2012-2014 by the DOpElib authors
+*
+* This file is part of DOpElib
+*
+* DOpElib is free software: you can redistribute it
+* and/or modify it under the terms of the GNU General Public
+* License as published by the Free Software Foundation, either
+* version 3 of the License, or (at your option) any later
+* version.
+*
+* DOpElib is distributed in the hope that it will be
+* useful, but WITHOUT ANY WARRANTY; without even the implied
+* warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+* PURPOSE.  See the GNU General Public License for more
+* details.
+*
+* Please refer to the file LICENSE.TXT included in this distribution
+* for further information on this license.
+*
+**/
 
 #ifndef SPACE_TIME_HANDLER_BASE_H_
 #define SPACE_TIME_HANDLER_BASE_H_
@@ -68,9 +68,9 @@ namespace DOpE
       control_ticket_ = 1;
     }
 
-    SpaceTimeHandlerBase (dealii::Triangulation<1> &times,
-                          const dealii::FiniteElement<1> &fe,
-                          DOpEtypes::ControlType type = DOpEtypes::stationary) :
+    SpaceTimeHandlerBase(dealii::Triangulation<1> &times,
+                         const dealii::FiniteElement<1> &fe,
+                         DOpEtypes::ControlType type = DOpEtypes::stationary) :
       tdfh_(times, fe), interval_(tdfh_.first_interval()), control_type_(type)
     {
       time_triangulation_ = &times;
@@ -81,7 +81,7 @@ namespace DOpE
 
     virtual ~SpaceTimeHandlerBase()
     {
-      tdfh_.clear ();
+      tdfh_.clear();
     }
 
     virtual MPI_Comm
@@ -95,8 +95,8 @@ namespace DOpE
      */
     void ReInitTime()
     {
-      IncrementStateTicket ();
-      tdfh_.distribute_dofs ();
+      IncrementStateTicket();
+      tdfh_.distribute_dofs();
       //FIXME When we have temporal discretization also for control and constraint,
       //one has to increment here the control_ticket_!
     }
@@ -110,7 +110,7 @@ namespace DOpE
      */
     unsigned int GetMaxTimePoint() const
     {
-      return (tdfh_.GetNbrOfDoFs () - 1); //because we start counting at 0.
+      return (tdfh_.GetNbrOfDoFs()-1);//because we start counting at 0.
     }
 
     /**
@@ -118,7 +118,7 @@ namespace DOpE
      */
     unsigned int GetNbrOfIntervals() const
     {
-      return tdfh_.GetNbrOfIntervals ();
+      return tdfh_.GetNbrOfIntervals();
     }
 
 
@@ -153,7 +153,7 @@ namespace DOpE
     double GetTime(unsigned int time_point) const
     {
 
-      return tdfh_.GetTime (time_point);
+      return tdfh_.GetTime(time_point);
     }
 
 
@@ -171,7 +171,7 @@ namespace DOpE
      */
     const std::vector<double> &GetTimes() const
     {
-      return tdfh_.GetTimes ();
+      return tdfh_.GetTimes();
     }
 
     /**
@@ -188,7 +188,7 @@ namespace DOpE
     void
     GetTimes(const TimeIterator &interval, std::vector<double> &local_times) const
     {
-      return tdfh_.GetTimes (interval, local_times);
+      return tdfh_.GetTimes(interval, local_times);
     }
 
 
@@ -252,7 +252,7 @@ namespace DOpE
     InterpolateControl(VECTOR & /*result*/, const std::vector<VECTOR *> &/*local_vectors*/,
                        double /*t*/, const TimeIterator &/*interval*/) const
     {
-      abort ();
+      abort();
     }
     /**
      * If one requires values at a time not corresponding to a degree of freedom in
@@ -282,7 +282,7 @@ namespace DOpE
     virtual void InterpolateConstraint(VECTOR & /*result*/, const std::vector<VECTOR *> &/*local_vectors*/,
                                        double /*t*/, const TimeIterator &/*interval*/) const
     {
-      abort ();
+      abort();
     }
 
     /**
@@ -294,7 +294,7 @@ namespace DOpE
      */
     virtual unsigned int GetControlNDoFs(int /*time_point*/ = -1) const
     {
-      abort ();
+      abort();
     }
 
     // TODO this function could replace all Get...NDoFs functions, currently just wraps around
@@ -391,7 +391,7 @@ namespace DOpE
      */
     virtual unsigned int GetConstraintNDoFs(std::string /*name*/) const
     {
-      abort ();
+      abort();
       return 0;
     }
     /**
@@ -403,7 +403,7 @@ namespace DOpE
      */
     virtual const std::vector<unsigned int> &GetControlDoFsPerBlock(int /*time_point*/ = -1) const
     {
-      abort ();
+      abort();
     }
     /**
      * Returns the DoFs per block for the state vector at the given point time_point.
@@ -419,21 +419,21 @@ namespace DOpE
      */
     virtual const std::vector<unsigned int> &GetConstraintDoFsPerBlock(std::string /*name*/) const
     {
-      abort ();
+      abort();
     }
     /**
      * Returns the Number of global in space and time Constraints
      */
     virtual unsigned int  GetNGlobalConstraints() const
     {
-      abort ();
+      abort();
     }
     /**
      * Returns the Number of local in space and time Constraints
      */
     virtual unsigned int  GetNLocalConstraints() const
     {
-      abort ();
+      abort();
     }
 
     /**
@@ -441,15 +441,15 @@ namespace DOpE
      */
     double GetStepSize() const
     {
-      return interval_.get_k ();
+      return interval_.get_k();
     }
     /**
      * Returns the length of interval_++;
      */
     double GetNextStepSize() const
     {
-      assert(interval_ != tdfh_.last_interval ());
-      double k = (++interval_).get_k ();
+      assert(interval_!= tdfh_.last_interval());
+      double k = (++interval_).get_k();
       --interval_;
       return k;
     }
@@ -458,8 +458,8 @@ namespace DOpE
      */
     double GetPreviousStepSize() const
     {
-      assert(interval_ != tdfh_.first_interval ());
-      double k = (--interval_).get_k ();
+      assert(interval_!= tdfh_.first_interval());
+      double k = (--interval_).get_k();
       ++interval_;
       return k;
     }
@@ -491,12 +491,12 @@ namespace DOpE
      */
     virtual void SpatialMeshTransferControl(const VECTOR & /*old_values*/, VECTOR & /*new_values*/) const
     {
-      abort ();
+      abort();
     }
 
     virtual void SpatialMeshTransferState(const VECTOR & /*old_values*/, VECTOR & /*new_values*/) const
     {
-      abort ();
+      abort();
     }
 
     /******************************************************/
@@ -509,12 +509,12 @@ namespace DOpE
      *                       is allowed in this method.
      */
     void
-    RefineTime (DOpEtypes::RefinementType /*ref_type*/=
-                  DOpEtypes::RefinementType::global)
+    RefineTime(DOpEtypes::RefinementType /*ref_type*/ =
+                 DOpEtypes::RefinementType::global)
     {
       //assert(ref_type == DOpEtypes::RefinementType::global);
       RefinementContainer ref_con_dummy;
-      RefineTime (ref_con_dummy);
+      RefineTime(ref_con_dummy);
     }
 
     /******************************************************/
@@ -528,27 +528,27 @@ namespace DOpE
      */
 
     void
-    RefineTime (const RefinementContainer &ref_container)
+    RefineTime(const RefinementContainer &ref_container)
     {
-      DOpEtypes::RefinementType ref_type = ref_container.GetRefType ();
+      DOpEtypes::RefinementType ref_type = ref_container.GetRefType();
 
       //make sure that we do not use any coarsening
-      assert(!ref_container.UsesCoarsening ());
+      assert(!ref_container.UsesCoarsening());
       assert(time_triangulation_ != NULL);
 
       if (DOpEtypes::RefinementType::global == ref_type)
         {
-          time_triangulation_->set_all_refine_flags ();
+          time_triangulation_->set_all_refine_flags();
         }
       else
         {
           throw DOpEException("Not implemented for name =" + DOpEtypesToString(ref_type),
                               "MethodOfLines_SpaceTimeHandler::RefineTime");
         }
-      time_triangulation_->prepare_coarsening_and_refinement ();
+      time_triangulation_->prepare_coarsening_and_refinement();
 
-      time_triangulation_->execute_coarsening_and_refinement ();
-      ReInitTime ();
+      time_triangulation_->execute_coarsening_and_refinement();
+      ReInitTime();
     }
 
     /******************************************************/
@@ -647,7 +647,7 @@ namespace DOpE
      */
     void IncrementStateTicket()
     {
-      assert(state_ticket_ < std::numeric_limits<unsigned int>::max ());
+      assert( state_ticket_ < std::numeric_limits<unsigned int>::max());
       state_ticket_++;
     }
 
@@ -656,12 +656,12 @@ namespace DOpE
      */
     void IncrementControlTicket()
     {
-      assert(control_ticket_ < std::numeric_limits<unsigned int>::max ());
+      assert( control_ticket_ < std::numeric_limits<unsigned int>::max());
       control_ticket_++;
     }
 
   private:
-    mutable TimeDoFHandler tdfh_; //FIXME Is it really necessary for tdfh_ and interval_ to be mutable? this is really ugly
+    mutable TimeDoFHandler tdfh_;//FIXME Is it really necessary for tdfh_ and interval_ to be mutable? this is really ugly
     mutable TimeIterator interval_;
     dealii::Triangulation<1> *time_triangulation_;
     unsigned int control_ticket_;

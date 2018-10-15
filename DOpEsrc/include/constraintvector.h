@@ -1,28 +1,31 @@
 /**
- *
- * Copyright (C) 2012-2014 by the DOpElib authors
- *
- * This file is part of DOpElib
- *
- * DOpElib is free software: you can redistribute it
- * and/or modify it under the terms of the GNU General Public
- * License as published by the Free Software Foundation, either
- * version 3 of the License, or (at your option) any later
- * version.
- *
- * DOpElib is distributed in the hope that it will be
- * useful, but WITHOUT ANY WARRANTY; without even the implied
- * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
- * PURPOSE.  See the GNU General Public License for more
- * details.
- *
- * Please refer to the file LICENSE.TXT included in this distribution
- * for further information on this license.
- *
- **/
+*
+* Copyright (C) 2012-2018 by the DOpElib authors
+*
+* This file is part of DOpElib
+*
+* DOpElib is free software: you can redistribute it
+* and/or modify it under the terms of the GNU General Public
+* License as published by the Free Software Foundation, either
+* version 3 of the License, or (at your option) any later
+* version.
+*
+* DOpElib is distributed in the hope that it will be
+* useful, but WITHOUT ANY WARRANTY; without even the implied
+* warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+* PURPOSE.  See the GNU General Public License for more
+* details.
+*
+* Please refer to the file LICENSE.TXT included in this distribution
+* for further information on this license.
+*
+**/
 
 #ifndef CONSTRAINT_VECTOR_H_
 #define CONSTRAINT_VECTOR_H_
+
+// TODO remove ...
+//#pragma GCC diagnostic ignored "-Wterminate"
 
 #include <basic/spacetimehandler_base.h>
 #include <basic/dopetypes.h>
@@ -46,7 +49,7 @@ namespace DOpE
    * @tparam <VECTOR>     Class in which we want to store the spatial vector
    *                      (i.e. dealii::Vector<double> or dealii::BlockVector<double>)
    */
-  template <typename VECTOR>
+  template<typename VECTOR>
   class ConstraintVector
   {
   public:
@@ -57,10 +60,9 @@ namespace DOpE
     //      with different meshes for Vectors.
     //      Note that this requires to keep track of the interpolation
     //      between state and control time points...
-    ConstraintVector (const ConstraintVector &ref);
+    ConstraintVector(const ConstraintVector &ref);
     ConstraintVector(const SpaceTimeHandlerBase<VECTOR> *STH, DOpEtypes::VectorStorageType behavior);
-    virtual
-    ~ConstraintVector () noexcept(false);
+    ~ConstraintVector();
 
 //    /**
 //     * Sets the time in the vector. This Function or SetTimeDoFNumber
@@ -218,7 +220,7 @@ namespace DOpE
      *                and false otherwise.
      */
     virtual bool
-    IsFeasible () const;
+    IsFeasible() const;
     /**
      *  This function is used to check whether the values
      *  stored in this vector
@@ -231,19 +233,19 @@ namespace DOpE
      *                and false otherwise.
      */
     virtual bool
-    IsEpsilonFeasible (double eps) const;
+    IsEpsilonFeasible(double eps) const;
 
     /**
-     *  This function is used to check whether the values
-     *  stored in this vector are larger than the given epsilon.
-     *
-     *  @param  eps   The value of epsilon.
-     *
-     *  @return       A boolean beeing true if the constraint is larger than eps
-     *                and false otherwise.
-     */
+    *  This function is used to check whether the values
+    *  stored in this vector are larger than the given epsilon.
+    *
+    *  @param  eps   The value of epsilon.
+    *
+    *  @return       A boolean beeing true if the constraint is larger than eps
+    *                and false otherwise.
+    */
     virtual bool
-    IsLargerThan (double eps) const;
+    IsLargerThan(double eps) const;
 
 
     /**
@@ -256,7 +258,7 @@ namespace DOpE
      *  @return the complementarity product.
      */
     virtual double
-    Complementarity (const ConstraintVector<VECTOR> &g) const;
+    Complementarity(const ConstraintVector<VECTOR> &g) const;
 
   private:
     /**
@@ -268,7 +270,7 @@ namespace DOpE
 
     void ReSizeGlobal(unsigned int ndofs);
 
-    std::vector<VECTOR *> local_control_constraint_;
+    std::vector<VECTOR * > local_control_constraint_;
     mutable VECTOR local_constraint_control_;
 
     dealii::Vector<double> global_constraint_;

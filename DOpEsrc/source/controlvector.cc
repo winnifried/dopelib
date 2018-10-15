@@ -1,25 +1,25 @@
 /**
- *
- * Copyright (C) 2012-2014 by the DOpElib authors
- *
- * This file is part of DOpElib
- *
- * DOpElib is free software: you can redistribute it
- * and/or modify it under the terms of the GNU General Public
- * License as published by the Free Software Foundation, either
- * version 3 of the License, or (at your option) any later
- * version.
- *
- * DOpElib is distributed in the hope that it will be
- * useful, but WITHOUT ANY WARRANTY; without even the implied
- * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
- * PURPOSE.  See the GNU General Public License for more
- * details.
- *
- * Please refer to the file LICENSE.TXT included in this distribution
- * for further information on this license.
- *
- **/
+*
+* Copyright (C) 2012-2018 by the DOpElib authors
+*
+* This file is part of DOpElib
+*
+* DOpElib is free software: you can redistribute it
+* and/or modify it under the terms of the GNU General Public
+* License as published by the Free Software Foundation, either
+* version 3 of the License, or (at your option) any later
+* version.
+*
+* DOpElib is distributed in the hope that it will be
+* useful, but WITHOUT ANY WARRANTY; without even the implied
+* warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+* PURPOSE.  See the GNU General Public License for more
+* details.
+*
+* Please refer to the file LICENSE.TXT included in this distribution
+* for further information on this license.
+*
+**/
 
 
 #include <include/controlvector.h>
@@ -33,18 +33,18 @@ using namespace dealii;
 using namespace DOpE;
 /******************************************************/
 
-template <typename VECTOR>
-ControlVector<VECTOR>::ControlVector (const ControlVector &ref)
+template<typename VECTOR>
+ControlVector<VECTOR>::ControlVector(const ControlVector &ref)
 {
-  behavior_ = ref.GetBehavior ();
-  STH_ = ref.GetSpaceTimeHandler ();
+  behavior_ = ref.GetBehavior();
+  STH_      = ref.GetSpaceTimeHandler();
   sfh_ticket_ = 0;
-  c_type_ = STH_->GetControlType ();
+  c_type_ = STH_->GetControlType();
 
   //Check consistency
   if (c_type_ == DOpEtypes::ControlType::initial || c_type_ == DOpEtypes::ControlType::stationary)
     {
-      if (behavior_ != DOpEtypes::VectorStorageType::fullmem)
+      if (behavior_!= DOpEtypes::VectorStorageType::fullmem)
         {
           throw DOpEException("Storage behavior: " + DOpEtypesToString(GetBehavior()) +
                               " is not compatible with control type: " + DOpEtypesToString(c_type_),
@@ -58,22 +58,22 @@ ControlVector<VECTOR>::ControlVector (const ControlVector &ref)
                           "ControlVector<VECTOR>::ControlVector<VECTOR>");
     }
 
-  ReInit ();
+  ReInit();
 }
 
 /******************************************************/
-template <typename VECTOR>
+template<typename VECTOR>
 ControlVector<VECTOR>::ControlVector(const SpaceTimeHandlerBase<VECTOR> *STH, DOpEtypes::VectorStorageType behavior)
 {
   behavior_ = behavior;
-  STH_ = STH;
+  STH_      = STH;
   sfh_ticket_ = 0;
-  c_type_ = STH_->GetControlType ();
+  c_type_ = STH_->GetControlType();
 
   //Check consistency
   if (c_type_ == DOpEtypes::ControlType::initial || c_type_ == DOpEtypes::ControlType::stationary)
     {
-      if (behavior_ != DOpEtypes::VectorStorageType::fullmem)
+      if (behavior_!= DOpEtypes::VectorStorageType::fullmem)
         {
           throw DOpEException("Storage behavior: " + DOpEtypesToString(GetBehavior()) +
                               " is not compatible with control type: " + DOpEtypesToString(c_type_),
@@ -87,38 +87,38 @@ ControlVector<VECTOR>::ControlVector(const SpaceTimeHandlerBase<VECTOR> *STH, DO
                           "ControlVector<VECTOR>::ControlVector<VECTOR>");
     }
 
-  ReInit ();
+  ReInit();
 }
 
 
 /******************************************************/
-template <typename VECTOR>
+template<typename VECTOR>
 void ControlVector<VECTOR>::ReInit()
 {
-  accessor_ = 0;
+  accessor_ =0;
 
-  if (!GetSpaceTimeHandler ()->IsValidControlTicket (sfh_ticket_))
+  if (!GetSpaceTimeHandler()->IsValidControlTicket(sfh_ticket_))
     {
-      if (GetBehavior () == DOpEtypes::VectorStorageType::fullmem)
+      if (GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
         {
           if (c_type_ == DOpEtypes::ControlType::initial || c_type_ == DOpEtypes::ControlType::stationary)
             {
-              control_.resize (1, NULL);
+              control_.resize(1,NULL);
               ReSizeSpace ();
             }
           else
             {
-              if (c_type_ == DOpEtypes::ControlType::nonstationary)
+              if ( c_type_ == DOpEtypes::ControlType::nonstationary)
                 {
                   //Time dofs for state and control are equal!
                   control_.resize(GetSpaceTimeHandler()->GetMaxTimePoint() + 1, NULL);
                   for (unsigned int t = 0; t
                        <= GetSpaceTimeHandler()->GetMaxTimePoint(); t++)
                     {
-                      SetTimeDoFNumber (t);
+                      SetTimeDoFNumber(t);
                       ReSizeSpace (t);
                     }
-                  SetTimeDoFNumber (0);
+                  SetTimeDoFNumber(0);
                 }
               else
                 {
@@ -131,18 +131,18 @@ void ControlVector<VECTOR>::ReInit()
           throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),"ControlVector<VECTOR>::ReInit");
         }
 
-      lock_ = false;
+      lock_= false;
     }
 }
 
 /******************************************************/
 
-template <typename VECTOR>
-ControlVector<VECTOR>::~ControlVector () noexcept(false)
+template<typename VECTOR>
+ControlVector<VECTOR>::~ControlVector()
 {
-  if (GetBehavior () == DOpEtypes::VectorStorageType::fullmem)
+  if (GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
     {
-      for (unsigned int i = 0; i < control_.size (); i++)
+      for (unsigned int i =0; i<control_.size(); i++)
         {
           assert(control_[i] != NULL);
           delete control_[i];
@@ -155,15 +155,15 @@ ControlVector<VECTOR>::~ControlVector () noexcept(false)
 }
 
 /******************************************************/
-template <typename VECTOR>
+template<typename VECTOR>
 void ControlVector<VECTOR>::SetTimeDoFNumber(unsigned int time_point) const
 {
   if (c_type_ == DOpEtypes::ControlType::nonstationary)
     {
-      if (GetBehavior () == DOpEtypes::VectorStorageType::fullmem)
+      if (GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
         {
           accessor_ = static_cast<int> (time_point);
-          assert(accessor_ < static_cast<int> (control_.size ()));
+          assert(accessor_ < static_cast<int>(control_.size()));
         }
       else
         {
@@ -198,7 +198,7 @@ void ControlVector<VECTOR>::SetTimeDoFNumber(unsigned int time_point) const
 
 /******************************************************/
 
-template <typename VECTOR>
+template<typename VECTOR>
 VECTOR &ControlVector<VECTOR>::GetSpacialVector()
 {
   if (c_type_ == DOpEtypes::ControlType::stationary || c_type_ == DOpEtypes::ControlType::initial)
@@ -209,7 +209,7 @@ VECTOR &ControlVector<VECTOR>::GetSpacialVector()
     {
       if (c_type_ == DOpEtypes::ControlType::nonstationary)
         {
-          if (GetBehavior () == DOpEtypes::VectorStorageType::fullmem)
+          if ( GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
             {
               if (accessor_ >= 0)
                 {
@@ -234,7 +234,7 @@ VECTOR &ControlVector<VECTOR>::GetSpacialVector()
 }
 
 /******************************************************/
-template <typename VECTOR>
+template<typename VECTOR>
 const VECTOR &ControlVector<VECTOR>::GetSpacialVector() const
 {
   if (c_type_ == DOpEtypes::ControlType::stationary || c_type_ == DOpEtypes::ControlType::initial)
@@ -245,7 +245,7 @@ const VECTOR &ControlVector<VECTOR>::GetSpacialVector() const
     {
       if (c_type_ == DOpEtypes::ControlType::nonstationary)
         {
-          if (GetBehavior () == DOpEtypes::VectorStorageType::fullmem)
+          if ( GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
             {
               if (accessor_ >= 0)
                 {
@@ -270,7 +270,7 @@ const VECTOR &ControlVector<VECTOR>::GetSpacialVector() const
 }
 
 /******************************************************/
-template <typename VECTOR>
+template<typename VECTOR>
 const Vector<double> &ControlVector<VECTOR>::GetSpacialVectorCopy() const
 {
   if (lock_)
@@ -287,7 +287,7 @@ const Vector<double> &ControlVector<VECTOR>::GetSpacialVectorCopy() const
     {
       if (c_type_ == DOpEtypes::ControlType::nonstationary)
         {
-          if (GetBehavior () == DOpEtypes::VectorStorageType::fullmem)
+          if ( GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
             {
               if (accessor_ >= 0)
                 {
@@ -314,7 +314,7 @@ const Vector<double> &ControlVector<VECTOR>::GetSpacialVectorCopy() const
 
 /******************************************************/
 
-template <typename VECTOR>
+template<typename VECTOR>
 void ControlVector<VECTOR>::operator=(double value)
 {
   if (lock_)
@@ -323,14 +323,14 @@ void ControlVector<VECTOR>::operator=(double value)
         "Trying to use operator= while a copy is in use!",
         "ControlVector::operator=");
     }
-  if (GetBehavior () == DOpEtypes::VectorStorageType::fullmem)
+  if (GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
     {
-      for (unsigned int i = 0; i < control_.size (); i++)
+      for (unsigned int i = 0; i < control_.size(); i++)
         {
           assert(control_[i] != NULL);
-          control_[i]->operator= (value);
+          control_[i]->operator=(value);
         }
-      SetTimeDoFNumber (0);
+      SetTimeDoFNumber(0);
     }
   else
     {
@@ -339,7 +339,7 @@ void ControlVector<VECTOR>::operator=(double value)
 }
 
 /******************************************************/
-template <typename VECTOR>
+template<typename VECTOR>
 void ControlVector<VECTOR>::operator=(const ControlVector &dq)
 {
   if (lock_)
@@ -348,23 +348,23 @@ void ControlVector<VECTOR>::operator=(const ControlVector &dq)
         "Trying to use operator= while a copy is in use!",
         "ControlVector::operator=");
     }
-  if (GetBehavior () != dq.GetBehavior ())
+  if (GetBehavior() != dq.GetBehavior())
     {
-      throw DOpEException (
+      throw DOpEException(
         "Own Behavior does not match dq.Behavior. Own Behavior:"
         + DOpEtypesToString(GetBehavior()) + " but dq.Behavior is "
         + DOpEtypesToString(dq.GetBehavior()),
         "ControlVector<VECTOR>::operator=");
     }
-  if (GetBehavior () == DOpEtypes::VectorStorageType::fullmem)
+  if (GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
     {
-      if (dq.control_.size () != control_.size ())
+      if (dq.control_.size() != control_.size())
         {
-          if (dq.control_.size () > control_.size ())
+          if (dq.control_.size() > control_.size())
             {
-              unsigned int s = control_.size ();
-              control_.resize (dq.control_.size (), NULL);
-              for (unsigned int i = s; i < control_.size (); i++)
+              unsigned int s = control_.size();
+              control_.resize(dq.control_.size(),NULL);
+              for (unsigned int i = s; i < control_.size(); i++)
                 {
                   assert(control_[i] == NULL);
                   control_[i] = new VECTOR;
@@ -377,19 +377,19 @@ void ControlVector<VECTOR>::operator=(const ControlVector &dq)
                   assert(control_[i] != NULL);
                   delete control_[i];
                   control_[i] = NULL;
-                  control_.pop_back ();
+                  control_.pop_back();
                 }
-              assert(control_.size () == dq.control_.size ());
+              assert(control_.size() == dq.control_.size());
             }
         }
 
-      for (unsigned int i = 0; i < control_.size (); i++)
+      for (unsigned int i = 0; i < control_.size(); i++)
         {
           assert(control_[i] != NULL);
           assert(dq.control_[i] != NULL);
-          control_[i]->operator= (*(dq.control_[i]));
+          control_[i]->operator=(*(dq.control_[i]));
         }
-      SetTimeDoFNumber (0);
+      SetTimeDoFNumber(0);
     }
   else
     {
@@ -398,7 +398,7 @@ void ControlVector<VECTOR>::operator=(const ControlVector &dq)
 }
 
 /******************************************************/
-template <typename VECTOR>
+template<typename VECTOR>
 void ControlVector<VECTOR>::operator+=(const ControlVector &dq)
 {
   if (lock_)
@@ -407,24 +407,24 @@ void ControlVector<VECTOR>::operator+=(const ControlVector &dq)
         "Trying to use operator+= while a copy is in use!",
         "ControlVector::operator+=");
     }
-  if (GetBehavior () != dq.GetBehavior ())
+  if (GetBehavior() != dq.GetBehavior())
     {
-      throw DOpEException (
+      throw DOpEException(
         "Own Behavior does not match dq.Behavior. Own Behavior:"
         + DOpEtypesToString(GetBehavior()) + " but dq.GetBehavior is "
         + DOpEtypesToString(dq.GetBehavior()),
         "ControlVector<VECTOR>::operator+=");
     }
-  if (GetBehavior () == DOpEtypes::VectorStorageType::fullmem)
+  if (GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
     {
-      assert(dq.control_.size () == control_.size ());
-      for (unsigned int i = 0; i < control_.size (); i++)
+      assert(dq.control_.size() == control_.size());
+      for (unsigned int i = 0; i < control_.size(); i++)
         {
           assert(control_[i] != NULL);
           assert(dq.control_[i] != NULL);
-          control_[i]->operator+= (*(dq.control_[i]));
+          control_[i]->operator+=(*(dq.control_[i]));
         }
-      SetTimeDoFNumber (0);
+      SetTimeDoFNumber(0);
     }
   else
     {
@@ -433,7 +433,7 @@ void ControlVector<VECTOR>::operator+=(const ControlVector &dq)
 }
 
 /******************************************************/
-template <typename VECTOR>
+template<typename VECTOR>
 void ControlVector<VECTOR>::operator*=(double a)
 {
   if (lock_)
@@ -442,14 +442,14 @@ void ControlVector<VECTOR>::operator*=(double a)
         "Trying to use operator= while a copy is in use!",
         "ControlVector::operator*=");
     }
-  if (GetBehavior () == DOpEtypes::VectorStorageType::fullmem)
+  if (GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
     {
-      for (unsigned int i = 0; i < control_.size (); i++)
+      for (unsigned int i = 0; i < control_.size(); i++)
         {
           assert(control_[i] != NULL);
-          control_[i]->operator*= (a);
+          control_[i]->operator*=(a);
         }
-      SetTimeDoFNumber (0);
+      SetTimeDoFNumber(0);
     }
   else
     {
@@ -458,7 +458,7 @@ void ControlVector<VECTOR>::operator*=(double a)
 }
 
 /******************************************************/
-template <typename VECTOR>
+template<typename VECTOR>
 double ControlVector<VECTOR>::operator*(const ControlVector &dq) const
 {
   if (lock_ || dq.lock_)
@@ -467,24 +467,24 @@ double ControlVector<VECTOR>::operator*(const ControlVector &dq) const
         "Trying to use operator* while a copy is in use!",
         "ControlVector::operator*");
     }
-  if (GetBehavior () != dq.GetBehavior ())
+  if (GetBehavior() != dq.GetBehavior())
     {
-      throw DOpEException (
+      throw DOpEException(
         "Own Behavior does not match dq.Behavior. Own Behavior:"
         + DOpEtypesToString(GetBehavior()) + " but dq.Behavior is "
         + DOpEtypesToString(dq.GetBehavior()),
         "ControlVector<VECTOR>::operator*");
     }
-  if (GetBehavior () == DOpEtypes::VectorStorageType::fullmem)
+  if (GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
     {
-      assert(dq.control_.size () == control_.size ());
+      assert(dq.control_.size() == control_.size());
 
       double ret = 0.;
-      for (unsigned int i = 0; i < control_.size (); i++)
+      for (unsigned int i = 0; i < control_.size(); i++)
         {
           assert(control_[i] != NULL);
           assert(dq.control_[i] != NULL);
-          ret += control_[i]->operator* (*(dq.control_[i]));
+          ret += control_[i]->operator*(*(dq.control_[i]));
         }
       return ret;
     }
@@ -495,7 +495,7 @@ double ControlVector<VECTOR>::operator*(const ControlVector &dq) const
 }
 
 /******************************************************/
-template <typename VECTOR>
+template<typename VECTOR>
 void ControlVector<VECTOR>::add(double s, const ControlVector &dq)
 {
   if (lock_)
@@ -504,25 +504,25 @@ void ControlVector<VECTOR>::add(double s, const ControlVector &dq)
         "Trying to use add while a copy is in use!",
         "ControlVector::add");
     }
-  if (GetBehavior () != dq.GetBehavior ())
+  if (GetBehavior() != dq.GetBehavior())
     {
-      throw DOpEException (
+      throw DOpEException(
         "Own Behavior does not match dq.Behavior. Own Behavior:"
         + DOpEtypesToString(GetBehavior()) + " but dq.Behavior is "
         + DOpEtypesToString(dq.GetBehavior()),
         "ControlVector<VECTOR>::add");
     }
-  if (GetBehavior () == DOpEtypes::VectorStorageType::fullmem)
+  if (GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
     {
-      assert(dq.control_.size () == control_.size ());
+      assert(dq.control_.size() == control_.size());
 
-      for (unsigned int i = 0; i < control_.size (); i++)
+      for (unsigned int i = 0; i < control_.size(); i++)
         {
           assert(control_[i] != NULL);
           assert(dq.control_[i] != NULL);
-          control_[i]->add (s, *(dq.control_[i]));
+          control_[i]->add(s,*(dq.control_[i]));
         }
-      SetTimeDoFNumber (0);
+      SetTimeDoFNumber(0);
     }
   else
     {
@@ -531,7 +531,7 @@ void ControlVector<VECTOR>::add(double s, const ControlVector &dq)
 }
 
 /******************************************************/
-template <typename VECTOR>
+template<typename VECTOR>
 void ControlVector<VECTOR>::equ(double s, const ControlVector &dq)
 {
   if (lock_)
@@ -540,25 +540,25 @@ void ControlVector<VECTOR>::equ(double s, const ControlVector &dq)
         "Trying to use add while a copy is in use!",
         "ControlVector::equ");
     }
-  if (GetBehavior () != dq.GetBehavior ())
+  if (GetBehavior() != dq.GetBehavior())
     {
-      throw DOpEException (
+      throw DOpEException(
         "Own Behavior does not match dq.Behavior. Own Behavior:"
         + DOpEtypesToString(GetBehavior()) + " but dq.Behavior is "
         + DOpEtypesToString(dq.GetBehavior()),
         "ControlVector<VECTOR>::equ");
     }
-  if (GetBehavior () == DOpEtypes::VectorStorageType::fullmem)
+  if (GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
     {
-      assert(dq.control_.size () == control_.size ());
+      assert(dq.control_.size() == control_.size());
 
-      for (unsigned int i = 0; i < control_.size (); i++)
+      for (unsigned int i = 0; i < control_.size(); i++)
         {
           assert(control_[i] != NULL);
           assert(dq.control_[i] != NULL);
-          control_[i]->equ (s, *(dq.control_[i]));
+          control_[i]->equ(s,*(dq.control_[i]));
         }
-      SetTimeDoFNumber (0);
+      SetTimeDoFNumber(0);
     }
   else
     {
@@ -567,7 +567,7 @@ void ControlVector<VECTOR>::equ(double s, const ControlVector &dq)
 }
 
 /******************************************************/
-template <typename VECTOR>
+template<typename VECTOR>
 void ControlVector<VECTOR>::max(const ControlVector &dq)
 {
   if (lock_)
@@ -576,26 +576,26 @@ void ControlVector<VECTOR>::max(const ControlVector &dq)
         "Trying to use add while a copy is in use!",
         "ControlVector::max");
     }
-  if (GetBehavior () != dq.GetBehavior ())
+  if (GetBehavior() != dq.GetBehavior())
     {
-      throw DOpEException (
+      throw DOpEException(
         "Own Behavior does not match dq.Behavior. Own Behavior:"
         + DOpEtypesToString(GetBehavior()) + " but dq.Behavior is "
         + DOpEtypesToString(dq.GetBehavior()),
         "ControlVector<VECTOR>::max");
     }
-  if (GetBehavior () == DOpEtypes::VectorStorageType::fullmem)
+  if (GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
     {
-      assert(dq.control_.size () == control_.size ());
+      assert(dq.control_.size() == control_.size());
 
-      for (unsigned int i = 0; i < control_.size (); i++)
+      for (unsigned int i = 0; i < control_.size(); i++)
         {
           assert(control_[i] != NULL);
           assert(dq.control_[i] != NULL);
           VECTOR &t = *(control_[i]);
           const VECTOR &tn = *(dq.control_[i]);
-          assert(t.size () == tn.size ());
-          for (unsigned int j = 0; j < t.size (); j++)
+          assert(t.size() == tn.size());
+          for (unsigned int j = 0; j < t.size() ; j++)
             {
               // For Trilinos vectors, we have to explicitly cast them to doubles
               typename VECTOR::value_type a = t (j);
@@ -603,7 +603,7 @@ void ControlVector<VECTOR>::max(const ControlVector &dq)
               t (j) = std::max (a, b);
             }
         }
-      SetTimeDoFNumber (0);
+      SetTimeDoFNumber(0);
     }
   else
     {
@@ -613,7 +613,7 @@ void ControlVector<VECTOR>::max(const ControlVector &dq)
 
 
 /******************************************************/
-template <typename VECTOR>
+template<typename VECTOR>
 void ControlVector<VECTOR>::min(const ControlVector &dq)
 {
   if (lock_)
@@ -622,26 +622,26 @@ void ControlVector<VECTOR>::min(const ControlVector &dq)
         "Trying to use add while a copy is in use!",
         "ControlVector::min");
     }
-  if (GetBehavior () != dq.GetBehavior ())
+  if (GetBehavior() != dq.GetBehavior())
     {
-      throw DOpEException (
+      throw DOpEException(
         "Own Behavior does not match dq.Behavior. Own Behavior:"
         + DOpEtypesToString(GetBehavior()) + " but dq.Behavior is "
         + DOpEtypesToString(dq.GetBehavior()),
         "ControlVector<VECTOR>::min");
     }
-  if (GetBehavior () == DOpEtypes::VectorStorageType::fullmem)
+  if (GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
     {
-      assert(dq.control_.size () == control_.size ());
+      assert(dq.control_.size() == control_.size());
 
-      for (unsigned int i = 0; i < control_.size (); i++)
+      for (unsigned int i = 0; i < control_.size(); i++)
         {
           assert(control_[i] != NULL);
           assert(dq.control_[i] != NULL);
           VECTOR &t = *(control_[i]);
           const VECTOR &tn = *(dq.control_[i]);
-          assert(t.size () == tn.size ());
-          for (unsigned int j = 0; j < t.size (); j++)
+          assert(t.size() == tn.size());
+          for (unsigned int j = 0; j < t.size() ; j++)
             {
               // For Trilinos vectors, we have to explicitly cast them to doubles
               typename VECTOR::value_type a = t (j);
@@ -649,7 +649,7 @@ void ControlVector<VECTOR>::min(const ControlVector &dq)
               t (j) = std::min (a, b);
             }
         }
-      SetTimeDoFNumber (0);
+      SetTimeDoFNumber(0);
     }
   else
     {
@@ -657,7 +657,7 @@ void ControlVector<VECTOR>::min(const ControlVector &dq)
     }
 }
 /******************************************************/
-template <typename VECTOR>
+template<typename VECTOR>
 void ControlVector<VECTOR>::comp_mult(const ControlVector &dq)
 {
   if (lock_)
@@ -666,31 +666,31 @@ void ControlVector<VECTOR>::comp_mult(const ControlVector &dq)
         "Trying to use add while a copy is in use!",
         "ControlVector::comp_mult");
     }
-  if (GetBehavior () != dq.GetBehavior ())
+  if (GetBehavior() != dq.GetBehavior())
     {
-      throw DOpEException (
+      throw DOpEException(
         "Own Behavior does not match dq.Behavior. Own Behavior:"
         + DOpEtypesToString(GetBehavior()) + " but dq.Behavior is "
         + DOpEtypesToString(dq.GetBehavior()),
         "ControlVector<VECTOR>::comp_mult");
     }
-  if (GetBehavior () == DOpEtypes::VectorStorageType::fullmem)
+  if (GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
     {
-      assert(dq.control_.size () == control_.size ());
+      assert(dq.control_.size() == control_.size());
 
-      for (unsigned int i = 0; i < control_.size (); i++)
+      for (unsigned int i = 0; i < control_.size(); i++)
         {
           assert(control_[i] != NULL);
           assert(dq.control_[i] != NULL);
           VECTOR &t = *(control_[i]);
           const VECTOR &tn = *(dq.control_[i]);
-          assert(t.size () == tn.size ());
-          for (unsigned int j = 0; j < t.size (); j++)
+          assert(t.size() == tn.size());
+          for (unsigned int j = 0; j < t.size() ; j++)
             {
-              t (j) = t (j) * tn (j);
+              t(j) = t(j)*tn(j);
             }
         }
-      SetTimeDoFNumber (0);
+      SetTimeDoFNumber(0);
     }
   else
     {
@@ -699,7 +699,7 @@ void ControlVector<VECTOR>::comp_mult(const ControlVector &dq)
 }
 
 /******************************************************/
-template <typename VECTOR>
+template<typename VECTOR>
 void ControlVector<VECTOR>::comp_invert()
 {
   if (lock_)
@@ -708,18 +708,18 @@ void ControlVector<VECTOR>::comp_invert()
         "Trying to use add while a copy is in use!",
         "ControlVector::comp_invert");
     }
-  if (GetBehavior () == DOpEtypes::VectorStorageType::fullmem)
+  if (GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
     {
-      for (unsigned int i = 0; i < control_.size (); i++)
+      for (unsigned int i = 0; i < control_.size(); i++)
         {
           assert(control_[i] != NULL);
           VECTOR &t = *(control_[i]);
-          for (unsigned int j = 0; j < t.size (); j++)
+          for (unsigned int j = 0; j < t.size() ; j++)
             {
-              t (j) = 1. / t (j);
+              t(j) = 1./t(j);
             }
         }
-      SetTimeDoFNumber (0);
+      SetTimeDoFNumber(0);
     }
   else
     {
@@ -728,7 +728,7 @@ void ControlVector<VECTOR>::comp_invert()
 }
 
 /******************************************************/
-template <typename VECTOR>
+template<typename VECTOR>
 void ControlVector<VECTOR>::init_by_sign(double smaller, double larger, double unclear, double TOL)
 {
   if (lock_)
@@ -737,29 +737,29 @@ void ControlVector<VECTOR>::init_by_sign(double smaller, double larger, double u
         "Trying to use add while a copy is in use!",
         "ControlVector::init_by_sign");
     }
-  if (GetBehavior () == DOpEtypes::VectorStorageType::fullmem)
+  if (GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
     {
-      for (unsigned int i = 0; i < control_.size (); i++)
+      for (unsigned int i = 0; i < control_.size(); i++)
         {
           assert(control_[i] != NULL);
           VECTOR &t = *(control_[i]);
-          for (unsigned int j = 0; j < t.size (); j++)
+          for (unsigned int j = 0; j < t.size() ; j++)
             {
-              if (t (j) < -TOL)
+              if (t(j) < -TOL)
                 {
-                  t (j) = smaller;
+                  t(j) = smaller;
                 }
-              else if (t (j) > TOL)
+              else if (t(j) > TOL)
                 {
-                  t (j) = larger;
+                  t(j) = larger;
                 }
               else
                 {
-                  t (j) = unclear;
+                  t(j) = unclear;
                 }
             }
         }
-      SetTimeDoFNumber (0);
+      SetTimeDoFNumber(0);
     }
   else
     {
@@ -768,35 +768,35 @@ void ControlVector<VECTOR>::init_by_sign(double smaller, double larger, double u
 }
 /******************************************************/
 
-template <typename VECTOR>
+template<typename VECTOR>
 void ControlVector<VECTOR>::PrintInfos(std::stringstream &out)
 {
-  if (control_.size () == 1)
+  if (control_.size() ==1)
     {
-      out << "\t" << control_[0]->size () << std::endl;
+      out<<"\t"<<control_[0]->size()<<std::endl;
     }
   else
     {
-      if (GetBehavior () == DOpEtypes::VectorStorageType::fullmem)
+      if (GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
         {
-          out << "\tNumber of Timepoints: " << control_.size () << std::endl;
-          unsigned int min_dofs = 0;
-          unsigned int max_dofs = 0;
-          unsigned int total_dofs = 0;
-          unsigned int this_size = 0;
-          for (unsigned int i = 0; i < control_.size (); i++)
+          out<<"\tNumber of Timepoints: "<<control_.size()<<std::endl;
+          unsigned int min_dofs =0;
+          unsigned int max_dofs =0;
+          unsigned int total_dofs =0;
+          unsigned int this_size=0;
+          for (unsigned int i = 0; i < control_.size(); i++)
             {
-              this_size = control_[i]->size ();
+              this_size = control_[i]->size();
               total_dofs += this_size;
-              if (i == 0)
+              if (i==0)
                 min_dofs = this_size;
               else
-                min_dofs = std::min (min_dofs, this_size);
-              max_dofs = std::max (max_dofs, this_size);
+                min_dofs = std::min(min_dofs,this_size);
+              max_dofs = std::max(max_dofs,this_size);
             }
-          out << "\tTotal   DoFs: " << total_dofs << std::endl;
-          out << "\tMinimal DoFs: " << min_dofs << std::endl;
-          out << "\tMaximal DoFs: " << max_dofs << std::endl;
+          out<<"\tTotal   DoFs: "<<total_dofs<<std::endl;
+          out<<"\tMinimal DoFs: "<<min_dofs<<std::endl;
+          out<<"\tMaximal DoFs: "<<max_dofs<<std::endl;
         }
       else
         {
@@ -807,7 +807,7 @@ void ControlVector<VECTOR>::PrintInfos(std::stringstream &out)
 
 /******************************************************/
 
-template <typename VECTOR>
+template<typename VECTOR>
 double ControlVector<VECTOR>::Norm(std::string name,std::string restriction) const
 {
   if (lock_)
@@ -816,30 +816,30 @@ double ControlVector<VECTOR>::Norm(std::string name,std::string restriction) con
         "Trying to use Norm while a copy is in use!",
         "ControlVector::Norm");
     }
-  if (GetBehavior () == DOpEtypes::VectorStorageType::fullmem)
+  if (GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
     {
       double ret = 0.;
       if (name == "infty")
         {
-          if (restriction == "all")
+          if ( restriction == "all")
             {
-              for (unsigned int i = 0; i < control_.size (); i++)
+              for (unsigned int i = 0; i < control_.size(); i++)
                 {
                   const VECTOR &tmp = *(control_[i]);
-                  for (unsigned int j = 0; j < tmp.size (); j++)
+                  for ( unsigned int j = 0; j < tmp.size(); j++)
                     {
-                      ret = std::max (ret, std::fabs (tmp (j)));
+                      ret = std::max(ret,std::fabs(tmp(j)));
                     }
                 }
             }
           else if (restriction == "positive")
             {
-              for (unsigned int i = 0; i < control_.size (); i++)
+              for (unsigned int i = 0; i < control_.size(); i++)
                 {
                   const VECTOR &tmp = *(control_[i]);
-                  for (unsigned int j = 0; j < tmp.size (); j++)
+                  for ( unsigned int j = 0; j < tmp.size(); j++)
                     {
-                      ret = std::max (ret, std::max (0., tmp (j)));
+                      ret = std::max(ret,std::max(0.,tmp(j)));
                     }
                 }
             }
@@ -850,25 +850,25 @@ double ControlVector<VECTOR>::Norm(std::string name,std::string restriction) con
         }
       else if (name == "l1")
         {
-          if (restriction == "all")
+          if ( restriction == "all")
             {
-              for (unsigned int i = 0; i < control_.size (); i++)
+              for (unsigned int i = 0; i < control_.size(); i++)
                 {
                   const VECTOR &tmp = *(control_[i]);
-                  for (unsigned int j = 0; j < tmp.size (); j++)
+                  for ( unsigned int j = 0; j < tmp.size(); j++)
                     {
-                      ret += std::fabs (tmp (j));
+                      ret += std::fabs(tmp(j));
                     }
                 }
             }
           else if (restriction == "positive")
             {
-              for (unsigned int i = 0; i < control_.size (); i++)
+              for (unsigned int i = 0; i < control_.size(); i++)
                 {
                   const VECTOR &tmp = *(control_[i]);
-                  for (unsigned int j = 0; j < tmp.size (); j++)
+                  for ( unsigned int j = 0; j < tmp.size(); j++)
                     {
-                      ret += std::max (0., tmp (j));
+                      ret += std::max(0.,tmp(j));
                     }
                 }
             }
@@ -890,23 +890,23 @@ double ControlVector<VECTOR>::Norm(std::string name,std::string restriction) con
 }
 
 /******************************************************/
-template <typename VECTOR>
+template<typename VECTOR>
 void
-ControlVector<VECTOR>::ComputeLocalVectors (const TimeIterator &interval) const
+ControlVector<VECTOR>::ComputeLocalVectors(const TimeIterator &interval) const
 {
 
   unsigned int n_local_dofs =
-    GetSpaceTimeHandler ()->GetTimeDoFHandler ().GetLocalNbrOfDoFs ();
-  std::vector<unsigned int> global_indices (n_local_dofs);
+    GetSpaceTimeHandler()->GetTimeDoFHandler().GetLocalNbrOfDoFs();
+  std::vector<unsigned int> global_indices(n_local_dofs);
   //get the global indices
-  interval.get_time_dof_indices (global_indices);
+  interval.get_time_dof_indices(global_indices);
 
   //clear out global_to_local_
-  global_to_local_.clear ();
+  global_to_local_.clear();
 
-  if (GetBehavior () == DOpEtypes::VectorStorageType::fullmem)
+  if (GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
     {
-      local_vectors_.resize (n_local_dofs);
+      local_vectors_.resize(n_local_dofs);
       for (unsigned int i = 0; i < n_local_dofs; ++i)
         {
           local_vectors_[i] = control_[global_indices[i]];
@@ -926,9 +926,3 @@ ControlVector<VECTOR>::ComputeLocalVectors (const TimeIterator &interval) const
 
 template class DOpE::ControlVector<dealii::Vector<double> >;
 template class DOpE::ControlVector<dealii::BlockVector<double> >;
-
-#ifdef DOPELIB_WITH_TRILINOS
-template class DOpE::ControlVector<dealii::TrilinosWrappers::MPI::Vector>;
-template class DOpE::ControlVector<dealii::TrilinosWrappers::MPI::BlockVector>;
-#endif
-

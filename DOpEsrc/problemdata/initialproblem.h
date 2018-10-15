@@ -1,6 +1,6 @@
 /**
 *
-* Copyright (C) 2012-2014 by the DOpElib authors
+* Copyright (C) 2012-2018 by the DOpElib authors
 *
 * This file is part of DOpElib
 *
@@ -209,6 +209,12 @@ namespace DOpE
     */
     inline bool
     HasInterfaces() const;
+
+    /**
+      * Do we need evaluation at the vertices?
+      */
+    inline bool
+    HasVertices() const;
 
     /**
     * Functions providing the required information for the integrator.
@@ -529,6 +535,15 @@ namespace DOpE
   InitialProblem<PDE, VECTOR, dim>::HasInterfaces() const
   {
     return pde_.HasInterfaces();
+  }
+
+  /******************************************************/
+
+  template<typename PDE, typename VECTOR, int dim>
+  bool
+  InitialProblem<PDE, VECTOR, dim>::HasVertices() const
+  {
+    return pde_.HasVertices();
   }
 
   /******************************************************/

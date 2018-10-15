@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (C) 2012-2014 by the DOpElib authors
+ * Copyright (C) 2012-2018 by the DOpElib authors
  *
  * This file is part of DOpElib
  *
@@ -37,6 +37,7 @@
 #include <deal.II/lac/constraint_matrix.h>
 #include <deal.II/numerics/solution_transfer.h>
 #include <deal.II/grid/grid_refinement.h>
+#include <deal.II/grid/grid_tools.h>
 
 namespace DOpE
 {
@@ -64,7 +65,7 @@ namespace DOpE
           &DOpEWrapper::StaticMappingQ1<dealdim, DH>::mapping_q1), state_mesh_transfer_(
           NULL)
     {
-      sparsitymaker_ = new SparsityMaker<DH, dealdim> (flux_pattern);
+      sparsitymaker_ = new SparsityMaker<DH, dealdim>(flux_pattern);
       user_defined_dof_constr_ = NULL;
     }
     MethodOfLines_StateSpaceTimeHandler(
@@ -80,7 +81,7 @@ namespace DOpE
           &DOpEWrapper::StaticMappingQ1<dealdim, DH>::mapping_q1), state_mesh_transfer_(
           NULL)
     {
-      sparsitymaker_ = new SparsityMaker<DH, dealdim> (flux_pattern);
+      sparsitymaker_ = new SparsityMaker<DH, dealdim>(flux_pattern);
       user_defined_dof_constr_ = NULL;
     }
 
@@ -96,7 +97,7 @@ namespace DOpE
           triangulation), state_dof_handler_(triangulation_), state_fe_(
           &state_fe), mapping_(&mapping), state_mesh_transfer_(NULL)
     {
-      sparsitymaker_ = new SparsityMaker<DH, dealdim> (flux_pattern);
+      sparsitymaker_ = new SparsityMaker<DH, dealdim>(flux_pattern);
       user_defined_dof_constr_ = NULL;
     }
     MethodOfLines_StateSpaceTimeHandler(
@@ -112,14 +113,14 @@ namespace DOpE
           triangulation), state_dof_handler_(triangulation_), state_fe_(
           &state_fe), mapping_(&mapping), state_mesh_transfer_(NULL)
     {
-      sparsitymaker_ = new SparsityMaker<DH, dealdim> (flux_pattern);
+      sparsitymaker_ = new SparsityMaker<DH, dealdim>(flux_pattern);
       user_defined_dof_constr_ = NULL;
     }
 
     virtual
-    ~MethodOfLines_StateSpaceTimeHandler ()
+    ~MethodOfLines_StateSpaceTimeHandler()
     {
-      state_dof_handler_.clear ();
+      state_dof_handler_.clear();
 
       if (state_mesh_transfer_ != NULL)
         {
@@ -135,20 +136,20 @@ namespace DOpE
      * Implementation of virtual function in StateSpaceTimeHandler
      */
     void
-    ReInit (unsigned int state_n_blocks,
-            const std::vector<unsigned int> &state_block_component,
-            const DirichletDescriptor &DD)
+    ReInit(unsigned int state_n_blocks,
+           const std::vector<unsigned int> &state_block_component,
+           const DirichletDescriptor &DD  )
     {
 
-      StateSpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dealdim>::SetActiveFEIndicesState (
+      StateSpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dealdim>::SetActiveFEIndicesState(
         state_dof_handler_);
-      state_dof_handler_.distribute_dofs (GetFESystem ("state"));
+      state_dof_handler_.distribute_dofs(GetFESystem("state"));
 //          DoFRenumbering::Cuthill_McKee(
 //              static_cast<DH<dealdim, dealdim>&>(state_dof_handler_));
-      DoFRenumbering::component_wise (
-        static_cast<DH<dealdim, dealdim>&> (state_dof_handler_));
+      DoFRenumbering::component_wise(
+        static_cast<DH<dealdim, dealdim>&>(state_dof_handler_));
 
-      state_dof_constraints_.clear ();
+      state_dof_constraints_.clear();
       state_dof_constraints_.reinit (
         this->GetLocallyRelevantDoFs (DOpEtypes::VectorType::state));
       DoFTools::make_hanging_node_constraints (
@@ -158,37 +159,42 @@ namespace DOpE
       if (GetUserDefinedDoFConstraints() != NULL) GetUserDefinedDoFConstraints()->MakeStateDoFConstraints(state_dof_handler_, state_dof_constraints_);
 
 
-      std::vector<unsigned int> dirichlet_colors = DD.GetDirichletColors ();
-      for (unsigned int i = 0; i < dirichlet_colors.size (); i++)
+      std::vector<unsigned int> dirichlet_colors = DD.GetDirichletColors();
+      for (unsigned int i = 0; i < dirichlet_colors.size(); i++)
         {
           unsigned int color = dirichlet_colors[i];
-          std::vector<bool> comp_mask = DD.GetDirichletCompMask (color);
+          std::vector<bool> comp_mask = DD.GetDirichletCompMask(color);
 
           //TODO: mapping[0] is a workaround, as deal does not support interpolate
           // boundary_values with a mapping collection at this point.
+#if DEAL_II_VERSION_GTE(9,0,0)
+          VectorTools::interpolate_boundary_values(GetMapping()[0], state_dof_handler_.GetDEALDoFHandler(), color, dealii::Functions::ZeroFunction<dealdim>(comp_mask.size()),
+                                                   state_dof_constraints_, comp_mask);
+#else
           VectorTools::interpolate_boundary_values(GetMapping()[0], state_dof_handler_.GetDEALDoFHandler(), color, dealii::ZeroFunction<dealdim>(comp_mask.size()),
                                                    state_dof_constraints_, comp_mask);
+#endif
         }
 
-      state_dof_constraints_.close ();
-      state_dofs_per_block_.resize (state_n_blocks);
+      state_dof_constraints_.close();
+      state_dofs_per_block_.resize(state_n_blocks);
 
       DoFTools::count_dofs_per_block(static_cast<DH<dealdim, dealdim>&>(state_dof_handler_), state_dofs_per_block_, state_block_component);
 
-      support_points_.clear ();
-
+      support_points_.clear();
+      n_neighbour_to_vertex_.clear();
       //Initialize also the timediscretization.
-      this->ReInitTime ();
+      this->ReInitTime();
 
       //There where changes invalidate tickets
-      this->IncrementStateTicket ();
+      this->IncrementStateTicket();
     }
 
     /**
      * Implementation of virtual function in StateSpaceTimeHandler
      */
     const DOpEWrapper::DoFHandler<dealdim, DH> &
-    GetStateDoFHandler () const
+    GetStateDoFHandler() const
     {
       //There is only one mesh, hence always return this
       return state_dof_handler_;
@@ -198,7 +204,7 @@ namespace DOpE
      * Implementation of virtual function in SpaceTimeHandler
      */
     const DOpEWrapper::Mapping<dealdim, DH> &
-    GetMapping () const
+    GetMapping() const
     {
       return *mapping_;
     }
@@ -207,7 +213,7 @@ namespace DOpE
      * Implementation of virtual function in StateSpaceTimeHandlerBase
      */
     const std::vector<unsigned int> &
-    GetStateDoFsPerBlock (int /*time_point*/= -1) const
+    GetStateDoFsPerBlock(int /*time_point*/= -1) const
     {
       return state_dofs_per_block_;
     }
@@ -216,7 +222,7 @@ namespace DOpE
      * Implementation of virtual function in StateSpaceTimeHandler
      */
     const dealii::ConstraintMatrix &
-    GetStateDoFConstraints () const
+    GetStateDoFConstraints() const
     {
       return state_dof_constraints_;
     }
@@ -226,19 +232,19 @@ namespace DOpE
      */
     virtual void InterpolateState(VECTOR &result, const std::vector<VECTOR *> &local_vectors, double t, const TimeIterator &it) const
     {
-      assert(it.get_left () <= t);
-      assert(it.get_right () >= t);
+      assert(it.get_left() <= t);
+      assert(it.get_right() >= t);
       if (local_vectors.size() != 2) throw DOpEException("This function is currently not implemented for anything other than"
                                                            " linear interpolation of 2 DoFs.",
                                                            "MethodOfLine_SpaceTimeHandler::InterpolateState");
 
-      double lambda_l = (it.get_right () - t) / it.get_k ();
-      double lambda_r = (t - it.get_left ()) / it.get_k ();
+      double lambda_l = (it.get_right() - t) / it.get_k();
+      double lambda_r = (t - it.get_left()) / it.get_k();
 
       //Here we assume that the numbering of dofs goes from left to right!
       result = *local_vectors[0];
 
-      result.sadd (lambda_l, lambda_r, *local_vectors[1]);
+      result.sadd(lambda_l, lambda_r, *local_vectors[1]);
     }
 
     /**
@@ -246,7 +252,7 @@ namespace DOpE
      */
     unsigned int GetStateNDoFs(int /*time_point*/= -1) const
     {
-      return GetStateDoFHandler ().n_dofs ();
+      return GetStateDoFHandler().n_dofs();
     }
 
     /**
@@ -310,11 +316,23 @@ namespace DOpE
      * Implementation of virtual function in StateSpaceTimeHandler
      */
     const std::vector<Point<dealdim> > &
-    GetMapDoFToSupportPoints ()
+    GetMapDoFToSupportPoints()
     {
-      support_points_.resize (GetStateNDoFs ());
+      support_points_.resize(GetStateNDoFs());
       DOpE::STHInternals::MapDoFsToSupportPoints<std::vector<Point<dealdim> >, dealdim>(this->GetMapping(), GetStateDoFHandler(), support_points_);
       return support_points_;
+    }
+
+    /**
+     * Implementation of virtual function in StateSpaceTimeHandler
+     */
+    const std::vector<unsigned int>* GetNNeighbourElements()
+    {
+      if(n_neighbour_to_vertex_.size()!=triangulation_.n_vertices())
+      {
+	DOpE::STHInternals::CalculateNeigbourElementsToVertices(triangulation_,n_neighbour_to_vertex_);
+      }
+      return &n_neighbour_to_vertex_;
     }
 
     /******************************************************/
@@ -330,7 +348,7 @@ namespace DOpE
      * Implementation of virtual function in StateSpaceTimeHandler
      */
     const FE<dealdim, dealdim> &
-    GetFESystem (std::string name) const
+    GetFESystem(std::string name) const
     {
       if (name == "state")
         {
@@ -338,7 +356,7 @@ namespace DOpE
         }
       else
         {
-          abort ();
+          abort();
           throw DOpEException("Not implemented for name =" + name, "MethodOfLines_StateSpaceTimeHandler::GetFESystem");
         }
 
@@ -354,12 +372,12 @@ namespace DOpE
      *                       additionally a RefinementContainer
      */
     void
-    RefineSpaceTime (DOpEtypes::RefinementType ref_type =
-                       DOpEtypes::RefinementType::global)
+    RefineSpaceTime(DOpEtypes::RefinementType ref_type =
+                      DOpEtypes::RefinementType::global)
     {
       assert(ref_type == DOpEtypes::RefinementType::global);
-      RefineSpace (ref_type);
-      SpaceTimeHandlerBase<VECTOR>::RefineTime (ref_type);
+      RefineSpace(ref_type);
+      SpaceTimeHandlerBase<VECTOR>::RefineTime(ref_type);
     }
 
     /******************************************************/
@@ -377,7 +395,7 @@ namespace DOpE
     {
       //assert(ref_type == DOpEtypes::RefinementType::global);
       RefinementContainer ref_con_dummy;
-      RefineSpace (ref_con_dummy);
+      RefineSpace(ref_con_dummy);
     }
 
     /******************************************************/
@@ -392,10 +410,10 @@ namespace DOpE
 
     void RefineSpace(const RefinementContainer &ref_container)
     {
-      DOpEtypes::RefinementType ref_type = ref_container.GetRefType ();
+      DOpEtypes::RefinementType ref_type = ref_container.GetRefType();
 
       //make sure that we do not use any coarsening
-      assert(!ref_container.UsesCoarsening ());
+      assert( !ref_container.UsesCoarsening());
 
       if (state_mesh_transfer_ != NULL)
         {
@@ -407,38 +425,38 @@ namespace DOpE
       switch (ref_type)
         {
         case DOpEtypes::RefinementType::global:
-          triangulation_.set_all_refine_flags ();
+          triangulation_.set_all_refine_flags();
           break;
 
         case DOpEtypes::RefinementType::fixed_number:
           GridRefinement::refine_and_coarsen_fixed_number (triangulation_,
                                                            ref_container.GetLocalErrorIndicators (),
                                                            ref_container.GetTopFraction (),
-                                                           ref_container.GetBottomFraction ());
+                                                          ref_container.GetBottomFraction());
           break;
 
         case DOpEtypes::RefinementType::fixed_fraction:
           GridRefinement::refine_and_coarsen_fixed_fraction (triangulation_,
                                                              ref_container.GetLocalErrorIndicators (),
                                                              ref_container.GetTopFraction (),
-                                                             ref_container.GetBottomFraction ());
+                                                            ref_container.GetBottomFraction());
           break;
 
         case DOpEtypes::RefinementType::optimized:
           GridRefinement::refine_and_coarsen_optimize (triangulation_,
                                                        ref_container.GetLocalErrorIndicators (),
-                                                       ref_container.GetConvergenceOrder ());
+                                                      ref_container.GetConvergenceOrder());
           break;
 
         default:
           throw DOpEException (
             "Not implemented for name =" + DOpEtypesToString (ref_type),
-            "MethodOfLines_StateSpaceTimeHandler::RefineStateSpace");
+                              "MethodOfLines_StateSpaceTimeHandler::RefineStateSpace");
         }
 
-      triangulation_.prepare_coarsening_and_refinement ();
+      triangulation_.prepare_coarsening_and_refinement();
       if (state_mesh_transfer_ != NULL) state_mesh_transfer_->prepare_for_pure_refinement();
-      triangulation_.execute_coarsening_and_refinement ();
+      triangulation_.execute_coarsening_and_refinement();
     }
     /******************************************************/
 
@@ -474,7 +492,7 @@ namespace DOpE
     void SetUserDefinedDoFConstraints(UserDefinedDoFConstraints<DH, dealdim> &user_defined_dof_constr)
     {
       user_defined_dof_constr_ = &user_defined_dof_constr;
-      user_defined_dof_constr_->RegisterMapping (this->GetMapping ());
+      user_defined_dof_constr_->RegisterMapping(this->GetMapping());
     }
     /******************************************************/
     /**
@@ -486,7 +504,7 @@ namespace DOpE
      */
     void SetSparsityMaker(SparsityMaker<DH, dealdim> &sparsity_maker)
     {
-      assert(sparse_mkr_dynamic_ == true); //If not true, we already set the sparsity maker
+      assert(sparse_mkr_dynamic_ == true);  //If not true, we already set the sparsity maker
       if (sparsitymaker_ != NULL && sparse_mkr_dynamic_) delete sparsitymaker_;
       sparsitymaker_ = &sparsity_maker;
       sparse_mkr_dynamic_ = false;
@@ -494,12 +512,12 @@ namespace DOpE
 
   private:
     const SparsityMaker<DH, dealdim> *
-    GetSparsityMaker () const
+    GetSparsityMaker() const
     {
       return sparsitymaker_;
     }
     const UserDefinedDoFConstraints<DH, dealdim> *
-    GetUserDefinedDoFConstraints () const
+    GetUserDefinedDoFConstraints() const
     {
       return user_defined_dof_constr_;
     }
@@ -519,6 +537,8 @@ namespace DOpE
 
     std::vector<Point<dealdim> > support_points_;
     dealii::SolutionTransfer<dealdim, VECTOR, DH<dealdim, dealdim> > *state_mesh_transfer_;
+
+    std::vector<unsigned int> n_neighbour_to_vertex_;
 
   };
 
