@@ -1,0 +1,38 @@
+\subsubsection{General problem description}
+In this problem we solve the simple vector valued Laplace equation in 3d
+on the unit square $\Omega=[0,1]^3$, i.e. in strong formulation we look for $u=(u_1, u_2, u_3)$ s.t.
+\begin{align*}
+-\Delta u =& f \quad\text{in }\Omega.
+\end{align*}
+We set zero Dirichlet values on $\partial \Gamma$ and choose $f=(1,1,1)$.
+\subsubsection{Program description}
+The PDE is discretized with Q3-elements on a series of locally refined grids (we use the \texttt{KellyErrorEstimator}). The algebraic equations are solved with  different iterative linear solvers acting on different vector and matrix-structures (i.e. we use \texttt{dealii::BlockVector} and \texttt{dealii::Vector} plus the appropriate matrix classes). 
+
+To switch the linear solver is pretty easy since the newton solver has a template for the linear solver. Thus changing this template is all that is required. 
+
+To change the structure of the vectors and matrices involves also only the change of some template parameters. Our example programs are mostly build such that only a change of some typedefs is required, i.e. one has to interchange the lines
+\begin{verbatim}
+	typedef SparseMatrix<double> MATRIX;
+	typedef SparsityPattern SPARSITYPATTERN;
+	typedef Vector<double> VECTOR;
+\end{verbatim}
+with
+\begin{verbatim}
+	typedef BlockSparseMatrix<double> MATRIX;
+	typedef BlockSparsityPattern SPARSITYPATTERN;
+	typedef BlockVector<double> VECTOR;
+\end{verbatim}
+to switch between the block and non-block structures.
+
+After solving the equation, we want to apply local mesh refinement. So first we extract with the help of the \texttt{SolutionExatractr}-class the vector \texttt{solution} representing the finite element solution
+\begin{verbatim}
+  SolutionExtractor<SSolver1, VECTORBLOCK> a1(solver1);
+ 	const StateVector<VECTORBLOCK> &gu1 = a1.GetU();
+ 	solution = gu1.GetSpacialVector();
+\end{verbatim}
+With this vector we estimate the error via \texttt{KellyErrorEstimator} and get a vector holding the estimated error per element. After choosing a refinement criterion (see \textit{refinementcontainer.h}, we opt here for refining the top 20\% of the elements), we give the SpaceTimeHandler an object of type \texttt{RefinementContainer} which holds all the information needed for the local mesh refinement. This is done via the \texttt{RefineSpace} method.
+\begin{verbatim}
+        DOFH1.RefineSpace(
+               RefineFixedNumber(estimated_error_per_element, 0.2, 0.0));
+\end{verbatim}
+This method transfers our solution onto the new mesh. The transferred solution is then taken as the starting guess of the newton method in the next solution cycle. This is especially helpful for nonlinear problems.
