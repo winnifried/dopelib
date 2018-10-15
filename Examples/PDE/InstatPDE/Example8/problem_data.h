@@ -77,7 +77,7 @@ NonHomoDirichletData::value (const Point<2>  &p,
 
       return ( ((p(1) == 1.0) )
                ?
-               (-1.0) * localtime * dis_step_per_timestep_ : 0 );
+               (-1.0) * localtime *dis_step_per_timestep_ : 0 );
 
     }
   return 0;

@@ -27,7 +27,7 @@ subsection output parameters
 
   # Iteration Counters that should not reflect in the outputname, seperated by
   # `;`
-  set ignore_iterations = Cg
+  set ignore_iterations = PDENewtonLS;Cg
 
   # Name of the logfile
   set logfile           = dope.log
@@ -35,7 +35,7 @@ subsection output parameters
   # Do not write files whose name contains a substring given here by a list of
   # `;` separated words
   #set never_write_list  = Gradient;Residual;Hessian;Tangent;Adjoint
-   set never_write_list  = Gradient;Residual;Hessian;Tangent;Adjoint;Update	
+   set never_write_list  = Gradient;Residual;Hessian;Tangent;Adjoint;Update;Intermediate	
 
   # Defines what strings should be printed, the higher the number the more
   # output

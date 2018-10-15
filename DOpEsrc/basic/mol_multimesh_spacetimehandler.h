@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (C) 2012-2014 by the DOpElib authors
+ * Copyright (C) 2012-2018 by the DOpElib authors
  *
  * This file is part of DOpElib
  *
@@ -178,6 +178,8 @@ namespace DOpE
       DoFRenumbering::component_wise(static_cast<DH<dim, dim>&>(control_dof_handler_));
 
       control_dof_constraints_.clear();
+      control_dof_constraints_.reinit (
+        this->GetLocallyRelevantDoFs (DOpEtypes::VectorType::control));
       DoFTools::make_hanging_node_constraints(
         static_cast<DH<dim, dim>&>(control_dof_handler_), control_dof_constraints_);
       if (GetUserDefinedDoFConstraints() != NULL)
@@ -193,8 +195,13 @@ namespace DOpE
 
             //TODO: mapping[0] is a workaround, as deal does not support interpolate
             // boundary_values with a mapping collection at this point.
-            dealii::VectorTools::interpolate_boundary_values(GetMapping()[0], control_dof_handler_.GetDEALDoFHandler(), color, dealii::ZeroFunction<dim>(comp_mask.size()),
+#if DEAL_II_VERSION_GTE(9,0,0)
+            dealii::VectorTools::interpolate_boundary_values(GetMapping()[0], control_dof_handler_.GetDEALDoFHandler(), color, dealii::Functions::ZeroFunction<dim>(comp_mask.size()),
                                                              control_dof_constraints_, comp_mask);
+#else
+	    dealii::VectorTools::interpolate_boundary_values(GetMapping()[0], control_dof_handler_.GetDEALDoFHandler(), color, dealii::ZeroFunction<dim>(comp_mask.size()),
+                                                             control_dof_constraints_, comp_mask);
+#endif
           }
       }
 
@@ -213,6 +220,8 @@ namespace DOpE
       DoFRenumbering::component_wise(static_cast<DH<dim, dim>&>(state_dof_handler_));
 
       state_dof_constraints_.clear();
+      state_dof_constraints_.reinit (
+        this->GetLocallyRelevantDoFs (DOpEtypes::VectorType::state));
       DoFTools::make_hanging_node_constraints(
         static_cast<DH<dim, dim>&>(state_dof_handler_), state_dof_constraints_);
       //TODO Dirichlet Daten hierueber.
@@ -228,8 +237,13 @@ namespace DOpE
 
             //TODO: mapping[0] is a workaround, as deal does not support interpolate
             // boundary_values with a mapping collection at this point.
+#if DEAL_II_VERSION_GTE(9,0,0)
+            VectorTools::interpolate_boundary_values(GetMapping()[0], state_dof_handler_.GetDEALDoFHandler(), color, dealii::Functions::ZeroFunction<dim>(comp_mask.size()),
+                                                     state_dof_constraints_, comp_mask);
+#else
             VectorTools::interpolate_boundary_values(GetMapping()[0], state_dof_handler_.GetDEALDoFHandler(), color, dealii::ZeroFunction<dim>(comp_mask.size()),
                                                      state_dof_constraints_, comp_mask);
+#endif
           }
       }
 
@@ -240,6 +254,7 @@ namespace DOpE
                                      state_dofs_per_block_, state_block_component);
 
       support_points_.clear();
+      n_neighbour_to_vertex_.clear();
 
       constraints_.ReInit(control_dofs_per_block_);
       //constraints_.ReInit(control_dofs_per_block_, state_dofs_per_block_);
@@ -432,6 +447,19 @@ namespace DOpE
       return support_points_;
     }
 
+    /**
+     * Implementation of virtual function in StateSpaceTimeHandler
+     * Always uses vertices of the state_triangulation!
+     */
+    const std::vector<unsigned int>* GetNNeighbourElements()
+    {
+      if(n_neighbour_to_vertex_.size()!=state_triangulation_.n_vertices())
+      {
+	DOpE::STHInternals::CalculateNeigbourElementsToVertices(state_triangulation_,n_neighbour_to_vertex_);
+      }
+      return &n_neighbour_to_vertex_;
+    }
+    
     /******************************************************/
     void
     ComputeControlSparsityPattern(SPARSITYPATTERN &sparsity) const;
@@ -568,6 +596,7 @@ namespace DOpE
       state_mesh_transfer_ = new DOpEWrapper::SolutionTransfer<dim, VECTOR,
       DH>(state_dof_handler_);
 
+      // TODO switch
       if (DOpEtypes::RefinementType::global == ref_type)
         {
           state_triangulation_.set_all_refine_flags();
@@ -637,6 +666,7 @@ namespace DOpE
       control_mesh_transfer_ = new DOpEWrapper::SolutionTransfer<dim, VECTOR,
       DH>(control_dof_handler_);
 #endif
+      // TODO switch
       if (DOpEtypes::RefinementType::global == ref_type)
         {
           control_triangulation_.set_all_refine_flags();
@@ -834,6 +864,9 @@ namespace DOpE
     DOpEWrapper::SolutionTransfer<dim, VECTOR,DH> *control_mesh_transfer_;
     DOpEWrapper::SolutionTransfer<dim, VECTOR,DH> *state_mesh_transfer_;
     bool sparse_mkr_dynamic_;
+
+    std::vector<unsigned int> n_neighbour_to_vertex_;
+
   };
 
   /**************************explicit instantiation*************/
@@ -954,7 +987,7 @@ namespace DOpE
 #endif //Endof explicit instanciation
   /*******************************************************/
   template<template<int, int> class FE, template<int, int> class DH,
-  typename SPARSITYPATTERN, typename VECTOR, int dim>
+           typename SPARSITYPATTERN, typename VECTOR, int dim>
   void
   MethodOfLines_MultiMesh_SpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR,
                                            dim>::FlagIfLeftIsNotFinest(dealii::Triangulation<dim> &left,

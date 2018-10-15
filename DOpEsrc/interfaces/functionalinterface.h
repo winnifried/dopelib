@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (C) 2012-2014 by the DOpElib authors
+ * Copyright (C) 2012-2018 by the DOpElib authors
  *
  * This file is part of DOpElib
  *
@@ -48,10 +48,10 @@ namespace DOpE
    * the derivatives thereof.
    */
   template<
-  template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
-           template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
-           template<int, int> class DH, typename VECTOR, int dopedim, int dealdim =
-           dopedim>
+    template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
+    template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
+    template<int, int> class DH, typename VECTOR, int dopedim, int dealdim =
+    dopedim>
   class FunctionalInterface
   {
   public:

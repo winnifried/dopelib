@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (C) 2012-2014 by the DOpElib authors
+ * Copyright (C) 2012-2018 by the DOpElib authors
  *
  * This file is part of DOpElib
  *
@@ -72,7 +72,7 @@ namespace DOpE
     //TODO This is Pfush needed to split into different subproblems and allow optproblem to
     //be substituted as any of these problems. Can be removed once the splitting is complete.
     AugmentedLagrangianProblem<CONSTRAINTACCESSOR, STH, OPTPROBLEM, dopedim,
-    dealdim, localdim>&
+    dealdim, localdim> &
     GetBaseProblem()
     {
       return *this;
@@ -1103,6 +1103,11 @@ namespace DOpE
     HasInterfaces() const
     {
       return OP_.HasInterfaces();
+    }
+    bool
+    HasVertices() const
+    {
+      return OP_.HasVertices();
     }
     template<typename ELEMENTITERATOR>
     bool AtInterface(ELEMENTITERATOR &element, unsigned int face) const

@@ -1,6 +1,6 @@
 /**
 *
-* Copyright (C) 2012-2014 by the DOpElib authors
+* Copyright (C) 2012-2018 by the DOpElib authors
 *
 * This file is part of DOpElib
 *
@@ -140,7 +140,7 @@ namespace DOpE
         state_.resize(2, NULL);
         if ( GetSpaceTimeHandler()->GetMaxTimePoint() < 1)
           {
-            throw DOpEException("There are not even two time points. Are you shure this is a non stationary problem?",
+            throw DOpEException("There are not even two time points. Are you sure this is a non stationary problem?",
                                 "StateVector::ReInit()");
           }
         for (unsigned int t = 0; t
@@ -234,8 +234,8 @@ namespace DOpE
                                       + tmp_dir_ + "StateVector_lock";
                 if (system(command.c_str()) != 0)
                   {
-                    throw DOpEException("The command " + command + "failed!",
-                                        "StateVector<VECTOR>::~StateVector");
+		    std::cerr<<"The command "<<command<<"failed! in StateVector<VECTOR>::~StateVector"<<std::endl;
+		    abort();
                   }
               }
             else
@@ -244,15 +244,17 @@ namespace DOpE
                                       + Utilities::int_to_string(unique_id_) + ".dope";
                 if (system(command.c_str()) != 0)
                   {
-                    throw DOpEException("The command " + command + "failed!",
-                                        "StateVector<VECTOR>::~StateVector");
+		    std::cerr<<"The command "<<command<<"failed! in StateVector<VECTOR>::~StateVector"<<std::endl;
+		    abort();
                   }
               }
             num_active_--;
           }
         else
-          throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),
-                              "StateVector<VECTOR>::~StateVector");
+	{
+	  std::cerr<<"Unknown Behavior "<<DOpEtypesToString(GetBehavior())<<" in StateVector<VECTOR>::~StateVector"<<std::endl;
+	  abort();
+	}
       }
   }
 
@@ -842,6 +844,23 @@ namespace DOpE
       }
 
   }
+
+#ifdef DOPELIB_WITH_TRILINOS
+// TODO intermediate compatibility
+  template<>
+  void
+  DOpE::StateVector<dealii::TrilinosWrappers::MPI::Vector>::ReSizeSpace(unsigned int ,
+      const std::vector<unsigned int> &) const
+  {
+  }
+  template<>
+  void
+  DOpE::StateVector<dealii::TrilinosWrappers::MPI::BlockVector>::ReSizeSpace(unsigned int,
+      const std::vector<unsigned int> &) const
+  {
+  }
+#endif
+
 
   /******************************************************/
   template<typename VECTOR>
@@ -1468,8 +1487,8 @@ namespace DOpE
             filestream_.open(filename_.c_str(), std::fstream::out);
             if (!filestream_.fail())
               {
-                local_vectors_[global_to_local_[accessor_]]->block_write(
-                  filestream_);
+                DOpEHelper::write (*local_vectors_[global_to_local_[accessor_]],
+                                   filestream_);
                 filestream_.close();
                 state_information_.at(accessor_).on_disc_ = true;
               }
@@ -1493,7 +1512,7 @@ namespace DOpE
     filestream_.open(filename_.c_str(), std::fstream::in);
     if (!filestream_.fail())
       {
-        vector.block_read(filestream_);
+        DOpEHelper::read (vector, filestream_);
         filestream_.close();
       }
     else
@@ -1627,4 +1646,11 @@ namespace DOpE
 
 template class DOpE::StateVector<dealii::BlockVector<double> >;
 template class DOpE::StateVector<dealii::Vector<double> >;
+
+#ifdef DOPELIB_WITH_TRILINOS
+#if DEAL_II_VERSION_GTE(9,0,0)
+template class DOpE::StateVector<dealii::TrilinosWrappers::MPI::BlockVector>;
+template class DOpE::StateVector<dealii::TrilinosWrappers::MPI::Vector>;
+#endif
+#endif
 

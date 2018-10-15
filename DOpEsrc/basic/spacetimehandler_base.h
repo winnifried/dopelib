@@ -1,6 +1,6 @@
 /**
 *
-* Copyright (C) 2012-2014 by the DOpElib authors
+* Copyright (C) 2012-2018 by the DOpElib authors
 *
 * This file is part of DOpElib
 *
@@ -27,6 +27,7 @@
 #include <deal.II/lac/vector.h>
 #include <deal.II/lac/block_vector_base.h>
 #include <deal.II/lac/block_vector.h>
+#include <deal.II/base/index_set.h>
 
 #include <vector>
 #include <iostream>
@@ -287,6 +288,87 @@ namespace DOpE
     {
       abort();
     }
+
+    // TODO this function could replace all Get...NDoFs functions, currently just wraps around
+    /**
+     * Returns the DoFs for the vector type at the given point time_point.
+     * If time_point==-1, it returns the DoFs for the current time which has
+     * to be set prior to calling this function using SetTimeDoFNumber.
+     *
+     * @ param type Indicates for which quantity (state, constrol, constraint, local constraint)
+     * we want to know the number of DoFs.
+     * @ param time_point Indicating the time at which we want to know the DoFs. -1 means now.
+     */
+    virtual unsigned int
+    GetNDoFs (const DOpEtypes::VectorType type,
+              int time_point = -1) const
+    {
+      switch (type)
+        {
+        case DOpEtypes::VectorType::state:
+          return GetStateNDoFs (time_point);
+        case DOpEtypes::VectorType::constraint:
+          return GetConstraintNDoFs ("global");
+        case DOpEtypes::VectorType::local_constraint:
+          return GetConstraintNDoFs ("local");
+        case DOpEtypes::VectorType::control:
+          return GetControlNDoFs (time_point);
+        default:
+          assert(false);
+          return 0;
+        }
+    }
+
+    /**
+     * Same as above, but block-wise.
+     *
+     * @ param type Indicates for which quantity (state, constrol, constraint, local constraint)
+     * we want to know the number of DoFs per block.
+     * @ param time_point Indicating the time at which we want to know the DoFs. -1 means now.
+     */
+    virtual std::vector<unsigned int>
+    GetDoFsPerBlock (const DOpEtypes::VectorType type,
+                     int time_point = -1) const
+    {
+      switch (type)
+        {
+        case DOpEtypes::VectorType::state:
+          return GetStateDoFsPerBlock (time_point);
+        case DOpEtypes::VectorType::constraint:
+          return GetConstraintDoFsPerBlock ("global");
+        case DOpEtypes::VectorType::local_constraint:
+          return GetConstraintDoFsPerBlock ("local");
+        case DOpEtypes::VectorType::control:
+          return GetControlDoFsPerBlock (time_point);
+        default:
+          abort ();
+          return std::vector<unsigned int>
+                 { };
+        }
+    }
+
+    /**
+     * Returns the locally owned DoFs for the given type of vector at given time point.
+     *
+     * @ param type Indicates for which quantity (state, constrol, constraint, local constraint)
+     * we want to know the number of DoFs per block.
+     * @ param time_point Indicating the time at which we want to know the DoFs. -1 means now.
+     */
+    virtual dealii::IndexSet
+    GetLocallyOwnedDoFs (const DOpEtypes::VectorType type,
+                         int time_point = -1) const = 0;
+
+    /**
+     * Returns the locally relevant DoFs for the given type of vector at given time point.
+     *
+     * @ param type Indicates for which quantity (state, constrol, constraint, local constraint)
+     * we want to know the number of DoFs per block.
+     * @ param time_point Indicating the time at which we want to know the DoFs. -1 means now.
+     */
+    virtual dealii::IndexSet
+    GetLocallyRelevantDoFs (const DOpEtypes::VectorType type,
+                            int time_point = -1) const = 0;
+
     /**
      * Returns the DoFs for the state vector at the given point time_point.
      * If time_point==-1, it returns the DoFs for the current time which has

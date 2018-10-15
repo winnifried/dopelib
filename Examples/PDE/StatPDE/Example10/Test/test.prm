@@ -54,7 +54,7 @@ subsection output parameters
 
   # Do not write files whose name contains a substring given here by a list of
   # `;` separated words
-  set never_write_list  = Gradient;Residual;Hessian;Tangent;Adjoint;Control;State;Update
+  set never_write_list  = Gradient;Residual;Hessian;Tangent;Adjoint;Control;State;Update;Intermediate
 
   # Defines what strings should be printed, the higher the number the more
   # output
@@ -62,6 +62,9 @@ subsection output parameters
 
   # Set the precision of the newton output
   set number_precision	 = 1
+
+  # Sets the precision of the output numbers for functionals.
+  set functional_number_precision = 5
 
   # Set manually the machine tolarance for the output
   set eps_machine_set_by_user	 = 1.0e-8

@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (C) 2012-2014 by the DOpElib authors
+ * Copyright (C) 2012-2018 by the DOpElib authors
  *
  * This file is part of DOpElib
  *
@@ -102,7 +102,7 @@ namespace DOpE
                                 const Quadrature<dim - 1>& quad,
                                 UpdateFlags update_flags,
                                 SpaceTimeHandler<FE, dealii::DoFHandler, SPARSITYPATTERN, dealii::Vector<double>,
-                                dopedim, dealdim>& sth,
+                                dopedim, dealdim> &sth,
                                 const std::vector<
                                 typename DOpEWrapper::DoFHandler<dim, dealii::DoFHandler>::active_cell_iterator>& element,
                                 const std::map<std::string, const Vector<double>*> &param_values,
@@ -156,7 +156,7 @@ namespace DOpE
                                 const Quadrature<dim - 1>& quad,
                                 UpdateFlags update_flags,
                                 StateSpaceTimeHandler<FE, dealii::DoFHandler, SPARSITYPATTERN, dealii::Vector<double>,
-                                dim>& sth,
+                                dim> &sth,
                                 const std::vector<
                                 typename DOpEWrapper::DoFHandler<dim, dealii::DoFHandler>::active_cell_iterator>& element,
                                 const std::map<std::string, const Vector<double>*> &param_values,

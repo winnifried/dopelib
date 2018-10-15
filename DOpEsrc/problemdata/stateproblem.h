@@ -1,6 +1,6 @@
 /**
 *
-* Copyright (C) 2012-2014 by the DOpElib authors
+* Copyright (C) 2012-2018 by the DOpElib authors
 *
 * This file is part of DOpElib
 *
@@ -470,6 +470,12 @@ namespace DOpE
     HasInterfaces() const;
 
     /**
+      * Do we need evaluation at the vertices?
+      */
+    inline bool
+    HasVertices() const;
+
+    /**
     * Functions providing the required information for the integrator.
     * see OptProblemContainer for details.
     */
@@ -651,7 +657,7 @@ namespace DOpE
   /******************************************************/
 
   template<typename OPTPROBLEM, typename PDE, typename DD,
-  typename SPARSITYPATTERN, typename VECTOR, int dim>
+           typename SPARSITYPATTERN, typename VECTOR, int dim>
   template<typename EDC>
   void
   StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR,
@@ -664,7 +670,7 @@ namespace DOpE
   /******************************************************/
 
   template<typename OPTPROBLEM, typename PDE, typename DD,
-  typename SPARSITYPATTERN, typename VECTOR, int dim>
+           typename SPARSITYPATTERN, typename VECTOR, int dim>
   template<typename EDC>
   void
   StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR,
@@ -677,7 +683,7 @@ namespace DOpE
   /******************************************************/
 
   template<typename OPTPROBLEM, typename PDE, typename DD,
-  typename SPARSITYPATTERN, typename VECTOR, int dim>
+           typename SPARSITYPATTERN, typename VECTOR, int dim>
   template<typename FDC>
   void
   StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR,
@@ -690,7 +696,7 @@ namespace DOpE
   /******************************************************/
 
   template<typename OPTPROBLEM, typename PDE, typename DD,
-  typename SPARSITYPATTERN, typename VECTOR, int dim>
+           typename SPARSITYPATTERN, typename VECTOR, int dim>
   template<typename FDC>
   void
   StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR,
@@ -702,7 +708,7 @@ namespace DOpE
   /******************************************************/
 
   template<typename OPTPROBLEM, typename PDE, typename DD,
-  typename SPARSITYPATTERN, typename VECTOR, int dim>
+           typename SPARSITYPATTERN, typename VECTOR, int dim>
   template<typename FDC>
   void
   StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR,
@@ -715,7 +721,7 @@ namespace DOpE
   /******************************************************/
 
   template<typename OPTPROBLEM, typename PDE, typename DD,
-  typename SPARSITYPATTERN, typename VECTOR, int dim>
+           typename SPARSITYPATTERN, typename VECTOR, int dim>
   template<typename EDC>
   void
   StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR,
@@ -728,7 +734,7 @@ namespace DOpE
   /******************************************************/
 
   template<typename OPTPROBLEM, typename PDE, typename DD,
-  typename SPARSITYPATTERN, typename VECTOR, int dim>
+           typename SPARSITYPATTERN, typename VECTOR, int dim>
   void
   StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dim>::PointRhs(
     const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
@@ -754,7 +760,7 @@ namespace DOpE
   /******************************************************/
 
   template<typename OPTPROBLEM, typename PDE, typename DD,
-  typename SPARSITYPATTERN, typename VECTOR, int dim>
+           typename SPARSITYPATTERN, typename VECTOR, int dim>
   template<typename FDC>
   void
   StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR,
@@ -767,7 +773,7 @@ namespace DOpE
   /******************************************************/
 
   template<typename OPTPROBLEM, typename PDE, typename DD,
-  typename SPARSITYPATTERN, typename VECTOR, int dim>
+           typename SPARSITYPATTERN, typename VECTOR, int dim>
   template<typename EDC>
   void
   StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR,
@@ -781,7 +787,7 @@ namespace DOpE
   /******************************************************/
 
   template<typename OPTPROBLEM, typename PDE, typename DD,
-  typename SPARSITYPATTERN, typename VECTOR, int dim>
+           typename SPARSITYPATTERN, typename VECTOR, int dim>
   template<typename EDC>
   void
   StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR,
@@ -794,7 +800,7 @@ namespace DOpE
   /******************************************************/
 
   template<typename OPTPROBLEM, typename PDE, typename DD,
-  typename SPARSITYPATTERN, typename VECTOR, int dim>
+           typename SPARSITYPATTERN, typename VECTOR, int dim>
   template<typename EDC>
   void
   StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR,
@@ -807,7 +813,7 @@ namespace DOpE
   /******************************************************/
 
   template<typename OPTPROBLEM, typename PDE, typename DD,
-  typename SPARSITYPATTERN, typename VECTOR, int dim>
+           typename SPARSITYPATTERN, typename VECTOR, int dim>
   template<typename FDC>
   void
   StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR,
@@ -821,7 +827,7 @@ namespace DOpE
   /******************************************************/
 
   template<typename OPTPROBLEM, typename PDE, typename DD,
-  typename SPARSITYPATTERN, typename VECTOR, int dim>
+           typename SPARSITYPATTERN, typename VECTOR, int dim>
   template<typename FDC>
   void
   StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR,
@@ -835,7 +841,7 @@ namespace DOpE
   /******************************************************/
 
   template<typename OPTPROBLEM, typename PDE, typename DD,
-  typename SPARSITYPATTERN, typename VECTOR, int dim>
+           typename SPARSITYPATTERN, typename VECTOR, int dim>
   template<typename FDC>
   void
   StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR,
@@ -849,7 +855,7 @@ namespace DOpE
   /******************************************************/
 
   template<typename OPTPROBLEM, typename PDE, typename DD,
-  typename SPARSITYPATTERN, typename VECTOR, int dim>
+           typename SPARSITYPATTERN, typename VECTOR, int dim>
   std::string
   StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dim>::GetDoFType() const
   {
@@ -978,6 +984,16 @@ namespace DOpE
   StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dim>::HasInterfaces() const
   {
     return pde_.HasInterfaces();
+  }
+
+  /******************************************************/
+
+  template<typename OPTPROBLEM, typename PDE, typename DD,
+           typename SPARSITYPATTERN, typename VECTOR, int dim>
+  bool
+  StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dim>::HasVertices() const
+  {
+    return pde_.HasVertices();
   }
 
   /******************************************************/

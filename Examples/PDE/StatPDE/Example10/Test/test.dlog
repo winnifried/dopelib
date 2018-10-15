@@ -4,6 +4,7 @@ For License details read LICENSE.TXT distributed with this software!
 
 This is DOpElib Version: 4.0.0 pre
 	Status as of: 16/02/2016
+Using dealii Version: 9.0
 
 	**************************************************
 	*             Starting Forward Solve             *
@@ -18,16 +19,16 @@ This is DOpElib Version: 4.0.0 pre
 			 Newton step: 2	 Residual (rel.):   6.2e-01	 LineSearch {1} 
 			 Newton step: 3	 Residual (rel.):   5.0e-01	 LineSearch {0} 
 			 Newton step: 4	 Residual (rel.):   1.2e-02	 LineSearch {0} 
-			 Newton step: 5	 Residual (rel.):   9.9e-06	 LineSearch {0} 
-			 Newton step: 6	 Residual (rel.):   7.3e-08	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   1.0e-05	 LineSearch {0} 
+			 Newton step: 6	 Residual (rel.):   7.4e-08	 LineSearch {0} 
 			 Newton step: 7	 Residual (rel.): < 1.0e-08	 LineSearch {0} 
 			 Newton step: 8	 Residual (rel.): < 1.0e-08	 LineSearch {0} 
 	Computing Functionals:
-	Pressure difference: 120.794
-	Deflection_X: 2.2131e-05
-	Deflection_Y: 0.0008773
-	Drag: 14.0628
-	Lift: 0.767527
+	Pressure difference: 120.85
+	Deflection_X: 2.2162e-05
+	Deflection_Y: 0.00088141
+	Drag: 14.063
+	Lift: 0.76584
 
 	**************************************************
 	*             Starting Forward Solve             *
@@ -40,14 +41,14 @@ This is DOpElib Version: 4.0.0 pre
 			 Newton step: 0	 Residual (rel.):   1.0e+00
 			 Newton step: 1	 Residual (rel.):   8.2e-03	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.):   1.5e-03	 LineSearch {0} 
-			 Newton step: 3	 Residual (rel.):   3.6e-06	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   3.7e-06	 LineSearch {0} 
 			 Newton step: 4	 Residual (rel.): < 1.0e-08	 LineSearch {0} 
 	Computing Functionals:
-	Pressure difference: 119.658
-	Deflection_X: 2.23585e-05
-	Deflection_Y: 0.000862097
-	Drag: 14.1982
-	Lift: 0.778748
+	Pressure difference: 119.71
+	Deflection_X: 2.239e-05
+	Deflection_Y: 0.00086615
+	Drag: 14.198
+	Lift: 0.77705
 
 	**************************************************
 	*             Starting Forward Solve             *
@@ -59,13 +60,13 @@ This is DOpElib Version: 4.0.0 pre
 			 Newton step: 0	 Residual (abs.):   3.6e-02
 			 Newton step: 0	 Residual (rel.):   1.0e+00
 			 Newton step: 1	 Residual (rel.):   8.0e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   6.4e-04	 LineSearch {0} 
-			 Newton step: 3	 Residual (rel.):   5.1e-06	 LineSearch {0} 
-			 Newton step: 4	 Residual (rel.):   4.4e-07	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   6.5e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   5.2e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   4.5e-07	 LineSearch {0} 
 			 Newton step: 5	 Residual (rel.): < 1.0e-08	 LineSearch {0} 
 	Computing Functionals:
-	Pressure difference: 119.318
-	Deflection_X: 2.24526e-05
-	Deflection_Y: 0.000850014
-	Drag: 14.2175
-	Lift: 0.778065
+	Pressure difference: 119.37
+	Deflection_X: 2.2485e-05
+	Deflection_Y: 0.00085399
+	Drag: 14.217
+	Lift: 0.77638

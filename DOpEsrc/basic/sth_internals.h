@@ -1,6 +1,6 @@
 /**
 *
-* Copyright (C) 2012-2014 by the DOpElib authors
+* Copyright (C) 2012-2018 by the DOpElib authors
 *
 * This file is part of DOpElib
 *
@@ -24,11 +24,14 @@
 #ifndef STH_INTERNALS_H_
 #define STH_INTERNALS_H_
 
+#include <vector> 
 #include <wrapper/mapping_wrapper.h>
 
 #include <deal.II/dofs/dof_tools.h>
 #include <deal.II/fe/mapping_q1.h>
 #include <deal.II/hp/mapping_collection.h>
+#include <deal.II/grid/tria.h>
+#include <deal.II/grid/grid_tools.h>
 
 #include <wrapper/dofhandler_wrapper.h>
 
@@ -97,7 +100,69 @@ namespace DOpE
         "MapDoFsToSupportPoints");
 #endif
     }
-  }
+
+    /**
+     * Create a vector associating to each global-vertex-id the number 
+     * of neighboring elements.
+     *
+     * Returns 0 if a vertex is hanging
+     */
+    template<int dim>
+    void CalculateNeigbourElementsToVertices(dealii::Triangulation<dim>& triangulation, std::vector<unsigned int>& n_neighbour_to_vertex)
+    {
+      //Build the list of neighbours
+      n_neighbour_to_vertex.resize(triangulation.n_vertices(),0);
+      for(unsigned int i = 0; i < n_neighbour_to_vertex.size(); i++)
+      {
+	auto cells = GridTools::find_cells_adjacent_to_vertex(triangulation,i);
+	unsigned int count = 0;
+	int level = -1;
+	bool hanging = false;
+	for(unsigned int c=0; c < cells.size(); c++)
+	{
+	  if( c == 0 )
+	  {
+	    level = cells[c]->level();
+	  }
+	  else
+	  {
+	    if(level != cells[c]->level())
+	    {
+	      //The vertex maybe hanging, we must check
+	      hanging = true;
+	    }
+	  }
+	  count++;
+	}
+	if(hanging == true)
+	{
+	  //Check if vertex is really hanging
+	  //A hanging Vertex is not a vertex of one of is neighbouring
+	  //elements
+	  for(unsigned int c=0; c < cells.size(); c++)
+	  {
+	    bool local_present=false;
+	    for(unsigned int j = 0; j < GeometryInfo<dim>::vertices_per_cell; j++)
+	    {
+	      local_present=local_present||(cells[c]->vertex_index(j) == i);
+	    }
+	    hanging = hanging && local_present;
+	    if(local_present==false)
+	    {
+	      break;
+	    }
+	  }
+	  //if still hanging the vertex was in all elements (its not hanging)
+	  if( !hanging )
+	  {
+	    count=0;
+	  }
+	}
+	n_neighbour_to_vertex[i]=count;
+      }
+    }
+    
+  }//End of namespace STHInternals
 }
 
 #endif /* STH_INTERNALS_H_ */

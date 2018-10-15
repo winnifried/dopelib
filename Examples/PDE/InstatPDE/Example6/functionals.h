@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (C) 2012-2014 by the DOpElib authors
+ * Copyright (C) 2012-2018 by the DOpElib authors
  *
  * This file is part of DOpElib
  *
@@ -34,9 +34,9 @@ using namespace DOpE;
 /****************************************************************************************/
 
 template<
-template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
-         template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
-         template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
+  template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
+  template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
+  template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
 class LocalPointFunctionalP1 : public FunctionalInterface<ElementDataContainer,
   FaceDataContainer, DH, VECTOR, dopedim, dealdim>
 {
@@ -89,9 +89,9 @@ public:
 /****************************************************************************************/
 
 template<
-template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
-         template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
-         template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
+  template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
+  template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
+  template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
 class LocalPointFunctionalP2 : public FunctionalInterface<EDC, FDC, DH,
   VECTOR, dopedim, dealdim>
 {

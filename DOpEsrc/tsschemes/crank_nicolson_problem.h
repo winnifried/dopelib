@@ -1,6 +1,6 @@
 /**
 *
-* Copyright (C) 2012-2014 by the DOpElib authors
+* Copyright (C) 2012-2018 by the DOpElib authors
 *
 * This file is part of DOpElib
 *
@@ -93,7 +93,7 @@ namespace DOpE
 
     /******************************************************/
     CrankNicolsonProblem<OPTPROBLEM, SPARSITYPATTERN, VECTOR,
-    dealdim, FE, DH>&
+    dealdim, FE, DH> &
     GetBaseProblem()
     {
       return *this;

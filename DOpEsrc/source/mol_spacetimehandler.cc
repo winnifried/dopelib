@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (C) 2012-2014 by the DOpElib authors
+ * Copyright (C) 2012-2018 by the DOpElib authors
  *
  * This file is part of DOpElib
  *
@@ -220,28 +220,28 @@ namespace DOpE
 }//End of namespace DOpE
 
 template class DOpE::MethodOfLines_SpaceTimeHandler<dealii::FESystem,
-         dealii::DoFHandler,
-         dealii::BlockSparsityPattern,
-         dealii::BlockVector<double>,
-         dope_dimension,
-         deal_II_dimension>;
+                                                    dealii::DoFHandler,
+                                                    dealii::BlockSparsityPattern,
+                                                    dealii::BlockVector<double>,
+                                                    dope_dimension,
+                                                    deal_II_dimension>;
 template class DOpE::MethodOfLines_SpaceTimeHandler<dealii::FESystem,
-         dealii::DoFHandler,
-         dealii::SparsityPattern,
-         dealii::Vector<double>,
-         dope_dimension,
-         deal_II_dimension>;
+                                                    dealii::DoFHandler,
+                                                    dealii::SparsityPattern,
+                                                    dealii::Vector<double>,
+                                                    dope_dimension,
+                                                    deal_II_dimension>;
 
 template class DOpE::MethodOfLines_SpaceTimeHandler<dealii::hp::FECollection,
-         dealii::hp::DoFHandler,
-         dealii::BlockSparsityPattern,
-         dealii::BlockVector<double>,
-         dope_dimension,
-         deal_II_dimension>;
+                                                    dealii::hp::DoFHandler,
+                                                    dealii::BlockSparsityPattern,
+                                                    dealii::BlockVector<double>,
+                                                    dope_dimension,
+                                                    deal_II_dimension>;
 template class DOpE::MethodOfLines_SpaceTimeHandler<dealii::hp::FECollection,
-         dealii::hp::DoFHandler,
-         dealii::SparsityPattern,
-         dealii::Vector<double>,
-         dope_dimension,
-         deal_II_dimension>;
+                                                    dealii::hp::DoFHandler,
+                                                    dealii::SparsityPattern,
+                                                    dealii::Vector<double>,
+                                                    dope_dimension,
+                                                    deal_II_dimension>;
 

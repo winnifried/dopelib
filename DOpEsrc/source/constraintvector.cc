@@ -1,6 +1,6 @@
 /**
 *
-* Copyright (C) 2012-2014 by the DOpElib authors
+* Copyright (C) 2012-2018 by the DOpElib authors
 *
 * This file is part of DOpElib
 *
@@ -93,7 +93,8 @@ ConstraintVector<VECTOR>::~ConstraintVector()
     }
   else
     {
-      throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),"ConstraintVector<VECTOR>::~ConstraintVector");
+      std::cerr<<"Unknown Behavior "<<DOpEtypesToString(GetBehavior())<<" in ConstraintVector<VECTOR>::~ConstraintVector"<<std::endl;
+      abort();
     }
 }
 
@@ -232,6 +233,20 @@ namespace DOpE
   }
 
   /******************************************************/
+
+#ifdef DOPELIB_WITH_TRILINOS
+// TODO these exist just for the moment to provide intermediate compatibility
+  template<>
+  void ConstraintVector<dealii::TrilinosWrappers::MPI::Vector>::ReSizeLocalSpace(unsigned int, const std::vector<
+      unsigned int>& /*dofs_per_block*/)
+  {
+  }
+  template<>
+  void ConstraintVector<dealii::TrilinosWrappers::MPI::BlockVector>::ReSizeLocalSpace(unsigned int, const std::vector<
+      unsigned int>& /*dofs_per_block*/)
+  {
+  }
+#endif
 
   template<>
   void ConstraintVector<dealii::Vector<double> >::ReSizeLocalSpace(unsigned int ndofs, const std::vector<
@@ -661,3 +676,11 @@ double ConstraintVector<VECTOR>::Complementarity(const ConstraintVector<VECTOR> 
 
 template class DOpE::ConstraintVector<dealii::Vector<double> >;
 template class DOpE::ConstraintVector<dealii::BlockVector<double> >;
+
+#ifdef DOPELIB_WITH_TRILINOS
+#if DEAL_II_VERSION_GTE(9,0,0)
+template class DOpE::ConstraintVector<dealii::TrilinosWrappers::MPI::Vector>;
+template class DOpE::ConstraintVector<dealii::TrilinosWrappers::MPI::BlockVector>;
+#endif
+#endif
+

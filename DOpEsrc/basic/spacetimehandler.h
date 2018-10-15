@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (C) 2012-2014 by the DOpElib authors
+ * Copyright (C) 2012-2018 by the DOpElib authors
  *
  * This file is part of DOpElib
  *
@@ -34,7 +34,7 @@
 #include <deal.II/lac/block_vector.h>
 #include <deal.II/lac/constraint_matrix.h>
 #include <deal.II/dofs/dof_handler.h>
-
+#include <deal.II/dofs/dof_tools.h>
 
 // Multi-level routines
 //#include <deal.II/multigrid/mg_constrained_dofs.h>
@@ -367,6 +367,80 @@ namespace DOpE
     /******************************************************/
 
     /**
+     * Returns the locally owned DoFs for the given type of vector at given time point.
+     *
+     * @ param type Indicates for which quantity (state, constrol, constraint, local constraint)
+     * we want to know the number of DoFs per block.
+     * @ param time_point Indicating the time at which we want to know the DoFs. -1 means now.
+     */
+    virtual dealii::IndexSet
+    GetLocallyOwnedDoFs (const DOpEtypes::VectorType type,
+                         int time_point = -1) const
+    {
+      (void) time_point; // TODO same local dofs for all times ?
+
+      switch (type)
+        {
+        case DOpEtypes::VectorType::state:
+          return GetStateDoFHandler ().GetDEALDoFHandler().locally_owned_dofs();
+
+        case DOpEtypes::VectorType::constraint:
+        case DOpEtypes::VectorType::local_constraint:
+          assert(false);
+          return dealii::IndexSet ();
+
+        case DOpEtypes::VectorType::control:
+          return GetControlDoFHandler ().GetDEALDoFHandler().locally_owned_dofs ();
+
+        default:
+          abort ();
+          return dealii::IndexSet ();
+        }
+    }
+
+    /**
+     * Returns the locally relevant DoFs for the given type of vector at given time point.
+     *
+     * @ param type Indicates for which quantity (state, constrol, constraint, local constraint)
+     * we want to know the number of DoFs per block.
+     * @ param time_point Indicating the time at which we want to know the DoFs. -1 means now.
+     */
+    virtual dealii::IndexSet
+    GetLocallyRelevantDoFs (const DOpEtypes::VectorType type,
+                            int time_point = -1) const
+    {
+      (void) time_point;
+
+      switch (type)
+        {
+        case DOpEtypes::VectorType::state:
+        {
+          dealii::IndexSet result;
+          DoFTools::extract_locally_relevant_dofs (GetStateDoFHandler ().GetDEALDoFHandler(),
+                                                   result);
+          return result;
+        }
+
+        case DOpEtypes::VectorType::constraint:
+        case DOpEtypes::VectorType::local_constraint:
+          assert(false);
+          return IndexSet ();
+
+        case DOpEtypes::VectorType::control:
+        {
+          dealii::IndexSet result;
+          DoFTools::extract_locally_relevant_dofs (GetControlDoFHandler ().GetDEALDoFHandler(),
+                                                   result);
+          return result;
+        }
+
+        default:
+          abort ();
+          return dealii::IndexSet ();
+        }
+    }
+
+    /**
      * Returns the constraint dofs in Block b at the current time
      */
     virtual unsigned int
@@ -426,6 +500,12 @@ namespace DOpE
     &
     GetMapDoFToSupportPoints()=0;
 
+    /**
+     * Returns the list of the number of neighbouring elements to the vertices
+     */
+
+    virtual const std::vector<unsigned int>* GetNNeighbourElements() = 0;
+        
     /******************************************************/
 
     /**
@@ -496,7 +576,7 @@ namespace DOpE
     //This saves us a template argument for statpdeproblem etc.
     DOpEWrapper::DataOut<dealdim, DH> data_out_;
     unsigned int control_index_, state_index_;
-    const ActiveFEIndexSetterInterface<dopedim, dealdim> *fe_index_setter_;
+    const ActiveFEIndexSetterInterface<dopedim, dealdim> *fe_index_setter_ = nullptr;
     mutable std::vector<const DOpEWrapper::DoFHandler<dealdim, DH>*> domain_dofhandler_vector_;
     //TODO What if control and state have different dofhandlertypes??
 

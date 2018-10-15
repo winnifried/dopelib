@@ -1,6 +1,6 @@
 /**
 *
-* Copyright (C) 2012-2014 by the DOpElib authors
+* Copyright (C) 2012-2018 by the DOpElib authors
 *
 * This file is part of DOpElib
 *
@@ -170,8 +170,11 @@ namespace DOpE
 
       // Initialize the data containers.
       idc_.InitializeEDC(pde.GetUpdateFlags(),
-                         *(pde.GetBaseProblem().GetSpaceTimeHandler()), element,
-                         this->GetParamData(), this->GetDomainData());
+                         *(pde.GetBaseProblem().GetSpaceTimeHandler()),
+			 element,
+                         this->GetParamData(),
+			 this->GetDomainData(),
+			 pde.HasVertices());
       auto &edc = idc_.GetElementDataContainer();
 
       bool need_faces = pde.HasFaces();
@@ -296,8 +299,11 @@ namespace DOpE
 
       // Initialize the data containers.
       idc_.InitializeEDC(pde.GetUpdateFlags(),
-                         *(pde.GetBaseProblem().GetSpaceTimeHandler()), element,
-                         this->GetParamData(), this->GetDomainData());
+                         *(pde.GetBaseProblem().GetSpaceTimeHandler()),
+			 element,
+                         this->GetParamData(),
+			 this->GetDomainData(),
+			 pde.HasVertices());
       auto &edc = idc_.GetElementDataContainer();
 
       bool need_faces = pde.HasFaces();
@@ -433,8 +439,11 @@ namespace DOpE
       auto endc = pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandlerEnd();
 
       idc_.InitializeEDC(pde.GetUpdateFlags(),
-                         *(pde.GetBaseProblem().GetSpaceTimeHandler()), element,
-                         this->GetParamData(), this->GetDomainData());
+                         *(pde.GetBaseProblem().GetSpaceTimeHandler()),
+			 element,
+                         this->GetParamData(),
+			 this->GetDomainData(),
+			 pde.HasVertices());
       auto &edc = idc_.GetElementDataContainer();
 
       for (; element[0] != endc[0]; element[0]++)
@@ -461,7 +470,7 @@ namespace DOpE
   /*******************************************************************************************/
 
   template<typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR, int dimlow,
-  int dimhigh>
+           int dimhigh>
   template<typename PROBLEM>
   SCALAR IntegratorMixedDimensions<INTEGRATORDATACONT, VECTOR, SCALAR, dimlow, dimhigh>::ComputePointScalar(PROBLEM &pde)
   {
@@ -754,7 +763,7 @@ namespace DOpE
   /*******************************************************************************************/
 
   template<typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR, int dimlow,
-  int dimhigh>
+           int dimhigh>
   void IntegratorMixedDimensions<INTEGRATORDATACONT, VECTOR, SCALAR, dimlow, dimhigh>::AddParamData(
     std::string name,
     const dealii::Vector<

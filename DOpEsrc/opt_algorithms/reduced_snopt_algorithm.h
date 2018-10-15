@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (C) 2012-2014 by the DOpElib authors
+ * Copyright (C) 2012-2018 by the DOpElib authors
  *
  * This file is part of DOpElib
  *
@@ -84,6 +84,14 @@ namespace DOpE
     virtual int
     Solve(ControlVector<VECTOR> &q, double global_tol = -1.);
 
+    void ReInit()
+    {
+      ReducedAlgorithm<PROBLEM,VECTOR>::ReInit();
+      start_=0; //Coldstart
+      nS_ =0;
+      nInf_ =0;
+      sInf_=0;
+    }
   protected:
 
   private:
@@ -93,8 +101,8 @@ namespace DOpE
     std::string postindex_;
     DOpEtypes::VectorStorageType vector_behavior_;
 
-    double func_prec_, feas_tol_, opt_tol_;
-    int max_inner_iter_, max_outer_iter_;
+    double func_prec_, feas_tol_, opt_tol_,sInf_;
+    int max_inner_iter_, max_outer_iter_,nS_,nInf_,start_;
     bool capture_out_;
   };
 
@@ -142,7 +150,6 @@ namespace DOpE
     ReducedAlgorithm<PROBLEM, VECTOR>(OP, S, param_reader, Except, Output,
                                       base_priority)
   {
-
     param_reader.SetSubsection("reduced_snoptalgorithm parameters");
 
     func_prec_ = param_reader.get_double("function precision");
@@ -197,7 +204,7 @@ namespace DOpE
     global_tol = std::max(opt_tol_,global_tol);
 
     out << "**************************************************\n";
-    out << "*        Starting Solution using SNOPT           *\n";
+    out << "*        Starting Solution using SNOPT "<<SNOPT_MAJOR_VERSION<<"."<<SNOPT_MINOR_VERSION<<"       *\n";
     out << "*   Solving : "<<this->GetProblem()->GetName()<<"\t*\n";
     out << "*  CDoFs : ";
     q.PrintInfos(out);
@@ -243,7 +250,36 @@ namespace DOpE
     int ret_val;
     {
       DOpEWrapper::SNOPT_Problem RSAProb;
+#if SNOPT_VERSION_GTE(7,6)
+      RSAProb.initialize("",1);
+      int n=q.GetSpacialVector().size();
+      int neF =1+constraints.GetGlobalConstraints().size();
+      int neA=0;
+      int *iAfun = NULL;
+      int *jAvar = NULL;
+      double *A = NULL;
 
+      int lenG = n*(neF); //We have that the derivative of J and the global constraints
+      //are nonzero w.r.t. all components.
+      int neG = lenG;     //Predefine the number of valid entries in iGfun and jGvar will be lenG.
+      int *iGfun = new int[lenG];
+      int *jGvar = new int[lenG];
+
+      double *x = new double[n];
+      double *xlow = new double[n];
+      double *xupp = new double[n];
+      double *xmul = new double[n];
+      int *xstate = new int[n];
+
+      double *F = new double[neF];
+      double *Flow = new double[neF];
+      double *Fupp = new double[neF];
+      double *Fmul = new double[neF];
+      int *Fstate = new int[neF];
+
+      int ObjRow = 0;
+      double ObjAdd = 0;
+#else
       integer n=q.GetSpacialVector().size();
       integer neF =1+constraints.GetGlobalConstraints().size();
       integer lenA=0;
@@ -277,13 +313,14 @@ namespace DOpE
 
       integer ObjRow = 0;
       doublereal ObjAdd = 0;
+#endif
 
       {
         const VECTOR &gv_q = q.GetSpacialVector();
         const VECTOR &gv_qmin = q_min.GetSpacialVector();
         const VECTOR &gv_qmax = q_max.GetSpacialVector();
 
-        for (unsigned int i=0; i < n; i++)
+        for (int i=0; i < n; i++)
           {
             x[i] = gv_q(i);
             xlow[i] = gv_qmin(i);
@@ -295,7 +332,7 @@ namespace DOpE
         Flow[0] = -1.e+20;
         Fupp[0] = 1.e+20;
         Fstate[0] = 0;
-        for (unsigned int j = 1; j<neF; j++)
+        for (int j = 1; j<neF; j++)
           {
             //Global constraints are to be given by the user such that
             //The feasible region is given by <= 0
@@ -303,7 +340,7 @@ namespace DOpE
             Flow[j] = -1.e+20;
             Fupp[j] = 0.;
             Fstate[j] = 0;
-            for (unsigned int i=0; i < n; i++)
+            for (int i=0; i < n; i++)
               {
                 iGfun[n*j+i] = j;
                 jGvar[n*j+i] = i;
@@ -312,6 +349,9 @@ namespace DOpE
       }
 
       //RSAProb.setPrintFile  ( "RSA.out" );
+#if SNOPT_VERSION_GTE(7,6)
+      RSAProb.setProbName ( "RSA" );
+#else
       RSAProb.setProblemSize( n, neF );
       RSAProb.setObjective ( ObjRow, ObjAdd );
       RSAProb.setA ( lenA, iAfun, jAvar, A );
@@ -323,10 +363,13 @@ namespace DOpE
       RSAProb.setProbName ( "RSA" );
       RSAProb.setNeA ( neA );
       RSAProb.setNeG ( neG );
-
+#endif
+      
       DOpEWrapper::SNOPT_A_userfunc_interface = boost::bind<int>(boost::mem_fn(&Reduced_SnoptAlgorithm<PROBLEM, VECTOR>::rsa_func_),boost::ref(*this),_1);
+#if SNOPT_VERSION_GTE(7,6)
+#else
       RSAProb.setUserFun ( DOpEWrapper::SNOPT_A_userfunc_ );
-
+#endif
       RSAProb.setIntParameter( "Derivative option", 1 );
       RSAProb.setRealParameter( "Function precison", func_prec_);
       RSAProb.setRealParameter( "Major optimality tolerance", global_tol);
@@ -334,8 +377,19 @@ namespace DOpE
       RSAProb.setRealParameter( "Minor feasibility tolerance", feas_tol_);
       RSAProb.setIntParameter( "Minor iterations limit", max_inner_iter_);
       RSAProb.setIntParameter( "Major iterations limit", max_outer_iter_);
+#if SNOPT_VERSION_GTE(7,6)
+      ret_val = RSAProb.solve(start_,neF,n,ObjAdd,ObjRow,DOpEWrapper::SNOPT_A_userfunc_,
+			      iAfun,jAvar,A,neA,
+			      iGfun,jGvar,neG,
+			      xlow,xupp,Flow,Fupp,
+			      x, xstate, xmul,
+			      F, Fstate, Fmul,
+			      nS_,nInf_,sInf_);
+      start_=2;
+#else
       RSAProb.solve(2);
       ret_val = RSAProb.GetReturnStatus();
+#endif
       {
         VECTOR &gv_q = q.GetSpacialVector();
         for (unsigned int i=0; i < gv_q.size(); i++)
@@ -362,9 +416,11 @@ namespace DOpE
       delete []Fmul;
       delete []Fstate;
 
+#if SNOPT_VERSION_GTE(7,6)
+#else
       delete []xnames;
       delete []Fnames;
-
+#endif
     }
 
     if (capture_out_)
@@ -479,11 +535,11 @@ namespace DOpE
           {
             *(data.Status) = -2;
             this->GetExceptionHandler()->HandleException(e,"Reduced_SnoptAlgorithm::rsa_func_");
-            return -1;
+            return -2;
           }
         assert(*(data.neG) == *(data.n) **(data.neF));
         const VECTOR &ref_g = gradient_transposed.GetSpacialVector();
-        for (unsigned int i=0; i < *(data.n); i++)
+        for (int i=0; i < *(data.n); i++)
           {
             (data.G)[i] = ref_g(i);
           }
@@ -499,10 +555,10 @@ namespace DOpE
               {
                 *(data.Status) = -2;
                 this->GetExceptionHandler()->HandleException(e,"Reduced_SnoptAlgorithm::rsa_func_");
-                return -1;
+                return -2;
               }
             const VECTOR &ref_g = gradient_transposed.GetSpacialVector();
-            for (unsigned int i=0; i < *(data.n); i++)
+            for (int i=0; i < *(data.n); i++)
               {
                 (data.G)[*(data.n)*(j+1)+i] = ref_g(i);
               }

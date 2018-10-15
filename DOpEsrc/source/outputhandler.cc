@@ -1,6 +1,6 @@
 /**
 *
-* Copyright (C) 2012-2014 by the DOpElib authors
+* Copyright (C) 2012-2018 by the DOpElib authors
 *
 * This file is part of DOpElib
 *
@@ -623,6 +623,7 @@ namespace DOpE
     out<<"\tStatus as of: "<<std::setfill('0')<<std::setw(2)<<DOpE::VERSION::day;
     out<<"/"<<std::setfill('0')<<std::setw(2)<<DOpE::VERSION::month;
     out<<"/"<<DOpE::VERSION::year<<std::endl;
+    out<<"Using dealii Version: "<<DOpE::VERSION::dealii_major<<"."<<DOpE::VERSION::dealii_minor<<std::endl;
     std::cout<<out.str();
     std::cout.flush();
     log_<<out.str();
@@ -633,8 +634,12 @@ namespace DOpE
 }//Endof namespace
 /******************************************************/
 /******************************************************/
+
 template class DOpE::DOpEOutputHandler<dealii::Vector<double> >;
 template class DOpE::DOpEOutputHandler<dealii::BlockVector<double> >;
 
-
+#ifdef DOPELIB_WITH_TRILINOS
+template class DOpE::DOpEOutputHandler<dealii::TrilinosWrappers::MPI::Vector>;
+template class DOpE::DOpEOutputHandler<dealii::TrilinosWrappers::MPI::BlockVector>;
+#endif
 

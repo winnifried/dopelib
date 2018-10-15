@@ -17,6 +17,7 @@
 \theoremstyle{remark}
 \newtheorem{remark}[Problem]{Remark}
 
+
 %%% Geht bei mir nicht: habe tex neu installiert, geht aber trotzdem nicht
 %\usepackage{changes}
 %\usepackage{todonotes}
@@ -24,9 +25,12 @@
 %\newcommand{\twick}[1]{\added{#1}}
 %\newcommand{\twickremove}[1]{\deleted{#1}}
 
+\usepackage{wallpaper} % Hintergrundbild ueber ganze Titelseite
+\usepackage{eso-pic,transparent}
 
 
 \newcommand{\dope}{\texttt{DOpElib}}
+
 
 \makeindex
 
@@ -35,8 +39,9 @@
 \title{DOpElib:\\ 
 Differential Equations and Optimization Environment}
 \author{
-  Thomas Wick\thanks{École Polytechnique, 
-    {thomas.wick@polytechnique.edu}}, 
+  Thomas Wick\thanks{Leibniz Universit\"at Hannover, 
+    {thomas.wick@ifam.uni-hannover.de}} 
+   $\,$ and $\,$
   Winnifried Wollner\thanks{Technische Universität Darmstadt, 
     {wollner@mathematik.tu-darmstadt.de}}
 }
@@ -45,13 +50,17 @@ Differential Equations and Optimization Environment}
 
 
 \date{\today
-\vspace*{2cm}
-\begin{figure}[h]
-\centering
-{\includegraphics[width=8cm]{Documentation/logo.png}}
-\end{figure}
+\vspace*{8.1cm}
+%\begin{figure}[h]
+%\centering
+%{\includegraphics[width=8cm]{Documentation/logo.png}}
+%\end{figure}
 }
 
+
+
+\transparent{1.0}{\ThisCenterWallPaper{0.5}{Documentation/logo.png}}
+%\ThisTileWallPaper
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \maketitle
@@ -268,6 +277,11 @@ not given as an integral but as function of an integral}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \input{Documentation/tests.tex}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\input{Documentation/terminal_output.tex}
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 

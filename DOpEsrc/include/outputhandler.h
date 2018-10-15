@@ -1,6 +1,6 @@
 /**
 *
-* Copyright (C) 2012-2014 by the DOpElib authors
+* Copyright (C) 2012-2018 by the DOpElib authors
 *
 * This file is part of DOpElib
 *
@@ -31,6 +31,7 @@
 #include <vector>
 #include <sstream>
 #include <deal.II/lac/vector.h>
+#include <include/parallel_vectors.h>
 
 #include <container/optproblemcontainer.h>
 #include <include/controlvector.h>

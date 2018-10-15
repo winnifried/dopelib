@@ -1,6 +1,6 @@
 /**
 *
-* Copyright (C) 2012-2014 by the DOpElib authors
+* Copyright (C) 2012-2018 by the DOpElib authors
 *
 * This file is part of DOpElib
 *
@@ -58,10 +58,10 @@ namespace DOpE
     }
 
     virtual
-    ~ReducedProblemInterface_Base()
+    ~ReducedProblemInterface_Base() noexcept(false)
     {
     }
-    ;
+
     /**
      * Basic function to get information of the state size.
      *

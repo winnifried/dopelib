@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (C) 2012-2014 by the DOpElib authors
+ * Copyright (C) 2012-2018 by the DOpElib authors
  *
  * This file is part of DOpElib
  *
@@ -37,6 +37,7 @@
 #include <deal.II/lac/constraint_matrix.h>
 #include <deal.II/numerics/solution_transfer.h>
 #include <deal.II/grid/grid_refinement.h>
+#include <deal.II/grid/grid_tools.h>
 
 namespace DOpE
 {
@@ -149,7 +150,11 @@ namespace DOpE
         static_cast<DH<dealdim, dealdim>&>(state_dof_handler_));
 
       state_dof_constraints_.clear();
-      DoFTools::make_hanging_node_constraints(static_cast<DH<dealdim, dealdim>&>(state_dof_handler_), state_dof_constraints_);
+      state_dof_constraints_.reinit (
+        this->GetLocallyRelevantDoFs (DOpEtypes::VectorType::state));
+      DoFTools::make_hanging_node_constraints (
+        static_cast<DH<dealdim, dealdim>&> (state_dof_handler_),
+        state_dof_constraints_);
       //TODO Dirichlet ueber Constraints
       if (GetUserDefinedDoFConstraints() != NULL) GetUserDefinedDoFConstraints()->MakeStateDoFConstraints(state_dof_handler_, state_dof_constraints_);
 
@@ -162,8 +167,13 @@ namespace DOpE
 
           //TODO: mapping[0] is a workaround, as deal does not support interpolate
           // boundary_values with a mapping collection at this point.
+#if DEAL_II_VERSION_GTE(9,0,0)
+          VectorTools::interpolate_boundary_values(GetMapping()[0], state_dof_handler_.GetDEALDoFHandler(), color, dealii::Functions::ZeroFunction<dealdim>(comp_mask.size()),
+                                                   state_dof_constraints_, comp_mask);
+#else
           VectorTools::interpolate_boundary_values(GetMapping()[0], state_dof_handler_.GetDEALDoFHandler(), color, dealii::ZeroFunction<dealdim>(comp_mask.size()),
                                                    state_dof_constraints_, comp_mask);
+#endif
         }
 
       state_dof_constraints_.close();
@@ -172,7 +182,7 @@ namespace DOpE
       DoFTools::count_dofs_per_block(static_cast<DH<dealdim, dealdim>&>(state_dof_handler_), state_dofs_per_block_, state_block_component);
 
       support_points_.clear();
-
+      n_neighbour_to_vertex_.clear();
       //Initialize also the timediscretization.
       this->ReInitTime();
 
@@ -246,6 +256,63 @@ namespace DOpE
     }
 
     /**
+     * Implementation of virtual function in StateSpaceTimeHandlerBase
+     */
+    virtual dealii::IndexSet
+    GetLocallyOwnedDoFs (const DOpEtypes::VectorType type,
+                         int time_point = -1) const
+    {
+      (void) time_point; // TODO same local dofs for all times ?
+
+      switch (type)
+        {
+        case DOpEtypes::VectorType::state:
+          return GetStateDoFHandler ().GetDEALDoFHandler().locally_owned_dofs();
+
+        case DOpEtypes::VectorType::constraint:
+        case DOpEtypes::VectorType::local_constraint:
+        case DOpEtypes::VectorType::control:
+          assert(false);
+          return dealii::IndexSet ();
+
+        default:
+          abort ();
+          return dealii::IndexSet ();
+        }
+    }
+
+    /**
+     * Implementation of virtual function in StateSpaceTimeHandlerBase
+     */
+    virtual dealii::IndexSet
+    GetLocallyRelevantDoFs (const DOpEtypes::VectorType type,
+                            int time_point = -1) const
+    {
+      (void) time_point;
+
+      switch (type)
+        {
+        case DOpEtypes::VectorType::state:
+        {
+          dealii::IndexSet result;
+          DoFTools::extract_locally_relevant_dofs (GetStateDoFHandler ().GetDEALDoFHandler(),
+                                                   result);
+          return result;
+        }
+
+        case DOpEtypes::VectorType::constraint:
+        case DOpEtypes::VectorType::local_constraint:
+        case DOpEtypes::VectorType::control:
+          assert(false);
+          return IndexSet ();
+
+        default:
+          abort ();
+          return dealii::IndexSet ();
+        }
+    }
+
+    /**
      * Implementation of virtual function in StateSpaceTimeHandler
      */
     const std::vector<Point<dealdim> > &
@@ -254,6 +321,18 @@ namespace DOpE
       support_points_.resize(GetStateNDoFs());
       DOpE::STHInternals::MapDoFsToSupportPoints<std::vector<Point<dealdim> >, dealdim>(this->GetMapping(), GetStateDoFHandler(), support_points_);
       return support_points_;
+    }
+
+    /**
+     * Implementation of virtual function in StateSpaceTimeHandler
+     */
+    const std::vector<unsigned int>* GetNNeighbourElements()
+    {
+      if(n_neighbour_to_vertex_.size()!=triangulation_.n_vertices())
+      {
+	DOpE::STHInternals::CalculateNeigbourElementsToVertices(triangulation_,n_neighbour_to_vertex_);
+      }
+      return &n_neighbour_to_vertex_;
     }
 
     /******************************************************/
@@ -343,32 +422,38 @@ namespace DOpE
         }
       state_mesh_transfer_ = new dealii::SolutionTransfer<dealdim, VECTOR, DH<dealdim, dealdim> >(state_dof_handler_);
 
-      if (DOpEtypes::RefinementType::global == ref_type)
+      switch (ref_type)
         {
+        case DOpEtypes::RefinementType::global:
           triangulation_.set_all_refine_flags();
-        }
-      else if (DOpEtypes::RefinementType::fixed_number == ref_type)
-        {
-          GridRefinement::refine_and_coarsen_fixed_number(triangulation_, ref_container.GetLocalErrorIndicators(), ref_container.GetTopFraction(),
-                                                          ref_container.GetBottomFraction());
-        }
-      else if (DOpEtypes::RefinementType::fixed_fraction == ref_type)
-        {
+          break;
 
-          GridRefinement::refine_and_coarsen_fixed_fraction(triangulation_, ref_container.GetLocalErrorIndicators(), ref_container.GetTopFraction(),
-                                                            ref_container.GetBottomFraction());
-        }
-      else if (DOpEtypes::RefinementType::optimized == ref_type)
-        {
+        case DOpEtypes::RefinementType::fixed_number:
+          GridRefinement::refine_and_coarsen_fixed_number (triangulation_,
+                                                           ref_container.GetLocalErrorIndicators (),
+                                                           ref_container.GetTopFraction (),
+                                                           ref_container.GetBottomFraction());
+          break;
 
-          GridRefinement::refine_and_coarsen_optimize(triangulation_, ref_container.GetLocalErrorIndicators(),
-                                                      ref_container.GetConvergenceOrder());
+        case DOpEtypes::RefinementType::fixed_fraction:
+          GridRefinement::refine_and_coarsen_fixed_fraction (triangulation_,
+                                                             ref_container.GetLocalErrorIndicators (),
+                                                             ref_container.GetTopFraction (),
+                                                             ref_container.GetBottomFraction());
+          break;
+
+        case DOpEtypes::RefinementType::optimized:
+          GridRefinement::refine_and_coarsen_optimize (triangulation_,
+                                                       ref_container.GetLocalErrorIndicators (),
+                                                       ref_container.GetConvergenceOrder());
+          break;
+
+        default:
+          throw DOpEException (
+            "Not implemented for name =" + DOpEtypesToString (ref_type),
+            "MethodOfLines_StateSpaceTimeHandler::RefineStateSpace");
         }
-      else
-        {
-          throw DOpEException("Not implemented for name =" + DOpEtypesToString(ref_type),
-                              "MethodOfLines_StateSpaceTimeHandler::RefineStateSpace");
-        }
+
       triangulation_.prepare_coarsening_and_refinement();
       if (state_mesh_transfer_ != NULL) state_mesh_transfer_->prepare_for_pure_refinement();
       triangulation_.execute_coarsening_and_refinement();
@@ -448,11 +533,12 @@ namespace DOpE
     dealii::ConstraintMatrix state_dof_constraints_;
 
     const dealii::SmartPointer<const FE<dealdim, dealdim> > state_fe_; //TODO is there a reason that this is not a reference?
-    const dealii::SmartPointer<
-    const DOpEWrapper::Mapping<dealdim, DH> > mapping_;
+    const dealii::SmartPointer<const DOpEWrapper::Mapping<dealdim, DH> > mapping_;
 
     std::vector<Point<dealdim> > support_points_;
     dealii::SolutionTransfer<dealdim, VECTOR, DH<dealdim, dealdim> > *state_mesh_transfer_;
+
+    std::vector<unsigned int> n_neighbour_to_vertex_;
 
   };
 

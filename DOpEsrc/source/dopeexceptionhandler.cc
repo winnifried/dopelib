@@ -1,6 +1,6 @@
 /**
 *
-* Copyright (C) 2012-2014 by the DOpElib authors
+* Copyright (C) 2012-2018 by the DOpElib authors
 *
 * This file is part of DOpElib
 *
@@ -81,4 +81,9 @@ namespace DOpE
 /******************************************************/
 template class DOpE::DOpEExceptionHandler<dealii::Vector<double> >;
 template class DOpE::DOpEExceptionHandler<dealii::BlockVector<double> >;
+#ifdef DOPELIB_WITH_TRILINOS
+template class DOpE::DOpEExceptionHandler<dealii::TrilinosWrappers::MPI::Vector>;
+template class DOpE::DOpEExceptionHandler<dealii::TrilinosWrappers::MPI::BlockVector>;
+#endif
+
 

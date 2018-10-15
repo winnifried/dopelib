@@ -38,9 +38,9 @@ using namespace dealii;
  */
 
 template<
-template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
-         template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
-         template<int, int> class DH, typename VECTOR, int dealdim>
+  template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
+  template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
+  template<int, int> class DH, typename VECTOR, int dealdim>
 class LocalPDE : public PDEInterface<EDC, FDC, DH, VECTOR, dealdim>
 {
 public:

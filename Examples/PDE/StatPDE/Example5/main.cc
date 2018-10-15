@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (C) 2012-2014 by the DOpElib authors
+ * Copyright (C) 2012-2018 by the DOpElib authors
  *
  * This file is part of DOpElib
  *
@@ -35,6 +35,9 @@
 #include <deal.II/base/quadrature_lib.h>
 #include <deal.II/base/function.h>
 #include <deal.II/numerics/vector_tools.h>
+#if DEAL_II_VERSION_GTE(9,0,0)
+#include <deal.II/grid/manifold_lib.h>
+#endif
 
 #include <container/pdeproblemcontainer.h>
 #include <interfaces/functionalinterface.h>
@@ -144,12 +147,18 @@ main(int argc, char **argv)
   //*************************************************
 
   //Make triangulation *************************************************
-  const Point<DIM> center(0, 0);
-  const HyperShellBoundary<DIM> boundary_description(center);
   Triangulation<DIM> triangulation(
     Triangulation<DIM>::MeshSmoothing::patch_level_1);
   GridGenerator::hyper_cube_with_cylindrical_hole(triangulation, 0.5, 2., 1, 1);
+  const Point<DIM> center(0, 0);
+#if DEAL_II_VERSION_GTE(9,0,0)
+  static const SphericalManifold<DIM> boundary(center);
+  triangulation.set_all_manifold_ids_on_boundary(1,1);
+  triangulation.set_manifold(1,boundary);
+#else
+  const HyperShellBoundary<DIM> boundary_description(center);
   triangulation.set_boundary(1, boundary_description);
+#endif
   triangulation.refine_global(1); //because we need the face located at x==0;
   for (auto it = triangulation.begin_active(); it != triangulation.end(); it++)
     if (it->center()[1] <= 0)

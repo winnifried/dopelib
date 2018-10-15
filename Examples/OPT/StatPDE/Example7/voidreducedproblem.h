@@ -1,6 +1,6 @@
 /**
 *
-* Copyright (C) 2012-2014 by the DOpElib authors
+* Copyright (C) 2012-2018 by the DOpElib authors
 *
 * This file is part of DOpElib
 *
@@ -78,7 +78,7 @@ namespace DOpE
   * @tparam <dealdim>                   The dimension for the state variable.
   */
   template <typename CONTROLNONLINEARSOLVER, typename CONTROLINTEGRATOR, typename PROBLEM,
-           typename VECTOR, int dopedim, int dealdim>
+            typename VECTOR, int dopedim, int dealdim>
   class VoidReducedProblem : public ReducedProblemInterface<PROBLEM,VECTOR>
   {
   public:

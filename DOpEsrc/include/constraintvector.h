@@ -1,6 +1,6 @@
 /**
 *
-* Copyright (C) 2012-2014 by the DOpElib authors
+* Copyright (C) 2012-2018 by the DOpElib authors
 *
 * This file is part of DOpElib
 *
@@ -24,8 +24,13 @@
 #ifndef CONSTRAINT_VECTOR_H_
 #define CONSTRAINT_VECTOR_H_
 
+// TODO remove ...
+//#pragma GCC diagnostic ignored "-Wterminate"
+
 #include <basic/spacetimehandler_base.h>
 #include <basic/dopetypes.h>
+#include <include/parallel_vectors.h>
+#include <include/helper.h>
 
 #include <deal.II/lac/vector.h>
 #include <deal.II/lac/block_vector_base.h>

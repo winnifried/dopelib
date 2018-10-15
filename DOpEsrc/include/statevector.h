@@ -1,6 +1,6 @@
 /**
 *
-* Copyright (C) 2012-2014 by the DOpElib authors
+* Copyright (C) 2012-2018 by the DOpElib authors
 *
 * This file is part of DOpElib
 *
@@ -24,19 +24,27 @@
 #ifndef STATE_VECTOR_H_
 #define STATE_VECTOR_H_
 
+// TODO remove ...
+//#pragma GCC diagnostic ignored "-Wterminate"
+
 #include <basic/spacetimehandler_base.h>
-#include <include/parameterreader.h>
 #include <basic/dopetypes.h>
+#include <include/parameterreader.h>
+#include <include/helper.h>
+#include <include/parallel_vectors.h>
 
 #include <deal.II/base/utilities.h>
 #include <deal.II/lac/vector.h>
 #include <deal.II/lac/block_vector_base.h>
 #include <deal.II/lac/block_vector.h>
 
+
 #include <vector>
 #include <iostream>
 #include <sstream>
 #include <fstream>
+
+// TODO is there any reason why dof_number, time_point, ... are non-const ?
 
 namespace DOpE
 {
@@ -231,7 +239,6 @@ namespace DOpE
         size_ = size;
         on_disc_ = on_disc;
       }
-      ;
     };
     /**
      * This function resizes the spatial vector at a prior given time point.
@@ -305,7 +312,6 @@ namespace DOpE
 
     //pointer to the dofs in the actual interval. Is only used if the interval is set!
     mutable std::vector<VECTOR *> local_vectors_;
-
 
     //Map: global time dof index - local time DoF index
     mutable std::map<unsigned int, unsigned int> global_to_local_;

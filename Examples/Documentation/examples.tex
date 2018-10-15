@@ -216,6 +216,17 @@ MyWonderfulFirstExample$ ./MyWonderfulFirstExample
   which points to the root directory of your DOpE installation.
   Adjust the path to match accordingly.
 
+  When working with cmake, the easiest option is to set 
+  the DOpElib environment variable, so that it will be found 
+  be cmake (similar to Section \ref{sec_installation}):
+  \begin{verbatim}
+  export DOPE_DIR=path_to_DOpElib
+  \end{verbatim}
+  or alternatively, passing directly a flag to cmake:
+  \begin{verbatim}
+  -DDOPE_DIR=path_to_DOpElib
+  \end{verbatim}
+
 \item If you want to run automated tests on you program so that you can 
   verify whether your code is running as expected after updating the 
   library you may want to update the sub-directory \texttt{Test} 

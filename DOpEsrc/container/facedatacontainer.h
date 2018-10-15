@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (C) 2012-2014 by the DOpElib authors
+ * Copyright (C) 2012-2018 by the DOpElib authors
  *
  * This file is part of DOpElib
  *
@@ -100,7 +100,7 @@ namespace DOpE
     FaceDataContainer(const Quadrature<dim - 1>& quad,
                       UpdateFlags update_flags,
                       SpaceTimeHandler<FE, dealii::DoFHandler, SPARSITYPATTERN, VECTOR,
-                      dopedim, dealdim>& sth,
+                      dopedim, dealdim> &sth,
                       const std::vector<
                       typename DOpEWrapper::DoFHandler<dim, dealii::DoFHandler>::active_cell_iterator>& element,
                       const std::map<std::string, const Vector<double>*> &param_values,
@@ -151,7 +151,7 @@ namespace DOpE
     FaceDataContainer(const Quadrature<dim - 1>& quad,
                       UpdateFlags update_flags,
                       StateSpaceTimeHandler<FE, dealii::DoFHandler, SPARSITYPATTERN,
-                      VECTOR, dim>& sth,
+                      VECTOR, dim> &sth,
                       const std::vector<
                       typename DOpEWrapper::DoFHandler<dim, dealii::DoFHandler>::active_cell_iterator>& element,
                       const std::map<std::string, const Vector<double>*> &param_values,
@@ -649,7 +649,7 @@ namespace DOpE
       const hp::QCollection<dim - 1>& q_collection,
       UpdateFlags update_flags,
       SpaceTimeHandler<FE, dealii::hp::DoFHandler, SPARSITYPATTERN,
-      VECTOR, dopedim, dealdim>& sth,
+      VECTOR, dopedim, dealdim> &sth,
       const std::vector<
       typename DOpEWrapper::DoFHandler<dim, dealii::hp::DoFHandler>::active_cell_iterator>& element,
       const std::map<std::string, const Vector<double>*> &param_values,
@@ -706,7 +706,7 @@ namespace DOpE
       const hp::QCollection<dim - 1>& q_collection,
       UpdateFlags update_flags,
       StateSpaceTimeHandler<FE, dealii::hp::DoFHandler, SPARSITYPATTERN,
-      VECTOR, dealdim>& sth,
+      VECTOR, dealdim> &sth,
       const std::vector<
       typename DOpEWrapper::DoFHandler<dim, dealii::hp::DoFHandler>::active_cell_iterator>& element,
       const std::map<std::string, const Vector<double>*> &param_values,
@@ -871,16 +871,16 @@ namespace DOpE
     DOpEWrapper::HpFEFaceValues<dim> state_hp_fe_values_;
     DOpEWrapper::HpFEFaceValues<dim> control_hp_fe_values_;
 
-    DOpEWrapper::HpFEFaceValues<dim> *nbr_state_hp_fe_values_;
-    DOpEWrapper::HpFEFaceValues<dim> *nbr_control_hp_fe_values_;
+    DOpEWrapper::HpFEFaceValues<dim> *nbr_state_hp_fe_values_ = nullptr;
+    DOpEWrapper::HpFEFaceValues<dim> *nbr_control_hp_fe_values_ = nullptr;
 
-    DOpEWrapper::HpFESubfaceValues<dim> *state_hp_fe_subface_values_;
-    DOpEWrapper::HpFESubfaceValues<dim> *control_hp_fe_subface_values_;
+    DOpEWrapper::HpFESubfaceValues<dim> *state_hp_fe_subface_values_ = nullptr;
+    DOpEWrapper::HpFESubfaceValues<dim> *control_hp_fe_subface_values_ = nullptr;
 
-    const dealii::FEFaceValuesBase<dim> *state_hp_fe_values_ptr_;
-    const dealii::FEFaceValuesBase<dim> *control_hp_fe_values_ptr_;
-    const dealii::FEFaceValuesBase<dim> *nbr_state_hp_fe_values_ptr_;
-    const dealii::FEFaceValuesBase<dim> *nbr_control_hp_fe_values_ptr_;
+    const dealii::FEFaceValuesBase<dim> *state_hp_fe_values_ptr_ = nullptr;
+    const dealii::FEFaceValuesBase<dim> *control_hp_fe_values_ptr_ = nullptr;
+    const dealii::FEFaceValuesBase<dim> *nbr_state_hp_fe_values_ptr_ = nullptr;
+    const dealii::FEFaceValuesBase<dim> *nbr_control_hp_fe_values_ptr_ = nullptr;
 
     const hp::QCollection<dim - 1>& q_collection_;
   };
@@ -1265,7 +1265,7 @@ namespace DOpE
 //      Assert(this->NeedNeighbour(), ExcInternalError());
 //      Assert(
 //          element_[this->GetStateIndex()]->neighbor_index(this->GetFace()) != -1,
-//          TriaAccessorExceptions::ExcUnusedCellAsNeighbor())
+//          TriaAccessorExceptions::ExcCellNotUsed())
 //
 //      if (element_[this->GetStateIndex()]->neighbor(this->GetFace())->has_children())
 //      {

@@ -1,6 +1,6 @@
 /**
 *
-* Copyright (C) 2012-2014 by the DOpElib authors
+* Copyright (C) 2012-2018 by the DOpElib authors
 *
 * This file is part of DOpElib
 *
@@ -156,10 +156,11 @@ namespace DOpE
      */
     void
     Init_PointRhs(
-      const std::map<std::string, const dealii::Vector<double>*> &/*param_values*/,
-      const std::map<std::string, const VECTOR *> &/*domain_values*/,
-      VECTOR & /*rhs_vector*/, double /*scale*/)
+      const std::map<std::string, const dealii::Vector<double>*> &param_values,
+      const std::map<std::string, const VECTOR *> &domain_values,
+      VECTOR & rhs_vector, double scale)
     {
+      this->GetProblem().Init_PointRhs(param_values, domain_values, rhs_vector, scale);
     }
 
     /**

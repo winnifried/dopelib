@@ -1,6 +1,6 @@
 /**
 *
-* Copyright (C) 2012-2014 by the DOpElib authors
+* Copyright (C) 2012-2018 by the DOpElib authors
 *
 * This file is part of DOpElib
 *
@@ -165,14 +165,14 @@ namespace DOpE
     Network_StatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER,
                                CONTROLINTEGRATOR, INTEGRATOR, PROBLEM, dopedim, dealdim>::declare_params(
                                  ParameterReader &param_reader)
-  {
+    {
       BASE_::declare_params(param_reader);
     }
     /******************************************************/
 
     template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
-    typename CONTROLINTEGRATOR, typename INTEGRATOR, typename PROBLEM,
-    int dopedim, int dealdim>
+             typename CONTROLINTEGRATOR, typename INTEGRATOR, typename PROBLEM,
+             int dopedim, int dealdim>
     template<typename INTEGRATORDATACONT>
     Network_StatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER,
                                CONTROLINTEGRATOR, INTEGRATOR, PROBLEM, dopedim, dealdim>::Network_StatReducedProblem(
@@ -212,8 +212,8 @@ namespace DOpE
     /******************************************************/
 
     template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
-    typename CONTROLINTEGRATOR, typename INTEGRATOR, typename PROBLEM,
-    int dopedim, int dealdim>
+             typename CONTROLINTEGRATOR, typename INTEGRATOR, typename PROBLEM,
+             int dopedim, int dealdim>
     void
     Network_StatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER,
                                CONTROLINTEGRATOR, INTEGRATOR, PROBLEM, dopedim, dealdim>::WriteToFile(
@@ -306,8 +306,8 @@ namespace DOpE
     /******************************************************/
 
     template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
-    typename CONTROLINTEGRATOR, typename INTEGRATOR, typename PROBLEM,
-    int dopedim, int dealdim>
+             typename CONTROLINTEGRATOR, typename INTEGRATOR, typename PROBLEM,
+             int dopedim, int dealdim>
     void
     Network_StatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER,
                                CONTROLINTEGRATOR, INTEGRATOR, PROBLEM, dopedim, dealdim>::WriteToFile(

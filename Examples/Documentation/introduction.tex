@@ -37,10 +37,17 @@ Please refer to the file LICENSE.TXT included in this distribution
 for further information on this license.
 
 
+\section{Contact / Mailinglist}
+We encourage you to contact us in case you have questions:
+\begin{verbatim}
+dope@dopelib.net 
+\end{verbatim}
+
+
 \newpage
 \section{References}
 If you like the library and use it for your own projects, please give credits by 
-referencing the project \dope{}~\cite{dope} using the following bibtex entries:
+referencing the project \dope{} using the following bibtex entries \cite{dope,dopelib}
 
 \begin{lstlisting}
 @Article{dopelib,
@@ -71,7 +78,7 @@ referencing the project \dope{}~\cite{dope} using the following bibtex entries:
 \label{sec:contrib}
 The library is currently maintained by 
 \begin{itemize}
-  \item Thomas Wick (Centre de Mathématiques Appliquées (CMAP) École Polytechnique)
+  \item Thomas Wick (Leibniz Universit\"at Hannover)
   \item Winnifried Wollner (Technische Universität Darmstadt)
 \end{itemize}
 
@@ -135,7 +142,7 @@ When installing \texttt{deal.II} (at least version 8.0) you should take care to 
 it to use UMFPACK.
 
 \begin{remark}
-Our current DOpE installation has been successfully tested for deal.II version 8.5.0.
+Our current \dope{} installation has been successfully tested for deal.II version 9.0.0.
 \end{remark}
 
 A configuration of deal.II working with \texttt{DOpElib} can be obtained with
@@ -221,9 +228,8 @@ Add /home/..../dopelib-4.0/ThirdPartyLibs/ipopt/lib64
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%5
 \section{Installation}\label{sec_installation}
-To work with DOpElib, your need necessarily deal.II, which installation 
-we describe first. Afterwards, the DOpElib installation is described and finally
-other optional packages might be installed.
+Having deal.II and other possible libraries installed, we turn now our focus 
+to the installation of \dope{} itself:
 \begin{itemize}
 \item We automatically search for \texttt{deal.II} to your home
   directory, i.e., if \texttt{deal.II} is located in \\
@@ -245,9 +251,15 @@ echo ${DEAL_II_DIR}
 \end{lstlisting}
 in the current terminal window.
 \end{remark}
+\begin{remark}
+\textbf{Furthermore:} please make sure that you point in the above path 
+to the deal.II \texttt{install} folder and NOT in the main directory of your deal.II 
+installation.
+\end{remark}
+
 Detailed installing instructions for deal.II (here the last version
-8.4.0) can be found on 
-\texttt{http://www.dealii.org/8.4.0/readme.html}. The deal.II 
+9.0.0) can be found on 
+\url{http://www.dealii.org/9.0.0/readme.html}. These
 installation instructions are descriptive enough and we omit 
 any further comments and refer to their webpage.
 %
@@ -272,6 +284,13 @@ Once there, to build \texttt{DOpElib} you can call
  make c-all
 \end{lstlisting}
 to build and configure the library using cmake. 
+\begin{remark}
+Due to very frequent problems at this stage, we strongly recommend 
+to read first now Section \ref{sec_FAQ} before yielding to despair.
+\end{remark}
+
+
+
 You also get various alternatives by just typing 
 \texttt{make}, including the generation of the documentation.
 Building the documentation will require  
@@ -324,6 +343,7 @@ In the path \texttt{ThirdPartyLibs>} type in the terminal\\
 
 \end{itemize}
 \section{FAQs}
+\label{sec_FAQ}
 \paragraph{1.) When building the library I get an error message:}
 \begin{itemize}
 \item \textbf{unrecognized command line option "-std=c++11"}\\
@@ -508,7 +528,25 @@ where $u$ is a FE-function and $q$ can either be a FE-function or some
 fixed number of parameters, $a$ and $b$ are constraint bounds for the control $q$,
 and $g(\cdot)$ is some state constraint.
 
+\section{Overview}
+The main library can be roughly split into three parts:
+\begin{verbatim}
+DOpEsrc, Examples, ThirdPartyLibs
+\end{verbatim}
+Here, \texttt{ThirdPartyLibs} was already previously discussed.
+The \texttt{Examples} will be discussed in the chapters \ref{chap:howtoex}
+to \ref{sec_terminal_output}. In this chapter, we concentrate on 
+\texttt{DOpEsrc}. Therein, the library implementation is divided into the following 
+subfolders:
+\begin{verbatim}
+container       reducedproblems    wrapper
+network         source             templates
+basic           include            opt_algorithms  
+interfaces      problemdata        tsschemes
+\end{verbatim}
 
+
+%\newpage
 \section{Problem description}
 In order to allow our algorithms the automatic assembly of all required 
 data we need to have some container which contains the complete problem 

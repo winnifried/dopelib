@@ -1,6 +1,6 @@
 /**
 *
-* Copyright (C) 2012-2014 by the DOpElib authors
+* Copyright (C) 2012-2018 by the DOpElib authors
 *
 * This file is part of DOpElib
 *
@@ -658,11 +658,12 @@ namespace NSE_in_ALE
                                      &old_solution_grads)
 
   {
-    return (phi_i_grads_v[0][0] + phi_i_grads_v[1][1] +
-            phi_i_grads_u[1][1] * old_solution_grads[q][0][0] -
-            phi_i_grads_u[0][1] * old_solution_grads[q][1][0] -
-            phi_i_grads_u[1][0] * old_solution_grads[q][0][1] +
-            phi_i_grads_u[0][0] * old_solution_grads[q][1][1]);
+    return (phi_i_grads_v[0][0] + phi_i_grads_v[1][1] + 
+	    phi_i_grads_u[1][1] * old_solution_grads[q][0][0] + old_solution_grads[q][dealdim+1][1] * phi_i_grads_v[0][0] -
+	    phi_i_grads_u[0][1] * old_solution_grads[q][1][0] - old_solution_grads[q][dealdim+0][1] * phi_i_grads_v[1][0] -
+	    phi_i_grads_u[1][0] * old_solution_grads[q][0][1] - old_solution_grads[q][dealdim+1][0] * phi_i_grads_v[0][1] +
+	    phi_i_grads_u[0][0] * old_solution_grads[q][1][1] + old_solution_grads[q][dealdim+0][0] * phi_i_grads_v[1][1]);
+    
   }
 
 

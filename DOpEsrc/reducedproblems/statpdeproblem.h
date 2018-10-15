@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (C) 2012-2014 by the DOpElib authors
+ * Copyright (C) 2012-2018 by the DOpElib authors
  *
  * This file is part of DOpElib
  *
@@ -460,7 +460,7 @@ namespace DOpE
   void
   StatPDEProblem<NONLINEARSOLVER, INTEGRATOR, PROBLEM, VECTOR, dealdim>::declare_params(
     ParameterReader &param_reader)
-{
+  {
     NONLINEARSOLVER::declare_params(param_reader);
     param_reader.SetSubsection("output parameters");
     param_reader.declare_entry("number of patches", "0",
@@ -901,6 +901,38 @@ namespace DOpE
                                           &(GetZForEE().GetSpacialVector()));
     AddUDD();
 
+    //Check if some nodal values need to be precomputed, e.g., active set indicators
+    // for the obstacle problem
+    std::vector<StateVector<VECTOR>* > aux_nodal_values;
+    unsigned int need_precomputed_nodal_values = dwrc.NPrecomputedNodalValues();
+    if ( need_precomputed_nodal_values != 0 )
+    {
+      aux_nodal_values.resize(need_precomputed_nodal_values,NULL);
+      for(unsigned int i = 0; i < need_precomputed_nodal_values; i++)
+      {
+	aux_nodal_values[i] = new StateVector<VECTOR>(GetU());
+	{
+	  //some output
+	  std::stringstream tmp;
+	  tmp << "Precomputation "<<i;
+	  this->GetOutputHandler()->Write(tmp.str(),
+					  4 + this->GetBasePriority());
+	}
+	//Calculate
+	this->SetProblemType("aux_error",i);
+	auto &problem = this->GetProblem()->GetErrorPrecomputations();
+	this->GetIntegrator().ComputeNonlinearRhs(problem, aux_nodal_values[i]->GetSpacialVector());
+	//Distribute for hanging nodes
+	problem.GetDoFConstraints().distribute(aux_nodal_values[i]->GetSpacialVector());
+	//output
+	this->GetOutputHandler()->Write(aux_nodal_values[i]->GetSpacialVector(),
+					"Aux_Error_Indicators_"+i,"state");
+	std::stringstream tmp;
+	tmp << "aux_error_"<<i;
+	this->GetIntegrator().AddDomainData(tmp.str(),&(aux_nodal_values[i]->GetSpacialVector()));
+      }
+    }
+ 
     this->SetProblemType("error_evaluation");
 
     //prepare the weights...
@@ -924,6 +956,18 @@ namespace DOpE
     this->GetProblem()->DeleteAuxiliaryFromIntegrator(
       this->GetIntegrator());
 
+    //Cleaning auxiliary nodal variables
+    if ( need_precomputed_nodal_values != 0 )
+    {
+      for(unsigned int i = 0; i < need_precomputed_nodal_values; i++)
+      {
+	std::stringstream tmp;
+	tmp << "aux_error_"<<i;
+	this->GetIntegrator().DeleteDomainData(tmp.str());
+	delete aux_nodal_values[i];
+	aux_nodal_values[i] = NULL;
+      }
+    }
     std::stringstream out;
     this->GetOutputHandler()->InitOut(out);
     out << "Error estimate using " << dwrc.GetName();

@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (C) 2012-2014 by the DOpElib authors
+ * Copyright (C) 2012-2018 by the DOpElib authors
  *
  * This file is part of DOpElib
  *
@@ -65,7 +65,6 @@ namespace DOpE
                "Dummy class, this constructor should never get called.",
                "ElementDataContainer<dealii::DoFHandler<dim> , VECTOR, dim>::ElementDataContainer"));
     }
-    ;
   };
 
   /**
@@ -101,22 +100,25 @@ namespace DOpE
      * @param domain_values           A std::map containing domain data (e.g. nodal vectors for FE-Functions). If the control
      *                                is distributed, it is contained in this map at the position "control". The state may always
      *                                be found in this map at the position "state"
+     * @param need_vertices           A flag indicating if vertex information needs to be prepared
      *
      */
     template<template<int, int> class FE, typename SPARSITYPATTERN, int dopedim, int dealdim>
     ElementDataContainer(const Quadrature<dim> &quad,
                          UpdateFlags update_flags,
                          SpaceTimeHandler<FE, dealii::DoFHandler, SPARSITYPATTERN, VECTOR,
-                         dopedim, dealdim>& sth,
+                         dopedim, dealdim> &sth,
                          const std::vector<
                          typename dealii::DoFHandler<dim>::active_cell_iterator>& element,
                          const std::map<std::string, const Vector<double>*> &param_values,
-                         const std::map<std::string, const VECTOR *> &domain_values) :
+                         const std::map<std::string, const VECTOR *> &domain_values,
+                         bool need_vertices) :
       edcinternal::ElementDataContainerInternal<VECTOR, dim>(param_values,
-                                                             domain_values), element_(element), state_fe_values_(
-                                                               sth.GetMapping(), (sth.GetFESystem("state")), quad,
-                                                               update_flags), control_fe_values_(sth.GetMapping(),
-                                                                   (sth.GetFESystem("control")), quad, update_flags)
+                                                             domain_values,
+							     sth, element[0], need_vertices),
+	element_(element),
+	state_fe_values_(sth.GetMapping(), (sth.GetFESystem("state")), quad, update_flags),
+	control_fe_values_(sth.GetMapping(),(sth.GetFESystem("control")), quad, update_flags)
     {
       state_index_ = sth.GetStateIndex();
       if (state_index_ == 1)
@@ -149,16 +151,18 @@ namespace DOpE
     ElementDataContainer(const Quadrature<dim> &quad,
                          UpdateFlags update_flags,
                          StateSpaceTimeHandler<FE, dealii::DoFHandler, SPARSITYPATTERN,
-                         VECTOR, dim>& sth,
+                         VECTOR, dim> &sth,
                          const std::vector<
                          typename dealii::DoFHandler<dim>::active_cell_iterator>& element,
                          const std::map<std::string, const Vector<double>*> &param_values,
-                         const std::map<std::string, const VECTOR *> &domain_values) :
+                         const std::map<std::string, const VECTOR *> &domain_values,
+                         bool need_vertices) :
       edcinternal::ElementDataContainerInternal<VECTOR, dim>(param_values,
-                                                             domain_values), element_(element), state_fe_values_(
-                                                               sth.GetMapping(), (sth.GetFESystem("state")), quad,
-                                                               update_flags), control_fe_values_(sth.GetMapping(),
-                                                                   (sth.GetFESystem("state")), quad, update_flags)
+                                                             domain_values,
+	                                                     sth, element[0], need_vertices),
+      element_(element),
+      state_fe_values_(sth.GetMapping(), (sth.GetFESystem("state")), quad, update_flags),
+      control_fe_values_(sth.GetMapping(),(sth.GetFESystem("state")), quad, update_flags)
     {
       state_index_ = sth.GetStateIndex();
       control_index_ = element.size(); //Make sure they are never used ...
@@ -201,6 +205,7 @@ namespace DOpE
     GetFEValuesState() const;
     inline const DOpEWrapper::FEValues<dim> &
     GetFEValuesControl() const;
+
   private:
     /*
      * Helper Functions
@@ -423,17 +428,18 @@ namespace DOpE
     ElementDataContainer(const hp::QCollection<dim> &q_collection,
                          UpdateFlags update_flags,
                          SpaceTimeHandler<FE, dealii::hp::DoFHandler, SPARSITYPATTERN,
-                         VECTOR, dopedim, dealdim>& sth,
+                         VECTOR, dopedim, dealdim> &sth,
                          const std::vector<
                          typename DOpEWrapper::DoFHandler<dim, dealii::hp::DoFHandler>::active_cell_iterator>& element,
                          const std::map<std::string, const Vector<double>*> &param_values,
-                         const std::map<std::string, const VECTOR *> &domain_values) :
+                         const std::map<std::string, const VECTOR *> &domain_values,
+                         bool need_vertices) :
       edcinternal::ElementDataContainerInternal<VECTOR, dim>(param_values,
-                                                             domain_values), element_(element), state_hp_fe_values_(
-                                                               sth.GetMapping(), (sth.GetFESystem("state")), q_collection,
-                                                               update_flags), control_hp_fe_values_(sth.GetMapping(),
-                                                                   (sth.GetFESystem("control")), q_collection, update_flags), q_collection_(
-                                                                       q_collection)
+                                                             domain_values,
+	                                                     sth, element[0], need_vertices),
+	element_(element),
+	state_hp_fe_values_(sth.GetMapping(), (sth.GetFESystem("state")), q_collection, update_flags),
+	control_hp_fe_values_(sth.GetMapping(), (sth.GetFESystem("control")), q_collection, update_flags), q_collection_(q_collection)
     {
       state_index_ = sth.GetStateIndex();
       if (state_index_ == 1)
@@ -463,17 +469,18 @@ namespace DOpE
     ElementDataContainer(const hp::QCollection<dim> &q_collection,
                          UpdateFlags update_flags,
                          StateSpaceTimeHandler<FE, dealii::hp::DoFHandler, SPARSITYPATTERN,
-                         VECTOR, dim>& sth,
+                         VECTOR, dim> &sth,
                          const std::vector<
                          typename DOpEWrapper::DoFHandler<dim, dealii::hp::DoFHandler>::active_cell_iterator>& element,
                          const std::map<std::string, const Vector<double>*> &param_values,
-                         const std::map<std::string, const VECTOR *> &domain_values) :
+                         const std::map<std::string, const VECTOR *> &domain_values,
+                         bool need_vertices) :
       edcinternal::ElementDataContainerInternal<VECTOR, dim>(param_values,
-                                                             domain_values), element_(element), state_hp_fe_values_(
-                                                               sth.GetMapping(), (sth.GetFESystem("state")), q_collection,
-                                                               update_flags), control_hp_fe_values_(sth.GetMapping(),
-                                                                   (sth.GetFESystem("state")), q_collection, update_flags), q_collection_(
-                                                                       q_collection)
+                                                             domain_values,
+							     sth, element[0], need_vertices),
+      element_(element),
+      state_hp_fe_values_(sth.GetMapping(), (sth.GetFESystem("state")), q_collection, update_flags),
+      control_hp_fe_values_(sth.GetMapping(),(sth.GetFESystem("state")), q_collection, update_flags), q_collection_(q_collection)
     {
       state_index_ = sth.GetStateIndex();
       control_index_ = element.size(); //Make sure they are never used ...
@@ -584,6 +591,9 @@ namespace DOpE
     //Make sure that the Control must be initialized.
     if (this->GetControlIndex() < element_.size())
       control_fe_values_.reinit(element_[this->GetControlIndex()]);
+
+    edcinternal::ElementDataContainerInternal<
+      VECTOR, dim>::ReInit(element_[this->GetStateIndex()]);
   }
 
   /***********************************************************************/
@@ -673,7 +683,7 @@ namespace DOpE
   {
     return control_fe_values_;
   }
-
+  
   /***********************************************************************/
 
   template<typename VECTOR, int dim>
@@ -839,6 +849,9 @@ namespace DOpE
     //Make sure that the Control must be initialized.
     if (this->GetControlIndex() < element_.size())
       control_hp_fe_values_.reinit(element_[this->GetControlIndex()]);
+
+    edcinternal::ElementDataContainerInternal<
+      VECTOR, dim>::ReInit(element_[this->GetStateIndex()]);
   }
   /*********************************************/
 

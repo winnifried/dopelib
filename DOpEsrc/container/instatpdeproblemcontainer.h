@@ -1,6 +1,6 @@
 /**
 *
-* Copyright (C) 2012-2014 by the DOpElib authors
+* Copyright (C) 2012-2018 by the DOpElib authors
 *
 * This file is part of DOpElib
 *
@@ -99,7 +99,7 @@ namespace DOpE
     PRIMALTSPROBLEM<StateProblem<
     PDEProblemContainer<PDE,DD,SPARSITYPATTERN,VECTOR,dealdim,FE, DH>,
                         PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>,
-                        SPARSITYPATTERN, VECTOR, dealdim, FE, DH>& GetStateProblem()
+                        SPARSITYPATTERN, VECTOR, dealdim, FE, DH> &GetStateProblem()
     {
       if (ts_state_problem_ == NULL)
         {
@@ -116,7 +116,7 @@ namespace DOpE
     PRIMALTSPROBLEM<StateProblem<
     PDEProblemContainer<PDE,DD,SPARSITYPATTERN,VECTOR,dealdim,FE, DH>,
     PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>,
-    SPARSITYPATTERN, VECTOR, dealdim, FE, DH>* ts_state_problem_;
+    SPARSITYPATTERN, VECTOR, dealdim, FE, DH> *ts_state_problem_;
 
   };
 }

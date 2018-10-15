@@ -1,0 +1,186 @@
+\chapter{Terminal Output  and Parameter Files when Running the Examples}
+\label{sec_terminal_output}
+We have implemented various options for terminal output and 
+data output into files that can be controlled with the help of 
+the respective parameter files
+\begin{verbatim}
+dope.prm
+\end{verbatim}
+in each Examples folder.
+
+In the following we briefly show such output and briefly 
+explain where to control it.
+\section{Example of a terminal output: \texttt{PDE/InstatPDE/Example8}}
+
+\begin{verbatim}
+Computing State Solution:
+Computing Initial Values:
+                 Newton step: 0  Residual (abs.):   9.7656e-04
+                 Newton step: 0  Residual (rel.):     1.0000e+00
+                 Newton step: 1  Residual (rel.): < 1.0000e-11   LineSearch {0} 
+Writing [Results/Mesh0/State_InstatPDEProblemContainer.00000.vtk]
+                 Precalculating functional values 
+        StressX: 0
+         Timestep: 1 (0 -> 0.0001) using Crank-Nicolson
+                 Newton step: 0  Residual (abs.):   4.0385e-04
+                 Newton step: 0  Residual (rel.):     1.0000e+00
+                 Newton step: 1  Residual (rel.):   1.8656e-03   LineSearch {0} 
+                 Newton step: 2  Residual (rel.):   3.4959e-06   LineSearch {0} 
+                 Newton step: 3  Residual (rel.):   1.3608e-10   LineSearch {0} 
+Writing [Results/Mesh0/State_InstatPDEProblemContainer.00001.vtk]
+                 Precalculating functional values 
+        StressX: 6.42408
+\end{verbatim}
+
+We observe the respective Newtons step, its current (relative) residual. 
+Then, we see at which place the result is written and the respective 
+name of that file. Afterwards, we calculate the functional values, here the 
+\texttt{StressX} value (see the detailed description of that example before).
+Then, we increment the time step number and proceed further.
+
+
+\section{Controlling the output in the parameter file}
+We have implemented various options to control the output via the 
+parameter file. Specifically in the part \texttt{subsection output
+  parameters}.
+Taking the parameter file from the previous example it looks like:
+\begin{verbatim}
+subsection output parameters
+  # File format for the output of solution variables
+  set file_format       = .vtk
+
+  # Iteration Counters that should not reflect in the outputname, seperated by
+  # `;`
+  set ignore_iterations = PDENewton;Cg
+  
+  # Name of the logfile
+  set logfile           = dope.log
+
+  # Do not write files whose name contains a substring given here by a list of
+  # `;` separated words
+  set never_write_list  = Gradient;Residual;Hessian;Tangent;Adjoint;Update
+  #set never_write_list  = Gradient;Hessian;Tangent;Adjoint
+      
+  # Defines what strings should be printed, the higher the number the more
+  # output
+  set printlevel        = 6
+  
+  # Set the precision of the newton output
+  set number_precision	 = 4
+
+  # Set manually the machine tolarance for the output
+  set eps_machine_set_by_user	 = 1.0e-11
+
+
+  # Directory where the output goes to
+  set results_dir       = Results/
+end
+\end{verbatim}
+Most settings are self-explaining with the help of their respective comments
+provided here. In the following, we discuss some of them in more detail though.
+
+
+
+\newpage
+\subsection{Printlevel}
+Let us first look to 
+\begin{verbatim}
+ set printlevel        = 6
+\end{verbatim}
+Taking $5$ rather than $6$ yields the terminal output:
+\begin{verbatim}
+Computing State Solution:
+Computing Initial Values:
+Writing [Results/Mesh0/State_InstatPDEProblemContainer.00000.vtk]
+         Timestep: 1 (0 -> 0.0001) using Crank-Nicolson
+Writing [Results/Mesh0/State_InstatPDEProblemContainer.00001.vtk]
+\end{verbatim}
+Reducing further the number yields less and less output on the screen. 
+For debugging purposes in the developement stage, it might be helpful to 
+work with print level $6$. 
+
+\begin{remark}
+In the \texttt{test.prm} file for running the regression tests, the print
+level 
+should be sufficiently high in order to compare `something'. If nothing 
+is printed, nothing can be compared whether \dope{} still works correctly.
+\end{remark}
+
+\begin{remark}
+Also
+\begin{verbatim}
+ set printlevel        = -1
+\end{verbatim}
+has been implemented, which just prints all possible output on the terminal
+thus deactivating all output filters.
+\end{remark}
+
+
+\subsection{Set never write list}
+With respect to graphical file output (here *.vtk), specifically in
+optimization many steps in the algorithm may be useful when checking 
+new developements. For instance, in the previous list, we never write 
+\begin{verbatim}
+ set never_write_list  = Gradient;Residual;Hessian;Tangent;Adjoint;Update
+\end{verbatim}
+On the other hand, if \texttt{set never write list} is empty, 
+we would write for each vector the respective *.vtk file
+which requires for fine discretizations a lot of memory on the hard disk.
+
+Let us give an example: we set 
+\begin{verbatim}
+ set never_write_list  = Gradient;Residual;Hessian;Tangent;Adjoint;Update
+\end{verbatim}
+Then, only the physical solution is written as *.vtk:
+\begin{verbatim}
+Writing [Results/Mesh0/State_InstatPDEProblemContainer.00000.vtk]
+\end{verbatim}
+If we remove \texttt{Residual} from that list, we obtain:
+\begin{verbatim}
+ set never_write_list  = Gradient;Hessian;Tangent;Adjoint;Update
+\end{verbatim}
+and we write the residual of the solution after each Newton step (using
+\texttt{printlevel 6} here):
+\begin{verbatim}
+         Timestep: 1 (0 -> 0.0001) using Crank-Nicolson
+Writing [Results/Mesh0/Residualstate.00001.vtk]
+                 Newton step: 0  Residual (abs.):   4.0385e-04
+                 Newton step: 0  Residual (rel.):     1.0000e+00
+Writing [Results/Mesh0/Residualstate.00001.vtk]
+                 Newton step: 1  Residual (rel.):   1.8656e-03   LineSearch {0} 
+Writing [Results/Mesh0/Residualstate.00001.vtk]
+                 Newton step: 2  Residual (rel.):   3.4959e-06   LineSearch {0} 
+Writing [Results/Mesh0/Residualstate.00001.vtk]
+                 Newton step: 3  Residual (rel.):   1.3608e-10   LineSearch {0} 
+Writing [Results/Mesh0/State_InstatPDEProblemContainer.00001.vtk]
+                 Precalculating functional values 
+        StressX: 6.42408
+\end{verbatim}
+
+\begin{remark}
+By removing \texttt{Update}, we would also write each Newton update into a
+vtk-file.
+These options allow detailed debugging of the code.
+\end{remark}
+
+
+\subsection{dope.log}
+The \texttt{dope.log} file contains exactly the output of the terminal 
+during and after running an example. This allows to double-check the output 
+when necessary.
+
+
+\subsection{Functional output into \texttt{gnuplot}}
+At the end of a simulation (in particular a time-dependent problem), we 
+are often interested in the temporal evolution of the functionals of interest.
+Here, in Example 8 it is \texttt{StressX}. If too much output would appear,
+\dope{} passes it directly into a file:
+\begin{verbatim}
+Computing Functionals:
+StressX too large. Writing to file instead: 
+Writing [Results/Mesh0/StressX_InstatPDEProblemContainer.00140.gpl]
+\end{verbatim}
+This file can then be plotted using gnuplot.
+The behavior for time-dependent problems is indeed usually to write 
+all functional values into a file at the end of a computation.
+For stationary problems, the functional value will be printed in the terminal.

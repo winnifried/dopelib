@@ -1,6 +1,6 @@
 /**
 *
-* Copyright (C) 2012-2014 by the DOpElib authors
+* Copyright (C) 2012-2018 by the DOpElib authors
 *
 * This file is part of DOpElib
 *
@@ -89,7 +89,7 @@ namespace DOpE
                             INTEGRATORDATACONT &idc,
                             DOpEExceptionHandler<VECTOR> *Except=NULL,
                             DOpEOutputHandler<VECTOR> *Output=NULL);
-    ~GeneralizedMMAAlgorithm() {}
+    ~GeneralizedMMAAlgorithm()  throw() {}
 
     /**
      * Used to declare run time parameters. This is needed to declare all

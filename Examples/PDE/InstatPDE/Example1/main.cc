@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (C) 2012-2014 by the DOpElib authors
+ * Copyright (C) 2012-2018 by the DOpElib authors
  *
  * This file is part of DOpElib
  *
@@ -35,6 +35,10 @@
 #include <deal.II/grid/grid_in.h>
 #include <deal.II/grid/tria_boundary_lib.h>
 #include <deal.II/grid/grid_generator.h>
+#include <deal.II/base/function.h>
+#if DEAL_II_VERSION_GTE(9,0,0)
+#include <deal.II/grid/manifold_lib.h>
+#endif
 
 //DOpE includes
 #include <include/parameterreader.h>
@@ -149,9 +153,15 @@ main(int argc, char **argv)
   /**********************************************/
 
   Point<DIM> p(0.2, 0.2);
+#if DEAL_II_VERSION_GTE(9,0,0)
+  static const SphericalManifold<DIM> boundary(p);
+  triangulation.set_all_manifold_ids_on_boundary(80,80);
+  triangulation.set_manifold(80,boundary);
+#else
   double radius = 0.05;
   static const HyperBallBoundary<DIM> boundary(p, radius);
   triangulation.set_boundary(80, boundary);
+#endif
   triangulation.refine_global(2);
 
   FE<DIM> state_fe(FE_Q<DIM>(2), 2, FE_Q<DIM>(1), 1);

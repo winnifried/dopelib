@@ -1,6 +1,6 @@
 /**
 *
-* Copyright (C) 2012-2014 by the DOpElib authors
+* Copyright (C) 2012-2018 by the DOpElib authors
 *
 * This file is part of DOpElib
 *
@@ -460,7 +460,7 @@ namespace DOpE
     /*******************************************************************************************/
 
     template<typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR, int dimlow,
-    int dimhigh>
+             int dimhigh>
     template<typename PROBLEM>
     SCALAR Network_IntegratorMixedDimensions<INTEGRATORDATACONT, VECTOR, SCALAR, dimlow, dimhigh>::ComputePointScalar(PROBLEM &pde)
     {
@@ -753,7 +753,7 @@ namespace DOpE
     /*******************************************************************************************/
 
     template<typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR, int dimlow,
-    int dimhigh>
+             int dimhigh>
     void Network_IntegratorMixedDimensions<INTEGRATORDATACONT, VECTOR, SCALAR, dimlow, dimhigh>::AddParamData(
       std::string name,
       const dealii::Vector<
