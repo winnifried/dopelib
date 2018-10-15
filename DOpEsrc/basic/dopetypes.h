@@ -176,6 +176,7 @@ namespace DOpE
         out<<"Code given is "<< t<<std::endl;
         throw DOpEException(out.str(),"DOpEtypesToString<DOpEtypes::VectorStorageType");
       }
+    }
   }
 
   template <>

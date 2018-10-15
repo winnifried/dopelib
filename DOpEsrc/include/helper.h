@@ -104,6 +104,7 @@ namespace DOpEHelper
   }
 #endif
 
+// TODO !!! remove
   /**
    * Helper class for the VECTOR-templates. Resizes the given BlockVector vector.
    */
@@ -163,6 +164,14 @@ namespace DOpEHelper
    * Same as above with different input parameters.
    */
   void ReSizeVector(const dealii::BlockIndices &, dealii::Vector<double> &vector);
+  
+    /**
+   * Splits an index set source into different blocks according to block_counts.
+   * Application: split locally_owned for block vectors
+   */
+  std::vector<dealii::IndexSet>
+  split_blockwise (const dealii::IndexSet &source,
+                   const std::vector<unsigned int> &block_counts);
 
   // Distributed: vmult, solve, +, -, constraints, assemble into
   // Ghosted: linearization point, output, anything that evaluates
