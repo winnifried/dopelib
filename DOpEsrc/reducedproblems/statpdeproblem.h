@@ -198,22 +198,6 @@ namespace DOpE
     /******************************************************/
 
     /**
-     *  Here, the given VECTOR v is printed to a file of *.vtk format.
-     *  However, in later implementations other file formats will be available.
-     *
-     *  @param v           The VECTOR to write to a file.
-     *  @param name        The names of the variables, e.g., in a fluid problem: v1, v2, p.
-     *  @param outfile     The basic name for the output file to print.
-     *  @param dof_type    Has the DoF type: state or control.
-     *  @param filetype    The filetype. Actually, *.vtk outputs are possible.
-     */
-    void
-    WriteToFile(const VECTOR &v, std::string name, std::string outfile,
-                std::string dof_type, std::string filetype);
-
-    /******************************************************/
-
-    /**
      *  Here, the given Vector v (containing element-related data) is printed to
      *  a file of *.vtk format. However, in later implementations other
      *  file formats will be available.
@@ -233,17 +217,6 @@ namespace DOpE
     /******************************************************/
 
     /**
-     *  Here, the given ControlVector<VECTOR> v is printed to a file of *.vtk format.
-     *  However, in later implementations other file formats will be available.
-     *
-     *  @param v           The ControlVector<VECTOR> to write to a file.
-     *  @param name        The names of the variables, e.g., in a fluid problem: v1, v2, p.
-     *  @param dof_type    Has the DoF type: state or control.
-     */
-    void
-    WriteToFile(const ControlVector<VECTOR> &v, std::string name, std::string dof_type);
-
-    /**
      * Basic function to write a std::vector to a file.
      *
      *  @param v           A std::vector to write to a file.
@@ -256,6 +229,11 @@ namespace DOpE
     {
       abort();
     }
+
+    /**
+     * Import overloads from base class.
+     */
+    using PDEProblemInterface<PROBLEM, VECTOR, dealdim>::WriteToFile;
 
   protected:
     /**
@@ -338,6 +316,7 @@ namespace DOpE
       return adjoint_reinit_;
     }
 
+
     bool &
     GetBuildStateMatrix()
     {
@@ -361,6 +340,7 @@ namespace DOpE
     {
       return adjoint_reinit_;
     }
+
 
   private:
     /**
@@ -425,6 +405,7 @@ namespace DOpE
                                 unsigned int n_pre,
                                 unsigned int prob_num);
 
+
     StateVector<VECTOR> u_;
     StateVector<VECTOR> z_for_ee_;
 
@@ -434,12 +415,12 @@ namespace DOpE
     NONLINEARSOLVER nonlinear_state_solver_;
     NONLINEARSOLVER nonlinear_adjoint_solver_;
 
-    bool build_state_matrix_;
-    bool build_adjoint_matrix_;
-    bool state_reinit_;
-    bool adjoint_reinit_;
+    bool build_state_matrix_ = false;
+    bool build_adjoint_matrix_= false;
+    bool state_reinit_ = false;
+    bool adjoint_reinit_ = false;
 
-    int n_patches_;
+    int n_patches_ = 0;
 
     friend class SolutionExtractor<
       StatPDEProblem<NONLINEARSOLVER, INTEGRATOR, PROBLEM, VECTOR, dealdim>,
@@ -601,19 +582,27 @@ namespace DOpE
           }
       }
 
+    MPI_TILL_HERE;
+
     this->GetOutputHandler()->Write("Computing State Solution:",
                                     4 + this->GetBasePriority());
+    MPI_TILL_HERE;
 
     this->GetProblem()->AddAuxiliaryToIntegrator(this->GetIntegrator());
+    MPI_TILL_HERE;
     AddUDD();
+    MPI_TILL_HERE;
     build_state_matrix_ = this->GetNonlinearSolver("state").NonlinearSolve(
                             problem, (GetU().GetSpacialVector()), true, build_state_matrix_);
+    MPI_TILL_HERE;
     DeleteUDD();
+    MPI_TILL_HERE;
 
     this->GetProblem()->DeleteAuxiliaryFromIntegrator(this->GetIntegrator());
 
     this->GetOutputHandler()->Write((GetU().GetSpacialVector()),
                                     "State" + this->GetPostIndex(), problem.GetDoFType());
+    MPI_TILL_HERE;
 
   }
 
@@ -976,30 +965,14 @@ namespace DOpE
 
   /******************************************************/
 
-  template<typename NONLINEARSOLVER, typename INTEGRATOR, typename PROBLEM,
-           typename VECTOR, int dealdim>
-  void
-  StatPDEProblem<NONLINEARSOLVER, INTEGRATOR, PROBLEM, VECTOR, dealdim>::WriteToFile(
-    const VECTOR &v, std::string name, std::string outfile,
-    std::string dof_type, std::string filetype)
-  {
-    if (dof_type != "state")
-      throw DOpEException("No such DoFHandler `" + dof_type + "'!",
-                          "StatPDEProblem::WriteToFile");
-
-    this->GetProblem()->GetSpaceTimeHandler()->WriteToFile(v, name, outfile, dof_type, filetype);
-  }
-
-  /******************************************************/
-
-  template<typename NONLINEARSOLVER, typename INTEGRATOR, typename PROBLEM,
-           typename VECTOR, int dealdim>
-  void
-  StatPDEProblem<NONLINEARSOLVER, INTEGRATOR, PROBLEM, VECTOR, dealdim>::WriteToFile(
-    const ControlVector<VECTOR> &/*v*/, std::string /*name*/, std::string /*dof_type*/)
-  {
-    throw DOpEException("This Problem does not support ControlVectors","StatPDEProblem::WriteToFile");
-  }
+//  template<typename NONLINEARSOLVER, typename INTEGRATOR, typename PROBLEM,
+//           typename VECTOR, int dealdim>
+//  void
+//  StatPDEProblem<NONLINEARSOLVER, INTEGRATOR, PROBLEM, VECTOR, dealdim>::WriteToFile(
+//    const ControlVector<VECTOR> &/*v*/, std::string /*name*/, std::string /*dof_type*/)
+//  {
+//    throw DOpEException("This Problem does not support ControlVectors","StatPDEProblem::WriteToFile");
+//  }
 
   /******************************************************/
 

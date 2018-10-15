@@ -34,39 +34,40 @@ namespace DOpE
    *
    * For details on the methods see ConstraintInterface
    */
-  template <
-    template <template <int, int> class DH, typename VECTOR, int dealdim> class EDC,
-    template <template <int, int> class DH, typename VECTOR, int dealdim> class FDC,
-    template <int, int> class DH, typename VECTOR, int dopedim, int dealdim>
-  class NoConstraints : public ConstraintInterface<EDC, FDC, DH, VECTOR,
-    dopedim, dealdim>
+  template<
+    template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
+    template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
+    template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
+  class NoConstraints : public ConstraintInterface<EDC, FDC, DH,
+    VECTOR, dopedim, dealdim>
   {
   public:
-    NoConstraints ()
-      : ConstraintInterface<EDC, FDC, DH, VECTOR, dopedim, dealdim> ()
+    NoConstraints() :
+      ConstraintInterface<EDC, FDC, DH, VECTOR, dopedim, dealdim>()
     {
     }
-    ~NoConstraints ()
+    ~NoConstraints()
     {
     }
 
     void
-    EvaluateLocalControlConstraints (const VECTOR & /*control*/,
-                                     VECTOR & /*constraints*/)
+    EvaluateLocalControlConstraints(
+      const VECTOR & /*control*/,
+      VECTOR & /*constraints*/)
     {
-      throw DOpEException ("This should never be called!",
-                           "NoConstraints::EvaluateLocalControlConstraints");
-      abort ();
+      throw DOpEException("This should never be called!",
+                          "NoConstraints::EvaluateLocalControlConstraints");
+      abort();
     }
     void
-    GetControlBoxConstraints (VECTOR &lb,
-                              VECTOR &ub) const
+    GetControlBoxConstraints(VECTOR &lb, VECTOR &ub) const
     {
       lb = -1.e+20;
       ub = 1.e+20;
     }
     void
-    PostProcessConstraints (ConstraintVector<VECTOR> & /*g*/) const
+    PostProcessConstraints(
+      ConstraintVector<VECTOR> & /*g*/) const
     {
     }
 

@@ -1,25 +1,25 @@
 /**
- *
- * Copyright (C) 2012-2014 by the DOpElib authors
- *
- * This file is part of DOpElib
- *
- * DOpElib is free software: you can redistribute it
- * and/or modify it under the terms of the GNU General Public
- * License as published by the Free Software Foundation, either
- * version 3 of the License, or (at your option) any later
- * version.
- *
- * DOpElib is distributed in the hope that it will be
- * useful, but WITHOUT ANY WARRANTY; without even the implied
- * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
- * PURPOSE.  See the GNU General Public License for more
- * details.
- *
- * Please refer to the file LICENSE.TXT included in this distribution
- * for further information on this license.
- *
- **/
+*
+* Copyright (C) 2012-2014 by the DOpElib authors
+*
+* This file is part of DOpElib
+*
+* DOpElib is free software: you can redistribute it
+* and/or modify it under the terms of the GNU General Public
+* License as published by the Free Software Foundation, either
+* version 3 of the License, or (at your option) any later
+* version.
+*
+* DOpElib is distributed in the hope that it will be
+* useful, but WITHOUT ANY WARRANTY; without even the implied
+* warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+* PURPOSE.  See the GNU General Public License for more
+* details.
+*
+* Please refer to the file LICENSE.TXT included in this distribution
+* for further information on this license.
+*
+**/
 
 #ifndef GMRES_LINEAR_SOLVER_H_
 #define GMRES_LINEAR_SOLVER_H_
@@ -67,8 +67,8 @@ namespace DOpE
     static void declare_params(ParameterReader &param_reader);
 
     /**
-     This Function should be called once after grid refinement, or changes in boundary values
-     to  recompute sparsity patterns, and constraint matrices.
+       This Function should be called once after grid refinement, or changes in boundary values
+       to  recompute sparsity patterns, and constraint matrices.
      */
     template<typename PROBLEM>
     void ReInit(PROBLEM &pde);
@@ -100,8 +100,8 @@ namespace DOpE
     SPARSITYPATTERN sparsity_pattern_;
     MATRIX matrix_;
 
-    double linear_global_tol_, linear_tol_;
-    int linear_maxiter_, no_tmp_vectors_;
+    double linear_global_tol_, linear_tol_ = 0;
+    int  linear_maxiter_, no_tmp_vectors_;
   };
 
   /*********************************Implementation************************************************/
@@ -122,9 +122,8 @@ namespace DOpE
   {
     param_reader.SetSubsection("gmres_withmatrix parameters");
     linear_global_tol_ = param_reader.get_double ("linear_global_tol");
-    linear_maxiter_ = param_reader.get_integer ("linear_maxiter");
-    no_tmp_vectors_ = param_reader.get_integer ("no_tmp_vectors");
-
+    linear_maxiter_    = param_reader.get_integer ("linear_maxiter");
+    no_tmp_vectors_    = param_reader.get_integer ("no_tmp_vectors");
   }
 
   /******************************************************/
@@ -138,7 +137,7 @@ namespace DOpE
 
   template <typename PRECONDITIONER,typename SPARSITYPATTERN, typename MATRIX, typename VECTOR>
   template<typename PROBLEM>
-  void GMRESLinearSolverWithMatrix<PRECONDITIONER,SPARSITYPATTERN,MATRIX,VECTOR>::ReInit(PROBLEM &pde)
+  void  GMRESLinearSolverWithMatrix<PRECONDITIONER,SPARSITYPATTERN,MATRIX,VECTOR>::ReInit(PROBLEM &pde)
   {
     matrix_.clear();
     pde.ComputeSparsityPattern(sparsity_pattern_);
@@ -160,6 +159,7 @@ namespace DOpE
         integr.ComputeMatrix (pde,matrix_);
       }
 
+
     dealii::SolverControl solver_control (linear_maxiter_, linear_global_tol_,false,false);
 
     // This is gmres specific
@@ -167,20 +167,16 @@ namespace DOpE
     typename dealii::SolverGMRES<VECTOR>::AdditionalData gmres_data;
     gmres_data.max_n_tmp_vectors = no_tmp_vectors_;
 
+
     dealii::SolverGMRES<VECTOR> gmres (solver_control, vector_memory, gmres_data);
     PRECONDITIONER precondition;
     precondition.initialize(matrix_);
-    try// TODO !!! remove
-      {
-        gmres.solve (matrix_, solution, rhs,
-                     precondition);
-      }
-    catch (SolverControl::NoConvergence &)
-      {
-      }
+    gmres.solve (matrix_, solution, rhs,
+                 precondition);
 
     pde.GetDoFConstraints().distribute(solution);
   }
+
 
 }
 #endif

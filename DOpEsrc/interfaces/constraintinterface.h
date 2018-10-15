@@ -59,13 +59,14 @@ namespace DOpE
     template <template <int, int> class DH, typename VECTOR, int dealdim> class EDC,
     template <template <int, int> class DH, typename VECTOR, int dealdim> class FDC,
     template <int, int> class DH, typename VECTOR, int dopedim, int dealdim>
-  class ConstraintInterface : public FunctionalInterface<EDC, FDC, DH, VECTOR,
-    dopedim, dealdim>
+  class ConstraintInterface : public FunctionalInterface<EDC, FDC, DH,
+    VECTOR, dopedim, dealdim>
   {
   public:
     ConstraintInterface ()
     {
     }
+    virtual
     ~ConstraintInterface ()
     {
     }
@@ -102,12 +103,10 @@ namespace DOpE
      *               size as the control.
      */
     virtual void
-    GetControlBoxConstraints (VECTOR &lb,
-                              VECTOR &ub) const = 0;
+    GetControlBoxConstraints(VECTOR &lb, VECTOR &ub) const = 0;
 
     void
-    SetProblemType (std::string type,
-                    unsigned int num)
+    SetProblemType(std::string type, unsigned int num)
     {
       problem_type_num_ = num;
       problem_type_ = type;
@@ -138,9 +137,10 @@ namespace DOpE
     {
       return problem_type_num_;
     }
+
   private:
-    std::string problem_type_;
-    unsigned int problem_type_num_;
+    std::string problem_type_ = "";
+    unsigned int problem_type_num_ = 0;
   };
 }
 

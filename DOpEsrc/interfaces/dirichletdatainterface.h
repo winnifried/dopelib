@@ -33,6 +33,10 @@ namespace DOpE
   class DirichletDataInterface
   {
   public:
+    virtual
+    ~DirichletDataInterface() {}
+
+
     /**
      * This Function should return the dirichlet value in the component component at the given point
      *
@@ -50,11 +54,11 @@ namespace DOpE
      * @return                      The dirichletdata for the componten at point.
      */
     virtual double
-    Data (const std::map<std::string, const dealii::Vector<double>*> * /*param_values*/,
-          const std::map<std::string, const VECTOR *> * /*domain_values*/,
-          unsigned int /*color*/,
-          const dealii::Point<dealdim> & /*point*/,
-          unsigned int /*component*/) const =0;
+    Data(
+      const std::map<std::string, const dealii::Vector<double>*> * /*param_values*/,
+      const std::map<std::string, const VECTOR *> * /*domain_values*/,
+      unsigned int /*color*/, const dealii::Point<dealdim> & /*point*/,
+      unsigned int /*component*/) const =0;
 
     /**
      * This Function should return the derivative wrt. the control of the dirichlet value at the in the component component at the given point.
@@ -74,11 +78,11 @@ namespace DOpE
      * @return                      The dirichletdata for the componten at point.
      */
     virtual double
-    Data_Q (const std::map<std::string, const dealii::Vector<double>*> * /*param_values*/,
-            const std::map<std::string, const VECTOR *> * /*domain_values*/,
-            unsigned int /*color*/,
-            const dealii::Point<dealdim> & /*point*/,
-            unsigned int /*component*/) const=0;
+    Data_Q(
+      const std::map<std::string, const dealii::Vector<double>*> * /*param_values*/,
+      const std::map<std::string, const VECTOR *> * /*domain_values*/,
+      unsigned int /*color*/, const dealii::Point<dealdim> & /*point*/,
+      unsigned int /*component*/) const=0;
     /**
      * This Function should return the transposed derivative wrt. the control of the dirichlet value.
      * The output  should be ordered by components in the control. The Testfunction is given in
@@ -99,13 +103,12 @@ namespace DOpE
      * @param local_vector          The transposed dirichlet data at the point
      */
     virtual void
-    Data_QT (const std::map<std::string, const dealii::Vector<double>*> * /*param_values*/,
-             const std::map<std::string, const VECTOR *> * /*domain_values*/,
-             unsigned int /*color*/,
-             const dealii::Point<dealdim> & /*point*/,
-             unsigned int /*component*/,
-             unsigned int /*dof_number*/,
-             dealii::Vector<double> & /*local_vector*/) const
+    Data_QT(
+      const std::map<std::string, const dealii::Vector<double>*> * /*param_values*/,
+      const std::map<std::string, const VECTOR *> * /*domain_values*/,
+      unsigned int /*color*/, const dealii::Point<dealdim> & /*point*/,
+      unsigned int /*component*/, unsigned int /*dof_number*/,
+      dealii::Vector<double> & /*local_vector*/) const
     {
     }
     /**
@@ -129,13 +132,12 @@ namespace DOpE
      * @param local_vector          The transposed dirichlet data at the point
      */
     virtual void
-    Data_QQT (const std::map<std::string, const dealii::Vector<double>*> * /*param_values*/,
-              const std::map<std::string, const VECTOR *> * /*domain_values*/,
-              unsigned int /*color*/,
-              const dealii::Point<dealdim> & /*point*/,
-              unsigned int /*component*/,
-              unsigned int /*dof_number*/,
-              dealii::Vector<double> & /*local_vector*/) const
+    Data_QQT(
+      const std::map<std::string, const dealii::Vector<double>*> * /*param_values*/,
+      const std::map<std::string, const VECTOR *> * /*domain_values*/,
+      unsigned int /*color*/, const dealii::Point<dealdim> & /*point*/,
+      unsigned int /*component*/, unsigned int /*dof_number*/,
+      dealii::Vector<double> & /*local_vector*/) const
     {
     }
     /**

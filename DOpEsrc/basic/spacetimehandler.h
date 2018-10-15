@@ -45,6 +45,8 @@
 //#include <deal.II/multigrid/mg_smoother.h>
 //#include <deal.II/multigrid/mg_matrix.h>
 
+
+
 #include <vector>
 #include <iostream>
 #include <fstream>
@@ -66,39 +68,39 @@ namespace DOpE
    * @tparam<dealdim>           The dimension for the state variable. This is the dimension the
    *                            mesh is in.
    */
-  template <template <int, int> class FE, template <int, int> class DH,
-            typename SPARSITYPATTERN, typename VECTOR, int dopedim, int dealdim>
+  template<template<int, int> class FE, template<int, int> class DH, typename SPARSITYPATTERN,
+           typename VECTOR, int dopedim, int dealdim>
   class SpaceTimeHandler : public SpaceTimeHandlerBase<VECTOR>
   {
   public:
-    SpaceTimeHandler (DOpEtypes::ControlType type)
-      : SpaceTimeHandlerBase<VECTOR> (type),
-        control_index_ (dealii::numbers::invalid_unsigned_int),
-        state_index_ (dealii::numbers::invalid_unsigned_int)
+    SpaceTimeHandler(DOpEtypes::ControlType type) :
+      SpaceTimeHandlerBase<VECTOR>(type), control_index_(
+        dealii::numbers::invalid_unsigned_int), state_index_(
+          dealii::numbers::invalid_unsigned_int)
     {
     }
     SpaceTimeHandler (dealii::Triangulation<1> &times,
-                      DOpEtypes::ControlType type)
-      : SpaceTimeHandlerBase<VECTOR> (times, type),
-        control_index_ (dealii::numbers::invalid_unsigned_int),
-        state_index_ (dealii::numbers::invalid_unsigned_int)
+                      DOpEtypes::ControlType type) :
+      SpaceTimeHandlerBase<VECTOR>(times, type), control_index_(
+        dealii::numbers::invalid_unsigned_int), state_index_(
+          dealii::numbers::invalid_unsigned_int)
     {
     }
     SpaceTimeHandler (DOpEtypes::ControlType type,
-                      const ActiveFEIndexSetterInterface<dopedim, dealdim> &index_setter)
-      : SpaceTimeHandlerBase<VECTOR> (type),
-        control_index_ (dealii::numbers::invalid_unsigned_int),
-        state_index_ (dealii::numbers::invalid_unsigned_int),
-        fe_index_setter_ (&index_setter)
+                      const ActiveFEIndexSetterInterface<dopedim, dealdim> &index_setter) :
+      SpaceTimeHandlerBase<VECTOR>(type), control_index_(
+        dealii::numbers::invalid_unsigned_int), state_index_(
+          dealii::numbers::invalid_unsigned_int), fe_index_setter_(
+            &index_setter)
     {
     }
     SpaceTimeHandler (dealii::Triangulation<1> &times,
                       DOpEtypes::ControlType type,
-                      const ActiveFEIndexSetterInterface<dopedim, dealdim> &index_setter)
-      : SpaceTimeHandlerBase<VECTOR> (times, type),
-        control_index_ (dealii::numbers::invalid_unsigned_int),
-        state_index_ (dealii::numbers::invalid_unsigned_int),
-        fe_index_setter_ (&index_setter)
+                      const ActiveFEIndexSetterInterface<dopedim, dealdim> &index_setter) :
+      SpaceTimeHandlerBase<VECTOR>(times, type), control_index_(
+        dealii::numbers::invalid_unsigned_int), state_index_(
+          dealii::numbers::invalid_unsigned_int), fe_index_setter_(
+            &index_setter)
     {
     }
     virtual
@@ -212,6 +214,7 @@ namespace DOpE
       return ret;
     }
 
+
     /******************************************************/
 
     /**
@@ -221,7 +224,8 @@ namespace DOpE
      * Iterator for multigrid's matrix assembling running
      * over all elements on all levels.
      */
-    std::vector<typename DOpEWrapper::DoFHandler<dealdim, DH>::cell_iterator>
+    std::vector<
+    typename DOpEWrapper::DoFHandler<dealdim, DH>::cell_iterator>
     GetDoFHandlerBeginActiveAllLevels () const
     {
       std::vector<
@@ -244,7 +248,8 @@ namespace DOpE
      * over all elements on all levels.
      */
 
-    std::vector<typename DOpEWrapper::DoFHandler<dealdim, DH>::cell_iterator>
+    std::vector<
+    typename DOpEWrapper::DoFHandler<dealdim, DH>::cell_iterator>
     GetDoFHandlerEndAllLevels () const
     {
       std::vector<
@@ -256,6 +261,8 @@ namespace DOpE
         }
       return ret;
     }
+
+
 
     /******************************************************/
 
@@ -325,13 +332,13 @@ namespace DOpE
      * @param dof_handler   The dof_handler for which the fe indices have to be set.
      */
     void
-    SetActiveFEIndicesState (DOpEWrapper::DoFHandler<dealdim, DH> &dof_handler)
+    SetActiveFEIndicesState(
+      DOpEWrapper::DoFHandler<dealdim, DH> &dof_handler)
     {
       if (dof_handler.NeedIndexSetter ()) //with this we distinguish between hp and classic
         {
           for (typename DH<dealdim, dealdim>::active_cell_iterator element =
-                 dof_handler.begin_active (); element != dof_handler.end ();
-               ++element)
+                 dof_handler.begin_active(); element != dof_handler.end(); ++element)
             {
               this->GetFEIndexSetter ().SetActiveFEIndexState (element);
             }
@@ -346,13 +353,13 @@ namespace DOpE
      * @param dof_handler   The dof_handler for which the fe indices have to be set.
      */
     void
-    SetActiveFEIndicesControl (DOpEWrapper::DoFHandler<dopedim, DH> &dof_handler)
+    SetActiveFEIndicesControl(
+      DOpEWrapper::DoFHandler<dopedim, DH> &dof_handler)
     {
       if (dof_handler.NeedIndexSetter ())
         {
           for (typename DH<dopedim, dopedim>::active_cell_iterator element =
-                 dof_handler.begin_active (); element != dof_handler.end ();
-               ++element)
+                 dof_handler.begin_active(); element != dof_handler.end(); ++element)
             {
               this->GetFEIndexSetter ().SetActiveFEIndexState (element);
             }
@@ -372,7 +379,7 @@ namespace DOpE
     GetLocallyOwnedDoFs (const DOpEtypes::VectorType type,
                          int time_point = -1) const
     {
-      (void) time_point;
+      (void) time_point; // TODO same local dofs for all times ?
 
       switch (type)
         {
@@ -439,8 +446,7 @@ namespace DOpE
      * Returns the constraint dofs in Block b at the current time
      */
     virtual unsigned int
-    GetConstraintDoFsPerBlock (std::string name,
-                               unsigned int b) const=0;
+    GetConstraintDoFsPerBlock(std::string name, unsigned int b) const=0;
 
     /******************************************************/
 
@@ -526,6 +532,7 @@ namespace DOpE
 //                "Not used for normal DofHandler",
 //                "StateSpaceTimeHandler.h");
 //  }
+
     /******************************************************/
 
 //      /**
@@ -558,7 +565,9 @@ namespace DOpE
       return data_out_;
     }
 
-    // TODO enum for filetype
+    /**
+     * Implementation of virtual function in SpaceTimeHandlerBase
+     */
     virtual void
     WriteToFile (const VECTOR &v,
                  std::string name,
@@ -573,11 +582,11 @@ namespace DOpE
     //This saves us a template argument for statpdeproblem etc.
     DOpEWrapper::DataOut<dealdim, DH> data_out_;
     unsigned int control_index_, state_index_;
-    const ActiveFEIndexSetterInterface<dopedim, dealdim> *fe_index_setter_;
+    const ActiveFEIndexSetterInterface<dopedim, dealdim> *fe_index_setter_ = nullptr;
     mutable std::vector<const DOpEWrapper::DoFHandler<dealdim, DH>*> domain_dofhandler_vector_;
     //TODO What if control and state have different dofhandlertypes??
-  }
-  ;
+
+  };
 
   template <template <int, int> class FE, template <int, int> class DH,
             typename SPARSITYPATTERN, typename VECTOR, int dopedim, int dealdim>
@@ -589,21 +598,20 @@ namespace DOpE
       std::string filetype)
   {
     // TODO remove MPI_COMM_WORLD
+#ifdef DOPELIB_WITH_MPI
     const bool parallel = dealii::Utilities::MPI::n_mpi_processes (
                             MPI_COMM_WORLD)
                           > 1;
+#else
+    const bool parallel = false;
+#endif
 
     if (dof_type == "state")
       {
         auto &data_out = GetDataOut ();
-        data_out.attach_dof_handler (GetStateDoFHandler ());
-
+        data_out.attach_dof_handler (GetStateDoFHandler ()); // TODO chose correct dofhandler
         data_out.add_data_vector (v, name);
         data_out.build_patches ();
-        // From statpdeproblem.h:
-        // TODO: mapping[0] is a workaround, as deal does not support interpolate
-        // boundary_values with a mapping collection at this point.
-        // data_out.build_patches(GetMapping()[0]);
 
         std::string _outfile = outfile;
 
@@ -637,6 +645,7 @@ namespace DOpE
               "InstatPDEProblem::WriteToFile");
           }
 
+#ifdef DOPELIB_WITH_MPI
         // In parallel computation, one cpu has to write a master file,
         // containting information about all files from other cpus.
         if (parallel)
@@ -661,6 +670,7 @@ namespace DOpE
                 data_out.write_pvtu_record (master_output, filenames);
               }
           }
+#endif
 
         data_out.clear ();
       }

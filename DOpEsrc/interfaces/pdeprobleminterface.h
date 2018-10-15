@@ -53,8 +53,7 @@ namespace DOpE
   class PDEProblemInterface : public ReducedProblemInterface_Base<VECTOR>
   {
   public:
-    PDEProblemInterface (PROBLEM *OP,
-                         int base_priority = 0)
+    PDEProblemInterface(PROBLEM *OP, int base_priority = 0)
       : ReducedProblemInterface_Base<VECTOR> ()
     {
       OP_ = OP;
@@ -97,8 +96,7 @@ namespace DOpE
      * FEValues after the type has changed. See also the documentation of SetType in optproblemcontainer.h
      */
     void
-    SetProblemType (std::string type,
-                    unsigned int num = 0)
+    SetProblemType(std::string type, unsigned int num = 0)
     {
       this->GetProblem ()->SetType (type, num);
     }
@@ -115,6 +113,35 @@ namespace DOpE
                        GetProblem ()->GetStateNBlocks (),
                        GetProblem ()->GetStateBlockComponent ());
     }
+
+    /**
+     * Implementation of Virtual Method in Base Class
+     * ReducedProblemInterface_Base
+     */
+    virtual void
+    WriteToFile(const VECTOR &v, std::string name, std::string outfile,
+                std::string dof_type, std::string filetype)
+    {
+      if (dof_type != "state")
+            throw DOpEException("No such DoFHandler `" + dof_type + "'!", "StatPDEProblem::WriteToFile");
+      else
+        GetProblem()->GetSpaceTimeHandler()->WriteToFile(v, name, outfile, dof_type, filetype);
+    }
+
+    /**
+     * Implementation of Virtual Method in Base Class
+     * ReducedProblemInterface_Base
+     */
+    virtual void
+    WriteToFile(const ControlVector<VECTOR> &, std::string, std::string)
+    {
+      abort();
+    }
+
+    /**
+     * Import overloads from base class.
+     */
+    using ReducedProblemInterface_Base<VECTOR>::WriteToFile;
 
   protected:
     /**

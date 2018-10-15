@@ -102,24 +102,20 @@ namespace DOpE
      *                                be found in this map at the position "state"
      *
      */
-    template <template <int, int> class FE, typename SPARSITYPATTERN,
-              int dopedim, int dealdim>
+    template<template<int, int> class FE, typename SPARSITYPATTERN, int dopedim, int dealdim>
     ElementDataContainer (const Quadrature<dim> &quad,
                           UpdateFlags update_flags,
-                          SpaceTimeHandler<FE, dealii::DoFHandler,
-                          SPARSITYPATTERN, VECTOR, dopedim, dealdim> &sth,
+                          SpaceTimeHandler<FE, dealii::DoFHandler, SPARSITYPATTERN, VECTOR,
+                          dopedim, dealdim> &sth,
                           const std::vector<
                           typename dealii::DoFHandler<dim>::active_cell_iterator>& element,
-                          const std::map<std::string,
-                          const Vector<double>*> &param_values,
-                          const std::map<std::string, const VECTOR *> &domain_values)
-      : edcinternal::ElementDataContainerInternal<VECTOR, dim> (
-        param_values, domain_values),
-      element_ (element),
-      state_fe_values_ (sth.GetMapping (),
-                        (sth.GetFESystem ("state")), quad, update_flags),
-      control_fe_values_ (sth.GetMapping (),
-                          (sth.GetFESystem ("control")), quad, update_flags)
+                          const std::map<std::string, const Vector<double>*> &param_values,
+                          const std::map<std::string, const VECTOR *> &domain_values) :
+      edcinternal::ElementDataContainerInternal<VECTOR, dim>(param_values,
+                                                             domain_values), element_(element), state_fe_values_(
+                                                               sth.GetMapping(), (sth.GetFESystem("state")), quad,
+                                                               update_flags), control_fe_values_(sth.GetMapping(),
+                                                                   (sth.GetFESystem ("control")), quad, update_flags)
     {
       state_index_ = sth.GetStateIndex ();
       if (state_index_ == 1)
@@ -151,20 +147,17 @@ namespace DOpE
     template <template <int, int> class FE, typename SPARSITYPATTERN>
     ElementDataContainer (const Quadrature<dim> &quad,
                           UpdateFlags update_flags,
-                          StateSpaceTimeHandler<FE, dealii::DoFHandler,
-                          SPARSITYPATTERN, VECTOR, dim> &sth,
+                          StateSpaceTimeHandler<FE, dealii::DoFHandler, SPARSITYPATTERN,
+                          VECTOR, dim> &sth,
                           const std::vector<
                           typename dealii::DoFHandler<dim>::active_cell_iterator>& element,
-                          const std::map<std::string,
-                          const Vector<double>*> &param_values,
-                          const std::map<std::string, const VECTOR *> &domain_values)
-      : edcinternal::ElementDataContainerInternal<VECTOR, dim> (
-        param_values, domain_values),
-      element_ (element),
-      state_fe_values_ (sth.GetMapping (),
-                        (sth.GetFESystem ("state")), quad, update_flags),
-      control_fe_values_ (sth.GetMapping (),
-                          (sth.GetFESystem ("state")), quad, update_flags)
+                          const std::map<std::string, const Vector<double>*> &param_values,
+                          const std::map<std::string, const VECTOR *> &domain_values) :
+      edcinternal::ElementDataContainerInternal<VECTOR, dim>(param_values,
+                                                             domain_values), element_(element), state_fe_values_(
+                                                               sth.GetMapping(), (sth.GetFESystem("state")), quad,
+                                                               update_flags), control_fe_values_(sth.GetMapping(),
+                                                                   (sth.GetFESystem ("state")), quad, update_flags)
     {
       state_index_ = sth.GetStateIndex ();
       control_index_ = element.size (); //Make sure they are never used ...
@@ -398,6 +391,7 @@ namespace DOpE
   /*  end MGDofHandler */
   /*************************************************************************/
 
+
   template <typename VECTOR, int dim>
   class ElementDataContainer<dealii::hp::DoFHandler, VECTOR, dim> : public edcinternal::ElementDataContainerInternal<
     VECTOR, dim>
@@ -424,26 +418,21 @@ namespace DOpE
      *                                be found in this map at the position "state"
      *
      */
-    template <template <int, int> class FE, typename SPARSITYPATTERN,
-              int dopedim, int dealdim>
+    template<template<int, int> class FE, typename SPARSITYPATTERN, int dopedim, int dealdim>
     ElementDataContainer (const hp::QCollection<dim> &q_collection,
                           UpdateFlags update_flags,
-                          SpaceTimeHandler<FE, dealii::hp::DoFHandler,
-                          SPARSITYPATTERN, VECTOR, dopedim, dealdim> &sth,
+                          SpaceTimeHandler<FE, dealii::hp::DoFHandler, SPARSITYPATTERN,
+                          VECTOR, dopedim, dealdim> &sth,
                           const std::vector<
-                          typename DOpEWrapper::DoFHandler<dim,
-                          dealii::hp::DoFHandler>::active_cell_iterator>& element,
-                          const std::map<std::string,
-                          const Vector<double>*> &param_values,
-                          const std::map<std::string, const VECTOR *> &domain_values)
-      : edcinternal::ElementDataContainerInternal<VECTOR, dim> (
-        param_values, domain_values),
-      element_ (element),
-      state_hp_fe_values_ (sth.GetMapping (),
-                           (sth.GetFESystem ("state")), q_collection, update_flags),
-      control_hp_fe_values_ (sth.GetMapping (),
-                             (sth.GetFESystem ("control")), q_collection, update_flags),
-      q_collection_ (q_collection)
+                          typename DOpEWrapper::DoFHandler<dim, dealii::hp::DoFHandler>::active_cell_iterator>& element,
+                          const std::map<std::string, const Vector<double>*> &param_values,
+                          const std::map<std::string, const VECTOR *> &domain_values) :
+      edcinternal::ElementDataContainerInternal<VECTOR, dim>(param_values,
+                                                             domain_values), element_(element), state_hp_fe_values_(
+                                                               sth.GetMapping(), (sth.GetFESystem("state")), q_collection,
+                                                               update_flags), control_hp_fe_values_(sth.GetMapping(),
+                                                                   (sth.GetFESystem("control")), q_collection, update_flags), q_collection_(
+                                                                       q_collection)
     {
       state_index_ = sth.GetStateIndex ();
       if (state_index_ == 1)
@@ -472,23 +461,18 @@ namespace DOpE
     template <template <int, int> class FE, typename SPARSITYPATTERN>
     ElementDataContainer (const hp::QCollection<dim> &q_collection,
                           UpdateFlags update_flags,
-                          StateSpaceTimeHandler<FE,
-                          dealii::hp::DoFHandler, SPARSITYPATTERN,
+                          StateSpaceTimeHandler<FE, dealii::hp::DoFHandler, SPARSITYPATTERN,
                           VECTOR, dim> &sth,
                           const std::vector<
-                          typename DOpEWrapper::DoFHandler<dim,
-                          dealii::hp::DoFHandler>::active_cell_iterator>& element,
-                          const std::map<std::string,
-                          const Vector<double>*> &param_values,
-                          const std::map<std::string, const VECTOR *> &domain_values)
-      : edcinternal::ElementDataContainerInternal<VECTOR, dim> (
-        param_values, domain_values),
-      element_ (element),
-      state_hp_fe_values_ (sth.GetMapping (),
-                           (sth.GetFESystem ("state")), q_collection, update_flags),
-      control_hp_fe_values_ (sth.GetMapping (),
-                             (sth.GetFESystem ("state")), q_collection, update_flags),
-      q_collection_ (q_collection)
+                          typename DOpEWrapper::DoFHandler<dim, dealii::hp::DoFHandler>::active_cell_iterator>& element,
+                          const std::map<std::string, const Vector<double>*> &param_values,
+                          const std::map<std::string, const VECTOR *> &domain_values) :
+      edcinternal::ElementDataContainerInternal<VECTOR, dim>(param_values,
+                                                             domain_values), element_(element), state_hp_fe_values_(
+                                                               sth.GetMapping(), (sth.GetFESystem("state")), q_collection,
+                                                               update_flags), control_hp_fe_values_(sth.GetMapping(),
+                                                                   (sth.GetFESystem("state")), q_collection, update_flags), q_collection_(
+                                                                       q_collection)
     {
       state_index_ = sth.GetStateIndex ();
       control_index_ = element.size (); //Make sure they are never used ...
@@ -545,17 +529,15 @@ namespace DOpE
      * Hier koennte man ueber ein Template nachdenken.
      */
     inline void
-    GetValues (const DOpEWrapper::FEValues<dim> &fe_values,
-               std::string name,
-               std::vector<double> &values) const;
+    GetValues(const DOpEWrapper::FEValues<dim> &fe_values, std::string name,
+              std::vector<double> &values) const;
     /***********************************************************/
     /**
      * Helper Function. Vector valued case.
      */
     inline void
-    GetValues (const DOpEWrapper::FEValues<dim> &fe_values,
-               std::string name,
-               std::vector<Vector<double> > &values) const;
+    GetValues(const DOpEWrapper::FEValues<dim> &fe_values, std::string name,
+              std::vector<Vector<double> > &values) const;
 
     /***********************************************************/
     /**
@@ -630,7 +612,8 @@ namespace DOpE
   /**********************************************/
   template <typename VECTOR, int dim>
   unsigned int
-  ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::GetNbrMaterialId (unsigned int face) const
+  ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::GetNbrMaterialId(
+    unsigned int face) const
   {
     if (element_[0]->neighbor_index (face) != -1)
       return element_[0]->neighbor (face)->material_id ();
@@ -646,7 +629,8 @@ namespace DOpE
   /**********************************************/
   template <typename VECTOR, int dim>
   unsigned int
-  ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::GetFaceBoundaryIndicator (unsigned int face) const
+  ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::GetFaceBoundaryIndicator(
+    unsigned int face) const
   {
     return element_[0]->face (face)->boundary_indicator ();
   }
@@ -713,6 +697,8 @@ namespace DOpE
   /***********************************************************************/
   /************************IMPLEMENTATION*********************************/
   /***********************************************************************/
+
+
 
 //  /***********************************************************************/
 //  /************************IMPLEMENTATION for MGDoFHandler*********************************/
@@ -841,6 +827,9 @@ namespace DOpE
   /************************IMPLEMENTATION*********************************/
   /***********************************************************************/
 
+
+
+
   template <typename VECTOR, int dim>
   void
   ElementDataContainer<dealii::hp::DoFHandler, VECTOR, dim>::ReInit ()
@@ -877,7 +866,8 @@ namespace DOpE
 
   template <typename VECTOR, int dim>
   unsigned int
-  ElementDataContainer<dealii::hp::DoFHandler, VECTOR, dim>::GetNbrMaterialId (unsigned int face) const
+  ElementDataContainer<dealii::hp::DoFHandler, VECTOR, dim>::GetNbrMaterialId(
+    unsigned int face) const
   {
     if (element_[0]->neighbor_index (face) != -1)
       return element_[0]->neighbor (face)->material_id ();
@@ -893,7 +883,8 @@ namespace DOpE
   /**********************************************/
   template <typename VECTOR, int dim>
   unsigned int
-  ElementDataContainer<dealii::hp::DoFHandler, VECTOR, dim>::GetFaceBoundaryIndicator (unsigned int face) const
+  ElementDataContainer<dealii::hp::DoFHandler, VECTOR, dim>::GetFaceBoundaryIndicator(
+    unsigned int face) const
   {
     return element_[0]->face (face)->boundary_indicator ();
   }

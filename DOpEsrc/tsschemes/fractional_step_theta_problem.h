@@ -53,25 +53,25 @@ namespace DOpE
    *                            the base class of the DOpEWrapper::DoFHandler in use.)
    *
    */
-  template <typename OPTPROBLEM, typename SPARSITYPATTERN, typename VECTOR,
-            int dealdim, template <int, int> class FE = dealii::FESystem, template <
-              int, int> class DH = dealii::DoFHandler>
+  template<typename OPTPROBLEM, typename SPARSITYPATTERN, typename VECTOR,
+           int dealdim, template<int, int> class FE = dealii::FESystem,
+           template<int, int> class DH = dealii::DoFHandler>
   class FractionalStepThetaProblem : public PrimalTSBase<OPTPROBLEM,
     SPARSITYPATTERN, VECTOR, dealdim, FE, DH>
   {
   public:
-    FractionalStepThetaProblem (OPTPROBLEM &OP)
-      : PrimalTSBase<OPTPROBLEM, SPARSITYPATTERN, VECTOR, dealdim, FE, DH> (
-        OP)
+    FractionalStepThetaProblem(OPTPROBLEM &OP) :
+      PrimalTSBase<OPTPROBLEM, SPARSITYPATTERN, VECTOR, dealdim,
+      FE, DH>(OP)
     {
-      fs_theta_ = 1.0 - std::sqrt (2.0) / 2.0;
+      fs_theta_ = 1.0 - std::sqrt(2.0) / 2.0;
       fs_theta_prime_ = 1.0 - 2.0 * fs_theta_;
       fs_alpha_ = (1.0 - 2.0 * fs_theta_) / (1.0 - fs_theta_);
       fs_beta_ = 1.0 - fs_alpha_;
       initial_problem_ = NULL;
     }
 
-    ~FractionalStepThetaProblem ()
+    ~FractionalStepThetaProblem()
     {
       if (initial_problem_ != NULL)
         delete initial_problem_;
@@ -80,7 +80,7 @@ namespace DOpE
     /******************************************************/
 
     std::string
-    GetName ()
+    GetName()
     {
       return "Fractional-Step-Theta";
     }
@@ -89,416 +89,440 @@ namespace DOpE
     InitialProblem<
     FractionalStepThetaProblem<OPTPROBLEM, SPARSITYPATTERN, VECTOR,
                                dealdim, FE, DH>, VECTOR, dealdim>&
-                               GetInitialProblem ()
+                               GetInitialProblem()
     {
       if (initial_problem_ == NULL)
         {
           initial_problem_ = new InitialProblem<
-          FractionalStepThetaProblem<OPTPROBLEM, SPARSITYPATTERN,
-          VECTOR, dealdim, FE, DH>, VECTOR, dealdim> (*this);
+          FractionalStepThetaProblem<OPTPROBLEM, SPARSITYPATTERN, VECTOR,
+          dealdim, FE, DH>, VECTOR, dealdim>(*this);
         }
       return *initial_problem_;
     }
 
     /******************************************************/
-    FractionalStepThetaProblem<OPTPROBLEM, SPARSITYPATTERN, VECTOR, dealdim,
-    FE, DH> &
-    GetBaseProblem ()
+    FractionalStepThetaProblem<OPTPROBLEM, SPARSITYPATTERN, VECTOR,
+    dealdim, FE, DH> &
+    GetBaseProblem()
     {
       return *this;
     }
     /******************************************************/
 
-    template <typename EDC>
+    template<typename EDC>
     void
-    ElementEquation (const EDC &edc,
-                     dealii::Vector<double> &local_vector,
-                     double scale,
-                     double /*scale_ico*/)
+    ElementEquation(const EDC &edc,
+                    dealii::Vector<double> &local_vector, double scale, double /*scale_ico*/)
     {
-      if (this->GetPart () == "New_for_1st_and_3rd_cycle")
+      if (this->GetPart() == "New_for_1st_and_3rd_cycle")
         {
-          dealii::Vector<double> tmp (local_vector);
+          dealii::Vector<double> tmp(local_vector);
 
           tmp = 0.0;
-          this->GetProblem ().ElementEquation (edc, tmp,
-                                               scale * fs_alpha_, scale);
+          this->GetProblem().ElementEquation(edc, tmp,
+                                             scale * fs_alpha_,
+                                             scale);
           local_vector += tmp;
 
           tmp = 0.0;
-          this->GetProblem ().ElementTimeEquation (edc, tmp,
-                                                   scale / (fs_theta_));
+          this->GetProblem().ElementTimeEquation(edc, tmp, scale / (fs_theta_));
           local_vector += tmp;
 
-          this->GetProblem ().ElementTimeEquationExplicit (edc,
-                                                           local_vector, scale / (fs_theta_));
+          this->GetProblem().ElementTimeEquationExplicit(edc, local_vector,
+                                                         scale / (fs_theta_));
         }
-      else if (this->GetPart () == "Old_for_1st_cycle")
+      else if (this->GetPart() == "Old_for_1st_cycle")
         {
-          dealii::Vector<double> tmp (local_vector);
+          dealii::Vector<double> tmp(local_vector);
           tmp = 0.0;
 
           // The explicit parts with old_time_values; e.g. for fluid problems: laplace, convection, etc.
-          this->GetProblem ().ElementEquation (edc, tmp, scale * fs_beta_,
-                                               0.);
+          this->GetProblem().ElementEquation(edc, tmp,
+                                             scale * fs_beta_,
+                                             0.);
           local_vector += tmp;
 
-          this->GetProblem ().ElementTimeEquation (edc, local_vector,
-                                                   (-1) * scale / (fs_theta_));
+          this->GetProblem().ElementTimeEquation(edc, local_vector,
+                                                 (-1) * scale / (fs_theta_));
         }
-      else if (this->GetPart () == "Old_for_3rd_cycle")
+      else if (this->GetPart() == "Old_for_3rd_cycle")
         {
-          dealii::Vector<double> tmp (local_vector);
+          dealii::Vector<double> tmp(local_vector);
           tmp = 0.0;
 
           // The explicit parts with old_time_values; e.g. for fluid problems: laplace, convection, etc.
-          this->GetProblem ().ElementEquation (edc, tmp, scale * fs_beta_,
-                                               0.);
+          this->GetProblem().ElementEquation(edc, tmp,
+                                             scale * fs_beta_,
+                                             0.);
           local_vector += tmp;
 
-          this->GetProblem ().ElementTimeEquation (edc, local_vector,
-                                                   (-1) * scale / (fs_theta_));
+          this->GetProblem().ElementTimeEquation(edc, local_vector,
+                                                 (-1) * scale / (fs_theta_));
         }
-      else if (this->GetPart () == "New_for_2nd_cycle")
+      else if (this->GetPart() == "New_for_2nd_cycle")
         {
-          dealii::Vector<double> tmp (local_vector);
+          dealii::Vector<double> tmp(local_vector);
 
           tmp = 0.0;
-          this->GetProblem ().ElementEquation (edc, tmp, scale * fs_beta_,
+          this->GetProblem().ElementEquation(edc, tmp,
+                                             scale * fs_beta_,
+                                             scale);
+          local_vector += tmp;
+
+          tmp = 0.0;
+          this->GetProblem().ElementTimeEquation(edc, tmp,
+                                                 scale / (fs_theta_prime_));
+          local_vector += tmp;
+
+          this->GetProblem().ElementTimeEquationExplicit(edc, local_vector,
+                                                         scale / (fs_theta_prime_));
+        }
+      else if (this->GetPart() == "Old_for_2nd_cycle")
+        {
+          dealii::Vector<double> tmp(local_vector);
+          tmp = 0.0;
+
+          // The explicit parts with old_time_values; e.g. for fluid problems: laplace, convection, etc.
+          this->GetProblem().ElementEquation(edc, tmp,
+                                             scale * fs_alpha_,
+                                             0.);
+          local_vector += tmp;
+
+          this->GetProblem().ElementTimeEquation(edc, local_vector,
+                                                 (-1) * scale / (fs_theta_prime_));
+        }
+      else
+        {
+          abort();
+        }
+    }
+
+    /******************************************************/
+
+    template<typename EDC>
+    void
+    ElementRhs(const EDC &edc,
+               dealii::Vector<double> &local_vector, double scale)
+    {
+      if (this->GetPart() == "New_for_1st_and_3rd_cycle")
+        {
+
+        }
+      else if (this->GetPart() == "Old_for_1st_cycle"
+               || this->GetPart() == "Old_for_3rd_cycle")
+        {
+          this->GetProblem().ElementRhs(edc, local_vector,
+                                        scale);
+        }
+      else if (this->GetPart() == "New_for_2nd_cycle")
+        {
+          this->GetProblem().ElementRhs(edc, local_vector,
+                                        scale);
+        }
+      else if (this->GetPart() == "Old_for_2nd_cycle")
+        {
+        }
+      else
+        {
+          abort();
+        }
+    }
+    /******************************************************/
+
+    void
+    PointRhs(
+      const std::map<std::string, const dealii::Vector<double>*> &param_values,
+      const std::map<std::string, const VECTOR *> &domain_values,
+      VECTOR &rhs_vector, double scale)
+    {
+      if (this->GetPart() == "New_for_1st_and_3rd_cycle")
+        {
+
+        }
+      else if (this->GetPart() == "Old_for_1st_cycle"
+               || this->GetPart() == "Old_for_3rd_cycle")
+        {
+          this->GetProblem().PointRhs(param_values, domain_values, rhs_vector,
+                                      scale);
+        }
+      else if (this->GetPart() == "New_for_2nd_cycle")
+        {
+          this->GetProblem().PointRhs(param_values, domain_values, rhs_vector,
+                                      scale);
+        }
+      else if (this->GetPart() == "Old_for_2nd_cycle")
+        {
+        }
+      else
+        {
+          abort();
+        }
+    }
+
+    /******************************************************/
+
+    template<typename EDC>
+    void
+    ElementMatrix(const EDC &edc,
+                  dealii::FullMatrix<double> &local_matrix)
+    {
+      if (this->GetPart() == "New_for_1st_and_3rd_cycle")
+        {
+          dealii::FullMatrix<double> m(local_matrix);
+          m = 0.;
+          this->GetProblem().ElementMatrix(edc, m,
+                                           fs_alpha_,
+                                           1.);
+          local_matrix.add(1.0, m);
+
+          m = 0.;
+          this->GetProblem().ElementTimeMatrix(edc, m);
+          local_matrix.add(1.0 / (fs_theta_), m);
+
+          m = 0.;
+          this->GetProblem().ElementTimeMatrixExplicit(edc, m);
+          local_matrix.add(1.0 / (fs_theta_), m);
+        }
+      else if (this->GetPart() == "New_for_2nd_cycle")
+        {
+          dealii::FullMatrix<double> m(local_matrix);
+          m = 0.;
+          this->GetProblem().ElementMatrix(edc, local_matrix,
+                                           fs_beta_,
+                                           1.);
+          local_matrix.add(1.0, m);
+
+          m = 0.;
+          this->GetProblem().ElementTimeMatrix(edc, m);
+          local_matrix.add(1.0 / (fs_theta_prime_), m);
+
+          m = 0.;
+          this->GetProblem().ElementTimeMatrixExplicit(edc, m);
+          local_matrix.add(1.0 / (fs_theta_prime_), m);
+        }
+    }
+
+    /******************************************************/
+
+    template<typename FDC>
+    void
+    FaceEquation(const FDC &fdc,
+                 dealii::Vector<double> &local_vector, double scale, double)
+    {
+      if (this->GetPart() == "New_for_1st_and_3rd_cycle")
+        {
+          this->GetProblem().FaceEquation(fdc, local_vector,
+                                          scale * fs_alpha_,
+                                          scale);
+
+        }
+      else if ((this->GetPart() == "Old_for_1st_cycle")
+               || (this->GetPart() == "Old_for_3rd_cycle"))
+        {
+          this->GetProblem().FaceEquation(fdc, local_vector,
+                                          scale * fs_beta_,
+                                          0);
+        }
+      else if (this->GetPart() == "New_for_2nd_cycle")
+        {
+          this->GetProblem().FaceEquation(fdc, local_vector,
+                                          scale * fs_beta_,
+                                          scale);
+        }
+      else if (this->GetPart() == "Old_for_2nd_cycle")
+        {
+          this->GetProblem().FaceEquation(fdc, local_vector,
+                                          scale * fs_alpha_,
+                                          0.);
+        }
+      else
+        {
+          abort();
+        }
+
+    }
+
+    /******************************************************/
+
+    template<typename FDC>
+    void
+    InterfaceEquation(const FDC &fdc,
+                      dealii::Vector<double> &local_vector, double scale,
+                      double /*scale_ico*/)
+    {
+      if (this->GetPart() == "New_for_1st_and_3rd_cycle")
+        {
+          this->GetProblem().InterfaceEquation(fdc, local_vector,
+                                               scale * fs_alpha_,
                                                scale);
-          local_vector += tmp;
 
-          tmp = 0.0;
-          this->GetProblem ().ElementTimeEquation (edc, tmp,
-                                                   scale / (fs_theta_prime_));
-          local_vector += tmp;
-
-          this->GetProblem ().ElementTimeEquationExplicit (edc,
-                                                           local_vector, scale / (fs_theta_prime_));
         }
-      else if (this->GetPart () == "Old_for_2nd_cycle")
+      else if ((this->GetPart() == "Old_for_1st_cycle")
+               || (this->GetPart() == "Old_for_3rd_cycle"))
         {
-          dealii::Vector<double> tmp (local_vector);
-          tmp = 0.0;
-
-          // The explicit parts with old_time_values; e.g. for fluid problems: laplace, convection, etc.
-          this->GetProblem ().ElementEquation (edc, tmp,
-                                               scale * fs_alpha_, 0.);
-          local_vector += tmp;
-
-          this->GetProblem ().ElementTimeEquation (edc, local_vector,
-                                                   (-1) * scale / (fs_theta_prime_));
+          this->GetProblem().InterfaceEquation(fdc, local_vector,
+                                               scale * fs_beta_,
+                                               0);
+        }
+      else if (this->GetPart() == "New_for_2nd_cycle")
+        {
+          this->GetProblem().InterfaceEquation(fdc, local_vector,
+                                               scale * fs_beta_,
+                                               scale);
+        }
+      else if (this->GetPart() == "Old_for_2nd_cycle")
+        {
+          this->GetProblem().InterfaceEquation(fdc, local_vector,
+                                               scale * fs_alpha_,
+                                               0.);
         }
       else
         {
-          abort ();
+          abort();
         }
+
     }
 
     /******************************************************/
 
-    template <typename EDC>
+    template<typename FDC>
     void
-    ElementRhs (const EDC &edc,
-                dealii::Vector<double> &local_vector,
-                double scale)
+    FaceRhs(const FDC &fdc,
+            dealii::Vector<double> &local_vector, double scale = 1.)
     {
-      if (this->GetPart () == "New_for_1st_and_3rd_cycle")
-        {
-
-        }
-      else if (this->GetPart () == "Old_for_1st_cycle"
-               || this->GetPart () == "Old_for_3rd_cycle")
-        {
-          this->GetProblem ().ElementRhs (edc, local_vector, scale);
-        }
-      else if (this->GetPart () == "New_for_2nd_cycle")
-        {
-          this->GetProblem ().ElementRhs (edc, local_vector, scale);
-        }
-      else if (this->GetPart () == "Old_for_2nd_cycle")
-        {
-        }
-      else
-        {
-          abort ();
-        }
+      this->GetProblem().FaceRhs(fdc, local_vector,
+                                 scale);
     }
+
     /******************************************************/
 
+    template<typename FDC>
     void
-    PointRhs (const std::map<std::string, const dealii::Vector<double>*> &param_values,
-              const std::map<std::string, const VECTOR *> &domain_values,
-              VECTOR &rhs_vector,
-              double scale)
+    FaceMatrix(const FDC &fdc,
+               dealii::FullMatrix<double> &local_matrix)
     {
-      if (this->GetPart () == "New_for_1st_and_3rd_cycle")
+      if (this->GetPart() == "New_for_1st_and_3rd_cycle")
         {
-
-        }
-      else if (this->GetPart () == "Old_for_1st_cycle"
-               || this->GetPart () == "Old_for_3rd_cycle")
-        {
-          this->GetProblem ().PointRhs (param_values, domain_values,
-                                        rhs_vector, scale);
-        }
-      else if (this->GetPart () == "New_for_2nd_cycle")
-        {
-          this->GetProblem ().PointRhs (param_values, domain_values,
-                                        rhs_vector, scale);
-        }
-      else if (this->GetPart () == "Old_for_2nd_cycle")
-        {
-        }
-      else
-        {
-          abort ();
-        }
-    }
-
-    /******************************************************/
-
-    template <typename EDC>
-    void
-    ElementMatrix (const EDC &edc,
-                   dealii::FullMatrix<double> &local_matrix)
-    {
-      if (this->GetPart () == "New_for_1st_and_3rd_cycle")
-        {
-          dealii::FullMatrix<double> m (local_matrix);
+          dealii::FullMatrix<double> m(local_matrix);
           m = 0.;
-          this->GetProblem ().ElementMatrix (edc, m, fs_alpha_, 1.);
-          local_matrix.add (1.0, m);
-
+          this->GetProblem().FaceMatrix(fdc, m,
+                                        fs_alpha_,
+                                        1.);
+          local_matrix.add(1., m);
+        }
+      else if (this->GetPart() == "New_for_2nd_cycle")
+        {
+          dealii::FullMatrix<double> m(local_matrix);
           m = 0.;
-          this->GetProblem ().ElementTimeMatrix (edc, m);
-          local_matrix.add (1.0 / (fs_theta_), m);
-
-          m = 0.;
-          this->GetProblem ().ElementTimeMatrixExplicit (edc, m);
-          local_matrix.add (1.0 / (fs_theta_), m);
-        }
-      else if (this->GetPart () == "New_for_2nd_cycle")
-        {
-          dealii::FullMatrix<double> m (local_matrix);
-          m = 0.;
-          this->GetProblem ().ElementMatrix (edc, local_matrix, fs_beta_,
-                                             1.);
-          local_matrix.add (1.0, m);
-
-          m = 0.;
-          this->GetProblem ().ElementTimeMatrix (edc, m);
-          local_matrix.add (1.0 / (fs_theta_prime_), m);
-
-          m = 0.;
-          this->GetProblem ().ElementTimeMatrixExplicit (edc, m);
-          local_matrix.add (1.0 / (fs_theta_prime_), m);
-        }
-    }
-
-    /******************************************************/
-
-    template <typename FDC>
-    void
-    FaceEquation (const FDC &fdc,
-                  dealii::Vector<double> &local_vector,
-                  double scale,
-                  double)
-    {
-      if (this->GetPart () == "New_for_1st_and_3rd_cycle")
-        {
-          this->GetProblem ().FaceEquation (fdc, local_vector,
-                                            scale * fs_alpha_, scale);
-
-        }
-      else if ((this->GetPart () == "Old_for_1st_cycle")
-               || (this->GetPart () == "Old_for_3rd_cycle"))
-        {
-          this->GetProblem ().FaceEquation (fdc, local_vector,
-                                            scale * fs_beta_, 0);
-        }
-      else if (this->GetPart () == "New_for_2nd_cycle")
-        {
-          this->GetProblem ().FaceEquation (fdc, local_vector,
-                                            scale * fs_beta_, scale);
-        }
-      else if (this->GetPart () == "Old_for_2nd_cycle")
-        {
-          this->GetProblem ().FaceEquation (fdc, local_vector,
-                                            scale * fs_alpha_, 0.);
-        }
-      else
-        {
-          abort ();
+          this->GetProblem().FaceMatrix(fdc, m,
+                                        fs_beta_,
+                                        1.);
+          local_matrix.add(1.0, m);
         }
 
     }
 
     /******************************************************/
 
-    template <typename FDC>
+    template<typename FDC>
     void
-    InterfaceEquation (const FDC &fdc,
-                       dealii::Vector<double> &local_vector,
-                       double scale,
-                       double /*scale_ico*/)
-    {
-      if (this->GetPart () == "New_for_1st_and_3rd_cycle")
-        {
-          this->GetProblem ().InterfaceEquation (fdc, local_vector,
-                                                 scale * fs_alpha_, scale);
-
-        }
-      else if ((this->GetPart () == "Old_for_1st_cycle")
-               || (this->GetPart () == "Old_for_3rd_cycle"))
-        {
-          this->GetProblem ().InterfaceEquation (fdc, local_vector,
-                                                 scale * fs_beta_, 0);
-        }
-      else if (this->GetPart () == "New_for_2nd_cycle")
-        {
-          this->GetProblem ().InterfaceEquation (fdc, local_vector,
-                                                 scale * fs_beta_, scale);
-        }
-      else if (this->GetPart () == "Old_for_2nd_cycle")
-        {
-          this->GetProblem ().InterfaceEquation (fdc, local_vector,
-                                                 scale * fs_alpha_, 0.);
-        }
-      else
-        {
-          abort ();
-        }
-
-    }
-
-    /******************************************************/
-
-    template <typename FDC>
-    void
-    FaceRhs (const FDC &fdc,
-             dealii::Vector<double> &local_vector,
-             double scale = 1.)
-    {
-      this->GetProblem ().FaceRhs (fdc, local_vector, scale);
-    }
-
-    /******************************************************/
-
-    template <typename FDC>
-    void
-    FaceMatrix (const FDC &fdc,
-                dealii::FullMatrix<double> &local_matrix)
-    {
-      if (this->GetPart () == "New_for_1st_and_3rd_cycle")
-        {
-          dealii::FullMatrix<double> m (local_matrix);
-          m = 0.;
-          this->GetProblem ().FaceMatrix (fdc, m, fs_alpha_, 1.);
-          local_matrix.add (1., m);
-        }
-      else if (this->GetPart () == "New_for_2nd_cycle")
-        {
-          dealii::FullMatrix<double> m (local_matrix);
-          m = 0.;
-          this->GetProblem ().FaceMatrix (fdc, m, fs_beta_, 1.);
-          local_matrix.add (1.0, m);
-        }
-
-    }
-
-    /******************************************************/
-
-    template <typename FDC>
-    void
-    InterfaceMatrix (const FDC &fdc,
-                     dealii::FullMatrix<double> &local_matrix)
-    {
-      if (this->GetPart () == "New_for_1st_and_3rd_cycle")
-        {
-          dealii::FullMatrix<double> m (local_matrix);
-          m = 0.;
-          this->GetProblem ().InterfaceMatrix (fdc, m, fs_alpha_, 1.);
-          local_matrix.add (1.0, m);
-        }
-      else if (this->GetPart () == "New_for_2nd_cycle")
-        {
-          dealii::FullMatrix<double> m (local_matrix);
-          m = 0.;
-          this->GetProblem ().InterfaceMatrix (fdc, m, fs_beta_, 1.);
-          local_matrix.add (1.0, m);
-        }
-
-    }
-
-    /******************************************************/
-
-    template <typename FDC>
-    void
-    BoundaryEquation (const FDC &fdc,
-                      dealii::Vector<double> &local_vector,
-                      double scale,
-                      double)
-    {
-      if (this->GetPart () == "New_for_1st_and_3rd_cycle")
-        {
-          this->GetProblem ().BoundaryEquation (fdc, local_vector,
-                                                scale * fs_alpha_, scale);
-        }
-      else if ((this->GetPart () == "Old_for_1st_cycle")
-               || (this->GetPart () == "Old_for_3rd_cycle"))
-        {
-          this->GetProblem ().BoundaryEquation (fdc, local_vector,
-                                                scale * fs_beta_, 0.);
-        }
-      else if (this->GetPart () == "New_for_2nd_cycle")
-        {
-          this->GetProblem ().BoundaryEquation (fdc, local_vector,
-                                                scale * fs_beta_, scale);
-        }
-      else if (this->GetPart () == "Old_for_2nd_cycle")
-        {
-          this->GetProblem ().BoundaryEquation (fdc, local_vector,
-                                                scale * fs_alpha_, 0);
-        }
-      else
-        {
-          abort ();
-        }
-
-    }
-
-    /******************************************************/
-
-    template <typename FDC>
-    void
-    BoundaryRhs (const FDC &fdc,
-                 dealii::Vector<double> &local_vector,
-                 double scale)
-    {
-      this->GetProblem ().BoundaryRhs (fdc, local_vector, scale);
-    }
-
-    /******************************************************/
-
-    template <typename FDC>
-    void
-    BoundaryMatrix (const FDC &fdc,
+    InterfaceMatrix(const FDC &fdc,
                     dealii::FullMatrix<double> &local_matrix)
     {
-      if (this->GetPart () == "New_for_1st_and_3rd_cycle")
+      if (this->GetPart() == "New_for_1st_and_3rd_cycle")
         {
-          dealii::FullMatrix<double> m (local_matrix);
+          dealii::FullMatrix<double> m(local_matrix);
           m = 0.;
-          this->GetProblem ().BoundaryMatrix (fdc, m, fs_alpha_, 1.);
-          local_matrix.add (1.0, m);
+          this->GetProblem().InterfaceMatrix(fdc, m,
+                                             fs_alpha_,
+                                             1.);
+          local_matrix.add(1.0, m);
         }
-      else if (this->GetPart () == "New_for_2nd_cycle")
+      else if (this->GetPart() == "New_for_2nd_cycle")
         {
-          dealii::FullMatrix<double> m (local_matrix);
+          dealii::FullMatrix<double> m(local_matrix);
           m = 0.;
-          this->GetProblem ().BoundaryMatrix (fdc, m, fs_beta_, 1.);
-          local_matrix.add (1.0, m);
+          this->GetProblem().InterfaceMatrix(fdc, m,
+                                             fs_beta_,
+                                             1.);
+          local_matrix.add(1.0, m);
+        }
+
+    }
+
+    /******************************************************/
+
+    template<typename FDC>
+    void
+    BoundaryEquation(const FDC &fdc,
+                     dealii::Vector<double> &local_vector, double scale, double)
+    {
+      if (this->GetPart() == "New_for_1st_and_3rd_cycle")
+        {
+          this->GetProblem().BoundaryEquation(fdc, local_vector,
+                                              scale * fs_alpha_, scale);
+        }
+      else if ((this->GetPart() == "Old_for_1st_cycle")
+               || (this->GetPart() == "Old_for_3rd_cycle"))
+        {
+          this->GetProblem().BoundaryEquation(fdc, local_vector,
+                                              scale * fs_beta_,
+                                              0.);
+        }
+      else if (this->GetPart() == "New_for_2nd_cycle")
+        {
+          this->GetProblem().BoundaryEquation(fdc, local_vector,
+                                              scale * fs_beta_,
+                                              scale);
+        }
+      else if (this->GetPart() == "Old_for_2nd_cycle")
+        {
+          this->GetProblem().BoundaryEquation(fdc, local_vector,
+                                              scale * fs_alpha_,
+                                              0);
+        }
+      else
+        {
+          abort();
+        }
+
+    }
+
+    /******************************************************/
+
+    template<typename FDC>
+    void
+    BoundaryRhs(const FDC &fdc,
+                dealii::Vector<double> &local_vector, double scale)
+    {
+      this->GetProblem().BoundaryRhs(fdc, local_vector,
+                                     scale);
+    }
+
+    /******************************************************/
+
+    template<typename FDC>
+    void
+    BoundaryMatrix(const FDC &fdc,
+                   dealii::FullMatrix<double> &local_matrix)
+    {
+      if (this->GetPart() == "New_for_1st_and_3rd_cycle")
+        {
+          dealii::FullMatrix<double> m(local_matrix);
+          m = 0.;
+          this->GetProblem().BoundaryMatrix(fdc, m,
+                                            fs_alpha_,
+                                            1.);
+          local_matrix.add(1.0, m);
+        }
+      else if (this->GetPart() == "New_for_2nd_cycle")
+        {
+          dealii::FullMatrix<double> m(local_matrix);
+          m = 0.;
+          this->GetProblem().BoundaryMatrix(fdc, m,
+                                            fs_beta_,
+                                            1.);
+          local_matrix.add(1.0, m);
         }
     }
   private:

@@ -48,10 +48,10 @@ namespace DOpE
      * (like global refinement). If no DOpEtypes::RefinementType is given, global
      * mesh refinement is assumed.
      * */
-    RefinementContainer (DOpEtypes::RefinementType ref_type =
-                           DOpEtypes::RefinementType::global);
+    RefinementContainer(DOpEtypes::RefinementType ref_type =
+                          DOpEtypes::RefinementType::global);
     virtual
-    ~RefinementContainer ()
+    ~RefinementContainer()
     {
     }
 
@@ -60,15 +60,15 @@ namespace DOpE
      * in the derived classes.
      */
     virtual const dealii::Vector<float> &
-    GetLocalErrorIndicators () const;
+    GetLocalErrorIndicators() const;
     virtual double
-    GetTopFraction () const;
+    GetTopFraction() const;
     virtual double
-    GetBottomFraction () const;
+    GetBottomFraction() const;
     //     virtual unsigned int
     //GetMaxNElements() const;
     virtual double
-    GetConvergenceOrder () const;
+    GetConvergenceOrder() const;
 
     /**
      * Returns the refinement type for which
@@ -76,13 +76,13 @@ namespace DOpE
      * see dopetypes.h
      */
     DOpEtypes::RefinementType
-    GetRefType () const;
+    GetRefType() const;
 
     /**
      * Specifies if the mesh refinement uses coarsening.
      */
     bool
-    UsesCoarsening () const;
+    UsesCoarsening() const;
   protected:
     bool coarsening_;
   private:
@@ -101,24 +101,24 @@ namespace DOpE
   {
   public:
     virtual
-    ~LocalRefinement ()
+    ~LocalRefinement()
     {
     }
 
     virtual const dealii::Vector<float> &
-    GetLocalErrorIndicators () const;
+    GetLocalErrorIndicators() const;
 
   protected:
     /**
      * Protected constructor for use in the derived classes
      */
-    LocalRefinement (const dealii::Vector<float> &,
-                     DOpEtypes::RefinementType ref_type);
+    LocalRefinement(const dealii::Vector<float> &,
+                    DOpEtypes::RefinementType ref_type);
   private:
     /**
      * Constructor made private. Should not get used!
      */
-    LocalRefinement ();
+    LocalRefinement();
     const dealii::Vector<float> &indicators_;
   };
 
@@ -139,19 +139,18 @@ namespace DOpE
      * @param topfraction       is the fraction of the total estimate which should be refined.
      * @param bottomfraction    is the fraction of the estimate coarsened.
      */
-    RefineFixedFraction (const dealii::Vector<float> &indicators,
-                         double top_fraction = 0.1,
-                         double bottom_fraction = 0.0);
+    RefineFixedFraction(const dealii::Vector<float> &indicators,
+                        double top_fraction = 0.1, double bottom_fraction = 0.0);
 
     virtual
-    ~ RefineFixedFraction ()
+    ~ RefineFixedFraction()
     {
     }
 
     virtual double
-    GetTopFraction () const;
+    GetTopFraction() const;
     virtual double
-    GetBottomFraction () const;
+    GetBottomFraction() const;
   private:
     const double top_fraction_, bottom_fraction_;
   };
@@ -176,18 +175,17 @@ namespace DOpE
      * @param bottomfraction    In a fixed fraction/fixed number strategy,
      *                          wich part should be coarsened.
      */
-    RefineFixedNumber (const dealii::Vector<float> &indicators,
-                       double top_fraction = 0.1,
-                       double bottom_fraction = 0.0);
+    RefineFixedNumber(const dealii::Vector<float> &indicators,
+                      double top_fraction = 0.1, double bottom_fraction = 0.0);
     virtual
-    ~ RefineFixedNumber ()
+    ~ RefineFixedNumber()
     {
     }
 
     virtual double
-    GetTopFraction () const;
+    GetTopFraction() const;
     virtual double
-    GetBottomFraction () const;
+    GetBottomFraction() const;
 
   private:
     const double top_fraction_, bottom_fraction_;
@@ -209,16 +207,16 @@ namespace DOpE
      * @param indicators        A set of positive values, used to guide refinement.
      * @param convergence_order Convergence order of the functional of interest.
      */
-    RefineOptimized (const dealii::Vector<float> &indicators,
-                     double convergence_order = 2.);
+    RefineOptimized(const dealii::Vector<float> &indicators,
+                    double convergence_order = 2.);
 
     virtual
-    ~ RefineOptimized ()
+    ~ RefineOptimized()
     {
     }
 
     virtual double
-    GetConvergenceOrder () const;
+    GetConvergenceOrder() const;
 
   private:
     const double convergence_order_;

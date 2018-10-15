@@ -21,12 +21,14 @@
  *
  **/
 
+
 #include <include/dopeexceptionhandler.h>
 #include <include/outputhandler.h>
 
 #include <iostream>
 #include <string>
 #include <cstdlib>
+
 
 namespace DOpE
 {
@@ -50,15 +52,11 @@ namespace DOpE
   /*******************************************************/
 
   template <typename VECTOR>
-  void
-  DOpEExceptionHandler<VECTOR>::HandleException (DOpEException &e,
-                                                 std::string reporter)
+  void DOpEExceptionHandler<VECTOR>::HandleException(DOpEException &e,std::string reporter)
   {
-    GetOutputHandler ()->WriteError (
-      "The following `" + e.GetName () + "` reports!");
-    GetOutputHandler ()->WriteError (
-      "Warning: During execution of `" + e.GetThrowingInstance ()
-      + "` the following Problem occurred!");
+    GetOutputHandler()->WriteError("The following `" + e.GetName() + "` reports!");
+    GetOutputHandler()->WriteError("Warning: During execution of `" + e.GetThrowingInstance()
+                                   + "` the following Problem occurred!");
     GetOutputHandler ()->WriteError (e.GetErrorMessage ());
     GetOutputHandler ()->WriteError ("Reported by `" + reporter + "`");
   }
@@ -66,15 +64,11 @@ namespace DOpE
   /*******************************************************/
 
   template <typename VECTOR>
-  void
-  DOpEExceptionHandler<VECTOR>::HandleCriticalException (DOpEException &e,
-                                                         std::string reporter)
+  void DOpEExceptionHandler<VECTOR>::HandleCriticalException(DOpEException &e,std::string reporter)
   {
-    GetOutputHandler ()->WriteError (
-      "The following `" + e.GetName () + "` reports!");
-    GetOutputHandler ()->WriteError (
-      "Error: During execution of `" + e.GetThrowingInstance ()
-      + "` the following fatal Problem occurred!");
+    GetOutputHandler()->WriteError("The following `" + e.GetName() + "` reports!");
+    GetOutputHandler()->WriteError("Error: During execution of `" + e.GetThrowingInstance()
+                                   + "` the following fatal Problem occurred!");
     GetOutputHandler ()->WriteError (e.GetErrorMessage ());
     GetOutputHandler ()->WriteError ("Reported by `" + reporter + "`");
     abort ();
@@ -85,11 +79,11 @@ namespace DOpE
 
 /******************************************************/
 /******************************************************/
-
 template class DOpE::DOpEExceptionHandler<dealii::Vector<double> >;
 template class DOpE::DOpEExceptionHandler<dealii::BlockVector<double> >;
-
+#ifdef DOPELIB_WITH_TRILINOS
 template class DOpE::DOpEExceptionHandler<dealii::TrilinosWrappers::MPI::Vector>;
-template class DOpE::DOpEExceptionHandler<
-  dealii::TrilinosWrappers::MPI::BlockVector>;
+template class DOpE::DOpEExceptionHandler<dealii::TrilinosWrappers::MPI::BlockVector>;
+#endif
+
 

@@ -51,8 +51,8 @@ namespace DOpEWrapper
   class DoFHandler : public DOFHANDLER<dim, dim>
   {
   public:
-    DoFHandler (const dealii::Triangulation<dim, dim> &tria)
-      : DOFHANDLER<dim, dim> (tria)
+    DoFHandler(const dealii::Triangulation<dim, dim> &tria) :
+      DOFHANDLER<dim, dim>(tria)
     {
     }
 
@@ -85,8 +85,8 @@ namespace DOpEWrapper
   class DoFHandler<dim, dealii::DoFHandler> : public dealii::DoFHandler<dim>
   {
   public:
-    DoFHandler (const dealii::Triangulation<dim, dim> &tria)
-      : dealii::DoFHandler<dim> (tria)
+    DoFHandler(const dealii::Triangulation<dim, dim> &tria) :
+      dealii::DoFHandler<dim>(tria)
     {
     }
     static bool
@@ -108,8 +108,8 @@ namespace DOpEWrapper
     dim>
   {
   public:
-    DoFHandler (const dealii::Triangulation<dim, dim> &tria)
-      : dealii::hp::DoFHandler<dim> (tria)
+    DoFHandler(const dealii::Triangulation<dim, dim> &tria) :
+      dealii::hp::DoFHandler<dim>(tria)
     {
     }
     static bool

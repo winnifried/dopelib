@@ -46,18 +46,17 @@ namespace DOpE
    *
    */
 
-  template <template <int, int> class DH, typename VECTOR, int dim>
+  template<template<int, int> class DH, typename VECTOR, int dim>
   class FaceDataContainer : public fdcinternal::FaceDataContainerInternal<
     VECTOR, dim>
   {
   public:
-    FaceDataContainer ()
+    FaceDataContainer()
     {
-      throw (DOpEException (
+      throw (DOpEException(
                "Dummy class, this constructor should never get called.",
                "ElementDataContainer<dealii::DoFHandler , VECTOR, dim>::ElementDataContainer"));
     }
-    ;
   };
 
   /**
@@ -69,7 +68,7 @@ namespace DOpE
    * @template dim        1+ the dimension of the integral we are actually interested in.//TODO 1+??
    */
 
-  template <typename VECTOR, int dim>
+  template<typename VECTOR, int dim>
   class FaceDataContainer<dealii::DoFHandler, VECTOR, dim> : public fdcinternal::FaceDataContainerInternal<
     VECTOR, dim>
   {
@@ -96,27 +95,23 @@ namespace DOpE
      * @param need_neighbour          Describes whether we need all the GetNbr (= Get Neighbor) functions.
      *
      */
-    template <template <int, int> class FE, typename SPARSITYPATTERN,
-              int dopedim, int dealdim>
-    FaceDataContainer (const Quadrature<dim - 1>& quad,
-                       UpdateFlags update_flags,
-                       SpaceTimeHandler<FE, dealii::DoFHandler,
-                       SPARSITYPATTERN, VECTOR, dopedim, dealdim> &sth,
-                       const std::vector<
-                       typename DOpEWrapper::DoFHandler<dim,
-                       dealii::DoFHandler>::active_cell_iterator>& element,
-                       const std::map<std::string, const Vector<double>*> &param_values,
-                       const std::map<std::string, const VECTOR *> &domain_values,
-                       bool need_neighbour)
-      : fdcinternal::FaceDataContainerInternal<VECTOR, dim> (
-        param_values, domain_values, need_neighbour),
-      element_ (element),
-      state_fe_values_ (sth.GetMapping (),
-                        (sth.GetFESystem ("state")), quad, update_flags),
-      control_fe_values_ (sth.GetMapping (),
-                          (sth.GetFESystem ("control")), quad, update_flags)
+    template<template<int, int> class FE, typename SPARSITYPATTERN, int dopedim, int dealdim>
+    FaceDataContainer(const Quadrature<dim - 1>& quad,
+                      UpdateFlags update_flags,
+                      SpaceTimeHandler<FE, dealii::DoFHandler, SPARSITYPATTERN, VECTOR,
+                      dopedim, dealdim> &sth,
+                      const std::vector<
+                      typename DOpEWrapper::DoFHandler<dim, dealii::DoFHandler>::active_cell_iterator>& element,
+                      const std::map<std::string, const Vector<double>*> &param_values,
+                      const std::map<std::string, const VECTOR *> &domain_values,
+                      bool need_neighbour) :
+      fdcinternal::FaceDataContainerInternal<VECTOR, dim>(param_values,
+                                                          domain_values, need_neighbour), element_(element), state_fe_values_(
+                                                            sth.GetMapping(), (sth.GetFESystem("state")), quad,
+                                                            update_flags), control_fe_values_(sth.GetMapping(),
+                                                                (sth.GetFESystem("control")), quad, update_flags)
     {
-      state_index_ = sth.GetStateIndex ();
+      state_index_ = sth.GetStateIndex();
       if (state_index_ == 1)
         control_index_ = 0;
       else
@@ -124,14 +119,14 @@ namespace DOpE
 
       if (need_neighbour) //so we need FEFAcevalues etc. for the neighbour too.
         {
-          nbr_control_fe_values_ = new DOpEWrapper::FEFaceValues<dim> (
-            sth.GetMapping (), (sth.GetFESystem ("control")), quad,
+          nbr_control_fe_values_ = new DOpEWrapper::FEFaceValues<dim>(
+            sth.GetMapping(), (sth.GetFESystem("control")), quad,
             update_flags);
-          control_fe_subface_values_ = new DOpEWrapper::FESubfaceValues<
-          dim> (sth.GetMapping (), (sth.GetFESystem ("control")),
-                quad, update_flags);
+          control_fe_subface_values_ =
+            new DOpEWrapper::FESubfaceValues<dim>(sth.GetMapping(),
+                                                  (sth.GetFESystem("control")), quad, update_flags);
         }
-      this->PrivateConstructor (quad, update_flags, sth, need_neighbour);
+      this->PrivateConstructor(quad, update_flags, sth, need_neighbour);
     }
     /**
      * Constructor. Initializes the FaceFEValues objects. For PDE only
@@ -151,43 +146,40 @@ namespace DOpE
      * @param need_neighbour          Describes whether we need all the GetNbr (= Get Neighbor) functions.
      *
      */
-    template <template <int, int> class FE, typename SPARSITYPATTERN>
-    FaceDataContainer (const Quadrature<dim - 1>& quad,
-                       UpdateFlags update_flags,
-                       StateSpaceTimeHandler<FE, dealii::DoFHandler,
-                       SPARSITYPATTERN, VECTOR, dim> &sth,
-                       const std::vector<
-                       typename DOpEWrapper::DoFHandler<dim,
-                       dealii::DoFHandler>::active_cell_iterator>& element,
-                       const std::map<std::string, const Vector<double>*> &param_values,
-                       const std::map<std::string, const VECTOR *> &domain_values,
-                       bool need_neighbour)
-      : fdcinternal::FaceDataContainerInternal<VECTOR, dim> (
-        param_values, domain_values, need_neighbour),
-      element_ (element),
-      state_fe_values_ (sth.GetMapping (),
-                        (sth.GetFESystem ("state")), quad, update_flags),
-      control_fe_values_ (sth.GetMapping (),
-                          (sth.GetFESystem ("state")), quad, update_flags)
+    template<template<int, int> class FE, typename SPARSITYPATTERN>
+    FaceDataContainer(const Quadrature<dim - 1>& quad,
+                      UpdateFlags update_flags,
+                      StateSpaceTimeHandler<FE, dealii::DoFHandler, SPARSITYPATTERN,
+                      VECTOR, dim> &sth,
+                      const std::vector<
+                      typename DOpEWrapper::DoFHandler<dim, dealii::DoFHandler>::active_cell_iterator>& element,
+                      const std::map<std::string, const Vector<double>*> &param_values,
+                      const std::map<std::string, const VECTOR *> &domain_values,
+                      bool need_neighbour) :
+      fdcinternal::FaceDataContainerInternal<VECTOR, dim>(param_values,
+                                                          domain_values, need_neighbour), element_(element), state_fe_values_(
+                                                            sth.GetMapping(), (sth.GetFESystem("state")), quad,
+                                                            update_flags), control_fe_values_(sth.GetMapping(),
+                                                                (sth.GetFESystem("state")), quad, update_flags)
     {
-      state_index_ = sth.GetStateIndex ();
-      control_index_ = element.size ();
-      n_q_points_per_element_ = quad.size ();
-      n_dofs_per_element_ = element[0]->get_fe ().dofs_per_cell;
+      state_index_ = sth.GetStateIndex();
+      control_index_ = element.size();
+      n_q_points_per_element_ = quad.size();
+      n_dofs_per_element_ = element[0]->get_fe().dofs_per_cell;
 
       if (need_neighbour) //so we need FEFAcevalues for the neighbour too.
         {
-          nbr_control_fe_values_ = new DOpEWrapper::FEFaceValues<dim> (
-            sth.GetMapping (), (sth.GetFESystem ("state")), quad,
+          nbr_control_fe_values_ = new DOpEWrapper::FEFaceValues<dim>(
+            sth.GetMapping(), (sth.GetFESystem("state")), quad,
             update_flags);
-          control_fe_subface_values_ = new DOpEWrapper::FESubfaceValues<
-          dim> (sth.GetMapping (), (sth.GetFESystem ("state")), quad,
-                update_flags);
+          control_fe_subface_values_ =
+            new DOpEWrapper::FESubfaceValues<dim>(sth.GetMapping(),
+                                                  (sth.GetFESystem("state")), quad, update_flags);
         }
-      this->PrivateConstructor (quad, update_flags, sth, need_neighbour);
+      this->PrivateConstructor(quad, update_flags, sth, need_neighbour);
     }
 
-    ~FaceDataContainer ()
+    ~FaceDataContainer()
     {
       if (nbr_state_fe_values_ != NULL)
         {
@@ -215,7 +207,7 @@ namespace DOpE
      *                    actual face.
      */
     inline void
-    ReInit (unsigned int face_no);
+    ReInit(unsigned int face_no);
 
     /*********************************************/
     /*
@@ -228,8 +220,7 @@ namespace DOpE
      *                    actual subface.
      */
     inline void
-    ReInit (unsigned int face_no,
-            unsigned int subface_no);
+    ReInit(unsigned int face_no, unsigned int subface_no);
 
     /*********************************************/
     /*
@@ -238,7 +229,7 @@ namespace DOpE
      * Assumes that ReInit is called prior to this function.
      */
     inline void
-    ReInitNbr ();
+    ReInitNbr();
 
     /*********************************************/
     /**
@@ -247,63 +238,60 @@ namespace DOpE
      * before calling them.
      */
     inline unsigned int
-    GetNDoFsPerElement () const;
+    GetNDoFsPerElement() const;
     inline unsigned int
-    GetNbrNDoFsPerElement () const;
+    GetNbrNDoFsPerElement() const;
     inline unsigned int
-    GetNQPoints () const;
+    GetNQPoints() const;
     inline unsigned int
-    GetNbrNQPoints () const;
+    GetNbrNQPoints() const;
     inline unsigned int
-    GetMaterialId () const;
+    GetMaterialId() const;
     inline unsigned int
-    GetNbrMaterialId () const;
+    GetNbrMaterialId() const;
     inline unsigned int
-    GetNbrMaterialId (unsigned int face) const;
+    GetNbrMaterialId(unsigned int face) const;
     inline bool
-    GetIsAtBoundary () const;
+    GetIsAtBoundary() const;
     inline double
-    GetElementDiameter () const;
+    GetElementDiameter() const;
     inline unsigned int
-    GetBoundaryIndicator () const;
+    GetBoundaryIndicator() const;
     inline const FEFaceValuesBase<dim> &
-    GetFEFaceValuesState () const;
+    GetFEFaceValuesState() const;
     inline const FEFaceValuesBase<dim> &
-    GetFEFaceValuesControl () const;
+    GetFEFaceValuesControl() const;
 
     inline const FEFaceValuesBase<dim> &
-    GetNbrFEFaceValuesState () const;
+    GetNbrFEFaceValuesState() const;
     inline const FEFaceValuesBase<dim> &
-    GetNbrFEFaceValuesControl () const;
+    GetNbrFEFaceValuesControl() const;
 
   private:
     /*
      * Helper Functions
      */
     unsigned int
-    GetStateIndex () const;
+    GetStateIndex() const;
     unsigned int
-    GetControlIndex () const;
+    GetControlIndex() const;
     /**
      * This function contains common code of the constructors.
      */
-    template <class STH>
+    template<class STH>
     void
-    PrivateConstructor (const Quadrature<dim - 1>& quad,
-                        UpdateFlags update_flags,
-                        STH &sth,
-                        bool need_neighbour)
+    PrivateConstructor(const Quadrature<dim - 1>& quad,
+                       UpdateFlags update_flags, STH &sth, bool need_neighbour)
     {
-      n_q_points_per_element_ = quad.size ();
-      n_dofs_per_element_ = element_[0]->get_fe ().dofs_per_cell;
+      n_q_points_per_element_ = quad.size();
+      n_dofs_per_element_ = element_[0]->get_fe().dofs_per_cell;
 
       if (need_neighbour) //so we need FEFAcevalues etc. for the neighbour too.
         {
-          nbr_state_fe_values_ = new DOpEWrapper::FEFaceValues<dim> (
-            (sth.GetFESystem ("state")), quad, update_flags);
-          state_fe_subface_values_ =
-            new DOpEWrapper::FESubfaceValues<dim> (
-            (sth.GetFESystem ("state")), quad, update_flags);
+          nbr_state_fe_values_ = new DOpEWrapper::FEFaceValues<dim>(
+            (sth.GetFESystem("state")), quad, update_flags);
+          state_fe_subface_values_ = new DOpEWrapper::FESubfaceValues<dim>(
+            (sth.GetFESystem("state")), quad, update_flags);
         }
       else
         {
@@ -329,20 +317,24 @@ namespace DOpE
     DOpEWrapper::FEFaceValues<dim> state_fe_values_;
     DOpEWrapper::FEFaceValues<dim> control_fe_values_;
 
-    DOpEWrapper::FEFaceValues<dim> *nbr_state_fe_values_;
-    DOpEWrapper::FEFaceValues<dim> *nbr_control_fe_values_;
+    DOpEWrapper::FEFaceValues<dim> *nbr_state_fe_values_ = nullptr;
+    DOpEWrapper::FEFaceValues<dim> *nbr_control_fe_values_ = nullptr;
 
-    DOpEWrapper::FESubfaceValues<dim> *state_fe_subface_values_;
-    DOpEWrapper::FESubfaceValues<dim> *control_fe_subface_values_;
+    DOpEWrapper::FESubfaceValues<dim> *state_fe_subface_values_ = nullptr;
+    DOpEWrapper::FESubfaceValues<dim> *control_fe_subface_values_ = nullptr;
 
-    dealii::FEFaceValuesBase<dim> *state_fe_values_ptr_;
-    dealii::FEFaceValuesBase<dim> *control_fe_values_ptr_;
-    dealii::FEFaceValuesBase<dim> *nbr_state_fe_values_ptr_;
-    dealii::FEFaceValuesBase<dim> *nbr_control_fe_values_ptr_;
+    dealii::FEFaceValuesBase<dim> *state_fe_values_ptr_ = nullptr;
+    dealii::FEFaceValuesBase<dim> *control_fe_values_ptr_ = nullptr;
+    dealii::FEFaceValuesBase<dim> *nbr_state_fe_values_ptr_ = nullptr;
+    dealii::FEFaceValuesBase<dim> *nbr_control_fe_values_ptr_ = nullptr;
 
-    unsigned int n_q_points_per_element_;
-    unsigned int n_dofs_per_element_;
+    unsigned int n_q_points_per_element_ = 0;
+    unsigned int n_dofs_per_element_ = 0;
   };
+
+
+
+
 
   /****************************************************/
   /* MGDofHandler */
@@ -624,7 +616,8 @@ namespace DOpE
   /* MGDofHandler */
   /****************************************************/
 
-  template <typename VECTOR, int dim>
+
+  template<typename VECTOR, int dim>
   class FaceDataContainer<dealii::hp::DoFHandler, VECTOR, dim> : public fdcinternal::FaceDataContainerInternal<
     VECTOR, dim>
   {
@@ -650,40 +643,24 @@ namespace DOpE
      * @param need_neighbour         Describes, whether we need all the GetNbr (= Get Neighbor) functions.
      *
      */
-    template <template <int, int> class FE, typename SPARSITYPATTERN,
-              int dopedim, int dealdim>
-    FaceDataContainer<dealii::hp::DoFHandler, VECTOR, dim> (const hp::QCollection<
-                                                            dim - 1>& q_collection,
-                                                            UpdateFlags update_flags,
-                                                            SpaceTimeHandler<
-                                                            FE,
-                                                            dealii::hp::DoFHandler,
-                                                            SPARSITYPATTERN,
-                                                            VECTOR,
-                                                            dopedim,
-                                                            dealdim> &sth,
-                                                            const std::vector<
-                                                            typename DOpEWrapper::DoFHandler<
-                                                            dim,
-                                                            dealii::hp::DoFHandler>::active_cell_iterator>& element,
-                                                            const std::map<
-                                                            std::string,
-                                                            const Vector<
-                                                            double>*> &param_values,
-                                                            const std::map<
-                                                            std::string,
-                                                            const VECTOR *> &domain_values,
-                                                            bool need_neighbour)
-      : fdcinternal::FaceDataContainerInternal<VECTOR, dim> (
-        param_values, domain_values, need_neighbour),
-      element_ (element),
-      state_hp_fe_values_ ((sth.GetFESystem ("state")), q_collection,
-                           update_flags),
-      control_hp_fe_values_ ((sth.GetFESystem ("control")),
-                             q_collection, update_flags),
-      q_collection_ (q_collection)
+    template<template<int, int> class FE, typename SPARSITYPATTERN, int dopedim, int dealdim>
+    FaceDataContainer<dealii::hp::DoFHandler, VECTOR, dim>(
+      const hp::QCollection<dim - 1>& q_collection,
+      UpdateFlags update_flags,
+      SpaceTimeHandler<FE, dealii::hp::DoFHandler, SPARSITYPATTERN,
+      VECTOR, dopedim, dealdim> &sth,
+      const std::vector<
+      typename DOpEWrapper::DoFHandler<dim, dealii::hp::DoFHandler>::active_cell_iterator>& element,
+      const std::map<std::string, const Vector<double>*> &param_values,
+      const std::map<std::string, const VECTOR *> &domain_values,
+      bool need_neighbour) :
+      fdcinternal::FaceDataContainerInternal<VECTOR, dim>(param_values,
+                                                          domain_values, need_neighbour), element_(element), state_hp_fe_values_(
+                                                            (sth.GetFESystem("state")), q_collection, update_flags), control_hp_fe_values_(
+                                                              (sth.GetFESystem("control")), q_collection, update_flags), q_collection_(
+                                                                q_collection)
     {
-      state_index_ = sth.GetStateIndex ();
+      state_index_ = sth.GetStateIndex();
       if (state_index_ == 1)
         control_index_ = 0;
       else
@@ -691,18 +668,16 @@ namespace DOpE
 
       if (need_neighbour) //so we need FEFAcevalues for the neighbour too.
         {
-          nbr_control_hp_fe_values_ =
-            new DOpEWrapper::HpFEFaceValues<dim> (sth.GetMapping (),
-                                                  (sth.GetFESystem ("control")), q_collection,
-                                                  update_flags);
+          nbr_control_hp_fe_values_ = new DOpEWrapper::HpFEFaceValues<dim>(
+            sth.GetMapping(), (sth.GetFESystem("control")), q_collection,
+            update_flags);
           control_hp_fe_subface_values_ =
-            new DOpEWrapper::HpFESubfaceValues<dim> (sth.GetMapping (),
-                                                     (sth.GetFESystem ("control")), q_collection,
-                                                     update_flags);
+            new DOpEWrapper::HpFESubfaceValues<dim>(sth.GetMapping(),
+                                                    (sth.GetFESystem("control")), q_collection, update_flags);
 
         }
-      this->PrivateConstructor (q_collection, update_flags, sth,
-                                need_neighbour);
+      this->PrivateConstructor(q_collection, update_flags, sth,
+                               need_neighbour);
     }
 
     /**
@@ -725,39 +700,24 @@ namespace DOpE
      * @param need_neighbour         Describes, whether we need all the GetNbr (= Get Neighbor) functions.
      *
      */
-    template <template <int, int> class FE, typename SPARSITYPATTERN,
-              int dealdim>
-    FaceDataContainer<dealii::hp::DoFHandler, VECTOR, dim> (const hp::QCollection<
-                                                            dim - 1>& q_collection,
-                                                            UpdateFlags update_flags,
-                                                            StateSpaceTimeHandler<
-                                                            FE,
-                                                            dealii::hp::DoFHandler,
-                                                            SPARSITYPATTERN,
-                                                            VECTOR,
-                                                            dealdim> &sth,
-                                                            const std::vector<
-                                                            typename DOpEWrapper::DoFHandler<
-                                                            dim,
-                                                            dealii::hp::DoFHandler>::active_cell_iterator>& element,
-                                                            const std::map<
-                                                            std::string,
-                                                            const Vector<
-                                                            double>*> &param_values,
-                                                            const std::map<
-                                                            std::string,
-                                                            const VECTOR *> &domain_values,
-                                                            bool need_neighbour)
-      : fdcinternal::FaceDataContainerInternal<VECTOR, dim> (
-        param_values, domain_values, need_neighbour),
-      element_ (element),
-      state_hp_fe_values_ ((sth.GetFESystem ("state")), q_collection,
-                           update_flags),
-      control_hp_fe_values_ ((sth.GetFESystem ("state")),
-                             q_collection, update_flags),
-      q_collection_ (q_collection)
+    template<template<int, int> class FE, typename SPARSITYPATTERN, int dealdim>
+    FaceDataContainer<dealii::hp::DoFHandler, VECTOR, dim>(
+      const hp::QCollection<dim - 1>& q_collection,
+      UpdateFlags update_flags,
+      StateSpaceTimeHandler<FE, dealii::hp::DoFHandler, SPARSITYPATTERN,
+      VECTOR, dealdim> &sth,
+      const std::vector<
+      typename DOpEWrapper::DoFHandler<dim, dealii::hp::DoFHandler>::active_cell_iterator>& element,
+      const std::map<std::string, const Vector<double>*> &param_values,
+      const std::map<std::string, const VECTOR *> &domain_values,
+      bool need_neighbour) :
+      fdcinternal::FaceDataContainerInternal<VECTOR, dim>(param_values,
+                                                          domain_values, need_neighbour), element_(element), state_hp_fe_values_(
+                                                            (sth.GetFESystem("state")), q_collection, update_flags), control_hp_fe_values_(
+                                                              (sth.GetFESystem("state")), q_collection, update_flags), q_collection_(
+                                                                q_collection)
     {
-      state_index_ = sth.GetStateIndex ();
+      state_index_ = sth.GetStateIndex();
       if (state_index_ == 1)
         control_index_ = 0;
       else
@@ -765,23 +725,21 @@ namespace DOpE
 
       if (need_neighbour)
         {
-          nbr_control_hp_fe_values_ =
-            new DOpEWrapper::HpFEFaceValues<dim> (sth.GetMapping (),
-                                                  (sth.GetFESystem ("state")), q_collection,
-                                                  update_flags);
+          nbr_control_hp_fe_values_ = new DOpEWrapper::HpFEFaceValues<dim>(
+            sth.GetMapping(), (sth.GetFESystem("state")), q_collection,
+            update_flags);
           control_hp_fe_subface_values_ =
-            new DOpEWrapper::HpFESubfaceValues<dim> (sth.GetMapping (),
-                                                     (sth.GetFESystem ("state")), q_collection,
-                                                     update_flags);
+            new DOpEWrapper::HpFESubfaceValues<dim>(sth.GetMapping(),
+                                                    (sth.GetFESystem("state")), q_collection, update_flags);
         }
-      this->PrivateConstructor (q_collection, update_flags, sth,
-                                need_neighbour);
+      this->PrivateConstructor(q_collection, update_flags, sth,
+                               need_neighbour);
     }
 
     /**
      * Destructor
      */
-    ~FaceDataContainer<dealii::hp::DoFHandler, VECTOR, dim> ()
+    ~FaceDataContainer<dealii::hp::DoFHandler, VECTOR, dim>()
     {
       delete nbr_state_hp_fe_values_;
       nbr_state_hp_fe_values_ = NULL;
@@ -802,7 +760,7 @@ namespace DOpE
      *                    actual face.
      */
     inline void
-    ReInit (unsigned int face_no);
+    ReInit(unsigned int face_no);
 
     /*********************************************/
     /*
@@ -815,8 +773,7 @@ namespace DOpE
      *                    actual subface.
      */
     inline void
-    ReInit (unsigned int face_no,
-            unsigned int subface_no);
+    ReInit(unsigned int face_no, unsigned int subface_no);
 
     /*********************************************/
     /*
@@ -827,7 +784,7 @@ namespace DOpE
      * Assumes that ReInit is called prior to this function.
      */
     inline void
-    ReInitNbr ();
+    ReInitNbr();
 
     /*********************************************/
     /**
@@ -835,62 +792,59 @@ namespace DOpE
      * is executed before calling them.
      */
     inline unsigned int
-    GetNDoFsPerElement () const;
+    GetNDoFsPerElement() const;
 
     inline unsigned int
-    GetNbrNDoFsPerElement () const;
+    GetNbrNDoFsPerElement() const;
     inline unsigned int
-    GetNQPoints () const;
+    GetNQPoints() const;
     inline unsigned int
-    GetNbrNQPoints () const;
+    GetNbrNQPoints() const;
     inline unsigned int
-    GetMaterialId () const;
+    GetMaterialId() const;
     inline unsigned int
-    GetNbrMaterialId () const;
+    GetNbrMaterialId() const;
     inline unsigned int
-    GetNbrMaterialId (unsigned int face) const;
+    GetNbrMaterialId(unsigned int face) const;
     inline bool
-    GetIsAtBoundary () const;
+    GetIsAtBoundary() const;
     inline unsigned int
-    GetBoundaryIndicator () const;
+    GetBoundaryIndicator() const;
     inline double
-    GetElementDiameter () const;
+    GetElementDiameter() const;
 
     inline const FEFaceValuesBase<dim> &
-    GetFEFaceValuesState () const;
+    GetFEFaceValuesState() const;
     inline const FEFaceValuesBase<dim> &
-    GetFEFaceValuesControl () const;
+    GetFEFaceValuesControl() const;
 
     inline const FEFaceValuesBase<dim> &
-    GetNbrFEFaceValuesState () const;
+    GetNbrFEFaceValuesState() const;
     inline const FEFaceValuesBase<dim> &
-    GetNbrFEFaceValuesControl () const;
+    GetNbrFEFaceValuesControl() const;
 
   private:
     inline unsigned int
-    GetStateIndex () const;
+    GetStateIndex() const;
     inline unsigned int
-    GetControlIndex () const;
+    GetControlIndex() const;
 
     /**
      * Contains common code of the constructors.
      */
-    template <class STH>
+    template<class STH>
     void
-    PrivateConstructor (const hp::QCollection<dim - 1>& q_collection,
-                        UpdateFlags update_flags,
-                        STH &sth,
-                        bool need_neighbour)
+    PrivateConstructor(const hp::QCollection<dim - 1>& q_collection,
+                       UpdateFlags update_flags, STH &sth, bool need_neighbour)
     {
       if (need_neighbour) //so we need FEFAcevalues for the neighbour too.
         {
-          nbr_state_hp_fe_values_ = new DOpEWrapper::HpFEFaceValues<dim> (
-            sth.GetMapping (), (sth.GetFESystem ("state")),
-            q_collection, update_flags);
-          state_hp_fe_subface_values_ =
-            new DOpEWrapper::HpFESubfaceValues<dim> (sth.GetMapping (),
-                                                     (sth.GetFESystem ("state")), q_collection,
-                                                     update_flags);
+          nbr_state_hp_fe_values_ = new DOpEWrapper::HpFEFaceValues<dim>(
+            sth.GetMapping(), (sth.GetFESystem("state")), q_collection,
+            update_flags);
+          state_hp_fe_subface_values_ = new DOpEWrapper::HpFESubfaceValues<
+          dim>(sth.GetMapping(), (sth.GetFESystem("state")),
+               q_collection, update_flags);
 
         }
       else
@@ -916,16 +870,16 @@ namespace DOpE
     DOpEWrapper::HpFEFaceValues<dim> state_hp_fe_values_;
     DOpEWrapper::HpFEFaceValues<dim> control_hp_fe_values_;
 
-    DOpEWrapper::HpFEFaceValues<dim> *nbr_state_hp_fe_values_;
-    DOpEWrapper::HpFEFaceValues<dim> *nbr_control_hp_fe_values_;
+    DOpEWrapper::HpFEFaceValues<dim> *nbr_state_hp_fe_values_ = nullptr;
+    DOpEWrapper::HpFEFaceValues<dim> *nbr_control_hp_fe_values_ = nullptr;
 
-    DOpEWrapper::HpFESubfaceValues<dim> *state_hp_fe_subface_values_;
-    DOpEWrapper::HpFESubfaceValues<dim> *control_hp_fe_subface_values_;
+    DOpEWrapper::HpFESubfaceValues<dim> *state_hp_fe_subface_values_ = nullptr;
+    DOpEWrapper::HpFESubfaceValues<dim> *control_hp_fe_subface_values_ = nullptr;
 
-    const dealii::FEFaceValuesBase<dim> *state_hp_fe_values_ptr_;
-    const dealii::FEFaceValuesBase<dim> *control_hp_fe_values_ptr_;
-    const dealii::FEFaceValuesBase<dim> *nbr_state_hp_fe_values_ptr_;
-    const dealii::FEFaceValuesBase<dim> *nbr_control_hp_fe_values_ptr_;
+    const dealii::FEFaceValuesBase<dim> *state_hp_fe_values_ptr_ = nullptr;
+    const dealii::FEFaceValuesBase<dim> *control_hp_fe_values_ptr_ = nullptr;
+    const dealii::FEFaceValuesBase<dim> *nbr_state_hp_fe_values_ptr_ = nullptr;
+    const dealii::FEFaceValuesBase<dim> *nbr_control_hp_fe_values_ptr_ = nullptr;
 
     const hp::QCollection<dim - 1>& q_collection_;
   };
@@ -940,321 +894,318 @@ namespace DOpE
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-function"
 
-    template <int dim, template <int, int> class DH>
-    bool
-    sanity_check (const typename DOpEWrapper::DoFHandler<dim, DH>::active_cell_iterator &element_,
-                  unsigned int face,
-                  unsigned int subface)
+    template<int dim, template<int, int> class DH>
+    bool sanity_check(const
+                      typename DOpEWrapper::DoFHandler<dim, DH>::active_cell_iterator &element_,
+                      unsigned int face,
+                      unsigned int subface)
     {
-      const auto neighbor_child = element_->neighbor_child_on_subface (face,
-                                  subface);
+      const auto neighbor_child =
+        element_->neighbor_child_on_subface(
+          face, subface);
 
       bool ret = false;
-      if (neighbor_child->face (element_->neighbor_of_neighbor (face)) == element_->face (
-            face)->child (subface))
+      if (neighbor_child->face(element_->neighbor_of_neighbor(face)) == element_->face(face)->child(subface))
         ret = true;
-      return ret;
+      return  ret;
     }
 
-    template <>
-    bool
-    sanity_check<1, dealii::hp::DoFHandler> (const typename DOpEWrapper::DoFHandler<
-                                             1, dealii::hp::DoFHandler>::active_cell_iterator &,
-                                             unsigned int,
-                                             unsigned int)
+    template<>
+    bool sanity_check<1,dealii::hp::DoFHandler>(const
+                                                typename DOpEWrapper::DoFHandler<1, dealii::hp::DoFHandler>::active_cell_iterator &,
+                                                unsigned int,
+                                                unsigned int)
     {
-      return true;
+      return  true;
     }
 
-    template <>
-    bool
-    sanity_check<1, dealii::DoFHandler> (const typename DOpEWrapper::DoFHandler<
-                                         1, dealii::DoFHandler>::active_cell_iterator &,
-                                         unsigned int,
-                                         unsigned int)
+    template<>
+    bool sanity_check<1,dealii::DoFHandler>(const
+                                            typename DOpEWrapper::DoFHandler<1, dealii::DoFHandler>::active_cell_iterator &,
+                                            unsigned int,
+                                            unsigned int)
     {
-      return true;
+      return  true;
     }
 //Reenable warning or unused functions
 #pragma GCC diagnostic pop
   }
 
-  template <typename VECTOR, int dim>
+  template<typename VECTOR, int dim>
   void
-  FaceDataContainer<dealii::DoFHandler, VECTOR, dim>::ReInit (unsigned int face_no)
+  FaceDataContainer<dealii::DoFHandler, VECTOR, dim>::ReInit(
+    unsigned int face_no)
   {
-    this->SetFace (face_no);
-    state_fe_values_.reinit (element_[this->GetStateIndex ()], face_no);
+    this->SetFace(face_no);
+    state_fe_values_.reinit(element_[this->GetStateIndex()], face_no);
     state_fe_values_ptr_ = &state_fe_values_;
     //Make sure that the Control must be initialized.
-    if (this->GetControlIndex () < element_.size ())
+    if (this->GetControlIndex() < element_.size())
       {
-        control_fe_values_.reinit (element_[this->GetControlIndex ()],
-                                   face_no);
+        control_fe_values_.reinit(element_[this->GetControlIndex()], face_no);
         control_fe_values_ptr_ = &control_fe_values_;
       }
   }
 
   /***********************************************************************/
 
-  template <typename VECTOR, int dim>
+  template<typename VECTOR, int dim>
   void
-  FaceDataContainer<dealii::DoFHandler, VECTOR, dim>::ReInit (unsigned int face_no,
-                                                              unsigned int subface_no)
+  FaceDataContainer<dealii::DoFHandler, VECTOR, dim>::ReInit(
+    unsigned int face_no, unsigned int subface_no)
   {
-    this->SetFace (face_no);
-    this->SetSubFace (subface_no);
-    state_fe_subface_values_->reinit (element_[this->GetStateIndex ()],
-                                      face_no, subface_no);
+    this->SetFace(face_no);
+    this->SetSubFace(subface_no);
+    state_fe_subface_values_->reinit(element_[this->GetStateIndex()], face_no,
+                                     subface_no);
     state_fe_values_ptr_ = state_fe_subface_values_;
     //Make sure that the Control must be initialized.
-    if (this->GetControlIndex () < element_.size ())
+    if (this->GetControlIndex() < element_.size())
       {
-        control_fe_subface_values_->reinit (
-          element_[this->GetControlIndex ()], face_no, this->GetSubFace ());
+        control_fe_subface_values_->reinit(element_[this->GetControlIndex()],
+                                           face_no, this->GetSubFace());
         control_fe_values_ptr_ = control_fe_subface_values_;
       }
   }
   /***********************************************************************/
 
-  template <typename VECTOR, int dim>
+
+  template<typename VECTOR, int dim>
   void
-  FaceDataContainer<dealii::DoFHandler, VECTOR, dim>::ReInitNbr ()
+  FaceDataContainer<dealii::DoFHandler, VECTOR, dim>::ReInitNbr()
   {
     Assert(this->NeedNeighbour(), ExcInternalError());
     Assert(
       element_[this->GetStateIndex()]->neighbor_index(this->GetFace()) != -1,
       TriaAccessorExceptions::ExcCellNotUsed())
 
-    if (element_[this->GetStateIndex ()]->neighbor (this->GetFace ())->has_children ())
+    if (element_[this->GetStateIndex()]->neighbor(this->GetFace())->has_children())
       {
         //if neighbor is more refined
         const auto neighbor_child =
-          element_[this->GetStateIndex ()]->neighbor_child_on_subface (
-            this->GetFace (), this->GetSubFace ());
+          element_[this->GetStateIndex()]->neighbor_child_on_subface(
+            this->GetFace(), this->GetSubFace());
 
         // some sanity checks: Check, that the face and subface match and that the neighbour child
         // is not more refined.
-        Assert(
-          (sanity_check<dim, dealii::DoFHandler>(element_[this->GetStateIndex()], this->GetFace(), this->GetSubFace()) == true),
-          ExcInternalError());
+        Assert((sanity_check<dim, dealii::DoFHandler>(element_[this->GetStateIndex()],
+                                                      this->GetFace(),
+                                                      this->GetSubFace()) == true), ExcInternalError());
         Assert(neighbor_child->has_children() == false, ExcInternalError());
 
-        nbr_state_fe_values_->reinit (neighbor_child,
-                                      element_[this->GetStateIndex ()]->neighbor_of_neighbor (
-                                        this->GetFace ()));
+        nbr_state_fe_values_->reinit(neighbor_child,
+                                     element_[this->GetStateIndex()]->neighbor_of_neighbor(
+                                       this->GetFace()));
         nbr_state_fe_values_ptr_ = nbr_state_fe_values_;
 
         //Make sure that the Control must be initialized.
-        if (this->GetControlIndex () < element_.size ())
+        if (this->GetControlIndex() < element_.size())
           {
             const auto control_neighbor_child =
-              element_[this->GetControlIndex ()]->neighbor_child_on_subface (
-                this->GetFace (), this->GetSubFace ());
+              element_[this->GetControlIndex()]->neighbor_child_on_subface(
+                this->GetFace(), this->GetSubFace());
 
-            nbr_control_fe_values_->reinit (control_neighbor_child,
-                                            element_[this->GetControlIndex ()]->neighbor_of_neighbor (
-                                              this->GetFace ()));
+            nbr_control_fe_values_->reinit(control_neighbor_child,
+                                           element_[this->GetControlIndex()]->neighbor_of_neighbor(
+                                             this->GetFace()));
             nbr_control_fe_values_ptr_ = nbr_control_fe_values_;
           }
       }
-    else if (element_[this->GetStateIndex ()]->neighbor_is_coarser (
-               this->GetFace ()))
+    else if (element_[this->GetStateIndex()]->neighbor_is_coarser(
+               this->GetFace()))
       {
         //if the neighbour is coarser
         Assert(
           element_[this->GetStateIndex()]->neighbor(this->GetFace())->level() == element_[this->GetStateIndex()]->level()-1,
           ExcInternalError());
-        const auto neighbor = element_[this->GetStateIndex ()]->neighbor (
-                                this->GetFace ());
+        const auto neighbor = element_[this->GetStateIndex()]->neighbor(
+                                this->GetFace());
         const std::pair<unsigned int, unsigned int> faceno_subfaceno =
-          element_[this->GetStateIndex ()]->neighbor_of_coarser_neighbor (
-            this->GetFace ());
+          element_[this->GetStateIndex()]->neighbor_of_coarser_neighbor(
+            this->GetFace());
         const unsigned int neighbor_face_no = faceno_subfaceno.first,
                            neighbor_subface_no = faceno_subfaceno.second;
-        state_fe_subface_values_->reinit (neighbor, neighbor_face_no,
-                                          neighbor_subface_no);
+        state_fe_subface_values_->reinit(neighbor, neighbor_face_no,
+                                         neighbor_subface_no);
         nbr_state_fe_values_ptr_ = state_fe_subface_values_;
-        if (this->GetControlIndex () < element_.size ())
+        if (this->GetControlIndex() < element_.size())
           {
             const auto control_neighbor =
-              element_[this->GetControlIndex ()]->neighbor (
-                this->GetFace ());
+              element_[this->GetControlIndex()]->neighbor(this->GetFace());
             const std::pair<unsigned int, unsigned int> control_faceno_subfaceno =
-              element_[this->GetControlIndex ()]->neighbor_of_coarser_neighbor (
-                this->GetFace ());
+              element_[this->GetControlIndex()]->neighbor_of_coarser_neighbor(
+                this->GetFace());
             const unsigned int control_neighbor_face_no =
               control_faceno_subfaceno.first, control_neighbor_subface_no =
                 control_faceno_subfaceno.second;
-            control_fe_subface_values_->reinit (control_neighbor,
-                                                control_neighbor_face_no, control_neighbor_subface_no);
+            control_fe_subface_values_->reinit(control_neighbor,
+                                               control_neighbor_face_no, control_neighbor_subface_no);
             nbr_control_fe_values_ptr_ = control_fe_subface_values_;
           }
 
       }
     else
       {
-        const auto neighbor_state =
-          element_[this->GetStateIndex ()]->neighbor (this->GetFace ());
+        const auto neighbor_state = element_[this->GetStateIndex()]->neighbor(
+                                      this->GetFace());
         // neighbor element is as much refined as the
-        Assert(
-          neighbor_state->level() == element_[this->GetStateIndex()]->level(),
-          ExcInternalError());
-        nbr_state_fe_values_->reinit (neighbor_state,
-                                      element_[this->GetStateIndex ()]->neighbor_of_neighbor (
-                                        this->GetFace ()));
+        Assert(neighbor_state->level() == element_[this->GetStateIndex()]->level(),
+               ExcInternalError());
+        nbr_state_fe_values_->reinit(neighbor_state,
+                                     element_[this->GetStateIndex()]->neighbor_of_neighbor(
+                                       this->GetFace()));
         nbr_state_fe_values_ptr_ = nbr_state_fe_values_;
 
         //Make sure that the Control must be initialized.
-        if (this->GetControlIndex () < element_.size ())
+        if (this->GetControlIndex() < element_.size())
           {
-            nbr_control_fe_values_->reinit (
-              element_[this->GetControlIndex ()]->neighbor (
-                this->GetFace ()),
-              element_[this->GetControlIndex ()]->neighbor_of_neighbor (
-                this->GetFace ()));
+            nbr_control_fe_values_->reinit(
+              element_[this->GetControlIndex()]->neighbor(this->GetFace()),
+              element_[this->GetControlIndex()]->neighbor_of_neighbor(
+                this->GetFace()));
             nbr_control_fe_values_ptr_ = nbr_control_fe_values_;
           }
       }
   }
   /***********************************************************************/
-  template <typename VECTOR, int dim>
+  template<typename VECTOR, int dim>
   unsigned int
-  FaceDataContainer<dealii::DoFHandler, VECTOR, dim>::GetNDoFsPerElement () const
+  FaceDataContainer<dealii::DoFHandler, VECTOR, dim>::GetNDoFsPerElement() const
   {
     return n_dofs_per_element_;
   }
 
   /***********************************************************************/
 
-  template <typename VECTOR, int dim>
+  template<typename VECTOR, int dim>
   unsigned int
-  FaceDataContainer<dealii::DoFHandler, VECTOR, dim>::GetNbrNDoFsPerElement () const
+  FaceDataContainer<dealii::DoFHandler, VECTOR, dim>::GetNbrNDoFsPerElement() const
   {
     return n_dofs_per_element_;
   }
 
   /**********************************************/
-  template <typename VECTOR, int dim>
+  template<typename VECTOR, int dim>
   unsigned int
-  FaceDataContainer<dealii::DoFHandler, VECTOR, dim>::GetNQPoints () const
+  FaceDataContainer<dealii::DoFHandler, VECTOR, dim>::GetNQPoints() const
   {
     return n_q_points_per_element_;
   }
 
   /**********************************************/
-  template <typename VECTOR, int dim>
+  template<typename VECTOR, int dim>
   unsigned int
-  FaceDataContainer<dealii::DoFHandler, VECTOR, dim>::GetNbrNQPoints () const
+  FaceDataContainer<dealii::DoFHandler, VECTOR, dim>::GetNbrNQPoints() const
   {
     return n_q_points_per_element_;
   }
 
   /**********************************************/
-  template <typename VECTOR, int dim>
+  template<typename VECTOR, int dim>
   unsigned int
-  FaceDataContainer<dealii::DoFHandler, VECTOR, dim>::GetMaterialId () const
+  FaceDataContainer<dealii::DoFHandler, VECTOR, dim>::GetMaterialId() const
   {
-    return element_[0]->material_id ();
+    return element_[0]->material_id();
   }
 
   /**********************************************/
-  template <typename VECTOR, int dim>
+  template<typename VECTOR, int dim>
   unsigned int
-  FaceDataContainer<dealii::DoFHandler, VECTOR, dim>::GetNbrMaterialId () const
+  FaceDataContainer<dealii::DoFHandler, VECTOR, dim>::GetNbrMaterialId() const
   {
-    return this->GetNbrMaterialId (this->GetFace ());
+    return this->GetNbrMaterialId(this->GetFace());
   }
 
   /**********************************************/
-  template <typename VECTOR, int dim>
+  template<typename VECTOR, int dim>
   unsigned int
-  FaceDataContainer<dealii::DoFHandler, VECTOR, dim>::GetNbrMaterialId (unsigned int face) const
+  FaceDataContainer<dealii::DoFHandler, VECTOR, dim>::GetNbrMaterialId(
+    unsigned int face) const
   {
-    if (element_[0]->neighbor_index (face) != -1)
-      return element_[0]->neighbor (face)->material_id ();
+    if (element_[0]->neighbor_index(face) != -1)
+      return element_[0]->neighbor(face)->material_id();
     else
       {
         std::stringstream out;
         out << "There is no neighbor with number " << face;
-        throw DOpEException (out.str (),
-                             "FaceDataContainer::GetNbrMaterialId");
+        throw DOpEException(out.str(),
+                            "FaceDataContainer::GetNbrMaterialId");
       }
   }
 
   /**********************************************/
-  template <typename VECTOR, int dim>
+  template<typename VECTOR, int dim>
   bool
-  FaceDataContainer<dealii::DoFHandler, VECTOR, dim>::GetIsAtBoundary () const
+  FaceDataContainer<dealii::DoFHandler, VECTOR, dim>::GetIsAtBoundary() const
   {
-    return element_[0]->face (this->GetFace ())->at_boundary ();
+    return element_[0]->face(this->GetFace())->at_boundary();
   }
 
   /**********************************************/
-  template <typename VECTOR, int dim>
+  template<typename VECTOR, int dim>
   double
-  FaceDataContainer<dealii::DoFHandler, VECTOR, dim>::GetElementDiameter () const
+  FaceDataContainer<dealii::DoFHandler, VECTOR, dim>::GetElementDiameter() const
   {
 //      return element_[0]->face(this->GetFace())->diameter();
-    return element_[0]->diameter ();
+    return element_[0]->diameter();
   }
 
   /**********************************************/
 
-  template <typename VECTOR, int dim>
+  template<typename VECTOR, int dim>
   unsigned int
-  FaceDataContainer<dealii::DoFHandler, VECTOR, dim>::GetBoundaryIndicator () const
+  FaceDataContainer<dealii::DoFHandler, VECTOR, dim>::GetBoundaryIndicator() const
   {
 #if DEAL_II_VERSION_GTE(8,3,0)
-    return element_[0]->face (this->GetFace ())->boundary_id ();
+    return element_[0]->face(this->GetFace())->boundary_id();
 #else
     return element_[0]->face(this->GetFace())->boundary_indicator();
 #endif
   }
 
   /**********************************************/
-  template <typename VECTOR, int dim>
+  template<typename VECTOR, int dim>
   const FEFaceValuesBase<dim> &
-  FaceDataContainer<dealii::DoFHandler, VECTOR, dim>::GetFEFaceValuesState () const
+  FaceDataContainer<dealii::DoFHandler, VECTOR, dim>::GetFEFaceValuesState() const
   {
     return *state_fe_values_ptr_;
   }
 
   /**********************************************/
-  template <typename VECTOR, int dim>
+  template<typename VECTOR, int dim>
   const FEFaceValuesBase<dim> &
-  FaceDataContainer<dealii::DoFHandler, VECTOR, dim>::GetFEFaceValuesControl () const
+  FaceDataContainer<dealii::DoFHandler, VECTOR, dim>::GetFEFaceValuesControl() const
   {
     return *control_fe_values_ptr_;
   }
   /**********************************************/
-  template <typename VECTOR, int dim>
+  template<typename VECTOR, int dim>
   const FEFaceValuesBase<dim> &
-  FaceDataContainer<dealii::DoFHandler, VECTOR, dim>::GetNbrFEFaceValuesState () const
+  FaceDataContainer<dealii::DoFHandler, VECTOR, dim>::GetNbrFEFaceValuesState() const
   {
     return *nbr_state_fe_values_ptr_;
   }
 
   /**********************************************/
-  template <typename VECTOR, int dim>
+  template<typename VECTOR, int dim>
   const FEFaceValuesBase<dim> &
-  FaceDataContainer<dealii::DoFHandler, VECTOR, dim>::GetNbrFEFaceValuesControl () const
+  FaceDataContainer<dealii::DoFHandler, VECTOR, dim>::GetNbrFEFaceValuesControl() const
   {
     return *nbr_control_fe_values_ptr_;
   }
 
-  template <typename VECTOR, int dim>
+  template<typename VECTOR, int dim>
   unsigned int
-  FaceDataContainer<dealii::DoFHandler, VECTOR, dim>::GetStateIndex () const
+  FaceDataContainer<dealii::DoFHandler, VECTOR, dim>::GetStateIndex() const
   {
     return state_index_;
   }
 
   /***********************************************************************/
 
-  template <typename VECTOR, int dim>
+  template<typename VECTOR, int dim>
   unsigned int
-  FaceDataContainer<dealii::DoFHandler, VECTOR, dim>::GetControlIndex () const
+  FaceDataContainer<dealii::DoFHandler, VECTOR, dim>::GetControlIndex() const
   {
     return control_index_;
   }
@@ -1313,7 +1264,7 @@ namespace DOpE
 //      Assert(this->NeedNeighbour(), ExcInternalError());
 //      Assert(
 //          element_[this->GetStateIndex()]->neighbor_index(this->GetFace()) != -1,
-//          TriaAccessorExceptions::ExcUnusedCellAsNeighbor())
+//          TriaAccessorExceptions::ExcCellNotUsed())
 //
 //      if (element_[this->GetStateIndex()]->neighbor(this->GetFace())->has_children())
 //      {
@@ -1548,63 +1499,66 @@ namespace DOpE
   /*****************IMPLEMENTATION for hp::DoFHandler*********************/
   /***********************************************************************/
 
-  template <typename VECTOR, int dim>
+
+
+
+
+  template<typename VECTOR, int dim>
   void
-  FaceDataContainer<dealii::hp::DoFHandler, VECTOR, dim>::ReInit (unsigned int face_no)
+  FaceDataContainer<dealii::hp::DoFHandler, VECTOR, dim>::ReInit(
+    unsigned int face_no)
   {
-    this->SetFace (face_no);
-    state_hp_fe_values_.reinit (element_[this->GetStateIndex ()], face_no);
-    state_hp_fe_values_ptr_ = &state_hp_fe_values_.get_present_fe_values ();
+    this->SetFace(face_no);
+    state_hp_fe_values_.reinit(element_[this->GetStateIndex()], face_no);
+    state_hp_fe_values_ptr_ = &state_hp_fe_values_.get_present_fe_values();
     //Make sure that the Control must be initialized.
-    if (this->GetControlIndex () < element_.size ())
+    if (this->GetControlIndex() < element_.size())
       {
-        control_hp_fe_values_.reinit (element_[this->GetControlIndex ()],
-                                      face_no);
+        control_hp_fe_values_.reinit(element_[this->GetControlIndex()], face_no);
         control_hp_fe_values_ptr_ =
-          &control_hp_fe_values_.get_present_fe_values ();
+          &control_hp_fe_values_.get_present_fe_values();
       }
   }
 
   /***********************************************************************/
 
-  template <typename VECTOR, int dim>
+  template<typename VECTOR, int dim>
   void
-  FaceDataContainer<dealii::hp::DoFHandler, VECTOR, dim>::ReInit (unsigned int face_no,
-      unsigned int subface_no)
+  FaceDataContainer<dealii::hp::DoFHandler, VECTOR, dim>::ReInit(
+    unsigned int face_no, unsigned int subface_no)
   {
-    this->SetFace (face_no);
-    this->SetSubFace (subface_no);
-    state_hp_fe_subface_values_->reinit (element_[this->GetStateIndex ()],
-                                         this->GetFace (), this->GetSubFace ());
+    this->SetFace(face_no);
+    this->SetSubFace(subface_no);
+    state_hp_fe_subface_values_->reinit(element_[this->GetStateIndex()],
+                                        this->GetFace(), this->GetSubFace());
     state_hp_fe_values_ptr_ =
-      &state_hp_fe_subface_values_->get_present_fe_values ();
+      &state_hp_fe_subface_values_->get_present_fe_values();
     //Make sure that the Control must be initialized.
-    if (this->GetControlIndex () < element_.size ())
+    if (this->GetControlIndex() < element_.size())
       {
-        control_hp_fe_subface_values_->reinit (
-          element_[this->GetControlIndex ()], this->GetFace (),
-          this->GetSubFace ());
+        control_hp_fe_subface_values_->reinit(element_[this->GetControlIndex()],
+                                              this->GetFace(), this->GetSubFace());
         control_hp_fe_values_ptr_ =
-          &control_hp_fe_subface_values_->get_present_fe_values ();
+          &control_hp_fe_subface_values_->get_present_fe_values();
       }
   }
 
   /***********************************************************************/
-  template <typename VECTOR, int dim>
+  template<typename VECTOR, int dim>
   void
-  FaceDataContainer<dealii::hp::DoFHandler, VECTOR, dim>::ReInitNbr ()
+  FaceDataContainer<dealii::hp::DoFHandler, VECTOR, dim>::ReInitNbr()
   {
     Assert(this->NeedNeighbour(), ExcInternalError());
     Assert(
       element_[this->GetStateIndex()]->neighbor_index(this->GetFace()) != -1,
       TriaAccessorExceptions::ExcCellNotUsed())
 
-    if (element_[this->GetStateIndex ()]->neighbor (this->GetFace ())->has_children ())
+    if (element_[this->GetStateIndex()]->neighbor(this->GetFace())->has_children())
       {
         //if neighbor is more refined
         const auto neighbor_child =
-          element_[this->GetStateIndex ()]->neighbor_child_on_subface (
-            this->GetFace (), this->GetSubFace ());
+          element_[this->GetStateIndex()]->neighbor_child_on_subface(
+            this->GetFace(), this->GetSubFace());
 
         // some sanity checks: Check, that the face and subface match and that the neighbour child
         // is not more refined.
@@ -1613,242 +1567,240 @@ namespace DOpE
           ExcInternalError());
         Assert(neighbor_child->has_children() == false, ExcInternalError());
 
-        nbr_state_hp_fe_values_->reinit (neighbor_child,
-                                         element_[this->GetStateIndex ()]->neighbor_of_neighbor (
-                                           this->GetFace ()));
+        nbr_state_hp_fe_values_->reinit(neighbor_child,
+                                        element_[this->GetStateIndex()]->neighbor_of_neighbor(
+                                          this->GetFace()));
         nbr_state_hp_fe_values_ptr_ =
-          &nbr_state_hp_fe_values_->get_present_fe_values ();
+          &nbr_state_hp_fe_values_->get_present_fe_values();
 
         //Make sure that the Control must be initialized.
-        if (this->GetControlIndex () < element_.size ())
+        if (this->GetControlIndex() < element_.size())
           {
             const auto control_neighbor_child =
-              element_[this->GetControlIndex ()]->neighbor_child_on_subface (
-                this->GetFace (), this->GetSubFace ());
+              element_[this->GetControlIndex()]->neighbor_child_on_subface(
+                this->GetFace(), this->GetSubFace());
 
-            nbr_control_hp_fe_values_->reinit (control_neighbor_child,
-                                               element_[this->GetControlIndex ()]->neighbor_of_neighbor (
-                                                 this->GetFace ()));
+            nbr_control_hp_fe_values_->reinit(control_neighbor_child,
+                                              element_[this->GetControlIndex()]->neighbor_of_neighbor(
+                                                this->GetFace()));
             nbr_control_hp_fe_values_ptr_ =
-              &nbr_control_hp_fe_values_->get_present_fe_values ();
+              &nbr_control_hp_fe_values_->get_present_fe_values();
           }
       }
-    else if (element_[this->GetStateIndex ()]->neighbor_is_coarser (
-               this->GetFace ()))
+    else if (element_[this->GetStateIndex()]->neighbor_is_coarser(
+               this->GetFace()))
       {
         //if the neighbour is coarser
         Assert(
           element_[this->GetStateIndex()]->neighbor(this->GetFace())->level() == element_[this->GetStateIndex()]->level()-1,
           ExcInternalError());
-        const auto neighbor = element_[this->GetStateIndex ()]->neighbor (
-                                this->GetFace ());
+        const auto neighbor = element_[this->GetStateIndex()]->neighbor(
+                                this->GetFace());
         const std::pair<unsigned int, unsigned int> faceno_subfaceno =
-          element_[this->GetStateIndex ()]->neighbor_of_coarser_neighbor (
-            this->GetFace ());
+          element_[this->GetStateIndex()]->neighbor_of_coarser_neighbor(
+            this->GetFace());
         const unsigned int neighbor_face_no = faceno_subfaceno.first,
                            neighbor_subface_no = faceno_subfaceno.second;
-        state_hp_fe_subface_values_->reinit (neighbor, neighbor_face_no,
-                                             neighbor_subface_no);
+        state_hp_fe_subface_values_->reinit(neighbor, neighbor_face_no,
+                                            neighbor_subface_no);
         nbr_state_hp_fe_values_ptr_ =
-          &state_hp_fe_subface_values_->get_present_fe_values ();
-        if (this->GetControlIndex () < element_.size ())
+          &state_hp_fe_subface_values_->get_present_fe_values();
+        if (this->GetControlIndex() < element_.size())
           {
             const auto control_neighbor =
-              element_[this->GetControlIndex ()]->neighbor (
-                this->GetFace ());
+              element_[this->GetControlIndex()]->neighbor(this->GetFace());
             const std::pair<unsigned int, unsigned int> control_faceno_subfaceno =
-              element_[this->GetControlIndex ()]->neighbor_of_coarser_neighbor (
-                this->GetFace ());
+              element_[this->GetControlIndex()]->neighbor_of_coarser_neighbor(
+                this->GetFace());
             const unsigned int control_neighbor_face_no =
               control_faceno_subfaceno.first, control_neighbor_subface_no =
                 control_faceno_subfaceno.second;
 
-            control_hp_fe_subface_values_->reinit (control_neighbor,
-                                                   control_neighbor_face_no, control_neighbor_subface_no);
+            control_hp_fe_subface_values_->reinit(control_neighbor,
+                                                  control_neighbor_face_no, control_neighbor_subface_no);
             nbr_control_hp_fe_values_ptr_ =
-              &control_hp_fe_subface_values_->get_present_fe_values ();
+              &control_hp_fe_subface_values_->get_present_fe_values();
           }
       }
     else
       {
-        const auto neighbor_state =
-          element_[this->GetStateIndex ()]->neighbor (this->GetFace ());
+        const auto neighbor_state = element_[this->GetStateIndex()]->neighbor(
+                                      this->GetFace());
         // neighbor element is as much refined as the
-        Assert(
-          neighbor_state->level() == element_[this->GetStateIndex()]->level(),
-          ExcInternalError());
-        nbr_state_hp_fe_values_->reinit (neighbor_state,
-                                         element_[this->GetStateIndex ()]->neighbor_of_neighbor (
-                                           this->GetFace ()));
+        Assert(neighbor_state->level() == element_[this->GetStateIndex()]->level(),
+               ExcInternalError());
+        nbr_state_hp_fe_values_->reinit(neighbor_state,
+                                        element_[this->GetStateIndex()]->neighbor_of_neighbor(
+                                          this->GetFace()));
         nbr_state_hp_fe_values_ptr_ =
-          &nbr_state_hp_fe_values_->get_present_fe_values ();
+          &nbr_state_hp_fe_values_->get_present_fe_values();
 
         //Make sure that the Control must be initialized.
-        if (this->GetControlIndex () < element_.size ())
+        if (this->GetControlIndex() < element_.size())
           {
-            nbr_control_hp_fe_values_->reinit (
-              element_[this->GetControlIndex ()]->neighbor (
-                this->GetFace ()),
-              element_[this->GetControlIndex ()]->neighbor_of_neighbor (
-                this->GetFace ()));
+            nbr_control_hp_fe_values_->reinit(
+              element_[this->GetControlIndex()]->neighbor(this->GetFace()),
+              element_[this->GetControlIndex()]->neighbor_of_neighbor(
+                this->GetFace()));
             nbr_control_hp_fe_values_ptr_ =
-              &nbr_control_hp_fe_values_->get_present_fe_values ();
+              &nbr_control_hp_fe_values_->get_present_fe_values();
           }
       }
   }
 
   /*********************************************/
 
-  template <typename VECTOR, int dim>
+  template<typename VECTOR, int dim>
   unsigned int
-  FaceDataContainer<dealii::hp::DoFHandler, VECTOR, dim>::GetNDoFsPerElement () const
+  FaceDataContainer<dealii::hp::DoFHandler, VECTOR, dim>::GetNDoFsPerElement() const
   {
-    return element_[0]->get_fe ().dofs_per_cell;
+    return element_[0]->get_fe().dofs_per_cell;
   }
 
   /*********************************************/
 
-  template <typename VECTOR, int dim>
+  template<typename VECTOR, int dim>
   unsigned int
-  FaceDataContainer<dealii::hp::DoFHandler, VECTOR, dim>::GetNbrNDoFsPerElement () const
+  FaceDataContainer<dealii::hp::DoFHandler, VECTOR, dim>::GetNbrNDoFsPerElement() const
   {
-    if (element_[0]->neighbor_index (this->GetFace ()) != -1)
-      return element_[0]->neighbor (this->GetFace ())->get_fe ().dofs_per_cell;
+    if (element_[0]->neighbor_index(this->GetFace()) != -1)
+      return element_[0]->neighbor(this->GetFace())->get_fe().dofs_per_cell;
     else
       {
         std::stringstream out;
-        out << "There is no neighbor with number " << this->GetFace ();
-        throw DOpEException (out.str (),
-                             "HpFaceDataContainer::GetNbrNDoFsPerElement");
+        out << "There is no neighbor with number " << this->GetFace();
+        throw DOpEException(out.str(),
+                            "HpFaceDataContainer::GetNbrNDoFsPerElement");
       }
   }
   /*********************************************/
-  template <typename VECTOR, int dim>
+  template<typename VECTOR, int dim>
   unsigned int
-  FaceDataContainer<dealii::hp::DoFHandler, VECTOR, dim>::GetNQPoints () const
+  FaceDataContainer<dealii::hp::DoFHandler, VECTOR, dim>::GetNQPoints() const
   {
-    return q_collection_[element_[0]->active_fe_index ()].size ();
+    return q_collection_[element_[0]->active_fe_index()].size();
   }
 
   /*********************************************/
-  template <typename VECTOR, int dim>
+  template<typename VECTOR, int dim>
   unsigned int
-  FaceDataContainer<dealii::hp::DoFHandler, VECTOR, dim>::GetNbrNQPoints () const
+  FaceDataContainer<dealii::hp::DoFHandler, VECTOR, dim>::GetNbrNQPoints() const
   {
-    if (element_[0]->neighbor_index (this->GetFace ()) != -1)
-      return q_collection_[element_[0]->neighbor (this->GetFace ())->active_fe_index ()].size ();
+    if (element_[0]->neighbor_index(this->GetFace()) != -1)
+      return q_collection_[element_[0]->neighbor(this->GetFace())->active_fe_index()].size();
     else
       {
         std::stringstream out;
-        out << "There is no neighbor with number " << this->GetFace ();
-        throw DOpEException (out.str (),
-                             "HpFaceDataContainer::GetNbrNQPoints");
+        out << "There is no neighbor with number " << this->GetFace();
+        throw DOpEException(out.str(),
+                            "HpFaceDataContainer::GetNbrNQPoints");
       }
   }
   /*********************************************/
 
-  template <typename VECTOR, int dim>
+  template<typename VECTOR, int dim>
   unsigned int
-  FaceDataContainer<dealii::hp::DoFHandler, VECTOR, dim>::GetMaterialId () const
+  FaceDataContainer<dealii::hp::DoFHandler, VECTOR, dim>::GetMaterialId() const
   {
-    return element_[0]->material_id ();
+    return element_[0]->material_id();
   }
   /*********************************************/
-  template <typename VECTOR, int dim>
+  template<typename VECTOR, int dim>
   unsigned int
-  FaceDataContainer<dealii::hp::DoFHandler, VECTOR, dim>::GetNbrMaterialId () const
+  FaceDataContainer<dealii::hp::DoFHandler, VECTOR, dim>::GetNbrMaterialId() const
   {
-    return this->GetNbrMaterialId (this->GetFace ());
+    return this->GetNbrMaterialId(this->GetFace());
   }
 
   /*********************************************/
 
-  template <typename VECTOR, int dim>
+  template<typename VECTOR, int dim>
   unsigned int
-  FaceDataContainer<dealii::hp::DoFHandler, VECTOR, dim>::GetNbrMaterialId (unsigned int face) const
+  FaceDataContainer<dealii::hp::DoFHandler, VECTOR, dim>::GetNbrMaterialId(
+    unsigned int face) const
   {
-    if (element_[0]->neighbor_index (face) != -1)
-      return element_[0]->neighbor (face)->material_id ();
+    if (element_[0]->neighbor_index(face) != -1)
+      return element_[0]->neighbor(face)->material_id();
     else
       {
         std::stringstream out;
         out << "There is no neighbor with number " << face;
-        throw DOpEException (out.str (),
-                             "HpFaceDataContainer::GetNbrMaterialId");
+        throw DOpEException(out.str(),
+                            "HpFaceDataContainer::GetNbrMaterialId");
       }
   }
 
   /*********************************************/
 
-  template <typename VECTOR, int dim>
+  template<typename VECTOR, int dim>
   double
-  FaceDataContainer<dealii::hp::DoFHandler, VECTOR, dim>::GetElementDiameter () const
+  FaceDataContainer<dealii::hp::DoFHandler, VECTOR, dim>::GetElementDiameter() const
   {
 //      return element_[0]->face(this->GetFace())->diameter();
-    return element_[0]->diameter ();
+    return element_[0]->diameter();
   }
 
   /**********************************************/
 
-  template <typename VECTOR, int dim>
+  template<typename VECTOR, int dim>
   bool
-  FaceDataContainer<dealii::hp::DoFHandler, VECTOR, dim>::GetIsAtBoundary () const
+  FaceDataContainer<dealii::hp::DoFHandler, VECTOR, dim>::GetIsAtBoundary() const
   {
-    return element_[0]->face (this->GetFace ())->at_boundary ();
+    return element_[0]->face(this->GetFace())->at_boundary();
   }
 
   /**********************************************/
-  template <typename VECTOR, int dim>
+  template<typename VECTOR, int dim>
   unsigned int
-  FaceDataContainer<dealii::hp::DoFHandler, VECTOR, dim>::GetBoundaryIndicator () const
+  FaceDataContainer<dealii::hp::DoFHandler, VECTOR, dim>::GetBoundaryIndicator() const
   {
 #if DEAL_II_VERSION_GTE(8,3,0)
-    return element_[0]->face (this->GetFace ())->boundary_id ();
+    return element_[0]->face(this->GetFace())->boundary_id();
 #else
     return element_[0]->face(this->GetFace())->boundary_indicator();
 #endif
   }
 
   /*********************************************/
-  template <typename VECTOR, int dim>
+  template<typename VECTOR, int dim>
   const FEFaceValuesBase<dim> &
-  FaceDataContainer<dealii::hp::DoFHandler, VECTOR, dim>::GetFEFaceValuesState () const
+  FaceDataContainer<dealii::hp::DoFHandler, VECTOR, dim>::GetFEFaceValuesState() const
   {
     return *state_hp_fe_values_ptr_;
   }
   /*********************************************/
-  template <typename VECTOR, int dim>
+  template<typename VECTOR, int dim>
   const FEFaceValuesBase<dim> &
-  FaceDataContainer<dealii::hp::DoFHandler, VECTOR, dim>::GetFEFaceValuesControl () const
+  FaceDataContainer<dealii::hp::DoFHandler, VECTOR, dim>::GetFEFaceValuesControl() const
   {
     return *control_hp_fe_values_ptr_;
   }
   /*********************************************/
-  template <typename VECTOR, int dim>
+  template<typename VECTOR, int dim>
   const FEFaceValuesBase<dim> &
-  FaceDataContainer<dealii::hp::DoFHandler, VECTOR, dim>::GetNbrFEFaceValuesState () const
+  FaceDataContainer<dealii::hp::DoFHandler, VECTOR, dim>::GetNbrFEFaceValuesState() const
   {
     return *nbr_state_hp_fe_values_ptr_;
   }
   /*********************************************/
-  template <typename VECTOR, int dim>
+  template<typename VECTOR, int dim>
   const FEFaceValuesBase<dim> &
-  FaceDataContainer<dealii::hp::DoFHandler, VECTOR, dim>::GetNbrFEFaceValuesControl () const
+  FaceDataContainer<dealii::hp::DoFHandler, VECTOR, dim>::GetNbrFEFaceValuesControl() const
   {
     return *nbr_control_hp_fe_values_ptr_;
   }
 
   /**********************************************/
-  template <typename VECTOR, int dim>
+  template<typename VECTOR, int dim>
   unsigned int
-  FaceDataContainer<dealii::hp::DoFHandler, VECTOR, dim>::GetStateIndex () const
+  FaceDataContainer<dealii::hp::DoFHandler, VECTOR, dim>::GetStateIndex() const
   {
     return state_index_;
   }
   /*********************************************/
-  template <typename VECTOR, int dim>
+  template<typename VECTOR, int dim>
   unsigned int
-  FaceDataContainer<dealii::hp::DoFHandler, VECTOR, dim>::GetControlIndex () const
+  FaceDataContainer<dealii::hp::DoFHandler, VECTOR, dim>::GetControlIndex() const
   {
     return control_index_;
   }

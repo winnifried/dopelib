@@ -1,25 +1,25 @@
 /**
- *
- * Copyright (C) 2012-2014 by the DOpElib authors
- *
- * This file is part of DOpElib
- *
- * DOpElib is free software: you can redistribute it
- * and/or modify it under the terms of the GNU General Public
- * License as published by the Free Software Foundation, either
- * version 3 of the License, or (at your option) any later
- * version.
- *
- * DOpElib is distributed in the hope that it will be
- * useful, but WITHOUT ANY WARRANTY; without even the implied
- * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
- * PURPOSE.  See the GNU General Public License for more
- * details.
- *
- * Please refer to the file LICENSE.TXT included in this distribution
- * for further information on this license.
- *
- **/
+*
+* Copyright (C) 2012-2014 by the DOpElib authors
+*
+* This file is part of DOpElib
+*
+* DOpElib is free software: you can redistribute it
+* and/or modify it under the terms of the GNU General Public
+* License as published by the Free Software Foundation, either
+* version 3 of the License, or (at your option) any later
+* version.
+*
+* DOpElib is distributed in the hope that it will be
+* useful, but WITHOUT ANY WARRANTY; without even the implied
+* warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+* PURPOSE.  See the GNU General Public License for more
+* details.
+*
+* Please refer to the file LICENSE.TXT included in this distribution
+* for further information on this license.
+*
+**/
 
 #ifndef MinRes_LINEAR_SOLVER_H_
 #define MinRes_LINEAR_SOLVER_H_
@@ -65,8 +65,8 @@ namespace DOpE
     static void declare_params(ParameterReader &param_reader);
 
     /**
-     This Function should be called once after grid refinement, or changes in boundary values
-     to  recompute sparsity patterns, and constraint matrices.
+       This Function should be called once after grid refinement, or changes in boundary values
+       to  recompute sparsity patterns, and constraint matrices.
      */
     template<typename PROBLEM>
     void ReInit(PROBLEM &pde);
@@ -99,7 +99,7 @@ namespace DOpE
     MATRIX matrix_;
 
     double linear_global_tol_, linear_tol_;
-    int linear_maxiter_;
+    int  linear_maxiter_;
   };
 
   /*********************************Implementation************************************************/
@@ -120,8 +120,8 @@ namespace DOpE
   {
     param_reader.SetSubsection("minreslinearsolver_withmatrix parameters");
     linear_global_tol_ = param_reader.get_double ("linear_global_tol");
-    linear_tol_ = param_reader.get_double ("linear_tol");
-    linear_maxiter_ = param_reader.get_integer ("linear_maxiter");
+    linear_tol_        = param_reader.get_double ("linear_tol");
+    linear_maxiter_    = param_reader.get_integer ("linear_maxiter");
 
   }
 
@@ -136,7 +136,7 @@ namespace DOpE
 
   template <typename PRECONDITIONER,typename SPARSITYPATTERN, typename MATRIX, typename VECTOR>
   template<typename PROBLEM>
-  void MinResLinearSolverWithMatrix<PRECONDITIONER,SPARSITYPATTERN,MATRIX,VECTOR>::ReInit(PROBLEM &pde)
+  void  MinResLinearSolverWithMatrix<PRECONDITIONER,SPARSITYPATTERN,MATRIX,VECTOR>::ReInit(PROBLEM &pde)
   {
     matrix_.clear();
     pde.ComputeSparsityPattern(sparsity_pattern_);
@@ -157,6 +157,7 @@ namespace DOpE
         integr.ComputeMatrix (pde,matrix_);
       }
 
+
     dealii::SolverControl solver_control (linear_maxiter_, linear_global_tol_,false,false);
     dealii::SolverMinRes<VECTOR> minres (solver_control);
     PRECONDITIONER precondition;
@@ -167,6 +168,8 @@ namespace DOpE
     pde.GetDoFConstraints().distribute(solution);
   }
   /******************************************************/
+
+
 
 }
 #endif

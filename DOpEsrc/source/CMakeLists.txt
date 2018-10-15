@@ -2,7 +2,7 @@ INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR})
 
 FILE(GLOB _src *.cc)
 
-FOREACH(_deal_ii_dimension 1 2 3) 
+FOREACH(_deal_ii_dimension 1 2 3)
   FOREACH(_dope_dimension 0 ${_deal_ii_dimension})
     ADD_LIBRARY(dope_${_dope_dimension}${_deal_ii_dimension} OBJECT ${_src})
     

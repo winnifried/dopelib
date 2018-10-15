@@ -105,6 +105,7 @@ namespace DOpE
                          INTEGRATORDATACONT &idc,
                          int base_priority = 0);
 
+
     /**
      * Constructor for the StatReducedProblem.
      *
@@ -160,6 +161,7 @@ namespace DOpE
      *
      */
     void GetControlBoxConstraints(ControlVector<VECTOR> &lb, ControlVector<VECTOR> &ub);
+
 
     /******************************************************/
 
@@ -245,21 +247,6 @@ namespace DOpE
     /******************************************************/
 
     /**
-     *  Here, the given BlockVector<double> v is printed to a file of *.vtk or *.gpl format.
-     *  However, in later implementations other file formats will be available.
-     *
-     *  @param v           The BlockVector to write to a file.
-     *  @param name        The names of the variables, e.g., in a fluid problem: v1, v2, p.
-     *  @param outfile     The basic name for the output file to print.
-     *  @param dof_type    Has the DoF type: state or control.
-     *  @param filetype    The filetype. Actually, *.vtk and *.gpl outputs are possible.
-     */
-    void WriteToFile(const VECTOR &v, std::string name, std::string outfile,
-                     std::string dof_type, std::string filetype);
-
-    /******************************************************/
-
-    /**
      *  Here, the given ControlVector<VECTOR> v is printed to a file of *.vtk or *.gpl format.
      *  However, in later implementations other file formats will be available.
      *
@@ -267,7 +254,7 @@ namespace DOpE
      *  @param name        The names of the variables, e.g., in a fluid problem: v1, v2, p.
      *  @param dof_type    Has the DoF type: state or control.
      */
-    void WriteToFile(const ControlVector<VECTOR> &v, std::string name, std::string dof_type);
+    virtual void WriteToFile(const ControlVector<VECTOR> &v, std::string name, std::string dof_type);
 
     /******************************************************/
 
@@ -278,7 +265,12 @@ namespace DOpE
      *  @param v           A std::vector to write to a file.
      *  @param outfile     The basic name for the output file to print.
      */
-    void WriteToFile(const std::vector<double> &v, std::string outfile);
+    virtual void WriteToFile(const std::vector<double> &v, std::string outfile);
+
+    /**
+     * Import overloads from base class.
+     */
+    using ReducedProblemInterface<PROBLEM, VECTOR>::WriteToFile;
 
   protected:
     const StateVector<VECTOR> &GetU() const
@@ -433,10 +425,10 @@ namespace DOpE
     NONLINEARSOLVER nonlinear_adjoint_solver_;
     CONTROLNONLINEARSOLVER nonlinear_gradient_solver_;
 
-    bool build_state_matrix_, build_adjoint_matrix_, build_control_matrix_;
+    bool build_state_matrix_ = false, build_adjoint_matrix_ = false, build_control_matrix_ = false;
     bool state_reinit_, adjoint_reinit_, gradient_reinit_;
 
-    bool project_initial_data_;
+    bool project_initial_data_ = false;
     unsigned int cost_needs_precomputations_;
 
     friend class SolutionExtractor<InstatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER,
@@ -863,6 +855,7 @@ namespace DOpE
         // Duplicate possibly already computed values
         ControlVector<VECTOR> tmp = gradient;
         tmp.GetSpacialVector() = gradient.GetSpacialVector();
+
 
         this->GetProblem()->AddAuxiliaryToIntegrator(this->GetControlIntegrator());
 
@@ -1549,17 +1542,6 @@ namespace DOpE
   }
 
   /******************************************************/
-  template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER, typename CONTROLINTEGRATOR,
-           typename INTEGRATOR, typename PROBLEM, typename VECTOR, int dopedim,
-           int dealdim>
-  void InstatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER, CONTROLINTEGRATOR, INTEGRATOR,
-       PROBLEM, VECTOR, dopedim, dealdim>::WriteToFile(const VECTOR &v, std::string name, std::string outfile, std::string dof_type, std::string filetype)
-  {
-    // TODO !!!
-//        ReducedProblemInterface<PROBLEM, VECTOR>::WriteToFile(v, name, outfile, dof_type, filetype);
-  }
-
-  /******************************************************/
 
   template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER, typename CONTROLINTEGRATOR,
            typename INTEGRATOR, typename PROBLEM, typename VECTOR, int dopedim,
@@ -1651,19 +1633,7 @@ namespace DOpE
       sol.SetTimeDoFNumber(local_to_global[0], it);
     }
     // Set u_old to initial_values
-    {
-      // Compute first all dofs
-      const std::vector<unsigned int> &dofs_per_block =
-        this->GetProblem()->GetSpaceTimeHandler()->GetStateDoFsPerBlock();
-      unsigned int n_dofs = 0;
-      unsigned int n_blocks = dofs_per_block.size();
-      for (unsigned int i = 0; i < n_blocks; i++)
-        {
-          n_dofs += dofs_per_block[i];
-        }
-      // ... then use helper because of templates
-      DOpEHelper::ReSizeVector(n_dofs, dofs_per_block, u_old);
-    }
+    this->GetProblem()->GetSpaceTimeHandler()->ReinitVector(u_old, DOpEtypes::state);
 
     // Projection of initial data
     this->GetOutputHandler()->SetIterationNumber(0, "Time");
@@ -1685,6 +1655,8 @@ namespace DOpE
     sol.GetSpacialVector() = u_old;
     this->GetOutputHandler()->Write(u_old, outname + this->GetPostIndex(),
                                     problem.GetDoFType());
+
+
 
     if (eval_funcs)
       {
@@ -1817,19 +1789,7 @@ namespace DOpE
       sol.SetTimeDoFNumber(local_to_global[local_to_global.size()-1], it);
     }
     // Set u_old to initial_values
-    {
-      // Compute total dofs first
-      const std::vector<unsigned int> &dofs_per_block =
-        this->GetProblem()->GetSpaceTimeHandler()->GetStateDoFsPerBlock();
-      unsigned int n_dofs = 0;
-      unsigned int n_blocks = dofs_per_block.size();
-      for (unsigned int i = 0; i < n_blocks; i++)
-        {
-          n_dofs += dofs_per_block[i];
-        }
-      // ... and then get helper (because of templates)
-      DOpEHelper::ReSizeVector(n_dofs, dofs_per_block, u_old);
-    }
+    this->GetProblem()->GetSpaceTimeHandler()->ReinitVector(u_old, DOpEtypes::state);
     // Projection of initial data
     this->GetOutputHandler()->SetIterationNumber(max_timestep, "Time");
     {

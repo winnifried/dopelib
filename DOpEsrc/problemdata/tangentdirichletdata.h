@@ -39,10 +39,7 @@ namespace DOpE
   class TangentDirichletData : public DOpEWrapper::Function<dealdim>
   {
   public:
-    TangentDirichletData (const DD &data)
-      : DOpEWrapper::Function<dealdim> (data.n_components (),
-                                        data.InitialTime ()),
-      dirichlet_data_ (data)
+    TangentDirichletData(const DD &data) : DOpEWrapper::Function<dealdim>(data.n_components(), data.InitialTime()), dirichlet_data_(data)
     {
       param_values_ = NULL;
       domain_values_ = NULL;
@@ -52,15 +49,16 @@ namespace DOpE
     /**
      * Initializes the private data, should be called prior to any value call!
      */
-    void
-    ReInit (const std::map<std::string, const dealii::Vector<double>*> &param_values,
-            const std::map<std::string, const VECTOR *> &domain_values,
-            unsigned int color)
+    void ReInit(
+      const std::map<std::string, const dealii::Vector<double>* > &param_values,
+      const std::map<std::string, const VECTOR *> &domain_values,
+      unsigned int color)
     {
       param_values_ = &param_values;
       domain_values_ = &domain_values;
       color_ = color;
     }
+
 
     /**
      * Accesses the values of the dirichlet data for the tangent problem.
@@ -72,12 +70,15 @@ namespace DOpE
      *
      * @return The component of the Dirichlet data at p, i.e., DD'(q)(p)_{component}
      */
-    double
-    value (const dealii::Point<dealdim> &p,
-           const unsigned int component) const
+    double value (const dealii::Point<dealdim>   &p,
+                  const unsigned int component) const
     {
-      return dirichlet_data_.Data_Q (param_values_, domain_values_, color_,
-                                     p, component);
+      return dirichlet_data_.Data_Q(
+               param_values_,
+               domain_values_,
+               color_,
+               p,
+               component);
     }
 
     /**
@@ -85,8 +86,7 @@ namespace DOpE
      *
      * @param time      The current time
      */
-    void
-    SetTime (double time) const
+    void SetTime(double time) const
     {
       dirichlet_data_.SetTime (time);
     }

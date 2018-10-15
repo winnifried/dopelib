@@ -47,14 +47,11 @@ namespace DOpEWrapper
    * @tparam <DH>               The dealii DofHandler type used.
    */
 
-  template <int dim, typename VECTOR,
-            template <int, int> class DH = dealii::DoFHandler>
-  class SolutionTransfer : public dealii::SolutionTransfer<dim, VECTOR,
-    DH<dim, dim> >
+  template <int dim, typename VECTOR, template<int, int> class DH = dealii::DoFHandler>
+  class SolutionTransfer : public dealii::SolutionTransfer<dim,VECTOR, DH<dim,dim> >
   {
   public:
-    SolutionTransfer (const DH<dim, dim> &dof)
-      : dealii::SolutionTransfer<dim, VECTOR, DH<dim, dim> > (dof)
+    SolutionTransfer(const DH<dim,dim> &dof) : dealii::SolutionTransfer<dim,VECTOR, DH<dim,dim> >(dof)
     {
     }
   };

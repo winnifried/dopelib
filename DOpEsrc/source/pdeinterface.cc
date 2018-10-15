@@ -1681,7 +1681,7 @@ template class DOpE::PDEInterface<DOpE::ElementDataContainer,
                                   DOpE::FaceDataContainer, dealii::DoFHandler, dealii::Vector<double>,
                                   deal_II_dimension>;
 
-// !!! Daniel !!!
+#ifdef DOPELIB_WITH_TRILINOS
 template class DOpE::PDEInterface<DOpE::ElementDataContainer,
                                   DOpE::FaceDataContainer, dealii::DoFHandler,
                                   dealii::TrilinosWrappers::MPI::BlockVector, deal_II_dimension>;
@@ -1689,6 +1689,7 @@ template class DOpE::PDEInterface<DOpE::ElementDataContainer,
 template class DOpE::PDEInterface<DOpE::ElementDataContainer,
                                   DOpE::FaceDataContainer, dealii::DoFHandler,
                                   dealii::TrilinosWrappers::MPI::Vector, deal_II_dimension>;
+#endif
 
 /********************************************/
 
@@ -1700,7 +1701,7 @@ template class DOpE::PDEInterface<DOpE::Multimesh_ElementDataContainer,
                                   DOpE::Multimesh_FaceDataContainer, dealii::DoFHandler,
                                   dealii::Vector<double>, deal_II_dimension>;
 
-// !!! Daniel !!!
+#ifdef DOPELIB_WITH_TRILINOS
 template class DOpE::PDEInterface<DOpE::Multimesh_ElementDataContainer,
                                   DOpE::Multimesh_FaceDataContainer, dealii::DoFHandler,
                                   dealii::TrilinosWrappers::MPI::BlockVector, deal_II_dimension>;
@@ -1708,6 +1709,7 @@ template class DOpE::PDEInterface<DOpE::Multimesh_ElementDataContainer,
 template class DOpE::PDEInterface<DOpE::Multimesh_ElementDataContainer,
                                   DOpE::Multimesh_FaceDataContainer, dealii::DoFHandler,
                                   dealii::TrilinosWrappers::MPI::Vector, deal_II_dimension>;
+#endif
 
 /********************************************/
 
@@ -1719,7 +1721,7 @@ template class DOpE::PDEInterface<DOpE::ElementDataContainer,
                                   DOpE::FaceDataContainer, dealii::hp::DoFHandler, dealii::Vector<double>,
                                   deal_II_dimension>;
 
-// !!! Daniel !!!
+#ifdef DOPELIB_WITH_TRILINOS
 template class DOpE::PDEInterface<DOpE::ElementDataContainer,
                                   DOpE::FaceDataContainer, dealii::hp::DoFHandler,
                                   dealii::TrilinosWrappers::MPI::BlockVector, deal_II_dimension>;
@@ -1727,6 +1729,7 @@ template class DOpE::PDEInterface<DOpE::ElementDataContainer,
 template class DOpE::PDEInterface<DOpE::ElementDataContainer,
                                   DOpE::FaceDataContainer, dealii::hp::DoFHandler,
                                   dealii::TrilinosWrappers::MPI::Vector, deal_II_dimension>;
+#endif
 
 /********************************************/
 
@@ -1744,9 +1747,9 @@ template class DOpE::PDEInterface<DOpE::ElementDataContainer,
 //    DOpE::FaceDataContainer, dealii::MGDoFHandler,
 //    dealii::Vector<double>, deal_II_dimension>;
 template class DOpE::PDEInterface<DOpE::Networks::Network_ElementDataContainer,
-                                  DOpE::Networks::Network_FaceDataContainer, dealii::DoFHandler,
-                                  dealii::BlockVector<double>, deal_II_dimension>;
+                                  DOpE::Networks::Network_FaceDataContainer, dealii::DoFHandler, dealii::BlockVector<double>,
+                                  deal_II_dimension>;
 template class DOpE::PDEInterface<DOpE::Networks::Network_ElementDataContainer,
-                                  DOpE::Networks::Network_FaceDataContainer, dealii::DoFHandler,
-                                  dealii::Vector<double>, deal_II_dimension>;
+                                  DOpE::Networks::Network_FaceDataContainer, dealii::DoFHandler, dealii::Vector<double>,
+                                  deal_II_dimension>;
 

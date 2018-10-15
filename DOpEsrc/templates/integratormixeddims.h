@@ -1,25 +1,25 @@
 /**
- *
- * Copyright (C) 2012-2014 by the DOpElib authors
- *
- * This file is part of DOpElib
- *
- * DOpElib is free software: you can redistribute it
- * and/or modify it under the terms of the GNU General Public
- * License as published by the Free Software Foundation, either
- * version 3 of the License, or (at your option) any later
- * version.
- *
- * DOpElib is distributed in the hope that it will be
- * useful, but WITHOUT ANY WARRANTY; without even the implied
- * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
- * PURPOSE.  See the GNU General Public License for more
- * details.
- *
- * Please refer to the file LICENSE.TXT included in this distribution
- * for further information on this license.
- *
- **/
+*
+* Copyright (C) 2012-2014 by the DOpElib authors
+*
+* This file is part of DOpElib
+*
+* DOpElib is free software: you can redistribute it
+* and/or modify it under the terms of the GNU General Public
+* License as published by the Free Software Foundation, either
+* version 3 of the License, or (at your option) any later
+* version.
+*
+* DOpElib is distributed in the hope that it will be
+* useful, but WITHOUT ANY WARRANTY; without even the implied
+* warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+* PURPOSE.  See the GNU General Public License for more
+* details.
+*
+* Please refer to the file LICENSE.TXT included in this distribution
+* for further information on this license.
+*
+**/
 
 #ifndef IntegratorMixed_H_
 #define IntegratorMixed_H_
@@ -98,13 +98,14 @@ namespace DOpE
     template<typename PROBLEM>
     void ApplyTransposedInitialBoundaryValues(PROBLEM &pde, VECTOR &u, SCALAR scale);
 
+
     inline void AddDomainData(std::string name, const VECTOR *new_data);
     inline void DeleteDomainData(std::string name);
 
     inline void AddParamData(std::string name, const dealii::Vector<SCALAR> *new_data);
     inline void DeleteParamData(std::string name);
 
-    inline const INTEGRATORDATACONT &GetIntegratorDataContainer() const;
+    inline  const INTEGRATORDATACONT &GetIntegratorDataContainer() const;
 
   protected:
     inline const std::map<std::string, const VECTOR *> &GetDomainData() const;

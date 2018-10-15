@@ -60,8 +60,7 @@ namespace DOpE
                    const ControlVector<VECTOR> *q_max,
                    const ConstraintVector<VECTOR> &c);
 
-    virtual ~Ipopt_Problem()
-    {}
+    virtual ~Ipopt_Problem() {}
 
     /**@name Overloaded from TNLP */
     //@{
@@ -363,6 +362,7 @@ namespace DOpE
     return false;
   }
 
+
   template <typename RPROBLEM, typename VECTOR>
   void Ipopt_Problem<RPROBLEM,VECTOR>::finalize_solution(Ipopt::SolverReturn status,
                                                          Ipopt::Index n, const Ipopt::Number *x,
@@ -388,7 +388,8 @@ namespace DOpE
 
 #endif //Endof DOPELIB_WITH_IPOPT
 
-}
-//Endof Namespace DOpE
+
+
+} //Endof Namespace DOpE
 
 #endif

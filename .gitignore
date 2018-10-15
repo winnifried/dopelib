@@ -17,3 +17,12 @@ Examples/???/*PDE/Example*/DOpE*Example*
 *.log
 *.toc
 Examples/description.pdf
+
+*.cproject
+*.project
+**Make**
+**make**
+Makefile
+*.xml
+
+**Examples**

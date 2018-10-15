@@ -101,6 +101,7 @@ namespace DOpE
                      INTEGRATORDATACONT &idc,
                      int base_priority = 0);
 
+
     virtual ~InstatPDEProblem();
 
     /******************************************************/
@@ -129,6 +130,7 @@ namespace DOpE
      *
      */
     void ComputeReducedFunctionals();
+
 
     /**
      * Computes the error indicators for the error of a previosly
@@ -169,21 +171,6 @@ namespace DOpE
     /******************************************************/
 
     /**
-     *  Here, the given BlockVector<double> v is printed to a file of *.vtk or *.gpl format.
-     *  However, in later implementations other file formats will be available.
-     *
-     *  @param v           The BlockVector to write to a file.
-     *  @param name        The names of the variables, e.g., in a fluid problem: v1, v2, p.
-     *  @param outfile     The basic name for the output file to print.
-     *  @param dof_type    Has the DoF type: state
-     *  @param filetype    The filetype. Actually, *.vtk and *.gpl outputs are possible.
-     */
-    void WriteToFile(const VECTOR &v, std::string name, std::string outfile,
-                     std::string dof_type, std::string filetype);
-
-    /******************************************************/
-
-    /**
      *  A std::vector v is printed to a text file.
      *  Note that this assumes that the vector is one entry per time step.
      *
@@ -192,17 +179,12 @@ namespace DOpE
      */
     void WriteToFile(const std::vector<double> &v, std::string outfile);
 
-    /******************************************************/
-
     /**
-     * Dummy for pure virtual in the base class
+     * Import overloads from base class.
      */
-    virtual void
-    WriteToFile(const ControlVector<VECTOR> &, std::string ,
-                std::string )
-    {
-      abort();
-    }
+    using PDEProblemInterface<PROBLEM, VECTOR, dealdim>::WriteToFile;
+
+    /******************************************************/
 
   protected:
     const StateVector<VECTOR> &GetU() const
@@ -316,10 +298,10 @@ namespace DOpE
     NONLINEARSOLVER nonlinear_state_solver_;
     NONLINEARSOLVER nonlinear_adjoint_solver_;
 
-    bool build_state_matrix_, build_adjoint_matrix_;
+    bool build_state_matrix_ = false, build_adjoint_matrix_ = false;
     bool state_reinit_, adjoint_reinit_;
 
-    bool project_initial_data_;
+    bool project_initial_data_ = false;
 
     friend class SolutionExtractor<InstatPDEProblem<NONLINEARSOLVER,
       INTEGRATOR, PROBLEM, VECTOR, dealdim>, VECTOR >;
@@ -648,20 +630,6 @@ namespace DOpE
   }
 
   /******************************************************/
-  template<typename NONLINEARSOLVER,
-           typename INTEGRATOR, typename PROBLEM, typename VECTOR,
-           int dealdim>
-  void InstatPDEProblem<NONLINEARSOLVER, INTEGRATOR,
-       PROBLEM, VECTOR, dealdim>::WriteToFile(const VECTOR &v, std::string name, std::string outfile, std::string dof_type, std::string filetype)
-  {
-    if (dof_type != "state")
-      throw DOpEException("No such DoFHandler `" + dof_type + "'!",
-                          "InstatPDEProblem::WriteToFile");
-
-    this->WriteToFile(v, name, outfile, dof_type, filetype);
-  }
-
-  /******************************************************/
 
   template<typename NONLINEARSOLVER,
            typename INTEGRATOR, typename PROBLEM,
@@ -713,20 +681,7 @@ namespace DOpE
       sol.SetTimeDoFNumber(local_to_global[0], it);
     }
     // Set u_old to initial_values
-    {
-      // Compute first all dofs
-      const std::vector<unsigned int> &dofs_per_block =
-        this->GetProblem()->GetSpaceTimeHandler()->GetStateDoFsPerBlock();
-      unsigned int n_dofs = 0;
-      unsigned int n_blocks = dofs_per_block.size();
-      for (unsigned int i = 0; i < n_blocks; i++)
-        {
-          n_dofs += dofs_per_block[i];
-        }
-      // ... then use helper because of templates
-      DOpEHelper::ReSizeVector(n_dofs, dofs_per_block, u_old);
-    }
-
+    this->GetProblem()->GetSpaceTimeHandler()->ReinitVector(u_old, DOpEtypes::state);
     // Projection of initial data
     this->GetOutputHandler()->SetIterationNumber(0, "Time");
     {
@@ -747,6 +702,8 @@ namespace DOpE
     sol.GetSpacialVector() = u_old;
     this->GetOutputHandler()->Write(u_old, outname + this->GetPostIndex(),
                                     problem.GetDoFType());
+
+
 
     if (eval_funcs)
       {
@@ -852,19 +809,7 @@ namespace DOpE
       sol.SetTimeDoFNumber(local_to_global[local_to_global.size()-1], it);
     }
     // Set u_old to initial_values
-    {
-      // Compute total dofs first
-      const std::vector<unsigned int> &dofs_per_block =
-        this->GetProblem()->GetSpaceTimeHandler()->GetStateDoFsPerBlock();
-      unsigned int n_dofs = 0;
-      unsigned int n_blocks = dofs_per_block.size();
-      for (unsigned int i = 0; i < n_blocks; i++)
-        {
-          n_dofs += dofs_per_block[i];
-        }
-      // ... and then get helper (because of templates)
-      DOpEHelper::ReSizeVector(n_dofs, dofs_per_block, u_old);
-    }
+    this->GetProblem()->GetSpaceTimeHandler()->ReinitVector(u_old, DOpEtypes::state);
     // Projection of initial data
     this->GetOutputHandler()->SetIterationNumber(max_timestep, "Time");
     {

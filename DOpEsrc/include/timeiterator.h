@@ -52,6 +52,7 @@ namespace DOpE
 
   typedef dealii::DoFHandler<1>::active_cell_iterator active_cell_it;
 
+
   /**
    * An iterator for the timedofhandler that allows us
    * to work with the 1d triangulation of the interval
@@ -74,9 +75,8 @@ namespace DOpE
     /**
      * Self explanatory.
      */
-    TimeIterator (const active_cell_it &element,
-                  int present_index)
-      : element_ (element)
+    TimeIterator(const active_cell_it &element, int present_index) :
+      element_(element)
     {
       present_index_ = present_index;
     }
@@ -133,8 +133,7 @@ namespace DOpE
     }
 
     void
-    Initialize (const active_cell_it &element,
-                int present_index)
+    Initialize(const active_cell_it &element, int present_index)
     {
       element_ = element;
       present_index_ = present_index;

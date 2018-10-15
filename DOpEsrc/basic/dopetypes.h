@@ -54,12 +54,9 @@ namespace DOpE
      */
     enum RefinementType
     {
-      global,
-      fixed_fraction,
-      fixed_number,
-      optimized,
-      finest_of_both
+      global, fixed_fraction, fixed_number, optimized, finest_of_both
     };
+
 
     /**
      * This enum describes which terms of the error identity
@@ -73,10 +70,7 @@ namespace DOpE
      */
     enum EETerms
     {
-      primal_only,
-      dual_only,
-      mixed,
-      mixed_control
+      primal_only, dual_only, mixed, mixed_control
     };
 
     /**
@@ -90,10 +84,7 @@ namespace DOpE
      */
     enum WeightComputation
     {
-      element_diameter,
-      higher_order_interpolation,
-      higher_order_computation,
-      constant/*Not implemented!*/
+      element_diameter, higher_order_interpolation, higher_order_computation, constant/*Not implemented!*/
     };
 
     /**
@@ -104,8 +95,7 @@ namespace DOpE
      */
     enum ResidualEvaluation
     {
-      strong_residual,
-      smoothness_and_influence_factors
+      strong_residual, smoothness_and_influence_factors
     };
 
     /**
@@ -158,20 +148,18 @@ namespace DOpE
 
   } //End of namespace DOpEtypes
 
+
   /**
    * Transfers DOpEtypes::VectorStorageType etc to Human readable values
    */
-  // TODO BetterEnum could do this for us ...
   template <typename C>
-  inline std::string
-  DOpEtypesToString (const C & /*t*/)
+  inline std::string DOpEtypesToString(const C & /*t*/)
   {
     throw DOpEException ("Not implemented!", "DOpEtypesToString");
   }
 
   template <>
-  inline std::string
-  DOpEtypesToString (const DOpEtypes::VectorStorageType &t)
+  inline std::string DOpEtypesToString(const DOpEtypes::VectorStorageType &t)
   {
     switch (t)
       {
@@ -186,8 +174,7 @@ namespace DOpE
         std::stringstream out;
         out << "Unknown DOpEtypes::VectorStorageType" << std::endl;
         out << "Code given is " << t << std::endl;
-        throw DOpEException (out.str (),
-                             "DOpEtypesToString<DOpEtypes::VectorStorageType");
+        throw DOpEException(out.str(),"DOpEtypesToString<DOpEtypes::VectorStorageType");
       }
       }
   }
@@ -209,15 +196,13 @@ namespace DOpE
         std::stringstream out;
         out << "Unknown DOpEtypes::ControlType" << std::endl;
         out << "Code given is " << t << std::endl;
-        throw DOpEException (out.str (),
-                             "DOpEtypesToString<DOpEtypes::ControlType");
+        throw DOpEException(out.str(),"DOpEtypesToString<DOpEtypes::ControlType");
       }
       }
   }
 
   template <>
-  inline std::string
-  DOpEtypesToString (const DOpEtypes::RefinementType &t)
+  inline std::string DOpEtypesToString(const DOpEtypes::RefinementType &t)
   {
     switch (t)
       {
@@ -236,8 +221,7 @@ namespace DOpE
         std::stringstream out;
         out << "Unknown DOpEtypes::RefinementType" << std::endl;
         out << "Code given is " << t << std::endl;
-        throw DOpEException (out.str (),
-                             "DOpEtypesToString<DOpEtypes::RefinementType>");
+        throw DOpEException (out.str(), "DOpEtypesToString<DOpEtypes::RefinementType>");
       }
       }
   }

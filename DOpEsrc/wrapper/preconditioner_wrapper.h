@@ -1,25 +1,25 @@
 /**
- *
- * Copyright (C) 2012-2014 by the DOpElib authors
- *
- * This file is part of DOpElib
- *
- * DOpElib is free software: you can redistribute it
- * and/or modify it under the terms of the GNU General Public
- * License as published by the Free Software Foundation, either
- * version 3 of the License, or (at your option) any later
- * version.
- *
- * DOpElib is distributed in the hope that it will be
- * useful, but WITHOUT ANY WARRANTY; without even the implied
- * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
- * PURPOSE.  See the GNU General Public License for more
- * details.
- *
- * Please refer to the file LICENSE.TXT included in this distribution
- * for further information on this license.
- *
- **/
+*
+* Copyright (C) 2012-2014 by the DOpElib authors
+*
+* This file is part of DOpElib
+*
+* DOpElib is free software: you can redistribute it
+* and/or modify it under the terms of the GNU General Public
+* License as published by the Free Software Foundation, either
+* version 3 of the License, or (at your option) any later
+* version.
+*
+* DOpElib is distributed in the hope that it will be
+* useful, but WITHOUT ANY WARRANTY; without even the implied
+* warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+* PURPOSE.  See the GNU General Public License for more
+* details.
+*
+* Please refer to the file LICENSE.TXT included in this distribution
+* for further information on this license.
+*
+**/
 
 #ifndef DOPE_PRECONDITIONER_H_
 #define DOPE_PRECONDITIONER_H_
@@ -42,24 +42,23 @@
 namespace DOpEWrapper
 {
   /**
-   * @class PreconditionSSOR_Wrapper
-   *
-   * Wrapper for the dealii::PreconditionSSOR preconditioner.
-   *
-   * This is provided to provide a unified initialization interface
-   * to the preconditioners making them useable as template arguments
-   * in our linear solvers.
-   *
-   * @tparam <MATRIX>   The used matrix type
-   */
+    * @class PreconditionSSOR_Wrapper
+    *
+    * Wrapper for the dealii::PreconditionSSOR preconditioner.
+    *
+    * This is provided to provide a unified initialization interface
+    * to the preconditioners making them useable as template arguments
+    * in our linear solvers.
+    *
+    * @tparam <MATRIX>   The used matrix type
+    */
   template <typename MATRIX>
   class PreconditionSSOR_Wrapper : public dealii::PreconditionSSOR<MATRIX>
   {
   public:
-    void
-    initialize (const MATRIX &A)
+    void initialize(const MATRIX &A)
     {
-      dealii::PreconditionSSOR<MATRIX>::initialize (A, 1);
+      dealii::PreconditionSSOR<MATRIX>::initialize(A,1);
     }
   };
 
@@ -75,58 +74,55 @@ namespace DOpEWrapper
    * @tparam <MATRIX>      The used matrix type
    * @tparam <blocksize>   The Blocksize to be considered
    */
-  template <typename MATRIX, int blocksize>
-  class PreconditionBlockSSOR_Wrapper : public dealii::PreconditionBlockSSOR<
-    MATRIX>
+  template <typename MATRIX,int blocksize>
+  class PreconditionBlockSSOR_Wrapper : public dealii::PreconditionBlockSSOR<MATRIX>
   {
   public:
-    void
-    initialize (const MATRIX &A)
+    void initialize(const MATRIX &A)
     {
-      dealii::PreconditionBlockSSOR<MATRIX>::initialize (A, blocksize);
+      dealii::PreconditionBlockSSOR<MATRIX>::initialize(A,blocksize);
     }
   };
 
+
   /**
-   * @class PreconditionIdentity_Wrapper
-   *
-   * Wrapper for the dealii::PreconditionIdentity preconditioner.
-   *
-   * This is provided to provide a unified initialization interface
-   * to the preconditioners making them useable as template arguments
-   * in our linear solvers.
-   *
-   * @tparam <MATRIX>   The used matrix type
-   */
+    * @class PreconditionIdentity_Wrapper
+    *
+    * Wrapper for the dealii::PreconditionIdentity preconditioner.
+    *
+    * This is provided to provide a unified initialization interface
+    * to the preconditioners making them useable as template arguments
+    * in our linear solvers.
+    *
+    * @tparam <MATRIX>   The used matrix type
+    */
   template <typename MATRIX>
   class PreconditionIdentity_Wrapper : public dealii::PreconditionIdentity
   {
   public:
-    void
-    initialize (const MATRIX & /*A*/)
+    void initialize(const MATRIX & /*A*/)
     {
     }
   };
 
   /**
-   * @class PreconditionSparseILU_Wrapper
-   *
-   * Wrapper for the dealii::PreconditionSparseILU preconditioner.
-   *
-   * This is provided to provide a unified initialization interface
-   * to the preconditioners making them useable as template arguments
-   * in our linear solvers.
-   *
-   * @tparam <MATRIX>   The used matrix type
-   */
+    * @class PreconditionSparseILU_Wrapper
+    *
+    * Wrapper for the dealii::PreconditionSparseILU preconditioner.
+    *
+    * This is provided to provide a unified initialization interface
+    * to the preconditioners making them useable as template arguments
+    * in our linear solvers.
+    *
+    * @tparam <MATRIX>   The used matrix type
+    */
   template <typename number>
   class PreconditionSparseILU_Wrapper : public dealii::SparseILU<number>
   {
   public:
-    void
-    initialize (const SparseMatrix<number> &A)
+    void initialize(const SparseMatrix<number> &A)
     {
-      dealii::SparseILU<number>::initialize (A);
+      dealii::SparseILU<number>::initialize(A);
     }
   };
 }

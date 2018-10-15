@@ -34,6 +34,7 @@
 
 #include <deal.II/dofs/dof_handler.h>
 
+
 using namespace dealii;
 
 namespace DOpE
@@ -52,18 +53,17 @@ namespace DOpE
      *                      interested in.
      */
 
-    template <template <int, int> class DH, typename VECTOR, int dim>
+    template<template<int, int> class DH, typename VECTOR, int dim>
     class Network_ElementDataContainer : public edcinternal::Network_ElementDataContainerInternal<
       dim>
     {
     public:
-      Network_ElementDataContainer ()
+      Network_ElementDataContainer()
       {
-        throw (DOpE::DOpEException (
+        throw (DOpE::DOpEException(
                  "Dummy class, this constructor should never get called.",
                  "Network_ElementDataContainer<dealii::DoFHandler<dim> , VECTOR, dim>::Network_ElementDataContainer"));
       }
-      ;
     };
 
     /**
@@ -74,7 +74,7 @@ namespace DOpE
      * @template dim        The dimension of the integral we are actually interested in.
      */
 
-    template <typename VECTOR, int dim>
+    template<typename VECTOR, int dim>
     class Network_ElementDataContainer<dealii::DoFHandler, VECTOR, dim> : public edcinternal::Network_ElementDataContainerInternal<
       dim>
     {
@@ -100,37 +100,28 @@ namespace DOpE
        *                                be found in this map at the position "state"
        *
        */
-      template <template <int, int> class FE, typename SPARSITYPATTERN,
-                int dopedim, int dealdim>
-      Network_ElementDataContainer (unsigned int pipe,
-                                    const Quadrature<dim> &quad,
-                                    UpdateFlags update_flags,
-                                    SpaceTimeHandler<FE,
-                                    dealii::DoFHandler,
-                                    SPARSITYPATTERN,
-                                    dealii::Vector<double>, dopedim,
-                                    dealdim> &sth,
-                                    const std::vector<
-                                    typename dealii::DoFHandler<dim>::active_cell_iterator>& element,
-                                    const std::map<std::string,
-                                    const Vector<double>*> &param_values,
-                                    const std::map<std::string,
-                                    const dealii::BlockVector<double> *> &domain_values)
-        : edcinternal::Network_ElementDataContainerInternal<dim> (pipe,
-                                                                  param_values, domain_values),
-        element_ (element),
-        state_fe_values_ (sth.GetMapping (),
-                          (sth.GetFESystem ("state")), quad, update_flags),
-        control_fe_values_ (sth.GetMapping (),
-                            (sth.GetFESystem ("control")), quad, update_flags)
+      template<template<int, int> class FE, typename SPARSITYPATTERN, int dopedim, int dealdim>
+      Network_ElementDataContainer(unsigned int pipe, const Quadrature<dim> &quad,
+                                   UpdateFlags update_flags,
+                                   SpaceTimeHandler<FE, dealii::DoFHandler, SPARSITYPATTERN, dealii::Vector<double>,
+                                   dopedim, dealdim> &sth,
+                                   const std::vector<
+                                   typename dealii::DoFHandler<dim>::active_cell_iterator>& element,
+                                   const std::map<std::string, const Vector<double>*> &param_values,
+                                   const std::map<std::string, const dealii::BlockVector<double> *> &domain_values) :
+        edcinternal::Network_ElementDataContainerInternal<dim>(pipe,param_values,
+                                                               domain_values), element_(element), state_fe_values_(
+                                                                 sth.GetMapping(), (sth.GetFESystem("state")), quad,
+                                                                 update_flags), control_fe_values_(sth.GetMapping(),
+                                                                     (sth.GetFESystem("control")), quad, update_flags)
       {
-        state_index_ = sth.GetStateIndex ();
+        state_index_ = sth.GetStateIndex();
         if (state_index_ == 1)
           control_index_ = 0;
         else
           control_index_ = 1;
-        n_q_points_per_element_ = quad.size ();
-        n_dofs_per_element_ = element[0]->get_fe ().dofs_per_cell;
+        n_q_points_per_element_ = quad.size();
+        n_dofs_per_element_ = element[0]->get_fe().dofs_per_cell;
       }
 
       /**
@@ -151,34 +142,27 @@ namespace DOpE
        *                                be found in this map at the position "state"
        *
        */
-      template <template <int, int> class FE, typename SPARSITYPATTERN>
-      Network_ElementDataContainer (unsigned int pipe,
-                                    const Quadrature<dim> &quad,
-                                    UpdateFlags update_flags,
-                                    StateSpaceTimeHandler<FE,
-                                    dealii::DoFHandler,
-                                    SPARSITYPATTERN,
-                                    dealii::Vector<double>, dim> &sth,
-                                    const std::vector<
-                                    typename dealii::DoFHandler<dim>::active_cell_iterator>& element,
-                                    const std::map<std::string,
-                                    const Vector<double>*> &param_values,
-                                    const std::map<std::string,
-                                    const dealii::BlockVector<double> *> &domain_values)
-        : edcinternal::Network_ElementDataContainerInternal<dim> (pipe,
-                                                                  param_values, domain_values),
-        element_ (element),
-        state_fe_values_ (sth.GetMapping (),
-                          (sth.GetFESystem ("state")), quad, update_flags),
-        control_fe_values_ (sth.GetMapping (),
-                            (sth.GetFESystem ("state")), quad, update_flags)
+      template<template<int, int> class FE, typename SPARSITYPATTERN>
+      Network_ElementDataContainer(unsigned int pipe, const Quadrature<dim> &quad,
+                                   UpdateFlags update_flags,
+                                   StateSpaceTimeHandler<FE, dealii::DoFHandler, SPARSITYPATTERN, dealii::Vector<double>,
+                                   dim> &sth,
+                                   const std::vector<
+                                   typename dealii::DoFHandler<dim>::active_cell_iterator>& element,
+                                   const std::map<std::string, const Vector<double>*> &param_values,
+                                   const std::map<std::string, const dealii::BlockVector<double> *> &domain_values) :
+        edcinternal::Network_ElementDataContainerInternal<dim>(pipe, param_values,
+                                                               domain_values), element_(element), state_fe_values_(
+                                                                 sth.GetMapping(), (sth.GetFESystem("state")), quad,
+                                                                 update_flags), control_fe_values_(sth.GetMapping(),
+                                                                     (sth.GetFESystem("state")), quad, update_flags)
       {
-        state_index_ = sth.GetStateIndex ();
-        control_index_ = element.size (); //Make sure they are never used ...
-        n_q_points_per_element_ = quad.size ();
-        n_dofs_per_element_ = element[0]->get_fe ().dofs_per_cell;
+        state_index_ = sth.GetStateIndex();
+        control_index_ = element.size(); //Make sure they are never used ...
+        n_q_points_per_element_ = quad.size();
+        n_dofs_per_element_ = element[0]->get_fe().dofs_per_cell;
       }
-      ~Network_ElementDataContainer ()
+      ~Network_ElementDataContainer()
       {
       }
       /*********************************************/
@@ -187,7 +171,7 @@ namespace DOpE
        * be called prior to any of the get-functions.
        */
       inline void
-      ReInit ();
+      ReInit();
 
       /*********************************************/
       /**
@@ -195,41 +179,40 @@ namespace DOpE
        * is executed before calling them. Self explanatory.
        */
       inline unsigned int
-      GetNDoFsPerElement () const;
+      GetNDoFsPerElement() const;
       inline unsigned int
-      GetNQPoints () const;
+      GetNQPoints() const;
       inline unsigned int
-      GetMaterialId () const;
+      GetMaterialId() const;
       inline unsigned int
-      GetNbrMaterialId (unsigned int face) const;
+      GetNbrMaterialId(unsigned int face) const;
       inline unsigned int
-      GetFaceBoundaryIndicator (unsigned int face) const;
+      GetFaceBoundaryIndicator(unsigned int face) const;
       inline bool
-      GetIsAtBoundary () const;
+      GetIsAtBoundary() const;
       inline double
-      GetElementDiameter () const;
+      GetElementDiameter() const;
       inline Point<dim>
-      GetCenter () const;
+      GetCenter() const;
       inline const DOpEWrapper::FEValues<dim> &
-      GetFEValuesState () const;
+      GetFEValuesState() const;
       inline const DOpEWrapper::FEValues<dim> &
-      GetFEValuesControl () const;
+      GetFEValuesControl() const;
     private:
       /*
        * Helper Functions
        */
       unsigned int
-      GetStateIndex () const;
+      GetStateIndex() const;
       unsigned int
-      GetControlIndex () const;
+      GetControlIndex() const;
 
       /***********************************************************/
       //"global" member data, part of every instantiation
       unsigned int state_index_;
       unsigned int control_index_;
 
-      const std::vector<
-      typename dealii::DoFHandler<dim>::active_cell_iterator> &element_;
+      const std::vector<typename dealii::DoFHandler<dim>::active_cell_iterator> &element_;
       DOpEWrapper::FEValues<dim> state_fe_values_;
       DOpEWrapper::FEValues<dim> control_fe_values_;
 
@@ -237,120 +220,123 @@ namespace DOpE
       unsigned int n_dofs_per_element_;
     };
 
+
     /***********************************************************************/
     /************************IMPLEMENTATION for DoFHandler*********************************/
     /***********************************************************************/
 
-    template <typename VECTOR, int dim>
+    template<typename VECTOR, int dim>
     void
-    Network_ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::ReInit ()
+    Network_ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::ReInit()
     {
-      state_fe_values_.reinit (element_[this->GetStateIndex ()]);
+      state_fe_values_.reinit(element_[this->GetStateIndex()]);
       //Make sure that the Control must be initialized.
-      if (this->GetControlIndex () < element_.size ())
-        control_fe_values_.reinit (element_[this->GetControlIndex ()]);
+      if (this->GetControlIndex() < element_.size())
+        control_fe_values_.reinit(element_[this->GetControlIndex()]);
     }
 
     /***********************************************************************/
-    template <typename VECTOR, int dim>
+    template<typename VECTOR, int dim>
     unsigned int
-    Network_ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::GetNDoFsPerElement () const
+    Network_ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::GetNDoFsPerElement() const
     {
       return n_dofs_per_element_;
     }
 
     /**********************************************/
-    template <typename VECTOR, int dim>
+    template<typename VECTOR, int dim>
     unsigned int
-    Network_ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::GetNQPoints () const
+    Network_ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::GetNQPoints() const
     {
       return n_q_points_per_element_;
     }
 
     /**********************************************/
-    template <typename VECTOR, int dim>
+    template<typename VECTOR, int dim>
     unsigned int
-    Network_ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::GetMaterialId () const
+    Network_ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::GetMaterialId() const
     {
-      return element_[0]->material_id ();
+      return element_[0]->material_id();
     }
 
     /**********************************************/
-    template <typename VECTOR, int dim>
+    template<typename VECTOR, int dim>
     unsigned int
-    Network_ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::GetNbrMaterialId (unsigned int face) const
+    Network_ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::GetNbrMaterialId(
+      unsigned int face) const
     {
-      if (element_[0]->neighbor_index (face) != -1)
-        return element_[0]->neighbor (face)->material_id ();
+      if (element_[0]->neighbor_index(face) != -1)
+        return element_[0]->neighbor(face)->material_id();
       else
         {
           std::stringstream out;
           out << "There is no neighbor with number " << face;
-          throw DOpEException (out.str (),
-                               "Network_ElementDataContainer::GetNbrMaterialId");
+          throw DOpEException(out.str(),
+                              "Network_ElementDataContainer::GetNbrMaterialId");
         }
     }
 
     /**********************************************/
-    template <typename VECTOR, int dim>
+    template<typename VECTOR, int dim>
     unsigned int
-    Network_ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::GetFaceBoundaryIndicator (unsigned int face) const
+    Network_ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::GetFaceBoundaryIndicator(
+      unsigned int face) const
     {
-      return element_[0]->face (face)->boundary_indicator ();
+      return element_[0]->face(face)->boundary_indicator();
     }
 
     /**********************************************/
-    template <typename VECTOR, int dim>
+    template<typename VECTOR, int dim>
     bool
-    Network_ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::GetIsAtBoundary () const
+    Network_ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::GetIsAtBoundary() const
     {
-      return element_[0]->at_boundary ();
+      return element_[0]->at_boundary();
     }
     /**********************************************/
-    template <typename VECTOR, int dim>
+    template<typename VECTOR, int dim>
     double
-    Network_ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::GetElementDiameter () const
+    Network_ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::GetElementDiameter() const
     {
-      return element_[0]->diameter ();
+      return element_[0]->diameter();
     }
     /**********************************************/
-    template <typename VECTOR, int dim>
+    template<typename VECTOR, int dim>
     Point<dim>
-    Network_ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::GetCenter () const
+    Network_ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::GetCenter() const
     {
-      return element_[0]->center ();
+      return element_[0]->center();
     }
 
     /**********************************************/
-    template <typename VECTOR, int dim>
+    template<typename VECTOR, int dim>
     const DOpEWrapper::FEValues<dim> &
-    Network_ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::GetFEValuesState () const
+    Network_ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::GetFEValuesState() const
     {
       return state_fe_values_;
     }
 
     /**********************************************/
-    template <typename VECTOR, int dim>
+    template<typename VECTOR, int dim>
     const DOpEWrapper::FEValues<dim> &
-    Network_ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::GetFEValuesControl () const
+    Network_ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::GetFEValuesControl() const
     {
       return control_fe_values_;
     }
 
     /***********************************************************************/
 
-    template <typename VECTOR, int dim>
+    template<typename VECTOR, int dim>
     unsigned int
-    Network_ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::GetStateIndex () const
+    Network_ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::GetStateIndex() const
     {
       return state_index_;
     }
 
     /***********************************************************************/
 
-    template <typename VECTOR, int dim>
+    template<typename VECTOR, int dim>
     unsigned int
-    Network_ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::GetControlIndex () const
+    Network_ElementDataContainer<dealii::DoFHandler, VECTOR, dim>::GetControlIndex() const
     {
       return control_index_;
     }

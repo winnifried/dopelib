@@ -21,6 +21,7 @@
  *
  **/
 
+
 #include <include/outputhandler.h>
 #include <interfaces/reducedprobleminterface.h>
 #include <include/version.h>
@@ -36,39 +37,20 @@ namespace DOpE
 
   /*******************************************************/
   template <typename VECTOR>
-  void
-  DOpEOutputHandler<VECTOR>::declare_params (ParameterReader &param_reader)
+  void DOpEOutputHandler<VECTOR>::declare_params(ParameterReader &param_reader)
   {
     param_reader.SetSubsection ("output parameters");
-    param_reader.declare_entry ("printlevel", "-1", Patterns::Integer (-1),
-                                "Defines what strings should be printed, the higher the number the more output");
-    param_reader.declare_entry ("never_write_list", "", Patterns::Anything (),
-                                "Do not write files whose name contains a substring given here by a list of `;` separated words");
-    param_reader.declare_entry ("ignore_iterations", "",
-                                Patterns::Anything (),
-                                "Iteration Counters that should not reflect in the outputname, seperated by `;`");
-    param_reader.declare_entry ("results_dir", "Results/",
-                                Patterns::Anything (), "Directory where the output goes to");
-    param_reader.declare_entry ("logfile", "dope.log", Patterns::Anything (),
-                                "Name of the logfile");
-    param_reader.declare_entry ("file_format", ".vtu",
-                                Patterns::Selection (".vtu|.vtk|.gpl"),
-                                "File format for the output of solution variables");
-    param_reader.declare_entry ("control_file_format", ".vtu",
-                                Patterns::Selection (".vtu|.vtk|.txt"),
-                                "File format for the output of control variables");
-    param_reader.declare_entry ("debug", "false", Patterns::Bool (),
-                                "Log Debug Information");
-    param_reader.declare_entry ("number_precision", "5",
-                                Patterns::Integer (1),
-                                "Sets the precision of the output numbers in the newton schemes.");
-    param_reader.declare_entry ("functional_number_precision", "6",
-                                Patterns::Integer (1),
-                                "Sets the precision of the output numbers for functionals.");
-    param_reader.declare_entry ("eps_machine_set_by_user", "0.0",
-                                Patterns::Double (),
-                                "Correlation of the output and machine precision");
-
+    param_reader.declare_entry("printlevel", "-1",Patterns::Integer(-1),"Defines what strings should be printed, the higher the number the more output");
+    param_reader.declare_entry("never_write_list","",Patterns::Anything(),"Do not write files whose name contains a substring given here by a list of `;` separated words");
+    param_reader.declare_entry("ignore_iterations","",Patterns::Anything(),"Iteration Counters that should not reflect in the outputname, seperated by `;`");
+    param_reader.declare_entry("results_dir","Results/",Patterns::Anything(),"Directory where the output goes to");
+    param_reader.declare_entry("logfile","dope.log",Patterns::Anything(),"Name of the logfile");
+    param_reader.declare_entry("file_format",".vtk",Patterns::Selection(".vtk|.vtu|.gpl"),"File format for the output of solution variables");
+    param_reader.declare_entry("control_file_format",".vtk",Patterns::Selection(".vtk|.vtu|.txt"),"File format for the output of control variables");
+    param_reader.declare_entry("debug","false",Patterns::Bool(),"Log Debug Information");
+    param_reader.declare_entry("number_precision","5",Patterns::Integer(1),"Sets the precision of the output numbers in the newton schemes.");
+    param_reader.declare_entry("functional_number_precision","6",Patterns::Integer(1),"Sets the precision of the output numbers for functionals.");
+    param_reader.declare_entry("eps_machine_set_by_user","0.0",Patterns::Double(),"Correlation of the output and machine precision");
   }
 
   /*******************************************************/
@@ -473,11 +455,9 @@ namespace DOpE
         Write ("Writing [" + outfile.str () + "]", 4);
 
         if (dof_type == "control") // TODO enum
-          GetReducedProblem ()->WriteToFile (q, name, outfile.str (),
-                                             dof_type, control_ending_);
+          GetReducedProblem()->WriteToFile(q,name,outfile.str(),dof_type,control_ending_);
         else if (dof_type == "state")
-          GetReducedProblem ()->WriteToFile (q, name, outfile.str (),
-                                             dof_type, ending_);
+          GetReducedProblem()->WriteToFile(q,name,outfile.str(),dof_type,ending_);
       }
   }
 
@@ -550,6 +530,7 @@ namespace DOpE
     return ret.str ();
   }
 
+
   /*******************************************************/
   template <typename VECTOR>
   void
@@ -565,6 +546,7 @@ namespace DOpE
   {
     msg.precision (functional_number_precision_);
   }
+
 
   /*******************************************************/
 
@@ -592,11 +574,11 @@ namespace DOpE
         Write ("Writing [" + outfile.str () + "]", 4);
 
         if (dof_type == "control")
-          GetReducedProblem ()->WriteToFileElementwise (q, name,
-                                                        outfile.str (), dof_type, control_ending_);
+          GetReducedProblem()->WriteToFileElementwise(q, name, outfile.str(),
+                                                      dof_type, control_ending_);
         else if (dof_type == "state")
-          GetReducedProblem ()->WriteToFileElementwise (q, name,
-                                                        outfile.str (), dof_type, ending_);
+          GetReducedProblem()->WriteToFileElementwise(q, name, outfile.str(),
+                                                      dof_type, ending_);
       }
   }
 
@@ -626,6 +608,7 @@ namespace DOpE
       }
     return outfile;
   }
+
 
   /*******************************************************/
   template <typename VECTOR>
@@ -714,6 +697,7 @@ namespace DOpE
     log_.flush ();
   }
 
+
 } //Endof namespace
 /******************************************************/
 /******************************************************/
@@ -721,8 +705,8 @@ namespace DOpE
 template class DOpE::DOpEOutputHandler<dealii::Vector<double> >;
 template class DOpE::DOpEOutputHandler<dealii::BlockVector<double> >;
 
-// !!! Daniel !!!
+#ifdef DOPELIB_WITH_TRILINOS
 template class DOpE::DOpEOutputHandler<dealii::TrilinosWrappers::MPI::Vector>;
-template class DOpE::DOpEOutputHandler<
-  dealii::TrilinosWrappers::MPI::BlockVector>;
+template class DOpE::DOpEOutputHandler<dealii::TrilinosWrappers::MPI::BlockVector>;
+#endif
 

@@ -21,13 +21,13 @@
  *
  **/
 
+
 #include <include/controlvector.h>
 #include <include/dopeexception.h>
 
 #include <iostream>
 #include <assert.h>
 #include <iomanip>
-#include <string>
 
 using namespace dealii;
 using namespace DOpE;
@@ -42,24 +42,20 @@ ControlVector<VECTOR>::ControlVector (const ControlVector &ref)
   c_type_ = STH_->GetControlType ();
 
   //Check consistency
-  if (c_type_ == DOpEtypes::ControlType::initial || c_type_
-      == DOpEtypes::ControlType::stationary)
+  if (c_type_ == DOpEtypes::ControlType::initial || c_type_ == DOpEtypes::ControlType::stationary)
     {
       if (behavior_ != DOpEtypes::VectorStorageType::fullmem)
         {
-          throw DOpEException (
-            "Storage behavior: " + DOpEtypesToString (GetBehavior ())
-            + " is not compatible with control type: "
-            + DOpEtypesToString (c_type_),
-            "ControlVector<VECTOR>::ControlVector<VECTOR>");
+          throw DOpEException("Storage behavior: " + DOpEtypesToString(GetBehavior()) +
+                              " is not compatible with control type: " + DOpEtypesToString(c_type_),
+                              "ControlVector<VECTOR>::ControlVector<VECTOR>");
         }
     }
   if (behavior_ != DOpEtypes::VectorStorageType::fullmem)
     {
-      throw DOpEException (
-        "Storage behavior: " + DOpEtypesToString (GetBehavior ())
-        + " not implemented",
-        "ControlVector<VECTOR>::ControlVector<VECTOR>");
+      throw DOpEException("Storage behavior: " + DOpEtypesToString(GetBehavior()) +
+                          " not implemented",
+                          "ControlVector<VECTOR>::ControlVector<VECTOR>");
     }
 
   ReInit ();
@@ -67,8 +63,7 @@ ControlVector<VECTOR>::ControlVector (const ControlVector &ref)
 
 /******************************************************/
 template <typename VECTOR>
-ControlVector<VECTOR>::ControlVector (const SpaceTimeHandlerBase<VECTOR> *STH,
-                                      DOpEtypes::VectorStorageType behavior)
+ControlVector<VECTOR>::ControlVector(const SpaceTimeHandlerBase<VECTOR> *STH, DOpEtypes::VectorStorageType behavior)
 {
   behavior_ = behavior;
   STH_ = STH;
@@ -76,33 +71,29 @@ ControlVector<VECTOR>::ControlVector (const SpaceTimeHandlerBase<VECTOR> *STH,
   c_type_ = STH_->GetControlType ();
 
   //Check consistency
-  if (c_type_ == DOpEtypes::ControlType::initial || c_type_
-      == DOpEtypes::ControlType::stationary)
+  if (c_type_ == DOpEtypes::ControlType::initial || c_type_ == DOpEtypes::ControlType::stationary)
     {
       if (behavior_ != DOpEtypes::VectorStorageType::fullmem)
         {
-          throw DOpEException (
-            "Storage behavior: " + DOpEtypesToString (GetBehavior ())
-            + " is not compatible with control type: "
-            + DOpEtypesToString (c_type_),
-            "ControlVector<VECTOR>::ControlVector<VECTOR>");
+          throw DOpEException("Storage behavior: " + DOpEtypesToString(GetBehavior()) +
+                              " is not compatible with control type: " + DOpEtypesToString(c_type_),
+                              "ControlVector<VECTOR>::ControlVector<VECTOR>");
         }
     }
   if (behavior_ != DOpEtypes::VectorStorageType::fullmem)
     {
-      throw DOpEException (
-        "Storage behavior: " + DOpEtypesToString (GetBehavior ())
-        + " not implemented",
-        "ControlVector<VECTOR>::ControlVector<VECTOR>");
+      throw DOpEException("Storage behavior: " + DOpEtypesToString(GetBehavior()) +
+                          " not implemented",
+                          "ControlVector<VECTOR>::ControlVector<VECTOR>");
     }
 
   ReInit ();
 }
 
+
 /******************************************************/
 template <typename VECTOR>
-void
-ControlVector<VECTOR>::ReInit ()
+void ControlVector<VECTOR>::ReInit()
 {
   accessor_ = 0;
 
@@ -110,8 +101,7 @@ ControlVector<VECTOR>::ReInit ()
     {
       if (GetBehavior () == DOpEtypes::VectorStorageType::fullmem)
         {
-          if (c_type_ == DOpEtypes::ControlType::initial || c_type_
-              == DOpEtypes::ControlType::stationary)
+          if (c_type_ == DOpEtypes::ControlType::initial || c_type_ == DOpEtypes::ControlType::stationary)
             {
               control_.resize (1, NULL);
               ReSizeSpace ();
@@ -121,10 +111,9 @@ ControlVector<VECTOR>::ReInit ()
               if (c_type_ == DOpEtypes::ControlType::nonstationary)
                 {
                   //Time dofs for state and control are equal!
-                  control_.resize (
-                    GetSpaceTimeHandler ()->GetMaxTimePoint () + 1, NULL);
-                  for (unsigned int t = 0;
-                       t <= GetSpaceTimeHandler ()->GetMaxTimePoint (); t++)
+                  control_.resize(GetSpaceTimeHandler()->GetMaxTimePoint() + 1, NULL);
+                  for (unsigned int t = 0; t
+                       <= GetSpaceTimeHandler()->GetMaxTimePoint(); t++)
                     {
                       SetTimeDoFNumber (t);
                       ReSizeSpace (t);
@@ -133,17 +122,13 @@ ControlVector<VECTOR>::ReInit ()
                 }
               else
                 {
-                  throw DOpEException (
-                    "control type " + DOpEtypesToString (c_type_)
-                    + "Not implemented", "ControlVector<VECTOR>::ReInit");
+                  throw DOpEException("control type " + DOpEtypesToString(c_type_) + "Not implemented","ControlVector<VECTOR>::ReInit");
                 }
             }
         }
       else
         {
-          throw DOpEException (
-            "Unknown Behavior " + DOpEtypesToString (GetBehavior ()),
-            "ControlVector<VECTOR>::ReInit");
+          throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),"ControlVector<VECTOR>::ReInit");
         }
 
       lock_ = false;
@@ -153,7 +138,7 @@ ControlVector<VECTOR>::ReInit ()
 /******************************************************/
 
 template <typename VECTOR>
-ControlVector<VECTOR>::~ControlVector ()
+ControlVector<VECTOR>::~ControlVector () noexcept(false)
 {
   if (GetBehavior () == DOpEtypes::VectorStorageType::fullmem)
     {
@@ -165,16 +150,13 @@ ControlVector<VECTOR>::~ControlVector ()
     }
   else
     {
-      throw DOpEException (
-        "Unknown Behavior " + DOpEtypesToString (GetBehavior ()),
-        "ControlVector<VECTOR>::~ControlVector");
+      throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),"ControlVector<VECTOR>::~ControlVector");
     }
 }
 
 /******************************************************/
 template <typename VECTOR>
-void
-ControlVector<VECTOR>::SetTimeDoFNumber (unsigned int time_point) const
+void ControlVector<VECTOR>::SetTimeDoFNumber(unsigned int time_point) const
 {
   if (c_type_ == DOpEtypes::ControlType::nonstationary)
     {
@@ -186,11 +168,8 @@ ControlVector<VECTOR>::SetTimeDoFNumber (unsigned int time_point) const
       else
         {
           //TODO if temporal behavior is required one needs to do something here!
-          throw DOpEException (
-            "Control type: " + DOpEtypesToString (c_type_)
-            + " is not implemented for behavior: "
-            + DOpEtypesToString (GetBehavior ()),
-            "ControlVector<VECTOR>::SetTimeDoFNumber");
+          throw DOpEException("Control type: " + DOpEtypesToString(c_type_) + " is not implemented for behavior: " + DOpEtypesToString(GetBehavior()),
+                              "ControlVector<VECTOR>::SetTimeDoFNumber");
         }
     }
   else
@@ -220,11 +199,9 @@ ControlVector<VECTOR>::SetTimeDoFNumber (unsigned int time_point) const
 /******************************************************/
 
 template <typename VECTOR>
-VECTOR &
-ControlVector<VECTOR>::GetSpacialVector ()
+VECTOR &ControlVector<VECTOR>::GetSpacialVector()
 {
-  if (c_type_ == DOpEtypes::ControlType::stationary || c_type_
-      == DOpEtypes::ControlType::initial)
+  if (c_type_ == DOpEtypes::ControlType::stationary || c_type_ == DOpEtypes::ControlType::initial)
     {
       return *(control_[accessor_]);
     }
@@ -244,28 +221,23 @@ ControlVector<VECTOR>::GetSpacialVector ()
             }
           else
             {
-              throw DOpEException (
-                "Unknown Behavior " + DOpEtypesToString (GetBehavior ()),
-                "ControlVector<VECTOR>::GetSpacialVector");
+              throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),
+                                  "ControlVector<VECTOR>::GetSpacialVector");
             }
         }
       else
         {
-          throw DOpEException (
-            "Control type: " + DOpEtypesToString (c_type_)
-            + " is not implemented.",
-            "ControlVector<VECTOR>::GetSpacialVector");
+          throw DOpEException("Control type: " + DOpEtypesToString(c_type_) + " is not implemented.",
+                              "ControlVector<VECTOR>::GetSpacialVector");
         }
     }
 }
 
 /******************************************************/
 template <typename VECTOR>
-const VECTOR &
-ControlVector<VECTOR>::GetSpacialVector () const
+const VECTOR &ControlVector<VECTOR>::GetSpacialVector() const
 {
-  if (c_type_ == DOpEtypes::ControlType::stationary || c_type_
-      == DOpEtypes::ControlType::initial)
+  if (c_type_ == DOpEtypes::ControlType::stationary || c_type_ == DOpEtypes::ControlType::initial)
     {
       return *(control_[accessor_]);
     }
@@ -285,35 +257,28 @@ ControlVector<VECTOR>::GetSpacialVector () const
             }
           else
             {
-              throw DOpEException (
-                "Unknown Behavior " + DOpEtypesToString (GetBehavior ()),
-                "ControlVector<VECTOR>::GetSpacialVector");
+              throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),
+                                  "ControlVector<VECTOR>::GetSpacialVector");
             }
         }
       else
         {
-          throw DOpEException (
-            "Control type: " + DOpEtypesToString (c_type_)
-            + " is not implemented.",
-            "ControlVector<VECTOR>::GetSpacialVector");
+          throw DOpEException("Control type: " + DOpEtypesToString(c_type_) + " is not implemented.",
+                              "ControlVector<VECTOR>::GetSpacialVector");
         }
     }
 }
 
 /******************************************************/
 template <typename VECTOR>
-const Vector<double> &
-ControlVector<VECTOR>::GetSpacialVectorCopy () const
+const Vector<double> &ControlVector<VECTOR>::GetSpacialVectorCopy() const
 {
   if (lock_)
     {
-      throw DOpEException (
-        "Trying to create a new copy while the old is still in use!",
-        "ControlVector::GetSpacialVectorCopy");
+      throw DOpEException("Trying to create a new copy while the old is still in use!","ControlVector::GetSpacialVectorCopy");
     }
   lock_ = true;
-  if (c_type_ == DOpEtypes::ControlType::stationary || c_type_
-      == DOpEtypes::ControlType::initial)
+  if (c_type_ == DOpEtypes::ControlType::stationary || c_type_ == DOpEtypes::ControlType::initial)
     {
       copy_control_ = *(control_[accessor_]);
       return copy_control_;
@@ -334,18 +299,15 @@ ControlVector<VECTOR>::GetSpacialVectorCopy () const
             }
           else
             {
-              throw DOpEException (
-                "Unknown Behavior " + DOpEtypesToString (GetBehavior ()),
-                "StateVector<VECTOR>::GetSpacialVectorCopy");
+              throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),
+                                  "StateVector<VECTOR>::GetSpacialVectorCopy");
             }
           return copy_control_;
         }
       else
         {
-          throw DOpEException (
-            "Control type: " + DOpEtypesToString (c_type_)
-            + " is not implemented.",
-            "ControlVector<VECTOR>::GetSpacialVectorCopy");
+          throw DOpEException("Control type: " + DOpEtypesToString(c_type_) + " is not implemented.",
+                              "ControlVector<VECTOR>::GetSpacialVectorCopy");
         }
     }
 }
@@ -353,13 +315,13 @@ ControlVector<VECTOR>::GetSpacialVectorCopy () const
 /******************************************************/
 
 template <typename VECTOR>
-void
-ControlVector<VECTOR>::operator= (double value)
+void ControlVector<VECTOR>::operator=(double value)
 {
   if (lock_)
     {
-      throw DOpEException ("Trying to use operator= while a copy is in use!",
-                           "ControlVector::operator=");
+      throw DOpEException(
+        "Trying to use operator= while a copy is in use!",
+        "ControlVector::operator=");
     }
   if (GetBehavior () == DOpEtypes::VectorStorageType::fullmem)
     {
@@ -372,28 +334,26 @@ ControlVector<VECTOR>::operator= (double value)
     }
   else
     {
-      throw DOpEException (
-        "Unknown Behavior " + DOpEtypesToString (GetBehavior ()),
-        "ControlVector<VECTOR>::operator=");
+      throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),"ControlVector<VECTOR>::operator=");
     }
 }
 
 /******************************************************/
 template <typename VECTOR>
-void
-ControlVector<VECTOR>::operator= (const ControlVector &dq)
+void ControlVector<VECTOR>::operator=(const ControlVector &dq)
 {
   if (lock_)
     {
-      throw DOpEException ("Trying to use operator= while a copy is in use!",
-                           "ControlVector::operator=");
+      throw DOpEException(
+        "Trying to use operator= while a copy is in use!",
+        "ControlVector::operator=");
     }
   if (GetBehavior () != dq.GetBehavior ())
     {
       throw DOpEException (
-        "Own Behavior does not match dq.Behavior. Own Behavior:" + DOpEtypesToString (
-          GetBehavior ())
-        + " but dq.Behavior is " + DOpEtypesToString (dq.GetBehavior ()),
+        "Own Behavior does not match dq.Behavior. Own Behavior:"
+        + DOpEtypesToString(GetBehavior()) + " but dq.Behavior is "
+        + DOpEtypesToString(dq.GetBehavior()),
         "ControlVector<VECTOR>::operator=");
     }
   if (GetBehavior () == DOpEtypes::VectorStorageType::fullmem)
@@ -412,8 +372,7 @@ ControlVector<VECTOR>::operator= (const ControlVector &dq)
             }
           else
             {
-              for (unsigned int i = control_.size () - 1;
-                   i >= dq.control_.size (); i--)
+              for (unsigned int i = control_.size()-1; i >=dq.control_.size(); i--)
                 {
                   assert(control_[i] != NULL);
                   delete control_[i];
@@ -434,28 +393,26 @@ ControlVector<VECTOR>::operator= (const ControlVector &dq)
     }
   else
     {
-      throw DOpEException (
-        "Unknown Behavior " + DOpEtypesToString (GetBehavior ()),
-        "ControlVector<VECTOR>::operator=");
+      throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),"ControlVector<VECTOR>::operator=");
     }
 }
 
 /******************************************************/
 template <typename VECTOR>
-void
-ControlVector<VECTOR>::operator+= (const ControlVector &dq)
+void ControlVector<VECTOR>::operator+=(const ControlVector &dq)
 {
   if (lock_)
     {
-      throw DOpEException ("Trying to use operator+= while a copy is in use!",
-                           "ControlVector::operator+=");
+      throw DOpEException(
+        "Trying to use operator+= while a copy is in use!",
+        "ControlVector::operator+=");
     }
   if (GetBehavior () != dq.GetBehavior ())
     {
       throw DOpEException (
-        "Own Behavior does not match dq.Behavior. Own Behavior:" + DOpEtypesToString (
-          GetBehavior ())
-        + " but dq.GetBehavior is " + DOpEtypesToString (dq.GetBehavior ()),
+        "Own Behavior does not match dq.Behavior. Own Behavior:"
+        + DOpEtypesToString(GetBehavior()) + " but dq.GetBehavior is "
+        + DOpEtypesToString(dq.GetBehavior()),
         "ControlVector<VECTOR>::operator+=");
     }
   if (GetBehavior () == DOpEtypes::VectorStorageType::fullmem)
@@ -471,21 +428,19 @@ ControlVector<VECTOR>::operator+= (const ControlVector &dq)
     }
   else
     {
-      throw DOpEException (
-        "Unknown Behavior " + DOpEtypesToString (GetBehavior ()),
-        "ControlVector<VECTOR>::operator+=");
+      throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),"ControlVector<VECTOR>::operator+=");
     }
 }
 
 /******************************************************/
 template <typename VECTOR>
-void
-ControlVector<VECTOR>::operator*= (double a)
+void ControlVector<VECTOR>::operator*=(double a)
 {
   if (lock_)
     {
-      throw DOpEException ("Trying to use operator= while a copy is in use!",
-                           "ControlVector::operator*=");
+      throw DOpEException(
+        "Trying to use operator= while a copy is in use!",
+        "ControlVector::operator*=");
     }
   if (GetBehavior () == DOpEtypes::VectorStorageType::fullmem)
     {
@@ -498,28 +453,26 @@ ControlVector<VECTOR>::operator*= (double a)
     }
   else
     {
-      throw DOpEException (
-        "Unknown Behavior " + DOpEtypesToString (GetBehavior ()),
-        "ControlVector<VECTOR>::operator*=");
+      throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),"ControlVector<VECTOR>::operator*=");
     }
 }
 
 /******************************************************/
 template <typename VECTOR>
-double
-ControlVector<VECTOR>::operator* (const ControlVector &dq) const
+double ControlVector<VECTOR>::operator*(const ControlVector &dq) const
 {
   if (lock_ || dq.lock_)
     {
-      throw DOpEException ("Trying to use operator* while a copy is in use!",
-                           "ControlVector::operator*");
+      throw DOpEException(
+        "Trying to use operator* while a copy is in use!",
+        "ControlVector::operator*");
     }
   if (GetBehavior () != dq.GetBehavior ())
     {
       throw DOpEException (
-        "Own Behavior does not match dq.Behavior. Own Behavior:" + DOpEtypesToString (
-          GetBehavior ())
-        + " but dq.Behavior is " + DOpEtypesToString (dq.GetBehavior ()),
+        "Own Behavior does not match dq.Behavior. Own Behavior:"
+        + DOpEtypesToString(GetBehavior()) + " but dq.Behavior is "
+        + DOpEtypesToString(dq.GetBehavior()),
         "ControlVector<VECTOR>::operator*");
     }
   if (GetBehavior () == DOpEtypes::VectorStorageType::fullmem)
@@ -537,29 +490,26 @@ ControlVector<VECTOR>::operator* (const ControlVector &dq) const
     }
   else
     {
-      throw DOpEException (
-        "Unknown Behavior " + DOpEtypesToString (GetBehavior ()),
-        "ControlVector<VECTOR>::operator*");
+      throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),"ControlVector<VECTOR>::operator*");
     }
 }
 
 /******************************************************/
 template <typename VECTOR>
-void
-ControlVector<VECTOR>::add (double s,
-                            const ControlVector &dq)
+void ControlVector<VECTOR>::add(double s, const ControlVector &dq)
 {
   if (lock_)
     {
-      throw DOpEException ("Trying to use add while a copy is in use!",
-                           "ControlVector::add");
+      throw DOpEException(
+        "Trying to use add while a copy is in use!",
+        "ControlVector::add");
     }
   if (GetBehavior () != dq.GetBehavior ())
     {
       throw DOpEException (
-        "Own Behavior does not match dq.Behavior. Own Behavior:" + DOpEtypesToString (
-          GetBehavior ())
-        + " but dq.Behavior is " + DOpEtypesToString (dq.GetBehavior ()),
+        "Own Behavior does not match dq.Behavior. Own Behavior:"
+        + DOpEtypesToString(GetBehavior()) + " but dq.Behavior is "
+        + DOpEtypesToString(dq.GetBehavior()),
         "ControlVector<VECTOR>::add");
     }
   if (GetBehavior () == DOpEtypes::VectorStorageType::fullmem)
@@ -576,29 +526,26 @@ ControlVector<VECTOR>::add (double s,
     }
   else
     {
-      throw DOpEException (
-        "Unknown Behavior " + DOpEtypesToString (GetBehavior ()),
-        "ControlVector<VECTOR>::add");
+      throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),"ControlVector<VECTOR>::add");
     }
 }
 
 /******************************************************/
 template <typename VECTOR>
-void
-ControlVector<VECTOR>::equ (double s,
-                            const ControlVector &dq)
+void ControlVector<VECTOR>::equ(double s, const ControlVector &dq)
 {
   if (lock_)
     {
-      throw DOpEException ("Trying to use add while a copy is in use!",
-                           "ControlVector::equ");
+      throw DOpEException(
+        "Trying to use add while a copy is in use!",
+        "ControlVector::equ");
     }
   if (GetBehavior () != dq.GetBehavior ())
     {
       throw DOpEException (
-        "Own Behavior does not match dq.Behavior. Own Behavior:" + DOpEtypesToString (
-          GetBehavior ())
-        + " but dq.Behavior is " + DOpEtypesToString (dq.GetBehavior ()),
+        "Own Behavior does not match dq.Behavior. Own Behavior:"
+        + DOpEtypesToString(GetBehavior()) + " but dq.Behavior is "
+        + DOpEtypesToString(dq.GetBehavior()),
         "ControlVector<VECTOR>::equ");
     }
   if (GetBehavior () == DOpEtypes::VectorStorageType::fullmem)
@@ -615,28 +562,26 @@ ControlVector<VECTOR>::equ (double s,
     }
   else
     {
-      throw DOpEException (
-        "Unknown Behavior " + DOpEtypesToString (GetBehavior ()),
-        "ControlVector<VECTOR>::equ");
+      throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),"ControlVector<VECTOR>::equ");
     }
 }
 
 /******************************************************/
 template <typename VECTOR>
-void
-ControlVector<VECTOR>::max (const ControlVector &dq)
+void ControlVector<VECTOR>::max(const ControlVector &dq)
 {
   if (lock_)
     {
-      throw DOpEException ("Trying to use add while a copy is in use!",
-                           "ControlVector::max");
+      throw DOpEException(
+        "Trying to use add while a copy is in use!",
+        "ControlVector::max");
     }
   if (GetBehavior () != dq.GetBehavior ())
     {
       throw DOpEException (
-        "Own Behavior does not match dq.Behavior. Own Behavior:" + DOpEtypesToString (
-          GetBehavior ())
-        + " but dq.Behavior is " + DOpEtypesToString (dq.GetBehavior ()),
+        "Own Behavior does not match dq.Behavior. Own Behavior:"
+        + DOpEtypesToString(GetBehavior()) + " but dq.Behavior is "
+        + DOpEtypesToString(dq.GetBehavior()),
         "ControlVector<VECTOR>::max");
     }
   if (GetBehavior () == DOpEtypes::VectorStorageType::fullmem)
@@ -652,6 +597,7 @@ ControlVector<VECTOR>::max (const ControlVector &dq)
           assert(t.size () == tn.size ());
           for (unsigned int j = 0; j < t.size (); j++)
             {
+              // For Trilinos vectors, we have to explicitly cast them to doubles
               typename VECTOR::value_type a = t (j);
               typename VECTOR::value_type b = tn (j);
               t (j) = std::max (a, b);
@@ -661,28 +607,27 @@ ControlVector<VECTOR>::max (const ControlVector &dq)
     }
   else
     {
-      throw DOpEException (
-        "Unknown Behavior " + DOpEtypesToString (GetBehavior ()),
-        "ControlVector<VECTOR>::max");
+      throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),"ControlVector<VECTOR>::max");
     }
 }
 
+
 /******************************************************/
 template <typename VECTOR>
-void
-ControlVector<VECTOR>::min (const ControlVector &dq)
+void ControlVector<VECTOR>::min(const ControlVector &dq)
 {
   if (lock_)
     {
-      throw DOpEException ("Trying to use add while a copy is in use!",
-                           "ControlVector::min");
+      throw DOpEException(
+        "Trying to use add while a copy is in use!",
+        "ControlVector::min");
     }
   if (GetBehavior () != dq.GetBehavior ())
     {
       throw DOpEException (
-        "Own Behavior does not match dq.Behavior. Own Behavior:" + DOpEtypesToString (
-          GetBehavior ())
-        + " but dq.Behavior is " + DOpEtypesToString (dq.GetBehavior ()),
+        "Own Behavior does not match dq.Behavior. Own Behavior:"
+        + DOpEtypesToString(GetBehavior()) + " but dq.Behavior is "
+        + DOpEtypesToString(dq.GetBehavior()),
         "ControlVector<VECTOR>::min");
     }
   if (GetBehavior () == DOpEtypes::VectorStorageType::fullmem)
@@ -698,6 +643,7 @@ ControlVector<VECTOR>::min (const ControlVector &dq)
           assert(t.size () == tn.size ());
           for (unsigned int j = 0; j < t.size (); j++)
             {
+              // For Trilinos vectors, we have to explicitly cast them to doubles
               typename VECTOR::value_type a = t (j);
               typename VECTOR::value_type b = tn (j);
               t (j) = std::min (a, b);
@@ -707,27 +653,25 @@ ControlVector<VECTOR>::min (const ControlVector &dq)
     }
   else
     {
-      throw DOpEException (
-        "Unknown Behavior " + DOpEtypesToString (GetBehavior ()),
-        "ControlVector<VECTOR>::min");
+      throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),"ControlVector<VECTOR>::min");
     }
 }
 /******************************************************/
 template <typename VECTOR>
-void
-ControlVector<VECTOR>::comp_mult (const ControlVector &dq)
+void ControlVector<VECTOR>::comp_mult(const ControlVector &dq)
 {
   if (lock_)
     {
-      throw DOpEException ("Trying to use add while a copy is in use!",
-                           "ControlVector::comp_mult");
+      throw DOpEException(
+        "Trying to use add while a copy is in use!",
+        "ControlVector::comp_mult");
     }
   if (GetBehavior () != dq.GetBehavior ())
     {
       throw DOpEException (
-        "Own Behavior does not match dq.Behavior. Own Behavior:" + DOpEtypesToString (
-          GetBehavior ())
-        + " but dq.Behavior is " + DOpEtypesToString (dq.GetBehavior ()),
+        "Own Behavior does not match dq.Behavior. Own Behavior:"
+        + DOpEtypesToString(GetBehavior()) + " but dq.Behavior is "
+        + DOpEtypesToString(dq.GetBehavior()),
         "ControlVector<VECTOR>::comp_mult");
     }
   if (GetBehavior () == DOpEtypes::VectorStorageType::fullmem)
@@ -750,21 +694,19 @@ ControlVector<VECTOR>::comp_mult (const ControlVector &dq)
     }
   else
     {
-      throw DOpEException (
-        "Unknown Behavior " + DOpEtypesToString (GetBehavior ()),
-        "ControlVector<VECTOR>::comp_mult");
+      throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),"ControlVector<VECTOR>::comp_mult");
     }
 }
 
 /******************************************************/
 template <typename VECTOR>
-void
-ControlVector<VECTOR>::comp_invert ()
+void ControlVector<VECTOR>::comp_invert()
 {
   if (lock_)
     {
-      throw DOpEException ("Trying to use add while a copy is in use!",
-                           "ControlVector::comp_invert");
+      throw DOpEException(
+        "Trying to use add while a copy is in use!",
+        "ControlVector::comp_invert");
     }
   if (GetBehavior () == DOpEtypes::VectorStorageType::fullmem)
     {
@@ -781,24 +723,19 @@ ControlVector<VECTOR>::comp_invert ()
     }
   else
     {
-      throw DOpEException (
-        "Unknown Behavior " + DOpEtypesToString (GetBehavior ()),
-        "ControlVector<VECTOR>::comp_invert");
+      throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),"ControlVector<VECTOR>::comp_invert");
     }
 }
 
 /******************************************************/
 template <typename VECTOR>
-void
-ControlVector<VECTOR>::init_by_sign (double smaller,
-                                     double larger,
-                                     double unclear,
-                                     double TOL)
+void ControlVector<VECTOR>::init_by_sign(double smaller, double larger, double unclear, double TOL)
 {
   if (lock_)
     {
-      throw DOpEException ("Trying to use add while a copy is in use!",
-                           "ControlVector::init_by_sign");
+      throw DOpEException(
+        "Trying to use add while a copy is in use!",
+        "ControlVector::init_by_sign");
     }
   if (GetBehavior () == DOpEtypes::VectorStorageType::fullmem)
     {
@@ -826,16 +763,13 @@ ControlVector<VECTOR>::init_by_sign (double smaller,
     }
   else
     {
-      throw DOpEException (
-        "Unknown Behavior " + DOpEtypesToString (GetBehavior ()),
-        "ControlVector<VECTOR>::init_by_sign");
+      throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),"ControlVector<VECTOR>::init_by_sign");
     }
 }
 /******************************************************/
 
 template <typename VECTOR>
-void
-ControlVector<VECTOR>::PrintInfos (std::stringstream &out)
+void ControlVector<VECTOR>::PrintInfos(std::stringstream &out)
 {
   if (control_.size () == 1)
     {
@@ -866,9 +800,7 @@ ControlVector<VECTOR>::PrintInfos (std::stringstream &out)
         }
       else
         {
-          throw DOpEException (
-            "Unknown Behavior " + DOpEtypesToString (GetBehavior ()),
-            "ControlVector<VECTOR>::PrintInfos");
+          throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),"ControlVector<VECTOR>::PrintInfos");
         }
     }
 }
@@ -876,14 +808,13 @@ ControlVector<VECTOR>::PrintInfos (std::stringstream &out)
 /******************************************************/
 
 template <typename VECTOR>
-double
-ControlVector<VECTOR>::Norm (std::string name,
-                             std::string restriction) const
+double ControlVector<VECTOR>::Norm(std::string name,std::string restriction) const
 {
   if (lock_)
     {
-      throw DOpEException ("Trying to use Norm while a copy is in use!",
-                           "ControlVector::Norm");
+      throw DOpEException(
+        "Trying to use Norm while a copy is in use!",
+        "ControlVector::Norm");
     }
   if (GetBehavior () == DOpEtypes::VectorStorageType::fullmem)
     {
@@ -914,8 +845,7 @@ ControlVector<VECTOR>::Norm (std::string name,
             }
           else
             {
-              throw DOpEException ("Unknown restriction: " + restriction,
-                                   "ControlVector<VECTOR>::Norm");
+              throw DOpEException("Unknown restriction: " + restriction,"ControlVector<VECTOR>::Norm");
             }
         }
       else if (name == "l1")
@@ -944,22 +874,18 @@ ControlVector<VECTOR>::Norm (std::string name,
             }
           else
             {
-              throw DOpEException ("Unknown restriction: " + restriction,
-                                   "ConstraintVector<VECTOR>::Norm");
+              throw DOpEException("Unknown restriction: " + restriction,"ConstraintVector<VECTOR>::Norm");
             }
         }
       else
         {
-          throw DOpEException ("Unknown type: " + name,
-                               "ConstraintVector<VECTOR>::Norm");
+          throw DOpEException("Unknown type: " + name,"ConstraintVector<VECTOR>::Norm");
         }
       return ret;
     }
   else
     {
-      throw DOpEException (
-        "Unknown Behavior " + DOpEtypesToString (GetBehavior ()),
-        "ControlVector<VECTOR>::Norm");
+      throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),"ControlVector<VECTOR>::Norm");
     }
 }
 
@@ -989,11 +915,11 @@ ControlVector<VECTOR>::ComputeLocalVectors (const TimeIterator &interval) const
     }
   else
     {
-      throw DOpEException (
-        "Unknown Behavior " + DOpEtypesToString (GetBehavior ()),
-        "ControlVector::ComputeLocalVectors");
+      throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),
+                          "ControlVector::ComputeLocalVectors");
     }
 }
+
 
 /******************************************************/
 /******************************************************/
@@ -1001,7 +927,8 @@ ControlVector<VECTOR>::ComputeLocalVectors (const TimeIterator &interval) const
 template class DOpE::ControlVector<dealii::Vector<double> >;
 template class DOpE::ControlVector<dealii::BlockVector<double> >;
 
-// !!! Daniel !!!
+#ifdef DOPELIB_WITH_TRILINOS
 template class DOpE::ControlVector<dealii::TrilinosWrappers::MPI::Vector>;
 template class DOpE::ControlVector<dealii::TrilinosWrappers::MPI::BlockVector>;
+#endif
 

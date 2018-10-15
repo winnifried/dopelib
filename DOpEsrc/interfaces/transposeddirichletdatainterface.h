@@ -37,16 +37,12 @@ namespace DOpE
   class TransposedDirichletDataInterface
   {
   public:
-    virtual
-    ~TransposedDirichletDataInterface ()
-    {
-    }
+    virtual ~TransposedDirichletDataInterface() {}
 
-    virtual void
-    value (const dealii::Point<dealdim> &p,
-           const unsigned int component,
-           const unsigned int dof_number,
-           dealii::Vector<double> &local_vector) const=0;
+    virtual void value (const dealii::Point<dealdim>   &p,
+                        const unsigned int component,
+                        const unsigned int dof_number,
+                        dealii::Vector<double> &local_vector) const=0;
   };
 }
 #endif

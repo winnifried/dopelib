@@ -68,6 +68,8 @@
 //#include <deal.II/multigrid/mg_smoother.h>
 //#include <deal.II/multigrid/mg_matrix.h>
 
+
+
 #include <assert.h>
 #include <string>
 #include <vector>
@@ -525,6 +527,7 @@ namespace DOpE
         std::pair<std::string, const StateVector<VECTOR>*>(name, c));
     }
 
+
     /******************************************************/
 
     const StateVector<VECTOR> *
@@ -539,6 +542,7 @@ namespace DOpE
         }
       return it->second;
     }
+
 
     /******************************************************/
 
@@ -555,6 +559,7 @@ namespace DOpE
         }
       auxiliary_state_.erase(it);
     }
+
 
     /******************************************************/
     /*****************************************************************/
@@ -707,6 +712,7 @@ namespace DOpE
         }
     }
 
+
     /******************************************************/
 
     unsigned int
@@ -763,7 +769,7 @@ namespace DOpE
     DOpEOutputHandler<VECTOR> *OutputHandler_;
 
     double interval_length_;
-    bool initial_;
+    bool initial_ = false;
 
     std::string algo_type_;
 
@@ -780,7 +786,7 @@ namespace DOpE
     std::vector<PrimalDirichletData<DD, VECTOR, dealdim>*> primal_dirichlet_values_;
     const dealii::Function<dealdim> *zero_dirichlet_values_;
 
-    const dealii::Function<dealdim> *initial_values_;
+    const dealii::Function<dealdim> *initial_values_ = nullptr;
 
     std::vector<unsigned int> state_boundary_equation_colors_;
     std::vector<unsigned int> adjoint_boundary_equation_colors_;
@@ -815,8 +821,11 @@ namespace DOpE
   {
     ExceptionHandler_ = NULL;
     OutputHandler_ = NULL;
-    zero_dirichlet_values_ = new ZeroFunction<dealdim>(
-      this->GetPDE().GetStateNComponents());
+    zero_dirichlet_values_ = new
+#if DEAL_II_VERSION_GTE(8,5,0)
+        Functions::
+#endif
+        ZeroFunction<dealdim>(this->GetPDE().GetStateNComponents());
     algo_type_ = "";
     functional_for_ee_num_ = dealii::numbers::invalid_unsigned_int;
     interval_length_=1.;
@@ -1228,6 +1237,7 @@ namespace DOpE
 
   }
 
+
   /******************************************************/
 
   template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
@@ -1495,6 +1505,7 @@ namespace DOpE
   }
 
   /******************************************************/
+
 
   template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
            int dealdim, template<int, int> class FE, template<int, int> class DH>

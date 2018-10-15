@@ -54,31 +54,30 @@ namespace DOpE
    * @tparam<dealdim>           The dimension for the state variable. This is the dimension the
    *                            mesh is in.
    */
-  template <template <int, int> class FE, template <int, int> class DH,
-            typename SPARSITYPATTERN, typename VECTOR, int dealdim>
+  template<template<int, int> class FE, template<int, int> class DH, typename SPARSITYPATTERN,
+           typename VECTOR, int dealdim>
   class StateSpaceTimeHandler : public SpaceTimeHandlerBase<VECTOR>
   {
   public:
-    StateSpaceTimeHandler ()
-      : SpaceTimeHandlerBase<VECTOR> ()
+    StateSpaceTimeHandler() :
+      SpaceTimeHandlerBase<VECTOR>()
     {
       domain_dofhandler_vector_.resize (1);
     }
-    StateSpaceTimeHandler (dealii::Triangulation<1> &times)
-      : SpaceTimeHandlerBase<VECTOR> (times)
+    StateSpaceTimeHandler(dealii::Triangulation<1> &times) :
+      SpaceTimeHandlerBase<VECTOR>(times)
     {
       domain_dofhandler_vector_.resize (1);
     }
-    StateSpaceTimeHandler (const ActiveFEIndexSetterInterface<dealdim> &index_setter)
-      : SpaceTimeHandlerBase<VECTOR> (),
-        fe_index_setter_ (&index_setter)
+    StateSpaceTimeHandler(
+      const ActiveFEIndexSetterInterface<dealdim> &index_setter) :
+      SpaceTimeHandlerBase<VECTOR>(), fe_index_setter_(&index_setter)
     {
       domain_dofhandler_vector_.resize (1);
     }
     StateSpaceTimeHandler (dealii::Triangulation<1> &times,
-                           const ActiveFEIndexSetterInterface<dealdim> &index_setter)
-      : SpaceTimeHandlerBase<VECTOR> (times),
-        fe_index_setter_ (&index_setter)
+                           const ActiveFEIndexSetterInterface<dealdim> &index_setter) :
+      SpaceTimeHandlerBase<VECTOR>(times), fe_index_setter_(&index_setter)
     {
       domain_dofhandler_vector_.resize (1);
     }
@@ -169,6 +168,7 @@ namespace DOpE
       return ret;
     }
 
+
     /******************************************************/
 
     /**
@@ -178,7 +178,8 @@ namespace DOpE
      * Iterator for multigrid's matrix assembling running
      * over all cells on all levels.
      */
-    std::vector<typename DOpEWrapper::DoFHandler<dealdim, DH>::cell_iterator>
+    std::vector<
+    typename DOpEWrapper::DoFHandler<dealdim, DH>::cell_iterator>
     GetDoFHandlerBeginActiveAllLevels () const
     {
       std::vector<
@@ -201,7 +202,8 @@ namespace DOpE
      * over all cells on all levels.
      */
 
-    std::vector<typename DOpEWrapper::DoFHandler<dealdim, DH>::cell_iterator>
+    std::vector<
+    typename DOpEWrapper::DoFHandler<dealdim, DH>::cell_iterator>
     GetDoFHandlerEndAllLevels () const
     {
       std::vector<
@@ -213,6 +215,8 @@ namespace DOpE
         }
       return ret;
     }
+
+
 
     /******************************************************/
 
@@ -246,13 +250,13 @@ namespace DOpE
      * @param dof_handler   The dof_handler for which the fe indices have to be set.
      */
     void
-    SetActiveFEIndicesState (DOpEWrapper::DoFHandler<dealdim, DH> &dof_handler)
+    SetActiveFEIndicesState(
+      DOpEWrapper::DoFHandler<dealdim, DH> &dof_handler)
     {
       if (dof_handler.NeedIndexSetter ())
         {
           for (typename DH<dealdim, dealdim>::active_cell_iterator element =
-                 dof_handler.begin_active (); element != dof_handler.end ();
-               ++element)
+                 dof_handler.begin_active(); element != dof_handler.end(); ++element)
             {
               this->GetFEIndexSetter ().SetActiveFEIndexState (element);
             }
@@ -271,6 +275,7 @@ namespace DOpE
 //                "StateSpaceTimeHandler.h");
 //
 //    }
+
     /******************************************************/
     /**
      * Get the triangulation.
@@ -278,8 +283,9 @@ namespace DOpE
     virtual const dealii::Triangulation<dealdim> &
     GetTriangulation () const
     {
-      throw DOpEException ("Not used for normal DofHandler",
-                           "StateSpaceTimeHandler.h");
+      throw DOpEException(
+        "Not used for normal DofHandler",
+        "StateSpaceTimeHandler.h");
 
     }
 
@@ -337,6 +343,8 @@ namespace DOpE
 //                "Not used for normal DofHandler",
 //                "StateSpaceTimeHandler.h");
 //  }
+
+
     /******************************************************/
     /**
      * Returns a const Reference to the FESystem indicated by the string 'name', i.e. state oder control.
@@ -354,8 +362,9 @@ namespace DOpE
       return data_out_;
     }
 
-
-    // TODO enum for filetype
+    /**
+     * Implementation of virtual function in SpaceTimeHandlerBase
+     */
     virtual void
     WriteToFile (const VECTOR &v,
                  std::string name,
@@ -369,6 +378,7 @@ namespace DOpE
     DOpEWrapper::DataOut<dealdim, DH> data_out_;
     const ActiveFEIndexSetterInterface<dealdim> *fe_index_setter_ = NULL;
     mutable std::vector<const DOpEWrapper::DoFHandler<dealdim, DH>*> domain_dofhandler_vector_;
+
   };
 
   template <template <int, int> class FE, template <int, int> class DH,
@@ -430,7 +440,7 @@ namespace DOpE
           }
 
         // In parallel computation, one cpu has to write a master file,
-        // containting information about all files from other cpus.
+        // containing information about all files from other cpus.
         if (parallel)
           {
             if (Utilities::MPI::this_mpi_process (MPI_COMM_WORLD) == 0)

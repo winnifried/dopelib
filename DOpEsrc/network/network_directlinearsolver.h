@@ -1,25 +1,25 @@
 /**
- *
- * Copyright (C) 2012-2014 by the DOpElib authors
- *
- * This file is part of DOpElib
- *
- * DOpElib is free software: you can redistribute it
- * and/or modify it under the terms of the GNU General Public
- * License as published by the Free Software Foundation, either
- * version 3 of the License, or (at your option) any later
- * version.
- *
- * DOpElib is distributed in the hope that it will be
- * useful, but WITHOUT ANY WARRANTY; without even the implied
- * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
- * PURPOSE.  See the GNU General Public License for more
- * details.
- *
- * Please refer to the file LICENSE.TXT included in this distribution
- * for further information on this license.
- *
- **/
+*
+* Copyright (C) 2012-2014 by the DOpElib authors
+*
+* This file is part of DOpElib
+*
+* DOpElib is free software: you can redistribute it
+* and/or modify it under the terms of the GNU General Public
+* License as published by the Free Software Foundation, either
+* version 3 of the License, or (at your option) any later
+* version.
+*
+* DOpElib is distributed in the hope that it will be
+* useful, but WITHOUT ANY WARRANTY; without even the implied
+* warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+* PURPOSE.  See the GNU General Public License for more
+* details.
+*
+* Please refer to the file LICENSE.TXT included in this distribution
+* for further information on this license.
+*
+**/
 
 #ifndef NETWORK_DIRECT_LINEAR_SOLVER_H_
 #define NETWORK_DIRECT_LINEAR_SOLVER_H_
@@ -63,8 +63,8 @@ namespace DOpE
       static void declare_params(ParameterReader &param_reader);
 
       /**
-       This Function should be called once after grid refinement, or changes in boundary values
-       to  recompute sparsity patterns, and constraint matrices.
+         This Function should be called once after grid refinement, or changes in boundary values
+         to  recompute sparsity patterns, and constraint matrices.
        */
       template<typename PROBLEM>
       void ReInit(PROBLEM &pde);
@@ -98,8 +98,8 @@ namespace DOpE
 
       dealii::SparseDirectUMFPACK *A_direct_;
 
-      MethodOfLines_Network_SpaceTimeHandler<FESystem,DoFHandler,BlockVector<double>,0,1> *sth_;
-      unsigned int n_pipes_;
+      MethodOfLines_Network_SpaceTimeHandler<FESystem,DoFHandler,BlockVector<double>,0,1> *sth_ = nullptr;
+      unsigned int n_pipes_ = 0;
     };
 
     /*********************************Implementation************************************************/
@@ -129,14 +129,14 @@ namespace DOpE
     /******************************************************/
 
     template<typename PROBLEM>
-    void DirectLinearSolverWithMatrix::ReInit(PROBLEM &pde)
+    void  DirectLinearSolverWithMatrix::ReInit(PROBLEM &pde)
     {
       sth_ = dynamic_cast<MethodOfLines_Network_SpaceTimeHandler<FESystem,DoFHandler,BlockVector<double>,0,1>*>(pde.GetBaseProblem().GetSpaceTimeHandler());
       if (sth_ == NULL)
         {
           throw DOpEException("Using Networks::DirectLinearSolverWithMatrix with wrong SpaceTimeHandler","DirectLinearSolverWithMatrix::ReInit");
         }
-      n_pipes_ = sth_->GetNPipes();
+      n_pipes_ =  sth_->GetNPipes();
 
       matrix_.clear();
       pde.ComputeSparsityPattern(sparsity_pattern_);

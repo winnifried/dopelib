@@ -206,6 +206,7 @@ namespace DOpE
 
     // For the integrator we need a ghosted linearization point
     solution = u;
+
     GetIntegrator ().AddDomainData ("last_newton_solution", &solution);
     GetIntegrator ().ComputeNonlinearResidual (pde, residual);
 
@@ -278,7 +279,9 @@ namespace DOpE
               // Reuse of Matrix seems to be a bad idea, rebuild and repeat
               u -= du;
               solution = u;
+
               GetIntegrator ().ComputeNonlinearResidual (pde, residual);
+
               residual *= -1.;
               out << algo_level << "Newton step: " << iter
                   << "\t Recalculate with new Matrix";
@@ -314,8 +317,8 @@ namespace DOpE
                   alpha *= rho;
 
                   solution = u;
-                  GetIntegrator ().ComputeNonlinearResidual (pde,
-                                                             residual);
+
+                  GetIntegrator ().ComputeNonlinearResidual (pde, residual);
                   residual *= -1.;
 
                   {

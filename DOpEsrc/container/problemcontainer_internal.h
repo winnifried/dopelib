@@ -1,25 +1,25 @@
 /**
- *
- * Copyright (C) 2012-2014 by the DOpElib authors
- *
- * This file is part of DOpElib
- *
- * DOpElib is free software: you can redistribute it
- * and/or modify it under the terms of the GNU General Public
- * License as published by the Free Software Foundation, either
- * version 3 of the License, or (at your option) any later
- * version.
- *
- * DOpElib is distributed in the hope that it will be
- * useful, but WITHOUT ANY WARRANTY; without even the implied
- * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
- * PURPOSE.  See the GNU General Public License for more
- * details.
- *
- * Please refer to the file LICENSE.TXT included in this distribution
- * for further information on this license.
- *
- **/
+*
+* Copyright (C) 2012-2014 by the DOpElib authors
+*
+* This file is part of DOpElib
+*
+* DOpElib is free software: you can redistribute it
+* and/or modify it under the terms of the GNU General Public
+* License as published by the Free Software Foundation, either
+* version 3 of the License, or (at your option) any later
+* version.
+*
+* DOpElib is distributed in the hope that it will be
+* useful, but WITHOUT ANY WARRANTY; without even the implied
+* warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+* PURPOSE.  See the GNU General Public License for more
+* details.
+*
+* Please refer to the file LICENSE.TXT included in this distribution
+* for further information on this license.
+*
+**/
 
 #ifndef PROBLEMCONTAINER_INTERNAL_H_
 #define PROBLEMCONTAINER_INTERNAL_H_
@@ -33,12 +33,13 @@ namespace DOpE
    *
    */
   //FIXME There is the possibility to put more into this class.
-  template <class PDE>
+
+  template<class PDE>
   class ProblemContainerInternal
   {
   public:
-    ProblemContainerInternal (PDE &pde)
-      : pde_ (pde)
+    ProblemContainerInternal(PDE &pde)
+      : pde_(pde)
     {
 
     }
@@ -61,12 +62,10 @@ namespace DOpE
      *                              error. 1st component: primal_part, 2nd component: dual_part
      * @param scale                 A scaling factor which is -1 or 1 depending on the subroutine to compute.
      */
-    template <class EDC, class DWRC>
+    template<class EDC, class DWRC>
     void
-    ElementErrorContribution (const EDC &edc,
-                              const DWRC &dwrc,
-                              std::vector<double> &element_contrib,
-                              double scale);
+    ElementErrorContribution(const EDC &edc, const DWRC &dwrc,
+                             std::vector<double> &element_contrib, double scale);
 
     /******************************************************/
 
@@ -79,12 +78,10 @@ namespace DOpE
      * as ElementErrorContribution, so we refer to its documentation.
      *
      */
-    template <class FDC, class DWRC>
+    template<class FDC, class DWRC>
     void
-    FaceErrorContribution (const FDC &fdc,
-                           const DWRC &dwrc,
-                           std::vector<double> &error_contrib,
-                           double scale = 1.);
+    FaceErrorContribution(const FDC &fdc, const DWRC &dwrc,
+                          std::vector<double> &error_contrib, double scale = 1.);
 
     /******************************************************/
 
@@ -96,45 +93,44 @@ namespace DOpE
      * as ElementErrorContribution, so we refer to its documentation.
      *
      */
-    template <class FDC, class DWRC>
+    template<class FDC, class DWRC>
     void
-    BoundaryErrorContribution (const FDC &dc,
-                               const DWRC &dwrc,
-                               std::vector<double> &,
-                               double scale = 1.);
+    BoundaryErrorContribution(const FDC &dc, const DWRC &dwrc,
+                              std::vector<double> &, double scale = 1.);
+
 
     const PDE &
-    GetPDE () const
+    GetPDE() const
     {
       return pde_;
     }
 
     std::string
-    GetType () const
+    GetType() const
     {
       return problem_type_;
     }
 
     unsigned int
-    GetTypeNum () const
+    GetTypeNum() const
     {
       return problem_type_num_;
     }
 
   protected:
     PDE &
-    GetPDE ()
+    GetPDE()
     {
       return pde_;
     }
     void
-    SetTypeInternal (std::string a)
+    SetTypeInternal(std::string a)
     {
       problem_type_ = a;
     }
 
     void
-    SetTypeNumInternal (unsigned int i)
+    SetTypeNumInternal(unsigned int i)
     {
       problem_type_num_ = i;
     }
@@ -142,276 +138,244 @@ namespace DOpE
   private:
     std::string problem_type_, algo_type_;
 
-    unsigned int problem_type_num_;
+    unsigned int problem_type_num_ = 0;
     PDE &pde_;
 
   };
 
   /******************************************************/
 
-  template <typename PDE>
-  template <class EDC, class DWRC>
+  template<typename PDE>
+  template<class EDC, class DWRC>
   void
-  ProblemContainerInternal<PDE>::ElementErrorContribution (const EDC &edc,
-                                                           const DWRC &dwrc,
-                                                           std::vector<
-                                                           double> &error,
-                                                           double scale)
+  ProblemContainerInternal<PDE>::ElementErrorContribution(const EDC &edc,
+                                                          const DWRC &dwrc, std::vector<double> &error, double scale)
   {
-    Assert (GetType () == "error_evaluation", ExcInternalError ());
+    Assert(GetType() == "error_evaluation", ExcInternalError());
 
-    if (dwrc.GetResidualEvaluation () == DOpEtypes::strong_residual)
+    if (dwrc.GetResidualEvaluation() == DOpEtypes::strong_residual)
       {
 
-        if (dwrc.GetWeightComputation () == DOpEtypes::higher_order_interpolation)
+        if (dwrc.GetWeightComputation()
+            == DOpEtypes::higher_order_interpolation)
           {
-            EDC *edc_w = ExtractEDC<EDC> (dwrc);
-            switch (dwrc.GetEETerms ())
+            EDC *edc_w = ExtractEDC<EDC>(dwrc);
+            switch (dwrc.GetEETerms())
               {
               case DOpEtypes::primal_only:
-                GetPDE ().StrongElementResidual (edc, *edc_w, error[0],
-                                                 scale);
+                GetPDE().StrongElementResidual(edc, *edc_w, error[0], scale);
                 break;
               case DOpEtypes::dual_only:
-                GetPDE ().StrongElementResidual_U (edc, *edc_w, error[1],
-                                                   scale);
+                GetPDE().StrongElementResidual_U(edc, *edc_w, error[1], scale);
                 break;
               case DOpEtypes::mixed:
-                GetPDE ().StrongElementResidual (edc, *edc_w, error[0],
-                                                 scale);
-                GetPDE ().StrongElementResidual_U (edc, *edc_w, error[1],
-                                                   scale);
+                GetPDE().StrongElementResidual(edc, *edc_w, error[0], scale);
+                GetPDE().StrongElementResidual_U(edc, *edc_w, error[1], scale);
                 break;
               case DOpEtypes::mixed_control:
-                GetPDE ().StrongElementResidual (edc, *edc_w, error[0],
-                                                 scale);
-                GetPDE ().StrongElementResidual_U (edc, *edc_w, error[1],
-                                                   scale);
-                GetPDE ().StrongElementResidual_Control (edc, *edc_w,
-                                                         error[2], scale);
+                GetPDE().StrongElementResidual(edc, *edc_w, error[0], scale);
+                GetPDE().StrongElementResidual_U(edc, *edc_w, error[1], scale);
+                GetPDE().StrongElementResidual_Control(edc, *edc_w, error[2], scale);
                 break;
               default:
-                throw DOpEException ("Not implemented for this EETerm.",
-                                     "ProblemContainerInternal::ElementErrorContribution");
+                throw DOpEException("Not implemented for this EETerm.",
+                                    "ProblemContainerInternal::ElementErrorContribution");
                 break;
               }
 
           }
-        else if (dwrc.GetWeightComputation ()
-                 == DOpEtypes::element_diameter)
+        else if (dwrc.GetWeightComputation() == DOpEtypes::element_diameter)
           {
-            switch (dwrc.GetEETerms ())
+            switch (dwrc.GetEETerms())
               {
               case DOpEtypes::primal_only:
-                GetPDE ().StrongElementResidual (edc, edc, error[0], scale);
+                GetPDE().StrongElementResidual(edc, edc, error[0], scale);
                 break;
               case DOpEtypes::dual_only:
-                GetPDE ().StrongElementResidual_U (edc, edc, error[1], scale);
+                GetPDE().StrongElementResidual_U(edc, edc, error[1], scale);
                 break;
               case DOpEtypes::mixed:
-                GetPDE ().StrongElementResidual (edc, edc, error[0], scale);
-                GetPDE ().StrongElementResidual_U (edc, edc, error[1], scale);
+                GetPDE().StrongElementResidual(edc, edc, error[0], scale);
+                GetPDE().StrongElementResidual_U(edc, edc, error[1], scale);
                 break;
               case DOpEtypes::mixed_control:
-                GetPDE ().StrongElementResidual (edc, edc, error[0], scale);
-                GetPDE ().StrongElementResidual_U (edc, edc, error[1], scale);
-                GetPDE ().StrongElementResidual_Control (edc, edc, error[2],
-                                                         scale);
+                GetPDE().StrongElementResidual        (edc, edc, error[0], scale);
+                GetPDE().StrongElementResidual_U      (edc, edc, error[1], scale);
+                GetPDE().StrongElementResidual_Control(edc, edc, error[2], scale);
                 break;
               default:
-                throw DOpEException ("Not implemented for this EETerm.",
-                                     "ProblemContainerInternal::ElementErrorContribution");
+                throw DOpEException("Not implemented for this EETerm.",
+                                    "ProblemContainerInternal::ElementErrorContribution");
                 break;
               }
           }
         else
           {
-            throw DOpEException (
-              "Not implemented for this WeightComputation.",
-              "ProblemContainerInternal::ElementErrorContribution");
+            throw DOpEException("Not implemented for this WeightComputation.",
+                                "ProblemContainerInternal::ElementErrorContribution");
           }
       }
     else
       {
-        throw DOpEException ("Not implemented for this ResidualEvaluation.",
-                             "ProblemContainerInternal::ElementErrorContribution");
+        throw DOpEException("Not implemented for this ResidualEvaluation.",
+                            "ProblemContainerInternal::ElementErrorContribution");
       }
   }
 
   /******************************************************/
 
-  template <typename PDE>
-  template <class FDC, class DWRC>
+  template<typename PDE>
+  template<class FDC, class DWRC>
   void
-  ProblemContainerInternal<PDE>::FaceErrorContribution (const FDC &fdc,
-                                                        const DWRC &dwrc,
-                                                        std::vector<double> &error,
-                                                        double scale)
+  ProblemContainerInternal<PDE>::FaceErrorContribution(const FDC &fdc,
+                                                       const DWRC &dwrc, std::vector<double> &error, double scale)
   {
-    Assert (GetType () == "error_evaluation", ExcInternalError ());
+    Assert(GetType() == "error_evaluation", ExcInternalError());
 
-    if (dwrc.GetResidualEvaluation () == DOpEtypes::strong_residual)
+    if (dwrc.GetResidualEvaluation() == DOpEtypes::strong_residual)
       {
 
-        if (dwrc.GetWeightComputation () == DOpEtypes::higher_order_interpolation)
+        if (dwrc.GetWeightComputation()
+            == DOpEtypes::higher_order_interpolation)
           {
-            FDC *fdc_w = ExtractFDC<FDC> (dwrc);
-            switch (dwrc.GetEETerms ())
+            FDC *fdc_w = ExtractFDC<FDC>(dwrc);
+            switch (dwrc.GetEETerms())
               {
               case DOpEtypes::primal_only:
-                GetPDE ().StrongFaceResidual (fdc, *fdc_w, error[0], scale);
+                GetPDE().StrongFaceResidual(fdc, *fdc_w, error[0], scale);
                 break;
               case DOpEtypes::dual_only:
-                GetPDE ().StrongFaceResidual_U (fdc, *fdc_w, error[1], scale);
+                GetPDE().StrongFaceResidual_U(fdc, *fdc_w, error[1], scale);
                 break;
               case DOpEtypes::mixed:
-                GetPDE ().StrongFaceResidual (fdc, *fdc_w, error[0], scale);
-                GetPDE ().StrongFaceResidual_U (fdc, *fdc_w, error[1], scale);
+                GetPDE().StrongFaceResidual(fdc, *fdc_w, error[0], scale);
+                GetPDE().StrongFaceResidual_U(fdc, *fdc_w, error[1], scale);
                 break;
               case DOpEtypes::mixed_control:
-                GetPDE ().StrongFaceResidual (fdc, *fdc_w, error[0], scale);
-                GetPDE ().StrongFaceResidual_U (fdc, *fdc_w, error[1], scale);
-                GetPDE ().StrongFaceResidual_Control (fdc, *fdc_w, error[2],
-                                                      scale);
+                GetPDE().StrongFaceResidual        (fdc, *fdc_w, error[0], scale);
+                GetPDE().StrongFaceResidual_U      (fdc, *fdc_w, error[1], scale);
+                GetPDE().StrongFaceResidual_Control(fdc, *fdc_w, error[2], scale);
                 break;
               default:
-                throw DOpEException ("Not implemented for this EETerm.",
-                                     "ProblemContainerInternal::FaceErrorContribution");
+                throw DOpEException("Not implemented for this EETerm.",
+                                    "ProblemContainerInternal::FaceErrorContribution");
                 break;
               }
           }
-        else if (dwrc.GetWeightComputation ()
-                 == DOpEtypes::element_diameter)
+        else if (dwrc.GetWeightComputation() == DOpEtypes::element_diameter)
           {
-            switch (dwrc.GetEETerms ())
+            switch (dwrc.GetEETerms())
               {
               case DOpEtypes::primal_only:
-                GetPDE ().StrongFaceResidual (fdc, fdc, error[0], scale);
+                GetPDE().StrongFaceResidual(fdc, fdc, error[0], scale);
                 break;
               case DOpEtypes::dual_only:
-                GetPDE ().StrongFaceResidual_U (fdc, fdc, error[1], scale);
+                GetPDE().StrongFaceResidual_U(fdc, fdc, error[1], scale);
                 break;
               case DOpEtypes::mixed:
-                GetPDE ().StrongFaceResidual (fdc, fdc, error[0], scale);
-                GetPDE ().StrongFaceResidual_U (fdc, fdc, error[1], scale);
+                GetPDE().StrongFaceResidual(fdc, fdc, error[0], scale);
+                GetPDE().StrongFaceResidual_U(fdc, fdc, error[1], scale);
                 break;
               case DOpEtypes::mixed_control:
-                GetPDE ().StrongFaceResidual (fdc, fdc, error[0], scale);
-                GetPDE ().StrongFaceResidual_U (fdc, fdc, error[1], scale);
-                GetPDE ().StrongFaceResidual_Control (fdc, fdc, error[2],
-                                                      scale);
+                GetPDE().StrongFaceResidual        (fdc, fdc, error[0], scale);
+                GetPDE().StrongFaceResidual_U      (fdc, fdc, error[1], scale);
+                GetPDE().StrongFaceResidual_Control(fdc, fdc, error[2], scale);
                 break;
               default:
-                throw DOpEException ("Not implemented for this EETerm.",
-                                     "ProblemContainerInternal::FaceErrorContribution");
+                throw DOpEException("Not implemented for this EETerm.",
+                                    "ProblemContainerInternal::FaceErrorContribution");
                 break;
               }
 
           }
         else
           {
-            throw DOpEException (
-              "Not implemented for this WeightComputation.",
-              "ProblemContainerInternal::FaceErrorContribution");
+            throw DOpEException("Not implemented for this WeightComputation.",
+                                "ProblemContainerInternal::FaceErrorContribution");
           }
       }
     else
       {
-        throw DOpEException ("Not implemented for this ResidualEvaluation.",
-                             "ProblemContainerInternal::FaceErrorContribution");
+        throw DOpEException("Not implemented for this ResidualEvaluation.",
+                            "ProblemContainerInternal::FaceErrorContribution");
       }
   }
 
   /******************************************************/
 
-  template <typename PDE>
-  template <class FDC, class DWRC>
+  template<typename PDE>
+  template<class FDC, class DWRC>
   void
-  ProblemContainerInternal<PDE>::BoundaryErrorContribution (const FDC &fdc,
-                                                            const DWRC &dwrc,
-                                                            std::vector<
-                                                            double> &error,
-                                                            double scale)
+  ProblemContainerInternal<PDE>::BoundaryErrorContribution(const FDC &fdc,
+                                                           const DWRC &dwrc, std::vector<double> &error, double scale)
   {
-    Assert (GetType () == "error_evaluation", ExcInternalError ());
+    Assert(GetType() == "error_evaluation", ExcInternalError());
 
-    if (dwrc.GetResidualEvaluation () == DOpEtypes::strong_residual)
+    if (dwrc.GetResidualEvaluation() == DOpEtypes::strong_residual)
       {
-        if (dwrc.GetWeightComputation () == DOpEtypes::higher_order_interpolation)
+        if (dwrc.GetWeightComputation()
+            == DOpEtypes::higher_order_interpolation)
           {
-            FDC *fdc_w = ExtractFDC<FDC> (dwrc);
-            switch (dwrc.GetEETerms ())
+            FDC *fdc_w = ExtractFDC<FDC>(dwrc);
+            switch (dwrc.GetEETerms())
               {
               case DOpEtypes::primal_only:
-                GetPDE ().StrongBoundaryResidual (fdc, *fdc_w, error[0],
-                                                  scale);
+                GetPDE().StrongBoundaryResidual(fdc, *fdc_w, error[0], scale);
                 break;
               case DOpEtypes::dual_only:
-                GetPDE ().StrongBoundaryResidual_U (fdc, *fdc_w, error[1],
-                                                    scale);
+                GetPDE().StrongBoundaryResidual_U(fdc, *fdc_w, error[1], scale);
                 break;
               case DOpEtypes::mixed:
-                GetPDE ().StrongBoundaryResidual (fdc, *fdc_w, error[0],
-                                                  scale);
-                GetPDE ().StrongBoundaryResidual_U (fdc, *fdc_w, error[1],
-                                                    scale);
+                GetPDE().StrongBoundaryResidual(fdc, *fdc_w, error[0], scale);
+                GetPDE().StrongBoundaryResidual_U(fdc, *fdc_w, error[1], scale);
                 break;
               case DOpEtypes::mixed_control:
-                GetPDE ().StrongBoundaryResidual (fdc, *fdc_w, error[0],
-                                                  scale);
-                GetPDE ().StrongBoundaryResidual_U (fdc, *fdc_w, error[1],
-                                                    scale);
-                GetPDE ().StrongBoundaryResidual_Control (fdc, *fdc_w,
-                                                          error[2], scale);
+                GetPDE().StrongBoundaryResidual        (fdc, *fdc_w, error[0], scale);
+                GetPDE().StrongBoundaryResidual_U      (fdc, *fdc_w, error[1], scale);
+                GetPDE().StrongBoundaryResidual_Control(fdc, *fdc_w, error[2], scale);
                 break;
               default:
-                throw DOpEException ("Not implemented for this EETerm.",
-                                     "ProblemContainerInternal::BoundaryErrorContribution");
+                throw DOpEException("Not implemented for this EETerm.",
+                                    "ProblemContainerInternal::BoundaryErrorContribution");
                 break;
               }
           }
-        else if (dwrc.GetWeightComputation ()
-                 == DOpEtypes::element_diameter)
+        else if (dwrc.GetWeightComputation() == DOpEtypes::element_diameter)
           {
-            switch (dwrc.GetEETerms ())
+            switch (dwrc.GetEETerms())
               {
               case DOpEtypes::primal_only:
-                GetPDE ().StrongBoundaryResidual (fdc, fdc, error[0], scale);
+                GetPDE().StrongBoundaryResidual(fdc, fdc, error[0], scale);
                 break;
               case DOpEtypes::dual_only:
-                GetPDE ().StrongBoundaryResidual_U (fdc, fdc, error[1],
-                                                    scale);
+                GetPDE().StrongBoundaryResidual_U(fdc, fdc, error[1], scale);
                 break;
               case DOpEtypes::mixed:
-                GetPDE ().StrongBoundaryResidual (fdc, fdc, error[0], scale);
-                GetPDE ().StrongBoundaryResidual_U (fdc, fdc, error[1],
-                                                    scale);
+                GetPDE().StrongBoundaryResidual(fdc, fdc, error[0], scale);
+                GetPDE().StrongBoundaryResidual_U(fdc, fdc, error[1], scale);
                 break;
               case DOpEtypes::mixed_control:
-                GetPDE ().StrongBoundaryResidual (fdc, fdc, error[0], scale);
-                GetPDE ().StrongBoundaryResidual_U (fdc, fdc, error[1],
-                                                    scale);
-                GetPDE ().StrongBoundaryResidual_Control (fdc, fdc, error[2],
-                                                          scale);
+                GetPDE().StrongBoundaryResidual        (fdc, fdc, error[0], scale);
+                GetPDE().StrongBoundaryResidual_U      (fdc, fdc, error[1], scale);
+                GetPDE().StrongBoundaryResidual_Control(fdc, fdc, error[2], scale);
                 break;
               default:
-                throw DOpEException ("Not implemented for this EETerm.",
-                                     "ProblemContainerInternal::BoundaryErrorContribution");
+                throw DOpEException("Not implemented for this EETerm.",
+                                    "ProblemContainerInternal::BoundaryErrorContribution");
                 break;
               }
           }
         else
           {
-            throw DOpEException (
-              "Not implemented for this WeightComputation.",
-              "ProblemContainerInternal::BoundaryErrorContribution");
+            throw DOpEException("Not implemented for this WeightComputation.",
+                                "ProblemContainerInternal::BoundaryErrorContribution");
 
           }
       }
     else
       {
-        throw DOpEException ("Not implemented for this ResidualEvaluation.",
-                             "ProblemContainerInternal::BoundaryErrorContribution");
+        throw DOpEException("Not implemented for this ResidualEvaluation.",
+                            "ProblemContainerInternal::BoundaryErrorContribution");
       }
   }
 }

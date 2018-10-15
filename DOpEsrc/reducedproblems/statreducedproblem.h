@@ -122,7 +122,7 @@ namespace DOpE
                        ParameterReader &param_reader, CONTROLINTEGRATORCONT &c_idc,
                        STATEINTEGRATORDATACONT &s_idc, int base_priority = 0);
 
-    ~StatReducedProblem();
+    virtual ~StatReducedProblem();
 
     /******************************************************/
 
@@ -255,29 +255,12 @@ namespace DOpE
     /**
      * Implementation of Virtual Method in Base Class
      * ReducedProblemInterface
-     *
      */
     void
     StateSizeInfo(std::stringstream &out)
     {
       GetU().PrintInfos(out);
     }
-
-    /******************************************************/
-
-    /**
-     *  Here, the given BlockVector<double> v is printed to a file of *.vtk or *.gpl format.
-     *  However, in later implementations other file formats will be available.
-     *
-     *  @param v           The BlockVector to write to a file.
-     *  @param name        The names of the variables, e.g., in a fluid problem: v1, v2, p.
-     *  @param outfile     The basic name for the output file to print.
-     *  @param dof_type    Has the DoF type: state or control.
-     *  @param filetype    The filetype. Actually, *.vtk or *.gpl  outputs are possible.
-     */
-    void
-    WriteToFile(const VECTOR &v, std::string name, std::string outfile,
-                std::string dof_type, std::string filetype);
 
     /******************************************************/
 
@@ -289,8 +272,11 @@ namespace DOpE
      *  @param name        The names of the variables, e.g., in a fluid problem: v1, v2, p.
      *  @param dof_type    Has the DoF type: state or control.
      */
-    void
-    WriteToFile(const ControlVector<VECTOR> &v, std::string name, std::string dof_type);
+    virtual void
+    WriteToFile(const ControlVector<VECTOR> &v, std::string name, std::string dof_type)
+    {
+      this->GetOutputHandler()->Write(v.GetSpacialVector(), name, dof_type);
+    }
 
     /**
      * Basic function to write a std::vector to a file.
@@ -299,12 +285,17 @@ namespace DOpE
      *  @param outfile     The basic name for the output file to print.
      *  Doesn't make sense here so aborts if called!
      */
-    void
+    virtual void
     WriteToFile(const std::vector<double> &/*v*/,
                 std::string /*outfile*/)
     {
       abort();
     }
+
+    /**
+     * Import overloads from base class.
+     */
+    using ReducedProblemInterface<PROBLEM, VECTOR>::WriteToFile;
 
   protected:
     /**
@@ -448,7 +439,7 @@ namespace DOpE
     NONLINEARSOLVER nonlinear_adjoint_solver_;
     CONTROLNONLINEARSOLVER nonlinear_gradient_solver_;
 
-    bool build_state_matrix_, build_adjoint_matrix_, build_control_matrix_;
+    bool build_state_matrix_ = false, build_adjoint_matrix_ = false, build_control_matrix_ = false;
     bool state_reinit_, adjoint_reinit_, gradient_reinit_;
     unsigned int cost_needs_precomputations_;
 
@@ -926,6 +917,7 @@ namespace DOpE
     //this->GetProblem()->PostProcessConstraints(g, true);
     this->GetProblem()->PostProcessConstraints(g);
 
+
     return g.IsFeasible();
   }
 
@@ -1373,6 +1365,7 @@ namespace DOpE
                                         &(GetU().GetSpacialVector()));
     double ret = 0;
     bool found = false;
+
 
     if (this->GetProblem()->GetFunctionalType().find("domain")
         != std::string::npos)
@@ -2005,34 +1998,6 @@ namespace DOpE
         throw DOpEException("dopedim not implemented",
                             "StatReducedProblem::ComputeReducedGradient");
       }
-  }
-
-  /******************************************************/
-
-  template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
-           typename CONTROLINTEGRATOR, typename INTEGRATOR, typename PROBLEM,
-           typename VECTOR, int dopedim, int dealdim>
-  void
-  StatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER,
-                     CONTROLINTEGRATOR, INTEGRATOR, PROBLEM, VECTOR, dopedim, dealdim>::WriteToFile(
-                       const VECTOR &v, std::string name, std::string outfile,
-                       std::string dof_type, std::string filetype)
-  {
-    this->WriteToFile(v, name, outfile, dof_type, filetype);
-  }
-
-  /******************************************************/
-
-  template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
-           typename CONTROLINTEGRATOR, typename INTEGRATOR, typename PROBLEM,
-           typename VECTOR, int dopedim, int dealdim>
-  void
-  StatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER,
-                     CONTROLINTEGRATOR, INTEGRATOR, PROBLEM, VECTOR, dopedim, dealdim>::WriteToFile(
-                       const ControlVector<VECTOR> &v, std::string name,
-                       std::string dof_type)
-  {
-    this->GetOutputHandler()->Write(v.GetSpacialVector(), name, dof_type);
   }
 
   /******************************************************/

@@ -25,8 +25,6 @@
 #define ELEMENTDATACONTAINER_INTERNAL_H_
 
 #include <deal.II/lac/vector.h>
-// !!! Daniel !!!
-#include <deal.II/lac/trilinos_vector.h>
 
 #include <wrapper/fevalues_wrapper.h>
 #include <include/dopeexception.h>
@@ -48,24 +46,22 @@ namespace DOpE
     class ElementDataContainerInternal
     {
     public:
-      ElementDataContainerInternal (const std::map<std::string,
-                                    const dealii::Vector<double>*> &param_values,
-                                    const std::map<std::string,
-                                    const VECTOR *> &domain_values);
+      ElementDataContainerInternal(
+        const std::map<std::string, const dealii::Vector<double>*> &param_values
+        ,
+        const std::map<std::string, const VECTOR *> &domain_values);
 
       virtual
       ~ElementDataContainerInternal ()
       {
       }
-      ;
 
       /**
        * Looks up the given name in parameter_data_ and returns the
        * corresponding value through 'value'.
        */
       void
-      GetParamValues (std::string name,
-                      dealii::Vector<double> &value) const;
+      GetParamValues(std::string name, dealii::Vector<double> &value) const;
 
       /**
        * Returns the domain values.
@@ -75,7 +71,6 @@ namespace DOpE
       {
         return domain_values_;
       }
-      ;
 
       virtual const DOpEWrapper::FEValues<dim> &
       GetFEValuesState () const = 0;
@@ -90,6 +85,7 @@ namespace DOpE
       const typename Triangulation<dim>::cell_iterator
       GetElementState () const;
 
+
       /********************************************************************/
       /**
        * Functions to extract values and gradients out of the FEValues
@@ -99,8 +95,7 @@ namespace DOpE
        * Writes the values of the state variable at the quadrature points into values.
        */
       void
-      GetValuesState (std::string name,
-                      std::vector<double> &values) const;
+      GetValuesState(std::string name, std::vector<double> &values) const;
 
       /*********************************************/
       /*
@@ -115,8 +110,7 @@ namespace DOpE
        * Writes the values of the control variable at the quadrature points into values
        */
       void
-      GetValuesControl (std::string name,
-                        std::vector<double> &values) const;
+      GetValuesControl(std::string name, std::vector<double> &values) const;
 
       /*********************************************/
       /*
@@ -141,9 +135,9 @@ namespace DOpE
        */
       template <int targetdim>
       void
-      GetGradsState (std::string name,
-                     std::vector<
-                     std::vector<dealii::Tensor<1, targetdim> > > &values) const;
+      GetGradsState(
+        std::string name,
+        std::vector<std::vector<dealii::Tensor<1, targetdim> > > &values) const;
 
       /*********************************************/
       /*
@@ -160,9 +154,9 @@ namespace DOpE
        */
       template <int targetdim>
       void
-      GetGradsControl (std::string name,
-                       std::vector<
-                       std::vector<dealii::Tensor<1, targetdim> > > &values) const;
+      GetGradsControl(
+        std::string name,
+        std::vector<std::vector<dealii::Tensor<1, targetdim> > > &values) const;
       /*********************************************/
       /*
        * Writes the values of the state hessian at the quadrature points into values.
@@ -178,9 +172,9 @@ namespace DOpE
        */
       template <int targetdim>
       void
-      GetHessiansState (std::string name,
-                        std::vector<
-                        std::vector<dealii::Tensor<2, targetdim> > > &values) const;
+      GetHessiansState(
+        std::string name,
+        std::vector<std::vector<dealii::Tensor<2, targetdim> > > &values) const;
 
       /*********************************************/
       /*
@@ -197,9 +191,9 @@ namespace DOpE
        */
       template <int targetdim>
       void
-      GetHessiansControl (std::string name,
-                          std::vector<
-                          std::vector<dealii::Tensor<2, targetdim> > > &values) const;
+      GetHessiansControl(
+        std::string name,
+        std::vector<std::vector<dealii::Tensor<2, targetdim> > > &values) const;
 
       /*********************************************/
       /*
@@ -246,8 +240,7 @@ namespace DOpE
        */
       void
       GetValues (const DOpEWrapper::FEValues<dim> &fe_values,
-                 std::string name,
-                 std::vector<double> &values) const;
+                 std::string name, std::vector<double> &values) const;
       /***********************************************************/
       /**
        * Helper Function. Vector valued case.
@@ -271,17 +264,17 @@ namespace DOpE
        */
       template <int targetdim>
       void
-      GetGrads (const DOpEWrapper::FEValues<dim> &fe_values,
-                std::string name,
-                std::vector<std::vector<dealii::Tensor<1, targetdim> > > &values) const;
+      GetGrads(
+        const DOpEWrapper::FEValues<dim> &fe_values,
+        std::string name,
+        std::vector<std::vector<dealii::Tensor<1, targetdim> > > &values) const;
       /***********************************************************/
       /**
        * Helper Function.
        */
       void
       GetLaplacians (const DOpEWrapper::FEValues<dim> &fe_values,
-                     std::string name,
-                     std::vector<double> &values) const;
+                     std::string name, std::vector<double> &values) const;
 
       /***********************************************************/
       /**
@@ -308,9 +301,10 @@ namespace DOpE
        */
       template <int targetdim>
       void
-      GetHessians (const DOpEWrapper::FEValues<dim> &fe_values,
-                   std::string name,
-                   std::vector<std::vector<dealii::Tensor<2, targetdim> > > &values) const;
+      GetHessians(
+        const DOpEWrapper::FEValues<dim> &fe_values,
+        std::string name,
+        std::vector<std::vector<dealii::Tensor<2, targetdim> > > &values) const;
 
       const std::map<std::string, const dealii::Vector<double>*> &param_values_;
       const std::map<std::string, const VECTOR *> &domain_values_;
@@ -318,23 +312,17 @@ namespace DOpE
 
     /**********************************************************************/
     template <typename VECTOR, int dim>
-    ElementDataContainerInternal<VECTOR, dim>::ElementDataContainerInternal (const std::map<
-        std::string,
-        const dealii::Vector<
-        double>*> &param_values,
-        const std::map<
-        std::string,
-        const VECTOR *> &domain_values)
-      : param_values_ (param_values),
-        domain_values_ (domain_values)
+    ElementDataContainerInternal<VECTOR, dim>::ElementDataContainerInternal(
+      const std::map<std::string, const dealii::Vector<double>*> &param_values,
+      const std::map<std::string, const VECTOR *> &domain_values)
+      : param_values_(param_values), domain_values_(domain_values)
     {
     }
 
     template <typename VECTOR, int dim>
     void
     ElementDataContainerInternal<VECTOR, dim>::GetParamValues (std::string name,
-                                                               dealii::Vector<
-                                                               double> &value) const
+                                                               dealii::Vector<double> &value) const
     {
       const auto it = param_values_.find (name);
       if (it == param_values_.end ())
@@ -349,8 +337,7 @@ namespace DOpE
     template <typename VECTOR, int dim>
     void
     ElementDataContainerInternal<VECTOR, dim>::GetValuesState (std::string name,
-                                                               std::vector<
-                                                               double> &values) const
+                                                               std::vector<double> &values) const
     {
       this->GetValues (this->GetFEValuesState (), name, values);
     }
@@ -358,13 +345,12 @@ namespace DOpE
     template <typename VECTOR, int dim>
     void
     ElementDataContainerInternal<VECTOR, dim>::GetValuesState (std::string name,
-                                                               std::vector<
-                                                               dealii::Vector<
-                                                               double> > &values) const
+                                                               std::vector<dealii::Vector<double> > &values) const
     {
       this->GetValues (this->GetFEValuesState (), name, values);
 
     }
+
 
     /*********************************************/
     template <typename VECTOR, int dim>
@@ -378,8 +364,7 @@ namespace DOpE
     template <typename VECTOR, int dim>
     void
     ElementDataContainerInternal<VECTOR, dim>::GetValuesControl (std::string name,
-        std::vector<
-        double> &values) const
+        std::vector<double> &values) const
     {
       this->GetValues (this->GetFEValuesControl (), name, values);
     }
@@ -388,9 +373,7 @@ namespace DOpE
     template <typename VECTOR, int dim>
     void
     ElementDataContainerInternal<VECTOR, dim>::GetValuesControl (std::string name,
-        std::vector<
-        dealii::Vector<
-        double> > &values) const
+        std::vector<dealii::Vector<double> > &values) const
     {
       this->GetValues (this->GetFEValuesControl (), name, values);
     }
@@ -400,10 +383,7 @@ namespace DOpE
     template <int targetdim>
     void
     ElementDataContainerInternal<VECTOR, dim>::GetGradsState (std::string name,
-                                                              std::vector<
-                                                              dealii::Tensor<
-                                                              1,
-                                                              targetdim> > &values) const
+                                                              std::vector<dealii::Tensor<1, targetdim> > &values) const
     {
       this->GetGrads<targetdim> (this->GetFEValuesState (), name, values);
     }
@@ -412,12 +392,9 @@ namespace DOpE
     template <typename VECTOR, int dim>
     template <int targetdim>
     void
-    ElementDataContainerInternal<VECTOR, dim>::GetGradsState (std::string name,
-                                                              std::vector<
-                                                              std::vector<
-                                                              dealii::Tensor<
-                                                              1,
-                                                              targetdim> > > &values) const
+    ElementDataContainerInternal<VECTOR, dim>::GetGradsState(
+      std::string name,
+      std::vector<std::vector<dealii::Tensor<1, targetdim> > > &values) const
     {
       this->GetGrads<targetdim> (this->GetFEValuesState (), name, values);
     }
@@ -427,11 +404,9 @@ namespace DOpE
     template <typename VECTOR, int dim>
     template <int targetdim>
     void
-    ElementDataContainerInternal<VECTOR, dim>::GetGradsControl (std::string name,
-                                                                std::vector<
-                                                                dealii::Tensor<
-                                                                1,
-                                                                targetdim> > &values) const
+    ElementDataContainerInternal<VECTOR, dim>::GetGradsControl(
+      std::string name,
+      std::vector<dealii::Tensor<1, targetdim> > &values) const
     {
       this->GetGrads<targetdim> (this->GetFEValuesControl (), name, values);
     }
@@ -441,12 +416,9 @@ namespace DOpE
     template <typename VECTOR, int dim>
     template <int targetdim>
     void
-    ElementDataContainerInternal<VECTOR, dim>::GetGradsControl (std::string name,
-                                                                std::vector<
-                                                                std::vector<
-                                                                dealii::Tensor<
-                                                                1,
-                                                                targetdim> > > &values) const
+    ElementDataContainerInternal<VECTOR, dim>::GetGradsControl(
+      std::string name,
+      std::vector<std::vector<dealii::Tensor<1, targetdim> > > &values) const
     {
       this->GetGrads<targetdim> (this->GetFEValuesControl (), name, values);
     }
@@ -456,15 +428,11 @@ namespace DOpE
     template <typename VECTOR, int dim>
     template <int targetdim>
     void
-    ElementDataContainerInternal<VECTOR, dim>::GetHessiansState (std::string name,
-        std::vector<
-        std::vector<
-        dealii::Tensor<
-        2,
-        targetdim> > > &values) const
+    ElementDataContainerInternal<VECTOR, dim>::GetHessiansState(
+      std::string name,
+      std::vector<std::vector<dealii::Tensor<2, targetdim> > > &values) const
     {
-      this->GetHessians<targetdim> (this->GetFEValuesState (), name,
-                                    values);
+      this->GetHessians<targetdim>(this->GetFEValuesState(), name, values);
     }
 
     /***********************************************************************/
@@ -472,14 +440,11 @@ namespace DOpE
     template <typename VECTOR, int dim>
     template <int targetdim>
     void
-    ElementDataContainerInternal<VECTOR, dim>::GetHessiansState (std::string name,
-        std::vector<
-        dealii::Tensor<
-        2,
-        targetdim> > &values) const
+    ElementDataContainerInternal<VECTOR, dim>::GetHessiansState(
+      std::string name,
+      std::vector<dealii::Tensor<2, targetdim> > &values) const
     {
-      this->GetHessians<targetdim> (this->GetFEValuesState (), name,
-                                    values);
+      this->GetHessians<targetdim>(this->GetFEValuesState(), name, values);
     }
 
     /***********************************************************************/
@@ -487,15 +452,11 @@ namespace DOpE
     template <typename VECTOR, int dim>
     template <int targetdim>
     void
-    ElementDataContainerInternal<VECTOR, dim>::GetHessiansControl (std::string name,
-        std::vector<
-        std::vector<
-        dealii::Tensor<
-        2,
-        targetdim> > > &values) const
+    ElementDataContainerInternal<VECTOR, dim>::GetHessiansControl(
+      std::string name,
+      std::vector<std::vector<dealii::Tensor<2, targetdim> > > &values) const
     {
-      this->GetHessians<targetdim> (this->GetFEValuesControl (), name,
-                                    values);
+      this->GetHessians<targetdim>(this->GetFEValuesControl(), name, values);
     }
 
     /***********************************************************************/
@@ -503,11 +464,9 @@ namespace DOpE
     template <typename VECTOR, int dim>
     template <int targetdim>
     void
-    ElementDataContainerInternal<VECTOR, dim>::GetHessiansControl (std::string name,
-        std::vector<
-        dealii::Tensor<
-        2,
-        targetdim> > &values) const
+    ElementDataContainerInternal<VECTOR, dim>::GetHessiansControl(
+      std::string name,
+      std::vector<dealii::Tensor<2, targetdim> > &values) const
     {
       this->GetHessians<targetdim> (this->GetFEValuesControl (), name,
                                     values);
@@ -516,9 +475,8 @@ namespace DOpE
     /***********************************************************************/
     template <typename VECTOR, int dim>
     void
-    ElementDataContainerInternal<VECTOR, dim>::GetLaplaciansState (std::string name,
-        std::vector<
-        double> &values) const
+    ElementDataContainerInternal<VECTOR, dim>::GetLaplaciansState(
+      std::string name, std::vector<double> &values) const
     {
       this->GetLaplacians (this->GetFEValuesState (), name, values);
     }
@@ -526,19 +484,16 @@ namespace DOpE
     /***********************************************************************/
     template <typename VECTOR, int dim>
     void
-    ElementDataContainerInternal<VECTOR, dim>::GetLaplaciansState (std::string name,
-        std::vector<
-        dealii::Vector<
-        double> > &values) const
+    ElementDataContainerInternal<VECTOR, dim>::GetLaplaciansState(
+      std::string name, std::vector<dealii::Vector<double> > &values) const
     {
       this->GetLaplacians (this->GetFEValuesState (), name, values);
     }
     /***********************************************************************/
     template <typename VECTOR, int dim>
     void
-    ElementDataContainerInternal<VECTOR, dim>::GetLaplaciansControl (std::string name,
-        std::vector<
-        double> &values) const
+    ElementDataContainerInternal<VECTOR, dim>::GetLaplaciansControl(
+      std::string name, std::vector<double> &values) const
     {
       this->GetLaplacians (this->GetFEValuesControl (), name, values);
     }
@@ -546,23 +501,19 @@ namespace DOpE
     /***********************************************************************/
     template <typename VECTOR, int dim>
     void
-    ElementDataContainerInternal<VECTOR, dim>::GetLaplaciansControl (std::string name,
-        std::vector<
-        dealii::Vector<
-        double> > &values) const
+    ElementDataContainerInternal<VECTOR, dim>::GetLaplaciansControl(
+      std::string name, std::vector<dealii::Vector<double> > &values) const
     {
       this->GetLaplacians (this->GetFEValuesControl (), name, values);
     }
     /***********************************************************************/
     template <typename VECTOR, int dim>
     void
-    ElementDataContainerInternal<VECTOR, dim>::GetValues (const DOpEWrapper::FEValues<
-                                                          dim> &fe_values,
-                                                          std::string name,
-                                                          std::vector<double> &values) const
+    ElementDataContainerInternal<VECTOR, dim>::GetValues(
+      const DOpEWrapper::FEValues<dim> &fe_values, std::string name,
+      std::vector<double> &values) const
     {
-      typename std::map<std::string, const VECTOR *>::const_iterator it =
-        this->GetDomainValues ().find (name);
+      const auto it = this->GetDomainValues().find(name);
       if (it == this->GetDomainValues ().end ())
         {
           throw DOpEException ("Did not find " + name,
@@ -574,15 +525,11 @@ namespace DOpE
     /***********************************************************************/
     template <typename VECTOR, int dim>
     void
-    ElementDataContainerInternal<VECTOR, dim>::GetValues (const DOpEWrapper::FEValues<
-                                                          dim> &fe_values,
-                                                          std::string name,
-                                                          std::vector<
-                                                          dealii::Vector<
-                                                          double> > &values) const
+    ElementDataContainerInternal<VECTOR, dim>::GetValues(
+      const DOpEWrapper::FEValues<dim> &fe_values, std::string name,
+      std::vector<dealii::Vector<double> > &values) const
     {
-      typename std::map<std::string, const VECTOR *>::const_iterator it =
-        this->GetDomainValues ().find (name);
+      const auto it = this->GetDomainValues().find(name);
       if (it == this->GetDomainValues ().end ())
         {
           throw DOpEException ("Did not find " + name,
@@ -596,16 +543,11 @@ namespace DOpE
     template <typename VECTOR, int dim>
     template <int targetdim>
     void
-    ElementDataContainerInternal<VECTOR, dim>::GetGrads (const DOpEWrapper::FEValues<
-                                                         dim> &fe_values,
-                                                         std::string name,
-                                                         std::vector<
-                                                         dealii::Tensor<
-                                                         1,
-                                                         targetdim> > &values) const
+    ElementDataContainerInternal<VECTOR, dim>::GetGrads(
+      const DOpEWrapper::FEValues<dim> &fe_values, std::string name,
+      std::vector<dealii::Tensor<1, targetdim> > &values) const
     {
-      typename std::map<std::string, const VECTOR *>::const_iterator it =
-        this->GetDomainValues ().find (name);
+      const auto it = this->GetDomainValues().find(name);
       if (it == this->GetDomainValues ().end ())
         {
           throw DOpEException ("Did not find " + name,
@@ -619,17 +561,12 @@ namespace DOpE
     template <typename VECTOR, int dim>
     template <int targetdim>
     void
-    ElementDataContainerInternal<VECTOR, dim>::GetGrads (const DOpEWrapper::FEValues<
-                                                         dim> &fe_values,
-                                                         std::string name,
-                                                         std::vector<
-                                                         std::vector<
-                                                         dealii::Tensor<
-                                                         1,
-                                                         targetdim> > > &values) const
+    ElementDataContainerInternal<VECTOR, dim>::GetGrads(
+      const DOpEWrapper::FEValues<dim> &fe_values,
+      std::string name,
+      std::vector<std::vector<dealii::Tensor<1, targetdim> > > &values) const
     {
-      typename std::map<std::string, const VECTOR *>::const_iterator it =
-        this->GetDomainValues ().find (name);
+      const auto it = this->GetDomainValues().find(name);
       if (it == this->GetDomainValues ().end ())
         {
           throw DOpEException ("Did not find " + name,
@@ -642,14 +579,11 @@ namespace DOpE
 
     template <typename VECTOR, int dim>
     void
-    ElementDataContainerInternal<VECTOR, dim>::GetLaplacians (const DOpEWrapper::FEValues<
-                                                              dim> &fe_values,
-                                                              std::string name,
-                                                              std::vector<
-                                                              double> &values) const
+    ElementDataContainerInternal<VECTOR, dim>::GetLaplacians(
+      const DOpEWrapper::FEValues<dim> &fe_values, std::string name,
+      std::vector<double> &values) const
     {
-      typename std::map<std::string, const VECTOR *>::const_iterator it =
-        this->GetDomainValues ().find (name);
+      const auto it = this->GetDomainValues().find(name);
       if (it == this->GetDomainValues ().end ())
         {
           throw DOpEException ("Did not find " + name,
@@ -662,15 +596,11 @@ namespace DOpE
 
     template <typename VECTOR, int dim>
     void
-    ElementDataContainerInternal<VECTOR, dim>::GetLaplacians (const DOpEWrapper::FEValues<
-                                                              dim> &fe_values,
-                                                              std::string name,
-                                                              std::vector<
-                                                              dealii::Vector<
-                                                              double> > &values) const
+    ElementDataContainerInternal<VECTOR, dim>::GetLaplacians(
+      const DOpEWrapper::FEValues<dim> &fe_values, std::string name,
+      std::vector<dealii::Vector<double> > &values) const
     {
-      typename std::map<std::string, const VECTOR *>::const_iterator it =
-        this->GetDomainValues ().find (name);
+      const auto it = this->GetDomainValues().find(name);
       if (it == this->GetDomainValues ().end ())
         {
           throw DOpEException ("Did not find " + name,
@@ -684,17 +614,12 @@ namespace DOpE
     template <typename VECTOR, int dim>
     template <int targetdim>
     void
-    ElementDataContainerInternal<VECTOR, dim>::GetHessians (const DOpEWrapper::FEValues<
-                                                            dim> &fe_values,
-                                                            std::string name,
-                                                            std::vector<
-                                                            std::vector<
-                                                            dealii::Tensor<
-                                                            2,
-                                                            targetdim> > > &values) const
+    ElementDataContainerInternal<VECTOR, dim>::GetHessians(
+      const DOpEWrapper::FEValues<dim> &fe_values,
+      std::string name,
+      std::vector<std::vector<dealii::Tensor<2, targetdim> > > &values) const
     {
-      typename std::map<std::string, const VECTOR *>::const_iterator it =
-        this->GetDomainValues ().find (name);
+      const auto it = this->GetDomainValues().find(name);
       if (it == this->GetDomainValues ().end ())
         {
           throw DOpEException ("Did not find " + name,
@@ -708,16 +633,11 @@ namespace DOpE
     template <typename VECTOR, int dim>
     template <int targetdim>
     void
-    ElementDataContainerInternal<VECTOR, dim>::GetHessians (const DOpEWrapper::FEValues<
-                                                            dim> &fe_values,
-                                                            std::string name,
-                                                            std::vector<
-                                                            dealii::Tensor<
-                                                            2,
-                                                            targetdim> > &values) const
+    ElementDataContainerInternal<VECTOR, dim>::GetHessians(
+      const DOpEWrapper::FEValues<dim> &fe_values, std::string name,
+      std::vector<dealii::Tensor<2, targetdim> > &values) const
     {
-      typename std::map<std::string, const VECTOR *>::const_iterator it =
-        this->GetDomainValues ().find (name);
+      const auto it = this->GetDomainValues().find(name);
       if (it == this->GetDomainValues ().end ())
         {
           throw DOpEException ("Did not find " + name,

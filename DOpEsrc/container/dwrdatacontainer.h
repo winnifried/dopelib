@@ -158,8 +158,7 @@ namespace DOpE
     GetPrimalError () const
     {
       double error = 0;
-      for (unsigned int i = 0; i < GetAllErrorIndicators ()[1]->size ();
-           ++i)
+      for (unsigned int i = 0; i < GetAllErrorIndicators()[1]->size(); ++i)
         {
           error += GetAllErrorIndicators ()[1]->operator() (i);
         }
@@ -178,8 +177,7 @@ namespace DOpE
     GetDualError () const
     {
       double error = 0;
-      for (unsigned int i = 0; i < GetAllErrorIndicators ()[2]->size ();
-           ++i)
+      for (unsigned int i = 0; i < GetAllErrorIndicators()[2]->size(); ++i)
         {
           error += GetAllErrorIndicators ()[2]->operator() (i);
         }
@@ -198,8 +196,7 @@ namespace DOpE
     GetControlError () const
     {
       double error = 0;
-      for (unsigned int i = 0; i < GetAllErrorIndicators ()[3]->size ();
-           ++i)
+      for (unsigned int i = 0; i < GetAllErrorIndicators()[3]->size(); ++i)
         {
           error += GetAllErrorIndicators ()[3]->operator() (i);
         }
@@ -297,8 +294,7 @@ namespace DOpE
       else if (i == 2)
         return error_ind_control_;
       else
-        throw DOpEException ("Unknown Indicator",
-                             "DWRDataContainer::GetErrorIndicators");
+        throw DOpEException("Unknown Indicator","DWRDataContainer::GetErrorIndicators");
     }
 
     const Vector<double> &
@@ -311,12 +307,10 @@ namespace DOpE
       else if (i == 2)
         return error_ind_control_;
       else
-        throw DOpEException ("Unknown Indicator",
-                             "DWRDataContainer::GetErrorIndicators");
+        throw DOpEException("Unknown Indicator","DWRDataContainer::GetErrorIndicators");
     }
 
-    unsigned int
-    GetNErrorComps () const
+    unsigned int GetNErrorComps() const
     {
       //number of error components...
       return n_error_comps_;
@@ -376,8 +370,7 @@ namespace DOpE
      */
     template <class PROBLEM, class INTEGRATOR>
     void
-    ComputeRefinementIndicators (PROBLEM &problem,
-                                 INTEGRATOR &integrator)
+    ComputeRefinementIndicators(PROBLEM &problem, INTEGRATOR &integrator)
     {
       integrator.ComputeRefinementIndicators (problem, *this);
     }
@@ -420,8 +413,7 @@ namespace DOpE
      * @param z   The FE-vector of the dual solution.
      */
     void
-    PrepareWeights (const StateVector<VECTOR> &u,
-                    const StateVector<VECTOR> &z)
+    PrepareWeights(const StateVector<VECTOR> &u, const StateVector<VECTOR> &z)
     {
       //Dependend on the GetEETerms we let the dwrc compute the primal and/or dual weights
       switch (GetEETerms ())
@@ -510,8 +502,7 @@ namespace DOpE
     PreparePI_h_q (const ControlVector<VECTOR> &q) = 0;
 
     void
-    AddWeightData (std::string name,
-                   const VECTOR *new_data)
+    AddWeightData(std::string name, const VECTOR *new_data)
     {
       if (weight_data_.find (name) != weight_data_.end ())
         {
@@ -528,10 +519,8 @@ namespace DOpE
     bool lock_;
     unsigned int n_error_comps_;
     std::map<std::string, const VECTOR *> weight_data_;
-    Vector<double> error_ind_, error_ind_primal_, error_ind_dual_,
-           error_ind_control_;
-  }
-  ;
+    Vector<double> error_ind_, error_ind_primal_, error_ind_dual_, error_ind_control_;
+  };
 
   template <typename VECTOR>
   void
@@ -553,17 +542,15 @@ namespace DOpE
   class DWRDataContainer : public DWRDataContainerBase<VECTOR>
   {
   public:
-    DWRDataContainer (DOpEtypes::EETerms ee_terms =
-                        DOpEtypes::EETerms::mixed)
+    DWRDataContainer(
+      DOpEtypes::EETerms ee_terms = DOpEtypes::EETerms::mixed)
       : DWRDataContainerBase<VECTOR> (ee_terms)
     {
     }
-    ;
     virtual
     ~DWRDataContainer ()
     {
     }
-    ;
 
     /**
      * Returns a ElementDataContainer for the weights on the

@@ -44,15 +44,15 @@ namespace DOpEWrapper
    * @template dim              Dimension of the dofhandler.
    * @template DOFHANDLER       The dealii DoFHandler Object
    */
-  template <int dim, template <int, int> class DH = dealii::DoFHandler>
+  template<int dim, template<int, int> class DH = dealii::DoFHandler>
   class Mapping
   {
   private:
-    Mapping ()
+    Mapping()
     {
     }
 
-    ~Mapping ()
+    ~Mapping()
     {
     }
 
@@ -60,22 +60,22 @@ namespace DOpEWrapper
 
   /************************************************************************************/
 
-  template <int dim>
-  class Mapping<dim, dealii::DoFHandler> : public dealii::MappingQ<dim>
+  template<int dim>
+  class Mapping<dim, dealii::DoFHandler > : public dealii::MappingQ<dim>
   {
   public:
-    Mapping (const unsigned int p,
-             const bool use_mapping_q_on_all_elements = false)
-      : dealii::MappingQ<dim> (p, use_mapping_q_on_all_elements)
+    Mapping(const unsigned int p, const bool use_mapping_q_on_all_elements =
+              false) :
+      dealii::MappingQ<dim>(p, use_mapping_q_on_all_elements)
     {
     }
 
-    Mapping (const dealii::MappingQ<dim> &mapping)
-      : dealii::MappingQ<dim> (mapping)
+    Mapping(const dealii::MappingQ<dim> &mapping) :
+      dealii::MappingQ<dim>(mapping)
     {
     }
 
-    ~Mapping ()
+    ~Mapping()
     {
     }
 
@@ -86,7 +86,7 @@ namespace DOpEWrapper
      * or MappingCollections in the hp-framework).
      */
     const typename dealii::MappingQ<dim> &
-    operator[] (const unsigned int /*index*/) const
+    operator[](const unsigned int /*index*/) const
     {
       //assert(index == 0);
       return *this;
@@ -137,38 +137,38 @@ namespace DOpEWrapper
    * with more than one mapping, as deal.ii is not consinstent in using
    * Collections!
    */
-  template <int dim>
+  template<int dim>
   class Mapping<dim, dealii::hp::DoFHandler> : public dealii::hp::MappingCollection<
     dim>
   {
   public:
-    Mapping ()
-      : dealii::hp::MappingCollection<dim> ()
+    Mapping() :
+      dealii::hp::MappingCollection<dim>()
     {
     }
 
-    ~Mapping ()
+    ~Mapping()
     {
     }
 
-    Mapping (const dealii::Mapping<dim> &mapping)
-      : dealii::hp::MappingCollection<dim> (mapping)
+    Mapping(const dealii::Mapping<dim> &mapping)
+      : dealii::hp::MappingCollection<dim>(mapping)
     {
     }
-    Mapping (const dealii::hp::MappingCollection<dim> &mapping_collection)
-      : dealii::hp::MappingCollection<dim> (mapping_collection)
+    Mapping(const dealii::hp::MappingCollection<dim> &mapping_collection) :
+      dealii::hp::MappingCollection<dim>(mapping_collection)
     {
     }
   };
 
   /************************************************************************************/
 
-  template <int dim, template <int, int> class DH>
+  template<int dim, template<int, int> class DH>
   struct StaticMappingQ1
   {
   };
 
-  template <int dim>
+  template<int dim>
   struct StaticMappingQ1<dim, dealii::DoFHandler>
   {
   public:
@@ -182,7 +182,7 @@ namespace DOpEWrapper
 //        static Mapping<dim, dealii::MGDoFHandler > mapping_q1;
 //    };
 
-  template <int dim>
+  template<int dim>
   struct StaticMappingQ1<dim, dealii::hp::DoFHandler>
   {
   public:

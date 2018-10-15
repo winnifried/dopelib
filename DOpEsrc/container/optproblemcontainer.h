@@ -24,9 +24,6 @@
 #ifndef OptProblemContainer_H_
 #define OptProblemContainer_H_
 
-// TODO remove ...
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-
 #include <include/dopeexceptionhandler.h>
 #include <include/outputhandler.h>
 #include <interfaces/functionalinterface.h>
@@ -349,9 +346,9 @@ namespace DOpE
     /******************************************************/
     /**
      * This function returns a functional value that is computed entirely
-     * out of the knowledge of the coordinate vectors of state and control.
-     *
-     * No integration routine is implemented inbetween!
+    * out of the knowledge of the coordinate vectors of state and control.
+    *
+    * No integration routine is implemented inbetween!
      */
     double
     AlgebraicFunctional(
@@ -360,9 +357,9 @@ namespace DOpE
 
     /**
      * This function returns a residual to an equation that is depending
-     * directly on the knowledge of the coordinate vectors of state and control.
-     *
-     * No integration routine is implemented inbetween!
+    * directly on the knowledge of the coordinate vectors of state and control.
+    *
+    * No integration routine is implemented inbetween!
      */
     void
     AlgebraicResidual(VECTOR &residual,
@@ -924,10 +921,10 @@ namespace DOpE
      * Sets the actual time.
      *
      * @param time      The actual time.
-     * @param time_dof_number The dofnumber in time associated to the vectors
+    * @param time_dof_number The dofnumber in time associated to the vectors
      * @param interval  The actual interval. Make sure that time
      *                  lies in interval!
-     * @param initial   Do we solve at the initial time?
+    * @param initial   Do we solve at the initial time?
      */
     void
     SetTime(double time,
@@ -1017,12 +1014,12 @@ namespace DOpE
     }
     /*****************************************************************/
     /**
-     * Adds the auxiliary Vectors from the integrator, so that their values are
-     * available for the integrated object.
-     *
-     * @param integrator         The integrator in which the vecors should be available
-     *
-     */
+    * Adds the auxiliary Vectors from the integrator, so that their values are
+    * available for the integrated object.
+    *
+    * @param integrator         The integrator in which the vecors should be available
+    *
+    */
 
     template<typename INTEGRATOR>
     void
@@ -1182,12 +1179,12 @@ namespace DOpE
 
     /******************************************************/
     /**
-     * Deletes the auxiliary Vectors from the integrator.
-     * This is required to add vecors of the same name but possibly
-     * at a different point in time.
-     *
-     * @param integrator         The integrator in which the vecors should be available
-     */
+    * Deletes the auxiliary Vectors from the integrator.
+    * This is required to add vecors of the same name but possibly
+    * at a different point in time.
+    *
+    * @param integrator         The integrator in which the vecors should be available
+    */
 
     template<typename INTEGRATOR>
     void
@@ -1344,7 +1341,7 @@ namespace DOpE
     DOpEOutputHandler<VECTOR> *OutputHandler_;
     std::string algo_type_;
 
-    bool functional_for_ee_is_cost_;
+    bool functional_for_ee_is_cost_ = false;
     double c_interval_length_, interval_length_;
     unsigned int functional_for_ee_num_;
     std::vector<FUNCTIONAL_INTERFACE *> aux_functionals_;
@@ -1368,7 +1365,7 @@ namespace DOpE
     std::vector<TangentDirichletData<DD, VECTOR, dealdim>*> tangent_dirichlet_values_;
     const dealii::Function<dealdim> *zero_dirichlet_values_;
 
-    const dealii::Function<dealdim> *initial_values_;
+    const dealii::Function<dealdim> *initial_values_ = nullptr;
 
     std::vector<unsigned int> control_boundary_equation_colors_;
     std::vector<unsigned int> state_boundary_equation_colors_;
@@ -1380,7 +1377,7 @@ namespace DOpE
     std::map<std::string, const StateVector<VECTOR>*> auxiliary_state_;
     std::map<std::string, const ConstraintVector<VECTOR>*> auxiliary_constraints_;
 
-    bool initial_; //Do we solve the problem at initial time?
+    bool initial_ = false; //Do we solve the problem at initial time?
 
     StateProblem<
     OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
@@ -1406,23 +1403,23 @@ namespace DOpE
     friend class StateProblem<
       OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
       CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>,
-      PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>;
+      PDE, DD, SPARSITYPATTERN, VECTOR, dealdim> ;
     friend class TangentProblem<
       OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
       CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>,
-      PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>;
+      PDE, DD, SPARSITYPATTERN, VECTOR, dealdim> ;
     friend class AdjointProblem<
       OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
       CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>,
-      PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>;
+      PDE, DD, SPARSITYPATTERN, VECTOR, dealdim> ;
     friend class Adjoint_HessianProblem<
       OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
       CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>,
-      PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>;
+      PDE, DD, SPARSITYPATTERN, VECTOR, dealdim> ;
     friend class OPT_Adjoint_For_EEProblem<
       OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
       CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>,
-      PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>;
+      PDE, DD, SPARSITYPATTERN, VECTOR, dealdim> ;
   };
   /******************************************************/
 
@@ -1436,13 +1433,16 @@ namespace DOpE
                         SpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dopedim, dealdim> &STH) :
                         ProblemContainerInternal<PDE>(pde), functional_(&functional), constraints_(
                           &constraints), STH_(&STH), state_problem_(NULL),
-                        tangent_problem_(NULL), adjoint_problem_(NULL),
+                        tangent_problem_(NULL),  adjoint_problem_(NULL),
                         adjoint_hessian_problem_(NULL), adjoint_for_ee_problem_(NULL)
   {
     ExceptionHandler_ = NULL;
     OutputHandler_ = NULL;
-    zero_dirichlet_values_ = new ZeroFunction<dealdim>(
-      this->GetPDE().GetStateNComponents());
+    zero_dirichlet_values_ = new
+#if DEAL_II_VERSION_GTE(8,5,0)
+        Functions::
+#endif
+    ZeroFunction<dealdim>(this->GetPDE().GetStateNComponents());
     algo_type_ = "";
     functional_position_[functional_->GetName()] = 0;
     //remember! At functional_values_[0] we store always the cost functional!
