@@ -48,7 +48,7 @@ public:
       const DOpEWrapper::DoFHandler<dealdim, DH> &state_dof_handler,
       const std::map<std::string, const dealii::Vector<double> *>
           & /*param_values*/,
-      const std::map<std::string, const VECTOR *> &domain_values) {
+      const std::map<std::string, const VECTOR *> &domain_values) override {
     Point<dealdim> p1(0.5, 0.5, 0.5);
 
     typename map<string, const VECTOR *>::const_iterator it =
@@ -65,8 +65,8 @@ public:
     return dealii::Utilities::MPI::max(tmp_vector(0), MPI_COMM_WORLD);
   }
 
-  string GetType() const { return "point"; }
-  string GetName() const { return "Point value in X"; }
+  string GetType() const override { return "point"; }
+  string GetName() const override { return "Point value in X"; }
 };
 
 #endif

@@ -24,39 +24,42 @@
 #ifndef LOCALPDE_
 #define LOCALPDE_
 
-#include <interfaces/pdeinterface.h>
 #include <container/elementdatacontainer.h>
 #include <container/facedatacontainer.h>
+#include <interfaces/pdeinterface.h>
 
 using namespace std;
 using namespace dealii;
 using namespace DOpE;
 
-template<
-  template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
-  template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
-  template<int, int> class DH, typename VECTOR, int dealdim>
+template <template <template <int, int> class DH, typename VECTOR, int dealdim>
+          class EDC,
+          template <template <int, int> class DH, typename VECTOR, int dealdim>
+          class FDC,
+          template <int, int> class DH,
+          typename VECTOR,
+          int dealdim>
 class LocalPDE : public PDEInterface<EDC, FDC, DH, VECTOR, dealdim>
 {
 public:
-  LocalPDE() :
-    state_block_component_(3, 0)
-  {
-  }
+  LocalPDE()
+    : state_block_component_(3, 0)
+  {}
 
   void
   ElementEquation(const EDC<DH, VECTOR, dealdim> &edc,
-                  dealii::Vector<double> &local_vector, double scale,
-                  double /*scale_ico*/)
+                  dealii::Vector<double> &        local_vector,
+                  double                          scale,
+                  double /*scale_ico*/) override
   {
     assert(this->problem_type_ == "state");
 
     const DOpEWrapper::FEValues<dealdim> &state_fe_values =
       edc.GetFEValuesState();
     const unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
-    const unsigned int n_q_points = edc.GetNQPoints();
+    const unsigned int n_q_points         = edc.GetNQPoints();
 
-    ugrads_.resize(n_q_points, vector<Tensor<1, dealdim> >(3));
+    ugrads_.resize(n_q_points, vector<Tensor<1, dealdim>>(3));
 
     edc.GetGradsState("last_newton_solution", ugrads_);
 
@@ -83,42 +86,42 @@ public:
             const Tensor<2, dealdim> phi_i_grads_u =
               state_fe_values[displacements].gradient(i, q_point);
 
-            local_vector(i) += scale
-                               * scalar_product(ugrads, phi_i_grads_u)
-                               * state_fe_values.JxW(q_point);
+            local_vector(i) += scale * scalar_product(ugrads, phi_i_grads_u) *
+                               state_fe_values.JxW(q_point);
           }
       }
   }
 
   void
   ElementMatrix(const EDC<DH, VECTOR, dealdim> &edc,
-                FullMatrix<double> &local_matrix, double scale,
-                double /*scale_ico*/)
+                FullMatrix<double> &            local_matrix,
+                double                          scale,
+                double /*scale_ico*/) override
   {
     const DOpEWrapper::FEValues<dealdim> &state_fe_values =
       edc.GetFEValuesState();
     const unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
-    const unsigned int n_q_points = edc.GetNQPoints();
+    const unsigned int n_q_points         = edc.GetNQPoints();
 
     const FEValuesExtractors::Vector displacements(0);
 
-    std::vector<Tensor<2, dealdim> > phi_grads_u(n_dofs_per_element);
+    std::vector<Tensor<2, dealdim>> phi_grads_u(n_dofs_per_element);
 
     for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
       {
         for (unsigned int k = 0; k < n_dofs_per_element; k++)
           {
-            phi_grads_u[k] = state_fe_values[displacements].gradient(k,
-                                                                     q_point);
+            phi_grads_u[k] =
+              state_fe_values[displacements].gradient(k, q_point);
           }
 
         for (unsigned int i = 0; i < n_dofs_per_element; i++)
           {
             for (unsigned int j = 0; j < n_dofs_per_element; j++)
               {
-                local_matrix(i, j) += scale
-                                      * scalar_product(phi_grads_u[j], phi_grads_u[i])
-                                      * state_fe_values.JxW(q_point);
+                local_matrix(i, j) +=
+                  scale * scalar_product(phi_grads_u[j], phi_grads_u[i]) *
+                  state_fe_values.JxW(q_point);
               }
           }
       }
@@ -126,14 +129,15 @@ public:
 
   void
   ElementRightHandSide(const EDC<DH, VECTOR, dealdim> &edc,
-                       dealii::Vector<double> &local_vector, double scale)
+                       dealii::Vector<double> &        local_vector,
+                       double                          scale) override
   {
     assert(this->problem_type_ == "state");
 
     const DOpEWrapper::FEValues<dealdim> &state_fe_values =
       edc.GetFEValuesState();
     const unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
-    const unsigned int n_q_points = edc.GetNQPoints();
+    const unsigned int n_q_points         = edc.GetNQPoints();
 
     const FEValuesExtractors::Vector displacements(0);
 
@@ -150,14 +154,14 @@ public:
             const Tensor<1, dealdim> phi_i_u =
               state_fe_values[displacements].value(i, q_point);
 
-            local_vector(i) += scale * fvalues * phi_i_u
-                               * state_fe_values.JxW(q_point);
+            local_vector(i) +=
+              scale * fvalues * phi_i_u * state_fe_values.JxW(q_point);
           }
       }
   }
 
   UpdateFlags
-  GetUpdateFlags() const
+  GetUpdateFlags() const override
   {
     if (this->problem_type_ == "state")
       return update_values | update_gradients | update_quadrature_points;
@@ -167,24 +171,24 @@ public:
   }
 
   unsigned int
-  GetStateNBlocks() const
+  GetStateNBlocks() const override
   {
     return 1;
   }
 
   std::vector<unsigned int> &
-  GetStateBlockComponent()
+  GetStateBlockComponent() override
   {
     return state_block_component_;
   }
   const std::vector<unsigned int> &
-  GetStateBlockComponent() const
+  GetStateBlockComponent() const override
   {
     return state_block_component_;
   }
 
 private:
-  vector<vector<Tensor<1, dealdim> > > ugrads_;
+  vector<vector<Tensor<1, dealdim>>> ugrads_;
 
   vector<unsigned int> state_block_component_;
 };
