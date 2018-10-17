@@ -30,7 +30,7 @@ do echo "Trying "$bd
 			    else
 				echo -en '\E[31;40m'"   failed!"
 				tput sgr0
-				sed 's/s$/s\t/g' time.txt | tr -d '\n'
+				sed 's/s$/s\t/g' time.txt | sed 's/real\t/r: /g' | sed 's/user\t/u: /g' | sed 's/sys\t/s: /g' | tr -d '\n'
 				echo
 				failed=$((${failed} + 1))
 			    fi
