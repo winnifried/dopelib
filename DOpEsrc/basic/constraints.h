@@ -134,6 +134,8 @@ namespace DOpE
         }
     }
 
+    // TODO correct ? (at least a missing "global" down there)
+
     /**
      * Returns the total number of local in time constraints.
      */
