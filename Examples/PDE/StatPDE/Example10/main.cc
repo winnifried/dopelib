@@ -84,12 +84,10 @@ typedef MethodOfLines_StateSpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN,
 int
 main(int argc, char **argv)
 {
-#ifdef DOPELIB_WITH_MPI
   //If deal.II has been configured with MPI we need to initialize it
   //athough we don't use MPI in the code explicitely.
   //However, if not initialized the trilinos solver will fail.
-  Utilities::MPI::MPI_InitFinalize mpi_initialization(argc, argv);
-#endif
+  Utilities::MPI::MPI_InitFinalize mpi(argc, argv);
 
   /**
    * Stationary FSI problem in an ALE framework

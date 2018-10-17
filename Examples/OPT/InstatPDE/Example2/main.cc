@@ -122,6 +122,8 @@ main(int argc, char **argv)
    * In this example we show the control of the
    *  heat equation via a space dependent right hand side
    */
+  
+  dealii::Utilities::MPI::MPI_InitFinalize mpi(argc, argv);
 
   string paramfile = "dope.prm";
 

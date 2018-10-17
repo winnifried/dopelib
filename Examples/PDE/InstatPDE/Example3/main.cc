@@ -159,6 +159,8 @@ ColorizeTriangulation(Triangulation<2> &coarse_grid, double upper_bound)
 int
 main(int argc, char **argv)
 {
+  dealii::Utilities::MPI::MPI_InitFinalize mpi(argc, argv);
+    
   string paramfile = "dope.prm";
 
   if (argc == 2)

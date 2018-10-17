@@ -130,6 +130,8 @@ main(int argc, char **argv)
    * the optimization problem we add a quadratic
    * regularization term to the cost functional.
    */
+  
+  dealii::Utilities::MPI::MPI_InitFinalize mpi(argc, argv);
 
   string paramfile = "dope.prm";
 

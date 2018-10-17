@@ -88,6 +88,7 @@ main(int argc, char **argv)
    *  E. Stein (editor), Error-controlled Adaptive Finite Elements in Solid Mechanics,
    Wiley (2003), pp. 386 - 387
    */
+  dealii::Utilities::MPI::MPI_InitFinalize mpi(argc, argv);
 
   string paramfile = "dope.prm";
 

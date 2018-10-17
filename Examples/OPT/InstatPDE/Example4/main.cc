@@ -124,6 +124,8 @@ main(int argc, char **argv)
    *  heat equation via the initial values.
    */
 
+  dealii::Utilities::MPI::MPI_InitFinalize mpi(argc, argv);
+  
   string paramfile = "dope.prm";
 
   if (argc == 2)

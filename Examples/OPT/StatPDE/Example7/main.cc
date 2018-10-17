@@ -106,6 +106,8 @@ main(int argc, char **argv)
    * MMA-Method of K. Svanberg together with an augmented
    * Lagrangian approach for the subproblems following M. Stingl.
    */
+  dealii::Utilities::MPI::MPI_InitFinalize mpi(argc, argv);
+  
   string paramfile = "dope.prm";
 
   if (argc == 2)

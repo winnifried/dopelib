@@ -109,6 +109,9 @@ main(int argc, char **argv)
    * main feature is the use of the DWR method for error
    * estimation and grid refinement.
    */
+  
+  dealii::Utilities::MPI::MPI_InitFinalize mpi(argc, argv);
+  
   string paramfile = "dope.prm";
 
   if (argc == 2)

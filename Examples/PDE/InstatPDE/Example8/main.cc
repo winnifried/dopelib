@@ -139,6 +139,8 @@ main(int argc, char **argv)
    *  iteration. The configuration is the single edge notched shear test.
    */
 
+  dealii::Utilities::MPI::MPI_InitFinalize mpi(argc, argv);
+  
   string paramfile = "dope.prm";
 
   if (argc == 2)

@@ -102,6 +102,9 @@ main(int argc, char **argv)
   /**
    * We solve the Laplace equation with periodic boundary conditions.
    */
+  
+  dealii::Utilities::MPI::MPI_InitFinalize mpi(argc, argv);
+  
   string paramfile = "dope.prm";
 
   if (argc == 2)

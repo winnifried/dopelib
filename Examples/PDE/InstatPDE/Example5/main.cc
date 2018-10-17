@@ -112,6 +112,8 @@ main(int argc, char **argv)
    * In this example we  solve the nonlinear, timedependent heat equation;
    * see the documentation for more information.
    */
+  
+  dealii::Utilities::MPI::MPI_InitFinalize mpi(argc, argv);
 
   string paramfile = "dope.prm";
 

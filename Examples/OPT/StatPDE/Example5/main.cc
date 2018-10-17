@@ -107,6 +107,9 @@ main(int argc, char **argv)
    * control on the right hand side. In this example, we use different
    * meshes for the control and the state variable.
    */
+  
+  dealii::Utilities::MPI::MPI_InitFinalize mpi(argc, argv);
+  
   string paramfile = "dope.prm";
 
   if (argc == 2)

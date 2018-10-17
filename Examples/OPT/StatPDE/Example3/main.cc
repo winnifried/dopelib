@@ -124,6 +124,8 @@ main(int argc, char **argv)
    * regularization term to the cost functional.
    */
 
+  dealii::Utilities::MPI::MPI_InitFinalize mpi(argc, argv);
+  
   string paramfile = "dope.prm";
 
   if (argc == 2)

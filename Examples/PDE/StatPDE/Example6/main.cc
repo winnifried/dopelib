@@ -124,6 +124,8 @@ main(int argc, char **argv)
    *  and three different iterative linear solvers.
    */
 
+  dealii::Utilities::MPI::MPI_InitFinalize mpi(argc, argv);
+  
   string paramfile = "dope.prm";
 
   if (argc == 2)

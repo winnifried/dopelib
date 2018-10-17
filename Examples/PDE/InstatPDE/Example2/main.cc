@@ -117,6 +117,8 @@ main(int argc, char **argv)
    * Fluid: NSE
    * Structure: INH or STVK
    */
+  
+  dealii::Utilities::MPI::MPI_InitFinalize mpi(argc, argv);
 
   string paramfile = "dope.prm";
 

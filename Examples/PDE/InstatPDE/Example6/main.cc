@@ -112,6 +112,8 @@ main(int argc, char **argv)
    * The quasi-static Biot problem
    * coupled with the Lame-Navier equations for linear elasticity
    */
+  
+  dealii::Utilities::MPI::MPI_InitFinalize mpi(argc, argv);
 
   string paramfile = "dope.prm";
 

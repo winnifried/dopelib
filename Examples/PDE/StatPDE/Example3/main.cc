@@ -126,6 +126,8 @@ main(int argc, char **argv)
    *
    *  This example uses hp finite elements as extension to PDE/StatPDE/Example 1
    */
+  
+  dealii::Utilities::MPI::MPI_InitFinalize mpi(argc, argv);
 
   //Handling of the param file.
   string paramfile = "dope.prm";

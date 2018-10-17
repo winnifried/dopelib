@@ -95,6 +95,9 @@ main(int argc, char **argv)
    * This example implements the topology optimization of an MBB-Beam given in
    * OPT/StatPDE/Example6 using the SIMP method and uses SNOPT for the optimization.
    */
+  
+  dealii::Utilities::MPI::MPI_InitFinalize mpi(argc, argv);
+  
   std::string paramfile = "dope.prm";
 
   if (argc == 2)

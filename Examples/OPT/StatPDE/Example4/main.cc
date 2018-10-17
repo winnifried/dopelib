@@ -101,6 +101,9 @@ main(int argc, char **argv)
    * and control int the dirichlet boundary values of the state.
    * The state solves the laplacian.
    */
+  
+  dealii::Utilities::MPI::MPI_InitFinalize mpi(argc, argv);
+  
   string paramfile = "dope.prm";
 
   if (argc == 2)

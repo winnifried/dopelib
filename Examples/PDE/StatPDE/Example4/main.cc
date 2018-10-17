@@ -81,6 +81,8 @@ main(int argc, char **argv)
    *  is to demonstrate how DOpE implements this
    *  well-known test.
    */
+  
+  dealii::Utilities::MPI::MPI_InitFinalize mpi(argc, argv);
 
   string paramfile = "dope.prm";
 

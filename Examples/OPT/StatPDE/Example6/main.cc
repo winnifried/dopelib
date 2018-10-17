@@ -102,6 +102,9 @@ main(int argc, char **argv)
    *  for the control. We use IPOPT/SNOPT for the optimization.
    *
    */
+  
+  dealii::Utilities::MPI::MPI_InitFinalize mpi(argc, argv);
+  
   std::string paramfile = "dope.prm";
 
   if (argc == 2)

@@ -124,6 +124,8 @@ main(int argc, char **argv)
    * In this example we show the control of a nonlinear
    *  heat equation via the initial values.
    */
+  
+  dealii::Utilities::MPI::MPI_InitFinalize mpi(argc, argv);
 
   string paramfile = "dope.prm";
 

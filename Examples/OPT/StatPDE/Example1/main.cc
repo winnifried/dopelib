@@ -136,6 +136,8 @@ main(int argc, char **argv)
    *
    * Additionally we estimate the error in the cost functional.
    */
+  
+  dealii::Utilities::MPI::MPI_InitFinalize mpi(argc, argv);
 
   string paramfile = "dope.prm";
 
