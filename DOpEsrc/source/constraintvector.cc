@@ -625,3 +625,10 @@ double ConstraintVector<VECTOR>::Complementarity(const ConstraintVector<VECTOR> 
 
 template class DOpE::ConstraintVector<dealii::Vector<double> >;
 template class DOpE::ConstraintVector<dealii::BlockVector<double> >;
+
+#ifdef DOPELIB_WITH_TRILINOS
+#if DEAL_II_VERSION_GTE(9,0,0)
+template class DOpE::ConstraintVector<dealii::TrilinosWrappers::MPI::BlockVector>;
+template class DOpE::ConstraintVector<dealii::TrilinosWrappers::MPI::Vector>;
+#endif
+#endif

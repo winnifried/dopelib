@@ -104,67 +104,6 @@ namespace DOpEHelper
   }
 #endif
 
-// TODO !!! remove
-  /**
-   * Helper class for the VECTOR-templates. Resizes the given BlockVector vector.
-   */
-  void ReSizeVector(unsigned int ndofs,
-                    const std::vector<unsigned int> &dofs_per_block,
-                    dealii::BlockVector<double> &vector);
-
-  /**
-   * Same as above with different input parameters.
-   */
-  void ReSizeVector(const dealii::BlockIndices &, dealii::BlockVector<double> &vector);
-
-  /*************************************************************************************/
-  /**
-   * Helper class for the VECTOR-templates. Resizes the given Vector vector.
-   */
-  void ReSizeVector(unsigned int ndofs,
-                    const std::vector<unsigned int> & /*dofs_per_block*/,
-                    dealii::Vector<double> &vector);
-  /**
-   * Same as above with different input parameters.
-   */
-  void ReSizeVector(const dealii::BlockIndices &, dealii::Vector<double> &vector);
-
-#ifdef DOPELIB_WITH_TRILINOS
-
-// TODO these are just for temporary compatibility, to be removed !!!
-  inline void ReSizeVector(const dealii::BlockIndices &, dealii::TrilinosWrappers::MPI::BlockVector &)
-  {
-  }
-
-  inline void ReSizeVector(const dealii::BlockIndices &, dealii::TrilinosWrappers::MPI::Vector &)
-  {
-  }
-
-  inline void ReSizeVector(unsigned int ,
-                           const std::vector<unsigned int> &,
-                           dealii::TrilinosWrappers::MPI::Vector &)
-  {
-  }
-  inline void ReSizeVector(unsigned int ,
-                           const std::vector<unsigned int> &,
-                           dealii::TrilinosWrappers::MPI::BlockVector &)
-  {
-  }
-
-#endif
-
-  /*************************************************************************************/
-  /**
-   * Helper class for the VECTOR-templates. Resizes the given Vector vector.
-   */
-  void ReSizeVector(unsigned int ndofs,
-                    const std::vector<unsigned int> & /*dofs_per_block*/,
-                    dealii::Vector<double> &vector);
-  /**
-   * Same as above with different input parameters.
-   */
-  void ReSizeVector(const dealii::BlockIndices &, dealii::Vector<double> &vector);
-  
     /**
    * Splits an index set source into different blocks according to block_counts.
    * Application: split locally_owned for block vectors
