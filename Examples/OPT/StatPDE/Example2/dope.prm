@@ -1,0 +1,73 @@
+# Listing of Parameters
+# ---------------------
+subsection newtonsolver parameters
+  # maximal number of linesearch steps
+  set line_maxiter         = 4
+
+  # reduction rate for the linesearch damping paramete
+  set linesearch_rho       = 0.9
+
+  # global tolerance for the newton iteration
+  set nonlinear_global_tol = 1.e-12
+
+  # maximal number of newton iterations
+  set nonlinear_maxiter    = 10
+
+  # minimal  newton reduction, if actual reduction is less, matrix is rebuild
+  set nonlinear_rho        = 0.1
+
+  # relative tolerance for the newton iteration
+  set nonlinear_tol        = 1.e-10
+end
+
+
+subsection output parameters
+  # File format for the output of control variables
+  set control_file_format = .txt
+
+  # Log Debug Information
+  set debug               = false
+
+  # File format for the output of solution variables
+  set file_format         = .vtk
+
+  # Iteration Counters that should not reflect in the outputname, seperated by
+  # `;`
+  set ignore_iterations   = PDENewton;Cg
+
+  # Name of the logfile
+  set logfile             = dope.log
+
+  # Do not write files whose name contains a substring given here by a list of
+  # `;` separated words
+  set never_write_list    = Gradient;Residual;Hessian;Tangent;Adjoint;Update
+
+  # Defines what strings should be printed, the higher the number the more
+  # output
+  set printlevel          = 4
+
+  # Set the precision of the newton output
+  set number_precision	 = 4
+
+  # Set manually the machine tolarance for the output
+  set eps_machine_set_by_user	 = 1.0e-11
+
+
+  # Directory where the output goes to
+  set results_dir         = Results/
+end
+
+
+subsection reducednewtonalgorithm parameters
+  set line_maxiter         = 4
+  set linear_global_tol    = 1.e-12
+  set linear_maxiter       = 40
+  set linear_tol           = 1.e-10
+  set linesearch_c         = 0.1
+  set linesearch_rho       = 0.9
+  set nonlinear_global_tol = 1.e-11
+  set nonlinear_maxiter    = 10
+  set nonlinear_tol        = 1.e-7
+end
+
+

@@ -1,0 +1,98 @@
+# Listing of Parameters
+# ---------------------
+subsection cglinearsolver_withmatrix parameters
+  # global tolerance for the cg iteration
+  set linear_global_tol = 5.e-13
+
+  # maximal number of cg steps
+  set linear_maxiter    = 1000
+
+  # relative tolerance for the cg iteration
+  set linear_tol        = 1.e-10
+end
+
+
+subsection newtonsolver parameters
+  # maximal number of linesearch steps
+  set line_maxiter         = 4
+
+  # reduction rate for the linesearch damping paramete
+  set linesearch_rho       = 0.9
+
+  # global tolerance for the newton iteration
+  set nonlinear_global_tol = 1.e-12
+
+  # maximal number of newton iterations
+  set nonlinear_maxiter    = 10
+
+  # minimal  newton reduction, if actual reduction is less, matrix is rebuild
+  set nonlinear_rho        = 0.1
+
+  # relative tolerance for the newton iteration
+  set nonlinear_tol        = 1.e-10
+end
+
+
+subsection output parameters
+  # File format for the output of control variables
+  set control_file_format     = .vtk
+
+  # Log Debug Information
+  set debug                   = false
+
+  # Correlation of the output and machine precision
+  set eps_machine_set_by_user = 1.0e-8
+
+  # File format for the output of solution variables
+  set file_format             = .vtk
+
+  # Iteration Counters that should not reflect in the outputname, seperated by
+  # `;`
+  set ignore_iterations       = PDENewton;Cg
+
+  # Name of the logfile
+  set logfile                 = dope.log
+
+  # Do not write files whose name contains a substring given here by a list of
+  # `;` separated words
+  set never_write_list        = Gradient;Residual;Hessian;Tangent;Adjoint;Update;State;Control
+
+  # Sets the precision of the output numbers
+  set number_precision        = 4
+
+  # Defines what strings should be printed, the higher the number the more
+  # output
+  set printlevel              = 4
+
+  # Directory where the output goes to
+  set results_dir             = Results/
+end
+
+
+subsection reducednewtonalgorithm parameters
+  set line_maxiter         = 4
+  set linear_global_tol    = 1.e-12
+  set linear_maxiter       = 40
+  set linear_tol           = 1.e-10
+  set linesearch_c         = 0.1
+  set linesearch_rho       = 0.9
+  set nonlinear_global_tol = 1.e-11
+  set nonlinear_maxiter    = 10
+  set nonlinear_tol        = 1.e-7
+end
+
+
+subsection reducedtrustregionnewtonalgorithm parameters
+  set linear_global_tol    = 1.e-12
+  set linear_maxiter       = 40
+  set linear_tol           = 1.e-10
+  set nonlinear_global_tol = 1.e-11
+  set nonlinear_maxiter    = 10
+  set nonlinear_tol        = 1.e-7
+  set tr_method            = dogleg
+  set tr_delta_max         = 1.e+5 
+  set tr_delta_null        = 1
+  set tr_delta_eta	   = 0.01
+end
+
+

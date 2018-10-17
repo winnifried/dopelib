@@ -1,0 +1,20 @@
+Until now, \dope{} provides various time-stepping schemes
+that are based on finite differences. Specifically, the 
+user can choose between the 
+\begin{itemize}
+\item Forward Euler scheme (FE), which is an explicit timestepping scheme. Here, 
+one as to take into account that $k\leq ch^2$ where $k$ denotes the timestep size
+and $h$ the local mesh cell diameter.
+\item Backward Euler scheme (BE), which is an implicit timestepping scheme.
+It is strongly A-stable but only from first order and very dissipative. 
+The BE-scheme is well suited for stationary numerical examples.  
+\item Crank-Nicolson scheme (CN), which is of second order, 
+A-stable, has very little dissipation but suffers from case to case from instabilities caused by rough
+initial- and/or boundary data. These properties are due to weak stability (it is not \textit{strongly}
+A-stable).
+\item Shifted (or stabilized) Crank-Nicolson scheme (CN shifted), which is
+  also of second order, but provides global stability.
+\item Fractional-step-$\theta$ scheme (FS). 
+It has second-order accuracy and is strongly A-stable, and therefore
+well-suited for computing solutions with rough data. 
+\end{itemize}

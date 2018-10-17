@@ -1,0 +1,47 @@
+\subsubsection{General problem description}
+
+In this example we consider the following benchmark problem from elasticity theory: \index{stationary PDE} \index{stationary PDE!elasticity equations}
+\begin{equation}
+   (\sigma(u),\varepsilon(\varphi)) = (g,\varphi)_{\Gamma_N}.
+\end{equation}
+Here $\tilde{\Omega}$ is a quadratic domain with side length $200$ mm, where a circular hole with radius $10$ mm around the center is cut out. Using symmetries of the domain, we restrict our actual computational domain $\Omega$ to the upper left quarter of $\tilde{\Omega}$.\\
+In the above equation, $\varepsilon(v) := \frac{1}{2}(\nabla v + \nabla v^T)$ is the symmetric strain tensor, and \index{strain tensor}
+\begin{equation*}
+   \sigma(v) := 2\mu \varepsilon(v)^D + \rho \, tr (\varepsilon(v)) I = 2\mu\varepsilon(v) + \lambda tr(\varepsilon(v)) I,
+\end{equation*}
+denotes the symmetric stress tensor. Here $\tau^D$ is the deviatoric part of a tensor $\tau$, in two dimensions defined as \index{deviator}
+\begin{equation*}
+   \tau^D := \tau - \frac{1}{2} tr(\tau) I,
+\end{equation*}
+and the parameters $\mu$ and $\rho$ are chosen as $\mu = 80193.800283$
+resp. $\rho = (\mu + \lambda) = 190937.589172$. We notice that $\mu$ and
+$\lambda$ denote the usual Lam\'e parameters.\\
+The corner points of our computational domain are in anticlockwise order: $(0,0), (90,0)$, $(100,10), (100,100)$ and $(0,100)$. We prescribe homogeneous Dirichlet boundary conditions in $y$-direction between $(0,0)$ and $(90,0)$ (lower boundary part), homogeneous Dirichlet boundary conditions in $x$-direction between $(100,10)$ and $(100,100)$ (right boundary part), and we interpret the right hand side of equation $(1)$ with $g = 450$ as a boundary condition between $(0,100)$ and $(100,100)$ (upper boundary part).\\
+The goal of our computations is to match the following functional reference values taken from \textit{E. Stein (editor), Error-controlled Adaptive Finite Elements in Solid Mechanics, Wiley (2003), pp. 386 - 387}:
+\begin{table}[h]
+\centering
+\begin{tabular}{lccc}    
+\hline
+ Functional & $u_1$ at $(90,0)$ & $\sigma_{22}$ at $(90,0)$ & $u_2$ at $(100,100)$\\
+\hline 
+ Reference value & 0.021290 & 1388.732343 & 0.20951\\
+\hline
+\end{tabular}
+\end{table}
+\begin{table}[h]
+\centering
+\begin{tabular}{lcc}    
+\hline
+ Functional & $u_1$ at $(0,100)$ & $\int_{(100,100)}^{(0,100)} u_2$\\
+\hline 
+ Reference value & 0.076758 & 20.40344\\
+\hline
+\end{tabular}
+\end{table}
+
+\subsubsection{Program description}
+
+From the previous examples we know how to read a grid from an \textit{.inp} file. The grid of our current example comes from the above mentioned benchmark problem.\\
+Apart from different point values of derivatives of the solution, we want to evaluate an integral over part of the boundary. \index{functional} \index{functional!boundary integral}This is newly implemented in \textit{functionals.h}.\\
+In principle, everything is clear from the preceding examples. We refine the grid globally instead of using an error estimator for local refinement.
+The output of the program reflects again the linearity of the problem (only one Newton step is needed for solution).\\

@@ -1,0 +1,284 @@
+\subsubsection{General problem description}
+This example solves a distributed minimization problem
+and shows how to estimate the error in the cost functional for stationary optimization
+problems. The problem reads:
+\begin{gather*}
+\min J(q,u) = \frac{1}{2} \|u-u^d\|^2 + \frac{\alpha}{2}\|q\|^2\\
+\text{s.t.} (\nabla u,\nabla \phi) = (q+f,\phi)\;\;\forall\,\phi \in H^1_0(\Omega)
+\end{gather*}
+on the domain $\Omega = [0,1]^2$, and the data is chosen as follows:
+\begin{gather*}
+ f = \left(20\pi^2  \sin(4 \pi x) - \frac{1}{\alpha}  \sin(\pi x)\right) \sin(2 \pi y)\\
+ u^d = \left( 5 \pi^2 \sin(\pi x) + \sin(4 \pi x)\right)  \sin(2\pi y)
+\end{gather*}
+and $\alpha = 10^{-3}$.
+Hence its solution is given by:
+\begin{gather*}
+ \overline{q} = \frac{1}{\alpha} \sin(\pi x) \sin(2 \pi y)\\
+ \overline{u} = \sin(4 \pi x) \sin(2 \pi y).
+\end{gather*}
+Thus the exact optimal value of the cost functional can be calculated as 
+\begin{gather*}
+ J^* = J(\overline{q},\overline{u}) = \frac{1}{8}\Bigl(25\pi^4 + \frac{1}{\alpha}\Bigr).
+\end{gather*}
+
+In addition the following functionals are evaluated:
+\begin{gather*}
+  \text{MidPoint: } u(0.5 ; 0.5)\\[2mm]
+  \text{MeanValue: }\int_\Omega u
+\end{gather*}
+
+{
+\subsubsection{Background information and program description}
+In the following, we describe all extensions to the previous problems 
+relevant to solving PDE-based optimization with \dope{}. So far, 
+we had only to implement the \texttt{ElementEquation} and the corresponding
+matrix \texttt{ElementMatrix}. Now, based on the idea of the reduced cost
+functional, we have to compute certain additional equations representing the 
+adjoint, tangent, and adjoint hessian equations
+\texttt{ElementEquation\underline{ }U, ElementEquation\underline{ }UT,
+ElementEquation\underline{ }UTT}
+for the state equation and in the same terms arising from the functional
+itself. Let us shed some light into all equations by giving some background
+information and overview first.
+
+In abstract form, we are given the following optimization problem:
+\begin{equation*}
+J(q,u) \, \rightarrow \, \min , \quad a(q,u)(\psi) = 0 \quad \forall\psi\in V
+\end{equation*}
+Lagrangian:
+\begin{equation*}
+{\cal L}(q,u,z):=J(q,u) - a(q,u)(z)
+\end{equation*}
+Optimality system (KKT system):
+\begin{align*}
+a_u'(q,u)(\phi , z) &= J'_u(q,u)(\phi) \quad \forall \phi\in V \\
+a_q'(q,u)(\chi , z) &= J'_q(q,u)(\chi) \quad \forall \chi\in Q \\
+a(q,u)(\psi) &= 0 \qquad \forall\psi\in V
+\end{align*}
+or equivalently, in terms of the Lagrangian
+\begin{align*}
+{\cal L}'_u(q,u,z)(\phi) &= 0 \quad\forall \phi\in V \quad\text{(Adjoint Equation)} \\
+{\cal L}'_q(q,u,z)(\chi) &= 0 \quad\forall \chi\in V \quad\text{(Gradient Equation)} \\
+{\cal L}'_z(q,u,z)(\psi) &= 0 \quad\forall \psi\in V \quad\text{(State Equation)}
+\end{align*}
+The continuous problem is discretized by a standard Galerkin method using 
+finite dimensional subspaces $Q_h \times V_h \subset Q\times V$:
+\begin{equation*}
+J(q,u) \, \rightarrow \, \min , \quad a(q,u)(\psi) = 0 \quad \forall\psi\in V
+\end{equation*}
+Discrete saddle-point problems
+\begin{align*}
+a_u'(q_h,u_h)(\phi_h , z_h) &= J'_u(q_h,u_h)(\phi_h) \quad \forall \phi_h\in V_h \\
+a_q'(q_h,u_h)(\chi_h , z_h) &= J'_q(q_h,u_h)(\chi_h) \quad \forall \chi_h\in Q_h \\
+a(q_h,u_h)(\psi_h) &= 0 \qquad \forall\psi_h\in V_h
+\end{align*}
+\subsubsection{Solution process}
+In this section, we briefly discuss the solution process for the 
+optimization problem. For further details, we refer to the standard literature.
+The unconstrained optimal control problem is reformulated as follows. 
+We introduce the solution operator $S:Q\rightarrow V$ of the state equation.
+Then:
+\begin{equation*}
+j(q):= J(q,S(q))\, \rightarrow \, \min , \quad a(q,S(q))(\Psi) = 0 \quad 
+\forall \Psi \in V.
+\end{equation*}
+The local existence and sufficient regularity of $S$ is assumed. The 
+necessary optimality conditions of first and second order are
+\begin{equation*}
+j'(q)(\delta q) = 0 , \quad j''(q)(\delta q,\delta q) \geq 0 \quad 
+\forall\delta q\in Q.
+\end{equation*} 
+The derivatives of the reduced functional can be computed using the 
+Lagrangian
+\begin{equation*}
+{\cal L}(q,u,z) =J(q,u) - a(q,u)(z)
+\end{equation*}
+as already introduced. Let $q\in Q$, and the corresponding state $u=S(q)\in V$ 
+be given. To calculate the derivative of the reduced cost functional $j$, 
+we introduce the dual variable
+$z\in V$ solving the\\[3mm]
+%
+\textbf{Dual equation}\\
+\begin{equation*}
+{\cal L}_u'(q,u,z)(\psi) = 0 \quad\forall\psi\in V.
+\end{equation*}
+Then,
+\begin{equation*}
+j'(q)(\delta q) = {\cal L}_q' (q,u,z)(\delta q) \quad \text{for }\delta q\in Q.
+\end{equation*}
+\\[2mm]
+%
+To calculate the second derivatives, we need to solve additional equations.\\
+%
+Let $\delta q\in Q$ be a given direction. Then we search $\delta u\in V$  
+solving the\\[2mm]
+%
+\textbf{Tangent equation}\\
+%
+\begin{equation*}
+{\cal L}_{qz}'' (q,u,z)(\delta q,\phi) + {\cal L}_{uz}'' (q,u,z)(\delta
+u,\phi) = 0
+\quad\forall \phi\in V.
+\end{equation*}
+Further, we have an auxilliary\\[2mm]  
+%
+\textbf{Dual for Hessian equation}
+to find $\delta z\in V$ solving
+\begin{equation*}
+{\cal L}_{qu}'' (q,u,z)(\delta q,\phi) + {\cal L}_{uu}'' 
+(q,u,z)(\delta u,\phi) + {\cal L}_{zu}'' (q,u,z)(\delta z,\phi) =0 
+\quad\forall \phi\in V.
+\end{equation*}
+
+Then, for $\delta r\in Q$, we can express the second derivatives of $j$ by
+\begin{align*}
+j''(q)(\delta q, \delta r) 
+&= {\cal L}_{qq}'' (q,u,z)(\delta q,\delta r) \\
+&\;\;\;\;+ {\cal L}_{uq}'' (q,u,z)(\delta u,\delta r) \\ 
+&\;\;\;\;+ {\cal L}_{zq}'' (q,u,z)(\delta z,\delta r).
+\end{align*}
+With these terms, we can calculate the Newton direction $\delta q$, at a given 
+iterate $q^n$, as solution to the problem
+\begin{align*}
+j''(q^n )(\delta q,\chi ) =&\, -j'(q^n)(\chi) \quad\forall\chi \in Q.
+\end{align*}
+
+Moreover, we would like to work in the Hilbert space $Q$. However, the derivative 
+$j'(q) \in H^*$ only. Hence, we need to calculate the Riesz representation 
+for the gradient $\nabla j(q) \in H$ using the definition:
+\[
+ (\nabla j(q),\delta q)_Q = j'(q)(\delta q) \quad \forall\,\delta q\in Q.
+\]
+In the given example, $Q = L^2(\Omega)$ and hence the scalar product will be the
+standard $L^2$-inner product. Simillarly, we can define the Hessian operator 
+$H(q) \in \mathcal L(Q,Q)$ by defining
+\[
+ (H(q)\tau q,\delta q)_Q = j''(q)(\tau q,\delta q) \quad \forall\,\delta q,\tau q\in Q.
+\]
+}
+
+\subsubsection{Implementation in \dope{}}
+From the previous details, and the definition of the Lagrangian and its 
+derivatives it is clear, that the user has to provide the respective derivatives. 
+Since the Lagrangian consists of the PDE and the cost functional it 
+is sufficient to provide the respective derivatives, while \texttt{DOpElib} 
+will assemble them as required.
+Test functions for vector valued terms will be denoted by an index $i$ while 
+matrix valued terms are indexed in $i$ and $j$. Test functions in the control 
+space $Q$ are denoted as $\phi^q_i$ while those in the state space $V$ are denoted 
+as $\phi_i$.
+
+To solve the linear equations the following matrices are needed
+\begin{align*}
+&\texttt{ElementMatrix} 
+&\Leftrightarrow \quad a_{i,j} &= a'_u(q,u)(\phi_j,\phi_i), \\
+&\texttt{ControlElementMatrix}  
+&\Leftrightarrow \quad a_{i,j} &= (\phi^q_j, \phi^q_i)_Q.
+\end{align*}
+The first one is required for all primal and dual PDE solves, while the second one is needed 
+to calculate the Riesz representation of the derivatives of $j$. 
+If desired, the matrix for the adjoint PDEs can be provided separately as 
+\texttt{ElementMatrix\underline{ }T}, but otherwise this will be 
+calculated automatically from the primal matrix.
+
+Additional terms are needed to calculate the corresponding 
+right hand sides. These are for the PDE the following: 
+{
+\begin{align*}
+&\texttt{ElementEquation}\text{ (state)} &\Leftrightarrow &\quad a(q,u)(\phi_i), \\
+&\texttt{ElementRightHandSide}\text{ (state)}  &\Leftrightarrow &\quad f(\phi_i), \\
+&\texttt{ControlElementEquation}\text{ (gradient or hessian)}  &\Leftrightarrow &\quad (\nabla j(q),\phi^q_i)_Q,
+\end{align*}
+as well as 
+\begin{align*}
+&\texttt{ElementEquation\underline{ }U}\text{ (adjoint)} 
+&\Leftrightarrow &\quad a_u'(q,u)(\phi_i, z),\\
+&\texttt{ElementEquation\underline{ }Q}\text{ (gradient)} 
+&\Leftrightarrow &\quad a_q'(q,u)(\phi^q_i,z), \\
+\end{align*}
+the terms
+\begin{align*}
+&\texttt{ElementEquation\underline{ }UU}\text{ (adjoint hessian)}  
+&\Leftrightarrow &\quad a_{uu}''(q,u)(\delta u, \phi_i, z),\\
+&\texttt{ElementEquation\underline{ }UQ}\text{ (hessian)}
+&\Leftrightarrow &\quad a_{uq}''(q,u)(\delta u, \phi^q_i, z),\\
+&\texttt{ElementEquation\underline{ }QU}\text{ (adjoint hessian)} 
+&\Leftrightarrow &\quad a_{qu}''(q,u)(\delta q, \phi_i, z), \\
+&\texttt{ElementEquation\underline{ }QQ}\text{ (hessian)} 
+&\Leftrightarrow &\quad a_{qq}''(q,u)(\delta q, \phi^q_i, z),\\
+&\texttt{ElementEquation\underline{ }UT}\text{ (tangent)}  
+&\Leftrightarrow &\quad a_u'(q,u)(\delta u, \phi_i), \\
+&\texttt{ElementEquation\underline{ }QT}\text{ (tangent)}  
+&\Leftrightarrow &\quad a_q'(q,u)(\delta q, \phi_i),
+\end{align*}
+and finally
+\begin{align*}
+&\texttt{ElementEquation\underline{ }UTT}\text{ (adjoint hessian)} \quad 
+&\Leftrightarrow &\quad  a_u'(q,u)(\phi_i, \delta z), \\
+&\texttt{ElementEquation\underline{ }QTT}\text{ (hessian)} \quad 
+&\Leftrightarrow &\quad a_{q}'(q,u)(\phi^q_i,\delta z).
+\end{align*}}
+As for PDE problems, it is up to the user to decide if the \texttt{ElementRightHandSide}
+is used, or if the terms are included in the \texttt{ElementEquation}. 
+
+For the cost functional, we have to provide{
+\begin{align*}
+&\texttt{ElementValue}\text{ (all)}   &\Leftrightarrow &\quad J(q,u), \\
+&\texttt{ElementValue\underline{ }U}\text{ (all)}    &\Leftrightarrow &\quad J_u'(q,u)(\phi_i), \\
+&\texttt{ElementValue\underline{ }Q}\text{ (all)}    &\Leftrightarrow &\quad J_q'(q,u)(\phi_i), \\
+&\texttt{ElementValue\underline{ }UU}\text{ (all)}  &\Leftrightarrow &\quad J_{uu}''(q,u)(\delta u, \phi_i), \\
+&\texttt{ElementValue\underline{ }UQ}\text{ (all)}  &\Leftrightarrow &\quad J_{uq}''(q,u)(\delta u, \phi^q_i), \\
+&\texttt{ElementValue\underline{ }QU}\text{ (all)}   &\Leftrightarrow &\quad J_{qu}''(q,u)(\delta q, \phi_i), \\
+&\texttt{ElementValue\underline{ }QQ}\text{ (all)}  &\Leftrightarrow &\quad J_{qq}''(q,u)(\delta q, \phi^q_i).
+\end{align*}}
+
+Clearly, if the PDE or cost functional contains other terms, such as boundary or face integrals 
+corresponding derivatives must be provided as well.
+
+\subsubsection{Back to the specific equations in this example}
+We have
+\begin{align*}
+a(q,u)(\phi) &= (\nabla u, \nabla\phi) - (q + f, \phi),\\
+a_u'(q,u)(\phi, z) &= (\nabla\phi, \nabla z),\\
+a_u'(q,u)(\delta u, \phi) &= (\nabla\delta u, \nabla\phi),\\
+a_u'(q,u)(\phi, \delta z) &= (\nabla\phi, \nabla\delta z),\\
+a_q'(q,u)(\delta q, \phi) &= -(z,\psi^q),\\
+a_q'(q,u)(\delta q, \phi) &= (\delta q,\phi),\\
+a_{q}'(q,u)(\delta q,\delta z) &= - (\delta z,\psi^q).
+\end{align*}
+%
+For the cost functional, we have the following terms:
+\begin{align*}
+J(q,u) &= \frac{1}{2} \|u-u^d\|^2 + \frac{\alpha}{2}\|q\|^2,\\
+J_u'(q,u)(\phi) &= (u-u^d, \phi),\\
+J_q'(q,u)(\phi) &= \alpha (q,\psi^q),\\
+J_{uu}''(q,u)(\psi, \phi) &= (\delta u, \phi).
+\end{align*}
+All other terms, specifically mixed terms with $QU$ etc. are zero in this
+example. 
+
+\subsubsection{\texttt{main.cc}}
+Finally, the main file of the optimization examples does not look very much 
+different than for pure PDE computations - which is one of the crucial aims 
+of our library. 
+Here, instead of using a \texttt{pdeproblemcontainer}, we use 
+now an \texttt{optproblemcontainer} which can assemble all additionally needed informations,
+such as adjoint and tangent PDEs. 
+Furthermore, we define \texttt{ReducedNewtonAlgorithm} and 
+\texttt{ReducedTrustregion\underline{ }NewtonAlgorithm}
+to solve the optimization problem with a linesearch and a trust-region Newton algorithm.
+Of course one would be sufficient, but we wanted to show how to change optimization 
+solvers easily using \texttt{DOpElib}.\\
+Next, in the body of the main file, we introduce a second FE function for the 
+control variable. Then, we define 
+a \texttt{COSTFUNCTIONAL}. Finally, the problem is either solved 
+by calling \texttt{Alg.Solve(q)} and/or the user might check if the 
+derivatives are implemented correctly by calling 
+\texttt{Alg.CheckGrads} or \texttt{Alg.CheckHessian}. The latter 
+two functionalities are highly recommended to check your
+implementation before wondering about your results.\\
+Finally, this example uses a DWR-error estimator to estimate the 
+error made in the cost functional. In contrast to the 
+error estimation for PDEs here, we have to include the error in the
+control by using the \texttt{HigherOrderDWRContainerControl}.

@@ -1,0 +1,18 @@
+\subsubsection{General problem description}
+In this problem we solve the simple vector valued Laplace equation in 2d
+on the unit square $\Omega=[0,1]^2$, i.e. in strong formulation we look for $u=(u_1,u_2)$ s.t.
+\begin{align*}
+-\Delta u =& f &&\text{in }\Omega.
+\end{align*}
+We set zero Dirichlet values on $\partial \Gamma$ and choose $f=(1,1)$. The
+classical example of a PDE.
+
+\begin{remark}[Why this example?]
+Originally, \dope{} was designed for coupled and nonlinear problems
+with possible PDE-based optimization extensions. Later, we decided 
+to add the most simplest PDE (the Laplace/Poisson equation) 
+in order to demonstrate how DOpE treats
+this well-known example. In addition, the first-time user might 
+start here to get a feeling for \dope{} and its capabilities.
+\end{remark}
+

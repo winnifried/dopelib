@@ -1,0 +1,26 @@
+\subsubsection{General problem description}
+This example solves the minimization problem
+\begin{gather*}
+\min J(q,u) = \frac{1}{2} \|u-u^d\|^2 + \frac{\alpha}{2}\|q\|^2\\
+\text{s.t. } (\nabla u,\nabla \phi) = (f,\phi)\;\;\forall\,\phi \in H^1_0(\Omega; \mathbb R^2)\\
+\end{gather*}
+on the domain $\Omega = [0,1]^2$. In addition, we set the Dirichlet data of the state on the boundary as follows
+\begin{gather*}
+ u_0(0,y) = q_0,\quad u_0(1,y) = q_1,\quad u_0(x,0) = q_2,\quad u_0(x,1) = q_3,\\
+ u_1 = q_4^3.
+\end{gather*}
+The data is chosen as follows:
+\begin{align*}
+ f &= \left(\begin{matrix}20\pi^2  \sin( \pi x) \sin(\pi y)\\1 \end{matrix}\right)\\
+ u^d&= \left(\begin{matrix}\sin( \pi x) \sin(\pi y)*x\\x \end{matrix}\right)
+\end{align*}
+with $\alpha = 10$.
+\subsubsection{Program description}
+The control in the Dirichlet boundary values is incorporated via the
+class \texttt{LocalDirichletData} which is defined in the
+file \textit{localdirichletdata.h}. The class is then given to
+the \texttt{OptProblemContainer} as a template argument. This is all that is
+needed to use the control in the Dirichlet boundary values. 
+In the main file and the localpde program, we work still with the 
+\texttt{FE\underline{}Nothing} element to assign the five controls.
+

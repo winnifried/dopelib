@@ -1,0 +1,19 @@
+\subsubsection{General problem description}
+This example solves the isothermal Euler equations
+\begin{align*}
+ \partial_t(\rho v) + \partial_x (p(\rho)+ \rho v^2) &= - \frac{\lambda}{2D} v|v| - gh' \rho\\
+ \partial_t \rho + \partial_x (\rho v) &=0
+\end{align*}
+on the set $t \in (0,1)$, $x \in (0,2)$.
+The relation 
+\[
+p(\rho) = \frac{RT\, \rho}{1-\alpha RT\,\rho}
+\]
+depends on the user provided data for gas-constant $R$ and temperature $T$ as well as a parameter 
+$\alpha$ ($\alpha = 0$ for ideal gases).
+The other parameters in the system to be provided by the user are 
+the friction parameter $\lambda$, the diameter $D$ of the pipe, the gravity $g$ and the slope $h'$ of the 
+pipe. 
+
+The discretization is done by a dG-method in space for the variables 
+$w = \rho v$ and $\rho$.

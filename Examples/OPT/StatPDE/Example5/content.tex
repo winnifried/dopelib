@@ -1,0 +1,35 @@
+\subsubsection{General problem description}
+This example solves the distributed minimization problem
+\begin{gather*}
+\min J(q,u) = \frac{1}{2} \|u-u^d\|^2 + \frac{\alpha}{2}\|q\|^2\\
+\text{s.t.} (\nabla u,\nabla \phi) = (q+f,\phi)\;\;\forall\,\phi \in H^1_0(\Omega)
+\end{gather*}
+on the domain $\Omega = [0,1]^2$, and the data is chosen as follows:
+\begin{gather*}
+ f = \left(20\pi^2  \sin(4 \pi x) - \frac{1}{\alpha}  \sin(\pi x)\right) \sin(2 \pi y)\\
+ u^d = \left( 5 \pi^2 \sin(\pi x) + \sin(4 \pi x)\right)  \sin(2\pi y)
+\end{gather*}
+and $\alpha = 10^{-3}$.
+Hence its solution is given by:
+\begin{gather*}
+ \overline{q} = \frac{1}{\alpha} \sin(\pi x) \sin(2 \pi y)\\
+ \overline{u} = \sin(4 \pi x) \sin(2 \pi y)
+\end{gather*}
+
+In addition, the following functionals are evaluated:
+\begin{align*}
+  &\text{MidPoint: } u_h(0.125 ; 0.75)&&
+  \text{ L1-Value: }\int_\Omega |u_h|\\
+  &\text{QError: }\int_\Omega |q_h-\overline{q}|^2
+  &&\text{  UError: }\int_\Omega |u_h-\overline{u}|^2
+\end{align*}
+ 
+The important new feature is that we can now use two different meshes for control and state variable.
+This is tested first for globally refined meshes, and then for locally refined meshes with different refinements for the control and state variable.
+\subsubsection{Program description}
+In order to use different meshes for control and state we need to use the multimesh variants of \texttt{ElementDataContainer}, \texttt{FaceDataContainer} and \texttt{Integrator} and we have to choose a space time handler capable of managing multiple meshes, so we use 
+
+\texttt{MethodOfLines\_MultiMesh\_SpaceTimeHandler}.
+
+The requirement for the control and state mesh is that they have a common coarse grid, so the space time handler gets only one mesh (to ensure a common coarse grid), but this gets copied internally so that we have two separate meshes for control and state. We can then separately refine the mesh for control and state (see \texttt{RefineControlSpace} and  \texttt{RefineStateSpace}).
+

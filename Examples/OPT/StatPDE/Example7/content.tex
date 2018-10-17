@@ -1,0 +1,46 @@
+\subsubsection{General problem description}
+This example implements the minimum compliance problem for the thickness optimization 
+of an MBB-Beam. Using the MMA-Method of K. Svanberg together with an augmented Lagrangian 
+approach for the subproblems following M. Stingl.
+%\todo{Gleichung, reference}
+
+The implementation is done using the following three additional files:
+
+\begin{itemize}
+\item \texttt{generalized\underline{ }mma\underline{ }algorithm.h}
+  An implementation of the MMA-Algorithm for structural optimization using an augmented
+  Lagrangian formulation for the subproblems. The subproblem is implemented using the 
+  special purpose\\ file \texttt{augmentedlagrangianproblem.h}.
+\item \texttt{augmentedlagrangianproblem.h} The problem container 
+  for the augmented Lagrangian problem.
+\item \texttt{voidreducedproblem.h} A wrapper file that eliminates $u$ 
+  if it is not present anyways. This is used so that we can use the same routines to 
+  solve problems that have no PDE constraint. This is used to fit the augmentedlagrangian 
+  problem into our framework.
+\end{itemize}
+
+
+\subsubsection{Program description}
+In addition to the previous Example \ref{OPT_Stat_Box_controlconstraints_SNOPT}, 
+we consider now in addition one global constraint. To calculate the correct 
+storrage needed we use the 
+second argument of \texttt{constraints(lcc, 1)}, which is now one. 
+
+We use 
+\texttt{localconstraints.h} and \texttt{localconstraintaccessor.h} to impose 
+all constraints. First, we have again one control block with a lower and 
+an upper bound, 
+\[
+\rho_{min} \leq q \leq \rho_{max}
+\]
+with $\rho_{min} = 10^{-4}$ and $\rho_{max} = 1$ ($\rho$ denotes the density
+of the material). These are implemented in \texttt{localconstraintaccessor.h}.
+The global constraint is the maximum volume of the material,
+which should remain constant with the value $V_{\max} = 0.5$, i.e.,
+\[
+ \int_\Omega q - V_{\max} \,dx \le 0.
+\]
+Its implementation is 
+provided in \texttt{localconstraints.h} where the global constraint is handled as 
+a functional, which again is normalized to be nonpositive if the control is feasible.
+

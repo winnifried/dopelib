@@ -1,0 +1,106 @@
+\subsubsection{General problem description}
+This example solves the distributed minimization problem
+\begin{gather*}
+\min J(q,u) = \frac{1}{2} \|u-u^d\|^2 + \frac{\alpha}{2}\|q\|^2\\
+\text{s.t.} (\nabla u,\nabla \phi) = (q+f,\phi)\;\;\forall\,\phi \in H^1_0(\Omega)\\
+\text{s.t.} -500 \le q \le 500\;\text{a.e. in }\Omega
+\end{gather*}
+on the domain $\Omega = [0,1]^2$, and the data is chosen as follows:
+\begin{gather*}
+ f = \left(20\pi^2  \sin(4 \pi x) - \frac{1}{\alpha}  \sin(\pi x)\right) \sin(2 \pi y)\\
+ u^d = \left( 5 \pi^2 \sin(\pi x) + \sin(4 \pi x)\right)  \sin(2\pi y)
+\end{gather*}
+and $\alpha = 10^{-3}$.
+
+In addition the following functionals are evaluated:
+\begin{gather*}
+  \text{MidPoint: } u(0.125 ; 0.75)\\[2mm]
+  \text{MeanValue: }\int_\Omega |u|
+\end{gather*}
+
+
+\subsubsection{Program description}
+
+The Problem is similar to that of \texttt{OPT/StatPDE/Example1} except for the box 
+control constraints.
+The implementation of these constraints is taken care of in the main file
+(where we add a constrained description \texttt{lcc}) and in the
+\texttt{localconstraints.h} file. This files serves to implement the actual constraints.
+ 
+In this example, we introduce the handling of \textit{local} constraints
+whereas the mixture of local and \textit{global} constraints will be discussed
+in the Example \ref{OPT_Stat_MBB-Beam}. 
+%
+First, we implement the upper and lower control bounds in 
+\texttt{localconstraints.h}, i.e,
+\[
+q_{\min} \leq q \leq q_{\max}.
+\]
+with $q_{\min} = -500$ and $q_{\max} = 500$.
+The constraints are `local', by which we mean the constraints are imposed 
+on the nodal values of the control vector. Thus, in the constraint 
+description \texttt{localconstraints.h},
+these vectors are manipulated directly without additional integration. We 
+note that the constraints need to be written such, that a feasible control
+generates non positive entried, i.e., we 
+calculate the vector
+\[
+ \mathcal C(q) = \begin{pmatrix}
+   q_{\min} - q\\q-q_{\max}
+ \end{pmatrix}.
+ \]
+%
+Second, the \texttt{lcc} vector is used to describe the amount of unknowns that 
+need to be reserved to store the constraints, and, eventually, corresponding 
+Lagrange multipliers. 
+Further information can be found in \texttt{basic/constraints.h}. 
+In our example, we have only one block in the control (The control is stored in 
+a \texttt{deal.II::BlockVector}). Hence, the \texttt{lcc} vector has a length of 
+one. 
+The only entry \texttt{lcc[0]} is a vector of size two (in the case of more than one 
+control block, each block would be given a size of $2$). 
+Each of the two entries has a specific meaning. 
+The first entry \texttt{lcc[0][\textcolor{blue}{0}] = 1} tells 
+you how many local entries in the present block are locally constrained, here 
+it is one local entry. ({\em Note that this entry will typically be one. 
+it is not one  would be if we have constraints of the type $q_{i} + q_{i+1} \le 1$ for each 
+even $i$, or similar combinations of multiple entries in the control vector.})
+
+The second entry \texttt{lcc[0][\textcolor{blue}{1}] = 2}, determines the number of 
+constraints on this local entry. Here, we impose 
+a lower and an upper bound, i.e., we give 2 constraints.
+This information tells the SpaceTimeHandler, that the vector 
+$\mathcal C(q)$ needs exactely twice the amount of unknowns as the vector $q$.
+In general, the space needed for $\mathcal C(q)$ is given as 
+\[
+\frac{\text{\texttt{lcc[0][1]}}}{\text{\texttt{lcc[0][0]}}}
+\]
+times the unknowns for the control.
+
+\subsubsection{External optimization solver}
+The problem is solved using the optimization library IPOPT that you can obtain for free. To use it 
+a correct link to the ipopt library needs to be created in  \texttt{DOpE/ThirdPartyLibs} by the name 
+\texttt{ipopt}, i.e., you should have the file
+\texttt{DOpE/ThirdPartyLibs/ipopt} pointing to the ipopt directory. If you have not done this you can compile the
+example but when running the example you will only get an error message like\\
+\texttt{Warning: During execution of `Reduced\underline{ }IpoptAlgorithm::Solve`\\ the following Problem occurred!\\
+To use this algorithm you need to have IPOPT installed! \\To use this set the WITH\underline{ }IPOPT CompilerFlag.}
+If you receive this message and have the ipopt installation complete, you
+might have overseen to add ipopt to your \texttt{LD\underline{ }LIBRARY\underline{ }PATH}:
+\begin{lstlisting}
+**************************************************************
+                 Installation complete!
+Add /home/..../dopelib-2.0/ThirdPartyLibs/ipopt/lib64
+    to your $LD_LIBRARY_PATH variable
+**************************************************************
+\end{lstlisting}
+
+
+Alternatively the commercial optimization library SNOPT can be used in this example.
+In order to use this library you need to install SNOPT on your computer and then generate a symlink to 
+the snopt directory (where you have the libs and the header files) 
+in the \texttt{DOpE/ThirdPartyLibs} directory named \texttt{snopt}, i.e., you should have the file
+\texttt{DOpE/ThirdPartyLibs/snopt} pointing to the snopt directory. If you have not done this you can compile the
+example but when running the example you will only get an error message like\\
+\texttt{Warning: During execution of `Reduced\underline{ }SnoptAlgorithm::Solve`\\ the following Problem occurred!\\
+To use this algorithm you need to have SNOPT installed! \\To use this set the WITH\underline{ }SNOPT CompilerFlag.} 

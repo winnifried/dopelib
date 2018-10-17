@@ -1,0 +1,39 @@
+\subsubsection{General problem description}
+This example shows the use higher order mappings in \texttt{DOpElib}. To this end, we solve a simple Laplace equation
+\begin{align*}
+-\Delta u &= -4 \quad\text{ in } \Omega
+\end{align*}
+with the analytical solution
+\begin{align*}
+u = {x^2 + y^2},
+\end{align*}
+and the Dirichlet Conditions on $u=1$, where the domain is given by a circle with radius 1 and the center located in the origin.
+
+We compute the $L^2$-norm of the error and, additionally, we evaluate a functional which does not depend on the solution at all.
+We integrate the constant $\frac 12$ once over the boundary of the domain. The result is an approximation of $\pi$.
+
+All this is standard and would not justify an additional example, however we solve the equation and the functional not one but two
+times. First with the standard Q1-mapping, the second time we use a higher order mapping. The exact order can be determined by the 
+parameter file, the preset is Q2-mapping. At the end, we gather the errors and convergence rates over some refinement cycles
+in a nice table and notice the higher order of convergence for the higher order mapping solutions. This is due to the fact that
+we can approximate the circular boundary much better by a quadratic mapping.
+\subsubsection{Program description}
+In this section we want to focus on what you have to do if you want to enhance your existing code to use higher order mappings,
+which is actually pretty simple.
+
+You have to include the file
+\begin{verbatim}
+mapping_wrapper.h
+\end{verbatim}
+
+and create a mapping of the desired order by
+\begin{verbatim}
+  DOpEWrapper::Mapping<dim, DOFHANDLER> mapping(order_of_mapping);
+\end{verbatim}
+
+The last step is to give the mapping to the DoFHandler:
+\begin{verbatim}
+MethodOfLines_StateSpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN,VECTOR, 2> 
+	  DOFH(triangulation, mapping, state_fe);
+\end{verbatim}
+The rest of the program is as usual.

@@ -1,0 +1,59 @@
+# Listing of Parameters
+# ---------------------
+subsection newtonsolver parameters
+  # maximal number of linesearch steps
+  set line_maxiter         = 4
+
+  # reduction rate for the linesearch damping paramete
+  set linesearch_rho       = 0.9
+
+  # global tolerance for the newton iteration
+  set nonlinear_global_tol = 1.e-12
+
+  # maximal number of newton iterations
+  set nonlinear_maxiter    = 10
+
+  # minimal  newton reduction, if actual reduction is less, matrix is rebuild
+  set nonlinear_rho        = 0.1
+
+  # relative tolerance for the newton iteration
+  set nonlinear_tol        = 1.e-10
+end
+
+
+subsection output parameters
+  # File format for the output of control variables
+  set control_file_format     = .vtk
+
+  # Log Debug Information
+  set debug                   = false
+
+  # Correlation of the output and machine precision
+  set eps_machine_set_by_user = 0.0
+
+  # File format for the output of solution variables
+  set file_format             = .vtk
+
+  # Iteration Counters that should not reflect in the outputname, seperated by
+  # `;`
+  set ignore_iterations       = 
+
+  # Name of the logfile
+  set logfile                 = dope.log
+
+  # Do not write files whose name contains a substring given here by a list of
+  # `;` separated words
+  set never_write_list        = 
+
+  # Sets the precision of the output numbers
+  set number_precision        = 5
+
+  # Defines what strings should be printed, the higher the number the more
+  # output
+  set printlevel              = -1
+
+  # Directory where the output goes to
+  set results_dir             = Results/
+end
+
+

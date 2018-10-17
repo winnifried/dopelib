@@ -1,0 +1,121 @@
+\subsubsection{General problem description}
+\index{stationary PDE}
+In this example we consider the stationary incompressible Stokes equation \index{stationary PDE!Stokes equation}. Here,
+we use the symmetric stress tensor which has a little consequence when using 
+the do-nothing outflow condition. In strong formulation we have
+\begin{align} \label{eq:strong}
+-\frac{1}{2}\nabla\cdot (\nabla v + \nabla v^{T}) + \nabla p &= f \\ 
+\nabla \cdot v &= 0 \notag
+\end{align} 
+on the domain $\Omega = [-6,6]\times [0,2]$. We split $\partial \Omega = \Gamma_D \cup \Gamma_{out}$. The right hand side of the channel is $\Gamma_{out}$ on which we describe the free outflow condition, on the rest of the boundary we prescribe Dirichlet values (An parabolic inflow on the left hand side and zero on the upper and lower channel walls). We choose for simplicity $f=0$.\\
+
+As code verification, we evaluate two different types of functionals. 
+First a point functional measuring the $x$-velocity and 
+a flux functional 
+\[
+\int_{\Gamma_{out}} v\cdot n \, ds,
+\]
+on the outflow boundary. Both a described in the 
+\texttt{functionals.h} file as described below.
+
+\subsubsection{Program structure}
+
+In all examples, the whole program is split up into several files for the sake of readability. These files are always denoted in the same way, so we only have to explain the general structure in this first example, whereas in the following examples, we will only point out differences to the current one. The content of the single files will be described in more detail below.\\
+
+If we do not use one of the standard grids given in the deal.II library, we can read a grid from an input file. In our example, the domain $\Omega = [-6,6]\times [0,2]$ is given in the \textit{channel.inp} file, where all nodes, elements and boundary lines are listed explicitly and the boundary is divided into disjoint parts by attributing different colors to the boundary lines.\index{grid}\\
+
+Certain parameters occurring during the solution process, e.g. error tolerances or the maximum number of iterations in an iterative solution procedure, are fixed in a parameter file called \textit{dope.prm}. This parameter file comprises several subsections corresponding to different solver components.\index{parameters}\\
+
+In the \textit{functionals.h} file we declare classes for different scalar quantities of interest (described mathematically as functionals) which we want to evaluate during the solution process.\index{functional}\\
+
+The \textit{localfunctional.h} file is relevant only if we want to solve an optimal control problem. In this case, it contains the cost functional, whereas the file is not needed for the forward solution of PDEs. We will get back to this later in the context of optimal control problems.\index{cost functional}\\
+
+All information about the PDE problem (in the optimal control case about the constraining PDE) is included in the \textit{localpde.h} file. In a class called \texttt{LocalPDE}, we build up the element equation, the element matrix and element right hand side as well as the boundary equation, boundary matrix and boundary right hand side. Later on, the integrator collects this local information and creates the global vectors and matrices.\\
+
+The most important part of each example is the \textit{main.cc} file which contains the \texttt{int main()} function. Here we create objects of all classes described above and actually solve the respective problem.\\
+ 
+\vspace{0.2cm}
+
+\textbf{The} functionals.h \textbf{file}\\
+
+\vspace{0.2cm}
+\index{functional evaluation}
+Here, we declare all quantities of interest (functionals), e.g. point values, drag, lift, mean values of certain quantities over a subdomain etc. \\
+Each of these functionals is declared as a class of its own, but in \texttt{DOpElib} all classes are derived from a so-called \texttt{FunctionalInterface} class.\\
+As already mentioned previsously, in the current example we declare functionals for point values of the velocity and for the flux at the outflow boundary of the channel.\index{functional!point value} \index{functional!boundary flux}\\
+
+\vspace{0.2cm}
+
+\textbf{The} localpde.h \textbf{file}\\
+
+\vspace{0.2cm}
+
+The \textit{LocalPDE} is derived from a \texttt{PDEInterface} class. It comprises several functions which build up the element and boundary equations, matrices and right hand sides. The weak formulation of problem \eqref{eq:strong} with $f=0$ is
+\begin{equation} \label{eq:weak}
+   \frac{1}{2}(\nabla v, \nabla \varphi)_\Omega + \frac{1}{2}(\nabla v^{T}, \nabla \varphi)_\Omega - (p, \nabla \cdot \varphi)_\Omega + (\nabla \cdot v, \psi)_\Omega - (n\cdot \nabla v^T,\phi)_{\Gamma_{out}} = 0.
+\end{equation}
+\begin{remark}
+Note the additional term on $\Gamma_{out}$, which is a consequence of the use of the symmetric stress tensor together with the free outflow condition.
+\end{remark}
+This problem is vector valued, i.e. the velocity variable $v$ has two components and the pressure variable $p$ is a scalar. For the implementation, we use a vector valued solution variable with three components, where the distinction between velocity and pressure is done by use of the deal.II \texttt{FEValuesExtractors} class. \index{vector-valued problem}\\
+Furthermore, in \texttt{DOpElib} we always interpret the problems in the context of a Newton method. Usually, a PDE in its weak formulation is given as
+\begin{equation*}
+   a(u;\varphi) = f(\varphi).
+\end{equation*}
+The left hand side is implemented in the \texttt{ElementEquation} function, the right hand side is implemented in the \texttt{ElementRightHandSide} function (which is unused in this example, because $f=0$).
+\begin{remark}
+The weak formulation might contain some terms on faces or (parts of) the boundary. DOpE is able to handle these via \texttt{BoundaryEquation}, \texttt{BoundaryRightHandSide} etc.. To keep things simple, we neglect these terms in this introduction.
+\end{remark}
+To apply Newton's method, this problem is linearized: on the left hand side, we have the derivative of the (semilinear) form $a(\cdot;\cdot)$ with respect to the solution variable $u$, and the right hand side is the residual of the weak formulation:
+\begin{equation*}
+   a_u'(u;u^+,\varphi) = -a(u;\varphi) + f(\varphi).
+\end{equation*}
+In the \texttt{ElementMatrix} function, we implement the following matrix $A$ as representation of the derivative on the left hand side:
+\begin{equation*}
+  A = (a_u'(u;\varphi_i,\varphi_j))_{j,i=1}^N
+\end{equation*}
+with the number $N$ of the degrees of freedom. Similarly, the \texttt{ElementEquation} contains the vector
+\begin{equation*}
+  a = a(u;\varphi_i)_{i=1}^{N},
+\end{equation*}
+and the \texttt{ElementRightHandSide} in the case $f \neq 0$ would contain a vector
+\begin{equation*}
+  \tilde{f} = (f;\varphi_i)_{i=1}^N.
+\end{equation*}
+The system of equations which is then actually solved is
+\begin{equation*}
+  A\tilde{u}^+ = -a + \tilde{f}.
+\end{equation*}
+Because of the linearity of equation \eqref{eq:weak}, there is almost no difference between the two functions.\index{Newton's method}\\
+
+\vspace{0.1cm}
+
+\textit{At this point, it is important to note that DOpE interprets any given problem as a nonlinear one which is solved by Newton's method; the special case of linear problems is included into this general framework.}\\
+
+\vspace{0.2cm}
+
+\textbf{The} main.cc \textbf{file}\\
+
+\vspace{0.2cm}
+
+First of all, several header files have to be included that are needed during the solution process. We divide these includes into blocks corresponding to DOpE headers, deal.II headers, C++ headers and header files of the example itself (like the ones mentioned above).\\
+Furthermore, we define names for certain objects via \texttt{typedef} which act as abbreviations in order to keep the code readable. In our case, these are \texttt{OP, IDC, INTEGRATOR, LINEARSOLVER, NLS, SSOLVER} and \texttt{STH}.\\
+In the \texttt{int main()} function, we first create a possibility to read the parameter values from the \textit{dope.prm} file. Then there are several standard steps for finite element codes like
+\begin{itemize}
+\item
+definition of a triangulation and create a grid object (which we read from the \textit{channel.inp} file)
+\item
+creation of finite element objects for the state and the control and of quadrature formula objects
+\end{itemize}
+and in addition, we 
+\begin{itemize}
+\item
+create objects of the \texttt{LocalPDE} class and of the different functional classes declared in the \textit{functionals.h} file.
+\end{itemize}
+\begin{remark}
+Up to now  we have to create a pseudo time even for stationary problems. The \\\texttt{MethodOfLines\underline{ }StateSpaceTimeHandler} object (\texttt{DOFH}) which is needed for the initialization of \texttt{OP} requires a vector in which timepoints are specified. However, this is again merely a dummy variable, for we do not actually apply a time stepping method in the stationary case. This will also be removed in future versions of DOpE.\\
+\end{remark}
+Before we initialize the \texttt{SSolver} object and actually solve the problem, we have to set the correct boundary conditions. Via the \texttt{compmask} vector, we ensure that the boundary conditions are set only for the velocity components of our solution vector. We set homogeneous Dirichlet values at the upper and lower boundaries of the channel. The inflow is described by a parabolic profile at the left boundary (the corresponding function class is declared in the \textit{myfunctions.cc} file), whereas we do not prescribe anything at the outflow boundary (so-called do-nothing condition).\\
+The output of the program (the two functional values) is rather unspectacular; as the problem is linear, the solution is computed within one Newton step.
+
+

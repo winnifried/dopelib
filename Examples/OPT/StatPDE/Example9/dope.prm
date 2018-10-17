@@ -1,0 +1,103 @@
+# Listing of Parameters
+# ---------------------
+
+subsection main parameters
+      set global_refinement = 1
+      set initial_control   = 1.0
+      set solve_or_check    = solve
+end
+
+subsection Local PDE parameters
+	   set mu_regularization = 1.0e-1
+	   set density_fluid	 = 1.0e+3
+	   set density_structure = 1.0e+3
+	   set viscosity	 = 1.0e-3
+	   set alpha_u		 = 1.0e-3
+	   set alpha_p		 = 1.0	   
+	   set mu		 = 0.5e+6	   
+	   set poisson_ratio_nu  = 0.4
+	   set control_constant	 = 14.0
+end
+
+subsection My functions parameters
+	   set mean_inflow_velocity = 0.2
+
+end
+
+
+# normal state problem
+subsection newtonsolver parameters
+  # maximal number of linesearch steps
+  set line_maxiter         = 10
+
+  # reduction rate for the linesearch damping paramete
+  set linesearch_rho       = 0.6
+
+  # global tolerance for the newton iteration
+  # for state Newton solver and Hessian Newton soler
+  # => all linear solvers
+  set nonlinear_global_tol = 1.e-10
+
+  # maximal number of newton iterations
+  set nonlinear_maxiter    = 15
+
+  # minimal  newton reduction, if actual reduction is less, matrix is rebuild
+  set nonlinear_rho        = 0.01
+
+  # relative tolerance for the newton iteration
+  set nonlinear_tol        = 1.e-6
+end
+
+
+
+# for optimization problem
+subsection reducednewtonalgorithm parameters
+  set line_maxiter         = 5
+
+  # normally 1.e-10
+  set linear_global_tol    = 1.e-10
+  set linear_maxiter       = 20
+  set linear_tol           = 1.e-10
+  set linesearch_c         = 0.1
+  set linesearch_rho       = 0.9
+
+  # For opt-Newton solver
+  # normally 1.e-11
+  set nonlinear_global_tol = 1.0e-5
+  set nonlinear_maxiter    = 20
+  set nonlinear_tol        = 1.e-5
+
+  set compute_functionals_in_every_step = true
+end
+
+
+subsection output parameters
+  # File format for the output of control variables
+  set control_file_format = .txt	   
+
+  # File format for the output of solution variables
+  set file_format       = .vtk
+
+  # Iteration Counters that should not reflect in the outputname, seperated by
+  # `;`
+  #set ignore_iterations = PDENewton;Cg
+  set ignore_iterations = Cg
+
+  # Name of the logfile
+  set logfile           = dope.log
+
+  # Do not write files whose name contains a substring given here by a list of
+  # `;` separated words
+  #set never_write_list  = Gradient;Residual;Hessian;Tangent;Adjoint;Update
+  set never_write_list  = Gradient;Hessian;Tangent;Update;Residual
+
+  # Defines what strings should be printed, the higher the number the more
+  # output
+  set printlevel        = 4
+
+  # Directory where the output goes to
+  set results_dir       = Results/
+end
+
+
+

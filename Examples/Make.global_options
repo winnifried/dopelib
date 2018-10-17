@@ -1,0 +1,18 @@
+c-all:
+	$(DOpE)/Examples/autocmake-examples.sh configure
+	cd autobuild; $(MAKE)
+	
+# Rule how to clean up. This is split into several different rules to
+# allow for parallel execution of commands:
+clean:
+	$(DOpE)/Examples/autocmake-examples.sh clean
+
+veryclean: #clean
+	 $(DOpE)/Examples/autocmake-examples.sh distclean 
+	-rm -f *~ */*~ */*/*~ Makefile.dep
+
+.PHONY: clean 
+
+
+
+

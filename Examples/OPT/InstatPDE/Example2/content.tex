@@ -1,0 +1,47 @@
+\subsubsection{General problem description}
+
+This example is a modified version of \texttt{OPT/InstatPDE/Example1}. 
+Again, we consider the heat equation, this time without an additional nonlinear
+term. The governing equation is
+\begin{equation*}
+\partial_t u(t,x,y) - \Delta u(t,x,y) = f(t)\cdot q(x,y),
+\end{equation*}
+with homogeneous Dirichlet-data.
+The computational domain is $\Omega \times I = [0,\pi]^2 \times [0,1]$. From the known solution, we can compute the appropriate data 
+\begin{align*}
+f(t) &= 2,\\
+u_0(x,y) &= \sin(x)\sin(y).
+\end{align*}
+
+With the cost functional 
+\begin{align*}
+ \min_{q,u} J(q,u) =&\; \frac{1}{2}\int_{\Omega} \Biggl(u(1,x,y) - \biggl(\frac{2e^2-1}{e^2-1}\biggr)\sin(x) \sin(y)\Biggr)^2\,d(x,y) + \frac{1}{2} \int_{\Omega} q(x,y)^2\,d(x,y).
+\end{align*}
+It has the optimal solution 
+\begin{align*}
+\overline{u}(t,x,y) &= \sin(x) \sin(y),\\
+\overline{q}(x,y) &= \sin(x) \sin(y)
+\end{align*}
+together with the optimal adjoint state 
+\[
+ \overline{z}(t,x,y) = \frac{e^2}{1-e^2}e^{2(t-1)}\sin(x) \sin(y).
+\]
+and the corresponding cost functional value 
+\[
+J(\overline{q},\overline{u}) = \frac{1}{2} \Bigl(\frac{e^4}{(e^2-1)^2}+1\Bigr)\frac{\pi^2}{4} \approx 2.88382.
+\]
+
+
+\subsubsection{Program description}
+In this example, we demonstrate how to implement a control that acts distributed in space and time,
+but has no temporal dependence. For this, the control vector type is set to be 
+{\texttt ControlType::stationary} (the default for stationary equations). In contrast to 
+the case of control in the initial values, the control vector can be accessed at a 
+all times. 
+
+Since the control has no time dependence \texttt{DOpElib} assumes that the control part of 
+the cost functional, here 
+\[
+ \frac{1}{2}\int_\Omega q^2\,dx
+\]
+is evaluated at initial time (i.e., $t=0$ in this example). 

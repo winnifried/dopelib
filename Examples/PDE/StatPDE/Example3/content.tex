@@ -1,0 +1,32 @@
+\subsubsection{General problem description}
+\index{stationary PDE}
+In this example we consider the same setting as in subsection~\ref{PDE_Stat_Stokes}, the only
+difference is that we want to employ the hp-Finite-Elements. So the equation we solve is still 
+the stationary incompressible Stokes equation \index{stationary PDE!Stokes equation}. Here,
+we use the symmetric stress tensor which has a little consequence when using 
+the do-nothing outflow condition. In strong formulation we have
+\begin{align} 
+-\frac{1}{2}\nabla\cdot (\nabla v + \nabla v^{T}) + \nabla p &= f \\ 
+\nabla \cdot v &= 0 \notag
+\end{align} 
+on the domain $\Omega = [-6,6]\times [0,2]$.  We split $\partial \Omega = \Gamma_D \cup \Gamma_{out}$. The right hand side of the channel is $\Gamma_{out}$ on which we describe the free outflow condition, on the rest of the boundary we prescribe Dirichlet values (An parabolic inflow on the left hand side and zero on the upper and lower channel walls). We choose for simplicity $f=0$..\\
+
+\subsubsection{Adding hp-Elements}
+One sees by comparing  the \texttt{main.cc}-file of this problem with the one of subsection~\ref{PDE_Stat_Stokes} that the change to hp-Elements is really easy, so we will keep the description short. In comparison to example \ref{PDE_Stat_Stokes} the \textit{localpde.h} and \textit{functionals.h} have not changed, but we have one additional file, namely \textit{indexsetter.h}, in which the class \texttt{ActiveFEIndexSetter} is defined.
+
+In the hp-framework we have a stack of finite elements (a \texttt{hp::FECollection}) given. We assign each element of the triangulation an fe-index which determines which finite element we use on this element. The \texttt{ActiveFEIndexSetter} class manages these indices, see there for more information.
+
+The changes in \textit{main.cc} are also minimal and are highlighted in the source code. Obviously, we use \texttt{FECollection} and \texttt{QCollection} as well as a different DoFHandler.
+\begin{verbatim}
+  	#define DOFHANDLER hp::DoFHandler
+  	#define FE hp::FECollection
+  	...
+  	typedef hp::QCollection<DIM> QUADRATURE;
+  typedef hp::QCollection<DIM - 1> FACEQUADRATURE;
+\end{verbatim}
+Apart from that we have only to tell the space time handler the distribution of the finite element indices:
+\begin{verbatim}
+  ActiveFEIndexSetter<2> indexsetter(pr);
+  STH DOFH(triangulation, state_fe_collection, indexsetter);
+\end{verbatim}
+

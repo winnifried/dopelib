@@ -1,0 +1,121 @@
+\subsubsection{General problem description}
+This example shows the use of the adaptive grid refinement and error estimation by the \textit{DWR method} (For a description of the method, see \cite{BR03}.) applied to the Laplace equation 
+\begin{align*}
+-\Delta u &= f \quad\text{ in } \Omega
+\end{align*}
+with the analytical solution
+\begin{align*}
+u = \sin\left(\frac{\pi}{x^2 + y^2}\right),
+\end{align*}
+ the corresponding right hand side $f = -\Delta u$ and appropriate Dirichlet Conditions on $\partial \Omega$, where the domain is given by
+\begin{align*}
+\Omega = [-2,2]^2\setminus \overline{B}_{0.5}(0).
+\end{align*}
+We want to estimate the error in the following functional of interest
+$$\fullfunction{J}{H^1(\Omega)}{\mathbb{R}}{u}{\frac 1 {\abs{\Gamma}} \int_\Gamma u \,dx}$$
+where
+$\Gamma = \left\{(x,y)\in \mathbb R ^2\,\big | \,x=0,-2<y<0.5 \right \}$.
+
+For this setting, we have the error representation
+\begin{align}\label{dwr.error_identity}
+J(e)=\sum_{K\in \mathbb T _h} \left\{(R_h, z-\psi_h)_K + (r_h, z-\psi_h)_{\partial_K}\right\}
+\end{align}
+with the error $e=u-u_h$, the Triangulation $\mathbb T_h$, the dual solution $z$, arbitrary function $\phi_h \in V_h$ (the ansatz space) and the element- and edge-residuals: 
+\begin{align}\label{dwr.element_residual}
+\eval[1]{R_h}_{K} = f+\Delta u_h
+\end{align}
+resp. 
+\begin{align}\label{dwr.edge_residual}
+\eval[1]{r_h}_{\Sigma} =
+\begin{cases}
+\frac 12 [\partial_n u_h] ,&\text{if } \Sigma \subset \partial_K \setminus \partial \Omega,\\
+0,& \text{if } \Sigma \subset\partial \Omega.
+\end{cases}
+\end{align}
+
+It holds $J(u) \approx 0.441956231972232$.
+\subsubsection{Program description}
+In this section we want to focus on what you have to do if you want to enhance your existing code to use the \textit{DWR method}.
+
+
+First, additionally to all the things one has to do when just solving the equation, we have to include the file
+\begin{verbatim}
+higher_order_dwrc.h
+\end{verbatim}
+
+As we approximate the so called 'weights' $z-\phi_h$ in the error representation by a patchwise higher order interpolation of $z_h$ (the computed dual solution), we have to enforce patch-wise refinement of the grid by giving the flag 
+\begin{verbatim}
+Triangulation<2>::MeshSmoothing::patch_level_1
+\end{verbatim}
+to the triangulation. 
+
+To be able to solve the adjoint equation for the error estimation one needs to implement some methods regarding the equation as well es the functional of interest:
+\begin{itemize}
+\item In {\verb pdeinterface.h }
+\begin{itemize}
+\item {\verb ElementEquation_U }: Weak form of the adjoint equation.
+\item {\verb ElementMatrix_T }: The FE matrix for the adjoint problem.
+\item {\verb FaceEquation_U }: This one is needed in this case here because we have a functional of interest that lives on faces. 
+\end{itemize}
+\item {\verb functionalinterface.h }
+\begin{itemize}
+\item {\verb FaceValue_U }: This is the right hand side of the adjoint equation.
+\end{itemize}
+\end{itemize}
+During the  evaluation of \eqref{dwr.error_identity}, the following methods are needed
+\begin{itemize}
+\item {\verb StrongElementResidual }: The element residual, see \eqref{dwr.element_residual}.
+\item {\verb StrongFaceResidual }: The terms in \eqref{dwr.error_identity} that lies in the interior (i.e. the jumps).
+\item {\verb StrongBoundaryResidual }:The terms in \eqref{dwr.error_identity} that lies on the boundary (There are none in this case).
+\end{itemize}
+
+Note that in the above three functions we always apply the method \texttt{ResidualModifier} both to the 
+residual as well as to the jumps on the faces. This is done to assert that we can apply both a 
+DWR-error estimator where the residual should be multiplied with the computed weights (then this function 
+does not do anything) as well as Residual Type error estimator for the $L^2$ or $H^1$ norm where we need to calculate element wise norms of the residual and the jumps. Then this function calculates the appropriate 
+local terms, e.g., the square of the residual scaled with appropriate powers of the local mesh size.
+
+
+
+After this, we tell the problem which functional we want to use for the error estimation, this is done via
+\begin{verbatim}
+P.SetFunctionalForErrorEstimation(LFF.GetName())
+\end{verbatim}
+where \texttt{P} is of type \texttt{PDEProblemContainer} and \texttt{LFF} is the desired functional of interest. 
+
+The next thing we need is an object of the type
+\begin{verbatim}
+HigherOrderDWRContainer
+\end{verbatim}
+This container takes care of the computation of the weights.
+
+To build this, we need the following:
+\begin{itemize}
+\item {\verb DOFH_higher_order }: With some higher order Finite Elements and the already defined triangulation, we build this \texttt{SpaceTimeHandler}. This is needed because  we want to use the patch-wise higher order interpolation of the weights.
+\item {\verb idc_high }: A \texttt{IntegratorDataContainer} in which we put some (face)quadrature formulas for the evaluation of the error Identity.
+\item A string which indicates how we want to store the weight-vectors (here: { \verb "fullmem" }).
+\item \texttt{pr}: The \texttt{ParameterReader} which we have already defined.
+\item A enum of type \texttt{EETerms} that tells the container, which error terms we want to compute (primal error indicators vs. dual error indicators, see \cite{BR03}).  
+\end{itemize}
+The last preparation step is now to initialize the \texttt{DWRDataContainer} with the problem in use:
+\begin{verbatim}
+  solver.InitializeHigherOrderDWRC(dwrc);
+\end{verbatim}
+
+Succeeding the solution of the state equation 
+\begin{verbatim}
+solver.ComputeReducedFunctionals(); 
+\end{verbatim}
+we compute the error indicators by calling 
+\begin{verbatim}
+solver.ComputeRefinementIndicators(dwrc);
+\end{verbatim}
+We can now get the error indicators (with signs!) out of \texttt{dwrc} by 
+\begin{verbatim}
+dwrc.GetErrorIndicators();
+\end{verbatim}
+With these indicators, we are now able to refine our grid adaptively (there are several mesh adaption strategies implemented, like 'RefineOptimized', 'RefineFixedNumber' or 'RefineFixedFraction')
+\begin{verbatim}
+DOFH.RefineSpace(RefineOptimized(optimized, error_ind));
+\end{verbatim}
+Note, that one has to take the norm of each entry in the vector of the error indicators before feeding them into the \texttt{RefineSpace} method.

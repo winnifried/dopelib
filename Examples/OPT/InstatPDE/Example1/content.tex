@@ -1,0 +1,47 @@
+\subsubsection{General problem description}
+
+This example is a modified version of \texttt{PDE/InstatPDE/Example5}. 
+Again, we consider the heat equation, this time with an additional nonlinear
+term and most important a time derivative leading to a 
+nonstationary optimization problem. The governing equation is
+\begin{equation*}
+\partial_t u(t,x,y) - \Delta u(t,x,y) + u(t,x,y)^2 = f(t,x,y),
+\end{equation*}
+with homogeneous Dirichlet-data.
+The computational domain is $\Omega \times I = [0,\pi]^2 \times [0,1]$. From the known solution, we can compute the appropriate data 
+\begin{align*}
+f(t,x,y) &= (3-2t)e^{t-t^2} \sin(x) \sin(y) + e^{(t-t^2)^2} \sin^2(x) \sin^2(y),\\
+u_0(x,y) &= q(x,y).
+\end{align*}
+
+With the cost functional 
+\[
+ \min_{q,u} J(q,u) = \frac{1}{2}\int_{\Omega} (u(1,x,y) - \sin(x) \sin(y))^2\,d(x,y) + \frac{1}{2} \int_{\Omega} (q(x,y) - \sin(x) \sin(y))^2\,d(x,y).
+\]
+It has the optimal solution 
+\begin{align*}
+\overline{u}(t,x,y) &= e^{t-t^2} \sin(x) \sin(y),\\
+\overline{q}(t,x,y) &= \sin(x) \sin(y)
+\end{align*}
+and $J(\overline{q},\overline{u}) = 0$.\\[4mm]
+
+\subsubsection{Program description}
+The following new things differ from the PDE-Examples and the optimization examples with stationary 
+PDEs:\\[2mm]
+First, we need to introduce a reasonable dual time-stepping scheme in the main
+file since we have to
+compute 
+the adjoint equation backward in time. 
+Next, in the file \texttt{main.cc} the SpaceTimeHandler now gets an additional argument.
+In this case \texttt{DOpEtypes::initial} which specifies that the control is entering in the 
+initial value.\\[2mm]
+In the file \texttt{localpde.h} we now have to specify the Methods \texttt{Init\underline{ }ElementRhs}
+and \texttt{Init\underline{ }ElementRhs\underline{ }Q}. They need to be adapted, since usually the InitialValue for the 
+PDE is auto generated from a deal.ii function in the ProblemContainer. This Value is set in the 
+\texttt{Init\underline{ }ElementRhs} hence we need to change this function to use the control instead. 
+Correspondingly we need to implement the first derivative of this with respect to the control. 
+--We don't need the second derivative since it is zero anyways.--\\[2mm]
+
+\textbf{Note:} In contrast to the ,,normal'' Element-terms in the PDE we assume in the program 
+that the \texttt{Init\underline{ }ElementEquation} is linear in the state and no other solution variables are present.
+Thus no derivatives of the \texttt{Init\underline{ }ElementEquation} need to be implemented.

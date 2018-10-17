@@ -18,7 +18,17 @@ Examples/???/*PDE/Example*/DOpE*Example*
 *.toc
 Examples/description.pdf
 
+*.vtu
+*.vtk
+*.pvtu
+
+
+*.cbp
+.idea
 *.cproject
 *.project
-**make**
 *.xml
+
+CMakeFiles
+CMakeCache.txt
+**make**

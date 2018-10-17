@@ -1,0 +1,92 @@
+\subsubsection{General problem description}
+We consider phase-field fracture propagation on a slit domain, with time dependent 
+Dirichlet data and homogenous Neumann data.
+The main novelties are:
+\begin{itemize}
+\item Imposing a variational inequality constraint ($\frac{\partial \varphi}{\partial t} \leq 0$)
+via penalization;
+%\item Implementation of an augmented Lagrangian loop (not yet)
+\item Stress splitting into tension and compression \`a
+la \cite{MieWelHof10a}, see as well \cite{AmorMarigoMaurini2009}, located 
+in 
+\begin{verbatim}
+stress_splitting.h
+\end{verbatim}
+\item Implementation of a Newton solver that 
+allows for an increase of the residual for which, however,
+no convergence results are available:
+\begin{verbatim}
+DOpEsrc/templates/instat_step_modified_newtonsolver.h
+\end{verbatim}
+\item Two localpde* files:
+\begin{verbatim}
+localpde_quasi_monolithic.h
+localpde_fully_implicit.h
+\end{verbatim}
+that provide implementations of a quasi-monolithic scheme (similar, but not
+the same as \cite{HeWheWi15}) and a fully implicit implementation.
+The fully implicit implementation requires a modified Newton scheme (see the
+previous bullet point) that 
+allows for a temporary increase of the Newton residual (similar to \cite{Wi17_pff_error_oriented_Newton}).
+\end{itemize}
+Let $u$ be the displacement and $\varphi$ be the phase field variable which should highlight the crack.
+Furthermore we denote the $L^2(\Omega)$ inner product of $v_1$ and $v_2$ with $(v_1,v_2)$.
+A material is supposed to be undamaged at position $x$ if $\varphi(x)$ is close to 1 and comletely cracked
+if it is close to $0$.
+We want to find a stationary point of the energy functional
+\begin{align*}
+E(u, \varphi):=& \frac{1}{2}(\sigma(u,\varphi),\varepsilon(u)) \\
++&\frac{G_c}{2}(\frac{1}{\varepsilon} \Vert 1 - \varphi \Vert^2)+\varepsilon \Vert \nabla \varphi  \Vert\\
++&\underbrace{\frac{\gamma_{pen}}{2} ((\varphi(t_n)-\varphi(t_{n-1}))_+)^2}_{\text{penalization term}},
+\end{align*}
+with
+\begin{align*}
+\sigma(u,\varphi)&:= (1-\kappa)\varphi^2 \sigma(u)^+ + \sigma(u)^-,\\
+\sigma(u)^+ &:= 2*\mu \varepsilon(u)^+ +\lambda (trace(\varepsilon(u)))_+ I,\\
+\sigma(u)^- &:= 2*\mu \varepsilon(u)^- +\lambda (trace(\varepsilon(u)))_- I,\\
+(c)_+ &:= max(0, c), \\
+(c)_- &:= c-(c)_+, \\
+\varepsilon(u)^+ &:= \sum_{i=1}^{d} (\lambda_i)_+ n_i^T n_i,\\
+\varepsilon(u)^- &:= \sum_{i=1}^{d} (\lambda_i)_- n_i^T n_i,\\
+\varepsilon(u)   &:= \frac{1}{2}(\nabla u +(\nabla u)^T),
+\end{align*}
+where $c \in \mathbb{R}$, $t^n$ denotes the time at timestep $n$, $\lambda_i$ denotes the $i-th$ eigenvalue of $\varepsilon(u)$ and $n_i$ the corresponding eigenvector.
+The idea for the choice of the energy functional is presented
+in \cite{MieHofWel2010} (based on the original work \cite{BourFraMar00,BourFraMar08,FraMar98}).
+This leads to the following problem: Find $(u, \varphi) \in V_u \times V_\varphi$ such that
+
+\begin{align*}
+A(u,\varphi)(\phi_u,\phi_\varphi):=& (\sigma(u,\varphi),\varepsilon(\phi_u)) \\
++& (((1-\kappa)\varphi \sigma(u)^+,\varepsilon(u)),\phi_\varphi)\\
+ +& G_c(\frac{1}{\varepsilon} (1 - \varphi,\phi_\varphi)+\varepsilon (\nabla \varphi, \nabla \phi_\varphi)\\
++&\gamma_{pen} ((\varphi(t_n)-\varphi(t_{n-1}))_+,\phi_\varphi)=0 \quad \forall (\phi_u, \phi_\varphi) \in V_u \times V_\varphi.
+\end{align*}
+
+The test case is the so-called single edged notched 
+shear test. For further details about this problem it is referred
+to \cite{MieHofWel2010,BoVeScoHuLa12}, and \cite{WeWiWo2014}.
+
+
+
+\subsubsection{Future improvements}
+Possible future improvements are:
+\begin{itemize}
+\item Implement the phase-field extrapolation in the displacement equation proposed in \cite{HeWheWi15};
+\item Implement the augmented Lagrangian loop proposed by
+Wheeler/Wick/Wollner, CMAME 2014 \cite{WeWiWo2014}. 
+\end{itemize}
+
+% Need to implement extrapolation with two 
+% previous time steps
+% To be changed: 
+% instatpdeproblem.h
+% instat_step_newton_solver.h
+%
+% augmented Lagrangian solver loop
+% -> currently simple penalization
+% has to be implemented in instat_step_newton_solver.h
+%
+% Dokumentation in content.tex
+
+
+

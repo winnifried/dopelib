@@ -1,0 +1,115 @@
+\subsubsection{General problem description}
+This example is similar to Example~\ref{OPT_Stat_Param_Nonlin_Fluid}.
+The notable difference in the setting is that now, the boundary control areas, 
+where the fluid can be sucked out of the domain, are in front of the 
+circular inclusion. Hence the drag
+\[
+k(v,p) = \int_{\Gamma_O} n\cdot \sigma(v,p)\cdot d \, \mathrm{d}s,
+\]
+where $\Gamma_O$ denotes the cylinder boundary, and $d$ is a vector in the
+direction of the mean in-flow can become negative, i.e., minimizing the 
+value of $k(v,p)$ is no longer viable. 
+
+Instead, we consider the objective 
+\[
+K(q,v,p) = \frac{1}{2}|k(v,p)|^2 + \frac{\alpha}{2}||q - q_0||^2
+\] 
+is to be minimized.
+
+In contrast to all previous examples, this means that the functional can
+no longer be calculated by one integration, but instead the values of the 
+integration (for the drag) need to be post-processed.
+
+To do so, the calculation of the functional and its derivatives
+is reordered in to two steps. First the value of $k(v,p)$ is
+calculated (and stored) then in a second sweep. The value of
+$K$ is calculated.
+
+To this end the following modifications are needed in the
+code:
+
+
+\textbf{\texttt{localpde.h}}
+There is a new method \texttt{unsigned int NeedPrecomputations() const}
+returning the value $1$ as we need one calculation of $k$ before we can
+assemble the value of the cost-functional.
+
+This pre-iteration has the Type \texttt{cost\_functional\_pre} and a corresponding
+number (here $0$ as only one pre-iteration is performed.
+
+In the cost functional, for the pre-iteration we set the type to
+\texttt{boundary} since $k$ is a boundary functional.
+For the evaluation of $K$ itself the type is \texttt{boundary algebraic}
+as we calculate the boundary integral $\|q\|^2$ and the algebraic calculation
+$|{k}|^2$.
+
+For higher derivatives, we notice that for a differentiable functions $g,f\colon \mathbb R\rightarrow \mathbb R$
+it holds for the directional derivative in direction $\delta u$
+\begin{align*}
+ \left((g\left(\int f(u(x))\,\mathrm{d}x\right)\right)'\delta u
+  &= g'(\int f(u(x))\,\mathrm{d}x) \int f'(u(x)) \delta u(x) \mathrm{d}x \\
+  &= \int g'(\int f(u(x))\,\mathrm{d}x) f'(u(x)) \delta u(x) \mathrm{d}x 
+\end{align*}
+Consequently, the first derivative can be calculated with only a single integration
+-- as a boundary integral in the present example where the 
+factor $g'$ can be calculated using the drag value in the 
+last iterate  
+\[
+g'(k(v,p)) \quad\text{and}\quad k'(v,p)\delta u(x) = k(\delta v, \delta p)
+\]
+since the drag is linear in $(v,p)$.
+
+For the second derivative, we can calculate in the directions $\delta u$ and $\tau u$
+by the following observation 
+\begin{align*}
+ \left(g\left(\int f(u(x))\,\mathrm{d}x\right)\right)''&(\delta u,\tau u)\\
+  &= g''(\int f(u(x))\,\mathrm{d}x) \int f'(u(x)) \delta u(x) \mathrm{d}x\int f'(u(x)) \tau u(x) \mathrm{d}x \\
+  &\;\;\;\;+ g'(\int f(u(x))\,\mathrm{d}x) \int f''(u(x)) \delta u(x) \tau u(x) \mathrm{d}x \\
+  &= \int \left(g''(\int f(u(x))\,\mathrm{d}x) \int f'(u(x)) \delta u(x) \mathrm{d}x\right)
+ f'(u(x)) \tau u(x) \mathrm{d}x \\
+ &\;\;\;\;+ \int g'(\int f(u(x))\,\mathrm{d}x)f''(u(x)) \delta u(x) \tau u(x) \mathrm{d}x.
+\end{align*}
+Consequently, the second derivative can be calculated as one boundary integral, if 
+the values of 
+\[
+\int f(u(x))\,\mathrm{d}x \quad \text{and} \quad \int f'(u(x)) \delta u(x) \mathrm{d}x
+\]
+in the tangent direction $\delta u$ are available by pre-computations.
+
+To do so in the present example, the following modifications are needed in the cost functional:
+\begin{itemize}
+\item There is a method \texttt{AlgebraicValue} which calculates $0.5 x^2$ for a given value $x$
+- here the pre-computed value of the drag.
+\item In the method \texttt{BoundaryValue}, we have to distinguish several cases.
+  based upon the problem type evaluated. The current value can be accessed by
+  \texttt{GetProblemType()} and if this matches
+  \begin{description}
+    \item[cost\_functional\_pre] then we must calculate the drag-value, i.e., $k(u)$.
+    \item[cost\_functional\_pre\_tangent] then we must calculate the derivative of 
+      the drag in direction $\delta u$ (the provided tangent-direction), i.e., $k(\delta u)$ 
+      since $k$ is linear in its argument.
+    \item[cost\_functional] then we must calculate the rest of the functional. Here only the integral
+      over the control costs is needed.
+  \end{description}
+\item In the methods \texttt{BoundaryValue\_U} and \texttt{BoundaryValue\_UU} we calculate
+  the entire derivative w.r.t $u$ (or second derivative respectively) as one integral 
+  using the formulas for the first and second derivative, respectively. The needed
+  values, i.e.,
+  \[
+  \int f(u)\mathrm{d}x = \int_{\Gamma_O} n \cdot \sigma(v,p)\,d \mathrm{d}s 
+  \]
+  and 
+  \[
+  \int f'(u(x)) \delta u(x) \mathrm{d}x = \int_{\Gamma_O} n \cdot \sigma(\delta v,\delta p)\,d \mathrm{d}s 
+  \]
+  are available as \texttt{ParamValues} with the respective labels 
+  \texttt{cost\_functional\_pre} and \texttt{cost\_functional\_pre\_tangent}.
+
+  Notice, that both \texttt{ParamValues} are a vector of the size given 
+  by \texttt{unsigned int NeedPrecomputations() const}. I.e. if multiple functional parts 
+  need a pre-integration these can be calculated in an arbitrary number of pre-integration runs.
+  In the case of multiple pre-integrations the method \texttt{*Value} needs not only to
+  consider the value of \texttt{GetProblemType()} but also the respective \texttt{GetProblemNum()}
+  running between $0$ and \texttt{NeedPrecomputations()}$-1$. 
+  The order in the ParamValues Vector corresponds to the chosen order of integration.
+\end{itemize}

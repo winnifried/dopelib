@@ -1,0 +1,19 @@
+\subsubsection{General problem description}
+This example implements the topology optimization of an MBB-Beam given in \\
+\texttt{OPT/StatPDE/Example7} using the SIMP method.
+
+The solution is computed using the commercial optimization library SNOPT, similar 
+to \texttt{OPT/StatPDE/Example6} where IPOPT is used. 
+This Example demonstrate how global constraints on
+the control variable can be included into the optimization call.
+
+\subsubsection{Program description}
+In this example, we have now some local (point) constraints, local constraints and a global
+constraint. In constrast to the previous example, these 
+constraints are all taken care of in the 
+\texttt{localconstraints.h} file. 
+Specifically, the point constraints are handled by the 
+\texttt{DOpE::PointConstraints<...>} function, which is also initializad 
+in the main file. 
+
+

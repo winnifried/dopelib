@@ -1,0 +1,20 @@
+\subsubsection{General problem description}
+
+This example differs only slightly from the previous one. Again, we consider the heat equation, this time with an additional nonlinear term
+\begin{equation*}
+\partial_t u(t,x,y) - \Delta u(t,x,y) + u(t,x,y)^2 = f(t,x,y),
+\end{equation*}
+but now in two space dimensions and with known solution 
+\begin{equation*}
+u(t,x,y) = e^{t-t^2} \sin(x) \sin(y).
+\end{equation*}
+The computational domain is $I\times\Omega = [0,1]\times [0,\pi]^2$. From the known solution, we can compute the appropriate data 
+\begin{align*}
+f(t,x,y) &= (3-2t)e^{t-t^2} \sin(x) \sin(y) + e^{(t-t^2)^2} \sin^2(x) \sin^2(y),\\
+u_0(x,y) &= \sin(x) \sin(y).
+\end{align*}
+Furthermore, we have to prescribe homogeneous Dirichlet boundary conditions.
+
+\subsubsection{Program description}
+
+The new feature of this example is the nonhomogeneous right hand side. In examples \ref{PDE_Stat_Laplace_2D} and \ref{PDE_Stat_Laplace_3D}, we regarded stationary problems with nonhomogeneous right hand sides, but up to now, we never involved the time variable into the nonhomogeneity. To do this, \texttt{DOpElib} yields a \texttt{SetTime()} function which has to be applied in the \textit{localpde.h} file as well as at the place where the \texttt{RightHandSideFunction} class is declared (here the \textit{myfunctions.h} file.

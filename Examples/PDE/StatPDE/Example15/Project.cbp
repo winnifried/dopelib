@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6"/>
+	<Project>
+		<Option title="Project"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="gcc"/>
+		<Option virtualFolders="CMake Files\;CMake Files\..\;CMake Files\..\..\;CMake Files\..\..\..\;CMake Files\..\..\..\..\;CMake Files\..\..\..\..\lib\;CMake Files\..\..\..\..\lib\cmake\;CMake Files\..\..\..\..\lib\cmake\DOpElib\;CMake Files\..\..\..\..\..\;CMake Files\..\..\..\..\..\..\;CMake Files\..\..\..\..\..\..\deal.ii-candi\;CMake Files\..\..\..\..\..\..\deal.ii-candi\deal.II-master\;CMake Files\..\..\..\..\..\..\deal.ii-candi\deal.II-master\lib\;CMake Files\..\..\..\..\..\..\deal.ii-candi\deal.II-master\lib\cmake\;CMake Files\..\..\..\..\..\..\deal.ii-candi\deal.II-master\lib\cmake\deal.II\;CMake Files\..\..\..\..\..\..\deal.ii-candi\deal.II-master\share\;CMake Files\..\..\..\..\..\..\deal.ii-candi\deal.II-master\share\deal.II\;CMake Files\..\..\..\..\..\..\deal.ii-candi\deal.II-master\share\deal.II\macros\;"/>
+		<Build>
+			<Target title="all">
+				<Option working_dir="/home/djodlbauer/Desktop/dopelib-devel/Examples/PDE/StatPDE/Example15"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/gmake -f &quot;/home/djodlbauer/Desktop/dopelib-devel/Examples/PDE/StatPDE/Example15/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="/usr/bin/gmake -f &quot;/home/djodlbauer/Desktop/dopelib-devel/Examples/PDE/StatPDE/Example15/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/gmake -f &quot;/home/djodlbauer/Desktop/dopelib-devel/Examples/PDE/StatPDE/Example15/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/gmake -f &quot;/home/djodlbauer/Desktop/dopelib-devel/Examples/PDE/StatPDE/Example15/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="rebuild_cache">
+				<Option working_dir="/home/djodlbauer/Desktop/dopelib-devel/Examples/PDE/StatPDE/Example15"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/gmake -f &quot;/home/djodlbauer/Desktop/dopelib-devel/Examples/PDE/StatPDE/Example15/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="/usr/bin/gmake -f &quot;/home/djodlbauer/Desktop/dopelib-devel/Examples/PDE/StatPDE/Example15/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/gmake -f &quot;/home/djodlbauer/Desktop/dopelib-devel/Examples/PDE/StatPDE/Example15/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/gmake -f &quot;/home/djodlbauer/Desktop/dopelib-devel/Examples/PDE/StatPDE/Example15/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="edit_cache">
+				<Option working_dir="/home/djodlbauer/Desktop/dopelib-devel/Examples/PDE/StatPDE/Example15"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/gmake -f &quot;/home/djodlbauer/Desktop/dopelib-devel/Examples/PDE/StatPDE/Example15/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="/usr/bin/gmake -f &quot;/home/djodlbauer/Desktop/dopelib-devel/Examples/PDE/StatPDE/Example15/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/gmake -f &quot;/home/djodlbauer/Desktop/dopelib-devel/Examples/PDE/StatPDE/Example15/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/gmake -f &quot;/home/djodlbauer/Desktop/dopelib-devel/Examples/PDE/StatPDE/Example15/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="debug">
+				<Option working_dir="/home/djodlbauer/Desktop/dopelib-devel/Examples/PDE/StatPDE/Example15"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/gmake -f &quot;/home/djodlbauer/Desktop/dopelib-devel/Examples/PDE/StatPDE/Example15/Makefile&quot;  VERBOSE=1 debug"/>
+					<CompileFile command="/usr/bin/gmake -f &quot;/home/djodlbauer/Desktop/dopelib-devel/Examples/PDE/StatPDE/Example15/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/gmake -f &quot;/home/djodlbauer/Desktop/dopelib-devel/Examples/PDE/StatPDE/Example15/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/gmake -f &quot;/home/djodlbauer/Desktop/dopelib-devel/Examples/PDE/StatPDE/Example15/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="release">
+				<Option working_dir="/home/djodlbauer/Desktop/dopelib-devel/Examples/PDE/StatPDE/Example15"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/gmake -f &quot;/home/djodlbauer/Desktop/dopelib-devel/Examples/PDE/StatPDE/Example15/Makefile&quot;  VERBOSE=1 release"/>
+					<CompileFile command="/usr/bin/gmake -f &quot;/home/djodlbauer/Desktop/dopelib-devel/Examples/PDE/StatPDE/Example15/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/gmake -f &quot;/home/djodlbauer/Desktop/dopelib-devel/Examples/PDE/StatPDE/Example15/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/gmake -f &quot;/home/djodlbauer/Desktop/dopelib-devel/Examples/PDE/StatPDE/Example15/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="run">
+				<Option working_dir="/home/djodlbauer/Desktop/dopelib-devel/Examples/PDE/StatPDE/Example15"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/gmake -f &quot;/home/djodlbauer/Desktop/dopelib-devel/Examples/PDE/StatPDE/Example15/Makefile&quot;  VERBOSE=1 run"/>
+					<CompileFile command="/usr/bin/gmake -f &quot;/home/djodlbauer/Desktop/dopelib-devel/Examples/PDE/StatPDE/Example15/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/gmake -f &quot;/home/djodlbauer/Desktop/dopelib-devel/Examples/PDE/StatPDE/Example15/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/gmake -f &quot;/home/djodlbauer/Desktop/dopelib-devel/Examples/PDE/StatPDE/Example15/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="DOpE-PDE-StatPDE-Example15">
+				<Option output="/home/djodlbauer/Desktop/dopelib-devel/Examples/PDE/StatPDE/Example15/DOpE-PDE-StatPDE-Example15" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/djodlbauer/Desktop/dopelib-devel/Examples/PDE/StatPDE/Example15"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-DBOOST_NO_AUTO_PTR"/>
+					<Add option="-DDEBUG"/>
+					<Add option="-DTBB_USE_DEBUG"/>
+					<Add option="-DTBB_DO_ASSERT=1"/>
+					<Add option="-Ddeal_II_dimension=3"/>
+					<Add option="-Ddope_dimension=3"/>
+					<Add option="-DDEAL_II_MAJOR_VERSION=9"/>
+					<Add option="-DDEAL_II_MINOR_VERSION=1"/>
+					<Add option="-DDOPELIB_WITH_TRILINOS"/>
+					<Add option="-DDOPELIB_WITH_MPI"/>
+					<Add option="-DDOPELIB_WITH_P4EST"/>
+					<Add directory="/home/djodlbauer/Desktop/dopelib-devel/DOpEsrc"/>
+					<Add directory="/home/djodlbauer/deal.ii-candi/deal.II-master/include"/>
+					<Add directory="/home/djodlbauer/deal.ii-candi/deal.II-master/include/deal.II/bundled"/>
+					<Add directory="/usr/lib64/mpi/gcc/openmpi/include"/>
+					<Add directory="/home/djodlbauer/deal.ii-candi/parmetis-4.0.3/include"/>
+					<Add directory="/home/djodlbauer/deal.ii-candi/trilinos-release-12-10-1/include"/>
+					<Add directory="/home/djodlbauer/deal.ii-candi/petsc-3.7.6/include"/>
+					<Add directory="/usr/include/suitesparse"/>
+					<Add directory="/home/djodlbauer/deal.ii-candi/hdf5-1.10.1/include"/>
+					<Add directory="/home/djodlbauer/deal.ii-candi/oce-OCE-0.18.2/include/oce"/>
+					<Add directory="/home/djodlbauer/deal.ii-candi/p4est-2.0/FAST/include"/>
+					<Add directory="/home/djodlbauer/deal.ii-candi/slepc-3.7.3/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/gmake -f &quot;/home/djodlbauer/Desktop/dopelib-devel/Examples/PDE/StatPDE/Example15/Makefile&quot;  VERBOSE=1 DOpE-PDE-StatPDE-Example15"/>
+					<CompileFile command="/usr/bin/gmake -f &quot;/home/djodlbauer/Desktop/dopelib-devel/Examples/PDE/StatPDE/Example15/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/gmake -f &quot;/home/djodlbauer/Desktop/dopelib-devel/Examples/PDE/StatPDE/Example15/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/gmake -f &quot;/home/djodlbauer/Desktop/dopelib-devel/Examples/PDE/StatPDE/Example15/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="DOpE-PDE-StatPDE-Example15/fast">
+				<Option output="/home/djodlbauer/Desktop/dopelib-devel/Examples/PDE/StatPDE/Example15/DOpE-PDE-StatPDE-Example15" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/djodlbauer/Desktop/dopelib-devel/Examples/PDE/StatPDE/Example15"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-DBOOST_NO_AUTO_PTR"/>
+					<Add option="-DDEBUG"/>
+					<Add option="-DTBB_USE_DEBUG"/>
+					<Add option="-DTBB_DO_ASSERT=1"/>
+					<Add option="-Ddeal_II_dimension=3"/>
+					<Add option="-Ddope_dimension=3"/>
+					<Add option="-DDEAL_II_MAJOR_VERSION=9"/>
+					<Add option="-DDEAL_II_MINOR_VERSION=1"/>
+					<Add option="-DDOPELIB_WITH_TRILINOS"/>
+					<Add option="-DDOPELIB_WITH_MPI"/>
+					<Add option="-DDOPELIB_WITH_P4EST"/>
+					<Add directory="/home/djodlbauer/Desktop/dopelib-devel/DOpEsrc"/>
+					<Add directory="/home/djodlbauer/deal.ii-candi/deal.II-master/include"/>
+					<Add directory="/home/djodlbauer/deal.ii-candi/deal.II-master/include/deal.II/bundled"/>
+					<Add directory="/usr/lib64/mpi/gcc/openmpi/include"/>
+					<Add directory="/home/djodlbauer/deal.ii-candi/parmetis-4.0.3/include"/>
+					<Add directory="/home/djodlbauer/deal.ii-candi/trilinos-release-12-10-1/include"/>
+					<Add directory="/home/djodlbauer/deal.ii-candi/petsc-3.7.6/include"/>
+					<Add directory="/usr/include/suitesparse"/>
+					<Add directory="/home/djodlbauer/deal.ii-candi/hdf5-1.10.1/include"/>
+					<Add directory="/home/djodlbauer/deal.ii-candi/oce-OCE-0.18.2/include/oce"/>
+					<Add directory="/home/djodlbauer/deal.ii-candi/p4est-2.0/FAST/include"/>
+					<Add directory="/home/djodlbauer/deal.ii-candi/slepc-3.7.3/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/gmake -f &quot;/home/djodlbauer/Desktop/dopelib-devel/Examples/PDE/StatPDE/Example15/Makefile&quot;  VERBOSE=1 DOpE-PDE-StatPDE-Example15/fast"/>
+					<CompileFile command="/usr/bin/gmake -f &quot;/home/djodlbauer/Desktop/dopelib-devel/Examples/PDE/StatPDE/Example15/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/gmake -f &quot;/home/djodlbauer/Desktop/dopelib-devel/Examples/PDE/StatPDE/Example15/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/gmake -f &quot;/home/djodlbauer/Desktop/dopelib-devel/Examples/PDE/StatPDE/Example15/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="/home/djodlbauer/Desktop/dopelib-devel/Examples/PDE/StatPDE/Example15/main.cc">
+			<Option target="DOpE-PDE-StatPDE-Example15"/>
+		</Unit>
+		<Unit filename="/home/djodlbauer/Desktop/dopelib-devel/Examples/PDE/StatPDE/Example15/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+		<Unit filename="/home/djodlbauer/Desktop/dopelib-devel/Examples/PDE/StatPDE/Example15/../../../CMakeExamples.txt">
+			<Option virtualFolder="CMake Files\..\..\..\"/>
+		</Unit>
+		<Unit filename="/home/djodlbauer/Desktop/dopelib-devel/Examples/PDE/StatPDE/Example15/../../../../lib/cmake/DOpElib/DOpElibConfig.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\lib\cmake\DOpElib\"/>
+		</Unit>
+		<Unit filename="/home/djodlbauer/Desktop/dopelib-devel/Examples/PDE/StatPDE/Example15/../../../../../../deal.ii-candi/deal.II-master/lib/cmake/deal.II/deal.IIConfig.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\deal.ii-candi\deal.II-master\lib\cmake\deal.II\"/>
+		</Unit>
+		<Unit filename="/home/djodlbauer/Desktop/dopelib-devel/Examples/PDE/StatPDE/Example15/../../../../../../deal.ii-candi/deal.II-master/lib/cmake/deal.II/deal.IIConfigVersion.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\deal.ii-candi\deal.II-master\lib\cmake\deal.II\"/>
+		</Unit>
+		<Unit filename="/home/djodlbauer/Desktop/dopelib-devel/Examples/PDE/StatPDE/Example15/../../../../../../deal.ii-candi/deal.II-master/lib/cmake/deal.II/deal.IITargets-debugrelease.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\deal.ii-candi\deal.II-master\lib\cmake\deal.II\"/>
+		</Unit>
+		<Unit filename="/home/djodlbauer/Desktop/dopelib-devel/Examples/PDE/StatPDE/Example15/../../../../../../deal.ii-candi/deal.II-master/lib/cmake/deal.II/deal.IITargets.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\deal.ii-candi\deal.II-master\lib\cmake\deal.II\"/>
+		</Unit>
+		<Unit filename="/home/djodlbauer/Desktop/dopelib-devel/Examples/PDE/StatPDE/Example15/../../../../../../deal.ii-candi/deal.II-master/share/deal.II/macros/macro_deal_ii_add_test.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\deal.ii-candi\deal.II-master\share\deal.II\macros\"/>
+		</Unit>
+		<Unit filename="/home/djodlbauer/Desktop/dopelib-devel/Examples/PDE/StatPDE/Example15/../../../../../../deal.ii-candi/deal.II-master/share/deal.II/macros/macro_deal_ii_initialize_cached_variables.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\deal.ii-candi\deal.II-master\share\deal.II\macros\"/>
+		</Unit>
+		<Unit filename="/home/djodlbauer/Desktop/dopelib-devel/Examples/PDE/StatPDE/Example15/../../../../../../deal.ii-candi/deal.II-master/share/deal.II/macros/macro_deal_ii_invoke_autopilot.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\deal.ii-candi\deal.II-master\share\deal.II\macros\"/>
+		</Unit>
+		<Unit filename="/home/djodlbauer/Desktop/dopelib-devel/Examples/PDE/StatPDE/Example15/../../../../../../deal.ii-candi/deal.II-master/share/deal.II/macros/macro_deal_ii_pickup_tests.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\deal.ii-candi\deal.II-master\share\deal.II\macros\"/>
+		</Unit>
+		<Unit filename="/home/djodlbauer/Desktop/dopelib-devel/Examples/PDE/StatPDE/Example15/../../../../../../deal.ii-candi/deal.II-master/share/deal.II/macros/macro_deal_ii_query_git_information.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\deal.ii-candi\deal.II-master\share\deal.II\macros\"/>
+		</Unit>
+		<Unit filename="/home/djodlbauer/Desktop/dopelib-devel/Examples/PDE/StatPDE/Example15/../../../../../../deal.ii-candi/deal.II-master/share/deal.II/macros/macro_deal_ii_setup_target.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\deal.ii-candi\deal.II-master\share\deal.II\macros\"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>

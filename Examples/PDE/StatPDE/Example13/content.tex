@@ -1,0 +1,123 @@
+\subsubsection{General problem description}
+Within this example, we demonstrate how to use the
+dG (discontinuous Galerkin) method for the solution of 
+a transport equation. The example corresponds to 
+the dealii step-12. Here we want to solve the transport equation 
+\begin{align*}
+ \nabla \cdot (\beta u) &= 0 & \text{in }&\Omega,\\
+ u &= g &\text{on }&\Gamma_- := \{ x \in \partial \Omega\,|\, \beta(x) \cdot n(x) < 0\}.
+\end{align*}
+Where $n$ is the outward unit normal, $\Omega = (0,1)^2$ and 
+\[
+\beta(x) = \frac{1}{|x|} \begin{pmatrix} -x_2\\x_1
+  \end{pmatrix}.
+\]
+
+For the numerical solution, as in dealii step~12, we use the upwind discontinuous 
+Galerkin \index{discontinuous Galerkin}. Hence we solve the problem of finding $u_h$ 
+such that 
+\[
+ -\sum_{T \in \mathcal T_h} (u_h \beta \cdot  \nabla v_h)_T 
+ + \sum_{F \in \mathcal F_h} (u_h^-,[\beta \cdot n v_h])_F + (u_h,\beta \cdot n v_h)_{\Gamma_+} = -(g,\beta \cdot n v_h)_{\Gamma_-}
+\]
+where $\Gamma_+ =  \{ x \in \partial \Omega\,|\, \beta(x) \cdot n(x) > 0\}$, $\mathcal T_h$ and $\mathcal F_h$ denote the 
+elements and interior faces of the mesh, respectively. The jump is defined as 
+\[
+[\beta \cdot n v_h] = (v^+ - v^-) \beta \cdot n^+
+\]
+where the superscript $+$ or $-$ denotes the dependence on the upstream $+$ or downstream $-$ element.
+
+\subsubsection{Implementational Details}
+Within this program, we need to make use of the additional \texttt{Face*} and \texttt{Interface*} methods as given in the  
+\texttt{PDEInterface} class. The Face* methods define all integrals on $\mathcal F$ in which the element interacts 
+with it self. The Interface* methods are used for the coupling between the two neighboring elements over the 
+given face.
+
+The program requires the following changes in contrast to the prior examples:
+
+\paragraph{main.cc} We utilize Block Preconditioners for the solution of the resulting system. 
+To this end we included the line
+\begin{verbatim}
+typedef DOpEWrapper::PreconditionBlockSSOR_Wrapper<MATRIX,4> 
+        PRECONDITIONERSSOR; 
+\end{verbatim}
+In contrast to all other preconditioners, we need to specify the block size. This number needs 
+to correspond to the number of unknowns per elements; here 4 since we use Q1-elements. Note that this works for dG
+elements only.
+
+The next important change is that we now not only use a discontinuous element, but we will need to assemble 
+terms on faces between elements that couple the unknowns in the different elements together. For this,
+the matrix needs to have the corresponding non-zero entries specified in the sparsity pattern.  
+To do this, the space time handler has an argument \texttt{bool flux\_pattern} in the constructor that needs to be set to true, i.e., we instantiate as follows: 
+\begin{verbatim}
+STH DOFH(triangulation, state_fe, true);
+\end{verbatim}
+
+Finally, the integration will utilize a special function to be declared in the \texttt{LocalPDE}, 
+hence all objects must use the \texttt{LocalPDE}
+and not the \texttt{PDEInterface}.
+To make sure that this is the case, the \texttt{PDEProblemContainer} needs to be initialized with the following arguments
+\begin{verbatim}
+typedef PDEProblemContainer<LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
+    SimpleDirichletData<VECTOR, DIM>, SPARSITYPATTERN, VECTOR, DIM> OP;
+\end{verbatim}
+
+\paragraph{localpde.h}
+In order to integrate the PDE above, we have to deal with one term that has not been considered before
+\[
+ \sum_{F \in \mathcal F_h} (u_h^-,[\beta \cdot n v_h])_F 
+\]
+Since internally all terms by sums over elements we split this term into contributions on the 
+element edges $\partial K$. On an element $K$ a face $F$, with outward normal $n$ 
+connects to another element $K'$, depending on the sign of $\beta \cdot n$ we have two cases. 
+$\beta \cdot n > 0$ in which case $u^-_h = u_h$ or $\beta \cdot n < 0$ in which case $u^-_h = u_h^* = u_h\lvert_{K'}$, i.e.
+the value from the neighbor. The jump always contains the values $v_h$ and $v_h^*$. 
+
+Let now $\beta \cdot n > 0$. Then we assemble the contributions coming only from this element in the \texttt{FaceEquation} 
+(and \texttt{FaceMatrix}),
+i.e.,
+\[
+ (u_h,\beta \cdot n v_h)_F
+\]
+The other part of the jump, namely 
+\[
+ -(u_h,\beta \cdot n v_h^*)_F
+\]
+is not assembled here, since the test functions do not live on the selected element $K$. These contributions will
+be assembled once the element $K'$ is selected (and hence on the same face $\beta \cdot n < 0$.
+Once this is the case, i.e. $\beta \cdot n < 0$, we assemble the other part of the jump,
+which is now 
+\[
+(u_h^*,\beta \cdot n v_h)_F.
+\]
+This is done in the \texttt{InterfaceEquation} (and \texttt{InterfaceMatrix}) since we couple unknowns for the neighboring element $K^*$ (the values of $u_h^*$) with those on $K$ (the values of $v_h$). Note that in contrast to the view on the element with 
+$\beta \cdot n > 0$ the term has apparently switched signs. This is no typo, but due to the fact, that the outward normal 
+has changed direction.
+
+The precise assembly is analogous to the usual integrals, hence we don't provide more details. The only 
+thing different in the \texttt{InterfaceEquation} and \texttt{InterfaceMatrix} we need to access the 
+values on the element on the other side of the face. To this end, all \texttt{Get*} functions used, 
+such as \texttt{GetFEFaceValuesState},
+have a counterpart \texttt{GetNbr*}, i.e., \texttt{GetNbrFEFaceValuesState}, to access the corresponding values 
+on the neighboring element.
+
+Naturally the two functions
+\begin{verbatim}
+bool HasFaces() const;
+bool HasInterfaces() const;
+\end{verbatim}
+need to return \texttt{true}.
+
+A last and important change is that we now need to implement the 
+method 
+\begin{verbatim}
+template<typename ELEMENTITERATOR>
+ bool AtInterface(ELEMENTITERATOR& element, unsigned int face) const
+ {
+   if (element[0]->neighbor_index(face) != -1) 
+     return true;
+   return false;
+ }
+\end{verbatim}
+that returns true whenever we are on an interior face and false otherwise.
+

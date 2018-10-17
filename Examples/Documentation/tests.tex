@@ -1,0 +1,81 @@
+\chapter{Regression Tests}\label{chap:test}
+The \dope{} test suite consists of regression tests. They are run to compare 
+the output to previous outputs. This is useful (necessary) after 
+changing programming code anywhere in the library. 
+
+\begin{itemize}
+\item If a test
+succeeds, everything is fine in the library. 
+\item If not, you should not
+check in your code into \dope{}. 
+Please make sure what is going wrong and WHY!
+\item 
+Every command is computed via a Makefile in the basic example 
+directory.
+\end{itemize}
+
+\section{Tests with third-party packages}
+Please keep in mind that DOpElib does not 
+only link to deal.II but also to third party libraries.
+If these libraries are not installed, the respective regression tests 
+will fail. 
+
+Currently the following examples link to third-party examples:
+\begin{itemize}
+\item \texttt{OPT/StatPDE/Example6}: IPOPT
+\item \texttt{OPT/StatPDE/Example8}: SNOPT
+\item \texttt{PDE/StatPDE/Example10}: Trilinos (via deal.II)
+\end{itemize}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Where can I find the tests}
+In each example directory you find a sub directory `Test'. Herein, you find 
+the parameter files for meshes (*.inp) and a param file (test.prm).
+Moreover, the executable is denoted by `test.sh'. Please make sure, that 
+the 
+\begin{verbatim}
+set never_write_list
+\end{verbatim}
+contains every possible output
+\begin{verbatim}
+Gradient;Hessian;Tangent;Residual;Update;Control;State
+\end{verbatim}
+That means, no solution files are written to the output.
+Recall, that we are just interested in terminal output that 
+is of course sufficient to verify the things.
+
+Hence, the results directory should be empty
+\begin{verbatim}
+set results_dir   = ./
+\end{verbatim}
+The rest in the param file must be identically the same as 
+in the dope.prm file in the parent directory. 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{How to start testing?}
+You start testing by typing 
+\begin{verbatim}
+> ./test.sh Store
+\end{verbatim}
+in the terminal.
+
+After the run, you have to call 
+\begin{verbatim}
+> ./test.sh Test
+\end{verbatim}
+to compare your stored output. Of course, there should be no differences.
+
+The useful point is now the following. After implementation of 
+new pieces of code in the DOpE library or in the examples, you can
+run 
+\begin{verbatim}
+> ./test.sh Test
+\end{verbatim}
+Hereby, you compare your `new' output with the previous stored output.
+
+Attention: After changes you should NOT run again
+\begin{verbatim}
+> ./test.sh Store
+\end{verbatim}
+In that case, you overwrite your previous output.

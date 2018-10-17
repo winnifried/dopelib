@@ -1,0 +1,161 @@
+\subsubsection{General problem description}
+In this example we consider the nonstationary incompressible Navier-Stokes equation. As in the stationary PDE Example \ref{PDE_Stat_Stokes},
+we use the symmetric fluid stress tensor, i.e. 
+in strong formulation we deal with 
+\begin{align*}
+\rho \partial_t v - \rho \nabla\cdot (\nabla v + \nabla v^{T}) + \rho (v\cdot\nabla)v  +\nabla p &= f \\
+\nabla\cdot v &= 0 
+\end{align*}
+on time interval $I=[0,T]$ (with $T=80$) and the fluid benchmark domain (Schaefer/Turek 1996). 
+Here, we set $f=0$ and the flow is driven by a Dirichlet inflow condition.
+
+
+As introduced earlier, we formulate the time stepping scheme as \textit{One-step-$\theta$ scheme},
+which are based on finite difference schemes. In order to keep the presentation simple, we describe the scheme using the stokes equation and thus neglecting the nonlinearity. Note that in the program we use the full Navier-Stokes operator.
+
+The time interval is given by $I=[0,T]$. Let $v^n,p^n$ and the time
+step $k=t^{n+1}-t^n$ be given. Find $v^{n+1}, p^{n+1}$ such that:
+
+\begin{align*}
+v^{n+1} - k\theta \left(\nabla\cdot (\nabla v^{n+1} + \nabla {v^{n+1}}^T) + \nabla p^{n+1}\right) =&
+k\theta f^{n+1} + k(1-\theta)f^{n}\\
+&+  v^n + k(1-\theta) \left(\nabla\cdot (\nabla v^n + \nabla (v^n)^{T}) 
++ \nabla p^n\right) \\
+\nabla \cdot v^{n+1} &= 0 
+\end{align*}
+In the case of the BE-scheme, $\theta = 1$, and the equation is reduced to
+\begin{align*}
+v^{n+1} - k (\nabla\cdot (\nabla v^{n+1} + \nabla {v^{n+1}}^{T}) + \nabla p^n) &=
+kf^{n+1} +  v^n  \\
+\nabla \cdot v^{n+1} &= 0
+\end{align*}
+Note, that one should prefer a complete implicit treatment of the
+pressure $p$. Instead of using $\theta p^{n+1} + (1-\theta)p^n$, the pressure
+appears only with $\theta p^{n+1}$.
+
+After discretization in time, the space is treated, as usually, with 
+a Galerkin finite element scheme, here based on the Taylor-Hood element 
+$Q_2^c / Q_1^c$.
+
+The variational formulation reads:
+
+\begin{Problem}[Backward Euler (BE) timestepping problem]
+Let $\theta =1$. Find $v:= v^{n+1}\in V$ and $p:= p^{n+1}\in L$:
+\begin{align}
+(v,\phi^v) + k\theta (\nabla v + \nabla v^{T}, \nabla\phi^v) 
+- k  (p, \nabla\cdot\phi^v) &=
+k\theta (f^{n+1},\phi^v) +  (v^n,\phi^v)\\
+(\nabla \cdot v,\phi^p) = 0  \label{eq.divfreiheit}
+\end{align}
+\end{Problem}
+for all suitable test functions ${\phi^v , \phi^p} \in V\times L$. 
+
+
+Derivation of the other timestepping problems is analogous.
+\begin{remark}
+Note that because of the zero right hand side we are allowed to multiply \eqref{eq.divfreiheit} by $k\theta$. So that we solve $$k\theta(\nabla \cdot v,\phi^p) = 0$$ instead of $(\nabla \cdot v,\phi^p) = 0$. 
+\end{remark}
+
+
+\subsubsection{Specific features for 
+solving nonstationary problems}
+
+In the following, we explain in more detail the 
+different member functions that are required to
+implement nonstationary equations.
+
+\begin{verbatim}
+void ElementEquation (..., double scale, double scale_ico)
+\end{verbatim}
+The two arguments 
+are used to distinguish between explicit 
+components and fully implicit components. 
+For standard equations (such as the heat 
+equation and the wave equation), there is 
+no special treatment required needed. 
+
+However, solving the Navier-Stokes equations or 
+multi-physics problems (like fluid-structure
+interaction), parts of the equations are treated
+with a fully implicit time-stepping scheme.
+
+Thus, the argument
+\begin{verbatim}
+double scale
+\end{verbatim}
+is used to indicate that the present term 
+can be used for implicit/explicit or mixed 
+discretization (such as time discretization with
+the Crank-Nicolson.
+
+The other argument
+\begin{verbatim}
+double scale_ico
+\end{verbatim} 
+is used to indicate that the present term 
+only is treated in a fully implicit manner. 
+For example, the pressure term (which is of course
+a Lagrange multiplier of the incompressibility 
+term of the fluid). It is recommended to treat 
+this term in a time discretization in a fully 
+implicit manner. 
+
+\begin{verbatim}
+void ElementMatrix (..., double scale, double scale_ico)
+\end{verbatim}
+The directional derivatives of the state equation
+are implemented in the present function. As before,
+the last two parameters
+\begin{verbatim}
+double scale, double scale_ico
+\end{verbatim} 
+are used to distinguish between fully implicit 
+are other behavior. 
+
+\begin{verbatim}
+void ElementTimeEquation (...) 
+\end{verbatim}
+This function is used to implement the 
+time derivative in weak formulation 
+\begin{equation*}
+(\partial_t v, \phi)_{\Omega}.
+\end{equation*}
+This term is time discretized via
+\begin{equation*}
+k^{-1} (v^n - v^{n-1} , \phi)_{\Omega}. 
+\end{equation*}
+Here, it suffices to implement the term
+\begin{equation*}
+(v^n, \phi)_{\Omega},
+\end{equation*}
+because the already known term $v^{n-1}$ is 
+automatically treated by the specific time
+stepping scheme. 
+
+In contrast to this behavior, the user 
+has the possibility to write all terms of 
+$\partial_t v$ explicitly. In this case, we 
+use the 
+\begin{verbatim}
+void ElementTimeEquationExplicit (...) 
+\end{verbatim}
+and we write 
+\begin{equation*}
+(v^n - v^{n-1}, \phi)_{\Omega}.
+\end{equation*}
+This behavior is useful for multi-physics problems
+where other solutions variables have to be considered
+around $\partial_t v$. The user should have a look 
+in the second Example 
+\ref{PDE_Instat_FSI} for nonstationary problems 
+for an illustration
+of this function. 
+
+Consequently, the directional derivatives of the 
+element terms are implemented in the corresponding
+matrix functions, i.e., 
+\begin{verbatim}
+void ElementTimeMatrix (...), void ElementTimeMatrixExplicit 
+\end{verbatim}
+
+

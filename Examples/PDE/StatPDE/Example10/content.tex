@@ -1,0 +1,90 @@
+\subsubsection{General problem description}
+
+This example is an extension the previous one.
+We solve an stationary FSI problem either with 
+INH material (see Problem definition before) 
+or St. Venant Kirchhoff material STVK: \index{structure} \index{structure!compressible St.Venant-Kirchhoff (STVK) material}
+\begin{Problem}[Compressible Saint Venant-Kirchhoff, Lagrangian framework]
+  \label{prob:stvk:lagrange}
+  Find $\{\hat u_s\} \in \{ \hat u_s^D + \hat V\}$, 
+  such that 
+  \begin{eqnarray}
+    \begin{aligned}   
+      (\hat J_s \hat\sigma_s(\hat u_s) \hat F_s^{-T},\hat\nabla\hat\phi^v)_{\hat\Omega_s}
+      &= \langle\hat J_s\hat n_s\cdot \hat g_s^\sigma\hat
+      F_s^{-T},\hat\phi^v  \rangle_{\hat\Gamma_i}
+      &&\quad\forall\hat \phi^v\in\hat V_s
+    \end{aligned}
+  \end{eqnarray}
+  where $\rho_s$ is the density of the structure, $\mu_s$ and $\lambda_s$ 
+  the Lam\'e coefficients, $\hat n_s$ the outer normal vector at $\hat\Gamma_i$, 
+  $\hat g_s^\sigma$ some forces on the interface.\index{Lam\'e coefficients} The properties of the STVK material
+  is specified by the constitutive law
+  \begin{eqnarray}
+    \hat\sigma_s(\hat u_s):=\hat J^{-1} \hat F (\lambda_s (tr\hat E) I + 2\mu_s \hat E)\hat F^{-T}.
+  \end{eqnarray}
+\end{Problem}
+\begin{remark}
+In the code, we also implement 
+\[
+(\hat v_s, \hat\phi),
+\]
+although this is not physically necessary. It is first for computational
+convenience in order to extend the fluid velocity variable to the whole
+domain.
+This could be resolved by using the FE Nothing element. Second, 
+using $\hat v_s$ here makes it easier to understand the 
+nonstationary FSI problem. The same holds for the (artificial) 
+pressure variable 
+in the STVK case.
+\end{remark}
+
+Often, the elasticity properties of structure materials is characterized by 
+Poisson's ratio $\nu_s$ ($\nu_s < \frac{1}{2}$ \index{Poisson's ratio} for 
+compressible materials) and the Young modulus $E$ \index{Young modulus}. The 
+relationship to the Lam\'e coefficients $\mu_s$ and $\lambda_s$ is
+given by:
+\begin{eqnarray}
+\nu_s = \frac{\lambda_s}{2(\lambda_s + \mu_s)}, \qquad 
+E = \frac{\mu_s (\lambda_s + 2\mu_s)}{(\lambda_s + \mu_s )} . 
+\end{eqnarray}
+On fluid side, we extend the problem from Stokes flow 
+to stationary Navier-Stokes flow considering the convection term
+\[
+v\cdot \nabla v
+\]
+which reads in transformed form \cite{Wi11}
+\[
+             (\hat J \rho_f \hat F^{-1}\hat  v\cdot\hat\nabla \hat v,
+             \hat\phi^v)_{\hat\Omega_f}.
+\]
+
+
+
+
+
+The whole equation system is solved on the benchmark configuration domain. For 
+details on parameters and geometry, we refer to the 
+numerical FSI benchmark \index{fluid-structure interaction (FSI)} \index{fluid-structure interaction (FSI)!FSI benchmark} proposal from Hron and Turek [2006].
+
+The code is established by computing the stationary FSI benchmark example FSI 1 with 
+the following values of interest: $x$-displacement, $y$-displacement, drag, and lift.\index{functional} \index{functional!drag} \index{functional!lift} \index{functional!deflection}
+
+\subsubsection{Program description}
+
+Compared to the previous Example \ref{PDE_Stat_FSI_STVK}, 
+there are some differences which we will briefly discuss in the following. First of all, the problem is nonlinear in contrast to the former ones. We work on a different domain (given in the \textit{benchfst0100tw.inp} file), namely a channel with a cylinder put at half height near the inflow boundary; further \textit{.inp} files yield the possibility to vary the domain.\\
+Furthermore, in the \textit{dope.prm} parameter file there are two additional subsections which are added only for the current problem. From the denotation of these subsections one can immediately see where in the code the parameters are used.\\
+As we want to compute certain benchmark quantities, we have to regard corresponding functionals in the \textit{functionals.h} file. The pressure at a point as well as the displacement in $x$- and $y$-directions are point values; furthermore we implement the drag and lift functionals (for which we need the additionally defined problem parameters).\\
+As before, we build up the element and boundary equations and matrices in the \textit{localpde.h} file. Apart from using the additionally defined problem parameters and modeling compressible STVK material instead of INH material (which leads to changes in the weak formulation of the equations), there are no major differences to the corresponding file in the last example.\\
+In the \textit{main.cc} file, we have to include additional header files from the deal.II library concerning error estimation and grid refinement. Further on, everything is pretty much the same as in the last example, but we have to use the \texttt{SetBoundaryFunctionalColors} function of the \texttt{PDEProblemContainer} class to be able to compute drag and lift in the respective functional classes in \textit{functionals.h}.\\
+The main innovation in contrast to the preceding examples is the refinement of the grid combined with a simple error estimator given in the deal.II \texttt{KellyErrorEstimator} class. If we look at the output of our program, everything is computed several times (once on each refinement level). Furthermore, we see that several Newton steps are needed on each refinement level; this is due to the nonlinearity of the current problem.
+
+Finally this example demonstrates how to use the direct solvers provided by trilinos. 
+This is done by the line 
+\begin{verbatim}
+typedef TrilinosDirectLinearSolverWithMatrix
+         <SPARSITYPATTERN, MATRIX, VECTOR> LINEARSOLVER;
+\end{verbatim}
+interfacing to the trilinos library. The selection of the precise direct solver can 
+be done using the parameter file.

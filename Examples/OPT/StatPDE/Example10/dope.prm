@@ -1,0 +1,88 @@
+# Listing of Parameters
+# ---------------------
+
+subsection Local PDE parameters
+	   set density_fluid	= 1.0
+	   set viscosity	= 1.0e-3
+end
+
+subsection My functions parameters
+	   set mean_inflow_velocity = 0.3
+
+end
+
+
+# normal state problem
+subsection newtonsolver parameters
+  # maximal number of linesearch steps
+  set line_maxiter         = 5
+
+  # reduction rate for the linesearch damping paramete
+  set linesearch_rho       = 0.5
+
+  # global tolerance for the newton iteration
+  set nonlinear_global_tol = 1.e-10
+
+  # maximal number of newton iterations
+  set nonlinear_maxiter    = 30
+
+  # minimal  newton reduction, if actual reduction is less, matrix is rebuild
+  set nonlinear_rho        = 0.1
+
+  # relative tolerance for the newton iteration
+  set nonlinear_tol        = 1.e-10
+end
+
+
+
+# for optimization problem
+subsection reducednewtonalgorithm parameters
+  set line_maxiter         = 20
+  set linear_global_tol    = 1.e-10
+  set linear_maxiter       = 40
+  set linear_tol           = 1.e-10
+  set linesearch_c         = 0.1
+  set linesearch_rho       = 0.9
+  set nonlinear_global_tol = 1.e-11
+  set nonlinear_maxiter    = 10
+  set nonlinear_tol        = 1.e-7
+end
+
+
+subsection output parameters
+  # File format for the output of control variables
+  set control_file_format = .txt	   
+
+  # File format for the output of solution variables
+  set file_format       = .vtk
+
+  # Iteration Counters that should not reflect in the outputname, seperated by
+  # `;`
+  #set ignore_iterations = PDENewton;Cg
+  set ignore_iterations = Cg
+
+  # Name of the logfile
+  set logfile           = dope.log
+
+  # Do not write files whose name contains a substring given here by a list of
+  # `;` separated words
+  #set never_write_list  = Gradient;Residual;Hessian;Tangent;Adjoint;Update
+  set never_write_list  = Gradient;Hessian;Tangent;Residual;Update
+
+  # Defines what strings should be printed, the higher the number the more
+  # output
+  set printlevel        = 4
+
+  # Set the precision of the newton output
+  set number_precision	 = 4
+
+  # Set manually the machine tolarance for the output
+  set eps_machine_set_by_user	 = 1.0e-11
+
+
+  # Directory where the output goes to
+  set results_dir       = Results/
+end
+
+
+

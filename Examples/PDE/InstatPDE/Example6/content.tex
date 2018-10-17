@@ -1,0 +1,180 @@
+\subsubsection{General problem description}
+The modeling part of this example is based on the coupled
+Biot-Lam\'e-Navier system. The Biot system itself   
+is a standard model in subsurface modeling \cite{Biot41a, Biot41b, Biot55}. 
+Here, a reservoir (the
+pay-zone) is modeled as a poroelastic medium with the help of Biot's
+equations. A surrounding medium (the non-pay zone) is modeled as a static
+elastic solid. 
+In fact, the
+Biot system is a multi-scale problem which 
+is identified on the micro-scale as 
+a fluid-structure interaction problem (details on the 
+interface law are found in Mikeli\'c and Wheeler (2011). 
+This system 
+is specifically suited for applications 
+in subsurface modeling for the poroelastic part, the 
+so-called pay-zone.  
+On the other hand, surrounding rock 
+(the non-pay zone) 
+is modeled with the help of linear elasticity (Ciarlet 1984). 
+Therefore, the final configuration 
+belongs to a multiphysics problem in non-overlapping domains.
+The nonstationary coupled system for the state is formulated 
+within a variational monolithically-coupled framework, 
+which is known 
+to be more robust than partitioned solutions algorithms.
+Its discretization 
+is carried out with help of the Rothe method in which we first 
+discretize in time and then in space. 
+The configuration 
+is based on the augmented Mandel problem which 
+shows the important Mandel-Cryer effect: First increasing pressure
+and then decreasing pressure in time while applying some 
+traction force on the top boundary. 
+
+We begin by describing the setting for a pure poroelastic setting, 
+the so-called pay-zone.
+Let $\Omega_B$ the domain of interest and $\partial\Omega_B$ its boundary
+with the partition:
+\begin{equation*}
+\partial\Omega_B = \Gamma_u \cup \Gamma_t = \Gamma_p \cup \Gamma_f,
+\end{equation*}
+where $\Gamma_u$ denotes the displacement boundary (Dirichlet), $\Gamma_t$ the 
+total stress or traction boundary (Neumann), $\Gamma_p$ the pore 
+pressure boundary (Dirichlet), and $\Gamma_f$ the fluid flux boundary
+(Neumann). Concretely, we have for a material 
+with the displacement variable $u$ and its 
+Cauchy stress tensor $\sigma$:
+\begin{align*}
+u &= \bar{u} \quad \text{on } \Gamma_u, \\
+\sigma n &= \bar{t} \quad \text{on } \Gamma_t, 
+\end{align*}
+for given $\bar{u}$ and $\bar{t}$, and the 
+normal vector $n$. 
+For the pressure with the permeability tensor 
+$K$ and fluid's viscosity $\eta_f$, we have the conditions:
+\begin{align*}
+p &= \bar{p} \quad \text{on } \Gamma_p, \\
+- \frac{K}{\eta_f} \Bigl( \nabla p - \rho_f g\Bigr) \cdot n &= \bar{q}\quad \text{on } \Gamma_f,
+\end{align*}
+for given $\bar{p}$ and $\bar{q}$; and the density $\rho_f$ and the gravity $g$.
+For the initial conditions at time $\tau=0$, we prescribe
+\begin{align*}
+p(\tau =0) = p_0 \quad \text{in } \Omega_B,\\
+\sigma(\tau =0) = \sigma_0 \quad \text{in } \Omega_B,
+\end{align*}
+In this case of this extension
+(if $\Omega_B$ is totally embedded in $\Omega_S$)
+the boundary conditions on $\partial\Omega_B$ reduce 
+to interface conditions $\partial\Omega_B :=\Gamma_i =
+\Omega_B \cap \Omega_S$.
+Let $I:=[0,T]$ denote the time interval.
+
+\begin{Problem}[The Biot system]
+Find the pressure $p_{\text{B}}$ and displacement 
+$u_{\text{B}}$ such that
+\begin{align*}
+\partial_t (c_B p_{\text{B}} + \alpha_B \text{div}u_{\text{B}})\\ -
+\frac{1}{\eta_f} \text{div}\, K 
+(\nabla p_{\text{B}} - \rho_f g) &= q \quad \text{in }\Omega_{B} \times I, \\
+- \text{div}\bigl( \sigma_B (u) \bigr)
++ \alpha_B\nabla p_{\text{B}} &= f_{\text{B}} 
+\quad \text{in }\Omega_{\text{B}} \times I,
+\end{align*}
+with
+\[
+\sigma_B(u_B) := \mu_B(\nabla u_{\text{B}} + \nabla u_{\text{B}}^T) +  
+\lambda_B\text{div}\, u_{\text{B}}I,
+\]
+and the coefficients $c_B\geq 0$, 
+the Biot-Willis constant $\alpha_B \in [0,1]$,
+(in fact, this constant relates to the amount of 
+coupling between the flow part and the elastic part) 
+and the permeability tensor $K$, 
+fluid's viscosity and its density 
+$\eta_f$ and $\rho_f$, gravity $g$ and a volume 
+source term $q$ (i.e., usually, wells for oil production and
+fluid injection). In the second equation,
+the Lam\'e coefficients are denoted 
+by $\lambda_B >0$ and $\mu_B >0$ 
+and $f_{\text{B}}$ is a volume force.
+\end{Problem}
+
+The velocity $v_{\text{B}}$ 
+in the porous medium is obtained 
+with the help of Darcy's law (Darcy 1856)
+and the Darcy equations which are obtained 
+through homogenization of Stokes's equations
+It holds:
+\begin{equation*}
+v_{\text{B}} = -\frac{1}{\eta_f} K(\nabla p_{\text{B}} - \rho_f g).
+\end{equation*}
+
+
+Usually the non-pay zone is described 
+in terms of linear elasticity: 
+\begin{Problem}
+Find 
+a displacement $u_S$ such that
+\begin{align*}
+- \text{div}\bigl( \sigma_S (u_S)  \bigr) = f_S \quad \text{in }\Omega_{\text{S}} \times I,
+\end{align*}
+with
+\begin{align*}
+\sigma_S (u_S) := \mu_S(\nabla u_{\text{S}} + \nabla u_{\text{S}}^T) +  
+\lambda_S\text{div}\, u_{\text{S}}I, 
+\end{align*}
+with the Lam\'e coefficients $\mu_S$ and $\lambda_S$
+and a volume force $f_S$. On the boundary 
+$\partial\Omega_S := \Gamma_D \cup \Gamma_N$, the 
+conditions
+\begin{equation*}
+u_S = \bar{u}_S \quad\text{on } \Gamma_D , \quad \sigma_S (u_S) n_S = \bar{t}_S \quad\text{on } \Gamma_N,
+\end{equation*}
+are prescribed with given $\bar{u}_S$ and $\bar{t}_S$.
+\end{Problem}
+
+It finally remains to describe the interface 
+conditions on $\Gamma_{i}$ between the two sub-systems:
+\begin{equation}
+\label{interface_conditions}
+\begin{aligned}
+u_{\text{B}} &= u_S ,   \\
+\sigma_{B}(u_B)n_B - \sigma_S(u_S)n_S &= 
+\alpha p_{\text{B}} n_B  , \\
+-\frac{1}{\eta_f} K(\nabla p_{\text{B}} - \rho_f g) \cdot n_S &= 0. 
+\end{aligned} 
+\end{equation}
+
+
+\subsubsection{Program description}
+In this example, the crucial aspect (from mathematical point of view 
+as well as from the implementation) are the interface conditions
+\eqref{interface_conditions}.
+Here, it is important to notice that the second condition 
+in \eqref{interface_conditions}, requires careful 
+implementation on the interface, which is 
+carried out with the help of deal.II's FE Nothing element.
+Second, please do not forget to activate the flag
+\begin{verbatim}
+      HasFaces() const
+      {
+        return true;
+      }
+\end{verbatim}
+
+The problem is driven by traction forces (Neumann conditions), which 
+are imposed via the 
+\begin{verbatim}
+      void
+      BoundaryEquation(...)
+      {
+        ...   
+      }
+\end{verbatim}
+
+As functionals, we evaluate the pressure in two different 
+points of the domain. The observation should be that the 
+pressure first starts increasing reaching a maximum and then
+starts decaying. This is the so-called Mandel-Creyer effect.

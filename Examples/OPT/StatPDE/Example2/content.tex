@@ -1,0 +1,57 @@
+\subsubsection{General problem description}
+This example solves the following pointwise minimization problem
+\begin{align*}
+\min_{(q,u)\in \mathbb R^3 \times H_0^1(\Omega; \mathbb R^2)} J(q,u) &= \frac{1}{2} \sum_{i=0}^2\abs{(u-\overline u)(x_i)}^2 + \frac{\alpha}{2}\|q\|^2&&\\
+\text{s.t. } (\nabla u,\nabla \phi) &= (f(q),\phi) \quad\forall\,\phi \in H^1_0(\Omega; \mathbb R^2)
+\end{align*}
+on the domain $\Omega = [0,1]^2$, with zero Dirichlet boundary conditions and
+\begin{itemize}
+\item the observation points
+\begin{align*}
+x_0 = (0.5, 0.5), \quad x_1 = (0.5, 0.25),\quad x_2 = (0.25, 0.25),
+\end{align*}
+\item the regularization parameter $\alpha = 0$, 
+\item the right hand side
+\begin{align*}
+ f(q) &= q_0 \left(\begin{matrix}2\pi^2  \sin( \pi x) \sin(\pi y)\\0 \end{matrix}\right)\\
+      &+ q_1 \left(\begin{matrix}5\pi^2  \sin( \pi x) \sin(2\pi y)\\0 \end{matrix}\right)\\
+      &+ q_2 \left(\begin{matrix}0 \\8\pi^2  \sin(2\pi x) \sin(2\pi y)\end{matrix}\right)\\
+\end{align*}
+\item and the exact solution given by 
+\begin{align*}
+ \overline{q} &= \bigl(1;0.5;1\bigr)\\
+ \overline{u}& = \left(\begin{matrix} \sin( \pi x)( \sin(\pi y)+0.5\sin(2\pi y))\\\sin(2\pi x) \sin(2\pi y) \end{matrix}\right).
+\end{align*}
+\end{itemize}
+\subsubsection{Program description}
+{
+In contrast to the first example, the control is now a discrete quantity (for
+the three observation points) where we use the \texttt{FE\underline{}Nothing}
+element to assign the three controls. Here, the number of components equals
+the number of controls. 
+In addition, }notice that the cost functional is of mixed type (from our computational point of view), i.e. the first part is a pointfunctional whereas the regularization part requires the evaluation of a domain integral. To handle this, we need a special integrator as well as a special newtonsolver. Additionally, our \texttt{LocalFunctional} returns as his type:
+\begin{verbatim}
+      string
+      GetType() const
+      {
+        return "point domain";
+      }
+\end{verbatim}
+Indicating, we have both some point values in the functional, as well as a domain contribution, 
+i.e., we calculate $\|q\| = \int_\Omega |q|\,dx$,
+even though this in not necessary, since $\alpha =0$ and the euclidean 
+norm of $q\in \mathbb R^3$ could be evaluated more easily using an \text{AlgebraicValue} in the functional.
+  
+This brings along that we have not only to implement {the methods
+\begin{align*} 
+ &\texttt{ElementValue},&&
+ \texttt{ElementValue\_U},\\
+ &\texttt{ElementValue\_Q}, &&
+ \texttt{ElementValue\_UU},\\
+ &\texttt{ElementValue\_UQ},&&
+ \texttt{ElementValue\_QU},\\
+ &\texttt{ElementValue\_QQ},
+\end{align*}}
+ from \texttt{FunctionalInterface}, but also all the aforementioned methods with a preceding \text{Point} (\texttt{PointValue} etc.).
+%FE_Nothing, handle of the control erlaeutern.
+

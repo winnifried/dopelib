@@ -1,0 +1,79 @@
+# Listing of Parameters for PDE Instat Example 1 (Fluid problem)
+# --------------------------------------------------------------
+
+subsection Local PDE parameters
+ 	   set constant_k	= 1.0e-10
+     	   set alpha_eps	= 2.0
+	   set gamma_penal	= 1.0
+	   set G_c		= 2.7
+	   set lame_coefficient_mu	= 80.77e+3
+	   set lame_coefficient_lambda  = 121.15e+3
+end
+
+subsection Problem data parameters
+	   set dis_step_per_timestep = 1.0
+
+end
+
+
+subsection newtonsolver parameters
+  # maximal number of linesearch steps
+  # For the modified instat_step Newton, do not set this number too high
+  set line_maxiter         = 4
+
+  # reduction rate for the linesearch damping paramete
+  set linesearch_rho       = 0.5
+
+  # global tolerance for the newton iteration
+  set nonlinear_global_tol = 1.e-10
+
+  # maximal number of newton iterations
+  set nonlinear_maxiter    = 100
+
+  # minimal  newton reduction, if actual reduction is less, matrix is rebuild
+  # the smaller this value, the more often we rebuild the matrix
+  set nonlinear_rho        = 0.0
+
+  # relative tolerance for the newton iteration
+  set nonlinear_tol        = 1.e-12
+end
+
+subsection output parameters
+  # File format for the output of solution variables
+  set file_format       = .vtk
+
+  # Iteration Counters that should not reflect in the outputname, seperated by
+  # `;`
+  set ignore_iterations = PDENewton;Cg
+  
+  # Name of the logfile
+  set logfile           = dope.log
+
+  # Do not write files whose name contains a substring given here by a list of
+  # `;` separated words
+  set never_write_list  = Gradient;Residual;Hessian;Tangent;Adjoint;Update
+  #set never_write_list  = Gradient;Hessian;Tangent;Adjoint
+      
+  # Defines what strings should be printed, the higher the number the more
+  # output
+  set printlevel        = 6
+  
+  # Set the precision of the newton output
+  set number_precision	 = 4
+
+  # Set manually the machine tolarance for the output
+  set eps_machine_set_by_user	 = 1.0e-11
+
+
+  # Directory where the output goes to
+  set results_dir       = Results/
+end
+
+
+#subsection gmres_withmatrix parameters
+	#   set linear_global_tol = 1.0e-16
+	#   set linear_maxiter    = 6000
+	#   set no_tmp_vectors    = 500
+#end
+
+

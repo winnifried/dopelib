@@ -1,0 +1,70 @@
+\subsubsection{General problem description}
+
+The problem under consideration is the so called multivariate Black-Scholes equation arising from pricing European style options in finance. \index{instationary PDE} \index{instationary PDE!Black-Scholes equation}\\
+To state the general form of the equation we need some nomenclature: We consider an option on $d$ risky assets with \textit{maturity} $T>0$ and \textit{strikeprice} $K>0$. For the sake of simplicity we assume the \textit{interest rate} $r>0$ and the \textit{volatility} of the i-th asset $\sigma_i>0$, $1\leq i\leq d$, to be constant. Besides, we assume the matrix $\rho=(\rho_{ij})$ of the \textit{correlation factors} $\rho_{ij}$ with  $-1\leq \rho_{ij}\leq 1$ for  $1\leq i,j \leq d$, to be positive definite. Of course $\rho$ is symmetric with $\rho_{ii}=1$.\\ 
+With $(t,x) \in I=(0,T] \times \mathbb{R}^d_+$ denoting the prices of the underlying assets at time $t$, the problem of determining the fair price $u$ of such an option is (after a time reversal) given by the following equation:
+\begin{subequations}
+\begin{align} 
+   \partial_t{u}-\frac12\sum_{i,j=1}^d \sigma_i\sigma_j\rho_{ij}x_ix_j \partial_{{x_i}}\partial_{x_j}u-r\sum_{i=1}^dx_i\partial_{x_i}{u}+ru&=0 &&\mbox{in } (0,T]\times \mathbb{R}_+^d,\\
+   u(0)&=u_0 &&\mbox{in } \mathbb{R}_+^d.
+\end{align}
+\end{subequations}
+The initial condition $u_0\in C^{0}\left({\mathbb{R}_+^d}\right) $ (i.e. the \textit{payoff}) is given depending of the type of the option. For example
+\begin{equation}
+u_0 :=\begin{cases} 
+\max(\sum_{i=1}^d \lambda_i x_i-K,0),&  u\text{ is a \textit{Call},}\\
+\max(K-\sum_{i=1}^d\lambda_i x_i,0),& u\text{ is a \textit{Put},}
+\end{cases}
+\end{equation}  
+for a plain vanilla European option on a basket of assets containing a share of $0<\lambda_i\leq 1$ of the $i$-th asset. For the computation, we truncate the domain, i.e. we choose $\overline x \in \mathbb{R}^d_+$ and consider the computational domain $\Omega := (x_1, \overline x_1)\times \dots \times (x_d, \overline x_d)$. On the new part of the boundary $\Gamma$ with $\Gamma :=\{x\in \partial\Omega |\exists_{1\leq i\leq d}  x_i=\overline x_i\}$) we impose asymptotic values as Dirichlet conditions. For a put, we take $u|_\Gamma=0$. We emphasize that no boundary conditions will be imposed on $\partial \Omega \setminus \Gamma$.\\
+In this particular example we examine the case of two uncorrelated stocks (with $\lambda_1=\lambda_2=\frac12$) and the following parameters:
+ \begin{table}[hb]
+    \centering
+    \begin{tabular}{lr}
+      \toprule 
+ & 2d-Put)\\
+       \cmidrule(l){2-2}
+	 actual asset value $x_0$ 	&  (25,25)\\
+	 strikeprice $K$			&  25 \\
+	 maturity date $T$ 			& 1 \\
+	 volatility $\sigma$		&  ($\frac12$, $\frac 3{10}$) \\
+	 cutoff $\overline x$		& $(100,100)$\\
+	 interest rate $r$ 				&  $0{,}05$\\
+	 option value $u(T,x_0$)			& ca.  2{,}269172389 \\
+      \bottomrule
+    \end{tabular}
+  \end{table}
+
+\subsubsection{Program description}
+Note that the initial conditions are only $H^1$-regular. Because of this, 
+the Crank-Nicolson scheme, which is not strongly A-stable, is not suited to solve 
+this problem. As we want to use a second order accurate time stepping scheme, we use 
+the shifted Crank-Nicolson method. The rest of the program is as before.
+
+In addition, this program shows how to change the vector behavior, from our
+default option \texttt{fullmem}, where the whole vector
+is stored in the computers main memory. Here the storage behavior is set to 
+\texttt{store\underline{ }on\underline{ }disc}, where only those unknowns are loaded into 
+main memory that are needed in the current time step, while all other 
+unknowns are stored on the hard drive. 
+
+This behavior is particularly useful, if many time steps are taken; so that the 
+whole set of unknowns can no longer be stored in main memory, but access to all
+parts of the solution is required after the solution process and thus the 
+option \texttt{only\underline{ }recent} used in Example~\ref{PDE_Instat_FSI} is not sufficient.
+Note that all vectors 
+will allocate the required memory when the vector is reinitialized to a new size.
+Hence, for large vectors this may need some time.
+
+To avoid multiple programs accessing the same files on the hard drive, a 
+\texttt{lock} file is initialized. Under normal conditions, this will be deleted 
+once the program terminates. However, should the program exit exceptionally, the 
+lock file will still exist. Calling the program in this case will produce an 
+exception, with the following text:
+\begin{verbatim}
+Warning: During execution of `StateVector<VECTOR>::StateVector` 
+         the following Problem occurred!
+The directory Results/tmp_state/ is probably already in use.
+\end{verbatim}
+To resolve the issue, you have to delete the named directory with the 
+temporary storage files manually.

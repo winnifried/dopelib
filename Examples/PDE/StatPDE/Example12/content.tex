@@ -1,0 +1,18 @@
+\subsubsection{General problem description}
+This example shows the use of the Raviart-Thomas (RT) element in \texttt{DOpElib}. The example 
+is taken from \texttt{dealii} step-20 and shows how this step can be implemented in \texttt{DOpElib}. The vector valued laplace equation is solved in the mixed formulation.
+
+Most things are identical to all the other programs. However there is a subtle difference in 
+\texttt{localpde.h}: Although the element used has 3 components (two for the RT-Element and 1 for the pressure)
+the block\underline{ }component vector mapping blocks to components has only 2 entries. 1 for each finite element used!
+
+The second difference is that we have to initialize the mapping explicitly. This is due to the fact that the 
+default 
+\begin{verbatim}
+  DOpEWrapper::Mapping<DIM,DOFHANDLER> mapping(1,false);
+\end{verbatim}
+is not working with the RT-element and leads to elements on which the divergence is NaN.
+
+An additional feature of this example is that for the solution of the PDE in mixed form we are using the 
+Schur complement solver provided in \texttt{dealii} step-20. Hence this example shows how simple it is to 
+use self-made linear solvers within the \texttt{DOpElib} framework.

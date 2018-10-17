@@ -1,0 +1,22 @@
+\subsubsection{General problem description}
+We solve the vector values Laplace equation on a quadratic domain $\Omega$ with a circular hole in the middle, i.e. in strong formulation we look for $u=(u_1,u_2)$ s.t.
+\begin{align*}
+-\nabla \cdot (\nabla u) =& f \quad\text{in }\Omega.
+\end{align*}
+We set zero Dirichlet values on the circular boundary in the middle of the domain and periodic boundary conditions on the other parts of the boundary. We choose the flux over the right hand side boundary as functional. We choose
+\begin{align*}
+f(x,y) = \left(\cos\left(\exp(10  x)\right)  y^2x + \sin(y), \cos\left(\exp(10 * y)\right)x^2y + \sin(x)\right)
+\end{align*}
+for the right hand side. As code verification, the mass flux on 
+one boundary part is evaluated.
+
+
+
+\subsubsection{Program description}
+This example show how to implement user defined DoF constraints. \texttt{DOpElib} has an interface for this, namely \texttt{UserDefinedDoFConstraints}. In our case, we derive the class \texttt{PeriodicityConstraints}, overwrite the method \texttt{MakeStateDoFConstraints} and give an instance of this class to SpaceTimeHandler at hand:
+\begin{verbatim}
+ 	PeriodicityConstraints<DOFHANDLER, DIM> constraints_mkr;
+ 	STH DOFH(triangulation, state_fe);
+ 	DOFH.SetUserDefinedDoFConstraints(constraints_mkr);
+\end{verbatim}
+This is all it takes. We refer to \textit{myconstraintsmaker.h} for the details of the implementation of the periodicity-constraints.
