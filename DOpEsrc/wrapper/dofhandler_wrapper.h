@@ -154,7 +154,9 @@ namespace DOpEWrapper
   {
   private:
     unsigned int dofs_ = 0;
+    dealii::Triangulation<1> tmp_tria_;
     dealii::DoFHandler<1> tmp_dof_handler_;
+
   public:
     /**
      * We actually never need the triangulation, this constructur merely exists
@@ -162,7 +164,7 @@ namespace DOpEWrapper
      */
     template<int dim>
     DoFHandler(const dealii::Triangulation<dim, dim> &/*tria*/)
-      : tmp_dof_handler_ (dealii::Triangulation<1> ())
+      : tmp_dof_handler_ (tmp_tria_)
     {
     }
     template<int dim>
@@ -201,6 +203,7 @@ namespace DOpEWrapper
   {
   private:
     unsigned int dofs_ = 0;
+    dealii::Triangulation<1> tmp_tria_;
     dealii::hp::DoFHandler<1> tmp_dof_handler_;
 
   public:
@@ -210,7 +213,7 @@ namespace DOpEWrapper
      */
     template<int dim>
     DoFHandler(const dealii::Triangulation<dim, dim> &/*tria*/)
-      : tmp_dof_handler_ (dealii::Triangulation<1> ())
+      : tmp_dof_handler_ (tmp_tria_)
     {
     }
     template<int dim>
