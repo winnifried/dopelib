@@ -30,8 +30,11 @@
 
 #include <deal.II/base/utilities.h>
 
-// TODO remove
+#ifdef DEAL_II_WITH_MPI
 #define MPI_TILL_HERE printf("[%d] Line %d \t File %s \n", dealii::Utilities::MPI::this_mpi_process(MPI_COMM_WORLD), __LINE__, __FILE__)
+#else
+#define MPI_TILL_HERE printf("Line %d \t File %s \n", __LINE__, __FILE__)
+#endif
 
 namespace DOpE
 {
