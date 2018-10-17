@@ -36,6 +36,7 @@
 #include <deal.II/dofs/dof_tools.h>
 #include <deal.II/lac/constraint_matrix.h>
 #include <deal.II/numerics/solution_transfer.h>
+#include <deal.II/numerics/vector_tools.h>
 #include <deal.II/grid/grid_refinement.h>
 #include <deal.II/grid/grid_tools.h>
 

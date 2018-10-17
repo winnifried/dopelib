@@ -27,6 +27,7 @@
 #include <basic/spacetimehandler_base.h>
 #include <interfaces/active_fe_index_setter_interface.h>
 #include <wrapper/dataout_wrapper.h>
+#include <wrapper/mapping_wrapper.h>
 
 #include <deal.II/lac/vector.h>
 #include <deal.II/lac/block_vector_base.h>
