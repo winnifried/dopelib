@@ -8,6 +8,9 @@ Changelog DOpE
 	    -Fixed some missing initializations.
 	    -ReSizeSpace methods changed interface. Now a variant for block and non-block
 	     vectors exists.
+	    -Integrator (integrator.h) adjusted to distributed triangulations.
+	    -Newtonsolver (newtonsolver.h) adjusted for distributed vectors, by handling
+	     ghosted and non-ghosted vectors.
 30.08.2018: Updated ReducedSNOPTAlgorithm to be compatible with SNOPT v 7.6
 28.08.2018: Added the possibility to conduct precalculation of nodal values in error estimation,
 	    such as information if a node is in 'full contact' for error estimation in the obstacle
