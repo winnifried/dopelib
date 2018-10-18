@@ -14,6 +14,7 @@ help:
 	@echo "=    c-all     :  Make all examples using cmake                           ="
 	@echo "=    clean     :  Cleaning up all examples                                ="
 	@echo "=    tests     :  Run all test param data.                                ="
+	@echo "=    time      :  Run all test param data and report timings.             ="
 	@echo "=    c-cat     :  Run clean, run c-all, run tests (combine these commands)="
 	@echo "=    doc       :  Create documentation in pdf file format via latexmk     ="
 	@echo "=    distclean :  Cleaning up, including documentation                    ="
@@ -27,6 +28,9 @@ c-all clean veryclean:	$(DIRECTORIES)
 
 tests:  
 	./testall.sh
+
+time:  
+	./testtime.sh
 
 c-cat:	
 	$(MAKE) clean; $(MAKE) c-all ; ./testall.sh
