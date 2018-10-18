@@ -1,5 +1,13 @@
 Changelog DOpE
 ==============
+18.10.2018: Merged parallel-dev branch. Including the following changes:
+	    -Replaced long if/else sections by a switch.
+	    -WriteToFile method moved to spacetimehandler.h, now including parallel output in .vtu
+	     format.
+	    -ReinitVector in spacetimehandler.h now also for parallel vectors.
+	    -Fixed some missing initializations.
+	    -ReSizeSpace methods changed interface. Now a variant for block and non-block
+	     vectors exists.
 30.08.2018: Updated ReducedSNOPTAlgorithm to be compatible with SNOPT v 7.6
 28.08.2018: Added the possibility to conduct precalculation of nodal values in error estimation,
 	    such as information if a node is in 'full contact' for error estimation in the obstacle
