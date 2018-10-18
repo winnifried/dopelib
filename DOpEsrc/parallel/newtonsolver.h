@@ -21,8 +21,8 @@
 *
 **/
 
-#ifndef NEWTON_SOLVER_H_
-#define NEWTON_SOLVER_H_
+#ifndef PARALLEL_NEWTON_SOLVER_H_
+#define PARALLEL_NEWTON_SOLVER_H_
 
 #include <deal.II/lac/vector.h>
 #include <deal.II/lac/block_sparsity_pattern.h>
