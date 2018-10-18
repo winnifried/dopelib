@@ -3211,6 +3211,10 @@ namespace DOpE
           {
             return this->GetPDE().HasInterfaces();
           }
+	else if (this->GetType() == "error_evaluation" )
+	{
+	  return true;//Always true for jumps over edges
+	}
         else
           {
             throw DOpEException("Unknown Type: '" + this->GetType() + "'!",

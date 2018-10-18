@@ -52,7 +52,7 @@
 #include <reducedproblems/statpdeproblem.h>
 #include <templates/gmreslinearsolver.h>
 #include <templates/integrator.h>
-#include <templates/newtonsolver.h>
+#include <parallel/newtonsolver.h>
 #include <wrapper/preconditioner_wrapper.h>
 
 #include "functionals.h"
@@ -151,9 +151,9 @@ typedef GMRESLinearSolverWithMatrix<PRECONDITIONERSSOR,
   GMRESSSOR;
 
 // Define three newtonsolver fitting the three linear solvers
-typedef NewtonSolver<BLOCKINTEGRATOR, GMRESIDENTITYBLOCK, VECTORBLOCK> NLS1;
-typedef NewtonSolver<INTEGRATOR, GMRESIDENTITY, VECTOR>                NLS2;
-typedef NewtonSolver<INTEGRATOR, GMRESSSOR, VECTOR>                    NLS3;
+typedef Parallel::NewtonSolver<BLOCKINTEGRATOR, GMRESIDENTITYBLOCK, VECTORBLOCK> NLS1;
+typedef Parallel::NewtonSolver<INTEGRATOR, GMRESIDENTITY, VECTOR>                NLS2;
+typedef Parallel::NewtonSolver<INTEGRATOR, GMRESSSOR, VECTOR>                    NLS3;
 
 // Define the three ssolver fitting the three linear solvers.
 typedef StatPDEProblem<NLS1, BLOCKINTEGRATOR, OPBLOCK, VECTORBLOCK, DIM> RP1;

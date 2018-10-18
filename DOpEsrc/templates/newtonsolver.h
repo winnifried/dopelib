@@ -33,8 +33,10 @@
 #include <fstream>
 #include <iomanip>
 
-#include <include/helper.h>
 #include <include/parameterreader.h>
+
+
+
 
 namespace DOpE
 {
@@ -174,46 +176,38 @@ namespace DOpE
                    std::string algo_level)
   {
     bool build_matrix = force_matrix_build;
-
-    VECTOR residual (solution);
-    VECTOR du (solution);
-    VECTOR u (solution);
-    VECTOR ghosted (solution);
-
-    DOpEHelper::make_distributed (u);
-    DOpEHelper::make_distributed (du);
-    DOpEHelper::make_distributed (residual);
-
+    VECTOR residual;
+    VECTOR du;
     std::stringstream out;
     pde.GetOutputHandler()->InitNewtonOut(out);
 
-    if (apply_boundary_values)
-      GetIntegrator ().ApplyInitialBoundaryValues (pde, u);
+    du.reinit(solution);
+    residual.reinit(solution);
 
-    // For the integrator we need a ghosted linearization point
-    solution = u;
+    if (apply_boundary_values)
+      {
+        GetIntegrator().ApplyInitialBoundaryValues(pde,solution);
+      }
 
     GetIntegrator().AddDomainData("last_newton_solution",&solution);
-    GetIntegrator ().ComputeNonlinearResidual (pde, residual);
 
+    GetIntegrator().ComputeNonlinearResidual(pde,residual);
     residual *= -1.;
 
-    {
-      ghosted = residual;
     pde.GetOutputHandler()->SetIterationNumber(0,"PDENewton");
-      pde.GetOutputHandler ()->Write (ghosted,
-                                      "Residual" + pde.GetType (), pde.GetDoFType ());
-    }
+    pde.GetOutputHandler()->Write(residual,"Residual"+pde.GetType(),pde.GetDoFType());
 
     double res = residual.linfty_norm();
     double firstres = res;
     double lastres = res;
 
-    out<< algo_level << "Newton step: " <<0<<"\t Residual (abs.): "
-        << pde.GetOutputHandler ()->ZeroTolerance (res, 1.0) << "\n";
 
-    out << algo_level << "Newton step: " << 0 << "\t Residual (rel.):   "
-        << std::scientific << firstres / firstres;
+    out<< algo_level << "Newton step: " <<0<<"\t Residual (abs.): "
+       <<pde.GetOutputHandler()->ZeroTolerance(res, 1.0)
+       <<"\n";
+
+    out<< algo_level << "Newton step: " <<0<<"\t Residual (rel.):   " << std::scientific << firstres/firstres;
+
 
     pde.GetOutputHandler()->Write(out,priority);
 
@@ -225,51 +219,37 @@ namespace DOpE
         if (iter > nonlinear_maxiter_)
           {
             GetIntegrator().DeleteDomainData("last_newton_solution");
-            throw DOpEIterationException (
-              "Iteration count exceeded bounds!",
-              "NewtonSolver::NonlinearSolve");
+            throw DOpEIterationException("Iteration count exceeded bounds!","NewtonSolver::NonlinearSolve");
           }
 
         pde.GetOutputHandler()->SetIterationNumber(iter,"PDENewton");
 
-        LINEARSOLVER::Solve (pde, GetIntegrator (), residual, du,
-                             build_matrix);
+        LINEARSOLVER::Solve(pde,GetIntegrator(),residual,du,build_matrix);
 
         //Linesearch
         {
-          u += du;
-
-          // We have to update the ghosted solution as well ...
-          solution = u;
+          solution += du;
           GetIntegrator().ComputeNonlinearResidual(pde,residual);
-
           residual *= -1.;
 
-          {
-            ghosted = residual;
-            pde.GetOutputHandler ()->Write (ghosted,
-                                            "Residual" + pde.GetType (), pde.GetDoFType ());
-
-            ghosted = du;
-            pde.GetOutputHandler ()->Write (ghosted,
-                                            "Update" + pde.GetType (), pde.GetDoFType ());
-          }
+          pde.GetOutputHandler()->Write(residual,"Residual"+pde.GetType(),pde.GetDoFType());
+          pde.GetOutputHandler()->Write(du,"Update"+pde.GetType(),pde.GetDoFType());
 
           double newres = residual.linfty_norm();
           int lineiter=0;
+	  pde.GetOutputHandler()->SetIterationNumber(lineiter,"PDENewtonLS");
           double rho = linesearch_rho_;
           double alpha=1;
           if ( newres > res && build_matrix == false)
             {
               build_matrix = true;
               // Reuse of Matrix seems to be a bad idea, rebuild and repeat
-              u -= du;
-              solution = u;
-
+              solution -= du;
               GetIntegrator().ComputeNonlinearResidual(pde,residual);
-
               residual *= -1.;
-              out << algo_level << "Newton step: " << iter
+              out << algo_level
+                  << "Newton step: "
+                  <<iter
                   <<"\t Recalculate with new Matrix";
               iter--;
               pde.GetOutputHandler()->Write(out,priority);
@@ -277,48 +257,38 @@ namespace DOpE
           else
             {
               build_matrix = false;
+	      pde.GetOutputHandler()->Write(solution,"Intermediate"+pde.GetType(),pde.GetDoFType());
               while (newres > res)
                 {
-                  out << algo_level
-                      << "Newton step: "
-                      << iter
-                      << "\t Residual (rel.): "
-                      << pde.GetOutputHandler ()->ZeroTolerance (
-                        newres / firstres, 1.0)
+                  out<< algo_level << "Newton step: " <<iter<<"\t Residual (rel.): "
+                     <<pde.GetOutputHandler()->ZeroTolerance(newres/firstres, 1.0)
                      << "\t LineSearch {"<<lineiter<<"} ";
 
                   pde.GetOutputHandler()->Write(out,priority+1);
 
                   lineiter++;
+		  pde.GetOutputHandler()->SetIterationNumber(lineiter,"PDENewtonLS");
                   if (lineiter > line_maxiter_)
                     {
-                      GetIntegrator ().DeleteDomainData (
-                        "last_newton_solution");
-                      throw DOpEIterationException (
-                        "Line-Iteration count exceeded bounds!",
-                        "NewtonSolver::NonlinearSolve");
+                      GetIntegrator().DeleteDomainData("last_newton_solution");
+                      throw DOpEIterationException("Line-Iteration count exceeded bounds!","NewtonSolver::NonlinearSolve");
                     }
-
-                  u.add (alpha * (rho - 1.), du);
+                  solution.add(alpha*(rho-1.),du);
                   alpha*= rho;
-
-                  solution = u;
 
                   GetIntegrator().ComputeNonlinearResidual(pde,residual);
                   residual *= -1.;
-
-                  {
-                    ghosted = residual;
-                    pde.GetOutputHandler ()->Write (ghosted,
-                                                    "Residual" + pde.GetType (), pde.GetDoFType ());
-                  }
+                  pde.GetOutputHandler()->Write(residual,"Residual"+pde.GetType(),pde.GetDoFType());
+		  pde.GetOutputHandler()->Write(solution,"Intermediate"+pde.GetType(),pde.GetDoFType());
 
                   newres = residual.linfty_norm();
+
                 }
 
               if (res/lastres > nonlinear_rho_)
+                {
                   build_matrix=true;
-
+                }
               lastres=res;
               res=newres;
 
@@ -326,11 +296,14 @@ namespace DOpE
                   << "Newton step: "
                   <<iter
                   <<"\t Residual (rel.): "
-                  << pde.GetOutputHandler ()->ZeroTolerance (res / firstres,
-                                                             1.0)
-                  << "\t LineSearch {" << lineiter << "} ";
+                  << pde.GetOutputHandler()->ZeroTolerance(res/firstres, 1.0)
+                  << "\t LineSearch {"
+                  <<lineiter
+                  <<"} ";
+
 
               pde.GetOutputHandler()->Write(out,priority);
+
             }//End of Linesearch
         }
       }
@@ -341,8 +314,8 @@ namespace DOpE
 
   /*******************************************************************************************/
   template <typename INTEGRATOR, typename LINEARSOLVER, typename VECTOR>
-  INTEGRATOR &
-  NewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR>::GetIntegrator ()
+  INTEGRATOR &NewtonSolver<INTEGRATOR,LINEARSOLVER, VECTOR>
+  ::GetIntegrator()
   {
     return integrator_;
   }
@@ -351,4 +324,8 @@ namespace DOpE
 
 }
 #endif
+
+
+
+
 
