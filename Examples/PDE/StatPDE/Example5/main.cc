@@ -246,7 +246,7 @@ main(int argc, char **argv)
 
   for (int i = 0; i < max_iter; i++)
     {
-      try
+      //try
         {
           solver.ReInit();
           out.ReInit();
@@ -274,13 +274,13 @@ main(int argc, char **argv)
           outp << "H1-Error estimator: " << sqrt(h1resc.GetError()) << std::endl;
           out.Write(outp, 1, 1, 1);
         }
-      catch (DOpEException &e)
-        {
-          std::cout
-              << "Warning: During execution of `" + e.GetThrowingInstance()
-              + "` the following Problem occurred!" << std::endl;
-          std::cout << e.GetErrorMessage() << std::endl;
-        }
+//      catch (DOpEException &e)
+//        {
+//          std::cout
+//              << "Warning: During execution of `" + e.GetThrowingInstance()
+//              + "` the following Problem occurred!" << std::endl;
+//          std::cout << e.GetErrorMessage() << std::endl;
+//        }
       if (i != max_iter - 1)
         {
           //For global mesh refinement, uncomment the next line

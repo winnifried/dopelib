@@ -2023,15 +2023,15 @@ void Integrator<INTEGRATORDATACONT, VECTOR, SCALAR,
 
 #endif
       }
-      {
-        // Remove Weights
-        auto wd = dwrc.GetWeightData().begin();
-        auto wend = dwrc.GetWeightData().end();
-        for (; wd != wend; wd++) {
-          DeleteDomainData(wd->first);
-        }
-      } // endif locally owned
+    }// endif locally owned
+  {
+    // Remove Weights
+    auto wd = dwrc.GetWeightData().begin();
+    auto wend = dwrc.GetWeightData().end();
+    for (; wd != wend; wd++) {
+      DeleteDomainData(wd->first);
     }
+  } 
 }
 
 /*******************************************************************************************/

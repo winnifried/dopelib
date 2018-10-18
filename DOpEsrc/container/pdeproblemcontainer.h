@@ -1300,7 +1300,7 @@ namespace DOpE
     else
       {
         throw DOpEException("Unknown Type: '" + this->GetType() + "'!",
-                            "PDEProblemContainer::HasFaces");
+                            "PDEProblemContainer::HasPoints");
       }
 
   }
@@ -1316,10 +1316,14 @@ namespace DOpE
       {
         return false;
       }
+    else if (this->GetType() == "error_evaluation")
+    {
+      return true; //Always true, for face contributions
+    }
     else
       {
         throw DOpEException("Unknown Type: '" + this->GetType() + "'!",
-                            "PDEProblemContainer::HasFaces");
+                            "PDEProblemContainer::HasInterfaces");
       }
   }
   
