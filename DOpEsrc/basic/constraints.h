@@ -164,7 +164,8 @@ namespace DOpE
         {
           return local_control_constraints_per_block_;
         }
-      throw DOpEException("Unknown name " + name, "constraints::n_dofs_");
+      abort();
+      throw DOpEException("Unknown name " + name, "constraints::GetDoFsPerBlock");
     }
 
   private:

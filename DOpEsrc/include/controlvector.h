@@ -345,7 +345,7 @@ namespace DOpE
         const unsigned int ndofs = GetSpaceTimeHandler ()->GetControlNDoFs (
                                      time_point);
         const auto &dofs_per_block =
-          GetSpaceTimeHandler ()->GetStateDoFsPerBlock (time_point);
+          GetSpaceTimeHandler ()->GetControlDoFsPerBlock (time_point);
         const unsigned int nblocks = dofs_per_block.size ();
 
         if (accessor_ >= 0)

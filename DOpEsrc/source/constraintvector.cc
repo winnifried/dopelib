@@ -205,10 +205,10 @@ ConstraintVector<VECTOR>::ReSizeLocalSpace ()
           {
             if (local_control_constraint_[accessor_] == NULL)
             local_control_constraint_[accessor_] = new VECTOR ();
-          if (local_control_constraint_[accessor_]->size () != GetSpaceTimeHandler ()->GetStateNDoFs ())
+          if (local_control_constraint_[accessor_]->size () != GetSpaceTimeHandler ()->GetConstraintNDoFs ("local"))
             GetSpaceTimeHandler ()->ReinitVector (
               *local_control_constraint_[accessor_],
-              DOpEtypes::VectorType::constraint);
+              DOpEtypes::VectorType::local_constraint);
           }
         else
           {
