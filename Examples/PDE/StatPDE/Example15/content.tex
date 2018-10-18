@@ -1,38 +1,39 @@
 \subsubsection{General problem description}
-In this problem we solve the simple vector valued Laplace equation in 3d
-on the unit square $\Omega=[0,1]^3$, i.e. in strong formulation we look for $u=(u_1, u_2, u_3)$ s.t.
-\begin{align*}
--\Delta u =& f \quad\text{in }\Omega.
-\end{align*}
-We set zero Dirichlet values on $\partial \Gamma$ and choose $f=(1,1,1)$.
+The setup of this example is the same as Example 6, i.e. we solve a vector-valued Laplace equation in 3d. The major difference is the use of MPI to parallelize and speedup our program.
+
 \subsubsection{Program description}
-The PDE is discretized with Q3-elements on a series of locally refined grids (we use the \texttt{KellyErrorEstimator}). The algebraic equations are solved with  different iterative linear solvers acting on different vector and matrix-structures (i.e. we use \texttt{dealii::BlockVector} and \texttt{dealii::Vector} plus the appropriate matrix classes). 
+MPI based parallelization in DOpE happens mainly behind the scenes. For simple examples like this one, there are only few changes required in the user provided source code.
 
-To switch the linear solver is pretty easy since the newton solver has a template for the linear solver. Thus changing this template is all that is required. 
+The first one is to use data structures that allow for MPI based parallelization. This is not supported by the previously used dealii::Vector and dealii::SparseMatrix structures, but we have to switch to the corresponding vectors in the dealii::TrilinosWrappers namespace.
 
-To change the structure of the vectors and matrices involves also only the change of some template parameters. Our example programs are mostly build such that only a change of some typedefs is required, i.e. one has to interchange the lines
 \begin{verbatim}
-	typedef SparseMatrix<double> MATRIX;
-	typedef SparsityPattern SPARSITYPATTERN;
-	typedef Vector<double> VECTOR;
+	using MATRIXBLOCK          = TrilinosWrappers::BlockSparseMatrix;
+	using SPARSITYPATTERNBLOCK = TrilinosWrappers::BlockSparsityPattern;
+	using VECTORBLOCK          = TrilinosWrappers::MPI::BlockVector;
 \end{verbatim}
-with
-\begin{verbatim}
-	typedef BlockSparseMatrix<double> MATRIX;
-	typedef BlockSparsityPattern SPARSITYPATTERN;
-	typedef BlockVector<double> VECTOR;
-\end{verbatim}
-to switch between the block and non-block structures.
 
-After solving the equation, we want to apply local mesh refinement. So first we extract with the help of the \texttt{SolutionExatractr}-class the vector \texttt{solution} representing the finite element solution
+\begin{remark}
+	\begin{verbatim} using \end{verbatim} is just the more modern version of \begin{verbatim} typedef \end{verbatim}
+\end{remark}
+
+MPI needs to be initialized, this is done via the line 
 \begin{verbatim}
-  SolutionExtractor<SSolver1, VECTORBLOCK> a1(solver1);
- 	const StateVector<VECTORBLOCK> &gu1 = a1.GetU();
- 	solution = gu1.GetSpacialVector();
+	dealii::Utilities::MPI::MPI_InitFinalize mpi(argc, argv);
 \end{verbatim}
-With this vector we estimate the error via \texttt{KellyErrorEstimator} and get a vector holding the estimated error per element. After choosing a refinement criterion (see \textit{refinementcontainer.h}, we opt here for refining the top 20\% of the elements), we give the SpaceTimeHandler an object of type \texttt{RefinementContainer} which holds all the information needed for the local mesh refinement. This is done via the \texttt{RefineSpace} method.
+which is a deal.II class handling the initialization for us. This object has to be created before any call to a MPI function, hence it is advised to put it right at the beginning of the main function. MPI also needs to be "finalized", i.e. closed explicitly. This is included in the previous class and happens when the MPI_InitFinalize object gets out of scope.
+
+% TODO pcout
+
+This are already all the changes required to run our application in parallel. In order to run the application with MPI, we have to call it via 
 \begin{verbatim}
-        DOFH1.RefineSpace(
-               RefineFixedNumber(estimated_error_per_element, 0.2, 0.0));
+	mpirun -np 4 application
 \end{verbatim}
-This method transfers our solution onto the new mesh. The transferred solution is then taken as the starting guess of the newton method in the next solution cycle. This is especially helpful for nonlinear problems.
+This example call spawns 4 instances of our application, which then proceed to jointly solve our problem. The number of cores used can be controlled via the "-np x" option. "-np 1" runs the application without MPI parallelization.
+
+\begin{remark}
+	Depending on your system, the exact command might be different, i.e. "srun -n 4 application" for slurm based systems.
+\end{remark}
+
+\begin{remark}
+	Note that on standard personal computers you may not actually see any speedup. This is due to limitations of the memory bandwidth. 
+\end{remark}
