@@ -20,7 +20,7 @@ MPI needs to be initialized, this is done via the line
 \begin{verbatim}
 	dealii::Utilities::MPI::MPI_InitFinalize mpi(argc, argv);
 \end{verbatim}
-which is a deal.II class handling the initialization for us. This object has to be created before any call to a MPI function, hence it is advised to put it right at the beginning of the main function. MPI also needs to be "finalized", i.e. closed explicitly. This is included in the previous class and happens when the MPI_InitFinalize object gets out of scope.
+which is a deal.II class handling the initialization for us. This object has to be created before any call to a MPI function, hence it is advised to put it right at the beginning of the main function. MPI also needs to be "finalized", i.e. closed explicitly. This is included in the previous class and happens when the MPI\_InitFinalize object gets out of scope.
 
 % TODO pcout
 
