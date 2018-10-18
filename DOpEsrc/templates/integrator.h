@@ -831,13 +831,14 @@ void Integrator<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::ComputeNonlinearRhs(
   //              "Integrator::ComputeNonlinearRhs");
   //        }
   bool need_faces = pde.HasFaces();
+  bool need_interfaces = pde.HasInterfaces();
   std::vector<unsigned int> boundary_equation_colors =
       pde.GetBoundaryEquationColors();
   bool need_boundary_integrals = (boundary_equation_colors.size() > 0);
 
   GetIntegratorDataContainer().InitializeFDC(
       pde.GetFaceUpdateFlags(), *(pde.GetBaseProblem().GetSpaceTimeHandler()),
-      element, this->GetParamData(), this->GetDomainData());
+      element, this->GetParamData(), this->GetDomainData(),need_interfaces);
   auto &fdc = GetIntegratorDataContainer().GetFaceDataContainer();
 
   for (; element[0] != endc[0]; element[0]++) {
@@ -1160,10 +1161,11 @@ Integrator<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::ComputeBoundaryScalar(
   auto element =
       pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandlerBeginActive();
   auto endc = pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandlerEnd();
-
+  bool need_interfaces = pde.HasInterfaces();
+  
   GetIntegratorDataContainerFunc().InitializeFDC(
       pde.GetFaceUpdateFlags(), *(pde.GetBaseProblem().GetSpaceTimeHandler()),
-      element, this->GetParamData(), this->GetDomainData());
+      element, this->GetParamData(), this->GetDomainData(), need_interfaces);
   auto &fdc = GetIntegratorDataContainerFunc().GetFaceDataContainer();
 
   std::vector<unsigned int> boundary_functional_colors =
@@ -1230,9 +1232,11 @@ SCALAR Integrator<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::ComputeFaceScalar(
       pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandlerBeginActive();
   auto endc = pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandlerEnd();
 
+  bool need_interfaces = pde.HasInterfaces();
+  
   GetIntegratorDataContainerFunc().InitializeFDC(
       pde.GetFaceUpdateFlags(), *(pde.GetBaseProblem().GetSpaceTimeHandler()),
-      element, this->GetParamData(), this->GetDomainData());
+      element, this->GetParamData(), this->GetDomainData(), need_interfaces);
   auto &fdc = GetIntegratorDataContainerFunc().GetFaceDataContainer();
 
   bool need_faces = pde.HasFaces();
@@ -1495,7 +1499,7 @@ void Integrator<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::
   }
 
   //        bool need_faces = pde.HasFaces();
-  //        bool need_interfaces = pde.HasInterfaces();
+  bool need_interfaces = pde.HasInterfaces();
   //        std::vector<unsigned int> boundary_equation_colors =
   //        pde.GetBoundaryEquationColors(); bool
   //        need_boundary_integrals = (boundary_equation_colors.size() >
@@ -1504,12 +1508,12 @@ void Integrator<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::
   GetIntegratorDataContainer().InitializeFDC(
       dwrc.GetWeightIDC().GetFaceQuad(), pde.GetFaceUpdateFlags(),
       *(pde.GetBaseProblem().GetSpaceTimeHandler()), element,
-      this->GetParamData(), this->GetDomainData(), true);
+      this->GetParamData(), this->GetDomainData(), need_interfaces);
   auto &fdc = GetIntegratorDataContainer().GetFaceDataContainer();
 
   dwrc.GetWeightIDC().InitializeFDC(
       pde.GetFaceUpdateFlags(), dwrc.GetWeightSTH(), element_weight,
-      this->GetParamData(), dwrc.GetWeightData(), true);
+      this->GetParamData(), dwrc.GetWeightData(), need_interfaces);
 
   for (unsigned int element_index = 0; element[0] != endc[0];
        element[0]++, element_index++) {
@@ -1778,7 +1782,7 @@ void Integrator<INTEGRATORDATACONT, VECTOR, SCALAR,
   // formula from the higher order idc!.
   GetIntegratorDataContainer().InitializeEDC(
       pde.GetUpdateFlags(), *(pde.GetBaseProblem().GetSpaceTimeHandler()),
-      element, this->GetParamData(), this->GetDomainData());
+      element, this->GetParamData(), this->GetDomainData(), pde.HasVertices());
   auto &edc = GetIntegratorDataContainer().GetElementDataContainer();
 
   // we want to integrate the face-terms only once
@@ -1806,7 +1810,7 @@ void Integrator<INTEGRATORDATACONT, VECTOR, SCALAR,
   }
 
   //        bool need_faces = pde.HasFaces();
-  //        bool need_interfaces = pde.HasInterfaces();
+  bool need_interfaces = pde.HasInterfaces();
   //        std::vector<unsigned int> boundary_equation_colors =
   //        pde.GetBoundaryEquationColors(); bool
   //        need_boundary_integrals = (boundary_equation_colors.size() >
@@ -1814,7 +1818,7 @@ void Integrator<INTEGRATORDATACONT, VECTOR, SCALAR,
 
   GetIntegratorDataContainer().InitializeFDC(
       pde.GetFaceUpdateFlags(), *(pde.GetBaseProblem().GetSpaceTimeHandler()),
-      element, this->GetParamData(), this->GetDomainData(), true);
+      element, this->GetParamData(), this->GetDomainData(), need_interfaces);
   auto &fdc = GetIntegratorDataContainer().GetFaceDataContainer();
 
   for (unsigned int element_index = 0; element[0] != endc[0];
