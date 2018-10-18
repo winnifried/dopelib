@@ -81,6 +81,7 @@ const static int DIM = 3;
 using QUADRATURE     = QGauss<DIM>;
 using FACEQUADRATURE = QGauss<DIM - 1>;
 
+#if defined(DOPELIB_WITH_TRILINOS) && defined(DOPELIB_WITH_MPI)
 // Define block issues
 using MATRIXBLOCK          = TrilinosWrappers::BlockSparseMatrix;
 using SPARSITYPATTERNBLOCK = TrilinosWrappers::BlockSparsityPattern;
@@ -395,6 +396,14 @@ main(int argc, char **argv)
 
   return 0;
 }
+#else
+int
+main(int /*argc*/, char **/*argv*/)
+{
+  std::cout<<"This example requires DOpE with  Trilinos and MPI"<<std::endl;
+    abort();
+}
+#endif //Dopelib with trilinos
 #undef FDC
 #undef CDC
 #undef FE

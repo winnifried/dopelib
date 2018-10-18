@@ -77,6 +77,7 @@ namespace DOpE
       const dealii::ConstraintMatrix &hanging_node_constraints,
       const std::vector<unsigned int> &blocks) const;
 
+#ifdef DOPELIB_WITH_TRILINOS
     virtual void
     ComputeSparsityPattern (const DOpEWrapper::DoFHandler<dim, DH> &dof_handler,
                             dealii::TrilinosWrappers::BlockSparsityPattern &sparsity,
@@ -90,7 +91,7 @@ namespace DOpE
                             const dealii::ConstraintMatrix &hanging_node_constraints,
                             const std::vector<unsigned int> &blocks,
                             const MPI_Comm mpi_comm = MPI_COMM_WORLD) const;
-
+#endif
 //      /*
 //       * Experimental status:
 //       * Needed for MG prec.
@@ -188,6 +189,7 @@ namespace DOpE
 
   /***********************************************************/
 
+#ifdef DOPELIB_WITH_TRILINOS
   template <template <int, int> class DH, int dim>
   void
   SparsityMaker<DH, dim>::ComputeSparsityPattern (const DOpEWrapper::DoFHandler<
@@ -268,6 +270,7 @@ namespace DOpE
       }
     sparsity.compress ();
   }
+#endif //Endof Dopelib_with_Trilinos
 
 ///***********************************************************/
 //  template<template<int, int> class DH, int dim>

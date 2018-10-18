@@ -582,27 +582,22 @@ namespace DOpE
           }
       }
 
-    MPI_TILL_HERE;
-
     this->GetOutputHandler()->Write("Computing State Solution:",
                                     4 + this->GetBasePriority());
-    MPI_TILL_HERE;
 
     this->GetProblem()->AddAuxiliaryToIntegrator(this->GetIntegrator());
-    MPI_TILL_HERE;
+
     AddUDD();
-    MPI_TILL_HERE;
+
     build_state_matrix_ = this->GetNonlinearSolver("state").NonlinearSolve(
                             problem, (GetU().GetSpacialVector()), true, build_state_matrix_);
-    MPI_TILL_HERE;
+
     DeleteUDD();
-    MPI_TILL_HERE;
 
     this->GetProblem()->DeleteAuxiliaryFromIntegrator(this->GetIntegrator());
 
     this->GetOutputHandler()->Write((GetU().GetSpacialVector()),
                                     "State" + this->GetPostIndex(), problem.GetDoFType());
-    MPI_TILL_HERE;
 
   }
 
