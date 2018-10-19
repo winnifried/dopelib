@@ -231,8 +231,8 @@ namespace DOpE
                                       + tmp_dir_ + "StateVector_lock";
                 if (system(command.c_str()) != 0)
                   {
-                    throw DOpEException("The command " + command + "failed!",
-                                        "StateVector<VECTOR>::~StateVector");
+		    std::cout<<"The command "<< command << "failed! in StateVector<VECTOR>::~StateVector"<<std::endl;
+		    abort();
                   }
               }
             else
@@ -241,15 +241,17 @@ namespace DOpE
                                       + Utilities::int_to_string(unique_id_) + ".dope";
                 if (system(command.c_str()) != 0)
                   {
-                    throw DOpEException("The command " + command + "failed!",
-                                        "StateVector<VECTOR>::~StateVector");
+		    std::cout<<"The command "<< command << "failed! in StateVector<VECTOR>::~StateVector"<<std::endl;
+		    abort();
                   }
               }
             num_active_--;
           }
         else
-          throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),
-                              "StateVector<VECTOR>::~StateVector");
+	{
+	  std::cout<<"Unknown Behavior "<< DOpEtypesToString(GetBehavior())<<" in StateVector<VECTOR>::~StateVector"<<std::endl;
+	  abort();
+	}
       }
   }
 
