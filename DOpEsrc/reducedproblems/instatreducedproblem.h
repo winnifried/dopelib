@@ -314,8 +314,9 @@ namespace DOpE
      *
      * @param step         The actual time step.
      * @param num_steps    The total number of time steps.
+     * @param u_old        Solution from previous time step, if needed by functional
      */
-    void ComputeTimeFunctionals(unsigned int step, unsigned int num_steps);
+    void ComputeTimeFunctionals(unsigned int step, unsigned int num_steps, const VECTOR& u_old);
     /**
      * This function is running the time dependent problem for the state variable.
      * There is a loop over all time steps, and in each time step
@@ -1307,7 +1308,7 @@ namespace DOpE
   typename INTEGRATOR, typename PROBLEM, typename VECTOR, int dopedim,
   int dealdim>
   void InstatReducedProblem<CONTROLNONLINEARSOLVER, NONLINEARSOLVER, CONTROLINTEGRATOR, INTEGRATOR,
-       PROBLEM, VECTOR, dopedim, dealdim>::ComputeTimeFunctionals(unsigned int step, unsigned int num_steps)
+       PROBLEM, VECTOR, dopedim, dealdim>::ComputeTimeFunctionals(unsigned int step, unsigned int num_steps, const VECTOR& u_old)
   {
     std::stringstream out;
     this->GetOutputHandler()->InitOut(out);
@@ -1317,6 +1318,10 @@ namespace DOpE
     this->GetProblem()->AddAuxiliaryToIntegrator(this->GetIntegrator());
 
     this->GetIntegrator().AddDomainData("state", &(GetU().GetSpacialVector()));
+    if(step!=0)
+    {
+      this->GetIntegrator().AddDomainData("last_time_state", &u_old);
+    }
     {
       //CostFunctional
       this->SetProblemType("cost_functional");
@@ -1537,6 +1542,10 @@ namespace DOpE
         }
     }
     this->GetIntegrator().DeleteDomainData("state");
+    if(step!=0)
+    {
+      this->GetIntegrator().DeleteDomainData("last_time_state");
+    }
     this->GetProblem()->DeleteAuxiliaryFromIntegrator(this->GetIntegrator());
 
   }
@@ -1662,7 +1671,7 @@ namespace DOpE
       {
         // Functional evaluation in t_0
         ComputeTimeFunctionals(0,
-                               max_timestep);
+                               max_timestep, u_old);
         this->SetProblemType("state");
       }
     if (cost_needs_precomputations_ != 0 && outname == "Tangent")
@@ -1733,14 +1742,12 @@ namespace DOpE
             this->GetProblem()->DeletePreviousAuxiliaryFromIntegrator(
               this->GetIntegrator());
 
-            //TODO do a transfer to the next grid for changing spatial meshes!
-            u_old = sol.GetSpacialVector();
             this->GetOutputHandler()->Write(sol.GetSpacialVector(),
                                             outname + this->GetPostIndex(), problem.GetDoFType());
             if (eval_funcs)
               {
                 //Functional evaluation in t_n  //if condition to get the type
-                ComputeTimeFunctionals(local_to_global[i], max_timestep);
+                ComputeTimeFunctionals(local_to_global[i], max_timestep,u_old);
                 this->SetProblemType("state");
               }
             if (cost_needs_precomputations_ != 0 && outname == "Tangent")
@@ -1756,6 +1763,8 @@ namespace DOpE
                 this->GetIntegrator().DeleteDomainData("state");
                 this->SetProblemType("tangent");
               } // End precomputation of values
+            //TODO do a transfer to the next grid for changing spatial meshes!
+            u_old = sol.GetSpacialVector();
           }
       }
   }
