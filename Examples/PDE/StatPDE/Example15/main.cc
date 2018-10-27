@@ -82,6 +82,7 @@ using QUADRATURE     = QGauss<DIM>;
 using FACEQUADRATURE = QGauss<DIM - 1>;
 
 #if defined(DOPELIB_WITH_TRILINOS) && defined(DOPELIB_WITH_MPI)
+#if DEAL_II_VERSION_GTE(9,0,0)
 // Define block issues
 using MATRIXBLOCK          = TrilinosWrappers::BlockSparseMatrix;
 using SPARSITYPATTERNBLOCK = TrilinosWrappers::BlockSparsityPattern;
@@ -396,6 +397,14 @@ main(int argc, char **argv)
 
   return 0;
 }
+#else //Dealii version too low.
+int
+main(int /*argc*/, char **/*argv*/)
+{
+  std::cout<<"This example requires deal.II v. 9.0.0 or newer"<<std::endl;
+    abort();
+}
+#endif
 #else
 int
 main(int /*argc*/, char **/*argv*/)
