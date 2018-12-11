@@ -72,7 +72,7 @@ namespace DOpE
       sparsitymaker_ = new SparsityMaker<DH, dealdim>(flux_pattern);
       user_defined_dof_constr_ = NULL;
 
-      InitSpaceTime(triangulation,times,time_to_dofhandler);
+      InitSpaceTime(triangulation,time_to_dofhandler);
     }
 
 
@@ -91,7 +91,7 @@ namespace DOpE
     {
       sparsitymaker_ = new SparsityMaker<DH, dealdim>(flux_pattern);
       user_defined_dof_constr_ = NULL;
-      InitSpaceTime(triangulation,times,time_to_dofhandler);
+      InitSpaceTime(triangulation,time_to_dofhandler);
     }
 
     virtual
@@ -189,7 +189,7 @@ namespace DOpE
     const DOpEWrapper::DoFHandler<dealdim, DH> &
     GetStateDoFHandler(int time_point= -1) const
     {
-      if(time_point == -1 || time_point > time_to_dofhandler_.size())
+      if(time_point <= -1 || (unsigned int)  time_point > time_to_dofhandler_.size())
       {
 	throw DOpEException("Invalid Timepoint", "Rothe_SpaceTimeHandler::GetStateDoFHandler");
       }
@@ -213,7 +213,7 @@ namespace DOpE
     const std::vector<unsigned int> &
     GetStateDoFsPerBlock(int time_point= -1) const
     {
-      if(time_point == -1 || time_point > time_to_dofhandler_.size())
+      if(time_point <= -1 || (unsigned int) time_point > time_to_dofhandler_.size())
       {
 	throw DOpEException("Invalid Timepoint", "Rothe_SpaceTimeHandler::GetStateDoFHandler");
       }
@@ -227,7 +227,7 @@ namespace DOpE
     const dealii::ConstraintMatrix &
     GetStateDoFConstraints(int time_point= -1) const
     {
-      if(time_point == -1 || time_point > time_to_dofhandler_.size())
+      if(time_point <= -1 || (unsigned int) time_point > time_to_dofhandler_.size())
       {
 	throw DOpEException("Invalid Timepoint", "Rothe_SpaceTimeHandler::GetStateDoFHandler");
       }
@@ -268,7 +268,7 @@ namespace DOpE
     const std::vector<Point<dealdim> > &
     GetMapDoFToSupportPoints(int time_point= -1)
     {
-      if(time_point == -1 || time_point > time_to_dofhandler_.size())
+      if(time_point <= -1 || (unsigned int)  time_point > time_to_dofhandler_.size())
       {
 	throw DOpEException("Invalid Timepoint", "Rothe_SpaceTimeHandler::GetStateDoFHandler");
       }
@@ -282,7 +282,7 @@ namespace DOpE
      */
     const std::vector<unsigned int>* GetNNeighbourElements(int time_point= -1)
     {
-      if(time_point == -1 || time_point > time_to_dofhandler_.size())
+      if(time_point <= -1 || (unsigned int)  time_point > time_to_dofhandler_.size())
       {
 	throw DOpEException("Invalid Timepoint", "Rothe_SpaceTimeHandler::GetStateDoFHandler");
       }
@@ -432,7 +432,7 @@ namespace DOpE
      */
     void SpatialMeshTransferState(const VECTOR &old_values, VECTOR &new_values, int time_point= -1) const
     {
-      if(time_point == -1 || time_point > time_to_dofhandler_.size())
+      if(time_point <= -1 || (unsigned int)  time_point > time_to_dofhandler_.size())
       {
 	throw DOpEException("Invalid Timepoint", "Rothe_SpaceTimeHandler::GetStateDoFHandler");
       }
@@ -475,7 +475,6 @@ namespace DOpE
      * and the corresponding triangulations ...
      */
     void InitSpaceTime(dealii::Triangulation<dealdim> &triangulation,
-		       dealii::Triangulation<1> &times,
 		       std::vector<unsigned int> &time_to_dofhandler)
     {
       //Create Map DoF To 
