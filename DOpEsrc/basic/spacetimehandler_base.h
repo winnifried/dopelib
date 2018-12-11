@@ -466,21 +466,6 @@ namespace DOpE
 
 
     /**
-     * DEPRECATED. FIXME  We have to think about how to realize this with the new
-     * TimeDoFHandler.
-     *
-     * This functions is used to interpolate Vectors after a refinement of the temporal mesh.
-     *
-     * @param t  An unsigned int specifying the current time point in the new enumeration
-     *
-     * @return An unsigned int indicating the number of the timepoint t
-     *         before the refinement. If the timepoint has not existed before
-     *         the return value is identical to argument t given to this function.
-     */
-    virtual unsigned int NewTimePointToOldTimePoint(unsigned int t) const = 0;
-
-
-    /**
      * This functions is used to interpolate Control Vectors after a refinement of the spatial mesh.
      * It expects that the timepoint of the mesh has been initialized correctly prior to
      * calling this function
@@ -494,7 +479,7 @@ namespace DOpE
       abort();
     }
 
-    virtual void SpatialMeshTransferState(const VECTOR & /*old_values*/, VECTOR & /*new_values*/) const
+    virtual void SpatialMeshTransferState(const VECTOR & /*old_values*/, VECTOR & /*new_values*/, int /*time_point*/= -1) const
     {
       abort();
     }

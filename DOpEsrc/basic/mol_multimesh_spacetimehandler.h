@@ -281,7 +281,7 @@ namespace DOpE
      * Implementation of virtual function in SpaceTimeHandler
      */
     const DOpEWrapper::DoFHandler<dim, DH> &
-    GetStateDoFHandler() const
+    GetStateDoFHandler(int /*time_point*/= -1) const
     {
       //There is only one mesh, hence always return this
       return state_dof_handler_;
@@ -340,7 +340,7 @@ namespace DOpE
      * Implementation of virtual function in SpaceTimeHandler
      */
     const dealii::ConstraintMatrix &
-    GetStateDoFConstraints() const
+    GetStateDoFConstraints(int /*time_point*/= -1) const
     {
       return state_dof_constraints_;
     }
@@ -440,7 +440,7 @@ namespace DOpE
      * Implementation of virtual function in SpaceTimeHandler
      */
     const std::vector<Point<dim> > &
-    GetMapDoFToSupportPoints()
+    GetMapDoFToSupportPoints(int /*time_point*/= -1)
     {
       support_points_.resize(GetStateNDoFs());
       DOpE::STHInternals::MapDoFsToSupportPoints(this->GetMapping(),
@@ -452,7 +452,7 @@ namespace DOpE
      * Implementation of virtual function in StateSpaceTimeHandler
      * Always uses vertices of the state_triangulation!
      */
-    const std::vector<unsigned int>* GetNNeighbourElements()
+    const std::vector<unsigned int>* GetNNeighbourElements(int /*time_point*/= -1)
     {
       if(n_neighbour_to_vertex_.size()!=state_triangulation_.n_vertices())
       {
@@ -467,7 +467,7 @@ namespace DOpE
 
     /******************************************************/
     void
-    ComputeStateSparsityPattern(SPARSITYPATTERN &sparsity) const
+      ComputeStateSparsityPattern(SPARSITYPATTERN &sparsity,int /*time_point*/= -1) const
     {
       this->GetSparsityMaker()->ComputeSparsityPattern(
         this->GetStateDoFHandler(), sparsity,
@@ -719,19 +719,6 @@ namespace DOpE
     /**
      * Implementation of virtual function in SpaceTimeHandlerBase
      */
-    unsigned int
-    NewTimePointToOldTimePoint(unsigned int t) const
-    {
-      //TODO this has to be implemented when temporal refinement is possible!
-      //At present the temporal grid can't be refined
-      return t;
-    }
-
-    /******************************************************/
-
-    /**
-     * Implementation of virtual function in SpaceTimeHandlerBase
-     */
     void
     SpatialMeshTransferControl(const VECTOR &old_values,
                                VECTOR &new_values) const
@@ -746,7 +733,7 @@ namespace DOpE
      */
     void
     SpatialMeshTransferState(const VECTOR &old_values,
-                             VECTOR &new_values) const
+                             VECTOR &new_values,int /*time_point*/= -1) const
     {
       if (state_mesh_transfer_ != NULL)
         state_mesh_transfer_->refine_interpolate(old_values, new_values);

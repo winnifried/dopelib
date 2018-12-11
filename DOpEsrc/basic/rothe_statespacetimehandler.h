@@ -263,59 +263,6 @@ namespace DOpE
     }
 
     /**
-     * Implementation of virtual function in StateSpaceTimeHandlerBase
-     */
-    virtual dealii::IndexSet
-    GetLocallyOwnedDoFs (const DOpEtypes::VectorType type,
-                         int time_point = -1) const
-    {
-      switch (type)
-        {
-        case DOpEtypes::VectorType::state:
-          return GetStateDoFHandler (time_point).GetDEALDoFHandler().locally_owned_dofs();
-
-        case DOpEtypes::VectorType::constraint:
-        case DOpEtypes::VectorType::local_constraint:
-        case DOpEtypes::VectorType::control:
-          assert(false);
-          return dealii::IndexSet ();
-
-        default:
-          abort ();
-          return dealii::IndexSet ();
-        }
-    }
-
-    /**
-     * Implementation of virtual function in StateSpaceTimeHandlerBase
-     */
-    virtual dealii::IndexSet
-    GetLocallyRelevantDoFs (const DOpEtypes::VectorType type,
-                            int time_point = -1) const
-    {
-      switch (type)
-        {
-        case DOpEtypes::VectorType::state:
-        {
-          dealii::IndexSet result;
-          DoFTools::extract_locally_relevant_dofs (GetStateDoFHandler (time_point).GetDEALDoFHandler(),
-                                                   result);
-          return result;
-        }
-
-        case DOpEtypes::VectorType::constraint:
-        case DOpEtypes::VectorType::local_constraint:
-        case DOpEtypes::VectorType::control:
-          assert(false);
-          return IndexSet ();
-
-        default:
-          abort ();
-          return dealii::IndexSet ();
-        }
-    }
-
-    /**
      * Implementation of virtual function in StateSpaceTimeHandler
      */
     const std::vector<Point<dealdim> > &
@@ -478,18 +425,6 @@ namespace DOpE
       	triangulations_.execute_coarsening_and_refinement();
       }
     }
-    /******************************************************/
-
-    /**
-     * Implementation of virtual function in StateSpaceTimeHandlerBase
-     */
-    unsigned int NewTimePointToOldTimePoint(unsigned int t) const
-    {
-      //TODO this has to be implemented when temporal refinement is possible!
-      //At present the temporal grid can't be refined
-      return t;
-    }
-
     /******************************************************/
 
     /**

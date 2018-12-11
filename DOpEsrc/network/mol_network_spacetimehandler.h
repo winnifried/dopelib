@@ -209,7 +209,7 @@ namespace DOpE
        * Implementation of virtual function in SpaceTimeHandler
        */
       const DOpEWrapper::DoFHandler<dopedim, DH> &
-      GetControlDoFHandler() const
+      GetControlDoFHandler(int /*time_point*/= -1) const
       {
         //There is only one control mesh, hence always return this
         return control_dof_handler_;
@@ -218,7 +218,7 @@ namespace DOpE
        * Implementation of virtual function in SpaceTimeHandler
        */
       const DOpEWrapper::DoFHandler<dealdim, DH> &
-      GetStateDoFHandler() const
+      GetStateDoFHandler(int /*time_point*/= -1) const
       {
         if (selected_pipe_ < sth_s_.size())
           return sth_s_[selected_pipe_]->GetStateDoFHandler();
@@ -289,7 +289,7 @@ namespace DOpE
        * Implementation of virtual function in SpaceTimeHandler
        */
       const dealii::ConstraintMatrix &
-      GetStateDoFConstraints() const
+      GetStateDoFConstraints(int /*time_point*/= -1) const
       {
         if (selected_pipe_ < sth_s_.size())
           return sth_s_[selected_pipe_]->GetStateDoFConstraints();
@@ -381,7 +381,7 @@ namespace DOpE
        * Implementation of virtual function in SpaceTimeHandler
        */
       const std::vector<Point<dealdim> > &
-      GetMapDoFToSupportPoints()
+      GetMapDoFToSupportPoints(int /*time_point*/= -1)
       {
         if (selected_pipe_ < sth_s_.size())
           return sth_s_[selected_pipe_]->GetMapDoFToSupportPoints();
@@ -394,7 +394,7 @@ namespace DOpE
       /**
        * Implementation of virtual function in StateSpaceTimeHandler
        */
-      const std::vector<unsigned int>* GetNNeighbourElements()
+      const std::vector<unsigned int>* GetNNeighbourElements(int /*time_point*/= -1)
       {
 	if (selected_pipe_ < sth_s_.size())
           return sth_s_[selected_pipe_]->GetNNeighbourElements();
@@ -418,7 +418,7 @@ namespace DOpE
        * of the PDE.
        */
       void
-      ComputeStateSparsityPattern(dealii::BlockSparsityPattern &sparsity) const
+	ComputeStateSparsityPattern(dealii::BlockSparsityPattern &sparsity,int /*time_point*/= -1) const
       {
         unsigned int n_pipes = GetNPipes();
         unsigned int n_comp = GetFESystem("state").n_components();
@@ -594,19 +594,6 @@ namespace DOpE
           {
             sth_s_[i]->RefineSpace(ref_container);
           }
-      }
-
-      /******************************************************/
-
-      /**
-       * Implementation of virtual function in SpaceTimeHandlerBase
-       */
-      unsigned int
-      NewTimePointToOldTimePoint(unsigned int t) const
-      {
-        //TODO this has to be implemented when temporal refinement is possible!
-        //At present the temporal grid can't be refined
-        return t;
       }
 
       /******************************************************/

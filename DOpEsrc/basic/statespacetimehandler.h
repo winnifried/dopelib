@@ -105,7 +105,7 @@ namespace DOpE
      * Returns a reference to the DoF Handler for the State at the current time point.
      */
     virtual const DOpEWrapper::DoFHandler<dealdim, DH> &
-    GetStateDoFHandler (int time_point= -1) const =0;
+      GetStateDoFHandler (int /*time_point*/= -1) const =0;
 
     /******************************************************/
 
@@ -122,9 +122,9 @@ namespace DOpE
      * be set prior by SetDoFHandlerOrdering
      */
     const std::vector<const DOpEWrapper::DoFHandler<dealdim, DH>*> &
-    GetDoFHandler () const
+    GetDoFHandler (int time_point= -1) const
     {
-      domain_dofhandler_vector_[0] = &GetStateDoFHandler ();
+      domain_dofhandler_vector_[0] = &GetStateDoFHandler (time_point);
       return domain_dofhandler_vector_;
     }
 
@@ -264,6 +264,68 @@ namespace DOpE
         }
     }
 
+
+    /**
+     * Returns the locally owned DoFs for the given type of vector at given time point.
+     *
+     * @ param type Indicates for which quantity (state, constrol, constraint, local constraint)
+     * we want to know the number of DoFs per block.
+     * @ param time_point Indicating the time at which we want to know the DoFs. -1 means now.
+     */
+    virtual dealii::IndexSet
+    GetLocallyOwnedDoFs (const DOpEtypes::VectorType type,
+                         int time_point = -1) const
+    {
+       switch (type)
+        {
+        case DOpEtypes::VectorType::state:
+          return GetStateDoFHandler (time_point).GetDEALDoFHandler().locally_owned_dofs();
+
+        case DOpEtypes::VectorType::constraint:
+        case DOpEtypes::VectorType::local_constraint:
+        case DOpEtypes::VectorType::control:
+          assert(false);
+          return dealii::IndexSet ();
+
+        default:
+          abort ();
+          return dealii::IndexSet ();
+        } 
+    }
+
+    /**
+     * Returns the locally relevant DoFs for the given type of vector at given time point.
+     *
+     * @ param type Indicates for which quantity (state, constrol, constraint, local constraint)
+     * we want to know the number of DoFs per block.
+     * @ param time_point Indicating the time at which we want to know the DoFs. -1 means now.
+     */
+    virtual dealii::IndexSet
+    GetLocallyRelevantDoFs (const DOpEtypes::VectorType type,
+                            int time_point = -1) const
+    {
+      switch (type)
+      {
+      case DOpEtypes::VectorType::state:
+      {
+	dealii::IndexSet result;
+	DoFTools::extract_locally_relevant_dofs (GetStateDoFHandler (time_point).GetDEALDoFHandler(),
+						 result);
+	return result;
+      }
+
+      case DOpEtypes::VectorType::constraint:
+      case DOpEtypes::VectorType::local_constraint:
+      case DOpEtypes::VectorType::control:
+	assert(false);
+	return IndexSet ();
+	
+        default:
+          abort ();
+          return dealii::IndexSet ();
+      } 
+    }
+    
     /******************************************************/
     /*
      //  * Experimental status for MG prec
@@ -296,7 +358,7 @@ namespace DOpE
      * Returns the state HN-Constraints at the current time
      */
     virtual const dealii::ConstraintMatrix &
-    GetStateDoFConstraints (int time_point= -1) const=0;
+    GetStateDoFConstraints (int /*time_point*/= -1) const=0;
 
     /*******************************************************/
 
@@ -305,13 +367,13 @@ namespace DOpE
      * on the current spatial mesh (if they do have that compare dealii::DoFTools>>map_dofs_to_support_points!).
      */
     virtual const std::vector<dealii::Point<dealdim> > &
-    GetMapDoFToSupportPoints (int time_point= -1)=0;
+    GetMapDoFToSupportPoints (int /*time_point*/= -1)=0;
 
     /**
      * Returns the list of the number of neighbouring elements to the vertices
      */
 
-    virtual const std::vector<unsigned int>* GetNNeighbourElements(int time_point= -1) = 0;
+    virtual const std::vector<unsigned int>* GetNNeighbourElements(int /*time_point*/= -1) = 0;
         
     /******************************************************/
 
@@ -319,7 +381,7 @@ namespace DOpE
      * Computes the current sparsity pattern for the state variable
      */
     virtual void
-      ComputeStateSparsityPattern (SPARSITYPATTERN &sparsity,int time_point= -1) const=0;
+      ComputeStateSparsityPattern (SPARSITYPATTERN &sparsity,int /*time_point*/= -1) const=0;
 
     /******************************************************/
 

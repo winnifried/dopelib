@@ -135,7 +135,7 @@ namespace DOpE
      * Returns a reference to the DoF Handler for the Control at the current time point.
      */
     virtual const DOpEWrapper::DoFHandler<dopedim, DH> &
-    GetControlDoFHandler () const =0;
+    GetControlDoFHandler (int /*time_point*/= -1) const =0;
 
     /******************************************************/
 
@@ -143,7 +143,7 @@ namespace DOpE
      * Returns a reference to the DoF Handler for the State at the current time point.
      */
     virtual const DOpEWrapper::DoFHandler<dealdim, DH> &
-    GetStateDoFHandler () const = 0;
+    GetStateDoFHandler (int /*time_point*/= -1) const = 0;
 
     /******************************************************/
 
@@ -160,15 +160,15 @@ namespace DOpE
      * be set prior by SetDoFHandlerOrdering
      */
     const std::vector<const DOpEWrapper::DoFHandler<dealdim, DH>*> &
-    GetDoFHandler () const
+    GetDoFHandler (int time_point= -1) const
     {
       assert(state_index_ != dealii::numbers::invalid_unsigned_int);
 #if dope_dimension > 0
       assert(control_index_ != dealii::numbers::invalid_unsigned_int);
-      domain_dofhandler_vector_[control_index_] = &GetControlDoFHandler();
-      domain_dofhandler_vector_[state_index_] = &GetStateDoFHandler();
+      domain_dofhandler_vector_[control_index_] = &GetControlDoFHandler(time_point);
+      domain_dofhandler_vector_[state_index_] = &GetStateDoFHandler(time_point);
 #else
-      domain_dofhandler_vector_[state_index_] = &GetStateDoFHandler ();
+      domain_dofhandler_vector_[state_index_] = &GetStateDoFHandler (time_point);
 #endif
       return domain_dofhandler_vector_;
     }
@@ -379,12 +379,10 @@ namespace DOpE
     GetLocallyOwnedDoFs (const DOpEtypes::VectorType type,
                          int time_point = -1) const
     {
-      (void) time_point; // TODO same local dofs for all times ?
-
       switch (type)
         {
         case DOpEtypes::VectorType::state:
-          return GetStateDoFHandler ().GetDEALDoFHandler().locally_owned_dofs();
+          return GetStateDoFHandler (time_point).GetDEALDoFHandler().locally_owned_dofs();
 
         case DOpEtypes::VectorType::constraint:
         case DOpEtypes::VectorType::local_constraint:
@@ -392,7 +390,7 @@ namespace DOpE
           return dealii::IndexSet ();
 
         case DOpEtypes::VectorType::control:
-          return GetControlDoFHandler ().GetDEALDoFHandler().locally_owned_dofs ();
+          return GetControlDoFHandler (time_point).GetDEALDoFHandler().locally_owned_dofs ();
 
         default:
           abort ();
@@ -411,14 +409,12 @@ namespace DOpE
     GetLocallyRelevantDoFs (const DOpEtypes::VectorType type,
                             int time_point = -1) const
     {
-      (void) time_point;
-
       switch (type)
         {
         case DOpEtypes::VectorType::state:
         {
           dealii::IndexSet result;
-          DoFTools::extract_locally_relevant_dofs (GetStateDoFHandler ().GetDEALDoFHandler(),
+          DoFTools::extract_locally_relevant_dofs (GetStateDoFHandler (time_point).GetDEALDoFHandler(),
                                                    result);
           return result;
         }
@@ -431,7 +427,7 @@ namespace DOpE
         case DOpEtypes::VectorType::control:
         {
           dealii::IndexSet result;
-          DoFTools::extract_locally_relevant_dofs (GetControlDoFHandler ().GetDEALDoFHandler(),
+          DoFTools::extract_locally_relevant_dofs (GetControlDoFHandler (time_point).GetDEALDoFHandler(),
                                                    result);
           return result;
         }
@@ -490,7 +486,7 @@ namespace DOpE
      */
     virtual const dealii::ConstraintMatrix
     &
-    GetStateDoFConstraints () const=0;
+    GetStateDoFConstraints (int /*time_point*/= -1) const=0;
 
     /*******************************************************/
 
@@ -500,13 +496,13 @@ namespace DOpE
      */
     virtual const std::vector<dealii::Point<dealdim> >
     &
-    GetMapDoFToSupportPoints ()=0;
+    GetMapDoFToSupportPoints (int /*time_point*/= -1)=0;
 
     /**
      * Returns the list of the number of neighbouring elements to the vertices
      */
 
-    virtual const std::vector<unsigned int>* GetNNeighbourElements() = 0;
+    virtual const std::vector<unsigned int>* GetNNeighbourElements(int /*time_point*/= -1) = 0;
         
     /******************************************************/
 
@@ -522,7 +518,7 @@ namespace DOpE
      * Computes the current sparsity pattern for the state variable
      */
     virtual void
-    ComputeStateSparsityPattern (SPARSITYPATTERN &sparsity) const=0;
+    ComputeStateSparsityPattern (SPARSITYPATTERN &sparsity, int /*time_point*/= -1) const=0;
 
     /******************************************************/
 
