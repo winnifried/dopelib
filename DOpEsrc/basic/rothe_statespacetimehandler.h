@@ -43,7 +43,7 @@
 namespace DOpE
 {
   /**
-   * Implements a Space Time Handler with a Method of Lines discretization.
+   * Implements a Space Time Handler with a Rothe discretization.
    * This means there is only one fixed mesh for the spatial domain.
    * This Space Time Handler has knowlege of only one variable, namely the
    * solution to a PDE.
@@ -54,79 +54,69 @@ namespace DOpE
   class Rothe_StateSpaceTimeHandler : public StateSpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dealdim>
   {
   public:
-    Rothe_StateSpaceTimeHandler(
-      dealii::Triangulation<dealdim> &triangulation, const FE<dealdim, dealdim> &state_fe,
-      bool flux_pattern = false,
-      const ActiveFEIndexSetterInterface<dealdim> &index_setter =
-        ActiveFEIndexSetterInterface<dealdim>())
-      : StateSpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR,
-        dealdim>(index_setter), sparse_mkr_dynamic_(true), triangulation_(
-          triangulation), state_dof_handler_(triangulation_), state_fe_(
-          &state_fe), mapping_(
-          &DOpEWrapper::StaticMappingQ1<dealdim, DH>::mapping_q1), state_mesh_transfer_(
-          NULL)
-    {
-      sparsitymaker_ = new SparsityMaker<DH, dealdim>(flux_pattern);
-      user_defined_dof_constr_ = NULL;
-    }
+    /**
+     * Only Constructors with time dependence, as there is no sense in a 
+     * Rothe discretization for non-timedependent problems
+     */
     Rothe_StateSpaceTimeHandler(
       dealii::Triangulation<dealdim> &triangulation, const FE<dealdim, dealdim> &state_fe,
       dealii::Triangulation<1> &times,
+      std::vector<unsigned int> *time_to_dofhandler = NULL,
       bool flux_pattern = false,
       const ActiveFEIndexSetterInterface<dealdim> &index_setter =
         ActiveFEIndexSetterInterface<dealdim>())
       : StateSpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR,
-        dealdim>(times, index_setter), sparse_mkr_dynamic_(true), triangulation_(
-          triangulation), state_dof_handler_(triangulation_), state_fe_(
-          &state_fe), mapping_(
-          &DOpEWrapper::StaticMappingQ1<dealdim, DH>::mapping_q1), state_mesh_transfer_(
-          NULL)
+        dealdim>(times, index_setter), sparse_mkr_dynamic_(true), state_fe_(
+          &state_fe), mapping_(&DOpEWrapper::StaticMappingQ1<dealdim, DH>::mapping_q1)
     {
       sparsitymaker_ = new SparsityMaker<DH, dealdim>(flux_pattern);
       user_defined_dof_constr_ = NULL;
+
+      InitSpaceTime(triangulation,times,time_to_dofhandler);
     }
+
 
     Rothe_StateSpaceTimeHandler(
       dealii::Triangulation<dealdim> &triangulation,
       const DOpEWrapper::Mapping<dealdim, DH> &mapping,
       const FE<dealdim, dealdim> &state_fe,
-      bool flux_pattern = false,
-      const ActiveFEIndexSetterInterface<dealdim> &index_setter =
-        ActiveFEIndexSetterInterface<dealdim>())
-      : StateSpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR,
-        dealdim>(index_setter), sparse_mkr_dynamic_(true), triangulation_(
-          triangulation), state_dof_handler_(triangulation_), state_fe_(
-          &state_fe), mapping_(&mapping), state_mesh_transfer_(NULL)
-    {
-      sparsitymaker_ = new SparsityMaker<DH, dealdim>(flux_pattern);
-      user_defined_dof_constr_ = NULL;
-    }
-    Rothe_StateSpaceTimeHandler(
-      dealii::Triangulation<dealdim> &triangulation,
-      const DOpEWrapper::Mapping<dealdim, DH> &mapping,
-      const FE<dealdim, dealdim> &state_fe,
       dealii::Triangulation<1> &times,
+      std::vector<unsigned int> *time_to_dofhandler = NULL,
       bool flux_pattern = false,
       const ActiveFEIndexSetterInterface<dealdim> &index_setter =
         ActiveFEIndexSetterInterface<dealdim>())
       : StateSpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR,
-        dealdim>(times, index_setter), sparse_mkr_dynamic_(true), triangulation_(
-          triangulation), state_dof_handler_(triangulation_), state_fe_(
-          &state_fe), mapping_(&mapping), state_mesh_transfer_(NULL)
+      dealdim>(times, index_setter), sparse_mkr_dynamic_(true), state_fe_(
+	&state_fe), mapping_(&mapping)
     {
       sparsitymaker_ = new SparsityMaker<DH, dealdim>(flux_pattern);
       user_defined_dof_constr_ = NULL;
+      InitSpaceTime(triangulation,times,time_to_dofhandler);
     }
 
     virtual
     ~Rothe_StateSpaceTimeHandler()
     {
-      state_dof_handler_.clear();
-
-      if (state_mesh_transfer_ != NULL)
+      assert(triangulations_.size()==n_dof_handlers_);
+      for(unsigned int i = 0; i < n_dof_handlers_; i++)
+      {
+	state_dof_handlers_[i].clear();
+	delete state_dof_handlers_[i];
+	
+	if (state_mesh_transfers_[i] != NULL)
         {
-          delete state_mesh_transfer_;
+          delete state_mesh_transfers_[i];
         }
+	if (state_dof_constraints_[i] != NULL)
+	{
+	  delete state_dof_constraints_[i];
+	}
+	if ( i != 0 )
+	{
+	  delete triangulations_[i];
+	}
+      }
+
       if (sparsitymaker_ != NULL && sparse_mkr_dynamic_ == true)
         {
           delete sparsitymaker_;
@@ -512,6 +502,62 @@ namespace DOpE
     }
 
   private:
+    /**
+     * Initialize the map of time to dof_handler
+     * and the corresponding triangulations ...
+     */
+    voit InitSpaceTime(dealii::Triangulation<dealdim> &triangulation,
+		       dealii::Triangulation<1> &times,
+		       std::vector<unsigned int> *time_to_dofhandler)
+    {
+      //Create Map DoF To 
+      if(time_to_dofhandler==NULL)
+      {
+	time_to_dofhandler_.resize(1);
+	time_to_dofhandler_[0]=0;
+	n_dof_handlers_ = 1;
+      }
+      else
+      {
+	assert(time_to_dofhandler.size() == GetMaxTimePoint());
+	time_to_dofhandler_.resize(GetMaxTimePoint()+1);
+	for(unsigned int i = 0; i <= GetMaxTimePoint(); i++);
+	{
+	  time_to_dofhandler_[i] = time_to_dofhandler[i];
+	  if(i==0)
+	  {
+	    assert(time_to_dofhandler_[i] == 0);
+	    n_dof_handlers_=1;
+	  }
+	  else
+	  {
+	    if(time_to_dofhandler_[i] >= n_dof_handlers_)
+	      n_dof_handlers_= time_to_dofhandler_[i]+1;
+	  }
+	  //TODO: Check for missing numbers?
+	}
+      }
+      //Initialize triangulations, ...
+      triangulations_.resize(n_dof_handlers_,NULL);
+      state_dof_handlers_.resize(n_dof_handlers_,NULL);
+      state_dof_constraints_.resize(n_dof_handlers_,NULL);
+      state_mesh_transfers_.resize(n_dof_handlers_,NULL);
+
+      for(unsigned int i = 0; i <= GetMaxTimePoint(); i++)
+      {
+	if(i == 0)
+	{
+	  triangulations_[0]=*triangulation;
+	}
+	else
+	{
+	  triangulations_[i]=new dealii::Triangulation<dealdim>;
+	  triangulations_[i]->copy_triangulation(triangulations_[i-1]);
+	}
+	state_dof_handlers_[i] = new DOpEWrapper::DoFHandler<dim, DH>(*triangulations_[i]);
+      }
+    }
+    
     const SparsityMaker<DH, dealdim> *
     GetSparsityMaker() const
     {
@@ -526,21 +572,23 @@ namespace DOpE
     UserDefinedDoFConstraints<DH, dealdim> *user_defined_dof_constr_;
     bool sparse_mkr_dynamic_;
 
-    dealii::Triangulation<dealdim> &triangulation_;
-    DOpEWrapper::DoFHandler<dealdim, DH> state_dof_handler_;
+    std::vector<dealii::Triangulation<dealdim> *> triangulations_;
+    std::vector<DOpEWrapper::DoFHandler<dealdim, DH> *> state_dof_handlers_;
 
-    std::vector<unsigned int> state_dofs_per_block_;
+    std::vector<std::vector<unsigned int> > state_dofs_per_block_;
 
-    dealii::ConstraintMatrix state_dof_constraints_;
+    std::vector<dealii::ConstraintMatrix*> state_dof_constraints_;
 
     const dealii::SmartPointer<const FE<dealdim, dealdim> > state_fe_; //TODO is there a reason that this is not a reference?
     const dealii::SmartPointer<const DOpEWrapper::Mapping<dealdim, DH> > mapping_;
 
-    std::vector<Point<dealdim> > support_points_;
-    dealii::SolutionTransfer<dealdim, VECTOR, DH<dealdim, dealdim> > *state_mesh_transfer_;
+    std::vector<std::vector<Point<dealdim> > > support_points_;
+    std::vector<dealii::SolutionTransfer<dealdim, VECTOR, DH<dealdim, dealdim> > *> state_mesh_transfers_;
 
-    std::vector<unsigned int> n_neighbour_to_vertex_;
+    std::vector<std::vector<unsigned int> > n_neighbour_to_vertex_;
 
+    std::vector<unsigned int> time_to_dofhandler_;
+    unsigned int n_dof_handlers_;
   };
 
 }
