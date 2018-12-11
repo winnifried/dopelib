@@ -1,0 +1,27 @@
+\subsubsection{General problem description}
+
+In this example we consider one of the prototypical nonstationary equations, the parabolic heat equation, i.e. for $x \in \Omega \subset \mathbb{R}^d, t\in I =[0,T], T\in \mathbb{R}^+,$ we search for the unknown solution $u:I \times \Omega \rightarrow \mathbb{R}$
+\begin{align*}
+\partial_t u(t,x) - \Delta u(t,x) &= f(t,x),\\
+u(t,x)|_{\partial \Omega} &= g(t,x),\\
+u(0,x) &= u_0(x).
+\end{align*} In our example, we consider the simplest case $d=1$, where the Laplacian $\Delta$ reduces to $\partial_x^2$. The computational domain is $ I\times \Omega = [0,1] \times [0,1]$. For further simplification, we choose the right hand side as $f=0$ as well as homogeneous Dirichlet boundary conditions ($g=0$). The initial condition is given by $u_0(x) = \min(x,1-x)$.
+
+\subsubsection{Program description}
+
+There are few new things compared to the other nonstationary examples. This is the first time we solve an equation in one spatial dimension. In most cases, the dimension dependence is covered by the \texttt{LOCALDOPEDIM} and \texttt{LOCALDEALDIM} variables (which are defined at the beginning of the \textit{main.cc} file), but there might be some places in the code (especially your own code) where a concrete dimension number is given to an object. There you have to replace it manually. Do not forget to insert the correct dimension in the \textit{Makefile}!\\
+The most important feature of this example is the serial application of several time-stepping schemes. At the moment, the following schemes are available (see also example \ref{PDE_Instat_Stokes}):
+\begin{enumerate}
+\item
+Forward Euler scheme (FE)
+\item
+Backward Euler scheme (BE)
+\item
+Crank-Nicolson scheme (CN)
+\item
+shifted Crank-Nicolson scheme (sCN)
+\item
+Fractional-Step-$\theta$ scheme (FS)
+\end{enumerate}
+All these time-stepping methods are applied in the current example in order to check them and to compare their characteristics. To keep the computing time acceptable, we choose a one dimensional example.\\
+One more innovation is the output format. We want to represent the output at single timepoints as a function graph on the space interval $[0,1]$; this can be done using \textit{GNUPLOT}, for example, so instead of \textit{.vtk} files as in all former examples, we now write out \textit{.gpl} files.
