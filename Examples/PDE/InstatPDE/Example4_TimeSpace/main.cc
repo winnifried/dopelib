@@ -41,7 +41,7 @@
 #include <include/parameterreader.h>
 #include <templates/directlinearsolver.h>
 #include <templates/integrator.h>
-#include <basic/mol_statespacetimehandler.h>
+#include <basic/rothe_statespacetimehandler.h>
 #include <problemdata/simpledirichletdata.h>
 #include <container/integratordatacontainer.h>
 #include <templates/newtonsolver.h>
@@ -219,8 +219,9 @@ main(int argc, char **argv)
   GridGenerator::subdivided_hyper_cube(times, 50);
 
   triangulation.refine_global(4);
-  MethodOfLines_StateSpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR,
-                                      DIM> DOFH(triangulation, state_fe, times);
+  std::vector<unsigned int> Rothe_time_to_dof;
+  Rothe_StateSpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR,
+                                      DIM> DOFH(triangulation, state_fe, times,Rothe_time_to_dof);
 
   OP1 P1(LPDE, DOFH);
   OP2 P2(LPDE, DOFH);

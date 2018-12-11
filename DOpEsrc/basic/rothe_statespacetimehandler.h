@@ -61,7 +61,7 @@ namespace DOpE
     Rothe_StateSpaceTimeHandler(
       dealii::Triangulation<dealdim> &triangulation, const FE<dealdim, dealdim> &state_fe,
       dealii::Triangulation<1> &times,
-      std::vector<unsigned int> *time_to_dofhandler = NULL,
+      std::vector<unsigned int> &time_to_dofhandler,
       bool flux_pattern = false,
       const ActiveFEIndexSetterInterface<dealdim> &index_setter =
         ActiveFEIndexSetterInterface<dealdim>())
@@ -81,7 +81,7 @@ namespace DOpE
       const DOpEWrapper::Mapping<dealdim, DH> &mapping,
       const FE<dealdim, dealdim> &state_fe,
       dealii::Triangulation<1> &times,
-      std::vector<unsigned int> *time_to_dofhandler = NULL,
+      std::vector<unsigned int> &time_to_dofhandler,
       bool flux_pattern = false,
       const ActiveFEIndexSetterInterface<dealdim> &index_setter =
         ActiveFEIndexSetterInterface<dealdim>())
@@ -100,7 +100,7 @@ namespace DOpE
       assert(triangulations_.size()==n_dof_handlers_);
       for(unsigned int i = 0; i < n_dof_handlers_; i++)
       {
-	state_dof_handlers_[i].clear();
+	state_dof_handlers_[i]->clear();
 	delete state_dof_handlers_[i];
 	
 	if (state_mesh_transfers_[i] != NULL)
@@ -131,24 +131,25 @@ namespace DOpE
            const std::vector<unsigned int> &state_block_component,
            const DirichletDescriptor &DD  )
     {
+     for(unsigned int i = 0; i < n_dof_handlers_; i++)
+      {
 
-      StateSpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dealdim>::SetActiveFEIndicesState(
-        state_dof_handler_);
-      state_dof_handler_.distribute_dofs(GetFESystem("state"));
-//          DoFRenumbering::Cuthill_McKee(
-//              static_cast<DH<dealdim, dealdim>&>(state_dof_handler_));
-      DoFRenumbering::component_wise(
-        static_cast<DH<dealdim, dealdim>&>(state_dof_handler_));
+      	StateSpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dealdim>::SetActiveFEIndicesState(
+        *state_dof_handlers_[i]);
+      	state_dof_handlers_[i]->distribute_dofs(GetFESystem("state"));
+      	DoFRenumbering::component_wise(
+        static_cast<DH<dealdim, dealdim>&>(*state_dof_handlers_[i]));
 
-      state_dof_constraints_.clear();
-      state_dof_constraints_.reinit (
+      	state_dof_constraints_[i]->clear();
+      	state_dof_constraints_[i]->reinit (
         this->GetLocallyRelevantDoFs (DOpEtypes::VectorType::state));
-      DoFTools::make_hanging_node_constraints (
-        static_cast<DH<dealdim, dealdim>&> (state_dof_handler_),
-        state_dof_constraints_);
-      //TODO Dirichlet ueber Constraints
-      if (GetUserDefinedDoFConstraints() != NULL) GetUserDefinedDoFConstraints()->MakeStateDoFConstraints(state_dof_handler_, state_dof_constraints_);
+      	DoFTools::make_hanging_node_constraints (
+        	static_cast<DH<dealdim, dealdim>&> (*state_dof_handlers_[i]),
+        *state_dof_constraints_[i]);
+      	//TODO Dirichlet ueber Constraints
+      	if (GetUserDefinedDoFConstraints() != NULL) GetUserDefinedDoFConstraints()->MakeStateDoFConstraints(*state_dof_handlers_[i], *state_dof_constraints_[i]);
 
+      }
 
       std::vector<unsigned int> dirichlet_colors = DD.GetDirichletColors();
       for (unsigned int i = 0; i < dirichlet_colors.size(); i++)
@@ -159,26 +160,31 @@ namespace DOpE
           //TODO: mapping[0] is a workaround, as deal does not support interpolate
           // boundary_values with a mapping collection at this point.
 #if DEAL_II_VERSION_GTE(9,0,0)
-          VectorTools::interpolate_boundary_values(GetMapping()[0], state_dof_handler_.GetDEALDoFHandler(), color, dealii::Functions::ZeroFunction<dealdim>(comp_mask.size()),
-                                                   state_dof_constraints_, comp_mask);
+          VectorTools::interpolate_boundary_values(GetMapping()[0], state_dof_handlers_[i]->GetDEALDoFHandler(),color, dealii::Functions::ZeroFunction<dealdim>(comp_mask.size()), *state_dof_constraints_[i], comp_mask);
 #else
-          VectorTools::interpolate_boundary_values(GetMapping()[0], state_dof_handler_.GetDEALDoFHandler(), color, dealii::ZeroFunction<dealdim>(comp_mask.size()),
-                                                   state_dof_constraints_, comp_mask);
+        VectorTools::interpolate_boundary_values(GetMapping()[0], *state_dof_handlers_[i].GetDEALDoFHandler(),  
+ 	state_dof_constraints_[i], comp_mask);
 #endif
         }
+      
+      for(unsigned int i = 0; i < n_dof_handlers_; i++)
+      {
 
-      state_dof_constraints_.close();
-      state_dofs_per_block_.resize(state_n_blocks);
+      	state_dof_constraints_[i]->close();
+      	state_dofs_per_block_[i].resize(state_n_blocks);
 
-      DoFTools::count_dofs_per_block(static_cast<DH<dealdim, dealdim>&>(state_dof_handler_), state_dofs_per_block_, state_block_component);
+      	DoFTools::count_dofs_per_block(static_cast<DH<dealdim, dealdim>&>(*state_dof_handlers_[i]),
+      	state_dofs_per_block_[i], state_block_component);
 
-      support_points_.clear();
-      n_neighbour_to_vertex_.clear();
-      //Initialize also the timediscretization.
-      this->ReInitTime();
+      	support_points_[i].clear();
+      	n_neighbour_to_vertex_[i].clear();
+      	//Initialize also the timediscretization.
+      	this->ReInitTime();
 
-      //There where changes invalidate tickets
-      this->IncrementStateTicket();
+      	//There where changes invalidate tickets
+      	this->IncrementStateTicket();
+  
+      }
     }
 
     /**
@@ -187,8 +193,12 @@ namespace DOpE
     const DOpEWrapper::DoFHandler<dealdim, DH> &
     GetStateDoFHandler() const
     {
-      //There is only one mesh, hence always return this
-      return state_dof_handler_;
+      // TODO SetTime function to set [i]
+      for(unsigned int i = 0; i < n_dof_handlers_; i++)
+      {
+        //There is only one mesh, hence always return this
+      	return *state_dof_handlers_[i];
+      }
     }
 
     /**
@@ -206,7 +216,10 @@ namespace DOpE
     const std::vector<unsigned int> &
     GetStateDoFsPerBlock(int /*time_point*/= -1) const
     {
-      return state_dofs_per_block_;
+      for(unsigned int i = 0; i < n_dof_handlers_; i++)
+      {
+      	return state_dofs_per_block_[i];
+      }
     }
 
     /**
@@ -215,7 +228,10 @@ namespace DOpE
     const dealii::ConstraintMatrix &
     GetStateDoFConstraints() const
     {
-      return state_dof_constraints_;
+      for(unsigned int i = 0; i < n_dof_handlers_; i++)
+      {
+      	return *state_dof_constraints_[i];
+      }
     }
 
     /**
@@ -309,9 +325,12 @@ namespace DOpE
     const std::vector<Point<dealdim> > &
     GetMapDoFToSupportPoints()
     {
-      support_points_.resize(GetStateNDoFs());
-      DOpE::STHInternals::MapDoFsToSupportPoints<std::vector<Point<dealdim> >, dealdim>(this->GetMapping(), GetStateDoFHandler(), support_points_);
-      return support_points_;
+      for(unsigned int i = 0; i < n_dof_handlers_; i++)
+      {
+      	support_points_[i].resize(GetStateNDoFs());
+      	DOpE::STHInternals::MapDoFsToSupportPoints<std::vector<Point<dealdim> >, dealdim>(this->GetMapping(), GetStateDoFHandler(), support_points_[i]);
+      	return support_points_[i];
+      }
     }
 
     /**
@@ -319,11 +338,14 @@ namespace DOpE
      */
     const std::vector<unsigned int>* GetNNeighbourElements()
     {
-      if(n_neighbour_to_vertex_.size()!=triangulation_.n_vertices())
+      for(unsigned int i = 0; i < n_dof_handlers_; i++)
       {
-	DOpE::STHInternals::CalculateNeigbourElementsToVertices(triangulation_,n_neighbour_to_vertex_);
+      	if(n_neighbour_to_vertex_[i].size()!=triangulations_[i]->n_vertices())
+      	{
+		DOpE::STHInternals::CalculateNeigbourElementsToVertices(*triangulations_[i],n_neighbour_to_vertex_[i]);
+      	}
+      	return &n_neighbour_to_vertex_[i];
       }
-      return &n_neighbour_to_vertex_;
     }
 
     /******************************************************/
@@ -406,35 +428,35 @@ namespace DOpE
       //make sure that we do not use any coarsening
       assert( !ref_container.UsesCoarsening());
 
-      if (state_mesh_transfer_ != NULL)
+      if (state_mesh_transfers_ != NULL)
         {
-          delete state_mesh_transfer_;
-          state_mesh_transfer_ = NULL;
+          delete state_mesh_transfers_;
+          state_mesh_transfers_ = NULL;
         }
-      state_mesh_transfer_ = new dealii::SolutionTransfer<dealdim, VECTOR, DH<dealdim, dealdim> >(state_dof_handler_);
+      state_mesh_transfers_ = new dealii::SolutionTransfer<dealdim, VECTOR, DH<dealdim, dealdim> >(state_dof_handlers_);
 
       switch (ref_type)
         {
         case DOpEtypes::RefinementType::global:
-          triangulation_.set_all_refine_flags();
+          triangulations_.set_all_refine_flags();
           break;
 
         case DOpEtypes::RefinementType::fixed_number:
-          GridRefinement::refine_and_coarsen_fixed_number (triangulation_,
+          GridRefinement::refine_and_coarsen_fixed_number (triangulations_,
                                                            ref_container.GetLocalErrorIndicators (),
                                                            ref_container.GetTopFraction (),
                                                           ref_container.GetBottomFraction());
           break;
 
         case DOpEtypes::RefinementType::fixed_fraction:
-          GridRefinement::refine_and_coarsen_fixed_fraction (triangulation_,
+          GridRefinement::refine_and_coarsen_fixed_fraction (triangulations_,
                                                              ref_container.GetLocalErrorIndicators (),
                                                              ref_container.GetTopFraction (),
                                                             ref_container.GetBottomFraction());
           break;
 
         case DOpEtypes::RefinementType::optimized:
-          GridRefinement::refine_and_coarsen_optimize (triangulation_,
+          GridRefinement::refine_and_coarsen_optimize (triangulations_,
                                                        ref_container.GetLocalErrorIndicators (),
                                                       ref_container.GetConvergenceOrder());
           break;
@@ -445,9 +467,12 @@ namespace DOpE
                               "Rothe_StateSpaceTimeHandler::RefineStateSpace");
         }
 
-      triangulation_.prepare_coarsening_and_refinement();
-      if (state_mesh_transfer_ != NULL) state_mesh_transfer_->prepare_for_pure_refinement();
-      triangulation_.execute_coarsening_and_refinement();
+      for(unsigned int i = 0; i < n_dof_handlers_; i++)
+      {
+      	triangulations_.prepare_coarsening_and_refinement();
+      	if (state_mesh_transfers_[i] != NULL) state_mesh_transfers_->prepare_for_pure_refinement();
+      	triangulations_.execute_coarsening_and_refinement();
+      }
     }
     /******************************************************/
 
@@ -468,7 +493,10 @@ namespace DOpE
      */
     void SpatialMeshTransferState(const VECTOR &old_values, VECTOR &new_values) const
     {
-      if (state_mesh_transfer_ != NULL) state_mesh_transfer_->refine_interpolate(old_values, new_values);
+      for(unsigned int i = 0; i < n_dof_handlers_; i++)
+      {
+      	if (state_mesh_transfers_[i] != NULL) state_mesh_transfers_[i]->refine_interpolate(old_values, new_values);
+      }
     }
 
     /******************************************************/
@@ -506,24 +534,23 @@ namespace DOpE
      * Initialize the map of time to dof_handler
      * and the corresponding triangulations ...
      */
-    voit InitSpaceTime(dealii::Triangulation<dealdim> &triangulation,
+    void InitSpaceTime(dealii::Triangulation<dealdim> &triangulation,
 		       dealii::Triangulation<1> &times,
-		       std::vector<unsigned int> *time_to_dofhandler)
+		       std::vector<unsigned int> &time_to_dofhandler)
     {
       //Create Map DoF To 
-      if(time_to_dofhandler==NULL)
+      if(time_to_dofhandler.size()==0)
       {
-	time_to_dofhandler_.resize(1);
-	time_to_dofhandler_[0]=0;
+	time_to_dofhandler_.resize(this->GetMaxTimePoint()+1,0);
 	n_dof_handlers_ = 1;
       }
       else
       {
-	assert(time_to_dofhandler.size() == GetMaxTimePoint());
-	time_to_dofhandler_.resize(GetMaxTimePoint()+1);
-	for(unsigned int i = 0; i <= GetMaxTimePoint(); i++);
+	assert(time_to_dofhandler.size() == this->GetMaxTimePoint());
+	time_to_dofhandler_.resize(this->GetMaxTimePoint()+1);
+	for(unsigned int i = 0; i <= this->GetMaxTimePoint(); i++)
 	{
-	  time_to_dofhandler_[i] = time_to_dofhandler[i];
+ 	  time_to_dofhandler_[i] = time_to_dofhandler[i];
 	  if(i==0)
 	  {
 	    assert(time_to_dofhandler_[i] == 0);
@@ -543,18 +570,21 @@ namespace DOpE
       state_dof_constraints_.resize(n_dof_handlers_,NULL);
       state_mesh_transfers_.resize(n_dof_handlers_,NULL);
 
-      for(unsigned int i = 0; i <= GetMaxTimePoint(); i++)
+      for(unsigned int i = 0; i < time_to_dofhandler.size(); i++)
       {
+        for(unsigned int i = 0; i < n_dof_handlers_; i++)
+      	{
 	if(i == 0)
 	{
-	  triangulations_[0]=*triangulation;
+	  triangulations_[0]= &triangulation;
 	}
 	else
 	{
 	  triangulations_[i]=new dealii::Triangulation<dealdim>;
-	  triangulations_[i]->copy_triangulation(triangulations_[i-1]);
+	  triangulations_[i]->copy_triangulation(*triangulations_[i-1]);
 	}
-	state_dof_handlers_[i] = new DOpEWrapper::DoFHandler<dim, DH>(*triangulations_[i]);
+	state_dof_handlers_[i] = new DOpEWrapper::DoFHandler<dealdim, DH>(*triangulations_[i]);
+        }
       }
     }
     
@@ -572,14 +602,14 @@ namespace DOpE
     UserDefinedDoFConstraints<DH, dealdim> *user_defined_dof_constr_;
     bool sparse_mkr_dynamic_;
 
-    std::vector<dealii::Triangulation<dealdim> *> triangulations_;
+    std::vector<dealii::Triangulation<dealdim> *> triangulations_; 
     std::vector<DOpEWrapper::DoFHandler<dealdim, DH> *> state_dof_handlers_;
 
     std::vector<std::vector<unsigned int> > state_dofs_per_block_;
 
     std::vector<dealii::ConstraintMatrix*> state_dof_constraints_;
 
-    const dealii::SmartPointer<const FE<dealdim, dealdim> > state_fe_; //TODO is there a reason that this is not a reference?
+    const dealii::SmartPointer<const FE<dealdim, dealdim> > state_fe_;
     const dealii::SmartPointer<const DOpEWrapper::Mapping<dealdim, DH> > mapping_;
 
     std::vector<std::vector<Point<dealdim> > > support_points_;
