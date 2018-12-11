@@ -131,53 +131,49 @@ namespace DOpE
            const std::vector<unsigned int> &state_block_component,
            const DirichletDescriptor &DD  )
     {
-     for(unsigned int i = 0; i < n_dof_handlers_; i++)
+     for(unsigned int j = 0; j < n_dof_handlers_; j++)
       {
 
       	StateSpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dealdim>::SetActiveFEIndicesState(
-        *state_dof_handlers_[i]);
-      	state_dof_handlers_[i]->distribute_dofs(GetFESystem("state"));
+        *state_dof_handlers_[j]);
+      	state_dof_handlers_[j]->distribute_dofs(GetFESystem("state"));
       	DoFRenumbering::component_wise(
-        static_cast<DH<dealdim, dealdim>&>(*state_dof_handlers_[i]));
+        static_cast<DH<dealdim, dealdim>&>(*state_dof_handlers_[j]));
 
-      	state_dof_constraints_[i]->clear();
-      	state_dof_constraints_[i]->reinit (
+      	state_dof_constraints_[j]->clear();
+      	state_dof_constraints_[j]->reinit (
         this->GetLocallyRelevantDoFs (DOpEtypes::VectorType::state));
       	DoFTools::make_hanging_node_constraints (
-        	static_cast<DH<dealdim, dealdim>&> (*state_dof_handlers_[i]),
-        *state_dof_constraints_[i]);
+        	static_cast<DH<dealdim, dealdim>&> (*state_dof_handlers_[j]),
+        *state_dof_constraints_[j]);
       	//TODO Dirichlet ueber Constraints
-      	if (GetUserDefinedDoFConstraints() != NULL) GetUserDefinedDoFConstraints()->MakeStateDoFConstraints(*state_dof_handlers_[i], *state_dof_constraints_[i]);
-
-      }
-
-      std::vector<unsigned int> dirichlet_colors = DD.GetDirichletColors();
-      for (unsigned int i = 0; i < dirichlet_colors.size(); i++)
+      	if (GetUserDefinedDoFConstraints() != NULL)
+	  GetUserDefinedDoFConstraints()->MakeStateDoFConstraints(*state_dof_handlers_[j], *state_dof_constraints_[j]);
+	
+	std::vector<unsigned int> dirichlet_colors = DD.GetDirichletColors();
+	for (unsigned int i = 0; i < dirichlet_colors.size(); i++)
         {
           unsigned int color = dirichlet_colors[i];
           std::vector<bool> comp_mask = DD.GetDirichletCompMask(color);
-
+	  
           //TODO: mapping[0] is a workaround, as deal does not support interpolate
           // boundary_values with a mapping collection at this point.
 #if DEAL_II_VERSION_GTE(9,0,0)
-          VectorTools::interpolate_boundary_values(GetMapping()[0], state_dof_handlers_[i]->GetDEALDoFHandler(),color, dealii::Functions::ZeroFunction<dealdim>(comp_mask.size()), *state_dof_constraints_[i], comp_mask);
+          VectorTools::interpolate_boundary_values(GetMapping()[0], state_dof_handlers_[j]->GetDEALDoFHandler(),color, dealii::Functions::ZeroFunction<dealdim>(comp_mask.size()), *state_dof_constraints_[j], comp_mask);
 #else
-        VectorTools::interpolate_boundary_values(GetMapping()[0], *state_dof_handlers_[i].GetDEALDoFHandler(),  
- 	state_dof_constraints_[i], comp_mask);
+	  VectorTools::interpolate_boundary_values(GetMapping()[0], *state_dof_handlers_[j].GetDEALDoFHandler(),  
+						   state_dof_constraints_[j], comp_mask);
 #endif
         }
       
-      for(unsigned int i = 0; i < n_dof_handlers_; i++)
-      {
+      	state_dof_constraints_[j]->close();
+      	state_dofs_per_block_[j].resize(state_n_blocks);
 
-      	state_dof_constraints_[i]->close();
-      	state_dofs_per_block_[i].resize(state_n_blocks);
+      	DoFTools::count_dofs_per_block(static_cast<DH<dealdim, dealdim>&>(*state_dof_handlers_[j]),
+      	state_dofs_per_block_[j], state_block_component);
 
-      	DoFTools::count_dofs_per_block(static_cast<DH<dealdim, dealdim>&>(*state_dof_handlers_[i]),
-      	state_dofs_per_block_[i], state_block_component);
-
-      	support_points_[i].clear();
-      	n_neighbour_to_vertex_[i].clear();
+      	support_points_[j].clear();
+      	n_neighbour_to_vertex_[j].clear();
       	//Initialize also the timediscretization.
       	this->ReInitTime();
 
@@ -191,14 +187,15 @@ namespace DOpE
      * Implementation of virtual function in StateSpaceTimeHandler
      */
     const DOpEWrapper::DoFHandler<dealdim, DH> &
-    GetStateDoFHandler() const
+    GetStateDoFHandler(int time_point= -1) const
     {
-      // TODO SetTime function to set [i]
-      for(unsigned int i = 0; i < n_dof_handlers_; i++)
+      if(time_point == -1 || time_point > time_to_dofhandler_.size())
       {
-        //There is only one mesh, hence always return this
-      	return *state_dof_handlers_[i];
+	throw DOpEException("Invalid Timepoint", "Rothe_SpaceTimeHandler::GetStateDoFHandler");
       }
+      
+      return *state_dof_handlers_[time_to_dofhandler_[time_point]];
+      
     }
 
     /**
@@ -214,24 +211,27 @@ namespace DOpE
      * Implementation of virtual function in StateSpaceTimeHandlerBase
      */
     const std::vector<unsigned int> &
-    GetStateDoFsPerBlock(int /*time_point*/= -1) const
+    GetStateDoFsPerBlock(int time_point= -1) const
     {
-      for(unsigned int i = 0; i < n_dof_handlers_; i++)
+      if(time_point == -1 || time_point > time_to_dofhandler_.size())
       {
-      	return state_dofs_per_block_[i];
+	throw DOpEException("Invalid Timepoint", "Rothe_SpaceTimeHandler::GetStateDoFHandler");
       }
+      return state_dofs_per_block_[time_to_dofhandler_[time_point]];
+      
     }
 
     /**
      * Implementation of virtual function in StateSpaceTimeHandler
      */
     const dealii::ConstraintMatrix &
-    GetStateDoFConstraints() const
+    GetStateDoFConstraints(int time_point= -1) const
     {
-      for(unsigned int i = 0; i < n_dof_handlers_; i++)
+      if(time_point == -1 || time_point > time_to_dofhandler_.size())
       {
-      	return *state_dof_constraints_[i];
+	throw DOpEException("Invalid Timepoint", "Rothe_SpaceTimeHandler::GetStateDoFHandler");
       }
+      return *state_dof_constraints_[time_to_dofhandler_[time_point]];
     }
 
     /**
@@ -257,9 +257,9 @@ namespace DOpE
     /**
      * Implementation of virtual function in StateSpaceTimeHandlerBase
      */
-    unsigned int GetStateNDoFs(int /*time_point*/= -1) const
+    unsigned int GetStateNDoFs(int time_point= -1) const
     {
-      return GetStateDoFHandler().n_dofs();
+      return GetStateDoFHandler(time_point).n_dofs();
     }
 
     /**
@@ -269,12 +269,10 @@ namespace DOpE
     GetLocallyOwnedDoFs (const DOpEtypes::VectorType type,
                          int time_point = -1) const
     {
-      (void) time_point; // TODO same local dofs for all times ?
-
       switch (type)
         {
         case DOpEtypes::VectorType::state:
-          return GetStateDoFHandler ().GetDEALDoFHandler().locally_owned_dofs();
+          return GetStateDoFHandler (time_point).GetDEALDoFHandler().locally_owned_dofs();
 
         case DOpEtypes::VectorType::constraint:
         case DOpEtypes::VectorType::local_constraint:
@@ -295,14 +293,12 @@ namespace DOpE
     GetLocallyRelevantDoFs (const DOpEtypes::VectorType type,
                             int time_point = -1) const
     {
-      (void) time_point;
-
       switch (type)
         {
         case DOpEtypes::VectorType::state:
         {
           dealii::IndexSet result;
-          DoFTools::extract_locally_relevant_dofs (GetStateDoFHandler ().GetDEALDoFHandler(),
+          DoFTools::extract_locally_relevant_dofs (GetStateDoFHandler (time_point).GetDEALDoFHandler(),
                                                    result);
           return result;
         }
@@ -323,36 +319,38 @@ namespace DOpE
      * Implementation of virtual function in StateSpaceTimeHandler
      */
     const std::vector<Point<dealdim> > &
-    GetMapDoFToSupportPoints()
+    GetMapDoFToSupportPoints(int time_point= -1)
     {
-      for(unsigned int i = 0; i < n_dof_handlers_; i++)
+      if(time_point == -1 || time_point > time_to_dofhandler_.size())
       {
-      	support_points_[i].resize(GetStateNDoFs());
-      	DOpE::STHInternals::MapDoFsToSupportPoints<std::vector<Point<dealdim> >, dealdim>(this->GetMapping(), GetStateDoFHandler(), support_points_[i]);
-      	return support_points_[i];
+	throw DOpEException("Invalid Timepoint", "Rothe_SpaceTimeHandler::GetStateDoFHandler");
       }
+      support_points_[time_to_dofhandler_[time_point]].resize(GetStateNDoFs(time_point));
+      DOpE::STHInternals::MapDoFsToSupportPoints<std::vector<Point<dealdim> >, dealdim>(this->GetMapping(), GetStateDoFHandler(time_point), support_points_[time_to_dofhandler_[time_point]]);
+      return support_points_[time_to_dofhandler_[time_point]];
     }
 
     /**
      * Implementation of virtual function in StateSpaceTimeHandler
      */
-    const std::vector<unsigned int>* GetNNeighbourElements()
+    const std::vector<unsigned int>* GetNNeighbourElements(int time_point= -1)
     {
-      for(unsigned int i = 0; i < n_dof_handlers_; i++)
+      if(time_point == -1 || time_point > time_to_dofhandler_.size())
       {
-      	if(n_neighbour_to_vertex_[i].size()!=triangulations_[i]->n_vertices())
-      	{
-		DOpE::STHInternals::CalculateNeigbourElementsToVertices(*triangulations_[i],n_neighbour_to_vertex_[i]);
-      	}
-      	return &n_neighbour_to_vertex_[i];
+	throw DOpEException("Invalid Timepoint", "Rothe_SpaceTimeHandler::GetStateDoFHandler");
       }
+      if(n_neighbour_to_vertex_[time_to_dofhandler_[time_point]].size()!=triangulations_[time_to_dofhandler_[time_point]]->n_vertices())
+      {
+	DOpE::STHInternals::CalculateNeigbourElementsToVertices(*triangulations_[time_to_dofhandler_[time_point]],n_neighbour_to_vertex_[time_to_dofhandler_[time_point]]);
+      }
+      return &n_neighbour_to_vertex_[time_to_dofhandler_[time_point]];
     }
 
     /******************************************************/
-    void ComputeStateSparsityPattern(SPARSITYPATTERN &sparsity) const
+    void ComputeStateSparsityPattern(SPARSITYPATTERN &sparsity,int time_point= -1) const
     {
-      this->GetSparsityMaker()->ComputeSparsityPattern(this->GetStateDoFHandler(), sparsity, this->GetStateDoFConstraints(),
-                                                       this->GetStateDoFsPerBlock());
+      this->GetSparsityMaker()->ComputeSparsityPattern(this->GetStateDoFHandler(time_point), sparsity, this->GetStateDoFConstraints(time_point),
+                                                       this->GetStateDoFsPerBlock(time_point));
     }
 
     /******************************************************/
@@ -390,6 +388,9 @@ namespace DOpE
     {
       assert(ref_type == DOpEtypes::RefinementType::global);
       RefineSpace(ref_type);
+      std::cout<<"Not implemented yet: RefineSpace"<<std::endl;
+      abort();
+      ///Time refinement needs potentially a change in the dofhandler number?
       SpaceTimeHandlerBase<VECTOR>::RefineTime(ref_type);
     }
 
@@ -425,6 +426,9 @@ namespace DOpE
     {
       DOpEtypes::RefinementType ref_type = ref_container.GetRefType();
 
+      std::cout<<"Not implemented yet: RefineSpace"<<std::endl;
+      abort();
+      
       //make sure that we do not use any coarsening
       assert( !ref_container.UsesCoarsening());
 
@@ -491,13 +495,14 @@ namespace DOpE
     /**
      * Implementation of virtual function in SpaceTimeHandlerBase
      */
-    void SpatialMeshTransferState(const VECTOR &old_values, VECTOR &new_values) const
+    void SpatialMeshTransferState(const VECTOR &old_values, VECTOR &new_values, int time_point= -1) const
     {
-      for(unsigned int i = 0; i < n_dof_handlers_; i++)
+      if(time_point == -1 || time_point > time_to_dofhandler_.size())
       {
-      	if (state_mesh_transfers_[i] != NULL) state_mesh_transfers_[i]->refine_interpolate(old_values, new_values);
+	throw DOpEException("Invalid Timepoint", "Rothe_SpaceTimeHandler::GetStateDoFHandler");
       }
-    }
+      if (state_mesh_transfers_[time_to_dofhandler_[time_point]] != NULL) state_mesh_transfers_[time_to_dofhandler_[time_point]]->refine_interpolate(old_values, new_values);
+     }
 
     /******************************************************/
     /**

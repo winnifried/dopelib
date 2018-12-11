@@ -105,7 +105,7 @@ namespace DOpE
      * Returns a reference to the DoF Handler for the State at the current time point.
      */
     virtual const DOpEWrapper::DoFHandler<dealdim, DH> &
-    GetStateDoFHandler () const =0;
+    GetStateDoFHandler (int time_point= -1) const =0;
 
     /******************************************************/
 
@@ -296,7 +296,7 @@ namespace DOpE
      * Returns the state HN-Constraints at the current time
      */
     virtual const dealii::ConstraintMatrix &
-    GetStateDoFConstraints () const=0;
+    GetStateDoFConstraints (int time_point= -1) const=0;
 
     /*******************************************************/
 
@@ -305,13 +305,13 @@ namespace DOpE
      * on the current spatial mesh (if they do have that compare dealii::DoFTools>>map_dofs_to_support_points!).
      */
     virtual const std::vector<dealii::Point<dealdim> > &
-    GetMapDoFToSupportPoints ()=0;
+    GetMapDoFToSupportPoints (int time_point= -1)=0;
 
     /**
      * Returns the list of the number of neighbouring elements to the vertices
      */
 
-    virtual const std::vector<unsigned int>* GetNNeighbourElements() = 0;
+    virtual const std::vector<unsigned int>* GetNNeighbourElements(int time_point= -1) = 0;
         
     /******************************************************/
 
@@ -319,7 +319,7 @@ namespace DOpE
      * Computes the current sparsity pattern for the state variable
      */
     virtual void
-    ComputeStateSparsityPattern (SPARSITYPATTERN &sparsity) const=0;
+      ComputeStateSparsityPattern (SPARSITYPATTERN &sparsity,int time_point= -1) const=0;
 
     /******************************************************/
 
