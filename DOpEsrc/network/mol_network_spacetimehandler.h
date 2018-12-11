@@ -610,7 +610,7 @@ namespace DOpE
       }
       void
       SpatialMeshTransferState(const  VECTOR &old_values,
-                               VECTOR &new_values) const
+                               VECTOR &new_values, int /*time_point*/= -1) const
       {
         assert(old_values.n_blocks() == new_values.n_blocks());
         assert(old_values.n_blocks() == sth_s_.size()+1);

@@ -34,6 +34,7 @@
 #include <deal.II/lac/block_vector.h>
 #include <deal.II/lac/constraint_matrix.h>
 #include <deal.II/dofs/dof_handler.h>
+#include <deal.II/dofs/dof_tools.h>
 //#include <deal.II/multigrid/mg_dof_handler.h>
 //#include <deal.II/multigrid/mg_constrained_dofs.h>
 
