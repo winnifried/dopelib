@@ -272,7 +272,7 @@ namespace DOpE
      * Implementation of virtual function in SpaceTimeHandler
      */
     const DOpEWrapper::DoFHandler<dim, DH> &
-    GetControlDoFHandler() const
+    GetControlDoFHandler(int /*time_point*/= -1) const
     {
       //There is only one mesh, hence always return this
       return control_dof_handler_;
