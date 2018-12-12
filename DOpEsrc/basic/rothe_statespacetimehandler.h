@@ -135,6 +135,8 @@ namespace DOpE
            const std::vector<unsigned int> &state_block_component,
            const DirichletDescriptor &DD  )
     {
+	assert(state_dof_constraints_.size()==n_dof_handlers_);
+
      state_dofs_per_block_.resize(n_dof_handlers_,std::vector<unsigned int>(state_n_blocks));
      for(unsigned int j = 0; j < n_dof_handlers_; j++)
       {
@@ -548,6 +550,7 @@ namespace DOpE
 	  triangulations_[i]->copy_triangulation(*(triangulations_[i-1]));
 	}
 	state_dof_handlers_[i] = new DOpEWrapper::DoFHandler<dealdim, DH>(*(triangulations_[i]));
+	state_dof_constraints_[i]= new dealii::ConstraintMatrix;
       }
     }
     
