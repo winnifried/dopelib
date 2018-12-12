@@ -149,7 +149,7 @@ namespace DOpE
 
       	state_dof_constraints_[j]->clear();
       	state_dof_constraints_[j]->reinit (
-        this->GetLocallyRelevantDoFs (DOpEtypes::VectorType::state));
+	  this->GetLocallyRelevantDoFs (DOpEtypes::VectorType::state,dofhandler_to_time_[j]));
       	DoFTools::make_hanging_node_constraints (
         	static_cast<DH<dealdim, dealdim>&> (*state_dof_handlers_[j]),
         *state_dof_constraints_[j]);
@@ -178,10 +178,14 @@ namespace DOpE
 
       	DoFTools::count_dofs_per_block(static_cast<DH<dealdim, dealdim>&>(*state_dof_handlers_[j]),
       	state_dofs_per_block_[j], state_block_component);
-
-      	support_points_[j].clear();
-      	n_neighbour_to_vertex_[j].clear();
-  
+	if(support_points_.size() > j)
+	{
+	  support_points_[j].clear();
+	}
+	if(n_neighbour_to_vertex_.size() > j)
+	{
+	  n_neighbour_to_vertex_[j].clear();
+	}  
       }
      //Initialize also the timediscretization.
      this->ReInitTime();
@@ -224,9 +228,6 @@ namespace DOpE
       {
 	throw DOpEException("Invalid Timepoint", "Rothe_SpaceTimeHandler::GetStateDoFsPerBlock");
       }
-      std::cout<<n_dof_handlers_<<std::endl;
-      std::cout<<state_dofs_per_block_.size()<<std::endl;
-      std::cout<<state_dofs_per_block_[0].size()<<std::endl;
       assert(time_to_dofhandler_[time_point]<state_dofs_per_block_.size());
       return state_dofs_per_block_[time_to_dofhandler_[time_point]];
       
@@ -532,6 +533,11 @@ namespace DOpE
 	  }
 	}
       }
+      dofhandler_to_time_.resize(n_dof_handlers_);
+      for(unsigned int i = 0; i < n_dof_handlers_; i++)
+      {
+	dofhandler_to_time_[i]=*(find(time_to_dofhandler_.begin(),time_to_dofhandler_.end(),i));
+      }
       //Initialize triangulations, ...
       triangulations_.resize(n_dof_handlers_,NULL);
       state_dof_handlers_.resize(n_dof_handlers_,NULL);
@@ -584,6 +590,7 @@ namespace DOpE
     std::vector<std::vector<unsigned int> > n_neighbour_to_vertex_;
 
     std::vector<unsigned int> time_to_dofhandler_;
+    std::vector<unsigned int> dofhandler_to_time_;
     unsigned int n_dof_handlers_;
   };
 
