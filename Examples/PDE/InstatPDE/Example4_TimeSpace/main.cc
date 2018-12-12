@@ -190,7 +190,7 @@ main(int argc, char **argv)
   //prepare the initial data
   InitialData initial_data;
   P.SetInitialValues(&initial_data);
-  
+
   RP solver(&P, DOpEtypes::VectorStorageType::fullmem, pr, idc);
   
   //Use one outputhandler for all problems

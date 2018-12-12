@@ -340,6 +340,7 @@ namespace DOpE
       OP_ = OP;
       base_priority_ = base_priority;
       post_index_ = "_" + this->GetProblem()->GetName();
+      OP_->ReInit("reduced");
     }
     virtual ~ReducedProblemInterface()
     {

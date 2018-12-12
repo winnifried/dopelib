@@ -341,7 +341,7 @@ namespace DOpE
   void
   StateVector<VECTOR>::ReSizeSpace (const unsigned int time_point) const
   {
-    const auto ndofs = GetSpaceTimeHandler ()->GetStateNDoFs ();
+    const auto ndofs = GetSpaceTimeHandler ()->GetStateNDoFs (time_point);
     const auto &dofs_per_block =
       GetSpaceTimeHandler ()->GetStateDoFsPerBlock (time_point);
 
@@ -381,10 +381,11 @@ namespace DOpE
                   local_state_ = *(state_[accessor_]);
 
                 GetSpaceTimeHandler ()->ReinitVector (*state_[accessor_],
-                                                      DOpEtypes::VectorType::state);
+                                                      DOpEtypes::VectorType::state,
+						      time_point);
                 if (existed)
                   GetSpaceTimeHandler ()->SpatialMeshTransferState (
-                    local_state_, *(state_[accessor_]));
+                    local_state_, *(state_[accessor_]), time_point);
               }
           }
         else
@@ -392,7 +393,8 @@ namespace DOpE
             //accessor_ < 0
             if (local_state_.size () != ndofs)
               GetSpaceTimeHandler ()->ReinitVector (local_state_,
-                                                    DOpEtypes::VectorType::state);
+                                                    DOpEtypes::VectorType::state,
+						    time_point);
           }
       }
     else
@@ -425,13 +427,15 @@ namespace DOpE
                 if (reinit)
                   GetSpaceTimeHandler ()->ReinitVector (
                     *local_vectors_[global_to_local_[accessor_]],
-                    DOpEtypes::VectorType::state);
+                    DOpEtypes::VectorType::state,
+		    time_point);
               }
             else
               {
                 if (local_state_.size () != ndofs)
                   GetSpaceTimeHandler ()->ReinitVector (local_state_,
-                                                        DOpEtypes::VectorType::state);
+                                                        DOpEtypes::VectorType::state,
+							time_point);
               }
           }
         else
@@ -475,11 +479,13 @@ namespace DOpE
                   local_state_ = *(state_[accessor_]);
 
                 GetSpaceTimeHandler ()->ReinitVector (*state_[accessor_],
-                                                      DOpEtypes::VectorType::state);
+                                                      DOpEtypes::VectorType::state,
+						      time_point);
 
                 if (existed)
                   GetSpaceTimeHandler ()->SpatialMeshTransferState (
-                    local_state_, *(state_[accessor_]));
+                    local_state_, *(state_[accessor_]),
+		    time_point);
               }
           }
         else
@@ -487,7 +493,8 @@ namespace DOpE
             //accessor < 0
             if (local_state_.size () != ndofs)
               GetSpaceTimeHandler ()->ReinitVector (local_state_,
-                                                    DOpEtypes::VectorType::state);
+                                                    DOpEtypes::VectorType::state,
+						    time_point);
           }
       }
     else
@@ -503,13 +510,15 @@ namespace DOpE
                 if (reinit)
                   GetSpaceTimeHandler ()->ReinitVector (
                     *local_vectors_[global_to_local_[accessor_]],
-                    DOpEtypes::VectorType::state);
+                    DOpEtypes::VectorType::state,
+		    time_point);
               }
             else
               {
                 if (local_state_.size () != ndofs)
                   GetSpaceTimeHandler ()->ReinitVector (local_state_,
-                                                        DOpEtypes::VectorType::state);
+                                                        DOpEtypes::VectorType::state,
+							time_point);
               }
           }
         else

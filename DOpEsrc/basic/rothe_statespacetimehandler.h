@@ -135,6 +135,7 @@ namespace DOpE
            const std::vector<unsigned int> &state_block_component,
            const DirichletDescriptor &DD  )
     {
+     state_dofs_per_block_.resize(n_dof_handlers_,std::vector<unsigned int>(state_n_blocks));
      for(unsigned int j = 0; j < n_dof_handlers_; j++)
       {
 
@@ -178,13 +179,13 @@ namespace DOpE
 
       	support_points_[j].clear();
       	n_neighbour_to_vertex_[j].clear();
-      	//Initialize also the timediscretization.
-      	this->ReInitTime();
-
-      	//There where changes invalidate tickets
-      	this->IncrementStateTicket();
   
       }
+     //Initialize also the timediscretization.
+     this->ReInitTime();
+     
+     //There where changes invalidate tickets
+     this->IncrementStateTicket();
     }
 
     /**
@@ -221,6 +222,10 @@ namespace DOpE
       {
 	throw DOpEException("Invalid Timepoint", "Rothe_SpaceTimeHandler::GetStateDoFsPerBlock");
       }
+      std::cout<<n_dof_handlers_<<std::endl;
+      std::cout<<state_dofs_per_block_.size()<<std::endl;
+      std::cout<<state_dofs_per_block_[0].size()<<std::endl;
+      assert(time_to_dofhandler_[time_point]<state_dofs_per_block_.size());
       return state_dofs_per_block_[time_to_dofhandler_[time_point]];
       
     }
@@ -276,6 +281,7 @@ namespace DOpE
       {
 	throw DOpEException("Invalid Timepoint", "Rothe_SpaceTimeHandler::GetMapDoFToSupportPoints");
       }
+      assert(time_to_dofhandler_[time_point]<support_points_.size());
       support_points_[time_to_dofhandler_[time_point]].resize(GetStateNDoFs(time_point));
       DOpE::STHInternals::MapDoFsToSupportPoints<std::vector<Point<dealdim> >, dealdim>(this->GetMapping(), GetStateDoFHandler(time_point), support_points_[time_to_dofhandler_[time_point]]);
       return support_points_[time_to_dofhandler_[time_point]];
@@ -289,6 +295,11 @@ namespace DOpE
       if(time_point <= -1 || (unsigned int)  time_point > time_to_dofhandler_.size())
       {
 	throw DOpEException("Invalid Timepoint", "Rothe_SpaceTimeHandler::GetNNeighbourElements");
+      }
+      if(n_neighbour_to_vertex_.size() <= time_to_dofhandler_[time_point])
+      {
+	n_neighbour_to_vertex_.resize(n_dof_handlers_);
+	assert(time_to_dofhandler_[time_point] < n_dof_handlers_);
       }
       if(n_neighbour_to_vertex_[time_to_dofhandler_[time_point]].size()!=triangulations_[time_to_dofhandler_[time_point]]->n_vertices())
       {
