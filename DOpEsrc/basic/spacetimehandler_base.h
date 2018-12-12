@@ -130,13 +130,23 @@ namespace DOpE
      *
      * @param interval   The current interval.
      */
-    void SetInterval(const TimeIterator &it, unsigned int time_dof_number)
+    void SetInterval(const TimeIterator &it, unsigned int time_dof_number) const
     {
       interval_ = it;
       time_dof_number_ = time_dof_number;
+      //TODO: Check if time_dof_number is in interval!
     }
 
-
+    /**
+     * Sets the current interval
+     *
+     * @param interval   The current interval.
+     */
+    //TODO:Remove, should only be SetInterval!
+    void SetTimeDoFNumber(unsigned int time_dof_number) const
+    {
+      time_dof_number_ = time_dof_number;
+    }
     /**
      * Returns the actual interval, which has to be set prior to this function through Setinterval.
      *

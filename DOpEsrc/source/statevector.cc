@@ -262,6 +262,7 @@ namespace DOpE
   StateVector<VECTOR>::SetTimeDoFNumber(unsigned int dof_number,
                                         const TimeIterator &interval) const
   {
+    GetSpaceTimeHandler()->SetInterval(interval,dof_number);
     if (GetBehavior() == DOpEtypes::VectorStorageType::fullmem
         || GetBehavior() == DOpEtypes::VectorStorageType::only_recent)
       {
@@ -305,6 +306,7 @@ namespace DOpE
   void
   StateVector<VECTOR>::SetTimeDoFNumber(unsigned int time_point) const
   {
+    GetSpaceTimeHandler()->SetTimeDoFNumber(time_point);
     if (GetBehavior() == DOpEtypes::VectorStorageType::only_recent)
       {
         if ( time_point - current_dof_number_ == 0)
