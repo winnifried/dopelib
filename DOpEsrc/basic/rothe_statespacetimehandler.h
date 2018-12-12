@@ -200,7 +200,9 @@ namespace DOpE
     const DOpEWrapper::DoFHandler<dealdim, DH> &
     GetStateDoFHandler(int time_point= -1) const
     {
-      if(time_point <= -1 || (unsigned int)  time_point > time_to_dofhandler_.size())
+	std::cout << "time_point " << time_point << " " << this->GetTimeDoFNumber() << std::endl;
+      assert(time_point == -1 || time_point == this->GetTimeDoFNumber());
+      if(this->GetTimeDoFNumber() > time_to_dofhandler_.size() || this->GetTimeDoFNumber() != std::numeric_limits<unsigned int>::max())
       {
 	throw DOpEException("Invalid Timepoint", "Rothe_SpaceTimeHandler::GetStateDoFHandler");
       }
@@ -240,7 +242,8 @@ namespace DOpE
     const dealii::ConstraintMatrix &
     GetStateDoFConstraints(int time_point= -1) const
     {
-      if(time_point <= -1 || (unsigned int) time_point > time_to_dofhandler_.size())
+      assert(time_point == -1 || time_point == this->GetTimeDoFNumber());
+      if(this->GetTimeDoFNumber() > time_to_dofhandler_.size() || this->GetTimeDoFNumber() != std::numeric_limits<unsigned int>::max())
       {
 	throw DOpEException("Invalid Timepoint", "Rothe_SpaceTimeHandler::GetStateDoFConstraints");
       }
@@ -281,7 +284,8 @@ namespace DOpE
     const std::vector<Point<dealdim> > &
     GetMapDoFToSupportPoints(int time_point= -1)
     {
-      if(time_point <= -1 || (unsigned int)  time_point > time_to_dofhandler_.size())
+      assert(time_point == -1 || time_point == this->GetTimeDoFNumber());
+      if(this->GetTimeDoFNumber() > time_to_dofhandler_.size() || this->GetTimeDoFNumber() != std::numeric_limits<unsigned int>::max())
       {
 	throw DOpEException("Invalid Timepoint", "Rothe_SpaceTimeHandler::GetMapDoFToSupportPoints");
       }
@@ -296,7 +300,8 @@ namespace DOpE
      */
     const std::vector<unsigned int>* GetNNeighbourElements(int time_point= -1)
     {
-      if(time_point <= -1 || (unsigned int)  time_point > time_to_dofhandler_.size())
+      assert(time_point == -1 || time_point == this->GetTimeDoFNumber());
+      if(this->GetTimeDoFNumber() > time_to_dofhandler_.size() || this->GetTimeDoFNumber() != std::numeric_limits<unsigned int>::max())
       {
 	throw DOpEException("Invalid Timepoint", "Rothe_SpaceTimeHandler::GetNNeighbourElements");
       }
@@ -451,7 +456,8 @@ namespace DOpE
      */
     void SpatialMeshTransferState(const VECTOR &old_values, VECTOR &new_values, int time_point= -1) const
     {
-      if(time_point <= -1 || (unsigned int)  time_point > time_to_dofhandler_.size())
+      assert(time_point == -1 || time_point == this->GetTimeDoFNumber());
+      if(this->GetTimeDoFNumber() > time_to_dofhandler_.size() || this->GetTimeDoFNumber() != std::numeric_limits<unsigned int>::max())
       {
 	throw DOpEException("Invalid Timepoint", "Rothe_SpaceTimeHandler::SpatialMeshTransferState");
       }
