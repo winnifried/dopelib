@@ -136,11 +136,11 @@ namespace DOpE
            const DirichletDescriptor &DD  )
     {
 	assert(state_dof_constraints_.size()==n_dof_handlers_);
-
+	
      state_dofs_per_block_.resize(n_dof_handlers_,std::vector<unsigned int>(state_n_blocks));
      for(unsigned int j = 0; j < n_dof_handlers_; j++)
       {
-
+	this->SetInterval(this->GetTimeDoFHandler().first_interval(),dofhandler_to_time_[j]);
       	StateSpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dealdim>::SetActiveFEIndicesState(
         *state_dof_handlers_[j]);
       	state_dof_handlers_[j]->distribute_dofs(GetFESystem("state"));
@@ -192,6 +192,7 @@ namespace DOpE
      
      //There where changes invalidate tickets
      this->IncrementStateTicket();
+     this->SetInterval(this->GetTimeDoFHandler().first_interval(),0);
     }
 
     /**
