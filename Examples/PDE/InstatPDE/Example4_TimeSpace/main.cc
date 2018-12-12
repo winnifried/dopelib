@@ -92,54 +92,19 @@ typedef StateProblem<OP_BASE, LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
         SimpleDirichletData<VECTOR, DIM>, SPARSITYPATTERN, VECTOR, DIM> PROB;
 // Typedefs for timestep problem
 
-#define TSP1 ForwardEulerProblem
-#define TSP2 BackwardEulerProblem
-#define TSP3 CrankNicolsonProblem
-#define TSP4 ShiftedCrankNicolsonProblem
-#define TSP5 FractionalStepThetaProblem
+#define TSP BackwardEulerProblem
 //FIXME: This should be a reasonable dual timestepping scheme
-#define DTSP1 ForwardEulerProblem
-#define DTSP2 BackwardEulerProblem
-#define DTSP3 CrankNicolsonProblem
-#define DTSP4 ShiftedCrankNicolsonProblem
-#define DTSP5 FractionalStepThetaProblem
+#define DTSP BackwardEulerProblem
 
-typedef InstatPDEProblemContainer<TSP1, DTSP1,
+typedef InstatPDEProblemContainer<TSP, DTSP,
         LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
         SimpleDirichletData<VECTOR, DIM>,
         SPARSITYPATTERN,
-        VECTOR, DIM> OP1;
-typedef InstatPDEProblemContainer<TSP2, DTSP2,
-        LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
-        SimpleDirichletData<VECTOR, DIM>,
-        SPARSITYPATTERN,
-        VECTOR, DIM> OP2;
-typedef InstatPDEProblemContainer<TSP3, DTSP3,
-        LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
-        SimpleDirichletData<VECTOR, DIM>,
-        SPARSITYPATTERN,
-        VECTOR, DIM> OP3;
-typedef InstatPDEProblemContainer<TSP4, DTSP4,
-        LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
-        SimpleDirichletData<VECTOR, DIM>,
-        SPARSITYPATTERN,
-        VECTOR, DIM> OP4;
-typedef InstatPDEProblemContainer<TSP5, DTSP5,
-        LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
-        SimpleDirichletData<VECTOR, DIM>,
-        SPARSITYPATTERN,
-        VECTOR, DIM> OP5;
+        VECTOR, DIM> OP;
 
-#undef TSP1
-#undef TSP2
-#undef TSP3
-#undef TSP4
-#undef TSP5
-#undef DTSP1
-#undef DTSP2
-#undef DTSP3
-#undef DTSP4
-#undef DTSP5
+
+#undef TSP
+#undef DTSP
 
 typedef IntegratorDataContainer<DOFHANDLER, QUADRATURE,
         FACEQUADRATURE, VECTOR, DIM> IDC;
@@ -151,18 +116,8 @@ typedef DirectLinearSolverWithMatrix<SPARSITYPATTERN, MATRIX, VECTOR> LINEARSOLV
 typedef NewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR> CNLS;
 typedef InstatStepNewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR> NLS;
 
-typedef FractionalStepThetaStepNewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR> NLS2;
-
-typedef InstatPDEProblem<NLS, INTEGRATOR, OP1, VECTOR,
-        DIM> RP1;
-typedef InstatPDEProblem<NLS, INTEGRATOR, OP2, VECTOR,
-        DIM> RP2;
-typedef InstatPDEProblem<NLS, INTEGRATOR, OP3, VECTOR,
-        DIM> RP3;
-typedef InstatPDEProblem<NLS, INTEGRATOR, OP4, VECTOR,
-        DIM> RP4;
-typedef InstatPDEProblem<NLS2, INTEGRATOR, OP5, VECTOR,
-        DIM> RP5;
+typedef InstatPDEProblem<NLS, INTEGRATOR, OP, VECTOR,
+        DIM> RP;
 
 int
 main(int argc, char **argv)
@@ -188,11 +143,7 @@ main(int argc, char **argv)
 
   //First, declare the parameters and read them in.
   ParameterReader pr;
-  RP1::declare_params(pr);
-  RP2::declare_params(pr);
-  RP3::declare_params(pr);
-  RP4::declare_params(pr);
-  RP5::declare_params(pr);
+  RP::declare_params(pr);
   DOpEOutputHandler<VECTOR>::declare_params(pr);
   pr.read_parameters(paramfile);
 
@@ -223,17 +174,9 @@ main(int argc, char **argv)
   Rothe_StateSpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR,
                                       DIM> DOFH(triangulation, state_fe, times,Rothe_time_to_dof);
 
-  OP1 P1(LPDE, DOFH);
-  OP2 P2(LPDE, DOFH);
-  OP3 P3(LPDE, DOFH);
-  OP4 P4(LPDE, DOFH);
-  OP5 P5(LPDE, DOFH);
+  OP P(LPDE, DOFH);
 
-  P1.AddFunctional(&LPF);
-  P2.AddFunctional(&LPF);
-  P3.AddFunctional(&LPF);
-  P4.AddFunctional(&LPF);
-  P5.AddFunctional(&LPF);
+  P.AddFunctional(&LPF);
 
   std::vector<bool> comp_mask(1);
   comp_mask[0] = true;
@@ -242,162 +185,53 @@ main(int argc, char **argv)
   DOpEWrapper::ZeroFunction<DIM> zf;
   SimpleDirichletData<VECTOR, DIM> DD1(zf);
 
-  P1.SetDirichletBoundaryColors(0, comp_mask, &DD1);
-  P1.SetDirichletBoundaryColors(1, comp_mask, &DD1);
-  P2.SetDirichletBoundaryColors(0, comp_mask, &DD1);
-  P2.SetDirichletBoundaryColors(1, comp_mask, &DD1);
-  P3.SetDirichletBoundaryColors(0, comp_mask, &DD1);
-  P3.SetDirichletBoundaryColors(1, comp_mask, &DD1);
-  P4.SetDirichletBoundaryColors(0, comp_mask, &DD1);
-  P4.SetDirichletBoundaryColors(1, comp_mask, &DD1);
-  P5.SetDirichletBoundaryColors(0, comp_mask, &DD1);
-  P5.SetDirichletBoundaryColors(1, comp_mask, &DD1);
+  P.SetDirichletBoundaryColors(0, comp_mask, &DD1);
+  P.SetDirichletBoundaryColors(1, comp_mask, &DD1);
 
   //prepare the initial data
   InitialData initial_data;
-  P1.SetInitialValues(&initial_data);
-  P2.SetInitialValues(&initial_data);
-  P3.SetInitialValues(&initial_data);
-  P4.SetInitialValues(&initial_data);
-  P5.SetInitialValues(&initial_data);
+  P.SetInitialValues(&initial_data);
 
-  RP1 solver1(&P1, DOpEtypes::VectorStorageType::fullmem, pr, idc);
-  RP2 solver2(&P2, DOpEtypes::VectorStorageType::fullmem, pr, idc);
-  RP3 solver3(&P3, DOpEtypes::VectorStorageType::fullmem, pr, idc);
-  RP4 solver4(&P4, DOpEtypes::VectorStorageType::fullmem, pr, idc);
-  RP5 solver5(&P5, DOpEtypes::VectorStorageType::fullmem, pr, idc);
+  RP solver(&P, DOpEtypes::VectorStorageType::fullmem, pr, idc);
 
   //Use one outputhandler for all problems
-  DOpEOutputHandler<VECTOR> output(&solver1, pr);
+  DOpEOutputHandler<VECTOR> output(&solver, pr);
   DOpEExceptionHandler<VECTOR> ex(&output);
 
-  P1.RegisterOutputHandler(&output);
-  P1.RegisterExceptionHandler(&ex);
-  P2.RegisterOutputHandler(&output);
-  P2.RegisterExceptionHandler(&ex);
-  P3.RegisterOutputHandler(&output);
-  P3.RegisterExceptionHandler(&ex);
-  P4.RegisterOutputHandler(&output);
-  P4.RegisterExceptionHandler(&ex);
-  P5.RegisterOutputHandler(&output);
-  P5.RegisterExceptionHandler(&ex);
-  solver1.RegisterOutputHandler(&output);
-  solver1.RegisterExceptionHandler(&ex);
-  solver2.RegisterOutputHandler(&output);
-  solver2.RegisterExceptionHandler(&ex);
-  solver3.RegisterOutputHandler(&output);
-  solver3.RegisterExceptionHandler(&ex);
-  solver4.RegisterOutputHandler(&output);
-  solver4.RegisterExceptionHandler(&ex);
-  solver5.RegisterOutputHandler(&output);
-  solver5.RegisterExceptionHandler(&ex);
-
+  P.RegisterOutputHandler(&output);
+  P.RegisterExceptionHandler(&ex);
+  solver.RegisterOutputHandler(&output);
+  solver.RegisterExceptionHandler(&ex);
 
   try
     {
 
-      solver1.ReInit();
-      solver2.ReInit();
-      solver3.ReInit();
-      solver4.ReInit();
-      solver5.ReInit();
+      solver.ReInit();
       output.ReInit();
 
       stringstream outp;
       {
         outp << "**************************************************\n";
         outp << "*             Starting Forward Solve             *\n";
-        outp << "*   Solving : " << P1.GetName() << "\t*\n";
+        outp << "*   Solving : " << P.GetName() << "\t*\n";
         outp << "*   SDoFs   : ";
-        solver1.StateSizeInfo(outp);
+        solver.StateSizeInfo(outp);
         outp << "**************************************************";
         //We print this header with priority 1 and 1 empty line in front and after.
         output.Write(outp, 1, 1, 1);
 
         //We compute the value of the functionals. To this end, we have to solve
         //the PDE at hand.
-        solver1.ComputeReducedFunctionals();
-      }
-      {
-        outp << "**************************************************\n";
-        outp << "*             Starting Forward Solve             *\n";
-        outp << "*   Solving : " << P2.GetName() << "\t*\n";
-        outp << "*   SDoFs   : ";
-        solver2.StateSizeInfo(outp);
-        outp << "**************************************************";
-        //We print this header with priority 1 and 1 empty line in front and after.
-        output.Write(outp, 1, 1, 1);
-
-        //We compute the value of the functionals. To this end, we have to solve
-        //the PDE at hand.
-        solver2.ComputeReducedFunctionals();
-      }
-      {
-        outp << "**************************************************\n";
-        outp << "*             Starting Forward Solve             *\n";
-        outp << "*   Solving : " << P3.GetName() << "\t*\n";
-        outp << "*   SDoFs   : ";
-        solver3.StateSizeInfo(outp);
-        outp << "**************************************************";
-        //We print this header with priority 1 and 1 empty line in front and after.
-        output.Write(outp, 1, 1, 1);
-
-        //We compute the value of the functionals. To this end, we have to solve
-        //the PDE at hand.
-        solver3.ComputeReducedFunctionals();
-      }
-      {
-        outp << "**************************************************\n";
-        outp << "*             Starting Forward Solve             *\n";
-        outp << "*   Solving : " << P5.GetName() << "\t*\n";
-        outp << "*   SDoFs   : ";
-        solver4.StateSizeInfo(outp);
-        outp << "**************************************************";
-        //We print this header with priority 1 and 1 empty line in front and after.
-        output.Write(outp, 1, 1, 1);
-
-        //We compute the value of the functionals. To this end, we have to solve
-        //the PDE at hand.
-        solver4.ComputeReducedFunctionals();
-      }
-      {
-        outp << "**************************************************\n";
-        outp << "*             Starting Forward Solve             *\n";
-        outp << "*   Solving : " << P5.GetName() << "\t*\n";
-        outp << "*   SDoFs   : ";
-        solver5.StateSizeInfo(outp);
-        outp << "**************************************************";
-        //We print this header with priority 1 and 1 empty line in front and after.
-        output.Write(outp, 1, 1, 1);
-
-        //We compute the value of the functionals. To this end, we have to solve
-        //the PDE at hand.
-        solver5.ComputeReducedFunctionals();
+        solver.ComputeReducedFunctionals();
       }
 
       // The soluction extractor class allows us
       // to get the solution vector from the solver
-      SolutionExtractor<RP1, VECTOR> a1(solver1);
-      const StateVector<VECTOR> &statevec1 = a1.GetU();
-      SolutionExtractor<RP2, VECTOR> a2(solver2);
-      const StateVector<VECTOR> &statevec2 = a2.GetU();
-      SolutionExtractor<RP3, VECTOR> a3(solver3);
-      const StateVector<VECTOR> &statevec3 = a3.GetU();
-      SolutionExtractor<RP4, VECTOR> a4(solver4);
-      const StateVector<VECTOR> &statevec4 = a4.GetU();
-      SolutionExtractor<RP5, VECTOR> a5(solver5);
-      const StateVector<VECTOR> &statevec5 = a5.GetU();
+      SolutionExtractor<RP, VECTOR> a(solver);
+      const StateVector<VECTOR> &statevec = a.GetU();
 
-      double product1 = statevec1 * statevec1;
-      double product2 = statevec2 * statevec2;
-      double product3 = statevec3 * statevec3;
-      double product4 = statevec4 * statevec4;
-      double product5 = statevec5 * statevec5;
-      outp << "Forward euler: u * u = " << product1 << std::endl;
-      outp << "Backward euler: u * u = " << product2 << std::endl;
-      outp << "CN: u * u = " << product3 << std::endl;
-      outp << "ShiftedCN: u * u = " << product4 << std::endl;
-      outp << "FractionalStepTheta: u * u = " << product5 << std::endl;
+      double product = statevec * statevec;
+      outp << "Backward euler: u * u = " << product << std::endl;
       output.Write(outp, 0);
 
     }
