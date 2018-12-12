@@ -1241,7 +1241,7 @@ namespace DOpE
     unsigned int time_dof_number,
     const TimeIterator &interval, bool initial)
   {
-    GetSpaceTimeHandler()->SetInterval(interval);
+    GetSpaceTimeHandler()->SetInterval(interval,time_dof_number);
     initial_ = initial;
     interval_length_ = GetSpaceTimeHandler()->GetStepSize();
 

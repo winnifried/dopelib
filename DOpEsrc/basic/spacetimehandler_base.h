@@ -58,6 +58,7 @@ namespace DOpE
       time_triangulation_ = NULL;
       state_ticket_ = 1;
       control_ticket_ = 1;
+      time_dof_number_ = std::numeric_limits<unsigned int>::max();
     }
 
     SpaceTimeHandlerBase(dealii::Triangulation<1> &times, DOpEtypes::ControlType type = DOpEtypes::stationary) :
@@ -66,6 +67,7 @@ namespace DOpE
       time_triangulation_ = &times;
       state_ticket_ = 1;
       control_ticket_ = 1;
+      time_dof_number_ = std::numeric_limits<unsigned int>::max();
     }
 
     SpaceTimeHandlerBase(dealii::Triangulation<1> &times,
@@ -76,6 +78,7 @@ namespace DOpE
       time_triangulation_ = &times;
       state_ticket_ = 1;
       control_ticket_ = 1;
+      time_dof_number_ = std::numeric_limits<unsigned int>::max();
     }
 
 
@@ -127,9 +130,10 @@ namespace DOpE
      *
      * @param interval   The current interval.
      */
-    void SetInterval(const TimeIterator &it)
+    void SetInterval(const TimeIterator &it, unsigned int time_dof_number)
     {
       interval_ = it;
+      time_dof_number_ = time_dof_number;
     }
 
 
@@ -141,6 +145,16 @@ namespace DOpE
     const TimeIterator &GetInterval() const
     {
       return interval_;
+    }
+
+    /**
+     * Returns the actual time_dof_number, which has to be set prior to this function through Setinterval.
+     *
+     * @return An number for the currently selected time_dof.
+     */
+    unsigned int GetTimeDoFNumber() const
+    {
+      return time_dof_number_;
     }
 
 
@@ -648,6 +662,7 @@ namespace DOpE
   private:
     mutable TimeDoFHandler tdfh_;//FIXME Is it really necessary for tdfh_ and interval_ to be mutable? this is really ugly
     mutable TimeIterator interval_;
+    mutable unsigned int time_dof_number_;
     dealii::Triangulation<1> *time_triangulation_;
     unsigned int control_ticket_;
     unsigned int state_ticket_;

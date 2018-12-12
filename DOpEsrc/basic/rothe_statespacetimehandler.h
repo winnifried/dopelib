@@ -224,12 +224,13 @@ namespace DOpE
     const std::vector<unsigned int> &
     GetStateDoFsPerBlock(int time_point= -1) const
     {
-      if(time_point <= -1 || (unsigned int) time_point > time_to_dofhandler_.size())
+      assert(time_point == -1 || time_point == this->GetTimeDoFNumber());
+      if(this->GetTimeDoFNumber() > time_to_dofhandler_.size() || this->GetTimeDoFNumber() != std::numeric_limits<unsigned int>::max())
       {
 	throw DOpEException("Invalid Timepoint", "Rothe_SpaceTimeHandler::GetStateDoFsPerBlock");
       }
-      assert(time_to_dofhandler_[time_point]<state_dofs_per_block_.size());
-      return state_dofs_per_block_[time_to_dofhandler_[time_point]];
+      assert(time_to_dofhandler_[this->GetTimeDoFNumber()]<state_dofs_per_block_.size());
+      return state_dofs_per_block_[time_to_dofhandler_[this->GetTimeDoFNumber()]];
       
     }
 
