@@ -168,43 +168,41 @@ main(int argc, char **argv)
   //Time grid of [0,1]
   Triangulation<1> times;
   GridGenerator::subdivided_hyper_cube(times, 50);
-
   triangulation.refine_global(4);
   std::vector<unsigned int> Rothe_time_to_dof;
   Rothe_StateSpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR,
-                                      DIM> DOFH(triangulation, state_fe, times,Rothe_time_to_dof);
-
+			      DIM> DOFH(triangulation, state_fe, times,Rothe_time_to_dof);
+  
   OP P(LPDE, DOFH);
-
+  
   P.AddFunctional(&LPF);
-
+  
   std::vector<bool> comp_mask(1);
   comp_mask[0] = true;
-
+  
   //Here we use zero boundary values
   DOpEWrapper::ZeroFunction<DIM> zf;
   SimpleDirichletData<VECTOR, DIM> DD1(zf);
-
+  
   P.SetDirichletBoundaryColors(0, comp_mask, &DD1);
   P.SetDirichletBoundaryColors(1, comp_mask, &DD1);
 
   //prepare the initial data
   InitialData initial_data;
   P.SetInitialValues(&initial_data);
-
+  
   RP solver(&P, DOpEtypes::VectorStorageType::fullmem, pr, idc);
-
+  
   //Use one outputhandler for all problems
   DOpEOutputHandler<VECTOR> output(&solver, pr);
   DOpEExceptionHandler<VECTOR> ex(&output);
-
+  
   P.RegisterOutputHandler(&output);
   P.RegisterExceptionHandler(&ex);
   solver.RegisterOutputHandler(&output);
   solver.RegisterExceptionHandler(&ex);
-
   try
-    {
+  {
 
       solver.ReInit();
       output.ReInit();

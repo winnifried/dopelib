@@ -97,8 +97,12 @@ namespace DOpE
     ~Rothe_StateSpaceTimeHandler()
     {
       assert(triangulations_.size()==n_dof_handlers_);
+      assert(state_dof_handlers_.size()==n_dof_handlers_);
+      assert(state_mesh_transfers_.size()==n_dof_handlers_);
+      assert(state_dof_constraints_.size()==n_dof_handlers_);
       for(unsigned int i = 0; i < n_dof_handlers_; i++)
       {
+	assert(state_dof_handlers_[i]!= NULL);
 	state_dof_handlers_[i]->clear();
 	delete state_dof_handlers_[i];
 	
@@ -112,6 +116,7 @@ namespace DOpE
 	}
 	if ( i != 0 )
 	{
+	  assert(triangulations_[i]!=NULL);
 	  delete triangulations_[i];
 	}
       }
@@ -214,7 +219,7 @@ namespace DOpE
     {
       if(time_point <= -1 || (unsigned int) time_point > time_to_dofhandler_.size())
       {
-	throw DOpEException("Invalid Timepoint", "Rothe_SpaceTimeHandler::GetStateDoFHandler");
+	throw DOpEException("Invalid Timepoint", "Rothe_SpaceTimeHandler::GetStateDoFsPerBlock");
       }
       return state_dofs_per_block_[time_to_dofhandler_[time_point]];
       
@@ -228,7 +233,7 @@ namespace DOpE
     {
       if(time_point <= -1 || (unsigned int) time_point > time_to_dofhandler_.size())
       {
-	throw DOpEException("Invalid Timepoint", "Rothe_SpaceTimeHandler::GetStateDoFHandler");
+	throw DOpEException("Invalid Timepoint", "Rothe_SpaceTimeHandler::GetStateDoFConstraints");
       }
       return *state_dof_constraints_[time_to_dofhandler_[time_point]];
     }
@@ -242,7 +247,7 @@ namespace DOpE
       assert(it.get_right() >= t);
       if (local_vectors.size() != 2) throw DOpEException("This function is currently not implemented for anything other than"
                                                            " linear interpolation of 2 DoFs.",
-                                                           "MethodOfLine_SpaceTimeHandler::InterpolateState");
+                                                           "Rothe_SpaceTimeHandler::InterpolateState");
 
       double lambda_l = (it.get_right() - t) / it.get_k();
       double lambda_r = (t - it.get_left()) / it.get_k();
@@ -269,7 +274,7 @@ namespace DOpE
     {
       if(time_point <= -1 || (unsigned int)  time_point > time_to_dofhandler_.size())
       {
-	throw DOpEException("Invalid Timepoint", "Rothe_SpaceTimeHandler::GetStateDoFHandler");
+	throw DOpEException("Invalid Timepoint", "Rothe_SpaceTimeHandler::GetMapDoFToSupportPoints");
       }
       support_points_[time_to_dofhandler_[time_point]].resize(GetStateNDoFs(time_point));
       DOpE::STHInternals::MapDoFsToSupportPoints<std::vector<Point<dealdim> >, dealdim>(this->GetMapping(), GetStateDoFHandler(time_point), support_points_[time_to_dofhandler_[time_point]]);
@@ -283,7 +288,7 @@ namespace DOpE
     {
       if(time_point <= -1 || (unsigned int)  time_point > time_to_dofhandler_.size())
       {
-	throw DOpEException("Invalid Timepoint", "Rothe_SpaceTimeHandler::GetStateDoFHandler");
+	throw DOpEException("Invalid Timepoint", "Rothe_SpaceTimeHandler::GetNNeighbourElements");
       }
       if(n_neighbour_to_vertex_[time_to_dofhandler_[time_point]].size()!=triangulations_[time_to_dofhandler_[time_point]]->n_vertices())
       {
@@ -433,7 +438,7 @@ namespace DOpE
     {
       if(time_point <= -1 || (unsigned int)  time_point > time_to_dofhandler_.size())
       {
-	throw DOpEException("Invalid Timepoint", "Rothe_SpaceTimeHandler::GetStateDoFHandler");
+	throw DOpEException("Invalid Timepoint", "Rothe_SpaceTimeHandler::SpatialMeshTransferState");
       }
       if (state_mesh_transfers_[time_to_dofhandler_[time_point]] != NULL) state_mesh_transfers_[time_to_dofhandler_[time_point]]->refine_interpolate(old_values, new_values);
      }
@@ -484,22 +489,34 @@ namespace DOpE
       }
       else
       {
-	assert(time_to_dofhandler.size() == this->GetMaxTimePoint());
+	if(time_to_dofhandler.size() != this->GetMaxTimePoint())
+	{
+	  throw DOpEException("Invalid given time_to_dofhandler map! Needs to have the same length as number of time-points.", "Rothe_SpaceTimeHandler::InitSpaceTime");
+	}
 	time_to_dofhandler_.resize(this->GetMaxTimePoint()+1);
+	//Input needs to be ordered without missing numbers!
 	for(unsigned int i = 0; i <= this->GetMaxTimePoint(); i++)
 	{
  	  time_to_dofhandler_[i] = time_to_dofhandler[i];
 	  if(i==0)
 	  {
-	    assert(time_to_dofhandler_[i] == 0);
+	    if(time_to_dofhandler_[i] != 0)
+	    {
+	      throw DOpEException("Invalid given time_to_dofhandler map! Must start with number zero!", "Rothe_SpaceTimeHandler::InitSpaceTime");
+	    }
 	    n_dof_handlers_=1;
 	  }
 	  else
 	  {
 	    if(time_to_dofhandler_[i] >= n_dof_handlers_)
-	      n_dof_handlers_= time_to_dofhandler_[i]+1;
+	    {
+	      n_dof_handlers_++;
+	      if(time_to_dofhandler_[i] >= n_dof_handlers_)
+	      {
+		throw DOpEException("Invalid given time_to_dofhandler map! DoF-Handler numbers must be given sequentially!", "Rothe_SpaceTimeHandler::InitSpaceTime");
+	      }
+	    }
 	  }
-	  //TODO: Check for missing numbers?
 	}
       }
       //Initialize triangulations, ...
@@ -508,10 +525,8 @@ namespace DOpE
       state_dof_constraints_.resize(n_dof_handlers_,NULL);
       state_mesh_transfers_.resize(n_dof_handlers_,NULL);
 
-      for(unsigned int i = 0; i < time_to_dofhandler.size(); i++)
+      for(unsigned int i = 0; i < n_dof_handlers_; i++)
       {
-        for(unsigned int i = 0; i < n_dof_handlers_; i++)
-      	{
 	if(i == 0)
 	{
 	  triangulations_[0]= &triangulation;
@@ -519,10 +534,9 @@ namespace DOpE
 	else
 	{
 	  triangulations_[i]=new dealii::Triangulation<dealdim>;
-	  triangulations_[i]->copy_triangulation(*triangulations_[i-1]);
+	  triangulations_[i]->copy_triangulation(*(triangulations_[i-1]));
 	}
-	state_dof_handlers_[i] = new DOpEWrapper::DoFHandler<dealdim, DH>(*triangulations_[i]);
-        }
+	state_dof_handlers_[i] = new DOpEWrapper::DoFHandler<dealdim, DH>(*(triangulations_[i]));
       }
     }
     
