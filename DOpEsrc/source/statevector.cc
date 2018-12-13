@@ -262,7 +262,6 @@ namespace DOpE
   StateVector<VECTOR>::SetTimeDoFNumber(unsigned int dof_number,
                                         const TimeIterator &interval) const
   {
-    GetSpaceTimeHandler()->SetInterval(interval,dof_number);
     if (GetBehavior() == DOpEtypes::VectorStorageType::fullmem
         || GetBehavior() == DOpEtypes::VectorStorageType::only_recent)
       {
@@ -306,8 +305,7 @@ namespace DOpE
   void
   StateVector<VECTOR>::SetTimeDoFNumber(unsigned int time_point) const
   {
-    GetSpaceTimeHandler()->SetTimeDoFNumber(time_point);
-    if (GetBehavior() == DOpEtypes::VectorStorageType::only_recent)
+     if (GetBehavior() == DOpEtypes::VectorStorageType::only_recent)
       {
         if ( time_point - current_dof_number_ == 0)
           {
@@ -344,7 +342,7 @@ namespace DOpE
             ResizeLocalVectors(1);
 
             GetSpaceTimeHandler ()->ReinitVector (*local_vectors_[0],
-                                                  DOpEtypes::VectorType::state);
+                                                  DOpEtypes::VectorType::state,time_point);
             if (FileExists(accessor_))
               {
                 FetchFromDisc(accessor_, *local_vectors_[0]);
@@ -837,7 +835,7 @@ namespace DOpE
                       {
                         SetTimeDoFNumber(t);//this makes sure that everything is stored an local_vectors_ has length 1.
                         GetSpaceTimeHandler ()->ReinitVector (local_state_,
-                                                              DOpEtypes::VectorType::state);
+                                                              DOpEtypes::VectorType::state,t);
                         dq.FetchFromDisc(t, local_state_);
                         assert(global_to_local_[accessor_]==0);
                         local_vectors_[0]->operator+=(local_state_);
@@ -956,10 +954,10 @@ namespace DOpE
                      <= GetSpaceTimeHandler()->GetMaxTimePoint(); t++)
                   {
                     GetSpaceTimeHandler ()->ReinitVector (local_state_,
-                                                          DOpEtypes::VectorType::state);
+                                                          DOpEtypes::VectorType::state,t);
                     FetchFromDisc(t, local_state_);
                     dq.GetSpaceTimeHandler ()->ReinitVector (dq.local_state_,
-                                                             DOpEtypes::VectorType::state);
+                                                             DOpEtypes::VectorType::state,t);
                     dq.FetchFromDisc(t, dq.local_state_);
                     ret += local_state_.operator*(dq.local_state_);
                   }
@@ -1027,7 +1025,7 @@ namespace DOpE
                       {
                         SetTimeDoFNumber(t);//this makes sure that everything is stored an local_vectors_ has length 1.
                         GetSpaceTimeHandler ()->ReinitVector (local_state_,
-                                                              DOpEtypes::VectorType::state);
+                                                              DOpEtypes::VectorType::state,t);
                         dq.FetchFromDisc(t, local_state_);
                         assert(global_to_local_[accessor_]==0);
                         local_vectors_[0]->add(s, local_state_);
@@ -1092,7 +1090,7 @@ namespace DOpE
                       {
                         SetTimeDoFNumber(t);//this makes sure that everything is stored an local_vectors_ has length 1.
                         GetSpaceTimeHandler ()->ReinitVector (local_state_,
-                                                              DOpEtypes::VectorType::state);
+                                                              DOpEtypes::VectorType::state,t);
                         dq.FetchFromDisc(t, local_state_);
                         assert(global_to_local_[accessor_]==0);
                         local_vectors_[0]->equ(s, local_state_);

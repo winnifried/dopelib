@@ -194,7 +194,7 @@ namespace DOpE
      * Implementation of virtual function in StateSpaceTimeHandler
      */
     const DOpEWrapper::DoFHandler<dealdim, DH> &
-    GetStateDoFHandler(int /*time_point*/= -1) const
+    GetStateDoFHandler(unsigned int /*time_point*/= std::numeric_limits<unsigned int>::max()) const
     {
       //There is only one mesh, hence always return this
       return state_dof_handler_;
@@ -213,7 +213,7 @@ namespace DOpE
      * Implementation of virtual function in StateSpaceTimeHandlerBase
      */
     const std::vector<unsigned int> &
-    GetStateDoFsPerBlock(int /*time_point*/= -1) const
+    GetStateDoFsPerBlock(unsigned int /*time_point*/= std::numeric_limits<unsigned int>::max()) const
     {
       return state_dofs_per_block_;
     }
@@ -222,7 +222,7 @@ namespace DOpE
      * Implementation of virtual function in StateSpaceTimeHandler
      */
     const dealii::ConstraintMatrix &
-    GetStateDoFConstraints(int /*time_point*/= -1) const
+    GetStateDoFConstraints(unsigned int /*time_point*/= std::numeric_limits<unsigned int>::max()) const
     {
       return state_dof_constraints_;
     }
@@ -250,7 +250,7 @@ namespace DOpE
     /**
      * Implementation of virtual function in StateSpaceTimeHandlerBase
      */
-    unsigned int GetStateNDoFs(int /*time_point*/= -1) const
+    unsigned int GetStateNDoFs(unsigned int /*time_point*/= std::numeric_limits<unsigned int>::max()) const
     {
       return GetStateDoFHandler().n_dofs();
     }
@@ -259,7 +259,7 @@ namespace DOpE
      * Implementation of virtual function in StateSpaceTimeHandler
      */
     const std::vector<Point<dealdim> > &
-    GetMapDoFToSupportPoints(int /*time_point*/= -1)
+    GetMapDoFToSupportPoints(unsigned int /*time_point*/= std::numeric_limits<unsigned int>::max())
     {
       support_points_.resize(GetStateNDoFs());
       DOpE::STHInternals::MapDoFsToSupportPoints<std::vector<Point<dealdim> >, dealdim>(this->GetMapping(), GetStateDoFHandler(), support_points_);
@@ -269,7 +269,7 @@ namespace DOpE
     /**
      * Implementation of virtual function in StateSpaceTimeHandler
      */
-    const std::vector<unsigned int>* GetNNeighbourElements(int /*time_point*/= -1)
+    const std::vector<unsigned int>* GetNNeighbourElements(unsigned int /*time_point*/= std::numeric_limits<unsigned int>::max())
     {
       if(n_neighbour_to_vertex_.size()!=triangulation_.n_vertices())
       {
@@ -279,7 +279,7 @@ namespace DOpE
     }
 
     /******************************************************/
-    void ComputeStateSparsityPattern(SPARSITYPATTERN &sparsity,int /*time_point*/= -1) const
+    void ComputeStateSparsityPattern(SPARSITYPATTERN &sparsity,unsigned int /*time_point*/= std::numeric_limits<unsigned int>::max()) const
     {
       this->GetSparsityMaker()->ComputeSparsityPattern(this->GetStateDoFHandler(), sparsity, this->GetStateDoFConstraints(),
                                                        this->GetStateDoFsPerBlock());
@@ -406,7 +406,7 @@ namespace DOpE
     /**
      * Implementation of virtual function in SpaceTimeHandlerBase
      */
-    void SpatialMeshTransferState(const VECTOR &old_values, VECTOR &new_values, int /*time_point*/= -1) const
+    void SpatialMeshTransferState(const VECTOR &old_values, VECTOR &new_values, unsigned int /*time_point*/= std::numeric_limits<unsigned int>::max()) const
     {
       if (state_mesh_transfer_ != NULL) state_mesh_transfer_->refine_interpolate(old_values, new_values);
     }
