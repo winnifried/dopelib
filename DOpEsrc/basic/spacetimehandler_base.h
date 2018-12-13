@@ -240,6 +240,19 @@ namespace DOpE
       return ret;
     }
 
+    bool IsValidTicket(const DOpEtypes::VectorType type, unsigned int &ticket)
+    {
+      switch (type)
+      {
+      case DOpEtypes::VectorType::state:
+	return IsValidStateTicket(ticket);
+      case DOpEtypes::VectorType::control:
+	return IsValidControlTicket(ticket);
+      default:
+	assert(false);
+	return false;
+      }
+    }
 
     /**
      * Returns the ControlType.
@@ -496,6 +509,22 @@ namespace DOpE
     virtual void SpatialMeshTransferState(const VECTOR & /*old_values*/, VECTOR & /*new_values*/, unsigned int /*time_point*/= std::numeric_limits<unsigned int>::max()) const
     {
       abort();
+    }
+
+    void SpatialMeshTransfer(const DOpEtypes::VectorType type, const VECTOR & old_values, VECTOR & new_values, unsigned int time_point= std::numeric_limits<unsigned int>::max()) const
+    {
+      switch (type)
+      {
+      case DOpEtypes::VectorType::state:
+	SpatialMeshTransferState(old_values,new_values,time_point);
+	return ;
+      case DOpEtypes::VectorType::control:
+	SpatialMeshTransferControl(old_values,new_values,time_point);
+	return ;
+      default:
+	assert(false);
+	return ;
+      }
     }
    
     /**

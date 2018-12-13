@@ -2,7 +2,10 @@ Changelog DOpE
 ==============
 13.12.2018: Started work on Rothe space-time-handler:
 	    -Adding time_point to all access functions in space-time-handlers
-	    -fixed flipping between int and unsigned for time_points
+	    -Fixed flipping between int and unsigned for time_points
+	    -Added refinement possibility to Rothe space-time-handlers
+	    -New class SpaceTimeVector to unify the storage routines of the
+	     different vector classes, as StateVector, ControlVector, ...
 18.10.2018: Compatibility fixes for deal.ii without Trilinos/MPI and deal.ii v8.5.0
 18.10.2018: Merged parallel-dev branch. Including the following changes:
 	    -Replaced long if/else sections by a switch.
