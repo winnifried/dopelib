@@ -60,7 +60,7 @@ namespace DOpE
      * in the derived classes.
      */
     virtual const dealii::Vector<float> &
-    GetLocalErrorIndicators() const;
+    GetLocalErrorIndicators(unsigned int timepoint = std::numeric_limits<unsigned int>::max()) const;
     virtual double
     GetTopFraction() const;
     virtual double
@@ -106,7 +106,7 @@ namespace DOpE
     }
 
     virtual const dealii::Vector<float> &
-    GetLocalErrorIndicators() const;
+    GetLocalErrorIndicators(unsigned int timepoint = std::numeric_limits<unsigned int>::max()) const;
 
   protected:
     /**
@@ -120,6 +120,37 @@ namespace DOpE
      */
     LocalRefinement();
     const dealii::Vector<float> &indicators_;
+  };
+
+   /***************************************************************/
+
+  /**
+   * Base class for RefinementContainer with local refinement. This
+   * class holds the vector of error indicators.
+   */
+  class SpaceTimeLocalRefinement : public RefinementContainer
+  {
+  public:
+    virtual
+    ~SpaceTimeLocalRefinement()
+    {
+    }
+
+    virtual const dealii::Vector<float> &
+    GetLocalErrorIndicators(unsigned int timepoint) const;
+
+  protected:
+    /**
+     * Protected constructor for use in the derived classes
+     */
+    SpaceTimeLocalRefinement(const std::vector<dealii::Vector<float> > &,
+                    DOpEtypes::RefinementType ref_type);
+  private:
+    /**
+     * Constructor made private. Should not get used!
+     */
+    SpaceTimeLocalRefinement();
+    const std::vector< dealii::Vector<float> > &indicators_;
   };
 
   /***************************************************************/
@@ -212,6 +243,30 @@ namespace DOpE
 
     virtual
     ~ RefineOptimized()
+    {
+    }
+
+    virtual double
+    GetConvergenceOrder() const;
+
+  private:
+    const double convergence_order_;
+  };
+
+  class SpaceTimeRefineOptimized : public SpaceTimeLocalRefinement
+  {
+  public:
+    /**
+     * Constructor if one wants to use the optimized refinement strategy.
+     *
+     * @param indicators        A set of positive values, used to guide refinement.
+     * @param convergence_order Convergence order of the functional of interest.
+     */
+    SpaceTimeRefineOptimized(const std::vector< dealii::Vector<float> > &indicators,
+                    double convergence_order = 2.);
+
+    virtual
+    ~ SpaceTimeRefineOptimized()
     {
     }
 

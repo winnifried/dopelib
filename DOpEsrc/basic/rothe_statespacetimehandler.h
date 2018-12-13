@@ -392,7 +392,7 @@ namespace DOpE
      *                        RefineFixedNumber and RefineOptimized.
      */
 
-    void RefineSpace(const RefinementContainer &ref_container)
+    void RefineSpace(const RefinementContainer &ref_container, int time_point= -1)
     {
       DOpEtypes::RefinementType ref_type = ref_container.GetRefType();
 
@@ -401,52 +401,66 @@ namespace DOpE
       
       //make sure that we do not use any coarsening
       assert( !ref_container.UsesCoarsening());
-
-      if (state_mesh_transfers_ != NULL)
-        {
-          delete state_mesh_transfers_;
-          state_mesh_transfers_ = NULL;
-        }
-      state_mesh_transfers_ = new dealii::SolutionTransfer<dealdim, VECTOR, DH<dealdim, dealdim> >(state_dof_handlers_);
-
-      switch (ref_type)
-        {
-        case DOpEtypes::RefinementType::global:
-          triangulations_.set_all_refine_flags();
-          break;
-
-        case DOpEtypes::RefinementType::fixed_number:
-          GridRefinement::refine_and_coarsen_fixed_number (triangulations_,
-                                                           ref_container.GetLocalErrorIndicators (),
-                                                           ref_container.GetTopFraction (),
-                                                          ref_container.GetBottomFraction());
-          break;
-
-        case DOpEtypes::RefinementType::fixed_fraction:
-          GridRefinement::refine_and_coarsen_fixed_fraction (triangulations_,
-                                                             ref_container.GetLocalErrorIndicators (),
-                                                             ref_container.GetTopFraction (),
-                                                            ref_container.GetBottomFraction());
-          break;
-
-        case DOpEtypes::RefinementType::optimized:
-          GridRefinement::refine_and_coarsen_optimize (triangulations_,
-                                                       ref_container.GetLocalErrorIndicators (),
-                                                      ref_container.GetConvergenceOrder());
-          break;
-
-        default:
-          throw DOpEException (
-            "Not implemented for name =" + DOpEtypesToString (ref_type),
-                              "Rothe_StateSpaceTimeHandler::RefineStateSpace");
-        }
-
       for(unsigned int i = 0; i < n_dof_handlers_; i++)
       {
-      	triangulations_.prepare_coarsening_and_refinement();
-      	if (state_mesh_transfers_[i] != NULL) state_mesh_transfers_->prepare_for_pure_refinement();
-      	triangulations_.execute_coarsening_and_refinement();
-      }
+      if (state_mesh_transfers_[i] != NULL)
+        {
+          delete state_mesh_transfers_[i];
+          state_mesh_transfers_[i] = NULL;
+        }
+      state_mesh_transfers_[i] = new dealii::SolutionTransfer<dealdim, VECTOR, DH<dealdim, dealdim> >(*state_dof_handlers_[i]);
+
+	  Vector<float> Indicators;
+	  for(unsigned int j = 0; j < time_to_dofhandler_[i]; j++) // time to dofhandler i or j ?
+          {
+	  if(time_to_dofhandler_[j] == i)
+	   {
+	   if(Indicators.size()==0)
+	     {
+		Indicators=ref_container.GetLocalErrorIndicators(j);
+	     }
+	   else
+	     {
+	   assert(Indicators.size()==ref_container.GetLocalErrorIndicators(j).size());
+		Indicators+=ref_container.GetLocalErrorIndicators(j);
+	     }
+	   }
+	  }
+	  switch (ref_type)
+            {
+            case DOpEtypes::RefinementType::global:
+             triangulations_[i]->set_all_refine_flags();
+            break;
+
+            case DOpEtypes::RefinementType::fixed_number:
+             GridRefinement::refine_and_coarsen_fixed_number (*triangulations_[i],
+                                                           Indicators,
+                                                           ref_container.GetTopFraction (),
+                                                          ref_container.GetBottomFraction());
+            break;
+
+            case DOpEtypes::RefinementType::fixed_fraction:
+             GridRefinement::refine_and_coarsen_fixed_fraction (*triangulations_[i],
+                                                             Indicators,
+                                                             ref_container.GetTopFraction (),
+                                                            ref_container.GetBottomFraction());
+            break;
+
+            case DOpEtypes::RefinementType::optimized:
+             GridRefinement::refine_and_coarsen_optimize (*triangulations_[i],
+                                                       Indicators,
+                                                      ref_container.GetConvergenceOrder());
+            break;
+
+            default:
+             throw DOpEException (
+              "Not implemented for name =" + DOpEtypesToString (ref_type),
+                              "Rothe_StateSpaceTimeHandler::RefineStateSpace");
+	    }
+	triangulations_[i]->prepare_coarsening_and_refinement();
+      	if (state_mesh_transfers_[i] != NULL) state_mesh_transfers_[i]->prepare_for_pure_refinement();
+      	triangulations_[i]->execute_coarsening_and_refinement();
+        }
     }
     /******************************************************/
 

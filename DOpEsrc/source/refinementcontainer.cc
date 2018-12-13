@@ -44,7 +44,7 @@ namespace DOpE
   /***********************************************************/
 
   const dealii::Vector<float> &
-  RefinementContainer::GetLocalErrorIndicators () const
+  RefinementContainer::GetLocalErrorIndicators (unsigned int /*timepoint*/) const
   {
     throw DOpEException ("Not implemented",
                          "RefinementContainer::GetLocalErrorIndicators()");
@@ -109,9 +109,28 @@ namespace DOpE
   }
 
   const dealii::Vector<float> &
-  LocalRefinement::GetLocalErrorIndicators () const
+  LocalRefinement::GetLocalErrorIndicators (unsigned int /*timepoint*/) const
   {
     return indicators_;
+  }
+
+  /***********************************************************/
+  /****Implementation of SpaceTimeLocalRefinement*************/
+  /***********************************************************/
+
+  SpaceTimeLocalRefinement::SpaceTimeLocalRefinement (const std::vector <dealii::Vector<float> > &indicators,
+                                    DOpEtypes::RefinementType ref_type)
+    : RefinementContainer (ref_type),
+      indicators_ (indicators)
+  {
+  }
+
+  const dealii::Vector<float> &
+  SpaceTimeLocalRefinement::GetLocalErrorIndicators (unsigned int timepoint) const
+  {
+    assert(timepoint != std::numeric_limits<unsigned int>::max());
+    assert(timepoint < indicators_.size());
+    return indicators_[timepoint];
   }
 
   /***********************************************************/
@@ -198,6 +217,26 @@ namespace DOpE
 
   double
   RefineOptimized::GetConvergenceOrder () const
+  {
+    return convergence_order_;
+  }
+
+    /***********************************************************/
+  /****Implementation of SpaceTimeRefineOptimized**************/
+  /***********************************************************/
+
+  SpaceTimeRefineOptimized::SpaceTimeRefineOptimized (const std::vector< dealii::Vector<float> > &indicators,
+                                    double convergence_order)
+    : SpaceTimeLocalRefinement (indicators, DOpEtypes::RefinementType::optimized),
+      convergence_order_ (convergence_order)
+  {
+    coarsening_ = false; //the method uses no coarsening.
+  }
+
+  /***********************************************************/
+
+  double
+  SpaceTimeRefineOptimized::GetConvergenceOrder () const
   {
     return convergence_order_;
   }

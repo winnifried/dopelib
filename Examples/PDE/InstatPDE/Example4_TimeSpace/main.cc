@@ -169,9 +169,9 @@ main(int argc, char **argv)
   Triangulation<1> times;
   GridGenerator::subdivided_hyper_cube(times, 50);
   triangulation.refine_global(4);
-  std::vector<unsigned int> Rothe_time_to_dof;
+  std::vector<unsigned int> Rothe_time_to_dof(50,0);
   Rothe_StateSpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR,
-			      DIM> DOFH(triangulation, state_fe, times,Rothe_time_to_dof);
+			      DIM> DOFH(triangulation, state_fe, times, Rothe_time_to_dof);
   
   OP P(LPDE, DOFH);
   
@@ -201,8 +201,11 @@ main(int argc, char **argv)
   P.RegisterExceptionHandler(&ex);
   solver.RegisterOutputHandler(&output);
   solver.RegisterExceptionHandler(&ex);
-  try
-  {
+
+  for (int j = 0; j < 2; j++)
+    {
+    try
+      {
 
       solver.ReInit();
       output.ReInit();
@@ -231,16 +234,32 @@ main(int argc, char **argv)
       double product = statevec * statevec;
       outp << "Backward euler: u * u = " << product << std::endl;
       output.Write(outp, 0);
+      }
+     
+    catch (DOpEException &e)
+       {
+        std::cout
+         << "Warning: During execution of `" + e.GetThrowingInstance()
+        + "` the following Problem occurred!" << std::endl;
+        std::cout << e.GetErrorMessage() << std::endl;
+       }
 
-    }
-  catch (DOpEException &e)
-    {
-      std::cout
-          << "Warning: During execution of `" + e.GetThrowingInstance()
-          + "` the following Problem occurred!" << std::endl;
-      std::cout << e.GetErrorMessage() << std::endl;
-    }
+    if (j != 1)
+        {
+          //For global mesh refinement, uncomment the next line
+          // DOFH.RefineSpace(DOpEtypes::RefinementType::global); //or just DOFH.RefineSpace()
 
+          std::vector<dealii::Vector<float> > error_ind;
+	  error_ind.resize(50,Vector<float>(16));
+	  error_ind[0](0)=1.0;
+
+          DOFH.RefineSpace(SpaceTimeRefineOptimized(error_ind));
+          //There are other mesh refinement strategies implemented, for example
+          //DOFH.RefineSpace(RefineFixedNumber(error_ind, 0.4));
+          //DOFH.RefineSpace(RefineFixedFraction(error_ind, 0.8));
+        }
+
+  }
   return 0;
 }
 

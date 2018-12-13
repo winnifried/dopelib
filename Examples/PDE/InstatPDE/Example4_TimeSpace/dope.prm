@@ -1,7 +1,6 @@
 # Listing of Parameters for PDE Instat Example 1 (Fluid problem)
 # --------------------------------------------------------------
 
-
 subsection newtonsolver parameters
   # maximal number of linesearch steps
   set line_maxiter         = 10
