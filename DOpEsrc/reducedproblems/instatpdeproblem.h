@@ -751,6 +751,7 @@ namespace DOpE
               this->GetIntegrator());
 
             problem.SetTime(time, local_to_global[i], it);
+	    problem.GetSpaceTimeHandler()->TemporalMeshTransferState(u_old, local_to_global[i-1], local_to_global[i]);
             this->GetProblem()->AddAuxiliaryToIntegrator(
               this->GetIntegrator());
             this->GetProblem()->AddPreviousAuxiliaryToIntegrator(
@@ -766,7 +767,6 @@ namespace DOpE
             this->GetProblem()->DeletePreviousAuxiliaryFromIntegrator(
               this->GetIntegrator());
 
-            //TODO do a transfer to the next grid for changing spatial meshes!
             u_old = sol.GetSpacialVector();
             this->GetOutputHandler()->Write(sol.GetSpacialVector(),
                                             outname + this->GetPostIndex(), problem.GetDoFType());
@@ -873,6 +873,7 @@ namespace DOpE
               this->GetIntegrator());
 
             problem.SetTime(time,local_to_global[j], it);
+	    problem.GetSpaceTimeHandler()->TemporalMeshTransferState(u_old, local_to_global[j+1], local_to_global[j]);
             this->GetProblem()->AddAuxiliaryToIntegrator(
               this->GetIntegrator());
             this->GetProblem()->AddNextAuxiliaryToIntegrator(

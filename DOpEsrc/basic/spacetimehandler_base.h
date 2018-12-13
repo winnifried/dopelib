@@ -497,6 +497,29 @@ namespace DOpE
     {
       abort();
     }
+   
+    /**
+     * This functions is used to interpolate Control Vectors between different meshes of different time steps.
+     * It expects that the timepoint of the mesh has been initialized correctly prior to
+     * calling this function
+     *
+     * @param new_values  The Vector to be interpolated in the dofs of the mesh at the time from_time_dof
+     * 			  After the function call, it contains the interpolated vector in the dofs of the mesh 
+     *   	          measured at the time to_time_dof
+     * @param from_time_dof 
+     * @param to_time_dof
+     *
+     */
+
+    virtual void TemporalMeshTransferControl( VECTOR & /*new_values*/, unsigned int /*from_time_dof*/, unsigned int /*to_time_dof*/) const
+    {
+      abort();
+    }
+
+    virtual void TemporalMeshTransferState(VECTOR & /*new_values*/ , unsigned int /*from_time_dof*/, unsigned int /*to_time_dof*/) const
+    {
+      abort();
+    }
 
     /******************************************************/
     /**

@@ -716,6 +716,29 @@ namespace DOpE
       if (state_mesh_transfer_ != NULL)
         state_mesh_transfer_->refine_interpolate(old_values, new_values);
     }
+
+     /******************************************************/
+
+    /**
+     * Implementation of virtual function in SpaceTimeHandlerBase
+     */
+
+    virtual void TemporalMeshTransferControl( VECTOR & /*new_values*/, unsigned int /*from_time_dof*/, unsigned int /*to_time_dof*/) const
+    {
+
+    }
+
+     /******************************************************/
+
+    /**
+     * Implementation of virtual function in SpaceTimeHandlerBase
+     */
+
+    virtual void TemporalMeshTransferState(VECTOR & /*new_values*/ , unsigned int /*from_time_dof*/, unsigned int /*to_time_dof*/) const
+    {
+
+    }
+
     /******************************************************/
     /**
      * Through this function one commits a constraints_maker

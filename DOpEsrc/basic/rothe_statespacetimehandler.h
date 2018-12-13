@@ -494,6 +494,37 @@ namespace DOpE
       if (state_mesh_transfers_[time_to_dofhandler_[this->GetTimeDoFNumber()]] != NULL) state_mesh_transfers_[time_to_dofhandler_[this->GetTimeDoFNumber()]]->refine_interpolate(old_values, new_values);
      }
 
+      /******************************************************/
+
+    /**
+     * Implementation of virtual function in SpaceTimeHandlerBase
+     */
+
+    virtual void TemporalMeshTransferControl( VECTOR & /*new_values*/, unsigned int /*from_time_dof*/, unsigned int /*to_time_dof*/) const
+    {
+	abort();
+    }
+
+     /******************************************************/
+
+    /**
+     * Implementation of virtual function in SpaceTimeHandlerBase
+     */
+
+    virtual void TemporalMeshTransferState(VECTOR & new_values, unsigned int from_time_dof, unsigned int to_time_dof) const
+    {
+	if (time_to_dofhandler_[from_time_dof] == time_to_dofhandler_[to_time_dof])
+	{
+	  return;
+	}
+	VECTOR temp = new_values;
+	this->ReinitVector(new_values, DOpEtypes::VectorType::state, to_time_dof);
+	dealii::VectorTools::interpolate_to_different_mesh(*state_dof_handlers_[from_time_dof], temp,
+							   *state_dof_handlers_[to_time_dof], 								   *state_dof_constraints_[to_time_dof], new_values);
+	
+	
+    }
+
     /******************************************************/
     /**
      * Through this function one commits a UserDefinedDoFConstraints
@@ -540,7 +571,7 @@ namespace DOpE
       }
       else
       {
-	if(time_to_dofhandler.size() != this->GetMaxTimePoint())
+	if(time_to_dofhandler.size() != this->GetMaxTimePoint()+1)
 	{
 	  throw DOpEException("Invalid given time_to_dofhandler map! Needs to have the same length as number of time-points.", "Rothe_SpaceTimeHandler::InitSpaceTime");
 	}

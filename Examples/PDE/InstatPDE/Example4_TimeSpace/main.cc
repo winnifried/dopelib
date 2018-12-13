@@ -169,7 +169,8 @@ main(int argc, char **argv)
   Triangulation<1> times;
   GridGenerator::subdivided_hyper_cube(times, 50);
   triangulation.refine_global(4);
-  std::vector<unsigned int> Rothe_time_to_dof(50,0);
+  std::vector<unsigned int> Rothe_time_to_dof(51,0);
+  Rothe_time_to_dof[25]=1;
   Rothe_StateSpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR,
 			      DIM> DOFH(triangulation, state_fe, times, Rothe_time_to_dof);
   
