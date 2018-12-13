@@ -409,7 +409,7 @@ namespace DOpE
      *                        RefineFixedNumber and RefineOptimized.
      */
 
-    void RefineSpace(const RefinementContainer &ref_container, int time_point= -1)
+    void RefineSpace(const RefinementContainer &ref_container)
     {
       DOpEtypes::RefinementType ref_type = ref_container.GetRefType();
 
@@ -519,10 +519,11 @@ namespace DOpE
 	}
 	VECTOR temp = new_values;
 	this->ReinitVector(new_values, DOpEtypes::VectorType::state, to_time_dof);
-	dealii::VectorTools::interpolate_to_different_mesh(*state_dof_handlers_[from_time_dof], temp,
-							   *state_dof_handlers_[to_time_dof], 								   *state_dof_constraints_[to_time_dof], new_values);
-	
-	
+	VectorTools::interpolate_to_different_mesh(state_dof_handlers_[from_time_dof]->GetDEALDoFHandler(),
+						   temp,
+						   state_dof_handlers_[to_time_dof]->GetDEALDoFHandler(),
+						   *state_dof_constraints_[to_time_dof],
+						   new_values);	
     }
 
     /******************************************************/
