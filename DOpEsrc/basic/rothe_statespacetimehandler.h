@@ -198,16 +198,24 @@ namespace DOpE
      * Implementation of virtual function in StateSpaceTimeHandler
      */
     const DOpEWrapper::DoFHandler<dealdim, DH> &
-    GetStateDoFHandler(int time_point= -1) const
+    GetStateDoFHandler(unsigned int time_point = std::numeric_limits<unsigned int>::max()) const
     {
-      assert(time_point == -1 || time_point == this->GetTimeDoFNumber());
+      //Logic is as follows: if time_point is given, we take this value
+      if(time_point != std::numeric_limits<unsigned int>::max())
+      {
+	if(time_point > time_to_dofhandler_.size())
+	{
+	  throw DOpEException("Invalid Timepoint", "Rothe_SpaceTimeHandler::GetStateDoFHandler");
+	}
+	return *state_dof_handlers_[time_to_dofhandler_[time_point]];
+      }
+      //otherwise, take the internaly stored time (asserting that it has been set)
       if(this->GetTimeDoFNumber() > time_to_dofhandler_.size() || this->GetTimeDoFNumber() == std::numeric_limits<unsigned int>::max())
       {
 	throw DOpEException("Invalid Timepoint", "Rothe_SpaceTimeHandler::GetStateDoFHandler");
       }
       
-      return *state_dof_handlers_[time_to_dofhandler_[this->GetTimeDoFNumber()]];
-      
+      return *state_dof_handlers_[time_to_dofhandler_[this->GetTimeDoFNumber()]];    
     }
 
     /**
@@ -223,9 +231,18 @@ namespace DOpE
      * Implementation of virtual function in StateSpaceTimeHandlerBase
      */
     const std::vector<unsigned int> &
-    GetStateDoFsPerBlock(int time_point= -1) const
+    GetStateDoFsPerBlock(unsigned int time_point = std::numeric_limits<unsigned int>::max()) const
     {
-      assert(time_point == -1 || time_point == this->GetTimeDoFNumber());
+      //Logic is as follows: if time_point is given, we take this value
+      if(time_point != std::numeric_limits<unsigned int>::max())
+      {
+	if(time_point > time_to_dofhandler_.size())
+	{
+	  throw DOpEException("Invalid Timepoint", "Rothe_SpaceTimeHandler::GetStateDoFHandler");
+	}
+	assert(time_to_dofhandler_[time_point]<state_dofs_per_block_.size());
+	return state_dofs_per_block_[time_to_dofhandler_[time_point]];
+      }
       if(this->GetTimeDoFNumber() > time_to_dofhandler_.size() || this->GetTimeDoFNumber() == std::numeric_limits<unsigned int>::max())
       {
 	throw DOpEException("Invalid Timepoint", "Rothe_SpaceTimeHandler::GetStateDoFsPerBlock");
@@ -239,9 +256,9 @@ namespace DOpE
      * Implementation of virtual function in StateSpaceTimeHandler
      */
     const dealii::ConstraintMatrix &
-    GetStateDoFConstraints(int time_point= -1) const
+    GetStateDoFConstraints(unsigned int time_point = std::numeric_limits<unsigned int>::max()) const
     {
-      assert(time_point == -1 || time_point == this->GetTimeDoFNumber());
+      assert(time_point == std::numeric_limits<unsigned int>::max() || time_point == this->GetTimeDoFNumber());
       if(this->GetTimeDoFNumber() > time_to_dofhandler_.size() || this->GetTimeDoFNumber() == std::numeric_limits<unsigned int>::max())
       {
 	throw DOpEException("Invalid Timepoint", "Rothe_SpaceTimeHandler::GetStateDoFConstraints");
@@ -272,7 +289,7 @@ namespace DOpE
     /**
      * Implementation of virtual function in StateSpaceTimeHandlerBase
      */
-    unsigned int GetStateNDoFs(int time_point= -1) const
+    unsigned int GetStateNDoFs(unsigned int time_point = std::numeric_limits<unsigned int>::max()) const
     {
       return GetStateDoFHandler(time_point).n_dofs();
     }
@@ -281,9 +298,9 @@ namespace DOpE
      * Implementation of virtual function in StateSpaceTimeHandler
      */
     const std::vector<Point<dealdim> > &
-    GetMapDoFToSupportPoints(int time_point= -1)
+    GetMapDoFToSupportPoints(unsigned int time_point = std::numeric_limits<unsigned int>::max())
     {
-      assert(time_point == -1 || time_point == this->GetTimeDoFNumber());
+      assert(time_point == std::numeric_limits<unsigned int>::max() || time_point == this->GetTimeDoFNumber());
       if(this->GetTimeDoFNumber() > time_to_dofhandler_.size() || this->GetTimeDoFNumber() == std::numeric_limits<unsigned int>::max())
       {
 	throw DOpEException("Invalid Timepoint", "Rothe_SpaceTimeHandler::GetMapDoFToSupportPoints");
@@ -297,9 +314,9 @@ namespace DOpE
     /**
      * Implementation of virtual function in StateSpaceTimeHandler
      */
-    const std::vector<unsigned int>* GetNNeighbourElements(int time_point= -1)
+    const std::vector<unsigned int>* GetNNeighbourElements(unsigned int time_point = std::numeric_limits<unsigned int>::max())
     {
-      assert(time_point == -1 || time_point == this->GetTimeDoFNumber());
+      assert(time_point == std::numeric_limits<unsigned int>::max() || time_point == this->GetTimeDoFNumber());
       if(this->GetTimeDoFNumber() > time_to_dofhandler_.size() || this->GetTimeDoFNumber() == std::numeric_limits<unsigned int>::max())
       {
 	throw DOpEException("Invalid Timepoint", "Rothe_SpaceTimeHandler::GetNNeighbourElements");
@@ -317,7 +334,7 @@ namespace DOpE
     }
 
     /******************************************************/
-    void ComputeStateSparsityPattern(SPARSITYPATTERN &sparsity,int time_point= -1) const
+    void ComputeStateSparsityPattern(SPARSITYPATTERN &sparsity,unsigned int time_point = std::numeric_limits<unsigned int>::max()) const
     {
       this->GetSparsityMaker()->ComputeSparsityPattern(this->GetStateDoFHandler(time_point), sparsity, this->GetStateDoFConstraints(time_point),
                                                        this->GetStateDoFsPerBlock(time_point));
@@ -453,9 +470,9 @@ namespace DOpE
     /**
      * Implementation of virtual function in SpaceTimeHandlerBase
      */
-    void SpatialMeshTransferState(const VECTOR &old_values, VECTOR &new_values, int time_point= -1) const
+    void SpatialMeshTransferState(const VECTOR &old_values, VECTOR &new_values, unsigned int time_point = std::numeric_limits<unsigned int>::max()) const
     {
-      assert(time_point == -1 || time_point == this->GetTimeDoFNumber());
+      assert(time_point == std::numeric_limits<unsigned int>::max() || time_point == this->GetTimeDoFNumber());
       if(this->GetTimeDoFNumber() > time_to_dofhandler_.size() || this->GetTimeDoFNumber() == std::numeric_limits<unsigned int>::max())
       {
 	throw DOpEException("Invalid Timepoint", "Rothe_SpaceTimeHandler::SpatialMeshTransferState");

@@ -209,7 +209,7 @@ namespace DOpE
        * Implementation of virtual function in SpaceTimeHandler
        */
       const DOpEWrapper::DoFHandler<dopedim, DH> &
-      GetControlDoFHandler(int /*time_point*/= -1) const
+      GetControlDoFHandler(unsigned int /*time_point*/= std::numeric_limits<unsigned int>::max()) const
       {
         //There is only one control mesh, hence always return this
         return control_dof_handler_;
@@ -218,7 +218,7 @@ namespace DOpE
        * Implementation of virtual function in SpaceTimeHandler
        */
       const DOpEWrapper::DoFHandler<dealdim, DH> &
-      GetStateDoFHandler(int /*time_point*/= -1) const
+      GetStateDoFHandler(unsigned int /*time_point*/= std::numeric_limits<unsigned int>::max()) const
       {
         if (selected_pipe_ < sth_s_.size())
           return sth_s_[selected_pipe_]->GetStateDoFHandler();
@@ -255,7 +255,7 @@ namespace DOpE
        * Implementation of virtual function in SpaceTimeHandlerBase
        */
       const std::vector<unsigned int> &
-      GetControlDoFsPerBlock(int /*time_point*/= -1) const
+      GetControlDoFsPerBlock(unsigned int /*time_point*/= std::numeric_limits<unsigned int>::max()) const
       {
         return control_dofs_per_block_;
       }
@@ -263,7 +263,7 @@ namespace DOpE
        * Implementation of virtual function in SpaceTimeHandlerBase
        */
       const std::vector<unsigned int> &
-      GetStateDoFsPerBlock(int /*time_point*/= -1) const
+      GetStateDoFsPerBlock(unsigned int /*time_point*/= std::numeric_limits<unsigned int>::max()) const
       {
         return state_dofs_per_block_;
       }
@@ -289,7 +289,7 @@ namespace DOpE
        * Implementation of virtual function in SpaceTimeHandler
        */
       const dealii::ConstraintMatrix &
-      GetStateDoFConstraints(int /*time_point*/= -1) const
+      GetStateDoFConstraints(unsigned int /*time_point*/= std::numeric_limits<unsigned int>::max()) const
       {
         if (selected_pipe_ < sth_s_.size())
           return sth_s_[selected_pipe_]->GetStateDoFConstraints();
@@ -338,7 +338,7 @@ namespace DOpE
        * Implementation of virtual function in SpaceTimeHandlerBase
        */
       unsigned int
-      GetControlNDoFs(int /*time_point*/= -1) const
+      GetControlNDoFs(unsigned int /*time_point*/= std::numeric_limits<unsigned int>::max()) const
       {
         return GetControlDoFHandler().n_dofs();
       }
@@ -346,7 +346,7 @@ namespace DOpE
        * Implementation of virtual function in SpaceTimeHandlerBase
        */
       unsigned int
-      GetStateNDoFs(int /*time_point*/= -1) const
+      GetStateNDoFs(unsigned int /*time_point*/= std::numeric_limits<unsigned int>::max()) const
       {
         return total_state_dofs_;
       }
@@ -381,7 +381,7 @@ namespace DOpE
        * Implementation of virtual function in SpaceTimeHandler
        */
       const std::vector<Point<dealdim> > &
-      GetMapDoFToSupportPoints(int /*time_point*/= -1)
+      GetMapDoFToSupportPoints(unsigned int /*time_point*/= std::numeric_limits<unsigned int>::max())
       {
         if (selected_pipe_ < sth_s_.size())
           return sth_s_[selected_pipe_]->GetMapDoFToSupportPoints();
@@ -394,7 +394,7 @@ namespace DOpE
       /**
        * Implementation of virtual function in StateSpaceTimeHandler
        */
-      const std::vector<unsigned int>* GetNNeighbourElements(int /*time_point*/= -1)
+      const std::vector<unsigned int>* GetNNeighbourElements(unsigned int /*time_point*/= std::numeric_limits<unsigned int>::max())
       {
 	if (selected_pipe_ < sth_s_.size())
           return sth_s_[selected_pipe_]->GetNNeighbourElements();
@@ -418,7 +418,7 @@ namespace DOpE
        * of the PDE.
        */
       void
-	ComputeStateSparsityPattern(dealii::BlockSparsityPattern &sparsity,int /*time_point*/= -1) const
+	ComputeStateSparsityPattern(dealii::BlockSparsityPattern &sparsity, unsigned int /*time_point*/= std::numeric_limits<unsigned int>::max()) const
       {
         unsigned int n_pipes = GetNPipes();
         unsigned int n_comp = GetFESystem("state").n_components();
@@ -610,7 +610,7 @@ namespace DOpE
       }
       void
       SpatialMeshTransferState(const  VECTOR &old_values,
-                               VECTOR &new_values, int /*time_point*/= -1) const
+                               VECTOR &new_values, unsigned int /*time_point*/= std::numeric_limits<unsigned int>::max()) const
       {
         assert(old_values.n_blocks() == new_values.n_blocks());
         assert(old_values.n_blocks() == sth_s_.size()+1);

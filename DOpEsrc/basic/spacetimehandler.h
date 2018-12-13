@@ -135,7 +135,7 @@ namespace DOpE
      * Returns a reference to the DoF Handler for the Control at the current time point.
      */
     virtual const DOpEWrapper::DoFHandler<dopedim, DH> &
-    GetControlDoFHandler (int /*time_point*/= -1) const =0;
+    GetControlDoFHandler (unsigned int /*time_point*/= std::numeric_limits<unsigned int>::max()) const =0;
 
     /******************************************************/
 
@@ -143,7 +143,7 @@ namespace DOpE
      * Returns a reference to the DoF Handler for the State at the current time point.
      */
     virtual const DOpEWrapper::DoFHandler<dealdim, DH> &
-    GetStateDoFHandler (int /*time_point*/= -1) const = 0;
+    GetStateDoFHandler (unsigned int /*time_point*/= std::numeric_limits<unsigned int>::max()) const = 0;
 
     /******************************************************/
 
@@ -160,7 +160,7 @@ namespace DOpE
      * be set prior by SetDoFHandlerOrdering
      */
     const std::vector<const DOpEWrapper::DoFHandler<dealdim, DH>*> &
-    GetDoFHandler (int time_point= -1) const
+    GetDoFHandler (unsigned int time_point = std::numeric_limits<unsigned int>::max()) const
     {
       assert(state_index_ != dealii::numbers::invalid_unsigned_int);
 #if dope_dimension > 0
@@ -377,7 +377,7 @@ namespace DOpE
      */
     virtual dealii::IndexSet
     GetLocallyOwnedDoFs (const DOpEtypes::VectorType type,
-                         int time_point = -1) const
+                         unsigned int time_point = std::numeric_limits<unsigned int>::max()) const
     {
       switch (type)
         {
@@ -407,7 +407,7 @@ namespace DOpE
      */
     virtual dealii::IndexSet
     GetLocallyRelevantDoFs (const DOpEtypes::VectorType type,
-                            int time_point = -1) const
+                            unsigned int time_point = std::numeric_limits<unsigned int>::max()) const
     {
       switch (type)
         {
@@ -450,7 +450,7 @@ namespace DOpE
      * Returns the control dofs per Block at the current time
      */
     virtual const std::vector<unsigned int> &
-    GetControlDoFsPerBlock (int time_point = -1) const =0;
+    GetControlDoFsPerBlock (unsigned int time_point = std::numeric_limits<unsigned int>::max()) const =0;
 
     /******************************************************/
 
@@ -460,7 +460,7 @@ namespace DOpE
      * \\TODO
      */
     virtual const std::vector<unsigned int> &
-    GetStateDoFsPerBlock (int time_point = -1) const =0;
+    GetStateDoFsPerBlock (unsigned int time_point = std::numeric_limits<unsigned int>::max()) const =0;
 
     /******************************************************/
     /**
@@ -486,7 +486,7 @@ namespace DOpE
      */
     virtual const dealii::ConstraintMatrix
     &
-    GetStateDoFConstraints (int /*time_point*/= -1) const=0;
+    GetStateDoFConstraints (unsigned int /*time_point*/= std::numeric_limits<unsigned int>::max()) const=0;
 
     /*******************************************************/
 
@@ -496,13 +496,13 @@ namespace DOpE
      */
     virtual const std::vector<dealii::Point<dealdim> >
     &
-    GetMapDoFToSupportPoints (int /*time_point*/= -1)=0;
+    GetMapDoFToSupportPoints (unsigned int /*time_point*/= std::numeric_limits<unsigned int>::max())=0;
 
     /**
      * Returns the list of the number of neighbouring elements to the vertices
      */
 
-    virtual const std::vector<unsigned int>* GetNNeighbourElements(int /*time_point*/= -1) = 0;
+    virtual const std::vector<unsigned int>* GetNNeighbourElements(unsigned int /*time_point*/= std::numeric_limits<unsigned int>::max()) = 0;
         
     /******************************************************/
 
@@ -518,7 +518,7 @@ namespace DOpE
      * Computes the current sparsity pattern for the state variable
      */
     virtual void
-    ComputeStateSparsityPattern (SPARSITYPATTERN &sparsity, int /*time_point*/= -1) const=0;
+    ComputeStateSparsityPattern (SPARSITYPATTERN &sparsity, unsigned int /*time_point*/= std::numeric_limits<unsigned int>::max()) const=0;
 
     /******************************************************/
 

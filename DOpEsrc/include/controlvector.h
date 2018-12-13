@@ -253,12 +253,12 @@ namespace DOpE
     template <typename _VECTOR = VECTOR, typename std::enable_if<
                 IsBlockVector<_VECTOR>::value, int>::type = 0>
     void
-    ReSizeSpace (const unsigned int time_point = -1);
+    ReSizeSpace (const unsigned int time_point = std::numeric_limits<unsigned int>::max());
 
     template <typename _VECTOR = VECTOR, typename std::enable_if<
                 !IsBlockVector<_VECTOR>::value, int>::type = 0>
     void
-    ReSizeSpace (const unsigned int time_point = -1);
+    ReSizeSpace (const unsigned int time_point = std::numeric_limits<unsigned int>::max());
 
     /**
      * Writes the vectors corresponding to the current interval

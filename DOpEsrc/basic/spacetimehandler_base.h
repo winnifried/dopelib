@@ -132,21 +132,11 @@ namespace DOpE
      */
     void SetInterval(const TimeIterator &it, unsigned int time_dof_number) const
     {
+      assert(IsInIntervall(it,time_dof_number));
       interval_ = it;
       time_dof_number_ = time_dof_number;
-      //TODO: Check if time_dof_number is in interval!
     }
 
-    /**
-     * Sets the current interval
-     *
-     * @param interval   The current interval.
-     */
-    //TODO:Remove, should only be SetInterval!
-    void SetTimeDoFNumber(unsigned int time_dof_number) const
-    {
-      time_dof_number_ = time_dof_number;
-    }
     /**
      * Returns the actual interval, which has to be set prior to this function through Setinterval.
      *
@@ -316,7 +306,7 @@ namespace DOpE
      *
      * @ param time_point Indicating the time at which we want to know the DoFs. -1 means now.
      */
-    virtual unsigned int GetControlNDoFs(int /*time_point*/ = -1) const
+    virtual unsigned int GetControlNDoFs(unsigned int /*time_point*/ = std::numeric_limits<unsigned int>::max()) const
     {
       abort();
     }
@@ -333,7 +323,7 @@ namespace DOpE
      */
     virtual unsigned int
     GetNDoFs (const DOpEtypes::VectorType type,
-              int time_point = -1) const
+              unsigned int time_point = std::numeric_limits<unsigned int>::max()) const
     {
       switch (type)
         {
@@ -360,7 +350,7 @@ namespace DOpE
      */
     virtual std::vector<unsigned int>
     GetDoFsPerBlock (const DOpEtypes::VectorType type,
-                     int time_point = -1) const
+                     unsigned int time_point = std::numeric_limits<unsigned int>::max()) const
     {
       switch (type)
         {
@@ -388,7 +378,7 @@ namespace DOpE
      */
     virtual dealii::IndexSet
     GetLocallyOwnedDoFs (const DOpEtypes::VectorType type,
-                         int time_point = -1) const = 0;
+                         unsigned int time_point = std::numeric_limits<unsigned int>::max()) const = 0;
 
     /**
      * Returns the locally relevant DoFs for the given type of vector at given time point.
@@ -399,7 +389,7 @@ namespace DOpE
      */
     virtual dealii::IndexSet
     GetLocallyRelevantDoFs (const DOpEtypes::VectorType type,
-                            int time_point = -1) const = 0;
+                            unsigned int time_point = std::numeric_limits<unsigned int>::max()) const = 0;
 
     /**
      * Returns the DoFs for the state vector at the given point time_point.
@@ -408,7 +398,7 @@ namespace DOpE
      *
      * @ param time_point Indicating the time at which we want to know the DoFs. -1 means now.
      */
-    virtual unsigned int GetStateNDoFs(int time_point = -1) const = 0;
+    virtual unsigned int GetStateNDoFs(unsigned int time_point = std::numeric_limits<unsigned int>::max()) const = 0;
     /**
      * Returns the DoFs for the constraint vector at the current time which has
      *  to be set prior to calling this function using SetTime.
@@ -425,7 +415,7 @@ namespace DOpE
      *
      * @ param time_point Indicating the time at which we want to know the DoFs per block. -1 means now.
      */
-    virtual const std::vector<unsigned int> &GetControlDoFsPerBlock(int /*time_point*/ = -1) const
+    virtual const std::vector<unsigned int> &GetControlDoFsPerBlock(unsigned int /*time_point*/ = std::numeric_limits<unsigned int>::max()) const
     {
       abort();
     }
@@ -436,7 +426,7 @@ namespace DOpE
      *
      * @ param time_point Indicating the time at which we want to know the DoFs per block. -1 means now.
      */
-    virtual const std::vector<unsigned int> &GetStateDoFsPerBlock(int time_point = -1) const = 0;
+    virtual const std::vector<unsigned int> &GetStateDoFsPerBlock(unsigned int time_point = std::numeric_limits<unsigned int>::max()) const = 0;
     /**
      * Returns the DoFs per  block for the constraint vector at the current time which has
      * to be set prior to calling this function using SetTime.
@@ -503,7 +493,7 @@ namespace DOpE
       abort();
     }
 
-    virtual void SpatialMeshTransferState(const VECTOR & /*old_values*/, VECTOR & /*new_values*/, int /*time_point*/= -1) const
+    virtual void SpatialMeshTransferState(const VECTOR & /*old_values*/, VECTOR & /*new_values*/, unsigned int /*time_point*/= std::numeric_limits<unsigned int>::max()) const
     {
       abort();
     }
@@ -573,7 +563,7 @@ namespace DOpE
     void
     ReinitVector (dealii::Vector<double> &v,
                   const DOpEtypes::VectorType type,
-                  const int time_point = -1) const
+                  const unsigned int time_point = std::numeric_limits<unsigned int>::max()) const
     {
       const auto dofs = GetNDoFs (type, time_point);
       v.reinit (dofs);
@@ -589,7 +579,7 @@ namespace DOpE
     void
     ReinitVector (dealii::BlockVector<double> &v,
                   const DOpEtypes::VectorType type,
-                  const int time_point = -1) const
+                  const unsigned int time_point = std::numeric_limits<unsigned int>::max()) const
     {
       const auto blocks = GetDoFsPerBlock (type, time_point);
       v.reinit (blocks);
@@ -606,7 +596,7 @@ namespace DOpE
     void
     ReinitVector (dealii::TrilinosWrappers::MPI::Vector &v,
                   const DOpEtypes::VectorType type,
-                  const int time_point = -1) const
+                  const unsigned int time_point = std::numeric_limits<unsigned int>::max()) const
     {
       const auto locally_owned = GetLocallyOwnedDoFs (type, time_point);
       const auto locally_relevant = GetLocallyRelevantDoFs (type,
@@ -625,7 +615,7 @@ namespace DOpE
     void
     ReinitVector (dealii::TrilinosWrappers::MPI::BlockVector &v,
                   const DOpEtypes::VectorType type,
-                  const int time_point = -1) const
+                  const unsigned int time_point = std::numeric_limits<unsigned int>::max()) const
     {
       const auto block_locally_owned = DOpEHelper::split_blockwise (
                                          GetLocallyOwnedDoFs (type, time_point),
@@ -669,6 +659,13 @@ namespace DOpE
       control_ticket_++;
     }
 
+    bool IsInIntervall(const TimeIterator &it, unsigned int time_dof_number) const
+    {
+      unsigned int n_dofs_per_interval = this->GetTimeDoFHandler().GetLocalNbrOfDoFs();
+      std::vector<unsigned int> local_to_global(n_dofs_per_interval);
+      it.get_time_dof_indices(local_to_global);
+      return (find(local_to_global.begin(),local_to_global.end(),time_dof_number)!=local_to_global.end());
+    }
   private:
     mutable TimeDoFHandler tdfh_;//FIXME Is it really necessary for tdfh_ and interval_ to be mutable? this is really ugly
     mutable TimeIterator interval_;
