@@ -212,17 +212,6 @@ namespace DOpE
      */
     void WriteToFile(const std::vector<double> &v, std::string outfile);
 
-    /******************************************************/
-
-    /**
-     *  A std::vector v is printed to a text file.
-     *  Note that this assumes that the vector is one entry per time step.
-     *
-     *  @param v           A std::vector to write to a file.
-     *  @param outfile     The basic name for the output file to print.
-     */
-    void WriteToFile(const std::vector<double> &v, std::string outfile);
-
     /**
      * Import overloads from base class.
      */
