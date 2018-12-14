@@ -71,7 +71,7 @@ namespace DOpE
   template<typename VECTOR>
   SpaceTimeVector<VECTOR>::SpaceTimeVector(const SpaceTimeHandlerBase<VECTOR> *STH,
 					   DOpEtypes::VectorStorageType behavior,
-					   DOpEtypes::VectorStorage type,
+					   DOpEtypes::VectorType type,
 					   ParameterReader &param_reader) :
     unique_id_(id_counter_)
   {

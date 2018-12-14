@@ -61,7 +61,7 @@ namespace DOpE
     SpaceTimeVector(const SpaceTimeVector<VECTOR> &ref);
     SpaceTimeVector(const SpaceTimeHandlerBase<VECTOR> *STH,
 		    DOpEtypes::VectorStorageType behavior,
-		    DOpEtypes::VectorStorage type,
+		    DOpEtypes::VectorType type,
 		    ParameterReader &param_reader);
     ~SpaceTimeVector();
 

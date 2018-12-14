@@ -150,12 +150,8 @@ namespace DOpE
      */
     template<class DWRC, class PDE>
     void
-    ComputeRefinementIndicators(DWRC &dwrc, PDE &pde)
-    {
-      throw DOpEException("ExcNotImplemented",
-                          "InstatPDEProblem::ComputeRefinementIndicators");
-    }
-
+      ComputeRefinementIndicators(DWRC &dwrc, PDE &pde);
+ 
     /******************************************************/
 
     /**
@@ -167,6 +163,54 @@ namespace DOpE
     {
       GetU().PrintInfos(out);
     }
+
+    /******************************************************/
+
+  /******************************************************/
+
+    /**
+     *  Here, the given Vector v (containing element-related data) is printed to
+     *  a file of *.vtk format. However, in later implementations other
+     *  file formats will be available.
+     *
+     *  @param v           The Vector to write to a file.
+     *  @param name        The names of the variables, e.g., in a fluid problem: v1, v2, p.
+     *  @param outfile     The basic name for the output file to print.
+     *  @param dof_type    Has the DoF type: state or control.
+     *  @param filetype    The filetype. Actually, *.vtk outputs are possible.
+     *  @param type        How to interprete the given data, i.e. does v contain nodal-related or
+     *                     element-related data.
+     */
+    void
+    WriteToFileElementwise(const Vector<double> &v, std::string name,
+                           std::string outfile, std::string dof_type, std::string filetype);
+
+
+    /******************************************************/
+
+    /**
+     *  Here, the given BlockVector<double> v is printed to a file of *.vtk or *.gpl format.
+     *  However, in later implementations other file formats will be available.
+     *
+     *  @param v           The BlockVector to write to a file.
+     *  @param name        The names of the variables, e.g., in a fluid problem: v1, v2, p.
+     *  @param outfile     The basic name for the output file to print.
+     *  @param dof_type    Has the DoF type: state
+     *  @param filetype    The filetype. Actually, *.vtk and *.gpl outputs are possible.
+     */
+    void WriteToFile(const VECTOR &v, std::string name, std::string outfile,
+                     std::string dof_type, std::string filetype);
+
+    /******************************************************/
+
+    /**
+     *  A std::vector v is printed to a text file.
+     *  Note that this assumes that the vector is one entry per time step.
+     *
+     *  @param v           A std::vector to write to a file.
+     *  @param outfile     The basic name for the output file to print.
+     */
+    void WriteToFile(const std::vector<double> &v, std::string outfile);
 
     /******************************************************/
 
@@ -195,7 +239,20 @@ namespace DOpE
     {
       return u_;
     }
-
+    /**
+     * Returns the solution of the dual equation for error estimation.
+     */
+    const StateVector<VECTOR> &
+    GetZForEE() const
+    {
+      return z_for_ee_;
+    }
+    StateVector<VECTOR> &
+    GetZForEE()
+    {
+      return z_for_ee_;
+    }
+    
     NONLINEARSOLVER &GetNonlinearSolver(std::string type);
     INTEGRATOR &GetIntegrator()
     {
@@ -254,6 +311,33 @@ namespace DOpE
 
   private:
     /**
+     * Helper function to prevent code duplicity. Adds the user defined
+     * user Data to the Integrator.
+     */
+    void
+      AddUDD()
+    {
+      for (auto it = this->GetUserDomainData().begin();
+           it != this->GetUserDomainData().end(); it++)
+        {
+          this->GetIntegrator().AddDomainData(it->first, it->second);
+        }
+    }
+    
+    /**
+     * Helper function to prevent code duplicity. Deletes the user defined
+     * user Data from the Integrator.
+     */
+    void
+      DeleteUDD()
+    {
+      for (auto it = this->GetUserDomainData().begin();
+           it != this->GetUserDomainData().end(); it++)
+        {
+          this->GetIntegrator().DeleteDomainData(it->first);
+        }
+    }
+    /**
      * This function is used to allocate space for auxiliary time-dependent parameters.
      *
      * @param name         The name under wich the params are stored.
@@ -291,6 +375,7 @@ namespace DOpE
                                 unsigned int prob_num);
 
     StateVector<VECTOR> u_;
+    StateVector<VECTOR> z_for_ee_;
 
     std::map<std::string,std::vector<dealii::Vector<double> >> auxiliary_time_params_;
 
@@ -299,9 +384,11 @@ namespace DOpE
     NONLINEARSOLVER nonlinear_adjoint_solver_;
 
     bool build_state_matrix_ = false, build_adjoint_matrix_ = false;
-    bool state_reinit_, adjoint_reinit_;
+    bool state_reinit_ = false, adjoint_reinit_ = false;
 
     bool project_initial_data_ = false;
+
+    int n_patches_ = 0;
 
     friend class SolutionExtractor<InstatPDEProblem<NONLINEARSOLVER,
       INTEGRATOR, PROBLEM, VECTOR, dealdim>,   VECTOR > ;
@@ -319,8 +406,13 @@ namespace DOpE
   void InstatPDEProblem<NONLINEARSOLVER, INTEGRATOR,
        PROBLEM, VECTOR, dealdim>::declare_params(
          ParameterReader &param_reader)
-{
+  {
     NONLINEARSOLVER::declare_params(param_reader);
+
+    param_reader.SetSubsection("output parameters");
+    param_reader.declare_entry("number of patches", "0",
+                               Patterns::Integer(0));
+    
   }
   /******************************************************/
 
@@ -338,10 +430,15 @@ namespace DOpE
                      PDEProblemInterface<PROBLEM, VECTOR,dealdim> (OP,
                          base_priority),
                      u_(OP->GetSpaceTimeHandler(), state_behavior, param_reader),
+                     z_for_ee_(OP->GetSpaceTimeHandler(), state_behavior, param_reader),
                      integrator_(idc),
                      nonlinear_state_solver_(integrator_, param_reader),
                      nonlinear_adjoint_solver_(integrator_, param_reader)
   {
+    
+    param_reader.SetSubsection("output parameters");
+    n_patches_ = param_reader.get_integer("number of patches");
+    
     // Solvers should be ReInited
     {
       state_reinit_ = true;
@@ -501,6 +598,173 @@ namespace DOpE
   }
 
   /******************************************************/
+ 
+  template<typename NONLINEARSOLVER, typename INTEGRATOR, typename PROBLEM,
+    typename VECTOR, int dealdim>
+    template<class DWRC, class PDE>
+    void
+    InstatPDEProblem<NONLINEARSOLVER, INTEGRATOR, PROBLEM, VECTOR, dealdim>::ComputeRefinementIndicators(
+													 DWRC &dwrc, PDE &pde)
+    {
+      //Attach the ResidualModifier to the PDE.
+      pde.ResidualModifier = boost::bind<void>(
+					       boost::mem_fn(&DWRC::ResidualModifier), boost::ref(dwrc), _1);
+      pde.VectorResidualModifier = boost::bind<void>(
+						     boost::mem_fn(&DWRC::VectorResidualModifier), boost::ref(dwrc), _1);
+      
+      VECTOR u_old;
+      
+      const std::vector<double> times =
+	this->GetProblem()->GetSpaceTimeHandler()->GetTimes();
+      const unsigned int
+	n_dofs_per_interval =
+	this->GetProblem()->GetSpaceTimeHandler()->GetTimeDoFHandler().GetLocalNbrOfDoFs();
+      
+      std::vector<unsigned int> local_to_global(n_dofs_per_interval);    
+      
+      this->GetOutputHandler()->SetIterationNumber(0, "Time");
+      
+      for (TimeIterator it =
+	     this->GetProblem()->GetSpaceTimeHandler()->GetTimeDoFHandler().first_interval(); it
+	     != this->GetProblem()->GetSpaceTimeHandler()->GetTimeDoFHandler().after_last_interval(); ++it)
+	{
+	  
+	  it.get_time_dof_indices(local_to_global);
+	  this->GetProblem()->SetTime(times[local_to_global[0]], local_to_global[0], it);
+	  GetU().SetTimeDoFNumber(local_to_global[0], it);
+	  u_old = GetU().GetSpacialVector();
+	  this->GetIntegrator().AddDomainData("last_time_state",&u_old);
+	  
+	  this->GetProblem()->SetTime(times[local_to_global[1]], local_to_global[1], it);
+	  GetU().SetTimeDoFNumber(local_to_global[1], it);
+	  dwrc.SetTime(local_to_global[1], it);
+	  //first we reinit the dwrdatacontainer (this
+	  //sets the weight-vectors to their correct length)
+#if DEAL_II_VERSION_GTE(8,4,0)
+	  const unsigned int n_elements =
+	    this->GetProblem()->GetSpaceTimeHandler()->GetStateDoFHandler().get_triangulation().n_active_cells();
+#else
+	  const unsigned int n_elements =
+	    this->GetProblem()->GetSpaceTimeHandler()->GetStateDoFHandler().get_tria().n_active_cells();
+#endif
+	  dwrc.ReInit(n_elements);
+	  //If we need the dual solution, compute it
+	  if (dwrc.NeedDual())
+	    this->ComputeDualForErrorEstimation(dwrc.GetWeightComputation());
+	  
+	  //some output
+	  this->GetOutputHandler()->Write("Computing Error Indicators:",
+					  4 + this->GetBasePriority());
+	  
+	  
+	  this->GetProblem()->AddAuxiliaryToIntegrator(this->GetIntegrator());
+	  
+	  //add the primal and (if needed) dual solution to the integrator
+	  this->GetIntegrator().AddDomainData("state",
+					      &(GetU().GetSpacialVector()));
+	  if (dwrc.NeedDual())
+	    this->GetIntegrator().AddDomainData("adjoint_for_ee",
+	    &(GetZForEE().GetSpacialVector()));
+	  AddUDD();
+	  
+	  //Check if some nodal values need to be precomputed, e.g., active set indicators
+	  // for the obstacle problem
+	  std::vector<StateVector<VECTOR>* > aux_nodal_values;
+	  unsigned int need_precomputed_nodal_values = dwrc.NPrecomputedNodalValues();
+	  if ( need_precomputed_nodal_values != 0 )
+	    {
+	      aux_nodal_values.resize(need_precomputed_nodal_values,NULL);
+	      for(unsigned int i = 0; i < need_precomputed_nodal_values; i++)
+		{
+		  aux_nodal_values[i] = new StateVector<VECTOR>(GetU());
+		  {
+		    //some output
+		    std::stringstream tmp;
+		    tmp << "Precomputation "<<i;
+		    this->GetOutputHandler()->Write(tmp.str(),
+						    4 + this->GetBasePriority());
+		  }
+		  
+		  
+		  //Calculate
+		  this->SetProblemType("aux_error",i);
+		  auto &problem = this->GetProblem()->GetErrorPrecomputations();
+		  
+		  this->GetIntegrator().ComputeNonlinearRhs(problem, aux_nodal_values[i]->GetSpacialVector());
+		  
+		  //Distribute for hanging nodes
+		  problem.GetDoFConstraints().distribute(aux_nodal_values[i]->GetSpacialVector());
+		  //output (in vtk files)
+		  this->GetOutputHandler()->Write(aux_nodal_values[i]->GetSpacialVector(),
+						  "Aux_Error_Indicators_"+i,"state");
+		  std::stringstream tmp;
+		  tmp << "aux_error_"<<i;
+		  this->GetIntegrator().AddDomainData(tmp.str(),&(aux_nodal_values[i]->GetSpacialVector()));
+		  
+		}
+	    }
+	  
+	  this->SetProblemType("error_evaluation");
+	  
+	  //prepare the weights...
+	  dwrc.PrepareWeights(GetU(), GetZForEE());
+	  
+	  //now we finally compute the refinement indicators
+	  this->GetIntegrator().ComputeRefinementIndicators(*this->GetProblem(),
+							    dwrc);
+	  
+	  // release the lock on the refinement indicators (see dwrcontainer.h)
+	  dwrc.ReleaseLock();
+	  
+	  const float error = dwrc.GetError();
+	  
+	  // clear the data
+	  dwrc.ClearWeightData();
+	  this->GetIntegrator().DeleteDomainData("state");
+	   if (dwrc.NeedDual())
+	     this->GetIntegrator().DeleteDomainData("adjoint_for_ee");
+	  DeleteUDD();
+	  this->GetProblem()->DeleteAuxiliaryFromIntegrator(
+							    this->GetIntegrator());
+	  this->GetIntegrator().DeleteDomainData("last_time_state");
+	  
+	  
+	  //Cleaning auxiliary nodal variables
+	  if ( need_precomputed_nodal_values != 0 )
+	    {
+	      for(unsigned int i = 0; i < need_precomputed_nodal_values; i++)
+		{
+		  std::stringstream tmp;
+		  tmp << "aux_error_"<<i;
+		  this->GetIntegrator().DeleteDomainData(tmp.str());
+		  delete aux_nodal_values[i];
+		  aux_nodal_values[i] = NULL;
+		}
+	    }
+	  
+	  std::stringstream out;
+	  this->GetOutputHandler()->InitOut(out);
+	  out << "Error estimate using " << dwrc.GetName();
+	  	if (dwrc.NeedDual())
+		out << " for the " << this->GetProblem()->GetFunctionalName();
+	  out << ": " << error;
+	  this->GetOutputHandler()->Write(out, 2 + this->GetBasePriority());
+	  
+	  this->GetOutputHandler()->WriteElementwise(dwrc.GetErrorIndicators(),
+						     "Error_Indicators" + this->GetPostIndex(),
+						     this->GetProblem()->GetDoFType());
+	  
+	  this->GetOutputHandler()->SetIterationNumber(local_to_global[1],
+						       "Time");
+	  
+	  
+	}//End of time loop
+      
+      
+    }
+
+
+  /******************************************************/
 
   template<typename NONLINEARSOLVER,
   typename INTEGRATOR, typename PROBLEM, typename VECTOR,
@@ -630,6 +894,84 @@ namespace DOpE
   }
 
   /******************************************************/
+  template<typename NONLINEARSOLVER, typename INTEGRATOR, typename PROBLEM,
+    typename VECTOR, int dealdim>
+    void
+    InstatPDEProblem<NONLINEARSOLVER, INTEGRATOR, PROBLEM, VECTOR, dealdim>::WriteToFileElementwise(
+												    const Vector<double> &v, std::string name, std::string outfile,
+												    std::string dof_type, std::string filetype)
+    {
+      if (dof_type == "state")
+	{
+	  auto &data_out =
+	    this->GetProblem()->GetSpaceTimeHandler()->GetDataOut();
+	  data_out.attach_dof_handler(
+				      this->GetProblem()->GetSpaceTimeHandler()->GetStateDoFHandler());
+	  
+	  data_out.add_data_vector(v, name);
+	  data_out.build_patches(n_patches_);
+	  
+	  std::ofstream output(outfile.c_str());
+	  
+	  if (filetype == ".vtk")
+	    {
+	      data_out.write_vtk(output);
+	    }
+	  else
+	    {
+	      throw DOpEException(
+				  "Don't know how to write filetype `" + filetype + "'!",
+				  "InstatPDEProblem::WriteToFileElementwise");
+	    }
+	  data_out.clear();
+	}
+      else
+	{
+	  throw DOpEException("No such DoFHandler `" + dof_type + "'!",
+			      "InstatPDEProblem::WriteToFileElementwise");
+	}
+    }
+
+  /******************************************************/
+  template<typename NONLINEARSOLVER,
+           typename INTEGRATOR, typename PROBLEM, typename VECTOR,
+           int dealdim>
+  void InstatPDEProblem<NONLINEARSOLVER, INTEGRATOR,
+       PROBLEM, VECTOR, dealdim>::WriteToFile(const VECTOR &v, std::string name, std::string outfile, std::string dof_type, std::string filetype)
+  {
+    if (dof_type == "state")
+      {
+        auto &data_out =  this->GetProblem()->GetSpaceTimeHandler()->GetDataOut();
+        data_out.attach_dof_handler(this->GetProblem()->GetSpaceTimeHandler()->GetStateDoFHandler());
+
+        data_out.add_data_vector(v, name);
+        data_out.build_patches();
+
+        std::ofstream output(outfile.c_str());
+
+        if (filetype == ".vtk")
+          {
+            data_out.write_vtk(output);
+          }
+        else if (filetype == ".gpl")
+          {
+            data_out.write_gnuplot(output);
+          }
+        else
+          {
+            throw DOpEException("Don't know how to write filetype `" + filetype + "'!",
+                                "InstatPDEProblem::WriteToFile");
+          }
+        data_out.clear();
+      }
+    else
+      {
+        throw DOpEException("No such DoFHandler `" + dof_type + "'!",
+                            "InstatPDEProblem::WriteToFile");
+      }
+  }
+
+ /******************************************************/
 
   template<typename NONLINEARSOLVER,
   typename INTEGRATOR, typename PROBLEM,

@@ -1,5 +1,6 @@
 Changelog DOpE
 ==============
+14.12.2018: Added support for error estimation in instatpde problem
 13.12.2018: Started work on Rothe space-time-handler:
 	    -Adding time_point to all access functions in space-time-handlers
 	    -Fixed flipping between int and unsigned for time_points

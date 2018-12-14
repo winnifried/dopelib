@@ -240,7 +240,7 @@ namespace DOpE
       return ret;
     }
 
-    bool IsValidTicket(const DOpEtypes::VectorType type, unsigned int &ticket)
+    bool IsValidTicket(const DOpEtypes::VectorType type, unsigned int &ticket) const
     {
       switch (type)
       {
@@ -519,7 +519,7 @@ namespace DOpE
 	SpatialMeshTransferState(old_values,new_values,time_point);
 	return ;
       case DOpEtypes::VectorType::control:
-	SpatialMeshTransferControl(old_values,new_values,time_point);
+	SpatialMeshTransferControl(old_values,new_values);
 	return ;
       default:
 	assert(false);
