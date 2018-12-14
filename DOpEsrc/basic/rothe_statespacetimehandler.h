@@ -513,17 +513,19 @@ namespace DOpE
 
     virtual void TemporalMeshTransferState(VECTOR & new_values, unsigned int from_time_dof, unsigned int to_time_dof) const
     {
-	if (time_to_dofhandler_[from_time_dof] == time_to_dofhandler_[to_time_dof])
-	{
-	  return;
-	}
-	VECTOR temp = new_values;
-	this->ReinitVector(new_values, DOpEtypes::VectorType::state, to_time_dof);
-	VectorTools::interpolate_to_different_mesh(state_dof_handlers_[from_time_dof]->GetDEALDoFHandler(),
-						   temp,
-						   state_dof_handlers_[to_time_dof]->GetDEALDoFHandler(),
-						   *state_dof_constraints_[to_time_dof],
-						   new_values);	
+      assert(time_to_dofhandler_.size() > std::max(from_time_dof,to_time_dof));
+      assert(state_dof_handlers_.size() > std::max(time_to_dofhandler_[from_time_dof],time_to_dofhandler_[to_time_dof]));
+      if (time_to_dofhandler_[from_time_dof] == time_to_dofhandler_[to_time_dof])
+      {
+	return;
+      }
+      VECTOR temp = new_values;
+      this->ReinitVector(new_values, DOpEtypes::VectorType::state, to_time_dof);
+      VectorTools::interpolate_to_different_mesh(state_dof_handlers_[time_to_dofhandler_[from_time_dof]]->GetDEALDoFHandler(),
+						 temp,
+						 state_dof_handlers_[time_to_dofhandler_[to_time_dof]]->GetDEALDoFHandler(),
+						 *state_dof_constraints_[time_to_dofhandler_[to_time_dof]],
+						 new_values);	
     }
 
     /******************************************************/
@@ -621,9 +623,15 @@ namespace DOpE
 	}
 	else
 	{
+	  //TODO: Not shure if this works if the original
+	  //Triangulation is a derived class such as
+	  //parallel::distributed::triangulation...
 	  triangulations_[i]=new dealii::Triangulation<dealdim>;
+	  assert(triangulations_[i] != NULL);
+	  assert(triangulations_[i-1] != NULL);
 	  triangulations_[i]->copy_triangulation(*(triangulations_[i-1]));
 	}
+	assert(triangulations_[i] != NULL);	  
 	state_dof_handlers_[i] = new DOpEWrapper::DoFHandler<dealdim, DH>(*(triangulations_[i]));
 	state_dof_constraints_[i]= new dealii::ConstraintMatrix;
       }

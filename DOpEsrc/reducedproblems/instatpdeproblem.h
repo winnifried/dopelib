@@ -1083,6 +1083,8 @@ namespace DOpE
               this->GetIntegrator());
 
             problem.SetTime(time, local_to_global[i], it);
+	    //TODO: Maybe better to change last solution to new mesh, and then evaluate on new mesh?
+	    //Otherwise wrong testfunctions are used for last-time eval
 	    problem.GetSpaceTimeHandler()->TemporalMeshTransferState(u_old, local_to_global[i-1], local_to_global[i]);
             this->GetProblem()->AddAuxiliaryToIntegrator(
               this->GetIntegrator());
@@ -1205,6 +1207,8 @@ namespace DOpE
               this->GetIntegrator());
 
             problem.SetTime(time,local_to_global[j], it);
+	    //TODO: Maybe better to change last solution to new mesh, and then evaluate on new mesh?
+	    //Otherwise wrong testfunctions are used for last-time eval
 	    problem.GetSpaceTimeHandler()->TemporalMeshTransferState(u_old, local_to_global[j+1], local_to_global[j]);
             this->GetProblem()->AddAuxiliaryToIntegrator(
               this->GetIntegrator());
