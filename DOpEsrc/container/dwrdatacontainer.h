@@ -52,7 +52,7 @@ namespace DOpE
   public:
     DWRDataContainerBase(DOpEtypes::EETerms ee_terms =
                            DOpEtypes::EETerms::mixed)
-      : ee_terms_(ee_terms), current_time_dof_=0
+      : ee_terms_(ee_terms), current_time_dof_(0)
     {
       lock_ = true;
       switch (this->GetEETerms())
