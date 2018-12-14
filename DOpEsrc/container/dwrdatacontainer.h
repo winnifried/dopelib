@@ -52,7 +52,7 @@ namespace DOpE
   public:
     DWRDataContainerBase(DOpEtypes::EETerms ee_terms =
                            DOpEtypes::EETerms::mixed)
-      : ee_terms_(ee_terms)
+      : ee_terms_(ee_terms), current_time_dof_=0
     {
       lock_ = true;
       switch (this->GetEETerms())
@@ -84,6 +84,13 @@ namespace DOpE
     virtual std::string
     GetName() const = 0;
 
+    /**
+     * This sets the vector to a given time-dof. 
+     * If this dof has not been previously set, the storage is resized to allow for this 
+     * time dof to be stored.
+     */
+    void SetTime(unsigned int time_dof);
+    
     /**
      * This initializes the vector of the error indicators and locks them.
      * The vector of the error indicators can only get returned if the lock
@@ -529,6 +536,7 @@ namespace DOpE
     DOpEtypes::EETerms ee_terms_;
     bool lock_;
     unsigned int n_error_comps_;
+    unsigned int current_time_dof_;
     std::map<std::string, const VECTOR *> weight_data_;
     Vector<double> error_ind_, error_ind_primal_, error_ind_dual_, error_ind_control_;
   };
@@ -544,6 +552,13 @@ namespace DOpE
     lock_ = true;
   }
 
+  template<typename VECTOR>
+    void
+    DWRDataContainerBase<VECTOR>::SetTime(unsigned int time_dof)
+  {
+    //FIXME - the time should be used to steer access to vectors!
+     current_time_dof_=time_dof;
+  }
   /**
    * Adds just the pure virtual functions GetElementWeight() and GetFaceWeight().
    * They have to get implemented in derived classes. These two methods are

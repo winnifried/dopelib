@@ -626,7 +626,7 @@ namespace DOpE
 	  
 	  this->GetProblem()->SetTime(times[local_to_global[1]], local_to_global[1], it);
 	  GetU().SetTimeDoFNumber(local_to_global[1], it);
-	  dwrc.SetTime(local_to_global[1], it);
+	  dwrc.SetTime(local_to_global[1]);
 	  //first we reinit the dwrdatacontainer (this
 	  //sets the weight-vectors to their correct length)
 #if DEAL_II_VERSION_GTE(8,4,0)
@@ -735,8 +735,9 @@ namespace DOpE
 	  this->GetOutputHandler()->InitOut(out);
 	  out << "Error estimate using " << dwrc.GetName();
 	  	if (dwrc.NeedDual())
-		out << " for the " << this->GetProblem()->GetFunctionalName();
-	  out << ": " << error;
+		  out << " for the " << this->GetProblem()->GetFunctionalName();
+		out << "at time "<<times[local_to_global[1]];
+		out << ": " << error;
 	  this->GetOutputHandler()->Write(out, 2 + this->GetBasePriority());
 	  
 	  this->GetOutputHandler()->WriteElementwise(dwrc.GetErrorIndicators(),
