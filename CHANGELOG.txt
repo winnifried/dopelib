@@ -1,7 +1,8 @@
 Changelog DOpE
 ==============
-16.12.2018: Changed DOpEtypes::ControlType to DOpEtypes::VectorAction to
-	    allow unification of storage classes
+16.12.2018: -Changed DOpEtypes::ControlType to DOpEtypes::VectorAction to
+	    allow unification of storage classes.
+	    -Updated ControlVector to be based on SpaceTimeVector.
 14.12.2018: Added support for error estimation in instatpde problem
 13.12.2018: Started work on Rothe space-time-handler:
 	    -Adding time_point to all access functions in space-time-handlers

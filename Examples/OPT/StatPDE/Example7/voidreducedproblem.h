@@ -317,6 +317,7 @@ namespace DOpE
 
     ConstraintVector<VECTOR> constraints_;
     double p_;
+    ParameterReader & parameter_reader_;
   };
 
   /*************************************************************************/
@@ -344,7 +345,8 @@ namespace DOpE
     : ReducedProblemInterface<PROBLEM, VECTOR>(OP,base_priority),
       control_integrator_(idc),
       nonlinear_gradient_solver_(control_integrator_, param_reader),
-      constraints_(OP->GetSpaceTimeHandler(),vector_behavior)
+      constraints_(OP->GetSpaceTimeHandler(),vector_behavior),
+    parameter_reader_(param_reader)
   {
     //ReducedProblems should be ReInited
     {
@@ -402,7 +404,7 @@ namespace DOpE
       {
         if (constraint_gradient_[i] == NULL)
           {
-            constraint_gradient_[i] = new ControlVector<VECTOR>(this->GetProblem()->GetSpaceTimeHandler(),vector_behavior_);
+            constraint_gradient_[i] = new ControlVector<VECTOR>(this->GetProblem()->GetSpaceTimeHandler(),vector_behavior_,parameter_reader_);
           }
         constraint_gradient_[i]->ReInit();
       }

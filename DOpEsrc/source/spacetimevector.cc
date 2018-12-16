@@ -87,7 +87,7 @@ namespace DOpE
     //Check if expectation on combination of args is given 
     if ( GetType() == DOpEtypes::VectorType::state )
     {
-      if ( GetAction() != DOpEtypes:VectorAction::nonstationary)
+      if ( GetAction() != DOpEtypes::VectorAction::nonstationary )
       {
 	throw DOpEException("VectorAction: " + DOpEtypesToString(GetAction()) +
 			    " is not compatible with DOpEType: " +
@@ -196,7 +196,7 @@ namespace DOpE
       {
         if (GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
           {
-	    if (GetAction() == DOpEtypes::VectorAction::initial || GetAction == DOpEtypes::VectorAction::stationary)
+	    if (GetAction() == DOpEtypes::VectorAction::initial || GetAction() == DOpEtypes::VectorAction::stationary)
             {
               stvector_.resize(1,NULL);
 	      //Always uses DoFs of Mesh at time_dof 0
@@ -679,43 +679,44 @@ namespace DOpE
     {
       assert( GetAction() == DOpEtypes::VectorAction::nonstationary);
       if (GetBehavior() == DOpEtypes::VectorStorageType::fullmem
-        || GetBehavior() == DOpEtypes::VectorStorageType::only_recent)
+	  || GetBehavior() == DOpEtypes::VectorStorageType::only_recent)
       {
         if (accessor_ >= 0)
-          {
-            assert(stvector_[accessor_] != NULL);
-            copy_stvector_ = *(stvector_[accessor_]);
-          }
+	{
+	  assert(stvector_[accessor_] != NULL);
+	  copy_stvector_ = *(stvector_[accessor_]);
+	}
         else
           copy_stvector_ = local_stvector_;
       }
-    else
+      else
       {
         if (GetBehavior() == DOpEtypes::VectorStorageType::store_on_disc)
-          {
-            if (accessor_ >= 0)
-              {
-                copy_stvector_ = *(local_vectors_[global_to_local_[accessor_]]);
-              }
-            else
-              copy_stvector_ = local_stvector_;
-          }
+	{
+	  if (accessor_ >= 0)
+	  {
+	    copy_stvector_ = *(local_vectors_[global_to_local_[accessor_]]);
+	  }
+	  else
+	    copy_stvector_ = local_stvector_;
+	}
         else
-          {
-            throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),
-                                "SpaceTimeVector<VECTOR>::GetSpacialVectorCopy");
-          }
+	{
+	  throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),
+			      "SpaceTimeVector<VECTOR>::GetSpacialVectorCopy");
+	}
       }
-    return copy_stvector_;
+      return copy_stvector_;
+    }
   }
-
+  
   /******************************************************/
   template<typename VECTOR>
   void
   SpaceTimeVector<VECTOR>::operator=(double value)
   {
     if (lock_)
-      {
+    {
         throw DOpEException(
           "Trying to use operator= while a copy is in use!",
           "SpaceTimeVector::operator=");
@@ -1402,7 +1403,7 @@ void SpaceTimeVector<VECTOR>::init_by_sign(double smaller, double larger, double
       throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),"SpaceTimeVector<VECTOR>::init_by_sign");
     }
 }
--
+
 template<typename VECTOR>
 double SpaceTimeVector<VECTOR>::Norm(std::string name,std::string restriction) const
 {
