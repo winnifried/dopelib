@@ -741,9 +741,9 @@ namespace DOpE
           this->GetProblem()->SetTime(times[local_to_global[0]],local_to_global[0], it,true);
           GetU().SetTimeDoFNumber(local_to_global[0], it);
           GetZ().SetTimeDoFNumber(local_to_global[0], it);
-          q.SetTimeDoFNumber(local_to_global[0]);
-          gradient.SetTimeDoFNumber(local_to_global[0]);
-          gradient_transposed.SetTimeDoFNumber(local_to_global[0]);
+          q.SetTimeDoFNumber(local_to_global[0], it);
+          gradient.SetTimeDoFNumber(local_to_global[0], it);
+          gradient_transposed.SetTimeDoFNumber(local_to_global[0], it);
         }
 
         this->GetProblem()->AddAuxiliaryToIntegrator(this->GetControlIntegrator());
@@ -849,9 +849,9 @@ namespace DOpE
           this->GetProblem()->SetTime(times[local_to_global[0]],local_to_global[0], it,true);
           GetU().SetTimeDoFNumber(local_to_global[0], it);
           GetZ().SetTimeDoFNumber(local_to_global[0], it);
-          q.SetTimeDoFNumber(local_to_global[0]);
-          gradient.SetTimeDoFNumber(local_to_global[0]);
-          gradient_transposed.SetTimeDoFNumber(local_to_global[0]);
+          q.SetTimeDoFNumber(local_to_global[0], it);
+          gradient.SetTimeDoFNumber(local_to_global[0], it);
+          gradient_transposed.SetTimeDoFNumber(local_to_global[0], it);
         }
         // Duplicate possibly already computed values
         ControlVector<VECTOR> tmp = gradient;
@@ -1140,9 +1140,9 @@ namespace DOpE
             GetZ().SetTimeDoFNumber(local_to_global[0], it);
             GetDU().SetTimeDoFNumber(local_to_global[0], it);
             GetDZ().SetTimeDoFNumber(local_to_global[0], it);
-            q.SetTimeDoFNumber(local_to_global[0]);
-            hessian_direction.SetTimeDoFNumber(local_to_global[0]);
-            hessian_direction_transposed.SetTimeDoFNumber(local_to_global[0]);
+            q.SetTimeDoFNumber(local_to_global[0], it);
+            hessian_direction.SetTimeDoFNumber(local_to_global[0], it);
+            hessian_direction_transposed.SetTimeDoFNumber(local_to_global[0], it);
           }
 
           this->GetProblem()->AddAuxiliaryToIntegrator(
@@ -1225,9 +1225,9 @@ namespace DOpE
             GetZ().SetTimeDoFNumber(local_to_global[0], it);
             GetDU().SetTimeDoFNumber(local_to_global[0], it);
             GetDZ().SetTimeDoFNumber(local_to_global[0], it);
-            q.SetTimeDoFNumber(local_to_global[0]);
-            hessian_direction.SetTimeDoFNumber(local_to_global[0]);
-            hessian_direction_transposed.SetTimeDoFNumber(local_to_global[0]);
+            q.SetTimeDoFNumber(local_to_global[0], it);
+            hessian_direction.SetTimeDoFNumber(local_to_global[0], it);
+            hessian_direction_transposed.SetTimeDoFNumber(local_to_global[0], it);
           }
           //Dupliziere ggf. vorberechnete Werte.
           ControlVector<VECTOR> tmp = hessian_direction;
@@ -1988,7 +1988,7 @@ namespace DOpE
                             //Only if not the initial time: Calculations at initial time are
                             //performed in the ComputeReducedGradient function.
                             this->GetProblem()->AddAuxiliaryToIntegrator(this->GetControlIntegrator());
-                            temp_q.SetTimeDoFNumber(local_to_global[j]);
+                            temp_q.SetTimeDoFNumber(local_to_global[j], it);
                             this->GetControlIntegrator().AddDomainData("adjoint",&(sol.GetSpacialVector()));
 
                             VECTOR tmp = temp_q.GetSpacialVector();
@@ -2025,8 +2025,8 @@ namespace DOpE
 
                         //Distributed Problem, calculate local Gradient contributions at each time point
                         this->GetProblem()->AddAuxiliaryToIntegrator(this->GetControlIntegrator());
-                        temp_q.SetTimeDoFNumber(local_to_global[j]);
-                        temp_q_trans.SetTimeDoFNumber(local_to_global[j]);
+                        temp_q.SetTimeDoFNumber(local_to_global[j], it);
+                        temp_q_trans.SetTimeDoFNumber(local_to_global[j], it);
                         this->GetControlIntegrator().AddDomainData("adjoint",&(sol.GetSpacialVector()));
                         temp_q_trans.GetSpacialVector() = 0.;
 
@@ -2093,7 +2093,7 @@ namespace DOpE
                             //Only if not the initial time: Calculations at initial time are
                             //performed in the ComputeReducedHessian function.
                             this->GetProblem()->AddAuxiliaryToIntegrator(this->GetControlIntegrator());
-                            temp_q.SetTimeDoFNumber(local_to_global[j]);
+                            temp_q.SetTimeDoFNumber(local_to_global[j], it);
                             this->GetControlIntegrator().AddDomainData("adjoint_hessian",&(sol.GetSpacialVector()));
 
                             VECTOR tmp = temp_q.GetSpacialVector();
@@ -2129,8 +2129,8 @@ namespace DOpE
                         this->GetOutputHandler()->Write(out, 5 + this->GetBasePriority());
 
                         this->GetProblem()->AddAuxiliaryToIntegrator(this->GetControlIntegrator());
-                        temp_q.SetTimeDoFNumber(local_to_global[j]);
-                        temp_q_trans.SetTimeDoFNumber(local_to_global[j]);
+                        temp_q.SetTimeDoFNumber(local_to_global[j], it);
+                        temp_q_trans.SetTimeDoFNumber(local_to_global[j], it);
                         this->GetControlIntegrator().AddDomainData("adjoint_hessian",&(sol.GetSpacialVector()));
                         temp_q_trans.GetSpacialVector() = 0.;
 

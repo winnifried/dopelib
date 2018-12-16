@@ -78,6 +78,17 @@ namespace DOpE
      */
     void SetTimeDoFNumber(unsigned int dof_number,
                           const TimeIterator &interval) const;
+    /**
+     * Sets the time in the vector. This Function or SetTime or SetTimeDoFNumber
+     * must be called before calling GetSpacialVector
+     * in order to load the required data.
+     *
+     * Only for internal use, externally a time intervall must be specified
+     *
+     * @param time_point   An unsigned integer. This gives the number of the point in the  time mesh.
+     *
+     */
+    void SetTimeDoFNumber(unsigned int time_point) const;
 
     /**
      * Returns a reference to the spatial vector associated to the last time given by SetTime*
@@ -274,20 +285,7 @@ namespace DOpE
      */
     void ReInit();
 
-  private:
-    /**
-     * Sets the time in the vector. This Function or SetTime or SetTimeDoFNumber
-     * must be called before calling GetSpacialVector
-     * in order to load the required data.
-     *
-     * Only for internal use, externally a time intervall must be specified
-     *
-     * @param time_point   An unsigned integer. This gives the number of the point in the  time mesh.
-     *
-     */
-    void SetTimeDoFNumber(unsigned int time_point) const;
-
-    
+  private:    
     struct SpatialVectorInfos
     {
       int size_;

@@ -105,6 +105,7 @@ namespace DOpE
     double func_prec_, feas_tol_, opt_tol_,sInf_;
     int max_inner_iter_, max_outer_iter_,nS_,nInf_,start_;
     bool capture_out_;
+    ParameterReader & parameter_reader_;
   };
 
   /***************************************************************************************/
@@ -149,7 +150,7 @@ namespace DOpE
       DOpEExceptionHandler<VECTOR> *Except, DOpEOutputHandler<VECTOR> *Output,
       int base_priority) :
     ReducedAlgorithm<PROBLEM, VECTOR>(OP, S, param_reader, Except, Output,
-                                      base_priority)
+                                      base_priority), parameter_reader_(param_reader)
   {
     param_reader.SetSubsection("reduced_snoptalgorithm parameters");
 
@@ -485,7 +486,7 @@ namespace DOpE
     //Needs to implement the evaluation of j and its derivative using the
     //Interface required by SNOPT
     ConstraintVector<VECTOR> constraints(this->GetReducedProblem()->GetProblem()->GetSpaceTimeHandler(),vector_behavior_);
-    ControlVector<VECTOR> tmp(this->GetReducedProblem()->GetProblem()->GetSpaceTimeHandler(),vector_behavior_);
+    ControlVector<VECTOR> tmp(this->GetReducedProblem()->GetProblem()->GetSpaceTimeHandler(),vector_behavior_,parameter_reader_);
     VECTOR &ref_x = tmp.GetSpacialVector();
     assert((int) ref_x.size() ==  *(data.n));
     for (unsigned int i=0; i < ref_x.size(); i++)
