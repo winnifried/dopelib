@@ -170,7 +170,7 @@ main(int argc, char **argv)
     qinit(4) = 1.;
   }
   Alg.ReInit();
-  ControlVector<VECTOR> q(&DOFH, DOpEtypes::VectorStorageType::fullmem);
+  ControlVector<VECTOR> q(&DOFH, DOpEtypes::VectorStorageType::fullmem,pr);
   q.GetSpacialVector() = qinit;
 
   for (int i = 0; i < niter; i++)

@@ -241,7 +241,7 @@ main(int argc, char **argv)
 
   Vector<double> solution;
   Alg.ReInit();
-  ControlVector<VECTOR> q(&DOFH, DOpEtypes::VectorStorageType::fullmem);
+  ControlVector<VECTOR> q(&DOFH, DOpEtypes::VectorStorageType::fullmem,pr);
   q = 0.1;
   for (int i = 0; i < niter; i++)
     {

@@ -168,7 +168,7 @@ main(int argc, char **argv)
 
   //Note that we give DOpEtypes::initial as the type of control.
   MethodOfLines_SpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR, CDIM,
-                                 DIM> DOFH(triangulation, control_fe, state_fe, times, DOpEtypes::ControlType::initial);
+                                 DIM> DOFH(triangulation, control_fe, state_fe, times, DOpEtypes::VectorAction::initial);
 
   NoConstraints<ElementDataContainer, FaceDataContainer, DOFHANDLER, VECTOR, CDIM,
                 DIM> Constraints;
@@ -196,7 +196,7 @@ main(int argc, char **argv)
       if (cases == "check")
         {
           Alg.ReInit();
-          ControlVector<VECTOR> q(&DOFH, DOpEtypes::VectorStorageType::fullmem);
+          ControlVector<VECTOR> q(&DOFH, DOpEtypes::VectorStorageType::fullmem,pr);
           q = 0.1;
           ControlVector<VECTOR> dq(q);
           // eps: step size for difference quotient
@@ -209,7 +209,7 @@ main(int argc, char **argv)
         {
           Alg.ReInit();
 
-          ControlVector<VECTOR> q(&DOFH, DOpEtypes::VectorStorageType::fullmem);
+          ControlVector<VECTOR> q(&DOFH, DOpEtypes::VectorStorageType::fullmem,pr);
 
           Alg.Solve(q);
         }

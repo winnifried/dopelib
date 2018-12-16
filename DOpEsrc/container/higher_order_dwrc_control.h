@@ -77,7 +77,7 @@ namespace DOpE
       if (this->GetEETerms() == DOpEtypes::mixed_control)
         {
           PI_h_q_ = new ControlVector<VECTOR>(&GetHigherOrderSTH(),
-                                              control_behavior);
+                                              control_behavior, param_reader);
         }
     }
 

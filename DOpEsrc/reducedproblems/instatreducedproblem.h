@@ -690,7 +690,7 @@ namespace DOpE
          ControlVector<VECTOR> &gradient,
          ControlVector<VECTOR> &gradient_transposed)
   {
-    if (this->GetProblem()->GetSpaceTimeHandler()->GetControlType() != DOpEtypes::ControlType::initial)
+    if (this->GetProblem()->GetSpaceTimeHandler()->GetControlActionType() != DOpEtypes::VectorAction::initial)
       {
         gradient = 0.;
       }
@@ -711,7 +711,7 @@ namespace DOpE
         gradient_reinit_ = false;
       }
 
-    if (this->GetProblem()->GetSpaceTimeHandler()->GetControlType() == DOpEtypes::ControlType::initial)
+    if (this->GetProblem()->GetSpaceTimeHandler()->GetControlActionType() == DOpEtypes::VectorAction::initial)
       {
 
         //Set time to initial
@@ -832,7 +832,7 @@ namespace DOpE
                                         "Gradient_Transposed" + this->GetPostIndex(),
                                         this->GetProblem()->GetDoFType());
       }//End initial
-    else if (this->GetProblem()->GetSpaceTimeHandler()->GetControlType() == DOpEtypes::ControlType::stationary)
+    else if (this->GetProblem()->GetSpaceTimeHandler()->GetControlActionType() == DOpEtypes::VectorAction::stationary)
       {
 
         //Set time to initial
@@ -940,14 +940,14 @@ namespace DOpE
                                         "Gradient_Transposed" + this->GetPostIndex(),
                                         this->GetProblem()->GetDoFType());
       }//End stationary
-    else if (this->GetProblem()->GetSpaceTimeHandler()->GetControlType() == DOpEtypes::ControlType::nonstationary)
+    else if (this->GetProblem()->GetSpaceTimeHandler()->GetControlActionType() == DOpEtypes::VectorAction::nonstationary)
       {
         //Nothing to do, all in the adjoint calculation
       }
     else
       {
         std::stringstream out;
-        out << "Unknown ControlType: "<<DOpEtypesToString(this->GetProblem()->GetSpaceTimeHandler()->GetControlType());
+        out << "Unknown VectorAction: "<<DOpEtypesToString(this->GetProblem()->GetSpaceTimeHandler()->GetControlActionType());
         throw DOpEException(out.str(), "InstatReducedProblem::ComputeReducedGradient");
       }
   }
@@ -1059,7 +1059,7 @@ namespace DOpE
   {
     this->GetOutputHandler()->Write("Computing ReducedHessianVector:",
                                     4 + this->GetBasePriority());
-    if (this->GetProblem()->GetSpaceTimeHandler()->GetControlType() != DOpEtypes::ControlType::initial)
+    if (this->GetProblem()->GetSpaceTimeHandler()->GetControlActionType() != DOpEtypes::VectorAction::initial)
       {
         hessian_direction = 0.;
       }
@@ -1104,7 +1104,7 @@ namespace DOpE
 
       this->GetProblem()->AddAuxiliaryState(&(this->GetDZ()),"adjoint_hessian");
 
-      if (this->GetProblem()->GetSpaceTimeHandler()->GetControlType() == DOpEtypes::ControlType::initial)
+      if (this->GetProblem()->GetSpaceTimeHandler()->GetControlActionType() == DOpEtypes::VectorAction::initial)
         {
           //Set time to initial
           const std::vector<double> times =
@@ -1207,7 +1207,7 @@ namespace DOpE
               delete tmp_du;
             }
         }//Endof the case of control in the initial values
-      else if (this->GetProblem()->GetSpaceTimeHandler()->GetControlType() == DOpEtypes::ControlType::stationary)
+      else if (this->GetProblem()->GetSpaceTimeHandler()->GetControlActionType() == DOpEtypes::VectorAction::stationary)
         {
           //Set time to initial
           const std::vector<double> times =
@@ -1281,14 +1281,14 @@ namespace DOpE
           this->GetProblem()->DeleteAuxiliaryFromIntegrator(
             this->GetControlIntegrator());
         }//Endof stationary
-      else if (this->GetProblem()->GetSpaceTimeHandler()->GetControlType() == DOpEtypes::ControlType::nonstationary)
+      else if (this->GetProblem()->GetSpaceTimeHandler()->GetControlActionType() == DOpEtypes::VectorAction::nonstationary)
         {
           //Nothing to do
         }
       else
         {
           std::stringstream out;
-          out << "Unknown ControlType: "<<DOpEtypesToString(this->GetProblem()->GetSpaceTimeHandler()->GetControlType());
+          out << "Unknown VectorAction: "<<DOpEtypesToString(this->GetProblem()->GetSpaceTimeHandler()->GetControlActionType());
           throw DOpEException(out.str(), "InstatReducedProblem::ComputeReducedHessianVector");
         }
     }//End of HessianVector Repr.
@@ -1560,13 +1560,13 @@ namespace DOpE
                                                        std::string name,
                                                        std::string dof_type)
   {
-    if (this->GetProblem()->GetSpaceTimeHandler()->GetControlType() == DOpEtypes::ControlType::initial
-        || this->GetProblem()->GetSpaceTimeHandler()->GetControlType() == DOpEtypes::ControlType::stationary)
+    if (this->GetProblem()->GetSpaceTimeHandler()->GetControlActionType() == DOpEtypes::VectorAction::initial
+        || this->GetProblem()->GetSpaceTimeHandler()->GetControlActionType() == DOpEtypes::VectorAction::stationary)
       {
         v.SetTimeDoFNumber(0);
         this->GetOutputHandler()->Write(v.GetSpacialVector(), name, dof_type);
       }
-    else if ( this->GetProblem()->GetSpaceTimeHandler()->GetControlType() == DOpEtypes::ControlType::nonstationary)
+    else if ( this->GetProblem()->GetSpaceTimeHandler()->GetControlActionType() == DOpEtypes::VectorAction::nonstationary)
       {
         unsigned int maxt = this->GetProblem()->GetSpaceTimeHandler()->GetMaxTimePoint();
 
@@ -1579,7 +1579,7 @@ namespace DOpE
       }
     else
       {
-        throw DOpEException("Unknown ControlType: "+DOpEtypesToString(this->GetProblem()->GetSpaceTimeHandler()->GetControlType()), "InstatReducedProblem::WriteToFile");
+        throw DOpEException("Unknown VectorAction: "+DOpEtypesToString(this->GetProblem()->GetSpaceTimeHandler()->GetControlActionType()), "InstatReducedProblem::WriteToFile");
       }
   }
 
@@ -1971,11 +1971,11 @@ namespace DOpE
                 if (outname == "Adjoint")
                   {
                     this->SetProblemType("gradient");
-                    if (this->GetProblem()->GetSpaceTimeHandler()->GetControlType() == DOpEtypes::ControlType::initial)
+                    if (this->GetProblem()->GetSpaceTimeHandler()->GetControlActionType() == DOpEtypes::VectorAction::initial)
                       {
                         //Nothing to do
                       }
-                    else if (this->GetProblem()->GetSpaceTimeHandler()->GetControlType() == DOpEtypes::ControlType::stationary)
+                    else if (this->GetProblem()->GetSpaceTimeHandler()->GetControlActionType() == DOpEtypes::VectorAction::stationary)
                       {
                         std::stringstream out;
                         this->GetOutputHandler()->InitOut(out);
@@ -2016,7 +2016,7 @@ namespace DOpE
                             this->GetProblem()->DeleteAuxiliaryFromIntegrator(this->GetControlIntegrator());
                           }
                       }//End of type stationary
-                    else if (this->GetProblem()->GetSpaceTimeHandler()->GetControlType() == DOpEtypes::ControlType::nonstationary)
+                    else if (this->GetProblem()->GetSpaceTimeHandler()->GetControlActionType() == DOpEtypes::VectorAction::nonstationary)
                       {
                         std::stringstream out;
                         this->GetOutputHandler()->InitOut(out);
@@ -2069,18 +2069,18 @@ namespace DOpE
                       }//End of type nonstationary
                     else
                       {
-                        throw DOpEException("Unknown ControlType: "+DOpEtypesToString(this->GetProblem()->GetSpaceTimeHandler()->GetControlType())+". In case Adjoint.", "InstatReducedProblem::BackwardTimeLoop");
+                        throw DOpEException("Unknown VectorAction: "+DOpEtypesToString(this->GetProblem()->GetSpaceTimeHandler()->GetControlActionType())+". In case Adjoint.", "InstatReducedProblem::BackwardTimeLoop");
                       }
                     this->SetProblemType("adjoint");
                   }//Endof Adjoint case
                 else if (outname == "Hessian")
                   {
                     this->SetProblemType("hessian");
-                    if (this->GetProblem()->GetSpaceTimeHandler()->GetControlType() == DOpEtypes::ControlType::initial)
+                    if (this->GetProblem()->GetSpaceTimeHandler()->GetControlActionType() == DOpEtypes::VectorAction::initial)
                       {
                         //Nothing to do
                       }
-                    else if (this->GetProblem()->GetSpaceTimeHandler()->GetControlType() == DOpEtypes::ControlType::stationary)
+                    else if (this->GetProblem()->GetSpaceTimeHandler()->GetControlActionType() == DOpEtypes::VectorAction::stationary)
                       {
                         std::stringstream out;
                         this->GetOutputHandler()->InitOut(out);
@@ -2121,7 +2121,7 @@ namespace DOpE
                             this->GetProblem()->DeleteAuxiliaryFromIntegrator(this->GetControlIntegrator());
                           }
                       }//End stationary
-                    else if (this->GetProblem()->GetSpaceTimeHandler()->GetControlType() == DOpEtypes::ControlType::nonstationary)
+                    else if (this->GetProblem()->GetSpaceTimeHandler()->GetControlActionType() == DOpEtypes::VectorAction::nonstationary)
                       {
                         std::stringstream out;
                         this->GetOutputHandler()->InitOut(out);
@@ -2176,7 +2176,7 @@ namespace DOpE
                       }//End nonstationary
                     else
                       {
-                        throw DOpEException("Unknown ControlType: "+DOpEtypesToString(this->GetProblem()->GetSpaceTimeHandler()->GetControlType())+". In case Hessian.", "InstatReducedProblem::BackwardTimeLoop");
+                        throw DOpEException("Unknown VectorAction: "+DOpEtypesToString(this->GetProblem()->GetSpaceTimeHandler()->GetControlActionType())+". In case Hessian.", "InstatReducedProblem::BackwardTimeLoop");
                       }
                     this->SetProblemType("adjoint_hessian");
                   }//Endof Hessian case

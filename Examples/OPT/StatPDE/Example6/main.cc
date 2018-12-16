@@ -174,7 +174,7 @@ main(int argc, char **argv)
   IPOPT_Alg Alg(&P, &solver, DOpEtypes::VectorStorageType::fullmem, pr);
 
   Alg.ReInit();
-  ControlVector<BlockVector<double> > q(&DOFH, DOpEtypes::VectorStorageType::fullmem);
+  ControlVector<BlockVector<double> > q(&DOFH, DOpEtypes::VectorStorageType::fullmem,pr);
 
   for (int i = 0; i < niter; i++)
     {

@@ -231,7 +231,7 @@ main(int argc, char **argv)
 
   Alg.ReInit();
   out.ReInit();
-  ControlVector<VECTOR> q(&DOFH, DOpEtypes::VectorStorageType::fullmem);
+  ControlVector<VECTOR> q(&DOFH, DOpEtypes::VectorStorageType::fullmem,pr);
 
   double ex_value = 1. / 8. * (25 * M_PI * M_PI * M_PI * M_PI + 1. / alpha);
 

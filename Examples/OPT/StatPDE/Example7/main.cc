@@ -212,7 +212,7 @@ main(int argc, char **argv)
   MMA Alg(&P, &CA, &solver, DOpEtypes::VectorStorageType::fullmem, pr, idc);
 
   Alg.ReInit();
-  ControlVector<VECTOR> q(&DOFH, DOpEtypes::VectorStorageType::fullmem);
+  ControlVector<VECTOR> q(&DOFH, DOpEtypes::VectorStorageType::fullmem,pr);
   //init q
   {
     q = 0.4;

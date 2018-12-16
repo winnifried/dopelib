@@ -171,7 +171,7 @@ main(int argc, char **argv)
   RNA Alg(&P, &solver, pr);
 
   Alg.ReInit();
-  ControlVector<VECTOR> q(&DOFH, DOpEtypes::VectorStorageType::fullmem);
+  ControlVector<VECTOR> q(&DOFH, DOpEtypes::VectorStorageType::fullmem,pr);
   DOFH.RefineStateSpace();
   Alg.ReInit();
 

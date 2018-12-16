@@ -73,20 +73,20 @@ namespace DOpE
   class SpaceTimeHandler : public SpaceTimeHandlerBase<VECTOR>
   {
   public:
-    SpaceTimeHandler(DOpEtypes::ControlType type) :
+    SpaceTimeHandler(DOpEtypes::VectorAction type) :
       SpaceTimeHandlerBase<VECTOR>(type), control_index_(
         dealii::numbers::invalid_unsigned_int), state_index_(
           dealii::numbers::invalid_unsigned_int)
     {
     }
     SpaceTimeHandler (dealii::Triangulation<1> &times,
-                      DOpEtypes::ControlType type) :
+                      DOpEtypes::VectorAction type) :
       SpaceTimeHandlerBase<VECTOR>(times, type), control_index_(
         dealii::numbers::invalid_unsigned_int), state_index_(
           dealii::numbers::invalid_unsigned_int)
     {
     }
-    SpaceTimeHandler (DOpEtypes::ControlType type,
+    SpaceTimeHandler (DOpEtypes::VectorAction type,
                       const ActiveFEIndexSetterInterface<dopedim, dealdim> &index_setter) :
       SpaceTimeHandlerBase<VECTOR>(type), control_index_(
         dealii::numbers::invalid_unsigned_int), state_index_(
@@ -95,7 +95,7 @@ namespace DOpE
     {
     }
     SpaceTimeHandler (dealii::Triangulation<1> &times,
-                      DOpEtypes::ControlType type,
+                      DOpEtypes::VectorAction type,
                       const ActiveFEIndexSetterInterface<dopedim, dealdim> &index_setter) :
       SpaceTimeHandlerBase<VECTOR>(times, type), control_index_(
         dealii::numbers::invalid_unsigned_int), state_index_(

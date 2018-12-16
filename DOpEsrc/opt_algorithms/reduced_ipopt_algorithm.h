@@ -154,10 +154,10 @@ namespace DOpE
     vector_behavior_ = vector_behavior;
     postindex_ = "_"+this->GetProblem()->GetName();
 
-    DOpEtypes::ControlType ct = S->GetProblem()->GetSpaceTimeHandler()->GetControlType();
-    if ((ct != DOpEtypes::ControlType::initial) && (ct != DOpEtypes::ControlType::stationary))
+    DOpEtypes::VectorAction ct = S->GetProblem()->GetSpaceTimeHandler()->GetControlActionType();
+    if ((ct != DOpEtypes::VectorAction::initial) && (ct != DOpEtypes::VectorAction::stationary))
       {
-        throw DOpEException("The ControlType: "+ DOpEtypesToString(ct) + " is not supported.",
+        throw DOpEException("The VectorAction: "+ DOpEtypesToString(ct) + " is not supported.",
                             "Reduced_IpoptAlgorithm::Reduced_IpoptAlgorithm");
       }
   }

@@ -53,7 +53,7 @@ namespace DOpE
   {
   public:
 
-    SpaceTimeHandlerBase(DOpEtypes::ControlType control_type = DOpEtypes::stationary) : control_type_(control_type)
+    SpaceTimeHandlerBase(DOpEtypes::VectorAction control_type = DOpEtypes::stationary) : control_type_(control_type)
     {
       time_triangulation_ = NULL;
       state_ticket_ = 1;
@@ -61,7 +61,7 @@ namespace DOpE
       time_dof_number_ = std::numeric_limits<unsigned int>::max();
     }
 
-    SpaceTimeHandlerBase(dealii::Triangulation<1> &times, DOpEtypes::ControlType type = DOpEtypes::stationary) :
+    SpaceTimeHandlerBase(dealii::Triangulation<1> &times, DOpEtypes::VectorAction type = DOpEtypes::stationary) :
       tdfh_(times), interval_(tdfh_.first_interval()), control_type_(type)
     {
       time_triangulation_ = &times;
@@ -72,7 +72,7 @@ namespace DOpE
 
     SpaceTimeHandlerBase(dealii::Triangulation<1> &times,
                          const dealii::FiniteElement<1> &fe,
-                         DOpEtypes::ControlType type = DOpEtypes::stationary) :
+                         DOpEtypes::VectorAction type = DOpEtypes::stationary) :
       tdfh_(times, fe), interval_(tdfh_.first_interval()), control_type_(type)
     {
       time_triangulation_ = &times;
@@ -255,10 +255,10 @@ namespace DOpE
     }
 
     /**
-     * Returns the ControlType.
+     * Returns the ControlActionType.
      */
 
-    DOpEtypes::ControlType GetControlType() const
+    DOpEtypes::VectorAction GetControlActionType() const
     {
       return control_type_;
     }
@@ -725,7 +725,7 @@ namespace DOpE
     dealii::Triangulation<1> *time_triangulation_;
     unsigned int control_ticket_;
     unsigned int state_ticket_;
-    mutable DOpEtypes::ControlType control_type_;
+    mutable DOpEtypes::VectorAction control_type_;
   };
 
 }

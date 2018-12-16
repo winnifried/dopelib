@@ -178,7 +178,7 @@ main(int argc, char **argv)
   int niter = 2;
 
   Alg.ReInit();
-  ControlVector<BlockVector<double> > q(&DOFH, DOpEtypes::VectorStorageType::fullmem);
+  ControlVector<BlockVector<double> > q(&DOFH, DOpEtypes::VectorStorageType::fullmem,pr);
   //init q
   {
     q = 0.4;

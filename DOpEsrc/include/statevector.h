@@ -49,7 +49,11 @@ namespace DOpE
     StateVector(const SpaceTimeHandlerBase<VECTOR> *STH,
                 DOpEtypes::VectorStorageType behavior,
                 ParameterReader &param_reader)
-      : SpaceTimeVector<VECTOR>(STH,behavior, DOpEtypes::VectorType::state,param_reader)
+      : SpaceTimeVector<VECTOR>(STH,
+				behavior,
+				DOpEtypes::VectorType::state,
+				DOpEtypes::VectorAction::nonstationary,
+				param_reader)
     {
     }
     ~StateVector()

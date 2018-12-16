@@ -74,7 +74,7 @@ namespace DOpE
       MethodOfLines_Network_SpaceTimeHandler(std::vector<dealii::Triangulation<dealdim> *> &triangulation,
                                              const FE<dealdim, dealdim> &control_fe,
                                              const FE<dealdim, dealdim> &state_fe,
-                                             DOpEtypes::ControlType type,
+                                             DOpEtypes::VectorAction type,
                                              NetworkInterface &network,
                                              bool flux_pattern = false) :
         SpaceTimeHandler<FE, DH, dealii::BlockSparsityPattern,  VECTOR, dopedim, dealdim>(type),
@@ -122,7 +122,7 @@ namespace DOpE
                                              const FE<dealdim, dealdim> &control_fe,
                                              const FE<dealdim, dealdim> &state_fe,
                                              dealii::Triangulation<1> &times,
-                                             DOpEtypes::ControlType type,
+                                             DOpEtypes::VectorAction type,
                                              NetworkInterface &network,
                                              bool flux_pattern = false) :
         SpaceTimeHandler<FE, DH, dealii::BlockSparsityPattern,  VECTOR, dopedim, dealdim>(times, type),

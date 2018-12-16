@@ -68,7 +68,7 @@ namespace DOpE
     MethodOfLines_SpaceTimeHandler(dealii::Triangulation<dealdim> &triangulation,
                                    const FE<dealdim, dealdim> &control_fe,
                                    const FE<dealdim, dealdim> &state_fe,
-                                   DOpEtypes::ControlType type,
+                                   DOpEtypes::VectorAction type,
                                    bool flux_pattern = false,
                                    const ActiveFEIndexSetterInterface<dopedim, dealdim> &index_setter =
                                      ActiveFEIndexSetterInterface<dopedim, dealdim>()) :
@@ -104,7 +104,7 @@ namespace DOpE
                                    const FE<dealdim, dealdim> &control_fe,
                                    const FE<dealdim, dealdim> &state_fe,
                                    dealii::Triangulation<1> &times,
-                                   DOpEtypes::ControlType type,
+                                   DOpEtypes::VectorAction type,
                                    bool flux_pattern = false,
                                    const ActiveFEIndexSetterInterface<dopedim, dealdim> &index_setter =
                                      ActiveFEIndexSetterInterface<dopedim, dealdim>()) :
@@ -138,7 +138,7 @@ namespace DOpE
                                    const FE<dealdim, dealdim> &control_fe,
                                    const FE<dealdim, dealdim> &state_fe,
                                    const Constraints &c,
-                                   DOpEtypes::ControlType type,
+                                   DOpEtypes::VectorAction type,
                                    bool flux_pattern = false,
                                    const ActiveFEIndexSetterInterface<dopedim, dealdim> &index_setter =
                                      ActiveFEIndexSetterInterface<dopedim, dealdim>()) :
@@ -174,7 +174,7 @@ namespace DOpE
                                    const FE<dealdim, dealdim> &state_fe,
                                    dealii::Triangulation<1> &times,
                                    const Constraints &c,
-                                   DOpEtypes::ControlType type,
+                                   DOpEtypes::VectorAction type,
                                    bool flux_pattern = false,
                                    const ActiveFEIndexSetterInterface<dopedim, dealdim> &index_setter =
                                      ActiveFEIndexSetterInterface<dopedim, dealdim>()) :

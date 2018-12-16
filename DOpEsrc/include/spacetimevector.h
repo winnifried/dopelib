@@ -62,6 +62,7 @@ namespace DOpE
     SpaceTimeVector(const SpaceTimeHandlerBase<VECTOR> *STH,
 		    DOpEtypes::VectorStorageType behavior,
 		    DOpEtypes::VectorType type,
+		    DOpEtypes::VectorAction action_,
 		    ParameterReader &param_reader);
     ~SpaceTimeVector();
 
@@ -166,6 +167,53 @@ namespace DOpE
     void equ(double s, const SpaceTimeVector<VECTOR> &dq);
 
     /**
+     * Sets this vector to the componentwise maximum of its own
+     * entries and that of the other vector
+     * The vector is not resized!
+     *
+     * @param dq    The other vector.
+     */
+    void max(const SpaceTimeVector &dq);
+    /**
+     * Sets this vector to the componentwise minimum of its own
+     * entries and that of the other vector
+     * The vector is not resized!
+     *
+     * @param dq    The other vector.
+     */
+    void min(const SpaceTimeVector &dq);
+
+    /**
+     * Computes the component wise product of this vector with the argument.
+     */
+    void comp_mult(const SpaceTimeVector &dq);
+
+    /**
+     * Inverts the elements of the vector component wise
+     */
+    void comp_invert();
+
+    /**
+     * Initializes this vector according to the signs in it.
+     *
+     * @param smaller   value to be taken if sign is negative
+     * @param larger    value to be taken if sign is positive
+     * @param unclear   value to be taken if sign is unclear
+     * @param TOL       if abs(value) < TOL we consider the sign to be unclear
+     */
+    void init_by_sign(double smaller, double larger, double unclear, double TOL = 1.e-10);
+
+    /**
+      * Computes the norm given by name of the vector.
+      * Feasible values are "infty", and "l1"
+      * The string restriction defines if only certain values are
+      * to be considered. Currently "all" and "positive" are feasible
+      * Meaning that either all or only the positive entries are
+      * considered.
+      */
+    double Norm(std::string name,std::string restriction = "all") const;
+
+    /**
      * Prints Information on this vector into the given stream.
      *
      * @param out    The output stream.
@@ -203,6 +251,16 @@ namespace DOpE
     {
       return vector_type_;
     }
+
+    /**
+     * This returns the action type of the SpaceTimeVector
+     * i.e. initial, stationary, nonstationary
+     */
+    DOpEtypes::VectorAction GetAction() const
+    {
+      return vector_action_;
+    }
+
     /**
      * @return               A const pointer to the SpaceTimeHandler associated with this vector.
      */
@@ -330,6 +388,7 @@ namespace DOpE
 
     DOpEtypes::VectorStorageType behavior_;
     DOpEtypes::VectorType vector_type_;
+    DOpEtypes::VectorAction vector_action_;
     std::string tmp_dir_;
     unsigned int sfh_ticket_;
 

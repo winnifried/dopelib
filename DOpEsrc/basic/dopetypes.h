@@ -103,13 +103,14 @@ namespace DOpE
     };
 
     /**
-     * An enum describing the type of the control.
+     * An enum describing the action of the vector.
      *
-     * stationary     the control is not time dependent
-     * initial        the control acts in the initial conditions
-     * nonstationary  the control is timedependent
+     * stationary     the vector is not time dependent but can be accessed at 
+     *                every time point
+     * initial        the vector acts in the initial conditions
+     * nonstationary  the vector is timedependent
      */
-    enum ControlType
+    enum VectorAction
     {
       stationary,
       initial,
@@ -185,22 +186,22 @@ namespace DOpE
 
   template <>
   inline std::string
-  DOpEtypesToString (const DOpEtypes::ControlType &t)
+  DOpEtypesToString (const DOpEtypes::VectorAction &t)
   {
     switch (t)
       {
-      case DOpEtypes::ControlType::initial:
+      case DOpEtypes::VectorAction::initial:
         return "initial";
-      case DOpEtypes::ControlType::stationary:
+      case DOpEtypes::VectorAction::stationary:
         return "stationary";
-      case DOpEtypes::ControlType::nonstationary:
+      case DOpEtypes::VectorAction::nonstationary:
         return "nonstationary";
       default:
       {
         std::stringstream out;
-        out<<"Unknown DOpEtypes::ControlType"<< std::endl;
+        out<<"Unknown DOpEtypes::VectorAction"<< std::endl;
         out<<"Code given is "<< t<<std::endl;
-        throw DOpEException(out.str(),"DOpEtypesToString<DOpEtypes::ControlType");
+        throw DOpEException(out.str(),"DOpEtypesToString<DOpEtypes::VectorAction");
       }
       }
   }

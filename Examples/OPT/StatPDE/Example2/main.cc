@@ -164,7 +164,7 @@ main(int argc, char **argv)
     {
       Alg.ReInit();
 
-      ControlVector<VECTOR> q(&DOFH, DOpEtypes::VectorStorageType::fullmem);
+      ControlVector<VECTOR> q(&DOFH, DOpEtypes::VectorStorageType::fullmem,pr);
       {
         //PreInitialization of q
         q = 2.;

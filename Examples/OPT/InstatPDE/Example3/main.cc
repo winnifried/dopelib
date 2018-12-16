@@ -180,7 +180,7 @@ main(int argc, char **argv)
   //Note that we give DOpEtypes::initial as the type of control.
   MethodOfLines_SpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR, CDIM,
                                  DIM> DOFH(triangulation, control_fe, state_fe, times,
-                                           DOpEtypes::ControlType::nonstationary);
+                                           DOpEtypes::VectorAction::nonstationary);
 
   NoConstraints<ElementDataContainer, FaceDataContainer, DOFHANDLER, VECTOR, CDIM,
                 DIM> Constraints;
@@ -203,7 +203,7 @@ main(int argc, char **argv)
   RP solver(&P, DOpEtypes::VectorStorageType::fullmem, pr, idc);
 
   RNA Alg(&P, &solver, pr);
-  ControlVector<VECTOR> q(&DOFH, DOpEtypes::VectorStorageType::fullmem);
+  ControlVector<VECTOR> q(&DOFH, DOpEtypes::VectorStorageType::fullmem,pr);
   Alg.ReInit();
 
   for (int i = 0; i < niter; i++)

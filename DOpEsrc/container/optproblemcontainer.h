@@ -2023,8 +2023,8 @@ namespace DOpE
   {
     if (this->GetType() == "gradient")
       {
-        if (GetSpaceTimeHandler()->GetControlType()
-            == DOpEtypes::ControlType::initial && initial_)
+        if (GetSpaceTimeHandler()->GetControlActionType()
+            == DOpEtypes::VectorAction::initial && initial_)
           {
             this->GetPDE().Init_ElementRhs_Q(edc, local_vector, scale);
           }
@@ -2053,8 +2053,8 @@ namespace DOpE
       }
     else if (this->GetType() == "hessian")
       {
-        if (GetSpaceTimeHandler()->GetControlType()
-            == DOpEtypes::ControlType::initial && initial_)
+        if (GetSpaceTimeHandler()->GetControlActionType()
+            == DOpEtypes::VectorAction::initial && initial_)
           {
             this->GetPDE().Init_ElementRhs_QTT(edc, local_vector, scale);
             this->GetPDE().Init_ElementRhs_QQ(edc, local_vector, scale);
@@ -2800,7 +2800,7 @@ namespace DOpE
     //      GetSpaceTimeHandler()->SetTimeDoFNumber(time_point);
     interval_length_ = GetSpaceTimeHandler()->GetStepSize();
 
-    if (GetSpaceTimeHandler()->GetControlType() == DOpEtypes::ControlType::initial || GetSpaceTimeHandler()->GetControlType() == DOpEtypes::ControlType::stationary )
+    if (GetSpaceTimeHandler()->GetControlActionType() == DOpEtypes::VectorAction::initial || GetSpaceTimeHandler()->GetControlActionType() == DOpEtypes::VectorAction::stationary )
       {
         c_interval_length_ = 1.;
       }

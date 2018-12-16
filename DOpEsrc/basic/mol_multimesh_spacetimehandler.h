@@ -61,7 +61,7 @@ namespace DOpE
     MethodOfLines_MultiMesh_SpaceTimeHandler(
       dealii::Triangulation<dim> &triangulation,
       const FE<dim, dim> &control_fe, const FE<dim, dim> &state_fe,
-      DOpEtypes::ControlType type,
+      DOpEtypes::VectorAction type,
       bool flux_pattern = false,
       const ActiveFEIndexSetterInterface<dim, dim> &index_setter =
         ActiveFEIndexSetterInterface<dim, dim>()) :
@@ -81,7 +81,7 @@ namespace DOpE
     MethodOfLines_MultiMesh_SpaceTimeHandler(
       dealii::Triangulation<dim> &triangulation,
       const FE<dim, dim> &control_fe, const FE<dim, dim> &state_fe,
-      dealii::Triangulation<1> &times, DOpEtypes::ControlType type,
+      dealii::Triangulation<1> &times, DOpEtypes::VectorAction type,
       bool flux_pattern = false,
       const ActiveFEIndexSetterInterface<dim, dim> &index_setter =
         ActiveFEIndexSetterInterface<dim, dim>()) :
@@ -101,7 +101,7 @@ namespace DOpE
     MethodOfLines_MultiMesh_SpaceTimeHandler(
       dealii::Triangulation<dim> &triangulation,
       const FE<dim, dim> &control_fe, const FE<dim, dim> &state_fe,
-      const Constraints &c, DOpEtypes::ControlType type,
+      const Constraints &c, DOpEtypes::VectorAction type,
       bool flux_pattern = false,
       const ActiveFEIndexSetterInterface<dim, dim> &index_setter =
         ActiveFEIndexSetterInterface<dim, dim>()) :
@@ -123,7 +123,7 @@ namespace DOpE
       dealii::Triangulation<dim> &triangulation,
       const FE<dim, dim> &control_fe, const FE<dim, dim> &state_fe,
       dealii::Triangulation<1> &times, const Constraints &c,
-      DOpEtypes::ControlType type,
+      DOpEtypes::VectorAction type,
       bool flux_pattern = false,
       const ActiveFEIndexSetterInterface<dim, dim> &index_setter =
         ActiveFEIndexSetterInterface<dim, dim>()) :
