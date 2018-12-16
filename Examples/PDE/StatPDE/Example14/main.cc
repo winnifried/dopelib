@@ -228,7 +228,7 @@ main(int argc, char **argv)
       try
         {
           Alg.ReInit();
-          ControlVector<VECTOR> q(&DOFH, DOpEtypes::VectorStorageType::fullmem);
+          ControlVector<VECTOR> q(&DOFH, DOpEtypes::VectorStorageType::fullmem,pr);
 
           Alg.SolveForward(q);
         }
