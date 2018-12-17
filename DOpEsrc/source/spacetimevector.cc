@@ -1495,7 +1495,9 @@ double SpaceTimeVector<VECTOR>::Norm(std::string name,std::string restriction) c
   void
   SpaceTimeVector<VECTOR>::PrintInfos(std::stringstream &out)
   {
-    if (GetSpaceTimeHandler()->GetMaxTimePoint() == 0)
+    if (GetSpaceTimeHandler()->GetMaxTimePoint() == 0 ||
+        GetAction() == DOpEtypes::VectorAction::initial ||
+        GetAction() == DOpEtypes::VectorAction::stationary )
       {
         if (GetBehavior() == DOpEtypes::VectorStorageType::fullmem)
           {
