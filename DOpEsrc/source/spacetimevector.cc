@@ -64,7 +64,8 @@ namespace DOpE
       }
     id_counter_++;
     current_dof_number_ = 0;
-
+    accessor_=0;
+    
     ReInit();
   }
 
@@ -156,6 +157,7 @@ namespace DOpE
     id_counter_++;
     num_active_++;
     current_dof_number_ = 0;
+    accessor_=0;
     ReInit();
   }
 

@@ -412,6 +412,7 @@ namespace DOpE
       {
         if (accessor_ >= 0)
           {
+	    assert(stvector_.size() > (unsigned int) accessor_);
             bool existed = true;
             if (stvector_[accessor_] == NULL)
               {
