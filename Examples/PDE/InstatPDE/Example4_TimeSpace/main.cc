@@ -245,7 +245,7 @@ main(int argc, char **argv)
         std::cout << e.GetErrorMessage() << std::endl;
        }
 
-    if (j != 1)
+    if (j != 0)
         {
           //For global mesh refinement, uncomment the next line
           // DOFH.RefineSpace(DOpEtypes::RefinementType::global); //or just DOFH.RefineSpace()
@@ -253,7 +253,6 @@ main(int argc, char **argv)
           std::vector<dealii::Vector<float> > error_ind;
 	  error_ind.resize(50,Vector<float>(16));
 	  error_ind[0](0)=1.0;
-
           DOFH.RefineSpace(SpaceTimeRefineOptimized(error_ind));
           //There are other mesh refinement strategies implemented, for example
           //DOFH.RefineSpace(RefineFixedNumber(error_ind, 0.4));
