@@ -1076,6 +1076,12 @@ namespace DOpE
             this->GetProblem()->AddAuxiliaryToIntegrator(
               this->GetIntegrator());
 
+	    //Transfer old solution to current mesh
+	    bool transfer_needed = problem.GetSpaceTimeHandler()->TemporalMeshTransferState(u_old, local_to_global[i-1], local_to_global[i]);
+	    //TODO: We need to call set problem.SetTime here, so that the unkowns for
+	    // the current mesh are correct. But the Data from the last time-point need to be
+	    //transfered. So the AddAuxiliaryToIntegrator must have a version with
+	    //'PreviousSpacialVector' + TemporalMeshTransfer
             this->GetNonlinearSolver("state").NonlinearLastTimeEvals(problem,
                                                                      u_old, sol.GetSpacialVector());
 
@@ -1083,18 +1089,17 @@ namespace DOpE
               this->GetIntegrator());
 
             problem.SetTime(time, local_to_global[i], it);
-	    //TODO: Maybe better to change last solution to new mesh, and then evaluate on new mesh?
-	    //Otherwise wrong testfunctions are used for last-time eval
-	    problem.GetSpaceTimeHandler()->TemporalMeshTransferState(u_old, local_to_global[i-1], local_to_global[i]);
+
             this->GetProblem()->AddAuxiliaryToIntegrator(
               this->GetIntegrator());
             this->GetProblem()->AddPreviousAuxiliaryToIntegrator(
               this->GetIntegrator());
 
+	    //Also rebuild matrix if a mesh transfer happend.
             build_state_matrix_
               = this->GetNonlinearSolver("state").NonlinearSolve(problem,
                                                                  u_old, sol.GetSpacialVector(), true,
-                                                                 build_state_matrix_);
+                                                                 build_state_matrix_||transfer_needed);
 
             this->GetProblem()->DeleteAuxiliaryFromIntegrator(
               this->GetIntegrator());
@@ -1200,16 +1205,17 @@ namespace DOpE
             this->GetProblem()->AddAuxiliaryToIntegrator(
               this->GetIntegrator());
 
-            this->GetNonlinearSolver("adjoint").NonlinearLastTimeEvals(problem,
+	    //Transfer old solution to current mesh
+	    problem.GetSpaceTimeHandler()->TemporalMeshTransferState(u_old, local_to_global[j+1], local_to_global[j]);
+
+	    this->GetNonlinearSolver("adjoint").NonlinearLastTimeEvals(problem,
                                                                        u_old, sol.GetSpacialVector());
 
             this->GetProblem()->DeleteAuxiliaryFromIntegrator(
               this->GetIntegrator());
 
             problem.SetTime(time,local_to_global[j], it);
-	    //TODO: Maybe better to change last solution to new mesh, and then evaluate on new mesh?
-	    //Otherwise wrong testfunctions are used for last-time eval
-	    problem.GetSpaceTimeHandler()->TemporalMeshTransferState(u_old, local_to_global[j+1], local_to_global[j]);
+
             this->GetProblem()->AddAuxiliaryToIntegrator(
               this->GetIntegrator());
             this->GetProblem()->AddNextAuxiliaryToIntegrator(

@@ -117,7 +117,7 @@ namespace DOpE
     /**
      * Returns a const reference to the spatial vector associated to the last time given by SetTime*
      * This makes a copy of the real vector  in order to change the vector type.
-     * To assert data integrity this Only one Copy may  be obtained at any time.
+     * To assert data integrity Only one Copy may  be obtained at any time.
      * Hence prior to calling this Function again UnLockCopy must be called.
      */
     const dealii::Vector<double> &GetSpacialVectorCopy() const;

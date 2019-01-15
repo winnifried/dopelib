@@ -375,8 +375,7 @@ namespace DOpE
     {
       assert(ref_type == DOpEtypes::RefinementType::global);
       RefineSpace(ref_type);
-      std::cout<<"Not implemented yet: RefineSpace"<<std::endl;
-      abort();
+
       ///Time refinement needs potentially a change in the dofhandler number?
       SpaceTimeHandlerBase<VECTOR>::RefineTime(ref_type);
     }
@@ -401,7 +400,7 @@ namespace DOpE
 
     /******************************************************/
     /**
-     * This Function is used to refine the spatial mesh.
+     * This Function is used to refine (all) the spatial meshes.
      * After calling a refinement function a reinitialization is required!
      *
      * @param ref_container   Steers the local mesh refinement. Currently availabe are
@@ -412,72 +411,78 @@ namespace DOpE
     void RefineSpace(const RefinementContainer &ref_container)
     {
       DOpEtypes::RefinementType ref_type = ref_container.GetRefType();
-
-      std::cout<<"Not implemented yet: RefineSpace"<<std::endl;
-      abort();
       
       //make sure that we do not use any coarsening
       assert( !ref_container.UsesCoarsening());
-      for(unsigned int i = 0; i < n_dof_handlers_; i++)
+      // i loop through all n dof handlers
+      // n dof handlers is the number of different dof handlers present
+      // in the Rothe_SpaceTimeHandler
+      for(unsigned int i = 0; i < n_dof_handlers_; i++) 
       {
-      if (state_mesh_transfers_[i] != NULL)
+	if (state_mesh_transfers_[i] != NULL)
         {
           delete state_mesh_transfers_[i];
           state_mesh_transfers_[i] = NULL;
         }
-      state_mesh_transfers_[i] = new dealii::SolutionTransfer<dealdim, VECTOR, DH<dealdim, dealdim> >(*state_dof_handlers_[i]);
-
-	  Vector<float> Indicators;
-	  for(unsigned int j = 0; j < time_to_dofhandler_[i]; j++) // time to dofhandler i or j ?
-          {
-	  if(time_to_dofhandler_[j] == i)
-	   {
-	   if(Indicators.size()==0)
-	     {
-		Indicators=ref_container.GetLocalErrorIndicators(j);
-	     }
-	   else
-	     {
-	   assert(Indicators.size()==ref_container.GetLocalErrorIndicators(j).size());
-		Indicators+=ref_container.GetLocalErrorIndicators(j);
-	     }
-	   }
+	state_mesh_transfers_[i] = new dealii::SolutionTransfer<dealdim, VECTOR, DH<dealdim, dealdim> >(*state_dof_handlers_[i]);
+	dealii::Vector<float> Indicators;
+	// j looping over timesteps
+	// time to dofhandler is a vector which has the size of number of timesteps
+	// it contains the number of the DoFHandler associated to the
+	// given time-point.
+	for(unsigned int j = 0; j < time_to_dofhandler_.size(); j++) 
+	{
+	  // Checking if current timepoint uses DoFHandler i,
+	  // if so, summ error indicators.
+	  if(time_to_dofhandler_[j] == i) 
+	  {
+	     //j is the corresponding timepoint!
+	    if(Indicators.size()==0)
+	    {
+	      Indicators=ref_container.GetLocalErrorIndicators(j);
+	    }
+	    else
+	    {
+	      assert(Indicators.size()==ref_container.GetLocalErrorIndicators(j).size());
+	      Indicators+=ref_container.GetLocalErrorIndicators(j);
+	    }
 	  }
-	  switch (ref_type)
-            {
-            case DOpEtypes::RefinementType::global:
-             triangulations_[i]->set_all_refine_flags();
-            break;
-
-            case DOpEtypes::RefinementType::fixed_number:
-             GridRefinement::refine_and_coarsen_fixed_number (*triangulations_[i],
+	}
+	switch (ref_type)
+	{
+	case DOpEtypes::RefinementType::global:
+	  triangulations_[i]->set_all_refine_flags();
+	  break;
+	  
+	case DOpEtypes::RefinementType::fixed_number:
+	  GridRefinement::refine_and_coarsen_fixed_number (*triangulations_[i],
                                                            Indicators,
                                                            ref_container.GetTopFraction (),
-                                                          ref_container.GetBottomFraction());
-            break;
-
-            case DOpEtypes::RefinementType::fixed_fraction:
-             GridRefinement::refine_and_coarsen_fixed_fraction (*triangulations_[i],
+							   ref_container.GetBottomFraction());
+	  break;
+	  
+	case DOpEtypes::RefinementType::fixed_fraction:
+	  GridRefinement::refine_and_coarsen_fixed_fraction (*triangulations_[i],
                                                              Indicators,
                                                              ref_container.GetTopFraction (),
-                                                            ref_container.GetBottomFraction());
-            break;
-
-            case DOpEtypes::RefinementType::optimized:
-             GridRefinement::refine_and_coarsen_optimize (*triangulations_[i],
+							     ref_container.GetBottomFraction());
+	  break;
+	  
+	case DOpEtypes::RefinementType::optimized: 
+	  GridRefinement::refine_and_coarsen_optimize (*triangulations_[i],
                                                        Indicators,
-                                                      ref_container.GetConvergenceOrder());
-            break;
-
-            default:
-             throw DOpEException (
-              "Not implemented for name =" + DOpEtypesToString (ref_type),
-                              "Rothe_StateSpaceTimeHandler::RefineStateSpace");
-	    }
+						       ref_container.GetConvergenceOrder());
+	  break;
+	  
+	default:
+	  throw DOpEException (
+	    "Not implemented for name =" + DOpEtypesToString (ref_type),
+	    "Rothe_StateSpaceTimeHandler::RefineStateSpace");
+	}
 	triangulations_[i]->prepare_coarsening_and_refinement();
       	if (state_mesh_transfers_[i] != NULL) state_mesh_transfers_[i]->prepare_for_pure_refinement();
       	triangulations_[i]->execute_coarsening_and_refinement();
-        }
+      }
     }
     /******************************************************/
 
@@ -486,12 +491,22 @@ namespace DOpE
      */
     void SpatialMeshTransferState(const VECTOR &old_values, VECTOR &new_values, unsigned int time_point = std::numeric_limits<unsigned int>::max()) const
     {
-      assert(time_point == std::numeric_limits<unsigned int>::max() || time_point == this->GetTimeDoFNumber());
-      if(this->GetTimeDoFNumber() > time_to_dofhandler_.size() || this->GetTimeDoFNumber() == std::numeric_limits<unsigned int>::max())
+      if(time_point != std::numeric_limits<unsigned int>::max() && time_point != this->GetTimeDoFNumber() )
       {
-	throw DOpEException("Invalid Timepoint", "Rothe_SpaceTimeHandler::SpatialMeshTransferState");
+	if(time_point > time_to_dofhandler_.size())
+	{
+	  throw DOpEException("Invalid Timepoint", "Rothe_SpaceTimeHandler::SpatialMeshTransferState");
+	}
+	if (state_mesh_transfers_[time_to_dofhandler_[time_point]] != NULL) state_mesh_transfers_[time_to_dofhandler_[time_point]]->refine_interpolate(old_values, new_values);
       }
-      if (state_mesh_transfers_[time_to_dofhandler_[this->GetTimeDoFNumber()]] != NULL) state_mesh_transfers_[time_to_dofhandler_[this->GetTimeDoFNumber()]]->refine_interpolate(old_values, new_values);
+      else
+      {
+	if(this->GetTimeDoFNumber() > time_to_dofhandler_.size() || this->GetTimeDoFNumber() == std::numeric_limits<unsigned int>::max())
+	{
+	  throw DOpEException("Invalid Timepoint", "Rothe_SpaceTimeHandler::SpatialMeshTransferState");
+	}
+	if (state_mesh_transfers_[time_to_dofhandler_[this->GetTimeDoFNumber()]] != NULL) state_mesh_transfers_[time_to_dofhandler_[this->GetTimeDoFNumber()]]->refine_interpolate(old_values, new_values);
+      }
      }
 
       /******************************************************/
@@ -500,7 +515,7 @@ namespace DOpE
      * Implementation of virtual function in SpaceTimeHandlerBase
      */
 
-    virtual void TemporalMeshTransferControl( VECTOR & /*new_values*/, unsigned int /*from_time_dof*/, unsigned int /*to_time_dof*/) const
+    virtual bool TemporalMeshTransferControl( VECTOR & /*new_values*/, unsigned int /*from_time_dof*/, unsigned int /*to_time_dof*/) const
     {
 	abort();
     }
@@ -511,13 +526,13 @@ namespace DOpE
      * Implementation of virtual function in SpaceTimeHandlerBase
      */
 
-    virtual void TemporalMeshTransferState(VECTOR & new_values, unsigned int from_time_dof, unsigned int to_time_dof) const
+    virtual bool TemporalMeshTransferState(VECTOR & new_values, unsigned int from_time_dof, unsigned int to_time_dof) const
     {
       assert(time_to_dofhandler_.size() > std::max(from_time_dof,to_time_dof));
       assert(state_dof_handlers_.size() > std::max(time_to_dofhandler_[from_time_dof],time_to_dofhandler_[to_time_dof]));
       if (time_to_dofhandler_[from_time_dof] == time_to_dofhandler_[to_time_dof])
       {
-	return;
+	return false;
       }
       VECTOR temp = new_values;
       this->ReinitVector(new_values, DOpEtypes::VectorType::state, to_time_dof);
@@ -525,7 +540,8 @@ namespace DOpE
 						 temp,
 						 state_dof_handlers_[time_to_dofhandler_[to_time_dof]]->GetDEALDoFHandler(),
 						 *state_dof_constraints_[time_to_dofhandler_[to_time_dof]],
-						 new_values);	
+						 new_values);
+      return true;
     }
 
     /******************************************************/
