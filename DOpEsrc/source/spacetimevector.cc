@@ -422,6 +422,12 @@ namespace DOpE
   VECTOR &
   SpaceTimeVector<VECTOR>::GetSpacialVector()
   {
+    if (lock_)
+    {
+      throw DOpEException(
+	"Trying to use GetSpacialVector while a copy is in use!",
+	"SpaceTimeVector::GetSpacialVector");
+    }
     if (GetAction() == DOpEtypes::VectorAction::stationary || GetAction() == DOpEtypes::VectorAction::initial)
     {
       return *(stvector_[accessor_]);
@@ -462,6 +468,12 @@ namespace DOpE
   const VECTOR &
   SpaceTimeVector<VECTOR>::GetSpacialVector() const
   {
+    if (lock_)
+    {
+      throw DOpEException(
+	"Trying to use GetSpacialVector while a copy is in use!",
+	"SpaceTimeVector::GetSpacialVector");
+    }
     if (GetAction() == DOpEtypes::VectorAction::stationary || GetAction() == DOpEtypes::VectorAction::initial)
     {
       return *(stvector_[accessor_]);
@@ -494,6 +506,65 @@ namespace DOpE
                             "SpaceTimeVector<VECTOR>::GetSpacialVector const");
       }
     }
+  }
+  /******************************************************/
+  template<typename VECTOR>
+  const VECTOR &
+  SpaceTimeVector<VECTOR>::GetSpacialVectorWithTemporalTransfer(unsigned int from_time_dof, unsigned int to_time_dof) const
+  {
+    if (lock_)
+    {
+      throw DOpEException(
+	"Trying to use GetSpacialVectorWithTemporalTransfer while a copy is in use!",
+	"SpaceTimeVector::GetSpacialVectorWithTemporalTransfer");
+    }
+    assert((to_time_dof == from_time_dof+1) || (to_time_dof == from_time_dof-1));
+    assert(from_time_dof == current_dof_number_);
+    //Fill local_stvector_;
+    
+    if (GetAction() == DOpEtypes::VectorAction::stationary || GetAction() == DOpEtypes::VectorAction::initial)
+    {
+       local_stvector_ = *(stvector_[accessor_]);
+    }
+    else
+    {
+      if (GetBehavior() == DOpEtypes::VectorStorageType::fullmem
+	  || GetBehavior() == DOpEtypes::VectorStorageType::only_recent)
+      {
+        if (accessor_ >= 0)
+	{
+	  assert(stvector_[accessor_] != NULL);
+	  local_stvector_ =  *(stvector_[accessor_]);
+	}
+        else
+          throw DOpEException("Case should not occure!",
+                            "SpaceTimeVector<VECTOR>::GetSpacialVectorWithTemporalTransfer const");
+      }
+      else
+      {
+        if (GetBehavior() == DOpEtypes::VectorStorageType::store_on_disc)
+	{
+	  if (accessor_ >= 0)
+	  {
+	    local_stvector_ =  *(local_vectors_[global_to_local_[accessor_]]);
+	  }
+	  else
+	    throw DOpEException("Case should not occure!",
+                            "SpaceTimeVector<VECTOR>::GetSpacialVectorWithTemporalTransfer const");
+	}
+        throw DOpEException("Unknown Behavior " + DOpEtypesToString(GetBehavior()),
+                            "SpaceTimeVector<VECTOR>::GetSpacialVectorWithTemporalTransfer const");
+      }
+    }
+    //Transfer
+    bool transfer = GetSpaceTimeHandler()->TemporalMeshTransferState(local_stvector_, from_time_dof, to_time_dof);
+    assert(transfer);
+    if(! transfer)
+    {
+      std::cerr<<"Meshtransfer initiated but not needed!"<<std::endl;
+    }
+    lock_ = true;
+    return local_stvector_;
   }
 
   /******************************************************/

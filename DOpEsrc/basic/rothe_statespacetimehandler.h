@@ -103,7 +103,6 @@ namespace DOpE
       {
 	assert(state_dof_handlers_[i]!= NULL);
 	state_dof_handlers_[i]->clear();
-	delete state_dof_handlers_[i];
 	
 	if (state_mesh_transfers_[i] != NULL)
         {
@@ -113,6 +112,9 @@ namespace DOpE
 	{
 	  delete state_dof_constraints_[i];
 	}
+
+
+	delete state_dof_handlers_[i];
 	if ( i != 0 )
 	{
 	  assert(triangulations_[i]!=NULL);

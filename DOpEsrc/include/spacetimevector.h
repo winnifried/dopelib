@@ -98,7 +98,12 @@ namespace DOpE
      * Returns a const reference to the spatial vector associated to the last time given by SetTime* or SetTimeDoFNumber
      */
     const VECTOR &GetSpacialVector() const;
-    /**
+     /**
+     * Returns a const reference to the spatial vector associated to the last time given by SetTime* or SetTimeDoFNumber, transfered to the DoFs at a different time point!
+     * This locks the vector, so UnlockCopy needs to be called to free the memory!
+     */
+    const VECTOR &GetSpacialVectorWithTemporalTransfer(unsigned int from_time_dof, unsigned int to_time_dof) const;
+   /**
      * Analog to GetSpacialVector, but the next timepoint in natural time direction
      */
     VECTOR &GetNextSpacialVector();

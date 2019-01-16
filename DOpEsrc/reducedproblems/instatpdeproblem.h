@@ -1062,9 +1062,33 @@ namespace DOpE
                                                          "Time");
             double time = times[local_to_global[i]];
 
+	    //Only set Time for DoFHandler to have the correct unknowns,
+	    //DO NOT call the set Time method of the problem, to avoid
+	    //having the wrong function values!
+	    problem.GetSpaceTimeHandler()->SetInterval(it,local_to_global[i]);
+	    //Transfer old solution to current mesh
+	    bool transfer_needed = problem.GetSpaceTimeHandler()->TemporalMeshTransferState(u_old, local_to_global[i-1], local_to_global[i]);
+
+	    if(transfer_needed)
+	    {
+	      this->GetNonlinearSolver("state").ReInit(problem);
+	      state_reinit_ = true; //We set reinit=true, so that in the next call,
+	      //reinit is called before handling the first time step.
+	      build_state_matrix_ = true;
+	    }
+	    
             std::stringstream out;
             this->GetOutputHandler()->InitOut(out);
-            out << "\t Timestep: " << local_to_global[i] << " ("
+            out << "\t Timestep";
+	    if (transfer_needed)
+	    {
+	      out <<" (MT): ";
+	    }
+	    else
+	    {
+	      out <<": ";   
+	    }
+	    out << local_to_global[i] << " ("
                 << times[local_to_global[i - 1]] << " -> " << time
                 << ") using " << problem.GetName();
             problem.GetOutputHandler()->Write(out,
@@ -1073,21 +1097,32 @@ namespace DOpE
             sol.SetTimeDoFNumber(local_to_global[i], it);
             sol.GetSpacialVector() = 0;
 
-            this->GetProblem()->AddAuxiliaryToIntegrator(
-              this->GetIntegrator());
+	    if (transfer_needed)
+	    {
+	      //Auxiliary vectors need to be interpolated!
+	      this->GetProblem()->AddAuxiliaryToIntegratorWithTemporalTransfer(
+		this->GetIntegrator(),local_to_global[i-1], local_to_global[i]);
+	    }
+	    else
+	    {
+	      this->GetProblem()->AddAuxiliaryToIntegrator(
+		this->GetIntegrator());
+	    }
 
-	    //Transfer old solution to current mesh
-	    bool transfer_needed = problem.GetSpaceTimeHandler()->TemporalMeshTransferState(u_old, local_to_global[i-1], local_to_global[i]);
-	    //TODO: We need to call set problem.SetTime here, so that the unkowns for
-	    // the current mesh are correct. But the Data from the last time-point need to be
-	    //transfered. So the AddAuxiliaryToIntegrator must have a version with
-	    //'PreviousSpacialVector' + TemporalMeshTransfer
             this->GetNonlinearSolver("state").NonlinearLastTimeEvals(problem,
                                                                      u_old, sol.GetSpacialVector());
 
-            this->GetProblem()->DeleteAuxiliaryFromIntegrator(
-              this->GetIntegrator());
-
+	    if (transfer_needed)
+	    {
+	      this->GetProblem()->DeleteAuxiliaryFromIntegratorWithTemporalTransfer(
+		this->GetIntegrator());
+	    }
+	    else
+	    {
+	      this->GetProblem()->DeleteAuxiliaryFromIntegrator(
+		this->GetIntegrator());
+	    }
+	      
             problem.SetTime(time, local_to_global[i], it);
 
             this->GetProblem()->AddAuxiliaryToIntegrator(
@@ -1099,7 +1134,7 @@ namespace DOpE
             build_state_matrix_
               = this->GetNonlinearSolver("state").NonlinearSolve(problem,
                                                                  u_old, sol.GetSpacialVector(), true,
-                                                                 build_state_matrix_||transfer_needed);
+                                                                 build_state_matrix_);
 
             this->GetProblem()->DeleteAuxiliaryFromIntegrator(
               this->GetIntegrator());
@@ -1191,9 +1226,33 @@ namespace DOpE
                                                          "Time");
             double time = times[local_to_global[j]];
 
+	    //Only set Time for DoFHandler to have the correct unknowns,
+	    //DO NOT call the set Time method of the problem, to avoid
+	    //having the wrong function values!
+	    problem.GetSpaceTimeHandler()->SetInterval(it,local_to_global[j]);
+            //Transfer old solution to current mesh
+	    bool transfer_needed = problem.GetSpaceTimeHandler()->TemporalMeshTransferState(u_old, local_to_global[j+1], local_to_global[j]);
+
+	    if(transfer_needed)
+	    {
+	      this->GetNonlinearSolver("adjoint").ReInit(problem);
+	      adjoint_reinit_ = true; //We set reinit=true, so that in the next call,
+	      //reinit is called before handling the first time step.
+	      build_adjoint_matrix_ = true;
+	    }
+	    
             std::stringstream out;
             this->GetOutputHandler()->InitOut(out);
-            out << "\t Timestep: " << local_to_global[j+1] << " ("
+            out << "\t Timestep";
+	    if (transfer_needed)
+	    {
+	      out <<" (MT): ";
+	    }
+	    else
+	    {
+	      out <<": ";   
+	    }
+	    out << local_to_global[j+1] << " ("
                 << times[local_to_global[j + 1]] << " -> " << time
                 << ") using " << problem.GetName();
             problem.GetOutputHandler()->Write(out,
@@ -1202,18 +1261,33 @@ namespace DOpE
             sol.SetTimeDoFNumber(local_to_global[j], it);
             sol.GetSpacialVector() = 0;
 
-            this->GetProblem()->AddAuxiliaryToIntegrator(
-              this->GetIntegrator());
 
-	    //Transfer old solution to current mesh
-	    problem.GetSpaceTimeHandler()->TemporalMeshTransferState(u_old, local_to_global[j+1], local_to_global[j]);
-
+            if (transfer_needed)
+	    {
+	      //Auxiliary vectors need to be interpolated!
+	      this->GetProblem()->AddAuxiliaryToIntegratorWithTemporalTransfer(
+		this->GetIntegrator(),local_to_global[j+1], local_to_global[j]);
+	    }
+	    else
+	    {
+	      this->GetProblem()->AddAuxiliaryToIntegrator(
+		this->GetIntegrator());
+	    }
+    
 	    this->GetNonlinearSolver("adjoint").NonlinearLastTimeEvals(problem,
                                                                        u_old, sol.GetSpacialVector());
 
-            this->GetProblem()->DeleteAuxiliaryFromIntegrator(
-              this->GetIntegrator());
-
+            if (transfer_needed)
+	    {
+	      this->GetProblem()->DeleteAuxiliaryFromIntegratorWithTemporalTransfer(
+		this->GetIntegrator());
+	    }
+	    else
+	    {
+	      this->GetProblem()->DeleteAuxiliaryFromIntegrator(
+		this->GetIntegrator());
+	    }
+	      
             problem.SetTime(time,local_to_global[j], it);
 
             this->GetProblem()->AddAuxiliaryToIntegrator(
@@ -1237,7 +1311,6 @@ namespace DOpE
               this->GetProblem()->DeletePreviousAuxiliaryFromIntegrator(
                 this->GetIntegrator());
 
-            //TODO do a transfer to the next grid for changing spatial meshes!
             u_old = sol.GetSpacialVector();
             this->GetOutputHandler()->Write(sol.GetSpacialVector(),
                                             outname + this->GetPostIndex(), problem.GetDoFType());

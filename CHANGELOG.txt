@@ -1,5 +1,16 @@
 Changelog DOpE
 ==============
+16.01.2018: -Updated Rothe_SpaceTimeHandler, to fix wrong order of deletes in Destructor
+	    -PDEProblemContainer now has a function for adding AuxiliaryVariables which
+	     need to be transfered to a different mesh due to a change over a time step.
+	    - SpaceTimeVector now has a method to acces the values at a given time point
+	      interpolated to DoFs at a different timepoint. Further, access to the vectors
+	      by GetSpacialVector, now checks (and aborts) if a copy of this vector has been
+	      called for and not been previously unlocked.
+	    -InstatPDEProblem now correctly handles the possibility of changing meshes
+	     in time.
+	    -Updated Test for PDE/InstatPDE/Example4_TimeSpace for the new output of the
+	     ForwardTimeLoop showing mesh changes in time.
 16.12.2018: -Changed DOpEtypes::ControlType to DOpEtypes::VectorAction to
 	    allow unification of storage classes.
 	    -Updated ControlVector to be based on SpaceTimeVector.

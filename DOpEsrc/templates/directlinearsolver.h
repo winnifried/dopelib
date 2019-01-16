@@ -159,11 +159,11 @@ namespace DOpE
       VECTOR &solution,
       bool force_matrix_build)
   {
-    if (force_matrix_build)
+     if (force_matrix_build)
       {
         integr.ComputeMatrix (pde,matrix_);
       }
-
+    
     if (A_direct_ == NULL)
       {
         A_direct_ = new dealii::SparseDirectUMFPACK;
