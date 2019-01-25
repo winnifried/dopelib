@@ -131,6 +131,26 @@ namespace DOpE
      */
     void ComputeReducedFunctionals();
 
+    /******************************************************/
+    
+    /**
+     * This function computes the solution for the dual variable
+     * for error estimation.
+     *
+     * I is assumed that the state u(q) corresponding to
+     * the argument q is already calculated.
+     *
+     * @param weight_comp  A flag deciding how the weights should be calculated
+     */
+    void
+      ComputeDualForErrorEstimation(DOpEtypes::WeightComputation)
+    {
+      throw DOpEException("ExcNotImplemented",
+			  "InstatPDEProblem::ComputeDualForErrorEstimation");
+    }
+
+
+    /******************************************************/
 
     /**
      * Computes the error indicators for the error of a previosly
