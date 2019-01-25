@@ -260,8 +260,9 @@ namespace DOpE
     const dealii::ConstraintMatrix &
     GetStateDoFConstraints(unsigned int time_point = std::numeric_limits<unsigned int>::max()) const
     {
-      assert(time_point == std::numeric_limits<unsigned int>::max() || time_point == this->GetTimeDoFNumber());
-      if(this->GetTimeDoFNumber() > time_to_dofhandler_.size() || this->GetTimeDoFNumber() == std::numeric_limits<unsigned int>::max())
+      if(this->GetTimeDoFNumber() > time_to_dofhandler_.size() || this->GetTimeDoFNumber() == std::numeric_limits<unsigned int>::max()
+	 || (time_point != std::numeric_limits<unsigned int>::max() && time_point != this->GetTimeDoFNumber())
+	)
       {
 	throw DOpEException("Invalid Timepoint", "Rothe_SpaceTimeHandler::GetStateDoFConstraints");
       }
@@ -318,8 +319,9 @@ namespace DOpE
      */
     const std::vector<unsigned int>* GetNNeighbourElements(unsigned int time_point = std::numeric_limits<unsigned int>::max())
     {
-      assert(time_point == std::numeric_limits<unsigned int>::max() || time_point == this->GetTimeDoFNumber());
-      if(this->GetTimeDoFNumber() > time_to_dofhandler_.size() || this->GetTimeDoFNumber() == std::numeric_limits<unsigned int>::max())
+      if(this->GetTimeDoFNumber() > time_to_dofhandler_.size() || this->GetTimeDoFNumber() == std::numeric_limits<unsigned int>::max()
+	 || (time_point != std::numeric_limits<unsigned int>::max() && time_point != this->GetTimeDoFNumber())
+	)
       {
 	throw DOpEException("Invalid Timepoint", "Rothe_SpaceTimeHandler::GetNNeighbourElements");
       }
