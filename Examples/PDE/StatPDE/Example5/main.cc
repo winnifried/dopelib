@@ -286,9 +286,7 @@ main(int argc, char **argv)
           //For global mesh refinement, uncomment the next line
           // DOFH.RefineSpace(DOpEtypes::RefinementType::global); //or just DOFH.RefineSpace()
 
-          Vector<float> error_ind(dwrc.GetErrorIndicators());
-          for (unsigned int i = 0; i < error_ind.size(); i++)
-            error_ind(i) = std::fabs(error_ind(i));
+          Vector<float> error_ind(dwrc.GetErrorIndicators()[0]);
 
           DOFH.RefineSpace(RefineOptimized(error_ind));
           //There are other mesh refinement strategies implemented, for example

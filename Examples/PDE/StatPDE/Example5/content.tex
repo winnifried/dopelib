@@ -110,12 +110,17 @@ we compute the error indicators by calling
 \begin{verbatim}
 solver.ComputeRefinementIndicators(dwrc);
 \end{verbatim}
-We can now get the error indicators (with signs!) out of \texttt{dwrc} by 
+We can now get the error indicators out of \texttt{dwrc} by 
 \begin{verbatim}
-dwrc.GetErrorIndicators();
+dwrc.GetErrorIndicators()[0];
 \end{verbatim}
-With these indicators, we are now able to refine our grid adaptively (there are several mesh adaption strategies implemented, like 'RefineOptimized', 'RefineFixedNumber' or 'RefineFixedFraction')
+With these indicators\footnote{In contrast to DOpElib 3.0 and earlier, GetErrorIndicators()
+  already returns non-negative values, so no additional manipulations
+  are needed. However, note that the values of GetError() have been
+  obtained by summing over the signed indices, hence the value of
+  GetError() can be smaller than the sum of the ErrorIndicators.
+}, we are now able to refine our grid adaptively (there are several mesh adaption strategies implemented, like 'RefineOptimized', 'RefineFixedNumber' or 'RefineFixedFraction')
 \begin{verbatim}
-DOFH.RefineSpace(RefineOptimized(optimized, error_ind));
+DOFH.RefineSpace(RefineOptimized(error_ind));
 \end{verbatim}
-Note, that one has to take the norm of each entry in the vector of the error indicators before feeding them into the \texttt{RefineSpace} method.
+

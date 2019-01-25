@@ -647,16 +647,8 @@ namespace DOpE
 	  this->GetProblem()->SetTime(times[local_to_global[1]], local_to_global[1], it);
 	  GetU().SetTimeDoFNumber(local_to_global[1], it);
 	  dwrc.SetTime(local_to_global[1]);
-	  //first we reinit the dwrdatacontainer (this
-	  //sets the weight-vectors to their correct length)
-#if DEAL_II_VERSION_GTE(8,4,0)
-	  const unsigned int n_elements =
-	    this->GetProblem()->GetSpaceTimeHandler()->GetStateDoFHandler().get_triangulation().n_active_cells();
-#else
-	  const unsigned int n_elements =
-	    this->GetProblem()->GetSpaceTimeHandler()->GetStateDoFHandler().get_tria().n_active_cells();
-#endif
-	  dwrc.ReInit(n_elements);
+	  //first we reinit the dwrdatacontainer
+	  dwrc.ReInit();
 	  //If we need the dual solution, compute it
 	  if (dwrc.NeedDual())
 	    this->ComputeDualForErrorEstimation(dwrc.GetWeightComputation());

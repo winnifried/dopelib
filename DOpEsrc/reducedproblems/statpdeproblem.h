@@ -854,16 +854,8 @@ namespace DOpE
                              boost::mem_fn(&DWRC::ResidualModifier), boost::ref(dwrc), _1);
     pde.VectorResidualModifier = boost::bind<void>(
                                    boost::mem_fn(&DWRC::VectorResidualModifier), boost::ref(dwrc), _1);
-    //first we reinit the dwrdatacontainer (this
-    //sets the weight-vectors to their correct length)
-#if DEAL_II_VERSION_GTE(8,4,0)
-    const unsigned int n_elements =
-      this->GetProblem()->GetSpaceTimeHandler()->GetStateDoFHandler().get_triangulation().n_active_cells();
-#else
-    const unsigned int n_elements =
-      this->GetProblem()->GetSpaceTimeHandler()->GetStateDoFHandler().get_tria().n_active_cells();
-#endif
-    dwrc.ReInit(n_elements);
+    //first we reinit the dwrdatacontainer 
+    dwrc.ReInit();
     //If we need the dual solution, compute it
     if (dwrc.NeedDual())
       this->ComputeDualForErrorEstimation(dwrc.GetWeightComputation());
@@ -925,11 +917,9 @@ namespace DOpE
 
     // release the lock on the refinement indicators (see dwrcontainer.h)
     dwrc.ReleaseLock();
-
-    const float error = dwrc.GetError();
-
     // clear the data
     dwrc.ClearWeightData();
+
     this->GetIntegrator().DeleteDomainData("state");
     if (dwrc.NeedDual())
       this->GetIntegrator().DeleteDomainData("adjoint_for_ee");
@@ -954,9 +944,9 @@ namespace DOpE
     out << "Error estimate using " << dwrc.GetName();
     if (dwrc.NeedDual())
       out << " for the " << this->GetProblem()->GetFunctionalName();
-    out << ": " << error;
+    out << ": " << dwrc.GetError();
     this->GetOutputHandler()->Write(out, 2 + this->GetBasePriority());
-    this->GetOutputHandler()->WriteElementwise(dwrc.GetErrorIndicators(),
+    this->GetOutputHandler()->WriteElementwise(dwrc.GetErrorIndicators()[0],
                                                "Error_Indicators" + this->GetPostIndex(),
                                                this->GetProblem()->GetDoFType());
 

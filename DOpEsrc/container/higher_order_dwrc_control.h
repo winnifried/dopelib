@@ -125,7 +125,7 @@ namespace DOpE
      * as well as the weight-vectors.
      */
     void
-    ReInit(unsigned int n_elements);
+    ReInit();
 
     STH &
     GetWeightSTH()
@@ -390,10 +390,9 @@ namespace DOpE
 
   template<class STH, class IDC, class EDC, class FDC, typename VECTOR>
   void
-  HigherOrderDWRContainerControl<STH, IDC, EDC, FDC, VECTOR>::ReInit(
-    unsigned int n_elements)
+  HigherOrderDWRContainerControl<STH, IDC, EDC, FDC, VECTOR>::ReInit()
   {
-    DWRDataContainer<STH, IDC, EDC, FDC, VECTOR>::ReInit(n_elements);
+    DWRDataContainer<STH, IDC, EDC, FDC, VECTOR>::ReInit(GetSTH());
 
     GetHigherOrderSTH().ReInit(control_n_blocks_, *control_block_component_,DirichletDescriptor(*control_dirichlet_colors_,*control_dirichlet_comps_), state_n_blocks_, *state_block_component_,DirichletDescriptor(*state_dirichlet_colors_,*state_dirichlet_comps_));
     if (this->GetEETerms() == DOpEtypes::primal_only

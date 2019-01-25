@@ -132,7 +132,7 @@ namespace DOpE
      * as well as the weight-vectors.
      */
     void
-    ReInit(unsigned int n_elements);
+    ReInit();
 
     StateVector<VECTOR> &
     GetPI_h_u()
@@ -272,9 +272,9 @@ namespace DOpE
 
   template<class STH, typename VECTOR, int dim>
   void
-  L2ResidualErrorContainer<STH, VECTOR, dim>::ReInit(unsigned int n_elements)
+  L2ResidualErrorContainer<STH, VECTOR, dim>::ReInit()
   {
-    DWRDataContainerBase<VECTOR>::ReInit(n_elements);
+    DWRDataContainerBase<VECTOR>::ReInit(GetSTH());
 
     if (this->GetEETerms() == DOpEtypes::primal_only
         || this->GetEETerms() == DOpEtypes::mixed)
@@ -347,7 +347,7 @@ namespace DOpE
      * as well as the weight-vectors.
      */
     void
-    ReInit(unsigned int n_elements);
+    ReInit();
 
     StateVector<VECTOR> &
     GetPI_h_u()
@@ -486,9 +486,9 @@ namespace DOpE
 
   template<class STH, typename VECTOR, int dim>
   void
-  H1ResidualErrorContainer<STH, VECTOR, dim>::ReInit(unsigned int n_elements)
+  H1ResidualErrorContainer<STH, VECTOR, dim>::ReInit()
   {
-    DWRDataContainerBase<VECTOR>::ReInit(n_elements);
+    DWRDataContainerBase<VECTOR>::ReInit(GetSTH());
 
     if (this->GetEETerms() == DOpEtypes::primal_only
         || this->GetEETerms() == DOpEtypes::mixed)
