@@ -496,7 +496,7 @@ namespace DOpE
 
   template<typename VECTOR>
   void
-  DOpEOutputHandler<VECTOR>::WriteElementwise(const Vector<double> &q,
+  DOpEOutputHandler<VECTOR>::WriteElementwise(const Vector<float> &q,
                                               std::string name, std::string dof_type)
   {
     if (AllowWrite(name))

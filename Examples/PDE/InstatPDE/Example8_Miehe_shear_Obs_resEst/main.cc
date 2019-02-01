@@ -386,7 +386,7 @@ main(int argc, char **argv)
     }
       if (i != max_iter - 1)
         {
-          const std::vector<dealii::Vector<double> > error_ind(resc.GetErrorIndicators());
+          const std::vector<dealii::Vector<float> > error_ind(resc.GetErrorIndicators());
 	  //std::cout << "main.cc: after error ind1 " << error_ind[5](5) << std::endl;
 	  
           DOFH.RefineSpace(SpaceTimeRefineOptimized(error_ind));

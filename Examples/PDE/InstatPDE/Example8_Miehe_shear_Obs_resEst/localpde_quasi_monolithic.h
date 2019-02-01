@@ -525,74 +525,75 @@ public:
     StrongElementResidual(const EDC<DH, VECTOR, dealdim> &edc,
 			  const EDC<DH, VECTOR, dealdim> &edc_w, double &sum, double scale)
   {
-    
-    unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();       
-    unsigned int n_q_points = edc.GetNQPoints();
-    const DOpEWrapper::FEValues<dealdim> &state_fe_values =
-      edc.GetFEValuesState();
-    
-    double element_diameter = edc.GetElementDiameter();
-    double eps_pf;
-    eps_pf = element_diameter* alpha_eps_;
+    if( this->GetTime() != 0.0 )
+    {
+      unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();       
+      unsigned int n_q_points = edc.GetNQPoints();
+      const DOpEWrapper::FEValues<dealdim> &state_fe_values =
+	edc.GetFEValuesState();
+      
+      double element_diameter = edc.GetElementDiameter();
+      double eps_pf;
+      eps_pf = element_diameter* alpha_eps_;
    
- 
-    fvalues_.resize(n_q_points);
-    
-    PI_h_z_.resize(n_q_points, Vector<double>(4));
-    lap_pf_.resize(n_q_points, Vector<double>(4));
-    uvalues_.resize(n_q_points, Vector<double>(4));
-    last_timestep_uvalues_.resize(n_q_points, Vector<double>(4));
-    
-    // zur Berechnung der Energie als Faktor
-    ugrads_.resize(n_q_points, vector<Tensor<1, 2> >(4));
-    
-    auxvalues_.resize(n_q_points, Vector<double>(4));
-    edc.GetLaplaciansState("state", lap_pf_);
-    edc.GetValuesState("state", uvalues_);
-    edc.GetGradsState("state", ugrads_);
-    edc.GetValuesState("last_time_state", last_timestep_uvalues_);    
-    edc_w.GetValuesState("weight_for_primal_residual", PI_h_z_);
-    
-    //aux_error_0 contains the data computed by evaluating
-    //*AuxRhs. Here this means
-    //Component 0 is the contact information
-    //Component 1 is the mass matrix diagonal
-    edc.GetValuesState("aux_error_0", auxvalues_);
-   
-    const FEValuesExtractors::Vector displacements(0);
-    const FEValuesExtractors::Scalar phasefield(2);
-    const FEValuesExtractors::Scalar multiplier(3);
-
-    // weight the residual depending on the contact status 
-    int fullContact =0;
-    // need localSum as in sum everything in summed up 
-    double elemRes = 0;
-    double complRes = 0;
-    
-    Tensor<2,2> Identity;
-    Identity[0][0] = 1.0;
-    Identity[1][1] = 1.0;
-    
-    Tensor<2,2> zero_matrix;
-    zero_matrix.clear();
-    
+      
+      fvalues_.resize(n_q_points);
+      
+      PI_h_z_.resize(n_q_points, Vector<double>(4));
+      lap_pf_.resize(n_q_points, Vector<double>(4));
+      uvalues_.resize(n_q_points, Vector<double>(4));
+      last_timestep_uvalues_.resize(n_q_points, Vector<double>(4));
+      
+      // zur Berechnung der Energie als Faktor
+      ugrads_.resize(n_q_points, vector<Tensor<1, 2> >(4));
+      
+      auxvalues_.resize(n_q_points, Vector<double>(4));
+      edc.GetLaplaciansState("state", lap_pf_);
+      edc.GetValuesState("state", uvalues_);
+      edc.GetGradsState("state", ugrads_);
+      edc.GetValuesState("last_time_state", last_timestep_uvalues_);    
+      edc_w.GetValuesState("weight_for_primal_residual", PI_h_z_);
+      
+      //aux_error_0 contains the data computed by evaluating
+      //*AuxRhs. Here this means
+      //Component 0 is the contact information
+      //Component 1 is the mass matrix diagonal
+      edc.GetValuesState("aux_error_0", auxvalues_);
+      
+      const FEValuesExtractors::Vector displacements(0);
+      const FEValuesExtractors::Scalar phasefield(2);
+      const FEValuesExtractors::Scalar multiplier(3);
+      
+      // weight the residual depending on the contact status 
+      int fullContact =0;
+      // need localSum as in sum everything in summed up 
+      double elemRes = 0;
+      double complRes = 0;
+      
+      Tensor<2,2> Identity;
+      Identity[0][0] = 1.0;
+      Identity[1][1] = 1.0;
+      
+      Tensor<2,2> zero_matrix;
+      zero_matrix.clear();
+      
     //make sure the binding of the function has worked
-    assert(this->ResidualModifier);
-    for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
+      assert(this->ResidualModifier);
+      for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
       {
 	// dofs not nodes
 	for (unsigned int i = 0; i < n_dofs_per_element; i++)
-	  {
-	    if(fabs(state_fe_values[phasefield].value(i,q_point) - 1.) < std::numeric_limits<double>::epsilon())
-	      {		
-     		if (fabs(auxvalues_[q_point](2)-1.)< std::numeric_limits<double>::epsilon())
-		  {
-		    //count how many nodes of the element are in full-contact
-		    fullContact += 1;		   
-		    
-    		  }
-    	      }
-    	  }
+	{
+	  if(fabs(state_fe_values[phasefield].value(i,q_point) - 1.) < std::numeric_limits<double>::epsilon())
+	  {		
+	    if (fabs(auxvalues_[q_point](2)-1.)< std::numeric_limits<double>::epsilon())
+	    {
+	      //count how many nodes of the element are in full-contact
+	      fullContact += 1;		   
+	      
+	    }
+	  }
+	}
 	
 	
 	// displacements gradient local
@@ -609,7 +610,7 @@ public:
         u[0] = uvalues_[q_point](0);
         u[1] = uvalues_[q_point](1);
 	
-
+	
 	// Youngs modulus
         const Tensor<2,2> E = 0.5 * (grad_u + transpose(grad_u));
 	const double tr_E = trace(E);
@@ -623,40 +624,40 @@ public:
         Tensor<2,2> stress_term_minus;
         stress_term_plus.clear();
 	stress_term_minus.clear();
-
+	
 	// Necessary because stress splitting does not work
         // in the very initial time step.	
 	if (this->GetTime() > 0.005) // to avoid zero matrices in the null lines of the loading
-          {
-	    
-	    decompose_stress(stress_term_plus, stress_term_minus,
-                             E, tr_E, zero_matrix , 0.0,
-                             lame_coefficient_lambda_,
-                             lame_coefficient_mu_, false);
-
-	  }
+	{
+	  
+	  decompose_stress(stress_term_plus, stress_term_minus,
+			   E, tr_E, zero_matrix , 0.0,
+			   lame_coefficient_lambda_,
+			   lame_coefficient_mu_, false);
+	  
+	}
 	else if (this->GetTime() == 0.001)
-	  {
-	    //std::cout << "First timestep no stress splitting!" << std::endl;
-	    stress_term_plus = stress_term;
-	    stress_term_minus = 0;
-	  }
+	{
+	  //std::cout << "First timestep no stress splitting!" << std::endl;
+	  stress_term_plus = stress_term;
+	  stress_term_minus = 0;
+	}
 	else
-	  {
-	    //std::cout << "Current step with nu = 0.18.." << std::endl;
-	    decompose_stress(stress_term_plus, stress_term_minus,
-                             E, tr_E, zero_matrix , 0.0,
-                             121150.0,
-                             lame_coefficient_mu_, false);
-	  }
+	{
+	  //std::cout << "Current step with nu = 0.18.." << std::endl;
+	  decompose_stress(stress_term_plus, stress_term_minus,
+			   E, tr_E, zero_matrix , 0.0,
+			   121150.0,
+			   lame_coefficient_mu_, false);
+	}
 	
 	fvalues_[q_point] = local::rhs(state_fe_values.quadrature_point(q_point)); //rhs sollte in functions.h implementiert sein 
 	double res;
-
+	
 	double weightEnergy;
 	weightEnergy = scalar_product(stress_term_plus, E);
 	//	std::cout << weightEnergy << std::endl;
-       
+	
 	res =  G_c_*fvalues_[q_point] + G_c_*eps_pf*eps_pf*lap_pf_[q_point](2) - G_c_*uvalues_[q_point](2)- 
 	  eps_pf*(1-constant_k_)*weightEnergy*uvalues_[q_point](2);
 	
@@ -671,41 +672,45 @@ public:
 	res = res *res * std::min((meshsize/(G_c_*eps_pf*eps_pf)),1/(G_c_ + eps_pf*(1-constant_k_)*weightEnergy));
 	elemRes += scale * (res * PI_h_z_[q_point](2))
 	  * state_fe_values.JxW(q_point);
-
+	
       }
-     elemRes = elemRes*(4-fullContact);
-
-    
-    for (unsigned int q = 0; q < n_q_points; q++)
+      elemRes = elemRes*(4-fullContact);
+      
+      
+      for (unsigned int q = 0; q < n_q_points; q++)
       {
 	// dofs not nodes
 	for (unsigned int i = 0; i < n_dofs_per_element; i++)
+	{
+	  // test if q = i (Knoten)
+	  if(fabs(state_fe_values[phasefield].value(i,q) - 1.) < std::numeric_limits<double>::epsilon())
 	  {
-	    // test if q = i (Knoten)
-	    if(fabs(state_fe_values[phasefield].value(i,q) - 1.) < std::numeric_limits<double>::epsilon())
+	    // if q is no full contact
+	    if (fabs(auxvalues_[q](2)-1.)>std::numeric_limits<double>::epsilon())
+	      // but if q is in contact
+	    {
+	      if(uvalues_[q](3) > 0 )
 	      {
-		// if q is no full contact
-		if (fabs(auxvalues_[q](2)-1.)>std::numeric_limits<double>::epsilon())
-		  // but if q is in contact
-		  {
-		    if(uvalues_[q](3) > 0 )
-		      {
-			//we have a semi contact node
-			// real quadrature loop
-			for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
-			  {
-			    //multiply with eps_pf da hier andere Gleichung geloest wird??
-			    complRes += eps_pf*uvalues_[q](3)*(fabs(last_timestep_uvalues_[q_point][2]-uvalues_[q_point][2]))*state_fe_values[phasefield].value(i,q_point)*state_fe_values.JxW(q_point);
-			  }
-		      }
-		  }
+		//we have a semi contact node
+		// real quadrature loop
+		for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
+		{
+		  //multiply with eps_pf da hier andere Gleichung geloest wird??
+		  complRes += eps_pf*uvalues_[q](3)*(fabs(last_timestep_uvalues_[q_point][2]-uvalues_[q_point][2]))*state_fe_values[phasefield].value(i,q_point)*state_fe_values.JxW(q_point);
+		}
 	      }
+	    }
 	  }
+	}
       }
-    
-    sum += elemRes;
-    sum += complRes;
-    
+      
+      sum += elemRes;
+      sum += complRes;
+    }//End of if time == 0.0
+    else
+    {
+      //Whatever error estimate we want to have for the initial_values
+    }
   }
   
 
@@ -716,77 +721,80 @@ public:
 		       const FaceDataContainer<dealii::DoFHandler, VECTOR, dealdim> &fdc_w,
 		       double &sum, double scale)
   {
-    unsigned int n_dofs_per_element = fdc.GetNDoFsPerElement();          
-    unsigned int n_q_points = fdc.GetNQPoints();
-    // auto findet selber heraus ?
-    const  auto &state_fe_values = fdc.GetFEFaceValuesState();
+    if( this->GetTime() != 0.0 )
+    {
+      unsigned int n_dofs_per_element = fdc.GetNDoFsPerElement();          
+      unsigned int n_q_points = fdc.GetNQPoints();
+      // auto findet selber heraus ?
+      const  auto &state_fe_values = fdc.GetFEFaceValuesState();
+      
+      double element_diameter = fdc.GetElementDiameter();
+      double eps_pf;
+      eps_pf = element_diameter* alpha_eps_;
+      
+      ugrads_.resize(n_q_points, std::vector<Tensor<1, dealdim> >(4));
+      ugrads_nbr_.resize(n_q_points, std::vector<Tensor<1, dealdim> >(4));
+      PI_h_z_.resize(n_q_points, Vector<double>(4));
+      auxvalues_.resize(n_q_points, Vector<double>(4));
+     
+      fdc.GetFaceValuesState("aux_error_0", auxvalues_);
+      
+      fdc.GetFaceGradsState("state", ugrads_);
+      fdc.GetNbrFaceGradsState("state", ugrads_nbr_);
+      fdc_w.GetFaceValuesState("weight_for_primal_residual", PI_h_z_);
+      vector<double> jump(n_q_points);
     
-    double element_diameter = fdc.GetElementDiameter();
-    double eps_pf;
-    eps_pf = element_diameter* alpha_eps_;
-    
-    ugrads_.resize(n_q_points, std::vector<Tensor<1, dealdim> >(4));
-    ugrads_nbr_.resize(n_q_points, std::vector<Tensor<1, dealdim> >(4));
-    PI_h_z_.resize(n_q_points, Vector<double>(4));
-    
-    fdc.GetFaceValuesState("aux_error_0", auxvalues_);
-   
-    fdc.GetFaceGradsState("state", ugrads_);
-    fdc.GetNbrFaceGradsState("state", ugrads_nbr_);
-    fdc_w.GetFaceValuesState("weight_for_primal_residual", PI_h_z_);
-    vector<double> jump(n_q_points);
-    
-    const FEValuesExtractors::Scalar phasefield(2);
-   
-    Tensor<2,2> Identity;
-    Identity[0][0] = 1.0;
-    Identity[1][1] = 1.0;
-    
-    Tensor<2,2> zero_matrix;
-    zero_matrix.clear();
-
-    // weight the face residual depending on the contact status of the nodes
-    int fullContact = 0;
-    // need localSum as in sum everything is summed up also the element residual
-    double localSum = 0;
- 
-    for (unsigned int q = 0; q < n_q_points; q++)
+      const FEValuesExtractors::Scalar phasefield(2);
+      
+      Tensor<2,2> Identity;
+      Identity[0][0] = 1.0;
+      Identity[1][1] = 1.0;
+      
+      Tensor<2,2> zero_matrix;
+      zero_matrix.clear();
+      
+      // weight the face residual depending on the contact status of the nodes
+      int fullContact = 0;
+      // need localSum as in sum everything is summed up also the element residual
+      double localSum = 0;
+      
+      for (unsigned int q = 0; q < n_q_points; q++)
       {
 	// phase field gradient
         Tensor<1,2> grad_pf;
         grad_pf.clear();
         grad_pf[0] = ugrads_[q][2][0];
         grad_pf[1] = ugrads_[q][2][1];
-
+	
 	// phase field gradient of neighbour
         Tensor<1,2> grad_pf_nbr;
         grad_pf_nbr.clear();
         grad_pf_nbr[0] = ugrads_nbr_[q][2][0];
         grad_pf_nbr[1] = ugrads_nbr_[q][2][1];
 
-	 jump[q] = G_c_*eps_pf*eps_pf*(grad_pf_nbr[0] - grad_pf[0])
-                  * fdc.GetFEFaceValuesState().normal_vector(q)[0]
-                  + G_c_*eps_pf*eps_pf*(grad_pf_nbr[1] - grad_pf[1])
-                  * fdc.GetFEFaceValuesState().normal_vector(q)[1];
-      
+	jump[q] = G_c_*eps_pf*eps_pf*(grad_pf_nbr[0] - grad_pf[0])
+	  * fdc.GetFEFaceValuesState().normal_vector(q)[0]
+	  + G_c_*eps_pf*eps_pf*(grad_pf_nbr[1] - grad_pf[1])
+	  * fdc.GetFEFaceValuesState().normal_vector(q)[1];
+	
 	// dofs not nodes
    	for (unsigned int i = 0; i < n_dofs_per_element; i++)
+	{
+	  if(fabs(state_fe_values[phasefield].value(i,q) - 1.) < std::numeric_limits<double>::epsilon())
 	  {
-	    if(fabs(state_fe_values[phasefield].value(i,q) - 1.) < std::numeric_limits<double>::epsilon())
-	      {
-		if (fabs(auxvalues_[q](2)-1.)< std::numeric_limits<double>::epsilon())
-		  {
-		    //count how many nodes of the element are in full-contact
+	    if (fabs(auxvalues_[q](2)-1.)< std::numeric_limits<double>::epsilon())
+	    {
+	      //count how many nodes of the element are in full-contact
 		    fullContact += 1;		   
 		    
-		  }
-	      }
+	    }
 	  }
+	}
       }
-    //make sure the binding of the function has worked
-    assert(this->ResidualModifier);
+      //make sure the binding of the function has worked
+      assert(this->ResidualModifier);
 
-    for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
+      for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
       {
         //Modify the residual as required by the error estimator
         double res;
@@ -801,65 +809,69 @@ public:
         grad_u[1][0] = ugrads_[q_point][1][0];
         grad_u[1][1] = ugrads_[q_point][1][1];
 	
-
+	
 	// Youngs modulus
         const Tensor<2,2> E = 0.5 * (grad_u + transpose(grad_u));
 	const double tr_E = trace(E);
-
+	
         Tensor<2,2> stress_term;
         stress_term.clear();
         stress_term = lame_coefficient_lambda_ * tr_E * Identity
-                      + 2 * lame_coefficient_mu_ * E;
-
+	  + 2 * lame_coefficient_mu_ * E;
+	
 	Tensor<2,2> stress_term_plus;
         Tensor<2,2> stress_term_minus;
         stress_term_plus.clear();
 	stress_term_minus.clear();
-
+	
 	// Necessary because stress splitting does not work
         // in the very initial time step.	
 	if (this->GetTime() > 0.005) // to avoid zero matrices in the null lines of the loading
-          {
-	    
-	    decompose_stress(stress_term_plus, stress_term_minus,
-                             E, tr_E, zero_matrix , 0.0,
-                             lame_coefficient_lambda_,
-                             lame_coefficient_mu_, false);
-
-	  }
+	{
+	  
+	  decompose_stress(stress_term_plus, stress_term_minus,
+			   E, tr_E, zero_matrix , 0.0,
+			   lame_coefficient_lambda_,
+			   lame_coefficient_mu_, false);
+	  
+	}
 	else if (this->GetTime() == 0.001)
-	  {
-	    //std::cout << "First timestep no stress splitting!" << std::endl;
-	    stress_term_plus = stress_term;
-	    stress_term_minus = 0;
-	  }
+	{
+	  //std::cout << "First timestep no stress splitting!" << std::endl;
+	  stress_term_plus = stress_term;
+	  stress_term_minus = 0;
+	}
 	else
-	  {
-	    //std::cout << "Current step with nu = 0.18.." << std::endl;
-	    decompose_stress(stress_term_plus, stress_term_minus,
-                             E, tr_E, zero_matrix , 0.0,
-                             121150.0,
-                             lame_coefficient_mu_, false);
-	  }
-
+	{
+	  //std::cout << "Current step with nu = 0.18.." << std::endl;
+	  decompose_stress(stress_term_plus, stress_term_minus,
+			   E, tr_E, zero_matrix , 0.0,
+			   121150.0,
+			   lame_coefficient_mu_, false);
+	}
+	
 	double weightEnergy;
 	weightEnergy = scalar_product(stress_term_plus, E);
-
+	
 	double meshsize;
 	meshsize =1.0;
 	// h ist die Diagonale und bei Seiten wird h zurueckgegeben
 	this->ResidualModifier(meshsize);
 	//weighting according to eps
 	res = res *res * min(meshsize/(sqrt(G_c_)*(eps_pf)),1/(sqrt(G_c_ + eps_pf*(1-constant_k_)*weightEnergy)))*(1/(sqrt(G_c_)*eps_pf));
-
+	
 	
         localSum += scale * (res * PI_h_z_[q_point](0))
-               * fdc.GetFEFaceValuesState().JxW(q_point);
+	  * fdc.GetFEFaceValuesState().JxW(q_point);
       }
-    localSum = (2.0-fullContact)*localSum;
-    
-         sum += localSum;
-  
+      localSum = (2.0-fullContact)*localSum;
+      
+      sum += localSum;
+    }
+    else
+    {
+      //Whatever if time == 0.0
+    }
   }
    
   
@@ -869,77 +881,80 @@ public:
 			   const FaceDataContainer<dealii::DoFHandler, VECTOR, dealdim> &fdc_w,
 			   double &sum, double scale)
   {
-    unsigned int n_q_points = fdc.GetNQPoints();
-    unsigned int n_dofs_per_element = fdc.GetNDoFsPerElement();          
+    if( this->GetTime() != 0.0 )
+    {
+      unsigned int n_q_points = fdc.GetNQPoints();
+      unsigned int n_dofs_per_element = fdc.GetNDoFsPerElement();          
+      
+      // auto findet selber heraus ?
+      const  auto &state_fe_values = fdc.GetFEFaceValuesState();
+      
+      double element_diameter = fdc.GetElementDiameter();
+      double eps_pf;
+      eps_pf = element_diameter* alpha_eps_;
+      
+      ugrads_.resize(n_q_points, std::vector<Tensor<1, dealdim> >(4));
+      //ugrads_nbr_.resize(n_q_points, std::vector<Tensor<1, dealdim> >(4));
+      PI_h_z_.resize(n_q_points, Vector<double>(4));
+      auxvalues_.resize(n_q_points, Vector<double>(4));
     
-    // auto findet selber heraus ?
-    const  auto &state_fe_values = fdc.GetFEFaceValuesState();
-  
-    double element_diameter = fdc.GetElementDiameter();
-    double eps_pf;
-    eps_pf = element_diameter* alpha_eps_;
-    
-    ugrads_.resize(n_q_points, std::vector<Tensor<1, dealdim> >(4));
-    //ugrads_nbr_.resize(n_q_points, std::vector<Tensor<1, dealdim> >(4));
-    PI_h_z_.resize(n_q_points, Vector<double>(4));
-    
-    fdc.GetFaceValuesState("aux_error_0", auxvalues_);
- 
-    fdc.GetFaceGradsState("state", ugrads_);
-    //fdc.GetNbrFaceGradsState("state", ugrads_nbr_);
-    fdc_w.GetFaceValuesState("weight_for_primal_residual", PI_h_z_);
-    vector<double> jump(n_q_points);
-    
-    const FEValuesExtractors::Scalar phasefield(2);
-
-    Tensor<2,2> Identity;
-    Identity[0][0] = 1.0;
-    Identity[1][1] = 1.0;
-  
-    Tensor<2,2> zero_matrix;
-    zero_matrix.clear();
-
-    // weight the face residual depending on the contact status of the nodes
-    int fullContact = 0;
-    // need localSum as in sum everything is summed up also the element residual
-    double localSum = 0;
-
-    
-    for (unsigned int q = 0; q < n_q_points; q++)
+      fdc.GetFaceValuesState("aux_error_0", auxvalues_);
+      
+      fdc.GetFaceGradsState("state", ugrads_);
+      //fdc.GetNbrFaceGradsState("state", ugrads_nbr_);
+      fdc_w.GetFaceValuesState("weight_for_primal_residual", PI_h_z_);
+      vector<double> jump(n_q_points);
+      
+      const FEValuesExtractors::Scalar phasefield(2);
+      
+      Tensor<2,2> Identity;
+      Identity[0][0] = 1.0;
+      Identity[1][1] = 1.0;
+      
+      Tensor<2,2> zero_matrix;
+      zero_matrix.clear();
+      
+      // weight the face residual depending on the contact status of the nodes
+      int fullContact = 0;
+      // need localSum as in sum everything is summed up also the element residual
+      double localSum = 0;
+      
+      
+      for (unsigned int q = 0; q < n_q_points; q++)
       {
-
+	
 	// phase field gradient
         Tensor<1,2> grad_pf;
         grad_pf.clear();
         grad_pf[0] = ugrads_[q][2][0];
         grad_pf[1] = ugrads_[q][2][1];
-
-
+	
+	
         jump[q] = G_c_*eps_pf*eps_pf*(0 - grad_pf[0])
     	  * fdc.GetFEFaceValuesState().normal_vector(q)[0]
     	  + G_c_*eps_pf*eps_pf*(0 - grad_pf[1])
     	  * fdc.GetFEFaceValuesState().normal_vector(q)[1];
-
+	
 	// dofs not nodes
 	for (unsigned int i = 0; i < n_dofs_per_element; i++)
+	{
+	  if(fabs(state_fe_values[phasefield].value(i,q) - 1.) < std::numeric_limits<double>::epsilon())
 	  {
-	    if(fabs(state_fe_values[phasefield].value(i,q) - 1.) < std::numeric_limits<double>::epsilon())
-	      {
-		if (fabs(auxvalues_[q](2)-1.)< std::numeric_limits<double>::epsilon())
-		  {
-		    //count how many nodes of the element are in full-contact
-		    fullContact += 1;		   
-		    
-		  }
-	      }
+	    if (fabs(auxvalues_[q](2)-1.)< std::numeric_limits<double>::epsilon())
+	    {
+	      //count how many nodes of the element are in full-contact
+	      fullContact += 1;		   
+	      
+	    }
 	  }
-
+	}
+	
       }
-    
-    //make sure the binding of the function has worked
-    assert(this->ResidualModifier);
-    
-    for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
+      
+      //make sure the binding of the function has worked
+      assert(this->ResidualModifier);
+      
+      for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
       {
         //Modify the residual as required by the error estimator
         double res;
@@ -953,69 +968,73 @@ public:
         grad_u[0][1] = ugrads_[q_point][0][1];
         grad_u[1][0] = ugrads_[q_point][1][0];
         grad_u[1][1] = ugrads_[q_point][1][1];
-
-
+	
+	
 	// Youngs modulus
         const Tensor<2,2> E = 0.5 * (grad_u + transpose(grad_u));
 	const double tr_E = trace(E);
-
+	
         Tensor<2,2> stress_term;
         stress_term.clear();
         stress_term = lame_coefficient_lambda_ * tr_E * Identity
-                      + 2 * lame_coefficient_mu_ * E;
-
+	  + 2 * lame_coefficient_mu_ * E;
+	
 	Tensor<2,2> stress_term_plus;
         Tensor<2,2> stress_term_minus;
         stress_term_plus.clear();
 	stress_term_minus.clear();
-
+	
 	// Necessary because stress splitting does not work
         // in the very initial time step.	
 	if (this->GetTime() > 0.005) // to avoid zero matrices in the null lines of the loading
-          {
-	    
-	    decompose_stress(stress_term_plus, stress_term_minus,
-                             E, tr_E, zero_matrix , 0.0,
-                             lame_coefficient_lambda_,
-                             lame_coefficient_mu_, false);
-
-	  }
+	{
+	  
+	  decompose_stress(stress_term_plus, stress_term_minus,
+			   E, tr_E, zero_matrix , 0.0,
+			   lame_coefficient_lambda_,
+			   lame_coefficient_mu_, false);
+	  
+	}
 	else if (this->GetTime() == 0.001)
-	  {
+	{
 	    //std::cout << "First timestep no stress splitting!" << std::endl;
-	    stress_term_plus = stress_term;
-	    stress_term_minus = 0;
-	  }
+	  stress_term_plus = stress_term;
+	  stress_term_minus = 0;
+	}
 	else
-	  {
-	    //std::cout << "Current step with nu = 0.18.." << std::endl;
-	    decompose_stress(stress_term_plus, stress_term_minus,
-                             E, tr_E, zero_matrix , 0.0,
-                             121150.0,
-                             lame_coefficient_mu_, false);
-	  }
-
+	{
+	  //std::cout << "Current step with nu = 0.18.." << std::endl;
+	  decompose_stress(stress_term_plus, stress_term_minus,
+			   E, tr_E, zero_matrix , 0.0,
+			   121150.0,
+			   lame_coefficient_mu_, false);
+	}
+	
 	double weightEnergy;
 	weightEnergy = scalar_product(stress_term_plus, E);
-
+	
 	double meshsize;
 	meshsize =1.0;
 	// h ist die Diagonale und bei Seiten wird h zurueckgegeben
 	this->ResidualModifier(meshsize);
 	//weighting according to eps
 	res = res *res * min(meshsize/(sqrt(G_c_)*(eps_pf)),1/(sqrt(G_c_ + eps_pf*(1-constant_k_)*weightEnergy)))*(1/(sqrt(G_c_)*eps_pf));
-
-
+	
+	
 	localSum += scale * (res * PI_h_z_[q_point](0))
     	  * fdc.GetFEFaceValuesState().JxW(q_point);
       }
-    
-        localSum = (2.0-fullContact)*localSum;
-    
-	      sum += localSum;
-  
-    
+      
+      localSum = (2.0-fullContact)*localSum;
+      
+      sum += localSum;
     }
+    else
+    {
+      //Whatever if time == 0.0
+    }
+
+  }
   
 /*NEU - ENDE*/
 
@@ -1067,72 +1086,78 @@ void
 		    dealii::Vector<double> &local_vector,
 		    double scale)
   {
-    unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
-    unsigned int n_q_points = edc.GetNQPoints();
-    const DOpEWrapper::FEValues<dealdim> &state_fe_values =
-      edc.GetFEValuesState();
-    
-    assert(this->problem_type_ == "aux_error");
-    assert(this->problem_type_num_ == 0);
-    //int test = this->GetTime();
-    //std::cout << test << std::endl;
-    
-    uvalues_.resize(n_q_points, Vector<double>(4));
-    last_timestep_uvalues_.resize(n_q_points, Vector<double>(4));
-    //obstacle_.resize(n_q_points, Vector<double>(4));
-
-    edc.GetValuesState("state", uvalues_);
-    // ACHTUNG: findet alte Lsg nicht
-    edc.GetValuesState("last_time_state", last_timestep_uvalues_);
-    //edc.GetValuesState("obstacle", obstacle_);
-    //std::cout << "hier" << std::endl; 
-    
-    const FEValuesExtractors::Scalar phasefield(2);
-    const FEValuesExtractors::Scalar multiplier(3);
-    
-    unsigned int contact_vertices=0;
-    //First component is full contact
-    //second is mass
-    
-    //Check if contact vertex
-    for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
+   if( this->GetTime() != 0.0 )
+    {
+      unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
+      unsigned int n_q_points = edc.GetNQPoints();
+      const DOpEWrapper::FEValues<dealdim> &state_fe_values =
+	edc.GetFEValuesState();
+      
+      assert(this->problem_type_ == "aux_error");
+      assert(this->problem_type_num_ == 0);
+      //int test = this->GetTime();
+      //std::cout << test << std::endl;
+      
+      uvalues_.resize(n_q_points, Vector<double>(4));
+      last_timestep_uvalues_.resize(n_q_points, Vector<double>(4));
+      //obstacle_.resize(n_q_points, Vector<double>(4));
+      
+      edc.GetValuesState("state", uvalues_);
+      // ACHTUNG: findet alte Lsg nicht
+      edc.GetValuesState("last_time_state", last_timestep_uvalues_);
+      //edc.GetValuesState("obstacle", obstacle_);
+      //std::cout << "hier" << std::endl; 
+      
+      const FEValuesExtractors::Scalar phasefield(2);
+      const FEValuesExtractors::Scalar multiplier(3);
+      
+      unsigned int contact_vertices=0;
+      //First component is full contact
+      //second is mass
+      
+      //Check if contact vertex
+      for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
       {
 	for (unsigned int i = 0; i < n_dofs_per_element; i++)
 	{
-	    //Only in vertices, so we check whether the u test function
-	    // is one (i.e. we are in a vertex)
-	    if(fabs(state_fe_values[phasefield].value(i,q_point) - 1.) < std::numeric_limits<double>::epsilon())
-	    {
-	      //Check if contact vertex
-	      if((uvalues_[q_point][2]-last_timestep_uvalues_[q_point][2]) >= 0.) 
-		contact_vertices++;
-	    }
-          }
-      }
-    //Now assembling the information
-    for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
-    {
-      for (unsigned int i = 0; i < n_dofs_per_element; i++)
-      {
-	//Both are vertex based, so we check if the corresponding q point is a vertex
-	//For contact, set one if all (4) vertices are in contact.
-	if(fabs(state_fe_values[phasefield].value(i,q_point) - 1.) < std::numeric_limits<double>::epsilon())
-	{
-	  unsigned int n_neig = edc.GetNNeighbourElementsOfVertex(state_fe_values.quadrature_point(q_point));
-	  if(n_neig > 0)
+	  //Only in vertices, so we check whether the u test function
+	  // is one (i.e. we are in a vertex)
+	  if(fabs(state_fe_values[phasefield].value(i,q_point) - 1.) < std::numeric_limits<double>::epsilon())
 	  {
-	    if(contact_vertices==4)
-	    {
-	      local_vector(i) += scale/n_neig;
-	    }
+	    //Check if contact vertex
+	    if((uvalues_[q_point][2]-last_timestep_uvalues_[q_point][2]) >= 0.) 
+	      contact_vertices++;
 	  }
 	}
-	//For Mass: \int_{N(x_i)} \phi_i
-	local_vector(i) += scale * state_fe_values[multiplier].value(i,q_point)
-	  * state_fe_values.JxW(q_point);
-	    
+      }
+      //Now assembling the information
+      for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
+      {
+	for (unsigned int i = 0; i < n_dofs_per_element; i++)
+	{
+	  //Both are vertex based, so we check if the corresponding q point is a vertex
+	  //For contact, set one if all (4) vertices are in contact.
+	  if(fabs(state_fe_values[phasefield].value(i,q_point) - 1.) < std::numeric_limits<double>::epsilon())
+	  {
+	    unsigned int n_neig = edc.GetNNeighbourElementsOfVertex(state_fe_values.quadrature_point(q_point));
+	    if(n_neig > 0)
+	    {
+	      if(contact_vertices==4)
+	      {
+		local_vector(i) += scale/n_neig;
+	      }
+	    }
+	  }
+	  //For Mass: \int_{N(x_i)} \phi_i
+	  local_vector(i) += scale * state_fe_values[multiplier].value(i,q_point)
+	    * state_fe_values.JxW(q_point);   
+	}
       }
     }
+   else //Time == 0
+   {
+     
+   }
   }
 
   void FaceAuxRhs(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
@@ -1152,7 +1177,7 @@ void
   UpdateFlags
   GetUpdateFlags() const
   {
-    return update_values | update_gradients | update_quadrature_points;
+    return update_values | update_gradients| update_hessians | update_quadrature_points;
   }
 
   UpdateFlags

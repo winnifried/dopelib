@@ -211,7 +211,7 @@ namespace DOpE
      *                     element-related data.
      */
     void
-    WriteToFileElementwise(const Vector<double> &v, std::string name,
+    WriteToFileElementwise(const Vector<float> &v, std::string name,
                            std::string outfile, std::string dof_type, std::string filetype);
 
     /******************************************************/
@@ -958,7 +958,7 @@ namespace DOpE
            typename VECTOR, int dealdim>
   void
   StatPDEProblem<NONLINEARSOLVER, INTEGRATOR, PROBLEM, VECTOR, dealdim>::WriteToFileElementwise(
-    const Vector<double> &v, std::string name, std::string outfile,
+    const Vector<float> &v, std::string name, std::string outfile,
     std::string dof_type, std::string filetype)
   {
     if (dof_type == "state")

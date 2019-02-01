@@ -97,7 +97,7 @@ namespace DOpE
      *  @param filetype    The filetype. Actually, *.vtk outputs are possible.
      */
     virtual void
-    WriteToFileElementwise(const Vector<double> &/*v*/, std::string /*name*/,
+    WriteToFileElementwise(const Vector<float> &/*v*/, std::string /*name*/,
                            std::string /*outfile*/, std::string /*dof_type*/,
                            std::string /*filetype*/)
     {

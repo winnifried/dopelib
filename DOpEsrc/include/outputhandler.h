@@ -142,7 +142,7 @@ namespace DOpE
      *                   Valid options are 'control' and 'state'.
      */
     void
-    WriteElementwise(const Vector<double> &q, std::string name,
+    WriteElementwise(const Vector<float> &q, std::string name,
                      std::string dof_type);
 
     /**

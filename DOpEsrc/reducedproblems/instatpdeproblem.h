@@ -202,7 +202,7 @@ namespace DOpE
      *                     element-related data.
      */
     void
-    WriteToFileElementwise(const Vector<double> &v, std::string name,
+    WriteToFileElementwise(const Vector<float> &v, std::string name,
                            std::string outfile, std::string dof_type, std::string filetype);
 
 
@@ -745,10 +745,10 @@ namespace DOpE
 	    out << "Error estimate using " << dwrc.GetName();
 	    if (dwrc.NeedDual())
 	      out << " for the " << this->GetProblem()->GetFunctionalName();
-	    out << " at time "<< times[local_to_global[1]];
+	    out << " at time "<< times[local_to_global[0]];
 	    out << ": " << step_error;
 	    this->GetOutputHandler()->Write(out, 2 + this->GetBasePriority());
-	    this->GetOutputHandler()->WriteElementwise(dwrc.GetErrorIndicators( )[local_to_global[0]],
+	    this->GetOutputHandler()->WriteElementwise(dwrc.GetStepErrorIndicators(),
 						       "Error_Indicators" + this->GetPostIndex(),
 						       this->GetProblem()->GetDoFType());
 	  }//End first intervall
@@ -860,7 +860,7 @@ namespace DOpE
 		out << " at time "<< times[local_to_global[1]];
 		out << ": " << step_error;
 	  this->GetOutputHandler()->Write(out, 2 + this->GetBasePriority());
-	  this->GetOutputHandler()->WriteElementwise(dwrc.GetErrorIndicators( )[local_to_global[1]],
+	  this->GetOutputHandler()->WriteElementwise(dwrc.GetStepErrorIndicators( ),
 						     "Error_Indicators" + this->GetPostIndex(),
 						     this->GetProblem()->GetDoFType());
 	  
@@ -1004,7 +1004,7 @@ namespace DOpE
     typename VECTOR, int dealdim>
     void
     InstatPDEProblem<NONLINEARSOLVER, INTEGRATOR, PROBLEM, VECTOR, dealdim>::WriteToFileElementwise(
-												    const Vector<double> &v, std::string name, std::string outfile,
+												    const Vector<float> &v, std::string name, std::string outfile,
 												    std::string dof_type, std::string filetype)
     {
       if (dof_type == "state")
