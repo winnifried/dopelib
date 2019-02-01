@@ -1542,9 +1542,7 @@ void Integrator<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::
       for (unsigned int l = 0; l < n_error_comps; l++) {
         dwrc.GetErrorIndicators(l)(element_index) = element_sum[l];
       }
-      // dwrc.GetPrimalErrorIndicators()(element_index) =
-      // element_sum[0]; dwrc.GetDualErrorIndicators()(element_index) =
-      // element_sum[1];
+
       element_sum.clear();
       element_sum.resize(n_error_comps, 0);
 
@@ -1722,12 +1720,6 @@ void Integrator<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::
                 face_integrals[element[0]->face(face_no)->vertex_index()][l];
 #endif
           }
-          //              dwrc.GetPrimalErrorIndicators()(present_element)
-          //              +=
-          //              face_integrals[element[0]->face(face_no)][0];
-          //              dwrc.GetDualErrorIndicators()(present_element)
-          //              +=
-          //              face_integrals[element[0]->face(face_no)][1];
         } else {
           for (unsigned int l = 0; l < n_error_comps; l++) {
 #if deal_II_dimension > 1
@@ -1739,12 +1731,6 @@ void Integrator<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::
                 face_integrals[element[0]->face(face_no)->vertex_index()][l];
 #endif
           }
-          //              dwrc.GetPrimalErrorIndicators()(present_element)
-          //              += 0.5 *
-          //              face_integrals[element[0]->face(face_no)][0];
-          //              dwrc.GetDualErrorIndicators()(present_element)
-          //              += 0.5 *
-          //              face_integrals[element[0]->face(face_no)][1];
         }
       }
     } // endif locally owned
@@ -1760,8 +1746,10 @@ void Integrator<INTEGRATORDATACONT, VECTOR, SCALAR,
                                                   ResidualErrorContainer<VECTOR>
                                                       &dwrc) {
   // for primal and dual part of the error
-  std::vector<double> element_sum(2, 0);
-  element_sum.resize(2, 0);
+  unsigned int n_error_comps = dwrc.GetNErrorComps();
+  // for primal and dual part of the error
+  std::vector<double> element_sum(n_error_comps, 0);
+  element_sum.resize(n_error_comps, 0);
   // Begin integration
   const auto &dof_handler =
       pde.GetBaseProblem().GetSpaceTimeHandler()->GetDoFHandler();
@@ -1832,16 +1820,17 @@ void Integrator<INTEGRATORDATACONT, VECTOR, SCALAR,
 
     if (element[0]->is_locally_owned()) {
       element_sum.clear();
-      element_sum.resize(2, 0);
+      element_sum.resize(n_error_comps, 0);
 
       edc.ReInit();
       dwrc.InitElement(element[0]->diameter());
       // first the element-residual
       pde.ElementErrorContribution(edc, dwrc, element_sum, 1.);
-      dwrc.GetPrimalErrorIndicators()(element_index) = element_sum[0];
-      dwrc.GetDualErrorIndicators()(element_index) = element_sum[1];
+      for (unsigned int l = 0; l < n_error_comps; l++) {
+        dwrc.GetErrorIndicators(l)(element_index) = element_sum[l];
+      }
       element_sum.clear();
-      element_sum.resize(2, 0);
+      element_sum.resize(n_error_comps, 0);
       // Now to the face terms. We compute them only once for each face
       // and distribute the afterwards. We choose always to work from the
       // coarser element, if both neigbors of the face are on the same
@@ -1878,7 +1867,7 @@ void Integrator<INTEGRATORDATACONT, VECTOR, SCALAR,
           face_integrals[element[0]->face(face)->vertex_index()] = element_sum;
 #endif
           element_sum.clear();
-          element_sum.resize(2, 0.);
+          element_sum.resize(n_error_comps, 0.);
         } else {
           // There exist now 3 different scenarios, given the actual
           // element and face:
@@ -1905,10 +1894,9 @@ void Integrator<INTEGRATORDATACONT, VECTOR, SCALAR,
 #endif
 
               pde.FaceErrorContribution(fdc, dwrc, element_sum, 1.);
-              sum[0] = element_sum[0];
-              sum[1] = element_sum[1];
-              element_sum.clear();
-              element_sum.resize(2, 0);
+	      for (unsigned int l = 0; l < n_error_comps; l++) {
+                sum[l] += element_sum[l];
+              }              
 #if deal_II_dimension > 1
               face_integrals[element[0]
                                  ->neighbor_child_on_subface(face, subface_no)
@@ -1921,7 +1909,7 @@ void Integrator<INTEGRATORDATACONT, VECTOR, SCALAR,
                                  ->vertex_index()] = element_sum;
 #endif
               element_sum.clear();
-              element_sum.resize(2, 0.);
+              element_sum.resize(n_error_comps, 0.);
             }
 
 #if deal_II_dimension > 1
@@ -1983,7 +1971,7 @@ void Integrator<INTEGRATORDATACONT, VECTOR, SCALAR,
                   element_sum;
 #endif
               element_sum.clear();
-              element_sum.resize(2, 0);
+              element_sum.resize(n_error_comps, 0);
             }
           }
         }
@@ -2008,20 +1996,33 @@ void Integrator<INTEGRATORDATACONT, VECTOR, SCALAR,
         Assert(face_integrals.find(element[0]->face(face_no)) !=
                    face_integrals.end(),
                ExcInternalError());
-        dwrc.GetPrimalErrorIndicators()(present_element) +=
-            0.5 * face_integrals[element[0]->face(face_no)][0];
-        dwrc.GetDualErrorIndicators()(present_element) +=
-            0.5 * face_integrals[element[0]->face(face_no)][1];
 #else
         Assert(face_integrals.find(element[0]->face(face_no)->vertex_index()) !=
                    face_integrals.end(),
                ExcInternalError());
-        dwrc.GetPrimalErrorIndicators()(present_element) +=
-            0.5 * face_integrals[element[0]->face(face_no)->vertex_index()][0];
-        dwrc.GetDualErrorIndicators()(present_element) +=
-            0.5 * face_integrals[element[0]->face(face_no)->vertex_index()][1];
-
 #endif
+        if (element[0]->face(face_no)->at_boundary()) {
+          for (unsigned int l = 0; l < n_error_comps; l++) {
+#if deal_II_dimension > 1
+            dwrc.GetErrorIndicators(l)(present_element) +=
+                face_integrals[element[0]->face(face_no)][l];
+#else
+            dwrc.GetErrorIndicators(l)(present_element) +=
+                face_integrals[element[0]->face(face_no)->vertex_index()][l];
+#endif
+          }
+        } else {
+          for (unsigned int l = 0; l < n_error_comps; l++) {
+#if deal_II_dimension > 1
+            dwrc.GetErrorIndicators(l)(present_element) +=
+                0.5 * face_integrals[element[0]->face(face_no)][l];
+#else
+            dwrc.GetErrorIndicators(l)(present_element) +=
+                0.5 *
+                face_integrals[element[0]->face(face_no)->vertex_index()][l];
+#endif
+          }
+        }
       }
     }// endif locally owned
   {
