@@ -274,7 +274,7 @@ namespace DOpE
   void
   L2ResidualErrorContainer<STH, VECTOR, dim>::ReInit()
   {
-    DWRDataContainerBase<VECTOR>::ReInit(GetSTH());
+    DWRDataContainerBase<VECTOR>::ReInit();
 
     if (this->GetEETerms() == DOpEtypes::primal_only
         || this->GetEETerms() == DOpEtypes::mixed)
@@ -488,7 +488,7 @@ namespace DOpE
   void
   H1ResidualErrorContainer<STH, VECTOR, dim>::ReInit()
   {
-    DWRDataContainerBase<VECTOR>::ReInit(GetSTH());
+    DWRDataContainerBase<VECTOR>::ReInit();
 
     if (this->GetEETerms() == DOpEtypes::primal_only
         || this->GetEETerms() == DOpEtypes::mixed)

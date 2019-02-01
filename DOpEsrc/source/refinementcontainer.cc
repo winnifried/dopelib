@@ -43,7 +43,7 @@ namespace DOpE
 
   /***********************************************************/
 
-  const dealii::Vector<float> &
+  const dealii::Vector<double> &
   RefinementContainer::GetLocalErrorIndicators (unsigned int /*timepoint*/) const
   {
     throw DOpEException ("Not implemented",
@@ -101,14 +101,14 @@ namespace DOpE
   /****Implementation of LocalRefinement**********************/
   /***********************************************************/
 
-  LocalRefinement::LocalRefinement (const dealii::Vector<float> &indicators,
+  LocalRefinement::LocalRefinement (const dealii::Vector<double> &indicators,
                                     DOpEtypes::RefinementType ref_type)
     : RefinementContainer (ref_type),
       indicators_ (indicators)
   {
   }
 
-  const dealii::Vector<float> &
+  const dealii::Vector<double> &
   LocalRefinement::GetLocalErrorIndicators (unsigned int /*timepoint*/) const
   {
     return indicators_;
@@ -118,14 +118,14 @@ namespace DOpE
   /****Implementation of SpaceTimeLocalRefinement*************/
   /***********************************************************/
 
-  SpaceTimeLocalRefinement::SpaceTimeLocalRefinement (const std::vector <dealii::Vector<float> > &indicators,
+  SpaceTimeLocalRefinement::SpaceTimeLocalRefinement (const std::vector <dealii::Vector<double> > &indicators,
                                     DOpEtypes::RefinementType ref_type)
     : RefinementContainer (ref_type),
       indicators_ (indicators)
   {
   }
 
-  const dealii::Vector<float> &
+  const dealii::Vector<double> &
   SpaceTimeLocalRefinement::GetLocalErrorIndicators (unsigned int timepoint) const
   {
     assert(timepoint != std::numeric_limits<unsigned int>::max());
@@ -137,7 +137,7 @@ namespace DOpE
   /****Implementation of RefineFixedFraction******************/
   /***********************************************************/
 
-  RefineFixedFraction::RefineFixedFraction (const dealii::Vector<float> &indicators,
+  RefineFixedFraction::RefineFixedFraction (const dealii::Vector<double> &indicators,
                                             double top_fraction,
                                             double bottom_fraction)
     : LocalRefinement (indicators, DOpEtypes::RefinementType::fixed_fraction),
@@ -171,7 +171,7 @@ namespace DOpE
   /****Implementation of RefineFixedNumber********************/
   /***********************************************************/
 
-  RefineFixedNumber::RefineFixedNumber (const dealii::Vector<float> &indicators,
+  RefineFixedNumber::RefineFixedNumber (const dealii::Vector<double> &indicators,
                                         double top_fraction,
                                         double bottom_fraction)
     : LocalRefinement (indicators, DOpEtypes::RefinementType::fixed_number),
@@ -205,7 +205,7 @@ namespace DOpE
   /****Implementation of RefineOptimized**********************/
   /***********************************************************/
 
-  RefineOptimized::RefineOptimized (const dealii::Vector<float> &indicators,
+  RefineOptimized::RefineOptimized (const dealii::Vector<double> &indicators,
                                     double convergence_order)
     : LocalRefinement (indicators, DOpEtypes::RefinementType::optimized),
       convergence_order_ (convergence_order)
@@ -225,7 +225,7 @@ namespace DOpE
   /****Implementation of SpaceTimeRefineOptimized**************/
   /***********************************************************/
 
-  SpaceTimeRefineOptimized::SpaceTimeRefineOptimized (const std::vector< dealii::Vector<float> > &indicators,
+  SpaceTimeRefineOptimized::SpaceTimeRefineOptimized (const std::vector< dealii::Vector<double> > &indicators,
                                     double convergence_order)
     : SpaceTimeLocalRefinement (indicators, DOpEtypes::RefinementType::optimized),
       convergence_order_ (convergence_order)

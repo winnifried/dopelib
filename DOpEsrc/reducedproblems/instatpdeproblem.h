@@ -632,7 +632,9 @@ namespace DOpE
       std::vector<unsigned int> local_to_global(n_dofs_per_interval);    
       
       this->GetOutputHandler()->SetIterationNumber(0, "Time");
-      
+
+      //first we reinit the dwrdatacontainer
+      dwrc.ReInit();
       for (TimeIterator it =
 	     this->GetProblem()->GetSpaceTimeHandler()->GetTimeDoFHandler().first_interval(); it
 	     != this->GetProblem()->GetSpaceTimeHandler()->GetTimeDoFHandler().after_last_interval(); ++it)
@@ -646,13 +648,12 @@ namespace DOpE
 	  
 	  this->GetProblem()->SetTime(times[local_to_global[1]], local_to_global[1], it);
 	  GetU().SetTimeDoFNumber(local_to_global[1], it);
+          //dwrc.ReInit(); // ReInit should be outside of the time loop
 	  dwrc.SetTime(local_to_global[1]);
-	  //first we reinit the dwrdatacontainer
-	  dwrc.ReInit();
+	  
 	  //If we need the dual solution, compute it
 	  if (dwrc.NeedDual())
 	    this->ComputeDualForErrorEstimation(dwrc.GetWeightComputation());
-	  
 	  //some output
 	  this->GetOutputHandler()->Write("Computing Error Indicators:",
 					  4 + this->GetBasePriority());
@@ -717,7 +718,7 @@ namespace DOpE
 	  // release the lock on the refinement indicators (see dwrcontainer.h)
 	  dwrc.ReleaseLock();
 	  
-	  const float error = dwrc.GetError();
+	  const float step_error = dwrc.GetStepError();
 	  
 	  // clear the data
 	  dwrc.ClearWeightData();
@@ -748,17 +749,14 @@ namespace DOpE
 	  out << "Error estimate using " << dwrc.GetName();
 	  	if (dwrc.NeedDual())
 		  out << " for the " << this->GetProblem()->GetFunctionalName();
-		out << "at time "<<times[local_to_global[1]];
-		out << ": " << error;
+		out << " at time "<< times[local_to_global[1]];
+		out << ": " << step_error;
 	  this->GetOutputHandler()->Write(out, 2 + this->GetBasePriority());
-	  
-	  this->GetOutputHandler()->WriteElementwise(dwrc.GetErrorIndicators(),
+	  this->GetOutputHandler()->WriteElementwise(dwrc.GetErrorIndicators( )[local_to_global[1]], //dwrc.GetErrorIndicators(0),
 						     "Error_Indicators" + this->GetPostIndex(),
 						     this->GetProblem()->GetDoFType());
-	  
 	  this->GetOutputHandler()->SetIterationNumber(local_to_global[1],
 						       "Time");
-	  
 	  
 	}//End of time loop
       

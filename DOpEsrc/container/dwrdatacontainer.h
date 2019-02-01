@@ -195,9 +195,13 @@ namespace DOpE
       error_ += time_step_error_[current_time_dof_];
       //Check if global lock can be released
       lock_ = false;
-      for ( unsigned int i = 0; i<= n_time_points_; i++)
+      for ( unsigned int i = 1; i<= n_time_points_; i++)//0 or 1?
       {
 	lock_ = lock_||locks_[i];
+	 //if(i==n_time_points_) // not nice! but it unlocks the error indicators in the last timestep
+	  //{
+	  	//lock_=0;
+	  //}
       }
     }
     /**
@@ -212,7 +216,7 @@ namespace DOpE
       if(lock_)
       {
 	throw DOpEException("Error indicators are still locked.",
-			    "DWRDataContainer::GetPrimalError");
+			    "DWRDataContainer::GetError");
       }
       else
       {
@@ -679,7 +683,7 @@ namespace DOpE
   {
     n_time_points_ = sth.GetMaxTimePoint();
     error_ind_.resize(n_time_points_+1);
-    lock_ = true;
+    lock_ = true; 
     locks_.clear();
     locks_.resize(n_time_points_+1,true);
     time_step_error_.resize(n_time_points_+1);
