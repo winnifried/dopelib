@@ -429,7 +429,7 @@ namespace DOpE
           state_mesh_transfers_[i] = NULL;
         }
 	state_mesh_transfers_[i] = new dealii::SolutionTransfer<dealdim, VECTOR, DH<dealdim, dealdim> >(*state_dof_handlers_[i]);
-	dealii::Vector<double> Indicators;
+	dealii::Vector<float> Indicators;
 	// j looping over timesteps
 	// time to dofhandler is a vector which has the size of number of timesteps
 	// it contains the number of the DoFHandler associated to the
@@ -602,7 +602,7 @@ namespace DOpE
 	//Input needs to be ordered without missing numbers!
 	for(unsigned int i = 0; i <= this->GetMaxTimePoint(); i++)
 	{
- 	  time_to_dofhandler_[i] += time_to_dofhandler[i]; //statt =
+ 	  time_to_dofhandler_[i] = time_to_dofhandler[i]; 
 	  if(i==0)
 	  {
 	    if(time_to_dofhandler_[i] != 0)

@@ -59,7 +59,7 @@ namespace DOpE
      * Get functions, self explanatory. Implemented
      * in the derived classes.
      */
-    virtual const dealii::Vector<double> &
+    virtual const dealii::Vector<float> &
     GetLocalErrorIndicators(unsigned int timepoint = std::numeric_limits<unsigned int>::max()) const;
     virtual double
     GetTopFraction() const;
@@ -86,7 +86,7 @@ namespace DOpE
   protected:
     bool coarsening_;
   private:
-    const dealii::Vector<double> dummy_;
+    const dealii::Vector<float> dummy_;
     const DOpEtypes::RefinementType ref_type_;
 
   };
@@ -105,21 +105,21 @@ namespace DOpE
     {
     }
 
-    virtual const dealii::Vector<double> &
+    virtual const dealii::Vector<float> &
     GetLocalErrorIndicators(unsigned int timepoint = std::numeric_limits<unsigned int>::max()) const;
 
   protected:
     /**
      * Protected constructor for use in the derived classes
      */
-    LocalRefinement(const dealii::Vector<double> &,
+    LocalRefinement(const dealii::Vector<float> &,
                     DOpEtypes::RefinementType ref_type);
   private:
     /**
      * Constructor made private. Should not get used!
      */
     LocalRefinement();
-    const dealii::Vector<double> &indicators_;
+    const dealii::Vector<float> &indicators_;
   };
 
    /***************************************************************/
@@ -136,21 +136,21 @@ namespace DOpE
     {
     }
 
-    virtual const dealii::Vector<double> &
+    virtual const dealii::Vector<float> &
     GetLocalErrorIndicators(unsigned int timepoint) const;
 
   protected:
     /**
      * Protected constructor for use in the derived classes
      */
-    SpaceTimeLocalRefinement(const std::vector<dealii::Vector<double> > &,
+    SpaceTimeLocalRefinement(const std::vector<dealii::Vector<float> > &,
                     DOpEtypes::RefinementType ref_type);
   private:
     /**
      * Constructor made private. Should not get used!
      */
     SpaceTimeLocalRefinement();
-    const std::vector< dealii::Vector<double> > &indicators_;
+    const std::vector< dealii::Vector<float> > &indicators_;
   };
 
   /***************************************************************/
@@ -170,7 +170,7 @@ namespace DOpE
      * @param topfraction       is the fraction of the total estimate which should be refined.
      * @param bottomfraction    is the fraction of the estimate coarsened.
      */
-    RefineFixedFraction(const dealii::Vector<double> &indicators,
+    RefineFixedFraction(const dealii::Vector<float> &indicators,
                         double top_fraction = 0.1, double bottom_fraction = 0.0);
 
     virtual
@@ -206,7 +206,7 @@ namespace DOpE
      * @param bottomfraction    In a fixed fraction/fixed number strategy,
      *                          wich part should be coarsened.
      */
-    RefineFixedNumber(const dealii::Vector<double> &indicators,
+    RefineFixedNumber(const dealii::Vector<float> &indicators,
                       double top_fraction = 0.1, double bottom_fraction = 0.0);
     virtual
     ~ RefineFixedNumber()
@@ -238,7 +238,7 @@ namespace DOpE
      * @param indicators        A set of positive values, used to guide refinement.
      * @param convergence_order Convergence order of the functional of interest.
      */
-    RefineOptimized(const dealii::Vector<double> &indicators,
+    RefineOptimized(const dealii::Vector<float> &indicators,
                     double convergence_order = 2.);
 
     virtual
@@ -262,7 +262,7 @@ namespace DOpE
      * @param indicators        A set of positive values, used to guide refinement.
      * @param convergence_order Convergence order of the functional of interest.
      */
-    SpaceTimeRefineOptimized(const std::vector< dealii::Vector<double> > &indicators,
+    SpaceTimeRefineOptimized(const std::vector< dealii::Vector<float> > &indicators,
                     double convergence_order = 2.);
 
     virtual

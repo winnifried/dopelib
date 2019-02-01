@@ -195,13 +195,9 @@ namespace DOpE
       error_ += time_step_error_[current_time_dof_];
       //Check if global lock can be released
       lock_ = false;
-      for ( unsigned int i = 1; i<= n_time_points_; i++)//0 or 1?
+      for ( unsigned int i = 0; i<= n_time_points_; i++)
       {
 	lock_ = lock_||locks_[i];
-	 //if(i==n_time_points_) // not nice! but it unlocks the error indicators in the last timestep
-	  //{
-	  	//lock_=0;
-	  //}
       }
     }
     /**
