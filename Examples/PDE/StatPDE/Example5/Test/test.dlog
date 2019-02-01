@@ -1,9 +1,9 @@
-DOpElib Copyright (C) 2012 - 2016 DOpElib authors
+DOpElib Copyright (C) 2012 - 2018 DOpElib authors
 This program comes with ABSOLUTELY NO WARRANTY.
 For License details read LICENSE.TXT distributed with this software!
 
 This is DOpElib Version: 4.0.0 pre
-	Status as of: 16/02/2016
+	Status as of: 27/08/2018
 Using dealii Version: 9.0
 
 	**************************************************
@@ -62,15 +62,15 @@ Using dealii Version: 9.0
 	Error estimate using DWR-Estimator for the Local Mean value: -0.0532603
 	Writing [./Mesh1/Error_Indicators_PDEProblemContainer.vtk]
 	Computing Error Indicators:
-	Error estimate using L2-Residual-Estimator: 752.863
+	Error estimate using L2-Residual-Estimator: 753.077
 	Writing [./Mesh1/Error_Indicators_PDEProblemContainer.vtk]
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator: 14880.2
+	Error estimate using H1-Residual-Estimator: 14886.5
 	Writing [./Mesh1/Error_Indicators_PDEProblemContainer.vtk]
 
 	Mean value error: -0.0778911  Ieff (eh/e)= 0.683778
-	L2-Error estimator: 27.4383
-	H1-Error estimator: 121.984
+	L2-Error estimator: 27.4422
+	H1-Error estimator: 122.01
 	
 
 
@@ -96,15 +96,15 @@ Using dealii Version: 9.0
 	Error estimate using DWR-Estimator for the Local Mean value: -0.0170594
 	Writing [./Mesh2/Error_Indicators_PDEProblemContainer.vtk]
 	Computing Error Indicators:
-	Error estimate using L2-Residual-Estimator: 596.329
+	Error estimate using L2-Residual-Estimator: 596.789
 	Writing [./Mesh2/Error_Indicators_PDEProblemContainer.vtk]
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator: 11139.5
+	Error estimate using H1-Residual-Estimator: 11156.3
 	Writing [./Mesh2/Error_Indicators_PDEProblemContainer.vtk]
 
 	Mean value error: -0.0169008  Ieff (eh/e)= 1.00938
-	L2-Error estimator: 24.4199
-	H1-Error estimator: 105.544
+	L2-Error estimator: 24.4293
+	H1-Error estimator: 105.623
 	
 
 
@@ -130,15 +130,15 @@ Using dealii Version: 9.0
 	Error estimate using DWR-Estimator for the Local Mean value: -0.00623515
 	Writing [./Mesh3/Error_Indicators_PDEProblemContainer.vtk]
 	Computing Error Indicators:
-	Error estimate using L2-Residual-Estimator: 174.113
+	Error estimate using L2-Residual-Estimator: 174.476
 	Writing [./Mesh3/Error_Indicators_PDEProblemContainer.vtk]
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator: 5628.13
+	Error estimate using H1-Residual-Estimator: 5649.19
 	Writing [./Mesh3/Error_Indicators_PDEProblemContainer.vtk]
 
 	Mean value error: -0.00555521  Ieff (eh/e)= 1.1224
-	L2-Error estimator: 13.1952
-	H1-Error estimator: 75.0209
+	L2-Error estimator: 13.2089
+	H1-Error estimator: 75.1611
 	
 
 
@@ -164,14 +164,14 @@ Using dealii Version: 9.0
 	Error estimate using DWR-Estimator for the Local Mean value: -0.00123763
 	Writing [./Mesh4/Error_Indicators_PDEProblemContainer.vtk]
 	Computing Error Indicators:
-	Error estimate using L2-Residual-Estimator: 11.562
+	Error estimate using L2-Residual-Estimator: 11.6422
 	Writing [./Mesh4/Error_Indicators_PDEProblemContainer.vtk]
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator: 1486.22
+	Error estimate using H1-Residual-Estimator: 1497.88
 	Writing [./Mesh4/Error_Indicators_PDEProblemContainer.vtk]
 
 	Mean value error: -0.00101697  Ieff (eh/e)= 1.21697
-	L2-Error estimator: 3.40029
-	H1-Error estimator: 38.5516
+	L2-Error estimator: 3.41207
+	H1-Error estimator: 38.7024
 	
 
