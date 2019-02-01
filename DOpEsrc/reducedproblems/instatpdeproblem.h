@@ -717,7 +717,7 @@ namespace DOpE
 	    // release the lock on the refinement indicators (see dwrcontainer.h)
 	    dwrc.ReleaseLock();
 	    
-	    const float step_error = dwrc.GetStepError();
+	    const double step_error = dwrc.GetStepError();
 	    
 	    // clear the data
 	    dwrc.ClearWeightData();
@@ -826,7 +826,7 @@ namespace DOpE
 	  // release the lock on the refinement indicators (see dwrcontainer.h)
 	  dwrc.ReleaseLock();
 	  
-	  const float step_error = dwrc.GetStepError();
+	  const double step_error = dwrc.GetStepError();
 	  
 	  // clear the data
 	  dwrc.ClearWeightData();

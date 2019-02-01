@@ -120,7 +120,7 @@ namespace DOpE
 	  {
 	    tmp = GetPrimalErrorIndicators()(i);
 	    time_step_error_[current_time_dof_]+=tmp;
-	    error_ind_[current_time_dof_](i) = std::fabs(tmp);
+	    error_ind_[current_time_dof_](i) = std::fabs(static_cast<float>(tmp));
 	    time_step_error_primal_[current_time_dof_]+=GetPrimalErrorIndicators()(i);
 	  }
           break;
@@ -130,7 +130,7 @@ namespace DOpE
 	  {
 	    tmp = GetDualErrorIndicators()(i);
 	    time_step_error_[current_time_dof_]+=tmp;
-	    error_ind_[current_time_dof_](i) = std::fabs(tmp);
+	    error_ind_[current_time_dof_](i) = std::fabs(static_cast<float>(tmp));
 	    time_step_error_dual_[current_time_dof_]+=GetDualErrorIndicators()(i);
 	  }
           break;
@@ -143,7 +143,7 @@ namespace DOpE
 	    tmp = 0.5 *GetPrimalErrorIndicators()(i);
 	    tmp += 0.5 * GetDualErrorIndicators()(i);
 	    time_step_error_[current_time_dof_]+=tmp;
-	    error_ind_[current_time_dof_](i) = std::fabs(tmp);
+	    error_ind_[current_time_dof_](i) = std::fabs(static_cast<float>(tmp));
 	    
 	    time_step_error_primal_[current_time_dof_]+=GetPrimalErrorIndicators()(i);
 	    time_step_error_dual_[current_time_dof_]+=GetDualErrorIndicators()(i);
@@ -161,7 +161,7 @@ namespace DOpE
 	    tmp += 0.5 * GetDualErrorIndicators()(i);
 	    tmp += 0.5 * GetControlErrorIndicators()(i);
 	    time_step_error_[current_time_dof_]+=tmp;
-	    error_ind_[current_time_dof_](i) = std::fabs(tmp);
+	    error_ind_[current_time_dof_](i) = std::fabs(static_cast<float>(tmp));
 
 	    time_step_error_primal_[current_time_dof_]+=GetPrimalErrorIndicators()(i);
 	    time_step_error_dual_[current_time_dof_]+=GetDualErrorIndicators()(i);
