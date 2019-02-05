@@ -1,7 +1,7 @@
 # Listing of Parameters for PDE Instat Example 1 (Fluid problem)
 # --------------------------------------------------------------
 subsection main parameters
-  set max_iter = 3
+  set max_iter = 5
   set prerefine = 4
 end
 

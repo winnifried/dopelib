@@ -194,7 +194,8 @@ main(int argc, char **argv)
 
   /*********************************************************************************/
   // Reading mesh and creating triangulation
-  Triangulation<DIM> triangulation;
+  Triangulation<DIM> triangulation(
+    Triangulation<DIM>::MeshSmoothing::patch_level_1);
   GridIn<DIM> grid_in;
   grid_in.attach_triangulation(triangulation);
   std::ifstream input_file("unit_slit.inp");
@@ -270,8 +271,8 @@ main(int argc, char **argv)
   // MethodOfLines_StateSpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR, DIM>
   //STH DOFH(triangulation, state_fe, times);
   std::vector<unsigned int> Rothe_time_to_dof(31,0); // new!
-  Rothe_time_to_dof[10]=1;
-  Rothe_time_to_dof[18]=2;
+  //Rothe_time_to_dof[5]=1;
+  //Rothe_time_to_dof[8]=2;
   Rothe_StateSpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR,
 			      DIM> DOFH(triangulation, state_fe, times, Rothe_time_to_dof); // new!
 
