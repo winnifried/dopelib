@@ -640,6 +640,16 @@ namespace DOpE
       
       //first we reinit the dwrdatacontainer
       dwrc.ReInit();
+
+      unsigned int need_precomputed_nodal_values = dwrc.NPrecomputedNodalValues();
+      if ( need_precomputed_nodal_values != 0 )
+      {
+	aux_nodal_values.resize(need_precomputed_nodal_values,NULL);
+	for(unsigned int i = 0; i < need_precomputed_nodal_values; i++)
+	{
+	  aux_nodal_values[i] = new StateVector<VECTOR>(GetU());
+	}
+      }	
       for (TimeIterator it =
 	     this->GetProblem()->GetSpaceTimeHandler()->GetTimeDoFHandler().first_interval(); it
 	     != this->GetProblem()->GetSpaceTimeHandler()->GetTimeDoFHandler().after_last_interval(); ++it)
@@ -671,13 +681,13 @@ namespace DOpE
 	    //Check if some nodal values need to be precomputed, e.g., active set indicators
 	    // for the obstacle problem
 	    std::vector<StateVector<VECTOR>* > aux_nodal_values;
-	    unsigned int need_precomputed_nodal_values = dwrc.NPrecomputedNodalValues();
+	    
 	    if ( need_precomputed_nodal_values != 0 )
 	    {
-	      aux_nodal_values.resize(need_precomputed_nodal_values,NULL);
 	      for(unsigned int i = 0; i < need_precomputed_nodal_values; i++)
 	      {
-		aux_nodal_values[i] = new StateVector<VECTOR>(GetU());
+		assert(aux_nodal_values[i] != NULL);
+		aux_nodal_values[i]->SetTimeDoFNumber(local_to_global[0], it);
 		{
 		  //some output
 		  std::stringstream tmp;
@@ -735,8 +745,6 @@ namespace DOpE
 		std::stringstream tmp;
 		tmp << "aux_error_"<<i;
 		this->GetIntegrator().DeleteDomainData(tmp.str());
-		delete aux_nodal_values[i];
-		aux_nodal_values[i] = NULL;
 	      }
 	    }
 	  
@@ -783,10 +791,10 @@ namespace DOpE
 	  unsigned int need_precomputed_nodal_values = dwrc.NPrecomputedNodalValues();
 	  if ( need_precomputed_nodal_values != 0 )
 	    {
-	      aux_nodal_values.resize(need_precomputed_nodal_values,NULL);
 	      for(unsigned int i = 0; i < need_precomputed_nodal_values; i++)
 		{
-		  aux_nodal_values[i] = new StateVector<VECTOR>(GetU());
+		  assert(aux_nodal_values[i] != NULL);
+		  aux_nodal_values[i]->SetTimeDoFNumber(local_to_global[1], it);
 		  {
 		    //some output
 		    std::stringstream tmp;
@@ -847,8 +855,6 @@ namespace DOpE
 		  std::stringstream tmp;
 		  tmp << "aux_error_"<<i;
 		  this->GetIntegrator().DeleteDomainData(tmp.str());
-		  delete aux_nodal_values[i];
-		  aux_nodal_values[i] = NULL;
 		}
 	    }
 	  
@@ -865,7 +871,12 @@ namespace DOpE
 						     this->GetProblem()->GetDoFType());
 	  
 	}//End of time loop
-      
+      //Cleaning auxiliary nodal variables
+      if ( need_precomputed_nodal_values != 0 )
+      {
+	delete aux_nodal_values[i];
+	aux_nodal_values[i] = NULL;
+      }
       
     }
 
