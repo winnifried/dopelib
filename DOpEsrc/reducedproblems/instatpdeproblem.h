@@ -787,8 +787,7 @@ namespace DOpE
 	  
 	  //Check if some nodal values need to be precomputed, e.g., active set indicators
 	  // for the obstacle problem
-	  std::vector<StateVector<VECTOR>* > aux_nodal_values;
-	  unsigned int need_precomputed_nodal_values = dwrc.NPrecomputedNodalValues();
+
 	  if ( need_precomputed_nodal_values != 0 )
 	    {
 	      for(unsigned int i = 0; i < need_precomputed_nodal_values; i++)
