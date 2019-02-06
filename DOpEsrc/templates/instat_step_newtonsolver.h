@@ -417,7 +417,7 @@ namespace DOpE
     tmp_residual.reinit(solution);
 
     //Transfer from previous timestep
-    residual +=solution;
+    residual =solution;
     // last_time_solution is very good starting value?
     solution = last_time_solution;
 
@@ -478,7 +478,8 @@ namespace DOpE
           residual -= time_residual;
           residual *= -1.;
           pde.GetOutputHandler()->Write(residual,"Residual"+pde.GetType(),pde.GetDoFType());
-
+	  pde.GetOutputHandler()->Write(du,"Update"+pde.GetType(),pde.GetDoFType());
+	  
           double newres = residual.linfty_norm();
           int lineiter=0;
           double rho = linesearch_rho_;
