@@ -642,6 +642,7 @@ namespace DOpE
       dwrc.ReInit();
 
       unsigned int need_precomputed_nodal_values = dwrc.NPrecomputedNodalValues();
+      std::vector<StateVector<VECTOR>* > aux_nodal_values;
       if ( need_precomputed_nodal_values != 0 )
       {
 	aux_nodal_values.resize(need_precomputed_nodal_values,NULL);
@@ -680,7 +681,6 @@ namespace DOpE
 	  
 	    //Check if some nodal values need to be precomputed, e.g., active set indicators
 	    // for the obstacle problem
-	    std::vector<StateVector<VECTOR>* > aux_nodal_values;
 	    
 	    if ( need_precomputed_nodal_values != 0 )
 	    {
@@ -874,8 +874,11 @@ namespace DOpE
       //Cleaning auxiliary nodal variables
       if ( need_precomputed_nodal_values != 0 )
       {
-	delete aux_nodal_values[i];
-	aux_nodal_values[i] = NULL;
+	for(unsigned int i = 0; i < need_precomputed_nodal_values; i++)
+	{
+	  delete aux_nodal_values[i];
+	  aux_nodal_values[i] = NULL;
+	}
       }
       
     }
