@@ -139,10 +139,35 @@ namespace DOpE
 	assert(state_dof_constraints_.size()==n_dof_handlers_);
 	
      state_dofs_per_block_.resize(n_dof_handlers_,std::vector<unsigned int>(state_n_blocks));
+     auto it = this->GetTimeDoFHandler().first_interval();
+     std::vector<unsigned int> local_to_global(this->GetTimeDoFHandler().GetLocalNbrOfDoFs());
      for(unsigned int j = 0; j < n_dof_handlers_; j++)
       {
-	this->SetInterval(this->GetTimeDoFHandler().first_interval(),dofhandler_to_time_[j]);
-      	StateSpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dealdim>::SetActiveFEIndicesState(
+	//Search suitable intervall (DoF-Handlers are consecutively ordered, so no revisiting of
+	//previous intervalls needed!)
+	{
+	  if( dofhandler_to_time_[j] == 0)
+	  {
+	    //Needs to be first intervall!
+	    assert(SpaceTimeHandlerBase<VECTOR>::IsInIntervall(it,dofhandler_to_time_[j]));
+	    this->SetInterval(it,dofhandler_to_time_[j]);
+	  }
+	  while( (! SpaceTimeHandlerBase<VECTOR>::IsInIntervall(it,dofhandler_to_time_[j]))
+		 && (it != this->GetTimeDoFHandler().after_last_interval()))
+	  {
+	    it++;
+	  }
+	  if (it == this->GetTimeDoFHandler().after_last_interval())
+	  {
+	    std::stringstream tmp;
+	    tmp<<"Could not find an interval where DoF-Handler "<<j<<" is needed!";
+	    throw DOpEException(tmp.str(),
+                    "Rothe_StateSpaceTimeHandler::ReInit");
+	  }
+	  assert(SpaceTimeHandlerBase<VECTOR>::IsInIntervall(it,dofhandler_to_time_[j]));
+	  this->SetInterval(it,dofhandler_to_time_[j]);
+	}
+	StateSpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dealdim>::SetActiveFEIndicesState(
         *state_dof_handlers_[j]);
       	state_dof_handlers_[j]->distribute_dofs(GetFESystem("state"));
       	DoFRenumbering::component_wise(

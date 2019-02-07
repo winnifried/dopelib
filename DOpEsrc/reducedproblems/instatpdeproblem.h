@@ -629,6 +629,8 @@ namespace DOpE
 	n_dofs_per_interval =
 	this->GetProblem()->GetSpaceTimeHandler()->GetTimeDoFHandler().GetLocalNbrOfDoFs();
 
+      //Not implemented for more than 2 dofs per interval.
+      assert(n_dofs_per_interval ==2);
       //If we need the dual solution, compute it
       if (dwrc.NeedDual())
 	this->ComputeDualForErrorEstimation(dwrc.GetWeightComputation());
@@ -655,7 +657,6 @@ namespace DOpE
 	     this->GetProblem()->GetSpaceTimeHandler()->GetTimeDoFHandler().first_interval(); it
 	     != this->GetProblem()->GetSpaceTimeHandler()->GetTimeDoFHandler().after_last_interval(); ++it)
 	{
-	  
 	  it.get_time_dof_indices(local_to_global);
 	  this->GetProblem()->SetTime(times[local_to_global[0]], local_to_global[0], it);
 	  if ( it == this->GetProblem()->GetSpaceTimeHandler()->GetTimeDoFHandler().first_interval())
@@ -763,6 +764,9 @@ namespace DOpE
 	  
 	  GetU().SetTimeDoFNumber(local_to_global[0], it);
 	  u_old = GetU().GetSpacialVector();
+	  //Transfer to current mesh if needed!
+	  this->GetProblem()->GetSpaceTimeHandler()->TemporalMeshTransferState(u_old, local_to_global[0], local_to_global[1]);
+	  
 	  this->GetIntegrator().AddDomainData("last_time_state",&u_old);
 	  
 	  this->GetProblem()->SetTime(times[local_to_global[1]], local_to_global[1], it);
