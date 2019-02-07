@@ -43,6 +43,8 @@ function RUN_TEST {
     fi
 }
 
+export -f RUN_TEST
+
 while getopts 'j:' flag; do
     case "${flag}" in
 	j) n_procs="${OPTARG}" ;;
@@ -64,10 +66,16 @@ do echo "Trying "$bd
 	    if [ -d $sd ]
 	    then
 		cd $sd
-		for i in `ls -d Example*`
-		do
-		    RUN_TEST $i $bd"/"$sd
-		done
+		if [ $n_procs == 1 ]
+		then
+		    for i in `ls -d Example*`
+		    do
+			RUN_TEST $i $bd"/"$sd
+		    done
+		else
+		    #-k option to keep the output in the same order as in the sequential case
+		    parallel -k --no-notice RUN_TEST ::: "`ls -d Example*`" ::: "$bd/$sd"
+		fi
 		cd ..
 	    fi
 	    wait
