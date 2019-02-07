@@ -1,6 +1,48 @@
 #!/bin/bash
 failed=0
 
+#The individual Tests:
+function RUN_TEST {
+    if [ -d $1 ]
+    then
+	cd $1
+	echo -n "In "$2"/"$1" Test: " 
+	if [ -d Test ]
+	then
+	    cd Test
+	    if [ -f test.sh ]
+	    then
+		(./test.sh Test 2>&1 ) > /dev/null
+		if [ $? -eq 0 ]
+		then
+		    echo -en '\E[32;40m'"succeeded!"
+		    tput sgr0
+		    echo
+		else
+		    echo -en '\E[31;40m'"failed!"
+		    tput sgr0
+		    echo 	
+		    failed=$((${failed} + 1))
+		fi
+	    else
+		echo -en '\E[31;40m'"failed!"
+		tput sgr0
+		echo 
+		failed=$((${failed} + 1))
+	    fi
+	    cd ..
+	else
+	    echo -en "'\E[31;40m'failed!"
+	    tput sgr0
+	    echo
+	    failed=$((${failed} + 1))
+	fi
+	cd ..
+    else
+	echo "Could not find directory :"$1
+    fi
+}
+
 while getopts 'j:' flag; do
     case "${flag}" in
 	j) n_procs="${OPTARG}" ;;
@@ -23,39 +65,8 @@ do echo "Trying "$bd
 	    then
 		cd $sd
 		for i in `ls -d Example*`
-		do cd $i
-		    echo -n "In "$bd"/"$sd"/"$i" Test: " 
-		    if [ -d Test ]
-		    then
-			cd Test
-			if [ -f test.sh ]
-			then
-			    (./test.sh Test 2>&1 ) > /dev/null
-			    if [ $? -eq 0 ]
-			    then
-				echo -en '\E[32;40m'"succeeded!"
-				tput sgr0
-				echo
-			    else
-				echo -en '\E[31;40m'"failed!"
-				tput sgr0
-				echo 	
-				failed=$((${failed} + 1))
-			    fi
-			else
-			    echo -en '\E[31;40m'"failed!"
-			    tput sgr0
-			    echo 
-			    failed=$((${failed} + 1))
-			fi
-			cd ..
-		    else
-			echo -en "'\E[31;40m'failed!"
-			tput sgr0
-			echo
-			failed=$((${failed} + 1))
-		    fi
-		    cd ..
+		do
+		    RUN_TEST $i $bd"/"$sd
 		done
 		cd ..
 	    fi
