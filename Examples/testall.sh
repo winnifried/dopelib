@@ -1,6 +1,17 @@
 #!/bin/bash
 failed=0
 
+while getopts 'j:' flag; do
+    case "${flag}" in
+	j) n_procs="${OPTARG}" ;;
+	*) echo "Unknown option ${flag}."
+	   echo "Run 'compile-tests.sh -h' for help."
+	   exit 1 ;;
+    esac
+done
+
+echo "Running tests with ${n_procs} parallel processes."
+
 for bd in OPT PDE
 do echo "Trying "$bd 
     if [ -d $bd ]

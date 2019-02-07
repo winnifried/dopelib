@@ -1,6 +1,10 @@
 c-all:
 	$(DOpE)/Examples/autocmake-examples.sh configure
 	cd autobuild; $(MAKE)
+
+c-all-deb:
+	$(DOpE)/Examples/autocmake-examples.sh configure-deb
+	cd autobuild; $(MAKE)
 	
 # Rule how to clean up. This is split into several different rules to
 # allow for parallel execution of commands:
