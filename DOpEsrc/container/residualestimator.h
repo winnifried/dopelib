@@ -120,11 +120,9 @@ namespace DOpE
     }
 
     void
-    Initialize(unsigned int state_n_blocks,
-               std::vector<unsigned int> &state_block_component)
+      Initialize(unsigned int /*state_n_blocks*/,
+		 std::vector<unsigned int> &/*state_block_component*/)
     {
-      state_n_blocks_ = state_n_blocks;
-      state_block_component_ = &state_block_component;
     }
 
     /**
@@ -261,8 +259,6 @@ namespace DOpE
     }
 
   private:
-    unsigned int state_n_blocks_;
-    std::vector<unsigned int> *state_block_component_;
     double weight_;
 
     STH &sth_;
@@ -335,11 +331,9 @@ namespace DOpE
     }
 
     void
-    Initialize(unsigned int state_n_blocks,
-               std::vector<unsigned int> &state_block_component)
+      Initialize(unsigned int /*state_n_blocks*/,
+		 std::vector<unsigned int> &/*state_block_component*/)
     {
-      state_n_blocks_ = state_n_blocks;
-      state_block_component_ = &state_block_component;
     }
 
     /**
@@ -475,8 +469,6 @@ namespace DOpE
     }
 
   private:
-    unsigned int state_n_blocks_;
-    std::vector<unsigned int> *state_block_component_;
     double weight_;
 
     STH &sth_;
