@@ -27,6 +27,10 @@ function RUN_TEST {
 		    echo 	
 		    failed=$((${failed} + 1))
 		fi
+		if [ -f time.txt ]
+		then
+		    rm time.txt
+		fi
 	    else
 		echo -en '\E[31;40m'"failed!"
 		tput sgr0
