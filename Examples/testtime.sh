@@ -57,6 +57,8 @@ while getopts 'j:' flag; do
     esac
 done
 
+echo "Running tests with ${n_procs} parallel processes."
+
 for bd in OPT PDE
 do echo "Trying "$bd 
     if [ -d $bd ]

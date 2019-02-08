@@ -22,6 +22,8 @@ help:
 	@echo "=                 To run tests in parallel add PROCS=[number]             ="
 	@echo "=                 to the call, i.e., make tests PROCS=2                   ="
 	@echo "=    time      :  Run all test param data and report timings.             ="
+	@echo "=                 To run tests in parallel add PROCS=[number]             ="
+	@echo "=                 to the call, i.e., make tests PROCS=2                   ="
 	@echo "=    c-cat     :  Run clean, run c-all, run tests (combine these commands)="
 	@echo "=    doc       :  Create documentation in pdf file format via latexmk     ="
 	@echo "=    distclean :  Cleaning up, including documentation                    ="
@@ -37,7 +39,7 @@ tests:
 	./testall.sh -j$(PROCS)
 
 time:  
-	./testtime.sh
+	./testtime.sh -j$(PROCS)
 
 c-cat:	
 	$(MAKE) clean; $(MAKE) c-all ; ./testall.sh
