@@ -308,6 +308,7 @@ namespace DOpE
     std::string results_basedir_, results_outdir_, ending_, control_ending_, logfile_;
     ReducedProblemInterface_Base<VECTOR> *Solver_;
     unsigned int n_reinits_;
+    int n_patches_ = 0;
     bool debug_;
     unsigned int number_precision_;
     unsigned int functional_number_precision_;

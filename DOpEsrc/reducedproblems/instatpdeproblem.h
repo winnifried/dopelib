@@ -186,43 +186,6 @@ namespace DOpE
 
     /******************************************************/
 
-  /******************************************************/
-
-    /**
-     *  Here, the given Vector v (containing element-related data) is printed to
-     *  a file of *.vtk format. However, in later implementations other
-     *  file formats will be available.
-     *
-     *  @param v           The Vector to write to a file.
-     *  @param name        The names of the variables, e.g., in a fluid problem: v1, v2, p.
-     *  @param outfile     The basic name for the output file to print.
-     *  @param dof_type    Has the DoF type: state or control.
-     *  @param filetype    The filetype. Actually, *.vtk outputs are possible.
-     *  @param type        How to interprete the given data, i.e. does v contain nodal-related or
-     *                     element-related data.
-     */
-    void
-    WriteToFileElementwise(const Vector<float> &v, std::string name,
-                           std::string outfile, std::string dof_type, std::string filetype);
-
-
-    /******************************************************/
-
-    /**
-     *  Here, the given BlockVector<double> v is printed to a file of *.vtk or *.gpl format.
-     *  However, in later implementations other file formats will be available.
-     *
-     *  @param v           The BlockVector to write to a file.
-     *  @param name        The names of the variables, e.g., in a fluid problem: v1, v2, p.
-     *  @param outfile     The basic name for the output file to print.
-     *  @param dof_type    Has the DoF type: state
-     *  @param filetype    The filetype. Actually, *.vtk and *.gpl outputs are possible.
-     */
-    void WriteToFile(const VECTOR &v, std::string name, std::string outfile,
-                     std::string dof_type, std::string filetype);
-
-    /******************************************************/
-
     /**
      *  A std::vector v is printed to a text file.
      *  Note that this assumes that the vector is one entry per time step.
@@ -397,8 +360,6 @@ namespace DOpE
 
     bool project_initial_data_ = false;
 
-    int n_patches_ = 0;
-
     friend class SolutionExtractor<InstatPDEProblem<NONLINEARSOLVER,
       INTEGRATOR, PROBLEM, VECTOR, dealdim>,   VECTOR > ;
   };
@@ -444,10 +405,6 @@ namespace DOpE
                      nonlinear_state_solver_(integrator_, param_reader),
                      nonlinear_adjoint_solver_(integrator_, param_reader)
   {
-    
-    param_reader.SetSubsection("output parameters");
-    n_patches_ = param_reader.get_integer("number of patches");
-    
     // Solvers should be ReInited
     {
       state_reinit_ = true;
@@ -1014,84 +971,6 @@ namespace DOpE
     this->GetIntegrator().DeleteDomainData("state");
     this->GetProblem()->DeleteAuxiliaryFromIntegrator(this->GetIntegrator());
 
-  }
-
-  /******************************************************/
-  template<typename NONLINEARSOLVER, typename INTEGRATOR, typename PROBLEM,
-    typename VECTOR, int dealdim>
-    void
-    InstatPDEProblem<NONLINEARSOLVER, INTEGRATOR, PROBLEM, VECTOR, dealdim>::WriteToFileElementwise(
-												    const Vector<float> &v, std::string name, std::string outfile,
-												    std::string dof_type, std::string filetype)
-    {
-      if (dof_type == "state")
-	{
-	  auto &data_out =
-	    this->GetProblem()->GetSpaceTimeHandler()->GetDataOut();
-	  data_out.attach_dof_handler(
-				      this->GetProblem()->GetSpaceTimeHandler()->GetStateDoFHandler());
-	  
-	  data_out.add_data_vector(v, name);
-	  data_out.build_patches(n_patches_);
-	  
-	  std::ofstream output(outfile.c_str());
-	  
-	  if (filetype == ".vtk")
-	    {
-	      data_out.write_vtk(output);
-	    }
-	  else
-	    {
-	      throw DOpEException(
-				  "Don't know how to write filetype `" + filetype + "'!",
-				  "InstatPDEProblem::WriteToFileElementwise");
-	    }
-	  data_out.clear();
-	}
-      else
-	{
-	  throw DOpEException("No such DoFHandler `" + dof_type + "'!",
-			      "InstatPDEProblem::WriteToFileElementwise");
-	}
-    }
-
-  /******************************************************/
-  template<typename NONLINEARSOLVER,
-           typename INTEGRATOR, typename PROBLEM, typename VECTOR,
-           int dealdim>
-  void InstatPDEProblem<NONLINEARSOLVER, INTEGRATOR,
-       PROBLEM, VECTOR, dealdim>::WriteToFile(const VECTOR &v, std::string name, std::string outfile, std::string dof_type, std::string filetype)
-  {
-    if (dof_type == "state")
-      {
-        auto &data_out =  this->GetProblem()->GetSpaceTimeHandler()->GetDataOut();
-        data_out.attach_dof_handler(this->GetProblem()->GetSpaceTimeHandler()->GetStateDoFHandler());
-
-        data_out.add_data_vector(v, name);
-        data_out.build_patches();
-
-        std::ofstream output(outfile.c_str());
-
-        if (filetype == ".vtk")
-          {
-            data_out.write_vtk(output);
-          }
-        else if (filetype == ".gpl")
-          {
-            data_out.write_gnuplot(output);
-          }
-        else
-          {
-            throw DOpEException("Don't know how to write filetype `" + filetype + "'!",
-                                "InstatPDEProblem::WriteToFile");
-          }
-        data_out.clear();
-      }
-    else
-      {
-        throw DOpEException("No such DoFHandler `" + dof_type + "'!",
-                            "InstatPDEProblem::WriteToFile");
-      }
   }
 
  /******************************************************/

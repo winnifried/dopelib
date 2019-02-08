@@ -95,14 +95,13 @@ namespace DOpE
      *  @param outfile     The basic name for the output file to print.
      *  @param dof_type    Has the DoF type: state or control.
      *  @param filetype    The filetype. Actually, *.vtk outputs are possible.
+     *  @param n_patches   Patches used for visualization.
      */
     virtual void
-    WriteToFileElementwise(const Vector<float> &/*v*/, std::string /*name*/,
-                           std::string /*outfile*/, std::string /*dof_type*/,
-                           std::string /*filetype*/)
-    {
-      throw DOpEException("NotImplemented", "WriteToFileElementwise");
-    }
+    WriteToFileElementwise(const Vector<float> &v, std::string name,
+                           std::string outfile, std::string dof_type,
+                           std::string filetype, int n_patches) = 0;
+
 
     /******************************************************/
 
@@ -524,6 +523,14 @@ namespace DOpE
     {
       this->GetProblem()->GetSpaceTimeHandler()->WriteToFile(v, name, outfile, dof_type, filetype);
     }
+    virtual void
+    WriteToFileElementwise(const Vector<float> &v, std::string name,
+                           std::string outfile, std::string dof_type,
+                           std::string filetype, int n_patches)
+    {
+      this->GetProblem()->GetSpaceTimeHandler()->WriteToFileElementwise(v, name, outfile, dof_type, filetype,n_patches);
+    }
+
 
     /**
      * Import overloads from base class.

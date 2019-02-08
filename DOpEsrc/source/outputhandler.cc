@@ -51,6 +51,8 @@ namespace DOpE
     param_reader.declare_entry("number_precision","5",Patterns::Integer(1),"Sets the precision of the output numbers in the newton schemes.");
     param_reader.declare_entry("functional_number_precision","6",Patterns::Integer(1),"Sets the precision of the output numbers for functionals.");
     param_reader.declare_entry("eps_machine_set_by_user","0.0",Patterns::Double(),"Correlation of the output and machine precision");
+    param_reader.declare_entry("number of patches", "0", Patterns::Integer(0));
+    
 
   }
 
@@ -92,7 +94,8 @@ namespace DOpE
     number_precision_  = param_reader.get_integer("number_precision");
     functional_number_precision_ = param_reader.get_integer("functional_number_precision");
     user_eps_machine_  = param_reader.get_double("eps_machine_set_by_user");
-
+    n_patches_ = param_reader.get_integer("number of patches");
+    
     std::string tmp  = param_reader.get_string("never_write_list");
     ParseString(tmp,never_write_list);
 
@@ -518,10 +521,10 @@ namespace DOpE
 
         if (dof_type == "control")
           GetReducedProblem()->WriteToFileElementwise(q, name, outfile.str(),
-                                                      dof_type, control_ending_);
+                                                      dof_type, control_ending_,n_patches_);
         else if (dof_type == "state")
           GetReducedProblem()->WriteToFileElementwise(q, name, outfile.str(),
-                                                      dof_type, ending_);
+                                                      dof_type, ending_,n_patches_);
       }
   }
 

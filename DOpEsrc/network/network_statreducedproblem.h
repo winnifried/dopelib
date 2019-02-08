@@ -241,7 +241,7 @@ namespace DOpE
               assert(pos != std::string::npos);
               pos += name.length();
               tmp.insert(pos,tmp2.str());
-
+  
               auto &data_out =
                 this->GetProblem()->GetSpaceTimeHandler()->GetDataOut();
               data_out.attach_dof_handler(

@@ -195,24 +195,6 @@ namespace DOpE
       GetU().PrintInfos(out);
     }
 
-    /******************************************************/
-
-    /**
-     *  Here, the given Vector v (containing element-related data) is printed to
-     *  a file of *.vtk format. However, in later implementations other
-     *  file formats will be available.
-     *
-     *  @param v           The Vector to write to a file.
-     *  @param name        The names of the variables, e.g., in a fluid problem: v1, v2, p.
-     *  @param outfile     The basic name for the output file to print.
-     *  @param dof_type    Has the DoF type: state or control.
-     *  @param filetype    The filetype. Actually, *.vtk outputs are possible.
-     *  @param type        How to interprete the given data, i.e. does v contain nodal-related or
-     *                     element-related data.
-     */
-    void
-    WriteToFileElementwise(const Vector<float> &v, std::string name,
-                           std::string outfile, std::string dof_type, std::string filetype);
 
     /******************************************************/
 
@@ -420,8 +402,6 @@ namespace DOpE
     bool state_reinit_ = false;
     bool adjoint_reinit_ = false;
 
-    int n_patches_ = 0;
-
     friend class SolutionExtractor<
       StatPDEProblem<NONLINEARSOLVER, INTEGRATOR, PROBLEM, VECTOR, dealdim>,
       VECTOR>;
@@ -440,10 +420,6 @@ namespace DOpE
     ParameterReader &param_reader)
   {
     NONLINEARSOLVER::declare_params(param_reader);
-    param_reader.SetSubsection("output parameters");
-    param_reader.declare_entry("number of patches", "0",
-                               Patterns::Integer(0));
-
   }
   /******************************************************/
 
@@ -460,9 +436,7 @@ namespace DOpE
           idc), nonlinear_state_solver_(integrator_, param_reader), nonlinear_adjoint_solver_(
             integrator_, param_reader)
   {
-    param_reader.SetSubsection("output parameters");
-    n_patches_ = param_reader.get_integer("number of patches");
-    //PDEProblems should be ReInited
+     //PDEProblems should be ReInited
     {
       state_reinit_ = true;
       adjoint_reinit_ = true;
@@ -950,46 +924,6 @@ namespace DOpE
                                                "Error_Indicators" + this->GetPostIndex(),
                                                this->GetProblem()->GetDoFType());
 
-  }
-
-  /******************************************************/
-
-  template<typename NONLINEARSOLVER, typename INTEGRATOR, typename PROBLEM,
-           typename VECTOR, int dealdim>
-  void
-  StatPDEProblem<NONLINEARSOLVER, INTEGRATOR, PROBLEM, VECTOR, dealdim>::WriteToFileElementwise(
-    const Vector<float> &v, std::string name, std::string outfile,
-    std::string dof_type, std::string filetype)
-  {
-    if (dof_type == "state")
-      {
-        auto &data_out =
-          this->GetProblem()->GetSpaceTimeHandler()->GetDataOut();
-        data_out.attach_dof_handler(
-          this->GetProblem()->GetSpaceTimeHandler()->GetStateDoFHandler());
-
-        data_out.add_data_vector(v, name);
-        data_out.build_patches(n_patches_);
-
-        std::ofstream output(outfile.c_str());
-
-        if (filetype == ".vtk")
-          {
-            data_out.write_vtk(output);
-          }
-        else
-          {
-            throw DOpEException(
-              "Don't know how to write filetype `" + filetype + "'!",
-              "StatPDEProblem::WriteToFileElementwise");
-          }
-        data_out.clear();
-      }
-    else
-      {
-        throw DOpEException("No such DoFHandler `" + dof_type + "'!",
-                            "StatPDEProblem::WriteToFileElementwise");
-      }
   }
 
   /******************************************************/

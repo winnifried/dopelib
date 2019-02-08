@@ -570,13 +570,20 @@ namespace DOpE
     /**
      * Implementation of virtual function in SpaceTimeHandlerBase
      */
-    virtual void
+    void
     WriteToFile (const VECTOR &v,
                  std::string name,
                  std::string outfile,
                  std::string dof_type,
                  std::string filetype);
 
+    void
+    WriteToFileElementwise(const Vector<float> &v,
+			   std::string name,
+                           std::string outfile,
+			   std::string dof_type,
+			   std::string filetype,
+			   int n_patches);
     /******************************************************/
 
   protected:
@@ -612,7 +619,7 @@ namespace DOpE
       {
         auto &data_out = GetDataOut ();
         data_out.attach_dof_handler (GetStateDoFHandler ()); // TODO chose correct dofhandler
-        data_out.add_data_vector (v, name);
+        data_out.add_data_vector (v, name, DataOut_DoFData<DH<dealdim,dealdim>,dealdim,dealdim>::DataVectorType::type_dof_data);
         data_out.build_patches ();
 
         std::string _outfile = outfile;
@@ -644,7 +651,7 @@ namespace DOpE
           {
             throw DOpEException (
               "Don't know how to write filetype `" + filetype + "'!",
-              "InstatPDEProblem::WriteToFile");
+              "SpaceTimeHandler::WriteToFile");
           }
 
 #ifdef DOPELIB_WITH_MPI
@@ -682,7 +689,7 @@ namespace DOpE
         auto &data_out = GetDataOut();
         data_out.attach_dof_handler (GetControlDoFHandler());
 
-        data_out.add_data_vector (v,name);
+        data_out.add_data_vector (v,name,DataOut_DoFData<DH<dealdim,dealdim>,dealdim,dealdim>::DataVectorType::type_dof_data);
         data_out.build_patches ();
 
         std::ofstream output(outfile.c_str());
@@ -698,7 +705,7 @@ namespace DOpE
         else
           {
             throw DOpEException("Don't know how to write filetype `" + filetype + "'!",
-                                "ReducedProblemInterface::WriteToFile");
+                                "SpaceTimeHandler::WriteToFile");
           }
         data_out.clear();
 #else
@@ -716,14 +723,53 @@ namespace DOpE
           {
             throw DOpEException (
               "Don't know how to write filetype `" + filetype + "'!",
-              "ReducedProblemInterface::WriteToFile");
+              "SpaceTimeHandler::WriteToFile");
           }
 #endif
       }
     else
       {
         throw DOpEException ("No such DoFHandler `" + dof_type + "'!",
-                             "ReducedProblemInterface::WriteToFile");
+                             "SpaceTimeHandler::WriteToFile");
+      }
+  }
+
+    template <template <int, int> class FE, template <int, int> class DH,
+            typename SPARSITYPATTERN, typename VECTOR, int dopedim, int dealdim>
+  void
+  SpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dopedim, dealdim>::WriteToFileElementwise (const Vector<float> &v,
+      std::string name,
+      std::string outfile,
+      std::string dof_type,
+      std::string filetype,
+      int n_patches)
+  {
+       if (dof_type == "state")
+      {
+        auto &data_out = GetDataOut ();
+        data_out.attach_dof_handler(GetStateDoFHandler());
+
+        data_out.add_data_vector(v, name,DataOut_DoFData<DH<dealdim,dealdim>,dealdim,dealdim>::DataVectorType::type_cell_data);
+        data_out.build_patches(n_patches);
+
+        std::ofstream output(outfile.c_str());
+
+        if (filetype == ".vtk")
+          {
+            data_out.write_vtk(output);
+          }
+        else
+          {
+            throw DOpEException(
+              "Don't know how to write filetype `" + filetype + "'!",
+              "SpaceTimeHandler::WriteToFileElementwise");
+          }
+        data_out.clear();
+      }
+    else
+      {
+        throw DOpEException("No such DoFHandler `" + dof_type + "'!",
+                            "SpaceTimeHandler::WriteToFileElementwise");
       }
   }
 

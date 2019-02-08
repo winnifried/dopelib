@@ -442,6 +442,14 @@ namespace DOpE
                  std::string dof_type,
                  std::string filetype);
 
+    virtual void
+    WriteToFileElementwise(const Vector<float> &v,
+			   std::string name,
+                           std::string outfile,
+			   std::string dof_type,
+			   std::string filetype,
+			   int n_patches);
+
   protected:
     //we need this here, because we know the type of the DoFHandler in use.
     //This saves us a template argument for statpdeproblem etc.
@@ -470,7 +478,7 @@ namespace DOpE
         auto &data_out = GetDataOut ();
         data_out.attach_dof_handler (GetStateDoFHandler ());
 
-        data_out.add_data_vector (v, name);
+        data_out.add_data_vector (v, name,DataOut_DoFData<DH<dealdim,dealdim>,dealdim,dealdim>::DataVectorType::type_dof_data);
         data_out.build_patches ();
         // From statpdeproblem.h:
         // TODO: mapping[0] is a workaround, as deal does not support interpolate
@@ -506,7 +514,7 @@ namespace DOpE
           {
             throw DOpEException (
               "Don't know how to write filetype `" + filetype + "'!",
-              "InstatPDEProblem::WriteToFile");
+              "StateSpaceTimeHandler::WriteToFile");
           }
 
         // In parallel computation, one cpu has to write a master file,
@@ -539,9 +547,49 @@ namespace DOpE
     else
       {
         throw DOpEException ("No such DoFHandler `" + dof_type + "'!",
-                             "ReducedProblemInterface::WriteToFile");
+                             "StateSpaceTimeHandler::WriteToFile");
       }
   }
+
+      template <template <int, int> class FE, template <int, int> class DH,
+            typename SPARSITYPATTERN, typename VECTOR, int dealdim>
+  void
+  StateSpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dealdim>::WriteToFileElementwise (const Vector<float> &v,
+      std::string name,
+      std::string outfile,
+      std::string dof_type,
+      std::string filetype,
+      int n_patches)
+  {
+       if (dof_type == "state")
+      {
+        auto &data_out = GetDataOut ();
+        data_out.attach_dof_handler(GetStateDoFHandler());
+
+        data_out.add_data_vector(v, name,DataOut_DoFData<DH<dealdim,dealdim>,dealdim,dealdim>::DataVectorType::type_cell_data);
+        data_out.build_patches(n_patches);
+
+        std::ofstream output(outfile.c_str());
+
+        if (filetype == ".vtk")
+          {
+            data_out.write_vtk(output);
+          }
+        else
+          {
+            throw DOpEException(
+              "Don't know how to write filetype `" + filetype + "'!",
+              "StateSpaceTimeHandler::WriteToFileElementwise");
+          }
+        data_out.clear();
+      }
+    else
+      {
+        throw DOpEException("No such DoFHandler `" + dof_type + "'!",
+                            "StateSpaceTimeHandler::WriteToFileElementwise");
+      }
+  }
+
 
 }
 

@@ -217,24 +217,6 @@ namespace DOpE
     /******************************************************/
 
     /**
-     *  Here, the given BlockVector<double> v is printed to a file of *.vtk format.
-     *  However, in later implementations other file formats will be available.
-     *
-     *  @param v           The BlockVector to write to a file.
-     *  @param name        The names of the variables, e.g., in a fluid problem: v1, v2, p.
-     *  @param outfile     The basic name for the output file to print.
-     *  @param dof_type    Has the DoF type: state or control.
-     *  @param filetype    The filetype. Actually, *.vtk outputs are possible.
-     */
-    void WriteToFile(const dealii::BlockVector<double> &v,
-                     std::string name,
-                     std::string outfile,
-                     std::string dof_type,
-                     std::string filetype);
-
-    /******************************************************/
-
-    /**
      *  Here, the given ControlVector v is printed to a file of *.vtk format.
      *  However, in later implementations other file formats will be available.
      *
@@ -285,6 +267,11 @@ namespace DOpE
                               "AumentedLagrangianProblem::SetType");
         }
     }
+    /**
+     * Import overloads from base class.
+     */
+    using ReducedProblemInterface<PROBLEM,VECTOR>::WriteToFile;
+
   protected:
     CONTROLNONLINEARSOLVER &GetControlNonlinearSolver();
     CONTROLINTEGRATOR &GetControlIntegrator()
@@ -1051,55 +1038,6 @@ namespace DOpE
         throw DOpEException("dopedim not implemented","VoidReducedProblem::ComputeReducedHessianVector");
       }
   }
-  /******************************************************/
-  template <typename CONTROLNONLINEARSOLVER, typename CONTROLINTEGRATOR, typename PROBLEM, typename VECTOR,int dopedim,int dealdim>
-  void VoidReducedProblem<CONTROLNONLINEARSOLVER, CONTROLINTEGRATOR, PROBLEM, VECTOR, dopedim, dealdim>::WriteToFile(const dealii::BlockVector<double> &v,
-      std::string  name, std::string outfile,
-      std::string dof_type,
-      std::string filetype)
-  {
-    if (dof_type == "control")
-      {
-#if dope_dimension >0
-        DataOut<dopedim> data_out;
-        data_out.attach_dof_handler (this->GetProblem()->GetSpaceTimeHandler()->GetControlDoFHandler());
-
-        data_out.add_data_vector (v,name);
-        data_out.build_patches ();
-
-        std::ofstream output(outfile.c_str());
-
-        if (filetype == ".vtk")
-          {
-            data_out.write_vtk (output);
-          }
-        else
-          {
-            throw DOpEException("Don't know how to write filetype `" + filetype + "'!","VoidReducedProblem::WriteToFile");
-          }
-#else
-        if (filetype == ".txt")
-          {
-            std::ofstream output(outfile.c_str());
-            Vector<double> off;
-            off = v;
-            for (unsigned int i =0; i<off.size(); i++)
-              {
-                output << off(i) <<std::endl;
-              }
-          }
-        else
-          {
-            throw DOpEException("Don't know how to write filetype `" + filetype + "'!","VoidReducedProblem::WriteToFile");
-          }
-#endif
-      }
-    else
-      {
-        throw DOpEException("No such DoFHandler `" + dof_type + "'!","VoidReducedProblem::WriteToFile");
-      }
-  }
-
   /******************************************************/
 
   template <typename CONTROLNONLINEARSOLVER, typename CONTROLINTEGRATOR, typename PROBLEM, typename VECTOR,int dopedim,int dealdim>

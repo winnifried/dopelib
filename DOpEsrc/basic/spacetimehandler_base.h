@@ -682,7 +682,15 @@ namespace DOpE
 
     /******************************************************/
     /**
-     * Writes vector to file. Delegate to child classes which have the required information.
+     *  Here, the given Vector v (associated to DoFs) is printed to
+     *  a file of *.vtk, *.vtu, *.gpl, or *.txt format. However, in later implementations other
+     *  file formats will be available.
+     *
+     *  @param v           The Vector to write to a file.
+     *  @param name        The names of the variables, e.g., in a fluid problem: v1, v2, p.
+     *  @param outfile     The basic name for the output file to print.
+     *  @param dof_type    Has the DoF type: state or control.
+     *  @param filetype    The filetype. Actually, *.vtk outputs are possible.
      */
     // TODO enum
     // TODO param
@@ -693,6 +701,22 @@ namespace DOpE
                  std::string dof_type,
                  std::string filetype) = 0;
 
+    /**
+     *  Here, the given Vector v (containing element-related data) is printed to
+     *  a file of *.vtk format. However, in later implementations other
+     *  file formats will be available.
+     *
+     *  @param v           The Vector to write to a file.
+     *  @param name        The names of the variables, e.g., in a fluid problem: v1, v2, p.
+     *  @param outfile     The basic name for the output file to print.
+     *  @param dof_type    Has the DoF type: state or control.
+     *  @param filetype    The filetype. Actually, *.vtk outputs are possible.
+     *  @param n_patches   Patches used for visualization.
+     */
+    virtual void
+    WriteToFileElementwise(const Vector<float> &v, std::string name,
+                           std::string outfile, std::string dof_type, std::string filetype, int n_patches) = 0 ;
+    
   protected:
     /**
      * Call this function if any StateDoF related stuff has changed to invalidate all previous tickets.
