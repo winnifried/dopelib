@@ -407,6 +407,8 @@ namespace DOpE
 
       ///Time refinement needs potentially a change in the dofhandler number?
       SpaceTimeHandlerBase<VECTOR>::RefineTime(ref_type);
+      //TimeRefinement requires a resizing of the time_to_dofhandler_ vector!
+      abort();
     }
 
     /******************************************************/
@@ -652,7 +654,17 @@ namespace DOpE
       dofhandler_to_time_.resize(n_dof_handlers_);
       for(unsigned int i = 0; i < n_dof_handlers_; i++)
       {
-	dofhandler_to_time_[i]=*(find(time_to_dofhandler_.begin(),time_to_dofhandler_.end(),i));
+	dofhandler_to_time_[i] = std::numeric_limits<unsigned int>::max();
+	for(unsigned int j =0; j < time_to_dofhandler_.size(); j++)
+	{
+	  if (time_to_dofhandler_[j]==i)
+	  {
+	    dofhandler_to_time_[i] = j;
+	    break;
+	  }
+	}
+	assert(dofhandler_to_time_[i] != std::numeric_limits<unsigned int>::max());
+	assert(time_to_dofhandler_[dofhandler_to_time_[i]]==i);
       }
       //Initialize triangulations, ...
       triangulations_.resize(n_dof_handlers_,NULL);
