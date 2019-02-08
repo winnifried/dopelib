@@ -275,7 +275,7 @@ namespace DOpE
     double
     GetControlError() const
     {
-      assert(this->GetEETerms() != DOpEtypes::mixed_control);
+      assert(this->GetEETerms() == DOpEtypes::mixed_control);
       if(lock_)
       {
 	throw DOpEException("Error indicators are still locked.",
@@ -784,18 +784,18 @@ namespace DOpE
     {
       //FIXME - the time should be used to steer access to vectors!
       current_time_dof_=time_dof;
+      GetPrimalErrorIndicators().reinit(error_ind_[time_dof].size());
+      GetDualErrorIndicators().reinit(error_ind_[time_dof].size());
       if (this->GetEETerms() == DOpEtypes::primal_only
 	  || this->GetEETerms() == DOpEtypes::mixed
 	  || this->GetEETerms() == DOpEtypes::mixed_control)
       {
-	GetPrimalErrorIndicators().reinit(error_ind_[time_dof].size());
 	GetPI_h_z().SetTimeDoFNumber(time_dof);
       }
       if (this->GetEETerms() == DOpEtypes::dual_only
 	  || this->GetEETerms() == DOpEtypes::mixed
 	  || this->GetEETerms() == DOpEtypes::mixed_control)
       {
-	GetDualErrorIndicators().reinit(error_ind_[time_dof].size());
 	GetPI_h_u().SetTimeDoFNumber(time_dof);
       }
       if ( this->GetEETerms() == DOpEtypes::mixed_control)
