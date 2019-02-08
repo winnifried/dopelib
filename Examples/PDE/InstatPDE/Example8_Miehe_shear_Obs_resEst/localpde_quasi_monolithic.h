@@ -97,8 +97,9 @@ public:
     unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
     unsigned int n_q_points = edc.GetNQPoints();
 
-    double element_diameter = edc.GetElementDiameter();
-
+    //double element_diameter = edc.GetElementDiameter();
+    double element_diameter = 0.044;
+   
     uvalues_.resize(n_q_points, Vector<double>(4));
     ugrads_.resize(n_q_points, vector<Tensor<1, 2> >(4));
     last_timestep_uvalues_.resize(n_q_points, Vector<double>(4));
@@ -276,8 +277,9 @@ public:
     unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
     unsigned int n_q_points = edc.GetNQPoints();
 
-    double element_diameter = edc.GetElementDiameter();
-
+    //double element_diameter = edc.GetElementDiameter();
+    double element_diameter = 0.044;
+ 
     const FEValuesExtractors::Vector displacements(0);
     const FEValuesExtractors::Scalar phasefield(2);
     //const FEValuesExtractors::Scalar pressure(3);
@@ -532,7 +534,9 @@ public:
       const DOpEWrapper::FEValues<dealdim> &state_fe_values =
 	edc.GetFEValuesState();
       
-      double element_diameter = edc.GetElementDiameter();
+      //double element_diameter = edc.GetElementDiameter();
+      double element_diameter = 0.044;
+    
       double eps_pf;
       eps_pf = element_diameter* alpha_eps_;
    
@@ -728,7 +732,9 @@ public:
       // auto findet selber heraus ?
       const  auto &state_fe_values = fdc.GetFEFaceValuesState();
       
-      double element_diameter = fdc.GetElementDiameter();
+      //double element_diameter = fdc.GetElementDiameter();
+      double element_diameter = 0.044;
+    
       double eps_pf;
       eps_pf = element_diameter* alpha_eps_;
       
@@ -889,7 +895,9 @@ public:
       // auto findet selber heraus ?
       const  auto &state_fe_values = fdc.GetFEFaceValuesState();
       
-      double element_diameter = fdc.GetElementDiameter();
+      //double element_diameter = fdc.GetElementDiameter();
+      double element_diameter = 0.044;
+    
       double eps_pf;
       eps_pf = element_diameter* alpha_eps_;
       
