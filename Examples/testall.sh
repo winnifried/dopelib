@@ -49,7 +49,7 @@ while getopts 'j:' flag; do
     case "${flag}" in
 	j) n_procs="${OPTARG}" ;;
 	*) echo "Unknown option ${flag}."
-	   echo "Run 'compile-tests.sh -h' for help."
+	   echo "Run 'compile-tests.sh -j[nprocs]'."
 	   exit 1 ;;
     esac
 done
