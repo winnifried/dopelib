@@ -657,14 +657,12 @@ public:
         //Outflow is color ==1
         if (color == 1 )
           {
-            assert(bn > 0);
             //Rightside of pipe -> Index n_comp+current_comp
             local_vector(2) += uvalues_[q_point][0];
             present_in_outflow[2] = true;
           }
         else
           {
-            assert(bn < 0);
             assert(color == 0);
             //Leftside of pipe  -> current_comp
             local_vector(1) += uvalues_[q_point][1];
@@ -708,14 +706,12 @@ public:
         if (color == 1 )
           {
             assert(uvalues_[q_point][0] > 0. || fabs(uvalues_[q_point][0]) < 1.e-13);
-            assert(bn > 0);
             local_matrix(0,2+0) += 1.;
             present_in_outflow[2+0] = true; //On right boundary always n_comp+c
           }
         else
           {
             assert(uvalues_[q_point][0] > 0. || fabs(uvalues_[q_point][0]) < 1.e-13);
-            assert(bn < 0);
             assert(color == 0);
             local_matrix(0+1,0+1) += 1.;
             present_in_outflow[0+1] = true;
