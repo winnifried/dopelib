@@ -1,7 +1,8 @@
 #!/bin/bash
 failed=0
 #The individual Tests:
-function RUN_TEST {
+function RUN_TEST() {
+    lfailed=0
     if [ -d $1 ]
     then
 	cd $1
@@ -25,7 +26,7 @@ function RUN_TEST {
 		    echo -n " "
 		    sed 's/s$/s\t/g' time.txt | sed 's/real\t/r: /g' | sed 's/user\t/u: /g' | sed 's/sys\t/s: /g' | tr -d '\n'
 		    echo 	
-		    failed=$((${failed} + 1))
+		    lfailed=$((${lfailed} + 1))
 		fi
 		if [ -f time.txt ]
 		then
@@ -35,19 +36,20 @@ function RUN_TEST {
 		echo -en '\E[31;40m'"failed!"
 		tput sgr0
 		echo 
-		failed=$((${failed} + 1))
+		lfailed=$((${lfailed} + 1))
 	    fi
 	    cd ..
 	else
 	    echo -en "'\E[31;40m'failed!"
 	    tput sgr0
 	    echo
-	    failed=$((${failed} + 1))
+	    lfailed=$((${lfailed} + 1))
 	fi
 	cd ..
     else
 	echo "Could not find directory :"$1
     fi
+    return $lfailed
 }
 
 export -f RUN_TEST
@@ -61,6 +63,11 @@ while getopts 'j:' flag; do
     esac
 done
 
+if [[ $n_procs == "" ]]
+then
+    n_procs=1
+fi
+
 echo "Running tests with ${n_procs} parallel processes."
 
 for bd in OPT PDE
@@ -73,15 +80,17 @@ do echo "Trying "$bd
 	    if [ -d $sd ]
 	    then
 		cd $sd
-		if [ $n_procs == 1 ]
+		if [[ $n_procs == 1 ]]
 		then
 		    for i in `ls -d Example*`
 		    do
 			RUN_TEST $i $bd"/"$sd
+			failed=$((${failed} + $?))
 		    done
 		else
 		    #-k option to keep the output in the same order as in the sequential case
-		    parallel -k --no-notice RUN_TEST ::: "`ls -d Example*`" ::: "$bd/$sd"
+		    parallel -k --no-notice -j${n_procs} RUN_TEST ::: "`ls -d Example*`" ::: "$bd/$sd"
+		    failed=$((${failed} + $?))
 		fi
 		cd ..
 	    fi
