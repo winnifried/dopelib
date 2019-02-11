@@ -232,7 +232,7 @@ main(int argc, char **argv)
   // 80 subintervalls for the timediscretization.
   // timestep size -> 10e-3
   Triangulation<1> times;
-  unsigned int num_intervals = 30; //300
+  unsigned int num_intervals = 300; //300
   double initial_time = 0.0;
   double end_time = 0.03; //0.03
   GridGenerator::subdivided_hyper_cube(times, num_intervals, initial_time, end_time);
@@ -272,7 +272,7 @@ main(int argc, char **argv)
   // the type of the control, see dopetypes.h for more information.
   // MethodOfLines_StateSpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR, DIM>
   //STH DOFH(triangulation, state_fe, times);
-  std::vector<unsigned int> Rothe_time_to_dof(31,0); // new!
+  std::vector<unsigned int> Rothe_time_to_dof(301,0); // new!
 
   //works
   /*Rothe_time_to_dof[5]=1;

@@ -168,7 +168,7 @@ public:
         // Necessary because stress splitting does not work
         // in the very initial time step.
 
-        if (this->GetTime() > 0.005) // to avoid zero matrices in the null lines of the loading
+        if (this->GetTime() > 0.001) // 0.005 to avoid zero matrices in the null lines of the loading
           {
 		decompose_stress(stress_term_plus, stress_term_minus,
                              E, tr_E, zero_matrix , 0.0,
@@ -176,7 +176,7 @@ public:
                              lame_coefficient_mu_, false);
 
 	  }
-	else if (this->GetTime() == 0.001)
+	else if (this->GetTime() <= 0.001)
 	  {
 		//std::cout << "First timestep no stress splitting!" << std::endl;
             	stress_term_plus = stress_term;
@@ -363,14 +363,14 @@ public:
 
         // Necessary because stress splitting does not work
         // in the very initial time step.
-        if (this->GetTime() > 0.005)
+        if (this->GetTime() > 0.001) // 0.005)
           {
 		decompose_stress(stress_term_plus, stress_term_minus,
                              E, tr_E, zero_matrix , 0.0,
                              lame_coefficient_lambda_,
                              lame_coefficient_mu_, false);
 	  }
-	else if (this->GetTime() == 0.001)
+	else if (this->GetTime() <= 0.001)
           {
 			//Tensor<2,2> stress_term_plus;
        			//Tensor<2,2> stress_term_minus;
@@ -398,7 +398,7 @@ public:
 	    Tensor<2,2> stress_term_plus_LinU;
             Tensor<2,2> stress_term_minus_LinU;
 
-	    if (this->GetTime() > 0.005)
+	    if (this->GetTime() > 0.001) // 0.005)
 	      {
             	        stress_term_LinU = lame_coefficient_lambda_ * tr_E_LinU * Identity
                                + 2 * lame_coefficient_mu_ * E_LinU;
@@ -411,7 +411,7 @@ public:
 
             // Necessary because stress splitting does not work
             // in the very initial time step.
-             if (this->GetTime() > 0.005) // to avoid zero matrices in the null lineas of the loading
+             if (this->GetTime() > 0.001) // 0.005) // to avoid zero matrices in the null lineas of the loading
 	      {
                 	decompose_stress(stress_term_plus_LinU, stress_term_minus_LinU,
                                  E, tr_E, E_LinU, tr_E_LinU,
@@ -419,7 +419,7 @@ public:
                                  lame_coefficient_mu_,
                                  true);
               }
-	     else if (this->GetTime() == 0.001)
+	     else if (this->GetTime() <= 0.001)
               {
 			//Tensor<2,2> stress_term_plus_LinU;
             		//Tensor<2,2> stress_term_minus_LinU;
@@ -631,7 +631,7 @@ public:
 	
 	// Necessary because stress splitting does not work
         // in the very initial time step.	
-	if (this->GetTime() > 0.005) // to avoid zero matrices in the null lines of the loading
+	if (this->GetTime() > 0.001) // 0.005) // to avoid zero matrices in the null lines of the loading
 	{
 	  
 	  decompose_stress(stress_term_plus, stress_term_minus,
@@ -640,7 +640,7 @@ public:
 			   lame_coefficient_mu_, false);
 	  
 	}
-	else if (this->GetTime() == 0.001)
+	else if (this->GetTime() <= 0.001)
 	{
 	  //std::cout << "First timestep no stress splitting!" << std::endl;
 	  stress_term_plus = stress_term;
@@ -832,7 +832,7 @@ public:
 	
 	// Necessary because stress splitting does not work
         // in the very initial time step.	
-	if (this->GetTime() > 0.005) // to avoid zero matrices in the null lines of the loading
+	if (this->GetTime() > 0.001) // 0.005) // to avoid zero matrices in the null lines of the loading
 	{
 	  
 	  decompose_stress(stress_term_plus, stress_term_minus,
@@ -841,7 +841,7 @@ public:
 			   lame_coefficient_mu_, false);
 	  
 	}
-	else if (this->GetTime() == 0.001)
+	else if (this->GetTime() <= 0.001)
 	{
 	  //std::cout << "First timestep no stress splitting!" << std::endl;
 	  stress_term_plus = stress_term;
@@ -994,7 +994,7 @@ public:
 	
 	// Necessary because stress splitting does not work
         // in the very initial time step.	
-	if (this->GetTime() > 0.005) // to avoid zero matrices in the null lines of the loading
+	if (this->GetTime() > 0.001) // 0.005) // to avoid zero matrices in the null lines of the loading
 	{
 	  
 	  decompose_stress(stress_term_plus, stress_term_minus,
@@ -1003,7 +1003,7 @@ public:
 			   lame_coefficient_mu_, false);
 	  
 	}
-	else if (this->GetTime() == 0.001)
+	else if (this->GetTime() <= 0.001)
 	{
 	    //std::cout << "First timestep no stress splitting!" << std::endl;
 	  stress_term_plus = stress_term;
