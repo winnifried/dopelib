@@ -489,7 +489,7 @@ namespace DOpE
               build_matrix = true;
               // Reuse of Matrix seems to be a bad idea, rebuild and repeat
               solution -= du;
-              GetIntegrator().ComputeNonlinearResidual(pde,residual);
+              GetIntegrator().ComputeNonlinearLhs(pde,residual);
               residual -= time_residual;
               residual *= -1.;
               out <<algo_level<<"Newton step: "

@@ -1083,6 +1083,8 @@ namespace DOpE
 
 	    if(transfer_needed)
 	    {
+	      this->GetOutputHandler()->Write(u_old,
+                                            "Transfered_" + outname + this->GetPostIndex(), problem.GetDoFType());
 	      this->GetNonlinearSolver("state").ReInit(problem);
 	      state_reinit_ = true; //We set reinit=true, so that in the next call,
 	      //reinit is called before handling the first time step.
@@ -1123,7 +1125,8 @@ namespace DOpE
 
             this->GetNonlinearSolver("state").NonlinearLastTimeEvals(problem,
                                                                      u_old, sol.GetSpacialVector());
-
+	    this->GetOutputHandler()->Write(sol.GetSpacialVector(),
+                                            "LastTimestep_" + outname + this->GetPostIndex(), problem.GetDoFType());
 	    if (transfer_needed)
 	    {
 	      this->GetProblem()->DeleteAuxiliaryFromIntegratorWithTemporalTransfer(
@@ -1247,6 +1250,8 @@ namespace DOpE
 
 	    if(transfer_needed)
 	    {
+	      this->GetOutputHandler()->Write(u_old,
+                                            "Transfered_" + outname + this->GetPostIndex(), problem.GetDoFType());
 	      this->GetNonlinearSolver("adjoint").ReInit(problem);
 	      adjoint_reinit_ = true; //We set reinit=true, so that in the next call,
 	      //reinit is called before handling the first time step.
