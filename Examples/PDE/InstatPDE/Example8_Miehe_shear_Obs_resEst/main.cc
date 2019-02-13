@@ -232,9 +232,9 @@ main(int argc, char **argv)
   // 80 subintervalls for the timediscretization.
   // timestep size -> 10e-3
   Triangulation<1> times;
-  unsigned int num_intervals = 300; //300
+  unsigned int num_intervals = 20;
   double initial_time = 0.0;
-  double end_time = 0.03; //0.03
+  double end_time = 0.02;
   GridGenerator::subdivided_hyper_cube(times, num_intervals, initial_time, end_time);
   
   // we want to log the refinement history
@@ -272,43 +272,16 @@ main(int argc, char **argv)
   // the type of the control, see dopetypes.h for more information.
   // MethodOfLines_StateSpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR, DIM>
   //STH DOFH(triangulation, state_fe, times);
-  std::vector<unsigned int> Rothe_time_to_dof(301,0); // new!
+  std::vector<unsigned int> Rothe_time_to_dof(21,0);
 
-  //works
-  /*Rothe_time_to_dof[5]=1;
-    Rothe_time_to_dof[8]=2;*/
-
-  //does not work
-  /*Rothe_time_to_dof[11]=1;
-    Rothe_time_to_dof[21]=2;*/
-  
-  
-  //does not work
-  Rothe_time_to_dof[11]=1;
-  Rothe_time_to_dof[12]=1;
-  Rothe_time_to_dof[13]=1;
-  Rothe_time_to_dof[14]=1;
-  Rothe_time_to_dof[15]=1;
-  Rothe_time_to_dof[16]=1;
-  Rothe_time_to_dof[17]=1;
-  Rothe_time_to_dof[18]=1;
-  Rothe_time_to_dof[19]=1;
-  Rothe_time_to_dof[20]=1;
-  
-  Rothe_time_to_dof[21]=2;
-  Rothe_time_to_dof[22]=2;
-  Rothe_time_to_dof[23]=2;
-  Rothe_time_to_dof[24]=2;
-  Rothe_time_to_dof[25]=2;
-  Rothe_time_to_dof[26]=2;
-  Rothe_time_to_dof[27]=2;
-  Rothe_time_to_dof[28]=2;
-  Rothe_time_to_dof[29]=2;
-  Rothe_time_to_dof[30]=2;
+  for (int k=1.0; k<21.0; k++)
+	{
+	  Rothe_time_to_dof[k]=k;
+	}
 
 
   Rothe_StateSpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR,
-			      DIM> DOFH(triangulation, state_fe, times, Rothe_time_to_dof); // new!
+			      DIM> DOFH(triangulation, state_fe, times, Rothe_time_to_dof);
 
 
 
