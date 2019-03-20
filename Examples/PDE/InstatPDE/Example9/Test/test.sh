@@ -5,6 +5,6 @@ if [ $# -ne 1 ]
     exit 1
 fi
 
-PROGRAM=../DOpE-PDE-InstatPDE-Example4_TimeSpace
+PROGRAM=../DOpE-PDE-InstatPDE-Example9
 
 ../../../../test-single.sh $1 $PROGRAM

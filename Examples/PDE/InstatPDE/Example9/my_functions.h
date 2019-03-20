@@ -28,18 +28,18 @@
 
 using namespace dealii;
 
-class InitialData : public DOpEWrapper::Function<1>
+class InitialData : public DOpEWrapper::Function<2>
 {
 public:
   InitialData() :
-    DOpEWrapper::Function<1>()
+    DOpEWrapper::Function<2>()
   {
 
   }
   virtual double
-  value(const Point<1> &p, const unsigned int component = 0) const;
+  value(const Point<2> &p, const unsigned int component = 0) const;
   virtual void
-  vector_value(const Point<1> &p, Vector<double> &value) const;
+  vector_value(const Point<2> &p, Vector<double> &value) const;
 
 private:
 
@@ -48,7 +48,7 @@ private:
 /******************************************************/
 
 double
-InitialData::value(const Point<1> &p, const unsigned int /*component*/) const
+InitialData::value(const Point<2> &p, const unsigned int /*component*/) const
 {
   double x = p[0];
 
@@ -59,7 +59,7 @@ InitialData::value(const Point<1> &p, const unsigned int /*component*/) const
 /******************************************************/
 
 void
-InitialData::vector_value(const Point<1> &p, Vector<double> &values) const
+InitialData::vector_value(const Point<2> &p, Vector<double> &values) const
 {
   for (unsigned int c = 0; c < this->n_components; ++c)
     values(c) = InitialData::value(p, c);

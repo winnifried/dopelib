@@ -68,7 +68,7 @@ using namespace dealii;
 using namespace DOpE;
 
 // Define dimensions for control- and state problem
-const static int DIM = 1;
+const static int DIM = 2;
 
 #define DOFHANDLER DoFHandler
 #define FE FESystem
@@ -131,8 +131,7 @@ int
 main(int argc, char **argv)
 {
   /**
-   * In this example we solve the one dimensional heat equation.
-   * It shows how DopE handels 1d equations.
+   * In this example we solve the two dimensional heat equation on varying meshes in time.
    */
   
   dealii::Utilities::MPI::MPI_InitFinalize mpi(argc, argv);
@@ -197,6 +196,8 @@ main(int argc, char **argv)
   
   P.SetDirichletBoundaryColors(0, comp_mask, &DD1);
   P.SetDirichletBoundaryColors(1, comp_mask, &DD1);
+  P.SetDirichletBoundaryColors(2, comp_mask, &DD1);
+  P.SetDirichletBoundaryColors(3, comp_mask, &DD1);
 
   //prepare the initial data
   InitialData initial_data;

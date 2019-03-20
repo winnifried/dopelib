@@ -1,6 +1,6 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
 # Set the name of the project and target:
-SET(TARGET "DOpE-PDE-InstatPDE-Example4_TimeSpace")
+SET(TARGET "DOpE-PDE-InstatPDE-Example9")
 
 # Declare all source files the target consists of:
 SET(TARGET_SRC
@@ -9,8 +9,8 @@ SET(TARGET_SRC
   )
 
 #Set dimensions
-SET(dope_dimension 1)
-SET(deal_dimension 1)
+SET(dope_dimension 2)
+SET(deal_dimension 2)
 
 #Find the DOpE library
 #The ../../../../ is included first to make shure we always use 

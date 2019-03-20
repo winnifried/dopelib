@@ -58,7 +58,7 @@ public:
     const std::map<std::string, const VECTOR *> &domain_values)
   {
 
-    Point<1> evaluation_point(0.5);
+    Point<2> evaluation_point(0.5,0.5);
 
     typename map<string, const VECTOR *>::const_iterator it =
       domain_values.find("state");

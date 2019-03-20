@@ -23,7 +23,7 @@ end
 
 subsection output parameters
   # File format for the output of solution variables
-  set file_format       = .gpl
+  set file_format       = .vtk
 
   # Iteration Counters that should not reflect in the outputname, seperated by
   # `;`
@@ -34,7 +34,7 @@ subsection output parameters
 
   # Do not write files whose name contains a substring given here by a list of
   # `;` separated words
-  set never_write_list  = Gradient;Residual;Hessian;Tangent;Adjoint;Update;State
+  set never_write_list  = Gradient;Residual;Hessian;Tangent;Adjoint;Update;Error
   #set never_write_list  = Gradient;Hessian;Tangent;Adjoint
       
   # Defines what strings should be printed, the higher the number the more
