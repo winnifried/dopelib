@@ -216,8 +216,8 @@ main(int argc, char **argv)
   solver.RegisterExceptionHandler(&ex);
 
   H1_RESC h1resc(DOFH, DOpEtypes::VectorStorageType::fullmem, pr, DOpEtypes::primal_only);
-
-  for (int j = 0; j < 2; j++)
+  unsigned int n_iter=4;
+  for (unsigned int j = 0; j < n_iter; j++)
     {
     try
       {
@@ -262,7 +262,7 @@ main(int argc, char **argv)
         std::cout << e.GetErrorMessage() << std::endl;
        }
     //No refinement after the last iteration
-    if (j != 1)
+    if (j != n_iter-1)
         {
           //For global mesh refinement, uncomment the next line
           // DOFH.RefineSpace(DOpEtypes::RefinementType::global); //or just DOFH.RefineSpace()

@@ -3,6 +3,7 @@ Changelog DOpE
 20.03.2019: Changed PDE/InstatPDE/Example4_TimeSpace to PDE/InstatPDE/Example9
 	    showing the use of Rothe-discretization for a 2d heat equation
 	    and Residual error estimation.
+	    Fixed Bug in Rothe-Spacetimehandler and non-homogeneous Dirichlet-Values
 25.01.2019: Update of DWRDataContainer_Base. Now, the container stores
 	    Space-Time distributed error indicators. Access to the global
 	    space-time summed error indicators can be done via GetError(), GetPrimalError(),

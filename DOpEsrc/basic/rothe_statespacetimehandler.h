@@ -99,6 +99,7 @@ namespace DOpE
       assert(state_dof_handlers_.size()==n_dof_handlers_);
       assert(state_mesh_transfers_.size()==n_dof_handlers_);
       assert(state_dof_constraints_.size()==n_dof_handlers_);
+      assert(state_hn_dof_constraints_.size()==n_dof_handlers_);
       for(unsigned int i = 0; i < n_dof_handlers_; i++)
       {
 	assert(state_dof_handlers_[i]!= NULL);
@@ -111,6 +112,10 @@ namespace DOpE
 	if (state_dof_constraints_[i] != NULL)
 	{
 	  delete state_dof_constraints_[i];
+	}
+	if (state_hn_dof_constraints_[i] != NULL)
+	{
+	  delete state_hn_dof_constraints_[i];
 	}
 
 
@@ -137,6 +142,7 @@ namespace DOpE
            const DirichletDescriptor &DD  )
     {
 	assert(state_dof_constraints_.size()==n_dof_handlers_);
+	assert(state_hn_dof_constraints_.size()==n_dof_handlers_);
 	
      state_dofs_per_block_.resize(n_dof_handlers_,std::vector<unsigned int>(state_n_blocks));
      auto it = this->GetTimeDoFHandler().first_interval();
@@ -173,13 +179,13 @@ namespace DOpE
       	DoFRenumbering::component_wise(
         static_cast<DH<dealdim, dealdim>&>(*state_dof_handlers_[j]));
 
+	//DoFConstraints including Dirichlet constraints
       	state_dof_constraints_[j]->clear();
       	state_dof_constraints_[j]->reinit (
 	  this->GetLocallyRelevantDoFs (DOpEtypes::VectorType::state,dofhandler_to_time_[j]));
       	DoFTools::make_hanging_node_constraints (
         	static_cast<DH<dealdim, dealdim>&> (*state_dof_handlers_[j]),
         *state_dof_constraints_[j]);
-      	//TODO Dirichlet ueber Constraints
       	if (GetUserDefinedDoFConstraints() != NULL)
 	  GetUserDefinedDoFConstraints()->MakeStateDoFConstraints(*state_dof_handlers_[j], *state_dof_constraints_[j]);
 	
@@ -202,6 +208,17 @@ namespace DOpE
       	state_dof_constraints_[j]->close();
       	state_dofs_per_block_[j].resize(state_n_blocks);
 
+	//Only Hanging Node DoFConstraints for interpolation!
+      	state_hn_dof_constraints_[j]->clear();
+      	state_hn_dof_constraints_[j]->reinit (
+	  this->GetLocallyRelevantDoFs (DOpEtypes::VectorType::state,dofhandler_to_time_[j]));
+      	DoFTools::make_hanging_node_constraints (
+	  static_cast<DH<dealdim, dealdim>&> (*state_dof_handlers_[j]),
+	  *state_hn_dof_constraints_[j]);
+
+	state_hn_dof_constraints_[j]->close();
+	//HN Constraints finished
+	
       	DoFTools::count_dofs_per_block(static_cast<DH<dealdim, dealdim>&>(*state_dof_handlers_[j]),
       	state_dofs_per_block_[j], state_block_component);
 	if(support_points_.size() > j)
@@ -570,7 +587,7 @@ namespace DOpE
       VectorTools::interpolate_to_different_mesh(state_dof_handlers_[time_to_dofhandler_[from_time_dof]]->GetDEALDoFHandler(),
 						 temp,
 						 state_dof_handlers_[time_to_dofhandler_[to_time_dof]]->GetDEALDoFHandler(),
-						 *state_dof_constraints_[time_to_dofhandler_[to_time_dof]],
+						 *state_hn_dof_constraints_[time_to_dofhandler_[to_time_dof]],
 						 new_values);
       return true;
     }
@@ -670,6 +687,7 @@ namespace DOpE
       triangulations_.resize(n_dof_handlers_,NULL);
       state_dof_handlers_.resize(n_dof_handlers_,NULL);
       state_dof_constraints_.resize(n_dof_handlers_,NULL);
+      state_hn_dof_constraints_.resize(n_dof_handlers_,NULL);
       state_mesh_transfers_.resize(n_dof_handlers_,NULL);
 
       for(unsigned int i = 0; i < n_dof_handlers_; i++)
@@ -691,6 +709,7 @@ namespace DOpE
 	assert(triangulations_[i] != NULL);	  
 	state_dof_handlers_[i] = new DOpEWrapper::DoFHandler<dealdim, DH>(*(triangulations_[i]));
 	state_dof_constraints_[i]= new dealii::ConstraintMatrix;
+	state_hn_dof_constraints_[i]= new dealii::ConstraintMatrix;
       }
     }
     
@@ -714,6 +733,7 @@ namespace DOpE
     std::vector<std::vector<unsigned int> > state_dofs_per_block_;
 
     std::vector<dealii::ConstraintMatrix*> state_dof_constraints_;
+    std::vector<dealii::ConstraintMatrix*> state_hn_dof_constraints_;
 
     const dealii::SmartPointer<const FE<dealdim, dealdim> > state_fe_;
     const dealii::SmartPointer<const DOpEWrapper::Mapping<dealdim, DH> > mapping_;

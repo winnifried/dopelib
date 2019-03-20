@@ -28,730 +28,1489 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep (MT): 2 (0.02 -> 0.04) using backward Euler
-			 Newton step: 0	 Residual (abs.):   1.3584e-03
+			 Newton step: 0	 Residual (abs.):   1.3583e-03
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep (MT): 3 (0.04 -> 0.06) using backward Euler
-			 Newton step: 0	 Residual (abs.):   4.0588e-04
+			 Newton step: 0	 Residual (abs.):   4.0476e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep (MT): 4 (0.06 -> 0.08) using backward Euler
-			 Newton step: 0	 Residual (abs.):   2.6532e-04
+			 Newton step: 0	 Residual (abs.):   3.5490e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep (MT): 5 (0.08 -> 0.1) using backward Euler
-			 Newton step: 0	 Residual (abs.):   1.9909e-04
+			 Newton step: 0	 Residual (abs.):   3.6545e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep (MT): 6 (0.1 -> 0.12) using backward Euler
-			 Newton step: 0	 Residual (abs.):   1.4621e-04
+			 Newton step: 0	 Residual (abs.):   3.7124e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep (MT): 7 (0.12 -> 0.14) using backward Euler
-			 Newton step: 0	 Residual (abs.):   1.0601e-04
+			 Newton step: 0	 Residual (abs.):   3.7489e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep (MT): 8 (0.14 -> 0.16) using backward Euler
-			 Newton step: 0	 Residual (abs.):   7.6371e-05
+			 Newton step: 0	 Residual (abs.):   3.7735e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep (MT): 9 (0.16 -> 0.18) using backward Euler
-			 Newton step: 0	 Residual (abs.):   5.4851e-05
+			 Newton step: 0	 Residual (abs.):   3.7906e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep (MT): 10 (0.18 -> 0.2) using backward Euler
-			 Newton step: 0	 Residual (abs.):   3.9338e-05
+			 Newton step: 0	 Residual (abs.):   3.8026e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep (MT): 11 (0.2 -> 0.22) using backward Euler
-			 Newton step: 0	 Residual (abs.):   2.8194e-05
+			 Newton step: 0	 Residual (abs.):   3.8112e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep (MT): 12 (0.22 -> 0.24) using backward Euler
-			 Newton step: 0	 Residual (abs.):   2.0201e-05
+			 Newton step: 0	 Residual (abs.):   3.8173e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep (MT): 13 (0.24 -> 0.26) using backward Euler
-			 Newton step: 0	 Residual (abs.):   1.4472e-05
+			 Newton step: 0	 Residual (abs.):   3.8217e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep (MT): 14 (0.26 -> 0.28) using backward Euler
-			 Newton step: 0	 Residual (abs.):   1.0367e-05
+			 Newton step: 0	 Residual (abs.):   3.8248e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep (MT): 15 (0.28 -> 0.3) using backward Euler
-			 Newton step: 0	 Residual (abs.):   7.4259e-06
+			 Newton step: 0	 Residual (abs.):   3.8271e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep (MT): 16 (0.3 -> 0.32) using backward Euler
-			 Newton step: 0	 Residual (abs.):   5.3193e-06
+			 Newton step: 0	 Residual (abs.):   3.8287e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep (MT): 17 (0.32 -> 0.34) using backward Euler
-			 Newton step: 0	 Residual (abs.):   3.8103e-06
+			 Newton step: 0	 Residual (abs.):   3.8298e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep (MT): 18 (0.34 -> 0.36) using backward Euler
-			 Newton step: 0	 Residual (abs.):   2.7293e-06
+			 Newton step: 0	 Residual (abs.):   3.8306e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep (MT): 19 (0.36 -> 0.38) using backward Euler
-			 Newton step: 0	 Residual (abs.):   1.9550e-06
+			 Newton step: 0	 Residual (abs.):   3.8312e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep (MT): 20 (0.38 -> 0.4) using backward Euler
-			 Newton step: 0	 Residual (abs.):   1.4004e-06
+			 Newton step: 0	 Residual (abs.):   3.8316e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep (MT): 21 (0.4 -> 0.42) using backward Euler
-			 Newton step: 0	 Residual (abs.):   1.0031e-06
+			 Newton step: 0	 Residual (abs.):   3.8319e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep (MT): 22 (0.42 -> 0.44) using backward Euler
-			 Newton step: 0	 Residual (abs.):   7.1853e-07
+			 Newton step: 0	 Residual (abs.):   3.8322e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep (MT): 23 (0.44 -> 0.46) using backward Euler
-			 Newton step: 0	 Residual (abs.):   5.1469e-07
+			 Newton step: 0	 Residual (abs.):   3.8323e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep (MT): 24 (0.46 -> 0.48) using backward Euler
-			 Newton step: 0	 Residual (abs.):   3.6867e-07
+			 Newton step: 0	 Residual (abs.):   3.8324e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep (MT): 25 (0.48 -> 0.5) using backward Euler
-			 Newton step: 0	 Residual (abs.):   2.6408e-07
+			 Newton step: 0	 Residual (abs.):   3.8325e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
-		Space-Time Pointevaluation: 0.000123852
+		Space-Time Pointevaluation: 0.053086
 		 Timestep (MT): 26 (0.5 -> 0.52) using backward Euler
-			 Newton step: 0	 Residual (abs.):   1.8916e-07
+			 Newton step: 0	 Residual (abs.):   3.8326e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep (MT): 27 (0.52 -> 0.54) using backward Euler
-			 Newton step: 0	 Residual (abs.):   1.3550e-07
+			 Newton step: 0	 Residual (abs.):   3.8326e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep (MT): 28 (0.54 -> 0.56) using backward Euler
-			 Newton step: 0	 Residual (abs.):   9.7058e-08
+			 Newton step: 0	 Residual (abs.):   3.8326e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep (MT): 29 (0.56 -> 0.58) using backward Euler
-			 Newton step: 0	 Residual (abs.):   6.9523e-08
+			 Newton step: 0	 Residual (abs.):   3.8327e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep (MT): 30 (0.58 -> 0.6) using backward Euler
-			 Newton step: 0	 Residual (abs.):   4.9800e-08
+			 Newton step: 0	 Residual (abs.):   3.8327e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep (MT): 31 (0.6 -> 0.62) using backward Euler
-			 Newton step: 0	 Residual (abs.):   3.5672e-08
+			 Newton step: 0	 Residual (abs.):   3.8327e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep (MT): 32 (0.62 -> 0.64) using backward Euler
-			 Newton step: 0	 Residual (abs.):   2.5552e-08
+			 Newton step: 0	 Residual (abs.):   3.8327e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep (MT): 33 (0.64 -> 0.66) using backward Euler
-			 Newton step: 0	 Residual (abs.):   1.8303e-08
+			 Newton step: 0	 Residual (abs.):   3.8327e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep (MT): 34 (0.66 -> 0.68) using backward Euler
-			 Newton step: 0	 Residual (abs.):   1.3110e-08
+			 Newton step: 0	 Residual (abs.):   3.8327e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep (MT): 35 (0.68 -> 0.7) using backward Euler
-			 Newton step: 0	 Residual (abs.):   9.3911e-09
+			 Newton step: 0	 Residual (abs.):   3.8327e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep (MT): 36 (0.7 -> 0.72) using backward Euler
-			 Newton step: 0	 Residual (abs.):   6.7269e-09
+			 Newton step: 0	 Residual (abs.):   3.8327e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep (MT): 37 (0.72 -> 0.74) using backward Euler
-			 Newton step: 0	 Residual (abs.):   4.8185e-09
+			 Newton step: 0	 Residual (abs.):   3.8327e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep (MT): 38 (0.74 -> 0.76) using backward Euler
-			 Newton step: 0	 Residual (abs.):   3.4515e-09
+			 Newton step: 0	 Residual (abs.):   3.8327e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep (MT): 39 (0.76 -> 0.78) using backward Euler
-			 Newton step: 0	 Residual (abs.):   2.4723e-09
+			 Newton step: 0	 Residual (abs.):   3.8327e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep (MT): 40 (0.78 -> 0.8) using backward Euler
-			 Newton step: 0	 Residual (abs.):   1.7709e-09
+			 Newton step: 0	 Residual (abs.):   3.8327e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep (MT): 41 (0.8 -> 0.82) using backward Euler
-			 Newton step: 0	 Residual (abs.):   1.2685e-09
+			 Newton step: 0	 Residual (abs.):   3.8327e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep (MT): 42 (0.82 -> 0.84) using backward Euler
-			 Newton step: 0	 Residual (abs.):   9.0865e-10
+			 Newton step: 0	 Residual (abs.):   3.8327e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep (MT): 43 (0.84 -> 0.86) using backward Euler
-			 Newton step: 0	 Residual (abs.):   6.5087e-10
+			 Newton step: 0	 Residual (abs.):   3.8327e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep (MT): 44 (0.86 -> 0.88) using backward Euler
-			 Newton step: 0	 Residual (abs.):   4.6622e-10
+			 Newton step: 0	 Residual (abs.):   3.8327e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep (MT): 45 (0.88 -> 0.9) using backward Euler
-			 Newton step: 0	 Residual (abs.):   3.3396e-10
+			 Newton step: 0	 Residual (abs.):   3.8327e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep (MT): 46 (0.9 -> 0.92) using backward Euler
-			 Newton step: 0	 Residual (abs.):   2.3922e-10
+			 Newton step: 0	 Residual (abs.):   3.8327e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep (MT): 47 (0.92 -> 0.94) using backward Euler
-			 Newton step: 0	 Residual (abs.):   1.7135e-10
+			 Newton step: 0	 Residual (abs.):   3.8327e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep (MT): 48 (0.94 -> 0.96) using backward Euler
-			 Newton step: 0	 Residual (abs.):   1.2274e-10
+			 Newton step: 0	 Residual (abs.):   3.8327e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep (MT): 49 (0.96 -> 0.98) using backward Euler
-			 Newton step: 0	 Residual (abs.):   8.7919e-11
+			 Newton step: 0	 Residual (abs.):   3.8327e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep (MT): 50 (0.98 -> 1) using backward Euler
-			 Newton step: 0	 Residual (abs.):   8.7919e-11
+			 Newton step: 0	 Residual (abs.):   3.8327e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 	Computing Functionals:
-	Space-Time Pointevaluation: 0.000123852
+	Space-Time Pointevaluation: 0.053086
 	Computing Error Indicators:
 	Error estimate using H1-Residual-Estimator at time 0: 0
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.02: 0.34665
+	Error estimate using H1-Residual-Estimator at time 0.02: 0.345763
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.04: 0.0795002
+	Error estimate using H1-Residual-Estimator at time 0.04: 0.0786802
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.06: 0.0356156
+	Error estimate using H1-Residual-Estimator at time 0.06: 0.0360301
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.08: 0.0177769
+	Error estimate using H1-Residual-Estimator at time 0.08: 0.02024
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.1: 0.00906831
+	Error estimate using H1-Residual-Estimator at time 0.1: 0.0141504
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.12: 0.00464714
+	Error estimate using H1-Residual-Estimator at time 0.12: 0.012812
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.14: 0.00238378
+	Error estimate using H1-Residual-Estimator at time 0.14: 0.0140611
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.16: 0.00122303
+	Error estimate using H1-Residual-Estimator at time 0.16: 0.0168392
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.18: 0.000627521
+	Error estimate using H1-Residual-Estimator at time 0.18: 0.020617
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.2: 0.000321976
+	Error estimate using H1-Residual-Estimator at time 0.2: 0.0251303
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.22: 0.000165203
+	Error estimate using H1-Residual-Estimator at time 0.22: 0.0302481
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.24: 8.47644e-05
+	Error estimate using H1-Residual-Estimator at time 0.24: 0.0359067
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.26: 4.3492e-05
+	Error estimate using H1-Residual-Estimator at time 0.26: 0.0420756
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.28: 2.23154e-05
+	Error estimate using H1-Residual-Estimator at time 0.28: 0.048741
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.3: 1.14499e-05
+	Error estimate using H1-Residual-Estimator at time 0.3: 0.0558971
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.32: 5.87483e-06
+	Error estimate using H1-Residual-Estimator at time 0.32: 0.0635415
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.34: 3.01433e-06
+	Error estimate using H1-Residual-Estimator at time 0.34: 0.0716739
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.36: 1.54663e-06
+	Error estimate using H1-Residual-Estimator at time 0.36: 0.0802944
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.38: 7.93564e-07
+	Error estimate using H1-Residual-Estimator at time 0.38: 0.0894034
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.4: 4.07171e-07
+	Error estimate using H1-Residual-Estimator at time 0.4: 0.0990015
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.42: 2.08917e-07
+	Error estimate using H1-Residual-Estimator at time 0.42: 0.109089
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.44: 1.07193e-07
+	Error estimate using H1-Residual-Estimator at time 0.44: 0.119666
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.46: 5.50001e-08
+	Error estimate using H1-Residual-Estimator at time 0.46: 0.130733
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.48: 2.82201e-08
+	Error estimate using H1-Residual-Estimator at time 0.48: 0.14229
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.5: 1.44795e-08
+	Error estimate using H1-Residual-Estimator at time 0.5: 0.154338
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.52: 7.42934e-09
+	Error estimate using H1-Residual-Estimator at time 0.52: 0.166875
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.54: 3.81194e-09
+	Error estimate using H1-Residual-Estimator at time 0.54: 0.179904
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.56: 1.95588e-09
+	Error estimate using H1-Residual-Estimator at time 0.56: 0.193422
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.58: 1.00354e-09
+	Error estimate using H1-Residual-Estimator at time 0.58: 0.207432
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.6: 5.14911e-10
+	Error estimate using H1-Residual-Estimator at time 0.6: 0.221931
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.62: 2.64197e-10
+	Error estimate using H1-Residual-Estimator at time 0.62: 0.236922
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.64: 1.35557e-10
+	Error estimate using H1-Residual-Estimator at time 0.64: 0.252403
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.66: 6.95534e-11
+	Error estimate using H1-Residual-Estimator at time 0.66: 0.268374
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.68: 3.56873e-11
+	Error estimate using H1-Residual-Estimator at time 0.68: 0.284836
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.7: 1.83109e-11
+	Error estimate using H1-Residual-Estimator at time 0.7: 0.301789
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.72: 9.39518e-12
+	Error estimate using H1-Residual-Estimator at time 0.72: 0.319233
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.74: 4.82059e-12
+	Error estimate using H1-Residual-Estimator at time 0.74: 0.337167
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.76: 2.47341e-12
+	Error estimate using H1-Residual-Estimator at time 0.76: 0.355592
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.78: 1.26909e-12
+	Error estimate using H1-Residual-Estimator at time 0.78: 0.374507
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.8: 6.51159e-13
+	Error estimate using H1-Residual-Estimator at time 0.8: 0.393913
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.82: 3.34104e-13
+	Error estimate using H1-Residual-Estimator at time 0.82: 0.413809
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.84: 1.71426e-13
+	Error estimate using H1-Residual-Estimator at time 0.84: 0.434197
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.86: 8.79576e-14
+	Error estimate using H1-Residual-Estimator at time 0.86: 0.455074
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.88: 4.51303e-14
+	Error estimate using H1-Residual-Estimator at time 0.88: 0.476443
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.9: 2.3156e-14
+	Error estimate using H1-Residual-Estimator at time 0.9: 0.498302
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.92: 1.18812e-14
+	Error estimate using H1-Residual-Estimator at time 0.92: 0.520652
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.94: 6.09614e-15
+	Error estimate using H1-Residual-Estimator at time 0.94: 0.543492
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.96: 3.12788e-15
+	Error estimate using H1-Residual-Estimator at time 0.96: 0.566823
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.98: 6.22367e-16
+	Error estimate using H1-Residual-Estimator at time 0.98: 0.590645
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 1: 6.22367e-16
+	Error estimate using H1-Residual-Estimator at time 1: 0.614957
 
-	H1-Error estimator: 0.7058
+	H1-Error estimator: 3.32655
 	
 
-	Backward euler: u * u = 39.9905
+	Backward euler: u * u = 241.958
 	
 
 	**************************************************
 	*             Starting Forward Solve             *
 	*   Solving : InstatPDEProblemContainer	*
 	*   SDoFs   : 	Number of Timepoints: 51
-		Total   DoFs: 37397
-		Minimal DoFs: 719
-		Maximal DoFs: 747
+		Total   DoFs: 16451
+		Minimal DoFs: 319
+		Maximal DoFs: 326
 	**************************************************
 
 	Computing State Solution:
 	Computing Initial Values:
-			 Newton step: 0	 Residual (abs.):   1.0986e-03
+			 Newton step: 0	 Residual (abs.):   1.8717e-03
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep (MT): 1 (0 -> 0.02) using backward Euler
-			 Newton step: 0	 Residual (abs.):   1.9957e-02
+			 Newton step: 0	 Residual (abs.):   1.7907e-02
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep (MT): 2 (0.02 -> 0.04) using backward Euler
-			 Newton step: 0	 Residual (abs.):   7.9200e-04
+			 Newton step: 0	 Residual (abs.):   1.3583e-03
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep (MT): 3 (0.04 -> 0.06) using backward Euler
-			 Newton step: 0	 Residual (abs.):   1.9549e-04
+			 Newton step: 0	 Residual (abs.):   4.0475e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep (MT): 4 (0.06 -> 0.08) using backward Euler
-			 Newton step: 0	 Residual (abs.):   1.0833e-04
+			 Newton step: 0	 Residual (abs.):   3.9791e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep (MT): 5 (0.08 -> 0.1) using backward Euler
-			 Newton step: 0	 Residual (abs.):   1.2925e-04
+			 Newton step: 0	 Residual (abs.):   3.9942e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep (MT): 6 (0.1 -> 0.12) using backward Euler
-			 Newton step: 0	 Residual (abs.):   6.7306e-05
+			 Newton step: 0	 Residual (abs.):   4.0024e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep (MT): 7 (0.12 -> 0.14) using backward Euler
-			 Newton step: 0	 Residual (abs.):   7.1630e-05
+			 Newton step: 0	 Residual (abs.):   4.0085e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep (MT): 8 (0.14 -> 0.16) using backward Euler
-			 Newton step: 0	 Residual (abs.):   3.5993e-05
+			 Newton step: 0	 Residual (abs.):   4.0116e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep (MT): 9 (0.16 -> 0.18) using backward Euler
-			 Newton step: 0	 Residual (abs.):   3.7375e-05
+			 Newton step: 0	 Residual (abs.):   4.0150e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep (MT): 10 (0.18 -> 0.2) using backward Euler
-			 Newton step: 0	 Residual (abs.):   1.8635e-05
+			 Newton step: 0	 Residual (abs.):   4.0161e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep (MT): 11 (0.2 -> 0.22) using backward Euler
-			 Newton step: 0	 Residual (abs.):   1.9247e-05
+			 Newton step: 0	 Residual (abs.):   4.0183e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep (MT): 12 (0.22 -> 0.24) using backward Euler
-			 Newton step: 0	 Residual (abs.):   9.5807e-06
+			 Newton step: 0	 Residual (abs.):   4.0183e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep (MT): 13 (0.24 -> 0.26) using backward Euler
-			 Newton step: 0	 Residual (abs.):   9.8839e-06
+			 Newton step: 0	 Residual (abs.):   4.0200e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep (MT): 14 (0.26 -> 0.28) using backward Euler
-			 Newton step: 0	 Residual (abs.):   4.9180e-06
+			 Newton step: 0	 Residual (abs.):   4.0194e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep (MT): 15 (0.28 -> 0.3) using backward Euler
-			 Newton step: 0	 Residual (abs.):   5.0724e-06
+			 Newton step: 0	 Residual (abs.):   4.0209e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep (MT): 16 (0.3 -> 0.32) using backward Euler
-			 Newton step: 0	 Residual (abs.):   2.5237e-06
+			 Newton step: 0	 Residual (abs.):   4.0200e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep (MT): 17 (0.32 -> 0.34) using backward Euler
-			 Newton step: 0	 Residual (abs.):   2.6028e-06
+			 Newton step: 0	 Residual (abs.):   4.0213e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep (MT): 18 (0.34 -> 0.36) using backward Euler
-			 Newton step: 0	 Residual (abs.):   1.2950e-06
+			 Newton step: 0	 Residual (abs.):   4.0202e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep (MT): 19 (0.36 -> 0.38) using backward Euler
-			 Newton step: 0	 Residual (abs.):   1.3355e-06
+			 Newton step: 0	 Residual (abs.):   4.0216e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep (MT): 20 (0.38 -> 0.4) using backward Euler
-			 Newton step: 0	 Residual (abs.):   6.6448e-07
+			 Newton step: 0	 Residual (abs.):   4.0203e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep (MT): 21 (0.4 -> 0.42) using backward Euler
-			 Newton step: 0	 Residual (abs.):   6.8528e-07
+			 Newton step: 0	 Residual (abs.):   4.0218e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep (MT): 22 (0.42 -> 0.44) using backward Euler
-			 Newton step: 0	 Residual (abs.):   3.4095e-07
+			 Newton step: 0	 Residual (abs.):   4.0203e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep (MT): 23 (0.44 -> 0.46) using backward Euler
-			 Newton step: 0	 Residual (abs.):   3.5163e-07
+			 Newton step: 0	 Residual (abs.):   4.0219e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep (MT): 24 (0.46 -> 0.48) using backward Euler
-			 Newton step: 0	 Residual (abs.):   1.7495e-07
+			 Newton step: 0	 Residual (abs.):   4.0203e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep (MT): 25 (0.48 -> 0.5) using backward Euler
-			 Newton step: 0	 Residual (abs.):   1.8042e-07
+			 Newton step: 0	 Residual (abs.):   4.0220e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
-		Space-Time Pointevaluation: 0.000123572
+		Space-Time Pointevaluation: 0.0533261
 		 Timestep (MT): 26 (0.5 -> 0.52) using backward Euler
-			 Newton step: 0	 Residual (abs.):   8.9767e-08
+			 Newton step: 0	 Residual (abs.):   4.0202e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep (MT): 27 (0.52 -> 0.54) using backward Euler
-			 Newton step: 0	 Residual (abs.):   9.2578e-08
+			 Newton step: 0	 Residual (abs.):   4.0221e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep (MT): 28 (0.54 -> 0.56) using backward Euler
-			 Newton step: 0	 Residual (abs.):   4.6060e-08
+			 Newton step: 0	 Residual (abs.):   4.0202e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep (MT): 29 (0.56 -> 0.58) using backward Euler
-			 Newton step: 0	 Residual (abs.):   4.7503e-08
+			 Newton step: 0	 Residual (abs.):   4.0222e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep (MT): 30 (0.58 -> 0.6) using backward Euler
-			 Newton step: 0	 Residual (abs.):   2.3634e-08
+			 Newton step: 0	 Residual (abs.):   4.0201e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep (MT): 31 (0.6 -> 0.62) using backward Euler
-			 Newton step: 0	 Residual (abs.):   2.4374e-08
+			 Newton step: 0	 Residual (abs.):   4.0223e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep (MT): 32 (0.62 -> 0.64) using backward Euler
-			 Newton step: 0	 Residual (abs.):   1.2127e-08
+			 Newton step: 0	 Residual (abs.):   4.0201e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep (MT): 33 (0.64 -> 0.66) using backward Euler
-			 Newton step: 0	 Residual (abs.):   1.2507e-08
+			 Newton step: 0	 Residual (abs.):   4.0223e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep (MT): 34 (0.66 -> 0.68) using backward Euler
-			 Newton step: 0	 Residual (abs.):   6.2225e-09
+			 Newton step: 0	 Residual (abs.):   4.0200e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep (MT): 35 (0.68 -> 0.7) using backward Euler
-			 Newton step: 0	 Residual (abs.):   6.4173e-09
+			 Newton step: 0	 Residual (abs.):   4.0224e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep (MT): 36 (0.7 -> 0.72) using backward Euler
-			 Newton step: 0	 Residual (abs.):   3.1928e-09
+			 Newton step: 0	 Residual (abs.):   4.0199e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep (MT): 37 (0.72 -> 0.74) using backward Euler
-			 Newton step: 0	 Residual (abs.):   3.2928e-09
+			 Newton step: 0	 Residual (abs.):   4.0225e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep (MT): 38 (0.74 -> 0.76) using backward Euler
-			 Newton step: 0	 Residual (abs.):   1.6383e-09
+			 Newton step: 0	 Residual (abs.):   4.0199e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep (MT): 39 (0.76 -> 0.78) using backward Euler
-			 Newton step: 0	 Residual (abs.):   1.6896e-09
+			 Newton step: 0	 Residual (abs.):   4.0225e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep (MT): 40 (0.78 -> 0.8) using backward Euler
-			 Newton step: 0	 Residual (abs.):   8.4062e-10
+			 Newton step: 0	 Residual (abs.):   4.0198e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep (MT): 41 (0.8 -> 0.82) using backward Euler
-			 Newton step: 0	 Residual (abs.):   8.6695e-10
+			 Newton step: 0	 Residual (abs.):   4.0226e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep (MT): 42 (0.82 -> 0.84) using backward Euler
-			 Newton step: 0	 Residual (abs.):   4.3133e-10
+			 Newton step: 0	 Residual (abs.):   4.0197e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep (MT): 43 (0.84 -> 0.86) using backward Euler
-			 Newton step: 0	 Residual (abs.):   4.4484e-10
+			 Newton step: 0	 Residual (abs.):   4.0226e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep (MT): 44 (0.86 -> 0.88) using backward Euler
-			 Newton step: 0	 Residual (abs.):   2.2132e-10
+			 Newton step: 0	 Residual (abs.):   4.0197e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep (MT): 45 (0.88 -> 0.9) using backward Euler
-			 Newton step: 0	 Residual (abs.):   2.2825e-10
+			 Newton step: 0	 Residual (abs.):   4.0227e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep (MT): 46 (0.9 -> 0.92) using backward Euler
-			 Newton step: 0	 Residual (abs.):   1.1356e-10
+			 Newton step: 0	 Residual (abs.):   4.0196e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep (MT): 47 (0.92 -> 0.94) using backward Euler
-			 Newton step: 0	 Residual (abs.):   1.1712e-10
+			 Newton step: 0	 Residual (abs.):   4.0228e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep (MT): 48 (0.94 -> 0.96) using backward Euler
-			 Newton step: 0	 Residual (abs.):   5.8271e-11
+			 Newton step: 0	 Residual (abs.):   4.0195e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep (MT): 49 (0.96 -> 0.98) using backward Euler
-			 Newton step: 0	 Residual (abs.):   8.6116e-11
+			 Newton step: 0	 Residual (abs.):   4.0228e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep (MT): 50 (0.98 -> 1) using backward Euler
-			 Newton step: 0	 Residual (abs.):   5.8271e-11
+			 Newton step: 0	 Residual (abs.):   4.0195e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 	Computing Functionals:
-	Space-Time Pointevaluation: 0.000123572
+	Space-Time Pointevaluation: 0.0533261
 	Computing Error Indicators:
 	Error estimate using H1-Residual-Estimator at time 0: 0
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.02: 0.102003
+	Error estimate using H1-Residual-Estimator at time 0.02: 0.34439
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.04: 0.0240113
+	Error estimate using H1-Residual-Estimator at time 0.04: 0.078544
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.06: 0.0149616
+	Error estimate using H1-Residual-Estimator at time 0.06: 0.0361836
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.08: 0.00545401
+	Error estimate using H1-Residual-Estimator at time 0.08: 0.0204344
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.1: 0.0041567
+	Error estimate using H1-Residual-Estimator at time 0.1: 0.0144715
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.12: 0.00144528
+	Error estimate using H1-Residual-Estimator at time 0.12: 0.013151
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.14: 0.00111207
+	Error estimate using H1-Residual-Estimator at time 0.14: 0.0145791
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.16: 0.000381626
+	Error estimate using H1-Residual-Estimator at time 0.16: 0.0173617
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.18: 0.00029386
+	Error estimate using H1-Residual-Estimator at time 0.18: 0.0214015
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.2: 0.000100545
+	Error estimate using H1-Residual-Estimator at time 0.2: 0.0258984
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.22: 7.743e-05
+	Error estimate using H1-Residual-Estimator at time 0.22: 0.0313731
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.24: 2.64759e-05
+	Error estimate using H1-Residual-Estimator at time 0.24: 0.0369847
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.26: 2.03896e-05
+	Error estimate using H1-Residual-Estimator at time 0.26: 0.0436154
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.28: 6.97091e-06
+	Error estimate using H1-Residual-Estimator at time 0.28: 0.0501931
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.3: 5.36844e-06
+	Error estimate using H1-Residual-Estimator at time 0.3: 0.0579256
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.32: 1.83534e-06
+	Error estimate using H1-Residual-Estimator at time 0.32: 0.0654308
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.34: 1.41343e-06
+	Error estimate using H1-Residual-Estimator at time 0.34: 0.0742647
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.36: 4.83217e-07
+	Error estimate using H1-Residual-Estimator at time 0.36: 0.0826839
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.38: 3.72135e-07
+	Error estimate using H1-Residual-Estimator at time 0.38: 0.0926299
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.4: 1.27223e-07
+	Error estimate using H1-Residual-Estimator at time 0.4: 0.101954
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.42: 9.79772e-08
+	Error estimate using H1-Residual-Estimator at time 0.42: 0.113024
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.44: 3.34958e-08
+	Error estimate using H1-Residual-Estimator at time 0.44: 0.123244
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.46: 2.57958e-08
+	Error estimate using H1-Residual-Estimator at time 0.46: 0.135451
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.48: 8.81891e-09
+	Error estimate using H1-Residual-Estimator at time 0.48: 0.146556
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.5: 6.79163e-09
+	Error estimate using H1-Residual-Estimator at time 0.5: 0.159911
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.52: 2.32188e-09
+	Error estimate using H1-Residual-Estimator at time 0.52: 0.171891
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.54: 1.78813e-09
+	Error estimate using H1-Residual-Estimator at time 0.54: 0.186406
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.56: 6.11313e-10
+	Error estimate using H1-Residual-Estimator at time 0.56: 0.199251
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.58: 4.70785e-10
+	Error estimate using H1-Residual-Estimator at time 0.58: 0.214936
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.6: 1.60949e-10
+	Error estimate using H1-Residual-Estimator at time 0.6: 0.228635
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.62: 1.2395e-10
+	Error estimate using H1-Residual-Estimator at time 0.62: 0.245502
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.64: 4.23752e-11
+	Error estimate using H1-Residual-Estimator at time 0.64: 0.260044
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.66: 3.2634e-11
+	Error estimate using H1-Residual-Estimator at time 0.66: 0.278104
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.68: 1.11567e-11
+	Error estimate using H1-Residual-Estimator at time 0.68: 0.293478
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.7: 8.59202e-12
+	Error estimate using H1-Residual-Estimator at time 0.7: 0.312741
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.72: 2.93738e-12
+	Error estimate using H1-Residual-Estimator at time 0.72: 0.328936
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.74: 2.26214e-12
+	Error estimate using H1-Residual-Estimator at time 0.74: 0.349414
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.76: 7.73366e-13
+	Error estimate using H1-Residual-Estimator at time 0.76: 0.36642
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.78: 5.95585e-13
+	Error estimate using H1-Residual-Estimator at time 0.78: 0.388122
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.8: 2.03615e-13
+	Error estimate using H1-Residual-Estimator at time 0.8: 0.405928
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.82: 1.56808e-13
+	Error estimate using H1-Residual-Estimator at time 0.82: 0.428867
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.84: 5.36085e-14
+	Error estimate using H1-Residual-Estimator at time 0.84: 0.447462
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.86: 4.1285e-14
+	Error estimate using H1-Residual-Estimator at time 0.86: 0.471647
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.88: 1.41142e-14
+	Error estimate using H1-Residual-Estimator at time 0.88: 0.49102
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.9: 1.08697e-14
+	Error estimate using H1-Residual-Estimator at time 0.9: 0.516463
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.92: 3.71605e-15
+	Error estimate using H1-Residual-Estimator at time 0.92: 0.536603
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.94: 2.86181e-15
+	Error estimate using H1-Residual-Estimator at time 0.94: 0.563315
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.96: 4.57028e-16
+	Error estimate using H1-Residual-Estimator at time 0.96: 0.584211
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.98: 5.7643e-16
+	Error estimate using H1-Residual-Estimator at time 0.98: 0.612202
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 1: 4.57028e-16
+	Error estimate using H1-Residual-Estimator at time 1: 0.633845
 
-	H1-Error estimator: 0.392506
+	H1-Error estimator: 3.37892
 	
 
-	Backward euler: u * u = 144.512
+	Backward euler: u * u = 388.652
+	
+
+	**************************************************
+	*             Starting Forward Solve             *
+	*   Solving : InstatPDEProblemContainer	*
+	*   SDoFs   : 	Number of Timepoints: 51
+		Total   DoFs: 18085
+		Minimal DoFs: 349
+		Maximal DoFs: 360
+	**************************************************
+
+	Computing State Solution:
+	Computing Initial Values:
+			 Newton step: 0	 Residual (abs.):   1.8717e-03
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep (MT): 1 (0 -> 0.02) using backward Euler
+			 Newton step: 0	 Residual (abs.):   1.7907e-02
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep (MT): 2 (0.02 -> 0.04) using backward Euler
+			 Newton step: 0	 Residual (abs.):   1.3583e-03
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep (MT): 3 (0.04 -> 0.06) using backward Euler
+			 Newton step: 0	 Residual (abs.):   4.3136e-04
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep (MT): 4 (0.06 -> 0.08) using backward Euler
+			 Newton step: 0	 Residual (abs.):   4.3175e-04
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep (MT): 5 (0.08 -> 0.1) using backward Euler
+			 Newton step: 0	 Residual (abs.):   4.3188e-04
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep (MT): 6 (0.1 -> 0.12) using backward Euler
+			 Newton step: 0	 Residual (abs.):   4.3194e-04
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep (MT): 7 (0.12 -> 0.14) using backward Euler
+			 Newton step: 0	 Residual (abs.):   4.3198e-04
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep (MT): 8 (0.14 -> 0.16) using backward Euler
+			 Newton step: 0	 Residual (abs.):   4.3200e-04
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep (MT): 9 (0.16 -> 0.18) using backward Euler
+			 Newton step: 0	 Residual (abs.):   4.3202e-04
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep (MT): 10 (0.18 -> 0.2) using backward Euler
+			 Newton step: 0	 Residual (abs.):   4.3203e-04
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep (MT): 11 (0.2 -> 0.22) using backward Euler
+			 Newton step: 0	 Residual (abs.):   4.3204e-04
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep (MT): 12 (0.22 -> 0.24) using backward Euler
+			 Newton step: 0	 Residual (abs.):   4.3205e-04
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep (MT): 13 (0.24 -> 0.26) using backward Euler
+			 Newton step: 0	 Residual (abs.):   4.3205e-04
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep (MT): 14 (0.26 -> 0.28) using backward Euler
+			 Newton step: 0	 Residual (abs.):   4.3205e-04
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep (MT): 15 (0.28 -> 0.3) using backward Euler
+			 Newton step: 0	 Residual (abs.):   4.3206e-04
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep (MT): 16 (0.3 -> 0.32) using backward Euler
+			 Newton step: 0	 Residual (abs.):   4.3206e-04
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep (MT): 17 (0.32 -> 0.34) using backward Euler
+			 Newton step: 0	 Residual (abs.):   4.3206e-04
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep (MT): 18 (0.34 -> 0.36) using backward Euler
+			 Newton step: 0	 Residual (abs.):   4.3206e-04
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep (MT): 19 (0.36 -> 0.38) using backward Euler
+			 Newton step: 0	 Residual (abs.):   4.3206e-04
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep (MT): 20 (0.38 -> 0.4) using backward Euler
+			 Newton step: 0	 Residual (abs.):   4.3206e-04
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep (MT): 21 (0.4 -> 0.42) using backward Euler
+			 Newton step: 0	 Residual (abs.):   4.3206e-04
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep (MT): 22 (0.42 -> 0.44) using backward Euler
+			 Newton step: 0	 Residual (abs.):   4.3206e-04
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep (MT): 23 (0.44 -> 0.46) using backward Euler
+			 Newton step: 0	 Residual (abs.):   4.3206e-04
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep (MT): 24 (0.46 -> 0.48) using backward Euler
+			 Newton step: 0	 Residual (abs.):   4.3206e-04
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep (MT): 25 (0.48 -> 0.5) using backward Euler
+			 Newton step: 0	 Residual (abs.):   4.3206e-04
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+		         Precalculating functional values 
+		Space-Time Pointevaluation: 0.0533855
+		 Timestep (MT): 26 (0.5 -> 0.52) using backward Euler
+			 Newton step: 0	 Residual (abs.):   4.3206e-04
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep (MT): 27 (0.52 -> 0.54) using backward Euler
+			 Newton step: 0	 Residual (abs.):   4.3206e-04
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep (MT): 28 (0.54 -> 0.56) using backward Euler
+			 Newton step: 0	 Residual (abs.):   4.3206e-04
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep (MT): 29 (0.56 -> 0.58) using backward Euler
+			 Newton step: 0	 Residual (abs.):   4.3206e-04
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep (MT): 30 (0.58 -> 0.6) using backward Euler
+			 Newton step: 0	 Residual (abs.):   4.3206e-04
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep (MT): 31 (0.6 -> 0.62) using backward Euler
+			 Newton step: 0	 Residual (abs.):   4.3206e-04
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep (MT): 32 (0.62 -> 0.64) using backward Euler
+			 Newton step: 0	 Residual (abs.):   4.3206e-04
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep (MT): 33 (0.64 -> 0.66) using backward Euler
+			 Newton step: 0	 Residual (abs.):   4.3206e-04
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep (MT): 34 (0.66 -> 0.68) using backward Euler
+			 Newton step: 0	 Residual (abs.):   4.3206e-04
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep (MT): 35 (0.68 -> 0.7) using backward Euler
+			 Newton step: 0	 Residual (abs.):   4.3206e-04
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep (MT): 36 (0.7 -> 0.72) using backward Euler
+			 Newton step: 0	 Residual (abs.):   4.3206e-04
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep (MT): 37 (0.72 -> 0.74) using backward Euler
+			 Newton step: 0	 Residual (abs.):   4.3206e-04
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep (MT): 38 (0.74 -> 0.76) using backward Euler
+			 Newton step: 0	 Residual (abs.):   4.3206e-04
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep (MT): 39 (0.76 -> 0.78) using backward Euler
+			 Newton step: 0	 Residual (abs.):   4.3206e-04
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep (MT): 40 (0.78 -> 0.8) using backward Euler
+			 Newton step: 0	 Residual (abs.):   4.3206e-04
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep (MT): 41 (0.8 -> 0.82) using backward Euler
+			 Newton step: 0	 Residual (abs.):   4.3206e-04
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep (MT): 42 (0.82 -> 0.84) using backward Euler
+			 Newton step: 0	 Residual (abs.):   4.3206e-04
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep (MT): 43 (0.84 -> 0.86) using backward Euler
+			 Newton step: 0	 Residual (abs.):   4.3206e-04
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep (MT): 44 (0.86 -> 0.88) using backward Euler
+			 Newton step: 0	 Residual (abs.):   4.3206e-04
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep (MT): 45 (0.88 -> 0.9) using backward Euler
+			 Newton step: 0	 Residual (abs.):   4.3206e-04
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep (MT): 46 (0.9 -> 0.92) using backward Euler
+			 Newton step: 0	 Residual (abs.):   4.3206e-04
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep (MT): 47 (0.92 -> 0.94) using backward Euler
+			 Newton step: 0	 Residual (abs.):   4.3206e-04
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep (MT): 48 (0.94 -> 0.96) using backward Euler
+			 Newton step: 0	 Residual (abs.):   4.3206e-04
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep (MT): 49 (0.96 -> 0.98) using backward Euler
+			 Newton step: 0	 Residual (abs.):   4.3206e-04
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep (MT): 50 (0.98 -> 1) using backward Euler
+			 Newton step: 0	 Residual (abs.):   4.3206e-04
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+		         Precalculating functional values 
+	Computing Functionals:
+	Space-Time Pointevaluation: 0.0533855
+	Computing Error Indicators:
+	Error estimate using H1-Residual-Estimator at time 0: 0
+	Computing Error Indicators:
+	Error estimate using H1-Residual-Estimator at time 0.02: 0.344578
+	Computing Error Indicators:
+	Error estimate using H1-Residual-Estimator at time 0.04: 0.0787996
+	Computing Error Indicators:
+	Error estimate using H1-Residual-Estimator at time 0.06: 0.0364896
+	Computing Error Indicators:
+	Error estimate using H1-Residual-Estimator at time 0.08: 0.0207925
+	Computing Error Indicators:
+	Error estimate using H1-Residual-Estimator at time 0.1: 0.014922
+	Computing Error Indicators:
+	Error estimate using H1-Residual-Estimator at time 0.12: 0.0136781
+	Computing Error Indicators:
+	Error estimate using H1-Residual-Estimator at time 0.14: 0.0152489
+	Computing Error Indicators:
+	Error estimate using H1-Residual-Estimator at time 0.16: 0.0181288
+	Computing Error Indicators:
+	Error estimate using H1-Residual-Estimator at time 0.18: 0.0223667
+	Computing Error Indicators:
+	Error estimate using H1-Residual-Estimator at time 0.2: 0.0269768
+	Computing Error Indicators:
+	Error estimate using H1-Residual-Estimator at time 0.22: 0.03271
+	Computing Error Indicators:
+	Error estimate using H1-Residual-Estimator at time 0.24: 0.0384462
+	Computing Error Indicators:
+	Error estimate using H1-Residual-Estimator at time 0.26: 0.0454002
+	Computing Error Indicators:
+	Error estimate using H1-Residual-Estimator at time 0.28: 0.0521093
+	Computing Error Indicators:
+	Error estimate using H1-Residual-Estimator at time 0.3: 0.0602347
+	Computing Error Indicators:
+	Error estimate using H1-Residual-Estimator at time 0.32: 0.0678735
+	Computing Error Indicators:
+	Error estimate using H1-Residual-Estimator at time 0.34: 0.0771745
+	Computing Error Indicators:
+	Error estimate using H1-Residual-Estimator at time 0.36: 0.0857247
+	Computing Error Indicators:
+	Error estimate using H1-Residual-Estimator at time 0.38: 0.096217
+	Computing Error Indicators:
+	Error estimate using H1-Residual-Estimator at time 0.4: 0.105664
+	Computing Error Indicators:
+	Error estimate using H1-Residual-Estimator at time 0.42: 0.117365
+	Computing Error Indicators:
+	Error estimate using H1-Residual-Estimator at time 0.44: 0.127696
+	Computing Error Indicators:
+	Error estimate using H1-Residual-Estimator at time 0.46: 0.140622
+	Computing Error Indicators:
+	Error estimate using H1-Residual-Estimator at time 0.48: 0.151821
+	Computing Error Indicators:
+	Error estimate using H1-Residual-Estimator at time 0.5: 0.165989
+	Computing Error Indicators:
+	Error estimate using H1-Residual-Estimator at time 0.52: 0.178042
+	Computing Error Indicators:
+	Error estimate using H1-Residual-Estimator at time 0.54: 0.193467
+	Computing Error Indicators:
+	Error estimate using H1-Residual-Estimator at time 0.56: 0.206358
+	Computing Error Indicators:
+	Error estimate using H1-Residual-Estimator at time 0.58: 0.223056
+	Computing Error Indicators:
+	Error estimate using H1-Residual-Estimator at time 0.6: 0.236771
+	Computing Error Indicators:
+	Error estimate using H1-Residual-Estimator at time 0.62: 0.254758
+	Computing Error Indicators:
+	Error estimate using H1-Residual-Estimator at time 0.64: 0.26928
+	Computing Error Indicators:
+	Error estimate using H1-Residual-Estimator at time 0.66: 0.288571
+	Computing Error Indicators:
+	Error estimate using H1-Residual-Estimator at time 0.68: 0.303886
+	Computing Error Indicators:
+	Error estimate using H1-Residual-Estimator at time 0.7: 0.324497
+	Computing Error Indicators:
+	Error estimate using H1-Residual-Estimator at time 0.72: 0.340588
+	Computing Error Indicators:
+	Error estimate using H1-Residual-Estimator at time 0.74: 0.362535
+	Computing Error Indicators:
+	Error estimate using H1-Residual-Estimator at time 0.76: 0.379387
+	Computing Error Indicators:
+	Error estimate using H1-Residual-Estimator at time 0.78: 0.402686
+	Computing Error Indicators:
+	Error estimate using H1-Residual-Estimator at time 0.8: 0.420283
+	Computing Error Indicators:
+	Error estimate using H1-Residual-Estimator at time 0.82: 0.444948
+	Computing Error Indicators:
+	Error estimate using H1-Residual-Estimator at time 0.84: 0.463275
+	Computing Error Indicators:
+	Error estimate using H1-Residual-Estimator at time 0.86: 0.489323
+	Computing Error Indicators:
+	Error estimate using H1-Residual-Estimator at time 0.88: 0.508364
+	Computing Error Indicators:
+	Error estimate using H1-Residual-Estimator at time 0.9: 0.53581
+	Computing Error Indicators:
+	Error estimate using H1-Residual-Estimator at time 0.92: 0.55555
+	Computing Error Indicators:
+	Error estimate using H1-Residual-Estimator at time 0.94: 0.584409
+	Computing Error Indicators:
+	Error estimate using H1-Residual-Estimator at time 0.96: 0.604832
+	Computing Error Indicators:
+	Error estimate using H1-Residual-Estimator at time 0.98: 0.635121
+	Computing Error Indicators:
+	Error estimate using H1-Residual-Estimator at time 1: 0.656211
+
+	H1-Error estimator: 3.43788
+	
+
+	Backward euler: u * u = 557.123
+	
+
+	**************************************************
+	*             Starting Forward Solve             *
+	*   Solving : InstatPDEProblemContainer	*
+	*   SDoFs   : 	Number of Timepoints: 51
+		Total   DoFs: 19693
+		Minimal DoFs: 379
+		Maximal DoFs: 393
+	**************************************************
+
+	Computing State Solution:
+	Computing Initial Values:
+			 Newton step: 0	 Residual (abs.):   1.8717e-03
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep (MT): 1 (0 -> 0.02) using backward Euler
+			 Newton step: 0	 Residual (abs.):   1.7907e-02
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep (MT): 2 (0.02 -> 0.04) using backward Euler
+			 Newton step: 0	 Residual (abs.):   1.3583e-03
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep (MT): 3 (0.04 -> 0.06) using backward Euler
+			 Newton step: 0	 Residual (abs.):   4.4862e-04
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep (MT): 4 (0.06 -> 0.08) using backward Euler
+			 Newton step: 0	 Residual (abs.):   4.4866e-04
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep (MT): 5 (0.08 -> 0.1) using backward Euler
+			 Newton step: 0	 Residual (abs.):   4.4866e-04
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep (MT): 6 (0.1 -> 0.12) using backward Euler
+			 Newton step: 0	 Residual (abs.):   4.4867e-04
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep (MT): 7 (0.12 -> 0.14) using backward Euler
+			 Newton step: 0	 Residual (abs.):   4.4867e-04
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep (MT): 8 (0.14 -> 0.16) using backward Euler
+			 Newton step: 0	 Residual (abs.):   4.4867e-04
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep (MT): 9 (0.16 -> 0.18) using backward Euler
+			 Newton step: 0	 Residual (abs.):   4.4867e-04
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep (MT): 10 (0.18 -> 0.2) using backward Euler
+			 Newton step: 0	 Residual (abs.):   4.4867e-04
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep (MT): 11 (0.2 -> 0.22) using backward Euler
+			 Newton step: 0	 Residual (abs.):   4.4868e-04
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep (MT): 12 (0.22 -> 0.24) using backward Euler
+			 Newton step: 0	 Residual (abs.):   4.4868e-04
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep (MT): 13 (0.24 -> 0.26) using backward Euler
+			 Newton step: 0	 Residual (abs.):   4.4868e-04
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep (MT): 14 (0.26 -> 0.28) using backward Euler
+			 Newton step: 0	 Residual (abs.):   4.4868e-04
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep (MT): 15 (0.28 -> 0.3) using backward Euler
+			 Newton step: 0	 Residual (abs.):   4.4868e-04
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep (MT): 16 (0.3 -> 0.32) using backward Euler
+			 Newton step: 0	 Residual (abs.):   4.4868e-04
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep (MT): 17 (0.32 -> 0.34) using backward Euler
+			 Newton step: 0	 Residual (abs.):   4.4868e-04
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep (MT): 18 (0.34 -> 0.36) using backward Euler
+			 Newton step: 0	 Residual (abs.):   4.4868e-04
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep (MT): 19 (0.36 -> 0.38) using backward Euler
+			 Newton step: 0	 Residual (abs.):   4.4868e-04
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep (MT): 20 (0.38 -> 0.4) using backward Euler
+			 Newton step: 0	 Residual (abs.):   4.4868e-04
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep (MT): 21 (0.4 -> 0.42) using backward Euler
+			 Newton step: 0	 Residual (abs.):   4.4868e-04
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep (MT): 22 (0.42 -> 0.44) using backward Euler
+			 Newton step: 0	 Residual (abs.):   4.4868e-04
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep (MT): 23 (0.44 -> 0.46) using backward Euler
+			 Newton step: 0	 Residual (abs.):   4.4868e-04
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep (MT): 24 (0.46 -> 0.48) using backward Euler
+			 Newton step: 0	 Residual (abs.):   4.4868e-04
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep (MT): 25 (0.48 -> 0.5) using backward Euler
+			 Newton step: 0	 Residual (abs.):   4.4868e-04
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+		         Precalculating functional values 
+		Space-Time Pointevaluation: 0.053401
+		 Timestep (MT): 26 (0.5 -> 0.52) using backward Euler
+			 Newton step: 0	 Residual (abs.):   4.4868e-04
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep (MT): 27 (0.52 -> 0.54) using backward Euler
+			 Newton step: 0	 Residual (abs.):   4.4868e-04
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep (MT): 28 (0.54 -> 0.56) using backward Euler
+			 Newton step: 0	 Residual (abs.):   4.4868e-04
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep (MT): 29 (0.56 -> 0.58) using backward Euler
+			 Newton step: 0	 Residual (abs.):   4.4868e-04
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep (MT): 30 (0.58 -> 0.6) using backward Euler
+			 Newton step: 0	 Residual (abs.):   4.4868e-04
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep (MT): 31 (0.6 -> 0.62) using backward Euler
+			 Newton step: 0	 Residual (abs.):   4.4868e-04
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep (MT): 32 (0.62 -> 0.64) using backward Euler
+			 Newton step: 0	 Residual (abs.):   4.4868e-04
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep (MT): 33 (0.64 -> 0.66) using backward Euler
+			 Newton step: 0	 Residual (abs.):   4.4868e-04
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep (MT): 34 (0.66 -> 0.68) using backward Euler
+			 Newton step: 0	 Residual (abs.):   4.4868e-04
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep (MT): 35 (0.68 -> 0.7) using backward Euler
+			 Newton step: 0	 Residual (abs.):   4.4868e-04
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep (MT): 36 (0.7 -> 0.72) using backward Euler
+			 Newton step: 0	 Residual (abs.):   4.4868e-04
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep (MT): 37 (0.72 -> 0.74) using backward Euler
+			 Newton step: 0	 Residual (abs.):   4.4868e-04
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep (MT): 38 (0.74 -> 0.76) using backward Euler
+			 Newton step: 0	 Residual (abs.):   4.4868e-04
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep (MT): 39 (0.76 -> 0.78) using backward Euler
+			 Newton step: 0	 Residual (abs.):   4.4868e-04
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep (MT): 40 (0.78 -> 0.8) using backward Euler
+			 Newton step: 0	 Residual (abs.):   4.4868e-04
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep (MT): 41 (0.8 -> 0.82) using backward Euler
+			 Newton step: 0	 Residual (abs.):   4.4868e-04
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep (MT): 42 (0.82 -> 0.84) using backward Euler
+			 Newton step: 0	 Residual (abs.):   4.4868e-04
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep (MT): 43 (0.84 -> 0.86) using backward Euler
+			 Newton step: 0	 Residual (abs.):   4.4868e-04
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep (MT): 44 (0.86 -> 0.88) using backward Euler
+			 Newton step: 0	 Residual (abs.):   4.4868e-04
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep (MT): 45 (0.88 -> 0.9) using backward Euler
+			 Newton step: 0	 Residual (abs.):   4.4868e-04
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep (MT): 46 (0.9 -> 0.92) using backward Euler
+			 Newton step: 0	 Residual (abs.):   4.4868e-04
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep (MT): 47 (0.92 -> 0.94) using backward Euler
+			 Newton step: 0	 Residual (abs.):   4.4868e-04
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep (MT): 48 (0.94 -> 0.96) using backward Euler
+			 Newton step: 0	 Residual (abs.):   4.5229e-04
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep (MT): 49 (0.96 -> 0.98) using backward Euler
+			 Newton step: 0	 Residual (abs.):   4.4868e-04
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+		         Precalculating functional values 
+		 Timestep (MT): 50 (0.98 -> 1) using backward Euler
+			 Newton step: 0	 Residual (abs.):   4.7167e-04
+			 Newton step: 0	 Residual (rel.):     1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+		         Precalculating functional values 
+	Computing Functionals:
+	Space-Time Pointevaluation: 0.053401
+	Computing Error Indicators:
+	Error estimate using H1-Residual-Estimator at time 0: 0
+	Computing Error Indicators:
+	Error estimate using H1-Residual-Estimator at time 0.02: 0.344581
+	Computing Error Indicators:
+	Error estimate using H1-Residual-Estimator at time 0.04: 0.0790702
+	Computing Error Indicators:
+	Error estimate using H1-Residual-Estimator at time 0.06: 0.0368356
+	Computing Error Indicators:
+	Error estimate using H1-Residual-Estimator at time 0.08: 0.0211775
+	Computing Error Indicators:
+	Error estimate using H1-Residual-Estimator at time 0.1: 0.0154176
+	Computing Error Indicators:
+	Error estimate using H1-Residual-Estimator at time 0.12: 0.0142183
+	Computing Error Indicators:
+	Error estimate using H1-Residual-Estimator at time 0.14: 0.0159696
+	Computing Error Indicators:
+	Error estimate using H1-Residual-Estimator at time 0.16: 0.0188862
+	Computing Error Indicators:
+	Error estimate using H1-Residual-Estimator at time 0.18: 0.0233889
+	Computing Error Indicators:
+	Error estimate using H1-Residual-Estimator at time 0.2: 0.0280149
+	Computing Error Indicators:
+	Error estimate using H1-Residual-Estimator at time 0.22: 0.0341105
+	Computing Error Indicators:
+	Error estimate using H1-Residual-Estimator at time 0.24: 0.0398288
+	Computing Error Indicators:
+	Error estimate using H1-Residual-Estimator at time 0.26: 0.0472559
+	Computing Error Indicators:
+	Error estimate using H1-Residual-Estimator at time 0.28: 0.0539
+	Computing Error Indicators:
+	Error estimate using H1-Residual-Estimator at time 0.3: 0.0626225
+	Computing Error Indicators:
+	Error estimate using H1-Residual-Estimator at time 0.32: 0.0701361
+	Computing Error Indicators:
+	Error estimate using H1-Residual-Estimator at time 0.34: 0.0801713
+	Computing Error Indicators:
+	Error estimate using H1-Residual-Estimator at time 0.36: 0.0885231
+	Computing Error Indicators:
+	Error estimate using H1-Residual-Estimator at time 0.38: 0.0998997
+	Computing Error Indicators:
+	Error estimate using H1-Residual-Estimator at time 0.4: 0.109062
+	Computing Error Indicators:
+	Error estimate using H1-Residual-Estimator at time 0.42: 0.121811
+	Computing Error Indicators:
+	Error estimate using H1-Residual-Estimator at time 0.44: 0.131757
+	Computing Error Indicators:
+	Error estimate using H1-Residual-Estimator at time 0.46: 0.145907
+	Computing Error Indicators:
+	Error estimate using H1-Residual-Estimator at time 0.48: 0.156609
+	Computing Error Indicators:
+	Error estimate using H1-Residual-Estimator at time 0.5: 0.17219
+	Computing Error Indicators:
+	Error estimate using H1-Residual-Estimator at time 0.52: 0.183621
+	Computing Error Indicators:
+	Error estimate using H1-Residual-Estimator at time 0.54: 0.200662
+	Computing Error Indicators:
+	Error estimate using H1-Residual-Estimator at time 0.56: 0.212792
+	Computing Error Indicators:
+	Error estimate using H1-Residual-Estimator at time 0.58: 0.231322
+	Computing Error Indicators:
+	Error estimate using H1-Residual-Estimator at time 0.6: 0.244123
+	Computing Error Indicators:
+	Error estimate using H1-Residual-Estimator at time 0.62: 0.264171
+	Computing Error Indicators:
+	Error estimate using H1-Residual-Estimator at time 0.64: 0.277614
+	Computing Error Indicators:
+	Error estimate using H1-Residual-Estimator at time 0.66: 0.299209
+	Computing Error Indicators:
+	Error estimate using H1-Residual-Estimator at time 0.68: 0.313265
+	Computing Error Indicators:
+	Error estimate using H1-Residual-Estimator at time 0.7: 0.336436
+	Computing Error Indicators:
+	Error estimate using H1-Residual-Estimator at time 0.72: 0.351077
+	Computing Error Indicators:
+	Error estimate using H1-Residual-Estimator at time 0.74: 0.375852
+	Computing Error Indicators:
+	Error estimate using H1-Residual-Estimator at time 0.76: 0.39105
+	Computing Error Indicators:
+	Error estimate using H1-Residual-Estimator at time 0.78: 0.417458
+	Computing Error Indicators:
+	Error estimate using H1-Residual-Estimator at time 0.8: 0.433182
+	Computing Error Indicators:
+	Error estimate using H1-Residual-Estimator at time 0.82: 0.461252
+	Computing Error Indicators:
+	Error estimate using H1-Residual-Estimator at time 0.84: 0.477475
+	Computing Error Indicators:
+	Error estimate using H1-Residual-Estimator at time 0.86: 0.507236
+	Computing Error Indicators:
+	Error estimate using H1-Residual-Estimator at time 0.88: 0.523929
+	Computing Error Indicators:
+	Error estimate using H1-Residual-Estimator at time 0.9: 0.555408
+	Computing Error Indicators:
+	Error estimate using H1-Residual-Estimator at time 0.92: 0.572543
+	Computing Error Indicators:
+	Error estimate using H1-Residual-Estimator at time 0.94: 0.60577
+	Computing Error Indicators:
+	Error estimate using H1-Residual-Estimator at time 0.96: 0.623317
+	Computing Error Indicators:
+	Error estimate using H1-Residual-Estimator at time 0.98: 0.658321
+	Computing Error Indicators:
+	Error estimate using H1-Residual-Estimator at time 1: 0.676252
+
+	H1-Error estimator: 3.49352
+	
+
+	Backward euler: u * u = 732.025
 	
