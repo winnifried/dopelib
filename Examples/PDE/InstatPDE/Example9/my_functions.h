@@ -65,4 +65,40 @@ InitialData::vector_value(const Point<2> &p, Vector<double> &values) const
     values(c) = InitialData::value(p, c);
 }
 
+/******************************************************/
+
+
+class DirichletValues : public DOpEWrapper::Function<2>
+{
+public:
+  DirichletValues () : DOpEWrapper::Function<2>()
+  {
+  }
+
+  double value (const Point<2>   &p,
+		const unsigned int /*component*/ = 0) const
+  {
+    double y = p[1];
+    return mytime*y;
+  }
+
+  void vector_value (const Point<2> &p,
+		     Vector<double>   &value) const
+  {
+    for (unsigned int c=0; c<this->n_components; ++c)
+      value (c) = DirichletValues::value (p, c);
+  }
+
+  void SetTime(double t) const
+  {
+    mytime=t;
+  }
+
+private:
+  mutable double mytime;
+};
+
+
+/******************************************************/
+
 #endif

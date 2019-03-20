@@ -158,7 +158,7 @@ main(int argc, char **argv)
 
   //Create the triangulation.
   Triangulation<DIM> triangulation;
-  GridGenerator::hyper_cube(triangulation, 0., 1.);
+  GridGenerator::hyper_cube(triangulation, 0., 1.,true);
 
   //Define the Finite Elements and quadrature formulas for the state.
   FESystem<DIM> state_fe(FE_Q<DIM>(1), 1);
@@ -193,9 +193,10 @@ main(int argc, char **argv)
   //Here we use zero boundary values
   DOpEWrapper::ZeroFunction<DIM> zf;
   SimpleDirichletData<VECTOR, DIM> DD1(zf);
-  
+  DirichletValues dirichlet;
+  SimpleDirichletData<VECTOR, DIM> DD2(dirichlet);
   P.SetDirichletBoundaryColors(0, comp_mask, &DD1);
-  P.SetDirichletBoundaryColors(1, comp_mask, &DD1);
+  P.SetDirichletBoundaryColors(1, comp_mask, &DD2);
   P.SetDirichletBoundaryColors(2, comp_mask, &DD1);
   P.SetDirichletBoundaryColors(3, comp_mask, &DD1);
 

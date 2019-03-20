@@ -33,7 +33,7 @@ subsection output parameters
 
   # Do not write files whose name contains a substring given here by a list of
   # `;` separated words
-  set never_write_list  = Gradient;Residual;Hessian;Tangent;Adjoint;Update;State;Error
+  set never_write_list  = Gradient;Residual;Hessian;Tangent;Adjoint;Update;State;Error;LastTime;Transfered
   #set never_write_list  = Gradient;Hessian;Tangent;Adjoint
       
   # Defines what strings should be printed, the higher the number the more

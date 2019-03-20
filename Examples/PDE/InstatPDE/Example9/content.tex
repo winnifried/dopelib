@@ -5,7 +5,17 @@ In this example we consider one of the prototypical nonstationary equations, the
 \partial_t u(t,x) - \Delta u(t,x) &= f(t,x),\\
 u(t,x)|_{\partial \Omega} &= g(t,x),\\
 u(0,x) &= u_0(x).
-\end{align*} In our example, we consider the simplest case $d=1$, where the Laplacian $\Delta$ reduces to $\partial_x^2$. The computational domain is $ I\times \Omega = [0,1] \times [0,1]^2$. For further simplification, we choose the right hand side as $f=0$ as well as homogeneous Dirichlet boundary conditions ($g=0$). The initial condition is given by $u_0(x) = \min(x_1,1-x_1)$.
+\end{align*} In our example, we consider the simplest case $d=1$,
+where the Laplacian $\Delta$ reduces to $\partial_x^2$. The
+computational domain is $ I\times \Omega = [0,1] \times [0,1]^2$. For
+further simplification, we choose the right hand side as $f=0$ and the
+initial condition is given by $u_0(x) = \min(x_1,1-x_1)$.
+The Dirichlet-data are
+\[
+  g(t,x) = \begin{cases} tx_2 & x_1 = 1,\\
+    0 & \text{otherwise.}
+  \end{cases}
+\]
 
 \subsubsection{Program description}
 The novelty of this program is the use of varying spatial meshes in
