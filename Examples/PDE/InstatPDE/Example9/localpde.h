@@ -194,7 +194,7 @@ public:
   UpdateFlags
   GetUpdateFlags() const
   {
-    if (this->problem_type_ == "state")
+    if (this->problem_type_ == "state" || this->problem_type_=="error_evaluation")
       return update_values | update_gradients | update_quadrature_points;
     else
       throw DOpEException("Unknown Problem Type " + this->problem_type_,
@@ -204,7 +204,7 @@ public:
   UpdateFlags
   GetFaceUpdateFlags() const
   {
-    if (this->problem_type_ == "state")
+    if (this->problem_type_ == "state" || this->problem_type_=="error_evaluation")
       return update_values | update_gradients | update_normal_vectors
              | update_quadrature_points;
     else

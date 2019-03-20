@@ -50,6 +50,7 @@
 #include <reducedproblems/instatpdeproblem.h>
 #include <templates/instat_step_newtonsolver.h>
 #include <container/instatpdeproblemcontainer.h>
+#include <container/residualestimator.h>
 
 #include <tsschemes/forward_euler_problem.h>
 #include <tsschemes/backward_euler_problem.h>
@@ -119,6 +120,13 @@ typedef InstatStepNewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR> NLS;
 typedef InstatPDEProblem<NLS, INTEGRATOR, OP, VECTOR,
         DIM> RP;
 
+typedef H1ResidualErrorContainer<Rothe_StateSpaceTimeHandler<FE,
+							     DOFHANDLER,
+							     SPARSITYPATTERN,
+							     VECTOR,
+							     DIM>,
+				 VECTOR, DIM> H1_RESC;
+
 int
 main(int argc, char **argv)
 {
@@ -167,10 +175,12 @@ main(int argc, char **argv)
 
   //Time grid of [0,1]
   Triangulation<1> times;
-  GridGenerator::subdivided_hyper_cube(times, 50);
+  unsigned int n_time_steps=50;
+  GridGenerator::subdivided_hyper_cube(times,n_time_steps);
   triangulation.refine_global(4);
-  std::vector<unsigned int> Rothe_time_to_dof(51,0);
-  Rothe_time_to_dof[25]=1;
+  std::vector<unsigned int> Rothe_time_to_dof(n_time_steps+1,0);
+  for(unsigned int i = 0; i < Rothe_time_to_dof.size(); i++)
+    Rothe_time_to_dof[i]=i%2;
   Rothe_StateSpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR,
 			      DIM> DOFH(triangulation, state_fe, times, Rothe_time_to_dof);
   
@@ -203,6 +213,8 @@ main(int argc, char **argv)
   solver.RegisterOutputHandler(&output);
   solver.RegisterExceptionHandler(&ex);
 
+  H1_RESC h1resc(DOFH, DOpEtypes::VectorStorageType::fullmem, pr, DOpEtypes::primal_only);
+
   for (int j = 0; j < 2; j++)
     {
     try
@@ -225,6 +237,9 @@ main(int argc, char **argv)
         //We compute the value of the functionals. To this end, we have to solve
         //the PDE at hand.
         solver.ComputeReducedFunctionals();
+	solver.ComputeRefinementIndicators(h1resc, LPDE);
+	outp << "H1-Error estimator: " << sqrt(h1resc.GetError()) << std::endl;
+	output.Write(outp, 1, 1, 1);
       }
 
       // The soluction extractor class allows us
@@ -250,9 +265,7 @@ main(int argc, char **argv)
           //For global mesh refinement, uncomment the next line
           // DOFH.RefineSpace(DOpEtypes::RefinementType::global); //or just DOFH.RefineSpace()
 
-          std::vector<dealii::Vector<float> > error_ind;
-	  error_ind.resize(51,Vector<float>(16));
-	  error_ind[0](0)=1.0;
+	  const std::vector<dealii::Vector<float> > error_ind(h1resc.GetErrorIndicators());
           DOFH.RefineSpace(SpaceTimeRefineOptimized(error_ind));
           //There are other mesh refinement strategies implemented, for example
           //DOFH.RefineSpace(RefineFixedNumber(error_ind, 0.4));
