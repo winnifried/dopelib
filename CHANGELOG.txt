@@ -1,6 +1,9 @@
 Changelog DOpE
 ==============
-25.01.2018: Update of DWRDataContainer_Base. Now, the container stores
+20.03.2019: Changed PDE/InstatPDE/Example4_TimeSpace to PDE/InstatPDE/Example9
+	    showing the use of Rothe-discretization for a 2d heat equation
+	    and Residual error estimation.
+25.01.2019: Update of DWRDataContainer_Base. Now, the container stores
 	    Space-Time distributed error indicators. Access to the global
 	    space-time summed error indicators can be done via GetError(), GetPrimalError(),
 	    GetDualError(), GetControlError() compatible with the access in the stationary case.
@@ -9,7 +12,7 @@ Changelog DOpE
 	    indicators (now already without sign!) the method GetErrorIndicators() returns
 	    a vector containing the elementwise indicators for each element and time step.
 	    The indicators for a particular time-step i can be accessed via operator[i]. 
-16.01.2018: -Updated Rothe_SpaceTimeHandler, to fix wrong order of deletes in Destructor
+16.01.2019: -Updated Rothe_SpaceTimeHandler, to fix wrong order of deletes in Destructor
 	    -PDEProblemContainer now has a function for adding AuxiliaryVariables which
 	     need to be transfered to a different mesh due to a change over a time step.
 	    - SpaceTimeVector now has a method to acces the values at a given time point
