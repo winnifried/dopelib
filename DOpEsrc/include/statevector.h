@@ -60,6 +60,7 @@ namespace DOpE
     {
     }
 
+    void operator=(double a) { SpaceTimeVector<VECTOR>::operator=(a); }
   };
 
 }
