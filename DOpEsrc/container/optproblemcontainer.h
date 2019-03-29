@@ -2867,7 +2867,12 @@ namespace DOpE
   void
   OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
                       SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::ComputeSparsityPattern(
-                        SPARSITYPATTERN &sparsity) const
+#if  dope_dimension > 0
+			SPARSITYPATTERN &sparsity
+#else
+			SPARSITYPATTERN &/*sparsity*/
+#endif
+			) const
   {
     if ((this->GetType() == "gradient")
         || (this->GetType() == "hessian"))
