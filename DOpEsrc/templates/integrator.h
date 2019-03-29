@@ -907,6 +907,7 @@ void Integrator<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::ComputeNonlinearRhs(
   // check if we need the evaluation of PointRhs
   if (need_point_rhs) {
     VECTOR point_rhs;
+    point_rhs.reinit(residual);
     pde.PointRhs(this->GetParamData(), this->GetDomainData(), point_rhs, 1.);
     residual += point_rhs;
   }
