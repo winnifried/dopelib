@@ -1,0 +1,94 @@
+DOpElib Copyright (C) 2012 - 2018 DOpElib authors
+This program comes with ABSOLUTELY NO WARRANTY.
+For License details read LICENSE.TXT distributed with this software!
+
+This is DOpElib Version: 4.0.0 pre
+	Status as of: 27/08/2018
+Using dealii Version: 9.0
+
+	**************************************************
+	*             Starting Forward Solve             *
+	*   Solving : PDEProblemContainer	*
+	*   SDoFs   : 	18
+	**************************************************
+
+	Computing State Solution:
+LOG: Allowing IterationCounter `PDENewton' for filenames!
+			 Newton step: 0	 Residual (abs.):   5.0000e+00
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+	Computing Functionals:
+	Local Mean value: 0
+
+	**************************************************
+	*             Starting Forward Solve             *
+	*   Solving : PDEProblemContainer	*
+	*   SDoFs   : 	50
+	**************************************************
+
+	Computing State Solution:
+			 Newton step: 0	 Residual (abs.):   4.0500e+00
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+	Computing Functionals:
+	Local Mean value: 0
+
+	**************************************************
+	*             Starting Forward Solve             *
+	*   Solving : PDEProblemContainer	*
+	*   SDoFs   : 	162
+	**************************************************
+
+	Computing State Solution:
+			 Newton step: 0	 Residual (abs.):   1.2125e+00
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.):   2.9210e-01	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+	Computing Functionals:
+	Local Mean value: 0
+
+	**************************************************
+	*             Starting Forward Solve             *
+	*   Solving : PDEProblemContainer	*
+	*   SDoFs   : 	578
+	**************************************************
+
+	Computing State Solution:
+			 Newton step: 0	 Residual (abs.):   4.7331e-01
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.):   2.9496e-01	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+	Computing Functionals:
+	Local Mean value: 0
+
+	**************************************************
+	*             Starting Forward Solve             *
+	*             for Reference Solution             *
+	*   Solving : PDEProblemContainer	*
+	*   SDoFs   : 	2178
+	**************************************************
+
+	Computing State Solution:
+			 Newton step: 0	 Residual (abs.):   1.8127e-01
+			 Newton step: 0	 Residual (rel.):   1.0000e+00
+			 Newton step: 1	 Residual (rel.):   4.3024e-01	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   6.7861e-03	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+	Computing Functionals:
+	Local Mean value: 0
+
+	Level 0 DoFs 18 Error: 1.30174
+	
+
+
+	Level 1 DoFs 50 Error: 1.22357
+	
+
+
+	Level 2 DoFs 162 Error: 0.608367
+	
+
+
+	Level 3 DoFs 578 Error: 0.302313
+	
+

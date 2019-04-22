@@ -1,0 +1,86 @@
+\subsubsection{General problem description}
+Within this example, we solve the obstacle problem\index{Obstacle problem}
+of finding $u \in \mathcal K$ solving 
+\begin{equation}\label{ex16:vi}
+  (\nabla u, \nabla (\phi-u)) \ge (f,\phi-u) \quad \forall v \in
+  \mathcal K
+\end{equation}
+where
+\[
+  \mathcal K = \{v \in H^1_0(\Omega)\,|\, v \ge \chi \text{ a.e. in }\Omega\}
+\]
+on $\Omega = (-1,1)^2$ with
+\[
+ \chi(x) = \operatorname{dist}(x,\partial \Omega) - 2
+ \operatorname{dist}\Bigl(x,\Omega \setminus (-\tfrac{1}{4},\tfrac{1}{4})\Bigr) -\frac{1}{5}
+\]
+and $f = -5$ as inspired
+by~\cite[Example~7.5]{NochettoSiebertVeeser:2003}.
+To handle the variational inequality \index{variational inequality},
+we introduce a Lagrange multiplier $\lambda$ such that~\eqref{ex16:vi}
+is equivalent to finding $u$ and $\lambda$ solving 
+\begin{equation}\label{ex16:lagrange}
+  \begin{aligned}
+    (\nabla u, \nabla \phi) - (f,\phi) - (\lambda,\phi) &= 0 & \forall
+    v &\in H^1_0(\Omega),\\
+    \lambda & \ge 0,\\
+    u-\chi & \ge 0,\\
+    (\lambda,u-\chi) &=0.
+  \end{aligned}
+\end{equation}
+Then, we replace the last three inequalities by a complementarity
+function, i.e., we notice that for any $c > 0$ 
+\[
+  x-\max(0,x-cy) = 0 \quad\Leftrightarrow \quad x \ge 0, y \ge 0, xy
+  = 0,
+\]
+and obtain the formulation
+\begin{equation}\label{ex16:complementarity}
+  \begin{aligned}
+    (\nabla u, \nabla \phi) - (f,\phi) - (\lambda,\phi) &= 0 & \forall
+    v &\in H^1_0(\Omega),\\
+    \lambda - \max(0,\lambda-c(u-\chi)) &= 0.
+  \end{aligned}
+\end{equation}
+For its discretization, we let $\chi_h = I_h \chi$ be the $\mathcal
+Q_1$ interpolation of the obstacle and take $u_h \in \mathcal Q_1$.
+For the multiplier $\lambda$, we utilize the dual basis of $\mathcal
+Q_1$ to define $\mathcal Q_1^*$, i.e., if $\phi^i$ are the nodal basis
+functions for $\mathcal Q_1$, then we define the basis $\psi^i$ of
+$\mathcal Q_1^*$ from
+\[
+ (\phi^i,\psi^j) = \delta_{ij} = \begin{cases} 1 & i = j,\\ 0 &
+   \text{otherwise.}
+ \end{cases}
+\] 
+This has the advantage, that
+the first equation in \eqref{ex16:complementarity} just gets
+\[
+  (\nabla u, \nabla \phi^i) - (f,\phi^i) - \lambda_i = 0 \quad \forall
+    \phi^i \;\text{nodal basis function of $\mathcal Q_1$.}
+\]
+The second equation, we enforce in the corresponding vertices $x_i$ to
+$\phi^i$, only, and get
+\[
+    \lambda_i - \max(0,\lambda_i-c(u(x_i)-\chi(x_i))) = 0.
+\]
+ The advantage of this formulation is that we don't need to actually
+ evaluate the basis functions $\psi^i$, since we only need the values
+ of $\lambda_i$ which we simply store in a $\mathcal Q_1$
+ Finite Element at the vertices since then
+ \[
+   \lambda_i = \lambda(x_i) 
+ \]
+ and we use a Gauss-Lobatto quadrature to actually evaluate the
+ functions at the vertices. The ugly part is that we need to assert
+ that we never evaluate $\lambda$ at a non-vertex quadrature point.
+
+ Now, when running over the mesh, we will have each vertex $x_i$ in
+ multiple elements, thus counting its contribution more than once.
+ To normalize it by the number of times it is counted, we need to
+ divide by this number of elements. We can get it from the
+ \texttt{ElementDataContainer} using
+ \texttt{GetNNeighbourElementsOfVertex}.
+ To use it we need to have the function \texttt{HasVertices} in
+ \texttt{LocalPDE} to return true, so that the information is generated.
+ 
