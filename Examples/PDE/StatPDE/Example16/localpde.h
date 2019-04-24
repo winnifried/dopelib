@@ -39,11 +39,11 @@ template<
   template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
   template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
   template<int, int> class DH, typename VECTOR, int dealdim>
-class LocalPDELaplace : public PDEInterface<EDC, FDC, DH, VECTOR, dealdim>
+class LocalPDE : public PDEInterface<EDC, FDC, DH, VECTOR, dealdim>
 {
 public:
   
-  LocalPDELaplace() :
+  LocalPDE() :
     state_block_component_(2, 0)
   {
     state_block_component_[1] =1;
@@ -237,7 +237,262 @@ public:
           }
       } //endfor qpoint
   }
+
+    void
+  StrongElementResidual(const EDC<DH, VECTOR, dealdim> &edc,
+                        const EDC<DH, VECTOR, dealdim> &edc_w, double &sum, double scale)
+  {   
+    unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();       
+    unsigned int n_q_points = edc.GetNQPoints();
+    const DOpEWrapper::FEValues<dealdim> &state_fe_values =
+      edc.GetFEValuesState();
+
+    fvalues_.resize(n_q_points);
+
+    PI_h_z_.resize(n_q_points, Vector<double>(2));
+    lap_u_.resize(n_q_points, Vector<double>(2));
+    uvalues_.resize(n_q_points, Vector<double>(2));
+    auxvalues_.resize(n_q_points, Vector<double>(2));
+    edc.GetLaplaciansState("state", lap_u_);
+    edc.GetValuesState("state", uvalues_);
+    edc_w.GetValuesState("weight_for_primal_residual", PI_h_z_);
+
+    //aux_error_0 contains the data computed by evaluating
+    //*AuxRhs. Here this means
+    //Component 0 is the contact information
+    //Component 1 is the mass matrix diagonal
+    edc.GetValuesState("aux_error_0", auxvalues_);
+    
+    const FEValuesExtractors::Scalar pde(0);
+    
+    // weight the residual depending on the contact status 
+    int fullContact =0;
+    // need to sum up locally as in sum everything in summed up 
+    double elemRes = 0;
+    double complRes = 0;
+
+    //make sure the binding of the function has worked
+    assert(this->ResidualModifier);
+    for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
+      {
+	// dofs not nodes
+	for (unsigned int i = 0; i < n_dofs_per_element; i++)
+	  {
+	    if(fabs(state_fe_values[pde].value(i,q_point) - 1.) < std::numeric_limits<double>::epsilon())
+	      {
+
+		if (fabs(auxvalues_[q_point](0)-1.)< std::numeric_limits<double>::epsilon())
+		  {
+		    //count how many nodes of the element are in full-contact
+		    fullContact += 1;		   
+ 
+		  }
+	      }
+	  }
+
+        fvalues_[q_point] = local::rhs(state_fe_values.quadrature_point(q_point));
+        double res;
+        res = fvalues_[q_point] + lap_u_[q_point](0);
+
+        //Modify the residual as required by the error estimator
+	this->ResidualModifier(res);
+	
+	elemRes += scale * (res * PI_h_z_[q_point](0))
+	  * state_fe_values.JxW(q_point);
+      }
+    //Only contribute to the error estimator if the element is not in full-contact
+    //i.e. fullContact < 4
+    elemRes = elemRes*(4-fullContact);
+    //Residual from the complementarity relation, need to be scaled with
+    //volume of domain for the basisfunctions
+    for (unsigned int q = 0; q < n_q_points; q++)
+      {
+	// dofs not nodes
+	for (unsigned int i = 0; i < n_dofs_per_element; i++)
+	  {
+	    // test if q = i (Knoten)
+	    if(fabs(state_fe_values[pde].value(i,q) - 1.) < std::numeric_limits<double>::epsilon())
+	      {
+		// if q is no full contact
+		if (fabs(auxvalues_[q](0)-1.)>std::numeric_limits<double>::epsilon())
+		  // but if q is in contact
+		  {
+		    if(uvalues_[q](1) > 0 )
+		      {
+			//we have a semi contact node
+			// real quadrature loop
+			for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
+			  {
+			    complRes += (1.0/auxvalues_[q](1))*uvalues_[q](1)*(fabs(obstacle_[q_point][0]-uvalues_[q_point][0]))*state_fe_values[pde].value(i,q_point)*state_fe_values.JxW(q_point);
+			  }
+		      }
+		  }
+	      }
+	  }
+      }
+    
+    sum += elemRes;
+    sum += complRes;
+    
+  }
+
+  void
+    StrongFaceResidual(
+      const FaceDataContainer<dealii::DoFHandler, VECTOR, dealdim> &fdc,
+      const FaceDataContainer<dealii::DoFHandler, VECTOR, dealdim> &fdc_w,
+      double &sum, double scale)
+  {
+    unsigned int n_dofs_per_element = fdc.GetNDoFsPerElement();
+    unsigned int n_q_points = fdc.GetNQPoints();
+    const  auto &state_fe_values = fdc.GetFEFaceValuesState();
   
+    ugrads_.resize(n_q_points, std::vector<Tensor<1, dealdim> >(2));
+    ugrads_nbr_.resize(n_q_points, std::vector<Tensor<1, dealdim> >(2));
+    PI_h_z_.resize(n_q_points, Vector<double>(2));
+
+    fdc.GetFaceValuesState("aux_error_0", auxvalues_);
+      
+    fdc.GetFaceGradsState("state", ugrads_);
+    fdc.GetNbrFaceGradsState("state", ugrads_nbr_);
+    fdc_w.GetFaceValuesState("weight_for_primal_residual", PI_h_z_);
+    vector<double> jump(n_q_points);
+    
+    const FEValuesExtractors::Scalar pde(0);
+   
+
+    // weight the face residual depending on the contact status of the nodes
+    int fullContact = 0;
+    // need localSum as in sum everything is summed up also the element residual
+    double localSum = 0;
+ 
+    for (unsigned int q = 0; q < n_q_points; q++)
+      {
+        jump[q] = (ugrads_nbr_[q][0][0] - ugrads_[q][0][0])
+                  * fdc.GetFEFaceValuesState().normal_vector(q)[0]
+                  + (ugrads_nbr_[q][0][1] - ugrads_[q][0][1])
+                  * fdc.GetFEFaceValuesState().normal_vector(q)[1];
+      
+	// dofs not nodes
+	for (unsigned int i = 0; i < n_dofs_per_element; i++)
+	  {
+	    if(fabs(state_fe_values[pde].value(i,q) - 1.) < std::numeric_limits<double>::epsilon())
+	      {
+		if (fabs(auxvalues_[q](0)-1.)< std::numeric_limits<double>::epsilon())
+		  {
+		    //count how many nodes of the element are in full-contact
+		    fullContact += 1;		   
+		    
+		  }
+	      }
+	  }
+      }
+    //make sure the binding of the function has worked
+    assert(this->ResidualModifier);
+
+    for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
+      {
+        //Modify the residual as required by the error estimator
+        double res;
+        res = jump[q_point];
+	
+	this->ResidualModifier(res);
+
+        localSum += scale * (res * PI_h_z_[q_point](0))
+               * fdc.GetFEFaceValuesState().JxW(q_point);
+      }
+    localSum = (2.0-fullContact)*localSum;
+    
+    sum += localSum;
+  
+  }
+
+  void
+    StrongBoundaryResidual(
+      const FaceDataContainer<dealii::DoFHandler, VECTOR, dealdim> &/*fdc*/,
+      const FaceDataContainer<dealii::DoFHandler, VECTOR, dealdim> &/*fdc_w*/,
+      double &/*sum*/, double /*scale*/)
+  {
+    /*Not needed on homogeneous Dirichlet-boundary*/
+  }
+
+    //Auxiliary Values for Error Estimation
+  void ElementAuxRhs(const EDC<DH, VECTOR, dealdim> & edc,
+		    dealii::Vector<double> &local_vector,
+		    double scale)
+  {
+    unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
+    unsigned int n_q_points = edc.GetNQPoints();
+    const DOpEWrapper::FEValues<dealdim> &state_fe_values =
+      edc.GetFEValuesState();
+    
+    assert(this->problem_type_ == "aux_error");
+    assert(this->problem_type_num_ == 0);
+    
+    uvalues_.resize(n_q_points, Vector<double>(2));
+    obstacle_.resize(n_q_points, Vector<double>(2));
+    edc.GetValuesState("state", uvalues_);
+    edc.GetValuesState("obstacle", obstacle_);
+
+    const FEValuesExtractors::Scalar pde(0);
+    const FEValuesExtractors::Scalar mult(1);
+    
+    unsigned int contact_vertices=0;
+    //First component is full contact
+    //second is mass
+    
+    //Check if contact vertex
+    for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
+      {
+	for (unsigned int i = 0; i < n_dofs_per_element; i++)
+	{
+	    //Only in vertices, so we check whether the u test function
+	    // is one (i.e. we are in a vertex)
+	    if(fabs(state_fe_values[pde].value(i,q_point) - 1.) < std::numeric_limits<double>::epsilon())
+	    {
+	      //Check if contact vertex
+	      if((uvalues_[q_point][0]-obstacle_[q_point][0]) >= 0.) 
+		contact_vertices++;
+	    }
+          }
+      }
+    //Now assembling the information
+    for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
+    {
+      for (unsigned int i = 0; i < n_dofs_per_element; i++)
+      {
+	//Both are vertex based, so we check if the corresponding q point is a vertex
+	//For contact, set one if all (4) vertices are in contact.
+	if(fabs(state_fe_values[pde].value(i,q_point) - 1.) < std::numeric_limits<double>::epsilon())
+	{
+	  unsigned int n_neig = edc.GetNNeighbourElementsOfVertex(state_fe_values.quadrature_point(q_point));
+	  if(n_neig > 0)
+	  {
+	    if(contact_vertices==4)
+	    {
+	      local_vector(i) += scale/n_neig;
+	    }
+	  }
+	}
+	//For Mass: \int_{N(x_i)} \phi_i
+	local_vector(i) += scale * state_fe_values[mult].value(i,q_point)
+	  * state_fe_values.JxW(q_point);
+	    
+      }
+    }
+  }
+
+  void FaceAuxRhs(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
+		  dealii::Vector<double> &/*local_vector*/,
+		  double /*scale*/)
+  {
+  }
+  
+  void BoundaryAuxRhs(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
+		      dealii::Vector<double> &/*local_vector*/,
+		      double /*scale*/)
+  {
+  }
+
   UpdateFlags
   GetUpdateFlags() const
   {

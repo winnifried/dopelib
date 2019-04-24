@@ -1,5 +1,8 @@
 Changelog DOpE
 ==============
+24.04.2019: Added error estimation to PDE/StatPDE/Example16, to show how to
+            use precomputations to evaluate non-elementwise quantities needed
+	    in error estimation for VIs.
 22.04.2019: Added Example PDE/StatPDE/Example16 to show how to solve an
 	    obstacle problem with Newton's method using a complementarity function.
 20.03.2019: Changed PDE/InstatPDE/Example4_TimeSpace to PDE/InstatPDE/Example9

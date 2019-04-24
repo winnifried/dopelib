@@ -19,6 +19,13 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 	Computing Functionals:
 	Local Mean value: 0
+	Computing Error Indicators:
+	Precomputation 0
+	Error estimate using Obstacle-Residual-Estimator: 600.48
+
+	Obstacle-Error estimator: 24.5047
+	
+
 
 	**************************************************
 	*             Starting Forward Solve             *
@@ -32,6 +39,13 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 	Computing Functionals:
 	Local Mean value: 0
+	Computing Error Indicators:
+	Precomputation 0
+	Error estimate using Obstacle-Residual-Estimator: 206.418
+
+	Obstacle-Error estimator: 14.3673
+	
+
 
 	**************************************************
 	*             Starting Forward Solve             *
@@ -46,49 +60,62 @@ LOG: Allowing IterationCounter `PDENewton' for filenames!
 			 Newton step: 2	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 	Computing Functionals:
 	Local Mean value: 0
+	Computing Error Indicators:
+	Precomputation 0
+	Error estimate using Obstacle-Residual-Estimator: 11.7254
+
+	Obstacle-Error estimator: 3.42424
+	
+
 
 	**************************************************
 	*             Starting Forward Solve             *
 	*   Solving : PDEProblemContainer	*
-	*   SDoFs   : 	578
+	*   SDoFs   : 	386
 	**************************************************
 
 	Computing State Solution:
-			 Newton step: 0	 Residual (abs.):   4.7331e-01
+			 Newton step: 0	 Residual (abs.):   5.0833e-01
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
-			 Newton step: 1	 Residual (rel.):   2.9496e-01	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   4.7545e-02	 LineSearch {0} 
 			 Newton step: 2	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 	Computing Functionals:
 	Local Mean value: 0
+	Computing Error Indicators:
+	Precomputation 0
+	Error estimate using Obstacle-Residual-Estimator: 34.6899
+
+	Obstacle-Error estimator: 5.88981
+	
+
 
 	**************************************************
 	*             Starting Forward Solve             *
 	*             for Reference Solution             *
 	*   Solving : PDEProblemContainer	*
-	*   SDoFs   : 	2178
+	*   SDoFs   : 	1362
 	**************************************************
 
 	Computing State Solution:
-			 Newton step: 0	 Residual (abs.):   1.8127e-01
+			 Newton step: 0	 Residual (abs.):   5.3624e-01
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
-			 Newton step: 1	 Residual (rel.):   4.3024e-01	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   6.7861e-03	 LineSearch {0} 
-			 Newton step: 3	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   2.2461e-01	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 	Computing Functionals:
 	Local Mean value: 0
 
-	Level 0 DoFs 18 Error: 1.30174
+	Level 0 DoFs 18 Estimate: 24.5047 Error: 1.32727 Ieff: 18.4625
 	
 
 
-	Level 1 DoFs 50 Error: 1.22357
+	Level 1 DoFs 50 Estimate: 14.3673 Error: 1.25594 Ieff: 11.4394
 	
 
 
-	Level 2 DoFs 162 Error: 0.608367
+	Level 2 DoFs 162 Estimate: 3.42424 Error: 0.593759 Ieff: 5.76705
 	
 
 
-	Level 3 DoFs 578 Error: 0.302313
+	Level 3 DoFs 386 Estimate: 5.88981 Error: 0.560998 Ieff: 10.4988
 	
 

@@ -1,7 +1,7 @@
 # Listing of Parameters
 # ---------------------
 subsection main parameters
-  set max_iter = 4
+  set max_iter = 8
   set post_ref = 1
   set prerefine = 1
   set quad order = 5

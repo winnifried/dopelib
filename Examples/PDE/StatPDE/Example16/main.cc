@@ -57,6 +57,7 @@
 #include "localpde.h"
 #include "functionals.h"
 #include "functions.h"
+#include "obstacleestimator.h"
 
 using namespace std;
 using namespace dealii;
@@ -75,7 +76,7 @@ typedef SparseMatrix<double> MATRIX;
 typedef SparsityPattern SPARSITYPATTERN;
 typedef Vector<double> VECTOR;
 
-typedef PDEProblemContainer<LocalPDELaplace<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
+typedef PDEProblemContainer<LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
         SimpleDirichletData<VECTOR, DIM>, SPARSITYPATTERN, VECTOR, DIM> OP;
 typedef IntegratorDataContainer<DOFHANDLER, QUADRATURE, FACEQUADRATURE,
         VECTOR, DIM> IDC;
@@ -86,6 +87,7 @@ typedef NewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR> NLS;
 typedef StatPDEProblem<NLS, INTEGRATOR, OP, VECTOR, DIM> RP;
 typedef MethodOfLines_StateSpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN,
         VECTOR, DIM> STH;
+typedef ObstacleResidualErrorContainer<STH, VECTOR, DIM> OBSTACLE_RESC;
 
 void
 declare_params(ParameterReader &param_reader)
@@ -162,7 +164,7 @@ main(int argc, char **argv)
 
   //Functionals*************************************************
   LocalFaceFunctional<CDC, FDC, DOFHANDLER, VECTOR, DIM> LFF;
-  LocalPDELaplace<CDC, FDC, DOFHANDLER, VECTOR, DIM> LPDE;
+  LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM> LPDE;
   //*************************************************
 
   //space time handler***********************************/
@@ -189,6 +191,7 @@ main(int argc, char **argv)
   solver.RegisterOutputHandler(&out);
   solver.RegisterExceptionHandler(&ex);
   /**********************************************************************/
+  OBSTACLE_RESC resc(DOFH, DOpEtypes::VectorStorageType::fullmem, pr, DOpEtypes::primal_only);
 
   solver.ReInit();
   out.ReInit();
@@ -200,6 +203,7 @@ main(int argc, char **argv)
     store[i] = new StateVector<VECTOR>(&DOFH, DOpEtypes::VectorStorageType::fullmem,pr);
     (*store[i]) = 0.;
   }
+  vector<double> h1errs(max_iter);
   vector<unsigned int> dofs(max_iter);
 
   for (int i = 0; i < max_iter; i++)
@@ -224,9 +228,13 @@ main(int argc, char **argv)
           out.Write(outp, 1, 1, 1);
 
           solver.ComputeReducedFunctionals();
+          solver.ComputeRefinementIndicators(resc, LPDE);
 	  P.DeleteAuxiliaryState("obstacle");
+          outp << "Obstacle-Error estimator: " << sqrt(resc.GetError()) << std::endl;
+          out.Write(outp, 1, 1, 1);
 
 	  //Store solution
+	  h1errs[i] = sqrt(resc.GetError());
 	  dofs[i] =  DOFH.GetStateNDoFs();
 	  SolutionExtractor<RP,VECTOR >  a(solver);
 	  store[i]->GetSpacialVector() = a.GetU().GetSpacialVector();
@@ -242,7 +250,7 @@ main(int argc, char **argv)
       if (i != max_iter - 1)
         {
           //For global mesh refinement, uncomment the next line
-          DOFH.RefineSpace();
+          DOFH.RefineSpace(RefineOptimized(resc.GetErrorIndicators()[0]));
 
 	  solver.ReInit();
           out.ReInit();
@@ -303,7 +311,7 @@ main(int argc, char **argv)
 					   VectorTools::H1_norm,
 					   &select_comp);
 	double error = difference_per_element.l2_norm();
-	outp<<"Level "<<i<<" DoFs "<<dofs[i]<<" Error: "<<error<<std::endl;
+	outp<<"Level "<<i<<" DoFs "<<dofs[i]<<" Estimate: "<<h1errs[i]<<" Error: "<<error<<" Ieff: "<<h1errs[i]/error<<std::endl;
 	out.Write(outp,1,1,1);
     }
     

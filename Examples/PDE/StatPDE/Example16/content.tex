@@ -83,4 +83,43 @@ $\phi^i$, only, and get
  \texttt{GetNNeighbourElementsOfVertex}.
  To use it we need to have the function \texttt{HasVertices} in
  \texttt{LocalPDE} to return true, so that the information is generated.
+
+ Further, in this example we show a residual based error estimator
+ for the obstacle problem, as given in~\cite{Walloth:2017}. In
+ principle this is similar to the calculations needed in
+ Example~\ref{PDE_adap_Stat_Laplace}, i.e., defining the
+ \texttt{Strong*Residual} terms in the \texttt{LocalPDE} class.
+ However, for the estimate of the obstacle we need too special
+ information. First, for a given vertex $x_i$, we need to know if
+ $x_i$ is a \textit{full contact} node, meaning that $u = \chi$ on
+ $\omega_i = \cup_{T \mid x_i \in T} T$ the patch around $v$. Further,
+ we need to have $|\omega_i| = \int_{\omega_i} \phi_i\,\mathrm{d}x$ for all
+ vertices to correctly scale the complementarity residual.
+ Unfortunately, both data are non-local, i.e., we can not compute it
+ on any given $T$ alone.
+
+ However, we can compute these values if we have one additional
+ integration over the domain. I.e. to get $|\omega_i|$ we simply
+ define a function $\omega \in \mathcal Q_1$ by $\omega(v) = \omega_v$
+ which we can calculate by computing the nodal vector corresponding to
+ the functional
+ \[
+   \int_\Omega \phi\,\mathrm{d}x.
+ \]
+ In a similar manner, we can calculate if a vertex is in full contact
+ by adding $1$ to a nodal vector whenever its support is contained in
+ a full contact element, and rescaling with the number of elements
+ adjacent to the corresponding node.
+
+ To execute these computations the \texttt{ObstacleResidualErrorContainer}
+ has a function \texttt{NPrecomputedNodalValues} returning $1$ since we
+ can compute both vectors in a single integration. The actual
+ integration is then implemented in \texttt{LocalPDE} in the
+ \texttt{*AuxRhs} which will be evaluated prior to error estimation.
+ The results are then accessible via the vector
+ \texttt{aux\_errror\_0} from the \texttt{*DataContainers} in the
+ evaluation of the \texttt{Strong*Residual}.
+
+ Note, if more than one precomputation is requested the results will
+ be accessible in \texttt{aux\_error\_i} for an appropriate index $i$.
  
