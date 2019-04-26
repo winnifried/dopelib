@@ -349,7 +349,7 @@ namespace DOpE
         catch (DOpENegativeCurvatureException &e)
           {
             this->GetExceptionHandler()->HandleException(e,"ReducedNewtonAlgorithm::Solve");
-            lineiter = -2;
+            liniter = -2;
           }
         catch (DOpEException &e)
           {
@@ -358,6 +358,14 @@ namespace DOpE
         //Linesearch
         try
           {
+	    //Check if dq is a descent direction
+	    double reduction = gradient*dq;
+	    if(reduction > 0)
+	    {
+	      this->GetOutputHandler()->WriteError("Waring: computed direction doesn't seem to be a descend direction! Trying negative gradient instead.");
+	      dq = gradient_transposed;
+	      dq *= -1.;
+	    }
             lineiter = ReducedNewtonLineSearch(dq,gradient,cost,q);
           }
         catch (DOpEIterationException &e)
