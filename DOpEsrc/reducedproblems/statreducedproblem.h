@@ -1201,7 +1201,7 @@ namespace DOpE
     if (cost_needs_precomputations_ != 0)
       {
         auto func_vals = GetAuxiliaryParams("cost_functional_pre");
-        this->GetIntegrator().AddParamData("cost_functional_pre",&(func_vals->second));
+        this->GetControlIntegrator().AddParamData("cost_functional_pre",&(func_vals->second));
       }
     this->GetControlIntegrator().AddDomainData("state",
                                                &(GetU().GetSpacialVector()));
@@ -1259,7 +1259,7 @@ namespace DOpE
       }
     if (cost_needs_precomputations_ != 0)
       {
-        this->GetIntegrator().DeleteParamData("cost_functional_pre");
+        this->GetControlIntegrator().DeleteParamData("cost_functional_pre");
       }
     this->GetControlIntegrator().DeleteDomainData("state");
     this->GetControlIntegrator().DeleteDomainData("adjoint");
@@ -1740,10 +1740,12 @@ namespace DOpE
           {
             auto func_vals = GetAuxiliaryParams("cost_functional_pre");
             this->GetIntegrator().AddParamData("cost_functional_pre",&(func_vals->second));
+            this->GetControlIntegrator().AddParamData("cost_functional_pre",&(func_vals->second));
           }
           {
             auto func_vals = GetAuxiliaryParams("cost_functional_pre_tangent");
             this->GetIntegrator().AddParamData("cost_functional_pre_tangent",&(func_vals->second));
+            this->GetControlIntegrator().AddParamData("cost_functional_pre_tangent",&(func_vals->second));
           }
         }
 
@@ -1919,6 +1921,8 @@ namespace DOpE
       {
         this->GetIntegrator().DeleteParamData("cost_functional_pre");
         this->GetIntegrator().DeleteParamData("cost_functional_pre_tangent");
+        this->GetControlIntegrator().DeleteParamData("cost_functional_pre");
+        this->GetControlIntegrator().DeleteParamData("cost_functional_pre_tangent");
       }
 
   }
