@@ -345,6 +345,14 @@ namespace DOpE
             //So only write a warning, and continue.
             this->GetExceptionHandler()->HandleException(e,"ReducedNewtonAlgorithm::Solve");
             liniter = -1;
+	    //However, if in this case the step is inconveniently large, i.e., it might
+	    //be an almost singular Hessian, we take the negative gradient instead.
+	    if (dq.Norm("infty") > 10000.*gradient_transposed.Norm("infty"))
+	    {
+   	      this->GetOutputHandler()->WriteError("Step discarded, taking negative Gradient instead.");
+	      dq = gradient_transposed;
+	      dq *= -1.;
+	    }
           }
         catch (DOpENegativeCurvatureException &e)
           {
