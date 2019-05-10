@@ -1,9 +1,9 @@
-DOpElib Copyright (C) 2012 - 2016 DOpElib authors
+DOpElib Copyright (C) 2012 - 2018 DOpElib authors
 This program comes with ABSOLUTELY NO WARRANTY.
 For License details read LICENSE.TXT distributed with this software!
 
 This is DOpElib Version: 4.0.0 pre
-	Status as of: 16/02/2016
+	Status as of: 27/08/2018
 Using dealii Version: 9.0
 
 	**************************************************
@@ -28,8 +28,10 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 0	 Residual (abs.):   1.22e-04
 			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   1.11e-02	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   3.66e-06	 LineSearch {0} 
-			 Newton step: 3	 Residual (rel.): < 1.00e-07	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   4.17e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   2.73e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   3.63e-06	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.): < 1.00e-07	 LineSearch {0} 
 		         Precalculating functional values 
 		Pressure_difference: 0.10548
 		Drag: 0.19756
@@ -37,9 +39,10 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 2 (0.1 -> 0.2) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   1.22e-04
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   5.10e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   1.95e-06	 LineSearch {0} 
-			 Newton step: 3	 Residual (rel.): < 1.00e-07	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   4.67e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.87e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   3.95e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 1.00e-07	 LineSearch {0} 
 		         Precalculating functional values 
 		Pressure_difference: 0.12423
 		Drag: 0.24183
@@ -47,9 +50,10 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 3 (0.2 -> 0.3) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   1.21e-04
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   5.52e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   2.11e-06	 LineSearch {0} 
-			 Newton step: 3	 Residual (rel.): < 1.00e-07	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   5.27e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.82e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   3.48e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 1.00e-07	 LineSearch {0} 
 		         Precalculating functional values 
 		Pressure_difference: 0.13905
 		Drag: 0.27886
@@ -57,9 +61,10 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 4 (0.3 -> 0.4) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   1.21e-04
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   5.75e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   1.38e-06	 LineSearch {0} 
-			 Newton step: 3	 Residual (rel.): < 1.00e-07	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   5.59e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.23e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   2.78e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 1.00e-07	 LineSearch {0} 
 		         Precalculating functional values 
 		Pressure_difference: 0.15559
 		Drag: 0.3144
@@ -67,9 +72,11 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 5 (0.4 -> 0.5) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   1.20e-04
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   5.70e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   9.89e-07	 LineSearch {0} 
-			 Newton step: 3	 Residual (rel.): < 1.00e-07	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   5.62e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.38e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   2.36e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   2.11e-06	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   4.21e-07	 LineSearch {0} 
 		         Precalculating functional values 
 		Pressure_difference: 0.17627
 		Drag: 0.3532
@@ -77,9 +84,11 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 6 (0.5 -> 0.6) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   1.19e-04
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   5.56e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   1.02e-06	 LineSearch {0} 
-			 Newton step: 3	 Residual (rel.): < 1.00e-07	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   1.26e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   5.16e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.64e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   1.72e-06	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.): < 1.00e-07	 LineSearch {0} 
 		         Precalculating functional values 
 		Pressure_difference: 0.20393
 		Drag: 0.39829
@@ -87,19 +96,23 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 7 (0.6 -> 0.7) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   1.18e-04
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   5.44e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   1.10e-06	 LineSearch {0} 
-			 Newton step: 3	 Residual (rel.): < 1.00e-07	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   5.36e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.95e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.09e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   1.08e-06	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.): < 1.00e-07	 LineSearch {0} 
 		         Precalculating functional values 
 		Pressure_difference: 0.24049
 		Drag: 0.45244
-		Lift: 0.00052873
+		Lift: 0.00052874
 		 Timestep: 8 (0.7 -> 0.8) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   1.16e-04
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   5.33e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   1.09e-06	 LineSearch {0} 
-			 Newton step: 3	 Residual (rel.): < 1.00e-07	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   2.24e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.73e-03	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.12e-04	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   1.88e-05	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.): < 1.00e-07	 LineSearch {0} 
 		         Precalculating functional values 
 		Pressure_difference: 0.28647
 		Drag: 0.51665
@@ -107,9 +120,10 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 9 (0.8 -> 0.9) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   1.15e-04
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   5.23e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   8.74e-07	 LineSearch {0} 
-			 Newton step: 3	 Residual (rel.): < 1.00e-07	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   5.14e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.63e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   9.15e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   7.69e-07	 LineSearch {0} 
 		         Precalculating functional values 
 		Pressure_difference: 0.34073
 		Drag: 0.5902
@@ -117,35 +131,45 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 10 (0.9 -> 1) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   1.13e-04
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   5.13e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   6.58e-07	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   2.17e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.54e-03	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.14e-04	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   1.81e-05	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.): < 1.00e-07	 LineSearch {0} 
 		         Precalculating functional values 
 		Pressure_difference: 0.40158
 		Drag: 0.67096
-		Lift: 0.00092716
+		Lift: 0.00092715
 		 Timestep: 11 (1 -> 1.1) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   1.12e-04
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   5.32e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   6.90e-07	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   5.27e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.46e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   8.46e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   6.33e-07	 LineSearch {0} 
 		         Precalculating functional values 
 		Pressure_difference: 0.46777
 		Drag: 0.75659
-		Lift: 0.00040035
+		Lift: 0.00040033
 		 Timestep: 12 (1.1 -> 1.2) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   1.10e-04
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   5.52e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   6.79e-07	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   2.10e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.42e-03	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   6.49e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   1.07e-05	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.): < 1.00e-07	 LineSearch {0} 
 		         Precalculating functional values 
 		Pressure_difference: 0.53858
 		Drag: 0.84552
-		Lift: -0.000748
+		Lift: -0.00074804
 		 Timestep: 13 (1.2 -> 1.3) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   1.07e-04
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   5.56e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   6.49e-07	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   5.50e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.32e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   5.69e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   2.61e-07	 LineSearch {0} 
 		         Precalculating functional values 
 		Pressure_difference: 0.61345
 		Drag: 0.93696
@@ -153,8 +177,11 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 14 (1.3 -> 1.4) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   1.05e-04
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   5.56e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   6.60e-07	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   2.02e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.29e-03	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   5.59e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   5.52e-06	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   7.76e-07	 LineSearch {0} 
 		         Precalculating functional values 
 		Pressure_difference: 0.69185
 		Drag: 1.0305
@@ -162,17 +189,22 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 15 (1.4 -> 1.5) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   1.03e-04
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   5.24e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   6.41e-07	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   1.07e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   3.42e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   4.72e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   3.02e-07	 LineSearch {0} 
 		         Precalculating functional values 
 		Pressure_difference: 0.77328
 		Drag: 1.1255
-		Lift: -0.0050726
+		Lift: -0.0050727
 		 Timestep: 16 (1.5 -> 1.6) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   9.99e-05
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   5.60e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   6.25e-07	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   2.54e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.59e-03	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   4.45e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   5.52e-06	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.): < 1.00e-07	 LineSearch {0} 
 		         Precalculating functional values 
 		Pressure_difference: 0.8572
 		Drag: 1.2215
@@ -180,8 +212,10 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 17 (1.6 -> 1.7) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   9.71e-05
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   5.35e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   4.84e-07	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   5.29e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.02e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   2.49e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   1.14e-07	 LineSearch {0} 
 		         Precalculating functional values 
 		Pressure_difference: 0.94308
 		Drag: 1.318
@@ -189,8 +223,11 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 18 (1.7 -> 1.8) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   9.41e-05
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   4.85e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   3.13e-07	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   1.83e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   9.97e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   2.91e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   2.93e-06	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.): < 1.00e-07	 LineSearch {0} 
 		         Precalculating functional values 
 		Pressure_difference: 1.0304
 		Drag: 1.4145
@@ -198,8 +235,10 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 19 (1.8 -> 1.9) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   9.10e-05
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   5.17e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   3.48e-07	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   5.09e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   8.75e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   2.81e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   2.34e-07	 LineSearch {0} 
 		         Precalculating functional values 
 		Pressure_difference: 1.1185
 		Drag: 1.5104
@@ -207,17 +246,22 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 20 (1.9 -> 2) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   8.77e-05
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   4.84e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   2.89e-07	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   1.72e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   8.52e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   3.21e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   5.70e-06	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.): < 1.00e-07	 LineSearch {0} 
 		         Precalculating functional values 
 		Pressure_difference: 1.2071
 		Drag: 1.6053
-		Lift: -0.0065673
+		Lift: -0.0065674
 		 Timestep: 21 (2 -> 2.1) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   8.44e-05
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   4.80e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   2.99e-07	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   4.75e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   7.46e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   4.21e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   1.74e-07	 LineSearch {0} 
 		         Precalculating functional values 
 		Pressure_difference: 1.2954
 		Drag: 1.6987
@@ -225,8 +269,11 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 22 (2.1 -> 2.2) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   8.09e-05
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   5.05e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   2.84e-07	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   1.60e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   7.11e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   5.08e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   4.08e-06	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   7.38e-07	 LineSearch {0} 
 		         Precalculating functional values 
 		Pressure_difference: 1.383
 		Drag: 1.7902
@@ -234,17 +281,22 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 23 (2.2 -> 2.3) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   7.72e-05
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   5.34e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   3.03e-07	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   8.10e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.76e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   3.98e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   1.83e-07	 LineSearch {0} 
 		         Precalculating functional values 
 		Pressure_difference: 1.4694
 		Drag: 1.8794
-		Lift: -0.0083125
+		Lift: -0.0083124
 		 Timestep: 24 (2.3 -> 2.4) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   7.35e-05
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   4.91e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   2.51e-07	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   1.92e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   8.08e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   4.41e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   4.80e-06	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.): < 1.00e-07	 LineSearch {0} 
 		         Precalculating functional values 
 		Pressure_difference: 1.5541
 		Drag: 1.9658
@@ -252,8 +304,10 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 25 (2.4 -> 2.5) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   6.96e-05
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   4.85e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   2.64e-07	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   4.78e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   7.86e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   2.80e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   2.36e-07	 LineSearch {0} 
 		         Precalculating functional values 
 		Pressure_difference: 1.6365
 		Drag: 2.0491
@@ -261,8 +315,11 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 26 (2.5 -> 2.6) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   6.56e-05
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   4.68e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   2.73e-07	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   1.39e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   4.88e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   3.82e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   5.30e-06	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.): < 1.00e-07	 LineSearch {0} 
 		         Precalculating functional values 
 		Pressure_difference: 1.7162
 		Drag: 2.1288
@@ -270,8 +327,10 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 27 (2.6 -> 2.7) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   6.16e-05
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   4.66e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   2.59e-07	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   4.67e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   7.53e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   3.69e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   1.37e-07	 LineSearch {0} 
 		         Precalculating functional values 
 		Pressure_difference: 1.7927
 		Drag: 2.2045
@@ -279,8 +338,10 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 28 (2.7 -> 2.8) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   5.74e-05
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   4.89e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   2.76e-07	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   1.41e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   4.16e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   4.32e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 1.00e-07	 LineSearch {0} 
 		         Precalculating functional values 
 		Pressure_difference: 1.8656
 		Drag: 2.276
@@ -289,7 +350,9 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 0	 Residual (abs.):   5.31e-05
 			 Newton step: 0	 Residual (rel.):     1.00e+00
 			 Newton step: 1	 Residual (rel.):   5.15e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   2.36e-07	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   7.31e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   2.99e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   1.36e-07	 LineSearch {0} 
 		         Precalculating functional values 
 		Pressure_difference: 1.9343
 		Drag: 2.3428
@@ -297,8 +360,11 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 30 (2.9 -> 3) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   4.88e-05
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   5.15e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   2.41e-07	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   1.59e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   4.38e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   3.40e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   3.50e-06	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.): < 1.00e-07	 LineSearch {0} 
 		         Precalculating functional values 
 		Pressure_difference: 1.9986
 		Drag: 2.4048
@@ -306,8 +372,9 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 31 (3 -> 3.1) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   4.44e-05
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   5.73e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   2.04e-07	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   5.70e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   6.31e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   2.23e-06	 LineSearch {0} 
 		         Precalculating functional values 
 		Pressure_difference: 2.0581
 		Drag: 2.4614
@@ -315,8 +382,11 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 32 (3.1 -> 3.2) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   3.99e-05
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   6.07e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   1.72e-07	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   1.84e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   3.88e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   3.00e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   3.27e-06	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.): < 1.00e-07	 LineSearch {0} 
 		         Precalculating functional values 
 		Pressure_difference: 2.1123
 		Drag: 2.5126
@@ -324,8 +394,9 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 33 (3.2 -> 3.3) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   3.55e-05
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   6.27e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   1.78e-07	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   6.24e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   6.35e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   2.77e-06	 LineSearch {0} 
 		         Precalculating functional values 
 		Pressure_difference: 2.1609
 		Drag: 2.558
@@ -333,8 +404,10 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 34 (3.3 -> 3.4) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   3.32e-05
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   6.40e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   1.57e-07	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   1.93e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   3.59e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   3.22e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   1.57e-06	 LineSearch {0} 
 		         Precalculating functional values 
 		Pressure_difference: 2.2038
 		Drag: 2.5974
@@ -342,8 +415,10 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 35 (3.4 -> 3.5) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   3.12e-05
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   5.88e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   1.61e-07	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   3.08e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   8.86e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.14e-04	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 1.00e-07	 LineSearch {0} 
 		         Precalculating functional values 
 		Pressure_difference: 2.2405
 		Drag: 2.6306
@@ -351,8 +426,9 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 36 (3.5 -> 3.6) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   2.85e-05
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   6.03e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   1.51e-07	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   5.99e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   6.73e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.50e-06	 LineSearch {0} 
 		         Precalculating functional values 
 		Pressure_difference: 2.2709
 		Drag: 2.6574
@@ -360,8 +436,10 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 37 (3.6 -> 3.7) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   2.51e-05
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   5.83e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   1.25e-07	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   1.82e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   4.02e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.77e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   1.27e-06	 LineSearch {0} 
 		         Precalculating functional values 
 		Pressure_difference: 2.2948
 		Drag: 2.6778
@@ -369,8 +447,11 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 38 (3.7 -> 3.8) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   2.19e-05
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   6.04e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   1.25e-07	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   3.17e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.01e-03	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   6.12e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   6.83e-06	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.): < 1.00e-07	 LineSearch {0} 
 		         Precalculating functional values 
 		Pressure_difference: 2.312
 		Drag: 2.6916
@@ -378,8 +459,9 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 39 (3.8 -> 3.9) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   1.93e-05
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   5.85e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   1.02e-07	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   5.83e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   5.73e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.10e-06	 LineSearch {0} 
 		         Precalculating functional values 
 		Pressure_difference: 2.3225
 		Drag: 2.6986
@@ -387,8 +469,10 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 40 (3.9 -> 4) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   1.65e-05
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   5.55e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   1.06e-07	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   1.77e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   3.40e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.51e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   9.64e-07	 LineSearch {0} 
 		         Precalculating functional values 
 		Pressure_difference: 2.3261
 		Drag: 2.699
@@ -396,8 +480,10 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 41 (4 -> 4.1) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   1.39e-05
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   5.36e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.): < 1.00e-07	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   2.93e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   8.18e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   6.24e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   5.02e-06	 LineSearch {0} 
 		         Precalculating functional values 
 		Pressure_difference: 2.3228
 		Drag: 2.6926
@@ -405,8 +491,10 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 42 (4.1 -> 4.2) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   1.48e-05
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   4.23e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.): < 1.00e-07	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   3.29e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.13e-03	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.30e-04	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 1.00e-07	 LineSearch {0} 
 		         Precalculating functional values 
 		Pressure_difference: 2.3127
 		Drag: 2.6794
@@ -414,8 +502,9 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 43 (4.2 -> 4.3) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   1.57e-05
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   3.42e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.): < 1.00e-07	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   3.41e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   3.09e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   8.54e-07	 LineSearch {0} 
 		         Precalculating functional values 
 		Pressure_difference: 2.2957
 		Drag: 2.6595
@@ -423,8 +512,10 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 44 (4.3 -> 4.4) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   1.67e-05
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   2.85e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.): < 1.00e-07	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   8.75e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.52e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   8.35e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   1.31e-07	 LineSearch {0} 
 		         Precalculating functional values 
 		Pressure_difference: 2.2721
 		Drag: 2.633
@@ -432,8 +523,10 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 45 (4.4 -> 4.5) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   2.14e-05
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   1.95e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.): < 1.00e-07	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   9.73e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.63e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.98e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   4.64e-07	 LineSearch {0} 
 		         Precalculating functional values 
 		Pressure_difference: 2.2418
 		Drag: 2.6
@@ -441,8 +534,10 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 46 (4.5 -> 4.6) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   2.61e-05
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   1.44e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.): < 1.00e-07	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   9.96e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   3.81e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   3.28e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   9.28e-07	 LineSearch {0} 
 		         Precalculating functional values 
 		Pressure_difference: 2.2051
 		Drag: 2.5605
@@ -450,8 +545,10 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 47 (4.6 -> 4.7) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   3.07e-05
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   1.37e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.): < 1.00e-07	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   1.30e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   4.76e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   4.73e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   1.55e-06	 LineSearch {0} 
 		         Precalculating functional values 
 		Pressure_difference: 2.1621
 		Drag: 2.5149
@@ -459,8 +556,10 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 48 (4.7 -> 4.8) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   3.53e-05
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   1.58e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.): < 1.00e-07	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   1.80e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   5.59e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   6.19e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 1.00e-07	 LineSearch {0} 
 		         Precalculating functional values 
 		Pressure_difference: 2.1132
 		Drag: 2.4632
@@ -468,8 +567,9 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 49 (4.8 -> 4.9) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   3.99e-05
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   1.78e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.): < 1.00e-07	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   1.79e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.41e-05	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.): < 1.00e-07	 LineSearch {0} 
 		         Precalculating functional values 
 		Pressure_difference: 2.0586
 		Drag: 2.4056
@@ -477,8 +577,9 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 50 (4.9 -> 5) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   4.44e-05
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   1.98e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.): < 1.00e-07	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   8.07e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.51e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.81e-06	 LineSearch {0} 
 		         Precalculating functional values 
 		Pressure_difference: 1.9986
 		Drag: 2.3426
@@ -486,8 +587,10 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 51 (5 -> 5.1) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   4.88e-05
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   2.18e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.): < 1.00e-07	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   1.51e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   4.48e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   8.51e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   2.22e-07	 LineSearch {0} 
 		         Precalculating functional values 
 		Pressure_difference: 1.9335
 		Drag: 2.2742
@@ -495,8 +598,10 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 52 (5.1 -> 5.2) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   5.31e-05
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   2.38e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.): < 1.00e-07	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   2.30e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   9.43e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   2.52e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   9.13e-07	 LineSearch {0} 
 		         Precalculating functional values 
 		Pressure_difference: 1.8638
 		Drag: 2.2008
@@ -504,17 +609,23 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 53 (5.2 -> 5.3) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   5.74e-05
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   2.57e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.): < 1.00e-07	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   3.16e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.68e-03	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   5.88e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   2.76e-06	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   2.22e-07	 LineSearch {0} 
 		         Precalculating functional values 
 		Pressure_difference: 1.7897
 		Drag: 2.1228
-		Lift: -0.0096163
+		Lift: -0.0096164
 		 Timestep: 54 (5.3 -> 5.4) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   6.16e-05
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   2.75e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.): < 1.00e-07	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   4.11e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.69e-03	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.19e-04	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   6.89e-06	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   6.94e-07	 LineSearch {0} 
 		         Precalculating functional values 
 		Pressure_difference: 1.7118
 		Drag: 2.0404
@@ -522,8 +633,9 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 55 (5.4 -> 5.5) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   6.56e-05
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   2.94e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.): < 1.00e-07	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   7.01e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.19e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.10e-06	 LineSearch {0} 
 		         Precalculating functional values 
 		Pressure_difference: 1.6305
 		Drag: 1.9541
@@ -531,8 +643,10 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 56 (5.5 -> 5.6) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   6.96e-05
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   3.11e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.): < 1.00e-07	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   1.73e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   5.70e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.10e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   3.50e-07	 LineSearch {0} 
 		         Precalculating functional values 
 		Pressure_difference: 1.5463
 		Drag: 1.8642
@@ -540,8 +654,11 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 57 (5.6 -> 5.7) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   7.35e-05
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   3.29e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.): < 1.00e-07	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   2.85e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.40e-03	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   4.21e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   2.04e-06	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   1.58e-07	 LineSearch {0} 
 		         Precalculating functional values 
 		Pressure_difference: 1.4596
 		Drag: 1.7712
@@ -549,8 +666,11 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 58 (5.7 -> 5.8) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   7.72e-05
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   3.46e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.): < 1.00e-07	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   4.05e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.66e-03	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.10e-04	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   7.20e-06	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   7.62e-07	 LineSearch {0} 
 		         Precalculating functional values 
 		Pressure_difference: 1.3709
 		Drag: 1.6755
@@ -558,17 +678,21 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 59 (5.8 -> 5.9) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   8.09e-05
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   3.62e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.): < 1.00e-07	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   8.66e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.87e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   2.10e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 1.00e-07	 LineSearch {0} 
 		         Precalculating functional values 
 		Pressure_difference: 1.2809
 		Drag: 1.5774
-		Lift: -0.0066068
+		Lift: -0.0066069
 		 Timestep: 60 (5.9 -> 6) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   8.44e-05
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   3.78e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.): < 1.00e-07	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   2.14e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   8.87e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   2.06e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   9.37e-07	 LineSearch {0} 
 		         Precalculating functional values 
 		Pressure_difference: 1.1899
 		Drag: 1.4776
@@ -576,8 +700,11 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 61 (6 -> 6.1) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   8.77e-05
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   3.93e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.): < 1.00e-07	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   3.51e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.15e-03	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   7.74e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   5.28e-06	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   5.52e-07	 LineSearch {0} 
 		         Precalculating functional values 
 		Pressure_difference: 1.0985
 		Drag: 1.3763
@@ -585,17 +712,22 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 62 (6.1 -> 6.2) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   9.10e-05
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   4.07e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.): < 1.00e-07	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   9.77e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.45e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   2.97e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   1.04e-07	 LineSearch {0} 
 		         Precalculating functional values 
 		Pressure_difference: 1.0072
 		Drag: 1.2742
-		Lift: -0.0048035
+		Lift: -0.0048034
 		 Timestep: 63 (6.2 -> 6.3) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   9.41e-05
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   4.21e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.): < 1.00e-07	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   2.42e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.15e-03	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   2.90e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   1.98e-06	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   1.42e-07	 LineSearch {0} 
 		         Precalculating functional values 
 		Pressure_difference: 0.91663
 		Drag: 1.1716
@@ -603,8 +735,12 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 64 (6.3 -> 6.4) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   9.71e-05
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   4.34e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.): < 1.00e-07	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   3.95e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.76e-03	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.08e-04	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   1.07e-05	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   1.19e-06	 LineSearch {0} 
+			 Newton step: 6	 Residual (rel.): < 1.00e-07	 LineSearch {0} 
 		         Precalculating functional values 
 		Pressure_difference: 0.82722
 		Drag: 1.0691
@@ -612,8 +748,10 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 65 (6.4 -> 6.5) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   9.99e-05
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   4.47e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   1.06e-07	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   4.52e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.02e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.34e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 1.00e-07	 LineSearch {0} 
 		         Precalculating functional values 
 		Pressure_difference: 0.73951
 		Drag: 0.96718
@@ -621,8 +759,11 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 66 (6.5 -> 6.6) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   1.03e-04
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   4.59e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   1.21e-07	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   2.03e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.02e-03	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   2.69e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   2.73e-06	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.): < 1.00e-07	 LineSearch {0} 
 		         Precalculating functional values 
 		Pressure_difference: 0.65399
 		Drag: 0.86629
@@ -630,8 +771,10 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 67 (6.6 -> 6.7) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   1.05e-04
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   4.70e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   1.47e-07	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   4.76e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.15e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.63e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   1.01e-07	 LineSearch {0} 
 		         Precalculating functional values 
 		Pressure_difference: 0.57114
 		Drag: 0.76694
@@ -639,8 +782,11 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 68 (6.7 -> 6.8) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   1.07e-04
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   4.80e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   1.79e-07	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   2.14e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.15e-03	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   3.27e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   4.02e-06	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.): < 1.00e-07	 LineSearch {0} 
 		         Precalculating functional values 
 		Pressure_difference: 0.49142
 		Drag: 0.66962
@@ -648,8 +794,10 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 69 (6.8 -> 6.9) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   1.10e-04
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   4.90e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   2.15e-07	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   4.97e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.27e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.94e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   1.42e-07	 LineSearch {0} 
 		         Precalculating functional values 
 		Pressure_difference: 0.41527
 		Drag: 0.57481
@@ -657,8 +805,11 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 70 (6.9 -> 7) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   1.12e-04
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   4.98e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   2.57e-07	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   2.23e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.28e-03	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   3.86e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   5.63e-06	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.): < 1.00e-07	 LineSearch {0} 
 		         Precalculating functional values 
 		Pressure_difference: 0.34309
 		Drag: 0.48296
@@ -666,8 +817,10 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 71 (7 -> 7.1) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   1.13e-04
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   5.06e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   3.05e-07	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   5.14e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.37e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   2.40e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   1.87e-07	 LineSearch {0} 
 		         Precalculating functional values 
 		Pressure_difference: 0.27525
 		Drag: 0.39454
@@ -675,84 +828,104 @@ LOG: Allowing IterationCounter `Time' for filenames!
 		 Timestep: 72 (7.1 -> 7.2) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   1.15e-04
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   5.12e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   3.56e-07	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   2.31e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.38e-03	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   4.65e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   7.39e-06	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.): < 1.00e-07	 LineSearch {0} 
 		         Precalculating functional values 
 		Pressure_difference: 0.21205
 		Drag: 0.30998
-		Lift: -0.00068927
+		Lift: -0.00068928
 		 Timestep: 73 (7.2 -> 7.3) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   1.16e-04
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   5.18e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   4.09e-07	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   5.27e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.44e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   3.46e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   2.27e-07	 LineSearch {0} 
 		         Precalculating functional values 
 		Pressure_difference: 0.15377
 		Drag: 0.22967
-		Lift: -0.00055594
+		Lift: -0.00055596
 		 Timestep: 74 (7.3 -> 7.4) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   1.18e-04
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   5.22e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   4.60e-07	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   2.37e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.47e-03	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   6.51e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   8.95e-06	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.): < 1.00e-07	 LineSearch {0} 
 		         Precalculating functional values 
 		Pressure_difference: 0.10059
 		Drag: 0.15399
-		Lift: -0.00047954
+		Lift: -0.00047957
 		 Timestep: 75 (7.4 -> 7.5) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   1.19e-04
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   5.25e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   5.80e-07	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   5.35e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.47e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   4.78e-06	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   3.76e-07	 LineSearch {0} 
 		         Precalculating functional values 
 		Pressure_difference: 0.052618
 		Drag: 0.08325
-		Lift: -0.00045928
+		Lift: -0.00045932
 		 Timestep: 76 (7.5 -> 7.6) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   1.20e-04
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   5.25e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   8.13e-07	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   2.41e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.51e-03	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   8.96e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   1.08e-05	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.): < 1.00e-07	 LineSearch {0} 
 		         Precalculating functional values 
 		Pressure_difference: 0.0098428
 		Drag: 0.017684
-		Lift: -0.00049998
+		Lift: -0.00050002
 		 Timestep: 77 (7.6 -> 7.7) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   1.21e-04
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   5.22e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   1.19e-06	 LineSearch {0} 
-			 Newton step: 3	 Residual (rel.): < 1.00e-07	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   5.35e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   1.43e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.07e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   9.51e-07	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.):   1.13e-07	 LineSearch {0} 
 		         Precalculating functional values 
-		Pressure_difference: -0.027901
+		Pressure_difference: -0.027902
 		Drag: -0.04258
-		Lift: -0.00060926
+		Lift: -0.0006093
 		 Timestep: 78 (7.7 -> 7.8) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   1.21e-04
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   5.15e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   1.77e-06	 LineSearch {0} 
-			 Newton step: 3	 Residual (rel.): < 1.00e-07	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   1.29e-02	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   4.50e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   1.77e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   1.83e-06	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.): < 1.00e-07	 LineSearch {0} 
 		         Precalculating functional values 
 		Pressure_difference: -0.060987
 		Drag: -0.097578
-		Lift: -0.00079517
+		Lift: -0.00079521
 		 Timestep: 79 (7.8 -> 7.9) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   1.22e-04
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   5.01e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   2.50e-06	 LineSearch {0} 
-			 Newton step: 3	 Residual (rel.): < 1.00e-07	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   5.16e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   2.31e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   2.30e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.):   2.91e-06	 LineSearch {0} 
+			 Newton step: 5	 Residual (rel.): < 1.00e-07	 LineSearch {0} 
 		         Precalculating functional values 
 		Pressure_difference: -0.090062
 		Drag: -0.14758
-		Lift: -0.0010646
+		Lift: -0.0010647
 		 Timestep: 80 (7.9 -> 8) using shifted Crank-Nicolson
 			 Newton step: 0	 Residual (abs.):   1.22e-04
 			 Newton step: 0	 Residual (rel.):     1.00e+00
-			 Newton step: 1	 Residual (rel.):   4.75e-03	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   3.26e-06	 LineSearch {0} 
-			 Newton step: 3	 Residual (rel.): < 1.00e-07	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   4.92e-03	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.):   3.41e-04	 LineSearch {0} 
+			 Newton step: 3	 Residual (rel.):   3.86e-05	 LineSearch {0} 
+			 Newton step: 4	 Residual (rel.): < 1.00e-07	 LineSearch {0} 
 		         Precalculating functional values 
 		Pressure_difference: -0.11613
 		Drag: -0.19322

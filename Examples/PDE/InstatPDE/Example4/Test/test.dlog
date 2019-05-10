@@ -1,9 +1,9 @@
-DOpElib Copyright (C) 2012 - 2016 DOpElib authors
+DOpElib Copyright (C) 2012 - 2018 DOpElib authors
 This program comes with ABSOLUTELY NO WARRANTY.
 For License details read LICENSE.TXT distributed with this software!
 
 This is DOpElib Version: 4.0.0 pre
-	Status as of: 16/02/2016
+	Status as of: 27/08/2018
 Using dealii Version: 9.0
 
 	**************************************************
@@ -1104,10 +1104,12 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 			 Newton step: 0	 Residual (abs.):   1.3949e-02
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   2.9289e-01	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 			 Newton step: 0	 Residual (abs.):   1.5981e-02
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   4.1421e-01	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep: 2 (0.02 -> 0.04) using Fractional-Step-Theta
 			 Newton step: 0	 Residual (abs.):   8.4283e-03
@@ -1115,10 +1117,12 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 			 Newton step: 0	 Residual (abs.):   6.8004e-03
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   2.9289e-01	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 			 Newton step: 0	 Residual (abs.):   5.9580e-03
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   4.1421e-01	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep: 3 (0.04 -> 0.06) using Fractional-Step-Theta
 			 Newton step: 0	 Residual (abs.):   4.9299e-03
@@ -1126,10 +1130,12 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 			 Newton step: 0	 Residual (abs.):   3.8178e-03
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   2.9289e-01	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 			 Newton step: 0	 Residual (abs.):   3.8284e-03
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   4.1421e-01	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep: 4 (0.06 -> 0.08) using Fractional-Step-Theta
 			 Newton step: 0	 Residual (abs.):   3.1268e-03
@@ -1137,10 +1143,12 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 			 Newton step: 0	 Residual (abs.):   2.8605e-03
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   2.9289e-01	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 			 Newton step: 0	 Residual (abs.):   2.6126e-03
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   4.1421e-01	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep: 5 (0.08 -> 0.1) using Fractional-Step-Theta
 			 Newton step: 0	 Residual (abs.):   2.4200e-03
@@ -1148,10 +1156,12 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 			 Newton step: 0	 Residual (abs.):   2.1719e-03
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   2.9289e-01	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 			 Newton step: 0	 Residual (abs.):   2.0650e-03
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   4.1421e-01	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep: 6 (0.1 -> 0.12) using Fractional-Step-Theta
 			 Newton step: 0	 Residual (abs.):   1.8696e-03
@@ -1159,10 +1169,12 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 			 Newton step: 0	 Residual (abs.):   1.7813e-03
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   2.9289e-01	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 			 Newton step: 0	 Residual (abs.):   1.6137e-03
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   4.1421e-01	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep: 7 (0.12 -> 0.14) using Fractional-Step-Theta
 			 Newton step: 0	 Residual (abs.):   1.5414e-03
@@ -1170,10 +1182,12 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 			 Newton step: 0	 Residual (abs.):   1.4278e-03
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   2.9289e-01	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 			 Newton step: 0	 Residual (abs.):   1.3354e-03
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   4.1421e-01	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep: 8 (0.14 -> 0.16) using Fractional-Step-Theta
 			 Newton step: 0	 Residual (abs.):   1.2430e-03
@@ -1181,10 +1195,12 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 			 Newton step: 0	 Residual (abs.):   1.1828e-03
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   2.9289e-01	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 			 Newton step: 0	 Residual (abs.):   1.0816e-03
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   4.1421e-01	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep: 9 (0.16 -> 0.18) using Fractional-Step-Theta
 			 Newton step: 0	 Residual (abs.):   1.0271e-03
@@ -1192,10 +1208,12 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 			 Newton step: 0	 Residual (abs.):   9.6611e-04
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   2.9289e-01	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 			 Newton step: 0	 Residual (abs.):   8.9208e-04
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   4.1421e-01	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep: 10 (0.18 -> 0.2) using Fractional-Step-Theta
 			 Newton step: 0	 Residual (abs.):   8.3984e-04
@@ -1203,10 +1221,12 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 			 Newton step: 0	 Residual (abs.):   7.9394e-04
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   2.9289e-01	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 			 Newton step: 0	 Residual (abs.):   7.3002e-04
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   4.1421e-01	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep: 11 (0.2 -> 0.22) using Fractional-Step-Theta
 			 Newton step: 0	 Residual (abs.):   6.8985e-04
@@ -1214,10 +1234,12 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 			 Newton step: 0	 Residual (abs.):   6.5073e-04
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   2.9289e-01	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 			 Newton step: 0	 Residual (abs.):   5.9944e-04
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   4.1421e-01	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep: 12 (0.22 -> 0.24) using Fractional-Step-Theta
 			 Newton step: 0	 Residual (abs.):   5.6553e-04
@@ -1225,10 +1247,12 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 			 Newton step: 0	 Residual (abs.):   5.3396e-04
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   2.9289e-01	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 			 Newton step: 0	 Residual (abs.):   4.9148e-04
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   4.1421e-01	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep: 13 (0.24 -> 0.26) using Fractional-Step-Theta
 			 Newton step: 0	 Residual (abs.):   4.6402e-04
@@ -1236,10 +1260,12 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 			 Newton step: 0	 Residual (abs.):   4.3793e-04
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   2.9289e-01	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 			 Newton step: 0	 Residual (abs.):   4.0323e-04
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   4.1421e-01	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep: 14 (0.26 -> 0.28) using Fractional-Step-Theta
 			 Newton step: 0	 Residual (abs.):   3.8058e-04
@@ -1247,10 +1273,12 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 			 Newton step: 0	 Residual (abs.):   3.5925e-04
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   2.9289e-01	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 			 Newton step: 0	 Residual (abs.):   3.3073e-04
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   4.1421e-01	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep: 15 (0.28 -> 0.3) using Fractional-Step-Theta
 			 Newton step: 0	 Residual (abs.):   3.1219e-04
@@ -1258,10 +1286,12 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 			 Newton step: 0	 Residual (abs.):   2.9467e-04
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   2.9289e-01	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 			 Newton step: 0	 Residual (abs.):   2.7130e-04
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   4.1421e-01	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep: 16 (0.3 -> 0.32) using Fractional-Step-Theta
 			 Newton step: 0	 Residual (abs.):   2.5608e-04
@@ -1269,10 +1299,12 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 			 Newton step: 0	 Residual (abs.):   2.4172e-04
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   2.9289e-01	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 			 Newton step: 0	 Residual (abs.):   2.2254e-04
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   4.1421e-01	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep: 17 (0.32 -> 0.34) using Fractional-Step-Theta
 			 Newton step: 0	 Residual (abs.):   2.1006e-04
@@ -1280,10 +1312,12 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 			 Newton step: 0	 Residual (abs.):   1.9827e-04
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   2.9289e-01	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 			 Newton step: 0	 Residual (abs.):   1.8255e-04
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   4.1421e-01	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep: 18 (0.34 -> 0.36) using Fractional-Step-Theta
 			 Newton step: 0	 Residual (abs.):   1.7231e-04
@@ -1291,10 +1325,12 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 			 Newton step: 0	 Residual (abs.):   1.6264e-04
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   2.9289e-01	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 			 Newton step: 0	 Residual (abs.):   1.4974e-04
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   4.1421e-01	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep: 19 (0.36 -> 0.38) using Fractional-Step-Theta
 			 Newton step: 0	 Residual (abs.):   1.4134e-04
@@ -1302,10 +1338,12 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 			 Newton step: 0	 Residual (abs.):   1.3341e-04
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   2.9289e-01	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 			 Newton step: 0	 Residual (abs.):   1.2283e-04
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   4.1421e-01	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep: 20 (0.38 -> 0.4) using Fractional-Step-Theta
 			 Newton step: 0	 Residual (abs.):   1.1594e-04
@@ -1313,10 +1351,12 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 			 Newton step: 0	 Residual (abs.):   1.0943e-04
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   2.9289e-01	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 			 Newton step: 0	 Residual (abs.):   1.0075e-04
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   4.1421e-01	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep: 21 (0.4 -> 0.42) using Fractional-Step-Theta
 			 Newton step: 0	 Residual (abs.):   9.5100e-05
@@ -1324,10 +1364,12 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 			 Newton step: 0	 Residual (abs.):   8.9766e-05
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   2.9289e-01	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 			 Newton step: 0	 Residual (abs.):   8.2644e-05
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   4.1421e-01	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep: 22 (0.42 -> 0.44) using Fractional-Step-Theta
 			 Newton step: 0	 Residual (abs.):   7.8009e-05
@@ -1335,10 +1377,12 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 			 Newton step: 0	 Residual (abs.):   7.3633e-05
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   2.9289e-01	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 			 Newton step: 0	 Residual (abs.):   6.7791e-05
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   4.1421e-01	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep: 23 (0.44 -> 0.46) using Fractional-Step-Theta
 			 Newton step: 0	 Residual (abs.):   6.3989e-05
@@ -1346,10 +1390,12 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 			 Newton step: 0	 Residual (abs.):   6.0399e-05
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   2.9289e-01	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 			 Newton step: 0	 Residual (abs.):   5.5608e-05
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   4.1421e-01	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep: 24 (0.46 -> 0.48) using Fractional-Step-Theta
 			 Newton step: 0	 Residual (abs.):   5.2488e-05
@@ -1357,10 +1403,12 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 			 Newton step: 0	 Residual (abs.):   4.9544e-05
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   2.9289e-01	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 			 Newton step: 0	 Residual (abs.):   4.5614e-05
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   4.1421e-01	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep: 25 (0.48 -> 0.5) using Fractional-Step-Theta
 			 Newton step: 0	 Residual (abs.):   4.3055e-05
@@ -1368,10 +1416,12 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 			 Newton step: 0	 Residual (abs.):   4.0640e-05
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   2.9289e-01	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 			 Newton step: 0	 Residual (abs.):   3.7416e-05
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   4.1421e-01	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		Space-Time Pointevaluation: 0.00287191
 		 Timestep: 26 (0.5 -> 0.52) using Fractional-Step-Theta
@@ -1380,10 +1430,12 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 			 Newton step: 0	 Residual (abs.):   3.3336e-05
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   2.9289e-01	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 			 Newton step: 0	 Residual (abs.):   3.0691e-05
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   4.1421e-01	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep: 27 (0.52 -> 0.54) using Fractional-Step-Theta
 			 Newton step: 0	 Residual (abs.):   2.8970e-05
@@ -1391,10 +1443,12 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 			 Newton step: 0	 Residual (abs.):   2.7345e-05
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   2.9289e-01	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 			 Newton step: 0	 Residual (abs.):   2.5175e-05
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   4.1421e-01	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep: 28 (0.54 -> 0.56) using Fractional-Step-Theta
 			 Newton step: 0	 Residual (abs.):   2.3763e-05
@@ -1402,10 +1456,12 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 			 Newton step: 0	 Residual (abs.):   2.2430e-05
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   2.9289e-01	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 			 Newton step: 0	 Residual (abs.):   2.0651e-05
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   4.1421e-01	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep: 29 (0.56 -> 0.58) using Fractional-Step-Theta
 			 Newton step: 0	 Residual (abs.):   1.9492e-05
@@ -1413,10 +1469,12 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 			 Newton step: 0	 Residual (abs.):   1.8399e-05
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   2.9289e-01	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 			 Newton step: 0	 Residual (abs.):   1.6939e-05
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   4.1421e-01	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep: 30 (0.58 -> 0.6) using Fractional-Step-Theta
 			 Newton step: 0	 Residual (abs.):   1.5989e-05
@@ -1424,10 +1482,12 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 			 Newton step: 0	 Residual (abs.):   1.5092e-05
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   2.9289e-01	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 			 Newton step: 0	 Residual (abs.):   1.3895e-05
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   4.1421e-01	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep: 31 (0.6 -> 0.62) using Fractional-Step-Theta
 			 Newton step: 0	 Residual (abs.):   1.3116e-05
@@ -1435,10 +1495,12 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 			 Newton step: 0	 Residual (abs.):   1.2380e-05
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   2.9289e-01	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 			 Newton step: 0	 Residual (abs.):   1.1398e-05
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   4.1421e-01	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep: 32 (0.62 -> 0.64) using Fractional-Step-Theta
 			 Newton step: 0	 Residual (abs.):   1.0758e-05
@@ -1446,10 +1508,12 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 			 Newton step: 0	 Residual (abs.):   1.0155e-05
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   2.9289e-01	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 			 Newton step: 0	 Residual (abs.):   9.3493e-06
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   4.1421e-01	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep: 33 (0.64 -> 0.66) using Fractional-Step-Theta
 			 Newton step: 0	 Residual (abs.):   8.8249e-06
@@ -1457,10 +1521,12 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 			 Newton step: 0	 Residual (abs.):   8.3298e-06
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   2.9289e-01	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 			 Newton step: 0	 Residual (abs.):   7.6690e-06
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   4.1421e-01	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep: 34 (0.66 -> 0.68) using Fractional-Step-Theta
 			 Newton step: 0	 Residual (abs.):   7.2388e-06
@@ -1468,10 +1534,12 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 			 Newton step: 0	 Residual (abs.):   6.8328e-06
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   2.9289e-01	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 			 Newton step: 0	 Residual (abs.):   6.2907e-06
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   4.1421e-01	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep: 35 (0.68 -> 0.7) using Fractional-Step-Theta
 			 Newton step: 0	 Residual (abs.):   5.9379e-06
@@ -1479,10 +1547,12 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 			 Newton step: 0	 Residual (abs.):   5.6048e-06
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   2.9289e-01	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 			 Newton step: 0	 Residual (abs.):   5.1601e-06
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   4.1421e-01	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep: 36 (0.7 -> 0.72) using Fractional-Step-Theta
 			 Newton step: 0	 Residual (abs.):   4.8707e-06
@@ -1490,10 +1560,12 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 			 Newton step: 0	 Residual (abs.):   4.5975e-06
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   2.9289e-01	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 			 Newton step: 0	 Residual (abs.):   4.2327e-06
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   4.1421e-01	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep: 37 (0.72 -> 0.74) using Fractional-Step-Theta
 			 Newton step: 0	 Residual (abs.):   3.9953e-06
@@ -1501,10 +1573,12 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 			 Newton step: 0	 Residual (abs.):   3.7712e-06
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   2.9289e-01	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 			 Newton step: 0	 Residual (abs.):   3.4720e-06
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   4.1421e-01	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep: 38 (0.74 -> 0.76) using Fractional-Step-Theta
 			 Newton step: 0	 Residual (abs.):   3.2773e-06
@@ -1512,10 +1586,12 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 			 Newton step: 0	 Residual (abs.):   3.0934e-06
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   2.9289e-01	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 			 Newton step: 0	 Residual (abs.):   2.8480e-06
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   4.1421e-01	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep: 39 (0.76 -> 0.78) using Fractional-Step-Theta
 			 Newton step: 0	 Residual (abs.):   2.6883e-06
@@ -1523,10 +1599,12 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 			 Newton step: 0	 Residual (abs.):   2.5375e-06
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   2.9289e-01	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 			 Newton step: 0	 Residual (abs.):   2.3362e-06
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   4.1421e-01	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep: 40 (0.78 -> 0.8) using Fractional-Step-Theta
 			 Newton step: 0	 Residual (abs.):   2.2051e-06
@@ -1534,10 +1612,12 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 			 Newton step: 0	 Residual (abs.):   2.0814e-06
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   2.9289e-01	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 			 Newton step: 0	 Residual (abs.):   1.9163e-06
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   4.1421e-01	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep: 41 (0.8 -> 0.82) using Fractional-Step-Theta
 			 Newton step: 0	 Residual (abs.):   1.8088e-06
@@ -1545,10 +1625,12 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 			 Newton step: 0	 Residual (abs.):   1.7073e-06
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   2.9289e-01	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 			 Newton step: 0	 Residual (abs.):   1.5719e-06
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   4.1421e-01	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep: 42 (0.82 -> 0.84) using Fractional-Step-Theta
 			 Newton step: 0	 Residual (abs.):   1.4837e-06
@@ -1556,10 +1638,12 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 			 Newton step: 0	 Residual (abs.):   1.4005e-06
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   2.9289e-01	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 			 Newton step: 0	 Residual (abs.):   1.2894e-06
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   4.1421e-01	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep: 43 (0.84 -> 0.86) using Fractional-Step-Theta
 			 Newton step: 0	 Residual (abs.):   1.2171e-06
@@ -1567,10 +1651,12 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 			 Newton step: 0	 Residual (abs.):   1.1488e-06
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   2.9289e-01	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 			 Newton step: 0	 Residual (abs.):   1.0577e-06
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   4.1421e-01	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep: 44 (0.86 -> 0.88) using Fractional-Step-Theta
 			 Newton step: 0	 Residual (abs.):   9.9833e-07
@@ -1578,10 +1664,12 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 			 Newton step: 0	 Residual (abs.):   9.4233e-07
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   2.9289e-01	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 			 Newton step: 0	 Residual (abs.):   8.6757e-07
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   4.1421e-01	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep: 45 (0.88 -> 0.9) using Fractional-Step-Theta
 			 Newton step: 0	 Residual (abs.):   8.1891e-07
@@ -1589,10 +1677,12 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 			 Newton step: 0	 Residual (abs.):   7.7297e-07
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   2.9289e-01	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 			 Newton step: 0	 Residual (abs.):   7.1165e-07
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   4.1421e-01	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep: 46 (0.9 -> 0.92) using Fractional-Step-Theta
 			 Newton step: 0	 Residual (abs.):   6.7173e-07
@@ -1600,10 +1690,12 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 			 Newton step: 0	 Residual (abs.):   6.3405e-07
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   2.9289e-01	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 			 Newton step: 0	 Residual (abs.):   5.8375e-07
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   4.1421e-01	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep: 47 (0.92 -> 0.94) using Fractional-Step-Theta
 			 Newton step: 0	 Residual (abs.):   5.5101e-07
@@ -1611,10 +1703,12 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 			 Newton step: 0	 Residual (abs.):   5.2010e-07
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   2.9289e-01	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 			 Newton step: 0	 Residual (abs.):   4.7884e-07
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   4.1421e-01	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep: 48 (0.94 -> 0.96) using Fractional-Step-Theta
 			 Newton step: 0	 Residual (abs.):   4.5198e-07
@@ -1622,10 +1716,12 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 			 Newton step: 0	 Residual (abs.):   4.2662e-07
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   2.9289e-01	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 			 Newton step: 0	 Residual (abs.):   3.9278e-07
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   4.1421e-01	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep: 49 (0.96 -> 0.98) using Fractional-Step-Theta
 			 Newton step: 0	 Residual (abs.):   3.7075e-07
@@ -1633,10 +1729,12 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 			 Newton step: 0	 Residual (abs.):   3.4995e-07
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   2.9289e-01	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 			 Newton step: 0	 Residual (abs.):   3.2219e-07
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   4.1421e-01	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 		 Timestep: 50 (0.98 -> 1) using Fractional-Step-Theta
 			 Newton step: 0	 Residual (abs.):   3.0412e-07
@@ -1644,10 +1742,12 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 			 Newton step: 0	 Residual (abs.):   2.8706e-07
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   2.9289e-01	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 			 Newton step: 0	 Residual (abs.):   2.6428e-07
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   4.1421e-01	 LineSearch {0} 
+			 Newton step: 2	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
 		         Precalculating functional values 
 	Computing Functionals:
 	Space-Time Pointevaluation: 0.00287191

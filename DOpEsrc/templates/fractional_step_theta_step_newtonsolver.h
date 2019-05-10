@@ -368,12 +368,12 @@ namespace DOpE
                   newres = residual.linfty_norm();
 
                 }
+              lastres=res;
+              res=newres;
               if (res/lastres > nonlinear_rho_)
                 {
                   build_matrix=true;
                 }
-              lastres=res;
-              res=newres;
 
               out << algo_level
                   << "Newton step: "
@@ -533,12 +533,12 @@ namespace DOpE
                   newres = residual.linfty_norm();
 
                 }
+              lastres=res;
+              res=newres;
               if (res/lastres > nonlinear_rho_)
                 {
                   build_matrix=true;
                 }
-              lastres=res;
-              res=newres;
 
               out<<algo_level<<"Newton step: " <<iter<<"\t Residual (rel.): "
                  << pde.GetOutputHandler()->ZeroTolerance(res/firstres, 1.0)
@@ -672,12 +672,12 @@ namespace DOpE
                   newres = residual.linfty_norm();
 
                 }
+              lastres=res;
+              res=newres;
               if (res/lastres > nonlinear_rho_)
                 {
                   build_matrix=true;
                 }
-              lastres=res;
-              res=newres;
 
               out<<algo_level<<"Newton step: " <<iter<<"\t Residual (rel.): "
                  << pde.GetOutputHandler()->ZeroTolerance(res/firstres, 1.0)
@@ -811,12 +811,12 @@ namespace DOpE
                   newres = residual.linfty_norm();
 
                 }
+              lastres=res;
+              res=newres;
               if (res/lastres > nonlinear_rho_)
                 {
                   build_matrix=true;
                 }
-              lastres=res;
-              res=newres;
 
               out<<algo_level<<"Newton step: " <<iter<<"\t Residual (rel.): "
                  << pde.GetOutputHandler()->ZeroTolerance(res/firstres, 1.0)

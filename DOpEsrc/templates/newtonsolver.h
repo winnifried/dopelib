@@ -285,12 +285,12 @@ namespace DOpE
 
                 }
 
+              lastres=res;
+              res=newres;
               if (res/lastres > nonlinear_rho_)
                 {
                   build_matrix=true;
                 }
-              lastres=res;
-              res=newres;
 
               out << algo_level
                   << "Newton step: "
