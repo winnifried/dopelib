@@ -228,7 +228,8 @@ namespace DOpE
         pde.GetOutputHandler()->SetIterationNumber(iter,"PDENewton");
 
         LINEARSOLVER::Solve(pde,GetIntegrator(),residual,du,build_matrix);
-        build_matrix = false;
+        bool was_build = build_matrix;
+	build_matrix = false;
         //Linesearch
         {
           solution += du;
@@ -248,6 +249,8 @@ namespace DOpE
               out<<algo_level + " Newton step: " <<iter<<"\t Residual (rel.): "
                  << pde.GetOutputHandler()->ZeroTolerance(newres/firstres, 1.0)
                  << "\t LineSearch {"<<lineiter<<"} ";
+	      if(was_build)
+		    out<<"M ";
               pde.GetOutputHandler()->Write(out,priority+1);
 
               lineiter++;
@@ -275,6 +278,8 @@ namespace DOpE
           out<<algo_level + " Newton step: " <<iter<<"\t Residual (rel.): "
              << pde.GetOutputHandler()->ZeroTolerance(res/firstres, 1.0)
              << "\t LineSearch {"<<lineiter<<"} ";
+	  if(was_build)
+		    out<<"M ";
           pde.GetOutputHandler()->Write(out,priority);
 
         }//End of Linesearch

@@ -1,9 +1,9 @@
-DOpElib Copyright (C) 2012 - 2016 DOpElib authors
+DOpElib Copyright (C) 2012 - 2018 DOpElib authors
 This program comes with ABSOLUTELY NO WARRANTY.
 For License details read LICENSE.TXT distributed with this software!
 
 This is DOpElib Version: 4.0.0 pre
-	Status as of: 16/02/2016
+	Status as of: 27/08/2018
 Using dealii Version: 9.0
 
 	**************************************************
@@ -15,7 +15,7 @@ Using dealii Version: 9.0
 	Computing State Solution:
 			 Newton step: 0	 Residual (abs.):   1.8298e-02
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 	Computing Functionals:
 	Outflow: -0.242447
 
@@ -28,7 +28,7 @@ Using dealii Version: 9.0
 	Computing State Solution:
 			 Newton step: 0	 Residual (abs.):   1.0331e-02
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 	Computing Functionals:
 	Outflow: -0.251092
 
@@ -41,7 +41,7 @@ Using dealii Version: 9.0
 	Computing State Solution:
 			 Newton step: 0	 Residual (abs.):   3.1017e-03
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 	Computing Functionals:
 	Outflow: -0.247244
 
@@ -54,6 +54,6 @@ Using dealii Version: 9.0
 	Computing State Solution:
 			 Newton step: 0	 Residual (abs.):   8.7566e-04
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 	Computing Functionals:
 	Outflow: -0.245841

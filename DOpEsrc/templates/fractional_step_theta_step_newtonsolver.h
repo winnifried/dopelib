@@ -313,7 +313,8 @@ namespace DOpE
         pde.GetOutputHandler()->SetIterationNumber(iter,"PDENewton");
 
         LINEARSOLVER::Solve(pde,GetIntegrator(),residual,du,build_matrix);
-
+	bool was_build = build_matrix;
+              
         //Linesearch
         {
           solution += du;
@@ -349,7 +350,8 @@ namespace DOpE
                   out<< algo_level << "Newton step: " <<iter<<"\t Residual (rel.): "
                      <<pde.GetOutputHandler()->ZeroTolerance(newres/firstres, 1.0)
                      << "\t LineSearch {"<<lineiter<<"} ";
-
+		  if(was_build)
+		    out<<"M ";
                   pde.GetOutputHandler()->Write(out,priority+1);
 
                   lineiter++;
@@ -383,7 +385,8 @@ namespace DOpE
                   << "\t LineSearch {"
                   <<lineiter
                   <<"} ";
-
+	      if(was_build)
+		out<<"M ";
 
               pde.GetOutputHandler()->Write(out,priority);
 
@@ -481,7 +484,8 @@ namespace DOpE
 
         pde.GetOutputHandler()->SetIterationNumber(iter,"PDENewton");
         LINEARSOLVER::Solve(pde,GetIntegrator(),residual,du,build_matrix);
-        //Linesearch
+        bool was_build = build_matrix;
+	//Linesearch
         {
           solution += du;
           GetIntegrator().ComputeNonlinearLhs(pde,residual);
@@ -514,8 +518,10 @@ namespace DOpE
               while (newres > res)
                 {
                   out<<algo_level<<"\t Linesearch step: " <<lineiter<<"\t Residual (rel.): "
-                     <<pde.GetOutputHandler()->ZeroTolerance(newres/firstres, 1.0);
-
+                     <<pde.GetOutputHandler()->ZeroTolerance(newres/firstres, 1.0)
+                     << "\t LineSearch {"<<lineiter<<"} ";
+		  if(was_build)
+		    out<<"M ";                  
                   pde.GetOutputHandler()->Write(out,priority+1);
                   lineiter++;
                   if (lineiter > line_maxiter_)
@@ -543,7 +549,9 @@ namespace DOpE
               out<<algo_level<<"Newton step: " <<iter<<"\t Residual (rel.): "
                  << pde.GetOutputHandler()->ZeroTolerance(res/firstres, 1.0)
                  << "\t LineSearch {"<<lineiter<<"} ";
-              pde.GetOutputHandler()->Write(out,priority);
+              if(was_build)
+		    out<<"M ";                  
+	      pde.GetOutputHandler()->Write(out,priority);
 
             }//End of Linesearch
         }
@@ -621,7 +629,8 @@ namespace DOpE
 
         pde.GetOutputHandler()->SetIterationNumber(iter,"PDENewton");
         LINEARSOLVER::Solve(pde,GetIntegrator(),residual,du,build_matrix);
-        //Linesearch
+        bool was_build = build_matrix;
+	//Linesearch
         {
           solution += du;
           GetIntegrator().ComputeNonlinearLhs(pde,residual);
@@ -653,8 +662,10 @@ namespace DOpE
               while (newres > res)
                 {
                   out<<algo_level<<"\t Linesearch step: " <<lineiter<<"\t Residual (rel.): "
-                     <<pde.GetOutputHandler()->ZeroTolerance(newres/firstres, 1.0);
-
+                     <<pde.GetOutputHandler()->ZeroTolerance(newres/firstres, 1.0)
+                     << "\t LineSearch {"<<lineiter<<"} ";
+		  if(was_build)
+		    out<<"M ";             
                   pde.GetOutputHandler()->Write(out,priority+1);
                   lineiter++;
                   if (lineiter > line_maxiter_)
@@ -682,8 +693,9 @@ namespace DOpE
               out<<algo_level<<"Newton step: " <<iter<<"\t Residual (rel.): "
                  << pde.GetOutputHandler()->ZeroTolerance(res/firstres, 1.0)
                  << "\t LineSearch {"<<lineiter<<"} ";
-
-              pde.GetOutputHandler()->Write(out,priority);
+	      if(was_build)
+		out<<"M ";
+	      pde.GetOutputHandler()->Write(out,priority);
 
             }//End of Linesearch
         }
@@ -760,7 +772,8 @@ namespace DOpE
 
         pde.GetOutputHandler()->SetIterationNumber(iter,"PDENewton");
         LINEARSOLVER::Solve(pde,GetIntegrator(),residual,du,build_matrix);
-        //Linesearch
+        bool was_build = build_matrix;
+	//Linesearch
         {
           solution += du;
           GetIntegrator().ComputeNonlinearLhs(pde,residual);
@@ -792,9 +805,11 @@ namespace DOpE
               while (newres > res)
                 {
                   out<<algo_level<<"\t Linesearch step: " <<lineiter<<"\t Residual (rel.): "
-                     <<pde.GetOutputHandler()->ZeroTolerance(newres/firstres, 1.0);
-
-                  pde.GetOutputHandler()->Write(out,priority+1);
+                     <<pde.GetOutputHandler()->ZeroTolerance(newres/firstres, 1.0)
+                     << "\t LineSearch {"<<lineiter<<"} ";
+		  if(was_build)
+		    out<<"M ";
+		  pde.GetOutputHandler()->Write(out,priority+1);
                   lineiter++;
                   if (lineiter > line_maxiter_)
                     {
@@ -821,7 +836,8 @@ namespace DOpE
               out<<algo_level<<"Newton step: " <<iter<<"\t Residual (rel.): "
                  << pde.GetOutputHandler()->ZeroTolerance(res/firstres, 1.0)
                  << "\t LineSearch {"<<lineiter<<"} ";
-
+	      if(was_build)
+		out<<"M ";
               pde.GetOutputHandler()->Write(out,priority);
 
             }//End of Linesearch

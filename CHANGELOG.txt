@@ -1,5 +1,6 @@
 Changelog DOpE
 ==============
+10.05.2019: Added info on rebuilding matrix to output of Newton solvers for PDEs.
 24.04.2019: Added error estimation to PDE/StatPDE/Example16, to show how to
             use precomputations to evaluate non-elementwise quantities needed
 	    in error estimation for VIs.
