@@ -1,8 +1,5 @@
 Changelog DOpE
 ==============
-10.05.2019: Bugfix in PDE-Newton linesearch. The check if the reduction in the last step
-	    was too small (and hence the matrix should be rebuild) was done for the second to last
-	    step delaying rebuild by one iteration.
 24.04.2019: Added error estimation to PDE/StatPDE/Example16, to show how to
             use precomputations to evaluate non-elementwise quantities needed
 	    in error estimation for VIs.
