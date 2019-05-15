@@ -349,6 +349,7 @@ public:
     ugrads_.resize(n_q_points, std::vector<Tensor<1, dealdim> >(2));
     ugrads_nbr_.resize(n_q_points, std::vector<Tensor<1, dealdim> >(2));
     PI_h_z_.resize(n_q_points, Vector<double>(2));
+    auxvalues_.resize(n_q_points, Vector<double>(2));
 
     fdc.GetFaceValuesState("aux_error_0", auxvalues_);
       
@@ -496,7 +497,7 @@ public:
   UpdateFlags
   GetUpdateFlags() const
   {
-    return update_values | update_gradients 
+    return update_values | update_gradients | update_hessians
            | update_quadrature_points;
   }
 
