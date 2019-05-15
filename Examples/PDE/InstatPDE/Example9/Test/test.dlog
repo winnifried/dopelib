@@ -20,258 +20,258 @@ LOG: Allowing IterationCounter `Time' for filenames!
 	Computing Initial Values:
 			 Newton step: 0	 Residual (abs.):   1.8717e-03
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 1 (0 -> 0.02) using backward Euler
 			 Newton step: 0	 Residual (abs.):   1.7907e-02
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 2 (0.02 -> 0.04) using backward Euler
 			 Newton step: 0	 Residual (abs.):   1.3583e-03
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 3 (0.04 -> 0.06) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.0476e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 4 (0.06 -> 0.08) using backward Euler
 			 Newton step: 0	 Residual (abs.):   3.5490e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 5 (0.08 -> 0.1) using backward Euler
 			 Newton step: 0	 Residual (abs.):   3.6545e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 6 (0.1 -> 0.12) using backward Euler
 			 Newton step: 0	 Residual (abs.):   3.7124e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 7 (0.12 -> 0.14) using backward Euler
 			 Newton step: 0	 Residual (abs.):   3.7489e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 8 (0.14 -> 0.16) using backward Euler
 			 Newton step: 0	 Residual (abs.):   3.7735e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 9 (0.16 -> 0.18) using backward Euler
 			 Newton step: 0	 Residual (abs.):   3.7906e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 10 (0.18 -> 0.2) using backward Euler
 			 Newton step: 0	 Residual (abs.):   3.8026e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 11 (0.2 -> 0.22) using backward Euler
 			 Newton step: 0	 Residual (abs.):   3.8112e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 12 (0.22 -> 0.24) using backward Euler
 			 Newton step: 0	 Residual (abs.):   3.8173e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 13 (0.24 -> 0.26) using backward Euler
 			 Newton step: 0	 Residual (abs.):   3.8217e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 14 (0.26 -> 0.28) using backward Euler
 			 Newton step: 0	 Residual (abs.):   3.8248e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 15 (0.28 -> 0.3) using backward Euler
 			 Newton step: 0	 Residual (abs.):   3.8271e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 16 (0.3 -> 0.32) using backward Euler
 			 Newton step: 0	 Residual (abs.):   3.8287e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 17 (0.32 -> 0.34) using backward Euler
 			 Newton step: 0	 Residual (abs.):   3.8298e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 18 (0.34 -> 0.36) using backward Euler
 			 Newton step: 0	 Residual (abs.):   3.8306e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 19 (0.36 -> 0.38) using backward Euler
 			 Newton step: 0	 Residual (abs.):   3.8312e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 20 (0.38 -> 0.4) using backward Euler
 			 Newton step: 0	 Residual (abs.):   3.8316e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 21 (0.4 -> 0.42) using backward Euler
 			 Newton step: 0	 Residual (abs.):   3.8319e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 22 (0.42 -> 0.44) using backward Euler
 			 Newton step: 0	 Residual (abs.):   3.8322e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 23 (0.44 -> 0.46) using backward Euler
 			 Newton step: 0	 Residual (abs.):   3.8323e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 24 (0.46 -> 0.48) using backward Euler
 			 Newton step: 0	 Residual (abs.):   3.8324e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 25 (0.48 -> 0.5) using backward Euler
 			 Newton step: 0	 Residual (abs.):   3.8325e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		Space-Time Pointevaluation: 0.053086
 		 Timestep (MT): 26 (0.5 -> 0.52) using backward Euler
 			 Newton step: 0	 Residual (abs.):   3.8326e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 27 (0.52 -> 0.54) using backward Euler
 			 Newton step: 0	 Residual (abs.):   3.8326e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 28 (0.54 -> 0.56) using backward Euler
 			 Newton step: 0	 Residual (abs.):   3.8326e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 29 (0.56 -> 0.58) using backward Euler
 			 Newton step: 0	 Residual (abs.):   3.8327e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 30 (0.58 -> 0.6) using backward Euler
 			 Newton step: 0	 Residual (abs.):   3.8327e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 31 (0.6 -> 0.62) using backward Euler
 			 Newton step: 0	 Residual (abs.):   3.8327e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 32 (0.62 -> 0.64) using backward Euler
 			 Newton step: 0	 Residual (abs.):   3.8327e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 33 (0.64 -> 0.66) using backward Euler
 			 Newton step: 0	 Residual (abs.):   3.8327e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 34 (0.66 -> 0.68) using backward Euler
 			 Newton step: 0	 Residual (abs.):   3.8327e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 35 (0.68 -> 0.7) using backward Euler
 			 Newton step: 0	 Residual (abs.):   3.8327e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 36 (0.7 -> 0.72) using backward Euler
 			 Newton step: 0	 Residual (abs.):   3.8327e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 37 (0.72 -> 0.74) using backward Euler
 			 Newton step: 0	 Residual (abs.):   3.8327e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 38 (0.74 -> 0.76) using backward Euler
 			 Newton step: 0	 Residual (abs.):   3.8327e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 39 (0.76 -> 0.78) using backward Euler
 			 Newton step: 0	 Residual (abs.):   3.8327e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 40 (0.78 -> 0.8) using backward Euler
 			 Newton step: 0	 Residual (abs.):   3.8327e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 41 (0.8 -> 0.82) using backward Euler
 			 Newton step: 0	 Residual (abs.):   3.8327e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 42 (0.82 -> 0.84) using backward Euler
 			 Newton step: 0	 Residual (abs.):   3.8327e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 43 (0.84 -> 0.86) using backward Euler
 			 Newton step: 0	 Residual (abs.):   3.8327e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 44 (0.86 -> 0.88) using backward Euler
 			 Newton step: 0	 Residual (abs.):   3.8327e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 45 (0.88 -> 0.9) using backward Euler
 			 Newton step: 0	 Residual (abs.):   3.8327e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 46 (0.9 -> 0.92) using backward Euler
 			 Newton step: 0	 Residual (abs.):   3.8327e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 47 (0.92 -> 0.94) using backward Euler
 			 Newton step: 0	 Residual (abs.):   3.8327e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 48 (0.94 -> 0.96) using backward Euler
 			 Newton step: 0	 Residual (abs.):   3.8327e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 49 (0.96 -> 0.98) using backward Euler
 			 Newton step: 0	 Residual (abs.):   3.8327e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 50 (0.98 -> 1) using backward Euler
 			 Newton step: 0	 Residual (abs.):   3.8327e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 	Computing Functionals:
 	Space-Time Pointevaluation: 0.053086
@@ -397,258 +397,258 @@ LOG: Allowing IterationCounter `Time' for filenames!
 	Computing Initial Values:
 			 Newton step: 0	 Residual (abs.):   1.8717e-03
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 1 (0 -> 0.02) using backward Euler
 			 Newton step: 0	 Residual (abs.):   1.7907e-02
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 2 (0.02 -> 0.04) using backward Euler
 			 Newton step: 0	 Residual (abs.):   1.3583e-03
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 3 (0.04 -> 0.06) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.0475e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 4 (0.06 -> 0.08) using backward Euler
 			 Newton step: 0	 Residual (abs.):   3.9791e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 5 (0.08 -> 0.1) using backward Euler
 			 Newton step: 0	 Residual (abs.):   3.9942e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 6 (0.1 -> 0.12) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.0024e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 7 (0.12 -> 0.14) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.0085e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 8 (0.14 -> 0.16) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.0116e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 9 (0.16 -> 0.18) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.0150e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 10 (0.18 -> 0.2) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.0161e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 11 (0.2 -> 0.22) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.0183e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 12 (0.22 -> 0.24) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.0183e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 13 (0.24 -> 0.26) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.0200e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 14 (0.26 -> 0.28) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.0194e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 15 (0.28 -> 0.3) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.0209e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 16 (0.3 -> 0.32) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.0200e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 17 (0.32 -> 0.34) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.0213e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 18 (0.34 -> 0.36) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.0202e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 19 (0.36 -> 0.38) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.0216e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 20 (0.38 -> 0.4) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.0203e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 21 (0.4 -> 0.42) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.0218e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 22 (0.42 -> 0.44) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.0203e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 23 (0.44 -> 0.46) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.0219e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 24 (0.46 -> 0.48) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.0203e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 25 (0.48 -> 0.5) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.0220e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		Space-Time Pointevaluation: 0.0533261
 		 Timestep (MT): 26 (0.5 -> 0.52) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.0202e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 27 (0.52 -> 0.54) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.0221e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 28 (0.54 -> 0.56) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.0202e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 29 (0.56 -> 0.58) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.0222e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 30 (0.58 -> 0.6) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.0201e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 31 (0.6 -> 0.62) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.0223e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 32 (0.62 -> 0.64) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.0201e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 33 (0.64 -> 0.66) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.0223e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 34 (0.66 -> 0.68) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.0200e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 35 (0.68 -> 0.7) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.0224e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 36 (0.7 -> 0.72) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.0199e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 37 (0.72 -> 0.74) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.0225e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 38 (0.74 -> 0.76) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.0199e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 39 (0.76 -> 0.78) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.0225e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 40 (0.78 -> 0.8) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.0198e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 41 (0.8 -> 0.82) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.0226e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 42 (0.82 -> 0.84) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.0197e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 43 (0.84 -> 0.86) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.0226e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 44 (0.86 -> 0.88) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.0197e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 45 (0.88 -> 0.9) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.0227e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 46 (0.9 -> 0.92) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.0196e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 47 (0.92 -> 0.94) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.0228e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 48 (0.94 -> 0.96) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.0195e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 49 (0.96 -> 0.98) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.0228e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 50 (0.98 -> 1) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.0195e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 	Computing Functionals:
 	Space-Time Pointevaluation: 0.0533261
@@ -774,258 +774,258 @@ LOG: Allowing IterationCounter `Time' for filenames!
 	Computing Initial Values:
 			 Newton step: 0	 Residual (abs.):   1.8717e-03
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 1 (0 -> 0.02) using backward Euler
 			 Newton step: 0	 Residual (abs.):   1.7907e-02
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 2 (0.02 -> 0.04) using backward Euler
 			 Newton step: 0	 Residual (abs.):   1.3583e-03
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 3 (0.04 -> 0.06) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.3136e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 4 (0.06 -> 0.08) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.3175e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 5 (0.08 -> 0.1) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.3188e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 6 (0.1 -> 0.12) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.3194e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 7 (0.12 -> 0.14) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.3198e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 8 (0.14 -> 0.16) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.3200e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 9 (0.16 -> 0.18) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.3202e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 10 (0.18 -> 0.2) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.3203e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 11 (0.2 -> 0.22) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.3204e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 12 (0.22 -> 0.24) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.3205e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 13 (0.24 -> 0.26) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.3205e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 14 (0.26 -> 0.28) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.3205e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 15 (0.28 -> 0.3) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.3206e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 16 (0.3 -> 0.32) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.3206e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 17 (0.32 -> 0.34) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.3206e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 18 (0.34 -> 0.36) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.3206e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 19 (0.36 -> 0.38) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.3206e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 20 (0.38 -> 0.4) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.3206e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 21 (0.4 -> 0.42) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.3206e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 22 (0.42 -> 0.44) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.3206e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 23 (0.44 -> 0.46) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.3206e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 24 (0.46 -> 0.48) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.3206e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 25 (0.48 -> 0.5) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.3206e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		Space-Time Pointevaluation: 0.0533855
 		 Timestep (MT): 26 (0.5 -> 0.52) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.3206e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 27 (0.52 -> 0.54) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.3206e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 28 (0.54 -> 0.56) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.3206e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 29 (0.56 -> 0.58) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.3206e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 30 (0.58 -> 0.6) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.3206e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 31 (0.6 -> 0.62) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.3206e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 32 (0.62 -> 0.64) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.3206e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 33 (0.64 -> 0.66) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.3206e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 34 (0.66 -> 0.68) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.3206e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 35 (0.68 -> 0.7) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.3206e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 36 (0.7 -> 0.72) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.3206e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 37 (0.72 -> 0.74) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.3206e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 38 (0.74 -> 0.76) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.3206e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 39 (0.76 -> 0.78) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.3206e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 40 (0.78 -> 0.8) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.3206e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 41 (0.8 -> 0.82) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.3206e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 42 (0.82 -> 0.84) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.3206e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 43 (0.84 -> 0.86) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.3206e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 44 (0.86 -> 0.88) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.3206e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 45 (0.88 -> 0.9) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.3206e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 46 (0.9 -> 0.92) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.3206e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 47 (0.92 -> 0.94) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.3206e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 48 (0.94 -> 0.96) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.3206e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 49 (0.96 -> 0.98) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.3206e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 50 (0.98 -> 1) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.3206e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 	Computing Functionals:
 	Space-Time Pointevaluation: 0.0533855
@@ -1151,258 +1151,258 @@ LOG: Allowing IterationCounter `Time' for filenames!
 	Computing Initial Values:
 			 Newton step: 0	 Residual (abs.):   1.8717e-03
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 1 (0 -> 0.02) using backward Euler
 			 Newton step: 0	 Residual (abs.):   1.7907e-02
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 2 (0.02 -> 0.04) using backward Euler
 			 Newton step: 0	 Residual (abs.):   1.3583e-03
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 3 (0.04 -> 0.06) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.4862e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 4 (0.06 -> 0.08) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.4866e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 5 (0.08 -> 0.1) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.4866e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 6 (0.1 -> 0.12) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.4867e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 7 (0.12 -> 0.14) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.4867e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 8 (0.14 -> 0.16) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.4867e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 9 (0.16 -> 0.18) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.4867e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 10 (0.18 -> 0.2) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.4867e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 11 (0.2 -> 0.22) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.4868e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 12 (0.22 -> 0.24) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.4868e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 13 (0.24 -> 0.26) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.4868e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 14 (0.26 -> 0.28) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.4868e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 15 (0.28 -> 0.3) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.4868e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 16 (0.3 -> 0.32) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.4868e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 17 (0.32 -> 0.34) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.4868e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 18 (0.34 -> 0.36) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.4868e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 19 (0.36 -> 0.38) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.4868e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 20 (0.38 -> 0.4) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.4868e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 21 (0.4 -> 0.42) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.4868e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 22 (0.42 -> 0.44) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.4868e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 23 (0.44 -> 0.46) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.4868e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 24 (0.46 -> 0.48) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.4868e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 25 (0.48 -> 0.5) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.4868e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		Space-Time Pointevaluation: 0.053401
 		 Timestep (MT): 26 (0.5 -> 0.52) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.4868e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 27 (0.52 -> 0.54) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.4868e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 28 (0.54 -> 0.56) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.4868e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 29 (0.56 -> 0.58) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.4868e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 30 (0.58 -> 0.6) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.4868e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 31 (0.6 -> 0.62) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.4868e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 32 (0.62 -> 0.64) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.4868e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 33 (0.64 -> 0.66) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.4868e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 34 (0.66 -> 0.68) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.4868e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 35 (0.68 -> 0.7) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.4868e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 36 (0.7 -> 0.72) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.4868e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 37 (0.72 -> 0.74) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.4868e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 38 (0.74 -> 0.76) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.4868e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 39 (0.76 -> 0.78) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.4868e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 40 (0.78 -> 0.8) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.4868e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 41 (0.8 -> 0.82) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.4868e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 42 (0.82 -> 0.84) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.4868e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 43 (0.84 -> 0.86) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.4868e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 44 (0.86 -> 0.88) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.4868e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 45 (0.88 -> 0.9) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.4868e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 46 (0.9 -> 0.92) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.4868e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 47 (0.92 -> 0.94) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.4868e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 48 (0.94 -> 0.96) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.5229e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 49 (0.96 -> 0.98) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.4868e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 50 (0.98 -> 1) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.7167e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 	Computing Functionals:
 	Space-Time Pointevaluation: 0.053401

@@ -15,14 +15,14 @@ Using dealii Version: 9.0
 	Computing State Solution:
 			 Newton step: 0	 Residual (abs.):   1.1774e+00
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 	Writing [./Mesh0/State_PDEProblemContainer.vtk]
 	Computing Functionals:
 	Local Mean value: 0.449067
 	Computing Dual for Error Estimation:
 			 Newton step: 0	 Residual (abs.):   1.2500e-01
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 	Writing [./Mesh0/Adjoint_for_ee_PDEProblemContainer.vtk]
 	Computing Error Indicators:
 	Error estimate using DWR-Estimator for the Local Mean value: -0.0443393
@@ -49,14 +49,14 @@ Using dealii Version: 9.0
 	Computing State Solution:
 			 Newton step: 0	 Residual (abs.):   6.8764e-01
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 	Writing [./Mesh1/State_PDEProblemContainer.vtk]
 	Computing Functionals:
 	Local Mean value: 0.519847
 	Computing Dual for Error Estimation:
 			 Newton step: 0	 Residual (abs.):   2.9503e-02
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 	Writing [./Mesh1/Adjoint_for_ee_PDEProblemContainer.vtk]
 	Computing Error Indicators:
 	Error estimate using DWR-Estimator for the Local Mean value: -0.0532603
@@ -83,14 +83,14 @@ Using dealii Version: 9.0
 	Computing State Solution:
 			 Newton step: 0	 Residual (abs.):   1.2193e+00
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 	Writing [./Mesh2/State_PDEProblemContainer.vtk]
 	Computing Functionals:
 	Local Mean value: 0.458857
 	Computing Dual for Error Estimation:
 			 Newton step: 0	 Residual (abs.):   1.4660e-02
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 	Writing [./Mesh2/Adjoint_for_ee_PDEProblemContainer.vtk]
 	Computing Error Indicators:
 	Error estimate using DWR-Estimator for the Local Mean value: -0.0170594
@@ -117,14 +117,14 @@ Using dealii Version: 9.0
 	Computing State Solution:
 			 Newton step: 0	 Residual (abs.):   1.5263e+00
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 	Writing [./Mesh3/State_PDEProblemContainer.vtk]
 	Computing Functionals:
 	Local Mean value: 0.447511
 	Computing Dual for Error Estimation:
 			 Newton step: 0	 Residual (abs.):   4.0664e-02
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 	Writing [./Mesh3/Adjoint_for_ee_PDEProblemContainer.vtk]
 	Computing Error Indicators:
 	Error estimate using DWR-Estimator for the Local Mean value: -0.00623515
@@ -151,14 +151,14 @@ Using dealii Version: 9.0
 	Computing State Solution:
 			 Newton step: 0	 Residual (abs.):   1.3472e+00
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 	Writing [./Mesh4/State_PDEProblemContainer.vtk]
 	Computing Functionals:
 	Local Mean value: 0.442973
 	Computing Dual for Error Estimation:
 			 Newton step: 0	 Residual (abs.):   2.0420e-02
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
-			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 	Writing [./Mesh4/Adjoint_for_ee_PDEProblemContainer.vtk]
 	Computing Error Indicators:
 	Error estimate using DWR-Estimator for the Local Mean value: -0.00123763

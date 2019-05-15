@@ -256,6 +256,7 @@ namespace DOpE
             }
           else
             {
+	      bool was_build = build_matrix;
               build_matrix = false;
 	      pde.GetOutputHandler()->Write(solution,"Intermediate"+pde.GetType(),pde.GetDoFType());
               while (newres > res)
@@ -263,7 +264,8 @@ namespace DOpE
                   out<< algo_level << "Newton step: " <<iter<<"\t Residual (rel.): "
                      <<pde.GetOutputHandler()->ZeroTolerance(newres/firstres, 1.0)
                      << "\t LineSearch {"<<lineiter<<"} ";
-
+		  if(was_build)
+		    out<<"M ";
                   pde.GetOutputHandler()->Write(out,priority+1);
 
                   lineiter++;
@@ -300,6 +302,8 @@ namespace DOpE
                   << "\t LineSearch {"
                   <<lineiter
                   <<"} ";
+	      if(was_build)
+		out<<"M ";
 
 
               pde.GetOutputHandler()->Write(out,priority);

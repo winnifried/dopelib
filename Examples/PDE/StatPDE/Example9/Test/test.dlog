@@ -1,9 +1,9 @@
-DOpElib Copyright (C) 2012 - 2016 DOpElib authors
+DOpElib Copyright (C) 2012 - 2018 DOpElib authors
 This program comes with ABSOLUTELY NO WARRANTY.
 For License details read LICENSE.TXT distributed with this software!
 
 This is DOpElib Version: 4.0.0 pre
-	Status as of: 16/02/2016
+	Status as of: 27/08/2018
 Using dealii Version: 9.0
 
 	**************************************************
@@ -15,9 +15,9 @@ Using dealii Version: 9.0
 	Computing State Solution:
 			 Newton step: 0	 Residual (abs.):   1.7333e+00
 			 Newton step: 0	 Residual (rel.):   1.0000e+00
-			 Newton step: 1	 Residual (rel.):   3.7038e-01	 LineSearch {0} 
-			 Newton step: 2	 Residual (rel.):   1.1734e-03	 LineSearch {0} 
-			 Newton step: 3	 Residual (rel.):   2.3562e-06	 LineSearch {0} 
+			 Newton step: 1	 Residual (rel.):   3.7038e-01	 LineSearch {0} M 
+			 Newton step: 2	 Residual (rel.):   1.1734e-03	 LineSearch {0} M 
+			 Newton step: 3	 Residual (rel.):   2.3562e-06	 LineSearch {0} M 
 			 Newton step: 4	 Residual (rel.):   8.4246e-08	 LineSearch {0} 
 			 Newton step: 5	 Residual (rel.):   1.9904e-09	 LineSearch {0} 
 			 Newton step: 6	 Residual (rel.):   8.8008e-11	 LineSearch {0} 

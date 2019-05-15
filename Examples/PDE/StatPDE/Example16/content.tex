@@ -2,17 +2,17 @@
 Within this example, we solve the obstacle problem\index{Obstacle problem}
 of finding $u \in \mathcal K$ solving 
 \begin{equation}\label{ex16:vi}
-  (\nabla u, \nabla (\phi-u)) \ge (f,\phi-u) \quad \forall v \in
+  (\nabla u, \nabla (\phi-u)) \ge (f,\phi-u) \quad \forall \phi \in
   \mathcal K
 \end{equation}
 where
 \[
-  \mathcal K = \{v \in H^1_0(\Omega)\,|\, v \ge \chi \text{ a.e. in }\Omega\}
+  \mathcal K = \{\phi \in H^1_0(\Omega)\,|\, \phi \ge \chi \text{ a.e. in }\Omega\}
 \]
 on $\Omega = (-1,1)^2$ with
 \[
  \chi(x) = \operatorname{dist}(x,\partial \Omega) - 2
- \operatorname{dist}\Bigl(x,\Omega \setminus (-\tfrac{1}{4},\tfrac{1}{4})\Bigr) -\frac{1}{5}
+ \operatorname{dist}\Bigl(x,\Omega \setminus (-\tfrac{1}{4},\tfrac{1}{4})^2\Bigr) -\frac{1}{5}
 \]
 and $f = -5$ as inspired
 by~\cite[Example~7.5]{NochettoSiebertVeeser:2003}.
@@ -22,7 +22,7 @@ is equivalent to finding $u$ and $\lambda$ solving
 \begin{equation}\label{ex16:lagrange}
   \begin{aligned}
     (\nabla u, \nabla \phi) - (f,\phi) - (\lambda,\phi) &= 0 & \forall
-    v &\in H^1_0(\Omega),\\
+    \phi &\in H^1_0(\Omega),\\
     \lambda & \ge 0,\\
     u-\chi & \ge 0,\\
     (\lambda,u-\chi) &=0.
@@ -38,7 +38,7 @@ and obtain the formulation
 \begin{equation}\label{ex16:complementarity}
   \begin{aligned}
     (\nabla u, \nabla \phi) - (f,\phi) - (\lambda,\phi) &= 0 & \forall
-    v &\in H^1_0(\Omega),\\
+    \phi &\in H^1_0(\Omega),\\
     \lambda - \max(0,\lambda-c(u-\chi)) &= 0.
   \end{aligned}
 \end{equation}
