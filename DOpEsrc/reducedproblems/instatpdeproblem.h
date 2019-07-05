@@ -287,12 +287,18 @@ namespace DOpE
      * user Data to the Integrator.
      */
     void
-      AddUDD()
+      AddUDD(unsigned int dof_number, const TimeIterator &interval)
     {
       for (auto it = this->GetUserDomainData().begin();
            it != this->GetUserDomainData().end(); it++)
         {
           this->GetIntegrator().AddDomainData(it->first, it->second);
+        }
+      for (auto it = this->GetUserTimeDomainData().begin();
+           it != this->GetUserTimeDomainData().end(); it++)
+        {
+	  it->second->SetTimeDoFNumber(dof_number,interval);
+          this->GetIntegrator().AddDomainData(it->first, &(it->second->GetSpacialVector()));
         }
     }
     
@@ -305,6 +311,11 @@ namespace DOpE
     {
       for (auto it = this->GetUserDomainData().begin();
            it != this->GetUserDomainData().end(); it++)
+        {
+          this->GetIntegrator().DeleteDomainData(it->first);
+        }
+      for (auto it = this->GetUserTimeDomainData().begin();
+           it != this->GetUserTimeDomainData().end(); it++)
         {
           this->GetIntegrator().DeleteDomainData(it->first);
         }
@@ -635,7 +646,8 @@ namespace DOpE
 	    if (dwrc.NeedDual())
 	      this->GetIntegrator().AddDomainData("adjoint_for_ee",
 						  &(GetZForEE().GetSpacialVector()));
-	    AddUDD();
+	    
+	    AddUDD(local_to_global[0], it);
 	  
 	    //Check if some nodal values need to be precomputed, e.g., active set indicators
 	    // for the obstacle problem
@@ -744,7 +756,7 @@ namespace DOpE
 	  if (dwrc.NeedDual())
 	    this->GetIntegrator().AddDomainData("adjoint_for_ee",
 	    &(GetZForEE().GetSpacialVector()));
-	  AddUDD();
+	  AddUDD(local_to_global[1], it);
 	  
 	  //Check if some nodal values need to be precomputed, e.g., active set indicators
 	  // for the obstacle problem
@@ -860,7 +872,6 @@ namespace DOpE
     this->GetProblem()->AddAuxiliaryToIntegrator(this->GetIntegrator());
 
     this->GetIntegrator().AddDomainData("state", &(GetU().GetSpacialVector()));
-    AddUDD();
     {
       //Aux Functionals
       double ret = 0;
@@ -970,7 +981,6 @@ namespace DOpE
         }
     }
     this->GetIntegrator().DeleteDomainData("state");
-    DeleteUDD();
     this->GetProblem()->DeleteAuxiliaryFromIntegrator(this->GetIntegrator());
 
   }
@@ -1053,9 +1063,13 @@ namespace DOpE
 
     if (eval_funcs)
       {
+	TimeIterator it =
+        problem.GetSpaceTimeHandler()->GetTimeDoFHandler().first_interval();
         // Functional evaluation in t_0
+	AddUDD(local_to_global[0], it);
         ComputeTimeFunctionals(0,
                                max_timestep);
+        DeleteUDD();
         this->SetProblemType("state");
       }
 
@@ -1164,8 +1178,10 @@ namespace DOpE
             if (eval_funcs)
               {
                 //Functional evaluation in t_n  //if condition to get the type
-                ComputeTimeFunctionals(local_to_global[i], max_timestep);
-                this->SetProblemType("state");
+                AddUDD(local_to_global[i], it);
+		ComputeTimeFunctionals(local_to_global[i], max_timestep);
+		DeleteUDD();
+		this->SetProblemType("state");
               }
           }
       }

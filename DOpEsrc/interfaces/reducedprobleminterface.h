@@ -248,6 +248,26 @@ namespace DOpE
       user_domain_data_.insert(
         std::pair<std::string, const VECTOR *>(name, new_data));
     }
+   /**
+     * The user can add his own Domain Data (for example the coefficient
+     * vector of a finite element function). The user has to make sure
+     * that the vector new_data has the appropriate length. This data
+     * is the accessible in the integrator routines.
+     *
+     * @param name      The unique identifier for the data-vector.
+     * @param new_data  The vector one wishes to add.
+     */
+    void AddUserTimeDomainData(std::string name,const SpaceTimeVector<VECTOR> *new_data)
+    {
+      if (user_time_domain_data_.find(name) != user_time_domain_data_.end())
+        {
+          throw DOpEException(
+            "Adding multiple Data with name " + name + " is prohibited!",
+            "ReducedProblemInterface::AddUserDomainData");
+        }
+      user_time_domain_data_.insert(
+        std::pair<std::string, const SpaceTimeVector<VECTOR> *>(name, new_data));
+    }
 
 
     /**
@@ -266,6 +286,23 @@ namespace DOpE
             "Integrator::DeleteDomainData");
         }
       user_domain_data_.erase(it);
+    }
+    /**
+     * This function allows to delete user-given domain data vectors,
+     * see AddUserDomainData.
+     */
+    void DeleteUserTimeDomainData(
+      std::string name)
+    {
+      typename std::map<std::string, const SpaceTimeVector<VECTOR> *>::iterator it =
+        user_time_domain_data_.find(name);
+      if (it == user_time_domain_data_.end())
+        {
+          throw DOpEException(
+            "Deleting Data " + name + " is impossible! Data not found",
+            "Integrator::DeleteDomainData");
+        }
+      user_time_domain_data_.erase(it);
     }
   protected:
     /**
@@ -300,7 +337,11 @@ namespace DOpE
     {
       return user_domain_data_;
     }
-
+    const std::map<std::string, const SpaceTimeVector<VECTOR> *> &
+    GetUserTimeDomainData() const
+    {
+      return user_time_domain_data_;
+    }
     /**
      * This has to get implemented in the derived classes
      * like optproblem, pdeproblemcontainer etc.
@@ -323,6 +364,7 @@ namespace DOpE
     DOpEOutputHandler<VECTOR> *OutputHandler_;
     std::vector<std::vector<double> > functional_values_;
     std::map<std::string, const VECTOR *> user_domain_data_;
+    std::map<std::string, const SpaceTimeVector<VECTOR> *> user_time_domain_data_;
   };
 
   /**
