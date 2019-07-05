@@ -392,6 +392,34 @@ namespace DOpE
 
   private:
     /**
+     * Helper function to prevent code duplicity. Adds the user defined
+     * user Data to the Integrator.
+     */
+    void
+    AddUDD()
+    {
+      for (auto it = this->GetUserDomainData().begin();
+           it != this->GetUserDomainData().end(); it++)
+        {
+          this->GetIntegrator().AddDomainData(it->first, it->second);
+        }
+    }
+
+    /**
+     * Helper function to prevent code duplicity. Deletes the user defined
+     * user Data from the Integrator.
+     */
+    void
+    DeleteUDD()
+    {
+      for (auto it = this->GetUserDomainData().begin();
+           it != this->GetUserDomainData().end(); it++)
+        {
+          this->GetIntegrator().DeleteDomainData(it->first);
+        }
+    }
+
+    /**
      * This function is used to allocate space for auxiliary parameters.
      *
      * @param name         The name under wich the params are stored.
@@ -1463,6 +1491,7 @@ namespace DOpE
       }
     this->GetIntegrator().AddDomainData("state",
                                         &(GetU().GetSpacialVector()));
+    AddUDD();
 
     for (unsigned int i = 0; i < this->GetProblem()->GetNFunctionals(); i++)
       {
@@ -1551,6 +1580,7 @@ namespace DOpE
                             "StatReducedProblem::ComputeReducedFunctionals");
       }
     this->GetIntegrator().DeleteDomainData("state");
+    DeleteUDD();
     this->GetProblem()->DeleteAuxiliaryFromIntegrator(this->GetIntegrator());
 
   }

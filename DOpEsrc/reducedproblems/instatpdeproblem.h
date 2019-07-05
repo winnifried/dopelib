@@ -860,6 +860,7 @@ namespace DOpE
     this->GetProblem()->AddAuxiliaryToIntegrator(this->GetIntegrator());
 
     this->GetIntegrator().AddDomainData("state", &(GetU().GetSpacialVector()));
+    AddUDD();
     {
       //Aux Functionals
       double ret = 0;
@@ -969,6 +970,7 @@ namespace DOpE
         }
     }
     this->GetIntegrator().DeleteDomainData("state");
+    DeleteUDD();
     this->GetProblem()->DeleteAuxiliaryFromIntegrator(this->GetIntegrator());
 
   }

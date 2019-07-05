@@ -376,6 +376,34 @@ namespace DOpE
 
   private:
     /**
+     * Helper function to prevent code duplicity. Adds the user defined
+     * user Data to the Integrator.
+     */
+    void
+    AddUDD()
+    {
+      for (auto it = this->GetUserDomainData().begin();
+           it != this->GetUserDomainData().end(); it++)
+        {
+          this->GetIntegrator().AddDomainData(it->first, it->second);
+        }
+    }
+
+    /**
+     * Helper function to prevent code duplicity. Deletes the user defined
+     * user Data from the Integrator.
+     */
+    void
+    DeleteUDD()
+    {
+      for (auto it = this->GetUserDomainData().begin();
+           it != this->GetUserDomainData().end(); it++)
+        {
+          this->GetIntegrator().DeleteDomainData(it->first);
+        }
+    }
+
+    /**
      * This function is used to allocate space for auxiliary time-dependent parameters.
      *
      * @param name         The name under wich the params are stored.
@@ -1318,6 +1346,7 @@ namespace DOpE
     this->GetProblem()->AddAuxiliaryToIntegrator(this->GetIntegrator());
 
     this->GetIntegrator().AddDomainData("state", &(GetU().GetSpacialVector()));
+    AddUDD();
     if(step!=0)
     {
       this->GetIntegrator().AddDomainData("last_time_state", &u_old);
@@ -1542,6 +1571,7 @@ namespace DOpE
         }
     }
     this->GetIntegrator().DeleteDomainData("state");
+    DeleteUDD();
     if(step!=0)
     {
       this->GetIntegrator().DeleteDomainData("last_time_state");
