@@ -1,5 +1,8 @@
 Changelog DOpE
 ==============
+05.07.2019: Added possibility to add UserDomainData to instationary and optimization problems.
+	    For instationary problem AddUserTimeDomainData can be used to add time dependent
+	    data.
 10.05.2019: Added info on rebuilding matrix to output of Newton solvers for PDEs.
 24.04.2019: Added error estimation to PDE/StatPDE/Example16, to show how to
             use precomputations to evaluate non-elementwise quantities needed

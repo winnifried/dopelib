@@ -380,12 +380,18 @@ namespace DOpE
      * user Data to the Integrator.
      */
     void
-    AddUDD()
+    AddUDD(unsigned int dof_number, const TimeIterator &interval)
     {
       for (auto it = this->GetUserDomainData().begin();
            it != this->GetUserDomainData().end(); it++)
         {
           this->GetIntegrator().AddDomainData(it->first, it->second);
+        }
+      for (auto it = this->GetUserTimeDomainData().begin();
+           it != this->GetUserTimeDomainData().end(); it++)
+        {
+	  it->second->SetTimeDoFNumber(dof_number,interval);
+          this->GetIntegrator().AddDomainData(it->first, &(it->second->GetSpacialVector()));
         }
     }
 
@@ -398,6 +404,11 @@ namespace DOpE
     {
       for (auto it = this->GetUserDomainData().begin();
            it != this->GetUserDomainData().end(); it++)
+        {
+          this->GetIntegrator().DeleteDomainData(it->first);
+        }
+      for (auto it = this->GetUserTimeDomainData().begin();
+           it != this->GetUserTimeDomainData().end(); it++)
         {
           this->GetIntegrator().DeleteDomainData(it->first);
         }
@@ -1346,7 +1357,6 @@ namespace DOpE
     this->GetProblem()->AddAuxiliaryToIntegrator(this->GetIntegrator());
 
     this->GetIntegrator().AddDomainData("state", &(GetU().GetSpacialVector()));
-    AddUDD();
     if(step!=0)
     {
       this->GetIntegrator().AddDomainData("last_time_state", &u_old);
@@ -1571,7 +1581,6 @@ namespace DOpE
         }
     }
     this->GetIntegrator().DeleteDomainData("state");
-    DeleteUDD();
     if(step!=0)
     {
       this->GetIntegrator().DeleteDomainData("last_time_state");
@@ -1699,9 +1708,13 @@ namespace DOpE
 
     if (eval_funcs)
       {
+        TimeIterator it =
+        problem.GetSpaceTimeHandler()->GetTimeDoFHandler().first_interval();
         // Functional evaluation in t_0
-        ComputeTimeFunctionals(0,
+        AddUDD(local_to_global[0], it);
+	ComputeTimeFunctionals(0,
                                max_timestep, u_old);
+	DeleteUDD();
         this->SetProblemType("state");
       }
     if (cost_needs_precomputations_ != 0 && outname == "Tangent")
@@ -1777,7 +1790,9 @@ namespace DOpE
             if (eval_funcs)
               {
                 //Functional evaluation in t_n  //if condition to get the type
+		AddUDD(local_to_global[i], it);
                 ComputeTimeFunctionals(local_to_global[i], max_timestep,u_old);
+		DeleteUDD();
                 this->SetProblemType("state");
               }
             if (cost_needs_precomputations_ != 0 && outname == "Tangent")
