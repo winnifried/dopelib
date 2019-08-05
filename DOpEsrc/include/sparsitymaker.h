@@ -26,7 +26,11 @@
 
 
 #include <deal.II/dofs/dof_tools.h>
+#if DEAL_II_VERSION_GTE(9,1,1)
+#include <deal.II/lac/affine_constraints.h>
+#else
 #include <deal.II/lac/constraint_matrix.h>
+#endif
 #include <deal.II/lac/block_sparsity_pattern.h>
 #include <wrapper/dofhandler_wrapper.h>
 #include <include/helper.h>
@@ -63,21 +67,54 @@ namespace DOpE
     {
     }
 
+#if DEAL_II_VERSION_GTE(9,1,1)
+    virtual void
+    ComputeSparsityPattern(
+      const DOpEWrapper::DoFHandler<dim, DH> &dof_handler,
+      dealii::BlockSparsityPattern &sparsity,
+      const dealii::AffineConstraints<double> &hanging_node_constraints,
+      const std::vector<unsigned int> &blocks) const;
+#else
     virtual void
     ComputeSparsityPattern(
       const DOpEWrapper::DoFHandler<dim, DH> &dof_handler,
       dealii::BlockSparsityPattern &sparsity,
       const dealii::ConstraintMatrix &hanging_node_constraints,
       const std::vector<unsigned int> &blocks) const;
+#endif
 
+#if DEAL_II_VERSION_GTE(9,1,1)
+    virtual void
+    ComputeSparsityPattern(
+      const DOpEWrapper::DoFHandler<dim, DH> &dof_handler,
+      dealii::SparsityPattern &sparsity,
+      const dealii::AffineConstraints<double> &hanging_node_constraints,
+      const std::vector<unsigned int> &blocks) const;
+#else
     virtual void
     ComputeSparsityPattern(
       const DOpEWrapper::DoFHandler<dim, DH> &dof_handler,
       dealii::SparsityPattern &sparsity,
       const dealii::ConstraintMatrix &hanging_node_constraints,
       const std::vector<unsigned int> &blocks) const;
+#endif
 
 #ifdef DOPELIB_WITH_TRILINOS
+#if DEAL_II_VERSION_GTE(9,1,1)
+    virtual void
+    ComputeSparsityPattern (const DOpEWrapper::DoFHandler<dim, DH> &dof_handler,
+                            dealii::TrilinosWrappers::BlockSparsityPattern &sparsity,
+                            const dealii::AffineConstraints<double> &hanging_node_constraints,
+                            const std::vector<unsigned int> &blocks,
+                            const MPI_Comm mpi_comm = MPI_COMM_WORLD) const;
+
+    virtual void
+    ComputeSparsityPattern (const DOpEWrapper::DoFHandler<dim, DH> &dof_handler,
+                            dealii::TrilinosWrappers::SparsityPattern &sparsity,
+                            const dealii::AffineConstraints<double> &hanging_node_constraints,
+                            const std::vector<unsigned int> &blocks,
+                            const MPI_Comm mpi_comm = MPI_COMM_WORLD) const;
+#else
     virtual void
     ComputeSparsityPattern (const DOpEWrapper::DoFHandler<dim, DH> &dof_handler,
                             dealii::TrilinosWrappers::BlockSparsityPattern &sparsity,
@@ -91,6 +128,7 @@ namespace DOpE
                             const dealii::ConstraintMatrix &hanging_node_constraints,
                             const std::vector<unsigned int> &blocks,
                             const MPI_Comm mpi_comm = MPI_COMM_WORLD) const;
+#endif
 #endif
 //      /*
 //       * Experimental status:
@@ -126,7 +164,15 @@ namespace DOpE
 
   /***********************************************************/
 
-
+#if DEAL_II_VERSION_GTE(9,1,1)
+  template<template<int, int> class DH, int dim>
+  void
+  SparsityMaker<DH, dim>::ComputeSparsityPattern(
+    const DOpEWrapper::DoFHandler<dim, DH> &dof_handler,
+    dealii::BlockSparsityPattern &sparsity,
+    const dealii::AffineConstraints<double> &hanging_node_constraints,
+    const std::vector<unsigned int> &blocks) const
+#else
   template<template<int, int> class DH, int dim>
   void
   SparsityMaker<DH, dim>::ComputeSparsityPattern(
@@ -134,6 +180,7 @@ namespace DOpE
     dealii::BlockSparsityPattern &sparsity,
     const dealii::ConstraintMatrix &hanging_node_constraints,
     const std::vector<unsigned int> &blocks) const
+#endif
   {
 #if DEAL_II_VERSION_GTE(8,3,0)
     dealii::BlockDynamicSparsityPattern csp(blocks, blocks);
@@ -155,6 +202,15 @@ namespace DOpE
   }
 
   /***********************************************************/
+#if DEAL_II_VERSION_GTE(9,1,1)
+  template<template<int, int> class DH, int dim>
+  void
+  SparsityMaker<DH, dim>::ComputeSparsityPattern(
+    const DOpEWrapper::DoFHandler<dim, DH> &dof_handler,
+    dealii::SparsityPattern &sparsity,
+    const dealii::AffineConstraints<double> &hanging_node_constraints,
+    const std::vector<unsigned int> &blocks) const
+#else
   template<template<int, int> class DH, int dim>
   void
   SparsityMaker<DH, dim>::ComputeSparsityPattern(
@@ -162,6 +218,7 @@ namespace DOpE
     dealii::SparsityPattern &sparsity,
     const dealii::ConstraintMatrix &hanging_node_constraints,
     const std::vector<unsigned int> &blocks) const
+#endif
   {
     unsigned int total_dofs = 0;
     for (unsigned int j = 0; j < blocks.size(); j++)
@@ -190,6 +247,17 @@ namespace DOpE
   /***********************************************************/
 
 #ifdef DOPELIB_WITH_TRILINOS
+#if DEAL_II_VERSION_GTE(9,1,1)
+  template <template <int, int> class DH, int dim>
+  void
+  SparsityMaker<DH, dim>::ComputeSparsityPattern (const DOpEWrapper::DoFHandler<
+                                                  dim, DH> &dof_handler,
+                                                  dealii::TrilinosWrappers::BlockSparsityPattern &sparsity,
+                                                  const dealii::AffineConstraints<double> &hanging_node_constraints,
+                                                  const std::vector<
+                                                  unsigned int> &blocks,
+                                                  const MPI_Comm mpi_comm) const
+#else
   template <template <int, int> class DH, int dim>
   void
   SparsityMaker<DH, dim>::ComputeSparsityPattern (const DOpEWrapper::DoFHandler<
@@ -199,6 +267,7 @@ namespace DOpE
                                                   const std::vector<
                                                   unsigned int> &blocks,
                                                   const MPI_Comm mpi_comm) const
+#endif
   {
     IndexSet locally_relevant;
     IndexSet locally_owned =
@@ -231,6 +300,17 @@ namespace DOpE
   }
 
   /***********************************************************/
+#if DEAL_II_VERSION_GTE(9,1,1)
+  template <template <int, int> class DH, int dim>
+  void
+  SparsityMaker<DH, dim>::ComputeSparsityPattern (const DOpEWrapper::DoFHandler<
+                                                  dim, DH> &dof_handler,
+                                                  dealii::TrilinosWrappers::SparsityPattern &sparsity,
+                                                  const dealii::AffineConstraints<double> &hanging_node_constraints,
+                                                  const std::vector<
+                                                  unsigned int> &blocks,
+                                                  const MPI_Comm mpi_comm) const
+#else
   template <template <int, int> class DH, int dim>
   void
   SparsityMaker<DH, dim>::ComputeSparsityPattern (const DOpEWrapper::DoFHandler<
@@ -240,6 +320,7 @@ namespace DOpE
                                                   const std::vector<
                                                   unsigned int> &blocks,
                                                   const MPI_Comm mpi_comm) const
+#endif
   {
     unsigned int total_dofs = 0;
     for (unsigned int j = 0; j < blocks.size (); j++)

@@ -377,8 +377,13 @@ namespace DOpE
      *
      * @return Returns a matrix with hanging node constraints.
      */
+#if DEAL_II_VERSION_GTE(9,1,1)
+    const dealii::AffineConstraints<double> &
+    GetDoFConstraints() const
+#else
     const dealii::ConstraintMatrix &
     GetDoFConstraints() const
+#endif
     {
       return OP_.GetDoFConstraints();
     }

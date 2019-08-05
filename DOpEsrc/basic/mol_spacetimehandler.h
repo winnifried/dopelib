@@ -37,7 +37,11 @@
 #include <deal.II/dofs/dof_renumbering.h>
 #include <deal.II/dofs/dof_tools.h>
 #include <deal.II/hp/mapping_collection.h>
+#if DEAL_II_VERSION_GTE(9,1,1)
+#include <deal.II/lac/affine_constraints.h>
+#else
 #include <deal.II/lac/constraint_matrix.h>
+#endif
 #include <deal.II/grid/grid_refinement.h>
 #include <deal.II/base/function.h>
 #include <deal.II/numerics/vector_tools.h>
@@ -406,20 +410,35 @@ namespace DOpE
     /**
      * Implementation of virtual function in SpaceTimeHandler
      */
+#if DEAL_II_VERSION_GTE(9,1,1)
+    const dealii::AffineConstraints<double> &
+    GetControlDoFConstraints() const
+    {
+      return control_dof_constraints_;
+    }
+#else
     const dealii::ConstraintMatrix &
     GetControlDoFConstraints() const
     {
       return control_dof_constraints_;
     }
+#endif
     /**
      * Implementation of virtual function in SpaceTimeHandler
      */
+#if DEAL_II_VERSION_GTE(9,1,1)
+    const dealii::AffineConstraints<double> &
+    GetStateDoFConstraints(unsigned int /*time_point*/= std::numeric_limits<unsigned int>::max()) const
+    {
+      return state_dof_constraints_;
+    }
+#else
     const dealii::ConstraintMatrix &
     GetStateDoFConstraints(unsigned int /*time_point*/= std::numeric_limits<unsigned int>::max()) const
     {
       return state_dof_constraints_;
     }
-
+#endif
     /**
      * Implementation of virtual function in SpaceTimeHandlerBase
      */
@@ -803,8 +822,13 @@ namespace DOpE
     std::vector<unsigned int> control_dofs_per_block_;
     std::vector<unsigned int> state_dofs_per_block_;
 
+#if DEAL_II_VERSION_GTE(9,1,1)
+    dealii::AffineConstraints<double> control_dof_constraints_;
+    dealii::AffineConstraints<double> state_dof_constraints_;
+#else
     dealii::ConstraintMatrix control_dof_constraints_;
     dealii::ConstraintMatrix state_dof_constraints_;
+#endif
 
     const dealii::SmartPointer<const FE<dealdim, dealdim> > control_fe_;
     const dealii::SmartPointer<const FE<dealdim, dealdim> > state_fe_;

@@ -228,10 +228,17 @@ main(int argc, char **argv)
 
               std::vector<bool> component_mask(1, true);
 
-              KellyErrorEstimator<DIM>::estimate(
-                static_cast<const DoFHandler<DIM>&>(DOFH.GetStateDoFHandler()),
-                QGauss<1>(2), FunctionMap<DIM>::type(), solution,
-                estimated_error_per_element, component_mask);
+#if DEAL_II_VERSION_GTE(9,1,1)
+          KellyErrorEstimator<DIM>::estimate(
+            static_cast<const DoFHandler<DIM>&>(DOFH.GetStateDoFHandler()),
+            QGauss<1>(2), std::map<types::boundary_id, const Function<DIM> *>(), solution,
+            estimated_error_per_element, component_mask);
+#else
+          KellyErrorEstimator<DIM>::estimate(
+            static_cast<const DoFHandler<DIM>&>(DOFH.GetStateDoFHandler()),
+	    QGauss<1>(2), FunctionMap<DIM>::type(), solution,
+            estimated_error_per_element, component_mask);
+#endif
               DOFH.RefineStateSpace(
                 RefineFixedNumber(estimated_error_per_element, 0.1, 0.0));
               Alg.ReInit();
@@ -245,10 +252,17 @@ main(int argc, char **argv)
 
               std::vector<bool> component_mask(1, true);
 
-              KellyErrorEstimator<DIM>::estimate(
-                static_cast<const DoFHandler<DIM>&>(DOFH.GetControlDoFHandler()),
-                QGauss<1>(2), FunctionMap<DIM>::type(), solution,
-                estimated_error_per_element, component_mask);
+#if DEAL_II_VERSION_GTE(9,1,1)
+          KellyErrorEstimator<DIM>::estimate(
+            static_cast<const DoFHandler<DIM>&>(DOFH.GetControlDoFHandler()),
+            QGauss<1>(2), std::map<types::boundary_id, const Function<DIM> *>(), solution,
+            estimated_error_per_element, component_mask);
+#else
+          KellyErrorEstimator<DIM>::estimate(
+            static_cast<const DoFHandler<DIM>&>(DOFH.GetControlDoFHandler()),
+	    QGauss<1>(2), FunctionMap<DIM>::type(), solution,
+            estimated_error_per_element, component_mask);
+#endif
               DOFH.RefineControlSpace(
                 RefineFixedNumber(estimated_error_per_element, 0.1, 0.0));
               Alg.ReInit();

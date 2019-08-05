@@ -32,7 +32,11 @@
 #include <deal.II/lac/vector.h>
 #include <deal.II/lac/block_vector_base.h>
 #include <deal.II/lac/block_vector.h>
+#if DEAL_II_VERSION_GTE(9,1,1)
+#include <deal.II/lac/affine_constraints.h>
+#else
 #include <deal.II/lac/constraint_matrix.h>
+#endif
 #include <deal.II/dofs/dof_handler.h>
 #include <deal.II/dofs/dof_tools.h>
 //#include <deal.II/multigrid/mg_dof_handler.h>
@@ -358,9 +362,13 @@ namespace DOpE
     /**
      * Returns the state HN-Constraints at the current time
      */
+#if DEAL_II_VERSION_GTE(9,1,1)
+    virtual const dealii::AffineConstraints<double> &
+    GetStateDoFConstraints (unsigned int /*time_point*/= std::numeric_limits<unsigned int>::max()) const=0;
+#else
     virtual const dealii::ConstraintMatrix &
     GetStateDoFConstraints (unsigned int /*time_point*/= std::numeric_limits<unsigned int>::max()) const=0;
-
+#endif
     /*******************************************************/
 
     /**

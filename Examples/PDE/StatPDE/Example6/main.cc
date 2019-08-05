@@ -237,11 +237,17 @@ main(int argc, char **argv)
             std::vector<bool> component_mask(3, true);
 
             //..and estimate the error with the help of the KellyErrorEstimator
-            KellyErrorEstimator<DIM>::estimate(
-              static_cast<const DoFHandler<DIM>&>(DOFH1.GetStateDoFHandler()),
-              QGauss<2>(3), FunctionMap<DIM>::type(), solution,
-              estimated_error_per_element, component_mask);
-
+#if DEAL_II_VERSION_GTE(9,1,1)
+          KellyErrorEstimator<DIM>::estimate(
+            static_cast<const DoFHandler<DIM>&>(DOFH1.GetStateDoFHandler()),
+            QGauss<2>(3), std::map<types::boundary_id, const Function<DIM> *>(), solution,
+            estimated_error_per_element, component_mask);
+#else
+          KellyErrorEstimator<DIM>::estimate(
+            static_cast<const DoFHandler<DIM>&>(DOFH1.GetStateDoFHandler()),
+	    QGauss<2>(3), FunctionMap<DIM>::type(), solution,
+            estimated_error_per_element, component_mask);
+#endif
             //We choose a refinement strategy (here fixednumber) and
             //refine the spatial esh accordingly.
             DOFH1.RefineSpace(
@@ -312,10 +318,17 @@ main(int argc, char **argv)
 
             std::vector<bool> component_mask(3, true);
 
-            KellyErrorEstimator<DIM>::estimate(
-              static_cast<const DoFHandler<DIM>&>(DOFH2.GetStateDoFHandler()),
-              QGauss<2>(3), FunctionMap<DIM>::type(), solution,
-              estimated_error_per_element, component_mask);
+#if DEAL_II_VERSION_GTE(9,1,1)
+          KellyErrorEstimator<DIM>::estimate(
+            static_cast<const DoFHandler<DIM>&>(DOFH2.GetStateDoFHandler()),
+            QGauss<2>(3), std::map<types::boundary_id, const Function<DIM> *>(), solution,
+            estimated_error_per_element, component_mask);
+#else
+          KellyErrorEstimator<DIM>::estimate(
+            static_cast<const DoFHandler<DIM>&>(DOFH2.GetStateDoFHandler()),
+	    QGauss<2>(3), FunctionMap<DIM>::type(), solution,
+            estimated_error_per_element, component_mask);
+#endif
             DOFH2.RefineSpace(
               RefineFixedNumber(estimated_error_per_element, 0.2, 0.0));
           }

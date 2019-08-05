@@ -52,25 +52,43 @@ namespace DOpE
 
     virtual ~PointConstraints() {}
 
+#if DEAL_II_VERSION_GTE(9,1,1)
+    virtual void MakeStateDoFConstraints(
+      const DOpEWrapper::DoFHandler<dealdim, DH> &dof_handler,
+      dealii::AffineConstraints<double> &constraint_matrix) const;
+#else
     virtual void MakeStateDoFConstraints(
       const DOpEWrapper::DoFHandler<dealdim, DH> &dof_handler,
       dealii::ConstraintMatrix &constraint_matrix) const;
+#endif
 
+#if DEAL_II_VERSION_GTE(9,1,1)
+    virtual void
+    MakeControlDoFConstraints(
+      const DOpEWrapper::DoFHandler<dopedim, DH> & /*dof_handler*/,
+      dealii::AffineConstraints<double> & /*dof_constraints*/) const {}
+#else
     virtual void
     MakeControlDoFConstraints(
       const DOpEWrapper::DoFHandler<dopedim, DH> & /*dof_handler*/,
       dealii::ConstraintMatrix & /*dof_constraints*/) const {}
-
+#endif
   private:
 
     const std::vector<Point<dealdim> > &c_points_;
     const std::vector<std::vector<bool> > &c_comps_;
   };
-
+#if DEAL_II_VERSION_GTE(9,1,1)
+  template<template<int, int> class DH, int dopedim, int dealdim>
+  void PointConstraints<DH, dopedim, dealdim>::MakeStateDoFConstraints(
+    const DOpEWrapper::DoFHandler<dealdim, DH > &dof_handler,
+    dealii::AffineConstraints<double> &constraint_matrix) const
+#else
   template<template<int, int> class DH, int dopedim, int dealdim>
   void PointConstraints<DH, dopedim, dealdim>::MakeStateDoFConstraints(
     const DOpEWrapper::DoFHandler<dealdim, DH > &dof_handler,
     dealii::ConstraintMatrix &constraint_matrix) const
+#endif
   {
     std::vector<dealii::Point<dealdim> > support_points(dof_handler.n_dofs());
     STHInternals::MapDoFsToSupportPoints(this->GetMapping(),dof_handler, support_points);

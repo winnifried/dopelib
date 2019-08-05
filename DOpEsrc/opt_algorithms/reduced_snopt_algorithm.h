@@ -184,8 +184,8 @@ namespace DOpE
 
   template<typename PROBLEM, typename VECTOR>
   int
-  Reduced_SnoptAlgorithm<PROBLEM, VECTOR>::Solve(ControlVector<VECTOR> &q,
-                                                 double global_tol)
+  Reduced_SnoptAlgorithm<PROBLEM, VECTOR>::Solve(ControlVector<VECTOR> &/*q*/,
+                                                 double /*global_tol*/)
   {
 #ifndef DOPELIB_WITH_SNOPT
     throw DOpEException("To use this algorithm you need to have SNOPT installed! To use this set the DOPELIB_WITH_SNOPT CompilerFlag.","Reduced_SnoptAlgorithm::Solve");

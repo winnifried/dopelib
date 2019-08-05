@@ -174,7 +174,7 @@ namespace DOpE
   /******************************************************/
 
   template <typename PROBLEM, typename VECTOR>
-  int Reduced_IpoptAlgorithm<PROBLEM, VECTOR>::Solve(ControlVector<VECTOR> &q,double global_tol)
+  int Reduced_IpoptAlgorithm<PROBLEM, VECTOR>::Solve(ControlVector<VECTOR> &/*q*/,double /*global_tol*/)
   {
 #ifndef DOPELIB_WITH_IPOPT
     throw DOpEException("To use this algorithm you need to have IPOPT installed! To use this set the DOPELIB_WITH_IPOPT CompilerFlag.","Reduced_IpoptAlgorithm::Solve");

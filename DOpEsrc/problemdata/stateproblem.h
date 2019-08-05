@@ -548,8 +548,13 @@ namespace DOpE
     * Functions providing the required information for the integrator.
     * see OptProblemContainer for details.
     */
+#if DEAL_II_VERSION_GTE(9,1,1)
+    inline const dealii::AffineConstraints<double> &
+    GetDoFConstraints() const;
+#else
     inline const dealii::ConstraintMatrix &
     GetDoFConstraints() const;
+#endif
     /**
     * Functions providing the required information for the integrator.
     * see OptProblemContainer for details.
@@ -1072,7 +1077,15 @@ namespace DOpE
   }
 
   /******************************************************/
-
+#if DEAL_II_VERSION_GTE(9,1,1)
+  template<typename OPTPROBLEM, typename PDE, typename DD,
+           typename SPARSITYPATTERN, typename VECTOR, int dim>
+  const dealii::AffineConstraints<double> &
+  StateProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dim>::GetDoFConstraints() const
+  {
+    return opt_problem_.GetSpaceTimeHandler()->GetStateDoFConstraints();
+  }
+#else
   template<typename OPTPROBLEM, typename PDE, typename DD,
            typename SPARSITYPATTERN, typename VECTOR, int dim>
   const dealii::ConstraintMatrix &
@@ -1080,7 +1093,7 @@ namespace DOpE
   {
     return opt_problem_.GetSpaceTimeHandler()->GetStateDoFConstraints();
   }
-
+#endif
   /******************************************************/
 
   template<typename OPTPROBLEM, typename PDE, typename DD,

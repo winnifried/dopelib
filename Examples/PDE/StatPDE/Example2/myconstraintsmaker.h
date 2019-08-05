@@ -41,11 +41,17 @@ namespace DOpE
     static void
     declare_params(ParameterReader &param_reader);
 
+#if DEAL_II_VERSION_GTE(9,1,1)
+    virtual void
+    MakeStateDoFConstraints(
+      const DOpEWrapper::DoFHandler<dim, DH> &dof_handler,
+      dealii::AffineConstraints<double> &constraint_matrix) const;
+#else
     virtual void
     MakeStateDoFConstraints(
       const DOpEWrapper::DoFHandler<dim, DH> &dof_handler,
       dealii::ConstraintMatrix &constraint_matrix) const;
-
+#endif
     struct DoFInfo
     {
       DoFInfo()
@@ -85,12 +91,19 @@ namespace DOpE
    *  constraint_matrix and closes it.
    *
    */
-
+#if DEAL_II_VERSION_GTE(9,1,1)
+  template<template<int, int> class DH, int dim>
+  void
+  PeriodicityConstraints<DH, dim>::MakeStateDoFConstraints(
+    const DOpEWrapper::DoFHandler<dim, DH> &dof_handler,
+    dealii::AffineConstraints<double> &constraint_matrix) const
+#else
   template<template<int, int> class DH, int dim>
   void
   PeriodicityConstraints<DH, dim>::MakeStateDoFConstraints(
     const DOpEWrapper::DoFHandler<dim, DH> &dof_handler,
     dealii::ConstraintMatrix &constraint_matrix) const
+#endif
   {
     /* Does not work on locally refined grids. We can only couple
      * dofs on a rectangular boundary.
@@ -107,9 +120,15 @@ namespace DOpE
 
     //then make a quadrature-rule with them
     dealii::Quadrature<dim - 1> quadrature_formula(face_unit_support_points);
+#if DEAL_II_VERSION_GTE(9,1,1)
+    typename DOpEWrapper::FEFaceValues<dim> fe_face_values(
+      dof_handler.get_fe(), quadrature_formula,
+      UpdateFlags(dealii::update_quadrature_points));
+#else
     typename DOpEWrapper::FEFaceValues<dim> fe_face_values(
       dof_handler.get_fe(), quadrature_formula,
       UpdateFlags(dealii::update_q_points));
+#endif
 
     const unsigned int n_q_points = quadrature_formula.size();
     std::vector<unsigned int> global_dof_indices(

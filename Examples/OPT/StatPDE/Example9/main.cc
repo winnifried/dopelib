@@ -26,7 +26,10 @@
 
 #include <deal.II/grid/tria.h>
 #include <deal.II/grid/grid_in.h>
+#if DEAL_II_VERSION_GTE(9,1,1)
+#else
 #include <deal.II/grid/tria_boundary_lib.h>
+#endif
 #include <deal.II/grid/grid_generator.h>
 #include <deal.II/fe/fe_q.h>
 #include <deal.II/fe/fe_dgp.h>
@@ -305,10 +308,17 @@ main(int argc, char **argv)
 
           std::vector<bool> component_mask(5, true);
 
+#if DEAL_II_VERSION_GTE(9,1,1)
           KellyErrorEstimator<DIM>::estimate(
             static_cast<const DoFHandler<DIM>&>(DOFH.GetStateDoFHandler()),
-            QGauss<1>(2), FunctionMap<DIM>::type(), solution,
+            QGauss<1>(2), std::map<types::boundary_id, const Function<DIM> *>(), solution,
             estimated_error_per_element, component_mask);
+#else
+          KellyErrorEstimator<DIM>::estimate(
+            static_cast<const DoFHandler<DIM>&>(DOFH.GetStateDoFHandler()),
+	    QGauss<1>(2), FunctionMap<DIM>::type(), solution,
+            estimated_error_per_element, component_mask);
+#endif
 
           GridRefinement::refine_and_coarsen_fixed_number(triangulation,
                                                           estimated_error_per_element, 0.3, 0.0);

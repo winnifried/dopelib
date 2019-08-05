@@ -33,7 +33,11 @@
 
 #include <deal.II/dofs/dof_handler.h>
 #include <deal.II/dofs/dof_renumbering.h>
+#if DEAL_II_VERSION_GTE(9,1,1)
+#include <deal.II/lac/affine_constraints.h>
+#else
 #include <deal.II/lac/constraint_matrix.h>
+#endif
 #include <deal.II/numerics/solution_transfer.h>
 #include <deal.II/numerics/vector_tools.h>
 #include <deal.II/grid/grid_refinement.h>
@@ -299,6 +303,19 @@ namespace DOpE
     /**
      * Implementation of virtual function in StateSpaceTimeHandler
      */
+#if DEAL_II_VERSION_GTE(9,1,1)
+    const dealii::AffineConstraints<double> &
+    GetStateDoFConstraints(unsigned int time_point = std::numeric_limits<unsigned int>::max()) const
+    {
+      if(this->GetTimeDoFNumber() > time_to_dofhandler_.size() || this->GetTimeDoFNumber() == std::numeric_limits<unsigned int>::max()
+	 || (time_point != std::numeric_limits<unsigned int>::max() && time_point != this->GetTimeDoFNumber())
+	)
+      {
+	throw DOpEException("Invalid Timepoint", "Rothe_SpaceTimeHandler::GetStateDoFConstraints");
+      }
+      return *state_dof_constraints_[time_to_dofhandler_[this->GetTimeDoFNumber()]];
+    }
+#else
     const dealii::ConstraintMatrix &
     GetStateDoFConstraints(unsigned int time_point = std::numeric_limits<unsigned int>::max()) const
     {
@@ -310,6 +327,7 @@ namespace DOpE
       }
       return *state_dof_constraints_[time_to_dofhandler_[this->GetTimeDoFNumber()]];
     }
+#endif
 
     /**
      * Implementation of virtual function in StateSpaceTimeHandlerBase
@@ -711,8 +729,14 @@ namespace DOpE
 	}
 	assert(triangulations_[i] != NULL);	  
 	state_dof_handlers_[i] = new DOpEWrapper::DoFHandler<dealdim, DH>(*(triangulations_[i]));
+
+#if DEAL_II_VERSION_GTE(9,1,1)
+	state_dof_constraints_[i]= new dealii::AffineConstraints<double>;
+	state_hn_dof_constraints_[i]= new dealii::AffineConstraints<double>;
+#else
 	state_dof_constraints_[i]= new dealii::ConstraintMatrix;
 	state_hn_dof_constraints_[i]= new dealii::ConstraintMatrix;
+#endif
       }
     }
     
@@ -735,8 +759,13 @@ namespace DOpE
 
     std::vector<std::vector<unsigned int> > state_dofs_per_block_;
 
+#if DEAL_II_VERSION_GTE(9,1,1)
+    std::vector<dealii::AffineConstraints<double>*> state_dof_constraints_;
+    std::vector<dealii::AffineConstraints<double>*> state_hn_dof_constraints_;
+#else
     std::vector<dealii::ConstraintMatrix*> state_dof_constraints_;
     std::vector<dealii::ConstraintMatrix*> state_hn_dof_constraints_;
+#endif
 
     const dealii::SmartPointer<const FE<dealdim, dealdim> > state_fe_;
     const dealii::SmartPointer<const DOpEWrapper::Mapping<dealdim, DH> > mapping_;

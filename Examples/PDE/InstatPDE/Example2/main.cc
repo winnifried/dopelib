@@ -34,7 +34,10 @@
 #include <deal.II/fe/fe_nothing.h>
 #include <deal.II/grid/tria.h>
 #include <deal.II/grid/grid_in.h>
+#if DEAL_II_VERSION_GTE(9,1,1)
+#else
 #include <deal.II/grid/tria_boundary_lib.h>
+#endif
 #include <deal.II/grid/grid_generator.h>
 #if DEAL_II_VERSION_GTE(9,0,0)
 #include <deal.II/grid/manifold_lib.h>

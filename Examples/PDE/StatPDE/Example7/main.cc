@@ -28,7 +28,10 @@
 #include <deal.II/grid/grid_in.h>
 #include <deal.II/grid/grid_out.h>
 #include <deal.II/grid/tria.h>
+#if DEAL_II_VERSION_GTE(9,1,1)
+#else
 #include <deal.II/grid/tria_boundary_lib.h>
+#endif
 
 #include <fstream>
 #include <iostream>

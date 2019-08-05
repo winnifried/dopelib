@@ -310,8 +310,14 @@ namespace DOpE
 
       //after that, build a fevalues object. We need only the quadrature points!
       //typename dealii::FEValues<1> fe_values(this->get_fe(),
+
+#if DEAL_II_VERSION_GTE(9,1,1)
+      dealii::FEValues<1> fe_values(this->get_fe(), quadrature_formula,
+                                    dealii::UpdateFlags(update_quadrature_points));
+#else
       dealii::FEValues<1> fe_values(this->get_fe(), quadrature_formula,
                                     dealii::UpdateFlags(update_q_points));
+#endif
 
       const unsigned int n_q_points = quadrature_formula.size();
       std::vector<unsigned int> global_dof_indices(

@@ -877,10 +877,13 @@ namespace DOpE
     GetDoFsPerBlock() const;
 
     /******************************************************/
-
+#if DEAL_II_VERSION_GTE(9,1,1)
+    const dealii::AffineConstraints<double> &
+    GetDoFConstraints() const;
+#else
     const dealii::ConstraintMatrix &
     GetDoFConstraints() const;
-
+#endif
     /******************************************************/
 
     std::string
@@ -3897,6 +3900,24 @@ namespace DOpE
   typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
   typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
   template<int, int> class DH>
+
+#if DEAL_II_VERSION_GTE(9,1,1)
+  const dealii::AffineConstraints<double> &
+  OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
+                      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetDoFConstraints() const
+  {
+    if ((this->GetType() == "gradient") || (this->GetType() == "hessian")
+        || (this->GetType() == "global_constraint_gradient"))
+      {
+        return GetSpaceTimeHandler()->GetControlDoFConstraints();
+      }
+    else
+      {
+        throw DOpEException("Unknown Type:" + this->GetType(),
+                            "OptProblemContainer::GetDoFConstraints");
+      }
+  }
+#else
   const dealii::ConstraintMatrix &
   OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
                       SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetDoFConstraints() const
@@ -3912,7 +3933,7 @@ namespace DOpE
                             "OptProblemContainer::GetDoFConstraints");
       }
   }
-
+#endif
   /******************************************************/
 
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,

@@ -38,7 +38,11 @@
 #include <deal.II/dofs/dof_renumbering.h>
 #include <deal.II/dofs/dof_tools.h>
 #include <deal.II/hp/mapping_collection.h>
+#if DEAL_II_VERSION_GTE(9,1,1)
+#include <deal.II/lac/affine_constraints.h>
+#else
 #include <deal.II/lac/constraint_matrix.h>
+#endif
 #include <deal.II/grid/grid_refinement.h>
 #include <deal.II/base/function.h>
 #include <deal.II/numerics/vector_tools.h>
@@ -280,16 +284,29 @@ namespace DOpE
       /**
        * Implementation of virtual function in SpaceTimeHandler
        */
+#if DEAL_II_VERSION_GTE(9,1,1)
+      const dealii::AffineConstraints<double> &
+      GetControlDoFConstraints() const
+      {
+        return control_dof_constraints_;
+      }
+#else
       const dealii::ConstraintMatrix &
       GetControlDoFConstraints() const
       {
         return control_dof_constraints_;
       }
+#endif
       /**
        * Implementation of virtual function in SpaceTimeHandler
        */
+#if DEAL_II_VERSION_GTE(9,1,1)
+      const dealii::AffineConstraints<double> &
+      GetStateDoFConstraints(unsigned int /*time_point*/= std::numeric_limits<unsigned int>::max()) const
+#else
       const dealii::ConstraintMatrix &
       GetStateDoFConstraints(unsigned int /*time_point*/= std::numeric_limits<unsigned int>::max()) const
+#endif
       {
         if (selected_pipe_ < sth_s_.size())
           return sth_s_[selected_pipe_]->GetStateDoFConstraints();
@@ -806,7 +823,11 @@ namespace DOpE
       const dealii::SmartPointer<const FE<dealdim, dealdim> > control_fe_;
 
       std::vector<unsigned int> control_dofs_per_block_;
+#if DEAL_II_VERSION_GTE(9,1,1)
+      dealii::AffineConstraints<double> control_dof_constraints_;
+#else
       dealii::ConstraintMatrix control_dof_constraints_;
+#endif
       std::vector<unsigned int> state_dofs_per_block_;
 
       std::vector<MethodOfLines_StateSpaceTimeHandler<FE,DH,dealii::SparsityPattern,dealii::Vector<double>,dealdim>*> sth_s_;
