@@ -183,13 +183,15 @@ namespace DOpE
   /******************************************************/
 
   template<typename PROBLEM, typename VECTOR>
-  int
-  Reduced_SnoptAlgorithm<PROBLEM, VECTOR>::Solve(ControlVector<VECTOR> &/*q*/,
-                                                 double /*global_tol*/)
-  {
 #ifndef DOPELIB_WITH_SNOPT
+  int Reduced_SnoptAlgorithm<PROBLEM, VECTOR>::Solve(ControlVector<VECTOR> &/*q*/,
+						     double /*global_tol*/)
+  {
     throw DOpEException("To use this algorithm you need to have SNOPT installed! To use this set the DOPELIB_WITH_SNOPT CompilerFlag.","Reduced_SnoptAlgorithm::Solve");
 #else
+  int Reduced_SnoptAlgorithm<PROBLEM, VECTOR>::Solve(ControlVector<VECTOR> &q,
+						     double global_tol)
+  {
     q.ReInit();
 
     ControlVector<VECTOR> dq(q);
