@@ -60,6 +60,10 @@ then
 		then 
 		    rm grid.eps
 		fi
+		if [ -d tmp_state ]
+		then
+		    rm -r tmp_*
+		fi
 		exit 0
 	    else
 		echo "There where discrepancies in the Output."
@@ -71,6 +75,10 @@ then
 		if [ -f grid.eps ]
 		then 
 		    rm grid.eps
+		fi
+		if [ -d tmp_state ]
+		then
+		    rm -r tmp_*
 		fi
 		exit 1
 	    fi
@@ -98,6 +106,10 @@ else
 	    if [ -f grid.eps ]
 	    then 
 		rm grid.eps
+	    fi
+	    if [ -d tmp_state ]
+	    then
+		rm -r tmp_*
 	    fi
 	    exit 0;
 	else

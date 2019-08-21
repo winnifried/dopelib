@@ -451,6 +451,7 @@ namespace DOpE
 	{
 	  if (accessor_ >= 0)
 	  {
+	    assert(global_to_local_.find(accessor_) !=global_to_local_.end());
 	    assert(global_to_local_[accessor_] <local_vectors_.size());
 	    return *(local_vectors_[global_to_local_[accessor_]]);
 	  }
@@ -497,6 +498,7 @@ namespace DOpE
 	{
 	  if (accessor_ >= 0)
 	  {
+	    assert(global_to_local_.find(accessor_) !=global_to_local_.end());
 	    return *(local_vectors_[global_to_local_[accessor_]]);
 	  }
 	  else
@@ -546,6 +548,7 @@ namespace DOpE
 	{
 	  if (accessor_ >= 0)
 	  {
+	    assert(global_to_local_.find(accessor_) !=global_to_local_.end());
 	    local_stvector_ =  *(local_vectors_[global_to_local_[accessor_]]);
 	  }
 	  else
@@ -594,7 +597,7 @@ namespace DOpE
       {
         if (GetBehavior() == DOpEtypes::VectorStorageType::store_on_disc)
           {
-            if (accessor_ >= 0 && accessor_ +1 < (int) global_to_local_.size())
+            if (accessor_ >= 0 && global_to_local_.find(accessor_ +1) !=global_to_local_.end())
               {
                 assert(global_to_local_[accessor_+1] <local_vectors_.size());
                 return *(local_vectors_[global_to_local_[accessor_+1]]);
@@ -635,12 +638,12 @@ namespace DOpE
       {
         if (GetBehavior() == DOpEtypes::VectorStorageType::store_on_disc)
           {
-            if (accessor_ >= 0 && accessor_ +1 < (int) global_to_local_.size())
+            if (accessor_ >= 0 && global_to_local_.find(accessor_ +1) !=global_to_local_.end())
               {
                 assert(global_to_local_[accessor_+1] <local_vectors_.size());
                 return *(local_vectors_[global_to_local_[accessor_+1]]);
               }
-            throw DOpEException("No Next Vector Available ",
+	    throw DOpEException("No Next Vector Available ",
                                 "SpaceTimeVector<VECTOR>::GetNextSpacialVector const");
             abort();
           }
@@ -678,6 +681,7 @@ namespace DOpE
           {
             if (accessor_ > 0 )
               {
+		assert(global_to_local_.find(accessor_-1) !=global_to_local_.end());
                 assert(global_to_local_[accessor_-1] <local_vectors_.size());
                 return *(local_vectors_[global_to_local_[accessor_-1]]);
               }
@@ -768,6 +772,7 @@ namespace DOpE
 	{
 	  if (accessor_ >= 0)
 	  {
+	    assert(global_to_local_.find(accessor_) !=global_to_local_.end());
 	    copy_stvector_ = *(local_vectors_[global_to_local_[accessor_]]);
 	  }
 	  else
@@ -828,7 +833,6 @@ namespace DOpE
                      <= GetSpaceTimeHandler()->GetMaxTimePoint(); t++)
                   {
                     SetTimeDoFNumber(t);
-                    assert(global_to_local_[accessor_]==0);
                     local_vectors_[0]->operator=(value);
                   }
                 SetTimeDoFNumber(0);
@@ -999,7 +1003,6 @@ namespace DOpE
                         GetSpaceTimeHandler ()->ReinitVector (local_stvector_,
                                                               vector_type_,t);
                         dq.FetchFromDisc(t, local_stvector_);
-                        assert(global_to_local_[accessor_]==0);
                         local_vectors_[0]->operator+=(local_stvector_);
                       }
                     SetTimeDoFNumber(0);
@@ -1056,7 +1059,6 @@ namespace DOpE
                      <= GetSpaceTimeHandler()->GetMaxTimePoint(); t++)
                   {
                     SetTimeDoFNumber(t);//this makes sure that everything is stored an local_vectors_ has length 1.
-                    assert(global_to_local_[accessor_]==0);
                     local_vectors_[0]->operator*=(value);
                   }
                 SetTimeDoFNumber(0);
@@ -1189,7 +1191,6 @@ namespace DOpE
                         GetSpaceTimeHandler ()->ReinitVector (local_stvector_,
                                                               vector_type_,t);
                         dq.FetchFromDisc(t, local_stvector_);
-                        assert(global_to_local_[accessor_]==0);
                         local_vectors_[0]->add(s, local_stvector_);
                       }
                     SetTimeDoFNumber(0);
@@ -1254,7 +1255,6 @@ namespace DOpE
                         GetSpaceTimeHandler ()->ReinitVector (local_stvector_,
                                                               vector_type_,t);
                         dq.FetchFromDisc(t, local_stvector_);
-                        assert(global_to_local_[accessor_]==0);
                         local_vectors_[0]->equ(s, local_stvector_);
 
                       }
@@ -1580,7 +1580,6 @@ double SpaceTimeVector<VECTOR>::Norm(std::string name,std::string restriction) c
             if (GetBehavior() == DOpEtypes::VectorStorageType::store_on_disc)
               {
                 SetTimeDoFNumber(0);
-                assert(global_to_local_[accessor_]==0);
                 out << "\t" << local_vectors_[0]->size() << std::endl;
               }
             else

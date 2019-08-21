@@ -1,5 +1,8 @@
 Changelog DOpE
 ==============
+21.08.2019: Fixed bug in SpaceTimeVector; now the behavior 'store_on_disc' also works
+	    for optimization problems in the adjoint loop.
+	    Further Examples/OPT/InstatPDE/Example2 now uses this StorageBehavior.
 16.08.2019: Fixed ipopt and snopt interface after adjustment to deal.ii 9.1.1.
 05.08.2019: Adjusted DOpE to compile with deal.ii 9.1.1.
 05.07.2019: Added possibility to add UserDomainData to instationary and optimization problems.

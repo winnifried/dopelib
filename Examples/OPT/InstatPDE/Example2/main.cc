@@ -192,7 +192,7 @@ main(int argc, char **argv)
 
   P.SetDirichletBoundaryColors(0, comp_mask, &DD1);
 
-  RP solver(&P, DOpEtypes::VectorStorageType::fullmem, pr, idc);
+  RP solver(&P, DOpEtypes::VectorStorageType::store_on_disc, pr, idc);
 
   RNA Alg(&P, &solver, pr);
   ControlVector<VECTOR> q(&DOFH, DOpEtypes::VectorStorageType::fullmem,pr);
