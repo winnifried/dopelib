@@ -232,7 +232,7 @@ main(int argc, char **argv)
 
   try
     {
-      RP solver(&P, DOpEtypes::VectorStorageType::fullmem, pr, idc);
+      RP solver(&P, DOpEtypes::VectorStorageType::store_on_disc, pr, idc);
       DOpEOutputHandler<VECTOR> out(&solver, pr);
       DOpEExceptionHandler<VECTOR> ex(&out);
       P.RegisterOutputHandler(&out);
