@@ -314,7 +314,9 @@ namespace DOpE
     unsigned int functional_number_precision_;
     double user_eps_machine_;
     bool disallow_all_;
-
+    bool parallel_;
+    unsigned int rank_;
+    
     std::vector<std::string> never_write_list;
     std::vector<std::string> ignore_iterations;
 

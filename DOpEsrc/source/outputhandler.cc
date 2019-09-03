@@ -60,10 +60,21 @@ namespace DOpE
   template <typename VECTOR>
   DOpEOutputHandler<VECTOR>::DOpEOutputHandler(ReducedProblemInterface_Base<VECTOR> *SI, ParameterReader &param_reader)
   {
+#ifdef DOPELIB_WITH_MPI
+    parallel_ = dealii::Utilities::MPI::n_mpi_processes (MPI_COMM_WORLD) > 1;
+    rank_ = Utilities::MPI::this_mpi_process (MPI_COMM_WORLD);
+#else
+    parallel_ = false;
+    rank_ = 0;
+#endif
+
     //assert(SI);
     if (!SI)
       {
-        std::cerr<<"Attention: DOpEOutputHandler is configured without a ReducedProblem, hence no vectors can be written!"<<std::endl;
+	if(rank_ == 0)
+	{
+	  std::cerr<<"Attention: DOpEOutputHandler is configured without a ReducedProblem, hence no vectors can be written!"<<std::endl;
+	}
         Solver_ = NULL;
       }
     else
@@ -114,7 +125,10 @@ namespace DOpE
     n_reinits_ = 0;
 
     std::string logfilename = results_basedir_+logfile_;
-    log_.open(logfilename.c_str(), std::ios::out);
+    if(rank_ == 0)
+    {
+      log_.open(logfilename.c_str(), std::ios::out);
+    }
     disallow_all_ = false;
     stdout_backup_ = 0;
 
@@ -151,7 +165,7 @@ namespace DOpE
   template <typename VECTOR>
   void DOpEOutputHandler<VECTOR>::SetIterationNumber(unsigned int iteration, std::string type)
   {
-    if (AllowIteration(type))
+    if (AllowIteration(type) && rank_ == 0)
       {
         std::map<std::string,unsigned int>::const_iterator pos = iteration_type_pos_.find(type);
         if (pos == iteration_type_pos_.end())
@@ -190,7 +204,7 @@ namespace DOpE
   {
     if (disallow_all_)
       {
-        if (debug_)
+        if (debug_ && rank_ == 0)
           {
             log_<<"DEBUG: Deny write of `"<<name<<"'! Since all output is supressed!"<<std::endl;
           }
@@ -200,7 +214,7 @@ namespace DOpE
       {
         if (name.find(never_write_list[i]) != std::string::npos)
           {
-            if (debug_)
+            if (debug_ && rank_ == 0)
               {
                 log_<<"DEBUG: Deny write of `"<<name<<"'! It containes the substring "<< never_write_list[i]<<std::endl;
               }
@@ -218,7 +232,7 @@ namespace DOpE
       {
         if (name.find(ignore_iterations[i]) != std::string::npos)
           {
-            if (debug_)
+            if (debug_ && rank_ == 0)
               {
                 log_<<"DEBUG: Deny Iteration counter `"<<name<<"'! It containes the substring "<< ignore_iterations[i]<<std::endl;
               }
@@ -245,15 +259,18 @@ namespace DOpE
   {
     if (disallow_all_)
       {
-        if (debug_)
+        if (debug_ && rank_ == 0)
           {
             log_<<"DEBUG: Output of Error was suppresed since all output is supressed!"<<std::endl;
           }
       }
     else
       {
-        std::cerr<<msg<<std::endl;
-        log_ <<" ERROR: "<<msg<<std::endl;
+        if(rank_ == 0)
+	{
+	  std::cerr<<msg<<std::endl;
+	  log_ <<" ERROR: "<<msg<<std::endl;
+	}
       }
   }
   /*******************************************************/
@@ -283,14 +300,14 @@ namespace DOpE
   {
     if (disallow_all_)
       {
-        if (debug_)
+        if (debug_ && rank_ == 0)
           {
             log_<<"DEBUG: Output of Error was suppresed since all output is supressed!"<<std::endl;
           }
       }
     else
       {
-        if (priority < printlevel_ || printlevel_ < 0)
+        if ((priority < printlevel_ || printlevel_ < 0) && rank_ == 0)
           {
             if (debug_)
               {
@@ -309,7 +326,7 @@ namespace DOpE
                 std::cout<<std::endl;
               }
           }
-        else if (debug_)
+        else if (debug_ && rank_ == 0)
           {
             log_<<"DEBUG: Write because priority "<<priority<<" is too small for printing at level "<<printlevel_<<std::endl;
             {
@@ -325,14 +342,14 @@ namespace DOpE
 
     if (disallow_all_)
       {
-        if (debug_)
+        if (debug_ && rank_ == 0)
           {
             log_<<"DEBUG: Output of Error was suppresed since all output is supressed!"<<std::endl;
           }
       }
     else
       {
-        if (priority < printlevel_ || printlevel_ < 0)
+        if ((priority < printlevel_ || printlevel_ < 0) && rank_ == 0)
           {
             if (debug_)
               {
@@ -368,7 +385,7 @@ namespace DOpE
                 std::cout<<std::endl;
               }
           }
-        else if (debug_)
+        else if (debug_ && rank_ == 0)
           {
             log_<<"DEBUG: Write because priority "<<priority<<" is too small for printing at level "<<printlevel_<<std::endl;
             {
@@ -601,7 +618,8 @@ namespace DOpE
     fsetpos(stdout,&std_out_pos_);
 
     std::string logfilename = results_basedir_+logfile_;
-    log_.open(logfilename.c_str(), std::ios::app|std::ios::out);
+    if(rank_ == 0)
+      log_.open(logfilename.c_str(), std::ios::app|std::ios::out);
   }
   /*******************************************************/
 
@@ -615,22 +633,29 @@ namespace DOpE
   template <typename VECTOR>
   void DOpEOutputHandler<VECTOR>::PrintCopyrightNotice()
   {
-    std::stringstream out;
+    if( rank_ == 0 )
+    {
+      std::stringstream out;
 
-    out<<"DOpElib Copyright (C) 2012 - "<<DOpE::VERSION::year<<" DOpElib authors"<<std::endl;
-    out<<"This program comes with ABSOLUTELY NO WARRANTY."<<std::endl;
-    out<<"For License details read LICENSE.TXT distributed with this software!"<<std::endl;
-    out<<std::endl;
-    out<<"This is DOpElib Version: "<<DOpE::VERSION::major<<"."<<DOpE::VERSION::minor;
-    out<<"."<<DOpE::VERSION::fix<<" "<<DOpE::VERSION::postfix<<std::endl;
-    out<<"\tStatus as of: "<<std::setfill('0')<<std::setw(2)<<DOpE::VERSION::day;
-    out<<"/"<<std::setfill('0')<<std::setw(2)<<DOpE::VERSION::month;
-    out<<"/"<<DOpE::VERSION::year<<std::endl;
-    out<<"Using dealii Version: "<<DOpE::VERSION::dealii_major<<"."<<DOpE::VERSION::dealii_minor<<std::endl;
-    std::cout<<out.str();
-    std::cout.flush();
-    log_<<out.str();
-    log_.flush();
+      out<<"DOpElib Copyright (C) 2012 - "<<DOpE::VERSION::year<<" DOpElib authors"<<std::endl;
+      out<<"This program comes with ABSOLUTELY NO WARRANTY."<<std::endl;
+      out<<"For License details read LICENSE.TXT distributed with this software!"<<std::endl;
+      out<<std::endl;
+      out<<"This is DOpElib Version: "<<DOpE::VERSION::major<<"."<<DOpE::VERSION::minor;
+      out<<"."<<DOpE::VERSION::fix<<" "<<DOpE::VERSION::postfix<<std::endl;
+      out<<"\tStatus as of: "<<std::setfill('0')<<std::setw(2)<<DOpE::VERSION::day;
+      out<<"/"<<std::setfill('0')<<std::setw(2)<<DOpE::VERSION::month;
+      out<<"/"<<DOpE::VERSION::year<<std::endl;
+      out<<"Using dealii Version: "<<DOpE::VERSION::dealii_major<<"."<<DOpE::VERSION::dealii_minor<<std::endl;
+      if( parallel_ )
+      {
+	out<<"Running in parallel with "<<dealii::Utilities::MPI::n_mpi_processes (MPI_COMM_WORLD)<<" MPI-processes"<<std::endl;
+      }
+      std::cout<<out.str();
+      std::cout.flush();
+      log_<<out.str();
+      log_.flush();
+    }
   }
 
 

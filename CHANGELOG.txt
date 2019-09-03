@@ -1,5 +1,7 @@
 Changelog DOpE
 ==============
+03.09.2019: If code runns in parallel using MPI, the outputhandler of the rank == 0
+ 	    process writes the log and console output.
 21.08.2019: Fixed bug in SpaceTimeVector; now the behavior 'store_on_disc' also works
 	    for optimization problems in the adjoint loop.
 	    Further Examples/OPT/InstatPDE/Example2 now uses this StorageBehavior.
