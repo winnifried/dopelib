@@ -352,6 +352,13 @@ public:
   inline void DeleteParamData(std::string name);
 
   /**
+   * This function is used to remove all previously added parameter and domain data from the
+   * integrator.
+   *
+   */
+  inline void DeleteAllData();
+  
+  /**
    * This function is used to calculate indicators based
    * on DWR-type data containes. This means it is
    * assumed that an additional SpaceTimeHandler is used
@@ -1422,6 +1429,15 @@ void Integrator<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::DeleteParamData(
                         "Integrator::DeleteParamData");
   }
   param_data_.erase(it);
+}
+
+/*******************************************************************************************/
+
+template <typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR,
+          int dim>
+void Integrator<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::DeleteAllData() {
+  param_data_.clear();
+  domain_data_.clear();
 }
 
 /*******************************************************************************************/

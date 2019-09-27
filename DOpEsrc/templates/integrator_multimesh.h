@@ -116,7 +116,9 @@ namespace DOpE
     AddParamData(std::string name, const dealii::Vector<SCALAR> *new_data);
     inline void
     DeleteParamData(std::string name);
-
+    inline void
+      DeleteAllData();
+    
   protected:
     inline const std::map<std::string, const dealii::Vector<SCALAR>*> &
     GetParamData() const;
@@ -943,6 +945,16 @@ namespace DOpE
           "IntegratorMultiMesh::DeleteParamData");
       }
     param_data_.erase(it);
+  }
+  
+  /*******************************************************************************************/
+
+  template<typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR,
+           int dim>
+  void
+  IntegratorMultiMesh<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::DeleteAllData() {
+    param_data_.clear();
+    domain_data_.clear();
   }
 
   /*******************************************************************************************/

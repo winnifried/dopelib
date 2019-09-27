@@ -219,6 +219,7 @@ namespace DOpE
         if (iter > nonlinear_maxiter_)
           {
             GetIntegrator().DeleteDomainData("last_newton_solution");
+	    GetIntegrator().DeleteAllData();
             throw DOpEIterationException("Iteration count exceeded bounds!","NewtonSolver::NonlinearSolve");
           }
 
@@ -273,6 +274,7 @@ namespace DOpE
                   if (lineiter > line_maxiter_)
                     {
                       GetIntegrator().DeleteDomainData("last_newton_solution");
+		      GetIntegrator().DeleteAllData();
                       throw DOpEIterationException("Line-Iteration count exceeded bounds!","NewtonSolver::NonlinearSolve");
                     }
                   solution.add(alpha*(rho-1.),du);

@@ -100,6 +100,8 @@ namespace DOpE
       inline void AddParamData(std::string name, const dealii::Vector<SCALAR> *new_data);
       inline void DeleteParamData(std::string name);
 
+      inline void DeleteAllData();
+
       inline  const INTEGRATORDATACONT &GetIntegratorDataContainer() const;
 
     protected:
@@ -781,6 +783,15 @@ namespace DOpE
                               "Network_IntegratorMixedDimensions::DeleteParamData");
         }
       param_data_.erase(it);
+    }
+
+   /*******************************************************************************************/
+
+    template<typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR, int dimlow,
+             int dimhigh>
+      void Network_IntegratorMixedDimensions<INTEGRATORDATACONT, VECTOR, SCALAR, dimlow, dimhigh>::DeleteAllData() {
+      param_data_.clear();
+      domain_data_.clear();
     }
 
     /*******************************************************************************************/

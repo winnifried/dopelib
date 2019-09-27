@@ -1,5 +1,8 @@
 Changelog DOpE
 ==============
+27.09.2019: Failiure of the Newton methods now cleans all integrator data prior to
+            throwing an exception. Thus a recomputation can be setup without
+	    first cleaning all data.
 03.09.2019: If code runns in parallel using MPI, the outputhandler of the rank == 0
  	    process writes the log and console output.
 21.08.2019: Fixed bug in SpaceTimeVector; now the behavior 'store_on_disc' also works
