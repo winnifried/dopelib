@@ -25,63 +25,47 @@ then
 		exit 1
 	    fi
 
-	    #Get deal major version
-	    deal=`grep "Using dealii Version: " dope.log | sed 's/.*Version: //g' | sed 's/\..//g'`
+	    for i in `ls test*.dlog`
+	    do
+		log=$i
+		#We don't compare the header (first seven lines of the log file)
+		(diff <(tail -n +8 dope.log) <(tail -n +8 ${log}) 2>&1) > /dev/null
+		if [ $? -eq 0 ]
+		then
+		    echo "No differences found to log "$log
+		    rm dope.log
+		    if [ -d Mesh0 ] 
+		    then
+			rm -r Mesh?/
+		    fi
+		    if [ -f grid.eps ]
+		    then 
+			rm grid.eps
+		    fi
+		    if [ -d tmp_state ]
+		    then
+			rm -r tmp_*
+		    fi
+		    exit 0
+		else
+		    echo "There where discrepancies in the Output compared to "$log		    
+		fi
+	    done
+	    #When we get here, all log files had discrepancies 
 	    
-	    echo "Comparing Results for dealii major version ${deal}:"
-	    log=test.dlog
-	    if [ -f test-${deal}.dlog ]
+	    if [ -d Mesh0 ] 
 	    then
-		log=test-${deal}.dlog
-		echo "Using alternative logfile ${log}"
-	    fi		
-	    #check if with snopt
-	    snopt=`grep "using SNOPT" dope.log -m 1 | sed 's/.*SNOPT //g' | sed 's/       \*//g'`
-	    if [ ${PIPESTATUS[0]} -eq 0 ]
-	    then
-		#using snopt
-		if [ -f test-s${snopt}.dlog ]
-		then
-		    log=test-s${snopt}.dlog
-		    echo "Using alternative logfile ${log}"
-		fi	
+		rm -r Mesh?/
 	    fi
-	    #We don't compare the header (first seven lines of the log file)
-	    (diff <(tail -n +8 dope.log) <(tail -n +8 ${log}) 2>&1) > /dev/null
-	    if [ $? -eq 0 ]
-	    then
-		echo "No differences found."
-		rm dope.log
-		if [ -d Mesh0 ] 
-		then
-		    rm -r Mesh?/
-		fi
-		if [ -f grid.eps ]
-		then 
-		    rm grid.eps
-		fi
-		if [ -d tmp_state ]
-		then
-		    rm -r tmp_*
-		fi
-		exit 0
-	    else
-		echo "There where discrepancies in the Output."
-		diff dope.log ${log}
-		if [ -d Mesh0 ] 
-		then
-		    rm -r Mesh?/
-		fi
-		if [ -f grid.eps ]
-		then 
-		    rm grid.eps
-		fi
-		if [ -d tmp_state ]
-		then
-		    rm -r tmp_*
-		fi
-		exit 1
+	    if [ -f grid.eps ]
+	    then 
+		rm grid.eps
 	    fi
+	    if [ -d tmp_state ]
+	    then
+		rm -r tmp_*
+		fi
+	    exit 1
 	else
 	    echo "Executable '"$2" not found."
 	    exit 1
