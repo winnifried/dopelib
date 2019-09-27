@@ -346,6 +346,8 @@ namespace DOpE
        */inline void
       DeleteParamData(std::string name);
 
+      inline void DeleteAllData();
+      
       /**
        * This function is used to calculate indicators based
        * on DWR-type data containes. This means it is
@@ -1378,6 +1380,16 @@ namespace DOpE
             "Network_Integrator::DeleteParamData");
         }
       param_data_.erase(it);
+    }
+
+   /*******************************************************************************************/
+
+    template<typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR,
+             int dim>
+    void
+    Network_Integrator<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::DeleteAllData() {
+      param_data_.clear();
+      domain_data_.clear();
     }
 
     /*******************************************************************************************/

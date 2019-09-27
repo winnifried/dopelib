@@ -307,6 +307,7 @@ namespace DOpE
         if (iter > nonlinear_maxiter_)
           {
             GetIntegrator().DeleteDomainData("last_newton_solution");
+	    GetIntegrator().DeleteAllData();
             throw DOpEIterationException("Iteration count exceeded bounds!","InstatStepNewtonSolver::NonlinearSolve_Initial");
           }
 
@@ -358,6 +359,7 @@ namespace DOpE
                   if (lineiter > line_maxiter_)
                     {
                       GetIntegrator().DeleteDomainData("last_newton_solution");
+		      GetIntegrator().DeleteAllData();
                       throw DOpEIterationException("Line-Iteration count exceeded bounds!","InstatStepNewtonSolver::NonlinearSolve_Initial");
                     }
                   solution.add(alpha*(rho-1.),du);
@@ -479,6 +481,7 @@ namespace DOpE
         iter++;
         if (iter > nonlinear_maxiter_)
           {
+	    GetIntegrator().DeleteAllData();
             throw DOpEIterationException("Iteration count exceeded bounds!","StatSolver::NonlinearSolve");
           }
 
@@ -526,6 +529,7 @@ namespace DOpE
                   lineiter++;
                   if (lineiter > line_maxiter_)
                     {
+		      GetIntegrator().DeleteAllData();
                       throw DOpEIterationException("Line-Iteration count exceeded bounds!","StatSolver::NonlinearSolve");
                     }
                   solution.add(alpha*(rho-1.),du);
@@ -624,6 +628,7 @@ namespace DOpE
         iter++;
         if (iter > nonlinear_maxiter_)
           {
+	    GetIntegrator().DeleteAllData();
             throw DOpEIterationException("Iteration count exceeded bounds!","StatSolver::NonlinearSolve");
           }
 
@@ -670,6 +675,7 @@ namespace DOpE
                   lineiter++;
                   if (lineiter > line_maxiter_)
                     {
+		      GetIntegrator().DeleteAllData();
                       throw DOpEIterationException("Line-Iteration count exceeded bounds!","StatSolver::NonlinearSolve");
                     }
                   solution.add(alpha*(rho-1.),du);
@@ -767,6 +773,7 @@ namespace DOpE
         iter++;
         if (iter > nonlinear_maxiter_)
           {
+	    GetIntegrator().DeleteAllData();
             throw DOpEIterationException("Iteration count exceeded bounds!","StatSolver::NonlinearSolve");
           }
 
@@ -813,6 +820,7 @@ namespace DOpE
                   lineiter++;
                   if (lineiter > line_maxiter_)
                     {
+		      GetIntegrator().DeleteAllData();
                       throw DOpEIterationException("Line-Iteration count exceeded bounds!","StatSolver::NonlinearSolve");
                     }
                   solution.add(alpha*(rho-1.),du);

@@ -222,6 +222,7 @@ namespace DOpE
 
         if (iter > nonlinear_maxiter_)
           {
+	    GetIntegrator().DeleteAllData();
             throw DOpEIterationException("Iteration count exceeded bounds!","NewtonSolverMixedDims::NonlinearSolve");
           }
 
@@ -256,6 +257,7 @@ namespace DOpE
               lineiter++;
               if (lineiter > line_maxiter_)
                 {
+		  GetIntegrator().DeleteAllData();
                   throw DOpEIterationException("Line-Iteration count exceeded bounds!","NewtonSolverMixedDims::NonlinearSolve");
                 }
               solution.add(alpha*(rho-1.),du);
