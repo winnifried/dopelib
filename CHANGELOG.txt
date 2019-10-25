@@ -1,5 +1,6 @@
 Changelog DOpE
 ==============
+25.10.2019: Fixed bug in ReducedProblemInterface_Base::GetTimeFunctionalValue
 27.09.2019: Failiure of the Newton methods now cleans all integrator data prior to
             throwing an exception. Thus a recomputation can be setup without
 	    first cleaning all data.

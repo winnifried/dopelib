@@ -174,7 +174,7 @@ namespace DOpE
 
       if (GetFunctionalValues()[pos].size() != 1)
         {
-          if (GetFunctionalValues()[0].size() == 0)
+          if (GetFunctionalValues()[pos].size() == 0)
             throw DOpEException(
               "Apparently the Functional in question was never evaluated!",
               "ReducedProblemInterface_Base::GetFunctionalValue");
@@ -210,17 +210,12 @@ namespace DOpE
         }
       unsigned int pos = it->second;
 
-      if (GetFunctionalValues()[pos].size != 1)
-        {
-          if (GetFunctionalValues()[0].size() == 0)
-            throw DOpEException(
-              "Apparently the Functional in question was never evaluated!",
-              "ReducedProblemInterface_Base::GetTimeFunctionalValue");
-          else
-            throw DOpEException(
-              "The Functional has been evaluated too many times! \n\tMaybe you should use GetTimeFunctionalValue.",
-              "ReducedProblemInterface_Base::GetTimeFunctionalValue");
-        }
+      if (GetFunctionalValues()[pos].size() == 0)
+      {
+	throw DOpEException(
+	  "Apparently the Functional in question was never evaluated!",
+	  "ReducedProblemInterface_Base::GetTimeFunctionalValue");
+      }
       else
         {
           return GetFunctionalValues()[pos];
