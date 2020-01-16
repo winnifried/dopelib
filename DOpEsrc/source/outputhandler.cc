@@ -247,7 +247,7 @@ namespace DOpE
   std::map<std::string,unsigned int>::const_iterator DOpEOutputHandler<VECTOR>::ReorderAndInsert(std::string type)
   {
     assert(iteration_number_.size() == iteration_type_pos_.size());
-    if(std::string type == "Time")
+    if(type == "Time")
     {
       //Time is always last, so that visualization tools can simply run over timesteps
       iteration_type_pos_[type]  = iteration_number_.size();
