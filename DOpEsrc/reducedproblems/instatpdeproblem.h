@@ -1158,9 +1158,16 @@ namespace DOpE
 
             this->GetProblem()->AddAuxiliaryToIntegrator(
               this->GetIntegrator());
-            this->GetProblem()->AddPreviousAuxiliaryToIntegrator(
+            if (transfer_needed)
+	    {
+	      this->GetProblem()->AddPreviousAuxiliaryToIntegratorWithTemporalTransfer(
+              this->GetIntegrator(),local_to_global[i-1], local_to_global[i]);
+	    }
+	    else
+	    {
+	      this->GetProblem()->AddPreviousAuxiliaryToIntegrator(
               this->GetIntegrator());
-
+	    }
 	    //Also rebuild matrix if a mesh transfer happend.
             build_state_matrix_
               = this->GetNonlinearSolver("state").NonlinearSolve(problem,
@@ -1169,9 +1176,16 @@ namespace DOpE
 
             this->GetProblem()->DeleteAuxiliaryFromIntegrator(
               this->GetIntegrator());
-            this->GetProblem()->DeletePreviousAuxiliaryFromIntegrator(
+            if (transfer_needed)
+	    {
+	      this->GetProblem()->DeletePreviousAuxiliaryFromIntegratorWithTemporalTransfer(
               this->GetIntegrator());
-
+	    }
+	    else
+	    {
+	      this->GetProblem()->DeletePreviousAuxiliaryFromIntegrator(
+              this->GetIntegrator());
+	    }
             u_old = sol.GetSpacialVector();
             this->GetOutputHandler()->Write(sol.GetSpacialVector(),
                                             outname + this->GetPostIndex(), problem.GetDoFType());
