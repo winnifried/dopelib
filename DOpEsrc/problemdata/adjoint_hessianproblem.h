@@ -426,6 +426,13 @@ namespace DOpE
     inline const dealii::ConstraintMatrix &
     GetDoFConstraints() const;
 #endif
+#if DEAL_II_VERSION_GTE(9,1,1)
+    inline const dealii::AffineConstraints<double> &
+    GetHNConstraints() const;
+#else
+    inline const dealii::ConstraintMatrix &
+    GetHNConstraints() const;
+#endif
     /**
     * Functions providing the required information for the integrator.
     * see OptProblemContainer for details.
@@ -1083,6 +1090,24 @@ namespace DOpE
   Adjoint_HessianProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dim>::GetDoFConstraints() const
   {
     return opt_problem_.GetSpaceTimeHandler()->GetStateDoFConstraints();
+  }
+#endif
+  /******************************************************/
+#if DEAL_II_VERSION_GTE(9,1,1)
+  template<typename OPTPROBLEM, typename PDE, typename DD,
+           typename SPARSITYPATTERN, typename VECTOR, int dim>
+  const dealii::AffineConstraints<double> &
+  Adjoint_HessianProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dim>::GetHNConstraints() const
+  {
+    return opt_problem_.GetSpaceTimeHandler()->GetStateHNConstraints();
+  }
+#else
+  template<typename OPTPROBLEM, typename PDE, typename DD,
+           typename SPARSITYPATTERN, typename VECTOR, int dim>
+  const dealii::ConstraintMatrix &
+  Adjoint_HessianProblem<OPTPROBLEM, PDE, DD, SPARSITYPATTERN, VECTOR, dim>::GetHNConstraints() const
+  {
+    return opt_problem_.GetSpaceTimeHandler()->GetStateHNConstraints();
   }
 #endif
   /******************************************************/

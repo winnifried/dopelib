@@ -243,8 +243,13 @@ namespace DOpE
       DoFRenumbering::component_wise (static_cast<DH<dopedim, dopedim>&>(control_dof_handler_));
       if (dopedim==dealdim)
         {
+	  control_hn_constraints_.clear ();
+	  control_hn_constraints_.reinit(this->GetLocallyRelevantDoFs(DOpEtypes::VectorType::control));
+          DoFTools::make_hanging_node_constraints (static_cast<DH<dopedim, dopedim>&>(control_dof_handler_),
+                                                   control_hn_constraints_);
+	  
           control_dof_constraints_.clear ();
-              control_dof_constraints_.reinit(this->GetLocallyRelevantDoFs(DOpEtypes::VectorType::control));
+	  control_dof_constraints_.reinit(this->GetLocallyRelevantDoFs(DOpEtypes::VectorType::control));
           DoFTools::make_hanging_node_constraints (static_cast<DH<dopedim, dopedim>&>(control_dof_handler_),
                                                    control_dof_constraints_);
           if (GetUserDefinedDoFConstraints() != NULL)
@@ -267,7 +272,7 @@ namespace DOpE
                                                                control_dof_constraints_, comp_mask);
 #endif	      
             }
-
+          control_hn_constraints_.close ();
           control_dof_constraints_.close ();
         }
       else
@@ -299,6 +304,13 @@ namespace DOpE
       DoFRenumbering::component_wise(
         static_cast<DH<dealdim, dealdim>&>(state_dof_handler_));
 
+      state_hn_constraints_.clear();
+      state_hn_constraints_.reinit (
+        this->GetLocallyRelevantDoFs (DOpEtypes::VectorType::state));
+      DoFTools::make_hanging_node_constraints(
+        static_cast<DH<dealdim, dealdim>&>(state_dof_handler_),
+        state_hn_constraints_);
+
       state_dof_constraints_.clear();
       state_dof_constraints_.reinit (
         this->GetLocallyRelevantDoFs (DOpEtypes::VectorType::state));
@@ -327,6 +339,7 @@ namespace DOpE
                                                    state_dof_constraints_, comp_mask);
 #endif	  
         }
+      state_hn_constraints_.close();
       state_dof_constraints_.close();
 
       state_dofs_per_block_.resize(state_n_blocks);
@@ -437,6 +450,39 @@ namespace DOpE
     GetStateDoFConstraints(unsigned int /*time_point*/= std::numeric_limits<unsigned int>::max()) const
     {
       return state_dof_constraints_;
+    }
+#endif
+    
+    /**
+     * Implementation of virtual function in SpaceTimeHandler
+     */
+#if DEAL_II_VERSION_GTE(9,1,1)
+    const dealii::AffineConstraints<double> &
+    GetControlHNConstraints() const
+    {
+      return control_hn_constraints_;
+    }
+#else
+    const dealii::ConstraintMatrix &
+    GetControlHNConstraints() const
+    {
+      return control_hn_constraints_;
+    }
+#endif
+    /**
+     * Implementation of virtual function in SpaceTimeHandler
+     */
+#if DEAL_II_VERSION_GTE(9,1,1)
+    const dealii::AffineConstraints<double> &
+    GetStateHNConstraints(unsigned int /*time_point*/= std::numeric_limits<unsigned int>::max()) const
+    {
+      return state_hn_constraints_;
+    }
+#else
+    const dealii::ConstraintMatrix &
+    GetStateHNConstraints(unsigned int /*time_point*/= std::numeric_limits<unsigned int>::max()) const
+    {
+      return state_hn_constraints_;
     }
 #endif
     /**
@@ -823,9 +869,13 @@ namespace DOpE
     std::vector<unsigned int> state_dofs_per_block_;
 
 #if DEAL_II_VERSION_GTE(9,1,1)
+    dealii::AffineConstraints<double> control_hn_constraints_;
+    dealii::AffineConstraints<double> state_hn_constraints_;
     dealii::AffineConstraints<double> control_dof_constraints_;
     dealii::AffineConstraints<double> state_dof_constraints_;
 #else
+    dealii::ConstraintMatrix control_hn_constraints_;
+    dealii::ConstraintMatrix state_hn_constraints_;
     dealii::ConstraintMatrix control_dof_constraints_;
     dealii::ConstraintMatrix state_dof_constraints_;
 #endif

@@ -1,10 +1,10 @@
-DOpElib Copyright (C) 2012 - 2016 DOpElib authors
+DOpElib Copyright (C) 2012 - 2018 DOpElib authors
 This program comes with ABSOLUTELY NO WARRANTY.
 For License details read LICENSE.TXT distributed with this software!
 
 This is DOpElib Version: 4.0.0 pre
-	Status as of: 16/02/2016
-Using dealii Version: 9.0
+	Status as of: 27/08/2018
+Using dealii Version: 9.1
 
 	**************************************************
 	*        Starting Reduced Newton Algorithm       *
@@ -161,14 +161,14 @@ LOG: Allowing IterationCounter `OptNewton_OptProblem' for filenames!
 		 Newton step: 0	 Residual (rel.): 1.0000e+00
 	
 	CostFunctional: 4.2940e+02
-		 Newton step: 1	 Residual (rel.):   2.6433e-05	 LinearIters [2]	 LineSearch {0} 
+		 Newton step: 1	 Residual (rel.):   2.6434e-05	 LinearIters [2]	 LineSearch {0} 
 	CostFunctional: 4.2940e+02
 		 Newton step: 2	 Residual (rel.):   1.2505e-08	 LinearIters [4]	 LineSearch {0} 
 	CostFunctional: 4.2940e+02
 	PointValue: -0.988735
 	L1-Norm: 0.401626
-	QError: 0.931586
-	UError: 0.000318661
+	QError: 0.934242
+	UError: 0.000318662
 
 	**************************************************
 	*        Stopping Reduced Newton Algorithm       *

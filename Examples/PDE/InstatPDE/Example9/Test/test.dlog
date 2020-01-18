@@ -4,7 +4,7 @@ For License details read LICENSE.TXT distributed with this software!
 
 This is DOpElib Version: 4.0.0 pre
 	Status as of: 27/08/2018
-Using dealii Version: 9.0
+Using dealii Version: 9.1
 
 	**************************************************
 	*             Starting Forward Solve             *
@@ -410,12 +410,12 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 3 (0.04 -> 0.06) using backward Euler
-			 Newton step: 0	 Residual (abs.):   4.0475e-04
+			 Newton step: 0	 Residual (abs.):   4.0476e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 4 (0.06 -> 0.08) using backward Euler
-			 Newton step: 0	 Residual (abs.):   3.9791e-04
+			 Newton step: 0	 Residual (abs.):   3.9792e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
@@ -430,47 +430,47 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 7 (0.12 -> 0.14) using backward Euler
-			 Newton step: 0	 Residual (abs.):   4.0085e-04
+			 Newton step: 0	 Residual (abs.):   4.0084e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 8 (0.14 -> 0.16) using backward Euler
-			 Newton step: 0	 Residual (abs.):   4.0116e-04
+			 Newton step: 0	 Residual (abs.):   4.0117e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 9 (0.16 -> 0.18) using backward Euler
-			 Newton step: 0	 Residual (abs.):   4.0150e-04
+			 Newton step: 0	 Residual (abs.):   4.0149e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 10 (0.18 -> 0.2) using backward Euler
-			 Newton step: 0	 Residual (abs.):   4.0161e-04
+			 Newton step: 0	 Residual (abs.):   4.0162e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 11 (0.2 -> 0.22) using backward Euler
-			 Newton step: 0	 Residual (abs.):   4.0183e-04
+			 Newton step: 0	 Residual (abs.):   4.0182e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 12 (0.22 -> 0.24) using backward Euler
-			 Newton step: 0	 Residual (abs.):   4.0183e-04
+			 Newton step: 0	 Residual (abs.):   4.0184e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 13 (0.24 -> 0.26) using backward Euler
-			 Newton step: 0	 Residual (abs.):   4.0200e-04
+			 Newton step: 0	 Residual (abs.):   4.0199e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 14 (0.26 -> 0.28) using backward Euler
-			 Newton step: 0	 Residual (abs.):   4.0194e-04
+			 Newton step: 0	 Residual (abs.):   4.0195e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 15 (0.28 -> 0.3) using backward Euler
-			 Newton step: 0	 Residual (abs.):   4.0209e-04
+			 Newton step: 0	 Residual (abs.):   4.0208e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
@@ -485,7 +485,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 18 (0.34 -> 0.36) using backward Euler
-			 Newton step: 0	 Residual (abs.):   4.0202e-04
+			 Newton step: 0	 Residual (abs.):   4.0203e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
@@ -495,17 +495,17 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 20 (0.38 -> 0.4) using backward Euler
-			 Newton step: 0	 Residual (abs.):   4.0203e-04
+			 Newton step: 0	 Residual (abs.):   4.0204e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 21 (0.4 -> 0.42) using backward Euler
-			 Newton step: 0	 Residual (abs.):   4.0218e-04
+			 Newton step: 0	 Residual (abs.):   4.0217e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 22 (0.42 -> 0.44) using backward Euler
-			 Newton step: 0	 Residual (abs.):   4.0203e-04
+			 Newton step: 0	 Residual (abs.):   4.0204e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
@@ -515,7 +515,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 24 (0.46 -> 0.48) using backward Euler
-			 Newton step: 0	 Residual (abs.):   4.0203e-04
+			 Newton step: 0	 Residual (abs.):   4.0204e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
@@ -524,34 +524,34 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
-		Space-Time Pointevaluation: 0.0533261
+		Space-Time Pointevaluation: 0.0533161
 		 Timestep (MT): 26 (0.5 -> 0.52) using backward Euler
-			 Newton step: 0	 Residual (abs.):   4.0202e-04
+			 Newton step: 0	 Residual (abs.):   4.0203e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 27 (0.52 -> 0.54) using backward Euler
-			 Newton step: 0	 Residual (abs.):   4.0221e-04
+			 Newton step: 0	 Residual (abs.):   4.0220e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 28 (0.54 -> 0.56) using backward Euler
-			 Newton step: 0	 Residual (abs.):   4.0202e-04
+			 Newton step: 0	 Residual (abs.):   4.0203e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 29 (0.56 -> 0.58) using backward Euler
-			 Newton step: 0	 Residual (abs.):   4.0222e-04
+			 Newton step: 0	 Residual (abs.):   4.0221e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 30 (0.58 -> 0.6) using backward Euler
-			 Newton step: 0	 Residual (abs.):   4.0201e-04
+			 Newton step: 0	 Residual (abs.):   4.0202e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 31 (0.6 -> 0.62) using backward Euler
-			 Newton step: 0	 Residual (abs.):   4.0223e-04
+			 Newton step: 0	 Residual (abs.):   4.0222e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
@@ -561,27 +561,27 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 33 (0.64 -> 0.66) using backward Euler
-			 Newton step: 0	 Residual (abs.):   4.0223e-04
+			 Newton step: 0	 Residual (abs.):   4.0222e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 34 (0.66 -> 0.68) using backward Euler
-			 Newton step: 0	 Residual (abs.):   4.0200e-04
+			 Newton step: 0	 Residual (abs.):   4.0201e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 35 (0.68 -> 0.7) using backward Euler
-			 Newton step: 0	 Residual (abs.):   4.0224e-04
+			 Newton step: 0	 Residual (abs.):   4.0223e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 36 (0.7 -> 0.72) using backward Euler
-			 Newton step: 0	 Residual (abs.):   4.0199e-04
+			 Newton step: 0	 Residual (abs.):   4.0200e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 37 (0.72 -> 0.74) using backward Euler
-			 Newton step: 0	 Residual (abs.):   4.0225e-04
+			 Newton step: 0	 Residual (abs.):   4.0224e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
@@ -591,22 +591,22 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 39 (0.76 -> 0.78) using backward Euler
-			 Newton step: 0	 Residual (abs.):   4.0225e-04
+			 Newton step: 0	 Residual (abs.):   4.0224e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 40 (0.78 -> 0.8) using backward Euler
-			 Newton step: 0	 Residual (abs.):   4.0198e-04
+			 Newton step: 0	 Residual (abs.):   4.0199e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 41 (0.8 -> 0.82) using backward Euler
-			 Newton step: 0	 Residual (abs.):   4.0226e-04
+			 Newton step: 0	 Residual (abs.):   4.0225e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 42 (0.82 -> 0.84) using backward Euler
-			 Newton step: 0	 Residual (abs.):   4.0197e-04
+			 Newton step: 0	 Residual (abs.):   4.0198e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
@@ -616,27 +616,27 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 44 (0.86 -> 0.88) using backward Euler
-			 Newton step: 0	 Residual (abs.):   4.0197e-04
+			 Newton step: 0	 Residual (abs.):   4.0198e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 45 (0.88 -> 0.9) using backward Euler
-			 Newton step: 0	 Residual (abs.):   4.0227e-04
+			 Newton step: 0	 Residual (abs.):   4.0226e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 46 (0.9 -> 0.92) using backward Euler
-			 Newton step: 0	 Residual (abs.):   4.0196e-04
+			 Newton step: 0	 Residual (abs.):   4.0197e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 47 (0.92 -> 0.94) using backward Euler
-			 Newton step: 0	 Residual (abs.):   4.0228e-04
+			 Newton step: 0	 Residual (abs.):   4.0227e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 48 (0.94 -> 0.96) using backward Euler
-			 Newton step: 0	 Residual (abs.):   4.0195e-04
+			 Newton step: 0	 Residual (abs.):   4.0196e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
@@ -646,119 +646,119 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 50 (0.98 -> 1) using backward Euler
-			 Newton step: 0	 Residual (abs.):   4.0195e-04
+			 Newton step: 0	 Residual (abs.):   4.0196e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 	Computing Functionals:
-	Space-Time Pointevaluation: 0.0533261
+	Space-Time Pointevaluation: 0.0533161
 	Computing Error Indicators:
 	Error estimate using H1-Residual-Estimator at time 0: 0
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.02: 0.34439
+	Error estimate using H1-Residual-Estimator at time 0.02: 0.344206
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.04: 0.078544
+	Error estimate using H1-Residual-Estimator at time 0.04: 0.0783679
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.06: 0.0361836
+	Error estimate using H1-Residual-Estimator at time 0.06: 0.0359982
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.08: 0.0204344
+	Error estimate using H1-Residual-Estimator at time 0.08: 0.0202582
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.1: 0.0144715
+	Error estimate using H1-Residual-Estimator at time 0.1: 0.0142873
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.12: 0.013151
+	Error estimate using H1-Residual-Estimator at time 0.12: 0.0129791
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.14: 0.0145791
+	Error estimate using H1-Residual-Estimator at time 0.14: 0.0143969
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.16: 0.0173617
+	Error estimate using H1-Residual-Estimator at time 0.16: 0.0171948
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.18: 0.0214015
+	Error estimate using H1-Residual-Estimator at time 0.18: 0.0212214
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.2: 0.0258984
+	Error estimate using H1-Residual-Estimator at time 0.2: 0.0257365
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.22: 0.0313731
+	Error estimate using H1-Residual-Estimator at time 0.22: 0.031195
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.24: 0.0369847
+	Error estimate using H1-Residual-Estimator at time 0.24: 0.0368278
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.26: 0.0436154
+	Error estimate using H1-Residual-Estimator at time 0.26: 0.0434391
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.28: 0.0501931
+	Error estimate using H1-Residual-Estimator at time 0.28: 0.0500411
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.3: 0.0579256
+	Error estimate using H1-Residual-Estimator at time 0.3: 0.0577511
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.32: 0.0654308
+	Error estimate using H1-Residual-Estimator at time 0.32: 0.0652838
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.34: 0.0742647
+	Error estimate using H1-Residual-Estimator at time 0.34: 0.074092
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.36: 0.0826839
+	Error estimate using H1-Residual-Estimator at time 0.36: 0.0825419
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.38: 0.0926299
+	Error estimate using H1-Residual-Estimator at time 0.38: 0.092459
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.4: 0.101954
+	Error estimate using H1-Residual-Estimator at time 0.4: 0.101817
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.42: 0.113024
+	Error estimate using H1-Residual-Estimator at time 0.42: 0.112855
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.44: 0.123244
+	Error estimate using H1-Residual-Estimator at time 0.44: 0.123112
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.46: 0.135451
+	Error estimate using H1-Residual-Estimator at time 0.46: 0.135284
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.48: 0.146556
+	Error estimate using H1-Residual-Estimator at time 0.48: 0.146429
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.5: 0.159911
+	Error estimate using H1-Residual-Estimator at time 0.5: 0.159746
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.52: 0.171891
+	Error estimate using H1-Residual-Estimator at time 0.52: 0.171769
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.54: 0.186406
+	Error estimate using H1-Residual-Estimator at time 0.54: 0.186242
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.56: 0.199251
+	Error estimate using H1-Residual-Estimator at time 0.56: 0.199134
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.58: 0.214936
+	Error estimate using H1-Residual-Estimator at time 0.58: 0.214774
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.6: 0.228635
+	Error estimate using H1-Residual-Estimator at time 0.6: 0.228523
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.62: 0.245502
+	Error estimate using H1-Residual-Estimator at time 0.62: 0.245342
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.64: 0.260044
+	Error estimate using H1-Residual-Estimator at time 0.64: 0.259937
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.66: 0.278104
+	Error estimate using H1-Residual-Estimator at time 0.66: 0.277945
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.68: 0.293478
+	Error estimate using H1-Residual-Estimator at time 0.68: 0.293375
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.7: 0.312741
+	Error estimate using H1-Residual-Estimator at time 0.7: 0.312584
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.72: 0.328936
+	Error estimate using H1-Residual-Estimator at time 0.72: 0.328839
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.74: 0.349414
+	Error estimate using H1-Residual-Estimator at time 0.74: 0.349259
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.76: 0.36642
+	Error estimate using H1-Residual-Estimator at time 0.76: 0.366327
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.78: 0.388122
+	Error estimate using H1-Residual-Estimator at time 0.78: 0.387969
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.8: 0.405928
+	Error estimate using H1-Residual-Estimator at time 0.8: 0.405841
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.82: 0.428867
+	Error estimate using H1-Residual-Estimator at time 0.82: 0.428715
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.84: 0.447462
+	Error estimate using H1-Residual-Estimator at time 0.84: 0.447379
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.86: 0.471647
+	Error estimate using H1-Residual-Estimator at time 0.86: 0.471497
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.88: 0.49102
+	Error estimate using H1-Residual-Estimator at time 0.88: 0.490942
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.9: 0.516463
+	Error estimate using H1-Residual-Estimator at time 0.9: 0.516315
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.92: 0.536603
+	Error estimate using H1-Residual-Estimator at time 0.92: 0.53653
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.94: 0.563315
+	Error estimate using H1-Residual-Estimator at time 0.94: 0.563168
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.96: 0.584211
+	Error estimate using H1-Residual-Estimator at time 0.96: 0.584144
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.98: 0.612202
+	Error estimate using H1-Residual-Estimator at time 0.98: 0.612058
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 1: 0.633845
+	Error estimate using H1-Residual-Estimator at time 1: 0.633782
 
-	H1-Error estimator: 3.37892
+	H1-Error estimator: 3.37786
 	
 
-	Backward euler: u * u = 388.652
+	Backward euler: u * u = 388.954
 	
 
 	**************************************************
@@ -901,7 +901,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
-		Space-Time Pointevaluation: 0.0533855
+		Space-Time Pointevaluation: 0.053373
 		 Timestep (MT): 26 (0.5 -> 0.52) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.3206e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
@@ -1028,114 +1028,114 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 	Computing Functionals:
-	Space-Time Pointevaluation: 0.0533855
+	Space-Time Pointevaluation: 0.053373
 	Computing Error Indicators:
 	Error estimate using H1-Residual-Estimator at time 0: 0
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.02: 0.344578
+	Error estimate using H1-Residual-Estimator at time 0.02: 0.344155
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.04: 0.0787996
+	Error estimate using H1-Residual-Estimator at time 0.04: 0.0783854
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.06: 0.0364896
+	Error estimate using H1-Residual-Estimator at time 0.06: 0.0360672
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.08: 0.0207925
+	Error estimate using H1-Residual-Estimator at time 0.08: 0.0203818
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.1: 0.014922
+	Error estimate using H1-Residual-Estimator at time 0.1: 0.0145044
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.12: 0.0136781
+	Error estimate using H1-Residual-Estimator at time 0.12: 0.0132759
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.14: 0.0152489
+	Error estimate using H1-Residual-Estimator at time 0.14: 0.0148372
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.16: 0.0181288
+	Error estimate using H1-Residual-Estimator at time 0.16: 0.017736
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.18: 0.0223667
+	Error estimate using H1-Residual-Estimator at time 0.18: 0.021961
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.2: 0.0269768
+	Error estimate using H1-Residual-Estimator at time 0.2: 0.0265935
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.22: 0.03271
+	Error estimate using H1-Residual-Estimator at time 0.22: 0.0323101
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.24: 0.0384462
+	Error estimate using H1-Residual-Estimator at time 0.24: 0.0380723
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.26: 0.0454002
+	Error estimate using H1-Residual-Estimator at time 0.26: 0.0450062
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.28: 0.0521093
+	Error estimate using H1-Residual-Estimator at time 0.28: 0.0517448
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.3: 0.0602347
+	Error estimate using H1-Residual-Estimator at time 0.3: 0.0598464
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.32: 0.0678735
+	Error estimate using H1-Residual-Estimator at time 0.32: 0.0675183
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.34: 0.0771745
+	Error estimate using H1-Residual-Estimator at time 0.34: 0.076792
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.36: 0.0857247
+	Error estimate using H1-Residual-Estimator at time 0.36: 0.0853789
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.38: 0.096217
+	Error estimate using H1-Residual-Estimator at time 0.38: 0.0958402
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.4: 0.105664
+	Error estimate using H1-Residual-Estimator at time 0.4: 0.105328
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.42: 0.117365
+	Error estimate using H1-Residual-Estimator at time 0.42: 0.116994
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.44: 0.127696
+	Error estimate using H1-Residual-Estimator at time 0.44: 0.127369
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.46: 0.140622
+	Error estimate using H1-Residual-Estimator at time 0.46: 0.140256
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.48: 0.151821
+	Error estimate using H1-Residual-Estimator at time 0.48: 0.151504
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.5: 0.165989
+	Error estimate using H1-Residual-Estimator at time 0.5: 0.165629
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.52: 0.178042
+	Error estimate using H1-Residual-Estimator at time 0.52: 0.177733
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.54: 0.193467
+	Error estimate using H1-Residual-Estimator at time 0.54: 0.193113
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.56: 0.206358
+	Error estimate using H1-Residual-Estimator at time 0.56: 0.206059
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.58: 0.223056
+	Error estimate using H1-Residual-Estimator at time 0.58: 0.222708
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.6: 0.236771
+	Error estimate using H1-Residual-Estimator at time 0.6: 0.236481
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.62: 0.254758
+	Error estimate using H1-Residual-Estimator at time 0.62: 0.254415
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.64: 0.26928
+	Error estimate using H1-Residual-Estimator at time 0.64: 0.269
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.66: 0.288571
+	Error estimate using H1-Residual-Estimator at time 0.66: 0.288235
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.68: 0.303886
+	Error estimate using H1-Residual-Estimator at time 0.68: 0.303615
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.7: 0.324497
+	Error estimate using H1-Residual-Estimator at time 0.7: 0.324166
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.72: 0.340588
+	Error estimate using H1-Residual-Estimator at time 0.72: 0.340327
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.74: 0.362535
+	Error estimate using H1-Residual-Estimator at time 0.74: 0.36221
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.76: 0.379387
+	Error estimate using H1-Residual-Estimator at time 0.76: 0.379135
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.78: 0.402686
+	Error estimate using H1-Residual-Estimator at time 0.78: 0.402366
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.8: 0.420283
+	Error estimate using H1-Residual-Estimator at time 0.8: 0.42004
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.82: 0.444948
+	Error estimate using H1-Residual-Estimator at time 0.82: 0.444634
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.84: 0.463275
+	Error estimate using H1-Residual-Estimator at time 0.84: 0.463041
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.86: 0.489323
+	Error estimate using H1-Residual-Estimator at time 0.86: 0.489014
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.88: 0.508364
+	Error estimate using H1-Residual-Estimator at time 0.88: 0.50814
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.9: 0.53581
+	Error estimate using H1-Residual-Estimator at time 0.9: 0.535507
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.92: 0.55555
+	Error estimate using H1-Residual-Estimator at time 0.92: 0.555335
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.94: 0.584409
+	Error estimate using H1-Residual-Estimator at time 0.94: 0.584112
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.96: 0.604832
+	Error estimate using H1-Residual-Estimator at time 0.96: 0.604626
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.98: 0.635121
+	Error estimate using H1-Residual-Estimator at time 0.98: 0.634829
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 1: 0.656211
+	Error estimate using H1-Residual-Estimator at time 1: 0.656015
 
-	H1-Error estimator: 3.43788
+	H1-Error estimator: 3.43545
 	
 
-	Backward euler: u * u = 557.123
+	Backward euler: u * u = 557.888
 	
 
 	**************************************************
@@ -1278,7 +1278,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
-		Space-Time Pointevaluation: 0.053401
+		Space-Time Pointevaluation: 0.0533877
 		 Timestep (MT): 26 (0.5 -> 0.52) using backward Euler
 			 Newton step: 0	 Residual (abs.):   4.4868e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
@@ -1390,7 +1390,7 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 48 (0.94 -> 0.96) using backward Euler
-			 Newton step: 0	 Residual (abs.):   4.5229e-04
+			 Newton step: 0	 Residual (abs.):   4.5258e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
@@ -1400,117 +1400,117 @@ LOG: Allowing IterationCounter `Time' for filenames!
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 		 Timestep (MT): 50 (0.98 -> 1) using backward Euler
-			 Newton step: 0	 Residual (abs.):   4.7167e-04
+			 Newton step: 0	 Residual (abs.):   4.7197e-04
 			 Newton step: 0	 Residual (rel.):     1.0000e+00
 			 Newton step: 1	 Residual (rel.): < 1.0000e-11	 LineSearch {0} M 
 		         Precalculating functional values 
 	Computing Functionals:
-	Space-Time Pointevaluation: 0.053401
+	Space-Time Pointevaluation: 0.0533877
 	Computing Error Indicators:
 	Error estimate using H1-Residual-Estimator at time 0: 0
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.02: 0.344581
+	Error estimate using H1-Residual-Estimator at time 0.02: 0.343888
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.04: 0.0790702
+	Error estimate using H1-Residual-Estimator at time 0.04: 0.0783881
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.06: 0.0368356
+	Error estimate using H1-Residual-Estimator at time 0.06: 0.0361477
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.08: 0.0211775
+	Error estimate using H1-Residual-Estimator at time 0.08: 0.0205031
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.1: 0.0154176
+	Error estimate using H1-Residual-Estimator at time 0.1: 0.0147387
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.12: 0.0142183
+	Error estimate using H1-Residual-Estimator at time 0.12: 0.0135565
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.14: 0.0159696
+	Error estimate using H1-Residual-Estimator at time 0.14: 0.015301
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.16: 0.0188862
+	Error estimate using H1-Residual-Estimator at time 0.16: 0.0182379
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.18: 0.0233889
+	Error estimate using H1-Residual-Estimator at time 0.18: 0.0227306
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.2: 0.0280149
+	Error estimate using H1-Residual-Estimator at time 0.2: 0.0273803
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.22: 0.0341105
+	Error estimate using H1-Residual-Estimator at time 0.22: 0.0334624
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.24: 0.0398288
+	Error estimate using H1-Residual-Estimator at time 0.24: 0.0392078
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.26: 0.0472559
+	Error estimate using H1-Residual-Estimator at time 0.26: 0.046618
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.28: 0.0539
+	Error estimate using H1-Residual-Estimator at time 0.28: 0.0532926
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.3: 0.0626225
+	Error estimate using H1-Residual-Estimator at time 0.3: 0.0619947
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.32: 0.0701361
+	Error estimate using H1-Residual-Estimator at time 0.32: 0.0695423
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.34: 0.0801713
+	Error estimate using H1-Residual-Estimator at time 0.34: 0.0795536
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.36: 0.0885231
+	Error estimate using H1-Residual-Estimator at time 0.36: 0.0879427
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.38: 0.0998997
+	Error estimate using H1-Residual-Estimator at time 0.38: 0.099292
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.4: 0.109062
+	Error estimate using H1-Residual-Estimator at time 0.4: 0.108496
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.42: 0.121811
+	Error estimate using H1-Residual-Estimator at time 0.42: 0.121213
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.44: 0.131757
+	Error estimate using H1-Residual-Estimator at time 0.44: 0.131204
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.46: 0.145907
+	Error estimate using H1-Residual-Estimator at time 0.46: 0.145319
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.48: 0.156609
+	Error estimate using H1-Residual-Estimator at time 0.48: 0.15607
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.5: 0.17219
+	Error estimate using H1-Residual-Estimator at time 0.5: 0.171613
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.52: 0.183621
+	Error estimate using H1-Residual-Estimator at time 0.52: 0.183095
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.54: 0.200662
+	Error estimate using H1-Residual-Estimator at time 0.54: 0.200094
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.56: 0.212792
+	Error estimate using H1-Residual-Estimator at time 0.56: 0.212279
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.58: 0.231322
+	Error estimate using H1-Residual-Estimator at time 0.58: 0.230765
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.6: 0.244123
+	Error estimate using H1-Residual-Estimator at time 0.6: 0.243624
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.62: 0.264171
+	Error estimate using H1-Residual-Estimator at time 0.62: 0.263624
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.64: 0.277614
+	Error estimate using H1-Residual-Estimator at time 0.64: 0.277128
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.66: 0.299209
+	Error estimate using H1-Residual-Estimator at time 0.66: 0.298672
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.68: 0.313265
+	Error estimate using H1-Residual-Estimator at time 0.68: 0.312793
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.7: 0.336436
+	Error estimate using H1-Residual-Estimator at time 0.7: 0.335909
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.72: 0.351077
+	Error estimate using H1-Residual-Estimator at time 0.72: 0.350619
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.74: 0.375852
+	Error estimate using H1-Residual-Estimator at time 0.74: 0.375335
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.76: 0.39105
+	Error estimate using H1-Residual-Estimator at time 0.76: 0.390605
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.78: 0.417458
+	Error estimate using H1-Residual-Estimator at time 0.78: 0.41695
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.8: 0.433182
+	Error estimate using H1-Residual-Estimator at time 0.8: 0.432751
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.82: 0.461252
+	Error estimate using H1-Residual-Estimator at time 0.82: 0.460755
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.84: 0.477475
+	Error estimate using H1-Residual-Estimator at time 0.84: 0.477057
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.86: 0.507236
+	Error estimate using H1-Residual-Estimator at time 0.86: 0.506749
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.88: 0.523929
+	Error estimate using H1-Residual-Estimator at time 0.88: 0.523524
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.9: 0.555408
+	Error estimate using H1-Residual-Estimator at time 0.9: 0.554931
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.92: 0.572543
+	Error estimate using H1-Residual-Estimator at time 0.92: 0.572152
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.94: 0.60577
+	Error estimate using H1-Residual-Estimator at time 0.94: 0.605303
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.96: 0.623317
+	Error estimate using H1-Residual-Estimator at time 0.96: 0.62294
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 0.98: 0.658321
+	Error estimate using H1-Residual-Estimator at time 0.98: 0.657865
 	Computing Error Indicators:
-	Error estimate using H1-Residual-Estimator at time 1: 0.676252
+	Error estimate using H1-Residual-Estimator at time 1: 0.675888
 
-	H1-Error estimator: 3.49352
+	H1-Error estimator: 3.48957
 	
 
-	Backward euler: u * u = 732.025
+	Backward euler: u * u = 733.307
 	

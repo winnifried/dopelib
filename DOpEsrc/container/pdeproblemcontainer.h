@@ -692,6 +692,67 @@ namespace DOpE
       }
     }
 
+      /*****************************************************************/
+    /**
+    * Adds the auxiliary Vectors from the integrator, so that their values are
+    * available for the integrated object. Takes the values from the previous (in
+    * natural time direction)
+    * time step to the integrator.In this method, an additional 
+    * mesh transfer is included.
+    *
+    * This adds only the vector named "state" and no other vectors!
+    * 
+    * @param integrator         The integrator in which the vecors should be available
+    * @param from_time_dof      The (global) Time DoF number from which the mesh transfer is 
+    *                           starting. Must be the time-dof to which the Vector objects 
+    *                           have been set previously!
+    * @param to_time_dof        The (global) Time DoF number to which DoFs the vector should 
+    *                           be transferd.
+    *
+    */
+
+  template<typename INTEGRATOR>
+  void
+  AddPreviousAuxiliaryToIntegratorWithTemporalTransfer(INTEGRATOR &integrator,unsigned int from_time_dof, unsigned int to_time_dof)
+    {
+      assert((to_time_dof == from_time_dof+1) || (to_time_dof == from_time_dof-1));
+      typename std::map<std::string, const StateVector<VECTOR> *>::const_iterator it =
+          auxiliary_state_.find("state");
+        if (it != auxiliary_state_.end())
+        {
+          integrator.AddDomainData("state_i-1",
+                                   &(it->second->GetPreviousSpacialVectorWithTemporalTransfer(from_time_dof, to_time_dof)));
+        }
+    }
+
+   /*****************************************************************/
+    /**
+     * Adds the auxiliary Vectors from the integrator, so that their values are
+     * available for the integrated object. Takes the values from the previous (in
+     * natural time direction)
+     * time step to the integrator.
+     *
+     * This adds only the vector named "state" and no other vectors!
+     *
+     * @param integrator         The integrator in which the vecors should be available
+     *
+     */
+
+    template<typename INTEGRATOR>
+    void
+    DeletePreviousAuxiliaryFromIntegratorWithTemporalTransfer(INTEGRATOR &integrator)
+    {
+      {
+        typename std::map<std::string, const StateVector<VECTOR> *>::const_iterator it =
+          auxiliary_state_.find("state");
+        if (it != auxiliary_state_.end())
+          {
+            integrator.DeleteDomainData("state_i-1");
+	    it->second->UnLockCopy();
+          }
+      }
+    }
+  
     /*****************************************************************/
     /**
      * Deletes the auxiliary Vectors from the integrator, so that their values are

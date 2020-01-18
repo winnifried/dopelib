@@ -846,6 +846,7 @@ namespace DOpE
             u(p->first) = p->second;
           }
       }
+    pde.GetHNConstraints().distribute(u);
   }
 
   /*******************************************************************************************/

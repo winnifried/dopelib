@@ -360,7 +360,7 @@ namespace DOpE
     /******************************************************/
 
     /**
-     * Returns the state HN-Constraints at the current time
+     * Returns the state DoF-Constraints at the current time
      */
 #if DEAL_II_VERSION_GTE(9,1,1)
     virtual const dealii::AffineConstraints<double> &
@@ -368,6 +368,20 @@ namespace DOpE
 #else
     virtual const dealii::ConstraintMatrix &
     GetStateDoFConstraints (unsigned int /*time_point*/= std::numeric_limits<unsigned int>::max()) const=0;
+#endif
+    /******************************************************/
+
+    /**
+     * Returns the state HN-Constraints at the current time
+     */
+#if DEAL_II_VERSION_GTE(9,1,1)
+    virtual const dealii::AffineConstraints<double>
+    &
+    GetStateHNConstraints (unsigned int /*time_point*/= std::numeric_limits<unsigned int>::max()) const=0;
+#else
+    virtual const dealii::ConstraintMatrix
+    &
+    GetStateHNConstraints (unsigned int /*time_point*/= std::numeric_limits<unsigned int>::max()) const=0;
 #endif
     /*******************************************************/
 

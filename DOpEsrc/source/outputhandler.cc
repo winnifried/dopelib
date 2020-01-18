@@ -246,10 +246,35 @@ namespace DOpE
   template <typename VECTOR>
   std::map<std::string,unsigned int>::const_iterator DOpEOutputHandler<VECTOR>::ReorderAndInsert(std::string type)
   {
-    //At the moment this does simple ordering using last_input is last field in Vector
     assert(iteration_number_.size() == iteration_type_pos_.size());
-    iteration_type_pos_[type]  = iteration_number_.size();
-    iteration_number_.push_back(0);
+    if(type == "Time")
+    {
+      //Time is always last, so that visualization tools can simply run over timesteps
+      iteration_type_pos_[type]  = iteration_number_.size();
+      iteration_number_.push_back(0);
+    }
+    else
+    {
+      std::map<std::string,unsigned int>::const_iterator it = iteration_type_pos_.find("Time");
+      if(it != iteration_type_pos_.end())
+      {
+	//Insert before the "Time" index
+	//Assert that time is last
+	assert(iteration_type_pos_["Time"]+1 == iteration_number_.size());
+	iteration_type_pos_[type]  = iteration_number_.size()-1;
+	iteration_type_pos_["Time"] = iteration_number_.size();
+	//Insert a zero before the time counter
+	unsigned int time_step = iteration_number_[iteration_number_.size()-1];
+	iteration_number_[iteration_number_.size()-1] = 0;
+	iteration_number_.push_back(time_step);
+      }
+      else
+      {
+	//Insert in the end, since no "Time" counter is given
+	iteration_type_pos_[type]  = iteration_number_.size();
+	iteration_number_.push_back(0);
+      }
+    }
     return iteration_type_pos_.find(type);
   }
 
