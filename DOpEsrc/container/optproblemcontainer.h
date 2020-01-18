@@ -885,6 +885,14 @@ namespace DOpE
     GetDoFConstraints() const;
 #endif
     /******************************************************/
+#if DEAL_II_VERSION_GTE(9,1,1)
+    const dealii::AffineConstraints<double> &
+    GetHNConstraints() const;
+#else
+    const dealii::ConstraintMatrix &
+    GetHNConstraints() const;
+#endif
+    /******************************************************/
 
     std::string
     GetDoFType() const;
@@ -3926,6 +3934,47 @@ namespace DOpE
         || (this->GetType() == "global_constraint_gradient"))
       {
         return GetSpaceTimeHandler()->GetControlDoFConstraints();
+      }
+    else
+      {
+        throw DOpEException("Unknown Type:" + this->GetType(),
+                            "OptProblemContainer::GetDoFConstraints");
+      }
+  }
+#endif
+  /******************************************************/
+  /******************************************************/
+
+  template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
+  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+  template<int, int> class DH>
+
+#if DEAL_II_VERSION_GTE(9,1,1)
+  const dealii::AffineConstraints<double> &
+  OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
+                      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetHNConstraints() const
+  {
+    if ((this->GetType() == "gradient") || (this->GetType() == "hessian")
+        || (this->GetType() == "global_constraint_gradient"))
+      {
+        return GetSpaceTimeHandler()->GetControlHNConstraints();
+      }
+    else
+      {
+        throw DOpEException("Unknown Type:" + this->GetType(),
+                            "OptProblemContainer::GetDoFConstraints");
+      }
+  }
+#else
+  const dealii::ConstraintMatrix &
+  OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD, CONSTRAINTS,
+                      SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::GetHNConstraints() const
+  {
+    if ((this->GetType() == "gradient") || (this->GetType() == "hessian")
+        || (this->GetType() == "global_constraint_gradient"))
+      {
+        return GetSpaceTimeHandler()->GetControlHNConstraints();
       }
     else
       {

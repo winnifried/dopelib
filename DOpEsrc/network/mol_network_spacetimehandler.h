@@ -302,6 +302,22 @@ namespace DOpE
        */
 #if DEAL_II_VERSION_GTE(9,1,1)
       const dealii::AffineConstraints<double> &
+      GetControlHNConstraints() const
+      {
+        return control_hn_constraints_;
+      }
+#else
+      const dealii::ConstraintMatrix &
+      GetControlHNConstraints() const
+      {
+        return control_hn_constraints_;
+      }
+#endif
+      /**
+       * Implementation of virtual function in SpaceTimeHandler
+       */
+#if DEAL_II_VERSION_GTE(9,1,1)
+      const dealii::AffineConstraints<double> &
       GetStateDoFConstraints(unsigned int /*time_point*/= std::numeric_limits<unsigned int>::max()) const
 #else
       const dealii::ConstraintMatrix &
@@ -314,6 +330,26 @@ namespace DOpE
         //No pipe selected
         abort();
         throw DOpEException("No pipe selected","MethodOfLines_Network_SpaceTimeHandler::GetStateDoFConstraints");
+
+//      return state_dof_constraints_;
+      }
+      /**
+       * Implementation of virtual function in SpaceTimeHandler
+       */
+#if DEAL_II_VERSION_GTE(9,1,1)
+      const dealii::AffineConstraints<double> &
+      GetStateHNConstraints(unsigned int /*time_point*/= std::numeric_limits<unsigned int>::max()) const
+#else
+      const dealii::ConstraintMatrix &
+      GetStateHNConstraints(unsigned int /*time_point*/= std::numeric_limits<unsigned int>::max()) const
+#endif
+      {
+        if (selected_pipe_ < sth_s_.size())
+          return sth_s_[selected_pipe_]->GetStateHNConstraints();
+
+        //No pipe selected
+        abort();
+        throw DOpEException("No pipe selected","MethodOfLines_Network_SpaceTimeHandler::GetStateHNConstraints");
 
 //      return state_dof_constraints_;
       }
@@ -824,8 +860,10 @@ namespace DOpE
 
       std::vector<unsigned int> control_dofs_per_block_;
 #if DEAL_II_VERSION_GTE(9,1,1)
+      dealii::AffineConstraints<double> control_hn_constraints_;
       dealii::AffineConstraints<double> control_dof_constraints_;
 #else
+      dealii::ConstraintMatrix control_hn_constraints_;
       dealii::ConstraintMatrix control_dof_constraints_;
 #endif
       std::vector<unsigned int> state_dofs_per_block_;

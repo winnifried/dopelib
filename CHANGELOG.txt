@@ -1,5 +1,7 @@
 Changelog DOpE
 ==============
+19.01.2020: Fixed bug in Integrator::ApplyInitialBoundaryValues. Now this function works correctly
+	    with hanging nodes.
 16.01.2020: Moved counter for timestep to last position in filename, so that iterating in
 	    visualization tools gets easier
 25.10.2019: Fixed bug in ReducedProblemInterface_Base::GetTimeFunctionalValue

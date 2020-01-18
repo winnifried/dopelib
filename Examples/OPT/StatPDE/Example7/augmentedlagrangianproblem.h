@@ -1306,6 +1306,19 @@ namespace DOpE
       return OP_.GetDoFConstraints();
     }
 #endif
+#if DEAL_II_VERSION_GTE(9,1,1)
+    const dealii::AffineConstraints<double> &
+    GetHNConstraints() const
+    {
+      return OP_.GetHNConstraints();
+    }
+#else
+    const dealii::ConstraintMatrix &
+    GetHNConstraints() const
+    {
+      return OP_.GetHNConstraints();
+    }
+#endif
 
     std::string
     GetType() const

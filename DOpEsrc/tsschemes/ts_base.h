@@ -387,6 +387,21 @@ namespace DOpE
     {
       return OP_.GetDoFConstraints();
     }
+    /**
+     * A dealii function. Please visit: ConstraintMatrix in the deal.ii manual.
+     *
+     * @return Returns a matrix with hanging node constraints.
+     */
+#if DEAL_II_VERSION_GTE(9,1,1)
+    const dealii::AffineConstraints<double> &
+    GetHNConstraints() const
+#else
+    const dealii::ConstraintMatrix &
+    GetHNConstraints() const
+#endif
+    {
+      return OP_.GetHNConstraints();
+    }
 
     std::string
     GetType() const

@@ -283,6 +283,13 @@ namespace DOpE
     inline const dealii::ConstraintMatrix &
     GetDoFConstraints() const;
 #endif
+#if DEAL_II_VERSION_GTE(9,1,1)
+    inline const dealii::AffineConstraints<double> &
+    GetHNConstraints() const;
+#else
+    inline const dealii::ConstraintMatrix &
+    GetHNConstraints() const;
+#endif
     /**
      * Functions providing the required information for the integrator.
      * see OptProblemContainer for details.
@@ -604,6 +611,22 @@ namespace DOpE
   InitialProblem<PDE, VECTOR, dim>::GetDoFConstraints() const
   {
     return pde_.GetDoFConstraints();
+  }
+#endif
+  /******************************************************/
+#if DEAL_II_VERSION_GTE(9,1,1)
+  template<typename PDE, typename VECTOR, int dim>
+  const dealii::AffineConstraints<double> &
+  InitialProblem<PDE, VECTOR, dim>::GetHNConstraints() const
+  {
+    return pde_.GetHNConstraints();
+  }
+#else
+  template<typename PDE, typename VECTOR, int dim>
+  const dealii::ConstraintMatrix &
+  InitialProblem<PDE, VECTOR, dim>::GetHNConstraints() const
+  {
+    return pde_.GetHNConstraints();
   }
 #endif
   /******************************************************/
