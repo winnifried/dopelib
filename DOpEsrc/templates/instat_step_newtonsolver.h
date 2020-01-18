@@ -450,6 +450,8 @@ namespace DOpE
 
     pde.GetOutputHandler()->SetIterationNumber(0,"PDENewton");
     pde.GetOutputHandler()->Write(residual,"Residual"+pde.GetType(),pde.GetDoFType());
+    //Write out initial solution after applying boundary values as 'Update' in iteration 0
+    pde.GetOutputHandler()->Write(solution,"Update"+pde.GetType(),pde.GetDoFType());
 
     res = residual.linfty_norm();
     firstres = res;
