@@ -112,7 +112,7 @@ namespace DOpE
         bool found = false;
         for (unsigned int p = 0; p < support_points.size(); p++)
           {
-            if (c_points_[i].distance(support_points[p]) < sqrt(support_points[p].square()+c_points_[i].square())*std::numeric_limits<double>::epsilon())
+            if (c_points_[i].distance(support_points[p]) <= sqrt(support_points[p].square()+c_points_[i].square())*std::numeric_limits<double>::epsilon())
               {
                 found = true;
                 if (selected_dofs[p] == true)
