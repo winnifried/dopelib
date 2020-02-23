@@ -745,7 +745,11 @@ namespace DOpE
                                                       ref_container.GetConvergenceOrder());
             break;
 
-          default:
+	  case DOpEtypes::RefinementType::geometry:
+	    dynamic_cast<const RefineByGeometry<dealdim>&>(ref_container).MarkElements(triangulation_);
+	    break;
+
+	  default:
             throw DOpEException (
                 "Not implemented for name =" + DOpEtypesToString (ref_type),
                               "MethodOfLines_SpaceTimeHandler::RefineSpace");

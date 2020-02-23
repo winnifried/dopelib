@@ -25,6 +25,7 @@
 #define REFINEMENTCONTAINER_H_
 
 #include <deal.II/lac/vector.h>
+#include <deal.II/grid/tria.h>
 #include <basic/dopetypes.h>
 #include <limits>
 
@@ -277,6 +278,26 @@ namespace DOpE
     const double convergence_order_;
   };
 
+  template<int dim,int spacedim=dim>
+    class RefineByGeometry : public RefinementContainer
+    {
+    public:
+
+    RefineByGeometry() : RefinementContainer(DOpEtypes::RefinementType::geometry)
+    {
+      coarsening_ = false; //No coarsening
+    }
+    
+    virtual void MarkElements(dealii::Triangulation<dim,spacedim> & /*tria*/) const
+    {
+      throw DOpEException ("Not implemented",
+			   "RefineByGeometry::MarkElements()");
+      
+    }
+    virtual ~RefineByGeometry()
+    {}
+
+    };
 }
 
 #endif /* RefinementContainer_H_ */

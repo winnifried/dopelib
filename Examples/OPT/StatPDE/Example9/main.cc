@@ -319,12 +319,8 @@ main(int argc, char **argv)
 	    QGauss<1>(2), FunctionMap<DIM>::type(), solution,
             estimated_error_per_element, component_mask);
 #endif
-
-          GridRefinement::refine_and_coarsen_fixed_number(triangulation,
-                                                          estimated_error_per_element, 0.3, 0.0);
-
-          triangulation.prepare_coarsening_and_refinement();
-          triangulation.execute_coarsening_and_refinement();
+	  RefineFixedNumber ref_cont(estimated_error_per_element,0.3,0.0);
+	  DOFH.RefineSpace(ref_cont);
         }
     }
 

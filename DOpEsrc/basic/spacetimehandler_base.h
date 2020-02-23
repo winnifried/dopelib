@@ -575,8 +575,8 @@ namespace DOpE
      * After calling a refinement function a reinitialization is required!
      *
      * @param ref_container   Steers the local mesh refinement. Currently availabe are
-     *                        RefinementContainer (for global refinement), RefineFixedFraction,
-     *                        RefineFixedNumber and RefineOptimized.
+     *                        RefinementContainer (for global refinement) for the 
+     *                        time discretization.
      */
 
     void
