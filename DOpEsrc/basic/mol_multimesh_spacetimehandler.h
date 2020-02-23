@@ -695,7 +695,11 @@ namespace DOpE
                                       control_triangulation_);
             break;
 
-          default:
+	  case DOpEtypes::RefinementType::geometry:
+	    dynamic_cast<const RefineByGeometry<dealdim>&>(ref_container).MarkElements(state_triangulation_);
+	    break;
+
+	  default:
             throw DOpEException (
                 "Not implemented for name =" + DOpEtypesToString (ref_type),
                               "MethodOfLines_MultiMesh_SpaceTimeHandler::RefineSpace");
@@ -766,6 +770,10 @@ namespace DOpE
           this->FlagIfLeftIsNotFinest(control_triangulation_,
                                       state_triangulation_);
             break;
+
+	 case DOpEtypes::RefinementType::geometry:
+	    dynamic_cast<const RefineByGeometry<dealdim>&>(ref_container).MarkElements(control_triangulation_);
+	    break;
 
           default:
             throw DOpEException (

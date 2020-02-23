@@ -24,3 +24,7 @@ needed to use the control in the Dirichlet boundary values.
 In the main file and the localpde program, we work still with the 
 \texttt{FE\underline{}Nothing} element to assign the five controls.
 
+Finally, we refine only the boundary of the domain, to demonstrate how
+refinement driven by geometric features can be realized. To this end,
+the class \texttt{BoundaryRefinement} in \texttt{boundaryrefinement.h}
+implements the marking base upon local information on the individual elements.

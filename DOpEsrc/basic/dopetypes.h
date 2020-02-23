@@ -55,10 +55,11 @@ namespace DOpE
      * finest_of_both   In the case that one has two grids, refine such that
      *                  elements are refined if, on the other mesh, the element
      *                  has been refined.
+     * geometry         Refinement driven by geometry not by element indicators.
      */
     enum RefinementType
     {
-      global, fixed_fraction, fixed_number, optimized, finest_of_both
+      global, fixed_fraction, fixed_number, optimized, finest_of_both, geometry
     };
 
 

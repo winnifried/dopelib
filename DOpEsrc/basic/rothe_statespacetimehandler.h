@@ -569,7 +569,11 @@ namespace DOpE
 							 Indicators,
 							 ref_container.GetConvergenceOrder());
 	    break;
-	    
+
+	  case DOpEtypes::RefinementType::geometry:
+	    dynamic_cast<const RefineByGeometry<dealdim>&>(ref_container).MarkElements(*triangulations_[i]);
+	    break;
+
 	  default:
 	    throw DOpEException (
 	      "Not implemented for name =" + DOpEtypesToString (ref_type),

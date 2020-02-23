@@ -49,6 +49,7 @@
 #include "localdirichletdata.h"
 #include "localpde.h"
 #include "localfunctional.h"
+#include "boundaryrefinement.h"
 
 using namespace std;
 using namespace dealii;
@@ -121,7 +122,7 @@ main(int argc, char **argv)
   RNA::declare_params(pr);
   pr.read_parameters(paramfile);
 
-  const  int niter = 1;
+  const  int niter = 2;
 
   //Create triangulation
   Triangulation<DIM> triangulation;
@@ -143,7 +144,7 @@ main(int argc, char **argv)
   COSTFUNCTIONAL LFunc;
 
   STH DOFH(triangulation, control_fe, state_fe, DOpEtypes::stationary);
-
+  
   NoConstraints<CDC, FDC, DOFHANDLER, VECTOR, CDIM,
                 DIM> Constraints;
 
@@ -190,8 +191,10 @@ main(int argc, char **argv)
 
       if (i != niter - 1)
         {
-          DOFH.RefineSpace();
+	  BoundaryRefinement<DIM> ref_cont;
+          DOFH.RefineSpace(ref_cont);
           Alg.ReInit();
+	  q.GetSpacialVector() = qinit;
         }
     }
   return 0;
