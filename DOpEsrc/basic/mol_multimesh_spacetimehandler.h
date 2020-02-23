@@ -696,7 +696,7 @@ namespace DOpE
             break;
 
 	  case DOpEtypes::RefinementType::geometry:
-	    dynamic_cast<const RefineByGeometry<dealdim>&>(ref_container).MarkElements(state_triangulation_);
+	    dynamic_cast<const RefineByGeometry<dim>&>(ref_container).MarkElements(state_triangulation_);
 	    break;
 
 	  default:
@@ -772,7 +772,7 @@ namespace DOpE
             break;
 
 	 case DOpEtypes::RefinementType::geometry:
-	    dynamic_cast<const RefineByGeometry<dealdim>&>(ref_container).MarkElements(control_triangulation_);
+	    dynamic_cast<const RefineByGeometry<dim>&>(ref_container).MarkElements(control_triangulation_);
 	    break;
 
           default:
