@@ -525,59 +525,63 @@ namespace DOpE
 	}
 	else
 	{
-	  dealii::Vector<float> Indicators;
-	  // j looping over timesteps
-	  // time to dofhandler is a vector which has the size of number of timesteps
-	  // it contains the number of the DoFHandler associated to the
-	  // given time-point.
-	  for(unsigned int j = 0; j < time_to_dofhandler_.size(); j++) 
+	  if (ref_type == DOpEtypes::RefinementType::geometry)
 	  {
-	    // Checking if current timepoint uses DoFHandler i,
-	    // if so, summ error indicators.
-	    if(time_to_dofhandler_[j] == i) 
+	    dynamic_cast<const RefineByGeometry<dealdim>&>(ref_container).MarkElements(*triangulations_[i]);
+	  }
+	  else
+	  {
+	    
+	    dealii::Vector<float> Indicators;
+	    // j looping over timesteps
+	    // time to dofhandler is a vector which has the size of number of timesteps
+	    // it contains the number of the DoFHandler associated to the
+	    // given time-point.
+	    for(unsigned int j = 0; j < time_to_dofhandler_.size(); j++) 
 	    {
-	      //j is the corresponding timepoint!
-	      if(Indicators.size()==0)
+	      // Checking if current timepoint uses DoFHandler i,
+	      // if so, summ error indicators.
+	      if(time_to_dofhandler_[j] == i) 
 	      {
-		Indicators=ref_container.GetLocalErrorIndicators(j);
-	      }
-	      else
-	      {
-		assert(Indicators.size()==ref_container.GetLocalErrorIndicators(j).size());
-		Indicators+=ref_container.GetLocalErrorIndicators(j);
+		//j is the corresponding timepoint!
+		if(Indicators.size()==0)
+		{
+		  Indicators=ref_container.GetLocalErrorIndicators(j);
+		}
+		else
+		{
+		  assert(Indicators.size()==ref_container.GetLocalErrorIndicators(j).size());
+		  Indicators+=ref_container.GetLocalErrorIndicators(j);
+		}
 	      }
 	    }
-	  }
-	  switch (ref_type)
-	  {
-	  case DOpEtypes::RefinementType::fixed_number:
-	    GridRefinement::refine_and_coarsen_fixed_number (*triangulations_[i],
-							     Indicators,
-							     ref_container.GetTopFraction (),
-							     ref_container.GetBottomFraction());
-	    break;
-	    
-	  case DOpEtypes::RefinementType::fixed_fraction:
-	    GridRefinement::refine_and_coarsen_fixed_fraction (*triangulations_[i],
+	    switch (ref_type)
+	    {
+	    case DOpEtypes::RefinementType::fixed_number:
+	      GridRefinement::refine_and_coarsen_fixed_number (*triangulations_[i],
 							       Indicators,
 							       ref_container.GetTopFraction (),
 							       ref_container.GetBottomFraction());
-	    break;
-	    
-	  case DOpEtypes::RefinementType::optimized: 
-	    GridRefinement::refine_and_coarsen_optimize (*triangulations_[i],
+	      break;
+	      
+	    case DOpEtypes::RefinementType::fixed_fraction:
+	      GridRefinement::refine_and_coarsen_fixed_fraction (*triangulations_[i],
+								 Indicators,
+								 ref_container.GetTopFraction (),
+								 ref_container.GetBottomFraction());
+	      break;
+	      
+	    case DOpEtypes::RefinementType::optimized: 
+	      GridRefinement::refine_and_coarsen_optimize (*triangulations_[i],
 							 Indicators,
-							 ref_container.GetConvergenceOrder());
-	    break;
-
-	  case DOpEtypes::RefinementType::geometry:
-	    dynamic_cast<const RefineByGeometry<dealdim>&>(ref_container).MarkElements(*triangulations_[i]);
-	    break;
-
-	  default:
-	    throw DOpEException (
+							   ref_container.GetConvergenceOrder());
+	      break;
+	      
+	    default:
+	      throw DOpEException (
 	      "Not implemented for name =" + DOpEtypesToString (ref_type),
 	      "Rothe_StateSpaceTimeHandler::RefineStateSpace");
+	    }
 	  }
 	}
 	triangulations_[i]->prepare_coarsening_and_refinement();
