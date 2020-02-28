@@ -123,10 +123,6 @@ namespace DOpE
 	    error_ind_[current_time_dof_](i) = std::fabs(static_cast<float>(tmp));
 	    time_step_error_primal_[current_time_dof_]+=GetPrimalErrorIndicators()(i);
 	  }
-	  for ( unsigned int i = 0; i < GetPrimalErrorIndicators().size(); i++)
-	    {
-	      error_ind_Normalized_[current_time_dof_](i) = (error_ind_[current_time_dof_](i))/(time_step_error_primal_[current_time_dof_]);
-	    }
           break;
         case DOpEtypes::dual_only:
           time_step_error_dual_[current_time_dof_]=0.;
@@ -394,26 +390,6 @@ namespace DOpE
         }
     }
 
-     /**
-     * Returns the vector of the error indicators. You have to
-     * call ReleaseLock() prior to this function.
-     *
-     * @return  Vector of raw absolute value of error indicators
-     */
-    const std::vector<Vector<float> >&
-    GetErrorIndicatorsNormalized() const
-    {
-      if (lock_)
-        {
-          throw DOpEException("Error indicators are still locked.",
-                              "DWRDataContainer::GetErrorIndicators");
-        }
-      else
-        {
-          return error_ind_Normalized_;
-        }
-    }
-   
     /**
      * Returns the vector of the error indicators at the 
      * current time point. You have to
@@ -717,7 +693,6 @@ namespace DOpE
     Vector<double> error_ind_primal_, error_ind_dual_, error_ind_control_;
     std::vector<double> time_step_error_, time_step_error_primal_,time_step_error_dual_, time_step_error_control_;
     std::vector<Vector<float> > error_ind_;
-    std::vector<Vector<float> > error_ind_Normalized_;
     double error_, primal_error_, dual_error_, control_error_;
     std::vector<bool> locks_;
   };
@@ -729,7 +704,6 @@ namespace DOpE
   {
     n_time_points_ = sth.GetMaxTimePoint();
     error_ind_.resize(n_time_points_+1);
-    error_ind_Normalized_.resize(n_time_points_+1);
     lock_ = true; 
     locks_.clear();
     locks_.resize(n_time_points_+1,true);
@@ -768,7 +742,6 @@ namespace DOpE
 	sth.GetStateDoFHandler(i).get_tria().n_active_cells();
 #endif
       error_ind_[i].reinit(n_elements);
-      error_ind_Normalized_[i].reinit(n_elements);
       if ( i == 0 )
       {
 	switch (GetEETerms())
