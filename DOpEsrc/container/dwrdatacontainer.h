@@ -389,7 +389,7 @@ namespace DOpE
           return error_ind_;
         }
     }
-    
+
     /**
      * Returns the vector of the error indicators at the 
      * current time point. You have to
