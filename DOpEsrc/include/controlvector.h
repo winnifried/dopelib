@@ -51,7 +51,7 @@ namespace DOpE
     //      with different meshes for Vectors.
     //      Note that this requires to keep track of the interpolation
     //      between state and control time points...
-    ControlVector(const ControlVector &ref)  : SpaceTimeVector<VECTOR>(ref)
+    ControlVector(const ControlVector<VECTOR> &ref)  : SpaceTimeVector<VECTOR>(ref)
     {  
     }
     ControlVector(const SpaceTimeHandlerBase<VECTOR> *STH,
@@ -64,8 +64,7 @@ namespace DOpE
     {
     }
     ~ControlVector()
-    {
-      
+    {      
     }
 
     void operator=(double a) { SpaceTimeVector<VECTOR>::operator=(a); }
