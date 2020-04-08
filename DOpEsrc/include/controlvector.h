@@ -68,6 +68,9 @@ namespace DOpE
     }
 
     void operator=(double a) { SpaceTimeVector<VECTOR>::operator=(a); }
+
+    //Explicit declarations of methods used from SpaceTimeVector
+    void operator=(const ControlVector<VECTOR> &dq) { SpaceTimeVector<VECTOR>::operator=(dq); }
   };
 
 }
