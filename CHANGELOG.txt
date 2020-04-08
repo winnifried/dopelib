@@ -1,5 +1,6 @@
 Changelog DOpE
 ==============
+08.04.2020: Adjustments for warnings given by gcc 4.9
 23.02.2020: Added new refinement container RefineByGeometry which can be used to drive
 	    mesh refinement based on geometric features of the domain, i.e., the location
 	    of the respective elements. An example has been added to
