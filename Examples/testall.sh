@@ -13,7 +13,7 @@ function RUN_TEST() {
 	    cd Test
 	    if [ -f test.sh ]
 	    then
-		(./test.sh Test 2>&1 ) > /dev/null
+		(bash ./test.sh Test 2>&1 ) > /dev/null
 		if [ $? -eq 0 ]
 		then
 		    echo -en '\E[32;40m'"succeeded!"

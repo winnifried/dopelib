@@ -1,4 +1,4 @@
-#!/bin/bash
+``#!/bin/bash
 failed=0
 #The individual Tests:
 function RUN_TEST() {
@@ -12,7 +12,7 @@ function RUN_TEST() {
 	    cd Test
 	    if [ -f test.sh ]
 	    then
-		((time (./test.sh Test 2>&1 ) > /dev/null ) 2>&1 )> time.txt
+		((time (bash ./test.sh Test 2>&1 ) > /dev/null ) 2>&1 )> time.txt
 		if [ $? -eq 0 ]
 		then
 		    echo -en '\E[32;40m'"succeeded!"
