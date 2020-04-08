@@ -7,5 +7,5 @@ fi
 
 PROGRAM=../DOpE-PDE-StatPDE-Example10
 
-../../../../test-single.sh $1 $PROGRAM
+bash ../../../../test-single.sh $1 $PROGRAM
     
