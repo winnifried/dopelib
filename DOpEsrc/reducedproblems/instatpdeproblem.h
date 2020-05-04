@@ -523,23 +523,23 @@ namespace DOpE
         this->SetProblemType("aux_functional", i);
         if (this->GetProblem()->GetFunctionalType().find("timelocal") != std::string::npos)
           {
-            if (this->GetFunctionalValues()[i + 1].size() == 1)
+            if (this->GetFunctionalValues()[i].size() == 1)
               {
                 std::stringstream out;
                 this->GetOutputHandler()->InitOut(out);
-                out << this->GetProblem()->GetFunctionalName() << ": " << this->GetFunctionalValues()[i + 1][0];
+                out << this->GetProblem()->GetFunctionalName() << ": " << this->GetFunctionalValues()[i][0];
                 this->GetOutputHandler()->Write(out, 2 + this->GetBasePriority());
               }
-            else if (this->GetFunctionalValues()[i + 1].size() > 1)
+            else if (this->GetFunctionalValues()[i].size() > 1)
               {
-                if (this->GetFunctionalValues()[i + 1].size()
+                if (this->GetFunctionalValues()[i].size()
                     == this->GetProblem()->GetSpaceTimeHandler()->GetMaxTimePoint() + 1)
                   {
                     std::stringstream out;
                     this->GetOutputHandler()->InitOut(out);
                     out << this->GetProblem()->GetFunctionalName() << " too large. Writing to file instead: ";
                     this->GetOutputHandler()->Write(out, 2 + this->GetBasePriority());
-                    this->GetOutputHandler()->Write(this->GetFunctionalValues()[i + 1],
+                    this->GetOutputHandler()->Write(this->GetFunctionalValues()[i],
                                                     this->GetProblem()->GetFunctionalName()
                                                     + this->GetPostIndex(), "time");
                   }
@@ -548,8 +548,8 @@ namespace DOpE
                     std::stringstream out;
                     this->GetOutputHandler()->InitOut(out);
                     out << this->GetProblem()->GetFunctionalName() << ": ";
-                    for (unsigned int k = 0; k < this->GetFunctionalValues()[i + 1].size(); k++)
-                      out << this->GetFunctionalValues()[i + 1][k] << " ";
+                    for (unsigned int k = 0; k < this->GetFunctionalValues()[i].size(); k++)
+                      out << this->GetFunctionalValues()[i][k] << " ";
                     this->GetOutputHandler()->Write(out, 2 + this->GetBasePriority());
                   }
               }
@@ -563,7 +563,7 @@ namespace DOpE
           {
             std::stringstream out;
             this->GetOutputHandler()->InitOut(out);
-            out << this->GetProblem()->GetFunctionalName() << ": " << this->GetFunctionalValues()[i + 1][0];
+            out << this->GetProblem()->GetFunctionalName() << ": " << this->GetFunctionalValues()[i][0];
             this->GetOutputHandler()->Write(out, 2 + this->GetBasePriority());
           }
         else
@@ -942,14 +942,14 @@ namespace DOpE
                   this->GetOutputHandler()->InitOut(out);
                   out << "\t" << this->GetProblem()->GetFunctionalName() << ": " << ret;
                   this->GetOutputHandler()->Write(out, 5 + this->GetBasePriority());
-                  this->GetFunctionalValues()[i + 1].push_back(ret);
+                  this->GetFunctionalValues()[i].push_back(ret);
                 }
               else if (this->GetProblem()->GetFunctionalType().find("timedistributed") != std::string::npos)
                 {
-                  if (this->GetFunctionalValues()[i + 1].size() != 1)
+                  if (this->GetFunctionalValues()[i].size() != 1)
                     {
-                      this->GetFunctionalValues()[i + 1].resize(1);
-                      this->GetFunctionalValues()[i + 1][0] = 0.;
+                      this->GetFunctionalValues()[i].resize(1);
+                      this->GetFunctionalValues()[i][0] = 0.;
                     }
                   double w = 0.;
                   if ((step == 0))
@@ -969,7 +969,7 @@ namespace DOpE
                       w += 0.5 * (this->GetProblem()->GetSpaceTimeHandler()->GetTime(step)
                                   - this->GetProblem()->GetSpaceTimeHandler()->GetTime(step - 1));
                     }
-                  this->GetFunctionalValues()[i + 1][0] += w * ret;
+                  this->GetFunctionalValues()[i][0] += w * ret;
                 }
               else
                 {
