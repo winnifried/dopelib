@@ -55,7 +55,7 @@ namespace DOpE
     {
       throw (DOpEException(
                "Dummy class, this constructor should never get called.",
-               "ElementDataContainer<dealii::DoFHandler , VECTOR, dim>::ElementDataContainer"));
+               "FaceDataContainer<dealii::DoFHandler , VECTOR, dim>::FaceDataContainer"));
     }
   };
 
@@ -255,6 +255,8 @@ namespace DOpE
     GetIsAtBoundary() const;
     inline double
     GetElementDiameter() const;
+    inline Point<dim>
+    GetCenter() const;
     inline unsigned int
     GetBoundaryIndicator() const;
     inline const FEFaceValuesBase<dim> &
@@ -812,7 +814,8 @@ namespace DOpE
     GetBoundaryIndicator() const;
     inline double
     GetElementDiameter() const;
-
+    inline Point<dim>
+    GetCenter() const;
     inline const FEFaceValuesBase<dim> &
     GetFEFaceValuesState() const;
     inline const FEFaceValuesBase<dim> &
@@ -1148,6 +1151,13 @@ namespace DOpE
   {
 //      return element_[0]->face(this->GetFace())->diameter();
     return element_[0]->diameter();
+  }
+  /**********************************************/
+  template<typename VECTOR, int dim>
+  Point<dim>
+  FaceDataContainer<dealii::DoFHandler, VECTOR, dim>::GetCenter() const
+  {
+    return element_[0]->center();
   }
 
   /**********************************************/
@@ -1738,6 +1748,13 @@ namespace DOpE
   {
 //      return element_[0]->face(this->GetFace())->diameter();
     return element_[0]->diameter();
+  }
+  /**********************************************/
+  template<typename VECTOR, int dim>
+  Point<dim>
+  FaceDataContainer<dealii::hp::DoFHandler, VECTOR, dim>::GetCenter() const
+  {
+    return element_[0]->center();
   }
 
   /**********************************************/
