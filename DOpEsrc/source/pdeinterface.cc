@@ -71,6 +71,21 @@ namespace DOpE
     throw DOpEException("Not Implemented", "PDEInterface::ElementEquation");
   }
 
+  template<
+   template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
+            template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
+            template<int, int> class DH, typename VECTOR, int dealdim>
+   void
+   PDEInterface<EDC, FDC, DH, VECTOR, dealdim>::ElementMassEquation(
+     const EDC<DH, VECTOR, dealdim> & /*edc*/,
+     dealii::Vector<double> &/*local_vector*/, double /*scale*/,
+     double /*scale_ico*/)
+   {
+     throw DOpEException("Not Implemented", "PDEInterface::ElementEquation");
+   }
+
+
+
   /********************************************/
 
   template<
@@ -241,6 +256,21 @@ namespace DOpE
            template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
            template<int, int> class DH, typename VECTOR, int dealdim>
   void
+  PDEInterface<EDC, FDC, DH, VECTOR, dealdim>::ElementMassEquation_U(
+    const EDC<DH, VECTOR, dealdim> &,
+    dealii::Vector<double> &/*local_vector*/, double /*scale*/,
+    double /*scale_ico*/)
+  {
+    throw DOpEException("Not Implemented", "PDEInterface::ElementEquation_U");
+  }
+
+  /********************************************/
+
+  template<
+  template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
+           template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
+           template<int, int> class DH, typename VECTOR, int dealdim>
+  void
   PDEInterface<EDC, FDC, DH, VECTOR, dealdim>::StrongElementResidual_U(
     const EDC<DH, VECTOR, dealdim> &,
     const EDC<DH, VECTOR, dealdim> & /*edc_weight*/, double &,
@@ -295,8 +325,22 @@ namespace DOpE
     throw DOpEException("Not Implemented", "PDEInterface::ElementEquation_Q");
   }
 
-  /********************************************/
 
+  /********************************************/
+  template<
+  template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
+           template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
+           template<int, int> class DH, typename VECTOR, int dealdim>
+  void
+  PDEInterface<EDC, FDC, DH, VECTOR, dealdim>::ElementMassEquation_Q(
+    const EDC<DH, VECTOR, dealdim> &,
+    dealii::Vector<double> &/*local_vector*/, double /*scale*/,
+    double /*scale_ico*/)
+  {
+    throw DOpEException("Not Implemented", "PDEInterface::ElementEquation_Q");
+  }
+
+  /********************************************/
   template<
   template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
            template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
@@ -524,11 +568,11 @@ namespace DOpE
            template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
            template<int, int> class DH, typename VECTOR, int dealdim>
   void
-  PDEInterface<EDC, FDC, DH, VECTOR, dealdim>::ElementTimeMatrix(
+  PDEInterface<EDC, FDC, DH, VECTOR, dealdim>::ElementMassMatrix(
     const EDC<DH, VECTOR, dealdim> &,
     FullMatrix<double> &/*local_entry_matrix*/)
   {
-    throw DOpEException("Not Implemented", "PDEInterface::ElementTimeMatrix");
+    throw DOpEException("Not Implemented", "PDEInterface::ElementMassMatrix");
   }
   /********************************************/
 

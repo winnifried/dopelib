@@ -130,32 +130,29 @@ namespace DOpE
                           double /*scale*/);
 
     /******************************************************/
+//TODO ElementMassEquation for Eigenvalue Optimization
 
-    /**
-     * Assuming that the discretization of temporal derivatives by a backward
-    * difference, i.e., \partial_t u(t_i) \approx 1/\delta t ( u(t_i) - u(t_{i-1})
-    * in several cases the the temporal derivatives of the
-    * equation give rise to a spacial integral of the form
-    *
-    * \int_Omega T(u(t_i); \phi(t_i)) - \int_Omega T(u(t_{i-1}); \phi(t_{i-1}))
-    *
-    * This equation is used to implement the element contribution
-    * \int_T T(u,\phi)
-    *
-    * @param edc                The ElementDataContainer object which provides
-    *                           access to all information on the element,
-    *                           e.g., test-functions, mesh size,...
-    * @param local_vector  The vector containing the integrals
-    *                           ordered according to the local number
-    *                           of the testfunction.
-    * @param scale              A scaling parameter to be used in all
-    *                           equations.
-    */
-    //Note that the _UU term is not needed, since we assume that ElementTimeEquation is linear!
     virtual void
-    ElementTimeEquation(const EDC<DH, VECTOR, dealdim> & /*edc*/,
-                        dealii::Vector<double> &/*local_vector*/,
-                        double /*scale*/);
+    ElementMassEquation(const EDC<DH, VECTOR, dealdim> & /*edc*/,
+            dealii::Vector<double> &/*local_vector*/,
+            double /*scale*/,
+            double /*scale_ico*/);
+
+
+//    virtual void
+//    ElementMassEquation_U(const EDC<DH, VECTOR, dealdim> & /*edc*/,
+//            dealii::Vector<double> &/*local_vector*/,
+//				double /*scale*/, double /*scale_ico*/);
+
+
+
+//    virtual void
+//    ElementMassEquation_Q(const EDC<DH, VECTOR, dealdim> & /*edc*/,
+//                          dealii::Vector<double> &/*local_vector*/,
+//                          double /*scale*/,
+//                          double /*scale_ico*/);
+
+
 
     /******************************************************/
     /**
@@ -361,6 +358,7 @@ namespace DOpE
                       double /*scale*/,
                       double /*scale_ico*/);
 
+
     /******************************************************/
     /**
      * Similar to the StongElementResidual, this function implements the
@@ -478,6 +476,7 @@ namespace DOpE
                       dealii::Vector<double> &/*local_vector*/,
                       double /*scale*/,
                       double /*scale_ico*/);
+
 
     /******************************************************/
 
@@ -703,22 +702,13 @@ namespace DOpE
                   double /*scale_ico*/);
 
     /******************************************************/
-    /**
-     * This implements the element integral used to calculate the
-     * matrix for the primal PDE corresponding to the time derivatives
-     * given in ElementTimeEquation.
-     *
-     * @param edc                The ElementDataContainer object which provides
-     *                           access to all information on the element,
-     *                           e.g., test-functions, mesh size,...
-     * @param local_entry_matrix The matrix containing the integrals
-     *                           ordered according to the local number
-     *                           of the testfunction.
-     */
+    // For eigenvalue optimization
 
     virtual void
-    ElementTimeMatrix(const EDC<DH, VECTOR, dealdim> & /*edc*/,
-                      dealii::FullMatrix<double> &/*local_entry_matrix*/);
+    ElementMassMatrix(const EDC<DH, VECTOR, dealdim> & /*edc*/,
+            dealii::FullMatrix<double> &/*local_entry_matrix*/,
+            double /*scale*/,
+            double /*scale_ico*/);
 
     /******************************************************/
     /**
@@ -1311,6 +1301,76 @@ namespace DOpE
     }
 
     virtual void
+       Init_ElementMassEquation(const EDC<DH, VECTOR, dealdim> &edc,
+                            dealii::Vector<double> &local_vector,
+                            double scale,
+                            double /*scale_ico*/)
+       {
+         const DOpEWrapper::FEValues<dealdim> &state_fe_values =
+           edc.GetFEValuesState();
+         unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
+         unsigned int n_q_points = edc.GetNQPoints();
+         std::vector<dealii::Vector<double> > uvalues;
+         uvalues.resize(n_q_points,
+                        dealii::Vector<double>(this->GetStateNComponents()));
+         edc.GetValuesState("last_newton_solution", uvalues);
+
+         dealii::Vector<double> f_values(
+           dealii::Vector<double>(this->GetStateNComponents()));
+
+         for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
+           {
+             for (unsigned int i = 0; i < n_dofs_per_element; i++)
+               {
+                 for (unsigned int comp = 0; comp < this->GetStateNComponents();
+                      comp++)
+                   {
+                     local_vector(i) += scale
+                                        * (state_fe_values.shape_value_component(i, q_point, comp)
+                                           * uvalues[q_point](comp))
+                                        * state_fe_values.JxW(q_point);
+                   }
+               }
+           } //endfor q_point
+       }
+
+
+
+    virtual void
+    Init_ElementTimeEquation(const EDC<DH, VECTOR, dealdim> &edc,
+                         dealii::Vector<double> &local_vector,
+                         double scale,
+                         double /*scale_ico*/)
+    {
+      const DOpEWrapper::FEValues<dealdim> &state_fe_values =
+        edc.GetFEValuesState();
+      unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
+      unsigned int n_q_points = edc.GetNQPoints();
+      std::vector<dealii::Vector<double> > uvalues;
+      uvalues.resize(n_q_points,
+                     dealii::Vector<double>(this->GetStateNComponents()));
+      edc.GetValuesState("last_newton_solution", uvalues);
+
+      dealii::Vector<double> f_values(
+        dealii::Vector<double>(this->GetStateNComponents()));
+
+      for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
+        {
+          for (unsigned int i = 0; i < n_dofs_per_element; i++)
+            {
+              for (unsigned int comp = 0; comp < this->GetStateNComponents();
+                   comp++)
+                {
+                  local_vector(i) += scale
+                                     * (state_fe_values.shape_value_component(i, q_point, comp)
+                                        * uvalues[q_point](comp))
+                                     * state_fe_values.JxW(q_point);
+                }
+            }
+        } //endfor q_point
+    }
+
+    virtual void
     Init_ElementRhs_Q(const EDC<DH, VECTOR, dealdim> & /*edc*/,
                       dealii::Vector<double> &/*local_vector*/, double /*scale*/)
     {
@@ -1367,6 +1427,38 @@ namespace DOpE
             }
         }
     }
+
+   virtual void
+    Init_ElementMassMatrix(const EDC<DH, VECTOR, dealdim> &edc,
+                       dealii::FullMatrix<double> &local_entry_matrix,
+                       double scale,
+                       double /*scale_ico*/)
+    {
+      const DOpEWrapper::FEValues<dealdim> &state_fe_values =
+        edc.GetFEValuesState();
+      unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
+      unsigned int n_q_points = edc.GetNQPoints();
+
+      for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
+        {
+          for (unsigned int i = 0; i < n_dofs_per_element; i++)
+            {
+              for (unsigned int j = 0; j < n_dofs_per_element; j++)
+                {
+                  for (unsigned int comp = 0; comp < this->GetStateNComponents();
+                       comp++)
+                    {
+                      local_entry_matrix(i, j) += scale
+                                                  * state_fe_values.shape_value_component(i, q_point, comp)
+                                                  * state_fe_values.shape_value_component(j, q_point, comp)
+                                                  * state_fe_values.JxW(q_point);
+                    }
+                }
+            }
+        }
+    }
+
+
 
     virtual void
     Init_ElementMatrix(const EDC<DH, VECTOR, dealdim> &edc,
