@@ -269,7 +269,7 @@ namespace DOpE
     inline const FEFaceValuesBase<dim> &
     GetNbrFEFaceValuesControl() const;
 
-  private:
+  protected:
     /*
      * Helper Functions
      */
@@ -277,6 +277,8 @@ namespace DOpE
     GetStateIndex() const;
     unsigned int
     GetControlIndex() const;
+
+  private:
     /**
      * This function contains common code of the constructors.
      */
