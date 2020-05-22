@@ -1,5 +1,7 @@
 Changelog DOpE
 ==============
+22.05.2020: Moved GetStateIndex and GetControlIndex to be protected rather than private
+	    to allow access in derived classes
 18.05.2020: Updates for dealii 9.2
 04.05.2020: Fixed of by one eror in storage of functional values for InstatPDEProblems
 08.04.2020: Adjustments to 'OSX Terminal' for test scripts

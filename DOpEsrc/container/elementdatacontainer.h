@@ -205,8 +205,7 @@ namespace DOpE
     GetFEValuesState() const;
     inline const DOpEWrapper::FEValues<dim> &
     GetFEValuesControl() const;
-
-  private:
+  protected:
     /*
      * Helper Functions
      */
@@ -214,6 +213,8 @@ namespace DOpE
     GetStateIndex() const;
     unsigned int
     GetControlIndex() const;
+    
+  private:
 
     /***********************************************************/
     //"global" member data, part of every instantiation
