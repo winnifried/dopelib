@@ -49,7 +49,6 @@
 
 #include "localpde.h"
 #include "localfunctional.h"
-//#include "functionals.h"
 #include "eigenvector_solver.h"
 #include "eigenvalueproblem.h"
 #include "integrator_eigenval.h"
@@ -93,24 +92,16 @@ typedef OptProblemContainer<FUNCTIONALINTERFACE, COSTFUNCTIONAL,
         SimpleDirichletData<VECTOR, DIM>,
         NoConstraints<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM>, SPARSITYPATTERN,
         VECTOR, CDIM, DIM> OP;
-
 typedef IntegratorDataContainer<DOFHANDLER, QUADRATURE, FACEQUADRATURE, VECTOR,
         DIM> IDC;
-
 typedef Integrator_eigenval<IDC, VECTOR, double, DIM> INTEGRATOR;
-
 typedef VoidLinearSolver<VECTOR> VOIDLS;
 typedef EigenvectorSolver<INTEGRATOR,VECTOR,EIGENVALUES, EIGENVECTORS, MATRIX, SPARSITYPATTERN> EVS;
-
-
-//TODO dummy for control
 typedef NewtonSolver<INTEGRATOR, VOIDLS, VECTOR> NLS;
-
 typedef EigenvalueProblem<NLS, EVS,INTEGRATOR, INTEGRATOR, OP, VECTOR, CDIM,
         DIM> RP;
 
-
-typedef MethodOfLines_SpaceTimeHandler/*_Curl*/<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR,
+typedef MethodOfLines_SpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR,
         CDIM, DIM> STH;
 
 int
@@ -132,7 +123,6 @@ main(int argc, char **argv)
   ParameterReader pr;
   RP::declare_params(pr);
   NLS::declare_params(pr);
- // RNA::declare_params(pr);
   DOpEOutputHandler<VECTOR>::declare_params(pr);
 
   pr.read_parameters(paramfile);
@@ -145,15 +135,13 @@ main(int argc, char **argv)
    FE<DIM> control_fe(FE_Q<DIM>(1), 2);
    FESystem<DIM> state_fe(FE_Q<DIM>(1), 1 , FE_Nedelec<DIM>(0),1);
 
-
   QUADRATURE quadrature_formula(4);
   FACEQUADRATURE face_quadrature_formula(4);
   IDC idc(quadrature_formula, face_quadrature_formula);
 
   LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM> LPDE(pr);
 
-  const double alpha = 1.e-3; //DUMMY - not used
-  COSTFUNCTIONAL LFunc(alpha); //DUMMY - not used
+  COSTFUNCTIONAL LFunc(0); //DUMMY - not used
   STH DOFH(triangulation, control_fe, state_fe, DOpEtypes::stationary);
 
   NoConstraints<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> Constraints;
@@ -172,10 +160,6 @@ main(int argc, char **argv)
    P.SetDirichletBoundaryColors(2, comp_mask, &DD1);
    P.SetDirichletBoundaryColors(3, comp_mask, &DD1);
 
-//TODO?
-  //  P.SetBoundaryEquationColors(0);
-  //  P.AddFunctional(&LF);
-
   RP solver(&P, DOpEtypes::VectorStorageType::fullmem, pr, idc, 2);
 
   DOpEOutputHandler<VECTOR> out(&solver, pr);
@@ -188,14 +172,13 @@ main(int argc, char **argv)
   solver.RegisterExceptionHandler(&ex);
   solver.ReInit();
 
-//  out.ReInit();
   ControlVector<VECTOR> q(&DOFH, DOpEtypes::VectorStorageType::fullmem,pr);
 
   //Set the initial control values: TODO
   Vector<double> qinit(q.GetSpacialVector().size());
    for(unsigned i = 0; i < q.GetSpacialVector().size(); i++) {
 	   if ( i == 0 ||  i % 2 == 0){
-		   qinit(i) = 0;//M_PI-1; TODO!!
+		   qinit(i) = 0;//M_PI-1;
 	   }else{
 		   qinit(i) = 0.;
 	   }
@@ -204,8 +187,6 @@ main(int argc, char **argv)
   q.GetSpacialVector() = qinit;
       try
         {
-
-//             q = 0;//1;
              solver.ComputeEigenfunctions(q);
         }
       catch (DOpEException &e)

@@ -43,12 +43,15 @@
 namespace DOpE
 {
   /**
-   * A nonlinear solver class to compute solutions to nonlinear (stationary) problems
+   * A solver class to compute eigenvalue problems
    *
    * @tparam <INTEGRATOR>          Integration routines to compute domain-, face-, and right-hand side values.
-   * @tparam <LINEARSOLVER>        A linear solver to solve the linear subproblems.
    * @tparam <VECTOR>              A template class for arbitrary vectors which are given to the
-                                   FS scheme and where the solution is stored in.
+   *                               FS scheme and where the solution is stored in.
+   * @tparam <EIGENVALUES>
+   * @tparam <EIGENVECTORS>
+   * @tparam <MATRIX>
+   * @tparam <SPARSITYPATTERN>
    */
 
   template <typename INTEGRATOR, typename VECTOR,typename EIGENVALUES, typename EIGENVECTORS, typename MATRIX,typename SPARSITYPATTERN>
@@ -66,7 +69,7 @@ namespace DOpE
     template<typename PROBLEM>
     bool NonlinearSolve(PROBLEM &pde, VECTOR &solution, EIGENVALUES &eigenvalues, EIGENVECTORS &eigenfunctions, bool apply_boundary_values=true,
                         bool force_matrix_build=false,
-                        int priority = 5, std::string algo_level = "\t\t "/*, int n_eigenval=5*/);
+                        int priority = 5, std::string algo_level = "\t\t ");
 
     template<typename PROBLEM>
     void EigenvalueDerivativeSolve(PROBLEM &pde, double eigenvalue, PETScWrappers::MPI::Vector &eigenvec, double eigenval_derivative);
@@ -80,13 +83,10 @@ namespace DOpE
     SPARSITYPATTERN sparsity_pattern_;
     MATRIX matrixK_, matrixM_;
 
-    //TODO
 //    std::vector<PETScWrappers::MPI::Vector> eigenfunctions;
 //    std::vector<double> eigenvalues;
     IndexSet eigenfunction_index_set;
-
     bool build_matrix_;
-
     double linear_global_tol_= 0.000001, linear_tol_ = 0.00001;
     int  linear_maxiter_=1000,n_eigenval_;
   };
@@ -98,17 +98,6 @@ namespace DOpE
   ::declare_params(ParameterReader &/*param_reader*/)
   {
 
-
-//    param_reader.SetSubsection("newtonsolver parameters");
-//    param_reader.declare_entry("nonlinear_global_tol", "1.e-12",Patterns::Double(0),"global tolerance for the newton iteration");
-//    param_reader.declare_entry("nonlinear_tol", "1.e-10",Patterns::Double(0),"relative tolerance for the newton iteration");
-//    param_reader.declare_entry("nonlinear_maxiter", "10",Patterns::Integer(0),"maximal number of newton iterations");
-//    param_reader.declare_entry("nonlinear_rho", "0.1",Patterns::Double(0),"minimal  newton reduction, if actual reduction is less, matrix is rebuild ");
-//
-//    param_reader.declare_entry("line_maxiter", "4",Patterns::Integer(0),"maximal number of linesearch steps");
-//    param_reader.declare_entry("linesearch_rho", "0.9",Patterns::Double(0),"reduction rate for the linesearch damping paramete");
-//
-//    LINEARSOLVER::declare_params(param_reader);
   }
 
   /*******************************************************************************************/
@@ -116,16 +105,9 @@ namespace DOpE
   template <typename INTEGRATOR, typename VECTOR, typename EIGENVALUES, typename EIGENVECTORS, typename MATRIX, typename SPARSITYPATTERN>
   EigenvectorSolver<INTEGRATOR,VECTOR,EIGENVALUES, EIGENVECTORS, MATRIX, SPARSITYPATTERN>
   ::EigenvectorSolver(INTEGRATOR &integrator, ParameterReader &/*param_reader*/)
-    : /*LINEARSOLVER(param_reader),*/ integrator_(integrator)
+    :  integrator_(integrator)
   {
-//    param_reader.SetSubsection("newtonsolver parameters");
-//    nonlinear_global_tol_ = param_reader.get_double ("nonlinear_global_tol");
-//    nonlinear_tol_        = param_reader.get_double ("nonlinear_tol");
-//    nonlinear_maxiter_    = param_reader.get_integer ("nonlinear_maxiter");
-//    nonlinear_rho_        = param_reader.get_double ("nonlinear_rho");
-//
-//    line_maxiter_   = param_reader.get_integer ("line_maxiter");
-//    linesearch_rho_ = param_reader.get_double ("linesearch_rho");
+
 
   }
 
@@ -165,14 +147,7 @@ namespace DOpE
                    std::string /*algo_level*//*, int n_eigenval*/)
   {
 
-//std::cout << "Test eigenvector_solver_1" << std::endl;
    bool build_matrix = force_matrix_build;
-//   VECTOR residual;
-//   INTEGRATOR &integr;
-//       if (apply_boundary_values)
-//         {
-//           GetIntegrator().ApplyInitialBoundaryValues(pde,solution);
-//         }
 
    if (force_matrix_build)
         {
