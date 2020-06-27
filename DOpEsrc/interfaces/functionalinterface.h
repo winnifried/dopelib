@@ -560,6 +560,14 @@ namespace DOpE
     HasFaces() const;
 
     /**
+     * This function determines whether the face evaluation needs neighbour information
+     *
+     * @return true if in a loop over faces neighbour information should be assembled.
+     */
+    virtual bool
+    HasInterfaces() const;
+
+    /**
      * This function determines whether an evaluation of PointRhs is required or not.
      *
      * @return Returns whether or not this functional needs pointevaluations. The default
