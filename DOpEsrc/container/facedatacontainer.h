@@ -1159,7 +1159,7 @@ namespace DOpE
   Point<dim>
   FaceDataContainer<dealii::DoFHandler, VECTOR, dim>::GetCenter() const
   {
-    return element_[0]->center();
+    return element_[0]->face(this->GetFace())->center();
   }
 
   /**********************************************/
@@ -1756,7 +1756,7 @@ namespace DOpE
   Point<dim>
   FaceDataContainer<dealii::hp::DoFHandler, VECTOR, dim>::GetCenter() const
   {
-    return element_[0]->center();
+    return element_[0]->face(this->GetFace())->center();
   }
 
   /**********************************************/
