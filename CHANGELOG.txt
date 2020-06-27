@@ -1,6 +1,8 @@
 Changelog DOpE
 ==============
 27.06.2020: Fixed, FaceDataContainer::GetCenter returns center of face instead of the corresponding element.
+	    In Integrator. If at an interface a face term needs to be evaluated neighbour information
+	    is also assembled for the evaluation of the face terms.
 22.05.2020: Moved GetStateIndex and GetControlIndex to be protected rather than private
 	    to allow access in derived classes
 18.05.2020: Updates for dealii 9.2
