@@ -3234,11 +3234,11 @@ namespace DOpE
   {
     if (this->GetType().find("aux_functional") != std::string::npos)
       {
-        return false;
+        return aux_functionals_[this->GetTypeNum()]->HasInterfaces();
       }
     else if (this->GetType().find("functional") != std::string::npos)
       {
-        return false;
+        return this->GetFunctional()->HasInterfaces();
       }
     else if (this->GetType().find("constraint") != std::string::npos)
       {

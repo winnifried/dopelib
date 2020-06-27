@@ -5,6 +5,7 @@ Changelog DOpE
 	    is also assembled for the evaluation of the face terms.
 	    Optimization problems where gradient involves face/interface terms now running without
 	    failiure due to missing Face/Interface Matrix.
+	    Functionals can now evaluate interface terms using also neighbour element information.
 22.05.2020: Moved GetStateIndex and GetControlIndex to be protected rather than private
 	    to allow access in derived classes
 18.05.2020: Updates for dealii 9.2

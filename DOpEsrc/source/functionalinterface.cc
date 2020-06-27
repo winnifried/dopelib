@@ -597,6 +597,19 @@ namespace DOpE
 
     return retrn;
   }
+
+  /********************************************/
+
+  template<
+  template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
+           template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
+           template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
+  bool
+  FunctionalInterface<EDC, FDC, DH, VECTOR, dopedim, dealdim>::HasInterfaces() const
+  {
+    //By default this is not needed
+    return false;
+  }
   /********************************************/
 
   template<
