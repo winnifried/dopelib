@@ -2453,6 +2453,12 @@ namespace DOpE
                         dealii::Vector<double> &/*local_vector*/, double /*scale*/,
                         double /*scale_ico*/)
   {
+    if ((this->GetType() == "gradient")
+        || (this->GetType() == "hessian"))
+    {
+      //Ok, in type gradient and hessian not needed
+    }
+    else
     {
       throw DOpEException("Not implemented",
                           "OptProblemContainer::FaceEquation");
@@ -2473,6 +2479,12 @@ namespace DOpE
                         dealii::Vector<double> &/*local_vector*/, double /*scale*/,
                         double /*scale_ico*/)
   {
+    if ((this->GetType() == "gradient")
+        || (this->GetType() == "hessian"))
+    {
+      //Ok, in type gradient and hessian not needed
+    }
+    else
     {
       throw DOpEException("Not implemented",
                           "OptProblemContainer::InterfaceEquation");
@@ -2498,6 +2510,12 @@ namespace DOpE
 //          this->GetPDE().ControlFaceMatrix(fdc, local_entry_matrix);
 //        }
 //        else
+    if ((this->GetType() == "gradient")
+        || (this->GetType() == "hessian"))
+    {
+      //Ok, in type gradient and hessian not needed
+    }
+    else
     {
       throw DOpEException("Not implemented",
                           "OptProblemContainer::NewtonFaceMatrix");
@@ -2518,6 +2536,12 @@ namespace DOpE
                         const FACEDATACONTAINER & /*fdc*/, FullMatrix<double> &/*local_entry_matrix*/,
                         double /*scale*/, double /*scale_ico*/)
   {
+    if ((this->GetType() == "gradient")
+        || (this->GetType() == "hessian"))
+    {
+      //Ok, in type gradient and hessian not needed
+    }
+    else
     {
       throw DOpEException("Not implemented",
                           "OptProblemContainer::NewtonInterfaceMatrix");
