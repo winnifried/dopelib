@@ -579,7 +579,7 @@ void Integrator<INTEGRATORDATACONT, VECTOR, SCALAR,
         }
       }
 
-      if (need_faces) {
+      if (need_faces && !need_interfaces) {
         for (unsigned int face = 0;
              face < dealii::GeometryInfo<dim>::faces_per_cell; ++face) {
           if (element[0]->neighbor_index(face) != -1) {
@@ -615,7 +615,11 @@ void Integrator<INTEGRATORDATACONT, VECTOR, SCALAR,
                 // actual element and then the facevalues of the neighbours
                 fdc.ReInit(face, subface_no);
                 fdc.ReInitNbr();
-
+		if(need_faces)
+		{
+		  pde.FaceEquation(fdc, local_vector, 1., 1.);
+		  pde.FaceRhs(fdc, local_vector, -1.);
+		}
                 pde.InterfaceEquation(fdc, local_vector, 1., 1.);
               }
             } else {
@@ -624,10 +628,23 @@ void Integrator<INTEGRATORDATACONT, VECTOR, SCALAR,
 
               fdc.ReInit(face);
               fdc.ReInitNbr();
+	      if(need_faces)
+		{
+		  pde.FaceEquation(fdc, local_vector, 1., 1.);
+		  pde.FaceRhs(fdc, local_vector, -1.);
+		}
               pde.InterfaceEquation(fdc, local_vector, 1., 1.);
             }
 
           } // endif atinterface
+	  else if(need_faces)
+	  {
+	    if (element[0]->neighbor_index(face) != -1) {
+	      fdc.ReInit(face);
+	      pde.FaceEquation(fdc, local_vector, 1., 1.);
+	      pde.FaceRhs(fdc, local_vector, -1.);
+	    }
+	  }
         }   // endfor faces
       }     // endif need_interfaces
 
@@ -738,7 +755,7 @@ void Integrator<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::ComputeNonlinearLhs(
           }
         }
       }
-      if (need_faces) {
+      if (need_faces && !need_interfaces) {
         for (unsigned int face = 0;
              face < dealii::GeometryInfo<dim>::faces_per_cell; ++face) {
           if (element[0]->neighbor_index(face) != -1) {
@@ -774,7 +791,10 @@ void Integrator<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::ComputeNonlinearLhs(
                 // actual element and then the facevalues of the neighbours
                 fdc.ReInit(face, subface_no);
                 fdc.ReInitNbr();
-
+		if(need_faces)
+		{
+		  pde.FaceEquation(fdc, local_vector, 1., 1.);
+		}
                 pde.InterfaceEquation(fdc, local_vector, 1., 1.);
               }
             } else {
@@ -783,9 +803,20 @@ void Integrator<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::ComputeNonlinearLhs(
 
               fdc.ReInit(face);
               fdc.ReInitNbr();
-              pde.InterfaceEquation(fdc, local_vector, 1., 1.);
+              if(need_faces)
+		{
+		  pde.FaceEquation(fdc, local_vector, 1., 1.);
+		}
+	      pde.InterfaceEquation(fdc, local_vector, 1., 1.);
             }
           } // endif atinterface
+	  else if(need_faces)
+	  {
+	    if (element[0]->neighbor_index(face) != -1) {
+	      fdc.ReInit(face);
+	      pde.FaceEquation(fdc, local_vector, 1., 1.);
+	    }
+	  }
         }   // endfor face
       }     // endif need_interfaces
       // LocalToGlobal
@@ -1002,7 +1033,7 @@ void Integrator<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::ComputeMatrix(
           }
         }
       }
-      if (need_faces) {
+      if (need_faces && !need_interfaces) {
         for (unsigned int face = 0;
              face < dealii::GeometryInfo<dim>::faces_per_cell; ++face) {
           if (element[0]->neighbor_index(face) != -1) {
@@ -1057,6 +1088,10 @@ void Integrator<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::ComputeMatrix(
                 C.distribute_local_to_global(local_interface_matrix,
                                              local_dof_indices,
                                              nbr_local_dof_indices, matrix);
+		if (need_faces)
+		{
+		  pde.FaceMatrix(fdc, local_matrix);
+		}
               }
             } else {
               // either neighbor is as fine as this element or it is coarser
@@ -1081,8 +1116,19 @@ void Integrator<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::ComputeMatrix(
               C.distribute_local_to_global(local_interface_matrix,
                                            local_dof_indices,
                                            nbr_local_dof_indices, matrix);
+	      if (need_faces)
+	      {
+		pde.FaceMatrix(fdc, local_matrix);
+	      }
             }
           } // endif atinterface
+	  else if(need_faces)
+	  {
+	    if (element[0]->neighbor_index(face) != -1) {
+	      fdc.ReInit(face);
+	      pde.FaceMatrix(fdc, local_matrix);
+	    }
+	  }
         }   // endfor face
       }     // endif need_interfaces
 
@@ -1266,6 +1312,10 @@ SCALAR Integrator<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::ComputeFaceScalar(
              face < dealii::GeometryInfo<dim>::faces_per_cell; ++face) {
           if (element[0]->neighbor_index(face) != -1) {
             fdc.ReInit(face);
+	    if(need_interfaces)
+	    {
+	      fdc.ReInitNbr();
+	    }
             ret += pde.FaceFunctional(fdc);
           }
         }
