@@ -306,7 +306,7 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 
 		private:
 		/**
-		 * Helper function to prevent code duplicity. Adds the user defined
+		 * Helper function to prevent code duplicity. Adds the user deeigenvalue_[q_point][0] *fined
 		 * user Data to the Integrator.
 		 */
 		void AddUDD() { for (auto it = this->GetUserDomainData().begin(); it != this->GetUserDomainData().end(); it++) { this->GetIntegrator().AddDomainData(it->first, it->second); } }
@@ -357,10 +357,9 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 		bool build_state_matrix_ = false, build_adjoint_matrix_ = false,
 		build_control_matrix_ = false; bool state_reinit_, adjoint_reinit_, eigenvaluestate_reinit_, eigenvalueadjoint_reinit_,eigenvaluederivative_reinit_,
 		gradient_reinit_; unsigned int cost_needs_precomputations_;
-		std::vector<PETScWrappers::MPI::Vector> eigenfunctions;
-		std::vector<double> eigenvalues;
-		std::vector<PETScWrappers::MPI::Vector> adjoint_eigenfunctions;
-		std::vector<double> adjoint_eigenvalues;
+		std::vector<PETScWrappers::MPI::Vector> eigenfunctions, adjoint_eigenfunctions, tangent_eigenfunctions, adjoint_hessian_eigenfunctions;
+		std::vector<double> eigenvalues, adjoint_eigenvalues, tangent_eigenvalues, adjoint_hessian_eigenvalues;
+		double numOfEigenval = 10;
 
 		friend class SolutionExtractor< EigenvalueProblem<CONTROLNONLINEARSOLVER,
 		NONLINEARSOLVER, CONTROLINTEGRATOR, INTEGRATOR, PROBLEM, VECTOR,
@@ -429,10 +428,16 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 		//EigenvalueProblem should be ReInited
 		{ state_reinit_ = true; eigenvaluestate_reinit_ = true; eigenvalueadjoint_reinit_ = true;
 		eigenvaluederivative_reinit_ = true; adjoint_reinit_ = true; gradient_reinit_ = true; } cost_needs_precomputations_ = 0;
-		eigenfunctions.resize((int) (10));
-		eigenvalues.resize(eigenfunctions.size());
-		adjoint_eigenfunctions.resize((int) (10));
-		adjoint_eigenvalues.resize(adjoint_eigenfunctions.size());
+
+
+		eigenfunctions.resize((int) (numOfEigenval));
+		eigenvalues.resize(numOfEigenval);
+		adjoint_eigenfunctions.resize((int) (numOfEigenval));
+		adjoint_eigenvalues.resize(numOfEigenval);
+		adjoint_hessian_eigenfunctions.resize((int) (numOfEigenval));
+		adjoint_hessian_eigenvalues.resize(numOfEigenval);
+		tangent_eigenfunctions.resize((int) (numOfEigenval));
+		tangent_eigenvalues.resize(numOfEigenval);
 		}
 
 		/******************************************************/
@@ -452,11 +457,11 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 		int dealdim> NONLINEARSOLVER & EigenvalueProblem<CONTROLNONLINEARSOLVER,
 		NONLINEARSOLVER, CONTROLINTEGRATOR, INTEGRATOR, PROBLEM, VECTOR,
 		dopedim,
-		dealdim>::GetNonlinearSolver( std::string type) { if ((type == "state") || (type == "tangent") ||(type == "eigenvaluestate")) {
+		dealdim>::GetNonlinearSolver( std::string type) { if ((type == "state") || (type == "tangent") ||(type == "eigenvaluetangent") ||(type == "eigenvaluestate")) {
 			return nonlinear_state_solver_;
-		} else if ((type == "adjoint") || (type == "adjoint_hessian") || (type == "adjoint_for_ee") || (type == "eigenvalueadjoint")) {
+		} else if ((type == "adjoint") || (type == "adjoint_hessian")|| (type == "eigenvalueadjoint_hessian") || (type == "adjoint_for_ee") || (type == "eigenvalueadjoint")) {
 			return nonlinear_adjoint_solver_;
-		} else { throw DOpEException("No Solver for Problem type:`" + type + "' found", "StatReducedProblem::GetNonlinearSolver");
+		} else { throw DOpEException("No Solver for Problem type:`" + type + "' found", "EigenvalueProblem::GetNonlinearSolver");
 
 		} }
 		/******************************************************/
@@ -470,7 +475,7 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 		dealdim>::GetControlNonlinearSolver() { if ((this->GetProblem()->GetType() == "gradient") || (this->GetProblem()->GetType() =="eigenvaluederivative")|| (this->GetProblem()->GetType() == "hessian")) {
 			return nonlinear_gradient_solver_;
 		} else {
-			throw DOpEException( "No Solver for Problem type:`" + this->GetProblem()->GetType() + "' found", "StatReducedProblem::GetControlNonlinearSolver");
+			throw DOpEException( "No Solver for Problem type:`" + this->GetProblem()->GetType() + "' found", "EigenvalueProblem::GetControlNonlinearSolver");
 
 		}
 		}
@@ -512,7 +517,7 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 				int dealdim> void EigenvalueProblem<CONTROLNONLINEARSOLVER,
 				NONLINEARSOLVER, CONTROLINTEGRATOR, INTEGRATOR, PROBLEM, VECTOR,
 				dopedim,
-				dealdim>::ComputeEigenvalueAdjoint(const ControlVector<VECTOR> &q, PETScWrappers::MPI::Vector &/*eigenfunction*/, double eigenvalue, std::vector<PETScWrappers::MPI::Vector> &adjoint_eigenfunctions,
+				dealdim>::ComputeEigenvalueAdjoint(const ControlVector<VECTOR> &q, PETScWrappers::MPI::Vector &eigenfunction, double eigenvalue, std::vector<PETScWrappers::MPI::Vector> &adjoint_eigenfunctions,
 		std::vector<double> &adjoint_eigenvalues) {
 			std::cout << "Ab hier in ComputeEigenvalueAdjoint" << std::endl;
 
@@ -526,67 +531,71 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 //				eigenvalueadjoint_reinit_ = false;
 //			}
 			this->GetProblem()->AddAuxiliaryToIntegrator(this->GetIntegrator());
-			    if (cost_needs_precomputations_ != 0)
-			      {
-			        auto func_vals = GetAuxiliaryParams("cost_functional_pre");
-			        this->GetIntegrator().AddParamData("cost_functional_pre",&(func_vals->second));
-			      }
-			    this->GetIntegrator().AddDomainData("state",
-			                                        &(GetU().GetSpacialVector()));
+//			    if (cost_needs_precomputations_ != 0)
+//			      {
+//			        auto func_vals = GetAuxiliaryParams("cost_functional_pre");
+//			        this->GetIntegrator().AddParamData("cost_functional_pre",&(func_vals->second));
+//			      }
+			    VECTOR eigfun(eigenfunction.size());
+			    eigfun = eigenfunction;
+			    this->GetIntegrator().AddDomainData("state",&(eigfun));
+			                                      //  &(GetU().GetSpacialVector()));
 
 			    if (dopedim == dealdim)
 			      {
 			        this->GetIntegrator().AddDomainData("control", &(q.GetSpacialVector()));
 			      }
-			    else if (dopedim == 0)
-			      {
-			        this->GetIntegrator().AddParamData("control",
-			                                           &(q.GetSpacialVectorCopy()));
-			      }
+//			    else if (dopedim == 0)
+//			      {
+//			        this->GetIntegrator().AddParamData("control",
+//			                                           &(q.GetSpacialVectorCopy()));
+//			      }
 			    else
 			      {
 			        throw DOpEException("dopedim not implemented",
 			                            "EigenvalueProblem::ComputeEigenvalueAdjoint");
 			      }
 
-			    VECTOR eigval(50);
+			    VECTOR eigval(1);
 			    eigval[0]=eigenvalue;
 			    this->GetIntegrator().AddParamData("eigenvalue",  &eigval);
-//			    this->AddUserDomainData("eigenvalue", &eigval);
-//			    std::vector<PETScWrappers::MPI::Vector> adjoint_eigenfunctions;
-//			    std::vector<double> adjoint_eigenvalues;
-			    adjoint_eigenfunctions.resize((int) (10)); //TODO hier reicht auch Übergabe von bestimmter EV und EW bei aktuellem Problem
-			    adjoint_eigenvalues.resize(eigenfunctions.size());
+
+			    adjoint_eigenfunctions.resize((int) (numOfEigenval)); //TODO hier reicht auch Übergabe von bestimmter EV und EW bei aktuellem Problem
+			    adjoint_eigenvalues.resize(numOfEigenval);
 			    build_adjoint_matrix_ = this->GetNonlinearSolver("eigenvalueadjoint").EigenvalueSolve(
 			    	                             problem,adjoint_eigenvalues, adjoint_eigenfunctions, true, build_adjoint_matrix_/*, n*/);
 			    std::cout << "################################################################" << std::endl;
-			    for (unsigned int i = 0; i < eigenvalues.size(); ++i) {
-			    		std::cout << "     k^2 " << i << " = " << adjoint_eigenvalues[i] << std::endl;
+			    for (unsigned int i = 0; i < numOfEigenval; ++i) {
+			    		std::cout << "adjoint_k^2 " << i << " = " << adjoint_eigenvalues[i] << std::endl;
 			    }
 			    std::cout << "################################################################" << std::endl;
 			    if (dopedim == dealdim)
 			      {
 			        this->GetIntegrator().DeleteDomainData("control");
 			      }
-			    else if (dopedim == 0)
-			      {
-			        this->GetIntegrator().DeleteParamData("control");
-			        q.UnLockCopy();
-			      }
+//			    else if (dopedim == 0)
+//			      {
+//			        this->GetIntegrator().DeleteParamData("control");
+//			        q.UnLockCopy();
+//			      }
 			    else
 			      {
 			        throw DOpEException("dopedim not implemented",
 			                            "EigenvalueProblem::ComputeEigenvalueAdjoint");
 			      }
-			    if (cost_needs_precomputations_ != 0)
-			      {
-			        this->GetIntegrator().DeleteParamData("cost_functional_pre");
-			      }
+//			    if (cost_needs_precomputations_ != 0)
+//			      {
+//			        this->GetIntegrator().DeleteParamData("cost_functional_pre");
+//			      }
 			    this->GetIntegrator().DeleteDomainData("state");
+			    this->GetIntegrator().DeleteParamData("eigenvalue");
 
 			    this->GetProblem()->DeleteAuxiliaryFromIntegrator(this->GetIntegrator());
 
-			    this->GetOutputHandler()->Write((GetZ().GetSpacialVector()),
+			    VECTOR adjeigfun(adjoint_eigenfunctions[0].size());
+			    adjeigfun = adjoint_eigenfunctions[0];
+
+			    this->GetOutputHandler()->Write(adjeigfun,
 			                                    "EigenvalueAdjoint" + this->GetPostIndex(), problem.GetDoFType());
 		}
 
@@ -601,7 +610,7 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 		void EigenvalueProblem<CONTROLNONLINEARSOLVER,
 				NONLINEARSOLVER, CONTROLINTEGRATOR, INTEGRATOR, PROBLEM, VECTOR,
 				dopedim,
-				dealdim>::ComputeReducedGradient(const ControlVector<VECTOR> &q, ControlVector<VECTOR> &/*gradient*/, ControlVector<VECTOR> &/*gradient_transposed*/){//*, /*std::vector<*/PETScWrappers::MPI::Vector/*>*/ &eigenfunction, /*std::vector<*/double/*>*/ eigenvalue*/ ) {
+				dealdim>::ComputeReducedGradient(const ControlVector<VECTOR> &q, ControlVector<VECTOR> &gradient, ControlVector<VECTOR> &gradient_transposed){
 			PETScWrappers::MPI::Vector eigenfunction = eigenfunctions[0];
 			double eigenvalue = eigenvalues[0];
 			this->ComputeEigenvalueAdjoint(q,eigenfunction, eigenvalue, adjoint_eigenfunctions, adjoint_eigenvalues);
@@ -609,51 +618,62 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 			std::cout << "Ab hier in ComputeDerivativesEigenvalue " << std::endl;
 			this->GetOutputHandler()->Write("Computing Gradient for Eigenvalueproblem:",
 			                                    4 + this->GetBasePriority());
-//			this->SetProblemType("eigenvaluederivative");
-//			auto &problem = this->GetProblem()->GetEigenvalueDerivativeProblem();
-//			if (eigenvaluederivative_reinit_ == true){
-//			        GetControlNonlinearSolver().ReInit(*(this->GetProblem()));
-//			        eigenvaluederivative_reinit_ = false;
-//			}
-//
-//			 this->GetProblem()->AddAuxiliaryToIntegrator(this->GetControlIntegrator());
-//
-//			    if (dopedim == dealdim)
-//			      {
-//			        this->GetControlIntegrator().AddDomainData("control",
-//			                                                   &(q.GetSpacialVector()));
-//			      }
-//			    else if (dopedim == 0)
-//			      {
-//			        this->GetControlIntegrator().AddParamData("control",
-//			                                                  &(q.GetSpacialVectorCopy()));
-//			      }
-//			    else
-//			      {
-//			        throw DOpEException("dopedim not implemented",
-//			                            "EigenvalueProblem::ComputeEigenvalueDerivative");
-//			      }
+			this->SetProblemType("eigenvaluederivative");
+			auto &problem = this->GetProblem()->GetEigenvalueDerivativeProblem();
+			if (eigenvaluederivative_reinit_ == true){
+			        GetControlNonlinearSolver().ReInit(*(this->GetProblem()));
+			        eigenvaluederivative_reinit_ = false;
+			}
+
+			 this->GetProblem()->AddAuxiliaryToIntegrator(this->GetControlIntegrator());
+
+			    if (dopedim == dealdim)
+			      {
+			        this->GetControlIntegrator().AddDomainData("control",
+			                                                   &(q.GetSpacialVector()));
+			      }
+			    else if (dopedim == 0)
+			      {
+			        this->GetControlIntegrator().AddParamData("control",
+			                                                  &(q.GetSpacialVectorCopy()));
+			      }
+			    else
+			      {
+			        throw DOpEException("dopedim not implemented",
+			                            "EigenvalueProblem::ComputeEigenvalueDerivative");
+			      }
 ////			    if (cost_needs_precomputations_ != 0)
 ////			        {
 ////			          auto func_vals = GetAuxiliaryParams("cost_functional_pre");
 ////			          this->GetControlIntegrator().AddParamData("cost_functional_pre",&(func_vals->second));
 ////			        }
-//			      this->GetControlIntegrator().AddDomainData("state",
-//			                                                 &(GetU().GetSpacialVector()));
+
+			    VECTOR eigval(eigenfunction.size());
+			    eigval[0]=eigenvalue;
+//			    this->GetControlIntegrator().AddParamData("eigenvalue",  &eigval);
+//			    this->GetIntegrator().AddParamData("eigenvalue",  &eigval);
+			    this->GetControlIntegrator().AddDomainData("eigenvalue",  &eigval);
+			    this->GetIntegrator().AddDomainData("eigenvalue",  &eigval);
+
+			    VECTOR eigfun(eigenfunction.size());
+			    eigfun = eigenfunction;
+			    this->GetControlIntegrator().AddDomainData("state",&(eigfun));
+
+			    VECTOR adjeigfun(adjoint_eigenfunctions[0].size());
+			    adjeigfun = adjoint_eigenfunctions[0];
+			    this->GetControlIntegrator().AddDomainData("adjoint",&(adjeigfun));
+
 //			      this->GetControlIntegrator().AddDomainData("adjoint",
 //			                                                 &(GetZ().GetSpacialVector()));
-////			      if (this->GetProblem()->HasControlInDirichletData())
-////			        this->GetControlIntegrator().AddDomainData("adjoint_residual", &tmp);
-////
-//			      gradient_transposed = 0.;
-//			      if (dopedim == dealdim)
-//			        {
-//			          this->GetControlIntegrator().AddDomainData("last_newton_solution",
-//			                                                     &(gradient_transposed.GetSpacialVector()));
-//			          this->GetControlIntegrator().ComputeNonlinearResidual(
-//			            *(this->GetProblem()), gradient.GetSpacialVector(), eigenvalue);
-//			          this->GetControlIntegrator().DeleteDomainData("last_newton_solution");
-//			        }
+			      gradient_transposed = 0.;
+			      if (dopedim == dealdim)
+			        {
+			          this->GetControlIntegrator().AddDomainData("last_newton_solution",
+			                                                     &(gradient_transposed.GetSpacialVector()));
+			          this->GetControlIntegrator().ComputeNonlinearResidual(
+			            *(this->GetProblem()), gradient.GetSpacialVector(), eigenvalue);
+			          this->GetControlIntegrator().DeleteDomainData("last_newton_solution");
+			        }
 //			      else if (dopedim == 0)
 //			        {
 //			          this->GetControlIntegrator().AddParamData("last_newton_solution",
@@ -667,46 +687,52 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 //			          gradient_transposed.UnLockCopy();
 //
 //			        }
-//
-//			gradient *= -1.;
-//			gradient_transposed = gradient;
-//
-//			//Compute l^2 representation of the Gradient
-//
-//			 build_control_matrix_ = this->GetControlNonlinearSolver().NonlinearSolve(
-//			                                    *(this->GetProblem()), gradient_transposed.GetSpacialVector(), true,
+
+			gradient *= -1.;
+			gradient_transposed = gradient;
+
+			//Compute l^2 representation of the Gradient
+			//TODO
+//						 build_control_matrix_ = this->GetControlNonlinearSolver().EigenvalueSolve(
+//					 problem, adjoint_eigenvalues,gradient_transposed.GetSpacialVector(), true,
 //			                                    build_control_matrix_);
-//			          if (dopedim == dealdim)
-//			            {
-//			              this->GetControlIntegrator().DeleteDomainData("control");
-//			            }
-//			          else if (dopedim == 0)
-//			            {
-//			              this->GetControlIntegrator().DeleteParamData("control");
-//			              q.UnLockCopy();
-//			            }
-//			          else
-//			            {
-//			              throw DOpEException("dopedim not implemented",
-//			                                  "EigenvalueProblem::ComputeEigenvalueDerivative");
-//			            }
-//			          if (cost_needs_precomputations_ != 0)
-//			            {
-//			              this->GetControlIntegrator().DeleteParamData("cost_functional_pre");
-//			            }
-//			          this->GetControlIntegrator().DeleteDomainData("state");
-//			          this->GetControlIntegrator().DeleteDomainData("adjoint");
+
+
+
+
+			          if (dopedim == dealdim)
+			            {
+			              this->GetControlIntegrator().DeleteDomainData("control");
+			            }
+			          else if (dopedim == 0)
+			            {
+			              this->GetControlIntegrator().DeleteParamData("control");
+			              q.UnLockCopy();
+			            }
+			          else
+			            {
+			              throw DOpEException("dopedim not implemented",
+			                                  "EigenvalueProblem::ComputeEigenvalueDerivative");
+			            }
+			          if (cost_needs_precomputations_ != 0)
+			            {
+			              this->GetControlIntegrator().DeleteParamData("cost_functional_pre");
+			            }
+			          this->GetControlIntegrator().DeleteDomainData("state");
+			          this->GetControlIntegrator().DeleteDomainData("adjoint");
+			          this->GetControlIntegrator().DeleteDomainData("eigenvalue");
+			          this->GetIntegrator().DeleteDomainData("eigenvalue");
 //			          if (this->GetProblem()->HasControlInDirichletData())
 //			            this->GetControlIntegrator().DeleteDomainData("adjoint_residual");
-//
-//			          this->GetProblem()->DeleteAuxiliaryFromIntegrator(
-//			            this->GetControlIntegrator());
-//
-//			          this->GetOutputHandler()->Write(gradient,
-//			                                          "Gradient" + this->GetPostIndex(), this->GetProblem()->GetDoFType());
-//			          this->GetOutputHandler()->Write(gradient_transposed,
-//			                                          "Gradient_Transposed" + this->GetPostIndex(),
-//			                                          this->GetProblem()->GetDoFType());
+
+			          this->GetProblem()->DeleteAuxiliaryFromIntegrator(
+			            this->GetControlIntegrator());
+
+			          this->GetOutputHandler()->Write(gradient,
+			                                          "Gradient" + this->GetPostIndex(), this->GetProblem()->GetDoFType());
+			          this->GetOutputHandler()->Write(gradient_transposed,
+			                                          "Gradient_Transposed" + this->GetPostIndex(),
+			                                          this->GetProblem()->GetDoFType());
 
 		}
 
@@ -905,6 +931,7 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 		NONLINEARSOLVER, CONTROLINTEGRATOR, INTEGRATOR, PROBLEM, VECTOR,
 		dopedim,
 		dealdim>::ComputeReducedCostFunctional( const ControlVector<VECTOR> &q) {
+			std::cout << "Ab hier in ComputeReducedCostFunctional " << std::endl;
 //			this->ComputeReducedState(q);
 			this->GetOutputHandler()->Write("Computing Eigenvalues and Eigenvectors:", 4 + this->GetBasePriority());
 			this->InitializeFunctionalValues(this->GetProblem()->GetNFunctionals() + 1);
@@ -916,97 +943,60 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 			}
 
 			this->GetProblem()->AddAuxiliaryToIntegrator(this->GetIntegrator());
-			cost_needs_precomputations_ = this->GetProblem()->FunctionalNeedPrecomputations();
-			if (cost_needs_precomputations_ != 0) {
-				unsigned int n_pre = cost_needs_precomputations_;
-				AllocateAuxiliaryParams("cost_functional_pre",n_pre);
-			}
+//			cost_needs_precomputations_ = this->GetProblem()->FunctionalNeedPrecomputations();
+//			if (cost_needs_precomputations_ != 0) {
+//				unsigned int n_pre = cost_needs_precomputations_;
+//				AllocateAuxiliaryParams("cost_functional_pre",n_pre);
+//			}
 //			this->GetIntegrator().AddDomainData("state", &(GetU().GetSpacialVector())); // TODO needed?
 
 			if (dopedim == dealdim){
 				 this->GetIntegrator().AddDomainData("control", &(q.GetSpacialVector()));
-		    } else if (dopedim == 0){
-				 this->GetIntegrator().AddParamData("control", &(q.GetSpacialVectorCopy()));
+//		    } else if (dopedim == 0){
+//				 this->GetIntegrator().AddParamData("control", &(q.GetSpacialVectorCopy()));
 		    }else{
-				 throw DOpEException("dopedim not implemented","StatReducedProblem::ComputeReducedState");
+				throw DOpEException("dopedim not implemented","EigenvalueProblem::ComputeReducedState");
 			}
-				 try{
-					 eigenfunctions.resize((int) (10));
-					 eigenvalues.resize(eigenfunctions.size());
-					 build_state_matrix_ = this->GetNonlinearSolver("eigenvaluestate").EigenvalueSolve(
-	                         problem, eigenvalues, eigenfunctions, true, build_state_matrix_/*, n*/);
+			try{
+				eigenfunctions.resize((int) (numOfEigenval));
+				eigenvalues.resize(numOfEigenval);
+				build_state_matrix_ = this->GetNonlinearSolver("eigenvaluestate").EigenvalueSolve(
+	                 problem, eigenvalues, eigenfunctions, true, build_state_matrix_/*, n*/);
 
-						std::cout << "################################################################" << std::endl;
-						for (unsigned int i = 0; i < eigenvalues.size(); ++i) {
-							std::cout << "     k^2 " << i << " = " << eigenvalues[i] << std::endl;
-						}
-						std::cout << "################################################################" << std::endl;
-				 }
-				     catch ( DOpEException &e)
-				       {
-				         if (dopedim == dealdim)
-				           {
-				             this->GetIntegrator().DeleteDomainData("control");
-				           }
-				         else if (dopedim == 0)
-				           {
-				             this->GetIntegrator().DeleteParamData("control");
-				             q.UnLockCopy();
-				           }
-				         else
-				           {
-				             throw DOpEException("dopedim not implemented",
+				std::cout << "################################################################" << std::endl;
+				for (unsigned int i = 0; i < eigenvalues.size(); ++i) {
+					std::cout << "     k^2 " << i << " = " << eigenvalues[i] << std::endl;
+				}
+				std::cout << "################################################################" << std::endl;
+			}catch ( DOpEException &e){
+				if (dopedim == dealdim){
+					this->GetIntegrator().DeleteDomainData("control");
+//				}else if (dopedim == 0){
+//				    this->GetIntegrator().DeleteParamData("control");
+//				     q.UnLockCopy();
+			}else{
+				  throw DOpEException("dopedim not implemented",
 				                                 "EigenvalueProblem::ComputeReducedCostFunctional");
-				           }
-				         this->GetProblem()->DeleteAuxiliaryFromIntegrator(this->GetIntegrator());
-				         //Reset Values
-				         GetU().GetSpacialVector() = 0.;
-				         build_state_matrix_ = true;
-				         eigenvaluestate_reinit_ = true;
-				         throw e;
-				       }
-//				     if (cost_needs_precomputations_ != 0) {
-//				    	 auto func_vals = GetAuxiliaryParams("cost_functional_pre");
-//				    	 this->GetIntegrator().AddParamData("cost_functional_pre",&(func_vals->second));
-//				     } this->GetIntegrator().AddDomainData("state", &(GetU().GetSpacialVector()));
-//				     double ret = 0; bool found = false;
-//					if (this->GetProblem()->GetFunctionalType().find("domain") != std::string::npos) {
-//						found = true; ret += this->GetIntegrator().ComputeDomainScalar(*(this->GetProblem()));
-//					}
-//					if (this->GetProblem()->GetFunctionalType().find("point") != std::string::npos) {
-//						found = true; ret += this->GetIntegrator().ComputePointScalar(*(this->GetProblem()));
-//					}
-//					if (this->GetProblem()->GetFunctionalType().find("boundary") != std::string::npos) {
-//						found = true; ret += this->GetIntegrator().ComputeBoundaryScalar( *(this->GetProblem()));
-//					}
-//					if (this->GetProblem()->GetFunctionalType().find("face") != std::string::npos) {
-//						found = true; ret += this->GetIntegrator().ComputeFaceScalar(*(this->GetProblem()));
-//					}
-//					if (this->GetProblem()->GetFunctionalType().find("algebraic") != std::string::npos) {
-//						found = true; ret += this->GetIntegrator().ComputeAlgebraicScalar(*(this->GetProblem()));
-//					}
-//					if (!found) { throw DOpEException( "Unknown Functional Type: " + this->GetProblem()->GetFunctionalType(), "EigenvalueProblem::ComputeReducedCostFunctional");
-//					}
-					if (dopedim == dealdim) {
-						this->GetIntegrator().DeleteDomainData("control");
-					} else if (dopedim == 0) {
-						this->GetIntegrator().DeleteParamData("control"); q.UnLockCopy();
-					} else { throw DOpEException("dopedim not implemented", "EigenvalueProblem::ComputeReducedCostFunctional");
-					}
-					//if (cost_needs_precomputations_ != 0) {
-//						this->GetIntegrator().DeleteParamData("cost_functional_pre");
-//					}
-
-				this->GetProblem()->DeleteAuxiliaryFromIntegrator(this->GetIntegrator());
-//					this->GetFunctionalValues()[0].push_back(ret); return ret;
-//				this->GetIntegrator().AddDomainData("eigenvalues", &eigenvalues);
-//				VECTOR eigval(1);
-//
-//				eigval[0]=eigenvalues[0];
-//				this->GetIntegrator().AddParamData("eigenvalue",  &eigval);
-//				this->AddUserDomainData("eigenvalue", &eigval);
-				return eigenvalues[0]; //TODO Anpassen bei Problemänderung
 			}
+			this->GetProblem()->DeleteAuxiliaryFromIntegrator(this->GetIntegrator());
+			 //Reset Values
+			GetU().GetSpacialVector() = 0.;
+			build_state_matrix_ = true;
+			eigenvaluestate_reinit_ = true;
+			throw e;
+			}
+
+			if (dopedim == dealdim) {
+				this->GetIntegrator().DeleteDomainData("control");
+//			} else if (dopedim == 0) {
+//				this->GetIntegrator().DeleteParamData("control"); q.UnLockCopy();
+			} else {
+				throw DOpEException("dopedim not implemented", "EigenvalueProblem::ComputeReducedCostFunctional");
+			}
+
+			this->GetProblem()->DeleteAuxiliaryFromIntegrator(this->GetIntegrator());
+			return eigenvalues[0]; //TODO Anpassen bei Problemänderung
+		}
 
 
 
@@ -1093,88 +1083,199 @@ template<typename CONTROLNONLINEARSOLVER, typename NONLINEARSOLVER,
 		NONLINEARSOLVER, CONTROLINTEGRATOR, INTEGRATOR, PROBLEM, VECTOR,
 		dopedim,
 		dealdim>::ComputeReducedHessianVector(
-				const ControlVector<VECTOR> &/*q*/, const ControlVector<VECTOR> &/*direction*/, ControlVector<VECTOR> &/*hessian_direction*/, ControlVector<VECTOR> &/*hessian_direction_transposed*/) {
-//			this->GetOutputHandler()->Write("Computing ReducedHessianVector:", 4 + this->GetBasePriority()); this->GetOutputHandler()->Write("\tSolving Tangent:", 5 + this->GetBasePriority());
-
-//		this->SetProblemType("tangent"); {
-//		//Start Tangent Calculatation
-//		auto &problem = this->GetProblem()->GetTangentProblem();
+				const ControlVector<VECTOR> &q, const ControlVector<VECTOR> &direction, ControlVector<VECTOR> &hessian_direction, ControlVector<VECTOR> &hessian_direction_transposed) {
+//		this->GetOutputHandler()->Write("Computing ReducedHessianVector:", 4 + this->GetBasePriority()); this->GetOutputHandler()->Write("\tSolving Tangent:", 5 + this->GetBasePriority());
+//		std::cout << "In ComputeReducedHessianVector"<< std::endl;
+//		this->SetProblemType("eigenvaluetangent");
+//		{ //Start Tangent Calculatation
+//		auto &problem = this->GetProblem()->GetEigenvalueTangentProblem();
+//
 //
 //		this->GetProblem()->AddAuxiliaryToIntegrator(this->GetIntegrator());
+//		VECTOR eigfun(eigenfunctions[0].size()); //TODO anpassen bei Problemänderung
+//		eigfun = eigenfunctions[0];
 //
-//		this->GetIntegrator().AddDomainData("state", &(GetU().GetSpacialVector())); this->GetControlIntegrator().AddDomainData("state", &(GetU().GetSpacialVector()));
+//		this->GetIntegrator().AddDomainData("state", /*&(GetU().GetSpacialVector())*/&(eigfun));
+//		this->GetControlIntegrator().AddDomainData("state",/*&(GetU().GetSpacialVector())*/&(eigfun));
 //
-//		if (dopedim == dealdim) { this->GetIntegrator().AddDomainData("dq", &(direction.GetSpacialVector())); this->GetIntegrator().AddDomainData("control", &(q.GetSpacialVector())); } else if (dopedim == 0) { this->GetIntegrator().AddParamData("dq", &(direction.GetSpacialVectorCopy())); this->GetIntegrator().AddParamData("control", &(q.GetSpacialVectorCopy())); } else { throw DOpEException("dopedim not implemented", "StatReducedProblem::ComputeReducedHessianVector"); }
+//		if (dopedim == dealdim) {
+//			this->GetIntegrator().AddDomainData("dq", &(direction.GetSpacialVector()));
+//			this->GetIntegrator().AddDomainData("control", &(q.GetSpacialVector()));
+//		} else if (dopedim == 0) {
+//			this->GetIntegrator().AddParamData("dq", &(direction.GetSpacialVectorCopy()));
+//			this->GetIntegrator().AddParamData("control", &(q.GetSpacialVectorCopy()));
+//		} else {
+//			throw DOpEException("dopedim not implemented", "EigenvalueProblem::ComputeReducedHessianVector");
+//		}
 //
-//		//tangent Matrix is the same as state matrix
-//		build_state_matrix_ = this->GetNonlinearSolver("tangent").NonlinearSolve( problem, (GetDU().GetSpacialVector()), true, build_state_matrix_);
 //
-//		this->GetOutputHandler()->Write((GetDU().GetSpacialVector()), "Tangent" + this->GetPostIndex(), problem.GetDoFType()); } //End Tangent Calculation
+////		tangent Matrix is the same as state matrix
+//		tangent_eigenfunctions.resize((int) (numOfEigenval));
+//		tangent_eigenvalues.resize(tangent_eigenfunctions.size());
+//		build_state_matrix_ = this->GetNonlinearSolver("eigenvaluetangent").EigenvalueSolve(
+//				                         problem, tangent_eigenvalues, tangent_eigenfunctions, true, build_state_matrix_/*, n*/);
 //
-//		this->GetIntegrator().AddDomainData("adjoint", &(GetZ().GetSpacialVector())); this->GetIntegrator().AddDomainData("tangent", &(GetDU().GetSpacialVector())); this->GetControlIntegrator().AddDomainData("adjoint", &(GetZ().GetSpacialVector())); this->GetControlIntegrator().AddDomainData("tangent", &(GetDU().GetSpacialVector()));
+//		std::cout << "################################################################" << std::endl;
+//		for (unsigned int i = 0; i < tangent_eigenvalues.size(); ++i) {
+//			std::cout << "tangent_k^2 " << i << " = " << tangent_eigenvalues[i] << std::endl;
+//		}
+//		std::cout << "################################################################" << std::endl;
+//
+//		VECTOR taneigfun(tangent_eigenfunctions[0].size());
+//		taneigfun = tangent_eigenfunctions[0];
+//		VECTOR adjeigfun(adjoint_eigenfunctions[0].size());
+//		adjeigfun = adjoint_eigenfunctions[0];
+//
+//		this->GetOutputHandler()->Write(taneigfun, "Tangent" + this->GetPostIndex(), problem.GetDoFType());
+//		//End Tangent Calculation
+//
+//		this->GetIntegrator().AddDomainData("adjoint", &(adjeigfun));
+//		this->GetIntegrator().AddDomainData("tangent", &(taneigfun));
+//		this->GetControlIntegrator().AddDomainData("adjoint", &(adjeigfun));
+//		this->GetControlIntegrator().AddDomainData("tangent", &(taneigfun));
 //
 //		//After the Tangent has been computed, we can precompute
 //		//cost functional derivative-values (if necessary)
-//		if (cost_needs_precomputations_ != 0) { unsigned int n_pre = cost_needs_precomputations_; AllocateAuxiliaryParams("cost_functional_pre_tangent",n_pre); CalculatePreFunctional("cost_functional","_pre_tangent",n_pre,0); } // End precomputation of values
+////		if (cost_needs_precomputations_ != 0) {
+////			unsigned int n_pre = cost_needs_precomputations_;
+////			AllocateAuxiliaryParams("cost_functional_pre_tangent",n_pre);
+////			CalculatePreFunctional("cost_functional","_pre_tangent",n_pre,0);
+//		} // End precomputation of values
 //
-//		this->GetOutputHandler()->Write("\tSolving Adjoint Hessian:", 5 + this->GetBasePriority()); this->SetProblemType("adjoint_hessian"); {
-//		//Adjoint_Hessian
-//		auto &problem = this->GetProblem()->GetAdjoint_HessianProblem();
-//
-//		if (cost_needs_precomputations_ != 0) { { auto func_vals = GetAuxiliaryParams("cost_functional_pre"); this->GetIntegrator().AddParamData("cost_functional_pre",&(func_vals->second)); this->GetControlIntegrator().AddParamData("cost_functional_pre",&(func_vals->second)); } { auto func_vals = GetAuxiliaryParams("cost_functional_pre_tangent"); this->GetIntegrator().AddParamData("cost_functional_pre_tangent",&(func_vals->second)); this->GetControlIntegrator().AddParamData("cost_functional_pre_tangent",&(func_vals->second)); } }
-//
+//		this->GetOutputHandler()->Write("\tSolving Eigenvalue Adjoint Hessian:", 5 + this->GetBasePriority());
+//		this->SetProblemType("eigenvalueadjoint_hessian");
+////		//Adjoint_Hessian
+//		{
+//		auto &problem = this->GetProblem()->GetEigenvalueAdjoint_HessianProblem();
+////
+////		if (cost_needs_precomputations_ != 0) { { auto func_vals = GetAuxiliaryParams("cost_functional_pre"); this->GetIntegrator().AddParamData("cost_functional_pre",&(func_vals->second)); this->GetControlIntegrator().AddParamData("cost_functional_pre",&(func_vals->second)); } { auto func_vals = GetAuxiliaryParams("cost_functional_pre_tangent"); this->GetIntegrator().AddParamData("cost_functional_pre_tangent",&(func_vals->second)); this->GetControlIntegrator().AddParamData("cost_functional_pre_tangent",&(func_vals->second)); } }
+////
 //		//adjoint_hessian Matrix is the same as adjoint matrix
-//		build_adjoint_matrix_ = this->GetNonlinearSolver("adjoint_hessian").NonlinearSolve( problem, (GetDZ().GetSpacialVector()), true, build_adjoint_matrix_);
 //
-//		this->GetOutputHandler()->Write((GetDZ().GetSpacialVector()), "Hessian" + this->GetPostIndex(), problem.GetDoFType());
+//		adjoint_hessian_eigenfunctions.resize((int) (numOfEigenval));
+//		adjoint_hessian_eigenvalues.resize(adjoint_hessian_eigenfunctions.size());
+//		build_adjoint_matrix_ = this->GetNonlinearSolver("eigenvalueadjoint_hessian").EigenvalueSolve(
+//						                         problem, adjoint_hessian_eigenvalues, adjoint_hessian_eigenfunctions, true, build_state_matrix_/*, n*/);
 //
-//		this->GetIntegrator().AddDomainData("adjoint_hessian", &(GetDZ().GetSpacialVector())); this->GetControlIntegrator().AddDomainData("adjoint_hessian", &(GetDZ().GetSpacialVector()));
+//				std::cout << "################################################################" << std::endl;
+//				for (unsigned int i = 0; i < numOfEigenval; ++i) {
+//					std::cout << "adjoint_hessian_k^2 " << i << " = " << adjoint_hessian_eigenvalues[i] << std::endl;
+//				}
+//				std::cout << "################################################################" << std::endl;
 //
-//		this->GetOutputHandler()->Write( "\tComputing Representation of the Hessian:", 5 + this->GetBasePriority()); } //End Adjoint Hessian
-//																													   //Preparations for Control In The Dirichlet Data
-//		VECTOR tmp; VECTOR tmp_second; if (this->GetProblem()->HasControlInDirichletData()) { tmp.reinit(GetU().GetSpacialVector()); tmp_second.reinit(GetU().GetSpacialVector()); this->SetProblemType("adjoint"); {
-//		// Adjoint
-//		auto &problem = this->GetProblem()->GetAdjointProblem();
+//		VECTOR adjhesseigfun(adjoint_hessian_eigenfunctions[0].size());
+//		adjhesseigfun = adjoint_hessian_eigenfunctions[0];
 //
-//		this->GetIntegrator().AddDomainData("last_newton_solution", &(GetZ().GetSpacialVector()));
+//		this->GetOutputHandler()->Write(adjhesseigfun, "Hessian" + this->GetPostIndex(), problem.GetDoFType());
 //
-////    this->GetIntegrator().ComputeNonlinearResidual(problem, tmp_second, false);
-//		this->GetIntegrator().ComputeNonlinearResidual(problem, tmp_second); tmp_second *= -1.;
+//		this->GetIntegrator().AddDomainData("adjoint_hessian", &(adjhesseigfun));
+//		this->GetControlIntegrator().AddDomainData("adjoint_hessian", &(adjhesseigfun));
 //
-//		this->GetIntegrator().DeleteDomainData("last_newton_solution"); } //End Adjoint
-//		this->SetProblemType("adjoint_hessian"); {
-//		//Adjoint_Hessian
-//		auto &problem = this->GetProblem()->GetAdjoint_HessianProblem();
+//		this->GetOutputHandler()->Write( "\tComputing Representation of the Hessian:", 5 + this->GetBasePriority());
 //
-//		this->GetIntegrator().AddDomainData("last_newton_solution", &(GetDZ().GetSpacialVector()));
+//		} //End Adjoint Hessian
 //
-////    this->GetIntegrator().ComputeNonlinearResidual(problem, tmp, false);
-//		this->GetIntegrator().ComputeNonlinearResidual(problem, tmp); tmp *= -1.;
+////		 //Preparations for Control In The Dirichlet Data
+////		VECTOR tmp; VECTOR tmp_second;
+////		if (this->GetProblem()->HasControlInDirichletData()) {
+////			tmp.reinit(GetU().GetSpacialVector());
+////			tmp_second.reinit(GetU().GetSpacialVector()); this->SetProblemType("adjoint"); {
+////		}
+//////		// Adjoint
+//////		auto &problem = this->GetProblem()->GetAdjointProblem();
+//////
+//////		this->GetIntegrator().AddDomainData("last_newton_solution", &(GetZ().GetSpacialVector()));
+//////
+////////    this->GetIntegrator().ComputeNonlinearResidual(problem, tmp_second, false);
+//////		this->GetIntegrator().ComputeNonlinearResidual(problem, tmp_second); tmp_second *= -1.;
+//////
+//////		this->GetIntegrator().DeleteDomainData("last_newton_solution"); } //End Adjoint
+//////		this->SetProblemType("adjoint_hessian");
+////		//{
+//////		//Adjoint_Hessian
+//////		auto &problem = this->GetProblem()->GetAdjoint_HessianProblem();
+//////
+//////		this->GetIntegrator().AddDomainData("last_newton_solution", &(GetDZ().GetSpacialVector()));
+//////
+////////    this->GetIntegrator().ComputeNonlinearResidual(problem, tmp, false);
+//////		this->GetIntegrator().ComputeNonlinearResidual(problem, tmp); tmp *= -1.;
+//////
+//////		this->GetIntegrator().DeleteDomainData("last_newton_solution"); } }
+//////		//Endof Dirichletdata Preparations
 //
-//		this->GetIntegrator().DeleteDomainData("last_newton_solution"); } }
-//		//Endof Dirichletdata Preparations
+//
+//
 //		this->GetProblem()->DeleteAuxiliaryFromIntegrator(this->GetIntegrator());
 //
-//		this->SetProblemType("hessian"); this->GetProblem()->AddAuxiliaryToIntegrator( this->GetControlIntegrator()); if (dopedim == dealdim) { this->GetIntegrator().DeleteDomainData("dq"); this->GetIntegrator().DeleteDomainData("control"); this->GetControlIntegrator().AddDomainData("dq", &(direction.GetSpacialVector())); this->GetControlIntegrator().AddDomainData("control", &(q.GetSpacialVector())); } else if (dopedim == 0) { this->GetIntegrator().DeleteParamData("dq"); this->GetIntegrator().DeleteParamData("control"); direction.UnLockCopy(); q.UnLockCopy(); this->GetControlIntegrator().AddParamData("dq", &(direction.GetSpacialVectorCopy())); this->GetControlIntegrator().AddParamData("control", &(q.GetSpacialVectorCopy())); } else { throw DOpEException("dopedim not implemented", "StatReducedProblem::ComputeReducedHessianVector"); } if (this->GetProblem()->HasControlInDirichletData()) { this->GetControlIntegrator().AddDomainData("adjoint_residual", &tmp); this->GetControlIntegrator().AddDomainData("hessian_residual", &tmp_second); }
+//		this->SetProblemType("eigenvaluehessian");
+//		this->GetProblem()->AddAuxiliaryToIntegrator( this->GetControlIntegrator());
+//		if (dopedim == dealdim) {
+//			this->GetIntegrator().DeleteDomainData("dq");
+//			this->GetIntegrator().DeleteDomainData("control");
+//			this->GetControlIntegrator().AddDomainData("dq", &(direction.GetSpacialVector()));
+//			this->GetControlIntegrator().AddDomainData("control", &(q.GetSpacialVector()));
+////		} else if (dopedim == 0) {
+////			this->GetIntegrator().DeleteParamData("dq");
+////			this->GetIntegrator().DeleteParamData("control");
+////			direction.UnLockCopy(); q.UnLockCopy();
+////			this->GetControlIntegrator().AddParamData("dq", &(direction.GetSpacialVectorCopy()));
+////			this->GetControlIntegrator().AddParamData("control", &(q.GetSpacialVectorCopy()));
+//		} else {
+//			throw DOpEException("dopedim not implemented", "StatReducedProblem::ComputeReducedHessianVector");
+//		}
+////		if (this->GetProblem()->HasControlInDirichletData()) {
+////			this->GetControlIntegrator().AddDomainData("adjoint_residual", &tmp);
+////			this->GetControlIntegrator().AddDomainData("hessian_residual", &tmp_second);
+////		}
+////
+//		{
+//			hessian_direction_transposed = 0.;
+//			if (dopedim == dealdim) {
+//				this->GetControlIntegrator().AddDomainData("last_newton_solution", &(hessian_direction_transposed.GetSpacialVector()));
+//				this->GetControlIntegrator().ComputeNonlinearResidual( *(this->GetProblem()), hessian_direction.GetSpacialVector()/*,eigenvalues[0]*/);
+//				this->GetControlIntegrator().DeleteDomainData("last_newton_solution");
+//			}
+////		} else if (dopedim == 0) {
+////			this->GetControlIntegrator().AddParamData("last_newton_solution", &(hessian_direction_transposed.GetSpacialVectorCopy()));
+////////         this->GetControlIntegrator().ComputeNonlinearResidual(
+////////             *(this->GetProblem()), hessian_direction.GetSpacialVector(),
+////////              true);
+//////		this->GetControlIntegrator().ComputeNonlinearResidual( *(this->GetProblem()), hessian_direction.GetSpacialVector()); this->GetControlIntegrator().DeleteParamData("last_newton_solution"); hessian_direction_transposed.UnLockCopy();
+//		}
+//		hessian_direction *= -1.; hessian_direction_transposed = hessian_direction;
+////		//Compute l^2 representation of the HesssianVector
+////		//hessian Matrix is the same as control matrix
+////		build_control_matrix_ = this->GetControlNonlinearSolver().NonlinearSolve( *(this->GetProblem()), hessian_direction_transposed.GetSpacialVector(), true, build_control_matrix_);
 //
-//		{ hessian_direction_transposed = 0.; if (dopedim == dealdim) { this->GetControlIntegrator().AddDomainData("last_newton_solution", &(hessian_direction_transposed.GetSpacialVector()));
-////          this->GetControlIntegrator().ComputeNonlinearResidual(
-////              *(this->GetProblem()), hessian_direction.GetSpacialVector(),
-////              true);
-//		this->GetControlIntegrator().ComputeNonlinearResidual( *(this->GetProblem()), hessian_direction.GetSpacialVector()); this->GetControlIntegrator().DeleteDomainData("last_newton_solution"); } else if (dopedim == 0) { this->GetControlIntegrator().AddParamData("last_newton_solution", &(hessian_direction_transposed.GetSpacialVectorCopy()));
-////         this->GetControlIntegrator().ComputeNonlinearResidual(
-////             *(this->GetProblem()), hessian_direction.GetSpacialVector(),
-////              true);
-//		this->GetControlIntegrator().ComputeNonlinearResidual( *(this->GetProblem()), hessian_direction.GetSpacialVector()); this->GetControlIntegrator().DeleteParamData("last_newton_solution"); hessian_direction_transposed.UnLockCopy(); } hessian_direction *= -1.; hessian_direction_transposed = hessian_direction;
-//		//Compute l^2 representation of the HessianVector
-//		//hessian Matrix is the same as control matrix
-//		build_control_matrix_ = this->GetControlNonlinearSolver().NonlinearSolve( *(this->GetProblem()), hessian_direction_transposed.GetSpacialVector(), true, build_control_matrix_);
+//		this->GetOutputHandler()->Write(hessian_direction, "HessianDirection" + this->GetPostIndex(), this->GetProblem()->GetDoFType());
+//		this->GetOutputHandler()->Write(hessian_direction_transposed, "HessianDirection_Transposed" + this->GetPostIndex(), this->GetProblem()->GetDoFType());
 //
-//		this->GetOutputHandler()->Write(hessian_direction, "HessianDirection" + this->GetPostIndex(), this->GetProblem()->GetDoFType()); this->GetOutputHandler()->Write(hessian_direction_transposed, "HessianDirection_Transposed" + this->GetPostIndex(), this->GetProblem()->GetDoFType()); }
 //
-//		if (dopedim == dealdim) { this->GetControlIntegrator().DeleteDomainData("dq"); this->GetControlIntegrator().DeleteDomainData("control"); } else if (dopedim == 0) { this->GetControlIntegrator().DeleteParamData("dq"); this->GetControlIntegrator().DeleteParamData("control"); direction.UnLockCopy(); q.UnLockCopy(); } else { throw DOpEException("dopedim not implemented", "StatReducedProblem::ComputeReducedHessianVector"); } this->GetIntegrator().DeleteDomainData("state"); this->GetIntegrator().DeleteDomainData("adjoint"); this->GetIntegrator().DeleteDomainData("tangent"); this->GetIntegrator().DeleteDomainData("adjoint_hessian"); this->GetControlIntegrator().DeleteDomainData("state"); this->GetControlIntegrator().DeleteDomainData("adjoint"); this->GetControlIntegrator().DeleteDomainData("tangent"); this->GetControlIntegrator().DeleteDomainData("adjoint_hessian"); if (this->GetProblem()->HasControlInDirichletData()) { this->GetControlIntegrator().DeleteDomainData("adjoint_residual"); this->GetControlIntegrator().DeleteDomainData("hessian_residual"); } this->GetProblem()->DeleteAuxiliaryFromIntegrator( this->GetControlIntegrator());
-//
-//		if (cost_needs_precomputations_ != 0) { this->GetIntegrator().DeleteParamData("cost_functional_pre"); this->GetIntegrator().DeleteParamData("cost_functional_pre_tangent"); this->GetControlIntegrator().DeleteParamData("cost_functional_pre"); this->GetControlIntegrator().DeleteParamData("cost_functional_pre_tangent"); }
+//		if (dopedim == dealdim) {
+//			this->GetControlIntegrator().DeleteDomainData("dq");
+//			this->GetControlIntegrator().DeleteDomainData("control");
+//		}/* else if (dopedim == 0) {
+//			this->GetControlIntegrator().DeleteParamData("dq");
+//			this->GetControlIntegrator().DeleteParamData("control");
+//			direction.UnLockCopy(); q.UnLockCopy();
+//		} */else {
+//			throw DOpEException("dopedim not implemented", "StatReducedProblem::ComputeReducedHessianVector");
+//		}
+//		this->GetIntegrator().DeleteDomainData("state");
+//		this->GetIntegrator().DeleteDomainData("adjoint");
+//		this->GetIntegrator().DeleteDomainData("tangent");
+//		this->GetIntegrator().DeleteDomainData("adjoint_hessian");
+//		this->GetControlIntegrator().DeleteDomainData("state");
+//		this->GetControlIntegrator().DeleteDomainData("adjoint");
+//		this->GetControlIntegrator().DeleteDomainData("tangent");
+//		this->GetControlIntegrator().DeleteDomainData("adjoint_hessian");
+//		if (this->GetProblem()->HasControlInDirichletData()) {
+//			this->GetControlIntegrator().DeleteDomainData("adjoint_residual");
+//			this->GetControlIntegrator().DeleteDomainData("hessian_residual");
+//		}
+//		this->GetProblem()->DeleteAuxiliaryFromIntegrator( this->GetControlIntegrator());
+////
+////		if (cost_needs_precomputations_ != 0) { this->GetIntegrator().DeleteParamData("cost_functional_pre"); this->GetIntegrator().DeleteParamData("cost_functional_pre_tangent"); this->GetControlIntegrator().DeleteParamData("cost_functional_pre"); this->GetControlIntegrator().DeleteParamData("cost_functional_pre_tangent"); }
 
 		}
 

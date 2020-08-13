@@ -129,6 +129,10 @@ namespace DOpE
                           double & /*ret*/,
                           double /*scale*/);
 
+    virtual void
+    ElementTimeEquation(const EDC<DH, VECTOR, dealdim> & /*edc*/,
+            dealii::Vector<double> &/*local_vector*/,
+            double /*scale*/);
     /******************************************************/
 //TODO ElementMassEquation for Eigenvalue Optimization
 
@@ -139,18 +143,18 @@ namespace DOpE
             double /*scale_ico*/);
 
 
-//    virtual void
-//    ElementMassEquation_U(const EDC<DH, VECTOR, dealdim> & /*edc*/,
-//            dealii::Vector<double> &/*local_vector*/,
-//				double /*scale*/, double /*scale_ico*/);
+    virtual void
+    ElementMassEquation_U(const EDC<DH, VECTOR, dealdim> & /*edc*/,
+            dealii::Vector<double> &/*local_vector*/,
+				double /*scale*/, double /*scale_ico*/);
 
 
 
-//    virtual void
-//    ElementMassEquation_Q(const EDC<DH, VECTOR, dealdim> & /*edc*/,
-//                          dealii::Vector<double> &/*local_vector*/,
-//                          double /*scale*/,
-//                          double /*scale_ico*/);
+    virtual void
+    ElementMassEquation_Q(const EDC<DH, VECTOR, dealdim> & /*edc*/,
+                          dealii::Vector<double> &/*local_vector*/,
+                          double /*scale*/,
+                          double /*scale_ico*/);
 
 
 
@@ -710,6 +714,15 @@ namespace DOpE
             double /*scale*/,
             double /*scale_ico*/);
 
+    virtual void
+    ElementTimeMatrix(const EDC<DH, VECTOR, dealdim> & /*edc*/,
+            dealii::FullMatrix<double> &/*local_entry_matrix*/,
+            double /*scale*/,
+            double /*scale_ico*/);
+
+    virtual void
+    ElementTimeMatrix(const EDC<DH, VECTOR, dealdim> & /*edc*/,
+            dealii::FullMatrix<double> &/*local_entry_matrix*/);
     /******************************************************/
     /**
      * The transposed of ElementTimeEquation.
@@ -788,6 +801,13 @@ namespace DOpE
                     dealii::FullMatrix<double> &/*local_entry_matrix*/,
                     double /*scale*/,
                     double /*scale_ico*/);
+
+    virtual void
+    ElementMassMatrix_T(const EDC<DH, VECTOR, dealdim> & /*edc*/,
+                    dealii::FullMatrix<double> &/*local_entry_matrix*/,
+                    double /*scale*/,
+                    double /*scale_ico*/);
+
 
     /******************************************************/
 

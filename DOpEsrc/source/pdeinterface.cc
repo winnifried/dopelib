@@ -554,11 +554,39 @@ namespace DOpE
            template<int, int> class DH, typename VECTOR, int dealdim>
   void
   PDEInterface<EDC, FDC, DH, VECTOR, dealdim>::ElementMatrix(
+		const EDC<DH, VECTOR, dealdim> &,
+	    FullMatrix<double> &/*local_entry_matrix*/, double/*scale*/,
+		double /*scale_ico*/)
+  {
+    throw DOpEException("Not Implemented", "PDEInterface::ElementMatrix");
+  }
+
+
+
+  template<
+  template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
+           template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
+           template<int, int> class DH, typename VECTOR, int dealdim>
+  void
+  PDEInterface<EDC, FDC, DH, VECTOR, dealdim>::ElementTimeMatrix(
     const EDC<DH, VECTOR, dealdim> &,
     FullMatrix<double> &/*local_entry_matrix*/, double/*scale*/,
     double /*scale_ico*/)
   {
-    throw DOpEException("Not Implemented", "PDEInterface::ElementMatrix");
+    throw DOpEException("Not Implemented", "PDEInterface::ElemenTimeMatrix");
+  }
+
+
+  template<
+  template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
+           template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
+           template<int, int> class DH, typename VECTOR, int dealdim>
+  void
+  PDEInterface<EDC, FDC, DH, VECTOR, dealdim>::ElementTimeMatrix(
+    const EDC<DH, VECTOR, dealdim> &,
+    FullMatrix<double> &/*local_entry_matrix*/)
+  {
+    throw DOpEException("Not Implemented", "PDEInterface::ElemenTimeMatrix");
   }
 
   /********************************************/
@@ -570,7 +598,8 @@ namespace DOpE
   void
   PDEInterface<EDC, FDC, DH, VECTOR, dealdim>::ElementMassMatrix(
     const EDC<DH, VECTOR, dealdim> &,
-    FullMatrix<double> &/*local_entry_matrix*/)
+    FullMatrix<double> &/*local_entry_matrix*/, double/*scale*/,
+    double /*scale_ico*/)
   {
     throw DOpEException("Not Implemented", "PDEInterface::ElementMassMatrix");
   }
@@ -674,6 +703,33 @@ namespace DOpE
   }
 
   /********************************************/
+
+  template<
+   template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
+            template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
+            template<int, int> class DH, typename VECTOR, int dealdim>
+   void
+   PDEInterface<EDC, FDC, DH, VECTOR, dealdim>::ElementMassMatrix_T(
+     const EDC<DH, VECTOR, dealdim> &edc,
+     FullMatrix<double> &local_entry_matrix, double scale, double scale_ico)
+   {
+     FullMatrix<double> tmp_mat = local_entry_matrix;
+     tmp_mat = 0.;
+
+     //FIXME is this the right behaviour in the instationary case? or what
+     //are the correct values for scale and scale_ico?
+     ElementMassMatrix(edc, tmp_mat, scale, scale_ico);
+     unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
+
+     for (unsigned int i = 0; i < n_dofs_per_element; i++)
+       {
+         for (unsigned int j = 0; j < n_dofs_per_element; j++)
+           {
+             local_entry_matrix(j, i) += tmp_mat(i, j);
+           }
+       }
+   }
+
 
   template<
   template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,

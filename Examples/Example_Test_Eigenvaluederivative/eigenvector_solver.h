@@ -129,15 +129,15 @@ namespace DOpE
                    int /*priority*/,
                    std::string /*algo_level*//*, int n_eigenval*/)
   {
-   this->ReInit(pde);
+
    bool build_matrix = force_matrix_build;
 
 
-   if (force_matrix_build)
-        {
+   if (force_matrix_build) {
+   	   this->ReInit(pde);
 	   integrator_.ComputeMatrix(pde,matrixK_);
 	   integrator_.ComputeMassMatrix(pde,matrixM_);
-        }
+   }
 
       eigenfunction_index_set = pde.GetBaseProblem().GetSpaceTimeHandler()->GetStateDoFHandler().GetDEALDoFHandler().locally_owned_dofs();
       for (unsigned int i = 0; i < eigenfunctions.size(); ++i) {
