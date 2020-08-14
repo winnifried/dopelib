@@ -494,11 +494,11 @@ namespace DOpE
                     dealii::Vector<double> &local_vector, double scale,
                     double scale_ico);
 
-    template<typename DATACONTAINER>
-    void
-    ElementMassEquation(const DATACONTAINER &edc,
-                    dealii::Vector<double> &local_vector, double scale,
-                    double scale_ico);
+//    template<typename DATACONTAINER>
+//    void
+//    ElementMassEquation(const DATACONTAINER &edc,
+//                    dealii::Vector<double> &local_vector, double scale,
+//                    double scale_ico);
 
 
     // ohne scale_ico für ElementEquation_Q..
@@ -507,10 +507,10 @@ namespace DOpE
     ElementEquation(const DATACONTAINER &edc,
                     dealii::Vector<double> &local_vector, double scale);
 
-    template<typename DATACONTAINER>
-    void
-    ElementMassEquation(const DATACONTAINER &edc,
-                    dealii::Vector<double> &local_vector, double scale);
+//    template<typename DATACONTAINER>
+//    void
+//    ElementMassEquation(const DATACONTAINER &edc,
+//                    dealii::Vector<double> &local_vector, double scale);
 
     /******************************************************/
 
@@ -563,6 +563,10 @@ namespace DOpE
     void
     ElementRhs(const DATACONTAINER &dc,
                dealii::Vector<double> &local_vector, double scale = 1.);
+    template<typename DATACONTAINER>
+       void
+       ElementRhs(const DATACONTAINER &dc,
+                  dealii::Vector<double> &local_vector, double scale = 1., double eigenvalue = 1.);
 
     /******************************************************/
 
@@ -2154,34 +2158,31 @@ namespace DOpE
       }
   }
 
-  /******************************************************/
-
-  template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-  template<int, int> class DH>
-  template<typename DATACONTAINER>
-  void
-  OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
-                      CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::ElementMassEquation(
-                        const DATACONTAINER &edc, dealii::Vector<double> &local_vector,
-                        double scale, double /*scale_ico*/)
-  {
-	 /* if(this->GetType() == "eigenvaluederivative"){
-		  this->GetPDE().ElementMassEquation_Q(edc, local_vector, scale*c_interval_length_);
-	  }
-	  else */ if ((this->GetType() == "gradient")
-        || (this->GetType() == "hessian") || this->GetType() == "eigenvaluehessian" || (this->GetType() == "eigenvaluederivative"))
-      {
-        throw DOpEException("Not implemented",
-                            "OptProblemContainer::ElementMassEquation");
-      }
-    else
-      {
-        throw DOpEException("Not implemented",
-                            "OptProblemContainer::ElementMassEquation");
-      }
-  }
+//  /******************************************************/
+//
+//  template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
+//  typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+//  typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+//  template<int, int> class DH>
+//  template<typename DATACONTAINER>
+//  void
+//  OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
+//                      CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::ElementMassEquation(
+//                        const DATACONTAINER &edc, dealii::Vector<double> &local_vector,
+//                        double scale, double /*scale_ico*/)
+//  {
+//	  if ((this->GetType() == "gradient")
+//        || (this->GetType() == "hessian") || this->GetType() == "eigenvaluehessian" || (this->GetType() == "eigenvaluederivative"))
+//      {
+//        throw DOpEException("Not implemented",
+//                            "OptProblemContainer::ElementMassEquation");
+//      }
+//    else
+//      {
+//        throw DOpEException("Not implemented",
+//                            "OptProblemContainer::ElementMassEquation");
+//      }
+//  }
 
   /******************************************************/
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
@@ -2201,52 +2202,44 @@ namespace DOpE
 	         // control values in quadrature point
 	         this->GetPDE().ControlElementEquation(edc, local_vector, scale*c_interval_length_);
 	       }
-
-//	  else if  (this->GetType() == "eigenvaluederivative")
-//        {
-//          // control values in quadrature points
-//          this->GetPDE().ElementEquation_Q(edc, local_vector, scale*c_interval_length_);
-//        }
-     /* else if ((this->GetType() == "eigenvaluederivative")){
-      	 this->GetPDE().ElementEquation_Q(edc, local_vector, scale*c_interval_length_);
-      }*/else
+	  	  else
         {
           throw DOpEException("Not implemented",
                               "OptProblemContainer::ElementEquation");
         }
     }
 
-    /******************************************************/
-
-    template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
-    typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
-    typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
-    template<int, int> class DH>
-    template<typename DATACONTAINER>
-    void
-    OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
-                        CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::ElementMassEquation(
-                          const DATACONTAINER &edc, dealii::Vector<double> &local_vector,
-                          double scale)
-    {
-    	//TODO ... nur zum Testen, stimmt noch nicht
-    	 if ((this->GetType() == "gradient")
-    		         || (this->GetType() == "hessian") || (this->GetType() == "eigenvaluehessian") || (this->GetType() == "eigenvaluehessian"))
-    		       {
-    		         // control values in quadrature point
-    		         this->GetPDE().ControlElementEquation(edc, local_vector, scale*c_interval_length_);
-    		       }
-
-    	 else if (this->GetType() == "eigenvaluederivative")
-        {
-  		  this->GetPDE().ElementMassEquation_Q(edc, local_vector, scale*c_interval_length_);
-        }
-      else
-        {
-          throw DOpEException("Not implemented",
-                              "OptProblemContainer::ElementMassEquation");
-        }
-    }
+//    /******************************************************/
+//
+//    template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
+//    typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+//    typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+//    template<int, int> class DH>
+//    template<typename DATACONTAINER>
+//    void
+//    OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
+//                        CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::ElementMassEquation(
+//                          const DATACONTAINER &edc, dealii::Vector<double> &local_vector,
+//                          double scale)
+//    {
+//    	//TODO ... nur zum Testen, stimmt noch nicht
+//    	 if ((this->GetType() == "gradient")
+//    		         || (this->GetType() == "hessian") || (this->GetType() == "eigenvaluehessian") || (this->GetType() == "eigenvaluehessian"))
+//    		       {
+//    		         // control values in quadrature point
+//    		         this->GetPDE().ControlElementEquation(edc, local_vector, scale*c_interval_length_);
+//    		       }
+//
+//    	 else if (this->GetType() == "eigenvaluederivative")
+//        {
+//  		  this->GetPDE().ElementMassEquation_Q(edc, local_vector, scale*c_interval_length_);
+//        }
+//      else
+//        {
+//          throw DOpEException("Not implemented",
+//                              "OptProblemContainer::ElementMassEquation");
+//        }
+//    }
 
     /******************************************************/
 
@@ -2358,6 +2351,59 @@ namespace DOpE
 
   /******************************************************/
 
+   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
+   typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
+   typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
+   template<int, int> class DH>
+   template<typename DATACONTAINER>
+   void
+   OptProblemContainer<FUNCTIONAL_INTERFACE, FUNCTIONAL, PDE, DD,
+                       CONSTRAINTS, SPARSITYPATTERN, VECTOR, dopedim, dealdim, FE, DH>::ElementRhs(
+                         const DATACONTAINER &edc, dealii::Vector<double> &local_vector,
+                         double scale, double eigenvalue)
+   {
+ 	    if (this->GetType() == "eigenvaluederivative")
+ 	      {
+ //	        if (GetSpaceTimeHandler()->GetControlActionType()
+ //	            == DOpEtypes::VectorAction::initial && initial_)
+ //	          {
+ //	            this->GetPDE().Init_ElementRhs_Q(edc, local_vector, scale);
+ //	          }
+ 	        // state values in quadrature points
+ 	    	//TODO
+ 	        if (GetFunctional()->NeedTime())
+ 	          {
+ 	            if (GetFunctional()->GetType().find("domain") != std::string::npos)
+ 	              {
+ //	                if (GetFunctional()->GetType().find("timedistributed") != std::string::npos)
+ //	                  {
+ //	                    GetFunctional()->ElementValue_Q(edc, local_vector, scale*interval_length_);
+ //	                  }
+ //	                else
+ //	                  {
+ 	                    GetFunctional()->ElementValue_Q(edc, local_vector, scale);
+ //	                  }
+ //	                if (GetFunctional()->GetType().find("timedistributed") != std::string::npos && GetFunctional()->GetType().find("timelocal") != std::string::npos)
+ //	                  {
+ //	                    throw DOpEException("Conflicting functional types: "+ GetFunctional()->GetType(),
+ //	                                        "OptProblemContainer::ElementRhs");
+ //	                  }
+ 	              }
+ 	          }
+ 	       this->GetPDE().ElementMassEquation_Q(edc, local_vector, scale*interval_length_ , eigenvalue);
+ 	        scale *= -1;
+ 	        this->GetPDE().ElementEquation_Q(edc, local_vector, scale*interval_length_/*, scale*interval_length_*/);
+
+ 	   }else
+ 		        {
+ 		          throw DOpEException("Not implemented",
+ 		                              "OptProblemContainer::ElementRhs");
+ 		        }
+   }
+
+
+  /******************************************************/
+
   template<typename FUNCTIONAL_INTERFACE, typename FUNCTIONAL, typename PDE,
   typename DD, typename CONSTRAINTS, typename SPARSITYPATTERN,
   typename VECTOR, int dopedim, int dealdim, template<int, int> class FE,
@@ -2369,119 +2415,121 @@ namespace DOpE
                         const DATACONTAINER &edc, dealii::Vector<double> &local_vector,
                         double scale)
   {
-	    if (this->GetType() == "eigenvaluederivative")
-	      {
-//	        if (GetSpaceTimeHandler()->GetControlActionType()
-//	            == DOpEtypes::VectorAction::initial && initial_)
+//	    if (this->GetType() == "eigenvaluederivative")
+//	      {
+////	        if (GetSpaceTimeHandler()->GetControlActionType()
+////	            == DOpEtypes::VectorAction::initial && initial_)
+////	          {
+////	            this->GetPDE().Init_ElementRhs_Q(edc, local_vector, scale);
+////	          }
+//	        // state values in quadrature points
+//	    	//TODO
+//	        if (GetFunctional()->NeedTime())
 //	          {
-//	            this->GetPDE().Init_ElementRhs_Q(edc, local_vector, scale);
+//	            if (GetFunctional()->GetType().find("domain") != std::string::npos)
+//	              {
+////	                if (GetFunctional()->GetType().find("timedistributed") != std::string::npos)
+////	                  {
+////	                    GetFunctional()->ElementValue_Q(edc, local_vector, scale*interval_length_);
+////	                  }
+////	                else
+////	                  {
+//	                    GetFunctional()->ElementValue_Q(edc, local_vector, scale);
+////	                  }
+////	                if (GetFunctional()->GetType().find("timedistributed") != std::string::npos && GetFunctional()->GetType().find("timelocal") != std::string::npos)
+////	                  {
+////	                    throw DOpEException("Conflicting functional types: "+ GetFunctional()->GetType(),
+////	                                        "OptProblemContainer::ElementRhs");
+////	                  }
+//	              }
 //	          }
-	        // state values in quadrature points
-	    	//TODO
-	        if (GetFunctional()->NeedTime())
-	          {
-	            if (GetFunctional()->GetType().find("domain") != std::string::npos)
-	              {
-//	                if (GetFunctional()->GetType().find("timedistributed") != std::string::npos)
-//	                  {
-//	                    GetFunctional()->ElementValue_Q(edc, local_vector, scale*interval_length_);
-//	                  }
-//	                else
-//	                  {
-	                    GetFunctional()->ElementValue_Q(edc, local_vector, scale);
-//	                  }
-//	                if (GetFunctional()->GetType().find("timedistributed") != std::string::npos && GetFunctional()->GetType().find("timelocal") != std::string::npos)
-//	                  {
-//	                    throw DOpEException("Conflicting functional types: "+ GetFunctional()->GetType(),
-//	                                        "OptProblemContainer::ElementRhs");
-//	                  }
-	              }
-	          }
-	        scale *= -1;
-	        this->GetPDE().ElementEquation_Q(edc, local_vector, scale*interval_length_/*, scale*interval_length_*/);
-	        scale *= -1;
-	        this->GetPDE().ElementMassEquation_Q(edc, local_vector, scale*interval_length_/*, scale*interval_length_*/);
-	   }
-//	    else if (this->GetType() == "gradient")
-//      {
-//        if (GetSpaceTimeHandler()->GetControlActionType()
-//            == DOpEtypes::VectorAction::initial && initial_)
-//          {
-//            this->GetPDE().Init_ElementRhs_Q(edc, local_vector, scale);
-//          }
-//        // state values in quadrature points
-//        if (GetFunctional()->NeedTime())
-//          {
-//            if (GetFunctional()->GetType().find("domain") != std::string::npos)
-//              {
-//                if (GetFunctional()->GetType().find("timedistributed") != std::string::npos)
-//                  {
-//                    GetFunctional()->ElementValue_Q(edc, local_vector, scale*interval_length_);
-//                  }
-//                else
-//                  {
-//                    GetFunctional()->ElementValue_Q(edc, local_vector, scale);
-//                  }
-//                if (GetFunctional()->GetType().find("timedistributed") != std::string::npos && GetFunctional()->GetType().find("timelocal") != std::string::npos)
-//                  {
-//                    throw DOpEException("Conflicting functional types: "+ GetFunctional()->GetType(),
-//                                        "OptProblemContainer::ElementRhs");
-//                  }
-//              }
-//          }
-//        scale *= -1;
-//        this->GetPDE().ElementEquation_Q(edc, local_vector, scale*interval_length_, scale*interval_length_);
-//      }
-//    else if (this->GetType() == "hessian")
-//      {
-//        if (GetSpaceTimeHandler()->GetControlActionType()
-//            == DOpEtypes::VectorAction::initial && initial_)
-//          {
-//            this->GetPDE().Init_ElementRhs_QTT(edc, local_vector, scale);
-//            this->GetPDE().Init_ElementRhs_QQ(edc, local_vector, scale);
-//          }
-//        if (GetFunctional()->NeedTime())
-//          {
-//            if (GetFunctional()->GetType().find("domain") != std::string::npos)
-//              {
-//                if (GetFunctional()->GetType().find("timedistributed") != std::string::npos)
-//                  {
-//                    GetFunctional()->ElementValue_QQ(edc, local_vector, scale*interval_length_);
-//                    GetFunctional()->ElementValue_UQ(edc, local_vector, scale*interval_length_);
-//                  }
-//                else
-//                  {
-//                    GetFunctional()->ElementValue_QQ(edc, local_vector, scale);
-//                    GetFunctional()->ElementValue_UQ(edc, local_vector, scale);
-//                  }
-//                if (GetFunctional()->GetType().find("timedistributed") != std::string::npos && GetFunctional()->GetType().find("timelocal") != std::string::npos)
-//                  {
-//                    throw DOpEException("Conflicting functional types: "+ GetFunctional()->GetType(),
-//                                        "OptProblemContainer::ElementRhs");
-//                  }
-//              }
-//          }
-//
-//        scale *= -1;
-//        this->GetPDE().ElementEquation_QTT(edc, local_vector, scale*interval_length_, scale*interval_length_);
-//        this->GetPDE().ElementEquation_UQ(edc, local_vector, scale*interval_length_, scale*interval_length_);
-//        this->GetPDE().ElementEquation_QQ(edc, local_vector, scale*interval_length_, scale*interval_length_);
-//      }
-//    else if (this->GetType() == "global_constraint_gradient")
-//      {
-//        assert(interval_length_==1.);
-//        GetConstraints()->ElementValue_Q(edc, local_vector, scale);
-//      }
-//    else if (this->GetType() == "global_constraint_hessian")
-//      {
-//        assert(interval_length_==1.);
-//        GetConstraints()->ElementValue_QQ(edc, local_vector, scale);
-//      }
-//    else
-//      {
-//        throw DOpEException("Not implemented",
-//                            "OptProblemContainer::ElementRhs");
-//      }
+//	        scale *= -1;
+//	        this->GetPDE().ElementEquation_Q(edc, local_vector, scale*interval_length_/*, scale*interval_length_*/);
+//	        scale *= -1;
+//	        this->GetPDE().ElementMassEquation_Q(edc, local_vector, scale*interval_length_/*, scale*interval_length_*/);
+//	   }
+//	    else
+
+	    	if (this->GetType() == "gradient")
+      {
+        if (GetSpaceTimeHandler()->GetControlActionType()
+            == DOpEtypes::VectorAction::initial && initial_)
+          {
+            this->GetPDE().Init_ElementRhs_Q(edc, local_vector, scale);
+          }
+        // state values in quadrature points
+        if (GetFunctional()->NeedTime())
+          {
+            if (GetFunctional()->GetType().find("domain") != std::string::npos)
+              {
+                if (GetFunctional()->GetType().find("timedistributed") != std::string::npos)
+                  {
+                    GetFunctional()->ElementValue_Q(edc, local_vector, scale*interval_length_);
+                  }
+                else
+                  {
+                    GetFunctional()->ElementValue_Q(edc, local_vector, scale);
+                  }
+                if (GetFunctional()->GetType().find("timedistributed") != std::string::npos && GetFunctional()->GetType().find("timelocal") != std::string::npos)
+                  {
+                    throw DOpEException("Conflicting functional types: "+ GetFunctional()->GetType(),
+                                        "OptProblemContainer::ElementRhs");
+                  }
+              }
+          }
+        scale *= -1;
+        this->GetPDE().ElementEquation_Q(edc, local_vector, scale*interval_length_, scale*interval_length_);
+      }
+    else if (this->GetType() == "hessian")
+      {
+        if (GetSpaceTimeHandler()->GetControlActionType()
+            == DOpEtypes::VectorAction::initial && initial_)
+          {
+            this->GetPDE().Init_ElementRhs_QTT(edc, local_vector, scale);
+            this->GetPDE().Init_ElementRhs_QQ(edc, local_vector, scale);
+          }
+        if (GetFunctional()->NeedTime())
+          {
+            if (GetFunctional()->GetType().find("domain") != std::string::npos)
+              {
+                if (GetFunctional()->GetType().find("timedistributed") != std::string::npos)
+                  {
+                    GetFunctional()->ElementValue_QQ(edc, local_vector, scale*interval_length_);
+                    GetFunctional()->ElementValue_UQ(edc, local_vector, scale*interval_length_);
+                  }
+                else
+                  {
+                    GetFunctional()->ElementValue_QQ(edc, local_vector, scale);
+                    GetFunctional()->ElementValue_UQ(edc, local_vector, scale);
+                  }
+                if (GetFunctional()->GetType().find("timedistributed") != std::string::npos && GetFunctional()->GetType().find("timelocal") != std::string::npos)
+                  {
+                    throw DOpEException("Conflicting functional types: "+ GetFunctional()->GetType(),
+                                        "OptProblemContainer::ElementRhs");
+                  }
+              }
+          }
+
+        scale *= -1;
+        this->GetPDE().ElementEquation_QTT(edc, local_vector, scale*interval_length_, scale*interval_length_);
+        this->GetPDE().ElementEquation_UQ(edc, local_vector, scale*interval_length_, scale*interval_length_);
+        this->GetPDE().ElementEquation_QQ(edc, local_vector, scale*interval_length_, scale*interval_length_);
+      }
+    else if (this->GetType() == "global_constraint_gradient")
+      {
+        assert(interval_length_==1.);
+        GetConstraints()->ElementValue_Q(edc, local_vector, scale);
+      }
+    else if (this->GetType() == "global_constraint_hessian")
+      {
+        assert(interval_length_==1.);
+        GetConstraints()->ElementValue_QQ(edc, local_vector, scale);
+      }
+    else
+      {
+        throw DOpEException("Not implemented",
+                            "OptProblemContainer::ElementRhs");
+      }
 
   }
 
@@ -2745,7 +2793,7 @@ namespace DOpE
   {
 
     if ((this->GetType() == "gradient")
-        || (this->GetType() == "hessian")/*|| (this->GetType() == "eigenvaluederivative")*/)
+        || (this->GetType() == "hessian")|| (this->GetType() == "eigenvaluederivative"))
       {
         // control values in quadrature points
         this->GetPDE().ControlElementMatrix(edc, local_entry_matrix, scale*c_interval_length_);
