@@ -563,7 +563,7 @@ namespace DOpE
     void
     ElementRhs(const DATACONTAINER &dc,
                dealii::Vector<double> &local_vector, double scale = 1.);
-    template<typename DATACONTAINER>
+   template<typename DATACONTAINER>
        void
        ElementRhs(const DATACONTAINER &dc,
                   dealii::Vector<double> &local_vector, double scale = 1., double eigenvalue = 1.);
@@ -1189,7 +1189,7 @@ namespace DOpE
     * available for the integrated object.
     *
     * @param integrator         The integrator in which the vecors should be available
-    *
+    *Ele
     */
 
     template<typename INTEGRATOR>
@@ -1939,6 +1939,12 @@ namespace DOpE
                         const DATACONTAINER &edc)
   {
 
+	if ((this->GetType() == "cost_functional") || (this->GetType() == "cost_functional_pre")
+	        || (this->GetType() == "cost_functional_pre_tangent"))
+	      {
+	        // state values in quadrature points
+	        return GetFunctional()->ElementValue(edc);
+	      }else
     if ((this->GetType() == "cost_functional") || (this->GetType() == "cost_functional_pre")
         || (this->GetType() == "cost_functional_pre_tangent"))
       {
@@ -2391,8 +2397,10 @@ namespace DOpE
  	              }
  	          }
  	       this->GetPDE().ElementMassEquation_Q(edc, local_vector, scale*interval_length_ , eigenvalue);
- 	        scale *= -1;
- 	        this->GetPDE().ElementEquation_Q(edc, local_vector, scale*interval_length_/*, scale*interval_length_*/);
+ 	       scale *= -1;
+ 	       this->GetPDE().ElementEquation_Q(edc, local_vector, scale*interval_length_/*, scale*interval_length_*/);
+
+
 
  	   }else
  		        {

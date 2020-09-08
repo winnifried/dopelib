@@ -29,7 +29,14 @@
 #include <deal.II/base/quadrature_lib.h>
 #include <deal.II/lac/precondition_block.h>
 
-#include <opt_algorithms/algorithmForEigenvalueproblem.h>
+#include <deal.II/lac/sparse_direct.h>
+
+#include <deal.II/dofs/dof_tools.h>
+#include <deal.II/numerics/vector_tools.h>
+#include <deal.II/base/function_lib.h>
+#include <deal.II/base/table.h>
+
+//#include <opt_algorithms/algorithmForEigenvalueproblem.h>
 #include <opt_algorithms/reducedgradientdescentalgorithm.h>
 #include <container/optproblemcontainer.h>
 #include <interfaces/functionalinterface.h>
@@ -44,6 +51,9 @@
 #include <templates/voidlinearsolver.h>
 #include <templates/directlinearsolver.h>
 #include <templates/cglinearsolver.h>
+#include <templates/gmreslinearsolver.h>
+#include <templates/trilinosdirectlinearsolver.h>
+#include <templates/richardsonlinearsolver.h>
 
 #include <templates/newtonsolver.h>
 
@@ -55,7 +65,7 @@
 
 #include "localpde.h"
 #include "localfunctional.h"
-//#include "functionals.h"
+#include "functions.h"
 #include "eigenvector_solver.h"
 #include "eigenvalueproblem.h"
 #include "integrator_eigenval.h"
@@ -78,6 +88,7 @@ typedef QGauss<DIM> QUADRATURE;
 typedef QGauss<DIM - 1> FACEQUADRATURE;
 
 typedef PETScWrappers::SparseMatrix MATRIX;
+typedef SparseMatrix<double> MATRIXFORLINSOLVE;
 typedef /*Block*/SparsityPattern SPARSITYPATTERN;
 typedef /*Block*/Vector<double> VECTOR;
 
@@ -102,21 +113,17 @@ typedef IntegratorDataContainer<DOFHANDLER, QUADRATURE, FACEQUADRATURE, VECTOR,
 typedef Integrator_eigenval<IDC, VECTOR, double, DIM> INTEGRATOR;
 typedef Integrator_eigenval<IDC, VECTOR, double, DIM> INTEGRATOR_CONTROL;
 
-typedef VoidLinearSolver<VECTOR> VOIDLS;
 //typedef VoidLinearSolver<VECTOR> LINEARSOLVER;
-//typedef CGLinearSolverWithMatrix<
-//DOpEWrapper::PreconditionIdentity_Wrapper<MATRIX>, SPARSITYPATTERN, MATRIX,
-//            VECTOR> LINEARSOLVER;
+
+typedef RichardsonLinearSolverWithMatrix<DOpEWrapper::PreconditionIdentity_Wrapper<MATRIXFORLINSOLVE>,SPARSITYPATTERN, MATRIXFORLINSOLVE, VECTOR> LINEARSOLVER;
+//typedef GMRESLinearSolverWithMatrix<DOpEWrapper::PreconditionIdentity_Wrapper<MATRIXFORLINSOLVE>,SPARSITYPATTERN, MATRIXFORLINSOLVE, VECTOR> LINEARSOLVER;
+
 //typedef DirectLinearSolverWithMatrix<SPARSITYPATTERN, MATRIX, VECTOR> LINEARSOLVER;
 
-typedef EigenvectorSolver<INTEGRATOR,VECTOR,EIGENVALUES, EIGENVECTORS, MATRIX, SPARSITYPATTERN> EVS;
-
-
-typedef NewtonSolver<INTEGRATOR_CONTROL, VOIDLS, VECTOR> NLS;
+typedef EigenvectorSolver<INTEGRATOR,VECTOR,EIGENVALUES, EIGENVECTORS, MATRIX, SPARSITYPATTERN, LINEARSOLVER> EVS;
 
 typedef EigenvalueProblem<EVS, EVS,INTEGRATOR_CONTROL, INTEGRATOR, OP, VECTOR, CDIM,
-        DIM/*,EIGENVALUES, EIGENVECTORS*/> RP;
-//typedef EVAlgorithm<OP, VECTOR> RNA;
+        DIM> RP;
 typedef ReducedGradientDescentAlgorithm<OP, VECTOR> RNA;
 
 
@@ -141,8 +148,7 @@ main(int argc, char **argv)
       return -1;
     }
   ParameterReader pr;
-//  RP::declare_params(pr);
-//  NLS::declare_params(pr);
+  EVS::declare_params(pr);
   RNA::declare_params(pr);
   DOpEOutputHandler<VECTOR>::declare_params(pr);
 
@@ -150,7 +156,7 @@ main(int argc, char **argv)
 
   Triangulation<DIM> triangulation;
   GridGenerator::hyper_cube(triangulation, 0, M_PI);
-  triangulation.refine_global(2);
+  triangulation.refine_global(3);
 
   //------------- FE-System ---------------------------------------------
    FE<DIM> control_fe(FE_Q<DIM>(1), 2);
@@ -163,7 +169,7 @@ main(int argc, char **argv)
 
   LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM> LPDE(pr);
 
-  COSTFUNCTIONAL LFunc(10);
+  COSTFUNCTIONAL LFunc(100);
   STH DOFH(triangulation, control_fe, state_fe, DOpEtypes::stationary);
 
   NoConstraints<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> Constraints;
@@ -198,24 +204,17 @@ main(int argc, char **argv)
 
 //  out.ReInit();
   ControlVector<VECTOR> q(&DOFH, DOpEtypes::VectorStorageType::fullmem,pr);
+  local::Q_Control q_initial;
+  VectorTools::interpolate(DOFH.GetControlDoFHandler().GetDEALDoFHandler(), q_initial,  q.GetSpacialVector());
+  ControlVector<VECTOR> dq(q);
 
-  //Set the initial control values: TODO
-  Vector<double> qinit(q.GetSpacialVector().size());
-   for(unsigned i = 0; i < q.GetSpacialVector().size(); i++) {
-	   if ( i == 0 ||  i % 2 == 0){
-		   qinit(i) = 0;
-	   }else{
-		   qinit(i) = 0.;
-	   }
-  }
-
-  q.GetSpacialVector() = qinit;
       try
         {
-    	  Alg.ReInit();
-//             q = 0;//1;
-    	  Alg.Solve(q, 0.1);
+//    	  solver.ComputeReducedCostFunctional(q);
 
+    	  Alg.ReInit();
+    	  Alg.Solve(q);
+//    	  Alg.CheckGrads(1., q, dq, 4);
         }
       catch (DOpEException &e)
         {

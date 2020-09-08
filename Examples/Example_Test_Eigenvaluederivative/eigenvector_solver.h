@@ -43,11 +43,11 @@
 namespace DOpE
 {
 
-  template <typename INTEGRATOR, typename VECTOR,typename EIGENVALUES, typename EIGENVECTORS, typename MATRIX,typename SPARSITYPATTERN>
-  class EigenvectorSolver
+  template <typename INTEGRATOR, typename VECTOR,typename EIGENVALUES, typename EIGENVECTORS, typename MATRIX,typename SPARSITYPATTERN, typename LINEARSOLVER>
+  class EigenvectorSolver : public LINEARSOLVER
   {
   public:
-	  EigenvectorSolver(INTEGRATOR &integrator, ParameterReader &param_reader);
+	  EigenvectorSolver( INTEGRATOR &integrator, ParameterReader &param_reader);
     ~EigenvectorSolver();
 
     static void declare_params(ParameterReader &param_reader);
@@ -59,6 +59,10 @@ namespace DOpE
     bool EigenvalueSolve(PROBLEM &pde, EIGENVALUES &eigenvalues, EIGENVECTORS &eigenfunctions, bool apply_boundary_values=true,
                             bool force_matrix_build=false,
                             int priority = 5, std::string algo_level = "\t\t "/*, int n_eigenval=5*/);
+    template<typename PROBLEM>
+       bool NonlinearSolve(PROBLEM &pde, EIGENVALUES &eigenvalues, VECTOR &solution, bool apply_boundary_values=true,
+                               bool force_matrix_build=false,
+                               int priority = 5, std::string algo_level = "\t\t "/*, int n_eigenval=5*/);
 
     inline INTEGRATOR &GetIntegrator();
 
@@ -71,40 +75,61 @@ namespace DOpE
 
     bool build_matrix_;
 
-    double linear_global_tol_= 0.000001, linear_tol_ = 0.00001;
-    int  linear_maxiter_=1000,n_eigenval_;
+//    double linear_global_tol_= 0.000001, linear_tol_ = 0.00001;
+   int  linear_maxiter_=1000,n_eigenval_;
+
+    double nonlinear_global_tol_, nonlinear_tol_, nonlinear_rho_;
+       double linesearch_rho_;
+       int nonlinear_maxiter_, line_maxiter_;
   };
 
   /**********************************Implementation*******************************************/
 
-  template <typename INTEGRATOR, typename VECTOR,typename EIGENVALUES, typename EIGENVECTORS, typename MATRIX, typename SPARSITYPATTERN>
-  void EigenvectorSolver<INTEGRATOR,VECTOR,EIGENVALUES, EIGENVECTORS, MATRIX, SPARSITYPATTERN>
-  ::declare_params(ParameterReader &/*param_reader*/)
+  template <typename INTEGRATOR, typename VECTOR,typename EIGENVALUES, typename EIGENVECTORS, typename MATRIX, typename SPARSITYPATTERN, typename LINEARSOLVER>
+  void EigenvectorSolver<INTEGRATOR,VECTOR,EIGENVALUES, EIGENVECTORS, MATRIX, SPARSITYPATTERN, LINEARSOLVER>
+  ::declare_params(ParameterReader &param_reader)
   {
+	  param_reader.SetSubsection("newtonsolver parameters");
+	     param_reader.declare_entry("nonlinear_global_tol", "1.e-12",Patterns::Double(0),"global tolerance for the newton iteration");
+	     param_reader.declare_entry("nonlinear_tol", "1.e-10",Patterns::Double(0),"relative tolerance for the newton iteration");
+	     param_reader.declare_entry("nonlinear_maxiter", "10",Patterns::Integer(0),"maximal number of newton iterations");
+	     param_reader.declare_entry("nonlinear_rho", "0.1",Patterns::Double(0),"minimal  newton reduction, if actual reduction is less, matrix is rebuild ");
+
+	     param_reader.declare_entry("line_maxiter", "4",Patterns::Integer(0),"maximal number of linesearch steps");
+	     param_reader.declare_entry("linesearch_rho", "0.9",Patterns::Double(0),"reduction rate for the linesearch damping paramete");
+
+	     LINEARSOLVER::declare_params(param_reader);
 
   }
 
   /*******************************************************************************************/
-  template <typename INTEGRATOR, typename VECTOR, typename EIGENVALUES, typename EIGENVECTORS, typename MATRIX, typename SPARSITYPATTERN>
-  EigenvectorSolver<INTEGRATOR,VECTOR,EIGENVALUES, EIGENVECTORS, MATRIX, SPARSITYPATTERN>
-  ::EigenvectorSolver(INTEGRATOR &integrator, ParameterReader &/*param_reader*/)
-    : integrator_(integrator)
+  template <typename INTEGRATOR, typename VECTOR, typename EIGENVALUES, typename EIGENVECTORS, typename MATRIX, typename SPARSITYPATTERN, typename LINEARSOLVER>
+  EigenvectorSolver<INTEGRATOR,VECTOR,EIGENVALUES, EIGENVECTORS, MATRIX, SPARSITYPATTERN, LINEARSOLVER>
+  ::EigenvectorSolver(INTEGRATOR &integrator, ParameterReader &param_reader)
+    : LINEARSOLVER(param_reader), integrator_(integrator)
   {
+	    param_reader.SetSubsection("newtonsolver parameters");
+	    nonlinear_global_tol_ = param_reader.get_double ("nonlinear_global_tol");
+	    nonlinear_tol_        = param_reader.get_double ("nonlinear_tol");
+	    nonlinear_maxiter_    = param_reader.get_integer ("nonlinear_maxiter");
+	    nonlinear_rho_        = param_reader.get_double ("nonlinear_rho");
 
+	    line_maxiter_   = param_reader.get_integer ("line_maxiter");
+	    linesearch_rho_ = param_reader.get_double ("linesearch_rho");
   }
 
   /*******************************************************************************************/
 
-  template <typename INTEGRATOR, typename VECTOR, typename EIGENVALUES, typename EIGENVECTORS, typename MATRIX, typename SPARSITYPATTERN>
-  EigenvectorSolver<INTEGRATOR,VECTOR, EIGENVALUES, EIGENVECTORS, MATRIX, SPARSITYPATTERN>
+  template <typename INTEGRATOR, typename VECTOR, typename EIGENVALUES, typename EIGENVECTORS, typename MATRIX, typename SPARSITYPATTERN, typename LINEARSOLVER>
+  EigenvectorSolver<INTEGRATOR,VECTOR, EIGENVALUES, EIGENVECTORS, MATRIX, SPARSITYPATTERN, LINEARSOLVER>
   ::~EigenvectorSolver()
   {
   }
 
   /*******************************************************************************************/
-  template <typename INTEGRATOR, typename VECTOR, typename EIGENVALUES, typename EIGENVECTORS, typename MATRIX, typename SPARSITYPATTERN>
+  template <typename INTEGRATOR, typename VECTOR, typename EIGENVALUES, typename EIGENVECTORS, typename MATRIX, typename SPARSITYPATTERN, typename LINEARSOLVER>
   template<typename PROBLEM>
-  void EigenvectorSolver<INTEGRATOR, VECTOR, EIGENVALUES, EIGENVECTORS, MATRIX, SPARSITYPATTERN>
+  void EigenvectorSolver<INTEGRATOR, VECTOR, EIGENVALUES, EIGENVECTORS, MATRIX, SPARSITYPATTERN, LINEARSOLVER>
   ::ReInit(PROBLEM &pde)
   {
 
@@ -114,13 +139,14 @@ namespace DOpE
 	     matrixK_.clear();
 	     matrixK_.reinit(pde.GetBaseProblem().GetSpaceTimeHandler()->GetStateDoFHandler().GetDEALDoFHandler().n_dofs(), pde.GetBaseProblem().GetSpaceTimeHandler()->GetStateDoFHandler().GetDEALDoFHandler().n_dofs(),
 	     		pde.GetBaseProblem().GetSpaceTimeHandler()->GetStateDoFHandler().GetDEALDoFHandler().max_couplings_between_dofs());
+	     LINEARSOLVER::ReInit(pde);
 
   }
 
   /*******************************************************************************************/
-  template <typename INTEGRATOR, typename VECTOR, typename EIGENVALUES, typename EIGENVECTORS, typename MATRIX, typename SPARSITYPATTERN>
+  template <typename INTEGRATOR, typename VECTOR, typename EIGENVALUES, typename EIGENVECTORS, typename MATRIX, typename SPARSITYPATTERN, typename LINEARSOLVER>
   template<typename PROBLEM>
-  bool EigenvectorSolver<INTEGRATOR, VECTOR, EIGENVALUES, EIGENVECTORS, MATRIX, SPARSITYPATTERN>
+  bool EigenvectorSolver<INTEGRATOR, VECTOR, EIGENVALUES, EIGENVECTORS, MATRIX, SPARSITYPATTERN, LINEARSOLVER>
   ::EigenvalueSolve(PROBLEM &pde,
 		  EIGENVALUES &eigenvalues,
 		  EIGENVECTORS &eigenfunctions,
@@ -151,14 +177,179 @@ namespace DOpE
 
           eigensolver.solve(matrixK_, matrixM_, eigenvalues, eigenfunctions, eigenvalues.size());
               	for (unsigned int i = 0; i < eigenfunctions.size(); ++i) {
-             		eigenfunctions[i] /= eigenfunctions[i].linfty_norm();
+//             		eigenfunctions[i] /= eigenfunctions[i].linfty_norm();
+              		eigenfunctions[i] /= eigenfunctions[i].norm_sqr();
              	}
+              	VECTOR residual;
+              	residual = eigenfunctions[0];
+//                GetIntegrator().ComputeNonlinearResidual(pde,residual,eigenvalues[0]);
+
+    return build_matrix;
+  }
+
+  //TODO Für Controlmatrix
+  /*******************************************************************************************/
+  template <typename INTEGRATOR, typename VECTOR, typename EIGENVALUES, typename EIGENVECTORS, typename MATRIX, typename SPARSITYPATTERN, typename LINEARSOLVER>
+    template<typename PROBLEM>
+  bool EigenvectorSolver<INTEGRATOR, VECTOR, EIGENVALUES, EIGENVECTORS, MATRIX, SPARSITYPATTERN, LINEARSOLVER>
+  ::NonlinearSolve(PROBLEM &pde,
+		  	  	  EIGENVALUES &eigenvalues,
+                   VECTOR &solution,
+                   bool apply_boundary_values,
+                   bool force_matrix_build,
+                   int priority,
+                   std::string algo_level)
+  {
+    bool build_matrix = force_matrix_build;
+    VECTOR residual;
+    VECTOR du;
+
+    std::stringstream out;
+    pde.GetOutputHandler()->InitNewtonOut(out);
+
+    du.reinit(solution);
+    residual.reinit(solution);
+
+//    if (apply_boundary_values)
+//      {
+//        GetIntegrator().ApplyInitialBoundaryValues(pde,solution);
+//      }
+
+    GetIntegrator().AddDomainData("last_newton_solution",&solution);
+
+    GetIntegrator().ComputeNonlinearResidual(pde,residual,eigenvalues[0]);
+    residual *= -1.;
+
+    pde.GetOutputHandler()->SetIterationNumber(0,"PDENewton");
+    pde.GetOutputHandler()->Write(residual,"Residual"+pde.GetType(),pde.GetDoFType());
+
+    double res = residual.linfty_norm();
+    double firstres = res;
+    double lastres = res;
+
+
+    out<< algo_level << "Newton step: " <<0<<"\t Residual (abs.): "
+       <<pde.GetOutputHandler()->ZeroTolerance(res, 1.0)
+       <<"\n";
+
+    out<< algo_level << "Newton step: " <<0<<"\t Residual (rel.):   " << std::scientific << firstres/firstres;
+
+
+    pde.GetOutputHandler()->Write(out,priority);
+
+    int iter=0;
+    while (res > nonlinear_global_tol_ && res > firstres * nonlinear_tol_)
+      {
+        iter++;
+
+        if (iter > nonlinear_maxiter_)
+          {
+            GetIntegrator().DeleteDomainData("last_newton_solution");
+	    GetIntegrator().DeleteAllData();
+            throw DOpEIterationException("Iteration count exceeded bounds!","EigenvectorSolver::NonlinearSolve");
+          }
+
+        pde.GetOutputHandler()->SetIterationNumber(iter,"PDENewton");
+
+//       LINEARSOLVER lin;
+        LINEARSOLVER::Solve(pde,GetIntegrator(),residual,du,build_matrix);
+
+        //Linesearch
+        {
+          solution += du;
+          GetIntegrator().ComputeNonlinearResidual(pde,residual,eigenvalues[0]);
+          residual *= -1.;
+
+          pde.GetOutputHandler()->Write(residual,"Residual"+pde.GetType(),pde.GetDoFType());
+          pde.GetOutputHandler()->Write(du,"Update"+pde.GetType(),pde.GetDoFType());
+
+          double newres = residual.linfty_norm();
+          int lineiter=0;
+          pde.GetOutputHandler()->SetIterationNumber(lineiter,"PDENewtonLS");
+          double rho = linesearch_rho_;
+          double alpha=1;
+          if ( newres > res && build_matrix == false)
+            {
+              build_matrix = true;
+              // Reuse of Matrix seems to be a bad idea, rebuild and repeat
+              solution -= du;
+              GetIntegrator().ComputeNonlinearResidual(pde,residual,eigenvalues[0]);
+              residual *= -1.;
+              out << algo_level
+                  << "Newton step: "
+                  <<iter
+                  <<"\t Recalculate with new Matrix";
+              iter--;
+              pde.GetOutputHandler()->Write(out,priority);
+            }
+          else
+            {
+	      bool was_build = build_matrix;
+              build_matrix = false;
+	      pde.GetOutputHandler()->Write(solution,"Intermediate"+pde.GetType(),pde.GetDoFType());
+              while (newres > res)
+                {
+                  out<< algo_level << "Newton step: " <<iter<<"\t Residual (rel.): "
+                     <<pde.GetOutputHandler()->ZeroTolerance(newres/firstres, 1.0)
+                     << "\t LineSearch {"<<lineiter<<"} ";
+		  if(was_build)
+		    out<<"M ";
+                  pde.GetOutputHandler()->Write(out,priority+1);
+
+                  lineiter++;
+		  pde.GetOutputHandler()->SetIterationNumber(lineiter,"PDENewtonLS");
+                  if (lineiter > line_maxiter_)
+                    {
+                      GetIntegrator().DeleteDomainData("last_newton_solution");
+		      GetIntegrator().DeleteAllData();
+                      throw DOpEIterationException("Line-Iteration count exceeded bounds!","NewtonSolver::NonlinearSolve");
+                    }
+                  solution.add(alpha*(rho-1.),du);
+                  alpha*= rho;
+
+                  GetIntegrator().ComputeNonlinearResidual(pde,residual,eigenvalues[0]);
+                  residual *= -1.;
+                  pde.GetOutputHandler()->Write(residual,"Residual"+pde.GetType(),pde.GetDoFType());
+                  pde.GetOutputHandler()->Write(solution,"Intermediate"+pde.GetType(),pde.GetDoFType());
+
+                  newres = residual.linfty_norm();
+
+                }
+
+              if (res/lastres > nonlinear_rho_)
+                {
+                  build_matrix=true;
+                }
+              lastres=res;
+              res=newres;
+
+              out << algo_level
+                  << "Newton step: "
+                  <<iter
+                  <<"\t Residual (rel.): "
+                  << pde.GetOutputHandler()->ZeroTolerance(res/firstres, 1.0)
+                  << "\t LineSearch {"
+                  <<lineiter
+                  <<"} ";
+	      if(was_build)
+		out<<"M ";
+
+
+              pde.GetOutputHandler()->Write(out,priority);
+
+            }//End of Linesearch
+        }
+      }
+   GetIntegrator().DeleteDomainData("last_newton_solution");
+
     return build_matrix;
   }
 
   /*******************************************************************************************/
-  template <typename INTEGRATOR,  typename VECTOR, typename EIGENVALUES, typename EIGENVECTORS,typename MATRIX, typename SPARSITYPATTERN>
-  INTEGRATOR &EigenvectorSolver<INTEGRATOR, VECTOR, EIGENVALUES, EIGENVECTORS, MATRIX, SPARSITYPATTERN>
+
+  /*******************************************************************************************/
+  template <typename INTEGRATOR,  typename VECTOR, typename EIGENVALUES, typename EIGENVECTORS,typename MATRIX, typename SPARSITYPATTERN, typename LINEARSOLVER>
+  INTEGRATOR &EigenvectorSolver<INTEGRATOR, VECTOR, EIGENVALUES, EIGENVECTORS, MATRIX, SPARSITYPATTERN, LINEARSOLVER>
   ::GetIntegrator()
   {
     return integrator_;

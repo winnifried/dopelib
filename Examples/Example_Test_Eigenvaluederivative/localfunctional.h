@@ -50,62 +50,57 @@ public:
     const DOpEWrapper::FEValues<dealdim> &state_fe_values =
       edc.GetFEValuesState();
     unsigned int n_q_points = edc.GetNQPoints();
-
-    {
-      qvalues_.resize(n_q_points);
-      fvalues_.resize(n_q_points);
-      uvalues_.resize(n_q_points);
+      qvalues_.resize(n_q_points, Vector<double>(2));
+      uvalues_.resize(n_q_points, Vector<double>(3));
+      vector<Vector<double>> eigenvalue;
+      eigenvalue.resize(n_q_points, Vector<double>(3));
 
       edc.GetValuesControl("control", qvalues_);
       edc.GetValuesState("state", uvalues_);
-    }
+      edc.GetValuesState("eigenvalue", eigenvalue);
+
+    double ev = eigenvalue[0][0];
+//    std::cout << "eigenvalue in elementvalue = " << ev << std::endl;
 
     double r = 0.;
     for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
       {
-    	fvalues_[q_point] = 1.0 ;//* state_fe_values.quadrature_point(q_point)(0);
-//        fvalues_[q_point] = (1.
-//                             * sin(4 * M_PI * state_fe_values.quadrature_point(q_point)(0))
-//                             + 5. * M_PI * M_PI
-//                             * sin(M_PI * state_fe_values.quadrature_point(q_point)(0)))
-//                            * sin(2 * M_PI * state_fe_values.quadrature_point(q_point)(1));
-
-        r += 0.5 * (uvalues_[q_point] - fvalues_[q_point])
-             * (uvalues_[q_point] - fvalues_[q_point])
+    	fvalues_= 1.;//* (state_fe_values.quadrature_point(q_point)(0)*state_fe_values.quadrature_point(q_point)(1));
+        r += 0.5 * (ev - fvalues_) * (ev - fvalues_)
              * state_fe_values.JxW(q_point);
-        r += 0.5 * alpha_ * (qvalues_[q_point] * qvalues_[q_point])
+         r += 0.5 * alpha_ * (qvalues_[q_point][0] * qvalues_[q_point][0] + qvalues_[q_point][1] * qvalues_[q_point][1])
              * state_fe_values.JxW(q_point);
       }
     return r;
   }
-
-  void
-  ElementValue_U(const EDC<DH, VECTOR, dealdim> &edc,
-                 dealii::Vector<double> &local_vector, double scale)
-  {
-    const DOpEWrapper::FEValues<dealdim> &state_fe_values =
-      edc.GetFEValuesState();
-    unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
-    unsigned int n_q_points = edc.GetNQPoints();
-    {
-      fvalues_.resize(n_q_points);
-      uvalues_.resize(n_q_points);
-
-      edc.GetValuesState("state", uvalues_);
-    }
-
-    for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
-      {
-        fvalues_[q_point] = 1.0;
-        for (unsigned int i = 0; i < n_dofs_per_element; i++)
-          {
-            local_vector(i) += scale
-                               * (uvalues_[q_point] - fvalues_[q_point])
-                               * state_fe_values.shape_value(i, q_point)
-                               * state_fe_values.JxW(q_point);
-          }
-      }
-  }
+//
+//  void
+//  ElementValue_U(const EDC<DH, VECTOR, dealdim> &edc,
+//                 dealii::Vector<double> &local_vector, double scale)
+//  {
+//    const DOpEWrapper::FEValues<dealdim> &state_fe_values =
+//      edc.GetFEValuesState();
+//    unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
+//    unsigned int n_q_points = edc.GetNQPoints();
+//    {
+//      fvalues_.resize(n_q_points);
+//      uvalues_.resize(n_q_points);
+//
+//      edc.GetValuesState("state", uvalues_);
+//    }
+//
+//    for (unsigned int q_point = 0; q_point < n_q_points; q_point++)
+//      {
+//        fvalues_[q_point] = 1.0;
+//        for (unsigned int i = 0; i < n_dofs_per_element; i++)
+//          {
+//            local_vector(i) += scale
+//                               * (uvalues_[q_point] - fvalues_[q_point])
+//                               * state_fe_values.shape_value(i, q_point)
+//                               * state_fe_values.JxW(q_point);
+//          }
+//      }
+//  }
 
   void
   ElementValue_Q(const EDC<DH, VECTOR, dealdim> &edc,
@@ -113,6 +108,8 @@ public:
   {
     const DOpEWrapper::FEValues<dealdim> &control_fe_values =
       edc.GetFEValuesControl();
+    const DOpEWrapper::FEValues<dealdim> &state_fe_values =
+      edc.GetFEValuesState();
     unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
     unsigned int n_q_points = edc.GetNQPoints();
     {
@@ -128,9 +125,10 @@ public:
         for (unsigned int i = 0; i < n_dofs_per_element; i++)
           {
         	phi_q[i]=  control_fe_values[dv].value(i,q_point);
+
         	local_vector(i) += scale * alpha_
               * (qvalues_[q_point][0]*phi_q[i][0]+qvalues_[q_point][1]*phi_q[i][1])
-              * control_fe_values.JxW(q_point);
+              * state_fe_values.JxW(q_point);
           }
       }
   }
@@ -215,11 +213,15 @@ public:
   }
 
 private:
-	vector<Vector<double> > qvalues_;
-  vector<double> fvalues_;
-  vector<double> uvalues_;
-  vector<double> duvalues_;
-  vector<double> dqvalues_;
+  vector<Vector<double> > uvalues_;
+  vector<Vector<double> > qvalues_;
+  vector<Vector<double> > funcgradvalues_;
+//  Vector<double>  fvalues_;
+  double fvalues_;
+//  vector<double> fvalues_;
+//  vector<double> uvalues_;
+//  vector<double> duvalues_;
+//  vector<double> dqvalues_;
   double alpha_;
 };
 #endif
