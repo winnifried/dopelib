@@ -31,11 +31,19 @@ namespace DOpE
    * This class implements the periodicity-constraints.
    */
   template<template<int, int> class DH, int dim>
+#if DEAL_II_VERSION_GTE(9,3,0)
     class PeriodicityConstraints : public UserDefinedDoFConstraints<false, DH, dim>
+#else
+    class PeriodicityConstraints : public UserDefinedDoFConstraints<DH, dim>
+#endif    
   {
   public:
     PeriodicityConstraints() :
+#if DEAL_II_VERSION_GTE(9,3,0)
     UserDefinedDoFConstraints<false, DH, dim>()
+#else
+    UserDefinedDoFConstraints<DH, dim>()
+#endif    
     {
     }
     static void

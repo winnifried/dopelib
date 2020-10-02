@@ -48,7 +48,11 @@ namespace DOpE
     template<typename VECTOR, int dealdim>
     void
     MapDoFsToSupportPoints(
+#if DEAL_II_VERSION_GTE(9,3,0)
       const DOpEWrapper::Mapping<dealdim, false > &mapping,
+#else
+      const DOpEWrapper::Mapping<dealdim,  dealii::DoFHandler > &mapping,
+#endif
       const DOpEWrapper::DoFHandler<dealdim, dealii::DoFHandler > &dh,
       VECTOR &support_points)
     {
