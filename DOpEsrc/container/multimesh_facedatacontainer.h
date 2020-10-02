@@ -99,8 +99,13 @@ namespace DOpE
     Multimesh_FaceDataContainer(
       const Quadrature<dim - 1>& quad,
       UpdateFlags update_flags,
+#if DEAL_II_VERSION_GTE(9,3,0)
+      SpaceTimeHandler<FE, false, dealii::DoFHandler, SPARSITYPATTERN,
+      VECTOR, dopedim, dealdim> &sth,
+#else
       SpaceTimeHandler<FE, dealii::DoFHandler, SPARSITYPATTERN,
       VECTOR, dopedim, dealdim> &sth,
+#endif
       const typename std::vector<typename dealii::DoFHandler<dim>::cell_iterator> &element,
       const typename std::vector<typename dealii::Triangulation<dim>::cell_iterator> &tria_element,
       const std::map<std::string, const Vector<double>*> &param_values,

@@ -100,8 +100,13 @@ namespace DOpE
                                 unsigned int n_comp,
                                 const Quadrature<dim - 1>& quad,
                                 UpdateFlags update_flags,
+#if DEAL_II_VERSION_GTE(9,3,0)
+                                SpaceTimeHandler<FE, false, dealii::DoFHandler, SPARSITYPATTERN, dealii::Vector<double>,
+                                dopedim, dealdim> &sth,
+#else
                                 SpaceTimeHandler<FE, dealii::DoFHandler, SPARSITYPATTERN, dealii::Vector<double>,
                                 dopedim, dealdim> &sth,
+#endif
                                 const std::vector<
                                 typename DOpEWrapper::DoFHandler<dim, dealii::DoFHandler>::active_cell_iterator>& element,
                                 const std::map<std::string, const Vector<double>*> &param_values,
@@ -154,8 +159,13 @@ namespace DOpE
                                 unsigned int n_comp,
                                 const Quadrature<dim - 1>& quad,
                                 UpdateFlags update_flags,
+#if DEAL_II_VERSION_GTE(9,3,0)
+                                StateSpaceTimeHandler<FE, false, dealii::DoFHandler, SPARSITYPATTERN, dealii::Vector<double>,
+                                dim> &sth,
+#else
                                 StateSpaceTimeHandler<FE, dealii::DoFHandler, SPARSITYPATTERN, dealii::Vector<double>,
                                 dim> &sth,
+#endif
                                 const std::vector<
                                 typename DOpEWrapper::DoFHandler<dim, dealii::DoFHandler>::active_cell_iterator>& element,
                                 const std::map<std::string, const Vector<double>*> &param_values,

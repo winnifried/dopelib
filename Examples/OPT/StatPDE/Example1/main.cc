@@ -119,8 +119,13 @@ typedef StatReducedProblem<NLS, NLS, INTEGRATOR, INTEGRATOR, OP, VECTOR, CDIM,
 
 //The spacetimehandler manages all the things related to the degrees of
 //freedom in space and time (for the optimization as well as the state variable!)
+#if DEAL_II_VERSION_GTE(9,3,0)//post deal 9.3.0
+typedef MethodOfLines_SpaceTimeHandler<FE, false, DOFHANDLER, SPARSITYPATTERN, VECTOR,
+        CDIM, DIM> STH;
+#else
 typedef MethodOfLines_SpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR,
         CDIM, DIM> STH;
+#endif
 
 typedef HigherOrderDWRContainerControl<STH, IDC, CDC<DOFHANDLER, VECTOR, DIM>,
         FDC<DOFHANDLER, VECTOR, DIM>, VECTOR> HO_DWRC;

@@ -150,11 +150,20 @@ main(int argc, char **argv)
   c_points[0][1] = 0.0;
   c_comps[0][0] = false; //But we allow displacements in x-dir (comp = 0) to be free
   c_comps[0][1] = true; //Only the y-displacement is fixed.
+#if DEAL_II_VERSION_GTE(9,3,0)
+  DOpE::PointConstraints<false, DOFHANDLER, 2, 2> constraints_mkr(c_points, c_comps);
+#else
   DOpE::PointConstraints<DOFHANDLER, 2, 2> constraints_mkr(c_points, c_comps);
-
+#endif
+  
+#if DEAL_II_VERSION_GTE(9,3,0)//post deal 9.3.0
+  MethodOfLines_SpaceTimeHandler<FE, false, DOFHANDLER, SPARSITYPATTERN, VECTOR, 2,2> DOFH(
+    triangulation, control_fe, state_fe, constraints, DOpEtypes::stationary);
+#else
   MethodOfLines_SpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR, 2, 2> DOFH(
     triangulation, control_fe, state_fe, constraints, DOpEtypes::stationary);
-
+#endif
+  
   DOFH.SetUserDefinedDoFConstraints(constraints_mkr);
 
   LocalConstraint<CDC, FDC, DOFHANDLER, VECTOR, 2, 2> LC;

@@ -428,9 +428,9 @@ protected:
   inline void AddPresetRightHandSide(double s, VECTOR &residual) const;
 
 private:
-  template <template <int, int> class DH>
+  template <bool HP, template <int, int> class DH>
   void
-  InterpolateBoundaryValues(const DOpEWrapper::Mapping<dim, DH> &mapping,
+  InterpolateBoundaryValues(const DOpEWrapper::Mapping<dim, HP> &mapping,
                             const DOpEWrapper::DoFHandler<dim, DH> *dof_handler,
                             const unsigned int color,
                             const dealii::Function<dim> &function,
@@ -2125,10 +2125,10 @@ INTEGRATORDATACONT &Integrator<INTEGRATORDATACONT, VECTOR, SCALAR,
 
 template <typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR,
           int dim>
-template <template <int, int> class DH>
+  template <bool HP, template <int, int> class DH>
 void Integrator<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::
     InterpolateBoundaryValues(
-        const DOpEWrapper::Mapping<dim, DH> &mapping,
+        const DOpEWrapper::Mapping<dim, HP> &mapping,
         const DOpEWrapper::DoFHandler<dim, DH> *dof_handler,
         const unsigned int color, const dealii::Function<dim> &function,
         std::map<unsigned int, SCALAR> &boundary_values,

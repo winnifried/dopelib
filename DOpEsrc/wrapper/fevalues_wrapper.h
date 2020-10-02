@@ -43,8 +43,12 @@ namespace DOpEWrapper
   class FEValues : public dealii::FEValues<dim>
   {
   public:
-    FEValues(const DOpEWrapper::Mapping<dim, dealii::DoFHandler> &mapping,
-             const dealii::FiniteElement<dim, dim> &fe,
+#if DEAL_II_VERSION_GTE(9,3,0)
+     FEValues(const DOpEWrapper::Mapping<dim, false> &mapping,
+#else
+     FEValues(const DOpEWrapper::Mapping<dim, dealii::DoFHandler> &mapping,
+#endif
+	     const dealii::FiniteElement<dim, dim> &fe,
              const dealii::Quadrature<dim> &quadrature,
              const dealii::UpdateFlags update_flags) :
       dealii::FEValues<dim>(mapping, fe, quadrature, update_flags)
@@ -89,22 +93,17 @@ namespace DOpEWrapper
   {
   public:
     FEFaceValues(
+#if DEAL_II_VERSION_GTE(9,3,0)
+      const DOpEWrapper::Mapping<dim, false> &mapping,
+#else
       const DOpEWrapper::Mapping<dim, dealii::DoFHandler> &mapping,
+#endif
       const dealii::FiniteElement<dim, dim> &fe,
       const dealii::Quadrature<dim - 1> &quadrature,
       const dealii::UpdateFlags update_flags) :
       dealii::FEFaceValues<dim>(mapping, fe, quadrature, update_flags)
     {
     }
-
-//    FEFaceValues(
-//            const DOpEWrapper::Mapping<dim, dealii::MGDoFHandler > & mapping,
-//            const dealii::FiniteElement<dim, dim> &fe,
-//            const dealii::Quadrature<dim - 1> &quadrature,
-//            const dealii::UpdateFlags update_flags)
-//            : dealii::FEFaceValues<dim>(mapping, fe, quadrature, update_flags)
-//        {
-//        }
 
     FEFaceValues(const dealii::FiniteElement<dim, dim> &fe,
                  const dealii::Quadrature<dim - 1> &quadrature,
@@ -138,23 +137,17 @@ namespace DOpEWrapper
   public:
 
     FESubfaceValues(
+#if DEAL_II_VERSION_GTE(9,3,0)
+      const DOpEWrapper::Mapping<dim, false> &mapping,
+#else
       const DOpEWrapper::Mapping<dim, dealii::DoFHandler> &mapping,
+#endif
       const dealii::FiniteElement<dim, dim> &fe,
       const dealii::Quadrature<dim - 1> &quadrature,
       const dealii::UpdateFlags update_flags) :
       dealii::FESubfaceValues<dim>(mapping, fe, quadrature, update_flags)
     {
     }
-
-//        FESubfaceValues(
-//            const DOpEWrapper::Mapping<dim, dealii::MGDoFHandler > & mapping,
-//            const dealii::FiniteElement<dim, dim> &fe,
-//            const dealii::Quadrature<dim - 1> &quadrature,
-//            const dealii::UpdateFlags update_flags)
-//            : dealii::FESubfaceValues<dim>(mapping, fe, quadrature,
-//                update_flags)
-//        {
-//        }
 
     FESubfaceValues(const dealii::FiniteElement<dim, dim> &fe,
                     const dealii::Quadrature<dim - 1> &quadrature,
@@ -187,7 +180,11 @@ namespace DOpEWrapper
   {
   public:
     HpFEValues(
+#if DEAL_II_VERSION_GTE(9,3,0)
+      const DOpEWrapper::Mapping<dim, true> &mapping_collection,
+#else
       const DOpEWrapper::Mapping<dim, dealii::hp::DoFHandler> &mapping_collection,
+#endif
       const dealii::hp::FECollection<dim, dim> &fe_collection,
       const dealii::hp::QCollection<dim> &q_collection,
       const dealii::UpdateFlags update_flags) :
@@ -219,7 +216,11 @@ namespace DOpEWrapper
   {
   public:
     HpFEFaceValues(
+#if DEAL_II_VERSION_GTE(9,3,0)
+      const DOpEWrapper::Mapping<dim, true> &mapping_collection,
+#else
       const DOpEWrapper::Mapping<dim, dealii::hp::DoFHandler> &mapping_collection,
+#endif
       const dealii::hp::FECollection<dim, dim> &fe_collection,
       const dealii::hp::QCollection<dim - 1> & q_collection,
       const dealii::UpdateFlags update_flags) :
@@ -261,7 +262,11 @@ namespace DOpEWrapper
   public:
 
     HpFESubfaceValues(
+#if DEAL_II_VERSION_GTE(9,3,0)
+      const DOpEWrapper::Mapping<dim, true> &mapping_collection,
+#else
       const DOpEWrapper::Mapping<dim, dealii::hp::DoFHandler> &mapping_collection,
+#endif
       const dealii::hp::FECollection<dim, dim> &fe_collection,
       const dealii::hp::QCollection<dim - 1> & q_collection,
       const dealii::UpdateFlags update_flags) :

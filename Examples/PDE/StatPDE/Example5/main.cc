@@ -91,8 +91,14 @@ typedef DirectLinearSolverWithMatrix<SPARSITYPATTERN, MATRIX, VECTOR> LINEARSOLV
 
 typedef NewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR> NLS;
 typedef StatPDEProblem<NLS, INTEGRATOR, OP, VECTOR, DIM> RP;
+#if DEAL_II_VERSION_GTE(9,3,0)
+typedef MethodOfLines_StateSpaceTimeHandler<FE, false, DOFHANDLER, SPARSITYPATTERN,
+        VECTOR, DIM> STH;
+#else
 typedef MethodOfLines_StateSpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN,
         VECTOR, DIM> STH;
+#endif
+
 typedef HigherOrderDWRContainer<STH, IDC, CDC<DOFHANDLER, VECTOR, DIM>,
         FDC<DOFHANDLER, VECTOR, DIM>, VECTOR> HO_DWRC;
 typedef L2ResidualErrorContainer<STH, VECTOR, DIM> L2_RESC;

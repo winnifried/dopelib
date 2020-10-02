@@ -78,16 +78,20 @@ typedef SparsityPattern SPARSITYPATTERN;
 typedef Vector<double> VECTOR;
 
 typedef PDEProblemContainer<LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
-        SimpleDirichletData<VECTOR, DIM>, SPARSITYPATTERN, VECTOR, DIM, FE,
-        DOFHANDLER> OP;
+        SimpleDirichletData<VECTOR, DIM>, SPARSITYPATTERN, VECTOR, DIM> OP;
 typedef IntegratorDataContainer<DOFHANDLER, QUADRATURE, FACEQUADRATURE, VECTOR,
         DIM> IDC;
 typedef Integrator<IDC, VECTOR, double, DIM> INTEGRATOR;
 typedef DirectLinearSolverWithMatrix<SPARSITYPATTERN, MATRIX, VECTOR> LINEARSOLVER;
 typedef NewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR> NLS;
 typedef StatPDEProblem<NLS, INTEGRATOR, OP, VECTOR, DIM> RP;
+#if DEAL_II_VERSION_GTE(9,3,0)
+typedef MethodOfLines_StateSpaceTimeHandler<FE, false, DOFHANDLER, SPARSITYPATTERN,
+        VECTOR, DIM> STH;
+#else
 typedef MethodOfLines_StateSpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN,
         VECTOR, DIM> STH;
+#endif
 
 void
 declare_params(ParameterReader &param_reader)
@@ -164,7 +168,11 @@ main(int argc, char **argv)
   LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM> LPDE;
   BoundaryFunctional<CDC, FDC, DOFHANDLER, VECTOR, DIM> BF;
 
+#if DEAL_II_VERSION_GTE(9,3,0)
+  DOpEWrapper::Mapping<DIM, false > mapping(order_mapping);
+#else
   DOpEWrapper::Mapping<DIM, DOFHANDLER > mapping(order_mapping);
+#endif
   STH DOFH(triangulation, mapping, state_fe);
   STH DOFH_q1(triangulation_q1, state_fe);
 

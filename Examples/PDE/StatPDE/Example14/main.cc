@@ -110,8 +110,13 @@ typedef VoidLinearSolver<VECTOR> VOIDLS;
 //special newtonsolver for the mixed dims
 typedef NewtonSolverMixedDimensions<CINTEGRATOR, VOIDLS, VECTOR> CNLS;
 typedef NewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR> NLS;
+#if DEAL_II_VERSION_GTE(9,3,0)
+typedef Networks::MethodOfLines_Network_SpaceTimeHandler<FE, false, DOFHANDLER,
+        VECTOR, CDIM, DIM> STH;
+#else
 typedef Networks::MethodOfLines_Network_SpaceTimeHandler<FE, DOFHANDLER,
         VECTOR, CDIM, DIM> STH;
+#endif
 
 typedef OptProblemContainer<
 FUNC,

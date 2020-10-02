@@ -1,5 +1,10 @@
 Changelog DOpE
 ==============
+01.10.2020: Adjustments to deal version 9.3.0. Due to the merging of the DoFHandlers
+	    no separate DoFHandler for HP is needed - and is no longer supported.
+	    To fix the automated selection
+	    between Mapping and MappingCollection the DOpEWrapper::Mapping now needs a
+	    template argument telling if it is a collection or not. 
 27.06.2020: Fixed: FaceDataContainer::GetCenter returns center of face instead of the corresponding element.
 	    In Integrator; if at an interface a face term needs to be evaluated neighbour information
 	    is also assembled for the evaluation of the face terms.

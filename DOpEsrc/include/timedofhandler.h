@@ -119,13 +119,18 @@ namespace DOpE
           dealii::DoFHandler<1>::distribute_dofs(*fe_);
           //make sure that the dofs are numbered 'downstream' (referring to the time variable!)
 
+#if DEAL_II_VERSION_GTE(9,3,0)
+	  dealii::DoFRenumbering::downstream<1,1>(*this,
+						  dealii::Point<1>(1.), true);
+#else
 #if DEAL_II_VERSION_GTE(7,3,0)
           dealii::DoFRenumbering::downstream<dealii::DoFHandler<1> >(*this,
                                                                      dealii::Point<1>(1.), true);
 #else
           dealii::DoFRenumbering::downstream<dealii::DoFHandler<1>, 1>(*this,
-              dealii::Point<1>(1.), true);
+								       dealii::Point<1>(1.), true);
 #endif
+#endif //deal 9.3.0
           find_ends();
           compute_times();
           initialized_ = true;

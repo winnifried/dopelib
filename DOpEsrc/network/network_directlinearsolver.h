@@ -97,8 +97,11 @@ namespace DOpE
       dealii::BlockSparseMatrix<double> matrix_;
 
       dealii::SparseDirectUMFPACK *A_direct_;
-
+#if DEAL_II_VERSION_GTE(9,3,0)
+      MethodOfLines_Network_SpaceTimeHandler<FESystem,false,DoFHandler,BlockVector<double>,0,1> *sth_ = nullptr;
+#else
       MethodOfLines_Network_SpaceTimeHandler<FESystem,DoFHandler,BlockVector<double>,0,1> *sth_ = nullptr;
+#endif
       unsigned int n_pipes_ = 0;
     };
 
@@ -131,7 +134,11 @@ namespace DOpE
     template<typename PROBLEM>
     void  DirectLinearSolverWithMatrix::ReInit(PROBLEM &pde)
     {
+#if DEAL_II_VERSION_GTE(9,3,0)
+      sth_ = dynamic_cast<MethodOfLines_Network_SpaceTimeHandler<FESystem,false,DoFHandler,BlockVector<double>,0,1>*>(pde.GetBaseProblem().GetSpaceTimeHandler());
+#else
       sth_ = dynamic_cast<MethodOfLines_Network_SpaceTimeHandler<FESystem,DoFHandler,BlockVector<double>,0,1>*>(pde.GetBaseProblem().GetSpaceTimeHandler());
+#endif
       if (sth_ == NULL)
         {
           throw DOpEException("Using Networks::DirectLinearSolverWithMatrix with wrong SpaceTimeHandler","DirectLinearSolverWithMatrix::ReInit");

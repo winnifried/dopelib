@@ -189,9 +189,14 @@ main(int argc, char **argv)
   // We give the spatial and time triangulation as well as the state/control finite
   // elements to the MOL-space time handler. DOpEtypes::undefined marks
   // the type of the control, see dopetypes.h for more information.
+#if DEAL_II_VERSION_GTE(9,3,0)
+  MethodOfLines_StateSpaceTimeHandler<FE, false, DOFHANDLER, SPARSITYPATTERN, VECTOR, DIM>
+  DOFH(triangulation, state_fe, times);
+#else
   MethodOfLines_StateSpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR, DIM>
   DOFH(triangulation, state_fe, times);
-
+#endif
+  
   OP P(LPDE, DOFH);
 
   P.AddFunctional(&LPFP);

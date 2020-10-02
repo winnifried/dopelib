@@ -38,13 +38,22 @@ namespace DOpE
    *                     indicate which components should be constraint at the point.
    *                     Both vetors are assumed to be in identical order!
    */
+#if DEAL_II_VERSION_GTE(9,3,0)
+  template<bool HP, template<int, int> class DH, int dopedim, int dealdim = dopedim>
+    class PointConstraints : public UserDefinedDoFConstraints<HP, DH,dopedim,dealdim>
+#else
   template<template<int, int> class DH, int dopedim, int dealdim = dopedim>
   class PointConstraints : public UserDefinedDoFConstraints<DH,dopedim,dealdim>
-  {
+#endif
+    {
   public:
     PointConstraints(const std::vector<dealii::Point<dealdim> > &c_points,
                      const std::vector<std::vector<bool> > &c_comps)
-      : UserDefinedDoFConstraints<DH,dopedim,dealdim>(), c_points_(c_points), c_comps_(c_comps)
+#if DEAL_II_VERSION_GTE(9,3,0)
+  : UserDefinedDoFConstraints<HP, DH,dopedim,dealdim>(), c_points_(c_points), c_comps_(c_comps)
+#else
+  : UserDefinedDoFConstraints<DH,dopedim,dealdim>(), c_points_(c_points), c_comps_(c_comps)
+#endif
     {
       if (c_points_.size() != c_comps_.size())
         throw DOpEException("Number of Entries not matching!","PointConstraints::PointConstraints");
@@ -78,6 +87,14 @@ namespace DOpE
     const std::vector<Point<dealdim> > &c_points_;
     const std::vector<std::vector<bool> > &c_comps_;
   };
+  
+#if DEAL_II_VERSION_GTE(9,3,0)
+  template<bool HP, template<int, int> class DH, int dopedim, int dealdim>
+    void PointConstraints<HP, DH, dopedim, dealdim>::MakeStateDoFConstraints(
+    const DOpEWrapper::DoFHandler<dealdim, DH > &dof_handler,
+    dealii::AffineConstraints<double> &constraint_matrix) const
+
+#else
 #if DEAL_II_VERSION_GTE(9,1,1)
   template<template<int, int> class DH, int dopedim, int dealdim>
   void PointConstraints<DH, dopedim, dealdim>::MakeStateDoFConstraints(
@@ -88,6 +105,7 @@ namespace DOpE
   void PointConstraints<DH, dopedim, dealdim>::MakeStateDoFConstraints(
     const DOpEWrapper::DoFHandler<dealdim, DH > &dof_handler,
     dealii::ConstraintMatrix &constraint_matrix) const
+#endif
 #endif
   {
     std::vector<dealii::Point<dealdim> > support_points(dof_handler.n_dofs());

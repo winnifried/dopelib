@@ -88,8 +88,13 @@ typedef DirectLinearSolverWithMatrix<SPARSITYPATTERN, MATRIX, VECTOR> LINEARSOLV
 
 typedef NewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR> NLS;
 typedef StatPDEProblem<NLS, INTEGRATOR, OP, VECTOR, DIM> RP;
+#if DEAL_II_VERSION_GTE(9,3,0)
+typedef MethodOfLines_StateSpaceTimeHandler<FE, false, DOFHANDLER, SPARSITYPATTERN,
+        VECTOR, DIM> STH;
+#else
 typedef MethodOfLines_StateSpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN,
         VECTOR, DIM> STH;
+#endif
 typedef ObstacleResidualErrorContainer<STH, VECTOR, DIM> OBSTACLE_RESC;
 
 void
@@ -308,7 +313,11 @@ main(int argc, char **argv)
       store[i]->GetSpacialVector() -=SE.GetU().GetSpacialVector();
 	VectorTools::integrate_difference( DOFH.GetStateDoFHandler(),
 					   store[i]->GetSpacialVector(),
+#if DEAL_II_VERSION_GTE(9,3,0)
+					   Functions::ZeroFunction<2>(2),
+#else
 					   ZeroFunction<2>(2),
+#endif
 					   difference_per_element,
 					   QGaussLobatto<2>(5),
 					   VectorTools::H1_norm,

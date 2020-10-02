@@ -48,6 +48,23 @@
 
 namespace DOpE
 {
+#if DEAL_II_VERSION_GTE(9,3,0)
+  /**
+   * Interface to the dimension depended functionality of a
+   * StateSpaceTimeDoFHandler.
+   *
+   * @tparam <FE>               The finite element type we use (i.e. 'normal' finite elements vs. hp::FECollections)
+   * @tparam <HP>       false for normal, true for HP-DoFhandler
+   * @tparam <DH>       The dofhandler type we use (i.e. 'normal' dofhandler vs. hp::dofhandler)
+   * @tparam <SPARSITYPATTERN>  The sparsity pattern for control & state. This is needed as a class template, because
+   *                            member function templates are not allowed for virtual member functions.
+   * @tparam <VECTOR>           The vector type for control & state (i.e. dealii::Vector<double> or dealii::BlockVector<double>)
+   * @tparam<dealdim>           The dimension for the state variable. This is the dimension the
+   *                            mesh is in.
+   */
+  template<template<int, int> class FE, bool HP, template<int, int> class DH, typename SPARSITYPATTERN,
+           typename VECTOR, int dealdim>
+#else
   /**
    * Interface to the dimension depended functionality of a
    * StateSpaceTimeDoFHandler.
@@ -62,6 +79,7 @@ namespace DOpE
    */
   template<template<int, int> class FE, template<int, int> class DH, typename SPARSITYPATTERN,
            typename VECTOR, int dealdim>
+#endif
   class StateSpaceTimeHandler : public SpaceTimeHandlerBase<VECTOR>
   {
   public:
@@ -117,7 +135,11 @@ namespace DOpE
     /**
      * Returns a reference to the Mapping in use.
      */
+#if DEAL_II_VERSION_GTE(9,3,0)
+    virtual const DOpEWrapper::Mapping<dealdim, HP> &
+#else
     virtual const DOpEWrapper::Mapping<dealdim, DH> &
+#endif
     GetMapping () const = 0;
 
     /******************************************************/
@@ -481,10 +503,19 @@ namespace DOpE
 
   };
 
+#if DEAL_II_VERSION_GTE(9,3,0)
+  template <template <int, int> class FE, bool HP, template <int, int> class DH,
+            typename SPARSITYPATTERN, typename VECTOR, int dealdim>
+#else
   template <template <int, int> class FE, template <int, int> class DH,
             typename SPARSITYPATTERN, typename VECTOR, int dealdim>
-  void
-  StateSpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dealdim>::WriteToFile (const VECTOR &v,
+#endif
+    void
+#if DEAL_II_VERSION_GTE(9,3,0)
+    StateSpaceTimeHandler<FE, HP, DH, SPARSITYPATTERN, VECTOR, dealdim>::WriteToFile (const VECTOR &v,
+#else
+    StateSpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dealdim>::WriteToFile (const VECTOR &v,
+#endif
       std::string name,
       std::string outfile,
       std::string dof_type,
@@ -573,10 +604,19 @@ namespace DOpE
       }
   }
 
-      template <template <int, int> class FE, template <int, int> class DH,
+#if DEAL_II_VERSION_GTE(9,3,0)
+  template <template <int, int> class FE, bool HP, template <int, int> class DH,
             typename SPARSITYPATTERN, typename VECTOR, int dealdim>
+#else
+  template <template <int, int> class FE, template <int, int> class DH,
+            typename SPARSITYPATTERN, typename VECTOR, int dealdim>
+#endif
   void
+#if DEAL_II_VERSION_GTE(9,3,0)
+   StateSpaceTimeHandler<FE, HP, DH, SPARSITYPATTERN, VECTOR, dealdim>::WriteToFileElementwise (const Vector<float> &v,
+#else
   StateSpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dealdim>::WriteToFileElementwise (const Vector<float> &v,
+#endif
       std::string name,
       std::string outfile,
       std::string dof_type,

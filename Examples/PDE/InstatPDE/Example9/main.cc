@@ -123,12 +123,22 @@ typedef InstatStepNewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR> NLS;
 typedef InstatPDEProblem<NLS, INTEGRATOR, OP, VECTOR,
         DIM> RP;
 
+#if DEAL_II_VERSION_GTE(9,3,0)
+typedef H1ResidualErrorContainer<Rothe_StateSpaceTimeHandler<FE,
+							     false,
+							     DOFHANDLER,
+							     SPARSITYPATTERN,
+							     VECTOR,
+							     DIM>,
+				 VECTOR, DIM> H1_RESC;
+#else
 typedef H1ResidualErrorContainer<Rothe_StateSpaceTimeHandler<FE,
 							     DOFHANDLER,
 							     SPARSITYPATTERN,
 							     VECTOR,
 							     DIM>,
 				 VECTOR, DIM> H1_RESC;
+#endif
 
 int
 main(int argc, char **argv)
@@ -183,8 +193,13 @@ main(int argc, char **argv)
   std::vector<unsigned int> Rothe_time_to_dof(n_time_steps+1,0);
   for(unsigned int i = 0; i < Rothe_time_to_dof.size(); i++)
     Rothe_time_to_dof[i]=i%2;
+#if DEAL_II_VERSION_GTE(9,3,0)
+  Rothe_StateSpaceTimeHandler<FE, false, DOFHANDLER, SPARSITYPATTERN, VECTOR,
+			      DIM> DOFH(triangulation, state_fe, times, Rothe_time_to_dof);
+#else
   Rothe_StateSpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR,
 			      DIM> DOFH(triangulation, state_fe, times, Rothe_time_to_dof);
+#endif
   
   OP P(LPDE, DOFH);
   

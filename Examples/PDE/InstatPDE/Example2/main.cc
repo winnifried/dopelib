@@ -212,9 +212,14 @@ main(int argc, char **argv)
   GridGenerator::subdivided_hyper_cube(times, 25, 0, 25);
 
 
+#if DEAL_II_VERSION_GTE(9,3,0)
+  MethodOfLines_StateSpaceTimeHandler<FE, false, DOFHANDLER, SPARSITYPATTERN, VECTOR,
+                                      DIM> DOFH(triangulation, state_fe, times);
+#else
   MethodOfLines_StateSpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR,
                                       DIM> DOFH(triangulation, state_fe, times);
-
+#endif
+  
   OP P(LPDE, DOFH);
 
   P.AddFunctional(&LPFP); // pressure difference

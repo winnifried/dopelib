@@ -422,13 +422,26 @@ namespace DOpE
       inline void AddPresetRightHandSide(double s, VECTOR &residual) const;
 
     private:
+#if DEAL_II_VERSION_GTE(9,3,0)
+      typedef MethodOfLines_Network_SpaceTimeHandler<FESystem,false,DoFHandler,BlockVector<double>,0,1> STH_;
+      typedef MethodOfLines_StateSpaceTimeHandler<FESystem,false,DoFHandler,SparsityPattern,Vector<double>,1> PIPE_STH_;
+#else
       typedef MethodOfLines_Network_SpaceTimeHandler<FESystem,DoFHandler,BlockVector<double>,0,1> STH_;
       typedef MethodOfLines_StateSpaceTimeHandler<FESystem,DoFHandler,SparsityPattern,Vector<double>,1> PIPE_STH_;
-
+#endif
+      
+#if DEAL_II_VERSION_GTE(9,3,0)
+      template<bool HP, template<int, int> class DH>
+#else
       template<template<int, int> class DH>
+#endif
       void
       InterpolateBoundaryValues(
+#if DEAL_II_VERSION_GTE(9,3,0)
+        const DOpEWrapper::Mapping<dim, HP> &mapping,
+#else
         const DOpEWrapper::Mapping<dim, DH> &mapping,
+#endif
         const DOpEWrapper::DoFHandler<dim, DH> *dof_handler,
         const unsigned int color, const dealii::Function<dim> &function,
         std::map<unsigned int, SCALAR> &boundary_values,
@@ -2023,10 +2036,18 @@ namespace DOpE
 
     template<typename INTEGRATORDATACONT, typename VECTOR, typename SCALAR,
              int dim>
-    template<template<int, int> class DH>
+#if DEAL_II_VERSION_GTE(9,3,0)
+      template<bool HP, template<int, int> class DH>
+#else
+      template<template<int, int> class DH>
+#endif
     void
     Network_Integrator<INTEGRATORDATACONT, VECTOR, SCALAR, dim>::InterpolateBoundaryValues(
-      const DOpEWrapper::Mapping<dim, DH> &mapping,
+#if DEAL_II_VERSION_GTE(9,3,0)
+        const DOpEWrapper::Mapping<dim, HP> &mapping,
+#else
+	const DOpEWrapper::Mapping<dim, DH> &mapping,
+#endif
       const DOpEWrapper::DoFHandler<dim, DH> *dof_handler,
       const unsigned int color, const dealii::Function<dim> &function,
       std::map<unsigned int, SCALAR> &boundary_values,

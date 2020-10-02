@@ -73,16 +73,20 @@ typedef BlockSparsityPattern SPARSITYPATTERN;
 typedef BlockVector<double> VECTOR;
 
 typedef PDEProblemContainer<LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
-        SimpleDirichletData<VECTOR, DIM>, SPARSITYPATTERN, VECTOR, DIM, FE,
-        DOFHANDLER> OP;
+        SimpleDirichletData<VECTOR, DIM>, SPARSITYPATTERN, VECTOR, DIM> OP;
 typedef IntegratorDataContainer<DOFHANDLER, QUADRATURE, FACEQUADRATURE, VECTOR,
         DIM> IDC;
 typedef Integrator<IDC, VECTOR, double, DIM> INTEGRATOR;
 typedef SchurLinearSolverWithMatrix LINEARSOLVER;
 typedef NewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR> NLS;
 typedef StatPDEProblem<NLS, INTEGRATOR, OP, VECTOR, DIM> RP;
+#if DEAL_II_VERSION_GTE(9,3,0)
+typedef MethodOfLines_StateSpaceTimeHandler<FE, false, DOFHANDLER, SPARSITYPATTERN,
+        VECTOR, DIM> STH;
+#else
 typedef MethodOfLines_StateSpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN,
         VECTOR, DIM> STH;
+#endif
 
 void
 declare_params(ParameterReader &param_reader)
@@ -134,8 +138,12 @@ main(int argc, char **argv)
 
   //We need to state the mapping explicitly, otherwise the divergence of
   //the RT-elements provided by dealii will be NaN.
+#if DEAL_II_VERSION_GTE(9,3,0)
+  DOpEWrapper::Mapping<DIM, false > mapping(1,true);
+#else
   DOpEWrapper::Mapping<DIM,DOFHANDLER> mapping(1,true);
-
+#endif
+  
   LocalFunctional<CDC,FDC,DOFHANDLER, VECTOR, DIM> LF;
 
   STH DOFH(triangulation, mapping, state_fe);

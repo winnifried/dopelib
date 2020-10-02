@@ -26,6 +26,7 @@
 
 #include <container/dwrdatacontainer.h>
 #include <deal.II/fe/fe_tools.h>
+#include <deal.II/base/function.h>
 
 namespace DOpE
 {
@@ -255,7 +256,11 @@ namespace DOpE
     {
       VectorTools::interpolate(sth_.GetMapping(),
                                *(static_cast<const DH<dim, dim>*>(dofh)),
+#if DEAL_II_VERSION_GTE(9,3,0)
+                               Functions::ConstantFunction<dim>(1., dofh->get_fe().n_components()), vals);
+#else
                                ConstantFunction<dim>(1., dofh->get_fe().n_components()), vals);
+#endif
     }
 
   private:
@@ -465,7 +470,11 @@ namespace DOpE
     {
       VectorTools::interpolate(sth_.GetMapping(),
                                dofh->GetDEALDoFHandler(),
+#if DEAL_II_VERSION_GTE(9,3,0)
+                               Functions::ConstantFunction<dim>(1., dofh->get_fe().n_components()), vals);
+#else
                                ConstantFunction<dim>(1., dofh->get_fe().n_components()), vals);
+#endif
     }
 
   private:

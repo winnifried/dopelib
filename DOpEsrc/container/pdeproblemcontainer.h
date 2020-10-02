@@ -84,6 +84,29 @@ namespace DOpE
   class DOpEExceptionHandler;
   /////////////////////////////
 
+#if DEAL_II_VERSION_GTE(9,3,0)
+  /**
+   * Container class for all stationary PDE problems.
+   * This class collects all problem depended data needed to
+   * calculate the solution to the PDE.
+   *
+   * @tparam PDE               The description of the PDE, see PDEInterface for details.
+   * @tparam DD                The description of the Dirichlet data, see
+   *                           DirichletDataInterface for details.
+   * @tparam SPARSITYPATTERN   The sparsity pattern to be used in the stiffness matrix.
+   * @tparam VECTOR            The vector type in which the coordinate vector of the
+   *                           solution is to be stored.
+   * @tparam dealdim           The dimension of the domain in which the PDE is considered.
+   * @tparam FE                The finite element under consideration.
+   * @tparam HP                     False for normal, true for hp-dofhandler
+   * @tparam DH                The spatial DoFHandler to be used when evaluating the
+   *                           weak form.
+   */
+  template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
+           int dealdim, template<int, int> class FE = dealii::FESystem,
+           bool HP = false,
+           template<int, int> class DH = dealii::DoFHandler>
+#else
   /**
    * Container class for all stationary PDE problems.
    * This class collects all problem depended data needed to
@@ -103,12 +126,16 @@ namespace DOpE
   template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
            int dealdim, template<int, int> class FE = dealii::FESystem,
            template<int, int> class DH = dealii::DoFHandler>
-  class PDEProblemContainer : public ProblemContainerInternal<PDE>
+#endif
+    class PDEProblemContainer : public ProblemContainerInternal<PDE>
   {
   public:
     PDEProblemContainer(PDE &pde,
+#if DEAL_II_VERSION_GTE(9,3,0)
+                        StateSpaceTimeHandler<FE, HP, DH, SPARSITYPATTERN, VECTOR, dealdim> &STH);
+#else
                         StateSpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dealdim> &STH);
-
+#endif
     /******************************************************/
 
     virtual
@@ -126,6 +153,22 @@ namespace DOpE
     /**
      * Returns a description of the PDE
      */
+#if DEAL_II_VERSION_GTE(9,3,0)
+    StateProblem<
+    PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE,
+      HP, DH>, PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>&
+                        GetStateProblem()
+    {
+      if (state_problem_ == NULL)
+        {
+          state_problem_ = new StateProblem<
+          PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim,
+	    FE, HP, DH>, PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>(*this,
+                                                              this->GetPDE());
+        }
+      return *state_problem_;
+    }
+#else
     StateProblem<
     PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE,
                         DH>, PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>&
@@ -140,10 +183,27 @@ namespace DOpE
         }
       return *state_problem_;
     }
-
+#endif
+    
     /**
      * Returns a description of the PDE_Adjoint PDE for Error Estimation
      */
+#if DEAL_II_VERSION_GTE(9,3,0)
+    PDE_Adjoint_For_EEProblem<
+    PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE,
+      HP, DH>, PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>&
+    GetAdjoint_For_EEProblem()
+    {
+      if (adjoint_for_ee_problem_ == NULL)
+        {
+          adjoint_for_ee_problem_ = new PDE_Adjoint_For_EEProblem<
+          PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim,
+	    FE, HP, DH>, PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>(*this,
+                                                              this->GetPDE());
+        }
+      return *adjoint_for_ee_problem_;
+    }
+#else
     PDE_Adjoint_For_EEProblem<
     PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE,
     DH>, PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>&
@@ -158,9 +218,26 @@ namespace DOpE
         }
       return *adjoint_for_ee_problem_;
     }
+#endif
     /**
      * Returns a description to potentially needed precomputations for the error evaluation
      */
+#if DEAL_II_VERSION_GTE(9,3,0)
+    AuxiliaryNodalErrorProblem<
+     PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE,
+      HP, DH>, PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>&
+    GetErrorPrecomputations()
+    {
+      if (aux_nodal_error_problem_ == NULL)
+        {
+          aux_nodal_error_problem_ = new AuxiliaryNodalErrorProblem<
+          PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim,
+	    FE, HP, DH>, PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>(*this,
+                                                              this->GetPDE());
+        }
+      return *aux_nodal_error_problem_;
+    }
+#else
     AuxiliaryNodalErrorProblem<
      PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE,
      DH>, PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>&
@@ -175,9 +252,14 @@ namespace DOpE
         }
       return *aux_nodal_error_problem_;
     }
+#endif
     //TODO This is Pfush needed to split into different subproblems and allow optproblem to
     //be substituted as any of these problems. Can be removed once the splitting is complete.
+#if DEAL_II_VERSION_GTE(9,3,0)
+    PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE, HP, DH> &
+#else
     PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE, DH> &
+#endif
     GetBaseProblem()
     {
       return *this;
@@ -521,7 +603,11 @@ namespace DOpE
 
     /******************************************************/
 
+#if DEAL_II_VERSION_GTE(9,3,0)
+    const StateSpaceTimeHandler<FE, HP, DH, SPARSITYPATTERN, VECTOR, dealdim> *
+#else
     const StateSpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dealdim> *
+#endif
     GetSpaceTimeHandler() const
     {
       return STH_;
@@ -529,7 +615,11 @@ namespace DOpE
 
     /******************************************************/
 
+#if DEAL_II_VERSION_GTE(9,3,0)
+    StateSpaceTimeHandler<FE, HP, DH, SPARSITYPATTERN, VECTOR, dealdim> *
+#else
     StateSpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dealdim> *
+#endif
     GetSpaceTimeHandler()
     {
       return STH_;
@@ -914,7 +1004,11 @@ namespace DOpE
     std::map<std::string, unsigned int> functional_position_;
 
     unsigned int functional_for_ee_num_;
+#if DEAL_II_VERSION_GTE(9,3,0)
+    StateSpaceTimeHandler<FE, HP, DH, SPARSITYPATTERN, VECTOR, dealdim> *STH_;
+#else
     StateSpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dealdim> *STH_;
+#endif
 
     std::vector<unsigned int> dirichlet_colors_;
     std::vector<std::vector<bool> > dirichlet_comps_;
@@ -930,6 +1024,27 @@ namespace DOpE
 
     std::map<std::string, const StateVector<VECTOR>*> auxiliary_state_;
 
+#if DEAL_II_VERSION_GTE(9,3,0)
+    StateProblem<
+    PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE,
+      HP, DH>, PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>* state_problem_;
+    PDE_Adjoint_For_EEProblem<
+    PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE,
+      HP, DH>, PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>* adjoint_for_ee_problem_;
+    AuxiliaryNodalErrorProblem<
+    PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE,
+      HP, DH>, PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>* aux_nodal_error_problem_;
+
+    friend class StateProblem<
+      PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE,
+      HP, DH>, PDE, DD, SPARSITYPATTERN, VECTOR, dealdim> ;
+    friend class PDE_Adjoint_For_EEProblem<
+      PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE,
+      HP, DH>, PDE, DD, SPARSITYPATTERN, VECTOR, dealdim> ;
+    friend class AuxiliaryNodalErrorProblem<
+      PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE,
+      HP, DH>, PDE, DD, SPARSITYPATTERN, VECTOR, dealdim> ;
+#else
     StateProblem<
     PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE,
                         DH>, PDE, DD, SPARSITYPATTERN, VECTOR, dealdim>* state_problem_;
@@ -949,15 +1064,24 @@ namespace DOpE
     friend class AuxiliaryNodalErrorProblem<
       PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE,
       DH>, PDE, DD, SPARSITYPATTERN, VECTOR, dealdim> ;
+#endif
   };
   /******************************************************/
 
-  template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
+#if DEAL_II_VERSION_GTE(9,3,0)
+template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
+  int dealdim, template<int, int> class FE, bool HP, template<int, int> class DH>
+  PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE, HP, DH>::PDEProblemContainer(
+    PDE &pde,
+    StateSpaceTimeHandler<FE, HP, DH, SPARSITYPATTERN, VECTOR, dealdim> &STH) :
+#else
+template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
            int dealdim, template<int, int> class FE, template<int, int> class DH>
   PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE, DH>::PDEProblemContainer(
     PDE &pde,
     StateSpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dealdim> &STH) :
-    ProblemContainerInternal<PDE>(pde), STH_(&STH), state_problem_(NULL),
+#endif
+  ProblemContainerInternal<PDE>(pde), STH_(&STH), state_problem_(NULL),
     adjoint_for_ee_problem_(NULL), aux_nodal_error_problem_(NULL)
   {
     ExceptionHandler_ = NULL;
@@ -974,10 +1098,16 @@ namespace DOpE
 
   /******************************************************/
 
-  template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
+#if DEAL_II_VERSION_GTE(9,3,0)
+template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
+  int dealdim, template<int, int> class FE, bool HP, template<int, int> class DH>
+  PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE, HP, DH>::~PDEProblemContainer()
+#else
+template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
            int dealdim, template<int, int> class FE, template<int, int> class DH>
   PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE, DH>::~PDEProblemContainer()
-  {
+#endif
+   {
     if (zero_dirichlet_values_ != NULL)
       {
         delete zero_dirichlet_values_;
@@ -999,10 +1129,17 @@ namespace DOpE
 
   /******************************************************/
 
-  template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
+#if DEAL_II_VERSION_GTE(9,3,0)
+template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
+           int dealdim, template<int, int> class FE, bool HP, template<int, int> class DH>
+  void
+  PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE, HP, DH>::ReInit(
+#else
+template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
            int dealdim, template<int, int> class FE, template<int, int> class DH>
   void
   PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE, DH>::ReInit(
+#endif
     std::string algo_type)
   {
     if (state_problem_ != NULL)
@@ -1043,10 +1180,17 @@ namespace DOpE
 
   /******************************************************/
 
+#if DEAL_II_VERSION_GTE(9,3,0)
+  template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
+           int dealdim, template<int, int> class FE, bool HP, template<int, int> class DH>
+  void
+  PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE, HP, DH>::SetType(
+#else
   template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
            int dealdim, template<int, int> class FE, template<int, int> class DH>
   void
   PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE, DH>::SetType(
+#endif
     std::string type, unsigned int num)
   {
     if (this->GetType() != type || this->GetTypeNum() != num)
@@ -1062,11 +1206,19 @@ namespace DOpE
 
   /******************************************************/
 
+#if DEAL_II_VERSION_GTE(9,3,0)
+  template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
+           int dealdim, template<int, int> class FE, bool HP, template<int, int> class DH>
+  template<typename DATACONTAINER>
+  double
+  PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE, HP, DH>::ElementFunctional(
+#else
   template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
            int dealdim, template<int, int> class FE, template<int, int> class DH>
   template<typename DATACONTAINER>
   double
   PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE, DH>::ElementFunctional(
+#endif
     const DATACONTAINER &edc)
   {
 
@@ -1091,10 +1243,17 @@ namespace DOpE
   }
 
   /******************************************************/
+#if DEAL_II_VERSION_GTE(9,3,0)
+  template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
+           int dealdim, template<int, int> class FE, bool HP, template<int, int> class DH>
+  double
+  PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE, HP, DH>::PointFunctional(
+#else
   template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
            int dealdim, template<int, int> class FE, template<int, int> class DH>
   double
   PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE, DH>::PointFunctional(
+#endif
     const std::map<std::string, const dealii::Vector<double>*> &param_values,
     const std::map<std::string, const VECTOR *> &domain_values)
   {
@@ -1127,11 +1286,19 @@ namespace DOpE
 
   /******************************************************/
 
+#if DEAL_II_VERSION_GTE(9,3,0)
+  template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
+           int dealdim, template<int, int> class FE, bool HP, template<int, int> class DH>
+  template<typename FACEDATACONTAINER>
+  double
+  PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE, HP, DH>::BoundaryFunctional(
+#else
   template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
            int dealdim, template<int, int> class FE, template<int, int> class DH>
   template<typename FACEDATACONTAINER>
   double
   PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE, DH>::BoundaryFunctional(
+#endif
     const FACEDATACONTAINER &fdc)
   {
     if (this->GetType() == "cost_functional")
@@ -1158,11 +1325,19 @@ namespace DOpE
 
   /******************************************************/
 
+#if DEAL_II_VERSION_GTE(9,3,0)
+  template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
+           int dealdim, template<int, int> class FE, bool HP, template<int, int> class DH>
+  template<typename FACEDATACONTAINER>
+  double
+  PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE, HP, DH>::FaceFunctional(
+#else
   template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
            int dealdim, template<int, int> class FE, template<int, int> class DH>
   template<typename FACEDATACONTAINER>
   double
   PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE, DH>::FaceFunctional(
+#endif
     const FACEDATACONTAINER &fdc)
   {
     if (this->GetType() == "cost_functional")
@@ -1189,10 +1364,17 @@ namespace DOpE
 
   /******************************************************/
 
+#if DEAL_II_VERSION_GTE(9,3,0)
+  template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
+           int dealdim, template<int, int> class FE, bool HP, template<int, int> class DH>
+  double
+  PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE, HP, DH>::AlgebraicFunctional(
+#else
   template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
            int dealdim, template<int, int> class FE, template<int, int> class DH>
   double
   PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE, DH>::AlgebraicFunctional(
+#endif
     const std::map<std::string, const dealii::Vector<double>*> &param_values,
     const std::map<std::string, const VECTOR *> &domain_values)
   {
@@ -1222,10 +1404,17 @@ namespace DOpE
 
   /******************************************************/
 
+#if DEAL_II_VERSION_GTE(9,3,0)
+  template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
+           int dealdim, template<int, int> class FE, bool HP, template<int, int> class DH>
+  std::string
+  PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE, HP, DH>::GetDoFType() const
+#else
   template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
            int dealdim, template<int, int> class FE, template<int, int> class DH>
   std::string
   PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE, DH>::GetDoFType() const
+#endif
   {
     if (this->GetType() == "error_evaluation")
       {
@@ -1240,10 +1429,17 @@ namespace DOpE
 
   /******************************************************/
 
+#if DEAL_II_VERSION_GTE(9,3,0)
+  template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
+           int dealdim, template<int, int> class FE, bool HP, template<int, int> class DH>
+  UpdateFlags
+  PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE, HP, DH>::GetUpdateFlags() const
+#else
   template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
            int dealdim, template<int, int> class FE, template<int, int> class DH>
   UpdateFlags
   PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE, DH>::GetUpdateFlags() const
+#endif
   {
 
     UpdateFlags r;
@@ -1265,10 +1461,17 @@ namespace DOpE
 
   /******************************************************/
 
+#if DEAL_II_VERSION_GTE(9,3,0)
+  template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
+           int dealdim, template<int, int> class FE, bool HP, template<int, int> class DH>
+  UpdateFlags
+  PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE, HP, DH>::GetFaceUpdateFlags() const
+#else
   template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
            int dealdim, template<int, int> class FE, template<int, int> class DH>
   UpdateFlags
   PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE, DH>::GetFaceUpdateFlags() const
+#endif
   {
     UpdateFlags r;
     if (this->GetType().find("aux_functional") != std::string::npos)
@@ -1291,10 +1494,17 @@ namespace DOpE
 
   /******************************************************/
 
+#if DEAL_II_VERSION_GTE(9,3,0)
+  template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
+           int dealdim, template<int, int> class FE, bool HP, template<int, int> class DH>
+  std::string
+  PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE, HP, DH>::GetFunctionalType() const
+#else
   template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
            int dealdim, template<int, int> class FE, template<int, int> class DH>
   std::string
   PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE, DH>::GetFunctionalType() const
+#endif
   {
     if (this->GetType() == "aux_functional")
       {
@@ -1309,10 +1519,17 @@ namespace DOpE
 
   /******************************************************/
 
+#if DEAL_II_VERSION_GTE(9,3,0)
+  template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
+           int dealdim, template<int, int> class FE, bool HP, template<int, int> class DH>
+  std::string
+  PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE, HP, DH>::GetFunctionalName() const
+#else
   template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
            int dealdim, template<int, int> class FE, template<int, int> class DH>
   std::string
   PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE, DH>::GetFunctionalName() const
+#endif
   {
     if (this->GetType() == "aux_functional")
       {
@@ -1327,10 +1544,17 @@ namespace DOpE
 
   /******************************************************/
 
+#if DEAL_II_VERSION_GTE(9,3,0)
+  template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
+           int dealdim, template<int, int> class FE, bool HP, template<int, int> class DH>
+  unsigned int
+  PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE, HP, DH>::FunctionalNeedPrecomputations() const
+#else
   template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
            int dealdim, template<int, int> class FE, template<int, int> class DH>
   unsigned int
   PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE, DH>::FunctionalNeedPrecomputations() const
+#endif
   {
     if (this->GetType() == "aux_functional")
       {
@@ -1345,10 +1569,17 @@ namespace DOpE
 
   /******************************************************/
 
+#if DEAL_II_VERSION_GTE(9,3,0)
+  template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
+           int dealdim, template<int, int> class FE, bool HP, template<int, int> class DH>
+  void
+  PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE, HP, DH>::SetTime(
+#else
   template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
            int dealdim, template<int, int> class FE, template<int, int> class DH>
   void
   PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE, DH>::SetTime(
+#endif
     double time,
     unsigned int time_dof_number,
     const TimeIterator &interval, bool initial)
@@ -1381,10 +1612,17 @@ namespace DOpE
 
   /******************************************************/
 
+#if DEAL_II_VERSION_GTE(9,3,0)
+  template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
+           int dealdim, template<int, int> class FE, bool HP, template<int, int> class DH>
+  bool
+  PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE, HP, DH>::HasFaces() const
+#else
   template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
            int dealdim, template<int, int> class FE, template<int, int> class DH>
   bool
   PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE, DH>::HasFaces() const
+#endif
   {
     if (this->GetType().find("aux_functional") != std::string::npos)
       {
@@ -1399,10 +1637,17 @@ namespace DOpE
 
   /******************************************************/
 
+#if DEAL_II_VERSION_GTE(9,3,0)
+  template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
+           int dealdim, template<int, int> class FE, bool HP, template<int, int> class DH>
+  bool
+  PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE, HP, DH>::HasPoints() const
+#else
   template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
            int dealdim, template<int, int> class FE, template<int, int> class DH>
   bool
   PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE, DH>::HasPoints() const
+#endif
   {
     if (this->GetType() == "aux_functional")
       {
@@ -1419,10 +1664,17 @@ namespace DOpE
 
   /******************************************************/
 
+#if DEAL_II_VERSION_GTE(9,3,0)
+  template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
+           int dealdim, template<int, int> class FE, bool HP, template<int, int> class DH>
+  bool
+  PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE, HP, DH>::HasInterfaces() const
+#else
   template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
            int dealdim, template<int, int> class FE, template<int, int> class DH>
   bool
   PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE, DH>::HasInterfaces() const
+#endif
   {
     if (this->GetType().find("aux_functional") != std::string::npos)
       {
@@ -1441,10 +1693,17 @@ namespace DOpE
   
   /******************************************************/
 
+#if DEAL_II_VERSION_GTE(9,3,0)
+  template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
+           int dealdim, template<int, int> class FE, bool HP, template<int, int> class DH>
+  bool
+  PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE, HP, DH>::HasVertices() const
+#else
   template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
            int dealdim, template<int, int> class FE, template<int, int> class DH>
   bool
   PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE, DH>::HasVertices() const
+#endif
   {
     if (this->GetType().find("aux_functional") != std::string::npos)
       {
@@ -1463,10 +1722,17 @@ namespace DOpE
 
   /******************************************************/
 
+#if DEAL_II_VERSION_GTE(9,3,0)
+  template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
+           int dealdim, template<int, int> class FE, bool HP, template<int, int> class DH>
+  void
+  PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE, HP, DH>::SetDirichletBoundaryColors(
+#else
   template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
            int dealdim, template<int, int> class FE, template<int, int> class DH>
   void
   PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE, DH>::SetDirichletBoundaryColors(
+#endif
     unsigned int color, const std::vector<bool> &comp_mask,
     const DD *values)
   {
@@ -1498,10 +1764,17 @@ namespace DOpE
 
   /******************************************************/
 
+#if DEAL_II_VERSION_GTE(9,3,0)
+  template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
+           int dealdim, template<int, int> class FE, bool HP, template<int, int> class DH>
+  void
+  PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE, HP, DH>::SetBoundaryEquationColors(
+#else
   template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
            int dealdim, template<int, int> class FE, template<int, int> class DH>
   void
   PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE, DH>::SetBoundaryEquationColors(
+#endif
     unsigned int color)
   {
     {
@@ -1553,10 +1826,17 @@ namespace DOpE
 
   /******************************************************/
 
+#if DEAL_II_VERSION_GTE(9,3,0)
+  template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
+           int dealdim, template<int, int> class FE, bool HP, template<int, int> class DH>
+  const std::vector<unsigned int> &
+  PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE, HP, DH>::GetBoundaryFunctionalColors() const
+#else
   template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
            int dealdim, template<int, int> class FE, template<int, int> class DH>
   const std::vector<unsigned int> &
   PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE, DH>::GetBoundaryFunctionalColors() const
+#endif
   {
     //FIXME cost_functional?? This is pdeproblemcontainer, we should not have a cost functional! ~cg
     if (this->GetType() == "cost_functional"
@@ -1574,10 +1854,17 @@ namespace DOpE
 
   /******************************************************/
 
+#if DEAL_II_VERSION_GTE(9,3,0)
+  template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
+           int dealdim, template<int, int> class FE, bool HP, template<int, int> class DH>
+  void
+  PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE, HP, DH>::SetBoundaryFunctionalColors(
+#else
   template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
            int dealdim, template<int, int> class FE, template<int, int> class DH>
   void
   PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE, DH>::SetBoundaryFunctionalColors(
+#endif
     unsigned int color)
   {
     {
@@ -1627,20 +1914,34 @@ namespace DOpE
 
   /******************************************************/
 
+#if DEAL_II_VERSION_GTE(9,3,0)
+  template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
+           int dealdim, template<int, int> class FE, bool HP, template<int, int> class DH>
+  unsigned int
+  PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE, HP, DH>::GetStateNBlocks() const
+#else
   template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
            int dealdim, template<int, int> class FE, template<int, int> class DH>
   unsigned int
   PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE, DH>::GetStateNBlocks() const
+#endif
   {
     return this->GetPDE().GetStateNBlocks();
   }
 
   /******************************************************/
 
+#if DEAL_II_VERSION_GTE(9,3,0)
+  template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
+           int dealdim, template<int, int> class FE, bool HP, template<int, int> class DH>
+  unsigned int
+  PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE, HP, DH>::GetNBlocks() const
+#else
   template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
            int dealdim, template<int, int> class FE, template<int, int> class DH>
   unsigned int
   PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE, DH>::GetNBlocks() const
+#endif
   {
     if ((this->GetType() == "state") || (this->GetType() == "adjoint_for_ee"))
       {
@@ -1655,10 +1956,17 @@ namespace DOpE
 
   /******************************************************/
 
+#if DEAL_II_VERSION_GTE(9,3,0)
+  template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
+           int dealdim, template<int, int> class FE, bool HP, template<int, int> class DH>
+  const std::vector<unsigned int> &
+  PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE, HP, DH>::GetDoFsPerBlock() const
+#else
   template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
            int dealdim, template<int, int> class FE, template<int, int> class DH>
   const std::vector<unsigned int> &
   PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE, DH>::GetDoFsPerBlock() const
+#endif
   {
     if ((this->GetType() == "state") || (this->GetType() == "adjoint_for_ee"))
       {
@@ -1674,10 +1982,17 @@ namespace DOpE
   /******************************************************/
 
 
+#if DEAL_II_VERSION_GTE(9,3,0)
+  template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
+           int dealdim, template<int, int> class FE, bool HP, template<int, int> class DH>
+  bool
+  PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE, HP, DH>::NeedTimeFunctional() const
+#else
   template<typename PDE, typename DD, typename SPARSITYPATTERN, typename VECTOR,
            int dealdim, template<int, int> class FE, template<int, int> class DH>
   bool
   PDEProblemContainer<PDE, DD, SPARSITYPATTERN, VECTOR, dealdim, FE, DH>::NeedTimeFunctional() const
+#endif
   {
     if (this->GetType() == "cost_functional")
       return false;

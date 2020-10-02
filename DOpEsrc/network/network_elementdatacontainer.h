@@ -103,7 +103,11 @@ namespace DOpE
       template<template<int, int> class FE, typename SPARSITYPATTERN, int dopedim, int dealdim>
       Network_ElementDataContainer(unsigned int pipe, const Quadrature<dim> &quad,
                                    UpdateFlags update_flags,
+#if DEAL_II_VERSION_GTE(9,3,0)
+                                   SpaceTimeHandler<FE, false, dealii::DoFHandler, SPARSITYPATTERN, dealii::Vector<double>,
+#else
                                    SpaceTimeHandler<FE, dealii::DoFHandler, SPARSITYPATTERN, dealii::Vector<double>,
+#endif
                                    dopedim, dealdim> &sth,
                                    const std::vector<
                                    typename dealii::DoFHandler<dim>::active_cell_iterator>& element,
@@ -145,7 +149,11 @@ namespace DOpE
       template<template<int, int> class FE, typename SPARSITYPATTERN>
       Network_ElementDataContainer(unsigned int pipe, const Quadrature<dim> &quad,
                                    UpdateFlags update_flags,
+#if DEAL_II_VERSION_GTE(9,3,0)
+                                   StateSpaceTimeHandler<FE, false, dealii::DoFHandler, SPARSITYPATTERN, dealii::Vector<double>,
+#else
                                    StateSpaceTimeHandler<FE, dealii::DoFHandler, SPARSITYPATTERN, dealii::Vector<double>,
+#endif
                                    dim> &sth,
                                    const std::vector<
                                    typename dealii::DoFHandler<dim>::active_cell_iterator>& element,

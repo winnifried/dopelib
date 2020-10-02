@@ -79,7 +79,11 @@ typedef SimpleDirichletData<VECTOR, DIM> DD;
 typedef LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM> PDE;
 typedef ConstraintInterface<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> CONS;
 
+#if DEAL_II_VERSION_GTE(9,3,0)//post deal 9.3.0
+typedef SpaceTimeHandler<FE, false, DOFHANDLER, SPARSITYPATTERN, VECTOR, CDIM, DIM> STH;
+#else
 typedef SpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR, CDIM, DIM> STH;
+#endif
 
 typedef OptProblemContainer<FUNCTIONALINTERFACE, COSTFUNCTIONAL, PDE, DD, CONS,
         SPARSITYPATTERN, VECTOR, CDIM, DIM> OP;
@@ -184,10 +188,16 @@ main(int argc, char **argv)
   lcc[0][1] = 2; // number of constraints (lower and upper bound)
   Constraints constraints(lcc, 1); // here, we impose one global constraint
 
+#if DEAL_II_VERSION_GTE(9,3,0)
+  MethodOfLines_SpaceTimeHandler<FE, false, DOFHANDLER, SPARSITYPATTERN, VECTOR, CDIM,
+                                 DIM> DOFH(triangulation, control_fe, state_fe, constraints,
+                                           DOpEtypes::stationary);
+#else
   MethodOfLines_SpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR, CDIM,
                                  DIM> DOFH(triangulation, control_fe, state_fe, constraints,
                                            DOpEtypes::stationary);
-
+#endif
+  
   LocalConstraintAccessor CA;
   LocalConstraint<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> LC(CA);
 

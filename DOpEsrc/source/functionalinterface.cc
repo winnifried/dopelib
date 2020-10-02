@@ -717,6 +717,8 @@ template class DOpE::FunctionalInterface<DOpE::Multimesh_ElementDataContainer,
 
 /********************************************/
 
+#if DEAL_II_VERSION_GTE(9,3,0)
+#else
 template class DOpE::FunctionalInterface<DOpE::ElementDataContainer,
          DOpE::FaceDataContainer, dealii::hp::DoFHandler, dealii::Vector<double>,
          dope_dimension, deal_II_dimension>;
@@ -737,15 +739,9 @@ template class DOpE::FunctionalInterface<DOpE::ElementDataContainer,
                                          deal_II_dimension>;
 #endif
 #endif
+#endif//Endof deal older than 9.3.0
 
 /********************************************/
-
-//template class DOpE::FunctionalInterface<DOpE::ElementDataContainer,
-//    DOpE::FaceDataContainer, dealii::MGDoFHandler, dealii::Vector<double>,
-//    dope_dimension, deal_II_dimension>;
-//template class DOpE::FunctionalInterface<DOpE::ElementDataContainer,
-//    DOpE::FaceDataContainer, dealii::MGDoFHandler,
-//    dealii::BlockVector<double>, dope_dimension, deal_II_dimension>;
 template class DOpE::FunctionalInterface<DOpE::Networks::Network_ElementDataContainer,
          DOpE::Networks::Network_FaceDataContainer, dealii::DoFHandler, dealii::Vector<double>,
          dope_dimension, deal_II_dimension>;

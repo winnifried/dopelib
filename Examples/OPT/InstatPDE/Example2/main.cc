@@ -172,10 +172,16 @@ main(int argc, char **argv)
 
 
   //Note that we give DOpEtypes::initial as the type of control.
+#if DEAL_II_VERSION_GTE(9,3,0)
+  MethodOfLines_SpaceTimeHandler<FE, false, DOFHANDLER, SPARSITYPATTERN, VECTOR, CDIM,
+                                 DIM> DOFH(triangulation, control_fe, state_fe, times,
+                                           DOpEtypes::VectorAction::stationary);
+#else
   MethodOfLines_SpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR, CDIM,
                                  DIM> DOFH(triangulation, control_fe, state_fe, times,
                                            DOpEtypes::VectorAction::stationary);
-
+#endif
+  
   NoConstraints<ElementDataContainer, FaceDataContainer, DOFHANDLER, VECTOR, CDIM,
                 DIM> Constraints;
   OP P(LFunc, LPDE, Constraints, DOFH);

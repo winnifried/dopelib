@@ -69,9 +69,10 @@ namespace DOpE
   class PDEInterface
   {
   public:
-    PDEInterface();
+    PDEInterface() {}
+    
     virtual
-    ~PDEInterface();
+      ~PDEInterface() {}
 
     /******************************************************/
 
@@ -103,8 +104,11 @@ namespace DOpE
     ElementEquation(const EDC<DH, VECTOR, dealdim> & /*edc*/,
                     dealii::Vector<double> &/*local_vector*/,
                     double /*scale*/,
-                    double /*scale_ico*/);
-
+                    double /*scale_ico*/)
+    {
+      throw DOpEException("Not Implemented", "PDEInterface::ElementEquation");
+    }
+    
     /******************************************************/
 
     /**
@@ -127,7 +131,11 @@ namespace DOpE
     StrongElementResidual(const EDC<DH, VECTOR, dealdim> & /*edc*/,
                           const EDC<DH, VECTOR, dealdim> & /*edc_weight*/,
                           double & /*ret*/,
-                          double /*scale*/);
+                          double /*scale*/)
+    {
+      throw DOpEException("Not Implemented",
+			  "PDEInterface::StrongElementResidual");
+    }
 
     /******************************************************/
 
@@ -155,8 +163,11 @@ namespace DOpE
     virtual void
     ElementTimeEquation(const EDC<DH, VECTOR, dealdim> & /*edc*/,
                         dealii::Vector<double> &/*local_vector*/,
-                        double /*scale*/);
-
+                        double /*scale*/)
+    {
+      throw DOpEException("Not Implemented", "PDEInterface::ElementTimeEquation");
+    }
+    
     /******************************************************/
     /**
      * Same as ElementTimeEquation, but here the derivative of T with
@@ -180,7 +191,11 @@ namespace DOpE
     virtual void
     ElementTimeEquation_U(const EDC<DH, VECTOR, dealdim> & /*edc*/,
                           dealii::Vector<double> &/*local_vector*/,
-                          double /*scale*/);
+                          double /*scale*/)
+    {
+      throw DOpEException("Not Implemented",
+			  "PDEInterface::ElementTimeEquation_U");
+    }
 
     /******************************************************/
     /**
@@ -202,7 +217,11 @@ namespace DOpE
     virtual void
     ElementTimeEquation_UT(const EDC<DH, VECTOR, dealdim> & /*edc*/,
                            dealii::Vector<double> &/*local_vector*/,
-                           double /*scale*/);
+                           double /*scale*/)
+    {
+      throw DOpEException("Not Implemented",
+			  "PDEInterface::ElementTimeEquation_UT");
+    }
 
     /******************************************************/
     /**
@@ -227,7 +246,11 @@ namespace DOpE
     virtual void
     ElementTimeEquation_UTT(const EDC<DH, VECTOR, dealdim> & /*edc*/,
                             dealii::Vector<double> &/*local_vector*/,
-                            double /*scale*/);
+                            double /*scale*/)
+    {
+      throw DOpEException("Not Implemented",
+			  "PDEInterface::ElementTimeEquation_UTT");
+    }
 
     /******************************************************/
 
@@ -251,7 +274,12 @@ namespace DOpE
     virtual void
     ElementTimeEquationExplicit(const EDC<DH, VECTOR, dealdim> & /*edc**/,
                                 dealii::Vector<double> &/*local_vector*/,
-                                double /*scale*/);
+                                double /*scale*/)
+    {
+      //This should be left empty, then one can use the default case *Time* without the
+      //need to implement ElementTimeEquationExplicit
+    }
+      
     /******************************************************/
     /**
      * Analog to ElementTimeEquationExplicit, this function is used
@@ -269,7 +297,11 @@ namespace DOpE
     virtual void
     ElementTimeEquationExplicit_U(const EDC<DH, VECTOR, dealdim> & /*edc*/,
                                   dealii::Vector<double> &/*local_vector*/,
-                                  double /*scale*/);
+                                  double /*scale*/)
+    {
+      //This should be left empty, then one can use the default case *Time* without the
+      //need to implement ElementTimeEquationExplicit
+    }
 
     /******************************************************/
     /**
@@ -289,7 +321,11 @@ namespace DOpE
     virtual void
     ElementTimeEquationExplicit_UT(const EDC<DH, VECTOR, dealdim> & /*edc*/,
                                    dealii::Vector<double> &/*local_vector*/,
-                                   double /*scale*/);
+                                   double /*scale*/)
+    {
+      //This should be left empty, then one can use the default case *Time* without the
+      //need to implement ElementTimeEquationExplicit
+    }
 
     /******************************************************/
     /**
@@ -308,7 +344,11 @@ namespace DOpE
     virtual void
     ElementTimeEquationExplicit_UTT(const EDC<DH, VECTOR, dealdim> & /*edc*/,
                                     dealii::Vector<double> &/*local_vector*/,
-                                    double /*scale*/);
+                                    double /*scale*/)
+    {
+      //This should be left empty, then one can use the default case *Time* without the
+      //need to implement ElementTimeEquationExplicit
+    }
 
     /******************************************************/
     /**
@@ -329,7 +369,11 @@ namespace DOpE
     virtual void
     ElementTimeEquationExplicit_UU(const EDC<DH, VECTOR, dealdim> & /*edc*/,
                                    dealii::Vector<double> &/*local_vector*/,
-                                   double /*scale*/);
+                                   double /*scale*/)
+    {
+      //This should be left empty, then one can use the default case *Time* without the
+      //need to implement ElementTimeEquationExplicit
+    }
 
     /******************************************************/
     /**
@@ -359,8 +403,11 @@ namespace DOpE
     ElementEquation_U(const EDC<DH, VECTOR, dealdim> & /*edc*/,
                       dealii::Vector<double> &/*local_vector*/,
                       double /*scale*/,
-                      double /*scale_ico*/);
-
+                      double /*scale_ico*/)
+    {
+      throw DOpEException("Not Implemented", "PDEInterface::ElementEquation_U");
+    }
+    
     /******************************************************/
     /**
      * Similar to the StongElementResidual, this function implements the
@@ -382,7 +429,11 @@ namespace DOpE
     StrongElementResidual_U(const EDC<DH, VECTOR, dealdim> & /*edc*/,
                             const EDC<DH, VECTOR, dealdim> & /*edc_weight*/,
                             double & /*ret*/,
-                            double /*scale*/);
+                            double /*scale*/)
+    {
+      throw DOpEException("Not Implemented",
+			  "PDEInterface::StrongElementResidual_U");
+    }
 
     /******************************************************/
     /**
@@ -412,8 +463,11 @@ namespace DOpE
     ElementEquation_UT(const EDC<DH, VECTOR, dealdim> & /*edc*/,
                        dealii::Vector<double> &/*local_vector*/,
                        double /*scale*/,
-                       double /*scale_ico*/);
-
+                       double /*scale_ico*/)
+    {
+      throw DOpEException("Not Implemented", "PDEInterface::ElementEquation_UT");
+    }
+ 
     /******************************************************/
     /**
      * This term implements the derivative of ElementEquation
@@ -444,7 +498,10 @@ namespace DOpE
     ElementEquation_UTT(const EDC<DH, VECTOR, dealdim> & /*edc*/,
                         dealii::Vector<double> &/*local_vector*/,
                         double /*scale*/,
-                        double /*scale_ico*/);
+                        double /*scale_ico*/)
+    {
+      throw DOpEException("Not Implemented", "PDEInterface::ElementEquation_UTT");
+    }
 
     /******************************************************/
 
@@ -477,7 +534,11 @@ namespace DOpE
     ElementEquation_Q(const EDC<DH, VECTOR, dealdim> & /*edc*/,
                       dealii::Vector<double> &/*local_vector*/,
                       double /*scale*/,
-                      double /*scale_ico*/);
+                      double /*scale_ico*/)
+    {
+      throw DOpEException("Not Implemented", "PDEInterface::ElementEquation_Q");
+    }
+
 
     /******************************************************/
 
@@ -509,7 +570,10 @@ namespace DOpE
     ElementEquation_QT(const EDC<DH, VECTOR, dealdim> & /*edc*/,
                        dealii::Vector<double> &/*local_vector*/,
                        double /*scale*/,
-                       double scale_ico);
+		       double /*scale_ico*/)
+    {
+      throw DOpEException("Not Implemented", "PDEInterface::ElementEquation_QT");
+    }
 
     /******************************************************/
 
@@ -537,7 +601,10 @@ namespace DOpE
     ElementEquation_QTT(const EDC<DH, VECTOR, dealdim> & /*edc*/,
                         dealii::Vector<double> &/*local_vector*/,
                         double /*scale*/,
-                        double /*scale_ico*/);
+                        double /*scale_ico*/)
+    {
+      throw DOpEException("Not Implemented", "PDEInterface::ElementEquation_QTT");
+    }
 
     /******************************************************/
 
@@ -566,8 +633,11 @@ namespace DOpE
     ElementEquation_UU(const EDC<DH, VECTOR, dealdim> & /*edc*/,
                        dealii::Vector<double> &/*local_vector*/,
                        double /*scale*/,
-                       double /*scale_ico*/);
-
+                       double /*scale_ico*/)
+    {
+      throw DOpEException("Not Implemented", "PDEInterface::ElementEquation_UU");
+    }
+    
     /******************************************************/
 
     /**
@@ -597,8 +667,11 @@ namespace DOpE
     ElementEquation_QU(const EDC<DH, VECTOR, dealdim> & /*edc*/,
                        dealii::Vector<double> &/*local_vector*/,
                        double /*scale*/,
-                       double /*scale_ico*/);
-
+                       double /*scale_ico*/)
+    {
+      throw DOpEException("Not Implemented", "PDEInterface::ElementEquation_QU");
+    }
+      
     /******************************************************/
     /**
      * Analog to ElementEquation_QU, but with different arguments, i.e., we calculate
@@ -625,7 +698,10 @@ namespace DOpE
     ElementEquation_UQ(const EDC<DH, VECTOR, dealdim> & /*edc*/,
                        dealii::Vector<double> &/*local_vector*/,
                        double /*scale*/,
-                       double /*scale_ico*/);
+                       double /*scale_ico*/)
+    {
+      throw DOpEException("Not Implemented", "PDEInterface::ElementEquation_UQ");
+    }
 
     /******************************************************/
     /**
@@ -652,7 +728,10 @@ namespace DOpE
     ElementEquation_QQ(const EDC<DH, VECTOR, dealdim> & /*edc*/,
                        dealii::Vector<double> &/*local_vector*/,
                        double /*scale*/,
-                       double /*scale_ico*/);
+                       double /*scale_ico*/)
+    {
+      throw DOpEException("Not Implemented", "PDEInterface::ElementEquation_QQ");
+    }
 
     /******************************************************/
     /**
@@ -671,7 +750,10 @@ namespace DOpE
     virtual void
     ElementRightHandSide(const EDC<DH, VECTOR, dealdim> & /*edc*/,
                          dealii::Vector<double> &/*local_vector*/,
-                         double /*scale*/);
+                         double /*scale*/)
+    {
+      throw DOpEException("Not Implemented", "PDEInterface::ElementRightHandSide");
+    }
 
     /******************************************************/
 
@@ -700,7 +782,10 @@ namespace DOpE
     ElementMatrix(const EDC<DH, VECTOR, dealdim> & /*edc*/,
                   dealii::FullMatrix<double> &/*local_entry_matrix*/,
                   double /*scale*/,
-                  double /*scale_ico*/);
+                  double /*scale_ico*/)
+    {
+      throw DOpEException("Not Implemented", "PDEInterface::ElementMatrix");
+    }
 
     /******************************************************/
     /**
@@ -718,7 +803,10 @@ namespace DOpE
 
     virtual void
     ElementTimeMatrix(const EDC<DH, VECTOR, dealdim> & /*edc*/,
-                      dealii::FullMatrix<double> &/*local_entry_matrix*/);
+                      dealii::FullMatrix<double> &/*local_entry_matrix*/)
+    {
+      throw DOpEException("Not Implemented", "PDEInterface::ElementTimeMatrix");
+    }
 
     /******************************************************/
     /**
@@ -732,8 +820,25 @@ namespace DOpE
      *                           of the testfunction.
      */
     virtual void
-    ElementTimeMatrix_T(const EDC<DH, VECTOR, dealdim> & /*edc*/,
-                        dealii::FullMatrix<double> &/*local_entry_matrix*/);
+    ElementTimeMatrix_T(const EDC<DH, VECTOR, dealdim> &edc,
+			FullMatrix<double> &local_entry_matrix)
+    {
+      FullMatrix<double> tmp_mat = local_entry_matrix;
+      tmp_mat = 0.;
+      
+      //FIXME is this the right behaviour in the instationary case? or what
+      //are the correct values for scale and scale_ico?
+      ElementTimeMatrix(edc, tmp_mat);
+      unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
+    
+      for (unsigned int i = 0; i < n_dofs_per_element; i++)
+      {
+	for (unsigned int j = 0; j < n_dofs_per_element; j++)
+	{
+	  local_entry_matrix(j, i) += tmp_mat(i, j);
+	}
+      }
+    } 
 
     /******************************************************/
     /**
@@ -751,8 +856,12 @@ namespace DOpE
 
     virtual void
     ElementTimeMatrixExplicit(const EDC<DH, VECTOR, dealdim> & /*edc*/,
-                              dealii::FullMatrix<double> &/*local_entry_matrix*/);
-
+                              dealii::FullMatrix<double> &/*local_entry_matrix*/)
+    {
+      //This should be left empty, then one can use the default case *Time* without the
+      //need to implement ElementTimeEquationExplicit
+    }
+    
     /******************************************************/
     /**
      * The transposed of ElementTimeEquationExplicit.
@@ -765,9 +874,26 @@ namespace DOpE
      *                           of the testfunction.
      */
     virtual void
-    ElementTimeMatrixExplicit_T(const EDC<DH, VECTOR, dealdim> & /*edc*/,
-                                dealii::FullMatrix<double> &/*local_entry_matrix*/);
-
+    ElementTimeMatrixExplicit_T(const EDC<DH, VECTOR, dealdim> &edc,
+				FullMatrix<double> &local_entry_matrix)
+    {
+      FullMatrix<double> tmp_mat = local_entry_matrix;
+      tmp_mat = 0.;
+      
+      //FIXME is this the right behaviour in the instationary case? or what
+      //are the correct values for scale and scale_ico?
+      ElementTimeMatrixExplicit(edc, tmp_mat);
+      unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
+      
+      for (unsigned int i = 0; i < n_dofs_per_element; i++)
+      {
+        for (unsigned int j = 0; j < n_dofs_per_element; j++)
+	{
+	  local_entry_matrix(j, i) += tmp_mat(i, j);
+	}
+      }
+    }
+    
     /******************************************************/
     /**
      * This implements the element integral used to calculate the
@@ -794,11 +920,28 @@ namespace DOpE
      *                           for more details.
      */
     virtual void
-    ElementMatrix_T(const EDC<DH, VECTOR, dealdim> & /*edc*/,
-                    dealii::FullMatrix<double> &/*local_entry_matrix*/,
-                    double /*scale*/,
-                    double /*scale_ico*/);
-
+    ElementMatrix_T(const EDC<DH, VECTOR, dealdim> &edc,
+		    FullMatrix<double> &local_entry_matrix,
+		    double scale,
+		    double scale_ico)
+    {
+      FullMatrix<double> tmp_mat = local_entry_matrix;
+      tmp_mat = 0.;
+      
+      //FIXME is this the right behaviour in the instationary case? or what
+      //are the correct values for scale and scale_ico?
+      ElementMatrix(edc, tmp_mat, scale, scale_ico);
+      unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
+      
+      for (unsigned int i = 0; i < n_dofs_per_element; i++)
+      {
+	for (unsigned int j = 0; j < n_dofs_per_element; j++)
+	{
+	  local_entry_matrix(j, i) += tmp_mat(i, j);
+	}
+      }
+    }
+    
     /******************************************************/
 
     /**
@@ -819,7 +962,11 @@ namespace DOpE
     virtual void
     ControlElementEquation(const EDC<DH, VECTOR, dealdim> & /*edc*/,
                            dealii::Vector<double> &/*local_vector*/,
-                           double /*scale*/);
+                           double /*scale*/)
+    {
+      throw DOpEException("Not Implemented",
+			  "PDEInterface::ControlElementEquation");
+    }
 
     /******************************************************/
     /**
@@ -835,7 +982,11 @@ namespace DOpE
     virtual void
     ControlElementMatrix(const EDC<DH, VECTOR, dealdim> & /*edc*/,
                          dealii::FullMatrix<double> &/*local_entry_matrix*/,
-                         double /*scale*/);
+                         double /*scale*/)
+    {
+      throw DOpEException("Not Implemented", "PDEInterface::ControlElementMatrix");
+    }
+
     /******************************************************/
 
     /**
@@ -856,7 +1007,11 @@ namespace DOpE
     virtual void
     ControlBoundaryEquation(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
                             dealii::Vector<double> &/*local_vector*/,
-                            double /*scale*/);
+                            double /*scale*/)
+    {
+      throw DOpEException("Not Implemented",
+			  "PDEInterface::ControlBoundaryEquation");
+    }
 
     /******************************************************/
     /**
@@ -872,7 +1027,11 @@ namespace DOpE
     virtual void
     ControlBoundaryMatrix(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
                           dealii::FullMatrix<double> &/*local_entry_matrix*/,
-                          double /*scale*/);
+                          double /*scale*/)
+    {
+      throw DOpEException("Not Implemented", "PDEInterface::ControlBoundaryMatrix");
+    }
+
     /******************************************************/
 
     /**
@@ -894,7 +1053,12 @@ namespace DOpE
     StrongElementResidual_Control(const EDC<DH, VECTOR, dealdim> & /*edc*/,
                                   const EDC<DH, VECTOR, dealdim> & /*edc_weight*/,
                                   double & /*ret*/,
-                                  double /*scale*/);
+                                  double /*scale*/)
+    {
+      throw DOpEException("Not Implemented",
+			  "PDEInterface::StrongElementResidual_Control");
+    }
+
     /******************************************************/
     /**
      * Similar to the StongElementResidual, this function implements the
@@ -917,7 +1081,12 @@ namespace DOpE
     StrongFaceResidual_Control(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
                                const FDC<DH, VECTOR, dealdim> & /*fdc_weight*/,
                                double & /*ret*/,
-                               double /*scale*/);
+                               double /*scale*/)
+    {
+      throw DOpEException("Not Implemented",
+			  "PDEInterface::StrongFaceResidual_Control");
+    }
+
     /******************************************************/
     /**
      * Similar to the StongElementResidual, this function implements the
@@ -940,7 +1109,11 @@ namespace DOpE
     StrongBoundaryResidual_Control(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
                                    const FDC<DH, VECTOR, dealdim> & /*fdc_weight*/,
                                    double & /*ret*/,
-                                   double /*scale*/);
+                                   double /*scale*/)
+    {
+      throw DOpEException("Not Implemented",
+			  "PDEInterface::StrongBoundaryResidual_Control");
+    }
 
     /******************************************************/
     // Functions for Face Integrals
@@ -957,14 +1130,22 @@ namespace DOpE
     FaceEquation(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
                  dealii::Vector<double> &/*local_vector*/,
                  double /*scale*/,
-                 double /*scale_ico*/);
+                 double /*scale_ico*/)
+    {
+      throw DOpEException("Not Implemented", "PDEInterface::FaceEquation");
+    }
+ 
     /******************************************************/
 
     virtual void
     StrongFaceResidual(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
                        const FDC<DH, VECTOR, dealdim> & /*fdc_weight*/,
                        double & /*ret*/,
-                       double /*scale*/);
+                       double /*scale*/)
+    {
+      throw DOpEException("Not Implemented",
+			  "PDEInterface::StrongFaceResidual");
+    }
 
     /******************************************************/
 
@@ -972,7 +1153,10 @@ namespace DOpE
     FaceEquation_U(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
                    dealii::Vector<double> &/*local_vector*/,
                    double /*scale*/,
-                   double /*scale_ico*/);
+                   double /*scale_ico*/)
+    {
+      throw DOpEException("Not Implemented", "PDEInterface::FaceEquation_U");
+    }
 
     /******************************************************/
 
@@ -980,7 +1164,11 @@ namespace DOpE
     StrongFaceResidual_U(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
                          const FDC<DH, VECTOR, dealdim> & /*fdc_weight*/,
                          double & /*ret*/,
-                         double /*scale*/);
+                         double /*scale*/)
+    {
+      throw DOpEException("Not Implemented",
+			  "PDEInterface::StrongFaceResidual_U");
+    }
 
     /******************************************************/
 
@@ -988,7 +1176,10 @@ namespace DOpE
     FaceEquation_UT(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
                     dealii::Vector<double> &/*local_vector*/,
                     double /*scale*/,
-                    double /*scale_ico*/);
+                    double /*scale_ico*/)
+    {
+      throw DOpEException("Not Implemented", "PDEInterface::FaceEquation_UT");
+    }
 
     /******************************************************/
 
@@ -996,7 +1187,10 @@ namespace DOpE
     FaceEquation_UTT(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
                      dealii::Vector<double> &/*local_vector*/,
                      double /*scale*/,
-                     double /*scale_ico*/);
+                     double /*scale_ico*/)
+    {
+      throw DOpEException("Not Implemented", "PDEInterface::FaceEquation_UTT");
+    }
 
     /******************************************************/
 
@@ -1004,7 +1198,10 @@ namespace DOpE
     FaceEquation_Q(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
                    dealii::Vector<double> &/*local_vector*/,
                    double /*scale*/,
-                   double /*scale_ico*/);
+                   double /*scale_ico*/)
+    {
+      throw DOpEException("Not Implemented", "PDEInterface::FaceEquation_Q");
+    }
 
     /******************************************************/
 
@@ -1012,7 +1209,10 @@ namespace DOpE
     FaceEquation_QT(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
                     dealii::Vector<double> &/*local_vector*/,
                     double /*scale*/,
-                    double /*scale_ico*/);
+                    double /*scale_ico*/)
+    {
+      throw DOpEException("Not Implemented", "PDEInterface::FaceEquation_QT");
+    }
 
     /******************************************************/
 
@@ -1020,7 +1220,10 @@ namespace DOpE
     FaceEquation_QTT(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
                      dealii::Vector<double> &/*local_vector*/,
                      double /*scale*/,
-                     double /*scale_ico*/);
+                     double /*scale_ico*/)
+    {
+      throw DOpEException("Not Implemented", "PDEInterface::FaceEquation_QTT");
+    }
 
     /******************************************************/
 
@@ -1028,7 +1231,10 @@ namespace DOpE
     FaceEquation_UU(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
                     dealii::Vector<double> &/*local_vector*/,
                     double /*scale*/,
-                    double /*scale_ico*/);
+                    double /*scale_ico*/)
+    {
+      throw DOpEException("Not Implemented", "PDEInterface::FaceEquation_UU");
+    }
 
     /******************************************************/
 
@@ -1036,7 +1242,10 @@ namespace DOpE
     FaceEquation_QU(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
                     dealii::Vector<double> &/*local_vector*/,
                     double /*scale*/,
-                    double /*scale_ico*/);
+                    double /*scale_ico*/)
+    {
+      throw DOpEException("Not Implemented", "PDEInterface::FaceEquation_QU");
+    }
 
     /******************************************************/
 
@@ -1044,7 +1253,10 @@ namespace DOpE
     FaceEquation_UQ(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
                     dealii::Vector<double> &/*local_vector*/,
                     double /*scale*/,
-                    double /*scale_ico*/);
+                    double /*scale_ico*/)
+    {
+      throw DOpEException("Not Implemented", "PDEInterface::FaceEquation_UQ");
+    }
 
     /******************************************************/
 
@@ -1052,14 +1264,20 @@ namespace DOpE
     FaceEquation_QQ(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
                     dealii::Vector<double> &/*local_vector*/,
                     double /*scale*/,
-                    double /*scale_ico*/);
+                    double /*scale_ico*/)
+    {
+      throw DOpEException("Not Implemented", "PDEInterface::FaceEquation_QQ");
+    }
 
     /******************************************************/
 
     virtual void
     FaceRightHandSide(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
                       dealii::Vector<double> &/*local_vector*/,
-                      double /*scale*/);
+                      double /*scale*/)
+    {
+      throw DOpEException("Not Implemented", "PDEInterface::FaceRightHandSide");
+    }
 
     /******************************************************/
 
@@ -1070,15 +1288,33 @@ namespace DOpE
     FaceMatrix(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
                dealii::FullMatrix<double> &/*local_entry_matrix*/,
                double /*scale*/,
-               double /*scale_ico*/);
+               double /*scale_ico*/)
+    {
+      throw DOpEException("Not Implemented", "PDEInterface::FaceMatrix");
+    }
 
     /******************************************************/
 
     virtual void
-    FaceMatrix_T(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
-                 dealii::FullMatrix<double> &/*local_entry_matrix*/,
-                 double /*scale*/,
-                 double /*scale_ico*/);
+    FaceMatrix_T(const FDC<DH, VECTOR, dealdim> &fdc,
+		 FullMatrix<double> &local_entry_matrix,
+		 double scale,
+		 double scale_ico)
+    {
+      FullMatrix<double> tmp_mat = local_entry_matrix;
+      tmp_mat = 0.;
+      
+      FaceMatrix(fdc, tmp_mat, scale, scale_ico);
+      unsigned int n_dofs_per_element = fdc.GetNDoFsPerElement();
+      
+      for (unsigned int i = 0; i < n_dofs_per_element; i++)
+      {
+        for (unsigned int j = 0; j < n_dofs_per_element; j++)
+	{
+	  local_entry_matrix(j, i) += tmp_mat(i, j);
+	}
+      }
+    }
 
     /******************************************************/
     //Functions for Interface Integrals
@@ -1087,7 +1323,10 @@ namespace DOpE
     InterfaceMatrix(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
                     dealii::FullMatrix<double> &/*local_entry_matrix*/,
                     double /*scale*/,
-                    double /*scale_ico*/);
+                    double /*scale_ico*/)
+    {
+      throw DOpEException("Not Implemented", "PDEInterface::InterfaceMatrix");
+    }
 
     /******************************************************/
     //Functions for Interface Integrals
@@ -1095,7 +1334,11 @@ namespace DOpE
     InterfaceMatrix_T(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
                       dealii::FullMatrix<double> &/*local_entry_matrix*/,
                       double /*scale*/,
-                      double /*scale_ico*/);
+                      double /*scale_ico*/)
+    {
+      throw DOpEException("Not Implemented", "PDEInterface::InterfaceMatrix_T");
+    }
+
 
     /******************************************************/
     // Integrals over interfaces (with test functions from
@@ -1108,29 +1351,46 @@ namespace DOpE
     InterfaceEquation(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
                       dealii::Vector<double> &/*local_vector*/,
                       double /*scale*/,
-                      double /*scale_ico*/);
-
+                      double /*scale_ico*/)
+    {
+      throw DOpEException("Not Implemented", "PDEInterface::InterfaceEquation");
+    }
+    
     /******************************************************/
 
     virtual void
     InterfaceEquation_U(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
                         dealii::Vector<double> &/*local_vector*/,
                         double /*scale*/,
-                        double /*scale_ico*/);
+                        double /*scale_ico*/)
+    {
+      throw DOpEException("Not Implemented",
+			  "PDEInterface::InterfaceEquation_U");
+    }
+
     /******************************************************/
 
     virtual void
     InterfaceEquation_UT(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
                          dealii::Vector<double> &/*local_vector*/,
                          double /*scale*/,
-                         double /*scale_ico*/);
+                         double /*scale_ico*/)
+    {
+      throw DOpEException("Not Implemented",
+			  "PDEInterface::InterfaceEquation_UT");
+    }
+    
     /******************************************************/
 
     virtual void
     InterfaceEquation_UTT(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
                           dealii::Vector<double> &/*local_vector*/,
                           double /*scale*/,
-                          double /*scale_ico*/);
+                          double /*scale_ico*/)
+    {
+      throw DOpEException("Not Implemented",
+			  "PDEInterface::InterfaceEquation_UTT");
+    }
 
     /******************************************************/
 
@@ -1140,15 +1400,22 @@ namespace DOpE
     BoundaryEquation(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
                      dealii::Vector<double> &/*local_vector*/,
                      double /*scale*/,
-                     double /*scale_ico*/);
-
+                     double /*scale_ico*/)
+    {
+      throw DOpEException("Not Implemented", "PDEInterface::BoundaryEquation");
+    }
+    
     /******************************************************/
 
     virtual void
     StrongBoundaryResidual(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
                            const FDC<DH, VECTOR, dealdim> & /*fdc_weight*/,
                            double & /*ret*/,
-                           double /*scale*/);
+                           double /*scale*/)
+    {
+      throw DOpEException("Not Implemented",
+			  "PDEInterface::StrongBoundaryResidual");
+    }
 
     /******************************************************/
 
@@ -1156,7 +1423,11 @@ namespace DOpE
     BoundaryEquation_U(const FDC<DH, VECTOR, dealdim> &/*fdc*/,
                        dealii::Vector<double> &/*local_vector*/,
                        double /*scale*/,
-                       double /*scale_ico*/);
+                       double /*scale_ico*/)
+    {
+      throw DOpEException("Not Implemented",
+			  "PDEInterface::BoundaryEquation_U");
+    }
 
     /******************************************************/
 
@@ -1164,7 +1435,11 @@ namespace DOpE
     StrongBoundaryResidual_U(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
                              const FDC<DH, VECTOR, dealdim> & /*fdc_weight*/,
                              double & /*ret*/,
-                             double /*scale*/);
+                             double /*scale*/)
+    {
+      throw DOpEException("Not Implemented",
+			  "PDEInterface::StrongBoundaryResidual_U");
+    }
 
     /******************************************************/
 
@@ -1172,7 +1447,11 @@ namespace DOpE
     BoundaryEquation_UT(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
                         dealii::Vector<double> &/*local_vector*/,
                         double /*scale*/,
-                        double /*scale_ico*/);
+                        double /*scale_ico*/)
+    {
+      throw DOpEException("Not Implemented",
+			  "PDEInterface::BoundaryEquation_UT");
+    }
 
     /******************************************************/
 
@@ -1180,7 +1459,11 @@ namespace DOpE
     BoundaryEquation_UTT(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
                          dealii::Vector<double> &/*local_vector*/,
                          double /*scale*/,
-                         double /*scale_ico*/);
+                         double /*scale_ico*/)
+    {
+      throw DOpEException("Not Implemented",
+			  "PDEInterface::BoundaryEquation_UTT");
+    }
 
     /******************************************************/
 
@@ -1188,7 +1471,11 @@ namespace DOpE
     BoundaryEquation_Q(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
                        dealii::Vector<double> &/*local_vector*/,
                        double /*scale*/,
-                       double /*scale_ico*/);
+                       double /*scale_ico*/)
+    {
+      throw DOpEException("Not Implemented",
+			  "PDEInterface::BoundaryEquation_Q");
+    }
 
     /******************************************************/
 
@@ -1196,7 +1483,11 @@ namespace DOpE
     BoundaryEquation_QT(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
                         dealii::Vector<double> &/*local_vector*/,
                         double /*scale*/,
-                        double /*scale_ico*/);
+                        double /*scale_ico*/)
+    {
+      throw DOpEException("Not Implemented",
+			  "PDEInterface::BoundaryEquation_QT");
+    }
 
     /******************************************************/
 
@@ -1204,7 +1495,11 @@ namespace DOpE
     BoundaryEquation_QTT(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
                          dealii::Vector<double> &/*local_vector*/,
                          double /*scale*/,
-                         double /*scale_ico*/);
+                         double /*scale_ico*/)
+    {
+      throw DOpEException("Not Implemented",
+			  "PDEInterface::BoundaryEquation_QTT");
+    }
 
     /******************************************************/
 
@@ -1212,7 +1507,11 @@ namespace DOpE
     BoundaryEquation_UU(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
                         dealii::Vector<double> &/*local_vector*/,
                         double /*scale*/,
-                        double /*scale_ico*/);
+                        double /*scale_ico*/)
+    {
+      throw DOpEException("Not Implemented",
+			  "PDEInterface::BoundaryEquation_UU");
+    }
 
     /******************************************************/
 
@@ -1220,7 +1519,11 @@ namespace DOpE
     BoundaryEquation_QU(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
                         dealii::Vector<double> &/*local_vector*/,
                         double /*scale*/,
-                        double /*scale_ico*/);
+                        double /*scale_ico*/)
+    {
+      throw DOpEException("Not Implemented",
+			  "PDEInterface::BoundaryEquation_QU");
+    }
 
     /******************************************************/
 
@@ -1228,7 +1531,11 @@ namespace DOpE
     BoundaryEquation_UQ(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
                         dealii::Vector<double> &/*local_vector*/,
                         double /*scale*/,
-                        double /*scale_ico*/);
+                        double /*scale_ico*/)
+    {
+      throw DOpEException("Not Implemented",
+			  "PDEInterface::BoundaryEquation_UQ");
+    }
 
     /******************************************************/
 
@@ -1236,14 +1543,22 @@ namespace DOpE
     BoundaryEquation_QQ(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
                         dealii::Vector<double> &/*local_vector*/,
                         double /*scale*/,
-                        double /*scale_ico*/);
+                        double /*scale_ico*/)
+    {
+      throw DOpEException("Not Implemented",
+			  "PDEInterface::BoundaryEquation_QQ");
+    }
 
     /******************************************************/
 
     virtual void
     BoundaryRightHandSide(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
                           dealii::Vector<double> &/*local_vector*/,
-                          double /*scale*/);
+                          double /*scale*/)
+    {
+      throw DOpEException("Not Implemented",
+			  "PDEInterface::BoundaryRightHandSide");
+    }
 
     /******************************************************/
 
@@ -1251,15 +1566,33 @@ namespace DOpE
     BoundaryMatrix(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
                    dealii::FullMatrix<double> &/*local_entry_matrix*/,
                    double /*scale*/,
-                   double /*scale_ico*/);
+                   double /*scale_ico*/)
+    {
+      throw DOpEException("Not Implemented", "PDEInterface::BoundaryMatrix");
+    }
 
     /******************************************************/
 
     virtual void
-    BoundaryMatrix_T(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
-                     dealii::FullMatrix<double> &/*local_entry_matrix*/,
-                     double /*scale*/,
-                     double /*scale_ico*/);
+      BoundaryMatrix_T(const FDC<DH, VECTOR, dealdim> &fdc,
+		       FullMatrix<double> &local_entry_matrix,
+		       double scale,
+		       double scale_ico)
+    {
+      FullMatrix<double> tmp_mat = local_entry_matrix;
+      tmp_mat = 0.;
+      
+      BoundaryMatrix(fdc, tmp_mat, scale, scale_ico);
+      unsigned int n_dofs_per_element = fdc.GetNDoFsPerElement();
+      
+      for (unsigned int i = 0; i < n_dofs_per_element; i++)
+      {
+        for (unsigned int j = 0; j < n_dofs_per_element; j++)
+	{
+            local_entry_matrix(j, i) += tmp_mat(i, j);
+	}
+      }
+    }
 
     /******************************************************/
     /******************************************************/
@@ -1404,14 +1737,20 @@ namespace DOpE
      * be calculated on the next element.
      */
     virtual dealii::UpdateFlags
-    GetUpdateFlags() const;
+    GetUpdateFlags() const  {
+      return update_default; //no update
+    }
+    
     /**
      * Returns the update flags needed by the integrator to
      * decide which finite element informations need to
      * be calculated on the next face (including on boundaries).
      */
     virtual dealii::UpdateFlags
-    GetFaceUpdateFlags() const;
+    GetFaceUpdateFlags() const  {
+      return update_default; //no update
+    }
+
 
     /**
      * Should return true, if integration on interior faces is
@@ -1420,9 +1759,14 @@ namespace DOpE
      * The default is false.
      */
     virtual bool
-    HasFaces() const;
+    HasFaces() const  {
+      return false;
+    }
+
     virtual bool
-    HasInterfaces() const;
+    HasInterfaces() const  {
+      return false;
+    }
 
     /**
      * Is an evaluation of quantities at vertices needed,
@@ -1431,27 +1775,52 @@ namespace DOpE
      * Defaults to false
      */
     virtual bool
-      HasVertices() const; 
+    HasVertices() const  {
+      return false;
+    } 
     
     /******************************************************/
 
     void
-      SetProblemType(std::string type,unsigned int num);
+      SetProblemType(std::string type,unsigned int num)
+    {
+      problem_type_ = type;
+      problem_type_num_ = num;
+    }
 
     /******************************************************/
 
     virtual unsigned int
-    GetControlNBlocks() const;
+    GetControlNBlocks() const  {
+      throw DOpEException("Not Implemented", "PDEInterface::GetControlNBlocks");
+    }
+
     virtual unsigned int
-    GetStateNBlocks() const;
+    GetStateNBlocks() const  {
+      throw DOpEException("Not Implemented", "PDEInterface::GetStateNBlocks");
+    }
+
     virtual std::vector<unsigned int> &
-    GetControlBlockComponent();
+    GetControlBlockComponent() {
+      throw DOpEException("Not Implemented",
+			  "PDEInterface::GetControlBlockComponent");
+    }
     virtual const std::vector<unsigned int> &
-    GetControlBlockComponent() const;
+      GetControlBlockComponent() const {
+      throw DOpEException("Not Implemented",
+			  "PDEInterface::GetControlBlockComponent");
+    }
     virtual std::vector<unsigned int> &
-    GetStateBlockComponent();
+    GetStateBlockComponent()  {
+      throw DOpEException("Not Implemented",
+			  "PDEInterface::GetStateBlockComponent");
+    }
+    
     virtual const std::vector<unsigned int> &
-    GetStateBlockComponent() const;
+    GetStateBlockComponent() const  {
+      throw DOpEException("Not Implemented",
+			  "PDEInterface::GetStateBlockComponent");
+    }
 
     /******************************************************/
 
@@ -1465,7 +1834,9 @@ namespace DOpE
     /******************************************************/
 
     unsigned int
-    GetStateNComponents() const;
+    GetStateNComponents() const  {
+      return this->GetStateBlockComponent().size();
+    }
 
     /******************************************************/
     /**

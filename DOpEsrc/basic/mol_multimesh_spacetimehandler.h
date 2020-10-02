@@ -56,10 +56,18 @@ namespace DOpE
    *
    * For the detailed documentation, see MethodOfLines_SpaceTimeHandler
    */
+#if DEAL_II_VERSION_GTE(9,3,0)
+  template<template<int, int> class FE, bool HP, template<int, int> class DH,
+#else
   template<template<int, int> class FE, template<int, int> class DH,
+#endif
            typename SPARSITYPATTERN, typename VECTOR, int dim>
   class MethodOfLines_MultiMesh_SpaceTimeHandler : public SpaceTimeHandler<FE,
+#if DEAL_II_VERSION_GTE(9,3,0)
+    HP, DH, SPARSITYPATTERN, VECTOR, dim, dim>
+#else
     DH, SPARSITYPATTERN, VECTOR, dim, dim>
+#endif
   {
   public:
     MethodOfLines_MultiMesh_SpaceTimeHandler(
@@ -69,13 +77,23 @@ namespace DOpE
       bool flux_pattern = false,
       const ActiveFEIndexSetterInterface<dim, dim> &index_setter =
         ActiveFEIndexSetterInterface<dim, dim>()) :
-      SpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dim, dim>(type,
-                                                                  index_setter), state_triangulation_(triangulation), control_dof_handler_(
-                                                                      control_triangulation_), state_dof_handler_(
-                                                                          state_triangulation_), control_fe_(&control_fe), state_fe_(
-                                                                              &state_fe), mapping_(
-                                                                                  DOpEWrapper::StaticMappingQ1<dim, DH>::mapping_q1), constraints_(), control_mesh_transfer_(
-                                                                                      NULL), state_mesh_transfer_(NULL), sparse_mkr_dynamic_(true)
+#if DEAL_II_VERSION_GTE(9,3,0)
+    SpaceTimeHandler<FE, HP, DH, SPARSITYPATTERN, VECTOR, dim, dim>(type,
+#else
+    SpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dim, dim>(type,
+#endif
+								index_setter),
+								    state_triangulation_(triangulation), control_dof_handler_(
+								  control_triangulation_), state_dof_handler_(
+								    state_triangulation_), control_fe_(&control_fe), state_fe_(
+								      &state_fe), mapping_(
+#if DEAL_II_VERSION_GTE(9,3,0)
+									DOpEWrapper::StaticMappingQ1<dim, HP>::mapping_q1),
+#else
+									DOpEWrapper::StaticMappingQ1<dim, DH>::mapping_q1),
+#endif
+      constraints_(), control_mesh_transfer_(
+								    NULL), state_mesh_transfer_(NULL), sparse_mkr_dynamic_(true)
     {
       control_triangulation_.copy_triangulation(state_triangulation_);
       sparsitymaker_ = new SparsityMaker<DH, dim>(flux_pattern);
@@ -89,12 +107,21 @@ namespace DOpE
       bool flux_pattern = false,
       const ActiveFEIndexSetterInterface<dim, dim> &index_setter =
         ActiveFEIndexSetterInterface<dim, dim>()) :
-      SpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dim, dim>(times,
-                                                                  type, index_setter), state_triangulation_(triangulation), control_dof_handler_(
-                                                                      control_triangulation_), state_dof_handler_(
-                                                                          state_triangulation_), control_fe_(&control_fe), state_fe_(
-                                                                              &state_fe), mapping_(
-                                                                                  DOpEWrapper::StaticMappingQ1<dim, DH>::mapping_q1), constraints_(), control_mesh_transfer_(
+#if DEAL_II_VERSION_GTE(9,3,0)
+    SpaceTimeHandler<FE, HP, DH, SPARSITYPATTERN, VECTOR, dim, dim>(times,
+#else
+    SpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dim, dim>(times,
+#endif
+								type, index_setter), state_triangulation_(triangulation), control_dof_handler_(
+								  control_triangulation_), state_dof_handler_(
+								    state_triangulation_), control_fe_(&control_fe), state_fe_(
+								      &state_fe), mapping_(
+#if DEAL_II_VERSION_GTE(9,3,0)
+									DOpEWrapper::StaticMappingQ1<dim, HP>::mapping_q1),
+#else
+									DOpEWrapper::StaticMappingQ1<dim, DH>::mapping_q1),
+#endif
+								    constraints_(), control_mesh_transfer_(
                                                                                       NULL), state_mesh_transfer_(NULL), sparse_mkr_dynamic_(true)
     {
       control_triangulation_.copy_triangulation(state_triangulation_);
@@ -109,14 +136,24 @@ namespace DOpE
       bool flux_pattern = false,
       const ActiveFEIndexSetterInterface<dim, dim> &index_setter =
         ActiveFEIndexSetterInterface<dim, dim>()) :
-      SpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dim, dim>(type,
-                                                                  index_setter), state_triangulation_(triangulation), control_dof_handler_(
-                                                                      control_triangulation_), state_dof_handler_(
-                                                                          state_triangulation_), control_fe_(&control_fe), state_fe_(
-                                                                              &state_fe), mapping_(
-                                                                                  DOpEWrapper::StaticMappingQ1<dim, DH>::mapping_q1), constraints_(
-                                                                                      c), control_mesh_transfer_(NULL), state_mesh_transfer_(NULL), sparse_mkr_dynamic_(
-                                                                                          true)
+#if DEAL_II_VERSION_GTE(9,3,0)
+    SpaceTimeHandler<FE, HP, DH, SPARSITYPATTERN, VECTOR, dim, dim>(type,
+#else
+    SpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dim, dim>(type,
+#endif
+                                                                  index_setter),
+								    state_triangulation_(triangulation),
+								    control_dof_handler_(control_triangulation_),
+								    state_dof_handler_(state_triangulation_), control_fe_(&control_fe), state_fe_(&state_fe),
+#if DEAL_II_VERSION_GTE(9,3,0)
+								    mapping_(DOpEWrapper::StaticMappingQ1<dim, HP>::mapping_q1),
+#else
+								    mapping_(DOpEWrapper::StaticMappingQ1<dim, DH>::mapping_q1),
+								    #endif
+								    constraints_(c),
+								    control_mesh_transfer_(NULL),
+								    state_mesh_transfer_(NULL),
+								    sparse_mkr_dynamic_(true)
     {
       control_triangulation_.copy_triangulation(state_triangulation_);
       sparsitymaker_ = new SparsityMaker<DH, dim>(flux_pattern);
@@ -131,12 +168,21 @@ namespace DOpE
       bool flux_pattern = false,
       const ActiveFEIndexSetterInterface<dim, dim> &index_setter =
         ActiveFEIndexSetterInterface<dim, dim>()) :
-      SpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dim, dim>(times,
-                                                                  type, index_setter), state_triangulation_(triangulation), control_dof_handler_(
+#if DEAL_II_VERSION_GTE(9,3,0)
+	SpaceTimeHandler<FE, HP, DH, SPARSITYPATTERN, VECTOR, dim, dim>(times,type, index_setter),
+#else
+	SpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dim, dim>(times,type, index_setter),
+#endif
+								    state_triangulation_(triangulation), control_dof_handler_(
                                                                       control_triangulation_), state_dof_handler_(
                                                                           state_triangulation_), control_fe_(&control_fe), state_fe_(
-                                                                              &state_fe), mapping_(
-                                                                                  DOpEWrapper::StaticMappingQ1<dim, DH>::mapping_q1), constraints_(
+                                                                              &state_fe),
+#if DEAL_II_VERSION_GTE(9,3,0)
+								    mapping_(DOpEWrapper::StaticMappingQ1<dim, HP>::mapping_q1),
+#else
+								    mapping_(DOpEWrapper::StaticMappingQ1<dim, DH>::mapping_q1),
+#endif
+								    constraints_(
                                                                                       c), control_mesh_transfer_(NULL), state_mesh_transfer_(NULL), sparse_mkr_dynamic_(
                                                                                           true)
     {
@@ -177,8 +223,13 @@ namespace DOpE
            const std::vector<unsigned int> &state_block_component,
            const DirichletDescriptor &DD_state)
     {
+#if DEAL_II_VERSION_GTE(9,3,0)
+      SpaceTimeHandler<FE, HP, DH, SPARSITYPATTERN, VECTOR, dim, dim>::SetActiveFEIndicesControl(
+        control_dof_handler_);
+#else
       SpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dim, dim>::SetActiveFEIndicesControl(
         control_dof_handler_);
+#endif
       control_dof_handler_.distribute_dofs(*control_fe_);
       DoFRenumbering::component_wise(static_cast<DH<dim, dim>&>(control_dof_handler_));
 
@@ -226,8 +277,13 @@ namespace DOpE
           control_block_component);
       }
 
+#if DEAL_II_VERSION_GTE(9,3,0)
+      SpaceTimeHandler<FE, HP, DH, SPARSITYPATTERN, VECTOR, dim, dim>::SetActiveFEIndicesState(
+        state_dof_handler_);
+#else
       SpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dim, dim>::SetActiveFEIndicesState(
         state_dof_handler_);
+#endif
       state_dof_handler_.distribute_dofs(GetFESystem("state"));
       DoFRenumbering::component_wise(static_cast<DH<dim, dim>&>(state_dof_handler_));
 
@@ -308,7 +364,12 @@ namespace DOpE
     /**
      * Implementation of virtual function in SpaceTimeHandler
      */
+#if DEAL_II_VERSION_GTE(9,3,0)
+    const DOpEWrapper::Mapping<dim, HP> &
+#else
     const DOpEWrapper::Mapping<dim, DH> &
+#endif
+								    
     GetMapping() const
     {
       return mapping_;
@@ -847,7 +908,11 @@ namespace DOpE
      */
     void
     SetUserDefinedDoFConstraints(
+#if DEAL_II_VERSION_GTE(9,3,0)
+      UserDefinedDoFConstraints<HP, DH, dim> &constraints_maker)
+#else
       UserDefinedDoFConstraints<DH, dim> &constraints_maker)
+#endif
     {
       user_defined_dof_constr_ = &constraints_maker;
       user_defined_dof_constr_->RegisterMapping(this->GetMapping());
@@ -915,7 +980,11 @@ namespace DOpE
     {
       return sparsitymaker_;
     }
+#if DEAL_II_VERSION_GTE(9,3,0)
+    const UserDefinedDoFConstraints<HP, DH, dim> *
+#else
     const UserDefinedDoFConstraints<DH, dim> *
+#endif
     GetUserDefinedDoFConstraints() const
     {
       return user_defined_dof_constr_;
@@ -926,7 +995,11 @@ namespace DOpE
                           const dealii::Triangulation<dim> &right);
 
     SparsityMaker<DH, dim> *sparsitymaker_;
+#if DEAL_II_VERSION_GTE(9,3,0)
+    UserDefinedDoFConstraints<HP, DH, dim> *user_defined_dof_constr_;
+#else
     UserDefinedDoFConstraints<DH, dim> *user_defined_dof_constr_;
+#endif
 
     dealii::Triangulation<dim> control_triangulation_;
     dealii::Triangulation<dim> &state_triangulation_;
@@ -951,7 +1024,11 @@ namespace DOpE
     const dealii::SmartPointer<const FE<dim, dim>> control_fe_;
     const dealii::SmartPointer<const FE<dim, dim>> state_fe_;
 
+#if DEAL_II_VERSION_GTE(9,3,0)
+    DOpEWrapper::Mapping<dim, HP> mapping_;
+#else								    
     DOpEWrapper::Mapping<dim, DH> mapping_;
+#endif
 
     std::vector<Point<dim> > support_points_;
 
@@ -972,8 +1049,12 @@ namespace DOpE
   template<>
   void
   DOpE::MethodOfLines_MultiMesh_SpaceTimeHandler<dealii::FESystem,
-       dealii::DoFHandler, dealii::BlockSparsityPattern,
-       dealii::BlockVector<double>, dope_dimension>::ComputeControlSparsityPattern(
+#if DEAL_II_VERSION_GTE(9,3,0)
+    false, dealii::DoFHandler, dealii::BlockSparsityPattern,
+#else
+    dealii::DoFHandler, dealii::BlockSparsityPattern,
+#endif
+    dealii::BlockVector<double>, dope_dimension>::ComputeControlSparsityPattern(
          dealii::BlockSparsityPattern &sparsity) const
   {
     const std::vector<unsigned int> &blocks = this->GetControlDoFsPerBlock();
@@ -1006,8 +1087,12 @@ namespace DOpE
   template<>
   void
   MethodOfLines_MultiMesh_SpaceTimeHandler<dealii::FESystem,
-                                           dealii::DoFHandler, dealii::SparsityPattern, dealii::Vector<double>,
-                                           dope_dimension>::ComputeControlSparsityPattern(
+#if DEAL_II_VERSION_GTE(9,3,0)
+    false, dealii::DoFHandler, dealii::SparsityPattern, dealii::Vector<double>,
+#else
+    dealii::DoFHandler, dealii::SparsityPattern, dealii::Vector<double>,
+#endif
+    dope_dimension>::ComputeControlSparsityPattern(
                                              dealii::SparsityPattern &sparsity) const
   {
     const unsigned int total_dofs = this->GetControlNDoFs();
@@ -1029,7 +1114,11 @@ namespace DOpE
   template<>
   void
   DOpE::MethodOfLines_MultiMesh_SpaceTimeHandler<dealii::hp::FECollection,
-       dealii::hp::DoFHandler, dealii::BlockSparsityPattern,
+#if DEAL_II_VERSION_GTE(9,3,0)
+    true, dealii::DoFHandler, dealii::BlockSparsityPattern,
+#else
+    dealii::hp::DoFHandler, dealii::BlockSparsityPattern,
+#endif
        dealii::BlockVector<double>, dope_dimension>::ComputeControlSparsityPattern(
          dealii::BlockSparsityPattern &sparsity) const
   {
@@ -1052,7 +1141,11 @@ namespace DOpE
     csp.collect_sizes();
 
     dealii::DoFTools::make_sparsity_pattern(
+#if DEAL_II_VERSION_GTE(9,3,0)
+      static_cast<const dealii::DoFHandler<deal_II_dimension>&>(this->GetControlDoFHandler()),
+#else
       static_cast<const dealii::hp::DoFHandler<deal_II_dimension>&>(this->GetControlDoFHandler()),
+#endif
       csp);
     this->GetControlDoFConstraints().condense(csp);
     sparsity.copy_from(csp);
@@ -1060,6 +1153,23 @@ namespace DOpE
 
   /******************************************************/
 
+#if DEAL_II_VERSION_GTE(9,3,0)
+  template<>
+  void
+  MethodOfLines_MultiMesh_SpaceTimeHandler<dealii::hp::FECollection,
+    true, dealii::DoFHandler, dealii::SparsityPattern, dealii::Vector<double>,
+                                           dope_dimension>::ComputeControlSparsityPattern(
+                                             dealii::SparsityPattern &sparsity) const
+  {
+    const unsigned int total_dofs = this->GetControlNDoFs();
+    dealii::DynamicSparsityPattern csp(total_dofs, total_dofs);
+    dealii::DoFTools::make_sparsity_pattern(
+      static_cast<const dealii::DoFHandler<deal_II_dimension>&>(this->GetControlDoFHandler()),
+      csp);
+    this->GetControlDoFConstraints().condense(csp);
+    sparsity.copy_from(csp);
+  }
+#else
   template<>
   void
   MethodOfLines_MultiMesh_SpaceTimeHandler<dealii::hp::FECollection,
@@ -1079,13 +1189,22 @@ namespace DOpE
     this->GetControlDoFConstraints().condense(csp);
     sparsity.copy_from(csp);
   }
+#endif
+  
 #endif //Endof explicit instanciation
   /*******************************************************/
+#if DEAL_II_VERSION_GTE(9,3,0)
+  template<template<int, int> class FE, bool HP, template<int, int> class DH,
+  typename SPARSITYPATTERN, typename VECTOR, int dim>
+  void
+    MethodOfLines_MultiMesh_SpaceTimeHandler<FE, HP, DH, SPARSITYPATTERN, VECTOR,
+#else
   template<template<int, int> class FE, template<int, int> class DH,
   typename SPARSITYPATTERN, typename VECTOR, int dim>
   void
   MethodOfLines_MultiMesh_SpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR,
-                                           dim>::FlagIfLeftIsNotFinest(dealii::Triangulation<dim> &left,
+#endif
+    dim>::FlagIfLeftIsNotFinest(dealii::Triangulation<dim> &left,
                                                const dealii::Triangulation<dim> &right)
   {
     auto element_list = GridTools::get_finest_common_cells(left, right);
