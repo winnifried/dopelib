@@ -1,5 +1,9 @@
 Changelog DOpE
 ==============
+05.10.2020: To adjust to the merging of the DoFHandlers, all classes having
+	    a DoFHandler as template argument now need an additional template
+	    (bool) to indicate if hp-functionality is used, so that the mappings
+	    can work correctly.
 05.10.2020: Adjustments to deal version 9.3.0. Due to the merging of the DoFHandlers
 	    no separate DoFHandler for HP is needed - and is no longer supported.
 	    To fix the automated selection
