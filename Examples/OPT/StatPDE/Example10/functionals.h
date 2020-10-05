@@ -32,13 +32,21 @@ using namespace DOpE;
 
 /****************************************************************************************/
 
+#if DEAL_II_VERSION_GTE(9,3,0)
+template<
+template<bool HP, template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
+  template<bool HP, template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
+  bool HP, template<int, int> class DH, typename VECTOR, int dopedim, int dealdim = dopedim>
+  class LocalPointFunctionalPressure : public FunctionalInterface<EDC, FDC, HP, DH,
+  VECTOR, dopedim, dealdim>
+#else
 template<
   template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
   template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
-  template<int, int> class DH, typename VECTOR, int dopedim, int dealdim =
-  dopedim>
+  template<int, int> class DH, typename VECTOR, int dopedim, int dealdim = dopedim>
 class LocalPointFunctionalPressure : public FunctionalInterface<EDC, FDC, DH,
   VECTOR, dopedim, dealdim>
+#endif
 {
 public:
 
@@ -83,13 +91,21 @@ public:
 };
 
 /****************************************************************************************/
+#if DEAL_II_VERSION_GTE(9,3,0)
+template<
+template<bool HP, template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
+  template<bool HP, template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
+  bool HP, template<int, int> class DH, typename VECTOR, int dopedim, int dealdim = dopedim>
+class LocalPointFunctionalDeflectionX : public FunctionalInterface<EDC, FDC,
+  HP, DH, VECTOR, dopedim, dealdim>
+#else
 template<
   template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
   template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
-  template<int, int> class DH, typename VECTOR, int dopedim, int dealdim =
-  dopedim>
+  template<int, int> class DH, typename VECTOR, int dopedim, int dealdim = dopedim>
 class LocalPointFunctionalDeflectionX : public FunctionalInterface<EDC, FDC,
   DH, VECTOR, dopedim, dealdim>
+#endif
 {
 public:
 
@@ -129,13 +145,21 @@ public:
 };
 
 /****************************************************************************************/
+#if DEAL_II_VERSION_GTE(9,3,0)
+template<
+template<bool HP, template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
+  template<bool HP, template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
+  bool HP, template<int, int> class DH, typename VECTOR, int dopedim, int dealdim = dopedim>
+class LocalPointFunctionalDeflectionY : public FunctionalInterface<EDC, FDC,
+  HP, DH, VECTOR, dopedim, dealdim>
+#else
 template<
   template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
   template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
-  template<int, int> class DH, typename VECTOR, int dopedim, int dealdim =
-  dopedim>
+  template<int, int> class DH, typename VECTOR, int dopedim, int dealdim = dopedim>
 class LocalPointFunctionalDeflectionY : public FunctionalInterface<EDC, FDC,
   DH, VECTOR, dopedim, dealdim>
+#endif
 {
 public:
 
@@ -175,13 +199,21 @@ public:
 };
 
 /****************************************************************************************/
+#if DEAL_II_VERSION_GTE(9,3,0)
+template<
+template<bool HP, template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
+  template<bool HP, template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
+  bool HP, template<int, int> class DH, typename VECTOR, int dopedim, int dealdim = dopedim>
+class LocalBoundaryFaceFunctionalDrag : public FunctionalInterface<EDC, FDC,
+  HP, DH, VECTOR, dopedim, dealdim>
+#else
 template<
   template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
   template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
-  template<int, int> class DH, typename VECTOR, int dopedim, int dealdim =
-  dopedim>
+  template<int, int> class DH, typename VECTOR, int dopedim, int dealdim = dopedim>
 class LocalBoundaryFaceFunctionalDrag : public FunctionalInterface<EDC, FDC,
   DH, VECTOR, dopedim, dealdim>
+#endif
 {
 public:
   static void
@@ -207,7 +239,11 @@ public:
   }
 
   double
-  BoundaryValue(const FaceDataContainer<DH, VECTOR, dealdim> &fdc)
+#if DEAL_II_VERSION_GTE(9,3,0)
+BoundaryValue(const FaceDataContainer<HP, DH, VECTOR, dealdim> &fdc)
+#else
+BoundaryValue(const FaceDataContainer<DH, VECTOR, dealdim> &fdc)
+#endif
   {
     const auto &state_fe_face_values = fdc.GetFEFaceValuesState();
     unsigned int n_q_points = fdc.GetNQPoints();
@@ -294,13 +330,21 @@ private:
 };
 
 /****************************************************************************************/
+#if DEAL_II_VERSION_GTE(9,3,0)
+template<
+template<bool HP, template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
+  template<bool HP, template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
+  bool HP, template<int, int> class DH, typename VECTOR, int dopedim, int dealdim = dopedim>
+class LocalBoundaryFaceFunctionalLift : public FunctionalInterface<EDC, FDC,
+  HP, DH, VECTOR, dopedim, dealdim>
+#else
 template<
   template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
   template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
-  template<int, int> class DH, typename VECTOR, int dopedim, int dealdim =
-  dopedim>
+  template<int, int> class DH, typename VECTOR, int dopedim, int dealdim = dopedim>
 class LocalBoundaryFaceFunctionalLift : public FunctionalInterface<EDC, FDC,
   DH, VECTOR, dopedim, dealdim>
+#endif
 {
 public:
   static void
@@ -326,7 +370,11 @@ public:
   }
 
   double
-  BoundaryValue(const FaceDataContainer<DH, VECTOR, dealdim> &fdc)
+#if DEAL_II_VERSION_GTE(9,3,0)
+BoundaryValue(const FaceDataContainer<HP, DH, VECTOR, dealdim> &fdc)
+#else
+BoundaryValue(const FaceDataContainer<DH, VECTOR, dealdim> &fdc)
+#endif
   {
     const auto &state_fe_face_values = fdc.GetFEFaceValuesState();
 

@@ -34,12 +34,19 @@ using namespace DOpE;
 
 /************************************************************************************************************************************************/
 
+#if DEAL_II_VERSION_GTE(9,3,0)
+template<
+template<bool HP, template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
+  template<bool HP, template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
+  bool HP, template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
+  class LocalPointFunctional : public FunctionalInterface<EDC, FDC, HP, DH, VECTOR, dopedim, dealdim>
+#else
 template<
   template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
   template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
   template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
-class LocalPointFunctional : public FunctionalInterface<ElementDataContainer,
-  FaceDataContainer, dealii::DoFHandler, VECTOR, dopedim, dealdim>
+class LocalPointFunctional : public FunctionalInterface<EDC, FDC, DH, VECTOR, dopedim, dealdim>
+#endif
 {
 public:
   bool
@@ -86,16 +93,29 @@ public:
 };
 
 /****************************************************************************************/
+#if DEAL_II_VERSION_GTE(9,3,0)
+template<
+template<bool HP, template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
+  template<bool HP, template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
+  bool HP, template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
+  class StateErrorFunctional : public FunctionalInterface<EDC, FDC, HP, DH, VECTOR,
+  dopedim, dealdim>
+#else
 template<
   template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
   template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
   template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
 class StateErrorFunctional : public FunctionalInterface<EDC, FDC, DH, VECTOR,
   dopedim, dealdim>
+#endif
 {
 public:
   double
-  ElementValue(const EDC<DH, VECTOR, dealdim> &edc)
+#if DEAL_II_VERSION_GTE(9,3,0)
+    ElementValue(const EDC<HP, DH, VECTOR, dealdim> &edc)
+#else
+    ElementValue(const EDC<DH, VECTOR, dealdim> &edc)
+#endif
   {
     const DOpEWrapper::FEValues<dealdim> &state_fe_values =
       edc.GetFEValuesState();
@@ -150,16 +170,29 @@ private:
 };
 
 /****************************************************************************************/
+#if DEAL_II_VERSION_GTE(9,3,0)
+template<
+template<bool HP, template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
+  template<bool HP, template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
+  bool HP, template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
+  class ControlErrorFunctional : public FunctionalInterface<EDC, FDC, HP, DH, VECTOR,
+  dopedim, dealdim>
+#else
 template<
   template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
   template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
   template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
 class ControlErrorFunctional : public FunctionalInterface<EDC, FDC, DH, VECTOR,
   dopedim, dealdim>
+#endif
 {
 public:
   double
-  ElementValue(const EDC<DH, VECTOR, dealdim> &edc)
+#if DEAL_II_VERSION_GTE(9,3,0)
+    ElementValue(const EDC<HP, DH, VECTOR, dealdim> &edc)
+#else
+    ElementValue(const EDC<DH, VECTOR, dealdim> &edc)
+#endif
   {
     const DOpEWrapper::FEValues<dealdim> &state_fe_values =
       edc.GetFEValuesState();

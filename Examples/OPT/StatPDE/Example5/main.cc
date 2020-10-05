@@ -56,7 +56,12 @@ using namespace DOpE;
 const static int DIM = 2;
 const static int CDIM = 2;
 
+#if DEAL_II_VERSION_GTE(9,3,0)
+#define DOFHANDLER false,DoFHandler
+#else
 #define DOFHANDLER DoFHandler
+#endif
+
 #define FE FESystem
 
 typedef QGauss<DIM> QUADRATURE;
@@ -96,13 +101,8 @@ typedef NewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR> NLS;
 typedef ReducedNewtonAlgorithm<OP, VECTOR> RNA;
 typedef StatReducedProblem<NLS, NLS, INTEGRATOR, INTEGRATOR, OP, VECTOR, CDIM,
         DIM> RP;
-#if DEAL_II_VERSION_GTE(9,3,0)
-typedef MethodOfLines_MultiMesh_SpaceTimeHandler<FE, false, DOFHANDLER,
-        SPARSITYPATTERN, VECTOR, DIM> STH;
-#else
 typedef MethodOfLines_MultiMesh_SpaceTimeHandler<FE, DOFHANDLER,
         SPARSITYPATTERN, VECTOR, DIM> STH;
-#endif
 
 int
 main(int argc, char **argv)

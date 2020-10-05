@@ -56,7 +56,12 @@ using namespace DOpE;
 const static int DIM = 2;
 const static int CDIM = 2;
 
+#if DEAL_II_VERSION_GTE(9,3,0)
+#define DOFHANDLER false,DoFHandler
+#else
 #define DOFHANDLER DoFHandler
+#endif
+
 #define FE FESystem
 
 typedef QGauss<DIM> QUADRATURE;
@@ -152,15 +157,9 @@ main(int argc, char **argv)
   lcc[0][1] = 2; // number of constraints (lower and upper bound)
   Constraints constraints(lcc, 0); //Second entry defines the numer of global constraints, here we have none
 
-#if DEAL_II_VERSION_GTE(9,3,0)//post deal 9.3.0
-  MethodOfLines_SpaceTimeHandler<FE, false, DOFHANDLER, SPARSITYPATTERN, VECTOR, CDIM,
-                                 DIM> DOFH(triangulation, control_fe, state_fe, constraints,
-                                           DOpEtypes::stationary);
-#else
   MethodOfLines_SpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR, CDIM,
                                  DIM> DOFH(triangulation, control_fe, state_fe, constraints,
                                            DOpEtypes::stationary);
-#endif
   LocalConstraint<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> LC;
 
   OP P(LFunc, LPDE, LC, DOFH);

@@ -66,7 +66,12 @@ const static int DIM = 2;
 
 //Abbreviations of deal.II types
 //The dofhandler and finite element we want to use.
+#if DEAL_II_VERSION_GTE(9,3,0)
+#define DOFHANDLER false,DoFHandler
+#else
 #define DOFHANDLER DoFHandler
+#endif
+
 #define FE FESystem
 
 //The qudrature rules we want to use.
@@ -109,13 +114,8 @@ typedef StatPDEProblem<NLS, INTEGRATOR, OP, VECTOR, DIM> RP;
 
 //The spacetimehandler manages all the things related to the degrees of
 //freedom in space and time.
-#if DEAL_II_VERSION_GTE(9,3,0)
-typedef MethodOfLines_StateSpaceTimeHandler<FE, false, DOFHANDLER, SPARSITYPATTERN,
-        VECTOR, DIM> STH;
-#else
 typedef MethodOfLines_StateSpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN,
         VECTOR, DIM> STH;
-#endif
 
 int
 main(int argc, char **argv)

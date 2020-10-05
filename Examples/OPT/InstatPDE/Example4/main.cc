@@ -71,7 +71,12 @@ using namespace DOpE;
 const static int DIM = 2;
 const static int CDIM = 2;
 
+#if DEAL_II_VERSION_GTE(9,3,0)
+#define DOFHANDLER false,DoFHandler
+#else
 #define DOFHANDLER DoFHandler
+#endif
+
 #define FE FESystem
 #define CDC ElementDataContainer
 #define FDC FaceDataContainer
@@ -170,13 +175,8 @@ main(int argc, char **argv)
 
 
   //Note that we give DOpEtypes::initial as the type of control.
-#if DEAL_II_VERSION_GTE(9,3,0)
-  MethodOfLines_SpaceTimeHandler<FE, false, DOFHANDLER, SPARSITYPATTERN, VECTOR, CDIM,
-                                 DIM> DOFH(triangulation, control_fe, state_fe, times, DOpEtypes::VectorAction::initial);
-#else
   MethodOfLines_SpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR, CDIM,
                                  DIM> DOFH(triangulation, control_fe, state_fe, times, DOpEtypes::VectorAction::initial);
-#endif
   
   NoConstraints<ElementDataContainer, FaceDataContainer, DOFHANDLER, VECTOR, CDIM,
                 DIM> Constraints;

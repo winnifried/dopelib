@@ -32,12 +32,21 @@ using namespace DOpE;
 
 /****************************************************************************************/
 
+#if DEAL_II_VERSION_GTE(9,3,0)
+template<
+template<bool HP, template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
+  template<bool HP, template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
+  bool HP, template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
+  class LocalPointFunctionalPressure : public FunctionalInterface<EDC, FDC, HP, DH,
+  VECTOR, dopedim, dealdim>
+#else
 template<
   template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
   template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
   template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
 class LocalPointFunctionalPressure : public FunctionalInterface<EDC, FDC, DH,
   VECTOR, dopedim, dealdim>
+#endif
 {
 public:
 
@@ -92,12 +101,21 @@ public:
 
 /****************************************************************************************/
 
+#if DEAL_II_VERSION_GTE(9,3,0)
+template<
+template<bool HP, template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
+  template<bool HP, template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
+  bool HP, template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
+  class LocalBoundaryFunctionalDrag : public FunctionalInterface<EDC, FDC, HP, DH,
+  VECTOR, dopedim, dealdim>
+#else
 template<
   template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
   template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
   template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
 class LocalBoundaryFunctionalDrag : public FunctionalInterface<EDC, FDC, DH,
   VECTOR, dopedim, dealdim>
+#endif
 {
   double density_fluid_, viscosity_;
   double drag_lift_constant_;
@@ -128,7 +146,11 @@ public:
   }
 
   double
-  BoundaryValue(const FDC<DH, VECTOR, dealdim> &fdc)
+#if DEAL_II_VERSION_GTE(9,3,0)
+    BoundaryValue(const FDC<HP, DH, VECTOR, dealdim> &fdc)
+#else
+    BoundaryValue(const FDC<DH, VECTOR, dealdim> &fdc)
+#endif
   {
     unsigned int color = fdc.GetBoundaryIndicator();
     const auto &state_fe_face_values = fdc.GetFEFaceValuesState();
@@ -200,12 +222,21 @@ public:
 
 /****************************************************************************************/
 
+#if DEAL_II_VERSION_GTE(9,3,0)
+template<
+template<bool HP, template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
+  template<bool HP, template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
+  bool HP, template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
+  class LocalBoundaryFunctionalLift : public FunctionalInterface<EDC, FDC, HP, DH,
+  VECTOR, dopedim, dealdim>
+#else
 template<
   template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
   template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
   template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
 class LocalBoundaryFunctionalLift : public FunctionalInterface<EDC, FDC, DH,
   VECTOR, dopedim, dealdim>
+#endif
 {
 private:
   double density_fluid_, viscosity_;
@@ -237,7 +268,11 @@ public:
   }
 
   double
-  BoundaryValue(const FDC<DH, VECTOR, dealdim> &fdc)
+#if DEAL_II_VERSION_GTE(9,3,0)
+    BoundaryValue(const FDC<HP, DH, VECTOR, dealdim> &fdc)
+#else
+    BoundaryValue(const FDC<DH, VECTOR, dealdim> &fdc)
+#endif
   {
     unsigned int color = fdc.GetBoundaryIndicator();
     const auto &state_fe_face_values = fdc.GetFEFaceValuesState();

@@ -91,7 +91,12 @@ using namespace DOpE;
 
 const static int DIM = 2;
 
+#if DEAL_II_VERSION_GTE(9,3,0)
+#define DOFHANDLER false,DoFHandler
+#else
 #define DOFHANDLER DoFHandler
+#endif
+
 #define FE FESystem
 #define CDC ElementDataContainer
 #define FDC FaceDataContainer
@@ -208,11 +213,7 @@ main(int argc, char **argv)
   // We give the spatial and time triangulation as well as the state finite
   // elements to the MOL-space time handler. DOpEtypes::undefined marks
   // the type of the control, see dopetypes.h for more information.
-#if DEAL_II_VERSION_GTE(9,3,0)
-  MethodOfLines_StateSpaceTimeHandler<FE, false, DOFHANDLER, SPARSITYPATTERN, VECTOR, DIM>
-#else
   MethodOfLines_StateSpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR, DIM>
-#endif
   DOFH(triangulation, state_fe, times);
 
   OP P(LPDE, DOFH);

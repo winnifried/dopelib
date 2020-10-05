@@ -70,7 +70,12 @@ using namespace DOpE;
 
 const static int DIM = 1;
 
+#if DEAL_II_VERSION_GTE(9,3,0)
+#define DOFHANDLER false,DoFHandler
+#else
 #define DOFHANDLER DoFHandler
+#endif
+
 #define FE FESystem
 #define CDC ElementDataContainer
 #define FDC FaceDataContainer
@@ -114,13 +119,8 @@ typedef NewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR> CNLS;
 typedef InstatStepNewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR> NLS;
 typedef InstatPDEProblem<NLS, INTEGRATOR, OP, VECTOR, DIM> RP;
 
-#if DEAL_II_VERSION_GTE(9,3,0)
-typedef MethodOfLines_StateSpaceTimeHandler<FE, false, DOFHANDLER, SPARSITYPATTERN,
-        VECTOR, DIM> STH;
-#else
 typedef MethodOfLines_StateSpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN,
         VECTOR, DIM> STH;
-#endif
 
 void
 declare_params(ParameterReader &param_reader)

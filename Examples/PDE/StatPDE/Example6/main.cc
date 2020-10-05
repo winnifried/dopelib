@@ -51,7 +51,12 @@ using namespace DOpE;
 
 const static int DIM = 3;
 
+#if DEAL_II_VERSION_GTE(9,3,0)
+#define DOFHANDLER false,DoFHandler
+#else
 #define DOFHANDLER DoFHandler
+#endif
+
 #define FE FESystem
 #define CDC ElementDataContainer
 #define FDC FaceDataContainer
@@ -111,17 +116,10 @@ typedef StatPDEProblem<NLS2, INTEGRATOR, OP, VECTOR, DIM> RP2;
 typedef StatPDEProblem<NLS3, INTEGRATOR, OP, VECTOR, DIM> RP3;
 
 //Define the spacetimehandler for block and non block vectors
-#if DEAL_II_VERSION_GTE(9,3,0)
-typedef MethodOfLines_StateSpaceTimeHandler<FE, false, DOFHANDLER,
-        SPARSITYPATTERNBLOCK, VECTORBLOCK, DIM> STHBLOCK;
-typedef MethodOfLines_StateSpaceTimeHandler<FE, false, DOFHANDLER, SPARSITYPATTERN,
-        VECTOR, DIM> STH;
-#else
 typedef MethodOfLines_StateSpaceTimeHandler<FE, DOFHANDLER,
         SPARSITYPATTERNBLOCK, VECTORBLOCK, DIM> STHBLOCK;
 typedef MethodOfLines_StateSpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN,
         VECTOR, DIM> STH;
-#endif
 
 int
 main(int argc, char **argv)

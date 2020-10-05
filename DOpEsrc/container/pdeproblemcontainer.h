@@ -480,8 +480,13 @@ namespace DOpE
      */
     void
     AddFunctional(
+#if DEAL_II_VERSION_GTE(9,3,0)
+      FunctionalInterface<ElementDataContainer, FaceDataContainer, HP, DH,
+      VECTOR, dealdim>* F)
+#else
       FunctionalInterface<ElementDataContainer, FaceDataContainer, DH,
       VECTOR, dealdim>* F)
+#endif
     {
       aux_functionals_.push_back(F);
       if (functional_position_.find(F->GetName())
@@ -999,8 +1004,13 @@ namespace DOpE
     std::string algo_type_;
 
     std::vector<
+#if DEAL_II_VERSION_GTE(9,3,0)
+    FunctionalInterface<ElementDataContainer, FaceDataContainer, HP, DH,
+                        VECTOR, dealdim>*> aux_functionals_;
+#else
     FunctionalInterface<ElementDataContainer, FaceDataContainer, DH,
                         VECTOR, dealdim>*> aux_functionals_;
+#endif
     std::map<std::string, unsigned int> functional_position_;
 
     unsigned int functional_for_ee_num_;

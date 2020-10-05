@@ -58,7 +58,11 @@ const static int DIM = 2;
 const static int CDIM = 2;
 //stands for the dimension of the controlvariable;
 
+#if DEAL_II_VERSION_GTE(9,3,0)
+#define DOFHANDLER false,DoFHandler
+#else
 #define DOFHANDLER DoFHandler
+#endif
 #define FE FESystem
 
 typedef QGauss<DIM> QUADRATURE;
@@ -119,13 +123,8 @@ typedef StatReducedProblem<NLS, NLS, INTEGRATOR, INTEGRATOR, OP, VECTOR, CDIM,
 
 //The spacetimehandler manages all the things related to the degrees of
 //freedom in space and time (for the optimization as well as the state variable!)
-#if DEAL_II_VERSION_GTE(9,3,0)//post deal 9.3.0
-typedef MethodOfLines_SpaceTimeHandler<FE, false, DOFHANDLER, SPARSITYPATTERN, VECTOR,
-        CDIM, DIM> STH;
-#else
 typedef MethodOfLines_SpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR,
         CDIM, DIM> STH;
-#endif
 
 typedef HigherOrderDWRContainerControl<STH, IDC, CDC<DOFHANDLER, VECTOR, DIM>,
         FDC<DOFHANDLER, VECTOR, DIM>, VECTOR> HO_DWRC;
@@ -186,20 +185,20 @@ main(int argc, char **argv)
   const double alpha = 1.e-3;
 
   LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM> LPDE(alpha);
-
+  
   // New in comparison to pure PDE problems
   COSTFUNCTIONAL LFunc(alpha);
 
   //AuxFunctionals
   LocalPointFunctional<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> LPF;
   LocalMeanValueFunctional<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> LMF;
-
+  
   triangulation.refine_global(5);
 
   STH DOFH(triangulation, control_fe, state_fe, DOpEtypes::stationary);
 
   NoConstraints<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> Constraints;
-
+  
   OP P(LFunc, LPDE, Constraints, DOFH);
 
   P.AddFunctional(&LPF);

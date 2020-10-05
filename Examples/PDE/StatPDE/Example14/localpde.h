@@ -32,11 +32,19 @@ using namespace dealii;
 using namespace DOpE;
 
 /***********************************************************************************************/
+#if DEAL_II_VERSION_GTE(9,3,0)
+template<
+  template<bool HP, template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
+  template<bool HP, template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
+  bool HP, template<int, int> class DH, typename VECTOR, int dealdim>
+  class LocalPDE : public PDEInterface<EDC, FDC, HP, DH, VECTOR, dealdim>
+#else
 template<
   template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
   template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
   template<int, int> class DH, typename VECTOR, int dealdim>
 class LocalPDE : public PDEInterface<EDC, FDC, DH, VECTOR, dealdim>
+#endif
 {
 public:
   LocalPDE(ParameterReader &param_reader, const LocalNetwork &net) :
@@ -50,9 +58,14 @@ public:
   }
 
   void
-  ElementEquation(const EDC<DH, VECTOR, dealdim> &edc,
-                  dealii::Vector<double> &local_vector, double scale,
-                  double/*scale_ico*/)
+  ElementEquation(
+#if DEAL_II_VERSION_GTE(9,3,0)
+    const EDC<HP, DH, VECTOR, dealdim> &edc,
+#else
+    const EDC<DH, VECTOR, dealdim> &edc,
+#endif
+    dealii::Vector<double> &local_vector, double scale,
+    double/*scale_ico*/)
   {
     unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
     unsigned int n_q_points = edc.GetNQPoints();
@@ -86,7 +99,11 @@ public:
 
   void
   BoundaryEquation(
+#if DEAL_II_VERSION_GTE(9,3,0)
+    const FDC<HP, DH, VECTOR, dealdim> &fdc,
+#else
     const FDC<DH, VECTOR, dealdim> &fdc,
+#endif
     dealii::Vector<double> &local_vector, double scale,
     double /*scale_ico*/)
   {
@@ -147,7 +164,11 @@ public:
 
   void
   FaceEquation(
+#if DEAL_II_VERSION_GTE(9,3,0)
+    const FDC<HP, DH, VECTOR, dealdim> &fdc,
+#else
     const FDC<DH, VECTOR, dealdim> &fdc,
+#endif
     dealii::Vector<double> &local_vector, double scale,
     double /*scale_ico*/)
   {
@@ -184,7 +205,11 @@ public:
   }
   void
   InterfaceEquation(
+#if DEAL_II_VERSION_GTE(9,3,0)
+    const FDC<HP, DH, VECTOR, dealdim> &fdc,
+#else
     const FDC<DH, VECTOR, dealdim> &fdc,
+#endif
     dealii::Vector<double> &local_vector, double scale,
     double /*scale_ico*/)
   {
@@ -226,7 +251,11 @@ public:
 
   void
   BoundaryMatrix(
+#if DEAL_II_VERSION_GTE(9,3,0)
+    const FDC<HP, DH, VECTOR, dealdim> &fdc,
+#else
     const FDC<DH, VECTOR, dealdim> &fdc,
+#endif
     FullMatrix<double> &local_matrix, double scale,
     double/*scale_ico*/)
   {
@@ -295,7 +324,11 @@ public:
   }
   void
   FaceMatrix(
+#if DEAL_II_VERSION_GTE(9,3,0)
+    const FDC<HP, DH, VECTOR, dealdim> &fdc,
+#else
     const FDC<DH, VECTOR, dealdim> &fdc,
+#endif
     FullMatrix<double> &local_matrix, double scale,
     double/*scale_ico*/)
   {
@@ -335,7 +368,11 @@ public:
 
   void
   InterfaceMatrix(
+#if DEAL_II_VERSION_GTE(9,3,0)
+    const FDC<HP, DH, VECTOR, dealdim> &fdc,
+#else
     const FDC<DH, VECTOR, dealdim> &fdc,
+#endif
     FullMatrix<double> &local_matrix, double scale,
     double/*scale_ico*/)
   {
@@ -380,9 +417,14 @@ public:
   }
 
   void
-  ElementMatrix(const EDC<DH, VECTOR, dealdim> &edc,
-                FullMatrix<double> &local_matrix, double scale,
-                double/*scale_ico*/)
+  ElementMatrix(
+#if DEAL_II_VERSION_GTE(9,3,0)
+    const EDC<HP, DH, VECTOR, dealdim> &edc,
+#else
+    const EDC<DH, VECTOR, dealdim> &edc,
+#endif
+    FullMatrix<double> &local_matrix, double scale,
+    double/*scale_ico*/)
   {
     unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
     unsigned int n_q_points = edc.GetNQPoints();
@@ -414,37 +456,61 @@ public:
   }
 
   void
-  ElementRightHandSide(const EDC<DH, VECTOR, dealdim> & /*edc*/,
-                       dealii::Vector<double> &/*local_vector*/, double /*scale*/)
+  ElementRightHandSide(
+#if DEAL_II_VERSION_GTE(9,3,0)
+    const EDC<HP, DH, VECTOR, dealdim> & /*edc*/,
+#else
+    const EDC<DH, VECTOR, dealdim> & /*edc*/,
+#endif
+    dealii::Vector<double> &/*local_vector*/, double /*scale*/)
   {
 
   }
 
   void
   FaceRightHandSide(
+#if DEAL_II_VERSION_GTE(9,3,0)
+    const FDC<HP, DH, VECTOR, dealdim> & /*fdc*/,
+#else
     const FDC<DH, VECTOR, dealdim> & /*fdc*/,
+#endif
     dealii::Vector<double> &/*local_vector*/, double /*scale*/)
   {
   }
 
   void
-  BoundaryRightHandSide(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
-                        dealii::Vector<double> &/*local_vector*/, double /*scale*/)
+  BoundaryRightHandSide(
+#if DEAL_II_VERSION_GTE(9,3,0)
+    const FDC<HP, DH, VECTOR, dealdim> & /*fdc*/,
+#else
+    const FDC<DH, VECTOR, dealdim> & /*fdc*/,
+#endif
+    dealii::Vector<double> &/*local_vector*/, double /*scale*/)
   {
   }
 
   void
-  ElementTimeEquationExplicit(const EDC<DH, VECTOR, dealdim> & /*edc*/,
-                              dealii::Vector<double> & /*local_vector*/,
-                              double /*scale*/)
+  ElementTimeEquationExplicit(
+#if DEAL_II_VERSION_GTE(9,3,0)
+    const EDC<HP, DH, VECTOR, dealdim> & /*edc*/,
+#else
+    const EDC<DH, VECTOR, dealdim> & /*edc*/,
+#endif
+    dealii::Vector<double> & /*local_vector*/,
+    double /*scale*/)
   {
     assert(this->problem_type_ == "state");
   }
 
   void
-  ElementTimeEquation(const EDC<DH, VECTOR, dealdim> &edc,
-                      dealii::Vector<double> &local_vector,
-                      double scale)
+  ElementTimeEquation(
+#if DEAL_II_VERSION_GTE(9,3,0)
+    const EDC<HP, DH, VECTOR, dealdim> &edc,
+#else
+    const EDC<DH, VECTOR, dealdim> &edc,
+#endif
+    dealii::Vector<double> &local_vector,
+    double scale)
   {
     assert(this->problem_type_ == "state");
 
@@ -474,15 +540,24 @@ public:
 
   void
   ElementTimeMatrixExplicit(
+#if DEAL_II_VERSION_GTE(9,3,0)
+    const EDC<HP, DH, VECTOR, dealdim> &/*edc*/,
+#else
     const EDC<DH, VECTOR, dealdim> & /*edc*/,
+#endif
     FullMatrix<double> &/*local_matrix*/)
   {
     assert(this->problem_type_ == "state");
   }
 
   void
-  ElementTimeMatrix(const EDC<DH, VECTOR, dealdim> &edc,
-                    FullMatrix<double> &local_matrix)
+  ElementTimeMatrix(
+#if DEAL_II_VERSION_GTE(9,3,0)
+    const EDC<HP, DH, VECTOR, dealdim> &edc,
+#else
+    const EDC<DH, VECTOR, dealdim> &edc,
+#endif
+    FullMatrix<double> &local_matrix)
   {
     assert(this->problem_type_ == "state");
 
@@ -512,10 +587,15 @@ public:
   }
 
   /*******************Special Methods on Pipes************************************/
-  void BoundaryEquation_BV(const FDC<DH, VECTOR, dealdim> &fdc,
-                           dealii::Vector<double> &local_vector,
-                           double scale,
-                           double /*scale_ico*/)
+  void BoundaryEquation_BV(
+#if DEAL_II_VERSION_GTE(9,3,0)
+    const FDC<HP, DH, VECTOR, dealdim> &fdc,
+#else
+    const FDC<DH, VECTOR, dealdim> &fdc,
+#endif
+    dealii::Vector<double> &local_vector,
+    double scale,
+    double /*scale_ico*/)
   {
     assert(local_vector.size()==4);
     unsigned int n_dofs_per_element = fdc.GetNDoFsPerElement();
@@ -564,11 +644,16 @@ public:
   }
 
 
-  void BoundaryMatrix_BV(const FDC<DH, VECTOR, dealdim> &fdc,
-                         std::vector<bool> & /*present_in_outflow*/,
-                         dealii::FullMatrix<double> &local_matrix,
-                         double scale,
-                         double /*scale_ico*/)
+  void BoundaryMatrix_BV(
+#if DEAL_II_VERSION_GTE(9,3,0)
+    const FDC<HP, DH, VECTOR, dealdim> &fdc,
+#else
+    const FDC<DH, VECTOR, dealdim> &fdc,
+#endif
+    std::vector<bool> & /*present_in_outflow*/,
+    dealii::FullMatrix<double> &local_matrix,
+    double scale,
+    double /*scale_ico*/)
   {
     assert(local_matrix.m()==4);
     assert(local_matrix.n()==4);//Should be a square matrix of dimension n_comp*2 x n_comp*2
@@ -626,11 +711,16 @@ public:
       }
   }
 
-  void OutflowValues(const FDC<DH, VECTOR, dealdim> &fdc,
-                     std::vector<bool> &present_in_outflow,
-                     dealii::Vector<double> &local_vector,
-                     double /*scale*/,
-                     double /*scale_ico*/)
+  void OutflowValues(
+#if DEAL_II_VERSION_GTE(9,3,0)
+    const FDC<HP, DH, VECTOR, dealdim> &fdc,
+#else
+    const FDC<DH, VECTOR, dealdim> &fdc,
+#endif
+    std::vector<bool> &present_in_outflow,
+    dealii::Vector<double> &local_vector,
+    double /*scale*/,
+    double /*scale_ico*/)
   {
     assert(local_vector.size()==8);
     //Values in local_vector
@@ -671,11 +761,16 @@ public:
       }
   }
 
-  void OutflowMatrix(const FDC<DH, VECTOR, dealdim> &fdc,
-                     std::vector<bool> &present_in_outflow,
-                     dealii::FullMatrix<double> &local_matrix,
-                     double /*scale*/,
-                     double /*scale_ico*/)
+  void OutflowMatrix(
+#if DEAL_II_VERSION_GTE(9,3,0)
+    const FDC<HP, DH, VECTOR, dealdim> &fdc,
+#else
+    const FDC<DH, VECTOR, dealdim> &fdc,
+#endif
+    std::vector<bool> &present_in_outflow,
+    dealii::FullMatrix<double> &local_matrix,
+    double /*scale*/,
+    double /*scale_ico*/)
   {
     assert(local_matrix.m()==4);
     assert(local_matrix.n()==4);//Should be a square matrix of dimension n_comp*2 x n_comp*2

@@ -35,11 +35,19 @@ using namespace dealii;
 using namespace DOpE;
 
 /***********************************************************************************************/
+#if DEAL_II_VERSION_GTE(9,3,0)
+template<
+  template<bool HP, template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
+  template<bool HP, template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
+  bool HP, template<int, int> class DH, typename VECTOR, int dealdim>
+  class LocalPDE : public PDEInterface<EDC, FDC, HP, DH, VECTOR, dealdim>
+#else
 template<
   template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
   template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
   template<int, int> class DH, typename VECTOR, int dealdim>
 class LocalPDE : public PDEInterface<EDC, FDC, DH, VECTOR, dealdim>
+#endif
 {
 public:
   
@@ -50,9 +58,14 @@ public:
   }
 
   void
-  ElementEquation(const EDC<DH, VECTOR, dealdim> &edc,
-                  dealii::Vector<double> &local_vector, double scale,
-                  double/*scale_ico*/)
+  ElementEquation(
+#if DEAL_II_VERSION_GTE(9,3,0)
+    const EDC<HP, DH, VECTOR, dealdim> &edc,
+#else
+    const EDC<DH, VECTOR, dealdim> &edc,
+#endif
+    dealii::Vector<double> &local_vector, double scale,
+    double/*scale_ico*/)
   {
     unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
     unsigned int n_q_points = edc.GetNQPoints();
@@ -123,9 +136,14 @@ public:
   }
 
   void
-  ElementMatrix(const EDC<DH, VECTOR, dealdim> &edc,
-                FullMatrix<double> &local_matrix, double scale,
-                double/*scale_ico*/)
+  ElementMatrix(
+#if DEAL_II_VERSION_GTE(9,3,0)
+    const EDC<HP, DH, VECTOR, dealdim> &edc,
+#else
+    const EDC<DH, VECTOR, dealdim> &edc,
+#endif
+    FullMatrix<double> &local_matrix, double scale,
+    double/*scale_ico*/)
   {
     unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
     unsigned int n_q_points = edc.GetNQPoints();
@@ -212,8 +230,13 @@ public:
   }
 
   void
-  ElementRightHandSide(const EDC<DH, VECTOR, dealdim> &edc,
-                       dealii::Vector<double> &local_vector, double scale)
+  ElementRightHandSide(
+#if DEAL_II_VERSION_GTE(9,3,0)
+    const EDC<HP, DH, VECTOR, dealdim> &edc,
+#else
+    const EDC<DH, VECTOR, dealdim> &edc,
+#endif
+    dealii::Vector<double> &local_vector, double scale)
   {
     assert(this->problem_type_ == "state");
     unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
@@ -239,8 +262,15 @@ public:
   }
 
     void
-  StrongElementResidual(const EDC<DH, VECTOR, dealdim> &edc,
-                        const EDC<DH, VECTOR, dealdim> &edc_w, double &sum, double scale)
+  StrongElementResidual(
+#if DEAL_II_VERSION_GTE(9,3,0)
+    const EDC<HP, DH, VECTOR, dealdim> &edc,
+    const EDC<HP, DH, VECTOR, dealdim> &edc_w,
+#else
+    const EDC<DH, VECTOR, dealdim> &edc,
+    const EDC<DH, VECTOR, dealdim> &edc_w,
+#endif
+    double &sum, double scale)
   {   
     unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();       
     unsigned int n_q_points = edc.GetNQPoints();
@@ -338,8 +368,13 @@ public:
 
   void
     StrongFaceResidual(
-      const FaceDataContainer<dealii::DoFHandler, VECTOR, dealdim> &fdc,
-      const FaceDataContainer<dealii::DoFHandler, VECTOR, dealdim> &fdc_w,
+#if DEAL_II_VERSION_GTE(9,3,0)
+      const FDC<HP, DH, VECTOR, dealdim> &fdc,
+      const FDC<HP, DH, VECTOR, dealdim> &fdc_w,
+#else
+      const FDC<DH, VECTOR, dealdim> &fdc,
+      const FDC<DH, VECTOR, dealdim> &fdc_w,
+#endif
       double &sum, double scale)
   {
     unsigned int n_dofs_per_element = fdc.GetNDoFsPerElement();
@@ -409,17 +444,27 @@ public:
 
   void
     StrongBoundaryResidual(
-      const FaceDataContainer<dealii::DoFHandler, VECTOR, dealdim> &/*fdc*/,
-      const FaceDataContainer<dealii::DoFHandler, VECTOR, dealdim> &/*fdc_w*/,
+#if DEAL_II_VERSION_GTE(9,3,0)
+      const FDC<HP, DH, VECTOR, dealdim> &/*fdc*/,
+      const FDC<HP, DH, VECTOR, dealdim> &/*fdc_w*/,
+#else
+      const FDC<DH, VECTOR, dealdim> &/*fdc*/,
+      const FDC<DH, VECTOR, dealdim> &/*fdc_w*/,
+#endif
       double &/*sum*/, double /*scale*/)
   {
     /*Not needed on homogeneous Dirichlet-boundary*/
   }
 
     //Auxiliary Values for Error Estimation
-  void ElementAuxRhs(const EDC<DH, VECTOR, dealdim> & edc,
-		    dealii::Vector<double> &local_vector,
-		    double scale)
+  void ElementAuxRhs(
+#if DEAL_II_VERSION_GTE(9,3,0)
+    const EDC<HP, DH, VECTOR, dealdim> & edc,
+#else
+    const EDC<DH, VECTOR, dealdim> & edc,
+#endif
+    dealii::Vector<double> &local_vector,
+    double scale)
   {
     unsigned int n_dofs_per_element = edc.GetNDoFsPerElement();
     unsigned int n_q_points = edc.GetNQPoints();
@@ -482,15 +527,25 @@ public:
     }
   }
 
-  void FaceAuxRhs(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
-		  dealii::Vector<double> &/*local_vector*/,
-		  double /*scale*/)
+  void FaceAuxRhs(
+#if DEAL_II_VERSION_GTE(9,3,0)
+    const FDC<HP, DH, VECTOR, dealdim> & /*fdc*/,
+#else
+    const FDC<DH, VECTOR, dealdim> & /*fdc*/,
+#endif
+    dealii::Vector<double> &/*local_vector*/,
+    double /*scale*/)
   {
   }
   
-  void BoundaryAuxRhs(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
-		      dealii::Vector<double> &/*local_vector*/,
-		      double /*scale*/)
+  void BoundaryAuxRhs(
+#if DEAL_II_VERSION_GTE(9,3,0)
+    const FDC<HP, DH, VECTOR, dealdim> & /*fdc*/,
+#else
+    const FDC<DH, VECTOR, dealdim> & /*fdc*/,
+#endif
+    dealii::Vector<double> &/*local_vector*/,
+    double /*scale*/)
   {
   }
 

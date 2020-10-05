@@ -30,6 +30,15 @@ using namespace std;
 using namespace dealii;
 using namespace DOpE;
 
+#if DEAL_II_VERSION_GTE(9,3,0)
+template<
+  template<bool HP, template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
+  template<bool HP, template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
+  bool HP, template<int, int> class DH, typename VECTOR, int dopedim, int dealdim =
+  dopedim>
+  class LocalFunctional : public FunctionalInterface<EDC, FDC, HP, DH, VECTOR,
+  dopedim, dealdim>
+#else
 template<
   template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
   template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
@@ -37,6 +46,7 @@ template<
   dopedim>
 class LocalFunctional : public FunctionalInterface<EDC, FDC, DH, VECTOR,
   dopedim, dealdim>
+#endif
 {
 public:
 
@@ -99,7 +109,12 @@ public:
 
   // compute drag value around cylinder
   double
-  BoundaryValue(const FDC<DH, VECTOR, dealdim> &fdc)
+  BoundaryValue(
+#if DEAL_II_VERSION_GTE(9,3,0)
+    const FDC<HP, DH, VECTOR, dealdim> &fdc)
+#else
+    const FDC<DH, VECTOR, dealdim> &fdc)
+#endif
   {
     const auto &state_fe_face_values = fdc.GetFEFaceValuesState();
     unsigned int n_q_points = fdc.GetNQPoints();
@@ -209,8 +224,13 @@ public:
   }
 
   void
-  BoundaryValue_U(const FDC<DH, VECTOR, dealdim> &fdc,
-                  dealii::Vector<double> &local_vector, double scale)
+  BoundaryValue_U(
+#if DEAL_II_VERSION_GTE(9,3,0)
+    const FDC<HP, DH, VECTOR, dealdim> &fdc,
+#else
+    const FDC<DH, VECTOR, dealdim> &fdc,
+#endif
+    dealii::Vector<double> &local_vector, double scale)
   {
     const auto &state_fe_face_values = fdc.GetFEFaceValuesState();
     unsigned int n_dofs_per_element = fdc.GetNDoFsPerElement();
@@ -313,8 +333,13 @@ public:
   }
 
   void
-  BoundaryValue_Q(const FDC<DH, VECTOR, dealdim> &fdc,
-                  dealii::Vector<double> &local_vector, double scale)
+  BoundaryValue_Q(
+#if DEAL_II_VERSION_GTE(9,3,0)
+    const FDC<HP, DH, VECTOR, dealdim> &fdc,
+#else
+    const FDC<DH, VECTOR, dealdim> &fdc,
+#endif
+    dealii::Vector<double> &local_vector, double scale)
   {
     const auto &state_fe_face_values = fdc.GetFEFaceValuesState();
     unsigned int n_dofs_per_element = local_vector.size();
@@ -356,8 +381,13 @@ public:
   }
 
   void
-  BoundaryValue_QQ(const FDC<DH, VECTOR, dealdim> &fdc,
-                   dealii::Vector<double> &local_vector, double scale)
+  BoundaryValue_QQ(
+#if DEAL_II_VERSION_GTE(9,3,0)
+    const FDC<HP, DH, VECTOR, dealdim> &fdc,
+#else
+    const FDC<DH, VECTOR, dealdim> &fdc,
+#endif
+    dealii::Vector<double> &local_vector, double scale)
   {
     const auto &state_fe_face_values = fdc.GetFEFaceValuesState();
     unsigned int n_dofs_per_element = local_vector.size();
@@ -403,29 +433,49 @@ public:
   }
 
   void
-  BoundaryValue_UU(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
-                   dealii::Vector<double> &/*local_vector*/, double /*scale*/)
+  BoundaryValue_UU(
+#if DEAL_II_VERSION_GTE(9,3,0)
+    const FDC<HP, DH, VECTOR, dealdim> & /*fdc*/,
+#else
+    const FDC<DH, VECTOR, dealdim> & /*fdc*/,
+#endif
+    dealii::Vector<double> &/*local_vector*/, double /*scale*/)
   {
 
   }
 
   void
-  BoundaryValue_QU(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
-                   dealii::Vector<double> &/*local_vector*/, double /*scale*/)
+  BoundaryValue_QU(
+#if DEAL_II_VERSION_GTE(9,3,0)
+    const FDC<HP, DH, VECTOR, dealdim> & /*fdc*/,
+#else
+    const FDC<DH, VECTOR, dealdim> & /*fdc*/,
+#endif
+    dealii::Vector<double> &/*local_vector*/, double /*scale*/)
   {
 
   }
 
   void
-  BoundaryValue_UQ(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
-                   dealii::Vector<double> &/*local_vector*/, double /*scale*/)
+  BoundaryValue_UQ(
+#if DEAL_II_VERSION_GTE(9,3,0)
+    const FDC<HP, DH, VECTOR, dealdim> & /*fdc*/,
+#else
+    const FDC<DH, VECTOR, dealdim> & /*fdc*/,
+#endif
+    dealii::Vector<double> &/*local_vector*/, double /*scale*/)
   {
 
   }
 
 // compute drag value around cylinder
   double
-  FaceValue(const FDC<DH, VECTOR, dealdim> &fdc)
+  FaceValue(
+#if DEAL_II_VERSION_GTE(9,3,0)
+    const FDC<HP, DH, VECTOR, dealdim> &fdc)
+#else
+    const FDC<DH, VECTOR, dealdim> &fdc)
+#endif
   {
     const auto &state_fe_face_values = fdc.GetFEFaceValuesState();
     unsigned int n_q_points = fdc.GetNQPoints();
@@ -502,8 +552,13 @@ public:
   }
 
   void
-  FaceValue_U(const FDC<DH, VECTOR, dealdim> &fdc,
-              dealii::Vector<double> &local_vector, double scale)
+  FaceValue_U(
+#if DEAL_II_VERSION_GTE(9,3,0)
+    const FDC<HP, DH, VECTOR, dealdim> &fdc,
+#else
+    const FDC<DH, VECTOR, dealdim> &fdc,
+#endif
+    dealii::Vector<double> &local_vector, double scale)
   {
     const auto &state_fe_face_values = fdc.GetFEFaceValuesState();
     unsigned int n_dofs_per_element = fdc.GetNDoFsPerElement();
@@ -614,82 +669,142 @@ public:
   }
 
   void
-  FaceValue_UU(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
-               dealii::Vector<double> &/*local_vector*/, double /*scale*/)
+  FaceValue_UU(
+#if DEAL_II_VERSION_GTE(9,3,0)
+    const FDC<HP, DH, VECTOR, dealdim> & /*fdc*/,
+#else
+    const FDC<DH, VECTOR, dealdim> & /*fdc*/,
+#endif
+    dealii::Vector<double> &/*local_vector*/, double /*scale*/)
   {
 
   }
 
   void
-  FaceValue_Q(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
-              dealii::Vector<double> & /*local_vector*/, double /*scale*/)
+  FaceValue_Q(
+#if DEAL_II_VERSION_GTE(9,3,0)
+    const FDC<HP, DH, VECTOR, dealdim> & /*fdc*/,
+#else
+    const FDC<DH, VECTOR, dealdim> & /*fdc*/,
+#endif
+    dealii::Vector<double> & /*local_vector*/, double /*scale*/)
   {
 
   }
 
   void
-  FaceValue_QU(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
-               dealii::Vector<double> & /*local_vector*/, double /*scale*/)
+  FaceValue_QU(
+#if DEAL_II_VERSION_GTE(9,3,0)
+    const FDC<HP, DH, VECTOR, dealdim> & /*fdc*/,
+#else
+    const FDC<DH, VECTOR, dealdim> & /*fdc*/,
+#endif
+    dealii::Vector<double> & /*local_vector*/, double /*scale*/)
   {
 
   }
 
   void
-  FaceValue_UQ(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
-               dealii::Vector<double> & /*local_vector*/, double /*scale*/)
+  FaceValue_UQ(
+#if DEAL_II_VERSION_GTE(9,3,0)
+    const FDC<HP, DH, VECTOR, dealdim> & /*fdc*/,
+#else
+    const FDC<DH, VECTOR, dealdim> & /*fdc*/,
+#endif
+    dealii::Vector<double> & /*local_vector*/, double /*scale*/)
   {
 
   }
 
   void
-  FaceValue_QQ(const FDC<DH, VECTOR, dealdim> & /*fdc*/,
-               dealii::Vector<double> & /*local_vector*/, double /*scale*/)
+  FaceValue_QQ(
+#if DEAL_II_VERSION_GTE(9,3,0)
+    const FDC<HP, DH, VECTOR, dealdim> & /*fdc*/,
+#else
+    const FDC<DH, VECTOR, dealdim> & /*fdc*/,
+#endif
+    dealii::Vector<double> & /*local_vector*/, double /*scale*/)
   {
 
   }
 
   double
-  ElementValue(const EDC<DH, VECTOR, dealdim> & /*edc*/)
+  ElementValue(
+#if DEAL_II_VERSION_GTE(9,3,0)
+    const EDC<HP, DH, VECTOR, dealdim> & /*edc*/)
+#else
+    const EDC<DH, VECTOR, dealdim> & /*edc*/)
+#endif
   {
     return 0.;
   }
 
   void
-  ElementValue_U(const EDC<DH, VECTOR, dealdim> & /*edc*/,
-                 dealii::Vector<double> &/*local_vector*/, double /*scale*/)
+  ElementValue_U(
+#if DEAL_II_VERSION_GTE(9,3,0)
+    const EDC<HP, DH, VECTOR, dealdim> & /*edc*/,
+#else
+    const EDC<DH, VECTOR, dealdim> & /*edc*/,
+#endif
+    dealii::Vector<double> &/*local_vector*/, double /*scale*/)
   {
 
   }
 
   void
-  ElementValue_Q(const EDC<DH, VECTOR, dealdim> & /*edc*/,
-                 dealii::Vector<double> &/*local_vector*/, double /*scale*/)
+  ElementValue_Q(
+#if DEAL_II_VERSION_GTE(9,3,0)
+    const EDC<HP, DH, VECTOR, dealdim> & /*edc*/,
+#else
+    const EDC<DH, VECTOR, dealdim> & /*edc*/,
+#endif
+    dealii::Vector<double> &/*local_vector*/, double /*scale*/)
   {
 
   }
 
   void
-  ElementValue_UU(const EDC<DH, VECTOR, dealdim> & /*edc*/,
-                  dealii::Vector<double> &/*local_vector*/, double /*scale*/)
+  ElementValue_UU(
+#if DEAL_II_VERSION_GTE(9,3,0)
+    const EDC<HP, DH, VECTOR, dealdim> & /*edc*/,
+#else
+    const EDC<DH, VECTOR, dealdim> & /*edc*/,
+#endif
+    dealii::Vector<double> &/*local_vector*/, double /*scale*/)
   {
 
   }
 
   void
-  ElementValue_QU(const EDC<DH, VECTOR, dealdim> & /*edc*/,
-                  dealii::Vector<double> &/*local_vector*/, double /*scale*/)
+  ElementValue_QU(
+#if DEAL_II_VERSION_GTE(9,3,0)
+    const EDC<HP, DH, VECTOR, dealdim> & /*edc*/,
+#else
+    const EDC<DH, VECTOR, dealdim> & /*edc*/,
+#endif
+    dealii::Vector<double> &/*local_vector*/, double /*scale*/)
   {
   }
 
   void
-  ElementValue_UQ(const EDC<DH, VECTOR, dealdim> & /*edc*/,
-                  dealii::Vector<double> &/*local_vector*/, double /*scale*/)
+  ElementValue_UQ(
+#if DEAL_II_VERSION_GTE(9,3,0)
+    const EDC<HP, DH, VECTOR, dealdim> & /*edc*/,
+#else
+    const EDC<DH, VECTOR, dealdim> & /*edc*/,
+#endif
+    dealii::Vector<double> &/*local_vector*/, double /*scale*/)
   {
   }
 
   void
-  ElementValue_QQ(const EDC<DH, VECTOR, dealdim> & /*edc*/,
-                  dealii::Vector<double> &/*local_vector*/, double /*scale*/)
+  ElementValue_QQ(
+#if DEAL_II_VERSION_GTE(9,3,0)
+    const EDC<HP, DH, VECTOR, dealdim> & /*edc*/,
+#else
+    const EDC<DH, VECTOR, dealdim> & /*edc*/,
+#endif
+    dealii::Vector<double> &/*local_vector*/, double /*scale*/)
   {
 
   }
@@ -701,60 +816,6 @@ public:
            | update_normal_vectors;
   }
 
-  inline void
-  GetFaceValues(const DOpEWrapper::FEFaceValues<dealdim> &fe_face_values,
-                const map<string, const BlockVector<double>*> &domain_values,
-                string name, vector<Vector<double> > &values)
-  {
-    typename map<string, const BlockVector<double>*>::const_iterator it =
-      domain_values.find(name);
-    if (it == domain_values.end())
-      {
-        throw DOpEException("Did not find " + name, "LocalPDE::GetValues");
-      }
-    fe_face_values.get_function_values(*(it->second), values);
-  }
-
-  inline void
-  GetFaceGrads(const DOpEWrapper::FEFaceValues<dealdim> &fe_face_values,
-               const map<string, const BlockVector<double>*> &domain_values,
-               string name, vector<vector<Tensor<1, dealdim> > > &values)
-  {
-    typename map<string, const BlockVector<double>*>::const_iterator it =
-      domain_values.find(name);
-    if (it == domain_values.end())
-      {
-        throw DOpEException("Did not find " + name, "LocalPDE::GetGrads");
-      }
-    fe_face_values.get_function_grads(*(it->second), values);
-  }
-
-  inline void
-  GetValues(const DOpEWrapper::FEValues<dealdim> &fe_values,
-            const map<string, const BlockVector<double>*> &domain_values,
-            string name, vector<Vector<double> > &values)
-  {
-    typename map<string, const BlockVector<double>*>::const_iterator it =
-      domain_values.find(name);
-    if (it == domain_values.end())
-      {
-        throw DOpEException("Did not find " + name, "LocalPDE::GetValues");
-      }
-    fe_values.get_function_values(*(it->second), values);
-  }
-
-  inline void
-  GetParams(const map<string, const Vector<double>*> &param_values,
-            string name, Vector<double> &values)
-  {
-    typename map<string, const Vector<double>*>::const_iterator it =
-      param_values.find(name);
-    if (it == param_values.end())
-      {
-        throw DOpEException("Did not find " + name, "LocalPDE::GetValues");
-      }
-    values = *(it->second);
-  }
 private:
   Vector<double> qvalues_;
   Vector<double> dqvalues_;

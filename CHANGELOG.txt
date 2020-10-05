@@ -1,6 +1,6 @@
 Changelog DOpE
 ==============
-01.10.2020: Adjustments to deal version 9.3.0. Due to the merging of the DoFHandlers
+05.10.2020: Adjustments to deal version 9.3.0. Due to the merging of the DoFHandlers
 	    no separate DoFHandler for HP is needed - and is no longer supported.
 	    To fix the automated selection
 	    between Mapping and MappingCollection the DOpEWrapper::Mapping now needs a

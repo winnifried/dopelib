@@ -35,12 +35,21 @@ using namespace DOpE;
 /**
  * This functional evaluates the x-displacement in (90,0).
  */
+#if DEAL_II_VERSION_GTE(9,3,0)
+template<
+template<bool HP, template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
+  template<bool HP, template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
+  bool HP, template<int, int> class DH, typename VECTOR, int dealdim>
+  class LocalPointFunctionalDisp_1 : public FunctionalInterface<EDC, FDC, HP, DH,
+  VECTOR, dealdim>
+#else
 template<
   template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
   template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
   template<int, int> class DH, typename VECTOR, int dealdim>
 class LocalPointFunctionalDisp_1 : public FunctionalInterface<EDC, FDC, DH,
   VECTOR, dealdim>
+#endif
 {
 public:
   LocalPointFunctionalDisp_1()
@@ -85,12 +94,21 @@ public:
  * This functional evaluates the y-displacement in (100,100).
  */
 
+#if DEAL_II_VERSION_GTE(9,3,0)
+template<
+template<bool HP, template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
+  template<bool HP, template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
+  bool HP, template<int, int> class DH, typename VECTOR, int dealdim>
+  class LocalPointFunctionalDisp_2 : public FunctionalInterface<EDC, FDC, HP, DH,
+  VECTOR, dealdim>
+#else
 template<
   template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
   template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
   template<int, int> class DH, typename VECTOR, int dealdim>
 class LocalPointFunctionalDisp_2 : public FunctionalInterface<EDC, FDC, DH,
   VECTOR, dealdim>
+#endif
 {
 public:
   LocalPointFunctionalDisp_2()
@@ -134,12 +152,21 @@ public:
 /**
  * This functional evaluates the x-displacement in (0,100).
  */
+#if DEAL_II_VERSION_GTE(9,3,0)
+template<
+template<bool HP, template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
+  template<bool HP, template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
+  bool HP, template<int, int> class DH, typename VECTOR, int dealdim>
+  class LocalPointFunctionalDisp_3 : public FunctionalInterface<EDC, FDC, HP, DH,
+  VECTOR, dealdim>
+#else
 template<
   template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
   template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
   template<int, int> class DH, typename VECTOR, int dealdim>
 class LocalPointFunctionalDisp_3 : public FunctionalInterface<EDC, FDC, DH,
   VECTOR, dealdim>
+#endif
 {
 public:
   LocalPointFunctionalDisp_3()
@@ -183,12 +210,21 @@ public:
 /**
  * This functional evaluates the yy-stress in (90,0).
  */
+#if DEAL_II_VERSION_GTE(9,3,0)
+template<
+template<bool HP, template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
+  template<bool HP, template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
+  bool HP, template<int, int> class DH, typename VECTOR, int dealdim>
+  class LocalDomainFunctionalStress : public FunctionalInterface<EDC, FDC, HP, DH,
+  VECTOR, dealdim>
+#else
 template<
   template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
   template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
   template<int, int> class DH, typename VECTOR, int dealdim>
 class LocalDomainFunctionalStress : public FunctionalInterface<EDC, FDC, DH,
   VECTOR, dealdim>
+#endif
 {
 public:
   LocalDomainFunctionalStress()
@@ -197,7 +233,11 @@ public:
   }
 
   double
-  ElementValue(const EDC<DH, VECTOR, dealdim> &edc)
+#if DEAL_II_VERSION_GTE(9,3,0)
+    ElementValue(const EDC<HP, DH, VECTOR, dealdim> &edc)
+#else
+    ElementValue(const EDC<DH, VECTOR, dealdim> &edc)
+#endif
   {
     const DOpEWrapper::FEValues<dealdim> &state_fe_values =
       edc.GetFEValuesState();
@@ -264,12 +304,21 @@ public:
 /**
  * This functional evaluates they-displacement-integral on upper boundary.
  */
+#if DEAL_II_VERSION_GTE(9,3,0)
+template<
+template<bool HP, template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
+  template<bool HP, template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
+  bool HP, template<int, int> class DH, typename VECTOR, int dealdim>
+class LocalBoundaryFaceFunctionalUpBd : public FunctionalInterface<EDC, FDC,
+  HP, DH, VECTOR, dealdim>
+#else
 template<
   template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
   template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
   template<int, int> class DH, typename VECTOR, int dealdim>
 class LocalBoundaryFaceFunctionalUpBd : public FunctionalInterface<EDC, FDC,
   DH, VECTOR, dealdim>
+#endif
 {
 public:
   LocalBoundaryFaceFunctionalUpBd()
@@ -279,7 +328,11 @@ public:
 
   // compute y-displacement-integral
   double
-  BoundaryValue(const FDC<DH, VECTOR, dealdim> &fdc)
+#if DEAL_II_VERSION_GTE(9,3,0)
+    BoundaryValue(const FDC<HP, DH, VECTOR, dealdim> &fdc)
+#else
+    BoundaryValue(const FDC<DH, VECTOR, dealdim> &fdc)
+#endif
   {
     unsigned int color = fdc.GetBoundaryIndicator();
     const auto &state_fe_face_values = fdc.GetFEFaceValuesState();

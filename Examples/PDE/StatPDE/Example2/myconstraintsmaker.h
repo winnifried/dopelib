@@ -30,10 +30,11 @@ namespace DOpE
   /**
    * This class implements the periodicity-constraints.
    */
-  template<template<int, int> class DH, int dim>
 #if DEAL_II_VERSION_GTE(9,3,0)
-    class PeriodicityConstraints : public UserDefinedDoFConstraints<false, DH, dim>
+  template<bool HP, template<int, int> class DH, int dim>
+    class PeriodicityConstraints : public UserDefinedDoFConstraints<HP, DH, dim>
 #else
+  template<template<int, int> class DH, int dim>
     class PeriodicityConstraints : public UserDefinedDoFConstraints<DH, dim>
 #endif    
   {
@@ -86,9 +87,15 @@ namespace DOpE
 
   };
 
+#if DEAL_II_VERSION_GTE(9,3,0)
+  template<bool HP, template<int, int> class DH, int dim>
+    void
+    PeriodicityConstraints<HP, DH, dim>::declare_params(
+#else
   template<template<int, int> class DH, int dim>
-  void
+    void
   PeriodicityConstraints<DH, dim>::declare_params(
+#endif
     ParameterReader &param_reader)
   {
   }
@@ -100,9 +107,15 @@ namespace DOpE
    *
    */
 #if DEAL_II_VERSION_GTE(9,1,1)
+#if DEAL_II_VERSION_GTE(9,3,0)
+  template<bool HP, template<int, int> class DH, int dim>
+  void
+    PeriodicityConstraints<HP, DH, dim>::MakeStateDoFConstraints(
+#else
   template<template<int, int> class DH, int dim>
   void
-  PeriodicityConstraints<DH, dim>::MakeStateDoFConstraints(
+    PeriodicityConstraints<DH, dim>::MakeStateDoFConstraints(
+#endif
     const DOpEWrapper::DoFHandler<dim, DH> &dof_handler,
     dealii::AffineConstraints<double> &constraint_matrix) const
 #else

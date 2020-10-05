@@ -33,12 +33,21 @@ using namespace dealii;
 using namespace DOpE;
 
 /****************************************************************************************/
+#if DEAL_II_VERSION_GTE(9,3,0)
+template<
+template<bool HP, template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
+  template<bool HP, template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
+  bool HP, template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
+class LocalPointFunctional : public FunctionalInterface<EDC,
+  FDC, HP, DH, VECTOR, dopedim, dealdim>
+#else
 template<
   template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
   template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
   template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
-class LocalPointFunctional : public FunctionalInterface<ElementDataContainer,
-  FaceDataContainer, dealii::DoFHandler, VECTOR, dopedim, dealdim>
+class LocalPointFunctional : public FunctionalInterface<EDC,
+  FDC, DH, VECTOR, dopedim, dealdim>
+#endif
 {
 public:
 
@@ -87,12 +96,21 @@ public:
 
 /************************************************************************************************************************************************/
 
+#if DEAL_II_VERSION_GTE(9,3,0)
+template<
+template<bool HP, template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
+  template<bool HP, template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
+  bool HP, template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
+class LocalPointFunctional2 : public FunctionalInterface<EDC,
+  FDC, HP, DH, VECTOR, dopedim, dealdim>
+#else
 template<
   template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
   template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
   template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
-class LocalPointFunctional2 : public FunctionalInterface<ElementDataContainer,
-  FaceDataContainer, dealii::DoFHandler, VECTOR, dopedim, dealdim>
+class LocalPointFunctional2 : public FunctionalInterface<EDC,
+  FDC, DH, VECTOR, dopedim, dealdim>
+#endif
 {
 public:
 

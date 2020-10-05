@@ -69,7 +69,7 @@ using namespace DOpE;
 const static int DIM = 2;
 
 #if DEAL_II_VERSION_GTE(9,3,0)
-#define DOFHANDLER DoFHandler
+#define DOFHANDLER true,DoFHandler
 #else
 #define DOFHANDLER hp::DoFHandler
 #endif
@@ -83,19 +83,11 @@ typedef BlockSparseMatrix<double> MATRIX;
 typedef BlockSparsityPattern SPARSITYPATTERN;
 typedef BlockVector<double> VECTOR;
 
-#if DEAL_II_VERSION_GTE(9,3,0)
-typedef PDEProblemContainer<
-LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
-         SimpleDirichletData<VECTOR, DIM>,
-         SPARSITYPATTERN,
-  VECTOR, DIM, FE, true, DOFHANDLER> OP_BASE;
-#else
 typedef PDEProblemContainer<
 LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
          SimpleDirichletData<VECTOR, DIM>,
          SPARSITYPATTERN,
   VECTOR, DIM, FE, DOFHANDLER> OP_BASE;
-#endif
 
 typedef StateProblem<OP_BASE, LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
         SimpleDirichletData<VECTOR, DIM>, SPARSITYPATTERN, VECTOR, DIM> PROB;
@@ -105,19 +97,11 @@ typedef StateProblem<OP_BASE, LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
 //FIXME: This should be a reasonable dual timestepping scheme
 #define DTSP BackwardEulerProblem
 
-#if DEAL_II_VERSION_GTE(9,3,0)
-typedef InstatPDEProblemContainer<TSP, DTSP,
-				  LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
-				  SimpleDirichletData<VECTOR, DIM>,
-				  SPARSITYPATTERN,
-				  VECTOR, DIM, FE, true, DOFHANDLER> OP;
-#else
 typedef InstatPDEProblemContainer<TSP, DTSP,
         LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
         SimpleDirichletData<VECTOR, DIM>,
         SPARSITYPATTERN,
         VECTOR, DIM, FE, DOFHANDLER> OP;
-#endif
 
 #undef TSP
 #undef DTSP
@@ -198,21 +182,12 @@ main(int argc, char **argv)
 
   triangulation.refine_global(3);
   ActiveFEIndexSetter<DIM> indexsetter;
-#if DEAL_II_VERSION_GTE(9,3,0)
-  MethodOfLines_StateSpaceTimeHandler<FE, true, DOFHANDLER, SPARSITYPATTERN, VECTOR,
-                                      DIM> DOFH(triangulation,
-                                                state_fe_collection,
-                                                times,
-                                                false,
-                                                indexsetter);
-#else
   MethodOfLines_StateSpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR,
                                       DIM> DOFH(triangulation,
                                                 state_fe_collection,
                                                 times,
                                                 false,
                                                 indexsetter);
-#endif
   
   OP P(LPDE, DOFH);
 

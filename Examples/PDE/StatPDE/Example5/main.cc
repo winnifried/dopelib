@@ -71,7 +71,12 @@ using namespace DOpE;
 
 const static int DIM = 2;
 
+#if DEAL_II_VERSION_GTE(9,3,0)
+#define DOFHANDLER false,DoFHandler
+#else
 #define DOFHANDLER DoFHandler
+#endif
+
 #define FE FESystem
 #define CDC ElementDataContainer
 #define FDC FaceDataContainer
@@ -91,13 +96,8 @@ typedef DirectLinearSolverWithMatrix<SPARSITYPATTERN, MATRIX, VECTOR> LINEARSOLV
 
 typedef NewtonSolver<INTEGRATOR, LINEARSOLVER, VECTOR> NLS;
 typedef StatPDEProblem<NLS, INTEGRATOR, OP, VECTOR, DIM> RP;
-#if DEAL_II_VERSION_GTE(9,3,0)
-typedef MethodOfLines_StateSpaceTimeHandler<FE, false, DOFHANDLER, SPARSITYPATTERN,
-        VECTOR, DIM> STH;
-#else
 typedef MethodOfLines_StateSpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN,
         VECTOR, DIM> STH;
-#endif
 
 typedef HigherOrderDWRContainer<STH, IDC, CDC<DOFHANDLER, VECTOR, DIM>,
         FDC<DOFHANDLER, VECTOR, DIM>, VECTOR> HO_DWRC;

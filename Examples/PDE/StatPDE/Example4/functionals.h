@@ -33,12 +33,21 @@ using namespace dealii;
 using namespace DOpE;
 
 /****************************************************************************************/
+#if DEAL_II_VERSION_GTE(9,3,0)
+template<
+template<bool HP, template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
+  template<bool HP, template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
+  bool HP, template<int, int> class DH, typename VECTOR, int dealdim>
+  class LocalPointFunctionalX : public FunctionalInterface<EDC, FDC, HP, DH, VECTOR,
+  dealdim>
+#else
 template<
   template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
   template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
   template<int, int> class DH, typename VECTOR, int dealdim>
 class LocalPointFunctionalX : public FunctionalInterface<EDC, FDC, DH, VECTOR,
   dealdim>
+#endif
 {
 public:
   double

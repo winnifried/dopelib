@@ -504,11 +504,18 @@ namespace DOpE
           }
 
         // Generate the data containers.
+#if DEAL_II_VERSION_GTE(9,3,0)
+        FaceDataContainer<false, dealii::DoFHandler, VECTOR, dimhigh> fdc(*(this->GetFaceQuadratureFormula()),
+                                                                   pde.GetFaceUpdateFlags(),
+                                                                   *(pde.GetBaseProblem().GetSpaceTimeHandler()), element,
+                                                                   this->GetParamData(), this->GetDomainData());
+#else
         FaceDataContainer<dealii::DoFHandler, VECTOR, dimhigh> fdc(*(this->GetFaceQuadratureFormula()),
                                                                    pde.GetFaceUpdateFlags(),
                                                                    *(pde.GetBaseProblem().GetSpaceTimeHandler()), element,
                                                                    this->GetParamData(), this->GetDomainData());
-
+#endif
+	
         std::vector<unsigned int> boundary_functional_colors =
           pde.GetBoundaryFunctionalColors();
         bool need_boundary_integrals = (boundary_functional_colors.size() > 0);
@@ -583,11 +590,18 @@ namespace DOpE
             endc[dh] = dof_handler[dh]->end();
           }
         // Generate the data containers.
+#if DEAL_II_VERSION_GTE(9,3,0)
+        FaceDataContainer<false,dealii::DoFHandler, VECTOR, dimhigh> fdc(*(this->GetFaceQuadratureFormula()),
+                                                                   pde.GetFaceUpdateFlags(),
+                                                                   *(pde.GetBaseProblem().GetSpaceTimeHandler()), element,
+                                                                   this->GetParamData(), this->GetDomainData());
+#else
         FaceDataContainer<dealii::DoFHandler, VECTOR, dimhigh> fdc(*(this->GetFaceQuadratureFormula()),
                                                                    pde.GetFaceUpdateFlags(),
                                                                    *(pde.GetBaseProblem().GetSpaceTimeHandler()), element,
                                                                    this->GetParamData(), this->GetDomainData());
-
+#endif
+	
         bool need_faces = pde.HasFaces();
         if (!need_faces)
           {

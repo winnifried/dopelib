@@ -515,10 +515,12 @@ namespace DOpE
         }
 
       // Generate the data containers.
-      FaceDataContainer<dealii::DoFHandler, VECTOR, dimhigh> fdc(*(this->GetFaceQuadratureFormula()),
-                                                                 pde.GetFaceUpdateFlags(),
-                                                                 *(pde.GetBaseProblem().GetSpaceTimeHandler()), element,
-                                                                 this->GetParamData(), this->GetDomainData());
+      idc_.InitializeFDC(pde.GetFaceUpdateFlags(),
+                         *(pde.GetBaseProblem().GetSpaceTimeHandler()),
+                         element,
+                         this->GetParamData(),
+                         this->GetDomainData());
+      auto &fdc = idc_.GetFaceDataContainer();
 
       std::vector<unsigned int> boundary_functional_colors =
         pde.GetBoundaryFunctionalColors();
@@ -594,10 +596,12 @@ namespace DOpE
           endc[dh] = dof_handler[dh]->end();
         }
       // Generate the data containers.
-      FaceDataContainer<dealii::DoFHandler, VECTOR, dimhigh> fdc(*(this->GetFaceQuadratureFormula()),
-                                                                 pde.GetFaceUpdateFlags(),
-                                                                 *(pde.GetBaseProblem().GetSpaceTimeHandler()), element,
-                                                                 this->GetParamData(), this->GetDomainData());
+      idc_.InitializeFDC(pde.GetFaceUpdateFlags(),
+                         *(pde.GetBaseProblem().GetSpaceTimeHandler()),
+                         element,
+                         this->GetParamData(),
+                         this->GetDomainData());
+      auto &fdc = idc_.GetFaceDataContainer();
 
       bool need_faces = pde.HasFaces();
       if (!need_faces)
