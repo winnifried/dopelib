@@ -122,9 +122,9 @@ class LocalBoundaryFluxFunctional : public FunctionalInterface<EDC, FDC, DH,
 public:
   double
 #if DEAL_II_VERSION_GTE(9,3,0)
-    BoundaryValue(const FaceDataContainer<HP, DH, VECTOR, dealdim> &fdc)
+    BoundaryValue(const FDC<HP, DH, VECTOR, dealdim> &fdc)
 #else
-    BoundaryValue(const FaceDataContainer<DH, VECTOR, dealdim> &fdc)
+    BoundaryValue(const FDC<DH, VECTOR, dealdim> &fdc)
 #endif
   {
     const unsigned int color = fdc.GetBoundaryIndicator();

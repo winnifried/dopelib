@@ -38,15 +38,15 @@ template<
 template<bool HP, template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
   template<bool HP, template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
   bool HP, template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
-class LocalPointFunctionalP1 : public FunctionalInterface<ElementDataContainer,
-  FaceDataContainer, HP, DH, VECTOR, dopedim, dealdim>
+class LocalPointFunctionalP1 : public FunctionalInterface<EDC,
+  FDC, HP, DH, VECTOR, dopedim, dealdim>
 #else
 template<
   template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
   template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
   template<int, int> class DH, typename VECTOR, int dopedim, int dealdim>
-class LocalPointFunctionalP1 : public FunctionalInterface<ElementDataContainer,
-  FaceDataContainer, DH, VECTOR, dopedim, dealdim>
+class LocalPointFunctionalP1 : public FunctionalInterface<EDC,
+  FDC, DH, VECTOR, dopedim, dealdim>
 #endif
 {
 public:

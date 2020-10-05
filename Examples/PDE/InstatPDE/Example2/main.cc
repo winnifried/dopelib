@@ -77,7 +77,7 @@ const static int DIM = 2;
 #endif
 
 #define FE FESystem
-#define CDC ElementDataContainer
+#define EDC ElementDataContainer
 #define FDC FaceDataContainer
 
 typedef QGauss<DIM> QUADRATURE;
@@ -88,12 +88,12 @@ typedef BlockVector<double> VECTOR;
 
 
 typedef PDEProblemContainer<
-LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
+LocalPDE<EDC, FDC, DOFHANDLER, VECTOR, DIM>,
          SimpleDirichletData<VECTOR, DIM>,
          SPARSITYPATTERN,
          VECTOR, DIM> OP_BASE;
 
-typedef StateProblem<OP_BASE, LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
+typedef StateProblem<OP_BASE, LocalPDE<EDC, FDC, DOFHANDLER, VECTOR, DIM>,
         SimpleDirichletData<VECTOR, DIM>, SPARSITYPATTERN, VECTOR, DIM> PROB;
 
 // Typedefs for timestep problem
@@ -101,7 +101,7 @@ typedef StateProblem<OP_BASE, LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
 //FIXME: This should be a reasonable dual timestepping scheme
 #define DTSP ShiftedCrankNicolsonProblem
 typedef InstatPDEProblemContainer<TSP, DTSP,
-        LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
+        LocalPDE<EDC, FDC, DOFHANDLER, VECTOR, DIM>,
         SimpleDirichletData<VECTOR, DIM>,
         SPARSITYPATTERN,
         VECTOR, DIM> OP;
@@ -143,11 +143,11 @@ main(int argc, char **argv)
   ParameterReader pr;
   RP::declare_params(pr);
   DOpEOutputHandler<VECTOR>::declare_params(pr);
-  LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, 2>::declare_params(pr);
+  LocalPDE<EDC, FDC, DOFHANDLER, VECTOR, 2>::declare_params(pr);
   BoundaryParabel::declare_params(pr);
-  LocalBoundaryFaceFunctionalDrag<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM>::declare_params(
+  LocalBoundaryFaceFunctionalDrag<EDC, FDC, DOFHANDLER, VECTOR, DIM, DIM>::declare_params(
     pr);
-  LocalBoundaryFaceFunctionalLift<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM>::declare_params(
+  LocalBoundaryFaceFunctionalLift<EDC, FDC, DOFHANDLER, VECTOR, DIM, DIM>::declare_params(
     pr);
   pr.read_parameters(paramfile);
 
@@ -190,15 +190,15 @@ main(int argc, char **argv)
   QGauss<DIM - 1> face_quadrature_formula(3);
   IDC idc(quadrature_formula, face_quadrature_formula);
 
-  LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM> LPDE(pr);
+  LocalPDE<EDC, FDC, DOFHANDLER, VECTOR, DIM> LPDE(pr);
 
-  LocalPointFunctionalPressure<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM> LPFP;
-  LocalPointFunctionalDeflectionX<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM> LPFDX;
-  LocalPointFunctionalDeflectionY<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM> LPFDY;
+  LocalPointFunctionalPressure<EDC, FDC, DOFHANDLER, VECTOR, DIM, DIM> LPFP;
+  LocalPointFunctionalDeflectionX<EDC, FDC, DOFHANDLER, VECTOR, DIM, DIM> LPFDX;
+  LocalPointFunctionalDeflectionY<EDC, FDC, DOFHANDLER, VECTOR, DIM, DIM> LPFDY;
 
-  LocalBoundaryFaceFunctionalDrag<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM> LBFD(
+  LocalBoundaryFaceFunctionalDrag<EDC, FDC, DOFHANDLER, VECTOR, DIM, DIM> LBFD(
     pr);
-  LocalBoundaryFaceFunctionalLift<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM> LBFL(
+  LocalBoundaryFaceFunctionalLift<EDC, FDC, DOFHANDLER, VECTOR, DIM, DIM> LBFL(
     pr);
 
   // Specification of time step size and time interval
@@ -321,7 +321,7 @@ main(int argc, char **argv)
 }
 
 #undef FDC
-#undef CDC
+#undef EDC
 #undef FE
 #undef DOFHANDLER
 

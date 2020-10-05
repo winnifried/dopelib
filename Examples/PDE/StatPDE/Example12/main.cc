@@ -68,7 +68,7 @@ const static int DIM = 2;
 #endif
 
 #define FE FESystem
-#define CDC ElementDataContainer
+#define EDC ElementDataContainer
 #define FDC FaceDataContainer
 
 typedef QGauss<DIM> QUADRATURE;
@@ -77,7 +77,7 @@ typedef BlockSparseMatrix<double> MATRIX;
 typedef BlockSparsityPattern SPARSITYPATTERN;
 typedef BlockVector<double> VECTOR;
 
-typedef PDEProblemContainer<LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
+typedef PDEProblemContainer<LocalPDE<EDC, FDC, DOFHANDLER, VECTOR, DIM>,
         SimpleDirichletData<VECTOR, DIM>, SPARSITYPATTERN, VECTOR, DIM> OP;
 typedef IntegratorDataContainer<DOFHANDLER, QUADRATURE, FACEQUADRATURE, VECTOR,
         DIM> IDC;
@@ -134,7 +134,7 @@ main(int argc, char **argv)
   FACEQUADRATURE face_quadrature_formula(1);
   IDC idc(quadrature_formula, face_quadrature_formula);
 
-  LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM> LPDE;
+  LocalPDE<EDC, FDC, DOFHANDLER, VECTOR, DIM> LPDE;
 
   //We need to state the mapping explicitly, otherwise the divergence of
   //the RT-elements provided by dealii will be NaN.
@@ -144,7 +144,7 @@ main(int argc, char **argv)
   DOpEWrapper::Mapping<DIM,DOFHANDLER> mapping(1,true);
 #endif
   
-  LocalFunctional<CDC,FDC,DOFHANDLER, VECTOR, DIM> LF;
+  LocalFunctional<EDC,FDC,DOFHANDLER, VECTOR, DIM> LF;
 
   STH DOFH(triangulation, mapping, state_fe);
 
@@ -202,6 +202,6 @@ main(int argc, char **argv)
   return 0;
 }
 #undef FDC
-#undef CDC
+#undef EDC
 #undef FE
 #undef DOFHANDLER

@@ -67,7 +67,7 @@ const static int DIM = 2;
 #endif
 
 #define FE FESystem
-#define CDC ElementDataContainer
+#define EDC ElementDataContainer
 #define FDC FaceDataContainer
 
 typedef QSimpson<DIM>             QUADRATURE;
@@ -76,7 +76,7 @@ typedef BlockSparseMatrix<double> MATRIX;
 typedef BlockSparsityPattern      SPARSITYPATTERN;
 typedef BlockVector<double>       VECTOR;
 
-typedef PDEProblemContainer<LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
+typedef PDEProblemContainer<LocalPDE<EDC, FDC, DOFHANDLER, VECTOR, DIM>,
                             SimpleDirichletData<VECTOR, DIM>,
                             SPARSITYPATTERN,
                             VECTOR,
@@ -151,13 +151,13 @@ main(int argc, char **argv)
   FACEQUADRATURE face_quadrature_formula;
   IDC            idc(quadrature_formula, face_quadrature_formula);
 
-  LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM> LPDE;
+  LocalPDE<EDC, FDC, DOFHANDLER, VECTOR, DIM> LPDE;
 
-  LocalPointFunctionalDisp_1<CDC, FDC, DOFHANDLER, VECTOR, DIM>      LPFD_1;
-  LocalPointFunctionalDisp_2<CDC, FDC, DOFHANDLER, VECTOR, DIM>      LPFD_2;
-  LocalPointFunctionalDisp_3<CDC, FDC, DOFHANDLER, VECTOR, DIM>      LPFD_3;
-  LocalDomainFunctionalStress<CDC, FDC, DOFHANDLER, VECTOR, DIM>     LDFS;
-  LocalBoundaryFaceFunctionalUpBd<CDC, FDC, DOFHANDLER, VECTOR, DIM> LBFUB;
+  LocalPointFunctionalDisp_1<EDC, FDC, DOFHANDLER, VECTOR, DIM>      LPFD_1;
+  LocalPointFunctionalDisp_2<EDC, FDC, DOFHANDLER, VECTOR, DIM>      LPFD_2;
+  LocalPointFunctionalDisp_3<EDC, FDC, DOFHANDLER, VECTOR, DIM>      LPFD_3;
+  LocalDomainFunctionalStress<EDC, FDC, DOFHANDLER, VECTOR, DIM>     LDFS;
+  LocalBoundaryFaceFunctionalUpBd<EDC, FDC, DOFHANDLER, VECTOR, DIM> LBFUB;
 
   STH DOFH(triangulation, state_fe);
 
@@ -230,6 +230,6 @@ main(int argc, char **argv)
   return 0;
 }
 #undef FDC
-#undef CDC
+#undef EDC
 #undef FE
 #undef DOFHANDLER

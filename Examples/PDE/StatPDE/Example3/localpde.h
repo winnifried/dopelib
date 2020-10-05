@@ -39,7 +39,7 @@ template<
   bool HP, template<int, int> class DH, typename VECTOR, int dealdim>
   class LocalPDE : public PDEInterface<EDC, FDC, HP, DH, VECTOR, dealdim>
 #else
-emplate<
+template<
   template<template<int, int> class DH, typename VECTOR, int dealdim> class EDC,
   template<template<int, int> class DH, typename VECTOR, int dealdim> class FDC,
   template<int, int> class DH, typename VECTOR, int dealdim>

@@ -75,7 +75,7 @@ const static int DIM = 2;
 #endif
 
 #define FE FESystem
-#define CDC ElementDataContainer
+#define EDC ElementDataContainer
 #define FDC FaceDataContainer
 
 typedef QGauss<DIM> QUADRATURE;
@@ -85,12 +85,12 @@ typedef BlockSparsityPattern SPARSITYPATTERN;
 typedef BlockVector<double> VECTOR;
 
 typedef PDEProblemContainer<
-LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
+LocalPDE<EDC, FDC, DOFHANDLER, VECTOR, DIM>,
          SimpleDirichletData<VECTOR, DIM>,
          SPARSITYPATTERN,
          VECTOR, DIM> OP_BASE;
 
-typedef StateProblem<OP_BASE, LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
+typedef StateProblem<OP_BASE, LocalPDE<EDC, FDC, DOFHANDLER, VECTOR, DIM>,
         SimpleDirichletData<VECTOR, DIM>, SPARSITYPATTERN, VECTOR, DIM> PROB;
 
 #define TSP BackwardEulerProblem
@@ -98,7 +98,7 @@ typedef StateProblem<OP_BASE, LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
 #define DTSP BackwardEulerProblem
 
 typedef InstatPDEProblemContainer<TSP, DTSP,
-        LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
+        LocalPDE<EDC, FDC, DOFHANDLER, VECTOR, DIM>,
         SimpleDirichletData<VECTOR, DIM>,
         SPARSITYPATTERN,
         VECTOR, DIM> OP;
@@ -156,9 +156,9 @@ main(int argc, char **argv)
 
   //Define the localPDE and the functionals we are interested in. Here, LFunc is a dummy necessary for the control,
   //LPF is a SpaceTimePointevaluation
-  LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM> LPDE;
-  LocalPointFunctional<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM> LPF;
-  LocalPointFunctional2<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM> LPF2;
+  LocalPDE<EDC, FDC, DOFHANDLER, VECTOR, DIM> LPDE;
+  LocalPointFunctional<EDC, FDC, DOFHANDLER, VECTOR, DIM, DIM> LPF;
+  LocalPointFunctional2<EDC, FDC, DOFHANDLER, VECTOR, DIM, DIM> LPF2;
 
   //Time grid of [0,1]
   Triangulation<1> times;
@@ -236,6 +236,6 @@ main(int argc, char **argv)
 }
 
 #undef FDC
-#undef CDC
+#undef EDC
 #undef FE
 #undef DOFHANDLER

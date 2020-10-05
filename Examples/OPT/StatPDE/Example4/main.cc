@@ -73,17 +73,17 @@ typedef BlockSparseMatrix<double> MATRIX;
 typedef BlockSparsityPattern SPARSITYPATTERN;
 typedef BlockVector<double> VECTOR;
 
-#define CDC ElementDataContainer
+#define EDC ElementDataContainer
 #define FDC FaceDataContainer
 
-typedef LocalFunctional<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> COSTFUNCTIONAL;
-typedef FunctionalInterface<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> FUNCTIONALINTERFACE;
+typedef LocalFunctional<EDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> COSTFUNCTIONAL;
+typedef FunctionalInterface<EDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> FUNCTIONALINTERFACE;
 
 //Note that we use LocalDirichletData instead of SimpleDirichletData
 typedef OptProblemContainer<FUNCTIONALINTERFACE, COSTFUNCTIONAL,
-        LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
+        LocalPDE<EDC, FDC, DOFHANDLER, VECTOR, DIM>,
         LocalDirichletData<VECTOR, DIM>,
-        NoConstraints<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM>, SPARSITYPATTERN,
+        NoConstraints<EDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM>, SPARSITYPATTERN,
         VECTOR, CDIM, DIM> OP;
 typedef IntegratorDataContainer<DOFHANDLER, QUADRATURE, FACEQUADRATURE, VECTOR,
         DIM> IDC;
@@ -146,12 +146,12 @@ main(int argc, char **argv)
   IDC idc(quadrature_formula, face_quadrature_formula);
 
   //define the PDE and the co
-  LocalPDE<CDC, FDC, DOFHANDLER, VECTOR,  DIM> LPDE;
+  LocalPDE<EDC, FDC, DOFHANDLER, VECTOR,  DIM> LPDE;
   COSTFUNCTIONAL LFunc;
 
   STH DOFH(triangulation, control_fe, state_fe, DOpEtypes::stationary);
   
-  NoConstraints<CDC, FDC, DOFHANDLER, VECTOR, CDIM,
+  NoConstraints<EDC, FDC, DOFHANDLER, VECTOR, CDIM,
                 DIM> Constraints;
 
   OP P(LFunc, LPDE, Constraints, DOFH);
@@ -208,6 +208,6 @@ main(int argc, char **argv)
 
 
 #undef FDC
-#undef CDC
+#undef EDC
 #undef FE
 #undef DOFHANDLER

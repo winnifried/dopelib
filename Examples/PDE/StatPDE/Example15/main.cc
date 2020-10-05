@@ -23,8 +23,6 @@
 #include <fstream>
 #include <iostream>
 
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-
 #include <deal.II/base/exceptions.h>
 #include <deal.II/base/quadrature_lib.h>
 
@@ -71,7 +69,7 @@ const static int DIM = 3;
 #endif
 
 #define FE FESystem
-#define CDC ElementDataContainer
+#define EDC ElementDataContainer
 #define FDC FaceDataContainer
 
 // template <int dim, int dim2>
@@ -79,7 +77,7 @@ const static int DIM = 3;
 // template <int dim>
 // using FE = FESystem<dim>;
 // template <template <int, int> class DH, typename VECTOR, int dim>
-// using CDC = ElementDataContainer<DH, VECTOR, dim>;
+// using EDC = ElementDataContainer<DH, VECTOR, dim>;
 // template <template <int, int> class DH, typename VECTOR, int dim>
 // using FDC = FaceDataContainer<DH, VECTOR, dim>;
 
@@ -107,14 +105,14 @@ using PRECONDITIONERSSOR =
   DOpEWrapper::PreconditionIdentity_Wrapper<MATRIX>; // TODO !!!
 
 // Define problemcontainer for block and non block
-typedef PDEProblemContainer<LocalPDE<CDC, FDC, DOFHANDLER, VECTORBLOCK, DIM>,
+typedef PDEProblemContainer<LocalPDE<EDC, FDC, DOFHANDLER, VECTORBLOCK, DIM>,
                             SimpleDirichletData<VECTORBLOCK, DIM>,
                             SPARSITYPATTERNBLOCK,
                             VECTORBLOCK,
                             DIM>
   OPBLOCK;
 
-typedef PDEProblemContainer<LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
+typedef PDEProblemContainer<LocalPDE<EDC, FDC, DOFHANDLER, VECTOR, DIM>,
                             SimpleDirichletData<VECTOR, DIM>,
                             SPARSITYPATTERN,
                             VECTOR,
@@ -229,11 +227,11 @@ main(int argc, char **argv)
 
   // Set up the pde and the pointfunctional for block-vectors and non block
   // vectors
-  LocalPDE<CDC, FDC, DOFHANDLER, VECTORBLOCK, DIM>              LPDE1;
-  LocalPointFunctionalX<CDC, FDC, DOFHANDLER, VECTORBLOCK, DIM> LPFX1;
+  LocalPDE<EDC, FDC, DOFHANDLER, VECTORBLOCK, DIM>              LPDE1;
+  LocalPointFunctionalX<EDC, FDC, DOFHANDLER, VECTORBLOCK, DIM> LPFX1;
 
-  LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>              LPDE2;
-  LocalPointFunctionalX<CDC, FDC, DOFHANDLER, VECTOR, DIM> LPFX2;
+  LocalPDE<EDC, FDC, DOFHANDLER, VECTOR, DIM>              LPDE2;
+  LocalPointFunctionalX<EDC, FDC, DOFHANDLER, VECTOR, DIM> LPFX2;
 
   // Define the different STH and OP objects
   STHBLOCK DOFH1(triangulation, state_fe);
@@ -427,6 +425,6 @@ main(int /*argc*/, char **/*argv*/)
 }
 #endif //Dopelib with trilinos
 #undef FDC
-#undef CDC
+#undef EDC
 #undef FE
 #undef DOFHANDLER

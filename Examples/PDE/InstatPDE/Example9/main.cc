@@ -80,7 +80,7 @@ const static int DIM = 2;
 #endif
 
 #define FE FESystem
-#define CDC ElementDataContainer
+#define EDC ElementDataContainer
 #define FDC FaceDataContainer
 
 typedef QGauss<DIM> QUADRATURE;
@@ -89,15 +89,15 @@ typedef BlockSparseMatrix<double> MATRIX;
 typedef BlockSparsityPattern SPARSITYPATTERN;
 typedef BlockVector<double> VECTOR;
 
-//typedef FunctionalInterface<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM> FUNC;
+//typedef FunctionalInterface<EDC, FDC, DOFHANDLER, VECTOR, DIM, DIM> FUNC;
 
 typedef PDEProblemContainer<
-LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
+LocalPDE<EDC, FDC, DOFHANDLER, VECTOR, DIM>,
          SimpleDirichletData<VECTOR, DIM>,
          SPARSITYPATTERN,
          VECTOR, DIM> OP_BASE;
 
-typedef StateProblem<OP_BASE, LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
+typedef StateProblem<OP_BASE, LocalPDE<EDC, FDC, DOFHANDLER, VECTOR, DIM>,
         SimpleDirichletData<VECTOR, DIM>, SPARSITYPATTERN, VECTOR, DIM> PROB;
 // Typedefs for timestep problem
 
@@ -106,7 +106,7 @@ typedef StateProblem<OP_BASE, LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
 #define DTSP BackwardEulerProblem
 
 typedef InstatPDEProblemContainer<TSP, DTSP,
-        LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
+        LocalPDE<EDC, FDC, DOFHANDLER, VECTOR, DIM>,
         SimpleDirichletData<VECTOR, DIM>,
         SPARSITYPATTERN,
         VECTOR, DIM> OP;
@@ -177,8 +177,8 @@ main(int argc, char **argv)
 
   //Define the localPDE and the functionals we are interested in. Here, LFunc is a dummy necessary for the control,
   //LPF is a SpaceTimePointevaluation
-  LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM> LPDE;
-  LocalPointFunctional<CDC, FDC, DOFHANDLER, VECTOR, DIM, DIM> LPF;
+  LocalPDE<EDC, FDC, DOFHANDLER, VECTOR, DIM> LPDE;
+  LocalPointFunctional<EDC, FDC, DOFHANDLER, VECTOR, DIM, DIM> LPF;
 
   //Time grid of [0,1]
   Triangulation<1> times;
@@ -287,7 +287,7 @@ main(int argc, char **argv)
 }
 
 #undef FDC
-#undef CDC
+#undef EDC
 #undef FE
 #undef DOFHANDLER
 

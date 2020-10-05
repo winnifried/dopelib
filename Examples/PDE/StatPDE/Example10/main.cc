@@ -68,7 +68,7 @@ const static int DIM = 2;
 #endif
 
 #define FE FESystem
-#define CDC ElementDataContainer
+#define EDC ElementDataContainer
 #define FDC FaceDataContainer
 
 typedef QGauss<DIM> QUADRATURE;
@@ -77,7 +77,7 @@ typedef SparseMatrix<double> MATRIX;
 typedef SparsityPattern SPARSITYPATTERN;
 typedef Vector<double> VECTOR;
 
-typedef PDEProblemContainer<LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
+typedef PDEProblemContainer<LocalPDE<EDC, FDC, DOFHANDLER, VECTOR, DIM>,
         SimpleDirichletData<VECTOR, DIM>, SPARSITYPATTERN, VECTOR, DIM> OP;
 typedef IntegratorDataContainer<DOFHANDLER, QUADRATURE, FACEQUADRATURE, VECTOR,
         DIM> IDC;
@@ -120,11 +120,11 @@ main(int argc, char **argv)
   ParameterReader pr;
   RP::declare_params(pr);
   DOpEOutputHandler<VECTOR>::declare_params(pr);
-  LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>::declare_params(pr);
+  LocalPDE<EDC, FDC, DOFHANDLER, VECTOR, DIM>::declare_params(pr);
   BoundaryParabel::declare_params(pr);
-  LocalBoundaryFaceFunctionalDrag<CDC, FDC, DOFHANDLER, VECTOR, DIM>::declare_params(
+  LocalBoundaryFaceFunctionalDrag<EDC, FDC, DOFHANDLER, VECTOR, DIM>::declare_params(
     pr);
-  LocalBoundaryFaceFunctionalLift<CDC, FDC, DOFHANDLER, VECTOR, DIM>::declare_params(
+  LocalBoundaryFaceFunctionalLift<EDC, FDC, DOFHANDLER, VECTOR, DIM>::declare_params(
     pr);
   LINEARSOLVER::declare_params(pr);
   pr.read_parameters(paramfile);
@@ -163,13 +163,13 @@ main(int argc, char **argv)
   FACEQUADRATURE face_quadrature_formula(3);
   IDC idc(quadrature_formula, face_quadrature_formula);
 
-  LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM> LPDE(pr);
+  LocalPDE<EDC, FDC, DOFHANDLER, VECTOR, DIM> LPDE(pr);
 
-  LocalPointFunctionalPressure<CDC, FDC, DOFHANDLER, VECTOR, DIM> LPFP;
-  LocalPointFunctionalDeflectionX<CDC, FDC, DOFHANDLER, VECTOR, DIM> LPFDX;
-  LocalPointFunctionalDeflectionY<CDC, FDC, DOFHANDLER, VECTOR, DIM> LPFDY;
-  LocalBoundaryFaceFunctionalDrag<CDC, FDC, DOFHANDLER, VECTOR, DIM> LBFD(pr);
-  LocalBoundaryFaceFunctionalLift<CDC, FDC, DOFHANDLER, VECTOR, DIM> LBFL(pr);
+  LocalPointFunctionalPressure<EDC, FDC, DOFHANDLER, VECTOR, DIM> LPFP;
+  LocalPointFunctionalDeflectionX<EDC, FDC, DOFHANDLER, VECTOR, DIM> LPFDX;
+  LocalPointFunctionalDeflectionY<EDC, FDC, DOFHANDLER, VECTOR, DIM> LPFDY;
+  LocalBoundaryFaceFunctionalDrag<EDC, FDC, DOFHANDLER, VECTOR, DIM> LBFD(pr);
+  LocalBoundaryFaceFunctionalLift<EDC, FDC, DOFHANDLER, VECTOR, DIM> LBFL(pr);
 
   STH DOFH(triangulation, state_fe);
 
@@ -274,6 +274,6 @@ main(int argc, char **argv)
 }
 
 #undef FDC
-#undef CDC
+#undef EDC
 #undef FE
 #undef DOFHANDLER

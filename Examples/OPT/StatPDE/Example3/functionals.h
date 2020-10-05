@@ -240,9 +240,9 @@ public:
 
   double
 #if DEAL_II_VERSION_GTE(9,3,0)
-BoundaryValue(const FaceDataContainer<HP, DH, VECTOR, dealdim> &fdc)
+BoundaryValue(const FDC<HP, DH, VECTOR, dealdim> &fdc)
 #else
-BoundaryValue(const FaceDataContainer<DH, VECTOR, dealdim> &fdc)
+BoundaryValue(const FDC<DH, VECTOR, dealdim> &fdc)
 #endif
   {
     const auto &state_fe_face_values = fdc.GetFEFaceValuesState();
@@ -371,9 +371,9 @@ public:
 
   double
 #if DEAL_II_VERSION_GTE(9,3,0)
-BoundaryValue(const FaceDataContainer<HP, DH, VECTOR, dealdim> &fdc)
+BoundaryValue(const FDC<HP, DH, VECTOR, dealdim> &fdc)
 #else
-BoundaryValue(const FaceDataContainer<DH, VECTOR, dealdim> &fdc)
+BoundaryValue(const FDC<DH, VECTOR, dealdim> &fdc)
 #endif
   {
     const auto &state_fe_face_values = fdc.GetFEFaceValuesState();

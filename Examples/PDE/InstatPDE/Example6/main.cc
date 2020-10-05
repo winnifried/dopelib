@@ -74,7 +74,7 @@ const static int DIM = 2;
 #define DOFHANDLER hp::DoFHandler
 #endif
 #define FE hp::FECollection
-#define CDC ElementDataContainer
+#define EDC ElementDataContainer
 #define FDC FaceDataContainer
 
 typedef hp::QCollection<DIM> QUADRATURE;
@@ -84,12 +84,12 @@ typedef BlockSparsityPattern SPARSITYPATTERN;
 typedef BlockVector<double> VECTOR;
 
 typedef PDEProblemContainer<
-LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
+LocalPDE<EDC, FDC, DOFHANDLER, VECTOR, DIM>,
          SimpleDirichletData<VECTOR, DIM>,
          SPARSITYPATTERN,
   VECTOR, DIM, FE, DOFHANDLER> OP_BASE;
 
-typedef StateProblem<OP_BASE, LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
+typedef StateProblem<OP_BASE, LocalPDE<EDC, FDC, DOFHANDLER, VECTOR, DIM>,
         SimpleDirichletData<VECTOR, DIM>, SPARSITYPATTERN, VECTOR, DIM> PROB;
 
 // Typedefs for timestep problem
@@ -98,7 +98,7 @@ typedef StateProblem<OP_BASE, LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
 #define DTSP BackwardEulerProblem
 
 typedef InstatPDEProblemContainer<TSP, DTSP,
-        LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
+        LocalPDE<EDC, FDC, DOFHANDLER, VECTOR, DIM>,
         SimpleDirichletData<VECTOR, DIM>,
         SPARSITYPATTERN,
         VECTOR, DIM, FE, DOFHANDLER> OP;
@@ -138,7 +138,7 @@ main(int argc, char **argv)
   ParameterReader pr;
   RP::declare_params(pr);
   DOpEOutputHandler<VECTOR>::declare_params(pr);
-  LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>::declare_params(pr);
+  LocalPDE<EDC, FDC, DOFHANDLER, VECTOR, DIM>::declare_params(pr);
   pr.read_parameters(paramfile);
 
   Triangulation<DIM> triangulation;
@@ -170,10 +170,10 @@ main(int argc, char **argv)
 
   IDC idc(q_coll, face_q_coll);
 
-  LocalPDE<CDC, FDC, DOFHANDLER,VECTOR, DIM> LPDE(pr);
+  LocalPDE<EDC, FDC, DOFHANDLER,VECTOR, DIM> LPDE(pr);
 
-  LocalPointFunctionalP1<CDC, FDC, DOFHANDLER,VECTOR, DIM, DIM> LPFP1;
-  LocalPointFunctionalP2<CDC, FDC, DOFHANDLER,VECTOR, DIM, DIM> LPFP2;
+  LocalPointFunctionalP1<EDC, FDC, DOFHANDLER,VECTOR, DIM, DIM> LPFP1;
+  LocalPointFunctionalP2<EDC, FDC, DOFHANDLER,VECTOR, DIM, DIM> LPFP2;
 
   //Time grid of [0,100000] divided into 100 intervals
   //corresponding to a time step size of 1000 (days).
@@ -286,7 +286,7 @@ main(int argc, char **argv)
 }
 
 #undef FDC
-#undef CDC
+#undef EDC
 #undef FE
 #undef DOFHANDLER
 

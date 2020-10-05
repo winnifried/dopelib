@@ -73,7 +73,7 @@ const static int DIM = 2;
 #endif
 
 #define FE FESystem
-#define CDC ElementDataContainer
+#define EDC ElementDataContainer
 #define FDC FaceDataContainer
 
 typedef QGauss<DIM> QUADRATURE;
@@ -82,7 +82,7 @@ typedef SparseMatrix<double> MATRIX;
 typedef SparsityPattern SPARSITYPATTERN;
 typedef Vector<double> VECTOR;
 
-typedef PDEProblemContainer<LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
+typedef PDEProblemContainer<LocalPDE<EDC, FDC, DOFHANDLER, VECTOR, DIM>,
         SimpleDirichletData<VECTOR, DIM>, SPARSITYPATTERN, VECTOR, DIM> OP;
 typedef IntegratorDataContainer<DOFHANDLER, QUADRATURE, FACEQUADRATURE, VECTOR,
         DIM> IDC;
@@ -165,8 +165,8 @@ main(int argc, char **argv)
   FACEQUADRATURE face_quadrature_formula(2);
   IDC idc(quadrature_formula, face_quadrature_formula);
 
-  LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM> LPDE;
-  BoundaryFunctional<CDC, FDC, DOFHANDLER, VECTOR, DIM> BF;
+  LocalPDE<EDC, FDC, DOFHANDLER, VECTOR, DIM> LPDE;
+  BoundaryFunctional<EDC, FDC, DOFHANDLER, VECTOR, DIM> BF;
 
 #if DEAL_II_VERSION_GTE(9,3,0)
   DOpEWrapper::Mapping<DIM, false > mapping(order_mapping);
@@ -332,6 +332,6 @@ main(int argc, char **argv)
   return 0;
 }
 #undef FDC
-#undef CDC
+#undef EDC
 #undef FE
 #undef DOFHANDLER

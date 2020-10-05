@@ -71,14 +71,14 @@ typedef BlockSparseMatrix<double> MATRIX;
 typedef BlockSparsityPattern SPARSITYPATTERN;
 typedef BlockVector<double> VECTOR;
 
-#define CDC ElementDataContainer
+#define EDC ElementDataContainer
 #define FDC FaceDataContainer
 
-typedef FunctionalInterface<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> FUNCTIONALINTERFACE;
-typedef LocalFunctional<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> COSTFUNCTIONAL;
-typedef LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM> PDE;
+typedef FunctionalInterface<EDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> FUNCTIONALINTERFACE;
+typedef LocalFunctional<EDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> COSTFUNCTIONAL;
+typedef LocalPDE<EDC, FDC, DOFHANDLER, VECTOR, DIM> PDE;
 typedef SimpleDirichletData<VECTOR, DIM> DD;
-typedef ConstraintInterface<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> CONS;
+typedef ConstraintInterface<EDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> CONS;
 
 typedef OptProblemContainer<FUNCTIONALINTERFACE, COSTFUNCTIONAL, PDE, DD, CONS,
         SPARSITYPATTERN, VECTOR, CDIM, DIM> OP;
@@ -147,8 +147,8 @@ main(int argc, char **argv)
   COSTFUNCTIONAL LFunc;
 
   //AuxFunctionals
-  LocalPointFunctional<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> LPF;
-  LocalMeanValueFunctional<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> LMF;
+  LocalPointFunctional<EDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> LPF;
+  LocalMeanValueFunctional<EDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> LMF;
 
   //Add Constrained description
   std::vector<std::vector<unsigned int> > lcc(1); //1 Control Block
@@ -160,7 +160,7 @@ main(int argc, char **argv)
   MethodOfLines_SpaceTimeHandler<FE, DOFHANDLER, SPARSITYPATTERN, VECTOR, CDIM,
                                  DIM> DOFH(triangulation, control_fe, state_fe, constraints,
                                            DOpEtypes::stationary);
-  LocalConstraint<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> LC;
+  LocalConstraint<EDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> LC;
 
   OP P(LFunc, LPDE, LC, DOFH);
 
@@ -203,6 +203,6 @@ main(int argc, char **argv)
   return 0;
 }
 #undef FDC
-#undef CDC
+#undef EDC
 #undef FE
 #undef DOFHANDLER

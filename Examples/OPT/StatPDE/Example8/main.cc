@@ -73,14 +73,14 @@ typedef BlockSparseMatrix<double> MATRIX;
 typedef BlockSparsityPattern SPARSITYPATTERN;
 typedef BlockVector<double> VECTOR;
 
-#define CDC ElementDataContainer
+#define EDC ElementDataContainer
 #define FDC FaceDataContainer
 
-typedef FunctionalInterface<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> FUNCTIONALINTERFACE;
-typedef LocalFunctional<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> COSTFUNCTIONAL;
-typedef LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM> PDE;
+typedef FunctionalInterface<EDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> FUNCTIONALINTERFACE;
+typedef LocalFunctional<EDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> COSTFUNCTIONAL;
+typedef LocalPDE<EDC, FDC, DOFHANDLER, VECTOR, DIM> PDE;
 typedef SimpleDirichletData<VECTOR, DIM> DD;
-typedef ConstraintInterface<CDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> CONS;
+typedef ConstraintInterface<EDC, FDC, DOFHANDLER, VECTOR, CDIM, DIM> CONS;
 
 typedef OptProblemContainer<FUNCTIONALINTERFACE, COSTFUNCTIONAL, PDE, DD, CONS,
         SPARSITYPATTERN, VECTOR, CDIM, DIM> OP;
@@ -136,8 +136,8 @@ main(int argc, char **argv)
   QGauss<1> face_quadrature_formula(2);
   IDC idc(quadrature_formula, face_quadrature_formula);
 
-  LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, 2> LPDE;
-  LocalFunctional<CDC, FDC, DOFHANDLER, VECTOR, 2, 2> LFunc;
+  LocalPDE<EDC, FDC, DOFHANDLER, VECTOR, 2> LPDE;
+  LocalFunctional<EDC, FDC, DOFHANDLER, VECTOR, 2, 2> LFunc;
 
   //triangulation.refine_global (5);
   triangulation.refine_global(3);
@@ -163,7 +163,7 @@ main(int argc, char **argv)
   
   DOFH.SetUserDefinedDoFConstraints(constraints_mkr);
 
-  LocalConstraint<CDC, FDC, DOFHANDLER, VECTOR, 2, 2> LC;
+  LocalConstraint<EDC, FDC, DOFHANDLER, VECTOR, 2, 2> LC;
 
   OP P(LFunc, LPDE, LC, DOFH);
 
@@ -216,6 +216,6 @@ main(int argc, char **argv)
   return 0;
 }
 #undef FDC
-#undef CDC
+#undef EDC
 #undef FE
 #undef DOFHANDLER

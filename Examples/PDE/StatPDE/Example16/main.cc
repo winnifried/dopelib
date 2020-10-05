@@ -75,7 +75,7 @@ const static int DIM = 2;
 #endif
 
 #define FE FESystem
-#define CDC ElementDataContainer
+#define EDC ElementDataContainer
 #define FDC FaceDataContainer
 
 typedef QGaussLobatto<DIM> QUADRATURE;
@@ -84,7 +84,7 @@ typedef SparseMatrix<double> MATRIX;
 typedef SparsityPattern SPARSITYPATTERN;
 typedef Vector<double> VECTOR;
 
-typedef PDEProblemContainer<LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM>,
+typedef PDEProblemContainer<LocalPDE<EDC, FDC, DOFHANDLER, VECTOR, DIM>,
         SimpleDirichletData<VECTOR, DIM>, SPARSITYPATTERN, VECTOR, DIM> OP;
 typedef IntegratorDataContainer<DOFHANDLER, QUADRATURE, FACEQUADRATURE,
         VECTOR, DIM> IDC;
@@ -171,8 +171,8 @@ main(int argc, char **argv)
   //**************************************************************************
 
   //Functionals*************************************************
-  LocalFaceFunctional<CDC, FDC, DOFHANDLER, VECTOR, DIM> LFF;
-  LocalPDE<CDC, FDC, DOFHANDLER, VECTOR, DIM> LPDE;
+  LocalFaceFunctional<EDC, FDC, DOFHANDLER, VECTOR, DIM> LFF;
+  LocalPDE<EDC, FDC, DOFHANDLER, VECTOR, DIM> LPDE;
   //*************************************************
 
   //space time handler***********************************/
@@ -338,6 +338,6 @@ main(int argc, char **argv)
   return 0;
 }
 #undef FDC
-#undef CDC
+#undef EDC
 #undef FE
 #undef DOFHANDLER
