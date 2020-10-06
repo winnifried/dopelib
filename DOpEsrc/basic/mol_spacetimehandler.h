@@ -90,8 +90,13 @@ namespace DOpE
       SpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dopedim, dealdim>(type, index_setter),
 #endif
       triangulation_(triangulation),
+#if DEAL_II_VERSION_GTE(9,3,0)
+      control_dof_handler_(triangulation_,HP),
+      state_dof_handler_(triangulation_,HP),
+#else
       control_dof_handler_(triangulation_),
       state_dof_handler_(triangulation_),
+#endif
       control_fe_(&control_fe),
       state_fe_(&state_fe),
 #if DEAL_II_VERSION_GTE(9,3,0)
@@ -134,8 +139,13 @@ namespace DOpE
       SpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dopedim, dealdim>(times, type, index_setter),
 #endif
       triangulation_(triangulation),
+#if DEAL_II_VERSION_GTE(9,3,0)
+      control_dof_handler_(triangulation_,HP),
+      state_dof_handler_(triangulation_,HP),
+#else
       control_dof_handler_(triangulation_),
       state_dof_handler_(triangulation_),
+#endif
       control_fe_(&control_fe),
       state_fe_(&state_fe),
 #if DEAL_II_VERSION_GTE(9,3,0)
@@ -176,8 +186,13 @@ namespace DOpE
       SpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dopedim, dealdim>(type, index_setter),
 #endif
       triangulation_(triangulation),
+#if DEAL_II_VERSION_GTE(9,3,0)
+      control_dof_handler_(triangulation_,HP),
+      state_dof_handler_(triangulation_,HP),
+#else
       control_dof_handler_(triangulation_),
       state_dof_handler_(triangulation_),
+#endif
       control_fe_(&control_fe),
       state_fe_(&state_fe),
 #if DEAL_II_VERSION_GTE(9,3,0)
@@ -220,8 +235,13 @@ namespace DOpE
       SpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dopedim, dealdim>(times, type, index_setter),
 #endif
       triangulation_(triangulation),
+#if DEAL_II_VERSION_GTE(9,3,0)
+      control_dof_handler_(triangulation_,HP),
+      state_dof_handler_(triangulation_,HP),
+#else
       control_dof_handler_(triangulation_),
       state_dof_handler_(triangulation_),
+#endif
       control_fe_(&control_fe),
       state_fe_(&state_fe),
 #if DEAL_II_VERSION_GTE(9,3,0)

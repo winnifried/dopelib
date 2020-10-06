@@ -68,20 +68,24 @@ namespace DOpE
       const ActiveFEIndexSetterInterface<dealdim> &index_setter =
         ActiveFEIndexSetterInterface<dealdim>())
 #if DEAL_II_VERSION_GTE(9,3,0)
-      : StateSpaceTimeHandler<FE, HP, DH, SPARSITYPATTERN, VECTOR,
+      : StateSpaceTimeHandler<FE, HP, DH, SPARSITYPATTERN, VECTOR, dealdim>(index_setter),
 #else
-      : StateSpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR,
+      : StateSpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dealdim>(index_setter),
 #endif
-        dealdim>(index_setter), sparse_mkr_dynamic_(true), triangulation_(
-          triangulation), state_dof_handler_(triangulation_), state_fe_(
-          &state_fe),
+      sparse_mkr_dynamic_(true),
+      triangulation_(triangulation),
+#if DEAL_II_VERSION_GTE(9,3,0)
+      state_dof_handler_(triangulation_,HP),
+#else
+      state_dof_handler_(triangulation_),
+#endif
+      state_fe_(&state_fe),
 #if DEAL_II_VERSION_GTE(9,3,0)
       mapping_(&DOpEWrapper::StaticMappingQ1<dealdim, HP>::mapping_q1),
 #else
       mapping_(&DOpEWrapper::StaticMappingQ1<dealdim, DH>::mapping_q1),
 #endif
-      state_mesh_transfer_(
-          NULL)
+      state_mesh_transfer_(NULL)
     {
       sparsitymaker_ = new SparsityMaker<DH, dealdim>(flux_pattern);
       user_defined_dof_constr_ = NULL;
@@ -93,13 +97,18 @@ namespace DOpE
       const ActiveFEIndexSetterInterface<dealdim> &index_setter =
         ActiveFEIndexSetterInterface<dealdim>())
 #if DEAL_II_VERSION_GTE(9,3,0)
-      : StateSpaceTimeHandler<FE, HP, DH, SPARSITYPATTERN, VECTOR,
+      : StateSpaceTimeHandler<FE, HP, DH, SPARSITYPATTERN, VECTOR, dealdim>(times, index_setter),
 #else
-      : StateSpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR,
+      : StateSpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dealdim>(times, index_setter),
 #endif
-      dealdim>(times, index_setter), sparse_mkr_dynamic_(true), triangulation_(
-          triangulation), state_dof_handler_(triangulation_), state_fe_(
-          &state_fe),
+      sparse_mkr_dynamic_(true),
+      triangulation_(triangulation),
+#if DEAL_II_VERSION_GTE(9,3,0)
+      state_dof_handler_(triangulation_,HP),
+#else
+      state_dof_handler_(triangulation_),
+#endif
+      state_fe_(&state_fe),
 #if DEAL_II_VERSION_GTE(9,3,0)
       mapping_(&DOpEWrapper::StaticMappingQ1<dealdim, HP>::mapping_q1),
 #else
@@ -124,13 +133,18 @@ namespace DOpE
       const ActiveFEIndexSetterInterface<dealdim> &index_setter =
         ActiveFEIndexSetterInterface<dealdim>())
 #if DEAL_II_VERSION_GTE(9,3,0)
-      : StateSpaceTimeHandler<FE, HP, DH, SPARSITYPATTERN, VECTOR,
+      : StateSpaceTimeHandler<FE, HP, DH, SPARSITYPATTERN, VECTOR, dealdim>(index_setter),
 #else
-      : StateSpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR,
+      : StateSpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dealdim>(index_setter),
 #endif
-      dealdim>(index_setter), sparse_mkr_dynamic_(true), triangulation_(
-          triangulation), state_dof_handler_(triangulation_), state_fe_(
-          &state_fe), mapping_(&mapping), state_mesh_transfer_(NULL)
+      sparse_mkr_dynamic_(true),
+      triangulation_(triangulation),
+#if DEAL_II_VERSION_GTE(9,3,0)
+      state_dof_handler_(triangulation_,HP),
+#else
+      state_dof_handler_(triangulation_),
+#endif
+      state_fe_(&state_fe), mapping_(&mapping), state_mesh_transfer_(NULL)
     {
       sparsitymaker_ = new SparsityMaker<DH, dealdim>(flux_pattern);
       user_defined_dof_constr_ = NULL;
@@ -148,13 +162,18 @@ namespace DOpE
       const ActiveFEIndexSetterInterface<dealdim> &index_setter =
         ActiveFEIndexSetterInterface<dealdim>())
 #if DEAL_II_VERSION_GTE(9,3,0)
-      : StateSpaceTimeHandler<FE, HP, DH, SPARSITYPATTERN, VECTOR,
+      : StateSpaceTimeHandler<FE, HP, DH, SPARSITYPATTERN, VECTOR, dealdim>(times, index_setter),
 #else
-      : StateSpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR,
+      : StateSpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dealdim>(times, index_setter),
 #endif
-      dealdim>(times, index_setter), sparse_mkr_dynamic_(true), triangulation_(
-          triangulation), state_dof_handler_(triangulation_), state_fe_(
-          &state_fe), mapping_(&mapping), state_mesh_transfer_(NULL)
+      sparse_mkr_dynamic_(true),
+      triangulation_(triangulation),
+#if DEAL_II_VERSION_GTE(9,3,0)
+      state_dof_handler_(triangulation_,HP),
+#else
+      state_dof_handler_(triangulation_),
+#endif
+      state_fe_(&state_fe), mapping_(&mapping), state_mesh_transfer_(NULL)
     {
       sparsitymaker_ = new SparsityMaker<DH, dealdim>(flux_pattern);
       user_defined_dof_constr_ = NULL;

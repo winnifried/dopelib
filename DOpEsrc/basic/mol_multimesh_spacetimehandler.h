@@ -78,22 +78,27 @@ namespace DOpE
       const ActiveFEIndexSetterInterface<dim, dim> &index_setter =
         ActiveFEIndexSetterInterface<dim, dim>()) :
 #if DEAL_II_VERSION_GTE(9,3,0)
-    SpaceTimeHandler<FE, HP, DH, SPARSITYPATTERN, VECTOR, dim, dim>(type,
+    SpaceTimeHandler<FE, HP, DH, SPARSITYPATTERN, VECTOR, dim, dim>(type,index_setter),
 #else
-    SpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dim, dim>(type,
+    SpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dim, dim>(type,index_setter),
 #endif
-								index_setter),
-								    state_triangulation_(triangulation), control_dof_handler_(
-								  control_triangulation_), state_dof_handler_(
-								    state_triangulation_), control_fe_(&control_fe), state_fe_(
-								      &state_fe), mapping_(
+      state_triangulation_(triangulation),
 #if DEAL_II_VERSION_GTE(9,3,0)
-									DOpEWrapper::StaticMappingQ1<dim, HP>::mapping_q1),
+      control_dof_handler_(control_triangulation_,HP),
+      state_dof_handler_(state_triangulation_,HP),
 #else
-									DOpEWrapper::StaticMappingQ1<dim, DH>::mapping_q1),
+      control_dof_handler_(control_triangulation_),
+      state_dof_handler_(state_triangulation_),
 #endif
-      constraints_(), control_mesh_transfer_(
-								    NULL), state_mesh_transfer_(NULL), sparse_mkr_dynamic_(true)
+      control_fe_(&control_fe),
+      state_fe_(&state_fe), 
+#if DEAL_II_VERSION_GTE(9,3,0)
+      mapping_(DOpEWrapper::StaticMappingQ1<dim, HP>::mapping_q1),
+#else
+      mapping_(DOpEWrapper::StaticMappingQ1<dim, DH>::mapping_q1),
+#endif
+      constraints_(),
+      control_mesh_transfer_(NULL), state_mesh_transfer_(NULL), sparse_mkr_dynamic_(true)
     {
       control_triangulation_.copy_triangulation(state_triangulation_);
       sparsitymaker_ = new SparsityMaker<DH, dim>(flux_pattern);
@@ -108,21 +113,27 @@ namespace DOpE
       const ActiveFEIndexSetterInterface<dim, dim> &index_setter =
         ActiveFEIndexSetterInterface<dim, dim>()) :
 #if DEAL_II_VERSION_GTE(9,3,0)
-    SpaceTimeHandler<FE, HP, DH, SPARSITYPATTERN, VECTOR, dim, dim>(times,
+    SpaceTimeHandler<FE, HP, DH, SPARSITYPATTERN, VECTOR, dim, dim>(times, type, index_setter),
 #else
-    SpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dim, dim>(times,
+    SpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dim, dim>(times, type, index_setter),
 #endif
-								type, index_setter), state_triangulation_(triangulation), control_dof_handler_(
-								  control_triangulation_), state_dof_handler_(
-								    state_triangulation_), control_fe_(&control_fe), state_fe_(
-								      &state_fe), mapping_(
+      state_triangulation_(triangulation),
 #if DEAL_II_VERSION_GTE(9,3,0)
-									DOpEWrapper::StaticMappingQ1<dim, HP>::mapping_q1),
+      control_dof_handler_(control_triangulation_,HP),
+      state_dof_handler_(state_triangulation_,HP),
 #else
-									DOpEWrapper::StaticMappingQ1<dim, DH>::mapping_q1),
+      control_dof_handler_(control_triangulation_),
+      state_dof_handler_(state_triangulation_),
 #endif
-								    constraints_(), control_mesh_transfer_(
-                                                                                      NULL), state_mesh_transfer_(NULL), sparse_mkr_dynamic_(true)
+      control_fe_(&control_fe),
+      state_fe_(&state_fe), 
+#if DEAL_II_VERSION_GTE(9,3,0)
+      mapping_(DOpEWrapper::StaticMappingQ1<dim, HP>::mapping_q1),
+#else
+      mapping_(DOpEWrapper::StaticMappingQ1<dim, DH>::mapping_q1),
+#endif
+      constraints_(),
+      control_mesh_transfer_(NULL), state_mesh_transfer_(NULL), sparse_mkr_dynamic_(true)
     {
       control_triangulation_.copy_triangulation(state_triangulation_);
       sparsitymaker_ = new SparsityMaker<DH, dim>(flux_pattern);
@@ -137,14 +148,20 @@ namespace DOpE
       const ActiveFEIndexSetterInterface<dim, dim> &index_setter =
         ActiveFEIndexSetterInterface<dim, dim>()) :
 #if DEAL_II_VERSION_GTE(9,3,0)
-    SpaceTimeHandler<FE, HP, DH, SPARSITYPATTERN, VECTOR, dim, dim>(type,
+    SpaceTimeHandler<FE, HP, DH, SPARSITYPATTERN, VECTOR, dim, dim>(type,index_setter),
 #else
-    SpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dim, dim>(type,
+    SpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dim, dim>(type,index_setter),
 #endif
-                                                                  index_setter),
-								    state_triangulation_(triangulation),
-								    control_dof_handler_(control_triangulation_),
-								    state_dof_handler_(state_triangulation_), control_fe_(&control_fe), state_fe_(&state_fe),
+      state_triangulation_(triangulation),
+#if DEAL_II_VERSION_GTE(9,3,0)
+      control_dof_handler_(control_triangulation_,HP),
+      state_dof_handler_(state_triangulation_,HP),
+#else
+      control_dof_handler_(control_triangulation_),
+      state_dof_handler_(state_triangulation_),
+#endif
+      control_fe_(&control_fe),
+      state_fe_(&state_fe),
 #if DEAL_II_VERSION_GTE(9,3,0)
 								    mapping_(DOpEWrapper::StaticMappingQ1<dim, HP>::mapping_q1),
 #else
@@ -173,18 +190,22 @@ namespace DOpE
 #else
 	SpaceTimeHandler<FE, DH, SPARSITYPATTERN, VECTOR, dim, dim>(times,type, index_setter),
 #endif
-								    state_triangulation_(triangulation), control_dof_handler_(
-                                                                      control_triangulation_), state_dof_handler_(
-                                                                          state_triangulation_), control_fe_(&control_fe), state_fe_(
-                                                                              &state_fe),
+	  state_triangulation_(triangulation),
+#if DEAL_II_VERSION_GTE(9,3,0)
+	  control_dof_handler_(control_triangulation_,HP),
+	  state_dof_handler_(state_triangulation_,HP),
+#else
+	  control_dof_handler_(control_triangulation_),
+	  state_dof_handler_(state_triangulation_),
+#endif
+	  control_fe_(&control_fe),
+	  state_fe_(&state_fe),
 #if DEAL_II_VERSION_GTE(9,3,0)
 								    mapping_(DOpEWrapper::StaticMappingQ1<dim, HP>::mapping_q1),
 #else
 								    mapping_(DOpEWrapper::StaticMappingQ1<dim, DH>::mapping_q1),
 #endif
-								    constraints_(
-                                                                                      c), control_mesh_transfer_(NULL), state_mesh_transfer_(NULL), sparse_mkr_dynamic_(
-                                                                                          true)
+	  constraints_(c), control_mesh_transfer_(NULL), state_mesh_transfer_(NULL), sparse_mkr_dynamic_(true)
     {
       control_triangulation_.copy_triangulation(state_triangulation_);
       sparsitymaker_ = new SparsityMaker<DH, dim>(flux_pattern);

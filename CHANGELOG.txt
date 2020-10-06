@@ -1,5 +1,6 @@
 Changelog DOpE
 ==============
+06.10.2020: Fixed SetActiveFEIndex* methods to work with the merged DoFHandlers
 05.10.2020: To adjust to the merging of the DoFHandlers, all classes having
 	    a DoFHandler as template argument now need an additional template
 	    (bool) to indicate if hp-functionality is used, so that the mappings

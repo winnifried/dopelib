@@ -800,7 +800,11 @@ namespace DOpE
 	  triangulations_[i]->copy_triangulation(*(triangulations_[i-1]));
 	}
 	assert(triangulations_[i] != NULL);	  
+#if DEAL_II_VERSION_GTE(9,3,0)
+	state_dof_handlers_[i] = new DOpEWrapper::DoFHandler<dealdim, DH>(*(triangulations_[i]),HP);
+#else
 	state_dof_handlers_[i] = new DOpEWrapper::DoFHandler<dealdim, DH>(*(triangulations_[i]));
+#endif
 
 #if DEAL_II_VERSION_GTE(9,1,1)
 	state_dof_constraints_[i]= new dealii::AffineConstraints<double>;

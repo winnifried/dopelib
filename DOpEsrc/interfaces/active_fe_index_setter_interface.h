@@ -51,7 +51,7 @@ namespace DOpE
      * used after the first grid generation.
      *
      */
-    void
+    virtual void
     SetActiveFEIndexState(
       typename dealii::DoFHandler<dealdim>::active_cell_iterator &) const
     {
@@ -72,7 +72,7 @@ namespace DOpE
     /**
      * Just for compatibility issues.
      */
-    void
+    virtual void
     SetActiveFEIndexState(
       typename dealii::DoFHandler<dealdim>::active_cell_iterator &) const
     {
@@ -86,7 +86,7 @@ namespace DOpE
      * used after the first grid generation.
      *
      */
-    void
+    virtual void
     SetActiveFEIndexControl(
       typename dealii::DoFHandler<dopedim>::active_cell_iterator &) const
     {
@@ -107,7 +107,7 @@ namespace DOpE
     /**
      * Just for compatibility issues.
      */
-    void
+    virtual void
     SetActiveFEIndexControl(
       typename dealii::DoFHandler<dopedim>::active_cell_iterator &) const
     {
